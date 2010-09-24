@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,9 +84,9 @@
 #define DEF_DOUBLE_LINE9_IN     DEF_LINE_WIDTH_0
 #define DEF_DOUBLE_LINE9_DIST   DEF_LINE_WIDTH_2
 
-#define DEF_DOUBLE_LINE10_OUT	DEF_LINE_WIDTH_3
-#define DEF_DOUBLE_LINE10_IN	DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE10_DIST	DEF_LINE_WIDTH_2
+#define DEF_DOUBLE_LINE10_OUT   DEF_LINE_WIDTH_3
+#define DEF_DOUBLE_LINE10_IN    DEF_LINE_WIDTH_0
+#define DEF_DOUBLE_LINE10_DIST  DEF_LINE_WIDTH_2
 
 // ============================================================================
 
@@ -104,24 +104,24 @@ public:
 
     SvxBorderLine& operator=( const SvxBorderLine& r );
 
-    const Color&	GetColor() const { return aColor; }
-    USHORT 			GetOutWidth() const { return nOutWidth; }
-    USHORT 			GetInWidth() const { return nInWidth; }
-    USHORT 			GetDistance() const { return nDistance; }
+    const Color&    GetColor() const { return aColor; }
+    USHORT          GetOutWidth() const { return nOutWidth; }
+    USHORT          GetInWidth() const { return nInWidth; }
+    USHORT          GetDistance() const { return nDistance; }
 
-    void 			SetColor( const Color &rColor ) { aColor = rColor; }
-    void			SetOutWidth( USHORT nNew ) { nOutWidth = nNew; }
-    void			SetInWidth( USHORT nNew ) { nInWidth = nNew;  }
-    void			SetDistance( USHORT nNew ) { nDistance = nNew; }
-    void			ScaleMetrics( long nMult, long nDiv );
+    void            SetColor( const Color &rColor ) { aColor = rColor; }
+    void            SetOutWidth( USHORT nNew ) { nOutWidth = nNew; }
+    void            SetInWidth( USHORT nNew ) { nInWidth = nNew;  }
+    void            SetDistance( USHORT nNew ) { nDistance = nNew; }
+    void            ScaleMetrics( long nMult, long nDiv );
 
-    BOOL			operator==( const SvxBorderLine &rCmp ) const;
+    BOOL            operator==( const SvxBorderLine &rCmp ) const;
 
     String          GetValueString( SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit,
                                     const IntlWrapper* pIntl,
                                     BOOL bMetricStr = FALSE ) const;
 
-    bool			HasPriority( const SvxBorderLine& rOtherLine ) const;
+    bool            HasPriority( const SvxBorderLine& rOtherLine ) const;
 
     bool isEmpty() const { return (0 == nOutWidth && 0 == nInWidth && 0 == nDistance); }
     bool isDouble() const { return (0 != nOutWidth && 0 != nInWidth); }

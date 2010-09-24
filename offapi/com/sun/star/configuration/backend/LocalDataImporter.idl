@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,19 +29,19 @@
 
 #ifndef __com_sun_star_configuration_backend_DataImporter_idl__
 #include <com/sun/star/configuration/backend/DataImporter.idl>
-#endif 
+#endif
 
-//============================================================================= 
+//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//============================================================================= 
+//=============================================================================
 
 /**
-    allows importing data from a local configuration data repository 
+    allows importing data from a local configuration data repository
     or file into any <type>Backend</type>.
-  
-    <p> Data to be imported can be a single layer either from a full local 
+
+    <p> Data to be imported can be a single layer either from a full local
         configuration database or from a particular OOR Update XML file.
     </p>
     <p> Data is imported into the <type>DefaultBackend</type>.
@@ -57,55 +57,55 @@ module com { module sun { module star { module configuration { module backend {
 */
 published service LocalDataImporter
 {
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** provides for running an import job
 
-        <p> The implementation returns <void/> from  
+        <p> The implementation returns <void/> from
             <member scope="com::sun::star::task">XJob::execute()</member>
-            to indicates successful execution. If import is not executed, 
-            because <code>OverwriteExisting = </code><TRUE/> was specified, 
-            a <type scope="com::sun::star::lang">IllegalAccessException</type> 
-            is returned. 
+            to indicates successful execution. If import is not executed,
+            because <code>OverwriteExisting = </code><TRUE/> was specified,
+            a <type scope="com::sun::star::lang">IllegalAccessException</type>
+            is returned.
         </p>
-         <p>If <void/> or <TRUE/> is returned, this indicates successful 
-            execution. If an 
-            <type scope="com::sun::star::uno">Exception</type> is returned, 
-            it represents an error condition encountered during execution. 
+         <p>If <void/> or <TRUE/> is returned, this indicates successful
+            execution. If an
+            <type scope="com::sun::star::uno">Exception</type> is returned,
+            it represents an error condition encountered during execution.
         </p>
 
         <p> The standard arguments to
             <member scope="com::sun::star::task">XJob::execute()</member>
-            are all supported by implementations. Additionally the following 
+            are all supported by implementations. Additionally the following
             argument is required to select the data source:
         <dl>
             <dt><code>LayerDataUrl</code> : <atom >string</atom></dt>
-            <dd>A file URL that specifies the location of the source data. 
-                <p> If no <code>Component</code> is provided, this must be the 
-                    location of an OOR Update XML file, which will be imported 
-                    directly. 
+            <dd>A file URL that specifies the location of the source data.
+                <p> If no <code>Component</code> is provided, this must be the
+                    location of an OOR Update XML file, which will be imported
+                    directly.
                 </p>
-                <p> If a <code>Component</code> is provided, the 
-                    <code>LayerDataUrl</code> is treated as Entity 
-                    (i.e. Layer directory base URL) for a local 
-                    configuration database and the appropriate component 
+                <p> If a <code>Component</code> is provided, the
+                    <code>LayerDataUrl</code> is treated as Entity
+                    (i.e. Layer directory base URL) for a local
+                    configuration database and the appropriate component
                     from that repository is imported.
                 </p>
             </dd>
         </dl>
         </p>
-        <p> Implementations may support additional parameters to select 
-            a destination <type>Backend</type>, that is not the 
+        <p> Implementations may support additional parameters to select
+            a destination <type>Backend</type>, that is not the
             <type>DefaultBackend</type>.
         </p>
       */
     service DataImporter ;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 } ;
 
-//============================================================================= 
+//=============================================================================
 
-} ; } ; } ; } ; } ; 
+} ; } ; } ; } ; } ;
 
-#endif 
+#endif

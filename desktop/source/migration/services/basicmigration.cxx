@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -150,7 +150,7 @@ namespace migration
         {
             return aResult;
         }
-    }       
+    }
 
     // -----------------------------------------------------------------------------
 
@@ -164,12 +164,12 @@ namespace migration
             TStringVectorPtr aFileList = getFiles( m_sSourceDir );
             TStringVector::const_iterator aI = aFileList->begin();
             while ( aI != aFileList->end() )
-            {                
+            {
                 ::rtl::OUString sLocalName = aI->copy( m_sSourceDir.getLength() );
                 ::rtl::OUString sTargetName = sTargetDir + sLocalName;
                 INetURLObject aURL( sTargetName );
                 aURL.removeSegment();
-                checkAndCreateDirectory( aURL );            
+                checkAndCreateDirectory( aURL );
                 ::osl::FileBase::RC aResult = ::osl::File::copy( *aI, sTargetName );
                 if ( aResult != ::osl::FileBase::E_None )
                 {
@@ -180,7 +180,7 @@ namespace migration
                 }
                 ++aI;
             }
-        } 
+        }
         else
         {
             OSL_ENSURE( sal_False, "BasicMigration::copyFiles: no user installation!" );
@@ -270,5 +270,5 @@ namespace migration
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}	// namespace migration
+}   // namespace migration
 //.........................................................................

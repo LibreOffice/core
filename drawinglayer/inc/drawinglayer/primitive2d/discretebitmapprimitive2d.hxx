@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,10 +49,10 @@ namespace drawinglayer
         {
         private:
             /// the RGBA Bitmap-data
-            BitmapEx									maBitmapEx;
+            BitmapEx                                    maBitmapEx;
 
             /** the top-left object position */
-            basegfx::B2DPoint							maTopLeft;
+            basegfx::B2DPoint                           maTopLeft;
 
         protected:
             /// local decomposition.
@@ -61,7 +61,7 @@ namespace drawinglayer
         public:
             /// constructor
             DiscreteBitmapPrimitive2D(
-                const BitmapEx& rBitmapEx, 
+                const BitmapEx& rBitmapEx,
                 const basegfx::B2DPoint& rTopLeft);
 
             /// data read access

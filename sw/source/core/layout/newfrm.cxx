@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@
 #include <viewopt.hxx>
 
 SwLayVout     *SwRootFrm::pVout = 0;
-BOOL 		   SwRootFrm::bInPaint = FALSE;
-BOOL 		   SwRootFrm::bNoVirDev = FALSE;
+BOOL           SwRootFrm::bInPaint = FALSE;
+BOOL           SwRootFrm::bNoVirDev = FALSE;
 
 SwCache *SwFrm::pCache = 0;
 
@@ -300,8 +300,8 @@ SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 sal_uInt32 SwFrm::mnLastFrmId=0;
 // <--
 
-TYPEINIT1(SwFrm,SwClient);		//rtti fuer SwFrm
-TYPEINIT1(SwCntntFrm,SwFrm);	//rtti fuer SwCntntFrm
+TYPEINIT1(SwFrm,SwClient);      //rtti fuer SwFrm
+TYPEINIT1(SwCntntFrm,SwFrm);    //rtti fuer SwCntntFrm
 
 
 void _FrmInit()
@@ -334,10 +334,10 @@ void _FrmFinit()
 
 /*************************************************************************
 |*
-|*	RootFrm::Alles was so zur CurrShell gehoert
+|*  RootFrm::Alles was so zur CurrShell gehoert
 |*
-|*	Ersterstellung		MA 09. Sep. 98
-|*	Letzte Aenderung	MA 18. Feb. 99
+|*  Ersterstellung      MA 09. Sep. 98
+|*  Letzte Aenderung    MA 18. Feb. 99
 |*
 |*************************************************************************/
 
@@ -410,14 +410,14 @@ void InitCurrShells( SwRootFrm *pRoot )
 
 /*************************************************************************
 |*
-|*	SwRootFrm::SwRootFrm()
+|*  SwRootFrm::SwRootFrm()
 |*
-|*	Beschreibung:
-|* 		Der RootFrm laesst sich grundsaetzlich vom Dokument ein eigenes
-|* 		FrmFmt geben. Dieses loescht er dann selbst im DTor.
-|* 		Das eigene FrmFmt wird vom uebergebenen Format abgeleitet.
-|*	Ersterstellung		SS 05-Apr-1991
-|*	Letzte Aenderung	MA 12. Dec. 94
+|*  Beschreibung:
+|*      Der RootFrm laesst sich grundsaetzlich vom Dokument ein eigenes
+|*      FrmFmt geben. Dieses loescht er dann selbst im DTor.
+|*      Das eigene FrmFmt wird vom uebergebenen Format abgeleitet.
+|*  Ersterstellung      SS 05-Apr-1991
+|*  Letzte Aenderung    MA 12. Dec. 94
 |*
 |*************************************************************************/
 
@@ -454,8 +454,8 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     IDocumentFieldsAccess *pFieldsAccess = pFmt->getIDocumentFieldsAccess();
     const IDocumentSettingAccess *pSettingAccess = pFmt->getIDocumentSettingAccess();
     pTimerAccess->StopIdling();
-    pLayoutAccess->SetRootFrm( this );		//Fuer das Erzeugen der Flys durch MakeFrms()
-    bCallbackActionEnabled = FALSE;	//vor Verlassen auf TRUE setzen!
+    pLayoutAccess->SetRootFrm( this );      //Fuer das Erzeugen der Flys durch MakeFrms()
+    bCallbackActionEnabled = FALSE; //vor Verlassen auf TRUE setzen!
 
     SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
 
@@ -536,10 +536,10 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
 
 /*************************************************************************
 |*
-|*	SwRootFrm::~SwRootFrm()
+|*  SwRootFrm::~SwRootFrm()
 |*
-|*	Ersterstellung		SS 05-Apr-1991
-|*	Letzte Aenderung	MA 12. Dec. 94
+|*  Ersterstellung      SS 05-Apr-1991
+|*  Letzte Aenderung    MA 12. Dec. 94
 |*
 |*************************************************************************/
 
@@ -565,10 +565,10 @@ SwRootFrm::~SwRootFrm()
 
 /*************************************************************************
 |*
-|*	SwRootFrm::RemoveMasterObjs()
+|*  SwRootFrm::RemoveMasterObjs()
 |*
-|*	Ersterstellung		MA 19.10.95
-|*	Letzte Aenderung	MA 19.10.95
+|*  Ersterstellung      MA 19.10.95
+|*  Letzte Aenderung    MA 19.10.95
 |*
 |*************************************************************************/
 

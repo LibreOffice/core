@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# 
+#
 # $Id: gcov_filter.pl,v 1.4 2005-11-02 17:23:57 kz Exp $
 #
 
@@ -7,7 +7,7 @@
 #
 # Helper to filter the gcov output.
 # Handle a compare between the hole gcov output and a given select list of exported functions.
-# 
+#
 # Q: Why perl?
 # A: regexp ;-)
 #
@@ -147,7 +147,7 @@ if ($showallfunc)
 }
 
 # back to current directory
-# this chdir was for a before chdir (in $startdir creation) but due to the fact, 
+# this chdir was for a before chdir (in $startdir creation) but due to the fact,
 # that the get_PRJ_from_makefile_mk works but the after concat of strings not, this
 # chdir is also remarked.
 # chdir $cwd;
@@ -288,7 +288,7 @@ sub read_gcov_function_file($)
     my $line = "";
     open(INPUT_HANDLE, $file)
         or die("ERROR: cannot open $file!\n");
-    
+
     while ($line = <INPUT_HANDLE>)
     {
         chomp($line);
@@ -340,7 +340,7 @@ sub read_gcov_function_file_old_gcc_3($)
     my $line = "";
     open(INPUT_HANDLE, $file)
         or die("ERROR: cannot open $file!\n");
-    
+
     while ($line = <INPUT_HANDLE>)
     {
         chomp($line);

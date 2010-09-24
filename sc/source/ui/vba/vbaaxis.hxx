@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@ class ScVbaAxis : public ScVbaAxis_BASE
     sal_Int32 mnType;
     sal_Int32 mnGroup;
     sal_Int32 mnCrosses;
-    sal_Bool bCrossesAreCustomized; 
+    sal_Bool bCrossesAreCustomized;
     ScVbaChart* getChartPtr() throw( css::uno::RuntimeException );
     sal_Bool isValueAxis() throw( css::script::BasicErrorException );
     std::auto_ptr<ov::ShapeHelper> oShapeHelper;
-    
+
 public:
     ScVbaAxis( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup );
     // Methods

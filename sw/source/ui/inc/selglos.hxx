@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,19 +43,19 @@
 class SwSelGlossaryDlg : public ModalDialog
 {
 protected:
-    ListBox 		aGlosBox;
+    ListBox         aGlosBox;
     FixedLine       aGlosFL;
-    OKButton 		aOKBtn;
-    CancelButton 	aCancelBtn;
-    HelpButton 		aHelpBtn;
+    OKButton        aOKBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
 
     DECL_LINK(DoubleClickHdl, ListBox*);
 public:
     SwSelGlossaryDlg(Window * pParent, const String &rShortName);
     ~SwSelGlossaryDlg();
-    void InsertGlos(const String &rRegion, const String &rGlosName);	// inline
-    USHORT GetSelectedIdx() const;	// inline
-    void SelectEntryPos(USHORT nIdx); 	// inline
+    void InsertGlos(const String &rRegion, const String &rGlosName);    // inline
+    USHORT GetSelectedIdx() const;  // inline
+    void SelectEntryPos(USHORT nIdx);   // inline
 };
 
 inline void SwSelGlossaryDlg::InsertGlos(const String &rRegion,
@@ -67,8 +67,8 @@ inline void SwSelGlossaryDlg::InsertGlos(const String &rRegion,
     aGlosBox.InsertEntry( aTmp );
 }
 inline USHORT SwSelGlossaryDlg::GetSelectedIdx() const
-{	return aGlosBox.GetSelectEntryPos(); }
+{   return aGlosBox.GetSelectEntryPos(); }
 inline void SwSelGlossaryDlg::SelectEntryPos(USHORT nIdx)
-{	aGlosBox.SelectEntryPos(nIdx); }
+{   aGlosBox.SelectEntryPos(nIdx); }
 
 #endif

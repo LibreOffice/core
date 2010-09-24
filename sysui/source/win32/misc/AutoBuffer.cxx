@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,19 +41,19 @@
 using rtl::OUString;
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 CAutoUnicodeBuffer::CAutoUnicodeBuffer( size_t size, sal_Bool bLazyCreation ) :
     m_buffSize( size ),
     m_pBuff( NULL )
-{	
+{
     if ( !bLazyCreation )
         init( );
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 CAutoUnicodeBuffer::~CAutoUnicodeBuffer( )
@@ -62,7 +62,7 @@ CAutoUnicodeBuffer::~CAutoUnicodeBuffer( )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 sal_Bool SAL_CALL CAutoUnicodeBuffer::resize( size_t new_size )
@@ -84,7 +84,7 @@ sal_Bool SAL_CALL CAutoUnicodeBuffer::resize( size_t new_size )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void SAL_CALL CAutoUnicodeBuffer::empty( )
@@ -94,7 +94,7 @@ void SAL_CALL CAutoUnicodeBuffer::empty( )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 sal_Bool SAL_CALL CAutoUnicodeBuffer::fill( const sal_Unicode* pContent, size_t nLen )
@@ -115,25 +115,25 @@ sal_Bool SAL_CALL CAutoUnicodeBuffer::fill( const sal_Unicode* pContent, size_t 
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 size_t SAL_CALL CAutoUnicodeBuffer::size( ) const
 {
     return m_buffSize;
 }
-    
+
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 CAutoUnicodeBuffer::operator sal_Unicode*( )
 {
     return m_pBuff;
 }
-    
+
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 sal_Unicode* CAutoUnicodeBuffer::operator&( )
@@ -142,7 +142,7 @@ sal_Unicode* CAutoUnicodeBuffer::operator&( )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 const sal_Unicode* CAutoUnicodeBuffer::operator&( ) const
@@ -151,13 +151,13 @@ const sal_Unicode* CAutoUnicodeBuffer::operator&( ) const
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void SAL_CALL CAutoUnicodeBuffer::init( )
 {
     if ( !m_pBuff && (m_buffSize > 0) )
-        m_pBuff = new sal_Unicode[ m_buffSize ];		
+        m_pBuff = new sal_Unicode[ m_buffSize ];
 
     empty( );
 }

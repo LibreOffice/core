@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,44 +29,44 @@
 
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif 
+#endif
 
 #ifndef __com_sun_star_configuration_backend_XLayerHandler_idl__
 #include <com/sun/star/configuration/backend/XLayerHandler.idl>
-#endif 
+#endif
 
 #ifndef __com_sun_star_lang_NullPointerException_idl__
 #include <com/sun/star/lang/NullPointerException.idl>
-#endif 
+#endif
 
 #ifndef __com_sun_star_lang_WrappedTargetException_idl__
 #include <com/sun/star/lang/WrappedTargetException.idl>
-#endif 
+#endif
 
 #ifndef __com_sun_star_configuration_backend_MalformedDataException_idl__
 #include <com/sun/star/configuration/backend/MalformedDataException.idl>
 #endif
 
-//============================================================================= 
+//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//============================================================================= 
+//=============================================================================
 
-/** 
+/**
   provides read access to the data contained in a layer.
 
     @since OOo 1.1.2
 */
-published interface XLayer : ::com::sun::star::uno::XInterface 
+published interface XLayer : ::com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
-    /** 
+    /**
       describes the contents of the layer to an <type>XLayerHandler</type>.
 
-      @param aHandler   
-            Handler object that will receive calls 
+      @param aHandler
+            Handler object that will receive calls
             describing the contents of the layer
 
       @throws com::sun::star::lang::NullPointerException
@@ -77,15 +77,15 @@ published interface XLayer : ::com::sun::star::uno::XInterface
               if the data read from the layer is rejected as invalid by the
               <type>XLayerHandler</type>.
     */
-    void readData([in] XLayerHandler aHandler) 
+    void readData([in] XLayerHandler aHandler)
         raises (com::sun::star::lang::NullPointerException,
                 com::sun::star::lang::WrappedTargetException,
                 MalformedDataException) ;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 } ;
 
-//============================================================================= 
+//=============================================================================
 
-} ; } ; } ; } ; } ; 
-#endif 
+} ; } ; } ; } ; } ;
+#endif

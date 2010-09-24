@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,8 +100,8 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
     if ( pArgs )
     {
-        const UINT32		nFormats = ( (SfxUInt32Item&) pArgs->Get( SID_GALLERY_FORMATS ) ).GetValue();
-        GalleryExplorer*	pGal = SVX_GALLERY();
+        const UINT32        nFormats = ( (SfxUInt32Item&) pArgs->Get( SID_GALLERY_FORMATS ) ).GetValue();
+        GalleryExplorer*    pGal = SVX_GALLERY();
 
         if ( pGal )
         {
@@ -128,12 +128,12 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
                 // Falls Grafik zu gross, wird die Grafik
                 // in die Seite eingepasst
-                if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()	> aPageSize.Width() ) ) &&
+                if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()   > aPageSize.Width() ) ) &&
                     aSize.Height() && aPageSize.Height() )
                 {
-                    float fGrfWH =	(float)aSize.Width() /
+                    float fGrfWH =  (float)aSize.Width() /
                                     (float)aSize.Height();
-                    float fWinWH =	(float)aPageSize.Width() /
+                    float fWinWH =  (float)aPageSize.Width() /
                                     (float)aPageSize.Height();
 
                     // Grafik an Pagesize anpassen (skaliert)
@@ -151,7 +151,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
 
                 // Ausgaberechteck fuer Grafik setzen
-                Point aPnt ((aPageSize.Width()	- aSize.Width())  / 2,
+                Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
                             (aPageSize.Height() - aSize.Height()) / 2);
                 aPnt += Point(pPage->GetLftBorder(), pPage->GetUppBorder());
                 Rectangle aRect (aPnt, aSize);
@@ -258,8 +258,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
     CheckLineTo (rReq);
 
-    SfxBindings&	rBindings = GetViewFrame()->GetBindings();
-    SfxItemSet*		pAttr = new SfxItemSet ( GetDoc()->GetPool() );
+    SfxBindings&    rBindings = GetViewFrame()->GetBindings();
+    SfxItemSet*     pAttr = new SfxItemSet ( GetDoc()->GetPool() );
 
     GetView()->GetAttributes( *pAttr );
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -375,8 +375,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE, FALSE);
 
                     XGradientList *pGradientList = GetDoc()->GetGradientList ();
-                    long		  nCounts		 = pGradientList->Count ();
-                    Color		  aColor ((BYTE) pRed->GetValue (),
+                    long          nCounts        = pGradientList->Count ();
+                    Color         aColor ((BYTE) pRed->GetValue (),
                                           (BYTE) pGreen->GetValue (),
                                           (BYTE) pBlue->GetValue ());
                     long i;
@@ -435,8 +435,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE, FALSE);
 
                     XHatchList *pHatchList = GetDoc()->GetHatchList ();
-                    long	   nCounts	   = pHatchList->Count ();
-                    Color	   aColor ((BYTE) pRed->GetValue (),
+                    long       nCounts     = pHatchList->Count ();
+                    Color      aColor ((BYTE) pRed->GetValue (),
                                        (BYTE) pGreen->GetValue (),
                                        (BYTE) pBlue->GetValue ());
                     long i;
@@ -500,8 +500,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_LINESTYLE);
 
                         XDashList  *pDashList = GetDoc()->GetDashList ();
-                        long	   nCounts	  = pDashList->Count ();
-                        XDashEntry *pEntry	  = new XDashEntry (aNewDash, pName->GetValue ());
+                        long       nCounts    = pDashList->Count ();
+                        XDashEntry *pEntry    = new XDashEntry (aNewDash, pName->GetValue ());
                         long i;
 
                         for ( i = 0; i < nCounts; i++ )
@@ -552,7 +552,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_FILLSTYLE);
 
                         XGradientList  *pGradientList = GetDoc()->GetGradientList ();
-                        long		   nCounts		  = pGradientList->Count ();
+                        long           nCounts        = pGradientList->Count ();
                         long i;
 
                         for ( i = 0; i < nCounts; i++ )
@@ -618,7 +618,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_FILLSTYLE);
 
                         XHatchList *pHatchList = GetDoc()->GetHatchList ();
-                        long	   nCounts	   = pHatchList->Count ();
+                        long       nCounts     = pHatchList->Count ();
                         long i;
 
                         for ( i = 0; i < nCounts; i++ )
@@ -668,7 +668,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, FALSE);
 
                     XGradientList  *pGradientList = GetDoc()->GetGradientList ();
-                    long		   nCounts		  = pGradientList->Count ();
+                    long           nCounts        = pGradientList->Count ();
 
                     for (long i = 0;
                               i < nCounts;
@@ -702,7 +702,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, FALSE);
 
                     XHatchList *pHatchList = GetDoc()->GetHatchList ();
-                    long	   nCounts	   = pHatchList->Count ();
+                    long       nCounts     = pHatchList->Count ();
 
                     for (long i = 0;
                               i < nCounts;
@@ -743,7 +743,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
             break;
 
-/*		  case SID_SETFONTFAMILYNAME :
+/*        case SID_SETFONTFAMILYNAME :
         case SID_SETFONTSTYLENAME :
         case SID_SETFONTFAMILY :
         case SID_SETFONTPITCH :
@@ -779,8 +779,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
 void DrawViewShell::AttrState (SfxItemSet& rSet)
 {
-    SfxWhichIter	 aIter (rSet);
-    USHORT			 nWhich = aIter.FirstWhich ();
+    SfxWhichIter     aIter (rSet);
+    USHORT           nWhich = aIter.FirstWhich ();
     SfxItemSet aAttr( GetDoc()->GetPool() );
     mpDrawView->GetAttributes( aAttr );
 
@@ -817,7 +817,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
             case SID_GETBLUE :
             {
                 const SfxUInt32Item &rWhatKind = (const SfxUInt32Item &) rSet.Get (ID_VAL_WHATKIND);
-                Color				aColor;
+                Color               aColor;
 
                 switch (rWhatKind.GetValue ())
                 {
@@ -841,7 +841,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
                     case 4 :
                     {
                         const XFillGradientItem &rFillGradientItem = (const XFillGradientItem &) aAttr.Get (XATTR_FILLGRADIENT);
-                        const XGradient 		&rGradient		   = rFillGradientItem.GetGradientValue ();
+                        const XGradient         &rGradient         = rFillGradientItem.GetGradientValue ();
 
                         aColor = (rWhatKind.GetValue () == 3)
                                     ? rGradient.GetStartColor ()
@@ -852,7 +852,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
                     case 5:
                     {
                         const XFillHatchItem &rFillHatchItem = (const XFillHatchItem &) aAttr.Get (XATTR_FILLHATCH);
-                        const XHatch		 &rHatch		 = rFillHatchItem.GetHatchValue ();
+                        const XHatch         &rHatch         = rFillHatchItem.GetHatchValue ();
 
                         aColor = rHatch.GetColor ();
                         break;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ inline double getRandomOrdinal( const ::std::size_t n )
 
 inline bool compare(const B2DPoint& left, const B2DPoint& right)
 {
-    return left.getX()<right.getX() 
+    return left.getX()<right.getX()
         || (left.getX()==right.getX() && left.getY()<right.getY());
 }
 
@@ -146,7 +146,7 @@ public:
         aRingIntersection2.appendElement( aWest2, ORIENTATION_NEGATIVE );
 
         aRingIntersectExtraStrip = aRingIntersection2;
-        aRingIntersectExtraStrip.appendElement( B2DRange(0, -25, 200, 25), 
+        aRingIntersectExtraStrip.appendElement( B2DRange(0, -25, 200, 25),
                                                 ORIENTATION_NEGATIVE );
 
         aComplexIntersections.appendElement( aCenter, ORIENTATION_NEGATIVE );
@@ -243,7 +243,7 @@ public:
     void verifyPoly(const char* sName, const char* sSvg, const B2DPolyRange& toTest)
     {
         B2DPolyPolygon aTmp1;
-        CPPUNIT_ASSERT_MESSAGE(sName, 
+        CPPUNIT_ASSERT_MESSAGE(sName,
                                tools::importFromSvgD(
                                    aTmp1,
                                    rtl::OUString::createFromAscii(sSvg)));
@@ -298,12 +298,12 @@ public:
         verifyPoly("randomIntersections", randomIntersections, aRandomIntersections);
     }
 
-    void dumpSvg(const char* pName, 
+    void dumpSvg(const char* pName,
                  const ::basegfx::B2DPolyPolygon& rPoly)
     {
         (void)pName; (void)rPoly;
 #if defined(VERBOSE)
-        fprintf(stderr, "%s - svg:d=\"%s\"\n", 
+        fprintf(stderr, "%s - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(rPoly),
                     RTL_TEXTENCODING_UTF8).getStr() );
@@ -341,12 +341,12 @@ public:
                 rRange.getElement(i).head);
             if( rRange.getElement(i).tail.head == ORIENTATION_NEGATIVE )
                 aRect.flip();
-            
+
             genericClip.append(aRect);
         }
 
 #if defined(VERBOSE)
-        fprintf(stderr, "%s input      - svg:d=\"%s\"\n", 
+        fprintf(stderr, "%s input      - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(
                         genericClip),
@@ -359,7 +359,7 @@ public:
                 normalizePoly(
                     boxClipResult)));
 #if defined(VERBOSE)
-        fprintf(stderr, "%s boxclipper - svg:d=\"%s\"\n", 
+        fprintf(stderr, "%s boxclipper - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
                     boxClipSvg,
                     RTL_TEXTENCODING_UTF8).getStr() );
@@ -371,13 +371,13 @@ public:
                 normalizePoly(
                     genericClip)));
 #if defined(VERBOSE)
-        fprintf(stderr, "%s genclipper - svg:d=\"%s\"\n", 
+        fprintf(stderr, "%s genclipper - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
                     genericClipSvg,
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
-        CPPUNIT_ASSERT_MESSAGE(pName, 
+        CPPUNIT_ASSERT_MESSAGE(pName,
                                genericClipSvg == boxClipSvg);
     }
 
@@ -393,7 +393,7 @@ public:
         validatePoly("intersectionSE", aIntersectionSE);
         validatePoly("intersectionSW", aIntersectionSW);
         validatePoly("intersectionNW", aIntersectionNW);
-        // subtle differences on Solaris Intel, comparison not smart enough 
+        // subtle differences on Solaris Intel, comparison not smart enough
         // (due to floating point inaccuracies)
         //validatePoly("ringIntersection", aRingIntersection);
         //validatePoly("ringIntersection2", aRingIntersection2);
@@ -403,14 +403,14 @@ public:
         //validatePoly("randomIntersections", aRandomIntersections);
     }
 
-    // Change the following lines only, if you add, remove or rename 
-    // member functions of the current class, 
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(boxclipper);
     CPPUNIT_TEST(validatePoly);
     CPPUNIT_TEST(verifyPoly);
-    CPPUNIT_TEST(getPolyPolygon);    
+    CPPUNIT_TEST(getPolyPolygon);
     CPPUNIT_TEST_SUITE_END();
 };
 

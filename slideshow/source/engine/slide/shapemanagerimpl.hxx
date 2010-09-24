@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@ namespace slideshow {
 namespace internal {
 
 /** Listener class for shape events
-    
-    This helper class registers itself on each view, and 
+
+    This helper class registers itself on each view, and
     broadcasts the XShapeEventListener events. The mouse motion
     events are needed for setting the shape cursor.
 */
@@ -67,7 +67,7 @@ class ShapeManagerImpl : public SubsettableShapeManager,
 {
 public:
     /** Create a shape event broadcaster
-        
+
         @param rEventMultiplexer
         The slideshow-global event source, where this class
         registeres its event handlers.
@@ -87,16 +87,16 @@ public:
         slide.
      */
     void activate( bool bSlideBackgoundPainted );
-    
+
     /** Disables event listening.
      */
     void deactivate();
-    
+
     // Disposable interface
     // ---------------------------------------------------------------
 
     virtual void dispose();
-    
+
 private:
 
     // MouseEventHandler interface
@@ -131,7 +131,7 @@ private:
     virtual void leaveAnimationMode( const AnimatableShapeSharedPtr& rShape );
     virtual void notifyShapeUpdate( const ShapeSharedPtr& rShape );
     virtual ShapeSharedPtr lookupShape(
-        ::com::sun::star::uno::Reference< 
+        ::com::sun::star::uno::Reference<
            ::com::sun::star::drawing::XShape > const & xShape ) const;
     virtual void addHyperlinkArea( const boost::shared_ptr<HyperlinkArea>& rArea );
     virtual void removeHyperlinkArea( const boost::shared_ptr<HyperlinkArea>& rArea );
@@ -140,16 +140,16 @@ private:
     // SubsettableShapeManager interface
     // ---------------------------------------------------
 
-    virtual boost::shared_ptr<AttributableShape> getSubsetShape( 
+    virtual boost::shared_ptr<AttributableShape> getSubsetShape(
         const boost::shared_ptr<AttributableShape>& rOrigShape,
         const DocTreeNode&                          rTreeNode );
-    virtual void revokeSubset( 
+    virtual void revokeSubset(
         const boost::shared_ptr<AttributableShape>& rOrigShape,
         const boost::shared_ptr<AttributableShape>& rSubsetShape );
 
-    virtual void addIntrinsicAnimationHandler( 
+    virtual void addIntrinsicAnimationHandler(
         const IntrinsicAnimationEventHandlerSharedPtr& rHandler );
-    virtual void removeIntrinsicAnimationHandler( 
+    virtual void removeIntrinsicAnimationHandler(
         const IntrinsicAnimationEventHandlerSharedPtr& rHandler );
     virtual bool notifyIntrinsicAnimationsEnabled();
     virtual bool notifyIntrinsicAnimationsDisabled();
@@ -177,8 +177,8 @@ private:
 
 
     ::rtl::OUString checkForHyperlink( ::basegfx::B2DPoint const& hitPos )const;
-    
-    
+
+
     typedef std::map<ShapeSharedPtr,
                      boost::shared_ptr< ::cppu::OInterfaceContainerHelper >,
                      Shape::lessThanShape>        ShapeToListenersMap;

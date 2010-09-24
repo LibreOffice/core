@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -238,7 +238,7 @@ enum ScXMLTableRowAttrTokens
     XML_TOK_TABLE_ROW_ATTR_VISIBILITY,
     XML_TOK_TABLE_ROW_ATTR_REPEATED,
     XML_TOK_TABLE_ROW_ATTR_DEFAULT_CELL_STYLE_NAME
-//	XML_TOK_TABLE_ROW_ATTR_USE_OPTIMAL_HEIGHT
+//  XML_TOK_TABLE_ROW_ATTR_USE_OPTIMAL_HEIGHT
 };
 
 enum ScXMLTableRowCellTokens
@@ -481,7 +481,8 @@ enum ScXMLDataPilotTableAttrTokens
     XML_TOK_DATA_PILOT_TABLE_ATTR_TARGET_RANGE_ADDRESS,
     XML_TOK_DATA_PILOT_TABLE_ATTR_BUTTONS,
     XML_TOK_DATA_PILOT_TABLE_ATTR_SHOW_FILTER_BUTTON,
-    XML_TOK_DATA_PILOT_TABLE_ATTR_DRILL_DOWN
+    XML_TOK_DATA_PILOT_TABLE_ATTR_DRILL_DOWN,
+    XML_TOK_DATA_PILOT_TABLE_ATTR_HEADER_GRID_LAYOUT
 };
 
 enum ScXMLDataPilotTableElemTokens
@@ -632,133 +633,133 @@ typedef std::list<const ScMyLabelRange*> ScMyLabelRanges;
 
 struct ScMyImportValidation
 {
-    rtl::OUString									sName;
-    rtl::OUString									sImputTitle;
-    rtl::OUString									sImputMessage;
-    rtl::OUString									sErrorTitle;
-    rtl::OUString									sErrorMessage;
-    rtl::OUString									sFormula1;
-    rtl::OUString									sFormula2;
+    rtl::OUString                                   sName;
+    rtl::OUString                                   sImputTitle;
+    rtl::OUString                                   sImputMessage;
+    rtl::OUString                                   sErrorTitle;
+    rtl::OUString                                   sErrorMessage;
+    rtl::OUString                                   sFormula1;
+    rtl::OUString                                   sFormula2;
     rtl::OUString                                   sFormulaNmsp1;
     rtl::OUString                                   sFormulaNmsp2;
     rtl::OUString                                   sBaseCellAddress;   // #b4974740# string is used directly
-    com::sun::star::sheet::ValidationAlertStyle		aAlertStyle;
-    com::sun::star::sheet::ValidationType			aValidationType;
-    com::sun::star::sheet::ConditionOperator		aOperator;
+    com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
+    com::sun::star::sheet::ValidationType           aValidationType;
+    com::sun::star::sheet::ConditionOperator        aOperator;
     formula::FormulaGrammar::Grammar                eGrammar1;
     formula::FormulaGrammar::Grammar                eGrammar2;
     sal_Int16                                       nShowList;
-    sal_Bool										bShowErrorMessage;
-    sal_Bool										bShowImputMessage;
-    sal_Bool										bIgnoreBlanks;
+    sal_Bool                                        bShowErrorMessage;
+    sal_Bool                                        bShowImputMessage;
+    sal_Bool                                        bIgnoreBlanks;
 };
 
-typedef std::vector<ScMyImportValidation>			ScMyImportValidations;
-typedef std::list<SvXMLImportContext*>				ScMyViewContextList;
+typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
+typedef std::list<SvXMLImportContext*>              ScMyViewContextList;
 class ScMyStylesImportHelper;
 
 class ScXMLImport: public SvXMLImport
 {
-    typedef ::std::hash_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >	CellTypeMap;
-    CellTypeMap				aCellTypeMap;
+    typedef ::std::hash_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >  CellTypeMap;
+    CellTypeMap             aCellTypeMap;
 
-    ScDocument*				pDoc;
-    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
-    ScMyViewContextList					aViewContextList;
-    ScMyStylesImportHelper*				pStylesImportHelper;
-    rtl::OUString						sNumberFormat;
-    rtl::OUString						sLocale;
-    rtl::OUString						sCellStyle;
-    rtl::OUString						sStandardFormat;
-    rtl::OUString						sType;
+    ScDocument*             pDoc;
+    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScMyViewContextList                 aViewContextList;
+    ScMyStylesImportHelper*             pStylesImportHelper;
+    rtl::OUString                       sNumberFormat;
+    rtl::OUString                       sLocale;
+    rtl::OUString                       sCellStyle;
+    rtl::OUString                       sStandardFormat;
+    rtl::OUString                       sType;
 
-//	SvXMLAutoStylePoolP		*pScAutoStylePool;
-    UniReference < XMLPropertyHandlerFactory >	xScPropHdlFactory;
-    UniReference < XMLPropertySetMapper >		xCellStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >		xColumnStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >		xRowStylesPropertySetMapper;
-    UniReference < XMLPropertySetMapper >		xTableStylesPropertySetMapper;
-//	SvXMLImportContextRef		xStyles;
-//	SvXMLImportContextRef		xAutoStyles;
+//  SvXMLAutoStylePoolP     *pScAutoStylePool;
+    UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
+    UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
+    UniReference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
+    UniReference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
+    UniReference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
+//  SvXMLImportContextRef       xStyles;
+//  SvXMLImportContextRef       xAutoStyles;
 
-//	SvXMLImportItemMapper	*pParaItemMapper;// paragraph item import
-//	SvI18NMap				*pI18NMap;			// name mapping for I18N
-    SvXMLTokenMap			*pDocElemTokenMap;
-    SvXMLTokenMap			*pStylesElemTokenMap;
-    SvXMLTokenMap			*pStylesAttrTokenMap;
-    SvXMLTokenMap			*pStyleElemTokenMap;
-    SvXMLTokenMap			*pBodyElemTokenMap;
-    SvXMLTokenMap			*pContentValidationsElemTokenMap;
-    SvXMLTokenMap			*pContentValidationElemTokenMap;
-    SvXMLTokenMap			*pContentValidationAttrTokenMap;
-    SvXMLTokenMap			*pContentValidationMessageElemTokenMap;
-    SvXMLTokenMap			*pContentValidationHelpMessageAttrTokenMap;
-    SvXMLTokenMap			*pContentValidationErrorMessageAttrTokenMap;
-    SvXMLTokenMap			*pContentValidationErrorMacroAttrTokenMap;
-    SvXMLTokenMap			*pLabelRangesElemTokenMap;
-    SvXMLTokenMap			*pLabelRangeAttrTokenMap;
-    SvXMLTokenMap			*pTableElemTokenMap;
-    SvXMLTokenMap			*pTableRowsElemTokenMap;
-    SvXMLTokenMap			*pTableColsElemTokenMap;
-    SvXMLTokenMap			*pTableScenarioAttrTokenMap;
-    SvXMLTokenMap			*pTableAttrTokenMap;
-    SvXMLTokenMap			*pTableColAttrTokenMap;
-    SvXMLTokenMap			*pTableRowElemTokenMap;
-    SvXMLTokenMap			*pTableRowAttrTokenMap;
-    SvXMLTokenMap			*pTableRowCellElemTokenMap;
-    SvXMLTokenMap			*pTableRowCellAttrTokenMap;
-    SvXMLTokenMap			*pTableAnnotationAttrTokenMap;
-    SvXMLTokenMap			*pDetectiveElemTokenMap;
-    SvXMLTokenMap			*pDetectiveHighlightedAttrTokenMap;
-    SvXMLTokenMap			*pDetectiveOperationAttrTokenMap;
-    SvXMLTokenMap			*pTableCellRangeSourceAttrTokenMap;
-    SvXMLTokenMap			*pNamedExpressionsElemTokenMap;
-    SvXMLTokenMap			*pNamedRangeAttrTokenMap;
-    SvXMLTokenMap			*pNamedExpressionAttrTokenMap;
-    SvXMLTokenMap			*pDatabaseRangesElemTokenMap;
-    SvXMLTokenMap			*pDatabaseRangeElemTokenMap;
-    SvXMLTokenMap			*pDatabaseRangeAttrTokenMap;
-    SvXMLTokenMap			*pDatabaseRangeSourceSQLAttrTokenMap;
-    SvXMLTokenMap			*pDatabaseRangeSourceTableAttrTokenMap;
-    SvXMLTokenMap			*pDatabaseRangeSourceQueryAttrTokenMap;
-    SvXMLTokenMap			*pFilterElemTokenMap;
-    SvXMLTokenMap			*pFilterAttrTokenMap;
-    SvXMLTokenMap			*pFilterConditionAttrTokenMap;
-    SvXMLTokenMap			*pSortElemTokenMap;
-    SvXMLTokenMap			*pSortAttrTokenMap;
-    SvXMLTokenMap			*pSortSortByAttrTokenMap;
-    SvXMLTokenMap			*pDatabaseRangeSubTotalRulesElemTokenMap;
-    SvXMLTokenMap			*pDatabaseRangeSubTotalRulesAttrTokenMap;
-    SvXMLTokenMap			*pSubTotalRulesSortGroupsAttrTokenMap;
-    SvXMLTokenMap			*pSubTotalRulesSubTotalRuleElemTokenMap;
-    SvXMLTokenMap			*pSubTotalRulesSubTotalRuleAttrTokenMap;
-    SvXMLTokenMap			*pSubTotalRuleSubTotalFieldAttrTokenMap;
-    SvXMLTokenMap 			*pDataPilotTablesElemTokenMap;
-    SvXMLTokenMap 			*pDataPilotTableAttrTokenMap;
-    SvXMLTokenMap 			*pDataPilotTableElemTokenMap;
-    SvXMLTokenMap 			*pDataPilotTableSourceServiceAttrTokenMap;
+//  SvXMLImportItemMapper   *pParaItemMapper;// paragraph item import
+//  SvI18NMap               *pI18NMap;          // name mapping for I18N
+    SvXMLTokenMap           *pDocElemTokenMap;
+    SvXMLTokenMap           *pStylesElemTokenMap;
+    SvXMLTokenMap           *pStylesAttrTokenMap;
+    SvXMLTokenMap           *pStyleElemTokenMap;
+    SvXMLTokenMap           *pBodyElemTokenMap;
+    SvXMLTokenMap           *pContentValidationsElemTokenMap;
+    SvXMLTokenMap           *pContentValidationElemTokenMap;
+    SvXMLTokenMap           *pContentValidationAttrTokenMap;
+    SvXMLTokenMap           *pContentValidationMessageElemTokenMap;
+    SvXMLTokenMap           *pContentValidationHelpMessageAttrTokenMap;
+    SvXMLTokenMap           *pContentValidationErrorMessageAttrTokenMap;
+    SvXMLTokenMap           *pContentValidationErrorMacroAttrTokenMap;
+    SvXMLTokenMap           *pLabelRangesElemTokenMap;
+    SvXMLTokenMap           *pLabelRangeAttrTokenMap;
+    SvXMLTokenMap           *pTableElemTokenMap;
+    SvXMLTokenMap           *pTableRowsElemTokenMap;
+    SvXMLTokenMap           *pTableColsElemTokenMap;
+    SvXMLTokenMap           *pTableScenarioAttrTokenMap;
+    SvXMLTokenMap           *pTableAttrTokenMap;
+    SvXMLTokenMap           *pTableColAttrTokenMap;
+    SvXMLTokenMap           *pTableRowElemTokenMap;
+    SvXMLTokenMap           *pTableRowAttrTokenMap;
+    SvXMLTokenMap           *pTableRowCellElemTokenMap;
+    SvXMLTokenMap           *pTableRowCellAttrTokenMap;
+    SvXMLTokenMap           *pTableAnnotationAttrTokenMap;
+    SvXMLTokenMap           *pDetectiveElemTokenMap;
+    SvXMLTokenMap           *pDetectiveHighlightedAttrTokenMap;
+    SvXMLTokenMap           *pDetectiveOperationAttrTokenMap;
+    SvXMLTokenMap           *pTableCellRangeSourceAttrTokenMap;
+    SvXMLTokenMap           *pNamedExpressionsElemTokenMap;
+    SvXMLTokenMap           *pNamedRangeAttrTokenMap;
+    SvXMLTokenMap           *pNamedExpressionAttrTokenMap;
+    SvXMLTokenMap           *pDatabaseRangesElemTokenMap;
+    SvXMLTokenMap           *pDatabaseRangeElemTokenMap;
+    SvXMLTokenMap           *pDatabaseRangeAttrTokenMap;
+    SvXMLTokenMap           *pDatabaseRangeSourceSQLAttrTokenMap;
+    SvXMLTokenMap           *pDatabaseRangeSourceTableAttrTokenMap;
+    SvXMLTokenMap           *pDatabaseRangeSourceQueryAttrTokenMap;
+    SvXMLTokenMap           *pFilterElemTokenMap;
+    SvXMLTokenMap           *pFilterAttrTokenMap;
+    SvXMLTokenMap           *pFilterConditionAttrTokenMap;
+    SvXMLTokenMap           *pSortElemTokenMap;
+    SvXMLTokenMap           *pSortAttrTokenMap;
+    SvXMLTokenMap           *pSortSortByAttrTokenMap;
+    SvXMLTokenMap           *pDatabaseRangeSubTotalRulesElemTokenMap;
+    SvXMLTokenMap           *pDatabaseRangeSubTotalRulesAttrTokenMap;
+    SvXMLTokenMap           *pSubTotalRulesSortGroupsAttrTokenMap;
+    SvXMLTokenMap           *pSubTotalRulesSubTotalRuleElemTokenMap;
+    SvXMLTokenMap           *pSubTotalRulesSubTotalRuleAttrTokenMap;
+    SvXMLTokenMap           *pSubTotalRuleSubTotalFieldAttrTokenMap;
+    SvXMLTokenMap           *pDataPilotTablesElemTokenMap;
+    SvXMLTokenMap           *pDataPilotTableAttrTokenMap;
+    SvXMLTokenMap           *pDataPilotTableElemTokenMap;
+    SvXMLTokenMap           *pDataPilotTableSourceServiceAttrTokenMap;
     SvXMLTokenMap           *pDataPilotGrandTotalAttrTokenMap;
-    SvXMLTokenMap 			*pDataPilotTableSourceCellRangeElemTokenMap;
-    SvXMLTokenMap 			*pDataPilotTableSourceCellRangeAttrTokenMap;
-    SvXMLTokenMap 			*pDataPilotFieldAttrTokenMap;
-    SvXMLTokenMap 			*pDataPilotFieldElemTokenMap;
-    SvXMLTokenMap 			*pDataPilotLevelAttrTokenMap;
-    SvXMLTokenMap 			*pDataPilotLevelElemTokenMap;
-    SvXMLTokenMap 			*pDataPilotSubTotalsElemTokenMap;
-    SvXMLTokenMap 			*pDataPilotSubTotalAttrTokenMap;
-    SvXMLTokenMap 			*pDataPilotMembersElemTokenMap;
-    SvXMLTokenMap 			*pDataPilotMemberAttrTokenMap;
-    SvXMLTokenMap 			*pConsolidationAttrTokenMap;
+    SvXMLTokenMap           *pDataPilotTableSourceCellRangeElemTokenMap;
+    SvXMLTokenMap           *pDataPilotTableSourceCellRangeAttrTokenMap;
+    SvXMLTokenMap           *pDataPilotFieldAttrTokenMap;
+    SvXMLTokenMap           *pDataPilotFieldElemTokenMap;
+    SvXMLTokenMap           *pDataPilotLevelAttrTokenMap;
+    SvXMLTokenMap           *pDataPilotLevelElemTokenMap;
+    SvXMLTokenMap           *pDataPilotSubTotalsElemTokenMap;
+    SvXMLTokenMap           *pDataPilotSubTotalAttrTokenMap;
+    SvXMLTokenMap           *pDataPilotMembersElemTokenMap;
+    SvXMLTokenMap           *pDataPilotMemberAttrTokenMap;
+    SvXMLTokenMap           *pConsolidationAttrTokenMap;
 
-    ScMyTables				aTables;
+    ScMyTables              aTables;
 
-    ScMyNamedExpressions* 	pMyNamedExpressions;
+    ScMyNamedExpressions*   pMyNamedExpressions;
     ScMyLabelRanges*        pMyLabelRanges;
-    ScMyImportValidations*	pValidations;
-    ScMyImpDetectiveOpArray*	pDetectiveOpArray;
-    ScUnoGuard*				pScUnoGuard;
+    ScMyImportValidations*  pValidations;
+    ScMyImpDetectiveOpArray*    pDetectiveOpArray;
+    ScUnoGuard*             pScUnoGuard;
 
-    std::vector<rtl::OUString>			aTableStyles;
+    std::vector<rtl::OUString>          aTableStyles;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
     ScMyStyleNumberFormats* pStyleNumberFormats;
     com::sun::star::uno::Reference <com::sun::star::util::XNumberFormats> xNumberFormats;
@@ -766,16 +767,16 @@ class ScXMLImport: public SvXMLImport
 
     com::sun::star::uno::Reference <com::sun::star::sheet::XSheetCellRangeContainer> xSheetCellRanges;
 
-    rtl::OUString			sEmpty;
-    rtl::OUString			sPrevStyleName;
-    rtl::OUString			sPrevCurrency;
-    sal_uInt32				nSolarMutexLocked;
+    rtl::OUString           sEmpty;
+    rtl::OUString           sPrevStyleName;
+    rtl::OUString           sPrevCurrency;
+    sal_uInt32              nSolarMutexLocked;
     sal_Int32               nProgressCount;
-    sal_uInt16				nStyleFamilyMask;// Mask of styles to load
-    sal_Int16				nPrevCellType;
-    sal_Bool				bLoadDoc;	// Load doc or styles only
-    sal_Bool				bRemoveLastChar;
-    sal_Bool				bNullDateSetted;
+    sal_uInt16              nStyleFamilyMask;// Mask of styles to load
+    sal_Int16               nPrevCellType;
+    sal_Bool                bLoadDoc;   // Load doc or styles only
+    sal_Bool                bRemoveLastChar;
+    sal_Bool                bNullDateSetted;
     sal_Bool                bSelfImportingXMLSet;
     sal_Bool                bLatinDefaultStyle;     // latin-only number format in default style?
     sal_Bool                bFromWrapper;           // called from ScDocShell / ScXMLImportWrapper?
@@ -810,8 +811,8 @@ public:
                                     const ::rtl::OUString& rLocalName );
     SvXMLImportContext *CreateStylesContext(const ::rtl::OUString& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList, sal_Bool bAutoStyles );
-//	SvXMLImportContext *CreateUseStylesContext(const ::rtl::OUString& rLocalName ,
-//									const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
+//  SvXMLImportContext *CreateUseStylesContext(const ::rtl::OUString& rLocalName ,
+//                                  const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateBodyContext(
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -819,8 +820,8 @@ public:
     virtual void SetStatistics(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats);
 
-    inline ScDocument*			GetDocument()			{ return pDoc; }
-    inline const ScDocument*	GetDocument() const		{ return pDoc; }
+    inline ScDocument*          GetDocument()           { return pDoc; }
+    inline const ScDocument*    GetDocument() const     { return pDoc; }
 
     ScMyTables& GetTables() { return aTables; }
 
@@ -831,21 +832,21 @@ public:
 
     sal_Int16 GetCellType(const ::rtl::OUString& rStrValue) const;
 
-//	SvI18NMap& GetI18NMap() { return *pI18NMap; }
+//  SvI18NMap& GetI18NMap() { return *pI18NMap; }
 
-//	inline const SvXMLImportItemMapper& GetParaItemMapper() const;
-//	SvXMLImportContext *CreateParaItemImportContext( USHORT nPrefix,
-//								  const ::rtl::OUString& rLocalName,
-//								  const ::com::sun::star::uno::Reference<
-//									::com::sun::star::xml::sax::XAttributeList& xAttrList,
-//								  SfxItemSet& rItemSet );
+//  inline const SvXMLImportItemMapper& GetParaItemMapper() const;
+//  SvXMLImportContext *CreateParaItemImportContext( USHORT nPrefix,
+//                                const ::rtl::OUString& rLocalName,
+//                                const ::com::sun::star::uno::Reference<
+//                                  ::com::sun::star::xml::sax::XAttributeList& xAttrList,
+//                                SfxItemSet& rItemSet );
 
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const { return xCellStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const { return xColumnStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetRowStylesPropertySetMapper() const { return xRowStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
-//	SvXMLImportContextRef			GetAutoStyles() const { return xAutoStyles; }
-//	SvXMLImportContextRef			GetStyles() const { return xStyles; }
+//  SvXMLImportContextRef           GetAutoStyles() const { return xAutoStyles; }
+//  SvXMLImportContextRef           GetStyles() const { return xStyles; }
 
     const SvXMLTokenMap& GetDocElemTokenMap();
 //UNUSED2008-05  const SvXMLTokenMap& GetStylesElemTokenMap();
@@ -913,13 +914,13 @@ public:
     const SvXMLTokenMap& GetDataPilotMembersElemTokenMap();
     const SvXMLTokenMap& GetDataPilotMemberAttrTokenMap();
     const SvXMLTokenMap& GetConsolidationAttrTokenMap();
-//	const SvXMLTokenMap& GetTextPElemTokenMap();
-//	const SvXMLTokenMap& GetTextPAttrTokenMap();
-//	const SvXMLTokenMap& GetStyleStylesElemTokenMap();
-//	const SvXMLTokenMap& GetTextListBlockAttrTokenMap();
-//	const SvXMLTokenMap& GetTextListBlockElemTokenMap();
+//  const SvXMLTokenMap& GetTextPElemTokenMap();
+//  const SvXMLTokenMap& GetTextPAttrTokenMap();
+//  const SvXMLTokenMap& GetStyleStylesElemTokenMap();
+//  const SvXMLTokenMap& GetTextListBlockAttrTokenMap();
+//  const SvXMLTokenMap& GetTextListBlockElemTokenMap();
 
-    void	AddNamedExpression(const ScMyNamedExpression* pMyNamedExpression) {
+    void    AddNamedExpression(const ScMyNamedExpression* pMyNamedExpression) {
         if (!pMyNamedExpressions)
             pMyNamedExpressions = new ScMyNamedExpressions();
         pMyNamedExpressions->push_back(pMyNamedExpression); }
@@ -937,7 +938,7 @@ public:
         pValidations->push_back(rValidation); }
     sal_Bool GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation);
 
-    inline ScMyImpDetectiveOpArray* GetDetectiveOpArray()	{
+    inline ScMyImpDetectiveOpArray* GetDetectiveOpArray()   {
         if (!pDetectiveOpArray)
             pDetectiveOpArray = new ScMyImpDetectiveOpArray();
         return pDetectiveOpArray; }
@@ -1000,7 +1001,7 @@ public:
 
     void SetRangeOverflowType(sal_uInt32 nType);
 
-    sal_Int32 	GetRangeType(const rtl::OUString sRangeType) const;
+    sal_Int32   GetRangeType(const rtl::OUString sRangeType) const;
     void SetNamedRanges();
     void SetLabelRanges();
     void AddDefaultNote( const com::sun::star::table::CellAddress& aCell );

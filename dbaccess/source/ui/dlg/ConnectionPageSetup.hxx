@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 #include "curledit.hxx"
 #endif
 
-#ifndef _SV_FIELD_HXX 
+#ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
 #endif
 
@@ -51,7 +51,7 @@
 namespace dbaui
 {
 //.........................................................................
-/*	// #106016# --------------
+/*  // #106016# --------------
     enum IS_PATH_EXIST
     {
         PATH_NOT_EXIST = 0,
@@ -69,7 +69,7 @@ namespace dbaui
     */
     class OConnectionTabPageSetup : public OConnectionHelper
     {
-        sal_Bool			m_bUserGrabFocus : 1;
+        sal_Bool            m_bUserGrabFocus : 1;
     protected:
 
         FixedText           m_aFT_HelpText;
@@ -78,17 +78,17 @@ namespace dbaui
         DECL_LINK(OnEditModified,Edit*);
 
     public:
-        static	OGenericAdministrationPage*	CreateDbaseTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-        static	OGenericAdministrationPage*	CreateMSAccessTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-        static	OGenericAdministrationPage*	CreateAdabasTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-        static	OGenericAdministrationPage*	CreateADOTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-        static	OGenericAdministrationPage*	CreateODBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
-        static	OGenericAdministrationPage*	CreateUserDefinedTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+        static  OGenericAdministrationPage* CreateDbaseTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+        static  OGenericAdministrationPage* CreateMSAccessTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+        static  OGenericAdministrationPage* CreateAdabasTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+        static  OGenericAdministrationPage* CreateADOTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+        static  OGenericAdministrationPage* CreateODBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
+        static  OGenericAdministrationPage* CreateUserDefinedTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
 
-        virtual	BOOL		FillItemSet	(SfxItemSet& _rCoreAttrs);
+        virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
 
-        virtual void		implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+        virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
 
@@ -99,8 +99,8 @@ namespace dbaui
             <p>The new URL must be of the type which is currently selected, only the parts which do not
             affect the type may be changed (compared to the previous URL).</p>
         */
-        void	changeConnectionURL( const String& _rNewDSN );
-        String	getConnectionURL( ) const;
+        void    changeConnectionURL( const String& _rNewDSN );
+        String  getConnectionURL( ) const;
 
 
     protected:
@@ -111,7 +111,7 @@ namespace dbaui
     };
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
-#endif 
+#endif

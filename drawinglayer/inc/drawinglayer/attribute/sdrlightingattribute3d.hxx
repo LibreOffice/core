@@ -86,7 +86,7 @@ namespace drawinglayer
             // color model solver
             basegfx::BColor solveColorModel(
                 const basegfx::B3DVector& rNormalInEyeCoordinates,
-                const basegfx::BColor& rColor, const basegfx::BColor& rSpecular, 
+                const basegfx::BColor& rColor, const basegfx::BColor& rSpecular,
                 const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity) const;
         };
     } // end of namespace attribute

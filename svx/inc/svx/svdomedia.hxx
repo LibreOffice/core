@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,42 +51,42 @@ public:
                                     SdrMediaObj();
                                     SdrMediaObj( const Rectangle& rRect );
 
-        virtual 					~SdrMediaObj();
+        virtual                     ~SdrMediaObj();
 
-        virtual FASTBOOL 			HasTextEdit() const;
+        virtual FASTBOOL            HasTextEdit() const;
 
-        virtual void				TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-        virtual UINT16				GetObjIdentifier() const;
+        virtual void                TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
+        virtual UINT16              GetObjIdentifier() const;
 
-        virtual void 				TakeObjNameSingul(String& rName) const;
-        virtual void 				TakeObjNamePlural(String& rName) const;
+        virtual void                TakeObjNameSingul(String& rName) const;
+        virtual void                TakeObjNamePlural(String& rName) const;
 
-        virtual void 				operator=(const SdrObject& rObj);
+        virtual void                operator=(const SdrObject& rObj);
 
-        virtual void				AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
+        virtual void                AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
 
 public:
 
-        void						setURL( const ::rtl::OUString& rURL );
-        const ::rtl::OUString&		getURL() const;
+        void                        setURL( const ::rtl::OUString& rURL );
+        const ::rtl::OUString&      getURL() const;
 
-        void						setMediaProperties( const ::avmedia::MediaItem& rState );
+        void                        setMediaProperties( const ::avmedia::MediaItem& rState );
         const ::avmedia::MediaItem& getMediaProperties() const;
 
-        bool						hasPreferredSize() const;
-        Size						getPreferredSize() const;
+        bool                        hasPreferredSize() const;
+        Size                        getPreferredSize() const;
 
         const Graphic&              getGraphic() const;
         void                        setGraphic( const Graphic* pGraphic = NULL );
 
 protected:
 
-        virtual void				mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
+        virtual void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
         virtual ::sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
 private:
 
-        ::avmedia::MediaItem		maMediaProperties;
+        ::avmedia::MediaItem        maMediaProperties;
         ::std::auto_ptr< Graphic >  mapGraphic;
 };
 

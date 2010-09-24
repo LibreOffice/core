@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,18 +36,18 @@
 
 enum SdXMLFilterMode
 {
-    SDXMLMODE_Normal,			// standard load and save of the complete document
-    SDXMLMODE_Preview,			// only for import, only the first draw page and its master page is loaded
-    SDXMLMODE_Organizer			// only for import, only the styles are loaded
+    SDXMLMODE_Normal,           // standard load and save of the complete document
+    SDXMLMODE_Preview,          // only for import, only the first draw page and its master page is loaded
+    SDXMLMODE_Organizer         // only for import, only the styles are loaded
 };
 
 class SdXMLFilter : public SdFilter
 {
 public:
-    SdXMLFilter( 
-        SfxMedium& rMedium, 
-        ::sd::DrawDocShell& rDocShell, 
-        sal_Bool bShowProgress, 
+    SdXMLFilter(
+        SfxMedium& rMedium,
+        ::sd::DrawDocShell& rDocShell,
+        sal_Bool bShowProgress,
         SdXMLFilterMode eFilterMode = SDXMLMODE_Normal,
         ULONG nStoreVer = SOFFICE_FILEFORMAT_8 );
     virtual ~SdXMLFilter (void);
@@ -60,4 +60,4 @@ private:
     ULONG mnStoreVer;
 };
 
-#endif	// _SDXMLWRP_HXX
+#endif  // _SDXMLWRP_HXX

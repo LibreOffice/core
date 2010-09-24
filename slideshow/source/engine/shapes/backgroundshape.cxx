@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,20 +83,20 @@ namespace slideshow
                 peculiarities of the draw API regarding background
                 content.
              */
-            BackgroundShape( const ::com::sun::star::uno::Reference< 
+            BackgroundShape( const ::com::sun::star::uno::Reference<
                                  ::com::sun::star::drawing::XDrawPage >& xDrawPage,
-                             const ::com::sun::star::uno::Reference< 
+                             const ::com::sun::star::uno::Reference<
                                  ::com::sun::star::drawing::XDrawPage >& xMasterPage,
                              const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
 
-            virtual ::com::sun::star::uno::Reference< 
+            virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShape > getXShape() const;
 
             // View layer methods
             //------------------------------------------------------------------
 
-            virtual void addViewLayer( const ViewLayerSharedPtr& 	rNewLayer,
-                                       bool							bRedrawLayer );
+            virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
+                                       bool                         bRedrawLayer );
             virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer );
             virtual bool clearAllViewLayers();
 
@@ -109,7 +109,7 @@ namespace slideshow
             virtual ::basegfx::B2DRectangle getUpdateArea() const;
             virtual bool isVisible() const;
             virtual double getPriority() const;
-            virtual bool isBackgroundDetached() const;            
+            virtual bool isBackgroundDetached() const;
 
 
             // render methods
@@ -118,17 +118,17 @@ namespace slideshow
             virtual bool update() const;
             virtual bool render() const;
             virtual bool isContentChanged() const;
-            
+
         private:
             /// The metafile actually representing the Shape
-            GDIMetaFileSharedPtr		mpMtf;
+            GDIMetaFileSharedPtr        mpMtf;
 
             // The attributes of this Shape
-            ::basegfx::B2DRectangle		maBounds; // always needed for rendering
+            ::basegfx::B2DRectangle     maBounds; // always needed for rendering
 
             /// the list of active view shapes (one for each registered view layer)
             typedef ::std::vector< ViewBackgroundShapeSharedPtr > ViewBackgroundShapeVector;
-            ViewBackgroundShapeVector	maViewShapes;
+            ViewBackgroundShapeVector   maViewShapes;
         };
 
 
@@ -142,7 +142,7 @@ namespace slideshow
             maBounds(),
             maViewShapes()
         {
-            uno::Reference< beans::XPropertySet > xPropSet( xDrawPage, 
+            uno::Reference< beans::XPropertySet > xPropSet( xDrawPage,
                                                             uno::UNO_QUERY_THROW );
             GDIMetaFileSharedPtr pMtf( new GDIMetaFile() );
 
@@ -177,15 +177,15 @@ namespace slideshow
             return uno::Reference< drawing::XShape >();
         }
 
-        void BackgroundShape::addViewLayer( const ViewLayerSharedPtr&	rNewLayer,
-                                            bool						bRedrawLayer )
+        void BackgroundShape::addViewLayer( const ViewLayerSharedPtr&   rNewLayer,
+                                            bool                        bRedrawLayer )
         {
             ViewBackgroundShapeVector::iterator aEnd( maViewShapes.end() );
 
             // already added?
-            if( ::std::find_if( maViewShapes.begin(), 
-                                aEnd, 
-                                ::boost::bind<bool>( 
+            if( ::std::find_if( maViewShapes.begin(),
+                                aEnd,
+                                ::boost::bind<bool>(
                                     ::std::equal_to< ViewLayerSharedPtr >(),
                                     ::boost::bind( &ViewBackgroundShape::getViewLayer,
                                                    _1 ),
@@ -195,8 +195,8 @@ namespace slideshow
                 return;
             }
 
-            maViewShapes.push_back( 
-                ViewBackgroundShapeSharedPtr( 
+            maViewShapes.push_back(
+                ViewBackgroundShapeSharedPtr(
                     new ViewBackgroundShape( rNewLayer,
                                              maBounds ) ) );
 
@@ -209,9 +209,9 @@ namespace slideshow
         {
             const ViewBackgroundShapeVector::iterator aEnd( maViewShapes.end() );
 
-            OSL_ENSURE( ::std::count_if(maViewShapes.begin(), 
-                                        aEnd, 
-                                        ::boost::bind<bool>( 
+            OSL_ENSURE( ::std::count_if(maViewShapes.begin(),
+                                        aEnd,
+                                        ::boost::bind<bool>(
                                             ::std::equal_to< ViewLayerSharedPtr >(),
                                             ::boost::bind( &ViewBackgroundShape::getViewLayer,
                                                            _1 ),
@@ -220,9 +220,9 @@ namespace slideshow
 
             ViewBackgroundShapeVector::iterator aIter;
 
-            if( (aIter=::std::remove_if( maViewShapes.begin(), 
-                                         aEnd, 
-                                         ::boost::bind<bool>( 
+            if( (aIter=::std::remove_if( maViewShapes.begin(),
+                                         aEnd,
+                                         ::boost::bind<bool>(
                                              ::std::equal_to< ViewLayerSharedPtr >(),
                                              ::boost::bind( &ViewBackgroundShape::getViewLayer,
                                                             _1 ),
@@ -248,7 +248,7 @@ namespace slideshow
         {
             return maBounds;
         }
-        
+
         ::basegfx::B2DRectangle BackgroundShape::getDomBounds() const
         {
             return maBounds;
@@ -295,13 +295,13 @@ namespace slideshow
 
             // redraw all view shapes, by calling their render() method
             if( ::std::count_if( maViewShapes.begin(),
-                                 maViewShapes.end(),                                 
+                                 maViewShapes.end(),
                                  ::boost::bind( &ViewBackgroundShape::render,
                                                 _1,
                                                 ::boost::cref( mpMtf ) ) )
                 != static_cast<ViewBackgroundShapeVector::difference_type>(maViewShapes.size()) )
             {
-                // at least one of the ViewBackgroundShape::render() calls did return 
+                // at least one of the ViewBackgroundShape::render() calls did return
                 // false - update failed on at least one ViewLayer
                 return false;
             }
@@ -321,13 +321,13 @@ namespace slideshow
 
         //////////////////////////////////////////////////////////
 
-        ShapeSharedPtr createBackgroundShape( 
+        ShapeSharedPtr createBackgroundShape(
             const uno::Reference< drawing::XDrawPage >& xDrawPage,
             const uno::Reference< drawing::XDrawPage >& xMasterPage,
             const SlideShowContext&                     rContext )
         {
             return ShapeSharedPtr(
-                new BackgroundShape( 
+                new BackgroundShape(
                     xDrawPage,
                     xMasterPage,
                     rContext ));

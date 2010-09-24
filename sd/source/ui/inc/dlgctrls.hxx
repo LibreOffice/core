@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,12 +51,12 @@ class SD_DLLPUBLIC FadeEffectLB : public ListBox
 public:
                                 FadeEffectLB( Window* pParent, SdResId Id );
                                 ~FadeEffectLB();
-    virtual void				Fill();
+    virtual void                Fill();
 
-/*	void						selectEffectFromPage( SdPage* pPage ); */
-    void						applySelected( SdPage* pSlide ) const;
+/*  void                        selectEffectFromPage( SdPage* pPage ); */
+    void                        applySelected( SdPage* pSlide ) const;
 
-    FadeEffectLBImpl*			mpImpl;
+    FadeEffectLBImpl*           mpImpl;
 };
 
 #endif // SD_DLGCTRLS_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,9 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define RID_SVXDLG_BMPMASK				(RID_SVX_BMPMASK_START)
-#define RID_SVXDLG_BMPMASK_STR_TRANSP	(RID_SVX_BMPMASK_START + 1)
-#define RID_SVXDLG_BMPMASK_STR_SOURCECOLOR	(RID_SVX_BMPMASK_START + 2)
+#define RID_SVXDLG_BMPMASK              (RID_SVX_BMPMASK_START)
+#define RID_SVXDLG_BMPMASK_STR_TRANSP   (RID_SVX_BMPMASK_START + 1)
+#define RID_SVXDLG_BMPMASK_STR_SOURCECOLOR  (RID_SVX_BMPMASK_START + 2)
 
 #define GRP_Q 1
 #define CTR_PIPETTE 1
@@ -56,7 +56,7 @@
 #define FT_1 1
 #define FT_2 2
 #define FT_3 3
-#define IMG_PIPETTE		11
-#define IMG_PIPETTE_H	12
+#define IMG_PIPETTE     11
+#define IMG_PIPETTE_H   12
 
 

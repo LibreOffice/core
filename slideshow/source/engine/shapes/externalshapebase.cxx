@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,13 +68,13 @@ namespace slideshow
 
             virtual void viewAdded( const UnoViewSharedPtr& ) {}
             virtual void viewRemoved( const UnoViewSharedPtr& ) {}
-            virtual void viewChanged( const UnoViewSharedPtr& rView ) 
-            { 
-                mrBase.implViewChanged(rView); 
+            virtual void viewChanged( const UnoViewSharedPtr& rView )
+            {
+                mrBase.implViewChanged(rView);
             }
             virtual void viewsChanged()
-            { 
-                mrBase.implViewsChanged(); 
+            {
+                mrBase.implViewsChanged();
             }
 
 
@@ -82,20 +82,20 @@ namespace slideshow
             // -------------------------------------------------
 
             virtual bool enableAnimations()
-            { 
-                return mrBase.implStartIntrinsicAnimation(); 
+            {
+                return mrBase.implStartIntrinsicAnimation();
             }
             virtual bool disableAnimations()
-            { 
-                return mrBase.implEndIntrinsicAnimation(); 
+            {
+                return mrBase.implEndIntrinsicAnimation();
             }
 
             ExternalShapeBase& mrBase;
         };
 
 
-        ExternalShapeBase::ExternalShapeBase( const uno::Reference< drawing::XShape >& 	xShape,
-                                              double									nPrio,
+        ExternalShapeBase::ExternalShapeBase( const uno::Reference< drawing::XShape >&  xShape,
+                                              double                                    nPrio,
                                               const SlideShowContext&                   rContext ) :
             mxComponentContext( rContext.mxComponentContext ),
             mxShape( xShape ),
@@ -120,7 +120,7 @@ namespace slideshow
                 mrEventMultiplexer.removeViewHandler( mpListener );
                 mpShapeManager->removeIntrinsicAnimationHandler( mpListener );
             }
-            catch (uno::Exception &) 
+            catch (uno::Exception &)
             {
                 OSL_ENSURE( false, rtl::OUStringToOString(
                                 comphelper::anyToString(
@@ -137,7 +137,7 @@ namespace slideshow
         }
 
         // ---------------------------------------------------------------------
-                
+
         void ExternalShapeBase::play()
         {
             implStartIntrinsicAnimation();
@@ -158,7 +158,7 @@ namespace slideshow
         }
 
         // ---------------------------------------------------------------------
-        
+
         bool ExternalShapeBase::isPlaying() const
         {
             return implIsIntrinsicAnimationPlaying();
@@ -179,7 +179,7 @@ namespace slideshow
         }
 
         // ---------------------------------------------------------------------
-        
+
         bool ExternalShapeBase::render() const
         {
             if( maBounds.getRange().equalZero() )
@@ -193,14 +193,14 @@ namespace slideshow
         }
 
         // ---------------------------------------------------------------------
-        
+
         bool ExternalShapeBase::isContentChanged() const
         {
             return true;
         }
 
         // ---------------------------------------------------------------------
-        
+
         ::basegfx::B2DRectangle ExternalShapeBase::getBounds() const
         {
             return maBounds;
@@ -214,28 +214,28 @@ namespace slideshow
         }
 
         // ---------------------------------------------------------------------
-        
+
         ::basegfx::B2DRectangle ExternalShapeBase::getUpdateArea() const
         {
             return maBounds;
         }
 
         // ---------------------------------------------------------------------
-                
+
         bool ExternalShapeBase::isVisible() const
         {
             return true;
         }
 
         // ---------------------------------------------------------------------
-        
+
         double ExternalShapeBase::getPriority() const
         {
             return mnPriority;
         }
 
         // ---------------------------------------------------------------------
-                        
+
         bool ExternalShapeBase::isBackgroundDetached() const
         {
             // external shapes always have their own window/surface

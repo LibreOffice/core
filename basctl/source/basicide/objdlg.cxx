@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )
             {
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(), 
+                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(),
                                   aDesc.GetMethodName(), ConvertType( aDesc.GetType() ) );
                 pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
                                         SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
@@ -102,7 +102,7 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
     aToolBox.SetSizePixel( aToolBox.CalcWindowSizePixel() );
     aToolBox.SetSelectHdl( LINK( this, ObjectCatalog, ToolBoxHdl ) );
 
-    aMacroTreeList.SetWindowBits( WB_HASLINES | WB_HASLINESATROOT | 
+    aMacroTreeList.SetWindowBits( WB_HASLINES | WB_HASLINESATROOT |
                                   WB_HASBUTTONS | WB_HASBUTTONSATROOT |
                                   WB_HSCROLL );
 
@@ -129,7 +129,7 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
     if ( aSize.Width() )
         SetOutputSizePixel( aSize );
 
-    Resize();	// damit der Resize-Handler die Controls anordnet
+    Resize();   // damit der Resize-Handler die Controls anordnet
 
     // make object catalog keyboard accessible
     pParent->GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
@@ -198,13 +198,13 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
             SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-            if ( aDesc.GetType() == OBJ_TYPE_MODULE || 
+            if ( aDesc.GetType() == OBJ_TYPE_MODULE ||
                  aDesc.GetType() == OBJ_TYPE_DIALOG ||
                  aDesc.GetType() == OBJ_TYPE_METHOD )
             {
                 if( pDispatcher )
                 {
-                    SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(), 
+                    SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(),
                                       aDesc.GetMethodName(), aMacroTreeList.ConvertType( aDesc.GetType() ) );
                     pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
                                           SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
@@ -270,7 +270,7 @@ void ObjectCatalog::UpdateEntries()
 }
 
 void ObjectCatalog::SetCurrentEntry( BasicEntryDescriptor& rDesc )
-{ 
+{
     aMacroTreeList.SetCurrentEntry( rDesc );
 }
 

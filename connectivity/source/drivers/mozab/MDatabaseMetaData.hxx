@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace connectivity
 
         class ODatabaseMetaData : public ODatabaseMetaDataBase
         {
-            OConnection*	                   m_pConnection;
+            OConnection*                       m_pConnection;
             MDatabaseMetaDataHelper*           m_pDbMetaDataHelper;
 
             ODatabaseMetaDataResultSet::ORows& SAL_CALL getColumnRows( const ::rtl::OUString& tableNamePattern, const ::rtl::OUString& columnNamePattern ) throw( ::com::sun::star::sdbc::SQLException );
@@ -52,7 +52,7 @@ namespace connectivity
             inline OConnection* getOwnConnection() const { return m_pConnection; }
 
             ODatabaseMetaData(OConnection* _pCon);
-            
+
         private:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw();
             // cached database information
@@ -69,7 +69,7 @@ namespace connectivity
             virtual sal_Int32       impl_getMaxStatements_throw(  );
             virtual sal_Int32       impl_getMaxTablesInSelect_throw(  );
             virtual sal_Bool        impl_storesMixedCaseQuotedIdentifiers_throw(  );
-            
+
             // as I mentioned before this interface is really BIG
             // XDatabaseMetaData
             virtual sal_Bool SAL_CALL allProceduresAreCallable(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

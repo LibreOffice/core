@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ static void ImplInitBackground( DockingAreaWindow* pThis )
 DockingAreaWindow::DockingAreaWindow( Window* pParent ) :
     Window( WINDOW_DOCKINGAREA )
 {
-    ImplInit( pParent, WB_CLIPCHILDREN|WB_3DLOOK, NULL ); 
+    ImplInit( pParent, WB_CLIPCHILDREN|WB_3DLOOK, NULL );
 
     mpImplData = new ImplData;
     ImplInitBackground( this );
@@ -102,7 +102,7 @@ static void ImplInvalidateMenubar( DockingAreaWindow* pThis )
     // due to a possible comon gradient covering menubar and top dockingarea
     // the menubar must be repainted if the top dockingarea changes size or visibility
     if( ImplGetSVData()->maNWFData.mbMenuBarDockingAreaCommonBG &&
-        (pThis->GetAlign() == WINDOWALIGN_TOP)  
+        (pThis->GetAlign() == WINDOWALIGN_TOP)
         && pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL )
         && pThis->IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
     {
@@ -167,8 +167,8 @@ void DockingAreaWindow::Paint( const Rectangle& )
             // draw a single toolbar background covering the whole docking area
             Point tmp;
             Rectangle aCtrlRegion( tmp, GetOutputSizePixel() );
-            
-            DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT, 
+
+            DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
                                aCtrlRegion, nState, aControlValue, rtl::OUString() );
 
             // each toolbar gets a thin border to better recognize its borders on the homogeneous docking area
@@ -194,7 +194,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
         }
         else
         {
-            // create map to find toolbar lines 
+            // create map to find toolbar lines
             Size aOutSz = GetOutputSizePixel();
             std::map< int, int > ranges;
             USHORT nChildren = GetChildCount();
@@ -228,7 +228,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
                     aTBRect.Top()       = 0;
                     aTBRect.Bottom()    = aOutSz.Height() - 1;
                 }
-                DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT, 
+                DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
                                    aTBRect, nState, aControlValue, rtl::OUString() );
             }
         }

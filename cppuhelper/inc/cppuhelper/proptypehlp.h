@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ namespace cppu {
     The function does the same as the operator >>= () at the
     Any class, except that it throws an IllegalArgumentException in case of
     failures (the value cannot be extracted without data loss )
-   
+
    @exception com::sun::star::lang::IllegalArgumentException when the type could not be converted.
  */
 template < class target >
@@ -49,25 +49,25 @@ inline void SAL_CALL convertPropertyValue( target &value ,  ::com::sun::star::un
 /**
   conversion of basic types
 */
-inline void SAL_CALL convertPropertyValue( sal_Int64 & target ,  const ::com::sun::star::uno::Any & source ) 
+inline void SAL_CALL convertPropertyValue( sal_Int64 & target ,  const ::com::sun::star::uno::Any & source )
     SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( sal_uInt64 & target, const ::com::sun::star::uno::Any & source ) 
+inline void SAL_CALL convertPropertyValue( sal_uInt64 & target, const ::com::sun::star::uno::Any & source )
     SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( sal_Int32 & target , const ::com::sun::star::uno::Any & source ) 
+inline void SAL_CALL convertPropertyValue( sal_Int32 & target , const ::com::sun::star::uno::Any & source )
     SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( sal_uInt32 & target, const ::com::sun::star::uno::Any & source ) 
+inline void SAL_CALL convertPropertyValue( sal_uInt32 & target, const ::com::sun::star::uno::Any & source )
     SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( sal_Int16 & target , const ::com::sun::star::uno::Any & source )
     SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( sal_uInt16 & target, const ::com::sun::star::uno::Any & source )
     SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( sal_Int8 & target	 , const ::com::sun::star::uno::Any & source )
+inline void SAL_CALL convertPropertyValue( sal_Int8 & target     , const ::com::sun::star::uno::Any & source )
     SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( float & target     , const ::com::sun::star::uno::Any & source )
     SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 inline void SAL_CALL convertPropertyValue( double &target     , const ::com::sun::star::uno::Any &source )
     SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( ::rtl::OUString &target 	, const ::com::sun::star::uno::Any &source )
+inline void SAL_CALL convertPropertyValue( ::rtl::OUString &target  , const ::com::sun::star::uno::Any &source )
     SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
 
 } // end namespace cppu

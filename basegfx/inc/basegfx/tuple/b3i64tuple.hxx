@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,71 +45,71 @@ namespace basegfx
     class B3I64Tuple
     {
     protected:
-        sal_Int64										mnX;
-        sal_Int64										mnY;
-        sal_Int64										mnZ;
+        sal_Int64                                       mnX;
+        sal_Int64                                       mnY;
+        sal_Int64                                       mnZ;
 
     public:
-        /**	Create a 3D Tuple
+        /** Create a 3D Tuple
 
             The tuple is initialized to (0, 0, 0)
         */
         B3I64Tuple()
-        :	mnX(0),
+        :   mnX(0),
             mnY(0),
             mnZ(0)
         {}
 
-        /**	Create a 3D Tuple
+        /** Create a 3D Tuple
 
             @param nX
             This parameter is used to initialize the X-coordinate
             of the 3D Tuple.
-            
+
             @param nY
             This parameter is used to initialize the Y-coordinate
             of the 3D Tuple.
-            
+
             @param nZ
             This parameter is used to initialize the Z-coordinate
             of the 3D Tuple.
         */
         B3I64Tuple(sal_Int64 nX, sal_Int64 nY, sal_Int64 nZ)
-        :	mnX(nX),
+        :   mnX(nX),
             mnY(nY),
             mnZ(nZ)
         {}
 
-        /**	Create a copy of a 3D Tuple
+        /** Create a copy of a 3D Tuple
 
             @param rTup
             The 3D Tuple which will be copied.
         */
-        B3I64Tuple(const B3I64Tuple& rTup) 
-        :	mnX( rTup.mnX ), 
+        B3I64Tuple(const B3I64Tuple& rTup)
+        :   mnX( rTup.mnX ),
             mnY( rTup.mnY ),
-            mnZ( rTup.mnZ ) 
+            mnZ( rTup.mnZ )
         {}
 
-        ~B3I64Tuple() 
+        ~B3I64Tuple()
         {}
 
         /// get X-Coordinate of 3D Tuple
         sal_Int64 getX() const
-        { 
-            return mnX; 
+        {
+            return mnX;
         }
 
         /// get Y-Coordinate of 3D Tuple
         sal_Int64 getY() const
-        { 
-            return mnY; 
+        {
+            return mnY;
         }
 
         /// get Z-Coordinate of 3D Tuple
         sal_Int64 getZ() const
-        { 
-            return mnZ; 
+        {
+            return mnZ;
         }
 
         /// set X-Coordinate of 3D Tuple
@@ -131,8 +131,8 @@ namespace basegfx
         }
 
         /// Array-access to 3D Tuple
-        const sal_Int64& operator[] (int nPos) const 
-        { 
+        const sal_Int64& operator[] (int nPos) const
+        {
             // Here, normally two if(...)'s should be used. In the assumption that
             // both sal_Int64 members can be accessed as an array a shortcut is used here.
             // if(0 == nPos) return mnX; if(1 == nPos) return mnY; return mnZ;
@@ -141,7 +141,7 @@ namespace basegfx
 
         /// Array-access to 3D Tuple
         sal_Int64& operator[] (int nPos)
-        { 
+        {
             // Here, normally two if(...)'s should be used. In the assumption that
             // both sal_Int64 members can be accessed as an array a shortcut is used here.
             // if(0 == nPos) return mnX; if(1 == nPos) return mnY; return mnZ;
@@ -151,81 +151,81 @@ namespace basegfx
         // operators
         //////////////////////////////////////////////////////////////////////
 
-        B3I64Tuple& operator+=( const B3I64Tuple& rTup ) 
-        { 
+        B3I64Tuple& operator+=( const B3I64Tuple& rTup )
+        {
             mnX += rTup.mnX;
-            mnY += rTup.mnY; 
-            mnZ += rTup.mnZ; 
-            return *this; 
+            mnY += rTup.mnY;
+            mnZ += rTup.mnZ;
+            return *this;
         }
 
-        B3I64Tuple& operator-=( const B3I64Tuple& rTup ) 
-        { 
+        B3I64Tuple& operator-=( const B3I64Tuple& rTup )
+        {
             mnX -= rTup.mnX;
-            mnY -= rTup.mnY; 
-            mnZ -= rTup.mnZ; 
-            return *this; 
+            mnY -= rTup.mnY;
+            mnZ -= rTup.mnZ;
+            return *this;
         }
 
-        B3I64Tuple& operator/=( const B3I64Tuple& rTup ) 
-        { 
+        B3I64Tuple& operator/=( const B3I64Tuple& rTup )
+        {
             mnX /= rTup.mnX;
-            mnY /= rTup.mnY; 
-            mnZ /= rTup.mnZ; 
-            return *this; 
+            mnY /= rTup.mnY;
+            mnZ /= rTup.mnZ;
+            return *this;
         }
 
-        B3I64Tuple& operator*=( const B3I64Tuple& rTup ) 
-        { 
+        B3I64Tuple& operator*=( const B3I64Tuple& rTup )
+        {
             mnX *= rTup.mnX;
-            mnY *= rTup.mnY; 
-            mnZ *= rTup.mnZ; 
-            return *this; 
+            mnY *= rTup.mnY;
+            mnZ *= rTup.mnZ;
+            return *this;
         }
 
-        B3I64Tuple& operator*=(sal_Int64 t) 
-        { 
-            mnX *= t; 
-            mnY *= t; 
-            mnZ *= t; 
-            return *this; 
+        B3I64Tuple& operator*=(sal_Int64 t)
+        {
+            mnX *= t;
+            mnY *= t;
+            mnZ *= t;
+            return *this;
         }
 
-        B3I64Tuple& operator/=(sal_Int64 t) 
-        { 
-            mnX /= t; 
-            mnY /= t; 
-            mnZ /= t; 
-            return *this; 
+        B3I64Tuple& operator/=(sal_Int64 t)
+        {
+            mnX /= t;
+            mnY /= t;
+            mnZ /= t;
+            return *this;
         }
 
-        B3I64Tuple operator-(void) const 
-        {	
-            return B3I64Tuple(-mnX, -mnY, -mnZ); 
+        B3I64Tuple operator-(void) const
+        {
+            return B3I64Tuple(-mnX, -mnY, -mnZ);
         }
 
         bool equalZero() const
-        { 
-            return (this == &getEmptyTuple() || 
+        {
+            return (this == &getEmptyTuple() ||
                 (mnX == 0 && mnY == 0 && mnZ == 0));
         }
 
-        bool operator==( const B3I64Tuple& rTup ) const 
-        { 
+        bool operator==( const B3I64Tuple& rTup ) const
+        {
             return this == &rTup || (rTup.mnX == mnX && rTup.mnY == mnY && rTup.mnZ == mnZ);
         }
 
-        bool operator!=( const B3I64Tuple& rTup ) const 
-        { 
+        bool operator!=( const B3I64Tuple& rTup ) const
+        {
             return !(*this == rTup);
         }
-        
-        B3I64Tuple& operator=( const B3I64Tuple& rTup ) 
-        { 
+
+        B3I64Tuple& operator=( const B3I64Tuple& rTup )
+        {
             mnX = rTup.mnX;
-            mnY = rTup.mnY; 
-            mnZ = rTup.mnZ; 
-            return *this; 
+            mnY = rTup.mnY;
+            mnZ = rTup.mnZ;
+            return *this;
         }
 
         static const B3I64Tuple& getEmptyTuple();
@@ -234,115 +234,115 @@ namespace basegfx
     // external operators
     //////////////////////////////////////////////////////////////////////////
 
-    inline B3I64Tuple minimum(const B3I64Tuple& rTupA, const B3I64Tuple& rTupB) 
-    { 
+    inline B3I64Tuple minimum(const B3I64Tuple& rTupA, const B3I64Tuple& rTupB)
+    {
         B3I64Tuple aMin(
             (rTupB.getX() < rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
             (rTupB.getY() < rTupA.getY()) ? rTupB.getY() : rTupA.getY(),
-            (rTupB.getZ() < rTupA.getZ()) ? rTupB.getZ() : rTupA.getZ()); 
+            (rTupB.getZ() < rTupA.getZ()) ? rTupB.getZ() : rTupA.getZ());
         return aMin;
     }
 
-    inline B3I64Tuple maximum(const B3I64Tuple& rTupA, const B3I64Tuple& rTupB) 
-    { 
+    inline B3I64Tuple maximum(const B3I64Tuple& rTupA, const B3I64Tuple& rTupB)
+    {
         B3I64Tuple aMax(
             (rTupB.getX() > rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
             (rTupB.getY() > rTupA.getY()) ? rTupB.getY() : rTupA.getY(),
-            (rTupB.getZ() > rTupA.getZ()) ? rTupB.getZ() : rTupA.getZ()); 
+            (rTupB.getZ() > rTupA.getZ()) ? rTupB.getZ() : rTupA.getZ());
         return aMax;
     }
 
-    inline B3I64Tuple absolute(const B3I64Tuple& rTup) 
-    { 
+    inline B3I64Tuple absolute(const B3I64Tuple& rTup)
+    {
         B3I64Tuple aAbs(
             (0 > rTup.getX()) ? -rTup.getX() : rTup.getX(),
             (0 > rTup.getY()) ? -rTup.getY() : rTup.getY(),
-            (0 > rTup.getZ()) ? -rTup.getZ() : rTup.getZ()); 
+            (0 > rTup.getZ()) ? -rTup.getZ() : rTup.getZ());
         return aAbs;
     }
 
-    inline B3DTuple interpolate(const B3I64Tuple& rOld1, const B3I64Tuple& rOld2, double t) 
-    { 
+    inline B3DTuple interpolate(const B3I64Tuple& rOld1, const B3I64Tuple& rOld2, double t)
+    {
         B3DTuple aInt(
             ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
             ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY(),
-            ((rOld2.getZ() - rOld1.getZ()) * t) + rOld1.getZ()); 
+            ((rOld2.getZ() - rOld1.getZ()) * t) + rOld1.getZ());
         return aInt;
     }
 
-    inline B3DTuple average(const B3I64Tuple& rOld1, const B3I64Tuple& rOld2) 
-    { 
+    inline B3DTuple average(const B3I64Tuple& rOld1, const B3I64Tuple& rOld2)
+    {
         B3DTuple aAvg(
             (rOld1.getX() + rOld2.getX()) * 0.5,
             (rOld1.getY() + rOld2.getY()) * 0.5,
-            (rOld1.getZ() + rOld2.getZ()) * 0.5); 
+            (rOld1.getZ() + rOld2.getZ()) * 0.5);
         return aAvg;
     }
-    
+
     inline B3DTuple average(const B3I64Tuple& rOld1, const B3I64Tuple& rOld2, const B3I64Tuple& rOld3)
-    { 
+    {
         B3DTuple aAvg(
             (rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0),
             (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0),
-            (rOld1.getZ() + rOld2.getZ() + rOld3.getZ()) * (1.0 / 3.0)); 
+            (rOld1.getZ() + rOld2.getZ() + rOld3.getZ()) * (1.0 / 3.0));
         return aAvg;
     }
-    
+
     inline B3I64Tuple operator+(const B3I64Tuple& rTupA, const B3I64Tuple& rTupB)
-    { 
-        B3I64Tuple aSum(rTupA); 
-        aSum += rTupB; 
-        return aSum; 
+    {
+        B3I64Tuple aSum(rTupA);
+        aSum += rTupB;
+        return aSum;
     }
 
     inline B3I64Tuple operator-(const B3I64Tuple& rTupA, const B3I64Tuple& rTupB)
-    { 
-        B3I64Tuple aSub(rTupA); 
-        aSub -= rTupB; 
-        return aSub; 
+    {
+        B3I64Tuple aSub(rTupA);
+        aSub -= rTupB;
+        return aSub;
     }
 
     inline B3I64Tuple operator/(const B3I64Tuple& rTupA, const B3I64Tuple& rTupB)
-    { 
-        B3I64Tuple aDiv(rTupA); 
-        aDiv /= rTupB; 
-        return aDiv; 
+    {
+        B3I64Tuple aDiv(rTupA);
+        aDiv /= rTupB;
+        return aDiv;
     }
 
     inline B3I64Tuple operator*(const B3I64Tuple& rTupA, const B3I64Tuple& rTupB)
-    { 
-        B3I64Tuple aMul(rTupA); 
-        aMul *= rTupB; 
-        return aMul; 
+    {
+        B3I64Tuple aMul(rTupA);
+        aMul *= rTupB;
+        return aMul;
     }
 
     inline B3I64Tuple operator*(const B3I64Tuple& rTup, sal_Int64 t)
-    { 
-        B3I64Tuple aNew(rTup); 
-        aNew *= t; 
-        return aNew; 
+    {
+        B3I64Tuple aNew(rTup);
+        aNew *= t;
+        return aNew;
     }
 
     inline B3I64Tuple operator*(sal_Int64 t, const B3I64Tuple& rTup)
-    { 
-        B3I64Tuple aNew(rTup); 
-        aNew *= t; 
-        return aNew; 
+    {
+        B3I64Tuple aNew(rTup);
+        aNew *= t;
+        return aNew;
     }
 
     inline B3I64Tuple operator/(const B3I64Tuple& rTup, sal_Int64 t)
-    { 
-        B3I64Tuple aNew(rTup); 
-        aNew /= t; 
-        return aNew; 
+    {
+        B3I64Tuple aNew(rTup);
+        aNew /= t;
+        return aNew;
     }
 
     inline B3I64Tuple operator/(sal_Int64 t, const B3I64Tuple& rTup)
     {
-        B3I64Tuple aNew(t, t, t); 
-        B3I64Tuple aTmp(rTup); 
-        aNew /= aTmp; 
-        return aNew; 
+        B3I64Tuple aNew(t, t, t);
+        B3I64Tuple aTmp(rTup);
+        aNew /= aTmp;
+        return aNew;
     }
 } // end of namespace basegfx
 

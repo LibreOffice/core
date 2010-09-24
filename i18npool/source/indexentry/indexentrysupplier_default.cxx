@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ sal_Int16 SAL_CALL IndexEntrySupplier_Unicode::compareIndexEntry(
             index->getIndexWeight(getEntry(rIndexEntry2, rPhoneticEntry2, rLocale2));
     if (result == 0)
         return IndexEntrySupplier_Common::compareIndexEntry(
-                    rIndexEntry1, rPhoneticEntry1, rLocale1, 
+                    rIndexEntry1, rPhoneticEntry1, rLocale1,
                     rIndexEntry2, rPhoneticEntry2, rLocale2);
     return result > 0 ? 1 : -1;
 }
@@ -134,14 +134,14 @@ sal_Int16 Index::compare(sal_Unicode c1, sal_Unicode c2)
 sal_Int16 Index::getIndexWeight(const OUString& rIndexEntry)
 {
     sal_Int32 startPos=0;
-    if (skipping_chars.getLength() > 0) 
+    if (skipping_chars.getLength() > 0)
         while (skipping_chars.indexOf(rIndexEntry[startPos]) >= 0)
             startPos++;
     if (mkey_count > 0) {
         for (sal_Int16 i = 0; i < mkey_count; i++) {
             sal_Int32 len = keys[mkeys[i]].mkey.getLength();
             if (collator->compareSubstring(rIndexEntry, startPos, len,
-                                    keys[mkeys[i]].mkey, 0, len) == 0) 
+                                    keys[mkeys[i]].mkey, 0, len) == 0)
                 return mkeys[i];
         }
     }
@@ -176,7 +176,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
     OUString keyStr = LocaleData().getIndexKeysByAlgorithm(rLocale, algorithm);
 
     if (!keyStr.getLength()) {
-        keyStr = LocaleData().getIndexKeysByAlgorithm(LOCALE_EN, 
+        keyStr = LocaleData().getIndexKeysByAlgorithm(LOCALE_EN,
                     LocaleData().getDefaultIndexAlgorithm(LOCALE_EN));
         if (!keyStr)
             throw RuntimeException();
@@ -263,7 +263,7 @@ void Index::init(const lang::Locale &rLocale, const OUString& algorithm) throw (
     Sequence< UnicodeScript > scriptList = LocaleData().getUnicodeScripts( rLocale );
 
     if (scriptList.getLength() == 0) {
-        scriptList = LocaleData().getUnicodeScripts(LOCALE_EN); 
+        scriptList = LocaleData().getUnicodeScripts(LOCALE_EN);
         if (scriptList.getLength() == 0)
             throw RuntimeException();
     }

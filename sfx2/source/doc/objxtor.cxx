@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -266,7 +266,7 @@ SfxObjectShell_Impl::~SfxObjectShell_Impl()
 //--------------------------------------------------------------------
 
 SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
-    :	pImp( new SfxObjectShell_Impl( *this ) )
+    :   pImp( new SfxObjectShell_Impl( *this ) )
     ,   pMedium(0)
     ,   pStyleSheetPool(0)
     ,   eCreateMode( ( i_nCreationFlags & SFXMODEL_EMBEDDED_OBJECT ) ? SFX_CREATE_MODE_EMBEDDED : SFX_CREATE_MODE_STANDARD )
@@ -289,7 +289,7 @@ SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
 
 SfxObjectShell::SfxObjectShell
 (
-    SfxObjectCreateMode	eMode	/*	Zweck, zu dem die SfxObjectShell
+    SfxObjectCreateMode eMode   /*  Zweck, zu dem die SfxObjectShell
                                     erzeugt wird:
 
                                     SFX_CREATE_MODE_EMBEDDED (default)
@@ -310,12 +310,12 @@ SfxObjectShell::SfxObjectShell
                                         ben"otigt */
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Konstruktor der Klasse SfxObjectShell.
 */
 
-:	pImp( new SfxObjectShell_Impl( *this ) ),
+:   pImp( new SfxObjectShell_Impl( *this ) ),
     pMedium(0),
     pStyleSheetPool(0),
     eCreateMode(eMode),
@@ -407,7 +407,7 @@ sal_Bool SfxObjectShell::Stamp_GetPrintCancelState() const
 
 void SfxObjectShell::ViewAssigned()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode wird gerufen, wenn eine View zugewiesen wird.
 */
@@ -466,7 +466,7 @@ sal_Bool SfxObjectShell::Close()
 SfxObjectShell* SfxObjectShell::GetFirst
 (
     const TypeId* pType ,
-    sal_Bool 			bOnlyVisible
+    sal_Bool            bOnlyVisible
 )
 {
     SfxObjectShellArr_Impl &rDocs = SFX_APP()->GetObjectShells_Impl();
@@ -491,9 +491,9 @@ SfxObjectShell* SfxObjectShell::GetFirst
 
 SfxObjectShell* SfxObjectShell::GetNext
 (
-    const SfxObjectShell& 	rPrev,
-    const TypeId* 			pType,
-    sal_Bool 					bOnlyVisible
+    const SfxObjectShell&   rPrev,
+    const TypeId*           pType,
+    sal_Bool                    bOnlyVisible
 )
 {
     SfxObjectShellArr_Impl &rDocs = SFX_APP()->GetObjectShells_Impl();
@@ -546,8 +546,8 @@ struct BoolEnv_Impl
 
 sal_uInt16 SfxObjectShell::PrepareClose
 (
-    sal_Bool	bUI,		// sal_True: Dialoge etc. erlaubt, sal_False: silent-mode
-    sal_Bool	bForBrowsing
+    sal_Bool    bUI,        // sal_True: Dialoge etc. erlaubt, sal_False: silent-mode
+    sal_Bool    bForBrowsing
 )
 {
     if( pImp->bInPrepareClose || pImp->bPreparedForClose )
@@ -792,7 +792,7 @@ StarBASIC* SfxObjectShell::GetBasic() const
 //--------------------------------------------------------------------
 
 void SfxObjectShell::InitBasicManager_Impl()
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     creates a document's BasicManager and loads it, if we are already based on
     a storage.
@@ -1092,7 +1092,7 @@ bool SfxObjectShell::IsChangeRecording() const
     return false;
 }
 
-    
+
 bool SfxObjectShell::HasChangeRecordProtection() const
 {
     // currently this function needs to be overwritten by Writer and Calc only
@@ -1100,20 +1100,20 @@ bool SfxObjectShell::HasChangeRecordProtection() const
     return false;
 }
 
-    
+
 void SfxObjectShell::SetChangeRecording( bool /*bActivate*/ )
 {
     // currently this function needs to be overwritten by Writer and Calc only
     DBG_ASSERT( 0, "function not implemented" );
 }
 
-    
+
 bool SfxObjectShell::SetProtectionPassword( const String & /*rPassword*/ )
 {
     // currently this function needs to be overwritten by Writer and Calc only
     DBG_ASSERT( 0, "function not implemented" );
     return false;
-}    
+}
 
 
 bool SfxObjectShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > & /*rPasswordHash*/ )
@@ -1121,5 +1121,5 @@ bool SfxObjectShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence<
     // currently this function needs to be overwritten by Writer and Calc only
     DBG_ASSERT( 0, "function not implemented" );
     return false;
-}    
+}
 

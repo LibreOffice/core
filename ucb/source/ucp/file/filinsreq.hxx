@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace fileaccess {
 
     class shell;
 
-    
+
     class XInteractionSupplyNameImpl
         : public cppu::OWeakObject,
           public com::sun::star::lang::XTypeProvider,
@@ -56,17 +56,17 @@ namespace fileaccess {
             : m_bSelected(false)
         {
         }
-        
+
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& rType )
             throw( com::sun::star::uno::RuntimeException);
-        
+
         virtual void SAL_CALL
         acquire(
             void )
             throw();
-        
+
         virtual void SAL_CALL
         release(
             void )
@@ -76,8 +76,8 @@ namespace fileaccess {
         // XTypeProvider
 
         XTYPEPROVIDER_DECL()
-        
-        
+
+
         virtual void SAL_CALL select()
             throw (::com::sun::star::uno::RuntimeException)
         {
@@ -89,17 +89,17 @@ namespace fileaccess {
         {
             m_aNewName = Name;
         }
-        
+
         rtl::OUString getName() const
         {
             return m_aNewName;
         }
-        
+
         bool isSelected() const
         {
             return m_bSelected;
         }
-        
+
     private:
 
         bool          m_bSelected;
@@ -114,22 +114,22 @@ namespace fileaccess {
           public com::sun::star::task::XInteractionAbort
     {
     public:
-        
+
         XInteractionAbortImpl()
             : m_bSelected(false)
         {
         }
-        
+
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& rType )
             throw( com::sun::star::uno::RuntimeException);
-        
+
         virtual void SAL_CALL
         acquire(
             void )
             throw();
-        
+
         virtual void SAL_CALL
         release(
             void )
@@ -139,51 +139,51 @@ namespace fileaccess {
         // XTypeProvider
 
         XTYPEPROVIDER_DECL()
-        
-        
+
+
         virtual void SAL_CALL select()
             throw (::com::sun::star::uno::RuntimeException)
         {
             m_bSelected = true;
         }
 
-        
+
         bool isSelected() const
         {
             return m_bSelected;
         }
-        
+
     private:
 
         bool          m_bSelected;
     };
 
-    
-    
+
+
     class XInteractionRequestImpl
         : public cppu::OWeakObject,
           public com::sun::star::lang::XTypeProvider,
           public com::sun::star::task::XInteractionRequest
     {
     public:
-        
+
         XInteractionRequestImpl(
             const rtl::OUString& aClashingName,
             const com::sun::star::uno::Reference<
             com::sun::star::uno::XInterface>& xOrigin,
             shell* pShell,
             sal_Int32 CommandId);
-        
+
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& rType )
             throw( com::sun::star::uno::RuntimeException);
-        
+
         virtual void SAL_CALL
         acquire(
             void )
             throw();
-        
+
         virtual void SAL_CALL
         release(
             void )
@@ -196,44 +196,44 @@ namespace fileaccess {
 
         ::com::sun::star::uno::Any SAL_CALL getRequest(  )
             throw (::com::sun::star::uno::RuntimeException);
-        
-        com::sun::star::uno::Sequence< 
-            com::sun::star::uno::Reference< 
+
+        com::sun::star::uno::Sequence<
+            com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionContinuation > > SAL_CALL
         getContinuations(  )
             throw (::com::sun::star::uno::RuntimeException)
         {
             return m_aSeq;
         }
-        
+
         bool aborted() const
         {
             return p2->isSelected();
         }
 
-        rtl::OUString newName() const 
+        rtl::OUString newName() const
         {
             if( p1->isSelected() )
                 return p1->getName();
             else
                 return rtl::OUString();
-        } 
-        
+        }
+
     private:
-        
+
         XInteractionSupplyNameImpl* p1;
         XInteractionAbortImpl* p2;
         sal_Int32 m_nErrorCode,m_nMinorError;
-        
+
         com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference< 
+            com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionContinuation > > m_aSeq;
-        
+
         rtl::OUString m_aClashingName;
         com::sun::star::uno::Reference<
             com::sun::star::uno::XInterface> m_xOrigin;
     };
-    
+
 }
 
 

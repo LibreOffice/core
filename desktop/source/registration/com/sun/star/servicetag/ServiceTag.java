@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@ import java.io.IOException;
 import static com.sun.star.servicetag.RegistrationDocument.*;
 
 /**
- * A service tag is an XML-based data structure that identifies a product or 
- * a component on a system. The service tag schema is defined by the 
+ * A service tag is an XML-based data structure that identifies a product or
+ * a component on a system. The service tag schema is defined by the
  * Service Tags Technology. The location of the DTD file is platform dependent.
  * On Solaris, see <tt>/usr/share/lib/xml/dtd/servicetag.dtd</tt>.
  * <p>
@@ -54,15 +54,15 @@ import static com.sun.star.servicetag.RegistrationDocument.*;
  *   <li>{@link #getInstallerUID <tt>installer_uid</tt>}</li>
  *   <li>{@link #getTimestamp <tt>timestamp</tt>}</li>
  * </ul>
- * 
- * The <tt>instance_urn</tt> can be specified when a {@code ServiceTag} 
+ *
+ * The <tt>instance_urn</tt> can be specified when a {@code ServiceTag}
  * object is created, or it can be generated when it is added to
  * a {@link RegistrationData} object, or {@link Registry
- * system service tag registry}. The <tt>installer_uid</tt> and 
+ * system service tag registry}. The <tt>installer_uid</tt> and
  * <tt>timestamp</tt> are set when a {@code ServiceTag} object
  * is added to a {@link RegistrationData} object, or {@link Registry
  * system service tag registry}.
- * 
+ *
  * @see <a href="https://sunconnection.sun.com/FAQ/sc_faq.html">Service Tags FAQ</a>
  */
 public class ServiceTag {
@@ -72,7 +72,7 @@ public class ServiceTag {
     private String productVersion;
     private String productURN;
     private String productParent;
-    private String productParentURN;        
+    private String productParentURN;
     private String productDefinedInstanceID;
     private String productVendor;
     private String platformArch;
@@ -82,7 +82,7 @@ public class ServiceTag {
     private Date timestamp;
 
     // Service Tag Field Lengths (defined in sthelper.h)
-    // Since the constants defined in sthelper.h includes the null-terminated 
+    // Since the constants defined in sthelper.h includes the null-terminated
     // character, so minus 1 from the sthelper.h defined values.
     private final int MAX_URN_LEN             = 256 - 1;
     private final int MAX_PRODUCT_NAME_LEN    = 256 - 1;
@@ -124,10 +124,10 @@ public class ServiceTag {
         setInstallerUID(installerUID);
         setTimestamp(timestamp);
     }
-    
+
     /**
      * Creates a service tag object with no <tt>instance_urn</tt>.
-     * 
+     *
      * @param productName               the name of the product.
      * @param productVersion            the version of the product.
      * @param productURN                the uniform resource name of the product
@@ -138,9 +138,9 @@ public class ServiceTag {
      * @param platformArch              the operating system architecture.
      * @param container                 the container of the product.
      * @param source                    the source of the product.
-     * 
+     *
      * @throws IllegalArgumentException if any value of the input fields
-     *    does not conform to the service tag XML schema. 
+     *    does not conform to the service tag XML schema.
      */
     public static ServiceTag newInstance(String productName,
                                          String productVersion,
@@ -169,7 +169,7 @@ public class ServiceTag {
 
     /**
      * Creates a service tag object with a specified <tt>instance_urn</tt>.
-     * 
+     *
      * @param instanceURN               the uniform resource name of this instance.
      * @param productName               the name of the product.
      * @param productVersion            the version of the product.
@@ -181,9 +181,9 @@ public class ServiceTag {
      * @param platformArch              the operating system architecture.
      * @param container                 the container of the product.
      * @param source                    the source of the product.
-     * 
-     * @throws IllegalArgumentException if any value of the input fields 
-     *    does not conform to the service tag XML schema. 
+     *
+     * @throws IllegalArgumentException if any value of the input fields
+     *    does not conform to the service tag XML schema.
      */
     public static ServiceTag newInstance(String instanceURN,
                                          String productName,
@@ -214,7 +214,7 @@ public class ServiceTag {
     // Creates a copy of the ServiceTag instance
     // with instance_urn and timestamp initialized
     static ServiceTag newInstanceWithUrnTimestamp(ServiceTag st) {
-        String instanceURN = 
+        String instanceURN =
             (st.getInstanceURN().length() == 0 ? Util.generateURN() :
                                                  st.getInstanceURN());
         ServiceTag svcTag = new ServiceTag(instanceURN,
@@ -232,18 +232,18 @@ public class ServiceTag {
                                            new Date());
         return svcTag;
     }
-    
+
     /**
      * Returns a uniform resource name (URN) in this format:
      * <blockquote>
      * "<tt>urn:st:<32-char {@link java.util.UUID uuid}></tt>"
-     * </blockquote> 
+     * </blockquote>
      * @return a URN.
      */
     public static String generateInstanceURN() {
         return Util.generateURN();
     }
-    
+
     /**
      * Returns the uniform resource name of this service tag instance.
      *
@@ -256,7 +256,7 @@ public class ServiceTag {
     /**
      * Returns the name of the product.
      *
-     * @return the product name.  
+     * @return the product name.
      */
     public String getProductName() {
         return productName;
@@ -265,21 +265,21 @@ public class ServiceTag {
     /**
      * Returns the version of the product.
      *
-     * @return the product version.  
+     * @return the product version.
      */
     public String getProductVersion() {
         return productVersion;
     }
-    
+
     /**
      * Returns the uniform resource name of the product.
      *
-     * @return the product URN.  
+     * @return the product URN.
      */
     public String getProductURN() {
         return productURN;
     }
-    
+
     /**
      * Returns the uniform resource name of the product's parent.
      *
@@ -288,25 +288,25 @@ public class ServiceTag {
     public String getProductParentURN() {
         return productParentURN;
     }
-    
+
     /**
      * Returns the name of the product's parent.
      *
-     * @return the product's parent name.  
+     * @return the product's parent name.
      */
     public String getProductParent() {
         return productParent;
     }
-    
+
     /**
      * Returns the identifier defined for this product instance.
      *
-     * @return  the identifier defined for this product instance. 
+     * @return  the identifier defined for this product instance.
      */
     public String getProductDefinedInstanceID() {
         return productDefinedInstanceID;
     }
-    
+
     /**
      * Returns the vendor of the product.
      *
@@ -315,9 +315,9 @@ public class ServiceTag {
     public String getProductVendor() {
         return productVendor;
     }
-    
+
     /**
-     * Returns the platform architecture on which the product 
+     * Returns the platform architecture on which the product
      * is running on.
      *
      * @return the platform architecture on which the product is running on.
@@ -328,12 +328,12 @@ public class ServiceTag {
 
     /**
      * Returns the timestamp.  This timestamp is set when this service tag
-     * is added to or updated in a {@code RegistrationData} object or 
+     * is added to or updated in a {@code RegistrationData} object or
      * the system service tag registry.
      * This method may return {@code null}.
      *
-     * @return timestamp when this service tag 
-     * is added to or updated in a {@code RegistrationData} object or 
+     * @return timestamp when this service tag
+     * is added to or updated in a {@code RegistrationData} object or
      * the system service tag registry, or {@code null}.
      */
     public Date getTimestamp() {
@@ -372,7 +372,7 @@ public class ServiceTag {
      *
      * @return the UID of whom this service tag
      * is added to or updated in the system service tag registry,
-     * or {@code -1}. 
+     * or {@code -1}.
      */
     public int getInstallerUID() {
         return installerUID;
@@ -380,7 +380,7 @@ public class ServiceTag {
 
     // The following setter methods are used to validate the
     // input field when constructing a ServiceTag instance
-    
+
     private void setInstanceURN(String instanceURN) {
         if (instanceURN == null) {
             throw new NullPointerException("Parameter instanceURN cannot be null");
@@ -391,7 +391,7 @@ public class ServiceTag {
         }
         this.instanceURN = instanceURN;
     }
-    
+
     private void setProductName(String productName) {
         if (productName == null) {
             throw new NullPointerException("Parameter productName cannot be null");
@@ -410,13 +410,13 @@ public class ServiceTag {
         if (productVersion == null) {
             throw new NullPointerException("Parameter productVersion cannot be null");
         }
-        
+
         if (productVersion.length() == 0) {
             throw new IllegalArgumentException("product version cannot be empty");
         }
         if (productVersion.length() > MAX_PRODUCT_VERSION_LEN) {
-            throw new IllegalArgumentException("productVersion \"" + 
-                productVersion + "\" exceeds maximum length " + 
+            throw new IllegalArgumentException("productVersion \"" +
+                productVersion + "\" exceeds maximum length " +
                 MAX_PRODUCT_VERSION_LEN);
         }
         this.productVersion = productVersion;
@@ -442,8 +442,8 @@ public class ServiceTag {
         }
         // optional field - can be empty
         if (productParentURN.length() > MAX_URN_LEN) {
-            throw new IllegalArgumentException("productParentURN \"" + 
-                productParentURN + "\" exceeds maximum length " + 
+            throw new IllegalArgumentException("productParentURN \"" +
+                productParentURN + "\" exceeds maximum length " +
                 MAX_URN_LEN);
         }
         this.productParentURN = productParentURN;
@@ -457,8 +457,8 @@ public class ServiceTag {
             throw new IllegalArgumentException("product parent cannot be empty");
         }
         if (productParent.length() > MAX_PRODUCT_PARENT_LEN) {
-            throw new IllegalArgumentException("productParent \"" + 
-                productParent + "\" exceeds maximum length " + 
+            throw new IllegalArgumentException("productParent \"" +
+                productParent + "\" exceeds maximum length " +
                 MAX_PRODUCT_PARENT_LEN);
         }
         this.productParent = productParent;
@@ -469,8 +469,8 @@ public class ServiceTag {
             throw new NullPointerException("Parameter productDefinedInstanceID cannot be null");
         }
         if (productDefinedInstanceID.length() > MAX_URN_LEN) {
-            throw new IllegalArgumentException("productDefinedInstanceID \"" + 
-                productDefinedInstanceID + "\" exceeds maximum length " + 
+            throw new IllegalArgumentException("productDefinedInstanceID \"" +
+                productDefinedInstanceID + "\" exceeds maximum length " +
                 MAX_URN_LEN);
         }
         // optional field - can be empty
@@ -485,13 +485,13 @@ public class ServiceTag {
             throw new IllegalArgumentException("product vendor cannot be empty");
         }
         if (productVendor.length() > MAX_PRODUCT_VENDOR_LEN) {
-            throw new IllegalArgumentException("productVendor \"" + 
-                productVendor + "\" exceeds maximum length " + 
+            throw new IllegalArgumentException("productVendor \"" +
+                productVendor + "\" exceeds maximum length " +
                 MAX_PRODUCT_VENDOR_LEN);
         }
         this.productVendor = productVendor;
     }
-    
+
     private void setPlatformArch(String platformArch) {
         if (platformArch == null) {
             throw new NullPointerException("Parameter platformArch cannot be null");
@@ -500,8 +500,8 @@ public class ServiceTag {
             throw new IllegalArgumentException("platform architecture cannot be empty");
         }
         if (platformArch.length() > MAX_PLATFORM_ARCH_LEN) {
-            throw new IllegalArgumentException("platformArch \"" + 
-                platformArch + "\" exceeds maximum length " + 
+            throw new IllegalArgumentException("platformArch \"" +
+                platformArch + "\" exceeds maximum length " +
                 MAX_PLATFORM_ARCH_LEN);
         }
         this.platformArch = platformArch;
@@ -520,8 +520,8 @@ public class ServiceTag {
             throw new IllegalArgumentException("container cannot be empty");
         }
         if (container.length() > MAX_CONTAINER_LEN) {
-            throw new IllegalArgumentException("container \"" + 
-                container + "\" exceeds maximum length " + 
+            throw new IllegalArgumentException("container \"" +
+                container + "\" exceeds maximum length " +
                 MAX_CONTAINER_LEN);
         }
         this.container = container;
@@ -546,13 +546,13 @@ public class ServiceTag {
     }
 
     /**
-     * Compares this service tag to the specified object. 
-     * The result is {@code true} if and only if the argument is 
+     * Compares this service tag to the specified object.
+     * The result is {@code true} if and only if the argument is
      * not {@code null} and is a {@code ServiceTag} object whose
-     * <tt>instance_urn</tt> is the same as the 
+     * <tt>instance_urn</tt> is the same as the
      * <tt>instance_urn</tt> of this service tag.
      *
-     * @return {@code true} if this service tag is the same as 
+     * @return {@code true} if this service tag is the same as
      * the specified object.
      */
     @Override
@@ -612,17 +612,17 @@ public class ServiceTag {
      * <p>
      * This method is designed for Sun software that bundles the JDK
      * or the JRE to use. It is recommended that the {@code source}
-     * string contains information about the bundling software 
+     * string contains information about the bundling software
      * such as the name and the version of the software bundle,
      * for example,
      * <blockquote>
      * <tt>NetBeans IDE 6.0 with JDK 6 Update 5 Bundle</tt>
      * </blockquote>
      * in a NetBeans/JDK bundle.
-     * <p> 
+     * <p>
      * At the first time to call this method the application
      * is required to have the write permission to the installed
-     * directory of this running JDK or JRE instance. 
+     * directory of this running JDK or JRE instance.
      *
      * @param source the source that bundles the JDK or the JRE.
      * @return a {@code ServiceTag} object for the Java platform,

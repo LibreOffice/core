@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,14 +27,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
- 
+
 #include "sdrmediawindow.hxx"
 #include <svtools/transfer.hxx>
 
 #include <svx/sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <vcl/window.hxx>
 
-namespace sdr {	namespace contact {
+namespace sdr { namespace contact {
 
 // ------------------
 // - SdrMediaWindow -
@@ -53,16 +53,16 @@ SdrMediaWindow::~SdrMediaWindow()
 }
 
 // ------------------------------------------------------------------------------
-        
+
 void SdrMediaWindow::MouseMove( const MouseEvent& rMEvt )
 {
     Window* pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
-    
+
     if( pWindow && getWindow() )
     {
         const MouseEvent aTransformedEvent( pWindow->ScreenToOutputPixel( getWindow()->OutputToScreenPixel( rMEvt.GetPosPixel() ) ),
                                               rMEvt.GetClicks(), rMEvt.GetMode(), rMEvt.GetButtons(), rMEvt.GetModifier() );
-    
+
         pWindow->MouseMove( aTransformedEvent );
         setPointer( pWindow->GetPointer() );
     }
@@ -73,12 +73,12 @@ void SdrMediaWindow::MouseMove( const MouseEvent& rMEvt )
 void SdrMediaWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Window* pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
-    
+
     if( pWindow && getWindow() )
     {
         const MouseEvent aTransformedEvent( pWindow->ScreenToOutputPixel( getWindow()->OutputToScreenPixel( rMEvt.GetPosPixel() ) ),
                                               rMEvt.GetClicks(), rMEvt.GetMode(), rMEvt.GetButtons(), rMEvt.GetModifier() );
-        
+
         pWindow->MouseButtonDown( aTransformedEvent );
     }
 }
@@ -88,12 +88,12 @@ void SdrMediaWindow::MouseButtonDown( const MouseEvent& rMEvt )
 void SdrMediaWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     Window* pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
-    
+
     if( pWindow && getWindow() )
     {
         const MouseEvent aTransformedEvent( pWindow->ScreenToOutputPixel( getWindow()->OutputToScreenPixel( rMEvt.GetPosPixel() ) ),
                                               rMEvt.GetClicks(), rMEvt.GetMode(), rMEvt.GetButtons(), rMEvt.GetModifier() );
-        
+
         pWindow->MouseButtonUp( aTransformedEvent );
     }
 }
@@ -103,7 +103,7 @@ void SdrMediaWindow::MouseButtonUp( const MouseEvent& rMEvt )
 void SdrMediaWindow::KeyInput( const KeyEvent& rKEvt )
 {
     Window* pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
-    
+
     if( pWindow )
         pWindow->KeyInput( rKEvt );
 }
@@ -113,7 +113,7 @@ void SdrMediaWindow::KeyInput( const KeyEvent& rKEvt )
 void SdrMediaWindow::KeyUp( const KeyEvent& rKEvt )
 {
     Window* pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
-    
+
     if( pWindow )
         pWindow->KeyUp( rKEvt );
 }
@@ -123,12 +123,12 @@ void SdrMediaWindow::KeyUp( const KeyEvent& rKEvt )
 void SdrMediaWindow::Command( const CommandEvent& rCEvt )
 {
     Window* pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
-    
+
     if( pWindow && getWindow() )
     {
         const CommandEvent aTransformedEvent( pWindow->ScreenToOutputPixel( getWindow()->OutputToScreenPixel( rCEvt.GetMousePosPixel() ) ),
                                                 rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetData() );
-        
+
         pWindow->Command( aTransformedEvent );
     }
 }
@@ -137,19 +137,19 @@ void SdrMediaWindow::Command( const CommandEvent& rCEvt )
 
 sal_Int8 SdrMediaWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    Window* 	pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
-    sal_Int8	nRet = DND_ACTION_NONE;
-    
+    Window*     pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
+    sal_Int8    nRet = DND_ACTION_NONE;
+
     if( pWindow )
     {
         DropTargetHelper* pDropTargetHelper = dynamic_cast< DropTargetHelper* >( pWindow );
-        
+
         if( pDropTargetHelper )
         {
             nRet = pDropTargetHelper->AcceptDrop( rEvt );
         }
     }
-    
+
     return( nRet );
 }
 
@@ -157,19 +157,19 @@ sal_Int8 SdrMediaWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 
 sal_Int8 SdrMediaWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    Window* 	pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
-    sal_Int8	nRet = DND_ACTION_NONE;
-    
+    Window*     pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
+    sal_Int8    nRet = DND_ACTION_NONE;
+
     if( pWindow )
     {
         DropTargetHelper* pDropTargetHelper = dynamic_cast< DropTargetHelper* >( pWindow );
-        
+
         if( pDropTargetHelper )
         {
             nRet = pDropTargetHelper->ExecuteDrop( rEvt );
         }
     }
-    
+
     return( nRet );
 }
 
@@ -178,11 +178,11 @@ sal_Int8 SdrMediaWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 void SdrMediaWindow::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
     Window* pWindow = mrViewObjectContactOfSdrMediaObj.getWindow();
-    
+
     if( pWindow )
     {
         DragSourceHelper* pDragSourceHelper = dynamic_cast< DragSourceHelper* >( pWindow );
-        
+
         if( pDragSourceHelper )
         {
             pDragSourceHelper->StartDrag( nAction, rPosPixel );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,30 +37,30 @@
 #include <vcl/svapp.hxx>
 #include <vcl/sound.hxx>
 #include <errhdl.hxx>
-#include <error.h>				// fuer die defines von ERR_SW6MSG_ ...
+#include <error.h>              // fuer die defines von ERR_SW6MSG_ ...
 
 // break into CodeView
 #if defined(ZTC) && defined(WIN)
-#define CVBREAK 	asm( 0xCC );
+#define CVBREAK     asm( 0xCC );
 #endif
 #if defined(MSC) && defined(WIN)
-#define CVBREAK 	__asm int 3;
+#define CVBREAK     __asm int 3;
 #endif
 #ifndef CVBREAK
 #define CVBREAK
 #endif
 
-BOOL bAssertFail = FALSE;			// ist gerade eine Assertbox oben ?
-BOOL bAssert = FALSE;				// TRUE, wenn mal ein ASSERT kam.
+BOOL bAssertFail = FALSE;           // ist gerade eine Assertbox oben ?
+BOOL bAssert = FALSE;               // TRUE, wenn mal ein ASSERT kam.
 
 /*------------------------------------------------------------------------
     Ausgabe einer Fehlermeldung inkl. Bedingung, Dateiname und Zeilennummer
     wo der Fehler auftrat.
     Die Funktion wird durch das ASSERT Makro gerufen!
     Parameter:
-                char	*pError		Fehlermeldung
-                char	*pFileName	Filename in dem der Fehler auftrat
-                USHORT	nLine		Zeilennummer in dem der Fehler auftrat
+                char    *pError     Fehlermeldung
+                char    *pFileName  Filename in dem der Fehler auftrat
+                USHORT  nLine       Zeilennummer in dem der Fehler auftrat
 ------------------------------------------------------------------------*/
 
 void AssertFail( const sal_Char* pError, const sal_Char* pFileName, USHORT nLine )
@@ -72,7 +72,7 @@ void AssertFail( const sal_Char* pError, const sal_Char* pFileName, USHORT nLine
     if( !bAssertFail && GetpApp() && GetpApp()->IsInMain() )
     {
         bAssertFail = TRUE;
-        ByteString	aErr;
+        ByteString  aErr;
         aErr = "Assertion failed\n==================\nFILE      :  ";
         aErr += pFileName;
         aErr += " at line ";
@@ -97,7 +97,7 @@ void AssertFail( const sal_Char* pError, const sal_Char* pFileName, USHORT nLine
         Sound::Beep(SOUND_ERROR);
         Sound::Beep(SOUND_ERROR);
         if( !bAssertFail )
-            *(short *)0 = 4711; 		// UAE ausloesen
+            *(short *)0 = 4711;         // UAE ausloesen
     }
 }
 
@@ -106,9 +106,9 @@ void AssertFail( const sal_Char* pError, const sal_Char* pFileName, USHORT nLine
     wo der Fehler auftrat.
     Die Funktion wird durch das ASSERT Makro gerufen!
     Parameter:
-                USHORT	nErrorId	Id fuer Fehlermeldung
-                char	*pFileName	Filename in dem der Fehler auftrat
-                USHORT	nLine		Zeilennummer in dem der Fehler auftrat
+                USHORT  nErrorId    Id fuer Fehlermeldung
+                char    *pFileName  Filename in dem der Fehler auftrat
+                USHORT  nLine       Zeilennummer in dem der Fehler auftrat
 ------------------------------------------------------------------------*/
 
 void AssertFail( USHORT nErrorId, const sal_Char* pFileName, USHORT nLine )
@@ -116,13 +116,13 @@ void AssertFail( USHORT nErrorId, const sal_Char* pFileName, USHORT nLine )
     // Umsetzung der ErrorId in eine Fehlermeldung
     static const sal_Char
         /* Error Fehlermeldungen zugriffe ausserhalb eines Bereiches */
-        sERR_VAR_IDX[]		= "Op[]",
-        sERR_OUTOFSCOPE[]	= "Zugriff ausserhalb des Bereiches",
+        sERR_VAR_IDX[]      = "Op[]",
+        sERR_OUTOFSCOPE[]   = "Zugriff ausserhalb des Bereiches",
         /* Error Codes fuer Numerierungsregeln */
-        sERR_NUMLEVEL[] 	= "Falscher Num-Level",
+        sERR_NUMLEVEL[]     = "Falscher Num-Level",
         /* Error Codes fuer TxtNode */
-        sERR_NOHINTS[]		= "Zugriff auf ungueltiges HintsArray",
-        sERR_UNKNOWN[]		= "???";
+        sERR_NOHINTS[]      = "Zugriff auf ungueltiges HintsArray",
+        sERR_UNKNOWN[]      = "???";
 
     static const sal_Char* aErrStrTab[ ERR_SWGMSG_END - ERR_SWGMSG_START +1 ] =
     {

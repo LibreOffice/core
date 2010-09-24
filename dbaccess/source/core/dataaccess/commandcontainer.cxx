@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,10 +62,10 @@ namespace dbaccess
 DBG_NAME(OCommandContainer)
 //--------------------------------------------------------------------------
 OCommandContainer::OCommandContainer( const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
-                                     ,const Reference< XInterface >&	_xParentContainer
+                                     ,const Reference< XInterface >&    _xParentContainer
                                      ,const TContentPtr& _pImpl
                                      ,sal_Bool _bTables
-                                     )									 
+                                     )
     :ODefinitionContainer(_xORB,_xParentContainer,_pImpl,!_bTables)
     ,m_bTables(_bTables)
 {
@@ -110,6 +110,6 @@ Reference< XInterface > SAL_CALL OCommandContainer::createInstance( ) throw (Exc
 }
 
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 

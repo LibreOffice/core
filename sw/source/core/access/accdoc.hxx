@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class VclSimpleEvent;
  * base class for SwAccessibleDocument (in this same header file) and
  * SwAccessiblePreview
  */
-class SwAccessibleDocumentBase : public	SwAccessibleContext
+class SwAccessibleDocumentBase : public SwAccessibleContext
 {
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> mxParent;
@@ -62,27 +62,27 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    ///	Return the number of currently visible children.
+    /// Return the number of currently visible children.
     virtual sal_Int32 SAL_CALL getAccessibleChildCount (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    ///	Return the specified child or NULL if index is invalid.
+    /// Return the specified child or NULL if index is invalid.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
-    ///	Return a reference to the parent.
+    /// Return a reference to the parent.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    ///	Return this objects index among the parents children.
-    virtual	sal_Int32 SAL_CALL
+    /// Return this objects index among the parents children.
+    virtual sal_Int32 SAL_CALL
         getAccessibleIndexInParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    ///	Return this object's description.
+    /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException);
 
@@ -114,7 +114,7 @@ public:
 /**
  * access to an accessible Writer document
  */
-class SwAccessibleDocument : public	SwAccessibleDocumentBase,
+class SwAccessibleDocument : public SwAccessibleDocumentBase,
                              public com::sun::star::accessibility::XAccessibleSelection
 {
     // Implementation for XAccessibleSelection interface
@@ -136,13 +136,13 @@ public:
 
     //=====  XServiceInfo  ====================================================
 
-    /**	Returns an identifier for the implementation of this object.
+    /** Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /**	Return whether the specified service is supported by this class.
+    /** Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
         supportsService (const ::rtl::OUString& sServiceName)

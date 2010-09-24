@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,21 +35,21 @@
 
 enum SwFillMode
 {
-    FILL_TAB,		// default, Auffuellen mit Tabulatoren
-    FILL_SPACE,		// ... mit Tabulatoren und Spaces
-    FILL_MARGIN,	// nur links, zentriert, rechts Ausrichten
+    FILL_TAB,       // default, Auffuellen mit Tabulatoren
+    FILL_SPACE,     // ... mit Tabulatoren und Spaces
+    FILL_MARGIN,    // nur links, zentriert, rechts Ausrichten
     FILL_INDENT     // durch linken Absatzeinzug
 };
 
 struct SwFillCrsrPos
 {
-    SwRect aCrsr;			// Position und Groesse des Shadowcursors
-    USHORT nParaCnt;		// Anzahl der einzufuegenden Absaetze
-    USHORT nTabCnt;			// Anzahl der Tabs bzw. Groesse des Einzugs
-    USHORT nSpaceCnt;		// Anzahl der einzufuegenden Leerzeichen
-    USHORT nColumnCnt;		// Anzahl der notwendigen Spaltenumbrueche
+    SwRect aCrsr;           // Position und Groesse des Shadowcursors
+    USHORT nParaCnt;        // Anzahl der einzufuegenden Absaetze
+    USHORT nTabCnt;         // Anzahl der Tabs bzw. Groesse des Einzugs
+    USHORT nSpaceCnt;       // Anzahl der einzufuegenden Leerzeichen
+    USHORT nColumnCnt;      // Anzahl der notwendigen Spaltenumbrueche
     sal_Int16 eOrient;      // Absatzausrichtung
-    SwFillMode eMode;		// Gewuenschte Auffuellregel
+    SwFillMode eMode;       // Gewuenschte Auffuellregel
     SwFillCrsrPos( SwFillMode eMd = FILL_TAB ) :
         nParaCnt( 0 ), nTabCnt( 0 ), nSpaceCnt( 0 ), nColumnCnt( 0 ),
         eOrient( com::sun::star::text::HoriOrientation::NONE ), eMode( eMd )
@@ -66,7 +66,7 @@ struct SwFillCrsrPos
 
 struct Sw2LinesPos
 {
-    SwRect aLine;			// Position and size of the line
+    SwRect aLine;           // Position and size of the line
     SwRect aPortion;        // Position and size of the multi portion
     SwRect aPortion2;       // needed for nested multi portions
     BYTE nMultiType;        // Multiportion type
@@ -122,35 +122,35 @@ struct SwSpecialPos
 // CrsrTravelling-Staties (fuer GetCrsrOfst)
 enum CrsrMoveState
 {
-    MV_NONE,			// default
-    MV_UPDOWN,			// Crsr Up/Down
-    MV_RIGHTMARGIN, 	// an rechten Rand
-    MV_LEFTMARGIN,		// an linken Rand
-    MV_SETONLYTEXT,		// mit dem Cursr nur im Text bleiben
-    MV_TBLSEL			// nicht in wiederholte Headlines
+    MV_NONE,            // default
+    MV_UPDOWN,          // Crsr Up/Down
+    MV_RIGHTMARGIN,     // an rechten Rand
+    MV_LEFTMARGIN,      // an linken Rand
+    MV_SETONLYTEXT,     // mit dem Cursr nur im Text bleiben
+    MV_TBLSEL           // nicht in wiederholte Headlines
 };
 
 // struct fuer spaetere Erweiterungen
 struct SwCrsrMoveState
 {
-    SwFillCrsrPos	*pFill;		// fuer das automatische Auffuellen mit Tabs etc.
-    Sw2LinesPos		*p2Lines; 	// for selections inside/around 2line portions
+    SwFillCrsrPos   *pFill;     // fuer das automatische Auffuellen mit Tabs etc.
+    Sw2LinesPos     *p2Lines;   // for selections inside/around 2line portions
     SwSpecialPos*   pSpecialPos; // for positions inside fields
-    Point aRealHeight;			// enthaelt dann die Position/Hoehe des Cursors
+    Point aRealHeight;          // enthaelt dann die Position/Hoehe des Cursors
     CrsrMoveState eState;
     BYTE            nCursorBidiLevel;
-    BOOL bStop			:1;
-    BOOL bRealHeight	:1;		// Soll die reale Hoehe berechnet werden?
-    BOOL bFieldInfo		:1;		// Sollen Felder erkannt werden?
-    BOOL bPosCorr		:1;		// Point musste korrigiert werden
-    BOOL bFtnNoInfo		:1;		// Fussnotennumerierung erkannt
-    BOOL bExactOnly		:1;		// GetCrsrOfst nur nach Exakten Treffern
+    BOOL bStop          :1;
+    BOOL bRealHeight    :1;     // Soll die reale Hoehe berechnet werden?
+    BOOL bFieldInfo     :1;     // Sollen Felder erkannt werden?
+    BOOL bPosCorr       :1;     // Point musste korrigiert werden
+    BOOL bFtnNoInfo     :1;     // Fussnotennumerierung erkannt
+    BOOL bExactOnly     :1;     // GetCrsrOfst nur nach Exakten Treffern
                                 // suchen lassen, sprich niemals in das
                                 // GetCntntPos laufen.
-    BOOL bFillRet		:1;		// wird nur im FillModus temp. genutzt
-    BOOL bSetInReadOnly :1;		// ReadOnlyBereiche duerfen betreten werden
-    BOOL bRealWidth		:1;		// Calculation of the width required
-    BOOL b2Lines		:1;		// Check 2line portions and fill p2Lines
+    BOOL bFillRet       :1;     // wird nur im FillModus temp. genutzt
+    BOOL bSetInReadOnly :1;     // ReadOnlyBereiche duerfen betreten werden
+    BOOL bRealWidth     :1;     // Calculation of the width required
+    BOOL b2Lines        :1;     // Check 2line portions and fill p2Lines
     BOOL bNoScroll      :1;     // No scrolling of undersized textframes
     BOOL bPosMatchesBounds :1;  // GetCrsrOfst should not return the next
                                 // position if screen position is inside second

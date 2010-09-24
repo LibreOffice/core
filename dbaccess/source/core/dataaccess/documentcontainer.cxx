@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ namespace dbaccess
 //........................................................................
 
 //==========================================================================
-//= LocalNameApproval 
+//= LocalNameApproval
 //==========================================================================
 class LocalNameApproval : public IContainerApprove
 {
@@ -142,7 +142,7 @@ void SAL_CALL LocalNameApproval::approveElement( const ::rtl::OUString& _rName, 
 DBG_NAME(ODocumentContainer)
 //--------------------------------------------------------------------------
 ODocumentContainer::ODocumentContainer(const Reference< XMultiServiceFactory >& _xORB
-                                    ,const Reference< XInterface >&	_xParentContainer
+                                    ,const Reference< XInterface >& _xParentContainer
                                     ,const TContentPtr& _pImpl
                                     , sal_Bool _bFormsContainer
                                     )
@@ -350,11 +350,11 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             Reference< XCommandProcessor > xCommandProcessor(xContent,UNO_QUERY);
             if ( xContent.is() )
             {
-                xCommandProcessor->execute(aCommand,-1,Reference< XCommandEnvironment >());	
+                xCommandProcessor->execute(aCommand,-1,Reference< XCommandEnvironment >());
             }
         }
-        
-        //	xRet = xContent;
+
+        //  xRet = xContent;
     }
     else if ( ServiceSpecifier == SERVICE_NAME_FORM_COLLECTION || SERVICE_NAME_REPORT_COLLECTION == ServiceSpecifier )
     {
@@ -389,7 +389,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             pElementImpl = aFind->second;
         OSL_ENSURE( pElementImpl ," Invalid entry in map!");
         xContent = new ODocumentContainer( m_aContext.getLegacyServiceFactory(), *this, pElementImpl, ServiceSpecifier == SERVICE_NAME_FORM_COLLECTION );
-        
+
         // copy children
         if ( xCopyFrom.is() )
         {
@@ -425,7 +425,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                     {
                         if ( m_bFormsContainer )
                             sServiceName = SERVICE_NAME_FORM_COLLECTION;
-                        else 
+                        else
                             sServiceName = SERVICE_NAME_REPORT_COLLECTION;
                     }
                     else
@@ -455,7 +455,7 @@ Sequence< ::rtl::OUString > SAL_CALL ODocumentContainer::getAvailableServiceName
 Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException)
 {
     Any aRet;
-    if ( aCommand.Name.compareToAscii( "open" ) == 0 ) 
+    if ( aCommand.Name.compareToAscii( "open" ) == 0 )
     {
         //////////////////////////////////////////////////////////////////
         // open command for a folder content
@@ -526,13 +526,13 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         //////////////////////////////////////////////////////////////////
         Sequence< ::rtl::OUString> aSeq = getElementNames();
         const ::rtl::OUString* pIter = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
+        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
         for(;pIter != pEnd;++pIter)
             removeByName(*pIter);
 
         dispose();
     }
-    else 
+    else
         aRet = OContentHelper::execute(aCommand,CommandId,Environment);
     return aRet;
 }
@@ -563,8 +563,8 @@ namespace
             }
         }
         if ( nIndex == -1 )
-            _sSimpleName = sName; // a content 
-        else 
+            _sSimpleName = sName; // a content
+        else
             _xNameContainer.clear(); // a sub folder doesn't exist
         return bRet;
     }
@@ -653,7 +653,7 @@ void SAL_CALL ODocumentContainer::insertByHierarchicalName( const ::rtl::OUStrin
     ::rtl::OUString sName;
     if ( lcl_queryContent(_sName,xNameContainer,aContent,sName) )
         throw ElementExistException(_sName,*this);
-    
+
     if ( !xNameContainer.is() )
     {
         ::rtl::OUString sMessage( DBA_RES( RID_STR_NO_SUB_FOLDER ) );
@@ -768,7 +768,7 @@ void SAL_CALL ODocumentContainer::revert(  ) throw (::com::sun::star::io::IOExce
 }
 // -----------------------------------------------------------------------------
 Reference< XStorage> ODocumentContainer::getContainerStorage() const
-{ 
+{
     return  m_pImpl->m_pDataSource
         ?   m_pImpl->m_pDataSource->getStorage( m_bFormsContainer ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT )
         :   Reference< XStorage>();
@@ -798,7 +798,7 @@ void SAL_CALL ODocumentContainer::removeByName( const ::rtl::OUString& _rName ) 
     // do the removal
     implRemove(_rName);
 
-    //	disposeComponent(xContent); // no dispose here, the object may be inserted again under a different name
+    //  disposeComponent(xContent); // no dispose here, the object may be inserted again under a different name
 
     notifyByName( aGuard, _rName, NULL, NULL, E_REMOVED, ContainerListemers );
 }
@@ -828,6 +828,6 @@ void SAL_CALL ODocumentContainer::rename( const ::rtl::OUString& newName ) throw
 }
 
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 

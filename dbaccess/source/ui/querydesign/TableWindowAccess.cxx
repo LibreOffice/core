@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 #endif
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif												 
+#endif
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
@@ -74,11 +74,11 @@ namespace dbaui
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
-    //	using namespace ::com::sun::star::awt;
+    //  using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star;
 
     OTableWindowAccess::OTableWindowAccess(OTableWindow* _pTable)
-        :VCLXAccessibleComponent(_pTable->GetComponentInterface().is() ? _pTable->GetWindowPeer() : NULL) 
+        :VCLXAccessibleComponent(_pTable->GetComponentInterface().is() ? _pTable->GetWindowPeer() : NULL)
         ,m_pTable(_pTable)
     {
     }
@@ -233,7 +233,7 @@ namespace dbaui
             }
         }
         return xReturn;
-    }	
+    }
     // -----------------------------------------------------------------------------
 
     sal_Int32 SAL_CALL OTableWindowAccess::getRelationCount(  ) throw (RuntimeException)
@@ -263,8 +263,8 @@ namespace dbaui
     sal_Bool SAL_CALL OTableWindowAccess::containsRelation( sal_Int16 aRelationType ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
-        return		AccessibleRelationType::CONTROLLER_FOR == aRelationType 
-                &&	m_pTable && m_pTable->getTableView()->ExistsAConn(m_pTable);
+        return      AccessibleRelationType::CONTROLLER_FOR == aRelationType
+                &&  m_pTable && m_pTable->getTableView()->ExistsAConn(m_pTable);
     }
     // -----------------------------------------------------------------------------
     AccessibleRelation SAL_CALL OTableWindowAccess::getRelationByType( sal_Int16 aRelationType ) throw (RuntimeException)
@@ -274,14 +274,14 @@ namespace dbaui
         {
             OJoinTableView* pView = m_pTable->getTableView();
             const ::std::vector<OTableConnection*>* pConnectionList = pView->getTableConnections();
-            
+
             ::std::vector<OTableConnection*>::const_iterator aIter = pView->getTableConnections(m_pTable);
             ::std::vector<OTableConnection*>::const_iterator aEnd = pConnectionList->end();
             ::std::vector< Reference<XInterface> > aRelations;
             aRelations.reserve(5); // just guessing
             for (; aIter != aEnd ; ++aIter )
                 aRelations.push_back(getParentChild(aIter - pConnectionList->begin()));
-            
+
             Reference<XInterface> *pRelations = aRelations.empty() ? 0 : &aRelations[0];
             Sequence< Reference<XInterface> > aSeq(pRelations, aRelations.size());
             return AccessibleRelation(AccessibleRelationType::CONTROLLER_FOR,aSeq);

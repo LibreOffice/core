@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@
 module com { module sun { module star { module datatransfer {
 
 //-------------------------------------------------------------------------
-/** An implementation of this interface represents a MIME content-type that 
-    is conform to <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a> and 
+/** An implementation of this interface represents a MIME content-type that
+    is conform to <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a> and
     <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>.
     Instances that implement this interface could be created using the
     interface <type>XMimeContentTypeFactory</type>.
@@ -80,10 +80,10 @@ published interface XMimeContentType : com::sun::star::uno::XInterface
         A list of the names of all parameters of the MIME content-type.
     */
     sequence< string > getParameters( );
-    
+
     //-------------------------------------------------------------------------
     /** To query if a specific parameter is supported.
-    
+
         @param aName
         The name of the parameter to query for.
 
@@ -94,7 +94,7 @@ published interface XMimeContentType : com::sun::star::uno::XInterface
     boolean hasParameter( [in] string aName );
 
     //-------------------------------------------------------------------------
-    /**	To get the value of a specified parameter.
+    /** To get the value of a specified parameter.
 
         @param aName
         The name of the parameter for which the value is requested.

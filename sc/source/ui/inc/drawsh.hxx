@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class ScDrawView;
 
 class ScDrawShell : public SfxShell
 {
-    ScViewData*	pViewData;
+    ScViewData* pViewData;
 
     DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
 
@@ -49,7 +49,7 @@ class ScDrawShell : public SfxShell
 #endif
 
 protected:
-    ScViewData*	GetViewData()	{ return pViewData; }
+    ScViewData* GetViewData()   { return pViewData; }
 
 public:
     TYPEINFO();
@@ -58,33 +58,33 @@ public:
                     ScDrawShell(ScViewData* pData);
                     ~ScDrawShell();
 
-    void 	StateDisableItems( SfxItemSet &rSet );
+    void    StateDisableItems( SfxItemSet &rSet );
 
-    void	ExecDrawAttr(SfxRequest& rReq);
-    void	GetDrawAttrState(SfxItemSet &rSet);
-    void	GetAttrFuncState(SfxItemSet &rSet);
+    void    ExecDrawAttr(SfxRequest& rReq);
+    void    GetDrawAttrState(SfxItemSet &rSet);
+    void    GetAttrFuncState(SfxItemSet &rSet);
 
-    void	ExecDrawFunc(SfxRequest& rReq);
-    void	GetDrawFuncState(SfxItemSet &rSet);
-    void	GetState(SfxItemSet &rSet);
+    void    ExecDrawFunc(SfxRequest& rReq);
+    void    GetDrawFuncState(SfxItemSet &rSet);
+    void    GetState(SfxItemSet &rSet);
 
-    void	ExecFormText(SfxRequest& rReq);		// StarFontWork
-    void	GetFormTextState(SfxItemSet& rSet);
+    void    ExecFormText(SfxRequest& rReq);     // StarFontWork
+    void    GetFormTextState(SfxItemSet& rSet);
 
-    void	ExecuteHLink(SfxRequest& rReq);		// Hyperlink
-    void	GetHLinkState(SfxItemSet& rSet);
+    void    ExecuteHLink(SfxRequest& rReq);     // Hyperlink
+    void    GetHLinkState(SfxItemSet& rSet);
 
     void    ExecFormatPaintbrush(SfxRequest& rReq);
     void    StateFormatPaintbrush(SfxItemSet& rSet);
 
     void    ExecuteMacroAssign( SdrObject* pObj, Window* pWin );
-    void	ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
-    void	ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
-    void	ExecuteTextAttrDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
+    void    ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
+    void    ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
+    void    ExecuteTextAttrDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
 
     ScDrawView* GetDrawView();
 
-    BOOL	AreAllObjectsOnLayer(USHORT nLayerNo,const SdrMarkList& rMark);
+    BOOL    AreAllObjectsOnLayer(USHORT nLayerNo,const SdrMarkList& rMark);
 };
 
 

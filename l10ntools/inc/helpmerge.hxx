@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,15 +42,15 @@ private:
     ByteString sHelpFile;
     bool       bUTF8;
     bool       bHasInputList;
-    
-/// Copy fallback language String (ENUS,DE) into position of the numeric language iso code 
+
+/// Copy fallback language String (ENUS,DE) into position of the numeric language iso code
 /// @PRECOND 0 < langIdx_in < MAX_IDX
     static void FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in );
 
 /// Debugmethod, prints the content of the map to stdout
     static  void Dump(  LangHashMap* rElem_in , const ByteString sKey_in );
 
-/// Debugmethod, prints the content of the map to stdout    
+/// Debugmethod, prints the content of the map to stdout
     static  void Dump(  XMLHashMap* rElem_in ) ;
 
 
@@ -63,13 +63,13 @@ public:
 /// @PRECOND rHelpFile is valid
     static bool CreateSDF( const ByteString &rSDFFile_in, const ByteString &rPrj_in, const ByteString &rRoot_in,
                            const ByteString &sHelpFile, XMLFile *pXmlFile, const ByteString &rGsi1 );
-    
+
     static  void parse_languages( std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile );
 
-/// Method merges the String from the SDFfile into XMLfile. Both Strings must 
-/// point to existing files. 
+/// Method merges the String from the SDFfile into XMLfile. Both Strings must
+/// point to existing files.
     bool Merge( const ByteString &rSDFFile_in, const ByteString &rDestinationFile_in , ByteString& sLanguage , MergeDataFile& aMergeDataFile );
-    bool Merge( const ByteString &rSDFFile, const ByteString &rPathX , const ByteString &rPathY , bool bISO 
+    bool Merge( const ByteString &rSDFFile, const ByteString &rPathX , const ByteString &rPathY , bool bISO
         , const std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile , bool bCreateDir );
 
 private:

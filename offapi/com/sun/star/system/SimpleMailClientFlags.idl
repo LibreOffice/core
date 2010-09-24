@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 module com { module sun { module star { module system {
 
 //=============================================================================
-/**	These constants are used to specify how the SimpleMailClient Service 
+/** These constants are used to specify how the SimpleMailClient Service
     should behave.
  */
 
@@ -40,16 +40,16 @@ published constants SimpleMailClientFlags
 {
     //---------------------------------------------------------------------
     /** Uses the default settings when sending a mail, e.g.
-        launches the current configured system mail client. 
+        launches the current configured system mail client.
     */
-    const long DEFAULTS				= 0;
+    const long DEFAULTS             = 0;
 
     //---------------------------------------------------------------------
     /** Does not show the current configured system mail client, but sends
         the mail without any further user interaction.
-        If this flag is specified, a recipient address must have been 
+        If this flag is specified, a recipient address must have been
         specified for the given <type>XSimpleMailMessage</type>
-        object given to the method 
+        object given to the method
         <member scope="com::sun::star::system">XSimpleMailClient::sendSimpleMailMessage()</member>.
      */
     const long NO_USER_INTERFACE    = 1;
@@ -57,13 +57,13 @@ published constants SimpleMailClientFlags
     //---------------------------------------------------------------------
     /** No logon dialog should be displayed to prompt the user for logon
         information if necessary.
-        When this flag is specified and the user needs to logon in order 
-        to send a simple mail message via the method 
+        When this flag is specified and the user needs to logon in order
+        to send a simple mail message via the method
         <member scope="com::sun::star::system">XSimpleMailClient::sendSimpleMailMessage()</member>,
-        an Exception will be thrown. 
+        an Exception will be thrown.
     */
-    const long NO_LOGON_DIALOG		= 2;
-};	
+    const long NO_LOGON_DIALOG      = 2;
+};
 
 //=============================================================================
 

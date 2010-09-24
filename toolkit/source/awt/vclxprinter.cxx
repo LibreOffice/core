@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@
 #include <toolkit/awt/vclxdevice.hxx>
 
 
-#define BINARYSETUPMARKER	0x23864691
+#define BINARYSETUPMARKER   0x23864691
 
-#define PROPERTY_Orientation	0
-#define PROPERTY_Horizontal		1
+#define PROPERTY_Orientation    0
+#define PROPERTY_Horizontal     1
 
 ::com::sun::star::beans::Property* ImplGetProperties( sal_uInt16& rElementCount )
 {
@@ -73,9 +73,9 @@
     return pProperties;
 }
 
-//	----------------------------------------------------
-//	class VCLXPrinterPropertySet
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXPrinterPropertySet
+//  ----------------------------------------------------
 
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXPrinterPropertySet::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
@@ -115,7 +115,7 @@ VCLXPrinterPropertySet::~VCLXPrinterPropertySet()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  VCLXPrinterPropertySet::GetDevice()
 {
-    if ( !mxPrnDevice.is() ) 
+    if ( !mxPrnDevice.is() )
     {
         VCLXDevice* pDev = new VCLXDevice;
         pDev->SetOutputDevice( GetPrinter() );
@@ -149,9 +149,9 @@ VCLXPrinterPropertySet::~VCLXPrinterPropertySet()
 sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( ::com::sun::star::uno::Any & rConvertedValue, ::com::sun::star::uno::Any & rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::lang::IllegalArgumentException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
-    
+
     sal_Bool bDifferent = sal_False;
-    switch ( nHandle ) 
+    switch ( nHandle )
     {
         case PROPERTY_Orientation:
         {
@@ -186,7 +186,7 @@ sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( ::com::sun::star::uno
 void VCLXPrinterPropertySet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
-    
+
     switch( nHandle )
     {
         case PROPERTY_Orientation:
@@ -209,7 +209,7 @@ void VCLXPrinterPropertySet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle
 void VCLXPrinterPropertySet::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((VCLXPrinterPropertySet*)this)->Mutex );
-    
+
     switch( nHandle )
     {
         case PROPERTY_Orientation:
@@ -238,10 +238,10 @@ void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal ) throw(::com::
 ::com::sun::star::uno::Sequence< ::rtl::OUString > VCLXPrinterPropertySet::getFormDescriptions(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
-    
+
     sal_uInt16 nPaperBinCount = GetPrinter()->GetPaperBinCount();
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >	aDescriptions( nPaperBinCount );
-    for ( sal_uInt16 n = 0; n < nPaperBinCount; n++ ) 
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aDescriptions( nPaperBinCount );
+    for ( sal_uInt16 n = 0; n < nPaperBinCount; n++ )
     {
         // Format: <DisplayFormName;FormNameId;DisplayPaperBinName;PaperBinNameId;DisplayPaperName;PaperNameId>
         String aDescr( RTL_CONSTASCII_USTRINGPARAM( "*;*;" ) );
@@ -258,7 +258,7 @@ void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal ) throw(::com::
 void VCLXPrinterPropertySet::selectForm( const ::rtl::OUString& rFormDescription ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
-    
+
     sal_Int32 nIndex = 0;
     sal_uInt16 nPaperBin = sal::static_int_cast< sal_uInt16 >(
         rFormDescription.getToken( 3, ';', nIndex ).toInt32());
@@ -268,7 +268,7 @@ void VCLXPrinterPropertySet::selectForm( const ::rtl::OUString& rFormDescription
 ::com::sun::star::uno::Sequence< sal_Int8 > VCLXPrinterPropertySet::getBinarySetup(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
-    
+
     SvMemoryStream aMem;
     aMem << BINARYSETUPMARKER;
     aMem << GetPrinter()->GetJobSetup();
@@ -278,12 +278,12 @@ void VCLXPrinterPropertySet::selectForm( const ::rtl::OUString& rFormDescription
 void VCLXPrinterPropertySet::setBinarySetup( const ::com::sun::star::uno::Sequence< sal_Int8 >& data ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
-    
+
     SvMemoryStream aMem( (char*) data.getConstArray(), data.getLength(), STREAM_READ );
     sal_uInt32 nMarker;
     aMem >> nMarker;
     DBG_ASSERT( nMarker == BINARYSETUPMARKER, "setBinarySetup - invalid!" );
-    if ( nMarker == BINARYSETUPMARKER ) 
+    if ( nMarker == BINARYSETUPMARKER )
     {
         JobSetup aSetup;
         aMem >> aSetup;
@@ -292,10 +292,10 @@ void VCLXPrinterPropertySet::setBinarySetup( const ::com::sun::star::uno::Sequen
 }
 
 
-//	----------------------------------------------------
-//	class VCLXPrinter
-//	----------------------------------------------------
-VCLXPrinter::VCLXPrinter( const String& rPrinterName ) 
+//  ----------------------------------------------------
+//  class VCLXPrinter
+//  ----------------------------------------------------
+VCLXPrinter::VCLXPrinter( const String& rPrinterName )
     : VCLXPrinterPropertySet( rPrinterName )
 {
 }
@@ -325,22 +325,22 @@ IMPL_XTYPEPROVIDER_END
 sal_Bool VCLXPrinter::start( const ::rtl::OUString& /*rJobName*/, sal_Int16 /*nCopies*/, sal_Bool /*bCollate*/ ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
-    
+
     sal_Bool bDone = sal_True;
     if ( mpListener.get() )
     {
         maInitJobSetup = mpPrinter->GetJobSetup();
         mpListener.reset( new vcl::OldStylePrintAdaptor( mpPrinter ) );
     }
-    
+
     return bDone;
 }
 
 void VCLXPrinter::end(  ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
-    
-    if ( mpListener.get() ) 
+
+    if ( mpListener.get() )
     {
         Printer::PrintJob( mpListener, maInitJobSetup );
         mpListener.reset();
@@ -351,14 +351,14 @@ void VCLXPrinter::terminate(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
-    mpListener.reset();	
+    mpListener.reset();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXPrinter::startPage(  ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
-    
-    if ( mpListener.get() ) 
+
+    if ( mpListener.get() )
     {
         mpListener->StartPage();
     }
@@ -368,19 +368,19 @@ void VCLXPrinter::terminate(  ) throw(::com::sun::star::uno::RuntimeException)
 void VCLXPrinter::endPage(  ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
-    
-    if ( mpListener.get() ) 
+
+    if ( mpListener.get() )
     {
         mpListener->EndPage();
     }
 }
 
 
-//	----------------------------------------------------
-//	class VCLXInfoPrinter
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXInfoPrinter
+//  ----------------------------------------------------
 
-VCLXInfoPrinter::VCLXInfoPrinter( const String& rPrinterName ) 
+VCLXInfoPrinter::VCLXInfoPrinter( const String& rPrinterName )
     : VCLXPrinterPropertySet( rPrinterName )
 {
 }
@@ -411,13 +411,13 @@ IMPL_XTYPEPROVIDER_END
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXInfoPrinter::createDevice(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
-    
+
     return GetDevice();
 }
 
-//	----------------------------------------------------
-//	class VCLXPrinterServer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXPrinterServer
+//  ----------------------------------------------------
 
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXPrinterServer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
@@ -438,10 +438,10 @@ IMPL_XTYPEPROVIDER_END
     const std::vector<rtl::OUString>& rQueues = Printer::GetPrinterQueues();
     sal_uInt32 nPrinters = rQueues.size();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >	aNames( nPrinters );
-    for ( sal_uInt32 n = 0; n < nPrinters; n++ ) 
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aNames( nPrinters );
+    for ( sal_uInt32 n = 0; n < nPrinters; n++ )
         aNames.getArray()[n] = rQueues[n];
-    
+
     return aNames;
 }
 

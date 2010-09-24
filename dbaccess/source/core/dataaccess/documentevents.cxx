@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -206,7 +206,7 @@ namespace dbaccess
 
         elementPos->second = aEventDescriptor;
     }
-    
+
     //--------------------------------------------------------------------
     Any SAL_CALL DocumentEvents::getByName( const ::rtl::OUString& _Name ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {
@@ -222,7 +222,7 @@ namespace dbaccess
             aReturn <<= rEventDesc;
         return aReturn;
     }
-    
+
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL DocumentEvents::getElementNames(  ) throw (RuntimeException)
     {
@@ -237,7 +237,7 @@ namespace dbaccess
         );
         return aNames;
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL DocumentEvents::hasByName( const ::rtl::OUString& _Name ) throw (RuntimeException)
     {
@@ -245,13 +245,13 @@ namespace dbaccess
 
         return m_pData->rEventsData.find( _Name ) != m_pData->rEventsData.end();
     }
-    
+
     //--------------------------------------------------------------------
     Type SAL_CALL DocumentEvents::getElementType(  ) throw (RuntimeException)
     {
         return ::cppu::UnoType< Sequence< PropertyValue > >::get();
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL DocumentEvents::hasElements(  ) throw (RuntimeException)
     {

@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -30,7 +30,7 @@ namespace agg
 
         w -= m_smoother_width;
         double s = m_smoother_width;
-        if(w < 0.0) 
+        if(w < 0.0)
         {
             s += w;
             w = 0.0;
@@ -88,15 +88,15 @@ namespace agg
 
         for(i = 0; i < subpixel_smoother_width; i++)
         {
-            *ch_smoother++ = 
-                m_gamma[unsigned((base_val - 
-                                  base_val * 
+            *ch_smoother++ =
+                m_gamma[unsigned((base_val -
+                                  base_val *
                                   (double(i) / subpixel_smoother_width)) * aa_mask)];
         }
 
-        unsigned n_smoother = profile_size() - 
-                              subpixel_smoother_width - 
-                              subpixel_center_width - 
+        unsigned n_smoother = profile_size() -
+                              subpixel_smoother_width -
+                              subpixel_center_width -
                               subpixel_size*2;
 
         val = m_gamma[0];

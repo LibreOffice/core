@@ -39,7 +39,7 @@
 using namespace xmlsecurity;
 
 struct ErrDesc {
-    PRErrorCode	 errNum;
+    PRErrorCode  errNum;
     const char * errString;
 };
 
@@ -49,7 +49,7 @@ const ErrDesc allDesc[] = {
 
 #include "certerrors.h"
 
-};  
+};
 
 
 
@@ -78,7 +78,7 @@ printChainFailure(CERTVerifyLog *log)
     const char * specificError = NULL;
     const char * issuer = NULL;
     CERTVerifyLogNode *node   = NULL;
-    
+
     if (log->count > 0)
     {
         xmlsec_trace("Bad certifcation path:");
@@ -88,7 +88,7 @@ printChainFailure(CERTVerifyLog *log)
             {
                 depth = node->depth;
                 xmlsec_trace("Certificate:  %d. %s %s:", depth,
-                        node->cert->subjectName, 
+                        node->cert->subjectName,
                         depth ? "[Certificate Authority]": "");
             }
             xmlsec_trace("  ERROR %ld: %s", node->error,
@@ -160,6 +160,6 @@ printChainFailure(CERTVerifyLog *log)
                 xmlsec_trace("%s", specificError);
             if (issuer)
                 xmlsec_trace("%s", issuer);
-        }    
+        }
     }
 }

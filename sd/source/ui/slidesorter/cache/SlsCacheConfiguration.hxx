@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public:
         does not exist then an empty Any is returned.
     */
     ::com::sun::star::uno::Any GetValue (const ::rtl::OUString& rName);
-    
+
 private:
     static ::boost::shared_ptr<CacheConfiguration> mpInstance;
     /** When a caller holds a reference after we have released ours we use

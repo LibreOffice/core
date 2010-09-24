@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ SlideShowContext::SlideShowContext( SubsettableShapeManagerSharedPtr& rSubsettab
                                     UserEventQueue&                   rUserEventQueue,
                                     CursorManager&                    rCursorManager,
                                     const UnoViewContainer&           rViewContainer,
-                                    const uno::Reference< 
+                                    const uno::Reference<
                                           uno::XComponentContext>&    rComponentContext ) :
         mpSubsettableShapeManager( rSubsettableShapeManager ),
         mrEventQueue( rEventQueue ),
@@ -67,9 +67,9 @@ SlideShowContext::SlideShowContext( SubsettableShapeManagerSharedPtr& rSubsettab
         mxComponentContext( rComponentContext )
     {}
 
-void SlideShowContext::dispose() 
-{ 
-    mxComponentContext.clear(); 
+void SlideShowContext::dispose()
+{
+    mxComponentContext.clear();
 }
 
 } // namespace internal

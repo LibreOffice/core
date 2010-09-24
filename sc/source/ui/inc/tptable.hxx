@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,13 +55,13 @@ public:
 class ScTablePage : public SfxTabPage
 {
 public:
-    static	SfxTabPage*	Create			( Window*		 	pParent,
-                                          const SfxItemSet&	rCoreSet );
-    static	USHORT*		GetRanges		();
-    virtual	BOOL		FillItemSet		( SfxItemSet& rCoreSet );
-    virtual	void		Reset			( const SfxItemSet& rCoreSet );
+    static  SfxTabPage* Create          ( Window*           pParent,
+                                          const SfxItemSet& rCoreSet );
+    static  USHORT*     GetRanges       ();
+    virtual BOOL        FillItemSet     ( SfxItemSet& rCoreSet );
+    virtual void        Reset           ( const SfxItemSet& rCoreSet );
     using SfxTabPage::DeactivatePage;
-    virtual int			DeactivatePage	( SfxItemSet* pSet = NULL );
+    virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL );
     virtual void        DataChanged     ( const DataChangedEvent& rDCEvt );
 
 private:
@@ -72,25 +72,25 @@ private:
 
 private:
     FixedLine       aFlPageDir;
-    RadioButton		aBtnTopDown;
-    RadioButton		aBtnLeftRight;
+    RadioButton     aBtnTopDown;
+    RadioButton     aBtnLeftRight;
     FixedImage      aBmpPageDir;
     Image           aImgLeftRight;
     Image           aImgTopDown;
     Image           aImgLeftRightHC;
     Image           aImgTopDownHC;
-    CheckBox		aBtnPageNo;
-    NumericField	aEdPageNo;
+    CheckBox        aBtnPageNo;
+    NumericField    aEdPageNo;
 
     FixedLine       aFlPrint;
-    CheckBox		aBtnHeaders;
-    CheckBox		aBtnGrid;
-    CheckBox		aBtnNotes;
-    CheckBox		aBtnObjects;
-    CheckBox		aBtnCharts;
-    CheckBox		aBtnDrawings;
-    CheckBox		aBtnFormulas;
-    CheckBox		aBtnNullVals;
+    CheckBox        aBtnHeaders;
+    CheckBox        aBtnGrid;
+    CheckBox        aBtnNotes;
+    CheckBox        aBtnObjects;
+    CheckBox        aBtnCharts;
+    CheckBox        aBtnDrawings;
+    CheckBox        aBtnFormulas;
+    CheckBox        aBtnNullVals;
 
     FixedLine           aFlScale;
     FixedText           aFtScaleMode;

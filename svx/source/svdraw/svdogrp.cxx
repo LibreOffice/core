@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,7 +130,7 @@ void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
         if (!aInfo.bMirror45Allowed        ) rInfo.bMirror45Allowed        =FALSE;
         if (!aInfo.bMirror90Allowed        ) rInfo.bMirror90Allowed        =FALSE;
         if (!aInfo.bShearAllowed           ) rInfo.bShearAllowed           =FALSE;
-        if (!aInfo.bEdgeRadiusAllowed	   ) rInfo.bEdgeRadiusAllowed	   =FALSE;
+        if (!aInfo.bEdgeRadiusAllowed      ) rInfo.bEdgeRadiusAllowed      =FALSE;
         if (!aInfo.bNoOrthoDesired         ) rInfo.bNoOrthoDesired         =FALSE;
         if (aInfo.bNoContortion            ) rInfo.bNoContortion           =TRUE;
         if (!aInfo.bCanConvToPath          ) rInfo.bCanConvToPath          =FALSE;

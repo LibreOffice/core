@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 // -----------
 
 // ClipRegions funktionieren immer noch nicht auf allen getesteten Druckern
-#define SAL_PRINTER_CLIPPATH	1
+#define SAL_PRINTER_CLIPPATH    1
 // #define SAL_PRINTER_POLYPATH 1
 
 // =======================================================================
@@ -62,7 +62,7 @@ void ImplInitSalGDI()
 
 void ImplFreeSalGDI()
 {
-    SalData*	pSalData = GetSalData();
+    SalData*    pSalData = GetSalData();
 
     // delete icon cache
     SalIcon* pIcon = pSalData->mpFirstIcon;
@@ -102,19 +102,19 @@ Os2SalGraphics::Os2SalGraphics()
 
     mfFontScale = 1.0;
 
-    mhPS 			= 0;
-    mhDC 			= 0;
-    mbLine				= FALSE;
-    mbFill				= FALSE;
-    mbXORMode			= FALSE;
-    mnFontMetricCount	= 0;
-    mpFontMetrics		= NULL;
-    mpClipRectlAry		= NULL;
+    mhPS            = 0;
+    mhDC            = 0;
+    mbLine              = FALSE;
+    mbFill              = FALSE;
+    mbXORMode           = FALSE;
+    mnFontMetricCount   = 0;
+    mpFontMetrics       = NULL;
+    mpClipRectlAry      = NULL;
 
-    mhDefFont			= 0;
-    mpFontKernPairs		= NULL;
-    mnFontKernPairCount	= 0;
-    mbFontKernInit		= FALSE;
+    mhDefFont           = 0;
+    mpFontKernPairs     = NULL;
+    mnFontKernPairCount = 0;
+    mbFontKernInit      = FALSE;
 
 }
 
@@ -219,7 +219,7 @@ void Os2SalGraphics::ResetClipRegion()
 
 void Os2SalGraphics::BeginSetClipRegion( ULONG nCount )
 {
-    mpClipRectlAry	  = new RECTL[ nCount ];
+    mpClipRectlAry    = new RECTL[ nCount ];
     mnClipElementCount = 0;
 }
 
@@ -494,11 +494,11 @@ void Os2SalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 void Os2SalGraphics::drawPolyLine( ULONG nPoints, const SalPoint* pPtAry )
 {
     // convert all points to sys orientation
-    POINTL* 			pOS2PtAry = new POINTL[ nPoints ];
-    POINTL* 			pTempOS2PtAry = pOS2PtAry;
-    const SalPoint* 	pTempPtAry = pPtAry;
-    ULONG				nTempPoints = nPoints;
-    long				nHeight = mnHeight - 1;
+    POINTL*             pOS2PtAry = new POINTL[ nPoints ];
+    POINTL*             pTempOS2PtAry = pOS2PtAry;
+    const SalPoint*     pTempPtAry = pPtAry;
+    ULONG               nTempPoints = nPoints;
+    long                nHeight = mnHeight - 1;
 
     while( nTempPoints-- )
     {
@@ -524,10 +524,10 @@ void Os2SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
     aPolygon.ulPoints = nPoints;
 
     // convert all points to sys orientation
-    POINTL* 			pTempOS2PtAry = aPolygon.aPointl;
-    const SalPoint* 	pTempPtAry = pPtAry;
-    ULONG				nTempPoints = nPoints;
-    long				nHeight = mnHeight - 1;
+    POINTL*             pTempOS2PtAry = aPolygon.aPointl;
+    const SalPoint*     pTempPtAry = pPtAry;
+    ULONG               nTempPoints = nPoints;
+    long                nHeight = mnHeight - 1;
 
     while( nTempPoints-- )
     {
@@ -586,9 +586,9 @@ void Os2SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 void Os2SalGraphics::drawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
                                    PCONSTSALPOINT* pPtAry )
 {
-    ULONG		i;
-    long		nHeight = mnHeight - 1;
-    PM_POLYGON*	aPolygonAry = new PM_POLYGON[ nPoly ];
+    ULONG       i;
+    long        nHeight = mnHeight - 1;
+    PM_POLYGON* aPolygonAry = new PM_POLYGON[ nPoly ];
 
     for( i = 0; i < nPoly; i++ )
     {
@@ -671,7 +671,7 @@ bool Os2SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /
 bool Os2SalGraphics::drawPolyLine(
     const basegfx::B2DPolygon& /*rPolygon*/,
     double /*fTransparency*/,
-    const basegfx::B2DVector& /*rLineWidths*/, 
+    const basegfx::B2DVector& /*rLineWidths*/,
     basegfx::B2DLineJoin /*eLineJoin*/)
 {
     // TODO: implement
@@ -703,15 +703,15 @@ sal_Bool Os2SalGraphics::drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoint
 // =======================================================================
 
 // MAXIMUM BUFSIZE EQ 0xFFFF
-#define POSTSCRIPT_BUFSIZE			0x4000
+#define POSTSCRIPT_BUFSIZE          0x4000
 // we only try to get the BoundingBox in the first 4096 bytes
-#define POSTSCRIPT_BOUNDINGSEARCH	0x1000
+#define POSTSCRIPT_BOUNDINGSEARCH   0x1000
 
 static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSize )
 {
     while ( nComp-- >= nSize )
     {
-        ULONG	i;
+        ULONG   i;
         for ( i = 0; i < nSize; i++ )
         {
             if ( ( pSource[i]&~0x20 ) != ( pDest[i]&~0x20 ) )
@@ -727,7 +727,7 @@ static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSi
 
 static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
 {
-    BOOL	bRetValue = FALSE;
+    BOOL    bRetValue = FALSE;
     BYTE* pDest = ImplSearchEntry( pSource, (BYTE*)"%%BoundingBox:", nSize, 14 );
     if ( pDest )
     {
@@ -736,15 +736,15 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
 
         int nSizeLeft = nSize - ( pDest - pSource );
         if ( nSizeLeft > 100 )
-            nSizeLeft = 100;	// only 100 bytes following the bounding box will be checked
+            nSizeLeft = 100;    // only 100 bytes following the bounding box will be checked
 
         int i;
         for ( i = 0; ( i < 4 ) && nSizeLeft; i++ )
         {
-            int 	nDivision = 1;
-            BOOL	bDivision = FALSE;
-            BOOL	bNegative = FALSE;
-            BOOL	bValid = TRUE;
+            int     nDivision = 1;
+            BOOL    bDivision = FALSE;
+            BOOL    bNegative = FALSE;
+            BOOL    bValid = TRUE;
 
             while ( ( --nSizeLeft ) && ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) pDest++;
             BYTE nByte = *pDest;
@@ -763,7 +763,7 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
                         break;
                     default :
                         if ( ( nByte < '0' ) || ( nByte > '9' ) )
-                            nSizeLeft = 1; 	// error parsing the bounding box values
+                            nSizeLeft = 1;  // error parsing the bounding box values
                         else if ( bValid )
                         {
                             if ( bDivision )
@@ -790,7 +790,7 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
 #if 0
 static void ImplWriteDouble( BYTE** pBuf, double nNumber )
 {
-//	*pBuf += sprintf( (char*)*pBuf, "%f", nNumber );
+//  *pBuf += sprintf( (char*)*pBuf, "%f", nNumber );
 
     if ( nNumber < 0 )
     {
@@ -825,7 +825,7 @@ static void ImplWriteDouble( BYTE** pBuf, double nNumber )
     }
     *(*pBuf)++ = ' ';
 }
-#endif 
+#endif
 
 inline void ImplWriteString( BYTE** pBuf, const char* sString )
 {
@@ -838,18 +838,18 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
     if ( !mbPrinter )
         return FALSE;
 
-    BOOL	bRet  = FALSE;
-    LONG	nLong = 0;
+    BOOL    bRet  = FALSE;
+    LONG    nLong = 0;
     if ( !(DevQueryCaps( mhDC, CAPS_TECHNOLOGY, 1, &nLong ) &&
            (CAPS_TECH_POSTSCRIPT == nLong)) )
         return FALSE;
 
-    BYTE*	pBuf = new BYTE[ POSTSCRIPT_BUFSIZE ];
-    double	nBoundingBox[4];
+    BYTE*   pBuf = new BYTE[ POSTSCRIPT_BUFSIZE ];
+    double  nBoundingBox[4];
 
     if ( pBuf && ImplGetBoundingBox( nBoundingBox, (BYTE*)pPtr, nSize ) )
     {
-        LONG pOS2DXAry[4];		  // hack -> print always 2 white space
+        LONG pOS2DXAry[4];        // hack -> print always 2 white space
         POINTL aPt;
         aPt.x = 0;
         aPt.y = 0;
@@ -859,7 +859,7 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
         Ft2CharStringPosAt( mhPS, &aPt, NULL, 0, 2, (PCH)pStr,(PLONG)&pOS2DXAry[0] );
 
         OStringBuffer aBuf( POSTSCRIPT_BUFSIZE );
-        
+
                 // reserve place for a USHORT
                 aBuf.append( "aa" );
 
@@ -943,7 +943,7 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                 //Escape ( mhDC, nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
                 DevEscape( mhDC, DEVESC_RAWDATA, aBuf.getLength(),
                         (PBYTE)aBuf.getStr(), 0, NULL );
-        
+
         double dM11 = nWidth / ( nBoundingBox[2] - nBoundingBox[0] );
         double dM22 = - ( nHeight / (nBoundingBox[1] - nBoundingBox[3] ) );
 
@@ -998,7 +998,7 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                 if ( DevEscape( mhDC, DEVESC_RAWDATA, 9, (PBYTE)pBuf,
                     0, NULL ) == DEV_OK ) bRet = TRUE;
             }
-            
+
                 // #107797# Write out EPS encapsulation footer
                 // ----------------------------------------------------------------------------------
                 // reserve a USHORT again
@@ -1011,7 +1011,7 @@ BOOL Os2SalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
                 DevEscape( mhDC, DEVESC_RAWDATA, aBuf.getLength(),
                         (PBYTE)aBuf.getStr(), 0, NULL );
                 bRet = TRUE;
-            
+
         }
     }
     delete [] pBuf;

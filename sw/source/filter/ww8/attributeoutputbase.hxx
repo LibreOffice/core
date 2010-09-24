@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -171,12 +171,12 @@ public:
 
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet ) = 0;
-    
+
     /// Output text (without markup).
     virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet ) = 0;
 
     /// Output ruby start.
-    virtual void StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby ) = 0;
+    virtual void StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby ) = 0;
 
     /// Output ruby end.
     virtual void EndRuby() = 0;
@@ -247,7 +247,8 @@ public:
 
     /// Start of a style in the styles table.
     virtual void StartStyle( const String& rName, bool bPapFmt,
-            USHORT nBase, USHORT nNext, USHORT nWwId, USHORT nId ) = 0;
+            USHORT nBase, USHORT nNext, USHORT nWwId, USHORT nId,
+            bool bAutoUpdate ) = 0;
 
     /// End of a style in the styles table.
     virtual void EndStyle() = 0;
@@ -306,7 +307,7 @@ public:
 
     /// Start of the abstract numbering definition instance.
     virtual void StartAbstractNumbering( USHORT /*nId*/ ) {}
-    
+
     /// End of the abstract numbering definition instance.
     virtual void EndAbstractNumbering() {}
 
@@ -323,7 +324,7 @@ public:
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
         const String &rNumberingString ) = 0;
-    
+
 protected:
 
     void GetNumberPara( String& rStr, const SwField& rFld );
@@ -528,7 +529,7 @@ protected:
 
     /// Sfx item RES_COL
     void FormatColumns( const SwFmtCol& );
-    
+
     virtual void FormatColumns_Impl( USHORT nCols, const SwFmtCol & rCol, bool bEven, SwTwips nPageSize ) = 0;
 
     /// Sfx item RES_KEEP
@@ -545,10 +546,10 @@ protected:
 
     /// Write the expanded field
     virtual void WriteExpand( const SwField* pFld ) = 0;
-    
+
     virtual void RefField( const SwField& rFld, const String& rRef ) = 0;
     virtual void HiddenField( const SwField& rFld ) = 0;
-    virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd ) = 0; 
+    virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd ) = 0;
     virtual void PostitField( const SwField* pFld ) = 0;
     virtual bool DropdownField( const SwField* pFld ) = 0;
 
@@ -573,9 +574,9 @@ public:
     void OutputFlyFrame( const sw::Frame& rFmt );
 
     void GetTablePageSize
-    ( ww8::WW8TableNodeInfoInner * pTableTextNodeInfoInner, 
+    ( ww8::WW8TableNodeInfoInner * pTableTextNodeInfoInner,
       sal_uInt32& rPageSize, bool& rRelBoxSize );
-    
+
 };
 
 #endif // _ATTRIBUTEOUTPUTBASE_HXX_

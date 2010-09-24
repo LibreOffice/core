@@ -3,7 +3,7 @@
 <oor:component-data oor:name="ChartCommands" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <node oor:name="UserInterface">
         <node oor:name="Commands">
-            
+
             <!-- Menu-Insert -->
             <node oor:name=".uno:InsertMenuTitles" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -45,7 +45,7 @@
                     <value xml:lang="en-US">Y Error ~Bars...</value>
                 </prop>
             </node>
-                        
+
             <!--  Menu - Format -->
             <node oor:name=".uno:FormatSelection" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -119,7 +119,7 @@
                     <value>1</value>
                 </prop>
             </node>
-            
+
             <!-- sub menu: format title-->
             <node oor:name=".uno:MainTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -259,7 +259,7 @@
                     <value xml:lang="en-US">Format Chart Area...</value>
                 </prop>
             </node>
-            
+
             <!-- title -->
             <node oor:name=".uno:InsertTitles" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -271,9 +271,9 @@
                     <value xml:lang="en-US">Format Title...</value>
                 </prop>
             </node>
-            
+
             <!-- legend -->
-            
+
             <node oor:name=".uno:InsertLegend" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Insert Legend</value>
@@ -289,9 +289,9 @@
                     <value xml:lang="en-US">Format Legend...</value>
                 </prop>
             </node>
-            
+
             <!-- axis -->
-            
+
             <node oor:name=".uno:InsertRemoveAxes" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Insert/Delete Axes...</value>
@@ -321,7 +321,7 @@
                     <value xml:lang="en-US">Insert Axis Title</value>
                 </prop>
             </node>
-            
+
             <!-- grids -->
 
             <node oor:name=".uno:InsertMajorGrid" oor:op="replace">
@@ -363,7 +363,7 @@
             </node>
 
             <!-- trend line -->
-            
+
             <node oor:name=".uno:InsertTrendline" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Insert Tre~nd Line...</value>
@@ -414,7 +414,7 @@
             </node>
 
             <!-- mean value -->
-            
+
             <node oor:name=".uno:InsertMeanValue" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Insert Mean ~Value Line</value>
@@ -449,9 +449,9 @@
                     <value xml:lang="en-US">Format Y Error Bars...</value>
                 </prop>
             </node>
-            
+
             <!-- data labels -->
-            
+
             <node oor:name=".uno:InsertDataLabels" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
 
@@ -486,9 +486,9 @@
                     <value xml:lang="en-US">Format Single Data Label...</value>
                 </prop>
             </node>
-            
+
             <!-- data series and point -->
-            
+
             <node oor:name=".uno:FormatDataSeries" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Format Data Series...</value>
@@ -509,8 +509,8 @@
                     <value xml:lang="en-US">Reset all Data Points</value>
                 </prop>
             </node>
-            
-            
+
+
             <node oor:name=".uno:FormatStockLoss" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Format Stock Loss...</value>
@@ -521,7 +521,7 @@
                     <value xml:lang="en-US">Format Stock Gain...</value>
                 </prop>
             </node>
-                        
+
             <!-- some toolbar button commands -->
 
             <node oor:name=".uno:ChartElementSelector" oor:op="replace">
@@ -564,7 +564,7 @@
                     <value xml:lang="en-US">Update Chart</value>
                 </prop>
             </node>
-            
+
             <node oor:name=".uno:ToggleTitle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Title On/Off</value>
@@ -589,7 +589,7 @@
                     <value>1</value>
                 </prop>
             </node>
-            
+
             <node oor:name=".uno:ToggleGridVertical" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Vertical Grid On/Off</value>
@@ -598,7 +598,7 @@
                     <value>1</value>
                 </prop>
             </node>
-            
+
             <node oor:name=".uno:DataInRows" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Data in Rows</value>
@@ -617,7 +617,7 @@
             </node>
             <node oor:name=".uno:ToolSelect" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    
+
                     <value xml:lang="en-US">Select Tool</value>
                 </prop>
             </node>
@@ -626,7 +626,7 @@
                     <value xml:lang="en-US">Chart Type</value>
                 </prop>
             </node>
-            
+
             <node oor:name=".uno:DataDescriptionType" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Caption Type for Chart Data</value>
@@ -652,7 +652,7 @@
             </node>
             <node oor:name=".uno:NumberOfLines" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    
+
                     <value xml:lang="en-US">Number of lines in combination chart</value>
                 </prop>
             </node>
@@ -680,9 +680,9 @@
                 </prop>
             </node>
         </node>
-        
+
         <!-- menu items with sub menu -->
-        
+
         <node oor:name="Popups">
             <node oor:name=".uno:ArrangeRow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">

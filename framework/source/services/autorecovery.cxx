@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -516,8 +516,8 @@ DEFINE_XINTERFACE_10(AutoRecovery                                               
                      DIRECT_INTERFACE (css::lang::XServiceInfo                                 ),
                      DIRECT_INTERFACE (css::frame::XDispatch                                   ),
                      DIRECT_INTERFACE (css::beans::XMultiPropertySet                           ),
-                     DIRECT_INTERFACE (css::beans::XFastPropertySet							   ),
-                     DIRECT_INTERFACE (css::beans::XPropertySet								   ),
+                     DIRECT_INTERFACE (css::beans::XFastPropertySet                            ),
+                     DIRECT_INTERFACE (css::beans::XPropertySet                                ),
                      DIRECT_INTERFACE (css::document::XEventListener                           ),
                      DIRECT_INTERFACE (css::util::XChangesListener                             ),
                      DIRECT_INTERFACE (css::util::XModifyListener                              ),
@@ -3343,7 +3343,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
 //-----------------------------------------------
 sal_Bool SAL_CALL AutoRecovery::convertFastPropertyValue(      css::uno::Any& /*aConvertedValue*/,
                                                                css::uno::Any& /*aOldValue*/      ,
-                                                               sal_Int32	  /*nHandle*/        ,
+                                                               sal_Int32      /*nHandle*/        ,
                                                          const css::uno::Any& /*aValue*/         )
     throw(css::lang::IllegalArgumentException)
 {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,10 +77,10 @@ class SvxEditEngineSourceImpl;
 class SvxEditEngineSourceImpl
 {
 private:
-    oslInterlockedCount	maRefCount;
+    oslInterlockedCount maRefCount;
 
-    EditEngine*				mpEditEngine;
-    SvxTextForwarder*		mpTextForwarder;
+    EditEngine*             mpEditEngine;
+    SvxTextForwarder*       mpTextForwarder;
 
     ~SvxEditEngineSourceImpl();
 
@@ -90,7 +90,7 @@ public:
     void SAL_CALL acquire();
     void SAL_CALL release();
 
-    SvxTextForwarder*		GetTextForwarder();
+    SvxTextForwarder*       GetTextForwarder();
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -114,10 +114,10 @@ SvxEditEngineSourceImpl::~SvxEditEngineSourceImpl()
 
 //------------------------------------------------------------------------
 
-void SAL_CALL SvxEditEngineSourceImpl::acquire() 
+void SAL_CALL SvxEditEngineSourceImpl::acquire()
 {
     osl_incrementInterlockedCount( &maRefCount );
-}	
+}
 
 //------------------------------------------------------------------------
 
@@ -125,7 +125,7 @@ void SAL_CALL SvxEditEngineSourceImpl::release()
 {
     if( ! osl_decrementInterlockedCount( &maRefCount ) )
         delete this;
-}	
+}
 
 //------------------------------------------------------------------------
 
@@ -358,7 +358,7 @@ class SvxXMLTextExportComponent : public SvXMLExport
 {
 public:
     // #110680#
-    SvxXMLTextExportComponent( 
+    SvxXMLTextExportComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         EditEngine* pEditEngine,
         const ESelection& rSel,
@@ -381,13 +381,13 @@ private:
 ///////////////////////////////////////////////////////////////////////
 
 // #110680#
-SvxXMLTextExportComponent::SvxXMLTextExportComponent( 
+SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     EditEngine* pEditEngine,
     const ESelection& rSel,
     const ::rtl::OUString& rFileName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler)
-:	SvXMLExport( xServiceFactory, rFileName, xHandler, ((frame::XModel*)new SvxSimpleUnoModel()), MAP_CM ),
+:   SvXMLExport( xServiceFactory, rFileName, xHandler, ((frame::XModel*)new SvxSimpleUnoModel()), MAP_CM ),
     mpEditEngine( pEditEngine ),
     maSelection( rSel )
 {
@@ -397,10 +397,10 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
-//		SVX_UNOEDIT_OUTLINER_PROPERTIES,
-        {MAP_CHAR_LEN(UNO_NAME_NUMBERING_RULES),		EE_PARA_NUMBULLET,	&::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace>*)0), 0, 0 },
-        {MAP_CHAR_LEN(UNO_NAME_NUMBERING),				EE_PARA_BULLETSTATE,&::getBooleanCppuType(), 0, 0 },
-        {MAP_CHAR_LEN(UNO_NAME_NUMBERING_LEVEL),		EE_PARA_OUTLLEVEL,	&::getCppuType((const sal_Int16*)0), 0, 0 },
+//      SVX_UNOEDIT_OUTLINER_PROPERTIES,
+        {MAP_CHAR_LEN(UNO_NAME_NUMBERING_RULES),        EE_PARA_NUMBULLET,  &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace>*)0), 0, 0 },
+        {MAP_CHAR_LEN(UNO_NAME_NUMBERING),              EE_PARA_BULLETSTATE,&::getBooleanCppuType(), 0, 0 },
+        {MAP_CHAR_LEN(UNO_NAME_NUMBERING_LEVEL),        EE_PARA_OUTLLEVEL,  &::getCppuType((const sal_Int16*)0), 0, 0 },
         SVX_UNOEDIT_PARA_PROPERTIES,
         {0,0,0,0,0,0}
     };
@@ -423,10 +423,10 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
     {
         do
         {
-            // create service factory	
+            // create service factory
 
             uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
-            
+
             if( !xServiceFactory.is() )
             {
                 DBG_ERROR( "got no service manager" );
@@ -436,14 +436,14 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
             // create document handler
 
             uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
-            
+
             if( !xWriter.is() )
             {
                 DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
                 break;
             }
 
-            uno::Reference<xml::sax::XDocumentHandler>	xHandler( xWriter, uno::UNO_QUERY );
+            uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
 
             // create output stream and active data source
             uno::Reference<io::XOutputStream> xOut( new utl::OOutputStreamWrapper( rStream ) );

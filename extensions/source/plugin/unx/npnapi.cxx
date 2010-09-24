@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,12 +53,12 @@ static void* l_NPN_MemAlloc( uint32 nBytes )
     void* pMem = new char[nBytes];
     return pMem;
 }
-    
+
 static void l_NPN_MemFree( void* pMem )
 {
     delete [] (char*)pMem;
 }
-    
+
 static uint32 l_NPN_MemFlush( uint32 /*nSize*/ )
 {
     return 0;
@@ -69,7 +69,7 @@ static NPError l_NPN_DestroyStream( NPP instance, NPStream* stream, NPError reas
     UINT32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
         return NPERR_GENERIC_ERROR;
-    
+
     UINT32 nFileID = pConnector->GetStreamID( stream );
     MediatorMessage* pMes=
         pConnector->
@@ -120,14 +120,14 @@ static NPError l_NPN_GetURL( NPP instance, const char* url, const char* window )
     UINT32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
         return NPERR_GENERIC_ERROR;
-    
+
     MediatorMessage* pMes=
         pConnector->
         Transact( eNPN_GetURL,
                   &nInstance, sizeof( nInstance ),
                   POST_STRING(url),
                   POST_STRING(window),
-                  NULL );	
+                  NULL );
     medDebug( !pMes, "geturl: message unaswered\n" );
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
@@ -192,7 +192,7 @@ static NPError l_NPN_NewStream( NPP instance, NPMIMEType type, const char* targe
         pStream->end = pMes->GetUINT32();
         pStream->lastmodified = pMes->GetUINT32();
         pStream->ndata = pStream->pdata = pStream->notifyData = NULL;
-        
+
         pConnector->getStreamList().push_back( pStream );
         *stream = pStream;
     }
@@ -260,7 +260,7 @@ static NPError l_NPN_RequestRead( NPStream* stream, NPByteRange* rangeList )
         nRanges++;
         pRange = pRange->next;
     }
-    
+
     UINT32* pArray = new UINT32[ 2 * nRanges ];
     pRange = rangeList;
     UINT32 n = 0;
@@ -297,7 +297,7 @@ static void l_NPN_Status( NPP instance, const char* message )
     pConnector->Send( eNPN_Status,
                       &nInstance, sizeof( nInstance ),
                       POST_STRING( message ),
-                      NULL ); 
+                      NULL );
 }
 
 static const char* l_NPN_UserAgent( NPP instance )
@@ -374,7 +374,7 @@ static int32 l_NPN_Write( NPP instance, NPStream* stream, int32 len, void* buffe
         return 0;
 
     INT32 nRet = pMes->GetUINT32();
-    return nRet;  
+    return nRet;
 }
 
 static void l_NPN_ReloadPlugins( NPBool /*reloadPages*/ )
@@ -511,9 +511,9 @@ static NPPluginFuncs aPluginFuncs =
 
 
 oslModule pPluginLib = NULL;
-char*(*pNPP_GetMIMEDescription)()								= NULL;
-NPError (*pNP_Initialize)(NPNetscapeFuncs*,NPPluginFuncs*)		= NULL;
-NPError (*pNP_Shutdown)()										= NULL;
+char*(*pNPP_GetMIMEDescription)()                               = NULL;
+NPError (*pNP_Initialize)(NPNetscapeFuncs*,NPPluginFuncs*)      = NULL;
+NPError (*pNP_Shutdown)()                                       = NULL;
 
 std::vector< PluginConnector* > PluginConnector::allConnectors;
 
@@ -539,11 +539,11 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
         {
             case eNPP_DestroyStream:
             {
-                UINT32 nInstance	= pMessage->GetUINT32();
-                NPP instance		= m_aInstances[ nInstance ]->instance;
-                UINT32 nFileID		= pMessage->GetUINT32();
-                NPStream* pStream	= m_aNPWrapStreams[ nFileID ];
-                NPError aReason		= GetNPError( pMessage );
+                UINT32 nInstance    = pMessage->GetUINT32();
+                NPP instance        = m_aInstances[ nInstance ]->instance;
+                UINT32 nFileID      = pMessage->GetUINT32();
+                NPStream* pStream   = m_aNPWrapStreams[ nFileID ];
+                NPError aReason     = GetNPError( pMessage );
                 m_aNPWrapStreams.erase( m_aNPWrapStreams.begin() + nFileID );
 
                 aReason = aPluginFuncs.destroystream( instance, pStream, aReason );
@@ -557,7 +557,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_Destroy:
             {
-                UINT32 nInstance	= pMessage->GetUINT32();
+                UINT32 nInstance    = pMessage->GetUINT32();
                 ConnectorInstance* pInst= m_aInstances[ nInstance ];
 
                 // some plugin rely on old netscapes behaviour
@@ -565,9 +565,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 // the instance, so mimic that behaviour here
                 if( pInst->pShell )
                     XtDestroyWidget( (Widget)pInst->pShell );
-                
+
                 pInst->pWidget = pInst->pShell = NULL;
-                
+
                 // the other side will call eNPP_DestroyPhase2 after this
                 NPError aReason = NPERR_NO_ERROR;
                 Respond( pMessage->m_nID, (char*)&aReason, sizeof( aReason ), NULL );
@@ -576,9 +576,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             case eNPP_DestroyPhase2:
             {
                 // now really destroy the instance
-                UINT32 nInstance	= pMessage->GetUINT32();
+                UINT32 nInstance    = pMessage->GetUINT32();
                 ConnectorInstance* pInst= m_aInstances[ nInstance ];
-                NPP instance		= pInst->instance;
+                NPP instance        = pInst->instance;
                 NPSavedData* pSave = NULL;
 
                 NPError aRet = aPluginFuncs.destroy( instance, &pSave );
@@ -611,15 +611,15 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_NewStream:
             {
-                UINT32 nInstance		= pMessage->GetUINT32();
-                NPP instance			= m_aInstances[ nInstance ]->instance;
-                char* pType				= pMessage->GetString();
-                NPStream* pStream		= new NPStream;
-                pStream->url			= pMessage->GetString();
-                pStream->end			= pMessage->GetUINT32();
-                pStream->lastmodified	= pMessage->GetUINT32();
+                UINT32 nInstance        = pMessage->GetUINT32();
+                NPP instance            = m_aInstances[ nInstance ]->instance;
+                char* pType             = pMessage->GetString();
+                NPStream* pStream       = new NPStream;
+                pStream->url            = pMessage->GetString();
+                pStream->end            = pMessage->GetUINT32();
+                pStream->lastmodified   = pMessage->GetUINT32();
                 pStream->pdata = pStream->ndata = pStream->notifyData = NULL;
-                NPBool* pSeekable		= (NPBool*)pMessage->GetBytes();
+                NPBool* pSeekable       = (NPBool*)pMessage->GetBytes();
                 m_aNPWrapStreams.push_back( pStream );
                 uint16 nStype = NP_ASFILE;
                 NPError aRet = aPluginFuncs.newstream( instance, pType, pStream,
@@ -638,10 +638,10 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_New:
             {
-                char* pType		= pMessage->GetString();
-                uint16* pMode	= (uint16*)pMessage->GetBytes();
-                int16*  pArgc	= (int16*)pMessage->GetBytes();
-                NPP instance	= new NPP_t;
+                char* pType     = pMessage->GetString();
+                uint16* pMode   = (uint16*)pMessage->GetBytes();
+                int16*  pArgc   = (int16*)pMessage->GetBytes();
+                NPP instance    = new NPP_t;
                 instance->pdata = instance->ndata = NULL;
                 ULONG nArgnBytes, nArgvBytes;
                 char* pArgn = (char*)pMessage->GetBytes( nArgnBytes );
@@ -684,7 +684,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                     medDebug( 1, "should use xembed = %s\n", pInst->bShouldUseXEmbed ? "true" : "false" );
                 }
                 #endif
-                
+
                 Respond( pMessage->m_nID,
                          (char*)&aRet, sizeof( aRet ),
                          NULL );
@@ -695,10 +695,10 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_SetWindow:
             {
-                UINT32 nInstance		= pMessage->GetUINT32();
+                UINT32 nInstance        = pMessage->GetUINT32();
                 ConnectorInstance* pInst= m_aInstances[ nInstance ];
-                NPWindow* pWindow		= (NPWindow*)pMessage->GetBytes();
-                
+                NPWindow* pWindow       = (NPWindow*)pMessage->GetBytes();
+
                 if( pWindow->width < 1 )
                     pWindow->width = 1;
                 if( pWindow->height < 1 )
@@ -710,7 +710,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                     if( ! pInst->pGtkWidget )
                     {
                         medDebug( 1, "creating gtk plug and socket\n" );
-                        
+
                         pInst->pGtkWindow = gtk_plug_new((GdkNativeWindow)reinterpret_cast<sal_uIntPtr>(pWindow->window));
                         gtk_widget_show( pInst->pGtkWindow );
                         pInst->pGtkWidget = gtk_socket_new();
@@ -725,56 +725,56 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 
                         XSync( pAppDisplay, False );
                     }
-                    
+
                     // update widget size; alas out parent is not yet really XEMBED conformant
                     gtk_widget_set_size_request( pInst->pGtkWidget, pWindow->width, pWindow->height );
                     gtk_window_resize( GTK_WINDOW(pInst->pGtkWindow), pWindow->width, pWindow->height );
-                    
+
                     GdkScreen* pGdkScreen = gtk_widget_get_screen( pInst->pGtkWidget );
                     Screen* pScreen = ScreenOfDisplay( pAppDisplay, gdk_screen_get_number( pGdkScreen ) );
 
-                    pInst->window.x					= 0;
-                    pInst->window.y					= 0;
-                    pInst->window.width				= pWindow->width;
-                    pInst->window.height			= pWindow->height;
-                    pInst->window.clipRect.left		= 0;
-                    pInst->window.clipRect.top		= 0;
-                    pInst->window.clipRect.right	= pWindow->width;
-                    pInst->window.clipRect.bottom	= pWindow->height;
-                    pInst->window.ws_info			= &pInst->ws_info;
-                    pInst->window.type				= NPWindowTypeWindow;
-                    pInst->ws_info.type				= NP_SETWINDOW;
-                    pInst->ws_info.display			= pAppDisplay;
-                    pInst->ws_info.visual			= DefaultVisualOfScreen( pScreen );
-                    pInst->ws_info.colormap			= DefaultColormapOfScreen( pScreen );
-                    pInst->ws_info.depth			= DefaultDepthOfScreen( pScreen );
+                    pInst->window.x                 = 0;
+                    pInst->window.y                 = 0;
+                    pInst->window.width             = pWindow->width;
+                    pInst->window.height            = pWindow->height;
+                    pInst->window.clipRect.left     = 0;
+                    pInst->window.clipRect.top      = 0;
+                    pInst->window.clipRect.right    = pWindow->width;
+                    pInst->window.clipRect.bottom   = pWindow->height;
+                    pInst->window.ws_info           = &pInst->ws_info;
+                    pInst->window.type              = NPWindowTypeWindow;
+                    pInst->ws_info.type             = NP_SETWINDOW;
+                    pInst->ws_info.display          = pAppDisplay;
+                    pInst->ws_info.visual           = DefaultVisualOfScreen( pScreen );
+                    pInst->ws_info.colormap         = DefaultColormapOfScreen( pScreen );
+                    pInst->ws_info.depth            = DefaultDepthOfScreen( pScreen );
                 }
                 else
                 #endif
                 {
                     if( ! pInst->pWidget )
                     {
-                        pInst->pWidget = CreateNewShell( &(pInst->pShell), (XLIB_Window)pWindow->window );					
+                        pInst->pWidget = CreateNewShell( &(pInst->pShell), (XLIB_Window)pWindow->window );
                     }
-    
+
                     // fill in NPWindow and NPCallbackStruct
-                    pInst->window.window			= (void*)XtWindow( (Widget)pInst->pWidget );
-                    pInst->window.x					= 0;
-                    pInst->window.y					= 0;
-                    pInst->window.width				= pWindow->width;
-                    pInst->window.height			= pWindow->height;
-                    pInst->window.clipRect.left		= 0;
-                    pInst->window.clipRect.top		= 0;
-                    pInst->window.clipRect.right	= pWindow->width;
-                    pInst->window.clipRect.bottom	= pWindow->height;
-                    pInst->window.ws_info			= &pInst->ws_info;
-                    pInst->window.type				= NPWindowTypeWindow;
-                    pInst->ws_info.type				= NP_SETWINDOW;
-                    pInst->ws_info.display			= XtDisplay( (Widget)pInst->pWidget );
-                    pInst->ws_info.visual			= DefaultVisualOfScreen( XtScreen( (Widget)pInst->pWidget ) );
-                    pInst->ws_info.colormap			= DefaultColormapOfScreen( XtScreen( (Widget)pInst->pWidget ) );
-                    pInst->ws_info.depth			= DefaultDepthOfScreen( XtScreen( (Widget)pInst->pWidget ) );
-    
+                    pInst->window.window            = (void*)XtWindow( (Widget)pInst->pWidget );
+                    pInst->window.x                 = 0;
+                    pInst->window.y                 = 0;
+                    pInst->window.width             = pWindow->width;
+                    pInst->window.height            = pWindow->height;
+                    pInst->window.clipRect.left     = 0;
+                    pInst->window.clipRect.top      = 0;
+                    pInst->window.clipRect.right    = pWindow->width;
+                    pInst->window.clipRect.bottom   = pWindow->height;
+                    pInst->window.ws_info           = &pInst->ws_info;
+                    pInst->window.type              = NPWindowTypeWindow;
+                    pInst->ws_info.type             = NP_SETWINDOW;
+                    pInst->ws_info.display          = XtDisplay( (Widget)pInst->pWidget );
+                    pInst->ws_info.visual           = DefaultVisualOfScreen( XtScreen( (Widget)pInst->pWidget ) );
+                    pInst->ws_info.colormap         = DefaultColormapOfScreen( XtScreen( (Widget)pInst->pWidget ) );
+                    pInst->ws_info.depth            = DefaultDepthOfScreen( XtScreen( (Widget)pInst->pWidget ) );
+
                     XtResizeWidget( (Widget)pInst->pShell,
                                     pInst->window.width,
                                     pInst->window.height,
@@ -795,11 +795,11 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_StreamAsFile:
             {
-                UINT32 nInstance		= pMessage->GetUINT32();
-                NPP instance			= m_aInstances[ nInstance ]->instance;
-                UINT32 nFileID			= pMessage->GetUINT32();
-                NPStream* pStream		= m_aNPWrapStreams[ nFileID ];
-                char* fname				= pMessage->GetString();
+                UINT32 nInstance        = pMessage->GetUINT32();
+                NPP instance            = m_aInstances[ nInstance ]->instance;
+                UINT32 nFileID          = pMessage->GetUINT32();
+                NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
+                char* fname             = pMessage->GetString();
                 medDebug( 1, "pluginapp: NPP_StreamAsFile %s\n", fname );
                 aPluginFuncs.asfile( instance, pStream, fname );
                 delete [] fname;
@@ -807,11 +807,11 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_URLNotify:
             {
-                UINT32 nInstance		= pMessage->GetUINT32();
-                NPP instance			= m_aInstances[ nInstance ]->instance;
-                char* url				= pMessage->GetString();
-                NPReason* pReason		= (NPReason*)pMessage->GetBytes();
-                void** notifyData		= (void**)pMessage->GetBytes();
+                UINT32 nInstance        = pMessage->GetUINT32();
+                NPP instance            = m_aInstances[ nInstance ]->instance;
+                char* url               = pMessage->GetString();
+                NPReason* pReason       = (NPReason*)pMessage->GetBytes();
+                void** notifyData       = (void**)pMessage->GetBytes();
                 aPluginFuncs.urlnotify( instance, url, *pReason, *notifyData );
                 delete [] url;
                 delete [] pReason;
@@ -820,15 +820,15 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_WriteReady:
             {
-                UINT32 nInstance		= pMessage->GetUINT32();
-                NPP instance			= m_aInstances[ nInstance ]->instance;
-                UINT32 nFileID			= pMessage->GetUINT32();
-                NPStream* pStream		= m_aNPWrapStreams[ nFileID ];
+                UINT32 nInstance        = pMessage->GetUINT32();
+                NPP instance            = m_aInstances[ nInstance ]->instance;
+                UINT32 nFileID          = pMessage->GetUINT32();
+                NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
                 int32 nRet = aPluginFuncs.writeready( instance, pStream );
-                
+
                 medDebug( 1, "pluginapp: NPP_WriteReady( %p, %p ) (stream id = %d) returns %d\n",
                           instance, pStream, nFileID, nRet );
-                
+
                 Respond( pMessage->m_nID,
                          (char*)&nRet, sizeof( nRet ),
                          NULL );
@@ -836,15 +836,15 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_Write:
             {
-                UINT32 nInstance		= pMessage->GetUINT32();
-                NPP instance			= m_aInstances[ nInstance ]->instance;
-                UINT32 nFileID			= pMessage->GetUINT32();
-                NPStream* pStream		= m_aNPWrapStreams[ nFileID ];
-                int32 offset			= pMessage->GetUINT32();
+                UINT32 nInstance        = pMessage->GetUINT32();
+                NPP instance            = m_aInstances[ nInstance ]->instance;
+                UINT32 nFileID          = pMessage->GetUINT32();
+                NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
+                int32 offset            = pMessage->GetUINT32();
                 ULONG len;
-                char* buffer			= (char*)pMessage->GetBytes( len );
+                char* buffer            = (char*)pMessage->GetBytes( len );
                 int32 nRet = aPluginFuncs.write( instance, pStream, offset, len, buffer );
-                
+
                 medDebug( 1,"pluginapp: NPP_Write( %p, %p, %d, %d, %p ) returns %d\n"
                           "stream = { pdata = %p, ndata = %p, url = %s, end = %d, lastmodified = %d, notifyData = %p }\n",
                           instance, pStream, offset, len, buffer, nRet,

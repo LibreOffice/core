@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,14 +76,14 @@ namespace dbaui
         ,m_aFT_DocListLabel             (this, ModuleRes(FT_DOCLISTLABEL))
         ,m_pLB_DocumentList             ( new OpenDocumentListBox( this, "com.sun.star.sdb.OfficeDatabaseDocument", ModuleRes( LB_DOCUMENTLIST ) ) )
         ,m_aPB_OpenDocument             (this, "com.sun.star.sdb.OfficeDatabaseDocument", ModuleRes(PB_OPENDOCUMENT))
-        ,m_aTypePreLabel		        (this, ModuleRes(FT_DATASOURCETYPE_PRE))
-        ,m_aDatasourceTypeLabel	        (this, ModuleRes(FT_DATATYPE))
-        ,m_pDatasourceType		        ( new ListBox(this, ModuleRes(LB_DATATYPE)))
+        ,m_aTypePreLabel                (this, ModuleRes(FT_DATASOURCETYPE_PRE))
+        ,m_aDatasourceTypeLabel         (this, ModuleRes(FT_DATATYPE))
+        ,m_pDatasourceType              ( new ListBox(this, ModuleRes(LB_DATATYPE)))
         ,m_aFTDataSourceAppendix        (this, ModuleRes(FT_DATATYPEAPPENDIX))
-        ,m_aTypePostLabel		        (this, ModuleRes(FT_DATASOURCETYPE_POST))
-        ,m_aSpecialMessage		        (this, ModuleRes(FT_SPECIAL_MESSAGE))
+        ,m_aTypePostLabel               (this, ModuleRes(FT_DATASOURCETYPE_POST))
+        ,m_aSpecialMessage              (this, ModuleRes(FT_SPECIAL_MESSAGE))
         ,m_DBWizardMode                 (_bDBWizardMode)
-        ,m_sMySQLEntry					(ModuleRes(STR_MYSQLENTRY))
+        ,m_sMySQLEntry                  (ModuleRes(STR_MYSQLENTRY))
         ,m_eOriginalCreationMode        (eCreateNew)
         ,m_pCollection                  (NULL)
         ,m_eNotSupportedKnownType       ( ::dbaccess::DST_UNKNOWN)
@@ -189,16 +189,16 @@ namespace dbaui
                 DisplayedTypes aDisplayedTypes;
 
                 ::dbaccess::ODsnTypeCollection::TypeIterator aEnd = m_pCollection->end();
-                for (	::dbaccess::ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
+                for (   ::dbaccess::ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
                         aTypeLoop != aEnd;
                         ++aTypeLoop
                     )
                 {
                     const ::rtl::OUString sURLPrefix = aTypeLoop.getURLPrefix();
                     if ( sURLPrefix.getLength() )
-                    {    				
+                    {
                         String sDisplayName = aTypeLoop.getDisplayName();
-                        if (   m_pDatasourceType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND 
+                        if (   m_pDatasourceType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND
                             && approveDataSourceType( sURLPrefix, sDisplayName ) )
                         {
                             aDisplayedTypes.push_back( DisplayedTypes::value_type( sURLPrefix, sDisplayName ) );
@@ -382,9 +382,9 @@ namespace dbaui
         if  (   approveDataSourceType( m_eCurrentSelection, sDisplayName )
             &&  ( LISTBOX_ENTRY_NOTFOUND == m_pDatasourceType->GetEntryPos( sDisplayName ) )
             )
-        {	// this indicates it's really a type which is known in general, but not supported on the current platform
+        {   // this indicates it's really a type which is known in general, but not supported on the current platform
             // show a message saying so
-            //	eSpecialMessage = smUnsupportedType;
+            //  eSpecialMessage = smUnsupportedType;
             insertDatasourceTypeEntryData(m_eCurrentSelection, sDisplayName);
             // remember this type so we can show the special message again if the user selects this
             // type again (without changing the data source)
@@ -478,7 +478,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    SfxTabPage*	OGeneralPage::Create(Window* _pParent, const SfxItemSet& _rAttrSet, sal_Bool _bWizardMode)
+    SfxTabPage* OGeneralPage::Create(Window* _pParent, const SfxItemSet& _rAttrSet, sal_Bool _bWizardMode)
     {
            return ( new OGeneralPage( _pParent, _rAttrSet, _bWizardMode ) );
     }
@@ -606,7 +606,7 @@ namespace dbaui
         const SfxFilter* pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {
-//			aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
+//          aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
             aFileDlg.SetCurrentFilter(pFilter->GetUIName());
         }
         if ( aFileDlg.Execute() == ERRCODE_NONE )
@@ -631,6 +631,6 @@ namespace dbaui
     }
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 

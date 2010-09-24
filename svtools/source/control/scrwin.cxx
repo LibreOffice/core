@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -191,21 +191,21 @@ void __EXPORT ScrollableWindow::Resize()
     const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     BOOL bVVisible = FALSE; // by default no vertical-ScrollBar
     BOOL bHVisible = FALSE; // by default no horizontal-ScrollBar
-    BOOL bChanged;			// determines if a visiblility was changed
+    BOOL bChanged;          // determines if a visiblility was changed
     do
     {
         bChanged = FALSE;
 
         // does we need a vertical ScrollBar
         if ( aOutPixSz.Width() < aTotPixSz.Width() && !bHVisible )
-        {	bHVisible = TRUE;
+        {   bHVisible = TRUE;
             aOutPixSz.Height() -= nScrSize;
             bChanged = TRUE;
         }
 
         // does we need a horizontal ScrollBar
         if ( aOutPixSz.Height() < aTotPixSz.Height() && !bVVisible )
-        {	bVVisible = TRUE;
+        {   bVVisible = TRUE;
             aOutPixSz.Width() -= nScrSize;
             bChanged = TRUE;
         }
@@ -349,7 +349,7 @@ void ScrollableWindow::SetVisibleSize( const Size& rNewSize )
 
     // get maximum rectangle for us from our parent-window (subst our border!)
     Rectangle aMax( Point(0, 0), GetParent()->GetOutputSizePixel() );
-    aMax.Left() -=	( Window::GetSizePixel().Width() -
+    aMax.Left() -=  ( Window::GetSizePixel().Width() -
                     Window::GetOutputSizePixel().Width() );
     aMax.Bottom() -= (Window::GetSizePixel().Height() -
                      Window::GetOutputSizePixel().Height());
@@ -358,7 +358,7 @@ void ScrollableWindow::SetVisibleSize( const Size& rNewSize )
     BOOL bHScroll = FALSE;
     const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     if ( aWill.Width() < aWish.GetSize().Width() )
-    {	bHScroll = TRUE;
+    {   bHScroll = TRUE;
         aWill.Height() =
             Min( aWill.Height()+nScrSize, aMax.GetSize().Height() );
     }

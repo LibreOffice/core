@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -161,7 +161,7 @@ Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo() th
 }
 
 //------------------------------------------------------------------------------
-Dialog*	OSQLMessageDialog::createDialog(Window* _pParent)
+Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
 {
     if ( m_aException.hasValue() )
         return new OSQLMessageBox( _pParent, SQLExceptionInfo( m_aException ), WB_OK | WB_DEF_OK, m_sHelpURL );
@@ -171,6 +171,6 @@ Dialog*	OSQLMessageDialog::createDialog(Window* _pParent)
 }
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 

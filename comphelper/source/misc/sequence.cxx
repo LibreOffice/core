@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,12 +92,12 @@ staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString 
 // -----------------------------------------------------------------------------
 sal_Bool existsValue(const ::rtl::OUString& Value,const staruno::Sequence< ::rtl::OUString >& _aList)
 {
-    const ::rtl::OUString * pIter	= _aList.getConstArray();
-    const ::rtl::OUString * pEnd	= pIter + _aList.getLength();
+    const ::rtl::OUString * pIter   = _aList.getConstArray();
+    const ::rtl::OUString * pEnd    = pIter + _aList.getLength();
     return ::std::find(pIter,pEnd,Value) != pEnd;
 }
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 

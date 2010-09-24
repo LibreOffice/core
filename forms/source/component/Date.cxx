@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -171,7 +171,7 @@ StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODateModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_DATEFIELD;	// old (non-sun) name for compatibility !
+    return FRM_COMPONENT_DATEFIELD; // old (non-sun) name for compatibility !
 }
 
 // XPropertySet
@@ -179,10 +179,10 @@ StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
 void ODateModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
-        DECL_PROP3(DEFAULT_DATE,			sal_Int32,				BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP1(TABINDEX,				sal_Int16,				BOUND);
-        DECL_PROP1(FORMATKEY,				sal_Int32,				TRANSIENT);
-        DECL_IFACE_PROP2(FORMATSSUPPLIER,	XNumberFormatsSupplier,	READONLY, TRANSIENT);
+        DECL_PROP3(DEFAULT_DATE,            sal_Int32,              BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP1(TABINDEX,                sal_Int16,              BOUND);
+        DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
+        DECL_IFACE_PROP2(FORMATSSUPPLIER,   XNumberFormatsSupplier, READONLY, TRANSIENT);
     END_DESCRIBE_PROPERTIES();
 }
 
@@ -358,6 +358,6 @@ Sequence< Type > ODateModel::getSupportedBindingTypes()
 }
 
 //.........................................................................
-}	// namespace frm
+}   // namespace frm
 //.........................................................................
 

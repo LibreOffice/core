@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@ namespace comphelper
 {
 //.........................................................................
 
-    namespace staruno	= ::com::sun::star::uno;
-    namespace starlang	= ::com::sun::star::lang;
-    namespace starutil	= ::com::sun::star::util;
+    namespace staruno   = ::com::sun::star::uno;
+    namespace starlang  = ::com::sun::star::lang;
+    namespace starutil  = ::com::sun::star::util;
 
     /// returns the ::com::sun::star::util::NumberFormat of the given key under the given formats
     COMPHELPER_DLLPUBLIC sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey);
@@ -67,7 +67,7 @@ namespace comphelper
     );
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 #endif // _COMPHELPER_NUMBERS_HXX_

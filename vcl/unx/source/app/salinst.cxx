@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,8 +58,8 @@
 
 SalYieldMutex::SalYieldMutex()
 {
-    mnCount 	= 0;
-    mnThreadId	= 0;
+    mnCount     = 0;
+    mnThreadId  = 0;
     ::tools::SolarMutex::SetSolarMutex( this );
 }
 
@@ -112,7 +112,7 @@ extern "C"
         */
         if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
             XInitThreads();
-        
+
         X11SalInstance* pInstance = new X11SalInstance( new SalYieldMutex() );
 
         // initialize SalData
@@ -149,8 +149,8 @@ X11SalInstance::~X11SalInstance()
 
 struct PredicateReturn
 {
-    USHORT	nType;
-    BOOL	bRet;
+    USHORT  nType;
+    BOOL    bRet;
 };
 
 extern "C" {
@@ -207,10 +207,10 @@ bool X11SalInstance::AnyInput(USHORT nType)
     else if (XPending(pDisplay) )
     {
         PredicateReturn aInput;
-        XEvent			aEvent;
+        XEvent          aEvent;
 
-        aInput.bRet 	= FALSE;
-        aInput.nType	= nType;
+        aInput.bRet     = FALSE;
+        aInput.nType    = nType;
 
         XCheckIfEvent(pDisplay, &aEvent, ImplPredicateEvent,
                       (char *)&aInput );
@@ -265,8 +265,8 @@ void X11SalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 void* X11SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
 {
     static const char* pDisplay = getenv( "DISPLAY" );
-    rReturnedType	= AsciiCString;
-    rReturnedBytes	= pDisplay ? strlen( pDisplay )+1 : 1;
+    rReturnedType   = AsciiCString;
+    rReturnedBytes  = pDisplay ? strlen( pDisplay )+1 : 1;
     return pDisplay ? (void*)pDisplay : (void*)"";
 }
 
@@ -342,14 +342,14 @@ static void getServerDirectories( std::list< rtl::OString >& o_rFontPaths )
 void X11SalInstance::FillFontPathList( std::list< rtl::OString >& o_rFontPaths )
 {
     Display *pDisplay = GetX11SalData()->GetDisplay()->GetDisplay();
-    
+
     DBG_ASSERT( pDisplay, "No Display !" );
     if( pDisplay )
     {
         // get font paths to look for fonts
         int nPaths = 0, i;
         char** pPaths = XGetFontPath( pDisplay, &nPaths );
-        
+
         bool bServerDirs = false;
         for( i = 0; i < nPaths; i++ )
         {
@@ -368,33 +368,33 @@ void X11SalInstance::FillFontPathList( std::list< rtl::OString >& o_rFontPaths )
                 o_rFontPaths.push_back( aPath );
             }
         }
-        
+
         if( nPaths )
             XFreeFontPath( pPaths );
     }
-    
+
     // insert some standard directories
     o_rFontPaths.push_back( "/usr/openwin/lib/X11/fonts/TrueType" );
     o_rFontPaths.push_back( "/usr/openwin/lib/X11/fonts/Type1" );
     o_rFontPaths.push_back( "/usr/openwin/lib/X11/fonts/Type1/sun" );
     o_rFontPaths.push_back( "/usr/X11R6/lib/X11/fonts/truetype" );
     o_rFontPaths.push_back( "/usr/X11R6/lib/X11/fonts/Type1" );
-    
+
     #ifdef SOLARIS
     /* cde specials, from /usr/dt/bin/Xsession: here are the good fonts,
     the OWfontpath file may contain as well multiple lines as a comma
     separated list of fonts in each line. to make it even more weird
     environment variables are allowed as well */
-    
+
     const char* lang = getenv("LANG");
     if ( lang != NULL )
     {
         String aOpenWinDir( String::CreateFromAscii( "/usr/openwin/lib/locale/" ) );
         aOpenWinDir.AppendAscii( lang );
         aOpenWinDir.AppendAscii( "/OWfontpath" );
-        
+
         SvFileStream aStream( aOpenWinDir, STREAM_READ );
-        
+
         // TODO: replace environment variables
         while( aStream.IsOpen() && ! aStream.IsEof() )
         {

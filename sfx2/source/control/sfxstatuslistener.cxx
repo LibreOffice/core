@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -175,13 +175,13 @@ void SAL_CALL SfxStatusListener::dispose() throw( ::com::sun::star::uno::Runtime
     m_xDispatchProvider.clear();
 }
 
-void SAL_CALL SfxStatusListener::addEventListener( const Reference< XEventListener >& ) 
+void SAL_CALL SfxStatusListener::addEventListener( const Reference< XEventListener >& )
 throw ( RuntimeException )
 {
     // do nothing - this is a wrapper class which does not support listeners
 }
 
-void SAL_CALL SfxStatusListener::removeEventListener( const Reference< XEventListener >& ) 
+void SAL_CALL SfxStatusListener::removeEventListener( const Reference< XEventListener >& )
 throw ( RuntimeException )
 {
     // do nothing - this is a wrapper class which does not support listeners
@@ -226,7 +226,7 @@ throw( RuntimeException )
     if ( rEvent.IsEnabled )
     {
         eState = SFX_ITEM_AVAILABLE;
-        ::com::sun::star::uno::Type pType =	rEvent.State.getValueType();
+        ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
         if ( pType == ::getVoidCppuType() )
         {

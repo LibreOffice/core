@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "svtools/svtdllapi.h"
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -46,7 +46,7 @@
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/compbase7.hxx>
@@ -58,8 +58,8 @@ namespace svt
 {
     struct PopupMenuControllerBaseDispatchInfo;
 
-    typedef ::cppu::WeakComponentImplHelper7< 
-                        com::sun::star::lang::XServiceInfo		      ,
+    typedef ::cppu::WeakComponentImplHelper7<
+                        com::sun::star::lang::XServiceInfo            ,
                         com::sun::star::frame::XPopupMenuController ,
                         com::sun::star::lang::XInitialization         ,
                         com::sun::star::frame::XStatusListener        ,
@@ -67,7 +67,7 @@ namespace svt
                         com::sun::star::frame::XDispatchProvider      ,
                         com::sun::star::frame::XDispatch > PopupMenuControllerBaseType;
 
-    class SVT_DLLPUBLIC PopupMenuControllerBase : protected ::comphelper::OBaseMutex,	// Struct for right initalization of mutex member! Must be first of baseclasses.
+    class SVT_DLLPUBLIC PopupMenuControllerBase : protected ::comphelper::OBaseMutex,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                                                   public PopupMenuControllerBaseType
     {
         public:
@@ -78,14 +78,14 @@ namespace svt
             virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
             virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
-            
+
             // XPopupMenuController
             virtual void SAL_CALL setPopupMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& PopupMenu ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException);
 
             // XInitialization
             virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-            
+
             // XStatusListener
             virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException ) = 0;
 
@@ -100,13 +100,13 @@ namespace svt
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException );
 
             // XDispatch
-            virtual void SAL_CALL dispatch(	const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& seqProperties ) throw( ::com::sun::star::uno::RuntimeException );
+            virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& seqProperties ) throw( ::com::sun::star::uno::RuntimeException );
             virtual void SAL_CALL addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw( ::com::sun::star::uno::RuntimeException );
-            virtual void SAL_CALL removeStatusListener(	const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw( ::com::sun::star::uno::RuntimeException );
-            
+            virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw( ::com::sun::star::uno::RuntimeException );
+
             // XEventListener
             virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
-        
+
             void dispatchCommand( const ::rtl::OUString& sCommandURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
 
     protected:

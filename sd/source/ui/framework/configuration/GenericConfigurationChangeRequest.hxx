@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ public:
         resource is requested.
     */
     enum Mode { Activation, Deactivation };
-    
+
     /** Create a new object that represents the request for activation or
         deactivation of the specified resource.
         @param rxsResourceId
@@ -80,12 +80,12 @@ public:
             rxResourceId,
         const Mode eMode)
         throw (::com::sun::star::lang::IllegalArgumentException);
-    
+
     virtual ~GenericConfigurationChangeRequest (void) throw();
 
-    
+
     // XConfigurationChangeOperation
-    
+
     /** The requested configuration change is executed on the given
         configuration.  Additionally to the explicitly requested change
         other changes have to be made as well.  See class description for an

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::Not
 {
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    
+
     {
         static const char * cSignature = "()Z";
         static const char * cMethodName = "available";
@@ -95,7 +95,7 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< s
     OSL_ENSURE(aData.getLength() < nBytesToRead," Sequence is smaller than BytesToRead");
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    
+
     {
         jcharArray pCharArray = t.pEnv->NewCharArray(nBytesToRead);
         static const char * cSignature = "([CII)I";

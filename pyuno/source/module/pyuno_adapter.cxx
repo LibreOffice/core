@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,7 +132,7 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
             // reference, which is never broken (as it is up to OOo1.1.0).
             Reference< XIntrospectionAccess > introspection =
                 runtime.getImpl()->cargo->xIntrospection->inspect( makeAny( unoAdapterObject ) );
-            
+
             if( !introspection.is() )
             {
                 throw RuntimeException(
@@ -205,7 +205,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         Sequence< sal_Int8 > id;
         if( aParams[0] >>= id )
             return com::sun::star::uno::makeAny( getSomething( id ) );
-        
+
     }
 
     RuntimeCargo *cargo = 0;
@@ -222,7 +222,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
             logCall( cargo, "try     uno->py[0x",
                      mWrappedObject.get(), aFunctionName, aParams );
         }
-       
+
         sal_Int32 size = aParams.getLength();
         PyRef argsTuple(PyTuple_New( size ), SAL_NO_ACQUIRE );
         int i;
@@ -286,7 +286,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
                              + aFunctionName),
                             Reference< XInterface > () );
                     }
-                    
+
                     if( aOutParamIndex.getLength() +1 != seq.getLength() )
                     {
                         OUStringBuffer buf;
@@ -299,7 +299,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
                         buf.appendAscii( " elements as return value." );
                         throw RuntimeException(buf.makeStringAndClear(), *this );
                     }
-                    
+
                     aOutParam.realloc( aOutParamIndex.getLength() );
                     ret = seq[0];
                     for( i = 0 ; i < aOutParamIndex.getLength() ; i ++ )
@@ -310,7 +310,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
                 // else { sequence is a return value !}
             }
         }
-        
+
         // log the reply, if desired
         if( isLog( cargo, LogLevel::CALL ) )
         {
@@ -318,7 +318,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
                       mWrappedObject.get(), aFunctionName, ret, aOutParam );
         }
     }
-    
+
     }
     catch(InvocationTargetException & e )
     {
@@ -380,7 +380,7 @@ void Adapter::setValue( const OUString & aPropertyName, const Any & value )
             buf.appendAscii( " is unknown." );
             throw UnknownPropertyException( buf.makeStringAndClear(), Reference< XInterface > () );
         }
-        
+
         PyObject_SetAttrString(
             mWrappedObject.get(), (char*)TO_ASCII(aPropertyName), obj.get() );
         raiseInvocationTargetExceptionWhenNeeded( runtime);
@@ -433,5 +433,5 @@ sal_Bool Adapter::hasProperty( const OUString & aPropertyName )
     }
     return bRet;
 }
-                     
+
 }

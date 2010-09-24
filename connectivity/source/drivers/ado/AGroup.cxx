@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ void WpADOGroup::Create()
     }
 }
 // -------------------------------------------------------------------------
-OAdoGroup::OAdoGroup(OCatalog* _pParent,sal_Bool _bCase,	ADOGroup* _pGroup) : OGroup_ADO(_bCase),m_pCatalog(_pParent)
+OAdoGroup::OAdoGroup(OCatalog* _pParent,sal_Bool _bCase,    ADOGroup* _pGroup) : OGroup_ADO(_bCase),m_pCatalog(_pParent)
 {
     construct();
     if(_pGroup)

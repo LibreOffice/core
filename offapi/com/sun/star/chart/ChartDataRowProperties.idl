@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,31 +24,31 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_ChartDataRowProperties_idl__ 
-#define __com_sun_star_chart_ChartDataRowProperties_idl__ 
- 
-#ifndef __com_sun_star_chart_ChartDataPointProperties_idl__ 
-#include <com/sun/star/chart/ChartDataPointProperties.idl> 
-#endif 
- 
-#ifndef __com_sun_star_chart_ChartStatistics_idl__ 
-#include <com/sun/star/chart/ChartStatistics.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_XPropertySet_idl__ 
-#include <com/sun/star/beans/XPropertySet.idl> 
-#endif 
- 
+#ifndef __com_sun_star_chart_ChartDataRowProperties_idl__
+#define __com_sun_star_chart_ChartDataRowProperties_idl__
+
+#ifndef __com_sun_star_chart_ChartDataPointProperties_idl__
+#include <com/sun/star/chart/ChartDataPointProperties.idl>
+#endif
+
+#ifndef __com_sun_star_chart_ChartStatistics_idl__
+#include <com/sun/star/chart/ChartStatistics.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
 #ifndef _com_sun_star_xml_UserDefinedAttributeSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 #endif
 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module chart {  
- 
-//============================================================================= 
- 
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
 /** specifies the properties for a group of graphic elements which
     belong to a data row (also known as data series).
 
@@ -60,12 +60,12 @@
     @see ChartDataPointProperties
  */
 published service ChartDataRowProperties
-{ 
-    service com::sun::star::chart::ChartDataPointProperties; 
+{
+    service com::sun::star::chart::ChartDataPointProperties;
     /** Statistical properties are not available for all types of
         diagrams.
     */
-    [optional] service com::sun::star::chart::ChartStatistics; 
+    [optional] service com::sun::star::chart::ChartStatistics;
 
     /** If <type>ChartDataRowProperties</type> may be stored as XML
         file, this service should be supported in order to preserve
@@ -75,10 +75,10 @@ published service ChartDataRowProperties
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
 
-    interface com::sun::star::beans::XPropertySet; 
- 
-    //------------------------------------------------------------------------- 
-     
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
     /** determines to which axis the data row is assigned.
 
         <p>The axis must be a primary or secondary y-axis</p>
@@ -87,41 +87,41 @@ published service ChartDataRowProperties
         @see ChartAxisYSupplier
         @see ChartTwoAxisYSupplier
      */
-    [property] long Axis; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] long Axis;
+
+    //-------------------------------------------------------------------------
+
     /** holds the properties of the regression line, if such one is
         enabled.
 
         @see ChartLine
         @see ChartStatistics
      */
-    [optional, readonly, property] com::sun::star::beans::XPropertySet DataRegressionProperties; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [optional, readonly, property] com::sun::star::beans::XPropertySet DataRegressionProperties;
+
+    //-------------------------------------------------------------------------
+
     /** holds the properties of the error markers, if those are
         enabled.
 
         @see ChartLine
         @see ChartStatistics
      */
-    [optional, readonly, property] com::sun::star::beans::XPropertySet DataErrorProperties; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [optional, readonly, property] com::sun::star::beans::XPropertySet DataErrorProperties;
+
+    //-------------------------------------------------------------------------
+
     /** holds the properties of the average line, if such one is
         enabled.
 
         @see ChartLine
         @see ChartStatistics
      */
-    [optional, readonly, property] com::sun::star::beans::XPropertySet DataMeanValueProperties; 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [optional, readonly, property] com::sun::star::beans::XPropertySet DataMeanValueProperties;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace sdr
 
         protected:
             // the SytleSheet of this object
-            SfxStyleSheet*									mpStyleSheet;
+            SfxStyleSheet*                                  mpStyleSheet;
 
             // create a new itemset
             virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& pPool);
@@ -71,7 +71,7 @@ namespace sdr
 
             // destructor
             virtual ~AttributeProperties();
-            
+
             // set a new StyleSheet and broadcast
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,24 +40,24 @@
 
 namespace ftp {
 
-    
+
     class FTPInputStream;
 
-    
+
     class FTPOutputStreamContainer
         : public FTPStreamContainer
-    {		
+    {
     public:
-    
+
         FTPOutputStreamContainer(const com::sun::star::uno::Reference<
                                  com::sun::star::io::XOutputStream>& out);
                                  virtual ~FTPOutputStreamContainer() {}
-    
-        virtual size_t write(void *buffer,size_t size,size_t nmemb);	
-    
-    
+
+        virtual size_t write(void *buffer,size_t size,size_t nmemb);
+
+
     private:
-    
+
         com::sun::star::uno::Reference<
         com::sun::star::io::XOutputStream> m_out;
     };
@@ -65,18 +65,18 @@ namespace ftp {
 
     class FTPInputStreamContainer
         : public FTPStreamContainer
-    {		
+    {
     public:
-    
+
         FTPInputStreamContainer(FTPInputStream* out);
-    
-        virtual size_t write(void *buffer,size_t size,size_t nmemb);	
-    
+
+        virtual size_t write(void *buffer,size_t size,size_t nmemb);
+
         com::sun::star::uno::Reference<
         com::sun::star::io::XInputStream> operator()();
 
     private:
-    
+
         FTPInputStream* m_out;
     };
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,17 +44,17 @@
 enum HelpProcessingErrorClass
 {
     HELPPROCESSING_NO_ERROR,
-    HELPPROCESSING_GENERAL_ERROR,		// Missing files, options etc.
-    HELPPROCESSING_INTERNAL_ERROR,		// Unexpected problems
-    HELPPROCESSING_XMLPARSING_ERROR		// Errors thrown by libxml
+    HELPPROCESSING_GENERAL_ERROR,       // Missing files, options etc.
+    HELPPROCESSING_INTERNAL_ERROR,      // Unexpected problems
+    HELPPROCESSING_XMLPARSING_ERROR     // Errors thrown by libxml
 };
 
 struct HelpProcessingErrorInfo
 {
-    HelpProcessingErrorClass		m_eErrorClass;
-    rtl::OUString					m_aErrorMsg;
-    rtl::OUString					m_aXMLParsingFile;
-    sal_Int32						m_nXMLParsingLine;
+    HelpProcessingErrorClass        m_eErrorClass;
+    rtl::OUString                   m_aErrorMsg;
+    rtl::OUString                   m_aXMLParsingFile;
+    sal_Int32                       m_nXMLParsingLine;
 
     HelpProcessingErrorInfo( void )
         : m_eErrorClass( HELPPROCESSING_NO_ERROR )

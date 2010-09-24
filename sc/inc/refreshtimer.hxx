@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,34 +42,34 @@ DECLARE_LIST( ScRefreshTimerList, ScRefreshTimer* )
 class ScRefreshTimerControl
 {
 private:
-            ::vos::OMutex		aMutex;
-            USHORT				nBlockRefresh;
+            ::vos::OMutex       aMutex;
+            USHORT              nBlockRefresh;
 
 public:
 #if SC_REFRESHTIMER_CONTROL_LIST
-            ScRefreshTimerList	aList;
+            ScRefreshTimerList  aList;
 #endif
 
                                 ScRefreshTimerControl() : nBlockRefresh(0) {}
 
-            void				SetAllowRefresh( BOOL b )
+            void                SetAllowRefresh( BOOL b )
                                     {
                                         if ( b && nBlockRefresh )
                                             --nBlockRefresh;
                                         else if ( !b && nBlockRefresh < (USHORT)(~0) )
                                             ++nBlockRefresh;
                                     }
-            BOOL				IsRefreshAllowed() const	{ return !nBlockRefresh; }
-            ::vos::OMutex&		GetMutex()					{ return aMutex; }
+            BOOL                IsRefreshAllowed() const    { return !nBlockRefresh; }
+            ::vos::OMutex&      GetMutex()                  { return aMutex; }
 };
 
 
 class ScRefreshTimerProtector
 {
 private:
-    ScRefreshTimerControl * const *	ppControl;
+    ScRefreshTimerControl * const * ppControl;
 public:
-                                ScRefreshTimerProtector( ScRefreshTimerControl * const *	 pp );
+                                ScRefreshTimerProtector( ScRefreshTimerControl * const *     pp );
                                 ~ScRefreshTimerProtector()
                                     {
                                         if ( ppControl && *ppControl )
@@ -81,16 +81,16 @@ public:
 class ScRefreshTimer : public AutoTimer
 {
 private:
-    ScRefreshTimerControl * const *	ppControl;
+    ScRefreshTimerControl * const * ppControl;
 
-            void				AppendToControl()
+            void                AppendToControl()
                                     {
 #if SC_REFRESHTIMER_CONTROL_LIST
                                         if ( ppControl && *ppControl )
                                             (*ppControl)->aList.Insert( this, LIST_APPEND );
 #endif
                                     }
-            void				RemoveFromControl()
+            void                RemoveFromControl()
                                     {
 #if SC_REFRESHTIMER_CONTROL_LIST
                                         if ( ppControl && *ppControl )
@@ -98,7 +98,7 @@ private:
 #endif
                                     }
 
-            void				Start()
+            void                Start()
                                     {
                                         if ( GetTimeout() )
                                             AutoTimer::Start();
@@ -115,42 +115,42 @@ public:
                                 ScRefreshTimer( const ScRefreshTimer& r )
                                     : AutoTimer( r ), ppControl(0)
                                     {}
-    virtual						~ScRefreshTimer();
+    virtual                     ~ScRefreshTimer();
 
-            ScRefreshTimer&		operator=( const ScRefreshTimer& r )
+            ScRefreshTimer&     operator=( const ScRefreshTimer& r )
                                     {
                                         SetRefreshControl(0);
                                         AutoTimer::operator=( r );
                                         return *this;
                                     }
 
-            BOOL				operator==( const ScRefreshTimer& r ) const
+            BOOL                operator==( const ScRefreshTimer& r ) const
                                     { return GetTimeout() == r.GetTimeout(); }
 
-            BOOL				operator!=( const ScRefreshTimer& r ) const
+            BOOL                operator!=( const ScRefreshTimer& r ) const
                                     { return !ScRefreshTimer::operator==( r ); }
 
-            void				StartRefreshTimer()
+            void                StartRefreshTimer()
                                     { Start(); }
 
-            void				SetRefreshControl( ScRefreshTimerControl * const * pp )
+            void                SetRefreshControl( ScRefreshTimerControl * const * pp )
                                     {
                                         RemoveFromControl();
                                         ppControl = pp;
                                         AppendToControl();
                                     }
 
-            void				SetRefreshHandler( const Link& rLink )
+            void                SetRefreshHandler( const Link& rLink )
                                     { SetTimeoutHdl( rLink ); }
 
-            ULONG				GetRefreshDelay() const
+            ULONG               GetRefreshDelay() const
                                     { return GetTimeout() / 1000; }
 
-            void				StopRefreshTimer()
+            void                StopRefreshTimer()
                                     { Stop(); }
 
-    SC_DLLPUBLIC virtual	void				SetRefreshDelay( ULONG nSeconds );
-    SC_DLLPUBLIC virtual	void				Timeout();
+    SC_DLLPUBLIC virtual    void                SetRefreshDelay( ULONG nSeconds );
+    SC_DLLPUBLIC virtual    void                Timeout();
 };
 
 

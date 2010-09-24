@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,21 +39,21 @@
 #include "internal/config.hxx"
 #include "internal/iso8601_converter.hxx"
 
-//#####################################   
+//#####################################
 const bool READONLY  = false;
 const bool WRITEABLE = true;
-       
+
 //#####################################
 document_statistic_reader_ptr create_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor)
 {
     File_Type_t file_type = get_file_type(document_name);
-            
+
     if (WRITER == file_type)
         return document_statistic_reader_ptr(new writer_document_statistic_reader(document_name, meta_info_accessor));
     else if (CALC == file_type)
         return document_statistic_reader_ptr(new calc_document_statistic_reader(document_name, meta_info_accessor));
     else
-        return document_statistic_reader_ptr(new draw_impress_math_document_statistic_reader(document_name, meta_info_accessor));	
+        return document_statistic_reader_ptr(new draw_impress_math_document_statistic_reader(document_name, meta_info_accessor));
 }
 
 
@@ -63,16 +63,16 @@ document_statistic_reader::document_statistic_reader(const std::string& document
     meta_info_accessor_(meta_info_accessor)
 {}
 
-//#####################################    
-document_statistic_reader::~document_statistic_reader() 
+//#####################################
+document_statistic_reader::~document_statistic_reader()
 {}
 
 //#####################################
 void document_statistic_reader::read(statistic_group_list_t* group_list)
 {
-    group_list->clear();    	    	    
+    group_list->clear();
     fill_description_section(meta_info_accessor_, group_list);
-    fill_origin_section(meta_info_accessor_, group_list);                                      
+    fill_origin_section(meta_info_accessor_, group_list);
 }
 
 //#####################################
@@ -85,30 +85,30 @@ std::string document_statistic_reader::get_document_name() const
 void document_statistic_reader::fill_origin_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list)
 {
     statistic_item_list_t il;
-        
+
     il.push_back(statistic_item(GetResString(IDS_AUTHOR), meta_info_accessor->getTagData( META_INFO_AUTHOR ), READONLY));
-    
-    il.push_back(statistic_item(GetResString(IDS_MODIFIED),        
-        iso8601_date_to_local_date(meta_info_accessor->getTagData(META_INFO_MODIFIED )), READONLY));        
-        
+
+    il.push_back(statistic_item(GetResString(IDS_MODIFIED),
+        iso8601_date_to_local_date(meta_info_accessor->getTagData(META_INFO_MODIFIED )), READONLY));
+
     il.push_back(statistic_item(GetResString(IDS_DOCUMENT_NUMBER), meta_info_accessor->getTagData( META_INFO_DOCUMENT_NUMBER ), READONLY));
-    
-    il.push_back(statistic_item(GetResString(IDS_EDITING_TIME), 
+
+    il.push_back(statistic_item(GetResString(IDS_EDITING_TIME),
         iso8601_duration_to_local_duration(meta_info_accessor->getTagData( META_INFO_EDITING_TIME )), READONLY));
-                        
-    group_list->push_back(statistic_group_t(GetResString(IDS_ORIGIN), il));  
+
+    group_list->push_back(statistic_group_t(GetResString(IDS_ORIGIN), il));
 }
-    
+
 //#####################################
 writer_document_statistic_reader::writer_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor) :
-    document_statistic_reader(document_name, meta_info_accessor)    
+    document_statistic_reader(document_name, meta_info_accessor)
 {}
 
 //#####################################
 void writer_document_statistic_reader::fill_description_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list)
 {
     statistic_item_list_t il;
-    
+
     il.push_back(statistic_item(GetResString(IDS_TITLE),    meta_info_accessor->getTagData( META_INFO_TITLE ),       READONLY));
     il.push_back(statistic_item(GetResString(IDS_COMMENTS), meta_info_accessor->getTagData( META_INFO_DESCRIPTION ), READONLY));
     il.push_back(statistic_item(GetResString(IDS_SUBJECT),  meta_info_accessor->getTagData( META_INFO_SUBJECT ),     READONLY));
@@ -120,10 +120,10 @@ void writer_document_statistic_reader::fill_description_section(CMetaInfoReader 
     il.push_back(statistic_item(GetResString(IDS_PARAGRAPHS), meta_info_accessor->getTagAttribute( META_INFO_DOCUMENT_STATISTIC,META_INFO_PARAGRAPHS) , READONLY));
     il.push_back(statistic_item(GetResString(IDS_WORDS), meta_info_accessor->getTagAttribute( META_INFO_DOCUMENT_STATISTIC,META_INFO_WORDS) , READONLY));
     il.push_back(statistic_item(GetResString(IDS_CHARACTERS), meta_info_accessor->getTagAttribute( META_INFO_DOCUMENT_STATISTIC,META_INFO_CHARACTERS) , READONLY));
-                                                                                    
-    group_list->push_back(statistic_group_t(GetResString(IDS_DESCRIPTION), il));                                                    
+
+    group_list->push_back(statistic_group_t(GetResString(IDS_DESCRIPTION), il));
 }
-    
+
 //#######################################
 calc_document_statistic_reader::calc_document_statistic_reader(
     const std::string& document_name, CMetaInfoReader* meta_info_accessor) :
@@ -135,16 +135,16 @@ void calc_document_statistic_reader::fill_description_section(
     CMetaInfoReader *meta_info_accessor,statistic_group_list_t* group_list)
 {
     statistic_item_list_t il;
-    
+
     il.push_back(statistic_item(GetResString(IDS_TITLE),       meta_info_accessor->getTagData( META_INFO_TITLE ),       READONLY));
     il.push_back(statistic_item(GetResString(IDS_COMMENTS),    meta_info_accessor->getTagData( META_INFO_DESCRIPTION ), READONLY));
     il.push_back(statistic_item(GetResString(IDS_SUBJECT),     meta_info_accessor->getTagData( META_INFO_SUBJECT ),     READONLY));
-    il.push_back(statistic_item(GetResString(IDS_KEYWORDS),    meta_info_accessor->getTagData(META_INFO_KEYWORDS ),    READONLY));    
+    il.push_back(statistic_item(GetResString(IDS_KEYWORDS),    meta_info_accessor->getTagData(META_INFO_KEYWORDS ),    READONLY));
     il.push_back(statistic_item(GetResString(IDS_TABLES),      meta_info_accessor->getTagAttribute( META_INFO_DOCUMENT_STATISTIC,META_INFO_TABLES) ,  READONLY));
     il.push_back(statistic_item(GetResString(IDS_CELLS),       meta_info_accessor->getTagAttribute( META_INFO_DOCUMENT_STATISTIC,META_INFO_CELLS) ,   READONLY));
     il.push_back(statistic_item(GetResString(IDS_OLE_OBJECTS), meta_info_accessor->getTagAttribute( META_INFO_DOCUMENT_STATISTIC,META_INFO_OBJECTS) , READONLY));
-                                                                                        
-    group_list->push_back(statistic_group_t(GetResString(IDS_DESCRIPTION), il));                                                    
+
+    group_list->push_back(statistic_group_t(GetResString(IDS_DESCRIPTION), il));
 }
 
 //#######################################
@@ -158,13 +158,13 @@ void draw_impress_math_document_statistic_reader::fill_description_section(
     CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list)
 {
     statistic_item_list_t il;
-    
+
     il.push_back(statistic_item(GetResString(IDS_TITLE),       meta_info_accessor->getTagData( META_INFO_TITLE ),       READONLY));
     il.push_back(statistic_item(GetResString(IDS_COMMENTS),    meta_info_accessor->getTagData( META_INFO_DESCRIPTION ), READONLY));
     il.push_back(statistic_item(GetResString(IDS_SUBJECT),     meta_info_accessor->getTagData( META_INFO_SUBJECT ),     READONLY));
     il.push_back(statistic_item(GetResString(IDS_KEYWORDS),    meta_info_accessor->getTagData(META_INFO_KEYWORDS ),    READONLY));
-    il.push_back(statistic_item(GetResString(IDS_PAGES),       meta_info_accessor->getTagAttribute( META_INFO_DOCUMENT_STATISTIC,META_INFO_PAGES) ,   READONLY));    
+    il.push_back(statistic_item(GetResString(IDS_PAGES),       meta_info_accessor->getTagAttribute( META_INFO_DOCUMENT_STATISTIC,META_INFO_PAGES) ,   READONLY));
     il.push_back(statistic_item(GetResString(IDS_OLE_OBJECTS), meta_info_accessor->getTagAttribute( META_INFO_DOCUMENT_STATISTIC,META_INFO_OBJECTS) , READONLY));
-                                                                                    
-    group_list->push_back(statistic_group_t(GetResString(IDS_DESCRIPTION), il));                                                    
+
+    group_list->push_back(statistic_group_t(GetResString(IDS_DESCRIPTION), il));
 }

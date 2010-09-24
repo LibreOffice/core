@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,14 +53,14 @@ class OfaOptionsTreeListBox : public SvTreeListBox
     using  SvListView::Collapse;
 
 private:
-    BOOL 			bInCollapse;
+    BOOL            bInCollapse;
 
 public:
     OfaOptionsTreeListBox(Window* pParent, const ResId& rResId) :
         SvTreeListBox( pParent, rResId ), bInCollapse(FALSE) {}
 
     virtual BOOL    Collapse( SvLBoxEntry* pParent );
-    BOOL			IsInCollapse()const {return bInCollapse;}
+    BOOL            IsInCollapse()const {return bInCollapse;}
 };
 
 // struct OrderedEntry ---------------------------------------------------
@@ -176,40 +176,40 @@ typedef std::vector< ExtensionsTabPage* > VectorOfPages;
 class OfaTreeOptionsDialog : public SfxModalDialog
 {
 private:
-    OKButton		aOkPB;
+    OKButton        aOkPB;
     CancelButton    aCancelPB;
-    HelpButton 		aHelpPB;
-    PushButton 		aBackPB;
+    HelpButton      aHelpPB;
+    PushButton      aBackPB;
 
-    FixedBorder		aHiddenGB;
-    FixedText 		aPageTitleFT;
-    FixedLine		aLine1FL;
-    FixedText		aHelpFT;
-    FixedImage 		aHelpImg;
+    FixedBorder     aHiddenGB;
+    FixedText       aPageTitleFT;
+    FixedLine       aLine1FL;
+    FixedText       aHelpFT;
+    FixedImage      aHelpImg;
 
     ImageList       aPageImages;
     ImageList       aPageImagesHC;
 
-    ResStringArray	aHelpTextsArr;
+    ResStringArray  aHelpTextsArr;
 
-    OfaOptionsTreeListBox	aTreeLB;
+    OfaOptionsTreeListBox   aTreeLB;
 
-    String 			sTitle;
-    String			sNotLoadedError;
+    String          sTitle;
+    String          sNotLoadedError;
 
     SvLBoxEntry*    pCurrentPageEntry;
 
     // for the ColorTabPage
-    SfxItemSet*		pColorPageItemSet;
-    XColorTable*	pColorTab;
-    USHORT			nChangeType;
-    USHORT 			nUnknownType;
-    USHORT			nUnknownPos;
-    BOOL			bIsAreaTP;
+    SfxItemSet*     pColorPageItemSet;
+    XColorTable*    pColorTab;
+    USHORT          nChangeType;
+    USHORT          nUnknownType;
+    USHORT          nUnknownPos;
+    BOOL            bIsAreaTP;
 
-    BOOL			bForgetSelection;
-    BOOL			bExternBrowserActive;
-    BOOL			bImageResized;
+    BOOL            bForgetSelection;
+    BOOL            bExternBrowserActive;
+    BOOL            bImageResized;
     bool            bInSelectHdl_Impl;
     bool            bIsFromExtensionManager;
 
@@ -223,11 +223,11 @@ private:
 
     static LastPageSaver*   pLastPageSaver;
 
-    SfxItemSet*		CreateItemSet( USHORT nId );
-    void			ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
+    SfxItemSet*     CreateItemSet( USHORT nId );
+    void            ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
     void            InitTreeAndHandler();
     void            Initialize( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame );
-    void			ResizeTreeLB( void );	// resizes dialog so that treelistbox has no horizontal scroll bar
+    void            ResizeTreeLB( void );   // resizes dialog so that treelistbox has no horizontal scroll bar
 
     void            LoadExtensionOptions( const rtl::OUString& rExtensionId );
     rtl::OUString   GetModuleIdentifier( const com::sun::star::uno::Reference<
@@ -283,34 +283,34 @@ public:
 
 class OfaPageResource : public Resource
 {
-    ResStringArray		aGeneralDlgAry;
-    ResStringArray	 	aInetDlgAry;
+    ResStringArray      aGeneralDlgAry;
+    ResStringArray      aInetDlgAry;
     ResStringArray      aLangDlgAry;
     ResStringArray      aTextDlgAry;
-    ResStringArray		aHTMLDlgAry;
-    ResStringArray		aCalcDlgAry;
-    ResStringArray		aStarMathDlgAry;
-    ResStringArray		aImpressDlgAry;
-    ResStringArray		aDrawDlgAry;
-    ResStringArray		aChartDlgAry;
-    ResStringArray		aFilterDlgAry;
-    ResStringArray		aDatasourcesDlgAry;
+    ResStringArray      aHTMLDlgAry;
+    ResStringArray      aCalcDlgAry;
+    ResStringArray      aStarMathDlgAry;
+    ResStringArray      aImpressDlgAry;
+    ResStringArray      aDrawDlgAry;
+    ResStringArray      aChartDlgAry;
+    ResStringArray      aFilterDlgAry;
+    ResStringArray      aDatasourcesDlgAry;
 
 public:
     OfaPageResource();
 
-    ResStringArray& GetGeneralArray() 		{return aGeneralDlgAry;}
-    ResStringArray& GetInetArray() 			{return aInetDlgAry;}
-    ResStringArray& GetLangArray()			{return aLangDlgAry;}
-    ResStringArray& GetTextArray() 			{return aTextDlgAry;}
-    ResStringArray& GetHTMLArray() 			{return aHTMLDlgAry;}
-    ResStringArray& GetCalcArray() 			{return aCalcDlgAry;}
-    ResStringArray& GetStarMathArray()		{return aStarMathDlgAry;}
-    ResStringArray& GetImpressArray() 		{return aImpressDlgAry;}
-    ResStringArray& GetDrawArray() 			{return aDrawDlgAry;}
-    ResStringArray& GetChartArray()			{return aChartDlgAry;}
-    ResStringArray& GetFilterArray() 		{return aFilterDlgAry;}
-    ResStringArray& GetDatasourcesArray()	{return aDatasourcesDlgAry;}
+    ResStringArray& GetGeneralArray()       {return aGeneralDlgAry;}
+    ResStringArray& GetInetArray()          {return aInetDlgAry;}
+    ResStringArray& GetLangArray()          {return aLangDlgAry;}
+    ResStringArray& GetTextArray()          {return aTextDlgAry;}
+    ResStringArray& GetHTMLArray()          {return aHTMLDlgAry;}
+    ResStringArray& GetCalcArray()          {return aCalcDlgAry;}
+    ResStringArray& GetStarMathArray()      {return aStarMathDlgAry;}
+    ResStringArray& GetImpressArray()       {return aImpressDlgAry;}
+    ResStringArray& GetDrawArray()          {return aDrawDlgAry;}
+    ResStringArray& GetChartArray()         {return aChartDlgAry;}
+    ResStringArray& GetFilterArray()        {return aFilterDlgAry;}
+    ResStringArray& GetDatasourcesArray()   {return aDatasourcesDlgAry;}
 };
 
 // class ExtensionsTabPage -----------------------------------------------

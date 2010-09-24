@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <osl/mutex.hxx>
-    
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -138,7 +138,7 @@ void PresenterSlideShowView::LateInit (void)
             mxWindow->addPaintListener(this);
             mxWindow->addWindowListener(this);
         }
-                
+
         // The window does not have to paint a background.  We do
         // that ourself.
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY);
@@ -151,7 +151,7 @@ void PresenterSlideShowView::LateInit (void)
     mxViewWindow = CreateViewWindow(mxWindow);
 
     mxViewCanvas = CreateViewCanvas(mxViewWindow);
-            
+
     if (mxViewWindow.is())
     {
         // Register listeners at window.
@@ -213,12 +213,12 @@ void PresenterSlideShowView::disposing (void)
     // Tell all listeners that we are disposed.
     lang::EventObject aEvent;
     aEvent.Source = static_cast<XWeak*>(this);
-    
+
     ::cppu::OInterfaceContainerHelper* pIterator
           = maBroadcaster.getContainer(getCppuType((Reference<lang::XEventListener>*)NULL));
     if (pIterator != NULL)
         pIterator->disposeAndClear(aEvent);
-    
+
     // Do this for
     // XPaintListener, XModifyListener,XMouseListener,XMouseMotionListener,XWindowListener?
 
@@ -686,7 +686,7 @@ void SAL_CALL PresenterSlideShowView::mouseExited (const awt::MouseEvent& rEvent
 
 
 //----- XMouseMotionListener --------------------------------------------------
-    
+
 void SAL_CALL PresenterSlideShowView::mouseDragged (const awt::MouseEvent& rEvent)
     throw (RuntimeException)
 {
@@ -767,7 +767,7 @@ void SAL_CALL PresenterSlideShowView::windowHidden (const lang::EventObject& rEv
 
 
 //----- XView -----------------------------------------------------------------
-    
+
 Reference<XResourceId> SAL_CALL PresenterSlideShowView::getResourceId (void)
     throw(RuntimeException)
 {
@@ -1068,7 +1068,7 @@ void PresenterSlideShowView::Resize (void)
     {
         pIterator->notifyEach(&util::XModifyListener::modified, aEvent);
     }
-    
+
     // Due to constant aspect ratio resizing may lead a preview that changes
     // its position but not its size.  This invalidates the back buffer and
     // we have to enforce a complete repaint.

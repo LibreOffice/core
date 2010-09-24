@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class SdrModel;
 class SvxFormatCellsDialog : public SfxTabDialog
 {
 private:
-    const SfxItemSet&	mrOutAttrs;
+    const SfxItemSet&   mrOutAttrs;
 
     XColorTable*        mpColorTab;
     XGradientList*      mpGradientList;

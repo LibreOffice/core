@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,20 +37,20 @@ class SwXMLExport;
 
 class SwXMLBrushItemExport
 {
-    SwXMLExport&		rExport;
+    SwXMLExport&        rExport;
 
 protected:
-    
+
     SwXMLExport& GetExport() { return rExport; }
 public:
 
     SwXMLBrushItemExport( SwXMLExport& rExport );
     ~SwXMLBrushItemExport();
-    
+
     // core API
     void exportXML( const SvxBrushItem& rItem );
 };
 
 
-#endif	//  _XMLBRSHE_HXX
+#endif  //  _XMLBRSHE_HXX
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ struct JNI_type_info
 {
     ::com::sun::star::uno::TypeDescription      m_td;
     jclass                                      m_class;
-    
+
     virtual void destroy( JNIEnv * jni_env ) = 0;
 protected:
     inline void destruct( JNIEnv * jni_env )
@@ -90,8 +90,8 @@ struct JNI_interface_type_info : public JNI_type_info
     jobject                                     m_proxy_ctor; // proxy ctor
     jobject                                     m_type;
     // sorted via typelib function index
-    jmethodID *                                 m_methods;    
-    
+    jmethodID *                                 m_methods;
+
     virtual void destroy( JNIEnv * jni_env );
     explicit JNI_interface_type_info(
         JNI_context const & jni, typelib_TypeDescription * td );
@@ -105,7 +105,7 @@ struct JNI_compound_type_info : public JNI_type_info
     jmethodID                                   m_exc_ctor;
     // sorted via typelib member index
     jfieldID *                                  m_fields;
-    
+
     virtual void destroy( JNIEnv * jni_env );
     explicit JNI_compound_type_info(
         JNI_context const & jni, typelib_TypeDescription * td );
@@ -128,7 +128,7 @@ class JNI_info
 {
     mutable ::osl::Mutex        m_mutex;
     mutable t_str2type          m_type_map;
-    
+
 public:
     // These two are needed very early by find_class from within the ctor:
     jclass                      m_class_Class;
@@ -140,7 +140,7 @@ public:
     jobject                     m_object_Type_UNSIGNED_SHORT;
     jobject                     m_object_Type_UNSIGNED_LONG;
     jobject                     m_object_Type_UNSIGNED_HYPER;
-    
+
     //
     jclass                      m_class_Object;
     jclass                      m_class_Character;
@@ -152,14 +152,14 @@ public:
     jclass                      m_class_Float;
     jclass                      m_class_Double;
     jclass                      m_class_String;
-    
+
     jclass                      m_class_UnoRuntime;
     jclass                      m_class_RuntimeException;
     jclass                      m_class_Any;
     jclass                      m_class_Type;
     jclass                      m_class_TypeClass;
     jclass                      m_class_JNI_proxy;
-    
+
     //
     jmethodID                   m_method_Object_toString;
     jmethodID                   m_method_Class_getName;
@@ -171,7 +171,7 @@ public:
     jmethodID                   m_ctor_Integer_with_int;
     jmethodID                   m_ctor_Long_with_long;
     jmethodID                   m_ctor_Float_with_float;
-    jmethodID                   m_ctor_Double_with_double;    
+    jmethodID                   m_ctor_Double_with_double;
     jmethodID                   m_method_Boolean_booleanValue;
     jmethodID                   m_method_Byte_byteValue;
     jmethodID                   m_method_Character_charValue;
@@ -180,7 +180,7 @@ public:
     jmethodID                   m_method_Integer_intValue;
     jmethodID                   m_method_Long_longValue;
     jmethodID                   m_method_Short_shortValue;
-    
+
     //
     jmethodID                   m_method_IEnvironment_getRegisteredInterface;
     jmethodID                   m_method_IEnvironment_registerInterface;
@@ -194,7 +194,7 @@ public:
     jfieldID                    m_field_Type__typeName;
     jmethodID                   m_method_TypeClass_fromInt;
     jfieldID                    m_field_Enum_m_value;
-    
+
     //
     jmethodID                   m_method_JNI_proxy_get_proxy_ctor;
     jmethodID                   m_method_JNI_proxy_create;
@@ -209,8 +209,8 @@ public:
     ::com::sun::star::uno::Type const & m_RuntimeException_type;
     ::com::sun::star::uno::Type const & m_void_type;
     //
-    JNI_interface_type_info const * m_XInterface_type_info;    
-    
+    JNI_interface_type_info const * m_XInterface_type_info;
+
     //
     JNI_type_info const * get_type_info(
         JNI_context const & jni,
@@ -225,18 +225,18 @@ public:
     inline static void append_sig(
         ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type,
         bool use_Object_for_type_XInterface = true, bool use_slashes = true );
-    
+
     // get this
     static JNI_info const * get_jni_info(
         rtl::Reference< jvmaccess::UnoVirtualMachine > const & uno_vm );
     inline void destroy( JNIEnv * jni_env );
-    
+
 private:
     JNI_type_info const * create_type_info(
         JNI_context const & jni, typelib_TypeDescription * td ) const;
-    
+
     void destruct( JNIEnv * jni_env );
-    
+
     JNI_info( JNIEnv * jni_env, jobject class_loader,
               jclass classClass, jmethodID methodForName );
     inline ~JNI_info() {}

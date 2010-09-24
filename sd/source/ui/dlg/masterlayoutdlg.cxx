@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 using namespace ::sd;
 
 MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage )
-:	ModalDialog( pParent, SdResId( RID_SD_DLG_MASTER_LAYOUT ) ),
+:   ModalDialog( pParent, SdResId( RID_SD_DLG_MASTER_LAYOUT ) ),
     mpDoc( pDoc ),
     mpCurrentPage( pCurrentPage ),
     maFLPlaceholders( this, SdResId( FL_PLACEHOLDERS ) ),
@@ -75,21 +75,21 @@ MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, S
     {
     case PK_STANDARD:
     {
-        //		aTitle = String( SdResId( STR_MASTER_LAYOUT_TITLE ) );
+        //      aTitle = String( SdResId( STR_MASTER_LAYOUT_TITLE ) );
         maCBHeader.Enable( FALSE );
     String aSlideNumberStr( SdResId( STR_SLIDE_NUMBER ) );
         maCBPageNumber.SetText( aSlideNumberStr );
         break;
     }
     case PK_NOTES:
-        //		aTitle = String( SdResId( STR_NOTES_MASTER_LAYOUT_TITLE ) );
+        //      aTitle = String( SdResId( STR_NOTES_MASTER_LAYOUT_TITLE ) );
         break;
     case PK_HANDOUT:
-        //		aTitle = String( SdResId( STR_HANDOUT_TEMPLATE_LAYOUT_TITLE ) );
+        //      aTitle = String( SdResId( STR_HANDOUT_TEMPLATE_LAYOUT_TITLE ) );
         break;
     }
     String aTitle (SdResId( STR_MASTER_LAYOUT_TITLE ) );
-    
+
     SetText( aTitle );
 
     FreeResource();
@@ -151,7 +151,7 @@ void MasterLayoutDialog::applyChanges()
         else
             create( PRESOBJ_SLIDENUMBER );
     }
-    
+
     mpDoc->EndUndo();
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,7 +166,7 @@ namespace reportdesign
             if ( xChild.is() )
                 xChild->setParent(Parent);
         }
-        template<typename T> static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > getParent( T* _pShape ) 
+        template<typename T> static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > getParent( T* _pShape )
         {
             ::osl::MutexGuard aGuard(_pShape->m_aMutex);
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > xChild;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ void SAL_CALL SbaXStatusMultiplexer::statusChanged(const ::com::sun::star::frame
     ::cppu::OInterfaceIteratorHelper aIt( *this );
     while ( aIt.hasMoreElements() )
         static_cast< ::com::sun::star::frame::XStatusListener* >( aIt.next() )->statusChanged( m_aLastKnownStatus );
-}																						\
+}                                                                                       \
 
 // LoadListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXLoadMultiplexer, ::com::sun::star::form::XLoadListener)

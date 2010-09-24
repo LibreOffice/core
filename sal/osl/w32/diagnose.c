@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,12 +34,12 @@
 
 #define NO_DEBUG_CRT
 
-static pfunc_osl_printDebugMessage	_pPrintDebugMessage = NULL;
-static pfunc_osl_printDetailedDebugMessage	_pPrintDetailedDebugMessage = NULL;
+static pfunc_osl_printDebugMessage  _pPrintDebugMessage = NULL;
+static pfunc_osl_printDetailedDebugMessage  _pPrintDetailedDebugMessage = NULL;
 
 pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDebugMessage pNewFunc )
 {
-    pfunc_osl_printDebugMessage	pOldFunc = _pPrintDebugMessage;
+    pfunc_osl_printDebugMessage pOldFunc = _pPrintDebugMessage;
     _pPrintDebugMessage = pNewFunc;
 
     return pOldFunc;
@@ -47,7 +47,7 @@ pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDeb
 
 pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pfunc_osl_printDetailedDebugMessage pNewFunc )
 {
-    pfunc_osl_printDetailedDebugMessage	pOldFunc = _pPrintDetailedDebugMessage;
+    pfunc_osl_printDetailedDebugMessage pOldFunc = _pPrintDetailedDebugMessage;
     _pPrintDetailedDebugMessage = pNewFunc;
     return pOldFunc;
 }
@@ -86,7 +86,7 @@ void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
 
     if ( IsDebuggerPresent() )
     {
-        sal_Char	szMessage[512];
+        sal_Char    szMessage[512];
         written = _vsnprintf( szMessage, sizeof(szMessage) - 2, lpszFormat, args );
         if ( written == -1 )
             written = sizeof(szMessage) - 2;
@@ -100,7 +100,7 @@ void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
     fprintf(stderr,"\n");
 
     fflush(stderr);
-     
+
     va_end(args);
 }
 
@@ -116,11 +116,11 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
     /* get app name or NULL if unknown (don't call assert) */
     LPCSTR lpszAppName = "Error";
     sal_Char   szMessage[512];
-    
+
     /* format message into buffer */
-    szMessage[sizeof(szMessage)-1] = '\0';	/* zero terminate always */
+    szMessage[sizeof(szMessage)-1] = '\0';  /* zero terminate always */
     _snprintf(szMessage, sizeof(szMessage)-1, "%s: File %hs, Line %d\n:%s\n",
-               lpszAppName, pszFileName, nLine,	pszMessage);
+               lpszAppName, pszFileName, nLine, pszMessage);
 
     OutputDebugString(szMessage);
 
@@ -130,7 +130,7 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
         _pPrintDebugMessage( szMessage );
     else if ( !getenv( "DISABLE_SAL_DBGBOX" ) )
     {
-        TCHAR	szBoxMessage[1024];
+        TCHAR   szBoxMessage[1024];
 
         /* active popup window for the current thread */
         hWndParent = GetActiveWindow();
@@ -147,9 +147,9 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
         szBoxMessage[sizeof(szBoxMessage)-1] = 0;
         _snprintf(szBoxMessage, sizeof(szBoxMessage)-1, "%s\n( Yes=Abort / No=Ignore / Cancel=Debugger )",
                    szMessage);
-        
+
         nCode = MessageBox(hWndParent, szBoxMessage, "Assertion Failed!", nFlags);
- 
+
         if (nCode == IDYES)
             FatalExit(-1);
 
@@ -167,14 +167,14 @@ sal_Int32 SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszMessage)
 {
     UINT nFlags;
     int nDisposition;
-        
+
     // active popup window for the current thread
     HWND hWndParent = GetActiveWindow();
     if (hWndParent != NULL)
         hWndParent = GetLastActivePopup(hWndParent);
 
     nType = nType; /* avoid warnings */
-    
+
     /* set message box flags */
     nFlags = MB_TASKMODAL | MB_ICONERROR | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_SETFOREGROUND;
     if (hWndParent == NULL)

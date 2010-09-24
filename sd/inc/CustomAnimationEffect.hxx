@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,88 +81,88 @@ public:
     CustomAnimationEffectPtr clone() const;
 
     // attributes
-    const rtl::OUString&	getPresetId() const { return maPresetId; }
-    const rtl::OUString&	getPresetSubType() const { return maPresetSubType; }
-    const rtl::OUString&	getProperty() const { return maProperty; }
+    const rtl::OUString&    getPresetId() const { return maPresetId; }
+    const rtl::OUString&    getPresetSubType() const { return maPresetSubType; }
+    const rtl::OUString&    getProperty() const { return maProperty; }
 
-    sal_Int16				getPresetClass() const { return mnPresetClass; }
-    void					setPresetClass( sal_Int16 nPresetClass );
+    sal_Int16               getPresetClass() const { return mnPresetClass; }
+    void                    setPresetClass( sal_Int16 nPresetClass );
 
-    sal_Int16		getNodeType() const { return mnNodeType; }
-    SD_DLLPUBLIC void			setNodeType( sal_Int16 nNodeType );
+    sal_Int16       getNodeType() const { return mnNodeType; }
+    SD_DLLPUBLIC void           setNodeType( sal_Int16 nNodeType );
 
-    ::com::sun::star::uno::Any				getRepeatCount() const;
-    void			setRepeatCount( const ::com::sun::star::uno::Any& rRepeatCount );
+    ::com::sun::star::uno::Any              getRepeatCount() const;
+    void            setRepeatCount( const ::com::sun::star::uno::Any& rRepeatCount );
 
-    ::com::sun::star::uno::Any				getEnd() const;
-    void			setEnd( const ::com::sun::star::uno::Any& rEnd );
+    ::com::sun::star::uno::Any              getEnd() const;
+    void            setEnd( const ::com::sun::star::uno::Any& rEnd );
 
-    sal_Int16		getFill() const;
-    void			setFill( sal_Int16 nFill );
-    
-    double			getBegin() const { return mfBegin; }
-    SD_DLLPUBLIC void			setBegin( double fBegin );
+    sal_Int16       getFill() const;
+    void            setFill( sal_Int16 nFill );
 
-    double			getDuration() const { return mfDuration; }
-    SD_DLLPUBLIC void			setDuration( double fDuration );
-    
-    double			getAbsoluteDuration() const { return mfAbsoluteDuration; }
+    double          getBegin() const { return mfBegin; }
+    SD_DLLPUBLIC void           setBegin( double fBegin );
 
-    const String&	getName() const { return maName; }
-    void			setName( const String& rName ) { maName = rName; }
+    double          getDuration() const { return mfDuration; }
+    SD_DLLPUBLIC void           setDuration( double fDuration );
 
-    sal_Int16		getIterateType() const { return mnIterateType; }
-    SD_DLLPUBLIC void			setIterateType( sal_Int16 nIterateType );
+    double          getAbsoluteDuration() const { return mfAbsoluteDuration; }
 
-    double			getIterateInterval() const { return mfIterateInterval; }
-    SD_DLLPUBLIC void			setIterateInterval( double fIterateInterval );
+    const String&   getName() const { return maName; }
+    void            setName( const String& rName ) { maName = rName; }
 
-    ::com::sun::star::uno::Any	getTarget() const { return maTarget; }
-    SD_DLLPUBLIC void						setTarget( const ::com::sun::star::uno::Any& rTarget );
+    sal_Int16       getIterateType() const { return mnIterateType; }
+    SD_DLLPUBLIC void           setIterateType( sal_Int16 nIterateType );
 
-    sal_Bool		hasAfterEffect() const { return mbHasAfterEffect; }
-    void			setHasAfterEffect( sal_Bool bHasAfterEffect ) { mbHasAfterEffect = bHasAfterEffect; }
+    double          getIterateInterval() const { return mfIterateInterval; }
+    SD_DLLPUBLIC void           setIterateInterval( double fIterateInterval );
 
-    ::com::sun::star::uno::Any	getDimColor() const { return maDimColor; }
-    void						setDimColor( ::com::sun::star::uno::Any aDimColor ) { maDimColor = aDimColor; }
+    ::com::sun::star::uno::Any  getTarget() const { return maTarget; }
+    SD_DLLPUBLIC void                       setTarget( const ::com::sun::star::uno::Any& rTarget );
 
-    bool			IsAfterEffectOnNext() const { return mbAfterEffectOnNextEffect; }
-    void			setAfterEffectOnNext( bool bOnNextEffect ) { mbAfterEffectOnNextEffect = bOnNextEffect; }
+    sal_Bool        hasAfterEffect() const { return mbHasAfterEffect; }
+    void            setHasAfterEffect( sal_Bool bHasAfterEffect ) { mbHasAfterEffect = bHasAfterEffect; }
 
-    sal_Int32		getParaDepth() const { return mnParaDepth; }
+    ::com::sun::star::uno::Any  getDimColor() const { return maDimColor; }
+    void                        setDimColor( ::com::sun::star::uno::Any aDimColor ) { maDimColor = aDimColor; }
 
-    sal_Bool		hasText() const { return mbHasText; }
+    bool            IsAfterEffectOnNext() const { return mbAfterEffectOnNextEffect; }
+    void            setAfterEffectOnNext( bool bOnNextEffect ) { mbAfterEffectOnNextEffect = bOnNextEffect; }
 
-    sal_Int16		getCommand() const { return mnCommand; }
+    sal_Int32       getParaDepth() const { return mnParaDepth; }
 
-    double			getAcceleration() const { return mfAcceleration; }
-    void			setAcceleration( double fAcceleration );
+    sal_Bool        hasText() const { return mbHasText; }
 
-    double			getDecelerate() const { return mfDecelerate; }
-    void			setDecelerate( double fDecelerate );
+    sal_Int16       getCommand() const { return mnCommand; }
 
-    sal_Bool		getAutoReverse() const { return mbAutoReverse; }
-    void			setAutoReverse( sal_Bool bAutoReverse );
+    double          getAcceleration() const { return mfAcceleration; }
+    void            setAcceleration( double fAcceleration );
 
-    ::com::sun::star::uno::Any	getProperty( sal_Int32 nNodeType, const rtl::OUString& rAttributeName, EValue eValue );
-    bool						setProperty( sal_Int32 nNodeType, const rtl::OUString& rAttributeName, EValue eValue, const ::com::sun::star::uno::Any& rValue );
+    double          getDecelerate() const { return mfDecelerate; }
+    void            setDecelerate( double fDecelerate );
 
-    ::com::sun::star::uno::Any	getTransformationProperty( sal_Int32 nTransformType, EValue eValue );
-    bool						setTransformationProperty( sal_Int32 nTransformType, EValue eValue, const ::com::sun::star::uno::Any& rValue );
+    sal_Bool        getAutoReverse() const { return mbAutoReverse; }
+    void            setAutoReverse( sal_Bool bAutoReverse );
 
-    ::com::sun::star::uno::Any	getColor( sal_Int32 nIndex );
-    void						setColor( sal_Int32 nIndex, const ::com::sun::star::uno::Any& rColor );
+    ::com::sun::star::uno::Any  getProperty( sal_Int32 nNodeType, const rtl::OUString& rAttributeName, EValue eValue );
+    bool                        setProperty( sal_Int32 nNodeType, const rtl::OUString& rAttributeName, EValue eValue, const ::com::sun::star::uno::Any& rValue );
 
-    ::com::sun::star::uno::Any	getRotation();
-    void						setRotation( const ::com::sun::star::uno::Any& rRotation );
+    ::com::sun::star::uno::Any  getTransformationProperty( sal_Int32 nTransformType, EValue eValue );
+    bool                        setTransformationProperty( sal_Int32 nTransformType, EValue eValue, const ::com::sun::star::uno::Any& rValue );
 
-    sal_Int32		getGroupId() const { return mnGroupId; }
-    void			setGroupId( sal_Int32 nGroupId );
+    ::com::sun::star::uno::Any  getColor( sal_Int32 nIndex );
+    void                        setColor( sal_Int32 nIndex, const ::com::sun::star::uno::Any& rColor );
 
-    sal_Int16		getTargetSubItem() const { return mnTargetSubItem; }
-    SD_DLLPUBLIC void			setTargetSubItem( sal_Int16 nSubItem );
+    ::com::sun::star::uno::Any  getRotation();
+    void                        setRotation( const ::com::sun::star::uno::Any& rRotation );
 
-    ::rtl::OUString	getPath() const;
+    sal_Int32       getGroupId() const { return mnGroupId; }
+    void            setGroupId( sal_Int32 nGroupId );
+
+    sal_Int16       getTargetSubItem() const { return mnTargetSubItem; }
+    SD_DLLPUBLIC void           setTargetSubItem( sal_Int16 nSubItem );
+
+    ::rtl::OUString getPath() const;
     void setPath( const ::rtl::OUString& rPath );
 
     bool checkForText();
@@ -175,7 +175,7 @@ public:
     void removeAudio();
     const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAudio >& getAudio() const { return mxAudio; }
 
-    EffectSequenceHelper*	getEffectSequence() const { return mpEffectSequence; }
+    EffectSequenceHelper*   getEffectSequence() const { return mpEffectSequence; }
 
     // helper
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > createAfterEffectNode() const throw (com::sun::star::uno::Exception);
@@ -193,36 +193,36 @@ protected:
     void setEffectSequence( EffectSequenceHelper* pSequence ) { mpEffectSequence = pSequence; }
 
 private:
-    sal_Int16		mnNodeType;
-    rtl::OUString	maPresetId;
-    rtl::OUString	maPresetSubType;
-    rtl::OUString	maProperty;
-    sal_Int16		mnPresetClass;
-    double			mfBegin;
-    double			mfDuration;					// this is the maximum duration of the subeffects 
-    double			mfAbsoluteDuration;			// this is the maximum duration of the subeffects including possible iterations
-    sal_Int32		mnGroupId;
-    sal_Int16		mnIterateType;
-    double			mfIterateInterval;
-    sal_Int32		mnParaDepth;
-    sal_Bool		mbHasText;
-    double			mfAcceleration;
-    double			mfDecelerate;
-    sal_Bool		mbAutoReverse;
-    sal_Int16		mnTargetSubItem;
-    sal_Int16		mnCommand;
+    sal_Int16       mnNodeType;
+    rtl::OUString   maPresetId;
+    rtl::OUString   maPresetSubType;
+    rtl::OUString   maProperty;
+    sal_Int16       mnPresetClass;
+    double          mfBegin;
+    double          mfDuration;                 // this is the maximum duration of the subeffects
+    double          mfAbsoluteDuration;         // this is the maximum duration of the subeffects including possible iterations
+    sal_Int32       mnGroupId;
+    sal_Int16       mnIterateType;
+    double          mfIterateInterval;
+    sal_Int32       mnParaDepth;
+    sal_Bool        mbHasText;
+    double          mfAcceleration;
+    double          mfDecelerate;
+    sal_Bool        mbAutoReverse;
+    sal_Int16       mnTargetSubItem;
+    sal_Int16       mnCommand;
 
     EffectSequenceHelper* mpEffectSequence;
 
-    String			maName;
+    String          maName;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxNode;
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAudio > mxAudio;
     ::com::sun::star::uno::Any maTarget;
 
-    sal_Bool		mbHasAfterEffect;
+    sal_Bool        mbHasAfterEffect;
     ::com::sun::star::uno::Any maDimColor;
-    bool		mbAfterEffectOnNextEffect;
+    bool        mbAfterEffectOnNextEffect;
 };
 
 struct stl_CustomAnimationEffect_search_node_predict
@@ -266,7 +266,7 @@ public:
 private:
     EffectSequence maEffects;
     ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape > maTarget;
-    
+
     sal_Int32 mnTextGrouping;
     sal_Bool mbAnimateForm;
     sal_Bool mbTextReverse;
@@ -332,7 +332,7 @@ public:
     // text group methods
 
     CustomAnimationTextGroupPtr findGroup( sal_Int32 nGroupId );
-    SD_DLLPUBLIC CustomAnimationTextGroupPtr	createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, sal_Bool bAnimateForm, sal_Bool bTextReverse );
+    SD_DLLPUBLIC CustomAnimationTextGroupPtr    createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, sal_Bool bAnimateForm, sal_Bool bTextReverse );
     void setTextGrouping( CustomAnimationTextGroupPtr pTextGroup, sal_Int32 nTextGrouping );
     void setAnimateForm( CustomAnimationTextGroupPtr pTextGroup, sal_Bool bAnimateForm );
     void setTextGroupingAuto( CustomAnimationTextGroupPtr pTextGroup, double fTextGroupingAuto );
@@ -383,7 +383,7 @@ public:
 private:
     virtual void implRebuild();
 
-    MainSequence*	mpMainSequence;
+    MainSequence*   mpMainSequence;
 };
 
 typedef boost::shared_ptr< InteractiveSequence > InteractiveSequencePtr;

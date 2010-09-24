@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <osl/mutex.hxx>
 
-#include <stdlib.h>	// qsort/bsearch
+#include <stdlib.h> // qsort/bsearch
 #include <tools/debug.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -69,11 +69,11 @@ using ::com::sun::star::style::VerticalAlignment;
 
 struct ImplPropertyInfo
 {
-    ::rtl::OUString					aName;
-    sal_uInt16						nPropId;
-    ::com::sun::star::uno::Type		aType;
-    sal_Int16 						nAttribs;
-    sal_Bool						bDependsOnOthers;	// eg. VALUE depends on MIN/MAX and must be set after MIN/MAX.
+    ::rtl::OUString                 aName;
+    sal_uInt16                      nPropId;
+    ::com::sun::star::uno::Type     aType;
+    sal_Int16                       nAttribs;
+    sal_Bool                        bDependsOnOthers;   // eg. VALUE depends on MIN/MAX and must be set after MIN/MAX.
 
     ImplPropertyInfo()
      {
@@ -206,7 +206,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "MultiSelection",         MULTISELECTION,     bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "MultiSelectionSimpleMode",   MULTISELECTION_SIMPLEMODE,    bool, BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "NativeWidgetLook",       NATIVE_WIDGET_LOOK, bool,               BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2	    ( "NoLabel",                NOLABEL,            bool,               BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "NoLabel",                NOLABEL,            bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Orientation",            ORIENTATION,        sal_Int32,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "PaintTransparent",       PAINTTRANSPARENT,   bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "PluginParent",           PLUGINPARENT,       sal_Int64,          BOUND, MAYBEDEFAULT ),
@@ -265,29 +265,29 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "StepTime",               STEP_TIME,              sal_Int32,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Decoration",             DECORATION,             sal_Bool,       BOUND, MAYBEDEFAULT ),
 
-            DECL_PROP_2		( "SelectionType",			TREE_SELECTIONTYPE,		::com::sun::star::view::SelectionType,		BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2		( "Editable",				TREE_EDITABLE,			sal_Bool,		BOUND, MAYBEDEFAULT ),
-            DECL_PROP_3		( "DataModel",				TREE_DATAMODEL,			Reference< ::com::sun::star::awt::tree::XTreeDataModel >,		BOUND, MAYBEDEFAULT, MAYBEVOID ),
-            DECL_PROP_2		( "RootDisplayed",			TREE_ROOTDISPLAYED,		sal_Bool,			BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2		( "ShowsHandles",			TREE_SHOWSHANDLES,		sal_Bool,			BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2		( "ShowsRootHandles",		TREE_SHOWSROOTHANDLES,	sal_Bool,			BOUND, MAYBEDEFAULT ),
-            DECL_PROP_3		( "RowHeight",				TREE_ROWHEIGHT,			sal_Int32,			BOUND, MAYBEDEFAULT, MAYBEVOID ),
-            DECL_PROP_2		( "InvokesStopNodeEditing",	TREE_INVOKESSTOPNODEEDITING, sal_Bool,		BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "SelectionType",          TREE_SELECTIONTYPE,     ::com::sun::star::view::SelectionType,      BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "Editable",               TREE_EDITABLE,          sal_Bool,       BOUND, MAYBEDEFAULT ),
+            DECL_PROP_3     ( "DataModel",              TREE_DATAMODEL,         Reference< ::com::sun::star::awt::tree::XTreeDataModel >,       BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_2     ( "RootDisplayed",          TREE_ROOTDISPLAYED,     sal_Bool,           BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "ShowsHandles",           TREE_SHOWSHANDLES,      sal_Bool,           BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "ShowsRootHandles",       TREE_SHOWSROOTHANDLES,  sal_Bool,           BOUND, MAYBEDEFAULT ),
+            DECL_PROP_3     ( "RowHeight",              TREE_ROWHEIGHT,         sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_2     ( "InvokesStopNodeEditing", TREE_INVOKESSTOPNODEEDITING, sal_Bool,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "DialogSourceURL",        DIALOGSOURCEURL,        ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "URL",                    URL,                    ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "WritingMode",            WRITING_MODE,           sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "ContextWritingMode",     CONTEXT_WRITING_MODE,   sal_Int16,          BOUND, MAYBEDEFAULT, TRANSIENT ),
-            DECL_PROP_2     ( "ShowRowHeader",			GRID_SHOWROWHEADER,     sal_Bool,          BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "ShowColumnHeader",		GRID_SHOWCOLUMNHEADER,  sal_Bool,          BOUND, MAYBEDEFAULT ),
-            DECL_PROP_3     ( "GridDataModel",		    GRID_DATAMODEL,         Reference< ::com::sun::star::awt::grid::XGridDataModel >,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
-            DECL_PROP_3     ( "ColumnModel",		    GRID_COLUMNMODEL,       Reference< ::com::sun::star::awt::grid::XGridColumnModel >,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
-            DECL_PROP_3     ( "SelectionModel",		    GRID_SELECTIONMODE,     ::com::sun::star::view::SelectionType,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_2     ( "ShowRowHeader",          GRID_SHOWROWHEADER,     sal_Bool,          BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "ShowColumnHeader",       GRID_SHOWCOLUMNHEADER,  sal_Bool,          BOUND, MAYBEDEFAULT ),
+            DECL_PROP_3     ( "GridDataModel",          GRID_DATAMODEL,         Reference< ::com::sun::star::awt::grid::XGridDataModel >,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "ColumnModel",            GRID_COLUMNMODEL,       Reference< ::com::sun::star::awt::grid::XGridColumnModel >,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "SelectionModel",         GRID_SELECTIONMODE,     ::com::sun::star::view::SelectionType,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "EnableVisible",          ENABLEVISIBLE,          sal_Bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "ReferenceDevice",        REFERENCE_DEVICE,       Reference< XDevice >,BOUND, MAYBEDEFAULT, TRANSIENT ),
             DECL_PROP_3     ( "EvenRowBackgroundColor", GRID_EVEN_ROW_BACKGROUND, sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "HeaderBackgroundColor",  GRID_HEADER_BACKGROUND,  sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "GridLineColor",          GRID_LINE_COLOR,         sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
-            DECL_PROP_3     ( "RowBackgroundColor",     GRID_ROW_BACKGROUND,     sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID )		
+            DECL_PROP_3     ( "RowBackgroundColor",     GRID_ROW_BACKGROUND,     sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID )
     };
             pPropertyInfos = aImplPropertyInfos;
             nElements = sizeof( aImplPropertyInfos ) / sizeof( ImplPropertyInfo );
@@ -300,15 +300,15 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
 
 struct ImplPropertyInfoCompareFunctor : ::std::binary_function<ImplPropertyInfo,::rtl::OUString,bool>
 {
-    inline bool operator()(const ImplPropertyInfo& lhs,const ImplPropertyInfo& rhs)	const
+    inline bool operator()(const ImplPropertyInfo& lhs,const ImplPropertyInfo& rhs) const
     {
         return lhs.aName.compareTo(rhs.aName) < 0;
     }
-    inline bool operator()(const ImplPropertyInfo& lhs,const ::rtl::OUString& rhs)	const
+    inline bool operator()(const ImplPropertyInfo& lhs,const ::rtl::OUString& rhs)  const
     {
         return lhs.aName.compareTo(rhs) < 0;
     }
-    inline bool operator()(const ::rtl::OUString& lhs,const ImplPropertyInfo& rhs)	const
+    inline bool operator()(const ::rtl::OUString& lhs,const ImplPropertyInfo& rhs)  const
     {
         return lhs.compareTo(rhs.aName) < 0;
     }

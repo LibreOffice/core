@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,16 +81,16 @@ namespace sd { namespace framework {
 */
 class BasicViewFactory
     : private sd::MutexOwner,
-      public BasicViewFactoryInterfaceBase      
+      public BasicViewFactoryInterfaceBase
 {
 public:
     BasicViewFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~BasicViewFactory (void);
-    
+
     virtual void SAL_CALL disposing (void);
 
-    
+
     // XViewFactory
 
     virtual css::uno::Reference<css::drawing::framework::XResource>
@@ -102,9 +102,9 @@ public:
         const css::uno::Reference<css::drawing::framework::XResource>& xView)
         throw(css::uno::RuntimeException);
 
-    
+
     // XInitialization
-    
+
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<css::uno::Any>& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
@@ -129,7 +129,7 @@ private:
         ::Window& rWindow,
         const css::uno::Reference<css::drawing::framework::XPane>& rxPane,
         FrameView* pFrameView);
-    
+
     ::boost::shared_ptr<ViewShell> CreateViewShell (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         SfxViewFrame& rFrame,

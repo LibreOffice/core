@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include "TransformerContext.hxx"
 
-class XMLControlOASISTransformerContext : public XMLTransformerContext 
+class XMLControlOASISTransformerContext : public XMLTransformerContext
 {
     ::rtl::OUString m_aElemQName;
     sal_Bool m_bCreateControl;
@@ -38,7 +38,7 @@ class XMLControlOASISTransformerContext : public XMLTransformerContext
 public:
     TYPEINFO();
 
-    XMLControlOASISTransformerContext( XMLTransformerBase& rTransformer, 
+    XMLControlOASISTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_Bool bCreateControl );
 
@@ -49,5 +49,5 @@ public:
     virtual void EndElement();
 };
 
-#endif	//  _XMLOFF_CONTROLASISTCONTEXT_HXX
+#endif  //  _XMLOFF_CONTROLASISTCONTEXT_HXX
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -212,7 +212,7 @@ typedef HMTX mutex_type;
  */
 static void __rtl_mutex_init (mutex_type* mutex)
 {
-    APIRET		rc = 0;
+    APIRET      rc = 0;
 
     rc = DosCreateMutexSem(NULL,mutex,0,0);
 
@@ -220,7 +220,7 @@ static void __rtl_mutex_init (mutex_type* mutex)
 
 static int __rtl_mutex_destroy (mutex_type* mutex)
 {
-    APIRET		rc = 0;
+    APIRET      rc = 0;
 
 
     do {
@@ -237,9 +237,9 @@ static int __rtl_mutex_destroy (mutex_type* mutex)
 
 static int __rtl_mutex_acquire(mutex_type* mutex)
 {
-    int		ret = 0;
-    int		status = 0;
-    APIRET		rc = 0;
+    int     ret = 0;
+    int     status = 0;
+    APIRET      rc = 0;
 
     // initialize static semaphores created with PTHREAD_MUTEX_INITIALIZER state.
     if (*mutex == -1)
@@ -255,9 +255,9 @@ static int __rtl_mutex_acquire(mutex_type* mutex)
 
 static int __rtl_mutex_release(mutex_type* mutex)
 {
-    int		ret = 0;
-    APIRET		rc = 0;
-    int		status;
+    int     ret = 0;
+    APIRET      rc = 0;
+    int     status;
 
 
     // initialize static semaphores created with PTHREAD_MUTEX_INITIALIZER state.

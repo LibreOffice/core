@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 #ifdef DBG_UTIL
 
-#define DBG_CHECK_RANGES(NUMTYPE, pArr)									\
+#define DBG_CHECK_RANGES(NUMTYPE, pArr)                                 \
     for ( const NUMTYPE *pRange = pArr; *pRange; pRange += 2 )          \
     {                                                                   \
         DBG_ASSERT( pRange[0] <= pRange[1], "ranges must be sorted" );  \
@@ -61,7 +61,7 @@ inline void Swap_Impl(const NUMTYPE *& rp1, const NUMTYPE *& rp2)
 NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
                                NUMTYPE nWh1, NUMTYPE nWh2, NUMTYPE nNull )
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Creates an USHORT-ranges-array in 'rpRanges' using 'nWh1' and 'nWh2' as
     first range, 'nNull' as terminator or start of 2nd range and 'pArgs' as
@@ -86,7 +86,7 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
                   va_arg( pArgs, NUMTYPE_ARG ) ) ) )
     {
         aNumArr.Insert( nIns, nCnt++ );
-        if ( 0 == (nCnt & 1) )		 // 4,6,8, usw.
+        if ( 0 == (nCnt & 1) )       // 4,6,8, usw.
         {
             DBG_ASSERT( aNumArr[ nCnt-2 ] <= nIns, "Ungueltiger Bereich" );
             nSize += nIns - aNumArr[ nCnt-2 ] + 1;
@@ -108,7 +108,7 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
 
 NUMTYPE Count_Impl( const NUMTYPE *pRanges )
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Determines the number of NUMTYPEs in an 0-terminated array of pairs of
     NUMTYPEs. The terminating 0 is not included in the count.
@@ -128,7 +128,7 @@ NUMTYPE Count_Impl( const NUMTYPE *pRanges )
 
 NUMTYPE Capacity_Impl( const NUMTYPE *pRanges )
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Determines the total number of NUMTYPEs described in an 0-terminated
     array of pairs of NUMTYPEs, each representing an range of NUMTYPEs.
@@ -152,7 +152,7 @@ NUMTYPE Capacity_Impl( const NUMTYPE *pRanges )
 
 SfxNumRanges::SfxNumRanges( const SfxNumRanges &rOrig )
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Copy-Ctor.
 */
@@ -172,7 +172,7 @@ SfxNumRanges::SfxNumRanges( const SfxNumRanges &rOrig )
 
 SfxNumRanges::SfxNumRanges( NUMTYPE nWhich1, NUMTYPE nWhich2 )
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Constructs an SfxNumRanges-instance from one range of NUMTYPEs.
 
@@ -191,7 +191,7 @@ SfxNumRanges::SfxNumRanges( NUMTYPE nWhich1, NUMTYPE nWhich2 )
 
 SfxNumRanges::SfxNumRanges( NUMTYPE_ARG nWh0, NUMTYPE_ARG nWh1, NUMTYPE_ARG nNull, ... )
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Constructs an SfxNumRanges-instance from more than one sorted ranges of
     NUMTYPEs terminated with one 0.
@@ -214,7 +214,7 @@ SfxNumRanges::SfxNumRanges( NUMTYPE_ARG nWh0, NUMTYPE_ARG nWh1, NUMTYPE_ARG nNul
 
 SfxNumRanges::SfxNumRanges( const NUMTYPE* pArr )
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Constcurts an SfxNumRanges-instance from an sorted ranges of NUMTYPEs,
     terminates with on 0.
@@ -268,7 +268,7 @@ SfxNumRanges& SfxNumRanges::operator =
     const SfxNumRanges &rRanges
 )
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Assigns ranges from 'rRanges' to '*this'.
 */
@@ -300,7 +300,7 @@ SfxNumRanges& SfxNumRanges::operator +=
     const SfxNumRanges &rRanges
 )
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Merges *this with 'rRanges'.
 
@@ -460,7 +460,7 @@ SfxNumRanges& SfxNumRanges::operator -=
     const SfxNumRanges &rRanges
 )
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Removes 'rRanges' from '*this'.
 
@@ -486,10 +486,10 @@ SfxNumRanges& SfxNumRanges::operator -=
     NUMTYPE nPos1 = 0, nPos2 = 0, nTargetPos = 0;
     while( _pRanges[ nPos1 ] )
     {
-        NUMTYPE l1 = _pRanges[ nPos1 ]; 	 // lower bound of interval 1
-        NUMTYPE u1 = _pRanges[ nPos1+1 ];	 // upper bound of interval 1
-        NUMTYPE l2 = rRanges._pRanges[ nPos2 ]; 	 // lower bound of interval 2
-        NUMTYPE u2 = rRanges._pRanges[ nPos2+1 ];	 // upper bound of interval 2
+        NUMTYPE l1 = _pRanges[ nPos1 ];      // lower bound of interval 1
+        NUMTYPE u1 = _pRanges[ nPos1+1 ];    // upper bound of interval 1
+        NUMTYPE l2 = rRanges._pRanges[ nPos2 ];      // lower bound of interval 2
+        NUMTYPE u2 = rRanges._pRanges[ nPos2+1 ];    // upper bound of interval 2
 
         // boundary cases
         // * subtrahend is empty -> copy the minuend
@@ -661,7 +661,7 @@ SfxNumRanges& SfxNumRanges::operator /=
     const SfxNumRanges &rRanges
 )
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Determines intersection of '*this' with 'rRanges'.
 
@@ -696,10 +696,10 @@ SfxNumRanges& SfxNumRanges::operator /=
     NUMTYPE nPos1 = 0, nPos2 = 0, nTargetPos = 0;
     while( _pRanges[ nPos1 ] != 0 && rRanges._pRanges[ nPos2 ] != 0 )
     {
-        NUMTYPE l1 = _pRanges[ nPos1 ]; 	 // lower bound of interval 1
-        NUMTYPE u1 = _pRanges[ nPos1+1 ];	 // upper bound of interval 1
-        NUMTYPE l2 = rRanges._pRanges[ nPos2 ]; 	 // lower bound of interval 2
-        NUMTYPE u2 = rRanges._pRanges[ nPos2+1 ];	 // upper bound of interval 2
+        NUMTYPE l1 = _pRanges[ nPos1 ];      // lower bound of interval 1
+        NUMTYPE u1 = _pRanges[ nPos1+1 ];    // upper bound of interval 1
+        NUMTYPE l2 = rRanges._pRanges[ nPos2 ];      // lower bound of interval 2
+        NUMTYPE u2 = rRanges._pRanges[ nPos2+1 ];    // upper bound of interval 2
 
         if( u1 < l2 )
         {
@@ -778,7 +778,7 @@ SfxNumRanges& SfxNumRanges::operator /=
 
 BOOL SfxNumRanges::Intersects( const SfxNumRanges &rRanges ) const
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Determines if at least one range in 'rRanges' intersects with one
     range in '*this'.
@@ -822,7 +822,7 @@ BOOL SfxNumRanges::Intersects( const SfxNumRanges &rRanges ) const
 
 NUMTYPE SfxNumRanges::Count() const
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Determines the number of USHORTs in the set described by the ranges
     of USHORTs in '*this'.
@@ -836,7 +836,7 @@ NUMTYPE SfxNumRanges::Count() const
 
 BOOL SfxNumRanges::Contains( NUMTYPE n ) const
 
-/**	<H3>Description</H3>
+/** <H3>Description</H3>
 
     Determines if '*this' contains 'n'.
 */

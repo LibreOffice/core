@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -267,7 +267,7 @@ OOO_DLLPUBLIC_CHARTTOOLS
 sal_Bool  hasLongOrShortValue( const ::com::sun::star::uno::Any& rAny );
 OOO_DLLPUBLIC_CHARTTOOLS
 sal_Int16 getShortForLongAlso( const ::com::sun::star::uno::Any& rAny );
-    
+
 OOO_DLLPUBLIC_CHARTTOOLS
 bool replaceParamterInString( rtl::OUString & rInOutResourceString,
                             const rtl::OUString & rParamToReplace,

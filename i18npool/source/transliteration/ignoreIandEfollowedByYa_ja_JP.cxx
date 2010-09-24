@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-OneToOneMappingTable_t IandE[] = {      
+OneToOneMappingTable_t IandE[] = {
     MAKE_PAIR( 0x30A3, 0x0000 ),  // KATAKANA LETTER SMALL I
     MAKE_PAIR( 0x30A4, 0x0000 ),  // KATAKANA LETTER I
     MAKE_PAIR( 0x30A7, 0x0000 ),  // KATAKANA LETTER SMALL E
@@ -80,13 +80,13 @@ OneToOneMappingTable_t IandE[] = {
 
 
 
-OUString SAL_CALL 
+OUString SAL_CALL
 ignoreIandEfollowedByYa_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 0 now.
-    rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h  
+    rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 
@@ -99,7 +99,7 @@ ignoreIandEfollowedByYa_ja_JP::folding( const OUString& inStr, sal_Int32 startPo
         position = startPos;
     }
 
-    // 
+    //
     sal_Unicode previousChar = *src ++;
     sal_Unicode currentChar;
 

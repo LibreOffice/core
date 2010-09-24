@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,34 +35,34 @@ class FileStringList;
 
 class SOT_DLLPUBLIC FileList : public SvDataCopyStream
 {
-    FileStringList*		pStrList;
+    FileStringList*     pStrList;
 
 protected:
 
     // SvData-Methoden
-    virtual	void		Load( SvStream& );
-    virtual	void		Save( SvStream& );
-    virtual	void		Assign( const SvDataCopyStream& );
+    virtual void        Load( SvStream& );
+    virtual void        Save( SvStream& );
+    virtual void        Assign( const SvDataCopyStream& );
 
     // Liste loeschen;
     void ClearAll( void );
 
 public:
-        
+
     TYPEINFO();
                         FileList();
                         ~FileList();
 
     // Zuweisungsoperator
-    FileList&			operator=( const FileList& rFileList );
+    FileList&           operator=( const FileList& rFileList );
 
 
     // Im-/Export
-    SOT_DLLPUBLIC friend SvStream&	operator<<( SvStream& rOStm, const FileList& rFileList );
-    SOT_DLLPUBLIC friend SvStream&	operator>>( SvStream& rIStm, FileList& rFileList );
+    SOT_DLLPUBLIC friend SvStream&  operator<<( SvStream& rOStm, const FileList& rFileList );
+    SOT_DLLPUBLIC friend SvStream&  operator>>( SvStream& rIStm, FileList& rFileList );
 
     // Clipboard, D&D usw.
-    static ULONG		GetFormat();
+    static ULONG        GetFormat();
 
 
     // Liste fuellen/abfragen
@@ -70,7 +70,7 @@ public:
     String GetFile( ULONG i ) const;
     ULONG Count( void ) const;
 
-};	
+};
 
 #endif // _FILELIST_HXX
 

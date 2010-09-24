@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //________________________________
-//	my own includes
+//  my own includes
 #include <jobs/jobexecutor.hxx>
 #include <jobs/job.hxx>
 #include <jobs/joburl.hxx>
@@ -44,13 +44,13 @@
 #include <services.h>
 
 //________________________________
-//	interface includes
+//  interface includes
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 
 //________________________________
-//	includes of other projects
+//  includes of other projects
 #include <unotools/configpathes.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
@@ -58,18 +58,18 @@
 #include <rtl/logfile.hxx>
 
 //________________________________
-//	namespace
+//  namespace
 
 namespace framework{
 
 //________________________________
-//	non exported const
+//  non exported const
 
 //________________________________
-//	non exported definitions
+//  non exported definitions
 
 //________________________________
-//	declarations
+//  declarations
 
 DEFINE_XINTERFACE_6( JobExecutor                                                               ,
                      OWeakObject                                                               ,
@@ -270,7 +270,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
         aReadLock.lock();
 
         const JobData::TJob2DocEventBinding& rBinding = *pIt;
-        
+
         JobData aCfg(m_xSMGR);
         aCfg.setEvent(rBinding.m_sDocEvent, rBinding.m_sJobName);
         aCfg.setEnvironment(JobData::E_DOCUMENTEVENT);

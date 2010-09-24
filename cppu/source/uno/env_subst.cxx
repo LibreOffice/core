@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@
 #include "env_subst.hxx"
 
 
-void SAL_CALL uno_getEnvironment(uno_Environment ** ppEnv, 
-                                 rtl_uString      * pEnvDcp, 
+void SAL_CALL uno_getEnvironment(uno_Environment ** ppEnv,
+                                 rtl_uString      * pEnvDcp,
                                  void             * pContext)
     SAL_THROW_EXTERN_C()
 {
@@ -46,7 +46,7 @@ void SAL_CALL uno_getEnvironment(uno_Environment ** ppEnv,
 
         OSL_TRACE("UNO_ENV_SUBST \"%s\" -> \"%s\"", a_envDcp.getStr(), c_value);
         rtl::OUString value(c_value, rtl_str_getLength(c_value), RTL_TEXTENCODING_ASCII_US);
-        
+
          envDcp = value;
     }
 

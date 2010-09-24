@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,19 +135,19 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
     if (IsValidHandle(h1file))
     {
         DWORD dummy;
-        
+
         // Converting string into UTF-8 encoding and writing into file "basis-link"
 
         int nCharsRequired = MultiByteToWideChar( CP_ACP, 0, sBasisInstallPath.c_str(), -1, NULL, 0 );
         if ( nCharsRequired )
         {
-            LPWSTR	lpPathW = new WCHAR[nCharsRequired];
+            LPWSTR  lpPathW = new WCHAR[nCharsRequired];
             if ( MultiByteToWideChar( CP_ACP, 0, sBasisInstallPath.c_str(), -1, lpPathW, nCharsRequired ) )
             {
                 nCharsRequired = WideCharToMultiByte( CP_UTF8, 0, lpPathW, -1, NULL, 0, NULL, NULL );
                 if ( nCharsRequired )
                 {
-                    LPSTR	lpPathUTF8 = new CHAR[nCharsRequired];
+                    LPSTR   lpPathUTF8 = new CHAR[nCharsRequired];
                     WideCharToMultiByte( CP_UTF8, 0, lpPathW, -1, lpPathUTF8, nCharsRequired, NULL, NULL );
 
                     // WriteFile( h1file, sBasisInstallPath.c_str(), sBasisInstallPath.size() ,&dummy, 0 );
@@ -156,7 +156,7 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
                     delete lpPathUTF8;
                 }
             }
-            
+
             delete lpPathW;
         }
 
@@ -183,13 +183,13 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
         int nCharsRequired = MultiByteToWideChar( CP_ACP, 0, sUreInstallPath.c_str(), -1, NULL, 0 );
         if ( nCharsRequired )
         {
-            LPWSTR	lpPathW = new WCHAR[nCharsRequired];
+            LPWSTR  lpPathW = new WCHAR[nCharsRequired];
             if ( MultiByteToWideChar( CP_ACP, 0, sUreInstallPath.c_str(), -1, lpPathW, nCharsRequired ) )
             {
                 nCharsRequired = WideCharToMultiByte( CP_UTF8, 0, lpPathW, -1, NULL, 0, NULL, NULL );
                 if ( nCharsRequired )
                 {
-                    LPSTR	lpPathUTF8 = new CHAR[nCharsRequired];
+                    LPSTR   lpPathUTF8 = new CHAR[nCharsRequired];
                     WideCharToMultiByte( CP_UTF8, 0, lpPathW, -1, lpPathUTF8, nCharsRequired, NULL, NULL );
 
                     // WriteFile( h2file, sUreInstallPath.c_str(), sUreInstallPath.size() ,&dummy, 0 );
@@ -198,7 +198,7 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
                     delete lpPathUTF8;
                 }
             }
-            
+
             delete lpPathW;
         }
 
@@ -215,7 +215,7 @@ extern "C" UINT __stdcall RemoveLayerLinks(MSIHANDLE handle)
     string sOfficeInstallPath = sInstallPath;
     string sBasisInstallPath = sInstallPath + TEXT("Basis\\");
     string sUreInstallPath = sInstallPath + TEXT("URE\\");
-    
+
     string sBasisLinkPath = sOfficeInstallPath + TEXT("basis-link");
     string sUreLinkPath = sBasisInstallPath + TEXT("ure-link");
     string sUreDirName = sUreInstallPath + TEXT("bin");

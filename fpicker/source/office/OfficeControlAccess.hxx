@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,35 +49,35 @@ namespace svt
     }
 
     // --------------------------------------------------------------------
-    /**	implements the XControlAccess, XControlInformation and XFilePickerControlAccess for the file picker
+    /** implements the XControlAccess, XControlInformation and XFilePickerControlAccess for the file picker
     */
     class OControlAccess
     {
-        IFilePickerController*	m_pFilePickerController;
-        SvtFileView*			m_pFileView;
+        IFilePickerController*  m_pFilePickerController;
+        SvtFileView*            m_pFileView;
 
     public:
         OControlAccess( IFilePickerController* _pController, SvtFileView* _pFileView );
 
         // XControlAccess implementation
         void setControlProperty( const ::rtl::OUString& _rControlName, const ::rtl::OUString& _rControlProperty, const ::com::sun::star::uno::Any& _rValue );
-        ::com::sun::star::uno::Any	getControlProperty( const ::rtl::OUString& _rControlName, const ::rtl::OUString& _rControlProperty );
+        ::com::sun::star::uno::Any  getControlProperty( const ::rtl::OUString& _rControlName, const ::rtl::OUString& _rControlProperty );
 
         // XControlInformation implementation
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >	getSupportedControls(  );
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >	getSupportedControlProperties( const ::rtl::OUString& _rControlName );
-        sal_Bool											isControlSupported( const ::rtl::OUString& _rControlName );
-        sal_Bool											isControlPropertySupported( const ::rtl::OUString& _rControlName, const ::rtl::OUString& _rControlProperty );
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedControls(  );
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedControlProperties( const ::rtl::OUString& _rControlName );
+        sal_Bool                                            isControlSupported( const ::rtl::OUString& _rControlName );
+        sal_Bool                                            isControlPropertySupported( const ::rtl::OUString& _rControlName, const ::rtl::OUString& _rControlProperty );
 
         // XFilePickerControlAccess
-        void						setValue( sal_Int16 _nId, sal_Int16 _nCtrlAction, const ::com::sun::star::uno::Any& _rValue );
+        void                        setValue( sal_Int16 _nId, sal_Int16 _nCtrlAction, const ::com::sun::star::uno::Any& _rValue );
         ::com::sun::star::uno::Any  getValue( sal_Int16 _nId, sal_Int16 _nCtrlAction ) const;
-        void						setLabel( sal_Int16 _nId, const ::rtl::OUString& _rValue );
+        void                        setLabel( sal_Int16 _nId, const ::rtl::OUString& _rValue );
         ::rtl::OUString             getLabel( sal_Int16 _nId ) const;
         void                        enableControl( sal_Int16 _nId, sal_Bool _bEnable );
 
-        static void				setHelpURL( Window* _pControl, const ::rtl::OUString& _rURL, sal_Bool _bFileView );
-        static ::rtl::OUString	getHelpURL( Window* _pControl, sal_Bool _bFileView );
+        static void             setHelpURL( Window* _pControl, const ::rtl::OUString& _rURL, sal_Bool _bFileView );
+        static ::rtl::OUString  getHelpURL( Window* _pControl, sal_Bool _bFileView );
 
     private:
         /** implements the various methods for setting properties on controls
@@ -94,7 +94,7 @@ namespace svt
             @param _bIgnoreIllegalArgument
                 if <FALSE/>, an exception will be thrown if the given value is of improper type
         */
-        void						implSetControlProperty(
+        void                        implSetControlProperty(
                                         sal_Int16 _nControlId,
                                         Control* _pControl, sal_Int16 _nProperty, const ::com::sun::star::uno::Any& _rValue,
                                         sal_Bool _bIgnoreIllegalArgument = sal_True );
@@ -111,14 +111,14 @@ namespace svt
                 See PROPERTY_FLAG_*
             @return
         */
-        ::com::sun::star::uno::Any	implGetControlProperty( Control* _pControl, sal_Int16 _nProperty ) const;
+        ::com::sun::star::uno::Any  implGetControlProperty( Control* _pControl, sal_Int16 _nProperty ) const;
 
         void implDoListboxAction( ListBox* _pListbox, sal_Int16 _nCtrlAction, const ::com::sun::star::uno::Any& _rValue );
 
     };
 
 //.........................................................................
-}	// namespace svt
+}   // namespace svt
 //.........................................................................
 
 #endif // SVTOOLS_CONTROLACCESS_HXX

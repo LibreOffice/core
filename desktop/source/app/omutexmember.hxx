@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,33 +29,33 @@
 #define __FRAMEWORK_OMUTEXMEMBER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	definitions
+//  definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			definition of a public mutex member
-    @descr			You can use this struct as baseclass to get a public mutex member for right initialization.
+    @short          definition of a public mutex member
+    @descr          You can use this struct as baseclass to get a public mutex member for right initialization.
                     Don't use it as member. You can't guarantee the right order of initialization of baseclasses then!
                     And some other helper classes share the mutex with an implementation and must have a valid one.
 
-    @seealso		See implementation of constructors in derived classes for further informations!
+    @seealso        See implementation of constructors in derived classes for further informations!
 
-    @devstatus		ready
+    @devstatus      ready
 *//*-*************************************************************************************************************/
 
 struct OMutexMember
 {
-    ::osl::Mutex	m_aMutex;
+    ::osl::Mutex    m_aMutex;
 };
 
-#endif	//	#ifndef __FRAMEWORK_OMUTEXMEMBER_HXX_
+#endif  //  #ifndef __FRAMEWORK_OMUTEXMEMBER_HXX_

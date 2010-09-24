@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ Reference< XTypeDescription > CompoundTypeDescriptionImpl::getBaseType()
         {
         }
         // never try again, if no base td was found
-        _aBaseType = OUString();        
+        _aBaseType = OUString();
     }
     return _xBaseTD;
 }
@@ -111,12 +111,12 @@ Sequence< Reference< XTypeDescription > > CompoundTypeDescriptionImpl::getMember
         typereg::Reader aReader(
             _aBytes.getConstArray(), _aBytes.getLength(), false,
             TYPEREG_VERSION_1);
-        
+
         sal_uInt16 nFields = aReader.getFieldCount();
         Sequence< Reference< XTypeDescription > > * pTempMembers =
             new Sequence< Reference< XTypeDescription > >( nFields );
         Reference< XTypeDescription > * pMembers = pTempMembers->getArray();
-        
+
         while (nFields--)
         {
             if ((aReader.getFieldFlags(nFields) & RT_ACCESS_PARAMETERIZED_TYPE)
@@ -134,7 +134,7 @@ Sequence< Reference< XTypeDescription > > CompoundTypeDescriptionImpl::getMember
                     pMembers[nFields].is(), "### compound member unknown!");
             }
         }
-        
+
         ClearableMutexGuard aGuard( getMutex() );
         if (_pMembers)
         {
@@ -146,7 +146,7 @@ Sequence< Reference< XTypeDescription > > CompoundTypeDescriptionImpl::getMember
             _pMembers = pTempMembers;
         }
     }
-    
+
     return *_pMembers;
 }
 //__________________________________________________________________________________________________
@@ -158,16 +158,16 @@ Sequence< OUString > CompoundTypeDescriptionImpl::getMemberNames()
         typereg::Reader aReader(
             _aBytes.getConstArray(), _aBytes.getLength(), false,
             TYPEREG_VERSION_1);
-        
+
         sal_uInt16 nFields = aReader.getFieldCount();
         Sequence< OUString > * pTempMemberNames = new Sequence< OUString >( nFields );
         OUString * pMemberNames = pTempMemberNames->getArray();
-        
+
         while (nFields--)
         {
             pMemberNames[nFields] = aReader.getFieldName( nFields );
         }
-        
+
         ClearableMutexGuard aGuard( getMutex() );
         if (_pMemberNames)
         {

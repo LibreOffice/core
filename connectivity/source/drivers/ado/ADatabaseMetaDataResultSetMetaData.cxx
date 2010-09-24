@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,10 +84,10 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnCount(  ) throw(
 
     if(m_vMapping.size())
         return m_mColumns.size();
-    
-    ADOFields* pFields	= NULL;
+
+    ADOFields* pFields  = NULL;
     m_pRecordSet->get_Fields(&pFields);
-    WpOLEAppendCollection<ADOFields, ADOField, WpADOField>	aFields(pFields);
+    WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(pFields);
     m_nColCount = aFields.GetItemCount();
     return m_nColCount;
 }
@@ -175,7 +175,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSetMetaData::isNullable( sal_Int32 col
 {
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.isNullable();
-    
+
     if(!m_pRecordSet)
         return 0;
 
@@ -199,7 +199,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isReadOnly( sal_Int32 colu
     WpADOField aField = ADOS::getField(m_pRecordSet,m_vMapping[column]);
     if(aField.IsValid())
     {
-        //	return (aField.GetStatus() & adFieldReadOnly) == adFieldReadOnly;
+        //  return (aField.GetStatus() & adFieldReadOnly) == adFieldReadOnly;
     }
     return sal_False;
 }

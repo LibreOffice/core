@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #endif
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif				  
+#endif
 #ifndef _DBU_APP_HRC_
 #include "dbu_app.hrc"
 #endif
@@ -75,7 +75,7 @@ OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWind
     ,m_rBorderWin( _rBorderWindow )
 {
     DBG_CTOR(OApplicationSwapWindow,NULL);
-//	SetCompoundControl( TRUE );
+//  SetCompoundControl( TRUE );
 
     ImplInitSettings( sal_True, sal_True, sal_True );
 
@@ -101,7 +101,7 @@ void OApplicationSwapWindow::Resize()
 
     Size aOutputSize = GetOutputSize();
 
-    m_aIconControl.SetPosSizePixel(	Point(static_cast<long>((aOutputSize.Width() - nX)*0.5), 0)  ,Size(nX,aOutputSize.Height()));
+    m_aIconControl.SetPosSizePixel( Point(static_cast<long>((aOutputSize.Width() - nX)*0.5), 0)  ,Size(nX,aOutputSize.Height()));
     m_aIconControl.ArrangeIcons();
 }
 // -----------------------------------------------------------------------------
@@ -196,7 +196,7 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
 IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pControl)
 {
     ULONG nPos = 0;
-    SvxIconChoiceCtrlEntry*	pEntry = _pControl->GetSelectedEntry( nPos );
+    SvxIconChoiceCtrlEntry* pEntry = _pControl->GetSelectedEntry( nPos );
     ElementType eType = E_NONE;
     if ( pEntry )
     {
@@ -216,7 +216,7 @@ IMPL_LINK(OApplicationSwapWindow, ChangeToLastSelected, void*, EMPTYARG)
 void OApplicationSwapWindow::selectContainer(ElementType _eType)
 {
     ULONG nCount = m_aIconControl.GetEntryCount();
-    SvxIconChoiceCtrlEntry*	pEntry = NULL;
+    SvxIconChoiceCtrlEntry* pEntry = NULL;
     for (ULONG i=0; i < nCount; ++i)
     {
         pEntry = m_aIconControl.GetEntry(i);

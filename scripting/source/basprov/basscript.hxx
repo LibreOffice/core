@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,11 +41,11 @@ namespace basprov
 {
 //.........................................................................
 
-    //	----------------------------------------------------
-    //	class BasicScriptImpl
-    //	----------------------------------------------------
+    //  ----------------------------------------------------
+    //  class BasicScriptImpl
+    //  ----------------------------------------------------
 
-    typedef ::cppu::WeakImplHelper1<    
+    typedef ::cppu::WeakImplHelper1<
         ::com::sun::star::script::provider::XScript > BasicScriptImpl_BASE;
 
 
@@ -76,14 +76,14 @@ namespace basprov
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams,
             ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam )
-            throw ( 
-                    ::com::sun::star::script::provider::ScriptFrameworkErrorException, 
+            throw (
+                    ::com::sun::star::script::provider::ScriptFrameworkErrorException,
                     ::com::sun::star::reflection::InvocationTargetException,
-                    ::com::sun::star::uno::RuntimeException );               
+                    ::com::sun::star::uno::RuntimeException );
     };
 
 //.........................................................................
-}	// namespace basprov
+}   // namespace basprov
 //.........................................................................
 
 #endif // SCRIPTING_BASSCRIPT_HXX

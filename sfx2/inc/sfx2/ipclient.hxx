@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@ class SFX2_DLLPUBLIC SfxInPlaceClient
 {
 friend class SfxInPlaceClient_Impl;
 
-    SfxInPlaceClient_Impl*	m_pImp;
-    SfxViewShell*			m_pViewSh;
+    SfxInPlaceClient_Impl*  m_pImp;
+    SfxViewShell*           m_pViewSh;
     Window*                 m_pEditWin;
 
     // called after the requested new object area was negotiated
@@ -69,9 +69,9 @@ friend class SfxInPlaceClient_Impl;
 
 public:
                         SfxInPlaceClient( SfxViewShell* pViewShell, Window* pDraw, sal_Int64 nAspect = com::sun::star::embed::Aspects::MSOLE_CONTENT );
-    virtual 			~SfxInPlaceClient();
+    virtual             ~SfxInPlaceClient();
 
-    SfxViewShell*		GetViewShell() const { return m_pViewSh; }
+    SfxViewShell*       GetViewShell() const { return m_pViewSh; }
     Window*             GetEditWin() const { return m_pEditWin; }
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject() const;
     void                SetObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rObject );
@@ -92,7 +92,7 @@ public:
     static Window*      GetActiveWindow( SfxObjectShell* pDoc, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObject );
     static SfxInPlaceClient* GetClient( SfxObjectShell* pDoc, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObject );
     sal_Int64           GetAspect() const;
-    sal_Int64			GetObjectMiscStatus() const;
+    sal_Int64           GetObjectMiscStatus() const;
     ErrCode             DoVerb( long nVerb );
     void                VisAreaChanged();
     void                ResetObject();

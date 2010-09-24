@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,12 +50,12 @@
 \************************************************************************/
 
 SvxNameDialog::SvxNameDialog( Window* pWindow, const String& rName, const String& rDesc ) :
-    ModalDialog		( pWindow, CUI_RES( RID_SVXDLG_NAME ) ),
-    aFtDescription		( this, CUI_RES( FT_DESCRIPTION ) ),
-    aEdtName			( this, CUI_RES( EDT_STRING ) ),
-    aBtnOK				( this, CUI_RES( BTN_OK ) ),
-    aBtnCancel			( this, CUI_RES( BTN_CANCEL ) ),
-    aBtnHelp			( this, CUI_RES( BTN_HELP ) )
+    ModalDialog     ( pWindow, CUI_RES( RID_SVXDLG_NAME ) ),
+    aFtDescription      ( this, CUI_RES( FT_DESCRIPTION ) ),
+    aEdtName            ( this, CUI_RES( EDT_STRING ) ),
+    aBtnOK              ( this, CUI_RES( BTN_OK ) ),
+    aBtnCancel          ( this, CUI_RES( BTN_CANCEL ) ),
+    aBtnHelp            ( this, CUI_RES( BTN_HELP ) )
 {
     FreeResource();
 
@@ -95,10 +95,10 @@ IMPL_LINK(SvxNameDialog, ModifyHdl, Edit*, EMPTYARG)
 // Dialog for editing Object Name
 // plus uniqueness-callback-linkHandler
 
-SvxObjectNameDialog::SvxObjectNameDialog( 
-    Window* pWindow, 
+SvxObjectNameDialog::SvxObjectNameDialog(
+    Window* pWindow,
     const String& rName)
-:	ModalDialog(pWindow, CUI_RES(RID_SVXDLG_OBJECT_NAME)),
+:   ModalDialog(pWindow, CUI_RES(RID_SVXDLG_OBJECT_NAME)),
     aFtName(this, CUI_RES(NTD_FT_NAME)),
     aEdtName(this, CUI_RES(NTD_EDT_NAME)),
     aFlSeparator(this, CUI_RES(FL_SEPARATOR_A)),
@@ -131,11 +131,11 @@ IMPL_LINK(SvxObjectNameDialog, ModifyHdl, Edit*, EMPTYARG)
 // #i68101#
 // Dialog for editing Object Title and Description
 
-SvxObjectTitleDescDialog::SvxObjectTitleDescDialog( 
-    Window* pWindow, 
-    const String& rTitle, 
+SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
+    Window* pWindow,
+    const String& rTitle,
     const String& rDescription)
-:	ModalDialog(pWindow, CUI_RES(RID_SVXDLG_OBJECT_TITLE_DESC)),
+:   ModalDialog(pWindow, CUI_RES(RID_SVXDLG_OBJECT_TITLE_DESC)),
     aFtTitle(this, CUI_RES(NTD_FT_TITLE)),
     aEdtTitle(this, CUI_RES(NTD_EDT_TITLE)),
     aFtDescription(this, CUI_RES(NTD_FT_DESC)),
@@ -164,12 +164,12 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
 \************************************************************************/
 
 SvxMessDialog::SvxMessDialog( Window* pWindow, const String& rText, const String& rDesc, Image* pImg ) :
-    ModalDialog		( pWindow, CUI_RES( RID_SVXDLG_MESSBOX ) ),
-    aFtDescription		( this, CUI_RES( FT_DESCRIPTION ) ),
-    aBtn1				( this, CUI_RES( BTN_1 ) ),
-    aBtn2				( this, CUI_RES( BTN_2 ) ),
-    aBtnCancel			( this, CUI_RES( BTN_CANCEL ) ),
-    aFtImage			( this )
+    ModalDialog     ( pWindow, CUI_RES( RID_SVXDLG_MESSBOX ) ),
+    aFtDescription      ( this, CUI_RES( FT_DESCRIPTION ) ),
+    aBtn1               ( this, CUI_RES( BTN_1 ) ),
+    aBtn2               ( this, CUI_RES( BTN_2 ) ),
+    aBtnCancel          ( this, CUI_RES( BTN_CANCEL ) ),
+    aFtImage            ( this )
 {
     FreeResource();
 

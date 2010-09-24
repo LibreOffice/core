@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -372,11 +372,11 @@ namespace canvas { namespace
                 // one of the following formats:
                 //
                 //    BMP_FORMAT_1BIT_MSB_PAL
-                //	  BMP_FORMAT_4BIT_MSN_PAL
-                //	  BMP_FORMAT_8BIT_PAL
-                //	  BMP_FORMAT_16BIT_TC_LSB_MASK
-                //	  BMP_FORMAT_24BIT_TC_BGR
-                //	  BMP_FORMAT_32BIT_TC_MASK
+                //    BMP_FORMAT_4BIT_MSN_PAL
+                //    BMP_FORMAT_8BIT_PAL
+                //    BMP_FORMAT_16BIT_TC_LSB_MASK
+                //    BMP_FORMAT_24BIT_TC_BGR
+                //    BMP_FORMAT_32BIT_TC_MASK
                 //
                 // and is always BMP_FORMAT_BOTTOM_UP
                 //
@@ -393,9 +393,9 @@ namespace canvas { namespace
                                   "vclBitmapEx2Raw(): "
                                   "Unsupported alpha scanline format" );
 
-                BitmapColor		aCol;
-                sal_uInt8* 		pCurrOutput( rBmpData.mpBitmapData );
-                int 			x, y;
+                BitmapColor     aCol;
+                sal_uInt8*      pCurrOutput( rBmpData.mpBitmapData );
+                int             x, y;
 
                 for( y=0; y<nHeight; ++y )
                 {
@@ -514,11 +514,11 @@ namespace canvas { namespace
                 // one of the following formats:
                 //
                 //    BMP_FORMAT_1BIT_MSB_PAL
-                //	  BMP_FORMAT_4BIT_MSN_PAL
-                //	  BMP_FORMAT_8BIT_PAL
-                //	  BMP_FORMAT_16BIT_TC_LSB_MASK
-                //	  BMP_FORMAT_24BIT_TC_BGR
-                //	  BMP_FORMAT_32BIT_TC_MASK
+                //    BMP_FORMAT_4BIT_MSN_PAL
+                //    BMP_FORMAT_8BIT_PAL
+                //    BMP_FORMAT_16BIT_TC_LSB_MASK
+                //    BMP_FORMAT_24BIT_TC_BGR
+                //    BMP_FORMAT_32BIT_TC_MASK
                 //
                 // and is always BMP_FORMAT_BOTTOM_UP
                 //
@@ -534,12 +534,12 @@ namespace canvas { namespace
                                   "vclBitmapEx2Raw(): "
                                   "Unsupported mask scanline format" );
 
-                BitmapColor		aCol;
-                int 			nCurrBit;
-                const int		nMask( 1L );
-                const int 		nInitialBit(7);
+                BitmapColor     aCol;
+                int             nCurrBit;
+                const int       nMask( 1L );
+                const int       nInitialBit(7);
                 sal_uInt32 *pBuffer = reinterpret_cast<sal_uInt32 *>(rBmpData.mpBitmapData);
-                int 			x, y;
+                int             x, y;
 
                 // mapping table, to get from mask index color to
                 // alpha value (which depends on the mask's palette)
@@ -899,7 +899,7 @@ namespace canvas { namespace
 template<class pixel_format>
 void Image::drawLinePolyPolygonImpl( const ::basegfx::B2DPolyPolygon&   rPolyPolygon,
                                      double                             fStrokeWidth,
-                                     const rendering::ViewState&        viewState, 
+                                     const rendering::ViewState&        viewState,
                                      const rendering::RenderState&      renderState )
 {
     ::basegfx::B2DPolyPolygon aPolyPolygon( rPolyPolygon );
@@ -1039,7 +1039,7 @@ void Image::drawLinePolyPolygon( const ::basegfx::B2DPolyPolygon&   rPoly,
  */
 ImageCachedPrimitiveSharedPtr Image::implDrawBitmap(
     const Image&                     rBitmap,
-    const rendering::ViewState& 	 viewState,
+    const rendering::ViewState&      viewState,
     const rendering::RenderState&    renderState )
 {
     ::basegfx::B2DPolyPolygon aPoly(
@@ -1179,7 +1179,7 @@ class cachedPrimitiveFTPP : public ImageCachedPrimitive
 
 template<class pixel_format,class span_gen_type>
 ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygonImpl(
-                                     const Image&					  rTexture,
+                                     const Image&                     rTexture,
                                      const ::basegfx::B2DPolyPolygon& rPolyPolygon,
                                      const ::basegfx::B2DHomMatrix&   rOverallTransform,
                                      const ::basegfx::B2DHomMatrix&   rViewTransform,
@@ -1393,11 +1393,11 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
 #if AGG_VERSION >= 2400
         typedef agg::image_accessor_wrap< pixfmt_rgba32, wrap_x_type, wrap_y_type > img_source_type_rgba;
         typedef agg::image_accessor_wrap< pixfmt_rgb24, wrap_x_type, wrap_y_type > img_source_type_rgb;
- 
+
         typedef agg::span_image_resample_rgba_affine< img_source_type_rgba > span_gen_type_rgba;
         typedef agg::span_image_resample_rgb_affine< img_source_type_rgb > span_gen_type_rgb;
 #else
-    typedef agg::span_pattern_resample_rgba_affine<	pixfmt_rgba32::color_type,
+    typedef agg::span_pattern_resample_rgba_affine< pixfmt_rgba32::color_type,
                                                     pixfmt_rgba32::order_type,
                                                     wrap_x_type,
                                                     wrap_y_type> span_gen_type_rgba;
@@ -1413,7 +1413,7 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
     if(nDest == FMT_R8G8B8 && nSource == FMT_R8G8B8)
     {
         return fillTexturedPolyPolygonImpl< agg::pixfmt_rgb24,
-                                            span_gen_type_rgb >( 
+                                            span_gen_type_rgb >(
                                                 rTexture,
                                                 rPolyPolygon,
                                                 rOverallTransform,
@@ -1423,7 +1423,7 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
     else if(nDest == FMT_R8G8B8 && nSource == FMT_A8R8G8B8)
     {
         return fillTexturedPolyPolygonImpl< agg::pixfmt_rgb24,
-                                            span_gen_type_rgba >( 
+                                            span_gen_type_rgba >(
                                                 rTexture,
                                                 rPolyPolygon,
                                                 rOverallTransform,
@@ -1433,7 +1433,7 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
     else if(nDest == FMT_A8R8G8B8 && nSource == FMT_R8G8B8)
     {
         return fillTexturedPolyPolygonImpl< agg::pixfmt_rgba32,
-                                            span_gen_type_rgb >( 
+                                            span_gen_type_rgb >(
                                                 rTexture,
                                                 rPolyPolygon,
                                                 rOverallTransform,
@@ -1443,7 +1443,7 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
     else if(nDest == FMT_A8R8G8B8 && nSource == FMT_A8R8G8B8)
     {
         return fillTexturedPolyPolygonImpl< agg::pixfmt_rgba32,
-                                            span_gen_type_rgba >( 
+                                            span_gen_type_rgba >(
                                                 rTexture,
                                                 rPolyPolygon,
                                                 rOverallTransform,
@@ -1520,10 +1520,10 @@ void Image::fillGradientImpl( const ParametricPolyPolygon::Values& rValues,
     gradient_polymorphic_wrapper<gradient_rect> gf_rectangular;
     gf_rectangular.m_gradient.width = static_cast<int>(rBounds.getWidth())<<4;
     gf_rectangular.m_gradient.height = static_cast<int>(rBounds.getHeight())<<4;
-    const gradient_polymorphic_wrapper_base *gf[] = { &gf_x,			// GRADIENT_LINEAR
-                                                      &gf_x,			// GRADIENT_AXIAL
-                                                      &gf_radial,		// GRADIENT_ELLIPTICAL
-                                                      &gf_rectangular	// GRADIENT_RECTANGULAR
+    const gradient_polymorphic_wrapper_base *gf[] = { &gf_x,            // GRADIENT_LINEAR
+                                                      &gf_x,            // GRADIENT_AXIAL
+                                                      &gf_radial,       // GRADIENT_ELLIPTICAL
+                                                      &gf_rectangular   // GRADIENT_RECTANGULAR
                                                     };
 
     // how do texture coordinates change when the pixel coordinate change?
@@ -1762,7 +1762,7 @@ Image::Image( const uno::Reference< rendering::XBitmap >& xBitmap ) :
 #endif
 
     // TODO(F1): Add support for floating point bitmap formats
-    uno::Reference<rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, 
+    uno::Reference<rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap,
                                                               uno::UNO_QUERY_THROW);
     ::BitmapEx aBmpEx = ::vcl::unotools::bitmapExFromXBitmap(xIntBmp);
     if( !!aBmpEx )
@@ -1841,7 +1841,7 @@ void Image::clear( sal_uInt8 a,
 
 void Image::fillB2DPolyPolygon(
             const ::basegfx::B2DPolyPolygon&    rPolyPolygon,
-            const rendering::ViewState& 		viewState,
+            const rendering::ViewState&         viewState,
             const rendering::RenderState&       renderState )
 {
 #if defined(PROFILER)
@@ -1919,9 +1919,9 @@ IColorBuffer::Format Image::getFormat() const
 // Image::drawPoint
 //////////////////////////////////////////////////////////////////////////////////
 
-void Image::drawPoint( const geometry::RealPoint2D& 	/*aPoint*/,
-                       const rendering::ViewState& 		/*viewState*/,
-                       const rendering::RenderState& 	/*renderState*/ )
+void Image::drawPoint( const geometry::RealPoint2D&     /*aPoint*/,
+                       const rendering::ViewState&      /*viewState*/,
+                       const rendering::RenderState&    /*renderState*/ )
 {
     OSL_ENSURE(false,
                "Image::drawPoint(): NYI" );
@@ -1931,10 +1931,10 @@ void Image::drawPoint( const geometry::RealPoint2D& 	/*aPoint*/,
 // Image::drawLine
 //////////////////////////////////////////////////////////////////////////////////
 
-void Image::drawLine( const geometry::RealPoint2D& 	aStartPoint,
-                      const geometry::RealPoint2D& 	aEndPoint,
-                      const rendering::ViewState& 	viewState,
-                      const rendering::RenderState& renderState	)
+void Image::drawLine( const geometry::RealPoint2D&  aStartPoint,
+                      const geometry::RealPoint2D&  aEndPoint,
+                      const rendering::ViewState&   viewState,
+                      const rendering::RenderState& renderState )
 {
     ::basegfx::B2DPolygon aLinePoly;
     aLinePoly.append(
@@ -1952,9 +1952,9 @@ void Image::drawLine( const geometry::RealPoint2D& 	aStartPoint,
 // Image::drawBezier
 //////////////////////////////////////////////////////////////////////////////////
 
-void Image::drawBezier( const geometry::RealBezierSegment2D&	aBezierSegment,
+void Image::drawBezier( const geometry::RealBezierSegment2D&    aBezierSegment,
                         const geometry::RealPoint2D&            aEndPoint,
-                        const rendering::ViewState& 			viewState,
+                        const rendering::ViewState&             viewState,
                         const rendering::RenderState&           renderState )
 {
     basegfx::B2DPolygon aBezierPoly;
@@ -1976,7 +1976,7 @@ void Image::drawBezier( const geometry::RealBezierSegment2D&	aBezierSegment,
 //////////////////////////////////////////////////////////////////////////////////
 
 ImageCachedPrimitiveSharedPtr Image::drawPolyPolygon(
-    const uno::Reference< rendering::XPolyPolygon2D >& 	xPolyPolygon,
+    const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
     const rendering::ViewState&                         viewState,
     const rendering::RenderState&                       renderState )
 {
@@ -2001,7 +2001,7 @@ ImageCachedPrimitiveSharedPtr Image::drawPolyPolygon(
 //////////////////////////////////////////////////////////////////////////////////
 
 ImageCachedPrimitiveSharedPtr Image::strokePolyPolygon(
-    const uno::Reference< rendering::XPolyPolygon2D >& 	xPolyPolygon,
+    const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
     const rendering::ViewState&                         viewState,
     const rendering::RenderState&                       renderState,
     const rendering::StrokeAttributes&                  strokeAttributes )
@@ -2023,7 +2023,7 @@ ImageCachedPrimitiveSharedPtr Image::strokePolyPolygon(
 //////////////////////////////////////////////////////////////////////////////////
 
 ImageCachedPrimitiveSharedPtr Image::strokeTexturedPolyPolygon(
-    const uno::Reference< rendering::XPolyPolygon2D >& 	/*xPolyPolygon*/,
+    const uno::Reference< rendering::XPolyPolygon2D >&  /*xPolyPolygon*/,
     const rendering::ViewState&                         /*viewState*/,
     const rendering::RenderState&                       /*renderState*/,
     const uno::Sequence< rendering::Texture >&          /*textures*/,
@@ -2042,12 +2042,12 @@ ImageCachedPrimitiveSharedPtr Image::strokeTexturedPolyPolygon(
 //////////////////////////////////////////////////////////////////////////////////
 
 ImageCachedPrimitiveSharedPtr Image::strokeTextureMappedPolyPolygon(
-    const uno::Reference< rendering::XPolyPolygon2D >& 	/*xPolyPolygon*/,
+    const uno::Reference< rendering::XPolyPolygon2D >&  /*xPolyPolygon*/,
     const rendering::ViewState&                         /*viewState*/,
     const rendering::RenderState&                       /*renderState*/,
     const uno::Sequence< rendering::Texture >&          /*textures*/,
     const ::std::vector< ::boost::shared_ptr<Image> >&  /*textureAnnotations*/,
-    const uno::Reference< geometry::XMapping2D >& 		/*xMapping*/,
+    const uno::Reference< geometry::XMapping2D >&       /*xMapping*/,
     const rendering::StrokeAttributes&                  /*strokeAttributes*/ )
 {
     OSL_ENSURE(false,
@@ -2062,9 +2062,9 @@ ImageCachedPrimitiveSharedPtr Image::strokeTextureMappedPolyPolygon(
 //////////////////////////////////////////////////////////////////////////////////
 
 template<class pixel_format>
-ImageCachedPrimitiveSharedPtr Image::fillPolyPolygonImpl( 
-            const ::basegfx::B2DPolyPolygon&                    rPolyPolygon, 
-            const rendering::ViewState&                         viewState, 
+ImageCachedPrimitiveSharedPtr Image::fillPolyPolygonImpl(
+            const ::basegfx::B2DPolyPolygon&                    rPolyPolygon,
+            const rendering::ViewState&                         viewState,
             const rendering::RenderState&                       renderState )
 {
 #if defined(PROFILER)
@@ -2161,7 +2161,7 @@ ImageCachedPrimitiveSharedPtr Image::fillPolyPolygonImpl(
 //////////////////////////////////////////////////////////////////////////////////
 
 ImageCachedPrimitiveSharedPtr Image::fillPolyPolygon(
-    const uno::Reference< rendering::XPolyPolygon2D >& 	xPolyPolygon,
+    const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
     const rendering::ViewState&                         viewState,
     const rendering::RenderState&                       renderState )
 {
@@ -2190,7 +2190,7 @@ ImageCachedPrimitiveSharedPtr Image::fillPolyPolygon(
 //////////////////////////////////////////////////////////////////////////////////
 
 ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
-    const uno::Reference< rendering::XPolyPolygon2D >&	xPolyPolygon,
+    const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
     const rendering::ViewState&                         viewState,
     const rendering::RenderState&                       renderState,
     const uno::Sequence< rendering::Texture >&          textures,
@@ -2284,12 +2284,12 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
 //////////////////////////////////////////////////////////////////////////////////
 
 ImageCachedPrimitiveSharedPtr Image::fillTextureMappedPolyPolygon(
-    const uno::Reference< rendering::XPolyPolygon2D >& 	/*xPolyPolygon*/,
+    const uno::Reference< rendering::XPolyPolygon2D >&  /*xPolyPolygon*/,
     const rendering::ViewState&                         /*viewState*/,
     const rendering::RenderState&                       /*renderState*/,
     const uno::Sequence< rendering::Texture >&          /*textures*/,
     const ::std::vector< ::boost::shared_ptr<Image> >&  /*textureAnnotations*/,
-    const uno::Reference< geometry::XMapping2D >& 		/*xMapping*/ )
+    const uno::Reference< geometry::XMapping2D >&       /*xMapping*/ )
 {
     OSL_ENSURE(false,
                "Image::fillTextureMappedPolyPolygon(): NYI" );
@@ -2339,7 +2339,7 @@ ImageCachedPrimitiveSharedPtr Image::drawBitmap(
 
 ImageCachedPrimitiveSharedPtr Image::drawBitmap(
     const ImageSharedPtr&           rImage,
-    const rendering::ViewState& 	viewState,
+    const rendering::ViewState&     viewState,
     const rendering::RenderState&   renderState )
 {
 #if defined(PROFILER)
@@ -2380,7 +2380,7 @@ ImageCachedPrimitiveSharedPtr Image::drawBitmapModulated(
 
 ImageCachedPrimitiveSharedPtr Image::drawBitmapModulated(
     const ImageSharedPtr&           rImage,
-    const rendering::ViewState& 	viewState,
+    const rendering::ViewState&     viewState,
     const rendering::RenderState&   renderState )
 {
     // TODO(P3): Implement bitmap caching

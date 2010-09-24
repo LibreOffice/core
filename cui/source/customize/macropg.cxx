@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -295,7 +295,7 @@ void _SvxMacroTabPage::InitResources()
     aDisplayNames.push_back( EventDisplayName( "OnPageCountChange",     RID_SVXSTR_EVENT_PAGECOUNTCHANGE ) );
     aDisplayNames.push_back( EventDisplayName( "OnSubComponentOpened",  RID_SVXSTR_EVENT_SUBCOMPONENT_OPENED ) );
     aDisplayNames.push_back( EventDisplayName( "OnSubComponentClosed",  RID_SVXSTR_EVENT_SUBCOMPONENT_CLOSED ) );
-//    aDisplayNames.push_back( EventDisplayName( "OnLayoutFinished",		RID_SVXSTR_EVENT_LAYOUT_FINISHED ) );
+//    aDisplayNames.push_back( EventDisplayName( "OnLayoutFinished",        RID_SVXSTR_EVENT_LAYOUT_FINISHED ) );
     aDisplayNames.push_back( EventDisplayName( "OnSelect",              RID_SVXSTR_EVENT_SELECTIONCHANGED ) );
     aDisplayNames.push_back( EventDisplayName( "OnDoubleClick",         RID_SVXSTR_EVENT_DOUBLECLICK ) );
     aDisplayNames.push_back( EventDisplayName( "OnRightClick",          RID_SVXSTR_EVENT_RIGHTCLICK ) );
@@ -843,17 +843,17 @@ Any _SvxMacroTabPage::GetPropsByName( const ::rtl::OUString& eventName, EventsHa
 SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFrame >& _rxDocumentFrame, const SfxItemSet& rSet, Reference< container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex )
     : _SvxMacroTabPage( pParent, CUI_RES( RID_SVXPAGE_MACROASSIGN ), rSet )
 {
-    mpImpl->pStrEvent           = new String(						CUI_RES( STR_EVENT ) );
-    mpImpl->pAssignedMacro      = new String(						CUI_RES( STR_ASSMACRO ) );
-    mpImpl->pEventLB            = new _HeaderTabListBox( this,		CUI_RES( LB_EVENT ) );
-    mpImpl->pAssignFT			= new FixedText( this,				CUI_RES( FT_ASSIGN ) );
-    mpImpl->pAssignPB           = new PushButton( this,				CUI_RES( PB_ASSIGN ) );
-    mpImpl->pDeletePB           = new PushButton( this,				CUI_RES( PB_DELETE ) );
-    mpImpl->pAssignComponentPB  = new PushButton( this,			CUI_RES( PB_ASSIGN_COMPONENT ) );
-    mpImpl->pMacroImg			= new Image(						CUI_RES(IMG_MACRO) );
-    mpImpl->pComponentImg		= new Image(						CUI_RES(IMG_COMPONENT) );
-    mpImpl->pMacroImg_h			= new Image(						CUI_RES(IMG_MACRO_H) );
-    mpImpl->pComponentImg_h		= new Image(						CUI_RES(IMG_COMPONENT_H) );
+    mpImpl->pStrEvent           = new String(                       CUI_RES( STR_EVENT ) );
+    mpImpl->pAssignedMacro      = new String(                       CUI_RES( STR_ASSMACRO ) );
+    mpImpl->pEventLB            = new _HeaderTabListBox( this,      CUI_RES( LB_EVENT ) );
+    mpImpl->pAssignFT           = new FixedText( this,              CUI_RES( FT_ASSIGN ) );
+    mpImpl->pAssignPB           = new PushButton( this,             CUI_RES( PB_ASSIGN ) );
+    mpImpl->pDeletePB           = new PushButton( this,             CUI_RES( PB_DELETE ) );
+    mpImpl->pAssignComponentPB  = new PushButton( this,         CUI_RES( PB_ASSIGN_COMPONENT ) );
+    mpImpl->pMacroImg           = new Image(                        CUI_RES(IMG_MACRO) );
+    mpImpl->pComponentImg       = new Image(                        CUI_RES(IMG_COMPONENT) );
+    mpImpl->pMacroImg_h         = new Image(                        CUI_RES(IMG_MACRO_H) );
+    mpImpl->pComponentImg_h     = new Image(                        CUI_RES(IMG_COMPONENT_H) );
 
     FreeResource();
 

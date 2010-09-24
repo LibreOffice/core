@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,9 +70,9 @@ sal_Int32 SAL_CALL rtl_uStringbuffer_newFromStringBuffer( rtl_uString ** newStr,
         newCapacity = oldStr->length;
 
     rtl_uString_new_WithLength( newStr, newCapacity );
-    
+
     if (oldStr->length > 0) {
-        (*newStr)->length = oldStr->length;    
+        (*newStr)->length = oldStr->length;
         rtl_copyMemory( (*newStr)->buffer, oldStr->buffer, oldStr->length * sizeof(sal_Unicode));
     }
     return newCapacity;

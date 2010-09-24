@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,12 +57,12 @@ namespace drawinglayer
                     {
                         // shortcut for scale; use simple BitmapPrimitive2D
                         basegfx::B2DHomMatrix aObjectTransform;
-                        
+
                         aObjectTransform.set(0, 0, getLocalObjectRange().getWidth());
                         aObjectTransform.set(1, 1, getLocalObjectRange().getHeight());
                         aObjectTransform.set(0, 2, getLocalObjectRange().getMinX());
                         aObjectTransform.set(1, 2, getLocalObjectRange().getMinY());
-                        
+
                         Primitive2DReference xReference(
                             new BitmapPrimitive2D(
                                 getBitmapEx(),
@@ -77,7 +77,7 @@ namespace drawinglayer
                         aInverseViewTransformation.invert();
                         basegfx::B2DVector aLogicSize(rPixelSize.Width(), rPixelSize.Height());
                         aLogicSize = aInverseViewTransformation * aLogicSize;
-                        
+
                         // apply laout
                         basegfx::B2DPoint aTargetTopLeft(getLocalObjectRange().getMinimum());
                         bool bUseTargetTopLeft(true);
@@ -156,18 +156,18 @@ namespace drawinglayer
 
                             // create aligned, single BitmapPrimitive2D
                             basegfx::B2DHomMatrix aObjectTransform;
-                            
+
                             aObjectTransform.set(0, 0, aTargetRange.getWidth());
                             aObjectTransform.set(1, 1, aTargetRange.getHeight());
                             aObjectTransform.set(0, 2, aTargetRange.getMinX());
                             aObjectTransform.set(1, 2, aTargetRange.getMinY());
-                            
+
                             Primitive2DReference xReference(
                                 new BitmapPrimitive2D(
                                     getBitmapEx(),
                                     aObjectTransform));
                             aRetval = Primitive2DSequence(&xReference, 1);
-                            
+
                             // clip when not completely inside object range
                             bNeedsClipping = !getLocalObjectRange().isInside(aTargetRange);
                         }
@@ -195,12 +195,12 @@ namespace drawinglayer
 
                             // create ObjectTransform
                             basegfx::B2DHomMatrix aObjectTransform;
-                            
+
                             aObjectTransform.set(0, 0, getLocalObjectRange().getWidth());
                             aObjectTransform.set(1, 1, getLocalObjectRange().getHeight());
                             aObjectTransform.set(0, 2, getLocalObjectRange().getMinX());
                             aObjectTransform.set(1, 2, getLocalObjectRange().getMinY());
-                            
+
                             // create FillBitmapPrimitive
                             const drawinglayer::primitive2d::Primitive2DReference xFillBitmap(
                                 new drawinglayer::primitive2d::FillBitmapPrimitive2D(
@@ -229,12 +229,12 @@ namespace drawinglayer
 
             return aRetval;
         }
-        
+
         WallpaperBitmapPrimitive2D::WallpaperBitmapPrimitive2D(
             const basegfx::B2DRange& rObjectRange,
             const BitmapEx& rBitmapEx,
             WallpaperStyle eWallpaperStyle)
-        :	ViewTransformationDependentPrimitive2D(),
+        :   ViewTransformationDependentPrimitive2D(),
             maObjectRange(rObjectRange),
             maBitmapEx(rBitmapEx),
             meWallpaperStyle(eWallpaperStyle)
@@ -254,7 +254,7 @@ namespace drawinglayer
 
             return false;
         }
-        
+
         basegfx::B2DRange WallpaperBitmapPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             return getLocalObjectRange();

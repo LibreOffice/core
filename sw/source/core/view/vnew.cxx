@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@
 #include <rootfrm.hxx>
 #include <viewimp.hxx>
 #include <viewopt.hxx>
-#include <txtfrm.hxx>		// Zugriff auf TxtCache
+#include <txtfrm.hxx>       // Zugriff auf TxtCache
 #include <notxtfrm.hxx>
 #include <fntcache.hxx>
 #include <docufld.hxx>
 #include <ptqueue.hxx>
-#include <dview.hxx>		// SdrView
+#include <dview.hxx>        // SdrView
 #include <ndgrf.hxx>
 #include <ndindex.hxx>
 #include <accessibilityoptions.hxx>
@@ -52,9 +52,9 @@
 
 /*************************************************************************
 |*
-|*	ViewShell::Init()
+|*  ViewShell::Init()
 |*
-|*	Letzte Aenderung	MA 14. Jun. 96
+|*  Letzte Aenderung    MA 14. Jun. 96
 |*
 |*************************************************************************/
 
@@ -96,8 +96,8 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     pDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode( pDShell ) );
 
     // JP 02.02.99: Bug 61335 - Readonly-Flag an den ViewOptions setzen,
-    //				bevor das Layout angelegt wird. Ansonsten muesste man
-    //				nochmals durchformatieren!!
+    //              bevor das Layout angelegt wird. Ansonsten muesste man
+    //              nochmals durchformatieren!!
     if( pDShell && pDShell->IsReadOnly() )
         pOpt->SetReadonly( TRUE );
 
@@ -156,9 +156,9 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 
 /*************************************************************************
 |*
-|*	ViewShell::ViewShell()	CTor fuer die erste Shell.
+|*  ViewShell::ViewShell()  CTor fuer die erste Shell.
 |*
-|*	Letzte Aenderung	MA 29. Aug. 95
+|*  Letzte Aenderung    MA 29. Aug. 95
 |*
 |*************************************************************************/
 
@@ -202,7 +202,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     // <--
     pDoc->acquire();
     pOutput = pOut;
-    Init( pNewOpt );	//verstellt ggf. das Outdev (InitPrt())
+    Init( pNewOpt );    //verstellt ggf. das Outdev (InitPrt())
     pOut = pOutput;
 
     // OD 28.03.2003 #108470# - initialize print preview layout after layout
@@ -238,9 +238,9 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
 
 /*************************************************************************
 |*
-|*	ViewShell::ViewShell()	CTor fuer weitere Shells auf ein Dokument.
+|*  ViewShell::ViewShell()  CTor fuer weitere Shells auf ein Dokument.
 |*
-|*	Letzte Aenderung	MA 29. Aug. 95
+|*  Letzte Aenderung    MA 29. Aug. 95
 |*
 |*************************************************************************/
 
@@ -286,7 +286,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     BOOL bModified = pDoc->IsModified();
 
     pOutput = pOut;
-    Init( rShell.GetViewOptions() );	//verstellt ggf. das Outdev (InitPrt())
+    Init( rShell.GetViewOptions() );    //verstellt ggf. das Outdev (InitPrt())
     pOut = pOutput;
 
     ((SwHiddenTxtFieldType*)pDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
@@ -309,10 +309,10 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
 
 /******************************************************************************
 |*
-|*	ViewShell::~ViewShell()
+|*  ViewShell::~ViewShell()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 10. May. 95
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 10. May. 95
 |*
 ******************************************************************************/
 
@@ -355,7 +355,7 @@ ViewShell::~ViewShell()
         }
 
         delete pImp; //Erst loeschen, damit die LayoutViews vernichtet werden.
-        pImp = 0;	// Set to zero, because ~SwFrm relies on it.
+        pImp = 0;   // Set to zero, because ~SwFrm relies on it.
 
         if ( pDoc )
         {

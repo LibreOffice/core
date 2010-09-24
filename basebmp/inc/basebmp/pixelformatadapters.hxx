@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,12 +52,12 @@ namespace basebmp
     to other templates, which in turn can invoke the nested meta
     function.
  */
-template< typename Getter, 
+template< typename Getter,
           typename Setter > struct AccessorSelector
 {
     template< typename Accessor > struct wrap_accessor
     {
-        typedef UnaryFunctionAccessorAdapter< Accessor, 
+        typedef UnaryFunctionAccessorAdapter< Accessor,
                                               Getter,
                                               Setter > type;
     };
@@ -66,7 +66,7 @@ template< typename Getter,
 //-----------------------------------------------------------------------------
 
 /** Convert color value to pixel data type
- */    
+ */
 template< class Accessor, typename DataType > struct ColorConvert
 {
     DataType operator()( const Accessor&               acc,

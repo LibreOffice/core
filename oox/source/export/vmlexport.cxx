@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ public:
 };
 
 VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer )
-    : EscherEx( *( new SvNullStream ), 0 ),
+    : EscherEx( EscherExGlobalRef(new EscherExGlobal(0)), *( new SvNullStream ) ),
       m_pSerializer( pSerializer ),
       m_pShapeAttrList( NULL ),
       m_nShapeType( ESCHER_ShpInst_Nil ),
@@ -115,7 +115,7 @@ void VMLExport::CloseContainer()
         sal_Int32 nShapeElement = StartShape();
 
         m_pSerializer->mergeTopMarks();
-        
+
         EndShape( nShapeElement );
 
         // cleanup
@@ -128,7 +128,7 @@ void VMLExport::CloseContainer()
 
 UINT32 VMLExport::EnterGroup( const String& rShapeName, const Rectangle* pRect )
 {
-    UINT32 nShapeId = GetShapeID();
+    sal_uInt32 nShapeId = GenerateShapeId();
 
     OStringBuffer aStyle( 200 );
     FastAttributeList *pAttrList = m_pSerializer->createAttrList();
@@ -318,7 +318,7 @@ inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPoi
 
         nRet = nUnsigned;
     }
-    
+
     return nRet;
 }
 
@@ -368,7 +368,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 }
                 bAlreadyWritten[ ESCHER_Prop_WrapText ] = true;
                 break;
-                
+
             // coordorigin
             case ESCHER_Prop_geoLeft: // 320
             case ESCHER_Prop_geoTop: // 321
@@ -496,7 +496,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                                     break;
                             }
                         }
-                        
+
                         if ( aPath.getLength() )
                             m_pShapeAttrList->add( XML_path, aPath.getStr() );
                     }

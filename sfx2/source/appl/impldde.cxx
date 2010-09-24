@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,12 +53,12 @@
 #include <svl/svdde.hxx>
 #include <sot/formats.hxx>
 
-#define DDELINK_COLD		0
-#define DDELINK_HOT 		1
+#define DDELINK_COLD        0
+#define DDELINK_HOT         1
 
-#define DDELINK_ERROR_APP	1
-#define DDELINK_ERROR_DATA	2
-#define DDELINK_ERROR_LINK	3
+#define DDELINK_ERROR_APP   1
+#define DDELINK_ERROR_DATA  2
+#define DDELINK_ERROR_LINK  3
 
 using namespace ::com::sun::star::uno;
 
@@ -151,7 +151,7 @@ BOOL SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
     if( !pConnection )
         return FALSE;
 
-    if( pConnection->GetError() )		// dann versuchen wir es nochmal
+    if( pConnection->GetError() )       // dann versuchen wir es nochmal
     {
         String sServer( pConnection->GetServiceName() );
         String sTopic( pConnection->GetTopicName() );
@@ -162,7 +162,7 @@ BOOL SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
             nError = DDELINK_ERROR_APP;
     }
 
-    if( bWaitForData )		// wir sind rekursiv drin, wieder raus
+    if( bWaitForData )      // wir sind rekursiv drin, wieder raus
         return FALSE;
 
     // Verriegeln gegen Reentrance
@@ -189,7 +189,7 @@ BOOL SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
     else
     {
         // ansonsten wird es asynchron ausgefuehrt
-//		if( !pLink || !pLink->IsBusy() )
+//      if( !pLink || !pLink->IsBusy() )
         {
             if( pRequest )
                 delete pRequest;
@@ -215,7 +215,7 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
     static BOOL bInWinExec = FALSE;
 #endif
     USHORT nLinkType = pSvLink->GetUpdateMode();
-    if( pConnection )		// Verbindung steht ja schon
+    if( pConnection )       // Verbindung steht ja schon
     {
         // tja, dann nur noch als Abhaengig eintragen
         AddDataAdvise( pSvLink,
@@ -291,7 +291,7 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
             }
         }
         else
-#endif	// WIN / WNT
+#endif  // WIN / WNT
         {
             nError = DDELINK_ERROR_APP;
         }
@@ -355,19 +355,19 @@ BOOL SvDDEObject::ImplHasOtherFormat( DdeTransaction& rReq )
     // sonst noch irgendwas ??
     }
     if( nFmt )
-        rReq.SetFormat( nFmt );		// damit nochmal versuchen
+        rReq.SetFormat( nFmt );     // damit nochmal versuchen
     return 0 != nFmt;
 }
 
 BOOL SvDDEObject::IsPending() const
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Die Methode stellt fest, ob aus einem DDE-Object die Daten gelesen
     werden kann.
     Zurueckgegeben wird:
-        ERRCODE_NONE 			wenn sie komplett gelesen wurde
-        ERRCODE_SO_PENDING		wenn sie noch nicht komplett gelesen wurde
-        ERRCODE_SO_FALSE		sonst
+        ERRCODE_NONE            wenn sie komplett gelesen wurde
+        ERRCODE_SO_PENDING      wenn sie noch nicht komplett gelesen wurde
+        ERRCODE_SO_FALSE        sonst
 */
 {
     return bWaitForData;
@@ -397,8 +397,8 @@ IMPL_LINK( SvDDEObject, ImplGetDDEData, DdeData*, pData )
             Sequence< sal_Int8 > aSeq( (const sal_Int8*)p, nLen );
             if( pGetData )
             {
-                *pGetData <<= aSeq; 	// Daten kopieren
-                pGetData = 0;			// und den Pointer bei mir zuruecksetzen
+                *pGetData <<= aSeq;     // Daten kopieren
+                pGetData = 0;           // und den Pointer bei mir zuruecksetzen
             }
             else
             {
@@ -421,9 +421,9 @@ IMPL_LINK( SvDDEObject, ImplDoneDDEData, void*, pData )
     {
         DdeTransaction* pReq = 0;
         if( !pLink || ( pLink && pLink->IsBusy() ))
-            pReq = pRequest;		// dann kann nur der fertig sein
+            pReq = pRequest;        // dann kann nur der fertig sein
         else if( pRequest && pRequest->IsBusy() )
-            pReq = pLink;			// dann kann nur der fertig sein
+            pReq = pLink;           // dann kann nur der fertig sein
 
         if( pReq )
         {

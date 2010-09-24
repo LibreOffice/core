@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,15 +33,15 @@ ZipPackageSink::ZipPackageSink(void)
 : xStream ( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > (NULL))
 {
 }
-ZipPackageSink::~ZipPackageSink(void) 
+ZipPackageSink::~ZipPackageSink(void)
 {
 }
-void SAL_CALL ZipPackageSink::setInputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream ) 
+void SAL_CALL ZipPackageSink::setInputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )
     throw(::com::sun::star::uno::RuntimeException)
 {
     xStream = aStream;
 }
-::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL ZipPackageSink::getInputStream(  ) 
+::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL ZipPackageSink::getInputStream(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return xStream;

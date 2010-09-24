@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ namespace xmloff
     {
     protected:
         DECLARE_STL_USTRINGACCESS_MAP( ElementType, MapString2Element );
-        static MapString2Element	s_sElementTranslations;
+        static MapString2Element    s_sElementTranslations;
 
     protected:
         OElementNameMap() { }
@@ -83,12 +83,12 @@ namespace xmloff
                 ,public OStackedLogging
     {
     protected:
-        ::rtl::OUString			m_sServiceName;		// the service name as extracted from the service-name attribute
-        ::rtl::OUString			m_sName;			// the name of the object (redundant, already contained in the base class' array)
-        OFormLayerXMLImport_Impl&	m_rFormImport;		// the form import context
-        IEventAttacherManager&	m_rEventManager;	// the event attacher manager
+        ::rtl::OUString         m_sServiceName;     // the service name as extracted from the service-name attribute
+        ::rtl::OUString         m_sName;            // the name of the object (redundant, already contained in the base class' array)
+        OFormLayerXMLImport_Impl&   m_rFormImport;      // the form import context
+        IEventAttacherManager&  m_rEventManager;    // the event attacher manager
 
-        const XMLTextStyleContext*	m_pStyleElement;	// the XML element which describes the style we encountered
+        const XMLTextStyleContext*  m_pStyleElement;    // the XML element which describes the style we encountered
                                                         // while reading our element
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
@@ -98,7 +98,7 @@ namespace xmloff
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                         m_xInfo;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        m_xElement;				// the element we're creating. Valid after StartElement
+                        m_xElement;             // the element we're creating. Valid after StartElement
 
     public:
         /** ctor
@@ -129,10 +129,10 @@ namespace xmloff
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-        virtual void	EndElement();
+        virtual void    EndElement();
 
         // OPropertyImport overridables
-        virtual void	handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
 
@@ -156,7 +156,7 @@ namespace xmloff
             property value as if the attribute was encountered.</p>
             @see encounteredAttribute
         */
-        void		simulateDefaultedAttribute(const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName, const sal_Char* _pAttributeDefault);
+        void        simulateDefaultedAttribute(const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName, const sal_Char* _pAttributeDefault);
 
     private:
         ::rtl::OUString implGetDefaultName() const;
@@ -177,10 +177,10 @@ namespace xmloff
                 ,public OValuePropertiesMetaData
     {
     protected:
-        ::rtl::OUString					m_sControlId;
-        OControlElement::ElementType	m_eElementType;
+        ::rtl::OUString                 m_sControlId;
+        OControlElement::ElementType    m_eElementType;
 
-        PropertyValueArray				m_aValueProperties;
+        PropertyValueArray              m_aValueProperties;
         // the value properties (value, current-value, min-value, max-value) require some special
         // handling
 
@@ -222,10 +222,10 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-        virtual void	EndElement();
+        virtual void    EndElement();
 
         // OPropertyImport overridables
-        virtual void	handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
 
@@ -295,7 +295,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
 
         // OPropertyImport overridables
-        virtual void	handleAttribute( sal_uInt16 _nNamespaceKey,
+        virtual void    handleAttribute( sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue
        );
@@ -307,7 +307,7 @@ namespace xmloff
     class OReferredControlImport : public OControlImport
     {
     protected:
-        ::rtl::OUString	m_sReferringControls;	// the list of ids of controls referring to the one beeing imported
+        ::rtl::OUString m_sReferringControls;   // the list of ids of controls referring to the one beeing imported
 
     public:
         OReferredControlImport(
@@ -321,7 +321,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
 
         // OPropertyImport overridables
-        virtual void	handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
     };
@@ -339,7 +339,7 @@ namespace xmloff
         );
 
         // OPropertyImport overridables
-        virtual void	handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
     };
@@ -358,7 +358,7 @@ namespace xmloff
 
     protected:
         // OPropertyImport overridables
-        virtual void	handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
     };
@@ -380,7 +380,7 @@ namespace xmloff
 
     protected:
         // OPropertyImport overridables
-        virtual void	handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
     };
@@ -430,7 +430,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList );
 
         // OPropertyImport overridables
-        virtual void	handleAttribute( sal_uInt16 _nNamespaceKey,
+        virtual void    handleAttribute( sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue );
     };
@@ -461,7 +461,7 @@ namespace xmloff
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-        virtual void	EndElement();
+        virtual void    EndElement();
 
     private:
         void    adjustDefaultControlProperty();
@@ -492,10 +492,10 @@ namespace xmloff
 
         ::rtl::OUString m_sCellListSource;      /// the cell range which acts as list source for the control
 
-        sal_Int32		m_nEmptyListItems;      /// number of empty list items encountered during reading
-        sal_Int32		m_nEmptyValueItems;     /// number of empty value items encountered during reading
+        sal_Int32       m_nEmptyListItems;      /// number of empty list items encountered during reading
+        sal_Int32       m_nEmptyValueItems;     /// number of empty value items encountered during reading
 
-        sal_Bool		m_bEncounteredLSAttrib;
+        sal_Bool        m_bEncounteredLSAttrib;
         sal_Bool        m_bLinkWithIndexes;     /** <TRUE/> if and only if we should use a cell value binding
                                                     which exchanges the selection index (instead of the selection text
                                                 */
@@ -513,10 +513,10 @@ namespace xmloff
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-        virtual void	EndElement();
+        virtual void    EndElement();
 
         // OPropertyImport overridables
-        virtual void	handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
 
@@ -543,7 +543,7 @@ namespace xmloff
     class OListOptionImport
                 :public SvXMLImportContext
     {
-        OListAndComboImportRef	m_xListBoxImport;
+        OListAndComboImportRef  m_xListBoxImport;
 
     public:
         OListOptionImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
@@ -561,7 +561,7 @@ namespace xmloff
     class OComboItemImport
                 :public SvXMLImportContext
     {
-        OListAndComboImportRef	m_xListBoxImport;
+        OListAndComboImportRef  m_xListBoxImport;
 
     public:
         OComboItemImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
@@ -585,7 +585,7 @@ namespace xmloff
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         m_xMeAsContainer;
-        ::rtl::OUString	m_sWrapperElementName;
+        ::rtl::OUString m_sWrapperElementName;
 
     protected:
         OContainerImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
@@ -608,7 +608,7 @@ namespace xmloff
                         createElement();
 
         // create the child context for the given control type
-        virtual SvXMLImportContext*	implCreateControlWrapper(
+        virtual SvXMLImportContext* implCreateControlWrapper(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName) = 0;
     };
 
@@ -648,8 +648,8 @@ namespace xmloff
                                 m_xOwnAttributes;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                                 m_xParentContainer;
-        OFormLayerXMLImport_Impl&	m_rFormImport;
-        IEventAttacherManager&	m_rEventManager;
+        OFormLayerXMLImport_Impl&   m_rFormImport;
+        IEventAttacherManager&  m_rEventManager;
 
     public:
         OColumnWrapperImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
@@ -670,7 +670,7 @@ namespace xmloff
     //=====================================================================
     //= OGridImport
     //=====================================================================
-    typedef OContainerImport< OControlImport >	OGridImport_Base;
+    typedef OContainerImport< OControlImport >  OGridImport_Base;
     /** helper class importing a single &lt;form:grid&gt; element
     */
     class OGridImport : public OGridImport_Base
@@ -683,14 +683,14 @@ namespace xmloff
 
     protected:
         // OContainerImport overridables
-        virtual SvXMLImportContext*	implCreateControlWrapper(
+        virtual SvXMLImportContext* implCreateControlWrapper(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName);
     };
 
     //=====================================================================
     //= OFormImport
     //=====================================================================
-    typedef OContainerImport< OElementImport >	OFormImport_Base;
+    typedef OContainerImport< OElementImport >  OFormImport_Base;
     /** helper class importing a single &lt;form:form&gt; element
     */
     class OFormImport : public OFormImport_Base
@@ -706,16 +706,16 @@ namespace xmloff
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-        virtual void	StartElement(
+        virtual void    StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-        virtual void	EndElement();
+        virtual void    EndElement();
 
         // OContainerImport overridables
-        virtual SvXMLImportContext*	implCreateControlWrapper(
+        virtual SvXMLImportContext* implCreateControlWrapper(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName);
 
         // OPropertyImport overridables
-        virtual void	handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
 
@@ -745,7 +745,7 @@ namespace xmloff
 #undef _INCLUDING_FROM_ELEMENTIMPORT_HXX_
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_ELEMENTIMPORT_HXX_

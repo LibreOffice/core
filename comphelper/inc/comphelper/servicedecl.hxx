@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ typedef ::boost::function3<
 /** Class to declare a service implementation.  There is no need to implement
     lang::XServiceInfo nor lang::XInitialization anymore.
     The declaration can be done in various ways, the (simplest) form is
-    
+
     <pre>
     class MyClass : cppu::WeakImplHelper2<XInterface1, XInterface2> {
     public:
@@ -79,11 +79,11 @@ typedef ::boost::function3<
         "my.unique.implementation.name",
         "MyServiceSpec1;MyServiceSpec2" );
     </pre>
-    
+
     If the service demands initialization by arguments, the implementation
     class has to define a constructor taking both arguments and component
     context:
-    
+
     <pre>
     class MyClass : cppu::WeakImplHelper2<XInterface1, XInterface2> {
     public:
@@ -102,7 +102,7 @@ typedef ::boost::function3<
     Additionally, there is the possibility to process some code after creation,
     e.g. to add the newly created object as a listener or perform aggregation
     (C++-UNO only):
-    
+
     <pre>
     uno::Reference<uno::XInterface> somePostProcCode( MyClass * p );
     [...]
@@ -119,7 +119,7 @@ class COMPHELPER_DLLPUBLIC ServiceDecl : private ::boost::noncopyable
 {
 public:
     /** Ctor for multiple supported service names.
-        
+
         @param implClass implementation class description
         @param pImplName implementation name
         @param pSupportedServiceNames supported service names
@@ -133,26 +133,26 @@ public:
           m_pImplName(pImplName),
           m_pServiceNames(pSupportedServiceNames),
           m_cDelim(cDelim) {}
-    
+
     /// @internal gets called by component_writeInfoHelper()
     bool writeInfo( ::com::sun::star::registry::XRegistryKey * xKey ) const;
     /// @internal gets called by component_getFactoryHelper()
     void * getFactory( sal_Char const* pImplName ) const;
-    
+
     /// @return supported service names
     ::com::sun::star::uno::Sequence< ::rtl::OUString>
     getSupportedServiceNames() const;
-    
+
     /// @return whether name is in set of supported service names
     bool supportsService( ::rtl::OUString const& name ) const;
-    
+
     /// @return implementation name
     ::rtl::OUString getImplementationName() const;
-    
+
 private:
     class Factory;
     friend class Factory;
-    
+
     detail::CreateFuncF const m_createFunc;
     char const* const m_pImplName;
     char const* const m_pServiceNames;
@@ -172,8 +172,8 @@ class OwnServiceImpl
       private ::boost::noncopyable
 {
     typedef ImplT BaseT;
-    
-public:    
+
+public:
     OwnServiceImpl(
         ServiceDecl const& rServiceDecl,
         css::uno::Sequence<css::uno::Any> const& args,
@@ -183,7 +183,7 @@ public:
         ServiceDecl const& rServiceDecl,
         css::uno::Reference<css::uno::XComponentContext> const& xContext )
         : BaseT(xContext), m_rServiceDecl(rServiceDecl) {}
-    
+
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException) {
@@ -197,7 +197,7 @@ public:
     SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException) {
         return m_rServiceDecl.getSupportedServiceNames();
     }
-    
+
 private:
     ServiceDecl const& m_rServiceDecl;
 };
@@ -234,7 +234,7 @@ struct CreateFunc<ImplT, PostProcessFuncT, with_args<false> > {
     PostProcessFuncT const m_postProcessFunc;
     explicit CreateFunc( PostProcessFuncT const& postProcessFunc )
         : m_postProcessFunc(postProcessFunc) {}
-    
+
     css::uno::Reference<css::uno::XInterface>
     operator()( ServiceDecl const& rServiceDecl,
                 css::uno::Sequence<css::uno::Any> const&,
@@ -251,7 +251,7 @@ struct CreateFunc<ImplT, PostProcessFuncT, with_args<true> > {
     PostProcessFuncT const m_postProcessFunc;
     explicit CreateFunc( PostProcessFuncT const& postProcessFunc )
         : m_postProcessFunc(postProcessFunc) {}
-    
+
     css::uno::Reference<css::uno::XInterface>
     operator()( ServiceDecl const& rServiceDecl,
                 css::uno::Sequence<css::uno::Any> const& args,
@@ -266,7 +266,7 @@ struct CreateFunc<ImplT, PostProcessFuncT, with_args<true> > {
 } // namespace detail
 
 /** Defines a service implementation class.
-    
+
     @tpl ImplT_ service implementation class
     @WithArgsT whether the implementation class ctor expects arguments
                (uno::Sequence<uno::Any>, uno::Reference<uno::XComponentContext>)
@@ -275,9 +275,9 @@ struct CreateFunc<ImplT, PostProcessFuncT, with_args<true> > {
 template <typename ImplT_, typename WithArgsT = with_args<false> >
 struct serviceimpl_base {
     typedef ImplT_ ImplT;
-    
+
     detail::CreateFuncF const m_createFunc;
-    
+
     typedef detail::PostProcessDefault<ImplT> PostProcessDefaultT;
 
     /** Default ctor.  Implementation class without args, expecting
@@ -288,7 +288,7 @@ struct serviceimpl_base {
             PostProcessDefaultT() ) ) {}
 
     /** Ctor to pass a post processing function/functor.
-        
+
         @tpl PostProcessDefaultT let your compiler deduce this
         @param postProcessFunc function/functor that gets the yet unacquired
                                ImplT_ pointer returning a
@@ -310,7 +310,7 @@ struct class_ : public serviceimpl_base< detail::ServiceImpl<ImplT_>, WithArgsT 
     class_() : baseT() {}
     template <typename PostProcessFuncT>
     /** Ctor to pass a post processing function/functor.
-        
+
         @tpl PostProcessDefaultT let your compiler deduce this
         @param postProcessFunc function/functor that gets the yet unacquired
                                ImplT_ pointer returning a
@@ -331,22 +331,22 @@ struct class_ : public serviceimpl_base< detail::ServiceImpl<ImplT_>, WithArgsT 
         pRet = BOOST_PP_CAT(s, n_).getFactory(pImplName);
 
 /** The following preprocessor repetitions generate functions like
-    
+
     <pre>
         inline sal_Bool component_writeInfoHelper(
             ::com::sun::star::lang::XMultiServiceFactory *,
             ::com::sun::star::registry::XRegistryKey * xRegistryKey,
             ServiceDecl const& s0, ServiceDecl const& s1, ... );
-        
+
         inline void * component_getFactoryHelper(
             sal_Char const* pImplName,
             ::com::sun::star::lang::XMultiServiceFactory *,
             ::com::sun::star::registry::XRegistryKey * xRegistryKey,
             ServiceDecl const& s0, ServiceDecl const& s1, ... );
     </pre>
-    
+
     which call on the passed service declarations.
-    
+
     The maximum number of service declarations can be set by defining
     COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS; its default is 8.
 */
@@ -389,15 +389,15 @@ BOOST_PP_REPEAT_FROM_TO(1, COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS,
 /** The following preprocessor macro generates the C access functions,
     that are used to initialize and register the components of a
     shared library object.
-    
+
     If you have, say, written a lib that contains three distinct
     components, each with its own ServiceDecl object, you might want
     to employ the following code:
 
     <pre>
         // must reside outside _any_ namespace
-        COMPHELPER_SERVICEDECL_EXPORTS3(yourServiceDecl1, 
-                                       yourServiceDecl2, 
+        COMPHELPER_SERVICEDECL_EXPORTS3(yourServiceDecl1,
+                                       yourServiceDecl2,
                                        yourServiceDecl3);
     </pre>
 

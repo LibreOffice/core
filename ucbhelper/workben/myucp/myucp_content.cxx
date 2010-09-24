@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -182,7 +182,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 rtl::OUString SAL_CALL Content::getImplementationName()
     throw( uno::RuntimeException )
 {
-    // @@@ Adjust implementation name. 
+    // @@@ Adjust implementation name.
     // Prefix with reversed company domain name.
     return rtl::OUString::createFromAscii( "com.sun.star.comp.myucp.Content" );
 }
@@ -438,7 +438,7 @@ uno::Any SAL_CALL Content::execute(
         removeAdditionalPropertySet( sal_True );
 
         // Remove own and all childrens(!) persistent data.
-//		removeData();
+//      removeData();
     }
 #endif // IMPLEMENT_COMMAND_DELETE
     else
@@ -491,7 +491,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             const uno::Reference< lang::XMultiServiceFactory >& rSMgr,
             const uno::Sequence< beans::Property >& rProperties,
             const ContentProperties& rData,
-            const rtl::Reference< 
+            const rtl::Reference<
                 ::ucbhelper::ContentProviderImplHelper >& rProvider,
             const rtl::OUString& rContentId )
 {
@@ -659,11 +659,11 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
-    aEvent.Further 		  = sal_False;
-//	aEvent.PropertyName	  =
+    aEvent.Further        = sal_False;
+//  aEvent.PropertyName   =
     aEvent.PropertyHandle = -1;
-//	aEvent.OldValue		  =
-//	aEvent.NewValue       =
+//  aEvent.OldValue       =
+//  aEvent.NewValue       =
 
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
@@ -769,7 +769,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                                 rValue.Name, rValue.Value );
 
                         aEvent.PropertyName = rValue.Name;
-                        aEvent.OldValue		= aOldValue;
+                        aEvent.OldValue     = aOldValue;
                         aEvent.NewValue     = rValue.Value;
 
                         aChanges.getArray()[ nChanged ] = aEvent;
@@ -810,7 +810,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     if ( nChanged > 0 )
     {
         // @@@ Save changes.
-//		storeData();
+//      storeData();
 
         aGuard.clear();
         aChanges.realloc( nChanged );
@@ -851,7 +851,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     while ( it != end )
     {
         ::ucbhelper::ContentImplHelperRef xChild = (*it);
-        ::rtl::OUString aChildURL 
+        ::rtl::OUString aChildURL
               = xChild->getIdentifier()->getContentIdentifier();
 
         // Is aURL a prefix of aChildURL?
@@ -885,7 +885,7 @@ void Content::insert(
     // Check, if all required properties were set.
 
 #if 0
-    // @@@ add checks for property presence 
+    // @@@ add checks for property presence
     if ( m_aProps.xxxx == yyyyy )
     {
         OSL_ENSURE( sal_False, "Content::insert - property value missing!" );
@@ -941,7 +941,7 @@ void Content::insert(
     m_xIdentifier = xId;
 
 //  @@@
-//	storeData();
+//  storeData();
 
     aGuard.clear();
     inserted();

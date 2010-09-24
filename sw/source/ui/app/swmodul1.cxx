@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <cppuhelper/implbase1.hxx>	// helper for implementations
+#include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <svx/dataaccessdescriptor.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -59,7 +59,7 @@
 #include <docsh.hxx>
 #include <dbmgr.hxx>
 #include <uinums.hxx>
-#include <prtopt.hxx>		// fuer PrintOptions
+#include <prtopt.hxx>       // fuer PrintOptions
 #include <navicfg.hxx>
 #include <doc.hxx>
 #include <cmdid.h>
@@ -122,11 +122,11 @@ void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Aktuelle SwWrtShell
+    Beschreibung:   Aktuelle SwWrtShell
  --------------------------------------------------------------------*/
 
 
-SwWrtShell*	GetActiveWrtShell()
+SwWrtShell* GetActiveWrtShell()
 {
     SwView *pActive = ::GetActiveView();
     if( pActive )
@@ -135,7 +135,7 @@ SwWrtShell*	GetActiveWrtShell()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: 	Pointer auf die aktuelle Sicht
+    Beschreibung:   Pointer auf die aktuelle Sicht
  --------------------------------------------------------------------*/
 
 
@@ -145,7 +145,7 @@ SwView* GetActiveView()
     return PTR_CAST( SwView, pView );
 }
 /*--------------------------------------------------------------------
-    Beschreibung:	Ueber Views iterieren - static
+    Beschreibung:   Ueber Views iterieren - static
  --------------------------------------------------------------------*/
 
 SwView* SwModule::GetFirstView()
@@ -166,7 +166,7 @@ SwView* SwModule::GetNextView(SwView* pView)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Neuer Master fuer die Einstellungen wird gesetzt;
+ Beschreibung:  Neuer Master fuer die Einstellungen wird gesetzt;
                 dieser wirkt sich auf die aktuelle Sicht und alle
                 folgenden aus.
 ------------------------------------------------------------------------*/
@@ -390,7 +390,7 @@ SwNavigationConfig*  SwModule::GetNavigationConfig()
 
 --------------------------------------------------*/
 
-SwPrintOptions* 	SwModule::GetPrtOptions(sal_Bool bWeb)
+SwPrintOptions*     SwModule::GetPrtOptions(sal_Bool bWeb)
 {
     if(bWeb && !pWebPrtOpt)
     {
@@ -407,7 +407,7 @@ SwPrintOptions* 	SwModule::GetPrtOptions(sal_Bool bWeb)
 /*-----------------26.06.97 07.52-------------------
 
 --------------------------------------------------*/
-SwChapterNumRules*	SwModule::GetChapterNumRules()
+SwChapterNumRules*  SwModule::GetChapterNumRules()
 {
     if(!pChapterNumRules)
         pChapterNumRules = new SwChapterNumRules;
@@ -504,9 +504,9 @@ void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
     if( COL_TRANSPARENT == rAttr.nColor )
     {
         static const ColorData aColArr[] = {
-         COL_AUTHOR1_DARK,		COL_AUTHOR2_DARK,	COL_AUTHOR3_DARK,
-         COL_AUTHOR4_DARK,		COL_AUTHOR5_DARK,	COL_AUTHOR6_DARK,
-         COL_AUTHOR7_DARK,		COL_AUTHOR8_DARK,	COL_AUTHOR9_DARK };
+         COL_AUTHOR1_DARK,      COL_AUTHOR2_DARK,   COL_AUTHOR3_DARK,
+         COL_AUTHOR4_DARK,      COL_AUTHOR5_DARK,   COL_AUTHOR6_DARK,
+         COL_AUTHOR7_DARK,      COL_AUTHOR8_DARK,   COL_AUTHOR9_DARK };
 
         aCol.SetColor( aColArr[ nAuthor % (sizeof( aColArr ) /
                                            sizeof( aColArr[0] )) ] );
@@ -634,7 +634,7 @@ const Color &SwModule::GetRedlineMarkColor()
 /*-----------------03.03.98 16:47-------------------
 
 --------------------------------------------------*/
-const SwViewOption*	SwModule::GetViewOption(sal_Bool bWeb)
+const SwViewOption* SwModule::GetViewOption(sal_Bool bWeb)
 {
     return GetUsrPref( bWeb );
 }
@@ -727,8 +727,8 @@ void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
                     pViewShell->GetWin()->Invalidate();
             }
         }
-//		pSpell->SetSpellWrongAgain( sal_False );
-//		pSpell->SetSpellAllAgain( sal_False );
+//      pSpell->SetSpellWrongAgain( sal_False );
+//      pSpell->SetSpellAllAgain( sal_False );
     }
 }
 

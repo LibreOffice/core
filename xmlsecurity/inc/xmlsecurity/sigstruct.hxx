@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,27 +41,27 @@
 /*
  * signature status
  */
-/* 
-#define STATUS_INIT			0
-#define STATUS_CREATION_SUCCEED		1
-#define STATUS_CREATION_FAIL		2
-#define STATUS_VERIFY_SUCCEED		3
-#define STATUS_VERIFY_FAIL		4
+/*
+#define STATUS_INIT         0
+#define STATUS_CREATION_SUCCEED     1
+#define STATUS_CREATION_FAIL        2
+#define STATUS_VERIFY_SUCCEED       3
+#define STATUS_VERIFY_FAIL      4
 */
 
 /*
  * type of reference
  */
-#define TYPE_SAMEDOCUMENT_REFERENCE	1
-#define TYPE_BINARYSTREAM_REFERENCE	2
-#define TYPE_XMLSTREAM_REFERENCE	3
+#define TYPE_SAMEDOCUMENT_REFERENCE 1
+#define TYPE_BINARYSTREAM_REFERENCE 2
+#define TYPE_XMLSTREAM_REFERENCE    3
 
 struct SignatureReferenceInformation
 {
     sal_Int32       nType;
     rtl::OUString   ouURI;
     rtl::OUString   ouDigestValue;
-    
+
     SignatureReferenceInformation( sal_Int32 type, rtl::OUString uri )
     {
         nType = type;
@@ -89,11 +89,11 @@ struct SignatureInformation
     //XML signatures are written again (unless they have been removed).
     //If the date time string is converted into the DateTime structure
     //then information can be lost because it only holds a fractional
-    //of a second with a accuracy of one hundredth of second. 
+    //of a second with a accuracy of one hundredth of second.
     //If the string contains
     //milli seconds (because the document was created by an application other than OOo)
     //and the converted time is written back, then the string looks different
-    //and the signature is broken.	
+    //and the signature is broken.
     rtl::OUString ouDateTime;
     rtl::OUString ouSignatureId;
     rtl::OUString ouPropertyId;
@@ -104,7 +104,7 @@ struct SignatureInformation
         nStatus = ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN;
         nSecurityEnvironmentIndex = -1;
     }
-};		
+};
 
 typedef ::std::vector< SignatureInformation > SignatureInformations;
 

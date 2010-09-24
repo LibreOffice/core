@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,14 +39,14 @@
 
 typedef CollTestImplHelper< ov::excel::XChartObjects > ChartObjects_BASE;
 /* #TODO see if this hash table is 'really' necessary
-typedef ::std::hash_map< ::rtl::OUString, 
+typedef ::std::hash_map< ::rtl::OUString,
 css::uno::Reference< ov::excel::XChartObject >,
     ::rtl::OUStringHash,
     ::std::equal_to< ::rtl::OUString > > aHashTable;
 */
 
 class ScVbaChartObjects : public ChartObjects_BASE
-{		
+{
 
     css::uno::Reference< css::table::XTableCharts > xTableCharts;
     css::uno::Reference< css::drawing::XDrawPageSupplier > xDrawPageSupplier;
@@ -65,8 +65,8 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
-    // ScVbaCollectionBaseImpl	
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ); 
+    // ScVbaCollectionBaseImpl
+    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
     // ChartObjects_BASE
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

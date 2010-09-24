@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,14 +35,14 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <vector>
 
-//	----------------------------------------------------
-//	class CalendarImpl
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class CalendarImpl
+//  ----------------------------------------------------
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
 class CalendarImpl : public cppu::WeakImplHelper2
-< 
+<
     com::sun::star::i18n::XExtendedCalendar,
     com::sun::star::lang::XServiceInfo
 >
@@ -91,7 +91,7 @@ public:
 
 private:
     struct lookupTableItem {
-    lookupTableItem(const rtl::OUString& _uniqueID, com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedCalendar >& _xCalendar) : 
+    lookupTableItem(const rtl::OUString& _uniqueID, com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedCalendar >& _xCalendar) :
         uniqueID(_uniqueID), xCalendar(_xCalendar) {}
     rtl::OUString uniqueID;
     com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedCalendar > xCalendar;

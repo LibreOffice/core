@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,12 +24,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #ifndef WW8_TABLE_INFO_HXX
 #define WW8_TABLE_INFO_HXX
 #include <hash_map>
 #include <string>
 #include <map>
+#include <set>
 #include <functional>
 #include <boost/shared_ptr.hpp>
 #include <sal/types.h>
@@ -47,7 +48,7 @@ namespace ww8
 using namespace ::std;
 
 class WW8TableNodeInfo;
-typedef boost::shared_ptr<SwRect> SwRectPtr; 
+typedef boost::shared_ptr<SwRect> SwRectPtr;
 typedef ::std::vector<const SwTableBox *> TableBoxVector;
 typedef boost::shared_ptr<TableBoxVector> TableBoxVectorPtr;
 typedef ::std::vector<sal_uInt32> GridCols;
@@ -72,13 +73,13 @@ class WW8TableNodeInfoInner
     const SwTableBox * mpTableBox;
     const SwTable * mpTable;
     SwRect maRect;
-    
+
 public:
     typedef boost::shared_ptr<WW8TableNodeInfoInner> Pointer_t;
 
     WW8TableNodeInfoInner(WW8TableNodeInfo * pParent);
     ~WW8TableNodeInfoInner();
-    
+
     void setDepth(sal_uInt32 nDepth);
     void setCell(sal_uInt32 nCell);
     void setRow(sal_uInt32 nRow);
@@ -91,7 +92,7 @@ public:
     void setTableBox(const SwTableBox * pTableBox);
     void setTable(const SwTable * pTable);
     void setRect(const SwRect & rRect);
-    
+
     sal_uInt32 getDepth() const;
     sal_uInt32 getCell() const;
     sal_uInt32 getRow() const;
@@ -104,7 +105,7 @@ public:
     const SwTableBox * getTableBox() const;
     const SwTable * getTable() const;
     const SwRect & getRect() const;
-    
+
     const SwNode * getNode() const;
 
     TableBoxVectorPtr getTableBoxesOfRow();
@@ -123,9 +124,9 @@ class WW8TableInfo;
 class WW8TableNodeInfo
 {
 public:
-    typedef map<sal_uInt32, WW8TableNodeInfoInner::Pointer_t, 
+    typedef map<sal_uInt32, WW8TableNodeInfoInner::Pointer_t,
                 greater<sal_uInt32> > Inners_t;
-    
+
 private:
     WW8TableInfo * mpParent;
     sal_uInt32 mnDepth;
@@ -139,7 +140,7 @@ public:
 
     WW8TableNodeInfo(WW8TableInfo * pParent, const SwNode * pTxtNode);
     virtual ~WW8TableNodeInfo();
-    
+
     void setDepth(sal_uInt32 nDepth);
     void setEndOfLine(bool bEndOfLine);
     void setEndOfCell(bool bEndOfCell);
@@ -154,7 +155,7 @@ public:
     void setNext(WW8TableNodeInfo * pNext);
     void setNextNode(const SwNode * pNode);
     void setRect(const SwRect & rRect);
-    
+
     WW8TableInfo * getParent() const;
     sal_uInt32 getDepth() const;
     bool isEndOfLine() const;
@@ -170,7 +171,7 @@ public:
     const Inners_t & getInners() const;
     const WW8TableNodeInfoInner::Pointer_t getFirstInner() const;
     const WW8TableNodeInfoInner::Pointer_t getInnerForDepth(sal_uInt32 nDepth) const;
-    
+
     sal_uInt32 getCell() const;
     sal_uInt32 getRow() const;
 
@@ -178,16 +179,16 @@ public:
 
     bool operator < (const WW8TableNodeInfo & rInfo) const;
 };
- 
+
 struct hashNode
 {
-    size_t operator()(const SwNode * pNode) const 
+    size_t operator()(const SwNode * pNode) const
     { return reinterpret_cast<size_t>(pNode); }
 };
-    
+
 struct hashTable
 {
-    size_t operator()(const SwTable * pTable) const 
+    size_t operator()(const SwTable * pTable) const
     { return reinterpret_cast<size_t>(pTable); }
 };
 
@@ -208,7 +209,7 @@ public:
     CellInfoMultiSet::const_iterator end() const;
 
     void setTableBoxVector(TableBoxVectorPtr pTableBoxVector);
-    void setWidths(WidthsPtr pGridCols);    
+    void setWidths(WidthsPtr pGridCols);
     void setRowSpans(RowSpansPtr pRowSpans);
 
     TableBoxVectorPtr getTableBoxVector() const;
@@ -223,7 +224,7 @@ class WW8TableCellGrid
 
     RowTops_t m_aRowTops;
     Rows_t m_aRows;
-    
+
     WW8TableCellGridRow::Pointer_t getRow(long nTop, bool bCreate = true);
     RowTops_t::const_iterator getRowTopsBegin() const;
     RowTops_t::const_iterator getRowTopsEnd() const;
@@ -236,7 +237,7 @@ public:
     WW8TableCellGrid();
     ~WW8TableCellGrid();
 
-    void insert(const SwRect & rRect, WW8TableNodeInfo * pNodeInfo, 
+    void insert(const SwRect & rRect, WW8TableNodeInfo * pNodeInfo,
                 unsigned long * pFmtFrmWidth = NULL);
     void addShadowCells();
     WW8TableNodeInfo * connectCells();
@@ -246,7 +247,7 @@ public:
     TableBoxVectorPtr getTableBoxesOfRow(WW8TableNodeInfoInner * pNodeInfo);
     WidthsPtr getWidthsOfRow(WW8TableNodeInfoInner * pNodeInfo);
     RowSpansPtr getRowSpansOfRow(WW8TableNodeInfoInner * pNodeInfo);
-}; 
+};
 
 class WW8TableInfo
 {
@@ -258,21 +259,21 @@ class WW8TableInfo
     CellGridMap_t mCellGridMap;
 
     typedef hash_map<const SwTable *, const SwNode *, hashTable > FirstInTableMap_t;
-    FirstInTableMap_t mFirstInTableMap;    
+    FirstInTableMap_t mFirstInTableMap;
 
     WW8TableNodeInfo *
-    processTableLine(const SwTable * pTable, 
+    processTableLine(const SwTable * pTable,
                      const SwTableLine * pTableLine,
-                     sal_uInt32 nRow, 
+                     sal_uInt32 nRow,
                      sal_uInt32 nDepth, WW8TableNodeInfo * pPrev);
 
     WW8TableNodeInfo *
     processTableBox(const SwTable * pTable,
                     const SwTableBox * pTableBox,
                     sal_uInt32 nRow,
-                    sal_uInt32 nCell, 
+                    sal_uInt32 nCell,
                     sal_uInt32 nDepth, bool bEndOfLine, WW8TableNodeInfo * pPrev);
-    
+
     WW8TableNodeInfo::Pointer_t
     processTableBoxLines(const SwTableBox * pBox,
                          const SwTable * pTable,
@@ -280,25 +281,25 @@ class WW8TableInfo
                          sal_uInt32 nRow,
                          sal_uInt32 nCell,
                          sal_uInt32 nDepth);
-                              
+
     WW8TableNodeInfo::Pointer_t
-    insertTableNodeInfo(const SwNode * pNode, 
-                        const SwTable * pTable, 
+    insertTableNodeInfo(const SwNode * pNode,
+                        const SwTable * pTable,
                         const SwTableBox * pTableBox,
                         sal_uInt32 nRow,
                         sal_uInt32 nCell,
                         sal_uInt32 nDepth,
                         SwRect * pRect = NULL);
 
-    WW8TableCellGrid::Pointer_t getCellGridForTable(const SwTable * pTable, 
+    WW8TableCellGrid::Pointer_t getCellGridForTable(const SwTable * pTable,
                                                     bool bCreate = true);
-    
-public: 
+
+public:
     typedef boost::shared_ptr<WW8TableInfo> Pointer_t;
 
     WW8TableInfo();
     virtual ~WW8TableInfo();
-    
+
     void processSwTable(const SwTable * pTable);
     WW8TableNodeInfo * processSwTableByLayout(const SwTable * pTable);
     WW8TableNodeInfo::Pointer_t getTableNodeInfo(const SwNode * pNode);
@@ -307,7 +308,7 @@ public:
 
     WW8TableNodeInfo * reorderByLayout(const SwTable * pTable);
 };
- 
+
 class CellInfo
 {
     SwRect m_aRect;
@@ -318,7 +319,7 @@ public:
     CellInfo(const SwRect & aRect, WW8TableNodeInfo * pNodeInfo);
 
     CellInfo(const CellInfo & aRectAndTableInfo)
-        : m_aRect(aRectAndTableInfo.m_aRect), 
+        : m_aRect(aRectAndTableInfo.m_aRect),
           m_pNodeInfo(aRectAndTableInfo.m_pNodeInfo),
           m_nFmtFrmWidth(aRectAndTableInfo.m_nFmtFrmWidth)
     {
@@ -335,7 +336,7 @@ public:
     long width() const { return m_aRect.Width(); }
     long height() const { return m_aRect.Height(); }
     SwRect getRect() const { return m_aRect; }
-    WW8TableNodeInfo * getTableNodeInfo() const 
+    WW8TableNodeInfo * getTableNodeInfo() const
     { return m_pNodeInfo; }
     unsigned long getFmtFrmWidth() const
     {

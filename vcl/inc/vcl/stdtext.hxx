@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@ class Window;
 // - Standard-Texte -
 // ------------------
 
-#define STANDARD_TEXT_FIRST 					STANDARD_TEXT_SERVICE_NOT_AVAILABLE
-#define STANDARD_TEXT_SERVICE_NOT_AVAILABLE 	((USHORT)0)
-#define STANDARD_TEXT_LAST						STANDARD_TEXT_SERVICE_NOT_AVAILABLE
+#define STANDARD_TEXT_FIRST                     STANDARD_TEXT_SERVICE_NOT_AVAILABLE
+#define STANDARD_TEXT_SERVICE_NOT_AVAILABLE     ((USHORT)0)
+#define STANDARD_TEXT_LAST                      STANDARD_TEXT_SERVICE_NOT_AVAILABLE
 
 XubString VCL_DLLPUBLIC GetStandardText( USHORT nStdText );
 
@@ -50,4 +50,4 @@ XubString VCL_DLLPUBLIC GetStandardText( USHORT nStdText );
 
 void VCL_DLLPUBLIC ShowServiceNotAvailableError( Window* pParent, const XubString& rServiceName, BOOL bError );
 
-#endif	// _VCL_STDTEXT_HXX
+#endif  // _VCL_STDTEXT_HXX

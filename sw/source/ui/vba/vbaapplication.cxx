@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ using ::rtl::OUString;
 #define FILE_PATH_SEPERATOR "/"
 #else // windows
 #define FILE_PATH_SEPERATOR "\\"
-#endif 
+#endif
 
 #define EXCELVERSION "11.0"
 
@@ -93,7 +93,7 @@ SwVbaApplication::getActiveDocument() throw (uno::RuntimeException)
     return new SwVbaDocument( this, mxContext, getCurrentDocument() );
 }
 
-uno::Reference< word::XWindow > SAL_CALL 
+uno::Reference< word::XWindow > SAL_CALL
 SwVbaApplication::getActiveWindow() throw (uno::RuntimeException)
 {
     // #FIXME sofar can't determine Parent
@@ -177,20 +177,20 @@ float SAL_CALL SwVbaApplication::CentimetersToPoints( float _Centimeters ) throw
     return VbaApplicationBase::CentimetersToPoints( _Centimeters );
 }
 
-uno::Reference< frame::XModel > 
+uno::Reference< frame::XModel >
 SwVbaApplication::getCurrentDocument() throw (css::uno::RuntimeException)
 {
     return getCurrentWordDoc( mxContext );
 }
 
-rtl::OUString& 
+rtl::OUString&
 SwVbaApplication::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaApplication") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 SwVbaApplication::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

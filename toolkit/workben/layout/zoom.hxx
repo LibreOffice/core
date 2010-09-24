@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@
 
 // define ----------------------------------------------------------------
 /* CHINA001
-#define	ZOOMBTN_OPTIMAL		((USHORT)0x0001)
-#define ZOOMBTN_PAGEWIDTH	((USHORT)0x0002)
-#define ZOOMBTN_WHOLEPAGE	((USHORT)0x0004)
+#define ZOOMBTN_OPTIMAL     ((USHORT)0x0001)
+#define ZOOMBTN_PAGEWIDTH   ((USHORT)0x0002)
+#define ZOOMBTN_WHOLEPAGE   ((USHORT)0x0004)
 */
 #ifndef _SVX_ZOOM_HXX
 #include "zoom_def.hxx"
@@ -54,7 +54,7 @@
     Mit diesem Dialog wird ein Zoom-Faktor eingestellt.
 
     [Items]
-    SvxZoomItem	<SID_ATTR_ZOOM>
+    SvxZoomItem <SID_ATTR_ZOOM>
 */
 
 #include <layout/layout-pre.hxx>
@@ -65,10 +65,10 @@ private:
     FixedLine           aZoomFl;
     RadioButton         aOptimalBtn;
     RadioButton         aWholePageBtn;
-    RadioButton 		aPageWidthBtn;
+    RadioButton         aPageWidthBtn;
     RadioButton         a100Btn;
     RadioButton         aUserBtn;
-    MetricField 		aUserEdit;
+    MetricField         aUserEdit;
 
     FixedLine           aViewLayoutFl;
     RadioButton         aAutomaticBtn;
@@ -79,14 +79,14 @@ private:
 
     FixedLine           aBottomFl;
     OKButton            aOKBtn;
-    CancelButton		aCancelBtn;
-    HelpButton			aHelpBtn;
+    CancelButton        aCancelBtn;
+    HelpButton          aHelpBtn;
 
 #if !TEST_LAYOUT
-    const SfxItemSet&	rSet;
+    const SfxItemSet&   rSet;
 #endif /* !TEST_LAYOUT */
-    SfxItemSet*			pOutSet;
-    BOOL				bModified;
+    SfxItemSet*         pOutSet;
+    BOOL                bModified;
 
 #ifdef _SVX_ZOOM_CXX
     DECL_LINK( UserHdl, RadioButton* );
@@ -105,16 +105,16 @@ public:
 #endif /* !TEST_LAYOUT */
     ~SvxZoomDialog();
 
-    static USHORT*		GetRanges();
-    const SfxItemSet*	GetOutputItemSet() const { return pOutSet; }
+    static USHORT*      GetRanges();
+    const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 
-    USHORT				GetFactor() const;
-    void				SetFactor( USHORT nNewFactor, USHORT nBtnId = 0 );
+    USHORT              GetFactor() const;
+    void                SetFactor( USHORT nNewFactor, USHORT nBtnId = 0 );
 
-    void				SetButtonText( USHORT nBtnId, const String& aNewTxt );
-    void				HideButton( USHORT nBtnId );
-    void				SetLimits( USHORT nMin, USHORT nMax );
-    void				SetSpinSize( USHORT nNewSpin );
+    void                SetButtonText( USHORT nBtnId, const String& aNewTxt );
+    void                HideButton( USHORT nBtnId );
+    void                SetLimits( USHORT nMin, USHORT nMax );
+    void                SetSpinSize( USHORT nNewSpin );
 };
 
 #include <layout/layout-post.hxx>

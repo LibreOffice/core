@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,19 +55,19 @@ public:
     DropTargetListener( HWND hEdit);
     ~DropTargetListener();
 
-    virtual void SAL_CALL disposing( const EventObject& Source ) 
+    virtual void SAL_CALL disposing( const EventObject& Source )
         throw(RuntimeException);
 
 
-    virtual void SAL_CALL drop( const DropTargetDropEvent& dtde ) 
+    virtual void SAL_CALL drop( const DropTargetDropEvent& dtde )
         throw(RuntimeException);
-    virtual void SAL_CALL dragEnter( const DropTargetDragEnterEvent& dtde ) 
+    virtual void SAL_CALL dragEnter( const DropTargetDragEnterEvent& dtde )
         throw(RuntimeException);
-    virtual void SAL_CALL dragExit( const DropTargetEvent& dte ) 
+    virtual void SAL_CALL dragExit( const DropTargetEvent& dte )
         throw(RuntimeException);
-    virtual void SAL_CALL dragOver( const DropTargetDragEvent& dtde ) 
+    virtual void SAL_CALL dragOver( const DropTargetDragEvent& dtde )
         throw(RuntimeException);
-    virtual void SAL_CALL dropActionChanged( const DropTargetDragEvent& dtde ) 
+    virtual void SAL_CALL dropActionChanged( const DropTargetDragEvent& dtde )
         throw(RuntimeException);
 };
 

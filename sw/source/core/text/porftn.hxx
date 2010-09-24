@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,12 +33,12 @@ class SwTxtFrm;
 class SwTxtFtn;
 
 /*************************************************************************
- *						class SwFtnPortion
+ *                      class SwFtnPortion
  *************************************************************************/
 
 class SwFtnPortion : public SwFldPortion
 {
-    SwTxtFrm *pFrm; 		// um im Dtor RemoveFtn rufen zu koennen.
+    SwTxtFrm *pFrm;         // um im Dtor RemoveFtn rufen zu koennen.
     SwTxtFtn *pFtn;
     KSHORT nOrigHeight;
     // --> OD 2009-01-29 #i98418#
@@ -48,7 +48,7 @@ class SwFtnPortion : public SwFldPortion
 public:
     SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrm, SwTxtFtn *pFtn,
                   KSHORT nOrig = KSHRT_MAX );
-    inline KSHORT& Orig() {	return nOrigHeight; }
+    inline KSHORT& Orig() { return nOrigHeight; }
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
@@ -64,7 +64,7 @@ public:
 };
 
 /*************************************************************************
- *						class SwFtnNumPortion
+ *                      class SwFtnNumPortion
  *************************************************************************/
 
 class SwFtnNumPortion : public SwNumberPortion
@@ -80,12 +80,12 @@ public:
 };
 
 /*************************************************************************
- *						class SwQuoVadisPortion
+ *                      class SwQuoVadisPortion
  *************************************************************************/
 
 class SwQuoVadisPortion : public SwFldPortion
 {
-    XubString	aErgo;
+    XubString   aErgo;
 public:
             SwQuoVadisPortion( const XubString &rExp, const XubString& rStr );
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
@@ -106,7 +106,7 @@ public:
 };
 
 /*************************************************************************
- *						class SwErgoSumPortion
+ *                      class SwErgoSumPortion
  *************************************************************************/
 
 class SwErgoSumPortion : public SwFldPortion

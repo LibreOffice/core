@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,10 +60,10 @@ import util.utils;
  * functions.
  */
 public class RecoveryTools {
-    
+
     private final TestParameters param;
     private final LogWriter log;
-    
+
     /**
      * Creates new OfficeWatcher
      * @param param the test parameter
@@ -72,19 +72,19 @@ public class RecoveryTools {
     public RecoveryTools(TestParameters param, LogWriter log) {
         this.param = param;
         this.log = log;
-        
+
     }
-    
+
     /**
      * get the active dialog from the top of the desktop
      * @param xToolKit xToolKit the <CODE> XExtendedToolkit</CODE> to get the dialog from the top of the desktop.
      * @return a <CODE>XDialog</CODE> interface of the dialog
-     */    
+     */
     public XDialog getActiveDialog( XMultiServiceFactory xMSF){
         XWindow xWin = getActiveWindow(xMSF);
         return (XDialog) UnoRuntime.queryInterface(XDialog.class, xWin);
     }
-    
+
     public XWindow getActiveWindow( XMultiServiceFactory xMSF){
         XInterface xToolKit = null;
         try {
@@ -105,10 +105,10 @@ public class RecoveryTools {
      * tries to get the dialog until the <CODE>OfficeWatcher</CODE> kills the office.
      * @param xToolKit the <CODE> XExtendedToolkit</CODE> to get the dialog from the top of the desktop.
      * @return a <CODE>XDialog</CODE> interface of the dialog
-     */    
+     */
     public XDialog getActiveDialogAfterStartup(XMultiServiceFactory xMSF){
         // while the office starts it takes some time to get the dialog.
-        
+
         // the dialog is accessible AFTER the office has recoverd all documents.
         // This could consumes more time then the TimeOut allow.
         int counter = 0;
@@ -116,9 +116,9 @@ public class RecoveryTools {
         int pause = param.getInt(PropertyName.SHORT_WAIT)*10;
         int timeOut = param.getInt(PropertyName.THREAD_TIME_OUT)*5;
         int maximum = (timeOut / pause) * multi;
-        
+
         XDialog oDialog = getActiveDialog(xMSF);
-        
+
         while (oDialog == null && (counter < maximum)){
             log.println("waiting until the office has recoverd... remaining " + (timeOut * multi - pause * counter)/1000 + " seconds");
             pause(pause);
@@ -130,18 +130,18 @@ public class RecoveryTools {
 
     /**
      * halt the thread for some time
-     */    
+     */
     public void pause(){
        pause(param.getInt(PropertyName.SHORT_WAIT));
     }
-    
+
     /**
      * halt the thread for some time
-     */    
+     */
     public void pause(int sleepTime){
         sleep(sleepTime);
     }
-    
+
     private void sleep(long millis){
         try{
             Thread.sleep(millis);
@@ -153,36 +153,36 @@ public class RecoveryTools {
      * was done from the Office via XSimpleFileAccess
      * @param xMSF a <CODE>XMultiServiceFactory</CODE> to get <CODE>XSimpleFileAccess</CODE>
      * @throws com.sun.star.io.IOException the exception was thrown if something goes wrong.
-     */    
+     */
     public void cleanRecoveryData()
         throws com.sun.star.io.IOException
     {
         try{
             HashMap recFiles = getRecoveryFiles();
-            
+
             String recoveryFolder = (String) recFiles.get("recoveryFolder");
             String recoveryXCU = (String) recFiles.get("recoveryXCU");
 
             log.println("try to remove content of '" + recoveryFolder + "'");
-            
+
             File rf = new File(recoveryFolder);
-            
+
             boolean success = FileTools.cleanDir(rf);
             log.println("removed " + recoveryFolder + ": " + success);
-            
+
             log.println("try to remove '" + recoveryXCU + "'");
-            
+
             File xcu = new File(recoveryXCU);
             if (xcu.isFile()){
                 success = xcu.delete();
                 log.println("removed " + recoveryXCU + " : " + success);
             }
-            
+
         } catch (Exception e){
             throw new com.sun.star.io.IOException("could not remove old recovery data: " + e.toString());
         }
     }
-    
+
     public HashMap getRecoveryFiles()
         throws com.sun.star.io.IOException
     {
@@ -190,46 +190,46 @@ public class RecoveryTools {
             log.println("try to get UnoProvider...");
             UnoProvider unoProv = new UnoProvider();
             XMultiServiceFactory xMSF = (XMultiServiceFactory) unoProv.getManager(param);
-            
+
             String userPath = utils.expandMacro(xMSF, "${$ORIGIN/bootstraprc:UserInstallation}");
             System.out.println("userPath:'" + userPath + "'");
-            
+
             if (userPath.equals(""))userPath = utils.expandMacro(xMSF, "${$ORIGIN/bootstrap.ini:UserInstallation}");
             System.out.println("userPath:'" + userPath + "'");
-            
+
             if (userPath.equals("")) throw new com.sun.star.io.IOException("could not get user path at bootstraping");
-            
+
             String recoveryFolder = utils.getSystemURL(userPath + "/user/backup");
-            
+
             String recoveryXCU = utils.getSystemURL(userPath + "/user/registry/data/org/openoffice/Office/Recovery.xcu");
-            
+
             HashMap recFiles = new HashMap();
-            
+
             recFiles.put("recoveryFolder", recoveryFolder);
             recFiles.put("recoveryXCU", recoveryXCU);
             return recFiles;
-            
+
         } catch (Exception e){
             throw new com.sun.star.io.IOException("could not get recovery folder: " + e.toString());
         }
-        
+
     }
     /**
      * This function close the office while calling terminate on the desktop. If
      * this failed, the <CODE>ProcessHandler</CODE> kills the process.
      * @param xMSF the <CODE>XMultiServiceFactory</CODE>
      * @return <CODE>TRUE</CODE> if no exception was thrown, otherwise <CODE>FALSE</CODE>
-     */    
+     */
     public boolean closeOffice(XMultiServiceFactory xMSF) {
         try {
             XDesktop desk = (XDesktop) UnoRuntime.queryInterface(
                     XDesktop.class, xMSF.createInstance(
                     "com.sun.star.frame.Desktop"));
             xMSF = null;
-            
+
             desk.terminate();
             log.println("Waiting until ProcessHandler loose the office...");
-            
+
         }
         catch (java.lang.Exception e) {
             e.printStackTrace();
@@ -238,11 +238,11 @@ public class RecoveryTools {
         waitForClosedOffice();
         return true;
     }
-    
+
     /**
      * This function waits until the office is closed. If the closing time reach
      * the value of parameter <CODE>THREAD_TIME_OUT</CODE> the office was killed.
-     */    
+     */
     public void waitForClosedOffice(){
         // check for the office process
         helper.ProcessHandler ph = (helper.ProcessHandler) param.get("AppProvider");
@@ -259,7 +259,7 @@ public class RecoveryTools {
         // be shure that office is closed
         if (ph != null) ph.kill();
     }
-    
+
     public void killOffice(){
         helper.ProcessHandler ph = (helper.ProcessHandler) param.get("AppProvider");
         ph.kill();
@@ -269,9 +269,9 @@ public class RecoveryTools {
      * The office must be started WITH restore and crashreporter functionality.
      * Therefore the parmater '<CODE>-norestore</CODE>' and '<CODE>-nocrashreport</CODE>'
      * was removed from the <CODE>AppExecutionCommand</CODE> parameter
-     */    
+     */
     public void removeParametersFromAppExecutionCommand(){
-                                    
+
         //remove some params to start office
         String office = (String) param.get("AppExecutionCommand");
         String[] params = {"-norestore", "-nocrashreport"};
@@ -286,19 +286,19 @@ public class RecoveryTools {
         }
         param.put("AppExecutionCommand", office);
         log.println("connect: " + (String) param.get("AppExecutionCommand"));
-        
+
     }
- 
+
     /**
      * This function uses accessibility to handle modal dialogs like the
      * "Are you sure" dialog.
      * It cklick the named button given in parameter <CODE>buttonName</CODE>
      * @param buttonName the name of the button wich should be chlicked
-     */    
+     */
     public void handleModalDialog(XMultiServiceFactory xMSF, String buttonName)
                 throws com.sun.star.accessibility.IllegalAccessibleComponentStateException
-    {                
-    
+    {
+
         log.println("try to get modal Dialog...");
 
         pause();
@@ -319,7 +319,7 @@ public class RecoveryTools {
         }
         pause();
     }
-    
+
     public void clickThreadButton(XMultiServiceFactory xMSF, XWindow xWindow, String buttonName)
                 throws com.sun.star.accessibility.IllegalAccessibleComponentStateException
     {
@@ -327,12 +327,12 @@ public class RecoveryTools {
         kbt.start();
         pause(param.getInt(PropertyName.SHORT_WAIT) * 10);
     }
- 
+
     public void copyRecoveryData(boolean backup)
         throws com.sun.star.io.IOException, java.io.IOException
-    {   
+    {
         HashMap recFiles = null;
-        
+
         try{
             recFiles = getRecoveryFiles();
         } catch ( com.sun.star.io.IOException e){
@@ -361,6 +361,6 @@ public class RecoveryTools {
             throw new java.io.IOException("Could not copy recovery files: " + e.toString());
         }
    }
-    
-    
+
+
 }

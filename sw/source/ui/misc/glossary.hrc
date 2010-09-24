@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,57 +27,57 @@
 
 
 // Box Textbausteine
-#define	FT_SHORTNAME		1
-#define ED_SHORTNAME		2
-#define FT_NAME				3
-//#define DCB_NAME			4
-#define ED_NAME				4
+#define FT_SHORTNAME        1
+#define ED_SHORTNAME        2
+#define FT_NAME             3
+//#define DCB_NAME          4
+#define ED_NAME             4
 #define CB_INSERT_TIP                   5
 
-//#define FT_BIB				10
+//#define FT_BIB                10
 
-#define PB_INSERT			50
-#define PB_EDIT				52
-#define PB_BIB				54
-#define PB_CLOSE			55
-#define PB_PATH				56
+#define PB_INSERT           50
+#define PB_EDIT             52
+#define PB_BIB              54
+#define PB_CLOSE            55
+#define PB_PATH             56
 #define PB_HELP             57
 
-#define MNU_EDIT			60
-#define FN_GL_DEFINE		61
-#define FN_GL_DEFINE_TEXT	62
-#define FN_GL_REPLACE		63
-#define FN_GL_EDIT			64
-#define FN_GL_DELETE		65
-#define FN_GL_RENAME		66
-#define FN_GL_MACRO			67
-#define CB_FILE_REL			68
+#define MNU_EDIT            60
+#define FN_GL_DEFINE        61
+#define FN_GL_DEFINE_TEXT   62
+#define FN_GL_REPLACE       63
+#define FN_GL_EDIT          64
+#define FN_GL_DELETE        65
+#define FN_GL_RENAME        66
+#define FN_GL_MACRO         67
+#define CB_FILE_REL         68
 #define CB_NET_REL          69
 #define FL_RELATIVE         70
 #define WIN_EXAMPLE         72
-#define CB_SHOW_EXAMPLE		73
+#define CB_SHOW_EXAMPLE     73
 #define FN_GL_COPY_TO_CLIPBOARD 74
-#define FN_GL_IMPORT		75
-#define ST_READONLY			76
-#define ST_READONLY_PATH	77
-#define FN_GL_REPLACE_TEXT	78
+#define FN_GL_IMPORT        75
+#define ST_READONLY         76
+#define ST_READONLY_PATH    77
+#define FN_GL_REPLACE_TEXT  78
 #define WIN_EXAMPLE_DUMMY   79
 
 // Box Bibliothek Textbausteine
 #define FL_EDIT                         1
 #define FL_BIB                          2
-#define ED_BIB				3
+#define ED_BIB              3
 
-#define PB_NEW				10
-#define PB_DELETE			11
+#define PB_NEW              10
+#define PB_DELETE           11
 
-#define BT_OK				100
+#define BT_OK               100
 
 // beide
-#define LB_BIB				80
+#define LB_BIB              80
 
 // Dialog Namensaenderung
-#define   FT_ON				 1
+#define   FT_ON              1
 #define   FT_OS              2
 #define   FT_NN              3
 #define   FT_NS              4
@@ -86,6 +86,6 @@
 #define   ED_NN              7
 #define   ED_NS              8
 #define   FL_NN              9
-#define   BT_CANCEL			10
-#define   BT_OKNEW			11
+#define   BT_CANCEL         10
+#define   BT_OKNEW          11
 

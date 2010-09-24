@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <tools/gen.hxx>
 #include "svx/svxdllapi.h"
 
-#define DFF_COMMON_RECORD_HEADER_SIZE			8
+#define DFF_COMMON_RECORD_HEADER_SIZE           8
 
 #define DFF_PSFLAG_CONTAINER 0x0F         // If the version field of a record
                                           //  header takes on this value, the
@@ -364,13 +364,13 @@ enum DFF_TextHeader {
 #define DFF_Prop_adjust8Value                334  //  LONG
 #define DFF_Prop_adjust9Value                335  //  LONG
 #define DFF_Prop_adjust10Value               336  //  LONG
-#define DFF_Prop_connectorPoints			 337  //  IMsoArray
-#define DFF_Prop_stretchPointX				 339  //  LONG
-#define DFF_Prop_stretchPointY				 340  //  LONG
-#define DFF_Prop_Handles				     341  //  H*
-#define DFF_Prop_pFormulas					 342  //  LONG
-#define DFF_Prop_textRectangles			     343  //  LONG
-#define DFF_Prop_connectorType				 344  //  LONG				->0=none, 1=segments, 2=custom, 3=rect
+#define DFF_Prop_connectorPoints             337  //  IMsoArray
+#define DFF_Prop_stretchPointX               339  //  LONG
+#define DFF_Prop_stretchPointY               340  //  LONG
+#define DFF_Prop_Handles                     341  //  H*
+#define DFF_Prop_pFormulas                   342  //  LONG
+#define DFF_Prop_textRectangles              343  //  LONG
+#define DFF_Prop_connectorType               344  //  LONG              ->0=none, 1=segments, 2=custom, 3=rect
 #define DFF_Prop_fShadowOK                   378  //  BOOL              Shadow may be set
 #define DFF_Prop_f3DOK                       379  //  BOOL              3D may be set
 #define DFF_Prop_fLineOK                     380  //  BOOL              Line style may be set
@@ -561,8 +561,8 @@ enum DFF_TextHeader {
 #define DFF_Prop_dxWrapDistRight             902  //  LONG            Right wrapping distance from text (Word)
 #define DFF_Prop_dyWrapDistBottom            903  //  LONG            Bottom wrapping distance from text (Word)
 #define DFF_Prop_lidRegroup                  904  //  LONG            Regroup ID
-#define DFF_Prop_tableProperties			 927  //  LONG
-#define DFF_Prop_tableRowProperties			 928  //  LONG*
+#define DFF_Prop_tableProperties             927  //  LONG
+#define DFF_Prop_tableRowProperties          928  //  LONG*
 #define DFF_Prop_fEditedWrap                 953  //  BOOL            Has the wrap polygon been edited?
 #define DFF_Prop_fBehindDocument             954  //  BOOL            Word-only (shape is behind text)
 #define DFF_Prop_fOnDblClickNotify           955  //  BOOL            Notify client on a double click
@@ -571,13 +571,13 @@ enum DFF_TextHeader {
 #define DFF_Prop_fHidden                     958  //  BOOL            Do not display
 #define DFF_Prop_fPrint                      959  //  BOOL            Print this shape
 // entsprechende BitFlags
-#define DFF_PBit_EditedWrap			0x00000040
-#define DFF_PBit_BehindDocument		0x00000020
-#define DFF_PBit_OnDblClickNotify	0x00000010
-#define DFF_PBit_IsButton			0x00000008
-#define DFF_PBit_OneD				0x00000004
-#define DFF_PBit_Hidden				0x00000002
-#define DFF_PBit_Print				0x00000001
+#define DFF_PBit_EditedWrap         0x00000040
+#define DFF_PBit_BehindDocument     0x00000020
+#define DFF_PBit_OnDblClickNotify   0x00000010
+#define DFF_PBit_IsButton           0x00000008
+#define DFF_PBit_OneD               0x00000004
+#define DFF_PBit_Hidden             0x00000002
+#define DFF_PBit_Print              0x00000001
 
 //---------------------------------------------------------------------------
 //  Dreh- und Angelpunkt: der Shape-Typ
@@ -1006,11 +1006,11 @@ enum MSO_ShadeType {
 
 // MSOLINESTYLE - compound line style
 enum MSO_LineStyle {
-   mso_lineSimple,			// Single line (of width lineWidth)
-   mso_lineDouble,			// Double lines of equal width
-   mso_lineThickThin,		// Double lines, one thick, one thin
-   mso_lineThinThick,		// Double lines, reverse order
-   mso_lineTriple			// Three lines, thin, thick, thin
+   mso_lineSimple,          // Single line (of width lineWidth)
+   mso_lineDouble,          // Double lines of equal width
+   mso_lineThickThin,       // Double lines, one thick, one thin
+   mso_lineThinThick,       // Double lines, reverse order
+   mso_lineTriple           // Three lines, thin, thick, thin
 };
 
 // MSO_LINETYPE - how to "fill" the line contour
@@ -1135,55 +1135,55 @@ typedef enum {
 } MSO_BLIPFILTER;
 
 typedef enum {
-    mso_syscolorButtonFace,				// COLOR_BTNFACE
-    mso_syscolorWindowText,				// COLOR_WINDOWTEXT
-    mso_syscolorMenu,					// COLOR_MENU
-    mso_syscolorHighlight,				// COLOR_HIGHLIGHT
-    mso_syscolorHighlightText,			// COLOR_HIGHLIGHTTEXT
-    mso_syscolorCaptionText,			// COLOR_CAPTIONTEXT
-    mso_syscolorActiveCaption,			// COLOR_ACTIVECAPTION
-    mso_syscolorButtonHighlight,		// COLOR_BTNHIGHLIGHT
-    mso_syscolorButtonShadow,			// COLOR_BTNSHADOW
-    mso_syscolorButtonText,				// COLOR_BTNTEXT
-    mso_syscolorGrayText,				// COLOR_GRAYTEXT
-    mso_syscolorInactiveCaption,		// COLOR_INACTIVECAPTION
-    mso_syscolorInactiveCaptionText,	// COLOR_INACTIVECAPTIONTEXT
-    mso_syscolorInfoBackground,			// COLOR_INFOBK
-    mso_syscolorInfoText,				// COLOR_INFOTEXT
-    mso_syscolorMenuText,				// COLOR_MENUTEXT
-    mso_syscolorScrollbar,				// COLOR_SCROLLBAR
-    mso_syscolorWindow,					// COLOR_WINDOW
-    mso_syscolorWindowFrame,			// COLOR_WINDOWFRAME
-    mso_syscolor3DLight,				// COLOR_3DLIGHT
-    mso_syscolorMax,					// Count of system colors
+    mso_syscolorButtonFace,             // COLOR_BTNFACE
+    mso_syscolorWindowText,             // COLOR_WINDOWTEXT
+    mso_syscolorMenu,                   // COLOR_MENU
+    mso_syscolorHighlight,              // COLOR_HIGHLIGHT
+    mso_syscolorHighlightText,          // COLOR_HIGHLIGHTTEXT
+    mso_syscolorCaptionText,            // COLOR_CAPTIONTEXT
+    mso_syscolorActiveCaption,          // COLOR_ACTIVECAPTION
+    mso_syscolorButtonHighlight,        // COLOR_BTNHIGHLIGHT
+    mso_syscolorButtonShadow,           // COLOR_BTNSHADOW
+    mso_syscolorButtonText,             // COLOR_BTNTEXT
+    mso_syscolorGrayText,               // COLOR_GRAYTEXT
+    mso_syscolorInactiveCaption,        // COLOR_INACTIVECAPTION
+    mso_syscolorInactiveCaptionText,    // COLOR_INACTIVECAPTIONTEXT
+    mso_syscolorInfoBackground,         // COLOR_INFOBK
+    mso_syscolorInfoText,               // COLOR_INFOTEXT
+    mso_syscolorMenuText,               // COLOR_MENUTEXT
+    mso_syscolorScrollbar,              // COLOR_SCROLLBAR
+    mso_syscolorWindow,                 // COLOR_WINDOW
+    mso_syscolorWindowFrame,            // COLOR_WINDOWFRAME
+    mso_syscolor3DLight,                // COLOR_3DLIGHT
+    mso_syscolorMax,                    // Count of system colors
 
-    mso_colorFillColor = 0xF0,			// Use the fillColor property
-    mso_colorLineOrFillColor,			// Use the line color only if there is a line
-    mso_colorLineColor,					// Use the lineColor property
-    mso_colorShadowColor,				// Use the shadow color
-    mso_colorThis,						// Use this color (only valid as described below)
-    mso_colorFillBackColor,				// Use the fillBackColor property
-    mso_colorLineBackColor,				// Use the lineBackColor property
-    mso_colorFillThenLine,				// Use the fillColor unless no fill and line
-    mso_colorIndexMask = 0xFF,			// Extract the color index
+    mso_colorFillColor = 0xF0,          // Use the fillColor property
+    mso_colorLineOrFillColor,           // Use the line color only if there is a line
+    mso_colorLineColor,                 // Use the lineColor property
+    mso_colorShadowColor,               // Use the shadow color
+    mso_colorThis,                      // Use this color (only valid as described below)
+    mso_colorFillBackColor,             // Use the fillBackColor property
+    mso_colorLineBackColor,             // Use the lineBackColor property
+    mso_colorFillThenLine,              // Use the fillColor unless no fill and line
+    mso_colorIndexMask = 0xFF,          // Extract the color index
 
-    mso_colorProcessMask	  =0xFFFF00,// All the processing bits
-    mso_colorModificationMask =0x0F00,	// Just the function
-    mso_colorModFlagMask      =0xF000,	// Just the additional flags
-    mso_colorDarken           =0x0100,	// Darken color by parameter/255
-    mso_colorLighten          =0x0200,	// Lighten color by parameter/255
-    mso_colorAdd              =0x0300,	// Add grey level RGB(param,param,param)
-    mso_colorSubtract         =0x0400,	// Subtract grey level RGB(p,p,p)
-    mso_colorReverseSubtract  =0x0500,	// Subtract from grey level RGB(p,p,p)
+    mso_colorProcessMask      =0xFFFF00,// All the processing bits
+    mso_colorModificationMask =0x0F00,  // Just the function
+    mso_colorModFlagMask      =0xF000,  // Just the additional flags
+    mso_colorDarken           =0x0100,  // Darken color by parameter/255
+    mso_colorLighten          =0x0200,  // Lighten color by parameter/255
+    mso_colorAdd              =0x0300,  // Add grey level RGB(param,param,param)
+    mso_colorSubtract         =0x0400,  // Subtract grey level RGB(p,p,p)
+    mso_colorReverseSubtract  =0x0500,  // Subtract from grey level RGB(p,p,p)
     /* In the following "black" means maximum component value, white minimum.
         The operation is per component, to guarantee white combine with
     mso_colorGray */
-    mso_colorBlackWhite       =0x0600,	// Black if < uParam, else white (>=)
-    mso_colorInvert           =0x2000,	// Invert color (at the *end*)
-    mso_colorInvert128        =0x4000,	// Invert by toggling the top bit
-    mso_colorGray             =0x8000,	// Make the color gray (before the above!)
+    mso_colorBlackWhite       =0x0600,  // Black if < uParam, else white (>=)
+    mso_colorInvert           =0x2000,  // Invert color (at the *end*)
+    mso_colorInvert128        =0x4000,  // Invert by toggling the top bit
+    mso_colorGray             =0x8000,  // Make the color gray (before the above!)
     mso_colorBParamMask       =0xFF0000,// Parameter used as above
-    mso_colorBParamShift = 16			// To extract the parameter value
+    mso_colorBParamShift = 16           // To extract the parameter value
 } MSO_SYSCOLORINDEX;
 
 #ifdef Hier_noch_was_aus_der_Doku

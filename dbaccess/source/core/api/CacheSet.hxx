@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,19 +73,19 @@ namespace dbaccess
     class OCacheSet : public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XRow>
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>			m_xDriverSet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>					m_xDriverRow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>	m_xSetMetaData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>			m_xConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xDriverSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xDriverRow;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xSetMetaData;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
 
-        ::com::sun::star::uno::Sequence<sal_Bool>	m_aNullable;
-        ::com::sun::star::uno::Sequence<sal_Bool>	m_aSignedFlags;
-        ::com::sun::star::uno::Sequence<sal_Int32>	m_aColumnTypes;
-        ORowSetRow									m_aInsertRow;
-        ::rtl::OUString								m_aComposedTableName;
-        sal_Bool									m_bInserted;
-        sal_Bool									m_bUpdated;
-        sal_Bool									m_bDeleted;
+        ::com::sun::star::uno::Sequence<sal_Bool>   m_aNullable;
+        ::com::sun::star::uno::Sequence<sal_Bool>   m_aSignedFlags;
+        ::com::sun::star::uno::Sequence<sal_Int32>  m_aColumnTypes;
+        ORowSetRow                                  m_aInsertRow;
+        ::rtl::OUString                             m_aComposedTableName;
+        sal_Bool                                    m_bInserted;
+        sal_Bool                                    m_bUpdated;
+        sal_Bool                                    m_bDeleted;
 
         OCacheSet();
         virtual ~OCacheSet();
@@ -97,7 +97,7 @@ namespace dbaccess
                             ,sal_Int32 _nScale
                             ) const;
         void fillParameters( const ORowSetRow& _rRow
-                            ,const connectivity::OSQLTable& _xTable 
+                            ,const connectivity::OSQLTable& _xTable
                             ,::rtl::OUStringBuffer& _sCondition
                             ,::rtl::OUStringBuffer& _sParameter
                             ,::std::list< sal_Int32>& _rOrgValues);
@@ -105,7 +105,7 @@ namespace dbaccess
 
         ::rtl::OUString getIdentifierQuoteString() const;
     public:
-        
+
         // late constructor
         virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter);
         virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition);

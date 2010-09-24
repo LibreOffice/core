@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
                                         const String& rTarget,
                                         const Point* pInsPos )
 {
-    //	Tabelle geschuetzt ?
+    //  Tabelle geschuetzt ?
 
     ScViewData* pViewData = GetViewData();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -72,10 +72,10 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
 
     MakeDrawLayer();
 
-    ScTabView*	pView	= pViewData->GetView();
-//	SdrView*	pDrView = pView->GetSdrView();
+    ScTabView*  pView   = pViewData->GetView();
+//  SdrView*    pDrView = pView->GetSdrView();
     ScDrawView* pDrView = pView->GetScDrawView();
-    SdrModel*	pModel	= pDrView->GetModel();
+    SdrModel*   pModel  = pDrView->GetModel();
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(FmFormInventor, OBJ_FM_BUTTON,
                                pDrView->GetSdrPageView()->GetPage(), pModel);
@@ -126,12 +126,12 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
         aPos.X() -= aSize.Width();
 
     pObj->SetLogicRect(Rectangle(aPos, aSize));
-//	pObj->Resize(Point(), Fraction(1, 1), Fraction(1, 1));
+//  pObj->Resize(Point(), Fraction(1, 1), Fraction(1, 1));
 
-    //	am alten VC-Button musste die Position/Groesse nochmal explizit
-    //	gesetzt werden - das scheint mit UnoControls nicht noetig zu sein
+    //  am alten VC-Button musste die Position/Groesse nochmal explizit
+    //  gesetzt werden - das scheint mit UnoControls nicht noetig zu sein
 
-    //	nicht markieren wenn Ole
+    //  nicht markieren wenn Ole
     pDrView->InsertObjectSafe( pObj, *pDrView->GetSdrPageView() );
 }
 

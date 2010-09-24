@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,35 +96,35 @@ namespace DOM
             throw (RuntimeException);
 
         /**
-        Indicates whether or not this parser is configured to understand 
-        namespaces.     
+        Indicates whether or not this parser is configured to understand
+        namespaces.
         */
         virtual sal_Bool SAL_CALL isNamespaceAware()
             throw (RuntimeException);
 
-        /**       
-        Indicates whether or not this parser is configured to validate XML 
+        /**
+        Indicates whether or not this parser is configured to validate XML
         documents.
         */
         virtual sal_Bool SAL_CALL isValidating()
             throw (RuntimeException);
 
         /**
-        Obtain a new instance of a DOM Document object to build a DOM tree 
-        with.          
+        Obtain a new instance of a DOM Document object to build a DOM tree
+        with.
         */
         virtual Reference< XDocument > SAL_CALL newDocument()
             throw (RuntimeException);
 
         /**
-        Parse the content of the given InputStream as an XML document and 
-        return a new DOM Document object.     
+        Parse the content of the given InputStream as an XML document and
+        return a new DOM Document object.
         */
         virtual Reference< XDocument > SAL_CALL parse(const Reference< XInputStream >& is)
             throw (RuntimeException, SAXParseException, IOException);
 
         /**
-        Parse the content of the given URI as an XML document and return 
+        Parse the content of the given URI as an XML document and return
         a new DOM Document object.
         */
         virtual Reference< XDocument > SAL_CALL parseURI(const OUString& uri)

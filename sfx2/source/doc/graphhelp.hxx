@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class GraphicHelper
 
     static sal_Bool createThumb_Impl( const GDIMetaFile& rMtf,
                        sal_uInt32 nMaximumExtent,
-                       BitmapEx& rBmpEx, 
+                       BitmapEx& rBmpEx,
                        const BitmapEx* pOverlay = NULL,
                        const Rectangle* pOverlayRect = NULL );
 

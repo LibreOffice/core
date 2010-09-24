@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ namespace basegfx
     class Impl2DHomMatrix : public ::basegfx::internal::ImplHomMatrixTemplate< 3 >
     {
     };
-    
-    namespace { struct IdentityMatrix : public rtl::Static< B2DHomMatrix::ImplType, 
+
+    namespace { struct IdentityMatrix : public rtl::Static< B2DHomMatrix::ImplType,
                                                             IdentityMatrix > {}; }
 
     B2DHomMatrix::B2DHomMatrix() :
@@ -61,7 +61,7 @@ namespace basegfx
     }
 
     B2DHomMatrix::B2DHomMatrix(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2)
-    :	mpImpl( IdentityMatrix::get() ) // use common identity matrix, will be made unique with 1st set-call
+    :   mpImpl( IdentityMatrix::get() ) // use common identity matrix, will be made unique with 1st set-call
     {
         mpImpl->set(0, 0, f_0x0);
         mpImpl->set(0, 1, f_0x1);
@@ -231,7 +231,7 @@ namespace basegfx
 
             tools::createSinCosOrthogonal(fSin, fCos, fRadiant);
             Impl2DHomMatrix aRotMat;
-            
+
             aRotMat.set(0, 0, fCos);
             aRotMat.set(1, 1, fCos);
             aRotMat.set(1, 0, fSin);
@@ -246,7 +246,7 @@ namespace basegfx
         if(!fTools::equalZero(fX) || !fTools::equalZero(fY))
         {
             Impl2DHomMatrix aTransMat;
-            
+
             aTransMat.set(0, 2, fX);
             aTransMat.set(1, 2, fY);
 
@@ -261,7 +261,7 @@ namespace basegfx
         if(!fTools::equal(fOne, fX) || !fTools::equal(fOne, fY))
         {
             Impl2DHomMatrix aScaleMat;
-            
+
             aScaleMat.set(0, 0, fX);
             aScaleMat.set(1, 1, fY);
 
@@ -275,7 +275,7 @@ namespace basegfx
         if(!fTools::equalZero(fSx))
         {
             Impl2DHomMatrix aShearXMat;
-            
+
             aShearXMat.set(0, 1, fSx);
 
             mpImpl->doMulMatrix(aShearXMat);
@@ -288,7 +288,7 @@ namespace basegfx
         if(!fTools::equalZero(fSy))
         {
             Impl2DHomMatrix aShearYMat;
-            
+
             aShearYMat.set(1, 0, fSy);
 
             mpImpl->doMulMatrix(aShearYMat);
@@ -356,7 +356,7 @@ namespace basegfx
                         // and correct rotation, it's the Y-Axis rotation minus 90 degrees
                         rRotate = atan2(aUnitVecY.getY(), aUnitVecY.getX()) - M_PI_2;
                     }
-                    
+
                     // one or both unit vectors do not extist, determinant is zero, no decomposition possible.
                     // Eventually used rotations or shears are lost
                     return false;
@@ -411,7 +411,7 @@ namespace basegfx
 
                     if(!fTools::equalZero(rRotate))
                     {
-                        // To be able to correct the shear for aUnitVecY, rotation needs to be 
+                        // To be able to correct the shear for aUnitVecY, rotation needs to be
                         // removed first. Correction of aUnitVecX is easy, it will be rotated back to (1, 0).
                         aUnitVecX.setX(rScale.getX());
                         aUnitVecX.setY(0.0);
@@ -420,7 +420,7 @@ namespace basegfx
                         const double fNegRotate(-rRotate);
                         const double fSin(sin(fNegRotate));
                         const double fCos(cos(fNegRotate));
-                        
+
                         const double fNewX(aUnitVecY.getX() * fCos - aUnitVecY.getY() * fSin);
                         const double fNewY(aUnitVecY.getX() * fSin + aUnitVecY.getY() * fCos);
 

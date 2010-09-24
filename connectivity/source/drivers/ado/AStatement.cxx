@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@
 
 using namespace ::comphelper;
 
-#define CHECK_RETURN(x)													\
-    if(!x)																\
+#define CHECK_RETURN(x)                                                 \
+    if(!x)                                                              \
         ADOS::ThrowException(*m_pConnection->getConnection(),*this);
 
 
@@ -62,7 +62,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace ::std;
 //------------------------------------------------------------------------------
-OStatement_Base::OStatement_Base(OConnection* _pConnection ) :	OStatement_BASE(m_aMutex)
+OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(m_aMutex)
                                                         ,OPropertySetHelper(OStatement_BASE::rBHelper)
                                                         ,OSubComponent<OStatement_Base, OStatement_BASE>((::cppu::OWeakObject*)_pConnection, this)
                                                         ,m_pConnection(_pConnection)
@@ -132,7 +132,7 @@ Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(Runtime
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OStatement_Base::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes(	::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
+    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
 
@@ -239,7 +239,7 @@ sal_Int32 OStatement_Base::getPrecision ( sal_Int32 sqlType)
 // Sets the warning
 //--------------------------------------------------------------------
 
-void OStatement_Base::setWarning (const	SQLWarning &ex) throw( SQLException)
+void OStatement_Base::setWarning (const SQLWarning &ex) throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -455,7 +455,7 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    SQLWarning	warning;
+    SQLWarning  warning;
 
     // clear previous warnings
 
@@ -641,7 +641,7 @@ void OStatement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeE
 
 
     m_nFetchSize = _par0;
-    //	m_RecordSet.put_CacheSize(_par0);
+    //  m_RecordSet.put_CacheSize(_par0);
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setMaxFieldSize(sal_Int32 /*_par0*/) throw(SQLException, RuntimeException)
@@ -665,12 +665,12 @@ void OStatement_Base::setCursorName(const ::rtl::OUString &_par0) throw(SQLExcep
     Sequence< com::sun::star::beans::Property > aProps(10);
     com::sun::star::beans::Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,	::rtl::OUString);
+    DECL_PROP0(CURSORNAME,  ::rtl::OUString);
     DECL_BOOL_PROP0(ESCAPEPROCESSING);
     DECL_PROP0(FETCHDIRECTION,sal_Int32);
-    DECL_PROP0(FETCHSIZE,	sal_Int32);
+    DECL_PROP0(FETCHSIZE,   sal_Int32);
     DECL_PROP0(MAXFIELDSIZE,sal_Int32);
-    DECL_PROP0(MAXROWS,		sal_Int32);
+    DECL_PROP0(MAXROWS,     sal_Int32);
     DECL_PROP0(QUERYTIMEOUT,sal_Int32);
     DECL_PROP0(RESULTSETCONCURRENCY,sal_Int32);
     DECL_PROP0(RESULTSETTYPE,sal_Int32);
@@ -733,7 +733,7 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
     }
     catch( const Exception& e )
     {
-        bModified = sal_True;	// will ensure that the property is set
+        bModified = sal_True;   // will ensure that the property is set
         OSL_ENSURE( sal_False, "OStatement_Base::convertFastPropertyValue: caught something strange!" );
         (void)e;
     }
@@ -769,9 +769,9 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
             setFetchSize(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_ESCAPEPROCESSING:
-            //	return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
+            //  return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
         case PROPERTY_ID_USEBOOKMARKS:
-            //	return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
+            //  return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
         default:
             ;
     }

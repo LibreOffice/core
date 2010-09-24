@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::rtl::O
     :OStatement_BASE2(_pConnection)
     ,numParams(0)
     ,boundParams(NULL)
-    ,m_bPrepared(sal_False)    
+    ,m_bPrepared(sal_False)
 {
     m_sSqlStatement = sql;
     try
@@ -78,7 +78,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::rtl::O
             ::rtl::OUString sNewSql;
             ::std::auto_ptr<OSQLParseNode> pNode( aParser.parseTree(sErrorMessage,sql) );
             if ( pNode.get() )
-            {	// special handling for parameters
+            {   // special handling for parameters
                 OSQLParseNode::substituteParameterNames(pNode.get());
                 pNode->parseNodeToStr( sNewSql, _pConnection );
                 m_sSqlStatement = sNewSql;
@@ -255,7 +255,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 
     if (!execute())
         numRows = getUpdateCount ();
-    else 
+    else
     {
         // No update count was produced (a ResultSet was).  Raise
         // an exception
@@ -292,7 +292,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
 
     if (execute())
         rs = getResultSet(sal_False);
-    else 
+    else
     {
         // No ResultSet was produced.  Raise an exception
         m_pConnection->throwGenericSQLException(STR_NO_RESULTSET,*this);
@@ -351,7 +351,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex,sal_Int32 _nType,
     sal_Int8* bindBuf = allocBindBuf(parameterIndex, nRealSize);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    OTools::bindParameter(	m_pConnection,
+    OTools::bindParameter(  m_pConnection,
                             m_aStatementHandle,
                             parameterIndex,
                             bindBuf,
@@ -450,13 +450,13 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     SQLSMALLINT fSqlType = 0;
 
     SQLSMALLINT nDecimalDigits = 0;
-    OTools::getBindTypes(	sal_False,
+    OTools::getBindTypes(   sal_False,
                             m_pConnection->useOldDateFormat(),
                             (SQLSMALLINT)sqlType,
                             fCType,
                             fSqlType);
 
-    SQLRETURN nReturn = N3SQLBindParameter(	m_aStatementHandle,
+    SQLRETURN nReturn = N3SQLBindParameter( m_aStatementHandle,
                                             (SQLUSMALLINT)parameterIndex,
                                             (SQLSMALLINT)SQL_PARAM_INPUT,
                                             fCType,
@@ -526,14 +526,14 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
                 setNull(parameterIndex,sqlType);
             break;
         case DataType::DECIMAL:
-            { 
+            {
                 ORowSetValue aValue;
                 aValue.fill(x);
                 setDecimal(parameterIndex,aValue);
             }
             break;
         case DataType::NUMERIC:
-            { 
+            {
                 ORowSetValue aValue;
                 aValue.fill(x);
                 setString(parameterIndex,aValue);
@@ -557,7 +557,7 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
 void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
     if (!::dbtools::implSetObject(this, parameterIndex, x))
-    {	// there is no other setXXX call which can handle the value in x
+    {   // there is no other setXXX call which can handle the value in x
         throw SQLException();
     }
 }
@@ -599,8 +599,8 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
 // -------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::clearBatch(  ) throw(SQLException, RuntimeException)
 {
-    //	clearParameters(  );
-    //	m_aBatchList.erase();
+    //  clearParameters(  );
+    //  m_aBatchList.erase();
 }
 // -------------------------------------------------------------------------
 
@@ -657,7 +657,7 @@ void OPreparedStatement::initBoundParam () throw(SQLException)
 // parameter.
 //--------------------------------------------------------------------
 
-sal_Int8* OPreparedStatement::allocBindBuf(	sal_Int32 index,sal_Int32 bufLen)
+sal_Int8* OPreparedStatement::allocBindBuf( sal_Int32 index,sal_Int32 bufLen)
 {
     sal_Int8* b = NULL;
 
@@ -724,7 +724,7 @@ sal_Int8* OPreparedStatement::getLengthBuf (sal_Int32 index)
 // the column is considered to be NULL.
 //--------------------------------------------------------------------
 
-sal_Int32 OPreparedStatement::getParamLength (	sal_Int32 index)
+sal_Int32 OPreparedStatement::getParamLength (  sal_Int32 index)
 {
     sal_Int32 paramLen = SQL_NULL_DATA;
 
@@ -763,12 +763,12 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
 
     // Get the information about the input stream
 
-    Reference< XInputStream> inputStream =	boundParams[index - 1].getInputStream ();
+    Reference< XInputStream> inputStream =  boundParams[index - 1].getInputStream ();
     if ( !inputStream.is() )
     {
         ::connectivity::SharedResources aResources;
         const ::rtl::OUString sError( aResources.getResourceString(STR_NO_INPUTSTREAM));
-        throw SQLException (sError,	*this,::rtl::OUString(),0,Any());
+        throw SQLException (sError, *this,::rtl::OUString(),0,Any());
     }
 
     sal_Int32 maxBytesLeft = boundParams[index - 1].getInputStreamLen ();
@@ -870,7 +870,7 @@ void OPreparedStatement::setStream(
 
     // Bind the parameter with SQL_LEN_DATA_AT_EXEC
     SQLSMALLINT   Ctype = SQL_C_CHAR;
-    SQLLEN	atExec = SQL_LEN_DATA_AT_EXEC (length);
+    SQLLEN  atExec = SQL_LEN_DATA_AT_EXEC (length);
     memcpy (dataBuf, &ParameterIndex, sizeof(ParameterIndex));
     memcpy (lenBuf, &atExec, sizeof (atExec));
 
@@ -932,7 +932,7 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
     }
     catch(const SQLException&)
     {
-        //	throw Exception(e.Message,*this);
+        //  throw Exception(e.Message,*this);
     }
 }
 // -----------------------------------------------------------------------------
@@ -951,7 +951,7 @@ void OPreparedStatement::prepareStatement()
 // -----------------------------------------------------------------------------
 void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
 {
-    if(	!_parameterIndex || _parameterIndex > numParams)
+    if( !_parameterIndex || _parameterIndex > numParams)
     {
         ::connectivity::SharedResources aResources;
         const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(STR_WRONG_PARAM_INDEX,

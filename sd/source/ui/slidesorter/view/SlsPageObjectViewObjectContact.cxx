@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ const sal_Int32 PageObjectViewObjectContact::mnMouseOverEffectOffset = 3;
 const sal_Int32 PageObjectViewObjectContact::mnMouseOverEffectThickness = 1;
 
 PageObjectViewObjectContact::PageObjectViewObjectContact (
-    ObjectContact& rObjectContact, 
+    ObjectContact& rObjectContact,
     ViewContact& rViewContact,
     const ::boost::shared_ptr<cache::PageCache>& rpCache,
     const ::boost::shared_ptr<controller::Properties>& rpProperties)
@@ -200,7 +200,7 @@ Rectangle PageObjectViewObjectContact::GetBoundingBox (
 
         case NameBoundingBox:
             break;
-            
+
         case FadeEffectIndicatorBoundingBox:
             Size aModelOffset = rDevice.PixelToLogic(Size (0, mnFadeEffectIndicatorOffset));
             // Flush left just outside the selection rectangle.
@@ -258,7 +258,7 @@ class SdPageObjectBasePrimitive : public drawinglayer::primitive2d::BufferedDeco
 {
 private:
     // the inner range of the SdPageObject visualisation
-    basegfx::B2DRange					maRange;
+    basegfx::B2DRange                   maRange;
 
 public:
     // constructor and destructor
@@ -273,7 +273,7 @@ public:
 };
 
 SdPageObjectBasePrimitive::SdPageObjectBasePrimitive(const basegfx::B2DRange& rRange)
-:	drawinglayer::primitive2d::BufferedDecompositionPrimitive2D(),
+:   drawinglayer::primitive2d::BufferedDecompositionPrimitive2D(),
     maRange(rRange)
 {
 }
@@ -300,7 +300,7 @@ class SdPageObjectPageBitmapPrimitive : public SdPageObjectBasePrimitive
 {
 private:
     // the bitmap containing the PagePreview
-    BitmapEx							maBitmapEx;
+    BitmapEx                            maBitmapEx;
 
 protected:
     // method which is to be used to implement the local decomposition of a 2D primitive.
@@ -329,7 +329,7 @@ Primitive2DSequence SdPageObjectPageBitmapPrimitive::create2DDecomposition(const
     // to avoid scaling, use the Bitmap pixel size as primitive size
     basegfx::B2DHomMatrix aBitmapTransform;
     const Size aBitmapSize(getBitmapEx().GetSizePixel());
-    const basegfx::B2DVector aBitmapSizeLogic(rViewInformation.getInverseObjectToViewTransformation() * 
+    const basegfx::B2DVector aBitmapSizeLogic(rViewInformation.getInverseObjectToViewTransformation() *
         basegfx::B2DVector(aBitmapSize.getWidth() - 1, aBitmapSize.getHeight() - 1));
 
     // short form for scale and translate transformation
@@ -347,7 +347,7 @@ Primitive2DSequence SdPageObjectPageBitmapPrimitive::create2DDecomposition(const
 SdPageObjectPageBitmapPrimitive::SdPageObjectPageBitmapPrimitive(
     const basegfx::B2DRange& rRange,
     const BitmapEx& rBitmapEx)
-:	SdPageObjectBasePrimitive(rRange),
+:   SdPageObjectBasePrimitive(rRange),
     maBitmapEx(rBitmapEx)
 {
 }
@@ -451,7 +451,7 @@ Primitive2DSequence SdPageObjectSelectPrimitive::create2DDecomposition(const dra
 }
 
 SdPageObjectSelectPrimitive::SdPageObjectSelectPrimitive(const basegfx::B2DRange& rRange)
-:	SdPageObjectBasePrimitive(rRange)
+:   SdPageObjectBasePrimitive(rRange)
 {
 }
 
@@ -493,14 +493,14 @@ Primitive2DSequence SdPageObjectBorderPrimitive::create2DDecomposition(const dra
     static bool bTestWithBrightColors(false);
     const svtools::ColorConfig aColorConfig;
     const basegfx::BColor aBorderColor(bTestWithBrightColors ? basegfx::BColor(1,0,0) : Color(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor).getBColor());
-    
+
     const Primitive2DReference xReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(basegfx::tools::createPolygonFromRect(aAdaptedInnerRange), aBorderColor));
     return Primitive2DSequence(&xReference, 1);
 }
 
 SdPageObjectBorderPrimitive::SdPageObjectBorderPrimitive(const basegfx::B2DRange& rRange)
-:	SdPageObjectBasePrimitive(rRange)
+:   SdPageObjectBasePrimitive(rRange)
 {
 }
 
@@ -574,7 +574,7 @@ Primitive2DSequence SdPageObjectFocusPrimitive::create2DDecomposition(const draw
     const drawinglayer::attribute::LineAttribute aLineAttribute(aLineColor.getBColor());
     const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
         aDotDashArray, 2.0 * nFocusIndicatorWidth * aDiscretePixel.getX());
- 
+
 
     xRetval[1] = Primitive2DReference(
         new drawinglayer::primitive2d::PolygonStrokePrimitive2D(aIndicatorPolygon, aLineAttribute, aStrokeAttribute));
@@ -583,7 +583,7 @@ Primitive2DSequence SdPageObjectFocusPrimitive::create2DDecomposition(const draw
 }
 
 SdPageObjectFocusPrimitive::SdPageObjectFocusPrimitive(const basegfx::B2DRange& rRange, const bool bContrast)
-    :	SdPageObjectBasePrimitive(rRange),
+    :   SdPageObjectBasePrimitive(rRange),
         mbContrastToSelected(bContrast)
 {
 }
@@ -611,14 +611,14 @@ private:
 
     /// the indicator bitmaps. Static since it is usable outside this primitive
     /// for size comparisons
-    static BitmapEx*			        mpFadeEffectIconBitmap;
-    static BitmapEx*			        mpCommentsIconBitmap;
+    static BitmapEx*                    mpFadeEffectIconBitmap;
+    static BitmapEx*                    mpCommentsIconBitmap;
 
     /// page name, number and needed infos
-    String								maPageName;
-    sal_uInt32							mnPageNumber;
-    Font								maPageNameFont;
-    Size								maPageNumberAreaModelSize;
+    String                              maPageName;
+    sal_uInt32                          mnPageNumber;
+    Font                                maPageNameFont;
+    Size                                maPageNumberAreaModelSize;
 
     // bitfield
     bool mbShowFadeEffectIcon : 1;
@@ -712,7 +712,7 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::create2DDecomposition(c
     basegfx::B2DVector aTextSizeAttribute;
     const drawinglayer::attribute::FontAttribute aFontAttribute(
         drawinglayer::primitive2d::getFontAttributeFromVclFont(
-            aTextSizeAttribute, 
+            aTextSizeAttribute,
             getPageNameFont(),
             false,
             false));
@@ -726,12 +726,12 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::create2DDecomposition(c
     if(getShowFadeEffectIcon())
     {
         // prepare fFadeEffect Sizes
-        const basegfx::B2DVector aFadeEffectBitmapSizeLogic(rViewInformation.getInverseObjectToViewTransformation() * 
+        const basegfx::B2DVector aFadeEffectBitmapSizeLogic(rViewInformation.getInverseObjectToViewTransformation() *
             basegfx::B2DVector(
-                getFadeEffectIconBitmap().GetSizePixel().getWidth() - 1,  
+                getFadeEffectIconBitmap().GetSizePixel().getWidth() - 1,
                 getFadeEffectIconBitmap().GetSizePixel().getHeight() - 1));
 
-        // Paint_FadeEffectIndicator replacement. 
+        // Paint_FadeEffectIndicator replacement.
         // create transformation. To avoid bitmap scaling, use bitmap size as size
         basegfx::B2DHomMatrix aBitmapTransform;
 
@@ -748,9 +748,9 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::create2DDecomposition(c
     if(nTextLength)
     {
         // prepare fFadeEffect Sizes since it consumes from text size
-        const basegfx::B2DVector aFadeEffectBitmapSizeLogic(rViewInformation.getInverseObjectToViewTransformation() * 
+        const basegfx::B2DVector aFadeEffectBitmapSizeLogic(rViewInformation.getInverseObjectToViewTransformation() *
             basegfx::B2DVector(
-                getFadeEffectIconBitmap().GetSizePixel().getWidth() - 1,  
+                getFadeEffectIconBitmap().GetSizePixel().getWidth() - 1,
                 getFadeEffectIconBitmap().GetSizePixel().getHeight() - 1));
 
         // Paint_PageName replacement. Get text size
@@ -762,11 +762,11 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::create2DDecomposition(c
 
         // calculate text start position
         double fStartX(
-            aAdaptedInnerRange.getMaxX() 
+            aAdaptedInnerRange.getMaxX()
             - fTextWidth
             + (aDiscretePixel.getX() * 3.0));
         const double fStartY(
-            aAdaptedInnerRange.getMaxY() 
+            aAdaptedInnerRange.getMaxY()
             + fTextHeight
             + fFadeEffectTextGap);
         const bool bNeedClipping(fStartX < aAdaptedInnerRange.getMinX() + fFadeEffectWidth);
@@ -812,13 +812,13 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::create2DDecomposition(c
         // create Text primitive and add to target
         xRetval[nInsert++] = Primitive2DReference(
             new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                aTextMatrix, 
-                aPageName, 
-                0, 
-                aPageName.Len(), 
-                aDXArray, 
-                aFontAttribute, 
-                aLocale, 
+                aTextMatrix,
+                aPageName,
+                0,
+                aPageName.Len(),
+                aDXArray,
+                aFontAttribute,
+                aLocale,
                 aFontColor));
     }
 
@@ -826,7 +826,7 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::create2DDecomposition(c
         // Paint_PageNumber replacement. Get the range where it shall be centered and prepare the string
         const double fLeft(aAdaptedInnerRange.getMinX() - (mnPageNumberOffset * aDiscretePixel.getX()) - getPageNumberAreaModelSize().Width());
         const double fTop(aAdaptedInnerRange.getMinY());
-        const basegfx::B2DRange aNumberRange(fLeft, fTop, 
+        const basegfx::B2DRange aNumberRange(fLeft, fTop,
             fLeft + getPageNumberAreaModelSize().Width(), fTop + getPageNumberAreaModelSize().Height());
         const String aPageNumber(String::CreateFromInt32(getPageNumber()));
         const xub_StrLen nNumberLen(aPageNumber.Len());
@@ -853,13 +853,13 @@ Primitive2DSequence SdPageObjectFadeNameNumberPrimitive::create2DDecomposition(c
         // create Text primitive
         xRetval[nInsert++] = Primitive2DReference(
             new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                aTextMatrix, 
-                aPageNumber, 
-                0, 
-                nNumberLen, 
-                aDXArray, 
-                aFontAttribute, 
-                aLocale, 
+                aTextMatrix,
+                aPageNumber,
+                0,
+                nNumberLen,
+                aDXArray,
+                aFontAttribute,
+                aLocale,
                 aFontColor));
 
         if(getExcluded())
@@ -891,7 +891,7 @@ SdPageObjectFadeNameNumberPrimitive::SdPageObjectFadeNameNumberPrimitive(
     bool bShowFadeEffectIcon,
     bool bShowCommentsIcon,
     bool bExcluded)
-:	SdPageObjectBasePrimitive(rRange),
+:   SdPageObjectBasePrimitive(rRange),
     maPageName(rPageName),
     mnPageNumber(nPageNumber),
     maPageNameFont(rPageNameFont),
@@ -938,8 +938,8 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
 
     // get primitive vector from parent class. Do remember the contents for later use; this
     // is done to create the page content renderer (see PagePrimitiveExtractor in svx) at the
-    // original object and to setup the draw hierarchy there so that changes to VCs of displayed 
-    // objects will lead to InvalidatePartOfView-calls which will be forwarded from the helper-OC 
+    // original object and to setup the draw hierarchy there so that changes to VCs of displayed
+    // objects will lead to InvalidatePartOfView-calls which will be forwarded from the helper-OC
     // to this VOC in calling a ActionChanged().
     //
     // This already produces the displayable page content as a primitive sequence, complete with
@@ -965,7 +965,7 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
     //       (just hand over the local member to the cache)
     //
     // For the moment i will use (1) and disable primitive creation for SdrPageObj contents here
-   
+
     // const_cast< PageObjectViewObjectContact* >(this)->mxCurrentPageContents = ViewObjectContactOfPageObj::createPrimitive2DSequence(rDisplayInfo);
 
     // assert when this call is issued indirectly from the destructor of
@@ -984,14 +984,14 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
         && !mbInDestructor)
     {
         // get inner and outer logic rectangles. Use model data directly for creation. Do NOT use getBoundRect()/
-        // getSnapRect() functionality; these will use the sequence of primitives in the long run itself. SdrPageObj 
+        // getSnapRect() functionality; these will use the sequence of primitives in the long run itself. SdrPageObj
         // is a SdrObject, so use SdrObject::aOutRect as model data. Access using GetLastBoundRect() to not execute anything
         PageObjectViewContact& rPaObVOC(static_cast< PageObjectViewContact& >(GetViewContact()));
         const Rectangle aInnerLogic(rPaObVOC.GetPageObject().GetLastBoundRect());
-                
+
         // get BitmapEx from cache. Do exactly the same as Paint_Preview() to avoid a repaint loop
         // caused by slightly different pixel sizes of what the cache sees as pixel size and what is
-        // calculated here in discrete coordinates. This includes to not use LogicToPiyel on the Rectangle, 
+        // calculated here in discrete coordinates. This includes to not use LogicToPiyel on the Rectangle,
         // but to do the same as the GetBoundingBox() implementation
         const Rectangle aInnerPixel(Rectangle(pDevice->LogicToPixel(aInnerLogic.TopLeft()), pDevice->LogicToPixel(aInnerLogic.GetSize())));
         BitmapEx aBitmapEx(const_cast< PageObjectViewObjectContact* >(this)->GetPreview(rDisplayInfo, aInnerPixel));
@@ -1011,13 +1011,13 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
         if(GetPage())
         {
             const SdPage* pPage = static_cast<const SdPage*>(GetPage());
-            
+
             // decide if fade effect indicator will be painted
             if(pPage->getTransitionType() > 0)
             {
                 bShowFadeEffectIcon = true;
             }
-            
+
             bShowCommentsIcon = !pPage->getAnnotations().empty();
 
             // prepare PageName, PageNumber, font and AreaModelSize
@@ -1042,11 +1042,11 @@ Primitive2DSequence PageObjectViewObjectContact::createPrimitive2DSequence(const
         const bool bCreateSelected(GetPageDescriptor()->IsSelected());
 
         const sal_uInt32 nCount(
-            (bCreateBitmap ? 1 : 0) +		// bitmap itself
-            1 +								// border around bitmap (always)
+            (bCreateBitmap ? 1 : 0) +       // bitmap itself
+            1 +                             // border around bitmap (always)
             1 +                             // FadeEffect, PageName and PageNumber visualisation (always)
-            (bCreateFocused ? 1 : 0) +		// create focused
-            (bCreateSelected ? 1 : 0)		// create selected
+            (bCreateFocused ? 1 : 0) +      // create focused
+            (bCreateSelected ? 1 : 0)       // create selected
             );
         sal_uInt32 nInsert(0);
         Primitive2DSequence xRetval(nCount);
@@ -1135,7 +1135,7 @@ BitmapEx PageObjectViewObjectContact::GetPreview (
         // assert when this call is issued indirectly from the destructor of
         // this instance. This is not allowed and needs to be looked at
         OSL_ENSURE(!mbInDestructor, "Higher call inside PageObjectViewObjectContact in destructor (!)");
-        
+
         if (!mbInDestructor)
         {
             if (mpCache != NULL)
@@ -1334,7 +1334,7 @@ SvBorder PageObjectViewObjectContact::CalculatePageModelBorder (
             aBottomRightBorders.Width(),
             aBottomRightBorders.Height());
 
-        
+
         // 2. Add the device dependent values.
 
         // Calculate the area of the page number.

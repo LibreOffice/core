@@ -44,20 +44,20 @@
 typedef struct _oslSignalHandlerImpl
 {
     oslSignalHandlerFunction      Handler;
-    void*			        	  pData;
-    struct _oslSignalHandlerImpl* pNext;	
+    void*                         pData;
+    struct _oslSignalHandlerImpl* pNext;
 } oslSignalHandlerImpl;
 
-static sal_Bool				  bErrorReportingEnabled = sal_True;
-static sal_Bool  			  bInitSignal = sal_False;
-static oslMutex 			  SignalListMutex;
+static sal_Bool               bErrorReportingEnabled = sal_True;
+static sal_Bool               bInitSignal = sal_False;
+static oslMutex               SignalListMutex;
 static oslSignalHandlerImpl*  SignalList;
 
 static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP);
 
 static sal_Bool InitSignal(void)
 {
-    HMODULE	hFaultRep;
+    HMODULE hFaultRep;
 
     SignalListMutex = osl_createMutex();
 
@@ -69,7 +69,7 @@ static sal_Bool InitSignal(void)
 #ifdef __MINGW32__
 typedef BOOL (WINAPI *pfn_ADDEREXCLUDEDAPPLICATIONW)(LPCWSTR);
 #endif
-        pfn_ADDEREXCLUDEDAPPLICATIONW		pfn = (pfn_ADDEREXCLUDEDAPPLICATIONW)GetProcAddress( hFaultRep, "AddERExcludedApplicationW" );
+        pfn_ADDEREXCLUDEDAPPLICATIONW       pfn = (pfn_ADDEREXCLUDEDAPPLICATIONW)GetProcAddress( hFaultRep, "AddERExcludedApplicationW" );
         if ( pfn )
             pfn( L"SOFFICE.EXE" );
         FreeLibrary( hFaultRep );
@@ -104,22 +104,22 @@ static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
 }
 
 /*****************************************************************************/
-/* SignalHandlerFunction	*/
+/* SignalHandlerFunction    */
 /*****************************************************************************/
 
-#define REPORTENV_PARAM		"-crashreportenv:"
-#define REPORTENV_PARAM2	"/crashreportenv:"
+#define REPORTENV_PARAM     "-crashreportenv:"
+#define REPORTENV_PARAM2    "/crashreportenv:"
 
 static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
 {
-    BOOL	fSuccess = FALSE;
-    BOOL	fAutoReport = FALSE;
-    TCHAR	szBuffer[1024];
+    BOOL    fSuccess = FALSE;
+    BOOL    fAutoReport = FALSE;
+    TCHAR   szBuffer[1024];
     ::osl::LongPathBuffer< sal_Char > aPath( MAX_LONG_PATH );
-    LPTSTR	lpFilePart;
-    PROCESS_INFORMATION	ProcessInfo;
-    STARTUPINFO	StartupInfo;
-    int		argi;
+    LPTSTR  lpFilePart;
+    PROCESS_INFORMATION ProcessInfo;
+    STARTUPINFO StartupInfo;
+    int     argi;
 
     if ( !bErrorReportingEnabled )
         return FALSE;
@@ -128,18 +128,18 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
 
     for ( argi = 1; argi < __argc; argi++ )
     {
-        if ( 
-            0 == stricmp( __argv[argi], "-nocrashreport" ) || 
+        if (
+            0 == stricmp( __argv[argi], "-nocrashreport" ) ||
             0 == stricmp( __argv[argi], "/nocrashreport" )
             )
             return FALSE;
         else if (
-            0 == stricmp( __argv[argi], "-autocrashreport" ) || 
+            0 == stricmp( __argv[argi], "-autocrashreport" ) ||
             0 == stricmp( __argv[argi], "/autocrashreport" )
             )
             fAutoReport = TRUE;
         else if (
-            0 == strnicmp( __argv[argi], REPORTENV_PARAM, strlen(REPORTENV_PARAM) ) || 
+            0 == strnicmp( __argv[argi], REPORTENV_PARAM, strlen(REPORTENV_PARAM) ) ||
             0 == strnicmp( __argv[argi], REPORTENV_PARAM2, strlen(REPORTENV_PARAM2) )
             )
         {
@@ -148,13 +148,13 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
 
             if ( delim )
             {
-                CHAR	*lpVariable;
-                CHAR	*lpValue;
+                CHAR    *lpVariable;
+                CHAR    *lpValue;
                 const char *variable = envparam;
                 size_t variable_len = delim - envparam;
                 const char *value = delim + 1;
                 size_t value_len = strlen(envparam) - variable_len - 1;
-                
+
                 if ( '\"' == *value )
                 {
                     const char *quote;
@@ -175,7 +175,7 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
                 memcpy( lpValue, value, value_len );
                 lpValue[value_len] = 0;
 
-                SetEnvironmentVariable( lpVariable, lpValue ); 
+                SetEnvironmentVariable( lpVariable, lpValue );
             }
         }
     }
@@ -186,34 +186,34 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
         StartupInfo.cb = sizeof(StartupInfo.cb);
 
 
-        sntprintf( szBuffer, elementsof(szBuffer), 
-            _T("%s -p %u -excp 0x%p -t %u%s"), 
-            aPath, 
-            GetCurrentProcessId(), 
-            lpEP, 
+        sntprintf( szBuffer, elementsof(szBuffer),
+            _T("%s -p %u -excp 0x%p -t %u%s"),
+            aPath,
+            GetCurrentProcessId(),
+            lpEP,
             GetCurrentThreadId(),
             fAutoReport ? _T(" -noui -send") : _T(" -noui") );
 
-        if ( 
-            CreateProcess( 
-                NULL, 
-                szBuffer, 
-                NULL, 
-                NULL, 
-                FALSE, 
+        if (
+            CreateProcess(
+                NULL,
+                szBuffer,
+                NULL,
+                NULL,
+                FALSE,
 #ifdef UNICODE
-                CREATE_UNICODE_ENVIRONMENT, 
+                CREATE_UNICODE_ENVIRONMENT,
 #else
                 0,
 #endif
-                NULL, NULL, &StartupInfo, &ProcessInfo ) 
+                NULL, NULL, &StartupInfo, &ProcessInfo )
             )
         {
-            DWORD	dwExitCode;
+            DWORD   dwExitCode;
 
             WaitForSingleObject( ProcessInfo.hProcess, INFINITE );
             if ( GetExitCodeProcess( ProcessInfo.hProcess, &dwExitCode ) && 0 == dwExitCode )
-            
+
             fSuccess = TRUE;
 
         }
@@ -223,21 +223,21 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
 }
 
 /*****************************************************************************/
-/* SignalHandlerFunction	*/
+/* SignalHandlerFunction    */
 /*****************************************************************************/
 
 static BOOL WINAPI IsWin95A(void)
 {
-    OSVERSIONINFO	ovi;
+    OSVERSIONINFO   ovi;
 
     ZeroMemory( &ovi, sizeof(ovi) );
     ovi.dwOSVersionInfoSize = sizeof(ovi);
 
     if ( GetVersionEx( &ovi ) )
         /* See MSDN January 2000 documentation of GetVersionEx */
-        return	(ovi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) && 
-                (ovi.dwMajorVersion <= 4) && 
-                (ovi.dwMinorVersion == 0) && 
+        return  (ovi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) &&
+                (ovi.dwMajorVersion <= 4) &&
+                (ovi.dwMinorVersion == 0) &&
                 (ovi.dwBuildNumber == 0x040003B6);
 
     /* Something wrent wrong. So assume we have an older operating prior Win95 */
@@ -250,10 +250,10 @@ static BOOL WINAPI IsWin95A(void)
 
 static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
 {
-    static sal_Bool		bNested = sal_False;
-    sal_Bool		bRaiseCrashReporter = sal_False;
-    oslSignalInfo	Info;
-    oslSignalAction	Action;
+    static sal_Bool     bNested = sal_False;
+    sal_Bool        bRaiseCrashReporter = sal_False;
+    oslSignalInfo   Info;
+    oslSignalAction Action;
 
     Info.UserSignal = lpEP->ExceptionRecord->ExceptionCode;
     Info.UserData   = NULL;
@@ -264,29 +264,29 @@ static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
            Microsoft C++ compiler (add more for other compilers if necessary).
          */
         case EXCEPTION_MSC_CPP_EXCEPTION:
-        case EXCEPTION_ACCESS_VIOLATION: 
+        case EXCEPTION_ACCESS_VIOLATION:
             Info.Signal = osl_Signal_AccessViolation;
             bRaiseCrashReporter = sal_True;
-            break; 
+            break;
 
-        case EXCEPTION_INT_DIVIDE_BY_ZERO: 
+        case EXCEPTION_INT_DIVIDE_BY_ZERO:
             Info.Signal = osl_Signal_IntegerDivideByZero;
             bRaiseCrashReporter = sal_True;
-            break; 
+            break;
 
-        case EXCEPTION_FLT_DIVIDE_BY_ZERO: 
+        case EXCEPTION_FLT_DIVIDE_BY_ZERO:
             Info.Signal = osl_Signal_FloatDivideByZero;
             bRaiseCrashReporter = sal_True;
-            break; 
+            break;
 
-        case EXCEPTION_BREAKPOINT: 
+        case EXCEPTION_BREAKPOINT:
             Info.Signal = osl_Signal_DebugBreak;
-            break; 
-            
+            break;
+
         default:
             Info.Signal = osl_Signal_System;
             bRaiseCrashReporter = sal_True;
-            break; 
+            break;
     }
 
     if ( !bNested )
@@ -339,12 +339,12 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler,
     pHandler = reinterpret_cast< oslSignalHandlerImpl* >( calloc( 1, sizeof(oslSignalHandlerImpl) ) );
 
     if (pHandler != NULL)
-    {	
+    {
         pHandler->Handler = Handler;
         pHandler->pData   = pData;
 
         osl_acquireMutex(SignalListMutex);
-    
+
         pHandler->pNext = SignalList;
         SignalList      = pHandler;
 
@@ -394,7 +394,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
         pPrevious = pHandler;
         pHandler  = pHandler->pNext;
     }
-            
+
     osl_releaseMutex(SignalListMutex);
 
     return (sal_False);
@@ -418,7 +418,7 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
     Info.UserData   = UserData;
 
     Action = CallSignalHandler(&Info);
-            
+
     osl_releaseMutex(SignalListMutex);
 
     return (Action);

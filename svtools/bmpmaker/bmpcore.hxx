@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,18 +34,18 @@
 #include <vector>
 
 // --------------
-// - Exit codes	-
+// - Exit codes -
 // --------------
 
-#define EXIT_NOERROR			    0
-#define EXIT_MISSING_BITMAP		    1
-#define EXIT_NOSRSFILE			    2
-#define EXIT_NOIMGLIST			    3
-#define EXIT_DIMENSIONERROR		    4
-#define	EXIT_IOERROR			    5
-#define EXIT_COMMONERROR	    	6
-#define EXIT_MISSING_RESOURCE	    7
-#define EXIT_COLORDEPTHERROR	    8
+#define EXIT_NOERROR                0
+#define EXIT_MISSING_BITMAP         1
+#define EXIT_NOSRSFILE              2
+#define EXIT_NOIMGLIST              3
+#define EXIT_DIMENSIONERROR         4
+#define EXIT_IOERROR                5
+#define EXIT_COMMONERROR            6
+#define EXIT_MISSING_RESOURCE       7
+#define EXIT_COLORDEPTHERROR        8
 #define EXIT_MISSING_SOLARSRC_ENV   9
 
 // ------------
@@ -55,7 +55,7 @@
 struct LangInfo
 {
     char    maLangDir[ 257 ];
-    USHORT	mnLangNum;
+    USHORT  mnLangNum;
 };
 
 // --------------
@@ -66,17 +66,17 @@ class BmpCreator
 {
 private:
 
-    Bitmap			aOutBmp;
-    Size			aOneSize;
-    Size			aTotSize;
-    Point			aPos;
-    SvFileStream*	pSRS;
-    ULONG			nTotCount;
-    USHORT			nPos;
+    Bitmap          aOutBmp;
+    Size            aOneSize;
+    Size            aTotSize;
+    Point           aPos;
+    SvFileStream*   pSRS;
+    ULONG           nTotCount;
+    USHORT          nPos;
 
-    void            ImplCreate( const ::std::vector< DirEntry >& rInDirs, 
-                                const DirEntry& rOut, 
-                                const String& rName, 
+    void            ImplCreate( const ::std::vector< DirEntry >& rInDirs,
+                                const DirEntry& rOut,
+                                const String& rName,
                                 const LangInfo& rLang );
 
 protected:
@@ -88,9 +88,9 @@ public:
                     BmpCreator();
     virtual         ~BmpCreator();
 
-    void			Create( const String& rSRSName, 
+    void            Create( const String& rSRSName,
                             const ::std::vector< String >& rInDirs,
-                            const String& rOutName, 
+                            const String& rOutName,
                             const LangInfo& rLang );
 };
 

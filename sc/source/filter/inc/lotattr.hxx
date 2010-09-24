@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,13 +46,13 @@ class LotAttrTable;
 
 struct LotAttrWK3
 {
-    UINT8					nFont;
-    UINT8					nLineStyle;
-    UINT8					nFontCol;
-    UINT8					nBack;
+    UINT8                   nFont;
+    UINT8                   nLineStyle;
+    UINT8                   nFontCol;
+    UINT8                   nBack;
 
-    inline BOOL				HasStyles( void );
-    inline BOOL				IsCentered( void );
+    inline BOOL             HasStyles( void );
+    inline BOOL             IsCentered( void );
 };
 
 
@@ -76,41 +76,41 @@ private:
 
     struct ENTRY
     {
-        ScPatternAttr*	pPattAttr;
-        UINT32			nHash0;
+        ScPatternAttr*  pPattAttr;
+        UINT32          nHash0;
 
-        inline			ENTRY( const ScPatternAttr& r )			{ pPattAttr = new ScPatternAttr( r ); }
+        inline          ENTRY( const ScPatternAttr& r )         { pPattAttr = new ScPatternAttr( r ); }
 
-        inline			ENTRY( ScPatternAttr* p )				{ pPattAttr = p; }
+        inline          ENTRY( ScPatternAttr* p )               { pPattAttr = p; }
 
-        inline			~ENTRY()								{ delete pPattAttr; }
+        inline          ~ENTRY()                                { delete pPattAttr; }
 
-        inline BOOL		operator ==( const ENTRY& r ) const		{ return nHash0 == r.nHash0; }
+        inline BOOL     operator ==( const ENTRY& r ) const     { return nHash0 == r.nHash0; }
 
-        inline BOOL		operator ==( const UINT32& r ) const	{ return nHash0 == r; }
+        inline BOOL     operator ==( const UINT32& r ) const    { return nHash0 == r; }
     };
 
-    ScDocumentPool*		pDocPool;
-    SvxColorItem*		ppColorItems[ 6 ];		// 0 und 7 fehlen!
-    SvxColorItem*		pBlack;
-    SvxColorItem*		pWhite;
-    Color*				pColTab;
+    ScDocumentPool*     pDocPool;
+    SvxColorItem*       ppColorItems[ 6 ];      // 0 und 7 fehlen!
+    SvxColorItem*       pBlack;
+    SvxColorItem*       pWhite;
+    Color*              pColTab;
 
-    inline static void	MakeHash( const LotAttrWK3& rAttr, UINT32& rOut )
+    inline static void  MakeHash( const LotAttrWK3& rAttr, UINT32& rOut )
                         {
                             ( ( UINT8* ) &rOut )[ 0 ] = rAttr.nFont & 0x7F;
                             ( ( UINT8* ) &rOut )[ 1 ] = rAttr.nLineStyle;
                             ( ( UINT8* ) &rOut )[ 2 ] = rAttr.nFontCol;
                             ( ( UINT8* ) &rOut )[ 3 ] = rAttr.nBack;
                         }
-    static void			LotusToScBorderLine( UINT8 nLine, SvxBorderLine& );
-    const SvxColorItem&	GetColorItem( const UINT8 nLotIndex ) const;
-    const Color&		GetColor( const UINT8 nLotIndex ) const;
+    static void         LotusToScBorderLine( UINT8 nLine, SvxBorderLine& );
+    const SvxColorItem& GetColorItem( const UINT8 nLotIndex ) const;
+    const Color&        GetColor( const UINT8 nLotIndex ) const;
 public:
                         LotAttrCache( void );
                         ~LotAttrCache();
 
-    const ScPatternAttr&	GetPattAttr( const LotAttrWK3& );
+    const ScPatternAttr&    GetPattAttr( const LotAttrWK3& );
 };
 
 
@@ -119,30 +119,30 @@ class LotAttrCol : private List
 private:
     struct ENTRY
     {
-        const ScPatternAttr*	pPattAttr;
-        SCROW					nFirstRow;
-        SCROW					nLastRow;
+        const ScPatternAttr*    pPattAttr;
+        SCROW                   nFirstRow;
+        SCROW                   nLastRow;
     };
 
 public:
                                 ~LotAttrCol( void );
-    void						SetAttr( const SCROW nRow, const ScPatternAttr& );
-    void						Apply( const SCCOL nCol, const SCTAB nTab, const BOOL bClear = TRUE );
-    void						Clear( void );
+    void                        SetAttr( const SCROW nRow, const ScPatternAttr& );
+    void                        Apply( const SCCOL nCol, const SCTAB nTab, const BOOL bClear = TRUE );
+    void                        Clear( void );
 };
 
 
 class LotAttrTable
 {
 private:
-    LotAttrCol			pCols[ MAXCOLCOUNT ];
-    LotAttrCache		aAttrCache;
+    LotAttrCol          pCols[ MAXCOLCOUNT ];
+    LotAttrCache        aAttrCache;
 public:
                         LotAttrTable( void );
                         ~LotAttrTable();
 
-    void				SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow, const LotAttrWK3& );
-    void				Apply( const SCTAB nTabNum );
+    void                SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow, const LotAttrWK3& );
+    void                Apply( const SCTAB nTabNum );
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@
 #include "drawview.hxx"
 #include "zoomlist.hxx"
 #include <vos/mutex.hxx>
-#include <vcl/salbtype.hxx>		// FRound
+#include <vcl/salbtype.hxx>     // FRound
 #include <vcl/svapp.hxx>
 
 namespace sd {
@@ -122,7 +122,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         }
         break;
 
-        case SID_CHAR_DLG:	// BASIC
+        case SID_CHAR_DLG:  // BASIC
         {
             SetCurrentFunction( FuChar::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
@@ -463,8 +463,8 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
 {
     if( mxScannerManager.is() )
     {
-        const ::com::sun::star::scanner::ScannerContext	aContext( mxScannerManager->getAvailableScanners().getConstArray()[ 0 ] );
-        const ::com::sun::star::scanner::ScanError		eError = mxScannerManager->getError( aContext );
+        const ::com::sun::star::scanner::ScannerContext aContext( mxScannerManager->getAvailableScanners().getConstArray()[ 0 ] );
+        const ::com::sun::star::scanner::ScanError      eError = mxScannerManager->getError( aContext );
 
         if( ::com::sun::star::scanner::ScanError_ScanErrorNone == eError )
         {

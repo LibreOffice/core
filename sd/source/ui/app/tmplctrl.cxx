@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,10 +52,10 @@ class TemplatePopup_Impl : public PopupMenu
 public:
     TemplatePopup_Impl();
 
-    USHORT			GetCurId() const { return nCurId; }
+    USHORT          GetCurId() const { return nCurId; }
 
 private:
-    USHORT			nCurId;
+    USHORT          nCurId;
 
     virtual void    Select();
 };
@@ -131,13 +131,13 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
         TemplatePopup_Impl aPop;
         {
             const USHORT nMasterCount = pDoc->GetMasterSdPageCount(PK_STANDARD);
-    
+
             USHORT nCount = 0;
             for( USHORT nPage = 0; nPage < nMasterCount; ++nPage )
             {
                 SdPage* pMaster = pDoc->GetMasterSdPage(nPage, PK_STANDARD);
                 if( pMaster )
-                    aPop.InsertItem( ++nCount, pMaster->GetName() );				
+                    aPop.InsertItem( ++nCount, pMaster->GetName() );
             }
             aPop.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
 

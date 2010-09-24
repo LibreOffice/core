@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,35 +24,35 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_ResultSetConcurrency_idl__ 
-#define __com_sun_star_sdbc_ResultSetConcurrency_idl__ 
- 
- module com {  module sun {  module star {  module sdbc { 
- 
- 
+#ifndef __com_sun_star_sdbc_ResultSetConcurrency_idl__
+#define __com_sun_star_sdbc_ResultSetConcurrency_idl__
+
+ module com {  module sun {  module star {  module sdbc {
+
+
 /** describes the different scroll capabilities of a result set.
  */
 published constants ResultSetConcurrency
-{ 
-     
-    /** is the concurrency mode for a 
+{
+
+    /** is the concurrency mode for a
         <type scope="com::sun::star::sdb">ResultSet</type>
         object that may NOT be updated.
      */
-    const long READ_ONLY = 1007; 
- 
-     
-    /** is the concurrency mode for a 
+    const long READ_ONLY = 1007;
+
+
+    /** is the concurrency mode for a
             <type scope="com::sun::star::sdb">ResultSet</type>
             object that may be updated.
      */
-    const long UPDATABLE = 1008; 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    const long UPDATABLE = 1008;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

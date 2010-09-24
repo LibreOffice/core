@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ namespace sdr
             {
                 // next time point exists, use it
                 sal_uInt32 nNextTime;
-                
+
                 if(fNextTime >= (double)0xffffff00)
                 {
                     // take care for very late points in time, e.g. when a text animation stops
@@ -105,7 +105,7 @@ namespace sdr
                 // ensure step forward in integer timing, the floating step difference maybe smaller than 1.0. Use
                 // at least 25ms for next step
                 const sal_uInt32 nMinimumStepTime((sal_uInt32)fCurrentTime + 25L);
-                
+
                 if(nNextTime <= nMinimumStepTime)
                 {
                     nNextTime = nMinimumStepTime;
@@ -118,7 +118,7 @@ namespace sdr
         }
 
         PrimitiveAnimation::PrimitiveAnimation(sdr::contact::ViewObjectContact& rVOContact, const drawinglayer::primitive2d::Primitive2DSequence& rAnimatedPrimitives)
-        :	Event(0L),
+        :   Event(0L),
             mrVOContact(rVOContact),
             maAnimatedPrimitives(rAnimatedPrimitives)
         {

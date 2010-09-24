@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,6 +76,7 @@ struct ScExtTabSettings
     bool                mbSelected;         /// true = Sheet is selected.
     bool                mbFrozenPanes;      /// true = Frozen panes; false = Normal splits.
     bool                mbPageMode;         /// true = Pagebreak mode; false = Normal view mode.
+    bool                mbShowGrid;         /// Whether or not to display gridlines.
 
     explicit            ScExtTabSettings();
 };

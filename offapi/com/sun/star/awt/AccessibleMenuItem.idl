@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,18 +51,18 @@
 #endif
 
 module com { module sun { module star { module awt {
-    
+
 /** specifies accessibility support for a menu item.
-    
+
     @since OOo 1.1.2
- */    
+ */
 published service AccessibleMenuItem
 {
     /** This interface gives access to the structural information of a
         menu item:
 
         <ul>
-        <li>Role: The role of a menu item is <const 
+        <li>Role: The role of a menu item is <const
             scope="com::sun::star::accessibility"
             >AccessibleRole::MENU_ITEM</const>.</li>
         <li>Name: The name of a menu item is the localized item text.</li>
@@ -85,7 +85,7 @@ published service AccessibleMenuItem
             <li><const scope="com::sun::star::accessibility"
                 >AccessibleStateType::DEFUNC</const>
                 is set if the object has already been disposed
-                and subsequent calls to this object result in				
+                and subsequent calls to this object result in
                 <type scope="com::sun::star::lang">DisposedException</type>
                 exceptions.</li>
             <li><const scope="com::sun::star::accessibility"
@@ -108,11 +108,11 @@ published service AccessibleMenuItem
         </ul>
      */
     interface ::com::sun::star::accessibility::XAccessibleContext;
-    
+
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
-    
+
     interface ::com::sun::star::accessibility::XAccessibleComponent;
-    
+
     interface ::com::sun::star::accessibility::XAccessibleExtendedComponent;
 
     /** This interface gives read-only access to the text representation

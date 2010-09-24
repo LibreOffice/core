@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -761,11 +761,11 @@ String RID_STR_EVT_BEFOREUPDATE
 };
 String RID_STR_EVT_APPROVEROWCHANGE
 {
-    Text [ en-US ] = "Before record action" ;	
+    Text [ en-US ] = "Before record action" ;
 };
 String RID_STR_EVT_ROWCHANGE
 {
-    Text [ en-US ] = "After record action" ;	
+    Text [ en-US ] = "After record action" ;
 };
 String RID_STR_EVT_CONFIRMDELETE
 {
@@ -801,11 +801,11 @@ String RID_STR_EVT_LOADED
 };
 String RID_STR_EVT_RELOADING
 {
-    Text [ en-US ] = "Before reloading" ;	
+    Text [ en-US ] = "Before reloading" ;
 };
 String RID_STR_EVT_RELOADED
 {
-    Text [ en-US ] = "When reloading" ;	
+    Text [ en-US ] = "When reloading" ;
 };
 String RID_STR_EVT_MOUSEDRAGGED
 {
@@ -853,7 +853,7 @@ String RID_STR_EVT_APPROVEACTIONPERFORMED
 };
 String RID_STR_EVT_SUBMITTED
 {
-    Text [ en-US ] = "Before submitting" ;	
+    Text [ en-US ] = "Before submitting" ;
 };
 String RID_STR_EVT_TEXTCHANGED
 {

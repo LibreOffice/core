@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace dxcanvas
     typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::rendering::XCustomSprite,
                                                ::com::sun::star::rendering::XBitmapCanvas,
                                               ::com::sun::star::rendering::XIntegerBitmap,
-                                                ::com::sun::star::lang::XServiceInfo >	CanvasCustomSpriteBase_Base;
+                                                ::com::sun::star::lang::XServiceInfo >  CanvasCustomSpriteBase_Base;
     /** Mixin Sprite
 
         Have to mixin the Sprite interface before deriving from
@@ -83,7 +83,7 @@ namespace dxcanvas
                                               SpriteHelper,
                                               BitmapCanvasHelper,
                                               ::osl::MutexGuard,
-                                              ::cppu::OWeakObject > 					CanvasCustomSpriteBaseT;
+                                              ::cppu::OWeakObject >                     CanvasCustomSpriteBaseT;
 
     /* Definition of CanvasCustomSprite class */
 
@@ -104,11 +104,11 @@ namespace dxcanvas
             @param rDevice
             Target DX device
          */
-        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D& 	rSpriteSize,
+        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
                             const SpriteCanvasRef&                          rRefDevice,
-                            const IDXRenderModuleSharedPtr&					rRenderModule,
-                            const ::canvas::ISurfaceProxyManagerSharedPtr&	rSurfaceProxy,
-                            bool											bShowSpriteBounds );
+                            const IDXRenderModuleSharedPtr&                 rRenderModule,
+                            const ::canvas::ISurfaceProxyManagerSharedPtr&  rSurfaceProxy,
+                            bool                                            bShowSpriteBounds );
 
         virtual void SAL_CALL disposing();
 

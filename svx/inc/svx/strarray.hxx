@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #endif
 #include "svx/svxdllapi.h"
 
-//	class SvxStringArray -------------------------------------------------
+//  class SvxStringArray -------------------------------------------------
 
 class SVX_DLLPUBLIC SvxStringArray : public ResStringArray
 {
@@ -43,9 +43,9 @@ public:
     SvxStringArray( const ResId& rResId );
     ~SvxStringArray();
 
-    const String&	GetStringByPos( sal_uInt32 nPos ) const;
-    const String&	GetStringByType( long nType ) const;
-    long			GetValueByStr( const String& rStr ) const;
+    const String&   GetStringByPos( sal_uInt32 nPos ) const;
+    const String&   GetStringByType( long nType ) const;
+    long            GetValueByStr( const String& rStr ) const;
 };
 
 

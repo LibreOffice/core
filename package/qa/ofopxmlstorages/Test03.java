@@ -61,7 +61,7 @@ public class Test03 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-            
+
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
@@ -96,7 +96,7 @@ public class Test03 implements StorageTest {
 
             if ( !m_aTestHelper.disposeStorage( xTempSubStorage ) )
                 return false;
-                
+
             // ================================================
             // check storage hyerarchy tree
             // ================================================
@@ -166,14 +166,14 @@ public class Test03 implements StorageTest {
                 return false;
             }
 
-            if ( !( sRootCont[0].equals( "SubStorage1" ) && sRootCont[1].equals( "SubStream1" ) 
+            if ( !( sRootCont[0].equals( "SubStorage1" ) && sRootCont[1].equals( "SubStream1" )
                  || sRootCont[0].equals( "SubStream1" ) && sRootCont[1].equals( "SubStorage1" ) )
               || !( xRootNameAccess.hasByName( "SubStream1" ) && xRootNameAccess.hasByName( "SubStorage1" ) ) )
             {
                 m_aTestHelper.Error( "Root storage contains wrong list of children!" );
                 return false;
             }
-            
+
             // get storage through XNameAccess
             XStorage xResultSubStorage = getStorageFromNameAccess( xRootNameAccess, "SubStorage1" );
             if ( xResultSubStorage == null )
@@ -199,7 +199,7 @@ public class Test03 implements StorageTest {
                 m_aTestHelper.Error( "'SubStream2' can not be detected as child stream element of 'SubStorage1'!" );
                 return false;
             }
-            
+
             return true;
         }
         catch( Exception e )
@@ -207,7 +207,7 @@ public class Test03 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 
     public XStorage getStorageFromNameAccess( XNameAccess xAccess, String sName )
     {

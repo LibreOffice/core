@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include <cppcanvas/sprite.hxx>
 #include <cppcanvas/customsprite.hxx>
 
-namespace com { namespace sun { namespace star { namespace rendering 
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XSpriteCanvas;
 } } } }
@@ -59,21 +59,21 @@ namespace cppcanvas
     class SpriteCanvas : public virtual BitmapCanvas
     {
     public:
-        virtual bool					updateScreen( bool bUpdateAll ) const = 0;
-        
-        virtual CustomSpriteSharedPtr 	createCustomSprite( const ::basegfx::B2DSize& ) const = 0;
-        virtual SpriteSharedPtr 		createClonedSprite( const SpriteSharedPtr& ) const = 0;
+        virtual bool                    updateScreen( bool bUpdateAll ) const = 0;
+
+        virtual CustomSpriteSharedPtr   createCustomSprite( const ::basegfx::B2DSize& ) const = 0;
+        virtual SpriteSharedPtr         createClonedSprite( const SpriteSharedPtr& ) const = 0;
 
         // shared_ptr does not allow for covariant return types
-        SpriteCanvasSharedPtr			cloneSpriteCanvas() const
+        SpriteCanvasSharedPtr           cloneSpriteCanvas() const
         {
             SpriteCanvasSharedPtr p( ::boost::dynamic_pointer_cast< SpriteCanvas >(this->clone()) );
             OSL_ENSURE(p.get(), "SpriteCanvas::cloneSpriteCanvas(): dynamic cast failed");
             return p;
         }
 
-        virtual ::com::sun::star::uno::Reference< 
-            ::com::sun::star::rendering::XSpriteCanvas > 	getUNOSpriteCanvas() const = 0;
+        virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const = 0;
     };
 
 }

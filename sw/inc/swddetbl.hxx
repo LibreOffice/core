@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ public:
     TYPEINFO();
     // Constructor movet alle Lines/Boxen aus der SwTable zu sich.
     // Die SwTable ist danach Leer und muss geloescht werden.
-    SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, 
+    SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
                 BOOL bUpdate = TRUE );
     ~SwDDETable();
 

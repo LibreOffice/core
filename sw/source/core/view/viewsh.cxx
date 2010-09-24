@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -179,9 +179,9 @@ void ViewShell::DLPostPaint2(bool bPaintFormLayer)
 
 /******************************************************************************
 |*
-|*	ViewShell::ImplEndAction()
+|*  ViewShell::ImplEndAction()
 |*
-|*	Letzte Aenderung	MA 04. Sep. 96
+|*  Letzte Aenderung    MA 04. Sep. 96
 |*
 ******************************************************************************/
 
@@ -201,8 +201,8 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
     ViewShell::bLstAct = TRUE;
     ViewShell *pSh = (ViewShell*)this->GetNext();
     while ( pSh != this )
-    {	if ( pSh->ActionPend() )
-        {	ViewShell::bLstAct = FALSE;
+    {   if ( pSh->ActionPend() )
+        {   ViewShell::bLstAct = FALSE;
             pSh = this;
         }
         else
@@ -257,8 +257,8 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
             SwRegionRects *pRegion = Imp()->GetRegion();
 
             //JP 27.11.97: wer die Selection hided, muss sie aber auch
-            //				wieder Showen. Sonst gibt es Paintfehler!
-            //	z.B.: addional Mode, Seite vertikal hab zu sehen, in der
+            //              wieder Showen. Sonst gibt es Paintfehler!
+            //  z.B.: addional Mode, Seite vertikal hab zu sehen, in der
             // Mitte eine Selektion und mit einem anderen Cursor an linken
             // rechten Rand springen. Ohne ShowCrsr verschwindet die
             // Selektion
@@ -427,10 +427,10 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
 
 /******************************************************************************
 |*
-|*	ViewShell::ImplStartAction()
+|*  ViewShell::ImplStartAction()
 |*
-|*	Ersterstellung		MA 25. Jul. 94
-|*	Letzte Aenderung	MA 25. Jul. 94
+|*  Ersterstellung      MA 25. Jul. 94
+|*  Letzte Aenderung    MA 25. Jul. 94
 |*
 ******************************************************************************/
 
@@ -443,17 +443,17 @@ void ViewShell::ImplStartAction()
 
 /******************************************************************************
 |*
-|*	ViewShell::ImplLockPaint(), ImplUnlockPaint()
+|*  ViewShell::ImplLockPaint(), ImplUnlockPaint()
 |*
-|*	Ersterstellung		MA 11. Jun. 96
-|*	Letzte Aenderung	MA 11. Jun. 96
+|*  Ersterstellung      MA 11. Jun. 96
+|*  Letzte Aenderung    MA 11. Jun. 96
 |*
 ******************************************************************************/
 
 void ViewShell::ImplLockPaint()
 {
     if ( GetWin() && GetWin()->IsVisible() )
-        GetWin()->EnablePaint( FALSE );	//Auch die Controls abklemmen.
+        GetWin()->EnablePaint( FALSE ); //Auch die Controls abklemmen.
     Imp()->LockPaint();
 }
 
@@ -515,10 +515,10 @@ void ViewShell::ImplUnlockPaint( BOOL bVirDev )
 
 /******************************************************************************
 |*
-|*	ViewShell::AddPaintRect()
+|*  ViewShell::AddPaintRect()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 09. Feb. 97
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 09. Feb. 97
 |*
 ******************************************************************************/
 
@@ -529,7 +529,7 @@ BOOL ViewShell::AddPaintRect( const SwRect & rRect )
     do
     {
         if ( pSh->IsPreView() && pSh->GetWin() )
-//			pSh->GetWin()->Invalidate();
+//          pSh->GetWin()->Invalidate();
             ::RepaintPagePreview( pSh, rRect );
         else
             bRet |= pSh->Imp()->AddPaintRect( rRect );
@@ -541,10 +541,10 @@ BOOL ViewShell::AddPaintRect( const SwRect & rRect )
 
 /******************************************************************************
 |*
-|*	ViewShell::InvalidateWindows()
+|*  ViewShell::InvalidateWindows()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 09. Feb. 97
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 09. Feb. 97
 |*
 ******************************************************************************/
 
@@ -558,7 +558,7 @@ void ViewShell::InvalidateWindows( const SwRect &rRect )
             if ( pSh->GetWin() )
             {
                 if ( pSh->IsPreView() )
-//					pSh->GetWin()->Invalidate();
+//                  pSh->GetWin()->Invalidate();
                     ::RepaintPagePreview( pSh, rRect );
                 else if ( pSh->VisArea().IsOver( rRect ) )
                     pSh->GetWin()->Invalidate( rRect.SVRect() );
@@ -571,10 +571,10 @@ void ViewShell::InvalidateWindows( const SwRect &rRect )
 
 /******************************************************************************
 |*
-|*	ViewShell::MakeVisible()
+|*  ViewShell::MakeVisible()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	AMA 10. Okt. 95
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    AMA 10. Okt. 95
 |*
 ******************************************************************************/
 
@@ -610,10 +610,10 @@ void ViewShell::MakeVisible( const SwRect &rRect )
 
 /******************************************************************************
 |*
-|*	ViewShell::CareChildWindow()
+|*  ViewShell::CareChildWindow()
 |*
-|*	Ersterstellung		AMA 10. Okt. 95
-|*	Letzte Aenderung	AMA 10. Okt. 95
+|*  Ersterstellung      AMA 10. Okt. 95
+|*  Letzte Aenderung    AMA 10. Okt. 95
 |*
 ******************************************************************************/
 
@@ -633,10 +633,10 @@ Window* ViewShell::CareChildWin(ViewShell& rVSh)
 
 /******************************************************************************
 |*
-|*	ViewShell::GetPagePos()
+|*  ViewShell::GetPagePos()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 04. Aug. 93
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 04. Aug. 93
 |*
 ******************************************************************************/
 
@@ -647,10 +647,10 @@ Point ViewShell::GetPagePos( USHORT nPageNum ) const
 
 /******************************************************************************
 |*
-|*	ViewShell::GetNumPages()
+|*  ViewShell::GetNumPages()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 20. Apr. 94
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 20. Apr. 94
 |*
 ******************************************************************************/
 
@@ -668,13 +668,13 @@ sal_Bool ViewShell::IsDummyPage( USHORT nPageNum ) const
 
 /*************************************************************************
 |*
-|*					ViewShell::UpdateFlds()
+|*                  ViewShell::UpdateFlds()
 |*
-|*	  Ersterstellung	BP 04.05.92
-|*	  Beschreibung		erzwingt ein Update fuer jedes Feld
+|*    Ersterstellung    BP 04.05.92
+|*    Beschreibung      erzwingt ein Update fuer jedes Feld
 |*
-|*	UpdateFlds benachrichtigt alle Felder mit pNewHt.
-|*	Wenn pNewHt == 0 ist (default), wird der Feldtyp verschickt.
+|*  UpdateFlds benachrichtigt alle Felder mit pNewHt.
+|*  Wenn pNewHt == 0 ist (default), wird der Feldtyp verschickt.
 |*
 *************************************************************************/
 
@@ -725,10 +725,10 @@ BOOL ViewShell::HasCharts() const
 
 /*************************************************************************
 |*
-|*	  ViewShell::LayoutIdle()
+|*    ViewShell::LayoutIdle()
 |*
-|*	  Ersterstellung	MA 26. May. 92
-|*	  Letzte Aenderung	OG 19. Mar. 96
+|*    Ersterstellung    MA 26. May. 92
+|*    Letzte Aenderung  OG 19. Mar. 96
 |*
 *************************************************************************/
 
@@ -745,7 +745,7 @@ void ViewShell::LayoutIdle()
     //Kein Idle wenn gerade gedruckt wird.
     ViewShell *pSh = this;
     do
-    {	if ( !pSh->GetWin() )
+    {   if ( !pSh->GetWin() )
             return;
         pSh = (ViewShell*)pSh->GetNext();
 
@@ -969,10 +969,10 @@ void ViewShell::SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWit
 
 /******************************************************************************
 |*
-|*	ViewShell::Reformat
+|*  ViewShell::Reformat
 |*
-|*	Ersterstellung		BP ???
-|*	Letzte Aenderung	MA 13. Feb. 98
+|*  Ersterstellung      BP ???
+|*  Letzte Aenderung    MA 13. Feb. 98
 |*
 ******************************************************************************/
 
@@ -1009,11 +1009,11 @@ void ViewShell::Reformat()
 
 /******************************************************************************
 |*
-|*	ViewShell::CalcLayout()
-|*					Vollstaendige Formatierung von Layout und Inhalt.
+|*  ViewShell::CalcLayout()
+|*                  Vollstaendige Formatierung von Layout und Inhalt.
 |*
-|*	Ersterstellung		MA 31. Jan. 94
-|*	Letzte Aenderung	MA 08. Oct. 96
+|*  Ersterstellung      MA 31. Jan. 94
+|*  Letzte Aenderung    MA 08. Oct. 96
 |*
 ******************************************************************************/
 
@@ -1068,10 +1068,10 @@ void ViewShell::CalcLayout()
 
 /******************************************************************************
 |*
-|*	ViewShell::SetFirstVisPageInvalid()
+|*  ViewShell::SetFirstVisPageInvalid()
 |*
-|*	Ersterstellung		MA 19. May. 94
-|*	Letzte Aenderung	MA 19. May. 94
+|*  Ersterstellung      MA 19. May. 94
+|*  Letzte Aenderung    MA 19. May. 94
 |*
 ******************************************************************************/
 
@@ -1079,7 +1079,7 @@ void ViewShell::SetFirstVisPageInvalid()
 {
     ViewShell *pSh = this;
     do
-    {	pSh->Imp()->SetFirstVisPageInvalid();
+    {   pSh->Imp()->SetFirstVisPageInvalid();
         pSh = (ViewShell*)pSh->GetNext();
 
     } while ( pSh != this );
@@ -1087,10 +1087,10 @@ void ViewShell::SetFirstVisPageInvalid()
 
 /******************************************************************************
 |*
-|*	ViewShell::SizeChgNotify()
+|*  ViewShell::SizeChgNotify()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 17. Sep. 96
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 17. Sep. 96
 |*
 ******************************************************************************/
 
@@ -1124,10 +1124,10 @@ void ViewShell::SizeChgNotify()
 
 /******************************************************************************
 |*
-|*	ViewShell::VisPortChgd()
+|*  ViewShell::VisPortChgd()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 22. Jul. 96
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 22. Jul. 96
 |*
 ******************************************************************************/
 
@@ -1321,10 +1321,10 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 
 /******************************************************************************
 |*
-|*	ViewShell::SmoothScroll()
+|*  ViewShell::SmoothScroll()
 |*
-|*	Ersterstellung		MA 04. Jul. 96
-|*	Letzte Aenderung	MA 25. Mar. 97
+|*  Ersterstellung      MA 04. Jul. 96
+|*  Letzte Aenderung    MA 25. Mar. 97
 |*
 ******************************************************************************/
 
@@ -1635,17 +1635,17 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
 
 /******************************************************************************
 |*
-|*	ViewShell::PaintDesktop()
+|*  ViewShell::PaintDesktop()
 |*
-|*	Ersterstellung		MA 16. Dec. 93
-|*	Letzte Aenderung	MA 30. Nov. 95
+|*  Ersterstellung      MA 16. Dec. 93
+|*  Letzte Aenderung    MA 30. Nov. 95
 |*
 ******************************************************************************/
 
 void ViewShell::PaintDesktop( const SwRect &rRect )
 {
     if ( !GetWin() && !GetOut()->GetConnectMetaFile() )
-        return;						//Fuer den Drucker tun wir hier nix
+        return;                     //Fuer den Drucker tun wir hier nix
 
     //Sonderfaelle abfangen, damit es nicht gar so ueberraschend aussieht.
     //Kann z.B. waehrend des Idle'ns zwischenzeitlich auftreten.
@@ -1779,10 +1779,10 @@ void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
 
 /******************************************************************************
 |*
-|*	ViewShell::CheckInvalidForPaint()
+|*  ViewShell::CheckInvalidForPaint()
 |*
-|*	Ersterstellung		MA 19. May. 94
-|*	Letzte Aenderung	MA 09. Jun. 94
+|*  Ersterstellung      MA 19. May. 94
+|*  Letzte Aenderung    MA 09. Jun. 94
 |*
 ******************************************************************************/
 
@@ -1852,12 +1852,12 @@ BOOL ViewShell::CheckInvalidForPaint( const SwRect &rRect )
             {
                 SwRegionRects aRegion( rRect );
                 for ( USHORT i = 0; i < pRegion->Count(); ++i )
-                {	const SwRect &rTmp = (*pRegion)[i];
+                {   const SwRect &rTmp = (*pRegion)[i];
                     if ( !rRect.IsInside( rTmp ) )
                     {
                         InvalidateWindows( rTmp );
                         if ( rTmp.IsOver( VisArea() ) )
-                        {	aRegion -= rTmp;
+                        {   aRegion -= rTmp;
                             bRet = TRUE;
                         }
                     }
@@ -1892,10 +1892,10 @@ BOOL ViewShell::CheckInvalidForPaint( const SwRect &rRect )
 
 /******************************************************************************
 |*
-|*	ViewShell::Paint()
+|*  ViewShell::Paint()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 17. Sep. 96
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 17. Sep. 96
 |*
 ******************************************************************************/
 
@@ -1967,7 +1967,7 @@ void ViewShell::Paint(const Rectangle &rRect)
             {
                 //SwSaveHdl *pSaveHdl = 0;
                 //if ( Imp()->HasDrawView() )
-                //	pSaveHdl = new SwSaveHdl( Imp() );
+                //  pSaveHdl = new SwSaveHdl( Imp() );
 
                 //Wenn eine der sichtbaren Seiten noch irgendetwas zum Repaint
                 //angemeldet hat, so muessen Repaints ausgeloest werden.
@@ -2037,10 +2037,10 @@ void ViewShell::Paint(const Rectangle &rRect)
 
 /******************************************************************************
 |*
-|*	ViewShell::SetBrowseBorder()
+|*  ViewShell::SetBrowseBorder()
 |*
-|*	Ersterstellung		AMA 20. Aug. 96
-|*	Letzte Aenderung	AMA 20. Aug. 96
+|*  Ersterstellung      AMA 20. Aug. 96
+|*  Letzte Aenderung    AMA 20. Aug. 96
 |*
 ******************************************************************************/
 
@@ -2075,10 +2075,10 @@ sal_Int32 ViewShell::GetBrowseWidth() const
 
 /******************************************************************************
 |*
-|*	ViewShell::CheckBrowseView()
+|*  ViewShell::CheckBrowseView()
 |*
-|*	Ersterstellung		MA 04. Mar. 96
-|*	Letzte Aenderung	MA 04. Jul. 96
+|*  Ersterstellung      MA 04. Mar. 96
+|*  Letzte Aenderung    MA 04. Jul. 96
 |*
 ******************************************************************************/
 
@@ -2114,7 +2114,7 @@ void ViewShell::CheckBrowseView( BOOL bBrowseChgd )
 
     SwPageFrm *pPg = (SwPageFrm*)GetLayout()->Lower();
     do
-    {	pPg->InvalidateSize();
+    {   pPg->InvalidateSize();
         pPg->_InvalidatePrt();
         pPg->InvaPercentLowers();
         if ( bBrowseChgd )
@@ -2143,11 +2143,11 @@ void ViewShell::CheckBrowseView( BOOL bBrowseChgd )
 
 /*************************************************************************
 |*
-|* 	  ViewShell::GetLayout()
-|*	  ViewShell::GetNodes()
+|*    ViewShell::GetLayout()
+|*    ViewShell::GetNodes()
 |*
-|*	  Ersterstellung	OK 26. May. 92
-|*	  Letzte Aenderung	MA 16. Sep. 93
+|*    Ersterstellung    OK 26. May. 92
+|*    Letzte Aenderung  MA 16. Sep. 93
 |*
 *************************************************************************/
 
@@ -2200,10 +2200,10 @@ SfxItemPool& ViewShell::GetAttrPool()
 
 /******************************************************************************
 |*
-|*	ViewShell::ApplyViewOptions(), ImplApplyViewOptions()
+|*  ViewShell::ApplyViewOptions(), ImplApplyViewOptions()
 |*
-|*	Ersterstellung		??
-|*	Letzte Aenderung	MA 03. Mar. 98
+|*  Ersterstellung      ??
+|*  Letzte Aenderung    MA 03. Mar. 98
 |*
 ******************************************************************************/
 
@@ -2212,7 +2212,7 @@ void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 
     ViewShell *pSh = this;
     do
-    {	pSh->StartAction();
+    {   pSh->StartAction();
         pSh = (ViewShell*)pSh->GetNext();
     } while ( pSh != this );
 
@@ -2237,7 +2237,7 @@ void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 
     pSh = this;
     do
-    {	pSh->EndAction();
+    {   pSh->EndAction();
         pSh = (ViewShell*)pSh->GetNext();
     } while ( pSh != this );
 
@@ -2257,7 +2257,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     SET_CURR_SHELL( this );
 
-    BOOL bReformat	 = FALSE;
+    BOOL bReformat   = FALSE;
 
     if( pOpt->IsShowHiddenField() != rOpt.IsShowHiddenField() )
     {
@@ -2342,7 +2342,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     BOOL bOnlineSpellChgd = pOpt->IsOnlineSpell() != rOpt.IsOnlineSpell();
 
-    *pOpt = rOpt;	// Erst jetzt werden die Options uebernommen.
+    *pOpt = rOpt;   // Erst jetzt werden die Options uebernommen.
     pOpt->SetUIOptions(rOpt);
 
     pDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode(pDoc->GetDocShell()));
@@ -2362,7 +2362,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         ViewShell *pSh = (ViewShell*)this->GetNext();
         BOOL bOnlineSpl = rOpt.IsOnlineSpell();
         while( pSh != this )
-        {	pSh->pOpt->SetOnlineSpell( bOnlineSpl );
+        {   pSh->pOpt->SetOnlineSpell( bOnlineSpl );
             Window *pTmpWin = pSh->GetWin();
             if( pTmpWin )
                 pTmpWin->Invalidate();
@@ -2374,10 +2374,10 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
 /******************************************************************************
 |*
-|*	ViewShell::SetUIOptions()
+|*  ViewShell::SetUIOptions()
 |*
-|*	Ersterstellung		OS 29.07.96
-|*	Letzte Aenderung	OS 29.07.96
+|*  Ersterstellung      OS 29.07.96
+|*  Letzte Aenderung    OS 29.07.96
 |*
 ******************************************************************************/
 
@@ -2394,17 +2394,17 @@ void ViewShell::SetUIOptions( const SwViewOption &rOpt )
 
 /******************************************************************************
 |*
-|*	ViewShell::SetReadonly()
+|*  ViewShell::SetReadonly()
 |*
-|*	Ersterstellung		OS 05.09.96
-|*	Letzte Aenderung	MA 12. Feb. 97
+|*  Ersterstellung      OS 05.09.96
+|*  Letzte Aenderung    MA 12. Feb. 97
 |*
 ******************************************************************************/
 
 void ViewShell::SetReadonlyOption(BOOL bSet)
 {
     //JP 01.02.99: bei ReadOnly Flag richtig abfragen und ggfs. neu
-    //				formatieren; Bug 61335
+    //              formatieren; Bug 61335
 
     // Schalten wir gerade von Readonly auf Bearbeiten um?
     if( bSet != pOpt->IsReadonly() )
@@ -2455,10 +2455,10 @@ void  ViewShell::SetReadonlySelectionOption(sal_Bool bSet)
 }
 /******************************************************************************
 |*
-|*	ViewShell::SetPrtFormatOption()
+|*  ViewShell::SetPrtFormatOption()
 |*
-|*	Ersterstellung		AMA 10. Sep. 97
-|*	Letzte Aenderung	AMA 10. Sep. 97
+|*  Ersterstellung      AMA 10. Sep. 97
+|*  Letzte Aenderung    AMA 10. Sep. 97
 |*
 ******************************************************************************/
 
@@ -2469,10 +2469,10 @@ void ViewShell::SetPrtFormatOption( BOOL bSet )
 
 /******************************************************************************
 |*
-|*	ViewShell::UISizeNotify()
+|*  ViewShell::UISizeNotify()
 |*
-|*	Ersterstellung		MA 14. Jan. 97
-|*	Letzte Aenderung	MA 14. Jan. 97
+|*  Ersterstellung      MA 14. Jan. 97
+|*  Letzte Aenderung    MA 14. Jan. 97
 |*
 ******************************************************************************/
 
@@ -2495,7 +2495,7 @@ void    ViewShell::SetRestoreActions(USHORT nSet)
     DBG_ASSERT(!GetRestoreActions()||!nSet, "mehrfaches Restore der Actions ?");
     Imp()->SetRestoreActions(nSet);
 }
-USHORT 	ViewShell::GetRestoreActions() const
+USHORT  ViewShell::GetRestoreActions() const
 {
     return Imp()->GetRestoreActions();
 }

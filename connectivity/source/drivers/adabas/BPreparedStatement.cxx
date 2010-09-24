@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
-OAdabasPreparedStatement::OAdabasPreparedStatement( OAdabasConnection* _pConnection,const ::rtl::OUString& sql) 
+OAdabasPreparedStatement::OAdabasPreparedStatement( OAdabasConnection* _pConnection,const ::rtl::OUString& sql)
 : ::connectivity::odbc::OPreparedStatement( _pConnection,sql)
 {
     m_aSelectColumns = _pConnection->createSelectColumns(sql);
@@ -67,7 +67,7 @@ void OAdabasPreparedStatement::setResultSetConcurrency(sal_Int32 /*_par0*/)
     ::dbtools::throwFeatureNotImplementedException( "PreparedStatement:ResultSetConcurrency", *this );
 }
 // -----------------------------------------------------------------------------
-void OAdabasPreparedStatement::setResultSetType(sal_Int32 /*_par0*/) 
+void OAdabasPreparedStatement::setResultSetType(sal_Int32 /*_par0*/)
 {
     ::dbtools::throwFeatureNotImplementedException( "PreparedStatement:ResultSetType", *this );
 }

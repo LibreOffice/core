@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ namespace connectivity
         class OAdabasConnection;
         class OGroups : public sdbcx::OCollection
         {
-            WpADOGroups	m_aCollection;
-            OCatalog*	m_pCatalog;
+            WpADOGroups m_aCollection;
+            OCatalog*   m_pCatalog;
         protected:
 
             virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
@@ -56,7 +56,7 @@ namespace connectivity
             OGroups(OCatalog* _pParent,
                      ::osl::Mutex& _rMutex,
                      const TStringVector &_rVector,
-                     const WpADOGroups&	_rCollection,sal_Bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
+                     const WpADOGroups& _rCollection,sal_Bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
                     ,m_aCollection(_rCollection)
                     ,m_pCatalog(_pParent)
             {

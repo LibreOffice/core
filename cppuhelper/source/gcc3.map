@@ -327,7 +327,7 @@ UDK_3.1 {
 
 UDK_3.2 {
     global:
-       _ZN4cppu20PropertySetMixinImpl10prepareSetERKN3rtl8OUStringERKN3com3sun4star3uno3AnyESB_PNS0_14BoundListenersE; 
+       _ZN4cppu20PropertySetMixinImpl10prepareSetERKN3rtl8OUStringERKN3com3sun4star3uno3AnyESB_PNS0_14BoundListenersE;
         _ZN4cppu20PropertySetMixinImpl14BoundListenersC1Ev;
         _ZN4cppu20PropertySetMixinImpl14BoundListenersC2Ev;
         _ZN4cppu20PropertySetMixinImpl14BoundListenersD1Ev;

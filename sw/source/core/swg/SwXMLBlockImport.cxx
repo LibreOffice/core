@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ sal_Char __READONLY_DATA sXML_np__text[] = "_otext";
 SwXMLBlockListImport::SwXMLBlockListImport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SwXMLTextBlocks &rBlocks )
-:	SvXMLImport( xServiceFactory, 0 ),
+:   SvXMLImport( xServiceFactory, 0 ),
     rBlockList (rBlocks)
 {
     GetNamespaceMap().Add( OUString ( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__block_list ) ),
@@ -81,7 +81,7 @@ SwXMLTextBlockImport::SwXMLTextBlockImport(
     SwXMLTextBlocks &rBlocks,
     String & rNewText,
     sal_Bool bNewTextOnly )
-:	SvXMLImport(xServiceFactory, IMPORT_ALL ),
+:   SvXMLImport(xServiceFactory, IMPORT_ALL ),
     rBlockList ( rBlocks ),
     bTextOnly ( bNewTextOnly ),
     m_rText ( rNewText )

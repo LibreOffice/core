@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ import com.sun.star.tooling.languageResolver.LanguageResolver.LanguageResolvingE
  */
 public class GSIWriter  extends DataWriter {
     /**
-     * The seperator used to seperate GSI columns 
+     * The seperator used to seperate GSI columns
      */
     final String seperator=new String("($$)");
 
@@ -66,7 +66,7 @@ public class GSIWriter  extends DataWriter {
      * A map holding the  content of an GSI Line contianing the source and the target language
      */
     private ExtMap outData=new ExtMap(outLineNames, null);
-    
+
     private static final String EMPTY          = new String("");
     /**
      * The sourceLanguage to use
@@ -76,7 +76,7 @@ public class GSIWriter  extends DataWriter {
      * The sourceLanguage to use
      */
     private String targetLanguage;
-    
+
     /**
      * GSILines have a special Line End
      */
@@ -87,29 +87,29 @@ public class GSIWriter  extends DataWriter {
      * The blockNr of the current line
      */
     private String blockNr;
-    
-    
-    
+
+
+
 
     /**
      * Create a new Instance of GSIWriter
-     * 
+     *
      * @param bos       the Buffered Output Stream to write to
      * @param charset   the used charset
      * @throws java.io.UnsupportedEncodingException
      */
     public GSIWriter(BufferedOutputStream bos,String charset) throws java.io.UnsupportedEncodingException {
         super(bos,charset);
-        
 
-        
+
+
     }
-    
+
     /* (non-Javadoc)
      * @see com.sun.star.tooling.converter.DataWriter#writeData()
      */
     public final void writeData() throws java.io.IOException {
-        
+
         StringBuffer buffer=new StringBuffer("");
         if(this.sourceLanguage==null&&this.targetLanguage==null){
             LanguageResolver lang =new LanguageResolver();
@@ -117,13 +117,13 @@ public class GSIWriter  extends DataWriter {
                 this.sourceLanguage=lang.getNrFromISO((String)outData.get("SourceLanguageID"));
                 this.targetLanguage=lang.getNrFromISO((String)outData.get("TargetLanguageID"));
             } catch (LanguageResolvingException e) {
-                
+
                 OutputHandler.out(e.getMessage());
                 System.exit(0);
             }
         }
-        
-        
+
+
         this.blockNr=(String)outData.get("BlockNr");
         // get the values of the found fields
         //create the gsi lines
@@ -133,7 +133,7 @@ public class GSIWriter  extends DataWriter {
         buffer.append(getSourceLine("HText"));
         buffer.append(getSourceLine("QText"));
         buffer.append(getSourceLine("Title"));
-        
+
         //now the target language line
         // put them together for output
         buffer.append(getTargetLine("Text"));
@@ -142,9 +142,9 @@ public class GSIWriter  extends DataWriter {
         buffer.append(getTargetLine("Title"));
         //ok...put all to disk;
         this.write(buffer.toString());
-        
+
     }
-    
+
     /**
      * Create a line containing the source string from the data
      * @param resType
@@ -171,14 +171,14 @@ public class GSIWriter  extends DataWriter {
             // seperate the fields with ($$)
             buffer.append(this.seperator);
             buffer.append(outData.get(resString));
-           
+
             // this line is full
             // so close it with '! cr lf'
             buffer.append(GSIWriter.lineEnd);
             Converter.countLine();
             return buffer;
         }
-    
+
     }
     /**
      * Create a line containing the target string from the data
@@ -205,30 +205,30 @@ public class GSIWriter  extends DataWriter {
             // seperate the fields with ($$)
             buffer.append(this.seperator);
             buffer.append(outData.get(resString));
-            
+
             // this line is full
             // so close it with '! cr lf'
             buffer.append(GSIWriter.lineEnd);
             Converter.countLine();
             return buffer;
         }
-    
+
     }
-        
+
 
     /* (non-Javadoc)
      * @see com.sun.star.tooling.converter.DataWriter#writeData(java.util.Map[])
      */
     protected void writeData(Map[] data) throws IOException {
         // TODO redesign DataHandler in the way that this is not nessesary any more
-        
+
     }
 
     /* (non-Javadoc)
      * @see com.sun.star.tooling.converter.DataWriter#getDataFrom(com.sun.star.tooling.converter.DataHandler)
      */
     protected void getDataFrom(DataHandler handler) throws IOException {
-        
+
         handler.putDataTo(this.outData);
     }
 
@@ -236,8 +236,8 @@ public class GSIWriter  extends DataWriter {
      * @see com.sun.star.tooling.converter.DataWriter#getDatafrom(com.sun.star.tooling.converter.DataHandler)
      */
     protected void getDatafrom(DataHandler handler) throws IOException {
-        
+
         handler.putDataTo(this.outData);
-        
+
     }
 }

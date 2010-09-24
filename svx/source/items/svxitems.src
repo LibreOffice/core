@@ -1,7 +1,7 @@
 ﻿/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,69 +34,69 @@ StringArray RID_ATTR_NAMES
 {
     ItemList =
     {
-        < "Scale"			;           SID_ATTR_ZOOM ; > ;
-        < "Brush"			;           SID_ATTR_BRUSH ; > ;
-        < "Tab stops"				;   SID_ATTR_TABSTOP ; > ;
-        < "Character"				;   SID_ATTR_CHAR ; > ;
-        < "Font"			;           SID_ATTR_CHAR_FONT ; > ;
-        < "Font posture"		;       SID_ATTR_CHAR_POSTURE ; > ;
-        < "Font weight"				;   SID_ATTR_CHAR_WEIGHT ; > ;
-        < "Shadowed"			;       SID_ATTR_CHAR_SHADOWED ; > ;
-        < "Individual words"		;   SID_ATTR_CHAR_WORDLINEMODE ; > ;
-        < "Outline"			;           SID_ATTR_CHAR_CONTOUR ; > ;
-        < "Strikethrough"			;   SID_ATTR_CHAR_STRIKEOUT ; > ;
-        < "Underline"			;       SID_ATTR_CHAR_UNDERLINE ; > ;
-        < "Font size"				;   SID_ATTR_CHAR_FONTHEIGHT ; > ;
-        < "Rel. Font size"		;       SID_ATTR_CHAR_PROPSIZE ; > ;
-        < "Font color"			;       SID_ATTR_CHAR_COLOR ; > ;
-        < "Kerning"		;               SID_ATTR_CHAR_KERNING ; > ;
-        < "Effects"		;               SID_ATTR_CHAR_CASEMAP ; > ;
+        < "Scale"           ;           SID_ATTR_ZOOM ; > ;
+        < "Brush"           ;           SID_ATTR_BRUSH ; > ;
+        < "Tab stops"               ;   SID_ATTR_TABSTOP ; > ;
+        < "Character"               ;   SID_ATTR_CHAR ; > ;
+        < "Font"            ;           SID_ATTR_CHAR_FONT ; > ;
+        < "Font posture"        ;       SID_ATTR_CHAR_POSTURE ; > ;
+        < "Font weight"             ;   SID_ATTR_CHAR_WEIGHT ; > ;
+        < "Shadowed"            ;       SID_ATTR_CHAR_SHADOWED ; > ;
+        < "Individual words"        ;   SID_ATTR_CHAR_WORDLINEMODE ; > ;
+        < "Outline"         ;           SID_ATTR_CHAR_CONTOUR ; > ;
+        < "Strikethrough"           ;   SID_ATTR_CHAR_STRIKEOUT ; > ;
+        < "Underline"           ;       SID_ATTR_CHAR_UNDERLINE ; > ;
+        < "Font size"               ;   SID_ATTR_CHAR_FONTHEIGHT ; > ;
+        < "Rel. Font size"      ;       SID_ATTR_CHAR_PROPSIZE ; > ;
+        < "Font color"          ;       SID_ATTR_CHAR_COLOR ; > ;
+        < "Kerning"     ;               SID_ATTR_CHAR_KERNING ; > ;
+        < "Effects"     ;               SID_ATTR_CHAR_CASEMAP ; > ;
         < "Language";                   SID_ATTR_CHAR_LANGUAGE ; > ;
-        < "Position"		;           SID_ATTR_CHAR_ESCAPEMENT ; > ;
+        < "Position"        ;           SID_ATTR_CHAR_ESCAPEMENT ; > ;
         < "Blinking"    ;               SID_ATTR_CHAR_AUTOKERN ; > ;
         < "Character set color"       ; SID_ATTR_CHAR_CHARSETCOLOR ; > ;
         < "Overline"      ;             SID_ATTR_CHAR_OVERLINE ; > ;
-        < "Paragraph"		;           SID_ATTR_PARA ; > ;
-        < "Alignment"		;           SID_ATTR_PARA_ADJUST ; > ;
-        < "Line spacing"		;       SID_ATTR_PARA_LINESPACE ; > ;
-        < "Page Break"		;           SID_ATTR_PARA_PAGEBREAK ; > ;
-        < "Hyphenation"		;           SID_ATTR_PARA_HYPHENZONE ; > ;
+        < "Paragraph"       ;           SID_ATTR_PARA ; > ;
+        < "Alignment"       ;           SID_ATTR_PARA_ADJUST ; > ;
+        < "Line spacing"        ;       SID_ATTR_PARA_LINESPACE ; > ;
+        < "Page Break"      ;           SID_ATTR_PARA_PAGEBREAK ; > ;
+        < "Hyphenation"     ;           SID_ATTR_PARA_HYPHENZONE ; > ;
         < "Do not split paragraph";     SID_ATTR_PARA_SPLIT ; > ;
-        < "Orphans"		;               SID_ATTR_PARA_ORPHANS ; > ;
-        < "Widows"		;               SID_ATTR_PARA_WIDOWS ; > ;
-        < "Spacing"		;               SID_ATTR_PARA_ULSPACE ; > ;
-        < "Indent"		;               SID_ATTR_PARA_LRSPACE ; > ;
-        < "Indent"		;               SID_ATTR_LRSPACE ; > ;
-        < "Spacing"		;               SID_ATTR_ULSPACE ; > ;
-        < "Page"		;               SID_ATTR_PAGE ; > ;
-        < "Page Style"		;           SID_ATTR_PARA_MODEL ; > ;
+        < "Orphans"     ;               SID_ATTR_PARA_ORPHANS ; > ;
+        < "Widows"      ;               SID_ATTR_PARA_WIDOWS ; > ;
+        < "Spacing"     ;               SID_ATTR_PARA_ULSPACE ; > ;
+        < "Indent"      ;               SID_ATTR_PARA_LRSPACE ; > ;
+        < "Indent"      ;               SID_ATTR_LRSPACE ; > ;
+        < "Spacing"     ;               SID_ATTR_ULSPACE ; > ;
+        < "Page"        ;               SID_ATTR_PAGE ; > ;
+        < "Page Style"      ;           SID_ATTR_PARA_MODEL ; > ;
         < "Keep with next paragraph";   SID_ATTR_PARA_KEEP ; > ;
-        < "Blinking"		;           SID_ATTR_FLASH ; > ;
-        < "Register-true"		;       SID_ATTR_PARA_REGISTER ; > ;
-        < "Character background"	;   SID_ATTR_BRUSH_CHAR ; > ;
-        < "Asian font"		;           SID_ATTR_CHAR_CJK_FONT ; > ;
-        < "Size of Asian font"		;   SID_ATTR_CHAR_CJK_FONTHEIGHT ; > ;
+        < "Blinking"        ;           SID_ATTR_FLASH ; > ;
+        < "Register-true"       ;       SID_ATTR_PARA_REGISTER ; > ;
+        < "Character background"    ;   SID_ATTR_BRUSH_CHAR ; > ;
+        < "Asian font"      ;           SID_ATTR_CHAR_CJK_FONT ; > ;
+        < "Size of Asian font"      ;   SID_ATTR_CHAR_CJK_FONTHEIGHT ; > ;
         < "Language of Asian font";     SID_ATTR_CHAR_CJK_LANGUAGE ; > ;
-        < "Posture of Asian font"	;   SID_ATTR_CHAR_CJK_POSTURE ; > ;
-        < "Weight of Asian font"	;   SID_ATTR_CHAR_CJK_WEIGHT ; > ;
-        < "CTL"		;                   SID_ATTR_CHAR_CTL_FONT ; > ;
-        < "Size of complex scripts"	;   SID_ATTR_CHAR_CTL_FONTHEIGHT ; > ;
+        < "Posture of Asian font"   ;   SID_ATTR_CHAR_CJK_POSTURE ; > ;
+        < "Weight of Asian font"    ;   SID_ATTR_CHAR_CJK_WEIGHT ; > ;
+        < "CTL"     ;                   SID_ATTR_CHAR_CTL_FONT ; > ;
+        < "Size of complex scripts" ;   SID_ATTR_CHAR_CTL_FONTHEIGHT ; > ;
         < "Language of complex scripts";SID_ATTR_CHAR_CTL_LANGUAGE ; > ;
         < "Posture of complex scripts"; SID_ATTR_CHAR_CTL_POSTURE ; > ;
         < "Weight of complex scripts";  SID_ATTR_CHAR_CTL_WEIGHT ; > ;
-        < "Double-lined"		;       SID_ATTR_CHAR_TWO_LINES ; > ;
-        < "Emphasis mark"		;       SID_ATTR_CHAR_EMPHASISMARK ; > ;
-        < "Text spacing"		;       SID_ATTR_PARA_SCRIPTSPACE ; > ;
-        < "Hanging punctuation"		;   SID_ATTR_PARA_HANGPUNCTUATION ; > ;
-        < "Forbidden characters"	;   SID_ATTR_PARA_FORBIDDEN_RULES ; > ;
-        < "Rotation"		;           SID_ATTR_CHAR_ROTATED ; > ;
-        < "Scale"		;               SID_ATTR_CHAR_SCALEWIDTH ; > ;
-        < "Relief"		;               SID_ATTR_CHAR_RELIEF ; > ;
-        < "Vertical text alignment"	;   SID_PARA_VERTALIGN ; > ;
+        < "Double-lined"        ;       SID_ATTR_CHAR_TWO_LINES ; > ;
+        < "Emphasis mark"       ;       SID_ATTR_CHAR_EMPHASISMARK ; > ;
+        < "Text spacing"        ;       SID_ATTR_PARA_SCRIPTSPACE ; > ;
+        < "Hanging punctuation"     ;   SID_ATTR_PARA_HANGPUNCTUATION ; > ;
+        < "Forbidden characters"    ;   SID_ATTR_PARA_FORBIDDEN_RULES ; > ;
+        < "Rotation"        ;           SID_ATTR_CHAR_ROTATED ; > ;
+        < "Scale"       ;               SID_ATTR_CHAR_SCALEWIDTH ; > ;
+        < "Relief"      ;               SID_ATTR_CHAR_RELIEF ; > ;
+        < "Vertical text alignment" ;   SID_PARA_VERTALIGN ; > ;
     };
 };
- 
- 
+
+
 String RID_SVXITEMS_EXTRAS_CHARCOLOR
 {
     Text [ en-US ] = "Font color" ;
@@ -215,7 +215,7 @@ String RID_SVXITEMS_BRUSHSTYLE_BITMAP
 {
     Text [ en-US ] = "Image" ;
 };
- 
+
 String RID_SVXITEMS_HORJUST_STANDARD
 {
     Text [ en-US ] = "Horizontal alignment default" ;

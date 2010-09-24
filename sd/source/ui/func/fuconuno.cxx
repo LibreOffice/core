@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,11 +67,11 @@ TYPEINIT1( FuConstructUnoControl, FuConstruct );
 \************************************************************************/
 
 FuConstructUnoControl::FuConstructUnoControl (
-    ViewShell* 	pViewSh,
-    ::sd::Window*		pWin,
-    ::sd::View*			pView,
-    SdDrawDocument*	pDoc,
-    SfxRequest&		rReq)
+    ViewShell*  pViewSh,
+    ::sd::Window*       pWin,
+    ::sd::View*         pView,
+    SdDrawDocument* pDoc,
+    SfxRequest&     rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
 }
@@ -205,7 +205,7 @@ void FuConstructUnoControl::Deactivate()
 SdrObject* FuConstructUnoControl::CreateDefaultObject(const sal_uInt16, const Rectangle& rRectangle)
 {
     // case SID_FM_CREATE_CONTROL:
-    
+
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
         0L, mpDoc);

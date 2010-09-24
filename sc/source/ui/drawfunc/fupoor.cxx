@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -127,9 +127,9 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     SCsCOL dx = 0;
     SCsROW dy = 0;
 
-    if ( aPixPos.X() <= 0			   ) dx = -1;
+    if ( aPixPos.X() <= 0              ) dx = -1;
     if ( aPixPos.X() >= aSize.Width()  ) dx =  1;
-    if ( aPixPos.Y() <= 0			   ) dy = -1;
+    if ( aPixPos.Y() <= 0              ) dy = -1;
     if ( aPixPos.Y() >= aSize.Height() ) dy =  1;
 
     ScViewData* pViewData = pViewShell->GetViewData();
@@ -152,7 +152,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 
     if ( dx != 0 || dy != 0 )
     {
-        ScrollStart();							// Scrollaktion in abgeleiteter Klasse
+        ScrollStart();                          // Scrollaktion in abgeleiteter Klasse
         pViewShell->ScrollLines(2*dx, 4*dy);
         ScrollEnd();
         aScrollTimer.Start();
@@ -168,7 +168,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, EMPTYARG )
 {
     Point aPosPixel = pWindow->GetPointerPosPixel();
-    
+
     // #95491# use remembered MouseButton state to create correct
     // MouseEvents for this artifical MouseMove.
     MouseMove(MouseEvent(aPosPixel, 1, 0, GetMouseButtonCode()));
@@ -179,20 +179,20 @@ IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
 
 // #95491# moved from inline to *.cxx
 BOOL FuPoor::MouseButtonUp(const MouseEvent& rMEvt)
-{ 
+{
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    return FALSE; 
+    return FALSE;
 }
 
 // #95491# moved from inline to *.cxx
 BOOL FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
-{ 
+{
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    return FALSE; 
+    return FALSE;
 }
 
 /*************************************************************************
@@ -201,7 +201,7 @@ BOOL FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-//	WriteStatus gibt's nicht mehr
+//  WriteStatus gibt's nicht mehr
 
 /*************************************************************************
 |*
@@ -248,7 +248,7 @@ void FuPoor::DoCut()
 {
     if (pView)
     {
-//!		pView->DoCut(pWindow);
+//!     pView->DoCut(pWindow);
     }
 }
 
@@ -262,7 +262,7 @@ void FuPoor::DoCopy()
 {
     if (pView)
     {
-//!		pView->DoCopy(pWindow);
+//!     pView->DoCopy(pWindow);
     }
 }
 
@@ -276,7 +276,7 @@ void FuPoor::DoPaste()
 {
     if (pView)
     {
-//!		pView->DoPaste(pWindow);
+//!     pView->DoPaste(pWindow);
     }
 }
 
@@ -288,12 +288,12 @@ void FuPoor::DoPaste()
 
 IMPL_LINK( FuPoor, DragTimerHdl, Timer *, EMPTYARG )
 {
-    //	ExecuteDrag (und das damit verbundene Reschedule) direkt aus dem Timer
-    //	aufzurufen, bringt die VCL-Timer-Verwaltung durcheinander, wenn dabei
-    //	(z.B. im Drop) wieder ein Timer gestartet wird (z.B. ComeBack-Timer der
-    //	DrawView fuer Solid Handles / ModelHasChanged) - der neue Timer laeuft
-    //	dann um die Dauer des Drag&Drop zu spaet ab.
-    //	Darum Drag&Drop aus eigenem Event:
+    //  ExecuteDrag (und das damit verbundene Reschedule) direkt aus dem Timer
+    //  aufzurufen, bringt die VCL-Timer-Verwaltung durcheinander, wenn dabei
+    //  (z.B. im Drop) wieder ein Timer gestartet wird (z.B. ComeBack-Timer der
+    //  DrawView fuer Solid Handles / ModelHasChanged) - der neue Timer laeuft
+    //  dann um die Dauer des Drag&Drop zu spaet ab.
+    //  Darum Drag&Drop aus eigenem Event:
 
     Application::PostUserEvent( LINK( this, FuPoor, DragHdl ) );
     return 0;
@@ -308,13 +308,13 @@ IMPL_LINK( FuPoor, DragHdl, void *, EMPTYARG )
         pWindow->ReleaseMouse();
         bIsInDragMode = TRUE;
 
-//		pView->BeginDrag(pWindow, aMDPos);
+//      pView->BeginDrag(pWindow, aMDPos);
         pViewShell->GetScDrawView()->BeginDrag(pWindow, aMDPos);
     }
     return 0;
 }
 
-//	Detektiv-Linie
+//  Detektiv-Linie
 
 BOOL FuPoor::IsDetectiveHit( const Point& rLogicPos )
 {
@@ -365,13 +365,13 @@ void FuPoor::ImpForceQuadratic(Rectangle& rRect)
     if(rRect.GetWidth() > rRect.GetHeight())
     {
         rRect = Rectangle(
-            Point(rRect.Left() + ((rRect.GetWidth() - rRect.GetHeight()) / 2), rRect.Top()), 
+            Point(rRect.Left() + ((rRect.GetWidth() - rRect.GetHeight()) / 2), rRect.Top()),
             Size(rRect.GetHeight(), rRect.GetHeight()));
     }
     else
     {
         rRect = Rectangle(
-            Point(rRect.Left(), rRect.Top() + ((rRect.GetHeight() - rRect.GetWidth()) / 2)), 
+            Point(rRect.Left(), rRect.Top() + ((rRect.GetHeight() - rRect.GetWidth()) / 2)),
             Size(rRect.GetWidth(), rRect.GetWidth()));
     }
 }

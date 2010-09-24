@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,41 +24,41 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _COM_SUN_STAR_BRIDGE_XBRIDGE_IDL_ 
-#define _COM_SUN_STAR_BRIDGE_XBRIDGE_IDL_ 
- 
-#include <com/sun/star/uno/XInterface.idl> 
- 
-module com {  module sun {  module star {  module bridge { 
- 
+#ifndef _COM_SUN_STAR_BRIDGE_XBRIDGE_IDL_
+#define _COM_SUN_STAR_BRIDGE_XBRIDGE_IDL_
+
+#include <com/sun/star/uno/XInterface.idl>
+
+module com {  module sun {  module star {  module bridge {
+
 /** main interface for an interprocess bridge.
  */
 published interface XBridge: com::sun::star::uno::XInterface
-{ 
+{
     /** tries to get an interface from the remote that is known by this name.
 
-        <p>In general, this method is called once to get the initial object from the 
+        <p>In general, this method is called once to get the initial object from the
         remote, but it is allowed to call the method multiple times. </p>
 
         @param sInstanceName The name of the object, that shall be retrieved from the
                              remote process. The call is delegated to
                              com.sun.star.bridge.XInstanceProvider.getInstance() in the
                              remote process.
-        @see com.sun.star.bridge.XInstanceProvider					 
+        @see com.sun.star.bridge.XInstanceProvider
      */
-    com::sun::star::uno::XInterface getInstance( [in] string sInstanceName ); 
- 
-     
+    com::sun::star::uno::XInterface getInstance( [in] string sInstanceName );
+
+
     /** name that the bridge got when it was created.
      */
-    string getName(); 
-     
-              
+    string getName();
+
+
     /** a unique descriptive string: protocol + ":" + XConnection.getDescription()
      */
-    string getDescription(); 
-}; 
- 
-};};};};  
- 
-#endif 
+    string getDescription();
+};
+
+};};};};
+
+#endif

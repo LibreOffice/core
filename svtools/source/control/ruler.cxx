@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@
 #define RULER_UNIT_MILE     6
 #define RULER_UNIT_POINT    7
 #define RULER_UNIT_PICA     8
-#define RULER_UNIT_CHAR	    9
+#define RULER_UNIT_CHAR     9
 #define RULER_UNIT_LINE    10
 #define RULER_UNIT_COUNT    11
 
@@ -148,7 +148,7 @@ static ImplRulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
 { MAP_10TH_INCH,    633600, 63360, 316800, 633600, 1609344, 4, " miles" }, // MILE
 { MAP_POINT,             1,    12,     12,     36,     353, 2, " pt"    }, // POINT
 { MAP_100TH_MM,        423,   423,    423,    846,     423, 3, " pi"    }, // PICA
-{ MAP_100TH_MM,	       371,   371,    371,    743,     371, 3, " ch"    }, // CHAR
+{ MAP_100TH_MM,        371,   371,    371,    743,     371, 3, " ch"    }, // CHAR
 { MAP_100TH_MM,        551,   551,    551,   1102,     551, 3, " li"    }  // LINE
 };
 
@@ -1510,16 +1510,16 @@ void Ruler::ImplDraw()
             if(mpData->bTextRTL)
                 aVirDevSize.Width() -= maExtraRect.GetWidth();
 
-//	else
-//		aVirDevSize.Width() -= mnVirOff;
+//  else
+//      aVirDevSize.Width() -= mnVirOff;
             aOffPos.Y() = RULER_OFF;
         }
         else
         {
             aOffPos.X() = RULER_OFF;
             aOffPos.Y() = mnVirOff;
-//	else
-//		aVirDevSize.Height() -= mnVirOff;
+//  else
+//      aVirDevSize.Height() -= mnVirOff;
         }
         DrawOutDev( aOffPos, aVirDevSize, Point(), aVirDevSize, maVirDev );
 

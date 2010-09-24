@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 
 /* HACK: disable some warnings for MS-C */
 #ifdef _MSC_VER
-#pragma warning (disable : 4355)	// 4355: this used in initializer-list
+#pragma warning (disable : 4355)    // 4355: this used in initializer-list
 #endif
 
 using namespace ::com::sun::star;
@@ -73,12 +73,12 @@ IMPL_LINK( MacroSecurity, OkBtnHdl, void*, EMPTYARG )
 }
 
 MacroSecurity::MacroSecurity( Window* _pParent, const cssu::Reference< cssu::XComponentContext> &_rxCtx, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment )
-    :TabDialog			( _pParent, XMLSEC_RES( RID_XMLSECTP_MACROSEC ) )
-    ,maTabCtrl			( this, XMLSEC_RES( 1 ) )
-    ,maOkBtn			( this, XMLSEC_RES( BTN_OK ) )
-    ,maCancelBtn		( this, XMLSEC_RES( BTN_CANCEL ) )
-    ,maHelpBtn			( this, XMLSEC_RES( BTN_HELP ) )
-    ,maResetBtn			( this, XMLSEC_RES( BTN_RESET ) )
+    :TabDialog          ( _pParent, XMLSEC_RES( RID_XMLSECTP_MACROSEC ) )
+    ,maTabCtrl          ( this, XMLSEC_RES( 1 ) )
+    ,maOkBtn            ( this, XMLSEC_RES( BTN_OK ) )
+    ,maCancelBtn        ( this, XMLSEC_RES( BTN_CANCEL ) )
+    ,maHelpBtn          ( this, XMLSEC_RES( BTN_HELP ) )
+    ,maResetBtn         ( this, XMLSEC_RES( BTN_RESET ) )
 {
     FreeResource();
 
@@ -103,19 +103,19 @@ MacroSecurity::~MacroSecurity()
 
 
 MacroSecurityTP::MacroSecurityTP( Window* _pParent, const ResId& _rResId, MacroSecurity* _pDlg )
-    :TabPage		( _pParent, _rResId )
-    ,mpDlg			( _pDlg )
+    :TabPage        ( _pParent, _rResId )
+    ,mpDlg          ( _pDlg )
 {
 }
 
 MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pDlg )
-    :MacroSecurityTP	( _pParent, XMLSEC_RES( RID_XMLSECTP_SECLEVEL ), _pDlg )
-    ,maSecLevelFL		( this, XMLSEC_RES( FL_SECLEVEL ) )
+    :MacroSecurityTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_SECLEVEL ), _pDlg )
+    ,maSecLevelFL       ( this, XMLSEC_RES( FL_SECLEVEL ) )
     ,maSecReadonlyFI    ( this, XMLSEC_RES( FI_SEC_READONLY ))
     ,maVeryHighRB       ( this, XMLSEC_RES( RB_VERYHIGH ) )
-    ,maHighRB			( this, XMLSEC_RES( RB_HIGH ) )
-    ,maMediumRB			( this, XMLSEC_RES( RB_MEDIUM ) )
-    ,maLowRB			( this, XMLSEC_RES( RB_LOW ) )
+    ,maHighRB           ( this, XMLSEC_RES( RB_HIGH ) )
+    ,maMediumRB         ( this, XMLSEC_RES( RB_MEDIUM ) )
+    ,maLowRB            ( this, XMLSEC_RES( RB_LOW ) )
 {
     FreeResource();
 
@@ -140,18 +140,18 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
     else
     {
         DBG_ERROR("illegal macro security level");
-    }            
+    }
     maSecReadonlyFI.Show(bReadonly);
     if(bReadonly)
     {
         //move to the selected button
         if( pCheck && pCheck != &maVeryHighRB)
-        {        
+        {
             long nDiff = pCheck->GetPosPixel().Y() - maVeryHighRB.GetPosPixel().Y();
             Point aPos(maSecReadonlyFI.GetPosPixel());
             aPos.Y() += nDiff;
             maSecReadonlyFI.SetPosPixel(aPos);
-        }            
+        }
         maVeryHighRB.Enable(sal_False);
         maHighRB.Enable(sal_False);
         maMediumRB.Enable(sal_False);
@@ -278,7 +278,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMPTYARG )
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMPTYARG )
 {
-    USHORT	nSel = maTrustFileLocLB.GetSelectEntryPos();
+    USHORT  nSel = maTrustFileLocLB.GetSelectEntryPos();
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
         maTrustFileLocLB.RemoveEntry( nSel );
@@ -320,8 +320,8 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
     {
         for( sal_uInt32 nEntry = 0 ; nEntry < nEntries ; ++nEntry )
         {
-            cssu::Sequence< ::rtl::OUString >&				rEntry = maTrustedAuthors[ nEntry ];
-            uno::Reference< css::security::XCertificate >	xCert;
+            cssu::Sequence< ::rtl::OUString >&              rEntry = maTrustedAuthors[ nEntry ];
+            uno::Reference< css::security::XCertificate >   xCert;
 
             // create from RawData
             xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( rEntry[ 2 ] );
@@ -329,34 +329,34 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
             SvLBoxEntry*    pLBEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName() ) );
             maTrustCertLB.SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
             maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
-            pLBEntry->SetUserData( ( void* ) sal_Int32( nEntry ) );		// missuse user data as index
+            pLBEntry->SetUserData( ( void* ) sal_Int32( nEntry ) );     // missuse user data as index
         }
     }
 }
 
 MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, MacroSecurity* _pDlg )
-    :MacroSecurityTP	( _pParent, XMLSEC_RES( RID_XMLSECTP_TRUSTSOURCES ), _pDlg )
-    ,maTrustCertFL		( this, XMLSEC_RES( FL_TRUSTCERT ) )
+    :MacroSecurityTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_TRUSTSOURCES ), _pDlg )
+    ,maTrustCertFL      ( this, XMLSEC_RES( FL_TRUSTCERT ) )
     ,maTrustCertROFI    ( this, XMLSEC_RES( FI_TRUSTCERT_RO ) )
     ,maTrustCertLB      ( this, XMLSEC_RES( LB_TRUSTCERT ) )
-    ,maAddCertPB		( this, XMLSEC_RES( PB_ADD_TRUSTCERT ) )
-    ,maViewCertPB		( this, XMLSEC_RES( PB_VIEW_TRUSTCERT ) )
-    ,maRemoveCertPB		( this, XMLSEC_RES( PB_REMOVE_TRUSTCERT ) )
-    ,maTrustFileLocFL	( this, XMLSEC_RES( FL_TRUSTFILELOC ) )
+    ,maAddCertPB        ( this, XMLSEC_RES( PB_ADD_TRUSTCERT ) )
+    ,maViewCertPB       ( this, XMLSEC_RES( PB_VIEW_TRUSTCERT ) )
+    ,maRemoveCertPB     ( this, XMLSEC_RES( PB_REMOVE_TRUSTCERT ) )
+    ,maTrustFileLocFL   ( this, XMLSEC_RES( FL_TRUSTFILELOC ) )
     ,maTrustFileROFI    ( this, XMLSEC_RES( FI_TRUSTFILE_RO ) )
     ,maTrustFileLocFI   ( this, XMLSEC_RES( FI_TRUSTFILELOC ) )
-    ,maTrustFileLocLB	( this, XMLSEC_RES( LB_TRUSTFILELOC ) )
-    ,maAddLocPB			( this, XMLSEC_RES( FL_ADD_TRUSTFILELOC ) )
-    ,maRemoveLocPB		( this, XMLSEC_RES( FL_REMOVE_TRUSTFILELOC ) )
+    ,maTrustFileLocLB   ( this, XMLSEC_RES( LB_TRUSTFILELOC ) )
+    ,maAddLocPB         ( this, XMLSEC_RES( FL_ADD_TRUSTFILELOC ) )
+    ,maRemoveLocPB      ( this, XMLSEC_RES( FL_REMOVE_TRUSTFILELOC ) )
 {
-    static long	nTabs[] = { 3, 0, 35*CS_LB_WIDTH/100, 70*CS_LB_WIDTH/100 };
+    static long nTabs[] = { 3, 0, 35*CS_LB_WIDTH/100, 70*CS_LB_WIDTH/100 };
     maTrustCertLB.SetTabs( &nTabs[ 0 ] );
     maTrustCertLB.InsertHeaderEntry( String( XMLSEC_RES( STR_HEADERBAR ) ) );
 
     FreeResource();
 
     maTrustCertLB.SetSelectHdl( LINK( this, MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl ) );
-    maAddCertPB.Hide();		// not used in the moment...
+    maAddCertPB.Hide();     // not used in the moment...
     maViewCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, ViewCertPBHdl ) );
     maViewCertPB.Disable();
     maRemoveCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, RemoveCertPBHdl ) );
@@ -371,12 +371,12 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, 
     mbAuthorsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS );
     maTrustCertROFI.Show( mbAuthorsReadonly );
     mbAuthorsReadonly ? maTrustCertLB.DisableTable() : maTrustCertLB.EnableTable();
-//  unused button 
+//  unused button
 //    maAddCertPB.Enable( !mbAuthorsReadonly );
 
     FillCertLB();
 
-    cssu::Sequence< rtl::OUString >	aSecureURLs = mpDlg->maSecOptions.GetSecureURLs();
+    cssu::Sequence< rtl::OUString > aSecureURLs = mpDlg->maSecOptions.GetSecureURLs();
     mbURLsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_SECUREURLS );
     maTrustFileROFI.Show( mbURLsReadonly );
     maTrustFileLocLB.Enable( !mbURLsReadonly );
@@ -399,10 +399,10 @@ void MacroSecurityTrustedSourcesTP::ActivatePage()
 
 void MacroSecurityTrustedSourcesTP::ClosePage( void )
 {
-    USHORT	nEntryCnt = maTrustFileLocLB.GetEntryCount();
+    USHORT  nEntryCnt = maTrustFileLocLB.GetEntryCount();
     if( nEntryCnt )
     {
-        cssu::Sequence< rtl::OUString >	aSecureURLs( nEntryCnt );
+        cssu::Sequence< rtl::OUString > aSecureURLs( nEntryCnt );
         for( USHORT i = 0 ; i < nEntryCnt ; ++i )
         {
             ::rtl::OUString aURL( maTrustFileLocLB.GetEntry( i ) );
@@ -449,7 +449,7 @@ void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
 
         String aStr(ReadOnlyImage::GetHelpTip());
         if ( Help::IsBalloonHelpEnabled() )
-            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aScreenRect, 
+            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aScreenRect,
             aStr );
         else if ( Help::IsQuickHelpEnabled() )
             Help::ShowQuickHelp( this, aScreenRect, aStr );

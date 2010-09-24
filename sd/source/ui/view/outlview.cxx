@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ namespace sd {
 struct SdParaAndPos
 {
     Paragraph* pPara;
-    USHORT	   nPos;
+    USHORT     nPos;
 };
 
 TYPEINIT1( OutlineView, ::sd::View );
@@ -329,7 +329,7 @@ void OutlineView::Paint(const Rectangle& rRect, ::sd::Window* pWin)
                 sal_Int32 nLineHeight = pOlView->GetOutliner()->GetLineHeight( nPara, 0 );
 
                 aPos.X() = nNumberOffset;
-                
+
                 Point aPoint( aPos.X() - pWin->GetTextWidth( aStr ), aPos.Y() + ( nLineHeight - maPageNumberFont.GetHeight()) / 2 );
                 pWin->DrawText( aPoint, aStr );
 
@@ -341,13 +341,13 @@ void OutlineView::Paint(const Rectangle& rRect, ::sd::Window* pWin)
         }
 
         pWin->SetFont( aOldFont );
-*/		
+*/
         mbFirstPaint = FALSE;
     }
 }
 
 void OutlineView::InvalidateSlideNumberArea()
-{   
+{
 /*
     for( sal_Int16 nView = 0; nView < MAX_OUTLINERVIEWS; ++nView )
     {
@@ -531,7 +531,7 @@ Paragraph* OutlineView::GetNextTitle(const Paragraph* pPara)
 
 IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
 {
-//	DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::ParagraphInsertedHdl(), model change without undo?!" );
+//  DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::ParagraphInsertedHdl(), model change without undo?!" );
 
     // we get calls to this handler during binary insert of drag and drop contents but
     // we ignore it here and handle it later in OnEndPasteOrDrop()
@@ -564,8 +564,8 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
 
     mpOutliner->SetParaFlag( pPara, PARAFLAG_ISPAGE );
     // wieviele Titel sind vor dem neuen Titelabsatz?
-    ULONG nExample = 0L;			// Position der "Vorbild"seite
-    ULONG nTarget  = 0L;			// Einfuegeposition
+    ULONG nExample = 0L;            // Position der "Vorbild"seite
+    ULONG nTarget  = 0L;            // Einfuegeposition
     while(pPara)
     {
         pPara = GetPrevTitle(pPara);
@@ -761,11 +761,11 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
         // haben es noch nicht getan?
         if (mnPagesToProcess == 0)
         {
-            Window* 	  pActWin = mpOutlineViewShell->GetActiveWindow();
+            Window*       pActWin = mpOutlineViewShell->GetActiveWindow();
             OutlinerView* pOlView = GetViewByWindow(pActWin);
-            List*		  pList   = pOlView->CreateSelectionList();
+            List*         pList   = pOlView->CreateSelectionList();
 
-            Paragraph*	  pParagraph   = (Paragraph*)pList->First();
+            Paragraph*    pParagraph   = (Paragraph*)pList->First();
             while (pParagraph)
             {
                 if( !pOutliner->HasParaFlag( pParagraph, PARAFLAG_ISPAGE ) && (pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pParagraph ) ) <= 0) )
@@ -773,7 +773,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
                 pParagraph = (Paragraph*)pList->Next();
             }
 
-            mnPagesToProcess++;	// der Absatz, der jetzt schon auf Level 0
+            mnPagesToProcess++; // der Absatz, der jetzt schon auf Level 0
                                 // steht, gehoert auch dazu
             mnPagesProcessed = 0;
 
@@ -967,10 +967,10 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
 IMPL_LINK( OutlineView, StatusEventHdl, EditStatus *, EMPTYARG )
 {
     ::sd::Window*   pWin = mpOutlineViewShell->GetActiveWindow();
-    OutlinerView*	pOutlinerView = GetViewByWindow(pWin);
-    Rectangle	  aVis			= pOutlinerView->GetVisArea();
+    OutlinerView*   pOutlinerView = GetViewByWindow(pWin);
+    Rectangle     aVis          = pOutlinerView->GetVisArea();
 
-//	  ULONG nWidth = ((SdPage*)mpDoc->GetSdPage(0, PK_STANDARD))->GetSize().Width();
+//    ULONG nWidth = ((SdPage*)mpDoc->GetSdPage(0, PK_STANDARD))->GetSize().Width();
     ULONG nWidth = OUTLINE_PAPERWIDTH;
     Rectangle aText = Rectangle(Point(0,0),
                                    Size(nWidth,
@@ -978,7 +978,7 @@ IMPL_LINK( OutlineView, StatusEventHdl, EditStatus *, EMPTYARG )
     Rectangle aWin(Point(0,0), pWin->GetOutputSizePixel());
     aWin = pWin->PixelToLogic(aWin);
 
-    if (!aVis.IsEmpty())		// nicht beim Oeffnen
+    if (!aVis.IsEmpty())        // nicht beim Oeffnen
     {
         aText.Bottom() += aWin.GetHeight();
 
@@ -1082,8 +1082,8 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
     // den ersten der selektierten Paragraphen in der neuen Ordnung suchen
     USHORT nPosNewOrder = 0;
     ULONG nParaPos = 0;
-    Paragraph*	pPara = pOutliner->GetParagraph( 0 );
-    Paragraph*	pPrev = NULL;
+    Paragraph*  pPara = pOutliner->GetParagraph( 0 );
+    Paragraph*  pPrev = NULL;
     while (pPara && pPara != pSearchIt)
     {
         if( pOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )
@@ -1094,10 +1094,10 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
         pPara = pOutliner->GetParagraph( ++nParaPos );
     }
 
-    USHORT nPos = nPosNewOrder; 	// nPosNewOrder nicht veraendern
+    USHORT nPos = nPosNewOrder;     // nPosNewOrder nicht veraendern
     if (nPos == 0)
     {
-        nPos = (USHORT)-1;			// vor der ersten Seite einfuegen
+        nPos = (USHORT)-1;          // vor der ersten Seite einfuegen
     }
     else
     {
@@ -1138,9 +1138,9 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
 
 SdrTextObj* OutlineView::GetTitleTextObject(SdrPage* pPage)
 {
-    ULONG			nObjectCount = pPage->GetObjCount();
-    SdrObject*		pObject 	 = NULL;
-    SdrTextObj* 	pResult 	 = NULL;
+    ULONG           nObjectCount = pPage->GetObjCount();
+    SdrObject*      pObject      = NULL;
+    SdrTextObj*     pResult      = NULL;
 
     for (ULONG nObject = 0; nObject < nObjectCount; nObject++)
     {
@@ -1164,9 +1164,9 @@ SdrTextObj* OutlineView::GetTitleTextObject(SdrPage* pPage)
 
 SdrTextObj* OutlineView::GetOutlineTextObject(SdrPage* pPage)
 {
-    ULONG			nObjectCount = pPage->GetObjCount();
-    SdrObject*		pObject 	 = NULL;
-    SdrTextObj* 	pResult 	 = NULL;
+    ULONG           nObjectCount = pPage->GetObjCount();
+    SdrObject*      pObject      = NULL;
+    SdrTextObj*     pResult      = NULL;
 
     for (ULONG nObject = 0; nObject < nObjectCount; nObject++)
     {
@@ -1209,13 +1209,13 @@ SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
     {
     case AUTOLAYOUT_NONE:
     case AUTOLAYOUT_ONLY_TITLE:
-    case AUTOLAYOUT_TITLE:	eNewLayout = AUTOLAYOUT_ENUM; break;
+    case AUTOLAYOUT_TITLE:  eNewLayout = AUTOLAYOUT_ENUM; break;
 
-    case AUTOLAYOUT_CHART:	eNewLayout = AUTOLAYOUT_CHARTTEXT; break;
+    case AUTOLAYOUT_CHART:  eNewLayout = AUTOLAYOUT_CHARTTEXT; break;
 
     case AUTOLAYOUT_ORG:
     case AUTOLAYOUT_TAB:
-    case AUTOLAYOUT_OBJ:	eNewLayout = AUTOLAYOUT_OBJTEXT; break;
+    case AUTOLAYOUT_OBJ:    eNewLayout = AUTOLAYOUT_OBJTEXT; break;
     default:
         break;
     }
@@ -1307,7 +1307,7 @@ void OutlineView::FillOutliner()
     // fill outliner with paragraphs from slides title & (outlines|subtitles)
     for (USHORT nPage = 0; nPage < nPageCount; nPage++)
     {
-        SdPage* 	pPage = (SdPage*)mpDoc->GetSdPage(nPage, PK_STANDARD);
+        SdPage*     pPage = (SdPage*)mpDoc->GetSdPage(nPage, PK_STANDARD);
         Paragraph * pPara = NULL;
 
         // take text from title shape
@@ -1353,7 +1353,7 @@ void OutlineView::FillOutliner()
 
         if (!pTO) // if no subtile found, try outline
             pTO = GetOutlineTextObject(pPage);
-        
+
         if(pTO && !(pTO->IsEmptyPresObj())) // found some text
         {
             OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
@@ -1494,7 +1494,7 @@ Paragraph* OutlineView::GetParagraphForPage( ::Outliner* pOutl, SdPage* pPage )
         {
             // see if we already skiped enough pages
             if( 0 == nPagesToSkip )
-                break;	// and if so, end the loop
+                break;  // and if so, end the loop
 
             // we skiped another page
             nPagesToSkip--;
@@ -1972,13 +1972,13 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
             long nFontHeight = 0;
             if ( !rEditEngine.IsFlatMode() )
             {
-//		        const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)rEditEngine.GetParaAttrib( pInfo->mnPara, EE_CHAR_FONTHEIGHT );
+//              const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)rEditEngine.GetParaAttrib( pInfo->mnPara, EE_CHAR_FONTHEIGHT );
 //              nBulletHeight = rFH.GetHeight();
                 nFontHeight = nBulletHeight / 5;
             }
             else
             {
-//		        const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)rEditEngine.GetEmptyItemSet().Get( EE_CHAR_FONTHEIGHT );
+//              const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)rEditEngine.GetEmptyItemSet().Get( EE_CHAR_FONTHEIGHT );
  //               nBulletHeight = rFH.GetHeight();
                 nFontHeight = (nBulletHeight * 10) / 25;
             }
@@ -2006,7 +2006,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
             Point aTextPos( aImagePos.X() - aOffset.Width(), pInfo->mrStartPos.Y() );
             Font aNewFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE, eLang, 0 ) );
             aNewFont.SetSize( aFontSz );
-//		    aNewFont.SetAlign( aBulletFont.GetAlign() );
+//          aNewFont.SetAlign( aBulletFont.GetAlign() );
             aNewFont.SetVertical( bVertical );
             aNewFont.SetOrientation( bVertical ? 2700 : 0 );
             aNewFont.SetColor( COL_AUTO );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,12 +32,12 @@
 #include <tools/ref.hxx>
 #include "xmlitmap.hxx"
 
-#define XML_EXPORT_FLAG_DEFAULTS	0x0001		// export also default items
-#define XML_EXPORT_FLAG_DEEP		0x0002		// export also items from
+#define XML_EXPORT_FLAG_DEFAULTS    0x0001      // export also default items
+#define XML_EXPORT_FLAG_DEEP        0x0002      // export also items from
                                                 // parent item sets
-#define XML_EXPORT_FLAG_EMPTY		0x0004		// export attribs element
+#define XML_EXPORT_FLAG_EMPTY       0x0004      // export attribs element
                                                 // even if its empty
-#define XML_EXPORT_FLAG_IGN_WS		0x0008
+#define XML_EXPORT_FLAG_IGN_WS      0x0008
 
 namespace rtl { class OUString; }
 class SvXMLUnitConverter;
@@ -122,7 +122,7 @@ public:
 
     inline void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
 
-    static sal_Bool QueryXMLValue( const SfxPoolItem& rItem, 
+    static sal_Bool QueryXMLValue( const SfxPoolItem& rItem,
                                  ::rtl::OUString& rValue, sal_uInt16 nMemberId,
                                  const SvXMLUnitConverter& rUnitConverter );
 };
@@ -133,4 +133,4 @@ SvXMLExportItemMapper::setMapEntries( SvXMLItemMapEntriesRef rMapEntries )
     mrMapEntries = rMapEntries;
 }
 
-#endif	//  _XMLITMPR_HXX
+#endif  //  _XMLITMPR_HXX

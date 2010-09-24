@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <tools/link.hxx>
-#include <tools/gen.hxx> 
+#include <tools/gen.hxx>
 #include <vcl/timer.hxx>
 #include <svl/hint.hxx>
 #include <svl/brdcst.hxx>
@@ -60,8 +60,8 @@ class DlgEdObj;
 class DlgEdHint: public SfxHint
 {
 private:
-    DlgEdHintKind	eHintKind;
-    DlgEdObj*		pDlgEdObj;
+    DlgEdHintKind   eHintKind;
+    DlgEdObj*       pDlgEdObj;
 
 public:
     TYPEINFO();
@@ -69,8 +69,8 @@ public:
     DlgEdHint( DlgEdHintKind eHint, DlgEdObj* pObj );
     virtual ~DlgEdHint();
 
-    DlgEdHintKind	GetKind() const	{ return eHintKind; }
-    DlgEdObj*		GetObject() const { return pDlgEdObj; }
+    DlgEdHintKind   GetKind() const { return eHintKind; }
+    DlgEdObj*       GetObject() const { return pDlgEdObj; }
 };
 
 
@@ -102,39 +102,39 @@ private:
     void Print( Printer* pPrinter, const String& rTitle );
 
 protected:
-    ScrollBar*			pHScroll;
-    ScrollBar*			pVScroll;
-    DlgEdModel*			pDlgEdModel;
-    DlgEdPage*			pDlgEdPage;
-    DlgEdView*			pDlgEdView;
-    DlgEdForm*			pDlgEdForm;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >		m_xUnoControlDialogModel;
+    ScrollBar*          pHScroll;
+    ScrollBar*          pVScroll;
+    DlgEdModel*         pDlgEdModel;
+    DlgEdPage*          pDlgEdPage;
+    DlgEdView*          pDlgEdView;
+    DlgEdForm*          pDlgEdForm;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >     m_xUnoControlDialogModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >        m_xControlContainer;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >		m_ClipboardDataFlavors;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >		m_ClipboardDataFlavorsResource;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >       m_ClipboardDataFlavors;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >       m_ClipboardDataFlavorsResource;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xSupplier;
-    DlgEdFactory*		pObjFac;
-    Window*				pWindow;
-    DlgEdFunc*			pFunc;
-    DlgEdMode			eMode;
-    USHORT				eActObj;
-    BOOL				bFirstDraw;
-    Size				aGridSize;
-    BOOL				bGridVisible;
-    BOOL				bGridSnap;
-    BOOL				bCreateOK;
-    Timer				aPaintTimer;
-    Rectangle			aPaintRect;
-    BOOL				bDialogModelChanged;
+    DlgEdFactory*       pObjFac;
+    Window*             pWindow;
+    DlgEdFunc*          pFunc;
+    DlgEdMode           eMode;
+    USHORT              eActObj;
+    BOOL                bFirstDraw;
+    Size                aGridSize;
+    BOOL                bGridVisible;
+    BOOL                bGridSnap;
+    BOOL                bCreateOK;
+    Timer               aPaintTimer;
+    Rectangle           aPaintRect;
+    BOOL                bDialogModelChanged;
     Timer               aMarkTimer;
-    long				mnPaintGuard;
+    long                mnPaintGuard;
 
 public:
     DlgEditor();
     ~DlgEditor();
 
-    void			SetWindow( Window* pWindow );
-    Window*			GetWindow() const { return pWindow; }
+    void            SetWindow( Window* pWindow );
+    Window*         GetWindow() const { return pWindow; }
 
     /** returns the control container associated with our window
         @see GetWindow
@@ -143,59 +143,59 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
                     GetWindowControlContainer();
 
-    void			SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
-    DlgEdForm*		GetDlgEdForm() const { return pDlgEdForm; }
+    void            SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
+    DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }
 
-    void			SetScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll );
+    void            SetScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll );
     void            InitScrollBars();
-    ScrollBar* 		GetHScroll() const { return pHScroll; }
-    ScrollBar*		GetVScroll() const { return pVScroll; }
-    void			DoScroll( ScrollBar* pActScroll );
-    void			UpdateScrollBars();
+    ScrollBar*      GetHScroll() const { return pHScroll; }
+    ScrollBar*      GetVScroll() const { return pVScroll; }
+    void            DoScroll( ScrollBar* pActScroll );
+    void            UpdateScrollBars();
 
-    void			SetDialog( ::com::sun::star::uno::Reference< 
+    void            SetDialog( ::com::sun::star::uno::Reference<
                         ::com::sun::star::container::XNameContainer > xUnoControlDialogModel );
-    void			ResetDialog( void );
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >	GetDialog() const 
+    void            ResetDialog( void );
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetDialog() const
                         {return m_xUnoControlDialogModel;}
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > const & GetNumberFormatsSupplier();
 
-    DlgEdModel*		GetModel() 		const { return pDlgEdModel; }
-    DlgEdView*		GetView() 	 	const { return pDlgEdView; }
-    DlgEdPage*		GetPage()		const { return pDlgEdPage; }
+    DlgEdModel*     GetModel()      const { return pDlgEdModel; }
+    DlgEdView*      GetView()       const { return pDlgEdView; }
+    DlgEdPage*      GetPage()       const { return pDlgEdPage; }
 
-    void			ShowDialog();
+    void            ShowDialog();
 
-    BOOL			UnmarkDialog();
-    BOOL			RemarkDialog();
+    BOOL            UnmarkDialog();
+    BOOL            RemarkDialog();
 
-    void			SetDialogModelChanged( BOOL bChanged = TRUE ) { bDialogModelChanged = bChanged; }
-    BOOL			IsDialogModelChanged() const { return bDialogModelChanged; }
+    void            SetDialogModelChanged( BOOL bChanged = TRUE ) { bDialogModelChanged = bChanged; }
+    BOOL            IsDialogModelChanged() const { return bDialogModelChanged; }
 
-    BOOL			IsModified() const;
-    void			ClearModifyFlag();
+    BOOL            IsModified() const;
+    void            ClearModifyFlag();
 
-    void			MouseButtonDown( const MouseEvent& rMEvt );
-    void			MouseButtonUp( const MouseEvent& rMEvt );
-    void			MouseMove( const MouseEvent& rMEvt );
-    void			Paint( const Rectangle& rRect );
-    BOOL			KeyInput( const KeyEvent& rKEvt );
+    void            MouseButtonDown( const MouseEvent& rMEvt );
+    void            MouseButtonUp( const MouseEvent& rMEvt );
+    void            MouseMove( const MouseEvent& rMEvt );
+    void            Paint( const Rectangle& rRect );
+    BOOL            KeyInput( const KeyEvent& rKEvt );
 
-    void 			SetMode( DlgEdMode eMode );
-    void			SetInsertObj( USHORT eObj );
-    USHORT    		GetInsertObj() const;
-    void			CreateDefaultObject();
-    DlgEdMode   	GetMode() const { return eMode; }
-    BOOL			IsCreateOK() const { return bCreateOK; }
+    void            SetMode( DlgEdMode eMode );
+    void            SetInsertObj( USHORT eObj );
+    USHORT          GetInsertObj() const;
+    void            CreateDefaultObject();
+    DlgEdMode       GetMode() const { return eMode; }
+    BOOL            IsCreateOK() const { return bCreateOK; }
 
-    void			Cut();
-    void			Copy();
-    void			Paste();
-    void			Delete();
+    void            Cut();
+    void            Copy();
+    void            Paste();
+    void            Delete();
     BOOL            IsPasteAllowed();
 
-    void			ShowProperties();
+    void            ShowProperties();
     void            UpdatePropertyBrowserDelayed();
 
     sal_Int32       countPages( Printer* pPrinter );
@@ -203,7 +203,7 @@ public:
 
     bool            AdjustPageSize();
 
-    bool			isInPaint() const { return mnPaintGuard > 0; }
+    bool            isInPaint() const { return mnPaintGuard > 0; }
 };
 
 #endif //_BASCTL_DLGED_HXX

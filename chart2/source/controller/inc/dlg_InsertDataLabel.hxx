@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,12 +49,12 @@ class DataLabelResources;
 class DataLabelsDialog : public ModalDialog
 {
 private:
-    OKButton			m_aBtnOK;
-    CancelButton		m_aBtnCancel;
-    HelpButton			m_aBtnHelp;
+    OKButton            m_aBtnOK;
+    CancelButton        m_aBtnCancel;
+    HelpButton          m_aBtnHelp;
     ::std::auto_ptr< DataLabelResources >    m_apDataLabelResources;
 
-    const SfxItemSet&	m_rInAttrs;
+    const SfxItemSet&   m_rInAttrs;
 
     void Reset();
 

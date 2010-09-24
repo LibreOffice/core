@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #define DEFAULT_DRAGMODE    2
 #define DEFAULT_SNAPMODE    0
 #define DEFAULT_SCALEFACTOR 100
-#define DEFAULT_AAMINHEIGHT	8
+#define DEFAULT_AAMINHEIGHT 8
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -52,23 +52,23 @@ sal_Bool SvtTabAppearanceCfg::bInitialized = sal_False;
  --------------------------------------------------------------------*/
 SvtTabAppearanceCfg::SvtTabAppearanceCfg()
     :ConfigItem(OUString::createFromAscii("Office.Common/View"))
-    ,nLookNFeel			( DEFAULT_LOOKNFEEL )
-    ,nDragMode			( DEFAULT_DRAGMODE )
+    ,nLookNFeel         ( DEFAULT_LOOKNFEEL )
+    ,nDragMode          ( DEFAULT_DRAGMODE )
     ,nScaleFactor       ( DEFAULT_SCALEFACTOR )
-    ,nSnapMode			( DEFAULT_SNAPMODE )
+    ,nSnapMode          ( DEFAULT_SNAPMODE )
     ,nMiddleMouse       ( MOUSE_MIDDLE_AUTOSCROLL )
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-    ,nAAMinPixelHeight	( DEFAULT_AAMINHEIGHT )
+    ,nAAMinPixelHeight  ( DEFAULT_AAMINHEIGHT )
 #endif
     ,bMenuMouseFollow(FALSE)
     ,bSingleLineTabCtrl(FALSE)
     ,bColoredTabCtrl(FALSE)
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-    ,bFontAntialiasing	( TRUE )
+    ,bFontAntialiasing  ( TRUE )
 #endif
 {
     RTL_LOGFILE_CONTEXT(aLog, "svtools SvtTabAppearanceCfg::SvtTabAppearanceCfg()");
-    
+
     const Sequence<OUString>& rNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();
@@ -238,20 +238,20 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     switch ( nLookNFeel )
     {
         case LookMotif:
-            hAppStyle.SetStandardUnixStyles();	break;
+            hAppStyle.SetStandardUnixStyles();  break;
 
         case LookOSTwo:
-            hAppStyle.SetStandardOS2Styles();	break;
+            hAppStyle.SetStandardOS2Styles();   break;
 
         case LookMacintosh:
-            hAppStyle.SetStandardMacStyles();	break;
+            hAppStyle.SetStandardMacStyles();   break;
 
         case LookWindows:
-            hAppStyle.SetStandardWinStyles();	break;
+            hAppStyle.SetStandardWinStyles();   break;
 
         case LookStardivision:
         default:
-            hAppStyle.SetStandardStyles();		break;
+            hAppStyle.SetStandardStyles();      break;
     }
 
     // and set it here

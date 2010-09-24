@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,8 +52,8 @@
 SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
                     const SfxObjectShell* pDocShell ) :
         SfxTabDialog        ( pParent, SdResId( TAB_CHAR ), pAttr ),
-        rOutAttrs			( *pAttr ),
-        rDocShell			( *pDocShell )
+        rOutAttrs           ( *pAttr ),
+        rDocShell           ( *pDocShell )
 {
     FreeResource();
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ SO2_IMPL_INVARIANT(SotObject)
 /*************************************************************************
 |*  SotObject::TestMemberObjRef()
 |*
-|*	Beschreibung:
+|*  Beschreibung:
 *************************************************************************/
 void SotObject::TestMemberObjRef( BOOL /*bFree*/ )
 {
@@ -70,7 +70,7 @@ void SotObject::TestMemberObjRef( BOOL /*bFree*/ )
 /*************************************************************************
 |*  SotObject::TestMemberObjRef()
 |*
-|*	Beschreibung:
+|*  Beschreibung:
 *************************************************************************/
 #ifdef TEST_INVARIANT
 void SotObject::TestMemberInvariant( BOOL /*bPrint*/ )
@@ -89,7 +89,7 @@ SotObject::SotObject()
     , nOwnerLockCount( 0 )
     , bOwner      ( TRUE )
     , bSVObject   ( FALSE )
-    , bInClose	  ( FALSE )
+    , bInClose    ( FALSE )
 {
     SotFactory::IncSvObjectCount( this );
 }
@@ -131,12 +131,12 @@ BOOL SotObject::IsSvObject() const
 /*************************************************************************
 |*    SotObject::QueryDelete()
 |*
-|*    Beschreibung:	Bei allen aggregierten Objekte muss der RefCount auf
-|*					0 gehen, damit das Gesammt-Objekt zerstoert wird. Das
-|*					zerst�ren von Teilen ist verboten. Da der Aggregator
-|*					(oder Cast-Verwalter) den Zaehler der aggregierten
-|*					Objekte um 1 erhoeht, muss dies bei der Berechnung
-|*					des 0-RefCounts beruecksichtigt werden.
+|*    Beschreibung: Bei allen aggregierten Objekte muss der RefCount auf
+|*                  0 gehen, damit das Gesammt-Objekt zerstoert wird. Das
+|*                  zerst�ren von Teilen ist verboten. Da der Aggregator
+|*                  (oder Cast-Verwalter) den Zaehler der aggregierten
+|*                  Objekte um 1 erhoeht, muss dies bei der Berechnung
+|*                  des 0-RefCounts beruecksichtigt werden.
 *************************************************************************/
 BOOL SotObject::ShouldDelete()
 {
@@ -384,21 +384,21 @@ SotObject * SotObject::GetMainObj() const
 //=========================================================================
 USHORT SotObject::FuzzyLock
 (
-    BOOL bLock,		    /* TRUE, lock. FALSE, unlock. */
-    BOOL /*bIntern*/,	/* TRUE, es handelt sich um einen internen Lock.
+    BOOL bLock,         /* TRUE, lock. FALSE, unlock. */
+    BOOL /*bIntern*/,   /* TRUE, es handelt sich um einen internen Lock.
                            FALSE, der Lock kam von aussen (Ole2, Ipc2) */
-    BOOL bClose		    /* TRUE, Close aufrufen wenn letzte Lock */
+    BOOL bClose         /* TRUE, Close aufrufen wenn letzte Lock */
 )
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Erlaubte Parameterkombinationen:
-    ( TRUE,  TRUE,  *     )	->	interner Lock.
-    ( FALSE, TRUE,  TRUE  )	->	interner Unlock mit Close,
+    ( TRUE,  TRUE,  *     ) ->  interner Lock.
+    ( FALSE, TRUE,  TRUE  ) ->  interner Unlock mit Close,
                                  wenn LockCount() == 0
-    ( TRUE,  FALSE, *	  )	->	externer Lock.
-    ( FALSE, FALSE, TRUE  )	->	externer Unlock mit Close,
+    ( TRUE,  FALSE, *     ) ->  externer Lock.
+    ( FALSE, FALSE, TRUE  ) ->  externer Unlock mit Close,
                                  wenn LockCount() == 0
-    ( FALSE, FALSE, FALSE )	->	externer Unlock
+    ( FALSE, FALSE, FALSE ) ->  externer Unlock
 
     F"ur !Owner() wird der Aufruf an das externe Objekt weitergeleitet.
      F"ur diese muss das <IOleItemContainer>-Interface zur Vef"ugung stehen.
@@ -431,9 +431,9 @@ USHORT SotObject::FuzzyLock
 //=========================================================================
 void SotObject::OwnerLock
 (
-    BOOL bLock		/* TRUE, lock. FALSE, unlock. */
+    BOOL bLock      /* TRUE, lock. FALSE, unlock. */
 )
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Wenn der OwnerLock auf Null dekrementiert, dann wird die Methode
     DoClose gerufen. Dies geschieht unabh"angig vom Lock. bzw. RefCount.

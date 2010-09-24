@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,20 +42,20 @@ SwVbaParagraph::~SwVbaParagraph()
 {
 }
 
-uno::Reference< word::XRange > SAL_CALL 
+uno::Reference< word::XRange > SAL_CALL
 SwVbaParagraph::getRange( ) throw ( uno::RuntimeException )
 {
     return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, mxTextRange->getStart(), mxTextRange->getEnd(), mxTextRange->getText(), sal_True ) );
 }
 
-rtl::OUString& 
+rtl::OUString&
 SwVbaParagraph::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaParagraph") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 SwVbaParagraph::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;
@@ -75,7 +75,7 @@ class ParagraphCollectionHelper : public ParagraphCollectionHelper_BASE
 {
 private:
     uno::Reference< text::XTextDocument > mxTextDocument;
-    
+
     uno::Reference< container::XEnumeration > getEnumeration() throw (uno::RuntimeException)
     {
         uno::Reference< container::XEnumerationAccess > xParEnumAccess( mxTextDocument->getText(), uno::UNO_QUERY_THROW );
@@ -103,7 +103,7 @@ public:
             }
         }
         return nCount;
-    }	
+    }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
     {
         if( Index < getCount() )
@@ -118,7 +118,7 @@ public:
                     if( Index == nCount )
                         return uno::makeAny( xServiceInfo );
                     nCount++;
-                }        
+                }
             }
         }
         throw lang::IndexOutOfBoundsException();
@@ -127,7 +127,7 @@ public:
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
     {
         return getEnumeration();
-    }    
+    }
 };
 
 SwVbaParagraphs::SwVbaParagraphs( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< ::com::sun::star::uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xDocument ) throw (uno::RuntimeException) : SwVbaParagraphs_BASE( xParent, xContext, new ParagraphCollectionHelper( xDocument ) ), mxTextDocument( xDocument )
@@ -154,14 +154,14 @@ SwVbaParagraphs::createCollectionObject( const css::uno::Any& aSource )
     return uno::makeAny( uno::Reference< word::XParagraph >( new SwVbaParagraph( this, mxContext, mxTextDocument, xTextRange ) ) );
 }
 
-rtl::OUString& 
+rtl::OUString&
 SwVbaParagraphs::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaParagraphs") );
     return sImplName;
 }
 
-css::uno::Sequence<rtl::OUString> 
+css::uno::Sequence<rtl::OUString>
 SwVbaParagraphs::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

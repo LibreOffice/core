@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,13 @@
 #define __FRAMEWORK_UIELEMENT_TOOLBARWRAPPER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <helper/uiconfigelementwrapperbase.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -43,7 +43,7 @@
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 
 namespace framework
@@ -56,15 +56,15 @@ class ToolBarWrapper : public ::com::sun::star::ui::XUIFunctionListener,
     public:
         ToolBarWrapper( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
         virtual ~ToolBarWrapper();
-        
+
         // XInterface
         virtual void SAL_CALL acquire() throw();
         virtual void SAL_CALL release() throw();
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException );
-        
+
         // XComponent
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
-        
+
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
@@ -73,7 +73,7 @@ class ToolBarWrapper : public ::com::sun::star::ui::XUIFunctionListener,
 
         // XUpdatable
         virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
-        
+
         // XUIElementSettings
         virtual void SAL_CALL updateSettings() throw (::com::sun::star::uno::RuntimeException);
 
@@ -83,14 +83,14 @@ class ToolBarWrapper : public ::com::sun::star::ui::XUIFunctionListener,
         // XEventListener
         using cppu::OPropertySetHelper::disposing;
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
-    
+
     //-------------------------------------------------------------------------------------------------------------
-    //	protected methods
+    //  protected methods
     //-------------------------------------------------------------------------------------------------------------
     protected:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any&  aValue ) throw( com::sun::star::uno::Exception );
         virtual void impl_fillNewData();
-    
+
     private:
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xToolBarManager;
         com::sun::star::uno::Reference< com::sun::star::awt::XWindow >                  m_xToolBarWindow;

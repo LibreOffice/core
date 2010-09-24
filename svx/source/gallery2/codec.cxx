@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 // - GalleryCodec -
 // ----------------
 
-GalleryCodec::GalleryCodec( SvStream& rIOStm ) : 
+GalleryCodec::GalleryCodec( SvStream& rIOStm ) :
     rStm( rIOStm )
 {
 }
@@ -51,9 +51,9 @@ GalleryCodec::~GalleryCodec()
 
 BOOL GalleryCodec::IsCoded( SvStream& rStm, UINT32& rVersion )
 {
-    const ULONG	nPos = rStm.Tell();
-    BOOL		bRet;
-    BYTE		cByte1, cByte2, cByte3, cByte4, cByte5, cByte6;
+    const ULONG nPos = rStm.Tell();
+    BOOL        bRet;
+    BYTE        cByte1, cByte2, cByte3, cByte4, cByte5, cByte6;
 
     rStm >> cByte1 >> cByte2 >> cByte3 >> cByte4 >> cByte5 >> cByte6;
 
@@ -78,7 +78,7 @@ BOOL GalleryCodec::IsCoded( SvStream& rStm, UINT32& rVersion )
 void GalleryCodec::Write( SvStream& rStmToWrite )
 {
     UINT32 nPos, nCompSize;
-    
+
     rStmToWrite.Seek( STREAM_SEEK_TO_END );
     const UINT32 nSize = rStmToWrite.Tell();
     rStmToWrite.Seek( 0UL );
@@ -108,7 +108,7 @@ void GalleryCodec::Read( SvStream& rStmToRead )
 
     if( IsCoded( rStm, nVersion ) )
     {
-        UINT32	nCompressedSize, nUnCompressedSize;
+        UINT32  nCompressedSize, nUnCompressedSize;
 
         rStm.SeekRel( 6 );
         rStm >> nUnCompressedSize >> nCompressedSize;
@@ -117,10 +117,10 @@ void GalleryCodec::Read( SvStream& rStmToRead )
         if( 1 == nVersion )
         {
             BYTE*   pCompressedBuffer = new BYTE[ nCompressedSize ]; rStm.Read( pCompressedBuffer, nCompressedSize );
-            BYTE*	pInBuf = pCompressedBuffer;
-            BYTE*	pOutBuf = new BYTE[ nUnCompressedSize ];
-            BYTE*	pTmpBuf = pOutBuf;
-            BYTE*	pLast = pOutBuf + nUnCompressedSize - 1;
+            BYTE*   pInBuf = pCompressedBuffer;
+            BYTE*   pOutBuf = new BYTE[ nUnCompressedSize ];
+            BYTE*   pTmpBuf = pOutBuf;
+            BYTE*   pLast = pOutBuf + nUnCompressedSize - 1;
             ULONG   nIndex = 0UL, nCountByte, nRunByte;
             BOOL    bEndDecoding = FALSE;
 
@@ -157,7 +157,7 @@ void GalleryCodec::Read( SvStream& rStmToRead )
             while ( !bEndDecoding && ( pTmpBuf <= pLast ) );
 
                rStmToRead.Write( pOutBuf, nUnCompressedSize );
-            
+
             delete[] pOutBuf;
             delete[] pCompressedBuffer;
         }

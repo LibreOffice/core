@@ -8,7 +8,7 @@ namespace writerfilter {
 namespace dmapper {
 
 TblStylePrHandler::TblStylePrHandler( DomainMapper & rDMapper ) :
-   m_rDMapper( rDMapper ), 
+   m_rDMapper( rDMapper ),
    m_pTablePropsHandler( new TablePropertiesHandler( true ) ),
    m_nType( TBL_STYLE_UNKNOWN ),
    m_pProperties( new PropertyMap )
@@ -54,7 +54,7 @@ void TblStylePrHandler::sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_PPrBase:
         case NS_ooxml::LN_EG_RPrBase:
         case NS_ooxml::LN_CT_TblPrBase:
-        case NS_ooxml::LN_CT_TrPrBase: 
+        case NS_ooxml::LN_CT_TrPrBase:
         case NS_ooxml::LN_CT_TcPrBase:
             resolveSprmProps( rSprm );
             break;
@@ -71,7 +71,7 @@ void TblStylePrHandler::sprm(Sprm & rSprm)
                 m_rDMapper.PopStyleSheetProperties( true );
             }
     }
-    
+
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement("TblStylePrHandler.sprm");
 #endif

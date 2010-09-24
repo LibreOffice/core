@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/interfacecontainer.hxx> 
+#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/compbase2.hxx>
 
@@ -78,11 +78,11 @@ using namespace ::com::sun::star;
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper1< presentation::XSlideShowView > ViewBase;
-class View : public ::comphelper::OBaseMutex,  
+class View : public ::comphelper::OBaseMutex,
              public ViewBase
 {
 public:
-    explicit View( const uno::Reference< rendering::XSpriteCanvas >& rCanvas ) : 
+    explicit View( const uno::Reference< rendering::XSpriteCanvas >& rCanvas ) :
         ViewBase( m_aMutex ),
         mxCanvas( rCanvas ),
         maPaintListeners( m_aMutex ),
@@ -101,7 +101,7 @@ public:
         maTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
             nSize, nSize, (rNewSize.Width() - nSize) / 2, (rNewSize.Height() - nSize) / 2);
 
-        lang::EventObject aEvent( *this ); 
+        lang::EventObject aEvent( *this );
         maTransformationListeners.notifyEach( &util::XModifyListener::modified,
                                               aEvent );
     }
@@ -110,7 +110,7 @@ public:
     {
         awt::PaintEvent aEvent( *this,
                                 awt::Rectangle(),
-                                0 ); 
+                                0 );
         maPaintListeners.notifyEach( &awt::XPaintListener::windowPaint,
                                      aEvent );
     }
@@ -129,12 +129,12 @@ private:
                                          ::basegfx::B2DRectangle(0.0,0.0,
                                                                  maSize.Width(),
                                                                  maSize.Height() )));
-        ::cppcanvas::SpriteCanvasSharedPtr pCanvas( 
+        ::cppcanvas::SpriteCanvasSharedPtr pCanvas(
             ::cppcanvas::VCLFactory::getInstance().createSpriteCanvas( mxCanvas ));
         if( !pCanvas )
             return;
 
-        ::cppcanvas::PolyPolygonSharedPtr pPolyPoly( 
+        ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
             ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( pCanvas,
                                                                           aPoly ) );
         if( !pPolyPoly )
@@ -150,7 +150,7 @@ private:
     virtual geometry::AffineMatrix2D SAL_CALL getTransformation(  ) throw (uno::RuntimeException)
     {
         geometry::AffineMatrix2D aRes;
-        return basegfx::unotools::affineMatrixFromHomMatrix( aRes, 
+        return basegfx::unotools::affineMatrixFromHomMatrix( aRes,
                                                              maTransform );
     }
 
@@ -207,9 +207,9 @@ private:
     Size                                       maSize;
 };
 
-typedef ::cppu::WeakComponentImplHelper2< drawing::XDrawPage, 
+typedef ::cppu::WeakComponentImplHelper2< drawing::XDrawPage,
                                           beans::XPropertySet > SlideBase;
-class DummySlide : public ::comphelper::OBaseMutex,  
+class DummySlide : public ::comphelper::OBaseMutex,
                    public SlideBase
 {
 public:
@@ -251,7 +251,7 @@ private:
         return uno::Reference< beans::XPropertySetInfo >();
     }
 
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& /*aPropertyName*/, 
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& /*aPropertyName*/,
                                             const uno::Any& /*aValue*/ ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
@@ -275,29 +275,29 @@ private:
                               sizeof(lcl_propertyMap)/sizeof(*lcl_propertyMap),
                               true );
 
-        sal_Int16 aRes;            
+        sal_Int16 aRes;
         if( !aMap.lookup( PropertyName, aRes ))
             return uno::Any();
-                
+
         return uno::makeAny(aRes);
     }
 
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, 
+    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/,
                                                      const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
 
-    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, 
+    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/,
                                                         const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
 
-    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/, 
+    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/,
                                                      const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
 
-    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/, 
+    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/,
                                                         const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
@@ -308,7 +308,7 @@ class DemoApp : public Application
 {
 public:
     virtual void Main();
-    virtual USHORT	Exception( USHORT nError );
+    virtual USHORT  Exception( USHORT nError );
 };
 
 class ChildWindow : public Window
@@ -320,7 +320,7 @@ public:
     virtual void Resize();
 
     void setShow( const uno::Reference< presentation::XSlideShow >& rShow ) { mxShow = rShow; init(); }
-    
+
 private:
     void init();
 
@@ -351,7 +351,7 @@ void ChildWindow::init()
         {
             uno::Reference< rendering::XCanvas > xCanvas( GetCanvas(),
                                                           uno::UNO_QUERY_THROW );
-            uno::Reference< rendering::XSpriteCanvas > xSpriteCanvas( xCanvas, 
+            uno::Reference< rendering::XSpriteCanvas > xSpriteCanvas( xCanvas,
                                                                       uno::UNO_QUERY_THROW );
             mpView = new View( xSpriteCanvas );
             mpView->resize( GetSizePixel() );
@@ -363,7 +363,7 @@ void ChildWindow::init()
     catch (const uno::Exception &e)
     {
         OSL_TRACE( "Exception '%s' thrown\n" ,
-                   (const sal_Char*)::rtl::OUStringToOString( e.Message, 
+                   (const sal_Char*)::rtl::OUStringToOString( e.Message,
                                                               RTL_TEXTENCODING_UTF8 ));
     }
 }
@@ -378,7 +378,7 @@ void ChildWindow::Paint( const Rectangle& /*rRect*/ )
     catch (const uno::Exception &e)
     {
         OSL_TRACE( "Exception '%s' thrown\n" ,
-                   (const sal_Char*)::rtl::OUStringToOString( e.Message, 
+                   (const sal_Char*)::rtl::OUStringToOString( e.Message,
                                                               RTL_TEXTENCODING_UTF8 ));
     }
 }
@@ -395,20 +395,20 @@ public:
     DemoWindow();
     virtual void Paint( const Rectangle& rRect );
     virtual void Resize();
-    
+
 private:
     void init();
     DECL_LINK( updateHdl, Timer* );
 
-    ChildWindow                                maLeftChild; 
-    ChildWindow                                maRightTopChild; 
-    ChildWindow                                maRightBottomChild; 
+    ChildWindow                                maLeftChild;
+    ChildWindow                                maRightTopChild;
+    ChildWindow                                maRightBottomChild;
     uno::Reference< presentation::XSlideShow > mxShow;
     AutoTimer                                  maUpdateTimer;
     bool                                       mbSlideDisplayed;
 };
 
-DemoWindow::DemoWindow() :    
+DemoWindow::DemoWindow() :
     Dialog((Window*)NULL),
     maLeftChild( this ),
     maRightTopChild( this ),
@@ -437,14 +437,14 @@ void DemoWindow::init()
     {
         if( !mxShow.is() )
         {
-            uno::Reference< lang::XMultiServiceFactory > xFactory( 
+            uno::Reference< lang::XMultiServiceFactory > xFactory(
                 ::comphelper::getProcessServiceFactory(),
                 uno::UNO_QUERY_THROW );
 
-            uno::Reference< uno::XInterface > xInt( xFactory->createInstance( 
+            uno::Reference< uno::XInterface > xInt( xFactory->createInstance(
                                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SlideShow")) ));
 
-            mxShow.set( xInt, 
+            mxShow.set( xInt,
                         uno::UNO_QUERY_THROW );
 
             maLeftChild.setShow( mxShow );
@@ -456,9 +456,9 @@ void DemoWindow::init()
         {
             uno::Reference< drawing::XDrawPage > xSlide( new DummySlide );
             mxShow->displaySlide( xSlide,
-                                  uno::Reference< animations::XAnimationNode >(), 
+                                  uno::Reference< animations::XAnimationNode >(),
                                   uno::Sequence< beans::PropertyValue >() );
-            mxShow->setProperty( beans::PropertyValue( 
+            mxShow->setProperty( beans::PropertyValue(
                                      rtl::OUString::createFromAscii("RehearseTimings"),
                                      0,
                                      uno::makeAny( sal_True ),
@@ -469,7 +469,7 @@ void DemoWindow::init()
     catch (const uno::Exception &e)
     {
         OSL_TRACE( "Exception '%s' thrown\n" ,
-                   (const sal_Char*)::rtl::OUStringToOString( e.Message, 
+                   (const sal_Char*)::rtl::OUStringToOString( e.Message,
                                                               RTL_TEXTENCODING_UTF8 ));
     }
 }
@@ -530,7 +530,7 @@ void DemoApp::Main()
     try
     {
         uno::Reference< uno::XComponentContext > xCtx = ::cppu::defaultBootstrap_InitialComponentContext();
-        xFactory = uno::Reference< lang::XMultiServiceFactory >(  xCtx->getServiceManager(), 
+        xFactory = uno::Reference< lang::XMultiServiceFactory >(  xCtx->getServiceManager(),
                                                                   uno::UNO_QUERY );
         if( xFactory.is() )
             ::comphelper::setProcessServiceFactory( xFactory );

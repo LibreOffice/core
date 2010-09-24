@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -133,7 +133,7 @@ public:
     SwFlyLayFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
     SwFlyLayFrm( SwFlyLayFrm& );
 
-    virtual	void Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
 };
 
@@ -161,7 +161,7 @@ public:
 
     SwFlyAtCntFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
 
-    virtual	void Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
     void SetAbsPos( const Point &rNew );
 
@@ -187,7 +187,7 @@ class SwFlyInCntFrm : public SwFlyFrm
     long  nLine; //Zeilenhoehe, Ref.Y() - nLine == Zeilenanfang.
 
     BOOL bInvalidLayout :1;
-    BOOL bInvalidCntnt	:1;
+    BOOL bInvalidCntnt  :1;
 
 protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
@@ -202,7 +202,7 @@ public:
 
     virtual ~SwFlyInCntFrm();
     virtual void  Format(  const SwBorderAttrs *pAttrs = 0 );
-    virtual	void  Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual void  Modify( SfxPoolItem*, SfxPoolItem* );
 
     void SetRefPoint( const Point& rPoint, const Point &rRelAttr,
         const Point &rRelPos );

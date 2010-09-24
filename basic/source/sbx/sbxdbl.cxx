@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,11 +77,11 @@ double ImpGetDouble( const SbxValues* p )
         case SbxSTRING:
         case SbxLPSTR:
             if( !p->pOUString )
-            {	
+            {
                 nRes = 0;
                 if ( SbiRuntime::isVBAEnabled() )// VBA only behaviour
                     SbxBase::SetError( SbxERR_CONVERSION );
-            }		
+            }
             else
             {
                 double d;
@@ -169,7 +169,7 @@ start:
             {
             SbxDecimal* pDec = ImpCreateDecimal( p );
             if( !pDec->setDouble( n ) )
-                SbxBase::SetError( SbxERR_OVERFLOW ); 
+                SbxBase::SetError( SbxERR_OVERFLOW );
             break;
             }
         direct:

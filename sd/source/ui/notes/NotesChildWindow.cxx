@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@
 namespace sd { namespace notes {
 
 NotesChildWindow::NotesChildWindow (
-    ::Window* _pParent, 
-    USHORT nId, 
-    SfxBindings* pBindings, 
-    SfxChildWinInfo* pInfo) 
+    ::Window* _pParent,
+    USHORT nId,
+    SfxBindings* pBindings,
+    SfxChildWinInfo* pInfo)
     : SfxChildWindow (_pParent, nId)
 {
     pWindow = new NotesDockingWindow (pBindings, this, _pParent);

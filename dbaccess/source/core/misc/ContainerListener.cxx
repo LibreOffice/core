@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ namespace dbaccess
 
         return dynamic_cast< XContainerApproveListener& >( m_rDestination ).approveInsertElement(  _Event );
     }
-    
+
     //--------------------------------------------------------------------
     Reference< XVeto > SAL_CALL OContainerListener::approveReplaceElement( const ContainerEvent& _Event ) throw (WrappedTargetException, RuntimeException)
     {
@@ -75,7 +75,7 @@ namespace dbaccess
 
         return dynamic_cast< XContainerApproveListener& >( m_rDestination ).approveReplaceElement(  _Event );
     }
-    
+
     //--------------------------------------------------------------------
     Reference< XVeto > SAL_CALL OContainerListener::approveRemoveElement( const ContainerEvent& _Event ) throw (WrappedTargetException, RuntimeException)
     {
@@ -85,7 +85,7 @@ namespace dbaccess
 
         return dynamic_cast< XContainerApproveListener& >( m_rDestination ).approveRemoveElement(  _Event );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL OContainerListener::elementInserted( const ContainerEvent& _Event ) throw(RuntimeException)
     {
@@ -95,7 +95,7 @@ namespace dbaccess
 
         dynamic_cast< XContainerListener& >( m_rDestination ).elementInserted(  _Event );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL OContainerListener::elementRemoved( const ContainerEvent& _Event ) throw(RuntimeException)
     {
@@ -105,7 +105,7 @@ namespace dbaccess
 
         dynamic_cast< XContainerListener& >( m_rDestination ).elementRemoved(  _Event );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL OContainerListener::elementReplaced( const ContainerEvent& _Event ) throw(RuntimeException)
     {
@@ -115,7 +115,7 @@ namespace dbaccess
 
         dynamic_cast< XContainerListener& >( m_rDestination ).elementReplaced(  _Event );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL OContainerListener::disposing( const EventObject& _Source ) throw(RuntimeException)
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@ const char C_sFuncEnd[]    =  "\";\r\n"
 
 
 void
-Create_AccessMethod( const char *			i_pOutputFileName,
-                     const char *			i_sText )
+Create_AccessMethod( const char *           i_pOutputFileName,
+                     const char *           i_sText )
 {
     const char * pText = i_sText;
     const char * pTrans = 0;
@@ -84,18 +84,18 @@ Create_AccessMethod( const char *			i_pOutputFileName,
     {
         switch (*pTrans)
         {
-            case '"':	aFile.write( "\\\"", 2);
+            case '"':   aFile.write( "\\\"", 2);
                         break;
             case '\n':  aFile.write( "\\n", 2);
                         aFile.write( sDescrLineChange, sDescrLen);
                         break;
             case '\r':  aFile.write( "\\r", 2);
                         break;
-//			case '\t':  aFile.write( "\\t", 2);
-//						break;
+//          case '\t':  aFile.write( "\\t", 2);
+//                      break;
             default:    aFile.write( pTrans, 1);
         }
-    }	/* end for */
+    }   /* end for */
 
     aFile.write( C_sFuncEnd, (int) strlen(C_sFuncEnd) );
 

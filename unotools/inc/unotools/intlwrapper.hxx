@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ class UNOTOOLS_DLLPUBLIC IntlWrapper
 {
 private:
 
-    ::com::sun::star::lang::Locale	aLocale;
+    ::com::sun::star::lang::Locale  aLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
 
             CharClass*          pCharClass;

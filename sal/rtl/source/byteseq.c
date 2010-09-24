@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -177,7 +177,7 @@ void SAL_CALL rtl_byte_sequence_construct( sal_Sequence **ppSequence , sal_Int32
 }
 
 //==================================================================================================
-void SAL_CALL rtl_byte_sequence_constructNoDefault(	sal_Sequence **ppSequence , sal_Int32 nLength )
+void SAL_CALL rtl_byte_sequence_constructNoDefault( sal_Sequence **ppSequence , sal_Int32 nLength )
 {
     OSL_ASSERT( ppSequence );
     if( *ppSequence )
@@ -216,7 +216,7 @@ void SAL_CALL rtl_byte_sequence_assign( sal_Sequence **ppSequence , sal_Sequence
         *ppSequence = pSequence;
         rtl_byte_sequence_acquire( *ppSequence );
     }
-//	else
+//  else
 //      nothing to do
 
 }

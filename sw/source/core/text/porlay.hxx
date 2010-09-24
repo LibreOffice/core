@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ class SvStream;
 class SwTxtFormatter;
 
 /*************************************************************************
- *						class SwCharRange
+ *                      class SwCharRange
  *************************************************************************/
 
 class SwCharRange
@@ -51,7 +51,7 @@ class SwCharRange
     xub_StrLen nStart, nLen;
 public:
     inline SwCharRange( const xub_StrLen nInitStart = 0,
-        const xub_StrLen nInitLen = 0):	nStart( nInitStart ), nLen(nInitLen) {}
+        const xub_StrLen nInitLen = 0): nStart( nInitStart ), nLen(nInitLen) {}
     inline xub_StrLen &Start() { return nStart; }
     inline const xub_StrLen &Start() const { return nStart; }
     inline void LeftMove( xub_StrLen nNew )
@@ -70,7 +70,7 @@ public:
 };
 
 /*************************************************************************
- *						class SwRepaint
+ *                      class SwRepaint
  *************************************************************************/
 
 // SwRepaint ist ein dokumentglobales SwRect mit einem nOfst der angibt,
@@ -92,7 +92,7 @@ public:
 };
 
 /*************************************************************************
- *						class SwLineLayout
+ *                      class SwLineLayout
  *************************************************************************/
 
 class SwLineLayout : public SwTxtPortion
@@ -103,17 +103,17 @@ private:
     SvUShorts* pKanaComp;               // Used for Kana compression.
     KSHORT nRealHeight;                 // Die aus Zeilenabstand/Register resultierende Hoehe.
     sal_Bool bFormatAdj : 1;
-    sal_Bool bDummy 	: 1;
-    sal_Bool bFntChg	: 1;
-    sal_Bool bEndHyph	: 1;
-    sal_Bool bMidHyph	: 1;
-    sal_Bool bTab		: 1;
+    sal_Bool bDummy     : 1;
+    sal_Bool bFntChg    : 1;
+    sal_Bool bEndHyph   : 1;
+    sal_Bool bMidHyph   : 1;
+    sal_Bool bTab       : 1;
     sal_Bool bFly       : 1;
-    sal_Bool bRest		: 1;
-    sal_Bool bBlinking	: 1;
-    sal_Bool bClipping	: 1; // Clipping erforderlich wg. exakter Zeilenhoehe
-    sal_Bool bContent	: 1; // enthaelt Text, fuer Zeilennumerierung
-    sal_Bool bRedline	: 1; // enthaelt Redlining
+    sal_Bool bRest      : 1;
+    sal_Bool bBlinking  : 1;
+    sal_Bool bClipping  : 1; // Clipping erforderlich wg. exakter Zeilenhoehe
+    sal_Bool bContent   : 1; // enthaelt Text, fuer Zeilennumerierung
+    sal_Bool bRedline   : 1; // enthaelt Redlining
     sal_Bool bForcedLeftMargin : 1; // vom Fly verschobener linker Einzug
     sal_Bool bHanging : 1; // contents a hanging portion in the margin
     sal_Bool bUnderscore : 1;
@@ -276,24 +276,24 @@ class SwParaPortion : public SwLineLayout
 
     // Wenn ein SwTxtFrm gelocked ist, werden keine Veraenderungen an den
     // Formatierungsdaten (unter pLine) vorgenommen (vgl. ORPHANS)
-    sal_Bool bFlys			: 1; // Ueberlappen Flys ?
-    sal_Bool bPrep			: 1; // PREP_*
-    sal_Bool bPrepWidows	: 1; // PREP_WIDOWS
-    sal_Bool bPrepAdjust	: 1; // PREP_ADJUST_FRM
-    sal_Bool bPrepMustFit	: 1; // PREP_MUST_FIT
-    sal_Bool bFollowField	: 1; // Es steht noch ein Feldrest fuer den Follow an.
+    sal_Bool bFlys          : 1; // Ueberlappen Flys ?
+    sal_Bool bPrep          : 1; // PREP_*
+    sal_Bool bPrepWidows    : 1; // PREP_WIDOWS
+    sal_Bool bPrepAdjust    : 1; // PREP_ADJUST_FRM
+    sal_Bool bPrepMustFit   : 1; // PREP_MUST_FIT
+    sal_Bool bFollowField   : 1; // Es steht noch ein Feldrest fuer den Follow an.
 
-    sal_Bool bFixLineHeight	: 1; // Feste Zeilenhoehe
-    sal_Bool bFtnNum	: 1; // contents a footnotenumberportion
-    sal_Bool bMargin	: 1; // contents a hanging punctuation in the margin
+    sal_Bool bFixLineHeight : 1; // Feste Zeilenhoehe
+    sal_Bool bFtnNum    : 1; // contents a footnotenumberportion
+    sal_Bool bMargin    : 1; // contents a hanging punctuation in the margin
 
-    sal_Bool bFlag00	: 1; //
-    sal_Bool bFlag11	: 1; //
-    sal_Bool bFlag12	: 1; //
-    sal_Bool bFlag13	: 1; //
-    sal_Bool bFlag14	: 1; //
-    sal_Bool bFlag15	: 1; //
-    sal_Bool bFlag16	: 1; //
+    sal_Bool bFlag00    : 1; //
+    sal_Bool bFlag11    : 1; //
+    sal_Bool bFlag12    : 1; //
+    sal_Bool bFlag13    : 1; //
+    sal_Bool bFlag14    : 1; //
+    sal_Bool bFlag15    : 1; //
+    sal_Bool bFlag16    : 1; //
 
 public:
     SwParaPortion();
@@ -372,7 +372,7 @@ public:
 };
 
 /*************************************************************************
- *						Inline-Implementierungen
+ *                      Inline-Implementierungen
  *************************************************************************/
 
 inline void SwLineLayout::ResetFlags()
@@ -399,10 +399,10 @@ inline void SwParaPortion::FormatReset()
 {
     nDelta = 0;
     aReformat = SwCharRange( 0, STRING_LEN );
-//	AMA 9916: bFlys muss in SwTxtFrm::_Format() erhalten bleiben, damit
-//	leere Absaetze, die Rahmen ohne Umfluss ausweichen mussten, sich
-//	neu formatieren, wenn der Rahmen aus dem Bereich verschwindet.
-//	bFlys = sal_False;
+//  AMA 9916: bFlys muss in SwTxtFrm::_Format() erhalten bleiben, damit
+//  leere Absaetze, die Rahmen ohne Umfluss ausweichen mussten, sich
+//  neu formatieren, wenn der Rahmen aus dem Bereich verschwindet.
+//  bFlys = sal_False;
     ResetPreps();
     bFollowField = bFixLineHeight = bMargin = sal_False;
 }

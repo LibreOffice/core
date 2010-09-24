@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -538,7 +538,7 @@ inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
         case BMP_FORMAT_32BIT_TC_RGBA:
             return ImplConvertToBitmap<BMP_FORMAT_32BIT_TC_RGBA>( aSrcType, rDst, rSrc );
     }
-    
+
 #ifdef DEBUG
     static int nNotAccelerated = 0;
     if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )

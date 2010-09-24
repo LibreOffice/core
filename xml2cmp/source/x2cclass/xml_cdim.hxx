@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef	UDKSERVICE_XML_CDIM_HXX
-#define	UDKSERVICE_XML_CDIM_HXX
+#ifndef UDKSERVICE_XML_CDIM_HXX
+#define UDKSERVICE_XML_CDIM_HXX
 
 
 #include "xml_cd.hxx"
@@ -36,7 +36,7 @@
 
 
 
-/**	Represents one of the Component descriptions in an XML file.
+/** Represents one of the Component descriptions in an XML file.
     Implements ComponentDescription and does part of the parsing for class CompDescrsFromAnXmlFile.
 **/
 class ComponentDescriptionImpl : public ComponentDescription
@@ -47,52 +47,52 @@ class ComponentDescriptionImpl : public ComponentDescription
       public:
         // LIFECYCLE
                             ValueList(
-                                E_Tag				i_eTag )
+                                E_Tag               i_eTag )
                                 : eTag(i_eTag) {}
         // INQUIRY
-        const char *		BeginTag() const;
-        BOOL				MatchesEndTag(
-                                const char *		i_pTextPosition ) const;
-        INT32				EndTagLength() const;
+        const char *        BeginTag() const;
+        BOOL                MatchesEndTag(
+                                const char *        i_pTextPosition ) const;
+        INT32               EndTagLength() const;
 
         static const ValueList &
                             Null_();
       private:
-        E_Tag				eTag;
+        E_Tag               eTag;
     };
 
     // LIFECYCLE
                         ComponentDescriptionImpl();
-    virtual				~ComponentDescriptionImpl();
+    virtual             ~ComponentDescriptionImpl();
 
     // OPERATIONS
-    ValueList *			GetBeginTag(
-                            ByteString &		    o_sValue,
-                            const char * & 			io_pStartOfTag ) const;
-    static void 		ParseUntilStartOfDescription(
+    ValueList *         GetBeginTag(
+                            ByteString &            o_sValue,
+                            const char * &          io_pStartOfTag ) const;
+    static void         ParseUntilStartOfDescription(
                             const char * & io_pBufferPosition );
     static BOOL         CheckEndOfDescription(
                             const char * & io_pBufferPosition );
     // INQUIRY
-    static INT32		DescriptionEndTagSize();
+    static INT32        DescriptionEndTagSize();
 
   // INTERFACE ComponentDescription
     // INQUIRY
     virtual const std::vector< ByteString > &
-                        DataOf(						/// @return All values of this tag.
+                        DataOf(                     /// @return All values of this tag.
                             ComponentDescription::E_Tag
                                                     i_eTag ) const;
-    virtual ByteString 	DatumOf(                    /// @return The only or the first value of this tag.
+    virtual ByteString  DatumOf(                    /// @return The only or the first value of this tag.
                             ComponentDescription::E_Tag
                                                     i_eTag ) const;
   private:
     // DATA
-    static const char 	C_sTagDescription[];
-    static const char 	C_sStatus[];
+    static const char   C_sTagDescription[];
+    static const char   C_sStatus[];
     static const char * C_sSubTags[ComponentDescription::tag_MAX];
     friend class ValueList;
 
-    std::vector< ValueList* >		// Dynamic allocated pointers.
+    std::vector< ValueList* >       // Dynamic allocated pointers.
                         aTags;
 };
 

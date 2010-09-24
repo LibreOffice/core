@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ WW8Analyzer::~WW8Analyzer()
 
 void WW8Analyzer::attribute(Id name, Value & val)
 {
-    string aAttrName = (*QNameToString::Instance())(name); 
+    string aAttrName = (*QNameToString::Instance())(name);
     string aStr;
 
     if (aAttrName.length() > 6)

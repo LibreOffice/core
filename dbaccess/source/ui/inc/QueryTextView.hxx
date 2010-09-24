@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace dbaui
     class OQueryTextView : public Window
     {
         friend class OQueryViewSwitch;
-        OSqlEdit*	m_pEdit;
+        OSqlEdit*   m_pEdit;
     public:
         OQueryTextView( OQueryContainerWindow* pParent );
         virtual ~OQueryTextView();
@@ -66,7 +66,7 @@ namespace dbaui
         // allow access to our edit
         OSqlEdit* getSqlEdit() const { return m_pEdit; }
 
-        OQueryContainerWindow*	getContainerWindow() { return static_cast< OQueryContainerWindow* >( GetParent() ); }
+        OQueryContainerWindow*  getContainerWindow() { return static_cast< OQueryContainerWindow* >( GetParent() ); }
     protected:
         virtual void Resize();
     };

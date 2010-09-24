@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,9 @@
 #include <com/sun/star/accessibility/AccessibleStateType.idl>
 #endif
 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
 
 module com { module sun { module star { module accessibility {
 
@@ -52,7 +52,7 @@ module com { module sun { module star { module accessibility {
 published interface XAccessibleStateSet : ::com::sun::star::uno::XInterface
 {
     /** Checks whether the current state set is empty.
-        
+
         @return
             Returns <TRUE/> if there is no state in this state set and
             <FALSE/> if there is at least one set state in it.
@@ -61,26 +61,26 @@ published interface XAccessibleStateSet : ::com::sun::star::uno::XInterface
 
     /** Checks if the given state is a member of the state set of the called
         object.
-        
+
         @param aState
             The state for which to check membership.  This has to be one of
             the constants of <type>AccessibleStateType</type>.
-            
+
         @return
             Returns <TRUE/> if the given state is a memeber of this object's
             state set and <FALSE/> otherwise.
     */
     boolean contains ([in] short aState);
-    
+
     /** Checks if all of the given states are in the state set of the called
         object.
-        
+
         @param aStateSet
             This sequence of states is interpreted as set and every of its
             members, duplicates are ignored, is checked for membership in
             this object's state set.  Each state has to be one of the
             constants of <type>AccessibleStateType</type>.
-            
+
         @return
             Returns <TRUE/> if all states of the given state set are members
             of this object's state set.  <FALSE/> is returned if at least
@@ -103,7 +103,7 @@ published interface XAccessibleStateSet : ::com::sun::star::uno::XInterface
     */
     sequence<short> getStates ();
 };
-          
+
 }; }; }; };
 
 #endif

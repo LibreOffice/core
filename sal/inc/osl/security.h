@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@ extern "C" {
 #endif
 
 typedef enum {
-    osl_Security_E_None,				
-    osl_Security_E_UserUnknown,			
+    osl_Security_E_None,
+    osl_Security_E_UserUnknown,
     osl_Security_E_WrongPassword,
     osl_Security_E_Unknown,
     osl_Security_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
@@ -74,7 +74,7 @@ oslSecurityError SAL_CALL osl_loginUser(
     );
 
 /** Create a security handle for the denoted user.
-    Try to log in the user on the denoted file server. On success the homedir will be 
+    Try to log in the user on the denoted file server. On success the homedir will be
     the maped drive on this server.
     @param strUserName [in] denotes the name of the user to logg in.
     @param strPasswd [in] the password for this user.
@@ -154,5 +154,5 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security);
 }
 #endif
 
-#endif	/* _OSL_SECURITY_H_ */
+#endif  /* _OSL_SECURITY_H_ */
 

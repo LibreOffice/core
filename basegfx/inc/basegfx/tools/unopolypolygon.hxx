@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@
 
 
 namespace basegfx
-{ 
+{
 namespace unotools
 {
-    typedef ::cppu::WeakComponentImplHelper3< 
+    typedef ::cppu::WeakComponentImplHelper3<
              ::com::sun::star::rendering::XLinePolyPolygon2D,
           ::com::sun::star::rendering::XBezierPolyPolygon2D,
           ::com::sun::star::lang::XServiceInfo > UnoPolyPolygonBase;
@@ -88,9 +88,9 @@ namespace unotools
                 throw ::com::sun::star::lang::IndexOutOfBoundsException();
         }
 
-        B2DPolyPolygon getSubsetPolyPolygon( sal_Int32 nPolygonIndex, 
-                                             sal_Int32 nNumberOfPolygons, 
-                                             sal_Int32 nPointIndex, 
+        B2DPolyPolygon getSubsetPolyPolygon( sal_Int32 nPolygonIndex,
+                                             sal_Int32 nNumberOfPolygons,
+                                             sal_Int32 nPointIndex,
                                              sal_Int32 nNumberOfPoints ) const;
 
         /// Get cow copy of internal polygon. not thread-safe outside this object.

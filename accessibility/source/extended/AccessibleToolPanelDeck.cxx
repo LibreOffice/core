@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -366,17 +366,17 @@ namespace accessibility
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        
+
         return NULL;
     }
-    
+
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AccessibleToolPanelDeck::grabFocus(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
         m_pImpl->m_pPanelDeck->GrabFocus();
     }
-    
+
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AccessibleToolPanelDeck::disposing()
     {

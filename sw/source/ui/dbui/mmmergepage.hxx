@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,15 +42,15 @@ class SwMailMergeWizard;
 class SwMailMergeMergePage : public svt::OWizardPage
 {
     SwBoldFixedInfo m_aHeaderFI;
-    
+
     FixedInfo       m_aEditFI;
     PushButton      m_aEditPB;
-                    
+
     FixedLine       m_aFindFL;
     FixedText       m_aFineFT;
     ReturnActionEdit    m_aFindED;
     PushButton      m_aFindPB;
-                    
+
     CheckBox        m_aWholeWordsCB;
     CheckBox        m_aBackwardsCB;
     CheckBox        m_aMatchCaseCB;
@@ -61,7 +61,7 @@ class SwMailMergeMergePage : public svt::OWizardPage
     DECL_LINK(FindHdl_Impl, PushButton*);
     DECL_LINK(EnteredFindStringHdl_Impl, void*);
 
-public:     
+public:
         SwMailMergeMergePage( SwMailMergeWizard* _pParent);
         ~SwMailMergeMergePage();
 

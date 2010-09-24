@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,10 +47,10 @@ public __gc class Cli_environment
 
 #if OSL_DEBUG_LEVEL >= 1
     int _numRegisteredObjects;
-#endif     
+#endif
 
 public:
-    
+
     static Cli_environment()
     {
         m_objects = Hashtable::Synchronized(new Hashtable());
@@ -65,7 +65,7 @@ public:
     inline Cli_environment();
 
     ~Cli_environment();
-    
+
     /**
        Registers an UNO object as being mapped by this bridge. The resulting
        cli object is represents all interfaces of the UNO object. Therefore the
@@ -84,7 +84,7 @@ public:
        destructors.
      */
     inline void revokeInterface(System::String* oid);
-    
+
     void revokeInterface(System::String* oid, System::Type* type);
     /**
      * Retrieves an interface identified by its object id and type from this

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,22 +55,22 @@ namespace dxcanvas
 
         // draw text
         void drawText( const boost::shared_ptr<Gdiplus::Graphics>&          rGraphics,
-                       const ::com::sun::star::rendering::ViewState& 		rViewState,
-                       const ::com::sun::star::rendering::RenderState& 		rRenderState,
-                       const ::basegfx::B2ISize& 							rOutputOffset,
-                       const ::com::sun::star::rendering::StringContext& 	rText,
-                       const ::com::sun::star::uno::Sequence< double >& 	rLogicalAdvancements,
+                       const ::com::sun::star::rendering::ViewState&        rViewState,
+                       const ::com::sun::star::rendering::RenderState&      rRenderState,
+                       const ::basegfx::B2ISize&                            rOutputOffset,
+                       const ::com::sun::star::rendering::StringContext&    rText,
+                       const ::com::sun::star::uno::Sequence< double >&     rLogicalAdvancements,
                        const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::rendering::XCanvasFont >& 	rCanvasFont,
-                       const ::com::sun::star::geometry::Matrix2D& 			rFontMatrix,
+                               ::com::sun::star::rendering::XCanvasFont >&  rCanvasFont,
+                       const ::com::sun::star::geometry::Matrix2D&          rFontMatrix,
                        bool                                                 bAlphaSurface );
 
         ::com::sun::star::geometry::RealRectangle2D queryTextBounds(
-            const ::com::sun::star::rendering::StringContext& 	rText,
-            const ::com::sun::star::uno::Sequence< double >& 	rLogicalAdvancements,
+            const ::com::sun::star::rendering::StringContext&   rText,
+            const ::com::sun::star::uno::Sequence< double >&    rLogicalAdvancements,
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XCanvasFont >&		rCanvasFont,
-              const ::com::sun::star::geometry::Matrix2D& 		rFontMatrix );
+                ::com::sun::star::rendering::XCanvasFont >&     rCanvasFont,
+              const ::com::sun::star::geometry::Matrix2D&       rFontMatrix );
 
 #ifdef DBG_UTIL
         void test();
@@ -78,7 +78,7 @@ namespace dxcanvas
 
     protected:
         ::com::sun::star::uno::Reference<
-              ::com::sun::star::rendering::XGraphicDevice >	mxGraphicDevice;
+              ::com::sun::star::rendering::XGraphicDevice > mxGraphicDevice;
     };
 }
 

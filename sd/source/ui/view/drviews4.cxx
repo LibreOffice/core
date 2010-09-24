@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ using namespace ::com::sun::star::drawing;
 
 void DrawViewShell::DeleteActualPage()
 {
-    USHORT			nPage = maTabControl.GetCurPageId() - 1;
+    USHORT          nPage = maTabControl.GetCurPageId() - 1;
 
     mpDrawView->SdrEndTextEdit();
 
@@ -146,7 +146,7 @@ void DrawViewShell::DeleteActualLayer()
         // Hint von Joe angestossen werden
         // ( View::Notify() --> ViewShell::ResetActualLayer() )
 
-        mbIsLayerModeActive = false; 	// damit ChangeEditMode() ueberhaupt was tut
+        mbIsLayerModeActive = false;    // damit ChangeEditMode() ueberhaupt was tut
         ChangeEditMode(GetEditMode(), true);
     }
 }
@@ -400,14 +400,14 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
         if ( mbPipette && GetViewFrame()->HasChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() ) )
         {
-            const long		nStartX = maMousePos.X() - PIPETTE_RANGE;
-            const long		nEndX = maMousePos.X() + PIPETTE_RANGE;
-            const long		nStartY = maMousePos.Y() - PIPETTE_RANGE;
-            const long		nEndY = maMousePos.Y() + PIPETTE_RANGE;
-            long			nRed = 0;
-            long			nGreen = 0;
-            long			nBlue = 0;
-            const double	fDiv = ( ( PIPETTE_RANGE << 1 ) + 1 ) * ( ( PIPETTE_RANGE << 1 ) + 1 );
+            const long      nStartX = maMousePos.X() - PIPETTE_RANGE;
+            const long      nEndX = maMousePos.X() + PIPETTE_RANGE;
+            const long      nStartY = maMousePos.Y() - PIPETTE_RANGE;
+            const long      nEndY = maMousePos.Y() + PIPETTE_RANGE;
+            long            nRed = 0;
+            long            nGreen = 0;
+            long            nBlue = 0;
+            const double    fDiv = ( ( PIPETTE_RANGE << 1 ) + 1 ) * ( ( PIPETTE_RANGE << 1 ) + 1 );
 
             for ( long nY = nStartY; nY <= nEndY; nY++ )
             {
@@ -518,7 +518,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
                 if( !mpDrawView->InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
                 {
-                    INetBookmark	aINetBookmark( aEmptyStr, aEmptyStr );
+                    INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
 
                     if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
                           aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
@@ -540,13 +540,13 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
             // Ist ein Fangobjekt unter dem Mauszeiger?
             SdrPageView* pPV;
-            Point	aMPos = pWin->PixelToLogic( maMousePos );
-            USHORT	nHitLog = (USHORT) GetActiveWindow()->PixelToLogic(
+            Point   aMPos = pWin->PixelToLogic( maMousePos );
+            USHORT  nHitLog = (USHORT) GetActiveWindow()->PixelToLogic(
                 Size(FuPoor::HITPIX, 0 ) ).Width();
-            USHORT	nHelpLine;
+            USHORT  nHelpLine;
             // fuer Klebepunkt
-            SdrObject*	pObj = NULL;
-            USHORT		nPickId = 0;
+            SdrObject*  pObj = NULL;
+            USHORT      nPickId = 0;
             // fuer Feldbefehl
             OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
             const SvxFieldItem* pFldItem = NULL;
@@ -622,7 +622,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     mpDrawView->GetMarkedObjectList().GetMarkCount() == 1 )
                 {
                     pObj = mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-                    if( HasCurrentFunction(SID_BEZIER_EDIT)	&& (dynamic_cast< SdrPathObj * >( pObj ) != 0 ) )
+                    if( HasCurrentFunction(SID_BEZIER_EDIT) && (dynamic_cast< SdrPathObj * >( pObj ) != 0 ) )
                     {
                         nSdResId = RID_BEZIER_POPUP;
                     }
@@ -679,9 +679,13 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                             {
                                 switch ( nId )
                                 {
+                                    case OBJ_OUTLINETEXT:
+                                        nSdResId = bGraphicShell ? RID_GRAPHIC_OUTLINETEXTOBJ_POPUP :
+                                                                    RID_DRAW_OUTLINETEXTOBJ_POPUP;
+                                        break;
+
                                     case OBJ_CAPTION:
                                     case OBJ_TITLETEXT:
-                                    case OBJ_OUTLINETEXT:
                                     case OBJ_TEXT:
                                         nSdResId = bGraphicShell ? RID_GRAPHIC_TEXTOBJ_POPUP :
                                                                     RID_DRAW_TEXTOBJ_POPUP;
@@ -694,7 +698,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                         break;
 
                                     case OBJ_FREELINE:
-                                    case OBJ_EDGE:		// Connector
+                                    case OBJ_EDGE:      // Connector
                                         nSdResId = bGraphicShell ? RID_GRAPHIC_EDGEOBJ_POPUP :
                                                                     RID_DRAW_EDGEOBJ_POPUP;
                                         break;
@@ -845,11 +849,11 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
 {
     if (mbHasRulers && pWin )
     {
-        RulerLine	pHLines[2];
-        RulerLine	pVLines[2];
+        RulerLine   pHLines[2];
+        RulerLine   pVLines[2];
         long        nHOffs = 0L;
         long        nVOffs = 0L;
-        USHORT		nCnt;
+        USHORT      nCnt;
 
         if (mpHorizontalRuler.get() != NULL)
             mpHorizontalRuler->SetLines();
@@ -899,7 +903,7 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
                                    SID_ATTR_SIZE, SID_ATTR_SIZE,
                                    0L);
 
-//		  GetStatusBarState(aSet);	nicht performant bei gedrueckter Modifiertaste!!
+//        GetStatusBarState(aSet);  nicht performant bei gedrueckter Modifiertaste!!
 
         aSet.Put( SfxStringItem( SID_CONTEXT, mpDrawView->GetStatusText() ) );
 

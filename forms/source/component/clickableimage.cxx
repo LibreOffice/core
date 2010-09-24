@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 #include <comphelper/container.hxx>
 #include <comphelper/listenernotification.hxx>
 #include <svtools/imageresourceaccess.hxx>
-#define LOCAL_URL_PREFIX	'#'
+#define LOCAL_URL_PREFIX    '#'
 
 //.........................................................................
 namespace frm
@@ -137,7 +137,7 @@ namespace frm
     {
         m_pFeatureInterception->registerDispatchProviderInterceptor( _rxInterceptor  );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL OClickableImageBaseControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
@@ -281,7 +281,7 @@ namespace frm
                     getString(xSet->getPropertyValue(PROPERTY_TARGET_URL));
 
                 if (aURL.Complete.getLength() && (LOCAL_URL_PREFIX == aURL.Complete.getStr()[0]))
-                {	// the URL contains a local URL only. Since the URLTransformer does not handle this case correctly
+                {   // the URL contains a local URL only. Since the URLTransformer does not handle this case correctly
                     // (it can't: it does not know the document URL), we have to take care for this ourself.
                     // The real solution would be to not allow such relative URLs (there is a rule that at runtime, all
                     // URLs have to be absolute), but for compatibility reasons this is no option.
@@ -488,10 +488,10 @@ namespace frm
         implConstruct();
 
         // copy properties
-        m_eButtonType			= _pOriginal->m_eButtonType;
-        m_sTargetURL			= _pOriginal->m_sTargetURL;
-        m_sTargetFrame			= _pOriginal->m_sTargetFrame;
-        m_bDispatchUrlInternal	= _pOriginal->m_bDispatchUrlInternal;
+        m_eButtonType           = _pOriginal->m_eButtonType;
+        m_sTargetURL            = _pOriginal->m_sTargetURL;
+        m_sTargetFrame          = _pOriginal->m_sTargetFrame;
+        m_bDispatchUrlInternal  = _pOriginal->m_bDispatchUrlInternal;
     }
 
     //------------------------------------------------------------------------------
@@ -623,10 +623,10 @@ namespace frm
     {
         switch (nHandle)
         {
-            case PROPERTY_ID_BUTTONTYPE				: rValue <<= m_eButtonType; break;
-            case PROPERTY_ID_TARGET_URL				: rValue <<= m_sTargetURL; break;
-            case PROPERTY_ID_TARGET_FRAME			: rValue <<= m_sTargetFrame; break;
-            case PROPERTY_ID_DISPATCHURLINTERNAL	: rValue <<= m_bDispatchUrlInternal; break;
+            case PROPERTY_ID_BUTTONTYPE             : rValue <<= m_eButtonType; break;
+            case PROPERTY_ID_TARGET_URL             : rValue <<= m_sTargetURL; break;
+            case PROPERTY_ID_TARGET_FRAME           : rValue <<= m_sTargetFrame; break;
+            case PROPERTY_ID_DISPATCHURLINTERNAL    : rValue <<= m_bDispatchUrlInternal; break;
             default:
                 OControlModel::getFastPropertyValue(rValue, nHandle);
         }
@@ -691,12 +691,12 @@ namespace frm
         ImageProducer *pImgProd = GetImageProducer();
         // grab the ImageURL
         rtl::OUString sURL;
-        getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ) ) >>= sURL;       
+        getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ) ) >>= sURL;
         if (!m_pMedium)
         {
             if ( ::svt::GraphicAccess::isSupportedURL( sURL )  )
                 pImgProd->SetImage( sURL );
-            else 
+            else
                 // caution: the medium may be NULL if somebody gave us a invalid URL to work with
                 // 11/24/2000 - 79667 - FS
                 pImgProd->SetImage(String());
@@ -738,7 +738,7 @@ namespace frm
             // we treat an invalid URL like we would treat no URL
             return;
 
-        if (rURL.getLength() && !::svt::GraphicAccess::isSupportedURL( rURL ) ) 
+        if (rURL.getLength() && !::svt::GraphicAccess::isSupportedURL( rURL ) )
        {
             if (m_pMedium)
                 delete m_pMedium;
@@ -896,10 +896,10 @@ namespace frm
     {
         switch (nHandle)
         {
-            case PROPERTY_ID_BUTTONTYPE				: return makeAny( FormButtonType_PUSH );
-            case PROPERTY_ID_TARGET_URL				:
-            case PROPERTY_ID_TARGET_FRAME			: return makeAny( ::rtl::OUString() );
-            case PROPERTY_ID_DISPATCHURLINTERNAL	: return makeAny( sal_False );
+            case PROPERTY_ID_BUTTONTYPE             : return makeAny( FormButtonType_PUSH );
+            case PROPERTY_ID_TARGET_URL             :
+            case PROPERTY_ID_TARGET_FRAME           : return makeAny( ::rtl::OUString() );
+            case PROPERTY_ID_DISPATCHURLINTERNAL    : return makeAny( sal_False );
             default:
                 return OControlModel::getPropertyDefaultByHandle(nHandle);
         }

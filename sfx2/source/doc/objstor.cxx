@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -767,8 +767,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         if( IsOwnStorageFormat_Impl(*pMed) && pMed->GetFilter() )
         {
-//???? dv			DirEntry aDirEntry( pMed->GetPhysicalName() );
-//???? dv			SetFileName( aDirEntry.GetFull() );
+//???? dv           DirEntry aDirEntry( pMed->GetPhysicalName() );
+//???? dv           SetFileName( aDirEntry.GetFull() );
         }
         Broadcast( SfxSimpleHint(SFX_HINT_NAMECHANGED) );
 
@@ -2021,7 +2021,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 
     sal_Bool bOk = sal_True;
     sal_Bool bMedChanged = pNewMed && pNewMed!=pMedium;
-/*	sal_Bool bCreatedTempStor = pNewMed && pMedium &&
+/*  sal_Bool bCreatedTempStor = pNewMed && pMedium &&
         IsPackageStorageFormat_Impl(*pMedium) &&
         !IsPackageStorageFormat_Impl(*pNewMed) &&
         pMedium->GetName().Len();
@@ -2946,7 +2946,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         else
         {
             // TODO/LATER: the code below must be dead since the storage commit makes all the stuff
-            //		 and the DoSaveCompleted call should not be able to fail in general
+            //       and the DoSaveCompleted call should not be able to fail in general
 
             DBG_ASSERT( !bCopyTo, "Error while reconnecting to medium, can't be handled!");
             SetError( pNewFile->GetErrorCode(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
@@ -2960,8 +2960,8 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
             }
 
             // TODO/LATER: disconnect the new file from the storage for the case when pure saving is done
-            //		 if storing has corrupted the file, probably it must be restored either here or
-            //		 by the storage
+            //       if storing has corrupted the file, probably it must be restored either here or
+            //       by the storage
             DELETEZ( pNewFile );
         }
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include "unotools/unotoolsdllapi.h"
@@ -42,44 +42,44 @@
 #include <unotools/options.hxx>
 
 //_________________________________________________________________________________________________________________
-//	const
+//  const
 //_________________________________________________________________________________________________________________
 
 #define FEATUREFLAG_BASICIDE                0x00000020
-#define FEATUREFLAG_MATH           			0x00000100
-#define FEATUREFLAG_CHART          			0x00000200
-#define FEATUREFLAG_CALC           			0x00000800
-#define FEATUREFLAG_DRAW           			0x00001000
-#define FEATUREFLAG_WRITER     				0x00002000
-#define FEATUREFLAG_IMPRESS     			0x00008000
-#define FEATUREFLAG_INSIGHT     			0x00010000
+#define FEATUREFLAG_MATH                    0x00000100
+#define FEATUREFLAG_CHART                   0x00000200
+#define FEATUREFLAG_CALC                    0x00000800
+#define FEATUREFLAG_DRAW                    0x00001000
+#define FEATUREFLAG_WRITER                  0x00002000
+#define FEATUREFLAG_IMPRESS                 0x00008000
+#define FEATUREFLAG_INSIGHT                 0x00010000
 
 //_________________________________________________________________________________________________________________
-//	forward declarations
+//  forward declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			forward declaration to our private date container implementation
-    @descr			We use these class as internal member to support small memory requirements.
+    @short          forward declaration to our private date container implementation
+    @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is neccessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
 class SvtModuleOptions_Impl;
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			collect informations about installation state of modules
+    @short          collect informations about installation state of modules
     @descr          Use these class to get installation state of different office modules like writer, calc etc
                     Further you can ask for additional informations; e.g. name of standard template file, which
                     should be used by corresponding module; or short/long name of these module factory.
 
-    @implements		-
-    @base			-
+    @implements     -
+    @base           -
 
-    @devstatus		ready to use
+    @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 class UNOTOOLS_DLLPUBLIC SvtModuleOptions: public utl::detail::Options
@@ -120,24 +120,24 @@ class UNOTOOLS_DLLPUBLIC SvtModuleOptions: public utl::detail::Options
             E_MATH          =  6,
             E_CHART         =  7,
             E_STARTMODULE   =  8,
-            E_DATABASE		=  9,
+            E_DATABASE      =  9,
             E_BASIC         = 10
 
         };
 
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
          SvtModuleOptions();
         virtual ~SvtModuleOptions();
 
         //---------------------------------------------------------------------------------------------------------
-        //	interface
+        //  interface
         //---------------------------------------------------------------------------------------------------------
         sal_Bool        IsModuleInstalled         (       EModule          eModule    ) const;
         ::rtl::OUString GetModuleName             (       EModule          eModule    ) const;
@@ -231,13 +231,13 @@ class UNOTOOLS_DLLPUBLIC SvtModuleOptions: public utl::detail::Options
         ::com::sun::star::uno::Sequence < ::rtl::OUString > GetAllServiceNames();
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& impl_GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private member
+    //  private member
     //-------------------------------------------------------------------------------------------------------------
     private:
 
@@ -249,9 +249,9 @@ class UNOTOOLS_DLLPUBLIC SvtModuleOptions: public utl::detail::Options
             Do it in your source only.
          */
 
-        static SvtModuleOptions_Impl*	m_pDataContainer	;	/// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32				m_nRefCount			;	/// internal ref count mechanism
+        static SvtModuleOptions_Impl*   m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32                m_nRefCount         ;   /// internal ref count mechanism
 
-};		// class SvtModuleOptions
+};      // class SvtModuleOptions
 
-#endif	// #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#endif  // #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX

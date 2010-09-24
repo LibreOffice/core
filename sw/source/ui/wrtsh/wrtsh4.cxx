@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ BOOL SwWrtShell::_SttWrd()
 }
 /*
  * Das Ende eines Wortes ist das Folgen von Trennzeichen auf
- * nicht-Trennzeichen.	Unter dem Ende eines Wortes wird
+ * nicht-Trennzeichen.  Unter dem Ende eines Wortes wird
  * ebenfalls die Folge von Worttrennzeichen auf Interpunktions-
  * zeichen verstanden. Das Absatzende ist ebenfalls Wortende.
  */
@@ -93,9 +93,9 @@ BOOL SwWrtShell::_EndWrd()
 BOOL SwWrtShell::_NxtWrd()
 {
     BOOL bRet = FALSE;
-    while( IsEndPara() )				// wenn schon am Ende, dann naechsten ???
+    while( IsEndPara() )                // wenn schon am Ende, dann naechsten ???
     {
-        if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))	// Document - Ende ??
+        if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))  // Document - Ende ??
         {
             Pop( FALSE );
             return bRet;
@@ -125,9 +125,9 @@ BOOL SwWrtShell::_PrvWrd()
 {
     BOOL bRet = FALSE;
     while( IsSttPara() )
-    {								// wenn schon am Anfang, dann naechsten ???
+    {                               // wenn schon am Anfang, dann naechsten ???
         if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
-        {							// Document - Anfang ??
+        {                           // Document - Anfang ??
             Pop( FALSE );
             return bRet;
         }

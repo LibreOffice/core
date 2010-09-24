@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,22 +73,22 @@ namespace dbaui
         ::std::auto_ptr<OSingleDocumentControllerImpl> m_pImpl;
 
     protected:
-        SfxUndoManager	m_aUndoManager;
+        SfxUndoManager  m_aUndoManager;
 
     private:
         /** forces usage of a connection which we do not own
             <p>To be used from within XInitialization::initialize, resp. impl_initialize, only.</p>
         */
-        void		initializeConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxForeignConn );
+        void        initializeConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxForeignConn );
 
     protected:
         // OGenericUnoController - initialization
         virtual void impl_initialize();
 
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState	GetState(sal_uInt16 nId) const;
+        virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
-        virtual void			Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getPrivateModel() const;
 
@@ -97,8 +97,8 @@ namespace dbaui
 
     public:
 
-        sal_Bool		isReadOnly()			const;
-        sal_Bool		isEditable()			const;
+        sal_Bool        isReadOnly()            const;
+        sal_Bool        isEditable()            const;
         void            setEditable(sal_Bool _bEditable);
 
         // need for undo's and redo's
@@ -106,13 +106,13 @@ namespace dbaui
 
         /** addUndoActionAndInvalidate adds an undo action to the undoManager,
             additionally invalidates the UNDO and REDO slot
-            @param	pAction	the undo action to add
+            @param  pAction the undo action to add
         */
         void addUndoActionAndInvalidate(SfxUndoAction *pAction);
         // ----------------------------------------------------------------
         // asking for connection-related stuff
-        
-        sal_Bool	isConnected() const;
+
+        sal_Bool    isConnected() const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
                     getMetaData( ) const;
@@ -122,7 +122,7 @@ namespace dbaui
         ::rtl::OUString getDataSourceName() const;
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&
                     getDataSource() const;
-        sal_Bool	haveDataSource() const;
+        sal_Bool    haveDataSource() const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                     getDatabaseDocument() const;
@@ -170,7 +170,7 @@ namespace dbaui
 
         /** returns the number formatter
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > 	getNumberFormatter() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getNumberFormatter() const;
 
         // ::com::sun::star::frame::XController
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
@@ -196,7 +196,7 @@ namespace dbaui
 
         virtual void        disconnect();
         virtual void        reconnect( sal_Bool _bUI );
-                sal_Bool    ensureConnected( sal_Bool _bUI )	{ if ( !isConnected() ) reconnect( _bUI ); return isConnected(); }
+                sal_Bool    ensureConnected( sal_Bool _bUI )    { if ( !isConnected() ) reconnect( _bUI ); return isConnected(); }
 
         /** called when our connection is beeing disposed
             <p>The default implementation does a reconnect</p>
@@ -214,7 +214,7 @@ namespace dbaui
         virtual void SAL_CALL disposing();
 
         // XInterface
-        virtual ::com::sun::star::uno::Any	SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
 
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -227,7 +227,7 @@ namespace dbaui
     };
 
 //........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //........................................................................
 
 #endif // DBAUI_SINGLEDOCCONTROLLER_HXX

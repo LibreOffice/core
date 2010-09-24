@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,13 +40,13 @@
 #ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_ 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_ 
+#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_ 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
@@ -58,7 +58,7 @@
 #ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #endif
-#ifndef _OSL_THREAD_H_ 
+#ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
@@ -67,16 +67,16 @@
 #ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
 #include <comphelper/namedvaluecollection.hxx>
 #endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_ 
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_ 
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
-#ifndef _VCL_STDTEXT_HXX 
+#ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
@@ -182,7 +182,7 @@ namespace dbaui
         try
         {
             if (bPwdRequired && !sPassword.getLength())
-            {	// password required, but empty -> connect using an interaction handler
+            {   // password required, but empty -> connect using an interaction handler
                 Reference< XCompletedConnection > xConnectionCompletion( _xDataSource, UNO_QUERY_THROW );
 
                 Reference< XModel > xModel( getDataSourceOrModel( _xDataSource ), UNO_QUERY_THROW );
@@ -272,6 +272,6 @@ namespace dbaui
     }
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 

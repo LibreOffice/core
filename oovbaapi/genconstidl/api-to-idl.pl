@@ -4,7 +4,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ sub end_element($) {
     }
     elsif ( $state ne "" && $element eq "element" ) {
         $state = "";
-        
+
         my @destination = split( /\./, $source );
         my $module = shift( @destination );
         my $type = shift( @destination );
@@ -109,7 +109,7 @@ sub end_element($) {
 # Process characters
 sub characters($) {
     my ($data) = @_;
-    
+
     if ( $state eq "name" ) {
         chomp( $name = $data );
     }
@@ -121,12 +121,12 @@ sub characters($) {
 # Create idls from the parsed data
 sub generate_idls($) {
     my ($path) = @_;
-    
+
     foreach $module ( keys %result ) {
         foreach $type ( keys %{$result{$module}} ) {
             my $fname = $path . "/" . $type . ".idl";
             open( IDL, ">$fname" ) || die "Cannot write $fname.";
-            
+
             if( $module eq "vba" ) {
         print IDL "module ooo { module $module {\n";
         }

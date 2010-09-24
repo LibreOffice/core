@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,10 +139,10 @@ public:
 // nowadays these substitutions are needed for backward compatibility and tight platform integration:
 // - substitutions from configuration entries (Tools->Options->FontReplacement and/or fontconfig)
 // - device specific substitutions (e.g. for PS printer builtin fonts)
-// - substitutions for missing fonts defined by configuration entries (generic and/or platform dependent fallbacks) 
+// - substitutions for missing fonts defined by configuration entries (generic and/or platform dependent fallbacks)
 // - substitutions for missing fonts defined by multi-token fontnames (e.g. fontname="SpecialFont;FallbackA;FallbackB")
 // - substitutions for incomplete fonts (implicit, generic, EUDC and/or platform dependent fallbacks)
-// - substitutions for missing symbol fonts by translating code points into other symbol fonts 
+// - substitutions for missing symbol fonts by translating code points into other symbol fonts
 
 class ImplFontSubstitution
 {
@@ -249,14 +249,14 @@ namespace basegfx { class B2DHomMatrix; }
 
 struct ImplOutDevData
 {
-    VirtualDevice*				mpRotateDev;
-    vcl::ControlLayoutData*		mpRecordLayout;
-    Rectangle					maRecordRect;
-    ImplDirectFontSubstitution		maDevFontSubst;
+    VirtualDevice*              mpRotateDev;
+    vcl::ControlLayoutData*     mpRecordLayout;
+    Rectangle                   maRecordRect;
+    ImplDirectFontSubstitution      maDevFontSubst;
 
     // #i75163#
-    basegfx::B2DHomMatrix*		mpViewTransform;
-    basegfx::B2DHomMatrix*		mpInverseViewTransform;
+    basegfx::B2DHomMatrix*      mpViewTransform;
+    basegfx::B2DHomMatrix*      mpInverseViewTransform;
 };
 
 void ImplFreeOutDevFontData();

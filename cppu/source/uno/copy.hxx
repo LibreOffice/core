@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,12 +76,12 @@ inline void _copyConstructStruct(
         // copy base value
         copyConstructStruct( pDest, pSource, pTypeDescr->pBaseTypeDescription, acquire, mapping );
     }
-    
+
     // then copy members
     typelib_TypeDescriptionReference ** ppTypeRefs = pTypeDescr->ppTypeRefs;
     sal_Int32 * pMemberOffsets = pTypeDescr->pMemberOffsets;
     sal_Int32 nDescr = pTypeDescr->nMembers;
-    
+
     if (mapping)
     {
         while (nDescr--)
@@ -178,7 +178,7 @@ inline void _copyConstructAnyFromData(
 {
     TYPE_ACQUIRE( pType );
     pDestAny->pType = pType;
-    
+
     switch (pType->eTypeClass)
     {
     case typelib_TypeClass_CHAR:
@@ -647,7 +647,7 @@ inline uno_Sequence * icopyConstructSequence(
                             pElements + (nPos * nElementSize);
                         char * pSource2 =
                             pSourceElements + (nPos * nElementSize);
-                        
+
                         typelib_TypeDescriptionReference * pSetType =
                             _unionGetSetType( pSource2, pElementTypeDescr );
                         ::uno_type_copyAndConvertData(
@@ -670,7 +670,7 @@ inline uno_Sequence * icopyConstructSequence(
                     typelib_TypeDescriptionReference * pSeqElementType =
                         ((typelib_IndirectTypeDescription *)
                          pElementTypeDescr)->pType;
-                    
+
                     uno_Sequence ** pDestElements =
                         (uno_Sequence **) pDest->elements;
                     uno_Sequence ** pSourceElements =
@@ -686,7 +686,7 @@ inline uno_Sequence * icopyConstructSequence(
                         // because of reference counted sequence handles
                         pDestElements[ nPos ] = pNew;
                     }
-                    
+
                     TYPELIB_DANGER_RELEASE( pElementTypeDescr );
                 }
                 break;
@@ -737,7 +737,7 @@ inline uno_Sequence * icopyConstructSequence(
         {
             pDest = allocSeq( 0, 0 );
         }
-        
+
         return pDest;
     }
 }

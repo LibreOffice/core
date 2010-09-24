@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <pattern/window.hxx>
 #include <helper/persistentwindowstate.hxx>
@@ -39,7 +39,7 @@
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XWindow.hpp>
 
@@ -50,7 +50,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/configurationhelper.hxx>
 #include <vcl/window.hxx>
@@ -63,12 +63,12 @@
 #include <vcl/wrkwin.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	definitions
+//  definitions
 
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
@@ -111,21 +111,21 @@ void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::u
                 DECLARE_ASCII("Empty argument list!"),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
-                
+
     lArguments[0] >>= xFrame;
     if (!xFrame.is())
         throw css::lang::IllegalArgumentException(
                 DECLARE_ASCII("No valid frame specified!"),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
-                
+
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
     // hold the frame as weak reference(!) so it can die everytimes :-)
     m_xFrame = xFrame;
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
-    
+
     // start listening
     xFrame->addFrameActionListener(this);
 }
@@ -145,12 +145,12 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
     // frame already gone ? We hold it weak only ...
     if (!xFrame.is())
         return;
-    
+
     // no window -> no position and size available
     css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow();
     if (!xWindow.is())
         return;
-    
+
     // unknown module -> no configuration available!
     ::rtl::OUString sModuleName = PersistentWindowState::implst_identifyModule(xSMGR, xFrame);
     if (!sModuleName.getLength())
@@ -172,14 +172,14 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
                 }
             }
             break;
-            
+
         case css::frame::FrameAction_COMPONENT_REATTACHED :
             {
                 // nothing todo here, because its not allowed to change position and size
                 // of an alredy existing frame!
             }
             break;
-            
+
         case css::frame::FrameAction_COMPONENT_DETACHING :
             {
                 ::rtl::OUString sWindowState = PersistentWindowState::implst_getWindowStateFromWindow(xWindow);
@@ -187,7 +187,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
             }
             break;
         default:
-            break;    
+            break;
     }
 }
 
@@ -203,11 +203,11 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
                                                              const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
     ::rtl::OUString sModuleName;
-    
+
     css::uno::Reference< css::frame::XModuleManager > xModuleManager(
         xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
         css::uno::UNO_QUERY_THROW);
-    
+
     try
     {
         sModuleName = xModuleManager->identify(xFrame);
@@ -216,25 +216,25 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
         { throw exRun; }
     catch(const css::uno::Exception&)
         { sModuleName = ::rtl::OUString(); }
-    
+
     return sModuleName;
 }
-                                                     
+
 //*****************************************************************************************************************
 ::rtl::OUString PersistentWindowState::implst_getWindowStateFromConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR      ,
                                                                        const ::rtl::OUString&                                        sModuleName)
 {
     ::rtl::OUString sWindowState;
-    
+
     ::rtl::OUStringBuffer sRelPathBuf(256);
     sRelPathBuf.appendAscii("Office/Factories/*[\"");
     sRelPathBuf.append     (sModuleName            );
     sRelPathBuf.appendAscii("\"]"                  );
-    
+
     ::rtl::OUString sPackage = ::rtl::OUString::createFromAscii("org.openoffice.Setup/");
     ::rtl::OUString sRelPath = sRelPathBuf.makeStringAndClear();
     ::rtl::OUString sKey     = ::rtl::OUString::createFromAscii("ooSetupFactoryWindowAttributes");
-    
+
     try
     {
         ::comphelper::ConfigurationHelper::readDirectKey(xSMGR,
@@ -247,8 +247,8 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
         { throw exRun; }
     catch(const css::uno::Exception&)
         { sWindowState = ::rtl::OUString(); }
-                                                                                  
-    return sWindowState;        
+
+    return sWindowState;
 }
 
 //*****************************************************************************************************************
@@ -260,11 +260,11 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
     sRelPathBuf.appendAscii("Office/Factories/*[\"");
     sRelPathBuf.append     (sModuleName            );
     sRelPathBuf.appendAscii("\"]"                  );
-    
+
     ::rtl::OUString sPackage = ::rtl::OUString::createFromAscii("org.openoffice.Setup/");
     ::rtl::OUString sRelPath = sRelPathBuf.makeStringAndClear();
     ::rtl::OUString sKey     = ::rtl::OUString::createFromAscii("ooSetupFactoryWindowAttributes");
-    
+
     try
     {
         ::comphelper::ConfigurationHelper::writeDirectKey(xSMGR,
@@ -284,12 +284,12 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
 ::rtl::OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
     ::rtl::OUString sWindowState;
-    
+
     if (xWindow.is())
     {
         // SOLAR SAFE -> ------------------------
         ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
-        
+
         Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
         // check for system window is neccessary to guarantee correct pointer cast!
         if (
@@ -303,14 +303,14 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
                             ((SystemWindow*)pWindow)->GetWindowState(nMask),
                             RTL_TEXTENCODING_UTF8);
         }
-        
+
         aSolarLock.clear();
         // <- SOLAR SAFE ------------------------
     }
-    
+
     return sWindowState;
 }
-                                                               
+
 
 //*********************************************************************************************************
 void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
@@ -324,27 +324,27 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
 
     // SOLAR SAFE -> ------------------------
     ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
-        
+
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     if (!pWindow)
         return;
-    
+
     // check for system and work window - its neccessary to guarantee correct pointer cast!
-    sal_Bool bSystemWindow = pWindow->IsSystemWindow(); 
-    sal_Bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW); 
+    sal_Bool bSystemWindow = pWindow->IsSystemWindow();
+    sal_Bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
 
     if (!bSystemWindow && !bWorkWindow)
         return;
 
     SystemWindow* pSystemWindow = (SystemWindow*)pWindow;
     WorkWindow*   pWorkWindow   = (WorkWindow*  )pWindow;
-    
+
     // dont save this special state!
     if (pWorkWindow->IsMinimized())
         return;
-    
+
     pSystemWindow->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
-    
+
     aSolarLock.clear();
     // <- SOLAR SAFE ------------------------
 }

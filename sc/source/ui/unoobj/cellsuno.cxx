@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <rtl/uuid.h>
-#include <float.h>				// DBL_MIN
+#include <float.h>              // DBL_MIN
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
@@ -68,13 +68,14 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 
 #include "autoform.hxx"
+#include "cellmergeoption.hxx"
 #include "cellsuno.hxx"
 #include "cursuno.hxx"
 #include "textuno.hxx"
 #include "editsrc.hxx"
 #include "notesuno.hxx"
 #include "fielduno.hxx"
-#include "docuno.hxx"		// ScTableColumnsObj etc
+#include "docuno.hxx"       // ScTableColumnsObj etc
 #include "datauno.hxx"
 #include "dapiuno.hxx"
 #include "chartuno.hxx"
@@ -96,7 +97,7 @@
 #include "cell.hxx"
 #include "undocell.hxx"
 #include "undotab.hxx"
-#include "undoblk.hxx"		// fuer lcl_ApplyBorder - nach docfunc verschieben!
+#include "undoblk.hxx"      // fuer lcl_ApplyBorder - nach docfunc verschieben!
 #include "stlsheet.hxx"
 #include "dbcolect.hxx"
 #include "attrib.hxx"
@@ -133,427 +134,427 @@ using namespace com::sun::star;
 
 class ScNamedEntry
 {
-    String	aName;
-    ScRange	aRange;
+    String  aName;
+    ScRange aRange;
 
 public:
             ScNamedEntry(const String& rN, const ScRange& rR) :
                 aName(rN), aRange(rR) {}
 
-    const String&	GetName() const		{ return aName; }
-    const ScRange&	GetRange() const	{ return aRange; }
+    const String&   GetName() const     { return aName; }
+    const ScRange&  GetRange() const    { return aRange; }
 };
 
 
 //------------------------------------------------------------------------
 
-//	Die Namen in den Maps muessen (nach strcmp) sortiert sein!
-//!	statt Which-ID 0 special IDs verwenden, und nicht ueber Namen vergleichen !!!!!!!!!
+//  Die Namen in den Maps muessen (nach strcmp) sortiert sein!
+//! statt Which-ID 0 special IDs verwenden, und nicht ueber Namen vergleichen !!!!!!!!!
 
-//	Left/Right/Top/BottomBorder are mapped directly to the core items,
-//	not collected/applied to the borders of a range -> ATTR_BORDER can be used directly
+//  Left/Right/Top/BottomBorder are mapped directly to the core items,
+//  not collected/applied to the borders of a range -> ATTR_BORDER can be used directly
 
 const SfxItemPropertySet* lcl_GetCellsPropertySet()
 {
     static SfxItemPropertyMapEntry aCellsPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),	SC_WID_UNO_ABSNAME,	&getCppuType((rtl::OUString*)0),		0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK),	ATTR_BACKGROUND,	&getCppuType((sal_Int32*)0),			0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),	ATTR_PROTECTION,	&getCppuType((util::CellProtection*)0),	0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL),	SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),		0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),	ATTR_FONT_COLOR,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_COUTL),	ATTR_FONT_CONTOUR,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),	ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),					0, MID_CROSSED_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CEMPHAS),	ATTR_FONT_EMPHASISMARK,&getCppuType((sal_Int16*)0),			0, MID_EMPHASIS },
-        {MAP_CHAR_LEN(SC_UNONAME_CFONT),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),	ATTR_FONT_HEIGHT,	&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),	ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),	ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),	ATTR_FONT_LANGUAGE,	&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),	ATTR_CJK_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),	ATTR_CTL_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNONAME_COVER),	ATTR_FONT_OVERLINE, &getCppuType((sal_Int16*)0),			0, MID_TL_STYLE },
-        {MAP_CHAR_LEN(SC_UNONAME_COVRLCOL),	ATTR_FONT_OVERLINE, &getCppuType((sal_Int32*)0),			0, MID_TL_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_COVRLHAS),	ATTR_FONT_OVERLINE, &getBooleanCppuType(),					0, MID_TL_HASCOLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CPOST),	ATTR_FONT_POSTURE,	&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),	ATTR_CJK_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),	ATTR_CTL_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNONAME_CRELIEF),	ATTR_FONT_RELIEF,	&getCppuType((sal_Int16*)0),			0, MID_RELIEF },
-        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),	ATTR_FONT_SHADOWED,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),	ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),			0, MID_CROSS_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),	ATTR_FONT_UNDERLINE,&getCppuType((sal_Int16*)0),			0, MID_TL_STYLE },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL),	ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),			0, MID_TL_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS),	ATTR_FONT_UNDERLINE,&getBooleanCppuType(),					0, MID_TL_HASCOLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),	ATTR_FONT_WEIGHT,	&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),	ATTR_CJK_FONT_WEIGHT,&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),	ATTR_CTL_FONT_WEIGHT,&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNONAME_CWORDMOD),	ATTR_FONT_WORDLINE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CHCOLHDR),	SC_WID_UNO_CHCOLHDR,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR),	SC_WID_UNO_CHROWHDR,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),	SC_WID_UNO_CONDFMT,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),	SC_WID_UNO_CONDLOC,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),	SC_WID_UNO_CONDXML,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,  &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),                 0, MID_CROSSED_OUT },
+        {MAP_CHAR_LEN(SC_UNONAME_CEMPHAS),  ATTR_FONT_EMPHASISMARK,&getCppuType((sal_Int16*)0),         0, MID_EMPHASIS },
+        {MAP_CHAR_LEN(SC_UNONAME_CFONT),    ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &getCppuType((float*)0),                0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   ATTR_FONT_LANGUAGE, &getCppuType((lang::Locale*)0),         0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   ATTR_CJK_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),          0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),   ATTR_CTL_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),          0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVER),    ATTR_FONT_OVERLINE, &getCppuType((sal_Int16*)0),            0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLCOL), ATTR_FONT_OVERLINE, &getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLHAS), ATTR_FONT_OVERLINE, &getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CPOST),    ATTR_FONT_POSTURE,  &getCppuType((awt::FontSlant*)0),       0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),    ATTR_CJK_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),     0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),    ATTR_CTL_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),     0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNONAME_CRELIEF),  ATTR_FONT_RELIEF,   &getCppuType((sal_Int16*)0),            0, MID_RELIEF },
+        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),  ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),           0, MID_CROSS_OUT },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,&getCppuType((sal_Int16*)0),            0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL), ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS), ATTR_FONT_UNDERLINE,&getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),  ATTR_FONT_WEIGHT,   &getCppuType((float*)0),                0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),  ATTR_CJK_FONT_WEIGHT,&getCppuType((float*)0),               0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),  ATTR_CTL_FONT_WEIGHT,&getCppuType((float*)0),               0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNONAME_CWORDMOD), ATTR_FONT_WORDLINE, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CHCOLHDR), SC_WID_UNO_CHCOLHDR,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR), SC_WID_UNO_CHROWHDR,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS),	ATTR_HOR_JUSTIFY,	&getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN),	ATTR_BACKGROUND,	&getBooleanCppuType(),					0, MID_GRAPHIC_TRANSPARENT },
-        {MAP_CHAR_LEN(SC_UNONAME_WRAP),		ATTR_LINEBREAK,		&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),	ATTR_VALUE_FORMAT,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_NUMRULES),	SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
+        {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &getCppuType((table::CellOrientation*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PADJUST),	ATTR_HOR_JUSTIFY,	&::getCppuType((const sal_Int16*)0),	0, MID_HORJUST_ADJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PINDENT),	ATTR_INDENT,		&getCppuType((sal_Int16*)0),			0, 0 }, //! CONVERT_TWIPS
-        {MAP_CHAR_LEN(SC_UNONAME_PISCHDIST),ATTR_SCRIPTSPACE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISFORBID),ATTR_FORBIDDEN_RULES,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISHANG),	ATTR_HANGPUNCTUATION,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISHYPHEN),ATTR_HYPHENATE,		&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PLASTADJ),	ATTR_HOR_JUSTIFY,	&::getCppuType((const sal_Int16*)0),	0, MID_HORJUST_ADJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, RIGHT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),	ATTR_ROTATE_VALUE,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),	ATTR_ROTATE_MODE,	&getCppuType((table::CellVertJustify*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SHADOW),	ATTR_SHADOW,		&getCppuType((table::ShadowFormat*)0),	0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),			    0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),	SC_WID_UNO_TBLBORD,	&getCppuType((table::TableBorder*)0),	0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),	ATTR_USERDEF,		&getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),	SC_WID_UNO_VALIDAT,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALILOC),	SC_WID_UNO_VALILOC,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),	SC_WID_UNO_VALIXML,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS),	ATTR_VER_JUSTIFY,	&getCppuType((table::CellVertJustify*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_WRITING),	ATTR_WRITINGDIR,	&getCppuType((sal_Int16*)0),			0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &getCppuType((sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
+        {MAP_CHAR_LEN(SC_UNONAME_PISCHDIST),ATTR_SCRIPTSPACE,   &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISFORBID),ATTR_FORBIDDEN_RULES,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISHANG),  ATTR_HANGPUNCTUATION,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISHYPHEN),ATTR_HYPHENATE,     &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PLASTADJ), ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,      &::getCppuType((const table::BorderLine*)0), 0, RIGHT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),               0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),  ATTR_USERDEF,       &getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aCellsPropertySet( aCellsPropertyMap_Impl );
     return &aCellsPropertySet;
 }
 
-//	CellRange enthaelt alle Eintraege von Cells, zusaetzlich eigene Eintraege
-//	mit Which-ID 0 (werden nur fuer getPropertySetInfo benoetigt).
+//  CellRange enthaelt alle Eintraege von Cells, zusaetzlich eigene Eintraege
+//  mit Which-ID 0 (werden nur fuer getPropertySetInfo benoetigt).
 
 const SfxItemPropertySet* lcl_GetRangePropertySet()
 {
     static SfxItemPropertyMapEntry aRangePropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),	SC_WID_UNO_ABSNAME,	&getCppuType((rtl::OUString*)0),		0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK),	ATTR_BACKGROUND,	&getCppuType((sal_Int32*)0),			0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),	ATTR_PROTECTION,	&getCppuType((util::CellProtection*)0),	0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL),	SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),		0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),	ATTR_FONT_COLOR,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_COUTL),	ATTR_FONT_CONTOUR,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),	ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),					0, MID_CROSSED_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CEMPHAS),	ATTR_FONT_EMPHASISMARK,&getCppuType((sal_Int16*)0),			0, MID_EMPHASIS },
-        {MAP_CHAR_LEN(SC_UNONAME_CFONT),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),	ATTR_FONT_HEIGHT,	&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),	ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),	ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),	ATTR_FONT_LANGUAGE,	&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),	ATTR_CJK_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),	ATTR_CTL_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNONAME_COVER),	ATTR_FONT_OVERLINE, &getCppuType((sal_Int16*)0),			0, MID_TL_STYLE },
-        {MAP_CHAR_LEN(SC_UNONAME_COVRLCOL),	ATTR_FONT_OVERLINE, &getCppuType((sal_Int32*)0),			0, MID_TL_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_COVRLHAS),	ATTR_FONT_OVERLINE, &getBooleanCppuType(),					0, MID_TL_HASCOLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CPOST),	ATTR_FONT_POSTURE,	&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),	ATTR_CJK_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),	ATTR_CTL_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNONAME_CRELIEF),	ATTR_FONT_RELIEF,	&getCppuType((sal_Int16*)0),			0, MID_RELIEF },
-        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),	ATTR_FONT_SHADOWED,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),	ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),			0, MID_CROSS_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),	ATTR_FONT_UNDERLINE,&getCppuType((sal_Int16*)0),			0, MID_TL_STYLE },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL),	ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),			0, MID_TL_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS),	ATTR_FONT_UNDERLINE,&getBooleanCppuType(),					0, MID_TL_HASCOLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),	ATTR_FONT_WEIGHT,	&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),	ATTR_CJK_FONT_WEIGHT,&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),	ATTR_CTL_FONT_WEIGHT,&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNONAME_CWORDMOD),	ATTR_FONT_WORDLINE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CHCOLHDR),	SC_WID_UNO_CHCOLHDR,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR),	SC_WID_UNO_CHROWHDR,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),	SC_WID_UNO_CONDFMT,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),	SC_WID_UNO_CONDLOC,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),	SC_WID_UNO_CONDXML,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,  &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),                 0, MID_CROSSED_OUT },
+        {MAP_CHAR_LEN(SC_UNONAME_CEMPHAS),  ATTR_FONT_EMPHASISMARK,&getCppuType((sal_Int16*)0),         0, MID_EMPHASIS },
+        {MAP_CHAR_LEN(SC_UNONAME_CFONT),    ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &getCppuType((float*)0),                0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   ATTR_FONT_LANGUAGE, &getCppuType((lang::Locale*)0),         0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   ATTR_CJK_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),          0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),   ATTR_CTL_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),          0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVER),    ATTR_FONT_OVERLINE, &getCppuType((sal_Int16*)0),            0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLCOL), ATTR_FONT_OVERLINE, &getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLHAS), ATTR_FONT_OVERLINE, &getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CPOST),    ATTR_FONT_POSTURE,  &getCppuType((awt::FontSlant*)0),       0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),    ATTR_CJK_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),     0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),    ATTR_CTL_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),     0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNONAME_CRELIEF),  ATTR_FONT_RELIEF,   &getCppuType((sal_Int16*)0),            0, MID_RELIEF },
+        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),  ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),           0, MID_CROSS_OUT },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,&getCppuType((sal_Int16*)0),            0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL), ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS), ATTR_FONT_UNDERLINE,&getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),  ATTR_FONT_WEIGHT,   &getCppuType((float*)0),                0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),  ATTR_CJK_FONT_WEIGHT,&getCppuType((float*)0),               0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),  ATTR_CTL_FONT_WEIGHT,&getCppuType((float*)0),               0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNONAME_CWORDMOD), ATTR_FONT_WORDLINE, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CHCOLHDR), SC_WID_UNO_CHCOLHDR,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR), SC_WID_UNO_CHROWHDR,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS),	ATTR_HOR_JUSTIFY,	&getCppuType((table::CellHoriJustify*)0),	0, MID_HORJUST_HORJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN),	ATTR_BACKGROUND,	&getBooleanCppuType(),					0, MID_GRAPHIC_TRANSPARENT },
-        {MAP_CHAR_LEN(SC_UNONAME_WRAP),		ATTR_LINEBREAK,		&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),	ATTR_VALUE_FORMAT,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_NUMRULES),	SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0),   0, MID_HORJUST_HORJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
+        {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &getCppuType((table::CellOrientation*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PADJUST),	ATTR_HOR_JUSTIFY,	&::getCppuType((const sal_Int16*)0),	0, MID_HORJUST_ADJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PINDENT),	ATTR_INDENT,		&getCppuType((sal_Int16*)0),			0, 0 }, //! CONVERT_TWIPS
-        {MAP_CHAR_LEN(SC_UNONAME_PISCHDIST),ATTR_SCRIPTSPACE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISFORBID),ATTR_FORBIDDEN_RULES,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISHANG),	ATTR_HANGPUNCTUATION,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISHYPHEN),ATTR_HYPHENATE,		&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PLASTADJ),	ATTR_HOR_JUSTIFY,	&::getCppuType((const sal_Int16*)0),	0, MID_HORJUST_ADJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_POS),		SC_WID_UNO_POS,		&getCppuType((awt::Point*)0),			0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, RIGHT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),	ATTR_ROTATE_VALUE,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),	ATTR_ROTATE_MODE,	&getCppuType((table::CellVertJustify*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SHADOW),	ATTR_SHADOW,		&getCppuType((table::ShadowFormat*)0),	0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),			    0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SIZE),		SC_WID_UNO_SIZE,	&getCppuType((awt::Size*)0),			0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),	SC_WID_UNO_TBLBORD,	&getCppuType((table::TableBorder*)0),	0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),	ATTR_USERDEF,		&getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),	SC_WID_UNO_VALIDAT,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALILOC),	SC_WID_UNO_VALILOC,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),	SC_WID_UNO_VALIXML,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS),	ATTR_VER_JUSTIFY,	&getCppuType((table::CellVertJustify*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_WRITING),	ATTR_WRITINGDIR,	&getCppuType((sal_Int16*)0),			0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &getCppuType((sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
+        {MAP_CHAR_LEN(SC_UNONAME_PISCHDIST),ATTR_SCRIPTSPACE,   &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISFORBID),ATTR_FORBIDDEN_RULES,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISHANG),  ATTR_HANGPUNCTUATION,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISHYPHEN),ATTR_HYPHENATE,     &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PLASTADJ), ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_POS),      SC_WID_UNO_POS,     &getCppuType((awt::Point*)0),           0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,      &::getCppuType((const table::BorderLine*)0), 0, RIGHT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),               0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_SIZE),     SC_WID_UNO_SIZE,    &getCppuType((awt::Size*)0),            0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),  ATTR_USERDEF,       &getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aRangePropertySet( aRangePropertyMap_Impl );
     return &aRangePropertySet;
 }
 
-//	Cell enthaelt alle Eintraege von CellRange, zusaetzlich eigene Eintraege
-//	mit Which-ID 0 (werden nur fuer getPropertySetInfo benoetigt).
+//  Cell enthaelt alle Eintraege von CellRange, zusaetzlich eigene Eintraege
+//  mit Which-ID 0 (werden nur fuer getPropertySetInfo benoetigt).
 
 const SfxItemPropertySet* lcl_GetCellPropertySet()
 {
     static SfxItemPropertyMapEntry aCellPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),	SC_WID_UNO_ABSNAME,	&getCppuType((rtl::OUString*)0),		0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK),	ATTR_BACKGROUND,	&getCppuType((sal_Int32*)0),			0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),	ATTR_PROTECTION,	&getCppuType((util::CellProtection*)0),	0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL),	SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),		0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),	ATTR_FONT_COLOR,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_COUTL),	ATTR_FONT_CONTOUR,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),	ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),					0, MID_CROSSED_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CEMPHAS),	ATTR_FONT_EMPHASISMARK,&getCppuType((sal_Int16*)0),			0, MID_EMPHASIS },
-        {MAP_CHAR_LEN(SC_UNONAME_CFONT),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),	ATTR_FONT_HEIGHT,	&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),	ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),	ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),	ATTR_FONT_LANGUAGE,	&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),	ATTR_CJK_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),	ATTR_CTL_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNONAME_COVER),	ATTR_FONT_OVERLINE, &getCppuType((sal_Int16*)0),			0, MID_TL_STYLE },
-        {MAP_CHAR_LEN(SC_UNONAME_COVRLCOL),	ATTR_FONT_OVERLINE, &getCppuType((sal_Int32*)0),			0, MID_TL_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_COVRLHAS),	ATTR_FONT_OVERLINE, &getBooleanCppuType(),					0, MID_TL_HASCOLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CPOST),	ATTR_FONT_POSTURE,	&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),	ATTR_CJK_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),	ATTR_CTL_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNONAME_CRELIEF),	ATTR_FONT_RELIEF,	&getCppuType((sal_Int16*)0),			0, MID_RELIEF },
-        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),	ATTR_FONT_SHADOWED,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),	ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),			0, MID_CROSS_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),	ATTR_FONT_UNDERLINE,&getCppuType((sal_Int16*)0),			0, MID_TL_STYLE },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL),	ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),			0, MID_TL_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS),	ATTR_FONT_UNDERLINE,&getBooleanCppuType(),					0, MID_TL_HASCOLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),	ATTR_FONT_WEIGHT,	&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),	ATTR_CJK_FONT_WEIGHT,&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),	ATTR_CTL_FONT_WEIGHT,&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNONAME_CWORDMOD),	ATTR_FONT_WORDLINE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CHCOLHDR),	SC_WID_UNO_CHCOLHDR,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR),	SC_WID_UNO_CHROWHDR,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),	SC_WID_UNO_CONDFMT,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),	SC_WID_UNO_CONDLOC,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),	SC_WID_UNO_CONDXML,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,  &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),                 0, MID_CROSSED_OUT },
+        {MAP_CHAR_LEN(SC_UNONAME_CEMPHAS),  ATTR_FONT_EMPHASISMARK,&getCppuType((sal_Int16*)0),         0, MID_EMPHASIS },
+        {MAP_CHAR_LEN(SC_UNONAME_CFONT),    ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &getCppuType((float*)0),                0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   ATTR_FONT_LANGUAGE, &getCppuType((lang::Locale*)0),         0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   ATTR_CJK_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),          0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),   ATTR_CTL_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),          0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVER),    ATTR_FONT_OVERLINE, &getCppuType((sal_Int16*)0),            0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLCOL), ATTR_FONT_OVERLINE, &getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLHAS), ATTR_FONT_OVERLINE, &getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CPOST),    ATTR_FONT_POSTURE,  &getCppuType((awt::FontSlant*)0),       0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),    ATTR_CJK_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),     0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),    ATTR_CTL_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),     0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNONAME_CRELIEF),  ATTR_FONT_RELIEF,   &getCppuType((sal_Int16*)0),            0, MID_RELIEF },
+        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),  ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),           0, MID_CROSS_OUT },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,&getCppuType((sal_Int16*)0),            0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL), ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS), ATTR_FONT_UNDERLINE,&getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),  ATTR_FONT_WEIGHT,   &getCppuType((float*)0),                0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),  ATTR_CJK_FONT_WEIGHT,&getCppuType((float*)0),               0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),  ATTR_CTL_FONT_WEIGHT,&getCppuType((float*)0),               0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNONAME_CWORDMOD), ATTR_FONT_WORDLINE, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CHCOLHDR), SC_WID_UNO_CHCOLHDR,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR), SC_WID_UNO_CHROWHDR,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_FORMLOC),	SC_WID_UNO_FORMLOC,	&getCppuType((rtl::OUString*)0),		0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_FORMRT),	SC_WID_UNO_FORMRT,	&getCppuType((table::CellContentType*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS),	ATTR_HOR_JUSTIFY,	&getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN),	ATTR_BACKGROUND,	&getBooleanCppuType(),					0, MID_GRAPHIC_TRANSPARENT },
-        {MAP_CHAR_LEN(SC_UNONAME_WRAP),		ATTR_LINEBREAK,		&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),	ATTR_VALUE_FORMAT,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_NUMRULES),	SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_FORMLOC),  SC_WID_UNO_FORMLOC, &getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_FORMRT),   SC_WID_UNO_FORMRT,  &getCppuType((table::CellContentType*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
+        {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &getCppuType((table::CellOrientation*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PADJUST),	ATTR_HOR_JUSTIFY,	&::getCppuType((const sal_Int16*)0),	0, MID_HORJUST_ADJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PINDENT),	ATTR_INDENT,		&getCppuType((sal_Int16*)0),			0, 0 }, //! CONVERT_TWIPS
-        {MAP_CHAR_LEN(SC_UNONAME_PISCHDIST),ATTR_SCRIPTSPACE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISFORBID),ATTR_FORBIDDEN_RULES,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISHANG),	ATTR_HANGPUNCTUATION,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISHYPHEN),ATTR_HYPHENATE,		&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PLASTADJ),	ATTR_HOR_JUSTIFY,	&::getCppuType((const sal_Int16*)0),	0, MID_HORJUST_ADJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_POS),		SC_WID_UNO_POS,		&getCppuType((awt::Point*)0),			0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, RIGHT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),	ATTR_ROTATE_VALUE,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),	ATTR_ROTATE_MODE,	&getCppuType((table::CellVertJustify*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SHADOW),	ATTR_SHADOW,		&getCppuType((table::ShadowFormat*)0),	0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),			    0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SIZE),		SC_WID_UNO_SIZE,	&getCppuType((awt::Size*)0),			0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),	SC_WID_UNO_TBLBORD,	&getCppuType((table::TableBorder*)0),	0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),	ATTR_USERDEF,		&getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),	SC_WID_UNO_VALIDAT,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALILOC),	SC_WID_UNO_VALILOC,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),	SC_WID_UNO_VALIXML,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS),	ATTR_VER_JUSTIFY,	&getCppuType((table::CellVertJustify*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_WRITING),	ATTR_WRITINGDIR,	&getCppuType((sal_Int16*)0),			0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &getCppuType((sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
+        {MAP_CHAR_LEN(SC_UNONAME_PISCHDIST),ATTR_SCRIPTSPACE,   &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISFORBID),ATTR_FORBIDDEN_RULES,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISHANG),  ATTR_HANGPUNCTUATION,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISHYPHEN),ATTR_HYPHENATE,     &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PLASTADJ), ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_POS),      SC_WID_UNO_POS,     &getCppuType((awt::Point*)0),           0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,      &::getCppuType((const table::BorderLine*)0), 0, RIGHT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),               0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_SIZE),     SC_WID_UNO_SIZE,    &getCppuType((awt::Size*)0),            0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),  ATTR_USERDEF,       &getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aCellPropertySet( aCellPropertyMap_Impl );
     return &aCellPropertySet;
 }
 
-//	Column und Row enthalten alle Eintraege von CellRange, zusaetzlich eigene Eintraege
-//	mit Which-ID 0 (werden nur fuer getPropertySetInfo benoetigt).
+//  Column und Row enthalten alle Eintraege von CellRange, zusaetzlich eigene Eintraege
+//  mit Which-ID 0 (werden nur fuer getPropertySetInfo benoetigt).
 
 const SfxItemPropertySet* lcl_GetColumnPropertySet()
 {
     static SfxItemPropertyMapEntry aColumnPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),	SC_WID_UNO_ABSNAME,	&getCppuType((rtl::OUString*)0),		0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK),	ATTR_BACKGROUND,	&getCppuType((sal_Int32*)0),			0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),	ATTR_PROTECTION,	&getCppuType((util::CellProtection*)0),	0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL),	SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),		0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),	ATTR_FONT_COLOR,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_COUTL),	ATTR_FONT_CONTOUR,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),	ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),					0, MID_CROSSED_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CEMPHAS),	ATTR_FONT_EMPHASISMARK,&getCppuType((sal_Int16*)0),			0, MID_EMPHASIS },
-        {MAP_CHAR_LEN(SC_UNONAME_CFONT),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),	ATTR_FONT_HEIGHT,	&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),	ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),	ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),	ATTR_FONT_LANGUAGE,	&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),	ATTR_CJK_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),	ATTR_CTL_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNONAME_COVER),	ATTR_FONT_OVERLINE, &getCppuType((sal_Int16*)0),			0, MID_TL_STYLE },
-        {MAP_CHAR_LEN(SC_UNONAME_COVRLCOL),	ATTR_FONT_OVERLINE, &getCppuType((sal_Int32*)0),			0, MID_TL_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_COVRLHAS),	ATTR_FONT_OVERLINE, &getBooleanCppuType(),					0, MID_TL_HASCOLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CPOST),	ATTR_FONT_POSTURE,	&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),	ATTR_CJK_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),	ATTR_CTL_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNONAME_CRELIEF),	ATTR_FONT_RELIEF,	&getCppuType((sal_Int16*)0),			0, MID_RELIEF },
-        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),	ATTR_FONT_SHADOWED,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),	ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),			0, MID_CROSS_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),	ATTR_FONT_UNDERLINE,&getCppuType((sal_Int16*)0),			0, MID_TL_STYLE },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL),	ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),			0, MID_TL_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS),	ATTR_FONT_UNDERLINE,&getBooleanCppuType(),					0, MID_TL_HASCOLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),	ATTR_FONT_WEIGHT,	&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),	ATTR_CJK_FONT_WEIGHT,&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),	ATTR_CTL_FONT_WEIGHT,&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNONAME_CWORDMOD),	ATTR_FONT_WORDLINE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CHCOLHDR),	SC_WID_UNO_CHCOLHDR,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR),	SC_WID_UNO_CHROWHDR,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),	SC_WID_UNO_CONDFMT,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),	SC_WID_UNO_CONDLOC,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),	SC_WID_UNO_CONDXML,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,  &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),                 0, MID_CROSSED_OUT },
+        {MAP_CHAR_LEN(SC_UNONAME_CEMPHAS),  ATTR_FONT_EMPHASISMARK,&getCppuType((sal_Int16*)0),         0, MID_EMPHASIS },
+        {MAP_CHAR_LEN(SC_UNONAME_CFONT),    ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &getCppuType((float*)0),                0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   ATTR_FONT_LANGUAGE, &getCppuType((lang::Locale*)0),         0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   ATTR_CJK_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),          0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),   ATTR_CTL_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),          0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVER),    ATTR_FONT_OVERLINE, &getCppuType((sal_Int16*)0),            0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLCOL), ATTR_FONT_OVERLINE, &getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLHAS), ATTR_FONT_OVERLINE, &getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CPOST),    ATTR_FONT_POSTURE,  &getCppuType((awt::FontSlant*)0),       0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),    ATTR_CJK_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),     0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),    ATTR_CTL_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),     0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNONAME_CRELIEF),  ATTR_FONT_RELIEF,   &getCppuType((sal_Int16*)0),            0, MID_RELIEF },
+        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),  ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),           0, MID_CROSS_OUT },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,&getCppuType((sal_Int16*)0),            0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL), ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS), ATTR_FONT_UNDERLINE,&getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),  ATTR_FONT_WEIGHT,   &getCppuType((float*)0),                0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),  ATTR_CJK_FONT_WEIGHT,&getCppuType((float*)0),               0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),  ATTR_CTL_FONT_WEIGHT,&getCppuType((float*)0),               0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNONAME_CWORDMOD), ATTR_FONT_WORDLINE, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CHCOLHDR), SC_WID_UNO_CHCOLHDR,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR), SC_WID_UNO_CHROWHDR,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS),	ATTR_HOR_JUSTIFY,	&getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN),	ATTR_BACKGROUND,	&getBooleanCppuType(),					0, MID_GRAPHIC_TRANSPARENT },
-//		{MAP_CHAR_LEN(SC_UNONAME_CELLFILT),	SC_WID_UNO_CELLFILT,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_MANPAGE),	SC_WID_UNO_MANPAGE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_NEWPAGE),	SC_WID_UNO_NEWPAGE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_WRAP),		ATTR_LINEBREAK,		&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLVIS),	SC_WID_UNO_CELLVIS,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),	ATTR_VALUE_FORMAT,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_NUMRULES),	SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_OWIDTH),	SC_WID_UNO_OWIDTH,	&getBooleanCppuType(),					0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
+//      {MAP_CHAR_LEN(SC_UNONAME_CELLFILT), SC_WID_UNO_CELLFILT,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_MANPAGE),  SC_WID_UNO_MANPAGE, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_NEWPAGE),  SC_WID_UNO_NEWPAGE, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLVIS),  SC_WID_UNO_CELLVIS, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_OWIDTH),   SC_WID_UNO_OWIDTH,  &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &getCppuType((table::CellOrientation*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PADJUST),	ATTR_HOR_JUSTIFY,	&::getCppuType((const sal_Int16*)0),	0, MID_HORJUST_ADJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PINDENT),	ATTR_INDENT,		&getCppuType((sal_Int16*)0),			0, 0 }, //! CONVERT_TWIPS
-        {MAP_CHAR_LEN(SC_UNONAME_PISCHDIST),ATTR_SCRIPTSPACE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISFORBID),ATTR_FORBIDDEN_RULES,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISHANG),	ATTR_HANGPUNCTUATION,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISHYPHEN),ATTR_HYPHENATE,		&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PLASTADJ),	ATTR_HOR_JUSTIFY,	&::getCppuType((const sal_Int16*)0),	0, MID_HORJUST_ADJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_POS),		SC_WID_UNO_POS,		&getCppuType((awt::Point*)0),			0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, RIGHT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),	ATTR_ROTATE_VALUE,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),	ATTR_ROTATE_MODE,	&getCppuType((table::CellVertJustify*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SHADOW),	ATTR_SHADOW,		&getCppuType((table::ShadowFormat*)0),	0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),			    0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SIZE),		SC_WID_UNO_SIZE,	&getCppuType((awt::Size*)0),			0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),	SC_WID_UNO_TBLBORD,	&getCppuType((table::TableBorder*)0),	0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),	ATTR_USERDEF,		&getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),	SC_WID_UNO_VALIDAT,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALILOC),	SC_WID_UNO_VALILOC,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),	SC_WID_UNO_VALIXML,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS),	ATTR_VER_JUSTIFY,	&getCppuType((table::CellVertJustify*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLWID),	SC_WID_UNO_CELLWID,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_WRITING),	ATTR_WRITINGDIR,	&getCppuType((sal_Int16*)0),			0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &getCppuType((sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
+        {MAP_CHAR_LEN(SC_UNONAME_PISCHDIST),ATTR_SCRIPTSPACE,   &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISFORBID),ATTR_FORBIDDEN_RULES,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISHANG),  ATTR_HANGPUNCTUATION,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISHYPHEN),ATTR_HYPHENATE,     &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PLASTADJ), ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_POS),      SC_WID_UNO_POS,     &getCppuType((awt::Point*)0),           0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,      &::getCppuType((const table::BorderLine*)0), 0, RIGHT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),               0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_SIZE),     SC_WID_UNO_SIZE,    &getCppuType((awt::Size*)0),            0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),  ATTR_USERDEF,       &getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLWID),  SC_WID_UNO_CELLWID, &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aColumnPropertySet( aColumnPropertyMap_Impl );
@@ -564,100 +565,100 @@ const SfxItemPropertySet* lcl_GetRowPropertySet()
 {
     static SfxItemPropertyMapEntry aRowPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),	SC_WID_UNO_ABSNAME,	&getCppuType((rtl::OUString*)0),		0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK),	ATTR_BACKGROUND,	&getCppuType((sal_Int32*)0),			0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),	ATTR_PROTECTION,	&getCppuType((util::CellProtection*)0),	0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL),	SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),		0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),	ATTR_FONT_COLOR,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_COUTL),	ATTR_FONT_CONTOUR,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),	ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),					0, MID_CROSSED_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CEMPHAS),	ATTR_FONT_EMPHASISMARK,&getCppuType((sal_Int16*)0),			0, MID_EMPHASIS },
-        {MAP_CHAR_LEN(SC_UNONAME_CFONT),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),	ATTR_FONT_HEIGHT,	&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),	ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),	ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),	ATTR_FONT_LANGUAGE,	&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),	ATTR_CJK_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),	ATTR_CTL_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNONAME_COVER),	ATTR_FONT_OVERLINE, &getCppuType((sal_Int16*)0),			0, MID_TL_STYLE },
-        {MAP_CHAR_LEN(SC_UNONAME_COVRLCOL),	ATTR_FONT_OVERLINE, &getCppuType((sal_Int32*)0),			0, MID_TL_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_COVRLHAS),	ATTR_FONT_OVERLINE, &getBooleanCppuType(),					0, MID_TL_HASCOLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CPOST),	ATTR_FONT_POSTURE,	&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),	ATTR_CJK_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),	ATTR_CTL_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNONAME_CRELIEF),	ATTR_FONT_RELIEF,	&getCppuType((sal_Int16*)0),			0, MID_RELIEF },
-        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),	ATTR_FONT_SHADOWED,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),	ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),			0, MID_CROSS_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),	ATTR_FONT_UNDERLINE,&getCppuType((sal_Int16*)0),			0, MID_TL_STYLE },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL),	ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),			0, MID_TL_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS),	ATTR_FONT_UNDERLINE,&getBooleanCppuType(),					0, MID_TL_HASCOLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),	ATTR_FONT_WEIGHT,	&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),	ATTR_CJK_FONT_WEIGHT,&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),	ATTR_CTL_FONT_WEIGHT,&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNONAME_CWORDMOD),	ATTR_FONT_WORDLINE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CHCOLHDR),	SC_WID_UNO_CHCOLHDR,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR),	SC_WID_UNO_CHROWHDR,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),	SC_WID_UNO_CONDFMT,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),	SC_WID_UNO_CONDLOC,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),	SC_WID_UNO_CONDXML,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,  &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),                 0, MID_CROSSED_OUT },
+        {MAP_CHAR_LEN(SC_UNONAME_CEMPHAS),  ATTR_FONT_EMPHASISMARK,&getCppuType((sal_Int16*)0),         0, MID_EMPHASIS },
+        {MAP_CHAR_LEN(SC_UNONAME_CFONT),    ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &getCppuType((float*)0),                0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   ATTR_FONT_LANGUAGE, &getCppuType((lang::Locale*)0),         0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   ATTR_CJK_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),          0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),   ATTR_CTL_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),          0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVER),    ATTR_FONT_OVERLINE, &getCppuType((sal_Int16*)0),            0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLCOL), ATTR_FONT_OVERLINE, &getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLHAS), ATTR_FONT_OVERLINE, &getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CPOST),    ATTR_FONT_POSTURE,  &getCppuType((awt::FontSlant*)0),       0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),    ATTR_CJK_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),     0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),    ATTR_CTL_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),     0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNONAME_CRELIEF),  ATTR_FONT_RELIEF,   &getCppuType((sal_Int16*)0),            0, MID_RELIEF },
+        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),  ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),           0, MID_CROSS_OUT },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,&getCppuType((sal_Int16*)0),            0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL), ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS), ATTR_FONT_UNDERLINE,&getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),  ATTR_FONT_WEIGHT,   &getCppuType((float*)0),                0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),  ATTR_CJK_FONT_WEIGHT,&getCppuType((float*)0),               0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),  ATTR_CTL_FONT_WEIGHT,&getCppuType((float*)0),               0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNONAME_CWORDMOD), ATTR_FONT_WORDLINE, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CHCOLHDR), SC_WID_UNO_CHCOLHDR,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR), SC_WID_UNO_CHROWHDR,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLHGT),	SC_WID_UNO_CELLHGT,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS),	ATTR_HOR_JUSTIFY,	&getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN),	ATTR_BACKGROUND,	&getBooleanCppuType(),					0, MID_GRAPHIC_TRANSPARENT },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLFILT),	SC_WID_UNO_CELLFILT,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_MANPAGE),	SC_WID_UNO_MANPAGE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_NEWPAGE),	SC_WID_UNO_NEWPAGE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_WRAP),		ATTR_LINEBREAK,		&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLVIS),	SC_WID_UNO_CELLVIS,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),	ATTR_VALUE_FORMAT,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_NUMRULES),	SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_OHEIGHT),	SC_WID_UNO_OHEIGHT,	&getBooleanCppuType(),					0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLHGT),  SC_WID_UNO_CELLHGT, &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLFILT), SC_WID_UNO_CELLFILT,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_MANPAGE),  SC_WID_UNO_MANPAGE, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_NEWPAGE),  SC_WID_UNO_NEWPAGE, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLVIS),  SC_WID_UNO_CELLVIS, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_OHEIGHT),  SC_WID_UNO_OHEIGHT, &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &getCppuType((table::CellOrientation*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PADJUST),	ATTR_HOR_JUSTIFY,	&::getCppuType((const sal_Int16*)0),	0, MID_HORJUST_ADJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PINDENT),	ATTR_INDENT,		&getCppuType((sal_Int16*)0),			0, 0 }, //! CONVERT_TWIPS
-        {MAP_CHAR_LEN(SC_UNONAME_PISCHDIST),ATTR_SCRIPTSPACE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISFORBID),ATTR_FORBIDDEN_RULES,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISHANG),	ATTR_HANGPUNCTUATION,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISHYPHEN),ATTR_HYPHENATE,		&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PLASTADJ),	ATTR_HOR_JUSTIFY,	&::getCppuType((const sal_Int16*)0),	0, MID_HORJUST_ADJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_POS),		SC_WID_UNO_POS,		&getCppuType((awt::Point*)0),			0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, RIGHT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),	ATTR_ROTATE_VALUE,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),	ATTR_ROTATE_MODE,	&getCppuType((table::CellVertJustify*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SHADOW),	ATTR_SHADOW,		&getCppuType((table::ShadowFormat*)0),	0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),			    0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SIZE),		SC_WID_UNO_SIZE,	&getCppuType((awt::Size*)0),			0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),	SC_WID_UNO_TBLBORD,	&getCppuType((table::TableBorder*)0),	0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),	ATTR_USERDEF,		&getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),	SC_WID_UNO_VALIDAT,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALILOC),	SC_WID_UNO_VALILOC,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),	SC_WID_UNO_VALIXML,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS),	ATTR_VER_JUSTIFY,	&getCppuType((table::CellVertJustify*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_WRITING),	ATTR_WRITINGDIR,	&getCppuType((sal_Int16*)0),			0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &getCppuType((sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
+        {MAP_CHAR_LEN(SC_UNONAME_PISCHDIST),ATTR_SCRIPTSPACE,   &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISFORBID),ATTR_FORBIDDEN_RULES,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISHANG),  ATTR_HANGPUNCTUATION,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISHYPHEN),ATTR_HYPHENATE,     &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PLASTADJ), ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_POS),      SC_WID_UNO_POS,     &getCppuType((awt::Point*)0),           0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,      &::getCppuType((const table::BorderLine*)0), 0, RIGHT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),               0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_SIZE),     SC_WID_UNO_SIZE,    &getCppuType((awt::Size*)0),            0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),  ATTR_USERDEF,       &getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aRowPropertySet( aRowPropertyMap_Impl );
@@ -668,108 +669,108 @@ const SfxItemPropertySet* lcl_GetSheetPropertySet()
 {
     static SfxItemPropertyMapEntry aSheetPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),	SC_WID_UNO_ABSNAME,	&getCppuType((rtl::OUString*)0),		0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_AUTOPRINT),SC_WID_UNO_AUTOPRINT,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_BORDCOL),  SC_WID_UNO_BORDCOL, &getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK),	ATTR_BACKGROUND,	&getCppuType((sal_Int32*)0),			0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),	ATTR_PROTECTION,	&getCppuType((util::CellProtection*)0),	0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL),	SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),		0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),	ATTR_FONT_COLOR,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_COUTL),	ATTR_FONT_CONTOUR,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),	ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),					0, MID_CROSSED_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CEMPHAS),	ATTR_FONT_EMPHASISMARK,&getCppuType((sal_Int16*)0),			0, MID_EMPHASIS },
-        {MAP_CHAR_LEN(SC_UNONAME_CFONT),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_CHAR_SET },
-        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),	ATTR_FONT,			&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),	ATTR_CJK_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),	ATTR_CTL_FONT,		&getCppuType((sal_Int16*)0),			0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),	ATTR_FONT,			&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),	ATTR_CJK_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),	ATTR_CTL_FONT,		&getCppuType((rtl::OUString*)0),		0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),	ATTR_FONT_HEIGHT,	&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),	ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),	ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),				0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),	ATTR_FONT_LANGUAGE,	&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),	ATTR_CJK_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),	ATTR_CTL_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),			0, MID_LANG_LOCALE },
-        {MAP_CHAR_LEN(SC_UNONAME_COVER),	ATTR_FONT_OVERLINE, &getCppuType((sal_Int16*)0),			0, MID_TL_STYLE },
-        {MAP_CHAR_LEN(SC_UNONAME_COVRLCOL),	ATTR_FONT_OVERLINE, &getCppuType((sal_Int32*)0),			0, MID_TL_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_COVRLHAS),	ATTR_FONT_OVERLINE, &getBooleanCppuType(),					0, MID_TL_HASCOLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CPOST),	ATTR_FONT_POSTURE,	&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),	ATTR_CJK_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),	ATTR_CTL_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),		0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNONAME_CRELIEF),	ATTR_FONT_RELIEF,	&getCppuType((sal_Int16*)0),			0, MID_RELIEF },
-        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),	ATTR_FONT_SHADOWED,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),	ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),			0, MID_CROSS_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),	ATTR_FONT_UNDERLINE,&getCppuType((sal_Int16*)0),			0, MID_TL_STYLE },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL),	ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),			0, MID_TL_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS),	ATTR_FONT_UNDERLINE,&getBooleanCppuType(),					0, MID_TL_HASCOLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),	ATTR_FONT_WEIGHT,	&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),	ATTR_CJK_FONT_WEIGHT,&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),	ATTR_CTL_FONT_WEIGHT,&getCppuType((float*)0),				0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNONAME_CWORDMOD),	ATTR_FONT_WORDLINE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CHCOLHDR),	SC_WID_UNO_CHCOLHDR,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR),	SC_WID_UNO_CHROWHDR,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),	SC_WID_UNO_CONDFMT,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),	SC_WID_UNO_CONDLOC,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),	SC_WID_UNO_CONDXML,	&getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_COPYBACK),	SC_WID_UNO_COPYBACK,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_COPYFORM),	SC_WID_UNO_COPYFORM,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_COPYSTYL),	SC_WID_UNO_COPYSTYL,&getBooleanCppuType(),					0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_AUTOPRINT),SC_WID_UNO_AUTOPRINT,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_BORDCOL),  SC_WID_UNO_BORDCOL, &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,  &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),                 0, MID_CROSSED_OUT },
+        {MAP_CHAR_LEN(SC_UNONAME_CEMPHAS),  ATTR_FONT_EMPHASISMARK,&getCppuType((sal_Int16*)0),         0, MID_EMPHASIS },
+        {MAP_CHAR_LEN(SC_UNONAME_CFONT),    ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &getCppuType((float*)0),                0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   ATTR_FONT_LANGUAGE, &getCppuType((lang::Locale*)0),         0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   ATTR_CJK_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),          0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),   ATTR_CTL_FONT_LANGUAGE,&getCppuType((lang::Locale*)0),          0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVER),    ATTR_FONT_OVERLINE, &getCppuType((sal_Int16*)0),            0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLCOL), ATTR_FONT_OVERLINE, &getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_COVRLHAS), ATTR_FONT_OVERLINE, &getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CPOST),    ATTR_FONT_POSTURE,  &getCppuType((awt::FontSlant*)0),       0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),    ATTR_CJK_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),     0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),    ATTR_CTL_FONT_POSTURE,&getCppuType((awt::FontSlant*)0),     0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNONAME_CRELIEF),  ATTR_FONT_RELIEF,   &getCppuType((sal_Int16*)0),            0, MID_RELIEF },
+        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),  ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),           0, MID_CROSS_OUT },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,&getCppuType((sal_Int16*)0),            0, MID_TL_STYLE },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLCOL), ATTR_FONT_UNDERLINE,&getCppuType((sal_Int32*)0),            0, MID_TL_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDLHAS), ATTR_FONT_UNDERLINE,&getBooleanCppuType(),                  0, MID_TL_HASCOLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),  ATTR_FONT_WEIGHT,   &getCppuType((float*)0),                0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),  ATTR_CJK_FONT_WEIGHT,&getCppuType((float*)0),               0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),  ATTR_CTL_FONT_WEIGHT,&getCppuType((float*)0),               0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNONAME_CWORDMOD), ATTR_FONT_WORDLINE, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CHCOLHDR), SC_WID_UNO_CHCOLHDR,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR), SC_WID_UNO_CHROWHDR,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_COPYBACK), SC_WID_UNO_COPYBACK,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_COPYFORM), SC_WID_UNO_COPYFORM,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_COPYSTYL), SC_WID_UNO_COPYSTYL,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS),	ATTR_HOR_JUSTIFY,	&getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_ISACTIVE),	SC_WID_UNO_ISACTIVE,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN),	ATTR_BACKGROUND,	&getBooleanCppuType(),					0, MID_GRAPHIC_TRANSPARENT },
-        {MAP_CHAR_LEN(SC_UNONAME_WRAP),		ATTR_LINEBREAK,		&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLVIS),	SC_WID_UNO_CELLVIS,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),	SC_WID_UNO_LINKDISPBIT,&getCppuType((uno::Reference<awt::XBitmap>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME),	SC_WID_UNO_LINKDISPNAME,&getCppuType((rtl::OUString*)0),	0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),	ATTR_VALUE_FORMAT,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_NUMRULES),	SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_ISACTIVE), SC_WID_UNO_ISACTIVE,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
+        {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLVIS),  SC_WID_UNO_CELLVIS, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  SC_WID_UNO_LINKDISPBIT,&getCppuType((uno::Reference<awt::XBitmap>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), SC_WID_UNO_LINKDISPNAME,&getCppuType((rtl::OUString*)0),    0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &getCppuType((table::CellOrientation*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PAGESTL),	SC_WID_UNO_PAGESTL,	&getCppuType((rtl::OUString*)0),		0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PADJUST),	ATTR_HOR_JUSTIFY,	&::getCppuType((const sal_Int16*)0),	0, MID_HORJUST_ADJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PINDENT),	ATTR_INDENT,		&getCppuType((sal_Int16*)0),			0, 0 }, //! CONVERT_TWIPS
-        {MAP_CHAR_LEN(SC_UNONAME_PISCHDIST),ATTR_SCRIPTSPACE,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISFORBID),ATTR_FORBIDDEN_RULES,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISHANG),	ATTR_HANGPUNCTUATION,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PISHYPHEN),ATTR_HYPHENATE,		&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PLASTADJ),	ATTR_HOR_JUSTIFY,	&::getCppuType((const sal_Int16*)0),	0, MID_HORJUST_ADJUST },
-        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN),	ATTR_MARGIN,		&getCppuType((sal_Int32*)0),			0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_POS),		SC_WID_UNO_POS,		&getCppuType((awt::Point*)0),			0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PRINTBORD),SC_WID_UNO_PRINTBORD,&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PROTECT),  SC_WID_UNO_PROTECT,	&getBooleanCppuType(),					0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, RIGHT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),	ATTR_ROTATE_VALUE,	&getCppuType((sal_Int32*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),	ATTR_ROTATE_MODE,	&getCppuType((table::CellVertJustify*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SHADOW),	ATTR_SHADOW,		&getCppuType((table::ShadowFormat*)0),	0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_SHOWBORD), SC_WID_UNO_SHOWBORD,&getBooleanCppuType(),					0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PAGESTL),  SC_WID_UNO_PAGESTL, &getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &getCppuType((sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
+        {MAP_CHAR_LEN(SC_UNONAME_PISCHDIST),ATTR_SCRIPTSPACE,   &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISFORBID),ATTR_FORBIDDEN_RULES,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISHANG),  ATTR_HANGPUNCTUATION,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PISHYPHEN),ATTR_HYPHENATE,     &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PLASTADJ), ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_POS),      SC_WID_UNO_POS,     &getCppuType((awt::Point*)0),           0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PRINTBORD),SC_WID_UNO_PRINTBORD,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PROTECT),  SC_WID_UNO_PROTECT, &getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,      &::getCppuType((const table::BorderLine*)0), 0, RIGHT_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_SHOWBORD), SC_WID_UNO_SHOWBORD,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SHRINK_TO_FIT), ATTR_SHRINKTOFIT, &getBooleanCppuType(),               0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_SIZE),		SC_WID_UNO_SIZE,	&getCppuType((awt::Size*)0),			0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),	SC_WID_UNO_TBLBORD,	&getCppuType((table::TableBorder*)0),	0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_TABLAYOUT),SC_WID_UNO_TABLAYOUT,&getCppuType((sal_Int16*)0),			0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,		&::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),	ATTR_USERDEF,		&getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),	SC_WID_UNO_VALIDAT,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALILOC),	SC_WID_UNO_VALILOC,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),	SC_WID_UNO_VALIXML,	&getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS),	ATTR_VER_JUSTIFY,	&getCppuType((table::CellVertJustify*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_WRITING),	ATTR_WRITINGDIR,	&getCppuType((sal_Int16*)0),			0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_SIZE),     SC_WID_UNO_SIZE,    &getCppuType((awt::Size*)0),            0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_TABLAYOUT),SC_WID_UNO_TABLAYOUT,&getCppuType((sal_Int16*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),  ATTR_USERDEF,       &getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),  SC_WID_UNO_VALIDAT, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TABCOLOR), SC_WID_UNO_TABCOLOR, &getCppuType((sal_Int32*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_CODENAME),        SC_WID_UNO_CODENAME, &getCppuType(static_cast< const rtl::OUString * >(0)),    0, 0},
         {0,0,0,0,0,0}
@@ -785,9 +786,9 @@ const SfxItemPropertyMapEntry* lcl_GetEditPropertyMap()
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        SVX_UNOEDIT_NUMBERING_PROPERTIE,	// for completeness of service ParagraphProperties
-        {MAP_CHAR_LEN(SC_UNONAME_TEXTUSER),	EE_CHAR_XMLATTRIBS,	&getCppuType((const uno::Reference< container::XNameContainer >*)0), 0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),	EE_PARA_XMLATTRIBS,	&getCppuType((const uno::Reference< container::XNameContainer >*)0), 0, 0},
+        SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
+        {MAP_CHAR_LEN(SC_UNONAME_TEXTUSER), EE_CHAR_XMLATTRIBS, &getCppuType((const uno::Reference< container::XNameContainer >*)0), 0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_USERDEF),  EE_PARA_XMLATTRIBS, &getCppuType((const uno::Reference< container::XNameContainer >*)0), 0, 0},
         {0,0,0,0,0,0}
     };
     return aEditPropertyMap_Impl;
@@ -801,21 +802,21 @@ const SvxItemPropertySet* lcl_GetEditPropertySet()
 
 //------------------------------------------------------------------------
 
-//!	diese Funktionen in einen allgemeinen Header verschieben
-inline long TwipsToHMM(long nTwips)	{ return (nTwips * 127 + 36) / 72; }
-inline long HMMToTwips(long nHMM)	{ return (nHMM * 72 + 63) / 127; }
+//! diese Funktionen in einen allgemeinen Header verschieben
+inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
+inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
 
 //------------------------------------------------------------------------
 
-#define SCCHARPROPERTIES_SERVICE	"com.sun.star.style.CharacterProperties"
-#define SCPARAPROPERTIES_SERVICE	"com.sun.star.style.ParagraphProperties"
-#define SCCELLPROPERTIES_SERVICE	"com.sun.star.table.CellProperties"
-#define SCCELLRANGE_SERVICE			"com.sun.star.table.CellRange"
-#define SCCELL_SERVICE				"com.sun.star.table.Cell"
-#define SCSHEETCELLRANGES_SERVICE	"com.sun.star.sheet.SheetCellRanges"
-#define SCSHEETCELLRANGE_SERVICE	"com.sun.star.sheet.SheetCellRange"
-#define SCSPREADSHEET_SERVICE		"com.sun.star.sheet.Spreadsheet"
-#define SCSHEETCELL_SERVICE			"com.sun.star.sheet.SheetCell"
+#define SCCHARPROPERTIES_SERVICE    "com.sun.star.style.CharacterProperties"
+#define SCPARAPROPERTIES_SERVICE    "com.sun.star.style.ParagraphProperties"
+#define SCCELLPROPERTIES_SERVICE    "com.sun.star.table.CellProperties"
+#define SCCELLRANGE_SERVICE         "com.sun.star.table.CellRange"
+#define SCCELL_SERVICE              "com.sun.star.table.Cell"
+#define SCSHEETCELLRANGES_SERVICE   "com.sun.star.sheet.SheetCellRanges"
+#define SCSHEETCELLRANGE_SERVICE    "com.sun.star.sheet.SheetCellRange"
+#define SCSPREADSHEET_SERVICE       "com.sun.star.sheet.Spreadsheet"
+#define SCSHEETCELL_SERVICE         "com.sun.star.sheet.SheetCell"
 
 SC_SIMPLE_SERVICE_INFO( ScCellFormatsEnumeration, "ScCellFormatsEnumeration", "com.sun.star.sheet.CellFormatRangesEnumeration" )
 SC_SIMPLE_SERVICE_INFO( ScCellFormatsObj, "ScCellFormatsObj", "com.sun.star.sheet.CellFormatRanges" )
@@ -834,7 +835,7 @@ SV_IMPL_PTRARR( ScNamedEntryArr_Impl, ScNamedEntryPtr );
 
 //------------------------------------------------------------------------
 
-//!	ScLinkListener in anderes File verschieben !!!
+//! ScLinkListener in anderes File verschieben !!!
 
 ScLinkListener::~ScLinkListener()
 {
@@ -870,7 +871,7 @@ SCTAB lcl_FirstTab( const ScRangeList& rRanges )
     if (pFirst)
         return pFirst->aStart.Tab();
 
-    return 0;	// soll nicht sein
+    return 0;   // soll nicht sein
 }
 
 BOOL lcl_WholeSheet( const ScRangeList& rRanges )
@@ -939,7 +940,7 @@ ScSubTotalFunc lcl_SummaryToSubTotal( sheet::GeneralFunction eSummary )
 
 const SvxBorderLine* ScHelperFunctions::GetBorderLine( SvxBorderLine& rLine, const table::BorderLine& rStruct )
 {
-    //	Calc braucht Twips, im Uno-Struct sind 1/100mm
+    //  Calc braucht Twips, im Uno-Struct sind 1/100mm
 
     rLine.SetOutWidth( (USHORT)HMMToTwips( rStruct.OuterLineWidth ) );
     rLine.SetInWidth(  (USHORT)HMMToTwips( rStruct.InnerLineWidth ) );
@@ -956,18 +957,18 @@ void ScHelperFunctions::FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner
 {
     SvxBorderLine aLine;
     rOuter.SetDistance( (USHORT)HMMToTwips( rBorder.Distance ) );
-    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.TopLine ),		BOX_LINE_TOP );
-    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.BottomLine ),		BOX_LINE_BOTTOM );
-    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.LeftLine ),		BOX_LINE_LEFT );
-    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.RightLine ),		BOX_LINE_RIGHT );
-    rInner.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.HorizontalLine ),	BOXINFO_LINE_HORI );
-    rInner.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.VerticalLine ),	BOXINFO_LINE_VERT );
-    rInner.SetValid( VALID_TOP,		 rBorder.IsTopLineValid );
-    rInner.SetValid( VALID_BOTTOM,	 rBorder.IsBottomLineValid );
-    rInner.SetValid( VALID_LEFT,	 rBorder.IsLeftLineValid );
-    rInner.SetValid( VALID_RIGHT,	 rBorder.IsRightLineValid );
-    rInner.SetValid( VALID_HORI,	 rBorder.IsHorizontalLineValid );
-    rInner.SetValid( VALID_VERT,	 rBorder.IsVerticalLineValid );
+    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.TopLine ),     BOX_LINE_TOP );
+    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.BottomLine ),      BOX_LINE_BOTTOM );
+    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.LeftLine ),        BOX_LINE_LEFT );
+    rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.RightLine ),       BOX_LINE_RIGHT );
+    rInner.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.HorizontalLine ),  BOXINFO_LINE_HORI );
+    rInner.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.VerticalLine ),    BOXINFO_LINE_VERT );
+    rInner.SetValid( VALID_TOP,      rBorder.IsTopLineValid );
+    rInner.SetValid( VALID_BOTTOM,   rBorder.IsBottomLineValid );
+    rInner.SetValid( VALID_LEFT,     rBorder.IsLeftLineValid );
+    rInner.SetValid( VALID_RIGHT,    rBorder.IsRightLineValid );
+    rInner.SetValid( VALID_HORI,     rBorder.IsHorizontalLineValid );
+    rInner.SetValid( VALID_VERT,     rBorder.IsVerticalLineValid );
     rInner.SetValid( VALID_DISTANCE, rBorder.IsDistanceValid );
     rInner.SetTable( TRUE );
 }
@@ -976,7 +977,7 @@ void ScHelperFunctions::FillBorderLine( table::BorderLine& rStruct, const SvxBor
 {
     if (pLine)
     {
-        rStruct.Color		   = pLine->GetColor().GetColor();
+        rStruct.Color          = pLine->GetColor().GetColor();
         rStruct.InnerLineWidth = (sal_Int16)TwipsToHMM( pLine->GetInWidth() );
         rStruct.OuterLineWidth = (sal_Int16)TwipsToHMM( pLine->GetOutWidth() );
         rStruct.LineDistance   = (sal_Int16)TwipsToHMM( pLine->GetDistance() );
@@ -989,26 +990,26 @@ void ScHelperFunctions::FillBorderLine( table::BorderLine& rStruct, const SvxBor
 void ScHelperFunctions::FillTableBorder( table::TableBorder& rBorder,
                             const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner )
 {
-    ScHelperFunctions::FillBorderLine( rBorder.TopLine, 		rOuter.GetTop() );
-    ScHelperFunctions::FillBorderLine( rBorder.BottomLine,		rOuter.GetBottom() );
-    ScHelperFunctions::FillBorderLine( rBorder.LeftLine,		rOuter.GetLeft() );
-    ScHelperFunctions::FillBorderLine( rBorder.RightLine,		rOuter.GetRight() );
-    ScHelperFunctions::FillBorderLine( rBorder.HorizontalLine,	rInner.GetHori() );
-    ScHelperFunctions::FillBorderLine( rBorder.VerticalLine,	rInner.GetVert() );
+    ScHelperFunctions::FillBorderLine( rBorder.TopLine,         rOuter.GetTop() );
+    ScHelperFunctions::FillBorderLine( rBorder.BottomLine,      rOuter.GetBottom() );
+    ScHelperFunctions::FillBorderLine( rBorder.LeftLine,        rOuter.GetLeft() );
+    ScHelperFunctions::FillBorderLine( rBorder.RightLine,       rOuter.GetRight() );
+    ScHelperFunctions::FillBorderLine( rBorder.HorizontalLine,  rInner.GetHori() );
+    ScHelperFunctions::FillBorderLine( rBorder.VerticalLine,    rInner.GetVert() );
 
-    rBorder.Distance 				= rOuter.GetDistance();
-    rBorder.IsTopLineValid 			= rInner.IsValid(VALID_TOP);
-    rBorder.IsBottomLineValid		= rInner.IsValid(VALID_BOTTOM);
-    rBorder.IsLeftLineValid			= rInner.IsValid(VALID_LEFT);
-    rBorder.IsRightLineValid		= rInner.IsValid(VALID_RIGHT);
-    rBorder.IsHorizontalLineValid 	= rInner.IsValid(VALID_HORI);
-    rBorder.IsVerticalLineValid		= rInner.IsValid(VALID_VERT);
-    rBorder.IsDistanceValid 		= rInner.IsValid(VALID_DISTANCE);
+    rBorder.Distance                = rOuter.GetDistance();
+    rBorder.IsTopLineValid          = rInner.IsValid(VALID_TOP);
+    rBorder.IsBottomLineValid       = rInner.IsValid(VALID_BOTTOM);
+    rBorder.IsLeftLineValid         = rInner.IsValid(VALID_LEFT);
+    rBorder.IsRightLineValid        = rInner.IsValid(VALID_RIGHT);
+    rBorder.IsHorizontalLineValid   = rInner.IsValid(VALID_HORI);
+    rBorder.IsVerticalLineValid     = rInner.IsValid(VALID_VERT);
+    rBorder.IsDistanceValid         = rInner.IsValid(VALID_DISTANCE);
 }
 
 //------------------------------------------------------------------------
 
-//!	lcl_ApplyBorder nach docfunc verschieben!
+//! lcl_ApplyBorder nach docfunc verschieben!
 
 void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,
                         const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner )
@@ -1055,12 +1056,12 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
 }
 
 //! move lcl_PutDataArray to docfunc?
-//!	merge loop with ScFunctionAccess::callFunction
+//! merge loop with ScFunctionAccess::callFunction
 
 BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         const uno::Sequence< uno::Sequence<uno::Any> >& aData )
 {
-//	BOOL bApi = TRUE;
+//  BOOL bApi = TRUE;
 
     ScDocument* pDoc = rDocShell.GetDocument();
     SCTAB nTab = rRange.aStart.Tab();
@@ -1072,7 +1073,7 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     if ( !pDoc->IsBlockEditable( nTab, nStartCol,nStartRow, nEndCol,nEndRow ) )
     {
-        //!	error message
+        //! error message
         return FALSE;
     }
 
@@ -1084,7 +1085,7 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     if ( nCols != nEndCol-nStartCol+1 || nRows != nEndRow-nStartRow+1 )
     {
-        //!	error message?
+        //! error message?
         return FALSE;
     }
 
@@ -1124,8 +1125,8 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                             eElemClass == uno::TypeClass_FLOAT ||
                             eElemClass == uno::TypeClass_DOUBLE )
                 {
-                    //	#87871# accept integer types because Basic passes a floating point
-                    //	variable as byte, short or long if it's an integer number.
+                    //  #87871# accept integer types because Basic passes a floating point
+                    //  variable as byte, short or long if it's an integer number.
                     double fVal(0.0);
                     rElement >>= fVal;
                     pDoc->SetValue( nDocCol, nDocRow, nTab, fVal );
@@ -1138,13 +1139,13 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         pDoc->PutCell( nDocCol, nDocRow, nTab, new ScStringCell( aUStr ) );
                 }
                 else
-                    bError = TRUE;		// invalid type
+                    bError = TRUE;      // invalid type
 
                 ++nDocCol;
             }
         }
         else
-            bError = TRUE;							// wrong size
+            bError = TRUE;                          // wrong size
 
         ++nDocRow;
     }
@@ -1162,7 +1163,7 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
     }
 
     if (!bHeight)
-        rDocShell.PostPaint( rRange, PAINT_GRID );		// AdjustRowHeight may have painted already
+        rDocShell.PostPaint( rRange, PAINT_GRID );      // AdjustRowHeight may have painted already
 
     rDocShell.SetDocumentModified();
 
@@ -1173,7 +1174,7 @@ BOOL lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
         const uno::Sequence< uno::Sequence<rtl::OUString> >& aData,
         const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
-//	BOOL bApi = TRUE;
+//  BOOL bApi = TRUE;
 
     ScDocument* pDoc = rDocShell.GetDocument();
     SCTAB nTab = rRange.aStart.Tab();
@@ -1185,7 +1186,7 @@ BOOL lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     if ( !pDoc->IsBlockEditable( nTab, nStartCol,nStartRow, nEndCol,nEndRow ) )
     {
-        //!	error message
+        //! error message
         return FALSE;
     }
 
@@ -1197,7 +1198,7 @@ BOOL lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     if ( nCols != nEndCol-nStartCol+1 || nRows != nEndRow-nStartRow+1 )
     {
-        //!	error message?
+        //! error message?
         return FALSE;
     }
 
@@ -1211,7 +1212,7 @@ BOOL lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     pDoc->DeleteAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, IDF_CONTENTS );
 
-    ScDocFunc aFunc( rDocShell );		// for InterpretEnglishString
+    ScDocFunc aFunc( rDocShell );       // for InterpretEnglishString
 
     BOOL bError = FALSE;
     SCROW nDocRow = nStartRow;
@@ -1233,7 +1234,7 @@ BOOL lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
             }
         }
         else
-            bError = TRUE;							// wrong size
+            bError = TRUE;                          // wrong size
 
         ++nDocRow;
     }
@@ -1251,14 +1252,14 @@ BOOL lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
     }
 
     if (!bHeight)
-        rDocShell.PostPaint( rRange, PAINT_GRID );		// AdjustRowHeight may have painted already
+        rDocShell.PostPaint( rRange, PAINT_GRID );      // AdjustRowHeight may have painted already
 
     rDocShell.SetDocumentModified();
 
     return !bError;
 }
 
-//	used in ScCellRangeObj::getFormulaArray and ScCellObj::GetInputString_Impl
+//  used in ScCellRangeObj::getFormulaArray and ScCellObj::GetInputString_Impl
 String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, BOOL bEnglish )
 {
     String aVal;
@@ -1281,14 +1282,14 @@ String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, BOOL bE
                 // LANGUAGE_ENGLISH_US the "General" format has index key 0,
                 // we don't have to query.
                 sal_uInt32 nNumFmt = bEnglish ?
-//						pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) :
+//                      pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) :
                         0 :
                         pDoc->GetNumberFormat( rPosition );
 
                 if ( eType == CELLTYPE_EDIT )
                 {
-                    //	GetString an der EditCell macht Leerzeichen aus Umbruechen,
-                    //	hier werden die Umbrueche aber gebraucht
+                    //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
+                    //  hier werden die Umbrueche aber gebraucht
                     const EditTextObject* pData = ((ScEditCell*)pCell)->GetData();
                     if (pData)
                     {
@@ -1300,7 +1301,7 @@ String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, BOOL bE
                 else
                     ScCellFormat::GetInputString( pCell, nNumFmt, aVal, *pFormatter );
 
-                //	ggf. ein ' davorhaengen wie in ScTabViewShell::UpdateInputHandler
+                //  ggf. ein ' davorhaengen wie in ScTabViewShell::UpdateInputHandler
                 if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                 {
                     double fDummy;
@@ -1309,8 +1310,8 @@ String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, BOOL bE
                         aVal.Insert('\'',0);
                     else if ( aVal.Len() && aVal.GetChar(0) == '\'' )
                     {
-                        //	if the string starts with a "'", add another one because setFormula
-                        //	strips one (like text input, except for "text" number formats)
+                        //  if the string starts with a "'", add another one because setFormula
+                        //  strips one (like text input, except for "text" number formats)
                         if ( bEnglish || ( pFormatter->GetType(nNumFmt) != NUMBERFORMAT_TEXT ) )
                             aVal.Insert('\'',0);
                     }
@@ -1397,8 +1398,8 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
 
 ScCellRangesBase::~ScCellRangesBase()
 {
-    //	#107294# call RemoveUnoObject first, so no notification can happen
-    //	during ForgetCurrentAttrs
+    //  #107294# call RemoveUnoObject first, so no notification can happen
+    //  during ForgetCurrentAttrs
 
     if (pDocShell)
         pDocShell->GetDocument()->RemoveUnoObject(*this);
@@ -1408,8 +1409,8 @@ ScCellRangesBase::~ScCellRangesBase()
 
     delete pValueListener;
 
-    //!	XChartDataChangeEventListener abmelden ??
-    //!	(ChartCollection haelt dann auch dieses Objekt fest!)
+    //! XChartDataChangeEventListener abmelden ??
+    //! (ChartCollection haelt dann auch dieses Objekt fest!)
 }
 
 void ScCellRangesBase::ForgetCurrentAttrs()
@@ -1434,7 +1435,7 @@ void ScCellRangesBase::ForgetMarkData()
 
 const ScPatternAttr* ScCellRangesBase::GetCurrentAttrsFlat()
 {
-    //	get and cache direct cell attributes for this object's range
+    //  get and cache direct cell attributes for this object's range
 
     if ( !pCurrentFlat && pDocShell )
     {
@@ -1446,7 +1447,7 @@ const ScPatternAttr* ScCellRangesBase::GetCurrentAttrsFlat()
 
 const ScPatternAttr* ScCellRangesBase::GetCurrentAttrsDeep()
 {
-    //	get and cache cell attributes (incl. styles) for this object's range
+    //  get and cache cell attributes (incl. styles) for this object's range
 
     if ( !pCurrentDeep && pDocShell )
     {
@@ -1463,7 +1464,7 @@ SfxItemSet* ScCellRangesBase::GetCurrentDataSet(bool bNoDflt)
         const ScPatternAttr* pPattern = GetCurrentAttrsDeep();
         if ( pPattern )
         {
-            //	Dontcare durch Default ersetzen, damit man immer eine Reflection hat
+            //  Dontcare durch Default ersetzen, damit man immer eine Reflection hat
             pCurrentDataSet = new SfxItemSet( pPattern->GetItemSet() );
             pNoDfltCurrentDataSet = new SfxItemSet( pPattern->GetItemSet() );
             pCurrentDataSet->ClearInvalidItems();
@@ -1528,11 +1529,11 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         if ( nId == SFX_HINT_DYING )
         {
             ForgetCurrentAttrs();
-            pDocShell = NULL;			// invalid
+            pDocShell = NULL;           // invalid
 
             if ( aValueListeners.Count() != 0 )
             {
-                //	dispose listeners
+                //  dispose listeners
 
                 lang::EventObject aEvent;
                 aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
@@ -1541,8 +1542,8 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                 aValueListeners.DeleteAndDestroy( 0, aValueListeners.Count() );
 
-                //	The listeners can't have the last ref to this, as it's still held
-                //	by the DocShell.
+                //  The listeners can't have the last ref to this, as it's still held
+                //  by the DocShell.
             }
         }
         else if ( nId == SFX_HINT_DATACHANGED )
@@ -1552,13 +1553,13 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
             if ( bGotDataChangedHint && pDocShell )
             {
-                //	This object was notified of content changes, so one call
-                //	for each listener is generated now.
-                //	The calls can't be executed directly because the document's
-                //	UNO broadcaster list must not be modified.
-                //	Instead, add to the document's list of listener calls,
-                //	which will be executed directly after the broadcast of
-                //	SFX_HINT_DATACHANGED.
+                //  This object was notified of content changes, so one call
+                //  for each listener is generated now.
+                //  The calls can't be executed directly because the document's
+                //  UNO broadcaster list must not be modified.
+                //  Instead, add to the document's list of listener calls,
+                //  which will be executed directly after the broadcast of
+                //  SFX_HINT_DATACHANGED.
 
                 lang::EventObject aEvent;
                 aEvent.Source.set((cppu::OWeakObject*)this);
@@ -1599,7 +1600,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 void ScCellRangesBase::RefChanged()
 {
-    //!	adjust XChartDataChangeEventListener
+    //! adjust XChartDataChangeEventListener
 
     if ( pValueListener && aValueListeners.Count() != 0 )
     {
@@ -1636,7 +1637,7 @@ void ScCellRangesBase::InitInsertRange(ScDocShell* pDocSh, const ScRange& rR)
 
         pDocShell->GetDocument()->AddUnoObject(*this);
 
-        RefChanged();	// Range im Range-Objekt anpassen
+        RefChanged();   // Range im Range-Objekt anpassen
     }
 }
 
@@ -1667,8 +1668,8 @@ void ScCellRangesBase::SetNewRanges(const ScRangeList& rNew)
 
 void ScCellRangesBase::SetCursorOnly( BOOL bSet )
 {
-    //	set for a selection object that is created from the cursor position
-    //	without anything selected (may contain several sheets)
+    //  set for a selection object that is created from the cursor position
+    //  without anything selected (may contain several sheets)
 
     bCursorOnly = bSet;
 }
@@ -1760,15 +1761,15 @@ double SAL_CALL ScCellRangesBase::computeFunction( sheet::GeneralFunction nFunct
     ScMarkData aMark(*GetMarkData());
     aMark.MarkToSimple();
     if (!aMark.IsMarked())
-        aMark.SetMarkNegative(TRUE);	// um Dummy Position angeben zu koennen
+        aMark.SetMarkNegative(TRUE);    // um Dummy Position angeben zu koennen
 
-    ScAddress aDummy;					// wenn nicht Marked, ignoriert wegen Negative
+    ScAddress aDummy;                   // wenn nicht Marked, ignoriert wegen Negative
     double fVal;
     ScSubTotalFunc eFunc = lcl_SummaryToSubTotal( nFunction );
     ScDocument* pDoc = pDocShell->GetDocument();
     if ( !pDoc->GetSelectionFunction( eFunc, aDummy, aMark, fVal ) )
     {
-        throw uno::RuntimeException();		//!	own exception?
+        throw uno::RuntimeException();      //! own exception?
     }
 
     return fVal;
@@ -1797,11 +1798,11 @@ const SfxItemPropertyMap* ScCellRangesBase::GetItemPropertyMap()
     return pPropSet->getPropertyMap();
 }
 
-void lcl_GetPropertyWhich( const SfxItemPropertySimpleEntry* pEntry, 
+void lcl_GetPropertyWhich( const SfxItemPropertySimpleEntry* pEntry,
                                                 USHORT& rItemWhich )
 {
-    //	Which-ID des betroffenen Items, auch wenn das Item die Property
-    //	nicht alleine behandeln kann
+    //  Which-ID des betroffenen Items, auch wenn das Item die Property
+    //  nicht alleine behandeln kann
     if ( pEntry )
     {
         if ( IsScItemWid( pEntry->nWID ) )
@@ -1830,12 +1831,12 @@ void lcl_GetPropertyWhich( const SfxItemPropertySimpleEntry* pEntry,
 beans::PropertyState ScCellRangesBase::GetOnePropertyState( USHORT nItemWhich, const SfxItemPropertySimpleEntry* pEntry )
 {
     beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
-    if ( nItemWhich )					// item wid (from map or special case)
+    if ( nItemWhich )                   // item wid (from map or special case)
     {
-        //	For items that contain several properties (like background),
-        //	"ambiguous" is returned too often here
+        //  For items that contain several properties (like background),
+        //  "ambiguous" is returned too often here
 
-        //	for PropertyState, don't look at styles
+        //  for PropertyState, don't look at styles
         const ScPatternAttr* pPattern = GetCurrentAttrsFlat();
         if ( pPattern )
         {
@@ -1867,7 +1868,7 @@ beans::PropertyState ScCellRangesBase::GetOnePropertyState( USHORT nItemWhich, c
             eRet = beans::PropertyState_DIRECT_VALUE;
         else if ( pEntry->nWID == SC_WID_UNO_CELLSTYL )
         {
-            //	a style is always set, there's no default state
+            //  a style is always set, there's no default state
             const ScStyleSheet* pStyle = pDocShell->GetDocument()->GetSelectionStyle(*GetMarkData());
             if (pStyle)
                 eRet = beans::PropertyState_DIRECT_VALUE;
@@ -1875,7 +1876,7 @@ beans::PropertyState ScCellRangesBase::GetOnePropertyState( USHORT nItemWhich, c
                 eRet = beans::PropertyState_AMBIGUOUS_VALUE;
         }
         else if ( pEntry->nWID == SC_WID_UNO_NUMRULES )
-            eRet = beans::PropertyState_DEFAULT_VALUE;		// numbering rules are always default
+            eRet = beans::PropertyState_DEFAULT_VALUE;      // numbering rules are always default
     }
     return eRet;
 }
@@ -1924,14 +1925,14 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const rtl::OUString& aProp
         USHORT nItemWhich = 0;
         const SfxItemPropertySimpleEntry* pEntry  = pPropertyMap->getByName( aPropertyName );
         lcl_GetPropertyWhich( pEntry, nItemWhich );
-        if ( nItemWhich )				// item wid (from map or special case)
+        if ( nItemWhich )               // item wid (from map or special case)
         {
-            if ( aRanges.Count() )		// leer = nichts zu tun
+            if ( aRanges.Count() )      // leer = nichts zu tun
             {
                 ScDocFunc aFunc(*pDocShell);
 
-                //!	Bei Items, die mehrere Properties enthalten (z.B. Hintergrund)
-                //!	wird hier zuviel zurueckgesetzt
+                //! Bei Items, die mehrere Properties enthalten (z.B. Hintergrund)
+                //! wird hier zuviel zurueckgesetzt
 
 //               //! for ATTR_ROTATE_VALUE, also reset ATTR_ORIENTATION?
 
@@ -1939,7 +1940,7 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const rtl::OUString& aProp
                 aWIDs[0] = nItemWhich;
                 if ( nItemWhich == ATTR_VALUE_FORMAT )
                 {
-                    aWIDs[1] = ATTR_LANGUAGE_FORMAT;	// #67847# language for number formats
+                    aWIDs[1] = ATTR_LANGUAGE_FORMAT;    // #67847# language for number formats
                     aWIDs[2] = 0;
                 }
                 else
@@ -1966,7 +1967,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const rtl::OUString& aPr
                                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                                         uno::RuntimeException)
 {
-    //!	mit getPropertyValue zusammenfassen
+    //! mit getPropertyValue zusammenfassen
 
     ScUnoGuard aGuard;
     uno::Any aAny;
@@ -1988,7 +1989,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const rtl::OUString& aPr
                     switch ( pEntry->nWID )     // fuer Item-Spezial-Behandlungen
                     {
                         case ATTR_VALUE_FORMAT:
-                            //	default has no language set
+                            //  default has no language set
                             aAny <<= (sal_Int32)( ((const SfxUInt32Item&)rSet.Get(pEntry->nWID)).GetValue() );
                             break;
                         case ATTR_INDENT:
@@ -2113,7 +2114,7 @@ void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const uno::A
                         if ( nNewMod == ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) &&
                              nNewMod <= SV_MAX_ANZ_STANDARD_FORMATE )
                         {
-                            rFirstItemId = 0;		// don't use ATTR_VALUE_FORMAT value
+                            rFirstItemId = 0;       // don't use ATTR_VALUE_FORMAT value
                         }
 
                         rSecondItemId = ATTR_LANGUAGE_FORMAT;
@@ -2137,7 +2138,7 @@ void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const uno::A
                 sal_Int32 nRotVal = 0;
                 if ( rValue >>= nRotVal )
                 {
-                    //	stored value is always between 0 and 360 deg.
+                    //  stored value is always between 0 and 360 deg.
                     nRotVal %= 36000;
                     if ( nRotVal < 0 )
                         nRotVal += 36000;
@@ -2212,17 +2213,17 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
     {
         if ( IsScItemWid( pEntry->nWID ) )
         {
-            if ( aRanges.Count() )		// leer = nichts zu tun
+            if ( aRanges.Count() )      // leer = nichts zu tun
             {
                 ScDocument* pDoc = pDocShell->GetDocument();
                 ScDocFunc aFunc(*pDocShell);
 
-                //	Fuer Teile von zusammengesetzten Items mit mehreren Properties (z.B. Hintergrund)
-                //	muss vorher das alte Item aus dem Dokument geholt werden
-                //!	Das kann hier aber nicht erkannt werden
-                //!	-> eigenes Flag im PropertyMap-Eintrag, oder was ???
-                //!	Item direkt von einzelner Position im Bereich holen?
-                //	ClearInvalidItems, damit auf jeden Fall ein Item vom richtigen Typ da ist
+                //  Fuer Teile von zusammengesetzten Items mit mehreren Properties (z.B. Hintergrund)
+                //  muss vorher das alte Item aus dem Dokument geholt werden
+                //! Das kann hier aber nicht erkannt werden
+                //! -> eigenes Flag im PropertyMap-Eintrag, oder was ???
+                //! Item direkt von einzelner Position im Bereich holen?
+                //  ClearInvalidItems, damit auf jeden Fall ein Item vom richtigen Typ da ist
 
                 ScPatternAttr aPattern( *GetCurrentAttrsDeep() );
                 SfxItemSet& rSet = aPattern.GetItemSet();
@@ -2238,7 +2239,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                 aFunc.ApplyAttributes( *GetMarkData(), aPattern, TRUE, TRUE );
             }
         }
-        else		// implemented here
+        else        // implemented here
             switch ( pEntry->nWID )
             {
                 case SC_WID_UNO_CHCOLHDR:
@@ -2261,13 +2262,13 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                 case SC_WID_UNO_TBLBORD:
                     {
                         table::TableBorder aBorder;
-                        if ( aRanges.Count() && ( aValue >>= aBorder ) )	// empty = nothing to do
+                        if ( aRanges.Count() && ( aValue >>= aBorder ) )    // empty = nothing to do
                         {
                             SvxBoxItem aOuter(ATTR_BORDER);
                             SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
                             ScHelperFunctions::FillBoxItems( aOuter, aInner, aBorder );
 
-                            ScHelperFunctions::ApplyBorder( pDocShell, aRanges, aOuter, aInner );	//! docfunc
+                            ScHelperFunctions::ApplyBorder( pDocShell, aRanges, aOuter, aInner );   //! docfunc
                         }
                     }
                     break;
@@ -2276,7 +2277,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                 case SC_WID_UNO_CONDXML:
                     {
                         uno::Reference<sheet::XSheetConditionalEntries> xInterface(aValue, uno::UNO_QUERY);
-                        if ( aRanges.Count() && xInterface.is() )	// leer = nichts zu tun
+                        if ( aRanges.Count() && xInterface.is() )   // leer = nichts zu tun
                         {
                             ScTableConditionalFormat* pFormat =
                                     ScTableConditionalFormat::getImplementation( xInterface );
@@ -2289,7 +2290,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                        formula::FormulaGrammar::GRAM_UNSPECIFIED :
                                        formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
 
-                                ScConditionalFormat aNew( 0, pDoc );	// Index wird beim Einfuegen gesetzt
+                                ScConditionalFormat aNew( 0, pDoc );    // Index wird beim Einfuegen gesetzt
                                 pFormat->FillFormat( aNew, pDoc, eGrammar );
                                 ULONG nIndex = pDoc->AddCondFormat( aNew );
 
@@ -2307,7 +2308,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                 case SC_WID_UNO_VALIXML:
                     {
                         uno::Reference<beans::XPropertySet> xInterface(aValue, uno::UNO_QUERY);
-                        if ( aRanges.Count() && xInterface.is() )	// leer = nichts zu tun
+                        if ( aRanges.Count() && xInterface.is() )   // leer = nichts zu tun
                         {
                             ScTableValidationObj* pValidObj =
                                     ScTableValidationObj::getImplementation( xInterface );
@@ -2400,7 +2401,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                 }
             }
         }
-        else		// implemented here
+        else        // implemented here
             switch ( pEntry->nWID )
             {
                 case SC_WID_UNO_CHCOLHDR:
@@ -2421,7 +2422,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                     break;
                 case SC_WID_UNO_TBLBORD:
                     {
-                        //!	loop throgh all ranges
+                        //! loop throgh all ranges
                         const ScRange* pFirst = aRanges.GetObject(0);
                         if (pFirst)
                         {
@@ -2604,12 +2605,12 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUS
                         pNewPattern = new ScPatternAttr( pDoc->GetPool() );
                     }
 
-                    //	collect items in pNewPattern, apply with one call after the loop
+                    //  collect items in pNewPattern, apply with one call after the loop
 
                     USHORT nFirstItem, nSecondItem;
                     lcl_SetCellProperty( *pEntry, pValues[i], *pOldPattern, pDoc, nFirstItem, nSecondItem );
 
-                    //	put only affected items into new set
+                    //  put only affected items into new set
                     if ( nFirstItem )
                         pNewPattern->GetItemSet().Put( pOldPattern->GetItemSet().Get( nFirstItem ) );
                     if ( nSecondItem )
@@ -2617,7 +2618,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUS
                 }
                 else if ( pEntry->nWID != SC_WID_UNO_CELLSTYL )   // CellStyle is handled above
                 {
-                    //	call virtual method to set a single property
+                    //  call virtual method to set a single property
                     SetOnePropertyValue( pEntry, pValues[i] );
                 }
             }
@@ -2678,9 +2679,9 @@ IMPL_LINK( ScCellRangesBase, ValueListenerHdl, SfxHint*, pHint )
     if ( pDocShell && pHint && pHint->ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint*)pHint)->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING) )
     {
-        //	This may be called several times for a single change, if several formulas
-        //	in the range are notified. So only a flag is set that is checked when
-        //	SFX_HINT_DATACHANGED is received.
+        //  This may be called several times for a single change, if several formulas
+        //  in the range are notified. So only a flag is set that is checked when
+        //  SFX_HINT_DATACHANGED is received.
 
         bGotDataChangedHint = TRUE;
     }
@@ -2755,14 +2756,14 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
                         pNewPattern = new ScPatternAttr( pDoc->GetPool() );
                     }
 
-                    //	collect items in pNewPattern, apply with one call after the loop
+                    //  collect items in pNewPattern, apply with one call after the loop
 
                     USHORT nFirstItem, nSecondItem;
                     try
                     {
                         lcl_SetCellProperty( *pEntry, pValues[i], *pOldPattern, pDoc, nFirstItem, nSecondItem );
 
-                        //	put only affected items into new set
+                        //  put only affected items into new set
                         if ( nFirstItem )
                             pNewPattern->GetItemSet().Put( pOldPattern->GetItemSet().Get( nFirstItem ) );
                         if ( nSecondItem )
@@ -2776,7 +2777,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
                 }
                 else if ( pEntry->nWID != SC_WID_UNO_CELLSTYL )   // CellStyle is handled above
                 {
-                    //	call virtual method to set a single property
+                    //  call virtual method to set a single property
                     try
                     {
                         SetOnePropertyValue( pEntry, pValues[i] );
@@ -2888,7 +2889,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL ScCellRangesBas
 void SAL_CALL ScCellRangesBase::decrementIndent() throw(::com::sun::star::uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    if ( pDocShell && aRanges.Count() )		// leer = nichts zu tun
+    if ( pDocShell && aRanges.Count() )     // leer = nichts zu tun
     {
         ScDocFunc aFunc(*pDocShell);
         //#97041#; put only MultiMarked ScMarkData in ChangeIndent
@@ -2901,7 +2902,7 @@ void SAL_CALL ScCellRangesBase::decrementIndent() throw(::com::sun::star::uno::R
 void SAL_CALL ScCellRangesBase::incrementIndent() throw(::com::sun::star::uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    if ( pDocShell && aRanges.Count() )		// leer = nichts zu tun
+    if ( pDocShell && aRanges.Count() )     // leer = nichts zu tun
     {
         ScDocFunc aFunc(*pDocShell);
         //#97041#; put only MultiMarked ScMarkData in ChangeIndent
@@ -2920,9 +2921,9 @@ ScMemChart* ScCellRangesBase::CreateMemChart_Impl() const
         ScRangeListRef xChartRanges;
         if ( aRanges.Count() == 1 )
         {
-            //	ganze Tabelle sinnvoll begrenzen (auf belegten Datenbereich)
-            //	(nur hier, Listener werden auf den ganzen Bereich angemeldet)
-            //!	direkt testen, ob es ein ScTableSheetObj ist?
+            //  ganze Tabelle sinnvoll begrenzen (auf belegten Datenbereich)
+            //  (nur hier, Listener werden auf den ganzen Bereich angemeldet)
+            //! direkt testen, ob es ein ScTableSheetObj ist?
 
             ScRange* pRange = aRanges.GetObject(0);
             if ( pRange->aStart.Col() == 0 && pRange->aEnd.Col() == MAXCOL &&
@@ -2950,7 +2951,7 @@ ScMemChart* ScCellRangesBase::CreateMemChart_Impl() const
                 xChartRanges->Append( ScRange( nStartX, nStartY, nTab, nEndX, nEndY, nTab ) );
             }
         }
-        if (!xChartRanges.Is())			//	sonst Ranges direkt uebernehmen
+        if (!xChartRanges.Is())         //  sonst Ranges direkt uebernehmen
             xChartRanges = new ScRangeList(aRanges);
         ScChartArray aArr( pDocShell->GetDocument(), xChartRanges, String() );
 
@@ -2999,7 +3000,7 @@ ScRangeListRef ScCellRangesBase::GetLimitedChartRanges_Impl( long nDataColumns, 
         if ( pRange->aStart.Col() == 0 && pRange->aEnd.Col() == MAXCOL &&
              pRange->aStart.Row() == 0 && pRange->aEnd.Row() == MAXROW )
         {
-            //	if aRanges is a complete sheet, limit to given size
+            //  if aRanges is a complete sheet, limit to given size
 
             SCTAB nTab = pRange->aStart.Tab();
 
@@ -3021,7 +3022,7 @@ ScRangeListRef ScCellRangesBase::GetLimitedChartRanges_Impl( long nDataColumns, 
         }
     }
 
-    return new ScRangeList(aRanges);		// as-is
+    return new ScRangeList(aRanges);        // as-is
 }
 
 void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<double> >& aData )
@@ -3036,7 +3037,7 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         ScChartArray aArr( pDoc, xChartRanges, String() );
-        aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );		// RowAsHdr = ColHeaders
+        aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
         const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
         if (pPosMap)
         {
@@ -3057,17 +3058,17 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
                         {
                             double fVal = pArray[nCol];
                             if ( fVal == DBL_MIN )
-                                pDoc->PutCell( *pPos, NULL );		// empty cell
+                                pDoc->PutCell( *pPos, NULL );       // empty cell
                             else
                                 pDoc->SetValue( pPos->Col(), pPos->Row(), pPos->Tab(), pArray[nCol] );
                         }
                     }
                 }
 
-                //!	undo
+                //! undo
                 PaintRanges_Impl( PAINT_GRID );
                 pDocShell->SetDocumentModified();
-                ForceChartListener_Impl();			// call listeners for this object synchronously
+                ForceChartListener_Impl();          // call listeners for this object synchronously
                 bDone = TRUE;
             }
         }
@@ -3110,7 +3111,7 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
         {
             ScDocument* pDoc = pDocShell->GetDocument();
             ScChartArray aArr( pDoc, xChartRanges, String() );
-            aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );		// RowAsHdr = ColHeaders
+            aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
             const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
             if (pPosMap)
             {
@@ -3127,14 +3128,14 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
                             if ( aStr.Len() )
                                 pDoc->PutCell( *pPos, new ScStringCell( aStr ) );
                             else
-                                pDoc->PutCell( *pPos, NULL );		// empty cell
+                                pDoc->PutCell( *pPos, NULL );       // empty cell
                         }
                     }
 
-                    //!	undo
+                    //! undo
                     PaintRanges_Impl( PAINT_GRID );
                     pDocShell->SetDocumentModified();
-                    ForceChartListener_Impl();			// call listeners for this object synchronously
+                    ForceChartListener_Impl();          // call listeners for this object synchronously
                     bDone = TRUE;
                 }
             }
@@ -3178,7 +3179,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
         {
             ScDocument* pDoc = pDocShell->GetDocument();
             ScChartArray aArr( pDoc, xChartRanges, String() );
-            aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );		// RowAsHdr = ColHeaders
+            aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
             const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
             if (pPosMap)
             {
@@ -3195,14 +3196,14 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
                             if ( aStr.Len() )
                                 pDoc->PutCell( *pPos, new ScStringCell( aStr ) );
                             else
-                                pDoc->PutCell( *pPos, NULL );		// empty cell
+                                pDoc->PutCell( *pPos, NULL );       // empty cell
                         }
                     }
 
-                    //!	undo
+                    //! undo
                     PaintRanges_Impl( PAINT_GRID );
                     pDocShell->SetDocumentModified();
-                    ForceChartListener_Impl();			// call listeners for this object synchronously
+                    ForceChartListener_Impl();          // call listeners for this object synchronously
                     bDone = TRUE;
                 }
             }
@@ -3215,8 +3216,8 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
 
 void ScCellRangesBase::ForceChartListener_Impl()
 {
-    //	call Update immediately so the caller to setData etc. can
-    //	regognize the listener call
+    //  call Update immediately so the caller to setData etc. can
+    //  regognize the listener call
 
     if ( pDocShell )
     {
@@ -3264,7 +3265,7 @@ void SAL_CALL ScCellRangesBase::addChartDataChangeEventListener( const uno::Refe
     ScUnoGuard aGuard;
     if ( pDocShell && aRanges.Count() )
     {
-        //!	auf doppelte testen?
+        //! auf doppelte testen?
 
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangeListRef aRangesRef( new ScRangeList(aRanges) );
@@ -3291,15 +3292,15 @@ void SAL_CALL ScCellRangesBase::removeChartDataChangeEventListener( const uno::R
     }
 }
 
-double SAL_CALL	ScCellRangesBase::getNotANumber() throw(::com::sun::star::uno::RuntimeException)
+double SAL_CALL ScCellRangesBase::getNotANumber() throw(::com::sun::star::uno::RuntimeException)
 {
-    //	im ScChartArray wird DBL_MIN verwendet, weil das Chart es so will
+    //  im ScChartArray wird DBL_MIN verwendet, weil das Chart es so will
     return DBL_MIN;
 }
 
 sal_Bool SAL_CALL ScCellRangesBase::isNotANumber( double nNumber ) throw(uno::RuntimeException)
 {
-    //	im ScChartArray wird DBL_MIN verwendet, weil das Chart es so will
+    //  im ScChartArray wird DBL_MIN verwendet, weil das Chart es so will
     return (nNumber == DBL_MIN);
 }
 
@@ -3326,7 +3327,7 @@ void SAL_CALL ScCellRangesBase::addModifyListener( const uno::Reference<util::XM
         for (ULONG i=0; i<nCount; i++)
             pDoc->StartListeningArea( *aRanges.GetObject(i), pValueListener );
 
-        acquire();	// don't lose this object (one ref for all listeners)
+        acquire();  // don't lose this object (one ref for all listeners)
     }
 }
 
@@ -3338,7 +3339,7 @@ void SAL_CALL ScCellRangesBase::removeModifyListener( const uno::Reference<util:
     if ( aRanges.Count() == 0 )
         throw uno::RuntimeException();
 
-    acquire();		// in case the listeners have the last ref - released below
+    acquire();      // in case the listeners have the last ref - released below
 
     USHORT nCount = aValueListeners.Count();
     for ( USHORT n=nCount; n--; )
@@ -3353,14 +3354,14 @@ void SAL_CALL ScCellRangesBase::removeModifyListener( const uno::Reference<util:
                 if (pValueListener)
                     pValueListener->EndListeningAll();
 
-                release();		// release the ref for the listeners
+                release();      // release the ref for the listeners
             }
 
             break;
         }
     }
 
-    release();		// might delete this object
+    release();      // might delete this object
 }
 
 // XCellRangesQuery
@@ -3371,7 +3372,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryVisibleC
     ScUnoGuard aGuard;
     if (pDocShell)
     {
-        //!	fuer alle Tabellen getrennt, wenn Markierungen pro Tabelle getrennt sind!
+        //! fuer alle Tabellen getrennt, wenn Markierungen pro Tabelle getrennt sind!
         SCTAB nTab = lcl_FirstTab(aRanges);
 
         ScMarkData aMarkData(*GetMarkData());
@@ -3415,7 +3416,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryEmptyCel
 
         ScMarkData aMarkData(*GetMarkData());
 
-        //	belegte Zellen wegmarkieren
+        //  belegte Zellen wegmarkieren
         ULONG nCount = aRanges.Count();
         for (ULONG i=0; i<nCount; i++)
         {
@@ -3425,7 +3426,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryEmptyCel
             ScBaseCell* pCell = aIter.GetFirst();
             while (pCell)
             {
-                //	Notizen zaehlen als nicht-leer
+                //  Notizen zaehlen als nicht-leer
                 if ( !pCell->IsBlank() )
                     aMarkData.SetMultiMarkArea(
                             ScRange( aIter.GetCol(), aIter.GetRow(), aIter.GetTab() ),
@@ -3436,11 +3437,11 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryEmptyCel
         }
 
         ScRangeList aNewRanges;
-        //	IsMultiMarked reicht hier nicht (wird beim deselektieren nicht zurueckgesetzt)
+        //  IsMultiMarked reicht hier nicht (wird beim deselektieren nicht zurueckgesetzt)
         if (aMarkData.HasAnyMultiMarks())
             aMarkData.FillRangeListWithMarks( &aNewRanges, FALSE );
 
-        return new ScCellRangesObj( pDocShell, aNewRanges );	// aNewRanges kann leer sein
+        return new ScCellRangesObj( pDocShell, aNewRanges );    // aNewRanges kann leer sein
     }
 
     return NULL;
@@ -3457,7 +3458,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
 
         ScMarkData aMarkData;
 
-        //	passende Zellen selektieren
+        //  passende Zellen selektieren
         ULONG nCount = aRanges.Count();
         for (ULONG i=0; i<nCount; i++)
         {
@@ -3491,7 +3492,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
                                 bAdd = TRUE;
                             else
                             {
-                                //	Date/Time Erkennung
+                                //  Date/Time Erkennung
 
                                 ULONG nIndex = (ULONG)((SfxUInt32Item*)pDoc->GetAttr(
                                         aIter.GetCol(), aIter.GetRow(), aIter.GetTab(),
@@ -3529,7 +3530,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
         if (aMarkData.IsMultiMarked())
             aMarkData.FillRangeListWithMarks( &aNewRanges, FALSE );
 
-        return new ScCellRangesObj( pDocShell, aNewRanges );	// aNewRanges kann leer sein
+        return new ScCellRangesObj( pDocShell, aNewRanges );    // aNewRanges kann leer sein
     }
 
     return NULL;
@@ -3546,7 +3547,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryFormulaC
 
         ScMarkData aMarkData;
 
-        //	passende Zellen selektieren
+        //  passende Zellen selektieren
         ULONG nCount = aRanges.Count();
         for (ULONG i=0; i<nCount; i++)
         {
@@ -3570,7 +3571,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryFormulaC
                         if ( nResultFlags & sheet::FormulaResult::VALUE )
                             bAdd = TRUE;
                     }
-                    else	// String
+                    else    // String
                     {
                         if ( nResultFlags & sheet::FormulaResult::STRING )
                             bAdd = TRUE;
@@ -3590,7 +3591,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryFormulaC
         if (aMarkData.IsMultiMarked())
             aMarkData.FillRangeListWithMarks( &aNewRanges, FALSE );
 
-        return new ScCellRangesObj( pDocShell, aNewRanges );	// aNewRanges kann leer sein
+        return new ScCellRangesObj( pDocShell, aNewRanges );    // aNewRanges kann leer sein
     }
 
     return NULL;
@@ -3608,10 +3609,10 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
 
         SCCOLROW nCmpPos = bColumnDiff ? (SCCOLROW)aCompare.Row : (SCCOLROW)aCompare.Column;
 
-        //	zuerst alles selektieren, wo ueberhaupt etwas in der Vergleichsspalte steht
-        //	(fuer gleiche Zellen wird die Selektion im zweiten Schritt aufgehoben)
+        //  zuerst alles selektieren, wo ueberhaupt etwas in der Vergleichsspalte steht
+        //  (fuer gleiche Zellen wird die Selektion im zweiten Schritt aufgehoben)
 
-        SCTAB nTab = lcl_FirstTab(aRanges);	//!	fuer alle Tabellen, wenn Markierungen pro Tabelle!
+        SCTAB nTab = lcl_FirstTab(aRanges); //! fuer alle Tabellen, wenn Markierungen pro Tabelle!
         ScRange aCmpRange, aCellRange;
         if (bColumnDiff)
             aCmpRange = ScRange( 0,nCmpPos,nTab, MAXCOL,nCmpPos,nTab );
@@ -3652,8 +3653,8 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
             pCmpCell = aCmpIter.GetNext();
         }
 
-        //	alle nichtleeren Zellen mit der Vergleichsspalte vergleichen und entsprechend
-        //	selektieren oder aufheben
+        //  alle nichtleeren Zellen mit der Vergleichsspalte vergleichen und entsprechend
+        //  selektieren oder aufheben
 
         ScAddress aCmpAddr;
         for (i=0; i<nRangeCount; i++)
@@ -3684,7 +3685,7 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
         if (aMarkData.IsMultiMarked())
             aMarkData.FillRangeListWithMarks( &aNewRanges, FALSE );
 
-        return new ScCellRangesObj( pDocShell, aNewRanges );	// aNewRanges kann leer sein
+        return new ScCellRangesObj( pDocShell, aNewRanges );    // aNewRanges kann leer sein
     }
     return NULL;
 }
@@ -3724,7 +3725,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryIntersec
                                 Min( aTemp.aEnd.Tab(), aMask.aEnd.Tab() ) ) );
     }
 
-    return new ScCellRangesObj( pDocShell, aNew );	// kann leer sein
+    return new ScCellRangesObj( pDocShell, aNew );  // kann leer sein
 }
 
 // XFormulaQuery
@@ -3743,10 +3744,10 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryPreceden
         {
             bFound = FALSE;
 
-            //	#97205# aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
+            //  #97205# aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
             ScMarkData aMarkData;
             aMarkData.MarkFromRangeList( aNewRanges, FALSE );
-            aMarkData.MarkToMulti();		// needed for IsAllMarked
+            aMarkData.MarkToMulti();        // needed for IsAllMarked
 
             ULONG nCount = aNewRanges.Count();
             for (ULONG nR=0; nR<nCount; nR++)
@@ -3798,12 +3799,12 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
             bFound = FALSE;
             ULONG nRangesCount = aNewRanges.Count();
 
-            //	#97205# aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
+            //  #97205# aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
             ScMarkData aMarkData;
             aMarkData.MarkFromRangeList( aNewRanges, FALSE );
-            aMarkData.MarkToMulti();		// needed for IsAllMarked
+            aMarkData.MarkToMulti();        // needed for IsAllMarked
 
-            SCTAB nTab = lcl_FirstTab(aNewRanges); 				//! alle Tabellen
+            SCTAB nTab = lcl_FirstTab(aNewRanges);              //! alle Tabellen
 
             ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
             ScBaseCell* pCell = aCellIter.GetFirst();
@@ -3820,7 +3821,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
                         {
                             ScRange aRange(*aNewRanges.GetObject(nR));
                             if (aRange.Intersects(aRefRange))
-                                bMark = TRUE;					// von Teil des Ranges abhaengig
+                                bMark = TRUE;                   // von Teil des Ranges abhaengig
                         }
                     }
                     if (bMark)
@@ -3859,7 +3860,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
                         const uno::Reference<util::XSearchDescriptor>& xDesc )
                                                     throw(uno::RuntimeException)
 {
-    //	Wenn nichts gefunden wird, soll Null zurueckgegeben werden (?)
+    //  Wenn nichts gefunden wird, soll Null zurueckgegeben werden (?)
     uno::Reference<container::XIndexAccess> xRet;
     if ( pDocShell && xDesc.is() )
     {
@@ -3871,7 +3872,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
             {
                 ScDocument* pDoc = pDocShell->GetDocument();
                 pSearchItem->SetCommand( SVX_SEARCHCMD_FIND_ALL );
-                //	immer nur innerhalb dieses Objekts
+                //  immer nur innerhalb dieses Objekts
                 pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
 
                 ScMarkData aMark(*GetMarkData());
@@ -3886,7 +3887,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
                 {
                     ScRangeList aNewRanges;
                     aMark.FillRangeListWithMarks( &aNewRanges, TRUE );
-                    //	bei findAll immer CellRanges, egal wieviel gefunden wurde
+                    //  bei findAll immer CellRanges, egal wieviel gefunden wurde
                     xRet.set(new ScCellRangesObj( pDocShell, aNewRanges ));
                 }
             }
@@ -3910,7 +3911,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
             {
                 ScDocument* pDoc = pDocShell->GetDocument();
                 pSearchItem->SetCommand( SVX_SEARCHCMD_FIND );
-                //	immer nur innerhalb dieses Objekts
+                //  immer nur innerhalb dieses Objekts
                 pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
 
                 ScMarkData aMark(*GetMarkData());
@@ -3922,7 +3923,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
                     pLastPos->GetVars( nCol, nRow, nTab );
                 else
                 {
-                    nTab = lcl_FirstTab(aRanges);	//! mehrere Tabellen?
+                    nTab = lcl_FirstTab(aRanges);   //! mehrere Tabellen?
                     ScDocument::GetSearchAndReplaceStart( *pSearchItem, nCol, nRow );
                 }
 
@@ -3995,7 +3996,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                 ScDocument* pDoc = pDocShell->GetDocument();
                 BOOL bUndo(pDoc->IsUndoEnabled());
                 pSearchItem->SetCommand( SVX_SEARCHCMD_REPLACE_ALL );
-                //	immer nur innerhalb dieses Objekts
+                //  immer nur innerhalb dieses Objekts
                 pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
 
                 ScMarkData aMark(*GetMarkData());
@@ -4007,11 +4008,11 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                         bProtected = TRUE;
                 if (bProtected)
                 {
-                    //!	Exception, oder was?
+                    //! Exception, oder was?
                 }
                 else
                 {
-                    SCTAB nTab = aMark.GetFirstSelected();		// bei SearchAndReplace nicht benutzt
+                    SCTAB nTab = aMark.GetFirstSelected();      // bei SearchAndReplace nicht benutzt
                     SCCOL nCol = 0;
                     SCROW nRow = 0;
 
@@ -4113,7 +4114,7 @@ void ScCellRangesObj::RefChanged()
 {
     ScCellRangesBase::RefChanged();
 
-    //	nix weiter...
+    //  nix weiter...
 }
 
 uno::Any SAL_CALL ScCellRangesObj::queryInterface( const uno::Type& rType )
@@ -4157,7 +4158,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangesObj::getTypes() throw(uno::Runtime
         pPtr[nParentLen + 2] = getCppuType((const uno::Reference<container::XEnumerationAccess>*)0);
 
         for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];				// parent types first
+            pPtr[i] = pParentPtr[i];                // parent types first
     }
     return aTypes;
 }
@@ -4189,7 +4190,7 @@ ScCellRangeObj* ScCellRangesObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
             return new ScCellRangeObj( pDocSh, aRange );
     }
 
-    return NULL;		// keine DocShell oder falscher Index
+    return NULL;        // keine DocShell oder falscher Index
 }
 
 uno::Sequence<table::CellRangeAddress> SAL_CALL ScCellRangesObj::getRangeAddresses()
@@ -4212,7 +4213,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScCellRangesObj::getRangeAddress
         return aSeq;
     }
 
-    return uno::Sequence<table::CellRangeAddress>(0);	// leer ist moeglich
+    return uno::Sequence<table::CellRangeAddress>(0);   // leer ist moeglich
 }
 
 uno::Reference<container::XEnumerationAccess> SAL_CALL ScCellRangesObj::getCells()
@@ -4220,10 +4221,10 @@ uno::Reference<container::XEnumerationAccess> SAL_CALL ScCellRangesObj::getCells
 {
     ScUnoGuard aGuard;
 
-    //	getCells with empty range list is possible (no exception),
-    //	the resulting enumeration just has no elements
-    //	(same behaviour as a valid range with no cells)
-    //	This is handled in ScCellsEnumeration ctor.
+    //  getCells with empty range list is possible (no exception),
+    //  the resulting enumeration just has no elements
+    //  (same behaviour as a valid range with no cells)
+    //  This is handled in ScCellsEnumeration ctor.
 
     const ScRangeList& rRanges = GetRangeList();
     ScDocShell* pDocSh = GetDocShell();
@@ -4343,7 +4344,7 @@ void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::
                                     ::com::sun::star::uno::RuntimeException)
 {
     // with this implementation not needed
-//	ScUnoGuard aGuard;
+//  ScUnoGuard aGuard;
 
 
     // use sometimes a better/faster implementation
@@ -4376,7 +4377,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const rtl::OUString& aName, const u
     ScDocShell* pDocSh = GetDocShell();
     BOOL bDone = FALSE;
 
-    //!	Type of aElement can be some specific interface instead of XInterface
+    //! Type of aElement can be some specific interface instead of XInterface
 
     uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
     if ( pDocSh && xInterface.is() )
@@ -4384,7 +4385,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const rtl::OUString& aName, const u
         ScCellRangesBase* pRangesImp = ScCellRangesBase::getImplementation( xInterface );
         if ( pRangesImp && pRangesImp->GetDocShell() == pDocSh )
         {
-            //	if explicit name is given and already existing, throw exception
+            //  if explicit name is given and already existing, throw exception
 
             String aNamStr(aName);
             if ( aNamStr.Len() )
@@ -4405,9 +4406,9 @@ void SAL_CALL ScCellRangesObj::insertByName( const rtl::OUString& aName, const u
 
             if ( aName.getLength() && nAddCount == 1 )
             {
-                //	if a name is given, also insert into list of named entries
-                //	(only possible for a single range)
-                //	name is not in aNamedEntries (tested above)
+                //  if a name is given, also insert into list of named entries
+                //  (only possible for a single range)
+                //  name is not in aNamedEntries (tested above)
 
                 ScNamedEntry* pEntry = new ScNamedEntry( aNamStr, *rAddRanges.GetObject(0) );
                 aNamedEntries.Insert( pEntry, aNamedEntries.Count() );
@@ -4417,7 +4418,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const rtl::OUString& aName, const u
 
     if (!bDone)
     {
-        //	invalid element - double names are handled above
+        //  invalid element - double names are handled above
         throw lang::IllegalArgumentException();
     }
 }
@@ -4440,14 +4441,14 @@ BOOL lcl_FindRangeByName( const ScRangeList& rRanges, ScDocShell* pDocSh,
             }
         }
     }
-    return FALSE;	// nicht gefunden
+    return FALSE;   // nicht gefunden
 }
 
 BOOL lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
                             const ScRangeList& rRanges, ScDocShell* pDocSh,
                             const String& rName, ScRange& rFound )
 {
-    //	exact range in list?
+    //  exact range in list?
 
     ULONG nIndex = 0;
     if ( lcl_FindRangeByName( rRanges, pDocSh, rName, nIndex ) )
@@ -4456,7 +4457,7 @@ BOOL lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
         return TRUE;
     }
 
-    //	range contained in selection? (sheet must be specified)
+    //  range contained in selection? (sheet must be specified)
 
     ScRange aCellRange;
     USHORT nParse = aCellRange.ParseAny( rName, pDocSh->GetDocument() );
@@ -4464,7 +4465,7 @@ BOOL lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
     {
         ScMarkData aMarkData;
         aMarkData.MarkFromRangeList( rRanges, FALSE );
-        aMarkData.MarkToMulti();		// needed for IsAllMarked
+        aMarkData.MarkToMulti();        // needed for IsAllMarked
         if ( aMarkData.IsAllMarked( aCellRange ) )
         {
             rFound = aCellRange;
@@ -4472,19 +4473,19 @@ BOOL lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
         }
     }
 
-    //	named entry in this object?
+    //  named entry in this object?
 
     if ( rNamedEntries.Count() )
     {
         for ( USHORT n=0; n<rNamedEntries.Count(); n++ )
             if ( rNamedEntries[n]->GetName() == rName )
             {
-                //	test if named entry is contained in rRanges
+                //  test if named entry is contained in rRanges
 
                 const ScRange& rComp = rNamedEntries[n]->GetRange();
                 ScMarkData aMarkData;
                 aMarkData.MarkFromRangeList( rRanges, FALSE );
-                aMarkData.MarkToMulti();		// needed for IsAllMarked
+                aMarkData.MarkToMulti();        // needed for IsAllMarked
                 if ( aMarkData.IsAllMarked( rComp ) )
                 {
                     rFound = rComp;
@@ -4493,7 +4494,7 @@ BOOL lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
             }
     }
 
-    return FALSE;		// not found
+    return FALSE;       // not found
 }
 
 void SAL_CALL ScCellRangesObj::removeByName( const rtl::OUString& aName )
@@ -4508,7 +4509,7 @@ void SAL_CALL ScCellRangesObj::removeByName( const rtl::OUString& aName )
     ULONG nIndex = 0;
     if ( lcl_FindRangeByName( rRanges, pDocSh, aNameStr, nIndex ) )
     {
-        //	einzelnen Range weglassen
+        //  einzelnen Range weglassen
         ScRangeList aNew;
         ULONG nCount = rRanges.Count();
         for (ULONG i=0; i<nCount; i++)
@@ -4519,7 +4520,7 @@ void SAL_CALL ScCellRangesObj::removeByName( const rtl::OUString& aName )
     }
     else if (pDocSh)
     {
-        //	deselect any ranges (parsed or named entry)
+        //  deselect any ranges (parsed or named entry)
         ScRangeList aDiff;
         BOOL bValid = ( aDiff.Parse( aNameStr, pDocSh->GetDocument() ) & SCA_VALID ) != 0;
         if ( !bValid && aNamedEntries.Count() )
@@ -4550,15 +4551,15 @@ void SAL_CALL ScCellRangesObj::removeByName( const rtl::OUString& aName )
             aMarkData.FillRangeListWithMarks( &aNew, FALSE );
             SetNewRanges(aNew);
 
-            bDone = TRUE;		//! error if range was not selected before?
+            bDone = TRUE;       //! error if range was not selected before?
         }
     }
 
     if (aNamedEntries.Count())
-        lcl_RemoveNamedEntry( aNamedEntries, aNameStr );	//	remove named entry
+        lcl_RemoveNamedEntry( aNamedEntries, aNameStr );    //  remove named entry
 
     if (!bDone)
-        throw container::NoSuchElementException();		// not found
+        throw container::NoSuchElementException();      // not found
 }
 
 // XNameReplace
@@ -4568,7 +4569,7 @@ void SAL_CALL ScCellRangesObj::replaceByName( const rtl::OUString& aName, const 
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    //!	zusammenfassen?
+    //! zusammenfassen?
     removeByName( aName );
     insertByName( aName, aElement );
 }
@@ -4630,7 +4631,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesObj::getElementNames()
         rtl::OUString* pAry = aSeq.getArray();
         for (ULONG i=0; i<nCount; i++)
         {
-            //	use given name if for exactly this range, otherwise just format
+            //  use given name if for exactly this range, otherwise just format
             ScRange aRange = *rRanges.GetObject(i);
             if ( !aNamedEntries.Count() || !lcl_FindEntryName( aNamedEntries, aRange, aRangeStr ) )
                 aRange.Format( aRangeStr, SCA_VALID | SCA_TAB_3D, pDoc );
@@ -4743,7 +4744,7 @@ ScCellRangeObj::ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR) :
     pRangePropSet( lcl_GetRangePropertySet() ),
     aRange( rR )
 {
-    aRange.Justify();		// Anfang / Ende richtig
+    aRange.Justify();       // Anfang / Ende richtig
 }
 
 ScCellRangeObj::~ScCellRangeObj()
@@ -4830,7 +4831,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangeObj::getTypes() throw(uno::RuntimeE
         pPtr[nParentLen +16] = getCppuType((const uno::Reference<sheet::XUniqueCellFormatRangesSupplier>*)0);
 
         for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];				// parent types first
+            pPtr[i] = pParentPtr[i];                // parent types first
     }
     return aTypes;
 }
@@ -4849,8 +4850,8 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellRangeObj::getImplementationId()
 
 // XCellRange
 
-//	ColumnCount / RowCount sind weggefallen
-//!	werden im Writer fuer Tabellen noch gebraucht ???
+//  ColumnCount / RowCount sind weggefallen
+//! werden im Writer fuer Tabellen noch gebraucht ???
 
 uno::Reference<table::XCell> ScCellRangeObj::GetCellByPosition_Impl(
                                         sal_Int32 nColumn, sal_Int32 nRow )
@@ -4925,8 +4926,8 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByName(
 uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
                         const rtl::OUString& aName, const ScAddress::Details& rDetails  ) throw(uno::RuntimeException)
 {
-    //	name refers to the whole document (with the range's table as default),
-    //	valid only if the range is within this range
+    //  name refers to the whole document (with the range's table as default),
+    //  valid only if the range is within this range
 
     ScUnoGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -4941,7 +4942,7 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
         USHORT nParse = aCellRange.ParseAny( aString, pDoc, rDetails );
         if ( nParse & SCA_VALID )
         {
-            if ( !(nParse & SCA_TAB_3D) )	// keine Tabelle angegeben -> auf dieser Tabelle
+            if ( !(nParse & SCA_TAB_3D) )   // keine Tabelle angegeben -> auf dieser Tabelle
             {
                 aCellRange.aStart.SetTab(nTab);
                 aCellRange.aEnd.SetTab(nTab);
@@ -4956,7 +4957,7 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
                 bFound = TRUE;
         }
 
-        if (bFound)			// valid only if within this object's range
+        if (bFound)         // valid only if within this object's range
         {
             if (!aRange.In(aCellRange))
                 bFound = FALSE;
@@ -5031,9 +5032,9 @@ rtl::OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeExcep
 {
     ScUnoGuard aGuard;
 
-    //	Matrix-Formel, wenn eindeutig Teil einer Matrix,
-    //	also wenn Anfang und Ende des Blocks zur selben Matrix gehoeren.
-    //	Sonst Leerstring.
+    //  Matrix-Formel, wenn eindeutig Teil einer Matrix,
+    //  also wenn Anfang und Ende des Blocks zur selben Matrix gehoeren.
+    //  Sonst Leerstring.
 
     String aFormula;
     ScDocShell* pDocSh = GetDocShell();
@@ -5051,8 +5052,8 @@ rtl::OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeExcep
             ScAddress aStart2;
             if ( pFCell1->GetMatrixOrigin( aStart1 ) && pFCell2->GetMatrixOrigin( aStart2 ) )
             {
-                if ( aStart1 == aStart2 )				// beides dieselbe Matrix
-                    pFCell1->GetFormula( aFormula );	// egal, von welcher Zelle
+                if ( aStart1 == aStart2 )               // beides dieselbe Matrix
+                    pFCell1->GetFormula( aFormula );    // egal, von welcher Zelle
             }
         }
     }
@@ -5070,7 +5071,7 @@ void ScCellRangeObj::SetArrayFormula_Impl( const rtl::OUString& rFormula,
         {
             if ( ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ) )
             {
-                //	#74681# don't set array formula for sheet object
+                //  #74681# don't set array formula for sheet object
                 throw uno::RuntimeException();
             }
 
@@ -5078,7 +5079,7 @@ void ScCellRangeObj::SetArrayFormula_Impl( const rtl::OUString& rFormula,
         }
         else
         {
-            //	empty string -> erase array formula
+            //  empty string -> erase array formula
             ScMarkData aMark;
             aMark.SetMarkArea( aRange );
             aMark.SelectTable( aRange.aStart.Tab(), TRUE );
@@ -5181,7 +5182,7 @@ uno::Sequence< uno::Sequence<uno::Any> > SAL_CALL ScCellRangeObj::getDataArray()
 
     if ( ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ) )
     {
-        //	don't create a data array for the sheet
+        //  don't create a data array for the sheet
         throw uno::RuntimeException();
     }
 
@@ -5194,11 +5195,11 @@ uno::Sequence< uno::Sequence<uno::Any> > SAL_CALL ScCellRangeObj::getDataArray()
         {
             uno::Sequence< uno::Sequence<uno::Any> > aSeq;
             if ( aAny >>= aSeq )
-                return aSeq;			// success
+                return aSeq;            // success
         }
     }
 
-    throw uno::RuntimeException();		// no other exceptions specified
+    throw uno::RuntimeException();      // no other exceptions specified
 //    return uno::Sequence< uno::Sequence<uno::Any> >(0);
 }
 
@@ -5217,7 +5218,7 @@ void SAL_CALL ScCellRangeObj::setDataArray(
     }
 
     if (!bDone)
-        throw uno::RuntimeException();		// no other exceptions specified
+        throw uno::RuntimeException();      // no other exceptions specified
 }
 
 // XCellRangeFormula
@@ -5229,7 +5230,7 @@ uno::Sequence< uno::Sequence<rtl::OUString> > SAL_CALL ScCellRangeObj::getFormul
 
     if ( ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ) )
     {
-        //	don't create a data array for the sheet
+        //  don't create a data array for the sheet
         throw uno::RuntimeException();
     }
 
@@ -5260,7 +5261,7 @@ uno::Sequence< uno::Sequence<rtl::OUString> > SAL_CALL ScCellRangeObj::getFormul
         return aRowSeq;
     }
 
-    throw uno::RuntimeException();		// no other exceptions specified
+    throw uno::RuntimeException();      // no other exceptions specified
 //    return uno::Sequence< uno::Sequence<rtl::OUString> >(0);
 }
 
@@ -5281,7 +5282,7 @@ void SAL_CALL ScCellRangeObj::setFormulaArray(
     }
 
     if (!bDone)
-        throw uno::RuntimeException();		// no other exceptions specified
+        throw uno::RuntimeException();      // no other exceptions specified
 }
 
 // XMultipleOperation
@@ -5304,10 +5305,10 @@ void SAL_CALL ScCellRangeObj::setTableOperation( const table::CellRangeAddress& 
         aParam.aRefFormulaEnd  = ScRefAddress( (SCCOL)aFormulaRange.EndColumn,
                                               (SCROW)aFormulaRange.EndRow, aFormulaRange.Sheet,
                                               FALSE, FALSE, FALSE );
-        aParam.aRefRowCell	   = ScRefAddress( (SCCOL)aRowCell.Column,
+        aParam.aRefRowCell     = ScRefAddress( (SCCOL)aRowCell.Column,
                                               (SCROW)aRowCell.Row, aRowCell.Sheet,
                                               FALSE, FALSE, FALSE );
-        aParam.aRefColCell	   = ScRefAddress( (SCCOL)aColumnCell.Column,
+        aParam.aRefColCell     = ScRefAddress( (SCCOL)aColumnCell.Column,
                                               (SCROW)aColumnCell.Row, aColumnCell.Sheet,
                                               FALSE, FALSE, FALSE );
         switch (nMode)
@@ -5342,12 +5343,16 @@ void SAL_CALL ScCellRangeObj::merge( sal_Bool bMerge ) throw(uno::RuntimeExcepti
     if ( pDocSh )
     {
         ScDocFunc aFunc(*pDocSh);
+        ScCellMergeOption aMergeOption(
+            aRange.aStart.Col(), aRange.aStart.Row(),
+            aRange.aEnd.Col(), aRange.aEnd.Row(), false);
+        aMergeOption.maTabs.insert(aRange.aStart.Tab());
         if ( bMerge )
-            aFunc.MergeCells( aRange, FALSE, TRUE, TRUE );
+            aFunc.MergeCells( aMergeOption, FALSE, TRUE, TRUE );
         else
-            aFunc.UnmergeCells( aRange, TRUE, TRUE );
+            aFunc.UnmergeCells( aMergeOption, TRUE, TRUE );
 
-        //!	Fehler abfangen?
+        //! Fehler abfangen?
     }
 }
 
@@ -5370,7 +5375,7 @@ void SAL_CALL ScCellRangeObj::fillSeries( sheet::FillDirection nFillDirection,
     {
         BOOL bError = FALSE;
 
-        FillDir	eDir = FILL_TO_BOTTOM;
+        FillDir eDir = FILL_TO_BOTTOM;
         switch (nFillDirection)
         {
             case sheet::FillDirection_TO_BOTTOM:
@@ -5411,7 +5416,7 @@ void SAL_CALL ScCellRangeObj::fillSeries( sheet::FillDirection nFillDirection,
                 bError = TRUE;
         }
 
-        FillDateCmd	eDateCmd = FILL_DAY;
+        FillDateCmd eDateCmd = FILL_DAY;
         switch ( nFillDateMode )
         {
             case sheet::FillDateMode_FILL_DATE_DAY:
@@ -5503,7 +5508,7 @@ void SAL_CALL ScCellRangeObj::autoFormat( const rtl::OUString& aName )
         for (nIndex=0; nIndex<nCount; nIndex++)
         {
             (*pAutoFormat)[nIndex]->GetName(aCompare);
-            if ( aCompare == aNameString )						//!	Case-insensitiv ???
+            if ( aCompare == aNameString )                      //! Case-insensitiv ???
                 break;
         }
         if (nIndex<nCount)
@@ -5532,7 +5537,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createSortDescripto
         {
             pData->GetSortParam(aParam);
 
-            //	im SortDescriptor sind die Fields innerhalb des Bereichs gezaehlt
+            //  im SortDescriptor sind die Fields innerhalb des Bereichs gezaehlt
             ScRange aDBRange;
             pData->GetArea(aDBRange);
             SCCOLROW nFieldStart = aParam.bByRow ?
@@ -5558,10 +5563,10 @@ void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& a
     {
         USHORT i;
         ScSortParam aParam;
-        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );	// ggf. Bereich anlegen
+        ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK ); // ggf. Bereich anlegen
         if (pData)
         {
-            //	alten Einstellungen holen, falls nicht alles neu gesetzt wird
+            //  alten Einstellungen holen, falls nicht alles neu gesetzt wird
             pData->GetSortParam(aParam);
             SCCOLROW nOldStart = aParam.bByRow ?
                 static_cast<SCCOLROW>(aRange.aStart.Col()) :
@@ -5573,8 +5578,8 @@ void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& a
 
         ScSortDescriptor::FillSortParam( aParam, aDescriptor );
 
-        //	im SortDescriptor sind die Fields innerhalb des Bereichs gezaehlt
-        //	ByRow kann bei FillSortParam umgesetzt worden sein
+        //  im SortDescriptor sind die Fields innerhalb des Bereichs gezaehlt
+        //  ByRow kann bei FillSortParam umgesetzt worden sein
         SCCOLROW nFieldStart = aParam.bByRow ?
             static_cast<SCCOLROW>(aRange.aStart.Col()) :
             static_cast<SCCOLROW>(aRange.aStart.Row());
@@ -5587,9 +5592,9 @@ void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& a
         aParam.nCol2 = aRange.aEnd.Col();
         aParam.nRow2 = aRange.aEnd.Row();
 
-        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );		// ggf. Bereich anlegen
+        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );       // ggf. Bereich anlegen
 
-        ScDBDocFunc aFunc(*pDocSh);							// Bereich muss angelegt sein
+        ScDBDocFunc aFunc(*pDocSh);                         // Bereich muss angelegt sein
         aFunc.Sort( nTab, aParam, TRUE, TRUE, TRUE );
     }
 }
@@ -5610,7 +5615,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
         {
             ScQueryParam aParam;
             pData->GetQueryParam(aParam);
-            //	im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
+            //  im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
             ScRange aDBRange;
             pData->GetArea(aDBRange);
             SCCOLROW nFieldStart = aParam.bByRow ?
@@ -5634,10 +5639,10 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
 {
     ScUnoGuard aGuard;
 
-    //	das koennte theoretisch ein fremdes Objekt sein, also nur das
-    //	oeffentliche XSheetFilterDescriptor Interface benutzen, um
-    //	die Daten in ein ScFilterDescriptor Objekt zu kopieren:
-    //!	wenn es schon ein ScFilterDescriptor ist, direkt per getImplementation?
+    //  das koennte theoretisch ein fremdes Objekt sein, also nur das
+    //  oeffentliche XSheetFilterDescriptor Interface benutzen, um
+    //  die Daten in ein ScFilterDescriptor Objekt zu kopieren:
+    //! wenn es schon ein ScFilterDescriptor ist, direkt per getImplementation?
 
     ScDocShell* pDocSh = GetDocShell();
     ScFilterDescriptor aImpl(pDocSh);
@@ -5650,20 +5655,20 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
     {
         aImpl.setFilterFields( xDescriptor->getFilterFields() );
     }
-    //	Rest sind jetzt Properties...
+    //  Rest sind jetzt Properties...
 
     uno::Reference<beans::XPropertySet> xPropSet( xDescriptor, uno::UNO_QUERY );
     if (xPropSet.is())
         lcl_CopyProperties( aImpl, *(beans::XPropertySet*)xPropSet.get() );
 
     //
-    //	ausfuehren...
+    //  ausfuehren...
     //
 
     if (pDocSh)
     {
         ScQueryParam aParam = aImpl.GetParam();
-        //	im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
+        //  im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
         SCCOLROW nFieldStart = aParam.bByRow ?
             static_cast<SCCOLROW>(aRange.aStart.Col()) :
             static_cast<SCCOLROW>(aRange.aStart.Row());
@@ -5674,7 +5679,7 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
             if (rEntry.bDoQuery)
             {
                 rEntry.nField += nFieldStart;
-                //	Im Dialog wird immer der String angezeigt -> muss zum Wert passen
+                //  Im Dialog wird immer der String angezeigt -> muss zum Wert passen
                 if ( !rEntry.bQueryByString )
                     pDocSh->GetDocument()->GetFormatTable()->
                         GetInputLineString( rEntry.nVal, 0, *rEntry.pStr );
@@ -5687,17 +5692,17 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
         aParam.nCol2 = aRange.aEnd.Col();
         aParam.nRow2 = aRange.aEnd.Row();
 
-        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );	// ggf. Bereich anlegen
+        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );   // ggf. Bereich anlegen
 
-        //!	keep source range in filter descriptor
-        //!	if created by createFilterDescriptorByObject ???
+        //! keep source range in filter descriptor
+        //! if created by createFilterDescriptorByObject ???
 
         ScDBDocFunc aFunc(*pDocSh);
-        aFunc.Query( nTab, aParam, NULL, TRUE, TRUE );	// Bereich muss angelegt sein
+        aFunc.Query( nTab, aParam, NULL, TRUE, TRUE );  // Bereich muss angelegt sein
     }
 }
 
-//!	get/setAutoFilter als Properties!!!
+//! get/setAutoFilter als Properties!!!
 
 // XAdvancedFilterSource
 
@@ -5707,17 +5712,17 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
 {
     ScUnoGuard aGuard;
 
-    //	this ist hier nicht der Bereich, der gefiltert wird, sondern der
-    //	Bereich mit der Abfrage...
+    //  this ist hier nicht der Bereich, der gefiltert wird, sondern der
+    //  Bereich mit der Abfrage...
 
     uno::Reference<sheet::XCellRangeAddressable> xAddr( xObject, uno::UNO_QUERY );
 
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh && xAddr.is() )
     {
-        //!	Test, ob xObject im selben Dokument ist
+        //! Test, ob xObject im selben Dokument ist
 
-        ScFilterDescriptor* pNew = new ScFilterDescriptor(pDocSh);	//! stattdessen vom Objekt?
+        ScFilterDescriptor* pNew = new ScFilterDescriptor(pDocSh);  //! stattdessen vom Objekt?
         //XSheetFilterDescriptorRef xNew = xObject->createFilterDescriptor(TRUE);
 
         ScQueryParam aParam = pNew->GetParam();
@@ -5737,7 +5742,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
                             aRange.aStart.Tab(), aParam );
         if ( bOk )
         {
-            //	im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
+            //  im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
             SCCOLROW nFieldStart = aParam.bByRow ?
                 static_cast<SCCOLROW>(aDataAddress.StartColumn) :
                 static_cast<SCCOLROW>(aDataAddress.StartRow);
@@ -5755,7 +5760,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
         else
         {
             delete pNew;
-            return NULL;		// ungueltig -> null
+            return NULL;        // ungueltig -> null
         }
     }
 
@@ -5779,7 +5784,7 @@ uno::Reference<sheet::XSubTotalDescriptor> SAL_CALL ScCellRangeObj::createSubTot
         {
             ScSubTotalParam aParam;
             pData->GetSubTotalParam(aParam);
-            //	im SubTotalDescriptor sind die Fields innerhalb des Bereichs gezaehlt
+            //  im SubTotalDescriptor sind die Fields innerhalb des Bereichs gezaehlt
             ScRange aDBRange;
             pData->GetArea(aDBRange);
             SCCOL nFieldStart = aDBRange.aStart.Col();
@@ -5815,9 +5820,9 @@ void SAL_CALL ScCellRangeObj::applySubTotals(
     if (pDocSh && pImp)
     {
         ScSubTotalParam aParam;
-        pImp->GetData(aParam);		// virtuelle Methode der Basisklasse
+        pImp->GetData(aParam);      // virtuelle Methode der Basisklasse
 
-        //	im SubTotalDescriptor sind die Fields innerhalb des Bereichs gezaehlt
+        //  im SubTotalDescriptor sind die Fields innerhalb des Bereichs gezaehlt
         SCCOL nFieldStart = aRange.aStart.Col();
         for (USHORT i=0; i<MAXSUBTOTAL; i++)
         {
@@ -5837,10 +5842,10 @@ void SAL_CALL ScCellRangeObj::applySubTotals(
         aParam.nCol2 = aRange.aEnd.Col();
         aParam.nRow2 = aRange.aEnd.Row();
 
-        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );	// ggf. Bereich anlegen
+        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );   // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh);
-        aFunc.DoSubTotals( nTab, aParam, NULL, TRUE, TRUE );	// Bereich muss angelegt sein
+        aFunc.DoSubTotals( nTab, aParam, NULL, TRUE, TRUE );    // Bereich muss angelegt sein
     }
 }
 
@@ -5854,7 +5859,7 @@ void SAL_CALL ScCellRangeObj::removeSubTotals() throw(uno::RuntimeException)
         ScSubTotalParam aParam;
         ScDBData* pData = pDocSh->GetDBData( aRange, SC_DB_OLD, SC_DBSEL_FORCE_MARK );
         if (pData)
-            pData->GetSubTotalParam(aParam);	// auch bei Remove die Feld-Eintraege behalten
+            pData->GetSubTotalParam(aParam);    // auch bei Remove die Feld-Eintraege behalten
 
         aParam.bRemoveOnly = TRUE;
 
@@ -5864,10 +5869,10 @@ void SAL_CALL ScCellRangeObj::removeSubTotals() throw(uno::RuntimeException)
         aParam.nCol2 = aRange.aEnd.Col();
         aParam.nRow2 = aRange.aEnd.Row();
 
-        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );	// ggf. Bereich anlegen
+        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );   // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh);
-        aFunc.DoSubTotals( nTab, aParam, NULL, TRUE, TRUE );	// Bereich muss angelegt sein
+        aFunc.DoSubTotals( nTab, aParam, NULL, TRUE, TRUE );    // Bereich muss angelegt sein
     }
 }
 
@@ -5909,10 +5914,10 @@ void SAL_CALL ScCellRangeObj::doImport( const uno::Sequence<beans::PropertyValue
         //! TODO: could we get passed a valid result set by any means?
         uno::Reference< sdbc::XResultSet > xResultSet;
 
-        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );		// ggf. Bereich anlegen
+        pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );       // ggf. Bereich anlegen
 
-        ScDBDocFunc aFunc(*pDocSh);							// Bereich muss angelegt sein
-        aFunc.DoImport( nTab, aParam, xResultSet, NULL, TRUE, FALSE );	//! Api-Flag als Parameter
+        ScDBDocFunc aFunc(*pDocSh);                         // Bereich muss angelegt sein
+        aFunc.DoImport( nTab, aParam, xResultSet, NULL, TRUE, FALSE );  //! Api-Flag als Parameter
     }
 }
 
@@ -5954,8 +5959,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellRangeObj::getPropertySetI
 void ScCellRangeObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    //	Range has only Position and Size in addition to ScCellRangesBase, both are ReadOnly
-    //	-> nothing to do here
+    //  Range has only Position and Size in addition to ScCellRangesBase, both are ReadOnly
+    //  -> nothing to do here
 
     ScCellRangesBase::SetOnePropertyValue( pEntry, aValue );
 }
@@ -5971,7 +5976,7 @@ void ScCellRangeObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEnt
             ScDocShell* pDocSh = GetDocShell();
             if (pDocSh)
             {
-                //	GetMMRect converts using HMM_PER_TWIPS, like the DrawingLayer
+                //  GetMMRect converts using HMM_PER_TWIPS, like the DrawingLayer
                 Rectangle aMMRect(pDocSh->GetDocument()->GetMMRect(
                                         aRange.aStart.Col(), aRange.aStart.Row(),
                                         aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab() ));
@@ -5984,7 +5989,7 @@ void ScCellRangeObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEnt
             ScDocShell* pDocSh = GetDocShell();
             if (pDocSh)
             {
-                //	GetMMRect converts using HMM_PER_TWIPS, like the DrawingLayer
+                //  GetMMRect converts using HMM_PER_TWIPS, like the DrawingLayer
                 Rectangle aMMRect = pDocSh->GetDocument()->GetMMRect(
                                         aRange.aStart.Col(), aRange.aStart.Row(),
                                         aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab() );
@@ -6053,11 +6058,11 @@ ScCellObj::ScCellObj(ScDocShell* pDocSh, const ScAddress& rP) :
     aCellPos( rP ),
     nActionLockCount( 0 )
 {
-    //	pUnoText is allocated on demand (GetUnoText)
-    //	can't be aggregated because getString/setString is handled here
+    //  pUnoText is allocated on demand (GetUnoText)
+    //  can't be aggregated because getString/setString is handled here
 }
 
-SvxUnoText&	ScCellObj::GetUnoText()
+SvxUnoText& ScCellObj::GetUnoText()
 {
     if (!pUnoText)
     {
@@ -6139,7 +6144,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes() throw(uno::RuntimeExcept
         pPtr[nParentLen + 7] = getCppuType((const uno::Reference<sheet::XFormulaTokens>*)0);
 
         for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];				// parent types first
+            pPtr[i] = pParentPtr[i];                // parent types first
     }
     return aTypes;
 }
@@ -6155,9 +6160,9 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellObj::getImplementationId() throw(uno::Run
     return aId;
 }
 
-//	Hilfsfunktionen
+//  Hilfsfunktionen
 
-String ScCellObj::GetInputString_Impl(BOOL bEnglish) const		// fuer getFormula / FormulaLocal
+String ScCellObj::GetInputString_Impl(BOOL bEnglish) const      // fuer getFormula / FormulaLocal
 {
     if (GetDocShell())
         return lcl_GetInputString( GetDocShell()->GetDocument(), aCellPos, bEnglish );
@@ -6174,8 +6179,8 @@ String ScCellObj::GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aCellP
         {
             if ( pCell->GetCellType() == CELLTYPE_EDIT )
             {
-                //	GetString an der EditCell macht Leerzeichen aus Umbruechen,
-                //	hier werden die Umbrueche aber gebraucht
+                //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
+                //  hier werden die Umbrueche aber gebraucht
                 const EditTextObject* pData = ((ScEditCell*)pCell)->GetData();
                 if (pData)
                 {
@@ -6183,12 +6188,12 @@ String ScCellObj::GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aCellP
                     rEngine.SetText( *pData );
                     aVal = rEngine.GetText( LINEEND_LF );
                 }
-                //	Edit-Zellen auch nicht per NumberFormatter formatieren
-                //	(passend zur Ausgabe)
+                //  Edit-Zellen auch nicht per NumberFormatter formatieren
+                //  (passend zur Ausgabe)
             }
             else
             {
-                //	wie in GetString am Dokument (column)
+                //  wie in GetString am Dokument (column)
                 Color* pColor;
                 ULONG nNumFmt = pDoc->GetNumberFormat( aCellPos );
                 ScCellFormat::GetString( pCell, nNumFmt, aVal, &pColor, *pDoc->GetFormatTable() );
@@ -6272,7 +6277,7 @@ void ScCellObj::SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
     }
 }
 
-//	XText
+//  XText
 
 uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursor()
                                                     throw(uno::RuntimeException)
@@ -6314,7 +6319,7 @@ void SAL_CALL ScCellObj::setString( const rtl::OUString& aText ) throw(uno::Runt
 {
     ScUnoGuard aGuard;
     String aString(aText);
-    SetString_Impl(aString, FALSE, FALSE);	// immer Text
+    SetString_Impl(aString, FALSE, FALSE);  // immer Text
 
     // don't create pUnoText here if not there
     if (pUnoText)
@@ -6356,7 +6361,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
         if (!pTextRange)
             pTextRange = SvxUnoTextRangeBase::getImplementation( xRange );
 
-        //!	bei SvxUnoTextRange testen, ob in passendem Objekt !!!
+        //! bei SvxUnoTextRange testen, ob in passendem Objekt !!!
 #endif
 
         if ( pCellField && !pCellField->IsInserted() && pTextRange )
@@ -6366,7 +6371,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
 
             if (!bAbsorb)
             {
-                //	nicht ersetzen -> hinten anhaengen
+                //  nicht ersetzen -> hinten anhaengen
                 aSelection.Adjust();
                 aSelection.nStartPara = aSelection.nEndPara;
                 aSelection.nStartPos  = aSelection.nEndPos;
@@ -6378,14 +6383,14 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
             pForwarder->QuickInsertField( aItem, aSelection );
             pEditSource->UpdateData();
 
-            //	neue Selektion: ein Zeichen
+            //  neue Selektion: ein Zeichen
             aSelection.Adjust();
             aSelection.nEndPara = aSelection.nStartPara;
             aSelection.nEndPos = aSelection.nStartPos + 1;
             pCellField->InitDoc( pDocSh, aCellPos, aSelection );
 
-            //	#91431# for bAbsorb=FALSE, the new selection must be behind the inserted content
-            //	(the xml filter relies on this)
+            //  #91431# for bAbsorb=FALSE, the new selection must be behind the inserted content
+            //  (the xml filter relies on this)
             if (!bAbsorb)
                 aSelection.nStartPos = aSelection.nEndPos;
 
@@ -6406,7 +6411,7 @@ void SAL_CALL ScCellObj::removeTextContent( const uno::Reference<text::XTextCont
         ScCellFieldObj* pCellField = ScCellFieldObj::getImplementation( xContent );
         if ( pCellField && pCellField->IsInserted() )
         {
-            //!	Testen, ob das Feld in dieser Zelle ist
+            //! Testen, ob das Feld in dieser Zelle ist
             pCellField->DeleteField();
             return;
         }
@@ -6451,12 +6456,12 @@ sal_Bool SAL_CALL ScCellObj::hasElements() throw(uno::RuntimeException)
     return GetUnoText().hasElements();
 }
 
-//	XCell
+//  XCell
 
 rtl::OUString SAL_CALL ScCellObj::getFormula() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    //	TRUE = englisch
+    //  TRUE = englisch
     return GetInputString_Impl(TRUE);
 }
 
@@ -6464,7 +6469,7 @@ void SAL_CALL ScCellObj::setFormula( const rtl::OUString& aFormula ) throw(uno::
 {
     ScUnoGuard aGuard;
     String aString(aFormula);
-    SetString_Impl(aString, TRUE, TRUE);	// englisch interpretieren
+    SetString_Impl(aString, TRUE, TRUE);    // englisch interpretieren
 }
 
 double SAL_CALL ScCellObj::getValue() throw(uno::RuntimeException)
@@ -6505,7 +6510,7 @@ table::CellContentType SAL_CALL ScCellObj::getType() throw(uno::RuntimeException
     }
     else
     {
-        DBG_ERROR("keine DocShell");		//! Exception oder so?
+        DBG_ERROR("keine DocShell");        //! Exception oder so?
     }
 
     return eRet;
@@ -6523,7 +6528,7 @@ table::CellContentType ScCellObj::GetResultType_Impl()
             return bValue ? table::CellContentType_VALUE : table::CellContentType_TEXT;
         }
     }
-    return getType();	// wenn keine Formel
+    return getType();   // wenn keine Formel
 }
 
 sal_Int32 SAL_CALL ScCellObj::getError() throw(uno::RuntimeException)
@@ -6540,7 +6545,7 @@ sal_Int32 SAL_CALL ScCellObj::getError() throw(uno::RuntimeException)
     }
     else
     {
-        DBG_ERROR("keine DocShell");		//! Exception oder so?
+        DBG_ERROR("keine DocShell");        //! Exception oder so?
     }
 
     return nError;
@@ -6589,9 +6594,9 @@ table::CellAddress SAL_CALL ScCellObj::getCellAddress() throw(uno::RuntimeExcept
 {
     ScUnoGuard aGuard;
     table::CellAddress aAdr;
-    aAdr.Sheet	= aCellPos.Tab();
-    aAdr.Column	= aCellPos.Col();
-    aAdr.Row	= aCellPos.Row();
+    aAdr.Sheet  = aCellPos.Tab();
+    aAdr.Column = aCellPos.Col();
+    aAdr.Row    = aCellPos.Row();
     return aAdr;
 }
 
@@ -6625,7 +6630,7 @@ uno::Reference<container::XEnumerationAccess> SAL_CALL ScCellObj::getTextFields(
 uno::Reference<container::XNameAccess> SAL_CALL ScCellObj::getTextFieldMasters()
                                                 throw(uno::RuntimeException)
 {
-    //	sowas gibts nicht im Calc (?)
+    //  sowas gibts nicht im Calc (?)
     return NULL;
 }
 
@@ -6650,12 +6655,12 @@ void ScCellObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, c
             rtl::OUString aStrVal;
             aValue >>= aStrVal;
             String aString(aStrVal);
-            SetString_Impl(aString, TRUE, FALSE);	// lokal interpretieren
+            SetString_Impl(aString, TRUE, FALSE);   // lokal interpretieren
         }
         else if ( pEntry->nWID == SC_WID_UNO_FORMRT )
         {
-            //	Read-Only
-            //!	Exception oder so...
+            //  Read-Only
+            //! Exception oder so...
         }
         else
             ScCellRangeObj::SetOnePropertyValue( pEntry, aValue );
@@ -6698,9 +6703,9 @@ rtl::OUString SAL_CALL ScCellObj::getImplementationName() throw(uno::RuntimeExce
 sal_Bool SAL_CALL ScCellObj::supportsService( const rtl::OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    //	CellRange/SheetCellRange are not in SheetCell service description,
-    //	but ScCellObj is used instead of ScCellRangeObj in CellRanges collections,
-    //	so it must support them
+    //  CellRange/SheetCellRange are not in SheetCell service description,
+    //  but ScCellObj is used instead of ScCellRangeObj in CellRanges collections,
+    //  so it must support them
 
     String aServiceStr(rServiceName);
     return aServiceStr.EqualsAscii( SCSHEETCELL_SERVICE ) ||
@@ -6892,7 +6897,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes() throw(uno::Runtime
         pPtr[nParentLen +17] = getCppuType((const uno::Reference<document::XEventsSupplier>*)0);
 
         for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];				// parent types first
+            pPtr[i] = pParentPtr[i];                // parent types first
     }
     return aTypes;
 }
@@ -6908,7 +6913,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScTableSheetObj::getImplementationId() throw(un
     return aId;
 }
 
-//	Hilfsfunktionen
+//  Hilfsfunktionen
 
 SCTAB ScTableSheetObj::GetTab_Impl() const
 {
@@ -6918,7 +6923,7 @@ SCTAB ScTableSheetObj::GetTab_Impl() const
     if (pFirst)
         return pFirst->aStart.Tab();
 
-    return 0;	// soll nicht sein
+    return 0;   // soll nicht sein
 }
 
 // former XSheet
@@ -6985,7 +6990,7 @@ uno::Reference<sheet::XSheetCellCursor> SAL_CALL ScTableSheetObj::createCursor()
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        //!	einzelne Zelle oder ganze Tabelle???????
+        //! einzelne Zelle oder ganze Tabelle???????
         SCTAB nTab = GetTab_Impl();
         return new ScCellCursorObj( pDocSh, ScRange( 0,0,nTab, MAXCOL,MAXROW,nTab ) );
     }
@@ -7017,7 +7022,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTableSheetObj::getSpreadsheet()
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return this;		//!???
+    return this;        //!???
 }
 
 // XCellRange
@@ -7049,11 +7054,11 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
         SCTAB nTab = GetTab_Impl();
 
         Size aSize(pDoc->GetPageSize( nTab ));
-        if (aSize.Width() && aSize.Height())		// effektive Groesse schon gesetzt?
+        if (aSize.Width() && aSize.Height())        // effektive Groesse schon gesetzt?
             pDoc->UpdatePageBreaks( nTab );
         else
         {
-            //	Umbrueche updaten wie in ScDocShell::PageStyleModified:
+            //  Umbrueche updaten wie in ScDocShell::PageStyleModified:
             ScPrintFunc aPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab );
             aPrintFunc.UpdatePages();
         }
@@ -7073,7 +7078,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
             ScBreakType nBreak = pDoc->HasColBreak(nCol, nTab);
             if (nBreak)
             {
-                aData.Position	  = nCol;
+                aData.Position    = nCol;
                 aData.ManualBreak = (nBreak & BREAK_MANUAL);
                 pAry[nPos] = aData;
                 ++nPos;
@@ -7095,11 +7100,11 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getRowPageBre
         SCTAB nTab = GetTab_Impl();
 
         Size aSize(pDoc->GetPageSize( nTab ));
-        if (aSize.Width() && aSize.Height())		// effektive Groesse schon gesetzt?
+        if (aSize.Width() && aSize.Height())        // effektive Groesse schon gesetzt?
             pDoc->UpdatePageBreaks( nTab );
         else
         {
-            //	Umbrueche updaten wie in ScDocShell::PageStyleModified:
+            //  Umbrueche updaten wie in ScDocShell::PageStyleModified:
             ScPrintFunc aPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab );
             aPrintFunc.UpdatePages();
         }
@@ -7114,7 +7119,7 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks() throw(uno::RuntimeExc
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        //!	docfunc Funktion, auch fuer ScViewFunc::RemoveManualBreaks
+        //! docfunc Funktion, auch fuer ScViewFunc::RemoveManualBreaks
 
         ScDocument* pDoc = pDocSh->GetDocument();
         BOOL bUndo (pDoc->IsUndoEnabled());
@@ -7181,8 +7186,8 @@ uno::Reference<drawing::XDrawPage> SAL_CALL ScTableSheetObj::getDrawPage()
         if (pPage)
             return uno::Reference<drawing::XDrawPage> (pPage->getUnoPage(), uno::UNO_QUERY);
 
-        //	Das DrawPage-Objekt meldet sich als Listener am SdrModel an
-        //	und sollte von dort alle Aktionen mitbekommen
+        //  Das DrawPage-Objekt meldet sich als Listener am SdrModel an
+        //  und sollte von dort alle Aktionen mitbekommen
     }
     return NULL;
 }
@@ -7200,11 +7205,11 @@ void SAL_CALL ScTableSheetObj::insertCells( const table::CellRangeAddress& rRang
         InsCellCmd eCmd = INS_NONE;
         switch (nMode)
         {
-            case sheet::CellInsertMode_NONE:	bDo = FALSE;			break;
-            case sheet::CellInsertMode_DOWN:	eCmd = INS_CELLSDOWN;	break;
-            case sheet::CellInsertMode_RIGHT:	eCmd = INS_CELLSRIGHT;	break;
-            case sheet::CellInsertMode_ROWS:	eCmd = INS_INSROWS;		break;
-            case sheet::CellInsertMode_COLUMNS: eCmd = INS_INSCOLS;		break;
+            case sheet::CellInsertMode_NONE:    bDo = FALSE;            break;
+            case sheet::CellInsertMode_DOWN:    eCmd = INS_CELLSDOWN;   break;
+            case sheet::CellInsertMode_RIGHT:   eCmd = INS_CELLSRIGHT;  break;
+            case sheet::CellInsertMode_ROWS:    eCmd = INS_INSROWS;     break;
+            case sheet::CellInsertMode_COLUMNS: eCmd = INS_INSCOLS;     break;
             default:
                 DBG_ERROR("insertCells: falscher Mode");
                 bDo = FALSE;
@@ -7232,11 +7237,11 @@ void SAL_CALL ScTableSheetObj::removeRange( const table::CellRangeAddress& rRang
         DelCellCmd eCmd = DEL_NONE;
         switch (nMode)
         {
-            case sheet::CellDeleteMode_NONE:	 bDo = FALSE;			break;
-            case sheet::CellDeleteMode_UP:		 eCmd = DEL_CELLSUP;	break;
-            case sheet::CellDeleteMode_LEFT:	 eCmd = DEL_CELLSLEFT;	break;
-            case sheet::CellDeleteMode_ROWS:	 eCmd = DEL_DELROWS;	break;
-            case sheet::CellDeleteMode_COLUMNS:	 eCmd = DEL_DELCOLS;	break;
+            case sheet::CellDeleteMode_NONE:     bDo = FALSE;           break;
+            case sheet::CellDeleteMode_UP:       eCmd = DEL_CELLSUP;    break;
+            case sheet::CellDeleteMode_LEFT:     eCmd = DEL_CELLSLEFT;  break;
+            case sheet::CellDeleteMode_ROWS:     eCmd = DEL_DELROWS;    break;
+            case sheet::CellDeleteMode_COLUMNS:  eCmd = DEL_DELCOLS;    break;
             default:
                 DBG_ERROR("deleteCells: falscher Mode");
                 bDo = FALSE;
@@ -7291,7 +7296,7 @@ void SAL_CALL ScTableSheetObj::copyRange( const table::CellAddress& aDestination
 
 void ScTableSheetObj::PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges )
 {
-    //	Umbrueche und Undo
+    //  Umbrueche und Undo
 
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
@@ -7375,7 +7380,7 @@ void SAL_CALL ScTableSheetObj::setPrintAreas(
             }
         }
 
-        PrintAreaUndo_Impl( pOldRanges );	// Undo, Umbrueche, Modified etc.
+        PrintAreaUndo_Impl( pOldRanges );   // Undo, Umbrueche, Modified etc.
     }
 }
 
@@ -7406,18 +7411,18 @@ void SAL_CALL ScTableSheetObj::setPrintTitleColumns( sal_Bool bPrintTitleColumns
 
         if ( bPrintTitleColumns )
         {
-            if ( !pDoc->GetRepeatColRange( nTab ) )			// keinen bestehenden Bereich veraendern
+            if ( !pDoc->GetRepeatColRange( nTab ) )         // keinen bestehenden Bereich veraendern
             {
-                ScRange aNew( 0, 0, nTab, 0, 0, nTab );		// Default
-                pDoc->SetRepeatColRange( nTab, &aNew );		// einschalten
+                ScRange aNew( 0, 0, nTab, 0, 0, nTab );     // Default
+                pDoc->SetRepeatColRange( nTab, &aNew );     // einschalten
             }
         }
         else
-            pDoc->SetRepeatColRange( nTab, NULL );			// abschalten
+            pDoc->SetRepeatColRange( nTab, NULL );          // abschalten
 
-        PrintAreaUndo_Impl( pOldRanges );	// Undo, Umbrueche, Modified etc.
+        PrintAreaUndo_Impl( pOldRanges );   // Undo, Umbrueche, Modified etc.
 
-        //!	zuletzt gesetzten Bereich beim Abschalten merken und beim Einschalten wiederherstellen ???
+        //! zuletzt gesetzten Bereich beim Abschalten merken und beim Einschalten wiederherstellen ???
     }
 }
 
@@ -7454,9 +7459,9 @@ void SAL_CALL ScTableSheetObj::setTitleColumns( const table::CellRangeAddress& a
 
         ScRange aNew;
         ScUnoConversion::FillScRange( aNew, aTitleColumns );
-        pDoc->SetRepeatColRange( nTab, &aNew );		// immer auch einschalten
+        pDoc->SetRepeatColRange( nTab, &aNew );     // immer auch einschalten
 
-        PrintAreaUndo_Impl( pOldRanges );			// Undo, Umbrueche, Modified etc.
+        PrintAreaUndo_Impl( pOldRanges );           // Undo, Umbrueche, Modified etc.
     }
 }
 
@@ -7487,18 +7492,18 @@ void SAL_CALL ScTableSheetObj::setPrintTitleRows( sal_Bool bPrintTitleRows )
 
         if ( bPrintTitleRows )
         {
-            if ( !pDoc->GetRepeatRowRange( nTab ) )			// keinen bestehenden Bereich veraendern
+            if ( !pDoc->GetRepeatRowRange( nTab ) )         // keinen bestehenden Bereich veraendern
             {
-                ScRange aNew( 0, 0, nTab, 0, 0, nTab );		// Default
-                pDoc->SetRepeatRowRange( nTab, &aNew );		// einschalten
+                ScRange aNew( 0, 0, nTab, 0, 0, nTab );     // Default
+                pDoc->SetRepeatRowRange( nTab, &aNew );     // einschalten
             }
         }
         else
-            pDoc->SetRepeatRowRange( nTab, NULL );			// abschalten
+            pDoc->SetRepeatRowRange( nTab, NULL );          // abschalten
 
-        PrintAreaUndo_Impl( pOldRanges );	// Undo, Umbrueche, Modified etc.
+        PrintAreaUndo_Impl( pOldRanges );   // Undo, Umbrueche, Modified etc.
 
-        //!	zuletzt gesetzten Bereich beim Abschalten merken und beim Einschalten wiederherstellen ???
+        //! zuletzt gesetzten Bereich beim Abschalten merken und beim Einschalten wiederherstellen ???
     }
 }
 
@@ -7535,9 +7540,9 @@ void SAL_CALL ScTableSheetObj::setTitleRows( const table::CellRangeAddress& aTit
 
         ScRange aNew;
         ScUnoConversion::FillScRange( aNew, aTitleRows );
-        pDoc->SetRepeatRowRange( nTab, &aNew );		// immer auch einschalten
+        pDoc->SetRepeatRowRange( nTab, &aNew );     // immer auch einschalten
 
-        PrintAreaUndo_Impl( pOldRanges );			// Undo, Umbrueche, Modified etc.
+        PrintAreaUndo_Impl( pOldRanges );           // Undo, Umbrueche, Modified etc.
     }
 }
 
@@ -7564,7 +7569,7 @@ void SAL_CALL ScTableSheetObj::setLinkMode( sheet::SheetLinkMode nLinkMode )
 {
     ScUnoGuard aGuard;
 
-    //!	Filter und Options aus altem Link suchen
+    //! Filter und Options aus altem Link suchen
 
     rtl::OUString aUrl(getLinkUrl());
     rtl::OUString aSheet(getLinkSheetName());
@@ -7588,7 +7593,7 @@ void SAL_CALL ScTableSheetObj::setLinkUrl( const rtl::OUString& aLinkUrl )
 {
     ScUnoGuard aGuard;
 
-    //!	Filter und Options aus altem Link suchen
+    //! Filter und Options aus altem Link suchen
 
     sheet::SheetLinkMode eMode = getLinkMode();
     rtl::OUString aSheet(getLinkSheetName());
@@ -7612,7 +7617,7 @@ void SAL_CALL ScTableSheetObj::setLinkSheetName( const rtl::OUString& aLinkSheet
 {
     ScUnoGuard aGuard;
 
-    //!	Filter und Options aus altem Link suchen
+    //! Filter und Options aus altem Link suchen
 
     sheet::SheetLinkMode eMode = getLinkMode();
     rtl::OUString aUrl(getLinkUrl());
@@ -7632,17 +7637,17 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
 
-        String aFileString	 (aUrl);
+        String aFileString   (aUrl);
         String aFilterString (aFilterName);
-        String aOptString	 (aFilterOptions);
-        String aSheetString	 (aSheetName);
+        String aOptString    (aFilterOptions);
+        String aSheetString  (aSheetName);
 
         aFileString = ScGlobal::GetAbsDocName( aFileString, pDocSh );
         if ( !aFilterString.Len() )
             ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString, TRUE, FALSE );
 
-        //	remove application prefix from filter name here, so the filter options
-        //	aren't reset when the filter name is changed in ScTableLink::DataChanged
+        //  remove application prefix from filter name here, so the filter options
+        //  aren't reset when the filter name is changed in ScTableLink::DataChanged
         ScDocumentLoader::RemoveAppPrefix( aFilterString );
 
         BYTE nLinkMode = SC_LINK_NONE;
@@ -7654,17 +7659,17 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
         ULONG nRefresh = 0;
         pDoc->SetLink( nTab, nLinkMode, aFileString, aFilterString, aOptString, aSheetString, nRefresh );
 
-        pDocSh->UpdateLinks();					// ggf. Link eintragen oder loeschen
+        pDocSh->UpdateLinks();                  // ggf. Link eintragen oder loeschen
         SfxBindings* pBindings = pDocSh->GetViewBindings();
         if (pBindings)
             pBindings->Invalidate(SID_LINKS);
 
-        //!	Undo fuer Link-Daten an der Table
+        //! Undo fuer Link-Daten an der Table
 
-        if ( nLinkMode != SC_LINK_NONE && pDoc->IsExecuteLinkEnabled() )		// Link updaten
+        if ( nLinkMode != SC_LINK_NONE && pDoc->IsExecuteLinkEnabled() )        // Link updaten
         {
-            //	Update immer, auch wenn der Link schon da war
-            //!	Update nur fuer die betroffene Tabelle???
+            //  Update immer, auch wenn der Link schon da war
+            //! Update nur fuer die betroffene Tabelle???
 
             sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
             USHORT nCount = pLinkManager->GetLinks().Count();
@@ -7675,14 +7680,14 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
                 {
                     ScTableLink* pTabLink = (ScTableLink*)pBase;
                     if ( pTabLink->GetFileName() == aFileString )
-                        pTabLink->Update();							// inkl. Paint&Undo
+                        pTabLink->Update();                         // inkl. Paint&Undo
 
-                    //!	Der Dateiname sollte nur einmal vorkommen (?)
+                    //! Der Dateiname sollte nur einmal vorkommen (?)
                 }
             }
         }
 
-        //!	Notify fuer ScSheetLinkObj Objekte!!!
+        //! Notify fuer ScSheetLinkObj Objekte!!!
     }
 }
 
@@ -7931,7 +7936,7 @@ sal_Bool SAL_CALL ScTableSheetObj::isProtected() throw(uno::RuntimeException)
     if ( pDocSh )
         return pDocSh->GetDocument()->IsTabProtected( GetTab_Impl() );
 
-    DBG_ERROR("keine DocShell");		//! Exception oder so?
+    DBG_ERROR("keine DocShell");        //! Exception oder so?
     return FALSE;
 }
 
@@ -8014,7 +8019,7 @@ void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAd
                 }
             }
 
-            //	Szenario-Ranges sind durch Attribut gekennzeichnet
+            //  Szenario-Ranges sind durch Attribut gekennzeichnet
             ScPatternAttr aPattern( pDoc->GetPool() );
             aPattern.GetItemSet().Put( ScMergeFlagAttr( SC_MF_SCENARIO ) );
             aPattern.GetItemSet().Put( ScProtectionAttr( TRUE ) );
@@ -8023,7 +8028,7 @@ void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAd
         }
 
         // don't use. We should use therefor a private interface, so we can also set the flags.
-/*    	else if (nTab > 0 && pDoc->IsImportingXML()) // make this sheet as an scenario and only if it is not the first sheet and only if it is ImportingXML,
+/*      else if (nTab > 0 && pDoc->IsImportingXML()) // make this sheet as an scenario and only if it is not the first sheet and only if it is ImportingXML,
             // because than no UNDO and repaint is necessary.
         {
             USHORT nRangeCount = (USHORT)rScenRanges.getLength();
@@ -8032,7 +8037,7 @@ void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAd
                 pDoc->SetScenario( nTab, TRUE );
 
                 // default flags
-                Color aColor( COL_LIGHTGRAY );	// Default
+                Color aColor( COL_LIGHTGRAY );  // Default
                 USHORT nFlags = SC_SCENARIO_SHOWFRAME | SC_SCENARIO_PRINTFRAME | SC_SCENARIO_TWOWAY;
                 String aComment;
 
@@ -8076,7 +8081,7 @@ void SAL_CALL ScTableSheetObj::apply() throw(uno::RuntimeException)
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
         String aName;
-        pDoc->GetName( nTab, aName );		// Name dieses Szenarios
+        pDoc->GetName( nTab, aName );       // Name dieses Szenarios
 
         SCTAB nDestTab = nTab;
         while ( nDestTab > 0 && pDoc->IsScenario(nDestTab) )
@@ -8085,7 +8090,7 @@ void SAL_CALL ScTableSheetObj::apply() throw(uno::RuntimeException)
         if ( !pDoc->IsScenario(nDestTab) )
             pDocSh->UseScenario( nDestTab, aName );
 
-        //!	sonst Fehler oder so
+        //! sonst Fehler oder so
     }
 }
 
@@ -8765,7 +8770,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTableColumnObj::getTypes() throw(uno::Runtim
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<container::XNamed>*)0);
 
         for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];				// parent types first
+            pPtr[i] = pParentPtr[i];                // parent types first
     }
     return aTypes;
 }
@@ -8791,14 +8796,14 @@ rtl::OUString SAL_CALL ScTableColumnObj::getName() throw(uno::RuntimeException)
     DBG_ASSERT(rRange.aStart.Col() == rRange.aEnd.Col(), "too many columns");
     SCCOL nCol = rRange.aStart.Col();
 
-    return ScColToAlpha( nCol );		// from global.hxx
+    return ScColToAlpha( nCol );        // from global.hxx
 }
 
 void SAL_CALL ScTableColumnObj::setName( const rtl::OUString& /* aNewName */ )
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    throw uno::RuntimeException();		// read-only
+    throw uno::RuntimeException();      // read-only
 }
 
 // XPropertySet erweitert fuer Spalten-Properties
@@ -8819,16 +8824,16 @@ void ScTableColumnObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
     {
         if ( IsScItemWid( pEntry->nWID ) )
         {
-            //	for Item WIDs, call ScCellRangesBase directly
+            //  for Item WIDs, call ScCellRangesBase directly
             ScCellRangesBase::SetOnePropertyValue(pEntry, aValue);
             return;
         }
 
-        //	own properties
+        //  own properties
 
         ScDocShell* pDocSh = GetDocShell();
         if (!pDocSh)
-            return;													//!	Exception oder so?
+            return;                                                 //! Exception oder so?
         const ScRange& rRange = GetRange();
         DBG_ASSERT(rRange.aStart.Col() == rRange.aEnd.Col(), "zuviele Spalten");
         SCCOL nCol = rRange.aStart.Col();
@@ -8843,7 +8848,7 @@ void ScTableColumnObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
             sal_Int32 nNewWidth = 0;
             if ( aValue >>= nNewWidth )
             {
-                //	property is 1/100mm, column width is twips
+                //  property is 1/100mm, column width is twips
                 nNewWidth = HMMToTwips(nNewWidth);
                 aFunc.SetWidthOrHeight( TRUE, 1, nColArr, nTab, SC_SIZE_ORIGINAL,
                                         (USHORT)nNewWidth, TRUE, TRUE );
@@ -8854,7 +8859,7 @@ void ScTableColumnObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
             BOOL bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
             aFunc.SetWidthOrHeight( TRUE, 1, nColArr, nTab, eMode, 0, TRUE, TRUE );
-            //	SC_SIZE_DIRECT mit Groesse 0 blendet aus
+            //  SC_SIZE_DIRECT mit Groesse 0 blendet aus
         }
         else if ( pEntry->nWID == SC_WID_UNO_OWIDTH )
         {
@@ -8897,7 +8902,7 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         {
             // for hidden column, return original height
             USHORT nWidth = pDoc->GetOriginalWidth( nCol, nTab );
-            //	property is 1/100mm, column width is twips
+            //  property is 1/100mm, column width is twips
             nWidth = (USHORT) TwipsToHMM(nWidth);
             rAny <<= (sal_Int32)( nWidth );
         }
@@ -8909,7 +8914,7 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         }
         else if ( pEntry->nWID == SC_WID_UNO_OWIDTH )
         {
-            //!	momentan immer gesetzt ??!?!
+            //! momentan immer gesetzt ??!?!
             BOOL bOpt = !(pDoc->GetColFlags( nCol, nTab ) & CR_MANUALSIZE);
             ScUnoHelpFunctions::SetBoolInAny( rAny, bOpt );
         }
@@ -8963,16 +8968,16 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
     {
         if ( IsScItemWid( pEntry->nWID ) )
         {
-            //	for Item WIDs, call ScCellRangesBase directly
+            //  for Item WIDs, call ScCellRangesBase directly
             ScCellRangesBase::SetOnePropertyValue(pEntry, aValue);
             return;
         }
 
-        //	own properties
+        //  own properties
 
         ScDocShell* pDocSh = GetDocShell();
         if (!pDocSh)
-            return;													//!	Exception oder so?
+            return;                                                 //! Exception oder so?
         ScDocument* pDoc = pDocSh->GetDocument();
         const ScRange& rRange = GetRange();
         DBG_ASSERT(rRange.aStart.Row() == rRange.aEnd.Row(), "zuviele Zeilen");
@@ -8988,7 +8993,7 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
             sal_Int32 nNewHeight = 0;
             if ( aValue >>= nNewHeight )
             {
-                //	property is 1/100mm, row height is twips
+                //  property is 1/100mm, row height is twips
                 nNewHeight = HMMToTwips(nNewHeight);
                 aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_ORIGINAL,
                                         (USHORT)nNewHeight, TRUE, TRUE );
@@ -8999,14 +9004,14 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
             BOOL bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
             aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, eMode, 0, TRUE, TRUE );
-            //	SC_SIZE_DIRECT mit Groesse 0 blendet aus
+            //  SC_SIZE_DIRECT mit Groesse 0 blendet aus
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLFILT )
         {
             BOOL bFil = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-//			ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
-//			aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, eMode, 0, TRUE, TRUE );
-            //	SC_SIZE_DIRECT mit Groesse 0 blendet aus
+//          ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
+//          aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, eMode, 0, TRUE, TRUE );
+            //  SC_SIZE_DIRECT mit Groesse 0 blendet aus
             pDoc->SetRowFiltered(nRow, nRow, nTab, bFil);
         }
         else if ( pEntry->nWID == SC_WID_UNO_OHEIGHT )
@@ -9016,7 +9021,7 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
                 aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_OPTIMAL, 0, TRUE, TRUE );
             else
             {
-                //	set current height again manually
+                //  set current height again manually
                 USHORT nHeight = pDoc->GetOriginalHeight( nRow, nTab );
                 aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_ORIGINAL, nHeight, TRUE, TRUE );
             }
@@ -9053,7 +9058,7 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         {
             // for hidden row, return original height
             USHORT nHeight = pDoc->GetOriginalHeight( nRow, nTab );
-            //	property is 1/100mm, row height is twips
+            //  property is 1/100mm, row height is twips
             nHeight = (USHORT) TwipsToHMM(nHeight);
             rAny <<= (sal_Int32)( nHeight );
         }
@@ -9119,7 +9124,7 @@ void ScCellsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;		// ungueltig geworden
+        pDocShell = NULL;       // ungueltig geworden
     }
 }
 
@@ -9146,7 +9151,7 @@ sal_Bool SAL_CALL ScCellsObj::hasElements() throw(uno::RuntimeException)
     BOOL bHas = FALSE;
     if ( pDocShell )
     {
-        //!	schneller selber testen?
+        //! schneller selber testen?
 
         uno::Reference<container::XEnumeration> xEnum(new ScCellsEnumeration( pDocShell, aRanges ));
         bHas = xEnum->hasMoreElements();
@@ -9174,7 +9179,7 @@ ScCellsEnumeration::ScCellsEnumeration(ScDocShell* pDocSh, const ScRangeList& rR
         if (pFirst)
             nTab = pFirst->aStart.Tab();
         aPos = ScAddress(0,0,nTab);
-        CheckPos_Impl();					// aPos auf erste passende Zelle setzen
+        CheckPos_Impl();                    // aPos auf erste passende Zelle setzen
     }
 }
 
@@ -9191,7 +9196,7 @@ void ScCellsEnumeration::CheckPos_Impl()
             {
                 pMark = new ScMarkData;
                 pMark->MarkFromRangeList( aRanges, FALSE );
-                pMark->MarkToMulti();	// needed for GetNextMarkedCell
+                pMark->MarkToMulti();   // needed for GetNextMarkedCell
             }
             bFound = pMark->IsCellMarked( aPos.Col(), aPos.Row() );
         }
@@ -9214,7 +9219,7 @@ void ScCellsEnumeration::Advance_Impl()
     {
         pMark = new ScMarkData;
         pMark->MarkFromRangeList( aRanges, FALSE );
-        pMark->MarkToMulti();	// needed for GetNextMarkedCell
+        pMark->MarkToMulti();   // needed for GetNextMarkedCell
     }
 
     SCCOL nCol = aPos.Col();
@@ -9224,7 +9229,7 @@ void ScCellsEnumeration::Advance_Impl()
     if (bFound)
         aPos.Set( nCol, nRow, nTab );
     else
-        bAtEnd = TRUE;		// kommt nix mehr
+        bAtEnd = TRUE;      // kommt nix mehr
 }
 
 void ScCellsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -9237,10 +9242,10 @@ void ScCellsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
             aRanges.UpdateReference( rRef.GetMode(), pDocShell->GetDocument(), rRef.GetRange(),
                                             rRef.GetDx(), rRef.GetDy(), rRef.GetDz() );
 
-            delete pMark;		// aus verschobenen Bereichen neu erzeugen
+            delete pMark;       // aus verschobenen Bereichen neu erzeugen
             pMark = NULL;
 
-            if (!bAtEnd)		// aPos anpassen
+            if (!bAtEnd)        // aPos anpassen
             {
                 ScRangeList aNew;
                 aNew.Append(ScRange(aPos));
@@ -9257,7 +9262,7 @@ void ScCellsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;		// ungueltig geworden
+        pDocShell = NULL;       // ungueltig geworden
     }
 }
 
@@ -9282,7 +9287,7 @@ uno::Any SAL_CALL ScCellsEnumeration::nextElement() throw(container::NoSuchEleme
         return uno::makeAny(uno::Reference<table::XCell>(new ScCellObj( pDocShell, aTempPos )));
     }
 
-    throw container::NoSuchElementException();		// no more elements
+    throw container::NoSuchElementException();      // no more elements
 //    return uno::Any();
 }
 
@@ -9308,18 +9313,18 @@ void ScCellFormatsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-        //!	aTotalRange...
+        //! aTotalRange...
     }
     else if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;		// ungueltig geworden
+        pDocShell = NULL;       // ungueltig geworden
     }
 }
 
 ScCellRangeObj* ScCellFormatsObj::GetObjectByIndex_Impl(long nIndex) const
 {
-    //!	direkt auf die AttrArrays zugreifen !!!!
+    //! direkt auf die AttrArrays zugreifen !!!!
 
     ScCellRangeObj* pRet = NULL;
     if (pDocShell)
@@ -9355,7 +9360,7 @@ sal_Int32 SAL_CALL ScCellFormatsObj::getCount() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
 
-    //!	direkt auf die AttrArrays zugreifen !!!!
+    //! direkt auf die AttrArrays zugreifen !!!!
 
     long nCount = 0;
     if (pDocShell)
@@ -9395,7 +9400,7 @@ uno::Type SAL_CALL ScCellFormatsObj::getElementType() throw(uno::RuntimeExceptio
 sal_Bool SAL_CALL ScCellFormatsObj::hasElements() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return ( getCount() != 0 );		//! immer groesser 0 ??
+    return ( getCount() != 0 );     //! immer groesser 0 ??
 }
 
 // XEnumerationAccess
@@ -9445,7 +9450,7 @@ void ScCellFormatsEnumeration::Advance_Impl()
     {
         if ( bDirty )
         {
-            pIter->DataChanged();	// AttrArray-Index neu suchen
+            pIter->DataChanged();   // AttrArray-Index neu suchen
             bDirty = FALSE;
         }
 
@@ -9454,10 +9459,10 @@ void ScCellFormatsEnumeration::Advance_Impl()
         if ( pIter->GetNext( nCol1, nCol2, nRow1, nRow2 ) )
             aNext = ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
         else
-            bAtEnd = TRUE;		// kommt nix mehr
+            bAtEnd = TRUE;      // kommt nix mehr
     }
     else
-        bAtEnd = TRUE;			// Dok weggekommen oder so
+        bAtEnd = TRUE;          // Dok weggekommen oder so
 }
 
 ScCellRangeObj* ScCellFormatsEnumeration::NextObject_Impl()
@@ -9478,20 +9483,20 @@ void ScCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-        //!	und nun ???
+        //! und nun ???
     }
     else if ( rHint.ISA( SfxSimpleHint ) )
     {
         ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
-            pDocShell = NULL;						// ungueltig geworden
+            pDocShell = NULL;                       // ungueltig geworden
             delete pIter;
             pIter = NULL;
         }
         else if ( nId == SFX_HINT_DATACHANGED )
         {
-            bDirty = TRUE;			// AttrArray-Index evtl. ungueltig geworden
+            bDirty = TRUE;          // AttrArray-Index evtl. ungueltig geworden
         }
     }
 }
@@ -9510,7 +9515,7 @@ uno::Any SAL_CALL ScCellFormatsEnumeration::nextElement() throw(container::NoSuc
     ScUnoGuard aGuard;
 
     if ( bAtEnd || !pDocShell )
-        throw container::NoSuchElementException();		// no more elements
+        throw container::NoSuchElementException();      // no more elements
 
     // Interface-Typ muss zu ScCellFormatsObj::getElementType passen
 
@@ -9541,13 +9546,13 @@ void ScUniqueCellFormatsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-        //!	aTotalRange...
+        //! aTotalRange...
     }
     else if ( rHint.ISA( SfxSimpleHint ) )
     {
         ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
-            pDocShell = NULL;						// ungueltig geworden
+            pDocShell = NULL;                       // ungueltig geworden
     }
 }
 
@@ -9808,13 +9813,13 @@ void ScUniqueCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHi
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-        //!	und nun ???
+        //! und nun ???
     }
     else if ( rHint.ISA( SfxSimpleHint ) )
     {
         ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
-            pDocShell = NULL;						// ungueltig geworden
+            pDocShell = NULL;                       // ungueltig geworden
     }
 }
 
@@ -9832,7 +9837,7 @@ uno::Any SAL_CALL ScUniqueCellFormatsEnumeration::nextElement() throw(container:
     ScUnoGuard aGuard;
 
     if ( !hasMoreElements() || !pDocShell )
-        throw container::NoSuchElementException();		// no more elements
+        throw container::NoSuchElementException();      // no more elements
 
     // Interface-Typ muss zu ScCellFormatsObj::getElementType passen
 

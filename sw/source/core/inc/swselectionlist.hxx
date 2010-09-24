@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@ class SwFrm;
 
 /** This class is used as parameter for creation of a block cursor selection
 
-    This class will be created by a block cursor. Its responsibility is 
+    This class will be created by a block cursor. Its responsibility is
     to collect a group of selected text portions which are part of a common
     context.
     Definition of context:
@@ -94,4 +94,4 @@ public:
     bool checkContext( const SwFrm* pCheck );
 };
 
-#endif	//_SWSELECTIONLIST_HXX
+#endif  //_SWSELECTIONLIST_HXX

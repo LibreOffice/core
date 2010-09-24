@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,11 +71,11 @@ typedef ::cppu::WeakImplHelper1<com::sun::star::io::XOutputStream> OslOutputStre
     // needed for some compilers
 class OslOutputStreamWrapper : public OslOutputStreamWrapper_Base
 {
-    osl::File	mrFile;
+    osl::File   mrFile;
 
 public:
-    OslOutputStreamWrapper(const OUString& sFileName) : mrFile(sFileName) 
-    { 
+    OslOutputStreamWrapper(const OUString& sFileName) : mrFile(sFileName)
+    {
         osl_removeFile(sFileName.pData);
         mrFile.open(OpenFlag_Create|OpenFlag_Write);
     }
@@ -117,7 +117,7 @@ void SAL_CALL OslOutputStreamWrapper::writeBytes( const ::com::sun::star::uno::S
 
         uBytesToWrite -= uBytesWritten;
         pBuffer += uBytesWritten;
-    }   
+    }
 }
 
 void SAL_CALL OslOutputStreamWrapper::flush(  ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
@@ -144,8 +144,8 @@ void SAL_CALL OslOutputStreamWrapper::closeOutput(  ) throw (::com::sun::star::i
 
 // -----------------------------------------------------------------------------
 
-class FlashExportFilter : public cppu::WeakImplHelper4 
-< 
+class FlashExportFilter : public cppu::WeakImplHelper4
+<
     com::sun::star::document::XFilter,
     com::sun::star::document::XExporter,
     com::sun::star::lang::XInitialization,
@@ -184,7 +184,7 @@ public:
 // -----------------------------------------------------------------------------
 
 FlashExportFilter::FlashExportFilter(const Reference< XMultiServiceFactory > &rxMSF)
-:	mxMSF( rxMSF )
+:   mxMSF( rxMSF )
 {
 }
 
@@ -234,7 +234,7 @@ TYPE findPropertyValue(const Sequence< PropertyValue >& aPropertySequence, const
     return def;
 }
 
-sal_Bool SAL_CALL FlashExportFilter::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor ) 
+sal_Bool SAL_CALL FlashExportFilter::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
     mxStatusIndicator = findPropertyValue<Reference<XStatusIndicator> >(aDescriptor, "StatusIndicator", mxStatusIndicator);
@@ -259,13 +259,13 @@ sal_Bool SAL_CALL FlashExportFilter::filter( const ::com::sun::star::uno::Sequen
 
 
 // AS: When exporting as multiple files, each background, object layer, and slide gets its own
-//  file.  Additionally, a file called BackgroundConfig.txt is generated, indicating which 
-//  background and objects (if any) go with each slide.  The files are named slideNb.swf, 
+//  file.  Additionally, a file called BackgroundConfig.txt is generated, indicating which
+//  background and objects (if any) go with each slide.  The files are named slideNb.swf,
 //  slideNo.swf, and slideNp.swf, where N is the slide number, and b=background, o=objects, and
 //  p=slide contents.  Note that under normal circumstances, there will be very few b and o files.
 
 // AS: HACK!  Right now, I create a directory as a sibling to the swf file selected in the Export
-//  dialog.  This directory is called presentation.sxi-swf-files.  The name of the swf file selected 
+//  dialog.  This directory is called presentation.sxi-swf-files.  The name of the swf file selected
 //  in the Export dialog has no impact on this.  All files created are placed in this directory.
 sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& aDescriptor)
 {
@@ -297,7 +297,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
     aFilterData = findPropertyValue<Sequence< PropertyValue > >(aDescriptor, "FilterData", aFilterData);
 
     //AS: Do a bunch of path mangling to figure out where to put the files.
-    
+
     OUString sOriginalPath = findPropertyValue<OUString>(aDescriptor, "URL", OUString());
 
     // AS: sPath is the parent directory, where everything else exists (like the sxi,
@@ -336,7 +336,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
         err = osl_writeFile(xBackgroundConfig, "slides=", strlen("slides="), &bytesWritten);
     }
 
-    FlashExporter aFlashExporter( mxMSF, findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75), 
+    FlashExporter aFlashExporter( mxMSF, findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
                                          findPropertyValue<sal_Bool>(aFilterData, "ExportOLEAsJPEG", false));
 
     const sal_Int32 nPageCount = xDrawPages->getCount();
@@ -428,7 +428,7 @@ sal_Bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& 
         return sal_False;
     }
 
-    FlashExporter aFlashExporter( mxMSF, findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75), 
+    FlashExporter aFlashExporter( mxMSF, findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
                                          findPropertyValue<sal_Bool>(aFilterData, "ExportOLEAsJPEG", false));
 
     return aFlashExporter.exportAll( mxDoc, xOutputStream, mxStatusIndicator );
@@ -436,7 +436,7 @@ sal_Bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& 
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL FlashExportFilter::cancel(  ) 
+void SAL_CALL FlashExportFilter::cancel(  )
     throw (RuntimeException)
 {
 }
@@ -444,7 +444,7 @@ void SAL_CALL FlashExportFilter::cancel(  )
 // -----------------------------------------------------------------------------
 
 // XExporter
-void SAL_CALL FlashExportFilter::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) 
+void SAL_CALL FlashExportFilter::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     mxDoc = xDoc;
@@ -453,7 +453,7 @@ void SAL_CALL FlashExportFilter::setSourceDocument( const ::com::sun::star::uno:
 // -----------------------------------------------------------------------------
 
 // XInitialization
-void SAL_CALL FlashExportFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& /* aArguments */ ) 
+void SAL_CALL FlashExportFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& /* aArguments */ )
     throw (Exception, RuntimeException)
 {
 }
@@ -470,7 +470,7 @@ OUString FlashExportFilter_getImplementationName ()
 
 #define SERVICE_NAME "com.sun.star.document.ExportFilter"
 
-sal_Bool SAL_CALL FlashExportFilter_supportsService( const OUString& ServiceName ) 
+sal_Bool SAL_CALL FlashExportFilter_supportsService( const OUString& ServiceName )
     throw (RuntimeException)
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ) );
@@ -478,7 +478,7 @@ sal_Bool SAL_CALL FlashExportFilter_supportsService( const OUString& ServiceName
 
 // -----------------------------------------------------------------------------
 
-Sequence< OUString > SAL_CALL FlashExportFilter_getSupportedServiceNames(  ) 
+Sequence< OUString > SAL_CALL FlashExportFilter_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(1);
@@ -499,7 +499,7 @@ Reference< XInterface > SAL_CALL FlashExportFilter_createInstance( const Referen
 // -----------------------------------------------------------------------------
 
 // XServiceInfo
-OUString SAL_CALL FlashExportFilter::getImplementationName(  ) 
+OUString SAL_CALL FlashExportFilter::getImplementationName(  )
     throw (RuntimeException)
 {
     return FlashExportFilter_getImplementationName();
@@ -507,7 +507,7 @@ OUString SAL_CALL FlashExportFilter::getImplementationName(  )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL FlashExportFilter::supportsService( const OUString& rServiceName ) 
+sal_Bool SAL_CALL FlashExportFilter::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
     return FlashExportFilter_supportsService( rServiceName );
@@ -515,7 +515,7 @@ sal_Bool SAL_CALL FlashExportFilter::supportsService( const OUString& rServiceNa
 
 // -----------------------------------------------------------------------------
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL FlashExportFilter::getSupportedServiceNames(  ) 
+::com::sun::star::uno::Sequence< OUString > SAL_CALL FlashExportFilter::getSupportedServiceNames(  )
     throw (RuntimeException)
 {
     return FlashExportFilter_getSupportedServiceNames();

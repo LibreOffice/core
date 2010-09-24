@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,11 +81,11 @@ namespace dbaui
                     m_xDocumentContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
                     m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI > 
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >
                     m_xDocumentUI;
-        Window*		m_pDialogParent;
-        String		m_sCurrentlyEditing;
-        ::rtl::OUString 
+        Window*     m_pDialogParent;
+        String      m_sCurrentlyEditing;
+        ::rtl::OUString
                     m_sDataSourceName;
 
     public:
@@ -152,7 +152,7 @@ namespace dbaui
     };
 
 //......................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //......................................................................
 
 #endif // _DBAUI_LINKEDDOCUMENTS_HXX_

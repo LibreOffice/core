@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,8 @@
 // contains the description of a data source
 struct SwDBData
 {
-    ::rtl::OUString 	sDataSource;
-    ::rtl::OUString 	sCommand;		//table, query or statement
+    ::rtl::OUString     sDataSource;
+    ::rtl::OUString     sCommand;       //table, query or statement
     sal_Int32           nCommandType; //com::sun::star::sdb::CommandType
     SwDBData() :
         nCommandType(0){}

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,7 +114,7 @@ public class XMLParserFactory {
                     Method write;
                     write = clazz.getDeclaredMethod("write",
                         new Class[] {OutputStream.class});
-                    write.invoke(doc, new Object[] {out});            
+                    write.invoke(doc, new Object[] {out});
                 }
                 else {
                     // try xerces serialize package using introspection
@@ -134,7 +134,7 @@ public class XMLParserFactory {
                         serializerClass = Class.forName(
                             prefix +  "serialize.XMLSerializer" , true, cl);
                         formatterClass = Class.forName(
-                            prefix + "serialize.OutputFormat", true, cl); 
+                            prefix + "serialize.OutputFormat", true, cl);
                     }
 
                     Object serializerObject = serializerClass.newInstance();
@@ -142,7 +142,7 @@ public class XMLParserFactory {
 
                     // improve output readability using the OutputFormat class
                     Method method = null;
-                    method = formatterClass.getMethod("setMethod", 
+                    method = formatterClass.getMethod("setMethod",
                         new Class[] {String.class});
                     method.invoke(formatterObject, new Object[] {"xml"});
                     method = formatterClass.getMethod("setIndenting",
@@ -153,11 +153,11 @@ public class XMLParserFactory {
                     // OutputStream and serialize our Document
                     method = serializerClass.getMethod("setOutputByteStream",
                         new Class[] {OutputStream.class});
-                    method.invoke(serializerObject, new Object[] {out});                                            
+                    method.invoke(serializerObject, new Object[] {out});
                     method = serializerClass.getMethod("setOutputFormat",
                         new Class[] {formatterClass});
                     method.invoke(serializerObject,
-                        new Object[] {formatterObject});                
+                        new Object[] {formatterObject});
 
                     method = serializerClass.getMethod("asDOMSerializer",
                         new Class[0]);

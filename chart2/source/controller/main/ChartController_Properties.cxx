@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -243,7 +243,7 @@ namespace
                 sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( xObjectProperties, xSeries, nPointIndex, xDiagram );
                 sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
                         xObjectProperties,uno::Reference< util::XNumberFormatsSupplier >(xChartModel, uno::UNO_QUERY));
-                
+
                 pItemConverter =  new wrapper::DataPointItemConverter( xChartModel, xContext,
                                         xObjectProperties, xSeries, rDrawModel.GetItemPool(), rDrawModel,
                                         pNumberFormatterWrapper,
@@ -355,7 +355,7 @@ rtl::OUString lcl_getTitleCIDForCommand( const ::rtl::OString& rDispatchCommand,
         nTitleType = TitleHelper::SECONDARY_X_AXIS_TITLE;
     else if( rDispatchCommand.equals("SecondaryYTitle") )
         nTitleType = TitleHelper::SECONDARY_Y_AXIS_TITLE;
-  
+
     uno::Reference< XTitle > xTitle( TitleHelper::getTitle( nTitleType, xChartModel ) );
     return ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, xChartModel );
 }
@@ -373,7 +373,7 @@ rtl::OUString lcl_getAxisCIDForCommand( const ::rtl::OString& rDispatchCommand, 
     }
     else if( rDispatchCommand.equals("DiagramAxisY"))
     {
-        nDimensionIndex=1; bMainAxis=true; 
+        nDimensionIndex=1; bMainAxis=true;
     }
     else if( rDispatchCommand.equals("DiagramAxisZ"))
     {
@@ -385,7 +385,7 @@ rtl::OUString lcl_getAxisCIDForCommand( const ::rtl::OString& rDispatchCommand, 
     }
     else if( rDispatchCommand.equals("DiagramAxisB"))
     {
-        nDimensionIndex=1; bMainAxis=false;     
+        nDimensionIndex=1; bMainAxis=false;
     }
 
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
@@ -578,7 +578,7 @@ rtl::OUString lcl_getObjectCIDForCommand( const ::rtl::OString& rDispatchCommand
             return rSelectedCID;
         else
             return ObjectIdentifier::createDataCurveCID(
-                ObjectIdentifier::getSeriesParticleFromCID( rSelectedCID ), 
+                ObjectIdentifier::getSeriesParticleFromCID( rSelectedCID ),
                     RegressionCurveHelper::getRegressionCurveIndex( xRegCurveCnt,
                         RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) ), false );
     }
@@ -627,7 +627,7 @@ rtl::OUString lcl_getObjectCIDForCommand( const ::rtl::OString& rDispatchCommand
             Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( rSelectedCID, xChartModel );
             return ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel );
         }
-        
+
     }
     //-------------------------------------------------------------------------
     // minor grid
@@ -723,7 +723,7 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
             m_xUndoManager, getModel() );
 
     bool bSuccess = ChartController::executeDlg_ObjectProperties_withoutUndoGuard( aObjectCID, false );
-    if( bSuccess ) 
+    if( bSuccess )
         aUndoGuard.commitAction();
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ module com { module sun { module star { module ucb {
 published interface XCachedContentResultSetFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /**	creates a remote optimized 
+    /** creates a remote optimized
         <type scope="com::sun::star::sdbc">XResultSet</type>.
 
         @param xSource
@@ -64,7 +64,7 @@ published interface XCachedContentResultSetFactory: com::sun::star::uno::XInterf
         @returns
         an instance of service <type>CachedContentResultSet</type>.
     */
-    com::sun::star::sdbc::XResultSet	createCachedContentResultSet(
+    com::sun::star::sdbc::XResultSet    createCachedContentResultSet(
                 [in] com::sun::star::sdbc::XResultSet xSource,
                 [in] com::sun::star::ucb::XContentIdentifierMapping xMapping );
 };

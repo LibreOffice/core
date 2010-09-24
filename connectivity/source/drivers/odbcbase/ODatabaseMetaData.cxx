@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,9 +61,9 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
         osl_incrementInterlockedCount( &m_refCount );
         try
         {
-            m_bUseCatalog	= !(usesLocalFiles() || usesLocalFilePerTable());
+            m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
             ::rtl::OUString sVersion = getDriverVersion();
-            m_bOdbc3		=  sVersion != ::rtl::OUString::createFromAscii("02.50") && sVersion != ::rtl::OUString::createFromAscii("02.00");
+            m_bOdbc3        =  sVersion != ::rtl::OUString::createFromAscii("02.50") && sVersion != ::rtl::OUString::createFromAscii("02.00");
         }
         catch(SQLException& )
         { // doesn't matter here
@@ -336,7 +336,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength(  ) throw(SQLExcepti
     return nValue;
 }
 // -------------------------------------------------------------------------
-sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  ) 
+sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_TABLES_IN_SELECT,nValue,*this);
@@ -484,7 +484,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLExc
     return nValue == SQL_IC_LOWER;
 }
 // -------------------------------------------------------------------------
-sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  ) 
+sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
@@ -523,8 +523,8 @@ sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ALTER_TABLE,nValue,*this);
-    return	((nValue & SQL_AT_DROP_COLUMN)			== SQL_AT_DROP_COLUMN)			||
-            ((nValue & SQL_AT_DROP_COLUMN_CASCADE)	== SQL_AT_DROP_COLUMN_CASCADE)	||
+    return  ((nValue & SQL_AT_DROP_COLUMN)          == SQL_AT_DROP_COLUMN)          ||
+            ((nValue & SQL_AT_DROP_COLUMN_CASCADE)  == SQL_AT_DROP_COLUMN_CASCADE)  ||
             ((nValue & SQL_AT_DROP_COLUMN_RESTRICT) == SQL_AT_DROP_COLUMN_RESTRICT);
 }
 // -------------------------------------------------------------------------
@@ -691,7 +691,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw
     return (nValue & SQL_SU_INDEX_DEFINITION) == SQL_SU_INDEX_DEFINITION;
 }
 // -------------------------------------------------------------------------
-sal_Bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  ) 
+sal_Bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
@@ -714,7 +714,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) thro
     return (nValue & SQL_CU_INDEX_DEFINITION) == SQL_CU_INDEX_DEFINITION;
 }
 // -------------------------------------------------------------------------
-sal_Bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  ) 
+sal_Bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
     SQLUINTEGER nValue=0;
     if(m_bUseCatalog)
@@ -941,25 +941,25 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_In
             OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_LONGVARBINARY,nValue,*this);
             break;
         case DataType::SQLNULL:
-            //	OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::OTHER:
-            //	OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::OBJECT:
-            //	OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::DISTINCT:
-            //	OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::STRUCT:
-            //	OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::ARRAY:
-            //	OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::REF:
-            //	OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
+            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
     }
     sal_Bool bConvert = sal_False;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,32 +70,32 @@ published struct ListAction
                         <th>Count</th>
                         <th>ActionInfo</th></tr>
 
-        <tr align=left>	<td>WELCOME</td>
+        <tr align=left> <td>WELCOME</td>
                         <td>n/a</td>
                         <td>n/a</td>
                         <td><type>WelcomeDynamicResultSetStruct</type> required</td></tr>
 
-        <tr align=left>	<td>CLEARED</td>
+        <tr align=left> <td>CLEARED</td>
                         <td>n/a</td>
                         <td>n/a</td>
                         <td>n/a</td></tr>
 
-        <tr align=left>	<td>INSERTED</td>
+        <tr align=left> <td>INSERTED</td>
                         <td>required 1-x</td>
                         <td>required 1-x</td>
                         <td>allowed but not required... @todo </td></tr>
 
-        <tr align=left>	<td>REMOVED</td>
+        <tr align=left> <td>REMOVED</td>
                         <td>required 1-x</td>
                         <td>required 1-x</td>
                         <td>n/a</td></tr>
 
-        <tr align=left>	<td>MOVED</td>
+        <tr align=left> <td>MOVED</td>
                         <td>required 1-x</td>
                         <td>required 1-x</td>
                         <td>type long required</td></tr>
 
-        <tr align=left>	<td>PROPERTIES_CHANGED</td>
+        <tr align=left> <td>PROPERTIES_CHANGED</td>
                         <td>required 1-x</td>
                         <td>required 1-x</td>
                         <td>allowed but not required... @todo</td></tr>

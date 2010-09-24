@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,11 +98,11 @@ namespace basegfx
             Gradient angle (from ODF)
          */
         ODFGradientInfo& createLinearODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                     const B2DRange&  rTargetArea, 
-                                                     sal_uInt32       nSteps, 
-                                                     double           fBorder, 
+                                                     const B2DRange&  rTargetArea,
+                                                     sal_uInt32       nSteps,
+                                                     double           fBorder,
                                                      double           fAngle);
-        
+
         /** Calculate linear gradient blend value
 
             This method generates you the lerp alpha value for
@@ -157,9 +157,9 @@ namespace basegfx
             Gradient angle (from ODF)
          */
         ODFGradientInfo& createAxialODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                    const B2DRange&  rTargetArea, 
-                                                    sal_uInt32       nSteps, 
-                                                    double           fBorder, 
+                                                    const B2DRange&  rTargetArea,
+                                                    sal_uInt32       nSteps,
+                                                    double           fBorder,
                                                     double           fAngle);
 
         /** Calculate axial gradient blend value
@@ -188,7 +188,7 @@ namespace basegfx
 
             return t;
         }
-        
+
         /** Create matrix for ODF's radial gradient definition
 
             @param o_rGradientInfo
@@ -212,11 +212,11 @@ namespace basegfx
             Gradient angle (from ODF)
          */
         ODFGradientInfo& createRadialODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                     const B2DRange&  rTargetArea, 
+                                                     const B2DRange&  rTargetArea,
                                                      const B2DVector& rOffset,
-                                                     sal_uInt32       nSteps, 
+                                                     sal_uInt32       nSteps,
                                                      double           fBorder);
-        
+
         /** Calculate radial gradient blend value
 
             This method generates you the lerp alpha value for
@@ -271,10 +271,10 @@ namespace basegfx
             Gradient angle (from ODF)
          */
         ODFGradientInfo& createEllipticalODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                         const B2DRange&  rTargetArea, 
+                                                         const B2DRange&  rTargetArea,
                                                          const B2DVector& rOffset,
-                                                         sal_uInt32       nSteps, 
-                                                         double           fBorder, 
+                                                         sal_uInt32       nSteps,
+                                                         double           fBorder,
                                                          double           fAngle);
 
         /** Calculate elliptical gradient blend value
@@ -319,10 +319,10 @@ namespace basegfx
             Gradient angle (from ODF)
          */
         ODFGradientInfo& createSquareODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                     const B2DRange&  rTargetArea, 
+                                                     const B2DRange&  rTargetArea,
                                                      const B2DVector& rOffset,
-                                                     sal_uInt32       nSteps, 
-                                                     double           fBorder, 
+                                                     sal_uInt32       nSteps,
+                                                     double           fBorder,
                                                      double           fAngle);
 
         /** Calculate square gradient blend value
@@ -380,10 +380,10 @@ namespace basegfx
             Gradient angle (from ODF)
          */
         ODFGradientInfo& createRectangularODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                          const B2DRange&  rTargetArea, 
+                                                          const B2DRange&  rTargetArea,
                                                           const B2DVector& rOffset,
-                                                          sal_uInt32       nSteps, 
-                                                          double           fBorder, 
+                                                          sal_uInt32       nSteps,
+                                                          double           fBorder,
                                                           double           fAngle);
 
         /** Calculate rectangular gradient blend value

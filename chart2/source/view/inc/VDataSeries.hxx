@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,7 +142,7 @@ public:
     sal_Int32 getStartingAngle() const;
 
     void setRoleOfSequenceForDataLabelNumberFormatDetection( const rtl::OUString& rRole );
-    
+
     //this is only temporarily here for area chart:
     ::com::sun::star::drawing::PolyPolygonShape3D       m_aPolyPolygonShape3D;
     sal_Int32   m_nPolygonIndex;

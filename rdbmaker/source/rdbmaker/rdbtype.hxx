@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,21 +28,21 @@
 #ifndef _RDBMAKER_RDBTYPE_HXX_
 #define _RDBMAKER_RDBTYPE_HXX_
 
-#include	<codemaker/typemanager.hxx>
-#include	<codemaker/dependency.hxx>
+#include    <codemaker/typemanager.hxx>
+#include    <codemaker/dependency.hxx>
 
-sal_Bool 	checkFilterTypes(const ::rtl::OString& type);
-void 		cleanUp(sal_Bool);
+sal_Bool    checkFilterTypes(const ::rtl::OString& type);
+void        cleanUp(sal_Bool);
 
 class RdbOptions;
 class FileStream;
 class RegistryKey;
 
 sal_Bool produceType(const ::rtl::OString& typeName,
-                     TypeManager& typeMgr, 
+                     TypeManager& typeMgr,
                      TypeDependency& typeDependencies,
                      RdbOptions* pOptions,
-                     FileStream& o, 
+                     FileStream& o,
                      RegistryKey& regKey,
                      StringSet& filterTypes,
                      sal_Bool bDepend = sal_False)

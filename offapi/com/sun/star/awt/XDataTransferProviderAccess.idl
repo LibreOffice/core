@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module datatransfer { 
+module com { module sun { module star { module datatransfer {
 module dnd {
      published interface XDragGestureRecognizer;
      published interface XDragSource;
@@ -42,7 +42,7 @@ module dnd {
 };
 module clipboard {
      published interface XClipboard;
-}; 
+};
 }; }; }; };
 
 //=============================================================================
@@ -53,7 +53,7 @@ module com { module sun { module star { module awt {
 
 //=============================================================================
 
-/** This interface extends the XToolkit interface with clipboard and 
+/** This interface extends the XToolkit interface with clipboard and
     drag-and-drop support.
 */
 published interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
@@ -61,7 +61,7 @@ published interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** returns the drag gesture recognizer of the specified window.
-    
+
         @returns the drag gesture recognizer.
 
         @param window
@@ -74,18 +74,18 @@ published interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
     /** returns the drag source of the specified window.
 
         @returns the drag source.
-    
+
         @param window
         a window created by the same toolkit instance.
     */
     com::sun::star::datatransfer::dnd::XDragSource getDragSource( [in] XWindow window );
-    
+
     //-------------------------------------------------------------------------
 
     /** returns the drop target of the specified window.
 
         @returns the drop target.
-        
+
         @param window
         a window created by the same toolkit instance.
     */
@@ -96,7 +96,7 @@ published interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
     /** returns the specified clipboard.
 
         @returns the specified clipboard (if available).
-        
+
         @param clipboardName
         the name of the clipboard to return.
         If an empty string is passed in, the default clipboard is returned.

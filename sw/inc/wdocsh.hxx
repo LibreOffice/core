@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 
 class SW_DLLPUBLIC SwWebDocShell: public SwDocShell
 {
-    USHORT		nSourcePara;	// aktive Zeile in der SourceView
+    USHORT      nSourcePara;    // aktive Zeile in der SourceView
 
 public:
 
@@ -46,14 +46,14 @@ public:
     SwWebDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
     ~SwWebDocShell();
 
-    virtual void		FillClass( SvGlobalName * pClassName,
+    virtual void        FillClass( SvGlobalName * pClassName,
                                    sal_uInt32 * pClipFormat,
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
                                    sal_Int32 nFileFormat,
                                    sal_Bool bTemplate = sal_False ) const;
-    USHORT 		GetSourcePara()const
+    USHORT      GetSourcePara()const
                             {return nSourcePara;}
     void        SetSourcePara(USHORT nSet) {nSourcePara = nSet;}
 };

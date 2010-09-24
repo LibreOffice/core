@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_THREADHELP_FAIRRWLOCK_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/inoncopyable.h>
@@ -37,33 +37,33 @@
 #include <macros/debug.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/XInterface.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	const
+//  const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          implement a read/write lock with fairness between read/write accessors
-    @descr			These implementation never should used as base class! Use it as a member every time.
+    @descr          These implementation never should used as base class! Use it as a member every time.
                     Use ReadGuard and/or WriteGuard in your methods (which work with these lock)
                     to make your code threadsafe.
                     Fair means: All reading or writing threads are synchronized AND serialzed by using one
@@ -71,17 +71,17 @@ namespace framework{
                     for writer this mutex is used to have an exclusiv access on your class member!
                     => It's a multi-reader/single-writer lock, which no preferred accessor.
 
-    @implements		IRWlock
+    @implements     IRWlock
     @base           INonCopyable
                     IRWLock
 
-    @devstatus		ready to use
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
 class FairRWLock : public  IRWLock
                  , private INonCopyable
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
@@ -270,17 +270,17 @@ class FairRWLock : public  IRWLock
         }
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private member
+    //  private member
     //-------------------------------------------------------------------------------------------------------------
     private:
 
-        ::osl::Mutex		m_aAccessLock		;	/// regulate access on internal member of this instance
-        ::osl::Mutex		m_aSerializer		;	/// serialze incoming read/write access threads
-        ::osl::Condition	m_aWriteCondition	;	/// a writer must wait till current working reader are gone
-        sal_Int32			m_nReadCount		;	/// every reader is registered - the last one open the door for waiting writer
+        ::osl::Mutex        m_aAccessLock       ;   /// regulate access on internal member of this instance
+        ::osl::Mutex        m_aSerializer       ;   /// serialze incoming read/write access threads
+        ::osl::Condition    m_aWriteCondition   ;   /// a writer must wait till current working reader are gone
+        sal_Int32           m_nReadCount        ;   /// every reader is registered - the last one open the door for waiting writer
 
-};		//	class FairRWLock
+};      //  class FairRWLock
 
-}		//	namespace framework
+}       //  namespace framework
 
-#endif	//	#ifndef __FRAMEWORK_THREADHELP_FAIRRWLOCK_HXX_
+#endif  //  #ifndef __FRAMEWORK_THREADHELP_FAIRRWLOCK_HXX_

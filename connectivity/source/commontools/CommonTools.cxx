@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ namespace connectivity
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace dbtools;
-    namespace starjava	= com::sun::star::java;
+    namespace starjava  = com::sun::star::java;
     //------------------------------------------------------------------------------
     const sal_Unicode CHAR_PLACE = '_';
     const sal_Unicode CHAR_WILD  = '%';
@@ -279,7 +279,7 @@ namespace connectivity
         if ( _pJVM.is() )
         {
             jvmaccess::VirtualMachine::AttachGuard aGuard(_pJVM);
-            JNIEnv*	pEnv = aGuard.getEnvironment();
+            JNIEnv* pEnv = aGuard.getEnvironment();
             if( pEnv )
             {
                 ::rtl::OString sClassName = ::rtl::OUStringToOString(_sClassName, RTL_TEXTENCODING_ASCII_US);
@@ -295,7 +295,7 @@ namespace connectivity
 
 }
 
-#include <ctype.h>		//isdigit
+#include <ctype.h>      //isdigit
 namespace dbtools
 {
 //------------------------------------------------------------------
@@ -319,10 +319,10 @@ sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSp
         if(!isCharOk(*pStr,_rSpecials))
             return sal_False;
 
-    if	(	rName.getLength()
-        &&	(	(rName.toChar() == '_')
-            ||	(	(rName.toChar() >= '0')
-                &&	(rName.toChar() <= '9')
+    if  (   rName.getLength()
+        &&  (   (rName.toChar() == '_')
+            ||  (   (rName.toChar() >= '0')
+                &&  (rName.toChar() <= '9')
                 )
             )
         )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,37 +41,37 @@ import org.openoffice.netbeans.modules.office.actions.*;
  * @author tomaso
  */
 public class ParcelDataObject extends MultiDataObject {
-    
+
     public ParcelDataObject(FileObject pf, ParcelDataLoader loader) throws DataObjectExistsException {
         super(pf, loader);
         init();
     }
-    
+
     private void init() {
         CookieSet cookies = getCookieSet();
         cookies.add(new ParcelSupport(getPrimaryFile()));
     }
-    
+
     public HelpCtx getHelpCtx() {
         return HelpCtx.DEFAULT_HELP;
         // If you add context help, change to:
         // return new HelpCtx(ParcelDataObject.class);
     }
-    
+
     protected Node createNodeDelegate() {
         return new ParcelDataNode(this);
     }
-    
+
     /* If you made an Editor Support you will want to add these methods:
-     
+
     final void addSaveCookie(SaveCookie save) {
         getCookieSet().add(save);
     }
-     
+
     final void removeSaveCookie(SaveCookie save) {
         getCookieSet().remove(save);
     }
-     
+
      */
-    
+
 }

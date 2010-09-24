@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,11 +36,11 @@ class SvUShorts;
 
 class SVL_DLLPUBLIC SfxAllEnumItem: public SfxEnumItem
 {
-    SfxAllEnumValueArr*		pValues;
-    SvUShorts*				pDisabledValues;
+    SfxAllEnumValueArr*     pValues;
+    SvUShorts*              pDisabledValues;
 
 protected:
-    USHORT					_GetPosByValue( USHORT nValue ) const;
+    USHORT                  _GetPosByValue( USHORT nValue ) const;
 
 public:
     TYPEINFO();
@@ -53,19 +53,19 @@ public:
                             ~SfxAllEnumItem();
 
     void                    InsertValue( USHORT nValue );
-    void					InsertValue( USHORT nValue, const XubString &rText );
+    void                    InsertValue( USHORT nValue, const XubString &rText );
     void                    RemoveValue( USHORT nValue );
-    void					RemoveAllValues();
+    void                    RemoveAllValues();
 
-    USHORT					GetPosByValue( USHORT nValue ) const;
+    USHORT                  GetPosByValue( USHORT nValue ) const;
 
-    virtual USHORT			GetValueCount() const;
-    virtual USHORT			GetValueByPos( USHORT nPos ) const;
-    virtual XubString		GetValueTextByPos( USHORT nPos ) const;
-    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*	Create(SvStream &, USHORT nVersion) const;
-    virtual BOOL			IsEnabled( USHORT ) const;
-    void					DisableValue( USHORT );
+    virtual USHORT          GetValueCount() const;
+    virtual USHORT          GetValueByPos( USHORT nPos ) const;
+    virtual XubString       GetValueTextByPos( USHORT nPos ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*    Create(SvStream &, USHORT nVersion) const;
+    virtual BOOL            IsEnabled( USHORT ) const;
+    void                    DisableValue( USHORT );
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,9 +27,9 @@
 #ifndef _FRAME_HXX
 #define _FRAME_HXX
 #include <svl/svarray.hxx>
-#include "swtypes.hxx"	// fuer SwTwips
+#include "swtypes.hxx"  // fuer SwTwips
 #include "swrect.hxx"
-#include "calbck.hxx"	// fuer SwClient
+#include "calbck.hxx"   // fuer SwClient
 
 class SwLayoutFrm;
 class SwRootFrm;
@@ -66,46 +66,46 @@ class SwAnchoredObject;
 //sie abgeleitet ist.
 //Der Frm hat in der Basisklasse einen Member der von den CToren der
 //einzelnen Frms entsprechend gesetzt werden muss.
-#define	FRM_ROOT		0x0001
-#define	FRM_PAGE		0x0002
-#define	FRM_COLUMN		0x0004
-#define	FRM_HEADER		0x0008
-#define FRM_FOOTER		0x0010
-#define	FRM_FTNCONT		0x0020
-#define	FRM_FTN			0x0040
-#define	FRM_BODY		0x0080
-#define	FRM_FLY     	0x0100
-#define	FRM_SECTION  	0x0200
-#define	FRM_UNUSED    	0x0400
-#define	FRM_TAB			0x0800
-#define	FRM_ROW			0x1000
-#define	FRM_CELL		0x2000
-#define	FRM_TXT			0x4000
-#define	FRM_NOTXT		0x8000
+#define FRM_ROOT        0x0001
+#define FRM_PAGE        0x0002
+#define FRM_COLUMN      0x0004
+#define FRM_HEADER      0x0008
+#define FRM_FOOTER      0x0010
+#define FRM_FTNCONT     0x0020
+#define FRM_FTN         0x0040
+#define FRM_BODY        0x0080
+#define FRM_FLY         0x0100
+#define FRM_SECTION     0x0200
+#define FRM_UNUSED      0x0400
+#define FRM_TAB         0x0800
+#define FRM_ROW         0x1000
+#define FRM_CELL        0x2000
+#define FRM_TXT         0x4000
+#define FRM_NOTXT       0x8000
 
 //Fuer den internen Gebrauch ein paar gebraeuchliche Verknuepfungen.
-#define FRM_LAYOUT		0x3FFF
-#define FRM_CNTNT		0xC000
-#define FRM_FTNBOSS		0x0006
+#define FRM_LAYOUT      0x3FFF
+#define FRM_CNTNT       0xC000
+#define FRM_FTNBOSS     0x0006
 #define FRM_ACCESSIBLE (FRM_HEADER|FRM_FOOTER|FRM_FTN|FRM_TXT|FRM_ROOT|FRM_FLY|FRM_TAB|FRM_CELL|FRM_PAGE)
 
         //Weils so schon ist das ganze als Bitfeld....
-//0000 0000 0000 0001	ROOT
-//0000 0000 0000 0010	PAGE
-//0000 0000 0000 0100	COLUMN
-//0000 0000 0000 1000	HEADER
-//0000 0000 0001 0000	FOOTER
-//0000 0000 0010 0000	FTNCONT
-//0000 0000 0100 0000	FTN
-//0000 0000 1000 0000	BODY
-//0000 0001 0000 0000	FLY
-//0000 0010 0000 0000	SECTION
-//0000 0100 0000 0000	UNUSED
-//0000 1000 0000 0000	TAB
-//0001 0000 0000 0000	ROW
-//0010 0000 0000 0000	CELL
-//0100 0000 0000 0000	TXT
-//1000 0000 0000 0000	NOTXT
+//0000 0000 0000 0001   ROOT
+//0000 0000 0000 0010   PAGE
+//0000 0000 0000 0100   COLUMN
+//0000 0000 0000 1000   HEADER
+//0000 0000 0001 0000   FOOTER
+//0000 0000 0010 0000   FTNCONT
+//0000 0000 0100 0000   FTN
+//0000 0000 1000 0000   BODY
+//0000 0001 0000 0000   FLY
+//0000 0010 0000 0000   SECTION
+//0000 0100 0000 0000   UNUSED
+//0000 1000 0000 0000   TAB
+//0001 0000 0000 0000   ROW
+//0010 0000 0000 0000   CELL
+//0100 0000 0000 0000   TXT
+//1000 0000 0000 0000   NOTXT
 
 // The type of the frame is internal represented by the 4-bit value nType,
 // which can expanded to the types above by shifting a bit (0x1 << nType)
@@ -228,11 +228,11 @@ extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R;
 //Fuer GetNextLeaf/GetPrevLeaf.
 enum MakePageType
 {
-    MAKEPAGE_NONE,		//Keine Seite bzw. Fussnote anlegen
-    MAKEPAGE_APPEND,	//Nur ggf. Seite anhaengen
-    MAKEPAGE_INSERT,	//Seite ggf. anhaengen oder einfuegen.
-    MAKEPAGE_FTN,		//Fussnote ggf. einfuegen.
-    MAKEPAGE_NOSECTION	// Don't create section frames
+    MAKEPAGE_NONE,      //Keine Seite bzw. Fussnote anlegen
+    MAKEPAGE_APPEND,    //Nur ggf. Seite anhaengen
+    MAKEPAGE_INSERT,    //Seite ggf. anhaengen oder einfuegen.
+    MAKEPAGE_FTN,       //Fussnote ggf. einfuegen.
+    MAKEPAGE_NOSECTION  // Don't create section frames
 };
 
 // OD 2004-05-06 #i28701# - replaced by new class <SwSortedObjs>
@@ -243,7 +243,7 @@ class SwFrm: public SwClient
 {
     //Der verkappte Frm
     friend class SwFlowFrm;
-    friend class SwLayoutFrm;		// Sw3FrameIo: fuer pNext, pPrev
+    friend class SwLayoutFrm;       // Sw3FrameIo: fuer pNext, pPrev
     friend class SwLooping;         // LoopControlling  (layouter.cxx)
 
     //Hebt die Lower waehrend eines Spaltenumbaus auf.
@@ -260,7 +260,7 @@ class SwFrm: public SwClient
         // Implementiert in text/txtftn.cxx, verhindert Ftn-Oszillation
     friend void ValidateTxt( SwFrm *pFrm );
 
-//	friend void CalcAnchorAndKeep( SwFlyFrm * );
+//  friend void CalcAnchorAndKeep( SwFlyFrm * );
 
     friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );
 
@@ -347,15 +347,15 @@ class SwFrm: public SwClient
     SwFrm* _GetIndNext();
     void SetDirFlags( BOOL bVert );
 
-    SwFrm( SwFrm & );		//Kopieren ist nicht erlaubt.
+    SwFrm( SwFrm & );       //Kopieren ist nicht erlaubt.
 
     const SwLayoutFrm* ImplGetNextLayoutLeaf( bool bFwd ) const;
 
 protected:
     SwSortedObjs* pDrawObjs;    //Hier haengen die DrawObjs, kann 0 sein
 
-    SwRect	aFrm;	//Absolute Dokumentposition und groesse des Frm
-    SwRect	aPrt;	//Position der PrtArea rel zum Frm und groesse der PrtArea
+    SwRect  aFrm;   //Absolute Dokumentposition und groesse des Frm
+    SwRect  aPrt;   //Position der PrtArea rel zum Frm und groesse der PrtArea
 
     USHORT bFlag01:         1;
     USHORT bFlag02:         1;
@@ -372,32 +372,32 @@ protected:
     USHORT bVertical:       1;
     USHORT nType:         4;  //Who am I?
 
-    BOOL bValidPos:			1;
-    BOOL bValidPrtArea:		1;
-    BOOL bValidSize:		1;
-    BOOL bValidLineNum:		1;
+    BOOL bValidPos:         1;
+    BOOL bValidPrtArea:     1;
+    BOOL bValidSize:        1;
+    BOOL bValidLineNum:     1;
     BOOL bFixSize:          1;
     BOOL bUnUsed1:          1;
-    BOOL bCompletePaint:	1;	//Frame wird ganz gepaintet wenn TRUE, auch
+    BOOL bCompletePaint:    1;  //Frame wird ganz gepaintet wenn TRUE, auch
                                 //wenn der Inhalt nur teilw. veraendert ist;
                                 //Bei CntntFrms wird ausschliesslich wenn TRUE
                                 //der Border (von Action) gemalt.
-    BOOL bRetouche:			1;	//Der Frame ist fuer Retusche verantwortlich
+    BOOL bRetouche:         1;  //Der Frame ist fuer Retusche verantwortlich
                                 //wenn TRUE.
 public:
     BOOL bUnUsed2:          1;
 protected:
-    BOOL bInfInvalid:		1;	//InfoFlags sind Invalid.
-    BOOL bInfBody:			1;	//Frm steht im DokumentBody.
-    BOOL bInfTab:			1;	//Frm steht in einer Tabelle.
-    BOOL bInfFly:			1;	//Frm steht in einem Fly.
-    BOOL bInfFtn:			1;	//Frm steht in einer Fussnote.
-    BOOL bInfSct:			1;  //Frm steht in einem Bereich.
-    BOOL bColLocked:		1;  //Grow/Shrink sperren bei spaltigen Section-
+    BOOL bInfInvalid:       1;  //InfoFlags sind Invalid.
+    BOOL bInfBody:          1;  //Frm steht im DokumentBody.
+    BOOL bInfTab:           1;  //Frm steht in einer Tabelle.
+    BOOL bInfFly:           1;  //Frm steht in einem Fly.
+    BOOL bInfFtn:           1;  //Frm steht in einer Fussnote.
+    BOOL bInfSct:           1;  //Frm steht in einem Bereich.
+    BOOL bColLocked:        1;  //Grow/Shrink sperren bei spaltigen Section-
                                 //oder Fly-Frames, wird im Format gesetzt
 
-    void ColLock()		{ bColLocked = TRUE; }
-    void ColUnlock()   	{ bColLocked = FALSE; }
+    void ColLock()      { bColLocked = TRUE; }
+    void ColUnlock()    { bColLocked = FALSE; }
 
     SwPageFrm *InsertPage( SwPageFrm *pSibling, BOOL bFtn );
     void PrepareMake();
@@ -418,8 +418,8 @@ protected:
     virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE ) = 0;
     virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE ) = 0;
 
-    SwModify	  	*GetDep()		{ return pRegisteredIn; }
-    const SwModify	*GetDep() const { return pRegisteredIn; }
+    SwModify        *GetDep()       { return pRegisteredIn; }
+    const SwModify  *GetDep() const { return pRegisteredIn; }
 
     SwFrm( SwModify* );
 
@@ -458,13 +458,13 @@ protected:
     void PaintShadow( const SwRect&, SwRect&, const SwBorderAttrs& ) const;
 
 public:
-    TYPEINFO();	//Bereits in Basisklasse Client drin.
+    TYPEINFO(); //Bereits in Basisklasse Client drin.
 
     USHORT GetType() const { return 0x1 << nType; }
 
-    static SwCache &GetCache() 				  { return *pCache; }
-    static SwCache *GetCachePtr()			  { return pCache;	}
-    static void		SetCache( SwCache *pNew ) { pCache = pNew;	}
+    static SwCache &GetCache()                { return *pCache; }
+    static SwCache *GetCachePtr()             { return pCache;  }
+    static void     SetCache( SwCache *pNew ) { pCache = pNew;  }
 
         //Aendern die PrtArea-SSize und die FrmSize.
     SwTwips Shrink( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
@@ -513,7 +513,7 @@ public:
     void InvalidateObjs( const bool _bInvaPosOnly,
                          const bool _bNoInvaOfAsCharAnchoredObjs = true );
 
-    virtual	void PaintBorder( const SwRect&, const SwPageFrm *pPage,
+    virtual void PaintBorder( const SwRect&, const SwPageFrm *pPage,
                               const SwBorderAttrs & ) const;
     void PaintBaBo( const SwRect&, const SwPageFrm *pPage = 0,
                     const BOOL bLowerBorder = FALSE ) const;
@@ -540,10 +540,10 @@ public:
     inline void ResetRetouche() const;
     inline BOOL IsRetouche() const { return bRetouche; }
 
-    void SetInfFlags();					//Setzen der InfoFlags
+    void SetInfFlags();                 //Setzen der InfoFlags
     inline void InvalidateInfFlags() { bInfInvalid = TRUE; }
-    inline BOOL	IsInDocBody() const;	//Benutzen die InfoFlags.
-    inline BOOL	IsInFtn() const;		//ggf. werden die Flags ermittelt.
+    inline BOOL IsInDocBody() const;    //Benutzen die InfoFlags.
+    inline BOOL IsInFtn() const;        //ggf. werden die Flags ermittelt.
     inline BOOL IsInTab() const;
     inline BOOL IsInFly() const;
     inline BOOL IsInSct() const;
@@ -598,14 +598,14 @@ public:
     //Fussnote einzufuegen (nicht z.B. in wiederholten TabellenHeadlines).
     BOOL IsFtnAllowed() const;
 
-    virtual	void  Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual void  Modify( SfxPoolItem*, SfxPoolItem* );
     virtual void  Format( const SwBorderAttrs *pAttrs = 0 );
 
     virtual void  CheckDirection( BOOL bVert );
 
     void ReinitializeFrmSizeAttrFlags();
 
-    const SwAttrSet	*GetAttrSet() const;
+    const SwAttrSet *GetAttrSet() const;
 
     inline BOOL HasFixSize() const { return bFixSize; }
     inline void SetFixSize( BOOL bNew ) { bFixSize = bNew; }
@@ -618,32 +618,32 @@ public:
     static void CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields = TRUE );
 
         //Koennen 0 liefern, einmal const einmal nicht
-    SwFrm				*GetNext()	{ return pNext; }
-    SwFrm				*GetPrev()	{ return pPrev; }
-    SwLayoutFrm			*GetUpper()	{ return pUpper; }
-    SwRootFrm			*FindRootFrm();
-    SwPageFrm	   		*FindPageFrm();
-    SwFrm				*FindColFrm();
-    SwRowFrm			*FindRowFrm();
-    SwFtnBossFrm		*FindFtnBossFrm( BOOL bFootnotes = FALSE );
-    SwTabFrm			*ImplFindTabFrm();
-    SwFtnFrm			*ImplFindFtnFrm();
-    SwFlyFrm 			*ImplFindFlyFrm();
-    SwSectionFrm		*ImplFindSctFrm();
-    SwFrm				*FindFooterOrHeader();
-    SwFrm				*GetLower();
-    const SwFrm			*GetNext()	const { return pNext; }
-    const SwFrm			*GetPrev()	const { return pPrev; }
-    const SwLayoutFrm	*GetUpper()	const { return pUpper; }
-    inline SwTabFrm		*FindTabFrm();
-    inline SwFtnFrm		*FindFtnFrm();
-    inline SwFlyFrm 	*FindFlyFrm();
-    inline SwSectionFrm	*FindSctFrm();
-    inline SwFrm		*FindNext();
+    SwFrm               *GetNext()  { return pNext; }
+    SwFrm               *GetPrev()  { return pPrev; }
+    SwLayoutFrm         *GetUpper() { return pUpper; }
+    SwRootFrm           *FindRootFrm();
+    SwPageFrm           *FindPageFrm();
+    SwFrm               *FindColFrm();
+    SwRowFrm            *FindRowFrm();
+    SwFtnBossFrm        *FindFtnBossFrm( BOOL bFootnotes = FALSE );
+    SwTabFrm            *ImplFindTabFrm();
+    SwFtnFrm            *ImplFindFtnFrm();
+    SwFlyFrm            *ImplFindFlyFrm();
+    SwSectionFrm        *ImplFindSctFrm();
+    SwFrm               *FindFooterOrHeader();
+    SwFrm               *GetLower();
+    const SwFrm         *GetNext()  const { return pNext; }
+    const SwFrm         *GetPrev()  const { return pPrev; }
+    const SwLayoutFrm   *GetUpper() const { return pUpper; }
+    inline SwTabFrm     *FindTabFrm();
+    inline SwFtnFrm     *FindFtnFrm();
+    inline SwFlyFrm     *FindFlyFrm();
+    inline SwSectionFrm *FindSctFrm();
+    inline SwFrm        *FindNext();
     // --> OD 2005-12-01 #i27138# - add parameter <_bInSameFtn>
     inline SwCntntFrm* FindNextCnt( const bool _bInSameFtn = false );
     // <--
-    inline SwFrm		*FindPrev();
+    inline SwFrm        *FindPrev();
     inline const SwPageFrm *FindPageFrm() const;
     inline const SwRootFrm *FindRootFrm() const;
     inline const SwFtnBossFrm *FindFtnBossFrm( BOOL bFtn = FALSE ) const;
@@ -653,12 +653,12 @@ public:
     inline const SwFtnFrm  *FindFtnFrm() const;
     inline const SwFlyFrm  *FindFlyFrm() const;
     inline const SwSectionFrm *FindSctFrm() const;
-    inline const SwFrm	   *FindNext() const;
+    inline const SwFrm     *FindNext() const;
     // --> OD 2005-12-01 #i27138# - add parameter <_bInSameFtn>
     inline const SwCntntFrm* FindNextCnt( const bool _bInSameFtn = false ) const;
     // <--
-    inline const SwFrm	   *FindPrev() const;
-           const SwFrm	   *GetLower()	const;
+    inline const SwFrm     *FindPrev() const;
+           const SwFrm     *GetLower()  const;
 
     /** inline wrapper method for <_FindPrevCnt(..)>
 
@@ -698,8 +698,8 @@ public:
         { return ( pNext || !IsInSct() ) ? pNext : _GetIndNext(); }
     const SwFrm* GetIndNext() const { return ((SwFrm*)this)->GetIndNext(); }
 
-    USHORT GetPhyPageNum() const;	//Seitennummer ohne Offset
-    USHORT GetVirtPageNum() const;	//Seitenummer mit Offset
+    USHORT GetPhyPageNum() const;   //Seitennummer ohne Offset
+    USHORT GetVirtPageNum() const;  //Seitenummer mit Offset
     BOOL OnRightPage() const { return 0 != GetPhyPageNum() % 2; };
     BOOL WannaRightPage() const;
 
@@ -738,9 +738,9 @@ public:
 
     void ValidateLineNum() { bValidLineNum = TRUE; }
 
-    BOOL GetValidPosFlag()	  const { return bValidPos; }
+    BOOL GetValidPosFlag()    const { return bValidPos; }
     BOOL GetValidPrtAreaFlag()const { return bValidPrtArea; }
-    BOOL GetValidSizeFlag()	  const { return bValidSize; }
+    BOOL GetValidSizeFlag()   const { return bValidSize; }
     BOOL GetValidLineNumFlag()const { return bValidLineNum; }
     BOOL IsValid() const { return bValidPos && bValidSize && bValidPrtArea; }
 
@@ -819,11 +819,11 @@ public:
 
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
-    virtual BOOL	GetCrsrOfst( SwPosition *, Point&,
+    virtual BOOL    GetCrsrOfst( SwPosition *, Point&,
                                  SwCrsrMoveState* = 0 ) const;
-    virtual BOOL	GetCharRect( SwRect &, const SwPosition&,
+    virtual BOOL    GetCharRect( SwRect &, const SwPosition&,
                                  SwCrsrMoveState* = 0 ) const;
-    virtual void	Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void    Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
 
     // der "kurze Dienstweg" zwischen den Frames und der Formatierung.
     // Wer den void* falsch Casted ist selbst schuld!
@@ -842,7 +842,7 @@ public:
     inline BOOL IsFtnContFrm() const;
     inline BOOL IsFtnFrm() const;
     inline BOOL IsBodyFrm() const;
-    inline BOOL IsColBodyFrm() const;	// in layfrm.hxx implementiert, BodyFrm unterhalb ColumnFrm
+    inline BOOL IsColBodyFrm() const;   // in layfrm.hxx implementiert, BodyFrm unterhalb ColumnFrm
     inline BOOL IsPageBodyFrm() const;  // in layfrm.hxx implementiert, BodyFrm unterhalb PageFrm
     inline BOOL IsFlyFrm() const;
     inline BOOL IsSctFrm() const;
@@ -852,20 +852,20 @@ public:
     inline BOOL IsCntntFrm() const;
     inline BOOL IsTxtFrm() const;
     inline BOOL IsNoTxtFrm() const;
-    inline BOOL IsFlowFrm() const;		//Frms deren PrtArea von den Nachbarn
+    inline BOOL IsFlowFrm() const;      //Frms deren PrtArea von den Nachbarn
                                         //abhaengen und die halt im Inhaltsfluss
                                         //stehen.
-    inline BOOL IsRetoucheFrm() const;	//Frms die Retouchefaehig sind bzw. die
+    inline BOOL IsRetoucheFrm() const;  //Frms die Retouchefaehig sind bzw. die
                                         //u.U. hinter sich Retouchieren muessen.
     inline BOOL IsAccessibleFrm() const;
 
-    void PrepareCrsr();					//Die CrsrShell darf.
+    void PrepareCrsr();                 //Die CrsrShell darf.
 
     //Ist der Frm (bzw. die Section in der er steht) geschuetzt?
     //Auch Fly in Fly in ... und Fussnoten
     BOOL IsProtected() const;
 
-    BOOL IsColLocked()	const { return bColLocked; }
+    BOOL IsColLocked()  const { return bColLocked; }
 
     virtual ~SwFrm();
 
@@ -916,13 +916,13 @@ public:
     bool IsCollapse() const;
 };
 
-inline BOOL	SwFrm::IsInDocBody() const
+inline BOOL SwFrm::IsInDocBody() const
 {
     if ( bInfInvalid )
         ((SwFrm*)this)->SetInfFlags();
     return bInfBody;
 }
-inline BOOL	SwFrm::IsInFtn() const
+inline BOOL SwFrm::IsInFtn() const
 {
     if ( bInfInvalid )
         ((SwFrm*)this)->SetInfFlags();

@@ -64,7 +64,7 @@ namespace drawinglayer
         public:
             // constructors/destructor
             Sdr3DObjectAttribute(
-                ::com::sun::star::drawing::NormalsKind	aNormalsKind,
+                ::com::sun::star::drawing::NormalsKind  aNormalsKind,
                 ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionX,
                 ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionY,
                 ::com::sun::star::drawing::TextureKind2 aTextureKind,

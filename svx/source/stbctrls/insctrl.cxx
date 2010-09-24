@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 #include "insctrl.hxx"
 #include <svx/dialmgr.hxx>
 
-#define PAINT_OFFSET	5
+#define PAINT_OFFSET    5
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxInsertStatusBarControl, SfxBoolItem);
 
@@ -90,13 +90,13 @@ void SvxInsertStatusBarControl::Click()
         return;
     bInsert = !bInsert;
     SfxBoolItem aIns( GetSlotId(), bInsert );
-    
+
     ::com::sun::star::uno::Any a;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
     aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InsertMode" ));
     aIns.QueryValue( a );
     aArgs[0].Value = a;
-    
+
     execute( aArgs );
 }
 

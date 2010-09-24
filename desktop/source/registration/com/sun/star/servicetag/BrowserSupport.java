@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@ import java.net.URI;
  *
  * The implementation of the com.sun.servicetag API needs to be
  * compiled with JDK 5 as well since the consumer of this API
- * may require to support JDK 5 (e.g. NetBeans). 
+ * may require to support JDK 5 (e.g. NetBeans).
  *
- * The Desktop.browse() method can be backported in this class 
+ * The Desktop.browse() method can be backported in this class
  * if needed.  The current implementation only supports JDK 6.
  */
 class BrowserSupport {
@@ -48,7 +48,7 @@ class BrowserSupport {
     private static Method browseMethod = null;
     private static Object desktop = null;
     private static volatile Boolean result = false;
-   
+
 
     private static void initX() {
     if  (desktop != null) {
@@ -60,21 +60,21 @@ class BrowserSupport {
         try {
             // Determine if java.awt.Desktop is supported
             Class desktopCls = Class.forName("java.awt.Desktop", true, null);
-            Method getDesktopM = desktopCls.getMethod("getDesktop"); 
-            browseM = desktopCls.getMethod("browse", URI.class); 
+            Method getDesktopM = desktopCls.getMethod("getDesktop");
+            browseM = desktopCls.getMethod("browse", URI.class);
 
             Class actionCls = Class.forName("java.awt.Desktop$Action", true, null);
-            final Method isDesktopSupportedMethod = desktopCls.getMethod("isDesktopSupported"); 
-            Method isSupportedMethod = desktopCls.getMethod("isSupported", actionCls); 
+            final Method isDesktopSupportedMethod = desktopCls.getMethod("isDesktopSupported");
+            Method isSupportedMethod = desktopCls.getMethod("isSupported", actionCls);
             Field browseField = actionCls.getField("BROWSE");
-            // isDesktopSupported calls getDefaultToolkit which can block 
-            // infinitely, see 6636099 for details, to workaround we call 
+            // isDesktopSupported calls getDefaultToolkit which can block
+            // infinitely, see 6636099 for details, to workaround we call
             // in a  thread and time it out, noting that the issue is specific
         // to X11, it does not hurt for Windows.
             Thread xthread = new Thread() {
                 public void run() {
                     try {
-                        // support only if Desktop.isDesktopSupported() and 
+                        // support only if Desktop.isDesktopSupported() and
                         // Desktop.isSupported(Desktop.Action.BROWSE) return true.
                         result = (Boolean) isDesktopSupportedMethod.invoke(null);
                     } catch (IllegalAccessException e) {
@@ -137,7 +137,7 @@ class BrowserSupport {
 
     static boolean isSupported() {
     initX();
-        return isBrowseSupported; 
+        return isBrowseSupported;
     }
 
     /**
@@ -170,14 +170,14 @@ class BrowserSupport {
         }
 
         // Call Desktop.browse() method
-        try { 
+        try {
         if (Util.isVerbose()) {
                 System.out.println("desktop: " + desktop + ":browsing..." + uri);
         }
             browseMethod.invoke(desktop, uri);
         } catch (IllegalAccessException e) {
             // should never reach here
-            InternalError x = 
+            InternalError x =
                 new InternalError("Desktop.getDesktop() method not found");
             x.initCause(e);
                 throw x;
@@ -194,8 +194,8 @@ class BrowserSupport {
                     throw (SecurityException) x;
                 } else {
                     // ignore
-                } 
-            } 
+                }
+            }
         }
     }
 }

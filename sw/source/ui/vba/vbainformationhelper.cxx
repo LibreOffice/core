@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ double SwVbaInformationHelper::handleWdVerticalPositionRelativeToPage( const css
     // FIXME: handle multipul page style
     // it is very strange that the curros position is incorrect when open Word file.
     // e.g. if current cursor in the top left of the text body of the first page without header,
-    // the top value of current position should be 0, but is 201 when open a Word file. 
+    // the top value of current position should be 0, but is 201 when open a Word file.
     nCurrentPos = nCurrentPos + nTopMargin - ( DEFAULT_PAGE_DISTANCE + TWIP_TO_MM100( nPageHeight ) ) * (  nCurrentPage - 1  );
     return Millimeter::getInPoints( nCurrentPos );
 }

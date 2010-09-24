@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@
 
 //=============================================================================
 /** extends interface XModel.
- 
+
     The foloowing functions are added:
- 
+
     - enumeration of all currently connected controller objects.
       (not getCurrentController() only, which depends on focus)
- 
+
     - establish new view controller factory methods, which will make
       it possible to create new views for this model.
  */
@@ -96,25 +96,25 @@ interface XModel2 : com::sun::star::frame::XModel
 
         <p>Effectively, this method is equivalent to calling <member>createView</member> with
         the <code>ViewName</code> being <code>&quot;Default&quot;</code>.</p>
-    
+
         @param Frame
                used to place the new created view there
-               
+
         @return the new view controller instance
-        
+
         @throws ::com::sun::star::lang::IllegalArgumentException
                 if one of the given parameter was wrong
-                
+
         @throws ::com::sun::star::uno::Exception
                 if creation of a new view failed by other reasons
      */
     com::sun::star::frame::XController2 createDefaultViewController( [in]  com::sun::star::frame::XFrame Frame )
         raises (com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::uno::Exception                );
-               
+
     //-------------------------------------------------------------------------
     /** creates a new view instance classified by the specified name and arguments.
-    
+
         <p>The newly created controller must not be connected with the document and the
         frame. That is, you should neither call <member>XFrame::setComponent</member>, nor
         <member>XController::attachFrame</member>, nor <member>XController::attachModel</member>,
@@ -123,18 +123,18 @@ interface XModel2 : com::sun::star::frame::XModel
 
         @param ViewName
                classified name of instance
-               
+
         @param Arguments
                arguments used for creation
-               
+
         @param Frame
                used to place the new created view there
-               
+
         @return the new view controller instance
-        
+
         @throws ::com::sun::star::lang::IllegalArgumentException
                 if one of the given parameter was wrong
-                
+
         @throws ::com::sun::star::uno::Exception
                 if creation of a new view failed by other reasons
      */

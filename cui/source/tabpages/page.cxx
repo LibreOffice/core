@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,9 +125,9 @@ void SvxHtmlExportModeConfigItem_Impl::Notify( const com::sun::star::uno::Sequen
 
 // static ----------------------------------------------------------------
 
-static const long MINBODY 		= 284;	// 0,5cm in twips aufgerundet
-//static const long PRINT_OFFSET 	= 17;	// 0,03cm in twips abgerundet
-static const long PRINT_OFFSET 	= 0;	// why was this ever set to 17 ? it led to wrong right and bottom margins.
+static const long MINBODY       = 284;  // 0,5cm in twips aufgerundet
+//static const long PRINT_OFFSET    = 17;   // 0,03cm in twips abgerundet
+static const long PRINT_OFFSET  = 0;    // why was this ever set to 17 ? it led to wrong right and bottom margins.
 
 static USHORT pRanges[] =
 {
@@ -207,14 +207,14 @@ BOOL IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 
 // -----------------------------------------------------------------------
 
-#define MARGIN_LEFT		( (MarginPosition)0x0001 )
-#define MARGIN_RIGHT	( (MarginPosition)0x0002 )
-#define MARGIN_TOP		( (MarginPosition)0x0004 )
-#define MARGIN_BOTTOM	( (MarginPosition)0x0008 )
+#define MARGIN_LEFT     ( (MarginPosition)0x0001 )
+#define MARGIN_RIGHT    ( (MarginPosition)0x0002 )
+#define MARGIN_TOP      ( (MarginPosition)0x0004 )
+#define MARGIN_BOTTOM   ( (MarginPosition)0x0008 )
 
 struct SvxPage_Impl
 {
-    MarginPosition	m_nPos;
+    MarginPosition  m_nPos;
     Printer*        mpDefPrinter;
     bool            mbDelPrinter;
 
@@ -265,37 +265,37 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aPaperTrayBox       ( this, CUI_RES( LB_PAPER_TRAY ) ),
     aMarginFl           ( this, CUI_RES( FL_MARGIN ) ),
     aLeftMarginLbl      ( this, CUI_RES( FT_LEFT_MARGIN ) ),
-    aLeftMarginEdit		( this, CUI_RES( ED_LEFT_MARGIN ) ),
-    aRightMarginLbl		( this, CUI_RES( FT_RIGHT_MARGIN ) ),
-    aRightMarginEdit	( this, CUI_RES( ED_RIGHT_MARGIN ) ),
-    aTopMarginLbl		( this, CUI_RES( FT_TOP_MARGIN ) ),
-    aTopMarginEdit		( this, CUI_RES( ED_TOP_MARGIN ) ),
-    aBottomMarginLbl	( this, CUI_RES( FT_BOTTOM_MARGIN ) ),
-    aBottomMarginEdit	( this, CUI_RES( ED_BOTTOM_MARGIN ) ),
+    aLeftMarginEdit     ( this, CUI_RES( ED_LEFT_MARGIN ) ),
+    aRightMarginLbl     ( this, CUI_RES( FT_RIGHT_MARGIN ) ),
+    aRightMarginEdit    ( this, CUI_RES( ED_RIGHT_MARGIN ) ),
+    aTopMarginLbl       ( this, CUI_RES( FT_TOP_MARGIN ) ),
+    aTopMarginEdit      ( this, CUI_RES( ED_TOP_MARGIN ) ),
+    aBottomMarginLbl    ( this, CUI_RES( FT_BOTTOM_MARGIN ) ),
+    aBottomMarginEdit   ( this, CUI_RES( ED_BOTTOM_MARGIN ) ),
 
     aLayoutFL           ( this, CUI_RES( FL_LAYOUT ) ),
-    aPageText			( this, CUI_RES( FT_PAGELAYOUT ) ),
+    aPageText           ( this, CUI_RES( FT_PAGELAYOUT ) ),
     aLayoutBox          ( this, CUI_RES( LB_LAYOUT ) ),
-    aNumberFormatText	( this, CUI_RES( FT_NUMBER_FORMAT ) ),
-    aNumberFormatBox	( this, CUI_RES( LB_NUMBER_FORMAT ) ),
+    aNumberFormatText   ( this, CUI_RES( FT_NUMBER_FORMAT ) ),
+    aNumberFormatBox    ( this, CUI_RES( LB_NUMBER_FORMAT ) ),
     aBottomSeparatorFl  ( this, CUI_RES( FL_BOTTOM_SEP ) ),
     aTblAlignFT         ( this, CUI_RES( FT_TBL_ALIGN ) ),
     aHorzBox            ( this, CUI_RES( CB_HORZ ) ),
-    aVertBox			( this, CUI_RES( CB_VERT ) ),
-    aAdaptBox			( this, CUI_RES( CB_ADAPT ) ),
+    aVertBox            ( this, CUI_RES( CB_VERT ) ),
+    aAdaptBox           ( this, CUI_RES( CB_ADAPT ) ),
     aRegisterCB         ( this, CUI_RES( CB_REGISTER ) ),
     aRegisterFT         ( this, CUI_RES( FT_REGISTER ) ),
-    aRegisterLB       	( this, CUI_RES( LB_REGISTER ) ),
+    aRegisterLB         ( this, CUI_RES( LB_REGISTER ) ),
 
-    aInsideText			( 		CUI_RES( STR_INSIDE ) ),
-    aOutsideText		( 		CUI_RES( STR_OUTSIDE ) ),
-    aPrintRangeQueryText(		CUI_RES( STR_QUERY_PRINTRANGE ) ),
+    aInsideText         (       CUI_RES( STR_INSIDE ) ),
+    aOutsideText        (       CUI_RES( STR_OUTSIDE ) ),
+    aPrintRangeQueryText(       CUI_RES( STR_QUERY_PRINTRANGE ) ),
 
-    bLandscape			( FALSE ),
-    eMode				( SVX_PAGE_MODE_STANDARD ),
-    ePaperStart			( PAPER_A3 ),
-    ePaperEnd 			( PAPER_ENV_DL ),
-    pImpl				( new SvxPage_Impl )
+    bLandscape          ( FALSE ),
+    eMode               ( SVX_PAGE_MODE_STANDARD ),
+    ePaperStart         ( PAPER_A3 ),
+    ePaperEnd           ( PAPER_ENV_DL ),
+    pImpl               ( new SvxPage_Impl )
 
 {
     bBorderModified = FALSE;
@@ -545,7 +545,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
     String aBinName;
 
-    if ( PAPERBIN_PRINTER_SETTINGS	== nPaperBin )
+    if ( PAPERBIN_PRINTER_SETTINGS  == nPaperBin )
         aBinName = EE_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS );
     else
         aBinName = pImpl->mpDefPrinter->GetPaperBinName( (USHORT)nPaperBin );
@@ -667,7 +667,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
     // im Beispiel Hintergrund und Umrandung anzeigen
     ResetBackground_Impl( rSet );
-//!	UpdateExample_Impl();
+//! UpdateExample_Impl();
     RangeHdl_Impl( 0 );
 
     // Header Footer anzeigen
@@ -821,7 +821,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
     if ( PAPER_USER == ePaper )
     {
-        if ( nOld != nPos						||
+        if ( nOld != nPos                       ||
              aPaperWidthEdit.IsValueModified()  ||
              aPaperHeightEdit.IsValueModified() ||
              bChecked != aLandscapeBtn.GetSavedValue() )
@@ -859,7 +859,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     // sonstiges Zeug der Page
     nWhich = GetWhich( SID_ATTR_PAGE );
     SvxPageItem aPage( (const SvxPageItem&)rOldSet.Get( nWhich ) );
-    bMod = 	aLayoutBox.GetSelectEntryPos()  != aLayoutBox.GetSavedValue();
+    bMod =  aLayoutBox.GetSelectEntryPos()  != aLayoutBox.GetSavedValue();
 
     if ( bMod )
         aPage.SetPageUsage(
@@ -1157,7 +1157,7 @@ IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
 void SvxPageDescPage::SwapFirstValues_Impl( FASTBOOL bSet )
 {
     MapMode aOldMode = pImpl->mpDefPrinter->GetMapMode();
-    Orientation	eOri = ORIENTATION_PORTRAIT;
+    Orientation eOri = ORIENTATION_PORTRAIT;
 
     if ( bLandscape )
         eOri = ORIENTATION_LANDSCAPE;
@@ -1201,7 +1201,7 @@ void SvxPageDescPage::SwapFirstValues_Impl( FASTBOOL bSet )
     nFirstRightMargin = static_cast<long>(aRightMarginEdit.GetFirst());
     aTopMarginEdit.SetFirst( aTopMarginEdit.Normalize( nNewT ), FUNIT_TWIP );
     nFirstTopMargin = static_cast<long>(aTopMarginEdit.GetFirst());
-    aBottomMarginEdit.SetFirst(	aBottomMarginEdit.Normalize( nNewB ), FUNIT_TWIP );
+    aBottomMarginEdit.SetFirst( aBottomMarginEdit.Normalize( nNewB ), FUNIT_TWIP );
     nFirstBottomMargin = static_cast<long>(aBottomMarginEdit.GetFirst());
 
     if ( bSet )
@@ -1238,7 +1238,7 @@ IMPL_LINK_INLINE_END( SvxPageDescPage, BorderModify_Impl, MetricField *, EMPTYAR
 void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )
 {
     // Size
-    Size aSize(	GetCoreValue( aPaperWidthEdit, SFX_MAPUNIT_TWIP ),
+    Size aSize( GetCoreValue( aPaperWidthEdit, SFX_MAPUNIT_TWIP ),
                 GetCoreValue( aPaperHeightEdit, SFX_MAPUNIT_TWIP ) );
 
     aBspWin.SetSize( aSize );
@@ -1477,13 +1477,13 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
             MetricField* pField = NULL;
             if ( IsPrinterRangeOverflow( aLeftMarginEdit, nFirstLeftMargin, nLastLeftMargin, MARGIN_LEFT ) )
                 pField = &aLeftMarginEdit;
-            if (	IsPrinterRangeOverflow( aRightMarginEdit, nFirstRightMargin, nLastRightMargin, MARGIN_RIGHT )
+            if (    IsPrinterRangeOverflow( aRightMarginEdit, nFirstRightMargin, nLastRightMargin, MARGIN_RIGHT )
                  && !pField )
                 pField = &aRightMarginEdit;
-            if (	IsPrinterRangeOverflow( aTopMarginEdit, nFirstTopMargin, nLastTopMargin, MARGIN_TOP )
+            if (    IsPrinterRangeOverflow( aTopMarginEdit, nFirstTopMargin, nLastTopMargin, MARGIN_TOP )
                  && !pField )
                 pField = &aTopMarginEdit;
-            if (	IsPrinterRangeOverflow( aBottomMarginEdit, nFirstBottomMargin, nLastBottomMargin, MARGIN_BOTTOM )
+            if (    IsPrinterRangeOverflow( aBottomMarginEdit, nFirstBottomMargin, nLastBottomMargin, MARGIN_BOTTOM )
                  && !pField )
                 pField = &aBottomMarginEdit;
             if ( pField )
@@ -1568,8 +1568,8 @@ IMPL_LINK( SvxPageDescPage, RangeHdl_Impl, Edit *, EMPTYARG )
     nW = static_cast<long>(aPaperWidthEdit.Denormalize(aPaperWidthEdit.GetValue(FUNIT_TWIP)));
 
     // Top
-    long nMax =	nH - nBB - aBorder.Height() - MINBODY -
-                nFDist - nFHeight -	nHDist - nHHeight;
+    long nMax = nH - nBB - aBorder.Height() - MINBODY -
+                nFDist - nFHeight - nHDist - nHHeight;
 
     aTopMarginEdit.SetMax(aTopMarginEdit.Normalize(nMax), FUNIT_TWIP);
 

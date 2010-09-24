@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@
 #include <mdiexp.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <pagefrm.hxx>	//Fuer DelPageDesc
-#include <rootfrm.hxx>	//Fuer DelPageDesc
+#include <pagefrm.hxx>  //Fuer DelPageDesc
+#include <rootfrm.hxx>  //Fuer DelPageDesc
 #include <ndtxt.hxx>
 #include <frmtool.hxx>
 #include <pagedesc.hxx>
@@ -139,10 +139,10 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
 
 /*************************************************************************
 |*
-|*	SwDoc::ChgPageDesc()
+|*  SwDoc::ChgPageDesc()
 |*
-|*	Ersterstellung		MA 25. Jan. 93
-|*	Letzte Aenderung	MA 01. Mar. 95
+|*  Ersterstellung      MA 25. Jan. 93
+|*  Letzte Aenderung    MA 01. Mar. 95
 |*
 |*************************************************************************/
 
@@ -223,7 +223,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
     {
         pDesc->SetNumType( rChged.GetNumType() );
         // JP 30.03.99: Bug 64121 - den Seitennummernfeldern bescheid sagen,
-        //		das sich das Num-Format geaendert hat
+        //      das sich das Num-Format geaendert hat
         GetSysFldType( RES_PAGENUMBERFLD )->UpdateFlds();
         GetSysFldType( RES_REFPAGEGETFLD )->UpdateFlds();
 
@@ -263,7 +263,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
         pDesc->GetLeft().SetFmtAttr( pDesc->GetMaster().GetHeader() );
     }
     else if ( rHead.IsActive() )
-    {	//Left bekommt einen eigenen Header verpasst wenn das Format nicht
+    {   //Left bekommt einen eigenen Header verpasst wenn das Format nicht
         //bereits einen hat.
         //Wenn er bereits einen hat und dieser auf die gleiche Section
         //wie der Rechte zeigt, so muss er einen eigenen bekommen. Der
@@ -325,7 +325,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
         //Left teilt sich den Header mit dem Master.
         pDesc->GetLeft().SetFmtAttr( pDesc->GetMaster().GetFooter() );
     else if ( rFoot.IsActive() )
-    {	//Left bekommt einen eigenen Footer verpasst wenn das Format nicht
+    {   //Left bekommt einen eigenen Footer verpasst wenn das Format nicht
         //bereits einen hat.
         //Wenn er bereits einen hat und dieser auf die gleiche Section
         //wie der Rechte zeigt, so muss er einen eigenen bekommen. Der
@@ -385,14 +385,14 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
         bUseOn = TRUE;
     }
     if ( pDesc->GetFollow() != rChged.GetFollow() )
-    {	if ( rChged.GetFollow() == &rChged )
-        {	if ( pDesc->GetFollow() != pDesc )
-            {	pDesc->SetFollow( pDesc );
+    {   if ( rChged.GetFollow() == &rChged )
+        {   if ( pDesc->GetFollow() != pDesc )
+            {   pDesc->SetFollow( pDesc );
                 bFollow = TRUE;
             }
         }
         else
-        {	pDesc->SetFollow( rChged.pFollow );
+        {   pDesc->SetFollow( rChged.pFollow );
             bFollow = TRUE;
         }
     }
@@ -438,12 +438,12 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 
 /*************************************************************************
 |*
-|*	SwDoc::DelPageDesc()
+|*  SwDoc::DelPageDesc()
 |*
-|* 	Beschreibung		Alle Descriptoren, deren Follow auf den zu loeschenden
-|*		zeigen muessen angepasst werden.
-|*	Ersterstellung		MA 25. Jan. 93
-|*	Letzte Aenderung	JP 04.09.95
+|*  Beschreibung        Alle Descriptoren, deren Follow auf den zu loeschenden
+|*      zeigen muessen angepasst werden.
+|*  Ersterstellung      MA 25. Jan. 93
+|*  Letzte Aenderung    JP 04.09.95
 |*
 |*************************************************************************/
 
@@ -492,7 +492,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
                     aPageDescs[0]->Add( pLast );
                 }
             }
-            else	//Es kann noch eine Undo-Kopie existieren
+            else    //Es kann noch eine Undo-Kopie existieren
                 aPageDescs[0]->Add( pLast );
         }
 
@@ -586,10 +586,10 @@ void SwDoc::DelPageDesc( USHORT i, BOOL bBroadcast )
 
 /*************************************************************************
 |*
-|*	SwDoc::MakePageDesc()
+|*  SwDoc::MakePageDesc()
 |*
-|*	Ersterstellung		MA 25. Jan. 93
-|*	Letzte Aenderung	MA 20. Aug. 93
+|*  Ersterstellung      MA 25. Jan. 93
+|*  Letzte Aenderung    MA 20. Aug. 93
 |*
 |*************************************************************************/
 
@@ -654,9 +654,9 @@ SwPageDesc* SwDoc::FindPageDescByName( const String& rName, USHORT* pPos ) const
 
 /******************************************************************************
  *  Methode     :   void SwDoc::PrtDataChanged()
- *	Beschreibung:
- *	Erstellt	:	OK 27.10.94 10:20
- *	Aenderung	:	MA 26. Mar. 98
+ *  Beschreibung:
+ *  Erstellt    :   OK 27.10.94 10:20
+ *  Aenderung   :   MA 26. Mar. 98
  ******************************************************************************/
 
 void SwDoc::PrtDataChanged()
@@ -742,7 +742,7 @@ void SwDoc::PrtOLENotify( BOOL bAll )
         ViewShell *pSh = GetRootFrm()->GetCurrShell();
         if ( !pSh->ISA(SwFEShell) )
             do
-            {	pSh = (ViewShell*)pSh->GetNext();
+            {   pSh = (ViewShell*)pSh->GetNext();
             } while ( !pSh->ISA(SwFEShell) &&
                       pSh != GetRootFrm()->GetCurrShell() );
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::sdb;
 //------------------------------------------------------------------
 OIndexIterator::~OIndexIterator()
 {
-    //	m_pIndex->UnLock();
+    //  m_pIndex->UnLock();
     m_pIndex->release();
 }
 
@@ -59,11 +59,11 @@ ULONG OIndexIterator::Next()
 //------------------------------------------------------------------
 ULONG OIndexIterator::Find(BOOL bFirst)
 {
-    //	ONDXIndex* m_pIndex = GetNDXIndex();
+    //  ONDXIndex* m_pIndex = GetNDXIndex();
 
     ULONG nRes = STRING_NOTFOUND;
-//	if (!m_pIndex->IsOpen())
-//		return nRes;
+//  if (!m_pIndex->IsOpen())
+//      return nRes;
 
     if (bFirst)
     {
@@ -106,7 +106,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
     // wird immer die aktuelle Seite und die Knotenposition vermerkt
     // auf die die Bedingung <= zutrifft
     // dieses findet beim Insert besondere Beachtung
-    //	ONDXIndex* m_pIndex = GetNDXIndex();
+    //  ONDXIndex* m_pIndex = GetNDXIndex();
     OOp_COMPARE aTempOp(SQLFilterOperator::GREATER);
     USHORT i = 0;
 
@@ -149,7 +149,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
 ULONG OIndexIterator::GetCompare(BOOL bFirst)
 {
     ONDXKey* pKey = NULL;
-    //	ONDXIndex* m_pIndex = GetNDXIndex();
+    //  ONDXIndex* m_pIndex = GetNDXIndex();
     sal_Int32 ePredicateType = PTR_CAST(file::OOp_COMPARE,m_pOperator)->getPredicateType();
 
     if (bFirst)
@@ -219,7 +219,7 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
 //------------------------------------------------------------------
 ULONG OIndexIterator::GetLike(BOOL bFirst)
 {
-    //	ONDXIndex* m_pIndex = GetNDXIndex();
+    //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (bFirst)
     {
         ONDXPage* pPage = m_aRoot;
@@ -240,7 +240,7 @@ ULONG OIndexIterator::GetLike(BOOL bFirst)
 //------------------------------------------------------------------
 ULONG OIndexIterator::GetNull(BOOL bFirst)
 {
-    //	ONDXIndex* m_pIndex = GetNDXIndex();
+    //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (bFirst)
     {
         ONDXPage* pPage = m_aRoot;
@@ -264,7 +264,7 @@ ULONG OIndexIterator::GetNull(BOOL bFirst)
 ULONG OIndexIterator::GetNotNull(BOOL bFirst)
 {
     ONDXKey* pKey;
-    //	ONDXIndex* m_pIndex = GetNDXIndex();
+    //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (bFirst)
     {
         // erst alle NULL werte abklappern
@@ -283,7 +283,7 @@ ULONG OIndexIterator::GetNotNull(BOOL bFirst)
 //------------------------------------------------------------------
 ONDXKey* OIndexIterator::GetNextKey()
 {
-    //	ONDXIndex* m_pIndex = GetNDXIndex();
+    //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (m_aCurLeaf.Is() && ((++m_nCurNode) >= m_aCurLeaf->Count()))
     {
         ONDXPage* pPage = m_aCurLeaf;
@@ -295,7 +295,7 @@ ONDXKey* OIndexIterator::GetNextKey()
             {
                 USHORT nPos = pParentPage->Search(pPage);
                 if (nPos != pParentPage->Count() - 1)
-                {	// Seite gefunden
+                {   // Seite gefunden
                     pPage = (*pParentPage)[nPos+1].GetChild(m_pIndex,pParentPage);
                     break;
                 }

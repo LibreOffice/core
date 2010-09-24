@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,10 +61,10 @@ class SwFtnFrm: public SwLayoutFrm
     // 0     wenn kein Follow vorhanden,
     // this  beim letzten
     // der Follow sonst.
-    SwFtnFrm	 *pFollow;
-    SwFtnFrm	 *pMaster;		//Der FtnFrm dessen Follow ich bin.
-    SwCntntFrm	 *pRef;			//In diesem CntntFrm steht die Fussnotenref.
-    SwTxtFtn	 *pAttr;		//Fussnotenattribut (zum wiedererkennen)
+    SwFtnFrm     *pFollow;
+    SwFtnFrm     *pMaster;      //Der FtnFrm dessen Follow ich bin.
+    SwCntntFrm   *pRef;         //In diesem CntntFrm steht die Fussnotenref.
+    SwTxtFtn     *pAttr;        //Fussnotenattribut (zum wiedererkennen)
 
     BOOL bBackMoveLocked : 1;   //Absaetze in dieser Fussnote duerfen derzeit
                                 //nicht rueckwaerts fliessen.
@@ -87,25 +87,25 @@ public:
     BOOL operator<( const SwTxtFtn* pTxtFtn ) const;
 
 #ifndef DBG_UTIL
-    const SwCntntFrm *GetRef() const	{ return pRef; }
-         SwCntntFrm  *GetRef()  		{ return pRef; }
+    const SwCntntFrm *GetRef() const    { return pRef; }
+         SwCntntFrm  *GetRef()          { return pRef; }
 #else
     //JP 15.10.2001: in a non pro version test if the attribute has the same
-    //				meaning which his reference is
+    //              meaning which his reference is
     const SwCntntFrm *GetRef() const;
          SwCntntFrm  *GetRef();
 #endif
     const SwCntntFrm *GetRefFromAttr()  const;
           SwCntntFrm *GetRefFromAttr();
 
-    const SwFtnFrm *GetFollow() const 	{ return pFollow; }
-          SwFtnFrm *GetFollow() 		{ return pFollow; }
+    const SwFtnFrm *GetFollow() const   { return pFollow; }
+          SwFtnFrm *GetFollow()         { return pFollow; }
 
-    const SwFtnFrm *GetMaster() const	{ return pMaster; }
-          SwFtnFrm *GetMaster() 		{ return pMaster; }
+    const SwFtnFrm *GetMaster() const   { return pMaster; }
+          SwFtnFrm *GetMaster()         { return pMaster; }
 
-    const SwTxtFtn   *GetAttr() const 	{ return pAttr; }
-          SwTxtFtn	 *GetAttr() 	  	{ return pAttr; }
+    const SwTxtFtn   *GetAttr() const   { return pAttr; }
+          SwTxtFtn   *GetAttr()         { return pAttr; }
 
     void SetFollow( SwFtnFrm *pNew ) { pFollow = pNew; }
     void SetMaster( SwFtnFrm *pNew ) { pMaster = pNew; }
@@ -113,13 +113,13 @@ public:
 
     void InvalidateNxtFtnCnts( SwPageFrm* pPage );
 
-    void LockBackMove()		{ bBackMoveLocked = TRUE; }
+    void LockBackMove()     { bBackMoveLocked = TRUE; }
     void UnlockBackMove()   { bBackMoveLocked = FALSE;}
     BOOL IsBackMoveLocked() { return bBackMoveLocked; }
 
     // Verhindert, dass der letzte Inhalt den SwFtnFrm mitloescht (Cut())
-    inline void ColLock()		{ bColLocked = TRUE; }
-    inline void ColUnlock()   	{ bColLocked = FALSE; }
+    inline void ColLock()       { bColLocked = TRUE; }
+    inline void ColUnlock()     { bColLocked = FALSE; }
 
     // --> OD 2005-05-18 #i49383#
     inline void UnlockPosOfLowerObjs()
@@ -147,4 +147,4 @@ public:
     SwCntntFrm* FindLastCntnt();
 };
 
-#endif	//_FTNFRM_HXX
+#endif  //_FTNFRM_HXX

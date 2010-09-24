@@ -26,18 +26,18 @@ public class EditorController {
     public final String[] RESTYPES = { ".src",".hrc",".xcu",".xrm",".xhp" };
     public final String   RECFILE  =   ".recommand";
     // Editor View
-    static transex3.view.Editor	aEditor					= null;
+    static transex3.view.Editor aEditor                 = null;
     // Editor Model
-    static Vector	sdfstrings					= new Vector();
-    static HashMap hashedsdfstrings			= new HashMap();
+    static Vector   sdfstrings                  = new Vector();
+    static HashMap hashedsdfstrings         = new HashMap();
     int oldindex = 0;
-    //HashMap hashedfilenames				= new HashMap();
+    //HashMap hashedfilenames               = new HashMap();
     // Search for source Strings
     public String fetchSourceStrings( String rootdir ){
 
         //String outputfile = "h:\\workspace\\recommandEditor\\null2";
         File tempfile = null;
-        
+
         try {
             tempfile = File.createTempFile( "receditor" , "tmp" );
         } catch (IOException e1) {
@@ -45,7 +45,7 @@ public class EditorController {
             System.err.println("Can not create temp file\n");
             e1.printStackTrace();
         }
-        
+
         String outputfile = tempfile.getAbsolutePath();
         try
         {
@@ -78,17 +78,17 @@ public class EditorController {
                     findRecommandFiles( aFileArray[ cnt ] , list);
                 else if( aFileArray[ cnt ].isFile() && isRecommandFile( aFileArray[ cnt ] ) )
                     list.add( aFileArray[ cnt ]);
-            }		
+            }
         }
     }
     private boolean isResourceType( File aFile ){
-        String filename 	= aFile.getName();
-        boolean isResType 	= false;
+        String filename     = aFile.getName();
+        boolean isResType   = false;
         for(int cnt = 0; cnt < RESTYPES.length ; cnt++){
             if( filename.endsWith( RESTYPES[ cnt ] ) )
                     isResType = true;
         }
-        return isResType;			
+        return isResType;
     }
     private boolean isRecommandFile( File aFile ){
         return aFile.getName().endsWith( RECFILE );
@@ -105,15 +105,15 @@ public class EditorController {
     // Add all data to view
     void updateData(){
         JTable recTable =transex3.controller.EditorController.aEditor.getRectable();
-                
+
         SdfString aSdfString = (SdfString) sdfstrings.get( oldindex );
         Vector newStrings = new Vector();
         for ( int n = 1; n < recTable.getRowCount() ; n++ ){
-            String lang 	= (String) recTable.getValueAt(n , 0 );
-            String text 	= (String) recTable.getValueAt(n , 1 );
-            String htext	= (String) recTable.getValueAt(n , 2 );
-            String qhtext 	= (String) recTable.getValueAt(n , 3 );
-            String ttext 	= (String) recTable.getValueAt(n , 4 );
+            String lang     = (String) recTable.getValueAt(n , 0 );
+            String text     = (String) recTable.getValueAt(n , 1 );
+            String htext    = (String) recTable.getValueAt(n , 2 );
+            String qhtext   = (String) recTable.getValueAt(n , 3 );
+            String ttext    = (String) recTable.getValueAt(n , 4 );
             if( lang != null && text != null ){
                 //System.out.println("Data "+ lang + " " + text );
                 SdfEntity aSdfEntity = new SdfEntity();
@@ -129,7 +129,7 @@ public class EditorController {
     }
 
     public void initView(){
-        Object[][]	sourceStringData = new Object[ sdfstrings.size() ][ 4 ];
+        Object[][]  sourceStringData = new Object[ sdfstrings.size() ][ 4 ];
         Object[][] firstData = new Object[100][5];
         // Set the files
         Iterator aIter = sdfstrings.iterator();
@@ -161,11 +161,11 @@ public class EditorController {
             counter++;
         }
         // Set the source srtings
-        
-        
+
+
         //aEditor = new transex3.view.Editor( sourceStringData , filedata.toArray() );
         aEditor = new transex3.view.Editor( sourceStringData , firstData );
-        
+
         aEditor.setBounds(100,100,800,900);
         aEditor.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
         aEditor.setVisible(true);
@@ -175,7 +175,7 @@ public class EditorController {
                 System.exit( 0 );
             }
         });
-        
+
         aEditor.getMiExit().addActionListener( new ActionListener(){
             public void actionPerformed( ActionEvent e ){
                 System.exit( 0 );
@@ -219,8 +219,8 @@ public class EditorController {
             public void tableChanged( TableModelEvent e ){
                 //System.out.println( e );
             }});
-        
-    
+
+
         aEditor.getRectable().getSelectionModel().addListSelectionListener( new  ListSelectionListener(){
             public void valueChanged( ListSelectionEvent e ){
                 JTable aTable = aEditor.getRectable();
@@ -237,29 +237,29 @@ public class EditorController {
                 //System.out.println("Selected = " +e.getFirstIndex()+"\n");
                 JTable table =transex3.controller.EditorController.aEditor.getTable();
                 JTable recTable =transex3.controller.EditorController.aEditor.getRectable();
-                SdfString aSdfString;	
+                SdfString aSdfString;
                 JTable aTable = aEditor.getRectable();
                 if(  aTable.getSelectedRow() != -1 && aTable.getSelectedColumn() != -1 )
                     aTable.getCellEditor( aTable.getSelectedRow(), aTable.getSelectedColumn() ).stopCellEditing();
-             
+
                 updateData();
                 clearAllRows( recTable );
-    
+
                 aSdfString = (SdfString) sdfstrings.get( table.getSelectedRow() );
                 recTable.setValueAt( "en-US" , 0, 0 );
-                recTable.setValueAt( aSdfString.getSourceString().getText() 		 , 0, 1 );
+                recTable.setValueAt( aSdfString.getSourceString().getText()          , 0, 1 );
                 recTable.setValueAt( aSdfString.getSourceString().getHelptext()      , 0, 2 );
                 recTable.setValueAt( aSdfString.getSourceString().getQuickhelptext() , 0, 3 );
-                recTable.setValueAt( aSdfString.getSourceString().getTitle() 		 , 0, 4 );
+                recTable.setValueAt( aSdfString.getSourceString().getTitle()         , 0, 4 );
                 Vector values = aSdfString.getLanguageStrings();
                 for( int n = 0; n < values.size() ; n++ )
                 {
                     SdfEntity aEntity = (SdfEntity) values.get( n );
-                    recTable.setValueAt( aEntity.getLangid() 		, n+1 , 0 );
-                    recTable.setValueAt( aEntity.getText()   		, n+1 , 1 );
-                    recTable.setValueAt( aEntity.getHelptext()		, n+1 , 2 );
-                    recTable.setValueAt( aEntity.getQuickhelptext()	, n+1 , 3 );
-                    recTable.setValueAt( aEntity.getTitle()  		, n+1 , 4 );
+                    recTable.setValueAt( aEntity.getLangid()        , n+1 , 0 );
+                    recTable.setValueAt( aEntity.getText()          , n+1 , 1 );
+                    recTable.setValueAt( aEntity.getHelptext()      , n+1 , 2 );
+                    recTable.setValueAt( aEntity.getQuickhelptext() , n+1 , 3 );
+                    recTable.setValueAt( aEntity.getTitle()         , n+1 , 4 );
                 }
                 oldindex = table.getSelectedRow();
             }
@@ -280,13 +280,13 @@ public class EditorController {
     }
     // Connect recommand strings with source strings
     public void readStrings( String sourcefiles , Vector recfiles ) {
-        BufferedReader aBR 				= null;
+        BufferedReader aBR              = null;
         try {
             //System.out.println("DBG: sourcefiles = " +sourcefiles);
             aBR = new BufferedReader( new FileReader( sourcefiles ) );
             String current = aBR.readLine();
-            SdfString aSdfString	 		= null;
-            SdfEntity aSdfEntity 			= null;
+            SdfString aSdfString            = null;
+            SdfEntity aSdfEntity            = null;
             while( current != null ){
                 aSdfEntity = new SdfEntity();
                 aSdfEntity.setProperties( current );
@@ -296,11 +296,11 @@ public class EditorController {
                 //System.out.println("Put ID '"+aSdfString.getId()+"'");
                 sdfstrings.add( aSdfString );
                 current = aBR.readLine();
-                
+
             }
             Iterator aIter=recfiles.iterator();
             File aFile;
-            BufferedReader aBR2				= null;
+            BufferedReader aBR2             = null;
             //System.out.println("Connecting strings");
             while( aIter.hasNext() ){
                 aFile = (File) aIter.next();
@@ -310,13 +310,13 @@ public class EditorController {
                 while ( current2 != null ){
                     SdfEntity aEntity = new SdfEntity();
                     aEntity.setProperties( current2 );
-                                        
+
                     if( hashedsdfstrings.containsKey( aEntity.getId() ) )
                     {
                         aSdfString = (SdfString) hashedsdfstrings.get( aEntity.getId() );
                         aSdfString.addLanguageString( aEntity );
                     }
-                    else 
+                    else
                     {
                         System.out.println("DBG: Can't find source string '"+aEntity.getId()+"'" );
                     }
@@ -329,6 +329,6 @@ public class EditorController {
         } catch ( IOException e){
             e.printStackTrace();
         }
-        
+
     }
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ using namespace ::ucbhelper;
 using rtl::OUString;
 typedef connectivity::OMetaConnection OConnection_BASE;
 // --------------------------------------------------------------------------------
-OConnection::OConnection(OFileDriver*	_pDriver)
+OConnection::OConnection(OFileDriver*   _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
                          ,m_pDriver(_pDriver)
                          ,m_bClosed(sal_False)
@@ -379,10 +379,10 @@ void OConnection::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     OConnection_BASE::disposing();
 
-    m_bClosed	= sal_True;
+    m_bClosed   = sal_True;
 m_xDir.clear();
 m_xContent.clear();
-    m_xCatalog	= WeakReference< XTablesSupplier>();
+    m_xCatalog  = WeakReference< XTablesSupplier>();
 
     dispose_ChildImpl();
 }

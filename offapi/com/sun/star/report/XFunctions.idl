@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,21 +27,21 @@
 #ifndef __com_sun_star_report_XFunctions_idl__
 #define __com_sun_star_report_XFunctions_idl__
 
-#ifndef __com_sun_star_container_XChild_idl__ 
-#include <com/sun/star/container/XChild.idl> 
-#endif 
-#ifndef __com_sun_star_container_XContainer_idl__ 
-#include <com/sun/star/container/XContainer.idl> 
-#endif 
-#ifndef __com_sun_star_container_XIndexContainer_idl__ 
-#include <com/sun/star/container/XIndexContainer.idl> 
-#endif 
-#ifndef __com_sun_star_lang_XComponent_idl__ 
-#include <com/sun/star/lang/XComponent.idl> 
+#ifndef __com_sun_star_container_XChild_idl__
+#include <com/sun/star/container/XChild.idl>
+#endif
+#ifndef __com_sun_star_container_XContainer_idl__
+#include <com/sun/star/container/XContainer.idl>
+#endif
+#ifndef __com_sun_star_container_XIndexContainer_idl__
+#include <com/sun/star/container/XIndexContainer.idl>
+#endif
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
 #endif
 //=============================================================================
 
- module com {  module sun {  module star {  module report { 
+ module com {  module sun {  module star {  module report {
 interface XReportDefinition;
 interface XFunction;
 //=============================================================================
@@ -54,7 +54,7 @@ interface XFunctions
 {
     /** allows to register listeners to be notified of changes in the container.
     */
-    interface com::sun::star::container::XContainer; 
+    interface com::sun::star::container::XContainer;
     /** gives access to the group elements.
         The elements are of type <type>XFunction</type>.
     */

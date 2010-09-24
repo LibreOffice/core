@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,9 +97,9 @@ BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVer
 }
 
 /*************************************************************************
-|*	  main()
+|*    main()
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 #if defined( UNX ) || (defined( PM2 ) && defined( CSET )) || defined (WTC) || defined (MTW) || defined (__MINGW32__) || defined( OS2 )
 int main ( int argc, char ** argv)

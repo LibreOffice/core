@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,12 +52,12 @@ bool XMLNumRulePropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
 }
 
 sal_Bool XMLNumRulePropHdl::importXML( const ::rtl::OUString& /*rStrImpValue*/, ::com::sun::star::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
-{ 
-    return sal_False; 
+{
+    return sal_False;
 }
 
 sal_Bool XMLNumRulePropHdl::exportXML( ::rtl::OUString& /*rStrExpValue*/, const ::com::sun::star::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
-{ 
+{
     return sal_False;
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ interface XPane2
         object is usually set at the topmost window.  However, the details
         are implementation dependent.
         @param xAccessible
-            May be an empty reference.  
+            May be an empty reference.
     */
     void setAccessible ([in] ::com::sun::star::accessibility::XAccessible xAccessible);
 

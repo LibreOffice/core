@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define _OCONNECTIONPOINTHELPER_HXX
 
 //______________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //______________________________________________________________________________________________________________
 
 #include <com/sun/star/lang/XConnectionPointContainer.hpp>
@@ -38,52 +38,52 @@
 #include <cppuhelper/propshlp.hxx>
 
 //______________________________________________________________________________________________________________
-//	includes of my own project
+//  includes of my own project
 //______________________________________________________________________________________________________________
 #include "OConnectionPointContainerHelper.hxx"
 
 //______________________________________________________________________________________________________________
-//	namespaces
+//  namespaces
 //______________________________________________________________________________________________________________
 
 namespace unocontrols{
 
-#define	UNO3_ANY										::com::sun::star::uno::Any
-#define	UNO3_SEQUENCE									::com::sun::star::uno::Sequence
-#define	UNO3_TYPE										::com::sun::star::uno::Type
-#define	UNO3_REFERENCE									::com::sun::star::uno::Reference
-#define	UNO3_XCONNECTIONPOINTCONTAINER					::com::sun::star::lang::XConnectionPointContainer
-#define	UNO3_XCONNECTIONPOINT							::com::sun::star::lang::XConnectionPoint
-#define	UNO3_MUTEX										::osl::Mutex
-#define	UNO3_RUNTIMEEXCEPTION							::com::sun::star::uno::RuntimeException
-#define	UNO3_XINTERFACE									::com::sun::star::uno::XInterface
-#define	UNO3_OMULTITYPEINTERFACECONTAINERHELPER			::cppu::OMultiTypeInterfaceContainerHelper
-#define	UNO3_LISTENEREXISTEXCEPTION						::com::sun::star::lang::ListenerExistException
-#define	UNO3_INVALIDLISTENEREXCEPTION					::com::sun::star::lang::InvalidListenerException
-#define	UNO3_WEAKREFERENCE								::com::sun::star::uno::WeakReference
-#define	UNO3_OWEAKOBJECT								::cppu::OWeakObject
-#define	UNO3_OCONNECTIONPOINTCONTAINERHELPER			OConnectionPointContainerHelper
+#define UNO3_ANY                                        ::com::sun::star::uno::Any
+#define UNO3_SEQUENCE                                   ::com::sun::star::uno::Sequence
+#define UNO3_TYPE                                       ::com::sun::star::uno::Type
+#define UNO3_REFERENCE                                  ::com::sun::star::uno::Reference
+#define UNO3_XCONNECTIONPOINTCONTAINER                  ::com::sun::star::lang::XConnectionPointContainer
+#define UNO3_XCONNECTIONPOINT                           ::com::sun::star::lang::XConnectionPoint
+#define UNO3_MUTEX                                      ::osl::Mutex
+#define UNO3_RUNTIMEEXCEPTION                           ::com::sun::star::uno::RuntimeException
+#define UNO3_XINTERFACE                                 ::com::sun::star::uno::XInterface
+#define UNO3_OMULTITYPEINTERFACECONTAINERHELPER         ::cppu::OMultiTypeInterfaceContainerHelper
+#define UNO3_LISTENEREXISTEXCEPTION                     ::com::sun::star::lang::ListenerExistException
+#define UNO3_INVALIDLISTENEREXCEPTION                   ::com::sun::star::lang::InvalidListenerException
+#define UNO3_WEAKREFERENCE                              ::com::sun::star::uno::WeakReference
+#define UNO3_OWEAKOBJECT                                ::cppu::OWeakObject
+#define UNO3_OCONNECTIONPOINTCONTAINERHELPER            OConnectionPointContainerHelper
 
 //______________________________________________________________________________________________________________
-//	defines
+//  defines
 //______________________________________________________________________________________________________________
 
 //______________________________________________________________________________________________________________
-//	class declaration OConnectionPointHelper
+//  class declaration OConnectionPointHelper
 //______________________________________________________________________________________________________________
 
-class OConnectionPointHelper	:	public	UNO3_XCONNECTIONPOINT
-                                ,	public	UNO3_OWEAKOBJECT
+class OConnectionPointHelper    :   public  UNO3_XCONNECTIONPOINT
+                                ,   public  UNO3_OWEAKOBJECT
 {
 
 //______________________________________________________________________________________________________________
-//	public methods
+//  public methods
 //______________________________________________________________________________________________________________
 
 public:
 
     //__________________________________________________________________________________________________________
-    //	construct/destruct
+    //  construct/destruct
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -99,9 +99,9 @@ public:
         @onerror
     */
 
-    OConnectionPointHelper(	UNO3_MUTEX&				  				aMutex						,
-                            UNO3_OCONNECTIONPOINTCONTAINERHELPER*	pContainerImplementation	,
-                            UNO3_TYPE				  				aType						);
+    OConnectionPointHelper( UNO3_MUTEX&                             aMutex                      ,
+                            UNO3_OCONNECTIONPOINTCONTAINERHELPER*   pContainerImplementation    ,
+                            UNO3_TYPE                               aType                       );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -116,61 +116,61 @@ public:
         @onerror
     */
 
-    virtual	~OConnectionPointHelper();
+    virtual ~OConnectionPointHelper();
 
     //________________________________________________________________________________________________________
-    //	XInterface
+    //  XInterface
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		give answer, if interface is supported
-        @descr		The interfaces are searched by type.
+        @short      give answer, if interface is supported
+        @descr      The interfaces are searched by type.
 
-        @seealso	XInterface
+        @seealso    XInterface
 
         @param      "rType" is the type of searched interface.
 
-        @return		Any		information about found interface
+        @return     Any     information about found interface
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual UNO3_ANY SAL_CALL queryInterface( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
 
     /**_______________________________________________________________________________________________________
-        @short		increment refcount
-        @descr		-
+        @short      increment refcount
+        @descr      -
 
-        @seealso	XInterface
-        @seealso	release()
+        @seealso    XInterface
+        @seealso    release()
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL acquire() throw();
 
     /**_______________________________________________________________________________________________________
-        @short		decrement refcount
-        @descr		-
+        @short      decrement refcount
+        @descr      -
 
-        @seealso	XInterface
-        @seealso	acquire()
+        @seealso    XInterface
+        @seealso    acquire()
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL release() throw();
 
     //__________________________________________________________________________________________________________
-    //	XConnectionPoint
+    //  XConnectionPoint
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -216,9 +216,9 @@ public:
         @onerror
     */
 
-    virtual void SAL_CALL advise( const UNO3_REFERENCE< UNO3_XINTERFACE >& xListener ) throw(	UNO3_LISTENEREXISTEXCEPTION		,
-                                                                                                UNO3_INVALIDLISTENEREXCEPTION	,
-                                                                                                UNO3_RUNTIMEEXCEPTION			);
+    virtual void SAL_CALL advise( const UNO3_REFERENCE< UNO3_XINTERFACE >& xListener ) throw(   UNO3_LISTENEREXISTEXCEPTION     ,
+                                                                                                UNO3_INVALIDLISTENEREXCEPTION   ,
+                                                                                                UNO3_RUNTIMEEXCEPTION           );
 
     /**_________________________________________________________________________________________________________
         @short
@@ -251,7 +251,7 @@ public:
     virtual UNO3_SEQUENCE< UNO3_REFERENCE< UNO3_XINTERFACE > > SAL_CALL getConnections() throw( UNO3_RUNTIMEEXCEPTION );
 
 //______________________________________________________________________________________________________________
-//	private methods
+//  private methods
 //______________________________________________________________________________________________________________
 
 private:
@@ -287,20 +287,20 @@ private:
     void impl_UnlockContainer();
 
 //______________________________________________________________________________________________________________
-//	private variables
+//  private variables
 //______________________________________________________________________________________________________________
 
 private:
 
-    UNO3_MUTEX&												m_aSharedMutex				;
-    UNO3_WEAKREFERENCE< UNO3_XCONNECTIONPOINTCONTAINER >	m_oContainerWeakReference	;	// Reference to container-class!. Don't use Reference<...>
+    UNO3_MUTEX&                                             m_aSharedMutex              ;
+    UNO3_WEAKREFERENCE< UNO3_XCONNECTIONPOINTCONTAINER >    m_oContainerWeakReference   ;   // Reference to container-class!. Don't use Reference<...>
                                                                                             // It is a ring-reference => and must be a wekreference!
-    UNO3_OCONNECTIONPOINTCONTAINERHELPER*					m_pContainerImplementation	;
-    UNO3_TYPE												m_aInterfaceType			;
-    UNO3_REFERENCE< UNO3_XINTERFACE >						m_xLock						;
+    UNO3_OCONNECTIONPOINTCONTAINERHELPER*                   m_pContainerImplementation  ;
+    UNO3_TYPE                                               m_aInterfaceType            ;
+    UNO3_REFERENCE< UNO3_XINTERFACE >                       m_xLock                     ;
 
-};	// class OConnectionPointHelper
+};  // class OConnectionPointHelper
 
-}	// namespace unocontrols
+}   // namespace unocontrols
 
-#endif	// #ifndef _OCONNECTIONPOINTHELPER_HXX
+#endif  // #ifndef _OCONNECTIONPOINTHELPER_HXX

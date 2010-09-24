@@ -1,7 +1,7 @@
 /**********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,12 +98,12 @@ SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rResId ) :
 {
     FreeResource();
     SetSelectionMode( SINGLE_SELECTION );
-    
+
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
                    WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HIDESELECTION |
                    WB_HASLINES | WB_HASLINESATROOT );
     SetNodeDefaultImages();
-    
+
     nMode = 0xFF;    // Alles
 }
 
@@ -123,8 +123,8 @@ void SFTreeListBox::delUserData( SvLBoxEntry* pEntry )
         {
             delete pUserData;
             // TBD seem to get a Select event on node that is remove ( below )
-            // so need to be able to detect that this node is not to be 
-            // processed in order to do this, setting userData to NULL ( must 
+            // so need to be able to detect that this node is not to be
+            // processed in order to do this, setting userData to NULL ( must
             // be a better way to do this )
             pUserData = 0;
             pEntry->SetUserData( pUserData );
@@ -141,7 +141,7 @@ void SFTreeListBox::deleteTree( SvLBoxEntry* pEntry )
     {
         SvLBoxEntry* pNextEntry = NextSibling( pEntry );
         deleteTree( pEntry );
-        GetModel()->Remove( pEntry );    
+        GetModel()->Remove( pEntry );
         pEntry = pNextEntry;
     }
 }
@@ -161,7 +161,7 @@ void SFTreeListBox::deleteAllTree()
             GetModel()->Remove( pEntry );
             pEntry = pNextEntry;
         }
-    }    
+    }
 }
 
 void SFTreeListBox::Init( const ::rtl::OUString& language  )
@@ -175,8 +175,8 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
 
     Sequence< Reference< browse::XBrowseNode > > children;
 
-    ::rtl::OUString userStr = ::rtl::OUString::createFromAscii("user");    
-    ::rtl::OUString shareStr = ::rtl::OUString::createFromAscii("share");    
+    ::rtl::OUString userStr = ::rtl::OUString::createFromAscii("user");
+    ::rtl::OUString shareStr = ::rtl::OUString::createFromAscii("share");
 
     ::rtl::OUString singleton = ::rtl::OUString::createFromAscii(
         "/singletons/com.sun.star.script.browse.theBrowseNodeFactory" );
@@ -196,7 +196,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
             browse::BrowseNodeFactoryViewTypes::MACROORGANIZER ) );
 
         if (  rootNode.is() && rootNode->hasChildNodes() == sal_True )
-        {            
+        {
             children = rootNode->getChildNodes();
         }
     }
@@ -206,7 +206,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
             ::rtl::OUStringToOString(
                 e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         // TODO exception handling
-    }        
+    }
 
     Reference<XModel> xDocumentModel;
     for ( sal_Int32 n = 0; n < children.getLength(); n++ )
@@ -243,7 +243,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
                 Sequence<beans::PropertyValue> moduleDescr;
                 try{
                     ::rtl::OUString appModule = xModuleManager->identify( xDocumentModel );
-                    xModuleConfig->getByName(appModule) >>= moduleDescr; 
+                    xModuleConfig->getByName(appModule) >>= moduleDescr;
                 } catch(const uno::Exception&)
                     {}
 
@@ -263,18 +263,18 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
         }
 
         ::rtl::OUString lang( language );
-        Reference< browse::XBrowseNode > langEntries = 
+        Reference< browse::XBrowseNode > langEntries =
             getLangNodeFromRootNode( children[ n ], lang );
 
         /*SvLBoxEntry* pBasicManagerRootEntry =*/
             insertEntry( uiName, app ? IMG_HARDDISK : IMG_DOCUMENT,
-                0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );    
+                0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );
     }
 
     SetUpdateMode( TRUE );
 }
 
-Reference< XInterface  > 
+Reference< XInterface  >
 SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
 {
     Reference< XInterface > xModel;
@@ -306,7 +306,7 @@ SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OU
     return xModel;
 }
 
-Reference< browse::XBrowseNode > 
+Reference< browse::XBrowseNode >
 SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNode, ::rtl::OUString& language )
 {
     Reference< browse::XBrowseNode > langNode;
@@ -320,8 +320,8 @@ SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNo
             {
                 langNode = children[ n ];
                 break;
-            }    
-        } 
+            }
+        }
     }
     catch ( Exception& )
     {
@@ -348,20 +348,20 @@ void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::co
     {
         // if we catch an exception in getChildNodes then no entries are added
     }
-    
+
     for ( sal_Int32 n = 0; n < children.getLength(); n++ )
     {
         ::rtl::OUString name( children[ n ]->getName() );
         if (  children[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
-            insertEntry( name, IMG_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, children[ n ],model ))); 
+            insertEntry( name, IMG_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, children[ n ],model )));
         }
         else
         {
             if ( children[ n ]->getType() == browse::BrowseNodeTypes::SCRIPT )
             {
-                insertEntry( name, IMG_MACRO, pRootEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, children[ n ],model ))); 
-                
+                insertEntry( name, IMG_MACRO, pRootEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, children[ n ],model )));
+
             }
         }
     }
@@ -420,7 +420,7 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
     {
         aImage = m_hdImage;
         aHCImage = m_hdImage_hc;
-    } 
+    }
     else if( nBitmap == IMG_LIB )
     {
         aImage = m_libImage;
@@ -459,7 +459,7 @@ void __EXPORT SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
     {
         node = userData->GetNode();
         model = userData->GetModel();
-        RequestSubEntries( pEntry, node, model );    
+        RequestSubEntries( pEntry, node, model );
         userData->setLoaded();
     }
 }
@@ -564,7 +564,7 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ::rtl::OUString languag
         m_createDupStr( CUI_RES ( RID_SVXSTR_CREATEFAILEDDUP ) ),
         m_createErrTitleStr( CUI_RES( RID_SVXSTR_CREATEFAILED_TITLE ) ),
         m_renameErrStr( CUI_RES ( RID_SVXSTR_RENAMEFAILED ) ),
-        m_renameErrTitleStr( CUI_RES( RID_SVXSTR_RENAMEFAILED_TITLE ) ) 
+        m_renameErrTitleStr( CUI_RES( RID_SVXSTR_RENAMEFAILED_TITLE ) )
 {
 
     // must be a neater way to deal with the strings than as above
@@ -603,22 +603,22 @@ short SvxScriptOrgDialog::Execute()
 
     SfxObjectShell *pDoc = SfxObjectShell::GetFirst();
 
-    // force load of MSPs for all documents    
-    while ( pDoc )    
+    // force load of MSPs for all documents
+    while ( pDoc )
     {
-        Reference< provider::XScriptProviderSupplier > xSPS = 
+        Reference< provider::XScriptProviderSupplier > xSPS =
             Reference< provider::XScriptProviderSupplier >
                                         ( pDoc->GetModel(), UNO_QUERY );
         if ( xSPS.is() )
         {
-            Reference< provider::XScriptProvider > ScriptProvider = 
+            Reference< provider::XScriptProvider > ScriptProvider =
             xSPS->getScriptProvider();
         }
-            
+
         pDoc = SfxObjectShell::GetNext(*pDoc);
     }
     aScriptsBox.ExpandAllTrees();
-    
+
     Window* pPrevDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
     short nRet = ModalDialog::Execute();
@@ -636,20 +636,20 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
     {
         if ( node->getType() == browse::BrowseNodeTypes::SCRIPT)
         {
-            aRunButton.Enable(); 
+            aRunButton.Enable();
         }
         else
         {
-            aRunButton.Disable(); 
+            aRunButton.Disable();
         }
         Reference< beans::XPropertySet > xProps( node, UNO_QUERY );
-    
+
         if ( !xProps.is() )
         {
             aEditButton.Disable();
             aDelButton.Disable();
             aCreateButton.Disable();
-            aRunButton.Disable(); 
+            aRunButton.Disable();
             return;
         }
 
@@ -697,14 +697,14 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
         {
             aRenameButton.Disable();
         }
-    }    
+    }
     else
     {
         // no node info available, disable all configurable actions
         aDelButton.Disable();
         aCreateButton.Disable();
         aEditButton.Disable();
-        aRunButton.Disable(); 
+        aRunButton.Disable();
         aRenameButton.Disable();
     }
 }
@@ -738,7 +738,7 @@ IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox )
               node = userData->GetNode();
         CheckButtons( node );
     }
-    
+
     return 0;
 }
 
@@ -749,7 +749,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
         StoreCurrentSelection();
         EndDialog( 0 );
     }
-    if ( pButton == &aEditButton ||  
+    if ( pButton == &aEditButton ||
             pButton == &aCreateButton ||
             pButton == &aDelButton ||
             pButton == &aRunButton ||
@@ -777,7 +777,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                 {
                     return 0;
                 }
-                
+
                 if ( pButton == &aRunButton )
                 {
                     ::rtl::OUString tmpString;
@@ -886,7 +886,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                     renameEntry( pEntry );
                 }
             }
-        }            
+        }
     }
     return 0;
 }
@@ -896,7 +896,7 @@ Reference< browse::XBrowseNode > SvxScriptOrgDialog::getBrowseNode( SvLBoxEntry*
     Reference< browse::XBrowseNode > node;
     if ( pEntry )
     {
-        SFEntry* userData = (SFEntry*)pEntry->GetUserData();        
+        SFEntry* userData = (SFEntry*)pEntry->GetUserData();
         if ( userData )
         {
             node = userData->GetNode();
@@ -911,7 +911,7 @@ Reference< XModel > SvxScriptOrgDialog::getModel( SvLBoxEntry* pEntry )
     Reference< XModel > model;
     if ( pEntry )
     {
-        SFEntry* userData = (SFEntry*)pEntry->GetUserData();        
+        SFEntry* userData = (SFEntry*)pEntry->GetUserData();
         if ( userData )
         {
             model = userData->GetModel();
@@ -921,7 +921,7 @@ Reference< XModel > SvxScriptOrgDialog::getModel( SvLBoxEntry* pEntry )
     return model;
 }
 
-Reference< XInterface  > 
+Reference< XInterface  >
 SvxScriptOrgDialog::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
 {
     Reference< XInterface > xModel;
@@ -959,13 +959,13 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
     Reference< browse::XBrowseNode >  aChildNode;
     Reference< browse::XBrowseNode > node = getBrowseNode( pEntry );
     Reference< script::XInvocation > xInv( node, UNO_QUERY );
-    
+
     if ( xInv.is() )
     {
         ::rtl::OUString aNewName;
         ::rtl::OUString aNewStdName;
         USHORT nMode = INPUTMODE_NEWLIB;
-        if( aScriptsBox.GetModel()->GetDepth( pEntry ) == 0 ) 
+        if( aScriptsBox.GetModel()->GetDepth( pEntry ) == 0 )
         {
             aNewStdName = ::rtl::OUString::createFromAscii( "Library" ) ;
         }
@@ -978,7 +978,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         //String aNewStdName( ResId( STR_STDMODULENAME ) );
         BOOL bValid = FALSE;
         USHORT i = 1;
-        
+
         Sequence< Reference< browse::XBrowseNode > > childNodes;
         // no children => ok to create Parcel1 or Script1 without checking
         try
@@ -1086,20 +1086,20 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
                 ::rtl::OUStringToOString(
                     e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
-    }                
+    }
     if ( aChildNode.is() )
     {
         String aChildName = aChildNode->getName();
         SvLBoxEntry* pNewEntry = NULL;
 
-            
+
         ::rtl::OUString name( aChildName );
         Reference<XModel> xDocumentModel = getModel( pEntry );
 
         // ISSUE do we need to remove all entries for parent
         // to achieve sort? Just need to determine position
         // SvTreeListBox::InsertEntry can take position arg
-        // -- Basic doesn't do this on create. 
+        // -- Basic doesn't do this on create.
         // Suppose we could avoid this too. -> created nodes are
         // not in alphabetical order
         if ( aChildNode->getType() == browse::BrowseNodeTypes::SCRIPT )
@@ -1209,7 +1209,7 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
                 ::rtl::OUStringToOString(
                     e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
-    }                
+    }
     if ( aChildNode.is() )
     {
         aScriptsBox.SetEntryText( pEntry, aChildNode->getName() );
@@ -1258,12 +1258,12 @@ void SvxScriptOrgDialog::deleteEntry( SvLBoxEntry* pEntry )
                 ::rtl::OUStringToOString(
                     e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
-    }        
-    
+    }
+
     if ( result == sal_True )
     {
         aScriptsBox.deleteTree( pEntry );
-        aScriptsBox.GetModel()->Remove( pEntry );    
+        aScriptsBox.GetModel()->Remove( pEntry );
     }
     else
     {
@@ -1371,11 +1371,11 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     aScriptsBox.SetCurEntry( pEntry );
 }
 
-BOOL SFTreeListBox::dialogSort1( Reference< browse::XBrowseNode > node1, 
+BOOL SFTreeListBox::dialogSort1( Reference< browse::XBrowseNode > node1,
     Reference< browse::XBrowseNode > node2 )
 {
-    ::rtl::OUString userStr = ::rtl::OUString::createFromAscii("user");    
-    ::rtl::OUString shareStr = ::rtl::OUString::createFromAscii("share");    
+    ::rtl::OUString userStr = ::rtl::OUString::createFromAscii("user");
+    ::rtl::OUString shareStr = ::rtl::OUString::createFromAscii("share");
     if( node1->getName().equals( userStr ) )
         return true;
     if( node2->getName().equals( userStr ) )
@@ -1387,7 +1387,7 @@ BOOL SFTreeListBox::dialogSort1( Reference< browse::XBrowseNode > node1,
     return dialogSort2( node1, node2 );
 }
 
-BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1, 
+BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     Reference< browse::XBrowseNode > node2 )
 {
     return ( node1->getName().compareTo( node2->getName() ) < 0 );
@@ -1399,7 +1399,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     const ::rtl::OUString& value )
 {
     sal_Int32 pos = source.indexOf( token );
-                                                                                
+
     if ( pos != -1 && value.getLength() != 0 )
     {
         return source.replaceAt( pos, token.getLength(), value );
@@ -1454,7 +1454,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     ::rtl::OUString unknown = ::rtl::OUString::createFromAscii( "UNKNOWN" );
     ::rtl::OUString language = unknown;
     ::rtl::OUString script = unknown;
-    ::rtl::OUString line = unknown; 
+    ::rtl::OUString line = unknown;
     ::rtl::OUString type = ::rtl::OUString();
     ::rtl::OUString message = eScriptError.Message;
 
@@ -1500,7 +1500,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     ::rtl::OUString line = unknown;
     ::rtl::OUString type = unknown;
     ::rtl::OUString message = eScriptException.Message;
-    
+
     if ( eScriptException.language.getLength() != 0 )
     {
         language = eScriptException.language;
@@ -1542,10 +1542,10 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     ::rtl::OUString unformatted = String(
         CUI_RES( RID_SVXSTR_FRAMEWORK_ERROR_RUNNING ) );
 
-    ::rtl::OUString language = 
+    ::rtl::OUString language =
         ::rtl::OUString::createFromAscii( "UNKNOWN" );
 
-    ::rtl::OUString script = 
+    ::rtl::OUString script =
         ::rtl::OUString::createFromAscii( "UNKNOWN" );
 
     ::rtl::OUString message;
@@ -1564,10 +1564,10 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
             CUI_RES(  RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED ) );
         message =  ReplaceString(
             message, ::rtl::OUString::createFromAscii( "%LANGUAGENAME" ), language );
- 
+
     }
     else
-    { 
+    {
         message = sError.Message;
     }
     return FormatErrorString(
@@ -1595,7 +1595,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
 ::rtl::OUString GetErrorMessage( const com::sun::star::uno::Any& aException )
 {
     ::rtl::OUString exType;
-    if ( aException.getValueType() == 
+    if ( aException.getValueType() ==
          ::getCppuType( (const reflection::InvocationTargetException* ) NULL ) )
     {
         reflection::InvocationTargetException ite;
@@ -1614,12 +1614,12 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
             ite.TargetException >>= scriptException;
             return GetErrorMessage( scriptException );
         }
-        else 
+        else
         {
             // Unknown error, shouldn't happen
             // OSL_ASSERT(...)
         }
-        
+
     }
     else if ( aException.getValueType() == ::getCppuType( ( const provider::ScriptFrameworkErrorException* ) NULL ) )
     {
@@ -1627,7 +1627,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
         provider::ScriptFrameworkErrorException sfe;
         aException >>= sfe;
         return GetErrorMessage( sfe );
-       
+
     }
     // unknown exception
     Exception e;
@@ -1637,9 +1637,9 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
         return GetErrorMessage( rte );
     }
 
-    aException >>= e; 
+    aException >>= e;
     return GetErrorMessage( e );
-    
+
 }
 
 SvxScriptErrorDialog::SvxScriptErrorDialog(

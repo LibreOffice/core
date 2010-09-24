@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,34 +44,34 @@ namespace sd {
 |*
 \******************************************************************************/
 
-class MorphDlg 
+class MorphDlg
     : public ModalDialog
 {
 public:
     MorphDlg (
-        ::Window* pParent, 
-        const SdrObject* pObj1, 
+        ::Window* pParent,
+        const SdrObject* pObj1,
         const SdrObject* pObj2);
     virtual ~MorphDlg (void);
 
-    void			SaveSettings() const;
-    USHORT			GetFadeSteps() const { return (USHORT) aMtfSteps.GetValue(); }
-    BOOL			IsAttributeFade() const { return aCbxAttributes.IsChecked(); }
-    BOOL			IsOrientationFade() const { return aCbxOrientation.IsChecked(); }
+    void            SaveSettings() const;
+    USHORT          GetFadeSteps() const { return (USHORT) aMtfSteps.GetValue(); }
+    BOOL            IsAttributeFade() const { return aCbxAttributes.IsChecked(); }
+    BOOL            IsOrientationFade() const { return aCbxOrientation.IsChecked(); }
 
 private:
-    FixedLine		aGrpPreset;
-    FixedText		aFtSteps;
-    MetricField		aMtfSteps;
-    CheckBox		aCbxAttributes;
-    CheckBox		aCbxOrientation;
-    OKButton		aBtnOK;
-    CancelButton	aBtnCancel;
+    FixedLine       aGrpPreset;
+    FixedText       aFtSteps;
+    MetricField     aMtfSteps;
+    CheckBox        aCbxAttributes;
+    CheckBox        aCbxOrientation;
+    OKButton        aBtnOK;
+    CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
-    SdrObject*		pSdrObj1;
-    SdrObject*		pSdrObj2;
+    SdrObject*      pSdrObj1;
+    SdrObject*      pSdrObj2;
 
-    void			LoadSettings();
+    void            LoadSettings();
 };
 
 

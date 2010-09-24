@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@ using namespace ::com::sun::star;
 
 namespace nullcanvas
 {
-    CanvasFont::CanvasFont( const rendering::FontRequest& 					rFontRequest,
-                            const uno::Sequence< beans::PropertyValue >& 	/*extraFontProperties*/, 
-                            const geometry::Matrix2D& 						fontMatrix ) :
+    CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
+                            const uno::Sequence< beans::PropertyValue >&    /*extraFontProperties*/,
+                            const geometry::Matrix2D&                       fontMatrix ) :
         CanvasFont_Base( m_aMutex ),
         maFontRequest( rFontRequest ),
         maFontMatrix( fontMatrix )
@@ -53,9 +53,9 @@ namespace nullcanvas
         ::osl::MutexGuard aGuard( m_aMutex );
     }
 
-    uno::Reference< rendering::XTextLayout > SAL_CALL CanvasFont::createTextLayout( const rendering::StringContext& aText, 
-                                                                                    sal_Int8 						nDirection, 
-                                                                                    sal_Int64 						nRandomSeed ) throw (uno::RuntimeException)
+    uno::Reference< rendering::XTextLayout > SAL_CALL CanvasFont::createTextLayout( const rendering::StringContext& aText,
+                                                                                    sal_Int8                        nDirection,
+                                                                                    sal_Int64                       nRandomSeed ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -110,7 +110,7 @@ namespace nullcanvas
     {
         uno::Sequence< ::rtl::OUString > aRet(1);
         aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
-        
+
         return aRet;
     }
 

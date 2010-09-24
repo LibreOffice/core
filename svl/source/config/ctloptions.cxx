@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#define ASCII_STR(s)	rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
+#define ASCII_STR(s)    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
 #define CFG_READONLY_DEFAULT    sal_False
 
 // SvtCJKOptions_Impl ----------------------------------------------------------
@@ -54,17 +54,17 @@ using namespace ::com::sun::star::uno;
 class SvtCTLOptions_Impl : public utl::ConfigItem
 {
 private:
-    sal_Bool						m_bIsLoaded;
-    sal_Bool						m_bCTLFontEnabled;
-    sal_Bool						m_bCTLSequenceChecking;
-    sal_Bool						m_bCTLRestricted;
+    sal_Bool                        m_bIsLoaded;
+    sal_Bool                        m_bCTLFontEnabled;
+    sal_Bool                        m_bCTLSequenceChecking;
+    sal_Bool                        m_bCTLRestricted;
     sal_Bool                        m_bCTLTypeAndReplace;
     SvtCTLOptions::CursorMovement   m_eCTLCursorMovement;
-    SvtCTLOptions::TextNumerals		m_eCTLTextNumerals;
+    SvtCTLOptions::TextNumerals     m_eCTLTextNumerals;
 
     sal_Bool                        m_bROCTLFontEnabled;
     sal_Bool                        m_bROCTLSequenceChecking;
-    sal_Bool						m_bROCTLRestricted;
+    sal_Bool                        m_bROCTLRestricted;
     sal_Bool                        m_bROCTLTypeAndReplace;
     sal_Bool                        m_bROCTLCursorMovement;
     sal_Bool                        m_bROCTLTextNumerals;
@@ -73,19 +73,19 @@ public:
     SvtCTLOptions_Impl();
     ~SvtCTLOptions_Impl();
 
-    virtual void 	Notify( const Sequence< rtl::OUString >& _aPropertyNames );
-    virtual void	Commit();
+    virtual void    Notify( const Sequence< rtl::OUString >& _aPropertyNames );
+    virtual void    Commit();
     void            Load();
 
-    sal_Bool 		IsLoaded() { return m_bIsLoaded; }
-    void			SetCTLFontEnabled( sal_Bool _bEnabled );
-    sal_Bool		IsCTLFontEnabled() const { return m_bCTLFontEnabled; }
+    sal_Bool        IsLoaded() { return m_bIsLoaded; }
+    void            SetCTLFontEnabled( sal_Bool _bEnabled );
+    sal_Bool        IsCTLFontEnabled() const { return m_bCTLFontEnabled; }
 
     void            SetCTLSequenceChecking( sal_Bool _bEnabled );
     sal_Bool        IsCTLSequenceChecking() const { return m_bCTLSequenceChecking;}
 
-    void			SetCTLSequenceCheckingRestricted( sal_Bool _bEnable );
-    sal_Bool		IsCTLSequenceCheckingRestricted( void ) const	{ return m_bCTLRestricted; }
+    void            SetCTLSequenceCheckingRestricted( sal_Bool _bEnable );
+    sal_Bool        IsCTLSequenceCheckingRestricted( void ) const   { return m_bCTLRestricted; }
 
     void            SetCTLSequenceCheckingTypeAndReplace( sal_Bool _bEnable );
     sal_Bool        IsCTLSequenceCheckingTypeAndReplace() const { return m_bCTLTypeAndReplace; }
@@ -94,7 +94,7 @@ public:
     SvtCTLOptions::CursorMovement
                     GetCTLCursorMovement() const { return m_eCTLCursorMovement; }
 
-    void        	SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals );
+    void            SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals );
     SvtCTLOptions::TextNumerals
                     GetCTLTextNumerals() const { return m_eCTLTextNumerals; }
 
@@ -103,8 +103,8 @@ public:
 //------------------------------------------------------------------------------
 namespace
 {
-    struct PropertyNames 
-        : public rtl::Static< Sequence< rtl::OUString >, PropertyNames > {}; 
+    struct PropertyNames
+        : public rtl::Static< Sequence< rtl::OUString >, PropertyNames > {};
 }
 //------------------------------------------------------------------------------
 sal_Bool SvtCTLOptions_Impl::IsReadOnly(SvtCTLOptions::EOption eOption) const
@@ -127,16 +127,16 @@ SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
 
     utl::ConfigItem( ASCII_STR("Office.Common/I18N/CTL") ),
 
-    m_bIsLoaded				( sal_False ),
-    m_bCTLFontEnabled		( sal_False ),
-    m_bCTLSequenceChecking	( sal_False ),
-    m_bCTLRestricted		( sal_False ),
-    m_eCTLCursorMovement	( SvtCTLOptions::MOVEMENT_LOGICAL ),
+    m_bIsLoaded             ( sal_False ),
+    m_bCTLFontEnabled       ( sal_False ),
+    m_bCTLSequenceChecking  ( sal_False ),
+    m_bCTLRestricted        ( sal_False ),
+    m_eCTLCursorMovement    ( SvtCTLOptions::MOVEMENT_LOGICAL ),
     m_eCTLTextNumerals      ( SvtCTLOptions::NUMERALS_ARABIC ),
 
     m_bROCTLFontEnabled     ( CFG_READONLY_DEFAULT ),
     m_bROCTLSequenceChecking( CFG_READONLY_DEFAULT ),
-    m_bROCTLRestricted		( CFG_READONLY_DEFAULT ),
+    m_bROCTLRestricted      ( CFG_READONLY_DEFAULT ),
     m_bROCTLCursorMovement  ( CFG_READONLY_DEFAULT ),
     m_bROCTLTextNumerals    ( CFG_READONLY_DEFAULT )
 {
@@ -234,9 +234,9 @@ void SvtCTLOptions_Impl::Commit()
                     pNames[nRealCount] = pOrgNames[nProp];
                     pValues[nRealCount].setValue( &m_bCTLTypeAndReplace, rType );
                     ++nRealCount;
-                }            
+                }
             }
-            break;        
+            break;
         }
     }
     aNames.realloc(nRealCount);
@@ -376,8 +376,8 @@ void SvtCTLOptions_Impl::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumer
 }
 // global ----------------------------------------------------------------
 
-static SvtCTLOptions_Impl*	pCTLOptions = NULL;
-static sal_Int32			nCTLRefCount = 0;
+static SvtCTLOptions_Impl*  pCTLOptions = NULL;
+static sal_Int32            nCTLRefCount = 0;
 namespace { struct CTLMutex : public rtl::Static< osl::Mutex, CTLMutex > {}; }
 
 // class SvtCTLOptions --------------------------------------------------

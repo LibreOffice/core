@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ namespace dbaui
     //------------------------------------------------------------------
     sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const ::rtl::OUString& _sAllowedChars)
     {
-        return	(
+        return  (
                  (_cChar >= 'A' && _cChar <= 'Z') ||
                  _cChar == '_' ||
                  _sAllowedChars.indexOf(_cChar) != -1 ||
@@ -44,16 +44,16 @@ namespace dbaui
                 );
     }
     //------------------------------------------------------------------
-    sal_Bool OSQLNameChecker::checkString(	const ::rtl::OUString& _sOldValue,
+    sal_Bool OSQLNameChecker::checkString(  const ::rtl::OUString& _sOldValue,
                                         const ::rtl::OUString& _sToCheck,
                                         ::rtl::OUString& _rsCorrected)
     {
         sal_Bool bCorrected = sal_False;
         if ( m_bCheck )
         {
-            XubString sSavedValue	= _sOldValue;
-            XubString sText			= _sToCheck;
-            xub_StrLen nMatch		= 0;
+            XubString sSavedValue   = _sOldValue;
+            XubString sText         = _sToCheck;
+            xub_StrLen nMatch       = 0;
             for ( xub_StrLen i=nMatch;i < sText.Len(); ++i )
             {
                 if ( !isCharOk( sText.GetBuffer()[i], i == 0, m_bOnlyUpperCase, m_sAllowedChars ) )

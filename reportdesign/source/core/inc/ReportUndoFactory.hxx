@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ namespace rptui
 {
     class OReportUndoFactory : public SdrUndoFactory
     {
-        OModuleClient	    m_aModuleClient;
+        OModuleClient       m_aModuleClient;
         ::std::auto_ptr<SdrUndoFactory> m_pUndoFactory;
 
         OReportUndoFactory(const OReportUndoFactory&);
@@ -67,7 +67,7 @@ namespace rptui
         virtual SdrUndoAction* CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1);
 
         // page
-        virtual SdrUndoAction*	CreateUndoDeletePage(SdrPage& rPage);
+        virtual SdrUndoAction*  CreateUndoDeletePage(SdrPage& rPage);
         virtual SdrUndoAction* CreateUndoNewPage(SdrPage& rPage);
         virtual SdrUndoAction* CreateUndoCopyPage(SdrPage& rPage);
         virtual SdrUndoAction* CreateUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1);

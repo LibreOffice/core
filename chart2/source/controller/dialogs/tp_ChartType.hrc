@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,14 +32,14 @@
 #define BTN_HELP    1
 
 #define LB_3D_SCHEME        1
-#define LB_CHARTTYPE		2
+#define LB_CHARTTYPE        2
 #define CT_CHARTVARIANT     3
 
 #define FL_SPLINE_SEPARATOR 2
 #define FL_SPLINE_DIALOGBUTTONS 3
 
-#define FT_CHARTTYPE		    1
-#define FT_SPLINE_ORDER         3   
+#define FT_CHARTTYPE            1
+#define FT_SPLINE_ORDER         3
 #define FT_SPLINE_RESOLUTION    4
 
 #define CB_X_AXIS_CATEGORIES 1

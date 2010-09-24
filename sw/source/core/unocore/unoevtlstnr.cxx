@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ SwEventListenerContainer::~SwEventListenerContainer()
 /*-- 22.04.99 11:24:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void 	SwEventListenerContainer::AddListener(const uno::Reference< lang::XEventListener > & rxListener)
+void    SwEventListenerContainer::AddListener(const uno::Reference< lang::XEventListener > & rxListener)
 {
     if(!pListenerArr)
         pListenerArr = new SwEvtLstnrArray;
@@ -77,7 +77,7 @@ void 	SwEventListenerContainer::AddListener(const uno::Reference< lang::XEventLi
 /*-- 22.04.99 11:25:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool	SwEventListenerContainer::RemoveListener(const uno::Reference< lang::XEventListener > & rxListener)
+sal_Bool    SwEventListenerContainer::RemoveListener(const uno::Reference< lang::XEventListener > & rxListener)
 {
     if(!pListenerArr)
         return sal_False;
@@ -101,7 +101,7 @@ sal_Bool	SwEventListenerContainer::RemoveListener(const uno::Reference< lang::XE
 /*-- 22.04.99 11:25:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void	SwEventListenerContainer::Disposing()
+void    SwEventListenerContainer::Disposing()
 {
     if(!pListenerArr)
         return;

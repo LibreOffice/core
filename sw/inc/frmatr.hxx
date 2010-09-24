@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,14 +27,14 @@
 #ifndef _FRMATR_HXX
 #define _FRMATR_HXX
 
-#include <hintids.hxx>		//die Ids der Attribute, vor frmitems damit die
-#include <format.hxx>		//fuer Implementierung der inlines
+#include <hintids.hxx>      //die Ids der Attribute, vor frmitems damit die
+#include <format.hxx>       //fuer Implementierung der inlines
 
 //------------------------ Inlines ---------------------------------
 
 
 /******************************************************************************
- *	Implementierung der FrameAttribut Methoden vom SwAttrSet
+ *  Implementierung der FrameAttribut Methoden vom SwAttrSet
  ******************************************************************************/
 
 inline const SvxPaperBinItem &SwAttrSet::GetPaperBin(BOOL bInP) const
@@ -66,7 +66,7 @@ inline const SvxFrameDirectionItem &SwAttrSet::GetFrmDir(BOOL bInP) const
 
 
 /******************************************************************************
- *	Implementierung der FrameAttribut Methoden vom SwFmt
+ *  Implementierung der FrameAttribut Methoden vom SwFmt
  ******************************************************************************/
 
 inline const SvxPaperBinItem &SwFmt::GetPaperBin(BOOL bInP) const
@@ -93,7 +93,7 @@ inline const SvxFmtBreakItem &SwFmt::GetBreak(BOOL bInP) const
     { return aSet.GetBreak(bInP); }
 inline const SvxMacroItem &SwFmt::GetMacro(BOOL bInP) const
     { return aSet.GetMacro(bInP); }
-inline const SvxFrameDirectionItem	&SwFmt::GetFrmDir(BOOL bInP) const
+inline const SvxFrameDirectionItem  &SwFmt::GetFrmDir(BOOL bInP) const
     { return aSet.GetFrmDir(bInP); }
-        
+
 #endif //_FRMATR_HXX

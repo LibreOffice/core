@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,13 +27,13 @@
 #ifndef DBAUI_SCROLLHELPER_HXX
 #define DBAUI_SCROLLHELPER_HXX
 
-#ifndef _LINK_HXX 
+#ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
-#ifndef _SV_GEN_HXX 
+#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
 #endif
-#ifndef _SV_TIMER_HXX 
+#ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
 #endif
 
@@ -41,8 +41,8 @@ namespace dbaui
 {
     class OScrollHelper
     {
-        Link	m_aUpScroll;
-        Link	m_aDownScroll;
+        Link    m_aUpScroll;
+        Link    m_aDownScroll;
     public:
         /** default contructor
         */
@@ -51,7 +51,7 @@ namespace dbaui
         ~OScrollHelper();
 
         /** set the memthod which should be called when scrolling up
-            @param	_rUpScroll
+            @param  _rUpScroll
                 the method to set
         */
         inline void setUpScrollMethod( const Link& _rUpScroll )
@@ -60,7 +60,7 @@ namespace dbaui
         }
 
         /** set the memthod which should be called when scrolling down
-            @param	_rDownScroll
+            @param  _rDownScroll
                 the method to set
         */
         inline void setDownScrollMethod( const Link& _rDownScroll )
@@ -69,9 +69,9 @@ namespace dbaui
         }
 
         /** check if a scroll method has to be called
-            @param	_rPoint	
+            @param  _rPoint
                 the current selection point
-            @param	_rOutputSize
+            @param  _rOutputSize
                 the output size of the window
         */
         void scroll(const Point& _rPoint, const Size& _rOutputSize);

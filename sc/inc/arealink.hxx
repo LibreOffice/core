@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ private:
     BOOL            bInCreate;
     BOOL            bDoInsert;      // wird fuer das erste Update auf FALSE gesetzt
 
-    BOOL		FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName );
+    BOOL        FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName );
 
 public:
     TYPEINFO();
@@ -67,23 +67,23 @@ public:
 
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
-    BOOL	Refresh( const String& rNewFile, const String& rNewFilter,
+    BOOL    Refresh( const String& rNewFile, const String& rNewFilter,
                     const String& rNewArea, ULONG nNewRefresh );
 
-    void	SetInCreate(BOOL bSet)					{ bInCreate = bSet; }
-    void	SetDoInsert(BOOL bSet)					{ bDoInsert = bSet; }
-    void	SetDestArea(const ScRange& rNew);
-    void	SetSource(const String& rDoc, const String& rFlt, const String& rOpt,
+    void    SetInCreate(BOOL bSet)                  { bInCreate = bSet; }
+    void    SetDoInsert(BOOL bSet)                  { bDoInsert = bSet; }
+    void    SetDestArea(const ScRange& rNew);
+    void    SetSource(const String& rDoc, const String& rFlt, const String& rOpt,
                         const String& rArea);
 
-    BOOL	IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
+    BOOL    IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
                         const String& rSource, const ScRange& rDest ) const;
 
-    const String&	GetFile() const			{ return aFileName;		}
-    const String&	GetFilter() const		{ return aFilterName;	}
-    const String&	GetOptions() const		{ return aOptions;		}
-    const String&	GetSource() const		{ return aSourceArea;	}
-    const ScRange&	GetDestArea() const		{ return aDestArea;		}
+    const String&   GetFile() const         { return aFileName;     }
+    const String&   GetFilter() const       { return aFilterName;   }
+    const String&   GetOptions() const      { return aOptions;      }
+    const String&   GetSource() const       { return aSourceArea;   }
+    const ScRange&  GetDestArea() const     { return aDestArea;     }
 
     DECL_LINK( RefreshHdl, ScAreaLink* );
     DECL_LINK( AreaEndEditHdl, void* );

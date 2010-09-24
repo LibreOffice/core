@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@
 
 #include <limits>
 
-#define CHECK_RETURN(x)													\
-    if(!x)																\
+#define CHECK_RETURN(x)                                                 \
+    if(!x)                                                              \
         ADOS::ThrowException(*m_pConnection->getConnection(),*this);
 
 #ifdef max
-#	undef max
+#   undef max
 #endif
 
 //------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInf
     ::rtl::OUString sNewSql;
     OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,sql);
     if(pNode)
-    {	// special handling for parameters
+    {   // special handling for parameters
         /* we recusive replace all occurences of ? in the statement and replace them with name like "æ¬å" */
         sal_Int32 nParameterCount = 0;
         ::rtl::OUString sDefaultName = ::rtl::OUString::createFromAscii("parame");
@@ -109,7 +109,7 @@ OPreparedStatement::~OPreparedStatement()
 Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OStatement_Base::queryInterface(rType);
-    return aRet.hasValue() ? aRet : ::cppu::queryInterface(	rType,
+    return aRet.hasValue() ? aRet : ::cppu::queryInterface( rType,
                                         static_cast< XPreparedStatement*>(this),
                                         static_cast< XParameters*>(this),
                                         static_cast< XPreparedBatchExecution*>(this),
@@ -118,7 +118,7 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OPreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes(	::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedStatement > *)0 ),
+    ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedStatement > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< XParameters > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< XResultSetMetaDataSupplier > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedBatchExecution > *)0 ));
@@ -165,7 +165,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    SQLWarning	warning;
+    SQLWarning  warning;
 
     // Reset warnings
 
@@ -173,7 +173,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
 
     // Reset the statement handle, warning and saved Resultset
 
-    //	reset();
+    //  reset();
 
     // Call SQLExecute
 
@@ -445,7 +445,7 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }
-    //	setObject (parameterIndex, x, sqlType, 0);
+    //  setObject (parameterIndex, x, sqlType, 0);
 }
 // -------------------------------------------------------------------------
 
@@ -504,15 +504,15 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
                 CHECK_RETURN(aParam.PutValue(aVal));
             }
         }
-            //	m_pParameters->Delete(OLEVariant(i));
+            //  m_pParameters->Delete(OLEVariant(i));
 
     }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::clearBatch(  ) throw(SQLException, RuntimeException)
 {
-    //	clearParameters(  );
-    //	m_aBatchList.erase();
+    //  clearParameters(  );
+    //  m_aBatchList.erase();
 }
 // -------------------------------------------------------------------------
 

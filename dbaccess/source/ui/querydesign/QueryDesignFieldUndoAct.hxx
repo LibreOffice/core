@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,23 +43,23 @@ namespace dbaui
     // ================================================================================================
     // OQueryDesignFieldUndoAct - Basisklasse fuer Undos in der Feldauflistung im Abfrageentwurf
 
-    
+
     class OQueryDesignFieldUndoAct : public OCommentUndoAction
     {
     protected:
-        OSelectionBrowseBox*	pOwner;
-        USHORT					m_nColumnPostion;
+        OSelectionBrowseBox*    pOwner;
+        USHORT                  m_nColumnPostion;
 
-        virtual void	Undo() = 0;
-        virtual void	Redo() = 0;
+        virtual void    Undo() = 0;
+        virtual void    Redo() = 0;
 
     public:
         OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, USHORT nCommentID);
         virtual ~OQueryDesignFieldUndoAct();
 
-        inline void SetColumnPosition(USHORT _nColumnPostion) 
-        { 
-            m_nColumnPostion = _nColumnPostion; 
+        inline void SetColumnPosition(USHORT _nColumnPostion)
+        {
+            m_nColumnPostion = _nColumnPostion;
             OSL_ENSURE(m_nColumnPostion != BROWSER_INVALIDID,"Column position was not set add the undo action!");
             OSL_ENSURE(m_nColumnPostion < pOwner->GetColumnCount(),"Position outside the column count!");
         }
@@ -71,16 +71,16 @@ namespace dbaui
     class OTabFieldCellModifiedUndoAct : public OQueryDesignFieldUndoAct
     {
     protected:
-        String		m_strNextCellContents;
-        sal_Int32	m_nCellIndex;
+        String      m_strNextCellContents;
+        sal_Int32   m_nCellIndex;
 
     public:
-        OTabFieldCellModifiedUndoAct(OSelectionBrowseBox* pSelBrwBox) 
-            : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_MODIFY_CELL) 
+        OTabFieldCellModifiedUndoAct(OSelectionBrowseBox* pSelBrwBox)
+            : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_MODIFY_CELL)
             ,m_nCellIndex(BROWSER_INVALIDID){ }
 
-        inline void SetCellContents(const String& str)	{ m_strNextCellContents = str; }
-        inline void SetCellIndex(sal_Int32 nIndex)		{ m_nCellIndex = nIndex; }
+        inline void SetCellContents(const String& str)  { m_strNextCellContents = str; }
+        inline void SetCellIndex(sal_Int32 nIndex)      { m_nCellIndex = nIndex; }
 
         virtual void Undo();
         virtual void Redo() { Undo(); }
@@ -92,7 +92,7 @@ namespace dbaui
     class OTabFieldSizedUndoAct : public OQueryDesignFieldUndoAct
     {
     protected:
-        long		m_nNextWidth;
+        long        m_nNextWidth;
 
     public:
         OTabFieldSizedUndoAct(OSelectionBrowseBox* pSelBrwBox) : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_SIZE_COLUMN), m_nNextWidth(0) { }
@@ -109,7 +109,7 @@ namespace dbaui
     class OTabFieldUndoAct : public OQueryDesignFieldUndoAct
     {
     protected:
-        OTableFieldDescRef		pDescr;		// geloeschte Spaltenbeschreibung
+        OTableFieldDescRef      pDescr;     // geloeschte Spaltenbeschreibung
 
     public:
         OTabFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, USHORT nCommentID) : OQueryDesignFieldUndoAct(pSelBrwBox, nCommentID) { }
@@ -150,8 +150,8 @@ namespace dbaui
     {
     protected:
         virtual void Undo();
-        virtual void Redo() 
-        { 
+        virtual void Redo()
+        {
             Undo();
         }
 

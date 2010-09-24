@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -276,18 +276,18 @@ SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
         pArray->unoAddDim( 0, -1 );
     }
 
-    for( USHORT	i=0; i< nArraySize; i++)
+    for( USHORT i=0; i< nArraySize; i++)
     {
         SbxVariable* pNew = new SbxVariable( SbxBYTE );
         BYTE aByte = static_cast< BYTE >( i%2 ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
         pNew->PutByte( aByte );
         pNew->SetFlag( SBX_WRITE );
-        pArray->Put( pNew, i );	
+        pArray->Put( pNew, i );
         if( i%2 )
             pSrc++;
     }
     return pArray;
-}	
+}
 
 // Convert an array of bytes to string (2bytes per character)
 ::rtl::OUString ByteArrayToString(SbxArray* pArr)
@@ -306,10 +306,10 @@ SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
         }
         else
         {
-            aChar = aTempChar;	
+            aChar = aTempChar;
         }
     }
-    
+
     if( nCount%2 )
     {
         aStrBuf.append(aChar);

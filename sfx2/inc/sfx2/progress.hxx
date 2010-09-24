@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,38 +46,38 @@ struct SvProgressArg;
 
 class SFX2_DLLPUBLIC SfxProgress
 {
-    SfxProgress_Impl*		pImp;
-    ULONG					nVal;
-    BOOL					bSuspended;
+    SfxProgress_Impl*       pImp;
+    ULONG                   nVal;
+    BOOL                    bSuspended;
 
 public:
                             SfxProgress( SfxObjectShell* pObjSh,
                                          const String& rText,
                                          ULONG nRange, BOOL bAllDocs = FALSE,
                                          BOOL bWait = TRUE );
-    virtual 				~SfxProgress();
+    virtual                 ~SfxProgress();
 
-    virtual void			SetText( const String& rText );
-    BOOL					SetStateText( ULONG nVal, const String &rVal, ULONG nNewRange = 0 );
-    virtual BOOL			SetState( ULONG nVal, ULONG nNewRange = 0 );
-    ULONG					GetState() const { return nVal; }
+    virtual void            SetText( const String& rText );
+    BOOL                    SetStateText( ULONG nVal, const String &rVal, ULONG nNewRange = 0 );
+    virtual BOOL            SetState( ULONG nVal, ULONG nNewRange = 0 );
+    ULONG                   GetState() const { return nVal; }
 
-    void					Resume();
-    void					Suspend();
-    BOOL					IsSuspended() const { return bSuspended; }
+    void                    Resume();
+    void                    Suspend();
+    BOOL                    IsSuspended() const { return bSuspended; }
 
-    void					Lock();
-    void					UnLock();
-    void					Reschedule();
+    void                    Lock();
+    void                    UnLock();
+    void                    Reschedule();
 
-    void					Stop();
+    void                    Stop();
 
-    void					SetWaitMode( BOOL bWait );
-    BOOL					GetWaitMode() const;
+    void                    SetWaitMode( BOOL bWait );
+    BOOL                    GetWaitMode() const;
 
-    static SfxProgress* 	GetActiveProgress( SfxObjectShell *pDocSh = 0 );
-    static void				EnterLock();
-    static void				LeaveLock();
+    static SfxProgress*     GetActiveProgress( SfxObjectShell *pDocSh = 0 );
+    static void             EnterLock();
+    static void             LeaveLock();
 
 //#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_STATIC_LINK( SfxProgress, SetStateHdl, PlugInLoadStatus* );

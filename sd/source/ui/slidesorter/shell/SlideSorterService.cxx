@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -140,7 +140,7 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
         try
         {
             mxViewId = Reference<XResourceId>(rArguments[0], UNO_QUERY_THROW);
-            
+
             // Get the XController.
             Reference<frame::XController> xController (rArguments[1], UNO_QUERY_THROW);
 
@@ -294,7 +294,7 @@ Reference<container::XIndexAccess> SAL_CALL SlideSorterService::getDocumentSlide
 {
     return mpSlideSorter->GetModel().GetDocumentSlides();
 }
-    
+
 
 
 
@@ -306,7 +306,7 @@ void SAL_CALL SlideSorterService::setDocumentSlides (
     if (mpSlideSorter.get() != NULL && mpSlideSorter->IsValid())
         mpSlideSorter->GetController().SetDocumentSlides(rxSlides);
 }
-    
+
 
 
 
@@ -420,7 +420,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsSuspendPreviewUpdatesDuringFullScreen
         return mpSlideSorter->GetController().GetProperties()
             ->IsSuspendPreviewUpdatesDuringFullScreenPresentation();
 }
-    
+
 
 
 
@@ -433,7 +433,7 @@ void SAL_CALL SlideSorterService::setIsSuspendPreviewUpdatesDuringFullScreenPres
         mpSlideSorter->GetController().GetProperties()
             ->SetSuspendPreviewUpdatesDuringFullScreenPresentation(bValue);
 }
-    
+
 
 
 
@@ -446,7 +446,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsOrientationVertical (void)
     else
         return mpSlideSorter->GetView().GetOrientation() == SlideSorterView::VERTICAL;
 }
-    
+
 
 
 
@@ -472,7 +472,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsSmoothScrolling (void)
     else
         return mpSlideSorter->GetController().GetProperties()->IsSmoothSelectionScrolling();
 }
-    
+
 
 
 

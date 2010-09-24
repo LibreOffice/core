@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ using namespace cppu;
 using namespace x11;
 
 /*
- *	DropTargetDropContext
+ *  DropTargetDropContext
  */
 
 DropTargetDropContext::DropTargetDropContext(
@@ -70,7 +70,7 @@ void DropTargetDropContext::dropComplete( sal_Bool success ) throw()
 
 
 /*
- *	DropTargetDragContext
+ *  DropTargetDragContext
  */
 
 DropTargetDragContext::DropTargetDragContext(
@@ -99,7 +99,7 @@ void DropTargetDragContext::rejectDrag() throw()
 }
 
 /*
- *	DragSourceContext
+ *  DragSourceContext
  */
 
 DragSourceContext::DragSourceContext(

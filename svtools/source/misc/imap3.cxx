@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@
 \******************************************************************************/
 
 IMapCompat::IMapCompat( SvStream& rStm, const USHORT nStreamMode ) :
-            pRWStm		( &rStm ),
-            nStmMode	( nStreamMode )
+            pRWStm      ( &rStm ),
+            nStmMode    ( nStreamMode )
 {
     DBG_ASSERT( nStreamMode == STREAM_READ || nStreamMode == STREAM_WRITE, "Wrong Mode!" );
 
@@ -77,7 +77,7 @@ IMapCompat::~IMapCompat()
     {
         if ( nStmMode == STREAM_WRITE )
         {
-            const ULONG	nEndPos = pRWStm->Tell();
+            const ULONG nEndPos = pRWStm->Tell();
 
             pRWStm->Seek( nCompatPos );
             *pRWStm << (UINT32) ( nEndPos - nTotalSize );

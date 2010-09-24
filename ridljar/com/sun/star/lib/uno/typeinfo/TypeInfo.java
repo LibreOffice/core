@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,18 +27,18 @@
 package com.sun.star.lib.uno.typeinfo;
 
 
-/** Defines a class to describe additional type information. 
+/** Defines a class to describe additional type information.
  */
 public class TypeInfo
 {
-    public static final int IN 			= 0x00000001;
-    public static final int OUT 		= 0x00000002;
-    public static final int UNSIGNED 	= 0x00000004;
-    public static final int READONLY	= 0x00000008;
-    public static final int ONEWAY 	 	= 0x00000010;
-    public static final int CONST		= 0x00000020;
-    public static final int ANY			= 0x00000040;
-    public static final int INTERFACE	= 0x00000080;
+    public static final int IN          = 0x00000001;
+    public static final int OUT         = 0x00000002;
+    public static final int UNSIGNED    = 0x00000004;
+    public static final int READONLY    = 0x00000008;
+    public static final int ONEWAY      = 0x00000010;
+    public static final int CONST       = 0x00000020;
+    public static final int ANY         = 0x00000040;
+    public static final int INTERFACE   = 0x00000080;
 
     /**
        Marks an extended attribute of an interface type as bound.
@@ -50,8 +50,8 @@ public class TypeInfo
      */
     public static final int BOUND = 0x00000100;
 
-    protected int		m_flags;
-    protected String	m_name;
+    protected int       m_flags;
+    protected String    m_name;
 
     public TypeInfo(String name, int flags)
     {

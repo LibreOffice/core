@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ public:
     virtual                     ~FormulaToken();
 
     inline  void                Delete()                { delete this; }
-    inline  StackVar      		GetType() const         { return eType; }
+    inline  StackVar            GetType() const         { return eType; }
             BOOL                IsFunction() const; // pure functions, no operators
             BOOL                IsMatrixFunction() const;   // if a function _always_ returns a Matrix
             BYTE                GetParamCount() const;
@@ -159,12 +159,12 @@ public:
     virtual BOOL                TextEqual( const formula::FormulaToken& rToken ) const;
     virtual BOOL                operator==( const FormulaToken& rToken ) const;
 
-    virtual bool isFunction() const 
+    virtual bool isFunction() const
     {
         return IsFunction();
     }
 
-    virtual sal_uInt32 getArgumentCount() const 
+    virtual sal_uInt32 getArgumentCount() const
     {
         return GetParamCount();
     }

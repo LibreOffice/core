@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ namespace toolkit
         static UnoPropertyArrayHelper* pHelper = NULL;
         if ( !pHelper )
         {
-            uno::Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
+            uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
             pHelper = new UnoPropertyArrayHelper( aIDs );
         }
         return *pHelper;

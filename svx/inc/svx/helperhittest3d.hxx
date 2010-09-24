@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ class E3dScene;
     will be used
 */
 E3dScene* fillViewInformation3DForCompoundObject(
-    drawinglayer::geometry::ViewInformation3D& o_rViewInformation3D, 
+    drawinglayer::geometry::ViewInformation3D& o_rViewInformation3D,
     const E3dCompoundObject& rCandidate);
 
 /** support for getting all from a 2d position hit objects in a 3d scene
@@ -84,8 +84,8 @@ E3dScene* fillViewInformation3DForCompoundObject(
 
 */
 SVX_DLLPUBLIC void getAllHit3DObjectsSortedFrontToBack(
-    const basegfx::B2DPoint& rPoint, 
-    const E3dScene& rScene, 
+    const basegfx::B2DPoint& rPoint,
+    const E3dScene& rScene,
     ::std::vector< const E3dCompoundObject* >& o_rResult);
 
 /** support for checking if the single given 3d object is hit at position
@@ -100,7 +100,7 @@ SVX_DLLPUBLIC void getAllHit3DObjectsSortedFrontToBack(
     true if hit, false if not
 */
 bool checkHitSingle3DObject(
-    const basegfx::B2DPoint& rPoint, 
+    const basegfx::B2DPoint& rPoint,
     const E3dCompoundObject& rCandidate);
 
 //////////////////////////////////////////////////////////////////////////////

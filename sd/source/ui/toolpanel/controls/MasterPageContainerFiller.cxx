@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,11 +86,11 @@ void MasterPageContainerFiller::RunNextStep (void)
         case SCAN_TEMPLATE:
             meState = ScanTemplate();
             break;
-            
+
         case ADD_TEMPLATE:
             meState = AddTemplate();
             break;
-            
+
         case DONE:
         case ERROR:
         default:
@@ -124,7 +124,7 @@ bool MasterPageContainerFiller::HasNextStep (void)
         case DONE:
         case ERROR:
             return false;
-            
+
         default:
             return true;
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,18 +52,18 @@ namespace basegfx
     class ip_single
     {
     private:
-        double										mfVal;
-        double										mfInc;
+        double                                      mfVal;
+        double                                      mfInc;
 
     public:
-        ip_single() 
-        :	mfVal(0.0), 
-            mfInc(0.0) 
+        ip_single()
+        :   mfVal(0.0),
+            mfInc(0.0)
         {}
 
-        ip_single(double fVal, double fInc) 
-        :	mfVal(fVal), 
-            mfInc(fInc) 
+        ip_single(double fVal, double fInc)
+        :   mfVal(fVal),
+            mfInc(fInc)
         {}
 
         double getVal() const { return mfVal; }
@@ -78,17 +78,17 @@ namespace basegfx
     class ip_double
     {
     private:
-        ip_single									maX;
-        ip_single									maY;
+        ip_single                                   maX;
+        ip_single                                   maY;
 
     public:
-        ip_double() 
-        :	maX(),
+        ip_double()
+        :   maX(),
             maY()
         {}
 
-        ip_double(double fXVal, double fXInc, double fYVal, double fYInc) 
-        :	maX(fXVal, fXInc),
+        ip_double(double fXVal, double fXInc, double fYVal, double fYInc)
+        :   maX(fXVal, fXInc),
             maY(fYVal, fYInc)
         {}
 
@@ -104,19 +104,19 @@ namespace basegfx
     class ip_triple
     {
     private:
-        ip_single									maX;
-        ip_single									maY;
-        ip_single									maZ;
+        ip_single                                   maX;
+        ip_single                                   maY;
+        ip_single                                   maZ;
 
     public:
-        ip_triple() 
-        :	maX(),
+        ip_triple()
+        :   maX(),
             maY(),
             maZ()
         {}
 
-        ip_triple(double fXVal, double fXInc, double fYVal, double fYInc, double fZVal, double fZInc) 
-        :	maX(fXVal, fXInc),
+        ip_triple(double fXVal, double fXInc, double fYVal, double fYInc, double fZVal, double fZInc)
+        :   maX(fXVal, fXInc),
             maY(fYVal, fYInc),
             maZ(fZVal, fZInc)
         {}
@@ -135,15 +135,15 @@ namespace basegfx
 
 namespace basegfx
 {
-    #define	SCANLINE_EMPTY_INDEX (0xffffffff)
+    #define SCANLINE_EMPTY_INDEX (0xffffffff)
 
     class InterpolatorProvider3D
     {
     private:
-        ::std::vector< ip_triple >					maColorInterpolators;
-        ::std::vector< ip_triple >					maNormalInterpolators;
-        ::std::vector< ip_double >					maTextureInterpolators;
-        ::std::vector< ip_triple >					maInverseTextureInterpolators;
+        ::std::vector< ip_triple >                  maColorInterpolators;
+        ::std::vector< ip_triple >                  maNormalInterpolators;
+        ::std::vector< ip_double >                  maTextureInterpolators;
+        ::std::vector< ip_triple >                  maInverseTextureInterpolators;
 
     protected:
         sal_uInt32 addColorInterpolator(const BColor& rA, const BColor& rB, double fInvYDelta)
@@ -212,19 +212,19 @@ namespace basegfx
     class RasterConversionLineEntry3D
     {
     private:
-        ip_single									maX;
-        ip_single									maZ;
-        sal_Int32									mnY;
-        sal_uInt32									mnCount;
+        ip_single                                   maX;
+        ip_single                                   maZ;
+        sal_Int32                                   mnY;
+        sal_uInt32                                  mnCount;
 
-        sal_uInt32									mnColorIndex;
-        sal_uInt32									mnNormalIndex;
-        sal_uInt32									mnTextureIndex;
-        sal_uInt32									mnInverseTextureIndex;
+        sal_uInt32                                  mnColorIndex;
+        sal_uInt32                                  mnNormalIndex;
+        sal_uInt32                                  mnTextureIndex;
+        sal_uInt32                                  mnInverseTextureIndex;
 
     public:
         RasterConversionLineEntry3D(const double& rfX, const double& rfDeltaX, const double& rfZ, const double& rfDeltaZ, sal_Int32 nY, sal_uInt32 nCount)
-        :	maX(rfX, rfDeltaX),
+        :   maX(rfX, rfDeltaX),
             maZ(rfZ, rfDeltaZ),
             mnY(nY),
             mnCount(nCount),
@@ -311,7 +311,7 @@ namespace basegfx
     {
     private:
         // the line entries for an area conversion run
-        ::std::vector< RasterConversionLineEntry3D >			maLineEntries;
+        ::std::vector< RasterConversionLineEntry3D >            maLineEntries;
 
         struct lineComparator
         {

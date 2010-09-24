@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,16 +41,16 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32								mnRefCount;
+            sal_uInt32                              mnRefCount;
 
             // data definitions
-            ::std::vector< double >						maDotDashArray;			// array of double which defines the dot-dash pattern
-            double										mfFullDotDashLen;		// sum of maDotDashArray (for convenience)
+            ::std::vector< double >                     maDotDashArray;         // array of double which defines the dot-dash pattern
+            double                                      mfFullDotDashLen;       // sum of maDotDashArray (for convenience)
 
             ImpStrokeAttribute(
                 const ::std::vector< double >& rDotDashArray,
                 double fFullDotDashLen)
-            :	mnRefCount(0),
+            :   mnRefCount(0),
                 maDotDashArray(rDotDashArray),
                 mfFullDotDashLen(fFullDotDashLen)
             {
@@ -58,7 +58,7 @@ namespace drawinglayer
 
             // data read access
             const ::std::vector< double >& getDotDashArray() const { return maDotDashArray; }
-            double getFullDotDashLen() const 
+            double getFullDotDashLen() const
             {
                 if(0.0 == mfFullDotDashLen && maDotDashArray.size())
                 {
@@ -67,7 +67,7 @@ namespace drawinglayer
                     const_cast< ImpStrokeAttribute* >(this)->mfFullDotDashLen = fAccumulated;
                 }
 
-                return mfFullDotDashLen; 
+                return mfFullDotDashLen;
             }
 
             bool operator==(const ImpStrokeAttribute& rCandidate) const
@@ -75,7 +75,7 @@ namespace drawinglayer
                 return (getDotDashArray() == rCandidate.getDotDashArray()
                     && getFullDotDashLen() == rCandidate.getFullDotDashLen());
             }
-            
+
             static ImpStrokeAttribute* get_global_default()
             {
                 static ImpStrokeAttribute* pDefault = 0;
@@ -97,19 +97,19 @@ namespace drawinglayer
         StrokeAttribute::StrokeAttribute(
             const ::std::vector< double >& rDotDashArray,
             double fFullDotDashLen)
-        :	mpStrokeAttribute(new ImpStrokeAttribute(
+        :   mpStrokeAttribute(new ImpStrokeAttribute(
                 rDotDashArray, fFullDotDashLen))
         {
         }
 
         StrokeAttribute::StrokeAttribute()
-        :	mpStrokeAttribute(ImpStrokeAttribute::get_global_default())
+        :   mpStrokeAttribute(ImpStrokeAttribute::get_global_default())
         {
             mpStrokeAttribute->mnRefCount++;
         }
 
         StrokeAttribute::StrokeAttribute(const StrokeAttribute& rCandidate)
-        :	mpStrokeAttribute(rCandidate.mpStrokeAttribute)
+        :   mpStrokeAttribute(rCandidate.mpStrokeAttribute)
         {
             mpStrokeAttribute->mnRefCount++;
         }
@@ -143,7 +143,7 @@ namespace drawinglayer
                 {
                     delete mpStrokeAttribute;
                 }
-                
+
                 mpStrokeAttribute = rCandidate.mpStrokeAttribute;
                 mpStrokeAttribute->mnRefCount++;
             }
@@ -166,14 +166,14 @@ namespace drawinglayer
             return (*rCandidate.mpStrokeAttribute == *mpStrokeAttribute);
         }
 
-        const ::std::vector< double >& StrokeAttribute::getDotDashArray() const 
-        { 
-            return mpStrokeAttribute->getDotDashArray(); 
+        const ::std::vector< double >& StrokeAttribute::getDotDashArray() const
+        {
+            return mpStrokeAttribute->getDotDashArray();
         }
 
         double StrokeAttribute::getFullDotDashLen() const
-        { 
-            return mpStrokeAttribute->getFullDotDashLen(); 
+        {
+            return mpStrokeAttribute->getFullDotDashLen();
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

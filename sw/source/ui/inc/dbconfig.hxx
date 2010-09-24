@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ public:
     SwDBConfig();
     virtual ~SwDBConfig();
 
-    void					Load();
-    const SwDBData&			GetAddressSource();
+    void                    Load();
+    const SwDBData&         GetAddressSource();
     const SwDBData&         GetBibliographySource();
     virtual void Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );

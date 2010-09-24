@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,7 +132,7 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( USHORT nPrefix,
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
     case XML_TOK_TABLE_ROW_CELL:
-//		if( IsInsertCellPossible() )
+//      if( IsInsertCellPossible() )
         {
             bHasCell = sal_True;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
@@ -142,7 +142,7 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( USHORT nPrefix,
         }
         break;
     case XML_TOK_TABLE_ROW_COVERED_CELL:
-//		if( IsInsertCellPossible() )
+//      if( IsInsertCellPossible() )
         {
             bHasCell = sal_True;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,

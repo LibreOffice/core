@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@
 namespace framework
 {
 
-class PropertySetContainer : public com::sun::star::container::XIndexContainer	,
-                             public ThreadHelpBase								,	// Struct for right initalization of mutex member! Must be first of baseclasses.
+class PropertySetContainer : public com::sun::star::container::XIndexContainer  ,
+                             public ThreadHelpBase                              ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                              public ::cppu::OWeakObject
 {
     public:
@@ -84,11 +84,11 @@ class PropertySetContainer : public com::sun::star::container::XIndexContainer	,
             throw (::com::sun::star::uno::RuntimeException);
 
     protected:
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >	m_xServiceManager;
+        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
 
     private:
         typedef std::vector< com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > > PropertySetVector;
-        PropertySetVector																m_aPropertySetVector;
+        PropertySetVector                                                               m_aPropertySetVector;
 
 };
 

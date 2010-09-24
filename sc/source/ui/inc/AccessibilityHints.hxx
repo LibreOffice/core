@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,10 @@
 #include <svl/smplhint.hxx>
 #include <svl/hint.hxx>
 
-#define SC_HINT_ACC_SIMPLE_START	SFX_HINT_USER00
-#define SC_HINT_ACC_TABLECHANGED	SC_HINT_ACC_SIMPLE_START + 1
-#define SC_HINT_ACC_CURSORCHANGED	SC_HINT_ACC_SIMPLE_START + 2
-#define SC_HINT_ACC_VISAREACHANGED	SC_HINT_ACC_SIMPLE_START + 3
+#define SC_HINT_ACC_SIMPLE_START    SFX_HINT_USER00
+#define SC_HINT_ACC_TABLECHANGED    SC_HINT_ACC_SIMPLE_START + 1
+#define SC_HINT_ACC_CURSORCHANGED   SC_HINT_ACC_SIMPLE_START + 2
+#define SC_HINT_ACC_VISAREACHANGED  SC_HINT_ACC_SIMPLE_START + 3
 #define SC_HINT_ACC_ENTEREDITMODE   SC_HINT_ACC_SIMPLE_START + 4
 #define SC_HINT_ACC_LEAVEEDITMODE   SC_HINT_ACC_SIMPLE_START + 5
 #define SC_HINT_ACC_MAKEDRAWLAYER   SC_HINT_ACC_SIMPLE_START + 6
@@ -48,7 +48,7 @@ class ScAccWinFocusLostHint : public SfxHint
                 xOldAccessible;
 public:
                 TYPEINFO();
-                ScAccWinFocusLostHint( 
+                ScAccWinFocusLostHint(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xOld );
                 ~ScAccWinFocusLostHint();
 
@@ -62,7 +62,7 @@ class ScAccWinFocusGotHint : public SfxHint
                 xNewAccessible;
 public:
                 TYPEINFO();
-                ScAccWinFocusGotHint( 
+                ScAccWinFocusGotHint(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xNew );
                 ~ScAccWinFocusGotHint();
 
@@ -72,26 +72,26 @@ public:
 
 class ScAccGridWinFocusLostHint : public ScAccWinFocusLostHint
 {
-    ScSplitPos	eOldGridWin;
+    ScSplitPos  eOldGridWin;
 public:
                 TYPEINFO();
-                ScAccGridWinFocusLostHint( ScSplitPos eOldGridWin, 
+                ScAccGridWinFocusLostHint( ScSplitPos eOldGridWin,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xOld );
                 ~ScAccGridWinFocusLostHint();
 
-    ScSplitPos	GetOldGridWin() const { return eOldGridWin; }
+    ScSplitPos  GetOldGridWin() const { return eOldGridWin; }
 };
 
 class ScAccGridWinFocusGotHint : public ScAccWinFocusGotHint
 {
-    ScSplitPos	eNewGridWin;
+    ScSplitPos  eNewGridWin;
 public:
                 TYPEINFO();
                 ScAccGridWinFocusGotHint( ScSplitPos eNewGridWin,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xNew );
                 ~ScAccGridWinFocusGotHint();
 
-    ScSplitPos	GetNewGridWin() const { return eNewGridWin; }
+    ScSplitPos  GetNewGridWin() const { return eNewGridWin; }
 };
 
 #endif

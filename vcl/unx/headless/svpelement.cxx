@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,16 +57,16 @@ class SvpElementContainer
     std::list< SvpElement* >        m_aElements;
     int                             m_nSocket;
     oslThread                       m_aThread;
-    
+
     SvpElementContainer();
     ~SvpElementContainer();
     public:
     void registerElement( SvpElement* pElement ) { m_aElements.push_back(pElement); }
     void deregisterElement( SvpElement* pElement ) { m_aElements.remove(pElement); }
-    
+
     void run();
     DECL_LINK(processRequest,void*);
-    
+
     static SvpElementContainer& get();
 };
 
@@ -86,7 +86,7 @@ SvpElementContainer::SvpElementContainer()
     if( m_nSocket >= 0)
     {
         int nOn = 1;
-        if( setsockopt(m_nSocket, SOL_SOCKET, SO_REUSEADDR, 
+        if( setsockopt(m_nSocket, SOL_SOCKET, SO_REUSEADDR,
                        (char*)&nOn, sizeof(nOn)) )
         {
             perror( "SvpElementContainer: changing socket options failed" );
@@ -165,7 +165,7 @@ static const char* matchType( SvpElement* pEle )
 IMPL_LINK( SvpElementContainer, processRequest, void*, pSocket )
 {
     int nFile = (int)pSocket;
-    
+
     rtl::OStringBuffer aBuf( 256 ), aAnswer( 256 );
     char c;
     while( read( nFile, &c, 1 ) && c != '\n' )
@@ -228,7 +228,7 @@ IMPL_LINK( SvpElementContainer, processRequest, void*, pSocket )
     }
     write( nFile, aAnswer.getStr(), aAnswer.getLength() );
     close( nFile );
-    
+
     return 0;
 }
 

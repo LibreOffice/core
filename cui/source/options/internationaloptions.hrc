@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,42 +31,42 @@
 #include <svtools/controldims.hrc>
 
 // general sizes
-#define PAGE_SIZE_X					260
-#define PAGE_SIZE_Y					185
+#define PAGE_SIZE_X                 260
+#define PAGE_SIZE_Y                 185
 
 // x-positions
-#define	COL_0						RSC_SP_TBPG_INNERBORDER_LEFT
-#define	COL_1						(COL_0 + RSC_SP_FLGR_SPACE_X)
-#define	COL_2						(COL_1 + RSC_SP_CHK_TEXTINDENT)
-#define COL_LAST					(PAGE_SIZE_X - RSC_SP_TBPG_INNERBORDER_RIGHT)
+#define COL_0                       RSC_SP_TBPG_INNERBORDER_LEFT
+#define COL_1                       (COL_0 + RSC_SP_FLGR_SPACE_X)
+#define COL_2                       (COL_1 + RSC_SP_CHK_TEXTINDENT)
+#define COL_LAST                    (PAGE_SIZE_X - RSC_SP_TBPG_INNERBORDER_RIGHT)
 
 // heights
-#define HEIGHT_FL					RSC_CD_FIXEDLINE_HEIGHT
-#define	HEIGHT_RB					RSC_CD_RADIOBUTTON_HEIGHT
-#define	HEIGHT_CB					RSC_CD_CHECKBOX_HEIGHT
+#define HEIGHT_FL                   RSC_CD_FIXEDLINE_HEIGHT
+#define HEIGHT_RB                   RSC_CD_RADIOBUTTON_HEIGHT
+#define HEIGHT_CB                   RSC_CD_CHECKBOX_HEIGHT
 
 // vertical spacing
-#define	SPACE_FL_NEXTCTRL_Y			RSC_SP_CTRL_DESC_Y
+#define SPACE_FL_NEXTCTRL_Y         RSC_SP_CTRL_DESC_Y
 
 // y-positions
-#define	ROW_0						RSC_SP_TBPG_INNERBORDER_TOP
-#define	ROW_1						(ROW_0 + HEIGHT_FL + SPACE_FL_NEXTCTRL_Y)
-#define	ROW_2						(ROW_1 + HEIGHT_RB + RSC_SP_CTRL_GROUP_Y)
-#define	ROW_3						(ROW_2 + HEIGHT_RB + RSC_SP_FLGR_SPACE_Y)
-#define	ROW_4						(ROW_3 + HEIGHT_FL + SPACE_FL_NEXTCTRL_Y)
-#define	ROW_5						(ROW_4 + HEIGHT_CB + RSC_SP_CTRL_GROUP_Y)
+#define ROW_0                       RSC_SP_TBPG_INNERBORDER_TOP
+#define ROW_1                       (ROW_0 + HEIGHT_FL + SPACE_FL_NEXTCTRL_Y)
+#define ROW_2                       (ROW_1 + HEIGHT_RB + RSC_SP_CTRL_GROUP_Y)
+#define ROW_3                       (ROW_2 + HEIGHT_RB + RSC_SP_FLGR_SPACE_Y)
+#define ROW_4                       (ROW_3 + HEIGHT_FL + SPACE_FL_NEXTCTRL_Y)
+#define ROW_5                       (ROW_4 + HEIGHT_CB + RSC_SP_CTRL_GROUP_Y)
 
 // misc calculation makros
-#define WIDTH2END( startcol )		(COL_LAST - startcol)
+#define WIDTH2END( startcol )       (COL_LAST - startcol)
 
 
 // resource IDs
-#define FL_DEFTXTDIRECTION			1
-#define	RB_TXTDIR_LEFT2RIGHT		2
-#define	RB_TXTDIR_RIGHT2LEFT		3
-#define	FL_SHEETVIEW				4
-#define	CB_SHTVW_RIGHT2LEFT			5
-#define	CB_SHTVW_CURRENTDOCONLY		6
+#define FL_DEFTXTDIRECTION          1
+#define RB_TXTDIR_LEFT2RIGHT        2
+#define RB_TXTDIR_RIGHT2LEFT        3
+#define FL_SHEETVIEW                4
+#define CB_SHTVW_RIGHT2LEFT         5
+#define CB_SHTVW_CURRENTDOCONLY     6
 
 #endif
 

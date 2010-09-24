@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,8 @@
 
 #include <svl/smplhint.hxx>
 
-#define SW_BROADCASTID_START 			SFX_HINT_USER00
-#define SW_BROADCAST_DRAWVIEWS_CREATED	SW_BROADCASTID_START
+#define SW_BROADCASTID_START            SFX_HINT_USER00
+#define SW_BROADCAST_DRAWVIEWS_CREATED  SW_BROADCASTID_START
 
 
 #endif

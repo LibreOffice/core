@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@ namespace pcr
     //========================================================================
     struct OLineDescriptor : public ::com::sun::star::inspection::LineDescriptor
     {
-        ::rtl::OUString             sName;	            // the name of the property
+        ::rtl::OUString             sName;              // the name of the property
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >
                                     xPropertyHandler;   // the handler for this property
         ::com::sun::star::uno::Any  aValue;             // the current value of the property
 
-        bool                        bUnknownValue	 : 1;   // is the property value currently "unknown"? (PropertyState_AMBIGUOUS)
+        bool                        bUnknownValue    : 1;   // is the property value currently "unknown"? (PropertyState_AMBIGUOUS)
         bool                        bReadOnly        : 1;
 
         OLineDescriptor()

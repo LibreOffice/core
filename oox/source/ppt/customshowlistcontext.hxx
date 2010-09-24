@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ namespace oox { namespace ppt {
 
     struct CustomShow
     {
-        ::rtl::OUString				maName;
-        ::rtl::OUString				mnId;
+        ::rtl::OUString             maName;
+        ::rtl::OUString             mnId;
         std::vector< rtl::OUString >maSldLst;
     };
 

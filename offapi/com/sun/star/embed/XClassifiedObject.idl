@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ published interface XClassifiedObject: com::sun::star::uno::XInterface
 {
     // -----------------------------------------------------------------------
     /** retrieves class ID of the object.
-        
+
         @return
             unique class ID of the object
      */
@@ -55,7 +55,7 @@ published interface XClassifiedObject: com::sun::star::uno::XInterface
 
     // -----------------------------------------------------------------------
     /** retrieves symbolic name for the object type to be used in UI.
-        
+
         @return
             the symbolic name for the object
      */
@@ -63,7 +63,7 @@ published interface XClassifiedObject: com::sun::star::uno::XInterface
 
     // -----------------------------------------------------------------------
     /** sets the class ID and symbolic name to an object.
-        
+
         @param aClassID
             the new class ID
 

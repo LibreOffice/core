@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ OPredicateInterpreter::~OPredicateInterpreter()
         delete m_aStack.top();
         m_aStack.pop();
     }
-    //	m_aStack.clear();
+    //  m_aStack.clear();
 }
 // -----------------------------------------------------------------------------
 void OPredicateCompiler::Clean()
@@ -74,7 +74,7 @@ void OSQLAnalyzer::clean()
 // -----------------------------------------------------------------------------
 void OSQLAnalyzer::bindParameterRow(OValueRefRow& _pRow)
 {
-    OCodeList& rCodeList	= m_aCompiler->m_aCodeList;
+    OCodeList& rCodeList    = m_aCompiler->m_aCodeList;
     for(OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end();++aIter)
     {
         OOperandParam* pParam = PTR_CAST(OOperandParam,(*aIter));

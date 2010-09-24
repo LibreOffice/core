@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,16 +43,16 @@
 --------------------------------------------------*/
 SwSplitTblDlg::SwSplitTblDlg( Window *pParent, SwWrtShell &rSh ) :
     SvxStandardDialog(pParent, SW_RES(DLG_SPLIT_TABLE)),
-    aOKPB(					this, SW_RES(PB_OK		)),
-    aCancelPB(      		this, SW_RES(PB_CANCEL	)),
-    aHelpPB(        		this, SW_RES(PB_HELP		)),
+    aOKPB(                  this, SW_RES(PB_OK      )),
+    aCancelPB(              this, SW_RES(PB_CANCEL  )),
+    aHelpPB(                this, SW_RES(PB_HELP        )),
     aSplitFL(               this, SW_RES(FL_SPLIT    )),
-    aCntntCopyRB(   		this, SW_RES(RB_CNTNT	)),
-    aBoxAttrCopyWithParaRB( this, SW_RES(RB_BOX_PARA	)),
-    aBoxAttrCopyNoParaRB(	this, SW_RES(RB_BOX_NOPARA)),
-    aBorderCopyRB(  		this, SW_RES(RB_BORDER	)),
+    aCntntCopyRB(           this, SW_RES(RB_CNTNT   )),
+    aBoxAttrCopyWithParaRB( this, SW_RES(RB_BOX_PARA    )),
+    aBoxAttrCopyNoParaRB(   this, SW_RES(RB_BOX_NOPARA)),
+    aBorderCopyRB(          this, SW_RES(RB_BORDER  )),
     rShell(rSh),
-    m_nSplit( HEADLINE_CNTNTCOPY ) 
+    m_nSplit( HEADLINE_CNTNTCOPY )
 {
     FreeResource();
     aCntntCopyRB.Check();

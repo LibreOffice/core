@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,8 +163,8 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
                 { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
                 { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
                 { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
-                { MAP_LEN( "IsActive" ),	HANDLE_ISACTIVE,	&::getBooleanCppuType(),				0, 0 },
-                { MAP_LEN( "Polygon" ),		HANDLE_POLYGON,		SEQTYPE(::getCppuType((const PointSequence*)0)),	0, 0 },
+                { MAP_LEN( "IsActive" ),    HANDLE_ISACTIVE,    &::getBooleanCppuType(),                0, 0 },
+                { MAP_LEN( "Polygon" ),     HANDLE_POLYGON,     SEQTYPE(::getCppuType((const PointSequence*)0)),    0, 0 },
                 {0,0,0,0,0,0}
             };
 
@@ -179,9 +179,9 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
                 { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
                 { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
                 { MAP_LEN( "Name" ),            HANDLE_NAME,        &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
-                { MAP_LEN( "IsActive" ),		HANDLE_ISACTIVE,	&::getBooleanCppuType(),				0, 0 },
-                { MAP_LEN( "Center" ),		HANDLE_CENTER,		&::getCppuType((const awt::Point*)0),	0, 0 },
-                { MAP_LEN( "Radius" ),		HANDLE_RADIUS,		&::getCppuType((const sal_Int32*)0),	0, 0 },
+                { MAP_LEN( "IsActive" ),        HANDLE_ISACTIVE,    &::getBooleanCppuType(),                0, 0 },
+                { MAP_LEN( "Center" ),      HANDLE_CENTER,      &::getCppuType((const awt::Point*)0),   0, 0 },
+                { MAP_LEN( "Radius" ),      HANDLE_RADIUS,      &::getCppuType((const sal_Int32*)0),    0, 0 },
                 {0,0,0,0,0,0}
             };
 
@@ -197,8 +197,8 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
                 { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0), 0, 0 },
                 { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const ::rtl::OUString*)0), 0, 0 },
                 { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const ::rtl::OUString*)0), 0, 0 },
-                { MAP_LEN( "IsActive" ),	HANDLE_ISACTIVE,	&::getBooleanCppuType(),			0, 0 },
-                { MAP_LEN( "Boundary" ),	HANDLE_BOUNDARY,	&::getCppuType((const awt::Rectangle*)0),	0, 0 },
+                { MAP_LEN( "IsActive" ),    HANDLE_ISACTIVE,    &::getBooleanCppuType(),            0, 0 },
+                { MAP_LEN( "Boundary" ),    HANDLE_BOUNDARY,    &::getCppuType((const awt::Rectangle*)0),   0, 0 },
                 {0,0,0,0,0,0}
             };
 
@@ -208,7 +208,7 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
 }
 
 SvUnoImageMapObject::SvUnoImageMapObject( UINT16 nType, const SvEventDescription* pSupportedMacroItems )
-:	PropertySetHelper( createPropertySetInfo( nType ) ),
+:   PropertySetHelper( createPropertySetInfo( nType ) ),
     mnType( nType )
 ,   mbIsActive( true )
 ,   mnRadius( 0 )
@@ -218,7 +218,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( UINT16 nType, const SvEventDescription
 }
 
 SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems )
-:	PropertySetHelper( createPropertySetInfo( rMapObject.GetType() ) ),
+:   PropertySetHelper( createPropertySetInfo( rMapObject.GetType() ) ),
     mnType( rMapObject.GetType() )
 ,   mbIsActive( true )
 ,   mnRadius( 0 )

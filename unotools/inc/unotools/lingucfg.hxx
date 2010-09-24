@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,14 +49,14 @@ class SvtLinguConfigItem;
 
 struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
 {
-    ::com::sun::star::uno::Sequence< rtl::OUString >	aActiveDics;
+    ::com::sun::star::uno::Sequence< rtl::OUString >    aActiveDics;
     ::com::sun::star::uno::Sequence< rtl::OUString >    aActiveConvDics;
 
     BOOL                                                bROActiveDics;
     BOOL                                                bROActiveConvDics;
 
     // Hyphenator service specific options
-    INT16	nHyphMinLeading,
+    INT16   nHyphMinLeading,
             nHyphMinTrailing,
             nHyphMinWordLength;
 
@@ -65,39 +65,39 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
             bROHyphMinWordLength;
 
     // misc options (non-service specific)
-    INT16	nDefaultLanguage;
-    INT16	nDefaultLanguage_CJK;
-    INT16	nDefaultLanguage_CTL;
+    INT16   nDefaultLanguage;
+    INT16   nDefaultLanguage_CJK;
+    INT16   nDefaultLanguage_CTL;
 
     BOOL    bRODefaultLanguage;
     BOOL    bRODefaultLanguage_CJK;
     BOOL    bRODefaultLanguage_CTL;
 
     // spelling options (non-service specific)
-    BOOL	bIsSpellSpecial;
-    BOOL	bIsSpellAuto;
-    BOOL	bIsSpellReverse;
+    BOOL    bIsSpellSpecial;
+    BOOL    bIsSpellAuto;
+    BOOL    bIsSpellReverse;
 
     BOOL    bROIsSpellSpecial;
     BOOL    bROIsSpellAuto;
     BOOL    bROIsSpellReverse;
 
     // hyphenation options (non-service specific)
-    BOOL	bIsHyphSpecial;
-    BOOL	bIsHyphAuto;
+    BOOL    bIsHyphSpecial;
+    BOOL    bIsHyphAuto;
 
     BOOL    bROIsHyphSpecial;
     BOOL    bROIsHyphAuto;
 
     // common to SpellChecker, Hyphenator and Thesaurus service
-    BOOL	bIsUseDictionaryList;
-    BOOL	bIsIgnoreControlCharacters;
+    BOOL    bIsUseDictionaryList;
+    BOOL    bIsIgnoreControlCharacters;
 
     BOOL    bROIsUseDictionaryList;
     BOOL    bROIsIgnoreControlCharacters;
 
     // SpellChecker service specific options
-    BOOL	bIsSpellWithDigits,
+    BOOL    bIsSpellWithDigits,
             bIsSpellUpperCase,
             bIsSpellCapitalization;
 
@@ -144,11 +144,11 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
 struct UNOTOOLS_DLLPUBLIC SvtLinguConfigDictionaryEntry
 {
     // the URL's pointing to the location of the files the dictionary consists of
-    com::sun::star::uno::Sequence< rtl::OUString >	aLocations;
+    com::sun::star::uno::Sequence< rtl::OUString >  aLocations;
     // the name of the dictionary format implement
-    rtl::OUString									aFormatName;
+    rtl::OUString                                   aFormatName;
     // the list of languages (ISO names) the dictionary can be used for
-    com::sun::star::uno::Sequence< rtl::OUString >	aLocaleNames;
+    com::sun::star::uno::Sequence< rtl::OUString >  aLocaleNames;
 };
 
 //////////////////////////////////////////////////////////////////////

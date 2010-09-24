@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 typedef CollTestImplHelper< ov::excel::XFormatConditions > ScVbaFormatConditions_BASE;
 class ScVbaFormatConditions: public ScVbaFormatConditions_BASE
 {
-    css::table::CellAddress maCellAddress; 	
+    css::table::CellAddress maCellAddress;
     css::uno::Reference< css::sheet::XSheetConditionalEntries > mxSheetConditionalEntries;
     css::uno::Reference< ov::excel::XStyles > mxStyles;
     css::uno::Reference< ov::excel::XRange > mxRangeParent;
@@ -55,7 +55,7 @@ public:
     virtual css::uno::Reference< ov::excel::XFormatCondition > SAL_CALL Add( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);	
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
     virtual css::uno::Any createCollectionObject(const css::uno::Any&);
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();

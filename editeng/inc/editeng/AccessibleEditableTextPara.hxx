@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,11 +71,11 @@ namespace accessibility
 
     protected:
         // override OCommonAccessibleText methods
-        virtual ::rtl::OUString					implGetText();
-        virtual ::com::sun::star::lang::Locale	implGetLocale();
-        virtual void							implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
-        virtual void							implGetParagraphBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
-        virtual void							implGetLineBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
+        virtual ::rtl::OUString                 implGetText();
+        virtual ::com::sun::star::lang::Locale  implGetLocale();
+        virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
+        virtual void                            implGetParagraphBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
+        virtual void                            implGetLineBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
 
     public:
         /// Create accessible object for given parent
@@ -87,7 +87,7 @@ namespace accessibility
                                      const AccessibleParaManager* _pParaManager = NULL );
         // <--
 
-        virtual ~AccessibleEditableTextPara	();
+        virtual ~AccessibleEditableTextPara ();
 
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface (const ::com::sun::star::uno::Type & rType) throw (::com::sun::star::uno::RuntimeException);
@@ -163,7 +163,7 @@ namespace accessibility
         // XAccessibleTextAttributes
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getDefaultAttributes( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRunAttributes( ::sal_Int32 Index, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-        
+
         // XAccessibleHypertext
         virtual ::sal_Int32 SAL_CALL getHyperLinkCount(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleHyperlink > SAL_CALL getHyperLink( ::sal_Int32 nLinkIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
@@ -264,7 +264,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        SvxAccessibleTextAdapter&	GetTextForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        SvxAccessibleTextAdapter&   GetTextForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** Query the SvxViewForwarder for EditEngine access.
 
@@ -273,7 +273,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        SvxViewForwarder&	GetViewForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        SvxViewForwarder&   GetViewForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** Query whether a GetEditViewForwarder( sal_False ) will return a forwarder
 
@@ -282,7 +282,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        sal_Bool	HaveEditView() const;
+        sal_Bool    HaveEditView() const;
 
         /** Query the SvxEditViewForwarder for EditEngine access.
 
@@ -364,9 +364,9 @@ namespace accessibility
         /** create selection from Accessible selection.
 
         */
-        ESelection 	MakeSelection( sal_Int32 nStartEEIndex, sal_Int32 nEndEEIndex );
-        ESelection 	MakeSelection( sal_Int32 nEEIndex );
-        ESelection 	MakeCursor( sal_Int32 nEEIndex );
+        ESelection  MakeSelection( sal_Int32 nStartEEIndex, sal_Int32 nEndEEIndex );
+        ESelection  MakeSelection( sal_Int32 nEEIndex );
+        ESelection  MakeCursor( sal_Int32 nEEIndex );
 
         // check whether index value is within permitted range
 
@@ -378,10 +378,10 @@ namespace accessibility
         void CheckRange( sal_Int32 nStart, sal_Int32 nEnd ) SAL_THROW((::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException));
 
         // the paragraph index in the edit engine (guarded by solar mutex)
-        sal_Int32	mnParagraphIndex;
+        sal_Int32   mnParagraphIndex;
 
         // our current index in the parent (guarded by solar mutex)
-        sal_Int32	mnIndexInParent;
+        sal_Int32   mnIndexInParent;
 
         // the current edit source (guarded by solar mutex)
         SvxEditSourceAdapter* mpEditSource;

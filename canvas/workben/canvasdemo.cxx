@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ class DemoApp : public Application
 {
 public:
     virtual void Main();
-    virtual USHORT	Exception( USHORT nError );
+    virtual USHORT  Exception( USHORT nError );
 };
 
 static void PrintHelp()
@@ -98,9 +98,9 @@ class TestWindow : public Dialog
         }
         virtual ~TestWindow() {}
         virtual void MouseButtonUp( const MouseEvent& /*rMEvt*/ )
-        { 
+        {
             //TODO: do something cool
-            EndDialog(); 
+            EndDialog();
         }
         virtual void Paint( const Rectangle& rRect );
 };
@@ -144,7 +144,7 @@ class DemoRenderer
             //it doesn't seem to do anything in either VCL or cairocanvas
             //I was hoping that CLEAR would clear the canvas before we paint,
             //but nothing changes
-            maRenderState.CompositeOperation = rendering::CompositeOperation::OVER; 
+            maRenderState.CompositeOperation = rendering::CompositeOperation::OVER;
 
             maBox.Width() = aSize.Width() / 3;
             maBox.Height() = aSize.Height() / 3;
@@ -204,7 +204,7 @@ class DemoRenderer
             xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
             xPoly->setClosed( 0, true );
             uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
-            
+
             rendering::RenderState aRenderState( maRenderState );
             aRenderState.DeviceColor = aColor;
             mxCanvas->drawPolyPolygon( xPP, maViewState, aRenderState );
@@ -235,7 +235,7 @@ class DemoRenderer
                 {
                     a = 2.0 * M_PI * j / VERTICES;
 
-//					FIXME: set cap_style to 'ROUND'
+//                  FIXME: set cap_style to 'ROUND'
                     mxCanvas->drawLine( aSrc,
                                         geometry::RealPoint2D( RADIUS * cos (a),
                                                                RADIUS * sin (a) ),
@@ -254,7 +254,7 @@ class DemoRenderer
 
             uno::Sequence< geometry::RealPoint2D > aPoints( nLength );
             uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
-        
+
             aPoints[0] = geometry::RealPoint2D( anchor_x, anchor_y );
             for (int i = 0; i < nLength; i++ )
             {
@@ -288,7 +288,7 @@ class DemoRenderer
 
             rendering::RenderState aRenderState( maRenderState );
             aRenderState.DeviceColor = maColorRed;
-//			aRenderState.DeviceColor[3] = 0.5;
+//          aRenderState.DeviceColor[3] = 0.5;
             rendering::StrokeAttributes aStrokeAttrs;
             aStrokeAttrs.StrokeWidth = 4.0;
             aStrokeAttrs.MiterLimit = 2.0; // ?
@@ -314,7 +314,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
 
             drawTitle( ::rtl::OString( "Rectangles" ) );
-            
+
             drawRect( Rectangle( 20, 30, 70, 60 ), maColorRed, 8 );
             // color mediumseagreen, stipple fill, outline black
             drawRect( Rectangle( 90, 40, 180, 100 ), maColorBlack, 4 );
@@ -331,16 +331,16 @@ class DemoRenderer
 
             drawTitle( ::rtl::OString( "Ellipses" ) );
 
-            const basegfx::B2DPoint aCenter( maBox.Width()*.5, 
+            const basegfx::B2DPoint aCenter( maBox.Width()*.5,
                                              maBox.Height()*.5 );
-            const basegfx::B2DPoint aRadii( maBox.Width()*.3, 
+            const basegfx::B2DPoint aRadii( maBox.Width()*.3,
                                             maBox.Height()*.3 );
-            const basegfx::B2DPolygon& rEllipse( 
-                basegfx::tools::createPolygonFromEllipse( aCenter, 
+            const basegfx::B2DPolygon& rEllipse(
+                basegfx::tools::createPolygonFromEllipse( aCenter,
                                                           aRadii.getX(),
                                                           aRadii.getY() ));
 
-            uno::Reference< rendering::XPolyPolygon2D > xPoly( 
+            uno::Reference< rendering::XPolyPolygon2D > xPoly(
                 basegfx::unotools::xPolyPolygonFromB2DPolygon(mxDevice,
                                                               rEllipse) );
 
@@ -384,7 +384,7 @@ class DemoRenderer
             translate( maBox.Width()*0.1, maBox.Height()*0.2 );
             maRenderState.AffineTransform.m00 *= 4.0/15;
             maRenderState.AffineTransform.m11 *= 3.0/15;
-            
+
             mxCanvas->drawBitmap(xBitmap, maViewState, maRenderState);
 
             // uno::Reference< rendering::XBitmap > xBitmap2( xBitmap->getScaledBitmap(geometry::RealSize2D(48, 48), false) );
@@ -426,7 +426,7 @@ class DemoRenderer
 
             const double r= 30.0;
             const int num_curves = 3;
-          
+
             //hacky hack hack
             uno::Sequence< geometry::RealBezierSegment2D > aBeziers (num_curves);
             uno::Reference< rendering::XBezierPolyPolygon2D > xPoly;
@@ -445,7 +445,7 @@ class DemoRenderer
             //uno::Reference< rendering::XBezierPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
             //compiles, but totally screws up.  I think it is interpretting the bezier as a line
             uno::Reference< rendering::XPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
-        
+
             rendering::StrokeAttributes aStrokeAttrs;
             aStrokeAttrs.StrokeWidth = 4.0;
             aStrokeAttrs.MiterLimit = 2.0; // ?
@@ -455,7 +455,7 @@ class DemoRenderer
             mxCanvas->strokePolyPolygon( xPP, maViewState, maRenderState, aStrokeAttrs );
             //you can't draw a BezierPolyPolygon2D with this, even though it is derived from it
             //mxCanvas->drawPolyPolygon( xPP, maViewState, maRenderState );
-                       
+
             maRenderState = maOldRenderState; // pop
         }
 
@@ -470,7 +470,7 @@ class DemoRenderer
             translate( 0.0, maBox.Height() * 2.0 );
 
             drawTitle( ::rtl::OString( "Arcs" ) );
-            
+
 
             //begin hacks
             //This stuff doesn't belong here, but probably in curves
@@ -482,7 +482,7 @@ class DemoRenderer
             double by;
             bx= gimmerand();
             by= gimmerand();
-                
+
             for (int i= 0; i < 1; i++)
             {
                 //point a= point b;
@@ -510,7 +510,7 @@ class DemoRenderer
                     );
                 geometry::RealPoint2D aEndPoint(bx, by);
                 maRenderState.DeviceColor = maColorBlack;
-                mxCanvas->drawBezier( 
+                mxCanvas->drawBezier(
                     aBezierSegment,
                     aEndPoint,
                     maViewState, maRenderState );
@@ -527,7 +527,7 @@ class DemoRenderer
 
             for (int i= 0; i < sides; i++)
             {
-                aPoints[i]= geometry::RealPoint2D( centerx + r * cos(i*2 * M_PI/sides), 
+                aPoints[i]= geometry::RealPoint2D( centerx + r * cos(i*2 * M_PI/sides),
                                                    centery + r * sin(i*2 * M_PI/sides));
             }
             uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys(1);
@@ -556,7 +556,7 @@ class DemoRenderer
                 drawRegularPolygon(35*i, 35, sides, 15);
                 sides++;
             }
-    
+
             maRenderState = maOldRenderState; // pop
         }
 
@@ -613,15 +613,15 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
         aRenderer.drawImages();
 
         // check whether virdev actually contained something
-        uno::Reference< rendering::XBitmap > xBitmap(xVDevCanvas, uno::UNO_QUERY);        
+        uno::Reference< rendering::XBitmap > xBitmap(xVDevCanvas, uno::UNO_QUERY);
         if( !xBitmap.is() )
             return;
-        
+
         aRenderer.maRenderState.AffineTransform.m02 += 100;
         aRenderer.maRenderState.AffineTransform.m12 += 100;
         xCanvas->drawBitmap(xBitmap, aRenderer.maViewState, aRenderer.maRenderState);
 
-        uno::Reference< rendering::XSpriteCanvas > xSpriteCanvas( xCanvas, 
+        uno::Reference< rendering::XSpriteCanvas > xSpriteCanvas( xCanvas,
                                                                   uno::UNO_QUERY );
         if( xSpriteCanvas.is() )
             xSpriteCanvas->updateScreen( sal_True ); // without
@@ -673,7 +673,7 @@ void DemoApp::Main()
     try
     {
         uno::Reference< uno::XComponentContext > xCtx = ::cppu::defaultBootstrap_InitialComponentContext();
-        xFactory = uno::Reference< lang::XMultiServiceFactory >(  xCtx->getServiceManager(), 
+        xFactory = uno::Reference< lang::XMultiServiceFactory >(  xCtx->getServiceManager(),
                                                                   uno::UNO_QUERY );
         if( xFactory.is() )
             ::comphelper::setProcessServiceFactory( xFactory );

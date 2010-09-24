@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,20 +31,20 @@
 #include "uistrings.hrc"
 #endif
 
-#define BORDERCOLORCHANGE 191 
+#define BORDERCOLORCHANGE 191
 //=====================================================================
 namespace rptui
 {
 //=====================================================================
     DBG_NAME( rpt_OColorListener )
-OColorListener::OColorListener(Window* _pParent	,const ::rtl::OUString& _sColorEntry)
+OColorListener::OColorListener(Window* _pParent ,const ::rtl::OUString& _sColorEntry)
 : Window(_pParent)
 ,m_sColorEntry(_sColorEntry)
 ,m_nColor(COL_LIGHTBLUE)
 ,m_bCollapsed(sal_False)
 ,m_bMarked(sal_False)
 {
-    DBG_CTOR( rpt_OColorListener,NULL);	
+    DBG_CTOR( rpt_OColorListener,NULL);
     StartListening(m_aExtendedColorConfig);
     m_nColor = m_aExtendedColorConfig.GetColorValue(CFG_REPORTDESIGNER,m_sColorEntry).getColor();
     m_nTextBoundaries = m_aColorConfig.GetColorValue(::svtools::DOCBOUNDARIES).nColor;
@@ -74,21 +74,21 @@ void OColorListener::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-    {		
+    {
         ImplInitSettings();
         Invalidate();
     }
 }
 // -----------------------------------------------------------------------------
 void OColorListener::setCollapsed(sal_Bool _bCollapsed)
-{ 
-    m_bCollapsed = _bCollapsed; 
-    if ( m_aCollapsedLink.IsSet() ) 
+{
+    m_bCollapsed = _bCollapsed;
+    if ( m_aCollapsedLink.IsSet() )
         m_aCollapsedLink.Call(this);
 }
 // -----------------------------------------------------------------------------
 void OColorListener::setMarked(sal_Bool _bMark)
-{ 
+{
     m_bMarked = _bMark;
     Invalidate();
 }

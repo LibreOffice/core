@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -211,7 +211,7 @@ bool RawBitmap::Rotate( int nAngle )
     unsigned char* pBuf = new unsigned char[ nBufSize ];
     if( !pBuf )
         return false;
-    
+
     memset( pBuf, 0, nBufSize );
     int i;
 

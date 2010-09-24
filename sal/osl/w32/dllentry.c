@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ static void do_cleanup(void);
 
 #else
 
-/* 
+/*
 This is needed because DllMain is called after static constructors. A DLL's
 startup and shutdown sequence looks like this:
 
@@ -136,7 +136,7 @@ __do_global_ctors (void)
     ;
     }
 
-  /* 
+  /*
    * Go through the list backwards calling constructors.
    */
   for (i = nptrs; i >= 1; i--)
@@ -170,13 +170,13 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
 {
     (void)hinstDLL; /* avoid warnings */
     (void)lpvReserved; /* avoid warnings */
-    
+
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
             {
 #endif
-                OSVERSIONINFO aInfo;                
+                OSVERSIONINFO aInfo;
 
 #ifdef _M_IX86
                 SYSTEM_INFO SystemInfo;
@@ -202,16 +202,16 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
                 /* initialize "current directory" mutex */
                 g_CurrentDirectoryMutex = osl_createMutex();
 
-      
-                /* initialize Win9x unicode functions */                
+
+                /* initialize Win9x unicode functions */
                 aInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
 
                 if ( GetVersionEx(&aInfo) )
                     g_dwPlatformId = aInfo.dwPlatformId;
-                
+
                 g_dwTLSTextEncodingIndex = TlsAlloc();
                 InitializeCriticalSection( &g_ThreadKeyListCS );
-        
+
                 //We disable floating point exceptions. This is the usual state at program startup
                 //but on Windows 98 and ME this is not always the case.
                 _control87(_MCW_EM, _MCW_EM);
@@ -258,7 +258,7 @@ void do_cleanup( void )
             {
                 /* cleanup locale hashtable */
                 rtl_locale_fini();
- 
+
                 /* finalize memory management */
                 rtl_memory_fini();
                 rtl_cache_fini();
@@ -358,7 +358,7 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
             return TRUE;
         }
 
-        case DLL_THREAD_ATTACH:         
+        case DLL_THREAD_ATTACH:
             break;
 
         case DLL_THREAD_DETACH:

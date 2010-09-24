@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,43 +51,43 @@ DECLARE_LIST( SalDisplays, SalDisplay* )
 #if defined SCO || defined LINUX || defined NETBSD || defined AIX || defined HPUX || defined FREEBSD
 #include <pthread.h>
 #else
-typedef	unsigned int pthread_t;
+typedef unsigned int pthread_t;
 #endif
 
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class VCL_DLLPUBLIC X11SalData : public SalData
 {
 protected:
-            BOOL				bNoExceptions_;
-            SalXLib			   *pXLib_;
-            SalDisplay		   *m_pSalDisplay;
-            pthread_t			hMainThread_;
+            BOOL                bNoExceptions_;
+            SalXLib            *pXLib_;
+            SalDisplay         *m_pSalDisplay;
+            pthread_t           hMainThread_;
             rtl::OUString       maLocalHostName;
 
 public:
     X11SalData();
     virtual ~X11SalData();
-    
-    virtual void			Init();
-    virtual void			initNWF();
-    virtual void			deInitNWF();
-    
-    inline	void			XError( Display     *pDisplay, XErrorEvent *pEvent ) const;
 
-    SalDisplay*				GetDisplay() const 
+    virtual void            Init();
+    virtual void            initNWF();
+    virtual void            deInitNWF();
+
+    inline  void            XError( Display     *pDisplay, XErrorEvent *pEvent ) const;
+
+    SalDisplay*             GetDisplay() const
     { return m_pSalDisplay; }
-    void					SetSalDisplay( SalDisplay* pDisplay )
+    void                    SetSalDisplay( SalDisplay* pDisplay )
     { m_pSalDisplay = pDisplay; }
 
-    void					DeleteDisplay(); // for shutdown
-    
-    inline	SalXLib*		GetLib() const { return pXLib_; }
-    inline	pthread_t		GetMainThread() const { return hMainThread_; }
+    void                    DeleteDisplay(); // for shutdown
 
-    void					StartTimer( ULONG nMS );
-    inline	void			StopTimer();
-    void					Timeout() const;
-    
+    inline  SalXLib*        GetLib() const { return pXLib_; }
+    inline  pthread_t       GetMainThread() const { return hMainThread_; }
+
+    void                    StartTimer( ULONG nMS );
+    inline  void            StopTimer();
+    void                    Timeout() const;
+
     const rtl::OUString&    GetLocalHostName() const
     { return maLocalHostName; }
 
@@ -106,13 +106,13 @@ inline X11SalData* GetX11SalData()
 
 
 #ifdef _SV_SALDISP_HXX
-inline void X11SalData::XError( Display *pDisplay,	XErrorEvent *pEvent ) const
+inline void X11SalData::XError( Display *pDisplay,  XErrorEvent *pEvent ) const
 { pXLib_->XError( pDisplay, pEvent ); }
 #endif
 
 class YieldMutexReleaser
 {
-    ULONG				m_nYieldCount;
+    ULONG               m_nYieldCount;
 public:
     inline YieldMutexReleaser();
     inline ~YieldMutexReleaser();

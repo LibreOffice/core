@@ -49,16 +49,16 @@
 
 
 static ScProgress theDummyInterpretProgress;
-SfxProgress*	ScProgress::pGlobalProgress = NULL;
-ULONG			ScProgress::nGlobalRange = 0;
-ULONG			ScProgress::nGlobalPercent = 0;
-BOOL			ScProgress::bGlobalNoUserBreak = TRUE;
-ScProgress*		ScProgress::pInterpretProgress = &theDummyInterpretProgress;
-ScProgress*		ScProgress::pOldInterpretProgress = NULL;
-ULONG			ScProgress::nInterpretProgress = 0;
-BOOL			ScProgress::bAllowInterpretProgress = TRUE;
-ScDocument*		ScProgress::pInterpretDoc;
-BOOL			ScProgress::bIdleWasDisabled = FALSE;
+SfxProgress*    ScProgress::pGlobalProgress = NULL;
+ULONG           ScProgress::nGlobalRange = 0;
+ULONG           ScProgress::nGlobalPercent = 0;
+BOOL            ScProgress::bGlobalNoUserBreak = TRUE;
+ScProgress*     ScProgress::pInterpretProgress = &theDummyInterpretProgress;
+ScProgress*     ScProgress::pOldInterpretProgress = NULL;
+ULONG           ScProgress::nInterpretProgress = 0;
+BOOL            ScProgress::bAllowInterpretProgress = TRUE;
+ScDocument*     ScProgress::pInterpretDoc;
+BOOL            ScProgress::bIdleWasDisabled = FALSE;
 
 
 BOOL lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
@@ -97,17 +97,17 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
     }
     else if ( SFX_APP()->IsDowning() )
     {
-        //	kommt vor z.B. beim Speichern des Clipboard-Inhalts als OLE beim Beenden
-        //	Dann wuerde ein SfxProgress wild im Speicher rummuellen
-        //!	Soll das so sein ???
+        //  kommt vor z.B. beim Speichern des Clipboard-Inhalts als OLE beim Beenden
+        //  Dann wuerde ein SfxProgress wild im Speicher rummuellen
+        //! Soll das so sein ???
 
         pProgress = NULL;
     }
     else if ( pObjSh && ( pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
                           pObjSh->GetProgress() ) )
     {
-        //	#62808# no own progress for embedded objects,
-        //	#73633# no second progress if the document already has one
+        //  #62808# no own progress for embedded objects,
+        //  #73633# no second progress if the document already has one
 
         pProgress = NULL;
     }
@@ -124,7 +124,7 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
 
 ScProgress::ScProgress() :
         pProgress( NULL )
-{	// DummyInterpret
+{   // DummyInterpret
 }
 
 

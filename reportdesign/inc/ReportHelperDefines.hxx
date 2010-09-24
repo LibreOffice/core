@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -189,7 +189,7 @@
     virtual ::com::sun::star::lang::Locale SAL_CALL getCharLocaleComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual void SAL_CALL setCharLocaleComplex( const ::com::sun::star::lang::Locale& _charlocalecomplex ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
-    
+
 
 #endif // INCLUDED_REPORTHELPERDEFINES_HXX
 

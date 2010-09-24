@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -232,7 +232,7 @@ void SAL_CALL TableColumn::setFastPropertyValue( sal_Int32 nHandle, const Any& a
         }
         mxTableModel->setModified(sal_True);
     }
-    
+
     if( pUndo )
         delete pUndo;
 }
@@ -243,11 +243,11 @@ Any SAL_CALL TableColumn::getFastPropertyValue( sal_Int32 nHandle ) throw (Unkno
 {
     switch( nHandle )
     {
-    case Property_Width:			return Any( mnWidth );
-    case Property_OptimalWidth:		return Any( mbOptimalWidth );
-    case Property_IsVisible:		return Any( mbIsVisible );
-    case Property_IsStartOfNewPage:	return Any( mbIsStartOfNewPage );
-    default:						throw UnknownPropertyException();
+    case Property_Width:            return Any( mnWidth );
+    case Property_OptimalWidth:     return Any( mbOptimalWidth );
+    case Property_IsVisible:        return Any( mbIsVisible );
+    case Property_IsStartOfNewPage: return Any( mbIsStartOfNewPage );
+    default:                        throw UnknownPropertyException();
     }
 }
 

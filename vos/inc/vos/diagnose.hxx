@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,15 +41,15 @@
 
 #define VOS_THIS_FILE       __FILE__
 
-#define VOS_DEBUG_ONLY(s)	_OSL_DEBUG_ONLY(s)
+#define VOS_DEBUG_ONLY(s)   _OSL_DEBUG_ONLY(s)
 #define VOS_TRACE           _OSL_TRACE
-#define VOS_ASSERT(c) 	    _OSL_ASSERT(c, VOS_THIS_FILE, __LINE__)
-#define VOS_VERIFY(c)		OSL_VERIFY(c)
+#define VOS_ASSERT(c)       _OSL_ASSERT(c, VOS_THIS_FILE, __LINE__)
+#define VOS_VERIFY(c)       OSL_VERIFY(c)
 #define VOS_ENSHURE(c, m)   _OSL_ENSURE(c, VOS_THIS_FILE, __LINE__, m)
 #define VOS_ENSURE(c, m)    _OSL_ENSURE(c, VOS_THIS_FILE, __LINE__, m)
 
-#define VOS_PRECOND(c, m)  	VOS_ENSHURE(c, m)
-#define VOS_POSTCOND(c, m) 	VOS_ENSHURE(c, m)
+#define VOS_PRECOND(c, m)   VOS_ENSHURE(c, m)
+#define VOS_POSTCOND(c, m)  VOS_ENSHURE(c, m)
 
 #endif /* _VOS_DIAGNOSE_H_ */
 

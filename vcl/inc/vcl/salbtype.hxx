@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,63 +42,63 @@
 // - Memory -
 // ----------
 
-typedef BYTE*		HPBYTE;
-typedef HPBYTE		Scanline;
-typedef const BYTE*	ConstHPBYTE;
-typedef ConstHPBYTE	ConstScanline;
+typedef BYTE*       HPBYTE;
+typedef HPBYTE      Scanline;
+typedef const BYTE* ConstHPBYTE;
+typedef ConstHPBYTE ConstScanline;
 
 // ------------------
 // - Bitmap formats -
 // ------------------
 
-#define BMP_FORMAT_BOTTOM_UP						0x00000000UL
-#define BMP_FORMAT_TOP_DOWN 						0x80000000UL
+#define BMP_FORMAT_BOTTOM_UP                        0x00000000UL
+#define BMP_FORMAT_TOP_DOWN                         0x80000000UL
 
-#define BMP_FORMAT_1BIT_MSB_PAL 					0x00000001UL
-#define BMP_FORMAT_1BIT_LSB_PAL 					0x00000002UL
+#define BMP_FORMAT_1BIT_MSB_PAL                     0x00000001UL
+#define BMP_FORMAT_1BIT_LSB_PAL                     0x00000002UL
 
-#define BMP_FORMAT_4BIT_MSN_PAL 					0x00000004UL
-#define BMP_FORMAT_4BIT_LSN_PAL 					0x00000008UL
+#define BMP_FORMAT_4BIT_MSN_PAL                     0x00000004UL
+#define BMP_FORMAT_4BIT_LSN_PAL                     0x00000008UL
 
-#define BMP_FORMAT_8BIT_PAL 						0x00000010UL
-#define BMP_FORMAT_8BIT_TC_MASK 					0x00000020UL
+#define BMP_FORMAT_8BIT_PAL                         0x00000010UL
+#define BMP_FORMAT_8BIT_TC_MASK                     0x00000020UL
 
-// #define BMP_FORMAT_16BIT_TC_MASK					0x00000040UL
+// #define BMP_FORMAT_16BIT_TC_MASK                 0x00000040UL
 
-#define BMP_FORMAT_24BIT_TC_BGR 					0x00000080UL
-#define BMP_FORMAT_24BIT_TC_RGB 					0x00000100UL
-#define BMP_FORMAT_24BIT_TC_MASK					0x00000200UL
+#define BMP_FORMAT_24BIT_TC_BGR                     0x00000080UL
+#define BMP_FORMAT_24BIT_TC_RGB                     0x00000100UL
+#define BMP_FORMAT_24BIT_TC_MASK                    0x00000200UL
 
-#define BMP_FORMAT_32BIT_TC_ABGR					0x00000400UL
-#define BMP_FORMAT_32BIT_TC_ARGB					0x00000800UL
-#define BMP_FORMAT_32BIT_TC_BGRA					0x00001000UL
-#define BMP_FORMAT_32BIT_TC_RGBA					0x00002000UL
-#define BMP_FORMAT_32BIT_TC_MASK					0x00004000UL
+#define BMP_FORMAT_32BIT_TC_ABGR                    0x00000400UL
+#define BMP_FORMAT_32BIT_TC_ARGB                    0x00000800UL
+#define BMP_FORMAT_32BIT_TC_BGRA                    0x00001000UL
+#define BMP_FORMAT_32BIT_TC_RGBA                    0x00002000UL
+#define BMP_FORMAT_32BIT_TC_MASK                    0x00004000UL
 
-#define BMP_FORMAT_16BIT_TC_MSB_MASK				0x00008000UL
-#define BMP_FORMAT_16BIT_TC_LSB_MASK				0x00010000UL
+#define BMP_FORMAT_16BIT_TC_MSB_MASK                0x00008000UL
+#define BMP_FORMAT_16BIT_TC_LSB_MASK                0x00010000UL
 
-#define BMP_SCANLINE_ADJUSTMENT( Mac_nBmpFormat )	( (Mac_nBmpFormat) & 0x80000000UL )
-#define BMP_SCANLINE_FORMAT( Mac_nBmpFormat )		( (Mac_nBmpFormat) & 0x7FFFFFFFUL )
+#define BMP_SCANLINE_ADJUSTMENT( Mac_nBmpFormat )   ( (Mac_nBmpFormat) & 0x80000000UL )
+#define BMP_SCANLINE_FORMAT( Mac_nBmpFormat )       ( (Mac_nBmpFormat) & 0x7FFFFFFFUL )
 
 // ------------------------------------------------------------------
 
-#define MASK_TO_COLOR( d_nVal, d_RM, d_GM, d_BM, d_RS, d_GS, d_BS, d_Col )							\
-ULONG _def_cR = (BYTE) ( d_RS < 0L ? ( (d_nVal) & d_RM ) << -d_RS : ( (d_nVal) & d_RM ) >> d_RS );	\
-ULONG _def_cG = (BYTE) ( d_GS < 0L ? ( (d_nVal) & d_GM ) << -d_GS : ( (d_nVal) & d_GM ) >> d_GS );	\
-ULONG _def_cB = (BYTE) ( d_BS < 0L ? ( (d_nVal) & d_BM ) << -d_BS : ( (d_nVal) & d_BM ) >> d_BS );	\
-d_Col = BitmapColor( (BYTE) ( _def_cR | ( ( _def_cR & mnROr ) >> mnROrShift ) ),					\
-                     (BYTE) ( _def_cG | ( ( _def_cG & mnGOr ) >> mnGOrShift ) ),					\
+#define MASK_TO_COLOR( d_nVal, d_RM, d_GM, d_BM, d_RS, d_GS, d_BS, d_Col )                          \
+ULONG _def_cR = (BYTE) ( d_RS < 0L ? ( (d_nVal) & d_RM ) << -d_RS : ( (d_nVal) & d_RM ) >> d_RS );  \
+ULONG _def_cG = (BYTE) ( d_GS < 0L ? ( (d_nVal) & d_GM ) << -d_GS : ( (d_nVal) & d_GM ) >> d_GS );  \
+ULONG _def_cB = (BYTE) ( d_BS < 0L ? ( (d_nVal) & d_BM ) << -d_BS : ( (d_nVal) & d_BM ) >> d_BS );  \
+d_Col = BitmapColor( (BYTE) ( _def_cR | ( ( _def_cR & mnROr ) >> mnROrShift ) ),                    \
+                     (BYTE) ( _def_cG | ( ( _def_cG & mnGOr ) >> mnGOrShift ) ),                    \
                      (BYTE) ( _def_cB | ( ( _def_cB & mnBOr ) >> mnBOrShift ) ) );
 
 // ------------------------------------------------------------------
 
 #define COLOR_TO_MASK( d_rCol, d_RM, d_GM, d_BM, d_RS, d_GS, d_BS ) \
-( ( ( ( d_RS < 0L ) ? ( (UINT32) (d_rCol).GetRed() >> -d_RS ) : 	\
-    ( (UINT32) (d_rCol).GetRed() << d_RS ) ) & d_RM ) | 			\
-  ( ( ( d_GS < 0L ) ? ( (UINT32) (d_rCol).GetGreen() >> -d_GS ) :	\
-    ( (UINT32) (d_rCol).GetGreen() << d_GS ) ) & d_GM ) |			\
-  ( ( ( d_BS < 0L ) ? ( (UINT32) (d_rCol).GetBlue() >> -d_BS ) :	\
+( ( ( ( d_RS < 0L ) ? ( (UINT32) (d_rCol).GetRed() >> -d_RS ) :     \
+    ( (UINT32) (d_rCol).GetRed() << d_RS ) ) & d_RM ) |             \
+  ( ( ( d_GS < 0L ) ? ( (UINT32) (d_rCol).GetGreen() >> -d_GS ) :   \
+    ( (UINT32) (d_rCol).GetGreen() << d_GS ) ) & d_GM ) |           \
+  ( ( ( d_BS < 0L ) ? ( (UINT32) (d_rCol).GetBlue() >> -d_BS ) :    \
     ( (UINT32) (d_rCol).GetBlue() << d_BS ) ) & d_BM ) )
 
 // ---------------
@@ -110,59 +110,59 @@ class Color;
 class VCL_DLLPUBLIC BitmapColor
 {
 private:
-                                             
+
 // !!! Achtung:
 // !!! da auf die Member dieser Klasse via memcpy
 // !!! zugegriffen wird, darf diese Klasse weder
 // !!! in der Groesse noch der Reihenfolge der
 // !!! Member veraendert werden (KA 02.09.97)
-    BYTE				mcBlueOrIndex;
-    BYTE				mcGreen;
-    BYTE				mcRed;
-    BYTE				mbIndex;
+    BYTE                mcBlueOrIndex;
+    BYTE                mcGreen;
+    BYTE                mcRed;
+    BYTE                mbIndex;
 
 public:
 
-    inline				BitmapColor();
-    inline				BitmapColor( const BitmapColor& rBitmapColor );
-    inline				BitmapColor( BYTE cRed, BYTE cGreen, BYTE cBlue );
-    inline				BitmapColor( const Color& rColor );
-    inline				BitmapColor( BYTE cIndex );
-    inline				~BitmapColor() {};
+    inline              BitmapColor();
+    inline              BitmapColor( const BitmapColor& rBitmapColor );
+    inline              BitmapColor( BYTE cRed, BYTE cGreen, BYTE cBlue );
+    inline              BitmapColor( const Color& rColor );
+    inline              BitmapColor( BYTE cIndex );
+    inline              ~BitmapColor() {};
 
-    inline BOOL 		operator==( const BitmapColor& rBitmapColor ) const;
-    inline BOOL 		operator!=( const BitmapColor& rBitmapColor ) const;
+    inline BOOL         operator==( const BitmapColor& rBitmapColor ) const;
+    inline BOOL         operator!=( const BitmapColor& rBitmapColor ) const;
     inline BitmapColor& operator=( const BitmapColor& rBitmapColor );
 
-    inline BOOL 		IsIndex() const;
+    inline BOOL         IsIndex() const;
 
-    inline BYTE 		GetRed() const;
-    inline void 		SetRed( BYTE cRed );
+    inline BYTE         GetRed() const;
+    inline void         SetRed( BYTE cRed );
 
-    inline BYTE 		GetGreen() const;
-    inline void 		SetGreen( BYTE cGreen );
+    inline BYTE         GetGreen() const;
+    inline void         SetGreen( BYTE cGreen );
 
-    inline BYTE 		GetBlue() const;
-    inline void 		SetBlue( BYTE cBlue );
+    inline BYTE         GetBlue() const;
+    inline void         SetBlue( BYTE cBlue );
 
-    inline BYTE 		GetIndex() const;
-    inline void 		SetIndex( BYTE cIndex );
+    inline BYTE         GetIndex() const;
+    inline void         SetIndex( BYTE cIndex );
 
-    operator			Color() const;
-    inline operator 	BYTE() const;
+    operator            Color() const;
+    inline operator     BYTE() const;
 
     inline BYTE         GetBlueOrIndex() const;
 
     inline BitmapColor& Invert();
 
-    inline BYTE 		GetLuminance() const;
+    inline BYTE         GetLuminance() const;
     inline BitmapColor& IncreaseLuminance( BYTE cGreyInc );
     inline BitmapColor& DecreaseLuminance( BYTE cGreyDec );
-    
-    inline BitmapColor&	Merge( const BitmapColor& rColor, BYTE cTransparency );
-    inline BitmapColor&	Merge( BYTE cR, BYTE cG, BYTE cB, BYTE cTransparency );
 
-    inline ULONG		GetColorError( const BitmapColor& rBitmapColor ) const;
+    inline BitmapColor& Merge( const BitmapColor& rColor, BYTE cTransparency );
+    inline BitmapColor& Merge( BYTE cR, BYTE cG, BYTE cB, BYTE cTransparency );
+
+    inline ULONG        GetColorError( const BitmapColor& rBitmapColor ) const;
 };
 
 // ---------------
@@ -178,37 +178,37 @@ class VCL_DLLPUBLIC BitmapPalette
 
 private:
 
-    BitmapColor*				mpBitmapColor;
-    USHORT						mnCount;
+    BitmapColor*                mpBitmapColor;
+    USHORT                      mnCount;
 
 //#if 0 // _SOLAR__PRIVATE
 
 public:
-    
+
     SAL_DLLPRIVATE inline BitmapColor* ImplGetColorBuffer() const;
 
 //#endif // __PRIVATE
 
 public:
 
-    inline						BitmapPalette();
-    inline						BitmapPalette( const BitmapPalette& rBitmapPalette );
-    inline						BitmapPalette( USHORT nCount );
-    inline						~BitmapPalette();
+    inline                      BitmapPalette();
+    inline                      BitmapPalette( const BitmapPalette& rBitmapPalette );
+    inline                      BitmapPalette( USHORT nCount );
+    inline                      ~BitmapPalette();
 
-    inline BitmapPalette&		operator=( const BitmapPalette& rBitmapPalette );
-    inline BOOL 				operator==( const BitmapPalette& rBitmapPalette ) const;
-    inline BOOL 				operator!=( const BitmapPalette& rBitmapPalette ) const;
-    inline BOOL 				operator!();
+    inline BitmapPalette&       operator=( const BitmapPalette& rBitmapPalette );
+    inline BOOL                 operator==( const BitmapPalette& rBitmapPalette ) const;
+    inline BOOL                 operator!=( const BitmapPalette& rBitmapPalette ) const;
+    inline BOOL                 operator!();
 
-    inline USHORT				GetEntryCount() const;
-    inline void 				SetEntryCount( USHORT nCount );
+    inline USHORT               GetEntryCount() const;
+    inline void                 SetEntryCount( USHORT nCount );
 
-    inline const BitmapColor&	operator[]( USHORT nIndex ) const;
-    inline BitmapColor& 		operator[]( USHORT nIndex );
+    inline const BitmapColor&   operator[]( USHORT nIndex ) const;
+    inline BitmapColor&         operator[]( USHORT nIndex );
 
-    inline USHORT				GetBestIndex( const BitmapColor& rCol ) const;
-    bool						IsGreyPalette() const;
+    inline USHORT               GetBestIndex( const BitmapColor& rCol ) const;
+    bool                        IsGreyPalette() const;
 };
 
 // ---------------
@@ -217,43 +217,43 @@ public:
 
 class VCL_DLLPUBLIC ColorMask
 {
-    ULONG				mnRMask;
-    ULONG				mnGMask;
-    ULONG				mnBMask;
-    long				mnRShift;
-    long				mnGShift;
-    long				mnBShift;
-    ULONG				mnROrShift;
-    ULONG				mnGOrShift;
-    ULONG				mnBOrShift;
-    ULONG				mnROr;
-    ULONG				mnGOr;
-    ULONG				mnBOr;
+    ULONG               mnRMask;
+    ULONG               mnGMask;
+    ULONG               mnBMask;
+    long                mnRShift;
+    long                mnGShift;
+    long                mnBShift;
+    ULONG               mnROrShift;
+    ULONG               mnGOrShift;
+    ULONG               mnBOrShift;
+    ULONG               mnROr;
+    ULONG               mnGOr;
+    ULONG               mnBOr;
 
     SAL_DLLPRIVATE inline long ImplCalcMaskShift( ULONG nMask, ULONG& rOr, ULONG& rOrShift ) const;
 
 public:
 
-    inline				ColorMask( ULONG nRedMask = 0UL, ULONG nGreenMask = 0UL, ULONG nBlueMask = 0UL );
-    inline				~ColorMask() {}
+    inline              ColorMask( ULONG nRedMask = 0UL, ULONG nGreenMask = 0UL, ULONG nBlueMask = 0UL );
+    inline              ~ColorMask() {}
 
-    inline ULONG		GetRedMask() const;
-    inline ULONG		GetGreenMask() const;
-    inline ULONG		GetBlueMask() const;
+    inline ULONG        GetRedMask() const;
+    inline ULONG        GetGreenMask() const;
+    inline ULONG        GetBlueMask() const;
 
-    inline void 		GetColorFor8Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const;
-    inline void 		SetColorFor8Bit( const BitmapColor& rColor, HPBYTE pPixel ) const;
+    inline void         GetColorFor8Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const;
+    inline void         SetColorFor8Bit( const BitmapColor& rColor, HPBYTE pPixel ) const;
 
-    inline void 		GetColorFor16BitMSB( BitmapColor& rColor, ConstHPBYTE pPixel ) const;
-    inline void 		SetColorFor16BitMSB( const BitmapColor& rColor, HPBYTE pPixel ) const;
-    inline void 		GetColorFor16BitLSB( BitmapColor& rColor, ConstHPBYTE pPixel ) const;
-    inline void 		SetColorFor16BitLSB( const BitmapColor& rColor, HPBYTE pPixel ) const;
+    inline void         GetColorFor16BitMSB( BitmapColor& rColor, ConstHPBYTE pPixel ) const;
+    inline void         SetColorFor16BitMSB( const BitmapColor& rColor, HPBYTE pPixel ) const;
+    inline void         GetColorFor16BitLSB( BitmapColor& rColor, ConstHPBYTE pPixel ) const;
+    inline void         SetColorFor16BitLSB( const BitmapColor& rColor, HPBYTE pPixel ) const;
 
-    inline void 		GetColorFor24Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const;
-    inline void 		SetColorFor24Bit( const BitmapColor& rColor, HPBYTE pPixel ) const;
+    inline void         GetColorFor24Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const;
+    inline void         SetColorFor24Bit( const BitmapColor& rColor, HPBYTE pPixel ) const;
 
-    inline void 		GetColorFor32Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const;
-    inline void 		SetColorFor32Bit( const BitmapColor& rColor, HPBYTE pPixel ) const;
+    inline void         GetColorFor32Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const;
+    inline void         SetColorFor32Bit( const BitmapColor& rColor, HPBYTE pPixel ) const;
 };
 
 // ---------------
@@ -262,14 +262,14 @@ public:
 
 struct VCL_DLLPUBLIC BitmapBuffer
 {
-    ULONG			mnFormat;
-    long			mnWidth;
-    long			mnHeight;
-    long			mnScanlineSize;
-    USHORT			mnBitCount;
-    ColorMask		maColorMask;
-    BitmapPalette	maPalette;
-    BYTE*			mpBits;
+    ULONG           mnFormat;
+    long            mnWidth;
+    long            mnHeight;
+    long            mnScanlineSize;
+    USHORT          mnBitCount;
+    ColorMask       maColorMask;
+    BitmapPalette   maPalette;
+    BYTE*           mpBits;
 
                     BitmapBuffer(){}
                     ~BitmapBuffer() {}
@@ -279,56 +279,56 @@ struct VCL_DLLPUBLIC BitmapBuffer
 // - StretchAndConvert -
 // ---------------------
 
-VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect, 
+VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
                                                ULONG nDstBitmapFormat, BitmapPalette* pDstPal = NULL, ColorMask* pDstMask = NULL );
 
 // ------------------------------------------------------------------
 
 inline BitmapColor::BitmapColor() :
-            mcBlueOrIndex	( 0 ),
-            mcGreen 		( 0 ),
-            mcRed			( 0 ),
-            mbIndex 		( FALSE )
+            mcBlueOrIndex   ( 0 ),
+            mcGreen         ( 0 ),
+            mcRed           ( 0 ),
+            mbIndex         ( FALSE )
 {
 }
 
 // ------------------------------------------------------------------
 
 inline BitmapColor::BitmapColor( BYTE cRed, BYTE cGreen, BYTE cBlue ) :
-            mcBlueOrIndex	( cBlue ),
-            mcGreen 		( cGreen ),
-            mcRed			( cRed ),
-            mbIndex 		( FALSE )
+            mcBlueOrIndex   ( cBlue ),
+            mcGreen         ( cGreen ),
+            mcRed           ( cRed ),
+            mbIndex         ( FALSE )
 {
 }
 
 // ------------------------------------------------------------------
 
 inline BitmapColor::BitmapColor( const BitmapColor& rBitmapColor ) :
-            mcBlueOrIndex	( rBitmapColor.mcBlueOrIndex ),
-            mcGreen 		( rBitmapColor.mcGreen ),
-            mcRed			( rBitmapColor.mcRed ),
-            mbIndex 		( rBitmapColor.mbIndex )
+            mcBlueOrIndex   ( rBitmapColor.mcBlueOrIndex ),
+            mcGreen         ( rBitmapColor.mcGreen ),
+            mcRed           ( rBitmapColor.mcRed ),
+            mbIndex         ( rBitmapColor.mbIndex )
 {
 }
 
 // ------------------------------------------------------------------
 
 inline BitmapColor::BitmapColor( const Color& rColor ) :
-            mcBlueOrIndex	( rColor.GetBlue() ),
-            mcGreen 		( rColor.GetGreen() ),
-            mcRed			( rColor.GetRed() ),
-            mbIndex 		( 0 )
+            mcBlueOrIndex   ( rColor.GetBlue() ),
+            mcGreen         ( rColor.GetGreen() ),
+            mcRed           ( rColor.GetRed() ),
+            mbIndex         ( 0 )
 {
 }
 
 // ------------------------------------------------------------------
 
 inline BitmapColor::BitmapColor( BYTE cIndex ) :
-            mcBlueOrIndex	( cIndex ),
-            mcGreen 		( 0 ),
-            mcRed			( 0 ),
-            mbIndex 		( TRUE )
+            mcBlueOrIndex   ( cIndex ),
+            mcGreen         ( 0 ),
+            mcRed           ( 0 ),
+            mbIndex         ( TRUE )
 {
 }
 
@@ -499,26 +499,26 @@ inline BitmapColor& BitmapColor::DecreaseLuminance( BYTE cGreyDec )
 
 // ------------------------------------------------------------------
 
-inline BitmapColor&	BitmapColor::Merge( const BitmapColor& rBitmapColor, BYTE cTransparency )
+inline BitmapColor& BitmapColor::Merge( const BitmapColor& rBitmapColor, BYTE cTransparency )
 {
     DBG_ASSERT( !mbIndex, "Pixel represents index into colortable!" );
     DBG_ASSERT( !rBitmapColor.mbIndex, "Pixel represents index into colortable!" );
     mcBlueOrIndex = COLOR_CHANNEL_MERGE( mcBlueOrIndex, rBitmapColor.mcBlueOrIndex, cTransparency );
     mcGreen = COLOR_CHANNEL_MERGE( mcGreen, rBitmapColor.mcGreen, cTransparency );
     mcRed = COLOR_CHANNEL_MERGE( mcRed, rBitmapColor.mcRed, cTransparency );
-    
+
     return *this;
 }
 
 // ------------------------------------------------------------------
 
-inline BitmapColor&	BitmapColor::Merge( BYTE cR, BYTE cG, BYTE cB, BYTE cTransparency )
+inline BitmapColor& BitmapColor::Merge( BYTE cR, BYTE cG, BYTE cB, BYTE cTransparency )
 {
     DBG_ASSERT( !mbIndex, "Pixel represents index into colortable!" );
     mcBlueOrIndex = COLOR_CHANNEL_MERGE( mcBlueOrIndex, cB, cTransparency );
     mcGreen = COLOR_CHANNEL_MERGE( mcGreen, cG, cTransparency );
     mcRed = COLOR_CHANNEL_MERGE( mcRed, cR, cTransparency );
-    
+
     return *this;
 }
 
@@ -536,8 +536,8 @@ inline ULONG BitmapColor::GetColorError( const BitmapColor& rBitmapColor ) const
 // ------------------------------------------------------------------
 
 inline BitmapPalette::BitmapPalette() :
-            mpBitmapColor	( NULL ),
-            mnCount 		( 0 )
+            mpBitmapColor   ( NULL ),
+            mnCount         ( 0 )
 {
 }
 
@@ -655,9 +655,9 @@ inline void BitmapPalette::SetEntryCount( USHORT nCount )
     {
         const ULONG nNewSize = nCount * sizeof( BitmapColor );
         const ULONG nMinSize = Min( mnCount, nCount ) * sizeof( BitmapColor );
-        BYTE*		pNewColor = new BYTE[ nNewSize ];
+        BYTE*       pNewColor = new BYTE[ nNewSize ];
 
-        if ( nMinSize && mpBitmapColor ) 
+        if ( nMinSize && mpBitmapColor )
             memcpy( pNewColor, mpBitmapColor, nMinSize );
         delete[] (BYTE*) mpBitmapColor;
         memset( pNewColor + nMinSize, 0, nNewSize - nMinSize );
@@ -740,9 +740,9 @@ inline ColorMask::ColorMask( ULONG nRedMask, ULONG nGreenMask, ULONG nBlueMask )
 
 inline long ColorMask::ImplCalcMaskShift( ULONG nMask, ULONG& rOr, ULONG& rOrShift ) const
 {
-    long	nShift;
-    long	nRet;
-    ULONG	nLen = 0UL;
+    long    nShift;
+    long    nRet;
+    ULONG   nLen = 0UL;
 
     // bei welchen Bits faengt die Maske an
     for( nShift = 31L; ( nShift >= 0L ) && !( nMask & ( 1 << (ULONG) nShift ) ); nShift-- )

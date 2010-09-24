@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,17 +47,17 @@ using namespace ::vos;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-#define WID_SEARCH_BACKWARDS	0
-#define WID_SEARCH_CASE			1
-#define WID_SEARCH_WORDS		2
+#define WID_SEARCH_BACKWARDS    0
+#define WID_SEARCH_CASE         1
+#define WID_SEARCH_WORDS        2
 
 const SfxItemPropertyMapEntry* ImplGetSearchPropertyMap()
 {
     static const SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN(UNO_NAME_SEARCH_BACKWARDS),	WID_SEARCH_BACKWARDS,	&::getBooleanCppuType(),	0,	0 },
-        { MAP_CHAR_LEN(UNO_NAME_SEARCH_CASE),		WID_SEARCH_CASE,		&::getBooleanCppuType(),	0,	0 },
-        { MAP_CHAR_LEN(UNO_NAME_SEARCH_WORDS),		WID_SEARCH_WORDS,		&::getBooleanCppuType(),	0,	0 },
+        { MAP_CHAR_LEN(UNO_NAME_SEARCH_BACKWARDS),  WID_SEARCH_BACKWARDS,   &::getBooleanCppuType(),    0,  0 },
+        { MAP_CHAR_LEN(UNO_NAME_SEARCH_CASE),       WID_SEARCH_CASE,        &::getBooleanCppuType(),    0,  0 },
+        { MAP_CHAR_LEN(UNO_NAME_SEARCH_WORDS),      WID_SEARCH_WORDS,       &::getBooleanCppuType(),    0,  0 },
         { 0,0,0,0,0,0}
     };
 
@@ -68,7 +68,7 @@ class SearchContext_impl
 {
     uno::Reference< drawing::XShapes > mxShapes;
     sal_Int32 mnIndex;
-    SearchContext_impl*	mpParent;
+    SearchContext_impl* mpParent;
 
 public:
     SearchContext_impl( uno::Reference< drawing::XShapes >  xShapes, SearchContext_impl* pParent = NULL )
@@ -91,7 +91,7 @@ public:
         }
         return xShape;
     }
-        
+
     SearchContext_impl* getParent() const { return mpParent; }
 };
 
@@ -123,7 +123,7 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
     if( pDescr == NULL )
         return 0;
 
-    sal_Int32 nFound	= 0;
+    sal_Int32 nFound    = 0;
 
     uno::Reference< drawing::XShapes >  xShapes;
     uno::Reference< drawing::XShape >  xShape;
@@ -627,7 +627,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                 xFound = (text::XText*)pRange;
                 pRange->SetSelection(aSelection);
 
-//				pDescr->SetStartPos( nEndPos );
+//              pDescr->SetStartPos( nEndPos );
             }
         }
         else

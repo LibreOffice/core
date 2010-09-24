@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,15 +35,15 @@
 #include "chgtrack.hxx"
 
 class ScDocShell;
-class AbstractSvxPostItDialog; //CHINA001 
+class AbstractSvxPostItDialog; //CHINA001
 
 class ScRedComDialog
 {
 private:
 
-    ScChangeAction	*pChangeAction;
-    ScDocShell		*pDocShell;
-    String			aComment;
+    ScChangeAction  *pChangeAction;
+    ScDocShell      *pDocShell;
+    String          aComment;
     AbstractSvxPostItDialog* pDlg;
 
     DECL_LINK( PrevHdl, AbstractSvxPostItDialog* );
@@ -51,8 +51,8 @@ private:
 
 protected:
 
-    void	ReInit(ScChangeAction *);
-    void	SelectCell();
+    void    ReInit(ScChangeAction *);
+    void    SelectCell();
 
     ScChangeAction *FindPrev(ScChangeAction *pAction);
     ScChangeAction *FindNext(ScChangeAction *pAction);

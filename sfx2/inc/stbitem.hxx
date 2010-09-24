@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ typedef SfxStatusBarControl* (*SfxStatusBarControlCtor)( USHORT nSlotId, USHORT 
 struct SfxStbCtrlFactory
 {
     SfxStatusBarControlCtor pCtor;
-    TypeId					nTypeId;
-    USHORT					nSlotId;
+    TypeId                  nTypeId;
+    USHORT                  nSlotId;
 
     SfxStbCtrlFactory( SfxStatusBarControlCtor pTheCtor,
             TypeId nTheTypeId, USHORT nTheSlotId ):
@@ -70,14 +70,14 @@ class SFX2_DLLPUBLIC SfxStatusBarControl: public svt::StatusbarController
 {
     USHORT          nSlotId;
     USHORT          nId;
-    StatusBar*		pBar;
+    StatusBar*      pBar;
 
 protected:
     // new controller API
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void			   SAL_CALL acquire() throw();
-    virtual void			   SAL_CALL release() throw();
+    virtual void               SAL_CALL acquire() throw();
+    virtual void               SAL_CALL release() throw();
 
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException );
@@ -104,27 +104,27 @@ protected:
     virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException);
 
     // Old sfx2 interface
-    virtual void	StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
-    virtual void	Click();
-    virtual void	DoubleClick();
-    virtual void	Command( const CommandEvent& rCEvt );
-    virtual BOOL	MouseButtonDown( const MouseEvent & );
-    virtual BOOL	MouseMove( const MouseEvent & );
-    virtual BOOL	MouseButtonUp( const MouseEvent & );
-    virtual void	Paint( const UserDrawEvent &rUDEvt );
+    virtual void    Click();
+    virtual void    DoubleClick();
+    virtual void    Command( const CommandEvent& rCEvt );
+    virtual BOOL    MouseButtonDown( const MouseEvent & );
+    virtual BOOL    MouseMove( const MouseEvent & );
+    virtual BOOL    MouseButtonUp( const MouseEvent & );
+    virtual void    Paint( const UserDrawEvent &rUDEvt );
 
     static USHORT   convertAwtToVCLMouseButtons( sal_Int16 nAwtMouseButtons );
 
 public:
                     SfxStatusBarControl( USHORT nSlotID, USHORT nId, StatusBar& rBar );
-    virtual 		~SfxStatusBarControl();
+    virtual         ~SfxStatusBarControl();
 
     USHORT          GetSlotId() const { return nSlotId; }
     USHORT          GetId() const { return nId; }
-    StatusBar&		GetStatusBar() const { return *pBar; }
-    void			CaptureMouse();
-    void			ReleaseMouse();
+    StatusBar&      GetStatusBar() const { return *pBar; }
+    void            CaptureMouse();
+    void            ReleaseMouse();
 
     static SfxStatusBarControl* CreateControl( USHORT nSlotID, USHORT nId, StatusBar *pBar, SfxModule* );
     static void RegisterStatusBarControl(SfxModule*, SfxStbCtrlFactory*);

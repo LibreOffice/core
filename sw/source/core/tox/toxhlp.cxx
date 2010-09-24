@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
                                                const STAR_NMSPC::lang::Locale& rLocale ) const
 {
     String sRet;
-    try	{
+    try {
         sRet = xIES->getIndexKey( rTxt, rTxtReading, rLocale );
     }
     catch ( UNO_NMSPC::Exception&
@@ -102,7 +102,7 @@ String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
 String IndexEntrySupplierWrapper::GetFollowingText( BOOL bMorePages ) const
 {
     String sRet;
-    try	{
+    try {
         sRet = xIES->getIndexFollowPageWord( bMorePages, aLcl );
     }
     catch ( UNO_NMSPC::Exception&
@@ -125,7 +125,7 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLc
 {
     uno::Sequence< ::rtl::OUString > sRet;
 
-    try	{
+    try {
         sRet = xIES->getAlgorithmList( rLcl );
     }
     catch ( UNO_NMSPC::Exception&
@@ -148,7 +148,7 @@ sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
         const String& sSortAlgorithm, long nOptions ) const
 {
     sal_Bool bRet = sal_False;
-    try	{
+    try {
         bRet = xIES->loadAlgorithm( rLcl, sSortAlgorithm, nOptions );
     }
     catch ( UNO_NMSPC::Exception&
@@ -173,7 +173,7 @@ sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
             const STAR_NMSPC::lang::Locale& rLocale2 ) const
 {
     sal_Int16 nRet = 0;
-    try	{
+    try {
         nRet = xIES->compareIndexEntry( rTxt1, rTxtReading1, rLocale1,
                                         rTxt2, rTxtReading2, rLocale2 );
     }

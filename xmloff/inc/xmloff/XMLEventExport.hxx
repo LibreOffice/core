@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,12 +49,12 @@ namespace com { namespace sun { namespace star {
 typedef ::std::map< ::rtl::OUString, XMLEventExportHandler* > HandlerMap;
 typedef ::std::map< ::rtl::OUString, XMLEventName > NameMap;
 
-/** 
+/**
  * Export instances of EventsSupplier services. To use this class you
  * must fulfill two conditions:
  *
  * 1) provide a translation from the API event names to XML event
- * names 
+ * names
  * 2) Register XMLEventExportHandler instances for all script types
  * that you would like to export.
  *

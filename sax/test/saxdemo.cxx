@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -293,9 +293,9 @@ struct TagAttribute
                   const OUString &sType ,
                   const OUString &sValue )
     {
-        this->sName 	= sName;
-        this->sType 	= sType;
-        this->sValue 	= sValue;
+        this->sName     = sName;
+        this->sType     = sType;
+        this->sValue    = sValue;
     }
 
     OUString sName;
@@ -392,7 +392,7 @@ AttributeListImpl::~AttributeListImpl()
 }
 
 
-void AttributeListImpl::addAttribute( 	const OUString &sName ,
+void AttributeListImpl::addAttribute(   const OUString &sName ,
                                         const OUString &sType ,
                                         const OUString &sValue )
 {
@@ -549,7 +549,7 @@ int main (int argc, char **argv)
         // create and connect the document handler to the parser
         TestDocumentHandler *pDocHandler = new TestDocumentHandler( );
 
-        Reference < XDocumentHandler >	rDocHandler( (XDocumentHandler *) pDocHandler );
+        Reference < XDocumentHandler >  rDocHandler( (XDocumentHandler *) pDocHandler );
         Reference< XEntityResolver > rEntityResolver( (XEntityResolver *) pDocHandler );
 
         rParser->setDocumentHandler( rDocHandler );
@@ -558,7 +558,7 @@ int main (int argc, char **argv)
         // create the input stream
         InputSource source;
         source.aInputStream = createStreamFromFile( argv[1] );
-        source.sSystemId 	= OUString::createFromAscii( argv[1] );
+        source.sSystemId    = OUString::createFromAscii( argv[1] );
 
         try
         {
@@ -598,7 +598,7 @@ int main (int argc, char **argv)
 
         pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("Arg1" )),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("CDATA")) ,
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("foo\n	u")) );
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("foo\n   u")) );
         pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("Arg2")) ,
                              OUString( RTL_CONSTASCII_USTRINGPARAM("CDATA")) ,
                              OUString( RTL_CONSTASCII_USTRINGPARAM("foo2")) );

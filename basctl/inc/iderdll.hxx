@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,15 +35,15 @@ class BasicIDEDLL
 {
     friend class BasicIDEShell;
 
-    BasicIDEShell*	pShell;
-    BasicIDEData*	pExtraData;
+    BasicIDEShell*  pShell;
+    BasicIDEData*   pExtraData;
 
 public:
                     BasicIDEDLL();
                     ~BasicIDEDLL();
 
-    BasicIDEShell*	GetShell() const { return pShell; }
-    BasicIDEData*	GetExtraData();
+    BasicIDEShell*  GetShell() const { return pShell; }
+    BasicIDEData*   GetExtraData();
     static void     Init();
     static void     Exit();
     static BasicIDEDLL* GetDLL();

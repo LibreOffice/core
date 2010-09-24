@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -173,9 +173,9 @@ void dispatchExecute(css::uno::Reference< css::frame::XModel>& xModel, USHORT nS
         {
             pDispatcher->Execute( nSlot , nCall );
         }
-    }	
+    }
 }
-        
+
 void
 implnPaste()
 {
@@ -197,7 +197,7 @@ implnCopy()
         pViewShell->CopyToClip(NULL,false,false,true);
 }
 
-void 
+void
 implnCut()
 {
     ScTabViewShell* pViewShell =  getCurrentBestViewShell();
@@ -212,23 +212,23 @@ void implnPasteSpecial(USHORT nFlags,USHORT nFunction,sal_Bool bSkipEmpty, sal_B
     InsCellCmd eMoveMode = INS_NONE;
 
     ScTabViewShell* pTabViewShell = ScTabViewShell::GetActiveViewShell();
-    if ( !pTabViewShell ) 
+    if ( !pTabViewShell )
         // none active, try next best
         pTabViewShell = getCurrentBestViewShell();
     if ( pTabViewShell )
     {
-        ScViewData* pView = pTabViewShell->GetViewData();	
+        ScViewData* pView = pTabViewShell->GetViewData();
         Window* pWin = ( pView != NULL ) ? pView->GetActiveWin() : NULL;
         if ( pView && pWin )
         {
             if ( bAsLink && bOtherDoc )
                 pTabViewShell->PasteFromSystem(0);//SOT_FORMATSTR_ID_LINK
-            else 
+            else
             {
                 ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
-                ScDocument* pDoc = NULL; 
+                ScDocument* pDoc = NULL;
                 if ( pOwnClip )
-                    pDoc = pOwnClip->GetDocument();	
+                    pDoc = pOwnClip->GetDocument();
                 pTabViewShell->PasteFromClip( nFlags, pDoc,
                     nFunction, bSkipEmpty, bTranspose, bAsLink,
                     eMoveMode, IDF_NONE, TRUE );
@@ -239,7 +239,7 @@ void implnPasteSpecial(USHORT nFlags,USHORT nFunction,sal_Bool bSkipEmpty, sal_B
 
 }
 
- uno::Reference< frame::XModel > 
+ uno::Reference< frame::XModel >
 getCurrentDocument() throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel;
@@ -249,7 +249,7 @@ getCurrentDocument() throw (uno::RuntimeException)
     {
         OSL_TRACE("getModelFromBasic() StarBASIC* is NULL" );
         return xModel;
-    }    
+    }
     SbxObject* p = pBasic;
     SbxObject* pParent = p->GetParent();
     SbxObject* pParentParent = pParent ? pParent->GetParent() : NULL;
@@ -264,7 +264,7 @@ getCurrentDocument() throw (uno::RuntimeException)
     }
 
 
-    uno::Any aModel; 
+    uno::Any aModel;
     SbxVariable *pCompVar = basicChosen->Find(  UniString(RTL_CONSTASCII_USTRINGPARAM("ThisComponent")), SbxCLASS_OBJECT );
 
     if ( pCompVar )
@@ -282,7 +282,7 @@ getCurrentDocument() throw (uno::RuntimeException)
             xModel.set( xDesktop->getCurrentComponent(), uno::UNO_QUERY );
             if ( !xModel.is() )
             {
-                throw uno::RuntimeException( 
+                throw uno::RuntimeException(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't extract model from basic ( its obviously not set yet ) therefore don't know the currently selected document") ), uno::Reference< uno::XInterface >() );
             }
             return xModel;
@@ -297,8 +297,8 @@ getCurrentDocument() throw (uno::RuntimeException)
     else
     {
         OSL_TRACE("Failed to get ThisComponent");
-        throw uno::RuntimeException( 
-            rtl::OUString( 
+        throw uno::RuntimeException(
+            rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "Can't determine the currently selected document") ),
             uno::Reference< uno::XInterface >() );
@@ -306,8 +306,8 @@ getCurrentDocument() throw (uno::RuntimeException)
     return xModel;
 }
 
-ScDocShell* 
-getDocShell( css::uno::Reference< css::frame::XModel>& xModel ) 
+ScDocShell*
+getDocShell( css::uno::Reference< css::frame::XModel>& xModel )
 {
     uno::Reference< uno::XInterface > xIf( xModel, uno::UNO_QUERY_THROW );
     ScModelObj* pModel = dynamic_cast< ScModelObj* >( xIf.get() );
@@ -318,7 +318,7 @@ getDocShell( css::uno::Reference< css::frame::XModel>& xModel )
 
 }
 
-ScTabViewShell* 
+ScTabViewShell*
 getBestViewShell(  css::uno::Reference< css::frame::XModel>& xModel )
 {
     ScDocShell* pDocShell = getDocShell( xModel );
@@ -327,23 +327,23 @@ getBestViewShell(  css::uno::Reference< css::frame::XModel>& xModel )
     return NULL;
 }
 
-ScTabViewShell* 
+ScTabViewShell*
 getCurrentBestViewShell()
-{ 
+{
     uno::Reference< frame::XModel > xModel = getCurrentDocument();
     return getBestViewShell( xModel );
 }
 
-SfxViewFrame* 
+SfxViewFrame*
 getCurrentViewFrame()
 {
-    ScTabViewShell* pViewShell = getCurrentBestViewShell();	
+    ScTabViewShell* pViewShell = getCurrentBestViewShell();
     if ( pViewShell )
         return pViewShell->GetViewFrame();
     return NULL;
 }
 
-sal_Int32 
+sal_Int32
 OORGBToXLRGB( sal_Int32 nCol )
 {
     sal_Int32 nRed = nCol;
@@ -357,7 +357,7 @@ OORGBToXLRGB( sal_Int32 nCol )
     sal_Int32 nRGB =  ( (nBlue << 16) | (nGreen << 8) | nRed );
     return nRGB;
 }
-sal_Int32 
+sal_Int32
 XLRGBToOORGB( sal_Int32 nCol )
 {
     sal_Int32 nBlue = nCol;
@@ -371,7 +371,7 @@ XLRGBToOORGB( sal_Int32 nCol )
     sal_Int32 nRGB =  ( (nRed << 16) | (nGreen << 8) | nBlue );
     return nRGB;
 }
-uno::Any 
+uno::Any
 OORGBToXLRGB( const uno::Any& aCol )
 {
     sal_Int32 nCol=0;
@@ -379,7 +379,7 @@ OORGBToXLRGB( const uno::Any& aCol )
     nCol = OORGBToXLRGB( nCol );
     return uno::makeAny( nCol );
 }
-uno::Any 
+uno::Any
 XLRGBToOORGB(  const uno::Any& aCol )
 {
     sal_Int32 nCol=0;
@@ -405,7 +405,7 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
 
     rtl::OUString sRange(  RTL_CONSTASCII_USTRINGPARAM( "-" ) );
     rtl::OUString sFileName;
-    
+
     if (( nFrom || nTo ) )
     {
         if ( nFrom )
@@ -425,7 +425,7 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
     if ( pViewFrame )
     {
         SfxAllItemSet aArgs( SFX_APP()->GetPool() );
-                
+
         SfxBoolItem sfxCollate( SID_PRINT_COLLATE, bCollate );
         aArgs.Put( sfxCollate, sfxCollate.Which() );
         SfxInt16Item sfxCopies( SID_PRINT_COPIES, nCopies );
@@ -434,7 +434,7 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
         {
             SfxStringItem sfxFileName( SID_FILE_NAME, sFileName);
             aArgs.Put( sfxFileName, sfxFileName.Which() );
-        
+
         }
         if (  sRange.getLength() )
         {
@@ -451,7 +451,7 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
         {
             if ( bPreview )
             {
-                if ( !pViewFrame->GetFrame().IsInPlace() ) 	
+                if ( !pViewFrame->GetFrame().IsInPlace() )
                 {
                     SC_MOD()->InputEnterHandler();
                     pViewFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SFX_CALLMODE_SYNCHRON );
@@ -462,12 +462,12 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
             else
                 pDispatcher->Execute( (USHORT)SID_PRINTDOC, (SfxCallMode)SFX_CALLMODE_SYNCHRON, aArgs );
         }
-            
+
     }
-    
+
     // #FIXME #TODO
     // 1 ActivePrinter ( how/can we switch a printer via API? )
-    // 2 PrintToFile ( ms behaviour if this option is specified but no 
+    // 2 PrintToFile ( ms behaviour if this option is specified but no
     //   filename supplied 'PrToFileName' then the user will be prompted )
     // 3 Need to check behaviour of Selected sheets with range ( e.g. From & To
     //    values ) in oOO these options are mutually exclusive
@@ -536,13 +536,13 @@ rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeEx
 }
 
 
-rtl::OUString 
+rtl::OUString
 ContainerUtilities::getUniqueName( const uno::Sequence< ::rtl::OUString >&  _slist, const rtl::OUString& _sElementName, const ::rtl::OUString& _sSuffixSeparator)
 {
     return getUniqueName(_slist, _sElementName, _sSuffixSeparator, sal_Int32(2));
 }
 
-rtl::OUString 
+rtl::OUString
 ContainerUtilities::getUniqueName( const uno::Sequence< rtl::OUString >& _slist, const rtl::OUString _sElementName, const rtl::OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix)
 {
     sal_Int32 a = _nStartSuffix;
@@ -552,7 +552,7 @@ ContainerUtilities::getUniqueName( const uno::Sequence< rtl::OUString >& _slist,
     if ( nLen == 0 )
         return _sElementName;
 
-    while (bElementexists == true) 
+    while (bElementexists == true)
     {
         for (sal_Int32 i = 0; i < nLen; i++)
         {
@@ -566,17 +566,17 @@ ContainerUtilities::getUniqueName( const uno::Sequence< rtl::OUString >& _slist,
     return rtl::OUString();
 }
 
-sal_Int32 
+sal_Int32
 ContainerUtilities::FieldInList( const uno::Sequence< rtl::OUString >& SearchList, const rtl::OUString& SearchString )
 {
     sal_Int32 FieldLen = SearchList.getLength();
     sal_Int32 retvalue = -1;
-    for (sal_Int32 i = 0; i < FieldLen; i++) 
+    for (sal_Int32 i = 0; i < FieldLen; i++)
     {
         // I wonder why comparing lexicographically is done
         // when its a match is whats interesting?
-        //if (SearchList[i].compareTo(SearchString) == 0) 
-        if ( SearchList[i].equals( SearchString ) ) 
+        //if (SearchList[i].compareTo(SearchString) == 0)
+        if ( SearchList[i].equals( SearchString ) )
         {
             retvalue = i;
             break;
@@ -601,7 +601,7 @@ rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike )
     if ( bForLike )
         sResult.append(static_cast<sal_Unicode>('^'));
 
-    while (start < end) 
+    while (start < end)
     {
         switch (*start)
         {
@@ -678,7 +678,7 @@ double getPixelTo100thMillimeterConversionFactor( css::uno::Reference< css::awt:
     }
     else
     {
-        fConvertFactor = xDevice->getInfo().PixelPerMeterX/100000;	
+        fConvertFactor = xDevice->getInfo().PixelPerMeterX/100000;
     }
     return fConvertFactor;
 }
@@ -708,7 +708,7 @@ UserFormGeometryHelper::UserFormGeometryHelper( const uno::Reference< uno::XComp
     double UserFormGeometryHelper::getLeft()
     {
     sal_Int32 nLeft = 0;
-    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_LEFT ) ) ) >>= nLeft;	
+    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_LEFT ) ) ) >>= nLeft;
     return Millimeter::getInPoints( nLeft );
     }
     void UserFormGeometryHelper::setLeft( double nLeft )
@@ -718,32 +718,32 @@ UserFormGeometryHelper::UserFormGeometryHelper( const uno::Reference< uno::XComp
     double UserFormGeometryHelper::getTop()
     {
     sal_Int32 nTop = 0;
-    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 	VBA_TOP ) ) ) >>= nTop;	
+    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  VBA_TOP ) ) ) >>= nTop;
     return Millimeter::getInPoints( nTop );
     }
     void UserFormGeometryHelper::setTop( double nTop )
     {
-    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 	VBA_TOP ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nTop ) ) );
+    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  VBA_TOP ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nTop ) ) );
     }
     double UserFormGeometryHelper::getHeight()
     {
     sal_Int32 nHeight = 0;
-    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 	SC_UNONAME_CELLHGT ) ) ) >>= nHeight;	
+    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLHGT ) ) ) >>= nHeight;
     return Millimeter::getInPoints( nHeight );
     }
     void UserFormGeometryHelper::setHeight( double nHeight )
     {
-    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 	SC_UNONAME_CELLHGT ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nHeight ) ) );
+    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLHGT ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nHeight ) ) );
     }
     double UserFormGeometryHelper::getWidth()
     {
     sal_Int32 nWidth = 0;
-    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 	SC_UNONAME_CELLWID ) ) ) >>= nWidth;	
+    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLWID ) ) ) >>= nWidth;
     return Millimeter::getInPoints( nWidth );
     }
     void UserFormGeometryHelper::setWidth( double nWidth)
     {
-    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( 	SC_UNONAME_CELLWID ) ), uno::makeAny(  Millimeter::getInHundredthsOfOneMillimeter( nWidth ) ) );
+    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLWID ) ), uno::makeAny(  Millimeter::getInHundredthsOfOneMillimeter( nWidth ) ) );
     }
 
 SfxItemSet*
@@ -751,7 +751,7 @@ ScVbaCellRangeAccess::GetDataSet( ScCellRangeObj* pRangeObj )
 {
     SfxItemSet* pDataSet = pRangeObj ? pRangeObj->GetCurrentDataSet( true ) : NULL ;
     return pDataSet;
-    
+
 }
 
 } // vba

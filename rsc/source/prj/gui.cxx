@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,13 +34,13 @@
 #include <rscrsc.hxx>
 #include <rscdb.hxx>
 
-/*************** G l o b a l e	 V a r i a b l e n **********************/
+/*************** G l o b a l e   V a r i a b l e n **********************/
 static RscCompiler * pRscCompiler = NULL;
 /****************************************************************/
-/*																*/
-/*	Function	:	ExitProgram()								*/
-/*																*/
-/*	Description :	Gibt die Temporaeren Dateien frei.			*/
+/*                                                              */
+/*  Function    :   ExitProgram()                               */
+/*                                                              */
+/*  Description :   Gibt die Temporaeren Dateien frei.          */
 /****************************************************************/
 #if defined( UNX ) || ( defined( OS2 ) && ( defined( TCPP ) || defined ( GCC )) ) ||  defined (WTC) || defined (MTW) || defined(__MINGW32__)
         void ExitProgram( void ){
@@ -81,10 +81,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     fprintf( stderr, "debugging %s\n", argv[0] );
 #endif
 
-    ERRTYPE 	aError;
+    ERRTYPE     aError;
 
     InitRscCompiler();
-    RscError*	pErrHdl    = new RscError( lcl_determineVerbosity( argc, argv ) );
+    RscError*   pErrHdl    = new RscError( lcl_determineVerbosity( argc, argv ) );
 #ifdef MTW
     RscCmdLine* pCmdLine   = new RscCmdLine( argc, (char **)argv, pErrHdl );
 #else

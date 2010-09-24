@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,18 +52,18 @@ using com::sun::star::container::XNameContainer;
 using rtl::OUString;
 
 
-namespace frm 
+namespace frm
 {
 
 Reference<XInterface> Model_CreateInstance(
-    const Reference<XMultiServiceFactory>& ) 
+    const Reference<XMultiServiceFactory>& )
     throw( RuntimeException )
 {
     return static_cast<XPropertySet*>( new xforms::Model );
 }
 
 Reference<XInterface> XForms_CreateInstance(
-    const Reference<XMultiServiceFactory>& ) 
+    const Reference<XMultiServiceFactory>& )
     throw( RuntimeException )
 {
     return static_cast<XNameContainer*>( new NameContainer<Reference<XPropertySet> >() );

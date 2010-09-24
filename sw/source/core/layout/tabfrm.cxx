@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,9 +68,9 @@
 #include "rowfrm.hxx"
 #include "cellfrm.hxx"
 #include "flyfrms.hxx"
-#include "txtfrm.hxx"		//HasFtn()
+#include "txtfrm.hxx"       //HasFtn()
 #include "htmltbl.hxx"
-#include "sectfrm.hxx"	//SwSectionFrm
+#include "sectfrm.hxx"  //SwSectionFrm
 // OD 30.09.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
 // --> OD 2004-06-28 #i28701#
@@ -89,10 +89,10 @@ using namespace ::com::sun::star;
 
 /*************************************************************************
 |*
-|*	SwTabFrm::SwTabFrm(), ~SwTabFrm()
+|*  SwTabFrm::SwTabFrm(), ~SwTabFrm()
 |*
-|*	Ersterstellung		MA 09. Mar. 93
-|*	Letzte Aenderung	MA 30. May. 96
+|*  Ersterstellung      MA 09. Mar. 93
+|*  Letzte Aenderung    MA 30. May. 96
 |*
 |*************************************************************************/
 SwTabFrm::SwTabFrm( SwTable &rTab ):
@@ -173,10 +173,10 @@ SwTabFrm::~SwTabFrm()
 
 /*************************************************************************
 |*
-|*	SwTabFrm::JoinAndDelFollows()
+|*  SwTabFrm::JoinAndDelFollows()
 |*
-|*	Ersterstellung		MA 30. May. 96
-|*	Letzte Aenderung	MA 30. May. 96
+|*  Ersterstellung      MA 30. May. 96
+|*  Letzte Aenderung    MA 30. May. 96
 |*
 |*************************************************************************/
 void SwTabFrm::JoinAndDelFollows()
@@ -191,10 +191,10 @@ void SwTabFrm::JoinAndDelFollows()
 
 /*************************************************************************
 |*
-|*	SwTabFrm::RegistFlys()
+|*  SwTabFrm::RegistFlys()
 |*
-|*	Ersterstellung		MA 08. Jul. 93
-|*	Letzte Aenderung	MA 27. Jan. 99
+|*  Ersterstellung      MA 08. Jul. 93
+|*  Letzte Aenderung    MA 27. Jan. 99
 |*
 |*************************************************************************/
 void SwTabFrm::RegistFlys()
@@ -1041,10 +1041,10 @@ bool lcl_FindSectionsInRow( const SwRowFrm& rRow )
 
 /*************************************************************************
 |*
-|*	SwTabFrm::Split(), Join()
+|*  SwTabFrm::Split(), Join()
 |*
-|*	Ersterstellung		MA 03. Jun. 93
-|*	Letzte Aenderung	MA 03. Sep. 96
+|*  Ersterstellung      MA 03. Jun. 93
+|*  Letzte Aenderung    MA 03. Sep. 96
 |*
 |*************************************************************************/
 bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep )
@@ -1412,12 +1412,12 @@ bool SwTabFrm::Join()
     ASSERT( !HasFollowFlowLine(), "Joining follow flow line" )
 
     SwTabFrm *pFoll = GetFollow();
-    SwTwips nHeight = 0;	//Gesamthoehe der eingefuegten Zeilen als Return.
+    SwTwips nHeight = 0;    //Gesamthoehe der eingefuegten Zeilen als Return.
 
     if ( !pFoll->IsJoinLocked() )
     {
         SWRECTFN( this )
-        pFoll->Cut();	//Erst ausschneiden um unuetze Benachrichtigungen zu
+        pFoll->Cut();   //Erst ausschneiden um unuetze Benachrichtigungen zu
                         //minimieren.
 
         SwFrm *pRow = pFoll->GetFirstNonHeadlineRow(),
@@ -1449,10 +1449,10 @@ bool SwTabFrm::Join()
 
 /*************************************************************************
 |*
-|*	SwTabFrm::MakeAll()
+|*  SwTabFrm::MakeAll()
 |*
-|*	Ersterstellung		MA 09. Mar. 93
-|*	Letzte Aenderung	MA 10. Apr. 97
+|*  Ersterstellung      MA 09. Mar. 93
+|*  Letzte Aenderung    MA 10. Apr. 97
 |*
 |*************************************************************************/
 void MA_FASTCALL SwInvalidatePositions( SwFrm *pFrm, long nBottom )
@@ -1461,7 +1461,7 @@ void MA_FASTCALL SwInvalidatePositions( SwFrm *pFrm, long nBottom )
     BOOL bAll = LONG_MAX == nBottom;
     SWRECTFN( pFrm )
     do
-    {	pFrm->_InvalidatePos();
+    {   pFrm->_InvalidatePos();
         pFrm->_InvalidateSize();
         if( pFrm->IsLayoutFrm() )
         {
@@ -1904,7 +1904,7 @@ void SwTabFrm::MakeAll()
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
     LockJoin(); //Ich lass mich nicht unterwegs vernichten.
-    SwLayNotify aNotify( this );	//uebernimmt im DTor die Benachrichtigung
+    SwLayNotify aNotify( this );    //uebernimmt im DTor die Benachrichtigung
     // If pos is invalid, we have to call a SetInvaKeep at aNotify.
     // Otherwise the keep atribute would not work in front of a table.
     const BOOL bOldValidPos = GetValidPosFlag();
@@ -1934,7 +1934,7 @@ void SwTabFrm::MakeAll()
         SetRemoveFollowFlowLinePending( FALSE );
     }
 
-    if ( bResizeHTMLTable )	//Optimiertes Zusammenspiel mit Grow/Shrink des Inhaltes
+    if ( bResizeHTMLTable ) //Optimiertes Zusammenspiel mit Grow/Shrink des Inhaltes
     {
         bResizeHTMLTable = FALSE;
         SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
@@ -1944,16 +1944,16 @@ void SwTabFrm::MakeAll()
     }
 
 
-    BOOL bMakePage	= TRUE;		//solange TRUE kann eine neue Seite
+    BOOL bMakePage  = TRUE;     //solange TRUE kann eine neue Seite
                                 //angelegt werden (genau einmal)
-    BOOL bMovedBwd	= FALSE;	//Wird TRUE wenn der Frame zurueckfliesst
-    BOOL bMovedFwd	= FALSE;	//solange FALSE kann der Frm zurueck-
+    BOOL bMovedBwd  = FALSE;    //Wird TRUE wenn der Frame zurueckfliesst
+    BOOL bMovedFwd  = FALSE;    //solange FALSE kann der Frm zurueck-
                                 //fliessen (solange, bis er einmal
                                 //vorwaerts ge'moved wurde).
-    BOOL bSplit		= FALSE;	//Wird TRUE wenn der Frm gesplittet wurde.
+    BOOL bSplit     = FALSE;    //Wird TRUE wenn der Frm gesplittet wurde.
     const BOOL bFtnsInDoc = 0 != GetFmt()->GetDoc()->GetFtnIdxs().Count();
     BOOL bMoveable;
-    const BOOL bFly		= IsInFly();
+    const BOOL bFly     = IsInFly();
 
     SwBorderAttrAccess  *pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
     const SwBorderAttrs *pAttrs = pAccess->Get();
@@ -2108,7 +2108,7 @@ void SwTabFrm::MakeAll()
                 delete pAccess;
                 bCalcLowers |= pLayout->Resize(
                         pLayout->GetBrowseWidthByTabFrm( *this ), FALSE );
-//					GetFmt()->GetDoc()->GetDocShell()->IsReadOnly() ? FALSE : TRUE );
+//                  GetFmt()->GetDoc()->GetDocShell()->IsReadOnly() ? FALSE : TRUE );
                 pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                 pAttrs = pAccess->Get();
             }
@@ -2678,7 +2678,7 @@ void SwTabFrm::MakeAll()
         bMovedFwd = bCalcLowers = TRUE;
         aNotify.SetLowersComplete( FALSE );
         if ( IsFollow() )
-        {	//Um Oszillationen zu vermeiden sollte kein ungueltiger Master
+        {   //Um Oszillationen zu vermeiden sollte kein ungueltiger Master
             //zurueckbleiben.
             SwTabFrm *pTab = FindMaster();
             if ( pTab->GetUpper() )
@@ -2745,12 +2745,12 @@ void SwTabFrm::MakeAll()
 
 /*************************************************************************
 |*
-|*	SwTabFrm::CalcFlyOffsets()
+|*  SwTabFrm::CalcFlyOffsets()
 |*
-|*	Beschreibung:		Berechnet die Offsets, die durch FlyFrames
-|*						entstehen.
-|*	Ersterstellung		MA/MIB 14. Apr. 99
-|*	Letzte Aenderung
+|*  Beschreibung:       Berechnet die Offsets, die durch FlyFrames
+|*                      entstehen.
+|*  Ersterstellung      MA/MIB 14. Apr. 99
+|*  Letzte Aenderung
 |*
 |*************************************************************************/
 BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
@@ -2874,7 +2874,7 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                             nPrtPos = nBottom;
                         bInvalidatePrtArea = TRUE;
                     }
-                    if ( (SURROUND_RIGHT	== rSur.GetSurround() ||
+                    if ( (SURROUND_RIGHT    == rSur.GetSurround() ||
                           SURROUND_PARALLEL == rSur.GetSurround())&&
                          text::HoriOrientation::LEFT == rHori.GetHoriOrient() )
                     {
@@ -2884,7 +2884,7 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                         rLeftOffset = Max( rLeftOffset, nWidth );
                         bInvalidatePrtArea = TRUE;
                     }
-                    if ( (SURROUND_LEFT		== rSur.GetSurround() ||
+                    if ( (SURROUND_LEFT     == rSur.GetSurround() ||
                           SURROUND_PARALLEL == rSur.GetSurround())&&
                          text::HoriOrientation::RIGHT == rHori.GetHoriOrient() )
                     {
@@ -2905,12 +2905,12 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
 
 /*************************************************************************
 |*
-|*	SwTabFrm::Format()
+|*  SwTabFrm::Format()
 |*
-|*	Beschreibung:		"Formatiert" den Frame; Frm und PrtArea
-|*						Die Fixsize wird hier nicht eingestellt.
-|*	Ersterstellung		MA 09. Mar. 93
-|*	Letzte Aenderung	MA 18. Jun. 97
+|*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea
+|*                      Die Fixsize wird hier nicht eingestellt.
+|*  Ersterstellung      MA 09. Mar. 93
+|*  Letzte Aenderung    MA 18. Jun. 97
 |*
 |*************************************************************************/
 void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
@@ -2936,7 +2936,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
     //1. Es gibt Rahmen mit SurroundNone, diesen wird vollsaendig ausgewichen
     //2. Es gibt Rahmen mit Umlauf nur rechts bzw. nur links und diese sind
     //   rechts bzw. links ausgerichtet, diese geben ein Minimum fuer die
-    //	 Raender vor.
+    //   Raender vor.
     long nTmpRight = -1000000,
          nLeftOffset  = 0;
     if( CalcFlyOffsets( nUpper, nLeftOffset, nTmpRight ) )
@@ -2950,7 +2950,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
     // <-- collapsing
 
     if ( !bValidPrtArea )
-    {	bValidPrtArea = TRUE;
+    {   bValidPrtArea = TRUE;
 
         //Die Breite der PrtArea wird vom FrmFmt vorgegeben, die Raender
         //sind entsprechend einzustellen.
@@ -3180,10 +3180,10 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
 }
 /*************************************************************************
 |*
-|*	SwTabFrm::GrowFrm()
+|*  SwTabFrm::GrowFrm()
 |*
-|*	Ersterstellung		MA 12. Mar. 93
-|*	Letzte Aenderung	MA 23. Sep. 96
+|*  Ersterstellung      MA 12. Mar. 93
+|*  Letzte Aenderung    MA 23. Sep. 96
 |*
 |*************************************************************************/
 SwTwips SwTabFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -3267,10 +3267,10 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 }
 /*************************************************************************
 |*
-|*	  SwTabFrm::Modify()
+|*    SwTabFrm::Modify()
 |*
-|*	  Ersterstellung	MA 14. Mar. 93
-|*	  Letzte Aenderung	MA 06. Dec. 96
+|*    Ersterstellung    MA 14. Mar. 93
+|*    Letzte Aenderung  MA 06. Dec. 96
 |*
 |*************************************************************************/
 void SwTabFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
@@ -3304,8 +3304,8 @@ void SwTabFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     {
         SwPageFrm *pPage = FindPageFrm();
         InvalidatePage( pPage );
-//		if ( nInvFlags & 0x01 )
-//			SetCompletePaint();
+//      if ( nInvFlags & 0x01 )
+//          SetCompletePaint();
         if ( nInvFlags & 0x02 )
             _InvalidatePrt();
         if ( nInvFlags & 0x40 )
@@ -3376,7 +3376,7 @@ void SwTabFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             rInvFlags |= 0x22;
             break;
 
-        case RES_PAGEDESC:						//Attributaenderung (an/aus)
+        case RES_PAGEDESC:                      //Attributaenderung (an/aus)
             if ( IsInDocBody() )
             {
                 rInvFlags |= 0x40;
@@ -3429,10 +3429,10 @@ void SwTabFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 
 /*************************************************************************
 |*
-|*	  SwTabFrm::GetInfo()
+|*    SwTabFrm::GetInfo()
 |*
-|*	  Ersterstellung	MA 06. Dec. 96
-|*	  Letzte Aenderung	MA 26. Jun. 98
+|*    Ersterstellung    MA 06. Dec. 96
+|*    Letzte Aenderung  MA 26. Jun. 98
 |*
 |*************************************************************************/
 BOOL SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
@@ -3446,7 +3446,7 @@ BOOL SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
             if ( pPage == rInfo.GetOrigPage() && !GetPrev() )
             {
                 //Das sollte er sein (kann allenfalls temporaer anders sein,
-                //					  sollte uns das beunruhigen?)
+                //                    sollte uns das beunruhigen?)
                 rInfo.SetInfo( pPage, this );
                 return FALSE;
             }
@@ -3463,10 +3463,10 @@ BOOL SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
 
 /*************************************************************************
 |*
-|*	  SwTabFrm::FindLastCntnt()
+|*    SwTabFrm::FindLastCntnt()
 |*
-|*	  Ersterstellung	MA 13. Apr. 93
-|*	  Letzte Aenderung	MA 15. May. 98
+|*    Ersterstellung    MA 13. Apr. 93
+|*    Letzte Aenderung  MA 15. May. 98
 |*
 |*************************************************************************/
 SwCntntFrm *SwTabFrm::FindLastCntnt()
@@ -3541,10 +3541,10 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
 
 /*************************************************************************
 |*
-|*	SwTabFrm::GetLeaf()
+|*  SwTabFrm::GetLeaf()
 |*
-|*	Ersterstellung		MA 19. Mar. 93
-|*	Letzte Aenderung	MA 25. Apr. 95
+|*  Ersterstellung      MA 19. Mar. 93
+|*  Letzte Aenderung    MA 25. Apr. 95
 |*
 |*************************************************************************/
 SwLayoutFrm *SwTabFrm::GetLeaf( MakePageType eMakePage, BOOL bFwd )
@@ -3565,11 +3565,11 @@ SwLayoutFrm *SwTabFrm::GetLeaf( MakePageType eMakePage, BOOL bFwd )
 
 /*************************************************************************
 |*
-|*	SwTabFrm::ShouldBwdMoved()
+|*  SwTabFrm::ShouldBwdMoved()
 |*
-|* 	Beschreibung		Returnwert sagt ob der Frm verschoben werden sollte
-|*	Ersterstellung		MA 10. Jul. 95
-|*	Letzte Aenderung	MA 04. Mar. 97
+|*  Beschreibung        Returnwert sagt ob der Frm verschoben werden sollte
+|*  Ersterstellung      MA 10. Jul. 95
+|*  Letzte Aenderung    MA 04. Mar. 97
 |*
 |*************************************************************************/
 BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL &rReformat )
@@ -3676,10 +3676,10 @@ BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL &rReformat )
 
 /*************************************************************************
 |*
-|*	SwTabFrm::Cut()
+|*  SwTabFrm::Cut()
 |*
-|*	Ersterstellung		MA 23. Feb. 94
-|*	Letzte Aenderung	MA 09. Sep. 98
+|*  Ersterstellung      MA 23. Feb. 94
+|*  Letzte Aenderung    MA 09. Sep. 98
 |*
 |*************************************************************************/
 void SwTabFrm::Cut()
@@ -3690,7 +3690,7 @@ void SwTabFrm::Cut()
     InvalidatePage( pPage );
     SwFrm *pFrm = GetNext();
     if( pFrm )
-    {	//Der alte Nachfolger hat evtl. einen Abstand zum Vorgaenger
+    {   //Der alte Nachfolger hat evtl. einen Abstand zum Vorgaenger
         //berechnet der ist jetzt wo er der erste wird obsolete
         pFrm->_InvalidatePrt();
         pFrm->_InvalidatePos();
@@ -3711,7 +3711,7 @@ void SwTabFrm::Cut()
         InvalidateNextPos();
         //Einer muss die Retusche uebernehmen: Vorgaenger oder Upper
         if ( 0 != (pFrm = GetPrev()) )
-        {	pFrm->SetRetouche();
+        {   pFrm->SetRetouche();
             pFrm->Prepare( PREP_WIDOWS_ORPHANS );
             pFrm->_InvalidatePos();
             if ( pFrm->IsCntntFrm() )
@@ -3721,7 +3721,7 @@ void SwTabFrm::Cut()
         //er die Retouche uebernehmen.
         //Ausserdem kann eine Leerseite entstanden sein.
         else
-        {	SwRootFrm *pRoot = (SwRootFrm*)pPage->GetUpper();
+        {   SwRootFrm *pRoot = (SwRootFrm*)pPage->GetUpper();
             pRoot->SetSuperfluous();
             GetUpper()->SetCompletePaint();
             if( IsInSct() )
@@ -3771,10 +3771,10 @@ void SwTabFrm::Cut()
 
 /*************************************************************************
 |*
-|*	SwTabFrm::Paste()
+|*  SwTabFrm::Paste()
 |*
-|*	Ersterstellung		MA 23. Feb. 94
-|*	Letzte Aenderung	MA 09. Sep. 98
+|*  Ersterstellung      MA 23. Feb. 94
+|*  Letzte Aenderung    MA 09. Sep. 98
 |*
 |*************************************************************************/
 void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
@@ -3856,10 +3856,10 @@ void SwTabFrm::Prepare( const PrepareHint eHint, const void *, BOOL )
 
 /*************************************************************************
 |*
-|*	SwRowFrm::SwRowFrm(), ~SwRowFrm()
+|*  SwRowFrm::SwRowFrm(), ~SwRowFrm()
 |*
-|*	Ersterstellung		MA 09. Mar. 93
-|*	Letzte Aenderung	MA 30. May. 96
+|*  Ersterstellung      MA 09. Mar. 93
+|*  Letzte Aenderung    MA 30. May. 96
 |*
 |*************************************************************************/
 SwRowFrm::SwRowFrm( const SwTableLine &rLine, bool bInsertContent ):
@@ -3895,18 +3895,18 @@ SwRowFrm::~SwRowFrm()
     SwModify* pMod = GetFmt();
     if( pMod )
     {
-        pMod->Remove( this );			// austragen,
+        pMod->Remove( this );           // austragen,
         if( !pMod->GetDepends() )
-            delete pMod;				// und loeschen
+            delete pMod;                // und loeschen
     }
 }
 
 /*************************************************************************
 |*
-|*	SwRowFrm::RegistFlys()
+|*  SwRowFrm::RegistFlys()
 |*
-|*	Ersterstellung		MA 08. Jul. 93
-|*	Letzte Aenderung	MA 08. Jul. 93
+|*  Ersterstellung      MA 08. Jul. 93
+|*  Letzte Aenderung    MA 08. Jul. 93
 |*
 |*************************************************************************/
 void SwRowFrm::RegistFlys( SwPageFrm *pPage )
@@ -3916,10 +3916,10 @@ void SwRowFrm::RegistFlys( SwPageFrm *pPage )
 
 /*************************************************************************
 |*
-|*	  SwRowFrm::Modify()
+|*    SwRowFrm::Modify()
 |*
-|*	  Ersterstellung	MA 12. Nov. 97
-|*	  Letzte Aenderung	MA 12. Nov. 97
+|*    Ersterstellung    MA 12. Nov. 97
+|*    Letzte Aenderung  MA 12. Nov. 97
 |*
 |*************************************************************************/
 void SwRowFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
@@ -3963,10 +3963,10 @@ void SwRowFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
 
 /*************************************************************************
 |*
-|*	SwRowFrm::MakeAll()
+|*  SwRowFrm::MakeAll()
 |*
-|*	Ersterstellung		MA 01. Mar. 94
-|*	Letzte Aenderung	MA 01. Mar. 94
+|*  Ersterstellung      MA 01. Mar. 94
+|*  Letzte Aenderung    MA 01. Mar. 94
 |*
 |*************************************************************************/
 void SwRowFrm::MakeAll()
@@ -3978,10 +3978,10 @@ void SwRowFrm::MakeAll()
 
 /*************************************************************************
 |*
-|*	SwRowFrm::Format()
+|*  SwRowFrm::Format()
 |*
-|*	Ersterstellung		MA 13. Mar. 93
-|*	Letzte Aenderung	MA 20. Jun. 96
+|*  Ersterstellung      MA 13. Mar. 93
+|*  Letzte Aenderung    MA 20. Jun. 96
 |*
 |*************************************************************************/
 long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
@@ -4509,10 +4509,10 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
 
 /*************************************************************************
 |*
-|*	SwRowFrm::AdjustCells()
+|*  SwRowFrm::AdjustCells()
 |*
-|*	Ersterstellung		MA 10. Aug. 93
-|*	Letzte Aenderung	MA 16. Dec. 96
+|*  Ersterstellung      MA 10. Aug. 93
+|*  Letzte Aenderung    MA 16. Dec. 96
 |*
 |*************************************************************************/
 void SwRowFrm::AdjustCells( const SwTwips nHeight, const BOOL bHeight )
@@ -4602,7 +4602,7 @@ void SwRowFrm::AdjustCells( const SwTwips nHeight, const BOOL bHeight )
         }
     }
     else
-    {	while ( pFrm )
+    {   while ( pFrm )
         {
             pFrm->_InvalidateAll();
             pFrm = pFrm->GetNext();
@@ -4613,10 +4613,10 @@ void SwRowFrm::AdjustCells( const SwTwips nHeight, const BOOL bHeight )
 
 /*************************************************************************
 |*
-|*	SwRowFrm::Cut()
+|*  SwRowFrm::Cut()
 |*
-|*	Ersterstellung		MA 12. Nov. 97
-|*	Letzte Aenderung	MA 12. Nov. 97
+|*  Ersterstellung      MA 12. Nov. 97
+|*  Letzte Aenderung    MA 12. Nov. 97
 |*
 |*************************************************************************/
 void SwRowFrm::Cut()
@@ -4655,10 +4655,10 @@ void SwRowFrm::Cut()
 
 /*************************************************************************
 |*
-|*	SwRowFrm::GrowFrm()
+|*  SwRowFrm::GrowFrm()
 |*
-|*	Ersterstellung		MA 15. Mar. 93
-|*	Letzte Aenderung	MA 05. May. 94
+|*  Ersterstellung      MA 15. Mar. 93
+|*  Letzte Aenderung    MA 05. May. 94
 |*
 |*************************************************************************/
 
@@ -4731,10 +4731,10 @@ SwTwips SwRowFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 
 /*************************************************************************
 |*
-|*	SwRowFrm::ShrinkFrm()
+|*  SwRowFrm::ShrinkFrm()
 |*
-|*	Ersterstellung		MA 15. Mar. 93
-|*	Letzte Aenderung	MA 20. Jun. 96
+|*  Ersterstellung      MA 15. Mar. 93
+|*  Letzte Aenderung    MA 20. Jun. 96
 |*
 |*************************************************************************/
 SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
@@ -4874,10 +4874,10 @@ bool SwRowFrm::ShouldRowKeepWithNext() const
 
 /*************************************************************************
 |*
-|*	SwCellFrm::SwCellFrm(), ~SwCellFrm()
+|*  SwCellFrm::SwCellFrm(), ~SwCellFrm()
 |*
-|*	Ersterstellung		MA 09. Mar. 93
-|*	Letzte Aenderung	MA 30. May. 96
+|*  Ersterstellung      MA 09. Mar. 93
+|*  Letzte Aenderung    MA 30. May. 96
 |*
 |*************************************************************************/
 SwCellFrm::SwCellFrm( const SwTableBox &rBox, bool bInsertContent ) :
@@ -4926,16 +4926,16 @@ SwCellFrm::~SwCellFrm()
 
         pMod->Remove( this );           // austragen,
         if( !pMod->GetDepends() )
-            delete pMod;				// und loeschen
+            delete pMod;                // und loeschen
     }
 }
 
 /*************************************************************************
 |*
-|*	SwCellFrm::Format()
+|*  SwCellFrm::Format()
 |*
-|*	Ersterstellung		MA 09. Mar. 93
-|*	Letzte Aenderung	MA 29. Jan. 98
+|*  Ersterstellung      MA 09. Mar. 93
+|*  Letzte Aenderung    MA 29. Jan. 98
 |*
 |*************************************************************************/
 BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
@@ -5435,10 +5435,10 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
 
 /*************************************************************************
 |*
-|*	  SwCellFrm::Modify()
+|*    SwCellFrm::Modify()
 |*
-|*	  Ersterstellung	MA 20. Dec. 96
-|*	  Letzte Aenderung	MA 20. Dec. 96
+|*    Ersterstellung    MA 20. Dec. 96
+|*    Letzte Aenderung  MA 20. Dec. 96
 |*
 |*************************************************************************/
 

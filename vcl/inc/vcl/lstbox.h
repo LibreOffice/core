@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,11 +28,11 @@
 #ifndef _SV_LSTBOX_H
 #define _SV_LSTBOX_H
 
-#define LISTBOX_APPEND			  	((USHORT)0xFFFF)
-#define LISTBOX_ENTRY_NOTFOUND	  	((USHORT)0xFFFF)
-#define LISTBOX_ERROR			  	((USHORT)0xFFFF)
+#define LISTBOX_APPEND              ((USHORT)0xFFFF)
+#define LISTBOX_ENTRY_NOTFOUND      ((USHORT)0xFFFF)
+#define LISTBOX_ERROR               ((USHORT)0xFFFF)
 
-#define LISTBOX_USERDRAW_SELECTED	((USHORT)0x0001)
+#define LISTBOX_USERDRAW_SELECTED   ((USHORT)0x0001)
 
 // --------------------------------------------------------------------
 
@@ -41,14 +41,14 @@
 
 // !! Do not use these flags for user data as they are reserved      !!
 // !! to change the internal behaviour of the ListBox implementation !!
-// !! for specific entries.											 !!
+// !! for specific entries.                                          !!
 
 /** this flag disables a selection of an entry completly. It is not
     possible to select such entries either from the user interface
     nor from the ListBox methods. Cursor traveling is handled correctly.
     This flag can be used to add titles to a ListBox.
 */
-#define LISTBOX_ENTRY_FLAG_DISABLE_SELECTION		0x0000001
+#define LISTBOX_ENTRY_FLAG_DISABLE_SELECTION        0x0000001
 
 /** this flag can be used to make an entry multine capable
     A normal entry is single line and will therefore be clipped
@@ -62,4 +62,4 @@
 */
 #define LISTBOX_ENTRY_FLAG_DRAW_DISABLED            0x0000004
 
-#endif	// _SV_LSTBOX_H
+#endif  // _SV_LSTBOX_H

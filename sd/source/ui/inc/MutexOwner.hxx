@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ namespace sd {
     satisfy some helper classes from cppuhelper who expect a mutex as
     argument to their constructor.
 */
-class MutexOwner 
+class MutexOwner
 {
 protected:
     mutable ::osl::Mutex maMutex;

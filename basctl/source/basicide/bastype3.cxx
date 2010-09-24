@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         return;
 
     LibraryLocation eLocation( aDesc.GetLocation() );
-    BasicEntryType eType( aDesc.GetType() );    
+    BasicEntryType eType( aDesc.GetType() );
 
     if ( eType == OBJ_TYPE_DOCUMENT )
     {
@@ -87,8 +87,8 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 
         if ( bOK )
         {
-            // load module library              
-            BOOL bModLibLoaded = FALSE;            
+            // load module library
+            BOOL bModLibLoaded = FALSE;
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
             {
                 if ( !xModLibContainer->isLibraryLoaded( aOULibName ) )
@@ -102,7 +102,7 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 
             // load dialog library
             BOOL bDlgLibLoaded = FALSE;
-            Reference< script::XLibraryContainer > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );           
+            Reference< script::XLibraryContainer > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
             {
                 if ( !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
@@ -131,7 +131,7 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
             }
         }
     }
-    else if ( eType == OBJ_TYPE_DOCUMENT_OBJECTS 
+    else if ( eType == OBJ_TYPE_DOCUMENT_OBJECTS
             || eType == OBJ_TYPE_USERFORMS
             || eType == OBJ_TYPE_NORMAL_MODULES
             || eType == OBJ_TYPE_CLASS_MODULES )
@@ -155,7 +155,7 @@ void __EXPORT BasicTreeListBox::ExpandedHdl()
         SvLBoxEntry* pChild = FirstChild( pEntry );
         while ( pChild )
         {
-            GetModel()->Remove( pChild );	// Ruft auch den DTOR
+            GetModel()->Remove( pChild );   // Ruft auch den DTOR
             pChild = FirstChild( pEntry );
         }
     }
@@ -194,12 +194,12 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
             case 4:
             case 3:
             case 2:
-            case 1: 
+            case 1:
             {
                 aEntries.C40_INSERT( SvLBoxEntry, pEntry, 0 );
             }
             break;
-            case 0: 
+            case 0:
             {
                 aDocument = ((BasicDocumentEntry*)pEntry->GetUserData())->GetDocument();
             }
@@ -299,12 +299,12 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
             case 4:
             case 3:
             case 2:
-            case 1: 
+            case 1:
             {
                 aEntries.C40_INSERT( SvLBoxEntry, pEntry, 0 );
             }
             break;
-            case 0: 
+            case 0:
             {
                 BasicDocumentEntry* pBasicDocumentEntry = (BasicDocumentEntry*)pEntry->GetUserData();
                 if ( pBasicDocumentEntry )

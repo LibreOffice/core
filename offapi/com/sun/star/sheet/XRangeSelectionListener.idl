@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,43 +24,43 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sheet_XRangeSelectionListener_idl__ 
-#define __com_sun_star_sheet_XRangeSelectionListener_idl__ 
+#ifndef __com_sun_star_sheet_XRangeSelectionListener_idl__
+#define __com_sun_star_sheet_XRangeSelectionListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__ 
-#include <com/sun/star/lang/XEventListener.idl> 
-#endif 
-
-#ifndef __com_sun_star_sheet_RangeSelectionEvent_idl__ 
-#include <com/sun/star/sheet/RangeSelectionEvent.idl> 
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
 #endif
- 
 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module sheet {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_sheet_RangeSelectionEvent_idl__
+#include <com/sun/star/sheet/RangeSelectionEvent.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
 /** allows notification when range selection is completed or aborted.
 
     @see com::sun::star::sheet::XRangeSelection
  */
 published interface XRangeSelectionListener: com::sun::star::lang::XEventListener
-{ 
+{
     /** is called when range selection is completed.
      */
-    void done( [in] com::sun::star::sheet::RangeSelectionEvent aEvent ); 
+    void done( [in] com::sun::star::sheet::RangeSelectionEvent aEvent );
 
     /** is called when range selection is aborted.
      */
-    void aborted( [in] com::sun::star::sheet::RangeSelectionEvent aEvent ); 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
+    void aborted( [in] com::sun::star::sheet::RangeSelectionEvent aEvent );
+};
+
+//=============================================================================
+
+}; }; }; };
+
 
 #endif
 

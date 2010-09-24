@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,11 +47,11 @@ namespace dbp
 {
 //.........................................................................
 
-#define BUTTON_HEIGHT		300
-#define TOP_HEIGHT			300
-#define HEIGHT				450
-#define OFFSET				300
-#define MIN_WIDTH			600
+#define BUTTON_HEIGHT       300
+#define TOP_HEIGHT          300
+#define HEIGHT              450
+#define OFFSET              300
+#define MIN_WIDTH           600
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::drawing;
@@ -211,6 +211,6 @@ namespace dbp
     }
 
 //.........................................................................
-}	// namespace dbp
+}   // namespace dbp
 //.........................................................................
 

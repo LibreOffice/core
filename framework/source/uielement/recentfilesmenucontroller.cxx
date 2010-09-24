@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include <uielement/recentfilesmenucontroller.hxx>
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
@@ -41,14 +41,14 @@
 #include <classes/fwkresid.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/util/XStringWidth.hpp>
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #ifndef _VCL_MENU_HXX_
@@ -71,7 +71,7 @@
 #include <vos/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
-//	Defines
+//  Defines
 //_________________________________________________________________________________________________________________
 //
 
@@ -103,7 +103,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
 
 DEFINE_XSERVICEINFO_MULTISERVICE        (   RecentFilesMenuController                   ,
                                             OWeakObject                                 ,
-                                            SERVICENAME_POPUPMENUCONTROLLER		        ,
+                                            SERVICENAME_POPUPMENUCONTROLLER             ,
                                             IMPLEMENTATIONNAME_RECENTFILESMENUCONTROLLER
                                         )
 
@@ -194,10 +194,10 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 }
 
                 // Abbreviate URL
-                rtl::OUString	aURLString( aCmdPrefix + rtl::OUString::valueOf( sal_Int32( i )));
-                rtl::OUString	aTipHelpText;
-                rtl::OUString	aMenuTitle;
-                INetURLObject	aURL( m_aRecentFilesItems[i].aURL );
+                rtl::OUString   aURLString( aCmdPrefix + rtl::OUString::valueOf( sal_Int32( i )));
+                rtl::OUString   aTipHelpText;
+                rtl::OUString   aMenuTitle;
+                INetURLObject   aURL( m_aRecentFilesItems[i].aURL );
 
                 if ( aURL.GetProtocol() == INET_PROT_FILE )
                 {
@@ -205,8 +205,8 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                     // path and abbreviate it with a special function:
                     String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-                    ::rtl::OUString	aSystemPath( aFileSystemPath );
-                    ::rtl::OUString	aCompactedSystemPath;
+                    ::rtl::OUString aSystemPath( aFileSystemPath );
+                    ::rtl::OUString aCompactedSystemPath;
 
                     aTipHelpText = aSystemPath;
                     oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
@@ -253,7 +253,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 else
                 {
                     // Use INetURLObject to abbreviate all other URLs
-                    String	aShortURL;
+                    String  aShortURL;
                     aShortURL = aURL.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
                     aMenuTitle += aShortURL;
                     aTipHelpText = aURLString;

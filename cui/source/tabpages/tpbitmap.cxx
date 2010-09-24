@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@
 
 /*************************************************************************
 |*
-|*	Dialog zum Aendern und Definieren der Bitmaps
+|*  Dialog zum Aendern und Definieren der Bitmaps
 |*
 \************************************************************************/
 
@@ -86,26 +86,26 @@ SvxBitmapTabPage::SvxBitmapTabPage
     const SfxItemSet& rInAttrs
 ) :
 
-    SvxTabPage			( pParent, CUI_RES( RID_SVXPAGE_BITMAP ), rInAttrs ),
+    SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_BITMAP ), rInAttrs ),
 
     aCtlPixel           ( this, CUI_RES( CTL_PIXEL ) ),
     aFtPixelEdit        ( this, CUI_RES( FT_PIXEL_EDIT ) ),
     aFtColor            ( this, CUI_RES( FT_COLOR ) ),
-    aLbColor			( this, CUI_RES( LB_COLOR ) ),
-    aFtBackgroundColor	( this, CUI_RES( FT_BACKGROUND_COLOR ) ),
-    aLbBackgroundColor	( this, CUI_RES( LB_BACKGROUND_COLOR ) ),
+    aLbColor            ( this, CUI_RES( LB_COLOR ) ),
+    aFtBackgroundColor  ( this, CUI_RES( FT_BACKGROUND_COLOR ) ),
+    aLbBackgroundColor  ( this, CUI_RES( LB_BACKGROUND_COLOR ) ),
     // This fix text is used only to provide the name for the following
     // bitmap list box.  The fixed text is not displayed.
     aLbBitmapsHidden    ( this, CUI_RES( FT_BITMAPS_HIDDEN ) ),
-    aLbBitmaps			( this, CUI_RES( LB_BITMAPS ) ),
+    aLbBitmaps          ( this, CUI_RES( LB_BITMAPS ) ),
     aFlProp             ( this, CUI_RES( FL_PROP ) ),
-    aCtlPreview			( this, CUI_RES( CTL_PREVIEW ) ),
-    aBtnAdd				( this, CUI_RES( BTN_ADD ) ),
+    aCtlPreview         ( this, CUI_RES( CTL_PREVIEW ) ),
+    aBtnAdd             ( this, CUI_RES( BTN_ADD ) ),
     aBtnModify          ( this, CUI_RES( BTN_MODIFY ) ),
     aBtnImport          ( this, CUI_RES( BTN_IMPORT ) ),
     aBtnDelete          ( this, CUI_RES( BTN_DELETE ) ),
-    aBtnLoad			( this, CUI_RES( BTN_LOAD ) ),
-    aBtnSave			( this, CUI_RES( BTN_SAVE ) ),
+    aBtnLoad            ( this, CUI_RES( BTN_LOAD ) ),
+    aBtnSave            ( this, CUI_RES( BTN_SAVE ) ),
 
     aBitmapCtl          ( this, aCtlPreview.GetSizePixel() ),
     rOutAttrs           ( rInAttrs ),
@@ -212,8 +212,8 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
 
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String			aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject	aURL( pBitmapList->GetPath() );
+            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            INetURLObject   aURL( pBitmapList->GetPath() );
 
             aURL.Append( pBitmapList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
@@ -361,13 +361,13 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
     }
     if( pXOBitmap )
     {
-        //WorkWindow		aTmpWW( DLGWIN );
-        //VirtualDevice	aVD( aTmpWW );
-        //USHORT	nLines = aCtlPixel.GetLineCount();
-        //Color	aPixelColor, aBackColor;
-        //BOOL	bPixelColor = FALSE;
-        //USHORT	nWidth  = pBitmap->GetSizePixel().Width();
-        //USHORT	nHeight = pBitmap->GetSizePixel().Height();
+        //WorkWindow        aTmpWW( DLGWIN );
+        //VirtualDevice aVD( aTmpWW );
+        //USHORT    nLines = aCtlPixel.GetLineCount();
+        //Color aPixelColor, aBackColor;
+        //BOOL  bPixelColor = FALSE;
+        //USHORT    nWidth  = pBitmap->GetSizePixel().Width();
+        //USHORT    nHeight = pBitmap->GetSizePixel().Height();
 
         // #85339# try to convert bitmapped item to array item.
         if(pXOBitmap->GetBitmapType() == XBITMAP_IMPORT)
@@ -690,7 +690,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 #ifdef WNT
             // hack: #31355# W.P.
             Rectangle aRect( aLbBitmaps.GetPosPixel(), aLbBitmaps.GetSizePixel() );
-            if( TRUE ) {				// ??? overlapped with pDlg
+            if( TRUE ) {                // ??? overlapped with pDlg
                                         // and srolling
                 Invalidate( aRect );
                 //aLbBitmaps.Invalidate();
@@ -733,8 +733,8 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
 
     if( !aDlg.Execute() )
     {
-        Graphic 		aGraphic;
-        int 			nError = 1;
+        Graphic         aGraphic;
+        int             nError = 1;
 
         EnterWait();
         nError = aDlg.GetGraphic( aGraphic );
@@ -746,8 +746,8 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
             WarningBox*    pWarnBox = NULL;
 
             // convert file URL to UI name
-            String 			aName;
-            INetURLObject	aURL( aDlg.GetPath() );
+            String          aName;
+            INetURLObject   aURL( aDlg.GetPath() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
             AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, String(aURL.GetName()).GetToken( 0, '.' ), aDesc );
@@ -799,7 +799,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
 #ifdef WNT
                 // hack: #31355# W.P.
                 Rectangle aRect( aLbBitmaps.GetPosPixel(), aLbBitmaps.GetSizePixel() );
-                if( TRUE ) {				// ??? overlapped with pDlg
+                if( TRUE ) {                // ??? overlapped with pDlg
                                             // and srolling
                     Invalidate( aRect );
                     //aLbBitmaps.Invalidate();
@@ -1055,8 +1055,8 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
-        INetURLObject	aURL( aDlg.GetPath() );
-        INetURLObject	aPathURL( aURL );
+        INetURLObject   aURL( aDlg.GetPath() );
+        INetURLObject   aPathURL( aURL );
 
         aPathURL.removeSegment();
         aPathURL.removeFinalSlash();
@@ -1152,7 +1152,7 @@ void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT )
 
 
 
-Window*	SvxBitmapTabPage::GetParentLabeledBy( const Window* pLabeled ) const
+Window* SvxBitmapTabPage::GetParentLabeledBy( const Window* pLabeled ) const
 {
     if (pLabeled == &aLbBitmaps)
         return const_cast<FixedText*>(&aLbBitmapsHidden);

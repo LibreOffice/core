@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ public:
             title bar as children is returned.
     */
     TitledControl* AddControl (
-        ::std::auto_ptr<TreeNode> pControl, 
+        ::std::auto_ptr<TreeNode> pControl,
         const String& rTitle,
         ULONG nHelpId);
 
@@ -125,7 +125,7 @@ public:
         @param pWindow
             This window is used to translate the given coordinates into ones
             that are relative to the scroll panel.
-        
+
     */
     void MakeRectangleVisible (
         Rectangle& aRectangle,

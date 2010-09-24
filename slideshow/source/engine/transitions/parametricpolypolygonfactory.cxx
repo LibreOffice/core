@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace slideshow
         {
             using namespace ::com::sun::star::animations::TransitionType;
             using namespace ::com::sun::star::animations::TransitionSubType;
-            
+
             switch (nType)
             {
             case BARWIPE:
@@ -286,7 +286,7 @@ namespace slideshow
                 return ParametricPolyPolygonSharedPtr( new ZigZagWipe(5) );
             case BARNZIGZAGWIPE:
                 return ParametricPolyPolygonSharedPtr( new BarnZigZagWipe(5) );
-                
+
             case BOWTIEWIPE:
             case BARNVEEWIPE:
             case EYEWIPE:
@@ -297,15 +297,15 @@ namespace slideshow
                 // for now, map to barwipe transition
                 return ParametricPolyPolygonSharedPtr(
                     new BarWipePolyPolygon );
-                
+
             default:
             case PUSHWIPE:
             case SLIDEWIPE:
             case FADE:
-                ENSURE_OR_THROW( false, 
+                ENSURE_OR_THROW( false,
                                   "createShapeClipPolyPolygonAnimation(): Transition type mismatch" );
             }
-            
+
             return ParametricPolyPolygonSharedPtr();
         }
     }

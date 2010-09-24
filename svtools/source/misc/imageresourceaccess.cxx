@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ namespace svt
     {
         return m_xInput;
     }
-    
+
     //--------------------------------------------------------------------
     Reference< XOutputStream > SAL_CALL StreamSupplier::getOutputStream(  ) throw (RuntimeException)
     {
@@ -114,7 +114,7 @@ namespace svt
 
         m_xSeekable->seek( location );
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Int64 SAL_CALL StreamSupplier::getPosition(  ) throw (IOException, RuntimeException)
     {
@@ -123,7 +123,7 @@ namespace svt
 
         return m_xSeekable->getPosition();
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Int64 SAL_CALL StreamSupplier::getLength(  ) throw (IOException, RuntimeException)
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ namespace vista{
 // types
 //-----------------------------------------------------------------------------
 
-typedef ::cppu::WeakComponentImplHelper10<         
+typedef ::cppu::WeakComponentImplHelper10<
                 css::ui::dialogs::XFilePicker2,
                 css::ui::dialogs::XFilterManager,
                 css::ui::dialogs::XFilterGroupManager,
@@ -106,49 +106,49 @@ public:
     // XFilePickerNotifier
     //------------------------------------------------------------------------------------
 
-    virtual void SAL_CALL addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) 
+    virtual void SAL_CALL addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
         throw( css::uno::RuntimeException );
 
-    virtual void SAL_CALL removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) 
+    virtual void SAL_CALL removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
         throw( css::uno::RuntimeException );
 
     //------------------------------------------------------------------------------------
     // XExecutableDialog functions
     //------------------------------------------------------------------------------------
-    
-    virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) 
+
+    virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle )
         throw( css::uno::RuntimeException );
 
-    virtual sal_Int16 SAL_CALL execute(  ) 
+    virtual sal_Int16 SAL_CALL execute(  )
         throw( css::uno::RuntimeException );
 
     //------------------------------------------------------------------------------------
     // XFilePicker functions
     //------------------------------------------------------------------------------------
 
-    virtual void SAL_CALL setMultiSelectionMode( sal_Bool bMode ) 
+    virtual void SAL_CALL setMultiSelectionMode( sal_Bool bMode )
         throw( css::uno::RuntimeException );
 
-    virtual void SAL_CALL setDefaultName( const ::rtl::OUString& sName ) 
+    virtual void SAL_CALL setDefaultName( const ::rtl::OUString& sName )
         throw( css::uno::RuntimeException );
 
-    virtual void SAL_CALL setDisplayDirectory( const ::rtl::OUString& sDirectory ) 
+    virtual void SAL_CALL setDisplayDirectory( const ::rtl::OUString& sDirectory )
         throw (css::lang::IllegalArgumentException,
                css::uno::RuntimeException         );
 
-    virtual ::rtl::OUString SAL_CALL getDisplayDirectory(  ) 
+    virtual ::rtl::OUString SAL_CALL getDisplayDirectory(  )
         throw( css::uno::RuntimeException );
 
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getFiles(  ) 
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getFiles(  )
         throw( css::uno::RuntimeException );
 
     //------------------------------------------------------------------------------------
     // XFilePicker2 functions
     //------------------------------------------------------------------------------------
-    
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSelectedFiles(  ) 
+
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSelectedFiles(  )
         throw( css::uno::RuntimeException );
-    
+
     //------------------------------------------------------------------------------------
     // XFilterManager functions
     //------------------------------------------------------------------------------------
@@ -158,11 +158,11 @@ public:
         throw (css::lang::IllegalArgumentException,
                css::uno::RuntimeException         );
 
-    virtual void SAL_CALL setCurrentFilter( const ::rtl::OUString& sTitle ) 
+    virtual void SAL_CALL setCurrentFilter( const ::rtl::OUString& sTitle )
         throw (css::lang::IllegalArgumentException,
                css::uno::RuntimeException         );
 
-    virtual ::rtl::OUString SAL_CALL getCurrentFilter(  ) 
+    virtual ::rtl::OUString SAL_CALL getCurrentFilter(  )
         throw( css::uno::RuntimeException );
 
     //------------------------------------------------------------------------------------
@@ -170,7 +170,7 @@ public:
     //------------------------------------------------------------------------------------
 
     virtual void SAL_CALL appendFilterGroup( const ::rtl::OUString&                              sGroupTitle,
-                                             const css::uno::Sequence< css::beans::StringPair >& lFilters   ) 
+                                             const css::uno::Sequence< css::beans::StringPair >& lFilters   )
         throw (css::lang::IllegalArgumentException,
                css::uno::RuntimeException         );
 
@@ -184,7 +184,7 @@ public:
         throw (css::uno::RuntimeException);
 
     virtual css::uno::Any SAL_CALL getValue( sal_Int16 nControlId     ,
-                                             sal_Int16 nControlAction ) 
+                                             sal_Int16 nControlAction )
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL enableControl( sal_Int16 nControlId,
@@ -195,7 +195,7 @@ public:
                                     const ::rtl::OUString& sLabel    )
         throw (css::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getLabel( sal_Int16 nControlId ) 
+    virtual ::rtl::OUString SAL_CALL getLabel( sal_Int16 nControlId )
         throw (css::uno::RuntimeException);
 
     //------------------------------------------------
@@ -243,27 +243,27 @@ public:
     // XEventListener
     //------------------------------------------------
 
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) 
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent )
         throw(css::uno::RuntimeException);
 
     //------------------------------------------------
     // XServiceInfo
-    //------------------------------------------------ 
+    //------------------------------------------------
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(	 )
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
         throw(css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
         throw(css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
         throw(css::uno::RuntimeException);
 
     /*
     //------------------------------------------------------------------------------------
     // FilePicker Event functions
     //------------------------------------------------------------------------------------
-    
+
     void SAL_CALL fileSelectionChanged(const css::ui::dialogs::FilePickerEvent& aEvent );
     void SAL_CALL directoryChanged(const css::ui::dialogs::FilePickerEvent& aEvent );
     ::rtl::OUString SAL_CALL helpRequested(const css::ui::dialogs::FilePickerEvent& aEvent ) const;
@@ -275,36 +275,36 @@ public:
     void suspendEventNotification();
     void resumeEventNotification();
     */
-    
+
     private:
-        
+
         // prevent copy and assignment
-        VistaFilePicker( const VistaFilePicker& );           
+        VistaFilePicker( const VistaFilePicker& );
         VistaFilePicker& operator=( const VistaFilePicker& );
-    
+
         using WeakComponentImplHelperBase::disposing;
 
     private:
-        
+
         //---------------------------------------------------------------------
         /// service manager to create own used uno services
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
-    
+
         //---------------------------------------------------------------------
         css::uno::Sequence< ::rtl::OUString > m_lLastFiles;
-    
+
         //---------------------------------------------------------------------
         /** execute the COM dialog within a STA thread
          *  Must be used on the heap ... because it's implemented as OSL thread .-)
          */
         RequestHandlerRef m_rDialog;
         AsyncRequests m_aAsyncExecute;
-    
+
         //---------------------------------------------------------------------
         oslThreadIdentifier m_nFilePickerThreadId;
 
         bool m_bInitialized;
-}; 
+};
 
 } // namespace vista
 } // namespace win32

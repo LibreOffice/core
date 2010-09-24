@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,10 +32,10 @@ import org.apache.batik.transcoder.TranscoderOutput;
 
 public class SOTranscoder
 {
-    public static void main(String [] args) throws Exception 
+    public static void main(String [] args) throws Exception
     {
-        PNGTranscoder	aTranscoder = new PNGTranscoder();
-        OutputStream	aOStm = new FileOutputStream( args[ 1 ] );
+        PNGTranscoder   aTranscoder = new PNGTranscoder();
+        OutputStream    aOStm = new FileOutputStream( args[ 1 ] );
 
         aTranscoder.transcode( new TranscoderInput( new File( args[ 0 ] ).toURL().toString() ), new TranscoderOutput( aOStm ) );
 

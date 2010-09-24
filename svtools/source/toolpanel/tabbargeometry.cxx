@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ namespace svt
         }
 
         //--------------------------------------------------------------------------------------------------------------
-        /** transforms the given, possible rotated playground, 
+        /** transforms the given, possible rotated playground,
         */
         void lcl_rotate( const Rectangle& i_rReference, Rectangle& io_rArea, const bool i_bRight )
         {

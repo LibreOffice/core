@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,7 +131,7 @@ published service PackageFolderContent
         changes to the underlying package file. Note that the current
         implementation of PCP contents never flushes automatically! Operations
         which require a flush to get persistent, are:
-        "setPropertyValues( < any_non_read_only_property > ) ",	"delete",
+        "setPropertyValues( < any_non_read_only_property > ) ", "delete",
         "insert" )
         </li>
         </ul>

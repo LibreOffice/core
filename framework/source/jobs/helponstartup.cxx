@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,18 +98,18 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                         m_xModuleManager = css::uno::Reference< css::frame::XModuleManager >(
                             m_xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
                             css::uno::UNO_QUERY_THROW);
-                        
+
                         m_xDesktop = css::uno::Reference< css::frame::XFrame >(
                             m_xSMGR->createInstance(SERVICENAME_DESKTOP),
                             css::uno::UNO_QUERY_THROW);
-                        
+
                         m_xConfig = css::uno::Reference< css::container::XNameAccess >(
                             ::comphelper::ConfigurationHelper::openConfig(
                                 m_xSMGR,
                                 CFG_PACKAGE_MODULES,
                                 ::comphelper::ConfigurationHelper::E_READONLY),
                             css::uno::UNO_QUERY_THROW);
-                    
+
                         // ask for office locale
                         ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xSMGR,
@@ -117,7 +117,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                             CFG_PATH_L10N,
                             CFG_KEY_LOCALE,
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= m_sLocale;
-                            
+
                         // detect system
                         ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xSMGR,
@@ -125,7 +125,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                             CFG_PATH_HELP,
                             CFG_KEY_HELPSYSTEM,
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= m_sSystem;
-                            
+
                         // Start listening for disposing events of these services,
                         // so we can react e.g. for an office shutdown
                         css::uno::Reference< css::lang::XComponent > xComponent;
@@ -140,7 +140,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                             xComponent->addEventListener(static_cast< css::lang::XEventListener* >(this));
                     }
                    )
-                    
+
 //-----------------------------------------------
 HelpOnStartup::HelpOnStartup(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : ThreadHelpBase(     )
@@ -172,7 +172,7 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
     // check current state of the help module
     // a) help isnt open                       => show default page for the detected module
     // b) help shows any other default page(!) => show default page for the detected module
-    // c) help shows any other content         => do nothing (user travelled to any other content and leaved the set of default pages) 
+    // c) help shows any other content         => do nothing (user travelled to any other content and leaved the set of default pages)
     ::rtl::OUString sCurrentHelpURL                = its_getCurrentHelpURL();
     sal_Bool        bCurrentHelpURLIsAnyDefaultURL = its_isHelpUrlADefaultOne(sCurrentHelpURL);
     sal_Bool        bShowIt                        = sal_False;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <helper/oframes.hxx>
 
@@ -38,51 +38,51 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
-using namespace ::com::sun::star::container		;
-using namespace ::com::sun::star::frame			;
-using namespace ::com::sun::star::lang			;
-using namespace ::com::sun::star::uno			;
-using namespace ::cppu							;
-using namespace ::osl							;
-using namespace ::rtl							;
-using namespace ::std							;
-using namespace ::vos							;
+using namespace ::com::sun::star::container     ;
+using namespace ::com::sun::star::frame         ;
+using namespace ::com::sun::star::lang          ;
+using namespace ::com::sun::star::uno           ;
+using namespace ::cppu                          ;
+using namespace ::osl                           ;
+using namespace ::rtl                           ;
+using namespace ::std                           ;
+using namespace ::vos                           ;
 
 //_________________________________________________________________________________________________________________
-//	non exported const
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//	non exported definitions
+//  non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  non exported definitions
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
+//  declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
-OFrames::OFrames(	const	Reference< XMultiServiceFactory >&	xFactory		,
-                    const	Reference< XFrame >&				xOwner			,
-                            FrameContainer*						pFrameContainer	)
-        //	Init baseclasses first
+OFrames::OFrames(   const   Reference< XMultiServiceFactory >&  xFactory        ,
+                    const   Reference< XFrame >&                xOwner          ,
+                            FrameContainer*                     pFrameContainer )
+        //  Init baseclasses first
         :   ThreadHelpBase              ( &Application::GetSolarMutex() )
         // Init member
         ,   m_xFactory                  ( xFactory                      )
@@ -96,7 +96,7 @@ OFrames::OFrames(	const	Reference< XMultiServiceFactory >&	xFactory		,
 }
 
 //*****************************************************************************************************************
-//	(proteced!) destructor
+//  (proteced!) destructor
 //*****************************************************************************************************************
 OFrames::~OFrames()
 {
@@ -105,7 +105,7 @@ OFrames::~OFrames()
 }
 
 //*****************************************************************************************************************
-//	XFrames
+//  XFrames
 //*****************************************************************************************************************
 void SAL_CALL OFrames::append( const Reference< XFrame >& xFrame ) throw( RuntimeException )
 {
@@ -131,7 +131,7 @@ void SAL_CALL OFrames::append( const Reference< XFrame >& xFrame ) throw( Runtim
 }
 
 //*****************************************************************************************************************
-//	XFrames
+//  XFrames
 //*****************************************************************************************************************
 void SAL_CALL OFrames::remove( const Reference< XFrame >& xFrame ) throw( RuntimeException )
 {
@@ -158,7 +158,7 @@ void SAL_CALL OFrames::remove( const Reference< XFrame >& xFrame ) throw( Runtim
 }
 
 //*****************************************************************************************************************
-//	XFrames
+//  XFrames
 //*****************************************************************************************************************
 Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearchFlags ) throw( RuntimeException )
 {
@@ -196,8 +196,8 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
             //_____________________________________________________________________________________________________________
             // Search for ALL and GLOBAL is superflous!
             // We support all necessary flags, from which these two flags are derived.
-            //		ALL		= PARENT + SELF  + CHILDREN + SIBLINGS
-            //		GLOBAL	= ALL    + TASKS
+            //      ALL     = PARENT + SELF  + CHILDREN + SIBLINGS
+            //      GLOBAL  = ALL    + TASKS
 
             //_____________________________________________________________________________________________________________
             // Add parent to list ... if any exist!
@@ -268,7 +268,7 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
 }
 
 //*****************************************************************************************************************
-//	XIndexAccess
+//  XIndexAccess
 //*****************************************************************************************************************
 sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException )
 {
@@ -292,11 +292,11 @@ sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException )
 }
 
 //*****************************************************************************************************************
-//	XIndexAccess
+//  XIndexAccess
 //*****************************************************************************************************************
-Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw(	IndexOutOfBoundsException	,
-                                                            WrappedTargetException		,
-                                                            RuntimeException			)
+Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsException   ,
+                                                            WrappedTargetException      ,
+                                                            RuntimeException            )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -324,7 +324,7 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw(	IndexOutOfBoundsExce
 }
 
 //*****************************************************************************************************************
-//	XElementAccess
+//  XElementAccess
 //*****************************************************************************************************************
 Type SAL_CALL OFrames::getElementType() throw( RuntimeException )
 {
@@ -333,7 +333,7 @@ Type SAL_CALL OFrames::getElementType() throw( RuntimeException )
 }
 
 //*****************************************************************************************************************
-//	XElementAccess
+//  XElementAccess
 //*****************************************************************************************************************
 sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException )
 {
@@ -359,7 +359,7 @@ sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException )
 }
 
 //*****************************************************************************************************************
-//	proteced method
+//  proteced method
 //*****************************************************************************************************************
 void OFrames::impl_resetObject()
 {
@@ -376,21 +376,21 @@ void OFrames::impl_resetObject()
 }
 
 //*****************************************************************************************************************
-//	private method
+//  private method
 //*****************************************************************************************************************
-void OFrames::impl_appendSequence(			Sequence< Reference< XFrame > >&	seqDestination	,
-                                     const	Sequence< Reference< XFrame > >&	seqSource		)
+void OFrames::impl_appendSequence(          Sequence< Reference< XFrame > >&    seqDestination  ,
+                                     const  Sequence< Reference< XFrame > >&    seqSource       )
 {
     // Get some informations about the sequences.
-    sal_Int32						nSourceCount		= seqSource.getLength();
-    sal_Int32						nDestinationCount	= seqDestination.getLength();
-    const Reference< XFrame >* 		pSourceAccess		= seqSource.getConstArray();
-    Reference< XFrame >*			pDestinationAccess	= seqDestination.getArray();
+    sal_Int32                       nSourceCount        = seqSource.getLength();
+    sal_Int32                       nDestinationCount   = seqDestination.getLength();
+    const Reference< XFrame >*      pSourceAccess       = seqSource.getConstArray();
+    Reference< XFrame >*            pDestinationAccess  = seqDestination.getArray();
 
     // Get memory for result list.
-    Sequence< Reference< XFrame > >	seqResult			( nSourceCount + nDestinationCount );
-    Reference< XFrame >*			pResultAccess		= seqResult.getArray();
-    sal_Int32						nResultPosition		= 0;
+    Sequence< Reference< XFrame > > seqResult           ( nSourceCount + nDestinationCount );
+    Reference< XFrame >*            pResultAccess       = seqResult.getArray();
+    sal_Int32                       nResultPosition     = 0;
 
     // Copy all items from first sequence.
     for ( sal_Int32 nSourcePosition=0; nSourcePosition<nSourceCount; ++nSourcePosition )
@@ -415,7 +415,7 @@ void OFrames::impl_appendSequence(			Sequence< Reference< XFrame > >&	seqDestina
 }
 
 //_________________________________________________________________________________________________________________
-//	debug methods
+//  debug methods
 //_________________________________________________________________________________________________________________
 
 /*-----------------------------------------------------------------------------------------------------------------
@@ -434,19 +434,19 @@ void OFrames::impl_appendSequence(			Sequence< Reference< XFrame > >&	seqDestina
 // An instance of this class can only work with valid initialization.
 // We share the mutex with ouer owner class, need a valid factory to instanciate new services and
 // use the access to ouer owner for some operations.
-sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(	const	Reference< XMultiServiceFactory >&	xFactory		,
-                                                        const	Reference< XFrame >&				xOwner			,
-                                                                FrameContainer*						pFrameContainer	)
+sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   Reference< XMultiServiceFactory >&  xFactory        ,
+                                                        const   Reference< XFrame >&                xOwner          ,
+                                                                FrameContainer*                     pFrameContainer )
 {
     // Set default return value.
     sal_Bool bOK = sal_True;
     // Check parameter.
-    if	(
-            ( &xFactory			==	NULL		)	||
-            ( &xOwner			==	NULL		)	||
-            ( xFactory.is()		==	sal_False	)	||
-            ( xOwner.is()		==	sal_False	)	||
-            ( pFrameContainer	==	NULL		)
+    if  (
+            ( &xFactory         ==  NULL        )   ||
+            ( &xOwner           ==  NULL        )   ||
+            ( xFactory.is()     ==  sal_False   )   ||
+            ( xOwner.is()       ==  sal_False   )   ||
+            ( pFrameContainer   ==  NULL        )
         )
     {
         bOK = sal_False ;
@@ -463,9 +463,9 @@ sal_Bool OFrames::impldbg_checkParameter_append( const Reference< XFrame >& xFra
     // Set default return value.
     sal_Bool bOK = sal_True;
     // Check parameter.
-    if	(
-            ( &xFrame		==	NULL		)	||
-            ( xFrame.is()	==	sal_False	)
+    if  (
+            ( &xFrame       ==  NULL        )   ||
+            ( xFrame.is()   ==  sal_False   )
         )
     {
         bOK = sal_False ;
@@ -482,9 +482,9 @@ sal_Bool OFrames::impldbg_checkParameter_remove( const Reference< XFrame >& xFra
     // Set default return value.
     sal_Bool bOK = sal_True;
     // Check parameter.
-    if	(
-            ( &xFrame		==	NULL		)	||
-            ( xFrame.is()	==	sal_False	)
+    if  (
+            ( &xFrame       ==  NULL        )   ||
+            ( xFrame.is()   ==  sal_False   )
         )
     {
         bOK = sal_False ;
@@ -501,16 +501,16 @@ sal_Bool OFrames::impldbg_checkParameter_queryFrames( sal_Int32 nSearchFlags )
     // Set default return value.
     sal_Bool bOK = sal_True;
     // Check parameter.
-    if	(
-            ( 	 nSearchFlags != FrameSearchFlag::AUTO		  )	&&
-            ( !( nSearchFlags &  FrameSearchFlag::PARENT	) )	&&
-            ( !( nSearchFlags &  FrameSearchFlag::SELF		) )	&&
-            ( !( nSearchFlags &  FrameSearchFlag::CHILDREN	) )	&&
-            ( !( nSearchFlags &  FrameSearchFlag::CREATE	) )	&&
-            ( !( nSearchFlags &  FrameSearchFlag::SIBLINGS	) )	&&
-            ( !( nSearchFlags &  FrameSearchFlag::TASKS		) )	&&
-            ( !( nSearchFlags &  FrameSearchFlag::ALL		) )	&&
-            ( !( nSearchFlags &  FrameSearchFlag::GLOBAL	) )
+    if  (
+            (    nSearchFlags != FrameSearchFlag::AUTO        ) &&
+            ( !( nSearchFlags &  FrameSearchFlag::PARENT    ) ) &&
+            ( !( nSearchFlags &  FrameSearchFlag::SELF      ) ) &&
+            ( !( nSearchFlags &  FrameSearchFlag::CHILDREN  ) ) &&
+            ( !( nSearchFlags &  FrameSearchFlag::CREATE    ) ) &&
+            ( !( nSearchFlags &  FrameSearchFlag::SIBLINGS  ) ) &&
+            ( !( nSearchFlags &  FrameSearchFlag::TASKS     ) ) &&
+            ( !( nSearchFlags &  FrameSearchFlag::ALL       ) ) &&
+            ( !( nSearchFlags &  FrameSearchFlag::GLOBAL    ) )
         )
     {
         bOK = sal_False ;
@@ -519,6 +519,6 @@ sal_Bool OFrames::impldbg_checkParameter_queryFrames( sal_Int32 nSearchFlags )
     return bOK ;
 }
 
-#endif	//	#ifdef ENABLE_ASSERTIONS
+#endif  //  #ifdef ENABLE_ASSERTIONS
 
-}		//	namespace framework
+}       //  namespace framework

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -523,20 +523,20 @@ void LineListBox::UpdateLineColors( void )
 {
     if( UpdatePaintLineColor() )
     {
-        ULONG		nCount = pLineList->Count();
+        ULONG       nCount = pLineList->Count();
         if( !nCount )
             return;
 
-        XubString	aStr;
-        Bitmap		aBmp;
+        XubString   aStr;
+        Bitmap      aBmp;
 
         // exchange entries which containing lines
         SetUpdateMode( FALSE );
 
-        USHORT		nSelEntry = GetSelectEntryPos();
+        USHORT      nSelEntry = GetSelectEntryPos();
         for( ULONG n = 0 ; n < nCount ; ++n )
         {
-            ImpLineListData*	pData = pLineList->GetObject( n );
+            ImpLineListData*    pData = pLineList->GetObject( n );
             if( pData )
             {
                 // exchange listbox data
@@ -558,9 +558,9 @@ void LineListBox::UpdateLineColors( void )
 
 BOOL LineListBox::UpdatePaintLineColor( void )
 {
-    BOOL					bRet = TRUE;
-    const StyleSettings&	rSettings = GetSettings().GetStyleSettings();
-    Color					aNewCol( rSettings.GetWindowColor().IsDark()? rSettings.GetLabelTextColor() : aColor );
+    BOOL                    bRet = TRUE;
+    const StyleSettings&    rSettings = GetSettings().GetStyleSettings();
+    Color                   aNewCol( rSettings.GetWindowColor().IsDark()? rSettings.GetLabelTextColor() : aColor );
 
     bRet = aNewCol != maPaintCol;
 

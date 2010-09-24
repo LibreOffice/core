@@ -56,9 +56,9 @@ public:
     // Setters for the import
     void SetValue( Id nId, sal_Int32 nValue );
     void SetBulletChar( rtl::OUString sValue ) { m_sBulletChar = sValue; };
-    void SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle ) 
-    { 
-        m_pParaStyle = pStyle; 
+    void SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle )
+    {
+        m_pParaStyle = pStyle;
     };
     void AddRGBXchNums( rtl::OUString sValue ) { m_sRGBXchNums += sValue; };
 
@@ -71,18 +71,18 @@ public:
     // rPrefix and rSuffix are out parameters
     static sal_Int16 GetParentNumbering( rtl::OUString sText, sal_Int16 nLevel,
         rtl::OUString& rPrefix, rtl::OUString& rSuffix );
-    
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >  
+
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
         GetProperties(  );
-    
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue> 
+
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue>
         GetCharStyleProperties( );
 private:
 
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >  
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
         GetLevelProperties(  );
-    
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >  
+
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
         GetParaProperties(  );
 };
 
@@ -99,7 +99,7 @@ private:
     // depending on the use of the class
     sal_Int32                            m_nId;
 
-    // Properties of each level. This can also reflect the overridden 
+    // Properties of each level. This can also reflect the overridden
     // levels of a numbering.
     ::std::vector< ListLevel::Pointer >  m_aLevels;
 
@@ -114,7 +114,7 @@ public:
 
     // Setters using during the import
     void SetId( sal_Int32 nId ) { m_nId = nId; };
-    void SetValue( sal_uInt32 nSprmId, sal_Int32 nValue );  
+    void SetValue( sal_uInt32 nSprmId, sal_Int32 nValue );
     void AddRGISTD( rtl::OUString sValue ) { m_sRGISTD += sValue; };
 
     // Accessors
@@ -126,8 +126,8 @@ public:
 
     ListLevel::Pointer    GetCurrentLevel( ) { return m_pCurrentLevel; };
 
-    virtual com::sun::star::uno::Sequence< 
-        com::sun::star::uno::Sequence< 
+    virtual com::sun::star::uno::Sequence<
+        com::sun::star::uno::Sequence<
             com::sun::star::beans::PropertyValue > > GetPropertyValues( );
 };
 
@@ -136,7 +136,7 @@ class ListDef : public AbstractListDef
 private:
     // Pointer to the abstract numbering
     AbstractListDef::Pointer             m_pAbstractDef;
-    
+
     // Cache for the UNO numbering rules
     uno::Reference< container::XIndexReplace > m_xNumRules;
 
@@ -145,23 +145,23 @@ public:
 
     ListDef( );
     ~ListDef( );
-    
+
     // Accessors
     void SetAbstractDefinition( AbstractListDef::Pointer pAbstract ) { m_pAbstractDef = pAbstract; };
     AbstractListDef::Pointer GetAbstractDefinition( ) { return m_pAbstractDef; };
-    
+
     // Mapping functions
     static rtl::OUString GetStyleName( sal_Int32 nId );
-    
-    com::sun::star::uno::Sequence< 
-        com::sun::star::uno::Sequence< 
+
+    com::sun::star::uno::Sequence<
+        com::sun::star::uno::Sequence<
             com::sun::star::beans::PropertyValue > > GetPropertyValues( );
-    
+
     void CreateNumberingRules(
             DomainMapper& rDMapper,
-            com::sun::star::uno::Reference< 
+            com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory> xFactory );
-    
+
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace >
             GetNumberingRules( ) { return m_xNumRules; };
 
@@ -169,14 +169,14 @@ public:
 
 /** This class provides access to the defined numbering styles.
   */
-class ListsManager : 
+class ListsManager :
     public Properties,
     public Table
 {
 private:
 
     DomainMapper&                                       m_rDMapper;
-    com::sun::star::uno::Reference< 
+    com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory >    m_xFactory;
 
     // The numbering entries
@@ -196,7 +196,7 @@ public:
             DomainMapper& rDMapper,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory);
     virtual ~ListsManager();
-    
+
     typedef boost::shared_ptr< ListsManager >  Pointer;
 
     // Properties
@@ -211,8 +211,8 @@ public:
 
     // Numberings accessors
     AbstractListDef::Pointer GetCurrentDef( ) { return m_pCurrentDefinition; };
-    
-    sal_uInt32              Size() const 
+
+    sal_uInt32              Size() const
         { return sal_uInt32( m_aLists.size( ) ); };
     ListDef::Pointer        GetList( sal_Int32 nId );
 

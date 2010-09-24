@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,12 +58,12 @@ using namespace ::com::sun::star::xml::sax;
 static sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
 {
     PROP_OASIS_GRAPHIC_ATTR_ACTIONS,
-    PROP_OASIS_DRAWING_PAGE_ATTR_ACTIONS,				// DRAWING_PAGE
+    PROP_OASIS_DRAWING_PAGE_ATTR_ACTIONS,               // DRAWING_PAGE
     PROP_OASIS_PAGE_LAYOUT_ATTR_ACTIONS,
     PROP_OASIS_HEADER_FOOTER_ATTR_ACTIONS,
     PROP_OASIS_TEXT_ATTR_ACTIONS,
     PROP_OASIS_PARAGRAPH_ATTR_ACTIONS,
-    MAX_OASIS_PROP_ACTIONS,				// RUBY
+    MAX_OASIS_PROP_ACTIONS,             // RUBY
     PROP_OASIS_SECTION_ATTR_ACTIONS,
     PROP_OASIS_TABLE_ATTR_ACTIONS,
     PROP_OASIS_TABLE_COLUMN_ATTR_ACTIONS,
@@ -87,7 +87,7 @@ class XMLPropertiesTContext_Impl : public XMLPersElemContentTContext
 public:
 
     void SetQNameAndPropType( const ::rtl::OUString& rQName,
-                                 XMLPropType ePropType	)
+                                 XMLPropType ePropType  )
     {
         m_ePropType = ePropType;
         XMLTransformerContext::SetQName( rQName );
@@ -530,7 +530,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                                     GetXMLToken( XML_MIRROR )), aAttrValue );
                     }
                     break;
-                case XML_ATACTION_GAMMA_OASIS:		 // converts percentage value to double
+                case XML_ATACTION_GAMMA_OASIS:       // converts percentage value to double
                     {
                         sal_Int32 nValue;
                         SvXMLUnitConverter::convertPercent( nValue, rAttrValue );

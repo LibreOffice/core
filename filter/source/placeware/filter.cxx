@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@ namespace pwp {
 
 // -----------------------------------------------------------------------------
 
-class PlaceWareExportFilter : public cppu::WeakImplHelper4 
-< 
+class PlaceWareExportFilter : public cppu::WeakImplHelper4
+<
     com::sun::star::document::XFilter,
     com::sun::star::document::XExporter,
     com::sun::star::lang::XInitialization,
@@ -81,13 +81,13 @@ public:
 // -----------------------------------------------------------------------------
 
 PlaceWareExportFilter::PlaceWareExportFilter(const Reference< XMultiServiceFactory > &rxMSF)
-:	mxMSF( rxMSF )
+:   mxMSF( rxMSF )
 {
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor ) 
+sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
     sal_Int32 nLength = aDescriptor.getLength();
@@ -127,7 +127,7 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Se
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL PlaceWareExportFilter::cancel(  ) 
+void SAL_CALL PlaceWareExportFilter::cancel(  )
     throw (RuntimeException)
 {
 }
@@ -135,7 +135,7 @@ void SAL_CALL PlaceWareExportFilter::cancel(  )
 // -----------------------------------------------------------------------------
 
 // XExporter
-void SAL_CALL PlaceWareExportFilter::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) 
+void SAL_CALL PlaceWareExportFilter::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     mxDoc = xDoc;
@@ -144,7 +144,7 @@ void SAL_CALL PlaceWareExportFilter::setSourceDocument( const ::com::sun::star::
 // -----------------------------------------------------------------------------
 
 // XInitialization
-void SAL_CALL PlaceWareExportFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& /* aArguments */ ) 
+void SAL_CALL PlaceWareExportFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& /* aArguments */ )
     throw (Exception, RuntimeException)
 {
 }
@@ -161,7 +161,7 @@ OUString PlaceWareExportFilter_getImplementationName ()
 
 #define SERVICE_NAME "com.sun.star.document.ExportFilter"
 
-sal_Bool SAL_CALL PlaceWareExportFilter_supportsService( const OUString& ServiceName ) 
+sal_Bool SAL_CALL PlaceWareExportFilter_supportsService( const OUString& ServiceName )
     throw (RuntimeException)
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ) );
@@ -169,7 +169,7 @@ sal_Bool SAL_CALL PlaceWareExportFilter_supportsService( const OUString& Service
 
 // -----------------------------------------------------------------------------
 
-Sequence< OUString > SAL_CALL PlaceWareExportFilter_getSupportedServiceNames(  ) 
+Sequence< OUString > SAL_CALL PlaceWareExportFilter_getSupportedServiceNames(  )
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(1);
@@ -190,7 +190,7 @@ Reference< XInterface > SAL_CALL PlaceWareExportFilter_createInstance( const Ref
 // -----------------------------------------------------------------------------
 
 // XServiceInfo
-OUString SAL_CALL PlaceWareExportFilter::getImplementationName(  ) 
+OUString SAL_CALL PlaceWareExportFilter::getImplementationName(  )
     throw (RuntimeException)
 {
     return PlaceWareExportFilter_getImplementationName();
@@ -198,7 +198,7 @@ OUString SAL_CALL PlaceWareExportFilter::getImplementationName(  )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL PlaceWareExportFilter::supportsService( const OUString& rServiceName ) 
+sal_Bool SAL_CALL PlaceWareExportFilter::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
     return PlaceWareExportFilter_supportsService( rServiceName );
@@ -206,7 +206,7 @@ sal_Bool SAL_CALL PlaceWareExportFilter::supportsService( const OUString& rServi
 
 // -----------------------------------------------------------------------------
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL PlaceWareExportFilter::getSupportedServiceNames(  ) 
+::com::sun::star::uno::Sequence< OUString > SAL_CALL PlaceWareExportFilter::getSupportedServiceNames(  )
     throw (RuntimeException)
 {
     return PlaceWareExportFilter_getSupportedServiceNames();

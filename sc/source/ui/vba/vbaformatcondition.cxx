@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaFormatConditions* 
+ScVbaFormatConditions*
 lcl_getScVbaFormatConditionsPtr( const uno::Reference< excel::XFormatConditions >& xFormatConditions ) throw ( script::BasicErrorException )
 {
     ScVbaFormatConditions* pFormatConditions = static_cast< ScVbaFormatConditions* >( xFormatConditions.get() );
@@ -48,7 +48,7 @@ ScVbaFormatCondition::ScVbaFormatCondition(  const uno::Reference< XHelperInterf
 }
 
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaFormatCondition::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     ScVbaFormatConditions* pFormatConditions = lcl_getScVbaFormatConditionsPtr( moFormatConditions );
@@ -56,7 +56,7 @@ ScVbaFormatCondition::Delete(  ) throw (script::BasicErrorException, uno::Runtim
         notifyRange();
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const uno::Any& _aOperator, const uno::Any& _aFormula1, const uno::Any& _aFormula2 ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     try
@@ -71,18 +71,18 @@ ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const uno::Any& _aOperator, co
     }
 }
 
-uno::Reference< excel::XInterior > SAL_CALL 
+uno::Reference< excel::XInterior > SAL_CALL
 ScVbaFormatCondition::Interior(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     return mxStyle->Interior();
 }
 
-uno::Reference< excel::XFont > SAL_CALL 
+uno::Reference< excel::XFont > SAL_CALL
 ScVbaFormatCondition::Font(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     return mxStyle->Font();
 }
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaFormatCondition::Borders( const uno::Any& Index ) throw (script::BasicErrorException, uno::RuntimeException)
 { return mxStyle->Borders( Index );
 }
@@ -102,11 +102,11 @@ ScVbaFormatCondition::retrieveAPIType(sal_Int32 _nVBAType, const uno::Reference<
             break;
         default:
             DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
-    }        
+    }
     return aAPIType;
 }
 
-void 
+void
 ScVbaFormatCondition::setFormula1( const uno::Any& _aFormula1) throw ( script::BasicErrorException )
 {
     // getA1Formula *SHOULD* detect whether the formula is r1c1 or A1 syntax
@@ -120,7 +120,7 @@ ScVbaFormatCondition::setFormula2( const uno::Any& _aFormula2) throw ( script::B
     ScVbaFormatCondition_BASE::setFormula1( uno::makeAny( lcl_getScVbaFormatConditionsPtr( moFormatConditions )->getA1Formula(_aFormula2)) );
 }
 
-::sal_Int32 SAL_CALL 
+::sal_Int32 SAL_CALL
 ScVbaFormatCondition::Type(  ) throw ( script::BasicErrorException, uno::RuntimeException )
 {
     sal_Int32 nReturnType = 0;
@@ -132,18 +132,18 @@ ScVbaFormatCondition::Type(  ) throw ( script::BasicErrorException, uno::Runtime
 }
 
 
-::sal_Int32 
+::sal_Int32
 ScVbaFormatCondition::Operator( sal_Bool bVal ) throw (script::BasicErrorException )
 {
     return ScVbaFormatCondition_BASE::Operator( bVal );
 }
-::sal_Int32 SAL_CALL 
+::sal_Int32 SAL_CALL
 ScVbaFormatCondition::Operator(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     return ScVbaFormatCondition_BASE::Operator( sal_True );
 }
 
-void 
+void
 ScVbaFormatCondition::notifyRange() throw ( script::BasicErrorException )
 {
     try
@@ -156,14 +156,14 @@ ScVbaFormatCondition::notifyRange() throw ( script::BasicErrorException )
     }
 }
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaFormatCondition::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaFormatCondition") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 ScVbaFormatCondition::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

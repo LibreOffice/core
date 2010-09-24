@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ atk_object_wrapper_conditional_ref( const uno::Reference< accessibility::XAccess
 #ifdef ENABLE_TRACING
     fprintf( stderr, ": %p\n", rxAccessible.get() );
 #endif
-    
+
     if( rxAccessible.is() )
         return atk_object_wrapper_ref( rxAccessible );
-    
+
     return NULL;
 }
 
@@ -79,10 +79,10 @@ static accessibility::XAccessibleTable*
             pWrap->mpTable = reinterpret_cast< accessibility::XAccessibleTable * > (any.pReserved);
             pWrap->mpTable->acquire();
         }
-        
+
         return pWrap->mpTable;
     }
-    
+
     return NULL;
 }
 
@@ -97,20 +97,20 @@ table_wrapper_ref_at (AtkTable *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
             fprintf(stderr, "getAccessibleCellAt( %u, %u ) returns", row, column );
-        
+
         if( column >= 255 )
             fprintf(stderr, "getAccessibleCellAt( %u, %u ) returns", row, column );
-            
+
 #endif
 
         if( pTable )
             return atk_object_wrapper_conditional_ref( pTable->getAccessibleCellAt( row, column ) );
     }
-        
+
     catch(const uno::Exception& e) {
         g_warning( "Exception in getAccessibleCellAt()" );
     }
@@ -127,13 +127,13 @@ table_wrapper_get_index_at (AtkTable      *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleIndex( %u, %u ) returns %u\n", 
+            fprintf(stderr, "getAccessibleIndex( %u, %u ) returns %u\n",
                 row, column, pTable->getAccessibleIndex( row, column ) );
 #endif
-        
+
         if( pTable )
             return pTable->getAccessibleIndex( row, column );
     }
@@ -152,13 +152,13 @@ table_wrapper_get_column_at_index (AtkTable      *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleColumn( %u ) returns %u\n", 
+            fprintf(stderr, "getAccessibleColumn( %u ) returns %u\n",
                 nIndex, pTable->getAccessibleColumn( nIndex ) );
 #endif
-        
+
         if( pTable )
             return pTable->getAccessibleColumn( nIndex );
     }
@@ -177,10 +177,10 @@ table_wrapper_get_row_at_index( AtkTable *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleRow( %u ) returns %u\n", 
+            fprintf(stderr, "getAccessibleRow( %u ) returns %u\n",
                 nIndex, pTable->getAccessibleRow( nIndex ) );
 #endif
 
@@ -204,7 +204,7 @@ table_wrapper_get_n_columns( AtkTable *table )
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "XAccessibleTable::getAccessibleColumnCount returns %u\n", 
+            fprintf(stderr, "XAccessibleTable::getAccessibleColumnCount returns %u\n",
                 pTable->getAccessibleColumnCount() );
 #endif
 
@@ -225,10 +225,10 @@ table_wrapper_get_n_rows( AtkTable *table )
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleRowCount() returns %u\n", 
+            fprintf(stderr, "getAccessibleRowCount() returns %u\n",
                 pTable->getAccessibleRowCount() );
 #endif
 
@@ -251,10 +251,10 @@ table_wrapper_get_column_extent_at( AtkTable *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleColumnExtentAt( %u, %u ) returns %u\n", 
+            fprintf(stderr, "getAccessibleColumnExtentAt( %u, %u ) returns %u\n",
                 row, column, pTable->getAccessibleColumnExtentAt( row, column ) );
 #endif
 
@@ -277,10 +277,10 @@ table_wrapper_get_row_extent_at( AtkTable *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleRowExtentAt( %u, %u ) returns %u\n", 
+            fprintf(stderr, "getAccessibleRowExtentAt( %u, %u ) returns %u\n",
                 row, column, pTable->getAccessibleRowExtentAt( row, column ) );
 #endif
 
@@ -301,7 +301,7 @@ table_wrapper_get_caption( AtkTable *table )
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
             fprintf(stderr, "getAccessibleCaption() returns" );
@@ -310,7 +310,7 @@ table_wrapper_get_caption( AtkTable *table )
         if( pTable )
             return atk_object_wrapper_conditional_ref( pTable->getAccessibleCaption() );
     }
-        
+
     catch(const uno::Exception& e) {
         g_warning( "Exception in getAccessibleCaption()" );
     }
@@ -329,7 +329,7 @@ table_wrapper_get_row_description( AtkTable *table,
 
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleRowDescription( %u ) returns %s\n", 
+            fprintf(stderr, "getAccessibleRowDescription( %u ) returns %s\n",
                 row, getAsConst( pTable->getAccessibleRowDescription( row ) ) );
 #endif
 
@@ -351,10 +351,10 @@ table_wrapper_get_column_description( AtkTable *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "getAccessibleColumnDescription( %u ) returns %s\n", 
+            fprintf(stderr, "getAccessibleColumnDescription( %u ) returns %s\n",
                 column, getAsConst( pTable->getAccessibleColumnDescription( column ) ) );
 #endif
 
@@ -407,7 +407,7 @@ table_wrapper_get_column_header( AtkTable *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
         if( pTable )
         {
             uno::Reference< accessibility::XAccessibleTable > xColumnHeaders( pTable->getAccessibleColumnHeaders() );
@@ -438,7 +438,7 @@ table_wrapper_get_summary( AtkTable *table )
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
             fprintf(stderr, "getAccessibleSummary() returns" );
@@ -483,12 +483,12 @@ table_wrapper_get_selected_columns( AtkTable      *table,
     *pSelected = NULL;
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
             fprintf(stderr, "getSelectedAccessibleColumns() \n" );
 #endif
-        
+
         if( pTable )
             return convertToGIntArray( pTable->getSelectedAccessibleColumns(), pSelected );
     }
@@ -508,12 +508,12 @@ table_wrapper_get_selected_rows( AtkTable      *table,
     *pSelected = NULL;
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
             fprintf(stderr, "getSelectedAccessibleRows() \n" );
 #endif
-        
+
         if( pTable )
             return convertToGIntArray( pTable->getSelectedAccessibleRows(), pSelected );
     }
@@ -532,13 +532,13 @@ table_wrapper_is_column_selected( AtkTable      *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "isAccessibleColumnSelected( %u ) returns %s\n", 
+            fprintf(stderr, "isAccessibleColumnSelected( %u ) returns %s\n",
                 column, pTable->isAccessibleColumnSelected( column ) ? "true" : "false" );
 #endif
-        
+
         if( pTable )
             return pTable->isAccessibleColumnSelected( column );
     }
@@ -557,13 +557,13 @@ table_wrapper_is_row_selected( AtkTable      *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "isAccessibleRowSelected( %u ) returns %s\n", 
+            fprintf(stderr, "isAccessibleRowSelected( %u ) returns %s\n",
                 row, pTable->isAccessibleRowSelected( row ) ? "true" : "false" );
 #endif
-        
+
         if( pTable )
             return pTable->isAccessibleRowSelected( row );
     }
@@ -583,13 +583,13 @@ table_wrapper_is_selected( AtkTable      *table,
 {
     try {
         accessibility::XAccessibleTable* pTable = getTable( table );
-        
+
 #ifdef ENABLE_TRACING
         if( pTable )
-            fprintf(stderr, "isAccessibleSelected( %u, %u ) returns %s\n", 
+            fprintf(stderr, "isAccessibleSelected( %u, %u ) returns %s\n",
                 row, column, pTable->isAccessibleSelected( row , column ) ? "true" : "false" );
 #endif
-        
+
         if( pTable )
             return pTable->isAccessibleSelected( row, column );
     }
@@ -690,11 +690,11 @@ tableIfaceInit (AtkTableIface *iface)
   g_return_if_fail (iface != NULL);
 
   iface->ref_at = table_wrapper_ref_at;
-  iface->get_n_rows = table_wrapper_get_n_rows; 
-  iface->get_n_columns = table_wrapper_get_n_columns;   
-  iface->get_index_at = table_wrapper_get_index_at; 
-  iface->get_column_at_index = table_wrapper_get_column_at_index;   
-  iface->get_row_at_index = table_wrapper_get_row_at_index; 
+  iface->get_n_rows = table_wrapper_get_n_rows;
+  iface->get_n_columns = table_wrapper_get_n_columns;
+  iface->get_index_at = table_wrapper_get_index_at;
+  iface->get_column_at_index = table_wrapper_get_column_at_index;
+  iface->get_row_at_index = table_wrapper_get_row_at_index;
   iface->is_row_selected = table_wrapper_is_row_selected;
   iface->is_selected = table_wrapper_is_selected;
   iface->get_selected_rows = table_wrapper_get_selected_rows;

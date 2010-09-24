@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,9 @@ namespace rptui
 {
     enum DlgEdMode { RPTUI_INSERT, RPTUI_SELECT, RPTUI_TEST, RPTUI_READONLY };
 
-#define REPORT_STARTMARKER_WIDTH	120
-#define REPORT_ENDMARKER_WIDTH		 10
-#define REPORT_EXTRA_SPACE			 10
+#define REPORT_STARTMARKER_WIDTH    120
+#define REPORT_ENDMARKER_WIDTH       10
+#define REPORT_EXTRA_SPACE           10
 
 }
 #endif //RPTUI_REPORT_DEFINES_HXX

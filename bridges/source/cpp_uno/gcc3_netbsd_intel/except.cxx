@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -247,7 +247,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
             *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
             Reference< XInterface >() );
     }
-    
+
     pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
     ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
@@ -299,7 +299,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
 #endif
         return;
     }
-    
+
     typelib_TypeDescription * pExcTypeDescr = 0;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
 #if defined DEBUG

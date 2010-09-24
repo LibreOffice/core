@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,24 +42,24 @@ class SvNumberFormatter;
 class ScDocument;
 
 
-//	how to treat COL_AUTO in GetFont:
+//  how to treat COL_AUTO in GetFont:
 
 enum ScAutoFontColorMode
 {
-    SC_AUTOCOL_RAW,			// COL_AUTO is returned
-    SC_AUTOCOL_BLACK,		// always use black
-    SC_AUTOCOL_PRINT,		// black or white, depending on background
-    SC_AUTOCOL_DISPLAY,		// from style settings, or black/white if needed
-    SC_AUTOCOL_IGNOREFONT,	// like DISPLAY, but ignore stored font color (assume COL_AUTO)
-    SC_AUTOCOL_IGNOREBACK,	// like DISPLAY, but ignore stored background color (use configured color)
-    SC_AUTOCOL_IGNOREALL	// like DISPLAY, but ignore stored font and background colors
+    SC_AUTOCOL_RAW,         // COL_AUTO is returned
+    SC_AUTOCOL_BLACK,       // always use black
+    SC_AUTOCOL_PRINT,       // black or white, depending on background
+    SC_AUTOCOL_DISPLAY,     // from style settings, or black/white if needed
+    SC_AUTOCOL_IGNOREFONT,  // like DISPLAY, but ignore stored font color (assume COL_AUTO)
+    SC_AUTOCOL_IGNOREBACK,  // like DISPLAY, but ignore stored background color (use configured color)
+    SC_AUTOCOL_IGNOREALL    // like DISPLAY, but ignore stored font and background colors
 };
 
 
 class SC_DLLPUBLIC ScPatternAttr: public SfxSetItem
 {
-    String*			pName;
-    ScStyleSheet*	pStyle;
+    String*         pName;
+    ScStyleSheet*   pStyle;
 public:
     static ScDocument* pDoc;
                             ScPatternAttr(SfxItemSet* pItemSet, const String& rStyleName);
@@ -73,17 +73,17 @@ public:
     virtual SfxPoolItem*    Create(SvStream& rStream, USHORT nVersion) const;
     virtual SvStream&       Store(SvStream& rStream, USHORT nItemVersion) const;
 
-    virtual int 			operator==(const SfxPoolItem& rCmp) const;
+    virtual int             operator==(const SfxPoolItem& rCmp) const;
 
     const SfxPoolItem&      GetItem( USHORT nWhichP ) const
                                         { return GetItemSet().Get(nWhichP); }
 
     static const SfxPoolItem& GetItem( USHORT nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet );
-    const SfxPoolItem&		GetItem( USHORT nWhich, const SfxItemSet* pCondSet ) const;
+    const SfxPoolItem&      GetItem( USHORT nWhich, const SfxItemSet* pCondSet ) const;
 
                             // pWhich sind keine Ranges, sondern einzelne IDs, 0-terminiert
-    BOOL					HasItemsSet( const USHORT* pWhich ) const;
-    void					ClearItems( const USHORT* pWhich );
+    BOOL                    HasItemsSet( const USHORT* pWhich ) const;
+    void                    ClearItems( const USHORT* pWhich );
 
     void                    DeleteUnchanged( const ScPatternAttr* pOldAttrs );
 
@@ -116,29 +116,29 @@ public:
     /** Converts all edit engine items contained in pEditSet to Calc items and puts them into the own item set. */
     void                    GetFromEditItemSet( const SfxItemSet* pEditSet );
 
-    void					FillEditParaItems( SfxItemSet* pSet ) const;
+    void                    FillEditParaItems( SfxItemSet* pSet ) const;
 
     ScPatternAttr*          PutInPool( ScDocument* pDestDoc, ScDocument* pSrcDoc ) const;
 
-    void					SetStyleSheet(ScStyleSheet* pNewStyle);
-    const ScStyleSheet*		GetStyleSheet() const  { return pStyle; }
-    const String*			GetStyleName() const;
-    void					UpdateStyleSheet();
-    void					StyleToName();
+    void                    SetStyleSheet(ScStyleSheet* pNewStyle);
+    const ScStyleSheet*     GetStyleSheet() const  { return pStyle; }
+    const String*           GetStyleName() const;
+    void                    UpdateStyleSheet();
+    void                    StyleToName();
 
-    BOOL					IsVisible() const;
-    BOOL					IsVisibleEqual( const ScPatternAttr& rOther ) const;
+    BOOL                    IsVisible() const;
+    BOOL                    IsVisibleEqual( const ScPatternAttr& rOther ) const;
 
                             /** If font is an old symbol font StarBats/StarMath
                                 with text encoding RTL_TEXTENC_SYMBOL */
-    BOOL					IsSymbolFont() const;
+    BOOL                    IsSymbolFont() const;
 
 //UNUSED2008-05                          /** Create a FontToSubsFontConverter if needed for
 //UNUSED2008-05                              this pattern, else return 0.
-//UNUSED2008-05  
+//UNUSED2008-05
 //UNUSED2008-05                              @param nFlags is the bit mask which shall be
 //UNUSED2008-05                              used for CreateFontToSubsFontConverter().
-//UNUSED2008-05  
+//UNUSED2008-05
 //UNUSED2008-05                              The converter must be destroyed by the caller
 //UNUSED2008-05                              using DestroyFontToSubsFontConverter() which
 //UNUSED2008-05                              should be accomplished using the
@@ -146,12 +146,12 @@ public:
 //UNUSED2008-05                           */
 //UNUSED2008-05  FontToSubsFontConverter GetSubsFontConverter( ULONG nFlags ) const;
 
-    ULONG					GetNumberFormat( SvNumberFormatter* ) const;
-    ULONG					GetNumberFormat( SvNumberFormatter* pFormatter,
+    ULONG                   GetNumberFormat( SvNumberFormatter* ) const;
+    ULONG                   GetNumberFormat( SvNumberFormatter* pFormatter,
                                                 const SfxItemSet* pCondSet ) const;
 
-    long					GetRotateVal( const SfxItemSet* pCondSet ) const;
-    BYTE					GetRotateDir( const SfxItemSet* pCondSet ) const;
+    long                    GetRotateVal( const SfxItemSet* pCondSet ) const;
+    BYTE                    GetRotateDir( const SfxItemSet* pCondSet ) const;
 };
 
 

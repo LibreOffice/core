@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,10 +53,10 @@ namespace drawinglayer
         {
         private:
             /// the fill color to use
-            basegfx::BColor								maBColor;
+            basegfx::BColor                             maBColor;
 
             /// the last used viewInformation, used from getDecomposition for buffering
-            basegfx::B2DRange							maLastViewport;
+            basegfx::B2DRange                           maLastViewport;
 
         protected:
             /// create local decomposition

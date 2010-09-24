@@ -1,7 +1,7 @@
 /*************************************************************************
- * 
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,27 +24,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #ifndef __com_sun_star_security_DocumentSignatureInformation_idl__
-#define __com_sun_star_security_DocumentSignatureInformation_idl__ 
+#define __com_sun_star_security_DocumentSignatureInformation_idl__
 
 #include <com/sun/star/security/XCertificate.idl>
 #include <com/sun/star/security/CertificateValidity.idl>
 
- 
-//============================================================================= 
+
+//=============================================================================
 
 module com { module sun { module star { module security {
 
-//============================================================================= 
- 
+//=============================================================================
+
 /** Status of digital signatures in a document.
 
     <p>
     This structure has the information about a digital signature in a document, and the status if the signature is valid.
     </p>
  */
- 
+
 struct DocumentSignatureInformation
 {
     XCertificate    Signer;
@@ -58,18 +58,18 @@ struct DocumentSignatureInformation
     long CertificateStatus;
     /* indicates what content of a document is signed.
         <p>
-        This value can be ignored when this struct is returned as part of 
+        This value can be ignored when this struct is returned as part of
         a macro signature validation.
-        As of OpenOffice.org 3.2 and ODF 1.2 the document signature comprises 
-        all files except the signature file itself. 
+        As of OpenOffice.org 3.2 and ODF 1.2 the document signature comprises
+        all files except the signature file itself.
         Signatures in OOo 2.x were only
-        applied to the files in the root of the document, except mimetype, the 
+        applied to the files in the root of the document, except mimetype, the
         Pictures and ObjectReplacements/Objects folder. That is, macros
         were not part of the document signature.
         OOo 3.0 signed everthing, execept mimetype and the META-INF folder.
         <p>
         If PartialDocumentSignature is true, then the signature was created by OOo
-        with a version less then 3.2. In this case, not all files are signed. The 
+        with a version less then 3.2. In this case, not all files are signed. The
         signature can still be regarded as valid, as long as SignatureIsValid is true
         and the certificate could be validated. However, users should be notified about
         the fact, that not everything in this document is signed.
@@ -78,8 +78,8 @@ struct DocumentSignatureInformation
 
 };
 
-//============================================================================= 
- 
+//=============================================================================
+
 }; }; }; };
 
 #endif

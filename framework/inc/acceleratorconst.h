@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,13 +40,13 @@
 // other includes
 
 namespace framework{
-    
+
 #define DOCTYPE_ACCELERATORS            DECLARE_ASCII("<!DOCTYPE accel:acceleratorlist PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"accelerator.dtd\">")
-    
-#define ATTRIBUTE_TYPE_CDATA		    DECLARE_ASCII("CDATA")
+
+#define ATTRIBUTE_TYPE_CDATA            DECLARE_ASCII("CDATA")
 
 #define XMLNS_ACCEL                     DECLARE_ASCII("accel")
-#define XMLNS_XLINK	                    DECLARE_ASCII("xlink")
+#define XMLNS_XLINK                     DECLARE_ASCII("xlink")
 
 #define ATTRIBUTE_URL                   DECLARE_ASCII("href" )
 #define ATTRIBUTE_KEYCODE               DECLARE_ASCII("code" )
@@ -57,10 +57,10 @@ namespace framework{
 
 // same items with a name space alias
 #define AL_ELEMENT_ACCELERATORLIST      DECLARE_ASCII("accel:acceleratorlist")
-#define AL_ELEMENT_ITEM				    DECLARE_ASCII("accel:item"           )
+#define AL_ELEMENT_ITEM                 DECLARE_ASCII("accel:item"           )
 
 #define AL_XMLNS_ACCEL                  DECLARE_ASCII("xmlns:accel")
-#define AL_XMLNS_XLINK	                DECLARE_ASCII("xmlns:xlink")
+#define AL_XMLNS_XLINK                  DECLARE_ASCII("xmlns:xlink")
 
 #define AL_ATTRIBUTE_URL                DECLARE_ASCII("xlink:href" )
 #define AL_ATTRIBUTE_KEYCODE            DECLARE_ASCII("accel:code" )
@@ -72,9 +72,9 @@ namespace framework{
 // same items with full qualified name space
 #define NS_ELEMENT_ACCELERATORLIST      DECLARE_ASCII("http://openoffice.org/2001/accel^acceleratorlist")
 #define NS_ELEMENT_ITEM                 DECLARE_ASCII("http://openoffice.org/2001/accel^item"           )
-                       
-#define NS_XMLNS_ACCEL					DECLARE_ASCII("http://openoffice.org/2001/accel")
-#define NS_XMLNS_XLINK					DECLARE_ASCII("http://www.w3.org/1999/xlink"    )
+
+#define NS_XMLNS_ACCEL                  DECLARE_ASCII("http://openoffice.org/2001/accel")
+#define NS_XMLNS_XLINK                  DECLARE_ASCII("http://www.w3.org/1999/xlink"    )
 
 #define NS_ATTRIBUTE_URL                DECLARE_ASCII("http://www.w3.org/1999/xlink^href"     )
 #define NS_ATTRIBUTE_KEYCODE            DECLARE_ASCII("http://openoffice.org/2001/accel^code" )

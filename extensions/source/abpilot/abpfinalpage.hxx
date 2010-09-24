@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,31 +46,31 @@ namespace abp
     class FinalPage : public AddressBookSourcePage
     {
     protected:
-        FixedText		m_aExplanation;
-        FixedText		m_aLocationLabel;
-        ::svt::OFileURLControl	m_aLocation;
-        PushButton		m_aBrowse;
-        CheckBox		m_aRegisterName;
-        FixedText		m_aNameLabel;
-        Edit			m_aName;
-        FixedText		m_aDuplicateNameError;
+        FixedText       m_aExplanation;
+        FixedText       m_aLocationLabel;
+        ::svt::OFileURLControl  m_aLocation;
+        PushButton      m_aBrowse;
+        CheckBox        m_aRegisterName;
+        FixedText       m_aNameLabel;
+        Edit            m_aName;
+        FixedText       m_aDuplicateNameError;
 
         ::svx::DatabaseLocationInputController
                         m_aLocationController;
 
-        StringBag		m_aInvalidDataSourceNames;
+        StringBag       m_aInvalidDataSourceNames;
 
     public:
         FinalPage( OAddessBookSourcePilot* _pParent );
 
     protected:
         // OWizardPage overridables
-        virtual void		initializePage();
-        virtual sal_Bool	commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void        initializePage();
+        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
         // TabDialog overridables
-        virtual void		ActivatePage();
-        virtual void		DeactivatePage();
+        virtual void        ActivatePage();
+        virtual void        DeactivatePage();
 
         // OImportPage overridables
         virtual bool        canAdvance() const;
@@ -79,13 +79,13 @@ namespace abp
         DECL_LINK( OnNameModified, Edit* );
         DECL_LINK( OnRegister, CheckBox* );
 
-        sal_Bool	isValidName() const;
-        void		implCheckName();
-        void		setFields();
+        sal_Bool    isValidName() const;
+        void        implCheckName();
+        void        setFields();
     };
 
 //.........................................................................
-}	// namespace abp
+}   // namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABP_ABPFINALPAGE_HXX

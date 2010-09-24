@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,21 +50,21 @@ namespace drawinglayer
         {
         private:
             /// texture geometry definition
-            basegfx::B2DVector							maTextureSize;
+            basegfx::B2DVector                          maTextureSize;
 
             /// bitfield
             /// flag if texture shall be modulated with white interpolated color
-            unsigned									mbModulate : 1;
+            unsigned                                    mbModulate : 1;
 
             /// flag if texture shall be filtered
-            unsigned									mbFilter : 1;
+            unsigned                                    mbFilter : 1;
 
         public:
             /// constructor
             TexturePrimitive3D(
-                const Primitive3DSequence& rChildren, 
-                const basegfx::B2DVector& rTextureSize, 
-                bool bModulate, 
+                const Primitive3DSequence& rChildren,
+                const basegfx::B2DVector& rTextureSize,
+                bool bModulate,
                 bool bFilter);
 
             /// data read access
@@ -94,12 +94,12 @@ namespace drawinglayer
         {
         private:
             /// transparency definition
-            double										mfTransparence;
+            double                                      mfTransparence;
 
         public:
             /// constructor
             UnifiedTransparenceTexturePrimitive3D(
-                double fTransparence, 
+                double fTransparence,
                 const Primitive3DSequence& rChildren);
 
             /// data read access
@@ -128,23 +128,23 @@ namespace drawinglayer
     {
         /** GradientTexturePrimitive3D class
 
-            This 3D primitive expands TexturePrimitive3D to a gradient texture 
-            definition. All 3D primitives embedded here will be shown with the 
+            This 3D primitive expands TexturePrimitive3D to a gradient texture
+            definition. All 3D primitives embedded here will be shown with the
             defined gradient.
          */
         class GradientTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
             /// the gradient definition
-            attribute::FillGradientAttribute		maGradient;
+            attribute::FillGradientAttribute        maGradient;
 
         public:
             /// constructor
             GradientTexturePrimitive3D(
-                const attribute::FillGradientAttribute& rGradient, 
-                const Primitive3DSequence& rChildren, 
-                const basegfx::B2DVector& rTextureSize, 
-                bool bModulate, 
+                const attribute::FillGradientAttribute& rGradient,
+                const Primitive3DSequence& rChildren,
+                const basegfx::B2DVector& rTextureSize,
+                bool bModulate,
                 bool bFilter);
 
             /// data read access
@@ -167,23 +167,23 @@ namespace drawinglayer
     {
         /** BitmapTexturePrimitive3D class
 
-            This 3D primitive expands TexturePrimitive3D to a bitmap texture 
-            definition. All 3D primitives embedded here will be shown with the 
+            This 3D primitive expands TexturePrimitive3D to a bitmap texture
+            definition. All 3D primitives embedded here will be shown with the
             defined bitmap (maybe tiled if defined).
          */
         class BitmapTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
             /// bitmap fill attribute
-            attribute::FillBitmapAttribute		maFillBitmapAttribute;
+            attribute::FillBitmapAttribute      maFillBitmapAttribute;
 
         public:
             /// constructor
             BitmapTexturePrimitive3D(
-                const attribute::FillBitmapAttribute& rFillBitmapAttribute, 
-                const Primitive3DSequence& rChildren, 
-                const basegfx::B2DVector& rTextureSize, 
-                bool bModulate, 
+                const attribute::FillBitmapAttribute& rFillBitmapAttribute,
+                const Primitive3DSequence& rChildren,
+                const basegfx::B2DVector& rTextureSize,
+                bool bModulate,
                 bool bFilter);
 
             /// data read access
@@ -206,9 +206,9 @@ namespace drawinglayer
     {
         /** TransparenceTexturePrimitive3D class
 
-            This 3D primitive expands TexturePrimitive3D to a transparence texture 
+            This 3D primitive expands TexturePrimitive3D to a transparence texture
             definition. For transparence definition, a gradient is used. The values in
-            that gradient will be interpreted as luminance Transparence-Values. All 3D 
+            that gradient will be interpreted as luminance Transparence-Values. All 3D
             primitives embedded here will be shown with the defined transparence.
          */
         class TransparenceTexturePrimitive3D : public GradientTexturePrimitive3D
@@ -216,8 +216,8 @@ namespace drawinglayer
         public:
             /// constructor
             TransparenceTexturePrimitive3D(
-                const attribute::FillGradientAttribute& rGradient, 
-                const Primitive3DSequence& rChildren, 
+                const attribute::FillGradientAttribute& rGradient,
+                const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize);
 
             /// compare operator

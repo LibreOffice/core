@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace svxform
     class SVX_DLLPUBLIC ODataAccessCharsetHelper : public ODbtoolsClient
     {
     protected:
-        mutable ::rtl::Reference< ::connectivity::simple::IDataAccessCharSet >	m_xCharsetHelper;
+        mutable ::rtl::Reference< ::connectivity::simple::IDataAccessCharSet >  m_xCharsetHelper;
 
     protected:
         virtual bool ensureLoaded() const;
@@ -49,7 +49,7 @@ namespace svxform
     public:
         ODataAccessCharsetHelper( );
 
-        inline sal_Int32	getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs ) const
+        inline sal_Int32    getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs ) const
         {
             if ( ensureLoaded() )
                 return m_xCharsetHelper->getSupportedTextEncodings( _rEncs );
@@ -58,7 +58,7 @@ namespace svxform
     };
 
 //........................................................................
-}	// namespace svxform
+}   // namespace svxform
 //........................................................................
 
 #endif // SVX_DBCHARSETCLIENT_HXX

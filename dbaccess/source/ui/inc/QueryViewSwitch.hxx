@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@ namespace dbaui
     class OQueryTextView;
     class OAddTableDlg;
     class OQueryContainerWindow;
-    class OQueryViewSwitch 
+    class OQueryViewSwitch
     {
-        OQueryDesignView*	m_pDesignView;
-        OQueryTextView*		m_pTextView;
-        sal_Bool			m_bAddTableDialogWasVisible; // true if so
+        OQueryDesignView*   m_pDesignView;
+        OQueryTextView*     m_pTextView;
+        sal_Bool            m_bAddTableDialogWasVisible; // true if so
     public:
         OQueryViewSwitch(OQueryContainerWindow* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~OQueryViewSwitch();
@@ -77,8 +77,8 @@ namespace dbaui
         bool     switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo );
         void     forceInitialView();
         sal_Bool isSlotEnabled(sal_Int32 _nSlotId);
-        void	 setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable);
-        void	 setNoneVisbleRow(sal_Int32 _nRows);
+        void     setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable);
+        void     setNoneVisbleRow(sal_Int32 _nRows);
         void     SaveUIConfig();
         bool     reset( ::dbtools::SQLExceptionInfo* _pErrorInfo );
         void     GrabFocus();
@@ -86,8 +86,8 @@ namespace dbaui
         // returs the add table dialog from the design view
         OAddTableDlg* getAddTableDialog();
 
-        OQueryDesignView*		getDesignView() const { return m_pDesignView; }
-        OQueryContainerWindow*	getContainer() const;
+        OQueryDesignView*       getDesignView() const { return m_pDesignView; }
+        OQueryContainerWindow*  getContainer() const;
 
         void SetPosSizePixel( Point _rPt,Size _rSize);
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;

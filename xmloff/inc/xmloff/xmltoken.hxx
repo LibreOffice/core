@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -2511,6 +2511,7 @@ namespace xmloff { namespace token {
 
         XML_SHOW_FILTER_BUTTON,
         XML_DRILL_DOWN_ON_DOUBLE_CLICK,
+        XML_HEADER_GRID_LAYOUT,
         XML_GROUPED_BY,
         XML_DAYS,
         XML_MONTHS,
@@ -2885,18 +2886,18 @@ namespace xmloff { namespace token {
         XML_N_RPT_OASIS,
         XML_N_RPT,
         XML_GROUP,
-        XML_GROUPS		,
+        XML_GROUPS      ,
         XML_REPORT_HEADER,
-        XML_PAGE_HEADER	,
-        XML_DETAIL		,
-        XML_PAGE_FOOTER	,
+        XML_PAGE_HEADER ,
+        XML_DETAIL      ,
+        XML_PAGE_FOOTER ,
         XML_REPORT_FOOTER,
-        XML_START_NEW_COLUMN			,
-        XML_RESET_PAGE_NUMBER			,
-        XML_PRINT_HEADER_ON_EACH_PAGE	,
-        XML_GROUP_EXPRESSION			,
-        XML_GROUP_HEADER				,
-        XML_GROUP_FOOTER				,
+        XML_START_NEW_COLUMN            ,
+        XML_RESET_PAGE_NUMBER           ,
+        XML_PRINT_HEADER_ON_EACH_PAGE   ,
+        XML_GROUP_EXPRESSION            ,
+        XML_GROUP_HEADER                ,
+        XML_GROUP_FOOTER                ,
         XML_HEADER_ON_NEW_PAGE,
         XML_FOOTER_ON_NEW_PAGE,
         XML_PAGE_PRINT_OPTION,
@@ -3090,9 +3091,9 @@ namespace xmloff { namespace token {
         XML_SURFACE,
 
         // MathML only
-        XML_MATHVARIANT, 
-        XML_MATHSIZE, 
-        XML_MATHWEIGHT, 
+        XML_MATHVARIANT,
+        XML_MATHSIZE,
+        XML_MATHWEIGHT,
         XML_MATHCOLOR,
 
         XML_CONTAINS,

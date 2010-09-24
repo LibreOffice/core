@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,84 +24,84 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_ColumnSearch_idl__ 
-#define __com_sun_star_sdbc_ColumnSearch_idl__ 
- 
- module com {  module sun {  module star {  module sdbc { 
- 
- 
+#ifndef __com_sun_star_sdbc_ColumnSearch_idl__
+#define __com_sun_star_sdbc_ColumnSearch_idl__
+
+ module com {  module sun {  module star {  module sdbc {
+
+
 /** indicates in which way a column can be used in the WHERE search.
  */
 published constants ColumnSearch
-{ 
-    //------------------------------------------------------------------------- 
-     
-    /** A possible value for column <code>SEARCHABLE</code> in the 
+{
+    //-------------------------------------------------------------------------
+
+    /** A possible value for column <code>SEARCHABLE</code> in the
              <type scope="com::sun::star::sdbc">XResultSet</type>
-             object returned by the method 
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member>
-             . 
-             <p>
-             Indicates that 
-             <code>WHERE</code>
-             search clauses are not supported 
-             for this type.
-     */
-    const long NONE = 0; 
-    //------------------------------------------------------------------------- 
-     
-    /** A possible value for column <code>SEARCHABLE</code> in the 
-             <type scope="com::sun::star::sdbc">XResultSet</type>
-             object returned by the method 
+             object returned by the method
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member>
              .
              <p>
-             Indicates that the only 
+             Indicates that
              <code>WHERE</code>
-             search clause that can 
-             be based on this type is 
+             search clauses are not supported
+             for this type.
+     */
+    const long NONE = 0;
+    //-------------------------------------------------------------------------
+
+    /** A possible value for column <code>SEARCHABLE</code> in the
+             <type scope="com::sun::star::sdbc">XResultSet</type>
+             object returned by the method
+             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member>
+             .
+             <p>
+             Indicates that the only
+             <code>WHERE</code>
+             search clause that can
+             be based on this type is
              <code>WHERE...LIKE</code>
              .
      */
-    const long CHAR = 1; 
-    //------------------------------------------------------------------------- 
-     
-    /** A possible value for column <code>SEARCHABLE</code> in the 
+    const long CHAR = 1;
+    //-------------------------------------------------------------------------
+
+    /** A possible value for column <code>SEARCHABLE</code> in the
              <type scope="com::sun::star::sdbc">XResultSet</type>
-             object returned by the method 
+             object returned by the method
              <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member>
              .
              <p>
-             Indicates that one can base all 
+             Indicates that one can base all
              <code>WHERE</code>
-             search clauses 
-             except 
+             search clauses
+             except
              <code>WHERE...LIKE</code>
              on this data type.
      */
-    const long BASIC = 2; 
-    //------------------------------------------------------------------------- 
-     
-    /** A possible value for column 
+    const long BASIC = 2;
+    //-------------------------------------------------------------------------
+
+    /** A possible value for column
             <code>SEARCHABLE</code>
-            in the 
+            in the
             <type scope="com::sun::star::sdbc">XResultSet</type>
-            object returned by the method 
+            object returned by the method
             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member>
             .
             <p>
-            Indicates that all 
+            Indicates that all
             <code>WHERE</code>
-            search clauses can be 
+            search clauses can be
             based on this type.
      */
-    const long FULL  = 3; 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    const long FULL  = 3;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

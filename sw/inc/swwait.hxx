@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ class SwDocShell;
 class SW_DLLPUBLIC SwWait
 {
     SwDocShell &rDoc;
-    BOOL		bLock;
+    BOOL        bLock;
 public:
     SwWait( SwDocShell &rDocShell, BOOL bLockDispatcher );
     ~SwWait();

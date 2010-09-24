@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,19 +51,19 @@ namespace offapp
     {
         using Window::Update;
     protected:
-        DriverPoolingSettings					m_aSavedSettings;
-        DriverPoolingSettings					m_aSettings;
-        DriverPoolingSettings::const_iterator	m_aSeekRow;
+        DriverPoolingSettings                   m_aSavedSettings;
+        DriverPoolingSettings                   m_aSettings;
+        DriverPoolingSettings::const_iterator   m_aSeekRow;
 
-        String									m_sYes;
-        String									m_sNo;
+        String                                  m_sYes;
+        String                                  m_sNo;
 
-        Link									m_aRowChangeHandler;
+        Link                                    m_aRowChangeHandler;
 
     public:
         DriverListControl( Window* _pParent, const ResId& _rId);
 
-        virtual	void Init();
+        virtual void Init();
                 void Update(const DriverPoolingSettings& _rSettings);
         virtual String GetCellText( long nRow, USHORT nColId ) const;
 
@@ -74,12 +74,12 @@ namespace offapp
 
         const DriverPooling* getCurrentRow() const;
         DriverPooling* getCurrentRow();
-        void									updateCurrentRow();
+        void                                    updateCurrentRow();
 
         const DriverPoolingSettings& getSettings() const { return m_aSettings; }
 
-        void		saveValue()				{ m_aSavedSettings = m_aSettings; }
-        sal_Bool	isModified() const;
+        void        saveValue()             { m_aSavedSettings = m_aSettings; }
+        sal_Bool    isModified() const;
 
     protected:
         virtual void InitController( ::svt::CellControllerRef& rController, long nRow, USHORT nCol );
@@ -106,7 +106,7 @@ namespace offapp
 
     //--------------------------------------------------------------------
     DriverListControl::DriverListControl( Window* _pParent, const ResId& _rId)
-//		:DriverListControl_Base(_pParent, _rId, DBBF_NOROWPICTURE, BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL | BROWSER_COLUMNSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL | BROWSER_HIDESELECT | BROWSER_CURSOR_WO_FOCUS)
+//      :DriverListControl_Base(_pParent, _rId, DBBF_NOROWPICTURE, BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL | BROWSER_COLUMNSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL | BROWSER_HIDESELECT | BROWSER_CURSOR_WO_FOCUS)
         :DriverListControl_Base(_pParent, _rId, EBBF_NOROWPICTURE, BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL | BROWSER_HIDECURSOR | BROWSER_AUTOSIZE_LASTCOL)
         ,m_aSeekRow(m_aSettings.end())
         ,m_sYes(ResId(STR_YES,*_rId.GetResMgr()))
@@ -330,15 +330,15 @@ namespace offapp
     //--------------------------------------------------------------------
     ConnectionPoolOptionsPage::ConnectionPoolOptionsPage(Window* _pParent, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, CUI_RES(RID_OFAPAGE_CONNPOOLOPTIONS ), _rAttrSet)
-        ,m_aFrame				(this,				CUI_RES(FL_POOLING))
-        ,m_aEnablePooling		(this,		CUI_RES(CB_POOL_CONNS))
-        ,m_aDriversLabel		(this,		CUI_RES(FT_DRIVERS))
+        ,m_aFrame               (this,              CUI_RES(FL_POOLING))
+        ,m_aEnablePooling       (this,      CUI_RES(CB_POOL_CONNS))
+        ,m_aDriversLabel        (this,      CUI_RES(FT_DRIVERS))
         ,m_pDriverList(new DriverListControl(this, CUI_RES(CTRL_DRIVER_LIST)))
-        ,m_aDriverLabel			(this,		CUI_RES(FT_DRIVERLABEL))
-        ,m_aDriver				(this,		CUI_RES(FT_DRIVER))
-        ,m_aDriverPoolingEnabled(this,		CUI_RES(CB_DRIVERPOOLING))
-        ,m_aTimeoutLabel		(this,		CUI_RES(FT_TIMEOUT))
-        ,m_aTimeout				(this,		CUI_RES(NF_TIMEOUT))
+        ,m_aDriverLabel         (this,      CUI_RES(FT_DRIVERLABEL))
+        ,m_aDriver              (this,      CUI_RES(FT_DRIVER))
+        ,m_aDriverPoolingEnabled(this,      CUI_RES(CB_DRIVERPOOLING))
+        ,m_aTimeoutLabel        (this,      CUI_RES(FT_TIMEOUT))
+        ,m_aTimeout             (this,      CUI_RES(NF_TIMEOUT))
     {
         m_pDriverList->Init();
         m_pDriverList->Show();
@@ -443,7 +443,7 @@ namespace offapp
         m_aTimeout.Enable(bValidRow);
 
         if (!bValidRow)
-        {	// positioned on an invalid row
+        {   // positioned on an invalid row
             m_aDriver.SetText(String());
         }
         else
@@ -501,7 +501,7 @@ namespace offapp
     }
 
 //........................................................................
-}	// namespace offapp
+}   // namespace offapp
 //........................................................................
 
 

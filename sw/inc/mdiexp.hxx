@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@ extern void PageNumNotify( ViewShell* pVwSh,
 enum FlyMode { FLY_DRAG_START, FLY_DRAG, FLY_DRAG_END };
 extern void FrameNotify( ViewShell* pVwSh, FlyMode eMode = FLY_DRAG );
 
-SW_DLLPUBLIC void StartProgress	   ( USHORT nMessId, long nStartVal, long nEndVal, SwDocShell *pDocSh = 0 );
-SW_DLLPUBLIC void EndProgress  	   ( SwDocShell *pDocSh = 0 );
+SW_DLLPUBLIC void StartProgress    ( USHORT nMessId, long nStartVal, long nEndVal, SwDocShell *pDocSh = 0 );
+SW_DLLPUBLIC void EndProgress      ( SwDocShell *pDocSh = 0 );
 SW_DLLPUBLIC void SetProgressState  ( long nPosition, SwDocShell *pDocShell );
 void SetProgressText   ( USHORT nMessId, SwDocShell *pDocShell );
 void RescheduleProgress( SwDocShell *pDocShell );

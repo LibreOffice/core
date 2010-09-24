@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,8 +78,8 @@ namespace dbaccess
         bool                                                    m_bInitialized;
         bool                                                    m_bDisposed;
         ::rtl::Reference< ::comphelper::AsyncEventNotifier >    m_pEventBroadcaster;
-        ::cppu::OInterfaceContainerHelper					    m_aLegacyEventListeners;
-        ::cppu::OInterfaceContainerHelper					    m_aDocumentEventListeners;
+        ::cppu::OInterfaceContainerHelper                       m_aLegacyEventListeners;
+        ::cppu::OInterfaceContainerHelper                       m_aDocumentEventListeners;
 
     public:
         DocumentEventNotifier_Impl( ::cppu::OWeakObject& _rBroadcasterDocument, ::osl::Mutex& _rMutex )

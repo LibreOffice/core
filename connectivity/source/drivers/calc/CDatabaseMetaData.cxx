@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ using namespace ::com::sun::star::sheet;
 
 // -------------------------------------------------------------------------
 
-OCalcDatabaseMetaData::OCalcDatabaseMetaData(OConnection* _pCon) 	:ODatabaseMetaData(_pCon)
+OCalcDatabaseMetaData::OCalcDatabaseMetaData(OConnection* _pCon)    :ODatabaseMetaData(_pCon)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcDatabaseMetaData::OCalcDatabaseMetaData" );
 }
@@ -177,8 +177,8 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
     aRow[10] = new ORowSetValueDecorator((sal_Int32)10);
 
     Sequence< ::rtl::OUString> aTabNames(xNames->getElementNames());
-    const ::rtl::OUString* pTabIter	= aTabNames.getConstArray();
-    const ::rtl::OUString* pTabEnd		= pTabIter + aTabNames.getLength();
+    const ::rtl::OUString* pTabIter = aTabNames.getConstArray();
+    const ::rtl::OUString* pTabEnd      = pTabIter + aTabNames.getLength();
     for(;pTabIter != pTabEnd;++pTabIter)
     {
         if(match(tableNamePattern,*pTabIter,'\0'))
@@ -207,13 +207,13 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
                     aRow[5] = new ORowSetValueDecorator(::comphelper::getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
                     aRow[6] = new ORowSetValueDecorator(::comphelper::getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))));
                     aRow[7] = new ORowSetValueDecorator(::comphelper::getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))));
-                    //	aRow[8] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                    //  aRow[8] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
                     aRow[9] = new ORowSetValueDecorator(::comphelper::getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))));
                     aRow[11] = new ORowSetValueDecorator(::comphelper::getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))));
-                    //	aRow[12] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                    //  aRow[12] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
                     aRow[13] = new ORowSetValueDecorator(::comphelper::getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))));
-                    //	aRow[14] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
-                    //	aRow[15] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                    //  aRow[14] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                    //  aRow[15] = xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
                     switch(sal_Int32(aRow[5]->getValue()))
                     {
                     case DataType::CHAR:
@@ -303,7 +303,7 @@ sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const ::r
     Reference<XSpreadsheet> xSheet;
     if ( aAny >>= xSheet )
     {
-        //	test if sheet is hidden
+        //  test if sheet is hidden
 
         Reference<XPropertySet> xProp( xSheet, UNO_QUERY );
         if (xProp.is())
@@ -312,11 +312,11 @@ sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const ::r
             Any aVisAny = xProp->getPropertyValue( ::rtl::OUString::createFromAscii("IsVisible") );
             if ( aVisAny >>= bVisible )
                 if (!bVisible)
-                    return sal_True;				// hidden
-        }		
+                    return sal_True;                // hidden
+        }
 
 #if 0
-        //	test if whole sheet is empty
+        //  test if whole sheet is empty
 
         Reference<XCellRangeAddressable> xAddr( xSheet, UNO_QUERY );
         Reference<XCellRangesQuery> xQuery( xSheet, UNO_QUERY );
@@ -331,26 +331,26 @@ sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const ::r
                 if (xCells.is())
                 {
                     if ( !xCells->hasElements() )
-                        return sal_True;			// empty
+                        return sal_True;            // empty
                 }
             }
         }
 #endif
 
-        //	use the same data area as in OCalcTable to test for empty table
+        //  use the same data area as in OCalcTable to test for empty table
 
         Reference<XSheetCellCursor> xCursor = xSheet->createCursor();
         Reference<XCellRangeAddressable> xRange( xCursor, UNO_QUERY );
         if ( xRange.is() )
         {
-            xCursor->collapseToSize( 1, 1 );		// single (first) cell
-            xCursor->collapseToCurrentRegion();		// contiguous data area
+            xCursor->collapseToSize( 1, 1 );        // single (first) cell
+            xCursor->collapseToCurrentRegion();     // contiguous data area
 
             CellRangeAddress aRangeAddr = xRange->getRangeAddress();
             if ( aRangeAddr.StartColumn == aRangeAddr.EndColumn &&
                  aRangeAddr.StartRow == aRangeAddr.EndRow )
             {
-                //	single cell -> check content
+                //  single cell -> check content
                 Reference<XCell> xCell = xCursor->getCellByPosition( 0, 0 );
                 if ( xCell.is() && xCell->getType() == CellContentType_EMPTY )
                     return sal_True;
@@ -382,7 +382,7 @@ sal_Bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const ::rtl::
             catch ( UnknownPropertyException& )
             {
                 // optional property
-            }			
+            }
         }
     }
 
@@ -412,9 +412,9 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
     if(nLength)
     {
         bTableFound = sal_False;
-        
+
         const ::rtl::OUString* pIter = types.getConstArray();
-        const ::rtl::OUString* pEnd	= pIter + nLength;
+        const ::rtl::OUString* pEnd = pIter + nLength;
         for(;pIter != pEnd;++pIter)
         {
             if(*pIter == aTable)

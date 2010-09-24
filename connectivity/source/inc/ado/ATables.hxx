@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ namespace connectivity
         class OCatalog;
         class OTables : public sdbcx::OCollection
         {
-            WpADOTables	m_aCollection;
-            OCatalog*	m_pCatalog;
+            WpADOTables m_aCollection;
+            OCatalog*   m_pCatalog;
         protected:
             virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);

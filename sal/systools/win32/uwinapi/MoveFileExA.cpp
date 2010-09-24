@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,35 +27,35 @@
 
 #include "macros.h"
 
-#define	WININIT_FILENAME	"wininit.ini"
-#define RENAME_SECTION		"rename"
+#define WININIT_FILENAME    "wininit.ini"
+#define RENAME_SECTION      "rename"
 
 IMPLEMENT_THUNK( kernel32, WINDOWS, BOOL, WINAPI, MoveFileExA, ( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWORD dwFlags ) )
 {
-    BOOL	fSuccess = FALSE;	// assume failure
+    BOOL    fSuccess = FALSE;   // assume failure
 
     // Windows 9x has a special mechanism to move files after reboot
 
     if ( dwFlags & MOVEFILE_DELAY_UNTIL_REBOOT )
     {
-        CHAR	szExistingFileNameA[MAX_PATH];
-        CHAR	szNewFileNameA[MAX_PATH] = "NUL";
+        CHAR    szExistingFileNameA[MAX_PATH];
+        CHAR    szNewFileNameA[MAX_PATH] = "NUL";
 
         // Path names in WININIT.INI must be in short path name form
 
-        if ( 
+        if (
             GetShortPathNameA( lpExistingFileNameA, szExistingFileNameA, MAX_PATH ) &&
             (!lpNewFileNameA || GetShortPathNameA( lpNewFileNameA, szNewFileNameA, MAX_PATH ))
             )
         {
-            CHAR	szBuffer[32767];	// The buffer size must not exceed 32K
-            DWORD	dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, elementsof(szBuffer), WININIT_FILENAME );
+            CHAR    szBuffer[32767];    // The buffer size must not exceed 32K
+            DWORD   dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, elementsof(szBuffer), WININIT_FILENAME );
 
-            CHAR	szRename[MAX_PATH];	// This is enough for at most to times 67 chracters
+            CHAR    szRename[MAX_PATH]; // This is enough for at most to times 67 chracters
             strcpy( szRename, szNewFileNameA );
             strcat( szRename, "=" );
             strcat( szRename, szExistingFileNameA );
-            size_t	lnRename = strlen(szRename);
+            size_t  lnRename = strlen(szRename);
 
             if ( dwBufLen + lnRename + 2 <= elementsof(szBuffer) )
             {
@@ -76,7 +76,7 @@ IMPLEMENT_THUNK( kernel32, WINDOWS, BOOL, WINAPI, MoveFileExA, ( LPCSTR lpExisti
 
         if ( !fSuccess && 0 != (dwFlags & (MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING)) )
         {
-            BOOL	bFailIfExist = 0 == (dwFlags & MOVEFILE_REPLACE_EXISTING);
+            BOOL    bFailIfExist = 0 == (dwFlags & MOVEFILE_REPLACE_EXISTING);
 
             fSuccess = CopyFileA( lpExistingFileNameA, lpNewFileNameA, bFailIfExist );
 

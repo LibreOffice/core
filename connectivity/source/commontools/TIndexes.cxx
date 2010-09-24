@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 OIndexesHelper::OIndexesHelper(OTableHelper* _pTable,
                  ::osl::Mutex& _rMutex,
              const ::std::vector< ::rtl::OUString> &_rVector
-             ) 
+             )
     : OCollection(*_pTable,sal_True,_rMutex,_rVector)
     ,m_pTable(_pTable)
 {
@@ -70,16 +70,16 @@ sdbcx::ObjectType OIndexesHelper::createObject(const ::rtl::OUString& _rName)
     sal_Int32 nLen = _rName.indexOf('.');
     if ( nLen != -1 )
     {
-        aQualifier	= _rName.copy(0,nLen);
-        aName		= _rName.copy(nLen+1);
+        aQualifier  = _rName.copy(0,nLen);
+        aName       = _rName.copy(nLen+1);
     }
     else
-        aName		= _rName;
-    
+        aName       = _rName;
+
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
     ::rtl::OUString aSchema,aTable;
-    m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))	>>= aSchema;
-    m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))		>>= aTable;
+    m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
+    m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
 
     Any aCatalog = m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME));
     Reference< XResultSet > xResult = m_pTable->getMetaData()->getIndexInfo(aCatalog,aSchema,aTable,sal_False,sal_False);
@@ -148,18 +148,18 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const ::rtl::OUString& _rForName
     {
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
         ::rtl::OUStringBuffer aSql( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATE ")));
-        ::rtl::OUString aQuote	= m_pTable->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot	= ::rtl::OUString::createFromAscii(".");
+        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
         if(comphelper::getBOOL(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             aSql.appendAscii("UNIQUE ");
         aSql.appendAscii("INDEX ");
 
-        
+
         ::rtl::OUString aCatalog,aSchema,aTable;
         dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema,aTable,::dbtools::eInDataManipulation);
         ::rtl::OUString aComposedName;
-        
+
         aComposedName = dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,sal_True,::dbtools::eInIndexDefinitions);
         if ( _rForName.getLength() )
         {
@@ -177,12 +177,12 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const ::rtl::OUString& _rForName
             {
                 xColProp.set(xColumns->getByIndex(i),UNO_QUERY);
                 aSql.append(::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))));
-                
-                if ( bAddIndexAppendix )
-                {				
 
-                    aSql.appendAscii(any2bool(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISASCENDING))) 
-                                                ? 
+                if ( bAddIndexAppendix )
+                {
+
+                    aSql.appendAscii(any2bool(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISASCENDING)))
+                                                ?
                                     " ASC"
                                                 :
                                     " DESC");
@@ -235,9 +235,9 @@ void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElem
             sal_Int32 nLen = _sElementName.indexOf('.');
             if(nLen != -1)
                 aSchema = _sElementName.copy(0,nLen);
-            aName	= _sElementName.copy(nLen+1);
+            aName   = _sElementName.copy(nLen+1);
 
-            ::rtl::OUString aSql	= ::rtl::OUString::createFromAscii("DROP INDEX ");
+            ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP INDEX ");
 
             ::rtl::OUString aComposedName = dbtools::composeTableName( m_pTable->getMetaData(), m_pTable, ::dbtools::eInIndexDefinitions, false, false, true );
             ::rtl::OUString sIndexName,sTemp;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ class CurrentMasterPagesSelector
 {
 public:
     CurrentMasterPagesSelector (
-        TreeNode* pParent, 
+        TreeNode* pParent,
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer);
@@ -69,7 +69,7 @@ protected:
     virtual ResId GetContextMenuResId (void) const;
     virtual void Execute (SfxRequest& rRequest);
     virtual void GetState (SfxItemSet& rItemSet);
-    
+
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>
         mxListener;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ template< class SourceIter, class SourceAcc,
 void scaleLine( SourceIter      s_begin,
                 SourceIter      s_end,
                 SourceAcc       s_acc,
-                DestIter        d_begin, 
-                DestIter        d_end, 
+                DestIter        d_begin,
+                DestIter        d_end,
                 DestAcc         d_acc )
 {
     const int src_width  = s_end - s_begin;
@@ -57,7 +57,7 @@ void scaleLine( SourceIter      s_begin,
         // shrink
         int rem = 0;
         while( s_begin != s_end )
-        {            
+        {
             if( rem >= 0 )
             {
                 d_acc.set( s_acc(s_begin), d_begin );
@@ -67,7 +67,7 @@ void scaleLine( SourceIter      s_begin,
             }
 
             rem += dest_width;
-            ++s_begin;            
+            ++s_begin;
         }
     }
     else
@@ -80,10 +80,10 @@ void scaleLine( SourceIter      s_begin,
             {
                 rem -= dest_width;
                 ++s_begin;
-            }            
+            }
 
             d_acc.set( s_acc(s_begin), d_begin );
-            
+
             rem += src_width;
             ++d_begin;
         }
@@ -122,8 +122,8 @@ template< class SourceIter, class SourceAcc,
 void scaleImage( SourceIter      s_begin,
                  SourceIter      s_end,
                  SourceAcc       s_acc,
-                 DestIter        d_begin, 
-                 DestIter        d_end, 
+                 DestIter        d_begin,
+                 DestIter        d_end,
                  DestAcc         d_acc,
                  bool            bMustCopy=false )
 {
@@ -133,8 +133,8 @@ void scaleImage( SourceIter      s_begin,
     const int dest_width ( d_end.x - d_begin.x );
     const int dest_height( d_end.y - d_begin.y );
 
-    if( !bMustCopy && 
-        src_width == dest_width && 
+    if( !bMustCopy &&
+        src_width == dest_width &&
         src_height == dest_height )
     {
         // no scaling involved, can simply copy
@@ -146,7 +146,7 @@ void scaleImage( SourceIter      s_begin,
     typedef vigra::BasicImage<typename SourceAcc::value_type> TmpImage;
     typedef typename TmpImage::traverser TmpImageIter;
 
-    TmpImage     tmp_image(src_width, 
+    TmpImage     tmp_image(src_width,
                            dest_height);
     TmpImageIter t_begin = tmp_image.upperLeft();
 
@@ -156,7 +156,7 @@ void scaleImage( SourceIter      s_begin,
         typename SourceIter::column_iterator   s_cbegin = s_begin.columnIterator();
         typename TmpImageIter::column_iterator t_cbegin = t_begin.columnIterator();
 
-        scaleLine(s_cbegin, s_cbegin+src_height, s_acc, 
+        scaleLine(s_cbegin, s_cbegin+src_height, s_acc,
                   t_cbegin, t_cbegin+dest_height, tmp_image.accessor());
     }
 
@@ -168,7 +168,7 @@ void scaleImage( SourceIter      s_begin,
         typename DestIter::row_iterator     d_rbegin = d_begin.rowIterator();
         typename TmpImageIter::row_iterator t_rbegin = t_begin.rowIterator();
 
-        scaleLine(t_rbegin, t_rbegin+src_width, tmp_image.accessor(), 
+        scaleLine(t_rbegin, t_rbegin+src_width, tmp_image.accessor(),
                   d_rbegin, d_rbegin+dest_width, d_acc);
     }
 }

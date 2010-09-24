@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -14,12 +14,12 @@
 //----------------------------------------------------------------------------
 //
 // polyline clipping converter
-// There an optimized Liang-Basky algorithm is used. 
+// There an optimized Liang-Basky algorithm is used.
 // The algorithm doesn't optimize the degenerate edges, i.e. it will never
-// break a closed polyline into two or more ones, instead, there will be 
+// break a closed polyline into two or more ones, instead, there will be
 // degenerate edges coinciding with the respective clipping boundaries.
-// This is a sub-optimal solution, because that optimization would require 
-// extra, rather expensive math while the rasterizer tolerates it quite well, 
+// This is a sub-optimal solution, because that optimization would require
+// extra, rather expensive math while the rasterizer tolerates it quite well,
 // without any considerable overhead.
 //
 //----------------------------------------------------------------------------
@@ -35,12 +35,12 @@ namespace agg
 {
 
     //=======================================================conv_clip_polyline
-    template<class VertexSource> 
+    template<class VertexSource>
     struct conv_clip_polyline : public conv_adaptor_vpgen<VertexSource, vpgen_clip_polyline>
     {
         typedef conv_adaptor_vpgen<VertexSource, vpgen_clip_polyline> base_type;
 
-        conv_clip_polyline(VertexSource& vs) : 
+        conv_clip_polyline(VertexSource& vs) :
             conv_adaptor_vpgen<VertexSource, vpgen_clip_polyline>(vs) {}
 
         void clip_box(double x1, double y1, double x2, double y2)
@@ -60,7 +60,7 @@ namespace agg
 
     private:
         conv_clip_polyline(const conv_clip_polyline<VertexSource>&);
-        const conv_clip_polyline<VertexSource>& 
+        const conv_clip_polyline<VertexSource>&
             operator = (const conv_clip_polyline<VertexSource>&);
     };
 

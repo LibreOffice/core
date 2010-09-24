@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,8 +90,8 @@
 
 /** is a table of text cells which is anchored to a surrounding text.
 
-    <p>Note: The anchor of the actual implementation for text tables 
-    does not have a position in the text. Thus that anchor can not be 
+    <p>Note: The anchor of the actual implementation for text tables
+    does not have a position in the text. Thus that anchor can not be
     used for some operation like <member>XTextContent::attach</member> or
     <member>XText::insertTextContent</member>
     or other function that require the object to have a position in the text.</p>
@@ -122,7 +122,7 @@
 published service TextTable
 {
     service com::sun::star::text::TextContent;
-    
+
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
 
     interface com::sun::star::text::XTextTable;

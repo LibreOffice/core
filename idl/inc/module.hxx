@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,8 @@
 
 struct SvNamePos
 {
-    SvGlobalName	aUUId;
-    UINT32  		nStmPos;
+    SvGlobalName    aUUId;
+    UINT32          nStmPos;
     SvNamePos( const SvGlobalName & rName, UINT32 nPos )
         : aUUId( rName )
         , nStmPos( nPos ) {}
@@ -44,15 +44,15 @@ DECLARE_LIST( SvNamePosList, SvNamePos *)
 /******************** class SvMetaModule *********************************/
 class SvMetaModule : public SvMetaExtern
 {
-    SvMetaClassMemberList   	aClassList;
-    SvMetaTypeMemberList    	aTypeList;
+    SvMetaClassMemberList       aClassList;
+    SvMetaTypeMemberList        aTypeList;
     SvMetaAttributeMemberList   aAttrList;
 // Browser
     String                  aIdlFileName;
     SvString                aHelpFileName;
     SvString                aSlotIdFile;
     SvString                aTypeLibFile;
-    SvString				aModulePrefix;
+    SvString                aModulePrefix;
 
 #ifdef IDL_COMPILER
     BOOL                    bImported   : 1,
@@ -71,7 +71,7 @@ public:
                         SvMetaModule();
 
     const String &      GetIdlFileName() const { return aIdlFileName; }
-    const ByteString &  	GetModulePrefix() const { return aModulePrefix; }
+    const ByteString &      GetModulePrefix() const { return aModulePrefix; }
 
     virtual BOOL        SetName( const ByteString & rName, SvIdlDataBase * = NULL  );
 
@@ -93,7 +93,7 @@ public:
     virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
 
-    virtual void		WriteAttributes( SvIdlDataBase & rBase,
+    virtual void        WriteAttributes( SvIdlDataBase & rBase,
                                         SvStream & rOutStm, USHORT nTab,
                                             WriteType, WriteAttribute = 0 );
 //    virtual void        WriteSbx( SvIdlDataBase & rBase, SvStream & rOutStm, SvNamePosList & rList );

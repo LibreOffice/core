@@ -85,18 +85,18 @@ void ParagraphStyle::write(DocumentHandler *pHandler) const
         }
         if (strcmp(k.key(), "fo:line-height") == 0)
             propList.insert("fo:line-height", k()->getStr());
-        if (strcmp(k.key(), "fo:break-before") == 0) 
+        if (strcmp(k.key(), "fo:break-before") == 0)
             propList.insert("fo:break-before", k()->getStr());
-        if (strcmp(k.key(), "fo:text-align") == 0) 
+        if (strcmp(k.key(), "fo:text-align") == 0)
             propList.insert("fo:text-align", k()->getStr());
                 if (strcmp(k.key(), "fo:text-align-last") == 0)
                         propList.insert("fo:text-align-last", k()->getStr());
     }
-    
+
     propList.insert("style:justify-single-word", "false");
     pHandler->startElement("style:properties", propList);
 
-        if (mxTabStops.count() > 0) 
+        if (mxTabStops.count() > 0)
         {
                 TagOpenElement tabListOpen("style:tab-stops");
                 tabListOpen.write(pHandler);
@@ -104,11 +104,11 @@ void ParagraphStyle::write(DocumentHandler *pHandler) const
                 for (i.rewind(); i.next();)
                 {
                         TagOpenElement tabStopOpen("style:tab-stop");
-                        
+
                         WPXPropertyList::Iter j(i());
                         for (j.rewind(); j.next(); )
                         {
-                                tabStopOpen.addAttribute(j.key(), j()->getStr().cstr());			
+                                tabStopOpen.addAttribute(j.key(), j()->getStr().cstr());
                         }
                         tabStopOpen.write(pHandler);
                         pHandler->endElement("style:tab-stop");
@@ -126,15 +126,15 @@ SpanStyle::SpanStyle(const char *psName, const WPXPropertyList &xPropList) :
 {
 }
 
-void SpanStyle::write(DocumentHandler *pHandler) const 
+void SpanStyle::write(DocumentHandler *pHandler) const
 {
     WRITER_DEBUG_MSG(("Writing a span style..\n"));
-        WPXPropertyList styleOpenList;    
+        WPXPropertyList styleOpenList;
     styleOpenList.insert("style:name", getName());
     styleOpenList.insert("style:family", "text");
         pHandler->startElement("style:style", styleOpenList);
 
-        WPXPropertyList propList(mPropList);    
+        WPXPropertyList propList(mPropList);
 
     if (mPropList["style:font-name"])
     {
@@ -147,7 +147,7 @@ void SpanStyle::write(DocumentHandler *pHandler) const
         propList.insert("style:font-size-asian", mPropList["fo:font-size"]->getStr());
         propList.insert("style:font-size-complex", mPropList["fo:font-size"]->getStr());
     }
-    
+
     if (mPropList["fo:font-weight"])
     {
         propList.insert("style:font-weight-asian", mPropList["fo:font-weight"]->getStr());

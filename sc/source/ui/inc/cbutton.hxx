@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,36 +46,36 @@ public:
 
     void    SetOutputDevice( OutputDevice* pOutputDevice );
 
-    void	Draw( const Point&	rAt,
-                  const Size&	rSize,
+    void    Draw( const Point&  rAt,
+                  const Size&   rSize,
                   BOOL          bState,
-                  BOOL			bBtnIn = FALSE );
+                  BOOL          bBtnIn = FALSE );
 
-    void	Draw( const Point&	rAt,
+    void    Draw( const Point&  rAt,
                   BOOL          bState,
-                  BOOL			bBtnIn = FALSE )
+                  BOOL          bBtnIn = FALSE )
                 { Draw( rAt, aBtnSize, bState, bBtnIn ); }
 
     void    Draw( BOOL          bState,
                   BOOL          bBtnIn = FALSE )
                 { Draw( aBtnPos, aBtnSize, bState, bBtnIn ); }
 
-    void	SetOptSizePixel();
+    void    SetOptSizePixel();
 
-    void	SetPosPixel( const Point& rNewPos )  { aBtnPos = rNewPos; }
-    Point	GetPosPixel() const				 	 { return aBtnPos; }
+    void    SetPosPixel( const Point& rNewPos )  { aBtnPos = rNewPos; }
+    Point   GetPosPixel() const                  { return aBtnPos; }
 
-    void	SetSizePixel( const Size& rNewSize ) { aBtnSize = rNewSize; }
-    Size	GetSizePixel() const				 { return aBtnSize; }
+    void    SetSizePixel( const Size& rNewSize ) { aBtnSize = rNewSize; }
+    Size    GetSizePixel() const                 { return aBtnSize; }
 
 private:
-    void	ImpDrawArrow( const Rectangle&	rRect,
+    void    ImpDrawArrow( const Rectangle&  rRect,
                           BOOL              bState );
 
 protected:
     OutputDevice* pOut;
-    Point	aBtnPos;
-    Size	aBtnSize;
+    Point   aBtnPos;
+    Size    aBtnSize;
 };
 
 

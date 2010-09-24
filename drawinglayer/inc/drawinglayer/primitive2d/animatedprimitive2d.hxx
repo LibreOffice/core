@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace drawinglayer
         /** AnimatedSwitchPrimitive2D class
 
             This is the basic class for simple, animated primitives. The basic idea
-            is to have an animation definition (AnimationEntry) who's basic 
+            is to have an animation definition (AnimationEntry) who's basic
             functionality is to return a state value for any given animation time in
             the range of [0.0 .. 1.0]. Depending on the state, the decomposition
             calculates an index, which of the members of the child vector is to
@@ -65,18 +65,18 @@ namespace drawinglayer
                 to an animation state [0.0 .. 1.0]. This member contains a cloned
                 definition and is owned by this implementation.
              */
-            animation::AnimationEntry*						mpAnimationEntry;
+            animation::AnimationEntry*                      mpAnimationEntry;
 
             /// bitfield
             /** flag if this is a text or graphic animation. Necessary since SdrViews need to differentiate
                 between both types if they are on/off
              */
-            unsigned										mbIsTextAnimation : 1;
+            unsigned                                        mbIsTextAnimation : 1;
 
         public:
             /// constructor
             AnimatedSwitchPrimitive2D(
-                const animation::AnimationEntry& rAnimationEntry, 
+                const animation::AnimationEntry& rAnimationEntry,
                 const Primitive2DSequence& rChildren,
                 bool bIsTextAnimation);
 
@@ -120,7 +120,7 @@ namespace drawinglayer
         public:
             /// constructor
             AnimatedBlinkPrimitive2D(
-                const animation::AnimationEntry& rAnimationEntry, 
+                const animation::AnimationEntry& rAnimationEntry,
                 const Primitive2DSequence& rChildren,
                 bool bIsTextAnimation);
 
@@ -150,14 +150,14 @@ namespace drawinglayer
         {
         private:
             /// the transformations
-            std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >		maMatrixStack;
+            std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >        maMatrixStack;
 
         protected:
         public:
             /// constructor
             AnimatedInterpolatePrimitive2D(
                 const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
-                const animation::AnimationEntry& rAnimationEntry, 
+                const animation::AnimationEntry& rAnimationEntry,
                 const Primitive2DSequence& rChildren,
                 bool bIsTextAnimation);
 

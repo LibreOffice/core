@@ -44,6 +44,7 @@ CDEFS+= -DVERBOSE
 
 SLOFILES =	$(SLO)$/cachedprimitivebase.obj \
             $(SLO)$/bitmapaction.obj \
+            $(SLO)$/emfplus.obj \
             $(SLO)$/implrenderer.obj \
             $(SLO)$/lineaction.obj \
             $(SLO)$/pointaction.obj \

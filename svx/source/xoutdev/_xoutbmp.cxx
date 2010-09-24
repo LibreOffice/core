@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@
 // - Defines -
 // -----------
 
-#define FORMAT_BMP	String(RTL_CONSTASCII_USTRINGPARAM("bmp"))
-#define FORMAT_GIF	String(RTL_CONSTASCII_USTRINGPARAM("gif"))
-#define FORMAT_JPG	String(RTL_CONSTASCII_USTRINGPARAM("jpg"))
-#define FORMAT_PNG	String(RTL_CONSTASCII_USTRINGPARAM("png"))
+#define FORMAT_BMP  String(RTL_CONSTASCII_USTRINGPARAM("bmp"))
+#define FORMAT_GIF  String(RTL_CONSTASCII_USTRINGPARAM("gif"))
+#define FORMAT_JPG  String(RTL_CONSTASCII_USTRINGPARAM("jpg"))
+#define FORMAT_PNG  String(RTL_CONSTASCII_USTRINGPARAM("png"))
 
 // --------------
 // - XOutBitmap -
@@ -69,16 +69,16 @@ BitmapEx XOutBitmap::CreateQuickDrawBitmapEx( const Graphic& rGraphic, const Out
         aRetBmp = rGraphic.GetBitmapEx();
     else
     {
-        VirtualDevice	aVDev( rCompDev );
-        MapMode			aMap( rMapMode );
+        VirtualDevice   aVDev( rCompDev );
+        MapMode         aMap( rMapMode );
 
         aMap.SetOrigin( Point() );
         aVDev.SetMapMode( aMap );
 
-        Point	aPoint( aVDev.LogicToPixel( rPoint ) );
-        Size	aOldSize( aVDev.LogicToPixel( rSize ) );
-        Size	aAbsSize( aOldSize );
-        Size	aQSizePix( aVDev.LogicToPixel( rLogSize ) );
+        Point   aPoint( aVDev.LogicToPixel( rPoint ) );
+        Size    aOldSize( aVDev.LogicToPixel( rSize ) );
+        Size    aAbsSize( aOldSize );
+        Size    aQSizePix( aVDev.LogicToPixel( rLogSize ) );
 
         aVDev.SetMapMode( MapMode() );
 
@@ -90,8 +90,8 @@ BitmapEx XOutBitmap::CreateQuickDrawBitmapEx( const Graphic& rGraphic, const Out
 
         if( aVDev.SetOutputSizePixel( aAbsSize ) )
         {
-            Point		aNewOrg( -aPoint.X(), -aPoint.Y() );
-            const Point	aNullPoint;
+            Point       aNewOrg( -aPoint.X(), -aPoint.Y() );
+            const Point aNullPoint;
 
             // horizontale Spiegelung ggf. beruecksichtigen
             if( aOldSize.Width() < 0 )
@@ -115,8 +115,8 @@ BitmapEx XOutBitmap::CreateQuickDrawBitmapEx( const Graphic& rGraphic, const Out
             {
                 rGraphic.Draw( &aVDev, aNewOrg, aQSizePix );
 
-                const Bitmap	aBmp( aVDev.GetBitmap( aNullPoint, aAbsSize ) );
-                Bitmap			aMask;
+                const Bitmap    aBmp( aVDev.GetBitmap( aNullPoint, aAbsSize ) );
+                Bitmap          aMask;
 
                 Graphic( rGraphic.GetGDIMetaFile().GetMonochromeMtf( COL_BLACK ) ).Draw( &aVDev, aNewOrg, aQSizePix );
                 aMask = aVDev.GetBitmap( aNullPoint, aAbsSize );
@@ -124,17 +124,17 @@ BitmapEx XOutBitmap::CreateQuickDrawBitmapEx( const Graphic& rGraphic, const Out
             }
             else
             {
-                Bitmap	aBmp( rGraphic.GetBitmap() );
+                Bitmap  aBmp( rGraphic.GetBitmap() );
 
 // UNX has got problems with 1x1 bitmaps which are transparent (KA 02.11.1998)
 #ifdef UNX
-                const Size	aBmpSize( aBmp.GetSizePixel() );
-                BOOL		bFullTrans = FALSE;
+                const Size  aBmpSize( aBmp.GetSizePixel() );
+                BOOL        bFullTrans = FALSE;
 
                 if( aBmpSize.Width() == 1 && aBmpSize.Height() == 1 && rGraphic.IsTransparent() )
                 {
-                    Bitmap				aTrans( rGraphic.GetBitmapEx().GetMask() );
-                    BitmapReadAccess*	pMAcc = aBmp.AcquireReadAccess();
+                    Bitmap              aTrans( rGraphic.GetBitmapEx().GetMask() );
+                    BitmapReadAccess*   pMAcc = aBmp.AcquireReadAccess();
 
                     if( pMAcc )
                     {
@@ -157,7 +157,7 @@ BitmapEx XOutBitmap::CreateQuickDrawBitmapEx( const Graphic& rGraphic, const Out
                         aRetBmp = BitmapEx( aBmp );
                     else
                     {
-                        Bitmap	aTrans( rGraphic.GetBitmapEx().GetMask() );
+                        Bitmap  aTrans( rGraphic.GetBitmapEx().GetMask() );
 
                         if( !aTrans )
                             aRetBmp = BitmapEx( aBmp, rGraphic.GetBitmapEx().GetTransparentColor() );
@@ -180,8 +180,8 @@ BitmapEx XOutBitmap::CreateQuickDrawBitmapEx( const Graphic& rGraphic, const Out
 void XOutBitmap::DrawQuickDrawBitmapEx( OutputDevice* pOutDev, const Point& rPt,
                                         const Size& rSize, const BitmapEx& rBmpEx )
 {
-    const Size		aBmpSizePix( rBmpEx.GetSizePixel() );
-    const Size		aSizePix( pOutDev->LogicToPixel( rSize ) );
+    const Size      aBmpSizePix( rBmpEx.GetSizePixel() );
+    const Size      aSizePix( pOutDev->LogicToPixel( rSize ) );
 
     if ( ( aSizePix.Width() - aBmpSizePix.Width() ) || ( aSizePix.Height() - aBmpSizePix.Height() ) )
         rBmpEx.Draw( pOutDev, rPt, rSize );
@@ -195,19 +195,19 @@ void XOutBitmap::DrawTiledBitmapEx( OutputDevice* pOutDev,
                                     const Point& rStartPt, const Size& rGrfSize,
                                     const Rectangle& rTileRect, const BitmapEx& rBmpEx )
 {
-    Rectangle		aClipRect( pOutDev->LogicToPixel( pOutDev->GetClipRegion().GetBoundRect() ) );
-    Rectangle		aPixRect( pOutDev->LogicToPixel( rTileRect ) );
-    const Size		aPixSize( pOutDev->LogicToPixel( rGrfSize ) );
-    const Point		aPixPoint( pOutDev->LogicToPixel( rStartPt ) );
-    Point  			aOrg;
-    const long		nWidth = aPixSize.Width();
-    const long 		nHeight = aPixSize.Height();
-    long			nXPos = aPixPoint.X() + ( ( aPixRect.Left() - aPixPoint.X() ) / nWidth ) * nWidth;
-    long			nYPos = aPixPoint.Y() + ( ( aPixRect.Top() - aPixPoint.Y() ) / nHeight ) * nHeight;
-    const long		nBottom = aPixRect.Bottom();
-    const long		nRight = aPixRect.Right();
-    const long		nLeft = nXPos;
-    const BOOL		bNoSize = ( aPixSize == rBmpEx.GetSizePixel() );
+    Rectangle       aClipRect( pOutDev->LogicToPixel( pOutDev->GetClipRegion().GetBoundRect() ) );
+    Rectangle       aPixRect( pOutDev->LogicToPixel( rTileRect ) );
+    const Size      aPixSize( pOutDev->LogicToPixel( rGrfSize ) );
+    const Point     aPixPoint( pOutDev->LogicToPixel( rStartPt ) );
+    Point           aOrg;
+    const long      nWidth = aPixSize.Width();
+    const long      nHeight = aPixSize.Height();
+    long            nXPos = aPixPoint.X() + ( ( aPixRect.Left() - aPixPoint.X() ) / nWidth ) * nWidth;
+    long            nYPos = aPixPoint.Y() + ( ( aPixRect.Top() - aPixPoint.Y() ) / nHeight ) * nHeight;
+    const long      nBottom = aPixRect.Bottom();
+    const long      nRight = aPixRect.Right();
+    const long      nLeft = nXPos;
+    const BOOL      bNoSize = ( aPixSize == rBmpEx.GetSizePixel() );
 
     pOutDev->Push();
     pOutDev->SetMapMode( MapMode() );
@@ -245,8 +245,8 @@ Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, BOOL bHMirr,
 
     if( bHMirr || bVMirr )
     {
-        const Size&	rGlobalSize = aNewAnim.GetDisplaySizePixel();
-        ULONG		nMirrorFlags = 0L;
+        const Size& rGlobalSize = aNewAnim.GetDisplaySizePixel();
+        ULONG       nMirrorFlags = 0L;
 
         if( bHMirr )
             nMirrorFlags |= BMP_MIRROR_HORZ;
@@ -256,7 +256,7 @@ Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, BOOL bHMirr,
 
         for( USHORT i = 0, nCount = aNewAnim.Count(); i < nCount; i++ )
         {
-            AnimationBitmap	aAnimBmp( aNewAnim.Get( i ) );
+            AnimationBitmap aAnimBmp( aNewAnim.Get( i ) );
 
             // BitmapEx spiegeln
             aAnimBmp.aBmpEx.Mirror( nMirrorFlags );
@@ -282,7 +282,7 @@ Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, BOOL bHMirr,
 
 Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const ULONG nMirrorFlags )
 {
-    Graphic	aRetGraphic;
+    Graphic aRetGraphic;
 
     if( nMirrorFlags )
     {
@@ -324,12 +324,12 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 {
     if( rGraphic.GetType() != GRAPHIC_NONE )
     {
-        INetURLObject	aURL( rFileName );
-        Graphic			aGraphic;
-        String			aExt;
-        GraphicFilter*	pFilter = GraphicFilter::GetGraphicFilter();
-        USHORT			nErr = GRFILTER_FILTERERROR, nFilter = GRFILTER_FORMAT_NOTFOUND;
-        BOOL			bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
+        INetURLObject   aURL( rFileName );
+        Graphic         aGraphic;
+        String          aExt;
+        GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+        USHORT          nErr = GRFILTER_FILTERERROR, nFilter = GRFILTER_FORMAT_NOTFOUND;
+        BOOL            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
 
         DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "XOutBitmap::WriteGraphic(...): invalid URL" );
 
@@ -370,8 +370,8 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                 aURL.setExtension( aExt );
                 rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
-                SfxMedium	aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
-                SvStream*	pOStm = aMedium.GetOutStream();
+                SfxMedium   aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
+                SvStream*   pOStm = aMedium.GetOutStream();
 
                 if( pOStm && aGfxLink.GetDataSize() && aGfxLink.GetData() )
                 {
@@ -386,8 +386,8 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 
         if( GRFILTER_OK != nErr )
         {
-            String	aFilter( rFilterName );
-            BOOL	bWriteTransGrf = ( aFilter.EqualsIgnoreCaseAscii( "transgrf" ) ) ||
+            String  aFilter( rFilterName );
+            BOOL    bWriteTransGrf = ( aFilter.EqualsIgnoreCaseAscii( "transgrf" ) ) ||
                                      ( aFilter.EqualsIgnoreCaseAscii( "gif" ) ) ||
                                      ( nFlags & XOUTBMP_USE_GIF_IF_POSSIBLE ) ||
                                      ( ( nFlags & XOUTBMP_USE_GIF_IF_SENSIBLE ) && ( bAnimated || bTransparent ) );
@@ -424,7 +424,7 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                             if( aVDev.SetOutputSizePixel( aSize ) )
                             {
                                 const Wallpaper aWallpaper( aVDev.GetBackground() );
-                                const Point		aPt;
+                                const Point     aPt;
 
                                 aVDev.SetBackground( Wallpaper( Color( COL_BLACK ) ) );
                                 aVDev.Erase();
@@ -451,8 +451,8 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                 {
                     if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GRAPHIC_BITMAP ) )
                     {
-                        VirtualDevice	aVDev;
-                        const Size		aSize( aVDev.LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
+                        VirtualDevice   aVDev;
+                        const Size      aSize( aVDev.LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
 
                         if( aVDev.SetOutputSizePixel( aSize ) )
                         {
@@ -499,9 +499,9 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
 {
     DBG_ASSERT( rURL.GetProtocol() != INET_PROT_NOT_VALID, "XOutBitmap::ExportGraphic(...): invalid URL" );
 
-    SfxMedium	aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
-    SvStream*	pOStm = aMedium.GetOutStream();
-    USHORT		nRet = GRFILTER_IOERROR;
+    SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
+    SvStream*   pOStm = aMedium.GetOutStream();
+    USHORT      nRet = GRFILTER_IOERROR;
 
     if( pOStm )
     {
@@ -527,9 +527,9 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
 
 Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const BYTE cThreshold )
 {
-    const Size	aSize( rBmp.GetSizePixel() );
-    Bitmap		aRetBmp;
-    BOOL		bRet = FALSE;
+    const Size  aSize( rBmp.GetSizePixel() );
+    Bitmap      aRetBmp;
+    BOOL        bRet = FALSE;
 
     if( ( aSize.Width() > 2L ) && ( aSize.Height() > 2L ) )
     {
@@ -537,22 +537,22 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const BYTE cThreshold )
 
         if( aWorkBmp.Convert( BMP_CONVERSION_8BIT_GREYS ) )
         {
-            Bitmap				aDstBmp( aSize, 1 );
-            BitmapReadAccess*	pReadAcc = aWorkBmp.AcquireReadAccess();
-            BitmapWriteAccess*	pWriteAcc = aDstBmp.AcquireWriteAccess();
+            Bitmap              aDstBmp( aSize, 1 );
+            BitmapReadAccess*   pReadAcc = aWorkBmp.AcquireReadAccess();
+            BitmapWriteAccess*  pWriteAcc = aDstBmp.AcquireWriteAccess();
 
             if( pReadAcc && pWriteAcc )
             {
-                const long			nWidth = aSize.Width();
-                const long			nWidth2 = nWidth - 2L;
-                const long			nHeight = aSize.Height();
-                const long			nHeight2 = nHeight - 2L;
-                const long			lThres2 = (long) cThreshold * cThreshold;
-                const BitmapColor	aWhite = (BYTE) pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) );
-                const BitmapColor	aBlack = (BYTE) pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) );
-                long				nSum1;
-                long				nSum2;
-                long				lGray;
+                const long          nWidth = aSize.Width();
+                const long          nWidth2 = nWidth - 2L;
+                const long          nHeight = aSize.Height();
+                const long          nHeight2 = nHeight - 2L;
+                const long          lThres2 = (long) cThreshold * cThreshold;
+                const BitmapColor   aWhite = (BYTE) pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) );
+                const BitmapColor   aBlack = (BYTE) pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) );
+                long                nSum1;
+                long                nSum2;
+                long                lGray;
 
                 // Rand mit Weiss init.
                 pWriteAcc->SetLineColor( Color( COL_WHITE) );
@@ -615,10 +615,10 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const BYTE cThreshold )
 Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const ULONG nFlags,
                                  const BYTE cEdgeDetectThreshold, const Rectangle* pWorkRectPixel )
 {
-    Bitmap		aWorkBmp;
-    Polygon		aRetPoly;
-    Point		aTmpPoint;
-    Rectangle	aWorkRect( aTmpPoint, rBmp.GetSizePixel() );
+    Bitmap      aWorkBmp;
+    Polygon     aRetPoly;
+    Point       aTmpPoint;
+    Rectangle   aWorkRect( aTmpPoint, rBmp.GetSizePixel() );
 
     if( pWorkRectPixel )
         aWorkRect.Intersection( *pWorkRectPixel );
@@ -637,24 +637,24 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const ULONG nFlags,
 
         if( pAcc )
         {
-            const Size&			rPrefSize = aWorkBmp.GetPrefSize();
-            const long			nWidth = pAcc->Width();
-            const long			nHeight = pAcc->Height();
-            const double		fFactorX = (double) rPrefSize.Width() / nWidth;
-            const double		fFactorY = (double) rPrefSize.Height() / nHeight;
-            const long			nStartX1 = aWorkRect.Left() + 1L;
-            const long			nEndX1 = aWorkRect.Right();
-            const long			nStartX2 = nEndX1 - 1L;
-//			const long			nEndX2 = nStartX1 - 1L;
-            const long			nStartY1 = aWorkRect.Top() + 1L;
-            const long			nEndY1 = aWorkRect.Bottom();
-            const long			nStartY2 = nEndY1 - 1L;
-//			const long			nEndY2 = nStartY1 - 1L;
-            Point*				pPoints1 = NULL;
-            Point*				pPoints2 = NULL;
-            long				nX, nY;
-            USHORT				nPolyPos = 0;
-            const BitmapColor	aBlack = pAcc->GetBestMatchingColor( Color( COL_BLACK ) );
+            const Size&         rPrefSize = aWorkBmp.GetPrefSize();
+            const long          nWidth = pAcc->Width();
+            const long          nHeight = pAcc->Height();
+            const double        fFactorX = (double) rPrefSize.Width() / nWidth;
+            const double        fFactorY = (double) rPrefSize.Height() / nHeight;
+            const long          nStartX1 = aWorkRect.Left() + 1L;
+            const long          nEndX1 = aWorkRect.Right();
+            const long          nStartX2 = nEndX1 - 1L;
+//          const long          nEndX2 = nStartX1 - 1L;
+            const long          nStartY1 = aWorkRect.Top() + 1L;
+            const long          nEndY1 = aWorkRect.Bottom();
+            const long          nStartY2 = nEndY1 - 1L;
+//          const long          nEndY2 = nStartY1 - 1L;
+            Point*              pPoints1 = NULL;
+            Point*              pPoints2 = NULL;
+            long                nX, nY;
+            USHORT              nPolyPos = 0;
+            const BitmapColor   aBlack = pAcc->GetBestMatchingColor( Color( COL_BLACK ) );
 
             if( nFlags & XOUTBMP_CONTOUR_VERT )
             {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,7 +166,7 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
 
     if ( bAccountHide )
     {
-        long nOffset = aAccountED.GetPosPixel().Y() - 
+        long nOffset = aAccountED.GetPosPixel().Y() -
                        aPasswordED.GetPosPixel().Y();
         lcl_Move( aSavePasswdBtn, nOffset );
         lcl_Move( aUseSysCredsCB, nOffset );
@@ -182,7 +182,7 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
 
     if ( bUseSysCredsHide )
     {
-        long nOffset = aUseSysCredsCB.GetPosPixel().Y() - 
+        long nOffset = aUseSysCredsCB.GetPosPixel().Y() -
                        aSavePasswdBtn.GetPosPixel().Y();
         lcl_Move( aButtonsFL, nOffset );
         lcl_Move( aOKBtn, nOffset );
@@ -265,21 +265,21 @@ LoginDialog::LoginDialog
     aLogin1FL       ( this, ResId( FL_LOGIN_1, *pResMgr ) ),
     aRequestInfo    ( this, ResId( FT_INFO_LOGIN_REQUEST, *pResMgr ) ),
     aLogin2FL       ( this, ResId( FL_LOGIN_2, *pResMgr ) ),
-    aPathFT			( this, ResId( FT_LOGIN_PATH, *pResMgr ) ),
-    aPathED			( this, ResId( ED_LOGIN_PATH, *pResMgr ) ),
-    aPathBtn		( this, ResId( BTN_LOGIN_PATH, *pResMgr ) ),
-    aNameFT			( this, ResId( FT_LOGIN_USERNAME, *pResMgr ) ),
-    aNameED			( this, ResId( ED_LOGIN_USERNAME, *pResMgr ) ),
-    aPasswordFT		( this, ResId( FT_LOGIN_PASSWORD, *pResMgr ) ),
-    aPasswordED		( this, ResId( ED_LOGIN_PASSWORD, *pResMgr ) ),
-    aAccountFT		( this, ResId( FT_LOGIN_ACCOUNT, *pResMgr ) ),
-    aAccountED		( this, ResId( ED_LOGIN_ACCOUNT, *pResMgr ) ),
-    aSavePasswdBtn	( this, ResId( CB_LOGIN_SAVEPASSWORD, *pResMgr ) ),
-    aUseSysCredsCB	( this, ResId( CB_LOGIN_USESYSCREDS, *pResMgr ) ),
+    aPathFT         ( this, ResId( FT_LOGIN_PATH, *pResMgr ) ),
+    aPathED         ( this, ResId( ED_LOGIN_PATH, *pResMgr ) ),
+    aPathBtn        ( this, ResId( BTN_LOGIN_PATH, *pResMgr ) ),
+    aNameFT         ( this, ResId( FT_LOGIN_USERNAME, *pResMgr ) ),
+    aNameED         ( this, ResId( ED_LOGIN_USERNAME, *pResMgr ) ),
+    aPasswordFT     ( this, ResId( FT_LOGIN_PASSWORD, *pResMgr ) ),
+    aPasswordED     ( this, ResId( ED_LOGIN_PASSWORD, *pResMgr ) ),
+    aAccountFT      ( this, ResId( FT_LOGIN_ACCOUNT, *pResMgr ) ),
+    aAccountED      ( this, ResId( ED_LOGIN_ACCOUNT, *pResMgr ) ),
+    aSavePasswdBtn  ( this, ResId( CB_LOGIN_SAVEPASSWORD, *pResMgr ) ),
+    aUseSysCredsCB  ( this, ResId( CB_LOGIN_USESYSCREDS, *pResMgr ) ),
     aButtonsFL      ( this, ResId( FL_BUTTONS, *pResMgr ) ),
-    aOKBtn			( this, ResId( BTN_LOGIN_OK, *pResMgr ) ),
-    aCancelBtn		( this, ResId( BTN_LOGIN_CANCEL, *pResMgr ) ),
-    aHelpBtn		( this, ResId( BTN_LOGIN_HELP, *pResMgr ) )
+    aOKBtn          ( this, ResId( BTN_LOGIN_OK, *pResMgr ) ),
+    aCancelBtn      ( this, ResId( BTN_LOGIN_CANCEL, *pResMgr ) ),
+    aHelpBtn        ( this, ResId( BTN_LOGIN_HELP, *pResMgr ) )
 
 {
     UniString aRequest;
@@ -313,15 +313,15 @@ LoginDialog::LoginDialog
 
 LoginDialog::~LoginDialog()
 {
-}    
+}
 
 // -----------------------------------------------------------------------
 
 void LoginDialog::SetUseSystemCredentials( BOOL bUse )
-{ 
+{
     if ( aUseSysCredsCB.IsVisible() )
     {
-        aUseSysCredsCB.Check( bUse ); 
+        aUseSysCredsCB.Check( bUse );
         EnableUseSysCredsControls_Impl( bUse );
     }
 }

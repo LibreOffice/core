@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
 
         String aStr(ReadOnlyImage::GetHelpTip());
         if ( Help::IsBalloonHelpEnabled() )
-            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aScreenRect, 
+            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aScreenRect,
             aStr );
         else if ( Help::IsQuickHelpEnabled() )
             Help::ShowQuickHelp( this, aScreenRect, aStr );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,12 +52,12 @@ namespace sdr
     class MasterPageDescriptor : public sdr::PageUser
     {
     private:
-        SdrPage&										maOwnerPage;
-        SdrPage&										maUsedPage;
-        SetOfByte										maVisibleLayers;
+        SdrPage&                                        maOwnerPage;
+        SdrPage&                                        maUsedPage;
+        SetOfByte                                       maVisibleLayers;
 
         // ViewContact part
-        sdr::contact::ViewContact*						mpViewContact;
+        sdr::contact::ViewContact*                      mpViewContact;
 
         // assignment operator defined, but not implemented
         void operator=(const MasterPageDescriptor& rCandidate);

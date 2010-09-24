@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,30 +24,30 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_XCodeProxy_idl__ 
-#define __com_sun_star_sdbc_XCodeProxy_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
-#ifndef __com_sun_star_mozilla_MozillaProductType_idl__ 
+#ifndef __com_sun_star_sdbc_XCodeProxy_idl__
+#define __com_sun_star_sdbc_XCodeProxy_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_mozilla_MozillaProductType_idl__
 #include <com/sun/star/mozilla/MozillaProductType.idl>
-#endif 
- 
- module com {  module sun {  module star {  module mozilla { 
- 
- 
- 
+#endif
+
+ module com {  module sun {  module star {  module mozilla {
+
+
+
 /** is the interface to run Mozilla XPCOM code
-    to run Mozilla XPCOM code in OOo,you should first implement this interface, then pass this object to 
+    to run Mozilla XPCOM code in OOo,you should first implement this interface, then pass this object to
     xProxyRunner->Run
-    
+
     @see XProxyRunner
     @see XMozillaBootstrap
  */
 published interface XCodeProxy: com::sun::star::uno::XInterface
-{ 
-     
+{
+
     /** all Mozilla XPCOM code must be called in run() or functions called by run()
      */
     long run();
@@ -58,10 +58,10 @@ published interface XCodeProxy: com::sun::star::uno::XInterface
      */
     string getProfileName();
 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

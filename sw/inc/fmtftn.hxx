@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@ class SwTxtFtn;
 class SW_DLLPUBLIC SwFmtFtn: public SfxPoolItem
 {
     friend class SwTxtFtn;
-    SwTxtFtn* pTxtAttr;		//mein TextAttribut
-    String  aNumber;		//Benutzerdefinierte 'Nummer'
-    USHORT  nNumber;		//Automatische Nummerierung
+    SwTxtFtn* pTxtAttr;     //mein TextAttribut
+    String  aNumber;        //Benutzerdefinierte 'Nummer'
+    USHORT  nNumber;        //Automatische Nummerierung
     bool    m_bEndNote;     // is it an End note?
 
     // geschuetzter CopyCtor
@@ -54,21 +54,21 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
     const String &GetNumStr() const { return aNumber; }
     const USHORT &GetNumber() const { return nNumber; }
           bool    IsEndNote() const { return m_bEndNote;}
 
-    void SetNumStr( const String& rStr )	{ aNumber = rStr; }
-    void SetNumber( USHORT nNo ) 			{ nNumber = nNo; }
+    void SetNumStr( const String& rStr )    { aNumber = rStr; }
+    void SetNumber( USHORT nNo )            { nNumber = nNo; }
     void SetEndNote( bool b );
 
     void SetNumber( const SwFmtFtn& rFtn )
         { nNumber = rFtn.nNumber; aNumber = rFtn.aNumber; }
 
     const SwTxtFtn *GetTxtFtn() const   { return pTxtAttr; }
-          SwTxtFtn *GetTxtFtn()	  		{ return pTxtAttr; }
+          SwTxtFtn *GetTxtFtn()         { return pTxtAttr; }
 
     void GetFtnText( String& rStr ) const;
 

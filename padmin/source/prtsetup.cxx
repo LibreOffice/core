@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,12 +49,12 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
     const PPDValue* pValue = NULL;
     USHORT nPos = 0;
     String aOptionText;
-    
+
     for( int i = 0; i < pKey->countValues(); i++ )
     {
         pValue = pKey->getValue( i );
         aOptionText = pParser->translateOption( pKey->getKey(), pValue->m_aOption) ;
-        
+
         if( m_aJobData.m_aContext.checkConstraints( pKey, pValue ) )
         {
             if( rBox.GetEntryPos( (void*)pValue ) == LISTBOX_ENTRY_NOTFOUND )
@@ -172,8 +172,8 @@ IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
     {
         switch( nId )
         {
-            case RID_RTS_PAPERPAGE:		m_pPaperPage->update();break;
-            case RID_RTS_DEVICEPAGE:	m_pDevicePage->update();break;
+            case RID_RTS_PAPERPAGE:     m_pPaperPage->update();break;
+            case RID_RTS_DEVICEPAGE:    m_pDevicePage->update();break;
             default: break;
         }
     }
@@ -195,9 +195,9 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
         }
         if( m_pDevicePage )
         {
-            m_aJobData.m_nColorDepth	= m_pDevicePage->getDepth();
-            m_aJobData.m_nColorDevice	= m_pDevicePage->getColorDevice();
-            m_aJobData.m_nPSLevel		= m_pDevicePage->getLevel();
+            m_aJobData.m_nColorDepth    = m_pDevicePage->getDepth();
+            m_aJobData.m_nColorDevice   = m_pDevicePage->getColorDevice();
+            m_aJobData.m_nPSLevel       = m_pDevicePage->getLevel();
         }
         if( m_pOtherPage )
             // write other settings
@@ -205,7 +205,7 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
         if( m_pCommandPage )
             // write command settings
             m_pCommandPage->save();
-    
+
         EndDialog( 1 );
     }
     else if( pButton == &m_aCancelButton )
@@ -224,7 +224,7 @@ RTSPaperPage::RTSPaperPage( RTSDialog* pParent ) :
         TabPage( & pParent->m_aTabControl, PaResId( RID_RTS_PAPERPAGE ) ),
 
         m_pParent( pParent ),
-        
+
         m_aPaperText( this, PaResId( RID_RTS_PAPER_PAPER_TXT ) ),
         m_aPaperBox( this, PaResId( RID_RTS_PAPER_PAPER_BOX ) ),
         m_aOrientText( this, PaResId( RID_RTS_PAPER_ORIENTATION_TXT ) ),
@@ -242,7 +242,7 @@ RTSPaperPage::RTSPaperPage( RTSDialog* pParent ) :
     FreeResource();
 
     USHORT nPos = 0;
-    
+
     m_aOrientBox.InsertEntry( PORTRAIT_STRING );
     m_aOrientBox.InsertEntry( LSCAPE_STRING );
     // duplex
@@ -268,13 +268,13 @@ RTSPaperPage::~RTSPaperPage()
 
 void RTSPaperPage::update()
 {
-    const PPDKey* pKey		= NULL;
-    
+    const PPDKey* pKey      = NULL;
+
     // orientation
     m_aOrientBox.SelectEntry(
         m_pParent->m_aJobData.m_eOrientation == orientation::Landscape
         ? LSCAPE_STRING : PORTRAIT_STRING );
-        
+
     // duplex
     if( m_pParent->m_aJobData.m_pParser &&
         (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) )) )
@@ -392,7 +392,7 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
         m_aLevelBox.SelectEntry( m_pParent->m_aFromDriverString );
     else
         m_aLevelBox.SelectEntry( String::CreateFromInt32( m_pParent->m_aJobData.m_nPSLevel ) );
-    
+
     m_aDepthBox.SelectEntry( String::CreateFromInt32( m_pParent->m_aJobData.m_nColorDepth ).AppendAscii( " Bit" ) );
 
     // fill ppd boxes
@@ -401,10 +401,10 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
         for( int i = 0; i < m_pParent->m_aJobData.m_pParser->getKeys(); i++ )
         {
             const PPDKey* pKey = m_pParent->m_aJobData.m_pParser->getKey( i );
-            if( pKey->isUIKey()									&&
-                ! pKey->getKey().EqualsAscii( "PageSize" )		&&
-                ! pKey->getKey().EqualsAscii( "InputSlot" )		&&
-                ! pKey->getKey().EqualsAscii( "PageRegion" )	&&
+            if( pKey->isUIKey()                                 &&
+                ! pKey->getKey().EqualsAscii( "PageSize" )      &&
+                ! pKey->getKey().EqualsAscii( "InputSlot" )     &&
+                ! pKey->getKey().EqualsAscii( "PageRegion" )    &&
                 ! pKey->getKey().EqualsAscii( "Duplex" )
                 )
             {
@@ -533,10 +533,10 @@ void RTSOtherPage::initValues()
                         nMarginBottom );
     }
 
-    nMarginLeft		+= m_pParent->m_aJobData.m_nLeftMarginAdjust;
-    nMarginRight	+= m_pParent->m_aJobData.m_nRightMarginAdjust;
-    nMarginTop		+= m_pParent->m_aJobData.m_nTopMarginAdjust;
-    nMarginBottom	+= m_pParent->m_aJobData.m_nBottomMarginAdjust;
+    nMarginLeft     += m_pParent->m_aJobData.m_nLeftMarginAdjust;
+    nMarginRight    += m_pParent->m_aJobData.m_nRightMarginAdjust;
+    nMarginTop      += m_pParent->m_aJobData.m_nTopMarginAdjust;
+    nMarginBottom   += m_pParent->m_aJobData.m_nBottomMarginAdjust;
 
     m_aLeftLB.SetValue( nMarginLeft, FUNIT_POINT );
     m_aRightLB.SetValue( nMarginRight, FUNIT_POINT );
@@ -564,10 +564,10 @@ void RTSOtherPage::save()
                         nMarginBottom );
     }
 
-    m_pParent->m_aJobData.m_nLeftMarginAdjust	= m_aLeftLB.GetValue( FUNIT_POINT ) - nMarginLeft;
-    m_pParent->m_aJobData.m_nRightMarginAdjust	= m_aRightLB.GetValue( FUNIT_POINT ) - nMarginRight;
-    m_pParent->m_aJobData.m_nTopMarginAdjust	= m_aTopLB.GetValue( FUNIT_POINT ) - nMarginTop;
-    m_pParent->m_aJobData.m_nBottomMarginAdjust	= m_aBottomLB.GetValue( FUNIT_POINT ) - nMarginBottom;
+    m_pParent->m_aJobData.m_nLeftMarginAdjust   = m_aLeftLB.GetValue( FUNIT_POINT ) - nMarginLeft;
+    m_pParent->m_aJobData.m_nRightMarginAdjust  = m_aRightLB.GetValue( FUNIT_POINT ) - nMarginRight;
+    m_pParent->m_aJobData.m_nTopMarginAdjust    = m_aTopLB.GetValue( FUNIT_POINT ) - nMarginTop;
+    m_pParent->m_aJobData.m_nBottomMarginAdjust = m_aBottomLB.GetValue( FUNIT_POINT ) - nMarginBottom;
     m_pParent->m_aJobData.m_aComment = m_aCommentEdt.GetText();
 }
 
@@ -582,7 +582,7 @@ IMPL_LINK( RTSOtherPage, ClickBtnHdl, Button*, pButton )
             m_pParent->m_aJobData.m_nTopMarginAdjust =
             m_pParent->m_aJobData.m_nBottomMarginAdjust = 0;
 
-        initValues();		
+        initValues();
     }
     return 0;
 }
@@ -590,7 +590,7 @@ IMPL_LINK( RTSOtherPage, ClickBtnHdl, Button*, pButton )
 // ------------------------------------------------------------------
 
 /*
- *	RTSFontSubstPage
+ *  RTSFontSubstPage
  */
 
 RTSFontSubstPage::RTSFontSubstPage( RTSDialog* pParent ) :
@@ -729,18 +729,18 @@ IMPL_LINK( RTSFontSubstPage, ClickBtnHdl, Button*, pButton )
 
 class RTSPWDialog : public ModalDialog
 {
-    FixedText		m_aText;
-    FixedText		m_aUserText;
-    Edit			m_aUserEdit;
-    FixedText		m_aPassText;
-    Edit			m_aPassEdit;
+    FixedText       m_aText;
+    FixedText       m_aUserText;
+    Edit            m_aUserEdit;
+    FixedText       m_aPassText;
+    Edit            m_aPassEdit;
 
-    OKButton		m_aOKButton;
-    CancelButton	m_aCancelButton;
+    OKButton        m_aOKButton;
+    CancelButton    m_aCancelButton;
 public:
     RTSPWDialog( const OString& rServer, const OString& rUserName, Window* pParent );
     ~RTSPWDialog();
-    
+
     OString getUserName() const;
     OString getPassword() const;
 };
@@ -803,7 +803,7 @@ extern "C" {
     bool Sal_authenticateQuery( const OString& rServer, OString& rUserName, OString& rPassword )
     {
         bool bRet = false;
-        
+
         RTSPWDialog aDialog( rServer, rUserName, NULL );
         if( aDialog.Execute() )
         {

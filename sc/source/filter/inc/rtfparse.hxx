@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@
 
 struct ScRTFCellDefault
 {
-    SfxItemSet			aItemSet;
-    SCCOL				nCol;
-    USHORT				nTwips;         // rechter Rand der Zelle
-    SCCOL				nColOverlap;	// MergeCell wenn >1, merged cells wenn 0
+    SfxItemSet          aItemSet;
+    SCCOL               nCol;
+    USHORT              nTwips;         // rechter Rand der Zelle
+    SCCOL               nColOverlap;    // MergeCell wenn >1, merged cells wenn 0
 
                         ScRTFCellDefault( SfxItemPool* pPool ) :
                             aItemSet( *pPool ), nColOverlap(1) {}
@@ -48,13 +48,13 @@ DECLARE_LIST( ScRTFDefaultList, ScRTFCellDefault* )
 // deswegen ULONG, typedef bringt's auch nicht :-(
 SV_DECL_VARARR_SORT( ScRTFColTwips, ULONG, 16, 4)
 
-#else		// SC_RTFPARSE_CXX
+#else       // SC_RTFPARSE_CXX
 
 struct ScRTFCellDefault;
 class ScRTFDefaultList;
 class ScRTFColTwips;
 
-#endif		// SC_RTFPARSE_CXX
+#endif      // SC_RTFPARSE_CXX
 
 
 class EditEngine;
@@ -62,26 +62,26 @@ class EditEngine;
 class ScRTFParser : public ScEEParser
 {
 private:
-    ScRTFDefaultList*	pDefaultList;
-    ScRTFColTwips*		pColTwips;
-    ScRTFCellDefault*	pInsDefault;
-    ScRTFCellDefault*	pActDefault;
-    ScRTFCellDefault*	pDefMerge;
-    ULONG				nStartAdjust;
-    USHORT				nLastWidth;
-    BOOL				bNewDef;
+    ScRTFDefaultList*   pDefaultList;
+    ScRTFColTwips*      pColTwips;
+    ScRTFCellDefault*   pInsDefault;
+    ScRTFCellDefault*   pActDefault;
+    ScRTFCellDefault*   pDefMerge;
+    ULONG               nStartAdjust;
+    USHORT              nLastWidth;
+    BOOL                bNewDef;
 
     DECL_LINK( RTFImportHdl, ImportInfo* );
-    inline void			NextRow();
-    void				EntryEnd( ScEEParseEntry*, const ESelection& );
-    void 				ProcToken( ImportInfo* );
-    void				ColAdjust();
-    BOOL				SeekTwips( USHORT nTwips, SCCOL* pCol );
-    void				NewCellRow( ImportInfo* );
+    inline void         NextRow();
+    void                EntryEnd( ScEEParseEntry*, const ESelection& );
+    void                ProcToken( ImportInfo* );
+    void                ColAdjust();
+    BOOL                SeekTwips( USHORT nTwips, SCCOL* pCol );
+    void                NewCellRow( ImportInfo* );
 
 public:
                         ScRTFParser( EditEngine* );
-    virtual				~ScRTFParser();
+    virtual             ~ScRTFParser();
     virtual ULONG       Read( SvStream&, const String& rBaseURL );
 };
 

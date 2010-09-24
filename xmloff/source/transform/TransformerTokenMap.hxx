@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 
 
 class XMLTransformerTokenMap :
-    public ::std::hash_map< ::rtl::OUString, ::xmloff::token::XMLTokenEnum, 
+    public ::std::hash_map< ::rtl::OUString, ::xmloff::token::XMLTokenEnum,
                             ::rtl::OUStringHash, ::comphelper::UStringEqual >
 {
 public:
@@ -47,4 +47,4 @@ public:
     ~XMLTransformerTokenMap();
 };
 
-#endif	//  _XMLOFF_TRANSFORMERTOKENMAPS_HXX
+#endif  //  _XMLOFF_TRANSFORMERTOKENMAPS_HXX

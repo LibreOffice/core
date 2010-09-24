@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,52 +24,52 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__ 
-#define __com_sun_star_util_XNumberFormatsSupplier_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_XPropertySet_idl__ 
-#include <com/sun/star/beans/XPropertySet.idl> 
-#endif 
- 
-#ifndef __com_sun_star_util_XNumberFormats_idl__ 
-#include <com/sun/star/util/XNumberFormats.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module util {  
- 
-//============================================================================= 
- 
-/** supplies the collection of <type>NumberFormat</type>s (for example, in a 
+#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__
+#define __com_sun_star_util_XNumberFormatsSupplier_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_util_XNumberFormats_idl__
+#include <com/sun/star/util/XNumberFormats.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
+/** supplies the collection of <type>NumberFormat</type>s (for example, in a
     document) and the settings belonging to these formats.
  */
 published interface XNumberFormatsSupplier: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
-    /** @returns  
+{
+    //-------------------------------------------------------------------------
+
+    /** @returns
                 the <type>NumberFormatSettings</type> of this object.
      */
-    com::sun::star::beans::XPropertySet getNumberFormatSettings(); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** @returns  
+    com::sun::star::beans::XPropertySet getNumberFormatSettings();
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
                 the collection of number formats belonging to this object (e.g., to this document).
      */
-    com::sun::star::util::XNumberFormats getNumberFormats(); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
+    com::sun::star::util::XNumberFormats getNumberFormats();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
 #endif
 

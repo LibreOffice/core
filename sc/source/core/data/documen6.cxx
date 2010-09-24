@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,11 +46,11 @@
 
 using namespace com::sun::star;
 
-#define SC_BREAKITER_SERVICE	"com.sun.star.i18n.BreakIterator"
+#define SC_BREAKITER_SERVICE    "com.sun.star.i18n.BreakIterator"
 
 //
-//	this file is compiled with exceptions enabled
-//	put functions here that need exceptions!
+//  this file is compiled with exceptions enabled
+//  put functions here that need exceptions!
 //
 
 // -----------------------------------------------------------------------
@@ -84,7 +84,7 @@ BOOL ScDocument::HasStringWeakCharacters( const String& rString )
             {
                 sal_Int16 nType = xBreakIter->getScriptType( aText, nPos );
                 if ( nType == i18n::ScriptType::WEAK )
-                    return TRUE;							// found
+                    return TRUE;                            // found
 
                 nPos = xBreakIter->endOfScript( aText, nPos, nType );
             }
@@ -92,7 +92,7 @@ BOOL ScDocument::HasStringWeakCharacters( const String& rString )
         }
     }
 
-    return FALSE;		// none found
+    return FALSE;       // none found
 }
 
 BYTE ScDocument::GetStringScriptType( const String& rString )
@@ -135,11 +135,11 @@ BYTE ScDocument::GetStringScriptType( const String& rString )
 BYTE ScDocument::GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat )
 {
     if ( !pCell )
-        return 0;		// empty
+        return 0;       // empty
 
     BYTE nStored = pCell->GetScriptType();
-    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )			// stored value valid?
-        return nStored;								// use stored value
+    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
+        return nStored;                             // use stored value
 
     String aStr;
     Color* pColor;
@@ -147,7 +147,7 @@ BYTE ScDocument::GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat )
 
     BYTE nRet = GetStringScriptType( aStr );
 
-    pCell->SetScriptType( nRet );		// store for later calls
+    pCell->SetScriptType( nRet );       // store for later calls
 
     return nRet;
 }
@@ -160,14 +160,14 @@ BYTE ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* 
     {
         pCell = GetCell( ScAddress( nCol, nRow, nTab ) );
         if ( !pCell )
-            return 0;		// empty
+            return 0;       // empty
     }
 
     // if script type is set, don't have to get number formats
 
     BYTE nStored = pCell->GetScriptType();
-    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )			// stored value valid?
-        return nStored;								// use stored value
+    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
+        return nStored;                             // use stored value
 
     // include number formats from conditional formatting
 

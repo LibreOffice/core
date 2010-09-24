@@ -9,7 +9,7 @@
     <value>0</value>
    </prop>
    <prop oor:name="FilterService" oor:type="xs:string">
-    <!-- stacks filters for XML import. see UserData below. 
+    <!-- stacks filters for XML import. see UserData below.
          the _Writer_ in the impl name is a misnomer -->
     <value>com.sun.star.comp.Writer.XmlFilterAdaptor</value>
    </prop>
@@ -38,7 +38,7 @@
     <value>0</value>
    </prop>
    <prop oor:name="FilterService" oor:type="xs:string">
-    <!-- stacks filters for XML import. see UserData below. 
+    <!-- stacks filters for XML import. see UserData below.
          the _Writer_ in the impl name is a misnomer -->
     <value>com.sun.star.comp.Writer.XmlFilterAdaptor</value>
    </prop>
@@ -67,7 +67,7 @@
     <value>0</value>
    </prop>
    <prop oor:name="FilterService" oor:type="xs:string">
-    <!-- stacks filters for XML import. see UserData below. 
+    <!-- stacks filters for XML import. see UserData below.
          the _Writer_ in the impl name is a misnomer -->
     <value>com.sun.star.comp.Writer.XmlFilterAdaptor</value>
    </prop>

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,8 +28,8 @@
 #include <tools/link.hxx>
 #include <rtl/ustring.hxx>
 
-#include <cppuhelper/implbase1.hxx> 
-#include <cppuhelper/implbase3.hxx> 
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase3.hxx>
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp>
@@ -50,7 +50,7 @@ namespace embed {
 // MT: Not needed any more, remove later...
 
 class ImplXMLSignatureListener : public cppu::WeakImplHelper3
-< 
+<
     com::sun::star::xml::crypto::sax::XSignatureCreationResultListener,
     com::sun::star::xml::crypto::sax::XSignatureVerifyResultListener,
     com::sun::star::xml::sax::XDocumentHandler
@@ -61,56 +61,56 @@ private:
     Link        maVerifyResultListenerListener;
     Link        maStartVerifySignatureElementListener;
 
-    com::sun::star::uno::Reference< 
+    com::sun::star::uno::Reference<
         com::sun::star::xml::sax::XDocumentHandler > m_xNextHandler;
 
 public:
     ImplXMLSignatureListener( const Link& rCreationResultListenerListener, const Link rVerifyResultListenerListener, const Link rStartVerifySignatureElement );
     ~ImplXMLSignatureListener();
-    
-    void setNextHandler(com::sun::star::uno::Reference< 
+
+    void setNextHandler(com::sun::star::uno::Reference<
         com::sun::star::xml::sax::XDocumentHandler > xNextHandler);
 
     // com::sun::star::xml::crypto::sax::XSignatureCreationResultListener
     virtual void SAL_CALL signatureCreated( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus creationResult )
         throw (com::sun::star::uno::RuntimeException);
-            
+
     // com::sun::star::xml::crypto::sax::XSignatureVerifyResultListener
     virtual void SAL_CALL signatureVerified( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus verifyResult )
         throw (com::sun::star::uno::RuntimeException);
-        
+
     // com::sun::star::xml::sax::XDocumentHandler
     virtual void SAL_CALL startElement( const rtl::OUString& aName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL startDocument(  )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL endDocument(  )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
-    virtual void SAL_CALL endElement( const rtl::OUString& aName ) 
+
+    virtual void SAL_CALL endElement( const rtl::OUString& aName )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL characters( const rtl::OUString& aChars )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL ignorableWhitespace( const rtl::OUString& aWhitespaces )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL processingInstruction( const rtl::OUString& aTarget, const rtl::OUString& aData )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL setDocumentLocator( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XLocator >& xLocator )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 };
 
 
 // ---------------------------------------------------------------------------------
-// XUriBinding 
+// XUriBinding
 // ---------------------------------------------------------------------------------
 
-class UriBindingHelper : public cppu::WeakImplHelper1 
+class UriBindingHelper : public cppu::WeakImplHelper1
 <
     com::sun::star::xml::crypto::XUriBinding
 >
@@ -119,7 +119,7 @@ private:
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxStorage;
 
 
-public: 
+public:
     UriBindingHelper();
     UriBindingHelper( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStorage );
 

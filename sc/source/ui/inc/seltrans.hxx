@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,32 +49,32 @@ enum ScSelectionTransferMode
 class ScSelectionTransferObj : public TransferableHelper
 {
 private:
-    ScTabView*				pView;
-    ScSelectionTransferMode	eMode;
-    ScTransferObj*			pCellData;
-    ScDrawTransferObj*		pDrawData;
+    ScTabView*              pView;
+    ScSelectionTransferMode eMode;
+    ScTransferObj*          pCellData;
+    ScDrawTransferObj*      pDrawData;
 
                 ScSelectionTransferObj( ScTabView* pSource, ScSelectionTransferMode eNewMode );
-    void		CreateCellData();
-    void		CreateDrawData();
+    void        CreateCellData();
+    void        CreateDrawData();
 
 public:
             // creates an object if the view has a valid selection,
             // returns NULL otherwise
     static ScSelectionTransferObj* CreateFromView( ScTabView* pSource );
 
-    virtual		~ScSelectionTransferObj();
+    virtual     ~ScSelectionTransferObj();
 
-    void		ForgetView();
-    BOOL		StillValid();
-    ScTabView*	GetView() const		{ return pView; }
-    
-    ScTransferObj*		GetCellData();
-    ScDrawTransferObj*	GetDrawData();
+    void        ForgetView();
+    BOOL        StillValid();
+    ScTabView*  GetView() const     { return pView; }
 
-    virtual void		AddSupportedFormats();
-    virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual void		ObjectReleased();
+    ScTransferObj*      GetCellData();
+    ScDrawTransferObj*  GetDrawData();
+
+    virtual void        AddSupportedFormats();
+    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual void        ObjectReleased();
 };
 
 #endif

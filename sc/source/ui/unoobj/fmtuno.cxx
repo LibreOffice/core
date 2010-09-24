@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include "document.hxx"
 #include "unoguard.hxx"
 #include "unonames.hxx"
-#include "styleuno.hxx"		// ScStyleNameConversion
+#include "styleuno.hxx"     // ScStyleNameConversion
 #include "tokenarray.hxx"
 #include "tokenuno.hxx"
 
@@ -52,7 +52,7 @@ using namespace ::formula;
 
 //------------------------------------------------------------------------
 
-//	Map nur fuer PropertySetInfo
+//  Map nur fuer PropertySetInfo
 
 const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
 {
@@ -86,15 +86,15 @@ sheet::ConditionOperator lcl_ConditionModeToOperator( ScConditionMode eMode )
     sheet::ConditionOperator eOper = sheet::ConditionOperator_NONE;
     switch (eMode)
     {
-        case SC_COND_EQUAL:		 eOper = sheet::ConditionOperator_EQUAL;		 break;
-        case SC_COND_LESS:		 eOper = sheet::ConditionOperator_LESS;			 break;
-        case SC_COND_GREATER:	 eOper = sheet::ConditionOperator_GREATER;		 break;
-        case SC_COND_EQLESS:	 eOper = sheet::ConditionOperator_LESS_EQUAL;	 break;
-        case SC_COND_EQGREATER:	 eOper = sheet::ConditionOperator_GREATER_EQUAL; break;
-        case SC_COND_NOTEQUAL:	 eOper = sheet::ConditionOperator_NOT_EQUAL;	 break;
-        case SC_COND_BETWEEN:	 eOper = sheet::ConditionOperator_BETWEEN;		 break;
-        case SC_COND_NOTBETWEEN: eOper = sheet::ConditionOperator_NOT_BETWEEN;	 break;
-        case SC_COND_DIRECT:	 eOper = sheet::ConditionOperator_FORMULA;		 break;
+        case SC_COND_EQUAL:      eOper = sheet::ConditionOperator_EQUAL;         break;
+        case SC_COND_LESS:       eOper = sheet::ConditionOperator_LESS;          break;
+        case SC_COND_GREATER:    eOper = sheet::ConditionOperator_GREATER;       break;
+        case SC_COND_EQLESS:     eOper = sheet::ConditionOperator_LESS_EQUAL;    break;
+        case SC_COND_EQGREATER:  eOper = sheet::ConditionOperator_GREATER_EQUAL; break;
+        case SC_COND_NOTEQUAL:   eOper = sheet::ConditionOperator_NOT_EQUAL;     break;
+        case SC_COND_BETWEEN:    eOper = sheet::ConditionOperator_BETWEEN;       break;
+        case SC_COND_NOTBETWEEN: eOper = sheet::ConditionOperator_NOT_BETWEEN;   break;
+        case SC_COND_DIRECT:     eOper = sheet::ConditionOperator_FORMULA;       break;
         default:
         {
             // added to avoid warnings
@@ -108,15 +108,15 @@ ScConditionMode lcl_ConditionOperatorToMode( sheet::ConditionOperator eOper )
     ScConditionMode eMode = SC_COND_NONE;
     switch (eOper)
     {
-        case sheet::ConditionOperator_EQUAL:		 eMode = SC_COND_EQUAL;		 break;
-        case sheet::ConditionOperator_LESS:			 eMode = SC_COND_LESS;		 break;
-        case sheet::ConditionOperator_GREATER:		 eMode = SC_COND_GREATER;	 break;
-        case sheet::ConditionOperator_LESS_EQUAL:	 eMode = SC_COND_EQLESS;	 break;
+        case sheet::ConditionOperator_EQUAL:         eMode = SC_COND_EQUAL;      break;
+        case sheet::ConditionOperator_LESS:          eMode = SC_COND_LESS;       break;
+        case sheet::ConditionOperator_GREATER:       eMode = SC_COND_GREATER;    break;
+        case sheet::ConditionOperator_LESS_EQUAL:    eMode = SC_COND_EQLESS;     break;
         case sheet::ConditionOperator_GREATER_EQUAL: eMode = SC_COND_EQGREATER;  break;
-        case sheet::ConditionOperator_NOT_EQUAL:	 eMode = SC_COND_NOTEQUAL;	 break;
-        case sheet::ConditionOperator_BETWEEN:		 eMode = SC_COND_BETWEEN;	 break;
-        case sheet::ConditionOperator_NOT_BETWEEN:	 eMode = SC_COND_NOTBETWEEN; break;
-        case sheet::ConditionOperator_FORMULA:		 eMode = SC_COND_DIRECT;	 break;
+        case sheet::ConditionOperator_NOT_EQUAL:     eMode = SC_COND_NOTEQUAL;   break;
+        case sheet::ConditionOperator_BETWEEN:       eMode = SC_COND_BETWEEN;    break;
+        case sheet::ConditionOperator_NOT_BETWEEN:   eMode = SC_COND_NOTBETWEEN; break;
+        case sheet::ConditionOperator_FORMULA:       eMode = SC_COND_DIRECT;     break;
         default:
         {
             // added to avoid warnings
@@ -139,7 +139,7 @@ ScCondFormatEntryItem::ScCondFormatEntryItem() :
 ScTableConditionalFormat::ScTableConditionalFormat(
         ScDocument* pDoc, ULONG nKey, FormulaGrammar::Grammar eGrammar)
 {
-    //	Eintrag aus dem Dokument lesen...
+    //  Eintrag aus dem Dokument lesen...
 
     if ( pDoc && nKey )
     {
@@ -187,7 +187,7 @@ FormulaGrammar::Grammar lclResolveGrammar( FormulaGrammar::Grammar eExtGrammar, 
 void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
         ScDocument* pDoc, FormulaGrammar::Grammar eGrammar) const
 {
-    //	ScConditionalFormat = Core-Struktur, muss leer sein
+    //  ScConditionalFormat = Core-Struktur, muss leer sein
 
     DBG_ASSERT( rFormat.IsEmpty(), "FillFormat: Format nicht leer" );
     USHORT nCount = (USHORT)aEntries.Count();
@@ -243,7 +243,7 @@ void ScTableConditionalFormat::AddEntry_Impl(const ScCondFormatEntryItem& aEntry
 
 void ScTableConditionalFormat::DataChanged()
 {
-    //	wenn's mal das "lebende Objekt" ist, muss hier was passieren...
+    //  wenn's mal das "lebende Objekt" ist, muss hier was passieren...
 }
 
 // XSheetConditionalFormat
@@ -343,7 +343,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         else
         {
             DBG_ERROR("falsche Property");
-            //!	Exception...
+            //! Exception...
         }
     }
 
@@ -417,8 +417,8 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasElements() throw(uno::RuntimeExce
     return ( getCount() != 0 );
 }
 
-//	conditional format entries have no real names
-//	-> generate name from index
+//  conditional format entries have no real names
+//  -> generate name from index
 
 rtl::OUString lcl_GetEntryNameFromIndex( sal_Int32 nIndex )
 {
@@ -635,12 +635,12 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
                                             const formula::FormulaGrammar::Grammar eGrammar) :
     aPropSet( lcl_GetValidatePropertyMap() )
 {
-    //	Eintrag aus dem Dokument lesen...
+    //  Eintrag aus dem Dokument lesen...
 
     BOOL bFound = FALSE;
     if ( pDoc && nKey )
     {
-        const ScValidationData*	pData = pDoc->GetValidationEntry( nKey );
+        const ScValidationData* pData = pDoc->GetValidationEntry( nKey );
         if (pData)
         {
             nMode = sal::static_int_cast<USHORT>( pData->GetOperation() );
@@ -667,13 +667,13 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
         }
     }
     if (!bFound)
-        ClearData_Impl();		// Defaults
+        ClearData_Impl();       // Defaults
 }
 
 ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
                                             formula::FormulaGrammar::Grammar eGrammar ) const
 {
-    //	ScValidationData = Core-Struktur
+    //  ScValidationData = Core-Struktur
 
     FormulaGrammar::Grammar eGrammar1 = lclResolveGrammar( eGrammar, meGrammar1 );
     FormulaGrammar::Grammar eGrammar2 = lclResolveGrammar( eGrammar, meGrammar2 );
@@ -716,13 +716,13 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
 
 void ScTableValidationObj::ClearData_Impl()
 {
-    nMode		 = SC_COND_NONE;
-    nValMode	 = SC_VALID_ANY;
+    nMode        = SC_COND_NONE;
+    nValMode     = SC_VALID_ANY;
     bIgnoreBlank = TRUE;
     nShowList    = sheet::TableValidationVisibility::UNSORTED;
-    bShowInput	 = FALSE;
-    bShowError	 = FALSE;
-    nErrorStyle	 = SC_VALERR_STOP;
+    bShowInput   = FALSE;
+    bShowError   = FALSE;
+    nErrorStyle  = SC_VALERR_STOP;
     aSrcPos.Set(0,0,0);
     aExpr1.Erase();
     aExpr2.Erase();
@@ -741,7 +741,7 @@ ScTableValidationObj::~ScTableValidationObj()
 
 void ScTableValidationObj::DataChanged()
 {
-    //	wenn's mal das "lebende Objekt" ist, muss hier was passieren...
+    //  wenn's mal das "lebende Objekt" ist, muss hier was passieren...
 }
 
 // XSheetCondition
@@ -859,7 +859,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     ScUnoGuard aGuard;
     String aString(aPropertyName);
 
-    if ( aString.EqualsAscii( SC_UNONAME_SHOWINP ) )	   bShowInput = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+    if ( aString.EqualsAscii( SC_UNONAME_SHOWINP ) )       bShowInput = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if ( aString.EqualsAscii( SC_UNONAME_SHOWERR ) )  bShowError = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if ( aString.EqualsAscii( SC_UNONAME_IGNOREBL ) ) bIgnoreBlank = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if ( aString.EqualsAscii( SC_UNONAME_SHOWLIST ) ) aValue >>= nShowList;
@@ -893,14 +893,14 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
                                 ScUnoHelpFunctions::GetEnumFromAny( aValue );
         switch (eType)
         {
-            case sheet::ValidationType_ANY:		 nValMode = SC_VALID_ANY;	  break;
-            case sheet::ValidationType_WHOLE:	 nValMode = SC_VALID_WHOLE;   break;
+            case sheet::ValidationType_ANY:      nValMode = SC_VALID_ANY;     break;
+            case sheet::ValidationType_WHOLE:    nValMode = SC_VALID_WHOLE;   break;
             case sheet::ValidationType_DECIMAL:  nValMode = SC_VALID_DECIMAL; break;
-            case sheet::ValidationType_DATE:	 nValMode = SC_VALID_DATE;	  break;
-            case sheet::ValidationType_TIME:	 nValMode = SC_VALID_TIME;	  break;
+            case sheet::ValidationType_DATE:     nValMode = SC_VALID_DATE;    break;
+            case sheet::ValidationType_TIME:     nValMode = SC_VALID_TIME;    break;
             case sheet::ValidationType_TEXT_LEN: nValMode = SC_VALID_TEXTLEN; break;
-            case sheet::ValidationType_LIST:	 nValMode = SC_VALID_LIST;	  break;
-            case sheet::ValidationType_CUSTOM:	 nValMode = SC_VALID_CUSTOM;  break;
+            case sheet::ValidationType_LIST:     nValMode = SC_VALID_LIST;    break;
+            case sheet::ValidationType_CUSTOM:   nValMode = SC_VALID_CUSTOM;  break;
             default:
             {
                 // added to avoid warnings
@@ -913,9 +913,9 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
                                 ScUnoHelpFunctions::GetEnumFromAny( aValue );
         switch (eStyle)
         {
-            case sheet::ValidationAlertStyle_STOP:	  nErrorStyle = SC_VALERR_STOP;	   break;
+            case sheet::ValidationAlertStyle_STOP:    nErrorStyle = SC_VALERR_STOP;    break;
             case sheet::ValidationAlertStyle_WARNING: nErrorStyle = SC_VALERR_WARNING; break;
-            case sheet::ValidationAlertStyle_INFO:	  nErrorStyle = SC_VALERR_INFO;	   break;
+            case sheet::ValidationAlertStyle_INFO:    nErrorStyle = SC_VALERR_INFO;    break;
             case sheet::ValidationAlertStyle_MACRO:   nErrorStyle = SC_VALERR_MACRO;   break;
             default:
             {
@@ -975,7 +975,7 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const rtl::OUString& a
     String aString(aPropertyName);
     uno::Any aRet;
 
-    if ( aString.EqualsAscii( SC_UNONAME_SHOWINP ) )	   ScUnoHelpFunctions::SetBoolInAny( aRet, bShowInput );
+    if ( aString.EqualsAscii( SC_UNONAME_SHOWINP ) )       ScUnoHelpFunctions::SetBoolInAny( aRet, bShowInput );
     else if ( aString.EqualsAscii( SC_UNONAME_SHOWERR ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, bShowError );
     else if ( aString.EqualsAscii( SC_UNONAME_IGNOREBL ) ) ScUnoHelpFunctions::SetBoolInAny( aRet, bIgnoreBlank );
     else if ( aString.EqualsAscii( SC_UNONAME_SHOWLIST ) ) aRet <<= nShowList;
@@ -988,14 +988,14 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const rtl::OUString& a
         sheet::ValidationType eType = sheet::ValidationType_ANY;
         switch (nValMode)
         {
-            case SC_VALID_ANY:		eType = sheet::ValidationType_ANY;		break;
-            case SC_VALID_WHOLE:	eType = sheet::ValidationType_WHOLE;	break;
-            case SC_VALID_DECIMAL:	eType = sheet::ValidationType_DECIMAL;	break;
-            case SC_VALID_DATE:		eType = sheet::ValidationType_DATE;		break;
-            case SC_VALID_TIME:		eType = sheet::ValidationType_TIME;		break;
-            case SC_VALID_TEXTLEN:	eType = sheet::ValidationType_TEXT_LEN; break;
-            case SC_VALID_LIST:		eType = sheet::ValidationType_LIST;		break;
-            case SC_VALID_CUSTOM:	eType = sheet::ValidationType_CUSTOM;	break;
+            case SC_VALID_ANY:      eType = sheet::ValidationType_ANY;      break;
+            case SC_VALID_WHOLE:    eType = sheet::ValidationType_WHOLE;    break;
+            case SC_VALID_DECIMAL:  eType = sheet::ValidationType_DECIMAL;  break;
+            case SC_VALID_DATE:     eType = sheet::ValidationType_DATE;     break;
+            case SC_VALID_TIME:     eType = sheet::ValidationType_TIME;     break;
+            case SC_VALID_TEXTLEN:  eType = sheet::ValidationType_TEXT_LEN; break;
+            case SC_VALID_LIST:     eType = sheet::ValidationType_LIST;     break;
+            case SC_VALID_CUSTOM:   eType = sheet::ValidationType_CUSTOM;   break;
         }
         aRet <<= eType;
     }
@@ -1004,10 +1004,10 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const rtl::OUString& a
         sheet::ValidationAlertStyle eStyle = sheet::ValidationAlertStyle_STOP;
         switch (nErrorStyle)
         {
-            case SC_VALERR_STOP:	eStyle = sheet::ValidationAlertStyle_STOP;	  break;
-            case SC_VALERR_WARNING:	eStyle = sheet::ValidationAlertStyle_WARNING; break;
-            case SC_VALERR_INFO:	eStyle = sheet::ValidationAlertStyle_INFO;	  break;
-            case SC_VALERR_MACRO:	eStyle = sheet::ValidationAlertStyle_MACRO;   break;
+            case SC_VALERR_STOP:    eStyle = sheet::ValidationAlertStyle_STOP;    break;
+            case SC_VALERR_WARNING: eStyle = sheet::ValidationAlertStyle_WARNING; break;
+            case SC_VALERR_INFO:    eStyle = sheet::ValidationAlertStyle_INFO;    break;
+            case SC_VALERR_MACRO:   eStyle = sheet::ValidationAlertStyle_MACRO;   break;
         }
         aRet <<= eStyle;
     }

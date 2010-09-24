@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -472,7 +472,7 @@ String SCSTR_VALID_LIST
     Text [ en-US ] = "~Entries" ;
 };
 
- //	fuer Dialoge:
+ // fuer Dialoge:
 
 String SCSTR_CHARSET_USER
 {
@@ -499,7 +499,7 @@ String SCSTR_FORMULA_AUTOCORRECTION
     Text [ en-US ] = "%PRODUCTNAME Calc found an error in the formula entered.\nDo you want to accept the correction proposed below?\n\n" ;
 };
 
-//!	the graphics filter error strings should be moved to svx or offapp!
+//! the graphics filter error strings should be moved to svx or offapp!
 
 String SCSTR_GRFILTER_OPENERROR
 {

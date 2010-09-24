@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,9 +33,9 @@
 
 
 namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax {	class XAttributeList; } }
+    namespace xml { namespace sax { class XAttributeList; } }
 } } }
-namespace rtl {	class OUString; }
+namespace rtl { class OUString; }
 class SvXMLImport;
 class XMLEventsImportContext;
 
@@ -49,12 +49,12 @@ public:
     XMLScriptContextFactory();
     virtual ~XMLScriptContextFactory();
 
-    virtual SvXMLImportContext * 
+    virtual SvXMLImportContext *
     CreateContext(SvXMLImport & rImport, /// import context
                   sal_uInt16 nPrefix,    /// element: namespace prefix
                   const ::rtl::OUString & rLocalName, /// element: local name
                   /// attribute list
-                  const ::com::sun::star::uno::Reference< 
+                  const ::com::sun::star::uno::Reference<
                   ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
                   /// the context for the enclosing <script:events> element
                   XMLEventsImportContext * rEvents,

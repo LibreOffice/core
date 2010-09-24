@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,17 +25,17 @@
  *
  ************************************************************************/
 
-#ifndef	UDKSERVICE_X2CSTL_HXX
-#define	UDKSERVICE_X2CSTL_HXX
+#ifndef UDKSERVICE_X2CSTL_HXX
+#define UDKSERVICE_X2CSTL_HXX
 
 
 #if STLPORT_VERSION < 321
 #include <tools/presys.h>
-#include 	<vector.h>
+#include    <vector.h>
 #include <tools/postsys.h>
 #else
-#include 	<vector>
-#endif	// STLPORT_VERSION < 321
+#include    <vector>
+#endif  // STLPORT_VERSION < 321
 
 #ifdef _USE_NO_NAMERSPACES_
 #define std

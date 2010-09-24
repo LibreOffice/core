@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -192,7 +192,7 @@ uno::Any createPolyPolygon_Cube(
 
     const double fHeightSign = fHeight >= 0.0 ? 1.0 : -1.0;
 
-    const double fOffset = (fWidthH * fRoundedEdge) * 1.05;	// increase by 5% for safety
+    const double fOffset = (fWidthH * fRoundedEdge) * 1.05; // increase by 5% for safety
     const bool bRoundEdges = fRoundedEdge && fOffset < fWidthH && 2.0 * fOffset < fHeightSign*fHeight;
     const sal_Int32 nPointCount = bRoundEdges ? 13 : 5;
 
@@ -631,7 +631,7 @@ uno::Reference<drawing::XShape>
 
     bool bInvertPolygon = false;
     bool bInvertNormals = false;
-    
+
     if(bRotateZ)
     {
         //bars
@@ -678,7 +678,7 @@ uno::Reference<drawing::XShape>
         aStripe3 = Stripe( aBottomP3, aTopP3, aTopP4, aBottomP4 );
         aStripe4 = Stripe( aBottomP4, aTopP4, aTopP1, aBottomP1 );
     }
-    
+
     Stripe aNormalsStripe1( aNormalsTopP1, aNormalsBottomP1, aNormalsBottomP2, aNormalsTopP2 );
     Stripe aNormalsStripe2( aNormalsTopP2, aNormalsBottomP2, aNormalsBottomP3, aNormalsTopP3 );
     Stripe aNormalsStripe3( aNormalsTopP3, aNormalsBottomP3, aNormalsBottomP4, aNormalsTopP4 );
@@ -691,12 +691,12 @@ uno::Reference<drawing::XShape>
         aNormalsStripe3 = Stripe( aNormalsTopP4, aNormalsBottomP4, aNormalsBottomP3, aNormalsTopP3 );
         aNormalsStripe4 = Stripe( aNormalsTopP1, aNormalsBottomP1, aNormalsBottomP4, aNormalsTopP4 );
     }
-    
+
     aStripe1.SetManualNormal( aNormalsStripe1.getNormal() );
     aStripe2.SetManualNormal( aNormalsStripe2.getNormal() );
     aStripe3.SetManualNormal( aNormalsStripe3.getNormal() );
     aStripe4.SetManualNormal( aNormalsStripe4.getNormal() );
-    
+
     const bool bFlatNormals = false;
     ShapeFactory::createStripe( xGroup, aStripe1, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
     ShapeFactory::createStripe( xGroup, aStripe2, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
@@ -731,7 +731,7 @@ uno::Reference<drawing::XShape>
             m_xShapeFactory->createInstance( C2U(
             "com.sun.star.drawing.Shape3DLatheObject") ), uno::UNO_QUERY );
     xTarget->add(xShape);
-   
+
     double fWidth      = rSize.DirectionX/2.0; //The depth will be corrrected within Matrix
     double fRadius     = fWidth; //!!!!!!!! problem in drawing layer: rotation object calculates wrong needed size -> wrong camera (it's a problem with bounding boxes)
     double fHeight     = rSize.DirectionY;

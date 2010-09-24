@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ sal_Bool equals( const test::TestElement & rData1, const test::TestElement & rDa
     OSL_ENSURE( rData1.String == rData2.String, "### string does not match!" );
     OSL_ENSURE( rData1.Interface == rData2.Interface, "### interface does not match!" );
     OSL_ENSURE( rData1.Any == rData2.Any, "### any does not match!" );
-    
+
     return (rData1.Bool == rData2.Bool &&
             rData1.Char == rData2.Char &&
             rData1.Byte == rData2.Byte &&
@@ -100,7 +100,7 @@ sal_Bool equals( const test::TestElement & rData1, const test::TestElement & rDa
 sal_Bool equals( const test::TestData & rData1, const test::TestData & rData2 )
 {
     sal_Int32 nLen;
-    
+
     if ((rData1.Sequence == rData2.Sequence) &&
         equals( (const test::TestElement &)rData1, (const test::TestElement &)rData2 ) &&
         (nLen = rData1.Sequence.getLength()) == rData2.Sequence.getLength())
@@ -169,11 +169,11 @@ void assign( test::TestData & rData,
 class Test_Impl : public WeakImplHelper1< XLanguageBindingTest >
 {
     test::TestData _aData, _aStructData;
-    
+
 public:
     virtual ~Test_Impl()
         { OSL_TRACE( "> scalar Test_Impl dtor <\n" ); }
-    
+
     // XLBTestBase
     virtual void SAL_CALL setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                                      sal_Int16 nShort, sal_uInt16 nUShort,
@@ -186,7 +186,7 @@ public:
                                      const ::com::sun::star::uno::Sequence<test::TestElement >& rSequence,
                                      const test::TestData& rStruct )
         throw(com::sun::star::uno::RuntimeException);
-    
+
     virtual test::TestData SAL_CALL setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                                 sal_Int16& nShort, sal_uInt16& nUShort,
                                                 sal_Int32& nLong, sal_uInt32& nULong,
@@ -198,7 +198,7 @@ public:
                                                 ::com::sun::star::uno::Sequence<test::TestElement >& rSequence,
                                                 test::TestData& rStruct )
         throw(com::sun::star::uno::RuntimeException);
-    
+
     virtual test::TestData SAL_CALL getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte,
                                                sal_Int16& nShort, sal_uInt16& nUShort,
                                                sal_Int32& nLong, sal_uInt32& nULong,
@@ -210,7 +210,7 @@ public:
                                                ::com::sun::star::uno::Sequence< test::TestElement >& rSequence,
                                                test::TestData& rStruct )
         throw(com::sun::star::uno::RuntimeException);
-    
+
     virtual sal_Bool SAL_CALL getBool() throw(com::sun::star::uno::RuntimeException)
         { return _aData.Bool; }
     virtual sal_Int8 SAL_CALL getByte() throw(com::sun::star::uno::RuntimeException)
@@ -284,7 +284,7 @@ public:
     // XLanguageBindingTest
     virtual test::TestData SAL_CALL raiseException( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte, sal_Int16& nShort, sal_uInt16& nUShort, sal_Int32& nLong, sal_uInt32& nULong, sal_Int64& nHyper, sal_uInt64& nUHyper, float& fFloat, double& fDouble, test::TestEnum& eEnum, ::rtl::OUString& aString, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInterface, ::com::sun::star::uno::Any& aAny, ::com::sun::star::uno::Sequence<test::TestElement >& aSequence,test::TestData& aStruct )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    
+
     virtual sal_Int32 SAL_CALL getRuntimeException() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRuntimeException( sal_Int32 _runtimeexception ) throw(::com::sun::star::uno::RuntimeException);
 };
@@ -292,13 +292,13 @@ public:
 class XLB_Invocation : public WeakImplHelper1< XInvocation >
 {
     Reference< XLanguageBindingTest > _xLBT;
-    
+
 public:
     XLB_Invocation( const Reference< XMultiServiceFactory > & /*xMgr*/,
                     const Reference< XLanguageBindingTest > & xLBT )
         : _xLBT( xLBT )
         {}
-    
+
     // XInvocation
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() throw(::com::sun::star::uno::RuntimeException)
         { return Reference< XIntrospectionAccess >(); }
@@ -319,12 +319,12 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException)
 {
     bool bImplementedMethod = true;
-    
+
     Any aRet;
-    
+
     OSL_ASSERT( rOutParam.getLength() == 0 );
     OSL_ASSERT( rOutParamIndex.getLength() == 0 );
-    
+
     try
     {
         sal_Bool aBool;
@@ -344,7 +344,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
         Any aAny;
         Sequence< TestElement > aSeq;
         TestData aData;
-        
+
         if (rFunctionName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("setValues") ))
         {
             OSL_ASSERT( rParams.getLength() == 17 );
@@ -365,11 +365,11 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             rParams[14] >>= aAny;
             rParams[15] >>= aSeq;
             rParams[16] >>= aData;
-            
+
             _xLBT->setValues( aBool, aChar, nByte, nShort, nUShort, nLong, nULong,
                               nHyper, nUHyper, fFloat, fDouble, eEnum, aString, xInterface,
                               aAny, aSeq, aData );
-            
+
             rOutParamIndex.realloc( 0 );
             rOutParam.realloc( 0 );
         }
@@ -392,11 +392,11 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             rParams[14] >>= aAny;
             rParams[15] >>= aSeq;
             rParams[16] >>= aData;
-            
+
             aRet <<= _xLBT->setValues2( aBool, aChar, nByte, nShort, nUShort, nLong, nULong,
                                         nHyper, nUHyper, fFloat, fDouble, eEnum, aString, xInterface,
                                         aAny, aSeq, aData );
-            
+
             rOutParamIndex.realloc( 17 );
             rOutParamIndex[0] = 0;
             rOutParamIndex[1] = 1;
@@ -415,7 +415,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             rOutParamIndex[14] = 14;
             rOutParamIndex[15] = 15;
             rOutParamIndex[16] = 16;
-            
+
             rOutParam.realloc( 17 );
             rOutParam[0].setValue( &aBool, ::getCppuBooleanType() );
             rOutParam[1].setValue( &aChar, ::getCppuCharType() );
@@ -440,7 +440,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             aRet <<= _xLBT->getValues( aBool, aChar, nByte, nShort, nUShort, nLong, nULong,
                                        nHyper, nUHyper, fFloat, fDouble, eEnum, aString, xInterface,
                                        aAny, aSeq, aData );
-            
+
             rOutParamIndex.realloc( 17 );
             rOutParamIndex[0] = 0;
             rOutParamIndex[1] = 1;
@@ -459,7 +459,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             rOutParamIndex[14] = 14;
             rOutParamIndex[15] = 15;
             rOutParamIndex[16] = 16;
-            
+
             rOutParam.realloc( 17 );
             rOutParam[0].setValue( &aBool, ::getCppuBooleanType() );
             rOutParam[1].setValue( &aChar, ::getCppuCharType() );
@@ -484,7 +484,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             aRet <<= _xLBT->raiseException( aBool, aChar, nByte, nShort, nUShort, nLong, nULong,
                                             nHyper, nUHyper, fFloat, fDouble, eEnum, aString, xInterface,
                                             aAny, aSeq, aData );
-            
+
             rOutParamIndex.realloc( 17 );
             rOutParamIndex[0] = 0;
             rOutParamIndex[1] = 1;
@@ -503,7 +503,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             rOutParamIndex[14] = 14;
             rOutParamIndex[15] = 15;
             rOutParamIndex[16] = 16;
-            
+
             rOutParam.realloc( 17 );
             rOutParam[0].setValue( &aBool, ::getCppuBooleanType() );
             rOutParam[1].setValue( &aChar, ::getCppuCharType() );
@@ -547,7 +547,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             OUString( RTL_CONSTASCII_USTRINGPARAM("not an implemented method!") ),
             (OWeakObject *)this, 0 );
     }
-    
+
     return aRet;
 }
 //__________________________________________________________________________________________________
@@ -756,9 +756,9 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
     {
         // this data is never ever granted access to by calls other than equals(), assign()!
         test::TestData aData; // test against this data
-        
+
         Reference<XInterface > xI( *new OWeakObject() );
-        
+
         assign( (test::TestElement &)aData,
                 sal_True, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
                 SAL_CONST_INT64(0x123456789abcdef0),
@@ -768,22 +768,22 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
 
         OSL_ENSURE( aData.Any == xI, "### unexpected any!" );
         OSL_ENSURE( !(aData.Any != xI), "### unexpected any!" );
-        
+
         aData.Sequence = Sequence<test::TestElement >( (const test::TestElement *)&aData, 1 );
         // aData complete
         //================================================================================
 
         // this is a manually copy of aData for first setting...
         test::TestData aSetData;
-        
+
         assign( (test::TestElement &)aSetData,
                 aData.Bool, aData.Char, aData.Byte, aData.Short, aData.UShort,
                 aData.Long, aData.ULong, aData.Hyper, aData.UHyper, aData.Float, aData.Double,
                 aData.Enum, aData.String, xI,
                 Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
-        
+
         aSetData.Sequence = Sequence<test::TestElement >( (const test::TestElement *)&aSetData, 1 );
-        
+
         xLBT->setValues(
             aSetData.Bool, aSetData.Char, aSetData.Byte, aSetData.Short, aSetData.UShort,
             aSetData.Long, aSetData.ULong, aSetData.Hyper, aSetData.UHyper, aSetData.Float, aSetData.Double,
@@ -795,15 +795,15 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
             aRet.Bool, aRet.Char, aRet.Byte, aRet.Short, aRet.UShort,
             aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float, aRet.Double,
             aRet.Enum, aRet.String, aRet.Interface, aRet.Any, aRet.Sequence, aRet2 );
-        
+
         OSL_ASSERT( equals( aData, aRet ) && equals( aData, aRet2 ) );
-        
+
         // set last retrieved values
         test::TestData aSV2ret = xLBT->setValues2(
             aRet.Bool, aRet.Char, aRet.Byte, aRet.Short, aRet.UShort,
             aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float, aRet.Double,
             aRet.Enum, aRet.String, aRet.Interface, aRet.Any, aRet.Sequence, aRet2 );
-        
+
         OSL_ASSERT( equals( aData, aSV2ret ) && equals( aData, aRet2 ) );
         }
         {
@@ -812,9 +812,9 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
             aRet.Bool, aRet.Char, aRet.Byte, aRet.Short, aRet.UShort,
             aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float, aRet.Double,
             aRet.Enum, aRet.String, aRet.Interface, aRet.Any, aRet.Sequence, aRet2 );
-        
+
         OSL_ASSERT( equals( aData, aRet ) && equals( aData, aRet2 ) && equals( aData, aGVret ) );
-        
+
         // set last retrieved values
         xLBT->setBool( aRet.Bool );
         xLBT->setChar( aRet.Char );
@@ -853,7 +853,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
         aRet.Any = xLBT->getAny();
         aRet.Sequence = xLBT->getSequence();
         aRet2 = xLBT->getStruct();
-        
+
         return (equals( aData, aRet ) && equals( aData, aRet2 ));
         }
     }
@@ -866,24 +866,24 @@ test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cC
 {
     IllegalArgumentException aExc;
     aExc.ArgumentPosition = 5;
-    aExc.Message		  = OUString::createFromAscii("dum dum dum ich tanz im kreis herum...");
-    aExc.Context		  = *this;
+    aExc.Message          = OUString::createFromAscii("dum dum dum ich tanz im kreis herum...");
+    aExc.Context          = *this;
     throw aExc;
 }
 //__________________________________________________________________________________________________
 sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;
-    aExc.Message		  = OUString::createFromAscii("dum dum dum ich tanz im kreis herum...");
-    aExc.Context		  = *this;
+    aExc.Message          = OUString::createFromAscii("dum dum dum ich tanz im kreis herum...");
+    aExc.Context          = *this;
     throw aExc;
 }
 //__________________________________________________________________________________________________
 void Test_Impl::setRuntimeException( sal_Int32 /*_runtimeexception*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;
-    aExc.Message		  = OUString::createFromAscii("dum dum dum ich tanz im kreis herum...");
-    aExc.Context		  = *this;
+    aExc.Message          = OUString::createFromAscii("dum dum dum ich tanz im kreis herum...");
+    aExc.Context          = *this;
     throw aExc;
 }
 
@@ -906,13 +906,13 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
             catch (IllegalArgumentException aExc)
             {
                 OSL_ENSURE( aExc.ArgumentPosition == 5 &&
-//  							 aExc.Context == xLBT &&
+//                               aExc.Context == xLBT &&
                              aExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
                              "### unexpected exception content!" );
-                
+
                 Reference<XLanguageBindingTest > xLBT2(
                     Reference<XLanguageBindingTest >::query( aExc.Context ) );
-                
+
                 OSL_ENSURE( xLBT2.is(), "### unexpected source of exception!" );
                 if (xLBT2.is())
                     xLBT2->getRuntimeException();
@@ -925,10 +925,10 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
             OSL_ENSURE(//rExc.Context == xLBT &&
                         rExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
                         "### unexpected exception content!" );
-            
+
             Reference<XLanguageBindingTest > xLBT2(
                 Reference<XLanguageBindingTest >::query( rExc.Context ) );
-            
+
             OSL_ENSURE( xLBT2.is(), "### unexpected source of exception!" );
             if (xLBT2.is())
                 xLBT2->setRuntimeException( 0xcafebabe );
@@ -953,7 +953,7 @@ static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
     Reference< XInvocationAdapterFactory > xAdapFac(
         xMgr->createInstance( OUString::createFromAscii("com.sun.star.script.InvocationAdapterFactory") ), UNO_QUERY );
     Reference< XInvocationAdapterFactory2 > xAdapFac2( xAdapFac, UNO_QUERY_THROW );
-    
+
     Reference< XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
     Reference< XInvocation > xInvok( new XLB_Invocation( xMgr, xOriginal ) );
     Reference< XLanguageBindingTest > xLBT( xAdapFac->createAdapter(
@@ -980,7 +980,7 @@ static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
             xInvok, ::getCppuType( (const Reference< XSimpleRegistry > *)0 ) ), UNO_QUERY );
     if (xLBT == xInvalidAdapter)
         return sal_False;
-    
+
     try
     {
         xInvalidAdapter->isValid();
@@ -989,7 +989,7 @@ static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
     catch (RuntimeException &)
     {
     }
-    
+
     return (performTest( xLBT ) && raiseException( xLBT ));
 }
 //==================================================================================================
@@ -1004,7 +1004,7 @@ static sal_Bool test_invocation( const Reference< XMultiServiceFactory > & xMgr 
     Any aOriginal( &xOriginal, ::getCppuType( &xOriginal ) );
     Reference< XInvocation > xInvok(
         xInvocFac->createInstanceWithArguments( Sequence< Any >( &aOriginal, 1 ) ), UNO_REF_QUERY );
-    
+
     Reference< XLanguageBindingTest > xLBT( xAdapFac->createAdapter(
         xInvok, ::getCppuType( (const Reference< XLanguageBindingTest > *)0 ) ), UNO_QUERY );
 
@@ -1015,7 +1015,7 @@ SAL_IMPLEMENT_MAIN()
 {
     Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb") ) ) );
-    
+
     try
     {
         Reference< XImplementationRegistration > xImplReg(
@@ -1025,7 +1025,7 @@ SAL_IMPLEMENT_MAIN()
                         "com.sun.star.registry.ImplementationRegistration") ) ),
             UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
-        
+
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
             OUString::createFromAscii("invocadapt.uno" SAL_DLLEXTENSION),
@@ -1046,7 +1046,7 @@ SAL_IMPLEMENT_MAIN()
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
             OUString::createFromAscii("introspection.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
-        
+
         if (test_adapter( xMgr ))
         {
             fprintf( stderr, "> test_iadapter() succeeded.\n" );
@@ -1062,7 +1062,7 @@ SAL_IMPLEMENT_MAIN()
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "%s\n", aMsg.getStr() );
     }
-    
+
     Reference< XComponent >( xMgr, UNO_QUERY )->dispose();
 
     return 0;

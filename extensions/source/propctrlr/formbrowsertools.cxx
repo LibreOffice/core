@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ namespace pcr
                 aUnoObj >>= xIFace;
                 sClassName = String(PcrRes(RID_STR_PROPTITLE_EDIT));
                 if (xIFace.is())
-                {	// we have a chance to check if it's a formatted field model
+                {   // we have a chance to check if it's a formatted field model
                     Reference< XServiceInfo >  xInfo(xIFace, UNO_QUERY);
                     if (xInfo.is() && (xInfo->supportsService(SERVICE_COMPONENT_FORMATTEDFIELD)))
                         sClassName = String(PcrRes(RID_STR_PROPTITLE_FORMATTED));

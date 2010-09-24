@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,24 +50,24 @@ namespace com{ namespace sun{ namespace star{ namespace beans{ class XPropertySe
 class SwMailMergeLayoutPage : public svt::OWizardPage
 {
     SwBoldFixedInfo     m_aHeaderFI;
-                        
+
     FixedLine           m_aPositionFL;
-                        
+
     CheckBox            m_aAlignToBodyCB;
     FixedText           m_aLeftFT;
     MetricField         m_aLeftMF;
     FixedText           m_aTopFT;
     MetricField         m_aTopMF;
-                        
+
     FixedLine           m_aGreetingLineFL;
     FixedText           m_aUpFT;
     PushButton          m_aUpPB;
     FixedText           m_aDownFT;
     PushButton          m_aDownPB;
-                        
+
     Window              m_aExampleContainerWIN;
     Window              m_aExampleWIN;
-                        
+
     FixedText           m_aZoomFT;
     ListBox             m_aZoomLB;
 
@@ -78,7 +78,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     SwFrmFmt*           m_pAddressBlockFormat;
 
     bool                m_bIsGreetingInserted;
-    
+
     SwMailMergeWizard*  m_pWizard;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  m_xViewProperties;
@@ -90,21 +90,21 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     DECL_LINK(AlignToTextHdl_Impl, CheckBox*);
 
     static SwFrmFmt*        InsertAddressFrame(
-                            SwWrtShell& rShell, 
-                            SwMailMergeConfigItem& rConfigItem, 
-                            const Point& rDestination, 
-                            bool bAlignToBody, 
+                            SwWrtShell& rShell,
+                            SwMailMergeConfigItem& rConfigItem,
+                            const Point& rDestination,
+                            bool bAlignToBody,
                             bool bExample);
     static void             InsertGreeting(SwWrtShell& rShell, SwMailMergeConfigItem& rConfigItem, bool bExample);
 
     virtual void        ActivatePage();
     virtual sal_Bool    commitPage(::svt::WizardTypes::CommitPageReason _eReason);
-public:     
+public:
         SwMailMergeLayoutPage( SwMailMergeWizard* _pParent);
         ~SwMailMergeLayoutPage();
 
-    static SwFrmFmt*        InsertAddressAndGreeting(SwView* pView, 
-                                            SwMailMergeConfigItem& rConfigItem, 
+    static SwFrmFmt*        InsertAddressAndGreeting(SwView* pView,
+                                            SwMailMergeConfigItem& rConfigItem,
                                             const Point& rAddressPos,
                                             bool bAlignToBody);
 };

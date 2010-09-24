@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,11 +37,11 @@ import org.w3c.dom.NamedNodeMap;
  * display in the tree. It also returns children, index values,
  * and child counts.
  */
-class AdapterNode 
-{ 
+class AdapterNode
+{
     private Node m_domNode;
     static final int ELEMENT_TYPE =   Node.ELEMENT_NODE;
-    
+
     /*
      * An array of names for DOM node-types
      */
@@ -60,105 +60,105 @@ class AdapterNode
         "DocFragment",
         "Notation",
         };
-    
+
     protected Node getNode()
     {
         return m_domNode;
     }
-    
+
     /*
      * Construct an Adapter node from a DOM node
      */
-    protected AdapterNode(org.w3c.dom.Node node) 
+    protected AdapterNode(org.w3c.dom.Node node)
     {
         m_domNode = node;
     }
-    
+
     /*
      * Return children, index, and count values
      */
-    protected int index(AdapterNode child) 
+    protected int index(AdapterNode child)
     {
         int count = childCount();
-        for (int i=0; i<count; ++i) 
+        for (int i=0; i<count; ++i)
         {
             AdapterNode n = this.child(i);
             if (child.m_domNode == n.m_domNode) return i;
         }
         return -1;
     }
-    
-    protected AdapterNode child(int searchIndex) 
+
+    protected AdapterNode child(int searchIndex)
     {
         if (m_domNode == null) return null;
-        
+
         /*
-         * Note: JTree index is zero-based. 
+         * Note: JTree index is zero-based.
          */
-        org.w3c.dom.Node node = 
+        org.w3c.dom.Node node =
             m_domNode.getChildNodes().item(searchIndex);
-            
-        return new AdapterNode(node); 
+
+        return new AdapterNode(node);
     }
-    
-    protected int childCount() 
+
+    protected int childCount()
     {
         int rc = 0;
-        
+
         if (m_domNode != null)
         {
             rc = m_domNode.getChildNodes().getLength();
         }
-        
+
         return rc;
     }
-    
+
     /*
      * Return a string that identifies this node in the tree
      */
-    public String toString() 
+    public String toString()
     {
         String rc = null;
-        
+
         if (m_domNode != null)
         {
             String s = typeName[m_domNode.getNodeType()];
             String nodeName = m_domNode.getNodeName();
-            
-            if (! nodeName.startsWith("#")) 
+
+            if (! nodeName.startsWith("#"))
             {
                 s += ": " + nodeName;
             }
-            
-            if (m_domNode.getNodeValue() != null) 
+
+            if (m_domNode.getNodeValue() != null)
             {
-                if (s.startsWith("ProcInstr")) 
+                if (s.startsWith("ProcInstr"))
                 {
-                    s += ", "; 
+                    s += ", ";
                 }
-                else 
+                else
                 {
                     s += ": ";
                 }
-                
+
                 String t = m_domNode.getNodeValue();
                 s += t;
             }
-            
+
             if (m_domNode.getNodeType() == ELEMENT_TYPE)
             {
                 NamedNodeMap attrs = m_domNode.getAttributes();
-                
+
                 int length = attrs.getLength();
                 for (int i=0; i<length; ++i)
                 {
                     Attr attr = (Attr)(attrs.item(i));
-                    s += " "+ attr.getName()+"='"+attr.getValue() + "'"; 
+                    s += " "+ attr.getName()+"='"+attr.getValue() + "'";
                 }
             }
             rc = s;
         }
-        
+
         return rc;
     }
 }

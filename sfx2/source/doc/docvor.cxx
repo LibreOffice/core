@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ using namespace ::com::sun::star;
 class SuspendAccel
 {
 public:
-    Accelerator*	pAccel;
+    Accelerator*    pAccel;
 
     SuspendAccel( Accelerator* pA )
     {
@@ -131,15 +131,15 @@ class SfxOrganizeDlg_Impl
 friend class SfxTemplateOrganizeDlg;
 friend class SfxOrganizeListBox_Impl;
 
-    SuspendAccel*			pSuspend;
+    SuspendAccel*           pSuspend;
     SfxTemplateOrganizeDlg* pDialog;
 
     SfxOrganizeListBox_Impl* pFocusBox;
-    Printer*				 pPrt;
+    Printer*                 pPrt;
 
     // save pointer for asynchronous D&D
-    SvLBox*					pSourceView;
-    SvLBoxEntry*			pTargetEntry;
+    SvLBox*                 pSourceView;
+    SvLBoxEntry*            pTargetEntry;
     SfxOrganizeListBox_Impl* pFinishedBox;
     sal_Int8                nDropAction;
     bool                    bExecDropFinished;
@@ -167,13 +167,13 @@ friend class SfxOrganizeListBox_Impl;
     SfxOrganizeMgr          aMgr;
     sfx2::FileDialogHelper* pFileDlg;
 
-    SvStringsDtor* 			GetAllFactoryURLs_Impl() const;
-    sal_Bool				GetServiceName_Impl( String& rFactoryURL, String& rFileURL ) const;
+    SvStringsDtor*          GetAllFactoryURLs_Impl() const;
+    sal_Bool                GetServiceName_Impl( String& rFactoryURL, String& rFileURL ) const;
     long                    Dispatch_Impl( USHORT nId, Menu* _pMenu );
     String                  GetPath_Impl( BOOL bOpen, const String& rFileName );
     ::com::sun::star::uno::Sequence< ::rtl::OUString >
                             GetPaths_Impl( const String& rFileName );
-    void					InitBitmaps( void );
+    void                    InitBitmaps( void );
 
     DECL_LINK( GetFocus_Impl, SfxOrganizeListBox_Impl * );
     DECL_LINK( LeftListBoxSelect_Impl, ListBox * );
@@ -211,25 +211,25 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     nDropAction         ( NO_DROP_ACTION ),
     bExecDropFinished   ( true ),
 
-    aLeftLb		( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_TEMPLATES ),
-    aLeftTypLb	(  pParent, SfxResId( LB_LEFT_TYP ) ),
+    aLeftLb     ( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_TEMPLATES ),
+    aLeftTypLb  (  pParent, SfxResId( LB_LEFT_TYP ) ),
 
-    aRightLb	( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_FILES ),
-    aRightTypLb	( pParent, SfxResId( LB_RIGHT_TYP ) ),
+    aRightLb    ( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_FILES ),
+    aRightTypLb ( pParent, SfxResId( LB_RIGHT_TYP ) ),
 
-    aOkBtn				( pParent, SfxResId( BTN_OK ) ),
-    aEditBtn			( pParent, SfxResId( BTN_EDIT ) ),
-    aHelpBtn			( pParent, SfxResId( BTN_HELP ) ),
-    aAddressTemplateBtn	( pParent, SfxResId( BTN_ADDRESSTEMPLATE ) ),
-    aFilesBtn			( pParent, SfxResId( BTN_FILES ) ),
+    aOkBtn              ( pParent, SfxResId( BTN_OK ) ),
+    aEditBtn            ( pParent, SfxResId( BTN_EDIT ) ),
+    aHelpBtn            ( pParent, SfxResId( BTN_HELP ) ),
+    aAddressTemplateBtn ( pParent, SfxResId( BTN_ADDRESSTEMPLATE ) ),
+    aFilesBtn           ( pParent, SfxResId( BTN_FILES ) ),
 
-    aEditAcc	( SfxResId( ACC_EDIT ) ),
+    aEditAcc    ( SfxResId( ACC_EDIT ) ),
     aMgr        ( &aLeftLb, &aRightLb, pTempl ),
     pFileDlg    ( NULL )
 
 {
     // update the SfxDocumentTemplates the manager works with
-    if ( aMgr.GetTemplates() )	// should never fail, but who knows ....
+    if ( aMgr.GetTemplates() )  // should never fail, but who knows ....
     {
         // for this, show a wait cursor (it may take a while)
         Window* pWaitObjectRange = pDialog ? pDialog->GetParent() : NULL;
@@ -241,7 +241,7 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
             // this const_cast is a hack - but the alternative would be to
             // * have a method which returns the templates non-const
             // * use a new SfxDocumentTemplates instance for the update (knowing that they all share the same
-            //	 implementation class)
+            //   implementation class)
             // * always work with an own instance, even if we get only NULL in this ctor
     }
 
@@ -323,15 +323,15 @@ SfxOrganizeDlg_Impl::~SfxOrganizeDlg_Impl()
 
 void SfxOrganizeDlg_Impl::InitBitmaps( void )
 {
-    Image	aOpenedFolderBmp( SfxResId( IMG_OPENED_FOLDER ) );
-    Image	aClosedFolderBmp( SfxResId( IMG_CLOSED_FOLDER ) );
-    Image	aOpenedDocBmp( SfxResId( IMG_OPENED_DOC ) );
-    Image	aClosedDocBmp( SfxResId( IMG_CLOSED_DOC ) );
+    Image   aOpenedFolderBmp( SfxResId( IMG_OPENED_FOLDER ) );
+    Image   aClosedFolderBmp( SfxResId( IMG_CLOSED_FOLDER ) );
+    Image   aOpenedDocBmp( SfxResId( IMG_OPENED_DOC ) );
+    Image   aClosedDocBmp( SfxResId( IMG_CLOSED_DOC ) );
 
-    Image	aOpenedFolderBmpHC( SfxResId( IMG_OPENED_FOLDER_HC ) );
-    Image	aClosedFolderBmpHC( SfxResId( IMG_CLOSED_FOLDER_HC ) );
-    Image	aOpenedDocBmpHC( SfxResId( IMG_OPENED_DOC_HC ) );
-    Image	aClosedDocBmpHC( SfxResId( IMG_CLOSED_DOC_HC ) );
+    Image   aOpenedFolderBmpHC( SfxResId( IMG_OPENED_FOLDER_HC ) );
+    Image   aClosedFolderBmpHC( SfxResId( IMG_CLOSED_FOLDER_HC ) );
+    Image   aOpenedDocBmpHC( SfxResId( IMG_OPENED_DOC_HC ) );
+    Image   aClosedDocBmpHC( SfxResId( IMG_CLOSED_DOC_HC ) );
 
     aLeftLb.SetBitmaps( aOpenedFolderBmp, aClosedFolderBmp, aOpenedDocBmp, aClosedDocBmp,
                         aOpenedFolderBmpHC, aClosedFolderBmpHC, aOpenedDocBmpHC, aClosedDocBmpHC );
@@ -391,8 +391,8 @@ void ErrorDelete_Impl(Window *pParent, const String &rName, sal_Bool bFolder = s
 
 struct ImpPath_Impl
 {
-    SvUShorts	aUS;
-    USHORT		nRef;
+    SvUShorts   aUS;
+    USHORT      nRef;
 
     ImpPath_Impl();
     ImpPath_Impl( const ImpPath_Impl& rCopy );
@@ -408,7 +408,7 @@ ImpPath_Impl::ImpPath_Impl() : aUS(5), nRef(1)
 
 ImpPath_Impl::ImpPath_Impl( const ImpPath_Impl& rCopy ) :
 
-    aUS	( (BYTE)rCopy.aUS.Count() ),
+    aUS ( (BYTE)rCopy.aUS.Count() ),
     nRef( 1 )
 
 {
@@ -1329,11 +1329,11 @@ USHORT SfxOrganizeListBox_Impl::GetLevelCount_Impl(SvLBoxEntry* pParent) const
 SvLBoxEntry* SfxOrganizeListBox_Impl::InsertEntryByBmpType( const XubString& rText, BMPTYPE eBmpType,
     SvLBoxEntry* pParent, BOOL bChildsOnDemand, ULONG nPos, void* pUserData )
 {
-    SvLBoxEntry*	pEntry = NULL;
-    const Image*	pExp = NULL;
-    const Image*	pCol = NULL;
-    const Image*	pExpHC = NULL;
-    const Image*	pColHC = NULL;
+    SvLBoxEntry*    pEntry = NULL;
+    const Image*    pExp = NULL;
+    const Image*    pCol = NULL;
+    const Image*    pExpHC = NULL;
+    const Image*    pColHC = NULL;
 
     switch( eBmpType )
     {
@@ -1374,9 +1374,9 @@ SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl
 
     SvTreeListBox( pParent, nBits ),
 
-    pMgr		( NULL ),
-    pDlg		( pArgDlg ),
-    eViewType	( eType )
+    pMgr        ( NULL ),
+    pDlg        ( pArgDlg ),
+    eViewType   ( eType )
 
 /*  [Beschreibung]
 
@@ -1477,15 +1477,15 @@ const Image &SfxOrganizeListBox_Impl::GetClosedBmp(USHORT nLevel) const
 */
 
 {
-    BOOL			bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-    const Image*	pRet = NULL;
+    BOOL            bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
+    const Image*    pRet = NULL;
 
     switch( nLevel )
     {
-        default:	DBG_ERROR( "Bitmaps ueberindiziert" );
+        default:    DBG_ERROR( "Bitmaps ueberindiziert" );
 
-        case 0:		pRet = bHC? &aClosedFolderBmpHC : &aClosedFolderBmp;		break;
-        case 1:		pRet = bHC? &aClosedDocBmpHC : &aClosedDocBmp;				break;
+        case 0:     pRet = bHC? &aClosedFolderBmpHC : &aClosedFolderBmp;        break;
+        case 1:     pRet = bHC? &aClosedDocBmpHC : &aClosedDocBmp;              break;
     }
 
     return *pRet;
@@ -1546,7 +1546,7 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
     [Parameter]
 
     BOOL bOpen                      Flag: "Offnen / Speichern
-    const String& rFileName			aktueller Dateiname als Vorschlag
+    const String& rFileName         aktueller Dateiname als Vorschlag
 
     [R"uckgabewert]                 Dateiname mit Pfad oder Leerstring, wenn
                                     der Benutzer 'Abbrechen' gedr"uckt hat
@@ -1775,7 +1775,7 @@ SvStringsDtor* SfxOrganizeDlg_Impl::GetAllFactoryURLs_Impl( ) const
 sal_Bool SfxOrganizeDlg_Impl::GetServiceName_Impl( String& rName, String& rFileURL ) const
 {
     sal_Bool bRet = sal_False;
-    const SfxDocumentTemplates*	pTemplates = aMgr.GetTemplates();
+    const SfxDocumentTemplates* pTemplates = aMgr.GetTemplates();
     SvLBoxEntry* pEntry = pFocusBox ? pFocusBox->FirstSelected() : NULL;
     USHORT nRegion = 0, nIndex = 0;
     GetIndices_Impl( pFocusBox, pEntry, nRegion, nIndex );
@@ -1909,7 +1909,7 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
             const SfxStringItem aLongName( SID_FILE_LONGNAME, pFocusBox->GetEntryText( pEntry ) );
             const SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private:user" ) );
             const SfxStringItem aTargetName( SID_TARGETNAME, DEFINE_CONST_UNICODE( "_default" ) );
-            const SfxBoolItem	aTemplateIndicator( SID_TEMPLATE, sal_False );
+            const SfxBoolItem   aTemplateIndicator( SID_TEMPLATE, sal_False );
 
             SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_OPENTEMPLATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                       &aName, &aLongName, &aReferer, &aTargetName, &aTemplateIndicator, 0L );

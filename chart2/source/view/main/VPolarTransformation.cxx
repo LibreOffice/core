@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,18 +60,18 @@ Sequence< double > SAL_CALL VPolarTransformation::transform(
 {
     double fScaledLogicAngle  = rSourceValues[0];
     double fScaledLogicRadius = rSourceValues[1];
-    
+
     if( m_aPositionHelper.isSwapXAndY() )
         std::swap(fScaledLogicAngle,fScaledLogicRadius);
 
     double fAngleDegree = m_aPositionHelper.transformToAngleDegree( fScaledLogicAngle, false );
     double fAnglePi     = fAngleDegree*F_PI/180.0;
-    double fRadius      = m_aPositionHelper.transformToRadius( fScaledLogicRadius, false); 
+    double fRadius      = m_aPositionHelper.transformToRadius( fScaledLogicRadius, false);
 
     double fX=fRadius*cos(fAnglePi);
     double fY=fRadius*sin(fAnglePi);
     double fZ=rSourceValues[2];
-    
+
     //!! applying matrix to vector does ignore translation, so it is important to use a B3DPoint here instead of B3DVector
     ::basegfx::B3DPoint aPoint(fX,fY,fZ);
     ::basegfx::B3DPoint aRet = m_aUnitCartesianToScene * aPoint;

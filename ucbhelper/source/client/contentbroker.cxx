@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -257,10 +257,10 @@ ContentBroker* ContentBroker::get()
 
 ContentBroker_Impl::~ContentBroker_Impl()
 {
-    Reference< XComponent > xComponent(	m_xProvider, UNO_QUERY );
+    Reference< XComponent > xComponent( m_xProvider, UNO_QUERY );
     if ( xComponent.is() )
     {
-        m_xIdFac 	   = 0;
+        m_xIdFac       = 0;
         m_xProvider    = 0;
         m_xProviderMgr = 0;
 

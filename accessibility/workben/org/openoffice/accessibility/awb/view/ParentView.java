@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,13 +87,13 @@ public class ParentView
             if (xParent != null)
             {
                 maParentLabel.setText ("yes");
-                XAccessibleContext xParentContext = 
+                XAccessibleContext xParentContext =
                     xParent.getAccessibleContext();
                 if (xParentContext != null)
                 {
                     try
                     {
-                        XAccessible xChild = 
+                        XAccessible xChild =
                             xParentContext.getAccessibleChild(nIndex);
                         if (xChild != mxContext)
                             maValidLabel.setText ("yes");

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #include "stringconverter.hxx"
 
 #ifdef _MSC_VER
@@ -43,7 +43,7 @@ std::string UnicodeToAnsiString(const std::wstring& UniString)
 {
     int len = WideCharToMultiByte(
         CP_ACP, 0, UniString.c_str(), -1, 0, 0, 0, 0);
-            
+
     char* buff = reinterpret_cast<char*>(_alloca(len));
 
     WideCharToMultiByte(
@@ -58,7 +58,7 @@ std::wstring AnsiToUnicodeString(const std::string& AnsiString)
 {
     int len = MultiByteToWideChar(
         CP_ACP, 0, AnsiString.c_str(), -1, 0, 0);
-            
+
     wchar_t* buff = reinterpret_cast<wchar_t*>(_alloca(len * sizeof(wchar_t)));
 
     MultiByteToWideChar(

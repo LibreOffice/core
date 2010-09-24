@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -140,7 +140,7 @@ void SAL_CALL VPolarRadiusAxis::createShapes()
 {
     if( !prepareShapeCreation() )
         return;
-    
+
     const ExplicitScaleData& rAngleScale         = m_pPosHelper->getScales()[0];
     const ExplicitIncrementData& rAngleIncrement = m_aIncrements[0];
 
@@ -153,7 +153,7 @@ void SAL_CALL VPolarRadiusAxis::createShapes()
         xInverseScaling = rAngleScale.Scaling->getInverseScaling();
 
     AxisProperties aAxisProperties(m_aAxisProperties);
-    
+
     sal_Int32 nTick = 0;
     EquidistantTickIter aIter( aAngleTickInfos, rAngleIncrement, 0, 0 );
     for( TickInfo* pTickInfo = aIter.firstInfo()

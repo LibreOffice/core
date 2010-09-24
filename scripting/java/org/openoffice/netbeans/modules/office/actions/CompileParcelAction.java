@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,6 +39,6 @@ public class CompileParcelAction extends CompileAllAction {
 
     protected void performAction(Node[] activatedNodes) {
         FrameworkJarChecker.mountDependencies();
-        super.performAction(activatedNodes);     
+        super.performAction(activatedNodes);
     }
 }

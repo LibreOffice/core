@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,13 +136,13 @@ namespace sdr
         }
 
         AttributeProperties::AttributeProperties(SdrObject& rObj)
-        :	DefaultProperties(rObj),
+        :   DefaultProperties(rObj),
             mpStyleSheet(0L)
         {
         }
 
         AttributeProperties::AttributeProperties(const AttributeProperties& rProps, SdrObject& rObj)
-        :	DefaultProperties(rProps, rObj),
+        :   DefaultProperties(rProps, rObj),
             mpStyleSheet(0L)
         {
             if(rProps.GetStyleSheet())
@@ -155,7 +155,7 @@ namespace sdr
         {
             ImpRemoveStyleSheet();
         }
-        
+
         BaseProperties& AttributeProperties::Clone(SdrObject& rObj) const
         {
             return *(new AttributeProperties(*this, rObj));
@@ -285,7 +285,7 @@ namespace sdr
                     {
                         // #i109515#
                         SfxItemPool* pStyleSheetPool = &pStySheet->GetPool().GetPool();
-                        
+
                         if(pStyleSheetPool == pDestPool)
                         {
                             // just re-set stylesheet
@@ -471,7 +471,7 @@ namespace sdr
                                 {
                                     ImpRemoveStyleSheet();
                                 }
-                                
+
                                 delete mpItemSet;
                                 mpItemSet = 0L;
                             }
@@ -546,19 +546,19 @@ namespace sdr
 
                 switch(pStyleHint->GetHint())
                 {
-                    case SFX_STYLESHEET_CREATED			:
+                    case SFX_STYLESHEET_CREATED         :
                     {
                         // cannot happen, nothing to do
                         break;
                     }
-                    case SFX_STYLESHEET_MODIFIED		:
-                    case SFX_STYLESHEET_CHANGED			:
+                    case SFX_STYLESHEET_MODIFIED        :
+                    case SFX_STYLESHEET_CHANGED         :
                     {
                         // notify change
                         break;
                     }
-                    case SFX_STYLESHEET_ERASED			:
-                    case SFX_STYLESHEET_INDESTRUCTION	:
+                    case SFX_STYLESHEET_ERASED          :
+                    case SFX_STYLESHEET_INDESTRUCTION   :
                     {
                         // Style needs to be exchanged
                         SfxStyleSheet* pNewStSh = 0L;
@@ -606,7 +606,7 @@ namespace sdr
 
                 //if(pPage && pPage->IsInserted())
                 //{
-                //	rObj.BroadcastObjectChange();
+                //  rObj.BroadcastObjectChange();
                 //}
 
                 rObj.SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect);

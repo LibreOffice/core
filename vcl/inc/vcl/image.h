@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,34 +43,34 @@ public:
                 ImplImageBmp();
                 ~ImplImageBmp();
 
-    void		Create( long nItemWidth, long nItemHeight, USHORT nInitSize );
-    void		Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight,USHORT nInitSize );
+    void        Create( long nItemWidth, long nItemHeight, USHORT nInitSize );
+    void        Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight,USHORT nInitSize );
 
-    void		Expand( USHORT nGrowSize );
+    void        Expand( USHORT nGrowSize );
 
-    void		Replace( USHORT nPos, USHORT nSrcPos );
-    void		Replace( USHORT nPos, const ImplImageBmp& rImageBmp, USHORT nSrcPos );
-    void		Replace( USHORT nPos, const BitmapEx& rBmpEx );
+    void        Replace( USHORT nPos, USHORT nSrcPos );
+    void        Replace( USHORT nPos, const ImplImageBmp& rImageBmp, USHORT nSrcPos );
+    void        Replace( USHORT nPos, const BitmapEx& rBmpEx );
 
     void        ReplaceColors( const Color* pSrcColors, const Color* pDstColors, ULONG nColorCount );
-    void		ColorTransform( BmpColorMode eColorMode );
-    void        	Invert();
+    void        ColorTransform( BmpColorMode eColorMode );
+    void            Invert();
 
-    BitmapEx	GetBitmapEx( USHORT nPosCount, USHORT* pPosAry ) const;
+    BitmapEx    GetBitmapEx( USHORT nPosCount, USHORT* pPosAry ) const;
 
-    void		Draw( USHORT nPos, OutputDevice* pDev, const Point& rPos, USHORT nStyle, const Size* pSize = NULL );
+    void        Draw( USHORT nPos, OutputDevice* pDev, const Point& rPos, USHORT nStyle, const Size* pSize = NULL );
 
 private:
 
-    BitmapEx	maBmpEx;
-    BitmapEx	maDisabledBmpEx;
-    BitmapEx*	mpDisplayBmp;
-    Size		maSize;
-    BYTE*		mpInfoAry;
-    USHORT		mnSize;
+    BitmapEx    maBmpEx;
+    BitmapEx    maDisabledBmpEx;
+    BitmapEx*   mpDisplayBmp;
+    Size        maSize;
+    BYTE*       mpInfoAry;
+    USHORT      mnSize;
 
-    void		ImplUpdateDisplayBmp( OutputDevice* pOutDev );
-    void		ImplUpdateDisabledBmpEx( int nPos );
+    void        ImplUpdateDisplayBmp( OutputDevice* pOutDev );
+    void        ImplUpdateDisabledBmpEx( int nPos );
 
 private:    // prevent assignment and copy construction
     ImplImageBmp( const ImplImageBmp& );
@@ -89,9 +89,9 @@ enum ImageType { IMAGETYPE_BITMAP, IMAGETYPE_IMAGE };
 
 struct ImageAryData
 {
-    ::rtl::OUString	maName;
+    ::rtl::OUString maName;
     // Images identified by either name, or by id
-    USHORT			mnId;
+    USHORT          mnId;
     BitmapEx        maBitmapEx;
 
     ImageAryData();
@@ -103,7 +103,7 @@ struct ImageAryData
     bool IsLoadable() { return maBitmapEx.IsEmpty() && maName.getLength(); }
     void Load(const rtl::OUString &rPrefix);
 
-    ImageAryData&	operator=( const ImageAryData& rData );
+    ImageAryData&   operator=( const ImageAryData& rData );
 };
 
 // ------------------------------------------------------------------------------
@@ -117,7 +117,7 @@ struct ImplImageList
     ImageAryDataVec             maImages;
     ImageAryDataNameHash        maNameHash;
     rtl::OUString               maPrefix;
-    Size			            maImageSize;
+    Size                        maImageSize;
     ULONG                       mnRefCount;
 
     ImplImageList();
@@ -136,13 +136,13 @@ struct ImplImageList
 
 struct ImplImageRefData
 {
-    ImplImageList*	mpImplData;
-    USHORT			mnIndex;
+    ImplImageList*  mpImplData;
+    USHORT          mnIndex;
 
-                    ImplImageRefData() {}	 // Um Warning zu umgehen
+                    ImplImageRefData() {}    // Um Warning zu umgehen
                     ~ImplImageRefData();
 
-    BOOL			IsEqual( const ImplImageRefData& rData );
+    BOOL            IsEqual( const ImplImageRefData& rData );
 };
 
 // ----------------
@@ -151,13 +151,13 @@ struct ImplImageRefData
 
 struct ImplImageData
 {
-    ImplImageBmp*	mpImageBitmap;
-    BitmapEx		maBmpEx;
+    ImplImageBmp*   mpImageBitmap;
+    BitmapEx        maBmpEx;
 
                     ImplImageData( const BitmapEx& rBmpEx );
                     ~ImplImageData();
 
-    BOOL			IsEqual( const ImplImageData& rData );
+    BOOL            IsEqual( const ImplImageData& rData );
 };
 
 // -------------
@@ -166,10 +166,10 @@ struct ImplImageData
 
 struct ImplImage
 {
-    ULONG			mnRefCount;
+    ULONG           mnRefCount;
     // TODO: use inheritance to get rid of meType+mpData
-    void*			mpData;
-    ImageType		meType;
+    void*           mpData;
+    ImageType       meType;
 
                     ImplImage();
                     ~ImplImage();

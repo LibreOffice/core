@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -174,7 +174,7 @@ void OSqlEdit::SetText(const String& rNewText)
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
     if (m_timerUndoActionCreation.IsActive())
-    {	// die noch anstehenden Undo-Action erzeugen
+    {   // die noch anstehenden Undo-Action erzeugen
         m_timerUndoActionCreation.Stop();
         LINK(this, OSqlEdit, OnUndoActionTimer).Call(NULL);
     }

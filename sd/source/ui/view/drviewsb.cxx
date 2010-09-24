@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@
 #include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
 
-#define	RET_DELETE	100
+#define RET_DELETE  100
 
 namespace sd {
 
@@ -134,7 +134,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     while( bLoop && pDlg->Execute() == RET_OK )
                     {
                         pDlg->GetAttr( aNewAttr );
-                        aLayerName	 = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+                        aLayerName   = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
                         if( rLayerAdmin.GetLayer( aLayerName, FALSE )
                             || aLayerName.Len()==0 )
@@ -160,11 +160,11 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     else
                     {
                         //pDlg->GetAttr( aNewAttr );
-                        //aLayerName	 = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+                        //aLayerName     = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
                         aLayerTitle  = ((SdAttrLayerTitle &) aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
                         aLayerDesc   = ((SdAttrLayerDesc &) aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
-                        bIsVisible	 = ((SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
-                        bIsLocked	 = ((SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
+                        bIsVisible   = ((SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
+                        bIsLocked    = ((SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
                         bIsPrintable = ((SdAttrLayerPrintable &) aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue () ;
 
                         delete pDlg;
@@ -187,7 +187,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                      aLayerName   = pLayerName->GetValue ();
                      bIsVisible   = pIsVisible->GetValue ();
-                     bIsLocked	  = pIsLocked->GetValue ();
+                     bIsLocked    = pIsLocked->GetValue ();
                      bIsPrintable = pIsPrintable->GetValue ();
                  }
 
@@ -296,12 +296,12 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     pDlg->SetHelpId( SID_MODIFYLAYER );
 
                     // Ueberpruefung auf schon vorhandene Namen
-                    BOOL	bLoop = TRUE;
-                    USHORT	nRet = 0;
+                    BOOL    bLoop = TRUE;
+                    USHORT  nRet = 0;
                     while( bLoop && ( (nRet = pDlg->Execute()) == RET_OK ) )
                     {
                         pDlg->GetAttr( aNewAttr );
-                        aLayerName	 = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+                        aLayerName   = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
                         if( (rLayerAdmin.GetLayer( aLayerName, FALSE ) &&
                              aLayerName != aOldLayerName) || aLayerName.Len()==0 )
@@ -321,8 +321,8 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                         case RET_OK :
                             aLayerTitle  = ((SdAttrLayerTitle &) aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
                             aLayerDesc   = ((SdAttrLayerDesc &) aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
-                            bIsVisible	 = ((const SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
-                            bIsLocked	 = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
+                            bIsVisible   = ((const SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
+                            bIsLocked    = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
                             bIsPrintable = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue ();
 
                             delete pDlg;
@@ -345,7 +345,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                 aLayerName   = pLayerName->GetValue ();
                 bIsVisible   = pIsVisible->GetValue ();
-                bIsLocked	 = pIsLocked->GetValue ();
+                bIsLocked    = pIsLocked->GetValue ();
                 bIsPrintable = pIsPrintable->GetValue ();
             }
             else
@@ -554,7 +554,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     if( GetDocSh()->HasName() )
                         aName = GetDocSh()->GetMedium()->GetName();
                     //else
-                    //	aName = GetDocSh()->GetName();
+                    //  aName = GetDocSh()->GetName();
                     pFieldItem = new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD );
                 }
                 break;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,12 +55,12 @@ namespace adabasui
     protected:
         OAdabasNewDbDlg* m_pDialog; // just to avoid a cast
         // <properties>
-        ::rtl::OUString	m_sDatabaseName;
-        ::rtl::OUString	m_sControlUser;
-        ::rtl::OUString	m_sControlPassword;
-        ::rtl::OUString	m_sUser;		
-        ::rtl::OUString	m_sUserPassword;
-        sal_Int32		m_nCacheSize;
+        ::rtl::OUString m_sDatabaseName;
+        ::rtl::OUString m_sControlUser;
+        ::rtl::OUString m_sControlPassword;
+        ::rtl::OUString m_sUser;
+        ::rtl::OUString m_sUserPassword;
+        sal_Int32       m_nCacheSize;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XCreateCatalog> m_xCreateCatalog;
         // </properties>
@@ -90,11 +90,11 @@ namespace adabasui
 
     protected:
     // OGenericUnoDialog overridables
-        virtual Dialog*	createDialog(Window* _pParent);
+        virtual Dialog* createDialog(Window* _pParent);
         virtual void executedDialog(sal_Int16 _nExecutionResult);
     };
 //.........................................................................
-}	// namespace adabasui
+}   // namespace adabasui
 //.........................................................................
 
 #endif // ADABASUI_NEWDB_HXX

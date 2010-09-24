@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,13 +58,13 @@
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
 
-//! 		Parent-Window fuer Dialoge
-//! 		Problem: OLE Server!
+//!         Parent-Window fuer Dialoge
+//!         Problem: OLE Server!
 
 Window* ScTabViewShell::GetDialogParent()
 {
-    //	#95513# if a ref-input dialog is open, use it as parent
-    //	(necessary when a slot is executed from the dialog's OK handler)
+    //  #95513# if a ref-input dialog is open, use it as parent
+    //  (necessary when a slot is executed from the dialog's OK handler)
     if ( nCurRefDlgId && nCurRefDlgId == SC_MOD()->GetCurRefDlgId() )
     {
         SfxViewFrame* pViewFrm = GetViewFrame();
@@ -91,7 +91,7 @@ Window* ScTabViewShell::GetDialogParent()
         //    return pEnv->GetEditWin();
     }
 
-    return GetActiveWin();		// for normal views, too
+    return GetActiveWin();      // for normal views, too
 }
 
 

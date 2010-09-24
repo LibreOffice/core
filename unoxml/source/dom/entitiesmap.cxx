@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace DOM
     }
 
     /**
-    Retrieves a node specified by local name     	
+    Retrieves a node specified by local name
     */
   Reference< XNode > SAL_CALL CEntitiesMap::getNamedItem(const OUString& /*name*/) throw (RuntimeException)
     {

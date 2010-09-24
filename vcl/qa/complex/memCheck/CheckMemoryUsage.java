@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,12 +47,12 @@ import util.WriterTools;
 import util.utils;
 
 /**
- * Documents are opened and exported with StarOffice. The memory usage of 
+ * Documents are opened and exported with StarOffice. The memory usage of
  * StarOffice is monitored and if the usage exceeds the allowed kilobytes,
- * the test is failed. Used for monitoring the StarOffice process is the 
+ * the test is failed. Used for monitoring the StarOffice process is the
  * command line tool 'pmap', available on Solaris or Linux. This test will not
- * run on Windows.<br>Test procedure: every given document type is searched in 
- * the source directory 
+ * run on Windows.<br>Test procedure: every given document type is searched in
+ * the source directory
  * Needed paramters:
  * <ul>
  *   <li>"TestDocumentPath" - the path where test documents are located.</li>
@@ -85,7 +85,7 @@ public class CheckMemoryUsage extends ComplexTestCase {
     private String[][] sDocuments;
     private int iAllowMemoryIncrease = 10;
     private int iExportDocCount = 25;
-    
+
     /**
      * Get all test methods
      * @return The test methods.
@@ -93,7 +93,7 @@ public class CheckMemoryUsage extends ComplexTestCase {
     public String[] getTestMethodNames() {
         return new String[] {"loadAndSaveDocuments"};
     }
-    
+
     /**
      * Collect all documnets to load and all filters used for export.
      */
@@ -104,12 +104,12 @@ public class CheckMemoryUsage extends ComplexTestCase {
                         + "displays the memory usage of StarOffice.");
             failed("Test does not run on Windows, only on Solaris or Linux.");
         }
-        
+
         // how many times is every document exported.
         int count = param.getInt("ExportDocCount");
         if (count != 0)
             iExportDocCount = count;
-        
+
         // get the temp dir for creating the command scripts.
         sTempDir = System.getProperty("java.io.tmpdir");
         sProcessIdCommand = sTempDir + "getPS";
@@ -130,7 +130,7 @@ public class CheckMemoryUsage extends ComplexTestCase {
             v.add(sCalcDoc);
             v.add(sImpressDoc);
         }
-        // store a file extension 
+        // store a file extension
         sDocTypeExportFilter = new String[v.size()][2];
         for (int i=0; i<v.size(); i++) {
             // 2do: error routine for wrong given params
@@ -173,14 +173,14 @@ public class CheckMemoryUsage extends ComplexTestCase {
         f = new File(sOfficeMemoryCommand);
         f.delete();
     }
-    
+
     /**
      * Thet etst function: load documents and save them using the given filters
      * for each given document type.
      */
     public void loadAndSaveDocuments() {
         int storageBefore = getOfficeMemoryUsage();
-        
+
         XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
 
         // iterate over all document types
@@ -233,14 +233,14 @@ public class CheckMemoryUsage extends ComplexTestCase {
             mem = storageAfter;
             storageAfter = getOfficeMemoryUsage();
             shortWait(1000);
-        } 
+        }
         assure("The Office consumes now " + (storageAfter - storageBefore)
             + "K more memory than at the start of the test; allowed were "
-            + iAllowMemoryIncrease * iExportDocCount + "K.", 
+            + iAllowMemoryIncrease * iExportDocCount + "K.",
             storageAfter - storageBefore < iAllowMemoryIncrease * iExportDocCount);
-        
+
     }
-    
+
     /**
      * Get the process ID from the Office
      * @return the Id as String
@@ -258,7 +258,7 @@ public class CheckMemoryUsage extends ComplexTestCase {
         String id = aToken.nextToken();
         return id;
     }
-    
+
     /**
      * Get the memory usage of the Office in KByte.
      * @return The memory used by the Office.
@@ -271,16 +271,16 @@ public class CheckMemoryUsage extends ComplexTestCase {
         String text = processID.getOutputText();
         if (text == null || text.equals("") || text.indexOf(' ') == -1) {
             failed("Could not determine Office memory usage. Check " + sOfficeMemoryCommand);
-        } 
+        }
         StringTokenizer aToken = new StringTokenizer(text);
         // this works, because the output of pmap is quite standardized.
         aToken.nextToken();
         String mem = aToken.nextToken();
-        mem = mem.substring(0, mem.indexOf('K')); 
+        mem = mem.substring(0, mem.indexOf('K'));
         Integer memory = new Integer(mem);
         return memory.intValue();
     }
-    
+
     /**
      * Write a script file and set its rights to rwxrwxrwx.
      * @param fileName The name of the created file
@@ -309,9 +309,9 @@ public class CheckMemoryUsage extends ComplexTestCase {
             Thread.sleep(milliSeconds);
         }
         catch(java.lang.InterruptedException e) { // ignore
-        }	
+        }
     }
-    
+
     /**
      * Own file filter, will just return ok for all files that end with a given
      * suffix

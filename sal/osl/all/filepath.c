@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,16 +36,16 @@ static sal_uInt32 SAL_CALL osl_defCalcTextWidth( rtl_uString *ustrText )
 
 oslFileError SAL_CALL osl_abbreviateSystemPath( rtl_uString *ustrSystemPath, rtl_uString **pustrCompacted, sal_uInt32 uMaxWidth, oslCalcTextWidthFunc pfnCalcWidth )
 {
-    oslFileError	error = osl_File_E_None;
-    rtl_uString		*ustrPath = NULL;
-    rtl_uString		*ustrFile = NULL;
-    sal_uInt32		uPathWidth, uFileWidth;
+    oslFileError    error = osl_File_E_None;
+    rtl_uString     *ustrPath = NULL;
+    rtl_uString     *ustrFile = NULL;
+    sal_uInt32      uPathWidth, uFileWidth;
 
     if ( !pfnCalcWidth )
         pfnCalcWidth = osl_defCalcTextWidth;
 
     {
-        sal_Int32	iLastSlash = rtl_ustr_lastIndexOfChar_WithLength( ustrSystemPath->buffer, ustrSystemPath->length, SAL_PATHDELIMITER );
+        sal_Int32   iLastSlash = rtl_ustr_lastIndexOfChar_WithLength( ustrSystemPath->buffer, ustrSystemPath->length, SAL_PATHDELIMITER );
 
         if ( iLastSlash >= 0 )
         {

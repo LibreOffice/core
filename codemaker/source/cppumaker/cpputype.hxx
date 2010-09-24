@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ enum CppuTypeDecl
     CPPUTYPEDECL_ALLTYPES,
     CPPUTYPEDECL_NOINTERFACES,
     CPPUTYPEDECL_ONLYINTERFACES
-};	
+};
 
 class CppuOptions;
 class FileStream;
@@ -67,7 +67,7 @@ public:
                       const ::rtl::OString& sExtension,
                       const ::rtl::OString& sName,
                       const ::rtl::OString& sOutPath )
-        throw( CannotDumpException );   
+        throw( CannotDumpException );
     void dumpDependedTypes(
         codemaker::GeneratedTypeSet & generated, CppuOptions * options);
     virtual sal_Bool dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException ) = 0;
@@ -84,28 +84,28 @@ public:
     virtual void dumpType(FileStream& o, const ::rtl::OString& type, bool bConst=false,
                           bool bRef=false, bool bNative=false, bool cppuUnoType=false)
         const throw( CannotDumpException );
-    ::rtl::OString	getTypeClass(const ::rtl::OString& type="", sal_Bool bCStyle=sal_False);
-    void	dumpCppuGetType(FileStream& o, const ::rtl::OString& type, sal_Bool bDecl=sal_False, CppuTypeDecl eDeclFlag=CPPUTYPEDECL_ALLTYPES);
+    ::rtl::OString  getTypeClass(const ::rtl::OString& type="", sal_Bool bCStyle=sal_False);
+    void    dumpCppuGetType(FileStream& o, const ::rtl::OString& type, sal_Bool bDecl=sal_False, CppuTypeDecl eDeclFlag=CPPUTYPEDECL_ALLTYPES);
 
     ::rtl::OString typeToIdentifier(const ::rtl::OString& type);
 
-    void 	dumpConstantValue(FileStream& o, sal_uInt16 index);
+    void    dumpConstantValue(FileStream& o, sal_uInt16 index);
 
     virtual sal_uInt32  getMemberCount();
-    virtual sal_uInt32	getInheritedMemberCount();
+    virtual sal_uInt32  getInheritedMemberCount();
 
-    void 			inc(sal_Int32 num=4);
-    void 			dec(sal_Int32 num=4);
-    ::rtl::OString 	indent() const;
+    void            inc(sal_Int32 num=4);
+    void            dec(sal_Int32 num=4);
+    ::rtl::OString  indent() const;
 protected:
     virtual sal_uInt32 checkInheritedMemberCount(
         const typereg::Reader* pReader);
 
     bool passByReference(rtl::OString const & unoType);
 
-    ::rtl::OString	resolveTypedefs(const ::rtl::OString& type) const;
-    ::rtl::OString	checkRealBaseType(const ::rtl::OString& type, sal_Bool bResolveTypeOnly = sal_False) const;
-    void	dumpCppuGetTypeMemberDecl(FileStream& o, CppuTypeDecl eDeclFlag);
+    ::rtl::OString  resolveTypedefs(const ::rtl::OString& type) const;
+    ::rtl::OString  checkRealBaseType(const ::rtl::OString& type, sal_Bool bResolveTypeOnly = sal_False) const;
+    void    dumpCppuGetTypeMemberDecl(FileStream& o, CppuTypeDecl eDeclFlag);
 
     codemaker::cpp::IdentifierTranslationMode isGlobal() const;
 
@@ -139,13 +139,13 @@ protected:
         FileStream & out, bool parameterized, rtl::OUString const & type) const;
 
 protected:
-    sal_uInt32 			m_inheritedMemberCount;
+    sal_uInt32          m_inheritedMemberCount;
 
-    sal_Bool			m_cppuTypeLeak;
-    sal_Bool			m_cppuTypeDynamic;
-    sal_Int32			m_indentLength;
-    ::rtl::OString		m_typeName;
-    ::rtl::OString		m_name;
+    sal_Bool            m_cppuTypeLeak;
+    sal_Bool            m_cppuTypeDynamic;
+    sal_Int32           m_indentLength;
+    ::rtl::OString      m_typeName;
+    ::rtl::OString      m_name;
     typereg::Reader     m_reader;
     TypeManager const & m_typeMgr;
     codemaker::Dependencies m_dependencies;
@@ -164,23 +164,23 @@ public:
 
     virtual ~InterfaceType();
 
-    sal_Bool	dumpDeclaration(FileStream& o) throw( CannotDumpException );
-    sal_Bool	dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
-    sal_Bool	dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
+    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
+    sal_Bool    dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
+    sal_Bool    dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
 
-    void		dumpAttributes(FileStream& o);
-    void		dumpMethods(FileStream& o);
-    void		dumpNormalGetCppuType(FileStream& o);
-    void 		dumpComprehensiveGetCppuType(FileStream& o);
-    void		dumpCppuAttributeRefs(FileStream& o, sal_uInt32& index);
-    void		dumpCppuMethodRefs(FileStream& o, sal_uInt32& index);
-    void		dumpCppuAttributes(FileStream& o, sal_uInt32& index);
-    void		dumpCppuMethods(FileStream& o, sal_uInt32& index);
-    void		dumpAttributesCppuDecl(FileStream& o, StringSet* pFinishedTypes, CppuTypeDecl eDeclFlag);
-    void		dumpMethodsCppuDecl(FileStream& o, StringSet* pFinishedTypes, CppuTypeDecl eDeclFlag );
+    void        dumpAttributes(FileStream& o);
+    void        dumpMethods(FileStream& o);
+    void        dumpNormalGetCppuType(FileStream& o);
+    void        dumpComprehensiveGetCppuType(FileStream& o);
+    void        dumpCppuAttributeRefs(FileStream& o, sal_uInt32& index);
+    void        dumpCppuMethodRefs(FileStream& o, sal_uInt32& index);
+    void        dumpCppuAttributes(FileStream& o, sal_uInt32& index);
+    void        dumpCppuMethods(FileStream& o, sal_uInt32& index);
+    void        dumpAttributesCppuDecl(FileStream& o, StringSet* pFinishedTypes, CppuTypeDecl eDeclFlag);
+    void        dumpMethodsCppuDecl(FileStream& o, StringSet* pFinishedTypes, CppuTypeDecl eDeclFlag );
 
-    sal_uInt32	getMemberCount();
-    sal_uInt32	getInheritedMemberCount();
+    sal_uInt32  getMemberCount();
+    sal_uInt32  getInheritedMemberCount();
 
 protected:
     virtual void addSpecialDependencies();
@@ -188,12 +188,12 @@ protected:
     virtual void addComprehensiveGetCppuTypeIncludes(
         codemaker::cppumaker::Includes & includes) const;
 
-    sal_uInt32	checkInheritedMemberCount(const typereg::Reader* pReader);
+    sal_uInt32  checkInheritedMemberCount(const typereg::Reader* pReader);
 
 protected:
-    sal_uInt32 	m_inheritedMemberCount;
-    sal_Bool 	m_hasAttributes;
-    sal_Bool 	m_hasMethods;
+    sal_uInt32  m_inheritedMemberCount;
+    sal_Bool    m_hasAttributes;
+    sal_Bool    m_hasMethods;
 
 private:
     void dumpExceptionSpecification(
@@ -224,12 +224,12 @@ public:
 
     virtual ~ConstantsType();
 
-    virtual sal_Bool 	dump(CppuOptions* pOptions) throw( CannotDumpException );
+    virtual sal_Bool    dump(CppuOptions* pOptions) throw( CannotDumpException );
 
-    sal_Bool			dumpDeclaration(FileStream& o) throw( CannotDumpException );
-    sal_Bool			dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
-    sal_Bool			dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
-    sal_Bool			hasConstants();
+    sal_Bool            dumpDeclaration(FileStream& o) throw( CannotDumpException );
+    sal_Bool            dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
+    sal_Bool            dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
+    sal_Bool            hasConstants();
 };
 
 class ModuleType : public ConstantsType
@@ -254,9 +254,9 @@ public:
 
     virtual ~StructureType();
 
-    sal_Bool	dumpDeclaration(FileStream& o) throw( CannotDumpException );
-    sal_Bool	dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
-    sal_Bool	dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
+    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
+    sal_Bool    dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
+    sal_Bool    dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
 
     virtual void dumpLightGetCppuType(FileStream & out);
 
@@ -264,7 +264,7 @@ public:
 
     virtual void dumpComprehensiveGetCppuType(FileStream & out);
 
-    sal_Bool	dumpSuperMember(FileStream& o, const ::rtl::OString& super, sal_Bool bWithType);
+    sal_Bool    dumpSuperMember(FileStream& o, const ::rtl::OString& super, sal_Bool bWithType);
 
 protected:
     virtual void addLightGetCppuTypeIncludes(
@@ -292,11 +292,11 @@ public:
 
     virtual ~ExceptionType();
 
-    sal_Bool	dumpDeclaration(FileStream& o) throw( CannotDumpException );
-    sal_Bool	dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
-    sal_Bool	dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
+    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
+    sal_Bool    dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
+    sal_Bool    dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
 
-    sal_Bool	dumpSuperMember(FileStream& o, const ::rtl::OString& super, sal_Bool bWithType);
+    sal_Bool    dumpSuperMember(FileStream& o, const ::rtl::OString& super, sal_Bool bWithType);
 };
 
 class EnumType : public CppuType
@@ -308,12 +308,12 @@ public:
 
     virtual ~EnumType();
 
-    sal_Bool	dumpDeclaration(FileStream& o) throw( CannotDumpException );
-    sal_Bool	dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
-    sal_Bool	dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
+    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
+    sal_Bool    dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
+    sal_Bool    dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
 
-    void		dumpNormalGetCppuType(FileStream& o);
-    void 		dumpComprehensiveGetCppuType(FileStream& o);
+    void        dumpNormalGetCppuType(FileStream& o);
+    void        dumpComprehensiveGetCppuType(FileStream& o);
 };
 
 class TypeDefType : public CppuType
@@ -325,9 +325,9 @@ public:
 
     virtual ~TypeDefType();
 
-    sal_Bool	dumpDeclaration(FileStream& o) throw( CannotDumpException );
-    sal_Bool	dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
-    sal_Bool	dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
+    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
+    sal_Bool    dumpHFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
+    sal_Bool    dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) throw( CannotDumpException );
 };
 
 class ConstructiveType: public CppuType {
@@ -384,23 +384,23 @@ public:
 };
 
 bool produceType(const ::rtl::OString& typeName,
-                     TypeManager const & typeMgr, 
+                     TypeManager const & typeMgr,
                      codemaker::GeneratedTypeSet & generated,
                      CppuOptions* pOptions)
                  throw( CannotDumpException );
 
 bool produceType(RegistryKey& typeName, bool bIsExtraType,
-                     TypeManager const & typeMgr, 
+                     TypeManager const & typeMgr,
                      codemaker::GeneratedTypeSet & generated,
                      CppuOptions* pOptions)
                  throw( CannotDumpException );
 
 /**
- * This function returns a C++ scoped name, represents the namespace 
+ * This function returns a C++ scoped name, represents the namespace
  * scoping of this type, e.g. com:.sun::star::uno::XInterface.
  */
-// ::rtl::OString scopedName(const ::rtl::OString& scope, const ::rtl::OString& type, 
-// 				   sal_Bool bNoNameSpace=sal_False);
+// ::rtl::OString scopedName(const ::rtl::OString& scope, const ::rtl::OString& type,
+//                 sal_Bool bNoNameSpace=sal_False);
 
 #endif // INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_CPPUTYPE_HXX
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,33 +40,33 @@ namespace connectivity
         ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
 
         class OMySQLTable;
-        typedef ::comphelper::OIdPropertyArrayUsageHelper< OMySQLTable >	OMySQLTable_PROP;
-        class OMySQLTable :	public OTableHelper
+        typedef ::comphelper::OIdPropertyArrayUsageHelper< OMySQLTable >    OMySQLTable_PROP;
+        class OMySQLTable : public OTableHelper
                             ,public OMySQLTable_PROP
         {
             sal_Int32 m_nPrivileges; // we have to set our privileges by our own
 
             /** executes the statmenmt.
-                @param	_rStatement
+                @param  _rStatement
                     The statement to execute.
                 */
             void executeStatement(const ::rtl::OUString& _rStatement );
         protected:
 
             /** creates the column collection for the table
-                @param	_rNames
+                @param  _rNames
                     The column names.
             */
             virtual sdbcx::OCollection* createColumns(const TStringVector& _rNames);
 
             /** creates the key collection for the table
-                @param	_rNames
+                @param  _rNames
                     The key names.
             */
             virtual sdbcx::OCollection* createKeys(const TStringVector& _rNames);
 
             /** creates the index collection for the table
-                @param	_rNames
+                @param  _rNames
                     The index names.
             */
             virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames);
@@ -85,15 +85,15 @@ namespace connectivity
                 <BR>
                 as long as IPropertyArrayHelper has no virtual destructor, the implementation of ~OPropertyArrayUsageHelper
                 assumes that you created an ::cppu::OPropertyArrayHelper when deleting s_pProps.
-                @return							an pointer to the newly created array helper. Must not be NULL.
+                @return                         an pointer to the newly created array helper. Must not be NULL.
             */
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-            
+
         public:
-            OMySQLTable(	sdbcx::OCollection* _pTables,
+            OMySQLTable(    sdbcx::OCollection* _pTables,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
-            OMySQLTable(	sdbcx::OCollection* _pTables,
+            OMySQLTable(    sdbcx::OCollection* _pTables,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                             const ::rtl::OUString& _Name,
                             const ::rtl::OUString& _Type,

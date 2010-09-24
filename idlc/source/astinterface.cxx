@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 using namespace ::rtl;
 
-AstInterface::AstInterface(const ::rtl::OString& name, 
+AstInterface::AstInterface(const ::rtl::OString& name,
                            AstInterface const * pInherits,
                            AstScope* pScope)
     : AstType(NT_interface, name, pScope)
@@ -117,7 +117,7 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
     RegistryKey localKey;
     if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
     {
-        fprintf(stderr, "%s: warning, could	not create key '%s' in '%s'\n",
+        fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
         return sal_False;
@@ -260,14 +260,14 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
 
     if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY, (RegValue)pBlob, aBlobSize))
     {
-        fprintf(stderr, "%s: warning, could	not set value of key \"%s\" in %s\n",
+        fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
         return sal_False;
     }
 
     return true;
-}	
+}
 
 void AstInterface::checkInheritedInterfaceClashes(
     DoubleDeclarations & doubleDeclarations,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,43 +24,43 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_beans_XPropertiesChangeListener_idl__ 
-#define __com_sun_star_beans_XPropertiesChangeListener_idl__ 
- 
-#ifndef __com_sun_star_lang_XEventListener_idl__ 
-#include <com/sun/star/lang/XEventListener.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_PropertyChangeEvent_idl__ 
-#include <com/sun/star/beans/PropertyChangeEvent.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module beans {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_beans_XPropertiesChangeListener_idl__
+#define __com_sun_star_beans_XPropertiesChangeListener_idl__
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyChangeEvent_idl__
+#include <com/sun/star/beans/PropertyChangeEvent.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
 /** receives events which get fired whenever a bound property is changed.
  */
 published interface XPropertiesChangeListener: com::sun::star::lang::XEventListener
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** gets called when bound properties are changed.
 
         @param aEvent
             contains a sequence of <type>PropertyChangeEvent</type> objects
-            which describe the event source and the properites wich have 
+            which describe the event source and the properites wich have
             changed.
      */
-    void propertiesChange( [in] sequence<com::sun::star::beans::PropertyChangeEvent> aEvent ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
+    void propertiesChange( [in] sequence<com::sun::star::beans::PropertyChangeEvent> aEvent );
 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

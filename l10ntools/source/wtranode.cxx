@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,13 +35,13 @@
 // NOT FULLY DECLARED SERVICES
 
 
-const ByteString	sEmptyString("");
+const ByteString    sEmptyString("");
 
 
-WTT_Node::WTT_Node( UINT8	   i_nValue,
+WTT_Node::WTT_Node( UINT8      i_nValue,
                     WTT_Node * i_pDefaultBranch,
                     WTT_Node * i_pDefaultBranchForAlphas )
-    :	nValue(i_nValue),
+    :   nValue(i_nValue),
         eType(token_to_keep),
         sReplaceString(sEmptyString),
         // aBranches,
@@ -60,7 +60,7 @@ WTT_Node::WTT_Node( UINT8	   i_nValue,
 
 void
 WTT_Node::SetBranch( UINT8      i_cBranch,
-                     WTT_Node *	i_pNode )
+                     WTT_Node * i_pNode )
 {
     if (i_cBranch < C_NR_OF_BRANCHES)
     {
@@ -79,7 +79,7 @@ WTT_Node::~WTT_Node()
 {
     // Delete the tree hanging below this node:
 
-    bIsOnDeleting = TRUE;	// Avoid double deleting of multiple used nodes.
+    bIsOnDeleting = TRUE;   // Avoid double deleting of multiple used nodes.
 
     for (int i = 0; i < C_NR_OF_BRANCHES; i++)
     {

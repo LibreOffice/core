@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,7 +100,7 @@ void DrawViewShell::ModelHasChanged()
 
     // jetzt den von der Drawing Engine neu erzeugten TextEditOutliner
     // initialisieren
-    ::Outliner* pOutliner 	  = mpDrawView->GetTextEditOutliner();
+    ::Outliner* pOutliner     = mpDrawView->GetTextEditOutliner();
     if (pOutliner)
     {
         SfxStyleSheetPool* pSPool = (SfxStyleSheetPool*) GetDocSh()->GetStyleSheetPool();
@@ -135,7 +135,7 @@ void DrawViewShell::ArrangeGUIElements (void)
     // Retrieve the current size (thickness) of the scroll bars.  That is
     // the width of the vertical and the height of the horizontal scroll
     // bar.
-    int nScrollBarSize = 
+    int nScrollBarSize =
         GetParentWindow()->GetSettings().GetStyleSettings().GetScrollBarSize();
     maScrBarWH = Size (nScrollBarSize, nScrollBarSize);
 
@@ -273,8 +273,8 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
         mpDrawView->SetMasterPagePaintCaching( pView->IsMasterPagePaintCaching() );
 
     // Definition:
-    //	grosse Handles:	9
-    //	kleine Handles:	7
+    //  grosse Handles: 9
+    //  kleine Handles: 7
     USHORT nTmp = mpDrawView->GetMarkHdlSizePixel();
     //DBG_ASSERT(nTmp != 7, "HandleSize != 7 oder 9");
     if( nTmp == 9 && !pView->IsBigHandles() )
@@ -468,7 +468,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
         aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     }
 
-    /* #97517#	This is done before each text edit, so why not do it before every paint.
+    /* #97517#  This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
     GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ) );
@@ -476,7 +476,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     // #103834# Set Application Background color for usage in SdrPaintView(s)
     mpDrawView->SetApplicationBackgroundColor(aFillColor);
 
-    /* #97517#	This is done before each text edit, so why not do it before every paint.
+    /* #97517#  This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
     GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( Application::GetSettings().GetLanguage() );
@@ -687,7 +687,7 @@ void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
 
 int DrawViewShell::GetActiveTabLayerIndex (void) const
 {
-    const LayerTabBar* pBar 
+    const LayerTabBar* pBar
         = const_cast<DrawViewShell*>(this)->GetLayerTabControl ();
     if (pBar != NULL)
         return pBar->GetPagePos (pBar->GetCurPageId());
@@ -734,7 +734,7 @@ LayerTabBar* DrawViewShell::GetLayerTabControl (void)
 
 int DrawViewShell::GetTabLayerCount (void) const
 {
-    const LayerTabBar* pBar 
+    const LayerTabBar* pBar
         = const_cast<DrawViewShell*>(this)->GetLayerTabControl ();
     if (pBar != NULL)
         return pBar->GetPageCount();

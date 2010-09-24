@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace basegfx
         derive from this, and override the span() method, which will
         get called for every scanline span of the poly-polygon.
 
-        @derive 
+        @derive
         Overwrite span() with the render output method of your choice.
      */
     class B2DPolyPolygonRasterConverter
@@ -73,7 +73,7 @@ namespace basegfx
             area might also be larger.
          */
         B2DPolyPolygonRasterConverter(const B2DPolyPolygon& rPolyPolyRaster,
-                                      const B2DRectangle&	rRasterArea );
+                                      const B2DRectangle&   rRasterArea );
 
         virtual ~B2DPolyPolygonRasterConverter();
 
@@ -89,7 +89,7 @@ namespace basegfx
 
             @param rfXLeft
             The left end of the current horizontal span
-            
+
             @param rfXRight
             The right end of the current horizontal span
 
@@ -102,8 +102,8 @@ namespace basegfx
         */
         virtual void span(const double& rfXLeft,
                           const double& rfXRight,
-                          sal_Int32 	nY, 
-                          bool 			bOn ) = 0;
+                          sal_Int32     nY,
+                          bool          bOn ) = 0;
 
         /// @internal
         struct Vertex
@@ -111,9 +111,9 @@ namespace basegfx
             inline Vertex();
             inline Vertex( const B2DPoint&, const B2DPoint&, bool );
 
-            B2DPoint	aP1;
-            B2DPoint	aP2;
-            bool 		bDownwards;
+            B2DPoint    aP1;
+            B2DPoint    aP2;
+            bool        bDownwards;
         };
 
     private:
@@ -123,18 +123,18 @@ namespace basegfx
 
         void init();
 
-        typedef ::std::vector<Vertex>				VectorOfVertices;
-        typedef ::std::vector<VectorOfVertices>		VectorOfVertexVectors;
+        typedef ::std::vector<Vertex>               VectorOfVertices;
+        typedef ::std::vector<VectorOfVertices>     VectorOfVertexVectors;
 
         /// The poly-polygon to raster-convert
-        B2DPolyPolygon								maPolyPolygon;
+        B2DPolyPolygon                              maPolyPolygon;
         /// Total bound rect of the poly-polygon
-        const B2DRectangle							maPolyPolyRectangle;
+        const B2DRectangle                          maPolyPolyRectangle;
 
         /** Vector containing for each scanline a vector which in turn
             contains all vertices that start on the specific scanline
          */
-        VectorOfVertexVectors						maScanlines;
+        VectorOfVertexVectors                       maScanlines;
     };
 }
 

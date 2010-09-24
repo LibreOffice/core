@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,13 +93,13 @@ class InternalResMgr
     friend class SimpleResMgr;
     friend class ResMgrContainer;
 
-    ImpContent *			        pContent;
-    UINT32					        nOffCorrection;
-    BYTE *					        pStringBlock;
-    SvStream *				        pStm;
-    BOOL					        bEqual2Content;
-    UINT32					        nEntries;
-    OUString				        aFileName;
+    ImpContent *                    pContent;
+    UINT32                          nOffCorrection;
+    BYTE *                          pStringBlock;
+    SvStream *                      pStm;
+    BOOL                            bEqual2Content;
+    UINT32                          nEntries;
+    OUString                        aFileName;
     OUString                        aPrefix;
     OUString                        aResName;
     bool                            bSingular;
@@ -111,15 +111,15 @@ class InternalResMgr
                                             const OUString& aResName,
                                             const com::sun::star::lang::Locale& rLocale );
                             ~InternalResMgr();
-    BOOL					Create();
+    BOOL                    Create();
 
-    BOOL					IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const;
-    void *					LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
+    BOOL                    IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const;
+    void *                  LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                                            void **pResHandle );
 public:
-    void					FreeGlobalRes( void *, void * );
+    void                    FreeGlobalRes( void *, void * );
 
-    SvStream *				GetBitmapStream( sal_uInt32 nResId );
+    SvStream *              GetBitmapStream( sal_uInt32 nResId );
 };
 
 // =======================================================================
@@ -127,39 +127,39 @@ public:
 class ResMgrContainer
 {
     static ResMgrContainer*     pOneInstance;
-    
+
     struct ContainerElement
     {
         InternalResMgr* pResMgr;
         OUString        aFileURL;
         int             nRefCount;
         int             nLoadCount;
-        
+
         ContainerElement() :
             pResMgr( NULL ),
             nRefCount( 0 ),
             nLoadCount( 0 )
             {}
     };
-    
+
     std::hash_map< OUString, ContainerElement, OUStringHash> m_aResFiles;
     com::sun::star::lang::Locale                             m_aDefLocale;
-    
+
     ResMgrContainer() { init(); }
     ~ResMgrContainer();
-    
+
     void init();
     public:
 
-    static ResMgrContainer& get();    
+    static ResMgrContainer& get();
     static void release();
-    
+
     InternalResMgr* getResMgr( const OUString& rPrefix,
                                com::sun::star::lang::Locale& rLocale,
                                bool bForceNewInstance = false
                                );
     InternalResMgr* getNextFallback( InternalResMgr* pResMgr );
-    
+
     void freeResMgr( InternalResMgr* pResMgr );
 
     void setDefLocale( const com::sun::star::lang::Locale& rLocale )
@@ -200,7 +200,7 @@ void ResMgrContainer::init()
     // get resource path
     std::list< OUString > aDirs;
     sal_Int32 nIndex = 0;
-    
+
     // 1. fixed locations
     rtl::OUString uri(
         RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/resource"));
@@ -210,7 +210,7 @@ void ResMgrContainer::init()
         RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program/resource"));
     rtl::Bootstrap::expandMacros(uri);
     aDirs.push_back(uri);
-    
+
     // 2. in STAR_RESOURCEPATH
     const sal_Char* pEnv = getenv( "STAR_RESOURCEPATH" );
     if( pEnv )
@@ -286,7 +286,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
     com::sun::star::lang::Locale aLocale( rLocale );
     OUStringBuffer aSearch( rPrefix.getLength() + 16 );
     std::hash_map< OUString, ContainerElement, OUStringHash >::iterator it = m_aResFiles.end();
-    
+
     int nTries = 0;
     if( aLocale.Language.getLength() > 0 )
         nTries = 1;
@@ -405,10 +405,10 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
     // at this point it->second.pResMgr must be filled either by creating a new one
     // (then the refcount is still 0) or because we already had one
     InternalResMgr* pImp = it->second.pResMgr;
-    
+
     if( it->second.nRefCount == 0 )
         it->second.nLoadCount++;
-    
+
     // for SimpleResMgr
     if( bForceNewInstance )
     {
@@ -434,7 +434,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
     }
     else
         it->second.nRefCount++;
-    
+
     return pImp;
 }
 
@@ -499,7 +499,7 @@ struct ImpContent
 
 struct ImpContentLessCompare : public ::std::binary_function< ImpContent, ImpContent, bool>
 {
-    inline bool operator() (const ImpContent& lhs, const ImpContent& rhs) const 
+    inline bool operator() (const ImpContent& lhs, const ImpContent& rhs) const
     {
         return lhs.nTypeAndId < rhs.nTypeAndId;
     }
@@ -507,11 +507,11 @@ struct ImpContentLessCompare : public ::std::binary_function< ImpContent, ImpCon
 
 struct ImpContentMixLessCompare : public ::std::binary_function< ImpContent, sal_uInt64, bool>
 {
-    inline bool operator() (const ImpContent& lhs, const sal_uInt64& rhs) const 
+    inline bool operator() (const ImpContent& lhs, const sal_uInt64& rhs) const
     {
         return lhs.nTypeAndId < rhs;
     }
-    inline bool operator() (const sal_uInt64& lhs, const ImpContent& rhs) const 
+    inline bool operator() (const sal_uInt64& lhs, const ImpContent& rhs) const
     {
         return lhs < rhs.nTypeAndId;
     }
@@ -664,7 +664,7 @@ BOOL InternalResMgr::Create()
         OSL_ENSURE( bEqual2Content, "resource structure wrong" );
         if( !bSorted )
             ::std::sort(pContent,pContent+nEntries,ImpContentLessCompare());
-            //	qsort( pContent, nEntries, sizeof( ImpContent ), Compare );
+            //  qsort( pContent, nEntries, sizeof( ImpContent ), Compare );
 
         bDone = TRUE;
     }
@@ -697,7 +697,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
     // Anfang der Strings suchen
     sal_uInt64 nValue = ((sal_uInt64(nRT) << 32) | nId);
     ImpContent* pEnd = (pContent + nEntries);
-    ImpContent* pFind = ::std::lower_bound(	pContent,
+    ImpContent* pFind = ::std::lower_bound( pContent,
                                             pEnd,
                                             nValue,
                                             ImpContentMixLessCompare());
@@ -801,7 +801,7 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
         ResMgrContainer::get().getResMgr( pResMgr->pImpRes->aPrefix,
                                           pResMgr->pImpRes->aLocale,
                                           true );
-                                          
+
     ResMgr* pNewResMgr = new ResMgr( pImp );
 
     ByteString aStr = OUStringToOString( pResMgr->GetFileName(), RTL_TEXTENCODING_UTF8 );
@@ -990,7 +990,7 @@ ResMgr::~ResMgr()
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     ResMgrContainer::get().freeResMgr( pImpRes );
-    
+
     // clean up possible left rc stack frames
     while( nCurStack > 0 )
     {
@@ -1008,7 +1008,7 @@ void ResMgr::incStack()
     if( nCurStack >= int(aStack.size()) )
         aStack.push_back( ImpRCStack() );
     aStack[nCurStack].Clear();
-    
+
     DBG_ASSERT( nCurStack < 32, "Resource stack unreasonably large" );
 }
 
@@ -1028,7 +1028,7 @@ void ResMgr::decStack()
         {
             #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE( "returning from fallback %s\n",
-                     OUStringToOString(pFallbackResMgr->GetFileName(), osl_getThreadTextEncoding() ).getStr() ); 
+                     OUStringToOString(pFallbackResMgr->GetFileName(), osl_getThreadTextEncoding() ).getStr() );
             #endif
             delete pFallbackResMgr;
             pFallbackResMgr = NULL;
@@ -1081,14 +1081,14 @@ BOOL ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
 
     if ( !pMgr )
         pMgr = this;
-    
+
     if( pMgr->pFallbackResMgr )
     {
         ResId aId( rId );
         aId.SetResMgr( NULL );
         return pMgr->pFallbackResMgr->IsAvailable( aId, pResObj );
     }
-    
+
     if ( !pResObj || pResObj == pMgr->aStack[pMgr->nCurStack].pResObj )
     {
         if ( !pClassRes )
@@ -1115,7 +1115,7 @@ void* ResMgr::GetClass()
 
     if( pFallbackResMgr )
         return pFallbackResMgr->GetClass();
-    
+
     return aStack[nCurStack].pClassRes;
 }
 
@@ -1135,7 +1135,7 @@ BOOL ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
     ResMgr* pMgr = rId.GetResMgr();
     if ( pMgr && (this != pMgr) )
         return pMgr->GetResource( rId, pResObj );
-    
+
     // normally Increment will pop the context; this is
     // not possible in RC_NOTFOUND case, so pop a frame here
     ImpRCStack* pTop = &aStack[nCurStack];
@@ -1248,7 +1248,7 @@ void ResMgr::PopContext( const Resource* pResObj )
         pFallbackResMgr->PopContext( pResObj );
         return;
     }
-    
+
 #ifdef DBG_UTIL
     if ( DbgIsResource() )
     {
@@ -1299,7 +1299,7 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
         aId.SetResMgr( NULL );
         return pFallbackResMgr->CreateBlock( aId );
     }
-    
+
     RSHEADER_TYPE* pHeader = NULL;
     if ( GetResource( rId ) )
     {
@@ -1385,7 +1385,7 @@ sal_uInt32 ResMgr::GetRemainSize()
 
     if( pFallbackResMgr )
         return pFallbackResMgr->GetRemainSize();
-    
+
     const ImpRCStack& rTop = aStack[nCurStack];
     return  (sal_uInt32)((long)(BYTE *)rTop.pResource +
                      rTop.pResource->GetLocalOff() -
@@ -1400,11 +1400,11 @@ void* ResMgr::Increment( sal_uInt32 nSize )
 
     if( pFallbackResMgr )
         return pFallbackResMgr->Increment( nSize );
-    
+
     ImpRCStack& rStack = aStack[nCurStack];
     if( (rStack.Flags & RC_NOTFOUND) )
         return rStack.pClassRes;
-    
+
     BYTE* pClassRes = (BYTE*)rStack.pClassRes + nSize;
 
     rStack.pClassRes = pClassRes;
@@ -1680,9 +1680,9 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     OUString aPrefix( pPrefixName, strlen( pPrefixName ), osl_getThreadTextEncoding() );
-    
+
     if( ! aLocale.Language.getLength() )
-        aLocale = ResMgrContainer::get().getDefLocale();    
+        aLocale = ResMgrContainer::get().getDefLocale();
 
     InternalResMgr* pImp = ResMgrContainer::get().getResMgr( aPrefix, aLocale );
     return pImp ? new ResMgr( pImp ) : NULL;
@@ -1700,7 +1700,7 @@ ResMgr* ResMgr::SearchCreateResMgr(
 
     if( ! rLocale.Language.getLength() )
         rLocale = ResMgrContainer::get().getDefLocale();
-    
+
     InternalResMgr* pImp = ResMgrContainer::get().getResMgr( aPrefix, rLocale );
     return pImp ? new ResMgr( pImp ) : NULL;
 }
@@ -1713,7 +1713,7 @@ INT16 ResMgr::ReadShort()
 
     if( pFallbackResMgr )
         return pFallbackResMgr->ReadShort();
-    
+
     INT16 n = GetShort( GetClass() );
     Increment( sizeof( INT16 ) );
     return n;
@@ -1727,7 +1727,7 @@ INT32 ResMgr::ReadLong()
 
     if( pFallbackResMgr )
         return pFallbackResMgr->ReadLong();
-    
+
     INT32 n = GetLong( GetClass() );
     Increment( sizeof( INT32 ) );
     return n;
@@ -1741,7 +1741,7 @@ UniString ResMgr::ReadStringWithoutHook()
 
     if( pFallbackResMgr )
         return pFallbackResMgr->ReadStringWithoutHook();
-    
+
     UniString aRet;
 
     const ImpRCStack& rTop = aStack[nCurStack];
@@ -1753,7 +1753,7 @@ UniString ResMgr::ReadStringWithoutHook()
     }
     else
         Increment( GetStringWithoutHook( aRet, (const BYTE*)GetClass() ) );
-    
+
     return aRet;
 }
 
@@ -1773,7 +1773,7 @@ ULONG ResMgr::GetAutoHelpId()
 
     if( pFallbackResMgr )
         return pFallbackResMgr->GetAutoHelpId();
-    
+
     DBG_ASSERT( nCurStack, "resource stack empty in Auto help id generation" );
     if( nCurStack < 1 || nCurStack > 2 )
         return 0;
@@ -1785,7 +1785,7 @@ ULONG ResMgr::GetAutoHelpId()
 
     if( !nGID || nGID > 32767 )
         return 0;
-    
+
     ULONG nHID = 0;
 
     // GGGg gggg::gggg gggg::ggLL LLLl::llll llll
@@ -1847,7 +1847,7 @@ ULONG ResMgr::GetAutoHelpId()
             return 0;
     } // of switch
     nHID |= nGID << 14;
-    
+
     return nHID;
 }
 
@@ -1891,9 +1891,9 @@ SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
 
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
     if( ! aLocale.Language.getLength() )
-        aLocale = ResMgrContainer::get().getDefLocale(); 
-    
-    m_pResImpl = ResMgrContainer::get().getResMgr( aPrefix, aLocale, true );     
+        aLocale = ResMgrContainer::get().getDefLocale();
+
+    m_pResImpl = ResMgrContainer::get().getResMgr( aPrefix, aLocale, true );
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::SimpleResMgr : have no impl class !" );
 }
 
@@ -1901,7 +1901,7 @@ SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
 SimpleResMgr::SimpleResMgr( const ::rtl::OUString& _rPrefixName, ::com::sun::star::lang::Locale& _inout_Locale )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-    m_pResImpl = ResMgrContainer::get().getResMgr( _rPrefixName, _inout_Locale, true );     
+    m_pResImpl = ResMgrContainer::get().getResMgr( _rPrefixName, _inout_Locale, true );
 }
 
 // -----------------------------------------------------------------------

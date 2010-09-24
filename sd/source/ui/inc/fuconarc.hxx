@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 namespace sd {
 
 
-class FuConstructArc 
+class FuConstructArc
     : public FuConstruct
 {
 public:
@@ -48,17 +48,17 @@ public:
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();		   // Function aktivieren
-    virtual void Deactivate();		   // Function deaktivieren
+    virtual void Activate();           // Function aktivieren
+    virtual void Deactivate();         // Function deaktivieren
 
     // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 protected:
     FuConstructArc (
-        ViewShell* pViewSh, 
+        ViewShell* pViewSh,
         ::sd::Window* pWin,
-        ::sd::View* pView, 
+        ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 

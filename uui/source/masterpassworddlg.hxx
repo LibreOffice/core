@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@
 //============================================================================
 class MasterPasswordDialog : public ModalDialog
 {
-    FixedText		aFTMasterPassword;
-    Edit			aEDMasterPassword;
+    FixedText       aFTMasterPassword;
+    Edit            aEDMasterPassword;
     FixedLine       aFL;
-    OKButton		aOKBtn;
-    CancelButton	aCancelBtn;
-    HelpButton		aHelpBtn;
+    OKButton        aOKBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
 
 
     DECL_LINK( OKHdl_Impl, OKButton * );
@@ -55,11 +55,11 @@ class MasterPasswordDialog : public ModalDialog
 public:
     MasterPasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr );
 
-    String			GetMasterPassword() const { return aEDMasterPassword.GetText(); }
+    String          GetMasterPassword() const { return aEDMasterPassword.GetText(); }
 
 private:
-    ::com::sun::star::task::PasswordRequestMode		nDialogMode;
-    ResMgr*											pResourceMgr;
+    ::com::sun::star::task::PasswordRequestMode     nDialogMode;
+    ResMgr*                                         pResourceMgr;
 };
 
 #endif // UUI_MASTERPASSWORDDLG_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,12 +31,12 @@
 #include <tabwin/tabwindow.hxx>
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -44,14 +44,14 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 
 //_________________________________________________________________________________________________________________
-//	Defines
+//  Defines
 //_________________________________________________________________________________________________________________
 //
 
@@ -65,11 +65,11 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//	XInterface, XTypeProvider, XServiceInfo
+//  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   TabWinFactory				                    ,
-                                            ::cppu::OWeakObject							    ,
-                                            SERVICENAME_TABWINFACTORY	                    ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   TabWinFactory                                   ,
+                                            ::cppu::OWeakObject                             ,
+                                            SERVICENAME_TABWINFACTORY                       ,
                                             IMPLEMENTATIONNAME_TABWINFACTORY
                                         )
 
@@ -139,9 +139,9 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
         {
             // describe window properties.
             css::awt::WindowDescriptor aDescriptor;
-            aDescriptor.Type                =   css::awt::WindowClass_TOP										    ;
-            aDescriptor.ParentIndex         =   -1																	;
-            aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()						;
+            aDescriptor.Type                =   css::awt::WindowClass_TOP                                           ;
+            aDescriptor.ParentIndex         =   -1                                                                  ;
+            aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()                      ;
             aDescriptor.Bounds              =   css::awt::Rectangle(0,0,0,0)                                        ;
             aDescriptor.WindowAttributes    =   css::awt::WindowAttribute::BORDER|
                                                 css::awt::WindowAttribute::SIZEABLE|
@@ -161,7 +161,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
 
         css::uno::Sequence< css::uno::Any > aArgs( 1 );
 
-        aPropValue.Name	 = aTopWindowArgName;
+        aPropValue.Name  = aTopWindowArgName;
         aPropValue.Value = css::uno::makeAny( xTopWindow );
         aArgs[0] = css::uno::makeAny( aPropValue );
         pTabWindow->initialize( aArgs );

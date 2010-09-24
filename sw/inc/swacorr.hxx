@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@ class SwAutoCorrect : public SvxAutoCorrect
     using  SvxAutoCorrect::PutText;
 
 protected:
-    //	- return den Ersetzungstext (nur fuer SWG-Format, alle anderen
-    //		koennen aus der Wortliste herausgeholt werden!)
-    //		rShort ist der Stream-Name - gecryptet!
+    //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
+    //      koennen aus der Wortliste herausgeholt werden!)
+    //      rShort ist der Stream-Name - gecryptet!
     virtual BOOL GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& , const String& rFileName, const String& rShort, String& rLong );
-    
-    //	- Text mit Attributierung (kann nur der SWG - SWG-Format!)
-    //		rShort ist der Stream-Name - gecryptet!
+
+    //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
+    //      rShort ist der Stream-Name - gecryptet!
     virtual BOOL PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFileName, const String& rShort, SfxObjectShell& ,
                             String& );
 

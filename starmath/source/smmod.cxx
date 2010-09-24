@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ SmResId::SmResId( USHORT nId )
 
 SmLocalizedSymbolData::SmLocalizedSymbolData() :
     Resource( SmResId(RID_LOCALIZED_NAMES) ),
-    aUiSymbolNamesAry		( SmResId(RID_UI_SYMBOL_NAMES) ),
+    aUiSymbolNamesAry       ( SmResId(RID_UI_SYMBOL_NAMES) ),
     aExportSymbolNamesAry   ( SmResId(RID_EXPORT_SYMBOL_NAMES) ),
     aUiSymbolSetNamesAry    ( SmResId(RID_UI_SYMBOLSET_NAMES) ),
     aExportSymbolSetNamesAry( SmResId(RID_EXPORT_SYMBOLSET_NAMES) ),
@@ -349,19 +349,19 @@ void SmModule::FillStatusBar(StatusBar &rBar)
 /* -----------------15.02.99 12:45-------------------
  *
  * --------------------------------------------------*/
-SfxItemSet*	 SmModule::CreateItemSet( USHORT nId )
+SfxItemSet*  SmModule::CreateItemSet( USHORT nId )
 {
-    SfxItemSet*	 pRet = 0;
+    SfxItemSet*  pRet = 0;
     if(nId == SID_SM_EDITOPTIONS)
     {
         pRet = new SfxItemSet(GetPool(),
                              //TP_SMPRINT
-                             SID_PRINTSIZE, 		SID_PRINTSIZE,
-                             SID_PRINTZOOM, 		SID_PRINTZOOM,
-                             SID_PRINTTITLE,		SID_PRINTTITLE,
-                             SID_PRINTTEXT, 		SID_PRINTTEXT,
-                             SID_PRINTFRAME,		SID_PRINTFRAME,
-                             SID_NO_RIGHT_SPACES,	SID_NO_RIGHT_SPACES,
+                             SID_PRINTSIZE,         SID_PRINTSIZE,
+                             SID_PRINTZOOM,         SID_PRINTZOOM,
+                             SID_PRINTTITLE,        SID_PRINTTITLE,
+                             SID_PRINTTEXT,         SID_PRINTTEXT,
+                             SID_PRINTFRAME,        SID_PRINTFRAME,
+                             SID_NO_RIGHT_SPACES,   SID_NO_RIGHT_SPACES,
                              0 );
 
             GetConfig()->ConfigToItemSet(*pRet);
@@ -381,9 +381,9 @@ void SmModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 /* -----------------15.02.99 12:45-------------------
  *
  * --------------------------------------------------*/
-SfxTabPage*	 SmModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
+SfxTabPage*  SmModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
 {
-    SfxTabPage*	 pRet = 0;
+    SfxTabPage*  pRet = 0;
     if(nId == SID_SM_TP_PRINTOPTIONS)
         pRet = SmPrintOptionsTabPage::Create( pParent, rSet );
     return pRet;

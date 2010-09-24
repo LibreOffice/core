@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 
-//	using namespace connectivity;
+//  using namespace connectivity;
 
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
     : ::connectivity::ODatabaseMetaDataBase(_pCon,_pCon->getConnectionInfo())
@@ -61,7 +61,7 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
 sal_Int32 ODatabaseMetaData::getInt32Property(const ::rtl::OUString& _aProperty)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     connectivity::ado::WpADOProperties aProps(m_pADOConnection->get_Properties());
-    //	ADOS::ThrowException(*m_pADOConnection,*this);
+    //  ADOS::ThrowException(*m_pADOConnection,*this);
     OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
     ADO_PROP(_aProperty);
     sal_Int32 nValue(0);
@@ -97,7 +97,7 @@ sal_Bool ODatabaseMetaData::getBoolProperty(const ::rtl::OUString& _aProperty)  
 Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     ADORecordset *pRecordset = m_pADOConnection->getTypeInfo();
-    //	ADOS::ThrowException(*m_pADOConnection,*this);
+    //  ADOS::ThrowException(*m_pADOConnection,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setTypeInfoMap(ADOS::isJetEngine(m_pConnection->getEngineType()));
@@ -252,7 +252,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLExcept
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
 {
-    //	return getInt32Property(::rtl::OUString::createFromAscii("Max Columns in Index"));
+    //  return getInt32Property(::rtl::OUString::createFromAscii("Max Columns in Index"));
     return 0;
 }
 // -------------------------------------------------------------------------
@@ -351,7 +351,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 {
     Reference< XResultSet > xRef;
     if(!ADOS::isJetEngine(m_pConnection->getEngineType()))
-    {	// the jet provider doesn't support this method
+    {   // the jet provider doesn't support this method
         // Create elements used in the array
 
         ADORecordset *pRecordset = m_pADOConnection->getTablePrivileges(catalog,schemaPattern,tableNamePattern);
@@ -431,7 +431,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLExc
     return (getInt32Property(::rtl::OUString::createFromAscii("Identifier Case Sensitivity")) & DBPROPVAL_IC_LOWER) == DBPROPVAL_IC_LOWER ;
 }
 // -------------------------------------------------------------------------
-sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  ) 
+sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     return (getInt32Property(::rtl::OUString::createFromAscii("Identifier Case Sensitivity")) & DBPROPVAL_IC_MIXED) == DBPROPVAL_IC_MIXED ;
 }
@@ -484,7 +484,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
 {
-    //	return getStringProperty(::rtl::OUString::createFromAscii("Special Characters"));
+    //  return getStringProperty(::rtl::OUString::createFromAscii("Special Characters"));
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
@@ -493,7 +493,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) 
     return isCapable(DBLITERAL_CORRELATION_NAME);
 }
 // -------------------------------------------------------------------------
-sal_Bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  ) 
+sal_Bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
     return getInt32Property(::rtl::OUString::createFromAscii("Catalog Location")) == DBPROPVAL_CL_START;
 }
@@ -602,19 +602,19 @@ sal_Bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 // -------------------------------------------------------------------------
 sal_Bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
 {
-    //	return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_TABLE_DEFINITION) == DBPROPVAL_CU_TABLE_DEFINITION;
+    //  return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_TABLE_DEFINITION) == DBPROPVAL_CU_TABLE_DEFINITION;
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    //	return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_INDEX_DEFINITION) == DBPROPVAL_CU_INDEX_DEFINITION;
+    //  return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_INDEX_DEFINITION) == DBPROPVAL_CU_INDEX_DEFINITION;
     return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
-    //	return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_DML_STATEMENTS) == DBPROPVAL_CU_DML_STATEMENTS;
+    //  return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_DML_STATEMENTS) == DBPROPVAL_CU_DML_STATEMENTS;
     return sal_False;
 }
 // -------------------------------------------------------------------------
@@ -807,7 +807,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw(
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    //	return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_PRIVILEGE_DEFINITION) == DBPROPVAL_CU_PRIVILEGE_DEFINITION;
+    //  return (getInt32Property(::rtl::OUString::createFromAscii("Catalog Usage")) & DBPROPVAL_CU_PRIVILEGE_DEFINITION) == DBPROPVAL_CU_PRIVILEGE_DEFINITION;
     return sal_False;
 }
 // -------------------------------------------------------------------------
@@ -932,7 +932,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeExc
         ::rtl::OUString aRet,aComma = ::rtl::OUString::createFromAscii(",");
         while(!aRecordset.IsAtEOF())
         {
-            WpOLEAppendCollection<ADOFields, ADOField, WpADOField>	aFields(aRecordset.GetFields());
+            WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
             WpADOField aField(aFields.GetItem(0));
             aField.get_Value(aValue);
             aRet = aRet + aValue + aComma;

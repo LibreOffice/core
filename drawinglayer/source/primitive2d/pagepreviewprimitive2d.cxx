@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace drawinglayer
             Primitive2DSequence xRetval;
             Primitive2DSequence aContent(getPageContent());
 
-            if(aContent.hasElements() 
+            if(aContent.hasElements()
                 && basegfx::fTools::more(getContentWidth(), 0.0)
                 && basegfx::fTools::more(getContentHeight(), 0.0))
             {
@@ -86,7 +86,7 @@ namespace drawinglayer
                         // center the output. Calculate needed scale factors
                         const double fScaleX(aScale.getX() / getContentWidth());
                         const double fScaleY(aScale.getY() / getContentHeight());
-                        
+
                         // to keep the aspect, use the smaller scale and adapt missing size by translation
                         if(fScaleX < fScaleY)
                         {
@@ -106,7 +106,7 @@ namespace drawinglayer
                             aPageTrans.translate(fSpaceToAdd * 0.5, 0.0);
                             aPageTrans.scale(aScale.getX() / fNeededWidth, fScaleY);
                         }
-                        
+
                         // add the missing object transformation aspects
                         const basegfx::B2DHomMatrix aCombined(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
                             fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
@@ -116,11 +116,11 @@ namespace drawinglayer
                     {
                         // completely scale to PageObject size. Scale to unit size.
                         aPageTrans.scale(1.0/ getContentWidth(), 1.0 / getContentHeight());
-                        
+
                         // apply object matrix
                         aPageTrans *= getTransform();
                     }
-                
+
                     // embed in necessary transformation to map from SdrPage to SdrPageObject
                     const Primitive2DReference xReferenceB(new TransformPrimitive2D(aPageTrans, aContent));
                     xRetval = Primitive2DSequence(&xReferenceB, 1);
@@ -137,7 +137,7 @@ namespace drawinglayer
             double fContentHeight,
             const Primitive2DSequence& rPageContent,
             bool bKeepAspectRatio)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             mxDrawPage(rxDrawPage),
             maPageContent(rPageContent),
             maTransform(rTransform),
@@ -152,7 +152,7 @@ namespace drawinglayer
             if(BasePrimitive2D::operator==(rPrimitive))
             {
                 const PagePreviewPrimitive2D& rCompare = static_cast< const PagePreviewPrimitive2D& >(rPrimitive);
-                
+
                 return (getXDrawPage() == rCompare.getXDrawPage()
                     && getPageContent() == rCompare.getPageContent()
                     && getTransform() == rCompare.getTransform()

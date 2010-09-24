@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,39 +47,39 @@ public class InstallationImminent extends JPanel {
     private JEditorPane ProductInformation;
     private JScrollPane ProductPane;
     private PanelTitle titlebox;
-    
+
     public InstallationImminent() {
 
         InstallData data = InstallData.getInstance();
 
         setLayout(new java.awt.BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
- 
+
         String titletext = ResourceManager.getString("String_InstallationImminent1");
         titlebox = new PanelTitle(titletext);
         add(titlebox, BorderLayout.NORTH);
-       
+
         JPanel contentpanel = new JPanel();
         contentpanel.setLayout(new java.awt.BorderLayout());
         if ( data.useRtl() ) { contentpanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
-       
+
         String text1 = ResourceManager.getString("String_InstallationImminent2");
         PanelLabel label1 = new PanelLabel(text1);
         if ( data.useRtl() ) { label1.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
-           
+
         ProductInformation = new JEditorPane("text/html", getInfoText());
         ProductInformation.setEditable(false);
         if ( data.useRtl() ) { ProductInformation.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
-       
+
         ProductPane = new JScrollPane(ProductInformation);
         ProductPane.setPreferredSize(new Dimension(250, 145));
         ProductPane.setBorder(new EmptyBorder(10, 0, 10, 0));
         if ( data.useRtl() ) { ProductPane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
- 
-        contentpanel.add(label1, BorderLayout.NORTH);        
+
+        contentpanel.add(label1, BorderLayout.NORTH);
         contentpanel.add(ProductPane, BorderLayout.CENTER);
- 
-        add(contentpanel, BorderLayout.CENTER);        
+
+        add(contentpanel, BorderLayout.CENTER);
     }
 
     public void setInfoText(String text) {
@@ -94,20 +94,20 @@ public class InstallationImminent extends JPanel {
     public String getInfoText() {
         return infoText;
     }
-    
+
     public void updateInfoText() {
         ProductInformation.setText(infoText);
     }
-    
+
     public void setTabOrder() {
         JScrollBar ScrollBar = ProductPane.getVerticalScrollBar();
         if ( ScrollBar.isShowing() ) {
             ProductInformation.setFocusable(true);
         } else {
             ProductInformation.setFocusable(false);
-        }    
+        }
     }
-    
+
     public void setCaretPosition() {
         ProductInformation.setCaretPosition(0);
     }

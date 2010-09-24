@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class Size;
 
 namespace sd { namespace slidesorter { namespace view {
 
-/** Calculate the size and position of page objects displayed by a slide 
+/** Calculate the size and position of page objects displayed by a slide
     sorter.  The layouter takes into account various input values:
     1.) Size of the window in which the slide sorter is displayed.
     2.) Desired and minimal and maximal widths of page objects.
@@ -54,7 +54,7 @@ namespace sd { namespace slidesorter { namespace view {
     2.) The number of columns.
     3.) The size of the enclosing page.
 
-    <p>Sizes and lengths are all in pixel except where explicitly stated 
+    <p>Sizes and lengths are all in pixel except where explicitly stated
     otherwise.</p>
 
     <p>The GetIndex... methods may return indices that are larger than or
@@ -114,7 +114,7 @@ public:
         @param nMaximalColumnCount
             The default value is 5.
     */
-    void SetColumnCount (sal_Int32 nMinimalColumnCount, 
+    void SetColumnCount (sal_Int32 nMinimalColumnCount,
         sal_Int32 nMaximalColumnCount);
 
     /** Central method of this class.  It takes the input values and
@@ -133,12 +133,12 @@ public:
             used to obtain valid values (<TRUE/>).
     */
     bool RearrangeHorizontal (
-        const Size& rWindowSize, 
+        const Size& rWindowSize,
         const Size& rPageObjectSize,
         OutputDevice* pDevice,
         const sal_uInt32 nPageCount);
     bool RearrangeVertical (
-        const Size& rWindowSize, 
+        const Size& rWindowSize,
         const Size& rPageObjectSize,
         OutputDevice* pDevice);
 
@@ -186,7 +186,7 @@ public:
             the right of the page object.
     */
     Rectangle GetInsertionMarkerBox (
-        sal_Int32 nIndex, 
+        sal_Int32 nIndex,
         bool bVertical,
         bool bLeftOrTop) const;
 
@@ -267,12 +267,12 @@ public:
         const DoublePoint&rLayouterPoint) const;
 
     typedef ::std::vector<Rectangle> BackgroundRectangleList;
-    
+
 private:
-    class ScreenAndModelValue {public: 
+    class ScreenAndModelValue {public:
         sal_Int32 mnScreen,mnModel;
         explicit ScreenAndModelValue (sal_Int32 nScreen, sal_Int32 nModel = 0)
-            : mnScreen(nScreen),mnModel(nModel) {} 
+            : mnScreen(nScreen),mnModel(nModel) {}
     };
     ScreenAndModelValue mnRequestedLeftBorder;
     ScreenAndModelValue mnRequestedRightBorder;
@@ -321,7 +321,7 @@ private:
             row above or below respectively.
     */
     sal_Int32 GetRowAtPosition (
-        sal_Int32 nYPosition, 
+        sal_Int32 nYPosition,
         bool bIncludeBordersAndGaps,
         GapMembership eGapMembership = GM_NONE) const;
 
@@ -341,13 +341,13 @@ private:
             gap area with the column to the left or right respectively.
     */
     sal_Int32 GetColumnAtPosition (
-        sal_Int32 nXPosition, 
+        sal_Int32 nXPosition,
         bool bIncludeBordersAndGaps,
         GapMembership eGapMembership = GM_NONE) const;
 
     /** This method is typically called from GetRowAtPosition() and
         GetColumnAtPosition() to handle a position that lies inside the gap
-        between two adjacent rows or columns. 
+        between two adjacent rows or columns.
         @param nDistanceIntoGap
             Vertical distance from the bottom of the upper row down into the
             gap or or horizontal distance from the right edge right into the

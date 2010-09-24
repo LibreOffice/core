@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ public abstract class TestCase extends complexlib.ComplexTestCase
 
     // --------------------------------------------------------------------------------------------------------
     /** returns the URL of a temporary file which can be used during the test.
-     * 
+     *
      *  The file will be deleted when the process exits
      *  @return the URL of a temporary file
      */

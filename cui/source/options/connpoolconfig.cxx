@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ namespace offapp
         DriverPoolingSettings aSettings;
         // first get all the drivers register at the driver manager
         ODriverEnumeration aEnumDrivers;
-        for	(	ODriverEnumeration::const_iterator aLoopDrivers = aEnumDrivers.begin();
+        for (   ODriverEnumeration::const_iterator aLoopDrivers = aEnumDrivers.begin();
                 aLoopDrivers != aEnumDrivers.end();
                 ++aLoopDrivers
             )
@@ -133,7 +133,7 @@ namespace offapp
             // look if we (resp. the driver manager) know this driver
             // doing O(n) search here, which is expensive, but this doesn't matter in this small case ...
              DriverPoolingSettings::iterator aLookup;
-             for	(	aLookup = aSettings.begin();
+             for    (   aLookup = aSettings.begin();
                     aLookup != aSettings.end();
                     ++aLookup
                 )
@@ -141,7 +141,7 @@ namespace offapp
                     break;
 
             if (aLookup == aSettings.end())
-            {	// do not know the driver - add it
+            {   // do not know the driver - add it
                 aSettings.push_back(DriverPooling(sThisDriverName, sal_False, 120));
 
                 // and the position of the new entry
@@ -191,7 +191,7 @@ namespace offapp
             OConfigurationNode aThisDriverSettings;
 
             const DriverPoolingSettings& rNewSettings = pDriverSettings->getSettings();
-            for (	DriverPoolingSettings::const_iterator aLoop = rNewSettings.begin();
+            for (   DriverPoolingSettings::const_iterator aLoop = rNewSettings.begin();
                     aLoop != rNewSettings.end();
                     ++aLoop
                 )
@@ -217,7 +217,7 @@ namespace offapp
     }
 
 //........................................................................
-}	// namespace offapp
+}   // namespace offapp
 //........................................................................
 
 

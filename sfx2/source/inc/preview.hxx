@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <sfx2/basedlgs.hxx>
 
 class SfxObjectShell;
-//REMOVE	class SvStorageRef;
+//REMOVE    class SvStorageRef;
 class SfxFrameWindow;
 
 class SfxFrame;
@@ -57,7 +57,7 @@ public:
 class SfxPreviewWin_Impl: public SfxPreviewBase_Impl
 {
 protected:
-    virtual void	Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect );
 public:
                     SfxPreviewWin_Impl( Window* pParent,
                                     const ResId& rResId )

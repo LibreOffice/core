@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,14 +46,14 @@ namespace executable {
 /* The XML file stores the extensions which are currently registered.
    They will be removed when they are revoked.
    The format looks like this:
-   
+
 <?xml version="1.0"?>
  */
 class ExecutableBackendDb: public dp_registry::backend::RegisteredDb
-{    
+{
 protected:
     virtual ::rtl::OUString getDbNSName();
-    
+
     virtual ::rtl::OUString getNSPrefix();
 
     virtual ::rtl::OUString getRootElementName();

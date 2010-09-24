@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,12 +53,12 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
     if ( pValue )
     {
         oslFileError error;
-        rtl_uString	*ustrTempPath = NULL;
+        rtl_uString *ustrTempPath = NULL;
 
         rtl_string2UString( &ustrTempPath, pValue, strlen( pValue ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
         error = osl_getFileURLFromSystemPath( ustrTempPath, pustrTempDir );
         rtl_uString_release( ustrTempPath );
-        
+
         return error;
     }
     else
@@ -70,33 +70,33 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 #    define NO_DEBUG_CRT
 #endif
 
-#ifndef _WIN32_WINNT 
-#	define _WIN32_WINNT 0x0400
-#	define _CTYPE_DISABLE_MACROS /* wg. dynamischer C-Runtime MH */
+#ifndef _WIN32_WINNT
+#   define _WIN32_WINNT 0x0400
+#   define _CTYPE_DISABLE_MACROS /* wg. dynamischer C-Runtime MH */
 #endif
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
-#endif 
+#endif
 
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>    
+#include <windows.h>
 #include <malloc.h>
 
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif 
+#endif
 
 #define elementsof(arr) (sizeof(arr)/sizeof(arr[0]))
 
 oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 {
-    WCHAR	szBuffer[MAX_PATH];
-    LPWSTR	lpBuffer = szBuffer;
-    DWORD	nBufferLength = elementsof(szBuffer) - 1;
+    WCHAR   szBuffer[MAX_PATH];
+    LPWSTR  lpBuffer = szBuffer;
+    DWORD   nBufferLength = elementsof(szBuffer) - 1;
 
-    DWORD			nLength;
-    oslFileError	error;
+    DWORD           nLength;
+    oslFileError    error;
 
     do
     {
@@ -111,7 +111,7 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 
     if ( nLength )
     {
-        rtl_uString	*ustrTempPath = NULL;
+        rtl_uString *ustrTempPath = NULL;
 
         if ( '\\' == lpBuffer[nLength-1] )
             lpBuffer[nLength-1] = 0;

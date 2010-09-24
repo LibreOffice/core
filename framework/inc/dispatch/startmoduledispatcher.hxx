@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,11 +86,11 @@ class StartModuleDispatcher : public css::lang::XTypeProvider
         //---------------------------------------
         /** @short  our "context" frame. */
         css::uno::WeakReference< css::frame::XFrame > m_xOwner;
-    
+
         //---------------------------------------
         /** @short  the original queryDispatch() target. */
         ::rtl::OUString m_sDispatchTarget;
-    
+
         //---------------------------------------
         /** @short  list of registered status listener */
         ListenerHash m_lStatusListener;
@@ -102,7 +102,7 @@ class StartModuleDispatcher : public css::lang::XTypeProvider
 
         //---------------------------------------
         /** @short  connect a new StartModuleDispatcher instance to its "owner frame".
-    
+
             @descr  Such "owner frame" is used as context for all related operations.
 
             @param  xSMGR
@@ -111,7 +111,7 @@ class StartModuleDispatcher : public css::lang::XTypeProvider
 
             @param  xFrame
                     the frame where the corresponding dispatch was started.
-    
+
             @param  sTarget
                     the original target information used for the related queryDispatch() call.
          */
@@ -161,7 +161,7 @@ class StartModuleDispatcher : public css::lang::XTypeProvider
         /** @short  check if StartModule can be shown.
          */
         ::sal_Bool implts_isBackingModePossible();
-    
+
         //---------------------------------------
         /** @short  open the special BackingComponent (now StartModule)
 

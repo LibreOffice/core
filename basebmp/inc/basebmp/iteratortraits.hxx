@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,17 +37,17 @@ namespace basebmp
 template< class Iterator > struct IteratorTraits
 {
     /// VigraTrueType, if iterator does not provide *operator()/operator[] methods
-    typedef typename vigra::IsDerivedFrom<Iterator,NonStandardIterator>::result 
+    typedef typename vigra::IsDerivedFrom<Iterator,NonStandardIterator>::result
             isNonStandardIterator;
 
     /// Retrieve default accessor for this iterator (and given value type)
     template< typename ValueType > struct defaultAccessor : public
-        // select according to non-standardness of iterator type    
+        // select according to non-standardness of iterator type
         vigra::If< isNonStandardIterator,
             NonStandardAccessor< ValueType >,
             StandardAccessor< ValueType > >
     {};
-    
+
 };
 
 } // namespace basebmp

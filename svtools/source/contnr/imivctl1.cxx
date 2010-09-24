@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,13 +57,13 @@
 
 #define DRAWTEXT_FLAGS_SMALLICON (TEXT_DRAW_LEFT|TEXT_DRAW_ENDELLIPSIS|TEXT_DRAW_CLIP)
 
-#define EVENTID_SHOW_CURSOR				((void*)1)
-#define EVENTID_ADJUST_SCROLLBARS		((void*)2)
+#define EVENTID_SHOW_CURSOR             ((void*)1)
+#define EVENTID_ADJUST_SCROLLBARS       ((void*)2)
 
 struct SvxIconChoiceCtrlEntry_Impl
 {
-    SvxIconChoiceCtrlEntry*	_pEntry;
-    Point			_aPos;
+    SvxIconChoiceCtrlEntry* _pEntry;
+    Point           _aPos;
                     SvxIconChoiceCtrlEntry_Impl( SvxIconChoiceCtrlEntry* pEntry, const Rectangle& rBoundRect )
                     : _pEntry( pEntry), _aPos( rBoundRect.TopLeft()) {}
 };
@@ -74,15 +74,15 @@ static BOOL bEndScrollInvalidate = TRUE;
 
 class IcnViewEdit_Impl : public MultiLineEdit
 {
-    Link 			aCallBackHdl;
-    Accelerator 	aAccReturn;
-    Accelerator 	aAccEscape;
-    Timer 			aTimer;
-    BOOL 			bCanceled;
-    BOOL 			bAlreadyInCallback;
-    BOOL			bGrabFocus;
+    Link            aCallBackHdl;
+    Accelerator     aAccReturn;
+    Accelerator     aAccEscape;
+    Timer           aTimer;
+    BOOL            bCanceled;
+    BOOL            bAlreadyInCallback;
+    BOOL            bGrabFocus;
 
-    void 			CallCallBackHdl_Impl();
+    void            CallCallBackHdl_Impl();
                     DECL_LINK( Timeout_Impl, Timer * );
                     DECL_LINK( ReturnHdl_Impl, Accelerator * );
                     DECL_LINK( EscapeHdl_Impl, Accelerator * );
@@ -97,11 +97,11 @@ public:
                         const Link& rNotifyEditEnd );
 
                     ~IcnViewEdit_Impl();
-    virtual void 	KeyInput( const KeyEvent& rKEvt );
-    virtual long 	PreNotify( NotifyEvent& rNEvt );
-    BOOL			EditingCanceled() const { return bCanceled; }
-    void			StopEditing( BOOL bCancel = FALSE );
-    BOOL			IsGrabFocus() const { return bGrabFocus; }
+    virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual long    PreNotify( NotifyEvent& rNEvt );
+    BOOL            EditingCanceled() const { return bCanceled; }
+    void            StopEditing( BOOL bCancel = FALSE );
+    BOOL            IsGrabFocus() const { return bGrabFocus; }
 };
 
 // ----------------------------------------------------------------------------------------------
@@ -309,7 +309,7 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, ULONG 
 
     pZOrderList->Insert( (void*)pEntry, LIST_APPEND ); //pZOrderList->Count() );
     pImpCursor->Clear();
-//	pGridMap->Clear();
+//  pGridMap->Clear();
     if( pPos )
     {
         Size aSize( CalcBoundingSize( pEntry ) );
@@ -330,7 +330,7 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, ULONG 
             Rectangle aOutputArea( GetOutputRect() );
             pGridMap->OccupyGrids( pEntry );
             if( !aOutputArea.IsOver( pEntry->aRect ) )
-                return;	// ist nicht sichtbar
+                return; // ist nicht sichtbar
             pView->Invalidate( pEntry->aRect );
         }
         else
@@ -361,8 +361,8 @@ void SvxIconChoiceCtrl_Impl::CreateAutoMnemonics( MnemonicGenerator* _pGenerator
     // exchange texts with generated mnemonics
     for( i = 0; i < nEntryCount; ++i )
     {
-        SvxIconChoiceCtrlEntry*	pEntry = GetEntry( i );
-        String					aTxt = pEntry->GetText();
+        SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
+        String                  aTxt = pEntry->GetText();
 
         if( _pGenerator->CreateMnemonic( aTxt ) )
             pEntry->SetText( aTxt );
@@ -1732,8 +1732,8 @@ void SvxIconChoiceCtrl_Impl::LoseFocus()
         pCursor->ClearFlags( ICNVIEW_FLAG_FOCUSED );
     ShowCursor( FALSE );
 
-//	HideFocus ();
-//	pView->Invalidate ( aFocus.aRect );
+//  HideFocus ();
+//  pView->Invalidate ( aFocus.aRect );
 
     RepaintEntries( ICNVIEW_FLAG_SELECTED );
 }
@@ -1835,8 +1835,8 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(
     }
 // die Emphasis des Images muss von der abgeleiteten Klasse gezeichnet werden
 // (in der virtuellen Funktion DrawEntryImage)
-//	else
-//		pOut->DrawRect( rImageRect );
+//  else
+//      pOut->DrawRect( rImageRect );
 
     pOut->SetFillColor( aOldFillColor );
 }
@@ -1972,12 +1972,12 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
     Rectangle aTextRect( CalcTextRect(pEntry,&rPos,FALSE,&aEntryText));
     Rectangle aBmpRect( CalcBmpRect(pEntry, &rPos ) );
 
-    sal_Bool	bShowSelection =
-        (	(	( bSelected && !bCursored )
-            ||	bDropTarget
+    sal_Bool    bShowSelection =
+        (   (   ( bSelected && !bCursored )
+            ||  bDropTarget
             )
-        &&	!bNoEmphasis
-        &&	( eSelectionMode != NO_SELECTION )
+        &&  !bNoEmphasis
+        &&  ( eSelectionMode != NO_SELECTION )
         );
     sal_Bool bActiveSelection = ( 0 != ( nWinBits & WB_NOHIDESELECTION ) ) || pView->HasFocus();
 
@@ -2113,7 +2113,7 @@ void SvxIconChoiceCtrl_Impl::SetEntryPos( SvxIconChoiceCtrlEntry* pEntry, const 
     }
     else
     {
-        SvxIconChoiceCtrlEntry*	pPrev = FindEntryPredecessor( pEntry, rPos );
+        SvxIconChoiceCtrlEntry* pPrev = FindEntryPredecessor( pEntry, rPos );
         SetEntryPredecessor( pEntry, pPrev );
         aAutoArrangeTimer.Start();
     }
@@ -2325,7 +2325,7 @@ Rectangle SvxIconChoiceCtrl_Impl::CalcTextRect( SvxIconChoiceCtrlEntry* pEntry,
 long SvxIconChoiceCtrl_Impl::CalcBoundingWidth( SvxIconChoiceCtrlEntry* pEntry ) const
 {
     long nStringWidth = GetItemSize( pEntry, IcnViewFieldTypeText ).Width();
-//	nStringWidth += 2*LROFFS_TEXT;
+//  nStringWidth += 2*LROFFS_TEXT;
     long nWidth = 0;
 
     switch( nWinBits & (VIEWMODE_MASK) )
@@ -2379,7 +2379,7 @@ Size SvxIconChoiceCtrl_Impl::CalcBoundingSize( SvxIconChoiceCtrlEntry* pEntry ) 
 
 void SvxIconChoiceCtrl_Impl::RecalcAllBoundingRects()
 {
-    nMaxBoundHeight	= 0;
+    nMaxBoundHeight = 0;
     pZOrderList->Clear();
     ULONG nCount = aEntries.Count();
     ULONG nCur;
@@ -2413,7 +2413,7 @@ void SvxIconChoiceCtrl_Impl::RecalcAllBoundingRects()
 
 void SvxIconChoiceCtrl_Impl::RecalcAllBoundingRectsSmart()
 {
-    nMaxBoundHeight	= 0;
+    nMaxBoundHeight = 0;
     pZOrderList->Clear();
     ULONG nCur;
     SvxIconChoiceCtrlEntry* pEntry;
@@ -2708,7 +2708,7 @@ void SvxIconChoiceCtrl_Impl::InvalidateBoundingRect( SvxIconChoiceCtrlEntry* pEn
 
 BOOL SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
 {
-    Rectangle aDocRect(	GetDocumentRect() );
+    Rectangle aDocRect( GetDocumentRect() );
     Rectangle aVisRect( GetVisibleRect() );
     if( aVisRect.IsInside( aDocRect ))
         return FALSE;
@@ -2838,7 +2838,7 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const Rectangle& rRect, BOOL bScrBar,
     aOrigin *= -1;
     Rectangle aOutputArea( GetOutputRect() );
     if( aOutputArea.IsInside( aVirtRect ) )
-        return;	// ist schon sichtbar
+        return; // ist schon sichtbar
 
     long nDy;
     if( aVirtRect.Top() < aOutputArea.Top() )
@@ -2993,7 +2993,7 @@ Size SvxIconChoiceCtrl_Impl::GetMinGrid() const
 {
     Size aMinSize( aImageSize );
     aMinSize.Width() += 2 * LROFFS_BOUND;
-    aMinSize.Height() += TBOFFS_BOUND;	// PB: einmal Offset reicht (FileDlg)
+    aMinSize.Height() += TBOFFS_BOUND;  // PB: einmal Offset reicht (FileDlg)
     String aStrDummy( RTL_CONSTASCII_USTRINGPARAM( "XXX" ) );
     Size aTextSize( pView->GetTextWidth( aStrDummy ), pView->GetTextHeight() );
     if( nWinBits & WB_ICON )
@@ -3284,9 +3284,9 @@ void SvxIconChoiceCtrl_Impl::SelectRange(
                         BOOL bAdd )
 {
     ULONG nFront = GetEntryListPos( pStart );
-    ULONG nBack	 = GetEntryListPos( pEnd );
+    ULONG nBack  = GetEntryListPos( pEnd );
     ULONG nFirst = std::min( nFront, nBack );
-    ULONG nLast	 = std::max( nFront, nBack );
+    ULONG nLast  = std::max( nFront, nBack );
     ULONG i;
     SvxIconChoiceCtrlEntry* pEntry;
 
@@ -4322,7 +4322,7 @@ BOOL SvxIconChoiceCtrl_Impl::GetEntryPredecessor( SvxIconChoiceCtrlEntry* pEntry
     return TRUE;
 }
 
-SvxIconChoiceCtrlEntry*	SvxIconChoiceCtrl_Impl::FindEntryPredecessor( SvxIconChoiceCtrlEntry* pEntry,
+SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::FindEntryPredecessor( SvxIconChoiceCtrlEntry* pEntry,
     const Point& rPosTopLeft )
 {
     Point aPos( rPosTopLeft ); //TopLeft
@@ -4641,12 +4641,12 @@ BOOL SvxIconChoiceCtrl_Impl::HandleShortCutKey( const KeyEvent& rKEvt )
 {
     StopEditTimer();
 
-    BOOL		bRet = FALSE;
+    BOOL        bRet = FALSE;
 
     DBG_ASSERT( rKEvt.GetKeyCode().IsMod2(), "*SvxIconChoiceCtrl_Impl::HandleShortCutKey(): no <ALT> pressed!?" );
 
-    sal_Unicode	cChar = rKEvt.GetCharCode();
-    ULONG		nPos = (ULONG)-1;
+    sal_Unicode cChar = rKEvt.GetCharCode();
+    ULONG       nPos = (ULONG)-1;
 
     if( cChar && IsMnemonicChar( cChar, nPos ) )
     {

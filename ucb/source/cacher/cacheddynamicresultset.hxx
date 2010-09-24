@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ class CachedDynamicResultSet
                 , public com::sun::star::lang::XTypeProvider
                 , public com::sun::star::lang::XServiceInfo
 {
-    com::sun::star::uno::Reference<	com::sun::star::ucb::XContentIdentifierMapping >
+    com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifierMapping >
                             m_xContentIdentifierMapping;
 
 protected:
@@ -54,7 +54,7 @@ protected:
                 com::sun::star::sdbc::XResultSet >& xResultSet );
 
 public:
-    CachedDynamicResultSet(	com::sun::star::uno::Reference<
+    CachedDynamicResultSet( com::sun::star::uno::Reference<
                         com::sun::star::ucb::XDynamicResultSet > xOrigin
         , const com::sun::star::uno::Reference<
                         com::sun::star::ucb::XContentIdentifierMapping > & xContentMapping
@@ -62,7 +62,7 @@ public:
                         com::sun::star::lang::XMultiServiceFactory > & xSMgr );
 
     virtual ~CachedDynamicResultSet();
-    
+
 
     //-----------------------------------------------------------------
     // XInterface inherited
@@ -76,7 +76,7 @@ public:
     // XServiceInfo
     //-----------------------------------------------------------------
     XSERVICEINFO_NOFACTORY_DECL()
-    
+
     //-----------------------------------------------------------------
     // own methods ( inherited )
     //-----------------------------------------------------------------
@@ -95,7 +95,7 @@ class CachedDynamicResultSetFactory
 {
 protected:
     com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >	m_xSMgr;
+        com::sun::star::lang::XMultiServiceFactory >    m_xSMgr;
 
 public:
 

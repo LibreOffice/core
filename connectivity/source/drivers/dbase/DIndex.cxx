@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getCo
     construct();
 }
 // -------------------------------------------------------------------------
-ODbaseIndex::ODbaseIndex(	ODbaseTable* _pTable,
+ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
                             const NDXHeader& _rHeader,
                             const ::rtl::OUString& _rName)
     :OIndex(_rName,::rtl::OUString(),_rHeader.db_unique,sal_False,sal_False,sal_True) // _pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers()
@@ -365,8 +365,8 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rInd
 /* OJ: no longer needed
     // Text convertierung
     ByteString aText(rIndex.m_aHeader.db_name);
-    //	aText.Convert(rIndex.m_pTable->getConnection()->GetCharacterSet(), m_pTable->getConnection()->getTextEncoding());
-    //	aText.Convert(rIndex.m_pTable->getConnection()->GetCharacterSet(), m_pTable->getConnection()->getTextEncoding());
+    //  aText.Convert(rIndex.m_pTable->getConnection()->GetCharacterSet(), m_pTable->getConnection()->getTextEncoding());
+    //  aText.Convert(rIndex.m_pTable->getConnection()->GetCharacterSet(), m_pTable->getConnection()->getTextEncoding());
     strcpy(rIndex.m_aHeader.db_name,aText.GetBuffer());
 */
     rIndex.m_nRootPage = rIndex.m_aHeader.db_rootpage;
@@ -379,7 +379,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rInd
     rStream.Seek(0);
 /* OJ: no longer needed
     ByteString aText(rIndex.m_aHeader.db_name);
-    //	aText.Convert(m_pTable->getConnection()->getTextEncoding(), rIndex.m_pTable->getConnection()->GetCharacterSet());
+    //  aText.Convert(m_pTable->getConnection()->getTextEncoding(), rIndex.m_pTable->getConnection()->GetCharacterSet());
     strcpy(rIndex.m_aHeader.db_name,aText.GetBuffer());
 */
     OSL_VERIFY_EQUALS( rStream.Write(&rIndex.m_aHeader,PAGE_SIZE), PAGE_SIZE, "Write not successful: Wrong header size for dbase index!");
@@ -507,16 +507,16 @@ BOOL ODbaseIndex::CreateImpl()
     // ist die Spalte schon indiziert ?
     if ( !xCol.is() )
         ::dbtools::throwFunctionSequenceException(*this);
-//	else if (pColumn && pColumn->IsIndexed())
-//	{
-//		String aText = String(OResId(STR_STAT_INDEX_COLUMN_ALREADY_INDEXED));
-//		aText.SearchAndReplace(String::CreateFromAscii("#"),pColumn->GetName());
-//		aStatus.Set(SDB_STAT_ERROR,
-//				String::CreateFromAscii("01000"),
-//				aStatus.CreateErrorMessage(aText),
-//				0, String() );
-//		return FALSE;
-//	}
+//  else if (pColumn && pColumn->IsIndexed())
+//  {
+//      String aText = String(OResId(STR_STAT_INDEX_COLUMN_ALREADY_INDEXED));
+//      aText.SearchAndReplace(String::CreateFromAscii("#"),pColumn->GetName());
+//      aStatus.Set(SDB_STAT_ERROR,
+//              String::CreateFromAscii("01000"),
+//              aStatus.CreateErrorMessage(aText),
+//              0, String() );
+//      return FALSE;
+//  }
 
     // create the index file
     m_pFileStream = OFileTable::createStream_simpleError(sFile,STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
@@ -558,13 +558,13 @@ BOOL ODbaseIndex::CreateImpl()
         aStatement += aName;
         aStatement += aQuote;
 
-//		if (!m_IsUnique) // zusaetzlich sortierung mit der bookmarkspalte
-//		{
-//			aStatement.AppendAscii(" ,");
-//			aStatement += aQuote;
-//			aStatement.AppendAscii("[BOOKMARK]"); // this is a special column
-//			aStatement += aQuote;
-//		}
+//      if (!m_IsUnique) // zusaetzlich sortierung mit der bookmarkspalte
+//      {
+//          aStatement.AppendAscii(" ,");
+//          aStatement += aQuote;
+//          aStatement.AppendAscii("[BOOKMARK]"); // this is a special column
+//          aStatement += aQuote;
+//      }
 
         xSet.set( xStmt->executeQuery(aStatement),UNO_SET_THROW );
     }
@@ -607,13 +607,13 @@ BOOL ODbaseIndex::CreateImpl()
     m_nRootPage = 1;
     m_nPageCount = 2;
 
-    //	ODatabaseType eType = m_aHeader.db_keytype == 0 ? DataType::VARCHAR : DataType::DOUBLE;
+    //  ODatabaseType eType = m_aHeader.db_keytype == 0 ? DataType::VARCHAR : DataType::DOUBLE;
     m_aCurLeaf = m_aRoot = CreatePage(m_nRootPage);
     m_aRoot->SetModified(TRUE);
 
     m_bUseCollector = TRUE;
 
-    //	ULONG nRowsLeft = pCursor->RowCount();
+    //  ULONG nRowsLeft = pCursor->RowCount();
     sal_Int32 nRowsLeft = 0;
     Reference<XRow> xRow(xSet,UNO_QUERY);
 
@@ -628,13 +628,13 @@ BOOL ODbaseIndex::CreateImpl()
         nRowsLeft = xSet->getRow();
 
         xSet->beforeFirst();
-        ORowSetValue	atmpValue=ORowSetValue();
+        ORowSetValue    atmpValue=ORowSetValue();
         ONDXKey aKey(atmpValue, nType, 0);
         ONDXKey aInsertKey(atmpValue, nType, 0);
         // Erzeugen der Indexstruktur
         while (xSet->next())
         {
-            //	ODbRow& rRow = *pCursor->GetRow();
+            //  ODbRow& rRow = *pCursor->GetRow();
             ORowSetValue aValue(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)));
             // ueberpruefen auf doppelten eintrag
             if (m_IsUnique && m_nCurNode != NODE_NOTFOUND)

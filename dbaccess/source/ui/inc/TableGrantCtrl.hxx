@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,19 +62,19 @@ class OTableGrantControl : public ::svt::EditBrowseBox
 
     OModuleClient        m_aModuleClient;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >	m_xUsers;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >	m_xTables;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xUsers;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xORB;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAuthorizable>		m_xGrantUser;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString>								m_aTableNames;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAuthorizable>       m_xGrantUser;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString>                               m_aTableNames;
 
-    mutable TTablePrivilegeMap	m_aPrivMap;
-    ::rtl::OUString				m_sUserName;
-    ::svt::CheckBoxControl*		m_pCheckCell;
-    Edit*						m_pEdit;
-    long						m_nDataPos;
-    BOOL						m_bEnable;
-    ULONG		                m_nDeactivateEvent;
+    mutable TTablePrivilegeMap  m_aPrivMap;
+    ::rtl::OUString             m_sUserName;
+    ::svt::CheckBoxControl*     m_pCheckCell;
+    Edit*                       m_pEdit;
+    long                        m_nDataPos;
+    BOOL                        m_bEnable;
+    ULONG                       m_nDeactivateEvent;
 
 public:
     OTableGrantControl( Window* pParent,const ResId& _RsId);
@@ -96,7 +96,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible >
     CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId );
-    
+
 protected:
     virtual void Resize();
 
@@ -116,8 +116,8 @@ private:
     DECL_LINK( AsynchActivate, void* );
     DECL_LINK( AsynchDeactivate, void* );
 
-    sal_Bool	isAllowed(USHORT _nColumnId,sal_Int32 _nPrivilege) const;
-    void		fillPrivilege(sal_Int32 _nRow) const;
+    sal_Bool    isAllowed(USHORT _nColumnId,sal_Int32 _nPrivilege) const;
+    void        fillPrivilege(sal_Int32 _nRow) const;
     TTablePrivilegeMap::const_iterator findPrivilege(sal_Int32 _nRow) const;
 };
 

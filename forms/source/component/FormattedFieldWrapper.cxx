@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XMultiServiceFact
             m_pEditPart->acquire();
         }
         if (m_xAggregate.is())
-        {	// has to be in it's own block because of the temporary variable created by *this
+        {   // has to be in it's own block because of the temporary variable created by *this
             m_xAggregate->setDelegator(static_cast<XWeak*>(this));
         }
         decrement(m_refCount);
@@ -126,13 +126,13 @@ OFormattedFieldWrapper::OFormattedFieldWrapper( const OFormattedFieldWrapper* _p
             }
         }
         if ( m_xAggregate.is() )
-        {	// has to be in it's own block because of the temporary variable created by *this
+        {   // has to be in it's own block because of the temporary variable created by *this
             m_xAggregate->setDelegator( static_cast< XWeak* >( this ) );
         }
         decrement( m_refCount );
     }
     else
-    {	// the clone source does not yet have an aggregate -> we don't yet need one, too
+    {   // the clone source does not yet have an aggregate -> we don't yet need one, too
     }
 }
 
@@ -155,7 +155,7 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw 
     Any aReturn;
 
     if (_rType.equals( ::getCppuType( static_cast< Reference< XTypeProvider >* >(NULL) ) ) )
-    {	// a XTypeProvider interface needs a working aggregate - we don't want to give the type provider
+    {   // a XTypeProvider interface needs a working aggregate - we don't want to give the type provider
         // of our base class (OFormattedFieldWrapper_Base) to the caller as it supplies nearly nothing
         ensureAggregate();
         if (m_xAggregate.is())
@@ -167,7 +167,7 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw 
         aReturn = OFormattedFieldWrapper_Base::queryAggregation(_rType);
 
         if ((_rType.equals( ::getCppuType( static_cast< Reference< XServiceInfo >* >(NULL) ) ) ) && aReturn.hasValue())
-        {	// somebody requested an XServiceInfo interface and our base class provided it
+        {   // somebody requested an XServiceInfo interface and our base class provided it
             // check our aggregate if it has one, too
             ensureAggregate();
         }
@@ -269,14 +269,14 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
 void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& _rxInStream) throw( IOException, RuntimeException )
 {
     if (m_xAggregate.is())
-    {	//  we alread did a decision if we're an EditModel or a FormattedModel
+    {   //  we alread did a decision if we're an EditModel or a FormattedModel
 
         // if we act as formatted, we have to read the edit part first
         if (m_xFormattedPart.is())
         {
             // two possible cases:
             // a) the stuff was written by a version which didn't work with an Edit header (all intermediate
-            //		versions >5.1 && <=568)
+            //      versions >5.1 && <=568)
             // b) it was written by a version using edit headers
             // as we can distinguish a) from b) only after we have read the edit part, we need to remember the
             // position
@@ -288,7 +288,7 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
                 // this only works because an edit model can read the stuff written by a formatted model (maybe with
                 // some assertions) , but not vice versa
             if (!m_pEditPart->lastReadWasFormattedFake())
-            {	// case a), written with a version without the edit part fake, so seek to the start position, again
+            {   // case a), written with a version without the edit part fake, so seek to the start position, again
                 xInMarkable->jumpToMark(nBeforeEditPart);
             }
             xInMarkable->deleteMark(nBeforeEditPart);
@@ -317,7 +317,7 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
         // yes -> all fine
         pNewAggregate = pBasicReader;
     else
-    {	// no -> substitute it with a formatted model
+    {   // no -> substitute it with a formatted model
 
         // let the formmatted model do the reading
         OFormattedModel* pFormattedReader = new OFormattedModel(m_xServiceFactory);
@@ -340,7 +340,7 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
         DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::read : the OEditModel didn't have an XAggregation interface !");
     }
     if (m_xAggregate.is())
-    {	// has to be in it's own block because of the temporary variable created by *this
+    {   // has to be in it's own block because of the temporary variable created by *this
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));
     }
     decrement(m_refCount);
@@ -385,7 +385,7 @@ void OFormattedFieldWrapper::ensureAggregate()
         }
     }
     if (m_xAggregate.is())
-    {	// has to be in it's own block because of the temporary variable created by *this
+    {   // has to be in it's own block because of the temporary variable created by *this
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));
     }
     decrement(m_refCount);

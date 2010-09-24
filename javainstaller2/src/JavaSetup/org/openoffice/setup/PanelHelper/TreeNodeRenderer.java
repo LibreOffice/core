@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 public class TreeNodeRenderer extends DefaultTreeCellRenderer {
-    
+
     ImageIcon    InstallIcon;
     ImageIcon    InstalledIcon;
     ImageIcon    DontInstallIcon;
@@ -55,12 +55,12 @@ public class TreeNodeRenderer extends DefaultTreeCellRenderer {
     public Component getTreeCellRendererComponent(
                         JTree tree, Object value, boolean sel, boolean expanded,
                         boolean leaf, int row, boolean hasFocus)    {
-        
+
         super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
         Object nodeObject = node.getUserObject();
-        
+
         if (DisplayPackageDescription.is(nodeObject)) {
             DisplayPackageDescription nodeInfo = (DisplayPackageDescription)nodeObject;
 
@@ -75,7 +75,7 @@ public class TreeNodeRenderer extends DefaultTreeCellRenderer {
                 default: setIcon(InstalledIcon); break;
             }
         }
- 
+
         if (sel) {
             setBackground(super.getBackgroundSelectionColor());
             setForeground(textSelectionColor);
@@ -83,7 +83,7 @@ public class TreeNodeRenderer extends DefaultTreeCellRenderer {
             setBackground(super.getBackgroundNonSelectionColor());
             setForeground(textSelectionColor);
         }
-        
+
         return this;
     }
 }

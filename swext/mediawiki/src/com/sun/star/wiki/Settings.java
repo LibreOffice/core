@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,25 +42,25 @@ import java.util.Vector;
 
 public class Settings
 {
-    
+
     private XComponentContext m_xContext;
     private int lastUsedWikiServer = 0;
-    
-    
+
+
     /* Singelton */
     private static Settings m_instance;
-    
-    
+
+
     private Vector m_WikiConnections = new Vector();
     private Vector m_aWikiDocs = new Vector();
-    
+
     private Settings( XComponentContext ctx )
     {
         m_xContext=ctx;
         loadConfiguration();
     }
-    
-    
+
+
     public static synchronized Settings getSettings( XComponentContext ctx )
     {
         if ( m_instance == null )
@@ -68,19 +68,19 @@ public class Settings
         // m_instance.loadSettings();
         return m_instance;
     }
-    
-    
+
+
     public void addWikiCon ( Hashtable wikiCon )
     {
         m_WikiConnections.add( wikiCon );
     }
-    
-    
+
+
     public Vector getWikiCons()
     {
         return m_WikiConnections;
     }
-    
+
     public String getWikiConUrlByNumber( int num )
     {
         String url = "";
@@ -91,8 +91,8 @@ public class Settings
         }
         return url;
     }
-    
-    
+
+
     public void addWikiDoc ( Hashtable aWikiDoc )
     {
         String sURL = ( String ) aWikiDoc.get( "CompleteUrl" );
@@ -111,13 +111,13 @@ public class Settings
 
         m_aWikiDocs.add( aWikiDoc );
     }
-    
-    
+
+
     public Vector getWikiDocs()
     {
         return m_aWikiDocs;
     }
-    
+
     public Object[] getWikiDocList( int serverid, int num )
     {
         String wikiserverurl = getWikiConUrlByNumber( serverid );
@@ -134,17 +134,17 @@ public class Settings
         }
         return theDocs.toArray( docs );
     }
-    
+
     public int getLastUsedWikiServer()
     {
         return lastUsedWikiServer;
     }
-    
+
     public void setLastUsedWikiServer( int l )
     {
         lastUsedWikiServer = l;
     }
-    
+
     public String[] getWikiURLs()
     {
         String [] WikiList = new String [m_WikiConnections.size()];
@@ -155,8 +155,8 @@ public class Settings
         }
         return WikiList;
     }
-    
-    
+
+
     public Hashtable getSettingByUrl( String sUrl )
     {
         Hashtable ht = null;
@@ -188,7 +188,7 @@ public class Settings
         }
         return ht;
     }
-    
+
     public Hashtable getDocByCompleteUrl( String curl )
     {
         Hashtable ht = null;
@@ -203,8 +203,8 @@ public class Settings
         }
         return ht;
     }
-    
-    
+
+
     public void removeSettingByUrl( String sUrl )
     {
         Hashtable ht = null;
@@ -218,8 +218,8 @@ public class Settings
             }
         }
     }
-    
-    
+
+
     public void storeConfiguration()
     {
         try
@@ -228,10 +228,10 @@ public class Settings
             XNameContainer xContainer = Helper.GetConfigNameContainer( m_xContext, "org.openoffice.Office.Custom.WikiExtension/ConnectionList" );
             String[] pNames = xContainer.getElementNames();
             for( int i=0; i<pNames.length; i++ )
-            { 
+            {
                 xContainer.removeByName( pNames[i] );
             }
-            
+
             // store all connections
             XSingleServiceFactory xConnectionFactory = ( XSingleServiceFactory ) UnoRuntime.queryInterface( XSingleServiceFactory.class, xContainer );
             for ( int i=0; i< m_WikiConnections.size(); i++ )
@@ -239,21 +239,21 @@ public class Settings
                 Object oNewConnection = xConnectionFactory.createInstance();
                 Hashtable ht = ( Hashtable ) m_WikiConnections.get( i );
                 XNameReplace xNewConn = ( XNameReplace ) UnoRuntime.queryInterface( XNameReplace.class, oNewConnection );
-                
+
                 if ( xNewConn != null )
                     xNewConn.replaceByName( "UserName", ht.get( "Username" ) );
- 
+
                 xContainer.insertByName( (String)ht.get( "Url" ), xNewConn );
             }
             // commit changes
             XChangesBatch xBatch = ( XChangesBatch ) UnoRuntime.queryInterface( XChangesBatch.class, xContainer );
             xBatch.commitChanges();
-            
+
             // remove stored connection information
             XNameContainer xContainer2 = Helper.GetConfigNameContainer( m_xContext, "org.openoffice.Office.Custom.WikiExtension/RecentDocs" );
             String[] pNames2 = xContainer2.getElementNames();
             for( int i=0; i<pNames2.length; i++ )
-            { 
+            {
                 xContainer2.removeByName( pNames2[i] );
             }
             // store all Docs
@@ -261,30 +261,30 @@ public class Settings
             for ( int i=0; i< m_aWikiDocs.size(); i++ )
             {
                 Hashtable ht = ( Hashtable ) m_aWikiDocs.get( i );
-                
+
                 Object oNewDoc = xDocListFactory.createInstance();
                 XNameReplace xNewDoc = ( XNameReplace ) UnoRuntime.queryInterface( XNameReplace.class, oNewDoc );
-                
+
                 Enumeration e = ht.keys();
                 while ( e.hasMoreElements() )
                 {
                     String key = ( String ) e.nextElement();
                     xNewDoc.replaceByName( key, ht.get( key ) );
                 }
-                
+
                 xContainer2.insertByName( "d" + i, xNewDoc );
             }
             // commit changes
             XChangesBatch xBatch2 = ( XChangesBatch ) UnoRuntime.queryInterface( XChangesBatch.class, xContainer2 );
             xBatch2.commitChanges();
-            
+
         }
         catch ( Exception ex )
         {
             ex.printStackTrace();
-        }   
+        }
     }
-    
+
     public void loadConfiguration()
     {
         m_WikiConnections.clear();
@@ -293,7 +293,7 @@ public class Settings
             // get configuration service
             // connect to configmanager
             XNameAccess xAccess = Helper.GetConfigNameAccess( m_xContext, "org.openoffice.Office.Custom.WikiExtension" );
-            
+
             if ( xAccess != null )
             {
                 Object oList = xAccess.getByName( "ConnectionList" );
@@ -320,7 +320,7 @@ public class Settings
                     {
                         e.printStackTrace();
                     }
-                    
+
                     addWikiCon( ht );
                 }
 
@@ -342,6 +342,6 @@ public class Settings
         catch ( Exception ex )
         {
             ex.printStackTrace();
-        } 
+        }
     }
 }

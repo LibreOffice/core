@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ TYPEINIT1(E3dSphereObj, E3dCompoundObject);
 \************************************************************************/
 
 E3dSphereObj::E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoint& rCenter, const basegfx::B3DVector& r3DSize)
-:	E3dCompoundObject(rDefault)
+:   E3dCompoundObject(rDefault)
 {
     // Defaults setzen
     SetDefaultAttributes(rDefault);
@@ -80,7 +80,7 @@ E3dSphereObj::E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoi
 }
 
 E3dSphereObj::E3dSphereObj()
-:	E3dCompoundObject()
+:   E3dCompoundObject()
 {
     // Defaults setzen
     E3dDefaultAttributes aDefault;

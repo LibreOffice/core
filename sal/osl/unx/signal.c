@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,22 +73,22 @@
 
 #include "file_path_helper.h"
 
-#define ACT_IGNORE	1
-#define ACT_EXIT	2
-#define ACT_SYSTEM	3
-#define ACT_HIDE	4
+#define ACT_IGNORE  1
+#define ACT_EXIT    2
+#define ACT_SYSTEM  3
+#define ACT_HIDE    4
 #ifdef SAL_ENABLE_CRASH_REPORT
-#    define ACT_ABORT	5
+#    define ACT_ABORT   5
 #else
 #    define ACT_ABORT   ACT_SYSTEM
 #endif
 
-#define MAX_PATH_LEN	2048
+#define MAX_PATH_LEN    2048
 
 typedef struct _oslSignalHandlerImpl
 {
     oslSignalHandlerFunction      Handler;
-    void*			        	  pData;
+    void*                         pData;
     struct _oslSignalHandlerImpl* pNext;
 } oslSignalHandlerImpl;
 
@@ -107,14 +107,14 @@ static struct SignalAction
     { SIGTRAP,   ACT_ABORT,  NULL },    /* trace trap (not reset when caught) */
 #if ( SIGIOT != SIGABRT )
     { SIGIOT,    ACT_ABORT,  NULL },    /* IOT instruction */
-#endif 
+#endif
     { SIGABRT,   ACT_ABORT,  NULL },    /* used by abort, replace SIGIOT in the future */
-#ifdef SIGEMT	
+#ifdef SIGEMT
     { SIGEMT,    ACT_SYSTEM,  NULL },    /* EMT instruction */
 /* changed from ACT_ABORT to ACT_SYSTEM to remove handler*/
 /* SIGEMT may also be used by the profiler - so it is probably not a good
 plan to have the new handler use this signal*/
-#endif	
+#endif
     { SIGFPE,    ACT_ABORT,  NULL },    /* floating point exception */
     { SIGKILL,   ACT_SYSTEM, NULL },    /* kill (cannot be caught or ignored) */
     { SIGBUS,    ACT_ABORT,  NULL },    /* bus error */
@@ -144,7 +144,7 @@ plan to have the new handler use this signal*/
     { SIGVTALRM, ACT_EXIT,   NULL },    /* virtual timer expired */
     { SIGPROF,   ACT_SYSTEM,   NULL },    /* profiling timer expired */
 /*Change from ACT_EXIT to ACT_SYSTEM for SIGPROF is so that profiling signals do
-not get taken by the new handler - the new handler does not pass on context 
+not get taken by the new handler - the new handler does not pass on context
 information which causes 'collect' to crash. This is a way of avoiding
 what looks like a bug in the new handler*/
     { SIGXCPU,   ACT_ABORT,  NULL },    /* exceeded cpu limit */
@@ -153,12 +153,12 @@ what looks like a bug in the new handler*/
 const int NoSignals = sizeof(Signals) / sizeof(struct SignalAction);
 
 static sal_Bool               bErrorReportingEnabled = sal_True;
-static sal_Bool  			  bInitSignal = sal_False;
-static oslMutex 			  SignalListMutex;
+static sal_Bool               bInitSignal = sal_False;
+static oslMutex               SignalListMutex;
 static oslSignalHandlerImpl*  SignalList;
-static sal_Bool				  bDoHardKill = sal_False;
-static sal_Bool				  bSetSEGVHandler = sal_False;
-static sal_Bool				  bSetWINCHHandler = sal_False;
+static sal_Bool               bDoHardKill = sal_False;
+static sal_Bool               bSetSEGVHandler = sal_False;
+static sal_Bool               bSetWINCHHandler = sal_False;
 static sal_Bool               bSetILLHandler = sal_False;
 
 static void SignalHandlerFunction(int);
@@ -207,8 +207,8 @@ static sal_Bool InitSignal()
 
     if (is_soffice_Impl())
     {
-        sal_uInt32	argi;
-        sal_uInt32	argc;
+        sal_uInt32  argi;
+        sal_uInt32  argc;
         rtl_uString *ustrCommandArg = 0;
 
         argc = osl_getCommandArgCount();
@@ -231,10 +231,10 @@ static sal_Bool InitSignal()
 
         // WORKAROUND FOR SEGV HANDLER CONFLICT
         //
-        // the java jit needs SIGSEGV for proper work 
+        // the java jit needs SIGSEGV for proper work
         // and we need SIGSEGV for the office crashguard
         //
-        // TEMPORARY SOLUTION: 
+        // TEMPORARY SOLUTION:
         //   the office sets the signal handler during startup
         //   java can than overwrite it, if needed
         bSetSEGVHandler = sal_True;
@@ -254,7 +254,7 @@ static sal_Bool InitSignal()
     sigfillset(&(act.sa_mask));
 
     /* Initialize the rest of the signals */
-    for (i = 0; i < NoSignals; i++) 
+    for (i = 0; i < NoSignals; i++)
     {
         /* hack: stomcatd is attaching JavaVM wich dont work with an sigaction(SEGV) */
         if ((bSetSEGVHandler || Signals[i].Signal != SIGSEGV)
@@ -307,7 +307,7 @@ static sal_Bool DeInitSignal()
     sigemptyset(&(act.sa_mask));
 
     /* Initialize the rest of the signals */
-    for (i = NoSignals - 1; i >= 0; i--) 
+    for (i = NoSignals - 1; i >= 0; i--)
         if (Signals[i].Action != ACT_SYSTEM)
         {
             act.sa_handler = Signals[i].Handler;
@@ -323,12 +323,12 @@ static sal_Bool DeInitSignal()
 #if defined (SAL_ENABLE_CRASH_REPORT) && defined(INCLUDE_BACKTRACE)
 
 /*****************************************************************************/
-/* Generate MD5 checksum	*/
+/* Generate MD5 checksum    */
 /*****************************************************************************/
 
 static sal_uInt32 calc_md5_checksum( const char *filename, sal_uInt8 *pChecksum, sal_uInt32 nChecksumLen )
 {
-    sal_uInt32	nBytesProcessed = 0;
+    sal_uInt32  nBytesProcessed = 0;
 
     FILE *fp = fopen( filename, "r" );
 
@@ -338,14 +338,14 @@ static sal_uInt32 calc_md5_checksum( const char *filename, sal_uInt8 *pChecksum,
 
         if ( digest )
         {
-            size_t			nBytesRead;
-            sal_uInt8		buffer[4096];
-            rtlDigestError	error = rtl_Digest_E_None;
+            size_t          nBytesRead;
+            sal_uInt8       buffer[4096];
+            rtlDigestError  error = rtl_Digest_E_None;
 
             while ( rtl_Digest_E_None == error &&
                 0 != (nBytesRead = fread( buffer, 1, sizeof(buffer), fp )) )
             {
-                error = rtl_digest_updateMD5( digest, buffer, nBytesRead );	
+                error = rtl_digest_updateMD5( digest, buffer, nBytesRead );
                 nBytesProcessed += nBytesRead;
             }
 
@@ -367,7 +367,7 @@ static sal_uInt32 calc_md5_checksum( const char *filename, sal_uInt8 *pChecksum,
 }
 
 /*****************************************************************************/
-/* Call crash reporter	*/
+/* Call crash reporter  */
 /*****************************************************************************/
 
 /* Helper function to encode and write a string to a stream */
@@ -403,7 +403,7 @@ static int fputs_xml( const char *string, FILE *stream )
 
 /* Create intermediate files and run crash reporter */
 
-#define REPORTENV_PARAM		"-crashreportenv:"
+#define REPORTENV_PARAM     "-crashreportenv:"
 
 #if defined SAL_ENABLE_CRASH_REPORT && defined INCLUDE_BACKTRACE && \
     defined LINUX
@@ -442,7 +442,7 @@ callback(struct dl_phdr_info *info, size_t size, void *data)
         dynamic_entry* entry = (dynamic_entry*)data;
 
         if (strcmp(dsoname, "") == 0)
-        { 
+        {
             snprintf(buffer, sizeof(buffer), "/proc/%d/exe", getpid());
             if ((len = readlink(buffer, exe, PATH_MAX)) != -1)
             {
@@ -461,14 +461,14 @@ callback(struct dl_phdr_info *info, size_t size, void *data)
 }
 
 /* Get the location of the .dynamic section offset for the given elf file.
- * i.e. same as the "Offset" value shown for DYNAMIC from readelf -l foo 
+ * i.e. same as the "Offset" value shown for DYNAMIC from readelf -l foo
  *
  * We want to know this value so that if the binaries have been modifed
- * by prelink then we can still process the call stack on server side 
+ * by prelink then we can still process the call stack on server side
  * by comparing this value to that of an "un-prelinked but known to be
- * otherwise equivalent" version of those binaries and adjust the call 
- * stack addresses by the differences between .dynamic addresses so as 
- * to be able to map the prelinked addresses back to the unprelinked 
+ * otherwise equivalent" version of those binaries and adjust the call
+ * stack addresses by the differences between .dynamic addresses so as
+ * to be able to map the prelinked addresses back to the unprelinked
  * addresses
  *
  * cmc@openoffice.org
@@ -491,17 +491,17 @@ static int ReportCrash( int Signal )
 {
 #ifdef SAL_ENABLE_CRASH_REPORT
     static sal_Bool bCrashReporterExecuted = sal_False;
-    sal_Bool		bAutoCrashReport = sal_False;
+    sal_Bool        bAutoCrashReport = sal_False;
 
-    sal_uInt32	argi;
-    sal_uInt32	argc;
+    sal_uInt32  argi;
+    sal_uInt32  argc;
     rtl_uString *ustrCommandArg = NULL;
-    
+
     if ( !bErrorReportingEnabled )
         return -1;
 
     argc = osl_getCommandArgCount();
-    
+
     for ( argi = 0; argi < argc; argi++ )
     {
         if ( osl_Process_E_None == osl_getCommandArg( argi, &ustrCommandArg ) )
@@ -515,23 +515,23 @@ static int ReportCrash( int Signal )
             {
                 bAutoCrashReport = sal_True;
             }
-            else if ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( 
-                rtl_uString_getStr( ustrCommandArg ), rtl_uString_getLength( ustrCommandArg ), 
-                REPORTENV_PARAM, strlen(REPORTENV_PARAM) ) 
+            else if ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength(
+                rtl_uString_getStr( ustrCommandArg ), rtl_uString_getLength( ustrCommandArg ),
+                REPORTENV_PARAM, strlen(REPORTENV_PARAM) )
                 )
             {
-                rtl_uString	*ustrEnvironment = NULL;
+                rtl_uString *ustrEnvironment = NULL;
                 rtl_String *strEnv = NULL;
 
                 rtl_uString_newFromStr( &ustrEnvironment, rtl_uString_getStr( ustrCommandArg ) + strlen(REPORTENV_PARAM) );
 
                 if ( ustrEnvironment )
                 {
-                    rtl_uString2String( 
-                        &strEnv, 
-                        rtl_uString_getStr( ustrEnvironment ), rtl_uString_getLength( ustrEnvironment ), 
-                        osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS 
-                        ); 
+                    rtl_uString2String(
+                        &strEnv,
+                        rtl_uString_getStr( ustrEnvironment ), rtl_uString_getLength( ustrEnvironment ),
+                        osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS
+                        );
 
                     if ( strEnv )
                     {
@@ -546,16 +546,16 @@ static int ReportCrash( int Signal )
 
         }
     }
-    
+
     if ( ustrCommandArg )
         rtl_uString_release( ustrCommandArg );
-    
+
     if ( !bCrashReporterExecuted )
     {
         int i;
         /* struct sigaction act; */
 
-        for (i = 0; i < NoSignals; i++) 
+        for (i = 0; i < NoSignals; i++)
         {
             if (Signals[i].Signal == Signal && Signals[i].Action == ACT_ABORT )
             {
@@ -593,7 +593,7 @@ static int ReportCrash( int Signal )
                 xmlout = fdopen( fdxml , "w" );
                 stackout = fdopen( fdstk , "w" );
                 checksumout = fdopen( fdchksum, "w" );
-            
+
                 pXMLTempName = szXMLTempNameBuffer;
                 pStackTempName = szStackTempNameBuffer;
                 pChecksumTempName = szChecksumTempNameBuffer;
@@ -647,9 +647,9 @@ static int ReportCrash( int Signal )
                             /* create checksum of library on stack */
                             if ( dli_fname )
                             {
-                                sal_uInt8	checksum[RTL_DIGEST_LENGTH_MD5];
+                                sal_uInt8   checksum[RTL_DIGEST_LENGTH_MD5];
 
-                                sal_uInt32 nBytesProcessed = calc_md5_checksum( 
+                                sal_uInt32 nBytesProcessed = calc_md5_checksum(
                                     dl_info.dli_fname, checksum, sizeof(checksum) );
                                 if ( nBytesProcessed )
                                 {
@@ -695,12 +695,12 @@ static int ReportCrash( int Signal )
                             {
                                 fputs( " (", stackout );
                                 fputs_xml( dl_info.dli_sname, stackout );
-                                fprintf( stackout, " + 0x%" SAL_PRI_PTRDIFFT "x)", 
+                                fprintf( stackout, " + 0x%" SAL_PRI_PTRDIFFT "x)",
                                     (char*)stackframes[iFrame] - (char*)dl_info.dli_saddr );
 
                                 fputs( " ordinal=\"", xmlout );
                                 fputs_xml( dl_info.dli_sname, xmlout );
-                                fprintf( xmlout, "+0x%" SAL_PRI_PTRDIFFT "x\"", 
+                                fprintf( xmlout, "+0x%" SAL_PRI_PTRDIFFT "x\"",
                                     (char *)stackframes[iFrame] - (char *)dl_info.dli_saddr );
                             }
 
@@ -724,7 +724,7 @@ static int ReportCrash( int Signal )
                     pStackTempName = NULL;
                     pChecksumTempName = NULL;
                 }
-                
+
                 if ( stackout )
                     fclose( stackout );
                 if ( xmlout )
@@ -758,19 +758,19 @@ static int ReportCrash( int Signal )
                     snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
                         "%s -p %d -s %d -xml %s -chksum %s -stack %s -noui%s",
                         rtl_string_getStr(crashrep_path_system),
-                        getpid(), 
-                        Signal, 
-                        pXMLTempName, 
-                        pChecksumTempName, 
+                        getpid(),
+                        Signal,
+                        pXMLTempName,
+                        pChecksumTempName,
                         pStackTempName,
                         bAutoCrashReport ? " -send" : "" );
 #elif defined INCLUDE_BACKTRACE && defined SOLARIS
                     snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
                         "%s -p %d -s %d -xml %s -chksum %s -noui%s",
                         rtl_string_getStr(crashrep_path_system),
-                        getpid(), 
-                        Signal, 
-                        pXMLTempName, 
+                        getpid(),
+                        Signal,
+                        pXMLTempName,
                         pChecksumTempName,
                         bAutoCrashReport ? " -send" : "" );
 #else
@@ -792,7 +792,7 @@ static int ReportCrash( int Signal )
 
                 if ( pChecksumTempName )
                     unlink( pChecksumTempName );
-                    
+
                 if ( -1 != ret )
                 {
                     bCrashReporterExecuted = sal_True;
@@ -800,13 +800,13 @@ static int ReportCrash( int Signal )
                 }
                 else
                     return -1;
-                
+
             }
         }
-        
+
         return 0;
     }
-    
+
     return 1;
 #else /* defined SAL_ENABLE_CRASH_REPORT */
     /* the utility crash_report is not build, so do the same as when
@@ -843,13 +843,13 @@ static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
 
     while (pHandler != NULL)
     {
-        if ((Action = pHandler->Handler(pHandler->pData, pInfo)) 
+        if ((Action = pHandler->Handler(pHandler->pData, pInfo))
             != osl_Signal_ActCallNextHdl)
             break;
 
         pHandler = pHandler->pNext;
     }
-    
+
     return Action;
 }
 
@@ -858,7 +858,7 @@ void CallSystemHandler(int Signal)
     int i;
     struct sigaction act;
 
-    for (i = 0; i < NoSignals; i++) 
+    for (i = 0; i < NoSignals; i++)
     {
         if (Signals[i].Signal == Signal)
             break;
@@ -873,12 +873,12 @@ void CallSystemHandler(int Signal)
         {
             switch (Signals[i].Action)
             {
-                case ACT_EXIT:		/* terminate */
+                case ACT_EXIT:      /* terminate */
                     /* prevent dumping core on exit() */
                     _exit(255);
                     break;
 
-                case ACT_ABORT:		/* terminate witch core dump */
+                case ACT_ABORT:     /* terminate witch core dump */
                     ReportCrash( Signal );
                     act.sa_handler = SIG_DFL;
                     act.sa_flags   = 0;
@@ -888,10 +888,10 @@ void CallSystemHandler(int Signal)
                     abort();
                     break;
 
-                case ACT_IGNORE:	/* ignore */
+                case ACT_IGNORE:    /* ignore */
                     break;
 
-                default:			/* should never happen */
+                default:            /* should never happen */
                     OSL_ASSERT(0);
             }
         }
@@ -902,11 +902,11 @@ void CallSystemHandler(int Signal)
 
 
 /*****************************************************************************/
-/* SignalHandlerFunction	*/
+/* SignalHandlerFunction    */
 /*****************************************************************************/
 void SignalHandlerFunction(int Signal)
 {
-    oslSignalInfo	 Info;
+    oslSignalInfo    Info;
     struct sigaction act;
 
     Info.UserSignal = Signal;
@@ -922,35 +922,35 @@ void SignalHandlerFunction(int Signal)
         case SIGABRT:
 #endif
             Info.Signal = osl_Signal_AccessViolation;
-            break; 
+            break;
 
         case -1:
             Info.Signal = osl_Signal_IntegerDivideByZero;
-            break; 
+            break;
 
         case SIGFPE:
             Info.Signal = osl_Signal_FloatDivideByZero;
-            break; 
+            break;
 
         case SIGINT:
         case SIGTERM:
     case SIGQUIT:
     case SIGHUP:
             Info.Signal = osl_Signal_Terminate;
-            break; 
+            break;
 
         default:
             Info.Signal = osl_Signal_System;
-            break; 
+            break;
     }
 
     ReportCrash( Signal );
-    
+
     /* Portal Demo HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
     if (bDoHardKill && (Info.Signal == osl_Signal_AccessViolation))
         _exit(255);
     /* Portal Demo HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-    
+
 
     switch (CallSignalHandler(&Info))
     {
@@ -1001,7 +1001,7 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler,
         pHandler->pData   = pData;
 
         osl_acquireMutex(SignalListMutex);
-    
+
         pHandler->pNext = SignalList;
         SignalList      = pHandler;
 
@@ -1009,7 +1009,7 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler,
 
         return (pHandler);
     }
-    
+
     return (NULL);
 }
 

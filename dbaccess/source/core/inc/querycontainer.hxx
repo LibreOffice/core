@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,7 +122,7 @@ namespace dbaccess
     class OQueryContainer;
     class OContainerListener;
     class OQuery;
-    class OQueryContainer	: public ODefinitionContainer
+    class OQueryContainer   : public ODefinitionContainer
                             , public OQueryContainer_Base
     {
     protected:
@@ -133,18 +133,18 @@ namespace dbaccess
                                         m_xConnection;
         // possible actions on our "aggregate"
         enum AGGREGATE_ACTION { NONE, INSERTING, FLUSHING };
-        AGGREGATE_ACTION		m_eDoingCurrently;
+        AGGREGATE_ACTION        m_eDoingCurrently;
 
         OContainerListener*     m_pCommandsListener;
 
         // ------------------------------------------------------------------------
         /** a class which automatically resets m_eDoingCurrently in it's destructor
         */
-        class OAutoActionReset;	// just for the following friend declaration
+        class OAutoActionReset; // just for the following friend declaration
         friend class OAutoActionReset;
         class OAutoActionReset
         {
-            OQueryContainer*		m_pActor;
+            OQueryContainer*        m_pActor;
         public:
             OAutoActionReset(OQueryContainer* _pActor) : m_pActor(_pActor) { }
             ~OAutoActionReset() { m_pActor->m_eDoingCurrently = NONE; }
@@ -152,7 +152,7 @@ namespace dbaccess
 
         // ODefinitionContainer
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject( const ::rtl::OUString& _rName);
-        virtual	sal_Bool checkExistence(const ::rtl::OUString& _rName);
+        virtual sal_Bool checkExistence(const ::rtl::OUString& _rName);
 
         // helper
         virtual void SAL_CALL disposing();
@@ -163,7 +163,7 @@ namespace dbaccess
 
             @param _pWarnings
                 specifies a warnings container (May be <NULL/>)
-                
+
                 Any errors which occur during the lifetime of the query container,
                 which cannot be reported as exceptionts (for instance in methods where throwing an SQLException is
                 not allowed) will be appended to this container.</p>
@@ -175,7 +175,7 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             ::dbtools::IWarningsContainer* _pWarnings
             );
-        
+
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
         DECLARE_SERVICE_INFO();
@@ -226,7 +226,7 @@ namespace dbaccess
 
     };
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 
 #endif // _DBA_CORE_QUERYCONTAINER_HXX_

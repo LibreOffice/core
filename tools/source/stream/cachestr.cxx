@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ SvCacheStream::SvCacheStream( ULONG nMaxMemSize )
     if( !nMaxMemSize )
         nMaxMemSize = 20480;
     SvStream::bIsWritable = TRUE;
-    nMaxSize		= nMaxMemSize;
-    bPersistent		= FALSE;
-    pSwapStream		= 0;
-    pCurrentStream	= new SvMemoryStream( nMaxMemSize );
+    nMaxSize        = nMaxMemSize;
+    bPersistent     = FALSE;
+    pSwapStream     = 0;
+    pCurrentStream  = new SvMemoryStream( nMaxMemSize );
     pTempFile       = 0;
 }
 
@@ -78,11 +78,11 @@ SvCacheStream::SvCacheStream( const String &rFileName,
         nExpectedSize = 4096;
 
     SvStream::bIsWritable = TRUE;
-    nMaxSize		= nMaxMemSize;
-    bPersistent		= TRUE;
-    aFileName		= rFileName;
-    pSwapStream		= 0;
-    pCurrentStream	= new SvMemoryStream( nExpectedSize );
+    nMaxSize        = nMaxMemSize;
+    bPersistent     = TRUE;
+    aFileName       = rFileName;
+    pSwapStream     = 0;
+    pCurrentStream  = new SvMemoryStream( nExpectedSize );
     pTempFile       = 0;
 }
 

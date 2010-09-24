@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,9 +27,9 @@
 
 /*************************************************************************
  *
- *	  ATTENTION
- *	  This file is intended to work inside and outside the StarOffice environment.
- *	  Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
+ *    ATTENTION
+ *    This file is intended to work inside and outside the StarOffice environment.
+ *    Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
  *
  ************************************************************************/
 

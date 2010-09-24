@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,31 +44,31 @@ public:
     static void FillLocale( com::sun::star::lang::Locale& rLocale, LanguageType eLang );
 
     // CellAddress -> ScAddress
-    static inline void	FillScAddress(
+    static inline void  FillScAddress(
                             ScAddress& rScAddress,
                             const ::com::sun::star::table::CellAddress& rApiAddress );
     // ScAddress -> CellAddress
-    static inline void	FillApiAddress(
+    static inline void  FillApiAddress(
                             ::com::sun::star::table::CellAddress& rApiAddress,
                             const ScAddress& rScAddress );
     // CellRangeAddress -> ScRange
-    static inline void	FillScRange(
+    static inline void  FillScRange(
                             ScRange& rScRange,
                             const ::com::sun::star::table::CellRangeAddress& rApiRange );
     // ScRange -> CellRangeAddress
-    static inline void	FillApiRange(
+    static inline void  FillApiRange(
                             ::com::sun::star::table::CellRangeAddress& rApiRange,
                             const ScRange& rScRange );
     // CellAddress -> CellRangeAddress
-    static inline void	FillApiRange(
+    static inline void  FillApiRange(
                             ::com::sun::star::table::CellRangeAddress& rApiRange,
                             const ::com::sun::star::table::CellAddress& rApiAddress );
     // CellRangeAddress-Start -> CellAddress
-    static inline void	FillApiStartAddress(
+    static inline void  FillApiStartAddress(
                             ::com::sun::star::table::CellAddress& rApiAddress,
                             const ::com::sun::star::table::CellRangeAddress& rApiRange );
     // CellRangeAddress-End -> CellAddress
-    static inline void	FillApiEndAddress(
+    static inline void  FillApiEndAddress(
                             ::com::sun::star::table::CellAddress& rApiAddress,
                             const ::com::sun::star::table::CellRangeAddress& rApiRange );
 
@@ -87,14 +87,14 @@ public:
 };
 
 
-inline void	ScUnoConversion::FillScAddress(
+inline void ScUnoConversion::FillScAddress(
         ScAddress& rScAddress,
         const ::com::sun::star::table::CellAddress& rApiAddress )
 {
     rScAddress.Set( (SCCOL)rApiAddress.Column, (SCROW)rApiAddress.Row, (SCTAB)rApiAddress.Sheet );
 }
 
-inline void	ScUnoConversion::FillApiAddress(
+inline void ScUnoConversion::FillApiAddress(
         ::com::sun::star::table::CellAddress& rApiAddress,
         const ScAddress& rScAddress )
 {
@@ -103,7 +103,7 @@ inline void	ScUnoConversion::FillApiAddress(
     rApiAddress.Sheet = rScAddress.Tab();
 }
 
-inline void	ScUnoConversion::FillScRange(
+inline void ScUnoConversion::FillScRange(
         ScRange& rScRange,
         const ::com::sun::star::table::CellRangeAddress& rApiRange )
 {
@@ -111,7 +111,7 @@ inline void	ScUnoConversion::FillScRange(
     rScRange.aEnd.Set( (SCCOL)rApiRange.EndColumn, (SCROW)rApiRange.EndRow, (SCTAB)rApiRange.Sheet );
 }
 
-inline void	ScUnoConversion::FillApiRange(
+inline void ScUnoConversion::FillApiRange(
         ::com::sun::star::table::CellRangeAddress& rApiRange,
         const ScRange& rScRange )
 {
@@ -122,7 +122,7 @@ inline void	ScUnoConversion::FillApiRange(
     rApiRange.EndRow = rScRange.aEnd.Row();
 }
 
-inline void	ScUnoConversion::FillApiRange(
+inline void ScUnoConversion::FillApiRange(
         ::com::sun::star::table::CellRangeAddress& rApiRange,
         const ::com::sun::star::table::CellAddress& rApiAddress )
 {
@@ -131,7 +131,7 @@ inline void	ScUnoConversion::FillApiRange(
     rApiRange.Sheet = rApiAddress.Sheet;
 }
 
-inline void	ScUnoConversion::FillApiStartAddress(
+inline void ScUnoConversion::FillApiStartAddress(
         ::com::sun::star::table::CellAddress& rApiAddress,
         const ::com::sun::star::table::CellRangeAddress& rApiRange )
 {
@@ -140,7 +140,7 @@ inline void	ScUnoConversion::FillApiStartAddress(
     rApiAddress.Sheet = rApiRange.Sheet;
 }
 
-inline void	ScUnoConversion::FillApiEndAddress(
+inline void ScUnoConversion::FillApiEndAddress(
         ::com::sun::star::table::CellAddress& rApiAddress,
         const ::com::sun::star::table::CellRangeAddress& rApiRange )
 {

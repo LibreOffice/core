@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,9 +51,9 @@
 
 struct SfxSIDRegistration_Impl
 {
-    String			_aGroup;
-    String			_aName;
-    USHORT			_nSID;
+    String          _aGroup;
+    String          _aName;
+    USHORT          _nSID;
 };
 
 struct SfxSlotType_Impl

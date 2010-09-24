@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@ namespace detail
         sal_Int32 const nNumScanlines( (sal_Int32)rGET.size() );
 
         // add all polygons to GET
-        for( sal_uInt32 i(0), nCount(rPolyPoly.count()); 
-             i<nCount; 
+        for( sal_uInt32 i(0), nCount(rPolyPoly.count());
+             i<nCount;
              ++i )
         {
             // add all vertices to GET

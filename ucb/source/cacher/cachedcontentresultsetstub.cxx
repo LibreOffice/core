@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ using namespace com::sun::star::util;
 using namespace cppu;
 using namespace rtl;
 
-CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > xOrigin	)
+CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > xOrigin )
                 : ContentResultSetWrapper( xOrigin )
                 , m_nColumnCount( 0 )
                 , m_bColumnCountCached( sal_False )
@@ -99,7 +99,7 @@ void SAL_CALL CachedContentResultSetStub
 
     //don't notify events on fetchsize and fetchdirection to the above CachedContentResultSet
     //because it will ignore them anyway and we can save this remote calls
-    if(	   rEvt.PropertyName == m_aPropertyNameForFetchSize
+    if(    rEvt.PropertyName == m_aPropertyNameForFetchSize
         || rEvt.PropertyName == m_aPropertyNameForFetchDirection )
         return;
 
@@ -107,7 +107,7 @@ void SAL_CALL CachedContentResultSetStub
     aEvt.Source = static_cast< XPropertySet * >( this );
     aEvt.Further = sal_False;
 
-    impl_notifyPropertyChangeListeners(	aEvt );
+    impl_notifyPropertyChangeListeners( aEvt );
 }
 
 
@@ -118,10 +118,10 @@ void SAL_CALL CachedContentResultSetStub
            RuntimeException )
 {
     impl_EnsureNotDisposed();
-    
+
     //don't notify events on fetchsize and fetchdirection to the above CachedContentResultSet
     //because it will ignore them anyway and we can save this remote calls
-    if(	   rEvt.PropertyName == m_aPropertyNameForFetchSize
+    if(    rEvt.PropertyName == m_aPropertyNameForFetchSize
         || rEvt.PropertyName == m_aPropertyNameForFetchDirection )
         return;
 
@@ -436,10 +436,10 @@ void SAL_CALL CachedContentResultSetStub
     sal_Bool bFirstPropagationDone;
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        bNeedAction				= m_bNeedToPropagateFetchSize;
-        nLastSize				= m_nLastFetchSize;
-        bLastDirection			= m_bLastFetchDirection;
-        bFirstPropagationDone	= m_bFirstFetchSizePropagationDone;
+        bNeedAction             = m_bNeedToPropagateFetchSize;
+        nLastSize               = m_nLastFetchSize;
+        bLastDirection          = m_bLastFetchDirection;
+        bFirstPropagationDone   = m_bFirstFetchSizePropagationDone;
     }
     if( bNeedAction )
     {
@@ -451,10 +451,10 @@ void SAL_CALL CachedContentResultSetStub
         if(!bFirstPropagationDone)
         {
             //check wether the properties 'FetchSize' and 'FetchDirection' do exist
-            
+
             Reference< XPropertySetInfo > xPropertySetInfo = getPropertySetInfo();
-            sal_Bool bHasSize = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchSize ); 
-            sal_Bool bHasDirection = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchDirection ); 
+            sal_Bool bHasSize = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchSize );
+            sal_Bool bHasDirection = xPropertySetInfo->hasPropertyByName( m_aPropertyNameForFetchDirection );
 
             if(!bHasSize || !bHasDirection)
             {
@@ -463,17 +463,17 @@ void SAL_CALL CachedContentResultSetStub
                 return;
             }
         }
-        
-        sal_Bool bSetSize		= ( nLastSize		!=nFetchSize		) || !bFirstPropagationDone;
-        sal_Bool bSetDirection	= ( bLastDirection	!=bFetchDirection	) || !bFirstPropagationDone;
+
+        sal_Bool bSetSize       = ( nLastSize       !=nFetchSize        ) || !bFirstPropagationDone;
+        sal_Bool bSetDirection  = ( bLastDirection  !=bFetchDirection   ) || !bFirstPropagationDone;
 
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             m_bFirstFetchSizePropagationDone = sal_True;
-            m_nLastFetchSize		= nFetchSize;
-            m_bLastFetchDirection	= bFetchDirection;
+            m_nLastFetchSize        = nFetchSize;
+            m_bLastFetchDirection   = bFetchDirection;
         }
-        
+
         if( bSetSize )
         {
             Any aValue;

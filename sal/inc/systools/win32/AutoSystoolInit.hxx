@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #endif
 
 //------------------------------------------------------------------------
-// class used to automatically initialize/deinitialize the systools 
+// class used to automatically initialize/deinitialize the systools
 //------------------------------------------------------------------------
 
 class OAutoSystoolInit
@@ -54,7 +54,7 @@ public:
         if ( NULL != m_lpfnDeInit )
             m_lpfnDeInit( );
     }
-    
+
 private:
     LPFNDEINIT_T m_lpfnDeInit; // address of the deinit function
 };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,13 +74,13 @@ using namespace com::sun::star;
 SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     SwFldPage( pWindow, SW_RES( TP_FLD_DOKINF ), rCoreSet ),
 
-    aTypeFT		(this, SW_RES(FT_DOKINFTYPE)),
-    aTypeTLB	(this, SW_RES(TLB_DOKINFTYPE)),
+    aTypeFT     (this, SW_RES(FT_DOKINFTYPE)),
+    aTypeTLB    (this, SW_RES(TLB_DOKINFTYPE)),
     aSelectionFT(this, SW_RES(FT_DOKINFSELECTION)),
     aSelectionLB(this, SW_RES(LB_DOKINFSELECTION)),
-    aFormatFT	(this, SW_RES(FT_DOKINFFORMAT)),
-    aFormatLB	(this, SW_RES(LB_DOKINFFORMAT)),
-    aFixedCB	(this, SW_RES(CB_DOKINFFIXEDCONTENT)),
+    aFormatFT   (this, SW_RES(FT_DOKINFFORMAT)),
+    aFormatLB   (this, SW_RES(LB_DOKINFFORMAT)),
+    aFixedCB    (this, SW_RES(CB_DOKINFFIXEDCONTENT)),
 
     pSelEntry   (0),
     aInfoStr    (SW_RES(STR_DOKINF_INFO))
@@ -117,7 +117,7 @@ __EXPORT SwFldDokInfPage::~SwFldDokInfPage()
 
 void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
 {
-    Init();	// Allgemeine initialisierung
+    Init(); // Allgemeine initialisierung
 
     // TypeListBox initialisieren
     aTypeTLB.SetUpdateMode(FALSE);
@@ -285,7 +285,7 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
                 aFormatFT.Enable(FALSE);
                 if( nSubType == DI_CUSTOM )
                 {
-                    //find out which type the custom field has - for a start set to DATE format 
+                    //find out which type the custom field has - for a start set to DATE format
                     ::rtl::OUString sName = aTypeTLB.GetEntryText(pSelEntry);
                     try
                     {
@@ -306,7 +306,7 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
                     }
                     catch( const uno::Exception& )
                     {
-                    }    
+                    }
                 }
                 else
                     return 0;
@@ -379,7 +379,7 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
                         if (nNewType == NUMBERFORMAT_DATE)
                             nFormat = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLang);
                         else if (nNewType == NUMBERFORMAT_TIME)
-                            nFormat = pFormatter->GetFormatIndex( NF_TIME_HHMM, eLang);                        
+                            nFormat = pFormatter->GetFormatIndex( NF_TIME_HHMM, eLang);
                     }
                 }
                 aFormatLB.SetDefFormat(nFormat);
@@ -413,7 +413,7 @@ USHORT SwFldDokInfPage::FillSelectionLB(USHORT nSubType)
 
     EnableInsert(nSubType != USHRT_MAX);
 
-    if (nSubType == USHRT_MAX)	// Info-Text
+    if (nSubType == USHRT_MAX)  // Info-Text
         nSubType = DI_SUBTYPE_BEGIN;
 
     aSelectionLB.Clear();
@@ -505,7 +505,7 @@ BOOL __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SfxTabPage* __EXPORT SwFldDokInfPage::Create( 	Window* pParent,
+SfxTabPage* __EXPORT SwFldDokInfPage::Create(   Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldDokInfPage( pParent, rAttrSet ) );
@@ -522,7 +522,7 @@ USHORT SwFldDokInfPage::GetGroup()
 /* -----------------12.01.99 11:21-------------------
  *
  * --------------------------------------------------*/
-void	SwFldDokInfPage::FillUserData()
+void    SwFldDokInfPage::FillUserData()
 {
     String sData( String::CreateFromAscii(
                             RTL_CONSTASCII_STRINGPARAM( USER_DATA_VERSION )));

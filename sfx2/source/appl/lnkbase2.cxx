@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,10 +78,10 @@ struct ImplBaseLinkData
     struct tClientType
     {
         // gilt fuer alle Links
-        ULONG				nCntntType; // Update Format
+        ULONG               nCntntType; // Update Format
         // nicht Ole-Links
-        BOOL 			bIntrnlLnk; // ist es ein interner Link
-        USHORT 			nUpdateMode;// UpdateMode
+        BOOL            bIntrnlLnk; // ist es ein interner Link
+        USHORT          nUpdateMode;// UpdateMode
     };
 
     struct tDDEType
@@ -107,7 +107,7 @@ class ImplDdeItem : public DdeGetPutItem
 {
     SvBaseLink* pLink;
     DdeData aData;
-    Sequence< sal_Int8 > aSeq;		    // Datacontainer for DdeData !!!
+    Sequence< sal_Int8 > aSeq;          // Datacontainer for DdeData !!!
     BOOL bIsValidData : 1;
     BOOL bIsInDTOR : 1;
 public:
@@ -132,9 +132,9 @@ public:
 
 
 /************************************************************************
-|*	  SvBaseLink::SvBaseLink()
+|*    SvBaseLink::SvBaseLink()
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 
 SvBaseLink::SvBaseLink()
@@ -147,9 +147,9 @@ SvBaseLink::SvBaseLink()
 }
 
 /************************************************************************
-|*	  SvBaseLink::SvBaseLink()
+|*    SvBaseLink::SvBaseLink()
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 
 SvBaseLink::SvBaseLink( USHORT nUpdateMode, ULONG nContentType )
@@ -167,9 +167,9 @@ SvBaseLink::SvBaseLink( USHORT nUpdateMode, ULONG nContentType )
 }
 
 /************************************************************************
-|*	  SvBaseLink::SvBaseLink()
+|*    SvBaseLink::SvBaseLink()
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 
 SvBaseLink::SvBaseLink( const String& rLinkName, USHORT nObjectType, SvLinkSource* pObj )
@@ -209,9 +209,9 @@ SvBaseLink::SvBaseLink( const String& rLinkName, USHORT nObjectType, SvLinkSourc
 }
 
 /************************************************************************
-|*	  SvBaseLink::~SvBaseLink()
+|*    SvBaseLink::~SvBaseLink()
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 
 SvBaseLink::~SvBaseLink()
@@ -243,9 +243,9 @@ IMPL_LINK( SvBaseLink, EndEditHdl, String*, _pNewName )
 }
 
 /************************************************************************
-|*	  SvBaseLink::SetObjType()
+|*    SvBaseLink::SetObjType()
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 
 void SvBaseLink::SetObjType( USHORT nObjTypeP )
@@ -257,9 +257,9 @@ void SvBaseLink::SetObjType( USHORT nObjTypeP )
 }
 
 /************************************************************************
-|*	  SvBaseLink::SetName()
+|*    SvBaseLink::SetName()
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 
 void SvBaseLink::SetName( const String & rNm )
@@ -268,9 +268,9 @@ void SvBaseLink::SetName( const String & rNm )
 }
 
 /************************************************************************
-|*	  SvBaseLink::GetName()
+|*    SvBaseLink::GetName()
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 
 String SvBaseLink::GetName() const
@@ -279,9 +279,9 @@ String SvBaseLink::GetName() const
 }
 
 /************************************************************************
-|*	  SvBaseLink::SetObj()
+|*    SvBaseLink::SetObj()
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 
 void SvBaseLink::SetObj( SvLinkSource * pObj )
@@ -294,9 +294,9 @@ void SvBaseLink::SetObj( SvLinkSource * pObj )
 }
 
 /************************************************************************
-|*	  SvBaseLink::SetLinkSourceName()
+|*    SvBaseLink::SetLinkSourceName()
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 
 void SvBaseLink::SetLinkSourceName( const String & rLnkNm )
@@ -316,9 +316,9 @@ void SvBaseLink::SetLinkSourceName( const String & rLnkNm )
 }
 
 /************************************************************************
-|*	  SvBaseLink::GetLinkSourceName()
+|*    SvBaseLink::GetLinkSourceName()
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 
 String  SvBaseLink::GetLinkSourceName() const
@@ -328,9 +328,9 @@ String  SvBaseLink::GetLinkSourceName() const
 
 
 /************************************************************************
-|*	  SvBaseLink::SetUpdateMode()
+|*    SvBaseLink::SetUpdateMode()
 |*
-|*	  Beschreibung
+|*    Beschreibung
 *************************************************************************/
 
 void SvBaseLink::SetUpdateMode( USHORT nMode )
@@ -379,7 +379,7 @@ BOOL SvBaseLink::Update()
             {
                 DataChanged( sMimeType, aData );
                 //JP 13.07.00: Bug 76817 - for manual Updates there is no
-                //				need to hold the ServerObject
+                //              need to hold the ServerObject
                 if( OBJECT_CLIENT_DDE == nObjType &&
                     LINKUPDATE_ONCALL == GetUpdateMode() && xObj.Is() )
                     xObj->RemoveAllDataAdvise( this );
@@ -421,14 +421,14 @@ void SvBaseLink::_GetRealObject( BOOL bConnect)
     {
         String sServer;
         if( pImpl->m_pLinkMgr->GetDisplayNames( this, &sServer ) &&
-            sServer == GetpApp()->GetAppName() )		// interner Link !!!
+            sServer == GetpApp()->GetAppName() )        // interner Link !!!
         {
             // damit der Internal - Link erzeugt werden kann !!!
             nObjType = OBJECT_INTERN;
             xObj = pImpl->m_pLinkMgr->CreateObj( this );
 
             pImplData->ClientType.bIntrnlLnk = TRUE;
-            nObjType = OBJECT_CLIENT_DDE;		// damit wir wissen was es mal war !!
+            nObjType = OBJECT_CLIENT_DDE;       // damit wir wissen was es mal war !!
         }
         else
         {
@@ -448,7 +448,7 @@ ULONG SvBaseLink::GetContentType() const
     if( OBJECT_CLIENT_SO & nObjType )
         return pImplData->ClientType.nCntntType;
 
-    return 0;		// alle Formate ?
+    return 0;       // alle Formate ?
 }
 
 
@@ -643,7 +643,7 @@ void ImplDdeItem::AdviseLoop( BOOL bOpen )
             // es wird wieder eine Verbindung hergestellt
             if( OBJECT_DDE_EXTERN == pLink->GetObjType() )
             {
-                pLink->GetObj()->AddDataAdvise( pLink, String::CreateFromAscii( "text/plain;charset=utf-16" ),	ADVISEMODE_NODATA );
+                pLink->GetObj()->AddDataAdvise( pLink, String::CreateFromAscii( "text/plain;charset=utf-16" ),  ADVISEMODE_NODATA );
                 pLink->GetObj()->AddConnectAdvise( pLink );
             }
         }
@@ -689,7 +689,7 @@ static DdeTopic* FindTopic( const String & rLinkName, USHORT* pItemStt )
                 // Topic nicht gefunden ?
                 // dann versuchen wir ihn mal anzulegen
                 if( i || !pService->MakeTopic( sTopic ) )
-                    break;	// hat nicht geklappt, also raus
+                    break;  // hat nicht geklappt, also raus
             }
             break;
         }

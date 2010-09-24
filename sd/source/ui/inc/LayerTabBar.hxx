@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,15 +42,15 @@ namespace sd {
 class DrawViewShell;
 
 class LayerTabBar
-    : public TabBar, 
+    : public TabBar,
       public DropTargetHelper
 {
 public:
     LayerTabBar (
-        DrawViewShell* pDrViewSh, 
+        DrawViewShell* pDrViewSh,
         ::Window* pParent);
     LayerTabBar (
-        DrawViewShell* pDrViewSh, 
+        DrawViewShell* pDrViewSh,
         ::Window* pParent,
         const ResId& rResId);
     virtual ~LayerTabBar (void);
@@ -71,21 +71,21 @@ protected:
     DrawViewShell* pDrViewSh;
 
     // TabBar
-    virtual void		Select();
-    virtual void		DoubleClick();
-    virtual void		MouseButtonDown(const MouseEvent& rMEvt);
-                        
-    virtual void		Command(const CommandEvent& rCEvt);
-                        
-    virtual long		StartRenaming();
-    virtual long		AllowRenaming();
-    virtual void		EndRenaming();
-                        
-    virtual void		ActivatePage();
+    virtual void        Select();
+    virtual void        DoubleClick();
+    virtual void        MouseButtonDown(const MouseEvent& rMEvt);
+
+    virtual void        Command(const CommandEvent& rCEvt);
+
+    virtual long        StartRenaming();
+    virtual long        AllowRenaming();
+    virtual void        EndRenaming();
+
+    virtual void        ActivatePage();
 
     // DropTargetHelper
-    virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8	ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 };
 
 } // end of namespace sd

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@ namespace connectivity
         class OConnection;
         class OAdoKey : public OKey_ADO
         {
-            WpADOKey		m_aKey;
-            OConnection*	m_pConnection;
+            WpADOKey        m_aKey;
+            OConnection*    m_pConnection;
         protected:
             void fillPropertyValues();
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue)throw (::com::sun::star::uno::Exception);
@@ -58,7 +58,7 @@ namespace connectivity
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-            WpADOKey		getImpl() const { return m_aKey;}
+            WpADOKey        getImpl() const { return m_aKey;}
             // map the update/delete rules
             static RuleEnum Map2Rule(const sal_Int32& _eNum);
             static sal_Int32 MapRule(const RuleEnum& _eNum);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 #include <cppuhelper/implbase9.hxx>
 #include <osl/mutex.hxx>
 
-#include <tools/gen.hxx>	// Size
+#include <tools/gen.hxx>    // Size
 #include <tools/link.hxx>
 
 #include <stdarg.h>
@@ -66,9 +66,9 @@ namespace toolkit
 }
 
 
-//	----------------------------------------------------
-//	class VCLXWINDOW
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXWINDOW
+//  ----------------------------------------------------
 
 class UnoPropertyArrayHelper;
 class VCLXWindowImpl;
@@ -90,9 +90,9 @@ private:
     VCLXWindowImpl*                 mpImpl;
 
     UnoPropertyArrayHelper *GetPropHelper();
-    
+
 protected:
-    Size			ImplCalcWindowSize( const Size& rOutSz ) const;
+    Size            ImplCalcWindowSize( const Size& rOutSz ) const;
     DECL_LINK(      WindowEventListener, VclSimpleEvent* );
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
@@ -102,7 +102,7 @@ protected:
     void            SetSynthesizingVCLEvent( sal_Bool b );
     BOOL            IsSynthesizingVCLEvent() const;
 
-    void 	    SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle );
+    void        SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle );
 
     ::toolkit::IAccessibleFactory&  getAccessibleFactory();
 
@@ -137,8 +137,8 @@ public:
     VCLXWindow( bool bWithDefaultProps = false );
     ~VCLXWindow();
 
-    virtual void	SetWindow( Window* pWindow );
-    Window*			GetWindow() const 									{ return (Window*)GetOutputDevice(); }
+    virtual void    SetWindow( Window* pWindow );
+    Window*         GetWindow() const                                   { return (Window*)GetOutputDevice(); }
 
     void    suspendVclEventListening( );
     void    resumeVclEventListening( );
@@ -146,9 +146,9 @@ public:
     void    notifyWindowRemoved( Window& _rWindow );
 
     // ::com::sun::star::lang::XUnoTunnel
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >&	GetUnoTunnelId() throw();
-    static VCLXWindow*											GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
-    sal_Int64													SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
+    static VCLXWindow*                                          GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
+    sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);

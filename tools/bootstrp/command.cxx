@@ -1,7 +1,7 @@
-/************************************************************************* 
+/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@
 #pragma warning (pop)
 #endif
 
-//#define MH_TEST2	1			// fuers direkte Testen
+//#define MH_TEST2  1           // fuers direkte Testen
 
 #if defined(WNT) || defined(OS2)
 #ifdef _MSC_VER
@@ -77,7 +77,7 @@
 #else
 #include <wait.h>
 #endif
-#define P_WAIT 1 		// erstmal einen dummz
+#define P_WAIT 1        // erstmal einen dummz
 #endif
 
 #if defined WNT
@@ -85,10 +85,10 @@
 #endif
 
 #if defined(WNT) || defined(OS2)
-#define  	cPathSeperator ';'
+#define     cPathSeperator ';'
 #endif
 #ifdef UNX
-#define	 	cPathSeperator	':'
+#define     cPathSeperator  ':'
 #endif
 
 /*****************************************************************************/
@@ -470,19 +470,19 @@ CCommand::operator int()
 
     switch ( errno )
     {
-        case	E2BIG :
+        case    E2BIG :
                     nError = COMMAND_TOOBIG;
                     break;
-        case	EINVAL :
+        case    EINVAL :
                     nError = COMMAND_INVALID;
                     break;
-        case	ENOENT:
+        case    ENOENT:
                     nError = COMMAND_NOTFOUND;
                     break;
-        case 	ENOEXEC :
+        case    ENOEXEC :
                     nError = COMMAND_NOEXEC;
                     break;
-        case	ENOMEM :
+        case    ENOMEM :
                     nError = COMMAND_NOMEM;
                     break;
         default:
@@ -509,7 +509,7 @@ ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
     }
 
     DirEntry aItem( String( sItem, RTL_TEXTENCODING_ASCII_US ));
-    if ( aItem.Exists()) 
+    if ( aItem.Exists())
         return sItem;
 
     ByteString aEntry, sReturn;
@@ -636,7 +636,7 @@ CCommandd::operator int()
     aStartupInfo.dwFillAttribute = FOREGROUND_RED | BACKGROUND_RED |
                                 BACKGROUND_BLUE | BACKGROUND_GREEN;
 
-//	aStartupInfo.dwFlags = STARTF_USESTDHANDLES;
+//  aStartupInfo.dwFlags = STARTF_USESTDHANDLES;
     //aStartupInfo.wShowWindow = SW_NORMAL; //SW_SHOWDEFAULT;
     //aStartupInfo.wShowWindow = SW_HIDE; //SW_SHOWNOACTIVATE;
     aStartupInfo.wShowWindow = SW_SHOWNOACTIVATE;

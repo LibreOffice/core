@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -279,14 +279,14 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const ::rtl::OUStrin
 
 static __FAR_DATA SvXMLEnumMapEntry aXMLLegendAlignmentMap[] =
 {
-// 	{ XML_LEFT, 		chart::ChartLegendPosition_LEFT		},
+//  { XML_LEFT,         chart::ChartLegendPosition_LEFT     },
     // #i35421#
-    { XML_START, 		chart::ChartLegendPosition_LEFT		},
-    { XML_TOP,			chart::ChartLegendPosition_TOP		},
-// 	{ XML_RIGHT,		chart::ChartLegendPosition_RIGHT	},
+    { XML_START,        chart::ChartLegendPosition_LEFT     },
+    { XML_TOP,          chart::ChartLegendPosition_TOP      },
+//  { XML_RIGHT,        chart::ChartLegendPosition_RIGHT    },
     // #i35421#
-    { XML_END,			chart::ChartLegendPosition_RIGHT	},
-    { XML_BOTTOM,		chart::ChartLegendPosition_BOTTOM	},
+    { XML_END,          chart::ChartLegendPosition_RIGHT    },
+    { XML_BOTTOM,       chart::ChartLegendPosition_BOTTOM   },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -407,12 +407,12 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
         maChartTypeServiceName = SchXMLTools::GetChartTypeByClassName( aChartClass_Bar, false /* bUseOldNames */ );
     }
 
-    //	Set the size of the draw page.
+    //  Set the size of the draw page.
     if( xVisualObject.is() )
         xVisualObject->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, maChartSize );
 
     InitChart( aOldChartTypeName, bSetSwitchData);
-        
+
     if( bHasAddin )
     {
         //correct charttype serveice name when having an addin
@@ -492,7 +492,7 @@ struct NewDonutSeries
         DataRowPointStyle aSeriesStyle( DataRowPointStyle::DATA_SERIES
             , m_xSeries, -1, 1, msStyleName, mnAttachedAxis );
         aRet.push_back( aSeriesStyle );
-        
+
         sal_Int32 nPointIndex=0;
         ::std::vector< ::rtl::OUString >::iterator aPointIt( m_aPointStyles.begin() );
         ::std::vector< ::rtl::OUString >::iterator aPointEnd( m_aPointStyles.end() );
@@ -540,7 +540,7 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle 
 
                 if( aSeriesMap.end() == aSeriesMap.find(aStyle.m_xSeries) )
                     aSeriesMap[aStyle.m_xSeries] = nOldSeriesIndex;
-                
+
                 nOldSeriesIndex++;
             }
         }
@@ -563,7 +563,7 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle 
         nOldSeriesCount = nMaxOldSeriesIndex+1;
     }
     */
-  
+
 
     //initialize new series styles
     ::std::map< Reference< chart2::XDataSeries >, sal_Int32 >::const_iterator aSeriesMapIt( aSeriesMap.begin() );
@@ -575,7 +575,7 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle 
         ::std::map< sal_Int32, Reference< chart2::XDataSeries > > aIndexSeriesMap;
         for( ; aSeriesMapIt != aSeriesMapEnd; ++aSeriesMapIt )
             aIndexSeriesMap[aSeriesMapIt->second] = aSeriesMapIt->first;
-    
+
         ::std::map< sal_Int32, Reference< chart2::XDataSeries > >::const_iterator aIndexIt( aIndexSeriesMap.begin() );
         ::std::map< sal_Int32, Reference< chart2::XDataSeries > >::const_iterator aIndexEnd( aIndexSeriesMap.end() );
 
@@ -608,8 +608,8 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle 
 
                 ::std::vector< NewDonutSeries >::iterator aNewSeriesIt( aNewSeriesVector.begin() );
                 ::std::vector< NewDonutSeries >::iterator aNewSeriesEnd( aNewSeriesVector.end() );
-                
-                for( ;aNewSeriesIt!=aNewSeriesEnd; ++aNewSeriesIt) 
+
+                for( ;aNewSeriesIt!=aNewSeriesEnd; ++aNewSeriesIt)
                     aNewSeriesIt->setSeriesStyleNameToPoint( aStyle.msStyleName, nNewPointIndex );
             }
         }
@@ -627,7 +627,7 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle 
                 sal_Int32 nNewPointIndex = aSeriesMapIt->second;
                 sal_Int32 nNewSeriesIndex = aStyle.m_nPointIndex;
                 sal_Int32 nRepeatCount = aStyle.m_nPointRepeat;
-                
+
                 while( nRepeatCount && (nNewSeriesIndex>=0) && (nNewSeriesIndex< static_cast<sal_Int32>(aNewSeriesVector.size()) ) )
                 {
                     NewDonutSeries& rNewSeries( aNewSeriesVector[nNewSeriesIndex] );
@@ -639,7 +639,7 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle 
             }
         }
     }
-   
+
     //put information from aNewSeriesVector to output parameter rStyleList
     rStyleList.clear();
 
@@ -750,10 +750,10 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
         }
     }
 
-    
+
     uno::Reference< chart2::data::XDataSource > xDataSource(
         xDataProvider->createDataSource( aArgs ));
-    
+
     aArgs.realloc( aArgs.getLength() + 1 );
     aArgs[ aArgs.getLength() - 1 ] = beans::PropertyValue(
         ::rtl::OUString::createFromAscii("HasCategories"),
@@ -1189,10 +1189,10 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
 
 /*
     With a locked controller the following is done here:
-        1.	Hide title, subtitle, and legend.
-        2.	Set the size of the draw page.
-        3.	Set a (logically) empty data set.
-        4.	Set the chart type.
+        1.  Hide title, subtitle, and legend.
+        2.  Set the size of the draw page.
+        3.  Set a (logically) empty data set.
+        4.  Set the chart type.
 */
 void SchXMLChartContext::InitChart(
     const OUString & rChartTypeServiceName, // currently the old service name
@@ -1201,7 +1201,7 @@ void SchXMLChartContext::InitChart(
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
     DBG_ASSERT( xDoc.is(), "No valid document!" );
     uno::Reference< frame::XModel > xModel (xDoc, uno::UNO_QUERY );
-    
+
     // Remove Title and Diagram ("De-InitNew")
     uno::Reference< chart2::XChartDocument > xNewDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
     if( xNewDoc.is())
@@ -1212,7 +1212,7 @@ void SchXMLChartContext::InitChart(
             xTitled->setTitleObject( 0 );
     }
 
-    //	Set the chart type via setting the diagram.
+    //  Set the chart type via setting the diagram.
     if( rChartTypeServiceName.getLength() &&
         xDoc.is())
     {

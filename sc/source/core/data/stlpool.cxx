@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@
 //========================================================================
 
 ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPoolP,
-                                    ScDocument*		pDocument )
+                                    ScDocument*     pDocument )
     :   SfxStyleSheetPool( rPoolP ),
         pActualStyleSheet( NULL ),
         pDoc( pDocument ),
@@ -102,11 +102,11 @@ void ScStyleSheetPool::SetDocument( ScDocument* pDocument )
 SfxStyleSheetBase& ScStyleSheetPool::Make( const String& rName,
                             SfxStyleFamily eFam, USHORT mask, USHORT nPos )
 {
-    //	When updating styles from a template, Office 5.1 sometimes created
-    //	files with multiple default styles.
-    //	Create new styles in that case:
+    //  When updating styles from a template, Office 5.1 sometimes created
+    //  files with multiple default styles.
+    //  Create new styles in that case:
 
-    //!	only when loading?
+    //! only when loading?
 
     if ( rName.EqualsAscii(STRING_STANDARD) && Find( rName, eFam ) != NULL )
     {
@@ -127,8 +127,8 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const String& rName,
 //------------------------------------------------------------------------
 
 SfxStyleSheetBase* __EXPORT ScStyleSheetPool::Create(
-                                            const String&	rName,
-                                            SfxStyleFamily	eFamily,
+                                            const String&   rName,
+                                            SfxStyleFamily  eFamily,
                                             USHORT          nMaskP )
 {
     ScStyleSheet* pSheet = new ScStyleSheet( rName, *this, eFamily, nMaskP );
@@ -165,7 +165,7 @@ void __EXPORT ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
 void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                                         const String& rName, SfxStyleFamily eFamily )
 {
-    //	this ist Dest-Pool
+    //  this ist Dest-Pool
 
     SfxStyleSheetBase* pStyleSheet = pSrcPool->Find( rName, eFamily );
     if (pStyleSheet)
@@ -180,7 +180,7 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
         const SfxPoolItem* pItem;
         if ( eFamily == SFX_STYLE_FAMILY_PAGE )
         {
-            //	Set-Items
+            //  Set-Items
 
             if ( rSourceSet.GetItemState( ATTR_PAGE_HEADERSET, FALSE, &pItem ) == SFX_ITEM_SET )
             {
@@ -215,23 +215,23 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
 
 //------------------------------------------------------------------------
 //
-//						Standard-Vorlagen
+//                      Standard-Vorlagen
 //
 //------------------------------------------------------------------------
 
-#define SCSTR(id)	ScGlobal::GetRscString(id)
+#define SCSTR(id)   ScGlobal::GetRscString(id)
 
 void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
 {
-    //	Default-Styles kopieren
+    //  Default-Styles kopieren
 
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),		SFX_STYLE_FAMILY_PARA );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_RESULT),		SFX_STYLE_FAMILY_PARA );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_RESULT1),		SFX_STYLE_FAMILY_PARA );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_HEADLINE),		SFX_STYLE_FAMILY_PARA );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_HEADLINE1),	SFX_STYLE_FAMILY_PARA );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),		SFX_STYLE_FAMILY_PAGE );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_REPORT),		SFX_STYLE_FAMILY_PAGE );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SFX_STYLE_FAMILY_PARA );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_RESULT),       SFX_STYLE_FAMILY_PARA );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_RESULT1),      SFX_STYLE_FAMILY_PARA );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_HEADLINE),     SFX_STYLE_FAMILY_PARA );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_HEADLINE1),    SFX_STYLE_FAMILY_PARA );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SFX_STYLE_FAMILY_PAGE );
+    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_REPORT),       SFX_STYLE_FAMILY_PAGE );
 }
 
 //------------------------------------------------------------------------
@@ -253,27 +253,27 @@ void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, USHORT nFontType, USHO
 
 void ScStyleSheetPool::CreateStandardStyles()
 {
-    //	neue Eintraege auch bei CopyStdStylesFrom eintragen
+    //  neue Eintraege auch bei CopyStdStylesFrom eintragen
 
-    Color			aColBlack	( COL_BLACK );
-    Color			aColGrey	( COL_LIGHTGRAY );
-    String			aStr;
-    xub_StrLen		nStrLen;
-    String			aHelpFile;//XXX JN welcher Text???
-    //ULONG			nNumFmt			= 0L;
-    SfxItemSet*		pSet			= NULL;
-    SfxItemSet*		pHFSet			= NULL;
-    SvxSetItem*		pHFSetItem		= NULL;
-    ScEditEngineDefaulter*	pEdEngine	= new ScEditEngineDefaulter( EditEngine::CreatePool(), TRUE );
+    Color           aColBlack   ( COL_BLACK );
+    Color           aColGrey    ( COL_LIGHTGRAY );
+    String          aStr;
+    xub_StrLen      nStrLen;
+    String          aHelpFile;//XXX JN welcher Text???
+    //ULONG         nNumFmt         = 0L;
+    SfxItemSet*     pSet            = NULL;
+    SfxItemSet*     pHFSet          = NULL;
+    SvxSetItem*     pHFSetItem      = NULL;
+    ScEditEngineDefaulter*  pEdEngine   = new ScEditEngineDefaulter( EditEngine::CreatePool(), TRUE );
     pEdEngine->SetUpdateMode( FALSE );
-    EditTextObject* pEmptyTxtObj	= pEdEngine->CreateTextObject();
-    EditTextObject* pTxtObj			= NULL;
-    ScPageHFItem*	pHeaderItem		= new ScPageHFItem( ATTR_PAGE_HEADERRIGHT );
-    ScPageHFItem*	pFooterItem		= new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT );
-    ScStyleSheet*	pSheet			= NULL;
-    SvxBorderLine	aBorderLine		( &aColBlack, DEF_LINE_WIDTH_2 );
-    SvxBoxItem		aBoxItem		( ATTR_BORDER );
-    SvxBoxInfoItem	aBoxInfoItem	( ATTR_BORDER_INNER );
+    EditTextObject* pEmptyTxtObj    = pEdEngine->CreateTextObject();
+    EditTextObject* pTxtObj         = NULL;
+    ScPageHFItem*   pHeaderItem     = new ScPageHFItem( ATTR_PAGE_HEADERRIGHT );
+    ScPageHFItem*   pFooterItem     = new ScPageHFItem( ATTR_PAGE_FOOTERRIGHT );
+    ScStyleSheet*   pSheet          = NULL;
+    SvxBorderLine   aBorderLine     ( &aColBlack, DEF_LINE_WIDTH_2 );
+    SvxBoxItem      aBoxItem        ( ATTR_BORDER );
+    SvxBoxInfoItem  aBoxInfoItem    ( ATTR_BORDER_INNER );
 
     String aStrStandard = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
 
@@ -287,18 +287,18 @@ void ScStyleSheetPool::CreateStandardStyles()
     pSheet = (ScStyleSheet*) &Make( aStrStandard, SFX_STYLE_FAMILY_PARA, SCSTYLEBIT_STANDARD );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_STD );
 
-    //	if default fonts for the document's languages are different from the pool default,
-    //	put them into the default style
-    //	(not as pool defaults, because pool defaults can't be changed by the user)
-    //	the document languages must be set before creating the default styles!
+    //  if default fonts for the document's languages are different from the pool default,
+    //  put them into the default style
+    //  (not as pool defaults, because pool defaults can't be changed by the user)
+    //  the document languages must be set before creating the default styles!
 
     pSet = &pSheet->GetItemSet();
     LanguageType eLatin, eCjk, eCtl;
     pDoc->GetLanguage( eLatin, eCjk, eCtl );
 
-    //	#108374# / #107782#: If the UI language is Korean, the default Latin font has to
-    //	be queried for Korean, too (the Latin language from the document can't be Korean).
-    //	This is the same logic as in SwDocShell::InitNew.
+    //  #108374# / #107782#: If the UI language is Korean, the default Latin font has to
+    //  be queried for Korean, too (the Latin language from the document can't be Korean).
+    //  This is the same logic as in SwDocShell::InitNew.
     LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();
     switch( eUiLanguage )
     {
@@ -345,7 +345,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // will now be done in GetItemSet();
     // pSet = &pSheet->GetItemSet();
     // nNumFmt = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_CURRENCY,
-            //										    ScGlobal::eLnge );
+            //                                          ScGlobal::eLnge );
     // pSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumFmt ) );
 
     //----------------
@@ -512,7 +512,7 @@ void ScStyleSheetPool::CreateStandardStyles()
 //UNUSED2008-05  void ScStyleSheetPool::UpdateStdNames()
 //UNUSED2008-05  {
 //UNUSED2008-05      //  Standard-Styles den richtigen Namen in der Programm-Sprache geben
-//UNUSED2008-05  
+//UNUSED2008-05
 //UNUSED2008-05      String aHelpFile;
 //UNUSED2008-05      sal_uInt32 nCount = aStyles.size();
 //UNUSED2008-05      for (sal_uInt32 n=0; n<nCount; n++)
@@ -523,7 +523,7 @@ void ScStyleSheetPool::CreateStandardStyles()
 //UNUSED2008-05              String aOldName     = pStyle->GetName();
 //UNUSED2008-05              ULONG nHelpId       = pStyle->GetHelpId( aHelpFile );
 //UNUSED2008-05              SfxStyleFamily eFam = pStyle->GetFamily();
-//UNUSED2008-05  
+//UNUSED2008-05
 //UNUSED2008-05              BOOL bHelpKnown = TRUE;
 //UNUSED2008-05              String aNewName;
 //UNUSED2008-05              USHORT nNameId = 0;
@@ -544,13 +544,13 @@ void ScStyleSheetPool::CreateStandardStyles()
 //UNUSED2008-05              {
 //UNUSED2008-05                  if ( nNameId )
 //UNUSED2008-05                      aNewName = SCSTR( nNameId );
-//UNUSED2008-05  
+//UNUSED2008-05
 //UNUSED2008-05                  if ( aNewName.Len() && aNewName != aOldName && !Find( aNewName, eFam ) )
 //UNUSED2008-05                  {
 //UNUSED2008-05                      DBG_TRACE( "Renaming style..." );
-//UNUSED2008-05  
+//UNUSED2008-05
 //UNUSED2008-05                      pStyle->SetName( aNewName );    // setzt auch Parents um
-//UNUSED2008-05  
+//UNUSED2008-05
 //UNUSED2008-05                      //  Styles in Patterns sind schon auf Pointer umgesetzt
 //UNUSED2008-05                      if (eFam == SFX_STYLE_FAMILY_PAGE)
 //UNUSED2008-05                      {
@@ -565,12 +565,12 @@ void ScStyleSheetPool::CreateStandardStyles()
 //UNUSED2008-05              else
 //UNUSED2008-05              {
 //UNUSED2008-05                  //  wrong or no HelpId -> set new HelpId
-//UNUSED2008-05  
+//UNUSED2008-05
 //UNUSED2008-05                  //  no assertion for wrong HelpIds because this happens
 //UNUSED2008-05                  //  with old files (#67218#) or with old files that were
 //UNUSED2008-05                  //  saved again with a new version in a different language
 //UNUSED2008-05                  //  (so SrcVersion doesn't help)
-//UNUSED2008-05  
+//UNUSED2008-05
 //UNUSED2008-05                  USHORT nNewId = 0;
 //UNUSED2008-05                  if ( eFam == SFX_STYLE_FAMILY_PARA )
 //UNUSED2008-05                  {
@@ -592,7 +592,7 @@ void ScStyleSheetPool::CreateStandardStyles()
 //UNUSED2008-05                      else if ( aOldName == SCSTR( STR_STYLENAME_REPORT ) )
 //UNUSED2008-05                          nNewId = HID_SC_SHEET_PAGE_REP;
 //UNUSED2008-05                  }
-//UNUSED2008-05  
+//UNUSED2008-05
 //UNUSED2008-05                  if ( nNewId )               // new ID found from name -> set ID
 //UNUSED2008-05                  {
 //UNUSED2008-05                      pStyle->SetHelpId( aHelpFile, nNewId );

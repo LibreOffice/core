@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,14 +66,14 @@ BOOL SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
             // jedenfall um einen SwCntntNode !!
 
             // FORWARD:  SPoint an das Ende, GetMark zum Anfanf vom Node
-            // BACKWARD: SPoint zum Anfang,	GetMark an das Ende vom Node
+            // BACKWARD: SPoint zum Anfang, GetMark an das Ende vom Node
             // und immer nach der Logik: inkl. Start, exkl. End !!!
             *GetPoint() = *pPam->GetPoint();
             SetMark();
             pNode->MakeEndIndex( &GetPoint()->nContent );
             GetMark()->nContent = 0;
-            if( !bSrchForward )			// rueckwaerts Suche?
-                Exchange(); 			// SPoint und GetMark tauschen
+            if( !bSrchForward )         // rueckwaerts Suche?
+                Exchange();             // SPoint und GetMark tauschen
             break;
         }
     }

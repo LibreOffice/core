@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ SV_DECL_VARARR( SwRects, SwRect, 20, 8 )
 
 class SwRegionRects : public SwRects
 {
-    SwRect aOrigin;	// die Kopie des StartRects
+    SwRect aOrigin; // die Kopie des StartRects
 
     inline void InsertRect( const SwRect &rRect, const USHORT nPos, BOOL &rDel);
 
@@ -54,4 +54,4 @@ public:
     inline void ChangeOrigin( const SwRect &rRect ) { aOrigin = rRect; }
 };
 
-#endif	//_SWREGION_HXX
+#endif  //_SWREGION_HXX

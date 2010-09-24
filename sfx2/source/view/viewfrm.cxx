@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1518,7 +1518,7 @@ SfxViewFrame::SfxViewFrame
     SfxObjectShell*     pObjShell
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Ctor des SfxViewFrame f"ur eine <SfxObjectShell> aus der Ressource.
     Die 'nViewId' der zu erzeugenden <SfxViewShell> kann angegeben werden
@@ -2054,7 +2054,7 @@ void SfxViewFrame::SetActiveChildFrame_Impl( SfxViewFrame *pViewFrame )
         if ( pViewFrame )
             xActive = pViewFrame->GetFrame().GetFrameInterface();
 
-        if ( xFrame.is() )	// PB: #74432# xFrame cann be NULL
+        if ( xFrame.is() )  // PB: #74432# xFrame cann be NULL
             xFrame->setActiveFrame( xActive );
     }
 }
@@ -2325,7 +2325,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 
         // create and load new ViewShell
         SfxViewShell* pNewSh = LoadViewIntoFrame_Impl(
-            *GetObjectShell(), 
+            *GetObjectShell(),
             GetFrame().GetFrameInterface(),
             Sequence< PropertyValue >(),    // means "reuse existing model's args"
             nViewId,
@@ -2723,7 +2723,7 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BO
         nStartPos = rStr.indexOf( LINE_SEP, nStartPos );
         if( nStartPos == -1 )
             break;
-        nStartPos++;	// nicht das \n.
+        nStartPos++;    // nicht das \n.
         nLine++;
     }
 
@@ -3275,7 +3275,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
 void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
 
-/* 	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann in der Execute-Methode f"ur das ein- und ausschalten
     von Child-Windows eingesetzt werden, um dieses inkl. API-Anbindung zu
@@ -3362,7 +3362,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
 
 void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
 
-/* 	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode kann in der Status-Methode f"ur das Ein- und Ausschalt-
     Zustand von Child-Windows eingesetzt werden, um dieses zu implementieren.

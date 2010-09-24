@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,37 +33,37 @@ namespace slideshow {
 namespace internal {
 
 /** This class implements sequential node containers
-    
+
     All children of this node are played sequentially
 */
 class SequentialTimeContainer : public BaseContainerNode
 {
 public:
     SequentialTimeContainer(
-        ::com::sun::star::uno::Reference< 
-        ::com::sun::star::animations::XAnimationNode> const& xNode, 
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode> const& xNode,
         BaseContainerNodeSharedPtr const& pParent,
         NodeContext const& rContext )
         : BaseContainerNode( xNode, pParent, rContext ) {}
-    
+
 #if defined(VERBOSE) && defined(DBG_UTIL)
     virtual const char* getDescription() const
         { return "SequentialTimeContainer"; }
 #endif
-    
+
 protected:
     virtual void dispose();
-    
+
 private:
     virtual void activate_st();
     virtual void notifyDeactivating( AnimationNodeSharedPtr const& rNotifier );
-    
+
     void skipEffect( AnimationNodeSharedPtr const& pChildNode );
     void rewindEffect( AnimationNodeSharedPtr const& pChildNode );
-    
+
 private:
     bool resolveChild( AnimationNodeSharedPtr const& pChildNode );
-    
+
     EventSharedPtr mpCurrentSkipEvent;
     EventSharedPtr mpCurrentRewindEvent;
 };

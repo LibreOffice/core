@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace drawinglayer
         }
 
         BaseProcessor3D::BaseProcessor3D(const geometry::ViewInformation3D& rViewInformation)
-        :	maViewInformation3D(rViewInformation)
+        :   maViewInformation3D(rViewInformation)
         {
         }
 
@@ -58,7 +58,7 @@ namespace drawinglayer
             if(rSource.hasElements())
             {
                 const sal_Int32 nCount(rSource.getLength());
-            
+
                 for(sal_Int32 a(0L); a < nCount; a++)
                 {
                     // get reference
@@ -93,7 +93,7 @@ namespace drawinglayer
     namespace processor3d
     {
         CollectingProcessor3D::CollectingProcessor3D(const geometry::ViewInformation3D& rViewInformation)
-        :	BaseProcessor3D(rViewInformation),
+        :   BaseProcessor3D(rViewInformation),
             maPrimitive3DSequence()
         {
         }

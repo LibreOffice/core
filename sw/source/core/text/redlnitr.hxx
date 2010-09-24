@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef	_REDLNITR_HXX
-#define	_REDLNITR_HXX
+#ifndef _REDLNITR_HXX
+#define _REDLNITR_HXX
 
 #include "ndhints.hxx"
 
@@ -47,7 +47,7 @@ class SwAttrHandler;
 class SwExtend
 {
     SwFont *pFnt;
-    const SvUShorts &rArr;	// XAMA: Array of xub_StrLen
+    const SvUShorts &rArr;  // XAMA: Array of xub_StrLen
     xub_StrLen nStart;
     xub_StrLen nPos;
     xub_StrLen nEnd;

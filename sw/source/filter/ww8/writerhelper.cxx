@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <doc.hxx>
-#	include "writerhelper.hxx"
+#   include "writerhelper.hxx"
 #   include <msfilter.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -567,7 +567,7 @@ namespace sw
             return aRet;
         }
 
-#if 0        
+#if 0
         Frames GetFramesBetweenNodes(const Frames &rFrames,
             const SwNode &rStart, const SwNode &rEnd)
         {

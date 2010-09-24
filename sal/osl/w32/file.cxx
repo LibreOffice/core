@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -346,7 +346,7 @@ oslFileError FileHandle_Impl::writeAt (
             return oslTranslateFileError( GetLastError() );
         m_offset = nOffset;
     }
-    
+
     DWORD dwDone = 0;
     if (!::WriteFile(m_hFile, pBuffer, nBytesToWrite, &dwDone, 0))
         return oslTranslateFileError( GetLastError() );
@@ -661,7 +661,7 @@ oslFileError FileHandle_Impl::syncFile()
     }
     return (result);
 }
- 
+
 //##################################################################
 // File I/O functions
 //##################################################################
@@ -706,7 +706,7 @@ SAL_CALL osl_createFileHandleFromOSHandle (
 }
 
 //#############################################
-oslFileError 
+oslFileError
 SAL_CALL osl_openFile(
     rtl_uString *   strPath,
     oslFileHandle * pHandle,
@@ -762,7 +762,7 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
 
     if (!FlushFileBuffers(pImpl->m_hFile))
         return oslTranslateFileError(GetLastError());
-        
+
     return osl_File_E_None;
 }
 
@@ -815,7 +815,7 @@ SAL_CALL osl_mapFile(
             (void)::CloseHandle(m_handle);
         }
     };
-        
+
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
     if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == ppAddr))
         return osl_File_E_INVAL;
@@ -909,11 +909,11 @@ SAL_CALL osl_readLine(
 }
 
 //#############################################
-oslFileError 
-SAL_CALL osl_readFile( 
-    oslFileHandle Handle, 
-    void *        pBuffer, 
-    sal_uInt64    uBytesRequested, 
+oslFileError
+SAL_CALL osl_readFile(
+    oslFileHandle Handle,
+    void *        pBuffer,
+    sal_uInt64    uBytesRequested,
     sal_uInt64 *  pBytesRead)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
@@ -932,9 +932,9 @@ SAL_CALL osl_readFile(
 //#############################################
 oslFileError
 SAL_CALL osl_writeFile(
-    oslFileHandle Handle, 
-    const void *  pBuffer, 
-    sal_uInt64    uBytesToWrite, 
+    oslFileHandle Handle,
+    const void *  pBuffer,
+    sal_uInt64    uBytesToWrite,
     sal_uInt64 *  pBytesWritten )
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
@@ -1115,12 +1115,12 @@ SAL_CALL osl_setFileSize (oslFileHandle Handle, sal_uInt64 uSize)
 //##################################################################
 // File handling functions
 //##################################################################
- 
+
 //#############################################
 oslFileError SAL_CALL osl_removeFile( rtl_uString* strPath )
 {
-    rtl_uString	*strSysPath = NULL;
-    oslFileError	error = _osl_getSystemPathFromFileURL( strPath, &strSysPath, sal_False );
+    rtl_uString *strSysPath = NULL;
+    oslFileError    error = _osl_getSystemPathFromFileURL( strPath, &strSysPath, sal_False );
 
     if ( osl_File_E_None == error )
     {
@@ -1135,13 +1135,13 @@ oslFileError SAL_CALL osl_removeFile( rtl_uString* strPath )
 }
 
 //#############################################
-#define osl_File_CopyRecursive	0x0001
-#define osl_File_CopyOverwrite	0x0002
+#define osl_File_CopyRecursive  0x0001
+#define osl_File_CopyOverwrite  0x0002
 
 oslFileError SAL_CALL osl_copyFile( rtl_uString* strPath, rtl_uString *strDestPath )
 {
-    rtl_uString	*strSysPath = NULL, *strSysDestPath = NULL;
-    oslFileError	error = _osl_getSystemPathFromFileURL( strPath, &strSysPath, sal_False );
+    rtl_uString *strSysPath = NULL, *strSysDestPath = NULL;
+    oslFileError    error = _osl_getSystemPathFromFileURL( strPath, &strSysPath, sal_False );
 
     if ( osl_File_E_None == error )
         error = _osl_getSystemPathFromFileURL( strDestPath, &strSysDestPath, sal_False );
@@ -1168,8 +1168,8 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* strPath, rtl_uString *strDestPa
 //#############################################
 oslFileError SAL_CALL osl_moveFile( rtl_uString* strPath, rtl_uString *strDestPath )
 {
-    rtl_uString	*strSysPath = NULL, *strSysDestPath = NULL;
-    oslFileError	error = _osl_getSystemPathFromFileURL( strPath, &strSysPath, sal_False );
+    rtl_uString *strSysPath = NULL, *strSysDestPath = NULL;
+    oslFileError    error = _osl_getSystemPathFromFileURL( strPath, &strSysPath, sal_False );
 
     if ( osl_File_E_None == error )
         error = _osl_getSystemPathFromFileURL( strDestPath, &strSysDestPath, sal_False );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 #include <svx/insctrl.hxx>
 #include <svx/selctrl.hxx>
 #include <svx/linectrl.hxx>
-#include <svx/tbxctl.hxx>			//z-Zt falscher includeschutz!
+#include <svx/tbxctl.hxx>           //z-Zt falscher includeschutz!
 #include <svx/fillctrl.hxx>
 #include <svx/tbcontrl.hxx>
 #include <svx/verttexttbxctrl.hxx>
@@ -164,7 +164,7 @@
 #include <app.hrc>
 #include <svx/xmlsecctrl.hxx>
 ResMgr *pSwResMgr = 0;
-sal_Bool 	bNoInterrupt 	= sal_False;
+sal_Bool    bNoInterrupt    = sal_False;
 
 #include <sfx2/app.hxx>
 
@@ -226,10 +226,10 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
     pStdFontConfig = new SwStdFontConfig;
 
-    pAuthorNames = new SvStringsDtor(5, 1);	// Alle Redlining-Autoren
+    pAuthorNames = new SvStringsDtor(5, 1); // Alle Redlining-Autoren
 
     //JP 18.10.96: SvxAutocorrect gegen die SwAutocorrect austauschen
-    SvxAutoCorrCfg*	pACfg = SvxAutoCorrCfg::Get();
+    SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
     if( pACfg )
     {
         const SvxAutoCorrect* pOld = pACfg->GetAutoCorrect();
@@ -309,7 +309,7 @@ void SwDLL::RegisterFactories()
     if ( SvtModuleOptions().IsWriter() )
         SwView::RegisterFactory         ( 2 );
 
-    SwWebView::RegisterFactory		( 5 );
+    SwWebView::RegisterFactory      ( 5 );
 
     if ( SvtModuleOptions().IsWriter() )
     {
@@ -393,7 +393,7 @@ void SwDLL::RegisterControls()
     SvxLineEndToolBoxControl::RegisterControl(SID_ATTR_LINEEND_STYLE, pMod );
 
     SvxFontNameToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONT, pMod );
-//	SvxFontHeightToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod );
+//  SvxFontHeightToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod );
     SvxFontColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR, pMod );
     SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2, pMod );
     SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND, pMod );
@@ -482,7 +482,7 @@ void SwDLL::RegisterControls()
 /* -----------------20.04.99 10:46-------------------
  *
  * --------------------------------------------------*/
-void	SwModule::InitAttrPool()
+void    SwModule::InitAttrPool()
 {
     DBG_ASSERT(!pAttrPool, "Pool ist schon da!");
     pAttrPool = new SwAttrPool(0);
@@ -491,7 +491,7 @@ void	SwModule::InitAttrPool()
 /* -----------------20.04.99 10:46-------------------
  *
  * --------------------------------------------------*/
-void	SwModule::RemoveAttrPool()
+void    SwModule::RemoveAttrPool()
 {
     SetPool(0);
     SfxItemPool::Free(pAttrPool);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ using namespace ::osl;
 
 //------------------------------------------------------------------
 SequenceInputStream::SequenceInputStream(const ByteSequence& rData)
-:	m_aData(rData)
-,	m_nPos(0)
+:   m_aData(rData)
+,   m_nPos(0)
 {
 }
 
@@ -151,7 +151,7 @@ OSequenceOutputStream::OSequenceOutputStream(Sequence< sal_Int8 >& _rSeq, double
     ,m_nResizeFactor(_nResizeFactor)
     ,m_nMinimumResize(_nMinimumResize)
     ,m_nMaximumResize(_nMaximumResize)
-    ,m_nSize(0)	// starting at position 0
+    ,m_nSize(0) // starting at position 0
     ,m_bConnected(sal_True)
 {
     OSL_ENSURE(m_nResizeFactor > 1, "OSequenceOutputStream::OSequenceOutputStream : invalid resize factor !");
@@ -188,13 +188,13 @@ void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rD
             nNewLength = nCurrentLength + m_nMaximumResize;
 
         if (nNewLength < m_nSize + _rData.getLength())
-        {	// it's not enough .... the data would not fit
+        {   // it's not enough .... the data would not fit
 
             // let's take the double amount of the length of the data to be written, as the next write
             // request could be as large as this one
             sal_Int32 nNewGrowth = _rData.getLength() * 2;
             if ((m_nMaximumResize > 0) && (nNewGrowth > m_nMaximumResize))
-            {	// we came to the limit, again ...
+            {   // we came to the limit, again ...
                 nNewGrowth = m_nMaximumResize;
                 if (nNewGrowth + nCurrentLength < m_nSize + _rData.getLength())
                     // but it would not fit if we respect the limit

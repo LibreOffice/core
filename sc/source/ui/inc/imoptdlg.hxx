@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,38 +60,38 @@ public:
         { SetTextEncoding( nEnc ); }
 
         ScImportOptions( const ScImportOptions& rCpy )
-            : nFieldSepCode		(rCpy.nFieldSepCode),
-              nTextSepCode		(rCpy.nTextSepCode),
-              aStrFont			(rCpy.aStrFont),
-              eCharSet      	(rCpy.eCharSet),
-              bFixedWidth   	(rCpy.bFixedWidth),
-              bSaveAsShown	    (rCpy.bSaveAsShown)
+            : nFieldSepCode     (rCpy.nFieldSepCode),
+              nTextSepCode      (rCpy.nTextSepCode),
+              aStrFont          (rCpy.aStrFont),
+              eCharSet          (rCpy.eCharSet),
+              bFixedWidth       (rCpy.bFixedWidth),
+              bSaveAsShown      (rCpy.bSaveAsShown)
         {}
 
     ScImportOptions& operator=( const ScImportOptions& rCpy )
                         {
-                            nFieldSepCode 	= rCpy.nFieldSepCode;
-                            nTextSepCode  	= rCpy.nTextSepCode;
-                            aStrFont	  	= rCpy.aStrFont;
-                            eCharSet	  	= rCpy.eCharSet;
-                            bFixedWidth   	= rCpy.bFixedWidth;
+                            nFieldSepCode   = rCpy.nFieldSepCode;
+                            nTextSepCode    = rCpy.nTextSepCode;
+                            aStrFont        = rCpy.aStrFont;
+                            eCharSet        = rCpy.eCharSet;
+                            bFixedWidth     = rCpy.bFixedWidth;
                             bSaveAsShown    = rCpy.bSaveAsShown;
                             return *this;
                         }
 
-    BOOL			 operator==( const ScImportOptions& rCmp )
+    BOOL             operator==( const ScImportOptions& rCmp )
                         {
                             return
-                                   nFieldSepCode 	== rCmp.nFieldSepCode
-                                && nTextSepCode  	== rCmp.nTextSepCode
-                                && eCharSet		 	== rCmp.eCharSet
-                                && aStrFont      	== rCmp.aStrFont
-                                && bFixedWidth   	== rCmp.bFixedWidth
+                                   nFieldSepCode    == rCmp.nFieldSepCode
+                                && nTextSepCode     == rCmp.nTextSepCode
+                                && eCharSet         == rCmp.eCharSet
+                                && aStrFont         == rCmp.aStrFont
+                                && bFixedWidth      == rCmp.bFixedWidth
                                 && bSaveAsShown     == rCmp.bSaveAsShown;
                         }
-    String	BuildString() const;
+    String  BuildString() const;
 
-    void	SetTextEncoding( rtl_TextEncoding nEnc );
+    void    SetTextEncoding( rtl_TextEncoding nEnc );
 
     sal_Unicode nFieldSepCode;
     sal_Unicode nTextSepCode;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, uno::Sequenc
     mpCfgItem( new FilterConfigItem( rConfigPath, pConfigData ) ),
     mpAttributeList( new SvXMLAttributeList() ),
     mpStream( NULL ),
-    mbEnabled( sal_False )	// will be set to true in StartTracing()
+    mbEnabled( sal_False )  // will be set to true in StartTracing()
 {
     if ( mpCfgItem->ReadBool( rtl::OUString::createFromAscii( "On" ), sal_False ) )
     {
@@ -139,7 +139,7 @@ MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, uno::Sequenc
             aArgument[ 0 ] <<= aPropValues;
             mxFilterTracer = xMgr->createInstanceWithArguments( rtl::OUString::createFromAscii( "com.sun.star.util.FilterTracer" ), aArgument );
             if ( mxFilterTracer.is() )
-            {				
+            {
                 mxTextSearch = uno::Reference< util::XTextSearch >( mxFilterTracer, uno::UNO_QUERY );
                 mxLogger = uno::Reference< util::logging::XLogger >( mxFilterTracer, uno::UNO_QUERY );
                 if ( mxTextSearch.is() )

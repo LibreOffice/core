@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@
 
 /*************************************************************************
 |*
-|*	Dialog zum Aendern und Definieren der Schraffuren
+|*  Dialog zum Aendern und Definieren der Schraffuren
 |*
 \************************************************************************/
 
@@ -73,26 +73,26 @@ SvxHatchTabPage::SvxHatchTabPage
     const SfxItemSet& rInAttrs
 ) :
 
-    SvxTabPage			( pParent, CUI_RES( RID_SVXPAGE_HATCH ), rInAttrs ),
+    SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_HATCH ), rInAttrs ),
 
     aFtDistance         ( this, CUI_RES( FT_LINE_DISTANCE ) ),
-    aMtrDistance		( this, CUI_RES( MTR_FLD_DISTANCE ) ),
-    aFtAngle			( this, CUI_RES( FT_LINE_ANGLE ) ),
-    aMtrAngle			( this, CUI_RES( MTR_FLD_ANGLE ) ),
-    aCtlAngle			( this, CUI_RES( CTL_ANGLE ),
+    aMtrDistance        ( this, CUI_RES( MTR_FLD_DISTANCE ) ),
+    aFtAngle            ( this, CUI_RES( FT_LINE_ANGLE ) ),
+    aMtrAngle           ( this, CUI_RES( MTR_FLD_ANGLE ) ),
+    aCtlAngle           ( this, CUI_RES( CTL_ANGLE ),
                                     RP_RB, 200, 80, CS_ANGLE ),
     aFlProp             ( this, CUI_RES( FL_PROP ) ),
-    aFtLineType			( this, CUI_RES( FT_LINE_TYPE ) ),
-    aLbLineType			( this, CUI_RES( LB_LINE_TYPE ) ),
-    aFtLineColor		( this, CUI_RES( FT_LINE_COLOR ) ),
-    aLbLineColor		( this, CUI_RES( LB_LINE_COLOR ) ),
-    aLbHatchings		( this, CUI_RES( LB_HATCHINGS ) ),
-    aCtlPreview			( this, CUI_RES( CTL_PREVIEW ) ),
-    aBtnAdd				( this, CUI_RES( BTN_ADD ) ),
-    aBtnModify			( this, CUI_RES( BTN_MODIFY ) ),
-    aBtnDelete			( this, CUI_RES( BTN_DELETE ) ),
-    aBtnLoad			( this, CUI_RES( BTN_LOAD ) ),
-    aBtnSave			( this, CUI_RES( BTN_SAVE ) ),
+    aFtLineType         ( this, CUI_RES( FT_LINE_TYPE ) ),
+    aLbLineType         ( this, CUI_RES( LB_LINE_TYPE ) ),
+    aFtLineColor        ( this, CUI_RES( FT_LINE_COLOR ) ),
+    aLbLineColor        ( this, CUI_RES( LB_LINE_COLOR ) ),
+    aLbHatchings        ( this, CUI_RES( LB_HATCHINGS ) ),
+    aCtlPreview         ( this, CUI_RES( CTL_PREVIEW ) ),
+    aBtnAdd             ( this, CUI_RES( BTN_ADD ) ),
+    aBtnModify          ( this, CUI_RES( BTN_MODIFY ) ),
+    aBtnDelete          ( this, CUI_RES( BTN_DELETE ) ),
+    aBtnLoad            ( this, CUI_RES( BTN_LOAD ) ),
+    aBtnSave            ( this, CUI_RES( BTN_SAVE ) ),
 
     rOutAttrs           ( rInAttrs ),
     pColorTab( NULL ),
@@ -203,8 +203,8 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
-            String			aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject	aURL( pHatchingList->GetPath() );
+            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+            INetURLObject   aURL( pHatchingList->GetPath() );
 
             aURL.Append( pHatchingList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
@@ -252,9 +252,9 @@ int SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 long SvxHatchTabPage::CheckChanges_Impl()
 {
-    if( aMtrDistance.GetText()			 != aMtrDistance.GetSavedValue() ||
-        aMtrAngle.GetText()				 != aMtrAngle.GetSavedValue() ||
-        aLbLineType.GetSelectEntryPos()	 != aLbLineType.GetSavedValue()  ||
+    if( aMtrDistance.GetText()           != aMtrDistance.GetSavedValue() ||
+        aMtrAngle.GetText()              != aMtrAngle.GetSavedValue() ||
+        aLbLineType.GetSelectEntryPos()  != aLbLineType.GetSavedValue()  ||
         aLbLineColor.GetSelectEntryPos() != aLbLineColor.GetSavedValue() ||
         aLbHatchings.GetSelectEntryPos() != aLbHatchings.GetSavedValue() )
     {
@@ -312,9 +312,9 @@ BOOL SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
         {
             // CheckChanges(); <-- doppelte Abfrage ?
 
-            XHatch*	pXHatch = NULL;
-            String	aString;
-            USHORT	nPos = aLbHatchings.GetSelectEntryPos();
+            XHatch* pXHatch = NULL;
+            String  aString;
+            USHORT  nPos = aLbHatchings.GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 pXHatch = new XHatch( pHatchingList->GetHatch( nPos )->GetHatch() );
@@ -573,7 +573,7 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 #ifdef WNT
         // hack: #31355# W.P.
         Rectangle aRect( aLbHatchings.GetPosPixel(), aLbHatchings.GetSizePixel() );
-        if( TRUE ) {				// ??? overlapped with pDlg
+        if( TRUE ) {                // ??? overlapped with pDlg
                                     // and srolling
             Invalidate( aRect );
             //aLbHatchings.Invalidate();

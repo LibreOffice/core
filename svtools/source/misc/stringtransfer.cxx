@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ namespace svt
 
         // check for a string format
         const DataFlavorExVector& rFormats = aClipboardData.GetDataFlavorExVector();
-        for	(	DataFlavorExVector::const_iterator aSearch = rFormats.begin();
+        for (   DataFlavorExVector::const_iterator aSearch = rFormats.begin();
                 aSearch != rFormats.end();
                 ++aSearch
             )
@@ -107,6 +107,6 @@ namespace svt
     }
 
 //........................................................................
-}	// namespace svt
+}   // namespace svt
 //........................................................................
 

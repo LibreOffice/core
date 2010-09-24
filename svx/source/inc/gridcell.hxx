@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ class FmXGridCell;
 class FmMutexHelper
 {
 protected:
-    ::osl::Mutex	m_aMutex;
+    ::osl::Mutex    m_aMutex;
 };
 
 //==================================================================
@@ -78,32 +78,32 @@ class DbGridColumn
 {
     friend class DbGridControl;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >		m_xModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >		m_xField;		// Verbindung zum Datenbankfeld
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xField;       // Verbindung zum Datenbankfeld
     ::svt::CellControllerRef m_xController; // Struktur zum Verwalten der Controls fuer eine Spalte
                                         // diese wird von der DbBrowseBox auf die jeweiligen Zellen
                                         // einer Spalte positioniert
-    FmXGridCell*				m_pCell;
+    FmXGridCell*                m_pCell;
 
 protected:
-    DbGridControl&		m_rParent;
+    DbGridControl&      m_rParent;
 
 private:
-    sal_Int32				m_nLastVisibleWidth;	// nur gueltig, wenn m_bHidden == sal_True
-    sal_Int32				m_nFormatKey;
-    sal_Int16				m_nFieldType;
-    sal_Int16				m_nTypeId;
-    sal_uInt16				m_nId;
-    sal_Int16				m_nFieldPos;
-    sal_Int16				m_nAlign;						// wird mit TXT_ALIGN_LEFT .... angegeben
-    sal_Bool				m_bReadOnly : 1;
-    sal_Bool				m_bAutoValue : 1;
-    sal_Bool				m_bInSave : 1;
-    sal_Bool				m_bNumeric : 1;
-    sal_Bool				m_bObject : 1;	// Verweist die Column auf ein Object Datentyp?
-    sal_Bool				m_bHidden : 1;
-    sal_Bool				m_bLocked : 1;
-    sal_Bool				m_bDateTime : 1;
+    sal_Int32               m_nLastVisibleWidth;    // nur gueltig, wenn m_bHidden == sal_True
+    sal_Int32               m_nFormatKey;
+    sal_Int16               m_nFieldType;
+    sal_Int16               m_nTypeId;
+    sal_uInt16              m_nId;
+    sal_Int16               m_nFieldPos;
+    sal_Int16               m_nAlign;                       // wird mit TXT_ALIGN_LEFT .... angegeben
+    sal_Bool                m_bReadOnly : 1;
+    sal_Bool                m_bAutoValue : 1;
+    sal_Bool                m_bInSave : 1;
+    sal_Bool                m_bNumeric : 1;
+    sal_Bool                m_bObject : 1;  // Verweist die Column auf ein Object Datentyp?
+    sal_Bool                m_bHidden : 1;
+    sal_Bool                m_bLocked : 1;
+    sal_Bool                m_bDateTime : 1;
 
     static ::svt::CellControllerRef s_xEmptyController;
         // used by locked columns
@@ -135,69 +135,69 @@ public:
     void  setModel(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xModel);
 
 
-    sal_uInt16	GetId() const {return m_nId;}
-    sal_Bool	IsReadOnly() const {return m_bReadOnly;}
-    sal_Bool	IsAutoValue() const {return m_bAutoValue;}
-    sal_Bool	IsUpdating() const {return m_bInSave;}
-    sal_Int16	GetAlignment() const {return m_nAlign;}
-    sal_Int16	GetType() const {return m_nFieldType;}
-    sal_Int16	GetFieldPos() const {return m_nFieldPos; }
-    sal_Bool	IsNumeric() const {return m_bNumeric;}
-    sal_Bool	IsDateTime() const {return m_bDateTime;}
-    sal_Bool	IsObject() const {return m_bObject;}
-    sal_Bool	IsHidden() const {return m_bHidden;}
-    sal_Int32	GetKey() const {return m_nFormatKey;}
-    const	::svt::CellControllerRef& GetController() const {return m_bLocked ? s_xEmptyController : m_xController;}
-    const	::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& GetField() const {return m_xField;}
+    sal_uInt16  GetId() const {return m_nId;}
+    sal_Bool    IsReadOnly() const {return m_bReadOnly;}
+    sal_Bool    IsAutoValue() const {return m_bAutoValue;}
+    sal_Bool    IsUpdating() const {return m_bInSave;}
+    sal_Int16   GetAlignment() const {return m_nAlign;}
+    sal_Int16   GetType() const {return m_nFieldType;}
+    sal_Int16   GetFieldPos() const {return m_nFieldPos; }
+    sal_Bool    IsNumeric() const {return m_bNumeric;}
+    sal_Bool    IsDateTime() const {return m_bDateTime;}
+    sal_Bool    IsObject() const {return m_bObject;}
+    sal_Bool    IsHidden() const {return m_bHidden;}
+    sal_Int32   GetKey() const {return m_nFormatKey;}
+    const   ::svt::CellControllerRef& GetController() const {return m_bLocked ? s_xEmptyController : m_xController;}
+    const   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& GetField() const {return m_xField;}
     DbGridControl& GetParent() const {return m_rParent;}
     FmXGridCell* GetCell() const {return m_pCell;}
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >	GetCurrentFieldValue() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >  GetCurrentFieldValue() const;
 
-    //		Zeichnen eines Feldes an einer Position, ist ein ::com::sun::star::sdbcx::View gesetzt
-    //		uebernimmt dieser das Zeichnen, z.B. fuer CheckBoxen
-    void	Paint(OutputDevice& rDev,
+    //      Zeichnen eines Feldes an einer Position, ist ein ::com::sun::star::sdbcx::View gesetzt
+    //      uebernimmt dieser das Zeichnen, z.B. fuer CheckBoxen
+    void    Paint(OutputDevice& rDev,
                   const Rectangle& rRect,
                   const DbGridRow* pRow,
                   const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
 
 
-    //		Inititialierung im alive mode
-    //		Ist kein ColumnController gesetzt, wird eine DefaultInitialisierung
-    //		vorgenommen
-    void	CreateControl(sal_Int32 _nFieldPos, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xField, sal_Int32 nTypeId);
-    void	UpdateControl()
+    //      Inititialierung im alive mode
+    //      Ist kein ColumnController gesetzt, wird eine DefaultInitialisierung
+    //      vorgenommen
+    void    CreateControl(sal_Int32 _nFieldPos, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xField, sal_Int32 nTypeId);
+    void    UpdateControl()
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xField(m_xField);
                 CreateControl(m_nFieldPos, xField, m_nTypeId);
             }
 
-    //		Editieren einer Zelle
-    void	UpdateFromField(const DbGridRow* pRow, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
-    sal_Bool	Commit();
+    //      Editieren einer Zelle
+    void    UpdateFromField(const DbGridRow* pRow, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
+    sal_Bool    Commit();
 
-    //		freigeben aller Daten, die fuer den AliveMode noetig sind
-    void	Clear();
+    //      freigeben aller Daten, die fuer den AliveMode noetig sind
+    void    Clear();
 
     XubString  GetCellText(const DbGridRow* pRow, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
     XubString  GetCellText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& xField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
 
-    void	SetReadOnly(sal_Bool bRead){m_bReadOnly = bRead;}
-    void	SetObject(sal_Int16 nPos) {m_bObject = m_bReadOnly = sal_True; m_nFieldPos = nPos;}
+    void    SetReadOnly(sal_Bool bRead){m_bReadOnly = bRead;}
+    void    SetObject(sal_Int16 nPos) {m_bObject = m_bReadOnly = sal_True; m_nFieldPos = nPos;}
 
-    void	ImplInitWindow( Window& rParent, const InitWindowFacet _eInitWhat );
+    void    ImplInitWindow( Window& rParent, const InitWindowFacet _eInitWhat );
 
     // Properties, die auf den ::com::sun::star::frame::Controller durchschlagen koennen
-    sal_Int16	SetAlignment(sal_Int16 _nAlign);
+    sal_Int16   SetAlignment(sal_Int16 _nAlign);
         // if _nAlign is -1, the alignment is calculated from the type of the field we are bound to
         // the value really set is returned
-    sal_Int16	SetAlignmentFromModel(sal_Int16 nStandardAlign);
+    sal_Int16   SetAlignmentFromModel(sal_Int16 nStandardAlign);
         // set the alignment according to the "Align"-property of m_xModel, use the given standard
         // alignment if the property if void, return the really set alignment
 
     // column locking
-    sal_Bool	isLocked() const { return m_bLocked; }
-    void	setLock(sal_Bool _bLock);
+    sal_Bool    isLocked() const { return m_bLocked; }
+    void    setLock(sal_Bool _bLock);
 
 private:
     /** attaches or detaches our cell object to the SctriptEventAttacherManager implemented
@@ -214,42 +214,42 @@ private:
 class DbCellControl
         :public ::svxform::OTypeConversionClient
         ,public ::svxform::OStaticDataAccessTools
-        ,public FmMutexHelper			// _before_ the listener, so the listener is to be destroyed first!
+        ,public FmMutexHelper           // _before_ the listener, so the listener is to be destroyed first!
         ,public ::comphelper::OPropertyChangeListener
 {
 private:
-    ::comphelper::OPropertyChangeMultiplexer*	m_pModelChangeBroadcaster;
-    ::comphelper::OPropertyChangeMultiplexer*	m_pFieldChangeBroadcaster;
+    ::comphelper::OPropertyChangeMultiplexer*   m_pModelChangeBroadcaster;
+    ::comphelper::OPropertyChangeMultiplexer*   m_pFieldChangeBroadcaster;
 
 private:
-    sal_Bool					m_bTransparent : 1;
-    sal_Bool					m_bAlignedController : 1;
-    sal_Bool					m_bAccessingValueProperty : 1;
+    sal_Bool                    m_bTransparent : 1;
+    sal_Bool                    m_bAlignedController : 1;
+    sal_Bool                    m_bAccessingValueProperty : 1;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
                                 m_xCursor;
 
 protected:
-    DbGridColumn&				m_rColumn;
-    Window* 					m_pPainter;
-    Window* 					m_pWindow;
+    DbGridColumn&               m_rColumn;
+    Window*                     m_pPainter;
+    Window*                     m_pWindow;
 
 protected:
     // attribute access
     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& getCursor() const { return m_xCursor; }
 
     // control transparency
-    inline	sal_Bool	isTransparent( ) const { return m_bTransparent; }
-    inline	void		setTransparent( sal_Bool _bSet ) { m_bTransparent = _bSet; }
+    inline  sal_Bool    isTransparent( ) const { return m_bTransparent; }
+    inline  void        setTransparent( sal_Bool _bSet ) { m_bTransparent = _bSet; }
 
     // control alignment
-    inline	void		setAlignedController( sal_Bool _bAlign = sal_True ) { m_bAlignedController = _bAlign; }
+    inline  void        setAlignedController( sal_Bool _bAlign = sal_True ) { m_bAlignedController = _bAlign; }
 
 
     /** determined whether or not the value property is locked
     @see lockValueProperty
     */
-    inline	sal_Bool	isValuePropertyLocked() const;
+    inline  sal_Bool    isValuePropertyLocked() const;
 
     /** locks the listening at the value property.
         <p>This means that every subsequent change now done on the value property of the model ("Text", or "Value",
@@ -259,23 +259,23 @@ protected:
         Value locking can't be nested
     @see unlockValueProperty
     */
-    inline	void		lockValueProperty();
+    inline  void        lockValueProperty();
     /** unlocks the listening at the value property
     @see lockValueProperty
     */
-    inline	void		unlockValueProperty();
+    inline  void        unlockValueProperty();
 
 protected:
     // adds the given property to the list of properties which we listen for
-    void	doPropertyListening( const ::rtl::OUString& _rPropertyName );
+    void    doPropertyListening( const ::rtl::OUString& _rPropertyName );
 
     // called whenever a property which affects field settings in general is called
     // you should overwrite this method for every property you add yourself as listener to
     // with doPropertyListening
-    virtual void	implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+    virtual void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 
     // called by _propertyChanged if a property which denotes the column value has changed
-    void	implValuePropertyChanged( );
+    void    implValuePropertyChanged( );
 
 
 public:
@@ -291,8 +291,8 @@ public:
     }
 
     // control alignment
-    inline	sal_Bool	isAlignedController() const { return m_bAlignedController; }
-            void		AlignControl(sal_Int16 nAlignment);
+    inline  sal_Bool    isAlignedController() const { return m_bAlignedController; }
+            void        AlignControl(sal_Int16 nAlignment);
 
     void SetTextLineColor();
     void SetTextLineColor(const Color& _rColor);
@@ -319,8 +319,8 @@ public:
 
     double GetValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
 
-protected:	
-    void	invalidatedController();
+protected:
+    void    invalidatedController();
 
     /** commits the content of the control (e.g. the text of an edit field) into the column model
         (e.g. the "Text" property of the model).
@@ -339,7 +339,7 @@ protected:
 
     @see commitControl
     */
-    virtual void	updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel ) = 0;
+    virtual void    updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel ) = 0;
 
 protected:
 // OPropertyChangeListener
@@ -357,20 +357,20 @@ private:
 
 //==================================================================
 //------------------------------------------------------------------
-inline	sal_Bool	DbCellControl::isValuePropertyLocked() const
+inline  sal_Bool    DbCellControl::isValuePropertyLocked() const
 {
     return m_bAccessingValueProperty;
 }
 
 //------------------------------------------------------------------
-inline	void		DbCellControl::lockValueProperty()
+inline  void        DbCellControl::lockValueProperty()
 {
     OSL_ENSURE( !isValuePropertyLocked(), "DbCellControl::lockValueProperty: not to be nested!" );
     m_bAccessingValueProperty = sal_True;
 }
 
 //------------------------------------------------------------------
-inline	void		DbCellControl::unlockValueProperty()
+inline  void        DbCellControl::unlockValueProperty()
 {
     OSL_ENSURE( isValuePropertyLocked(), "DbCellControl::lockValueProperty: not locked so far!" );
     m_bAccessingValueProperty = sal_False;
@@ -404,7 +404,7 @@ class DbTextField : public DbLimitedLengthField
 {
     ::svt::IEditImplementation* m_pEdit;
     ::svt::IEditImplementation* m_pPainterImplementation;
-    sal_Int16		            m_nKeyType;
+    sal_Int16                   m_nKeyType;
     sal_Bool                    m_bIsSimpleEdit;
 
 protected:
@@ -427,8 +427,8 @@ public:
 
 protected:
     // DbCellControl
-    virtual sal_Bool	commitControl( );
-    virtual void		updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
     // DbLimitedLengthField
     virtual void        implSetEffectiveMaxTextLen( sal_Int16 _nMaxLen );
 };
@@ -437,8 +437,8 @@ protected:
 class DbFormattedField : public DbLimitedLengthField
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >	m_xSupplier;
-    sal_Int16						m_nKeyType;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xSupplier;
+    sal_Int16                       m_nKeyType;
 
 
 public:
@@ -454,8 +454,8 @@ public:
 
 protected:
     // DbCellControl
-    virtual sal_Bool	commitControl( );
-    virtual void		updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 
     // OPropertyChangeListener
     virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
@@ -478,14 +478,14 @@ public:
 
 protected:
     // DbCellControl
-    virtual sal_Bool	commitControl( );
-    virtual void		updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 };
 
 //==================================================================
 class DbComboBox : public DbCellControl
 {
-    sal_Int16		  m_nKeyType;
+    sal_Int16         m_nKeyType;
 
 public:
     TYPEINFO();
@@ -500,19 +500,19 @@ public:
 
 protected:
     // DbCellControl
-    virtual sal_Bool	commitControl( );
-    virtual void		updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 
-    virtual void		implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+    virtual void        implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 
     // OPropertyChangeListener
     virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 };
 
 //==================================================================
-class DbListBox 	:public DbCellControl
+class DbListBox     :public DbCellControl
 {
-    sal_Bool			  m_bBound	: 1;
+    sal_Bool              m_bBound  : 1;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aValueList;
 
 public:
@@ -528,10 +528,10 @@ public:
 
 protected:
     // DbCellControl
-    virtual sal_Bool	commitControl( );
-    virtual void		updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 
-    virtual void		implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+    virtual void        implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 
     // OPropertyChangeListener
     virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
@@ -550,10 +550,10 @@ public:
 
 protected:
     /// DbCellControl
-    virtual sal_Bool	commitControl( );
-    virtual void		updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 
-    virtual void		implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+    virtual void        implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 
 private:
     String  impl_formatText( const String& _rText );
@@ -568,7 +568,7 @@ private:
 class DbSpinField : public DbCellControl
 {
 private:
-    sal_Int16	m_nStandardAlign;
+    sal_Int16   m_nStandardAlign;
 
 public:
     TYPEINFO();
@@ -577,11 +577,11 @@ protected:
     DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign = com::sun::star::awt::TextAlign::RIGHT );
 
 public:
-    virtual void						Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxCursor );
-    virtual ::svt::CellControllerRef	CreateController() const;
+    virtual void                        Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxCursor );
+    virtual ::svt::CellControllerRef    CreateController() const;
 
 protected:
-    virtual SpinField*	createField(
+    virtual SpinField*  createField(
                             Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
@@ -599,18 +599,18 @@ public:
 
 protected:
     // DbCellControl
-    virtual sal_Bool	commitControl( );
-    virtual void		updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 
     // DbSpinField
-    virtual SpinField*	createField(
+    virtual SpinField*  createField(
                             Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
                         );
 
     /// initializes everything which relates to the properties describing the numeric behaviour
-    virtual void	implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+    virtual void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
 //==================================================================
@@ -624,18 +624,18 @@ public:
 
 protected:
     // DbCellControl
-    virtual sal_Bool	commitControl( );
-    virtual void		updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 
     // DbSpinField
-    virtual SpinField*	createField(
+    virtual SpinField*  createField(
                             Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
                         );
 
     /// initializes everything which relates to the properties describing the numeric behaviour
-    virtual void	implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+    virtual void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
 //==================================================================
@@ -653,18 +653,18 @@ public:
 
 protected:
     // DbCellControl
-    virtual sal_Bool	commitControl( );
-    virtual void		updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 
     // DbSpinField
-    virtual SpinField*	createField(
+    virtual SpinField*  createField(
                             Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
                         );
 
     /// initializes everything which relates to the properties describing the numeric behaviour
-    virtual void	implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+    virtual void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
 //==================================================================
@@ -678,18 +678,18 @@ public:
 
 protected:
     // DbCellControl
-    virtual sal_Bool	commitControl( );
-    virtual void		updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 
     // DbSpinField
-    virtual SpinField*	createField(
+    virtual SpinField*  createField(
                             Window* _pParent,
                             WinBits _nFieldStyle,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
                         );
 
     /// initializes everything which relates to the properties describing the numeric behaviour
-    void	implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+    void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
 //==================================================================
@@ -697,13 +697,13 @@ class DbFilterField
         :public DbCellControl
         ,public ::svxform::OSQLParserClient
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >	m_aValueList;
-    XubString	m_aText;
-    Link	m_aCommitLink;
-    sal_Int16	m_nControlClass;
-    sal_Bool	m_bFilterList : 1;
-    sal_Bool	m_bFilterListFilled : 1;
-    sal_Bool	m_bBound : 1;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aValueList;
+    XubString   m_aText;
+    Link    m_aCommitLink;
+    sal_Int16   m_nControlClass;
+    sal_Bool    m_bFilterList : 1;
+    sal_Bool    m_bFilterListFilled : 1;
+    sal_Bool    m_bBound : 1;
 
 public:
     TYPEINFO();
@@ -726,8 +726,8 @@ public:
 protected:
 
     // DbCellControl
-    virtual sal_Bool	commitControl( );
-    virtual void		updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 
 protected:
     void SetList(const ::com::sun::star::uno::Any& rItems, sal_Bool bComboBox);
@@ -753,11 +753,11 @@ protected:
     DbCellControl*      m_pCellControl;
 
 private:
-    ::cppu::OInterfaceContainerHelper	m_aWindowListeners;
-    ::cppu::OInterfaceContainerHelper	m_aFocusListeners;
-    ::cppu::OInterfaceContainerHelper	m_aKeyListeners;
-    ::cppu::OInterfaceContainerHelper	m_aMouseListeners;
-    ::cppu::OInterfaceContainerHelper	m_aMouseMotionListeners;
+    ::cppu::OInterfaceContainerHelper   m_aWindowListeners;
+    ::cppu::OInterfaceContainerHelper   m_aFocusListeners;
+    ::cppu::OInterfaceContainerHelper   m_aKeyListeners;
+    ::cppu::OInterfaceContainerHelper   m_aMouseListeners;
+    ::cppu::OInterfaceContainerHelper   m_aMouseMotionListeners;
 
 protected:
     virtual ~FmXGridCell();
@@ -782,8 +782,8 @@ public:
 
 // ::com::sun::star::lang::XComponent
     virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException){OComponentHelper::dispose();}
-    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener)throw(::com::sun::star::uno::RuntimeException)		{ OComponentHelper::addEventListener(aListener);}
-    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener)throw(::com::sun::star::uno::RuntimeException)		{ OComponentHelper::removeEventListener(aListener);}
+    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener)throw(::com::sun::star::uno::RuntimeException)       { OComponentHelper::addEventListener(aListener);}
+    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener)throw(::com::sun::star::uno::RuntimeException)        { OComponentHelper::removeEventListener(aListener);}
 
 // ::com::sun::star::awt::XControl
     virtual void SAL_CALL setContext(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& /*Context*/) throw(::com::sun::star::uno::RuntimeException){}
@@ -909,8 +909,8 @@ private:
     ::rtl::OUString                     m_sValueOnEnter;
 
 protected:
-    ::cppu::OInterfaceContainerHelper	m_aTextListeners;
-    ::cppu::OInterfaceContainerHelper	m_aChangeListeners;
+    ::cppu::OInterfaceContainerHelper   m_aTextListeners;
+    ::cppu::OInterfaceContainerHelper   m_aChangeListeners;
     ::svt::IEditImplementation*         m_pEditImplementation;
     bool                                m_bOwnEditImplementation;
 
@@ -963,10 +963,10 @@ typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XCheckBox
 class FmXCheckBoxCell : public FmXDataCell,
                         public FmXCheckBoxCell_Base
 {
-    ::cppu::OInterfaceContainerHelper	m_aItemListeners;
-    ::cppu::OInterfaceContainerHelper	m_aActionListeners;
+    ::cppu::OInterfaceContainerHelper   m_aItemListeners;
+    ::cppu::OInterfaceContainerHelper   m_aActionListeners;
     ::rtl::OUString                     m_aActionCommand;
-    CheckBox*							m_pBox;
+    CheckBox*                           m_pBox;
 
 protected:
     virtual ~FmXCheckBoxCell();
@@ -1008,9 +1008,9 @@ typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XListBox
 class FmXListBoxCell    :public FmXTextCell
                         ,public FmXListBoxCell_Base
 {
-    ::cppu::OInterfaceContainerHelper	m_aItemListeners,
+    ::cppu::OInterfaceContainerHelper   m_aItemListeners,
                                         m_aActionListeners;
-    ListBox*							m_pBox;
+    ListBox*                            m_pBox;
 
 protected:
     virtual ~FmXListBoxCell();
@@ -1063,7 +1063,7 @@ class FmXComboBoxCell   :public FmXTextCell
                         ,public FmXComboBoxCell_Base
 {
 private:
-    ::cppu::OInterfaceContainerHelper	m_aItemListeners,
+    ::cppu::OInterfaceContainerHelper   m_aItemListeners,
                                         m_aActionListeners;
     ComboBox*                           m_pComboBox;
 
@@ -1127,7 +1127,7 @@ public:
     static FmXFilterCell* getImplementation(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxObject);
 
-//	painting the filter text
+//  painting the filter text
     virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect);
     void Update(){m_pCellControl->Update();}
 

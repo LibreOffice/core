@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -167,7 +167,7 @@ BOOL SwEditShell::IsTextToTableAvailable() const
             // pruefe ob in der Selection eine Tabelle liegt
             ULONG nStt = PCURCRSR->GetMark()->nNode.GetIndex(),
                   nEnd = PCURCRSR->GetPoint()->nNode.GetIndex();
-            if( nStt > nEnd )	{ ULONG n = nStt; nStt = nEnd; nEnd = n; }
+            if( nStt > nEnd )   { ULONG n = nStt; nStt = nEnd; nEnd = n; }
 
             for( ; nStt <= nEnd; ++nStt )
                 if( !GetDoc()->GetNodes()[ nStt ]->IsTxtNode() )
@@ -208,7 +208,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTblOpts,
     SwTableNode* pTblNode = (SwTableNode*)pTbl->GetTabSortBoxes()[ 0 ]->
                                                 GetSttNd()->FindTableNode();
     SwDDETable* pDDETbl = new SwDDETable( *pTbl, pDDEType );
-    pTblNode->SetNewTable( pDDETbl );		// setze die DDE-Tabelle
+    pTblNode->SetNewTable( pDDETbl );       // setze die DDE-Tabelle
 
     if( bEndUndo )
         EndUndo( UNDO_END );
@@ -258,7 +258,7 @@ void SwEditShell::SetTblChgMode( TblChgMode eMode )
     if( pTblNd )
     {
         ((SwTable&)pTblNd->GetTable()).SetTblChgMode( eMode );
-        if( !GetDoc()->IsModified() )	// Bug 57028
+        if( !GetDoc()->IsModified() )   // Bug 57028
             GetDoc()->SetUndoNoResetModified();
         GetDoc()->SetModified();
     }
@@ -453,13 +453,13 @@ BOOL SwEditShell::CanMergeTable( BOOL bWithPrev, BOOL* pChkNxtPrv ) const
                 // --> FME 2004-09-17 #117418# Consider table in table case
                 pChkNd->EndOfSectionIndex() == pTblNd->GetIndex() - 1 )
                 // <--
-                *pChkNxtPrv = TRUE, bRet = TRUE;		// mit Prev ist moeglich
+                *pChkNxtPrv = TRUE, bRet = TRUE;        // mit Prev ist moeglich
             else
             {
                 pChkNd = rNds[ pTblNd->EndOfSectionIndex() + 1 ]->GetTableNode();
                 if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) &&
                     bNew == pChkNd->GetTable().IsNewModel() )
-                    *pChkNxtPrv = FALSE, bRet = TRUE;		// mit Next ist moeglich
+                    *pChkNxtPrv = FALSE, bRet = TRUE;       // mit Next ist moeglich
             }
         }
         else

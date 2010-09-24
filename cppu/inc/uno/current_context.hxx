@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,11 +33,11 @@
 
 
 namespace com
-{     
+{
 namespace sun
-{     
+{
 namespace star
-{     
+{
 namespace uno
 {
 
@@ -45,7 +45,7 @@ namespace uno
     @attention
     Don't spread the returned interface around to other threads.  Every thread has its own
     current context.
-    
+
     @return current context or null ref, if none is set
 */
 inline Reference< XCurrentContext > SAL_CALL getCurrentContext()
@@ -83,10 +83,10 @@ class ContextLayer
         @internal
     */
     Reference< XCurrentContext > m_xPreviousContext;
-    
+
 public:
     /** Constructor: Saves the previous context and sets the new (given) one.
-        
+
         @param xNewContext new context to be set
     */
     inline ContextLayer(
@@ -95,9 +95,9 @@ public:
     /** Destructor: restores the previous context.
     */
     inline ~ContextLayer() SAL_THROW( () );
-    
+
     /** Gets the previously set context.
-        
+
         @return the previously set context
     */
     inline Reference< XCurrentContext > SAL_CALL getPreviousContext() const

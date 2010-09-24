@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,17 +44,17 @@ using namespace std;
 namespace ole_adapter
 {
 // CoInitializeEx *
-typedef DECLSPEC_IMPORT HRESULT (STDAPICALLTYPE *ptrCoInitEx)( LPVOID, DWORD); 
+typedef DECLSPEC_IMPORT HRESULT (STDAPICALLTYPE *ptrCoInitEx)( LPVOID, DWORD);
 // CoInitialize *
-typedef DECLSPEC_IMPORT HRESULT (STDAPICALLTYPE *ptrCoInit)( LPVOID); 
+typedef DECLSPEC_IMPORT HRESULT (STDAPICALLTYPE *ptrCoInit)( LPVOID);
 
 void o2u_attachCurrentThread()
 {
     static OThreadData oleThreadData;
-    
+
     if ((sal_Bool)(sal_IntPtr)oleThreadData.getData() != sal_True)
     {
-        HINSTANCE inst=	LoadLibrary( _T("ole32.dll"));
+        HINSTANCE inst= LoadLibrary( _T("ole32.dll"));
         if( inst )
         {
             HRESULT hr;
@@ -70,8 +70,8 @@ void o2u_attachCurrentThread()
                     hr= initFunc( NULL);
             }
         }
-        oleThreadData.setData((void*)sal_True);				
+        oleThreadData.setData((void*)sal_True);
     }
-}	
+}
 
 } // end namespace

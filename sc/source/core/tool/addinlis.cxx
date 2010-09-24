@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 
 #include "addinlis.hxx"
-#include "miscuno.hxx"		// SC_IMPL_SERVICE_INFO
+#include "miscuno.hxx"      // SC_IMPL_SERVICE_INFO
 #include "document.hxx"
 #include "brdcst.hxx"
 #include "unoguard.hxx"
@@ -55,17 +55,17 @@ List ScAddInListener::aAllListeners;
 
 //------------------------------------------------------------------------
 
-//	static
+//  static
 ScAddInListener* ScAddInListener::CreateListener(
                         uno::Reference<sheet::XVolatileResult> xVR, ScDocument* pDoc )
 {
     ScAddInListener* pNew = new ScAddInListener( xVR, pDoc );
 
-    pNew->acquire();								// for aAllListeners
+    pNew->acquire();                                // for aAllListeners
     aAllListeners.Insert( pNew, LIST_APPEND );
 
-    if ( xVR.is() )	
-        xVR->addResultListener( pNew );				// after at least 1 ref exists!
+    if ( xVR.is() )
+        xVR->addResultListener( pNew );             // after at least 1 ref exists!
 
     return pNew;
 }
@@ -94,17 +94,17 @@ ScAddInListener* ScAddInListener::Get( uno::Reference<sheet::XVolatileResult> xV
         if ( pComp == (sheet::XVolatileResult*)pLst->xVolRes.get() )
             return pLst;
     }
-    return NULL;		// not found
+    return NULL;        // not found
 }
 
-//!	move to some container object?
+//! move to some container object?
 // static
 void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
 {
     ULONG nPos = aAllListeners.Count();
     while (nPos)
     {
-        //	loop backwards because elements are removed
+        //  loop backwards because elements are removed
         --nPos;
         ScAddInListener* pLst = (ScAddInListener*)aAllListeners.GetObject(nPos);
         ScAddInDocs* p = pLst->pDocs;
@@ -115,14 +115,14 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
             if ( p->Count() == 0 )
             {
                 // this AddIn is no longer used
-                //	dont delete, just remove the ref for the list
+                //  dont delete, just remove the ref for the list
 
                 aAllListeners.Remove( nPos );
 
-                if ( pLst->xVolRes.is() )	
+                if ( pLst->xVolRes.is() )
                     pLst->xVolRes->removeResultListener( pLst );
 
-                pLst->release();	// Ref for aAllListeners - pLst may be deleted here
+                pLst->release();    // Ref for aAllListeners - pLst may be deleted here
             }
         }
     }
@@ -135,25 +135,25 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
 void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEvent& aEvent )
                                 throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aGuard;			//! or generate a UserEvent
+    ScUnoGuard aGuard;          //! or generate a UserEvent
 
-    aResult = aEvent.Value;		// store result
+    aResult = aEvent.Value;     // store result
 
     if ( !HasListeners() )
     {
-        //!	remove from list and removeListener, as in RemoveDocument ???
+        //! remove from list and removeListener, as in RemoveDocument ???
 
 #if 0
-        //!	this will crash if called before first StartListening !!!
+        //! this will crash if called before first StartListening !!!
         aAllListeners.Remove( this );
-        if ( xVolRes.is() )	
+        if ( xVolRes.is() )
             xVolRes->removeResultListener( this );
-        release();	// Ref for aAllListeners - this may be deleted here
+        release();  // Ref for aAllListeners - this may be deleted here
         return;
 #endif
     }
 
-    //	notify document of changes
+    //  notify document of changes
 
     Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -237,7 +237,7 @@ public class ParcelDescriptor {
             Map langProps = new HashMap();
             NodeList nl;
             Element tmp;
-            
+
             Element scriptElement = (Element)scriptNodes.item(i);
             language = scriptElement.getAttribute("language");
 
@@ -278,7 +278,7 @@ public class ParcelDescriptor {
             nl = scriptElement.getElementsByTagName("languagedepprops");
             if ( nl != null && nl.getLength() > 0 )
             {
-                
+
                 NodeList props = ((Element)nl.item(0)).getElementsByTagName("prop");
                 if ( props != null )
                 {
@@ -360,10 +360,10 @@ public class ParcelDescriptor {
                 catch (DOMException de) {
                     // ignore
                 }
-            }   
+            }
         }
     }
-        
+
     public void removeScriptEntry(ScriptEntry script) {
         NodeList scriptNodes;
         Element main = document.getDocumentElement();
@@ -393,17 +393,17 @@ public class ParcelDescriptor {
                 catch (DOMException de) {
                     // ignore
                 }
-            }   
+            }
         }
     }
 
     public void addScriptEntry(ScriptEntry script) {
         Element main = document.getDocumentElement();
-        Element root, item, tempitem; 
+        Element root, item, tempitem;
 
         root = document.createElement("script");
         root.setAttribute("language", script.getLanguage());
-            
+
         item = document.createElement("locale");
         item.setAttribute("lang", "en");
         tempitem = document.createElement("displayname");

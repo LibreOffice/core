@@ -30,7 +30,7 @@ public:
     TablePropertiesHandler( bool bOOXML );
     virtual ~TablePropertiesHandler( );
 
-    bool sprm(Sprm & sprm); 
+    bool sprm(Sprm & sprm);
 
     inline void SetTableManager( DomainMapperTableManager_Base_t *pTableManager )
     {

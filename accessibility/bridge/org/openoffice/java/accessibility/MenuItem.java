@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,24 +37,24 @@ class MenuItem extends ToggleButton {
     }
 
     protected class AccessibleMenuItemListener extends AccessibleUNOComponentListener {
-    
+
         protected AccessibleMenuItemListener() {
         }
-        
+
         protected void setComponentState(short state, boolean enable) {
-                
+
             // #i56538# menu items in Java 1.5 are ARMED, not SELECTED
             if( state == com.sun.star.accessibility.AccessibleStateType.SELECTED )
                 fireStatePropertyChange(javax.accessibility.AccessibleState.ARMED, enable);
             else
                 super.setComponentState(state, enable);
-        }        
+        }
     };
 
     protected XAccessibleEventListener createEventListener() {
         return new AccessibleMenuItemListener();
     }
-    
+
     /** Creates the AccessibleContext associated with this object */
     public javax.accessibility.AccessibleContext createAccessibleContext() {
         return new AccessibleMenuItem();
@@ -74,7 +74,7 @@ class MenuItem extends ToggleButton {
                 return super.getAccessibleIndexInParent();
             }
         }
-        
+
         /**
         * Gets the current state set of this object.
         *
@@ -84,16 +84,16 @@ class MenuItem extends ToggleButton {
         */
         public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
             javax.accessibility.AccessibleStateSet stateSet = super.getAccessibleStateSet();
-            
+
             // #i56538# menu items in Java do not have SELECTABLE ..
             stateSet.remove(javax.accessibility.AccessibleState.SELECTABLE);
-            
+
             // .. and also ARMED insted of SELECTED
             if( stateSet.remove(javax.accessibility.AccessibleState.SELECTED) )
                 stateSet.add(javax.accessibility.AccessibleState.ARMED);
-            
+
             return stateSet;
         }
-        
+
     }
 }

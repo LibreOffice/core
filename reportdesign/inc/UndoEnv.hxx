@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,14 @@ namespace rptui
 
     //========================================================================
     class REPORTDESIGN_DLLPUBLIC OXUndoEnvironment
-        : public ::cppu::WeakImplHelper3<	::com::sun::star::beans::XPropertyChangeListener
-                                        ,	::com::sun::star::container::XContainerListener
-                                        ,	::com::sun::star::util::XModifyListener
+        : public ::cppu::WeakImplHelper3<   ::com::sun::star::beans::XPropertyChangeListener
+                                        ,   ::com::sun::star::container::XContainerListener
+                                        ,   ::com::sun::star::util::XModifyListener
                                         >
         , public SfxListener
     {
         const ::std::auto_ptr<OXUndoEnvironmentImpl> m_pImpl;
-        
+
         OXUndoEnvironment(const OXUndoEnvironment&);
         OXUndoEnvironment& operator=(const OXUndoEnvironment&);
 
@@ -110,7 +110,7 @@ namespace rptui
         void RemoveSection( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection );
         /** removes the section from the page out of the undo env
         *
-        * \param _pPage 
+        * \param _pPage
         */
         void RemoveSection(OReportPage* _pPage);
 
@@ -141,7 +141,7 @@ namespace rptui
         void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxContainer, bool _bStartListening ) SAL_THROW(());
         void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(());
 
-        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> >::const_iterator 
+        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> >::const_iterator
             getSection(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild>& _xContainer) const;
     };
 

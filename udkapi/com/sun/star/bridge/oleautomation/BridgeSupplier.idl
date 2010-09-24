@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ module com { module sun { module star { module bridge { module oleautomation {
     <member scope="com::sun::star::bridge">XBridgeSupplier2::createBridge</member>
     maps a value of a UNO or Automation type to the desired target type. If a UNO
     interface was mapped  to <code>IDispatch</code>, then all objects
-    (interfaces, structs) and other types which	are obtained from that Automation
+    (interfaces, structs) and other types which are obtained from that Automation
     object are automatically mapped to the corresponding Automation types. Hence,
     if one provides an initial object which forms the root of all other objects,
     such as a service manager, then only that object needs to be explicitly
@@ -53,16 +53,16 @@ module com { module sun { module star { module bridge { module oleautomation {
     </p>
     <p>
     For Automation objects to be mapped they have to implement
-    <code>IDispatch</code> interface. Other COM interfaces,	except for
+    <code>IDispatch</code> interface. Other COM interfaces, except for
     <code>IUnknown</code>, are not supported. UNO interfaces and structs are
     mapped to <code>IDispatch</code>.
     </p>
     <p>
     The service implements the
     <type scope="com::sun::star::bridge">XBridgeSupplier2</type> interface and
-    handles the model types 
-    <const>com::sun::star::bridge::ModelDependent::UNO</const> and 
-    <const>com::sun::star::bridge::ModelDependent::OLE</const>.  
+    handles the model types
+    <const>com::sun::star::bridge::ModelDependent::UNO</const> and
+    <const>com::sun::star::bridge::ModelDependent::OLE</const>.
     The service does not specify any requirements for registering OLE objects and
     class factories.
     </p>

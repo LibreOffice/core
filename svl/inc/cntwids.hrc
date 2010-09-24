@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@
 #define WID_CHAOS_START 500
 
 //FUNC MSG
-#define WID_MARK_THREAD_MARKED				(499)
-#define WID_MARK_THREAD_UNMARKED			(498)
+#define WID_MARK_THREAD_MARKED              (499)
+#define WID_MARK_THREAD_UNMARKED            (498)
 
 // ARGS
 #define WID_DUMMY_ARG1                      (WID_CHAOS_START +  0)
@@ -295,7 +295,7 @@
 #define WID_TRANSFER                        (WID_CHAOS_START + 149)
 
 // PROP ALL
-#define WID_KEYWORDS	                    (WID_CHAOS_START + 150)
+#define WID_KEYWORDS                        (WID_CHAOS_START + 150)
 #define WID_IS_PROTECTED                    (WID_CHAOS_START + 151)
 
 // PROP SEARCH
@@ -412,7 +412,7 @@
 #define WID_ALL_START2                      (WID_CHAOS_START + 212)
 #define WID_REAL_NAME                       (WID_CHAOS_START + 212)
 #define WID_FLAG_UPDATE_ON_OPEN             (WID_CHAOS_START + 213)
-#define WID_ACTION_LIST	                   	(WID_CHAOS_START + 214)
+#define WID_ACTION_LIST                     (WID_CHAOS_START + 214)
 #define WID_EDIT_STRING                     (WID_CHAOS_START + 215)
 #define WID_SET_AS_DEFAULT                  (WID_CHAOS_START + 216)
 #define WID_ALL_END2                        (WID_CHAOS_START + 216)
@@ -434,7 +434,7 @@
 #define WID_FSYS_START                      (WID_CHAOS_START + 224)
 #define WID_FSYS_VALUE_FOLDER               (WID_CHAOS_START + 224)
 #define WID_FSYS_SHOW_EXTENSION             (WID_CHAOS_START + 225)
-#define WID_VALUE_ADDED_MODE          		(WID_CHAOS_START + 226)
+#define WID_VALUE_ADDED_MODE                (WID_CHAOS_START + 226)
 #define WID_FSYS_DUMMY3                     (WID_CHAOS_START + 227)
 #define WID_FSYS_DUMMY4                     (WID_CHAOS_START + 228)
 #define WID_FSYS_END                        (WID_CHAOS_START + 228)
@@ -452,11 +452,11 @@
 //////////////////////////////////////////////////////////////////////////
 
 // PROP FOLDER
-#define WID_FOLDER_START2              		(WID_CHAOS_START + 233)
+#define WID_FOLDER_START2                   (WID_CHAOS_START + 233)
 #define WID_USER_SORT_CRITERIUM             (WID_CHAOS_START + 233)
 #define WID_HEADER_CONFIG                   (WID_CHAOS_START + 234)
 #define WID_GROUPVIEW_CONFIG                (WID_CHAOS_START + 235)
-#define WID_FLD_WEBVIEW_TEMPLATE			(WID_CHAOS_START + 236)
+#define WID_FLD_WEBVIEW_TEMPLATE            (WID_CHAOS_START + 236)
 // eigene Iconpositionen fuer den Explorer, da er noch
 // keinen eigenen View-Storage hat
 #define WID_VIEW_ICON_POS_GRPWIN            (WID_CHAOS_START + 237)
@@ -467,36 +467,36 @@
 
 // PROP FOLDER (VIEW)
 #define WID_VIEW3_START                     (WID_CHAOS_START + 239)
-#define WID_FLD_FONT                  	    (WID_CHAOS_START + 239)
+#define WID_FLD_FONT                        (WID_CHAOS_START + 239)
 #define WID_FLD_WEBVIEW_USE_GLOBAL          (WID_CHAOS_START + 240)
 #define WID_VIEW3_DUMMY2                    (WID_CHAOS_START + 241)
 #define WID_VIEW3_DUMMY3                    (WID_CHAOS_START + 242)
 #define WID_VIEW3_END                       (WID_CHAOS_START + 242)
 
 // PROP FTP
-#define WID_FTP_ACCOUNT						(WID_CHAOS_START + 243)
+#define WID_FTP_ACCOUNT                     (WID_CHAOS_START + 243)
 
 // PROP FOLDER
-#define WID_STORE_MARKED					(WID_CHAOS_START + 244)
+#define WID_STORE_MARKED                    (WID_CHAOS_START + 244)
 
 // REPLICATION ( Currently only here to have file compatibility between
 //               SO51 Client and SO51 Server, for which the functionality
 //               first shall be implemented ).
-#define WID_REPLICATION_1					(WID_CHAOS_START + 245)
-#define WID_REPLICATION_2					(WID_CHAOS_START + 246)
-#define WID_REPLICATION_3					(WID_CHAOS_START + 247)
-#define WID_REPLICATION_4					(WID_CHAOS_START + 248)
-#define WID_REPLICATION_5					(WID_CHAOS_START + 249)
+#define WID_REPLICATION_1                   (WID_CHAOS_START + 245)
+#define WID_REPLICATION_2                   (WID_CHAOS_START + 246)
+#define WID_REPLICATION_3                   (WID_CHAOS_START + 247)
+#define WID_REPLICATION_4                   (WID_CHAOS_START + 248)
+#define WID_REPLICATION_5                   (WID_CHAOS_START + 249)
 
 // PROP SEARCH
-#define WID_SEARCH_INDIRECTIONS				(WID_CHAOS_START + 250)
+#define WID_SEARCH_INDIRECTIONS             (WID_CHAOS_START + 250)
 
 // PROP ALL
-#define WID_SEND_FORMATS					(WID_CHAOS_START + 251)
-#define WID_SEND_COPY_TARGET				(WID_CHAOS_START + 252)
+#define WID_SEND_FORMATS                    (WID_CHAOS_START + 251)
+#define WID_SEND_COPY_TARGET                (WID_CHAOS_START + 252)
 
 // FUNC ALL
-#define WID_TRANSFER_RESULT					(WID_CHAOS_START + 253)
+#define WID_TRANSFER_RESULT                 (WID_CHAOS_START + 253)
 
 // END
 #define WID_CHAOS_END                       (WID_CHAOS_START + 253)

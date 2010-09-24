@@ -58,6 +58,8 @@ EXCEPTIONSFILES = \
         $(SLO)$/wrtw8num.obj \
         $(SLO)$/wrtw8sty.obj \
         $(SLO)$/wrtww8.obj \
+        $(SLO)$/docxattributeoutput.obj \
+        $(SLO)$/docxexportfilter.obj \
         $(SLO)$/ww8atr.obj \
         $(SLO)$/ww8par.obj \
         $(SLO)$/ww8par6.obj \
@@ -67,7 +69,12 @@ EXCEPTIONSFILES = \
         $(SLO)$/WW8TableInfo.obj \
         $(SLO)$/WW8FFData.obj \
         $(SLO)$/WW8Sttbf.obj \
-        $(SLO)$/WW8FibData.obj
+        $(SLO)$/WW8FibData.obj \
+        $(SLO)$/rtfexportfilter.obj \
+        $(SLO)$/rtfimportfilter.obj \
+        $(SLO)$/rtfattributeoutput.obj \
+        $(SLO)$/rtfsdrexport.obj \
+        $(SLO)$/rtfexport.obj
 
 
 SLOFILES =	\
@@ -77,6 +84,9 @@ SLOFILES =	\
         $(SLO)$/wrtw8sty.obj \
         $(SLO)$/wrtww8.obj \
         $(SLO)$/wrtww8gr.obj \
+        $(SLO)$/docxattributeoutput.obj \
+        $(SLO)$/docxexportfilter.obj \
+        $(SLO)$/docxexport.obj \
         $(SLO)$/ww8atr.obj \
         $(SLO)$/ww8graf.obj \
         $(SLO)$/ww8graf2.obj \
@@ -96,7 +106,12 @@ SLOFILES =	\
         $(SLO)$/WW8TableInfo.obj \
         $(SLO)$/WW8FFData.obj \
         $(SLO)$/WW8Sttbf.obj \
-        $(SLO)$/WW8FibData.obj
+        $(SLO)$/WW8FibData.obj \
+        $(SLO)$/rtfexportfilter.obj \
+        $(SLO)$/rtfimportfilter.obj \
+        $(SLO)$/rtfattributeoutput.obj \
+        $(SLO)$/rtfsdrexport.obj \
+        $(SLO)$/rtfexport.obj
 
 
 # --- Tagets -------------------------------------------------------

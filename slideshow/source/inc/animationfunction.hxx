@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace slideshow
             /** Operator to calculate function value.
 
                 This method calculates the function value for the
-                given time instant t. 
+                given time instant t.
 
                 @param t
                 Current time instant, must be in the range [0,1]

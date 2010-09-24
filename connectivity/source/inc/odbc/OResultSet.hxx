@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace connectivity
     {
 
         /*
-        **	java_sql_ResultSet
+        **  java_sql_ResultSet
         */
         typedef ::cppu::WeakComponentImplHelper12<      ::com::sun::star::sdbc::XResultSet,
                                                         ::com::sun::star::sdbc::XRow,
@@ -73,7 +73,7 @@ namespace connectivity
         typedef ::std::pair<sal_Int64,sal_Int32> TVoidPtr;
         typedef ::std::allocator< TVoidPtr > TVoidAlloc;
         typedef ::std::vector<TVoidPtr> TVoidVector;
-        //	typedef ::com::sun::star::uno::Sequence<TVoidPtr> TVoidVector;
+        //  typedef ::com::sun::star::uno::Sequence<TVoidPtr> TVoidVector;
         /// unary_function Functor object for class ZZ returntype is void
         struct OOO_DLLPUBLIC_ODBCBASE TBookmarkPosMapCompare : ::std::binary_function< ::com::sun::star::uno::Sequence<sal_Int8>, ::com::sun::star::uno::Sequence<sal_Int8>, bool >
         {
@@ -85,8 +85,8 @@ namespace connectivity
                     sal_Int32 nCount = _rLH.getLength();
                     if(nCount != 4)
                     {
-                        const sal_Int8* pLHBack	= _rLH.getConstArray() + nCount - 1;
-                        const sal_Int8* pRHBack	= _rRH.getConstArray() + nCount - 1;
+                        const sal_Int8* pLHBack = _rLH.getConstArray() + nCount - 1;
+                        const sal_Int8* pRHBack = _rRH.getConstArray() + nCount - 1;
 
                         sal_Int32 i;
                         for(i=0;i < nCount;++i,--pLHBack,--pRHBack)
@@ -113,52 +113,52 @@ namespace connectivity
         typedef ::std::map< ::com::sun::star::uno::Sequence<sal_Int8>, sal_Int32,TBookmarkPosMapCompare > TBookmarkPosMap;
 
         class OOO_DLLPUBLIC_ODBCBASE OResultSet :
-                            public	comphelper::OBaseMutex,
-                            public	::connectivity::IResultSetHelper,
-                            public	OResultSet_BASE,
-                            public	::cppu::OPropertySetHelper,
-                            public	::comphelper::OPropertyArrayUsageHelper<OResultSet>
+                            public  comphelper::OBaseMutex,
+                            public  ::connectivity::IResultSetHelper,
+                            public  OResultSet_BASE,
+                            public  ::cppu::OPropertySetHelper,
+                            public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
-            TBookmarkPosMap								m_aPosToBookmarks;
+            TBookmarkPosMap                             m_aPosToBookmarks;
             // used top hold the information about the value and the datatype to save calls to metadata
-            typedef ::std::vector<ORowSetValue>			TDataRow;
+            typedef ::std::vector<ORowSetValue>         TDataRow;
 
-            TVoidVector									m_aBindVector;
-            ::std::vector<SQLLEN>						m_aLengthVector;
-            ::std::map<sal_Int32,SWORD>					m_aODBCColumnTypes;
-            ::com::sun::star::uno::Sequence<sal_Int8>	m_aBookmark;
+            TVoidVector                                 m_aBindVector;
+            ::std::vector<SQLLEN>                       m_aLengthVector;
+            ::std::map<sal_Int32,SWORD>                 m_aODBCColumnTypes;
+            ::com::sun::star::uno::Sequence<sal_Int8>   m_aBookmark;
 
-            TDataRow									m_aRow; // only used when SQLGetData can't be called in any order
-            ORowSetValue								m_aEmptyValue;	// needed for the getValue method when no prefetch is used
-            SQLHANDLE									m_aStatementHandle;
-            SQLHANDLE									m_aConnectionHandle;
-            OStatement_Base*							m_pStatement;
-            OSkipDeletedSet*							m_pSkipDeletedSet;
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>	m_xStatement;
+            TDataRow                                    m_aRow; // only used when SQLGetData can't be called in any order
+            ORowSetValue                                m_aEmptyValue;  // needed for the getValue method when no prefetch is used
+            SQLHANDLE                                   m_aStatementHandle;
+            SQLHANDLE                                   m_aConnectionHandle;
+            OStatement_Base*                            m_pStatement;
+            OSkipDeletedSet*                            m_pSkipDeletedSet;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    m_xStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
-            SQLUSMALLINT*								m_pRowStatusArray;
-            rtl_TextEncoding							m_nTextEncoding;
-            sal_Int32									m_nRowPos;
-            sal_Int32									m_nLastColumnPos;		// used for m_aRow just to know where we are
+            SQLUSMALLINT*                               m_pRowStatusArray;
+            rtl_TextEncoding                            m_nTextEncoding;
+            sal_Int32                                   m_nRowPos;
+            sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
             mutable sal_uInt32                          m_nUseBookmarks;
-            SQLRETURN									m_nCurrentFetchState;
-            sal_Bool									m_bWasNull;
-            sal_Bool									m_bEOF;					// after last record
-            sal_Bool									m_bLastRecord;
-            sal_Bool									m_bFreeHandle;
-            sal_Bool									m_bInserting;
-            sal_Bool									m_bFetchData;			// true when SQLGetaData can be called in any order or when fetching data for m_aRow
-            sal_Bool									m_bRowInserted;
-            sal_Bool									m_bRowDeleted;
-            sal_Bool									m_bUseFetchScroll;
+            SQLRETURN                                   m_nCurrentFetchState;
+            sal_Bool                                    m_bWasNull;
+            sal_Bool                                    m_bEOF;                 // after last record
+            sal_Bool                                    m_bLastRecord;
+            sal_Bool                                    m_bFreeHandle;
+            sal_Bool                                    m_bInserting;
+            sal_Bool                                    m_bFetchData;           // true when SQLGetaData can be called in any order or when fetching data for m_aRow
+            sal_Bool                                    m_bRowInserted;
+            sal_Bool                                    m_bRowDeleted;
+            sal_Bool                                    m_bUseFetchScroll;
 
-            sal_Bool  isBookmarkable()			const;
+            sal_Bool  isBookmarkable()          const;
             sal_Int32 getResultSetConcurrency() const;
-            sal_Int32 getResultSetType()		const;
-            sal_Int32 getFetchDirection()		const;
-            sal_Int32 getFetchSize()			const;
-            ::rtl::OUString getCursorName()		const;
+            sal_Int32 getResultSetType()        const;
+            sal_Int32 getFetchDirection()       const;
+            sal_Int32 getFetchSize()            const;
+            ::rtl::OUString getCursorName()     const;
 
             void setFetchDirection(sal_Int32 _par0);
             void setFetchSize(sal_Int32 _par0);
@@ -174,7 +174,7 @@ namespace connectivity
             TVoidPtr allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex);
             SQLRETURN unbind(sal_Bool _bUnbindHandle = sal_True);
             SWORD impl_getColumnType_nothrow(sal_Int32 columnIndex);
-        
+
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
             // OPropertySetHelper

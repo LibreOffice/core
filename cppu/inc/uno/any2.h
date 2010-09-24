@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,13 +68,13 @@ typedef struct _uno_Any
 
 /** Assign an any with a given value. Interfaces are acquired or released by the given callback
     functions.
-    
-    @param pDest			pointer memory of destination any
-    @param pSource			pointer to source value; defaults (0) to default constructed value
-    @param pTypeDescr		type description of value; defaults (0) to void
-    @param acquire			function called each time an interface needs to be acquired;
+
+    @param pDest            pointer memory of destination any
+    @param pSource          pointer to source value; defaults (0) to default constructed value
+    @param pTypeDescr       type description of value; defaults (0) to void
+    @param acquire          function called each time an interface needs to be acquired;
                             defaults (0) to uno
-    @param release			function called each time an interface needs to be released;
+    @param release          function called each time an interface needs to be released;
                             defaults (0) to uno
 */
 void SAL_CALL uno_any_assign(
@@ -84,13 +84,13 @@ void SAL_CALL uno_any_assign(
     SAL_THROW_EXTERN_C();
 /** Assign an any with a given value. Interfaces are acquired or released by the given callback
     functions.
-    
-    @param pDest			pointer memory of destination any
-    @param pSource			pointer to source value; defaults (0) to default constructed value
-    @param pTypeDescr		type description of value; defaults (0) to void
-    @param acquire			function called each time an interface needs to be acquired;
+
+    @param pDest            pointer memory of destination any
+    @param pSource          pointer to source value; defaults (0) to default constructed value
+    @param pTypeDescr       type description of value; defaults (0) to void
+    @param acquire          function called each time an interface needs to be acquired;
                             defaults (0) to uno
-    @param release			function called each time an interface needs to be released;
+    @param release          function called each time an interface needs to be released;
                             defaults (0) to uno
 */
 void SAL_CALL uno_type_any_assign(
@@ -100,11 +100,11 @@ void SAL_CALL uno_type_any_assign(
     SAL_THROW_EXTERN_C();
 
 /** Constructs an any with a given value. Interfaces are acquired by the given callback function.
-    
-    @param pDest			pointer memory of destination any
-    @param pSource			pointer to source value; defaults (0) to default constructed value
-    @param pTypeDescr		type description of value; defaults (0) to void
-    @param acquire			function called each time an interface needs to be acquired;
+
+    @param pDest            pointer memory of destination any
+    @param pSource          pointer to source value; defaults (0) to default constructed value
+    @param pTypeDescr       type description of value; defaults (0) to void
+    @param acquire          function called each time an interface needs to be acquired;
                             defaults (0) to uno
 */
 void SAL_CALL uno_any_construct(
@@ -113,11 +113,11 @@ void SAL_CALL uno_any_construct(
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
 /** Constructs an any with a given value. Interfaces are acquired by the given callback function.
-    
-    @param pDest			pointer memory of destination any
-    @param pSource			pointer to source value; defaults (0) to default constructed value
-    @param pType			type of value; defaults (0) to void
-    @param acquire			function called each time an interface needs to be acquired;
+
+    @param pDest            pointer memory of destination any
+    @param pSource          pointer to source value; defaults (0) to default constructed value
+    @param pType            type of value; defaults (0) to void
+    @param acquire          function called each time an interface needs to be acquired;
                             defaults (0) to uno
 */
 void SAL_CALL uno_type_any_construct(
@@ -127,11 +127,11 @@ void SAL_CALL uno_type_any_construct(
     SAL_THROW_EXTERN_C();
 
 /** Constructs an any with a given value and converts/ maps interfaces.
-    
-    @param pDest			pointer memory of destination any
-    @param pSource			pointer to source value; defaults (0) to default constructed value
-    @param pTypeDescr		type description of value; defaults (0) to void
-    @param mapping			mapping to convert/ map interfaces
+
+    @param pDest            pointer memory of destination any
+    @param pSource          pointer to source value; defaults (0) to default constructed value
+    @param pTypeDescr       type description of value; defaults (0) to void
+    @param mapping          mapping to convert/ map interfaces
 */
 void SAL_CALL uno_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
@@ -139,11 +139,11 @@ void SAL_CALL uno_any_constructAndConvert(
     struct _uno_Mapping * mapping )
     SAL_THROW_EXTERN_C();
 /** Constructs an any with a given value and converts/ maps interfaces.
-    
-    @param pDest			pointer memory of destination any
-    @param pSource			pointer to source value; defaults (0) to default constructed value
-    @param pType			type of value; defaults (0) to void
-    @param mapping			mapping to convert/ map interfaces
+
+    @param pDest            pointer memory of destination any
+    @param pSource          pointer to source value; defaults (0) to default constructed value
+    @param pType            type of value; defaults (0) to void
+    @param mapping          mapping to convert/ map interfaces
 */
 void SAL_CALL uno_type_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
@@ -152,9 +152,9 @@ void SAL_CALL uno_type_any_constructAndConvert(
     SAL_THROW_EXTERN_C();
 
 /** Destructs an any.
-    
-    @param pValue			pointer to any
-    @param release			function called each time an interface needs to be released;
+
+    @param pValue           pointer to any
+    @param release          function called each time an interface needs to be released;
                             defaults (0) to uno
 */
 void SAL_CALL uno_any_destruct(
@@ -162,9 +162,9 @@ void SAL_CALL uno_any_destruct(
     SAL_THROW_EXTERN_C();
 
 /** Sets value to void.
-    
-    @param pValue			pointer to any
-    @param release			function called each time an interface needs to be released;
+
+    @param pValue           pointer to any
+    @param release          function called each time an interface needs to be released;
                             defaults (0) to uno
 */
 void SAL_CALL uno_any_clear(

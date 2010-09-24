@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <macros/generic.hxx>
 #include <macros/debug.hxx>
@@ -47,11 +47,11 @@
 #include <threadhelp/writeguard.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/random.h>
 #include <vos/process.hxx>
@@ -71,23 +71,23 @@
 #include <stdio.h>
 
 //_________________________________________________________________________________________________________________
-//	const
+//  const
 //_________________________________________________________________________________________________________________
 
-#define	LOGFILE				"threadtest.log"
-#define	STATISTICS_FILE		"threadtest_statistic.csv"
+#define LOGFILE             "threadtest.log"
+#define STATISTICS_FILE     "threadtest_statistic.csv"
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
-using namespace ::rtl		;
-using namespace ::osl		;
-using namespace ::vos		;
-using namespace ::framework	;
+using namespace ::rtl       ;
+using namespace ::osl       ;
+using namespace ::vos       ;
+using namespace ::framework ;
 
 //_________________________________________________________________________________________________________________
-//	defines
+//  defines
 //_________________________________________________________________________________________________________________
 
 /*---------------- Use follow defines to enable/disable some special features of this little test program! -------*/
@@ -99,165 +99,165 @@ using namespace ::framework	;
 /*----------------------------------------------------------------------------------------------------------------*/
 
 #ifdef ENABLE_LOG
-    #define	LOG_SETA_START( NA, NID )											\
-        {																		\
-            sal_uInt32 nTimeStamp = osl_getGlobalTimer();						\
-            ResetableGuard aLogGuard( m_aLogMutex );							\
-            OStringBuffer sLog(256);											\
-            sLog.append( (sal_Int32)nTimeStamp	);								\
-            sLog.append( ": Thread[ "			);								\
-            sLog.append( NID					);								\
-            sLog.append( " ] call setA( "		);								\
-            sLog.append( NA						);								\
-            sLog.append( " )\n"					);								\
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )					\
+    #define LOG_SETA_START( NA, NID )                                           \
+        {                                                                       \
+            sal_uInt32 nTimeStamp = osl_getGlobalTimer();                       \
+            ResetableGuard aLogGuard( m_aLogMutex );                            \
+            OStringBuffer sLog(256);                                            \
+            sLog.append( (sal_Int32)nTimeStamp  );                              \
+            sLog.append( ": Thread[ "           );                              \
+            sLog.append( NID                    );                              \
+            sLog.append( " ] call setA( "       );                              \
+            sLog.append( NA                     );                              \
+            sLog.append( " )\n"                 );                              \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
-    #define	LOG_SETA_END( NA, EREASON, NID )									\
-        {																		\
-            sal_uInt32 nTimeStamp = osl_getGlobalTimer();						\
-            ResetableGuard aLogGuard( m_aLogMutex );							\
-            OStringBuffer sLog(256);											\
-            sLog.append( (sal_Int32)nTimeStamp	);								\
-            sLog.append( ": Thread[ "			);								\
-            sLog.append( NID					);								\
-            if( EREASON == E_NOREASON )											\
-                sLog.append( " ] finish setA( "			);						\
-            else																\
-                sLog.append( " ] was refused at setA( ");						\
-            sLog.append( NA		);												\
-            sLog.append( " )\n"	);												\
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )					\
+    #define LOG_SETA_END( NA, EREASON, NID )                                    \
+        {                                                                       \
+            sal_uInt32 nTimeStamp = osl_getGlobalTimer();                       \
+            ResetableGuard aLogGuard( m_aLogMutex );                            \
+            OStringBuffer sLog(256);                                            \
+            sLog.append( (sal_Int32)nTimeStamp  );                              \
+            sLog.append( ": Thread[ "           );                              \
+            sLog.append( NID                    );                              \
+            if( EREASON == E_NOREASON )                                         \
+                sLog.append( " ] finish setA( "         );                      \
+            else                                                                \
+                sLog.append( " ] was refused at setA( ");                       \
+            sLog.append( NA     );                                              \
+            sLog.append( " )\n" );                                              \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
-    #define	LOG_GETA_START( NID )												\
-        {																		\
-            sal_uInt32 nTimeStamp = osl_getGlobalTimer();						\
-            ResetableGuard aLogGuard( m_aLogMutex );							\
-            OStringBuffer sLog(256);											\
-            sLog.append( (sal_Int32)nTimeStamp	);								\
-            sLog.append( ": Thread[ "			);								\
-            sLog.append( NID					);								\
-            sLog.append( " ] call getA()\n"		);								\
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )					\
+    #define LOG_GETA_START( NID )                                               \
+        {                                                                       \
+            sal_uInt32 nTimeStamp = osl_getGlobalTimer();                       \
+            ResetableGuard aLogGuard( m_aLogMutex );                            \
+            OStringBuffer sLog(256);                                            \
+            sLog.append( (sal_Int32)nTimeStamp  );                              \
+            sLog.append( ": Thread[ "           );                              \
+            sLog.append( NID                    );                              \
+            sLog.append( " ] call getA()\n"     );                              \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
-    #define	LOG_GETA_END( NRETURN, EREASON, NID )								\
-        {																		\
-            sal_uInt32 nTimeStamp = osl_getGlobalTimer();						\
-            ResetableGuard aLogGuard( m_aLogMutex );							\
-            OStringBuffer sLog(256);											\
-            sLog.append( (sal_Int32)nTimeStamp	);								\
-            sLog.append( ": Thread[ "			);								\
-            sLog.append( NID					);								\
-            if( EREASON == E_NOREASON )											\
-                sLog.append( " ] finish getA() with "			);				\
-            else																\
-                sLog.append( " ] was refused at getA() with "	);				\
-            sLog.append( NRETURN	);											\
-            sLog.append( "\n"		);											\
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )					\
+    #define LOG_GETA_END( NRETURN, EREASON, NID )                               \
+        {                                                                       \
+            sal_uInt32 nTimeStamp = osl_getGlobalTimer();                       \
+            ResetableGuard aLogGuard( m_aLogMutex );                            \
+            OStringBuffer sLog(256);                                            \
+            sLog.append( (sal_Int32)nTimeStamp  );                              \
+            sLog.append( ": Thread[ "           );                              \
+            sLog.append( NID                    );                              \
+            if( EREASON == E_NOREASON )                                         \
+                sLog.append( " ] finish getA() with "           );              \
+            else                                                                \
+                sLog.append( " ] was refused at getA() with "   );              \
+            sLog.append( NRETURN    );                                          \
+            sLog.append( "\n"       );                                          \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
-    #define	LOG_WORKA_START( NA, NID )											\
-        {																		\
-            sal_uInt32 nTimeStamp = osl_getGlobalTimer();						\
-            ResetableGuard aLogGuard( m_aLogMutex );							\
-            OStringBuffer sLog(256);											\
-            sLog.append( (sal_Int32)nTimeStamp	);								\
-            sLog.append( ": Thread[ "			);								\
-            sLog.append( NID					);								\
-            sLog.append( " ] call workA( "		);								\
-            sLog.append( NA						);								\
-            sLog.append( " )\n"					);								\
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )					\
+    #define LOG_WORKA_START( NA, NID )                                          \
+        {                                                                       \
+            sal_uInt32 nTimeStamp = osl_getGlobalTimer();                       \
+            ResetableGuard aLogGuard( m_aLogMutex );                            \
+            OStringBuffer sLog(256);                                            \
+            sLog.append( (sal_Int32)nTimeStamp  );                              \
+            sLog.append( ": Thread[ "           );                              \
+            sLog.append( NID                    );                              \
+            sLog.append( " ] call workA( "      );                              \
+            sLog.append( NA                     );                              \
+            sLog.append( " )\n"                 );                              \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
-    #define	LOG_WORKA_END( NRETURN, EREASON, NID )								\
-        {																		\
-            sal_uInt32 nTimeStamp = osl_getGlobalTimer();						\
-            ResetableGuard aLogGuard( m_aLogMutex );							\
-            OStringBuffer sLog(256);											\
-            sLog.append( (sal_Int32)nTimeStamp	);								\
-            sLog.append( ": Thread[ "			);								\
-            sLog.append( NID					);								\
-            if( EREASON == E_NOREASON )											\
-                sLog.append( " ] finish workA() with "			);				\
-            else																\
-                sLog.append( " ] was refused at workA() with "	);				\
-            sLog.append( NRETURN	);											\
-            sLog.append( "\n"		);											\
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )					\
+    #define LOG_WORKA_END( NRETURN, EREASON, NID )                              \
+        {                                                                       \
+            sal_uInt32 nTimeStamp = osl_getGlobalTimer();                       \
+            ResetableGuard aLogGuard( m_aLogMutex );                            \
+            OStringBuffer sLog(256);                                            \
+            sLog.append( (sal_Int32)nTimeStamp  );                              \
+            sLog.append( ": Thread[ "           );                              \
+            sLog.append( NID                    );                              \
+            if( EREASON == E_NOREASON )                                         \
+                sLog.append( " ] finish workA() with "          );              \
+            else                                                                \
+                sLog.append( " ] was refused at workA() with "  );              \
+            sLog.append( NRETURN    );                                          \
+            sLog.append( "\n"       );                                          \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
-    #define	LOG_INITEXCEPTION( SMETHOD, NID )									\
-        {																		\
-            sal_uInt32 nTimeStamp = osl_getGlobalTimer();						\
-            ResetableGuard aLogGuard( m_aLogMutex );							\
-            OStringBuffer sLog(256);											\
-            sLog.append( (sal_Int32)nTimeStamp				);					\
-            sLog.append( ": Thread[ "						);					\
-            sLog.append( NID								);					\
-            sLog.append( " ] get EInitException from \""	);					\
-            sLog.append( SMETHOD							);					\
-            sLog.append( "\"\n"								);					\
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )					\
+    #define LOG_INITEXCEPTION( SMETHOD, NID )                                   \
+        {                                                                       \
+            sal_uInt32 nTimeStamp = osl_getGlobalTimer();                       \
+            ResetableGuard aLogGuard( m_aLogMutex );                            \
+            OStringBuffer sLog(256);                                            \
+            sLog.append( (sal_Int32)nTimeStamp              );                  \
+            sLog.append( ": Thread[ "                       );                  \
+            sLog.append( NID                                );                  \
+            sLog.append( " ] get EInitException from \""    );                  \
+            sLog.append( SMETHOD                            );                  \
+            sLog.append( "\"\n"                             );                  \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
-    #define	LOG_CLOSEEXCEPTION( SMETHOD, NID )									\
-        {																		\
-            sal_uInt32 nTimeStamp = osl_getGlobalTimer();						\
-            ResetableGuard aLogGuard( m_aLogMutex );							\
-            OStringBuffer sLog(256);											\
-            sLog.append( (sal_Int32)nTimeStamp				);					\
-            sLog.append( ": Thread[ "						);					\
-            sLog.append( NID								);					\
-            sLog.append( " ] get ECloseException from \""	);					\
-            sLog.append( SMETHOD							);					\
-            sLog.append( "\"\n"								);					\
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )					\
+    #define LOG_CLOSEEXCEPTION( SMETHOD, NID )                                  \
+        {                                                                       \
+            sal_uInt32 nTimeStamp = osl_getGlobalTimer();                       \
+            ResetableGuard aLogGuard( m_aLogMutex );                            \
+            OStringBuffer sLog(256);                                            \
+            sLog.append( (sal_Int32)nTimeStamp              );                  \
+            sLog.append( ": Thread[ "                       );                  \
+            sLog.append( NID                                );                  \
+            sLog.append( " ] get ECloseException from \""   );                  \
+            sLog.append( SMETHOD                            );                  \
+            sLog.append( "\"\n"                             );                  \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
-    #define	LOG_INIT( NA, NID )													\
-        {																		\
-            sal_uInt32 nTimeStamp = osl_getGlobalTimer();						\
-            ResetableGuard aLogGuard( m_aLogMutex );							\
-            OStringBuffer sLog(256);											\
-            sLog.append( (sal_Int32)nTimeStamp		);							\
-            sLog.append( ": Thread[ "				);							\
-            sLog.append( NID						);							\
-            sLog.append( " ] initialize me with "	);							\
-            sLog.append( NA							);							\
-            sLog.append( "\n"						);							\
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )					\
+    #define LOG_INIT( NA, NID )                                                 \
+        {                                                                       \
+            sal_uInt32 nTimeStamp = osl_getGlobalTimer();                       \
+            ResetableGuard aLogGuard( m_aLogMutex );                            \
+            OStringBuffer sLog(256);                                            \
+            sLog.append( (sal_Int32)nTimeStamp      );                          \
+            sLog.append( ": Thread[ "               );                          \
+            sLog.append( NID                        );                          \
+            sLog.append( " ] initialize me with "   );                          \
+            sLog.append( NA                         );                          \
+            sLog.append( "\n"                       );                          \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 
-    #define	LOG_CLOSE( NID )													\
-        {																		\
-            sal_uInt32 nTimeStamp = osl_getGlobalTimer();						\
-            ResetableGuard aLogGuard( m_aLogMutex );							\
-            OStringBuffer sLog(256);											\
-            sLog.append( (sal_Int32)nTimeStamp	);								\
-            sLog.append( ": Thread[ "			);								\
-            sLog.append( NID					);								\
-            sLog.append( " ] close me\n"		);								\
-            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )					\
+    #define LOG_CLOSE( NID )                                                    \
+        {                                                                       \
+            sal_uInt32 nTimeStamp = osl_getGlobalTimer();                       \
+            ResetableGuard aLogGuard( m_aLogMutex );                            \
+            OStringBuffer sLog(256);                                            \
+            sLog.append( (sal_Int32)nTimeStamp  );                              \
+            sLog.append( ": Thread[ "           );                              \
+            sLog.append( NID                    );                              \
+            sLog.append( " ] close me\n"        );                              \
+            WRITE_LOGFILE( LOGFILE, sLog.makeStringAndClear() )                 \
         }
 #else
-    #define	LOG_SETA_START( NA, NID )
-    #define	LOG_SETA_END( NA, EREASON, NID )
-    #define	LOG_GETA_START( NID )
-    #define	LOG_GETA_END( NRETURN, EREASON, NID )
-    #define	LOG_WORKA_START( NA, NID )
-    #define	LOG_WORKA_END( NRETURN, EREASON, NID )
-    #define	LOG_INITEXCEPTION( SMETHOD, NID )
-    #define	LOG_CLOSEEXCEPTION( SMETHOD, NID )
-    #define	LOG_INIT( NA, NID )
-    #define	LOG_CLOSE( NID )
+    #define LOG_SETA_START( NA, NID )
+    #define LOG_SETA_END( NA, EREASON, NID )
+    #define LOG_GETA_START( NID )
+    #define LOG_GETA_END( NRETURN, EREASON, NID )
+    #define LOG_WORKA_START( NA, NID )
+    #define LOG_WORKA_END( NRETURN, EREASON, NID )
+    #define LOG_INITEXCEPTION( SMETHOD, NID )
+    #define LOG_CLOSEEXCEPTION( SMETHOD, NID )
+    #define LOG_INIT( NA, NID )
+    #define LOG_CLOSE( NID )
 #endif
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 sal_uInt16 getRandomValue()
@@ -265,21 +265,21 @@ sal_uInt16 getRandomValue()
     // Get new random value for thread-sleep!
     // See run() for further informations.
     // Always calculate a new random number.
-    sal_uInt16		nValue;
-    rtlRandomPool	aPool = rtl_random_createPool();
-    rtl_random_getBytes		( aPool, &nValue, 2	);
-    rtl_random_destroyPool	( aPool				);
+    sal_uInt16      nValue;
+    rtlRandomPool   aPool = rtl_random_createPool();
+    rtl_random_getBytes     ( aPool, &nValue, 2 );
+    rtl_random_destroyPool  ( aPool             );
     return nValue;
 }
 
 /*-************************************************************************************************************//**
-    @descr			This class is used from different threads at the same time.
+    @descr          This class is used from different threads at the same time.
                     We start working after calling init() first(!) ...
                     and finish it by calling close(). It exist two methods for reading/writing an
                     internal variable "A". Another function workA() do both things at the same time.
                     All public methods log information in a file if DO_LOG is defined.
 
-    @attention		Our public base class FaiRWLockBase is a struct with a RWLock as member.
+    @attention      Our public base class FaiRWLockBase is a struct with a RWLock as member.
                     This member can be used by guards to safe access at internal variables
                     in interface methods.
                     Another baseclass is the TransactionBase. They support rejection of wrong calls at wrong time.
@@ -291,37 +291,37 @@ class ThreadSafeClass : private TransactionBase
 {
     public:
 
-        ThreadSafeClass	();
+        ThreadSafeClass ();
         ~ThreadSafeClass();
 
         // This methods are used from differnt threads
         // to test this class.
-        void		init	(	sal_Int32	nA			,
-                                sal_Int32	nThreadID	);
-        void		close	(	sal_Int32	nThreadID	);
-        void		setA	(	sal_Int32	nA			,
-                                sal_Int32	nThreadID	);
-        sal_Int32	getA	(	sal_Int32	nThreadID	);
-        sal_Int32	workA	(	sal_Int32	nA			,
-                                sal_Int32	nThreadID	);
+        void        init    (   sal_Int32   nA          ,
+                                sal_Int32   nThreadID   );
+        void        close   (   sal_Int32   nThreadID   );
+        void        setA    (   sal_Int32   nA          ,
+                                sal_Int32   nThreadID   );
+        sal_Int32   getA    (   sal_Int32   nThreadID   );
+        sal_Int32   workA   (   sal_Int32   nA          ,
+                                sal_Int32   nThreadID   );
 
         #ifdef ENABLE_REQUESTCOUNT
         // This methods are used for statistics only!
-        sal_Int32 getReadCount () { return m_nReadCount;	}
-        sal_Int32 getWriteCount() { return m_nWriteCount;	}
+        sal_Int32 getReadCount () { return m_nReadCount;    }
+        sal_Int32 getWriteCount() { return m_nWriteCount;   }
         #endif
 
     private:
 
-        sal_Int32				m_nA			;	/// test member fro reading/writing
+        sal_Int32               m_nA            ;   /// test member fro reading/writing
 
         #ifdef ENABLE_LOG
-        ::osl::Mutex			m_aLogMutex		;	/// mutex to serialize writing log file!
+        ::osl::Mutex            m_aLogMutex     ;   /// mutex to serialize writing log file!
         #endif
 
         #ifdef ENABLE_REQUESTCOUNT
-        oslInterlockedCount		m_nReadCount	;	/// statistic variables to count read/write requests
-        oslInterlockedCount		m_nWriteCount	;
+        oslInterlockedCount     m_nReadCount    ;   /// statistic variables to count read/write requests
+        oslInterlockedCount     m_nWriteCount   ;
         #endif
 };
 
@@ -329,10 +329,10 @@ class ThreadSafeClass : private TransactionBase
 ThreadSafeClass::ThreadSafeClass()
     :   TransactionBase (   )
     ,   FairRWLockBase  (   )
-    ,	m_nA			( 0 )
+    ,   m_nA            ( 0 )
     #ifdef ENABLE_REQUESTCOUNT
-    ,	m_nReadCount	( 0	)
-    ,	m_nWriteCount	( 0	)
+    ,   m_nReadCount    ( 0 )
+    ,   m_nWriteCount   ( 0 )
     #endif
 {
 }
@@ -400,7 +400,7 @@ void ThreadSafeClass::close( sal_Int32 nThreadID )
 }
 
 //_________________________________________________________________________________________________________________
-void ThreadSafeClass::setA( sal_Int32 nA, sal_Int32 nThreadID	)
+void ThreadSafeClass::setA( sal_Int32 nA, sal_Int32 nThreadID   )
 {
     // Make it threadsafe.
     WriteGuard aWriteLock( m_aLock );
@@ -451,8 +451,8 @@ sal_Int32 ThreadSafeClass::getA( sal_Int32 nThreadID )
 }
 
 //_________________________________________________________________________________________________________________
-sal_Int32 ThreadSafeClass::workA(	sal_Int32	nA			,
-                                    sal_Int32	nThreadID	)
+sal_Int32 ThreadSafeClass::workA(   sal_Int32   nA          ,
+                                    sal_Int32   nThreadID   )
 {
     // This method test the downgrade-mechanism of used lock implementation!
     // Make it threadsafe.
@@ -488,7 +488,7 @@ sal_Int32 ThreadSafeClass::workA(	sal_Int32	nA			,
 }
 
 /*-****************************************************************************************************//**
-    @descr	Every thread instance of these class lopp from 0 up to "nLoops".
+    @descr  Every thread instance of these class lopp from 0 up to "nLoops".
             He sleep for a random time and work with given test class "pClass" then.
             We use random values for waiting for better results!
             Otherwise all threads are sychron after first 2,3...5 calls - I think!
@@ -498,34 +498,34 @@ class TestThread : public OThread
 {
     public:
 
-        TestThread(	ThreadSafeClass*	pClass						,
-                    sal_Int32			nLoops						,
-                    Condition*			pListener					,
-                    sal_Bool			bOwner		=	sal_False	);
+        TestThread( ThreadSafeClass*    pClass                      ,
+                    sal_Int32           nLoops                      ,
+                    Condition*          pListener                   ,
+                    sal_Bool            bOwner      =   sal_False   );
 
     private:
 
-           virtual void SAL_CALL	run				();
-           virtual void SAL_CALL	onTerminated	();
+           virtual void SAL_CALL    run             ();
+           virtual void SAL_CALL    onTerminated    ();
 
     private:
 
-        ThreadSafeClass*	m_pClass		;
-        sal_Int32			m_nLoops		;
-        sal_Int32			m_nThreadID		;
-        Condition*			m_pListener		;
-        sal_Bool			m_bOwner		;
+        ThreadSafeClass*    m_pClass        ;
+        sal_Int32           m_nLoops        ;
+        sal_Int32           m_nThreadID     ;
+        Condition*          m_pListener     ;
+        sal_Bool            m_bOwner        ;
 };
 
 //_________________________________________________________________________________________________________________
-TestThread::TestThread(	ThreadSafeClass*	pClass		,
-                        sal_Int32			nLoops		,
-                        Condition*			pListener	,
-                        sal_Bool			bOwner		)
-    :	m_pClass	( pClass	)
-    ,	m_nLoops	( nLoops	)
-    ,	m_pListener	( pListener	)
-    ,	m_bOwner	( bOwner	)
+TestThread::TestThread( ThreadSafeClass*    pClass      ,
+                        sal_Int32           nLoops      ,
+                        Condition*          pListener   ,
+                        sal_Bool            bOwner      )
+    :   m_pClass    ( pClass    )
+    ,   m_nLoops    ( nLoops    )
+    ,   m_pListener ( pListener )
+    ,   m_bOwner    ( bOwner    )
 {
 }
 
@@ -545,10 +545,10 @@ void SAL_CALL TestThread::run()
     }
 
     #ifdef ENABLE_THREADDELAY
-    TimeValue	nDelay	;
+    TimeValue   nDelay  ;
     #endif
 
-    sal_Int32	nA		;
+    sal_Int32   nA      ;
 
     for( sal_Int32 nCount=0; nCount<m_nLoops; ++nCount )
     {
@@ -590,35 +590,35 @@ void SAL_CALL TestThread::onTerminated()
     // But don't forget to call listener before.
     m_pListener->set();
 
-    m_pClass	= NULL;
-    m_pListener	= NULL;
+    m_pClass    = NULL;
+    m_pListener = NULL;
 
     delete this;
 }
 
 /*-****************************************************************************************************//**
-    @descr	This is our test application.
+    @descr  This is our test application.
             We create one ThreadSafeClass object and a lot of threads
             which use it at different times.
 *//*-*****************************************************************************************************/
 
 struct ThreadInfo
 {
-    Condition*	pCondition	;
-    TestThread*	pThread		;
+    Condition*  pCondition  ;
+    TestThread* pThread     ;
 };
 
 class TestApplication : public Application
 {
     public:
-        void		Main		(								);
-        sal_Int32	measureTime	(	sal_Int32	nThreadCount	,
-                                    sal_Int32	nOwner			,
-                                    sal_Int32	nLoops=0		);
+        void        Main        (                               );
+        sal_Int32   measureTime (   sal_Int32   nThreadCount    ,
+                                    sal_Int32   nOwner          ,
+                                    sal_Int32   nLoops=0        );
 };
 
 //_________________________________________________________________________________________________________________
-//	definition
+//  definition
 //_________________________________________________________________________________________________________________
 
 TestApplication aApplication;
@@ -628,17 +628,17 @@ TestApplication aApplication;
 // You can specify the owner thread of this test class which start/stop it by using "nOwner". [1..nThreadcount]!
 // If you specify "nLoops" different from 0 we use it as loop count for every started thread.
 // Otherwise we work with random values.
-sal_Int32 TestApplication::measureTime(	sal_Int32	nThreadCount	,
-                                           sal_Int32	nOwner			,
-                                          sal_Int32	nLoops			)
+sal_Int32 TestApplication::measureTime( sal_Int32   nThreadCount    ,
+                                           sal_Int32    nOwner          ,
+                                          sal_Int32 nLoops          )
 {
     // This is the class which should be tested.
     ThreadSafeClass aClass;
 
     // Create list of threads.
-    ThreadInfo* pThreads	=	new ThreadInfo[nThreadCount];
-    sal_Int32	nLoopCount	=	nLoops						;
-    sal_Bool	bOwner		=	sal_False					;
+    ThreadInfo* pThreads    =   new ThreadInfo[nThreadCount];
+    sal_Int32   nLoopCount  =   nLoops                      ;
+    sal_Bool    bOwner      =   sal_False                   ;
     for( sal_Int32 nI=1; nI<=nThreadCount; ++nI )
     {
         // If nLoops==0 => we must use random value; otherwise we must use given count ...
@@ -659,8 +659,8 @@ sal_Int32 TestApplication::measureTime(	sal_Int32	nThreadCount	,
     }
 
     // Start clock to get information about used time.
-    sal_uInt32	nStartTime	;
-    sal_uInt32	nEndTime	;
+    sal_uInt32  nStartTime  ;
+    sal_uInt32  nEndTime    ;
 
     nStartTime = osl_getGlobalTimer();
 
@@ -690,47 +690,47 @@ sal_Int32 TestApplication::measureTime(	sal_Int32	nThreadCount	,
 //_________________________________________________________________________________________________________________
 void TestApplication::Main()
 {
-    sal_Int32 nTestCount	= 0;	/// count of calling "measureTime()"
-    sal_Int32 nThreadCount	= 0;	/// count of used threads by "measure..."
-    sal_Int32 nLoops		= 0;	/// loop count for every thread
-    sal_Int32 nOwner		= 0;	/// number of owner thread
+    sal_Int32 nTestCount    = 0;    /// count of calling "measureTime()"
+    sal_Int32 nThreadCount  = 0;    /// count of used threads by "measure..."
+    sal_Int32 nLoops        = 0;    /// loop count for every thread
+    sal_Int32 nOwner        = 0;    /// number of owner thread
 
     // Parse command line.
     // Attention: All parameter are required and must exist!
     // syntax: "threadtest.exe <testcount> <threadcount> <loops> <owner>"
-    OStartupInfo	aInfo		;
-    OUString		sArgument	;
-    sal_Int32		nArgument	;
-    sal_Int32		nCount		= aInfo.getCommandArgCount();
+    OStartupInfo    aInfo       ;
+    OUString        sArgument   ;
+    sal_Int32       nArgument   ;
+    sal_Int32       nCount      = aInfo.getCommandArgCount();
 
     LOG_ASSERT2( nCount!=4 ,"TestApplication::Main()" , "Wrong argument line detected!")
 
     for( nArgument=0; nArgument<nCount; ++nArgument )
     {
         aInfo.getCommandArg( nArgument, sArgument );
-        if( nArgument== 0 )	nTestCount	=sArgument.toInt32();
-        if( nArgument== 1 )	nThreadCount=sArgument.toInt32();
-        if( nArgument== 2 )	nLoops		=sArgument.toInt32();
-        if( nArgument== 3 )	nOwner		=sArgument.toInt32();
+        if( nArgument== 0 ) nTestCount  =sArgument.toInt32();
+        if( nArgument== 1 ) nThreadCount=sArgument.toInt32();
+        if( nArgument== 2 ) nLoops      =sArgument.toInt32();
+        if( nArgument== 3 ) nOwner      =sArgument.toInt32();
     }
 
     // Start test.
-    OStringBuffer	sBuf(256);
-    sal_Int32		nTime=0;
+    OStringBuffer   sBuf(256);
+    sal_Int32       nTime=0;
     sBuf.append( "Nr.\tTime\tThreadCount\tLoops\tOwner\n" );
     for( sal_Int32 nI=1; nI<=nTestCount; ++nI )
     {
         nTime = measureTime( nThreadCount, nOwner, nLoops );
-        sBuf.append( nI				);
-        sBuf.append( "\t"			);
-        sBuf.append( nTime			);
-        sBuf.append( "\t"			);
-        sBuf.append( nThreadCount	);
-        sBuf.append( "\t"			);
-        sBuf.append( nLoops			);
-        sBuf.append( "\t"			);
-        sBuf.append( nOwner 		);
-        sBuf.append( "\n"			);
+        sBuf.append( nI             );
+        sBuf.append( "\t"           );
+        sBuf.append( nTime          );
+        sBuf.append( "\t"           );
+        sBuf.append( nThreadCount   );
+        sBuf.append( "\t"           );
+        sBuf.append( nLoops         );
+        sBuf.append( "\t"           );
+        sBuf.append( nOwner         );
+        sBuf.append( "\n"           );
     }
 
     WRITE_LOGFILE( STATISTICS_FILE, sBuf.makeStringAndClear() );

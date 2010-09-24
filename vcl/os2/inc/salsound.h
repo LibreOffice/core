@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,50 +45,50 @@
 class Os2SalSound : public SalSound
 {
 private:
-                        
-    static HMODULE		mhMCILib;
-    static ULONG		mnSoundState;
-    static void*		mpMCIFnc;
-    SALSOUNDPROC		mpProc;
-    void*				mpInst;
-    ULONG				mnStartTime;
-    ULONG				mnPlayLen;
-    HWND				mhSoundWnd;
-    USHORT				mnDeviceId;
-    BOOL				mbLoop;
-    BOOL				mbPaused;
+
+    static HMODULE      mhMCILib;
+    static ULONG        mnSoundState;
+    static void*        mpMCIFnc;
+    SALSOUNDPROC        mpProc;
+    void*               mpInst;
+    ULONG               mnStartTime;
+    ULONG               mnPlayLen;
+    HWND                mhSoundWnd;
+    USHORT              mnDeviceId;
+    BOOL                mbLoop;
+    BOOL                mbPaused;
 
 public:
 
     void                ImplSetError( ULONG nMciErr );
-    void				ImplNotify( SoundNotification eNotification, ULONG nError );
+    void                ImplNotify( SoundNotification eNotification, ULONG nError );
 
-public:					
+public:
 
-    BOOL				Create();
-    //static BOOL			IsValid() { return( SOUND_STATE_VALID == Os2SalSound::mnSoundState ); } 
-    //BOOL				Init( SalFrame* pFrame, const String& rSoundName, ULONG& rSoundLen );
-    //BOOL				Init( SalFrame* pFrame, const BYTE* pSound, ULONG nDataLen, ULONG& rSoundLen );
+    BOOL                Create();
+    //static BOOL           IsValid() { return( SOUND_STATE_VALID == Os2SalSound::mnSoundState ); }
+    //BOOL              Init( SalFrame* pFrame, const String& rSoundName, ULONG& rSoundLen );
+    //BOOL              Init( SalFrame* pFrame, const BYTE* pSound, ULONG nDataLen, ULONG& rSoundLen );
 
-    void				SetNotifyProc( void* pInst, SALSOUNDPROC pProc ) 
+    void                SetNotifyProc( void* pInst, SALSOUNDPROC pProc )
                             { mpInst = pInst; mpProc = pProc; }
 public:
     Os2SalSound();
     virtual ~Os2SalSound();
-    
-    virtual bool		IsValid();
-    virtual bool		Init( const String& rSoundName, ULONG& rSoundLen );
-       virtual void		Play( ULONG nStartTime, ULONG nPlayTime, bool bLoop );
-    virtual void		Stop();
-    virtual void		Pause();
-    virtual void		Continue();
-    virtual bool		IsLoopMode() const;
-    virtual bool		IsPlaying() const;
-    virtual bool		IsPaused() const;
 
-    bool				ImplCreate();
-    void				ImplDestroy();
-    static void 		Release();
+    virtual bool        IsValid();
+    virtual bool        Init( const String& rSoundName, ULONG& rSoundLen );
+       virtual void     Play( ULONG nStartTime, ULONG nPlayTime, bool bLoop );
+    virtual void        Stop();
+    virtual void        Pause();
+    virtual void        Continue();
+    virtual bool        IsLoopMode() const;
+    virtual bool        IsPlaying() const;
+    virtual bool        IsPaused() const;
+
+    bool                ImplCreate();
+    void                ImplDestroy();
+    static void         Release();
 };
 
 #endif // _SV_SALSOUND_H

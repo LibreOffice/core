@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 #define HID_FIRSTSTART_CANCEL                       (HID_DESKTOP_START +  13)
 #define HID_FIRSTSTART_FINISH                       (HID_DESKTOP_START +  14)
 #define UID_FIRSTSTART_HELP                         (HID_DESKTOP_START +  15)
-#define UID_BTN_LICENSE_ACCEPT						(HID_DESKTOP_START +  16)
+#define UID_BTN_LICENSE_ACCEPT                      (HID_DESKTOP_START +  16)
 #define HID_FIRSTSTART_UPDATE_CHECK                 (HID_DESKTOP_START +  17)
 #define HID_DEPLOYMENT_GUI_UPDATE                   (HID_DESKTOP_START +  18)
 #define HID_DEPLOYMENT_GUI_UPDATEINSTALL            (HID_DESKTOP_START +  19)

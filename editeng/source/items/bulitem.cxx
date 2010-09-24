@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 // #90477#
 #include <tools/tenccvt.hxx>
 
-#define BULITEM_VERSION		((USHORT)2)
+#define BULITEM_VERSION     ((USHORT)2)
 
 // -----------------------------------------------------------------------
 
@@ -85,10 +85,10 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, USHORT nVer )
     rStream >> nTemp; aFont.SetFamily((FontFamily)nTemp);
 
     // #90477#
-    rStream >> nTemp; 
+    rStream >> nTemp;
     nTemp = (sal_uInt16)GetSOLoadTextEncoding((rtl_TextEncoding)nTemp, (sal_uInt16)rStream.GetVersion());
     aFont.SetCharSet((rtl_TextEncoding)nTemp);
-    
+
     rStream >> nTemp; aFont.SetPitch((FontPitch)nTemp);
     rStream >> nTemp; aFont.SetAlign((FontAlign)nTemp);
     rStream >> nTemp; aFont.SetWeight((FontWeight)nTemp);
@@ -140,9 +140,9 @@ SvxBulletItem::SvxBulletItem( BYTE nNewStyle, const Font& rFont, USHORT /*nStart
 SvxBulletItem::SvxBulletItem( const Font& rFont, xub_Unicode cSymb, USHORT _nWhich ) : SfxPoolItem( _nWhich )
 {
     SetDefaults_Impl();
-    aFont 	= rFont;
+    aFont   = rFont;
     cSymbol = cSymb;
-    nStyle 	= BS_BULLET;
+    nStyle  = BS_BULLET;
     nValidMask = 0xFFFF;
 }
 
@@ -153,7 +153,7 @@ SvxBulletItem::SvxBulletItem( const Bitmap& rBmp, USHORT _nWhich ) : SfxPoolItem
     SetDefaults_Impl();
 
     if( !rBmp.IsEmpty() )
-    {   
+    {
         pGraphicObject = new GraphicObject( rBmp );
         nStyle = BS_BMP;
     }
@@ -172,14 +172,14 @@ SvxBulletItem::SvxBulletItem( const GraphicObject& rGraphicObject, USHORT _nWhic
         pGraphicObject = new GraphicObject( rGraphicObject );
         nStyle = BS_BMP;
     }
-    
+
     nValidMask = 0xFFFF;
 }
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( SvStream& rStrm, USHORT _nWhich ) : 
-    SfxPoolItem( _nWhich ), 
+SvxBulletItem::SvxBulletItem( SvStream& rStrm, USHORT _nWhich ) :
+    SfxPoolItem( _nWhich ),
     pGraphicObject( NULL )
 {
     rStrm >> nStyle;
@@ -189,8 +189,8 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, USHORT _nWhich ) :
     else
     {
         // Sicheres Laden mit Test auf leere Bitmap
-        Bitmap			aBmp;
-        const UINT32	nOldPos = rStrm.Tell();
+        Bitmap          aBmp;
+        const UINT32    nOldPos = rStrm.Tell();
         // #69345# Errorcode beim Bitmap lesen ignorieren,
         // siehe Kommentar #67581# in SvxBulletItem::Store()
         BOOL bOldError = rStrm.GetError() ? TRUE : FALSE;
@@ -210,7 +210,7 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, USHORT _nWhich ) :
         else
             pGraphicObject = new GraphicObject( aBmp );
     }
-    
+
     rStrm >> nWidth;
     rStrm >> nStart;
     rStrm >> nJustify;
@@ -234,17 +234,17 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, USHORT _nWhich ) :
 
 SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
 {
-    aFont			= rItem.aFont;
-    pGraphicObject	= ( rItem.pGraphicObject ? new GraphicObject( *rItem.pGraphicObject ) : NULL );
-    aPrevText		= rItem.aPrevText;
-    aFollowText		= rItem.aFollowText;
-    nStart			= rItem.nStart;
-    nStyle			= rItem.nStyle;
-    nWidth			= rItem.nWidth;
-    nScale			= rItem.nScale;
-    cSymbol			= rItem.cSymbol;
-    nJustify		= rItem.nJustify;
-    nValidMask		= rItem.nValidMask;
+    aFont           = rItem.aFont;
+    pGraphicObject  = ( rItem.pGraphicObject ? new GraphicObject( *rItem.pGraphicObject ) : NULL );
+    aPrevText       = rItem.aPrevText;
+    aFollowText     = rItem.aFollowText;
+    nStart          = rItem.nStart;
+    nStyle          = rItem.nStyle;
+    nWidth          = rItem.nWidth;
+    nScale          = rItem.nScale;
+    cSymbol         = rItem.cSymbol;
+    nJustify        = rItem.nJustify;
+    nValidMask      = rItem.nValidMask;
 }
 
 // -----------------------------------------------------------------------
@@ -283,12 +283,12 @@ void SvxBulletItem::SetDefaultFont_Impl()
 void SvxBulletItem::SetDefaults_Impl()
 {
     pGraphicObject  = NULL;
-    nWidth		    = 1200;  // 1.2cm
-    nStart		    = 1;
-    nStyle		    = BS_123;
-    nJustify	    = BJ_HLEFT | BJ_VCENTER;
-    cSymbol		    = sal_Unicode(' ');
-    nScale 		    = 75;
+    nWidth          = 1200;  // 1.2cm
+    nStart          = 1;
+    nStyle          = BS_123;
+    nJustify        = BJ_HLEFT | BJ_VCENTER;
+    cSymbol         = sal_Unicode(' ');
+    nScale          = 75;
 }
 
 // -----------------------------------------------------------------------
@@ -339,25 +339,25 @@ int SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
     const SvxBulletItem& rBullet = (const SvxBulletItem&)rItem;
     // ValidMask mitvergleichen, da sonst kein Putten in ein AttrSet moeglich,
     // wenn sich das Item nur in der ValidMask von einem existierenden unterscheidet.
-    if(	nValidMask != rBullet.nValidMask 	||
-        nStyle != rBullet.nStyle 			||
-        nScale != rBullet.nScale			||
-        nJustify != rBullet.nJustify 		||
-        nWidth != rBullet.nWidth 			||
-        nStart != rBullet.nStart 			||
-        cSymbol != rBullet.cSymbol 			||
-        aPrevText != rBullet.aPrevText 		||
+    if( nValidMask != rBullet.nValidMask    ||
+        nStyle != rBullet.nStyle            ||
+        nScale != rBullet.nScale            ||
+        nJustify != rBullet.nJustify        ||
+        nWidth != rBullet.nWidth            ||
+        nStart != rBullet.nStart            ||
+        cSymbol != rBullet.cSymbol          ||
+        aPrevText != rBullet.aPrevText      ||
         aFollowText != rBullet.aFollowText )
             return 0;
 
     if( ( nStyle != BS_BMP ) && ( aFont != rBullet.aFont ) )
         return 0;
-    
+
     if( nStyle == BS_BMP )
-    { 
+    {
         if( ( pGraphicObject && !rBullet.pGraphicObject ) || ( !pGraphicObject && rBullet.pGraphicObject ) )
             return 0;
- 
+
         if( ( pGraphicObject && rBullet.pGraphicObject ) &&
             ( ( *pGraphicObject != *rBullet.pGraphicObject ) ||
               ( pGraphicObject->GetPrefSize() != rBullet.pGraphicObject->GetPrefSize() ) ) )
@@ -374,7 +374,7 @@ int SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 SvStream& SvxBulletItem::Store( SvStream& rStrm, USHORT /*nItemVersion*/ ) const
 {
     // Korrektur bei leerer Bitmap
-    if( ( nStyle == BS_BMP ) && 
+    if( ( nStyle == BS_BMP ) &&
         ( !pGraphicObject || ( GRAPHIC_NONE == pGraphicObject->GetType() ) || ( GRAPHIC_DEFAULT == pGraphicObject->GetType() ) ) )
     {
         if( pGraphicObject )
@@ -382,7 +382,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, USHORT /*nItemVersion*/ ) const
             delete( const_cast< SvxBulletItem* >( this )->pGraphicObject );
             const_cast< SvxBulletItem* >( this )->pGraphicObject = NULL;
         }
-        
+
         const_cast< SvxBulletItem* >( this )->nStyle = BS_NONE;
     }
 
@@ -448,7 +448,7 @@ SfxItemPresentation SvxBulletItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     XubString&          rText, const IntlWrapper *
-)	const
+)   const
 {
     SfxItemPresentation eRet = SFX_ITEM_PRESENTATION_NONE;
     switch ( ePres )
@@ -471,7 +471,7 @@ SfxItemPresentation SvxBulletItem::GetPresentation
 //------------------------------------------------------------------------
 
 Bitmap SvxBulletItem::GetBitmap() const
-{ 
+{
     if( pGraphicObject )
         return pGraphicObject->GetGraphic().GetBitmap();
     else
@@ -517,7 +517,7 @@ const GraphicObject& SvxBulletItem::GetGraphicObject() const
 //------------------------------------------------------------------------
 
 void SvxBulletItem::SetGraphicObject( const GraphicObject& rGraphicObject )
-{ 
+{
     if( ( GRAPHIC_NONE == rGraphicObject.GetType() ) || ( GRAPHIC_DEFAULT == rGraphicObject.GetType() ) )
     {
         if( pGraphicObject )

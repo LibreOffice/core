@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ class ScXMLImport;
 
 struct ScMyStyleNumberFormat
 {
-    rtl::OUString		sStyleName;
-    sal_Int32			nNumberFormat;
+    rtl::OUString       sStyleName;
+    sal_Int32           nNumberFormat;
 
     ScMyStyleNumberFormat() : nNumberFormat(-1) {}
     ScMyStyleNumberFormat(const rtl::OUString& rStyleName) :
@@ -58,11 +58,11 @@ struct LessStyleNumberFormat
     }
 };
 
-typedef std::set< ScMyStyleNumberFormat, LessStyleNumberFormat >	ScMyStyleNumberFormatSet;
+typedef std::set< ScMyStyleNumberFormat, LessStyleNumberFormat >    ScMyStyleNumberFormatSet;
 
 class ScMyStyleNumberFormats
 {
-    ScMyStyleNumberFormatSet	aSet;
+    ScMyStyleNumberFormatSet    aSet;
 
 public:
     void AddStyleNumberFormat(const rtl::OUString& rStyleName, const sal_Int32 nNumberFormat);
@@ -71,8 +71,8 @@ public:
 
 struct ScMyCurrencyStyle
 {
-    rtl::OUString		sCurrency;
-    ScRangeListRef		xRanges;
+    rtl::OUString       sCurrency;
+    ScRangeListRef      xRanges;
 
     ScMyCurrencyStyle() : xRanges(new ScRangeList()) {}
     ~ScMyCurrencyStyle() {}
@@ -86,18 +86,18 @@ struct LessCurrencyStyle
     }
 };
 
-typedef std::set<ScMyCurrencyStyle, LessCurrencyStyle>	ScMyCurrencyStylesSet;
+typedef std::set<ScMyCurrencyStyle, LessCurrencyStyle>  ScMyCurrencyStylesSet;
 
 class ScMyStyleRanges : public SvRefBase
 {
-    ScRangeList*			pTextList;
-    ScRangeList*			pNumberList;
-    ScRangeList*			pTimeList;
-    ScRangeList*			pDateTimeList;
-    ScRangeList*			pPercentList;
-    ScRangeList*			pLogicalList;
-    ScRangeList*			pUndefinedList;
-    ScMyCurrencyStylesSet*	pCurrencyList;
+    ScRangeList*            pTextList;
+    ScRangeList*            pNumberList;
+    ScRangeList*            pTimeList;
+    ScRangeList*            pDateTimeList;
+    ScRangeList*            pPercentList;
+    ScRangeList*            pLogicalList;
+    ScRangeList*            pUndefinedList;
+    ScMyCurrencyStylesSet*  pCurrencyList;
 
     void AddRange(const ScRange& rRange, ScRangeList* pList,
         const rtl::OUString* pStyleName, const sal_Int16 nType,
@@ -130,8 +130,8 @@ SV_DECL_IMPL_REF( ScMyStyleRanges );
 
 struct ScMyStyle
 {
-    rtl::OUString		sStyleName;
-    ScMyStyleRangesRef	xRanges;
+    rtl::OUString       sStyleName;
+    ScMyStyleRangesRef  xRanges;
 
     ScMyStyle() : xRanges(new ScMyStyleRanges()) {}
     ~ScMyStyle() {}
@@ -145,24 +145,24 @@ struct LessStyle
     }
 };
 
-typedef std::set<ScMyStyle, LessStyle>	ScMyStylesSet;
+typedef std::set<ScMyStyle, LessStyle>  ScMyStylesSet;
 typedef std::vector<ScMyStylesSet::iterator> ScMyStyles;
 
 class ScMyStylesImportHelper
 {
-    ScMyStylesSet		aCellStyles;
-    ScMyStyles			aColDefaultStyles;
-    ScMyStylesSet::iterator	aRowDefaultStyle;
-    ScXMLImport&		rImport;
-    rtl::OUString*		pStyleName;
-    rtl::OUString*		pPrevStyleName;
-    rtl::OUString*		pCurrency;
-    rtl::OUString*		pPrevCurrency;
-    ScRange				aPrevRange;
-    sal_uInt32			nMaxRanges;
-    sal_Int16			nCellType;
-    sal_Int16			nPrevCellType;
-    sal_Bool			bPrevRangeAdded;
+    ScMyStylesSet       aCellStyles;
+    ScMyStyles          aColDefaultStyles;
+    ScMyStylesSet::iterator aRowDefaultStyle;
+    ScXMLImport&        rImport;
+    rtl::OUString*      pStyleName;
+    rtl::OUString*      pPrevStyleName;
+    rtl::OUString*      pCurrency;
+    rtl::OUString*      pPrevCurrency;
+    ScRange             aPrevRange;
+    sal_uInt32          nMaxRanges;
+    sal_Int16           nCellType;
+    sal_Int16           nPrevCellType;
+    sal_Bool            bPrevRangeAdded;
 
     void ResetAttributes();
     ScMyStylesSet::iterator GetIterator(const rtl::OUString* pStyleName);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,32 +69,32 @@ typedef void (CALLTYPE* SetLanguagePtr)( USHORT& nLanguage );
 typedef void (CALLTYPE* GetParamDesc)
     (USHORT& nNo, USHORT& nParam, sal_Char* pName, sal_Char* pDesc );
 
-typedef void (CALLTYPE* IsAsync) ( USHORT&		nNo,
-                                   ParamType*	peType );
-typedef void (CALLTYPE* Advice)  ( USHORT&		nNo,
-                                   AdvData&		pfCallback );
-typedef void (CALLTYPE* Unadvice)( double&		nHandle );
+typedef void (CALLTYPE* IsAsync) ( USHORT&      nNo,
+                                   ParamType*   peType );
+typedef void (CALLTYPE* Advice)  ( USHORT&      nNo,
+                                   AdvData&     pfCallback );
+typedef void (CALLTYPE* Unadvice)( double&      nHandle );
 
 typedef void (CALLTYPE* FARPROC) ( void );
 
 }
 
 #if defined(OS2) && defined(BLC)
-#define GETFUNCTIONCOUNT		"_GetFunctionCount"
-#define GETFUNCTIONDATA			"_GetFunctionData"
-#define SETLANGUAGE				"_SetLanguage"
-#define GETPARAMDESC			"_GetParameterDescription"
-#define ISASYNC					"_IsAsync"
-#define ADVICE					"_Advice"
-#define UNADVICE				"_Unadvice"
+#define GETFUNCTIONCOUNT        "_GetFunctionCount"
+#define GETFUNCTIONDATA         "_GetFunctionData"
+#define SETLANGUAGE             "_SetLanguage"
+#define GETPARAMDESC            "_GetParameterDescription"
+#define ISASYNC                 "_IsAsync"
+#define ADVICE                  "_Advice"
+#define UNADVICE                "_Unadvice"
 #else // Pascal oder extern "C"
-#define GETFUNCTIONCOUNT		"GetFunctionCount"
-#define GETFUNCTIONDATA			"GetFunctionData"
-#define SETLANGUAGE				"SetLanguage"
-#define GETPARAMDESC			"GetParameterDescription"
-#define ISASYNC					"IsAsync"
-#define ADVICE					"Advice"
-#define UNADVICE				"Unadvice"
+#define GETFUNCTIONCOUNT        "GetFunctionCount"
+#define GETFUNCTIONDATA         "GetFunctionData"
+#define SETLANGUAGE             "SetLanguage"
+#define GETPARAMDESC            "GetParameterDescription"
+#define ISASYNC                 "IsAsync"
+#define ADVICE                  "Advice"
+#define UNADVICE                "Unadvice"
 #endif
 
 #define LIBFUNCNAME( name ) \
@@ -103,12 +103,12 @@ typedef void (CALLTYPE* FARPROC) ( void );
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 FuncData::FuncData(const String& rIName) :
-    pModuleData		(NULL),
+    pModuleData     (NULL),
     aInternalName   (rIName),
-//  aFuncName		(""),
-    nNumber			(0),
-    nParamCount		(0),
-    eAsyncType		(NONE)
+//  aFuncName       (""),
+    nNumber         (0),
+    nParamCount     (0),
+    eAsyncType      (NONE)
 {
     for (USHORT i = 0; i < MAXFUNCPARAM; i++)
         eParamType[i] = PTR_DOUBLE;
@@ -117,18 +117,18 @@ FuncData::FuncData(const String& rIName) :
 //------------------------------------------------------------------------
 
 FuncData::FuncData(const ModuleData*pModule,
-                   const String&	rIName,
-                   const String&	rFName,
-                         USHORT	nNo,
-                    USHORT	nCount,
+                   const String&    rIName,
+                   const String&    rFName,
+                         USHORT nNo,
+                    USHORT  nCount,
                    const ParamType* peType,
                     ParamType  eType) :
-    pModuleData		(pModule),
+    pModuleData     (pModule),
     aInternalName   (rIName),
-    aFuncName		(rFName),
-    nNumber			(nNo),
-    nParamCount		(nCount),
-    eAsyncType		(eType)
+    aFuncName       (rFName),
+    nNumber         (nNo),
+    nParamCount     (nCount),
+    eAsyncType      (eType)
 {
     for (USHORT i = 0; i < MAXFUNCPARAM; i++)
         eParamType[i] = peType[i];
@@ -138,12 +138,12 @@ FuncData::FuncData(const ModuleData*pModule,
 
 FuncData::FuncData(const FuncData& rData) :
     ScDataObject(),
-    pModuleData		(rData.pModuleData),
+    pModuleData     (rData.pModuleData),
     aInternalName   (rData.aInternalName),
-    aFuncName		(rData.aFuncName),
-    nNumber			(rData.nNumber),
-    nParamCount		(rData.nParamCount),
-    eAsyncType		(rData.eAsyncType)
+    aFuncName       (rData.aFuncName),
+    nNumber         (rData.nNumber),
+    nParamCount     (rData.nParamCount),
+    eAsyncType      (rData.eAsyncType)
 {
     for (USHORT i = 0; i < MAXFUNCPARAM; i++)
         eParamType[i] = rData.eParamType[i];
@@ -169,17 +169,17 @@ BOOL FuncCollection::SearchFunc( const String& rName, USHORT& rIndex ) const
 class ModuleData : public ScDataObject
 {
 friend class ModuleCollection;
-    String		aName;
+    String      aName;
     osl::Module* pInstance;
 public:
     ModuleData(const String& rStr, osl::Module* pInst) : aName (rStr), pInstance (pInst) {}
     ModuleData(const ModuleData& rData) : ScDataObject(), aName (rData.aName) {pInstance = new osl::Module(aName);}
     ~ModuleData() { delete pInstance; }
-    virtual ScDataObject*	Clone() const { return new ModuleData(*this); }
+    virtual ScDataObject*   Clone() const { return new ModuleData(*this); }
 
-    const   String&			GetName() const { return aName; }
+    const   String&         GetName() const { return aName; }
             osl::Module*    GetInstance() const { return pInstance; }
-            void			FreeInstance() { delete pInstance; pInstance = 0; }
+            void            FreeInstance() { delete pInstance; pInstance = 0; }
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -189,10 +189,10 @@ public:
     ModuleCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) : ScSortedCollection ( nLim, nDel, bDup ) {}
     ModuleCollection(const ModuleCollection& rModuleCollection) : ScSortedCollection ( rModuleCollection ) {}
 
-    virtual ScDataObject*		Clone() const { return new ModuleCollection(*this); }
-            ModuleData*		operator[]( const USHORT nIndex) const {return (ModuleData*)At(nIndex);}
-    virtual short			Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-            BOOL			SearchModule( const String& rName,
+    virtual ScDataObject*       Clone() const { return new ModuleCollection(*this); }
+            ModuleData*     operator[]( const USHORT nIndex) const {return (ModuleData*)At(nIndex);}
+    virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
+            BOOL            SearchModule( const String& rName,
                                           const ModuleData*& rpModule ) const;
 };
 
@@ -451,7 +451,7 @@ BOOL FuncData::GetParamDesc( String& aName, String& aDesc, USHORT nParam )
             sal_Char pcName[256];
             sal_Char pcDesc[256];
             *pcName = *pcDesc = 0;
-            USHORT nFuncNo = nNumber;	// nicht per Reference versauen lassen..
+            USHORT nFuncNo = nNumber;   // nicht per Reference versauen lassen..
             ((::GetParamDesc)fProc)( nFuncNo, nParam, pcName, pcDesc );
             aName = String( pcName, osl_getThreadTextEncoding() );
             aDesc = String( pcDesc, osl_getThreadTextEncoding() );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,19 +46,19 @@ class ModuleDescription : public SequenceElement
   public:
                         ModuleDescription();
 
-    const Simstr &		ModuleName() const;
-    void	            Get_SupportedServices(    /// @return also the children of component-description.
+    const Simstr &      ModuleName() const;
+    void                Get_SupportedServices(    /// @return also the children of component-description.
                             List< const MultipleTextElement * > &
                                                 o_rServices ) const;
-    void				Get_Types(
+    void                Get_Types(
                             List< const MultipleTextElement * > &
                                                 o_rTypes ) const;
-    void				Get_ServiceDependencies(
+    void                Get_ServiceDependencies(
                             List< const MultipleTextElement * > &
                                                 o_rServices ) const;
   private:
-    SglTextElement *	pModuleName;
-    CompDescrList *		pCdList;
+    SglTextElement *    pModuleName;
+    CompDescrList *     pCdList;
     MultipleTextElement *
                         pTypes;
     MultipleTextElement *
@@ -71,7 +71,7 @@ class ComponentDescription : public SequenceElement
   public:
                         ComponentDescription();
 
-    const Simstr &		ComponentName() const	{ return pComponentName->Data(); }
+    const Simstr &      ComponentName() const   { return pComponentName->Data(); }
     const MultipleTextElement &
                         SupportedServices() const
                                                 { return *pSupportedServices; }
@@ -81,7 +81,7 @@ class ComponentDescription : public SequenceElement
                         ServiceDependencies() const
                                                 { return *pServiceDependencies; }
   private:
-    SglTextElement *	pComponentName;
+    SglTextElement *    pComponentName;
     MultipleTextElement *
                         pSupportedServices;
     MultipleTextElement *
@@ -95,17 +95,17 @@ class CompDescrList : public ListElement
   public:
                         CompDescrList();
     virtual void        Write2Html(
-                            HtmlCreator &		io_rHC ) const;
+                            HtmlCreator &       io_rHC ) const;
     virtual XmlElement *
                         Create_and_Add_NewElement();
 
-    void				Get_SupportedServices(
+    void                Get_SupportedServices(
                             List< const MultipleTextElement * > &
                                                 o_rResult ) const;
-    void				Get_Types(
+    void                Get_Types(
                             List< const MultipleTextElement * > &
                                                 o_rResult ) const;
-    void				Get_ServiceDependencies(
+    void                Get_ServiceDependencies(
                             List< const MultipleTextElement * > &
                                                 o_rResult ) const;
   private:
@@ -118,7 +118,7 @@ class MdName : public SglTextElement
   public:
                         MdName();
     virtual void        Write2Html(
-                            HtmlCreator &		io_rHC ) const;
+                            HtmlCreator &       io_rHC ) const;
 };
 
 class CdName : public SglTextElement
@@ -126,7 +126,7 @@ class CdName : public SglTextElement
   public:
                         CdName();
     virtual void        Write2Html(
-                            HtmlCreator &		io_rHC ) const;
+                            HtmlCreator &       io_rHC ) const;
 };
 
 class SupportedService : public MultipleTextElement
@@ -135,7 +135,7 @@ class SupportedService : public MultipleTextElement
                         SupportedService();
 
     virtual void        Insert2Index(
-                            Index & 	        o_rIndex ) const;
+                            Index &             o_rIndex ) const;
 };
 
 

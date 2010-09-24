@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #ifndef _ENHANCED_CUSTOMSHAPE_HANDLE_HXX
-#define	_ENHANCED_CUSTOMSHAPE_HANDLE_HXX
+#define _ENHANCED_CUSTOMSHAPE_HANDLE_HXX
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/implbase2.hxx>
@@ -38,23 +38,23 @@
 #include <cppuhelper/weakref.hxx>
 
 class EnhancedCustomShapeHandle : public cppu::WeakImplHelper2
-< 
+<
     com::sun::star::drawing::XCustomShapeHandle,
     com::sun::star::lang::XInitialization
 >
 {
-    sal_uInt32															mnIndex;
+    sal_uInt32                                                          mnIndex;
     com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxCustomShape;
 
 public:
 
             EnhancedCustomShapeHandle( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xCustomShape, sal_uInt32 nIndex );
     virtual ~EnhancedCustomShapeHandle();
-                                            
-    // XInterface							
+
+    // XInterface
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
-    
+
     // XCustomShapeHandle
     virtual com::sun::star::awt::Point SAL_CALL getPosition()
         throw ( com::sun::star::uno::RuntimeException );
@@ -62,7 +62,7 @@ public:
         throw ( com::sun::star::uno::RuntimeException );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) 
+    virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
         throw ( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException );
 };
 

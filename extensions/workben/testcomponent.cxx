@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
 #endif
 
     // create service manager
-//	XMultiServiceFactoryRef xSMgr = getProcessServiceManager();
+//  XMultiServiceFactoryRef xSMgr = getProcessServiceManager();
     XMultiServiceFactoryRef xSMgr = createRegistryServiceManager();
     OSL_ASSERT( xSMgr.is() );
     registerUsrServices( xSMgr );
@@ -83,18 +83,18 @@ int __LOADONCALLAPI main (int argc, char **argv)
     XImplementationRegistrationRef xReg;
     XSimpleRegistryRef xSimpleReg;
 
-    try	{
+    try {
         // Create registration service
         XInterfaceRef x = xSMgr->createInstance(
             UString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) );
         x->queryInterface( XImplementationRegistration::getSmartUik() , xReg );
 
-/*		x = xSMgr->createInstance( L"stardiv.uno.repos.SimpleRegistry" );
+/*      x = xSMgr->createInstance( L"stardiv.uno.repos.SimpleRegistry" );
         OSL_ASSERT( x.is() );
         x->queryInterface( XSimpleRegistry::getSmartUik() , xSimpleReg );
         OSL_ASSERT( xSimpleReg.is() );
         xSimpleReg->open( L"testcomp.rdb" , FALSE , TRUE );
-*/	}
+*/  }
     catch( Exception& e ) {
         printf( "%s\n" , OWStringToOString( e.getName() , CHARSET_SYSTEM ).getStr() );
         exit(1);
@@ -167,15 +167,15 @@ int __LOADONCALLAPI main (int argc, char **argv)
         XInterfaceRef x = xSMgr->createInstance( OStringToOWString( argv[1] , CHARSET_SYSTEM ) );
         if( ! x.is() ) {
             printf( "Couldn't instantiate service !\n" );
-            exit( 1 );	
+            exit( 1 );
         }
 
         // do the test
-        try {		
+        try {
             nNewHandle = xTest->test( OStringToOWString( argv[1] , CHARSET_SYSTEM ) , x , nHandle );
         }
         catch ( Exception& e ) {
-            printf( "testcomponent : uncaught exception %s\n" , 
+            printf( "testcomponent : uncaught exception %s\n" ,
                         OWStringToOString( e.getName(), CHARSET_SYSTEM ).getStr() );
             exit(1);
         }
@@ -183,25 +183,25 @@ int __LOADONCALLAPI main (int argc, char **argv)
             printf( "testcomponent : uncaught unknown exception\n"  );
             exit(1);
         }
-        
-        
+
+
         // print errors and warning
         Sequence<UString> seqErrors = xTest->getErrors();
         Sequence<UString> seqWarnings = xTest->getWarnings();
         if( seqWarnings.getLen() > nWarningCount ) {
             printf( "Warnings during test %d!\n" , nHandle );
             for( ; nWarningCount < seqWarnings.getLen() ; nWarningCount ++ ) {
-                printf( "Warning\n%s\n---------\n" , 
+                printf( "Warning\n%s\n---------\n" ,
                     OWStringToOString( seqWarnings.getArray()[nWarningCount], CHARSET_SYSTEM ).getStr() );
-            }			
+            }
         }
 
 
         if( seqErrors.getLen() > nErrorCount ) {
             printf( "Errors during test %d!\n" , nHandle );
             for( ; nErrorCount < seqErrors.getLen() ; nErrorCount ++ ) {
-                printf( "%s\n" , 
-                            OWStringToOString( 
+                printf( "%s\n" ,
+                            OWStringToOString(
                                     seqErrors.getArray()[nErrorCount], CHARSET_SYSTEM ).getStr() );
             }
         }
@@ -213,7 +213,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
         printf( "Test passed !\n" );
     }
     else {
-        printf( "Test failed !\n" );	
+        printf( "Test failed !\n" );
     }
 
     XComponentRef rComp( xSMgr , USR_QUERY );

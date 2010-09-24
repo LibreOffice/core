@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ TYPEINIT1(SfxMacroInfoItem, SfxPoolItem);
 // -----------------------------------------------------------------------
 
 SfxMacroInfoItem::SfxMacroInfoItem(
-    USHORT nWhichId,		// Slot-ID
+    USHORT nWhichId,        // Slot-ID
     const BasicManager* pMgr,
     const String &rLibName,
     const String &rModuleName,

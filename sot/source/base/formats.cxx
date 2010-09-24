@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,14 +46,14 @@ using namespace::com::sun::star::datatransfer;
 
 struct SotAction_Impl
 {
-    ULONG 	nFormatId;			// Clipboard Id
-    USHORT	nAction;			// Action Id
-    BYTE 	nContextCheckId;	// additional check of content in clipboard
+    ULONG   nFormatId;          // Clipboard Id
+    USHORT  nAction;            // Action Id
+    BYTE    nContextCheckId;    // additional check of content in clipboard
 };
 
 
 // define a context check Id for every formatid
-#define FILEGRPDSC_ONLY_URL		1
+#define FILEGRPDSC_ONLY_URL     1
 
 /*
     Fuer jedes Ziel existiert in der Tabelle genau ein SotDestinationEntry_Impl.
@@ -68,11 +68,11 @@ struct SotAction_Impl
 
 struct SotDestinationEntry_Impl
 {
-    USHORT					nDestination;
-    const SotAction_Impl*	aDefaultActions;
-    const SotAction_Impl*	aMoveActions;
-    const SotAction_Impl*	aCopyActions;
-    const SotAction_Impl*	aLinkActions;
+    USHORT                  nDestination;
+    const SotAction_Impl*   aDefaultActions;
+    const SotAction_Impl*   aMoveActions;
+    const SotAction_Impl*   aCopyActions;
+    const SotAction_Impl*   aLinkActions;
 };
 
 
@@ -92,7 +92,7 @@ struct SotDestinationEntry_Impl
 */
 
 #define EXCHG_EMPYT_ARRAY                                                 \
-static SotAction_Impl __READONLY_DATA aEmptyArr[] =			              \
+static SotAction_Impl __READONLY_DATA aEmptyArr[] =                       \
     {                                                                     \
         { 0xffff, 0, 0 }                                                  \
     };
@@ -172,8 +172,8 @@ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_Def[] =     \
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
         { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
         { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_COPY, 0 },                   \
-        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_COPY, 0 },       		\
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },   		\
+        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_COPY, 0 },               \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },           \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
         { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_COPY, 0 },       \
@@ -202,7 +202,7 @@ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_Move[] =    \
         { SOT_FORMATSTR_ID_HTML_NO_COMMENT, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },   		\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
         { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -231,7 +231,7 @@ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_Copy[] =    \
         { SOT_FORMATSTR_ID_HTML_NO_COMMENT, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },   		\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
         { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
@@ -274,8 +274,8 @@ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_WEB_Def[] =     
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
         { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
         { SOT_FORMATSTR_ID_SONLK, EXCHG_IN_ACTION_COPY, 0 },                   \
-        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_COPY, 0 },       		\
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },   		\
+        { SOT_FORMATSTR_ID_INET_IMAGE, EXCHG_IN_ACTION_COPY, 0 },               \
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },           \
         { SOT_FORMAT_FILE_LIST, EXCHG_IN_ACTION_COPY, 0 },                     \
         { SOT_FORMAT_FILE, EXCHG_IN_ACTION_COPY, 0 },                          \
         { SOT_FORMATSTR_ID_SOLK, EXCHG_IN_ACTION_COPY, 0 },       \
@@ -295,7 +295,7 @@ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_WEB_Move[] =    
         { SOT_FORMATSTR_ID_HTML_NO_COMMENT, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },   		\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
         { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_GDIMETAFILE, EXCHG_OUT_ACTION_INSERT_GDIMETAFILE| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_BITMAP, EXCHG_OUT_ACTION_INSERT_BITMAP| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
@@ -318,7 +318,7 @@ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_DOC_TEXTFRAME_WEB_Copy[] =    
         { SOT_FORMATSTR_ID_HTML_NO_COMMENT, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },   		\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
         { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING| EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
@@ -792,7 +792,7 @@ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_Def[] =   \
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY, 0 },                           \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_IN_ACTION_COPY, 0 },                    \
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },   		\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },           \
         { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
@@ -853,7 +853,7 @@ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_Copy[] =  \
         { SOT_FORMATSTR_ID_HTML_NO_COMMENT, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                           \
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },   		\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
         { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },              \
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
@@ -897,7 +897,7 @@ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Def[] =   
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_IN_ACTION_COPY, 0 },             \
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY, 0 },                           \
         { SOT_FORMATSTR_ID_SVIM, EXCHG_IN_ACTION_COPY, 0 },                    \
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },   		\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY, 0 },           \
         { SOT_FORMAT_STRING, EXCHG_IN_ACTION_COPY, 0 },                        \
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_IN_ACTION_COPY, 0 },       \
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_IN_ACTION_COPY, FILEGRPDSC_ONLY_URL },       \
@@ -937,7 +937,7 @@ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Copy[] =  
         { SOT_FORMATSTR_ID_HTML_NO_COMMENT, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_HTML_SIMPLE, EXCHG_OUT_ACTION_INSERT_HTML | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMAT_RTF, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },                           \
-        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },   		\
+        { SOT_FORMATSTR_ID_NETSCAPE_IMAGE, EXCHG_IN_ACTION_COPY | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },          \
         { SOT_FORMAT_STRING, EXCHG_OUT_ACTION_INSERT_STRING | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },              \
         { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, 0 },\
         { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, EXCHG_OUT_ACTION_INSERT_HYPERLINK | EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP | EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL, FILEGRPDSC_ONLY_URL },\
@@ -1144,16 +1144,16 @@ static SotAction_Impl __READONLY_DATA aEXCHG_DEST_SDDOC_FREE_AREA_Link[] =  \
 
 /*  */
 
-#define IMPL_DATA_ARRAY_1				                                  \
+#define IMPL_DATA_ARRAY_1                                                 \
 EXCHG_EMPYT_ARRAY                                                         \
 EXCHG_DEST_DOC_OLEOBJ_ARRAY                                               \
 EXCHG_DEST_CHARTDOC_OLEOBJ_ARRAY                                          \
 EXCHG_DEST_DOC_TEXTFRAME_ARRAY                                            \
 EXCHG_DEST_DOC_GRAPHOBJ_ARRAY                                             \
-EXCHG_DEST_DOC_LNKD_GRAPHOBJ_ARRAY										  \
+EXCHG_DEST_DOC_LNKD_GRAPHOBJ_ARRAY                                        \
 EXCHG_DEST_DOC_TEXTFRAME_WEB_ARRAY
 
-#define IMPL_DATA_ARRAY_2				                                  \
+#define IMPL_DATA_ARRAY_2                                                 \
 EXCHG_DEST_DOC_GRAPH_W_IMAP_ARRAY                                         \
 EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_ARRAY                                    \
 EXCHG_DEST_DOC_IMAPREGION_ARRAY                                           \
@@ -1164,9 +1164,9 @@ EXCHG_DEST_DOC_GROUPOBJ_ARRAY                                             \
 EXCHG_DEST_SWDOC_FREE_AREA_ARRAY                                          \
 EXCHG_DEST_SCDOC_FREE_AREA_ARRAY                                          \
 EXCHG_DEST_SDDOC_FREE_AREA_ARRAY                                          \
-EXCHG_DEST_SWDOC_FREE_AREA_WEB_ARRAY									  \
+EXCHG_DEST_SWDOC_FREE_AREA_WEB_ARRAY                                      \
 
-#define IMPL_DATA_ARRAY_3				                                  \
+#define IMPL_DATA_ARRAY_3                                                 \
 static SotDestinationEntry_Impl __READONLY_DATA aDestinationArray[] =     \
 {                                                                         \
     { EXCHG_DEST_DOC_OLEOBJ,                                              \
@@ -1259,18 +1259,18 @@ static SotDestinationEntry_Impl __READONLY_DATA aDestinationArray[] =     \
         aEXCHG_DEST_SDDOC_FREE_AREA_Copy,                                 \
         aEXCHG_DEST_SDDOC_FREE_AREA_Link                                  \
     },                                                                    \
-    { EXCHG_DEST_DOC_TEXTFRAME_WEB,								  		  \
+    { EXCHG_DEST_DOC_TEXTFRAME_WEB,                                       \
         aEXCHG_DEST_DOC_TEXTFRAME_WEB_Def,                                \
         aEXCHG_DEST_DOC_TEXTFRAME_WEB_Move,                               \
         aEXCHG_DEST_DOC_TEXTFRAME_WEB_Copy,                               \
-        aEXCHG_DEST_DOC_TEXTFRAME_WEB_Link	                              \
-    },																	  \
-    { EXCHG_DEST_SWDOC_FREE_AREA_WEB,									  \
-        aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Def,						  	  \
+        aEXCHG_DEST_DOC_TEXTFRAME_WEB_Link                                \
+    },                                                                    \
+    { EXCHG_DEST_SWDOC_FREE_AREA_WEB,                                     \
+        aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Def,                              \
         aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Move,                             \
         aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Copy,                             \
         aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Link                              \
-    },																	  \
+    },                                                                    \
     {                                                                     \
         0xffff, 0, 0, 0, 0                                                \
     }                                                                     \
@@ -1285,9 +1285,9 @@ static SotDestinationEntry_Impl __READONLY_DATA aDestinationArray[] =     \
 
 sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, ULONG nId )
 {
-    DataFlavorExVector::iterator	aIter( ( (DataFlavorExVector&) rDataFlavorExVector ).begin() );
-    DataFlavorExVector::iterator	aEnd( ( (DataFlavorExVector&) rDataFlavorExVector ).end() );
-    sal_Bool						bRet = sal_False;
+    DataFlavorExVector::iterator    aIter( ( (DataFlavorExVector&) rDataFlavorExVector ).begin() );
+    DataFlavorExVector::iterator    aEnd( ( (DataFlavorExVector&) rDataFlavorExVector ).end() );
+    sal_Bool                        bRet = sal_False;
 
     while( aIter != aEnd )
     {
@@ -1309,8 +1309,8 @@ rEntry
 #endif
 )
 {
-    DataFlavor	aFlavor;
-    BOOL		bRet = TRUE;
+    DataFlavor  aFlavor;
+    BOOL        bRet = TRUE;
 
     try
     {
@@ -1325,7 +1325,7 @@ rEntry
                 {
                     bRet = FALSE;
 
-                    if(	SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_FILECONTENT, aFlavor ) &&
+                    if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_FILECONTENT, aFlavor ) &&
                         (*pxTransferable)->isDataFlavorSupported( aFlavor ) &&
                         SotExchange::GetFormatDataFlavor( rEntry.nFormatId, aFlavor ) &&
                         (*pxTransferable)->isDataFlavorSupported( aFlavor ) )
@@ -1378,9 +1378,9 @@ static USHORT GetTransferableAction_Impl(
     {
         if( rDataFlavorExVector.size() )
         {
-            DataFlavor				aFlavor;
-            const SotAction_Impl*	pArrayStart = pArray;
-            ULONG					nId = pArray->nFormatId;
+            DataFlavor              aFlavor;
+            const SotAction_Impl*   pArrayStart = pArray;
+            ULONG                   nId = pArray->nFormatId;
 
 #if OSL_DEBUG_LEVEL > 1
 // used for testing a specific format - change in the debugger the value
@@ -1404,7 +1404,7 @@ static USHORT GetTransferableAction_Impl(
                 {
                     if( pxTransferable && (*pxTransferable).is() && ( SOT_FORMAT_FILE_LIST == rFormat ) )
                     {
-                        if(	IsFormatSupported( rDataFlavorExVector, SOT_FORMAT_FILE ) )
+                        if( IsFormatSupported( rDataFlavorExVector, SOT_FORMAT_FILE ) )
                         {
                             DataFlavor aFileListFlavor;
                             SotExchange::GetFormatDataFlavor( SOT_FORMAT_FILE_LIST, aFileListFlavor );
@@ -1412,9 +1412,9 @@ static USHORT GetTransferableAction_Impl(
 
                             if( aAny.hasValue() )
                             {
-                                Sequence< sal_Int8 >	aSeq; aAny >>= aSeq;
-                                SvMemoryStream			aMemStm( (void*) aSeq.getConstArray(), aSeq.getLength(), STREAM_READ );
-                                FileList				aFileList;
+                                Sequence< sal_Int8 >    aSeq; aAny >>= aSeq;
+                                SvMemoryStream          aMemStm( (void*) aSeq.getConstArray(), aSeq.getLength(), STREAM_READ );
+                                FileList                aFileList;
 
                                 aMemStm >> aFileList;
 
@@ -1513,7 +1513,7 @@ USHORT SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorExVe
                         rFormat, nOnlyTestFormat, pxTransferable );
                     if ( nUserAction )
                         return nUserAction;
-                }        
+                }
                 rDefaultAction = (EXCHG_IN_ACTION_LINK & nSourceOptions);
                 if( rDefaultAction )
                 {
@@ -1584,8 +1584,8 @@ USHORT SotExchange::GetExchangeAction(
 
             for( sal_Int32 i = 0; i < aFlavors.getLength(); i++ )
             {
-                DataFlavorEx		aFlavorEx;
-                const DataFlavor&	rFlavor = aFlavors[ i ];
+                DataFlavorEx        aFlavorEx;
+                const DataFlavor&   rFlavor = aFlavors[ i ];
 
                 aFlavorEx.MimeType = rFlavor.MimeType;
                 aFlavorEx.HumanPresentableName = rFlavor.HumanPresentableName;
@@ -1628,9 +1628,9 @@ USHORT SotExchange::GetExchangeAction(
 USHORT SotExchange::IsChart(  const SvGlobalName& rName )
 {
     USHORT nRet=0;
-//	if ( rName == SvGlobalName( SO3_SCH_CLASSID_8 ) )
-//		nRet = SOFFICE_FILEFORMAT_8;
-//	else 
+//  if ( rName == SvGlobalName( SO3_SCH_CLASSID_8 ) )
+//      nRet = SOFFICE_FILEFORMAT_8;
+//  else
     if ( rName == SvGlobalName( SO3_SCH_CLASSID_60 ) )
         nRet = SOFFICE_FILEFORMAT_60;
     else if ( rName == SvGlobalName( SO3_SCH_CLASSID_50 ) )
@@ -1646,9 +1646,9 @@ USHORT SotExchange::IsChart(  const SvGlobalName& rName )
 USHORT SotExchange::IsMath(  const SvGlobalName& rName )
 {
     USHORT nRet=0;
-//	if ( rName == SvGlobalName( SO3_SM_CLASSID_8 ) )
-//		nRet = SOFFICE_FILEFORMAT_8;
-//	else
+//  if ( rName == SvGlobalName( SO3_SM_CLASSID_8 ) )
+//      nRet = SOFFICE_FILEFORMAT_8;
+//  else
     if ( rName == SvGlobalName( SO3_SM_CLASSID_60 ) )
         nRet = SOFFICE_FILEFORMAT_60;
     else if ( rName == SvGlobalName( SO3_SM_CLASSID_50 ) )

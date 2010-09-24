@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ long NumEditAction::Notify( NotifyEvent& rNEvt )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	KeyInput fuer ShortName - Edits ohne Spaces
+ Beschreibung:  KeyInput fuer ShortName - Edits ohne Spaces
 ------------------------------------------------------------------------*/
 
 NoSpaceEdit::NoSpaceEdit( Window* pParent, const ResId& rResId)
@@ -84,7 +84,7 @@ void NoSpaceEdit::KeyInput(const KeyEvent& rEvt)
     if(rEvt.GetCharCode())
     {
         String sKey = rEvt.GetCharCode();
-        if(	STRING_NOTFOUND != sForbiddenChars.Search(sKey))
+        if( STRING_NOTFOUND != sForbiddenChars.Search(sKey))
             bCallParent = FALSE;
     }
     if(bCallParent)
@@ -117,7 +117,7 @@ void NoSpaceEdit::Modify()
  --------------------------------------------------*/
 ReturnActionEdit::~ReturnActionEdit()
 {
-}            
+}
 /* -----------------25.06.2003 15:58-----------------
 
  --------------------------------------------------*/
@@ -130,9 +130,9 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
     {
         if(aReturnActionLink.IsSet())
             aReturnActionLink.Call(this);
-    }    
-    else 
+    }
+    else
         Edit::KeyInput(rEvt);
-}            
+}
 
 

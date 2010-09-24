@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,17 +89,17 @@ void ConfigurationAccess::Initialize (
         Sequence<Any> aCreationArguments(3);
         aCreationArguments[0] = makeAny(beans::PropertyValue(
             OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
-            0, 
-            makeAny(rsRootName), 
+            0,
+            makeAny(rsRootName),
             beans::PropertyState_DIRECT_VALUE));
         aCreationArguments[1] = makeAny(beans::PropertyValue(
             OUString(RTL_CONSTASCII_USTRINGPARAM("depth")),
-            0, 
+            0,
             makeAny((sal_Int32)-1),
             beans::PropertyState_DIRECT_VALUE));
         aCreationArguments[2] = makeAny(beans::PropertyValue(
             OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite")),
-            0, 
+            0,
             makeAny(true),
             beans::PropertyState_DIRECT_VALUE));
         OUString sAccessService;
@@ -109,7 +109,7 @@ void ConfigurationAccess::Initialize (
         else
             sAccessService = OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "com.sun.star.configuration.ConfigurationUpdateAccess"));
-            
+
         mxRoot = rxProvider->createInstanceWithArguments(
             sAccessService,
             aCreationArguments);
@@ -154,7 +154,7 @@ Any ConfigurationAccess::GetConfigurationNode (
             ::rtl::OUStringToOString(sPathToNode, RTL_TEXTENCODING_UTF8).getStr(),
             ::rtl::OUStringToOString(rException.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
-    
+
     return Any();
 }
 

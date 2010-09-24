@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,32 +55,32 @@ class MacroWarning : public ModalDialog
 {
 private:
 
-    cssu::Reference< css::security::XCertificate >	mxCert;
-    cssu::Reference< css::embed::XStorage >			mxStore;
+    cssu::Reference< css::security::XCertificate >  mxCert;
+    cssu::Reference< css::embed::XStorage >         mxStore;
     ::rtl::OUString                                 maODFVersion;
-    const cssu::Sequence< css::security::DocumentSignatureInformation >*	mpInfos;
+    const cssu::Sequence< css::security::DocumentSignatureInformation >*    mpInfos;
 
-    FixedImage			maSymbolImg;
-    FixedInfo			maDocNameFI;
-    FixedInfo			maDescr1aFI;
-    FixedInfo			maDescr1bFI;
-    FixedInfo			maSignsFI;
-    PushButton			maViewSignsBtn;
-    FixedInfo			maDescr2FI;
-    CheckBox			maAlwaysTrustCB;
-    FixedLine			maBottomSepFL;
+    FixedImage          maSymbolImg;
+    FixedInfo           maDocNameFI;
+    FixedInfo           maDescr1aFI;
+    FixedInfo           maDescr1bFI;
+    FixedInfo           maSignsFI;
+    PushButton          maViewSignsBtn;
+    FixedInfo           maDescr2FI;
+    CheckBox            maAlwaysTrustCB;
+    FixedLine           maBottomSepFL;
     OKButton            maEnableBtn;
     CancelButton        maDisableBtn;
-    HelpButton			maHelpBtn;
+    HelpButton          maHelpBtn;
 
-    const bool			mbSignedMode;			// modus of dialog (signed / unsigned macros)
+    const bool          mbSignedMode;           // modus of dialog (signed / unsigned macros)
     const bool          mbShowSignatures;
-    sal_Int32			mnActSecLevel;
+    sal_Int32           mnActSecLevel;
 
-    DECL_LINK(			ViewSignsBtnHdl, void* );
-    DECL_LINK(			EnableBtnHdl, void* );
-    DECL_LINK(			DisableBtnHdl, void* );
-    DECL_LINK(			AlwaysTrustCheckHdl, void* );
+    DECL_LINK(          ViewSignsBtnHdl, void* );
+    DECL_LINK(          EnableBtnHdl, void* );
+    DECL_LINK(          DisableBtnHdl, void* );
+    DECL_LINK(          AlwaysTrustCheckHdl, void* );
 
     void                InitControls();
     void                FitControls();
@@ -93,10 +93,10 @@ public:
 
     void    SetDocumentURL( const String& rDocURL );
 
-    void	SetStorage( const cssu::Reference < css::embed::XStorage >& rxStore,
+    void    SetStorage( const cssu::Reference < css::embed::XStorage >& rxStore,
                         const ::rtl::OUString& aODFVersion,
                         const cssu::Sequence< css::security::DocumentSignatureInformation >& _rInfos );
-    void	SetCertificate( const cssu::Reference< css::security::XCertificate >& _rxCert );
+    void    SetCertificate( const cssu::Reference< css::security::XCertificate >& _rxCert );
 };
 
 #endif

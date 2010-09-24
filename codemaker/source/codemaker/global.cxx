@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,7 +166,7 @@ OString createFileNameFromType( const OString& destination,
 
     OUString uSysFileName;
     OSL_VERIFY( FileBase::getSystemPathFromFileURL(
-        convertToFileUrl(fileName), uSysFileName) == FileBase::E_None );    
+        convertToFileUrl(fileName), uSysFileName) == FileBase::E_None );
     return OUStringToOString(uSysFileName, osl_getThreadTextEncoding());;
 }
 
@@ -187,14 +187,14 @@ sal_Bool checkFileContent(const OString& targetFileName, const OString& tmpFileN
 {
     FILE  *target = fopen(targetFileName.getStr(), "r");
     FILE  *tmp = fopen(tmpFileName.getStr(), "r");
-    sal_Bool 	bFindChanges = sal_False;
+    sal_Bool    bFindChanges = sal_False;
 
     if (target != NULL && tmp != NULL)
     {
-        sal_Char 	buffer1[1024+1];
-        sal_Char 	buffer2[1024+1];
-        sal_Int32 	n1 = 0;
-        sal_Int32 	n2 = 0;
+        sal_Char    buffer1[1024+1];
+        sal_Char    buffer2[1024+1];
+        sal_Int32   n1 = 0;
+        sal_Int32   n2 = 0;
 
         while ( !bFindChanges && !feof(target) && !feof(tmp))
         {
@@ -211,7 +211,7 @@ sal_Bool checkFileContent(const OString& targetFileName, const OString& tmpFileN
 
     if (target) fclose(target);
     if (tmp) fclose(tmp);
-    
+
     return bFindChanges;
 }
 
@@ -222,14 +222,14 @@ sal_Bool makeValidTypeFile(const OString& targetFileName, const OString& tmpFile
         if (checkFileContent(targetFileName, tmpFileName)) {
             if ( !unlink(targetFileName.getStr()) )
                 if ( !rename(tmpFileName.getStr(), targetFileName.getStr()) )
-                    return sal_True;        
-        } else 
+                    return sal_True;
+        } else
             return removeTypeFile(tmpFileName);
     } else {
         if (fileExists(targetFileName))
             if (!removeTypeFile(targetFileName))
                 return sal_False;
-        
+
         if ( rename(tmpFileName.getStr(), targetFileName.getStr()) ) {
             if (errno == EEXIST)
                 return sal_True;
@@ -302,7 +302,7 @@ FileStream::FileStream(const OString& name, FileAccessMode mode)
     if ( name.getLength() > 0 )
     {
         OUString sUrl(convertToFileUrl(name));
-#ifdef SAL_UNX        
+#ifdef SAL_UNX
         sal_uInt64 uAttr = osl_File_Attribute_OwnWrite |
                            osl_File_Attribute_OwnRead |
                            osl_File_Attribute_GrpWrite |
@@ -345,7 +345,7 @@ void FileStream::createTempFile(const OString& sPath)
     sTmpPath = convertToFileUrl(sTmp);
 
     if (osl_createTempFile(sTmpPath.pData, &m_file, &sTmpName.pData) == osl_File_E_None) {
-#ifdef SAL_UNX       
+#ifdef SAL_UNX
         sal_uInt64 uAttr = osl_File_Attribute_OwnWrite |
                            osl_File_Attribute_OwnRead |
                            osl_File_Attribute_GrpWrite |
@@ -355,7 +355,7 @@ void FileStream::createTempFile(const OString& sPath)
             m_file = NULL;
             return;
         }
-#endif  
+#endif
         OUString sSysTmpName;
         FileBase::getSystemPathFromFileURL(sTmpName, sSysTmpName);
         m_name = OUStringToOString(sSysTmpName, osl_getThreadTextEncoding());
@@ -434,7 +434,7 @@ FileStream &operator<<(FileStream& o, const ::rtl::OString& s) {
     sal_uInt64 writtenBytes;
     osl_writeFile(o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
     return o;
-    
+
 }
 FileStream &operator<<(FileStream& o, ::rtl::OStringBuffer* s) {
     sal_uInt64 writtenBytes;

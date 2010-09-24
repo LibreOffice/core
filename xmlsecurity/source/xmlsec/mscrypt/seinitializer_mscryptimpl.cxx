@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,26 +50,26 @@ SEInitializer_MSCryptImpl::SEInitializer_MSCryptImpl(
 {
 }
 
-SEInitializer_MSCryptImpl::~SEInitializer_MSCryptImpl() 
+SEInitializer_MSCryptImpl::~SEInitializer_MSCryptImpl()
 {
 }
 
 /* XSEInitializer */
-cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL 
+cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     SEInitializer_MSCryptImpl::createSecurityContext(
     const rtl::OUString& sCertDB )
     throw (cssu::RuntimeException)
 {
     const char* n_pCertStore ;
     HCERTSTORE  n_hStoreHandle ;
-    
+
     //Initialize the crypto engine
-    if( sCertDB.getLength() > 0 ) 
+    if( sCertDB.getLength() > 0 )
     {
         rtl::OString sCertDir(sCertDB, sCertDB.getLength(), RTL_TEXTENCODING_ASCII_US);
         n_pCertStore = sCertDir.getStr();
         n_hStoreHandle = CertOpenSystemStore( NULL, n_pCertStore ) ;
-        if( n_hStoreHandle == NULL ) 
+        if( n_hStoreHandle == NULL )
         {
             return NULL;
         }
@@ -79,50 +79,50 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         n_pCertStore = NULL ;
         n_hStoreHandle = NULL ;
     }
-    
+
     xmlSecMSCryptoAppInit( n_pCertStore ) ;
 
     try {
         /* Build Security Environment */
-        const rtl::OUString sSecyrutyEnvironment ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_ENVIRONMENT ) );	
+        const rtl::OUString sSecyrutyEnvironment ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_ENVIRONMENT ) );
         cssu::Reference< cssxc::XSecurityEnvironment > xSecEnv( mxMSF->createInstance ( sSecyrutyEnvironment ), cssu::UNO_QUERY );
-        if( !xSecEnv.is() ) 
+        if( !xSecEnv.is() )
         {
             if( n_hStoreHandle != NULL )
             {
                 CertCloseStore( n_hStoreHandle, CERT_CLOSE_STORE_FORCE_FLAG ) ;
             }
-        
+
             xmlSecMSCryptoAppShutdown() ;
             return NULL;
         }
-        
+
         /* Setup key slot and certDb */
         cssu::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , cssu::UNO_QUERY ) ;
-        if( !xEnvTunnel.is() ) 
+        if( !xEnvTunnel.is() )
         {
             if( n_hStoreHandle != NULL )
             {
                 CertCloseStore( n_hStoreHandle, CERT_CLOSE_STORE_FORCE_FLAG ) ;
             }
-        
+
             xmlSecMSCryptoAppShutdown() ;
             return NULL;
         }
 
         SecurityEnvironment_MSCryptImpl* pSecEnv = ( SecurityEnvironment_MSCryptImpl* )xEnvTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ) ;
-        if( pSecEnv == NULL ) 
+        if( pSecEnv == NULL )
         {
             if( n_hStoreHandle != NULL )
             {
                 CertCloseStore( n_hStoreHandle, CERT_CLOSE_STORE_FORCE_FLAG ) ;
             }
-        
+
             xmlSecMSCryptoAppShutdown() ;
             return NULL;
         }
 
-        if( n_hStoreHandle != NULL ) 
+        if( n_hStoreHandle != NULL )
         {
             pSecEnv->setCryptoSlot( n_hStoreHandle ) ;
             pSecEnv->setCertDb( n_hStoreHandle ) ;
@@ -133,19 +133,19 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         }
 
         /* Build XML Security Context */
-        const rtl::OUString sSecyrutyContext ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_CONTEXT ) );	
+        const rtl::OUString sSecyrutyContext ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_CONTEXT ) );
         cssu::Reference< cssxc::XXMLSecurityContext > xSecCtx( mxMSF->createInstance ( sSecyrutyContext ), cssu::UNO_QUERY );
-        if( !xSecCtx.is() ) 
+        if( !xSecCtx.is() )
         {
             if( n_hStoreHandle != NULL )
             {
                 CertCloseStore( n_hStoreHandle, CERT_CLOSE_STORE_FORCE_FLAG ) ;
             }
-        
+
             xmlSecMSCryptoAppShutdown() ;
             return NULL;
         }
-        
+
         xSecCtx->setDefaultSecurityEnvironmentIndex(xSecCtx->addSecurityEnvironment( xSecEnv )) ;
         return xSecCtx;
     }
@@ -155,7 +155,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         {
             CertCloseStore( n_hStoreHandle, CERT_CLOSE_STORE_FORCE_FLAG ) ;
         }
-    
+
         xmlSecMSCryptoAppShutdown() ;
         return NULL;
     }
@@ -167,27 +167,27 @@ void SAL_CALL SEInitializer_MSCryptImpl::freeSecurityContext( const cssu::Refere
     /*
     cssu::Reference< cssxc::XSecurityEnvironment > xSecEnv
         = securityContext->getSecurityEnvironment();
-        
-    if( xSecEnv.is() ) 
+
+    if( xSecEnv.is() )
     {
         cssu::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , cssu::UNO_QUERY ) ;
-        if( xEnvTunnel.is() ) 
+        if( xEnvTunnel.is() )
         {
             SecurityEnvironment_MSCryptImpl* pSecEnv = ( SecurityEnvironment_MSCryptImpl* )xEnvTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ) ;
             HCERTSTORE n_hStoreHandle = pSecEnv->getCryptoSlot();
-            
+
             if( n_hStoreHandle != NULL )
             {
                 CertCloseStore( n_hStoreHandle, CERT_CLOSE_STORE_FORCE_FLAG ) ;
                 pSecEnv->setCryptoSlot( NULL ) ;
                 pSecEnv->setCertDb( NULL ) ;
             }
-        
+
             xmlSecMSCryptoAppShutdown() ;
         }
-    } 
+    }
     */
-    
+
     xmlSecMSCryptoAppShutdown() ;
 }
 
@@ -197,13 +197,13 @@ rtl::OUString SEInitializer_MSCryptImpl_getImplementationName ()
     return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }
 
-sal_Bool SAL_CALL SEInitializer_MSCryptImpl_supportsService( const rtl::OUString& ServiceName ) 
+sal_Bool SAL_CALL SEInitializer_MSCryptImpl_supportsService( const rtl::OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ));
 }
 
-cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames(  ) 
+cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     cssu::Sequence < rtl::OUString > aRet(1);
@@ -220,17 +220,17 @@ cssu::Reference< cssu::XInterface > SAL_CALL SEInitializer_MSCryptImpl_createIns
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL SEInitializer_MSCryptImpl::getImplementationName(  ) 
+rtl::OUString SAL_CALL SEInitializer_MSCryptImpl::getImplementationName(  )
     throw (cssu::RuntimeException)
 {
     return SEInitializer_MSCryptImpl_getImplementationName();
 }
-sal_Bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const rtl::OUString& rServiceName ) 
+sal_Bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const rtl::OUString& rServiceName )
     throw (cssu::RuntimeException)
 {
     return SEInitializer_MSCryptImpl_supportsService( rServiceName );
 }
-cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_MSCryptImpl::getSupportedServiceNames(  ) 
+cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_MSCryptImpl::getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     return SEInitializer_MSCryptImpl_getSupportedServiceNames();

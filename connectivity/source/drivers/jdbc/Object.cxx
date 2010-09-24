@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -344,7 +344,7 @@ void java_lang_Object::callVoidMethodWithBoolArg( const char* _pMethodName, jmet
 {
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_lang_Object::callStringMethod: no Java enviroment anymore!" );
-    
+
     // call method
     jstring out = (jstring)callObjectMethod(t.pEnv,_pMethodName,"()Ljava/lang/String;", _inout_MethodID);
     return JavaString2String( t.pEnv, out );

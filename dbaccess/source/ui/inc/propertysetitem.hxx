@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace dbaui
     */
     class OPropertySetItem : public SfxPoolItem
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >	m_xSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xSet;
 
     public:
         TYPEINFO();
@@ -56,15 +56,15 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSet);
         OPropertySetItem(const OPropertySetItem& _rSource);
 
-        virtual int 			 operator==(const SfxPoolItem& _rItem) const;
-        virtual SfxPoolItem*	 Clone(SfxItemPool* _pPool = NULL) const;
+        virtual int              operator==(const SfxPoolItem& _rItem) const;
+        virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                 getPropertySet() const { return m_xSet; }
     };
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_PROPERTYSETITEM_HXX_

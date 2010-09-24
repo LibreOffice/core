@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS TrueGuard
 public:
     explicit TrueGuard( bool& rbTrueDuringGuardedTime );
     virtual ~TrueGuard();
-    
+
 private:
     bool& m_rbTrueDuringGuardedTime;
 };

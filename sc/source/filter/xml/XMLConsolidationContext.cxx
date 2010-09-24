@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,15 +59,15 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
     rImport.LockSolarMutex();
     if( !xAttrList.is() ) return;
 
-    sal_Int16				nAttrCount		= xAttrList->getLength();
-    const SvXMLTokenMap&	rAttrTokenMap	= GetScImport().GetConsolidationAttrTokenMap();
+    sal_Int16               nAttrCount      = xAttrList->getLength();
+    const SvXMLTokenMap&    rAttrTokenMap   = GetScImport().GetConsolidationAttrTokenMap();
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName	(xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sValue		(xAttrList->getValueByIndex( nIndex ));
+        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        USHORT nPrefix		= GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -129,7 +129,7 @@ void ScXMLConsolidationContext::EndElement()
                 if ( !ScRangeStringConverter::GetAreaFromString(
                     *ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
                 {
-                    bError = sal_True;		//! handle error
+                    bError = sal_True;      //! handle error
                 }
             }
 

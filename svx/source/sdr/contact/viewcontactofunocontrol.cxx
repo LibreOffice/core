@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -141,7 +141,7 @@ namespace sdr { namespace contact {
         // call to GetGeoRect() to access SdrTextObj::aRect directly and without executing anything
         const Rectangle& rRectangle(GetSdrUnoObj().GetGeoRect());
         const basegfx::B2DRange aRange(
-            rRectangle.Left(), rRectangle.Top(), 
+            rRectangle.Left(), rRectangle.Top(),
             rRectangle.Right(), rRectangle.Bottom());
 
         // create object transform
@@ -160,7 +160,7 @@ namespace sdr { namespace contact {
             // the VOC in createPrimitive2DSequence()
             const drawinglayer::primitive2d::Primitive2DReference xRetval(
                 new drawinglayer::primitive2d::ControlPrimitive2D(
-                    aTransform, 
+                    aTransform,
                     xControlModel));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);

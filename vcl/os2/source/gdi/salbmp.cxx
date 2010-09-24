@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -181,11 +181,11 @@ bool Os2SalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
 
     if( rSalBmp.mhDIB )
     {
-        HPS						hPS = pGraphics->mhPS;
-        HBITMAP					hNewDDB;
-        BITMAPINFOHEADER2		aInfoHeader;
-        const Size				aSize( rSalBmp.GetSize() );
-        long					nFormat[ 2 ];
+        HPS                     hPS = pGraphics->mhPS;
+        HBITMAP                 hNewDDB;
+        BITMAPINFOHEADER2       aInfoHeader;
+        const Size              aSize( rSalBmp.GetSize() );
+        long                    nFormat[ 2 ];
 
         memset( &aInfoHeader, 0, sizeof( aInfoHeader ) );
         aInfoHeader.cbFix = 16;
@@ -205,8 +205,8 @@ bool Os2SalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
         // BitCount == 1 ist wegen aller moeglichen Treiberfehler nicht moeglich
         if( rSalBmp.GetBitCount() == 1 )
         {
-            HANDLE 	hTmp = ImplCreateDIB4FromDIB1( rSalBmp.mhDIB );
-            PBYTE	pBits = (PBYTE) hTmp + *(ULONG*) hTmp + ImplGetDIBColorCount( hTmp ) * sizeof( RGB2 );
+            HANDLE  hTmp = ImplCreateDIB4FromDIB1( rSalBmp.mhDIB );
+            PBYTE   pBits = (PBYTE) hTmp + *(ULONG*) hTmp + ImplGetDIBColorCount( hTmp ) * sizeof( RGB2 );
 
             hNewDDB = GpiCreateBitmap( hPS, &aInfoHeader, CBM_INIT, pBits, (PBITMAPINFO2) hTmp );
             rtl_freeMemory( (void*)hTmp );
@@ -348,16 +348,16 @@ HANDLE Os2SalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBits, const Bitma
 
     if ( rSize.Width() && rSize.Height() && ( nBits == 1 || nBits == 4 || nBits == 8 || nBits == 24 ) )
     {
-        const ULONG		nImageSize = AlignedWidth4Bytes( nBits * rSize.Width() ) * rSize.Height();
-        const USHORT	nColors = ( nBits <= 8 ) ? ( 1 << nBits ) : 0;
+        const ULONG     nImageSize = AlignedWidth4Bytes( nBits * rSize.Width() ) * rSize.Height();
+        const USHORT    nColors = ( nBits <= 8 ) ? ( 1 << nBits ) : 0;
 
         hDIB = (HANDLE) rtl_allocateZeroMemory( sizeof( BITMAPINFOHEADER2 ) + nColors * sizeof( RGB2 ) + nImageSize );
 
         if( hDIB )
         {
             // bitmap infos can be found at the beginning of the memory
-            PBITMAPINFO2		pBI = (PBITMAPINFO2) hDIB;
-            PBITMAPINFOHEADER2	pBIH = (PBITMAPINFOHEADER2) pBI;
+            PBITMAPINFO2        pBI = (PBITMAPINFO2) hDIB;
+            PBITMAPINFOHEADER2  pBIH = (PBITMAPINFOHEADER2) pBI;
 
             pBIH->cbFix = sizeof( BITMAPINFOHEADER2 );
             pBIH->cx = rSize.Width();

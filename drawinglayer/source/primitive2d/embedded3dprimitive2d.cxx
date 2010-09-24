@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        bool Embedded3DPrimitive2D::impGetShadow3D(const geometry::ViewInformation2D& /*rViewInformation*/) const 
-        { 
+        bool Embedded3DPrimitive2D::impGetShadow3D(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
             osl::MutexGuard aGuard( m_aMutex );
 
             // create on demand
@@ -58,9 +58,9 @@ namespace drawinglayer
             {
                 // create shadow extraction processor
                 processor3d::Shadow3DExtractingProcessor aShadowProcessor(
-                    getViewInformation3D(), 
+                    getViewInformation3D(),
                     getObjectTransformation(),
-                    getLightNormal(), 
+                    getLightNormal(),
                     getShadowSlant(),
                     getScene3DRange());
 
@@ -94,7 +94,7 @@ namespace drawinglayer
             const basegfx::B3DVector& rLightNormal,
             double fShadowSlant,
             const basegfx::B3DRange& rScene3DRange)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             mxChildren3D(rxChildren3D),
             maObjectTransformation(rObjectTransformation),
             maViewInformation3D(rViewInformation3D),
@@ -113,7 +113,7 @@ namespace drawinglayer
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const Embedded3DPrimitive2D& rCompare = static_cast< const Embedded3DPrimitive2D& >(rPrimitive);
-                
+
                 return (primitive3d::arePrimitive3DSequencesEqual(getChildren3D(), rCompare.getChildren3D())
                     && getObjectTransformation() == rCompare.getObjectTransformation()
                     && getViewInformation3D() == rCompare.getViewInformation3D()

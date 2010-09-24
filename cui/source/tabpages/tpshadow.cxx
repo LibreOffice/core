@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,26 +65,26 @@ static USHORT pShadowRanges[] =
 
 /*************************************************************************
 |*
-|*	Dialog zum Aendern des Schattens
+|*  Dialog zum Aendern des Schattens
 |*
 \************************************************************************/
 
 SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
-    SvxTabPage			( pParent, CUI_RES( RID_SVXPAGE_SHADOW ), rInAttrs ),
+    SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_SHADOW ), rInAttrs ),
 
     aFlProp             ( this, CUI_RES( FL_PROP ) ),
     aTsbShowShadow      ( this, CUI_RES( TSB_SHOW_SHADOW ) ),
     aFtPosition         ( this, CUI_RES( FT_POSITION ) ),
     aCtlPosition        ( this, CUI_RES( CTL_POSITION ) ),
-    aFtDistance			( this, CUI_RES( FT_DISTANCE ) ),
-    aMtrDistance		( this, CUI_RES( MTR_FLD_DISTANCE ) ),
-    aFtShadowColor		( this, CUI_RES( FT_SHADOW_COLOR ) ),
-    aLbShadowColor		( this, CUI_RES( LB_SHADOW_COLOR ) ),
+    aFtDistance         ( this, CUI_RES( FT_DISTANCE ) ),
+    aMtrDistance        ( this, CUI_RES( MTR_FLD_DISTANCE ) ),
+    aFtShadowColor      ( this, CUI_RES( FT_SHADOW_COLOR ) ),
+    aLbShadowColor      ( this, CUI_RES( LB_SHADOW_COLOR ) ),
     aFtTransparent      ( this, CUI_RES( FT_TRANSPARENT ) ),
     aMtrTransparent      ( this, CUI_RES( MTR_SHADOW_TRANSPARENT ) ),
     aCtlXRectPreview    ( this, CUI_RES( CTL_COLOR_PREVIEW ) ),
-    rOutAttrs			( rInAttrs ),
+    rOutAttrs           ( rInAttrs ),
     pColorTab( NULL ),
     bDisable            ( FALSE ),
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
@@ -278,8 +278,8 @@ int SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 BOOL SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
-    const SfxPoolItem*	pOld = NULL;
-    BOOL				bModified = FALSE;
+    const SfxPoolItem*  pOld = NULL;
+    BOOL                bModified = FALSE;
 
     if( !bDisable )
     {
@@ -304,14 +304,14 @@ BOOL SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
 
         switch( aCtlPosition.GetActualRP() )
         {
-            case RP_LT: nX = nY = -nXY; 	 break;
-            case RP_MT: nY = -nXY;			 break;
+            case RP_LT: nX = nY = -nXY;      break;
+            case RP_MT: nY = -nXY;           break;
             case RP_RT: nX = nXY; nY = -nXY; break;
-            case RP_LM: nX = -nXY;			 break;
-            case RP_RM: nX = nXY;			 break;
+            case RP_LM: nX = -nXY;           break;
+            case RP_RM: nX = nXY;            break;
             case RP_LB: nX = -nXY; nY = nXY; break;
-            case RP_MB: nY = nXY; 			 break;
-            case RP_RB: nX = nY = nXY; 		 break;
+            case RP_MB: nY = nXY;            break;
+            case RP_RB: nX = nY = nXY;       break;
             case RP_MM: break;
         }
 
@@ -424,7 +424,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
                 SetMetricValue( aMtrDistance, nY < 0L ? -nY : nY, ePoolUnit );
 
             // Setzen des Schatten-Controls
-            if	   ( nX <  0L && nY <  0L ) aCtlPosition.SetActualRP( RP_LT );
+            if     ( nX <  0L && nY <  0L ) aCtlPosition.SetActualRP( RP_LT );
             else if( nX == 0L && nY <  0L ) aCtlPosition.SetActualRP( RP_MT );
             else if( nX >  0L && nY <  0L ) aCtlPosition.SetActualRP( RP_RT );
             else if( nX <  0L && nY == 0L ) aCtlPosition.SetActualRP( RP_LM );
@@ -501,7 +501,7 @@ SfxTabPage* SvxShadowTabPage::Create( Window* pWindow,
 
 //------------------------------------------------------------------------
 
-USHORT*	SvxShadowTabPage::GetRanges()
+USHORT* SvxShadowTabPage::GetRanges()
 {
     return( pShadowRanges );
 }
@@ -563,14 +563,14 @@ IMPL_LINK( SvxShadowTabPage, ModifyShadowHdl_Impl, void *, EMPTYARG )
     INT32 nXY = GetCoreValue( aMtrDistance, ePoolUnit );
     switch( aCtlPosition.GetActualRP() )
     {
-        case RP_LT: nX = nY = -nXY; 	 break;
-        case RP_MT: nY = -nXY;			 break;
+        case RP_LT: nX = nY = -nXY;      break;
+        case RP_MT: nY = -nXY;           break;
         case RP_RT: nX = nXY; nY = -nXY; break;
-        case RP_LM: nX = -nXY;			 break;
-        case RP_RM: nX = nXY;			 break;
+        case RP_LM: nX = -nXY;           break;
+        case RP_RM: nX = nXY;            break;
         case RP_LB: nX = -nXY; nY = nXY; break;
-        case RP_MB: nY = nXY; 			 break;
-        case RP_RB: nX = nY = nXY; 		 break;
+        case RP_MB: nY = nXY;            break;
+        case RP_RB: nX = nY = nXY;       break;
         case RP_MM: break;
     }
 

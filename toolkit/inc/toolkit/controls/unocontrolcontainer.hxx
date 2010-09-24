@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@
 
 class UnoControlHolderList;
 
-//	----------------------------------------------------
-//	class UnoControlContainer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class UnoControlContainer
+//  ----------------------------------------------------
 typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
                                             ,   ::com::sun::star::awt::XUnoControlContainer
                                             ,   ::com::sun::star::awt::XControlContainer
@@ -55,13 +55,13 @@ typedef ::cppu::AggImplInheritanceHelper4   <   UnoControlBase
 
 class UnoControlContainer : public UnoControlContainer_Base
 {
-private:	
-    UnoControlHolderList*					mpControls;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > >	maTabControllers;
-    ContainerListenerMultiplexer			maCListeners;
+private:
+    UnoControlHolderList*                   mpControls;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > >    maTabControllers;
+    ContainerListenerMultiplexer            maCListeners;
 
 protected:
-    void									ImplActivateTabControllers();
+    void                                    ImplActivateTabControllers();
 
 public:
                 UnoControlContainer();
@@ -100,16 +100,16 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getControl( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL addControl( const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& Control ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& Control ) throw(::com::sun::star::uno::RuntimeException);
-    
+
     // ::com::sun::star::awt::XUnoControlContainer
     void SAL_CALL setTabControllers( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > >& TabControllers ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > > SAL_CALL getTabControllers(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL addTabController( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >& TabController ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeTabController( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >& TabController ) throw(::com::sun::star::uno::RuntimeException);
-    
+
     // ::com::sun::star::awt::XControl
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
-    
+
     // ::com::sun::star::awt::XWindow
     void SAL_CALL setVisible( sal_Bool Visible ) throw(::com::sun::star::uno::RuntimeException);
 

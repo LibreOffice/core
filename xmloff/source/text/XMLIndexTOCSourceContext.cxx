@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,20 +65,20 @@ const sal_Char sAPI_CreateFromLevelParagraphStyles[] = "CreateFromLevelParagraph
 TYPEINIT1( XMLIndexTOCSourceContext, XMLIndexSourceBaseContext );
 
 XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
-    SvXMLImport& rImport, 
+    SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet)
-:	XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, sal_True)
-,	sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromMarks))
-,	sLevel(RTL_CONSTASCII_USTRINGPARAM(sAPI_Level))
-,	sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromOutline))
-,	sCreateFromLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromLevelParagraphStyles))
+:   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, sal_True)
+,   sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromMarks))
+,   sLevel(RTL_CONSTASCII_USTRINGPARAM(sAPI_Level))
+,   sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromOutline))
+,   sCreateFromLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromLevelParagraphStyles))
     // use all chapters by default
-,	nOutlineLevel(rImport.GetTextImport()->GetChapterNumbering()->getCount())
-,	bUseOutline(sal_True)
-,	bUseMarks(sal_True)
-,	bUseParagraphStyles(sal_False)
+,   nOutlineLevel(rImport.GetTextImport()->GetChapterNumbering()->getCount())
+,   bUseOutline(sal_True)
+,   bUseMarks(sal_True)
+,   bUseParagraphStyles(sal_False)
 {
 }
 
@@ -87,7 +87,7 @@ XMLIndexTOCSourceContext::~XMLIndexTOCSourceContext()
 }
 
 void XMLIndexTOCSourceContext::ProcessAttribute(
-    enum IndexSourceParamEnum eParam, 
+    enum IndexSourceParamEnum eParam,
     const OUString& rValue)
 {
     switch (eParam)
@@ -112,7 +112,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
                 }
             }
             break;
-            
+
         case XML_TOK_INDEXSOURCE_USE_OUTLINE_LEVEL:
         {
             sal_Bool bTmp;
@@ -172,7 +172,7 @@ void XMLIndexTOCSourceContext::EndElement()
 }
 
 
-SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext( 
+SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
@@ -180,16 +180,16 @@ SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
          IsXMLToken(rLocalName, XML_TABLE_OF_CONTENT_ENTRY_TEMPLATE) )
     {
-        return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet, 
+        return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
                                            nPrefix, rLocalName,
                                            aLevelNameTOCMap,
                                            XML_OUTLINE_LEVEL,
                                            aLevelStylePropNameTOCMap,
                                            aAllowedTokenTypesTOC, sal_True );
     }
-    else 
+    else
     {
-        return XMLIndexSourceBaseContext::CreateChildContext(nPrefix, 
+        return XMLIndexSourceBaseContext::CreateChildContext(nPrefix,
                                                              rLocalName,
                                                              xAttrList);
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <WW8DocumentImpl.hxx>
 
 namespace writerfilter {
-namespace doctok 
+namespace doctok
 {
 /**
    A helper class for footnotes and endnotes and annotations(aka X-notes).
@@ -89,7 +89,7 @@ public:
     }
 
     /**
-       Initialize. 
+       Initialize.
 
        Generates CpAndFcs in document for X-notes.
      */
@@ -109,7 +109,7 @@ public:
      */
     sal_uInt32 getIndexOfCpAndFc(const CpAndFc & rCpAndFc);
 
-    /** 
+    /**
         Return subdocument containing X-note.
 
         @param nIndex  index of X-note.
@@ -125,14 +125,14 @@ public:
 
     /**
        Return reference data structure of X-note.
-       
+
        @param nIndex    index of X-note
     */
     T * getRef(sal_uInt32 nIndex);
 
     /**
        Return reference data structure of X-note.
-       
+
        @param rCpAndFc     CpAndFc for the X-note's reference
     */
     T * getRef(const CpAndFc & rCpAndFc);

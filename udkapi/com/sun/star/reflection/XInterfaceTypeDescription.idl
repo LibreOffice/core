@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,28 +24,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_reflection_XInterfaceTypeDescription_idl__ 
-#define __com_sun_star_reflection_XInterfaceTypeDescription_idl__ 
- 
-#ifndef __com_sun_star_reflection_XTypeDescription_idl__ 
-#include <com/sun/star/reflection/XTypeDescription.idl> 
-#endif 
- 
-#ifndef __com_sun_star_uno_Uik_idl__ 
-#include <com/sun/star/uno/Uik.idl> 
-#endif 
- 
-#ifndef __com_sun_star_reflection_XInterfaceMemberTypeDescription_idl__ 
-#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module reflection {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_reflection_XInterfaceTypeDescription_idl__
+#define __com_sun_star_reflection_XInterfaceTypeDescription_idl__
+
+#ifndef __com_sun_star_reflection_XTypeDescription_idl__
+#include <com/sun/star/reflection/XTypeDescription.idl>
+#endif
+
+#ifndef __com_sun_star_uno_Uik_idl__
+#include <com/sun/star/uno/Uik.idl>
+#endif
+
+#ifndef __com_sun_star_reflection_XInterfaceMemberTypeDescription_idl__
+#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
 /** Reflects an interface type.
 
     <p>This type is superseded by <type>XInterfaceTypeDescription2</type>, which
@@ -54,7 +54,7 @@
     @see XInterfaceMemberTypeDescription
 */
 published interface XInterfaceTypeDescription: com::sun::star::reflection::XTypeDescription
-{ 
+{
     /** Returns the base interface or null, if the reflected interface is not
         inherited from another.
 
@@ -67,30 +67,30 @@ published interface XInterfaceTypeDescription: com::sun::star::reflection::XType
         @deprecated
     */
     com::sun::star::reflection::XTypeDescription getBaseType();
-    
+
     /** Deprecated.  UIK are not used anymore, a type is uniquely identified by
         its name.<br>
         Returns the UIK, i.e. the unique identifier of the interface.
-        
+
         @return
                 uik of the interface
         @deprecated
     */
-    com::sun::star::uno::Uik getUik(); 
-    
+    com::sun::star::uno::Uik getUik();
+
     /** Returns the members of the interfaces, i.e. attributes and methods.
 
         @returns
                 interface members
     */
     sequence<com::sun::star::reflection::XInterfaceMemberTypeDescription> getMembers();
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

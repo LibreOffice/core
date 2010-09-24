@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,8 +67,8 @@ void SwVbaRange::initialize( const uno::Reference< text::XTextRange >& rStart, c
     if( !mxText.is() )
     {
         mxText = mxTextDocument->getText();
-    }    
-    
+    }
+
     mxTextCursor = SwVbaRangeHelper::initCursor( rStart, mxText );
     mxTextCursor->collapseToStart();
 
@@ -250,7 +250,7 @@ SwVbaRange::getStyle() throw ( uno::RuntimeException )
     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( mxTextDocument, uno::UNO_QUERY_THROW);
     uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName( aStyleType ), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xStyleProps( xStylesAccess->getByName( aStyleName ), uno::UNO_QUERY_THROW );
-    return uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, xStyleProps ) ); 
+    return uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, xStyleProps ) );
 }
 
 void SAL_CALL
@@ -324,14 +324,14 @@ void SAL_CALL SwVbaRange::setEnd( ::sal_Int32 _end ) throw (uno::RuntimeExceptio
     mxTextCursor->gotoRange( xEnd, sal_True );
 }
 
-rtl::OUString& 
+rtl::OUString&
 SwVbaRange::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaRange") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 SwVbaRange::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,22 +62,22 @@ public:
     ~OMarkableOutputStreamTest();
 
 public: // implementation names
-    static Sequence< OUString > 	getSupportedServiceNames_Static(void) throw ();
-    static OUString 				getImplementationName_Static() throw ();
+    static Sequence< OUString >     getSupportedServiceNames_Static(void) throw ();
+    static OUString                 getImplementationName_Static() throw ();
 
 public:
     virtual void SAL_CALL testInvariant(
         const OUString& TestName,
         const Reference < XInterface >& TestObject)
-        throw (	IllegalArgumentException,
+        throw ( IllegalArgumentException,
                 RuntimeException) ;
 
-    virtual sal_Int32 SAL_CALL  test(	const OUString& TestName,
+    virtual sal_Int32 SAL_CALL  test(   const OUString& TestName,
                         const Reference < XInterface >& TestObject,
                         sal_Int32 hTestHandle)
-        throw (	IllegalArgumentException, RuntimeException);
+        throw ( IllegalArgumentException, RuntimeException);
     virtual sal_Bool SAL_CALL testPassed(void)
-        throw (	RuntimeException);
+        throw ( RuntimeException);
     virtual Sequence< OUString > SAL_CALL getErrors(void)
         throw (RuntimeException);
     virtual Sequence< Any > SAL_CALL getErrorExceptions(void)
@@ -112,7 +112,7 @@ OMarkableOutputStreamTest::~OMarkableOutputStreamTest()
 
 void OMarkableOutputStreamTest::testInvariant( const OUString& TestName,
                                                const Reference < XInterface >& TestObject )
-    throw (	IllegalArgumentException, RuntimeException)
+    throw ( IllegalArgumentException, RuntimeException)
 {
     Reference< XServiceInfo > info( TestObject, UNO_QUERY );
     ERROR_ASSERT( info.is() , "XServiceInfo not supported !" );
@@ -129,7 +129,7 @@ sal_Int32 OMarkableOutputStreamTest::test(
     const OUString& TestName,
     const Reference < XInterface >& TestObject,
     sal_Int32 hTestHandle)
-    throw (	IllegalArgumentException, RuntimeException)
+    throw ( IllegalArgumentException, RuntimeException)
 {
     if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.MarkableOutputStream") )
                   == TestName  )  {
@@ -185,13 +185,13 @@ sal_Int32 OMarkableOutputStreamTest::test(
 
 
 
-sal_Bool OMarkableOutputStreamTest::testPassed(void) 						throw (RuntimeException)
+sal_Bool OMarkableOutputStreamTest::testPassed(void)                        throw (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
 
 
-Sequence< OUString > OMarkableOutputStreamTest::getErrors(void) 		throw (RuntimeException)
+Sequence< OUString > OMarkableOutputStreamTest::getErrors(void)         throw (RuntimeException)
 {
     return m_seqErrors;
 }
@@ -203,13 +203,13 @@ Sequence< Any > OMarkableOutputStreamTest::getErrorExceptions(void) throw (Runti
 }
 
 
-Sequence< OUString > OMarkableOutputStreamTest::getWarnings(void) 		throw (RuntimeException)
+Sequence< OUString > OMarkableOutputStreamTest::getWarnings(void)       throw (RuntimeException)
 {
     return m_seqWarnings;
 }
 
 
-void OMarkableOutputStreamTest::testSimple(  	const Reference< XOutputStream > &rOutput ,
+void OMarkableOutputStreamTest::testSimple(     const Reference< XOutputStream > &rOutput ,
                                                 const Reference< XInputStream > &rInput )
 {
     Reference < XMarkableStream > rMarkable( rOutput , UNO_QUERY );
@@ -399,7 +399,7 @@ OUString     OMarkableOutputStreamTest_getServiceName() throw ()
     return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.MarkableOutputStream"));
 }
 
-OUString 	OMarkableOutputStreamTest_getImplementationName() throw ()
+OUString    OMarkableOutputStreamTest_getImplementationName() throw ()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.starextensions.stm.MarkableOutputStream"));
 }
@@ -421,24 +421,24 @@ public:
     ~OMarkableInputStreamTest();
 
 public: // implementation names
-    static Sequence< OUString > 	getSupportedServiceNames_Static(void) throw () ;
-    static OUString 				getImplementationName_Static() throw () ;
+    static Sequence< OUString >     getSupportedServiceNames_Static(void) throw () ;
+    static OUString                 getImplementationName_Static() throw () ;
 
 public:
     virtual void SAL_CALL testInvariant(
         const OUString& TestName,
         const Reference < XInterface >& TestObject)
-        throw (	IllegalArgumentException, RuntimeException) ;
+        throw ( IllegalArgumentException, RuntimeException) ;
 
     virtual sal_Int32 SAL_CALL test(
         const OUString& TestName,
         const Reference < XInterface >& TestObject,
         sal_Int32 hTestHandle)
-        throw (	IllegalArgumentException,
+        throw ( IllegalArgumentException,
                 RuntimeException) ;
 
     virtual sal_Bool SAL_CALL testPassed(void)
-        throw (	RuntimeException);
+        throw ( RuntimeException);
     virtual Sequence< OUString > SAL_CALL getErrors(void)
         throw (RuntimeException);
     virtual Sequence< Any > SAL_CALL getErrorExceptions(void)
@@ -473,7 +473,7 @@ OMarkableInputStreamTest::~OMarkableInputStreamTest()
 
 void OMarkableInputStreamTest::testInvariant(
     const OUString& TestName, const Reference < XInterface >& TestObject )
-    throw (	IllegalArgumentException, RuntimeException)
+    throw ( IllegalArgumentException, RuntimeException)
 {
     if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.MarkableInputStream"))
         == TestName )  {
@@ -498,7 +498,7 @@ void OMarkableInputStreamTest::testInvariant(
 sal_Int32 OMarkableInputStreamTest::test(
     const OUString& TestName,
     const Reference < XInterface >& TestObject,
-    sal_Int32 hTestHandle) 	throw (	IllegalArgumentException, RuntimeException)
+    sal_Int32 hTestHandle)  throw ( IllegalArgumentException, RuntimeException)
 {
     if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.MarkableInputStream")) == TestName )
     {
@@ -552,31 +552,31 @@ sal_Int32 OMarkableInputStreamTest::test(
 
 
 
-sal_Bool OMarkableInputStreamTest::testPassed(void) 										throw (RuntimeException)
+sal_Bool OMarkableInputStreamTest::testPassed(void)                                         throw (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
 
 
-Sequence< OUString > OMarkableInputStreamTest::getErrors(void) 							throw (RuntimeException)
+Sequence< OUString > OMarkableInputStreamTest::getErrors(void)                          throw (RuntimeException)
 {
     return m_seqErrors;
 }
 
 
-Sequence< Any > OMarkableInputStreamTest::getErrorExceptions(void) 					throw (RuntimeException)
+Sequence< Any > OMarkableInputStreamTest::getErrorExceptions(void)                  throw (RuntimeException)
 {
     return m_seqExceptions;
 }
 
 
-Sequence< OUString > OMarkableInputStreamTest::getWarnings(void) 						throw (RuntimeException)
+Sequence< OUString > OMarkableInputStreamTest::getWarnings(void)                        throw (RuntimeException)
 {
     return m_seqWarnings;
 }
 
 
-void OMarkableInputStreamTest::testSimple(  	const Reference< XOutputStream > &rOutput ,
+void OMarkableInputStreamTest::testSimple(      const Reference< XOutputStream > &rOutput ,
                                                 const Reference < XInputStream > &rInput )
 {
     Reference < XMarkableStream > rMarkable( rInput , UNO_QUERY );
@@ -630,7 +630,7 @@ void OMarkableInputStreamTest::testSimple(  	const Reference< XOutputStream > &r
     ERROR_ASSERT( 256-10-50 == rInput->available() , "marking error" );
 
 
-    ERROR_ASSERT( 100 == rInput->readSomeBytes( seqRead , 100	) , "wrong results using readSomeBytes" );
+    ERROR_ASSERT( 100 == rInput->readSomeBytes( seqRead , 100   ) , "wrong results using readSomeBytes" );
     ERROR_ASSERT( 96 == rInput->readSomeBytes( seqRead , 1000) , "wrong results using readSomeBytes" );
     rOutput->closeOutput();
     rInput->closeInput();
@@ -666,12 +666,12 @@ Sequence<OUString> OMarkableInputStreamTest_getSupportedServiceNames(void) throw
     return aRet;
 }
 
-OUString     OMarkableInputStreamTest_getServiceName() throw () 
+OUString     OMarkableInputStreamTest_getServiceName() throw ()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.MarkableInputStream"));
 }
 
-OUString 	OMarkableInputStreamTest_getImplementationName() throw () 
+OUString    OMarkableInputStreamTest_getImplementationName() throw ()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.extensions.stm.MarkableInputStream" ));
 }

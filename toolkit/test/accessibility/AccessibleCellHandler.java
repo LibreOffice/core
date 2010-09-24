@@ -15,7 +15,7 @@ class AccessibleCellHandler extends NodeHandler
             XAccessible xParent = xContext.getAccessibleParent();
             if (xParent != null)
             {
-                XAccessibleTable xTable = 
+                XAccessibleTable xTable =
                     (XAccessibleTable) UnoRuntime.queryInterface (
                         XAccessibleTable.class, xParent.getAccessibleContext());
                 if (xTable != null)

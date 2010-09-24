@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ published interface XRemoteContentProviderAcceptor: com::sun::star::uno::XInterf
         @param DoneListener  If not null, the implementation of this interface
         can---through this callback---tell the calling side that the
         implementation no longer needs the remote content provider.  (And the
-        calling side should call 
+        calling side should call
         <member>XRemoteContentProviderAcceptor::removeRemoteContentProvider</member>
         then.)
 

@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -29,7 +29,7 @@ namespace agg
 
 
     //-----------------------------------------------------------line_aa_vertex
-    // Vertex (x, y) with the distance to the next one. The last vertex has 
+    // Vertex (x, y) with the distance to the next one. The last vertex has
     // the distance between the last and the first points
     struct line_aa_vertex
     {
@@ -49,7 +49,7 @@ namespace agg
         {
             double dx = val.x - x;
             double dy = val.y - y;
-            return (len = int(sqrt(dx * dx + dy * dy))) > 
+            return (len = int(sqrt(dx * dx + dy * dy))) >
                    (line_subpixel_size + line_subpixel_size / 2);
         }
     };
@@ -78,8 +78,8 @@ namespace agg
         typedef line_aa_vertex                  vertex_type;
         typedef vertex_sequence<vertex_type, 6> vertex_storage_type;
 
-        rasterizer_outline_aa(Renderer& ren) : 
-            m_ren(ren), 
+        rasterizer_outline_aa(Renderer& ren) :
+            m_ren(ren),
             m_accurate_join(m_ren.accurate_join_only()),
             m_round_cap(false),
             m_start_x(0),
@@ -88,9 +88,9 @@ namespace agg
         }
 
         //------------------------------------------------------------------------
-        void accurate_join(bool v) 
-        { 
-            m_accurate_join = m_ren.accurate_join_only() ? true : v; 
+        void accurate_join(bool v)
+        {
+            m_accurate_join = m_ren.accurate_join_only() ? true : v;
         }
         bool accurate_join() const { return m_accurate_join; }
 
@@ -128,17 +128,17 @@ namespace agg
         //------------------------------------------------------------------------
         void add_vertex(double x, double y, unsigned cmd)
         {
-            if(is_move_to(cmd)) 
+            if(is_move_to(cmd))
             {
                 render(false);
                 move_to_d(x, y);
             }
-            else 
+            else
             {
                 if(is_end_poly(cmd))
                 {
                     render(is_closed(cmd));
-                    if(is_closed(cmd)) 
+                    if(is_closed(cmd))
                     {
                         move_to(m_start_x, m_start_y);
                     }
@@ -169,8 +169,8 @@ namespace agg
 
         //------------------------------------------------------------------------
         template<class VertexSource, class ColorStorage, class PathId>
-        void render_all_paths(VertexSource& vs, 
-                              const ColorStorage& colors, 
+        void render_all_paths(VertexSource& vs,
+                              const ColorStorage& colors,
                               const PathId& id,
                               unsigned num_paths)
         {
@@ -195,7 +195,7 @@ namespace agg
 
     private:
         rasterizer_outline_aa(const rasterizer_outline_aa<Renderer>&);
-        const rasterizer_outline_aa<Renderer>& operator = 
+        const rasterizer_outline_aa<Renderer>& operator =
             (const rasterizer_outline_aa<Renderer>&);
 
         Renderer& m_ren;
@@ -214,7 +214,7 @@ namespace agg
 
 
     //----------------------------------------------------------------------------
-    template<class Renderer> 
+    template<class Renderer>
     void rasterizer_outline_aa<Renderer>::draw(draw_vars& dv, unsigned start, unsigned end)
     {
         unsigned i;
@@ -236,7 +236,7 @@ namespace agg
             dv.lnext = m_src_vertices[dv.idx].len;
 
             ++dv.idx;
-            if(dv.idx >= m_src_vertices.size()) dv.idx = 0; 
+            if(dv.idx >= m_src_vertices.size()) dv.idx = 0;
 
             v = &m_src_vertices[dv.idx];
             dv.x2 = v->x;
@@ -254,7 +254,7 @@ namespace agg
             else
             {
                 dv.flags >>= 1;
-                dv.flags |= ((dv.curr.diagonal_quadrant() == 
+                dv.flags |= ((dv.curr.diagonal_quadrant() ==
                               dv.next.diagonal_quadrant()) << 1);
             }
 
@@ -269,7 +269,7 @@ namespace agg
 
 
     //----------------------------------------------------------------------------
-    template<class Renderer> 
+    template<class Renderer>
     void rasterizer_outline_aa<Renderer>::render(bool close_polygon)
     {
         m_src_vertices.close(close_polygon);
@@ -320,7 +320,7 @@ namespace agg
                 }
                 else
                 {
-                    dv.flags = 
+                    dv.flags =
                             (prev.diagonal_quadrant() == dv.curr.diagonal_quadrant()) |
                         ((dv.curr.diagonal_quadrant() == dv.next.diagonal_quadrant()) << 1);
                 }
@@ -355,16 +355,16 @@ namespace agg
                     x2    = v->x;
                     y2    = v->y;
                     line_parameters lp(x1, y1, x2, y2, lprev);
-                    if(m_round_cap) 
+                    if(m_round_cap)
                     {
                         m_ren.semidot(cmp_dist_start, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
                     }
-                    m_ren.line3(lp, 
-                                x1 + (y2 - y1), 
+                    m_ren.line3(lp,
+                                x1 + (y2 - y1),
                                 y1 - (x2 - x1),
-                                x2 + (y2 - y1), 
+                                x2 + (y2 - y1),
                                 y2 - (x2 - x1));
-                    if(m_round_cap) 
+                    if(m_round_cap)
                     {
                         m_ren.semidot(cmp_dist_end, x2, y2, x2 + (y2 - y1), y2 - (x2 - x1));
                     }
@@ -390,22 +390,22 @@ namespace agg
                     line_parameters lp2(x2, y2, x3, y3, lnext);
                     bisectrix(lp1, lp2, &dv.xb1, &dv.yb1);
 
-                    if(m_round_cap) 
+                    if(m_round_cap)
                     {
                         m_ren.semidot(cmp_dist_start, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
                     }
-                    m_ren.line3(lp1, 
-                                x1 + (y2 - y1), 
+                    m_ren.line3(lp1,
+                                x1 + (y2 - y1),
                                 y1 - (x2 - x1),
-                                dv.xb1, 
+                                dv.xb1,
                                 dv.yb1);
 
-                    m_ren.line3(lp2, 
+                    m_ren.line3(lp2,
                                 dv.xb1,
                                 dv.yb1,
-                                x3 + (y3 - y2), 
+                                x3 + (y3 - y2),
                                 y3 - (x3 - x2));
-                    if(m_round_cap) 
+                    if(m_round_cap)
                     {
                         m_ren.semidot(cmp_dist_end, x3, y3, x3 + (y3 - y2), y3 - (x3 - x2));
                     }
@@ -449,7 +449,7 @@ namespace agg
                     }
                     else
                     {
-                        dv.flags = 
+                        dv.flags =
                                 (prev.diagonal_quadrant() == dv.curr.diagonal_quadrant()) |
                             ((dv.curr.diagonal_quadrant() == dv.next.diagonal_quadrant()) << 1);
                     }
@@ -457,19 +457,19 @@ namespace agg
                     if((dv.flags & 1) == 0)
                     {
                         bisectrix(prev, dv.curr, &dv.xb1, &dv.yb1);
-                        m_ren.line3(prev, 
-                                    x1 + (y2 - y1), 
+                        m_ren.line3(prev,
+                                    x1 + (y2 - y1),
                                     y1 - (x2 - x1),
-                                    dv.xb1, 
+                                    dv.xb1,
                                     dv.yb1);
                     }
                     else
                     {
-                        m_ren.line1(prev, 
-                                    x1 + (y2 - y1), 
+                        m_ren.line1(prev,
+                                    x1 + (y2 - y1),
                                     y1 - (x2 - x1));
                     }
-                    if(m_round_cap) 
+                    if(m_round_cap)
                     {
                         m_ren.semidot(cmp_dist_start, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
                     }
@@ -482,19 +482,19 @@ namespace agg
 
                     if((dv.flags & 1) == 0)
                     {
-                        m_ren.line3(dv.curr, 
-                                    dv.xb1, 
+                        m_ren.line3(dv.curr,
+                                    dv.xb1,
                                     dv.yb1,
-                                    dv.curr.x2 + (dv.curr.y2 - dv.curr.y1), 
+                                    dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),
                                     dv.curr.y2 - (dv.curr.x2 - dv.curr.x1));
                     }
                     else
                     {
-                        m_ren.line2(dv.curr, 
-                                    dv.curr.x2 + (dv.curr.y2 - dv.curr.y1), 
+                        m_ren.line2(dv.curr,
+                                    dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),
                                     dv.curr.y2 - (dv.curr.x2 - dv.curr.x1));
                     }
-                    if(m_round_cap) 
+                    if(m_round_cap)
                     {
                         m_ren.semidot(cmp_dist_end, dv.curr.x2, dv.curr.y2,
                                       dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),

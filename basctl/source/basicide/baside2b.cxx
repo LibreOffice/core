@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,13 +71,13 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-long nVirtToolBoxHeight;	// wird im WatchWindow init., im Stackwindow verw.
+long nVirtToolBoxHeight;    // wird im WatchWindow init., im Stackwindow verw.
 long nHeaderBarHeight;
 
-#define SCROLL_LINE		12
-#define SCROLL_PAGE		60
+#define SCROLL_LINE     12
+#define SCROLL_PAGE     60
 
-#define DWBORDER		3
+#define DWBORDER        3
 
 static const char cSuffixes[] = "%&!#@$";
 
@@ -194,7 +194,7 @@ __EXPORT EditorWindow::~EditorWindow()
     {
         EndListening( *pEditEngine );
         pEditEngine->RemoveView( pEditView );
-//		pEditEngine->SetViewWin( 0 );
+//      pEditEngine->SetViewWin( 0 );
         delete pEditView;
         delete pEditEngine;
     }
@@ -292,7 +292,7 @@ void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                         else if ( (BYTE)eType != (BYTE)SbxEMPTY )
                         {
                             aHelpText = pVar->GetName();
-                            if ( !aHelpText.Len() ) 	// Bei Uebergabeparametern wird der Name nicht kopiert
+                            if ( !aHelpText.Len() )     // Bei Uebergabeparametern wird der Name nicht kopiert
                                 aHelpText = aWord;
                             aHelpText += '=';
                             aHelpText += pVar->GetString();
@@ -324,7 +324,7 @@ void __EXPORT EditorWindow::Resize()
     if ( pEditView )
     {
         long nVisY = pEditView->GetStartDocPos().Y();
-//		pEditView->SetOutputArea( Rectangle( Point( 0, 0 ), GetOutputSize() ) );
+//      pEditView->SetOutputArea( Rectangle( Point( 0, 0 ), GetOutputSize() ) );
         pEditView->ShowCursor();
         Size aOutSz( GetOutputSizePixel() );
         long nMaxVisAreaStart = pEditView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
@@ -410,7 +410,7 @@ BOOL EditorWindow::ImpCanModify()
 
 void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    if ( !pEditView )	// Passiert unter W95 bei letzte Version, Ctrl-Tab
+    if ( !pEditView )   // Passiert unter W95 bei letzte Version, Ctrl-Tab
         return;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -475,7 +475,7 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
 void __EXPORT EditorWindow::Paint( const Rectangle& rRect )
 {
-    if ( !pEditEngine )		// spaetestens jetzt brauche ich sie...
+    if ( !pEditEngine )     // spaetestens jetzt brauche ich sie...
         CreateEditEngine();
 
     pEditView->Paint( rRect );
@@ -493,7 +493,7 @@ BOOL EditorWindow::SetSourceInBasic( BOOL bQuiet )
 
     BOOL bChanged = FALSE;
     if ( pEditEngine && pEditEngine->IsModified()
-        && !GetEditView()->IsReadOnly() )	// Added because of #i60626, otherwise
+        && !GetEditView()->IsReadOnly() )   // Added because of #i60626, otherwise
             // any read only bug in the text engine could lead to a crash later
     {
         if ( !StarBASIC::IsRunning() ) // Nicht zur Laufzeit!
@@ -562,7 +562,7 @@ void EditorWindow::CreateEditEngine()
     aHighlighter.initialize( HIGHLIGHT_BASIC );
 
     BOOL bWasDoSyntaxHighlight = bDoSyntaxHighlight;
-    bDoSyntaxHighlight = FALSE;	// Bei grossen Texten zu langsam...
+    bDoSyntaxHighlight = FALSE; // Bei grossen Texten zu langsam...
     ::rtl::OUString aOUSource( pModulWindow->GetModule() );
     sal_Int32 nLines = 0;
     sal_Int32 nIndex = -1;
@@ -583,7 +583,7 @@ void EditorWindow::CreateEditEngine()
     pEditView->SetSelection( TextSelection() );
     pModulWindow->GetBreakPointWindow().GetCurYOffset() = 0;
     pEditEngine->SetUpdateMode( TRUE );
-    Update();	// Es wurde bei UpdateMode = TRUE nur Invalidiert
+    Update();   // Es wurde bei UpdateMode = TRUE nur Invalidiert
 
     // Die anderen Fenster auch, damit keine halben Sachen auf dem Bildschirm!
     pModulWindow->GetLayout()->GetWatchWindow().Update();
@@ -961,7 +961,7 @@ __EXPORT BreakPointWindow::~BreakPointWindow()
 
 void __EXPORT BreakPointWindow::Resize()
 {
-///	Invalidate();
+/// Invalidate();
 }
 
 
@@ -1010,10 +1010,10 @@ void BreakPointWindow::SetMarkerPos( USHORT nLine, BOOL bError )
     if ( SyncYOffset() )
         Update();
 
-    ShowMarker( FALSE );	// Alten wegzeichen...
+    ShowMarker( FALSE );    // Alten wegzeichen...
     nMarkerPos = nLine;
     bErrorMarker = bError;
-    ShowMarker( TRUE );		// Neuen zeichnen...
+    ShowMarker( TRUE );     // Neuen zeichnen...
 }
 
 void BreakPointWindow::ShowMarker( BOOL bShow )
@@ -1047,13 +1047,13 @@ void BreakPointWindow::ShowMarker( BOOL bShow )
 
 
 
-BreakPoint*	BreakPointWindow::FindBreakPoint( const Point& rMousePos )
+BreakPoint* BreakPointWindow::FindBreakPoint( const Point& rMousePos )
 {
     long nLineHeight = GetTextHeight();
     long nYPos = rMousePos.Y() + nCurYOffset;
-//	Image aBrk( ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->GetImage( IMGID_BRKENABLED ) );
-//	Size aBmpSz( aBrk.GetSizePixel() );
-//	aBmpSz = PixelToLogic( aBmpSz );
+//  Image aBrk( ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->GetImage( IMGID_BRKENABLED ) );
+//  Size aBmpSz( aBrk.GetSizePixel() );
+//  aBmpSz = PixelToLogic( aBmpSz );
 
     BreakPoint* pBrk = GetBreakPoints().First();
     while ( pBrk )
@@ -1267,7 +1267,7 @@ void __EXPORT WatchWindow::Resize()
     Size aSz = GetOutputSizePixel();
     Size aBoxSz( aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER );
 
-    if ( aBoxSz.Width() < 4 )	// < 4, weil noch Border...
+    if ( aBoxSz.Width() < 4 )   // < 4, weil noch Border...
         aBoxSz.Width() = 0;
     if ( aBoxSz.Height() < 4 )
         aBoxSz.Height() = 0;
@@ -1279,13 +1279,13 @@ void __EXPORT WatchWindow::Resize()
     aBoxSz.Height() = nHeaderBarHeight;
     aHeaderBar.SetSizePixel( aBoxSz );
 
-    Invalidate();	//Wegen DrawLine im Paint...
+    Invalidate();   //Wegen DrawLine im Paint...
 }
 
 struct MemberList
 {
-    String*			mpMemberNames;
-    int				mnMemberCount;
+    String*         mpMemberNames;
+    int             mnMemberCount;
 
     MemberList( void )
         : mpMemberNames( NULL )
@@ -1324,14 +1324,14 @@ struct WatchItem
     String          maName;
     String          maDisplayName;
     SbxObjectRef    mpObject;
-    MemberList		maMemberList;
+    MemberList      maMemberList;
 
-    SbxDimArrayRef	mpArray;
-    int				nDimLevel;	// 0 = Root
-    int				nDimCount;
-    short*			pIndices;
+    SbxDimArrayRef  mpArray;
+    int             nDimLevel;  // 0 = Root
+    int             nDimCount;
+    short*          pIndices;
 
-    WatchItem*		mpArrayParentItem;
+    WatchItem*      mpArrayParentItem;
 
     WatchItem( void )
         : nDimLevel( 0 )
@@ -1539,7 +1539,7 @@ StackWindow::StackWindow( Window* pParent ) :
     aSz.Width() += 6;
     aSz.Height() += 6;
     aGotoCallButton.SetSizePixel( aSz );
-//	aGotoCallButton.Show();	// wird vom Basic noch nicht unterstuetzt!
+//  aGotoCallButton.Show(); // wird vom Basic noch nicht unterstuetzt!
     aGotoCallButton.Hide();
 
     // make stack window keyboard accessible
@@ -1568,14 +1568,14 @@ void __EXPORT StackWindow::Resize()
     Size aSz = GetOutputSizePixel();
     Size aBoxSz( aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER );
 
-    if ( aBoxSz.Width() < 4 )	// < 4, weil noch Border...
+    if ( aBoxSz.Width() < 4 )   // < 4, weil noch Border...
         aBoxSz.Width() = 0;
     if ( aBoxSz.Height() < 4 )
         aBoxSz.Height() = 0;
 
     aTreeListBox.SetSizePixel( aBoxSz );
 
-    Invalidate();	//Wegen DrawLine im Paint...
+    Invalidate();   //Wegen DrawLine im Paint...
 }
 
 
@@ -1703,9 +1703,9 @@ void __EXPORT ComplexEditorWindow::Resize()
     aEWVScrollBar.SetPosSizePixel( Point( aOutSz.Width()-DWBORDER-nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
 
     // Macht das EditorWindow, ausserdem hier falsch, da Pixel
-//	aEWVScrollBar.SetPageSize( aEWSz.Height() * 8 / 10 );
-//	aEWVScrollBar.SetVisibleSize( aSz.Height() );
-//	Invalidate();
+//  aEWVScrollBar.SetPageSize( aEWSz.Height() * 8 / 10 );
+//  aEWVScrollBar.SetVisibleSize( aSz.Height() );
+//  Invalidate();
 }
 
 IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
@@ -2056,7 +2056,7 @@ static void implCollapseModifiedObjectEntry( SvLBoxEntry* pParent, WatchTreeList
 {
     pThis->Collapse( pParent );
 
-    SvLBoxTreeList*	pModel = pThis->GetModel();
+    SvLBoxTreeList* pModel = pThis->GetModel();
     SvLBoxEntry* pDeleteEntry;
     while( (pDeleteEntry = pThis->SvTreeListBox::GetEntry( pParent, 0 )) != NULL )
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ sdbcx::ObjectType OViews::createObject(const ::rtl::OUString& _rName)
     ::rtl::OUString aName,aSchema;
     sal_Int32 nLen = _rName.indexOf('.');
     aSchema = _rName.copy(0,nLen);
-    aName	= _rName.copy(nLen+1);
+    aName   = _rName.copy(nLen+1);
 
     ::rtl::OUString sStmt = ::rtl::OUString::createFromAscii("SELECT DISTINCT * FROM DOMAIN.SHOW_VIEW WHERE ");
     if(aSchema.getLength())
@@ -140,7 +140,7 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ::rtl::OUString aName,aSchema;
         sal_Int32 nLen = _sElementName.indexOf('.');
         aSchema = _sElementName.copy(0,nLen);
-        aName	= _sElementName.copy(nLen+1);
+        aName   = _sElementName.copy(nLen+1);
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW");
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
@@ -161,8 +161,8 @@ void OViews::dropByNameImpl(const ::rtl::OUString& elementName)
 // -----------------------------------------------------------------------------
 void OViews::createView( const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aSql	= ::rtl::OUString::createFromAscii("CREATE VIEW ");
-    ::rtl::OUString aQuote	= static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE VIEW ");
+    ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
     ::rtl::OUString sSchema,sCommand;
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,12 +26,12 @@
  ************************************************************************/
 
 #include <stdio.h>
-#include	<rtl/alloc.h>
-#include	<rtl/ustring.hxx>
-#include	<rtl/strbuf.hxx>
+#include    <rtl/alloc.h>
+#include    <rtl/ustring.hxx>
+#include    <rtl/strbuf.hxx>
 
-#include	"rdbtype.hxx"
-#include	"rdboptions.hxx"
+#include    "rdbtype.hxx"
+#include    "rdboptions.hxx"
 
 using namespace rtl;
 
@@ -54,21 +54,21 @@ sal_Bool isBaseType(const OString& type)
           type.equals("unsigned short") ||
           type.equals("unsigned hyper") )
         return sal_True;
-        
+
     return sal_False;
-}	
+}
 
 sal_Bool produceDependedTypes(const OString& typeName,
-                              TypeManager& typeMgr, 
+                              TypeManager& typeMgr,
                               TypeDependency& typeDependencies,
                               RdbOptions* pOptions,
-                              FileStream& o, 
+                              FileStream& o,
                               RegistryKey& regKey,
                               StringSet& filterTypes)
     throw( CannotDumpException )
 {
     sal_Bool ret = sal_True;
-    
+
     TypeUsingSet usingSet(typeDependencies.getDependencies(typeName));
 
     TypeUsingSet::const_iterator iter = usingSet.begin();
@@ -79,7 +79,7 @@ sal_Bool produceDependedTypes(const OString& typeName,
         sTypeName = (*iter).m_type;
         if ((index = sTypeName.lastIndexOf(']')) > 0)
             sTypeName = sTypeName.copy(index + 1);
-        
+
         if ( !isBaseType(sTypeName) )
         {
             if (!produceType(sTypeName,
@@ -90,27 +90,27 @@ sal_Bool produceDependedTypes(const OString& typeName,
                              filterTypes,
                              sal_True))
             {
-                fprintf(stderr, "%s ERROR: %s\n", 
-                        pOptions->getProgramName().getStr(), 
+                fprintf(stderr, "%s ERROR: %s\n",
+                        pOptions->getProgramName().getStr(),
                         OString("cannot dump Type '" + sTypeName + "'").getStr());
                 cleanUp(sal_True);
                 exit(99);
             }
         }
         iter++;
-    }		
+    }
 
-    return ret; 
+    return ret;
 }
 
 //*************************************************************************
 // produceType
 //*************************************************************************
 sal_Bool produceType(const OString& typeName,
-                     TypeManager& typeMgr, 
+                     TypeManager& typeMgr,
                      TypeDependency& typeDependencies,
                      RdbOptions* pOptions,
-                     FileStream& o, 
+                     FileStream& o,
                      RegistryKey& regKey,
                      StringSet& filterTypes,
                      sal_Bool bDepend)
@@ -119,11 +119,11 @@ sal_Bool produceType(const OString& typeName,
     if (typeDependencies.isGenerated(typeName) )
         return sal_True;
 /*
-    RegistryKey		typeKey = typeMgr.getTypeKey(typeName);
+    RegistryKey     typeKey = typeMgr.getTypeKey(typeName);
 
     if (!typeKey.isValid())
-        return sal_False;	
-*/		
+        return sal_False;
+*/
     if( !checkTypeDependencies(typeMgr, typeDependencies, typeName, bDepend))
         return sal_False;
 
@@ -131,13 +131,13 @@ sal_Bool produceType(const OString& typeName,
     {
         if ( pOptions->generateTypeList() )
         {
-            o << typeName.getStr() << "\n";	
+            o << typeName.getStr() << "\n";
         } else
         {
 /*
-            RegValueType 	valueType;
-            sal_uInt32		valueSize;
-            
+            RegValueType    valueType;
+            sal_uInt32      valueSize;
+
             if (typeKey.getValueInfo(OUString(), &valueType, &valueSize))
             {
                 if (typeName.equals("/"))
@@ -147,7 +147,7 @@ sal_Bool produceType(const OString& typeName,
             }
 
             sal_uInt8* pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
-        
+
             if (typeKey.getValue(OUString(), pBuffer))
             {
                 rtl_freeMemory(pBuffer);
@@ -169,24 +169,24 @@ sal_Bool produceType(const OString& typeName,
             RegistryKey typeKey;
             if ( regKey.createKey( OStringToOUString(typeName, RTL_TEXTENCODING_UTF8), typeKey) )
             {
-//				rtl_freeMemory(pBuffer);
+//              rtl_freeMemory(pBuffer);
                 return sal_False;
             }
-            
+
             if ( typeKey.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)reader.getBlop(), reader.getBlopSize()) )
-//			if ( typeKey.setValue(OUString(), valueType, pBuffer, valueSize) )
+//          if ( typeKey.setValue(OUString(), valueType, pBuffer, valueSize) )
             {
-//				rtl_freeMemory(pBuffer);
+//              rtl_freeMemory(pBuffer);
                 return sal_False;
             }
-        
-//			rtl_freeMemory(pBuffer);
+
+//          rtl_freeMemory(pBuffer);
         }
     }
-    
+
     typeDependencies.setGenerated(typeName);
-    sal_Bool ret = produceDependedTypes(typeName, typeMgr, typeDependencies, 
-                                        pOptions, o, regKey, filterTypes);	
+    sal_Bool ret = produceDependedTypes(typeName, typeMgr, typeDependencies,
+                                        pOptions, o, regKey, filterTypes);
 
     return ret;
 }

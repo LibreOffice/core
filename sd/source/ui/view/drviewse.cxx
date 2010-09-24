@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -249,7 +249,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
     switch ( nSId )
     {
-        case SID_TEXTEDIT:	// BASIC ???
+        case SID_TEXTEDIT:  // BASIC ???
         case SID_ATTR_CHAR:
         case SID_ATTR_CHAR_VERTICAL:
         case SID_TEXT_FITTOSIZE:
@@ -541,7 +541,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             rBind.Update( nSId );
             break;
         }
-        
+
         default:
            break;
     }
@@ -703,7 +703,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if( xPresentation.is() )
             {
                 if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
-                    xPresentation->start(); 
+                    xPresentation->start();
                 else
                     xPresentation->rehearseTimings();
             }
@@ -1167,7 +1167,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         // Namensverwirrung: SID_SIZE_OPTIMAL -> Zoom auf selektierte Objekte
         // --> Wird als Objektzoom im Programm angeboten
-        case SID_SIZE_OPTIMAL:	// BASIC
+        case SID_SIZE_OPTIMAL:  // BASIC
         {
             mbZoomOnPage = FALSE;
             if ( mpDrawView->AreObjectsMarked() )
@@ -1197,7 +1197,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         // Namensverwirrung: SID_SIZE_ALL -> Zoom auf alle Objekte
         // --> Wird als Optimal im Programm angeboten
-        case SID_SIZE_ALL:	// BASIC
+        case SID_SIZE_ALL:  // BASIC
         {
             mbZoomOnPage = FALSE;
             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
@@ -1376,7 +1376,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
                         if( rGraphic.GetType() == GRAPHIC_BITMAP )
                         {
-                            SdrGrafObj*	pNewObj = (SdrGrafObj*) pObj->Clone();
+                            SdrGrafObj* pNewObj = (SdrGrafObj*) pObj->Clone();
 
                             if( rGraphic.IsAnimated() )
                             {

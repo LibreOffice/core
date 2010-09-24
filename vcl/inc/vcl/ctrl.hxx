@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,9 @@ protected:
     ::vcl::ImplControlData* mpControlData;
 
 private:
-    BOOL					mbHasFocus;
-    Link					maGetFocusHdl;
-    Link					maLoseFocusHdl;
+    BOOL                    mbHasFocus;
+    Link                    maGetFocusHdl;
+    Link                    maLoseFocusHdl;
 
     SAL_DLLPRIVATE void     ImplInitControlData();
 
@@ -59,10 +59,10 @@ private:
 
 protected:
                     Control( WindowType nType );
-    virtual void	FillLayoutData() const;
+    virtual void    FillLayoutData() const;
 
     // helper method for composite controls
-    void			AppendLayoutData( const Control& rSubControl ) const;
+    void            AppendLayoutData( const Control& rSubControl ) const;
 
     /// creates the mpData->mpLayoutData structure
     void            CreateLayoutData() const;
@@ -86,7 +86,7 @@ protected:
         @return
             if the Control instance has been destroyed in any of the call
     */
-    BOOL        ImplCallEventListenersAndHandler( 
+    BOOL        ImplCallEventListenersAndHandler(
                     ULONG nEvent, const Link& rHandler, void* pCaller
                 );
 
@@ -131,22 +131,22 @@ public:
             by the space occupied by the drawn pixels.
     */
     SAL_DLLPRIVATE void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect );
-//#endif    
+//#endif
 
 public:
                     Control( Window* pParent, WinBits nWinStyle = 0 );
                     Control( Window* pParent, const ResId& rResId );
                     ~Control();
 
-    virtual void	GetFocus();
-    virtual void	LoseFocus();
-    virtual long	Notify( NotifyEvent& rNEvt );
-    virtual void	StateChanged( StateChangedType nStateChange );
+    virtual void    GetFocus();
+    virtual void    LoseFocus();
+    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    Resize();
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     // invalidates layout data
-    virtual void	SetText( const String& rStr );
+    virtual void    SetText( const String& rStr );
     // gets the displayed text
     virtual String GetDisplayText() const;
     // returns the bounding box for the character at index nIndex (in control coordinates)
@@ -174,12 +174,12 @@ public:
     */
     long ToRelativeLineIndex( long nIndex ) const;
 
-    void			SetGetFocusHdl( const Link& rLink ) { maGetFocusHdl = rLink; }
-    const Link& 	GetGetFocusHdl() const	 { return maGetFocusHdl; }
-    void			SetLoseFocusHdl( const Link& rLink ) { maLoseFocusHdl = rLink; }
-    const Link& 	GetLoseFocusHdl() const { return maLoseFocusHdl; }
+    void            SetGetFocusHdl( const Link& rLink ) { maGetFocusHdl = rLink; }
+    const Link&     GetGetFocusHdl() const   { return maGetFocusHdl; }
+    void            SetLoseFocusHdl( const Link& rLink ) { maLoseFocusHdl = rLink; }
+    const Link&     GetLoseFocusHdl() const { return maLoseFocusHdl; }
 
-    void			SetLayoutDataParent( const Control* pParent ) const;
+    void            SetLayoutDataParent( const Control* pParent ) const;
 
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
 
@@ -198,4 +198,4 @@ public:
     }
 };
 
-#endif	// _SV_CTRL_HXX
+#endif  // _SV_CTRL_HXX

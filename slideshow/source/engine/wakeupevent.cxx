@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace slideshow
             mrActivityQueue( rActivityQueue )
         {
         }
-        
+
         void WakeupEvent::dispose()
         {
             mpActivity.reset();
@@ -61,25 +61,25 @@ namespace slideshow
         {
             if( !mpActivity )
                 return false;
-            
+
             return mrActivityQueue.addActivity( mpActivity );
         }
-        
+
         bool WakeupEvent::isCharged() const
         {
             // this event won't expire, we fire everytime we're
             // re-inserted into the event queue.
             return true;
         }
-        
+
         double WakeupEvent::getActivationTime( double nCurrentTime ) const
         {
             const double nElapsedTime( maTimer.getElapsedTime() );
-            
+
             return ::std::max( nCurrentTime,
                                nCurrentTime - nElapsedTime + mnNextTime );
-        } 
-       
+        }
+
         void WakeupEvent::start()
         {
             // start timer
@@ -90,7 +90,7 @@ namespace slideshow
         {
             mnNextTime = rNextTime;
         }
-        
+
         void WakeupEvent::setActivity( const ActivitySharedPtr& rActivity )
         {
             mpActivity = rActivity;

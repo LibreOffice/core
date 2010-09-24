@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,58 +24,58 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_AdvancedTextDocument_idl__ 
-#define __com_sun_star_text_AdvancedTextDocument_idl__ 
- 
-#ifndef __com_sun_star_lang_Locale_idl__ 
-#include <com/sun/star/lang/Locale.idl> 
-#endif 
- 
-#ifndef __com_sun_star_text_HypertextDocument_idl__ 
-#include <com/sun/star/text/HypertextDocument.idl> 
-#endif 
- 
-#ifndef __com_sun_star_text_XFootnotesSupplier_idl__ 
-#include <com/sun/star/text/XFootnotesSupplier.idl> 
-#endif 
- 
-#ifndef __com_sun_star_text_XEndnotesSupplier_idl__ 
-#include <com/sun/star/text/XEndnotesSupplier.idl> 
-#endif 
- 
-#ifndef __com_sun_star_util_XReplaceable_idl__ 
-#include <com/sun/star/util/XReplaceable.idl> 
-#endif 
- 
-#ifndef __com_sun_star_text_XPagePrintable_idl__ 
-#include <com/sun/star/text/XPagePrintable.idl> 
-#endif 
- 
-#ifndef __com_sun_star_text_XReferenceMarksSupplier_idl__ 
-#include <com/sun/star/text/XReferenceMarksSupplier.idl> 
-#endif 
- 
-#ifndef __com_sun_star_text_XLineNumberingSupplier_idl__ 
-#include <com/sun/star/text/XLineNumberingSupplier.idl> 
-#endif 
- 
-#ifndef __com_sun_star_text_XChapterNumberingSupplier_idl__ 
-#include <com/sun/star/text/XChapterNumberingSupplier.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_XPropertySet_idl__ 
-#include <com/sun/star/beans/XPropertySet.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module text {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_text_AdvancedTextDocument_idl__
+#define __com_sun_star_text_AdvancedTextDocument_idl__
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+#ifndef __com_sun_star_text_HypertextDocument_idl__
+#include <com/sun/star/text/HypertextDocument.idl>
+#endif
+
+#ifndef __com_sun_star_text_XFootnotesSupplier_idl__
+#include <com/sun/star/text/XFootnotesSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_text_XEndnotesSupplier_idl__
+#include <com/sun/star/text/XEndnotesSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_util_XReplaceable_idl__
+#include <com/sun/star/util/XReplaceable.idl>
+#endif
+
+#ifndef __com_sun_star_text_XPagePrintable_idl__
+#include <com/sun/star/text/XPagePrintable.idl>
+#endif
+
+#ifndef __com_sun_star_text_XReferenceMarksSupplier_idl__
+#include <com/sun/star/text/XReferenceMarksSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_text_XLineNumberingSupplier_idl__
+#include <com/sun/star/text/XLineNumberingSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_text_XChapterNumberingSupplier_idl__
+#include <com/sun/star/text/XChapterNumberingSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
 // DocMerge from xml: service com::sun::star::text::AdvancedTextDocument
-/** An advanced text document is an extension of a hypertext document 
+/** An advanced text document is an extension of a hypertext document
     which can also contain text-frames, foot- and endnotes, and some
     other advanced contents.
 
@@ -83,80 +83,80 @@
         use <type>TextDocument</type> instead.
  */
 published service AdvancedTextDocument
-{ 
+{
     // DocMerge: empty anyway
-    service com::sun::star::text::HypertextDocument; 
-    
+    service com::sun::star::text::HypertextDocument;
+
     // DocMerge: empty anyway
-    interface com::sun::star::text::XFootnotesSupplier; 
-    
+    interface com::sun::star::text::XFootnotesSupplier;
+
     // DocMerge: empty anyway
-    interface com::sun::star::text::XEndnotesSupplier; 
-    
+    interface com::sun::star::text::XEndnotesSupplier;
+
     // DocMerge: empty anyway
-    interface com::sun::star::util::XReplaceable; 
-    
+    interface com::sun::star::util::XReplaceable;
+
     // DocMerge: empty anyway
-    interface com::sun::star::text::XPagePrintable; 
-    
+    interface com::sun::star::text::XPagePrintable;
+
     // DocMerge: empty anyway
-    interface com::sun::star::text::XReferenceMarksSupplier; 
-    
+    interface com::sun::star::text::XReferenceMarksSupplier;
+
     // DocMerge: empty anyway
-    interface com::sun::star::text::XLineNumberingSupplier; 
-    
+    interface com::sun::star::text::XLineNumberingSupplier;
+
     // DocMerge: empty anyway
-    interface com::sun::star::text::XChapterNumberingSupplier; 
-    
+    interface com::sun::star::text::XChapterNumberingSupplier;
+
     // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet; 
- 
-    //------------------------------------------------------------------------- 
-     
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::CharLocale
     /** contains the identifier of the default locale of the document.
      */
-    [property] com::sun::star::lang::Locale CharLocale; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] com::sun::star::lang::Locale CharLocale;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::CharacterCount
     /** contains the count of all characters in the document.
      */
-    [readonly, property] long CharacterCount; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [readonly, property] long CharacterCount;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::ParagraphCount
     /** contains the count of all paragraphs in the document.
      */
-    [readonly, property] long ParagraphCount; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [readonly, property] long ParagraphCount;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::WordCount
     /** contains the count of all words in the document.@see WordSeparator
      */
-    [readonly, property] long WordCount; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [readonly, property] long WordCount;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::WordSeparator
     /** contains a string that consists of characters that mark the
         separation of words in counting the words in a document.
-        
-        
-        
+
+
+
         <p> I.e., slash and backslash. Whitespaces (tab stop,
-        space, paragraph break, or line break) always separate 
+        space, paragraph break, or line break) always separate
         words.</p>@see WordCount
      */
-    [property] string WordSeparator; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [property] string WordSeparator;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

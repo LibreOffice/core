@@ -45,7 +45,7 @@
 #include <tools/urlobj.hxx>
 #include <swdllapi.h>
 #include <swtypes.hxx>
-#include <docfac.hxx>	// SwDocFac
+#include <docfac.hxx>   // SwDocFac
 #include <errhdl.hxx>
 #include <iodetect.hxx>
 
@@ -157,7 +157,7 @@ public:
     void ResetASCIIOpts() { aASCIIOpts.Reset(); }
 
     SwgReaderOption()
-    {	ResetAllFmtsOnly(); aASCIIOpts.Reset(); }
+    {   ResetAllFmtsOnly(); aASCIIOpts.Reset(); }
 };
 
 class SwReader: public SwDocFac
@@ -165,7 +165,7 @@ class SwReader: public SwDocFac
     SvStream* pStrm;
     SotStorageRef pStg;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
-    SfxMedium* pMedium;		// wer ein Medium haben will (W4W)
+    SfxMedium* pMedium;     // wer ein Medium haben will (W4W)
 
     SwPaM* pCrsr;
     String aFileName;
@@ -175,7 +175,7 @@ public:
     /*
      * Initiales Einlesen. Dokument wird erst beim Read(..) angelegt.
      * JP 25.04.95: oder falls es mitgegeben wird, in dieses.
-     *				Sonderfall fuer Load mit Sw3Reader
+     *              Sonderfall fuer Load mit Sw3Reader
      */
     //SwReader( SotStorage&, const String& rFilename, SwDoc *pDoc = 0 );
     //SwReader( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFilename, SwDoc *pDoc = 0 );
@@ -212,8 +212,8 @@ protected:
 /****************  SPEZIELLE Reader ************************/
 
 // spezielle - Reader koennen beides sein !! (Excel, W4W, .. )
-#define SW_STREAM_READER	1
-#define SW_STORAGE_READER	2
+#define SW_STREAM_READER    1
+#define SW_STORAGE_READER   2
 
 class SW_DLLPUBLIC Reader
 {
@@ -230,12 +230,12 @@ protected:
     SvStream* pStrm;
     SotStorageRef pStg;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
-    SfxMedium* pMedium;		// wer ein Medium haben will (W4W)
+    SfxMedium* pMedium;     // wer ein Medium haben will (W4W)
 
     SwgReaderOption aOpt;
     BOOL bInsertMode : 1;
     BOOL bTmplBrowseMode : 1;
-    BOOL bReadUTF8: 1;		// Stream als UTF-8 interpretieren
+    BOOL bReadUTF8: 1;      // Stream als UTF-8 interpretieren
     BOOL bBlockMode: 1;
     BOOL bOrganizerMode : 1;
     BOOL bHasAskTemplateName : 1;
@@ -353,7 +353,7 @@ class SW_DLLPUBLIC SwTextBlocks
 //  friend class Sw2TextBlocks;
 //  friend class Sw3IoImp;
     SwImpBlocks* pImp;
-    ULONG 		 nErr;
+    ULONG        nErr;
 
 public:
     SwTextBlocks( const String& );
@@ -362,7 +362,7 @@ public:
     void Flush(){}
 
     SwDoc* GetDoc();
-    void   ClearDoc();					// Doc-Inhalt loeschen
+    void   ClearDoc();                  // Doc-Inhalt loeschen
     const  String& GetName();
     void   SetName( const String& );
     ULONG GetError() const { return nErr; }
@@ -371,32 +371,32 @@ public:
     void   SetBaseURL( const String& rURL );
 
     BOOL   IsOld() const;
-    ULONG  ConvertToNew();				// Textbausteine konvertieren
+    ULONG  ConvertToNew();              // Textbausteine konvertieren
 
-    USHORT GetCount() const;						// Anzahl Textbausteine ermitteln
-    USHORT GetIndex( const String& ) const;			// Index fuer Kurznamen ermitteln
-    USHORT GetLongIndex( const String& ) const;		//Index fuer Langnamen ermitteln
-    const  String& GetShortName( USHORT ) const; 	// Kurzname fuer Index zurueck
-    const  String& GetLongName( USHORT ) const;  	// Langname fuer Index zurueck
+    USHORT GetCount() const;                        // Anzahl Textbausteine ermitteln
+    USHORT GetIndex( const String& ) const;         // Index fuer Kurznamen ermitteln
+    USHORT GetLongIndex( const String& ) const;     //Index fuer Langnamen ermitteln
+    const  String& GetShortName( USHORT ) const;    // Kurzname fuer Index zurueck
+    const  String& GetLongName( USHORT ) const;     // Langname fuer Index zurueck
 
-    BOOL   Delete( USHORT );			// Loeschen
+    BOOL   Delete( USHORT );            // Loeschen
     USHORT Rename( USHORT, const String*, const String* ); // Umbenennen
     ULONG  CopyBlock( SwTextBlocks& rSource, String& rSrcShort,
                                     const String& rLong ); // Block kopieren
 
-    BOOL   BeginGetDoc( USHORT );			// Textbaustein einlesen
-    void   EndGetDoc();						// Textbaustein wieder loslassen
+    BOOL   BeginGetDoc( USHORT );           // Textbaustein einlesen
+    void   EndGetDoc();                     // Textbaustein wieder loslassen
 
     BOOL   BeginPutDoc( const String&, const String& ); // Speichern Beginn
-    USHORT PutDoc(); 								// Speichern Ende
+    USHORT PutDoc();                                // Speichern Ende
 
     USHORT PutText( const String&, const String&, const String& ); // Speichern( Kurzn., Text)
 
     BOOL IsOnlyTextBlock( USHORT ) const;
     BOOL IsOnlyTextBlock( const String& rShort ) const;
 
-    const String& GetFileName() const;		// Dateiname von pImp
-    BOOL IsReadOnly() const;  				// ReadOnly-Flag von pImp
+    const String& GetFileName() const;      // Dateiname von pImp
+    BOOL IsReadOnly() const;                // ReadOnly-Flag von pImp
 
     BOOL GetMacroTable( USHORT nIdx, SvxMacroTableDtor& rMacroTbl );
     BOOL SetMacroTable( USHORT nIdx, const SvxMacroTableDtor& rMacroTbl );
@@ -448,7 +448,7 @@ class SW_DLLPUBLIC Writer
 
 protected:
 
-    SwPaM* pOrigPam;			// der letze zu bearbeitende Pam
+    SwPaM* pOrigPam;            // der letze zu bearbeitende Pam
     const String* pOrigFileName;
 
     void ResetWriter();
@@ -498,7 +498,7 @@ public:
 
     void SetShowProgress( BOOL bFlag = FALSE )  { bShowProgress = bFlag; }
 
-    const String* GetOrigFileName() const 		{ return pOrigFileName; }
+    const String* GetOrigFileName() const       { return pOrigFileName; }
 
     const SwAsciiOptions& GetAsciiOptions() const { return aAscOpts; }
     void SetAsciiOptions( const SwAsciiOptions& rOpt ) { aAscOpts = rOpt; }
@@ -537,7 +537,7 @@ public:
     inline SvStream& OutHex( USHORT nHex, BYTE nLen = 2 )      { return OutHex( Strm(), nHex, nLen ); }
     inline SvStream& OutHex4( USHORT nHex )     { return OutHex( Strm(), nHex, 4 ); }
     inline SvStream& OutLong( long nVal )       { return OutLong( Strm(), nVal ); }
-    inline SvStream& OutULong( ULONG nVal )		{ return OutULong( Strm(), nVal ); }
+    inline SvStream& OutULong( ULONG nVal )     { return OutULong( Strm(), nVal ); }
 
     void SetStream(SvStream *const pStream);
     SvStream& Strm();
@@ -624,7 +624,7 @@ public:
 
     SwWriter( SfxMedium&, SwCrsrShell &,BOOL bWriteAll = FALSE );
     SwWriter( SfxMedium&, SwDoc & );
-//	SwWriter( SfxMedium&, SwPaM&, BOOL bWriteAll = FALSE );
+//  SwWriter( SfxMedium&, SwPaM&, BOOL bWriteAll = FALSE );
 
     //const String&       GetBaseURL() const { return sBaseURL;}
 };

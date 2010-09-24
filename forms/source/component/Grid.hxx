@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,55 +56,55 @@ class OGridColumn;
     struct ColumnDescription : public ElementDescription
     {
     public:
-        OGridColumn*				pColumn;		// not owned by this instance! only to prevent duplicate XUnoTunnel usage
+        OGridColumn*                pColumn;        // not owned by this instance! only to prevent duplicate XUnoTunnel usage
     };
 
 //==================================================================
 // OGridControlModel
 //==================================================================
-typedef ::cppu::ImplHelper7 <	::com::sun::star::awt::XControlModel
-                            ,	::com::sun::star::form::XGridColumnFactory
-                            ,	::com::sun::star::form::XReset
-                            ,	::com::sun::star::view::XSelectionSupplier
-                            ,	::com::sun::star::sdb::XSQLErrorListener
+typedef ::cppu::ImplHelper7 <   ::com::sun::star::awt::XControlModel
+                            ,   ::com::sun::star::form::XGridColumnFactory
+                            ,   ::com::sun::star::form::XReset
+                            ,   ::com::sun::star::view::XSelectionSupplier
+                            ,   ::com::sun::star::sdb::XSQLErrorListener
                             ,   ::com::sun::star::sdb::XRowSetSupplier
                             ,   ::com::sun::star::sdb::XRowSetChangeBroadcaster
-                            >	OGridControlModel_BASE;
- 
+                            >   OGridControlModel_BASE;
+
 class OGridControlModel :public OControlModel
                         ,public OInterfaceContainer
                         ,public OErrorBroadcaster
                         ,public FontControlModel
                         ,public OGridControlModel_BASE
 {
-    ::cppu::OInterfaceContainerHelper		m_aSelectListeners,
+    ::cppu::OInterfaceContainerHelper       m_aSelectListeners,
                                             m_aResetListeners,
                                             m_aRowSetChangeListeners;
 
 // [properties]
-    ::com::sun::star::uno::Any				m_aRowHeight;			// Zeilenhoehe
-    ::com::sun::star::uno::Any				m_aTabStop;
-    ::com::sun::star::uno::Any				m_aBackgroundColor;
-    ::com::sun::star::uno::Any				m_aCursorColor; 			// transient
+    ::com::sun::star::uno::Any              m_aRowHeight;           // Zeilenhoehe
+    ::com::sun::star::uno::Any              m_aTabStop;
+    ::com::sun::star::uno::Any              m_aBackgroundColor;
+    ::com::sun::star::uno::Any              m_aCursorColor;             // transient
     ::com::sun::star::uno::Any              m_aBorderColor;
-    ::rtl::OUString 						m_aDefaultControl;
-    ::rtl::OUString 						m_sHelpText;
+    ::rtl::OUString                         m_aDefaultControl;
+    ::rtl::OUString                         m_sHelpText;
 // [properties]
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >		m_xSelection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xSelection;
 
 // [properties]
-    ::rtl::OUString 			m_sHelpURL; 				// URL
-    sal_Int16					m_nBorder;
+    ::rtl::OUString             m_sHelpURL;                 // URL
+    sal_Int16                   m_nBorder;
     sal_Int16                   m_nWritingMode;
     sal_Int16                   m_nContextWritingMode;
-    sal_Bool					m_bEnableVisible	: 1;
-    sal_Bool					m_bEnable			: 1;
-    sal_Bool					m_bNavigation		: 1;
-    sal_Bool					m_bRecordMarker 	: 1;
-    sal_Bool					m_bPrintable		: 1;
-    sal_Bool					m_bAlwaysShowCursor : 1;    // transient
-    sal_Bool					m_bDisplaySynchron	: 1;    // transient
+    sal_Bool                    m_bEnableVisible    : 1;
+    sal_Bool                    m_bEnable           : 1;
+    sal_Bool                    m_bNavigation       : 1;
+    sal_Bool                    m_bRecordMarker     : 1;
+    sal_Bool                    m_bPrintable        : 1;
+    sal_Bool                    m_bAlwaysShowCursor : 1;    // transient
+    sal_Bool                    m_bDisplaySynchron  : 1;    // transient
 // [properties]
 
 protected:
@@ -213,7 +213,7 @@ protected:
 };
 
 //.........................................................................
-}	// namespace frm
+}   // namespace frm
 //.........................................................................
 
 

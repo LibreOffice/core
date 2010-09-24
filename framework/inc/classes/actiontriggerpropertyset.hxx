@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,11 +48,11 @@
 namespace framework
 {
 
-class ActionTriggerPropertySet :	public ThreadHelpBase						,	// Struct for right initalization of mutex member! Must be first of baseclasses.
-                                    public ::com::sun::star::lang::XServiceInfo	,
+class ActionTriggerPropertySet :    public ThreadHelpBase                       ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                    public ::com::sun::star::lang::XServiceInfo ,
                                     public ::com::sun::star::lang::XTypeProvider,
-                                    public ::cppu::OBroadcastHelper				,
-                                    public ::cppu::OPropertySetHelper			,	// -> XPropertySet, XFastPropertySet, XMultiPropertySet
+                                    public ::cppu::OBroadcastHelper             ,
+                                    public ::cppu::OPropertySetHelper           ,   // -> XPropertySet, XFastPropertySet, XMultiPropertySet
                                     public ::cppu::OWeakObject
 {
     public:
@@ -60,7 +60,7 @@ class ActionTriggerPropertySet :	public ThreadHelpBase						,	// Struct for righ
         virtual ~ActionTriggerPropertySet();
 
         // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) 
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
             throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire() throw ();
         virtual void SAL_CALL release() throw ();
@@ -76,49 +76,49 @@ class ActionTriggerPropertySet :	public ThreadHelpBase						,	// Struct for righ
 
     private:
         //---------------------------------------------------------------------------------------------------------
-        //	OPropertySetHelper
+        //  OPropertySetHelper
         //---------------------------------------------------------------------------------------------------------
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(	com::sun::star::uno::Any&		aConvertedValue,
-                                                            com::sun::star::uno::Any&		aOldValue,
-                                                            sal_Int32						nHandle,
-                                                            const com::sun::star::uno::Any&	aValue			) 
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any&       aConvertedValue,
+                                                            com::sun::star::uno::Any&       aOldValue,
+                                                            sal_Int32                       nHandle,
+                                                            const com::sun::star::uno::Any& aValue          )
             throw( com::sun::star::lang::IllegalArgumentException );
 
 
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(	sal_Int32 nHandle, const com::sun::star::uno::Any& aValue ) 
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any& aValue )
             throw( com::sun::star::uno::Exception );
 
         using cppu::OPropertySetHelper::getFastPropertyValue;
-        virtual void SAL_CALL getFastPropertyValue(	com::sun::star::uno::Any& aValue, sal_Int32	nHandle	) const;
+        virtual void SAL_CALL getFastPropertyValue( com::sun::star::uno::Any& aValue, sal_Int32 nHandle ) const;
 
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-        virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() 
+        virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
             throw (::com::sun::star::uno::RuntimeException);
 
         static const com::sun::star::uno::Sequence< com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
 
         //---------------------------------------------------------------------------------------------------------
-        //	helper
+        //  helper
         //---------------------------------------------------------------------------------------------------------
 
-        sal_Bool impl_tryToChangeProperty(	const	rtl::OUString&				aCurrentValue	,
-                                            const	com::sun::star::uno::Any&	aNewValue		,
-                                            com::sun::star::uno::Any&			aOldValue		,
-                                            com::sun::star::uno::Any&			aConvertedValue	) throw( com::sun::star::lang::IllegalArgumentException );
+        sal_Bool impl_tryToChangeProperty(  const   rtl::OUString&              aCurrentValue   ,
+                                            const   com::sun::star::uno::Any&   aNewValue       ,
+                                            com::sun::star::uno::Any&           aOldValue       ,
+                                            com::sun::star::uno::Any&           aConvertedValue ) throw( com::sun::star::lang::IllegalArgumentException );
 
-        sal_Bool impl_tryToChangeProperty(	const	com::sun::star::uno::Reference< com::sun::star::awt::XBitmap >	xBitmap,
-                                            const	com::sun::star::uno::Any&	aNewValue		,
-                                            com::sun::star::uno::Any&			aOldValue		,
-                                            com::sun::star::uno::Any&			aConvertedValue	) throw( com::sun::star::lang::IllegalArgumentException );
+        sal_Bool impl_tryToChangeProperty(  const   com::sun::star::uno::Reference< com::sun::star::awt::XBitmap >  xBitmap,
+                                            const   com::sun::star::uno::Any&   aNewValue       ,
+                                            com::sun::star::uno::Any&           aOldValue       ,
+                                            com::sun::star::uno::Any&           aConvertedValue ) throw( com::sun::star::lang::IllegalArgumentException );
 
-        sal_Bool impl_tryToChangeProperty(	const	com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xInterface,
-                                            const	com::sun::star::uno::Any&	aNewValue		,
-                                            com::sun::star::uno::Any&			aOldValue		,
-                                            com::sun::star::uno::Any&			aConvertedValue	) throw( com::sun::star::lang::IllegalArgumentException );
+        sal_Bool impl_tryToChangeProperty(  const   com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xInterface,
+                                            const   com::sun::star::uno::Any&   aNewValue       ,
+                                            com::sun::star::uno::Any&           aOldValue       ,
+                                            com::sun::star::uno::Any&           aConvertedValue ) throw( com::sun::star::lang::IllegalArgumentException );
 
         //---------------------------------------------------------------------------------------------------------
-        //	members
+        //  members
         //---------------------------------------------------------------------------------------------------------
 
         rtl::OUString                                                         m_aCommandURL;

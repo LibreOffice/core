@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 
 class PageStyleContext : public XMLPropStyleContext
 {
-    ::rtl::OUString	sPageUsage;
+    ::rtl::OUString sPageUsage;
 protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -410,7 +410,7 @@ css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() {
 
 cppu::ImplementationEntry entries[] = {
     { &create, &getImplementationName, &getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 }, 
+      &cppu::createSingleComponentFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 } };
 
 }

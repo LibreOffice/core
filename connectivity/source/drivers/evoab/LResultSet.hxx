@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@ namespace connectivity
         class OEvoabResultSet;
         // these typedef's are only necessary for the compiler
         typedef ::cppu::ImplHelper1<  ::com::sun::star::sdbcx::XRowLocate> OEvoabResultSet_BASE;
-        typedef file::OResultSet											OEvoabResultSet_BASE2;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OEvoabResultSet>		OEvoabResultSet_BASE3;
+        typedef file::OResultSet                                            OEvoabResultSet_BASE2;
+        typedef ::comphelper::OPropertyArrayUsageHelper<OEvoabResultSet>        OEvoabResultSet_BASE3;
 
 
-        class OEvoabResultSet :	public OEvoabResultSet_BASE2,
+        class OEvoabResultSet : public OEvoabResultSet_BASE2,
                                 public OEvoabResultSet_BASE,
                                 public OEvoabResultSet_BASE3
         {
@@ -56,7 +56,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            OEvoabResultSet( file::OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&	_aSQLIterator);
+            OEvoabResultSet( file::OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&  _aSQLIterator);
 
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

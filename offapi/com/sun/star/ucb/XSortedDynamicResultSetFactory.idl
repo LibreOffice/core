@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ module com { module sun { module star { module ucb {
 published interface XSortedDynamicResultSetFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /**	creates a sorted <type>XDynamicResultSet</type> depending on internal
+    /** creates a sorted <type>XDynamicResultSet</type> depending on internal
         data, an (unsorted) XDynamicResultSet and the sorting info.
 
         @returns
@@ -68,7 +68,7 @@ published interface XSortedDynamicResultSetFactory: com::sun::star::uno::XInterf
         @param CompareFactory
         a factory for compare objects.
     */
-    com::sun::star::ucb::XDynamicResultSet	createSortedDynamicResultSet(
+    com::sun::star::ucb::XDynamicResultSet  createSortedDynamicResultSet(
                 [in] com::sun::star::ucb::XDynamicResultSet Source,
                 [in] sequence<com::sun::star::ucb::NumberedSortingInfo> Info,
                 [in] com::sun::star::ucb::XAnyCompareFactory CompareFactory );

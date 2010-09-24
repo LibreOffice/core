@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -189,4 +189,10 @@ BOOL SystemChildWindow::IsEraseBackgroundEnabled()
         return mpWindowImpl->mpSysObj->IsEraseBackgroundEnabled();
     else
         return FALSE;
+}
+
+void SystemChildWindow::SetForwardKey( BOOL bEnable )
+{
+       if ( mpWindowImpl->mpSysObj )
+               mpWindowImpl->mpSysObj->SetForwardKey( bEnable );
 }

@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -31,13 +31,13 @@ namespace agg
     // It means that the type T must expose:
     //
     // bool operator() (const T& val)
-    // 
+    //
     // that is called every time new vertex is being added. The main purpose
-    // of this operator is the possibility to calculate some values during 
+    // of this operator is the possibility to calculate some values during
     // adding and to return true if the vertex fits some criteria or false if
-    // it doesn't. In the last case the new vertex is not added. 
-    // 
-    // The simple example is filtering coinciding vertices with calculation 
+    // it doesn't. In the last case the new vertex is not added.
+    //
+    // The simple example is filtering coinciding vertices with calculation
     // of the distance between the current and previous ones:
     //
     //    struct vertex_dist
@@ -60,10 +60,10 @@ namespace agg
     //        }
     //    };
     //
-    // Function close() calls this operator and removes the last vertex if 
+    // Function close() calls this operator and removes the last vertex if
     // necessary.
     //------------------------------------------------------------------------
-    template<class T, unsigned S=6> 
+    template<class T, unsigned S=6>
     class vertex_sequence : public pod_deque<T, S>
     {
     public:
@@ -77,12 +77,12 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<class T, unsigned S> 
+    template<class T, unsigned S>
     void vertex_sequence<T, S>::add(const T& val)
     {
         if(base_type::size() > 1)
         {
-            if(!(*this)[base_type::size() - 2]((*this)[base_type::size() - 1])) 
+            if(!(*this)[base_type::size() - 2]((*this)[base_type::size() - 1]))
             {
                 base_type::remove_last();
             }
@@ -92,7 +92,7 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<class T, unsigned S> 
+    template<class T, unsigned S>
     void vertex_sequence<T, S>::modify_last(const T& val)
     {
         base_type::remove_last();
@@ -102,7 +102,7 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<class T, unsigned S> 
+    template<class T, unsigned S>
     void vertex_sequence<T, S>::close(bool closed)
     {
         while(base_type::size() > 1)
@@ -129,7 +129,7 @@ namespace agg
     const double vertex_dist_epsilon = 1e-14;
 
     //-------------------------------------------------------------vertex_dist
-    // Vertex (x, y) with the distance to the next one. The last vertex has 
+    // Vertex (x, y) with the distance to the next one. The last vertex has
     // distance between the last and the first points if the polygon is closed
     // and 0.0 if it's a polyline.
     struct vertex_dist

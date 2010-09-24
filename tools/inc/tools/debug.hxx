@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -725,7 +725,7 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #define DBG_ENDAPPEXECUTE() ((void)0)
 
 #define DBG_MEMTEST() ((void)0)
-#define DBG_MEMTEST_PTR( p ) ((void)0)             
+#define DBG_MEMTEST_PTR( p ) ((void)0)
 
 #define DBG_NAME( aName )
 #define DBG_NAMEEX( aName )

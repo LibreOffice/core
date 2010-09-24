@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,11 +46,11 @@ public class UninstallationImminentCtrl extends PanelController {
         super("UninstallationImminent", new UninstallationImminent());
         helpFile = "String_Helpfile_UninstallationImminent";
     }
-    
+
     public String getNext() {
         return new String("UninstallationOngoing");
     }
-    
+
     public String getPrevious() {
 
         InstallData data = InstallData.getInstance();
@@ -58,12 +58,12 @@ public class UninstallationImminentCtrl extends PanelController {
         if ( data.getInstallationType().equals(data.getCustomActionCommand()) ) {
             return new String("ChooseUninstallationComponents");
         } else if ( data.getInstallationType().equals(data.getTypicalActionCommand()) ) {
-            return new String("ChooseUninstallationType");            
+            return new String("ChooseUninstallationType");
         } else {
-            System.err.println("Error: Unknown uninstallation type!" );            
-            return new String("Error");            
+            System.err.println("Error: Unknown uninstallation type!" );
+            return new String("Error");
         }
-    }  
+    }
 
     public final String getHelpFileName () {
         return this.helpFile;
@@ -72,7 +72,7 @@ public class UninstallationImminentCtrl extends PanelController {
     public void beforeShow() {
         String StringInstall = ResourceManager.getString("String_Uninstall");
         getSetupFrame().setButtonText(StringInstall, getSetupFrame().BUTTON_NEXT);
-        
+
         ProductDescription productData = SetupDataProvider.getProductDescription();
         PackageDescription packageData = SetupDataProvider.getPackageDescription();
 
@@ -88,7 +88,7 @@ public class UninstallationImminentCtrl extends PanelController {
         // System.err.println("\nUninstallation module state dump 3:");
         // Dumper.dumpModuleStates(packageData);
     }
-    
+
     public void duringShow() {
         UninstallationImminent panel = (UninstallationImminent)getPanel();
         panel.setTabOrder();
@@ -105,8 +105,8 @@ public class UninstallationImminentCtrl extends PanelController {
             // System.err.println("\nUninstallation module state dump 4:");
             // Dumper.dumpModuleStates(packageData);
         }
-        
+
         return repeatDialog;
     }
-        
+
 }

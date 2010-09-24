@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ module com { module sun { module star { module util {
 //============================================================================
 
 /**
-  provides timestamp information for an object 
+  provides timestamp information for an object
   in the form of an arbitrary string.
 
   <p> The format and meaning of the timestamp depends on the implementation.
@@ -45,27 +45,27 @@ module com { module sun { module star { module util {
      format they use.
   </p>
 
-  <p> If the timestamp is unchanged between two calls, the 
-     associated object has not changed. Any properties beyond this, 
-     particularly the presence of a meaningful order between 
-     timestamps, depend on the implementation. 
+  <p> If the timestamp is unchanged between two calls, the
+     associated object has not changed. Any properties beyond this,
+     particularly the presence of a meaningful order between
+     timestamps, depend on the implementation.
   </p>
 
     @since OOo 1.1.2
   */
-published interface XTimeStamped : ::com::sun::star::uno::XInterface 
+published interface XTimeStamped : ::com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
 
     /**
-      returns the timestamp of the object. 
-      
+      returns the timestamp of the object.
 
-      @return   
+
+      @return
         a <atom>string</atom> that represents a timestamp.
       */
     string getTimestamp() ;
-    
+
     //------------------------------------------------------------------------
 } ;
 

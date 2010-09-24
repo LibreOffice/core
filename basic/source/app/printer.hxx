@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,14 +35,14 @@ class BasicPrinter
 {
     boost::shared_ptr<Printer>                      mpPrinter;
     boost::shared_ptr<vcl::OldStylePrintAdaptor>    mpListener;
-    
-    short nLine;						// aktuelle Zeile
-    short nPage;						// aktuelle Seite
-    short nLines;						// Zeilen pro Seite
-    short nYoff;						// Zeilenabstand in Points
-    String aFile;						// Dateiname
 
-    void Header();						// Seitenkopf drucken
+    short nLine;                        // aktuelle Zeile
+    short nPage;                        // aktuelle Seite
+    short nLines;                       // Zeilen pro Seite
+    short nYoff;                        // Zeilenabstand in Points
+    String aFile;                       // Dateiname
+
+    void Header();                      // Seitenkopf drucken
     void StartPage();
 public:
     BasicPrinter();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 
 #include "tabcol.hxx"
-#include <errhdl.hxx>		// fuer Create-Methoden
+#include <errhdl.hxx>       // fuer Create-Methoden
 
 
 SwTabCols::SwTabCols( USHORT nSize ) :
@@ -72,8 +72,8 @@ SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
 SwTabCols &SwTabCols::operator=( const SwTabCols& rCpy )
 {
     nLeftMin = rCpy.GetLeftMin();
-    nLeft	 = rCpy.GetLeft();
-    nRight	 = rCpy.GetRight();
+    nLeft    = rCpy.GetLeft();
+    nRight   = rCpy.GetRight();
     nRightMax= rCpy.GetRightMax();
     bLastRowAllowedToChange = rCpy.IsLastRowAllowedToChange();
 
@@ -88,8 +88,8 @@ BOOL SwTabCols::operator==( const SwTabCols& rCmp ) const
     USHORT i;
 
     if ( !(nLeftMin == rCmp.GetLeftMin() &&
-           nLeft	== rCmp.GetLeft()	 &&
-           nRight	== rCmp.GetRight()	 &&
+           nLeft    == rCmp.GetLeft()    &&
+           nRight   == rCmp.GetRight()   &&
            nRightMax== rCmp.GetRightMax()&&
            bLastRowAllowedToChange== rCmp.IsLastRowAllowedToChange() &&
            Count()== rCmp.Count()) )

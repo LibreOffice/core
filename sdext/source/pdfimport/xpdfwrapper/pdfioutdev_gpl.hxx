@@ -15,12 +15,12 @@
  *    modify it under the terms of the GNU General Public License as
  *    published by the Free Software Foundation; either version 2 of
  *    the License, or (at your option) any later version.
- *    
+ *
  *    This program is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *    GNU General Public License for more details.
- *    
+ *
  *    You should have received a copy of the GNU General Public
  *    License along with this program; if not, write to the Free
  *    Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -139,14 +139,14 @@ namespace pdfi
         bool        isBold;
         bool        isItalic;
         bool        isUnderline;
-        double      size;            
+        double      size;
     };
 
     class PDFOutDev : public OutputDev
     {
         // not owned by this class
         PDFDoc*                                 m_pDoc;
-        mutable std::hash_map< long long, 
+        mutable std::hash_map< long long,
                                FontAttributes > m_aFontMap;
         UnicodeMap*                             m_pUtf8Map;
 
@@ -156,50 +156,50 @@ namespace pdfi
 
     public:
         explicit PDFOutDev( PDFDoc* pDoc );
-        
+
         //----- get info about output device
-        
+
         // Does this device use upside-down coordinates?
         // (Upside-down means (0,0) is the top left corner of the page.)
         virtual GBool upsideDown() { return gTrue; }
-        
+
         // Does this device use drawChar() or drawString()?
         virtual GBool useDrawChar() { return gTrue; }
-        
+
         // Does this device use beginType3Char/endType3Char?  Otherwise,
         // text in Type 3 fonts will be drawn with drawChar/drawString.
         virtual GBool interpretType3Chars() { return gFalse; }
-        
+
         // Does this device need non-text content?
         virtual GBool needNonText() { return gTrue; }
-        
+
         //----- initialization and control
-        
+
         // Set default transform matrix.
         virtual void setDefaultCTM(double *ctm);
-        
+
         // Start a page.
         virtual void startPage(int pageNum, GfxState *state);
-        
+
         // End a page.
         virtual void endPage();
-        
+
         // Dump page contents to display.
         // virtual void dump() {}
-        
+
         //----- coordinate conversion
-        
+
         // Convert between device and user coordinates.
         // virtual void cvtDevToUser(double dx, double dy, double *ux, double *uy);
         // virtual void cvtUserToDev(double ux, double uy, int *dx, int *dy);
-        
+
         //----- link borders
         virtual void processLink(Link *link, Catalog *catalog);
-        
+
         //----- save/restore graphics state
         virtual void saveState(GfxState *state);
         virtual void restoreState(GfxState *state);
-        
+
         //----- update graphics state
         // virtual void updateAll(GfxState *state);
         virtual void updateCTM(GfxState *state, double m11, double m12,
@@ -215,7 +215,7 @@ namespace pdfi
         virtual void updateFillOpacity(GfxState *state);
         virtual void updateStrokeOpacity(GfxState *state);
         virtual void updateBlendMode(GfxState *state);
-        
+
         //----- update text state
         virtual void updateFont(GfxState *state);
         // virtual void updateTextMat(GfxState *state);
@@ -226,16 +226,16 @@ namespace pdfi
         // virtual void updateHorizScaling(GfxState *state) {}
         // virtual void updateTextPos(GfxState *state) {}
         // virtual void updateTextShift(GfxState *state, double shift) {}
-        
+
         //----- path painting
         virtual void stroke(GfxState *state);
         virtual void fill(GfxState *state);
         virtual void eoFill(GfxState *state);
-        
+
         //----- path clipping
         virtual void clip(GfxState *state);
         virtual void eoClip(GfxState *state);
-        
+
         //----- text drawing
         virtual void drawChar(GfxState *state, double x, double y,
                               double dx, double dy,
@@ -243,7 +243,7 @@ namespace pdfi
                               CharCode code, int nBytes, Unicode *u, int uLen);
         virtual void drawString(GfxState *state, GooString *s);
         virtual void endTextObject(GfxState *state);
-        
+
         //----- image drawing
         virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
                                    int width, int height, GBool invert,
@@ -262,18 +262,18 @@ namespace pdfi
                                          Stream *maskStr,
                                          int maskWidth, int maskHeight,
                                          GfxImageColorMap *maskColorMap);
-        
+
         //----- OPI functions
         // virtual void opiBegin(GfxState *state, Dict *opiDict);
         // virtual void opiEnd(GfxState *state, Dict *opiDict);
-        
+
         //----- Type 3 font operators
         // virtual void type3D0(GfxState *state, double wx, double wy) {}
         // virtual void type3D1(GfxState *state, double wx, double wy,
         //                      double llx, double lly, double urx, double ury) {}
-        
+
         //----- PostScript XObjects
-        // virtual void psXObject(Stream *psStream, Stream *level1Stream) {}        
+        // virtual void psXObject(Stream *psStream, Stream *level1Stream) {}
 
         void setPageNum( int nNumPages );
     };

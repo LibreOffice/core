@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,27 +85,27 @@ using namespace ::com::sun::star::beans;
 
 DBG_NAME(DlgOrderCrit)
 //------------------------------------------------------------------------------
-DlgOrderCrit::DlgOrderCrit(	Window * pParent,
+DlgOrderCrit::DlgOrderCrit( Window * pParent,
                             const Reference< XConnection>& _rxConnection,
                             const Reference< XSingleSelectQueryComposer >& _rxComposer,
                             const Reference< XNameAccess>& _rxCols)
              :ModalDialog( pParent, ModuleRes(DLG_ORDERCRIT) )
-            ,aLB_ORDERFIELD1(	this, ModuleRes( LB_ORDERFIELD1 ) )
-            ,aLB_ORDERVALUE1(	this, ModuleRes( LB_ORDERVALUE1 ) )
-            ,aLB_ORDERFIELD2(	this, ModuleRes( LB_ORDERFIELD2 ) )
-            ,aLB_ORDERVALUE2(	this, ModuleRes( LB_ORDERVALUE2 ) )
-            ,aLB_ORDERFIELD3(	this, ModuleRes( LB_ORDERFIELD3 ) )
-            ,aLB_ORDERVALUE3(	this, ModuleRes( LB_ORDERVALUE3 ) )
-            ,aFT_ORDERFIELD(	this, ModuleRes( FT_ORDERFIELD ) )
-            ,aFT_ORDERAFTER1(	this, ModuleRes( FT_ORDERAFTER1 ) )
-            ,aFT_ORDERAFTER2(	this, ModuleRes( FT_ORDERAFTER2 ) )
-            ,aFT_ORDEROPER(		this, ModuleRes( FT_ORDEROPER ) )
-            ,aFT_ORDERDIR(		this, ModuleRes( FT_ORDERDIR ) )
-            ,aBT_OK(			this, ModuleRes( BT_OK ) )
-            ,aBT_CANCEL(		this, ModuleRes( BT_CANCEL ) )
-            ,aBT_HELP(			this, ModuleRes( BT_HELP ) )
+            ,aLB_ORDERFIELD1(   this, ModuleRes( LB_ORDERFIELD1 ) )
+            ,aLB_ORDERVALUE1(   this, ModuleRes( LB_ORDERVALUE1 ) )
+            ,aLB_ORDERFIELD2(   this, ModuleRes( LB_ORDERFIELD2 ) )
+            ,aLB_ORDERVALUE2(   this, ModuleRes( LB_ORDERVALUE2 ) )
+            ,aLB_ORDERFIELD3(   this, ModuleRes( LB_ORDERFIELD3 ) )
+            ,aLB_ORDERVALUE3(   this, ModuleRes( LB_ORDERVALUE3 ) )
+            ,aFT_ORDERFIELD(    this, ModuleRes( FT_ORDERFIELD ) )
+            ,aFT_ORDERAFTER1(   this, ModuleRes( FT_ORDERAFTER1 ) )
+            ,aFT_ORDERAFTER2(   this, ModuleRes( FT_ORDERAFTER2 ) )
+            ,aFT_ORDEROPER(     this, ModuleRes( FT_ORDEROPER ) )
+            ,aFT_ORDERDIR(      this, ModuleRes( FT_ORDERDIR ) )
+            ,aBT_OK(            this, ModuleRes( BT_OK ) )
+            ,aBT_CANCEL(        this, ModuleRes( BT_CANCEL ) )
+            ,aBT_HELP(          this, ModuleRes( BT_HELP ) )
             ,aFL_ORDER(         this, ModuleRes( FL_ORDER ) )
-            ,aSTR_NOENTRY(		ModuleRes( STR_NOENTRY ) )
+            ,aSTR_NOENTRY(      ModuleRes( STR_NOENTRY ) )
             ,m_xQueryComposer( _rxComposer )
             ,m_xColumns(_rxCols)
             ,m_xConnection(_rxConnection)
@@ -181,8 +181,8 @@ DlgOrderCrit::DlgOrderCrit(	Window * pParent,
 
 //------------------------------------------------------------------------------
 
-#define LbText(x)		((x).GetSelectEntry())
-#define LbPos(x)		((x).GetSelectEntryPos())
+#define LbText(x)       ((x).GetSelectEntry())
+#define LbPos(x)        ((x).GetSelectEntryPos())
 
 //------------------------------------------------------------------------------
 DlgOrderCrit::~DlgOrderCrit()
@@ -271,7 +271,7 @@ void DlgOrderCrit::EnableLines()
 {
     DBG_CHKTHIS(DlgOrderCrit,NULL);
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-    ::rtl::OUString sQuote	= xMetaData.is() ? xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
+    ::rtl::OUString sQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
     static const ::rtl::OUString sDESC = ::rtl::OUString::createFromAscii(" DESC ");
     static const ::rtl::OUString sASC  = ::rtl::OUString::createFromAscii(" ASC ");
 
@@ -295,7 +295,7 @@ void DlgOrderCrit::EnableLines()
                     if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME) )
                     {
                         ::rtl::OUString sRealName;
-                        xColumn->getPropertyValue(PROPERTY_REALNAME)	>>= sRealName;
+                        xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
                         sName = sRealName;
                         static ::rtl::OUString sAgg(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"));
                         static ::rtl::OUString sFunction(RTL_CONSTASCII_USTRINGPARAM("Function"));

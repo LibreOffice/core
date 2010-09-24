@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,18 +39,18 @@ uno::Reference< excel::XPivotCache >
 ScVbaPivotTable::PivotCache() throw (uno::RuntimeException)
 {
     // #FIXME with a quick example failed to determine what the parent
-    // should be, leaving as null at the moment	
+    // should be, leaving as null at the moment
     return new ScVbaPivotCache( uno::Reference< XHelperInterface >(), mxContext, m_xTable );
 }
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaPivotTable::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotTable") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 ScVbaPivotTable::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

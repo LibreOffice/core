@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1193,7 +1193,7 @@ void TabBar::Paint( const Rectangle& )
                 aPos2.X()--;
                 aPos3.X()--;
 
-                // If this is the current tab, draw the left inner shadow the default color, 
+                // If this is the current tab, draw the left inner shadow the default color,
                 // otherwise make it the same as the custom background color
                 if ( pItem->mbSelect || (pItem->mnId == mnCurPageId) ) {
                     SetLineColor( rStyleSettings.GetLightColor() );
@@ -1229,7 +1229,7 @@ void TabBar::Paint( const Rectangle& )
                 DrawLine( aPos1, aPos2 );
 
                 // draw a small 2px sliver of the original background color at the bottom of the selected tab
-                     
+
                 if ( !pItem->IsDefaultTabBgColor() )
                 {
                     if ( pItem->mbSelect || (pItem->mnId == mnCurPageId) || rStyleSettings.GetHighContrastMode() ) {

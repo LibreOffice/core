@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -457,7 +457,7 @@ void SplineCalculater::CalculateBSplines(
     rResult.SequenceX.realloc(0);
     rResult.SequenceY.realloc(0);
     rResult.SequenceZ.realloc(0);
-    
+
     sal_Int32 nOuterCount = rInput.SequenceX.getLength();
     if( !nOuterCount )
         return; // no input
@@ -470,22 +470,22 @@ void SplineCalculater::CalculateBSplines(
     {
         if( rInput.SequenceX[nOuter].getLength() <= 1 )
             continue; // need at least 2 control points
-        
+
         sal_Int32 n = rInput.SequenceX[nOuter].getLength()-1; // maximum index of control points
-        
+
         double fCurveparam =0.0; // parameter for the curve
         // 0<= fCurveparam < fMaxCurveparam
         double fMaxCurveparam = 2.0+ n - k;
         if (fMaxCurveparam <= 0.0)
             return; // not enough control points for desired spline order
-        
+
         if (nGranularity < 1)
             return; //need at least 1 line for each part beween the control points
 
         const double* pOldX = rInput.SequenceX[nOuter].getConstArray();
         const double* pOldY = rInput.SequenceY[nOuter].getConstArray();
         const double* pOldZ = rInput.SequenceZ[nOuter].getConstArray();
-            
+
         // keep this amount of steps to go well with old version
         sal_Int32 nNewSectorCount = nGranularity * n;
         double fCurveStep = fMaxCurveparam/static_cast< double >(nNewSectorCount);
@@ -500,7 +500,7 @@ void SplineCalculater::CalculateBSplines(
         double* pNewX = rResult.SequenceX[nOuter].getArray();
         double* pNewY = rResult.SequenceY[nOuter].getArray();
         double* pNewZ = rResult.SequenceZ[nOuter].getArray();
-        
+
         // variables needed inside loop, when calculating one point of output
         sal_Int32 nPointIndex =0; //index of given contol points
         double fX=0.0;
@@ -509,10 +509,10 @@ void SplineCalculater::CalculateBSplines(
 
         for(sal_Int32 nNewSector=0; nNewSector<nNewSectorCount; nNewSector++)
         { // in first looping fCurveparam has value 0.0
-            
+
             // Calculate the values of the blending functions for actual curve parameter
             BVector(fCurveparam, n, k, b, t);
-            
+
             // output point(fCurveparam) = sum over {input point * value of blending function}
             fX = 0.0;
             fY = 0.0;
@@ -526,7 +526,7 @@ void SplineCalculater::CalculateBSplines(
             pNewX[nNewSector] = fX;
             pNewY[nNewSector] = fY;
             pNewZ[nNewSector] = fZ;
-            
+
             fCurveparam += fCurveStep; //for next looping
         }
         // add last control point to BSpline curve

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,11 +91,11 @@ namespace drawinglayer
         }
 
         SdrPrimitive3D::SdrPrimitive3D(
-            const basegfx::B3DHomMatrix& rTransform, 
+            const basegfx::B3DHomMatrix& rTransform,
             const basegfx::B2DVector& rTextureSize,
             const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
             const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute)
-        :	BufferedDecompositionPrimitive3D(),
+        :   BufferedDecompositionPrimitive3D(),
             maTransform(rTransform),
             maTextureSize(rTextureSize),
             maSdrLFSAttribute(rSdrLFSAttribute),

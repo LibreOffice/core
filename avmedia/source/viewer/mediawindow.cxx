@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -368,6 +368,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
                                         "AU Audio", "au",
                                         "AVI", "avi",
                                         "CD Audio", "cda",
+                                        "FLAC Audio", "flac",
                                         "MIDI Audio", "mid;midi",
                                         "MPEG Audio", "mp2;mp3;mpa",
                                         "MPEG Video", "mpg;mpeg;mpv;mp4",

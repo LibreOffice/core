@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <osl/diagnose.h>
 
 //-----------------------------------
-// 
+//
 //-----------------------------------
 
 CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, HWND aParentHandle)
@@ -43,8 +43,8 @@ CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, 
     OSL_PRECOND(IsWindow(aControlHandle),"Invalid control handle");
     OSL_PRECOND(IsWindow(aControlHandle),"Invalid parent handle");
 
-    // get window class 
-    // if static text create static text control etc.	
+    // get window class
+    // if static text create static text control etc.
 
     TCHAR aClsName[256];
     ZeroMemory(aClsName,sizeof(aClsName));
@@ -66,18 +66,18 @@ CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, 
 
         return new CDummyCustomControl(aControlHandle,aParentHandle);
     }
-    
+
     if (0 == _tcsicmp(aClsName,TEXT("listbox")) || 0 == _tcsicmp(aClsName,TEXT("combobox")))
         return new CComboboxCustomControl(aControlHandle,aParentHandle);
 
     if (0 == _tcsicmp(aClsName,TEXT("static")))
         return new CStaticCustomControl(aControlHandle,aParentHandle);
-    
+
     return new CDummyCustomControl(aControlHandle,aParentHandle);
 }
 
 //-----------------------------------
-// 
+//
 //-----------------------------------
 
 CCustomControl* CCustomControlFactory::CreateCustomControlContainer()

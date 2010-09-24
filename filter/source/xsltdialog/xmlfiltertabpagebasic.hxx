@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,19 +49,19 @@ public:
     static rtl::OUString decodeComment( const rtl::OUString& rComment );
     static rtl::OUString encodeComment( const rtl::OUString& rComment );
 
-    FixedText		maFTFilterName;
-    Edit			maEDFilterName;
+    FixedText       maFTFilterName;
+    Edit            maEDFilterName;
 
-    FixedText		maFTApplication;
-    ComboBox		maCBApplication;
+    FixedText       maFTApplication;
+    ComboBox        maCBApplication;
 
-    FixedText		maFTInterfaceName;
-    Edit			maEDInterfaceName;
+    FixedText       maFTInterfaceName;
+    Edit            maEDInterfaceName;
 
-    FixedText		maFTExtension;
-    Edit			maEDExtension;
-    FixedText		maFTDescription;
-    MultiLineEdit	maEDDescription;
+    FixedText       maFTExtension;
+    Edit            maEDExtension;
+    FixedText       maFTDescription;
+    MultiLineEdit   maEDDescription;
 };
 
 #endif

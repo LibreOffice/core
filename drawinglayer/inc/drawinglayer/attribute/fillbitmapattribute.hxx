@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,9 +58,9 @@ namespace drawinglayer
         public:
             /// constructors/assignmentoperator/destructor
             FillBitmapAttribute(
-                const BitmapEx& rBitmapEx, 
-                const basegfx::B2DPoint& rTopLeft, 
-                const basegfx::B2DVector& rSize, 
+                const BitmapEx& rBitmapEx,
+                const basegfx::B2DPoint& rTopLeft,
+                const basegfx::B2DVector& rSize,
                 bool bTiling);
             FillBitmapAttribute();
             FillBitmapAttribute(const FillBitmapAttribute& rCandidate);

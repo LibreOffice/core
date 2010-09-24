@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -381,7 +381,7 @@ sal_Bool XMLDoublePercentPropHdl::exportXML( OUString& rStrExpValue, const Any& 
     if( rValue >>= fValue )
     {
         fValue *= 100.0;
-        if( fValue > 0 ) fValue += 0.5; else	fValue -= 0.5;
+        if( fValue > 0 ) fValue += 0.5; else    fValue -= 0.5;
 
         sal_Int32 nValue = (sal_Int32)fValue;
 
@@ -650,7 +650,7 @@ sal_Bool XMLDoublePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 
 XMLColorTransparentPropHdl::XMLColorTransparentPropHdl(
     enum XMLTokenEnum eTransparent ) :
-    sTransparent( GetXMLToken( 
+    sTransparent( GetXMLToken(
         eTransparent != XML_TOKEN_INVALID ? eTransparent : XML_TRANSPARENT ) )
 {
     // Nothing to do
@@ -703,12 +703,12 @@ sal_Bool XMLColorTransparentPropHdl::exportXML( OUString& rStrExpValue, const An
 
 XMLIsTransparentPropHdl::XMLIsTransparentPropHdl(
     enum XMLTokenEnum eTransparent, sal_Bool bTransPropVal ) :
-    sTransparent( GetXMLToken( 
+    sTransparent( GetXMLToken(
         eTransparent != XML_TOKEN_INVALID ? eTransparent : XML_TRANSPARENT ) ),
     bTransPropValue( bTransPropVal )
 {
 }
-    
+
 XMLIsTransparentPropHdl::~XMLIsTransparentPropHdl()
 {
     // Nothing to do
@@ -800,7 +800,7 @@ sal_Bool XMLColorAutoPropHdl::exportXML( OUString& rStrExpValue, const Any& rVal
 XMLIsAutoColorPropHdl::XMLIsAutoColorPropHdl()
 {
 }
-    
+
 XMLIsAutoColorPropHdl::~XMLIsAutoColorPropHdl()
 {
     // Nothing to do
@@ -870,9 +870,9 @@ XMLNumberWithoutZeroPropHdl::~XMLNumberWithoutZeroPropHdl()
 {
 }
 
-sal_Bool XMLNumberWithoutZeroPropHdl::importXML( 
-    const OUString& rStrImpValue, 
-    Any& rValue, 
+sal_Bool XMLNumberWithoutZeroPropHdl::importXML(
+    const OUString& rStrImpValue,
+    Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
@@ -907,9 +907,9 @@ XMLNumberWithAutoInsteadZeroPropHdl::~XMLNumberWithAutoInsteadZeroPropHdl()
 {
 }
 
-sal_Bool XMLNumberWithAutoInsteadZeroPropHdl::importXML( 
-    const OUString& rStrImpValue, 
-    Any& rValue, 
+sal_Bool XMLNumberWithAutoInsteadZeroPropHdl::importXML(
+    const OUString& rStrImpValue,
+    Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;

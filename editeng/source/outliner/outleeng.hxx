@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ SV_DECL_PTRARR_DEL( NotifyList, EENotifyPtr, 1, 1 )
 
 class OutlinerEditEng : public EditEngine
 {
-    Outliner* 			pOwner;
+    Outliner*           pOwner;
 
 protected:
 
@@ -49,10 +49,10 @@ public:
                         OutlinerEditEng( Outliner* pOwner, SfxItemPool* pPool );
                         ~OutlinerEditEng();
 
-    virtual void 		PaintingFirstLine( USHORT nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev );
+    virtual void        PaintingFirstLine( USHORT nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev );
 
-    virtual void 		ParagraphInserted( USHORT nNewParagraph );
-    virtual void 		ParagraphDeleted( USHORT nDeletedParagraph );
+    virtual void        ParagraphInserted( USHORT nNewParagraph );
+    virtual void        ParagraphDeleted( USHORT nDeletedParagraph );
     virtual void        ParagraphConnected( USHORT nLeftParagraph, USHORT nRightParagraph );
 
     // #101498#
@@ -76,19 +76,19 @@ public:
         const Color& rOverlineColor,
         const Color& rTextLineColor);
 
-    virtual	void 		StyleSheetChanged( SfxStyleSheet* pStyle );
-    virtual void 		ParaAttribsChanged( USHORT nPara );
-    virtual BOOL 		SpellNextDocument();
-    virtual XubString	GetUndoComment( USHORT nUndoId ) const;
+    virtual void        StyleSheetChanged( SfxStyleSheet* pStyle );
+    virtual void        ParaAttribsChanged( USHORT nPara );
+    virtual BOOL        SpellNextDocument();
+    virtual XubString   GetUndoComment( USHORT nUndoId ) const;
 
     // for text conversion
     virtual BOOL        ConvertNextDocument();
 
-    virtual void		FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
-    virtual void		FieldSelected( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
-    virtual XubString	CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual void        FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
+    virtual void        FieldSelected( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
+    virtual XubString   CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rTxtColor, Color*& rFldColor );
 
-    virtual Rectangle 	GetBulletArea( USHORT nPara );
+    virtual Rectangle   GetBulletArea( USHORT nPara );
 
        virtual void        SetParaAttribs( USHORT nPara, const SfxItemSet& rSet );
 

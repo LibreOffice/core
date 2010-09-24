@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,39 +38,39 @@
 
 static void MovePosY( Window& _rWin, long _nDelta )
 {
-    Point	aPoint = _rWin.GetPosPixel();
+    Point   aPoint = _rWin.GetPosPixel();
     aPoint.Y() += _nDelta;
-    
+
     _rWin.SetPosPixel( aPoint );
 }
 
 struct SvxAccessibilityOptionsTabPage_Impl
 {
-    SvtAccessibilityOptions 	m_aConfig;
+    SvtAccessibilityOptions     m_aConfig;
     SvxAccessibilityOptionsTabPage_Impl()
             : m_aConfig(){}
 };
 
 SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage( Window* pParent, const SfxItemSet& rSet )
     :SfxTabPage(pParent, CUI_RES( RID_SVXPAGE_ACCESSIBILITYCONFIG ), rSet)
-    ,m_aMiscellaneousLabel		(this, CUI_RES(FL_MISCELLANEOUS		))
-    ,m_aAccessibilityTool		(this, CUI_RES(CB_ACCESSIBILITY_TOOL	))
-    ,m_aTextSelectionInReadonly	(this, CUI_RES(CB_TEXTSELECTION		))
-    ,m_aAnimatedGraphics		(this, CUI_RES(CB_ANIMATED_GRAPHICS	))
-    ,m_aAnimatedTexts			(this, CUI_RES(CB_ANIMATED_TEXTS		))
-    ,m_aTipHelpCB				(this, CUI_RES(CB_TIPHELP				))
-    ,m_aTipHelpNF				(this, CUI_RES(NF_TIPHELP				))
-    ,m_aTipHelpFT				(this, CUI_RES(FT_TIPHELP				))
-    ,m_aHCOptionsLabel			(this, CUI_RES(FL_HC_OPTIONS			))
-    ,m_aAutoDetectHC			(this, CUI_RES(CB_AUTO_DETECT_HC		))
-    ,m_aAutomaticFontColor		(this, CUI_RES(CB_AUTOMATIC_FONT_COLOR))
-    ,m_aPagePreviews			(this, CUI_RES(CB_PAGE_PREVIEWS       ))
+    ,m_aMiscellaneousLabel      (this, CUI_RES(FL_MISCELLANEOUS     ))
+    ,m_aAccessibilityTool       (this, CUI_RES(CB_ACCESSIBILITY_TOOL    ))
+    ,m_aTextSelectionInReadonly (this, CUI_RES(CB_TEXTSELECTION     ))
+    ,m_aAnimatedGraphics        (this, CUI_RES(CB_ANIMATED_GRAPHICS ))
+    ,m_aAnimatedTexts           (this, CUI_RES(CB_ANIMATED_TEXTS        ))
+    ,m_aTipHelpCB               (this, CUI_RES(CB_TIPHELP               ))
+    ,m_aTipHelpNF               (this, CUI_RES(NF_TIPHELP               ))
+    ,m_aTipHelpFT               (this, CUI_RES(FT_TIPHELP               ))
+    ,m_aHCOptionsLabel          (this, CUI_RES(FL_HC_OPTIONS            ))
+    ,m_aAutoDetectHC            (this, CUI_RES(CB_AUTO_DETECT_HC        ))
+    ,m_aAutomaticFontColor      (this, CUI_RES(CB_AUTOMATIC_FONT_COLOR))
+    ,m_aPagePreviews            (this, CUI_RES(CB_PAGE_PREVIEWS       ))
     ,m_pImpl(new SvxAccessibilityOptionsTabPage_Impl)
 {
     FreeResource();
     m_aTipHelpCB.SetClickHdl(LINK(this, SvxAccessibilityOptionsTabPage, TipHelpHdl));
 
-    long nHeightDelta = 0;		// to correct positions _under_ m_aAccessibilityTool
+    long nHeightDelta = 0;      // to correct positions _under_ m_aAccessibilityTool
 
 #ifdef UNX
     {
@@ -96,7 +96,7 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage( Window* pParent,
 #endif
 
     if( nHeightDelta )
-    {	//adjust positions of controls under m_aAccessibilityTool
+    {   //adjust positions of controls under m_aAccessibilityTool
         Size aSize = m_aAccessibilityTool.LogicToPixel( Size( 0, nHeightDelta ), MAP_APPFONT );
         nHeightDelta = aSize.Height();
 
@@ -118,7 +118,7 @@ SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
     delete m_pImpl;
 }
 
-SfxTabPage*	SvxAccessibilityOptionsTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxAccessibilityOptionsTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new SvxAccessibilityOptionsTabPage(pParent, rAttrSet);
 }
@@ -132,7 +132,7 @@ BOOL SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& )
     m_pImpl->m_aConfig.SetHelpTipSeconds( (short)m_aTipHelpNF.GetValue() );
     m_pImpl->m_aConfig.SetIsAllowAnimatedGraphics( m_aAnimatedGraphics.IsChecked() );
     m_pImpl->m_aConfig.SetIsAllowAnimatedText( m_aAnimatedTexts.IsChecked() );
-    m_pImpl->m_aConfig.SetIsAutomaticFontColor(	m_aAutomaticFontColor.IsChecked() );
+    m_pImpl->m_aConfig.SetIsAutomaticFontColor( m_aAutomaticFontColor.IsChecked() );
     m_pImpl->m_aConfig.SetSelectionInReadonly( m_aTextSelectionInReadonly.IsChecked());
     m_pImpl->m_aConfig.SetAutoDetectSystemHC( m_aAutoDetectHC.IsChecked());
 
@@ -155,15 +155,15 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet& )
 {
     //set controls from aConfig.Get...
 
-    m_aPagePreviews.Check(			  m_pImpl->m_aConfig.GetIsForPagePreviews() );
-    EnableTipHelp(					  m_pImpl->m_aConfig.GetIsHelpTipsDisappear() );
-    m_aTipHelpNF.SetValue(			  m_pImpl->m_aConfig.GetHelpTipSeconds() );
-    m_aAnimatedGraphics.Check(		  m_pImpl->m_aConfig.GetIsAllowAnimatedGraphics() );
-    m_aAnimatedTexts.Check(			  m_pImpl->m_aConfig.GetIsAllowAnimatedText() );
-    m_aAutomaticFontColor.Check(	  m_pImpl->m_aConfig.GetIsAutomaticFontColor() );
-//	m_aSystemFont.Check(			  m_pImpl->m_aConfig.GetIsSystemFont() );
+    m_aPagePreviews.Check(            m_pImpl->m_aConfig.GetIsForPagePreviews() );
+    EnableTipHelp(                    m_pImpl->m_aConfig.GetIsHelpTipsDisappear() );
+    m_aTipHelpNF.SetValue(            m_pImpl->m_aConfig.GetHelpTipSeconds() );
+    m_aAnimatedGraphics.Check(        m_pImpl->m_aConfig.GetIsAllowAnimatedGraphics() );
+    m_aAnimatedTexts.Check(           m_pImpl->m_aConfig.GetIsAllowAnimatedText() );
+    m_aAutomaticFontColor.Check(      m_pImpl->m_aConfig.GetIsAutomaticFontColor() );
+//  m_aSystemFont.Check(              m_pImpl->m_aConfig.GetIsSystemFont() );
     m_aTextSelectionInReadonly.Check( m_pImpl->m_aConfig.IsSelectionInReadonly() );
-    m_aAutoDetectHC.Check(			  m_pImpl->m_aConfig.GetAutoDetectSystemHC() );
+    m_aAutoDetectHC.Check(            m_pImpl->m_aConfig.GetAutoDetectSystemHC() );
 
 
     AllSettings aAllSettings = Application::GetSettings();

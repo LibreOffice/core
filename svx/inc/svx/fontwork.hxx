@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,39 +105,39 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
 
     SvxFontWorkControllerItem* pCtrlItems[CONTROLLER_COUNT];
 
-    ValueSet		aFormSet;
+    ValueSet        aFormSet;
 
-    ToolBox			aTbxStyle;
-    ToolBox			aTbxAdjust;
+    ToolBox         aTbxStyle;
+    ToolBox         aTbxAdjust;
 
-    FixedImage		aFbDistance;
-    MetricField		aMtrFldDistance;
-    FixedImage		aFbTextStart;
-    MetricField		aMtrFldTextStart;
+    FixedImage      aFbDistance;
+    MetricField     aMtrFldDistance;
+    FixedImage      aFbTextStart;
+    MetricField     aMtrFldTextStart;
 
-    ToolBox			aTbxShadow;
+    ToolBox         aTbxShadow;
 
-    FixedImage		aFbShadowX;
-    MetricField		aMtrFldShadowX;
-    FixedImage		aFbShadowY;
-    MetricField		aMtrFldShadowY;
+    FixedImage      aFbShadowX;
+    MetricField     aMtrFldShadowX;
+    FixedImage      aFbShadowY;
+    MetricField     aMtrFldShadowY;
 
-    ColorLB			aShadowColorLB;
+    ColorLB         aShadowColorLB;
 
-    SfxBindings&	rBindings;
-    Timer			aInputTimer;
-    BOOL			bUserZoomedIn;
+    SfxBindings&    rBindings;
+    Timer           aInputTimer;
+    BOOL            bUserZoomedIn;
 
-    USHORT			nLastStyleTbxId;
-    USHORT			nLastAdjustTbxId;
-    USHORT			nLastShadowTbxId;
-    long			nSaveShadowX;
-    long			nSaveShadowY;
-    long			nSaveShadowAngle;
-    long			nSaveShadowSize;
+    USHORT          nLastStyleTbxId;
+    USHORT          nLastAdjustTbxId;
+    USHORT          nLastShadowTbxId;
+    long            nSaveShadowX;
+    long            nSaveShadowY;
+    long            nSaveShadowAngle;
+    long            nSaveShadowSize;
 
-    ImageList		maImageList;
-    ImageList		maImageListH;
+    ImageList       maImageList;
+    ImageList       maImageListH;
 
     const XColorTable* pColorTable;
 
@@ -174,12 +174,12 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     void ApplyImageList();
 
  protected:
-    virtual void	Zoom();
+    virtual void    Zoom();
     virtual SfxChildAlignment CheckAlignment( SfxChildAlignment eActAlign,
                                               SfxChildAlignment eAlign );
 
  public:
-    SvxFontWorkDialog(	SfxBindings *pBindinx,
+    SvxFontWorkDialog(  SfxBindings *pBindinx,
                         SfxChildWindow *pCW,
                         Window* pParent,
                         const ResId& rResId );
@@ -193,5 +193,5 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
                           XFormTextStdForm eForm);
 };
 
-#endif		// _SVX_FONTWORK_HXX
+#endif      // _SVX_FONTWORK_HXX
 

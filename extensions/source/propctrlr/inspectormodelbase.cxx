@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -204,13 +204,13 @@ namespace pcr
     {
         return m_pProperties->convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ImplInspectorModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
     {
         m_pProperties->setFastPropertyValue( nHandle, rValue );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ImplInspectorModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
     {
@@ -222,13 +222,13 @@ namespace pcr
     {
         return m_pProperties->hasHelpSection();
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Int32 SAL_CALL ImplInspectorModel::getMinHelpTextLines() throw (RuntimeException)
     {
         return m_pProperties->getMinHelpTextLines();
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Int32 SAL_CALL ImplInspectorModel::getMaxHelpTextLines() throw (RuntimeException)
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 
 class DragSource;
 
-/* The functions declared in this protocol are actually 
+/* The functions declared in this protocol are actually
    declared in vcl/aqua/inc/salframe.h. Because we want
    to avoid importing VCL headers in UNO services and
    on the other hand want to avoid warnings caused by
@@ -80,8 +80,8 @@ class DragSource;
 
 
 class DragSource : public ::cppu::BaseMutex,
-                   public ::cppu::WeakComponentImplHelper3< com::sun::star::datatransfer::dnd::XDragSource, 
-                                                            com::sun::star::lang::XInitialization, 
+                   public ::cppu::WeakComponentImplHelper3< com::sun::star::datatransfer::dnd::XDragSource,
+                                                            com::sun::star::lang::XInitialization,
                                                             com::sun::star::lang::XServiceInfo >,
                    private ::boost::noncopyable
 {
@@ -98,7 +98,7 @@ public:
 
   virtual sal_Int32 SAL_CALL getDefaultCursor(sal_Int8 dragAction)
     throw(com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException);
-  
+
   virtual void SAL_CALL startDrag( const com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
                                    sal_Int8 sourceActions,
                                    sal_Int32 cursor,
@@ -128,7 +128,7 @@ public:
   // The mouse button that set off the drag and drop operation
   short m_MouseButton;
   sal_Int8 mDragSourceActions;
-  
+
   static com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable > g_XTransferable;
   static NSView* g_DragSourceView;
   static bool    g_DropSuccessSet;

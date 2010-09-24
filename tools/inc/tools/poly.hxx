@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,17 +37,17 @@
 // - Defines -
 // -----------
 
-#define POLY_APPEND				(0xFFFF)
-#define POLYPOLY_APPEND			(0xFFFF)
+#define POLY_APPEND             (0xFFFF)
+#define POLYPOLY_APPEND         (0xFFFF)
 
 // ------------------------------------------------------------------------
 
-#define POLY_OPTIMIZE_NONE		0x00000000UL
-#define POLY_OPTIMIZE_OPEN		0x00000001UL
-#define POLY_OPTIMIZE_CLOSE		0x00000002UL
-#define POLY_OPTIMIZE_NO_SAME	0x00000004UL
-#define POLY_OPTIMIZE_REDUCE	0x00000008UL
-#define POLY_OPTIMIZE_EDGES		0x00000010UL
+#define POLY_OPTIMIZE_NONE      0x00000000UL
+#define POLY_OPTIMIZE_OPEN      0x00000001UL
+#define POLY_OPTIMIZE_CLOSE     0x00000002UL
+#define POLY_OPTIMIZE_NO_SAME   0x00000004UL
+#define POLY_OPTIMIZE_REDUCE    0x00000008UL
+#define POLY_OPTIMIZE_EDGES     0x00000010UL
 
 // -------------
 // - PolyStyle -
@@ -83,9 +83,9 @@ class PolyOptimizeData
 {
 private:
 
-    enum DataType	{ DATA_NONE = 0, DATA_ABSOLUT = 1, DATA_PERCENT = 2 };
-    DataType		eType;
-    union			{ ULONG mnAbsolut; USHORT mnPercent; };
+    enum DataType   { DATA_NONE = 0, DATA_ABSOLUT = 1, DATA_PERCENT = 2 };
+    DataType        eType;
+    union           { ULONG mnAbsolut; USHORT mnPercent; };
 
 public:
 
@@ -93,8 +93,8 @@ public:
                     PolyOptimizeData( ULONG nAbsolut ) : eType( DATA_ABSOLUT ), mnAbsolut( nAbsolut ) {}
                     PolyOptimizeData( USHORT nPercent ) : eType( DATA_PERCENT ), mnPercent( nPercent ) {}
 
-    ULONG			GetAbsValue() const { DBG_ASSERT( eType == DATA_ABSOLUT, "Wrong data type" ); return mnAbsolut; }
-    USHORT			GetPercentValue() const { DBG_ASSERT( eType == DATA_PERCENT, "Wrong data type" ); return mnPercent; }
+    ULONG           GetAbsValue() const { DBG_ASSERT( eType == DATA_ABSOLUT, "Wrong data type" ); return mnAbsolut; }
+    USHORT          GetPercentValue() const { DBG_ASSERT( eType == DATA_PERCENT, "Wrong data type" ); return mnPercent; }
 };
 
 // -----------
@@ -104,10 +104,10 @@ public:
 class SvStream;
 class ImplPolygon;
 class ImplPolyPolygon;
-class PolyPolygon; 
+class PolyPolygon;
 
-namespace basegfx 
-{ 
+namespace basegfx
+{
     class B2DPolygon;
     class B2DPolyPolygon;
 } // end of namespace basegfx
@@ -127,9 +127,9 @@ public:
     Point*              ImplGetPointAry();
     BYTE*               ImplGetFlagAry();
 
-    static void			ImplReduceEdges( Polygon& rPoly, const double& rArea, USHORT nPercent );
-    void				ImplRead( SvStream& rIStream );
-    void				ImplWrite( SvStream& rOStream ) const;
+    static void         ImplReduceEdges( Polygon& rPoly, const double& rArea, USHORT nPercent );
+    void                ImplRead( SvStream& rIStream );
+    void                ImplWrite( SvStream& rOStream ) const;
 
 //#endif // __PRIVATE
 
@@ -139,7 +139,7 @@ public:
                         Polygon( USHORT nPoints, const Point* pPtAry,
                                  const BYTE* pFlagAry = NULL );
                         Polygon( const Rectangle& rRect );
-                        Polygon( const Rectangle& rRect, 
+                        Polygon( const Rectangle& rRect,
                                  ULONG nHorzRound, ULONG nVertRound );
                         Polygon( const Point& rCenter,
                                  long nRadX, long nRadY,
@@ -147,8 +147,8 @@ public:
                         Polygon( const Rectangle& rBound,
                                  const Point& rStart, const Point& rEnd,
                                  PolyStyle ePolyStyle = POLY_ARC );
-                        Polygon( const Point& rBezPt1, const Point& rCtrlPt1, 
-                                 const Point& rBezPt2, const Point& rCtrlPt2,  
+                        Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
+                                 const Point& rBezPt2, const Point& rCtrlPt2,
                                  USHORT nPoints = 0 );
 
                         Polygon( const Polygon& rPoly );
@@ -159,11 +159,11 @@ public:
 
     void                SetFlags( USHORT nPos, PolyFlags eFlags );
     PolyFlags           GetFlags( USHORT nPos ) const;
-    sal_Bool			HasFlags() const;
+    sal_Bool            HasFlags() const;
 
     BOOL                IsControl( USHORT nPos ) const;
     BOOL                IsSmooth( USHORT nPos ) const;
-    BOOL				IsRect() const;
+    BOOL                IsRect() const;
 
     void                SetSize( USHORT nNewSize );
     USHORT              GetSize() const;
@@ -177,7 +177,7 @@ public:
     BOOL                IsRightOrientated() const;
     double              CalcDistance( USHORT nPt1, USHORT nPt2 );
     void                Clip( const Rectangle& rRect, BOOL bPolygon = TRUE );
-    void				Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData = NULL );
+    void                Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData = NULL );
 
     /** Adaptive subdivision of polygons with curves
 
@@ -188,7 +188,7 @@ public:
         @param rResult
         The resulting subdivided polygon
 
-        @param d 
+        @param d
         This parameter controls the amount of subdivision. The
         original curve is guaranteed to not differ by more than this
         amount per bezier segment from the subdivided
@@ -197,12 +197,12 @@ public:
         the original polygon is guaranteed to be smaller than one
         pixel.
      */
-    void 				AdaptiveSubdivide( Polygon& rResult, const double d = 1.0 ) const;
+    void                AdaptiveSubdivide( Polygon& rResult, const double d = 1.0 ) const;
 
-    void				GetIntersection( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
-    void				GetUnion( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
-    void				GetDifference( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
-    void				GetXOR( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
+    void                GetIntersection( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
+    void                GetUnion( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
+    void                GetDifference( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
+    void                GetXOR( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
 
     void                Move( long nHorzMove, long nVertMove );
     void                Translate( const Point& rTrans );
@@ -224,15 +224,15 @@ public:
     BOOL                operator==( const Polygon& rPoly ) const;
     BOOL                operator!=( const Polygon& rPoly ) const
                             { return !(Polygon::operator==( rPoly )); }
-    sal_Bool			IsEqual( const Polygon& rPoly ) const;
+    sal_Bool            IsEqual( const Polygon& rPoly ) const;
 
     // streaming a Polygon does ignore PolyFlags, so use the Write Or Read
     // method to take care of PolyFlags
     TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, Polygon& rPoly );
     TOOLS_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStream, const Polygon& rPoly );
 
-    void				Read( SvStream& rIStream );
-    void				Write( SvStream& rOStream ) const;
+    void                Read( SvStream& rIStream );
+    void                Write( SvStream& rOStream ) const;
 
     const Point*        GetConstPointAry() const;
     const BYTE*         GetConstFlagAry() const;
@@ -275,14 +275,14 @@ public:
     void                Replace( const Polygon& rPoly, USHORT nPos );
     const Polygon&      GetObject( USHORT nPos ) const;
 
-    BOOL				IsRect() const;
+    BOOL                IsRect() const;
 
     void                Clear();
 
     USHORT              Count() const;
     Rectangle           GetBoundRect() const;
     void                Clip( const Rectangle& rRect );
-    void				Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData = NULL );
+    void                Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData = NULL );
 
     /** Adaptive subdivision of polygons with curves
 
@@ -293,7 +293,7 @@ public:
         @param rResult
         The resulting subdivided polygon
 
-        @param d 
+        @param d
         This parameter controls the amount of subdivision. The
         original curve is guaranteed to not differ by more than this
         amount per bezier segment from the subdivided
@@ -302,12 +302,12 @@ public:
         the original polygon is guaranteed to be smaller than one
         pixel.
      */
-    void 				AdaptiveSubdivide( PolyPolygon& rResult, const double d = 1.0 ) const;
+    void                AdaptiveSubdivide( PolyPolygon& rResult, const double d = 1.0 ) const;
 
-    void				GetIntersection( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
-    void				GetUnion( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
-    void				GetDifference( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
-    void				GetXOR( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
+    void                GetIntersection( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
+    void                GetUnion( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
+    void                GetDifference( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
+    void                GetXOR( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
 
     void                Move( long nHorzMove, long nVertMove );
     void                Translate( const Point& rTrans );
@@ -326,13 +326,13 @@ public:
     BOOL                operator!=( const PolyPolygon& rPolyPoly ) const
                             { return !(PolyPolygon::operator==( rPolyPoly )); }
 
-    sal_Bool			IsEqual( const PolyPolygon& rPolyPoly ) const;
+    sal_Bool            IsEqual( const PolyPolygon& rPolyPoly ) const;
 
     TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, PolyPolygon& rPolyPoly );
     TOOLS_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStream, const PolyPolygon& rPolyPoly );
 
-    void				Read( SvStream& rIStream );
-    void				Write( SvStream& rOStream ) const;
+    void                Read( SvStream& rIStream );
+    void                Write( SvStream& rOStream ) const;
 
     // convert to ::basegfx::B2DPolyPolygon and return
     ::basegfx::B2DPolyPolygon getB2DPolyPolygon() const;

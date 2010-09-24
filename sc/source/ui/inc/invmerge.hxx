@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,21 +37,21 @@ class Window;
 class ScInvertMerger
 {
 private:
-    Window*		pWin;
+    Window*     pWin;
     ::std::vector< Rectangle >* pRects;
-    Rectangle	aTotalRect;
-    Rectangle	aLineRect;
+    Rectangle   aTotalRect;
+    Rectangle   aLineRect;
 
-    void		FlushLine();
-    void		FlushTotal();
+    void        FlushLine();
+    void        FlushTotal();
 
 public:
                 ScInvertMerger( Window* pWindow );
                 ScInvertMerger( ::std::vector< Rectangle >* pRectangles );
                 ~ScInvertMerger();
 
-    void		AddRect( const Rectangle& rRect );
-    void		Flush();
+    void        AddRect( const Rectangle& rRect );
+    void        Flush();
 };
 
 

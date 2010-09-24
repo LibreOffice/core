@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,13 @@
 import java.util.*;
 
 // LinkedHashMap implrementation
-public class OrderedHashMap 
+public class OrderedHashMap
 {
     private HashMap hm = new HashMap();
     private LinkedList list  = new LinkedList();
 
     public Iterator    iterator()   { return list.iterator(); }
-    
+
     public boolean isEmpty()        { return hm.isEmpty(); }
     public Object get( Object key ) { return hm.get( key ); }
     public Object get( int index )  { return hm.get( list.get( index ) ); }

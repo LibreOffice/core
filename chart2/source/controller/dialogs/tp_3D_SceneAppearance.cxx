@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,13 +105,13 @@ ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(
       Window* pWindow
     , const uno::Reference< frame::XModel > & xChartModel
     , ControllerLockHelper & rControllerLockHelper )
-                : TabPage 	        ( pWindow, SchResId( TP_3D_SCENEAPPEARANCE ) )
+                : TabPage           ( pWindow, SchResId( TP_3D_SCENEAPPEARANCE ) )
                 , m_xChartModel     ( xChartModel )
                 , m_aFT_Scheme      ( this, SchResId( FT_SCHEME ) )
                 , m_aLB_Scheme      ( this, SchResId( LB_SCHEME ) )
                 , m_aFL_Seperator   ( this, SchResId( FL_SEPERATOR ) )
                 , m_aCB_RoundedEdge ( this, SchResId( CB_ROUNDEDEDGE ) )
-                , m_aCB_Shading	    ( this, SchResId( CB_SHADING ) )
+                , m_aCB_Shading     ( this, SchResId( CB_SHADING ) )
                 , m_aCB_ObjectLines ( this, SchResId( CB_OBJECTLINES ) )
                 , m_bUpdateOtherControls( true )
                 , m_bCommitToModel( true )
@@ -345,14 +345,14 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, Check
     if( pCheckBox == &m_aCB_ObjectLines )
     {
         m_aCB_ObjectLines.EnableTriState( FALSE );
-        m_bUpdateOtherControls = false; 
+        m_bUpdateOtherControls = false;
         m_aCB_RoundedEdge.Enable( !m_aCB_ObjectLines.IsChecked() );
         if(!m_aCB_RoundedEdge.IsEnabled())
             m_aCB_RoundedEdge.Check(FALSE);
         m_bUpdateOtherControls = true;
     }
     else
-        m_aCB_RoundedEdge.EnableTriState( FALSE ); 
+        m_aCB_RoundedEdge.EnableTriState( FALSE );
     applyRoundedEdgeAndObjectLinesToModel();
     updateScheme();
     return 0;

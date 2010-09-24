@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace drawinglayer
                 fDeltaX = -fDeltaX;
                 nIndX--;
             }
-            
+
             if(fDeltaY > 0.0 && nIntY + 1L < rRead.Height())
             {
                 nIndY++;
@@ -102,14 +102,14 @@ namespace drawinglayer
                     if(!nIndX)
                     {
                         const BitmapColor aBottom(rRead.GetColor(nIntY + nIndY, nIntX));
-                        
+
                         fRBottom = aBottom.GetRed() * fColorToReal;
                         fGBottom = aBottom.GetGreen() * fColorToReal;
                         fBBottom = aBottom.GetBlue() * fColorToReal;
                     }
 
                     const double fMulB(1.0 - fDeltaY);
-                    
+
                     fR = (fR * fMulB) + (fRBottom * fDeltaY);
                     fG = (fG * fMulB) + (fGBottom * fDeltaY);
                     fB = (fB * fMulB) + (fBBottom * fDeltaY);
@@ -137,7 +137,7 @@ namespace drawinglayer
                 fDeltaX = -fDeltaX;
                 nIndX--;
             }
-            
+
             if(fDeltaY > 0.0 && nIntY + 1L < rRead.Height())
             {
                 nIndY++;
@@ -177,12 +177,12 @@ namespace drawinglayer
                     if(!nIndX)
                     {
                         const BitmapColor aBottom(rRead.GetPixel(nIntY + nIndY, nIntX));
-                        
+
                         fValBottom = aBottom.GetIndex() * fColorToReal;
                     }
 
                     const double fMulB(1.0 - fDeltaY);
-                    
+
                     fVal = (fVal * fMulB) + (fValBottom * fDeltaY);
                 }
 
@@ -221,7 +221,7 @@ namespace drawinglayer
                                     if(bWorkWithIndex)
                                     {
                                         BitmapColor aValue(pRead->GetPixel(nIntY, nIntX));
-                                        
+
                                         if(bSmooth)
                                         {
                                             impSmoothIndex(aValue, aSourceCoor, nIntX, nIntY, *pRead);
@@ -232,7 +232,7 @@ namespace drawinglayer
                                     else
                                     {
                                         BitmapColor aValue(pRead->GetColor(nIntY, nIntX));
-                                        
+
                                         if(bSmooth)
                                         {
                                             impSmoothPoint(aValue, aSourceCoor, nIntX, nIntY, *pRead);
@@ -288,8 +288,8 @@ namespace drawinglayer
 namespace drawinglayer
 {
     BitmapEx impTransformBitmapEx(
-        const BitmapEx& rSource, 
-        const Rectangle& rCroppedRectPixel, 
+        const BitmapEx& rSource,
+        const Rectangle& rCroppedRectPixel,
         const basegfx::B2DHomMatrix& rTransform)
     {
         // force destination to 24 bit, we want to smooth output
@@ -319,7 +319,7 @@ namespace drawinglayer
     }
 
     BitmapEx impModifyBitmapEx(
-        const basegfx::BColorModifierStack& rBColorModifierStack, 
+        const basegfx::BColorModifierStack& rBColorModifierStack,
         const BitmapEx& rSource)
     {
         Bitmap aChangedBitmap(rSource.GetBitmap());
@@ -328,7 +328,7 @@ namespace drawinglayer
         for(sal_uInt32 a(rBColorModifierStack.count()); a && !bDone; )
         {
             const basegfx::BColorModifier& rModifier = rBColorModifierStack.getBColorModifier(--a);
-            
+
             switch(rModifier.getMode())
             {
                 case basegfx::BCOLORMODIFYMODE_REPLACE :
@@ -350,8 +350,8 @@ namespace drawinglayer
                                 BitmapPalette aNewPalette(pReadAccess->GetPalette());
                                 aNewPalette[0] = BitmapColor(Color(rModifier.getBColor()));
                                 aChangedBitmap = Bitmap(
-                                    aChangedBitmap.GetSizePixel(), 
-                                    aChangedBitmap.GetBitCount(), 
+                                    aChangedBitmap.GetSizePixel(),
+                                    aChangedBitmap.GetBitCount(),
                                     &aNewPalette);
                                 delete pReadAccess;
                             }
@@ -366,7 +366,7 @@ namespace drawinglayer
                         // erase bitmap, caller will know to paint direct
                         aChangedBitmap.SetEmpty();
                     }
-                    
+
                     bDone = true;
                     break;
                 }
@@ -385,18 +385,18 @@ namespace drawinglayer
                             {
                                 const BitmapColor aBMCol(pContent->GetColor(y, x));
                                 const basegfx::BColor aBSource(
-                                    (double)aBMCol.GetRed() * fConvertColor, 
-                                    (double)aBMCol.GetGreen() * fConvertColor, 
+                                    (double)aBMCol.GetRed() * fConvertColor,
+                                    (double)aBMCol.GetGreen() * fConvertColor,
                                     (double)aBMCol.GetBlue() * fConvertColor);
                                 const basegfx::BColor aBDest(rModifier.getModifiedColor(aBSource));
-                                
+
                                 pContent->SetPixel(y, x, BitmapColor(Color(aBDest)));
                             }
                         }
 
                         delete pContent;
                     }
-                    
+
                     break;
                 }
             }

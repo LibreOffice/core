@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ uno::Reference< XTitled > lcl_getTitleParentFromDiagram(
         else
             nTitleIndex = bIsVertical ? TitleHelper::Y_AXIS_TITLE : TitleHelper::X_AXIS_TITLE;
     }
-            
+
 
     switch( nTitleIndex )
     {
@@ -172,7 +172,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
             xTitled = lcl_getTitleParent( eTitleType, xModel );
         }
     }
-    
+
     if(xTitled.is())
     {
         uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
@@ -281,7 +281,7 @@ void TitleHelper::setCompleteString( const rtl::OUString& rNewText
         rtl::OUStringBuffer aSource(rNewText);
 
         bool bBreakIgnored = false;
-        sal_Int32 nLen = rNewText.getLength();       
+        sal_Int32 nLen = rNewText.getLength();
         for( sal_Int32 nPos = 0; nPos < nLen; ++nPos )
         {
             sal_Unicode aChar = aSource.charAt( nPos );
@@ -357,7 +357,7 @@ bool TitleHelper::getTitleType( eTitleType& rType
 {
     if( !xTitle.is() || !xModel.is() )
         return false;
-    
+
     Reference< chart2::XTitle > xCurrentTitle;
     for( sal_Int32 nTitleType = TITLE_BEGIN; nTitleType < NORMAL_TITLE_END; nTitleType++ )
     {

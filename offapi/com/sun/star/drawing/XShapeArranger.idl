@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,32 +24,32 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_XShapeArranger_idl__ 
-#define __com_sun_star_drawing_XShapeArranger_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_drawing_XShapes_idl__ 
-#include <com/sun/star/drawing/XShapes.idl> 
-#endif 
- 
-#ifndef __com_sun_star_drawing_Arrangement_idl__ 
-#include <com/sun/star/drawing/Arrangement.idl> 
-#endif 
- 
-#ifndef __com_sun_star_drawing_XShape_idl__ 
-#include <com/sun/star/drawing/XShape.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module drawing {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_drawing_XShapeArranger_idl__
+#define __com_sun_star_drawing_XShapeArranger_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_XShapes_idl__
+#include <com/sun/star/drawing/XShapes.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_Arrangement_idl__
+#include <com/sun/star/drawing/Arrangement.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_XShape_idl__
+#include <com/sun/star/drawing/XShape.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
 // DocMerge from xml: interface com::sun::star::drawing::XShapeArranger
 /** Objects implementing this interface can be used to arrange
     <type>Shape</type>s.
@@ -57,65 +57,65 @@
     @deprecated
  */
 published interface XShapeArranger: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::arrange
     /** applies the specified <type>Arrangement</type> to
         the specified collection of <type>Shape</type>s.
      */
-    void arrange( [in] com::sun::star::drawing::XShapes xShapes, 
-             [in] com::sun::star::drawing::Arrangement eType ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void arrange( [in] com::sun::star::drawing::XShapes xShapes,
+             [in] com::sun::star::drawing::Arrangement eType );
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::bringToFront
-    /** moves the specified <type>Shape</type>s by a specified number 
+    /** moves the specified <type>Shape</type>s by a specified number
         of objects more to the front.
      */
-    void bringToFront( [in] com::sun::star::drawing::XShapes xShapes, 
-             [in] short nSteps ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void bringToFront( [in] com::sun::star::drawing::XShapes xShapes,
+             [in] short nSteps );
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::sendToBack
     /** moves the specified <type>Shape</type>s
         <var>nSteps</var> objects more to the back.
      */
-    void sendToBack( [in] com::sun::star::drawing::XShapes xShapes, 
-             [in] short nSteps ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void sendToBack( [in] com::sun::star::drawing::XShapes xShapes,
+             [in] short nSteps );
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::setBehindShape
     /** moves the specified collection of <type>Shape</type>s
         behind the specified single <type>Shape</type>.
      */
-    void setBehindShape( [in] com::sun::star::drawing::XShapes xShapes, 
-             [in] com::sun::star::drawing::XShape xShape ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void setBehindShape( [in] com::sun::star::drawing::XShapes xShapes,
+             [in] com::sun::star::drawing::XShape xShape );
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::setInFrontOf
     /** moves the specified collection of <type>Shape</type>s in
         front of the specified single <type>Shape</type>.
      */
-    void setInFrontOf( [in] com::sun::star::drawing::XShapes xShapes, 
-             [in] com::sun::star::drawing::XShape xShape ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void setInFrontOf( [in] com::sun::star::drawing::XShapes xShapes,
+             [in] com::sun::star::drawing::XShape xShape );
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::reverseOrder
     /** reverses the order of the specified collection of
         <type>Shape</type>s.
      */
-    void reverseOrder( [in] com::sun::star::drawing::XShapes xShapes ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    void reverseOrder( [in] com::sun::star::drawing::XShapes xShapes );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
 

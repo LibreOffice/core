@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,31 +32,31 @@
 #include <com/sun/star/ui/XUIElementFactory.idl>
 #endif
 
-//============================================================================= 
+//=============================================================================
 
 module com { module sun { module star { module ui {
 
-//============================================================================= 
+//=============================================================================
 
 /** specifies a user interface element factory that can create and initialize
     a user interface element type.
-    
+
     <p>
-    It depends on the implementation which user interface element types can be 
-    created. It is also possible that a factory is only able to create one 
-    special user interface element. User interface element factories must be 
-    registered at the single instance <type>UIElementFactoryManager</type> 
+    It depends on the implementation which user interface element types can be
+    created. It is also possible that a factory is only able to create one
+    special user interface element. User interface element factories must be
+    registered at the single instance <type>UIElementFactoryManager</type>
     service to provide access to itself.
     </p>
-    
+
     @since OOo 2.0.0
 */
 
 service UIElementFactory
 {
-    /** this interface provides a function to create and initalize new 
+    /** this interface provides a function to create and initalize new
         instances of user interface elements.
-    
+
         @see XUIElementFactory
      */
     interface com::sun::star::ui::XUIElementFactory;

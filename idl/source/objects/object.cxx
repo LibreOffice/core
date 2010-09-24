@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,9 +84,9 @@ void SvClassElement::Save( SvPersistStream & rStm )
 {
     // Maske erstellen
     BYTE nMask = 0;
-    if( aAutomation.IsSet() ) 		nMask |= 0x1;
-    if( aPrefix.Len() )		  		nMask |= 0x2;
-    if( xClass.Is() )				nMask |= 0x4;
+    if( aAutomation.IsSet() )       nMask |= 0x1;
+    if( aPrefix.Len() )             nMask |= 0x2;
+    if( xClass.Is() )               nMask |= 0x4;
 
     // Daten schreiben
     rStm << nMask;
@@ -152,11 +152,11 @@ void SvMetaClass::Save( SvPersistStream & rStm )
 
     // Maske erstellen
     BYTE nMask = 0;
-    if( aAttrList.Count() ) 		nMask |= 0x1;
-    if( aSuperClass.Is() )  		nMask |= 0x2;
-    if( aClassList.Count() )		nMask |= 0x4;
+    if( aAttrList.Count() )         nMask |= 0x1;
+    if( aSuperClass.Is() )          nMask |= 0x2;
+    if( aClassList.Count() )        nMask |= 0x4;
     if( xAutomationInterface.Is() ) nMask |= 0x8;
-    if( aAutomation.IsSet() )		nMask |= 0x10;
+    if( aAutomation.IsSet() )       nMask |= 0x10;
 
     // Daten schreiben
     rStm << nMask;
@@ -652,7 +652,7 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                 rOutStm << " ( Automation ) ";
             rOutStm << endl;
             WriteDescription( rOutStm );
-            rOutStm	<< "</INTERFACE>" << endl << endl;
+            rOutStm << "</INTERFACE>" << endl << endl;
 
             // alle Attribute schreiben
             ULONG n;
@@ -983,11 +983,11 @@ void SvMetaClass::WriteHxx( SvIdlDataBase &, SvStream & rOutStm, USHORT )
     << "protected:" << endl
     << "\tvirtual SvGlobalName  GetTypeName() const;" << endl
     << "\tvirtual BOOL          FillTypeLibInfo( SvGlobalName *, USHORT * pMajor," << endl
-    << "\t                         			     USHORT * pMinor ) const;" << endl
+    << "\t                                       USHORT * pMinor ) const;" << endl
     << "\tvirtual BOOL          FillTypeLibInfo( ByteString * pName, USHORT * pMajor," << endl;
     rOutStm
-    << "\t			                             USHORT * pMinor ) const;" << endl
-    << "\tvirtual void 			Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) = 0;" << endl
+    << "\t                                       USHORT * pMinor ) const;" << endl
+    << "\tvirtual void          Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) = 0;" << endl
     << "public:" << endl
     << "\t static SvGlobalName  ClassName()" << endl
     << "\t                      { return SvGlobalName( " << ByteString( GetUUId().GetctorName(), RTL_TEXTENCODING_UTF8 ).GetBuffer() << " ); }" << endl
@@ -1016,8 +1016,8 @@ void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, USHORT )
     SvMetaModule * pMod = GetModule();
     // FillTypeLibInfo
     rOutStm << "BOOL " << name.GetBuffer() << "::FillTypeLibInfo( SvGlobalName * pGN," << endl
-    << "\t								 USHORT * pMajor," << endl
-    << "\t                         		 USHORT * pMinor ) const" << endl
+    << "\t                               USHORT * pMajor," << endl
+    << "\t                               USHORT * pMinor ) const" << endl
     << '{' << endl
     << "\tSvGlobalName aN( " << ByteString( pMod->GetUUId().GetctorName(), RTL_TEXTENCODING_UTF8 ).GetBuffer() << " );" << endl;
     rOutStm << "\t*pGN = aN;" << endl
@@ -1028,8 +1028,8 @@ void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, USHORT )
 
     // FillTypeLibInfo
     rOutStm << "BOOL " << name.GetBuffer() << "::FillTypeLibInfo( ByteString * pName,"
-    << "\t								 USHORT * pMajor," << endl
-    << "\t                         		 USHORT * pMinor ) const" << endl;
+    << "\t                               USHORT * pMajor," << endl
+    << "\t                               USHORT * pMinor ) const" << endl;
     rOutStm << '{' << endl
     << "\t*pName = \"" << pMod->GetTypeLibFileName().GetBuffer()  << "\";" << endl
     << "\t*pMajor = " << ByteString::CreateFromInt32(pMod->GetVersion().GetMajorVersion()).GetBuffer() << ';' << endl

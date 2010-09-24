@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ public class _XDataPilotTable {
     XCell xCellForCheck = null;
     CellAddress OutputRange = null;
     int changeValue = 0;
-    
+
     /**
      * The test parameters
      */
@@ -72,14 +72,14 @@ public class _XDataPilotTable {
      * The log writer
      */
     private LogWriter log = null;
-    
+
     /**
      * Constructor: gets the object to test, a logger and the test parameters
      * @param xObj The test object
      * @param log A log writer
      * @param param The test parameters
      */
-    public _XDataPilotTable(XDataPilotTable xObj, 
+    public _XDataPilotTable(XDataPilotTable xObj,
                                     LogWriter log, TestParameters param) {
         oObj = xObj;
         this.log = log;

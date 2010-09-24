@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ static const WordDialogTable aWordDialogTable[] =
     { 0, 0 }
 };
 
-rtl::OUString 
+rtl::OUString
 SwVbaDialog::mapIndexToName( sal_Int32 nIndex )
 {
     for( const WordDialogTable* pTable = aWordDialogTable; pTable != NULL; pTable++ )
@@ -58,14 +58,14 @@ SwVbaDialog::mapIndexToName( sal_Int32 nIndex )
     return rtl::OUString();
 }
 
-rtl::OUString& 
+rtl::OUString&
 SwVbaDialog::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaDialog") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 SwVbaDialog::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

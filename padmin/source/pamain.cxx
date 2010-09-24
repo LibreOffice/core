@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,9 +58,9 @@ using namespace comphelper;
 class MyApp : public Application
 {
 public:
-    void			Main();
-    virtual USHORT	Exception( USHORT nError );
-    
+    void            Main();
+    virtual USHORT  Exception( USHORT nError );
+
     static void ReadStringHook( String& );
 };
 
@@ -113,7 +113,7 @@ void MyApp::Main()
     catch( com::sun::star::uno::Exception& rExc)
     {
     }
-    
+
     if( ! xFactory.is() )
     {
         fprintf( stderr, "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
@@ -125,7 +125,7 @@ void MyApp::Main()
         new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
 
     /*
-     *	Create UCB.
+     *  Create UCB.
      */
     Sequence< Any > aArgs( 2 );
     aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
@@ -142,11 +142,11 @@ void MyApp::Main()
         exit( 1 );
     }
 #endif
-    
+
     /*
-     * Initialize the Java UNO AccessBridge if accessibility is turned on 
+     * Initialize the Java UNO AccessBridge if accessibility is turned on
      */
-     
+
     if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
     {
         BOOL bQuitApp;
@@ -157,7 +157,7 @@ void MyApp::Main()
 
     // initialize test-tool library (if available)
     tools::InitTestToolLib();
-    
+
     ResMgr::SetReadStringHook( MyApp::ReadStringHook );
 
     pPADialog = PADialog::Create( NULL , FALSE );

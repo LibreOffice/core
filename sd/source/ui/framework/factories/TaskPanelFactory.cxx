@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,13 +82,13 @@ typedef ::cppu::WeakComponentImplHelper1 <
 
 class TaskPanelResource
     : private ::cppu::BaseMutex,
-      public TaskPanelResourceInterfaceBase      
+      public TaskPanelResourceInterfaceBase
 {
 public:
     TaskPanelResource (
         const Reference<XResourceId>& rxResourceId );
     virtual ~TaskPanelResource ();
-    
+
     virtual void SAL_CALL disposing ();
 
     // XResource
@@ -134,9 +134,9 @@ void SAL_CALL TaskPanelFactory::disposing (void)
 
 
 
-    
+
 //===== XInitialization =======================================================
-    
+
 void SAL_CALL TaskPanelFactory::initialize(
     const ::com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArguments)
     throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
@@ -205,7 +205,7 @@ Reference<XResource> SAL_CALL TaskPanelFactory::createResource (
     throw (RuntimeException, IllegalArgumentException, WrappedTargetException)
 {
     Reference<XResource> xResource;
-    
+
     if ( ! rxResourceId.is())
         return NULL;
 
@@ -214,7 +214,7 @@ Reference<XResource> SAL_CALL TaskPanelFactory::createResource (
     if ( sResourceURL.match( FrameworkHelper::msTaskPanelURLPrefix ) )
     {
         toolpanel::PanelId ePanelId( toolpanel::GetStandardPanelId( sResourceURL ) );
-        
+
         if ( ( ePanelId != toolpanel::PID_UNKNOWN ) && ( mpViewShellBase != NULL ) )
         {
             ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( *mpViewShellBase ) );

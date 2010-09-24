@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ class HostnameCache
     typedef std::pair< rtl::OUString, rtl::OUString > HostListEntry;
 
     std::list< HostListEntry >     m_aHostList;
-    sal_uInt32                     m_nCapacity;                           
+    sal_uInt32                     m_nCapacity;
 
 public:
     explicit HostnameCache( sal_uInt32 nCapacity )
@@ -109,7 +109,7 @@ public:
         {
             if ( (*it).first == rKey )
             {
-                rValue = (*it).second; 
+                rValue = (*it).second;
                 return true;
             }
             it++;
@@ -122,7 +122,7 @@ public:
         if ( m_aHostList.size() == m_nCapacity )
             m_aHostList.resize( m_nCapacity / 2 );
 
-        m_aHostList.push_front( HostListEntry( rKey, rValue ) ); 
+        m_aHostList.push_front( HostListEntry( rKey, rValue ) );
     }
 };
 
@@ -555,7 +555,7 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
             // This might be quite expensive (DNS lookup).
             const osl::SocketAddr aAddr( aHost, nPort );
             aFullyQualifiedHost = aAddr.getHostname().toAsciiLowerCase();
-            m_aHostnames.put( aHost, aFullyQualifiedHost ); 
+            m_aHostnames.put( aHost, aFullyQualifiedHost );
         }
 
         // Error resolving name? -> fallback.

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,11 +59,11 @@ public:
 };
 
 
-ScVbaNames::ScVbaNames(const css::uno::Reference< ov::XHelperInterface >& xParent, 
+ScVbaNames::ScVbaNames(const css::uno::Reference< ov::XHelperInterface >& xParent,
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
             const css::uno::Reference< css::sheet::XNamedRanges >& xNames,
             const css::uno::Reference< css::frame::XModel >& xModel ):
-            ScVbaNames_BASE(  xParent , xContext , uno::Reference< container::XIndexAccess >( xNames, uno::UNO_QUERY ) ), 
+            ScVbaNames_BASE(  xParent , xContext , uno::Reference< container::XIndexAccess >( xNames, uno::UNO_QUERY ) ),
             mxModel( xModel ),
             mxNames( xNames )
 {
@@ -100,7 +100,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                                         const css::uno::Any& RefersToR1C1,
                                         const css::uno::Any& RefersToR1C1Local ) throw (css::uno::RuntimeException)
 {
-    
+
     rtl::OUString sName;
     uno::Reference< excel::XRange > xRange;
     if ( Name.hasValue() )
@@ -153,7 +153,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         sTmp += sRangeAdd;
         if ( mxNames.is() )
         {
-            RangeType nType = RT_NAME; 
+            RangeType nType = RT_NAME;
             table::CellAddress aCellAddr( aAddr.Sheet , aAddr.StartColumn , aAddr.StartRow );
             if ( mxNames->hasByName( sName ) )
                 mxNames->removeByName(sName);
@@ -164,7 +164,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
 }
 
 // XEnumerationAccess
-css::uno::Type 
+css::uno::Type
 ScVbaNames::getElementType() throw( css::uno::RuntimeException )
 {
     return ov::excel::XName::static_type(0);
@@ -184,14 +184,14 @@ ScVbaNames::createCollectionObject( const uno::Any& aSource )
     return uno::makeAny( uno::Reference< excel::XName > ( new ScVbaName( getParent(), mxContext, xName, mxNames , mxModel ) ) );
 }
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaNames::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaNames") );
     return sImplName;
-}	
+}
 
-css::uno::Sequence<rtl::OUString> 
+css::uno::Sequence<rtl::OUString>
 ScVbaNames::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

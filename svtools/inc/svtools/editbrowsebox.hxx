@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,20 +48,20 @@
 //==================================================================
 // EditBrowseBoxFlags (EBBF)
 
-#define EBBF_NONE						((sal_Int32)0x0000)
+#define EBBF_NONE                       ((sal_Int32)0x0000)
 /** if this bit is _not_ set, the handle column will be invalidated upon
     changing the row in the browse box.  This is for forcing the row picture to
     be repainted. If you do not have row pictures or text, you don't need this
     invalidation, then you would specify this bit to prevent flicker
 */
-#define EBBF_NO_HANDLE_COLUMN_CONTENT	((sal_Int32)0x0001)
+#define EBBF_NO_HANDLE_COLUMN_CONTENT   ((sal_Int32)0x0001)
 /** set this bit to activate the cell on a MouseButtonDown, not a MouseButtonUp event
  */
-#define EBBF_ACTIVATE_ON_BUTTONDOWN		((sal_Int32)0x0002)
+#define EBBF_ACTIVATE_ON_BUTTONDOWN     ((sal_Int32)0x0002)
 /** if this bit is set and EBBF_NO_HANDLE_COLUMN_CONTENT is _not_ set, the handle
     column is drawn with the text contained in column 0 instead of an image
 */
-#define EBBF_HANDLE_COLUMN_TEXT			((sal_Int32)0x0004)
+#define EBBF_HANDLE_COLUMN_TEXT         ((sal_Int32)0x0004)
 
 /** If this bit is set, tab traveling is somewhat modified<br/>
     If the control gets the focus because the user pressed the TAB key, then the
@@ -70,10 +70,10 @@
     @see Window::GetGetFocusFlags
     @see GETFOCUS_*
 */
-#define EBBF_SMART_TAB_TRAVEL			((sal_Int32)0x0008)
+#define EBBF_SMART_TAB_TRAVEL           ((sal_Int32)0x0008)
 
 /// @deprecated
-#define EBBF_NOROWPICTURE				EBBF_NO_HANDLE_COLUMN_CONTENT
+#define EBBF_NOROWPICTURE               EBBF_NO_HANDLE_COLUMN_CONTENT
 
 //==================================================================
 
@@ -98,8 +98,8 @@ namespace svt
         friend class EditBrowseBox;
 
     protected:
-        Control*	pWindow;
-        sal_Bool	bSuspended;		// <TRUE> if the window is hidden and disabled
+        Control*    pWindow;
+        sal_Bool    bSuspended;     // <TRUE> if the window is hidden and disabled
 
     public:
         TYPEINFO();
@@ -119,9 +119,9 @@ namespace svt
         virtual void CommitModifications();
 
         // suspending the controller is not culmulative!
-                void		suspend( );
-                void		resume( );
-        inline	sal_Bool	isSuspended( ) const { return bSuspended; }
+                void        suspend( );
+                void        resume( );
+        inline  sal_Bool    isSuspended( ) const { return bSuspended; }
 
     protected:
         virtual sal_Bool MoveAllowed(const KeyEvent& rEvt) const;
@@ -291,9 +291,9 @@ namespace svt
     //==================================================================
     class SVT_DLLPUBLIC CheckBoxControl : public Control
     {
-        CheckBox*	pBox;
-        Rectangle	aFocusRect;
-        Link		m_aClickLink,m_aModifyLink;
+        CheckBox*   pBox;
+        Rectangle   aFocusRect;
+        Link        m_aClickLink,m_aModifyLink;
 
     public:
         CheckBoxControl(Window* pParent, WinBits nWinStyle = 0);
@@ -313,7 +313,7 @@ namespace svt
         void SetModifyHdl(const Link& rHdl) {m_aModifyLink = rHdl;}
         const Link& GetModifyHdl() const {return m_aModifyLink;}
 
-        CheckBox&	GetBox() {return *pBox;};
+        CheckBox&   GetBox() {return *pBox;};
 
     private:
         DECL_LINK( OnClick, void* );
@@ -439,25 +439,25 @@ namespace svt
 
         enum BrowseInfo
         {
-            COLSELECT	=	1,
-            ROWSELECT	=	2,
-            ROWCHANGE	=	4,
-            COLCHANGE	=	8
+            COLSELECT   =   1,
+            ROWSELECT   =   2,
+            ROWCHANGE   =   4,
+            COLCHANGE   =   8
         };
 
     public:
         enum RowStatus
         {
-            CLEAN				=	0,
-            CURRENT				=	1,
-            CURRENTNEW			=	2,
-            MODIFIED			=	3,
-            NEW					=	4,
-            DELETED				=	5,
-            PRIMARYKEY			=	6,
-            CURRENT_PRIMARYKEY	=	7,
-            FILTER				=	8,
-            HEADERFOOTER		=	9
+            CLEAN               =   0,
+            CURRENT             =   1,
+            CURRENTNEW          =   2,
+            MODIFIED            =   3,
+            NEW                 =   4,
+            DELETED             =   5,
+            PRIMARYKEY          =   6,
+            CURRENT_PRIMARYKEY  =   7,
+            FILTER              =   8,
+            HEADERFOOTER        =   9
         };
 
     private:
@@ -483,27 +483,27 @@ namespace svt
             void Set(const BrowserMouseEvent* pEvt, sal_Bool bIsDown);
         } aMouseEvent;
 
-        const BrowserMouseEvent* pMouseEvent;	// is set during a mouse event
-        CellControllerRef		 aController,
+        const BrowserMouseEvent* pMouseEvent;   // is set during a mouse event
+        CellControllerRef        aController,
                                  aOldController;
 
-        ULONG	nStartEvent, nEndEvent, nCellModifiedEvent;		// event ids
-        Window*	m_pFocusWhileRequest;
+        ULONG   nStartEvent, nEndEvent, nCellModifiedEvent;     // event ids
+        Window* m_pFocusWhileRequest;
             // In ActivateCell, we grab the focus asynchronously, but if between requesting activation
             // and the asynchornous event the focus has changed, we won't grab it for ourself.
 
-        long	nPaintRow;	// row beeing painted
-        long	nEditRow, nOldEditRow;
-        sal_uInt16	nEditCol, nOldEditCol;
+        long    nPaintRow;  // row beeing painted
+        long    nEditRow, nOldEditRow;
+        sal_uInt16  nEditCol, nOldEditCol;
 
         sal_Bool            bHasFocus : 1;
-        mutable sal_Bool    bPaintStatus : 1;	// paint a status (image) in the handle column
+        mutable sal_Bool    bPaintStatus : 1;   // paint a status (image) in the handle column
         sal_Bool            bActiveBeforeTracking;
 
         CheckBoxControl* pCheckBoxPaint;
 
-        sal_Int32	m_nBrowserFlags;
-        ImageList	m_aStatusImages;
+        sal_Int32   m_nBrowserFlags;
+        ImageList   m_aStatusImages;
         ::std::auto_ptr< EditBrowseBoxImpl> m_aImpl;
 
     protected:
@@ -516,7 +516,7 @@ namespace svt
         BrowserMouseEventPtr& getMouseEvent() { return aMouseEvent; }
 
     protected:
-        BrowserHeader*	GetHeaderBar() const {return pHeader;}
+        BrowserHeader*  GetHeaderBar() const {return pHeader;}
 
         virtual BrowserHeader* CreateHeaderBar(BrowseBox* pParent);
 
@@ -563,16 +563,16 @@ namespace svt
         virtual void    ImplEndTracking();
 
         // when changing a row:
-        // CursorMoving:	cursor is beeing moved, but GetCurRow() still provides the old row
+        // CursorMoving:    cursor is beeing moved, but GetCurRow() still provides the old row
         virtual sal_Bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
 
         // cursor has been moved
         virtual void CursorMoved();
 
-        virtual void CellModified();		// called whenever a cell has been modified
-        virtual sal_Bool SaveModified();	// called whenever a cell should be left, and it's content should be saved
+        virtual void CellModified();        // called whenever a cell has been modified
+        virtual sal_Bool SaveModified();    // called whenever a cell should be left, and it's content should be saved
                                             // return sal_False prevents leaving the cell
-        virtual sal_Bool SaveRow();			// commit the current row
+        virtual sal_Bool SaveRow();         // commit the current row
 
         virtual sal_Bool IsModified() const {return aController.Is() && aController->IsModified();}
 
@@ -598,7 +598,7 @@ namespace svt
 
         virtual sal_Bool IsCursorMoveAllowed(long nNewRow, sal_uInt16 nNewColId) const;
 
-        void	PaintTristate(OutputDevice& rDev, const Rectangle& rRect,const TriState& eState,sal_Bool _bEnabled=sal_True) const;
+        void    PaintTristate(OutputDevice& rDev, const Rectangle& rRect,const TriState& eState,sal_Bool _bEnabled=sal_True) const;
 
         void AsynchGetFocus();
             // secure starting of StartEditHdl
@@ -618,19 +618,19 @@ namespace svt
         virtual void Dispatch(sal_uInt16 nId);
 
         CellControllerRef Controller() const { return aController; }
-        sal_Int32	GetBrowserFlags() const { return m_nBrowserFlags; }
-        void	SetBrowserFlags(sal_Int32 nFlags);
+        sal_Int32   GetBrowserFlags() const { return m_nBrowserFlags; }
+        void    SetBrowserFlags(sal_Int32 nFlags);
 
-        virtual void ActivateCell(long nRow, sal_uInt16	nCol, sal_Bool bSetCellFocus = sal_True);
+        virtual void ActivateCell(long nRow, sal_uInt16 nCol, sal_Bool bSetCellFocus = sal_True);
         virtual void DeactivateCell(sal_Bool bUpdate = sal_True);
         // Children ---------------------------------------------------------------
 
         /** Creates the accessible object of a data table cell.
-        @param nRow  
+        @param nRow
             The row index of the cell.
-        @param nColumnId  
+        @param nColumnId
             The column ID of the cell.
-        @return  
+        @return
             The XAccessible interface of the specified cell. */
         virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible >
@@ -640,18 +640,18 @@ namespace svt
         virtual sal_Int32 GetAccessibleControlCount() const;
 
         /** Creates the accessible object of an additional control.
-            @param nIndex  
+            @param nIndex
                 The 0-based index of the control.
-            @return  
+            @return
                 The XAccessible interface of the specified control. */
         virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible >
         CreateAccessibleControl( sal_Int32 nIndex );
 
         /** Creates the accessible object of a column header.
-            @param nColumnId  
+            @param nColumnId
                 The column ID of the header.
-            @return  
+            @return
                 The XAccessible interface of the specified column header. */
         virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible >
@@ -667,7 +667,7 @@ namespace svt
             ::com::sun::star::accessibility::XAccessible > CreateAccessibleCheckBoxCell(long _nRow, USHORT _nColumnPos,const TriState& eState,sal_Bool _bEnabled=sal_True);
     protected:
         // creates the accessible which wraps the active cell
-        void	implCreateActiveAccessible( );
+        void    implCreateActiveAccessible( );
 
     private:
         virtual void PaintField(OutputDevice& rDev, const Rectangle& rRect,
@@ -688,7 +688,7 @@ namespace svt
     };
 
 // .......................................................................
-}	// namespace svt
+}   // namespace svt
 // .......................................................................
 
 #undef SVTOOLS_IN_EDITBROWSEBOX_HXX

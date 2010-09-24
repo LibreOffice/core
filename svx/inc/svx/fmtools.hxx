@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,17 +99,17 @@ SVX_DLLPUBLIC ::rtl::OUString getLabelName(const ::com::sun::star::uno::Referenc
 
 // ===================================================================================================
 // = class CursorWrapper - eine Hilfsklasse, die parallel mit je einem ::com::sun::star::uno::Reference<XDatabaseUpdateCursor>,
-//							XDatabaseBookmarkCursor und XDatabaseDirectCursor arbeitet
+//                          XDatabaseBookmarkCursor und XDatabaseDirectCursor arbeitet
 // ===================================================================================================
 
 class CursorWrapper
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>				m_xGeneric;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>				m_xMoveOperations;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>				m_xBookmarkOperations;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>		m_xColumnsSupplier;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>			m_xPropertyAccess;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                m_xGeneric;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>               m_xMoveOperations;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>              m_xBookmarkOperations;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>        m_xColumnsSupplier;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>            m_xPropertyAccess;
 
 public:
     // Construction/Destruction
@@ -132,14 +132,14 @@ public:
 
     // 'Konvertierungen'
     const CursorWrapper& operator=(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xCursor);
-    operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& () const			{ return m_xMoveOperations; }
-    operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>& () const 		{ return m_xBookmarkOperations; }
-    operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& () const	{ return m_xColumnsSupplier; }
+    operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& () const          { return m_xMoveOperations; }
+    operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>& () const         { return m_xBookmarkOperations; }
+    operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& () const   { return m_xColumnsSupplier; }
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&		getPropertySet() const		{ return m_xPropertyAccess; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&			getResultSet() const		{ return m_xMoveOperations; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate >&			getRowLocate() const		{ return m_xBookmarkOperations; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >&	getColumnsSupplier() const	{ return m_xColumnsSupplier; }
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&        getPropertySet() const      { return m_xPropertyAccess; }
+    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&           getResultSet() const        { return m_xMoveOperations; }
+    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate >&          getRowLocate() const        { return m_xBookmarkOperations; }
+    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >&    getColumnsSupplier() const  { return m_xColumnsSupplier; }
 
     // das normale queryInterface
     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )
@@ -156,23 +156,23 @@ public:
     sal_Int32 hashBookmark(const ::com::sun::star::uno::Any& bookmark) const throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) { return m_xBookmarkOperations->hashBookmark(bookmark); }
 
     // ::com::sun::star::sdbc::XResultSet
-    sal_Bool isBeforeFirst() const				{ return m_xMoveOperations->isBeforeFirst(); }
-    sal_Bool isAfterLast() const				{ return m_xMoveOperations->isAfterLast(); }
-    sal_Bool isFirst() const					{ return m_xMoveOperations->isFirst(); }
-    sal_Bool isLast() const 					{ return m_xMoveOperations->isLast(); }
-    void beforeFirst()							{ m_xMoveOperations->beforeFirst(); }
-    sal_Bool first()							{ return m_xMoveOperations->first(); }
-    sal_Bool last() 							{ return m_xMoveOperations->last(); }
-    sal_Int32 getRow() const					{ return m_xMoveOperations->getRow(); }
-    sal_Bool absolute(sal_Int32 nPosition)			{ return m_xMoveOperations->absolute(nPosition); }
-    sal_Bool relative(sal_Int32 nCount) 			{ return m_xMoveOperations->relative(nCount); }
-    sal_Bool previous() 						{ return m_xMoveOperations->previous(); }
-    sal_Bool next() 							{ return m_xMoveOperations->next(); }
-    void refreshRow()						{ m_xMoveOperations->refreshRow(); }
-    sal_Bool rowUpdated()						{ return m_xMoveOperations->rowUpdated(); }
-    sal_Bool rowInserted()						{ return m_xMoveOperations->rowInserted(); }
-    sal_Bool rowDeleted()						{ return m_xMoveOperations->rowDeleted(); }
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> getStatement() 		{ return m_xMoveOperations->getStatement(); }
+    sal_Bool isBeforeFirst() const              { return m_xMoveOperations->isBeforeFirst(); }
+    sal_Bool isAfterLast() const                { return m_xMoveOperations->isAfterLast(); }
+    sal_Bool isFirst() const                    { return m_xMoveOperations->isFirst(); }
+    sal_Bool isLast() const                     { return m_xMoveOperations->isLast(); }
+    void beforeFirst()                          { m_xMoveOperations->beforeFirst(); }
+    sal_Bool first()                            { return m_xMoveOperations->first(); }
+    sal_Bool last()                             { return m_xMoveOperations->last(); }
+    sal_Int32 getRow() const                    { return m_xMoveOperations->getRow(); }
+    sal_Bool absolute(sal_Int32 nPosition)          { return m_xMoveOperations->absolute(nPosition); }
+    sal_Bool relative(sal_Int32 nCount)             { return m_xMoveOperations->relative(nCount); }
+    sal_Bool previous()                         { return m_xMoveOperations->previous(); }
+    sal_Bool next()                             { return m_xMoveOperations->next(); }
+    void refreshRow()                       { m_xMoveOperations->refreshRow(); }
+    sal_Bool rowUpdated()                       { return m_xMoveOperations->rowUpdated(); }
+    sal_Bool rowInserted()                      { return m_xMoveOperations->rowInserted(); }
+    sal_Bool rowDeleted()                       { return m_xMoveOperations->rowDeleted(); }
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> getStatement()         { return m_xMoveOperations->getStatement(); }
     // ::com::sun::star::sdbcx::XColumnsSupplier
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getColumns() const throw( ::com::sun::star::uno::RuntimeException ) { return m_xColumnsSupplier->getColumns(); }
 private:
@@ -185,8 +185,8 @@ class FmXDisposeListener
 {
     friend class FmXDisposeMultiplexer;
 
-    FmXDisposeMultiplexer*	m_pAdapter;
-    ::osl::Mutex&	m_rMutex;
+    FmXDisposeMultiplexer*  m_pAdapter;
+    ::osl::Mutex&   m_rMutex;
 
 public:
     FmXDisposeListener(::osl::Mutex& _rMutex) : m_pAdapter(NULL), m_rMutex(_rMutex) { }
@@ -202,7 +202,7 @@ protected:
 
 class FmXDisposeMultiplexer :public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener>
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>		m_xObject;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       m_xObject;
     FmXDisposeListener* m_pListener;
     sal_Int16           m_nId;
 
@@ -216,9 +216,9 @@ public:
     void dispose();
 };
 
-//	==================================================================
+//  ==================================================================
 
-sal_Int16		getControlTypeByObject(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject);
+sal_Int16       getControlTypeByObject(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject);
     // get the object type (OBJ_FM_...) from the services the object supports
 
 //==================================================================

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,31 +29,31 @@
 #define __FRAMEWORK_DISPATCH_SELFDISPATCHER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <dispatch/basedispatcher.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	exported const
+//  exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	exported definitions
+//  exported definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -63,7 +63,7 @@ namespace framework{
                     Use this class as member only! Never use it as baseclass.
                     XInterface will be ambigous and we hold a weakreference to ouer OWNER - not to ouer SUPERCLASS!
 
-    @implements		XInterface
+    @implements     XInterface
                     XDispatch
                     XStatusListener
                     XLoadEventListener
@@ -72,7 +72,7 @@ namespace framework{
     @base           BaseDispatcher
                     OWeakObject
 
-    @devstatus		ready to use
+    @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 class SelfDispatcher   :   // -interfaces  ... are supported by our BaseDispatcher!
@@ -80,13 +80,13 @@ class SelfDispatcher   :   // -interfaces  ... are supported by our BaseDispatch
                            public BaseDispatcher
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
         //  ctor
                               SelfDispatcher      ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory   ,
                                                     const css::uno::Reference< css::frame::XFrame >&              xTarget    );
-        //	XDispatch
+        //  XDispatch
         virtual void SAL_CALL dispatch            ( const css::util::URL&                                         aURL       ,
                                                     const css::uno::Sequence< css::beans::PropertyValue >&        lArguments ) throw( css::uno::RuntimeException );
 
@@ -107,6 +107,6 @@ class SelfDispatcher   :   // -interfaces  ... are supported by our BaseDispatch
 
 };      //  class SelfDispatcher
 
-}		//	namespace framework
+}       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_DISPATCH_SELFDISPATCHER_HXX_

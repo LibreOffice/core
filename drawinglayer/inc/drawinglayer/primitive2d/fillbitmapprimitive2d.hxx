@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,10 +56,10 @@ namespace drawinglayer
         {
         private:
             /// the geometric definition
-            basegfx::B2DHomMatrix						maTransformation;
+            basegfx::B2DHomMatrix                       maTransformation;
 
             /// the fill attributes
-            attribute::FillBitmapAttribute				maFillBitmap;
+            attribute::FillBitmapAttribute              maFillBitmap;
 
         protected:
             /// local decomposition.
@@ -68,7 +68,7 @@ namespace drawinglayer
         public:
             /// constructor
             FillBitmapPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransformation, 
+                const basegfx::B2DHomMatrix& rTransformation,
                 const attribute::FillBitmapAttribute& rFillBitmap);
 
             /// data read access

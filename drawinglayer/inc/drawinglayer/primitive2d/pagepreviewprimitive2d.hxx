@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         /** PagePreviewPrimitive2D class
-        
+
             This primitive is needed to have the correct XDrawPage as ViewInformation for decomposing
             the page contents (given as PageContent here) if these contain e.g.
             view-dependent (in this case XDrawPage-dependent) text fields like PageNumber. If You want
@@ -59,7 +59,7 @@ namespace drawinglayer
             Primitive2DSequence                         maPageContent;
 
             /// the own geometry
-            basegfx::B2DHomMatrix						maTransform;
+            basegfx::B2DHomMatrix                       maTransform;
 
             /// content width and height
             double                                      mfContentWidth;
@@ -67,7 +67,7 @@ namespace drawinglayer
 
             /// bitfield
             /// flag to allow keeping the aspect ratio
-            unsigned									mbKeepAspectRatio : 1;
+            unsigned                                    mbKeepAspectRatio : 1;
 
         protected:
             /// local decomposition. Implementation will just return children

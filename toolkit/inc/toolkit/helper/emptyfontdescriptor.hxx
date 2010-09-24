@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,15 +33,15 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 
-//	----------------------------------------------------
-//	class EmptyFontDescriptor
-//	----------------------------------------------------
-class EmptyFontDescriptor : public ::com::sun::star::awt::FontDescriptor 
+//  ----------------------------------------------------
+//  class EmptyFontDescriptor
+//  ----------------------------------------------------
+class EmptyFontDescriptor : public ::com::sun::star::awt::FontDescriptor
 {
-public:	
+public:
     EmptyFontDescriptor()
     {
-        // Not all enums are initialized correctly in FontDescriptor-CTOR because 
+        // Not all enums are initialized correctly in FontDescriptor-CTOR because
         // they are set to the first enum value, this is not allways the default value.
         Slant = ::com::sun::star::awt::FontSlant_DONTKNOW;
         Underline = ::com::sun::star::awt::FontUnderline::DONTKNOW;

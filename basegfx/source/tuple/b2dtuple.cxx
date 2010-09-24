@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@ namespace basegfx
         return EmptyTuple::get();
     }
 
-    B2DTuple::B2DTuple(const B2ITuple& rTup) 
-    :	mfX( rTup.getX() ), 
-        mfY( rTup.getY() ) 
+    B2DTuple::B2DTuple(const B2ITuple& rTup)
+    :   mfX( rTup.getX() ),
+        mfY( rTup.getY() )
     {}
 
     void B2DTuple::correctValues(const double fCompareValue)

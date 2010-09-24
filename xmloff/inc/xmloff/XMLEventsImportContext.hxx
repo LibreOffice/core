@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@
 #include <vector>
 
 namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax {	class XAttributeList; } }
-    namespace beans { struct PropertyValue;	}
+    namespace xml { namespace sax { class XAttributeList; } }
+    namespace beans { struct PropertyValue; }
     namespace container { class XNameReplace; }
     namespace document { class XEventsSupplier; }
 } } }
-namespace rtl {	class OUString; }
+namespace rtl { class OUString; }
 
 typedef ::std::pair<
             ::rtl::OUString,
@@ -54,18 +54,18 @@ typedef ::std::pair<
 typedef ::std::vector< EventNameValuesPair > EventsVector;
 
 /**
- * Import <script:events> element. 
- * 
+ * Import <script:events> element.
+ *
  * The import context usually sets the events immediatly at the event
- * XNameReplace. If none was given on construction, it operates in 
+ * XNameReplace. If none was given on construction, it operates in
  * delayed mode: All events are collected and may then be set
- * with the setEvents() method.  
+ * with the setEvents() method.
  */
 class XMLOFF_DLLPUBLIC XMLEventsImportContext : public SvXMLImportContext
 {
 protected:
     // the event XNameReplace; may be empty
-    ::com::sun::star::uno::Reference< 
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XNameReplace> xEvents;
 
     // if no XNameReplace is given, use this vector to collect events
@@ -76,41 +76,41 @@ public:
     TYPEINFO();
 
     XMLEventsImportContext(
-        SvXMLImport& rImport, 
+        SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName);
 
     XMLEventsImportContext(
-        SvXMLImport& rImport, 
+        SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::document::XEventsSupplier> & xEventsSupplier);
 
     XMLEventsImportContext(
-        SvXMLImport& rImport, 
+        SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XNameReplace> & xNameRepl);
 
     ~XMLEventsImportContext();
 
     void AddEventValues(
         const ::rtl::OUString& rEventName,
-        const ::com::sun::star::uno::Sequence< 
+        const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue> & rValues);
 
     /// if the import operates in delayed mode, you can use this method
     /// to set all events that have been read on the XEventsSupplier
     void SetEvents(
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::document::XEventsSupplier> & xEventsSupplier);
 
     /// if the import operates in delayed mode, you can use this method
     /// to set all events that have been read on the XNameReplace
     void SetEvents(
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XNameReplace> & xNameRepl);
 
     /// if the import operates indelayed mode, you can use this method
@@ -123,15 +123,15 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
     virtual void EndElement();
 
-    virtual SvXMLImportContext *CreateChildContext( 
+    virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };
 

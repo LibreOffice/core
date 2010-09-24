@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ import com.sun.star.pgp.*;
 
 
 public class TestPGP {
-    
+
 
     static void doSomething(Object r) throws com.sun.star.uno.Exception, IOException, Exception {
         XNamingService rName = (XNamingService)UnoRuntime.queryInterface(XNamingService.class, r);
@@ -75,7 +75,7 @@ public class TestPGP {
         if(rName != null) {
             System.err.println("got the remote naming service !");
             Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager");
-            
+
             XMultiServiceFactory rSmgr = (XMultiServiceFactory)UnoRuntime.queryInterface(XMultiServiceFactory.class, rXsmgr);
             if(rSmgr != null) {
                 System.err.println("got the remote service manager !");
@@ -86,7 +86,7 @@ public class TestPGP {
                 System.err.println(" couldn't get XSet from ServiceFactory");
                 return;
             }
-//  			try{
+//              try{
             SimplePGPMailerFactoryReg mailerReg= new SimplePGPMailerFactoryReg();
             XSingleServiceFactory factory= mailerReg.getServiceFactory(
                 "com.sun.star.pgp.SimplePGPMailerImpl", rSmgr, null, null);
@@ -98,10 +98,10 @@ public class TestPGP {
             set.insert(factory );
             System.err.println("PGP factory inserted into service manager");
 
-//  			}catch(Exception e ){
-//  				System.err.println( "exception caught in TestPGP");
-//  			}
-                
+//              }catch(Exception e ){
+//                  System.err.println( "exception caught in TestPGP");
+//              }
+
         }
     }
 
@@ -115,32 +115,32 @@ public class TestPGP {
     };
 
     public static void main(String argv[]) throws Exception {
-        if(argv.length != 1)	{
+        if(argv.length != 1)    {
             System.err.println("usage : testoffice protocol:host:port");
             System.exit(-1);
         }
 
-//  		try {
+//          try {
             com.sun.star.comp.servicemanager.ServiceManager smgr = new com.sun.star.comp.servicemanager.ServiceManager();
             smgr.addFactories(neededServices, null);
 
               XConnector  xConnector  = (XConnector)smgr.createInstance("com.sun.star.connection.Connector");
               XConnection xConnection = xConnector.connect(argv[0]);
-            
+
             String rootOid = "classic_uno";
               IBridge iBridge = UnoRuntime.getBridgeByName("java", null, "remote", null, new Object[]{"iiop", xConnection, null});
 
             Object rInitialObject = iBridge.mapInterfaceFrom(rootOid, XInterface.class);
-//  			Object rInitialObject = xBridge.getInstance("NamingService");
-            
+//              Object rInitialObject = xBridge.getInstance("NamingService");
+
             if(rInitialObject != null) {
                 System.err.println("got the remote object");
                 doSomething(rInitialObject);
             }
-//  		}
-//  		catch (Exception exception) {
-//  			System.err.println("Exception thrown:" + exception);
-//  		}
+//          }
+//          catch (Exception exception) {
+//              System.err.println("Exception thrown:" + exception);
+//          }
     }
 }
 

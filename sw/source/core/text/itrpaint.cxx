@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@
 
 
 #include "hintids.hxx"
-#include "flyfrm.hxx"	  // SwFlyInCntFrm
-#include "viewopt.hxx"	// SwViewOptions
+#include "flyfrm.hxx"     // SwFlyInCntFrm
+#include "viewopt.hxx"  // SwViewOptions
 #include "errhdl.hxx"
 #include "txtatr.hxx"  // SwINetFmt
 #include <tools/multisel.hxx>
@@ -64,13 +64,13 @@
 #include "swfont.hxx"
 #include "txtpaint.hxx"
 #include "portab.hxx"   // SwTabPortion::IsFilled
-#include "porfly.hxx"	  // SwFlyCntPortion
-#include "porfld.hxx"	// SwGrfNumPortion
-#include "frmfmt.hxx"	// LRSpace
+#include "porfly.hxx"     // SwFlyCntPortion
+#include "porfld.hxx"   // SwGrfNumPortion
+#include "frmfmt.hxx"   // LRSpace
 #include "txatbase.hxx" // SwTxtAttr
 #include "charfmt.hxx"  // SwFmtCharFmt
 #include "redlnitr.hxx" // SwRedlineItr
-#include "porrst.hxx"	// SwArrowPortion
+#include "porrst.hxx"   // SwArrowPortion
 #include "pormulti.hxx"
 
 /*************************************************************************
@@ -92,7 +92,7 @@ sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
 }
 
 /*************************************************************************
- *					SwTxtPainter::CtorInitTxtPainter()
+ *                  SwTxtPainter::CtorInitTxtPainter()
  *************************************************************************/
 void SwTxtPainter::CtorInitTxtPainter( SwTxtFrm *pNewFrm, SwTxtPaintInfo *pNewInf )
 {
@@ -113,7 +113,7 @@ void SwTxtPainter::CtorInitTxtPainter( SwTxtFrm *pNewFrm, SwTxtPaintInfo *pNewIn
 
 
 /*************************************************************************
- *					  SwTxtPainter::CalcPaintOfst()
+ *                    SwTxtPainter::CalcPaintOfst()
  *************************************************************************/
 SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
 {
@@ -149,7 +149,7 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
         }
 
         // 7529: bei PostIts auch pLast returnen.
-        if( pLast && !pLast->Width() &&	pLast->IsPostItsPortion() )
+        if( pLast && !pLast->Width() && pLast->IsPostItsPortion() )
         {
             pPor = pLast;
             GetInfo().SetIdx( GetInfo().GetIdx() - pPor->GetLen() );
@@ -163,9 +163,9 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
  *
  * Es gibt zwei Moeglichkeiten bei transparenten Font auszugeben:
  * 1) DrawRect auf die ganze Zeile und die DrawText hinterher
- *	  (objektiv schnell, subjektiv langsam).
+ *    (objektiv schnell, subjektiv langsam).
  * 2) Fuer jede Portion ein DrawRect mit anschliessendem DrawText
- *	  ausgefuehrt (objektiv langsam, subjektiv schnell).
+ *    ausgefuehrt (objektiv langsam, subjektiv schnell).
  * Da der User in der Regel subjektiv urteilt, wird die 2. Methode
  * als Default eingestellt.
  *************************************************************************/
@@ -234,7 +234,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 #if OSL_DEBUG_LEVEL > 1
         static sal_Bool bClipAlways = sal_False;
         if( bClip && bClipAlways )
-        {	bClip = sal_False;
+        {   bClip = sal_False;
             rClip.ChgClip( rPaint );
         }
 #endif
@@ -364,7 +364,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         else
             bSeeked = sal_False;
 
-//		bRest = sal_False;
+//      bRest = sal_False;
 
         // Wenn das Ende der Portion hinausragt, wird geclippt.
         // Es wird ein Sicherheitsabstand von Height-Halbe aufaddiert,
@@ -461,7 +461,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         if( !GetNextLine() &&
             GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreView() &&
-            GetInfo().GetOpt().IsParagraph() &&	!GetTxtFrm()->GetFollow() &&
+            GetInfo().GetOpt().IsParagraph() && !GetTxtFrm()->GetFollow() &&
             GetInfo().GetIdx() >= GetInfo().GetTxt().Len() )
         {
             const SwTmpEndPortion aEnd( *pEndTempl );

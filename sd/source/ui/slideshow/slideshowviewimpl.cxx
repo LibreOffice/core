@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,11 +62,11 @@ namespace sd
 {
 
 ///////////////////////////////////////////////////////////////////////
-// SlideShowViewListeners 
+// SlideShowViewListeners
 ///////////////////////////////////////////////////////////////////////
 
 SlideShowViewListeners::SlideShowViewListeners( ::osl::Mutex& rMutex )
-:	mrMutex( rMutex )
+:   mrMutex( rMutex )
 {
 }
 
@@ -126,23 +126,23 @@ void SlideShowViewListeners::disposing( const lang::EventObject& _rEventSource )
 }
 
 ///////////////////////////////////////////////////////////////////////
-// SlideShowViewPaintListeners 
+// SlideShowViewPaintListeners
 ///////////////////////////////////////////////////////////////////////
 
 SlideShowViewPaintListeners::SlideShowViewPaintListeners( ::osl::Mutex& rMutex )
-:	SlideShowViewPaintListeners_Base( rMutex )
+:   SlideShowViewPaintListeners_Base( rMutex )
 {
 }
 
 bool SlideShowViewPaintListeners::implTypedNotify( const Reference< awt::XPaintListener >& rListener,
-                                              const awt::PaintEvent& 				  rEvent ) throw( uno::Exception )
+                                              const awt::PaintEvent&                  rEvent ) throw( uno::Exception )
 {
     rListener->windowPaint( rEvent );
     return true; // continue calling listeners
 }
 
 ///////////////////////////////////////////////////////////////////////
-// SlideShowViewMouseListeners 
+// SlideShowViewMouseListeners
 ///////////////////////////////////////////////////////////////////////
 
 SlideShowViewMouseListeners::SlideShowViewMouseListeners( ::osl::Mutex& rMutex ) :
@@ -150,8 +150,8 @@ SlideShowViewMouseListeners::SlideShowViewMouseListeners( ::osl::Mutex& rMutex )
 {
 }
 
-bool SlideShowViewMouseListeners::implTypedNotify( const Reference< awt::XMouseListener >&	rListener,
-                                              const WrappedMouseEvent& 			  		rEvent ) throw( uno::Exception )
+bool SlideShowViewMouseListeners::implTypedNotify( const Reference< awt::XMouseListener >&  rListener,
+                                              const WrappedMouseEvent&                  rEvent ) throw( uno::Exception )
 {
     switch( rEvent.meType )
     {
@@ -176,7 +176,7 @@ bool SlideShowViewMouseListeners::implTypedNotify( const Reference< awt::XMouseL
 }
 
 ///////////////////////////////////////////////////////////////////////
-// SlideShowViewMouseMotionListeners 
+// SlideShowViewMouseMotionListeners
 ///////////////////////////////////////////////////////////////////////
 
 SlideShowViewMouseMotionListeners::SlideShowViewMouseMotionListeners( ::osl::Mutex& rMutex ) :
@@ -184,15 +184,15 @@ SlideShowViewMouseMotionListeners::SlideShowViewMouseMotionListeners( ::osl::Mut
 {
 }
 
-bool SlideShowViewMouseMotionListeners::implTypedNotify( const Reference< awt::XMouseMotionListener >&	rListener,
-                                                    const WrappedMouseMotionEvent& 		  			rEvent ) throw( uno::Exception )
+bool SlideShowViewMouseMotionListeners::implTypedNotify( const Reference< awt::XMouseMotionListener >&  rListener,
+                                                    const WrappedMouseMotionEvent&                  rEvent ) throw( uno::Exception )
 {
     switch( rEvent.meType )
     {
         case WrappedMouseMotionEvent::DRAGGED:
             rListener->mouseDragged( rEvent.maEvent );
             break;
-            
+
         case WrappedMouseMotionEvent::MOVED:
             rListener->mouseMoved( rEvent.maEvent );
             break;
@@ -205,12 +205,12 @@ bool SlideShowViewMouseMotionListeners::implTypedNotify( const Reference< awt::X
 // SlideShowView
 ///////////////////////////////////////////////////////////////////////
 
-SlideShowView::SlideShowView( ShowWindow&     rOutputWindow, 
-                              SdDrawDocument* pDoc, 
-                              AnimationMode   eAnimationMode, 
+SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
+                              SdDrawDocument* pDoc,
+                              AnimationMode   eAnimationMode,
                               SlideshowImpl*  pSlideShow,
                               bool            bFullScreen )
-:	SlideShowView_Base( m_aMutex ),
+:   SlideShowView_Base( m_aMutex ),
     mpCanvas( ::cppcanvas::VCLFactory::getInstance().createSpriteCanvas( rOutputWindow ) ),
     mxWindow( VCLUnoHelper::GetInterface( &rOutputWindow ), uno::UNO_QUERY_THROW ),
     mxWindowPeer( mxWindow, uno::UNO_QUERY_THROW ),
@@ -330,7 +330,7 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
                                      ::basegfx::B2DRectangle(0.0,0.0,
                                                              aWindowSize.Width(),
                                                              aWindowSize.Height() ) ) );
-    ::cppcanvas::PolyPolygonSharedPtr pPolyPoly( 
+    ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
         ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( mpCanvas, aPoly ) );
 
     if( pPolyPoly.get() )
@@ -351,11 +351,11 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
     {
         return geometry::AffineMatrix2D (1,0,0,0,1,0);
     }
-    
+
     // Reduce available width by one, as the slides might actually
     // render one pixel wider and higher as aPageSize below specifies
     // (when shapes of page size have visible border lines)
-    const Size  aWindowSize( rTmpSize.Width()-1, 
+    const Size  aWindowSize( rTmpSize.Width()-1,
                              rTmpSize.Height()-1 );
     Size aOutputSize( aWindowSize );
 
@@ -672,7 +672,7 @@ void SlideShowView::init()
         {
             Reference< beans::XPropertySet > xCanvasProps( getCanvas(),
                                                            uno::UNO_QUERY_THROW );
-            xCanvasProps->setPropertyValue( 
+            xCanvasProps->setPropertyValue(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UnsafeScrolling")),
                 uno::makeAny( true ) );
         }

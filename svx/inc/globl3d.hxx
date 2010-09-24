@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,14 @@ const UINT32 E3dInventor = UINT32('E')*0x00000001+
                            UINT32('D')*0x00010000+
                            UINT32('1')*0x01000000;
 
-const UINT16 E3D_SCENE_ID		= 1;
-const UINT16 E3D_POLYSCENE_ID	= 2;
-const UINT16 E3D_OBJECT_ID		= 3; // should not be used, it's only a helper class for E3DScene and E3DCompoundObject
-const UINT16 E3D_CUBEOBJ_ID 	= 4;
-const UINT16 E3D_SPHEREOBJ_ID	= 5;
-const UINT16 E3D_EXTRUDEOBJ_ID	= 6;
-const UINT16 E3D_LATHEOBJ_ID	= 7;
+const UINT16 E3D_SCENE_ID       = 1;
+const UINT16 E3D_POLYSCENE_ID   = 2;
+const UINT16 E3D_OBJECT_ID      = 3; // should not be used, it's only a helper class for E3DScene and E3DCompoundObject
+const UINT16 E3D_CUBEOBJ_ID     = 4;
+const UINT16 E3D_SPHEREOBJ_ID   = 5;
+const UINT16 E3D_EXTRUDEOBJ_ID  = 6;
+const UINT16 E3D_LATHEOBJ_ID    = 7;
 const UINT16 E3D_COMPOUNDOBJ_ID = 8;
-const UINT16 E3D_POLYGONOBJ_ID 	= 9;
+const UINT16 E3D_POLYGONOBJ_ID  = 9;
 
-#endif		// _E3D_GLOBL3D_HXX
+#endif      // _E3D_GLOBL3D_HXX

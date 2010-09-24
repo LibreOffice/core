@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ ScVbaGlobals::ScVbaGlobals( uno::Sequence< uno::Any > const& aArgs, uno::Referen
         aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
         aInitArgs[ 1 ].Name = sDocCtxName;
         aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
-        
+
         init( aInitArgs );
 }
 
@@ -74,29 +74,29 @@ ScVbaGlobals::~ScVbaGlobals()
 uno::Reference<excel::XApplication >
 ScVbaGlobals::getApplication() throw (uno::RuntimeException)
 {
-//	OSL_TRACE("In ScVbaGlobals::getApplication");	
+//  OSL_TRACE("In ScVbaGlobals::getApplication");
         if ( !mxApplication.is() )
         mxApplication.set( new ScVbaApplication( mxContext) );
-       return mxApplication; 
+       return mxApplication;
 }
 
 
 uno::Reference<excel::XApplication > SAL_CALL
 ScVbaGlobals::getExcel() throw (uno::RuntimeException)
 {
-       return getApplication(); 
+       return getApplication();
 }
 
 
 
-uno::Reference< excel::XWorkbook > SAL_CALL 
+uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException)
 {
-//	OSL_TRACE("In ScVbaGlobals::getActiveWorkbook");	
+//  OSL_TRACE("In ScVbaGlobals::getActiveWorkbook");
     uno::Reference< excel::XWorkbook > xWorkbook( getApplication()->getActiveWorkbook(), uno::UNO_QUERY);
     if ( xWorkbook.is() )
     {
-        return xWorkbook;    
+        return xWorkbook;
     }
 // FIXME check if this is correct/desired behavior
     throw uno::RuntimeException( rtl::OUString::createFromAscii(
@@ -104,19 +104,19 @@ ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException)
 }
 
 
-uno::Reference< excel::XWindow > SAL_CALL 
+uno::Reference< excel::XWindow > SAL_CALL
 ScVbaGlobals::getActiveWindow() throw (uno::RuntimeException)
 {
     return getApplication()->getActiveWindow();
 }
 
-uno::Reference< excel::XWorksheet > SAL_CALL 
+uno::Reference< excel::XWorksheet > SAL_CALL
 ScVbaGlobals::getActiveSheet() throw (uno::RuntimeException)
 {
     return getApplication()->getActiveSheet();
 }
 
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaGlobals::WorkBooks( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
     return uno::Any( getApplication()->Workbooks(aIndex) );
@@ -133,7 +133,7 @@ ScVbaGlobals::Sheets( const uno::Any& aIndex ) throw (uno::RuntimeException)
     return WorkSheets( aIndex );
 }
 
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaGlobals::Range( const uno::Any& Cell1, const uno::Any& Cell2 ) throw (uno::RuntimeException)
 {
     return getApplication()->Range( Cell1, Cell2 );
@@ -145,87 +145,87 @@ ScVbaGlobals::Names( const css::uno::Any& aIndex ) throw ( uno::RuntimeException
     return getApplication()->Names( aIndex );
 }
 
-uno::Reference< excel::XRange > SAL_CALL 
+uno::Reference< excel::XRange > SAL_CALL
 ScVbaGlobals::getActiveCell() throw (uno::RuntimeException)
 {
     return getApplication()->getActiveCell();
 }
 
-uno::Reference< XAssistant > SAL_CALL 
+uno::Reference< XAssistant > SAL_CALL
 ScVbaGlobals::getAssistant() throw (uno::RuntimeException)
 {
     return getApplication()->getAssistant();
 }
 
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaGlobals::getSelection() throw (uno::RuntimeException)
 {
     return getApplication()->getSelection();
 }
 
-uno::Reference< excel::XWorkbook > SAL_CALL 
+uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaGlobals::getThisWorkbook() throw (uno::RuntimeException)
 {
     return getApplication()->getThisWorkbook();
 }
-void SAL_CALL 
+void SAL_CALL
 ScVbaGlobals::Calculate()  throw (::com::sun::star::script::BasicErrorException, ::com::sun::star::uno::RuntimeException)
 {
     return getApplication()->Calculate();
 }
 
-uno::Reference< excel::XRange > SAL_CALL 
+uno::Reference< excel::XRange > SAL_CALL
 ScVbaGlobals::Cells( const uno::Any& RowIndex, const uno::Any& ColumnIndex ) throw (uno::RuntimeException)
 {
     return getApplication()->getActiveSheet()->Cells( RowIndex, ColumnIndex );
 }
-uno::Reference< excel::XRange > SAL_CALL 
+uno::Reference< excel::XRange > SAL_CALL
 ScVbaGlobals::Columns( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
     return getApplication()->getActiveSheet()->Columns( aIndex );
 }
 
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaGlobals::CommandBars( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
     uno::Reference< XApplicationBase > xBase( getApplication(), uno::UNO_QUERY_THROW );
     return xBase->CommandBars( aIndex );
 }
 
-css::uno::Reference< ov::excel::XRange > SAL_CALL 
+css::uno::Reference< ov::excel::XRange > SAL_CALL
 ScVbaGlobals::Union( const css::uno::Reference< ov::excel::XRange >& Arg1, const css::uno::Reference< ov::excel::XRange >& Arg2, const css::uno::Any& Arg3, const css::uno::Any& Arg4, const css::uno::Any& Arg5, const css::uno::Any& Arg6, const css::uno::Any& Arg7, const css::uno::Any& Arg8, const css::uno::Any& Arg9, const css::uno::Any& Arg10, const css::uno::Any& Arg11, const css::uno::Any& Arg12, const css::uno::Any& Arg13, const css::uno::Any& Arg14, const css::uno::Any& Arg15, const css::uno::Any& Arg16, const css::uno::Any& Arg17, const css::uno::Any& Arg18, const css::uno::Any& Arg19, const css::uno::Any& Arg20, const css::uno::Any& Arg21, const css::uno::Any& Arg22, const css::uno::Any& Arg23, const css::uno::Any& Arg24, const css::uno::Any& Arg25, const css::uno::Any& Arg26, const css::uno::Any& Arg27, const css::uno::Any& Arg28, const css::uno::Any& Arg29, const css::uno::Any& Arg30 ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
 {
     return getApplication()->Union(  Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Arg15, Arg16, Arg17, Arg18, Arg19, Arg20, Arg21, Arg22, Arg23, Arg24, Arg25, Arg26, Arg27, Arg28, Arg29, Arg30 );
 }
-css::uno::Reference< ov::excel::XRange > SAL_CALL 
+css::uno::Reference< ov::excel::XRange > SAL_CALL
 ScVbaGlobals::Intersect( const css::uno::Reference< ov::excel::XRange >& Arg1, const css::uno::Reference< ov::excel::XRange >& Arg2, const css::uno::Any& Arg3, const css::uno::Any& Arg4, const css::uno::Any& Arg5, const css::uno::Any& Arg6, const css::uno::Any& Arg7, const css::uno::Any& Arg8, const css::uno::Any& Arg9, const css::uno::Any& Arg10, const css::uno::Any& Arg11, const css::uno::Any& Arg12, const css::uno::Any& Arg13, const css::uno::Any& Arg14, const css::uno::Any& Arg15, const css::uno::Any& Arg16, const css::uno::Any& Arg17, const css::uno::Any& Arg18, const css::uno::Any& Arg19, const css::uno::Any& Arg20, const css::uno::Any& Arg21, const css::uno::Any& Arg22, const css::uno::Any& Arg23, const css::uno::Any& Arg24, const css::uno::Any& Arg25, const css::uno::Any& Arg26, const css::uno::Any& Arg27, const css::uno::Any& Arg28, const css::uno::Any& Arg29, const css::uno::Any& Arg30 ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
 {
     return getApplication()->Intersect(  Arg1, Arg2, Arg3, Arg4, Arg5, Arg6, Arg7, Arg8, Arg9, Arg10, Arg11, Arg12, Arg13, Arg14, Arg15, Arg16, Arg17, Arg18, Arg19, Arg20, Arg21, Arg22, Arg23, Arg24, Arg25, Arg26, Arg27, Arg28, Arg29, Arg30 );
 }
 
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaGlobals::Evaluate( const ::rtl::OUString& Name ) throw (uno::RuntimeException)
 {
     return getApplication()->Evaluate( Name );
 }
 
-css::uno::Any SAL_CALL 
+css::uno::Any SAL_CALL
 ScVbaGlobals::WorksheetFunction(  ) throw (css::uno::RuntimeException)
 {
     return getApplication()->WorksheetFunction();
 }
 
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaGlobals::Windows( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
     return getApplication()->Windows( aIndex );
 }
 
-uno::Reference< excel::XRange > SAL_CALL 
+uno::Reference< excel::XRange > SAL_CALL
 ScVbaGlobals::Rows( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
     return getApplication()->getActiveSheet()->Rows( aIndex );
-    
+
 }
 
 
@@ -247,14 +247,14 @@ ScVbaGlobals::getDebug() throw (uno::RuntimeException)
     return uno::Any();
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL 
+uno::Sequence< ::rtl::OUString > SAL_CALL
 ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
 {
     static bool bInit = false;
     static uno::Sequence< rtl::OUString > serviceNames( ScVbaGlobals_BASE::getAvailableServiceNames() );
     if ( !bInit )
     {
-         rtl::OUString names[] = { 
+         rtl::OUString names[] = {
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.excel.Range" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.excel.Workbook" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.excel.Window" ) ),

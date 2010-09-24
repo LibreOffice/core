@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include <SwGetPoolIdFromName.hxx>
 
 #ifndef INCLUDED_LIMITS_H
-#include <limits.h> 	//fuer LONG_MAX
+#include <limits.h>     //fuer LONG_MAX
 #define INCLUDED_LIMITS_H
 #endif
 
@@ -70,15 +70,15 @@ class LocaleDataWrapper;
 class CollatorWrapper;
 
 typedef long SwTwips;
-#define INVALID_TWIPS	LONG_MAX
-#define TWIPS_MAX		(LONG_MAX - 1)
+#define INVALID_TWIPS   LONG_MAX
+#define TWIPS_MAX       (LONG_MAX - 1)
 
-#define MM50   283	// 1/2 cm in TWIPS
+#define MM50   283  // 1/2 cm in TWIPS
 // --> OD 2004-06-18 #i19922# - constant for minimal page header/footer height of 1mm
 const SwTwips cMinHdFtHeight = 56;
 
-#define MINFLY 23	//Minimalgroesse fuer FlyFrms
-#define MINLAY 23	//Minimalgroesse anderer Frms
+#define MINFLY 23   //Minimalgroesse fuer FlyFrms
+#define MINLAY 23   //Minimalgroesse anderer Frms
 
 // Default-Spaltenabstand zweier Textspalten entspricht 0.3 cm
 #define DEF_GUTTER_WIDTH (MM50 / 5 * 3)
@@ -100,31 +100,31 @@ const SwTwips lMinBorder = 1134;
 #define UNDO_ACTION_COUNT 20
 
 // Konstante Strings
-SW_DLLPUBLIC extern UniString aEmptyStr;			// ""
-extern ByteString aEmptyByteStr;	// ""
-SW_DLLPUBLIC extern UniString aDotStr;			// '.'
+SW_DLLPUBLIC extern UniString aEmptyStr;            // ""
+extern ByteString aEmptyByteStr;    // ""
+SW_DLLPUBLIC extern UniString aDotStr;          // '.'
 
 //Zum Einfuegen von Beschriftungen (wie bzw. wo soll eingefuegt werden).
 //Hier weil ein eigenes hxx nicht lohnt und es sonst nirgendwo so recht
 //hinpasst.
 enum SwLabelType
 {
-    LTYPE_TABLE,	//Beschriftung einer Tabelle
-    LTYPE_OBJECT,	//Beschriftung von Grafik oder OLE
-    LTYPE_FLY,		//Beschriftung eines (Text-)Rahmens
-    LTYPE_DRAW		//Beschriftung eines Zeichen-Objektes
+    LTYPE_TABLE,    //Beschriftung einer Tabelle
+    LTYPE_OBJECT,   //Beschriftung von Grafik oder OLE
+    LTYPE_FLY,      //Beschriftung eines (Text-)Rahmens
+    LTYPE_DRAW      //Beschriftung eines Zeichen-Objektes
 };
 
 
 const BYTE OLD_MAXLEVEL = 5;
-const BYTE MAXLEVEL = 10;		//Ehemals numrule.hxx
-const BYTE NO_NUM 		= 200;  //Ehemals numrule.hxx
-//const BYTE NO_NUMBERING = 201;  //Ehemals numrule.hxx	//#outline level,removed by zhaojianwei
-//const BYTE NO_INIT 		= 202;  //Ehemals numrule.hxx
+const BYTE MAXLEVEL = 10;       //Ehemals numrule.hxx
+const BYTE NO_NUM       = 200;  //Ehemals numrule.hxx
+//const BYTE NO_NUMBERING = 201;  //Ehemals numrule.hxx //#outline level,removed by zhaojianwei
+//const BYTE NO_INIT        = 202;  //Ehemals numrule.hxx
 
 // fuer Absaetze mit NO_NUM aber auf unterschiedlichen Leveln
 // DAMIT entfaellt das NO_NUM !!!!
-const BYTE NO_NUMLEVEL  = 0x20;	// wird mit den Levels verodert
+const BYTE NO_NUMLEVEL  = 0x20; // wird mit den Levels verodert
 
 
 /*
@@ -142,7 +142,7 @@ extern SwPathFinder *pPathFinder;
 
 // Werte fuer die Einzuege an der Nummerierung und BulletListe
 // (fuer die weiteren Ebenen sind die Werte mit den Ebenen+1 zu
-//	multiplizieren; Ebenen 0..4 !!!)
+//  multiplizieren; Ebenen 0..4 !!!)
 
 // -> #i30312#
 const USHORT lBullIndent = 1440/4;
@@ -153,10 +153,10 @@ const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 // <- #i30312#
 
 // Anzahl der SystemField-Types vom SwDoc
-#define INIT_FLDTYPES	32
+#define INIT_FLDTYPES   32
 // Anzahl der vordefinierten Seq-Feldtypen. Es handelt sich dabei
 // immer um die letzen Felder vor INIT_FLDTYPES
-#define INIT_SEQ_FLDTYPES	4
+#define INIT_SEQ_FLDTYPES   4
 
 //Die ehemaligen Rendevouz-Ids leben weiter:
 //Es gibt Ids fuer die Anker (SwFmtAnchor) und ein paar weitere die nur fuer
@@ -176,22 +176,22 @@ enum RndStdIds
     RND_STD_FOOTERL,
     RND_STD_FOOTERR,
 
-    RND_DRAW_OBJECT		// ein Draw-Object !! nur fuer die SwDoc-Schnittstelle!
+    RND_DRAW_OBJECT     // ein Draw-Object !! nur fuer die SwDoc-Schnittstelle!
 };
 
 
-extern ResMgr* pSwResMgr;			// steht in swapp0.cxx
-#define SW_RES(i)		ResId(i,*pSwResMgr)
-#define SW_RESSTR(i)	UniString(ResId(i,*pSwResMgr))
+extern ResMgr* pSwResMgr;           // steht in swapp0.cxx
+#define SW_RES(i)       ResId(i,*pSwResMgr)
+#define SW_RESSTR(i)    UniString(ResId(i,*pSwResMgr))
 
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XSpellChecker1 >	GetSpellChecker();
+    ::com::sun::star::linguistic2::XSpellChecker1 > GetSpellChecker();
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XHyphenator >	GetHyphenator();
+    ::com::sun::star::linguistic2::XHyphenator >    GetHyphenator();
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XThesaurus >		GetThesaurus();
+    ::com::sun::star::linguistic2::XThesaurus >     GetThesaurus();
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet >			GetLinguPropertySet();
+    ::com::sun::star::beans::XPropertySet >         GetLinguPropertySet();
 
 // reutns the twip size of this graphic
 SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, OutputDevice* pOutDev );
@@ -199,7 +199,7 @@ SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, OutputDevice* pOutDev );
 
 // Seperator fuer Sprunge im Dokument auf verschiedene Inhalttype
 const sal_Unicode cMarkSeperator = '|';
-extern const sal_Char* __FAR_DATA pMarkToTable;				// Strings stehen
+extern const sal_Char* __FAR_DATA pMarkToTable;             // Strings stehen
 extern const sal_Char* __FAR_DATA pMarkToFrame;             // im Init.cxx
 extern const sal_Char* __FAR_DATA pMarkToRegion;
 SW_DLLPUBLIC extern const sal_Char* __FAR_DATA pMarkToOutline;
@@ -207,8 +207,8 @@ extern const sal_Char* __FAR_DATA pMarkToText;
 extern const sal_Char* __FAR_DATA pMarkToGraphic;
 extern const sal_Char* __FAR_DATA pMarkToOLE;
 
-#ifndef DB_DELIM							// Ist in OFA definiert!!!
-#define DB_DELIM ((sal_Unicode)0xff)		// Datenbank <-> Tabellen-Trenner
+#ifndef DB_DELIM                            // Ist in OFA definiert!!!
+#define DB_DELIM ((sal_Unicode)0xff)        // Datenbank <-> Tabellen-Trenner
 #endif
 
 
@@ -216,15 +216,15 @@ typedef USHORT SetAttrMode;
 
 namespace nsSetAttrMode
 {
-    const SetAttrMode SETATTR_DEFAULT        = 0x0000;	// default
-    const SetAttrMode SETATTR_DONTEXPAND 	 = 0x0001;	// TextAttribute nicht weiter expand.
-    const SetAttrMode SETATTR_DONTREPLACE	 = 0x0002;	// kein anderes TextAttrib verdraengen
+    const SetAttrMode SETATTR_DEFAULT        = 0x0000;  // default
+    const SetAttrMode SETATTR_DONTEXPAND     = 0x0001;  // TextAttribute nicht weiter expand.
+    const SetAttrMode SETATTR_DONTREPLACE    = 0x0002;  // kein anderes TextAttrib verdraengen
 
-    const SetAttrMode SETATTR_NOTXTATRCHR	 = 0x0004;	// bei Attr ohne Ende kein 0xFF einfuegen
-    const SetAttrMode SETATTR_NOHINTADJUST	 = 0x0008; 	// keine Zusammenfassung von Bereichen.
-    const SetAttrMode SETATTR_NOFORMATATTR	 = 0x0010;	// nicht zum FormatAttribut umwandeln
-    const SetAttrMode SETATTR_DONTCHGNUMRULE = 0x0020; 	// nicht die NumRule veraendern
-    const SetAttrMode SETATTR_APICALL		 = 0x0040;	// called from API (all UI related
+    const SetAttrMode SETATTR_NOTXTATRCHR    = 0x0004;  // bei Attr ohne Ende kein 0xFF einfuegen
+    const SetAttrMode SETATTR_NOHINTADJUST   = 0x0008;  // keine Zusammenfassung von Bereichen.
+    const SetAttrMode SETATTR_NOFORMATATTR   = 0x0010;  // nicht zum FormatAttribut umwandeln
+    const SetAttrMode SETATTR_DONTCHGNUMRULE = 0x0020;  // nicht die NumRule veraendern
+    const SetAttrMode SETATTR_APICALL        = 0x0040;  // called from API (all UI related
                                                         // functionality will be disabled)
     /// force hint expand (only matters for hints with CH_TXTATR)
     const SetAttrMode SETATTR_FORCEHINTEXPAND= 0x0080;
@@ -232,8 +232,8 @@ namespace nsSetAttrMode
 
 //Umrechnung Twip<-> 1/100 mm fuer UNO
 
-#define TWIP_TO_MM100(TWIP) 	((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define MM100_TO_TWIP(MM100)	((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
+#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 #define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
 #define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
 
@@ -247,9 +247,9 @@ namespace nsSetAttrMode
 #endif
 
 
-#define CHAR_HARDBLANK		((sal_Unicode)0x00A0)
-#define CHAR_HARDHYPHEN		((sal_Unicode)0x2011)
-#define CHAR_SOFTHYPHEN		((sal_Unicode)0x00AD)
+#define CHAR_HARDBLANK      ((sal_Unicode)0x00A0)
+#define CHAR_HARDHYPHEN     ((sal_Unicode)0x2011)
+#define CHAR_SOFTHYPHEN     ((sal_Unicode)0x00AD)
 #define CHAR_RLM            ((sal_Unicode)0x200F)
 #define CHAR_LRM            ((sal_Unicode)0x200E)
 #define CHAR_ZWSP           ((sal_Unicode)0x200B)

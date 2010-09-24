@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@
 class VCL_DLLPUBLIC ImageControl : public FixedImage
 {
 private:
-    BitmapEx		maBmp;
-    BitmapEx		maBmpHC;
+    BitmapEx        maBmp;
+    BitmapEx        maBmpHC;
     ::sal_Int16     mnScaleMode;
 
 public:
@@ -51,17 +51,17 @@ public:
     void            SetScaleMode( const ::sal_Int16 _nMode );
     ::sal_Int16     GetScaleMode() const { return mnScaleMode; }
 
-    virtual void	Resize();
-    virtual void	UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void    Resize();
+    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
     virtual void    Paint( const Rectangle& rRect );
     virtual void    GetFocus();
     virtual void    LoseFocus();
 
-    void			SetBitmap( const BitmapEx& rBmp );
+    void            SetBitmap( const BitmapEx& rBmp );
     using OutputDevice::GetBitmap;
     const BitmapEx& GetBitmap() const { return maBmp; }
     BOOL            SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode = BMP_COLOR_NORMAL );
     const BitmapEx& GetModeBitmap( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
 };
 
-#endif	// _SV_IMGCTRL_HXX
+#endif  // _SV_IMGCTRL_HXX

@@ -51,7 +51,7 @@ $record = 1;
 while( <> )
 {
     if( $state == 0 && m|next position will be| )
-    {		
+    {
         ($posX) = m|.*\(([0-9]+.[0-9]+),|;
         ($posY) = m|.*,([0-9]+.[0-9]+)\)|;
         $state = 1;

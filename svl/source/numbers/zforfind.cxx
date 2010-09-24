@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,9 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         pUpperMonthText( NULL ),
         pUpperAbbrevMonthText( NULL ),
         pUpperDayText( NULL ),
-        pUpperAbbrevDayText( NULL )
+        pUpperAbbrevDayText( NULL ),
+        eScannedType( NUMBERFORMAT_UNDEFINED ),
+        eSetType( NUMBERFORMAT_UNDEFINED )
 {
     pFormatter = pFormatterP;
     pNullDate = new Date(30,12,1899);
@@ -1109,9 +1111,16 @@ input for the following reasons:
                         switch (DateFmt)
                         {
                             case MDY:
-                            case YMD:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                            case YMD: {
+                                USHORT nDay = ImplGetDay(0);
+                                USHORT nYear = ImplGetYear(0);
+                                if (nDay == 0 || nDay > 32) {
+                                    pCal->setValue( CalendarFieldIndex::YEAR, nYear);
+                                }
+                                else
+                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                                 break;
+                            }
                             case DMY:
                                 pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                                 break;
@@ -1550,6 +1559,13 @@ BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
         }
     }
 
+    // skip any trailing '-' or '/' chars
+    if (nPos < rString.Len())
+    {
+        while (SkipChar ('-', rString, nPos) || SkipChar ('/', rString, nPos)) {
+            // do nothing
+        }
+    }
     if (nPos < rString.Len())                       // not everything consumed
     {
         // Does input StartString equal StartString of format?

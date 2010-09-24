@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -150,52 +150,52 @@ public:
         const css::geometry::RealPoint2D& rLocation,
         const css::geometry::RealSize2D& rSize);
 
-    
+
     // XInitialization
-    
+
     virtual void SAL_CALL initialize (
         const css::uno::Sequence<css::uno::Any>& rArguments)
         throw(css::uno::Exception, css::uno::RuntimeException);
 
-    
+
     // XCanvas
 
     virtual void SAL_CALL clear (void)
         throw (css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL drawPoint (
         const css::geometry::RealPoint2D& aPoint,
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL drawLine (
         const css::geometry::RealPoint2D& aStartPoint,
         const css::geometry::RealPoint2D& aEndPoint,
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL drawBezier (
         const css::geometry::RealBezierSegment2D& aBezierSegment,
         const css::geometry::RealPoint2D& aEndPoint,
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL drawPolyPolygon (
         const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL strokePolyPolygon (
         const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
         const css::rendering::ViewState& aViewState,
         const css::rendering::RenderState& aRenderState,
         const css::rendering::StrokeAttributes& aStrokeAttributes)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         strokeTexturedPolyPolygon (
             const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
@@ -206,7 +206,7 @@ public:
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
             css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         strokeTextureMappedPolyPolygon(
             const css::uno::Reference<css::rendering::XPolyPolygon2D >& xPolyPolygon,
@@ -218,7 +218,7 @@ public:
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
             css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XPolyPolygon2D> SAL_CALL
         queryStrokeShapes(
             const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
@@ -226,7 +226,7 @@ public:
             const css::rendering::RenderState& aRenderState,
             const css::rendering::StrokeAttributes& aStrokeAttributes)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         fillPolyPolygon(
             const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
@@ -234,7 +234,7 @@ public:
             const css::rendering::RenderState& aRenderState)
         throw (css::lang::IllegalArgumentException,
             css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         fillTexturedPolyPolygon(
             const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
@@ -244,7 +244,7 @@ public:
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
             css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         fillTextureMappedPolyPolygon(
             const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
@@ -255,7 +255,7 @@ public:
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
             css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XCanvasFont> SAL_CALL
         createFont(
             const css::rendering::FontRequest& aFontRequest,
@@ -263,13 +263,13 @@ public:
             const css::geometry::Matrix2D& aFontMatrix)
         throw (css::lang::IllegalArgumentException,
             css::uno::RuntimeException);
-    
+
     virtual css::uno::Sequence<css::rendering::FontInfo> SAL_CALL
         queryAvailableFonts(
             const css::rendering::FontInfo& aFilter,
             const css::uno::Sequence< css::beans::PropertyValue >& aFontProperties)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         drawText(
             const css::rendering::StringContext& aText,
@@ -278,14 +278,14 @@ public:
             const css::rendering::RenderState& aRenderState,
             ::sal_Int8 nTextDirection)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         drawTextLayout(
             const css::uno::Reference< css::rendering::XTextLayout >& xLayoutetText,
             const css::rendering::ViewState& aViewState,
             const css::rendering::RenderState& aRenderState)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         drawBitmap(
             const css::uno::Reference< css::rendering::XBitmap >& xBitmap,
@@ -294,7 +294,7 @@ public:
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
             css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
         drawBitmapModulated(
             const css::uno::Reference< css::rendering::XBitmap>& xBitmap,
@@ -303,7 +303,7 @@ public:
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
             css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XGraphicDevice> SAL_CALL
         getDevice (void)
         throw (css::uno::RuntimeException);
@@ -323,14 +323,14 @@ public:
             css::rendering::VolatileContentDestroyedException,
             css::uno::RuntimeException);
 
-    
+
     // XSpriteCanvas
 
     css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL
         createSpriteFromAnimation (
             const css::uno::Reference< css::rendering::XAnimation >& animation)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    
+
     css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL
         createSpriteFromBitmaps (
             const css::uno::Sequence<
@@ -339,17 +339,17 @@ public:
         throw (css::lang::IllegalArgumentException,
             css::rendering::VolatileContentDestroyedException,
             css::uno::RuntimeException);
-    
+
     css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL
         createCustomSprite (
             const css::geometry::RealSize2D& spriteSize)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    
+
     css::uno::Reference< css::rendering::XSprite > SAL_CALL
         createClonedSprite (
             const css::uno::Reference< css::rendering::XSprite >& original)
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    
+
     ::sal_Bool SAL_CALL updateScreen (::sal_Bool bUpdateAll)
         throw (css::uno::RuntimeException);
 
@@ -364,13 +364,13 @@ public:
 
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -382,10 +382,10 @@ public:
 
     virtual sal_Bool SAL_CALL hasAlpha (void)
         throw (css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XBitmapCanvas> SAL_CALL queryBitmapCanvas (void)
         throw (css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL getScaledBitmap(
         const css::geometry::RealSize2D& rNewSize,
         sal_Bool bFast)

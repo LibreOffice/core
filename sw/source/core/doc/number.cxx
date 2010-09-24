@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -372,7 +372,7 @@ void SwNumFmt::SetCharFmtName(const String& rSet)
 /* -----------------------------22.02.01 13:47--------------------------------
 
  ---------------------------------------------------------------------------*/
-const String&	SwNumFmt::GetCharFmtName() const
+const String&   SwNumFmt::GetCharFmtName() const
 {
     if((SwCharFmt*)pRegisteredIn)
         return ((SwCharFmt*)pRegisteredIn)->GetName();
@@ -382,7 +382,7 @@ const String&	SwNumFmt::GetCharFmtName() const
 /* -----------------------------22.02.01 16:05--------------------------------
 
  ---------------------------------------------------------------------------*/
-void	SwNumFmt::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize,
+void    SwNumFmt::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize,
     const sal_Int16* pOrient)
 {
     if(pOrient)
@@ -513,7 +513,7 @@ SwNumRule::SwNumRule( const String& rNm,
     nSerial = nInstances++;
 #endif
 
-    if( !nRefCount++ )			// zum erstmal, also initialisiern
+    if( !nRefCount++ )          // zum erstmal, also initialisiern
     {
         SwNumFmt* pFmt;
         BYTE n;
@@ -650,7 +650,7 @@ SwNumRule::~SwNumRule()
         pNumRuleMap->erase(GetName());
     }
 
-    if( !--nRefCount )			// der letzte macht die Tuer zu
+    if( !--nRefCount )          // der letzte macht die Tuer zu
     {
             // Nummerierung:
             SwNumFmt** ppFmts = (SwNumFmt**)SwNumRule::aBaseFmts;
@@ -845,13 +845,13 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                         aStr += rNFmt.GetNumStr( rNumVector[ i ] );
                 }
                 else
-                    aStr += '0';		// alle 0-Level sind eine 0
+                    aStr += '0';        // alle 0-Level sind eine 0
                 if( i != nLevel && aStr.Len() )
                     aStr += aDotStr;
             }
 
             //JP 14.12.99: the type dont have any number, so dont append
-            //				the Post-/Prefix String
+            //              the Post-/Prefix String
             if( bInclStrings && !bOnlyArabic &&
                 SVX_NUM_CHAR_SPECIAL != rMyNFmt.GetNumberingType() &&
                 SVX_NUM_BITMAP != rMyNFmt.GetNumberingType() )
@@ -1003,7 +1003,7 @@ void SwNumRule::SetInvalidRule(BOOL bFlag)
             SwList* pList = pTxtNode->GetDoc()->getListByName( pTxtNode->GetListId() );
             ASSERT( pList, "<SwNumRule::SetInvalidRule(..)> - list at which the text node is registered at does not exist. This is a serious issue --> please inform OD.");
             if ( pList )
-            {        
+            {
                 aLists.insert( pList );
             }
             // <--

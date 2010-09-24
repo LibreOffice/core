@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,12 +32,12 @@
 
 namespace connectivity
 {
-    namespace starsdbc	= ::com::sun::star::sdbc;
+    namespace starsdbc  = ::com::sun::star::sdbc;
     //**************************************************************
     //************ Class: java.sql.SQLException
     //**************************************************************
     class java_sql_SQLException_BASE;
-    class java_sql_SQLException :	public starsdbc::SQLException
+    class java_sql_SQLException :   public starsdbc::SQLException
     {
     public:
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
@@ -45,7 +45,7 @@ namespace connectivity
         java_sql_SQLException( const java_sql_SQLException_BASE& _rException,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext);
     };
 
-    class java_sql_SQLException_BASE :	public java_lang_Exception
+    class java_sql_SQLException_BASE :  public java_lang_Exception
     {
     protected:
     // statische Daten fuer die Klasse
@@ -55,14 +55,14 @@ namespace connectivity
         virtual ~java_sql_SQLException_BASE();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_SQLException_BASE( JNIEnv * pEnv, jobject myObj );
-        
+
         ::rtl::OUString getSQLState() const;
-        sal_Int32		getErrorCode() const;
+        sal_Int32       getErrorCode() const;
         starsdbc::SQLException getNextException() const;
 
         static jclass st_getMyClass();
     };
-    
+
 }
 #endif // _CONNECTIVITY_JAVA_SQL_SQLEXCEPTION_HXX_
 

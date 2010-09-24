@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -187,7 +187,7 @@ namespace dbaccess
 
             const ::comphelper::NamedValueCollection aScriptDescriptor( xDocEvents->getByName( _Event.EventName ) );
 
-            
+
             ::rtl::OUString sEventType;
             bool bScriptAssigned = aScriptDescriptor.get_ensureType( "EventType", sEventType );
 
@@ -218,7 +218,7 @@ namespace dbaccess
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL DocumentEventExecutor::disposing( const lang::EventObject& /*_Source*/ ) throw (RuntimeException)
     {

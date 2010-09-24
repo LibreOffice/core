@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -654,7 +654,7 @@ void BrowseBox::SetColumnTitle( USHORT nItemId, const String& rTitle )
 
         if ( isAccessibleAlive() )
         {
-            commitTableEvent(	TABLE_COLUMN_DESCRIPTION_CHANGED,
+            commitTableEvent(   TABLE_COLUMN_DESCRIPTION_CHANGED,
                 makeAny( sNew ),
                 makeAny( sOld )
             );
@@ -856,7 +856,7 @@ void BrowseBox::RemoveColumn( USHORT nItemId )
     {
         commitTableEvent(
             TABLE_MODEL_CHANGED,
-            makeAny( AccessibleTableModelChange(	DELETE,
+            makeAny( AccessibleTableModelChange(    DELETE,
                                                     0,
                                                     GetRowCount(),
                                                     nPos,
@@ -1456,7 +1456,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, BOOL bDoPaint )
         uRow.nSel = BROWSER_ENDOFSELECTION;
 
     // adjust the cursor
-    if ( nRowCount == 0 )	// don't compare nRowCount with nNumRows as nNumRows already was subtracted from nRowCount
+    if ( nRowCount == 0 )   // don't compare nRowCount with nNumRows as nNumRows already was subtracted from nRowCount
         nCurRow = BROWSER_ENDOFSELECTION;
     else if ( nRow < nCurRow )
     {
@@ -1947,13 +1947,13 @@ void BrowseBox::SelectRow( long nRow, BOOL _bSelect, BOOL bExpand )
     }
 
     // set new selection
-    if	(	!bHideSelect
-        &&	(	(	bMultiSelection
-                &&	uRow.pSel->GetTotalRange().Max() >= nRow
-                &&	uRow.pSel->Select( nRow, _bSelect )
+    if  (   !bHideSelect
+        &&  (   (   bMultiSelection
+                &&  uRow.pSel->GetTotalRange().Max() >= nRow
+                &&  uRow.pSel->Select( nRow, _bSelect )
                 )
-            ||	(	!bMultiSelection
-                &&	( uRow.nSel = nRow ) != BROWSER_ENDOFSELECTION )
+            ||  (   !bMultiSelection
+                &&  ( uRow.nSel = nRow ) != BROWSER_ENDOFSELECTION )
                 )
             )
     {
@@ -2159,12 +2159,12 @@ sal_Bool BrowseBox::IsAllSelected() const
 
 BOOL BrowseBox::MakeFieldVisible
 (
-    long	nRow,		// Zeilen-Nr des Feldes (beginnend mit 0)
-    USHORT	nColId, 	// Spalten-Id des Feldes
-    BOOL	bComplete	// (== FALSE), TRUE => vollst"andig sichtbar machen
+    long    nRow,       // Zeilen-Nr des Feldes (beginnend mit 0)
+    USHORT  nColId,     // Spalten-Id des Feldes
+    BOOL    bComplete   // (== FALSE), TRUE => vollst"andig sichtbar machen
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Macht das durch 'nRow' und 'nColId' beschriebene Feld durch
     entsprechendes scrollen sichtbar. Ist 'bComplete' gesetzt, dann wird
@@ -2172,7 +2172,7 @@ BOOL BrowseBox::MakeFieldVisible
 
     [R"uckgabewert]
 
-    BOOL			TRUE
+    BOOL            TRUE
                     Das angegebene Feld wurde sichtbar gemacht, bzw. war
                     bereits sichtbar.
 
@@ -2433,21 +2433,21 @@ void BrowseBox::SetMode( BrowserMode nMode )
 #ifdef DBG_MIx
     Sound::Beep();
     nMode =
-//  		BROWSER_COLUMNSELECTION |
-//  		BROWSER_MULTISELECTION |
+//          BROWSER_COLUMNSELECTION |
+//          BROWSER_MULTISELECTION |
             BROWSER_THUMBDRAGGING |
             BROWSER_KEEPHIGHLIGHT |
             BROWSER_HLINES |
             BROWSER_VLINES |
-// 			BROWSER_HIDECURSOR |
-//  		BROWSER_NO_HSCROLL |
-//  		BROWSER_NO_SCROLLBACK |
+//          BROWSER_HIDECURSOR |
+//          BROWSER_NO_HSCROLL |
+//          BROWSER_NO_SCROLLBACK |
             BROWSER_AUTO_VSCROLL |
             BROWSER_AUTO_HSCROLL |
             BROWSER_TRACKING_TIPS |
-//  		BROWSER_HIGHLIGHT_NONE |
+//          BROWSER_HIGHLIGHT_NONE |
             BROWSER_HEADERBAR_NEW |
-//			BROWSER_AUTOSIZE_LASTCOL |
+//          BROWSER_AUTOSIZE_LASTCOL |
             0;
 #endif
 
@@ -2489,7 +2489,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
     bHideCursor = NO_CURSOR_HIDE;
 
     if ( BROWSER_SMART_HIDECURSOR == ( nMode & BROWSER_SMART_HIDECURSOR ) )
-    {	// smart cursor hide overrules hard cursor hide
+    {   // smart cursor hide overrules hard cursor hide
         bHideCursor = SMART_CURSOR_HIDE;
     }
     else if ( BROWSER_HIDECURSOR == ( nMode & BROWSER_HIDECURSOR ) )
@@ -2596,7 +2596,7 @@ void BrowseBox::VisibleRowsChanged( long, USHORT )
 
 BOOL BrowseBox::IsCursorMoveAllowed( long, USHORT ) const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese virtuelle Methode wird immer gerufen bevor der Cursor direkt
     bewegt werden soll. Durch 'return FALSE' kann verhindert werden, da\s

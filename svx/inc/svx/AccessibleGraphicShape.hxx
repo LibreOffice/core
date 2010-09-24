@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,14 +34,14 @@
 
 namespace accessibility {
 
-/**	@descr
+/** @descr
         This class makes graphic shapes accessible.  With respect to its
         base class <type>AccessibleShape</type> it supports the additional
         <type>XAccessibleImage</type> interface.
 */
 class SVX_DLLPUBLIC AccessibleGraphicShape
-    :	public AccessibleShape,
-        public ::com::sun::star::accessibility::XAccessibleImage 
+    :   public AccessibleShape,
+        public ::com::sun::star::accessibility::XAccessibleImage
 {
 public:
     //=====  internal  ========================================================
@@ -56,10 +56,10 @@ public:
     ::rtl::OUString SAL_CALL getAccessibleImageDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    sal_Int32 SAL_CALL getAccessibleImageHeight (void) 
+    sal_Int32 SAL_CALL getAccessibleImageHeight (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    sal_Int32 SAL_CALL getAccessibleImageWidth (void) 
+    sal_Int32 SAL_CALL getAccessibleImageWidth (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XInterface  ======================================================
@@ -69,7 +69,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        acquire (void) 
+        acquire (void)
         throw ();
 
     virtual void SAL_CALL
@@ -78,7 +78,7 @@ public:
 
     //=====  XServiceInfo  ====================================================
 
-    /**	Returns an identifier for the implementation of this object.
+    /** Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
@@ -95,18 +95,18 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    ///	Create a name string that contains the accessible name.
+    /// Create a name string that contains the accessible name.
     virtual ::rtl::OUString
         CreateAccessibleBaseName ()
         throw (::com::sun::star::uno::RuntimeException);
 
-    ///	Create a description string that contains the accessible description.
+    /// Create a description string that contains the accessible description.
     virtual ::rtl::OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    /** Don't use the default constructor.  Use the public constructor that 
+    /** Don't use the default constructor.  Use the public constructor that
         takes the original shape and the parent as arguments instead.
     */
     SVX_DLLPRIVATE AccessibleGraphicShape (void);

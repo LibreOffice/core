@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,38 +44,38 @@ public abstract class SymbolLookup {
      * across all instances of the lookup table.
      */
     abstract public void initialize();
-    
+
     /**
      * Associate a symbol with a  numeric value in the lookup table
-     * @param symbol	The symbol that will act as the key in the lookup table
-     * @param value		The value to be associated with a given symbol
+     * @param symbol    The symbol that will act as the key in the lookup table
+     * @param value     The value to be associated with a given symbol
      */
     public void addEntry(String symbol, int id) {
         Integer iObj = new Integer(id);
         stringToID.put(symbol, iObj);
         idToString.put(iObj, symbol);
     }
-    
+
     /**
      * Retrieve the symbol associated with a given identifier
-     * @param	id	The identfier for which we need to retieve the symbol string
-     * @return	The string associated with this identifier in the lookup table.
+     * @param   id  The identfier for which we need to retieve the symbol string
+     * @return  The string associated with this identifier in the lookup table.
      */
     public String getStringFromID(int id) {
         return (String)idToString.get(new Integer(id));
     }
-    
+
     /**
      * Retrieve the identifier associated with a given symbol
-     * @param	symbol	The symbol for which we need to retieve the identifier
+     * @param   symbol  The symbol for which we need to retieve the identifier
      * @throws UnsupportedFunctionException Thown when the symbol is not found in the lookup table
-     * @return	The identifier associated with this string in the lookup table.
+     * @return  The identifier associated with this string in the lookup table.
      */
     public int getIDFromString(String symbol) throws UnsupportedFunctionException {
         Integer i = (Integer)stringToID.get(symbol);
         if (i == null)
             throw new UnsupportedFunctionException("Token '" + symbol + "' not supported by Pocket Excel");
-    
+
         return ((Integer)stringToID.get(symbol)).intValue();
     }
 }

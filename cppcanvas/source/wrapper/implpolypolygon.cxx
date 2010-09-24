@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,12 +52,12 @@ namespace cppcanvas
                                           const uno::Reference< rendering::XPolyPolygon2D >& rPolyPoly ) :
             CanvasGraphicHelper( rParentCanvas ),
             mxPolyPoly( rPolyPoly ),
-            maStrokeAttributes(1.0, 
-                               10.0, 
-                               uno::Sequence< double >(), 
-                               uno::Sequence< double >(), 
-                               rendering::PathCapType::ROUND, 
-                               rendering::PathCapType::ROUND, 
+            maStrokeAttributes(1.0,
+                               10.0,
+                               uno::Sequence< double >(),
+                               uno::Sequence< double >(),
+                               rendering::PathCapType::ROUND,
+                               rendering::PathCapType::ROUND,
                                rendering::PathJoinType::ROUND ),
             maFillColor(),
             maStrokeColor(),
@@ -73,7 +73,7 @@ namespace cppcanvas
 
         void ImplPolyPolygon::addPolygon( const ::basegfx::B2DPolygon& rPoly )
         {
-            OSL_ENSURE( mxPolyPoly.is(), 
+            OSL_ENSURE( mxPolyPoly.is(),
                         "ImplPolyPolygon::addPolygon(): Invalid polygon" );
 
             if( !mxPolyPoly.is() )
@@ -81,9 +81,9 @@ namespace cppcanvas
 
             uno::Reference< rendering::XGraphicDevice > xDevice( getGraphicDevice() );
 
-            OSL_ENSURE( xDevice.is(), 
+            OSL_ENSURE( xDevice.is(),
                         "ImplPolyPolygon::addPolygon(): Invalid graphic device" );
-            
+
             if( !xDevice.is() )
                 return;
 
@@ -95,7 +95,7 @@ namespace cppcanvas
 
         void ImplPolyPolygon::addPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly )
         {
-            OSL_ENSURE( mxPolyPoly.is(), 
+            OSL_ENSURE( mxPolyPoly.is(),
                         "ImplPolyPolygon::addPolyPolygon(): Invalid polygon" );
 
             if( !mxPolyPoly.is() )
@@ -103,9 +103,9 @@ namespace cppcanvas
 
             uno::Reference< rendering::XGraphicDevice > xDevice( getGraphicDevice() );
 
-            OSL_ENSURE( xDevice.is(), 
+            OSL_ENSURE( xDevice.is(),
                         "ImplPolyPolygon::addPolyPolygon(): Invalid graphic device" );
-            
+
             if( !xDevice.is() )
                 return;
 
@@ -117,27 +117,27 @@ namespace cppcanvas
 
         void ImplPolyPolygon::setRGBAFillColor( Color::IntSRGBA aColor )
         {
-            maFillColor = tools::intSRGBAToDoubleSequence( getGraphicDevice(), 
+            maFillColor = tools::intSRGBAToDoubleSequence( getGraphicDevice(),
                                                            aColor );
             mbFillColorSet = true;
         }
 
         void ImplPolyPolygon::setRGBALineColor( Color::IntSRGBA aColor )
         {
-            maStrokeColor = tools::intSRGBAToDoubleSequence( getGraphicDevice(), 
+            maStrokeColor = tools::intSRGBAToDoubleSequence( getGraphicDevice(),
                                                              aColor );
             mbStrokeColorSet = true;
         }
 
         Color::IntSRGBA ImplPolyPolygon::getRGBAFillColor() const
         {
-            return tools::doubleSequenceToIntSRGBA( getGraphicDevice(),  
+            return tools::doubleSequenceToIntSRGBA( getGraphicDevice(),
                                                     maFillColor );
         }
 
         Color::IntSRGBA ImplPolyPolygon::getRGBALineColor() const
         {
-            return tools::doubleSequenceToIntSRGBA( getGraphicDevice(),  
+            return tools::doubleSequenceToIntSRGBA( getGraphicDevice(),
                                                     maStrokeColor );
         }
 
@@ -158,7 +158,7 @@ namespace cppcanvas
             OSL_ENSURE( pCanvas.get() != NULL &&
                         pCanvas->getUNOCanvas().is(),
                         "ImplBitmap::draw: invalid canvas" );
-            
+
             if( pCanvas.get() == NULL ||
                 !pCanvas->getUNOCanvas().is() )
                 return false;
@@ -168,8 +168,8 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( getRenderState() );
                 aLocalState.DeviceColor = maFillColor;
 
-                pCanvas->getUNOCanvas()->fillPolyPolygon( mxPolyPoly, 
-                                                          pCanvas->getViewState(), 
+                pCanvas->getUNOCanvas()->fillPolyPolygon( mxPolyPoly,
+                                                          pCanvas->getViewState(),
                                                           aLocalState );
             }
 
@@ -179,17 +179,17 @@ namespace cppcanvas
                 aLocalState.DeviceColor = maStrokeColor;
 
                 if( ::rtl::math::approxEqual(maStrokeAttributes.StrokeWidth, 1.0) )
-                    pCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly, 
-                                                              pCanvas->getViewState(), 
+                    pCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly,
+                                                              pCanvas->getViewState(),
                                                               aLocalState );
                 else
-                    pCanvas->getUNOCanvas()->strokePolyPolygon( mxPolyPoly, 
-                                                                pCanvas->getViewState(), 
+                    pCanvas->getUNOCanvas()->strokePolyPolygon( mxPolyPoly,
+                                                                pCanvas->getViewState(),
                                                                 aLocalState,
                                                                 maStrokeAttributes );
             }
 
-            return true;            
+            return true;
         }
 
         uno::Reference< rendering::XPolyPolygon2D > ImplPolyPolygon::getUNOPolyPolygon() const

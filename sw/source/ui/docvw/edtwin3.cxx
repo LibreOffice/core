@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Core-Notify
+    Beschreibung:   Core-Notify
  --------------------------------------------------------------------*/
 
 
@@ -64,7 +64,7 @@ void ScrollMDI( ViewShell* pVwSh, const SwRect &rRect,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Docmdi - verschiebbar
+    Beschreibung:   Docmdi - verschiebbar
  --------------------------------------------------------------------*/
 
 
@@ -78,7 +78,7 @@ BOOL IsScrollMDI( ViewShell* pVwSh, const SwRect &rRect )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Notify fuer Groessen-Aenderung
+    Beschreibung:   Notify fuer Groessen-Aenderung
  --------------------------------------------------------------------*/
 
 
@@ -96,7 +96,7 @@ void SizeNotify(ViewShell* pVwSh, const Size &rSize)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Notify fuer Seitenzahl-Update
+    Beschreibung:   Notify fuer Seitenzahl-Update
  --------------------------------------------------------------------*/
 
 
@@ -111,10 +111,10 @@ void PageNumNotify( ViewShell* pVwSh, USHORT nPhyNum, USHORT nVirtNum,
 }
 
 /******************************************************************************
- *	Methode		:	void FrameNotify( DocMDIBase *pWin, FlyMode eMode )
- *	Beschreibung:
- *	Erstellt	:	OK 08.02.94 13:49
- *	Aenderung	:
+ *  Methode     :   void FrameNotify( DocMDIBase *pWin, FlyMode eMode )
+ *  Beschreibung:
+ *  Erstellt    :   OK 08.02.94 13:49
+ *  Aenderung   :
  ******************************************************************************/
 
 
@@ -126,7 +126,7 @@ void FrameNotify( ViewShell* pVwSh, FlyMode eMode )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Notify fuer Seitenzahl-Update
+    Beschreibung:   Notify fuer Seitenzahl-Update
  --------------------------------------------------------------------*/
 BOOL SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, BOOL bVerticalMode)
 {
@@ -196,7 +196,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
             pSh->LockPaint();
             bUnlockPaint = TRUE;
             ViewShell::DeleteReplacementBitmaps();
-            GetView().InvalidateBorder();				//Scrollbarbreiten
+            GetView().InvalidateBorder();               //Scrollbarbreiten
         }
         break;
 
@@ -206,7 +206,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     case DATACHANGED_FONTSUBSTITUTION:
         pSh->LockPaint();
         bUnlockPaint = TRUE;
-        GetView().GetDocShell()->UpdateFontList();	//z.B. Druckerwechsel
+        GetView().GetDocShell()->UpdateFontList();  //z.B. Druckerwechsel
         break;
     }
     pSh->LockView( bViewWasLocked );

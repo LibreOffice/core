@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -279,7 +279,7 @@ bool readProperties( ::std::list< ::std::pair< ::rtl::OUString, ::rtl::OUString>
     OUString file( reinterpret_cast<sal_Char const *>(bytes.getConstArray()),
                    bytes.getLength(), RTL_TEXTENCODING_UTF8);
     sal_Int32 pos = 0;
-    
+
     for (;;)
     {
 
@@ -302,7 +302,7 @@ bool readProperties( ::std::list< ::std::pair< ::rtl::OUString, ::rtl::OUString>
             pos++;
         }
         OUString aLine = buf.makeStringAndClear();
-        
+
         sal_Int32 posEqual = aLine.indexOf('=');
         if (posEqual > 0 && (posEqual + 1) <  aLine.getLength())
         {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,21 +86,21 @@ using namespace ::xmloff::token;
 
 static __FAR_DATA SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,	XML_STYLE,			XML_TOK_STYLE_STYLE                },
-    { XML_NAMESPACE_STYLE,	XML_PAGE_LAYOUT,	XML_TOK_STYLE_PAGE_MASTER          },
-    { XML_NAMESPACE_TEXT,	XML_LIST_STYLE, 	XML_TOK_TEXT_LIST_STYLE            },
-    { XML_NAMESPACE_TEXT,	XML_OUTLINE_STYLE,	XML_TOK_TEXT_OUTLINE               },
-    { XML_NAMESPACE_STYLE,	XML_DEFAULT_STYLE,	XML_TOK_STYLE_DEFAULT_STYLE        },
-    { XML_NAMESPACE_DRAW,	XML_GRADIENT,		XML_TOK_STYLES_GRADIENTSTYLES      },
-    { XML_NAMESPACE_DRAW,	XML_HATCH,			XML_TOK_STYLES_HATCHSTYLES         },
-    { XML_NAMESPACE_DRAW,	XML_FILL_IMAGE,	    XML_TOK_STYLES_BITMAPSTYLES        },
-    { XML_NAMESPACE_DRAW,	XML_OPACITY,		XML_TOK_STYLES_TRANSGRADIENTSTYLES },
-    { XML_NAMESPACE_DRAW,	XML_MARKER,		    XML_TOK_STYLES_MARKERSTYLES        },
-    { XML_NAMESPACE_DRAW,	XML_STROKE_DASH,	XML_TOK_STYLES_DASHSTYLES        },
-    { XML_NAMESPACE_TEXT,	XML_NOTES_CONFIGURATION,    XML_TOK_TEXT_NOTE_CONFIG },
-    { XML_NAMESPACE_TEXT,	XML_BIBLIOGRAPHY_CONFIGURATION, XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG },
+    { XML_NAMESPACE_STYLE,  XML_STYLE,          XML_TOK_STYLE_STYLE                },
+    { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT,    XML_TOK_STYLE_PAGE_MASTER          },
+    { XML_NAMESPACE_TEXT,   XML_LIST_STYLE,     XML_TOK_TEXT_LIST_STYLE            },
+    { XML_NAMESPACE_TEXT,   XML_OUTLINE_STYLE,  XML_TOK_TEXT_OUTLINE               },
+    { XML_NAMESPACE_STYLE,  XML_DEFAULT_STYLE,  XML_TOK_STYLE_DEFAULT_STYLE        },
+    { XML_NAMESPACE_DRAW,   XML_GRADIENT,       XML_TOK_STYLES_GRADIENTSTYLES      },
+    { XML_NAMESPACE_DRAW,   XML_HATCH,          XML_TOK_STYLES_HATCHSTYLES         },
+    { XML_NAMESPACE_DRAW,   XML_FILL_IMAGE,     XML_TOK_STYLES_BITMAPSTYLES        },
+    { XML_NAMESPACE_DRAW,   XML_OPACITY,        XML_TOK_STYLES_TRANSGRADIENTSTYLES },
+    { XML_NAMESPACE_DRAW,   XML_MARKER,         XML_TOK_STYLES_MARKERSTYLES        },
+    { XML_NAMESPACE_DRAW,   XML_STROKE_DASH,    XML_TOK_STYLES_DASHSTYLES        },
+    { XML_NAMESPACE_TEXT,   XML_NOTES_CONFIGURATION,    XML_TOK_TEXT_NOTE_CONFIG },
+    { XML_NAMESPACE_TEXT,   XML_BIBLIOGRAPHY_CONFIGURATION, XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG },
     { XML_NAMESPACE_TEXT,   XML_LINENUMBERING_CONFIGURATION,XML_TOK_TEXT_LINENUMBERING_CONFIG },
-    { XML_NAMESPACE_STYLE,	XML_DEFAULT_PAGE_LAYOUT,	XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT        },
+    { XML_NAMESPACE_STYLE,  XML_DEFAULT_PAGE_LAYOUT,    XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT        },
     XML_TOKEN_MAP_END
 };
 
@@ -193,7 +193,7 @@ void SvXMLStyleContext::StartElement( const uno::Reference< xml::sax::XAttribute
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,	&aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
         const OUString& rValue = xAttrList->getValueByIndex( i );
 
         SetAttribute( nPrefix, aLocalName, rValue );
@@ -225,8 +225,8 @@ BOOL SvXMLStyleContext::IsTransient() const
 
 class SvXMLStyleIndex_Impl
 {
-    OUString 			  sName;
-    sal_uInt16 			  nFamily;
+    OUString              sName;
+    sal_uInt16            nFamily;
     const SvXMLStyleContext *pStyle;
 
 public:
@@ -276,8 +276,8 @@ IMPL_CONTAINER_SORT( SvXMLStyleIndices_Impl, SvXMLStyleIndex_Impl,
 
 class SvXMLStylesContext_Impl
 {
-    SvXMLStyleContexts_Impl	aStyles;
-    SvXMLStyleIndices_Impl	*pIndices;
+    SvXMLStyleContexts_Impl aStyles;
+    SvXMLStyleIndices_Impl  *pIndices;
     sal_Bool bAutomaticStyle;
 
 #ifdef DBG_UTIL
@@ -762,7 +762,7 @@ Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( sal_uInt16 nFa
             sName = bPara ?
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphStyles" ) ):
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "CharacterStyles" ) );
-            Reference< XAutoStylesSupplier > xAutoStylesSupp(	GetImport().GetModel(), UNO_QUERY );
+            Reference< XAutoStylesSupplier > xAutoStylesSupp(   GetImport().GetModel(), UNO_QUERY );
             Reference< XAutoStyles > xAutoStyleFamilies = xAutoStylesSupp->getAutoStyles();
             if (xAutoStyleFamilies->hasByName(sName))
             {
@@ -872,7 +872,7 @@ SvXMLImportContext *SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,
 
     SvXMLStyleContext *pStyle =
         CreateStyleChildContext( nPrefix, rLocalName, xAttrList );
-//		DBG_ASSERT( pStyle->GetFamily(), "Style without a family" );
+//      DBG_ASSERT( pStyle->GetFamily(), "Style without a family" );
     if( pStyle )
     {
         if( !pStyle->IsTransient() )

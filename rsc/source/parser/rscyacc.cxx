@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@
 #include "rsclex.hxx"
 
 /************** V a r i a b l e n ****************************************/
-ObjectStack 					S;
-RscTop *						pCurClass;
-sal_uInt32						nCurMask;
-char							szErrBuf[ 100 ];
+ObjectStack                     S;
+RscTop *                        pCurClass;
+sal_uInt32                      nCurMask;
+char                            szErrBuf[ 100 ];
 
 /************** H i l f s F u n k t i o n e n ****************************/
 RSCINST GetVarInst( const RSCINST & rInst, const char * pVarName )
@@ -111,7 +111,7 @@ void SetString( const RSCINST & rInst, const char * pVarName, const char * pStr 
 RscId MakeRscId( RscExpType aExpType )
 {
     if( !aExpType.IsNothing() ){
-        INT32		lValue;
+        INT32       lValue;
 
         if( !aExpType.Evaluate( &lValue ) )
             pTC->pEH->Error( ERR_ZERODIVISION, NULL, RscId() );
@@ -247,16 +247,16 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 /************** Y a c c   C o d e ****************************************/
 //#define YYDEBUG 1
 
-#define TYPE_Atom 			  0
-#define TYPE_RESID				  1
+#define TYPE_Atom             0
+#define TYPE_RESID                1
 
 #ifdef UNX
-#define YYMAXDEPTH				2000
+#define YYMAXDEPTH              2000
 #else
 #ifdef W30
-#define YYMAXDEPTH				300
+#define YYMAXDEPTH              300
 #else
-#define YYMAXDEPTH				800
+#define YYMAXDEPTH              800
 #endif
 #endif
 

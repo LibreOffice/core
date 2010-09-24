@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
         rUnitConv.convertNumber( sBuffer, (sal_Int32)aFormat.Lines );
         rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LINES,
                               sBuffer.makeStringAndClear() );
-        
+
         // style:length
         if( bWholeWord )
         {
@@ -91,14 +91,14 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
             rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_DISTANCE,
                                   sBuffer.makeStringAndClear() );
         }
-        
+
         // style:style-name
         if( rStyleName.getLength() )
             rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_STYLE_NAME,
                                   rExport.EncodeStyleName( rStyleName ) );
     }
 
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_DROP_CAP, 
+    SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_DROP_CAP,
                               sal_False, sal_False );
 }
 

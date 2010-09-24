@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -391,9 +391,9 @@ private:
     SVT_DLLPRIVATE USHORT          ImplGetLastFirstPos();
     SVT_DLLPRIVATE void            ImplInitControls();
     SVT_DLLPRIVATE void            ImplEnableControls();
-    SVT_DLLPRIVATE void			ImplSelect();
-    SVT_DLLPRIVATE void			ImplActivatePage();
-    SVT_DLLPRIVATE long			ImplDeactivatePage();
+    SVT_DLLPRIVATE void         ImplSelect();
+    SVT_DLLPRIVATE void         ImplActivatePage();
+    SVT_DLLPRIVATE long         ImplDeactivatePage();
                     DECL_DLLPRIVATE_LINK( ImplClickHdl, ImplTabButton* );
 
 public:
@@ -446,7 +446,7 @@ public:
     USHORT          GetPageId( const Point& rPos ) const;
     Rectangle       GetPageRect( USHORT nPageId ) const;
     // returns the rectangle in which page tabs are drawn
-    Rectangle		GetPageArea() const;
+    Rectangle       GetPageArea() const;
 
     void            SetCurPageId( USHORT nPageId );
     USHORT          GetCurPageId() const { return mnCurPageId; }

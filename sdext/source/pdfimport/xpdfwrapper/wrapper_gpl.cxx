@@ -15,12 +15,12 @@
  *    modify it under the terms of the GNU General Public License as
  *    published by the Free Software Foundation; either version 2 of
  *    the License, or (at your option) any later version.
- *    
+ *
  *    This program is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *    GNU General Public License for more details.
- *    
+ *
  *    You should have received a copy of the GNU General Public
  *    License along with this program; if not, write to the Free
  *    Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -122,15 +122,15 @@ int main(int argc, char **argv)
             }
         }
     }
-        
+
     // PDFDoc takes over ownership for all strings below
     GooString* pFileName    = new GooString(argv[1]);
     GooString* pTempErrFileName     = new GooString("_err.pdf");
     GooString* pTempErrFileNamePath = new GooString(argv[0]);
 
     GooString* pErrFileName = new GooString(pTempErrFileNamePath,pTempErrFileName);
-   
-        
+
+
     // check for password string(s)
     GooString* pOwnerPasswordStr( ownerPassword[0] != '\001'
                                   ? new GooString(ownerPassword)
@@ -152,18 +152,14 @@ int main(int argc, char **argv)
     PDFDoc aDoc( pFileName,
                  pOwnerPasswordStr,
                  pUserPasswordStr );
-  
+
     PDFDoc aErrDoc( pErrFileName,
                  pOwnerPasswordStr,
                  pUserPasswordStr );
-   
-    
+
+
    // Check various permissions.
-   if ( !aDoc.isOk()||
-        !aDoc.okToPrint() ||    
-        !aDoc.okToChange()||
-        !aDoc.okToCopy()||
-        !aDoc.okToAddNotes() )
+   if ( !aDoc.isOk() )
    {
         pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aErrDoc) );
 
@@ -178,17 +174,17 @@ int main(int argc, char **argv)
        // do the conversion
        for( int i=1; i<=nPages; ++i )
        {
-          aErrDoc.displayPage( pOutDev, 
-                            i, 
-                            PDFI_OUTDEV_RESOLUTION, 
+          aErrDoc.displayPage( pOutDev,
+                            i,
+                            PDFI_OUTDEV_RESOLUTION,
                             PDFI_OUTDEV_RESOLUTION,
                             0, gTrue, gTrue, gTrue );
           aErrDoc.processLinks( pOutDev, i );
        }
    }
    else
-   {  
-      
+   {
+
       pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aDoc) );
 
       // tell receiver early - needed for proper progress calculation
@@ -201,9 +197,9 @@ int main(int argc, char **argv)
       const int nPages = aDoc.getNumPages();
       for( int i=1; i<=nPages; ++i )
       {
-        aDoc.displayPage( pOutDev, 
-                          i, 
-                          PDFI_OUTDEV_RESOLUTION, 
+        aDoc.displayPage( pOutDev,
+                          i,
+                          PDFI_OUTDEV_RESOLUTION,
                           PDFI_OUTDEV_RESOLUTION,
                           0, gTrue, gTrue, gTrue );
         aDoc.processLinks( pOutDev, i );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@ namespace connectivity
         typedef sdbcx::OIndex OIndex_ADO;
 
         class OConnection;
-        class OAdoIndex :	 public OIndex_ADO
+        class OAdoIndex :    public OIndex_ADO
         {
-            WpADOIndex		m_aIndex;
-            OConnection*	m_pConnection;
+            WpADOIndex      m_aIndex;
+            OConnection*    m_pConnection;
         protected:
             void fillPropertyValues();
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue)throw (::com::sun::star::uno::Exception);
@@ -51,13 +51,13 @@ namespace connectivity
         public:
             virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();
-            OAdoIndex(sal_Bool _bCase,	OConnection* _pConnection,ADOIndex* _pIndex);
-            OAdoIndex(sal_Bool _bCase,	OConnection* _pConnection);
+            OAdoIndex(sal_Bool _bCase,  OConnection* _pConnection,ADOIndex* _pIndex);
+            OAdoIndex(sal_Bool _bCase,  OConnection* _pConnection);
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-            WpADOIndex		getImpl() const { return m_aIndex;}
+            WpADOIndex      getImpl() const { return m_aIndex;}
         };
     }
 }

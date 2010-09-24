@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ namespace cppu
 /**
  * Sets enum from int32 value.  This function does NOT check for valid enum values!
  *<BR>
- * @param nEnum			int32 enum value
- * @param rType			enum type
+ * @param nEnum         int32 enum value
+ * @param rType         enum type
  * @return enum or emoty any.
  */
 inline ::com::sun::star::uno::Any SAL_CALL int2enum(
@@ -58,8 +58,8 @@ inline ::com::sun::star::uno::Any SAL_CALL int2enum(
 /**
  * Sets int32 from enum or int in any.
  *<BR>
- * @param rnEnum		[out] int32 enum value
- * @param rAny			enum or int
+ * @param rnEnum        [out] int32 enum value
+ * @param rAny          enum or int
  * @param sal_True if enum or int value was set else sal_False.
  */
 inline sal_Bool SAL_CALL enum2int( sal_Int32 & rnEnum, const ::com::sun::star::uno::Any & rAny )
@@ -76,9 +76,9 @@ inline sal_Bool SAL_CALL enum2int( sal_Int32 & rnEnum, const ::com::sun::star::u
 /**
  * Sets int32 from enum or int in any with additional typecheck
  * <BR>
- * @param rAny			enum or int
- * @param eRet			the enum value as int. If there is not enum of the given type or
- *						a ::com::sun::star::lang::IllegalArgumentException is thrown
+ * @param rAny          enum or int
+ * @param eRet          the enum value as int. If there is not enum of the given type or
+ *                      a ::com::sun::star::lang::IllegalArgumentException is thrown
  */
 template< typename E >
 inline void SAL_CALL any2enum( E & eRet, const ::com::sun::star::uno::Any & rAny )
@@ -113,8 +113,8 @@ inline ::com::sun::star::uno::Any SAL_CALL enum2any( E eEnum )
  * it will be queried for it.
  * If no interface is available, the out ref will be cleared.
  *<BR>
- * @param rxOut			[out] demanded interface
- * @param rAny			interface
+ * @param rxOut         [out] demanded interface
+ * @param rAny          interface
  * @return sal_True if any reference (including the null ref) was retrieved from any else sal_False.
  */
 template< class T >

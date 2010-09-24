@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,18 +35,18 @@
 module com { module sun { module star { module mail {
 
 /**
-   A <type>NoMailTransportProviderException</type> will be thrown if an 
-   appropriate provider for sending mail messages could not be found or 
+   A <type>NoMailTransportProviderException</type> will be thrown if an
+   appropriate provider for sending mail messages could not be found or
    could not be created.
-   
+
    @see com::sun::star::mail::MailServer
-   
+
    @since OOo 2.0.0
  */
-exception NoMailTransportProviderException: com::sun::star::mail::MailException 
-{    
-};    
-  
+exception NoMailTransportProviderException: com::sun::star::mail::MailException
+{
+};
+
 }; }; }; };
 
 #endif

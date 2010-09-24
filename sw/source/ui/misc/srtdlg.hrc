@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,15 +48,15 @@
 #define RB_TABCH    22
 #define ED_TABCH    23
 #define FL_DELIM    24
-#define STR_ROW		25
-#define STR_COL		26
+#define STR_ROW     25
+#define STR_COL     26
 #define BT_HELP     27
-#define FT_DIR		28
+#define FT_DIR      28
 #define RB_UP2      29
 #define RB_DN2      30
 #define RB_UP3      31
 #define RB_DN3      32
-#define STR_NUMERIC	33
+#define STR_NUMERIC 33
 #define PB_DELIM    34
 #define FL_LANG     35
 #define LB_LANG     36

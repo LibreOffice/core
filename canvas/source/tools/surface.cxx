@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include "surface.hxx"
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <comphelper/scopeguard.hxx> 
+#include <comphelper/scopeguard.hxx>
 #include <boost/bind.hpp>
 
 namespace canvas
@@ -158,22 +158,22 @@ namespace canvas
             ######################################
             ######################################
             ######################################
-            
+
                            Y
                            ^+1
                            |
-                   2	   |	   3
+                   2       |       3
                      x------------x
-                     |	   |	  |
-                      |	   |	  |
+                     |     |      |
+                      |    |      |
                ------|-----O------|------>X
-               -1  	 |	   |	  |		+1
-                     |	   |	  |
+               -1    |     |      |     +1
+                     |     |      |
                      x------------x
                     1      |       0
                             |
                            |-1
-            
+
             ######################################
             ######################################
             ######################################
@@ -262,7 +262,7 @@ namespace canvas
             aDestOffset = mpFragment->getPos();
 
         // convert size to normalized device coordinates
-        const ::basegfx::B2DRectangle& rUV( 
+        const ::basegfx::B2DRectangle& rUV(
             getUVCoords(aPos1 - maSourceOffset + aDestOffset,
                         aSize) );
         const double u1(rUV.getMinX());
@@ -284,30 +284,30 @@ namespace canvas
             ######################################
             ######################################
             ######################################
-            
+
                            Y
                            ^+1
                            |
-                   2	   |	   3
+                   2       |       3
                      x------------x
-                     |	   |	  |
-                      |	   |	  |
+                     |     |      |
+                      |    |      |
                ------|-----O------|------>X
-               -1  	 |	   |	  |		+1
-                     |	   |	  |
+               -1    |     |      |     +1
+                     |     |      |
                      x------------x
                     1      |       0
                             |
                            |-1
-            
+
             ######################################
             ######################################
             ######################################
         */
 
         const ::basegfx::B2DPoint& p0(aTransform * ::basegfx::B2DPoint(aSize.getX(),aSize.getY()));
-        const ::basegfx::B2DPoint& p1(aTransform * ::basegfx::B2DPoint(0.0,			aSize.getY()));
-        const ::basegfx::B2DPoint& p2(aTransform * ::basegfx::B2DPoint(0.0,			0.0));
+        const ::basegfx::B2DPoint& p1(aTransform * ::basegfx::B2DPoint(0.0,         aSize.getY()));
+        const ::basegfx::B2DPoint& p2(aTransform * ::basegfx::B2DPoint(0.0,         0.0));
         const ::basegfx::B2DPoint& p3(aTransform * ::basegfx::B2DPoint(aSize.getX(),0.0));
 
         canvas::Vertex vertex;
@@ -385,22 +385,22 @@ namespace canvas
             ######################################
             ######################################
             ######################################
-            
+
                            Y
                            ^+1
                            |
-                   2	   |	   3
+                   2       |       3
                      x------------x
-                     |	   |	  |
-                      |	   |	  |
+                     |     |      |
+                      |    |      |
                ------|-----O------|------>X
-               -1  	 |	   |	  |		+1
-                     |	   |	  |
+               -1    |     |      |     +1
+                     |     |      |
                      x------------x
                     1      |       0
                             |
                            |-1
-            
+
             ######################################
             ######################################
             ######################################
@@ -430,19 +430,19 @@ namespace canvas
 #endif
 
             pRenderModule->beginPrimitive( canvas::IRenderModule::PRIMITIVE_TYPE_TRIANGLE );
-            
-            // issue an endPrimitive() when leaving the scope   
+
+            // issue an endPrimitive() when leaving the scope
             const ::comphelper::ScopeGuard aScopeGuard(
                 boost::bind( &::canvas::IRenderModule::endPrimitive,
                                 ::boost::ref(pRenderModule) ) );
 
-            for(sal_uInt32 nIndex=0; nIndex<nVertexCount; ++nIndex) 
+            for(sal_uInt32 nIndex=0; nIndex<nVertexCount; ++nIndex)
             {
                 const basegfx::B2DPoint &aPoint = rTriangleList.getB2DPoint(nIndex);
                 basegfx::B2DPoint aTransformedPoint(aTransform * aPoint);
                 const double tu(((aPoint.getX()-aSurfaceClipRect.getMinX())*rUV.getWidth()/w)+rUV.getMinX());
                 const double tv(((aPoint.getY()-aSurfaceClipRect.getMinY())*rUV.getHeight()/h)+rUV.getMinY());
-                vertex.u=static_cast<float>(tu); 
+                vertex.u=static_cast<float>(tu);
                 vertex.v=static_cast<float>(tv);
                 vertex.x=static_cast<float>(aTransformedPoint.getX());
                 vertex.y=static_cast<float>(aTransformedPoint.getY());

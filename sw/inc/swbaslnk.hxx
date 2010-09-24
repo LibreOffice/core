@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,15 +79,15 @@ public:
     BOOL Connect() { return 0 != SvBaseLink::GetRealObject(); }
 
     // nur fuer Grafik-Links ( zum Umschalten zwischen DDE / Grf-Link)
-    void SetObjType( USHORT nType )	{ SvBaseLink::SetObjType( nType ); }
+    void SetObjType( USHORT nType ) { SvBaseLink::SetObjType( nType ); }
 
     BOOL IsRecursion( const SwBaseLink* pChkLnk ) const;
     virtual BOOL IsInRange( ULONG nSttNd, ULONG nEndNd, xub_StrLen nStt = 0,
                             xub_StrLen nEnd = STRING_NOTFOUND ) const;
 
-    void SetNoDataFlag()	{ bNoDataFlag = TRUE; }
-    BOOL ChkNoDataFlag()	{ BOOL bRet = bNoDataFlag; bNoDataFlag = FALSE; return bRet; }
-    BOOL IsNoDataFlag()	const			{ return bNoDataFlag; }
+    void SetNoDataFlag()    { bNoDataFlag = TRUE; }
+    BOOL ChkNoDataFlag()    { BOOL bRet = bNoDataFlag; bNoDataFlag = FALSE; return bRet; }
+    BOOL IsNoDataFlag() const           { return bNoDataFlag; }
 };
 
 

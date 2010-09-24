@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,10 +43,10 @@ namespace basebmp
     When true, 0 means fully transparent, and 1 fully opaque. And vice
     versa.
  */
-template< typename ValueType, 
+template< typename ValueType,
           typename AlphaType,
           bool     polarity > struct BlendFunctor;
-template< typename ValueType, 
+template< typename ValueType,
           typename AlphaType > struct BlendFunctor<ValueType,AlphaType,true>
   : public TernaryFunctorBase<AlphaType,ValueType,ValueType,ValueType>
 {
@@ -59,7 +59,7 @@ template< typename ValueType,
         return (vigra::NumericTraits<AlphaType>::one()-fAlpha)*v1 + fAlpha*v2;
     }
 };
-template< typename ValueType, 
+template< typename ValueType,
           typename AlphaType > struct BlendFunctor<ValueType,AlphaType,false>
   : public TernaryFunctorBase<AlphaType,ValueType,ValueType,ValueType>
 {
@@ -78,12 +78,12 @@ template< typename ValueType,
 
     @tpl polarity
     When true, 0 means fully transparent, and 1 fully opaque. And vice
-    versa.    
+    versa.
  */
-template< typename ValueType, 
+template< typename ValueType,
           typename AlphaType,
           bool     polarity > struct IntegerBlendFunctor;
-template< typename ValueType, 
+template< typename ValueType,
           typename AlphaType > struct IntegerBlendFunctor<ValueType,AlphaType,true>
   : public TernaryFunctorBase<AlphaType,ValueType,ValueType,ValueType>
 {
@@ -96,7 +96,7 @@ template< typename ValueType,
             vigra::NumericTraits<AlphaType>::max();
     }
 };
-template< typename ValueType, 
+template< typename ValueType,
           typename AlphaType > struct IntegerBlendFunctor<ValueType,AlphaType,false>
   : public TernaryFunctorBase<AlphaType,ValueType,ValueType,ValueType>
 {
@@ -104,7 +104,7 @@ template< typename ValueType,
                           ValueType v1,
                           ValueType v2 ) const
     {
-        return (alpha*v1 + 
+        return (alpha*v1 +
                 vigra::NumericTraits<AlphaType>::toPromote(
                     vigra::NumericTraits<AlphaType>::max()-alpha)*v2) /
             vigra::NumericTraits<AlphaType>::max();
@@ -128,18 +128,18 @@ template< typename ColorType > struct ColorTraits
     typedef ColorType component_type;
 
     /// Calculate normalized distance between color c1 and c2
-    static inline vigra::NormTraits<ColorType> distance( ColorType c1, 
-                                                         ColorType c2 ) 
-    { 
+    static inline vigra::NormTraits<ColorType> distance( ColorType c1,
+                                                         ColorType c2 )
+    {
         return vigra::norm(c1 - c2);
     }
 
-    static inline component_type toGreyscale( ColorType c ) 
+    static inline component_type toGreyscale( ColorType c )
     {
         return c;
     }
 
-    static inline ColorType fromGreyscale( component_type c ) 
+    static inline ColorType fromGreyscale( component_type c )
     {
         return c;
     }

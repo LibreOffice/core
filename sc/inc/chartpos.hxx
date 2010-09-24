@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,37 +41,37 @@ class ScChartPositionMap
 {
     friend class ScChartPositioner;
 
-            ScAddress**			ppData;
-            ScAddress**			ppColHeader;
-            ScAddress**			ppRowHeader;
-            ULONG				nCount;
-            SCCOL				nColCount;
-            SCROW				nRowCount;
+            ScAddress**         ppData;
+            ScAddress**         ppColHeader;
+            ScAddress**         ppRowHeader;
+            ULONG               nCount;
+            SCCOL               nColCount;
+            SCROW               nRowCount;
 
                                 ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
-                                    SCCOL nColAdd,		// Header-Spalten
-                                    SCROW nRowAdd,		// Header-Zeilen
-                                    Table& rCols		// Table mit Col-Tables mit Address*
+                                    SCCOL nColAdd,      // Header-Spalten
+                                    SCROW nRowAdd,      // Header-Zeilen
+                                    Table& rCols        // Table mit Col-Tables mit Address*
                                     );
-                                ~ScChartPositionMap();	//! deletes all ScAddress*
+                                ~ScChartPositionMap();  //! deletes all ScAddress*
 
                                 // not implemented
                                 ScChartPositionMap( const ScChartPositionMap& );
-            ScChartPositionMap&	operator=( const ScChartPositionMap& );
+            ScChartPositionMap& operator=( const ScChartPositionMap& );
 
 public:
 
-            ULONG				GetCount() const { return nCount; }
-            SCCOL				GetColCount() const { return nColCount; }
-            SCROW				GetRowCount() const { return nRowCount; }
+            ULONG               GetCount() const { return nCount; }
+            SCCOL               GetColCount() const { return nColCount; }
+            SCROW               GetRowCount() const { return nRowCount; }
 
-            BOOL				IsValid( SCCOL nCol, SCROW nRow ) const
+            BOOL                IsValid( SCCOL nCol, SCROW nRow ) const
                                     { return nCol < nColCount && nRow < nRowCount; }
                                 // Daten spaltenweise
-            ULONG				GetIndex( SCCOL nCol, SCROW nRow ) const
+            ULONG               GetIndex( SCCOL nCol, SCROW nRow ) const
                                     { return (ULONG) nCol * nRowCount + nRow; }
 
-            const ScAddress*	GetPosition( ULONG nIndex ) const
+            const ScAddress*    GetPosition( ULONG nIndex ) const
                                     {
                                         if ( nIndex < nCount )
                                             return ppData[ nIndex ];
@@ -79,56 +79,56 @@ public:
                                     }
 
                                     //! kann NULL sein und damit "kein Wert"
-            const ScAddress*	GetPosition( SCCOL nChartCol, SCROW nChartRow ) const
+            const ScAddress*    GetPosition( SCCOL nChartCol, SCROW nChartRow ) const
                                     {
                                         if ( IsValid( nChartCol, nChartRow ) )
                                             return ppData[ GetIndex( nChartCol, nChartRow ) ];
                                         return NULL;
                                     }
-            const ScAddress*	GetColHeaderPosition( SCCOL nChartCol ) const
+            const ScAddress*    GetColHeaderPosition( SCCOL nChartCol ) const
                                     {
                                         if ( nChartCol < nColCount )
                                             return ppColHeader[ nChartCol ];
                                         return NULL;
                                     }
-            const ScAddress*	GetRowHeaderPosition( SCROW nChartRow ) const
+            const ScAddress*    GetRowHeaderPosition( SCROW nChartRow ) const
                                     {
                                         if ( nChartRow < nRowCount )
                                             return ppRowHeader[ nChartRow ];
                                         return NULL;
                                     }
-//UNUSED2009-05 ScRangeListRef		GetColRanges( SCCOL nChartCol ) const;
-//UNUSED2009-05 ScRangeListRef		GetRowRanges( SCROW nChartRow ) const;
+//UNUSED2009-05 ScRangeListRef      GetColRanges( SCCOL nChartCol ) const;
+//UNUSED2009-05 ScRangeListRef      GetRowRanges( SCROW nChartRow ) const;
 };
 
 
 enum ScChartGlue {
     SC_CHARTGLUE_NA,
     SC_CHARTGLUE_NONE,      // alte Mimik
-    SC_CHARTGLUE_COLS,		// alte Mimik
+    SC_CHARTGLUE_COLS,      // alte Mimik
     SC_CHARTGLUE_ROWS,
     SC_CHARTGLUE_BOTH
 };
 
 class ScDocument;
 
-class ScChartPositioner				// nur noch Parameter-Struct
+class ScChartPositioner             // nur noch Parameter-Struct
 {
-    ScRangeListRef	aRangeListRef;
-    ScDocument*	pDocument;
+    ScRangeListRef  aRangeListRef;
+    ScDocument* pDocument;
     ScChartPositionMap* pPositionMap;
-    ScChartGlue	eGlue;
-    SCCOL		nStartCol;
-    SCROW		nStartRow;
-    BOOL		bColHeaders;
-    BOOL		bRowHeaders;
-    BOOL		bDummyUpperLeft;
+    ScChartGlue eGlue;
+    SCCOL       nStartCol;
+    SCROW       nStartRow;
+    BOOL        bColHeaders;
+    BOOL        bRowHeaders;
+    BOOL        bDummyUpperLeft;
 
 private:
-    void		CheckColRowHeaders();
+    void        CheckColRowHeaders();
 
-    void		GlueState();		// zusammengefasste Bereiche
-    void		CreatePositionMap();
+    void        GlueState();        // zusammengefasste Bereiche
+    void        CreatePositionMap();
 
 public:
     ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
@@ -137,23 +137,23 @@ public:
     ScChartPositioner( ScDocument* pDoc, const ScRangeListRef& rRangeList );
     ScChartPositioner( const ScChartPositioner& rPositioner );
 
-    virtual	~ScChartPositioner();
+    virtual ~ScChartPositioner();
 
-    const ScRangeListRef&	GetRangeList() const { return aRangeListRef; }
-    void	SetRangeList( const ScRangeListRef& rNew ) { aRangeListRef = rNew; }
-    void	SetRangeList( const ScRange& rNew );
+    const ScRangeListRef&   GetRangeList() const { return aRangeListRef; }
+    void    SetRangeList( const ScRangeListRef& rNew ) { aRangeListRef = rNew; }
+    void    SetRangeList( const ScRange& rNew );
 
-    void	SetHeaders(BOOL bCol, BOOL bRow) { bColHeaders=bCol; bRowHeaders=bRow; }
-    BOOL	HasColHeaders() const			 { return bColHeaders; }
-    BOOL	HasRowHeaders() const			 { return bRowHeaders; }
+    void    SetHeaders(BOOL bCol, BOOL bRow) { bColHeaders=bCol; bRowHeaders=bRow; }
+    BOOL    HasColHeaders() const            { return bColHeaders; }
+    BOOL    HasRowHeaders() const            { return bRowHeaders; }
     void    SetDummyUpperLeft(BOOL bNew) { bDummyUpperLeft = bNew; }
     void    SeteGlue(ScChartGlue eNew) { eGlue = eNew; }
     void    SetStartCol(SCCOL nNew) { nStartCol = nNew; }
     void    SetStartRow(SCROW nNew) { nStartRow = nNew; }
 
-    BOOL	operator==(const ScChartPositioner& rCmp) const;
+    BOOL    operator==(const ScChartPositioner& rCmp) const;
 
-    void					InvalidateGlue()
+    void                    InvalidateGlue()
                                 {
                                     eGlue = SC_CHARTGLUE_NA;
                                     if ( pPositionMap )
@@ -162,7 +162,7 @@ public:
                                         pPositionMap = NULL;
                                     }
                                 }
-    const ScChartPositionMap*	GetPositionMap();
+    const ScChartPositionMap*   GetPositionMap();
 };
 
 

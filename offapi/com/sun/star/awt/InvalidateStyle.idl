@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,66 +24,66 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_InvalidateStyle_idl__ 
-#define __com_sun_star_awt_InvalidateStyle_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_InvalidateStyle_idl__
+#define __com_sun_star_awt_InvalidateStyle_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
 /** specifies how to invalidate windows.
  */
 published constants InvalidateStyle
-{ 
-    //------------------------------------------------------------------------- 
-        
+{
+    //-------------------------------------------------------------------------
+
     /** The child windows are invalidated, too.
      */
-    const short CHILDREN = 1; 
- 
-    //------------------------------------------------------------------------- 
-        
+    const short CHILDREN = 1;
+
+    //-------------------------------------------------------------------------
+
     /** The child windows are not invalidated.
      */
-    const short NOCHILDREN = 2; 
- 
-    //------------------------------------------------------------------------- 
-        
+    const short NOCHILDREN = 2;
+
+    //-------------------------------------------------------------------------
+
     /** The invalidated area is painted with the background color/pattern.
      */
-    const short NOERASE = 4; 
- 
-    //------------------------------------------------------------------------- 
-        
+    const short NOERASE = 4;
+
+    //-------------------------------------------------------------------------
+
     /** The invalidated area is updated immediately.
      */
-    const short UPDATE = 8; 
- 
-    //------------------------------------------------------------------------- 
-    
+    const short UPDATE = 8;
+
+    //-------------------------------------------------------------------------
+
     /** The parent window is invalidated, too.
      */
-    const short TRANSPARENT = 16; 
- 
-    //------------------------------------------------------------------------- 
+    const short TRANSPARENT = 16;
+
+    //-------------------------------------------------------------------------
 
     /** The parent window is not invalidated.
      */
-    const short NOTRANSPARENT = 32; 
- 
-    //------------------------------------------------------------------------- 
-        
+    const short NOTRANSPARENT = 32;
+
+    //-------------------------------------------------------------------------
+
     /** The area is invalidated regardless of overlapping child windows.
      */
-    const short NOCLIPCHILDREN = 16384; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    const short NOCLIPCHILDREN = 16384;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

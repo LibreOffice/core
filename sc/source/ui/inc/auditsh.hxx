@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ class ScViewData;
 class ScAuditingShell : public SfxShell
 {
 private:
-    ScViewData*	pViewData;
-    USHORT		nFunction;
+    ScViewData* pViewData;
+    USHORT      nFunction;
 
 public:
     TYPEINFO();
@@ -48,8 +48,8 @@ public:
                     ScAuditingShell(ScViewData* pData);
                     ~ScAuditingShell();
 
-    void	Execute(SfxRequest& rReq);
-    void	GetState(SfxItemSet& rSet);
+    void    Execute(SfxRequest& rReq);
+    void    GetState(SfxItemSet& rSet);
 };
 
 

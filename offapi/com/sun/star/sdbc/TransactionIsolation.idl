@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,62 +24,62 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_TransactionIsolation_idl__ 
-#define __com_sun_star_sdbc_TransactionIsolation_idl__ 
- 
- module com {  module sun {  module star {  module sdbc { 
- 
- 
+#ifndef __com_sun_star_sdbc_TransactionIsolation_idl__
+#define __com_sun_star_sdbc_TransactionIsolation_idl__
+
+ module com {  module sun {  module star {  module sdbc {
+
+
 /** distinguishes different possible transaction isolation levels.
  */
 published constants TransactionIsolation
-{ 
-     
+{
+
     /** indicates that transactions are not supported.
      */
-    const long NONE					=  0; 
-     
-    /** Dirty reads, non-repeatable reads and phantom reads can occur. 
-             This level allows a row changed by one transaction to be read 
-             by another transaction before any changes in that row have been 
-             committed (a "dirty read").  If any of the changes are rolled back, 
+    const long NONE                 =  0;
+
+    /** Dirty reads, non-repeatable reads and phantom reads can occur.
+             This level allows a row changed by one transaction to be read
+             by another transaction before any changes in that row have been
+             committed (a "dirty read").  If any of the changes are rolled back,
              the second transaction will have retrieved an invalid row.
      */
-    const long READ_UNCOMMITTED 	=  1; 
-     
-    /** Dirty reads are prevented; non-repeatable reads and phantom 
-             reads can occur.  This level only prohibits a transaction 
+    const long READ_UNCOMMITTED     =  1;
+
+    /** Dirty reads are prevented; non-repeatable reads and phantom
+             reads can occur.  This level only prohibits a transaction
              from reading a row with uncommitted changes in it.
      */
-    const long READ_COMMITTED		=  2; 
-     
-    /** Dirty reads and non-repeatable reads are prevented; phantom 
-             reads can occur.  This level prohibits a transaction from 
-             reading a row with uncommitted changes in it, and it also 
-             prohibits the situation where one transaction reads a row, 
-             a second transaction alters the row, and the first transaction 
-             rereads the row, getting different values the second time 
+    const long READ_COMMITTED       =  2;
+
+    /** Dirty reads and non-repeatable reads are prevented; phantom
+             reads can occur.  This level prohibits a transaction from
+             reading a row with uncommitted changes in it, and it also
+             prohibits the situation where one transaction reads a row,
+             a second transaction alters the row, and the first transaction
+             rereads the row, getting different values the second time
              (a "non-repeatable read").
      */
-    const long REPEATABLE_READ 		=  4; 
-     
-    /** Dirty reads, non-repeatable reads and phantom reads are prevented. 
-             This level includes the prohibitions in 
+    const long REPEATABLE_READ      =  4;
+
+    /** Dirty reads, non-repeatable reads and phantom reads are prevented.
+             This level includes the prohibitions in
              <code>REPEATABLE_READ</code>
-             and further prohibits the 
-             situation where one transaction reads all rows that satisfy 
-             a WHERE condition, a second transaction inserts a row that 
-             satisfies that WHERE condition, and the first transaction 
-             rereads for the same condition, retrieving the additional 
+             and further prohibits the
+             situation where one transaction reads all rows that satisfy
+             a WHERE condition, a second transaction inserts a row that
+             satisfies that WHERE condition, and the first transaction
+             rereads for the same condition, retrieving the additional
              "phantom" row in the second read.
      */
-    const long SERIALIZABLE 		=  8; 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    const long SERIALIZABLE         =  8;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

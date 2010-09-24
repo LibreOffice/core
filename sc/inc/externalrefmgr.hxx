@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,14 +129,14 @@ public:
     class Table;
     friend class ScExternalRefCache::Table;
 
-    /** 
-     * Represents a single cached table in an external document.  It only 
-     * stores non-empty cells; empty cells should never be stored in the data 
-     * cache. Instead, cached ranges should be used to determine whether or 
-     * not a cell is empty or needs fetching from the source document.  If a 
-     * cell's value is not stored but its address is within the cached ranges, 
-     * that cell is already queried in the source document and we know it's 
-     * empty. 
+    /**
+     * Represents a single cached table in an external document.  It only
+     * stores non-empty cells; empty cells should never be stored in the data
+     * cache. Instead, cached ranges should be used to determine whether or
+     * not a cell is empty or needs fetching from the source document.  If a
+     * cell's value is not stored but its address is within the cached ranges,
+     * that cell is already queried in the source document and we know it's
+     * empty.
      */
     class Table
     {
@@ -152,10 +152,10 @@ public:
         Table();
         ~Table();
 
-        /** 
+        /**
          * Add cell value to the cache.
          *
-         * @param bSetCacheRange if true, mark this cell 'cached'.  This is 
+         * @param bSetCacheRange if true, mark this cell 'cached'.  This is
          *                       false _only when_ adding a range of cell
          *                       values, for performance reasons.
          */
@@ -184,12 +184,12 @@ public:
         void setCachedCell(SCCOL nCol, SCROW nRow);
         void setCachedCellRange(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
 
-        /** 
+        /**
          * Call this to mark the entire table "cached".  This will prevent all
-         * future attempts to access the source document even when non-cached 
-         * cells are queried.  In such case, non-cached cells are treated as 
-         * empty cells.  Useful when loading a document with own external data 
-         * cache. 
+         * future attempts to access the source document even when non-cached
+         * cells are queried.  In such case, non-cached cells are treated as
+         * empty cells.  Useful when loading a document with own external data
+         * cache.
          */
         SC_DLLPUBLIC void setWholeTableCached();
     private:
@@ -390,10 +390,10 @@ public:
         };
     };
 
-    /** 
-     * Use this guard when performing something from the API that might query 
-     * values from external references.  Interpreting formula strings is one 
-     * such example. 
+    /**
+     * Use this guard when performing something from the API that might query
+     * values from external references.  Interpreting formula strings is one
+     * such example.
      */
     class ApiGuard
     {
@@ -645,10 +645,10 @@ public:
      */
     void resetSrcFileData(const String& rBaseFileUrl);
 
-    /** 
-     * Stop tracking a specific formula cell. 
-     *  
-     * @param pCell pointer to cell that formerly contained external 
+    /**
+     * Stop tracking a specific formula cell.
+     *
+     * @param pCell pointer to cell that formerly contained external
      *              reference.
      */
     void removeRefCell(ScFormulaCell* pCell);
@@ -744,8 +744,8 @@ private:
     /** Status whether in reference marking state. See isInReferenceMarking(). */
     bool mbInReferenceMarking:1;
 
-    /** 
-     * Controls whether or not to allow user interaction.  We don't want any 
+    /**
+     * Controls whether or not to allow user interaction.  We don't want any
      * user interaction when calling from the API.
      */
     bool mbUserInteractionEnabled:1;

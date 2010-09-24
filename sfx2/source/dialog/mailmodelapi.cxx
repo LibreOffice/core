@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,7 +100,7 @@ namespace
 
     BOOL CreateFromAddress_Impl( String& rFrom )
 
-    /*	[Beschreibung]
+    /*  [Beschreibung]
 
         Diese Funktion versucht mit Hilfe des IniManagers eine From-Adresse
         zu erzeugen. daf"ur werden die Felder 'Vorname', 'Name' und 'EMail'
@@ -109,14 +109,14 @@ namespace
 
         [R"uckgabewert]
 
-        TRUE:	Adresse konnte erzeugt werden.
-        FALSE:	Adresse konnte nicht erzeugt werden.
+        TRUE:   Adresse konnte erzeugt werden.
+        FALSE:  Adresse konnte nicht erzeugt werden.
     */
 
     {
         SvtUserOptions aUserCFG;
-        String aName		= aUserCFG.GetLastName	();
-        String aFirstName	= aUserCFG.GetFirstName	();
+        String aName        = aUserCFG.GetLastName  ();
+        String aFirstName   = aUserCFG.GetFirstName ();
         if ( aFirstName.Len() || aName.Len() )
         {
             if ( aFirstName.Len() )
@@ -157,7 +157,7 @@ class OMailSendThreadImpl : public ::vos::OThread
         OMailSendThreadImpl(
                 Reference< XSimpleMailClient > xSimpleMailClient,
                 Reference< XSimpleMailMessage > xSimpleMailMessage,
-                const Reference< XFrame >&	_xCurrentFrame,
+                const Reference< XFrame >&  _xCurrentFrame,
                 long nSendFlags ) :
             m_nSendFlags( nSendFlags ),
             m_bSend( sal_False ),
@@ -171,11 +171,11 @@ class OMailSendThreadImpl : public ::vos::OThread
         virtual void SAL_CALL onTerminated();
 
     private:
-        long		m_nSendFlags;
-        sal_Bool	m_bSend;
+        long        m_nSendFlags;
+        sal_Bool    m_bSend;
         Reference< XSimpleMailClient > m_xSimpleMailClient;
         Reference< XSimpleMailMessage > m_xSimpleMailMessage;
-        Reference< XFrame >	m_xCurrentFrame;
+        Reference< XFrame > m_xCurrentFrame;
 };
 
 OMailSendThreadImpl::~OMailSendThreadImpl()
@@ -278,10 +278,10 @@ namespace
     {
     // create temp file name with leading chars and extension
         Reference < XStorable > xStor( _xModel, UNO_QUERY );
-        String		aLeadingStr;
+        String      aLeadingStr;
         if ( xStor.is() )
         {
-            sal_Bool	bHasName = xStor->hasLocation();
+            sal_Bool    bHasName = xStor->hasLocation();
 
             if ( !bHasName )
             {
@@ -320,7 +320,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocument( const ::rtl::OUString& _sAt
                                     , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _xModel
                                     , String& rFileName)
 {
-    SaveResult			eRet = SAVE_CANCELLED;
+    SaveResult          eRet = SAVE_CANCELLED;
     try
     {
         Reference<XModifiable> xMod(_xModel,UNO_QUERY);
@@ -330,14 +330,14 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocument( const ::rtl::OUString& _sAt
         {
             // detect filter
             const SfxFilter* pFilter = SfxFilter::GetDefaultFilter(lcl_getFactoryName(_xModel));
-//			sal_Bool bHasFilter = pFilter != NULL;
+//          sal_Bool bHasFilter = pFilter != NULL;
 
             sal_Bool bRet = sal_False;
             // create temp file name with leading chars and extension
             Reference < XStorable > xStor( _xModel, UNO_QUERY );
             if ( xStor.is() )
             {
-                String*		pExt = NULL;
+                String*     pExt = NULL;
                 INetURLObject aFileObj(_xModel->getURL());
                 if ( aFileObj.hasExtension() )
                     pExt = new String( String::CreateFromAscii( "." ) + (OUString) aFileObj.getExtension() );
@@ -389,7 +389,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocument( const ::rtl::OUString& _sAt
                     Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
                     SfxStoringHelper aHelper(xMgr);
                     aHelper.GUIStoreModel(_xModel,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveAs")),aArgs, sal_False, ::rtl::OUString() );
-                    //	xStor->storeToURL(rFileName,aArgs);
+                    //  xStor->storeToURL(rFileName,aArgs);
                     bRet = sal_True;
                 }
                 catch(Exception&)
@@ -456,7 +456,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocAsPDF( const ::rtl::OUString& _sAt
                     Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
                     SfxStoringHelper aHelper(xMgr);
                     aHelper.GUIStoreModel(_xModel,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ExportToPDF")),aArgs, sal_False, ::rtl::OUString);
-                    //	xStor->storeToURL(rFileName,aArgs);
+                    //  xStor->storeToURL(rFileName,aArgs);
                     bRet = sal_True;
                 }
                 catch(Exception&)
@@ -488,7 +488,7 @@ SfxMailModel::SendMailResult SfxMailModel::AttachDocument(   MailDocType _eMailD
     SaveResult eSaveResult;
     String aFileName;
 
-//	sal_Bool bSuccessfull = sal_False;
+//  sal_Bool bSuccessfull = sal_False;
     if ( _eMailDocType == TYPE_SELF )
         eSaveResult = SaveDocument( _sAttachmentTitle,_xModel,aFileName);
     else
@@ -510,12 +510,12 @@ IMPL_LINK_INLINE_END( SfxMailModel, DoneHdl, void*, EMPTYARG )
 
 SfxMailModel::SfxMailModel( const Reference< XFrame >& _xFrame) :
 
-    mpToList	( NULL ),
-    mpCcList	( NULL ),
-    mpBccList	( NULL ),
-    m_xCurrentFrame	( _xFrame ),
-    mePriority	( PRIO_NORMAL ),
-    mbLoadDone	( sal_True )
+    mpToList    ( NULL ),
+    mpCcList    ( NULL ),
+    mpBccList   ( NULL ),
+    m_xCurrentFrame ( _xFrame ),
+    mePriority  ( PRIO_NORMAL ),
+    mbLoadDone  ( sal_True )
 
 {
 }
@@ -574,14 +574,14 @@ void SfxMailModel::AddAddress( const String& rAddress, AddressRole eRole )
 SfxMailModel::SendMailResult SfxMailModel::Send( )
 {
     OSL_ENSURE(!maAttachedDocuments.empty(),"No document added!");
-    SendMailResult	eResult = SEND_MAIL_ERROR;
+    SendMailResult  eResult = SEND_MAIL_ERROR;
     if ( !maAttachedDocuments.empty() )
     {
 
         Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
         if ( xMgr.is() )
         {
-            Reference< XSimpleMailClientSupplier >	xSimpleMailClientSupplier;
+            Reference< XSimpleMailClientSupplier >  xSimpleMailClientSupplier;
 
             // Prefer the SimpleSystemMail service if available
             xSimpleMailClientSupplier = Reference< XSimpleMailClientSupplier >(
@@ -617,9 +617,9 @@ SfxMailModel::SendMailResult SfxMailModel::Send( )
                     }
                     xSimpleMailMessage->setOriginator( maFromAddress );
 
-                    sal_Int32 nToCount		= mpToList ? mpToList->Count() : 0;
-                    sal_Int32 nCcCount		= mpCcList ? mpCcList->Count() : 0;
-                    sal_Int32 nCcSeqCount	= nCcCount;
+                    sal_Int32 nToCount      = mpToList ? mpToList->Count() : 0;
+                    sal_Int32 nCcCount      = mpCcList ? mpCcList->Count() : 0;
+                    sal_Int32 nCcSeqCount   = nCcCount;
 
                     // set recipient (only one) for this simple mail server!!
                     if ( nToCount > 1 )
@@ -637,8 +637,8 @@ SfxMailModel::SendMailResult SfxMailModel::Send( )
                     // all other recipient must be handled with CC recipients!
                     if ( nCcSeqCount > 0 )
                     {
-                        sal_Int32				nIndex = 0;
-                        Sequence< OUString >	aCcRecipientSeq;
+                        sal_Int32               nIndex = 0;
+                        Sequence< OUString >    aCcRecipientSeq;
 
                         aCcRecipientSeq.realloc( nCcSeqCount );
                         if ( nCcSeqCount > nCcCount )

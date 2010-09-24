@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,20 +29,20 @@
 #include "precompiled_sw.hxx"
 
 
-#include <viewopt.hxx>	// SwViewOptions
+#include <viewopt.hxx>  // SwViewOptions
 #include <SwPortionHandler.hxx>
 #include <inftxt.hxx>
 #include <porexp.hxx>
 
 /*************************************************************************
- *						class SwExpandPortion
+ *                      class SwExpandPortion
  *************************************************************************/
 
 xub_StrLen SwExpandPortion::GetCrsrOfst( const MSHORT nOfst ) const
 { return SwLinePortion::GetCrsrOfst( nOfst ); }
 
 /*************************************************************************
- *				virtual SwExpandPortion::GetExpTxt()
+ *              virtual SwExpandPortion::GetExpTxt()
  *************************************************************************/
 
 sal_Bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&,
@@ -65,7 +65,7 @@ void SwExpandPortion::HandlePortion( SwPortionHandler& rPH ) const
 }
 
 /*************************************************************************
- *				virtual SwExpandPortion::GetTxtSize()
+ *              virtual SwExpandPortion::GetTxtSize()
  *************************************************************************/
 
 SwPosSize SwExpandPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
@@ -98,7 +98,7 @@ sal_Bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *				virtual SwExpandPortion::Paint()
+ *              virtual SwExpandPortion::Paint()
  *************************************************************************/
 
 void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
@@ -126,7 +126,7 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
 }
 
 /*************************************************************************
- *						class SwBlankPortion
+ *                      class SwBlankPortion
  *************************************************************************/
 
 SwLinePortion *SwBlankPortion::Compress() { return this; }
@@ -187,7 +187,7 @@ MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
 }
 
 /*************************************************************************
- *				   virtual SwBlankPortion::FormatEOL()
+ *                 virtual SwBlankPortion::FormatEOL()
  *************************************************************************/
 // Format end of Line
 
@@ -229,7 +229,7 @@ sal_Bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *				   virtual SwBlankPortion::Paint()
+ *                 virtual SwBlankPortion::Paint()
  *************************************************************************/
 
 void SwBlankPortion::Paint( const SwTxtPaintInfo &rInf ) const
@@ -240,7 +240,7 @@ void SwBlankPortion::Paint( const SwTxtPaintInfo &rInf ) const
 }
 
 /*************************************************************************
- *				virtual SwBlankPortion::GetExpTxt()
+ *              virtual SwBlankPortion::GetExpTxt()
  *************************************************************************/
 
 sal_Bool SwBlankPortion::GetExpTxt( const SwTxtSizeInfo&, XubString &rTxt ) const

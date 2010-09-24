@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace {
 class WindowHash
 {
 public:
-    size_t operator()(const ::Window* argument) const 
+    size_t operator()(const ::Window* argument) const
     { return reinterpret_cast<unsigned long>(argument); }
 };
 
@@ -176,7 +176,7 @@ void FocusManager::RemoveLinks (
         Clear();
         return;
     }
-    
+
     ::std::pair<LinkMap::iterator,LinkMap::iterator> aCandidates;
     LinkMap::iterator iCandidate;
     bool bLoop (mpLinks->size() > 0);
@@ -226,7 +226,7 @@ void FocusManager::RemoveLinks (::Window* pWindow)
 
     // Make sure that we are not called back for the window.
     pWindow->RemoveEventListener (LINK (this, FocusManager, WindowEventListener));
-    
+
     // Remove the links from the given window.
     ::std::pair<LinkMap::iterator,LinkMap::iterator> aCandidates(mpLinks->equal_range(pWindow));
     mpLinks->erase(aCandidates.first, aCandidates.second);
@@ -257,7 +257,7 @@ void FocusManager::RemoveLinks (::Window* pWindow)
 void FocusManager::RemoveUnusedEventListener (::Window* pWindow)
 {
     OSL_ASSERT(pWindow!=NULL);
-    
+
     if (pWindow == NULL)
         return;
 

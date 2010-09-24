@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,10 +72,10 @@ namespace cppcanvas
         ::basegfx::B2DHomMatrix ImplCanvas::getTransformation() const
         {
             ::basegfx::B2DHomMatrix aMatrix;
-            return ::canvas::tools::getViewStateTransform( aMatrix, 
+            return ::canvas::tools::getViewStateTransform( aMatrix,
                                                            maViewState );
         }
-            
+
         void ImplCanvas::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )
         {
             // TODO(T3): not thread-safe. B2DPolyPolygon employs copy-on-write
@@ -98,7 +98,7 @@ namespace cppcanvas
         {
             return FontSharedPtr( new ImplFont( getUNOCanvas(), rFontName, rCellSize ) );
         }
-    
+
         ColorSharedPtr ImplCanvas::createColor() const
         {
             return ColorSharedPtr( new ImplColor( getUNOCanvas()->getDevice() ) );
@@ -108,7 +108,7 @@ namespace cppcanvas
         {
             return CanvasSharedPtr( new ImplCanvas( *this ) );
         }
-    
+
         void ImplCanvas::clear() const
         {
             OSL_ENSURE( mxCanvas.is(), "ImplCanvas::clear(): Invalid XCanvas" );

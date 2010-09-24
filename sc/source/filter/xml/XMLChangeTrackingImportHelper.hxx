@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,9 +81,9 @@ typedef std::list<ScMyDeleted*> ScMyDeletedList;
 
 struct ScMyGenerated
 {
-    ScBigRange		aBigRange;
-    sal_uInt32		nID;
-    ScMyCellInfo*	pCellInfo;
+    ScBigRange      aBigRange;
+    sal_uInt32      nID;
+    ScMyCellInfo*   pCellInfo;
 
     ScMyGenerated(ScMyCellInfo* pCellInfo, const ScBigRange& aBigRange);
     ~ScMyGenerated();
@@ -167,7 +167,7 @@ struct ScMyMoveAction : public ScMyBaseAction
 
 struct ScMyContentAction : public ScMyBaseAction
 {
-    ScMyCellInfo*	pCellInfo;
+    ScMyCellInfo*   pCellInfo;
 
     ScMyContentAction();
     ~ScMyContentAction();
@@ -185,25 +185,25 @@ class ScChangeViewSettings;
 
 class ScXMLChangeTrackingImportHelper
 {
-    ScStrCollection		aUsers;
-    ScMyActions			aActions;
-    com::sun::star::uno::Sequence<sal_Int8>	aProtect;
-    ScDocument*			pDoc;
-    ScChangeTrack*		pTrack;
-    ScMyBaseAction*		pCurrentAction;
-    rtl::OUString		sIDPrefix;
-    sal_uInt32			nPrefixLength;
-    sal_Int16			nMultiSpanned;
-    sal_Int16			nMultiSpannedSlaveCount;
-    sal_Bool			bChangeTrack;
+    ScStrCollection     aUsers;
+    ScMyActions         aActions;
+    com::sun::star::uno::Sequence<sal_Int8> aProtect;
+    ScDocument*         pDoc;
+    ScChangeTrack*      pTrack;
+    ScMyBaseAction*     pCurrentAction;
+    rtl::OUString       sIDPrefix;
+    sal_uInt32          nPrefixLength;
+    sal_Int16           nMultiSpanned;
+    sal_Int16           nMultiSpannedSlaveCount;
+    sal_Bool            bChangeTrack;
 
 private:
     void ConvertInfo(const ScMyActionInfo& aInfo, String& rUser, DateTime& aDateTime);
-    ScChangeAction*	CreateInsertAction(ScMyInsAction* pAction);
-    ScChangeAction*	CreateDeleteAction(ScMyDelAction* pAction);
-    ScChangeAction*	CreateMoveAction(ScMyMoveAction* pAction);
-    ScChangeAction*	CreateRejectionAction(ScMyRejAction* pAction);
-    ScChangeAction*	CreateContentAction(ScMyContentAction* pAction);
+    ScChangeAction* CreateInsertAction(ScMyInsAction* pAction);
+    ScChangeAction* CreateDeleteAction(ScMyDelAction* pAction);
+    ScChangeAction* CreateMoveAction(ScMyMoveAction* pAction);
+    ScChangeAction* CreateRejectionAction(ScMyRejAction* pAction);
+    ScChangeAction* CreateContentAction(ScMyContentAction* pAction);
 
     void CreateGeneratedActions(ScMyGeneratedList& rList);
 

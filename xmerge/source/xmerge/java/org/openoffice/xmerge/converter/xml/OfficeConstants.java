@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ public interface OfficeConstants {
      *  tag in content.xml.
      */
     public final static String TAG_OFFICE_DOCUMENT_CONTENT = "office:document-content";
-    
+
     /**
      *  Element tag for <i>office:document-settings</i>, this is the root
      *  tag in content.xml.
@@ -105,23 +105,23 @@ public interface OfficeConstants {
     public final static String TAG_TEXT_SEQUENCE = "text:sequence";
 
      /** Element tag for <i>text:text-input</i>. */
-    public final static String TAG_TEXT_VARIABLE_INPUT = "text:variable-input"; 
+    public final static String TAG_TEXT_VARIABLE_INPUT = "text:variable-input";
      /** Element tag for <i>text:time</i>. */
-     public final static String TAG_TEXT_TIME = "text:time"; 
+     public final static String TAG_TEXT_TIME = "text:time";
 
     /** Element tag for <i>text:page-count</i>. */
-     public final static String TAG_TEXT_PAGE_COUNT = "text:page-count"; 
+     public final static String TAG_TEXT_PAGE_COUNT = "text:page-count";
     /** Element tag for <i>text:page-number</i>. */
-     public final static String TAG_TEXT_PAGE_NUMBER = "text:page-number"; 
+     public final static String TAG_TEXT_PAGE_NUMBER = "text:page-number";
     /** Element tag for <i>text:author-initials</i>. */
-     public final static String TAG_TEXT_AUTHOR_INITIALS = "text:author-initials"; 
+     public final static String TAG_TEXT_AUTHOR_INITIALS = "text:author-initials";
     /** Element tag for <i>text:subject</i>. */
-     public final static String TAG_TEXT_SUBJECT = "text:subject"; 
+     public final static String TAG_TEXT_SUBJECT = "text:subject";
     /** Element tag for <i>text:title</i>. */
-     public final static String TAG_TEXT_TITLE = "text:title"; 
+     public final static String TAG_TEXT_TITLE = "text:title";
     /** Element tag for <i>text:creation-time</i>. */
-     public final static String TAG_TEXT_CREATION_TIME = "text:creation-time"; 
-    
+     public final static String TAG_TEXT_CREATION_TIME = "text:creation-time";
+
     /** Element tag for <i>text:date</i>. */
      public final static String TAG_TEXT_DATE = "text:date";
     /** Element tag for <i>text:text-input</i>. */
@@ -150,7 +150,7 @@ public interface OfficeConstants {
      *  <i>fo:font-family</i>.
      */
     public final static String ATTRIBUTE_FO_FONT_FAMILY = "fo:font-family";
-    
+
     /**
      *  Attribute tag for <i>fo:font-family</i> of element
      *  <i>fo:font-family</i>.
@@ -159,7 +159,7 @@ public interface OfficeConstants {
 
     /** Element tag for <i>text:p</i>. */
     public final static String TAG_PARAGRAPH = "text:p";
-    
+
     /** Element tag for <i>text:</i>. */
     public final static String TAG_TEXT = "text:";
 
@@ -218,14 +218,14 @@ public interface OfficeConstants {
     public final static String TAG_TABLE_NAMED_RANGE= "table:named-range";
 
     /** Element tag for <i>table:named-expression</i>. */
-    public final static String TAG_TABLE_NAMED_EXPRESSION= "table:named-expression";    
-    
+    public final static String TAG_TABLE_NAMED_EXPRESSION= "table:named-expression";
+
     /**
      *  Attribute tag for <i>table:name</i> of element
      *  <i>table:table</i>.
      */
     public final static String ATTRIBUTE_TABLE_NAME = "table:name";
-    
+
     /**
      *  Attribute tag for <i>table:expression</i> of element
      *  <i>table:named-range</i>.
@@ -237,13 +237,13 @@ public interface OfficeConstants {
      *  <i>table:named-range</i>.
      */
     public final static String ATTRIBUTE_TABLE_BASE_CELL_ADDRESS = "table:base-cell-address";
-    
+
     /**
      *  Attribute tag for <i>table:cell-range-address</i> of element
      *  <i>table:named-range</i>.
      */
     public final static String ATTRIBUTE_TABLE_CELL_RANGE_ADDRESS = "table:cell-range-address";
-    
+
     /** Element tag for <i>table:table-row</i>. */
     public final static String TAG_TABLE_ROW = "table:table-row";
 
@@ -254,7 +254,7 @@ public interface OfficeConstants {
     *  Attribute tag for <i>table:default-cell-style-name</i>
     *  of element <i>table:table-column</i>.
     */
-    public final static String ATTRIBUTE_DEFAULT_CELL_STYLE = "table:default-cell-style-name";	
+    public final static String ATTRIBUTE_DEFAULT_CELL_STYLE = "table:default-cell-style-name";
 
     /** Element tag for <i>table:scenario</i>. */
     public final static String TAG_TABLE_SCENARIO = "table:scenario";
@@ -355,33 +355,33 @@ public interface OfficeConstants {
 
     /** StarWriter XML <i>office:class</i> value. */
     public final static String SXW_TYPE = "text";
-   
+
     /** StarCalc XML file extension. */
     public final static String SXC_FILE_EXTENSION = ".sxc";
 
     /** StarCalc XML <i>office:class</i> value. */
     public final static String SXC_TYPE = "spreadsheet";
-       
+
     /** Element tag for <i>manifest:manifest</i>entry in Manifest XML */
     public final static String TAG_MANIFEST_ROOT = "manifest:manifest";
-    
+
     /** Element tag for <i>manifest:file-entry</i> entry in Manifest XML. */
     public final static String TAG_MANIFEST_FILE = "manifest:file-entry";
-    
-    /** 
+
+    /**
      * Attribute tag for <i>manifest:media-type</i> of element
-     * <i>manifest:file-entry</i>. 
+     * <i>manifest:file-entry</i>.
      */
     public final static String ATTRIBUTE_MANIFEST_FILE_TYPE = "manifest:media-type";
-    
-    /** 
+
+    /**
      * Attribute tag for <i>manifest:full-path</i> of element
-     * <i>manifest:file-entry</i>. 
+     * <i>manifest:file-entry</i>.
      */
     public final static String ATTRIBUTE_MANIFEST_FILE_PATH = "manifest:full-path";
-   
+
     // Tags and Elements for the settings.xml
-   
+
     /** Element tag for <i>config:config-item</i>. */
     public final static String TAG_CONFIG_ITEM = "config:config-item";
 
@@ -402,17 +402,17 @@ public interface OfficeConstants {
      *  <i>config:config-item</i>.
      */
     public final static String ATTRIBUTE_CONFIG_NAME = "config:name";
-    
+
     /**
      *  Attribute tag for <i>config:type</i> of element
      *  <i>config:config-item</i>.
      */
     public final static String ATTRIBUTE_CONFIG_TYPE = "config:type";
-    
-    
+
+
     /** StarWriter XML MIME type. */
     public final static String SXW_MIME_TYPE = "application/vnd.sun.xml.writer";
-    
+
     /** StarWriter XML Template MIME type. */
     public final static String STW_MIME_TYPE = "application/vnd.sun.xml.writer.template";
 
@@ -421,19 +421,19 @@ public interface OfficeConstants {
 
     /** StarCalc XML Template MIME type. */
     public final static String STC_MIME_TYPE = "application/vnd.sun.xml.calc.template";
-    
+
     /** StarImpress XML MIME type. */
     public final static String SXI_MIME_TYPE = "application/vnd.sun.xml.impress";
-    
+
     /** StarImpress XML Template MIME type. */
     public final static String STI_MIME_TYPE = "application/vnd.sun.xml.impress.template";
 
     /** StarDraw XML MIME type. */
     public final static String SXD_MIME_TYPE = "application/vnd.sun.xml.draw";
-    
+
     /** StarMath XML MIME type. */
     public final static String SXM_MIME_TYPE = "application/vnd.sun.xml.math";
-    
+
     /** StarWriter Global XML MIME Type */
     public final static String SXG_MIME_TYPE = "application/vnd.sun.xml.writer.global";
 }

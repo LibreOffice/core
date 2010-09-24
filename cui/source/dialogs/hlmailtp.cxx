@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,10 +54,10 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
 :   SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_MAIL ),
                               rItemSet ),
     maGrpMailNews   ( this, CUI_RES (GRP_MAILNEWS) ),
-    maRbtMail		( this, CUI_RES (RB_LINKTYP_MAIL) ),
-    maRbtNews		( this, CUI_RES (RB_LINKTYP_NEWS) ),
-    maFtReceiver	( this, CUI_RES (FT_RECEIVER) ),
-    maCbbReceiver	( this, INET_PROT_MAILTO ),
+    maRbtMail       ( this, CUI_RES (RB_LINKTYP_MAIL) ),
+    maRbtNews       ( this, CUI_RES (RB_LINKTYP_NEWS) ),
+    maFtReceiver    ( this, CUI_RES (FT_RECEIVER) ),
+    maCbbReceiver   ( this, INET_PROT_MAILTO ),
     maBtAdrBook     ( this, CUI_RES (BTN_ADRESSBOOK) ),
     maFtSubject     ( this, CUI_RES (FT_SUBJECT) ),
     maEdSubject     ( this, CUI_RES (ED_SUBJECT) )
@@ -82,10 +82,10 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
     maRbtMail.Check ();
 
     // overload handlers
-    maRbtMail.SetClickHdl		 ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
-    maRbtNews.SetClickHdl		 ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
-    maBtAdrBook.SetClickHdl		 ( LINK ( this, SvxHyperlinkMailTp, ClickAdrBookHdl_Impl ) );
-    maCbbReceiver.SetModifyHdl	 ( LINK ( this, SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl) );
+    maRbtMail.SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
+    maRbtNews.SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
+    maBtAdrBook.SetClickHdl      ( LINK ( this, SvxHyperlinkMailTp, ClickAdrBookHdl_Impl ) );
+    maCbbReceiver.SetModifyHdl   ( LINK ( this, SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl) );
 
     if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
         maBtAdrBook.Hide();
@@ -310,7 +310,7 @@ IMPL_LINK ( SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, void *, EMPTYARG )
     }
 
 
-/*	uno::Reference< frame::XDispatchProvider > xProv( pViewFrame->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
+/*  uno::Reference< frame::XDispatchProvider > xProv( pViewFrame->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
     if ( xProv.is() )
     {
 !!! (pb) we need a new config item here

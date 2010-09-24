@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ public:
 
     // has to be called in case the dialog was closed with OK
     void commitPendingChanges();
-    
+
 private:
     DECL_LINK( ClickLightSourceButtonHdl, LightButton* );
     DECL_LINK( SelectColorHdl, ColorLB* );

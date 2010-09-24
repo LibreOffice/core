@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -194,8 +194,8 @@ BOOL Writer::CopyNextPam( SwPaM ** ppPam )
 {
     if( (*ppPam)->GetNext() == pOrigPam )
     {
-        *ppPam = pOrigPam;			// wieder auf den Anfangs-Pam setzen
-        return FALSE;				// Ende vom Ring
+        *ppPam = pOrigPam;          // wieder auf den Anfangs-Pam setzen
+        return FALSE;               // Ende vom Ring
     }
 
     // ansonsten kopiere den die Werte aus dem naechsten Pam
@@ -262,7 +262,7 @@ void Writer::SetStream(SvStream *const pStream)
 
 
 SvStream& Writer::OutHex( SvStream& rStrm, ULONG nHex, BYTE nLen )
-{												   // in einen Stream aus
+{                                                  // in einen Stream aus
     // Pointer an das Bufferende setzen
     sal_Char* pStr = aNToABuf + (NTOABUFLEN-1);
     for( BYTE n = 0; n < nLen; ++n )
@@ -357,15 +357,15 @@ ULONG Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const St
 
 BOOL Writer::CopyLocalFileToINet( String& rFileNm )
 {
-    if( !pOrigFileName )		        // can be happen, by example if we
+    if( !pOrigFileName )                // can be happen, by example if we
         return FALSE;                   // write into the clipboard
 
     BOOL bRet = FALSE;
     INetURLObject aFileUrl( rFileNm ), aTargetUrl( *pOrigFileName );
 
 // JP 01.11.00: what is the correct question for the portal??
-//	if( aFileUrl.GetProtocol() == aFileUrl.GetProtocol() )
-//		return bRet;
+//  if( aFileUrl.GetProtocol() == aFileUrl.GetProtocol() )
+//      return bRet;
 // this is our old without the Mail-Export
     if( ! ( INET_PROT_FILE == aFileUrl.GetProtocol() &&
             INET_PROT_FILE != aTargetUrl.GetProtocol() &&

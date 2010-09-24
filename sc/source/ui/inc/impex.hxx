@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ class ScAsciiOptions;
 struct ScExportTextOptions
 {
     enum NewlineConversion { ToSystem, ToSpace, None };
-    ScExportTextOptions( NewlineConversion eNewlineConversion = ToSystem, sal_Unicode cSeparatorConvertTo = 0, bool bAddQuotes = false ) : 
+    ScExportTextOptions( NewlineConversion eNewlineConversion = ToSystem, sal_Unicode cSeparatorConvertTo = 0, bool bAddQuotes = false ) :
         meNewlineConversion( eNewlineConversion ), mcSeparatorConvertTo( cSeparatorConvertTo ), mbAddQuotes( bAddQuotes ) {}
 
     NewlineConversion meNewlineConversion;
@@ -56,24 +56,24 @@ class ScImportExport
     ScDocument* pDoc;
     ScDocument* pUndoDoc;
     ScRange     aRange;
-    String		aStreamPath;
+    String      aStreamPath;
     String      aNonConvertibleChars;
-    ULONG		nSizeLimit;
-    sal_Unicode	cSep;					// Separator
-    sal_Unicode	cStr;					// String Delimiter
-    BOOL		bFormulas;				// Formeln im Text?
-    BOOL		bIncludeFiltered;		// include filtered rows? (default true)
-    BOOL		bAll;					// keine Selektion
-    BOOL		bSingle;				// Einfachselektion
-    BOOL		bUndo;					// Mit Undo?
-    BOOL		bOverflow;				// zuviele Zeilen/Spalten
+    ULONG       nSizeLimit;
+    sal_Unicode cSep;                   // Separator
+    sal_Unicode cStr;                   // String Delimiter
+    BOOL        bFormulas;              // Formeln im Text?
+    BOOL        bIncludeFiltered;       // include filtered rows? (default true)
+    BOOL        bAll;                   // keine Selektion
+    BOOL        bSingle;                // Einfachselektion
+    BOOL        bUndo;                  // Mit Undo?
+    BOOL        bOverflow;              // zuviele Zeilen/Spalten
     bool        mbApi;
     ScExportTextOptions mExportTextOptions;
 
-    ScAsciiOptions*	pExtOptions;		// erweiterte Optionen
+    ScAsciiOptions* pExtOptions;        // erweiterte Optionen
 
-    BOOL StartPaste();					// Protect-Check, Undo einrichten
-    void EndPaste();					// Undo/Redo-Aktionen, Repaint
+    BOOL StartPaste();                  // Protect-Check, Undo einrichten
+    void EndPaste();                    // Undo/Redo-Aktionen, Repaint
     BOOL Doc2Text( SvStream& );
     BOOL Text2Doc( SvStream& );
     BOOL Doc2Sylk( SvStream& );
@@ -82,13 +82,13 @@ class ScImportExport
     BOOL Doc2RTF( SvStream& );
     BOOL Doc2Dif( SvStream& );
     BOOL Dif2Doc( SvStream& );
-    BOOL ExtText2Doc( SvStream& );		// mit pExtOptions
+    BOOL ExtText2Doc( SvStream& );      // mit pExtOptions
     BOOL RTF2Doc( SvStream&, const String& rBaseURL );
     BOOL HTML2Doc( SvStream&, const String& rBaseURL );
 
 public:
-    ScImportExport( ScDocument* );					// Gesamtdokument
-    ScImportExport( ScDocument*, const String& );	// Bereichs/Zellangabe
+    ScImportExport( ScDocument* );                  // Gesamtdokument
+    ScImportExport( ScDocument*, const String& );   // Bereichs/Zellangabe
     ScImportExport( ScDocument*, const ScAddress& );
     ScImportExport( ScDocument*, const ScRange& );
    ~ScImportExport();
@@ -97,20 +97,20 @@ public:
 
     BOOL IsDoubleRef() const { return BOOL( !( bAll || bSingle ) ); }
     BOOL IsSingleRef() const { return bSingle; }
-    BOOL IsNoRef() const	 { return bAll;    }
-    BOOL IsRef() const	 	 { return BOOL( !bAll ); }
+    BOOL IsNoRef() const     { return bAll;    }
+    BOOL IsRef() const       { return BOOL( !bAll ); }
 
     const ScRange& GetRange() const { return aRange; }
 
-    BOOL IsUndo() const		 { return bUndo; }
-    void SetUndo( BOOL b )	 { bUndo = b;	 }
+    BOOL IsUndo() const      { return bUndo; }
+    void SetUndo( BOOL b )   { bUndo = b;    }
 
     static BOOL  IsFormatSupported( ULONG nFormat );
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
             String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, bool bMergeSeps, bool& rbIsQuoted );
-    static	void	WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, BOOL bZero = FALSE );
-    static	void	WriteUnicodeOrByteEndl( SvStream& rStrm );
-    static	inline	BOOL	IsEndianSwap( const SvStream& rStrm );
+    static  void    WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, BOOL bZero = FALSE );
+    static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
+    static  inline  BOOL    IsEndianSwap( const SvStream& rStrm );
 
     //! only if stream is only used in own (!) memory
     static  inline  void    SetNoEndianSwap( SvStream& rStrm );
@@ -124,10 +124,10 @@ public:
     BOOL IsIncludeFiltered() const { return bIncludeFiltered; }
     void SetIncludeFiltered( BOOL b ) { bIncludeFiltered = b; }
 
-    void SetSizeLimit( ULONG nNew ) { nSizeLimit = nNew; }	// momentan nur fuer Ascii
+    void SetSizeLimit( ULONG nNew ) { nSizeLimit = nNew; }  // momentan nur fuer Ascii
 
-    void			SetStreamPath( const String& rPath ) { aStreamPath = rPath; }
-    const String&	GetStreamPath() const { return aStreamPath; }
+    void            SetStreamPath( const String& rPath ) { aStreamPath = rPath; }
+    const String&   GetStreamPath() const { return aStreamPath; }
 
     BOOL ImportString( const ::rtl::OUString&, ULONG=FORMAT_STRING );
     BOOL ExportString( ::rtl::OUString&, ULONG=FORMAT_STRING );
@@ -141,7 +141,7 @@ public:
     BOOL ExportData( const String& rMimeType,
                      ::com::sun::star::uno::Any & rValue  );
 
-    BOOL IsOverflow() const	{ return bOverflow; }		// nach dem Importieren
+    BOOL IsOverflow() const { return bOverflow; }       // nach dem Importieren
 
     const String& GetNonConvertibleChars() const { return aNonConvertibleChars; }
 

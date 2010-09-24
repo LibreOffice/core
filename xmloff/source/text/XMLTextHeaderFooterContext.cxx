@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,15 +166,15 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
             xOldTextCursor = xTxtImport->GetCursor();
             xTxtImport->SetCursor( xText->createTextCursor() );
         }
-        
-        pContext = 
+
+        pContext =
             GetImport().GetTextImport()->CreateTextChildContext(
                 GetImport(), nPrefix, rLocalName, xAttrList,
                 XML_TEXT_TYPE_HEADER_FOOTER );
     }
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    
+
     return pContext;
 }
 

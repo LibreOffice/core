@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,8 +28,8 @@
 #ifndef _XMLOFF_TRANSFORMERACTION_HXX
 #define _XMLOFF_TRANSFORMERACTION_HXX
 
-#define	XML_TACTION_EOT 0x0000
-#define	XML_TACTION_END 0xffff
+#define XML_TACTION_EOT 0x0000
+#define XML_TACTION_END 0xffff
 
 
-#endif	//  _XMLOFF_TRANSFORMERACTION_HXX
+#endif  //  _XMLOFF_TRANSFORMERACTION_HXX

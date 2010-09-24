@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ public:
     SwTxtLine( SwTxtFrm *pFrm, SwParaPortion *pNew = 0 );
     virtual ~SwTxtLine();
 
-    inline 		 SwParaPortion *GetPara()		{ return pLine; }
+    inline       SwParaPortion *GetPara()       { return pLine; }
     inline const SwParaPortion *GetPara() const { return pLine; }
 
     inline void SetPara( SwParaPortion *pNew ) { pLine = pNew; }

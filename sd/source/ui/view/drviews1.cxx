@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -344,7 +344,7 @@ USHORT DrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     if ( ViewShell::PrepareClose(bUI, bForBrowsing) != TRUE )
         return FALSE;
 
-    BOOL			bRet = TRUE;
+    BOOL            bRet = TRUE;
 
     if( bRet && HasCurrentFunction() )
     {
@@ -540,7 +540,7 @@ bool DrawViewShell::IsLayerModeActive (void) const
 
 long DrawViewShell::GetHCtrlWidth()
 {
-    //	return maTabControl.GetSizePixel().Width();
+    //  return maTabControl.GetSizePixel().Width();
     return 0;
 }
 
@@ -555,11 +555,11 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, BOOL bIsFirst)
 {
     Ruler* pRuler;
     WinBits  aWBits;
-    USHORT	 nFlags = SVXRULER_SUPPORT_OBJECT;
+    USHORT   nFlags = SVXRULER_SUPPORT_OBJECT;
 
     if ( bIsFirst )
     {
-        aWBits	= WB_HSCROLL | WB_3DLOOK | WB_BORDER | WB_EXTRAFIELD;
+        aWBits  = WB_HSCROLL | WB_3DLOOK | WB_BORDER | WB_EXTRAFIELD;
         nFlags |= ( SVXRULER_SUPPORT_SET_NULLOFFSET |
                     SVXRULER_SUPPORT_TABS |
                     SVXRULER_SUPPORT_PARAGRAPH_MARGINS ); // Neu
@@ -599,7 +599,7 @@ SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
 {
     Ruler* pRuler;
     WinBits  aWBits = WB_VSCROLL | WB_3DLOOK | WB_BORDER;
-    USHORT	 nFlags = SVXRULER_SUPPORT_OBJECT;
+    USHORT   nFlags = SVXRULER_SUPPORT_OBJECT;
 
     pRuler = new Ruler(*this, GetParentWindow(), pWin, nFlags,
         GetViewFrame()->GetBindings(), aWBits);
@@ -722,7 +722,7 @@ SdPage* DrawViewShell::getCurrentPage() const
 void DrawViewShell::ResetActualPage()
 {
     USHORT nCurrentPage = maTabControl.GetCurPageId() - 1;
-    USHORT nPageCount	= (meEditMode == EM_PAGE)?GetDoc()->GetSdPageCount(mePageKind):GetDoc()->GetMasterSdPageCount(mePageKind);
+    USHORT nPageCount   = (meEditMode == EM_PAGE)?GetDoc()->GetSdPageCount(mePageKind):GetDoc()->GetMasterSdPageCount(mePageKind);
     if (nPageCount > 0)
         nCurrentPage = Min((USHORT)(nPageCount - 1), nCurrentPage);
     else
@@ -1219,7 +1219,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
                 // set pages for all available handout presentation objects
                 sd::ShapeList& rShapeList = pMaster->GetPresentationShapeList();
                 SdrObject* pObj = 0;
-                
+
                 while( (pObj = rShapeList.getNextShape(pObj)) != 0 )
                 {
                     if( pMaster->GetPresObjKind(pObj) == PRESOBJ_HANDOUT )

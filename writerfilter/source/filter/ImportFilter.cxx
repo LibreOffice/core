@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,12 +89,12 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 #ifdef DEBUG_ELEMENT
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
         ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
-        
+
         writerfilter::TagLogger::Pointer_t debugLogger
         (writerfilter::TagLogger::getInstance("DEBUG"));
         debugLogger->setFileName(sURLc);
         debugLogger->startDocument();
-        
+
         writerfilter::TagLogger::Pointer_t dmapperLogger
         (writerfilter::TagLogger::getInstance("DOMAINMAPPER"));
         dmapperLogger->setFileName(sURLc);

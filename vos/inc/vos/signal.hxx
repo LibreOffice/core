@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,9 @@
 #ifndef _VOS_SIGNAL_HXX_
 #define _VOS_SIGNAL_HXX_
 
-#	include <vos/types.hxx>
-#	include <vos/object.hxx>
-#	include <osl/signal.h>
+#   include <vos/types.hxx>
+#   include <vos/object.hxx>
+#   include <osl/signal.h>
 
 namespace vos
 {
@@ -73,8 +73,8 @@ public:
 
     typedef oslSignalInfo TSignalInfo;
 
-    /// Constructor 
-    OSignalHandler();              
+    /// Constructor
+    OSignalHandler();
 
     /// Destructor kills thread if neccessary
     virtual ~OSignalHandler();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjitem.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/dialmgr.hxx>					// SVX_RESSTR
+#include <svx/dialmgr.hxx>                  // SVX_RESSTR
 #include <editeng/bulitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/sxmsuitm.hxx>
@@ -159,16 +159,16 @@ void SdDrawDocument::CreateLayoutTemplates()
     SfxItemSet& rISet = pSheet->GetItemSet();
     SfxItemPool* pPool = rISet.GetPool();
 
-    String	 aNullStr;
+    String   aNullStr;
 
     ::basegfx::B2DPolyPolygon aNullPolyPolygon;
-    Color	 aNullCol(RGB_Color(COL_BLACK));
+    Color    aNullCol(RGB_Color(COL_BLACK));
 
-    XDash	  aNullDash;
+    XDash     aNullDash;
     XGradient aNullGrad(aNullCol,RGB_Color(COL_WHITE));
               aNullGrad.SetStartIntens( 100 );
               aNullGrad.SetEndIntens( 100 );
-    XHatch	  aNullHatch(aNullCol);
+    XHatch    aNullHatch(aNullCol);
 
                     // Linienattribute (Extended OutputDevice)
     rISet.Put(XLineStyleItem(XLINE_SOLID));
@@ -197,7 +197,7 @@ void SdDrawDocument::CreateLayoutTemplates()
                     // Schattenattribute (Drawing Engine)
     rISet.Put(SdrShadowItem(FALSE));
     rISet.Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
-    rISet.Put(SdrShadowXDistItem(300)); 		// 3 mm Schattendistanz
+    rISet.Put(SdrShadowXDistItem(300));         // 3 mm Schattendistanz
     rISet.Put(SdrShadowYDistItem(300));
 
     Font aLatinFont, aCJKFont, aCTLFont;
@@ -242,7 +242,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
     rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
 
-    rISet.Put( SdrTextLeftDistItem( 250 ) );	// sj: (i33745) using text frame distances seems to be a better default
+    rISet.Put( SdrTextLeftDistItem( 250 ) );    // sj: (i33745) using text frame distances seems to be a better default
     rISet.Put( SdrTextRightDistItem( 250 ) );
     rISet.Put( SdrTextUpperDistItem( 125 ) );
     rISet.Put( SdrTextLowerDistItem( 125 ) );
@@ -258,18 +258,18 @@ void SdDrawDocument::CreateLayoutTemplates()
                             // die sind in allen Ebenen identisch
     aBulletItem.SetStyle(BS_BULLET);
     aBulletItem.SetStart(1);
-    aBulletItem.SetScale(45);			// in Prozent
+    aBulletItem.SetScale(45);           // in Prozent
 
     Font aBulletFont( pSSPool->GetBulletFont() );
 
-    aBulletFont.SetSize(Size(0,635));	// sj: (i33745) changed default from 24 to 18 pt
+    aBulletFont.SetSize(Size(0,635));   // sj: (i33745) changed default from 24 to 18 pt
 
     aBulletItem.SetFont(aBulletFont);
-    aBulletItem.SetSymbol( 0x25CF );					// Punkt
+    aBulletItem.SetSymbol( 0x25CF );                    // Punkt
     rISet.Put(aBulletItem);
 
-//	SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 0); // Bullets nicht sichtbar
-//	rISet.Put(aBulletStateItem);
+//  SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 0); // Bullets nicht sichtbar
+//  rISet.Put(aBulletStateItem);
 
     // Neues BulletItem
     pSSPool->PutNumBulletItem( pSheet, aBulletFont );
@@ -309,7 +309,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SdrShadowItem(TRUE));
     pISet->Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
-    pISet->Put(SdrShadowXDistItem(300));		// 3 mm Schattendistanz
+    pISet->Put(SdrShadowXDistItem(300));        // 3 mm Schattendistanz
     pISet->Put(SdrShadowYDistItem(300));
 
     // ---- Objekt ohne Fllung -------------------------------------------
@@ -371,7 +371,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
     SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
-    aLRSpaceItem.SetTxtFirstLineOfst(600); 		// Erstzeileneinzug 6mm, rechts 0
+    aLRSpaceItem.SetTxtFirstLineOfst(600);      // Erstzeileneinzug 6mm, rechts 0
     pISet->Put(aLRSpaceItem);
 
 /* #i35937#
@@ -407,7 +407,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SdrShadowItem(TRUE));
     pISet->Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
-    pISet->Put(SdrShadowXDistItem(200));		// 2 mm Schattendistanz
+    pISet->Put(SdrShadowXDistItem(200));        // 2 mm Schattendistanz
     pISet->Put(SdrShadowYDistItem(200));
 
     pISet->Put(SvxFontHeightItem(846, 100, EE_CHAR_FONTHEIGHT ));       // 24 pt
@@ -431,13 +431,13 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SdrShadowItem(TRUE));
     pISet->Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
-    pISet->Put(SdrShadowXDistItem(200));		// 2 mm Schattendistanz
+    pISet->Put(SdrShadowXDistItem(200));        // 2 mm Schattendistanz
     pISet->Put(SdrShadowYDistItem(200));
 
     pISet->Put(SvxFontHeightItem(1270, 100, EE_CHAR_FONTHEIGHT ));      // 36 pt
 
     SvxLRSpaceItem aLRSpItem( 200, 200, 0, 0, EE_PARA_LRSPACE);
-    pISet->Put( aLRSpItem );	// Erstzeileneinzug 0 mm, links und rechts 2 mm
+    pISet->Put( aLRSpItem );    // Erstzeileneinzug 0 mm, links und rechts 2 mm
 
 /* #i35937#
     // SvxLRSpaceItem hart gesetzt: NumBulletItem anpassen
@@ -581,17 +581,17 @@ void SdDrawDocument::CreateDefaultCellStyles()
     pSheet = &(pSSPool->Make(aDefaultCellStyleName, SD_STYLE_FAMILY_CELL, nMask));
     pSheet->SetHelpId( aHelpFile, HID_SD_CELL_STYLE_DEFAULT );
     SfxItemSet& rISet = pSheet->GetItemSet();
-//	SfxItemPool* pPool = rISet.GetPool();
+//  SfxItemPool* pPool = rISet.GetPool();
 
-    String	 aNullStr;
+    String   aNullStr;
 
-    Color	 aNullCol(RGB_Color(COL_BLACK));
+    Color    aNullCol(RGB_Color(COL_BLACK));
 
-    XDash	  aNullDash;
+    XDash     aNullDash;
     XGradient aNullGrad(aNullCol,RGB_Color(COL_WHITE));
               aNullGrad.SetStartIntens( 100 );
               aNullGrad.SetEndIntens( 100 );
-    XHatch	  aNullHatch(aNullCol);
+    XHatch    aNullHatch(aNullCol);
 
     rISet.Put(XFillStyleItem(XFILL_SOLID));
     rISet.Put(XFillColorItem(String(), RGB_Color(0x00ccccff)));
@@ -617,13 +617,13 @@ void SdDrawDocument::CreateDefaultCellStyles()
     rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 18 pt
     rISet.Put( SvxFontHeightItem( convertFontHeightToCTL( 635 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 18 pt
 
-//	rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
-//	rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
-//	rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
+//  rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
+//  rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
+//  rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
 
-//	rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
-//	rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
-//	rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
+//  rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
+//  rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
+//  rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
 
 //    rISet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
 //    rISet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
@@ -650,7 +650,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     Color aWhite( COL_WHITE );
     SvxBorderLine aBorderLine( &aWhite, 1, 0, 0 );
-    
+
     SvxBoxItem aBoxItem( SDRATTR_TABLE_BORDER );
     aBoxItem.SetLine( &aBorderLine, BOX_LINE_TOP );
     aBoxItem.SetLine( &aBorderLine, BOX_LINE_BOTTOM );
@@ -679,7 +679,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     // ---- Orange --------------------------------------------------
 
-    Any aOrange1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("orange1") ), aDefaultCellStyleName, RGB_COLORDATA(255,204,153))); 
+    Any aOrange1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("orange1") ), aDefaultCellStyleName, RGB_COLORDATA(255,204,153)));
     Any aOrange2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("orange2") ), aDefaultCellStyleName, RGB_COLORDATA(255,153,102)));
     Any aOrange3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("orange3") ), aDefaultCellStyleName, RGB_COLORDATA(255,102,51)));
 
@@ -999,7 +999,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
                     bLock = pModel->isLocked();
                     pModel->setLock( sal_True );
                 }
-                // taking text from the outliner				
+                // taking text from the outliner
                 ((SdrTextObj*) pObj)->SetOutlinerParaObject( pOutl->CreateParaObject() );
 
                 pObj->BroadcastObjectChange();
@@ -1210,9 +1210,9 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
             aSheetName.Insert(rNewName, 0);
 
             StyleReplaceData* pReplData = new StyleReplaceData;
-            pReplData->nFamily	  = pSheet->GetFamily();
+            pReplData->nFamily    = pSheet->GetFamily();
             pReplData->nNewFamily = pSheet->GetFamily();
-            pReplData->aName	  = pSheet->GetName();
+            pReplData->aName      = pSheet->GetName();
             pReplData->aNewName   = aSheetName;
             aReplList.Insert(pReplData, LIST_APPEND);
 
@@ -1334,17 +1334,17 @@ void SdDrawDocument::SetTextDefaults() const
     // BulletItem und BulletFont fuer Titel und Gliederung
     SvxBulletItem aBulletItem(EE_PARA_BULLET);
     Font aBulletFont( static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->GetBulletFont() );
-    aBulletFont.SetSize(Size(0,846));		// 24 pt
+    aBulletFont.SetSize(Size(0,846));       // 24 pt
     aBulletItem.SetFont(aBulletFont);
     aBulletItem.SetStyle(BS_BULLET);
     aBulletItem.SetStart(1);
-    aBulletItem.SetScale(45);				// in Prozent
-    aBulletItem.SetSymbol( 0x25CF );				// Punkt
+    aBulletItem.SetScale(45);               // in Prozent
+    aBulletItem.SetSymbol( 0x25CF );                // Punkt
     pItemPool->SetPoolDefaultItem( aBulletItem );
 
     // Bullets nicht sichtbar
-//	SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 0);
-//	pItemPool->SetPoolDefaultItem( aBulletStateItem );
+//  SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 0);
+//  pItemPool->SetPoolDefaultItem( aBulletStateItem );
 
     // Neues BulletItem
     SvxNumberFormat aNumberFormat(SVX_NUM_CHAR_SPECIAL);
@@ -1436,9 +1436,9 @@ void SdDrawDocument::getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rC
 {
     LanguageType eLatin = GetLanguage( EE_CHAR_LANGUAGE );
 
-    //	#108374# / #107782#: If the UI language is Korean, the default Latin font has to
-    //	be queried for Korean, too (the Latin language from the document can't be Korean).
-    //	This is the same logic as in SwDocShell::InitNew.
+    //  #108374# / #107782#: If the UI language is Korean, the default Latin font has to
+    //  be queried for Korean, too (the Latin language from the document can't be Korean).
+    //  This is the same logic as in SwDocShell::InitNew.
     LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();
     switch( eUiLanguage )
     {

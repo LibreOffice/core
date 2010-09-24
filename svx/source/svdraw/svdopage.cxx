@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ void SdrPageObj::PageInDestruction(const SdrPage& rPage)
 TYPEINIT1(SdrPageObj,SdrObject);
 
 SdrPageObj::SdrPageObj(SdrPage* pNewPage)
-:	mpShownPage(pNewPage)
+:   mpShownPage(pNewPage)
 {
     if(mpShownPage)
     {
@@ -90,7 +90,7 @@ SdrPageObj::SdrPageObj(SdrPage* pNewPage)
 }
 
 SdrPageObj::SdrPageObj(const Rectangle& rRect, SdrPage* pNewPage)
-:	mpShownPage(pNewPage)
+:   mpShownPage(pNewPage)
 {
     if(mpShownPage)
     {
@@ -132,8 +132,8 @@ void SdrPageObj::SetReferencedPage(SdrPage* pNewPage)
             mpShownPage->AddPageUser(*this);
         }
 
-        SetChanged(); 
-        BroadcastObjectChange(); 
+        SetChanged();
+        BroadcastObjectChange();
     }
 }
 

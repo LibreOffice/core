@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,31 +32,31 @@
 #include <comphelper/accessibletexthelper.hxx>
 
 
-//	----------------------------------------------------
-//	class VCLXAccessibleTextComponent
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXAccessibleTextComponent
+//  ----------------------------------------------------
 
-typedef ::cppu::ImplHelper1	<	
-    ::com::sun::star::accessibility::XAccessibleText >	VCLXAccessibleTextComponent_BASE;
+typedef ::cppu::ImplHelper1 <
+    ::com::sun::star::accessibility::XAccessibleText >  VCLXAccessibleTextComponent_BASE;
 
 class VCLXAccessibleTextComponent : public VCLXAccessibleComponent,
                                     public ::comphelper::OCommonAccessibleText,
-                                    public VCLXAccessibleTextComponent_BASE		
+                                    public VCLXAccessibleTextComponent_BASE
 {
 protected:
-    ::rtl::OUString			                m_sText;
+    ::rtl::OUString                         m_sText;
 
-    void					                SetText( const ::rtl::OUString& sText );
+    void                                    SetText( const ::rtl::OUString& sText );
 
-    virtual void							ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void                            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 
     // OCommonAccessibleText
-    virtual ::rtl::OUString					implGetText();
-    virtual ::com::sun::star::lang::Locale	implGetLocale();
-    virtual void							implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
+    virtual ::rtl::OUString                 implGetText();
+    virtual ::com::sun::star::lang::Locale  implGetLocale();
+    virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
 
     // XComponent
-    virtual void SAL_CALL	                disposing();
+    virtual void SAL_CALL                   disposing();
 
 public:
     VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindow );

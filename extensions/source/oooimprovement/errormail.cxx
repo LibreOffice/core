@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,7 +106,7 @@ namespace {
     {
         struct utsname info;
         //memset(&info, 0, sizeof(info));
-        uname(&info); 
+        uname(&info);
         OStringBuffer result =
             "<systeminfo:systeminfo xmlns:systeminfo=\"http://openoffice.org/2002/systeminfo\">\n"
             "<systeminfo:System name=\""
@@ -169,19 +169,19 @@ namespace {
     };
 }
 
-namespace oooimprovement  
+namespace oooimprovement
 {
     Errormail::Errormail(const Reference<XMultiServiceFactory>& sf)
         : m_ServiceFactory(sf)
     {}
-        
+
     OString Errormail::getXml()
     {
         Config config(m_ServiceFactory);
         const OString usertype;
         const OString email = OUStringToOString(config.getReporterEmail(), RTL_TEXTENCODING_ASCII_US);
         OString feedback;
-        {        
+        {
             OStringBuffer temp;
             temp.append(config.getReportCount());
             feedback = temp.makeStringAndClear();
@@ -199,7 +199,7 @@ namespace oooimprovement
             + xmlAttrEncode(title) + "</reportmail:title>\n"
            "<reportmail:attachment name=\"data.zip\" media-type=\"application/zip\" class=\"OOoImprovementLog\"/>\n"
             "</reportmail:mail>\n"
-            + getOfficeInfoXml(m_ServiceFactory) 
+            + getOfficeInfoXml(m_ServiceFactory)
             + getSystemInfoXml(m_ServiceFactory) +
             "</errormail:errormail>\n";
         return result.makeStringAndClear();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 
 
 namespace ftp {
-    
+
     class ResultSetBase
         : public cppu::OWeakObject,
           public com::sun::star::lang::XComponent,
@@ -57,7 +57,7 @@ namespace ftp {
           public com::sun::star::ucb::XContentAccess
     {
     public:
-        
+
         ResultSetBase(const com::sun::star::uno::Reference<
                       com::sun::star::lang::XMultiServiceFactory >&  xMSF,
                       const com::sun::star::uno::Reference<
@@ -67,20 +67,20 @@ namespace ftp {
                       com::sun::star::beans::Property >& seq,
                       const com::sun::star::uno::Sequence<
                       com::sun::star::ucb::NumberedSortingInfo >& seqSort);
-        
+
         virtual ~ResultSetBase();
-        
+
         // XInterface
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
             const com::sun::star::uno::Type& aType )
             throw( com::sun::star::uno::RuntimeException);
-        
+
         virtual void SAL_CALL
         acquire(
             void )
             throw();
-        
+
         virtual void SAL_CALL
         release(
             void )
@@ -99,7 +99,7 @@ namespace ftp {
             throw( com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL
-        removeEventListener( const com::sun::star::uno::Reference< 
+        removeEventListener( const com::sun::star::uno::Reference<
                              com::sun::star::lang::XEventListener >& aListener )
             throw( com::sun::star::uno::RuntimeException );
 
@@ -127,7 +127,7 @@ namespace ftp {
             rtl::OUString ret;
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 ret = m_aItems[m_nRow]->getString( columnIndex );
-            
+
             return ret;
         }
 
@@ -142,7 +142,7 @@ namespace ftp {
             else
                 return false;
         }
-        
+
         virtual sal_Int8 SAL_CALL
         getByte(
             sal_Int32 columnIndex )
@@ -251,7 +251,7 @@ namespace ftp {
             else
                 return com::sun::star::util::Time();
         }
-        
+
         virtual com::sun::star::util::DateTime SAL_CALL
         getTimestamp(
             sal_Int32 columnIndex )
@@ -264,8 +264,8 @@ namespace ftp {
                 return com::sun::star::util::DateTime();
         }
 
-        
-        virtual com::sun::star::uno::Reference< 
+
+        virtual com::sun::star::uno::Reference<
         com::sun::star::io::XInputStream > SAL_CALL
         getBinaryStream(
             sal_Int32 columnIndex )
@@ -275,10 +275,10 @@ namespace ftp {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getBinaryStream( columnIndex );
             else
-                return com::sun::star::uno::Reference< 
+                return com::sun::star::uno::Reference<
                     com::sun::star::io::XInputStream >();
         }
-        
+
         virtual com::sun::star::uno::Reference<
         com::sun::star::io::XInputStream > SAL_CALL
         getCharacterStream(
@@ -306,7 +306,7 @@ namespace ftp {
             else
                 return com::sun::star::uno::Any();
         }
-        
+
         virtual com::sun::star::uno::Reference<
         com::sun::star::sdbc::XRef > SAL_CALL
         getRef(
@@ -332,8 +332,8 @@ namespace ftp {
             else
                 return com::sun::star::uno::Reference< com::sun::star::sdbc::XBlob >();
         }
-        
-        virtual com::sun::star::uno::Reference< 
+
+        virtual com::sun::star::uno::Reference<
         com::sun::star::sdbc::XClob > SAL_CALL
         getClob(
             sal_Int32 columnIndex )
@@ -343,11 +343,11 @@ namespace ftp {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getClob( columnIndex );
             else
-                return com::sun::star::uno::Reference< 
+                return com::sun::star::uno::Reference<
                     com::sun::star::sdbc::XClob >();
         }
-        
-        virtual com::sun::star::uno::Reference< 
+
+        virtual com::sun::star::uno::Reference<
         com::sun::star::sdbc::XArray > SAL_CALL
         getArray(
             sal_Int32 columnIndex )
@@ -467,13 +467,13 @@ namespace ftp {
                    com::sun::star::uno::RuntimeException);
 
 
-        virtual  com::sun::star::uno::Reference< 
+        virtual  com::sun::star::uno::Reference<
         com::sun::star::uno::XInterface > SAL_CALL
         getStatement(
             void  )
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException);
-        
+
         // XCloseable
 
         virtual void SAL_CALL
@@ -488,14 +488,14 @@ namespace ftp {
         queryContentIdentifierString(
             void )
             throw( com::sun::star::uno::RuntimeException );
-        
+
         virtual com::sun::star::uno::Reference<
         com::sun::star::ucb::XContentIdentifier > SAL_CALL
         queryContentIdentifier(
             void )
             throw( com::sun::star::uno::RuntimeException );
-        
-        virtual com::sun::star::uno::Reference< 
+
+        virtual com::sun::star::uno::Reference<
         com::sun::star::ucb::XContent > SAL_CALL
         queryContent(
             void )
@@ -535,7 +535,7 @@ namespace ftp {
         virtual void SAL_CALL
         addPropertyChangeListener(
             const rtl::OUString& aPropertyName,
-            const com::sun::star::uno::Reference< 
+            const com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertyChangeListener >& xListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
@@ -544,7 +544,7 @@ namespace ftp {
         virtual void SAL_CALL
         removePropertyChangeListener(
             const rtl::OUString& aPropertyName,
-            const com::sun::star::uno::Reference< 
+            const com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertyChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
@@ -561,37 +561,37 @@ namespace ftp {
 
         virtual void SAL_CALL removeVetoableChangeListener(
             const rtl::OUString& PropertyName,
-            const com::sun::star::uno::Reference< 
+            const com::sun::star::uno::Reference<
             com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
                    com::sun::star::uno::RuntimeException);
 
     protected:
-        
+
         com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory >  m_xMSF;
-        com::sun::star::uno::Reference< 
+        com::sun::star::uno::Reference<
         com::sun::star::ucb::XContentProvider >  m_xProvider;
         sal_Int32                           m_nRow;
         sal_Bool                            m_nWasNull;
         sal_Int32                           m_nOpenMode;
         sal_Bool                            m_bRowCountFinal;
-        
-        typedef std::vector< com::sun::star::uno::Reference< 
+
+        typedef std::vector< com::sun::star::uno::Reference<
         com::sun::star::ucb::XContentIdentifier > > IdentSet;
         typedef std::vector< com::sun::star::uno::Reference<
         com::sun::star::sdbc::XRow > >              ItemSet;
         typedef std::vector< rtl::OUString >
         PathSet;
-        
+
         IdentSet                            m_aIdents;
         ItemSet                             m_aItems;
         PathSet                             m_aPath;
-        
+
         com::sun::star::uno::Sequence<
         com::sun::star::beans::Property >           m_sProperty;
-        com::sun::star::uno::Sequence< 
+        com::sun::star::uno::Sequence<
         com::sun::star::ucb::NumberedSortingInfo >  m_sSortingInfo;
 
         osl::Mutex                          m_aMutex;

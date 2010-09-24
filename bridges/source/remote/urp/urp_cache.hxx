@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ namespace bridges_urp
         m_pCache( new t[nMaxEntries] ),
         m_nMaxEntries( nMaxEntries ),
         m_nEntries( 0 )
-    {		
-        
+    {
+
     }
 
     template < class t , class tequals >
@@ -80,7 +80,7 @@ namespace bridges_urp
         }
         return nEntry;
     }
-    
+
     template < class t , class tequals >
     inline sal_uInt16 Cache< t , tequals >::seek( const t & value )
     {
@@ -109,7 +109,7 @@ namespace bridges_urp
         sal_Int32 operator () ( const t &value  )  const
             { return value >= m_; }
     };
-    
+
     template < class t, class tequals >
     inline void Cache < t , tequals >::resize( sal_uInt16 nNewMaxEntries )
     {

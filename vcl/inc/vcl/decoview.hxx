@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,45 +42,45 @@ class OutputDevice;
 // ------------------------
 
 // Flags for DrawSymbol()
-#define SYMBOL_DRAW_MONO					((USHORT)0x0001)
-#define SYMBOL_DRAW_DISABLE 				((USHORT)0x0002)
+#define SYMBOL_DRAW_MONO                    ((USHORT)0x0001)
+#define SYMBOL_DRAW_DISABLE                 ((USHORT)0x0002)
 
 // Flags for DrawFrame()
-#define FRAME_DRAW_IN						((USHORT)0x0001)
-#define FRAME_DRAW_OUT						((USHORT)0x0002)
-#define FRAME_DRAW_GROUP					((USHORT)0x0003)
-#define FRAME_DRAW_DOUBLEIN 				((USHORT)0x0004)
-#define FRAME_DRAW_DOUBLEOUT				((USHORT)0x0005)
+#define FRAME_DRAW_IN                       ((USHORT)0x0001)
+#define FRAME_DRAW_OUT                      ((USHORT)0x0002)
+#define FRAME_DRAW_GROUP                    ((USHORT)0x0003)
+#define FRAME_DRAW_DOUBLEIN                 ((USHORT)0x0004)
+#define FRAME_DRAW_DOUBLEOUT                ((USHORT)0x0005)
 #define FRAME_DRAW_MENU                     ((USHORT)0x0010)
 #define FRAME_DRAW_WINDOWBORDER             ((USHORT)0x0020)
 #define FRAME_DRAW_BORDERWINDOWBORDER       ((USHORT)0x0040)
-#define FRAME_DRAW_MONO 					((USHORT)0x1000)
-#define FRAME_DRAW_NODRAW					((USHORT)0x8000)
-#define FRAME_DRAW_STYLE					((USHORT)0x000F)
+#define FRAME_DRAW_MONO                     ((USHORT)0x1000)
+#define FRAME_DRAW_NODRAW                   ((USHORT)0x8000)
+#define FRAME_DRAW_STYLE                    ((USHORT)0x000F)
 
 // Flags for DrawHighlightFrame()
-#define FRAME_HIGHLIGHT_IN					((USHORT)0x0001)
-#define FRAME_HIGHLIGHT_OUT 				((USHORT)0x0002)
-#define FRAME_HIGHLIGHT_TESTBACKGROUND		((USHORT)0x4000)
-#define FRAME_HIGHLIGHT_STYLE				((USHORT)0x000F)
+#define FRAME_HIGHLIGHT_IN                  ((USHORT)0x0001)
+#define FRAME_HIGHLIGHT_OUT                 ((USHORT)0x0002)
+#define FRAME_HIGHLIGHT_TESTBACKGROUND      ((USHORT)0x4000)
+#define FRAME_HIGHLIGHT_STYLE               ((USHORT)0x000F)
 
 // Flags for DrawButton()
-#define BUTTON_DRAW_DEFAULT 				((USHORT)0x0001)
-#define BUTTON_DRAW_NOLIGHTBORDER			((USHORT)0x0002)
-#define BUTTON_DRAW_PRESSED 				((USHORT)0x0004)
-#define BUTTON_DRAW_CHECKED 				((USHORT)0x0008)
-#define BUTTON_DRAW_DONTKNOW				((USHORT)0x0010)
-#define BUTTON_DRAW_MONO					((USHORT)0x0020)
-#define BUTTON_DRAW_NOFILL					((USHORT)0x0040)
-#define BUTTON_DRAW_DISABLED				((USHORT)0x0080)
-#define BUTTON_DRAW_HIGHLIGHT				((USHORT)0x0100)
-#define BUTTON_DRAW_FLAT					((USHORT)0x0200)
-#define BUTTON_DRAW_NOTOPLIGHTBORDER		((USHORT)0x0400)
-#define BUTTON_DRAW_NOBOTTOMSHADOWBORDER	((USHORT)0x0800)
-#define BUTTON_DRAW_NOLEFTLIGHTBORDER		((USHORT)0x1000)
-#define BUTTON_DRAW_NOTEXT					((USHORT)0x2000)
-#define BUTTON_DRAW_NOIMAGE				((USHORT)0x4000)
-#define BUTTON_DRAW_NODRAW					((USHORT)0x8000)
+#define BUTTON_DRAW_DEFAULT                 ((USHORT)0x0001)
+#define BUTTON_DRAW_NOLIGHTBORDER           ((USHORT)0x0002)
+#define BUTTON_DRAW_PRESSED                 ((USHORT)0x0004)
+#define BUTTON_DRAW_CHECKED                 ((USHORT)0x0008)
+#define BUTTON_DRAW_DONTKNOW                ((USHORT)0x0010)
+#define BUTTON_DRAW_MONO                    ((USHORT)0x0020)
+#define BUTTON_DRAW_NOFILL                  ((USHORT)0x0040)
+#define BUTTON_DRAW_DISABLED                ((USHORT)0x0080)
+#define BUTTON_DRAW_HIGHLIGHT               ((USHORT)0x0100)
+#define BUTTON_DRAW_FLAT                    ((USHORT)0x0200)
+#define BUTTON_DRAW_NOTOPLIGHTBORDER        ((USHORT)0x0400)
+#define BUTTON_DRAW_NOBOTTOMSHADOWBORDER    ((USHORT)0x0800)
+#define BUTTON_DRAW_NOLEFTLIGHTBORDER       ((USHORT)0x1000)
+#define BUTTON_DRAW_NOTEXT                  ((USHORT)0x2000)
+#define BUTTON_DRAW_NOIMAGE             ((USHORT)0x4000)
+#define BUTTON_DRAW_NODRAW                  ((USHORT)0x8000)
 
 // ------------------
 // - DecorationView -
@@ -89,21 +89,21 @@ class OutputDevice;
 class VCL_DLLPUBLIC DecorationView
 {
 private:
-    OutputDevice*		mpOutDev;
+    OutputDevice*       mpOutDev;
 
 public:
                         DecorationView( OutputDevice* pOutDev )
                             { mpOutDev = pOutDev; }
 
-    void				DrawSymbol( const Rectangle& rRect, SymbolType eType,
+    void                DrawSymbol( const Rectangle& rRect, SymbolType eType,
                                     const Color& rColor, USHORT nStyle = 0 );
-    void				DrawFrame( const Rectangle& rRect,
+    void                DrawFrame( const Rectangle& rRect,
                                    const Color& rLeftTopColor,
                                    const Color& rRightBottomColor );
-    void				DrawHighlightFrame( const Rectangle& rRect,
+    void                DrawHighlightFrame( const Rectangle& rRect,
                                             USHORT nStyle = FRAME_HIGHLIGHT_OUT );
-    Rectangle			DrawFrame( const Rectangle& rRect, USHORT nStyle = FRAME_DRAW_OUT );
-    Rectangle			DrawButton( const Rectangle& rRect, USHORT nStyle );
+    Rectangle           DrawFrame( const Rectangle& rRect, USHORT nStyle = FRAME_DRAW_OUT );
+    Rectangle           DrawButton( const Rectangle& rRect, USHORT nStyle );
     void                DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical = true );
 };
 

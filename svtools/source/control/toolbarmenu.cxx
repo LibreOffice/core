@@ -97,7 +97,7 @@ ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Stri
 : mrMenu( rMenu )
 {
     init( nEntryId, nBits );
-    
+
     maText = rText;
     mbHasText = true;
 }
@@ -287,7 +287,7 @@ sal_Int32 ToolbarMenu_Impl::getAccessibleChildCount() throw (RuntimeException)
 }
 
 // --------------------------------------------------------------------
-    
+
 Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( sal_Int32 index ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     const int nEntryCount = maEntryVector.size();
@@ -309,7 +309,7 @@ Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( sal_Int32 index )
 }
 
 // --------------------------------------------------------------------
-    
+
 Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( Control* pControl, sal_Int32 childIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     const int nEntryCount = maEntryVector.size();
@@ -690,7 +690,7 @@ Size ToolbarMenu::implCalcSize()
 
     if ( aMaxImgSz.Width() )
         mpImpl->mnTextPos += std::max( nExtra, 7L );
-    if ( bCheckable	)
+    if ( bCheckable )
         mpImpl->mnTextPos += 16;
 
     // set heights, calc maximum width
@@ -725,7 +725,7 @@ Size ToolbarMenu::implCalcSize()
 
         }
     }
-    
+
     aSz.Width() = nMaxTextWidth + (BORDER_X<<1);
 
     // positionate controls
@@ -880,7 +880,7 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
 {
     Size    aSz( GetOutputSizePixel() );
     long    nX = 0, nY = 0;
-    
+
     const int nEntryCount = mpImpl->maEntryVector.size();
     int nEntry;
     for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
@@ -912,7 +912,7 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
                 long nFontHeight = GetTextHeight();
                 aItemRect.Right() -= nFontHeight + nFontHeight/4;
             }
-            
+
             if( IsNativeControlSupported( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL ) )
             {
                 Size aPxSize( GetOutputSizePixel() );
@@ -1018,7 +1018,7 @@ void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool bMBDown )
     if ( ( nMouseY >= 0 ) && ( nMouseY < aOutSz.Height() ) )
     {
         bool bHighlighted = FALSE;
-        
+
         const int nEntryCount = mpImpl->maEntryVector.size();
         int nEntry;
         for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
@@ -1099,7 +1099,7 @@ static bool implCheckSubControlCursorMove( Control* pControl, bool bUp, int& nLa
             const USHORT nLine = nItemPos / nColCount;
 
             nLastColumn = nItemPos - (nLine * nColCount);
-    
+
             if( bUp )
             {
                 return nLine > 0;
@@ -1130,7 +1130,7 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
             else
                 n = mpImpl->maEntryVector.size()-1;
         }
-        else 
+        else
         {
             // if we have a currently selected entry and
             // cursor keys are used than check if this entry
@@ -1313,10 +1313,10 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
     {
         ImplControlValue    aControlValue;
         ControlState        nState = CTRL_STATE_PRESSED | CTRL_STATE_ENABLED;
-        
+
         aControlValue.setTristateVal( BUTTONVALUE_ON );
-        
-        bNativeOk = i_pWindow->DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON, 
+
+        bNativeOk = i_pWindow->DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON,
                                                   i_rRect, nState, aControlValue,
                                                   rtl::OUString() );
     }
@@ -1332,7 +1332,7 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
 static long ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth )
 {
     rMaxWidth = rCheckHeight = rRadioHeight = 0;
-    
+
     ImplControlValue aVal;
     Rectangle aNativeBounds;
     Rectangle aNativeContent;
@@ -1452,7 +1452,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                     SetLineColor( rSettings.GetLightColor() );
                     DrawLine( aRect.TopLeft(), aRect.TopRight() );
                     SetLineColor( rSettings.GetShadowColor() );
-                    DrawLine( aRect.BottomLeft(), aRect.BottomRight() );					
+                    DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
                 }
 
                 // CheckMark
@@ -1474,29 +1474,29 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                             ControlPart nPart = ((pEntry->mnBits & MIB_RADIOCHECK)
                                                  ? PART_MENU_ITEM_RADIO_MARK
                                                  : PART_MENU_ITEM_CHECK_MARK);
-    
+
                             ControlState nState = 0;
-    
+
                             if ( pEntry->mbChecked )
                                 nState |= CTRL_STATE_PRESSED;
-    
+
                             if ( pEntry->mbEnabled )
                                 nState |= CTRL_STATE_ENABLED;
-    
+
                             if ( bHighlighted )
                                 nState |= CTRL_STATE_SELECTED;
-    
+
                             long nCtrlHeight = (pEntry->mnBits & MIB_RADIOCHECK) ? nCheckHeight : nRadioHeight;
                             aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight)/2;
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight)/2;
-                            
-                            Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );                            
+
+                            Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
                             DrawNativeControl( CTRL_MENU_POPUP, nPart, aCheckRect, nState, ImplControlValue(), OUString() );
                         }
                         else if ( pEntry->mbChecked ) // by default do nothing for unchecked items
                         {
                             ImplPaintCheckBackground( this, aOuterCheckRect, pThisOnly && bHighlighted );
-                            
+
                             SymbolType eSymbol;
                             Size aSymbolSize;
                             if ( pEntry->mnBits & MIB_RADIOCHECK )
@@ -1707,7 +1707,7 @@ void SAL_CALL ToolbarMenu::statusChanged( const ::com::sun::star::frame::Feature
 
 class ToolbarMenuStatusListener : public svt::FrameStatusListener
 {
-public: 
+public:
     ToolbarMenuStatusListener( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager,
                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
                                ToolbarMenu& rToolbarMenu );
@@ -1720,7 +1720,7 @@ public:
 
 // --------------------------------------------------------------------
 
-ToolbarMenuStatusListener::ToolbarMenuStatusListener( 
+ToolbarMenuStatusListener::ToolbarMenuStatusListener(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
     ToolbarMenu& rToolbarMenu )
@@ -1790,7 +1790,7 @@ const Link& ToolbarMenu::GetSelectHdl() const
 
 // --------------------------------------------------------------------
 
-Reference< XFrame >	ToolbarMenu::GetFrame() const
+Reference< XFrame > ToolbarMenu::GetFrame() const
 {
     return mpImpl->mxFrame;
 }

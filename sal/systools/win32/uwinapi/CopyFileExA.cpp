@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,21 +31,21 @@
 #define _WIN32_WINNT 0x0400
 #include "macros.h"
 
-#define	BUFSIZE	16384
+#define BUFSIZE 16384
 
 static DWORD CALLBACK DefCopyProgressRoutine(
-    LARGE_INTEGER	TotalFileSize,	// total file size, in bytes
-    LARGE_INTEGER	TotalBytesTransferred,
+    LARGE_INTEGER   TotalFileSize,  // total file size, in bytes
+    LARGE_INTEGER   TotalBytesTransferred,
                                     // total number of bytes transferred
-    LARGE_INTEGER	StreamSize,		// total number of bytes for this stream
-    LARGE_INTEGER	StreamBytesTransferred,
+    LARGE_INTEGER   StreamSize,     // total number of bytes for this stream
+    LARGE_INTEGER   StreamBytesTransferred,
                                     // total number of bytes transferred for
                                     // this stream
-    DWORD		dwStreamNumber,		// the current stream
-    DWORD		dwCallbackReason,	// reason for callback
-    HANDLE	hSourceFile,			// handle to the source file
-    HANDLE	hDestinationFile,		// handle to the destination file
-    LPVOID	lpData					// passed by CopyFileEx
+    DWORD       dwStreamNumber,     // the current stream
+    DWORD       dwCallbackReason,   // reason for callback
+    HANDLE  hSourceFile,            // handle to the source file
+    HANDLE  hDestinationFile,       // handle to the destination file
+    LPVOID  lpData                  // passed by CopyFileEx
 )
 {
     return PROGRESS_CONTINUE;
@@ -54,9 +54,9 @@ static DWORD CALLBACK DefCopyProgressRoutine(
 
 IMPLEMENT_THUNK( kernel32, WINDOWS, BOOL, WINAPI, CopyFileExA, ( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, LPPROGRESS_ROUTINE  lpProgressRoutine, LPVOID lpData, LPBOOL pbCancel, DWORD dwCopyFlags ) )
 {
-    BOOL	fSuccess = FALSE; // Assume failure
+    BOOL    fSuccess = FALSE; // Assume failure
 
-    HANDLE	hSourceFile = CreateFileA(
+    HANDLE  hSourceFile = CreateFileA(
         lpExistingFileNameA,
         GENERIC_READ,
         FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -68,8 +68,8 @@ IMPLEMENT_THUNK( kernel32, WINDOWS, BOOL, WINAPI, CopyFileExA, ( LPCSTR lpExisti
 
     if ( IsValidHandle(hSourceFile) )
     {
-        LARGE_INTEGER	FileSize, BytesTransferred;
-        HANDLE	hTargetFile = NULL;
+        LARGE_INTEGER   FileSize, BytesTransferred;
+        HANDLE  hTargetFile = NULL;
 
         SetLastError( ERROR_SUCCESS );
         FileSize.LowPart = GetFileSize( hSourceFile, (LPDWORD)&FileSize.HighPart );
@@ -120,8 +120,8 @@ IMPLEMENT_THUNK( kernel32, WINDOWS, BOOL, WINAPI, CopyFileExA, ( LPCSTR lpExisti
 
             while ( fSuccess && PROGRESS_CONTINUE == dwProgressResult )
             {
-                BYTE	buffer[BUFSIZE];
-                DWORD	dwBytesRead, dwBytesWritten = 0;
+                BYTE    buffer[BUFSIZE];
+                DWORD   dwBytesRead, dwBytesWritten = 0;
 
                 fSuccess = ReadFile( hSourceFile, buffer, BUFSIZE, &dwBytesRead, NULL );
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,9 +59,9 @@ extern "C"
             try
             {
                 Reference< XRegistryKey > xNewKey(
-                    reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SVGFilter_getImplementationName() ) ); 
+                    reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SVGFilter_getImplementationName() ) );
                 xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
-                
+
                 const Sequence< OUString > & rSNL = SVGFilter_getSupportedServiceNames();
                 const OUString * pArray = rSNL.getConstArray();
                 for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
@@ -81,7 +81,7 @@ extern "C"
         const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
     {
         void * pRet = 0;
-        
+
         OUString implName = OUString::createFromAscii( pImplName );
         if ( pServiceManager && implName.equals(SVGFilter_getImplementationName()) )
         {
@@ -89,14 +89,14 @@ extern "C"
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
                 SVGFilter_createInstance, SVGFilter_getSupportedServiceNames() ) );
-            
+
             if (xFactory.is())
             {
                 xFactory->acquire();
                 pRet = xFactory.get();
             }
         }
-        
+
         return pRet;
     }
 }

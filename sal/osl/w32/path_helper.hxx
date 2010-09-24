@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,11 +41,11 @@ namespace osl
 
 /*******************************************************************
  osl_systemPathEnsureSeparator
- Adds a trailing path separator to the given system path if not 
+ Adds a trailing path separator to the given system path if not
  already there and if the path is not the root path or a logical
  drive alone
  ******************************************************************/
- 
+
 inline void systemPathEnsureSeparator(/*inout*/ rtl::OUString& Path)
 {
     osl_systemPathEnsureSeparator(&Path.pData);
@@ -53,24 +53,24 @@ inline void systemPathEnsureSeparator(/*inout*/ rtl::OUString& Path)
 
 /*******************************************************************
  osl_systemPathRemoveSeparator
- Removes the last separator from the given system path if any and 
+ Removes the last separator from the given system path if any and
  if the path is not the root path '\'
  ******************************************************************/
- 
+
 inline void systemPathRemoveSeparator(/*inout*/ rtl::OUString& Path)
 {
     osl_systemPathRemoveSeparator(&Path.pData);
 }
 
 /*******************************************************************
- osl_systemPathIsLogicalDrivePattern 
+ osl_systemPathIsLogicalDrivePattern
  ******************************************************************/
- 
+
 inline bool systemPathIsLogicalDrivePattern(/*in*/ const rtl::OUString& path)
 {
     return osl_systemPathIsLogicalDrivePattern(path.pData);
 }
- 
+
 /*******************************************************************
  LongPathBuffer
  ******************************************************************/
@@ -115,4 +115,4 @@ public:
 
 } // end namespace osl
 
-#endif 
+#endif

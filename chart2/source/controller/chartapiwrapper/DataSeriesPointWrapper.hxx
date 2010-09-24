@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace chart
 
 namespace wrapper
 {
-    
+
 class Chart2ModelContact;
 
 class DataSeriesPointWrapper : public ::cppu::ImplInheritanceHelper4<
@@ -145,7 +145,7 @@ private:
     sal_Int32           m_nPointIndex;
 
     sal_Bool            m_bLinesAllowed;
-    
+
     //this should only be used, if the DataSeriesPointWrapper is initialized via the XInitialize interface
     //because a big change in the chartmodel may leed to an dataseriespointer thats not connected to the model anymore
     //with the indizes instead we are can aleays get the new dataseries

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ namespace dbaui
 namespace rptui
 {
     class OObjectBase;
-    
-    
+
+
     /** \class OSectionUndo
      * Undo class for section add and remove.
      */
@@ -50,12 +50,12 @@ namespace rptui
         OSectionUndo(const OSectionUndo&);
         void operator =(const OSectionUndo&);
     protected:
-        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> > 
+        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> >
                                                     m_aControls;
-        ::std::vector< ::std::pair< ::rtl::OUString ,::com::sun::star::uno::Any> > 
+        ::std::vector< ::std::pair< ::rtl::OUString ,::com::sun::star::uno::Any> >
                                                     m_aValues;
-        Action										m_eAction;
-        sal_uInt16									m_nSlot;
+        Action                                      m_eAction;
+        sal_uInt16                                  m_nSlot;
         bool                                        m_bInserted;
 
         virtual void    implReInsert( ) = 0;
@@ -64,21 +64,21 @@ namespace rptui
         void collectControls(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
     public:
         TYPEINFO();
-        OSectionUndo(	OReportModel& rMod
+        OSectionUndo(   OReportModel& rMod
                         ,sal_uInt16 _nSlot
                         ,Action _eAction
                         ,USHORT nCommentID);
         virtual ~OSectionUndo();
 
-        virtual void		Undo();
-        virtual void		Redo();
+        virtual void        Undo();
+        virtual void        Redo();
     };
 
     /** Undo action for the group header, footer, page header, footer
     */
     class OReportSectionUndo : public OSectionUndo
     {
-        OReportHelper								m_aReportHelper;
+        OReportHelper                               m_aReportHelper;
         ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
                                     ,OReportHelper> m_pMemberFunction;
 
@@ -88,8 +88,8 @@ namespace rptui
         void operator =(const OReportSectionUndo&);
     public:
         TYPEINFO();
-        //OReportSectionUndo(	 const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
-        OReportSectionUndo(	OReportModel& rMod
+        //OReportSectionUndo(    const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
+        OReportSectionUndo( OReportModel& rMod
                             ,sal_uInt16 _nSlot
                             ,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
                                 ,OReportHelper> _pMemberFunction
@@ -103,7 +103,7 @@ namespace rptui
     */
     class OGroupSectionUndo : public OSectionUndo
     {
-        OGroupHelper								m_aGroupHelper;
+        OGroupHelper                                m_aGroupHelper;
         ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
                                     ,OGroupHelper> m_pMemberFunction;
 
@@ -115,8 +115,8 @@ namespace rptui
         void operator =(const OGroupSectionUndo&);
     public:
         TYPEINFO();
-        //OGroupSectionUndo(	 const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
-        OGroupSectionUndo(	OReportModel& rMod
+        //OGroupSectionUndo(     const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
+        OGroupSectionUndo(  OReportModel& rMod
                             ,sal_uInt16 _nSlot
                             ,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
                                             ,OGroupHelper> _pMemberFunction
@@ -124,7 +124,7 @@ namespace rptui
                             ,Action _eAction
                             ,USHORT nCommentID);
 
-        virtual String		GetComment() const;
+        virtual String      GetComment() const;
     };
 
     /** /class OGroupUndo
@@ -132,10 +132,10 @@ namespace rptui
     */
     class OGroupUndo : public OCommentUndoAction
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>				m_xGroup; ///<! the group for the undo redo action
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >	m_xReportDefinition; ///<! the parent report definition
-        Action																			m_eAction; ///<! the current action
-        sal_Int32																		m_nLastPosition; ///<! the last position of the group
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>             m_xGroup; ///<! the group for the undo redo action
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition > m_xReportDefinition; ///<! the parent report definition
+        Action                                                                          m_eAction; ///<! the current action
+        sal_Int32                                                                       m_nLastPosition; ///<! the last position of the group
 
         void    implReInsert( );
         void    implReRemove( );
@@ -143,11 +143,11 @@ namespace rptui
         TYPEINFO();
         OGroupUndo(OReportModel& rMod
                     ,USHORT nCommentID
-                    ,Action	_eAction
+                    ,Action _eAction
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition);
-        virtual void		Undo();
-        virtual void		Redo();
+        virtual void        Undo();
+        virtual void        Redo();
     };
 }
 #endif // RPTUI_UNDO_HXX

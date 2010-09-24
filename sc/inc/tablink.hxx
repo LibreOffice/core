@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,10 @@
 #include <sfx2/lnkbase.hxx>
 
 #include <sfx2/objsh.hxx>
-//REMOVE	#ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE	#define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE	SO2_DECL_REF(SvEmbeddedObject)
-//REMOVE	#endif
+//REMOVE    #ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
+//REMOVE    #define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
+//REMOVE    SO2_DECL_REF(SvEmbeddedObject)
+//REMOVE    #endif
 
 class ScDocShell;
 struct TableLink_Impl;
@@ -66,17 +66,17 @@ public:
 
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
-    BOOL	Refresh(const String& rNewFile, const String& rNewFilter,
+    BOOL    Refresh(const String& rNewFile, const String& rNewFilter,
                     const String* pNewOptions /* = NULL */, ULONG nNewRefresh );
-    void	SetInCreate(BOOL bSet)		{ bInCreate = bSet; }
-    void	SetAddUndo(BOOL bSet)		{ bAddUndo = bSet; }
-    void	SetPaint(BOOL bSet)			{ bDoPaint = bSet; }
+    void    SetInCreate(BOOL bSet)      { bInCreate = bSet; }
+    void    SetAddUndo(BOOL bSet)       { bAddUndo = bSet; }
+    void    SetPaint(BOOL bSet)         { bDoPaint = bSet; }
 
-    const String& GetFileName() const	{ return aFileName; }
-    const String& GetFilterName() const	{ return aFilterName; }
-    const String& GetOptions() const	{ return aOptions; }
+    const String& GetFileName() const   { return aFileName; }
+    const String& GetFilterName() const { return aFilterName; }
+    const String& GetOptions() const    { return aOptions; }
 
-    BOOL	IsUsed() const;
+    BOOL    IsUsed() const;
 
     DECL_LINK( RefreshHdl, ScTableLink* );
     DECL_LINK( TableEndEditHdl, ::sfx2::SvBaseLink* );
@@ -88,34 +88,34 @@ class SfxMedium;
 class SC_DLLPUBLIC ScDocumentLoader
 {
 private:
-    ScDocShell*			pDocShell;
+    ScDocShell*         pDocShell;
     SfxObjectShellRef   aRef;
-    SfxMedium*			pMedium;
+    SfxMedium*          pMedium;
 
 public:
                         ScDocumentLoader( const String& rFileName,
                                             String& rFilterName, String& rOptions,
                                             UINT32 nRekCnt = 0, BOOL bWithInteraction = FALSE );
                         ~ScDocumentLoader();
-    ScDocument*			GetDocument();
-    ScDocShell*			GetDocShell()		{ return pDocShell; }
-    BOOL				IsError() const;
-    String				GetTitle() const;
+    ScDocument*         GetDocument();
+    ScDocShell*         GetDocShell()       { return pDocShell; }
+    BOOL                IsError() const;
+    String              GetTitle() const;
 
-    void				ReleaseDocRef();	// without calling DoClose
+    void                ReleaseDocRef();    // without calling DoClose
 
-    static String		GetOptions( SfxMedium& rMedium );
+    static String       GetOptions( SfxMedium& rMedium );
 
     /** Returns the filter name and options from a file name.
         @param bWithContent
             true = Tries to detect the filter by looking at the file contents.
             false = Detects filter by file name extension only (should be used in filter code only).
         @return TRUE if a filter could be found, FALSE otherwise. */
-    static BOOL			GetFilterName( const String& rFileName,
+    static BOOL         GetFilterName( const String& rFileName,
                                         String& rFilter, String& rOptions,
                                         BOOL bWithContent, BOOL bWithInteraction );
 
-    static void			RemoveAppPrefix( String& rFilterName );
+    static void         RemoveAppPrefix( String& rFilterName );
 };
 
 #endif

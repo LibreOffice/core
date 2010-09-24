@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -181,7 +181,7 @@ public class XAccessibleTextLog
 
     public com.sun.star.accessibility.TextSegment getTextAtIndex(int param,
         short param1)
-        throws com.sun.star.lang.IndexOutOfBoundsException, 
+        throws com.sun.star.lang.IndexOutOfBoundsException,
             com.sun.star.lang.IllegalArgumentException {
         try {
             com.sun.star.accessibility.TextSegment ts = unoObject.getTextAtIndex(param,
@@ -205,7 +205,7 @@ public class XAccessibleTextLog
 
     public com.sun.star.accessibility.TextSegment getTextBeforeIndex(
         int param, short param1)
-        throws com.sun.star.lang.IndexOutOfBoundsException, 
+        throws com.sun.star.lang.IndexOutOfBoundsException,
             com.sun.star.lang.IllegalArgumentException {
         try {
             com.sun.star.accessibility.TextSegment ts = unoObject.getTextBeforeIndex(param,
@@ -230,7 +230,7 @@ public class XAccessibleTextLog
 
     public com.sun.star.accessibility.TextSegment getTextBehindIndex(
         int param, short param1)
-        throws com.sun.star.lang.IndexOutOfBoundsException, 
+        throws com.sun.star.lang.IndexOutOfBoundsException,
             com.sun.star.lang.IllegalArgumentException {
         try {
             com.sun.star.accessibility.TextSegment ts = unoObject.getTextBehindIndex(param,

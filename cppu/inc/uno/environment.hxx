@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,13 +35,13 @@
 
 /** */ //for docpp
 namespace com
-{     
+{
 /** */ //for docpp
 namespace sun
-{     
+{
 /** */ //for docpp
 namespace star
-{     
+{
 /** */ //for docpp
 namespace uno
 {
@@ -55,7 +55,7 @@ class Environment
     /** binary C uno_Environment
     */
     uno_Environment * _pEnv;
-    
+
 public:
     /** Returns the current Environment.
 
@@ -78,13 +78,13 @@ public:
     /** @internal */
     inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
-    
+
     /** Constructor: acquires given environment
-        
+
         @param pEnv environment
     */
     inline Environment( uno_Environment * pEnv = 0 ) SAL_THROW( () );
-    
+
     /** Gets a specific environment. If the specified environment does not exist, then a default one
         is created and registered.
 
@@ -95,7 +95,7 @@ public:
 
 
     /** Copy constructor: acquires given environment
-        
+
         @param rEnv another environment
     */
     inline Environment( const Environment & rEnv ) SAL_THROW( () );
@@ -103,49 +103,49 @@ public:
     /** Destructor: releases a set environment.
     */
     inline ~Environment() SAL_THROW( () );
-    
+
     /** Sets a given environment, i.e. acquires given one and releases a set one.
-        
+
         @param pEnv another environment
         @return this environment
     */
     inline Environment & SAL_CALL operator = ( uno_Environment * pEnv ) SAL_THROW( () );
     /** Sets a given environment, i.e. acquires given one and releases a set one.
-        
+
         @param rEnv another environment
         @return this environment
     */
     inline Environment & SAL_CALL operator = ( const Environment & rEnv ) SAL_THROW( () )
         { return operator = ( rEnv._pEnv ); }
-    
+
     /** Provides UNacquired pointer to the set C environment.
-        
+
         @return UNacquired pointer to the C environment struct
     */
     inline uno_Environment * SAL_CALL get() const SAL_THROW( () )
         { return _pEnv; }
-    
+
     /** Gets type name of set environment.
-        
+
         @return type name of set environment
     */
     inline ::rtl::OUString SAL_CALL getTypeName() const SAL_THROW( () )
         { return _pEnv->pTypeName; }
-    
+
     /** Gets free context pointer of set environment.
-        
+
         @return free context pointer of set environment
     */
     inline void * SAL_CALL getContext() const SAL_THROW( () )
         { return _pEnv->pContext; }
-    
+
     /** Tests if a environment is set.
-        
+
         @return true, if a environment is set, false otherwise
     */
     inline sal_Bool SAL_CALL is() const SAL_THROW( () )
         { return (_pEnv != 0); }
-    
+
     /** Releases a set environment.
     */
     inline void SAL_CALL clear() SAL_THROW( () );
@@ -158,7 +158,7 @@ public:
     */
     inline void SAL_CALL invoke_v(uno_EnvCallee * pCallee, va_list * pParam) const SAL_THROW( () );
 
-    /** Invoke the passed function in this environment. 
+    /** Invoke the passed function in this environment.
 
         @param pCallee  the function to call
         @param ...      the parameters to be passed to the function
@@ -166,13 +166,13 @@ public:
     */
     inline void SAL_CALL invoke(uno_EnvCallee * pCallee, ...) const SAL_THROW( () );
 
-    /** Enter this environment explicitly. 
+    /** Enter this environment explicitly.
 
         @since UDK 3.2.7
     */
     inline void SAL_CALL enter() const SAL_THROW( () );
 
-    /** Checks, if it is valid to currently call objects 
+    /** Checks, if it is valid to currently call objects
         belonging to this environment.
 
         @since UDK 3.2.7
@@ -236,15 +236,15 @@ inline void SAL_CALL Environment::invoke_v(uno_EnvCallee * pCallee, va_list * pP
 //__________________________________________________________________________________________________
 inline void SAL_CALL Environment::invoke(uno_EnvCallee * pCallee, ...) const SAL_THROW( () )
 {
-    if (_pEnv) 
+    if (_pEnv)
     {
         va_list param;
-        
+
         va_start(param, pCallee);
         uno_Environment_invoke_v(_pEnv, pCallee, &param);
         va_end(param);
     }
-    
+
 }
 //__________________________________________________________________________________________________
 inline void SAL_CALL Environment::enter() const SAL_THROW( () )

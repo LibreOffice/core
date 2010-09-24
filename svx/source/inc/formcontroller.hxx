@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,19 +152,19 @@ namespace svxform
                                 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
                             >   DispatcherContainer;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>				m_xAggregate;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController>			m_xTabController;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>					m_xActiveControl, m_xCurrentControl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>		m_xModelAsIndex;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager>	m_xModelAsManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>				m_xParent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>              m_xAggregate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController>            m_xTabController;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>                  m_xActiveControl, m_xCurrentControl;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>        m_xModelAsIndex;
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager>  m_xModelAsManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                m_xParent;
         ::comphelper::ComponentContext                                                      m_aContext;
         // Composer used for checking filter conditions
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >       m_xComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >             m_xInteractionHandler;
         ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext > m_xContext;
 
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >	m_aControls;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >   m_aControls;
         ::cppu::OInterfaceContainerHelper
                                     m_aActivateListeners,
                                     m_aModifyListeners,
@@ -174,11 +174,11 @@ namespace svxform
                                     m_aParameterListeners,
                                     m_aFilterListeners;
 
-        FmFormControllers			m_aChilds;
+        FmFormControllers           m_aChilds;
         FilterComponents            m_aFilterComponents;
         FmFilterRows                m_aFilterRows;
 
-        Timer						m_aTabActivationTimer;
+        Timer                       m_aTabActivationTimer;
         Timer                       m_aFeatureInvalidationTimer;
 
         ::svxform::ControlBorderManager*
@@ -189,7 +189,7 @@ namespace svxform
         DispatcherContainer         m_aFeatureDispatchers;
         ::std::set< sal_Int16 >     m_aInvalidFeatures;     // for asynchronous feature invalidation
 
-        ::rtl::OUString				m_aMode;
+        ::rtl::OUString             m_aMode;
 
         ::svxform::DelayedEvent     m_aLoadEvent;
         ::svxform::DelayedEvent     m_aToggleEvent;
@@ -199,27 +199,27 @@ namespace svxform
         ::std::auto_ptr< ColumnInfoCache >
                                     m_pColumnInfoCache;
 
-        sal_Int32					m_nCurrentFilterPosition;	// current level for filtering (or-criteria)
+        sal_Int32                   m_nCurrentFilterPosition;   // current level for filtering (or-criteria)
 
-        sal_Bool					m_bCurrentRecordModified    : 1;
-        sal_Bool					m_bCurrentRecordNew         : 1;
-        sal_Bool					m_bLocked			        : 1;
-        sal_Bool					m_bDBConnection	            : 1;	// Focuslistener nur fuer Datenbankformulare
-        sal_Bool					m_bCycle			        : 1;
-        sal_Bool					m_bCanInsert		        : 1;
-        sal_Bool					m_bCanUpdate		        : 1;
-        sal_Bool					m_bCommitLock	            : 1;	// lock the committing of controls see focusGained
-        sal_Bool					m_bModified		            : 1;	// ist der Inhalt eines Controls modifiziert ?
-        sal_Bool					m_bControlsSorted           : 1;
-        sal_Bool					m_bFiltering                : 1;
-        sal_Bool					m_bAttachEvents             : 1;
-        sal_Bool					m_bDetachEvents             : 1;
+        sal_Bool                    m_bCurrentRecordModified    : 1;
+        sal_Bool                    m_bCurrentRecordNew         : 1;
+        sal_Bool                    m_bLocked                   : 1;
+        sal_Bool                    m_bDBConnection             : 1;    // Focuslistener nur fuer Datenbankformulare
+        sal_Bool                    m_bCycle                    : 1;
+        sal_Bool                    m_bCanInsert                : 1;
+        sal_Bool                    m_bCanUpdate                : 1;
+        sal_Bool                    m_bCommitLock               : 1;    // lock the committing of controls see focusGained
+        sal_Bool                    m_bModified                 : 1;    // ist der Inhalt eines Controls modifiziert ?
+        sal_Bool                    m_bControlsSorted           : 1;
+        sal_Bool                    m_bFiltering                : 1;
+        sal_Bool                    m_bAttachEvents             : 1;
+        sal_Bool                    m_bDetachEvents             : 1;
         sal_Bool                    m_bAttemptedHandlerCreation : 1;
 
         // as we want to intercept dispatches of _all_ controls we're responsible for, and an object implementing
         // the ::com::sun::star::frame::XDispatchProviderInterceptor interface can intercept only _one_ objects dispatches, we need a helper class
         DECLARE_STL_VECTOR(DispatchInterceptionMultiplexer*, Interceptors);
-        Interceptors	m_aControlDispatchInterceptors;
+        Interceptors    m_aControlDispatchInterceptors;
 
     public:
         FormController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB );
@@ -332,10 +332,10 @@ namespace svxform
     // ::com::sun::star::beans::XPropertyChangeListener -> aenderung der stati
         virtual void SAL_CALL propertyChange(const  ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException );
 
-    // XTextListener		   -> modify setzen
+    // XTextListener           -> modify setzen
         virtual void SAL_CALL textChanged(const  ::com::sun::star::awt::TextEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException );
 
-    // XItemListener			-> modify setzen
+    // XItemListener            -> modify setzen
         virtual void SAL_CALL itemStateChanged(const  ::com::sun::star::awt::ItemEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException );
 
     // XModifyListener   -> modify setzen
@@ -409,8 +409,8 @@ namespace svxform
 
     // XServiceInfo
         virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString	SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >	SAL_CALL getSupportedServiceNames(void) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >  SAL_CALL getSupportedServiceNames(void) throw(::com::sun::star::uno::RuntimeException);
 
     // XResetListener
         virtual sal_Bool SAL_CALL approveReset(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException );
@@ -421,7 +421,7 @@ namespace svxform
         virtual void SAL_CALL invalidateAllFeatures(  ) throw (::com::sun::star::uno::RuntimeException);
 
 // method for registration
-        static  ::com::sun::star::uno::Sequence< ::rtl::OUString >	getSupportedServiceNames_Static(void);
+        static  ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static(void);
 
         // comphelper::OPropertyArrayUsageHelper
         virtual void fillProperties(
@@ -538,9 +538,9 @@ namespace svxform
         Window* getDialogParentWindow();
             // returns the window which should be used as parent window for dialogs
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor>	createInterceptor(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _xInterception);
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor>    createInterceptor(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _xInterception);
             // create a new interceptor, register it on the given object
-        void							deleteInterceptor(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _xInterception);
+        void                            deleteInterceptor(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _xInterception);
             // if createInterceptor was called for the given object the according interceptor will be removed
             // from the objects interceptor chain and released
 
@@ -588,5 +588,5 @@ namespace svxform
 
 }   // namespace svxform
 
-#endif	// _SVX_FMCTRLER_HXX
+#endif  // _SVX_FMCTRLER_HXX
 

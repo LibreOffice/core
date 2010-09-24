@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,6 +51,8 @@
 #include "editutil.hxx"
 #include "chgtrack.hxx"
 #include "externalrefmgr.hxx"
+#include "scitems.hxx"
+#include "patattr.hxx"
 
 using namespace formula;
 
@@ -139,6 +141,28 @@ void ScEditCell::GetString( String& rString ) const
         rString.Erase();
 }
 
+void ScEditCell::RemoveCharAttribs( const ScPatternAttr& rAttr )
+{
+    const struct {
+        USHORT nAttrType;
+        USHORT nCharType;
+    } AttrTypeMap[] = {
+        { ATTR_FONT,        EE_CHAR_FONTINFO },
+        { ATTR_FONT_HEIGHT, EE_CHAR_FONTHEIGHT },
+        { ATTR_FONT_WEIGHT, EE_CHAR_WEIGHT },
+        { ATTR_FONT_COLOR,  EE_CHAR_COLOR }
+    };
+    USHORT nMapCount = sizeof(AttrTypeMap) / sizeof(AttrTypeMap[0]);
+
+    const SfxItemSet& rSet = rAttr.GetItemSet();
+    const SfxPoolItem* pItem;
+    for (USHORT i = 0; i < nMapCount; ++i)
+    {
+        if ( rSet.GetItemState(AttrTypeMap[i].nAttrType, false, &pItem) == SFX_ITEM_SET )
+            pData->RemoveCharAttribs(AttrTypeMap[i].nCharType);
+    }
+}
+
 void ScEditCell::SetTextObject( const EditTextObject* pObject,
             const SfxItemPool* pFromPool )
 {
@@ -172,6 +196,76 @@ void ScEditCell::SetTextObject( const EditTextObject* pObject,
     }
     else
         pData = NULL;
+}
+
+ScEditDataArray::ScEditDataArray()
+{
+}
+
+ScEditDataArray::~ScEditDataArray()
+{
+}
+
+void ScEditDataArray::AddItem(SCTAB nTab, SCCOL nCol, SCROW nRow,
+                              EditTextObject* pOldData, EditTextObject* pNewData)
+{
+    maArray.push_back(Item(nTab, nCol, nRow, pOldData, pNewData));
+}
+
+const ScEditDataArray::Item* ScEditDataArray::First()
+{
+    maIter = maArray.begin();
+    if (maIter == maArray.end())
+        return NULL;
+    return &(*maIter++);
+}
+
+const ScEditDataArray::Item* ScEditDataArray::Next()
+{
+    if (maIter == maArray.end())
+        return NULL;
+    return &(*maIter++);
+}
+
+// ============================================================================
+
+ScEditDataArray::Item::Item(SCTAB nTab, SCCOL nCol, SCROW nRow,
+                            EditTextObject* pOldData, EditTextObject* pNewData) :
+    mnTab(nTab),
+    mnCol(nCol),
+    mnRow(nRow)
+{
+    mpOldData.reset(pOldData);
+    mpNewData.reset(pNewData);
+}
+
+ScEditDataArray::Item::~Item()
+{
+}
+
+const EditTextObject* ScEditDataArray::Item::GetOldData() const
+{
+    return mpOldData.get();
+}
+
+const EditTextObject* ScEditDataArray::Item::GetNewData() const
+{
+    return mpNewData.get();
+}
+
+SCTAB ScEditDataArray::Item::GetTab() const
+{
+    return mnTab;
+}
+
+SCCOL ScEditDataArray::Item::GetCol() const
+{
+    return mnCol;
+}
+
+SCROW ScEditDataArray::Item::GetRow() const
+{
+    return mnRow;
 }
 
 // ============================================================================
@@ -225,7 +319,7 @@ lcl_checkRangeDimensions(
     const bool bSameCols(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetCol));
     const bool bSameRows(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetRow));
     const bool bSameTabs(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetTab));
-        
+
     // Test if exactly two dimensions are equal
     if (!(bSameCols ^ bSameRows ^ bSameTabs)
             && (bSameCols || bSameRows || bSameTabs))
@@ -677,9 +771,9 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
        intersection must be empty set.
     */
 
-    // Detect the simple case of exactly one reference in advance without all 
+    // Detect the simple case of exactly one reference in advance without all
     // overhead.
-    // #i107741# Doing so actually makes outlines using SUBTOTAL(x;reference) 
+    // #i107741# Doing so actually makes outlines using SUBTOTAL(x;reference)
     // work again, where the function does not have only references.
     if (HasOneReference( rRange))
         return true;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ namespace sdext { namespace presenter {
 
     For the offset of the bitmap you can call
     Point aOffset = getPropertyValue(sStyleName + "_TopLeftOffset");
-    
+
     This is work in progress.
 */
 class PresenterTheme
@@ -93,7 +93,7 @@ public:
     public:
         explicit FontDescriptor (void);
         explicit FontDescriptor (const ::boost::shared_ptr<FontDescriptor>& rpDescriptor);
-        
+
         ::rtl::OUString msFamilyName;
         ::rtl::OUString msStyleName;
         sal_Int32 mnSize;
@@ -120,7 +120,7 @@ public:
     SharedBitmapDescriptor GetBitmap (
         const ::rtl::OUString& rsStyleName,
         const ::rtl::OUString& rsBitmapName) const;
-    
+
     SharedBitmapDescriptor GetBitmap (
         const ::rtl::OUString& rsBitmapName) const;
 

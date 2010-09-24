@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,29 +39,29 @@ class Accelerator;
 #include <bastypes.hxx>
 #include <bastype2.hxx>
 
-#define INVPOSITION	0x7fff
+#define INVPOSITION 0x7fff
 
 class BasicIDEData
 {
 private:
-    Accelerator*	pAccelerator;
-    SvxSearchItem*	pSearchItem;
+    Accelerator*    pAccelerator;
+    SvxSearchItem*  pSearchItem;
 
-    LibInfos		aLibInfos;
+    LibInfos        aLibInfos;
 
     BasicEntryDescriptor    m_aLastEntryDesc;
 
-    Point			aObjCatPos;
-    Size			aObjCatSize;
+    Point           aObjCatPos;
+    Size            aObjCatSize;
 
-    String			aAddLibPath;
-    String			aAddLibFilter;
+    String          aAddLibPath;
+    String          aAddLibFilter;
 
-    USHORT			nBasicDialogCount;
+    USHORT          nBasicDialogCount;
 
-    BOOL			OLD_bRelMacroRecording;
-    BOOL			bChoosingMacro;
-    BOOL			bShellInCriticalSection;
+    BOOL            OLD_bRelMacroRecording;
+    BOOL            bChoosingMacro;
+    BOOL            bShellInCriticalSection;
 
 protected:
     DECL_LINK( GlobalBasicBreakHdl, StarBASIC * );
@@ -70,36 +70,36 @@ public:
                             BasicIDEData();
                             ~BasicIDEData();
 
-    LibInfos&				GetLibInfos() { return aLibInfos; }
+    LibInfos&               GetLibInfos() { return aLibInfos; }
 
     BasicEntryDescriptor&   GetLastEntryDescriptor()    { return m_aLastEntryDesc; }
     void                    SetLastEntryDescriptor( BasicEntryDescriptor& rDesc ) { m_aLastEntryDesc = rDesc; }
 
-    BOOL&					ChoosingMacro() 			{ return bChoosingMacro; }
-    BOOL&					ShellInCriticalSection()	{ return bShellInCriticalSection; }
+    BOOL&                   ChoosingMacro()             { return bChoosingMacro; }
+    BOOL&                   ShellInCriticalSection()    { return bShellInCriticalSection; }
 
-    USHORT					GetBasicDialogCount() const { return nBasicDialogCount; }
-    void					IncBasicDialogCount() 		{ nBasicDialogCount++; }
-    void					DecBasicDialogCount()		{ nBasicDialogCount--; }
+    USHORT                  GetBasicDialogCount() const { return nBasicDialogCount; }
+    void                    IncBasicDialogCount()       { nBasicDialogCount++; }
+    void                    DecBasicDialogCount()       { nBasicDialogCount--; }
 
-    SvxSearchItem&			GetSearchItem() const;
-    void					SetSearchItem( const SvxSearchItem& rItem );
+    SvxSearchItem&          GetSearchItem() const;
+    void                    SetSearchItem( const SvxSearchItem& rItem );
 
-    void					SetObjectCatalogPos( const Point& rPnt )
+    void                    SetObjectCatalogPos( const Point& rPnt )
                                 { aObjCatPos = rPnt; }
-    const Point&			GetObjectCatalogPos() const
+    const Point&            GetObjectCatalogPos() const
                                 { return aObjCatPos; }
 
-    void					SetObjectCatalogSize( const Size& rSize )
+    void                    SetObjectCatalogSize( const Size& rSize )
                                 { aObjCatSize = rSize; }
-    const Size&				GetObjectCatalogSize() const
+    const Size&             GetObjectCatalogSize() const
                                 { return aObjCatSize; }
 
-    const String&			GetAddLibPath() const	{ return aAddLibPath; }
-    void					SetAddLibPath( const String& rPath ) { aAddLibPath = rPath; }
+    const String&           GetAddLibPath() const   { return aAddLibPath; }
+    void                    SetAddLibPath( const String& rPath ) { aAddLibPath = rPath; }
 
-    const String&			GetAddLibFilter() const	{ return aAddLibFilter; }
-    void					SetAddLibFilter( const String& rFilter )  { aAddLibFilter = rFilter; }
+    const String&           GetAddLibFilter() const { return aAddLibFilter; }
+    void                    SetAddLibFilter( const String& rFilter )  { aAddLibFilter = rFilter; }
 
     DECL_LINK( ExecuteMacroEvent, void * );
 };

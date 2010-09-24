@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ namespace xmloff
 
         /** calculate the names of the properties which, at runtime, are used for <em>value</em> and
             <em>default value</em>.
-        */ 
+        */
         static void getRuntimeValuePropertyNames(
             OControlElement::ElementType _eType,
             sal_Int16 _nFormComponentType,
@@ -76,7 +76,7 @@ namespace xmloff
     };
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_VALUEPROPERTIES_HXX_

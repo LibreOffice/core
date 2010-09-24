@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -536,8 +536,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                                 if(OBJ_GRAF == nObjType && 0L == aName.Len())
                                 {
-                                    //	graphics objects must have names
-                                    //	(all graphics are supposed to be in the navigator)
+                                    //  graphics objects must have names
+                                    //  (all graphics are supposed to be in the navigator)
                                     ScDrawLayer* pModel = pViewData->GetDocument()->GetDrawLayer();
 
                                     if(pModel)
@@ -546,9 +546,9 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                     }
                                 }
 
-                                //	An undo action for renaming is missing in svdraw (99363).
-                                //	For OLE objects (which can be identified using the persist name),
-                                //	ScUndoRenameObject can be used until there is a common action for all objects.
+                                //  An undo action for renaming is missing in svdraw (99363).
+                                //  For OLE objects (which can be identified using the persist name),
+                                //  ScUndoRenameObject can be used until there is a common action for all objects.
                                 if(OBJ_OLE2 == nObjType)
                                 {
                                     const String aPersistName = static_cast<SdrOle2Obj*>(pSelected)->GetPersistName();
@@ -671,7 +671,7 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
         }
     }
 
-    return 1;	// name is valid
+    return 1;   // name is valid
 }
 
 //------------------------------------------------------------------

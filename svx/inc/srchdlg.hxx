@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,8 +64,8 @@ struct SearchDlg_Impl;
 
 struct SearchAttrItem
 {
-    USHORT 			nSlot;
-    SfxPoolItem* 	pItem;
+    USHORT          nSlot;
+    SfxPoolItem*    pItem;
 };
 
 // class SearchAttrItemList ----------------------------------------------
@@ -143,7 +143,7 @@ public:
     virtual BOOL    Close();
 
     // Window
-    virtual void	Activate();
+    virtual void    Activate();
 
     void            GetSearchItems( SfxItemSet& rSet );
     void            GetReplaceItems( SfxItemSet& rSet );
@@ -153,12 +153,14 @@ public:
     const SearchAttrItemList*   GetReplaceItemList() const
                                     { return pReplaceList; }
 
-    inline BOOL 	HasSearchAttributes() const;
-    inline BOOL 	HasReplaceAttributes() const;
+    inline BOOL     HasSearchAttributes() const;
+    inline BOOL     HasReplaceAttributes() const;
 
     PushButton&     GetReplaceBtn() { return aReplaceBtn; }
 
-    INT32			GetTransliterationFlags() const;
+    INT32           GetTransliterationFlags() const;
+
+    void            SetSaveToModule(bool b);
 
 private:
     FixedText       aSearchText;
@@ -218,18 +220,18 @@ private:
     BOOL            bSearch;
     BOOL            bFormat;
     USHORT          nOptions;
-    FASTBOOL		bSet;
-    FASTBOOL		bReadOnly;
-    FASTBOOL		bConstruct;
-    ULONG			nModifyFlag;
+    FASTBOOL        bSet;
+    FASTBOOL        bReadOnly;
+    FASTBOOL        bConstruct;
+    ULONG           nModifyFlag;
     String          aStylesStr;
-    String			aLayoutStr;
+    String          aLayoutStr;
     LocalizedString aCalcStr;
 
     SvStringsDtor   aSearchStrings;
     SvStringsDtor   aReplaceStrings;
 
-    SearchDlg_Impl*			pImpl;
+    SearchDlg_Impl*         pImpl;
     SearchAttrItemList*     pSearchList;
     SearchAttrItemList*     pReplaceList;
     SvxSearchItem*          pSearchItem;
@@ -240,7 +242,7 @@ private:
     SvxSearchController*    pSearchSetController;
     SvxSearchController*    pReplaceSetController;
 
-    mutable INT32			nTransliterationFlags;
+    mutable INT32           nTransliterationFlags;
 
 #ifdef _SVX_SRCHDLG_CXX
     DECL_LINK( ModifyHdl_Impl, ComboBox* pEdit );
@@ -254,7 +256,7 @@ private:
     DECL_LINK( AttributeHdl_Impl, Button* );
     DECL_LINK( TimeoutHdl_Impl, Timer* );
 
-    void			Construct_Impl();
+    void            Construct_Impl();
     void            InitControls_Impl();
     void            CalculateDelta_Impl();
     void            Init_Impl( int bHasItemSet );
@@ -269,10 +271,10 @@ private:
     void            EnableControl_Impl( Control* pCtrl );
     void            SetItem_Impl( const SvxSearchItem* pItem );
 
-    void			SetModifyFlag_Impl( const Control* pCtrl );
-    void			SaveToModule_Impl();
+    void            SetModifyFlag_Impl( const Control* pCtrl );
+    void            SaveToModule_Impl();
 
-    void			ApplyTransliterationFlags_Impl( INT32 nSettings );
+    void            ApplyTransliterationFlags_Impl( INT32 nSettings );
 #endif
 };
 

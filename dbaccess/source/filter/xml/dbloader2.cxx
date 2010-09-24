@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,12 +114,12 @@ public:
     DBTypeDetection(const Reference< XMultiServiceFactory >&);
 
     // XServiceInfo
-    ::rtl::OUString					SAL_CALL getImplementationName() throw(  );
-    sal_Bool 						SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
-    Sequence< ::rtl::OUString > 	SAL_CALL getSupportedServiceNames(void) throw(  );
+    ::rtl::OUString                 SAL_CALL getImplementationName() throw(  );
+    sal_Bool                        SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
+    Sequence< ::rtl::OUString >     SAL_CALL getSupportedServiceNames(void) throw(  );
 
     // static methods
-    static ::rtl::OUString 			getImplementationName_Static() throw(  )
+    static ::rtl::OUString          getImplementationName_Static() throw(  )
     {
         return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbflt.DBTypeDetection");
     }
@@ -212,8 +212,8 @@ Reference< XInterface > SAL_CALL DBTypeDetection::Create( const Reference< XMult
 sal_Bool SAL_CALL DBTypeDetection::supportsService(const ::rtl::OUString& ServiceName) throw(  )
 {
     Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
-    const ::rtl::OUString * pBegin	= aSNL.getConstArray();
-    const ::rtl::OUString * pEnd	= pBegin + aSNL.getLength();
+    const ::rtl::OUString * pBegin  = aSNL.getConstArray();
+    const ::rtl::OUString * pEnd    = pBegin + aSNL.getLength();
     for( ; pBegin != pEnd; ++pBegin)
         if( *pBegin == ServiceName )
             return sal_True;
@@ -244,9 +244,9 @@ class DBContentLoader : public ::cppu::WeakImplHelper2< XFrameLoader, XServiceIn
 {
 private:
     ::comphelper::ComponentContext      m_aContext;
-    Reference< XFrameLoader >			m_xMySelf;
-    ::rtl::OUString						m_sCurrentURL;
-    ULONG								m_nStartWizard;
+    Reference< XFrameLoader >           m_xMySelf;
+    ::rtl::OUString                     m_sCurrentURL;
+    ULONG                               m_nStartWizard;
 
     DECL_LINK( OnStartTableWizard, void* );
 public:
@@ -254,12 +254,12 @@ public:
     ~DBContentLoader();
 
     // XServiceInfo
-    ::rtl::OUString					SAL_CALL getImplementationName() throw(  );
-    sal_Bool 						SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
-    Sequence< ::rtl::OUString > 	SAL_CALL getSupportedServiceNames(void) throw(  );
+    ::rtl::OUString                 SAL_CALL getImplementationName() throw(  );
+    sal_Bool                        SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
+    Sequence< ::rtl::OUString >     SAL_CALL getSupportedServiceNames(void) throw(  );
 
     // static methods
-    static ::rtl::OUString 			getImplementationName_Static() throw(  )
+    static ::rtl::OUString          getImplementationName_Static() throw(  )
     {
         return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbflt.DBContentLoader2");
     }
@@ -268,7 +268,7 @@ public:
             SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
     // XLoader
-    virtual void SAL_CALL load(	const Reference< XFrame > & _rFrame, const ::rtl::OUString& _rURL,
+    virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const ::rtl::OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
                                 const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL cancel(void) throw();
@@ -311,8 +311,8 @@ Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMult
 sal_Bool SAL_CALL DBContentLoader::supportsService(const ::rtl::OUString& ServiceName) throw(  )
 {
     Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
-    const ::rtl::OUString * pBegin	= aSNL.getConstArray();
-    const ::rtl::OUString * pEnd	= pBegin + aSNL.getLength();
+    const ::rtl::OUString * pBegin  = aSNL.getConstArray();
+    const ::rtl::OUString * pEnd    = pBegin + aSNL.getLength();
     for( ; pBegin != pEnd; ++pBegin)
         if( *pBegin == ServiceName )
             return sal_True;

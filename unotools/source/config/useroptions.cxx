@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,26 +108,26 @@ public:
     ::rtl::OUString   GetLocale() const { return m_aLocale; }
 
     // set the address token
-    void			  SetCompany( const ::rtl::OUString& rNewToken );
-    void			  SetFirstName( const ::rtl::OUString& rNewToken );
-    void			  SetLastName( const ::rtl::OUString& rNewToken );
-    void			  SetID( const ::rtl::OUString& rNewToken );
-    void			  SetStreet( const ::rtl::OUString& rNewToken );
-    void			  SetCity( const ::rtl::OUString& rNewToken );
-    void			  SetState( const ::rtl::OUString& rNewToken );
-    void			  SetZip( const ::rtl::OUString& rNewToken );
-    void			  SetCountry( const ::rtl::OUString& rNewToken );
-    void			  SetPosition( const ::rtl::OUString& rNewToken );
-    void			  SetTitle( const ::rtl::OUString& rNewToken );
-    void			  SetTelephoneHome( const ::rtl::OUString& rNewToken );
-    void			  SetTelephoneWork( const ::rtl::OUString& rNewToken );
-    void			  SetFax( const ::rtl::OUString& rNewToken );
-    void			  SetEmail( const ::rtl::OUString& rNewToken );
-    void			  SetCustomerNumber( const ::rtl::OUString& rNewToken );
+    void              SetCompany( const ::rtl::OUString& rNewToken );
+    void              SetFirstName( const ::rtl::OUString& rNewToken );
+    void              SetLastName( const ::rtl::OUString& rNewToken );
+    void              SetID( const ::rtl::OUString& rNewToken );
+    void              SetStreet( const ::rtl::OUString& rNewToken );
+    void              SetCity( const ::rtl::OUString& rNewToken );
+    void              SetState( const ::rtl::OUString& rNewToken );
+    void              SetZip( const ::rtl::OUString& rNewToken );
+    void              SetCountry( const ::rtl::OUString& rNewToken );
+    void              SetPosition( const ::rtl::OUString& rNewToken );
+    void              SetTitle( const ::rtl::OUString& rNewToken );
+    void              SetTelephoneHome( const ::rtl::OUString& rNewToken );
+    void              SetTelephoneWork( const ::rtl::OUString& rNewToken );
+    void              SetFax( const ::rtl::OUString& rNewToken );
+    void              SetEmail( const ::rtl::OUString& rNewToken );
+    void              SetCustomerNumber( const ::rtl::OUString& rNewToken );
     void              SetFathersName( const ::rtl::OUString& rNewToken );
     void              SetApartment( const ::rtl::OUString& rNewToken );
 
-    sal_Bool 		  IsTokenReadonly( USHORT nToken ) const;
+    sal_Bool          IsTokenReadonly( USHORT nToken ) const;
     ::rtl::OUString   GetToken(USHORT nToken) const;
     void              Notify();
 
@@ -140,10 +140,10 @@ private:
 
 // global ----------------------------------------------------------------
 
-static SvtUserOptions_Impl*	pOptions = NULL;
-static sal_Int32			nRefCount = 0;
+static SvtUserOptions_Impl* pOptions = NULL;
+static sal_Int32            nRefCount = 0;
 
-#define READONLY_DEFAULT	sal_False
+#define READONLY_DEFAULT    sal_False
 
 /*-- 16.06.2009 14:22:56---------------------------------------------------
 
@@ -950,7 +950,7 @@ SvtUserOptions::~SvtUserOptions()
     if ( !--nRefCount )
     {
         //if ( pOptions->IsModified() )
-        //	pOptions->Commit();
+        //  pOptions->Commit();
         DELETEZ( pOptions );
     }
 }

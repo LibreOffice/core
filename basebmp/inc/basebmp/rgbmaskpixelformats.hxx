@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,8 +67,8 @@ namespace basebmp
     @tpl SwapBytes
     When true, the final pixel values will be byte-swapped before
     passed on.
- */ 
-template< typename     PixelType, 
+ */
+template< typename     PixelType,
           typename     ColorType,
           unsigned int RedMask,
           unsigned int GreenMask,
@@ -81,7 +81,7 @@ template< typename     PixelType,
     typedef typename ColorTraits<ColorType>::component_type component_type;
 
     // calc corrective shifts for all three channels in advance
-    enum { 
+    enum {
         red_shift   = numberOfTrailingZeros<RedMask>::value,
         green_shift = numberOfTrailingZeros<GreenMask>::value,
         blue_shift  = numberOfTrailingZeros<BlueMask>::value,
@@ -92,19 +92,19 @@ template< typename     PixelType,
     };
 };
 
-template< typename     PixelType, 
+template< typename     PixelType,
           typename     ColorType,
           unsigned int RedMask,
           unsigned int GreenMask,
           unsigned int BlueMask,
-          bool         SwapBytes > struct RGBMaskGetter : 
+          bool         SwapBytes > struct RGBMaskGetter :
         public RGBMaskFunctorBase<PixelType,
                                   ColorType,
                                   RedMask,
                                   GreenMask,
                                   BlueMask,
                                   SwapBytes>,
-        public std::unary_function<PixelType, ColorType> 
+        public std::unary_function<PixelType, ColorType>
 {
     typedef RGBMaskFunctorBase<PixelType,
                                ColorType,
@@ -114,7 +114,7 @@ template< typename     PixelType,
                                SwapBytes> base_type;
 
     ColorType operator()( PixelType v ) const
-    { 
+    {
         v = SwapBytes ? byteSwap(v) : v;
 
         const typename base_type::unsigned_pixel_type red  (v & RedMask);
@@ -124,7 +124,7 @@ template< typename     PixelType,
         // shift color nibbles to right-aligend position. ORing it
         // channel value shifted twice the number of channel bits, to
         // spread the value into the component_type range
-        ColorType res( (shiftRight(red, 
+        ColorType res( (shiftRight(red,
                                    base_type::red_shift-8*
                                    (signed)sizeof(typename base_type::component_type)+
                                    base_type::red_bits)) |
@@ -132,7 +132,7 @@ template< typename     PixelType,
                                    base_type::red_shift-8*
                                    (signed)sizeof(typename base_type::component_type)+
                                    2*base_type::red_bits)),
-                       
+
                        (shiftRight(green,
                                    base_type::green_shift-8*
                                    (signed)sizeof(typename base_type::component_type)+
@@ -141,7 +141,7 @@ template< typename     PixelType,
                                    base_type::green_shift-8*
                                    (signed)sizeof(typename base_type::component_type)+
                                    2*base_type::green_bits)),
-                       
+
                        (shiftRight(blue,
                                    base_type::blue_shift-8*
                                    (signed)sizeof(typename base_type::component_type)+
@@ -154,19 +154,19 @@ template< typename     PixelType,
     }
 };
 
-template< typename     PixelType, 
+template< typename     PixelType,
           typename     ColorType,
           unsigned int RedMask,
           unsigned int GreenMask,
           unsigned int BlueMask,
-          bool         SwapBytes > struct RGBMaskSetter : 
+          bool         SwapBytes > struct RGBMaskSetter :
         public RGBMaskFunctorBase<PixelType,
                                   ColorType,
                                   RedMask,
                                   GreenMask,
                                   BlueMask,
                                   SwapBytes>,
-        public std::unary_function<ColorType, PixelType> 
+        public std::unary_function<ColorType, PixelType>
 {
     typedef RGBMaskFunctorBase<PixelType,
                                ColorType,
@@ -181,7 +181,7 @@ template< typename     PixelType,
         const typename base_type::unsigned_pixel_type green(c.getGreen());
         const typename base_type::unsigned_pixel_type blue (c.getBlue());
 
-        typename base_type::unsigned_pixel_type res( 
+        typename base_type::unsigned_pixel_type res(
             (shiftLeft(red,
                        base_type::red_shift-8*
                        (signed)sizeof(typename base_type::component_type)+
@@ -201,7 +201,7 @@ template< typename     PixelType,
 
 //-----------------------------------------------------------------------------
 
-template< typename     PixelType, 
+template< typename     PixelType,
           unsigned int RedMask,
           unsigned int GreenMask,
           unsigned int BlueMask,

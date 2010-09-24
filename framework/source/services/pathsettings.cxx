@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@
 #include <unotools/configpathes.hxx>
 
 // ______________________________________________
-//	non exported const
+//  non exported const
 
 #define CFG_READONLY_DEFAULT    sal_False
 
@@ -91,7 +91,7 @@ sal_Int32 impl_getPropGroup(sal_Int32 nID)
 }
 
 // ______________________________________________
-//	namespace
+//  namespace
 
 namespace framework
 {
@@ -99,24 +99,24 @@ namespace framework
 //-----------------------------------------------------------------------------
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XINTERFACE_7						(   PathSettings                                             ,
+DEFINE_XINTERFACE_7                     (   PathSettings                                             ,
                                             OWeakObject                                              ,
                                             DIRECT_INTERFACE ( css::lang::XTypeProvider              ),
                                             DIRECT_INTERFACE ( css::lang::XServiceInfo               ),
                                             DERIVED_INTERFACE( css::lang::XEventListener, css::util::XChangesListener),
                                             DIRECT_INTERFACE ( css::util::XChangesListener           ),
-                                            DIRECT_INTERFACE ( css::beans::XPropertySet				 ),
-                                            DIRECT_INTERFACE ( css::beans::XFastPropertySet			 ),
-                                            DIRECT_INTERFACE ( css::beans::XMultiPropertySet		)
+                                            DIRECT_INTERFACE ( css::beans::XPropertySet              ),
+                                            DIRECT_INTERFACE ( css::beans::XFastPropertySet          ),
+                                            DIRECT_INTERFACE ( css::beans::XMultiPropertySet        )
                                         )
 
-DEFINE_XTYPEPROVIDER_7					(   PathSettings                                            ,
+DEFINE_XTYPEPROVIDER_7                  (   PathSettings                                            ,
                                             css::lang::XTypeProvider                                ,
                                             css::lang::XServiceInfo                                 ,
                                             css::lang::XEventListener                               ,
                                             css::util::XChangesListener                             ,
-                                            css::beans::XPropertySet								,
-                                            css::beans::XFastPropertySet							,
+                                            css::beans::XPropertySet                                ,
+                                            css::beans::XFastPropertySet                            ,
                                             css::beans::XMultiPropertySet
                                         )
 
@@ -141,7 +141,7 @@ DEFINE_INIT_SERVICE                     (   PathSettings,
 
 //-----------------------------------------------------------------------------
 PathSettings::PathSettings( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
-    //	Init baseclasses first
+    //  Init baseclasses first
     //  Attention: Don't change order of initialization!
     //      ThreadHelpBase is a struct with a lock as member. We can't use a lock as direct member!
     //      We must garant right initialization and a valid value of this to initialize other baseclasses!
@@ -288,7 +288,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
 
     // read state props
     xPath->getByName(CFGPROP_ISSINGLEPATH) >>= aPathVal.bIsSinglePath;
-    
+
     // analyze finalized/mandatory states
     aPathVal.bIsReadonly = sal_False;
     css::uno::Reference< css::beans::XProperty > xInfo(xPath, css::uno::UNO_QUERY);
@@ -297,7 +297,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
         css::beans::Property aInfo = xInfo->getAsProperty();
         sal_Bool bFinalized = ((aInfo.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
         //sal_Bool bMandatory = ((aInfo.Attributes & css::beans::PropertyAttribute::REMOVEABLE) != css::beans::PropertyAttribute::REMOVEABLE);
-    
+
         // Note: Till we support finalized / mandatory on our API more in detail we handle
         // all states simple as READONLY ! But because all realy needed pathes are "mandatory" by default
         // we have to handle "finalized" as the real "readonly" indicator .
@@ -657,7 +657,7 @@ void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
 ::rtl::OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath) const
 {
     OUStringList::const_iterator pIt;
-    OUStringList				 lTemp;
+    OUStringList                 lTemp;
     lTemp.reserve(rPath.lInternalPaths.size() + rPath.lUserPaths.size() + 1);
 
     for (  pIt  = rPath.lInternalPaths.begin();

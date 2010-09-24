@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace sdr { namespace table {
 
 // -----------------------------------------------------------------------------
 
-class SVX_DLLPUBLIC Cell :	public SdrText,
+class SVX_DLLPUBLIC Cell :  public SdrText,
                 public SvxUnoTextBase,
                 public ::com::sun::star::table::XMergeableCell,
                 public ::com::sun::star::awt::XLayoutConstrains,
@@ -196,7 +196,7 @@ public:
 
     SVX_DLLPRIVATE virtual void SetOutlinerParaObject( OutlinerParaObject* pTextObject );
 
-    SVX_DLLPRIVATE void	AddUndo();
+    SVX_DLLPRIVATE void AddUndo();
 
     using SvxUnoTextRangeBase::setPropertyValue;
     using SvxUnoTextRangeBase::getPropertyValue;
@@ -221,16 +221,16 @@ private:
 
     const SvxItemPropertySet* mpPropSet;
 
-    sdr::properties::TextProperties*	mpProperties;
+    sdr::properties::TextProperties*    mpProperties;
 
     ::com::sun::star::table::CellContentType mnCellContentType;
 
-    ::rtl::OUString	msFormula;
-    double			mfValue;
-    ::sal_Int32		mnError;
-    ::sal_Bool		mbMerged;
-    ::sal_Int32		mnRowSpan;
-    ::sal_Int32		mnColSpan;
+    ::rtl::OUString msFormula;
+    double          mfValue;
+    ::sal_Int32     mnError;
+    ::sal_Bool      mbMerged;
+    ::sal_Int32     mnRowSpan;
+    ::sal_Int32     mnColSpan;
 
     Rectangle maCellRect;
 

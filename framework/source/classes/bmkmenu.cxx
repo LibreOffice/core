@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <limits.h>
@@ -41,7 +41,7 @@
 #include <xml/menuconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/util/URL.hpp>
@@ -54,7 +54,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <tools/config.hxx>
 #include <vcl/svapp.hxx>
@@ -63,7 +63,7 @@
 #include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 using namespace ::comphelper;
@@ -77,26 +77,26 @@ namespace framework
 {
 
 void GetMenuEntry(
-    Sequence< PropertyValue >&	aDynamicMenuEntry,
-    ::rtl::OUString&			rTitle,
-    ::rtl::OUString&			rURL,
-    ::rtl::OUString&			rFrame,
-    ::rtl::OUString&			rImageId );
+    Sequence< PropertyValue >&  aDynamicMenuEntry,
+    ::rtl::OUString&            rTitle,
+    ::rtl::OUString&            rURL,
+    ::rtl::OUString&            rFrame,
+    ::rtl::OUString&            rImageId );
 
 class BmkMenu_Impl
 {
     private:
-        static USHORT		 m_nMID;
+        static USHORT        m_nMID;
 
     public:
-        BmkMenu*			 m_pRoot;
+        BmkMenu*             m_pRoot;
         BOOL                 m_bInitialized;
 
         BmkMenu_Impl( BmkMenu* pRoot );
         BmkMenu_Impl();
         ~BmkMenu_Impl();
 
-        static USHORT		GetMID();
+        static USHORT       GetMID();
 };
 
 USHORT BmkMenu_Impl::m_nMID = BMKMENU_ITEMID_START;
@@ -186,8 +186,8 @@ void BmkMenu::Initialize()
             InsertSeparator();
         else
         {
-            sal_Bool	bImageSet = sal_False;
-            USHORT		nId = CreateMenuId();
+            sal_Bool    bImageSet = sal_False;
+            USHORT      nId = CreateMenuId();
 
             if ( bShowMenuImages )
             {

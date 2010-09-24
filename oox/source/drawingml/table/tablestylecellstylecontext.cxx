@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,9 +61,9 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
     AttributeList aAttribs( xAttribs );
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML|XML_tcBdr:		// CT_TableCellBorderStyle
+        case NMSP_DRAWINGML|XML_tcBdr:      // CT_TableCellBorderStyle
             break;
-        case NMSP_DRAWINGML|XML_left:		// CT_ThemeableLineStyle
+        case NMSP_DRAWINGML|XML_left:       // CT_ThemeableLineStyle
         case NMSP_DRAWINGML|XML_right:
         case NMSP_DRAWINGML|XML_top:
         case NMSP_DRAWINGML|XML_bottom:
@@ -97,14 +97,14 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
             break;
 
         // EG_ThemeableFillStyle (choice)
-        case NMSP_DRAWINGML|XML_fill:		// CT_FillProperties
+        case NMSP_DRAWINGML|XML_fill:       // CT_FillProperties
             {
                 FillPropertiesPtr& rxFillProperties = mrTableStylePart.getFillProperties();
                 rxFillProperties.reset( new FillProperties );
                 xRet.set( new FillPropertiesContext( *this, *rxFillProperties ) );
             }
             break;
-        case NMSP_DRAWINGML|XML_fillRef:	// CT_StyleMatrixReference
+        case NMSP_DRAWINGML|XML_fillRef:    // CT_StyleMatrixReference
             {
                 ShapeStyleRef& rStyleRef = mrTableStylePart.getStyleRefs()[ XML_fillRef ];
                 rStyleRef.mnThemedIdx = aAttribs.getInteger( XML_idx, 0 );
@@ -112,7 +112,7 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
             }
             break;
 
-        case NMSP_DRAWINGML|XML_cell3D:		// CT_Cell3D
+        case NMSP_DRAWINGML|XML_cell3D:     // CT_Cell3D
             break;
     }
     if( !xRet.is() )

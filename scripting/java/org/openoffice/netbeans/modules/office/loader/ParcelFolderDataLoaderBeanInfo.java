@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ import org.openide.util.Utilities;
  * @author tomaso
  */
 public class ParcelFolderDataLoaderBeanInfo extends SimpleBeanInfo {
-    
+
     // If you have additional properties:
     /*
     public PropertyDescriptor[] getPropertyDescriptors() {
@@ -54,7 +54,7 @@ public class ParcelFolderDataLoaderBeanInfo extends SimpleBeanInfo {
         }
     }
      */
-    
+
     public BeanInfo[] getAdditionalBeanInfo() {
         try {
             // I.e. MultiFileLoader.class or UniFileLoader.class.
@@ -64,7 +64,7 @@ public class ParcelFolderDataLoaderBeanInfo extends SimpleBeanInfo {
             return null;
         }
     }
-    
+
     public Image getIcon(int type) {
         if (type == BeanInfo.ICON_COLOR_16x16 || type == BeanInfo.ICON_MONO_16x16) {
             return Utilities.loadImage("org/openoffice/netbeans/modules/office/loaders/ParcelFolderDataIcon.gif");
@@ -72,5 +72,5 @@ public class ParcelFolderDataLoaderBeanInfo extends SimpleBeanInfo {
             return Utilities.loadImage("org/openoffice/netbeans/modules/office/loaders/ParcelFolderDataIcon32.gif");
         }
     }
-    
+
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,20 +60,20 @@ struct ModuleImport
     : public ::cppu::WeakImplHelper1< xml::input::XRoot >
 {
     friend class ModuleElement;
-    
+
     ModuleDescriptor& mrModuleDesc;
 
     sal_Int32 XMLNS_SCRIPT_UID;
     sal_Int32 XMLNS_LIBRARY_UID;
     sal_Int32 XMLNS_XLINK_UID;
-    
+
 public:
     inline ModuleImport( ModuleDescriptor& rModuleDesc )
         SAL_THROW( () )
         : mrModuleDesc( rModuleDesc ) {}
     virtual ~ModuleImport()
         SAL_THROW( () );
-    
+
     // XRoot
     virtual void SAL_CALL startDocument(
         Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
@@ -96,14 +96,14 @@ public:
 class ModuleElement
     : public ::cppu::WeakImplHelper1< xml::input::XElement >
 {
-protected:  
+protected:
     ModuleImport * _pImport;
     ModuleElement * _pParent;
-    
+
     OUString _aLocalName;
     Reference< xml::input::XAttributes > _xAttributes;
     ::rtl::OUStringBuffer _StrBuffer;
-    
+
 public:
     ModuleElement(
         OUString const & rLocalName,
@@ -112,7 +112,7 @@ public:
         SAL_THROW( () );
     virtual ~ModuleElement()
         SAL_THROW( () );
-    
+
     // XElement
     virtual Reference< xml::input::XElement > SAL_CALL getParent()
         throw (RuntimeException);

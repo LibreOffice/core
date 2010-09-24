@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,7 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
     aRect.Top()    = (long) (aRect.Top()    * HMM_PER_TWIPS);
     aRect.Right()  = (long) (aRect.Right()  * HMM_PER_TWIPS);
     aRect.Bottom() = (long) (aRect.Bottom() * HMM_PER_TWIPS);
-    
+
     if(pViewShell || pDrawView)
     {
         SdrView* pLocalDrawView = (pDrawView) ? pDrawView : pViewShell->GetSdrView();
@@ -122,7 +122,7 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
 }
 
 // #i72502#
-void ScOutputData::PostPrintDrawingLayer(const Point& rMMOffset) // #i74768# 
+void ScOutputData::PostPrintDrawingLayer(const Point& rMMOffset) // #i74768#
 {
     // #i74768# just use offset as in PrintDrawingLayer() to also get the form controls
     // painted with offset
@@ -156,14 +156,14 @@ void ScOutputData::PostPrintDrawingLayer(const Point& rMMOffset) // #i74768#
 void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOffset)
 {
     bool bHideAllDrawingLayer(false);
-    
+
     if(pViewShell || pDrawView)
     {
         SdrView* pLocalDrawView = (pDrawView) ? pDrawView : pViewShell->GetSdrView();
 
         if(pLocalDrawView)
         {
-            bHideAllDrawingLayer = pLocalDrawView->getHideOle() && pLocalDrawView->getHideChart() 
+            bHideAllDrawingLayer = pLocalDrawView->getHideOle() && pLocalDrawView->getHideChart()
                     && pLocalDrawView->getHideDraw() && pLocalDrawView->getHideFormControl();
         }
     }
@@ -240,14 +240,14 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
     return;
 }
 
-//	Teile nur fuer Bildschirm
+//  Teile nur fuer Bildschirm
 
 // #109985#
 void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
 {
-    BOOL	bHad	= FALSE;
-    long	nPosY	= nScrY;
-    SCSIZE	nArrY;
+    BOOL    bHad    = FALSE;
+    long    nPosY   = nScrY;
+    SCSIZE  nArrY;
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];

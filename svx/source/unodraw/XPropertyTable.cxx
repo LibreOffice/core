@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@ using namespace ::vos;
 class SvxUnoXPropertyTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
-    XPropertyTable*	mpTable;
-    XPropertyList*	mpList;
+    XPropertyTable* mpTable;
+    XPropertyList*  mpList;
     sal_Int16 mnWhich;
 
     long getCount() const { return mpList ? mpList->Count() : (mpTable?mpTable->Count():0); }
@@ -64,7 +64,7 @@ public:
     SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList* pList ) throw();
     SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyTable* pTable ) throw();
 
-    virtual	~SvxUnoXPropertyTable() throw();
+    virtual ~SvxUnoXPropertyTable() throw();
 
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() = 0;
     virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw() = 0;
@@ -543,7 +543,7 @@ uno::Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const throw()
     aUnoHatch.Color = aHatch.GetColor().GetColor();
     aUnoHatch.Distance = aHatch.GetDistance();
     aUnoHatch.Angle = aHatch.GetAngle();
-    
+
     uno::Any aAny;
     aAny <<= aUnoHatch;
     return aAny;
@@ -701,9 +701,9 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoXBitmapTable_createInstance( XP
 // SvxUnoXPropertyTable
 uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
-    OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));			
+    OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
     aURL += OUString::createFromAscii( ((XBitmapEntry*)pEntry)->GetXBitmap().GetGraphicObject().GetUniqueID().GetBuffer() );
-    
+
     uno::Any aAny;
     aAny <<= aURL;
     return aAny;
@@ -717,7 +717,7 @@ XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const uno::
 
     GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
     XOBitmap aBMP( aGrafObj );
-    
+
     const String aName( rName );
     return new XBitmapEntry( aBMP, aName );
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,19 +51,19 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-#define A2OU(x)	::rtl::OUString::createFromAscii( x )
+#define A2OU(x) ::rtl::OUString::createFromAscii( x )
 
 ///////////////////////////////////////////////////////////////////////////
 
-    
+
 PropertyChgHelper::PropertyChgHelper(
         const Reference< XInterface > & rxSource,
         Reference< XPropertySet > &rxPropSet,
         const char *pPropNames[], USHORT nPropCount ) :
-    xMyEvtObj			(rxSource),
-    xPropSet			(rxPropSet),
-    aPropNames			(nPropCount),
-    aLngSvcEvtListeners	(GetLinguMutex())
+    xMyEvtObj           (rxSource),
+    xPropSet            (rxPropSet),
+    aPropNames          (nPropCount),
+    aLngSvcEvtListeners (GetLinguMutex())
 {
     OUString *pName = aPropNames.getArray();
     for (INT32 i = 0;  i < nPropCount;  ++i)
@@ -74,18 +74,18 @@ PropertyChgHelper::PropertyChgHelper(
 
 
 PropertyChgHelper::PropertyChgHelper( const PropertyChgHelper &rHelper ) :
-    aLngSvcEvtListeners	(GetLinguMutex())
+    aLngSvcEvtListeners (GetLinguMutex())
 {
-    xPropSet	= rHelper.xPropSet;
-    aPropNames	= rHelper.aPropNames;
+    xPropSet    = rHelper.xPropSet;
+    aPropNames  = rHelper.aPropNames;
     AddAsPropListener();
-    
-    xMyEvtObj	= rHelper.xMyEvtObj;
+
+    xMyEvtObj   = rHelper.xMyEvtObj;
 }
 
 
 PropertyChgHelper::~PropertyChgHelper()
-{	
+{
 }
 
 
@@ -116,7 +116,7 @@ void PropertyChgHelper::RemoveAsPropListener()
         }
     }
 }
-         
+
 
 void PropertyChgHelper::LaunchEvent( const LinguServiceEvent &rEvt )
 {
@@ -130,10 +130,10 @@ void PropertyChgHelper::LaunchEvent( const LinguServiceEvent &rEvt )
 }
 
 
-void SAL_CALL PropertyChgHelper::disposing( const EventObject& rSource ) 
+void SAL_CALL PropertyChgHelper::disposing( const EventObject& rSource )
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
     if (rSource.Source == xPropSet)
     {
         RemoveAsPropListener();
@@ -141,36 +141,36 @@ void SAL_CALL PropertyChgHelper::disposing( const EventObject& rSource )
         aPropNames.realloc( 0 );
     }
 }
-    
-    
-sal_Bool SAL_CALL 
-    PropertyChgHelper::addLinguServiceEventListener( 
-            const Reference< XLinguServiceEventListener >& rxListener ) 
+
+
+sal_Bool SAL_CALL
+    PropertyChgHelper::addLinguServiceEventListener(
+            const Reference< XLinguServiceEventListener >& rxListener )
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
-    
+    MutexGuard  aGuard( GetLinguMutex() );
+
     BOOL bRes = FALSE;
     if (rxListener.is())
     {
-        INT32	nCount = aLngSvcEvtListeners.getLength();
+        INT32   nCount = aLngSvcEvtListeners.getLength();
         bRes = aLngSvcEvtListeners.addInterface( rxListener ) != nCount;
     }
     return bRes;
 }
 
 
-sal_Bool SAL_CALL 
-    PropertyChgHelper::removeLinguServiceEventListener( 
-            const Reference< XLinguServiceEventListener >& rxListener ) 
+sal_Bool SAL_CALL
+    PropertyChgHelper::removeLinguServiceEventListener(
+            const Reference< XLinguServiceEventListener >& rxListener )
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
-    
+    MutexGuard  aGuard( GetLinguMutex() );
+
     BOOL bRes = FALSE;
     if (rxListener.is())
     {
-        INT32	nCount = aLngSvcEvtListeners.getLength();
+        INT32   nCount = aLngSvcEvtListeners.getLength();
         bRes = aLngSvcEvtListeners.removeInterface( rxListener ) != nCount;
     }
     return bRes;
@@ -192,7 +192,7 @@ static const char *aSP[] =
 PropertyHelper_Spell::PropertyHelper_Spell(
         const Reference< XInterface > & rxSource,
         Reference< XPropertySet > &rxPropSet ) :
-    PropertyChgHelper	( rxSource, rxPropSet, aSP, sizeof(aSP) / sizeof(aSP[0]) )
+    PropertyChgHelper   ( rxSource, rxPropSet, aSP, sizeof(aSP) / sizeof(aSP[0]) )
 {
     SetDefault();
     INT32 nLen = GetPropNames().getLength();
@@ -201,40 +201,40 @@ PropertyHelper_Spell::PropertyHelper_Spell(
         const OUString *pPropName = GetPropNames().getConstArray();
         for (INT32 i = 0;  i < nLen;  ++i)
         {
-            BOOL *pbVal		= NULL,
-                 *pbResVal	= NULL;
+            BOOL *pbVal     = NULL,
+                 *pbResVal  = NULL;
 
             if (A2OU( UPN_IS_GERMAN_PRE_REFORM ) == pPropName[i])
             {
-                pbVal	 = &bIsGermanPreReform;
+                pbVal    = &bIsGermanPreReform;
                 pbResVal = &bResIsGermanPreReform;
             }
             else if (A2OU( UPN_IS_IGNORE_CONTROL_CHARACTERS ) == pPropName[i])
             {
-                pbVal	 = &bIsIgnoreControlCharacters;
+                pbVal    = &bIsIgnoreControlCharacters;
                 pbResVal = &bResIsIgnoreControlCharacters;
             }
             else if (A2OU( UPN_IS_USE_DICTIONARY_LIST ) == pPropName[i])
             {
-                pbVal	 = &bIsUseDictionaryList;
+                pbVal    = &bIsUseDictionaryList;
                 pbResVal = &bResIsUseDictionaryList;
             }
             else if (A2OU( UPN_IS_SPELL_UPPER_CASE ) == pPropName[i])
             {
-                pbVal	 = &bIsSpellUpperCase;
+                pbVal    = &bIsSpellUpperCase;
                 pbResVal = &bResIsSpellUpperCase;
             }
             else if (A2OU( UPN_IS_SPELL_WITH_DIGITS ) == pPropName[i])
             {
-                pbVal	 = &bIsSpellWithDigits;
+                pbVal    = &bIsSpellWithDigits;
                 pbResVal = &bResIsSpellWithDigits;
             }
             else if (A2OU( UPN_IS_SPELL_CAPITALIZATION ) == pPropName[i])
             {
-                pbVal	 = &bIsSpellCapitalization;
+                pbVal    = &bIsSpellCapitalization;
                 pbResVal = &bResIsSpellCapitalization;
             }
-            
+
             if (pbVal && pbResVal)
             {
                 rxPropSet->getPropertyValue( pPropName[i] ) >>= *pbVal;
@@ -252,66 +252,66 @@ PropertyHelper_Spell::~PropertyHelper_Spell()
 
 void PropertyHelper_Spell::SetDefault()
 {
-    bResIsGermanPreReform			= bIsGermanPreReform			= FALSE;
-    bResIsIgnoreControlCharacters	= bIsIgnoreControlCharacters	= TRUE;
-    bResIsUseDictionaryList			= bIsUseDictionaryList			= TRUE;
-    bResIsSpellUpperCase			= bIsSpellUpperCase				= FALSE;
-    bResIsSpellWithDigits			= bIsSpellWithDigits			= FALSE;
-    bResIsSpellCapitalization		= bIsSpellCapitalization		= TRUE;
+    bResIsGermanPreReform           = bIsGermanPreReform            = FALSE;
+    bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters    = TRUE;
+    bResIsUseDictionaryList         = bIsUseDictionaryList          = TRUE;
+    bResIsSpellUpperCase            = bIsSpellUpperCase             = FALSE;
+    bResIsSpellWithDigits           = bIsSpellWithDigits            = FALSE;
+    bResIsSpellCapitalization       = bIsSpellCapitalization        = TRUE;
 }
 
 
-void SAL_CALL 
-    PropertyHelper_Spell::propertyChange( const PropertyChangeEvent& rEvt ) 
+void SAL_CALL
+    PropertyHelper_Spell::propertyChange( const PropertyChangeEvent& rEvt )
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     if (GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
         INT16 nLngSvcFlags = 0;
-        BOOL bSCWA = FALSE,	// SPELL_CORRECT_WORDS_AGAIN ?
-             bSWWA = FALSE;	// SPELL_WRONG_WORDS_AGAIN ?
+        BOOL bSCWA = FALSE, // SPELL_CORRECT_WORDS_AGAIN ?
+             bSWWA = FALSE; // SPELL_WRONG_WORDS_AGAIN ?
 
         BOOL *pbVal = NULL;
         switch (rEvt.PropertyHandle)
         {
             case UPH_IS_IGNORE_CONTROL_CHARACTERS :
             {
-                pbVal = &bIsIgnoreControlCharacters; 
+                pbVal = &bIsIgnoreControlCharacters;
                 break;
             }
-            case UPH_IS_GERMAN_PRE_REFORM		  :
+            case UPH_IS_GERMAN_PRE_REFORM         :
             {
-                pbVal = &bIsGermanPreReform; 
+                pbVal = &bIsGermanPreReform;
                 bSCWA = bSWWA = TRUE;
                 break;
             }
-            case UPH_IS_USE_DICTIONARY_LIST		  :
+            case UPH_IS_USE_DICTIONARY_LIST       :
             {
-                pbVal = &bIsUseDictionaryList; 
+                pbVal = &bIsUseDictionaryList;
                 bSCWA = bSWWA = TRUE;
                 break;
             }
-            case UPH_IS_SPELL_UPPER_CASE		  :
+            case UPH_IS_SPELL_UPPER_CASE          :
             {
                 pbVal = &bIsSpellUpperCase;
-                bSCWA = FALSE == *pbVal;	// FALSE->TRUE change?
-                bSWWA = !bSCWA;				// TRUE->FALSE change?
+                bSCWA = FALSE == *pbVal;    // FALSE->TRUE change?
+                bSWWA = !bSCWA;             // TRUE->FALSE change?
                 break;
             }
-            case UPH_IS_SPELL_WITH_DIGITS		  :
+            case UPH_IS_SPELL_WITH_DIGITS         :
             {
-                pbVal = &bIsSpellWithDigits; 
-                bSCWA = FALSE == *pbVal;	// FALSE->TRUE change?
-                bSWWA = !bSCWA;				// TRUE->FALSE change?
+                pbVal = &bIsSpellWithDigits;
+                bSCWA = FALSE == *pbVal;    // FALSE->TRUE change?
+                bSWWA = !bSCWA;             // TRUE->FALSE change?
                 break;
             }
-            case UPH_IS_SPELL_CAPITALIZATION	  :
+            case UPH_IS_SPELL_CAPITALIZATION      :
             {
-                pbVal = &bIsSpellCapitalization; 
-                bSCWA = FALSE == *pbVal;	// FALSE->TRUE change?
-                bSWWA = !bSCWA;				// TRUE->FALSE change?
+                pbVal = &bIsSpellCapitalization;
+                bSCWA = FALSE == *pbVal;    // FALSE->TRUE change?
+                bSWWA = !bSCWA;             // TRUE->FALSE change?
                 break;
             }
             default:
@@ -332,17 +332,17 @@ void SAL_CALL
     }
 }
 
-          
+
 void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
 {
-    // set return value to default value unless there is an 
+    // set return value to default value unless there is an
     // explicitly supplied temporary value
-    bResIsGermanPreReform			= bIsGermanPreReform;
-    bResIsIgnoreControlCharacters	= bIsIgnoreControlCharacters;
-    bResIsUseDictionaryList			= bIsUseDictionaryList;
-    bResIsSpellUpperCase			= bIsSpellUpperCase;
-    bResIsSpellWithDigits			= bIsSpellWithDigits;
-    bResIsSpellCapitalization		= bIsSpellCapitalization;
+    bResIsGermanPreReform           = bIsGermanPreReform;
+    bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters;
+    bResIsUseDictionaryList         = bIsUseDictionaryList;
+    bResIsSpellUpperCase            = bIsSpellUpperCase;
+    bResIsSpellWithDigits           = bIsSpellWithDigits;
+    bResIsSpellCapitalization       = bIsSpellCapitalization;
     //
     INT32 nLen = rPropVals.getLength();
     if (nLen)
@@ -353,12 +353,12 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
             BOOL *pbResVal = NULL;
             switch (pVal[i].Handle)
             {
-                case UPH_IS_GERMAN_PRE_REFORM		  : pbResVal = &bResIsGermanPreReform; break;
+                case UPH_IS_GERMAN_PRE_REFORM         : pbResVal = &bResIsGermanPreReform; break;
                 case UPH_IS_IGNORE_CONTROL_CHARACTERS : pbResVal = &bResIsIgnoreControlCharacters; break;
-                case UPH_IS_USE_DICTIONARY_LIST		  : pbResVal = &bResIsUseDictionaryList; break;
-                case UPH_IS_SPELL_UPPER_CASE		  : pbResVal = &bResIsSpellUpperCase; break;
-                case UPH_IS_SPELL_WITH_DIGITS		  : pbResVal = &bResIsSpellWithDigits; break;
-                case UPH_IS_SPELL_CAPITALIZATION	  : pbResVal = &bResIsSpellCapitalization; break;
+                case UPH_IS_USE_DICTIONARY_LIST       : pbResVal = &bResIsUseDictionaryList; break;
+                case UPH_IS_SPELL_UPPER_CASE          : pbResVal = &bResIsSpellUpperCase; break;
+                case UPH_IS_SPELL_WITH_DIGITS         : pbResVal = &bResIsSpellWithDigits; break;
+                case UPH_IS_SPELL_CAPITALIZATION      : pbResVal = &bResIsSpellCapitalization; break;
                 default:
                     DBG_ERROR( "unknown property" );
             }

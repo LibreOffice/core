@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,20 +34,20 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void ImpCalcBmpFillSizes( Size&			   rStartOffset,
-                          Size&			   rBmpOutputSize,
+void ImpCalcBmpFillSizes( Size&            rStartOffset,
+                          Size&            rBmpOutputSize,
                           const Rectangle& rOutputRect,
                           const MapMode&   rOutputMapMode,
                           const Bitmap&    rFillBitmap,
                           const Size&      rBmpSize,
                           const Size&      rBmpPerCent,
-                          const Size&	   rBmpOffPerCent,
+                          const Size&      rBmpOffPerCent,
                           BOOL             bBmpLogSize,
                           BOOL             bBmpTile,
                           BOOL             bBmpStretch,
                           RECT_POINT       eBmpRectPoint )
 {
-    BOOL	bOriginalSize = FALSE, bScaleSize = FALSE;
+    BOOL    bOriginalSize = FALSE, bScaleSize = FALSE;
 
     // Falls keine Groessen gegeben sind ( z.B. alte Dokumente )
     // berechnen wir uns die Groesse selber aus der Bitmap

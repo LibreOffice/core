@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,9 +53,9 @@
 \************************************************************************/
 
 SdSnapLineDlg::SdSnapLineDlg(
-    ::Window* pWindow, 
+    ::Window* pWindow,
     const SfxItemSet& rInAttrs,
-    ::sd::View* pView) 
+    ::sd::View* pView)
     : ModalDialog (pWindow, SdResId(DLG_SNAPLINE)),
       aFlPos      (this, SdResId(FL_POSITION)),
       aFtX        (this, SdResId(FT_X)),
@@ -97,7 +97,7 @@ SdSnapLineDlg::SdSnapLineDlg(
     SfxMapUnit ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
     // #i48497# Consider page origin
-    SdrPageView* pPV = pView->GetSdrPageView();	
+    SdrPageView* pPV = pView->GetSdrPageView();
     Point aLeftTop(aWorkArea.Left()+1, aWorkArea.Top()+1);
     pPV->LogicToPagePos(aLeftTop);
     Point aRightBottom(aWorkArea.Right()-2, aWorkArea.Bottom()-2);
@@ -149,9 +149,9 @@ SdSnapLineDlg::SdSnapLineDlg(
 
 IMPL_LINK( SdSnapLineDlg, ClickHdl, Button *, pBtn )
 {
-    if ( pBtn == &aRbPoint )		SetInputFields(TRUE, TRUE);
-    else if ( pBtn == &aRbHorz )	SetInputFields(FALSE, TRUE);
-    else if ( pBtn == &aRbVert )	SetInputFields(TRUE, FALSE);
+    if ( pBtn == &aRbPoint )        SetInputFields(TRUE, TRUE);
+    else if ( pBtn == &aRbHorz )    SetInputFields(FALSE, TRUE);
+    else if ( pBtn == &aRbVert )    SetInputFields(TRUE, FALSE);
     else if ( pBtn == &aBtnDelete ) EndDialog(RET_SNAP_DELETE);
 
     return 0;
@@ -167,9 +167,9 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
 {
     SnapKind eKind;
 
-    if ( aRbHorz.IsChecked() )		eKind = SK_HORIZONTAL;
+    if ( aRbHorz.IsChecked() )      eKind = SK_HORIZONTAL;
     else if ( aRbVert.IsChecked() ) eKind = SK_VERTICAL;
-    else							eKind = SK_POINT;
+    else                            eKind = SK_POINT;
 
     nXValue = Fraction( GetCoreValue( aMtrFldX, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
     nYValue = Fraction( GetCoreValue( aMtrFldY, SFX_MAPUNIT_100TH_MM) ) * aUIScale;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -254,8 +254,8 @@ umask(old_mode);
 
                  DirectoryItem aTmpItem;
                  FileStatus aTmpStatus( FileStatusMask_Type );
-                 if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None 
-                   || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None 
+                 if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
+                   || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
                    || aTmpStatus.getFileType() != FileStatus::Directory )
                      break;
             }
@@ -319,8 +319,8 @@ umask(old_mode);
 
                 DirectoryItem aTmpItem;
                 FileStatus aTmpStatus( FileStatusMask_Type );
-                if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None 
-                  || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None 
+                if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
+                  || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
                   || aTmpStatus.getFileType() != FileStatus::Directory )
                     break;
             }

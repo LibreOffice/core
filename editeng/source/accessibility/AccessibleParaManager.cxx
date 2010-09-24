@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -180,10 +180,10 @@ namespace accessibility
         }
     }
 
-    AccessibleParaManager::Child AccessibleParaManager::CreateChild( sal_Int32 								nChild,
-                                                                     const uno::Reference< XAccessible >& 	xFrontEnd,
-                                                                     SvxEditSourceAdapter& 					rEditSource,
-                                                                     sal_uInt32 							nParagraphIndex	)
+    AccessibleParaManager::Child AccessibleParaManager::CreateChild( sal_Int32                              nChild,
+                                                                     const uno::Reference< XAccessible >&   xFrontEnd,
+                                                                     SvxEditSourceAdapter&                  rEditSource,
+                                                                     sal_uInt32                             nParagraphIndex )
     {
         DBG_ASSERT( maChildren.size() > nParagraphIndex, "AccessibleParaManager::CreateChild: invalid index" );
 
@@ -253,10 +253,10 @@ namespace accessibility
             SetState( mnFocusedChild, AccessibleStateType::FOCUSED );
     }
 
-    void AccessibleParaManager::InitChild( AccessibleEditableTextPara& 	rChild,
-                                           SvxEditSourceAdapter& 		rEditSource,
-                                           sal_Int32 					nChild,
-                                           sal_uInt32 					nParagraphIndex ) const
+    void AccessibleParaManager::InitChild( AccessibleEditableTextPara&  rChild,
+                                           SvxEditSourceAdapter&        rEditSource,
+                                           sal_Int32                    nChild,
+                                           sal_uInt32                   nParagraphIndex ) const
     {
         rChild.SetEditSource( &rEditSource );
         rChild.SetIndexInParent( nChild );

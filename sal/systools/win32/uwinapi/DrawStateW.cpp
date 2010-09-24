@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,16 +29,16 @@
 
 IMPLEMENT_THUNK( user32, WINDOWS, BOOL, WINAPI, DrawStateW,
 (
-    HDC				hdc,			// handle to device context
-    HBRUSH			hbr,			// handle to brush
-    DRAWSTATEPROC	lpOutputFunc,	// pointer to callback function
-    LPARAM			lData,			// image information
-    WPARAM			wData,			// more image information
-    int				x,				// horizontal location of image
-    int				y,				// vertical location of image
-    int				cx,				// width of image
-    int				cy,				// height of image
-    UINT			fuFlags			// image type and state
+    HDC             hdc,            // handle to device context
+    HBRUSH          hbr,            // handle to brush
+    DRAWSTATEPROC   lpOutputFunc,   // pointer to callback function
+    LPARAM          lData,          // image information
+    WPARAM          wData,          // more image information
+    int             x,              // horizontal location of image
+    int             y,              // vertical location of image
+    int             cx,             // width of image
+    int             cy,             // height of image
+    UINT            fuFlags         // image type and state
 
 ))
 {
@@ -47,12 +47,12 @@ IMPLEMENT_THUNK( user32, WINDOWS, BOOL, WINAPI, DrawStateW,
     case DST_TEXT:
     case DST_PREFIXTEXT:
         {
-            LPSTR	lpTextA = NULL;
+            LPSTR   lpTextA = NULL;
 
             if ( lData )
             {
-                int	cchWideChar = (int) (wData ? wData : -1);
-                int	cchNeeded = WideCharToMultiByte( CP_ACP, 0, (LPCWSTR)lData, cchWideChar, NULL, 0, NULL, NULL );
+                int cchWideChar = (int) (wData ? wData : -1);
+                int cchNeeded = WideCharToMultiByte( CP_ACP, 0, (LPCWSTR)lData, cchWideChar, NULL, 0, NULL, NULL );
 
                 lpTextA = (LPSTR)_alloca( cchNeeded * sizeof(CHAR) );
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@
 #include <docstat.hxx>
 #include <outline.hxx>
 #include <tablemgr.hxx>
-#include <swundo.hxx>		// fuer Undo-IDs
+#include <swundo.hxx>       // fuer Undo-IDs
 #include <reffld.hxx>
 #include <docsh.hxx>
 #include <mdiexp.hxx>
@@ -666,7 +666,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case FN_AUTOFORMAT_AUTO:
         {
-            SvxAutoCorrCfg*	pACfg = SvxAutoCorrCfg::Get();
+            SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
             BOOL bSet = pItem ? ((const SfxBoolItem*)pItem)->GetValue() : !pACfg->IsAutoFmtByInput();
             if( bSet != pACfg->IsAutoFmtByInput() )
             {
@@ -846,10 +846,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case SID_CHAR_DLG_FOR_PARAGRAPH:
         {
-            rWrtSh.Push();			//save current cursor
+            rWrtSh.Push();          //save current cursor
             SwLangHelper::SelectCurrentPara( rWrtSh );
             lcl_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
-            rWrtSh.Pop( FALSE );	//restore old cursor
+            rWrtSh.Pop( FALSE );    //restore old cursor
         }
         break;
         case SID_ATTR_LRSPACE :
@@ -1126,7 +1126,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
 
                 rReq.Done();
-/*		 		OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
+/*              OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
                 SwEditWin& rEdtWin = GetView().GetEditWin();
 
                 SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
@@ -1167,7 +1167,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             rReq.Done();
 
-/*			OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
+/*          OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
             if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
             {
                 Brush aBrush(pItem ? BRUSH_SOLID : BRUSH_NULL);
@@ -1431,7 +1431,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.DisableItem( SID_THES );
         }
         break;
-                
+
         case FN_NUMBER_NEWSTART :
             if(!rSh.GetCurNumRule())
                     rSet.DisableItem(nWhich);

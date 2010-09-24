@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,12 +120,12 @@ ScChartsObj::~ScChartsObj()
 
 void ScChartsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //!	Referenz-Update
+    //! Referenz-Update
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;		// ungueltig geworden
+        pDocShell = NULL;       // ungueltig geworden
     }
 }
 
@@ -154,7 +154,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
                             uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                             if ( xObj.is() )
                                 aName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
-                            break;	// nicht weitersuchen
+                            break;  // nicht weitersuchen
                         }
                         ++nPos;
                     }
@@ -196,14 +196,14 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     if (!pPage || !pDoc)
         return;
 
-    //	chart can't be inserted if any ole object with that name exists on any table
-    //	(empty string: generate valid name)
+    //  chart can't be inserted if any ole object with that name exists on any table
+    //  (empty string: generate valid name)
 
     String aNameString(aName);
     SCTAB nDummy;
     if ( aNameString.Len() && pModel->GetNamedObject( aNameString, OBJ_OLE2, nDummy ) )
     {
-        //	object exists - only RuntimeException is specified
+        //  object exists - only RuntimeException is specified
         throw uno::RuntimeException();
     }
 
@@ -229,13 +229,13 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     {
             String aObjName = aTmp;       // wirklich eingefuegter Name...
 
-            //	Rechteck anpassen
-            //!	Fehler/Exception, wenn leer/ungueltig ???
+            //  Rechteck anpassen
+            //! Fehler/Exception, wenn leer/ungueltig ???
             Point aRectPos( aRect.X, aRect.Y );
             if (aRectPos.X() < 0) aRectPos.X() = 0;
             if (aRectPos.Y() < 0) aRectPos.Y() = 0;
             Size aRectSize( aRect.Width, aRect.Height );
-            if (aRectSize.Width() <= 0) aRectSize.Width() = 5000;	// Default-Groesse
+            if (aRectSize.Width() <= 0) aRectSize.Width() = 5000;   // Default-Groesse
             if (aRectSize.Height() <= 0) aRectSize.Height() = 5000;
             Rectangle aInsRect( aRectPos, aRectSize );
 
@@ -298,7 +298,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
                 xObj->setVisualAreaSize( nAspect, aSz );
 
             pPage->InsertObject( pObj );
-            pModel->AddUndo( new SdrUndoInsertObj( *pObj ) );		//! Undo-Kommentar?
+            pModel->AddUndo( new SdrUndoInsertObj( *pObj ) );       //! Undo-Kommentar?
 
             // Dies veranlaesst Chart zum sofortigen Update
             //SvData aEmpty;
@@ -315,13 +315,13 @@ void SAL_CALL ScChartsObj::removeByName( const rtl::OUString& aName )
     if (pObj)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
-        ScDrawLayer* pModel = pDoc->GetDrawLayer();		// ist nicht 0
+        ScDrawLayer* pModel = pDoc->GetDrawLayer();     // ist nicht 0
         SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));    // ist nicht 0
 
-        pModel->AddUndo( new SdrUndoRemoveObj( *pObj ) );	//!	Undo-Kommentar?
+        pModel->AddUndo( new SdrUndoRemoveObj( *pObj ) );   //! Undo-Kommentar?
         pPage->RemoveObject( pObj->GetOrdNum() );
 
-        //!	Notify etc.???
+        //! Notify etc.???
     }
 }
 
@@ -479,12 +479,12 @@ ScChartObj::~ScChartObj()
 
 void ScChartObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //!	Referenz-Update
+    //! Referenz-Update
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;		// ungueltig geworden
+        pDocShell = NULL;       // ungueltig geworden
     }
 }
 
@@ -734,11 +734,11 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges() throw(un
         {
             ScRange aRange(*xRanges->GetObject(i));
 
-            aRangeAddress.Sheet		  = aRange.aStart.Tab();
+            aRangeAddress.Sheet       = aRange.aStart.Tab();
             aRangeAddress.StartColumn = aRange.aStart.Col();
-            aRangeAddress.StartRow	  = aRange.aStart.Row();
-            aRangeAddress.EndColumn	  = aRange.aEnd.Col();
-            aRangeAddress.EndRow	  = aRange.aEnd.Row();
+            aRangeAddress.StartRow    = aRange.aStart.Row();
+            aRangeAddress.EndColumn   = aRange.aEnd.Col();
+            aRangeAddress.EndRow      = aRange.aEnd.Row();
 
             pAry[i] = aRangeAddress;
         }
@@ -801,7 +801,7 @@ rtl::OUString SAL_CALL ScChartObj::getName() throw(uno::RuntimeException)
 void SAL_CALL ScChartObj::setName( const rtl::OUString& /* aName */ ) throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    throw uno::RuntimeException();		// name cannot be changed
+    throw uno::RuntimeException();      // name cannot be changed
 }
 
 // XPropertySet

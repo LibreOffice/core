@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,14 +59,14 @@ class CWinClipbImpl;
 class CXNotifyingDataObject : public IDataObject
 {
 public:
-    CXNotifyingDataObject( 
-        const IDataObjectPtr& aIDataObject,		
+    CXNotifyingDataObject(
+        const IDataObjectPtr& aIDataObject,
         const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& aXTransferable,
         const com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboardOwner >& aXClipOwner,
         CWinClipbImpl* theWinClipImpl );
 
     virtual ~CXNotifyingDataObject() {}
-    
+
     //-----------------------------------------------------------------
     // ole interface implementation
     //-----------------------------------------------------------------
@@ -92,12 +92,12 @@ public:
 private:
     void SAL_CALL lostOwnership( );
 
-private:	
-    sal_Int32																							m_nRefCnt;
-    IDataObjectPtr																						m_aIDataObject;	
-    const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >					m_XTransferable;
-    const com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboardOwner >	m_XClipboardOwner;
-    CWinClipbImpl*																						m_pWinClipImpl;
+private:
+    sal_Int32                                                                                           m_nRefCnt;
+    IDataObjectPtr                                                                                      m_aIDataObject;
+    const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >                 m_XTransferable;
+    const com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboardOwner >    m_XClipboardOwner;
+    CWinClipbImpl*                                                                                      m_pWinClipImpl;
 
     friend class CWinClipbImpl;
 };

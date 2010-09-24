@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 class ImpWorkWindow : public WorkWindow
 {
 public:
-    MultiLineEdit	m_aInhalt;
+    MultiLineEdit   m_aInhalt;
     ImpWorkWindow( WorkWindow *pParent, const UniString &rName, WinBits );
     ~ImpWorkWindow();
     void Resize();
@@ -145,7 +145,7 @@ void EditWindow::AddText( const String &rNew )
         if ( nTextLen > 5000 )
         {
             pImpWorkWindow->m_aInhalt.SetText( pImpWorkWindow->m_aInhalt.GetText().Erase(0,1000) );
-            nTextLen = pImpWorkWindow->m_aInhalt.GetText().Len();		// Absolut, um Fehler sonstwo auszubügeln
+            nTextLen = pImpWorkWindow->m_aInhalt.GetText().Len();       // Absolut, um Fehler sonstwo auszubügeln
         }
 
 

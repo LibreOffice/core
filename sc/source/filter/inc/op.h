@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@ void OP_EOF( SvStream &aStream, USHORT nLaenge );
 void OP_Integer( SvStream &aStream, USHORT nLaenge );
 void OP_Number( SvStream &aStream, USHORT nLaenge );
 void OP_Label( SvStream &aStream, USHORT nLaenge );
-//UNUSED2009-05 void OP_Text( SvStream &aStream, USHORT nLaenge );		// WK3
-void OP_Integer3( SvStream &aStream, USHORT nLaenge );	// WK3
-void OP_Number3( SvStream &aStream, USHORT nLaenge );	// WK3
+//UNUSED2009-05 void OP_Text( SvStream &aStream, USHORT nLaenge );      // WK3
+void OP_Integer3( SvStream &aStream, USHORT nLaenge );  // WK3
+void OP_Number3( SvStream &aStream, USHORT nLaenge );   // WK3
 void OP_Formula( SvStream &aStream, USHORT nLaenge );
-void OP_Formula3( SvStream &aStream, USHORT nLaenge );	// WK3
+void OP_Formula3( SvStream &aStream, USHORT nLaenge );  // WK3
 void OP_ColumnWidth( SvStream &aStream, USHORT nLaenge );
 void OP_NamedRange( SvStream &aStream, USHORT nLaenge );
 void OP_SymphNamedRange( SvStream &aStream, USHORT nLaenge );

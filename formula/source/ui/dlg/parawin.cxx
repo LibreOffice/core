@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include "helpids.hrc"
 #include "formula/formdata.hxx"
 #include "formula/IFunctionDescription.hxx"
-#include "ModuleHelper.hxx" 
+#include "ModuleHelper.hxx"
 #include "ForResId.hrc"
 
 #define VAR_ARGS 30
@@ -49,42 +49,42 @@ namespace formula
 //============================================================================
 
 ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
-    TabPage			(pParent,ModuleRes(RID_FORMULATAB_PARAMETER)),
-    pFuncDesc		( NULL ),
+    TabPage         (pParent,ModuleRes(RID_FORMULATAB_PARAMETER)),
+    pFuncDesc       ( NULL ),
     pMyParent       (_pDlg),
-    aFtEditDesc 	( this, ModuleRes( FT_EDITDESC ) ),
-    aFtArgName		( this, ModuleRes( FT_PARNAME ) ),
-    aFtArgDesc		( this, ModuleRes( FT_PARDESC ) ),
+    aFtEditDesc     ( this, ModuleRes( FT_EDITDESC ) ),
+    aFtArgName      ( this, ModuleRes( FT_PARNAME ) ),
+    aFtArgDesc      ( this, ModuleRes( FT_PARDESC ) ),
 
-    aFtArg1 		( this, ModuleRes( FT_ARG1 ) ),
-    aFtArg2 		( this, ModuleRes( FT_ARG2 ) ),
-    aFtArg3 		( this, ModuleRes( FT_ARG3 ) ),
-    aFtArg4 		( this, ModuleRes( FT_ARG4 ) ),
+    aFtArg1         ( this, ModuleRes( FT_ARG1 ) ),
+    aFtArg2         ( this, ModuleRes( FT_ARG2 ) ),
+    aFtArg3         ( this, ModuleRes( FT_ARG3 ) ),
+    aFtArg4         ( this, ModuleRes( FT_ARG4 ) ),
 
-    aBtnFx1 		( this, ModuleRes( BTN_FX1 ) ),
-    aBtnFx2 		( this, ModuleRes( BTN_FX2 ) ),
-    aBtnFx3 		( this, ModuleRes( BTN_FX3 ) ),
-    aBtnFx4 		( this, ModuleRes( BTN_FX4 ) ),
+    aBtnFx1         ( this, ModuleRes( BTN_FX1 ) ),
+    aBtnFx2         ( this, ModuleRes( BTN_FX2 ) ),
+    aBtnFx3         ( this, ModuleRes( BTN_FX3 ) ),
+    aBtnFx4         ( this, ModuleRes( BTN_FX4 ) ),
 
-    aEdArg1 		( this, ModuleRes( ED_ARG1 ) ),
-    aEdArg2 		( this, ModuleRes( ED_ARG2 ) ),
-    aEdArg3 		( this, ModuleRes( ED_ARG3 ) ),
-    aEdArg4 		( this, ModuleRes( ED_ARG4 ) ),
-    
-    aRefBtn1		( this, ModuleRes( RB_ARG1 ) ),
-    aRefBtn2		( this, ModuleRes( RB_ARG2 ) ),
-    aRefBtn3		( this, ModuleRes( RB_ARG3 ) ),
-    aRefBtn4		( this, ModuleRes( RB_ARG4 ) ),
-    
-    aSlider 		( this, ModuleRes( WND_SLIDER ) ),
+    aEdArg1         ( this, ModuleRes( ED_ARG1 ) ),
+    aEdArg2         ( this, ModuleRes( ED_ARG2 ) ),
+    aEdArg3         ( this, ModuleRes( ED_ARG3 ) ),
+    aEdArg4         ( this, ModuleRes( ED_ARG4 ) ),
+
+    aRefBtn1        ( this, ModuleRes( RB_ARG1 ) ),
+    aRefBtn2        ( this, ModuleRes( RB_ARG2 ) ),
+    aRefBtn3        ( this, ModuleRes( RB_ARG3 ) ),
+    aRefBtn4        ( this, ModuleRes( RB_ARG4 ) ),
+
+    aSlider         ( this, ModuleRes( WND_SLIDER ) ),
     m_sOptional     ( ModuleRes( STR_OPTIONAL ) ),
     m_sRequired     ( ModuleRes( STR_REQUIRED ) ),
-    bRefMode		(FALSE)
+    bRefMode        (FALSE)
 {
     Image aFxHC( ModuleRes( IMG_FX_H ) );
     FreeResource();
     aDefaultString=aFtEditDesc.GetText();
-    
+
     SetPosPixel(aPos);
     nEdFocus=NOT_FOUND;
     nActiveLine=0;
@@ -116,8 +116,8 @@ void ParaWin::UpdateArgDesc( USHORT nArg )
 
     if ( (nArgs > 0) && (nArg<nArgs) )
     {
-        String	aArgDesc;
-        String	aArgName;
+        String  aArgDesc;
+        String  aArgName;
 
         SetArgumentDesc( String() );
         SetArgumentText( String() );
@@ -158,9 +158,9 @@ void ParaWin::UpdateArgInput( USHORT nOffset, USHORT i )
         if(nArg<nArgs)
         {
             USHORT nRealArg = aVisibleArgMapping[nArg];
-            SetArgNameFont	(i,(pFuncDesc->isParameterOptional(nRealArg))
+            SetArgNameFont  (i,(pFuncDesc->isParameterOptional(nRealArg))
                                             ? aFntLight : aFntBold );
-            SetArgName		(i,pFuncDesc->getParameterName(nRealArg));
+            SetArgName      (i,pFuncDesc->getParameterName(nRealArg));
         }
     }
     else
@@ -245,7 +245,7 @@ String ParaWin::GetArgument(USHORT no)
     return aStr;
 }
 
-String	ParaWin::GetActiveArgName()
+String  ParaWin::GetActiveArgName()
 {
     String aStr;
     if(nArgs>0 && nEdFocus!=NOT_FOUND)
@@ -304,7 +304,7 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
         aEdArg3.SetHelpId( nHelpId );
         aEdArg4.SetHelpId( nHelpId );
 
-        //	Unique-IDs muessen gleich bleiben fuer Automatisierung
+        //  Unique-IDs muessen gleich bleiben fuer Automatisierung
         SetUniqueId( HID_FORMULA_FAP_PAGE );
         aEdArg1.SetUniqueId( HID_FORMULA_FAP_EDIT1 );
         aEdArg2.SetUniqueId( HID_FORMULA_FAP_EDIT2 );
@@ -378,10 +378,10 @@ void ParaWin::InitArgInput( USHORT nPos, FixedText& rFtArg, ImageButton& rBtnFx,
 
     aArgInput[nPos].Hide();
 
-    aArgInput[nPos].SetFxClickHdl	( LINK( this, ParaWin, GetFxHdl ) );
-    aArgInput[nPos].SetFxFocusHdl	( LINK( this, ParaWin, GetFxFocusHdl ) );
-    aArgInput[nPos].SetEdFocusHdl	( LINK( this, ParaWin, GetEdFocusHdl ) );
-    aArgInput[nPos].SetEdModifyHdl	( LINK( this, ParaWin, ModifyHdl ) );
+    aArgInput[nPos].SetFxClickHdl   ( LINK( this, ParaWin, GetFxHdl ) );
+    aArgInput[nPos].SetFxFocusHdl   ( LINK( this, ParaWin, GetFxFocusHdl ) );
+    aArgInput[nPos].SetEdFocusHdl   ( LINK( this, ParaWin, GetEdFocusHdl ) );
+    aArgInput[nPos].SetEdModifyHdl  ( LINK( this, ParaWin, ModifyHdl ) );
 }
 
 void ParaWin::ClearAll()
@@ -404,7 +404,7 @@ void ParaWin::SetArgumentOffset(USHORT nOffset)
             String aString;
             aArgInput[i].SetArgVal(aString);
             aArgInput[i].GetArgEdPtr()->Init(
-                (i==0)			  	 ? (ArgEdit *)NULL : aArgInput[i-1].GetArgEdPtr(),
+                (i==0)               ? (ArgEdit *)NULL : aArgInput[i-1].GetArgEdPtr(),
                 (i==3 || i==nArgs-1) ? (ArgEdit *)NULL : aArgInput[i+1].GetArgEdPtr(),
                                        aSlider, nArgs );
         }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,14 +41,14 @@
 #include <boost/shared_ptr.hpp>
 
 
-/* An interface to get the clipboard data in either 
+/* An interface to get the clipboard data in either
    system or OOo format.
  */
 class DataProvider
 {
 public:
   virtual ~DataProvider() {};
-  
+
   /* Get the clipboard data in the system format.
      The caller has to retain/release the returned
      CFDataRef on demand.
@@ -75,8 +75,8 @@ public:
   DataFlavorMapper();
 
 
-  /* Map a system data flavor to an OpenOffice data flavor. 
-     Return an empty string if there is not suiteable 
+  /* Map a system data flavor to an OpenOffice data flavor.
+     Return an empty string if there is not suiteable
      mapping from a system data flavor to a OpenOffice data
      flavor.
   */
@@ -98,11 +98,11 @@ public:
   /* Get a data provider which is able to provide the data 'rTransferable' offers in a format that can
      be put on to the system clipboard.
    */
-  DataProviderPtr_t getDataProvider(NSString* systemFlavor, 
+  DataProviderPtr_t getDataProvider(NSString* systemFlavor,
                                     const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable > rTransferable) const;
 
-  
-  
+
+
   /* Get a data provider which is able to provide 'systemData' in the OOo expected format.
    */
   DataProviderPtr_t getDataProvider(const NSString* systemFlavor, NSArray* systemData) const;
@@ -114,12 +114,12 @@ public:
 
 
   /* Translate a sequence of DataFlavors into a NSArray of system types.
-     Only those DataFlavors for which a suitable mapping to a system 
+     Only those DataFlavors for which a suitable mapping to a system
      type exist will be contained in the returned types array.
    */
   NSArray* flavorSequenceToTypesArray(const com::sun::star::uno::Sequence<com::sun::star::datatransfer::DataFlavor>& flavors) const;
 
-  /* Translate a NSArray of system types into a sequence of DataFlavors. 
+  /* Translate a NSArray of system types into a sequence of DataFlavors.
      Only those types for which a suitable mapping to a DataFlavor
      exist will be contained in the new DataFlavor Sequence.
   */
@@ -140,4 +140,4 @@ private:
 
 typedef boost::shared_ptr<DataFlavorMapper> DataFlavorMapperPtr_t;
 
-#endif 
+#endif

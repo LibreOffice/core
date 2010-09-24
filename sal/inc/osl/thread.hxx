@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@
 namespace osl
 {
 /** threadFunc is the function which is executed by the threads
-    created by the osl::Thread class. The function's signature 
-    matches the one of oslWorkerFunction which is declared in 
+    created by the osl::Thread class. The function's signature
+    matches the one of oslWorkerFunction which is declared in
     osl/thread.h .
 */
 extern "C" inline void SAL_CALL threadFunc( void* param);
@@ -68,48 +68,48 @@ public:
         osl_destroyThread( m_hThread);
     }
 
-    sal_Bool SAL_CALL create() 
+    sal_Bool SAL_CALL create()
     {
-        OSL_ASSERT(m_hThread == 0);	// only one running thread per instance
+        OSL_ASSERT(m_hThread == 0); // only one running thread per instance
            if (m_hThread)
             return sal_False;
 
         m_hThread = osl_createSuspendedThread( threadFunc, (void*)this);
         if ( m_hThread )
-            osl_resumeThread(m_hThread);							             
+            osl_resumeThread(m_hThread);
 
         return m_hThread != 0;
     }
 
-    sal_Bool SAL_CALL createSuspended() 
+    sal_Bool SAL_CALL createSuspended()
     {
-        OSL_ASSERT(m_hThread == 0);	// only one running thread per instance
+        OSL_ASSERT(m_hThread == 0); // only one running thread per instance
         if( m_hThread)
             return sal_False;
-        m_hThread= osl_createSuspendedThread( threadFunc, 
+        m_hThread= osl_createSuspendedThread( threadFunc,
                                              (void*)this);
         return m_hThread != 0;
     }
 
-    virtual void SAL_CALL suspend() 
+    virtual void SAL_CALL suspend()
     {
         if( m_hThread )
             osl_suspendThread(m_hThread);
     }
 
-    virtual void SAL_CALL resume() 
+    virtual void SAL_CALL resume()
     {
         if( m_hThread )
             osl_resumeThread(m_hThread);
     }
 
-    virtual void SAL_CALL terminate() 
+    virtual void SAL_CALL terminate()
     {
         if( m_hThread )
             osl_terminateThread(m_hThread);
     }
 
-    virtual void SAL_CALL join() 
+    virtual void SAL_CALL join()
     {
         osl_joinWithThread(m_hThread);
     }
@@ -140,22 +140,22 @@ public:
         return osl_getThreadIdentifier(0);
     }
 
-    static void SAL_CALL wait(const TimeValue& Delay) 
+    static void SAL_CALL wait(const TimeValue& Delay)
     {
         osl_waitThread(&Delay);
     }
 
-    static void SAL_CALL yield() 
-    { 
+    static void SAL_CALL yield()
+    {
         osl_yieldThread();
     }
-    
 
-    virtual sal_Bool SAL_CALL schedule() 
+
+    virtual sal_Bool SAL_CALL schedule()
     {
         return m_hThread ? osl_scheduleThread(m_hThread) : sal_False;
     }
-    
+
     SAL_CALL operator oslThread() const
     {
         return m_hThread;
@@ -170,7 +170,7 @@ protected:
 
     virtual void SAL_CALL run() = 0;
 
-    virtual void SAL_CALL onTerminated() 
+    virtual void SAL_CALL onTerminated()
     {
     }
 
@@ -182,21 +182,21 @@ extern "C" inline void SAL_CALL threadFunc( void* param)
 {
         Thread* pObj= (Thread*)param;
         pObj->run();
-        pObj->onTerminated();		
+        pObj->onTerminated();
 }
 
-class ThreadData 
+class ThreadData
 {
     ThreadData( const ThreadData& );
     ThreadData& operator= (const ThreadData& );
 public:
-     /// Create a thread specific local data key 
+     /// Create a thread specific local data key
     ThreadData( oslThreadKeyCallbackFunction pCallback= 0 )
     {
         m_hKey = osl_createThreadKey( pCallback );
     }
 
-    /// Destroy a thread specific local data key 
+    /// Destroy a thread specific local data key
     ~ThreadData()
     {
            osl_destroyThreadKey(m_hKey);
@@ -211,7 +211,7 @@ public:
     }
 
     /** Get the data associated with the data key.
-        @returns The data asscoitaed with the data key or 
+        @returns The data asscoitaed with the data key or
         NULL if no data was set
     */
     void* SAL_CALL getData()

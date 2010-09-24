@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,14 +97,14 @@ namespace pcr
     //= OPropertyBrowserController
     //========================================================================
     // #95343#------------------------------------------------------------------------------------
-    typedef ::cppu::WeakImplHelper7 <	::com::sun::star::lang::XServiceInfo
-                                    ,	::com::sun::star::awt::XFocusListener
-                                    ,	::com::sun::star::awt::XLayoutConstrains
-                                    ,	::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::WeakImplHelper7 <   ::com::sun::star::lang::XServiceInfo
+                                    ,   ::com::sun::star::awt::XFocusListener
+                                    ,   ::com::sun::star::awt::XLayoutConstrains
+                                    ,   ::com::sun::star::beans::XPropertyChangeListener
                                     ,   ::com::sun::star::inspection::XPropertyControlFactory
                                     ,   ::com::sun::star::inspection::XObjectInspector
                                     ,   ::com::sun::star::lang::XInitialization
-                                    >	OPropertyBrowserController_Base;
+                                    >   OPropertyBrowserController_Base;
 
     class OPropertyBrowserController
                 :public ::comphelper::OMutexAndBroadcastHelper
@@ -133,8 +133,8 @@ namespace pcr
         // meta data about the properties
         OPropertyBrowserView*               m_pView;
 
-        ::rtl::OUString		                m_sPageSelection;
-        ::rtl::OUString		                m_sLastValidPageSelection;
+        ::rtl::OUString                     m_sPageSelection;
+        ::rtl::OUString                     m_sLastValidPageSelection;
 
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >
                                                         PropertyHandlerRef;
@@ -224,8 +224,8 @@ namespace pcr
 
     protected:
         // IPropertyLineListener
-        virtual void	Clicked(	const ::rtl::OUString& _rName, sal_Bool _bPrimary );
-        virtual void	Commit(		const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& _rVal );
+        virtual void    Clicked(    const ::rtl::OUString& _rName, sal_Bool _bPrimary );
+        virtual void    Commit(     const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& _rVal );
 
         // IPropertyControlObserver
         virtual void    focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _Control );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,14 @@ class RTFVertOrient
 public:
     RTFVertOrient( USHORT nValue ) { Value.nVal = nValue; }
 
-    RTFVertOrient( USHORT nOrient, USHORT nRelOrient )	{
+    RTFVertOrient( USHORT nOrient, USHORT nRelOrient )  {
         Value.Flags.nOrient = nOrient;
         Value.Flags.nRelOrient = nRelOrient;
     }
 
-    USHORT GetOrient() 	 const { return Value.Flags.nOrient; }
+    USHORT GetOrient()   const { return Value.Flags.nOrient; }
     USHORT GetRelation() const { return Value.Flags.nRelOrient; }
-    USHORT GetValue() 	 const { return Value.nVal; }
+    USHORT GetValue()    const { return Value.nVal; }
 };
 
 
@@ -74,9 +74,9 @@ public:
         Value.Flags.nRelAnchor = 0;
     }
 
-    USHORT GetOrient() 	 const { return Value.Flags.nOrient; }
+    USHORT GetOrient()   const { return Value.Flags.nOrient; }
     USHORT GetRelation() const { return Value.Flags.nRelOrient; }
-    USHORT GetValue() 	 const { return Value.nVal; }
+    USHORT GetValue()    const { return Value.nVal; }
 };
 
 class RTFProtect
@@ -98,10 +98,10 @@ public:
         Value.Flags.bPos = bPos;
     }
 
-    BOOL GetCntnt()  	const { return Value.Flags.bCntnt; }
-    BOOL GetSize()		const { return Value.Flags.bSize; }
-    BOOL GetPos()		const { return Value.Flags.bPos; }
-    USHORT GetValue() 	const { return Value.nVal; }
+    BOOL GetCntnt()     const { return Value.Flags.bCntnt; }
+    BOOL GetSize()      const { return Value.Flags.bSize; }
+    BOOL GetPos()       const { return Value.Flags.bPos; }
+    USHORT GetValue()   const { return Value.nVal; }
 };
 
 
@@ -124,7 +124,7 @@ public:
 
     BYTE GetOrder()     const { return (BYTE)Value.Flags.nOrder; }
     BOOL GetGoldCut()   const { return (BOOL)Value.Flags.nGoldCut; }
-    USHORT GetValue() 	const { return Value.nVal; }
+    USHORT GetValue()   const { return Value.nVal; }
 };
 
 #endif // _RTF_HXX

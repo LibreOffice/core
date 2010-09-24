@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ namespace DOM { namespace events
         m_capture = bCapture;
 
         m_target->addEventListener(m_type, Reference< XEventListener >(this), m_capture);
-        
+
 
     }
 
@@ -129,7 +129,7 @@ namespace DOM { namespace events
     {
         FILE* f = fopen("C:\\listener.out", "a");
         fprintf(f, "CTestListener::handleEvent in %s\n", U2S(m_name));
-        fprintf(f, "    type: %s\n\n", OUStringToOString(evt->getType(), RTL_TEXTENCODING_ASCII_US).getStr());        
+        fprintf(f, "    type: %s\n\n", OUStringToOString(evt->getType(), RTL_TEXTENCODING_ASCII_US).getStr());
         fclose(f);
 
     }

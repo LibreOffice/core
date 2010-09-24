@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,20 +54,20 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
 {
     SwPamRange aRg( rIdx1.GetIndex(), rIdx2.GetIndex() );
     if( aRg.nEnd < aRg.nStart )
-    {	aRg.nStart = aRg.nEnd; aRg.nEnd = rIdx1.GetIndex(); }
+    {   aRg.nStart = aRg.nEnd; aRg.nEnd = rIdx1.GetIndex(); }
 
     USHORT nPos = 0;
     const SwPamRange* pTmp;
-    if( Count() && Seek_Entry( aRg, &nPos ))		// suche Insert Position
+    if( Count() && Seek_Entry( aRg, &nPos ))        // suche Insert Position
     {
         // ist der im Array stehende kleiner ??
         if( ( pTmp = GetData()+ nPos )->nEnd < aRg.nEnd )
         {
             aRg.nEnd = pTmp->nEnd;
-            Remove( nPos, 1 );		// zusammenfassen
+            Remove( nPos, 1 );      // zusammenfassen
         }
         else
-            return;		// ende, weil schon alle zusammengefasst waren
+            return;     // ende, weil schon alle zusammengefasst waren
     }
 
     BOOL bEnde;
@@ -82,7 +82,7 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
             {
                 aRg.nStart = pTmp->nStart;
                 bEnde = FALSE;
-                Remove( --nPos, 1 );		// zusammenfassen
+                Remove( --nPos, 1 );        // zusammenfassen
             }
             // SSelection im Bereich ??
             else if( pTmp->nStart <= aRg.nStart && aRg.nEnd <= pTmp->nEnd )
@@ -96,7 +96,7 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
             {
                 aRg.nEnd = pTmp->nEnd;
                 bEnde = FALSE;
-                Remove( nPos, 1 );		// zusammenfassen
+                Remove( nPos, 1 );      // zusammenfassen
             }
 
             // SSelection im Bereich ??
@@ -129,7 +129,7 @@ SwPaM& SwPamRanges::SetPam( USHORT nArrPos, SwPaM& rPam )
 
 void SwEditShell::SetOutlineNumRule(const SwNumRule& rRule)
 {
-    StartAllAction();		// Klammern fuers Updaten !!
+    StartAllAction();       // Klammern fuers Updaten !!
     GetDoc()->SetOutlineNumRule(rRule);
     EndAllAction();
 }
@@ -151,7 +151,7 @@ BOOL SwEditShell::NoNum()
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )			// Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
         GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
@@ -215,7 +215,7 @@ void SwEditShell::DelNumRules()
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )			// Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
         GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
@@ -251,7 +251,7 @@ BOOL SwEditShell::NumUpDown( BOOL bDown )
 
     BOOL bRet = TRUE;
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() == pCrsr )			// keine Mehrfachselektion ?
+    if( pCrsr->GetNext() == pCrsr )         // keine Mehrfachselektion ?
         bRet = GetDoc()->NumUpDown( *pCrsr, bDown );
     else
     {
@@ -436,7 +436,7 @@ BOOL SwEditShell::MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft )
             long nOffset = 0;
             const SwNode* pNd;
 
-            if( bUpperLeft )		// verschiebe nach oben
+            if( bUpperLeft )        // verschiebe nach oben
             {
                 SwPosition aPos( *aCrsr.GetMark() );
                 if( GetDoc()->GotoPrevNum( aPos, FALSE ) )
@@ -453,7 +453,7 @@ BOOL SwEditShell::MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft )
                         nOffset = nIdx - nStt;
                 }
             }
-            else					// verschiebe nach unten
+            else                    // verschiebe nach unten
             {
                 const SwNumRule* pOrig = aCrsr.GetNode(FALSE)->GetTxtNode()->GetNumRule();
                 if( aCrsr.GetNode()->IsTxtNode() &&
@@ -513,7 +513,7 @@ BOOL SwEditShell::OutlineUpDown( short nOffset )
 
     BOOL bRet = TRUE;
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() == pCrsr )			// keine Mehrfachselektion ?
+    if( pCrsr->GetNext() == pCrsr )         // keine Mehrfachselektion ?
         bRet = GetDoc()->OutlineUpDown( *pCrsr, nOffset );
     else
     {
@@ -564,7 +564,7 @@ BOOL SwEditShell::IsProtectedOutlinePara() const
  //           int nTmpLvl = pTmpNd->GetTxtNode()->GetOutlineLevel();//#outline level,zhaojianwei
             int nTmpLvl = pTmpNd->GetTxtNode()->GetAttrOutlineLevel();
  //           ASSERT( nTmpLvl >= 0 && nTmpLvl < MAXLEVEL,
-            ASSERT( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,			//<-end,zhaojianwei
+            ASSERT( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,            //<-end,zhaojianwei
                     "<SwEditShell::IsProtectedOutlinePara()>" );
             // <--
             if( bFirst )
@@ -625,7 +625,7 @@ BOOL SwEditShell::NumOrNoNum( BOOL bNumOn, BOOL bChkStart ) // #115901#
     if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
         ( !bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()) )
     {
-        StartAllAction();		// Klammern fuers Updaten !!
+        StartAllAction();       // Klammern fuers Updaten !!
         // #115901#
         bRet = GetDoc()->NumOrNoNum( pCrsr->GetPoint()->nNode, !bNumOn ); // #i29560#
         EndAllAction();
@@ -657,8 +657,8 @@ BOOL SwEditShell::IsNoNum( BOOL bChkStart ) const
 BYTE SwEditShell::GetNumLevel() const
 {
     // gebe die akt. Ebene zurueck, auf der sich der Point vom Cursor befindet
-    //BYTE nLevel = NO_NUMBERING;	//#outline level,zhaojianwei
-    BYTE nLevel = MAXLEVEL;		//end,zhaojianwei
+    //BYTE nLevel = NO_NUMBERING;   //#outline level,zhaojianwei
+    BYTE nLevel = MAXLEVEL;     //end,zhaojianwei
 
     SwPaM* pCrsr = GetCrsr();
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
@@ -699,7 +699,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )			// Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
         GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
@@ -759,7 +759,7 @@ void SwEditShell::SetNumRuleStart( BOOL bFlag )
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )			// Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
         GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
@@ -788,7 +788,7 @@ void SwEditShell::SetNodeNumStart( USHORT nStt )
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )			// Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
         GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,17 +96,17 @@ namespace rptui
 TYPEINIT1( OCommentUndoAction,          SdrUndoAction );
 DBG_NAME(rpt_OCommentUndoAction)
 //----------------------------------------------------------------------------
-OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,USHORT nCommentID) 
+OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,USHORT nCommentID)
     :SdrUndoAction(_rMod)
-{ 
-    DBG_CTOR(rpt_OCommentUndoAction,NULL);    
+{
+    DBG_CTOR(rpt_OCommentUndoAction,NULL);
     m_pController = static_cast< OReportModel& >( _rMod ).getController();
     if ( nCommentID )
-        m_strComment = String(ModuleRes(nCommentID)); 
+        m_strComment = String(ModuleRes(nCommentID));
 }
 OCommentUndoAction::~OCommentUndoAction()
 {
-    DBG_DTOR(rpt_OCommentUndoAction,NULL);    
+    DBG_DTOR(rpt_OCommentUndoAction,NULL);
 }
 //----------------------------------------------------------------------------
 void OCommentUndoAction::Undo()
@@ -169,7 +169,7 @@ OUndoContainerAction::~OUndoContainerAction()
 }
 //------------------------------------------------------------------------------
 void OUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
-{	
+{
     if ( m_xContainer.is() )
     {
         // insert the element
@@ -276,7 +276,7 @@ OUndoGroupSectionAction::OUndoGroupSectionAction(SdrModel& _rMod
 }
 //------------------------------------------------------------------------------
 void OUndoGroupSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
-{	
+{
     OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
     try
     {
@@ -322,7 +322,7 @@ OUndoReportSectionAction::OUndoReportSectionAction(SdrModel& _rMod
 }
 //------------------------------------------------------------------------------
 void OUndoReportSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
-{	
+{
     OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
     try
     {
@@ -405,7 +405,7 @@ void ORptUndoPropertyAction::setProperty(sal_Bool _bOld)
 String ORptUndoPropertyAction::GetComment() const
 {
     String aStr(ModuleRes(RID_STR_UNDO_PROPERTY));
-    
+
     aStr.SearchAndReplace( '#', m_aPropertyName );
     return aStr;
 }

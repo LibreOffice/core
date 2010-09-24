@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ ScVbaFrame::ScVbaFrame( const uno::Reference< XHelperInterface >& xParent, const
 }
 
 // Attributes
-rtl::OUString SAL_CALL 
+rtl::OUString SAL_CALL
 ScVbaFrame::getCaption() throw (css::uno::RuntimeException)
 {
     rtl::OUString Label;
@@ -45,34 +45,34 @@ ScVbaFrame::getCaption() throw (css::uno::RuntimeException)
     return Label;
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaFrame::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
 }
 
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaFrame::getValue() throw (css::uno::RuntimeException)
 {
     return uno::makeAny( getCaption() );
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaFrame::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::RuntimeException)
 {
     rtl::OUString sCaption;
     _value >>= sCaption;
-    setCaption( sCaption ); 
+    setCaption( sCaption );
 }
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaFrame::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaFrame") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 ScVbaFrame::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

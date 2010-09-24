@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -352,7 +352,7 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <osl/conditn.hxx>
-#include <osl/conditn.hxx> 
+#include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.h>

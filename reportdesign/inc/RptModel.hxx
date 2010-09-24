@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,8 +55,8 @@ class REPORTDESIGN_DLLPUBLIC OReportModel : public SdrModel
     friend class OReportPage;
 
 private:
-    OXUndoEnvironment*	                m_pUndoEnv;
-    ::dbaui::OSingleDocumentController*	m_pController;
+    OXUndoEnvironment*                  m_pUndoEnv;
+    ::dbaui::OSingleDocumentController* m_pController;
     ::reportdesign::OReportDefinition*  m_pReportDefinition;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
@@ -87,7 +87,7 @@ public:
 
     /** returns the page which belongs to a section
     *
-    * \param _xSection 
+    * \param _xSection
     * \return The page or <NULL/> when t´no page could be found.
     */
     OReportPage* getPage(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);

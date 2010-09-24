@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ using namespace osl;
 using namespace rtl;
 
 #define SERVICENAME "com.sun.star.registry.SimpleRegistry"
-#define IMPLNAME	"com.sun.star.comp.stoc.SimpleRegistry"
+#define IMPLNAME    "com.sun.star.comp.stoc.SimpleRegistry"
 
 extern rtl_StandardModuleCount g_moduleCount;
 
@@ -93,7 +93,7 @@ OUString simreg_getImplementationName()
     return *pImplName;
 }
 }
-    
+
 namespace stoc_simreg {
 
 //*************************************************************************
@@ -104,10 +104,10 @@ class RegistryKeyImpl;
 //*************************************************************************
 // SimpleRegistryImpl
 //*************************************************************************
-class SimpleRegistryImpl	: public WeakImplHelper2< XSimpleRegistry, XServiceInfo >
+class SimpleRegistryImpl    : public WeakImplHelper2< XSimpleRegistry, XServiceInfo >
 {
 public:
-    SimpleRegistryImpl(	const Registry& rRegistry );
+    SimpleRegistryImpl( const Registry& rRegistry );
 
     ~SimpleRegistryImpl();
 
@@ -128,9 +128,9 @@ public:
 
     friend class RegistryKeyImpl;
 protected:
-    Mutex		m_mutex;
-    OUString 	m_url;
-    Registry	m_registry;
+    Mutex       m_mutex;
+    OUString    m_url;
+    Registry    m_registry;
 };
 
 
@@ -143,7 +143,7 @@ public:
 
     ~RegistryKeyImpl();
 
-    // XRegistryKey	
+    // XRegistryKey
     virtual OUString SAL_CALL getKeyName() throw(RuntimeException);
     virtual sal_Bool SAL_CALL isReadOnly(  ) throw(InvalidRegistryException, RuntimeException);
     virtual sal_Bool SAL_CALL isValid(  ) throw(RuntimeException);
@@ -175,10 +175,10 @@ public:
     virtual OUString SAL_CALL getResolvedName( const OUString& aKeyName ) throw(InvalidRegistryException, RuntimeException);
 
 protected:
-    OUString 			m_name;
-    RegistryKey			m_key;
-    SimpleRegistryImpl*	m_pRegistry;
-};	
+    OUString            m_name;
+    RegistryKey         m_key;
+    SimpleRegistryImpl* m_pRegistry;
+};
 
 //*************************************************************************
 RegistryKeyImpl::RegistryKeyImpl( const RegistryKey& key, SimpleRegistryImpl* pRegistry )
@@ -190,7 +190,7 @@ RegistryKeyImpl::RegistryKeyImpl( const RegistryKey& key, SimpleRegistryImpl* pR
 }
 
 //*************************************************************************
-RegistryKeyImpl::RegistryKeyImpl( const OUString& rKeyName, 
+RegistryKeyImpl::RegistryKeyImpl( const OUString& rKeyName,
                                   SimpleRegistryImpl* pRegistry )
     : m_pRegistry(pRegistry)
 {
@@ -214,7 +214,7 @@ RegistryKeyImpl::RegistryKeyImpl( const OUString& rKeyName,
         {
             m_name = rKeyName;
         }
-    }		
+    }
 }
 
 //*************************************************************************
@@ -228,10 +228,10 @@ OUString SAL_CALL RegistryKeyImpl::getKeyName() throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
     return m_name;
-}	
+}
 
 //*************************************************************************
-sal_Bool SAL_CALL RegistryKeyImpl::isReadOnly(  ) 
+sal_Bool SAL_CALL RegistryKeyImpl::isReadOnly(  )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -244,17 +244,17 @@ sal_Bool SAL_CALL RegistryKeyImpl::isReadOnly(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
             (OWeakObject *)this );
     }
-}	
+}
 
 //*************************************************************************
 sal_Bool SAL_CALL RegistryKeyImpl::isValid(  ) throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
     return m_key.isValid();
-}	
+}
 
 //*************************************************************************
-RegistryKeyType SAL_CALL RegistryKeyImpl::getKeyType( const OUString& rKeyName ) 
+RegistryKeyType SAL_CALL RegistryKeyImpl::getKeyType( const OUString& rKeyName )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -282,12 +282,12 @@ RegistryKeyType SAL_CALL RegistryKeyImpl::getKeyType( const OUString& rKeyName )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
             (OWeakObject *)this );
     }
-    
+
     return RegistryKeyType_KEY;
-}	
+}
 
 //*************************************************************************
-RegistryValueType SAL_CALL RegistryKeyImpl::getValueType(  ) 
+RegistryValueType SAL_CALL RegistryKeyImpl::getValueType(  )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -298,9 +298,9 @@ RegistryValueType SAL_CALL RegistryKeyImpl::getValueType(  )
             (OWeakObject *)this );
     } else
     {
-        RegValueType 	type;
-        sal_uInt32		size;
-        
+        RegValueType    type;
+        sal_uInt32      size;
+
         if (m_key.getValueInfo(OUString(), &type, &size))
         {
             return RegistryValueType_NOT_DEFINED;
@@ -308,23 +308,23 @@ RegistryValueType SAL_CALL RegistryKeyImpl::getValueType(  )
         {
             switch (type)
             {
-                case RG_VALUETYPE_LONG:			return RegistryValueType_LONG;
-                case RG_VALUETYPE_STRING: 		return RegistryValueType_ASCII;
-                case RG_VALUETYPE_UNICODE: 		return RegistryValueType_STRING;
-                case RG_VALUETYPE_BINARY: 		return RegistryValueType_BINARY;
-                case RG_VALUETYPE_LONGLIST:		return RegistryValueType_LONGLIST;
-                case RG_VALUETYPE_STRINGLIST: 	return RegistryValueType_ASCIILIST;
-                case RG_VALUETYPE_UNICODELIST: 	return RegistryValueType_STRINGLIST;
-                default:						return RegistryValueType_NOT_DEFINED;
+                case RG_VALUETYPE_LONG:         return RegistryValueType_LONG;
+                case RG_VALUETYPE_STRING:       return RegistryValueType_ASCII;
+                case RG_VALUETYPE_UNICODE:      return RegistryValueType_STRING;
+                case RG_VALUETYPE_BINARY:       return RegistryValueType_BINARY;
+                case RG_VALUETYPE_LONGLIST:     return RegistryValueType_LONGLIST;
+                case RG_VALUETYPE_STRINGLIST:   return RegistryValueType_ASCIILIST;
+                case RG_VALUETYPE_UNICODELIST:  return RegistryValueType_STRINGLIST;
+                default:                        return RegistryValueType_NOT_DEFINED;
             }
         }
     }
-    
+
     return RegistryValueType_NOT_DEFINED;
-}	
+}
 
 //*************************************************************************
-sal_Int32 SAL_CALL RegistryKeyImpl::getLongValue(  ) 
+sal_Int32 SAL_CALL RegistryKeyImpl::getLongValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -335,9 +335,9 @@ sal_Int32 SAL_CALL RegistryKeyImpl::getLongValue(  )
             (OWeakObject *)this );
     } else
     {
-        RegValueType 	type;
-        sal_uInt32		size;
-        
+        RegValueType    type;
+        sal_uInt32      size;
+
         if ( !m_key.getValueInfo(OUString(), &type, &size) )
         {
             if (type == RG_VALUETYPE_LONG)
@@ -354,10 +354,10 @@ sal_Int32 SAL_CALL RegistryKeyImpl::getLongValue(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
             (OWeakObject *)this );
     }
-}	
+}
 
 //*************************************************************************
-void SAL_CALL RegistryKeyImpl::setLongValue( sal_Int32 value ) 
+void SAL_CALL RegistryKeyImpl::setLongValue( sal_Int32 value )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -375,10 +375,10 @@ void SAL_CALL RegistryKeyImpl::setLongValue( sal_Int32 value )
                 (OWeakObject *)this );
         }
     }
-}	
+}
 
 //*************************************************************************
-Sequence< sal_Int32 > SAL_CALL RegistryKeyImpl::getLongListValue(  ) 
+Sequence< sal_Int32 > SAL_CALL RegistryKeyImpl::getLongListValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -389,9 +389,9 @@ Sequence< sal_Int32 > SAL_CALL RegistryKeyImpl::getLongListValue(  )
             (OWeakObject *)this );
     } else
     {
-        RegValueType 	type;
-        sal_uInt32		size;
-        
+        RegValueType    type;
+        sal_uInt32      size;
+
         if ( !m_key.getValueInfo(OUString(), &type, &size) )
         {
             if (type == RG_VALUETYPE_LONGLIST)
@@ -400,10 +400,10 @@ Sequence< sal_Int32 > SAL_CALL RegistryKeyImpl::getLongListValue(  )
                 if ( !m_key.getLongListValue(OUString(), tmpValue) )
                 {
                     Sequence<sal_Int32> seqValue(size);
-                    
+
                     for (sal_uInt32 i=0; i < size; i++)
                     {
-                        seqValue.getArray()[i] = tmpValue.getElement(i); 
+                        seqValue.getArray()[i] = tmpValue.getElement(i);
                     }
 
                     return seqValue;
@@ -416,9 +416,9 @@ Sequence< sal_Int32 > SAL_CALL RegistryKeyImpl::getLongListValue(  )
             (OWeakObject *)this );
     }
 }
-    
+
 //*************************************************************************
-void SAL_CALL RegistryKeyImpl::setLongListValue( const Sequence< sal_Int32 >& seqValue ) 
+void SAL_CALL RegistryKeyImpl::setLongListValue( const Sequence< sal_Int32 >& seqValue )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -429,12 +429,12 @@ void SAL_CALL RegistryKeyImpl::setLongListValue( const Sequence< sal_Int32 >& se
             (OWeakObject *)this );
     } else
     {
-        sal_uInt32 length = seqValue.getLength(); 
+        sal_uInt32 length = seqValue.getLength();
         sal_Int32* tmpValue = new sal_Int32[length];
 
         for (sal_uInt32 i=0; i < length; i++)
         {
-            tmpValue[i] = seqValue.getConstArray()[i]; 
+            tmpValue[i] = seqValue.getConstArray()[i];
         }
 
         if ( m_key.setLongListValue(OUString(), tmpValue, length) )
@@ -446,11 +446,11 @@ void SAL_CALL RegistryKeyImpl::setLongListValue( const Sequence< sal_Int32 >& se
         }
 
         delete[] tmpValue;
-    }	
-}	
+    }
+}
 
 //*************************************************************************
-OUString SAL_CALL RegistryKeyImpl::getAsciiValue(  ) 
+OUString SAL_CALL RegistryKeyImpl::getAsciiValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -461,9 +461,9 @@ OUString SAL_CALL RegistryKeyImpl::getAsciiValue(  )
             (OWeakObject *)this );
     } else
     {
-        RegValueType 	type;
-        sal_uInt32		size;
-        
+        RegValueType    type;
+        sal_uInt32      size;
+
         if ( !m_key.getValueInfo(OUString(), &type, &size) )
         {
             if ( type == RG_VALUETYPE_STRING )
@@ -488,10 +488,10 @@ OUString SAL_CALL RegistryKeyImpl::getAsciiValue(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
             (OWeakObject *)this );
     }
-}	
+}
 
 //*************************************************************************
-void SAL_CALL RegistryKeyImpl::setAsciiValue( const OUString& value ) 
+void SAL_CALL RegistryKeyImpl::setAsciiValue( const OUString& value )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -502,9 +502,9 @@ void SAL_CALL RegistryKeyImpl::setAsciiValue( const OUString& value )
             (OWeakObject *)this );
     } else
     {
-        OString 		sValue = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
-        sal_uInt32 	size = sValue.getLength()+1;
-        if ( m_key.setValue(OUString(), RG_VALUETYPE_STRING, 
+        OString         sValue = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
+        sal_uInt32  size = sValue.getLength()+1;
+        if ( m_key.setValue(OUString(), RG_VALUETYPE_STRING,
                             (RegValue)(sValue.getStr()), size) )
         {
             throw InvalidValueException(
@@ -512,10 +512,10 @@ void SAL_CALL RegistryKeyImpl::setAsciiValue( const OUString& value )
                 (OWeakObject *)this );
         }
     }
-}	
+}
 
 //*************************************************************************
-Sequence< OUString > SAL_CALL RegistryKeyImpl::getAsciiListValue(  ) 
+Sequence< OUString > SAL_CALL RegistryKeyImpl::getAsciiListValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -526,9 +526,9 @@ Sequence< OUString > SAL_CALL RegistryKeyImpl::getAsciiListValue(  )
             (OWeakObject *)this );
     } else
     {
-        RegValueType 	type;
-        sal_uInt32		size;
-        
+        RegValueType    type;
+        sal_uInt32      size;
+
         if ( !m_key.getValueInfo(OUString(), &type, &size) )
         {
             if (type == RG_VALUETYPE_STRINGLIST)
@@ -537,26 +537,26 @@ Sequence< OUString > SAL_CALL RegistryKeyImpl::getAsciiListValue(  )
                 if ( !m_key.getStringListValue(OUString(), tmpValue) )
                 {
                     Sequence<OUString> seqValue(size);
-                    
+
                     for (sal_uInt32 i=0; i < size; i++)
                     {
-                        seqValue.getArray()[i] = 
-                            OStringToOUString(tmpValue.getElement(i), RTL_TEXTENCODING_UTF8); 
+                        seqValue.getArray()[i] =
+                            OStringToOUString(tmpValue.getElement(i), RTL_TEXTENCODING_UTF8);
                     }
 
                     return seqValue;
                 }
-            } 
+            }
         }
-        
+
         throw InvalidValueException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
             (OWeakObject *)this );
     }
 }
-    
+
 //*************************************************************************
-void SAL_CALL RegistryKeyImpl::setAsciiListValue( const Sequence< OUString >& seqValue ) 
+void SAL_CALL RegistryKeyImpl::setAsciiListValue( const Sequence< OUString >& seqValue )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -567,14 +567,14 @@ void SAL_CALL RegistryKeyImpl::setAsciiListValue( const Sequence< OUString >& se
             (OWeakObject *)this );
     } else
     {
-        sal_uInt32 	length = seqValue.getLength(); 
-        OString* 	pSValue = new OString[length];
-        char** 		tmpValue = new char*[length];
+        sal_uInt32  length = seqValue.getLength();
+        OString*    pSValue = new OString[length];
+        char**      tmpValue = new char*[length];
 
         for (sal_uInt32 i=0; i < length; i++)
         {
             pSValue[i] = OUStringToOString(seqValue.getConstArray()[i], RTL_TEXTENCODING_UTF8);
-            tmpValue[i] = (char*)pSValue[i].getStr(); 
+            tmpValue[i] = (char*)pSValue[i].getStr();
         }
 
         if ( m_key.setStringListValue(OUString(), tmpValue, length) )
@@ -589,10 +589,10 @@ void SAL_CALL RegistryKeyImpl::setAsciiListValue( const Sequence< OUString >& se
         delete[] pSValue;
         delete[] tmpValue;
     }
-}	
+}
 
 //*************************************************************************
-OUString SAL_CALL RegistryKeyImpl::getStringValue(  ) 
+OUString SAL_CALL RegistryKeyImpl::getStringValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -603,9 +603,9 @@ OUString SAL_CALL RegistryKeyImpl::getStringValue(  )
             (OWeakObject *)this );
     } else
     {
-        RegValueType 	type;
-        sal_uInt32		size;
-        
+        RegValueType    type;
+        sal_uInt32      size;
+
         if ( !m_key.getValueInfo(OUString(), &type, &size) )
         {
             if (type == RG_VALUETYPE_UNICODE)
@@ -625,15 +625,15 @@ OUString SAL_CALL RegistryKeyImpl::getStringValue(  )
                 }
             }
         }
-        
+
         throw InvalidValueException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
             (OWeakObject *)this );
     }
-}	
+}
 
 //*************************************************************************
-void SAL_CALL RegistryKeyImpl::setStringValue( const OUString& value ) 
+void SAL_CALL RegistryKeyImpl::setStringValue( const OUString& value )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -645,18 +645,18 @@ void SAL_CALL RegistryKeyImpl::setStringValue( const OUString& value )
     } else
     {
         sal_uInt32 size = (value.getLength() + 1) * sizeof(sal_Unicode);
-        if ( m_key.setValue(OUString(), RG_VALUETYPE_UNICODE, 
+        if ( m_key.setValue(OUString(), RG_VALUETYPE_UNICODE,
                             (RegValue)(value.getStr()), size) )
         {
             throw InvalidValueException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
                 (OWeakObject *)this );
         }
-    }	
-}	
+    }
+}
 
 //*************************************************************************
-Sequence< OUString > SAL_CALL RegistryKeyImpl::getStringListValue(  ) 
+Sequence< OUString > SAL_CALL RegistryKeyImpl::getStringListValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -667,9 +667,9 @@ Sequence< OUString > SAL_CALL RegistryKeyImpl::getStringListValue(  )
             (OWeakObject *)this );
     } else
     {
-        RegValueType 	type;
-        sal_uInt32		size;
-        
+        RegValueType    type;
+        sal_uInt32      size;
+
         if ( !m_key.getValueInfo(OUString(), &type, &size) )
         {
             if (type == RG_VALUETYPE_UNICODELIST)
@@ -678,10 +678,10 @@ Sequence< OUString > SAL_CALL RegistryKeyImpl::getStringListValue(  )
                 if ( !m_key.getUnicodeListValue(OUString(), tmpValue) )
                 {
                     Sequence<OUString> seqValue(size);
-                    
+
                     for (sal_uInt32 i=0; i < size; i++)
                     {
-                        seqValue.getArray()[i] = OUString(tmpValue.getElement(i)); 
+                        seqValue.getArray()[i] = OUString(tmpValue.getElement(i));
                     }
 
                     return seqValue;
@@ -694,9 +694,9 @@ Sequence< OUString > SAL_CALL RegistryKeyImpl::getStringListValue(  )
             (OWeakObject *)this );
     }
 }
-    
+
 //*************************************************************************
-void SAL_CALL RegistryKeyImpl::setStringListValue( const Sequence< OUString >& seqValue ) 
+void SAL_CALL RegistryKeyImpl::setStringListValue( const Sequence< OUString >& seqValue )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -707,12 +707,12 @@ void SAL_CALL RegistryKeyImpl::setStringListValue( const Sequence< OUString >& s
             (OWeakObject *)this );
     } else
     {
-        sal_uInt32	length = seqValue.getLength(); 
-        sal_Unicode** 	tmpValue = new sal_Unicode*[length];
+        sal_uInt32  length = seqValue.getLength();
+        sal_Unicode**   tmpValue = new sal_Unicode*[length];
 
         for (sal_uInt32 i=0; i < length; i++)
         {
-            tmpValue[i] = (sal_Unicode*)seqValue.getConstArray()[i].getStr(); 
+            tmpValue[i] = (sal_Unicode*)seqValue.getConstArray()[i].getStr();
         }
 
         if (m_key.setUnicodeListValue(OUString(), tmpValue, length))
@@ -724,11 +724,11 @@ void SAL_CALL RegistryKeyImpl::setStringListValue( const Sequence< OUString >& s
         }
 
         delete[] tmpValue;
-    }	
-}	
+    }
+}
 
 //*************************************************************************
-Sequence< sal_Int8 > SAL_CALL RegistryKeyImpl::getBinaryValue(  ) 
+Sequence< sal_Int8 > SAL_CALL RegistryKeyImpl::getBinaryValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -739,9 +739,9 @@ Sequence< sal_Int8 > SAL_CALL RegistryKeyImpl::getBinaryValue(  )
             (OWeakObject *)this );
     } else
     {
-        RegValueType 	type;
-        sal_uInt32		size;
-        
+        RegValueType    type;
+        sal_uInt32      size;
+
         if ( !m_key.getValueInfo(OUString(), &type, &size) )
         {
             if (type == RG_VALUETYPE_BINARY)
@@ -757,7 +757,7 @@ Sequence< sal_Int8 > SAL_CALL RegistryKeyImpl::getBinaryValue(  )
                 {
                     Sequence<sal_Int8> seqBytes(value, size);
                     delete [] value;
-                    return seqBytes;				
+                    return seqBytes;
                 }
             }
         }
@@ -766,10 +766,10 @@ Sequence< sal_Int8 > SAL_CALL RegistryKeyImpl::getBinaryValue(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
             (OWeakObject *)this );
     }
-}	
+}
 
 //*************************************************************************
-void SAL_CALL RegistryKeyImpl::setBinaryValue( const Sequence< sal_Int8 >& value ) 
+void SAL_CALL RegistryKeyImpl::setBinaryValue( const Sequence< sal_Int8 >& value )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -781,22 +781,22 @@ void SAL_CALL RegistryKeyImpl::setBinaryValue( const Sequence< sal_Int8 >& value
     } else
     {
         sal_uInt32 size = value.getLength();
-        if ( m_key.setValue(OUString(), RG_VALUETYPE_BINARY, 
+        if ( m_key.setValue(OUString(), RG_VALUETYPE_BINARY,
                             (RegValue)(value.getConstArray()), size) )
         {
             throw InvalidValueException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidValueException") ),
                 (OWeakObject *)this );
         }
-    }	
-}	
+    }
+}
 
 //*************************************************************************
-Reference< XRegistryKey > SAL_CALL RegistryKeyImpl::openKey( const OUString& aKeyName ) 
+Reference< XRegistryKey > SAL_CALL RegistryKeyImpl::openKey( const OUString& aKeyName )
     throw(InvalidRegistryException, RuntimeException)
 {
     RegistryKey newKey;
-    
+
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
     if ( !m_key.isValid() )
     {
@@ -820,15 +820,15 @@ Reference< XRegistryKey > SAL_CALL RegistryKeyImpl::openKey( const OUString& aKe
         {
             return ((XRegistryKey*)new RegistryKeyImpl(newKey, m_pRegistry));
         }
-    }		
-}	
+    }
+}
 
 //*************************************************************************
-Reference< XRegistryKey > SAL_CALL RegistryKeyImpl::createKey( const OUString& aKeyName ) 
+Reference< XRegistryKey > SAL_CALL RegistryKeyImpl::createKey( const OUString& aKeyName )
     throw(InvalidRegistryException, RuntimeException)
 {
     RegistryKey newKey;
-    
+
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
     if ( !m_key.isValid() )
     {
@@ -846,17 +846,17 @@ Reference< XRegistryKey > SAL_CALL RegistryKeyImpl::createKey( const OUString& a
                     OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
                     (OWeakObject *)this );
             }
-            
+
             return Reference<XRegistryKey>();
         } else
         {
             return ((XRegistryKey*)new RegistryKeyImpl(newKey, m_pRegistry));
         }
-    }		
-}	
+    }
+}
 
 //*************************************************************************
-void SAL_CALL RegistryKeyImpl::closeKey(  ) 
+void SAL_CALL RegistryKeyImpl::closeKey(  )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -865,14 +865,14 @@ void SAL_CALL RegistryKeyImpl::closeKey(  )
         if ( !m_key.closeKey() )
             return;
     }
-    
+
     throw InvalidRegistryException(
         OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
         (OWeakObject *)this );
-}	
+}
 
 //*************************************************************************
-void SAL_CALL RegistryKeyImpl::deleteKey( const OUString& rKeyName ) 
+void SAL_CALL RegistryKeyImpl::deleteKey( const OUString& rKeyName )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -880,15 +880,15 @@ void SAL_CALL RegistryKeyImpl::deleteKey( const OUString& rKeyName )
     {
         if ( !m_key.deleteKey(rKeyName) )
             return;
-    }		
+    }
 
     throw InvalidRegistryException(
         OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
         (OWeakObject *)this );
-}	
+}
 
 //*************************************************************************
-Sequence< Reference< XRegistryKey > > SAL_CALL RegistryKeyImpl::openKeys(  ) 
+Sequence< Reference< XRegistryKey > > SAL_CALL RegistryKeyImpl::openKeys(  )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -899,8 +899,8 @@ Sequence< Reference< XRegistryKey > > SAL_CALL RegistryKeyImpl::openKeys(  )
             (OWeakObject *)this );
     } else
     {
-        RegistryKeyArray 	subKeys;
-        RegError 			_ret = REG_NO_ERROR;
+        RegistryKeyArray    subKeys;
+        RegError            _ret = REG_NO_ERROR;
         if ( (_ret = m_key.openSubKeys(OUString(), subKeys)) )
         {
             if ( _ret == REG_INVALID_KEY )
@@ -909,25 +909,25 @@ Sequence< Reference< XRegistryKey > > SAL_CALL RegistryKeyImpl::openKeys(  )
                     OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
                     (OWeakObject *)this );
             }
-            
+
             return Sequence< Reference<XRegistryKey> >();
         } else
         {
-            sal_uInt32 							length = subKeys.getLength();
+            sal_uInt32                          length = subKeys.getLength();
             Sequence< Reference<XRegistryKey> > seqKeys(length);
-            
+
             for (sal_uInt32 i=0; i < length; i++)
             {
-                seqKeys.getArray()[i] = 
-                    (XRegistryKey*)	new RegistryKeyImpl(subKeys.getElement(i), m_pRegistry);
+                seqKeys.getArray()[i] =
+                    (XRegistryKey*) new RegistryKeyImpl(subKeys.getElement(i), m_pRegistry);
             }
             return seqKeys;
         }
-    }		
-}	
+    }
+}
 
 //*************************************************************************
-Sequence< OUString > SAL_CALL RegistryKeyImpl::getKeyNames(  ) 
+Sequence< OUString > SAL_CALL RegistryKeyImpl::getKeyNames(  )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -938,8 +938,8 @@ Sequence< OUString > SAL_CALL RegistryKeyImpl::getKeyNames(  )
             (OWeakObject *)this );
     } else
     {
-        RegistryKeyNames 	subKeys;
-        RegError 			_ret = REG_NO_ERROR;
+        RegistryKeyNames    subKeys;
+        RegError            _ret = REG_NO_ERROR;
         if ( (_ret = m_key.getKeyNames(OUString(), subKeys)) )
         {
             if ( _ret == REG_INVALID_KEY )
@@ -948,24 +948,24 @@ Sequence< OUString > SAL_CALL RegistryKeyImpl::getKeyNames(  )
                     OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
                     (OWeakObject *)this );
             }
-            
+
             return Sequence<OUString>();
         } else
         {
-            sal_uInt32 			length = subKeys.getLength();
-            Sequence<OUString> 	seqKeys(length);
-            
+            sal_uInt32          length = subKeys.getLength();
+            Sequence<OUString>  seqKeys(length);
+
             for (sal_uInt32 i=0; i < length; i++)
             {
                 seqKeys.getArray()[i] = subKeys.getElement(i);
             }
             return seqKeys;
         }
-    }		
-}	
+    }
+}
 
 //*************************************************************************
-sal_Bool SAL_CALL RegistryKeyImpl::createLink( const OUString& aLinkName, const OUString& aLinkTarget ) 
+sal_Bool SAL_CALL RegistryKeyImpl::createLink( const OUString& aLinkName, const OUString& aLinkTarget )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -985,7 +985,7 @@ sal_Bool SAL_CALL RegistryKeyImpl::createLink( const OUString& aLinkName, const 
                 throw InvalidRegistryException(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
                     (OWeakObject *)this );
-            } else 
+            } else
             {
                 return sal_False;
             }
@@ -995,7 +995,7 @@ sal_Bool SAL_CALL RegistryKeyImpl::createLink( const OUString& aLinkName, const 
 }
 
 //*************************************************************************
-void SAL_CALL RegistryKeyImpl::deleteLink( const OUString& rLinkName ) 
+void SAL_CALL RegistryKeyImpl::deleteLink( const OUString& rLinkName )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -1006,21 +1006,21 @@ void SAL_CALL RegistryKeyImpl::deleteLink( const OUString& rLinkName )
             (OWeakObject *)this );
     } else
     {
-        if ( m_key.deleteLink(rLinkName) )  
+        if ( m_key.deleteLink(rLinkName) )
         {
             throw InvalidRegistryException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
                 (OWeakObject *)this );
         }
-    }		
+    }
 }
-    
+
 //*************************************************************************
-OUString SAL_CALL RegistryKeyImpl::getLinkTarget( const OUString& rLinkName ) 
+OUString SAL_CALL RegistryKeyImpl::getLinkTarget( const OUString& rLinkName )
     throw(InvalidRegistryException, RuntimeException)
 {
     OUString linkTarget;
-    
+
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
     if ( !m_key.isValid() )
     {
@@ -1030,23 +1030,23 @@ OUString SAL_CALL RegistryKeyImpl::getLinkTarget( const OUString& rLinkName )
     } else
     {
         RegError ret = m_key.getLinkTarget(rLinkName, linkTarget);
-        if ( ret ) 
+        if ( ret )
         {
             throw InvalidRegistryException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
                 (OWeakObject *)this );
         }
-    }		
+    }
 
     return linkTarget;
-}	
+}
 
 //*************************************************************************
-OUString SAL_CALL RegistryKeyImpl::getResolvedName( const OUString& aKeyName ) 
+OUString SAL_CALL RegistryKeyImpl::getResolvedName( const OUString& aKeyName )
     throw(InvalidRegistryException, RuntimeException)
 {
     OUString resolvedName;
-    
+
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
     if ( !m_key.isValid() )
     {
@@ -1057,23 +1057,23 @@ OUString SAL_CALL RegistryKeyImpl::getResolvedName( const OUString& aKeyName )
     {
         RegError ret = m_key.getResolvedKeyName(
             aKeyName, sal_True, resolvedName);
-        if ( ret ) 
+        if ( ret )
         {
             throw InvalidRegistryException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
                 (OWeakObject *)this );
-        } 
-    }		
+        }
+    }
 
     return resolvedName;
-}	
+}
 
 //*************************************************************************
-SimpleRegistryImpl::SimpleRegistryImpl(	const Registry& rRegistry )
+SimpleRegistryImpl::SimpleRegistryImpl( const Registry& rRegistry )
     : m_registry(rRegistry)
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-}	
+}
 
 //*************************************************************************
 SimpleRegistryImpl::~SimpleRegistryImpl()
@@ -1082,14 +1082,14 @@ SimpleRegistryImpl::~SimpleRegistryImpl()
 }
 
 //*************************************************************************
-OUString SAL_CALL SimpleRegistryImpl::getImplementationName(  ) 
+OUString SAL_CALL SimpleRegistryImpl::getImplementationName(  )
     throw(RuntimeException)
 {
     return stoc_bootstrap::simreg_getImplementationName();
-}	
+}
 
 //*************************************************************************
-sal_Bool SAL_CALL SimpleRegistryImpl::supportsService( const OUString& ServiceName ) 
+sal_Bool SAL_CALL SimpleRegistryImpl::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
@@ -1099,24 +1099,24 @@ sal_Bool SAL_CALL SimpleRegistryImpl::supportsService( const OUString& ServiceNa
         if( pArray[i] == ServiceName )
             return sal_True;
     return sal_False;
-}	
+}
 
 //*************************************************************************
-Sequence<OUString> SAL_CALL SimpleRegistryImpl::getSupportedServiceNames(  ) 
+Sequence<OUString> SAL_CALL SimpleRegistryImpl::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
     return stoc_bootstrap::simreg_getSupportedServiceNames();
-}	
+}
 
 //*************************************************************************
 OUString SAL_CALL SimpleRegistryImpl::getURL() throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
     return m_url;
-}	
+}
 
 //*************************************************************************
-void SAL_CALL SimpleRegistryImpl::open( const OUString& rURL, sal_Bool bReadOnly, sal_Bool bCreate ) 
+void SAL_CALL SimpleRegistryImpl::open( const OUString& rURL, sal_Bool bReadOnly, sal_Bool bCreate )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
@@ -1126,16 +1126,16 @@ void SAL_CALL SimpleRegistryImpl::open( const OUString& rURL, sal_Bool bReadOnly
     }
 
     RegAccessMode accessMode = REG_READWRITE;
-    
+
     if ( bReadOnly )
         accessMode = REG_READONLY;
-        
+
     if ( !m_registry.open(rURL, accessMode) )
     {
         m_url = rURL;
         return;
     }
-    
+
     if ( bCreate )
     {
         if ( !m_registry.create(rURL) )
@@ -1144,7 +1144,7 @@ void SAL_CALL SimpleRegistryImpl::open( const OUString& rURL, sal_Bool bReadOnly
             return;
         }
     }
-    
+
     m_url = OUString();
 
     OUStringBuffer reason( 128 );
@@ -1168,17 +1168,17 @@ void SAL_CALL SimpleRegistryImpl::open( const OUString& rURL, sal_Bool bReadOnly
         reason.appendAscii( RTL_CONSTASCII_STRINGPARAM(" for writing" ) );
     }
     throw InvalidRegistryException( reason.makeStringAndClear() , Reference< XInterface >() );
-}	
+}
 
 //*************************************************************************
 sal_Bool SAL_CALL SimpleRegistryImpl::isValid(  ) throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
     return m_registry.isValid();
-}	
+}
 
 //*************************************************************************
-void SAL_CALL SimpleRegistryImpl::close(  ) 
+void SAL_CALL SimpleRegistryImpl::close(  )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
@@ -1190,14 +1190,14 @@ void SAL_CALL SimpleRegistryImpl::close(  )
             return;
         }
     }
-    
+
     throw InvalidRegistryException(
         OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
         (OWeakObject *)this );
-}	
+}
 
 //*************************************************************************
-void SAL_CALL SimpleRegistryImpl::destroy(  ) 
+void SAL_CALL SimpleRegistryImpl::destroy(  )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
@@ -1213,10 +1213,10 @@ void SAL_CALL SimpleRegistryImpl::destroy(  )
     throw InvalidRegistryException(
         OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
         (OWeakObject *)this );
-}	
+}
 
 //*************************************************************************
-Reference< XRegistryKey > SAL_CALL SimpleRegistryImpl::getRootKey(  ) 
+Reference< XRegistryKey > SAL_CALL SimpleRegistryImpl::getRootKey(  )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
@@ -1228,25 +1228,25 @@ Reference< XRegistryKey > SAL_CALL SimpleRegistryImpl::getRootKey(  )
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
             (OWeakObject *)this );
     }
-}	
+}
 
 //*************************************************************************
-sal_Bool SAL_CALL SimpleRegistryImpl::isReadOnly(  ) 
+sal_Bool SAL_CALL SimpleRegistryImpl::isReadOnly(  )
     throw(InvalidRegistryException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
     if ( m_registry.isValid() )
-        return m_registry.isReadOnly();		
+        return m_registry.isReadOnly();
     else
     {
         throw InvalidRegistryException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
             (OWeakObject *)this );
     }
-}	
+}
 
 //*************************************************************************
-void SAL_CALL SimpleRegistryImpl::mergeKey( const OUString& aKeyName, const OUString& aUrl ) 
+void SAL_CALL SimpleRegistryImpl::mergeKey( const OUString& aKeyName, const OUString& aUrl )
     throw(InvalidRegistryException, MergeConflictException, RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
@@ -1273,7 +1273,7 @@ void SAL_CALL SimpleRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
                         (OWeakObject *)this );
                 }
             }
-            
+
             return;
         }
     }
@@ -1281,7 +1281,7 @@ void SAL_CALL SimpleRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
     throw InvalidRegistryException(
         OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
         (OWeakObject *)this );
-}	
+}
 }
 
 namespace stoc_bootstrap
@@ -1289,17 +1289,17 @@ namespace stoc_bootstrap
 //*************************************************************************
 Reference<XInterface> SAL_CALL SimpleRegistry_CreateInstance( const Reference<XComponentContext>& )
 {
-    Reference<XInterface>	xRet;
+    Reference<XInterface>   xRet;
 
     Registry reg;
-    
+
     XSimpleRegistry *pRegistry = (XSimpleRegistry*) new stoc_simreg::SimpleRegistryImpl(reg);
 
     if (pRegistry)
     {
         xRet = Reference<XInterface>::query(pRegistry);
-    }	
-    
+    }
+
     return xRet;
 }
 }

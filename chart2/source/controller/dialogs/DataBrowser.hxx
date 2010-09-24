@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,14 +79,14 @@ public:
     virtual ~DataBrowser();
 
     /** GetCellText returns the text at the given position
-        @param	nRow
+        @param  nRow
             the number of the row
-        @param	nColId
+        @param  nColId
             the ID of the column
         @return
             the text out of the cell
     */
-    virtual String	GetCellText(long nRow, USHORT nColId) const;
+    virtual String  GetCellText(long nRow, USHORT nColId) const;
 
     /** returns the number in the given cell. If a cell is empty or contains a
         string, the result will be Nan
@@ -182,7 +182,7 @@ private:
     /// note: m_aTextEditField must precede this member!
     ::svt::CellControllerRef m_rTextEditController;
 
-    Link				m_aCursorMovedHdlLink;
+    Link                m_aCursorMovedHdlLink;
     Link                m_aCellModifiedLink;
 
     void clearHeaders();
@@ -201,4 +201,4 @@ private:
 
 } // namespace chart
 
-#endif	// CHART_DATA_BROWSER_HXX
+#endif  // CHART_DATA_BROWSER_HXX

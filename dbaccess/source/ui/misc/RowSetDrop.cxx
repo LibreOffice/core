@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,16 +47,16 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::lang;
-//	using namespace ::com::sun::star::sdbcx;
+//  using namespace ::com::sun::star::sdbcx;
 
 // export data
-ORowSetImportExport::ORowSetImportExport(	Window* _pParent,
+ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
                                             const Reference< XResultSetUpdate >& _xResultSetUpdate,
                                             const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                             const Reference< XMultiServiceFactory >& _rM,
                                             const String& rExchange
-                                            ) 
-                                            : ODatabaseImportExport(_aDataDescriptor,_rM,NULL,rExchange) 
+                                            )
+                                            : ODatabaseImportExport(_aDataDescriptor,_rM,NULL,rExchange)
                                             ,m_xTargetResultSetUpdate(_xResultSetUpdate)
                                             ,m_xTargetRowUpdate(_xResultSetUpdate,UNO_QUERY)
                                             ,m_pParent(_pParent)
@@ -69,15 +69,15 @@ ORowSetImportExport::ORowSetImportExport(	Window* _pParent,
 void ORowSetImportExport::initialize()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::initialize" );
-    ODatabaseImportExport::initialize(); 
-    // do namemapping 
+    ODatabaseImportExport::initialize();
+    // do namemapping
     Reference<XColumnLocate> xColumnLocate(m_xResultSet,UNO_QUERY);
     OSL_ENSURE(xColumnLocate.is(),"The rowset normally should support this");
 
     m_xTargetResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xTargetResultSetUpdate,UNO_QUERY)->getMetaData();
     if(!m_xTargetResultSetMetaData.is() || !xColumnLocate.is() || !m_xResultSetMetaData.is() )
         throw SQLException(String(ModuleRes(STR_UNEXPECTED_ERROR)),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
-    
+
     sal_Int32 nCount = m_xTargetResultSetMetaData->getColumnCount();
     m_aColumnMapping.reserve(nCount);
     m_aColumnTypes.reserve(nCount);
@@ -96,7 +96,7 @@ void ORowSetImportExport::initialize()
                 if(m_xTargetResultSetMetaData->isNullable(i))
                     nPos = 0; // column doesn't exists but we could set it to null
             }
-        }		
+        }
 
         m_aColumnMapping.push_back(nPos);
         if(nPos > 0)
@@ -125,7 +125,7 @@ BOOL ORowSetImportExport::Read()
     if(m_aSelection.getLength())
     {
         const Any* pBegin = m_aSelection.getConstArray();
-        const Any* pEnd	  = pBegin + m_aSelection.getLength();
+        const Any* pEnd   = pBegin + m_aSelection.getLength();
         for(;pBegin != pEnd && bContinue;++pBegin)
         {
             sal_Int32 nPos = -1;
@@ -160,7 +160,7 @@ BOOL ORowSetImportExport::Read()
             if(!m_pRowMarker || m_pRowMarker[nRowFilterIndex] == nCurrentRow)
             {
                 ++nRowFilterIndex;
-                bContinue = insertNewRow();				
+                bContinue = insertNewRow();
             }
         }
     }

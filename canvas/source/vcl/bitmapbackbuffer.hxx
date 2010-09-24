@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,12 +50,12 @@ namespace vclcanvas
     public:
         /** Create a backbuffer for given reference device
          */
-        BitmapBackBuffer( const BitmapEx& 		rBitmap,
-                          const OutputDevice& 	rRefDevice );
-        
+        BitmapBackBuffer( const BitmapEx&       rBitmap,
+                          const OutputDevice&   rRefDevice );
+
         ~BitmapBackBuffer();
 
-        virtual OutputDevice& 		getOutDev();
+        virtual OutputDevice&       getOutDev();
         virtual const OutputDevice& getOutDev() const;
 
         /// Clear the underlying bitmap to white, all transparent
@@ -66,17 +66,17 @@ namespace vclcanvas
 
             @internal
         */
-        BitmapEx&					getBitmapReference(); 
-        Size						getBitmapSizePixel() const; 
+        BitmapEx&                   getBitmapReference();
+        Size                        getBitmapSizePixel() const;
 
     private:
         void createVDev() const;
         void updateVDev() const;
 
-        ::canvas::vcltools::VCLObject<BitmapEx>	maBitmap;
-        mutable VirtualDevice*					mpVDev; // created only on demand
+        ::canvas::vcltools::VCLObject<BitmapEx> maBitmap;
+        mutable VirtualDevice*                  mpVDev; // created only on demand
 
-        const OutputDevice& 					mrRefDevice;
+        const OutputDevice&                     mrRefDevice;
 
         /** When true, the bitmap contains the last valid
             content. When false, and mbVDevContentIsCurrent is true,
@@ -85,7 +85,7 @@ namespace vclcanvas
             called). When both are false, this object is just
             initialized.
          */
-        mutable bool							mbBitmapContentIsCurrent; 
+        mutable bool                            mbBitmapContentIsCurrent;
 
         /** When true, and mpVDev is non-NULL, the VDev contains the
             last valid content. When false, and
@@ -93,7 +93,7 @@ namespace vclcanvas
             last valid content. When both are false, this object is
             just initialized.
          */
-        mutable bool							mbVDevContentIsCurrent;
+        mutable bool                            mbVDevContentIsCurrent;
     };
 
     typedef ::boost::shared_ptr< BitmapBackBuffer > BitmapBackBufferSharedPtr;

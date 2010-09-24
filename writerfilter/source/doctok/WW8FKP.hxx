@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ public:
     : WW8StructBase(rStream, nOffset, 512)
     {
     }
-        
+
     /**
        Return count of entries.
     */
@@ -92,7 +92,7 @@ public:
        Check if an FKP contains an FC.
 
        @param rFc   FC to look for
-       
+
        @retval true    FKP contains FC
        @retval false   else
      */
@@ -101,15 +101,15 @@ public:
     /**
        Return properties stored in an FKP for a FC.
 
-       @param rFc   FC to look for       
+       @param rFc   FC to look for
      */
-    virtual writerfilter::Reference<Properties>::Pointer_t 
-    getProperties(const Fc & rFc) 
+    virtual writerfilter::Reference<Properties>::Pointer_t
+    getProperties(const Fc & rFc)
         const = 0;
 };
 
 /**
-   Cache providing FKPs.   
+   Cache providing FKPs.
  */
 class WW8FKPCache
 {
@@ -118,7 +118,7 @@ public:
        Shared pointer to cache.
      */
     typedef boost::shared_ptr<WW8FKPCache> Pointer_t;
-        
+
     virtual ~WW8FKPCache();
 
     /**

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@
 
 /*
     A simple wrapper around the GetOpenFileName/GetSaveFileName API.
-    Because currently the Win32 API functions GetOpenFileName/GetSaveFileName 
-    work only properly in an Single Threaded Appartment. 
+    Because currently the Win32 API functions GetOpenFileName/GetSaveFileName
+    work only properly in an Single Threaded Appartment.
 */
 
 class CGetFileNameWrapper

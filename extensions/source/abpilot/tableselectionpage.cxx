@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ namespace abp
     //---------------------------------------------------------------------
     TableSelectionPage::TableSelectionPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_TABLESELECTION_AB))
-        ,m_aLabel			( this, ModuleRes( FL_TOOMUCHTABLES ) )
-        ,m_aTableList		( this, ModuleRes( LB_TABLELIST ) )
+        ,m_aLabel           ( this, ModuleRes( FL_TOOMUCHTABLES ) )
+        ,m_aTableList       ( this, ModuleRes( LB_TABLELIST ) )
     {
         FreeResource();
 
@@ -82,7 +82,7 @@ namespace abp
             // this page should never bother the user if there is 1 or less tables.
 
         // fill the list
-        for	(	ConstStringBagIterator aTables = aTableNames.begin();
+        for (   ConstStringBagIterator aTables = aTableNames.begin();
                 aTables != aTableNames.end();
                 ++aTables
             )
@@ -123,11 +123,11 @@ namespace abp
     //---------------------------------------------------------------------
     bool TableSelectionPage::canAdvance() const
     {
-        return	AddressBookSourcePage::canAdvance()
-            &&	( 0 < m_aTableList.GetSelectEntryCount() );
+        return  AddressBookSourcePage::canAdvance()
+            &&  ( 0 < m_aTableList.GetSelectEntryCount() );
     }
 
 //.........................................................................
-}	// namespace abp
+}   // namespace abp
 //.........................................................................
 

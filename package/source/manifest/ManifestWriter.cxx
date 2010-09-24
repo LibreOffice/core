@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::packages::manifest;
 
 ManifestWriter::ManifestWriter( const Reference < XMultiServiceFactory > & xNewFactory )
-: xFactory ( xNewFactory ) 
+: xFactory ( xNewFactory )
 {
 }
 ManifestWriter::~ManifestWriter()
@@ -68,7 +68,7 @@ ManifestWriter::~ManifestWriter()
 }
 
 // XManifestWriter methods
-void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStream >& rStream, const Sequence< Sequence< PropertyValue > >& rSequence ) 
+void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStream >& rStream, const Sequence< Sequence< PropertyValue > >& rSequence )
         throw (RuntimeException)
 {
     OUString sSaxWriter ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.xml.sax.Writer" ) );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include <comphelper/stl_types.hxx>
 
 namespace rtl { class OUString; }
-namespace com { namespace sun { namespace star { 
+namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
     namespace uno { template<class A> class Reference; }
 } } }
@@ -74,7 +74,7 @@ class XMLPropertyBackpatcher
 {
 
     /// name of property that gets set or backpatched
-     ::rtl::OUString sPropertyName;	
+     ::rtl::OUString sPropertyName;
 
     /// should a default value be set for unresolved properties
     sal_Bool bDefaultHandling;
@@ -89,7 +89,7 @@ class XMLPropertyBackpatcher
     A aDefault;
 
     /// backpatch list type
-    typedef ::std::vector< 
+    typedef ::std::vector<
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet> > BackpatchListType;
 
@@ -105,12 +105,12 @@ class XMLPropertyBackpatcher
     ::std::map<const ::rtl::OUString, A, ::comphelper::UStringLess> aIDMap;
 
 public:
-    
+
     XMLPropertyBackpatcher(
         const ::rtl::OUString& sPropertyName);
 
     XMLPropertyBackpatcher(
-        const ::rtl::OUString& sPropertyName, 
+        const ::rtl::OUString& sPropertyName,
         const ::rtl::OUString& sPreservePropertyName,
         sal_Bool bDefault,
         A aDef);

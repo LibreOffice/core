@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,8 +63,8 @@ namespace slideshow
                 @param rAttrLayer
                 Attribute layer to change the animated values on.
              */
-            virtual void setTargets( const AnimatableShapeSharedPtr& 		rShape,
-                                     const ShapeAttributeLayerSharedPtr& 	rAttrLayer ) = 0;
+            virtual void setTargets( const AnimatableShapeSharedPtr&        rShape,
+                                     const ShapeAttributeLayerSharedPtr&    rAttrLayer ) = 0;
         };
 
         typedef ::boost::shared_ptr< AnimationActivity > AnimationActivitySharedPtr;

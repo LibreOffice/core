@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,16 +39,16 @@ class SfxItemSet;
 
 class SVL_DLLPUBLIC SfxItemSetHint: public SfxHint
 {
-    SfxItemSet*			_pItemSet;
+    SfxItemSet*         _pItemSet;
 
 public:
                         TYPEINFO();
 
                         SfxItemSetHint( SfxItemSet *pItemSet );
                         SfxItemSetHint( const SfxItemSet &rItemSet );
-    virtual				~SfxItemSetHint();
+    virtual             ~SfxItemSetHint();
 
-    const SfxItemSet&	GetItemSet() const { return *_pItemSet; }
+    const SfxItemSet&   GetItemSet() const { return *_pItemSet; }
 };
 
 #endif

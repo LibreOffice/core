@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 #include <HashMaps.hxx>
 
-namespace com { namespace sun { namespace star { 
+namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { struct PropertyValue; }
 } } }
@@ -63,7 +63,7 @@ class ManifestImport : public cppu::WeakImplHelper1 < com::sun::star::xml::sax::
 {
 protected:
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aSequence;
-    sal_Int16 		nNumProperty;
+    sal_Int16       nNumProperty;
     ManifestStack aStack;
     sal_Bool bIgnoreEncryptData;
     ::std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rManVector;
@@ -111,21 +111,21 @@ protected:
 public:
     ManifestImport( std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rNewVector );
     ~ManifestImport( void );
-    virtual void SAL_CALL startDocument(  ) 	
+    virtual void SAL_CALL startDocument(  )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL endDocument(  ) 	
+    virtual void SAL_CALL endDocument(  )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL startElement( const ::rtl::OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs ) 	
+    virtual void SAL_CALL startElement( const ::rtl::OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL endElement( const ::rtl::OUString& aName ) 	
+    virtual void SAL_CALL endElement( const ::rtl::OUString& aName )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL characters( const ::rtl::OUString& aChars ) 	
+    virtual void SAL_CALL characters( const ::rtl::OUString& aChars )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) 	
+    virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString& aWhitespaces )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData ) 	
+    virtual void SAL_CALL processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator ) 	
+    virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 };
 #endif

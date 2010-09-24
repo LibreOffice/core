@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,16 +24,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_TriState_idl__ 
-#define __com_sun_star_util_TriState_idl__ 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module util {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_util_TriState_idl__
+#define __com_sun_star_util_TriState_idl__
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
 /** This enumeration represents a tristate value.<p>
 
     This enumeration defines three values, <TRUE/>, <FALSE/> and a don't know
@@ -45,22 +45,22 @@ enum TriState
      */
     NO,
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** The value is equivalent to <TRUE/>.
      */
     YES,
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** The value is indeterminate.
      */
     INDETERMINATE
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

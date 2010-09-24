@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,8 +71,8 @@ void OMySQLCatalog::refreshTables()
     Sequence< ::rtl::OUString > sTableTypes(3);
     sTableTypes[0] = s_sTableTypeView;
     sTableTypes[1] = s_sTableTypeTable;
-    sTableTypes[2] = s_sAll;	// just to be sure to include anything else ....
-    
+    sTableTypes[2] = s_sAll;    // just to be sure to include anything else ....
+
     refreshObjects(sTableTypes,aVector);
 
     if ( m_pTables )
@@ -156,7 +156,7 @@ Sequence< Type > SAL_CALL OMySQLCatalog::getTypes(  ) throw(RuntimeException)
 {
     Sequence< Type > aTypes = OCatalog::getTypes();
     ::std::vector<Type> aOwnTypes;
-    aOwnTypes.reserve(aTypes.getLength());	
+    aOwnTypes.reserve(aTypes.getLength());
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)

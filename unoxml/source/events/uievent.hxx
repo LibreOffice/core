@@ -29,10 +29,10 @@ protected:
 public:
     virtual Reference< XAbstractView > SAL_CALL getView() throw(RuntimeException);
     virtual sal_Int32 SAL_CALL getDetail() throw(RuntimeException);
-    virtual void SAL_CALL initUIEvent(const OUString& typeArg, 
-                     sal_Bool canBubbleArg, 
-                     sal_Bool cancelableArg, 
-                     const Reference< XAbstractView >& viewArg, 
+    virtual void SAL_CALL initUIEvent(const OUString& typeArg,
+                     sal_Bool canBubbleArg,
+                     sal_Bool cancelableArg,
+                     const Reference< XAbstractView >& viewArg,
                      sal_Int32 detailArg) throw(RuntimeException);
 
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
@@ -46,10 +46,10 @@ public:
     virtual void SAL_CALL stopPropagation() throw (RuntimeException);
     virtual void SAL_CALL preventDefault() throw (RuntimeException);
     virtual void SAL_CALL initEvent(
-        const OUString& eventTypeArg, 
-        sal_Bool canBubbleArg, 
-        sal_Bool cancelableArg) 
-        throw (RuntimeException);    
+        const OUString& eventTypeArg,
+        sal_Bool canBubbleArg,
+        sal_Bool cancelableArg)
+        throw (RuntimeException);
 };
 }}
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,16 +34,16 @@ import com.sun.star.lang.XMultiServiceFactory;
 
 public class SequenceOutputStreamUnitTest extends ComplexTestCase {
     private XMultiServiceFactory m_xMSF = null;
-    
+
     public String[] getTestMethodNames() {
         return new String[] {
             "ExecuteTest01"};
     }
-    
+
     public String getTestObjectName () {
         return "SequenceOutputStreamUnitTest";
     }
-    
+
     public static String getShortTestDescription() {
         return "tests the SequenceOutput/InputStream implementations";
     }
@@ -58,11 +58,11 @@ public class SequenceOutputStreamUnitTest extends ComplexTestCase {
             failed ("Cannot create service factory!");
         }
     }
-    
+
     public void after() {
         m_xMSF = null;
     }
-    
+
     public void ExecuteTest01() {
         Test01 aTest = new Test01 (m_xMSF, log);
         assure ( "Test01 failed!", aTest.test() );

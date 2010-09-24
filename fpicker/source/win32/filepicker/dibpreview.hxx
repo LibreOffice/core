@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 class CDIBPreview : public PreviewBase
 {
 public:
-    
+
     // ctor
     CDIBPreview(HINSTANCE instance,HWND parent,sal_Bool bShowWindow = sal_False);
 
@@ -65,23 +65,23 @@ public:
 
     // preview interface implementation
 
-    virtual sal_Int32 SAL_CALL getTargetColorDepth() 
+    virtual sal_Int32 SAL_CALL getTargetColorDepth()
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getAvailableWidth() 
+    virtual sal_Int32 SAL_CALL getAvailableWidth()
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getAvailableHeight() 
+    virtual sal_Int32 SAL_CALL getAvailableHeight()
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL setImage(sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage) 
+    virtual void SAL_CALL setImage(sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage)
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL setShowState(sal_Bool bShowState)
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL getShowState()
-        throw (::com::sun::star::uno::RuntimeException);		
+        throw (::com::sun::star::uno::RuntimeException);
 
     virtual HWND SAL_CALL getWindowHandle() const;
 
@@ -92,12 +92,12 @@ private:
     void SAL_CALL UnregisterDibPreviewWindowClass( );
 
     static LRESULT CALLBACK WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-    
-private:    		
+
+private:
     HINSTANCE  m_Instance;
-    HWND	   m_Hwnd;		
+    HWND       m_Hwnd;
     com::sun::star::uno::Sequence<sal_Int8> m_Image;
-    osl::Mutex	m_PaintLock;
+    osl::Mutex  m_PaintLock;
 
     // the preview window class has to be registered only
     // once per process, so multiple instance of this class
@@ -105,7 +105,7 @@ private:
     static ATOM       s_ClassAtom;
     static osl::Mutex s_Mutex;
     static sal_Int32  s_RegisterDibPreviewWndCount;
-    
+
 // prevent copy and assignment
 private:
     CDIBPreview(const CDIBPreview&);

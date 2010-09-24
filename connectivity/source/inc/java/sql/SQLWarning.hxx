@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@
 
 namespace connectivity
 {
-    //	namespace starsdbc	= ::com::sun::star::sdbc;
-    //	namespace ::com::sun::star::uno	= ::com::sun::star::uno;
+    //  namespace starsdbc  = ::com::sun::star::sdbc;
+    //  namespace ::com::sun::star::uno = ::com::sun::star::uno;
     //**************************************************************
     //************ Class: java.sql.SQLWarning
     //**************************************************************
@@ -56,7 +56,7 @@ namespace connectivity
     class java_sql_SQLWarning : public java_sql_SQLException
     {
     public:
-        java_sql_SQLWarning(const java_sql_SQLWarning_BASE& _rW,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext) 
+        java_sql_SQLWarning(const java_sql_SQLWarning_BASE& _rW,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext)
             : java_sql_SQLException(_rW,_rContext) {}
     };
 }

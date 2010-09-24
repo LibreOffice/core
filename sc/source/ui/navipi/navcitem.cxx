@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include "navcitem.hxx"
 #include "global.hxx"
 #include "navipi.hxx"
-#include "sc.hrc"		// -> Item-IDs
+#include "sc.hrc"       // -> Item-IDs
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -47,9 +47,9 @@
 
 ScNavigatorControllerItem::ScNavigatorControllerItem( USHORT          nIdP,
                                                       ScNavigatorDlg& rDlg,
-                                                      SfxBindings&	  rBindings )
+                                                      SfxBindings&    rBindings )
     :   SfxControllerItem   ( nIdP, rBindings ),
-        rNavigatorDlg		( rDlg )
+        rNavigatorDlg       ( rDlg )
 {
 }
 
@@ -63,22 +63,22 @@ void __EXPORT ScNavigatorControllerItem::StateChanged( USHORT /* nSID */, SfxIte
         case SID_CURRENTCELL:
             if ( pItem )
             {
-//				const SfxPointItem* pCellPosItem = PTR_CAST(SfxPointItem, pItem);
+//              const SfxPointItem* pCellPosItem = PTR_CAST(SfxPointItem, pItem);
                 const SfxStringItem* pCellPosItem = PTR_CAST(SfxStringItem, pItem);
 
                 DBG_ASSERT( pCellPosItem, "SfxStringItem expected!" );
 
                 if ( pCellPosItem )
                 {
-                    String	aAddress( pCellPosItem->GetValue() );
+                    String  aAddress( pCellPosItem->GetValue() );
                     ScAddress aScAddress;
                     aScAddress.Parse( aAddress );
 
                     SCCOL nCol = aScAddress.Col()+1;
                     SCROW nRow = aScAddress.Row()+1;
 
-//					SCCOL nCol = (USHORT)pCellPosItem->GetValue().X()+1;
-//					SCROW nRow = (USHORT)pCellPosItem->GetValue().Y()+1;
+//                  SCCOL nCol = (USHORT)pCellPosItem->GetValue().X()+1;
+//                  SCROW nRow = (USHORT)pCellPosItem->GetValue().Y()+1;
 
                     rNavigatorDlg.UpdateColumn( &nCol );
                     rNavigatorDlg.UpdateRow   ( &nRow );
@@ -94,7 +94,7 @@ void __EXPORT ScNavigatorControllerItem::StateChanged( USHORT /* nSID */, SfxIte
 
                 DBG_ASSERT( pTabItem, "SfxUInt16Item expected!" );
 
-                //	Tabelle fuer Basic ist 1-basiert
+                //  Tabelle fuer Basic ist 1-basiert
                 if ( pTabItem && pTabItem->GetValue() )
                 {
                     SCTAB nTab = pTabItem->GetValue() - 1;
@@ -109,7 +109,7 @@ void __EXPORT ScNavigatorControllerItem::StateChanged( USHORT /* nSID */, SfxIte
 
         case SID_CURRENTDOC:
             //
-            //	gar nix mehr, wird ueber SFX_HINT_DOCCHANGED erledigt
+            //  gar nix mehr, wird ueber SFX_HINT_DOCCHANGED erledigt
             //
             break;
 

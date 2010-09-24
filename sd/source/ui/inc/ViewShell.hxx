@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 
 class SdPage;
 class SvxRuler;
-class SdrOle2Obj;		// fuer die, die Teile von SVDRAW rausdefiniert haben
+class SdrOle2Obj;       // fuer die, die Teile von SVDRAW rausdefiniert haben
 class ScrollBarBox;
 class SdDrawDocument;
 class ScrollBar;
@@ -111,33 +111,33 @@ public:
         ST_DRAW,         // The Draw application.
         ST_IMPRESS,      // Main view of the Impress application.
         ST_NOTES,
-        ST_HANDOUT, 
-        ST_OUTLINE, 
+        ST_HANDOUT,
+        ST_OUTLINE,
         ST_SLIDE_SORTER,
         ST_PRESENTATION,
         ST_TASK_PANE
     };
     static const int MAX_HSPLIT_CNT = 1;
     static const int MAX_VSPLIT_CNT = 1;
-    static const int MIN_SCROLLBAR_SIZE	= 50;
+    static const int MIN_SCROLLBAR_SIZE = 50;
 
     static const ULONG OUTPUT_DRAWMODE_COLOR = DRAWMODE_DEFAULT;
-    static const ULONG OUTPUT_DRAWMODE_GRAYSCALE 
-        = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL 
-        | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP 
+    static const ULONG OUTPUT_DRAWMODE_GRAYSCALE
+        = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL
+        | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP
         | DRAWMODE_GRAYGRADIENT;
-    static const int  OUTPUT_DRAWMODE_BLACKWHITE 
-        = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT 
-        | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP 
+    static const int  OUTPUT_DRAWMODE_BLACKWHITE
+        = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT
+        | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP
         | DRAWMODE_WHITEGRADIENT;
-    static const int OUTPUT_DRAWMODE_CONTRAST 
-        = DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL 
+    static const int OUTPUT_DRAWMODE_CONTRAST
+        = DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL
         | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT;
 
     TYPEINFO();
 
     ViewShell (
-        SfxViewFrame *pFrame, 
+        SfxViewFrame *pFrame,
         ::Window* pParentWindow,
         ViewShellBase& rViewShellBase,
         bool bAllowCenter = true);
@@ -224,13 +224,13 @@ public:
         bar controls are not modified.
     */
     virtual void UpdateScrollBars (void);
-    void	Scroll(long nX, long nY);
-    void	ScrollLines(long nX, long nY);
-    virtual void	SetZoom(long nZoom);
-    virtual void	SetZoomRect(const Rectangle& rZoomRect);
-    void	InitWindows(const Point& rViewOrigin, const Size& rViewSize,
+    void    Scroll(long nX, long nY);
+    void    ScrollLines(long nX, long nY);
+    virtual void    SetZoom(long nZoom);
+    virtual void    SetZoomRect(const Rectangle& rZoomRect);
+    void    InitWindows(const Point& rViewOrigin, const Size& rViewSize,
                         const Point& rWinPos, BOOL bUpdate = FALSE);
-    void	InvalidateWindows();
+    void    InvalidateWindows();
     /** This method is still used by the OutlineViewShell to update the
         model according to the content of the outline view.  This in turn
         updates the previews in the slide sorter.
@@ -239,7 +239,7 @@ public:
 
     void    DrawMarkRect(const Rectangle& rRect) const;
 
-    void	ExecReq( SfxRequest &rReq );
+    void    ExecReq( SfxRequest &rReq );
 
     ZoomList* GetZoomList (void);
 
@@ -260,10 +260,10 @@ public:
     /** @returns
             current or selected page or 0. This method
             will fail in master page mode.
-            
+
         @deprecated, please use getCurrentPage();
     */
-    virtual SdPage*	GetActualPage() = 0;
+    virtual SdPage* GetActualPage() = 0;
 
     /** @returns
             current or selected page or 0.
@@ -280,13 +280,13 @@ public:
     void SetOldFunction(const FunctionReference& xFunction);
     void DeactivateCurrentFunction( bool bPermanent = false );
 
-    void	SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
+    void    SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
                             long nLeft, long nRight, long nUpper, long nLower,
                             BOOL bScaleAll, Orientation eOrient, USHORT nPaperBin,
                             BOOL bBackgroundFullSize );
 
-    void	SetStartShowWithDialog( BOOL bIn = TRUE ) { mbStartShowWithDialog = bIn; }
-    BOOL	IsStartShowWithDialog() const { return mbStartShowWithDialog; }
+    void    SetStartShowWithDialog( BOOL bIn = TRUE ) { mbStartShowWithDialog = bIn; }
+    BOOL    IsStartShowWithDialog() const { return mbStartShowWithDialog; }
 
     USHORT GetPrintedHandoutPageNum (void) const { return mnPrintedHandoutPageNum; }
     void SetPrintedHandoutPageNum (USHORT nPageNumber) {mnPrintedHandoutPageNum=nPageNumber; }
@@ -371,7 +371,7 @@ public:
             The new size in pixel.
     */
     // This is to be replaced by Resize.
-    //	virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize);
+    //  virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize);
 
     /** Set position and size of the GUI elements that are controllerd by
         the view shell like rulers and scroll bars as well as the actual
@@ -380,8 +380,8 @@ public:
     */
     virtual void ArrangeGUIElements (void);
 
-    //	virtual void OuterResizePixel(const Point &rPos, const Size &rSize);
-    //	virtual void InnerResizePixel(const Point &rPos, const Size &rSize);
+    //  virtual void OuterResizePixel(const Point &rPos, const Size &rSize);
+    //  virtual void InnerResizePixel(const Point &rPos, const Size &rSize);
 
     ViewShellBase& GetViewShellBase (void) const;
 
@@ -409,8 +409,8 @@ public:
 
     /** This method is more or less an alias to Deactivate().  It is called
         before an object of this class is taken from the stack of view
-        shells. 
-        
+        shells.
+
         <p>When this method is not called before a view shell is taken from
         a stack then the Deactivate() call from the SFX as a response to
         RemoveSubShell() comes to late when the view shell is not on the
@@ -475,24 +475,24 @@ protected:
     /// The active window.
     ::sd::Window* mpActiveWindow;
     ::sd::View* mpView;
-    FrameView*	mpFrameView;
+    FrameView*  mpFrameView;
 
-    FunctionReference	mxCurrentFunction;
-    FunctionReference	mxOldFunction;
-    ZoomList*	mpZoomList;
+    FunctionReference   mxCurrentFunction;
+    FunctionReference   mxOldFunction;
+    ZoomList*   mpZoomList;
 
-    Point		maViewPos;
-    Size		maViewSize;
-    Size		maScrBarWH;
+    Point       maViewPos;
+    Size        maViewSize;
+    Size        maScrBarWH;
 
-    BOOL		mbCenterAllowed; 		  // wird an Fenster weitergegeben
+    BOOL        mbCenterAllowed;          // wird an Fenster weitergegeben
 
-    BOOL		mbStartShowWithDialog;	// Praesentation wurde ueber Dialog gestartet
-    USHORT		mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
+    BOOL        mbStartShowWithDialog;  // Praesentation wurde ueber Dialog gestartet
+    USHORT      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
     USHORT      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.
 
-    //af	BOOL		bPrintDirectSelected;		// Print only selected objects in direct print
-    //afString		sPageRange;					// pagerange if selected objects in direct print
+    //af    BOOL        bPrintDirectSelected;       // Print only selected objects in direct print
+    //afString      sPageRange;                 // pagerange if selected objects in direct print
 
     /** Area covered by all windows, i.e. the area of the parent window
         without the controls at the borders like rulers, scroll bars, tab
@@ -586,12 +586,12 @@ private:
     return mpParentWindow;
 }
 
-::sd::View* ViewShell::GetView (void) const 
+::sd::View* ViewShell::GetView (void) const
 {
-    return mpView; 
+    return mpView;
 }
 
-SdrView* ViewShell::GetDrawView (void) const 
+SdrView* ViewShell::GetDrawView (void) const
 {
     return static_cast<SdrView*>(mpView);
 }

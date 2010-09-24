@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//	----------------------------------------------------
-//	class IndexEntrySupplier_ja_phonetic
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class IndexEntrySupplier_ja_phonetic
+//  ----------------------------------------------------
 
 class IndexEntrySupplier_ja_phonetic : public IndexEntrySupplier_Common {
 public:
@@ -71,5 +71,5 @@ INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_first_by_consonant )
 INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_last_by_syllable )
 INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_last_by_consonant )
 
-} } } } 
+} } } }
 #endif

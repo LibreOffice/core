@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 
 // PRIVATE METHODES ------------------------------------------------------
 /*------------------------------------------------------------------------
- Beschreibung:	Spaltenbreite auf aktuelle Breite einstellen
+ Beschreibung:  Spaltenbreite auf aktuelle Breite einstellen
 ------------------------------------------------------------------------*/
 
 
@@ -59,7 +59,7 @@ void FitToActualSize(SwFmtCol& rCol, USHORT nWidth)
 
 // PUBLIC METHODES -------------------------------------------------------
 /*------------------------------------------------------------------------
- Beschreibung:	Setzen Spaltenanzahl und Gutterwidth
+ Beschreibung:  Setzen Spaltenanzahl und Gutterwidth
 ------------------------------------------------------------------------*/
 
 
@@ -107,7 +107,7 @@ void SwColMgr::SetGutterWidth(USHORT nGutterWidth, USHORT nPos )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Hoehe Trennlinie
+ Beschreibung:  Hoehe Trennlinie
 ------------------------------------------------------------------------*/
 
 
@@ -125,7 +125,7 @@ void SwColMgr::SetLineHeightPercent(short nPercent)
     aFmtCol.SetLineHeight((BYTE)nPercent);
 }
 /*------------------------------------------------------------------------
- Beschreibung:	Spaltenbreite
+ Beschreibung:  Spaltenbreite
 ------------------------------------------------------------------------*/
 
 
@@ -146,7 +146,7 @@ void SwColMgr::SetColWidth(USHORT nIdx, USHORT nWd)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: 	Groesse neu setzen
+    Beschreibung:   Groesse neu setzen
  --------------------------------------------------------------------*/
 
 

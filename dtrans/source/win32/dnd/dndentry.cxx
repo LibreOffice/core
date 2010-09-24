@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@
 #include "source.hxx"
 #include "target.hxx"
 
-using namespace ::rtl						;
-using namespace ::com::sun::star::uno		;
-using namespace ::com::sun::star::registry	;
-using namespace ::cppu					    ;
+using namespace ::rtl                       ;
+using namespace ::com::sun::star::uno       ;
+using namespace ::com::sun::star::registry  ;
+using namespace ::cppu                      ;
 using namespace ::com::sun::star::lang;
 
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
@@ -55,7 +55,7 @@ Reference< XInterface > SAL_CALL createDropTarget( const Reference< XMultiServic
 }
 
 
-extern "C" 
+extern "C"
 {
 sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 {
@@ -87,17 +87,17 @@ sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistr
     {
         try
         {
-            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );							
+            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
             pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( DNDSOURCE_REGKEY_NAME ) ) );
             bRetVal = sal_True;
 
-            pXNewKey=  static_cast< XRegistryKey* >( pRegistryKey );							
+            pXNewKey=  static_cast< XRegistryKey* >( pRegistryKey );
             pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( DNDTARGET_REGKEY_NAME ) ) );
             bRetVal = sal_True;
         }
         catch( InvalidRegistryException& )
-        {			
-            OSL_ENSURE(sal_False, "InvalidRegistryException caught");			
+        {
+            OSL_ENSURE(sal_False, "InvalidRegistryException caught");
             bRetVal = sal_False;
         }
     }
@@ -106,7 +106,7 @@ sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistr
 }
 
 //----------------------------------------------------------------------
-// component_getFactory 
+// component_getFactory
 // returns a factory to create XFilePicker-Services
 //----------------------------------------------------------------------
 
@@ -118,21 +118,21 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, DNDSOURCE_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( DNDSOURCE_SERVICE_NAME ) );		
-        
+        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( DNDSOURCE_SERVICE_NAME ) );
+
         xFactory= createSingleFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
             OUString::createFromAscii( pImplName ),
             createDragSource,
             aSNS,
             &g_moduleCount.modCnt);
-        
+
     }
     else if( pSrvManager && ( 0 == rtl_str_compare( pImplName, DNDTARGET_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( DNDTARGET_SERVICE_NAME ) );		
-        
+        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( DNDTARGET_SERVICE_NAME ) );
+
         xFactory= createSingleFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
             OUString::createFromAscii( pImplName ),
@@ -145,7 +145,7 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
     {
         xFactory->acquire();
         pRet = xFactory.get();
-    }			
+    }
 
     return pRet;
 }

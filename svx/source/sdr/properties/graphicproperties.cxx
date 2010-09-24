@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,12 +62,12 @@ namespace sdr
         }
 
         GraphicProperties::GraphicProperties(SdrObject& rObj)
-        :	RectangleProperties(rObj)
+        :   RectangleProperties(rObj)
         {
         }
 
         GraphicProperties::GraphicProperties(const GraphicProperties& rProps, SdrObject& rObj)
-        :	RectangleProperties(rProps, rObj)
+        :   RectangleProperties(rProps, rObj)
         {
         }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1108,7 +1108,7 @@ Reference< XTitle > XclImpChText::CreateTitle() const
 void XclImpChText::ConvertTitlePosition( const XclChTextKey& rTitleKey ) const
 {
     if( !mxFramePos ) return;
-    
+
     const XclChFramePos& rPosData = mxFramePos->GetFramePosData();
     OSL_ENSURE( (rPosData.mnTLMode == EXC_CHFRAMEPOS_PARENT) && (rPosData.mnBRMode == EXC_CHFRAMEPOS_PARENT),
         "XclImpChText::ConvertTitlePosition - unexpected frame position mode" );

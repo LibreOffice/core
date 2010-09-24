@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,12 +45,12 @@
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp> 
-#include <com/sun/star/ucb/XCommandEnvironment.hpp> 
-#include <com/sun/star/beans/Optional.hpp> 
-#include <com/sun/star/beans/PropertyValue.hpp> 
-#include <com/sun/star/beans/NamedValue.hpp> 
-#include <com/sun/star/frame/XConfigManager.hpp> 
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
@@ -179,10 +179,10 @@ Databases::Databases( sal_Bool showBasic,
     // m_vReplacement[2...4] (vendorName/-Version/-Short) are empty strings
     m_vReplacement[5] = productName;
     m_vReplacement[6] = productVersion;
-    
+
     setInstallPath( instPath );
 
-    m_xSFA = Reference< ucb::XSimpleFileAccess >( 
+    m_xSFA = Reference< ucb::XSimpleFileAccess >(
         m_xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
         m_xContext ), UNO_QUERY_THROW );
 }
@@ -190,17 +190,17 @@ Databases::Databases( sal_Bool showBasic,
 Databases::~Databases()
 {
     // release stylesheet
-    
+
     delete[] m_pCustomCSSDoc;
-    
+
     // release errorDocument
-    
+
     delete[] m_pErrorDoc;
-    
+
     // unload the databases
-    
+
     {
-        // DatabasesTable 
+        // DatabasesTable
         DatabasesTable::iterator it = m_aDatabases.begin();
         while( it != m_aDatabases.end() )
         {
@@ -210,10 +210,10 @@ Databases::~Databases()
             ++it;
         }
     }
-    
+
     {
         //  ModInfoTable
-    
+
         ModInfoTable::iterator it = m_aModInfo.begin();
         while( it != m_aModInfo.end() )
         {
@@ -221,10 +221,10 @@ Databases::~Databases()
             ++it;
         }
     }
-    
+
     {
         // KeywordInfoTable
-        
+
         KeywordInfoTable::iterator it = m_aKeywordInfo.begin();
         while( it != m_aKeywordInfo.end() )
         {
@@ -332,16 +332,16 @@ void Databases::replaceName( rtl::OUString& oustring ) const
     sal_Int32 idx = -1,idx1 = -1,idx2 = -1,k = 0,off;
     bool cap = false;
     rtl::OUStringBuffer aStrBuf( 0 );
-    
+
     while( true )
     {
         ++idx;
         idx1 = oustring.indexOf( sal_Unicode('%'),idx);
         idx2 = oustring.indexOf( sal_Unicode('$'),idx);
-        
+
         if(idx1 == -1 && idx2 == -1)
             break;
-        
+
         if(idx1 == -1)
             idx = idx2;
         else if(idx2 == -1)
@@ -353,7 +353,7 @@ void Databases::replaceName( rtl::OUString& oustring ) const
             else if(idx2 < idx1 )
                 idx = idx2;
         }
-        
+
         if( oustring.indexOf( prodName,idx ) == idx )
             off = PRODUCTNAME;
         else if( oustring.indexOf( prodVersion,idx ) == idx )
@@ -370,7 +370,7 @@ void Databases::replaceName( rtl::OUString& oustring ) const
             off = NEWPRODUCTVERSION;
         else
             off = -1;
-        
+
         if( off != -1 )
         {
             if( ! cap )
@@ -378,13 +378,13 @@ void Databases::replaceName( rtl::OUString& oustring ) const
                 cap = true;
                 aStrBuf.ensureCapacity( 256 );
             }
-            
+
             aStrBuf.append( &oustring.getStr()[k],idx - k );
             aStrBuf.append( m_vReplacement[off] );
             k = idx + m_vAdd[off];
         }
     }
-    
+
     if( cap )
     {
         if( k < oustring.getLength() )
@@ -394,12 +394,12 @@ void Databases::replaceName( rtl::OUString& oustring ) const
 }
 
 
-    
+
 
 rtl::OUString Databases::getInstallPathAsSystemPath()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    
+
     if( ! m_aInstallDirectoryAsSystemPath.getLength() )
     {
 #ifdef DBG_UTIL
@@ -407,11 +407,11 @@ rtl::OUString Databases::getInstallPathAsSystemPath()
             osl::FileBase::E_None ==
             osl::FileBase::getSystemPathFromFileURL( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
         VOS_ENSURE( bla,"HelpProvider, no installpath" );
-#else                    
-        osl::FileBase::getSystemPathFromFileURL( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );		
+#else
+        osl::FileBase::getSystemPathFromFileURL( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
 #endif
     }
-    
+
     return m_aInstallDirectoryAsSystemPath;
 }
 
@@ -421,7 +421,7 @@ rtl::OUString Databases::getInstallPathAsSystemPath()
 rtl::OUString Databases::getInstallPathAsURL()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    
+
       return m_aInstallDirectory;
 }
 
@@ -433,32 +433,32 @@ const std::vector< rtl::OUString >& Databases::getModuleList( const rtl::OUStrin
         rtl::OUString  fileName,dirName = getInstallPathAsURL() + processLang( Language );
         osl::Directory dirFile( dirName );
 
-        osl::DirectoryItem aDirItem;			
+        osl::DirectoryItem aDirItem;
         osl::FileStatus    aStatus( FileStatusMask_FileName );
-                
+
         sal_Int32 idx;
 
         if( osl::FileBase::E_None != dirFile.open() )
             return m_avModules;
-            
-        while( dirFile.getNextItem( aDirItem ) == osl::FileBase::E_None && 
+
+        while( dirFile.getNextItem( aDirItem ) == osl::FileBase::E_None &&
                aDirItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
         {
             if( ! aStatus.isValid( FileStatusMask_FileName ) )
                 continue;
-                    
+
             fileName = aStatus.getFileName();
-                    
+
             // Check, whether fileName is of the form *.cfg
             idx = fileName.lastIndexOf(  sal_Unicode( '.' ) );
-                    
+
             if( idx == -1 )
                 continue;
-                    
+
             const sal_Unicode* str = fileName.getStr();
-                    
-            if( fileName.getLength() == idx + 4                   && 
-                ( str[idx + 1] == 'c' || str[idx + 1] == 'C' )    && 
+
+            if( fileName.getLength() == idx + 4                   &&
+                ( str[idx + 1] == 'c' || str[idx + 1] == 'C' )    &&
                 ( str[idx + 2] == 'f' || str[idx + 2] == 'F' )    &&
                 ( str[idx + 3] == 'g' || str[idx + 3] == 'G' )    &&
                 ( fileName = fileName.copy(0,idx).toAsciiLowerCase() ).compareToAscii( "picture" ) != 0 ) {
@@ -469,7 +469,7 @@ const std::vector< rtl::OUString >& Databases::getModuleList( const rtl::OUStrin
         }
     }
     return m_avModules;
-}		
+}
 
 
 
@@ -480,17 +480,17 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
 
     rtl::OUString key = processLang(Language) + rtl::OUString::createFromAscii( "/" ) + Module;
 
-    std::pair< ModInfoTable::iterator,bool > aPair = 
-        m_aModInfo.insert( ModInfoTable::value_type( key,0 ) );		
+    std::pair< ModInfoTable::iterator,bool > aPair =
+        m_aModInfo.insert( ModInfoTable::value_type( key,0 ) );
 
     ModInfoTable::iterator it = aPair.first;
-    
+
     if( aPair.second && ! it->second )
     {
         osl::File cfgFile( getInstallPathAsURL() +
                            key +
                            rtl::OUString::createFromAscii( ".cfg" ) );
-        
+
         if( osl::FileBase::E_None != cfgFile.open( OpenFlag_Read ) )
             it->second = 0;
         else
@@ -500,16 +500,16 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
             sal_Char buffer[2048];
             sal_Unicode lineBuffer[1028];
             rtl::OUString fileContent;
-            
+
             while( osl::FileBase::E_None == cfgFile.read( &buffer,2048,nRead ) && nRead )
                 fileContent += rtl::OUString( buffer,sal_Int32( nRead ),RTL_TEXTENCODING_UTF8 );
-            
+
             cfgFile.close();
-            
+
             const sal_Unicode* str = fileContent.getStr();
             rtl::OUString current,lang_,program,startid,title,heading,fulltext;
             rtl::OUString order = rtl::OUString::createFromAscii( "1" );
-            
+
             for( sal_Int32 i = 0;i < fileContent.getLength();i++ )
             {
                 sal_Unicode ch = str[ i ];
@@ -518,7 +518,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
                     if( pos )
                     {
                         current = rtl::OUString( lineBuffer,pos );
-                        
+
                         if( current.compareToAscii( "Title",5 ) == 0 )
                         {
                             title = current.copy( current.indexOf(sal_Unicode( '=' ) ) + 1 );
@@ -559,10 +559,10 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
                                                       program,
                                                       heading,
                                                       fulltext,
-                                                      order );			
+                                                      order );
         }
     }
-    
+
     return it->second;
 }
 
@@ -575,12 +575,12 @@ rtl::OUString Databases::processLang( const rtl::OUString& Language )
 
     rtl::OUString ret;
     LangSetTable::iterator it = m_aLangSet.find( Language );
-    
+
     if( it == m_aLangSet.end() )
     {
         sal_Int32 idx;
         osl::DirectoryItem aDirItem;
-        
+
         if( osl::FileBase::E_None == osl::DirectoryItem::get( getInstallPathAsURL() + Language,aDirItem ) )
         {
             ret = Language;
@@ -599,7 +599,7 @@ rtl::OUString Databases::processLang( const rtl::OUString& Language )
         ret = it->second;
 
     return ret;
-}		
+}
 
 
 rtl::OUString Databases::country( const rtl::OUString& Language )
@@ -608,7 +608,7 @@ rtl::OUString Databases::country( const rtl::OUString& Language )
     if( ( idx = Language.indexOf( '-' ) ) != -1 ||
         ( idx = Language.indexOf( '_' ) ) != -1 )
         return Language.copy( 1+idx );
-    
+
     return rtl::OUString();
 }
 
@@ -620,7 +620,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
 {
     if( ! Database.getLength() || ! Language.getLength() )
         return 0;
-    
+
     osl::MutexGuard aGuard( m_aMutex );
 
 
@@ -630,23 +630,23 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
     if( pExtensionPath == NULL )
         key = processLang( Language ) + dbFileName;
     else
-        key = *pExtensionPath + Language + dbFileName;		// make unique, don't change language
+        key = *pExtensionPath + Language + dbFileName;      // make unique, don't change language
 
-    std::pair< DatabasesTable::iterator,bool > aPair = 
+    std::pair< DatabasesTable::iterator,bool > aPair =
         m_aDatabases.insert( DatabasesTable::value_type( key,0 ) );
-    
-    DatabasesTable::iterator it = aPair.first;	
-    
+
+    DatabasesTable::iterator it = aPair.first;
+
     if( aPair.second && ! it->second )
     {
         Db* table = new Db();
-        
+
         rtl::OUString fileNameOU;
         if( pExtensionPath )
         {
-            rtl::OUString aExpandedURL = expandURL( *pExtensionPath );		
+            rtl::OUString aExpandedURL = expandURL( *pExtensionPath );
             aExpandedURL += Language + dbFileName;
-            osl::FileBase::getSystemPathFromFileURL( aExpandedURL, fileNameOU );		
+            osl::FileBase::getSystemPathFromFileURL( aExpandedURL, fileNameOU );
         }
         else
             fileNameOU = getInstallPathAsSystemPath() + key;
@@ -677,7 +677,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
             delete table;
             table = 0;
         }
-        
+
         it->second = table;
     }
 
@@ -691,16 +691,16 @@ Databases::getCollator( const rtl::OUString& Language,
     (void)System;
 
     rtl::OUString key = Language;
-    
+
     osl::MutexGuard aGuard( m_aMutex );
-    
+
     CollatorTable::iterator it =
         m_aCollatorTable.insert( CollatorTable::value_type( key,0 ) ).first;
-    
+
     if( ! it->second.is() )
     {
-        it->second = 
-            Reference< XCollator > ( 
+        it->second =
+            Reference< XCollator > (
                 m_xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii( "com.sun.star.i18n.Collator" ),
                 m_xContext ), UNO_QUERY );
         rtl::OUString langStr = processLang(Language);
@@ -729,38 +729,38 @@ Databases::getCollator( const rtl::OUString& Language,
                                                   rtl::OUString() ),
                                           0 );
     }
-    
+
     return it->second;
 }
 
 
 
 namespace chelp {
-    
+
     struct KeywordElementComparator
     {
         KeywordElementComparator( const Reference< XCollator >& xCollator )
             : m_xCollator( xCollator )
         { }
-        
+
         bool operator()( const KeywordInfo::KeywordElement& la,
                          const KeywordInfo::KeywordElement& ra ) const
         {
             const rtl::OUString& l = la.key;
             const rtl::OUString& r = ra.key;
-            
+
             bool ret;
-            
+
             if( m_xCollator.is() )
             {
                 sal_Int32 l1 = l.indexOf( sal_Unicode( ';' ) );
                 sal_Int32 l3 = ( l1 == -1 ? l.getLength() : l1 );
-        
+
                 sal_Int32 r1 = r.indexOf( sal_Unicode( ';' ) );
                 sal_Int32 r3 = ( r1 == -1 ? r.getLength() : r1 );
-                
+
                 sal_Int32 c1 = m_xCollator->compareSubstring( l,0,l3,r,0,r3 );
-                
+
                 if( c1 == +1 )
                     ret = false;
                 else if( c1 == 0 )
@@ -774,13 +774,13 @@ namespace chelp {
             }
             else
                 ret = bool( l < r );
-            
+
             return ret;
         }
-        
+
         Reference< XCollator > m_xCollator;
     }; // end struct KeywordElementComparator
-    
+
 }
 
 
@@ -817,7 +817,7 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
             anchor.push_back( rtl::OUString() );
         }
     }
-    
+
     listId.realloc( id.size() );
     listAnchor.realloc( id.size() );
     listTitle.realloc( id.size() );
@@ -835,7 +835,7 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
         pData = pEmpty;
         if( pDb )
         {
-            rtl::OString idi( id[i].getStr(),id[i].getLength(),RTL_TEXTENCODING_UTF8 );		
+            rtl::OString idi( id[i].getStr(),id[i].getLength(),RTL_TEXTENCODING_UTF8 );
             DBHelp* pDBHelp = pDb->getDBHelp();
             if( pDBHelp != NULL )
             {
@@ -857,9 +857,9 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
                 pData = static_cast<sal_Char*>( data.get_data() );
             }
         }
-        
+
         DbtToStringConverter converter( pData, nSize );
-        
+
         rtl::OUString title = converter.getTitle();
         pDatabases->replaceName( title );
         listTitle[i] = title;
@@ -936,14 +936,14 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                                     const rtl::OUString& Language )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    
+
     rtl::OUString key = processLang(Language) + rtl::OUString::createFromAscii( "/" ) + Database;
-    
-    std::pair< KeywordInfoTable::iterator,bool > aPair = 
-        m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,0 ) );		
-    
-    KeywordInfoTable::iterator it = aPair.first;	
-    
+
+    std::pair< KeywordInfoTable::iterator,bool > aPair =
+        m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,0 ) );
+
+    KeywordInfoTable::iterator it = aPair.first;
+
     if( aPair.second && ! it->second )
     {
         std::vector<KeywordInfo::KeywordElement> aVector;
@@ -993,7 +993,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
 
                         if( !bBelongsToDatabase )
                             continue;
-                    
+
                         aVector.push_back( KeywordInfo::KeywordElement( this,
                                                                         idmap,
                                                                         keyword,
@@ -1016,11 +1016,11 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                 int nDummy = 0;
 #endif
             }
-        
+
             else if( 0 == table.open( 0,fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
             {
                 Db* idmap = getBerkeley( Database,Language );
-                
+
                 bool first = true;
 
                 Dbc* cursor = 0;
@@ -1043,7 +1043,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
 
                     if( !bBelongsToDatabase )
                         continue;
-                
+
                     aVector.push_back( KeywordInfo::KeywordElement( this,
                                                                     idmap,
                                                                     keyword,
@@ -1055,7 +1055,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                         first = false;
                     }
                 }
-                
+
                 if( cursor ) cursor->close();
             }
             table.close( 0 );
@@ -1065,11 +1065,11 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
         Reference< XCollator > xCollator = getCollator( Language,rtl::OUString());
         KeywordElementComparator aComparator( xCollator );
         std::sort(aVector.begin(),aVector.end(),aComparator);
-        
+
         KeywordInfo* pInfo = it->second = new KeywordInfo( aVector );
         (void)pInfo;
     }
-    
+
     return it->second;
 }
 
@@ -1084,10 +1084,10 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
     rtl::OUString key = processLang(Language) + aSlash + jar;
 
     osl::MutexGuard aGuard( m_aMutex );
-    
+
     ZipFileTable::iterator it =
         m_aZipFileTable.insert( ZipFileTable::value_type( key,Reference< XHierarchicalNameAccess >(0) ) ).first;
-    
+
     if( ! it->second.is() )
     {
         rtl::OUString zipFile;
@@ -1114,7 +1114,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
             }
 
             Sequence< Any > aArguments( 2 );
-            
+
             XInputStream_impl* p = new XInputStream_impl( zipFile );
             if( p->CtorSuccess() )
             {
@@ -1126,7 +1126,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
                 delete p;
                 aArguments[ 0 ] <<= zipFile;
             }
-            
+
             // let ZipPackage be used ( no manifest.xml is required )
             beans::NamedValue aArg;
             aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
@@ -1138,16 +1138,16 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
                     rtl::OUString::createFromAscii(
                         "com.sun.star.packages.comp.ZipPackage" ),
                     aArguments, m_xContext );
-            
+
             if ( xIfc.is() )
             {
                 it->second = Reference< XHierarchicalNameAccess >( xIfc, UNO_QUERY );
-                
+
                 VOS_ENSURE( it->second.is(),
                             "ContentProvider::createPackage - "
                             "Got no hierarchical name access!" );
-                
-            }            
+
+            }
         }
         catch ( RuntimeException & )
         {
@@ -1156,7 +1156,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
         {
         }
     }
-    
+
     return it->second;
 }
 
@@ -1191,20 +1191,20 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
                 if( aIdentifierInPath.getLength() && aIdentifierOptional.IsPresent )
                 {
                     rtl::OUString aUnencodedIdentifier = aIdentifierOptional.Value;
-                    rtl::OUString aIdentifier = rtl::Uri::encode( aUnencodedIdentifier, 
+                    rtl::OUString aIdentifier = rtl::Uri::encode( aUnencodedIdentifier,
                         rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8 );
 
                     if( !aIdentifierInPath.equals( aIdentifier ) )
                     {
                         // path does not start with extension identifier -> ignore
                         bSuccess = false;
-                    } 
+                    }
                 }
                 else
                 {
                     // No identifier -> ignore
                     bSuccess = false;
-                } 
+                }
             }
 
             if( bSuccess )
@@ -1214,7 +1214,7 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
             }
         }
     }
-    
+
     return xNA;
 }
 
@@ -1228,17 +1228,17 @@ void Databases::popupDocument( URLParameter* urlPar,char **buffer,int *byteCount
         " <body>                                                                "
         " <help:popup-cut Id=\"";
     const sal_Int32 l1 = strlen( pop1 );
-    
+
     const char* pop3 = "\" Eid=\"";
     const sal_Int32 l3 = strlen( pop3 );
 
-    const char* pop5 = 
+    const char* pop5 =
         "\" xmlns:help=\"http://openoffice.org/2000/help\"></help:popup-cut>  "
         " </body>                                                             "
         " </html>";
     const sal_Int32 l5 = strlen( pop5 );
     sal_Int32 l2,l4;
-    
+
     rtl::OUString val = urlPar->get_id();
     rtl::OString pop2O( val.getStr(),l2 = val.getLength(),RTL_TEXTENCODING_UTF8 );
     const char* pop2 = pop2O.getStr();
@@ -1246,9 +1246,9 @@ void Databases::popupDocument( URLParameter* urlPar,char **buffer,int *byteCount
     val = urlPar->get_eid();
     rtl::OString pop4O( val.getStr(),l4 = val.getLength(),RTL_TEXTENCODING_UTF8 );
     const char* pop4 = pop4O.getStr();
-    
+
     (*byteCount) = l1 + l2 + l3 + l4 + l5;
-        
+
     *buffer = new char[ 1+*byteCount ];
 
     rtl_copyMemory( *buffer,pop1,l1 );
@@ -1271,7 +1271,7 @@ void Databases::changeCSS(const rtl::OUString& newStyleSheet)
 void Databases::cascadingStylesheet( const rtl::OUString& Language,
                                      char** buffer,
                                      int* byteCount )
-{	
+{
     if( ! m_pCustomCSSDoc )
     {
         int retry = 2;
@@ -1304,27 +1304,27 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
                 }
             }
         }
-        
+
         while( error && retry )
         {
-            
+
             if( retry == 2 )
-                fileURL = 
+                fileURL =
                     getInstallPathAsURL()  +
                     processLang( Language )       +
                     rtl::OUString::createFromAscii( "/" ) +
                     aCSS +
                     rtl::OUString::createFromAscii( ".css" );
             else if( retry == 1 )
-                fileURL = 
+                fileURL =
                     getInstallPathAsURL()  +
                     aCSS +
                     rtl::OUString::createFromAscii( ".css" );
-            
+
             osl::DirectoryItem aDirItem;
             osl::File aFile( fileURL );
             osl::FileStatus aStatus( FileStatusMask_FileSize );
-            
+
             if( osl::FileBase::E_None == osl::DirectoryItem::get( fileURL,aDirItem ) &&
                 osl::FileBase::E_None == aFile.open( OpenFlag_Read )                 &&
                 osl::FileBase::E_None == aDirItem.getFileStatus( aStatus ) )
@@ -1347,19 +1347,19 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
                 bHighContrastMode = sal_False;
             }
         }
-        
+
         if( error )
         {
             m_nCustomCSSDocLength = 0;
             m_pCustomCSSDoc = new char[ 1 ]; // Initialize with 1 to avoid gcc compiler warning
         }
     }
-    
+
     *byteCount = m_nCustomCSSDocLength;
     *buffer = new char[ 1 + *byteCount ];
     (*buffer)[*byteCount] = 0;
     rtl_copyMemory( *buffer,m_pCustomCSSDoc,m_nCustomCSSDocLength );
-    
+
 }
 
 
@@ -1410,7 +1410,7 @@ void Databases::setActiveText( const rtl::OUString& Module,
 
     if( bSuccess )
     {
-        // ensure existence of tmp after for 
+        // ensure existence of tmp after for
         rtl::OString tmp;
         for( int i = 0; i < nSize; ++i )
             if( pData[i] == '%' || pData[i] == '$' )
@@ -1444,13 +1444,13 @@ void Databases::setActiveText( const rtl::OUString& Module,
 void Databases::setInstallPath( const rtl::OUString& aInstDir )
 {
     osl::MutexGuard aGuard( m_aMutex );
-        
+
     osl::FileBase::getFileURLFromSystemPath( aInstDir,m_aInstallDirectory );
         //TODO: check returned error code
-    
+
     if( m_aInstallDirectory.lastIndexOf( sal_Unicode( '/' ) ) != m_aInstallDirectory.getLength() - 1 )
         m_aInstallDirectory += rtl::OUString::createFromAscii( "/" );
-    
+
     m_aInstallDirectoryWithoutEncoding = rtl::Uri::decode( m_aInstallDirectory,
                                                            rtl_UriDecodeWithCharset,
                                                            RTL_TEXTENCODING_UTF8 );
@@ -1462,7 +1462,7 @@ void Databases::setInstallPath( const rtl::OUString& aInstDir )
 
 ExtensionHelpExistanceMap ExtensionIteratorBase::aHelpExistanceMap;
 
-ExtensionIteratorBase::ExtensionIteratorBase( Reference< XComponentContext > xContext, 
+ExtensionIteratorBase::ExtensionIteratorBase( Reference< XComponentContext > xContext,
     Databases& rDatabases, const rtl::OUString& aInitialModule, const rtl::OUString& aLanguage )
         : m_xContext( xContext )
         , m_rDatabases( rDatabases )
@@ -1505,7 +1505,7 @@ void ExtensionIteratorBase::init()
     }
 
     Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
-    m_xSFA = Reference< ucb::XSimpleFileAccess >( 
+    m_xSFA = Reference< ucb::XSimpleFileAccess >(
         xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
         m_xContext ), UNO_QUERY_THROW );
 
@@ -1596,7 +1596,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
 
     if( m_iUserPackage == m_aUserPackagesSeq.getLength() )
     {
-        m_eState = SHARED_EXTENSIONS;		// Later: SHARED_MODULE
+        m_eState = SHARED_EXTENSIONS;       // Later: SHARED_MODULE
     }
     else
     {
@@ -1763,7 +1763,7 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_
         {
             case INITIAL_MODULE:
                 pRetDb = m_rDatabases.getBerkeley( m_aInitialModule, m_aLanguage, m_bHelpText );
-                m_eState = USER_EXTENSIONS;		// Later: SHARED_MODULE
+                m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
                 break;
 
             // Later:
@@ -1814,7 +1814,7 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_
 Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xPackage,
             rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath )
 {
-    
+
     beans::Optional< ::rtl::OUString> optRegData;
     try
     {
@@ -1828,7 +1828,7 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
     Db* pRetDb = NULL;
     if (optRegData.IsPresent && optRegData.Value.getLength() > 0)
     {
-        rtl::OUString aRegDataUrl(optRegData.Value); 
+        rtl::OUString aRegDataUrl(optRegData.Value);
         aRegDataUrl += aSlash;
 
         rtl::OUString aUsedLanguage = m_aLanguage;
@@ -1861,7 +1861,7 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
         if( o_pExtensionRegistryPath )
             *o_pExtensionRegistryPath = xPackage->getURL() + aSlash + aUsedLanguage;
     }
-    
+
     return pRetDb;
 }
 
@@ -1878,14 +1878,14 @@ rtl::OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
         switch( m_eState )
         {
             case INITIAL_MODULE:
-                aRetFile = 
+                aRetFile =
                     m_rDatabases.getInstallPathAsSystemPath() +
                     m_rDatabases.processLang( m_aLanguage ) + aSlash + m_aInitialModule +
                     rtl::OUString::createFromAscii( ".key" );
 
                 o_rbExtension = false;
 
-                m_eState = USER_EXTENSIONS;		// Later: SHARED_MODULE
+                m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
                 break;
 
             // Later:
@@ -1965,7 +1965,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
         {
             case INITIAL_MODULE:
                 xNA = m_rDatabases.jarFile( m_aInitialModule, m_aLanguage );
-                m_eState = USER_EXTENSIONS;		// Later: SHARED_MODULE
+                m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
                 break;
 
             // Later:
@@ -2036,15 +2036,15 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
                 rtl::OUString::createFromAscii(
                     "com.sun.star.packages.comp.ZipPackage" ),
                 aArguments, m_xContext );
-        
+
         if ( xIfc.is() )
         {
             xNA = Reference< XHierarchicalNameAccess >( xIfc, UNO_QUERY );
-            
+
             VOS_ENSURE( xNA.is(),
                 "JarFileIterator::implGetJarFromPackage() - "
                 "Got no hierarchical name access!" );
-        }            
+        }
     }
     catch ( RuntimeException & )
     {}
@@ -2057,7 +2057,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
         sal_Int32 nLastSlash = zipFile.lastIndexOf( '/' );
         if( nLastSlash != -1 )
             *o_pExtensionPath = zipFile.copy( 0, nLastSlash );
-        
+
         if( o_pExtensionRegistryPath != NULL )
         {
             rtl::OUString& rPath = *o_pExtensionPath;
@@ -2067,7 +2067,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
             *o_pExtensionRegistryPath += rPath.copy( nLastSlashInPath);
         }
     }
-    
+
     return xNA;
 }
 
@@ -2084,7 +2084,7 @@ rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o
         switch( m_eState )
         {
             case INITIAL_MODULE:
-                aIndexFolder = 
+                aIndexFolder =
                     m_rDatabases.getInstallPathAsURL() +
                     m_rDatabases.processLang( m_aLanguage ) + aSlash + m_aInitialModule +
                     rtl::OUString::createFromAscii( ".idxl" );
@@ -2092,7 +2092,7 @@ rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o
                 o_rbTemporary = false;
                 o_rbExtension = false;
 
-                m_eState = USER_EXTENSIONS;		// Later: SHARED_MODULE
+                m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
                 break;
 
             // Later:
@@ -2122,7 +2122,7 @@ rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o
                 o_rbExtension = true;
                 break;
             }
-            
+
             case BUNDLED_EXTENSIONS:
             {
                 Reference< deployment::XPackage > xParentPackageBundle;
@@ -2177,7 +2177,7 @@ rtl::OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemp
             Reference< XMultiComponentFactory >xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
             try
             {
-                xInvocation = Reference< script::XInvocation >( 
+                xInvocation = Reference< script::XInvocation >(
                     m_xContext->getServiceManager()->createInstanceWithContext( rtl::OUString::createFromAscii(
                     "com.sun.star.help.HelpIndexer" ), m_xContext ) , UNO_QUERY );
 

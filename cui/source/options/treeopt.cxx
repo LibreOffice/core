@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,7 +120,7 @@
 #include <svx/dialogs.hrc>
 
 #ifndef _SVX_LANGITEM_HXX
-#define	ITEMID_LANGUAGE SID_ATTR_CHAR_LANGUAGE
+#define ITEMID_LANGUAGE SID_ATTR_CHAR_LANGUAGE
 #include <editeng/langitem.hxx>
 #endif
 
@@ -153,15 +153,15 @@ using namespace ::com::sun::star::util;
 #endif
 
 #define HINT_TIMEOUT            200
-#define SELECT_FIRST_TIMEOUT	0
-#define SELECT_TIMEOUT			300
-#define COLORPAGE_UNKNOWN		((sal_uInt16)0xFFFF)
+#define SELECT_FIRST_TIMEOUT    0
+#define SELECT_TIMEOUT          300
+#define COLORPAGE_UNKNOWN       ((sal_uInt16)0xFFFF)
 #define EXPAND_PROTOCOL         "vnd.sun.star.expand:"
 
 LastPageSaver* OfaTreeOptionsDialog::pLastPageSaver = NULL;
 
 // some stuff for easier changes for SvtViewOptions
-static const sal_Char*		pViewOptDataName = "page data";
+static const sal_Char*      pViewOptDataName = "page data";
 #define VIEWOPT_DATANAME    rtl::OUString::createFromAscii( pViewOptDataName )
 
 static XOutdevItemPool* mpStaticXOutdevItemPool = 0L;
@@ -336,47 +336,47 @@ void MailMergeCfg_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUStri
 }
 
 //typedef SfxTabPage* (*FNCreateTabPage)( Window *pParent, const SfxItemSet &rAttrSet );
-SfxTabPage*	CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet )
 {
     CreateTabPage fnCreate = 0;
     switch(nId)
     {
-        case RID_SFXPAGE_SAVE:						fnCreate = &SvxSaveTabPage::Create; break;
-        case RID_SFXPAGE_PATH:						fnCreate = &SvxPathTabPage::Create; break;
-        case RID_SFXPAGE_GENERAL:					fnCreate = &SvxGeneralTabPage::Create; break;
-        case RID_SFXPAGE_PRINTOPTIONS:				fnCreate = &SfxCommonPrintOptionsTabPage::Create; break;
-        case OFA_TP_LANGUAGES:						fnCreate = &OfaLanguagesTabPage::Create; break;
-        case RID_SFXPAGE_LINGU:						fnCreate = &SvxLinguTabPage::Create; break;
-        case RID_SVXPAGE_COLOR:						fnCreate = &SvxColorTabPage::Create; break;
-        case OFA_TP_VIEW:							fnCreate = &OfaViewTabPage::Create; break;
-        case OFA_TP_MISC:							fnCreate = &OfaMiscTabPage::Create; break;
-        case OFA_TP_MEMORY:							fnCreate = &OfaMemoryOptionsPage::Create; break;
-        case RID_SVXPAGE_ASIAN_LAYOUT:				fnCreate = &SvxAsianLayoutPage::Create; break;
-        case RID_SVX_FONT_SUBSTITUTION:				fnCreate = &SvxFontSubstTabPage::Create; break;
-        case RID_SVXPAGE_INET_PROXY:				fnCreate = &SvxProxyTabPage::Create; break;
-        case RID_SVXPAGE_INET_SEARCH:				fnCreate = &SvxSearchTabPage::Create; break;
-        case RID_SVXPAGE_INET_SECURITY:				fnCreate = &SvxSecurityTabPage::Create; break;
-        case RID_SVXPAGE_INET_MAIL:					fnCreate = &SvxEMailTabPage::Create; break;
-        case RID_SVXPAGE_COLORCONFIG:				fnCreate = &SvxColorOptionsTabPage::Create; break;
-        case RID_OFAPAGE_HTMLOPT:					fnCreate = &OfaHtmlTabPage::Create; break;
-        case SID_OPTFILTER_MSOFFICE:				fnCreate = &OfaMSFilterTabPage::Create; break;
-        case RID_OFAPAGE_MSFILTEROPT2:				fnCreate = &OfaMSFilterTabPage2::Create; break;
-        case RID_SVXPAGE_JSEARCH_OPTIONS:			fnCreate = &SvxJSearchOptionsPage::Create ; break;
-        case SID_SB_CONNECTIONPOOLING:				fnCreate = &::offapp::ConnectionPoolOptionsPage::Create; break;
-        case SID_SB_DBREGISTEROPTIONS:				fnCreate = &::svx::DbRegistrationOptionsPage::Create; break;
-        case RID_SVXPAGE_ACCESSIBILITYCONFIG:		fnCreate = &SvxAccessibilityOptionsTabPage::Create; break;
-        case RID_SVXPAGE_SSO:						fnCreate = GetSSOCreator(); break;
-        case RID_SVXPAGE_OPTIONS_CTL:				fnCreate = &SvxCTLOptionsPage::Create ; break;
+        case RID_SFXPAGE_SAVE:                      fnCreate = &SvxSaveTabPage::Create; break;
+        case RID_SFXPAGE_PATH:                      fnCreate = &SvxPathTabPage::Create; break;
+        case RID_SFXPAGE_GENERAL:                   fnCreate = &SvxGeneralTabPage::Create; break;
+        case RID_SFXPAGE_PRINTOPTIONS:              fnCreate = &SfxCommonPrintOptionsTabPage::Create; break;
+        case OFA_TP_LANGUAGES:                      fnCreate = &OfaLanguagesTabPage::Create; break;
+        case RID_SFXPAGE_LINGU:                     fnCreate = &SvxLinguTabPage::Create; break;
+        case RID_SVXPAGE_COLOR:                     fnCreate = &SvxColorTabPage::Create; break;
+        case OFA_TP_VIEW:                           fnCreate = &OfaViewTabPage::Create; break;
+        case OFA_TP_MISC:                           fnCreate = &OfaMiscTabPage::Create; break;
+        case OFA_TP_MEMORY:                         fnCreate = &OfaMemoryOptionsPage::Create; break;
+        case RID_SVXPAGE_ASIAN_LAYOUT:              fnCreate = &SvxAsianLayoutPage::Create; break;
+        case RID_SVX_FONT_SUBSTITUTION:             fnCreate = &SvxFontSubstTabPage::Create; break;
+        case RID_SVXPAGE_INET_PROXY:                fnCreate = &SvxProxyTabPage::Create; break;
+        case RID_SVXPAGE_INET_SEARCH:               fnCreate = &SvxSearchTabPage::Create; break;
+        case RID_SVXPAGE_INET_SECURITY:             fnCreate = &SvxSecurityTabPage::Create; break;
+        case RID_SVXPAGE_INET_MAIL:                 fnCreate = &SvxEMailTabPage::Create; break;
+        case RID_SVXPAGE_COLORCONFIG:               fnCreate = &SvxColorOptionsTabPage::Create; break;
+        case RID_OFAPAGE_HTMLOPT:                   fnCreate = &OfaHtmlTabPage::Create; break;
+        case SID_OPTFILTER_MSOFFICE:                fnCreate = &OfaMSFilterTabPage::Create; break;
+        case RID_OFAPAGE_MSFILTEROPT2:              fnCreate = &OfaMSFilterTabPage2::Create; break;
+        case RID_SVXPAGE_JSEARCH_OPTIONS:           fnCreate = &SvxJSearchOptionsPage::Create ; break;
+        case SID_SB_CONNECTIONPOOLING:              fnCreate = &::offapp::ConnectionPoolOptionsPage::Create; break;
+        case SID_SB_DBREGISTEROPTIONS:              fnCreate = &::svx::DbRegistrationOptionsPage::Create; break;
+        case RID_SVXPAGE_ACCESSIBILITYCONFIG:       fnCreate = &SvxAccessibilityOptionsTabPage::Create; break;
+        case RID_SVXPAGE_SSO:                       fnCreate = GetSSOCreator(); break;
+        case RID_SVXPAGE_OPTIONS_CTL:               fnCreate = &SvxCTLOptionsPage::Create ; break;
         //added by jmeng begin
-        case RID_SVXPAGE_INET_MOZPLUGIN:			fnCreate = &MozPluginTabPage::Create; break;
+        case RID_SVXPAGE_INET_MOZPLUGIN:            fnCreate = &MozPluginTabPage::Create; break;
         //added by jmeng end
-        case RID_SVXPAGE_OPTIONS_JAVA:				fnCreate = &SvxJavaOptionsPage::Create ; break;
-        case RID_SVXPAGE_ONLINEUPDATE:				fnCreate = &SvxOnlineUpdateTabPage::Create; break;
-        case RID_OPTPAGE_CHART_DEFCOLORS:			fnCreate = &SvxDefaultColorOptPage::Create; break;
+        case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
+        case RID_SVXPAGE_ONLINEUPDATE:              fnCreate = &SvxOnlineUpdateTabPage::Create; break;
+        case RID_OPTPAGE_CHART_DEFCOLORS:           fnCreate = &SvxDefaultColorOptPage::Create; break;
         case RID_SVXPAGE_IMPROVEMENT:               fnCreate = &SvxImprovementOptionsPage::Create; break;
     }
 
-    SfxTabPage*	pRet = fnCreate ? (*fnCreate)( pParent, rSet ) : NULL;
+    SfxTabPage* pRet = fnCreate ? (*fnCreate)( pParent, rSet ) : NULL;
     return pRet;
 }
 
@@ -451,6 +451,7 @@ static OptionsMapping_Impl __READONLY_DATA OptionsMap_Impl[] =
     { "Calc",               "View",                 SID_SC_TP_CONTENT },
     { "Calc",               "International",        RID_OFA_TP_INTERNATIONAL },
     { "Calc",               "Calculate",            SID_SC_TP_CALC },
+    { "Calc",               "Formula",              SID_SC_TP_FORMULA },
     { "Calc",               "SortLists",            SID_SC_TP_USERLISTS },
     { "Calc",               "Changes",              SID_SC_TP_CHANGES },
     { "Calc",               "Grid",                 SID_SC_TP_GRID },
@@ -694,9 +695,9 @@ OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
 }
 
 /* -----------------11.02.99 10:02-------------------
- *	der ItemSet* geht in den Besitz des Dialogs
+ *  der ItemSet* geht in den Besitz des Dialogs
  * --------------------------------------------------*/
-sal_uInt16	OfaTreeOptionsDialog::AddGroup(const String& rGroupName,
+sal_uInt16  OfaTreeOptionsDialog::AddGroup(const String& rGroupName,
                                         SfxShell* pCreateShell,
                                         SfxModule* pCreateModule,
                                         sal_uInt16 nDialogId )
@@ -1020,7 +1021,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
 /* -----------------22.02.99 08:52-------------------
  *
  * --------------------------------------------------*/
-long	OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
+long    OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -1200,7 +1201,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
                     }
                 }
 
-//				if ( pPageInfo->nPageId != RID_OPTPAGE_CHART_DEFCOLORS )
+//              if ( pPageInfo->nPageId != RID_OPTPAGE_CHART_DEFCOLORS )
                 {
                     if(!pGroupInfo->m_pInItemSet)
                         pGroupInfo->m_pInItemSet = pGroupInfo->m_pShell
@@ -1491,7 +1492,7 @@ BOOL EnableSSO( void )
                           theBackendServiceTypeValue );
 
     BOOL bSSOEnabled =
-        ( theOfflineValue == theDefaultOfflineValue						&&
+        ( theOfflineValue == theDefaultOfflineValue                     &&
           ( theServerTypeValue.getLength() == 0 ||
           theServerTypeValue == rtl::OUString::createFromAscii( "uno" ) ) &&
           theBackendServiceTypeValue ==
@@ -1524,10 +1525,10 @@ CreateTabPage GetSSOCreator( void )
     return theSymbol;
 }
 
-SfxItemSet*	OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
+SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
 {
     Reference< XPropertySet >  xProp( SvxGetLinguPropertySet() );
-    SfxItemSet*	pRet = 0;
+    SfxItemSet* pRet = 0;
     switch(nId)
     {
         case SID_GENERAL_OPTIONS:
@@ -1545,7 +1546,7 @@ SfxItemSet*	OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             SFX_APP()->GetOptions(aOptSet);
             pRet->Put(aOptSet);
 
-            utl::MiscCfg	aMisc;
+            utl::MiscCfg    aMisc;
             const SfxPoolItem* pItem;
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             if ( pViewFrame )
@@ -1586,7 +1587,7 @@ SfxItemSet*	OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             pRet->Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
             SfxHyphenRegionItem aHyphen( SID_ATTR_HYPHENREGION );
 
-            sal_Int16 	nMinLead  = 2,
+            sal_Int16   nMinLead  = 2,
                         nMinTrail = 2;
             if (xProp.is())
             {
@@ -1680,7 +1681,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
     {
         case SID_GENERAL_OPTIONS:
         {
-            utl::MiscCfg	aMisc;
+            utl::MiscCfg    aMisc;
             const SfxPoolItem* pItem;
             SfxItemSet aOptSet(SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );
             aOptSet.Put(rSet);
@@ -1689,7 +1690,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             // Dispatcher neu holen, weil SetOptions() ggf. den Dispatcher zerst"ort hat
             SfxViewFrame *pViewFrame = SfxViewFrame::Current();
 // -------------------------------------------------------------------------
-//			Year2000 auswerten
+//          Year2000 auswerten
 // -------------------------------------------------------------------------
             USHORT nY2K = USHRT_MAX;
             if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_YEAR2000, sal_False, &pItem ) )
@@ -1705,7 +1706,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             }
 
 // -------------------------------------------------------------------------
-//			Drucken auswerten
+//          Drucken auswerten
 // -------------------------------------------------------------------------
             if(SFX_ITEM_SET == rSet.GetItemState(SID_PRINTER_NOTFOUND_WARN, sal_False, &pItem))
                 aMisc.SetNotFoundWarning(((const SfxBoolItem*)pItem)->GetValue());
@@ -1717,7 +1718,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                 aMisc.SetPaperOrientationWarning(0 !=  (pFlag->GetValue() & SFX_PRINTER_CHG_ORIENTATION ));
             }
 // -------------------------------------------------------------------------
-//			evaluate help options
+//          evaluate help options
 // -------------------------------------------------------------------------
             if ( SvtHelpOptions().IsHelpTips() != Help::IsQuickHelpEnabled() )
                 SvtHelpOptions().IsHelpTips() ? Help::EnableQuickHelp() : Help::DisableQuickHelp();
@@ -2203,27 +2204,27 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             if ( nPageId == RID_SVXPAGE_INET_MOZPLUGIN )
                 continue;
 #endif
-#ifdef LINUX                                                                  
-            // Disable Mozilla Plug-in tab-page on Linux if we find a         
-            // globally installed plugin                                      
-            if ( nPageId == RID_SVXPAGE_INET_MOZPLUGIN ) {                     
-                struct stat sb;                                               
-                char *p;                                                       
-                bool bHaveSystemWidePlugin = false;                           
-                char mozpaths[]="/usr/lib/mozilla/plugins/libnpsoplugin.so:/usr/lib/firefox/plugins/libnpsoplugin.so:/usr/lib/mozilla-firefox/plugins/libnpsoplugin.so:/usr/lib/iceweasel/plugins/libnpsoplugin.so:/usr/lib/iceape/plugins/libnpsoplugin.so:/usr/lib/browser-plugins/libnpsoplugin.so:/usr/lib64/browser-plugins/libnpsoplugin.so";  
-                                                                               
-                p = strtok(mozpaths, ":");                                     
-                while (p != NULL) {                                            
-                    if (stat(p, &sb) != -1) {                                  
-                         bHaveSystemWidePlugin = true;                         
-                         break;                                                
-                    }                                                          
-                    p = strtok(NULL, ":");                                     
-                }                                                             
-                                                                               
-                if (bHaveSystemWidePlugin == true)                            
-                    continue;                                                  
-            }                                                                   
+#ifdef LINUX
+            // Disable Mozilla Plug-in tab-page on Linux if we find a
+            // globally installed plugin
+            if ( nPageId == RID_SVXPAGE_INET_MOZPLUGIN ) {
+                struct stat sb;
+                char *p;
+                bool bHaveSystemWidePlugin = false;
+                char mozpaths[]="/usr/lib/mozilla/plugins/libnpsoplugin.so:/usr/lib/firefox/plugins/libnpsoplugin.so:/usr/lib/mozilla-firefox/plugins/libnpsoplugin.so:/usr/lib/iceweasel/plugins/libnpsoplugin.so:/usr/lib/iceape/plugins/libnpsoplugin.so:/usr/lib/browser-plugins/libnpsoplugin.so:/usr/lib64/browser-plugins/libnpsoplugin.so";
+
+                p = strtok(mozpaths, ":");
+                while (p != NULL) {
+                    if (stat(p, &sb) != -1) {
+                         bHaveSystemWidePlugin = true;
+                         break;
+                    }
+                    p = strtok(NULL, ":");
+                }
+
+                if (bHaveSystemWidePlugin == true)
+                    continue;
+            }
 #endif
             AddTabPage( nPageId, rInetArray.GetString(i), nGroup );
         }
@@ -2239,7 +2240,7 @@ namespace
 {
     void MoveControl( Control& _rCtrl, long _nDeltaPixel )
     {
-        Point	aPt( _rCtrl.GetPosPixel() );
+        Point   aPt( _rCtrl.GetPosPixel() );
         aPt.X() += _nDeltaPixel;
         _rCtrl.SetPosPixel( aPt );
     }
@@ -2254,10 +2255,10 @@ void OfaTreeOptionsDialog::ResizeTreeLB( void )
     const long  nIndent0 = PixelToLogic( Size( 28, 0 ) ).Width();
     const long  nIndent1 = PixelToLogic( Size( 52, 0 ) ).Width();
 
-    SvTreeList*			pTreeList = aTreeLB.GetModel();
+    SvTreeList*         pTreeList = aTreeLB.GetModel();
     DBG_ASSERT( pTreeList, "-OfaTreeOptionsDialog::ResizeTreeLB(): no model, no cookies!" );
 
-    SvListEntry*		pEntry = pTreeList->First();
+    SvListEntry*        pEntry = pTreeList->First();
     while( pEntry )
     {
         long n = aTreeLB.GetTextWidth( aTreeLB.GetEntryText( static_cast< SvLBoxEntry* >( pEntry ) ) );
@@ -2269,14 +2270,14 @@ void OfaTreeOptionsDialog::ResizeTreeLB( void )
         pEntry = pTreeList->Next( pEntry, &nDepth );
     }
 
-    nDelta = LogicToPixel( Size( nDelta + 3, 0 ) ).Width();			// + extra space [logic]
-    nDelta += GetSettings().GetStyleSettings().GetScrollBarSize();	// + scroll bar, in case it's needed
+    nDelta = LogicToPixel( Size( nDelta + 3, 0 ) ).Width();         // + extra space [logic]
+    nDelta += GetSettings().GetStyleSettings().GetScrollBarSize();  // + scroll bar, in case it's needed
 
     if( nDelta > nMax )
         nDelta = nMax;
 
     // starting resizing with this
-    Size			aSize( GetSizePixel() );
+    Size            aSize( GetSizePixel() );
     aSize.Width() += nDelta;
     SetSizePixel( aSize );
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ class Printer;
 class OutputDevice;
 class FontMetric;
 class SwFntObj;
-class SwDrawTextInfo;	// DrawText
+class SwDrawTextInfo;   // DrawText
 class ViewShell;
 class SwSubFont;
 class MapMode;
@@ -111,8 +111,8 @@ public:
 
     virtual ~SwFntObj();
 
-    inline 		 Font *GetScrFont()		{ return pScrFont; }
-    inline 		 Font *GetFont()		{ return &aFont; }
+    inline       Font *GetScrFont()     { return pScrFont; }
+    inline       Font *GetFont()        { return &aFont; }
     inline const Font *GetFont() const  { return &aFont; }
 
     inline USHORT GetGuessedLeading() const  { return nGuessedLeading; }
@@ -126,9 +126,9 @@ public:
 
     void SetDevFont( const ViewShell *pSh, OutputDevice& rOut );
     inline OutputDevice* GetPrt() const { return pPrinter; }
-    inline USHORT	GetZoom() const { return nZoom; }
-    inline USHORT	GetPropWidth() const { return nPropWidth; }
-    inline BOOL		IsSymbol() const { return bSymbol; }
+    inline USHORT   GetZoom() const { return nZoom; }
+    inline USHORT   GetPropWidth() const { return nPropWidth; }
+    inline BOOL     IsSymbol() const { return bSymbol; }
 
     void   DrawText( SwDrawTextInfo &rInf );
     Size  GetTextSize( SwDrawTextInfo &rInf );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ template< class Vec, class Iter > void remove_range( Vec& rVector, sal_Int32 nIn
             else
             {
                 Iter aEnd( aBegin );
-        
+
                 while( nCount-- )
                     aEnd++;
                 rVector.erase( aBegin, aEnd );
@@ -656,7 +656,7 @@ void TableModel::notifyModification()
             {
                 CellRef xCell( getCell( nCol, nRow ) );
                 fprintf( file, "<cell this=\"%lx\"", xCell.get() );
-                
+
                 sal_Int32 nRowSpan = xCell->getRowSpan();
                 sal_Int32 nColSpan = xCell->getColumnSpan();
                 sal_Bool bMerged = xCell->isMerged();
@@ -791,7 +791,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
 
             if( bUndo )
                 pModel->EndUndo();
-                
+
             if( pModel )
                 pModel->SetChanged();
 
@@ -872,7 +872,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                         {
                             // current cells merges with columns after the removed columns
                             const sal_Int32 nRemove = nCount - nCol + nIndex;
-                            
+
                             CellRef xTargetCell( getCell( nIndex + nCount, nRow ) );
                             if( xTargetCell.is() )
                             {
@@ -885,7 +885,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                     }
                     else if( nColSpan > (nIndex - nCol) )
                     {
-                        // current cells spans inside the removed columns, so adjust					
+                        // current cells spans inside the removed columns, so adjust
                         const sal_Int32 nRemove = ::std::min( nCount, nCol + nColSpan - nIndex );
                         if( bUndo )
                             xCell->AddUndo();
@@ -901,7 +901,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
 
             if( bUndo )
                 pModel->EndUndo();
-                
+
             if( pModel )
                 pModel->SetChanged();
         }
@@ -969,7 +969,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
         }
         if( bUndo )
             pModel->EndUndo();
-            
+
         if( pModel )
             pModel->SetChanged();
 
@@ -1033,7 +1033,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
                         {
                             // current cells merges with rows after the removed rows
                             const sal_Int32 nRemove = nCount - nRow + nIndex;
-                            
+
                             CellRef xTargetCell( getCell( nCol, nIndex + nCount ) );
                             if( xTargetCell.is() )
                             {
@@ -1046,7 +1046,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
                     }
                     else if( nRowSpan > (nIndex - nRow) )
                     {
-                        // current cells spans inside the removed rows, so adjust					
+                        // current cells spans inside the removed rows, so adjust
                         const sal_Int32 nRemove = ::std::min( nCount, nRow + nRowSpan - nIndex );
                         if( bUndo )
                             xCell->AddUndo();
@@ -1060,7 +1060,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
 
             if( bUndo )
                 pModel->EndUndo();
-                
+
             if( pModel )
                 pModel->SetChanged();
         }
@@ -1102,7 +1102,7 @@ void TableModel::optimize()
     TableModelNotifyGuard aGuard( this );
 
     bool bWasModified = false;
-    
+
     if( !maRows.empty() && !maColumns.empty() )
     {
         sal_Int32 nCol = getColumnCountImpl() - 1;
@@ -1115,7 +1115,7 @@ void TableModel::optimize()
                 if( xCell.is() && !xCell->isMerged() )
                     bEmpty = false;
             }
-            
+
             if( bEmpty )
             {
                 if( nCol > 0 ) try
@@ -1152,7 +1152,7 @@ void TableModel::optimize()
                 if( xCell.is() && !xCell->isMerged() )
                     bEmpty = false;
             }
-            
+
             if( bEmpty )
             {
                 if( nRow > 0 ) try
@@ -1198,7 +1198,7 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
     {
         DBG_ERROR("TableModel::merge(), merge beyound the table!");
     }
-        
+
     // merge first cell
     CellRef xOriginCell( dynamic_cast< Cell* >( getCellByPosition( nCol, nRow ).get() ) );
     if( xOriginCell.is() )

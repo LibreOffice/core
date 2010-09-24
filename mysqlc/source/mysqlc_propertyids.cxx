@@ -1,6 +1,6 @@
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-* 
+*
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -38,64 +38,64 @@ namespace connectivity
 {
 namespace mysqlc
 {
-const sal_Char* getPROPERTY_QUERYTIMEOUT()			{ return "QueryTimeOut"; }
-const sal_Char* getPROPERTY_MAXFIELDSIZE()			{ return "MaxFieldSize"; }
-const sal_Char* getPROPERTY_MAXROWS()				{ return "MaxRows"; }
-const sal_Char* getPROPERTY_CURSORNAME()			{ return "CursorName"; }
-const sal_Char* getPROPERTY_RESULTSETCONCURRENCY()	{ return "ResultSetConcurrency"; }
-const sal_Char* getPROPERTY_RESULTSETTYPE()			{ return "ResultSetType"; }
-const sal_Char* getPROPERTY_FETCHDIRECTION()		{ return "FetchDirection"; }
-const sal_Char* getPROPERTY_FETCHSIZE()				{ return "FetchSize"; }
-const sal_Char* getPROPERTY_ESCAPEPROCESSING()		{ return "EscapeProcessing"; }
-const sal_Char* getPROPERTY_USEBOOKMARKS()			{ return "UseBookmarks"; }
+const sal_Char* getPROPERTY_QUERYTIMEOUT()          { return "QueryTimeOut"; }
+const sal_Char* getPROPERTY_MAXFIELDSIZE()          { return "MaxFieldSize"; }
+const sal_Char* getPROPERTY_MAXROWS()               { return "MaxRows"; }
+const sal_Char* getPROPERTY_CURSORNAME()            { return "CursorName"; }
+const sal_Char* getPROPERTY_RESULTSETCONCURRENCY()  { return "ResultSetConcurrency"; }
+const sal_Char* getPROPERTY_RESULTSETTYPE()         { return "ResultSetType"; }
+const sal_Char* getPROPERTY_FETCHDIRECTION()        { return "FetchDirection"; }
+const sal_Char* getPROPERTY_FETCHSIZE()             { return "FetchSize"; }
+const sal_Char* getPROPERTY_ESCAPEPROCESSING()      { return "EscapeProcessing"; }
+const sal_Char* getPROPERTY_USEBOOKMARKS()          { return "UseBookmarks"; }
 
-const sal_Char* getPROPERTY_NAME()					{ return "Name"; }
-const sal_Char* getPROPERTY_TYPE()					{ return "Type"; }
-const sal_Char* getPROPERTY_TYPENAME()				{ return "TypeName"; }
-const sal_Char* getPROPERTY_PRECISION()				{ return "Precision"; }
-const sal_Char* getPROPERTY_SCALE()					{ return "Scale"; }
-const sal_Char* getPROPERTY_ISNULLABLE()			{ return "IsNullable"; }
-const sal_Char* getPROPERTY_ISAUTOINCREMENT()		{ return "IsAutoIncrement"; }
-const sal_Char* getPROPERTY_ISROWVERSION()			{ return "IsRowVersion"; }
-const sal_Char* getPROPERTY_DESCRIPTION()			{ return "Description"; }
-const sal_Char* getPROPERTY_DEFAULTVALUE()			{ return "DefaultValue"; }
+const sal_Char* getPROPERTY_NAME()                  { return "Name"; }
+const sal_Char* getPROPERTY_TYPE()                  { return "Type"; }
+const sal_Char* getPROPERTY_TYPENAME()              { return "TypeName"; }
+const sal_Char* getPROPERTY_PRECISION()             { return "Precision"; }
+const sal_Char* getPROPERTY_SCALE()                 { return "Scale"; }
+const sal_Char* getPROPERTY_ISNULLABLE()            { return "IsNullable"; }
+const sal_Char* getPROPERTY_ISAUTOINCREMENT()       { return "IsAutoIncrement"; }
+const sal_Char* getPROPERTY_ISROWVERSION()          { return "IsRowVersion"; }
+const sal_Char* getPROPERTY_DESCRIPTION()           { return "Description"; }
+const sal_Char* getPROPERTY_DEFAULTVALUE()          { return "DefaultValue"; }
 
-const sal_Char* getPROPERTY_REFERENCEDTABLE()		{ return "ReferencedTable"; }
-const sal_Char* getPROPERTY_UPDATERULE()			{ return "UpdateRule"; }
-const sal_Char* getPROPERTY_DELETERULE()			{ return "DeleteRule"; }
-const sal_Char* getPROPERTY_CATALOG()				{ return "Catalog"; }
-const sal_Char* getPROPERTY_ISUNIQUE()				{ return "IsUnique"; }
-const sal_Char* getPROPERTY_ISPRIMARYKEYINDEX()		{ return "IsPrimaryKeyIndex"; }
-const sal_Char* getPROPERTY_ISCLUSTERED()			{ return "IsClustered"; }
-const sal_Char* getPROPERTY_ISASCENDING()			{ return "IsAscending"; }
-const sal_Char* getPROPERTY_SCHEMANAME()			{ return "SchemaName"; }
-const sal_Char* getPROPERTY_CATALOGNAME()			{ return "CatalogName"; }
-const sal_Char* getPROPERTY_COMMAND()				{ return "Command"; }
-const sal_Char* getPROPERTY_CHECKOPTION()			{ return "CheckOption"; }
-const sal_Char* getPROPERTY_PASSWORD()				{ return "Password"; }
-const sal_Char* getPROPERTY_RELATEDCOLUMN()			{ return "RelatedColumn"; }
+const sal_Char* getPROPERTY_REFERENCEDTABLE()       { return "ReferencedTable"; }
+const sal_Char* getPROPERTY_UPDATERULE()            { return "UpdateRule"; }
+const sal_Char* getPROPERTY_DELETERULE()            { return "DeleteRule"; }
+const sal_Char* getPROPERTY_CATALOG()               { return "Catalog"; }
+const sal_Char* getPROPERTY_ISUNIQUE()              { return "IsUnique"; }
+const sal_Char* getPROPERTY_ISPRIMARYKEYINDEX()     { return "IsPrimaryKeyIndex"; }
+const sal_Char* getPROPERTY_ISCLUSTERED()           { return "IsClustered"; }
+const sal_Char* getPROPERTY_ISASCENDING()           { return "IsAscending"; }
+const sal_Char* getPROPERTY_SCHEMANAME()            { return "SchemaName"; }
+const sal_Char* getPROPERTY_CATALOGNAME()           { return "CatalogName"; }
+const sal_Char* getPROPERTY_COMMAND()               { return "Command"; }
+const sal_Char* getPROPERTY_CHECKOPTION()           { return "CheckOption"; }
+const sal_Char* getPROPERTY_PASSWORD()              { return "Password"; }
+const sal_Char* getPROPERTY_RELATEDCOLUMN()         { return "RelatedColumn"; }
 
-const sal_Char* getSTAT_INVALID_INDEX()				{ return "Invalid descriptor index"; }
+const sal_Char* getSTAT_INVALID_INDEX()             { return "Invalid descriptor index"; }
 
-const sal_Char* getPROPERTY_FUNCTION()				{ return "Function"; }
-const sal_Char* getPROPERTY_TABLENAME()				{ return "TableName"; }
-const sal_Char* getPROPERTY_REALNAME()				{ return "RealName"; }
-const sal_Char* getPROPERTY_DBASEPRECISIONCHANGED()	{ return "DbasePrecisionChanged"; }
-const sal_Char* getPROPERTY_ISCURRENCY()			{ return "IsCurrency"; }
-const sal_Char* getPROPERTY_ISBOOKMARKABLE()		{ return "IsBookmarkable"; }
+const sal_Char* getPROPERTY_FUNCTION()              { return "Function"; }
+const sal_Char* getPROPERTY_TABLENAME()             { return "TableName"; }
+const sal_Char* getPROPERTY_REALNAME()              { return "RealName"; }
+const sal_Char* getPROPERTY_DBASEPRECISIONCHANGED() { return "DbasePrecisionChanged"; }
+const sal_Char* getPROPERTY_ISCURRENCY()            { return "IsCurrency"; }
+const sal_Char* getPROPERTY_ISBOOKMARKABLE()        { return "IsBookmarkable"; }
 
-const sal_Char* getPROPERTY_FORMATKEY()				{ return "FormatKey"; }
-const sal_Char* getPROPERTY_LOCALE()				{ return "Locale"; }
+const sal_Char* getPROPERTY_FORMATKEY()             { return "FormatKey"; }
+const sal_Char* getPROPERTY_LOCALE()                { return "Locale"; }
 
-const sal_Char* getPROPERTY_AUTOINCREMENTCREATION()	{ return "AutoIncrementCreation"; }
-const sal_Char* getPROPERTY_PRIVILEGES()			{ return "Privileges"; }
+const sal_Char* getPROPERTY_AUTOINCREMENTCREATION() { return "AutoIncrementCreation"; }
+const sal_Char* getPROPERTY_PRIVILEGES()            { return "Privileges"; }
     //============================================================
     //= error messages
     //============================================================
-const sal_Char* getERRORMSG_SEQUENCE()				{ return "Function sequence error"; }
-const sal_Char* getSQLSTATE_SEQUENCE()				{ return "HY010"; }
-const sal_Char* getSQLSTATE_GENERAL()				{ return "HY0000"; }
-const sal_Char* getSTR_DELIMITER()					{ return "/"; }
+const sal_Char* getERRORMSG_SEQUENCE()              { return "Function sequence error"; }
+const sal_Char* getSQLSTATE_SEQUENCE()              { return "HY010"; }
+const sal_Char* getSQLSTATE_GENERAL()               { return "HY0000"; }
+const sal_Char* getSTR_DELIMITER()                  { return "/"; }
 
 
 

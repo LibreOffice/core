@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,17 +96,17 @@ using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
-//	using namespace ::com::sun::star::sdb;
+//  using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
-//	using namespace ::cppu;
+//  using namespace ::cppu;
 using namespace ::osl;
 
 DBG_NAME(OCacheSet)
 // -------------------------------------------------------------------------
-OCacheSet::OCacheSet() 
+OCacheSet::OCacheSet()
             :m_bInserted(sal_False)
             ,m_bUpdated(sal_False)
             ,m_bDeleted(sal_False)
@@ -126,7 +126,7 @@ OCacheSet::OCacheSet()
     return sQuote;
 }
 // -------------------------------------------------------------------------
-void OCacheSet::construct(	const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& /*i_sRowSetFilter*/) 
+void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& /*i_sRowSetFilter*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::construct" );
     OSL_ENSURE(_xDriverSet.is(),"Invalid resultSet");
@@ -167,10 +167,10 @@ OCacheSet::~OCacheSet()
 {
     try
     {
-        m_xDriverSet = NULL;  
-        m_xDriverRow = NULL;  
+        m_xDriverSet = NULL;
+        m_xDriverRow = NULL;
         m_xSetMetaData = NULL;
-        m_xConnection = NULL; 
+        m_xConnection = NULL;
     }
     catch(Exception&)
     {
@@ -243,27 +243,27 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
 
         m_bInserted = xPrep->executeUpdate() > 0;
     }
-    
-//	::rtl::OUString aCountSql = ::rtl::OUString::createFromAscii("SELECT COUNT(*) FROM ");
-//	aCountSql += m_aComposedTableName;
-//	try
-//	{
-//		Reference< XStatement > xStmt(m_xConnection->createStatement());
-//		Reference<XResultSet> xRes(xStmt->executeQuery(aCountSql));
-//		if(xRes.is() && xRes->next())
-//		{
-//			Reference<XRow> xRow(xRes,UNO_QUERY);
-//		}
-//	}
-//	catch(SQLException&)
-//	{
-//	}
-    
+
+//  ::rtl::OUString aCountSql = ::rtl::OUString::createFromAscii("SELECT COUNT(*) FROM ");
+//  aCountSql += m_aComposedTableName;
+//  try
+//  {
+//      Reference< XStatement > xStmt(m_xConnection->createStatement());
+//      Reference<XResultSet> xRes(xStmt->executeQuery(aCountSql));
+//      if(xRes.is() && xRes->next())
+//      {
+//          Reference<XRow> xRow(xRes,UNO_QUERY);
+//      }
+//  }
+//  catch(SQLException&)
+//  {
+//  }
+
     // TODO set the bookmark in the insert row
 }
 // -------------------------------------------------------------------------
 void OCacheSet::fillParameters( const ORowSetRow& _rRow
-                                        ,const connectivity::OSQLTable& _xTable 
+                                        ,const connectivity::OSQLTable& _xTable
                                         ,::rtl::OUStringBuffer& _sCondition
                                         ,::rtl::OUStringBuffer& _sParameter
                                         ,::std::list< sal_Int32>& _rOrgValues)
@@ -279,7 +279,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     if(xIndexSup.is())
         xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
 
-    //	Reference<XColumnsSupplier>
+    //  Reference<XColumnsSupplier>
     Reference<XPropertySet> xIndexColsSup;
     Reference<XNameAccess> xIndexColumns;
     ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
@@ -288,7 +288,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
         for(sal_Int32 j=0;j<xIndexes->getCount();++j)
         {
             xIndexColsSup.set(xIndexes->getByIndex(j),UNO_QUERY);
-            if(	xIndexColsSup.is()
+            if( xIndexColsSup.is()
                 && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
                 && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
               )
@@ -297,15 +297,15 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     }
 
     ::rtl::OUString aColumnName;
-    
-    static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
-    static ::rtl::OUString aAnd		= ::rtl::OUString::createFromAscii(" AND ");
 
-    ::rtl::OUString aQuote	= getIdentifierQuoteString();
+    static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
+    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
+
+    ::rtl::OUString aQuote  = getIdentifierQuoteString();
 
     sal_Int32 nCheckCount = 1; // index for the orginal values
     sal_Int32 i = 1;
-    
+
     ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
     ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
     ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rRow->get().begin()+1;
@@ -358,7 +358,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     aSql.append(m_aComposedTableName);
     aSql.append(::rtl::OUString::createFromAscii(" SET "));
     // list all cloumns that should be set
-    
+
     ::rtl::OUStringBuffer aCondition;
     ::std::list< sal_Int32> aOrgValues;
     fillParameters(_rInsertRow,_xTable,aCondition,aSql,aOrgValues);
@@ -407,8 +407,8 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     aSql.append(::rtl::OUString::createFromAscii(" WHERE "));
 
     // list all cloumns that should be set
-    ::rtl::OUString aQuote	= getIdentifierQuoteString();
-    static ::rtl::OUString aAnd		= ::rtl::OUString::createFromAscii(" AND ");
+    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
 
     // use keys and indexes for excat postioning
     // first the keys
@@ -419,7 +419,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     if(xIndexSup.is())
         xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
 
-    //	Reference<XColumnsSupplier>
+    //  Reference<XColumnsSupplier>
     Reference<XPropertySet> xIndexColsSup;
     Reference<XNameAccess> xIndexColumns;
     ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
@@ -428,7 +428,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
         for(sal_Int32 j=0;j<xIndexes->getCount();++j)
         {
             xIndexColsSup.set(xIndexes->getByIndex(j),UNO_QUERY);
-            if(	xIndexColsSup.is()
+            if( xIndexColsSup.is()
                 && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
                 && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
               )
@@ -439,7 +439,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     ::rtl::OUStringBuffer aColumnName;
     ::std::list< sal_Int32> aOrgValues;
     fillParameters(_rDeleteRow,_xTable,aSql,aColumnName,aOrgValues);
-    
+
     aSql.setLength(aSql.getLength()-5);
 
     // now create end execute the prepared statement

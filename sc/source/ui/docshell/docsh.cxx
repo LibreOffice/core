@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@
 #include "attrib.hxx"
 #include "asciiopt.hxx"
 #include "waitoff.hxx"
-#include "docpool.hxx"		// LoadCompleted
+#include "docpool.hxx"      // LoadCompleted
 #include "progress.hxx"
 #include "pntlock.hxx"
 #include "collect.hxx"
@@ -136,39 +136,39 @@ using ::rtl::OUStringBuffer;
 
 // STATIC DATA -----------------------------------------------------------
 
-//	Stream-Namen im Storage
+//  Stream-Namen im Storage
 
-const sal_Char __FAR_DATA ScDocShell::pStarCalcDoc[] = STRING_SCSTREAM;		// "StarCalcDocument"
+const sal_Char __FAR_DATA ScDocShell::pStarCalcDoc[] = STRING_SCSTREAM;     // "StarCalcDocument"
 const sal_Char __FAR_DATA ScDocShell::pStyleName[] = "SfxStyleSheets";
 
-//	Filter-Namen (wie in sclib.cxx)
+//  Filter-Namen (wie in sclib.cxx)
 
-static const sal_Char __FAR_DATA pFilterSc50[]		= "StarCalc 5.0";
-//static const sal_Char __FAR_DATA pFilterSc50Temp[]	= "StarCalc 5.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterSc40[]		= "StarCalc 4.0";
-//static const sal_Char __FAR_DATA pFilterSc40Temp[]	= "StarCalc 4.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterSc30[]		= "StarCalc 3.0";
-//static const sal_Char __FAR_DATA pFilterSc30Temp[]	= "StarCalc 3.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterSc10[]		= "StarCalc 1.0";
-static const sal_Char __FAR_DATA pFilterXML[]		= "StarOffice XML (Calc)";
-static const sal_Char __FAR_DATA pFilterAscii[]		= "Text - txt - csv (StarCalc)";
-static const sal_Char __FAR_DATA pFilterLotus[]		= "Lotus";
-static const sal_Char __FAR_DATA pFilterQPro6[]		= "Quattro Pro 6.0";
-static const sal_Char __FAR_DATA pFilterExcel4[]	= "MS Excel 4.0";
-static const sal_Char __FAR_DATA pFilterEx4Temp[]	= "MS Excel 4.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterExcel5[]	= "MS Excel 5.0/95";
-static const sal_Char __FAR_DATA pFilterEx5Temp[]	= "MS Excel 5.0/95 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterExcel95[]	= "MS Excel 95";
-static const sal_Char __FAR_DATA pFilterEx95Temp[]	= "MS Excel 95 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterExcel97[]	= "MS Excel 97";
-static const sal_Char __FAR_DATA pFilterEx97Temp[]	= "MS Excel 97 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterSc50[]      = "StarCalc 5.0";
+//static const sal_Char __FAR_DATA pFilterSc50Temp[]    = "StarCalc 5.0 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterSc40[]      = "StarCalc 4.0";
+//static const sal_Char __FAR_DATA pFilterSc40Temp[]    = "StarCalc 4.0 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterSc30[]      = "StarCalc 3.0";
+//static const sal_Char __FAR_DATA pFilterSc30Temp[]    = "StarCalc 3.0 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterSc10[]      = "StarCalc 1.0";
+static const sal_Char __FAR_DATA pFilterXML[]       = "StarOffice XML (Calc)";
+static const sal_Char __FAR_DATA pFilterAscii[]     = "Text - txt - csv (StarCalc)";
+static const sal_Char __FAR_DATA pFilterLotus[]     = "Lotus";
+static const sal_Char __FAR_DATA pFilterQPro6[]     = "Quattro Pro 6.0";
+static const sal_Char __FAR_DATA pFilterExcel4[]    = "MS Excel 4.0";
+static const sal_Char __FAR_DATA pFilterEx4Temp[]   = "MS Excel 4.0 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterExcel5[]    = "MS Excel 5.0/95";
+static const sal_Char __FAR_DATA pFilterEx5Temp[]   = "MS Excel 5.0/95 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterExcel95[]   = "MS Excel 95";
+static const sal_Char __FAR_DATA pFilterEx95Temp[]  = "MS Excel 95 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterExcel97[]   = "MS Excel 97";
+static const sal_Char __FAR_DATA pFilterEx97Temp[]  = "MS Excel 97 Vorlage/Template";
 static const sal_Char __FAR_DATA pFilterEx07Xml[]   = "MS Excel 2007 XML";
-static const sal_Char __FAR_DATA pFilterDBase[]		= "dBase";
-static const sal_Char __FAR_DATA pFilterDif[]		= "DIF";
-static const sal_Char __FAR_DATA pFilterSylk[]		= "SYLK";
-static const sal_Char __FAR_DATA pFilterHtml[]		= "HTML (StarCalc)";
-static const sal_Char __FAR_DATA pFilterHtmlWebQ[]	= "calc_HTML_WebQuery";
-static const sal_Char __FAR_DATA pFilterRtf[]		= "Rich Text Format (StarCalc)";
+static const sal_Char __FAR_DATA pFilterDBase[]     = "dBase";
+static const sal_Char __FAR_DATA pFilterDif[]       = "DIF";
+static const sal_Char __FAR_DATA pFilterSylk[]      = "SYLK";
+static const sal_Char __FAR_DATA pFilterHtml[]      = "HTML (StarCalc)";
+static const sal_Char __FAR_DATA pFilterHtmlWebQ[]  = "calc_HTML_WebQuery";
+static const sal_Char __FAR_DATA pFilterRtf[]       = "Rich Text Format (StarCalc)";
 
 //----------------------------------------------------------------------
 
@@ -181,10 +181,10 @@ SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell, ScResId(SCSTR_DOCSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
 }
 
-//	GlobalName der aktuellen Version:
+//  GlobalName der aktuellen Version:
 SFX_IMPL_OBJECTFACTORY( ScDocShell, SvGlobalName(SO3_SC_CLASSID), SFXOBJECTSHELL_STD_NORMAL, "scalc" )
 
-TYPEINIT1( ScDocShell, SfxObjectShell );		// SfxInPlaceObject: kein Type-Info ?
+TYPEINIT1( ScDocShell, SfxObjectShell );        // SfxInPlaceObject: kein Type-Info ?
 
 //------------------------------------------------------------------
 
@@ -198,17 +198,17 @@ void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
 {
     if ( nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
-        *pClassName		= SvGlobalName( SO3_SC_CLASSID_60 );
-        *pFormat		= SOT_FORMATSTR_ID_STARCALC_60;
-        *pFullTypeName	= String( ScResId( SCSTR_LONG_SCDOC_NAME ) );
-        *pShortTypeName	= String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
+        *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
+        *pFormat        = SOT_FORMATSTR_ID_STARCALC_60;
+        *pFullTypeName  = String( ScResId( SCSTR_LONG_SCDOC_NAME ) );
+        *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
     }
     else if ( nFileFormat == SOFFICE_FILEFORMAT_8 )
     {
-        *pClassName		= SvGlobalName( SO3_SC_CLASSID_60 );
-        *pFormat		= bTemplate ? SOT_FORMATSTR_ID_STARCALC_8_TEMPLATE : SOT_FORMATSTR_ID_STARCALC_8;
-        *pFullTypeName	= String( RTL_CONSTASCII_USTRINGPARAM("calc8") );
-        *pShortTypeName	= String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
+        *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
+        *pFormat        = bTemplate ? SOT_FORMATSTR_ID_STARCALC_8_TEMPLATE : SOT_FORMATSTR_ID_STARCALC_8;
+        *pFullTypeName  = String( RTL_CONSTASCII_USTRINGPARAM("calc8") );
+        *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
     }
     else
     {
@@ -235,7 +235,7 @@ SCTAB ScDocShell::GetSaveTab()
     if (pSh)
     {
         const ScMarkData& rMark = pSh->GetViewData()->GetMarkData();
-        for ( nTab = 0; nTab <= MAXTAB; nTab++ )	// erste markierte Tabelle
+        for ( nTab = 0; nTab <= MAXTAB; nTab++ )    // erste markierte Tabelle
             if ( rMark.GetTableSelect( nTab ) )
                 break;
     }
@@ -324,14 +324,14 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
                             ScGlobal::UnicodeStrChr( pNameBuffer, SC_COMPILER_FILE_TAB_SEP ) )
                         {
                             rtl::OUStringBuffer aDocURLBuffer;
-                            BOOL bQuote = TRUE;			// Dokumentenname ist immer quoted
+                            BOOL bQuote = TRUE;         // Dokumentenname ist immer quoted
                             ++pNameBuffer;
                             while ( bQuote && *pNameBuffer )
                             {
                                 if ( *pNameBuffer == '\'' && *(pNameBuffer-1) != '\\' )
                                     bQuote = FALSE;
                                 else if( !(*pNameBuffer == '\\' && *(pNameBuffer+1) == '\'') )
-                                    aDocURLBuffer.append(*pNameBuffer);		// falls escaped Quote: nur Quote in den Namen
+                                    aDocURLBuffer.append(*pNameBuffer);     // falls escaped Quote: nur Quote in den Namen
                                 ++pNameBuffer;
                             }
 
@@ -340,7 +340,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
                             {
                                 xub_StrLen nIndex = nNameLength - nLinkTabNameLength;
                                 INetURLObject aINetURLObject(aDocURLBuffer.makeStringAndClear());
-                                if(	aName.Equals(aLinkTabName, nIndex, nLinkTabNameLength) &&
+                                if( aName.Equals(aLinkTabName, nIndex, nLinkTabNameLength) &&
                                     (aName.GetChar(nIndex - 1) == '#') && // before the table name should be the # char
                                     !aINetURLObject.HasError()) // the docname should be a valid URL
                                 {
@@ -375,7 +375,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
     }
     else
         aDocument.SetInsertingFromOtherDoc( FALSE );
-        
+
     aDocument.SetImportingXML( FALSE );
     aDocument.EnableExecuteLink( true );
     aDocument.EnableUndo( TRUE );
@@ -394,11 +394,32 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
     aDocument.DisableIdle( FALSE );
 }
 
+namespace {
+
+class LoadMediumGuard
+{
+public:
+    explicit LoadMediumGuard(ScDocument* pDoc) :
+        mpDoc(pDoc)
+    {
+        mpDoc->SetLoadingMedium(true);
+    }
+
+    ~LoadMediumGuard()
+    {
+        mpDoc->SetLoadingMedium(false);
+    }
+private:
+    ScDocument* mpDoc;
+};
+
+}
+
 BOOL ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::LoadXML" );
 
-    //	MacroCallMode is no longer needed, state is kept in SfxObjectShell now
+    //  MacroCallMode is no longer needed, state is kept in SfxObjectShell now
 
     // no Seek(0) here - always loading from storage, GetInStream must not be called
 
@@ -424,7 +445,7 @@ BOOL ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::R
     aDocument.SetXMLFromWrapper( FALSE );
     AfterXMLLoading(bRet);
 
-    //!	row heights...
+    //! row heights...
 
     return bRet;
 }
@@ -450,11 +471,11 @@ BOOL ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::uno::R
 BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Load" );
-
+    LoadMediumGuard aLoadGuard(&aDocument);
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
-    //	only the latin script language is loaded
-    //	-> initialize the others from options (before loading)
+    //  only the latin script language is loaded
+    //  -> initialize the others from options (before loading)
     InitOptions(true);
 
     GetUndoManager()->Clear();
@@ -469,8 +490,8 @@ BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
         }
 
         {
-            //	prepare a valid document for XML filter
-            //	(for ConvertFrom, InitNew is called before)
+            //  prepare a valid document for XML filter
+            //  (for ConvertFrom, InitNew is called before)
             aDocument.MakeTable(0);
             aDocument.GetStyleSheetPool()->CreateStandardStyles();
             aDocument.UpdStlShtPtrsFrmNms();
@@ -561,27 +582,27 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
     }
 
-    if (rHint.ISA(SfxSimpleHint))								// ohne Parameter
+    if (rHint.ISA(SfxSimpleHint))                               // ohne Parameter
     {
         ULONG nSlot = ((const SfxSimpleHint&)rHint).GetId();
         switch ( nSlot )
         {
             case SFX_HINT_TITLECHANGED:
                 aDocument.SetName( SfxShell::GetName() );
-                //	RegisterNewTargetNames gibts nicht mehr
-                SFX_APP()->Broadcast(SfxSimpleHint( SC_HINT_DOCNAME_CHANGED ));	// Navigator
+                //  RegisterNewTargetNames gibts nicht mehr
+                SFX_APP()->Broadcast(SfxSimpleHint( SC_HINT_DOCNAME_CHANGED )); // Navigator
                 break;
         }
     }
-    else if (rHint.ISA(SfxStyleSheetHint))						// Vorlagen geaendert
+    else if (rHint.ISA(SfxStyleSheetHint))                      // Vorlagen geaendert
         NotifyStyle((const SfxStyleSheetHint&) rHint);
     else if (rHint.ISA(ScAutoStyleHint))
     {
-        //!	direct call for AutoStyles
+        //! direct call for AutoStyles
 
-        //	this is called synchronously from ScInterpreter::ScStyle,
-        //	modifying the document must be asynchronous
-        //	(handled by AddInitial)
+        //  this is called synchronously from ScInterpreter::ScStyle,
+        //  modifying the document must be asynchronous
+        //  (handled by AddInitial)
 
         ScAutoStyleHint& rStlHint = (ScAutoStyleHint&)rHint;
         ScRange aRange = rStlHint.GetRange();
@@ -624,7 +645,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     if( aDocument.IsInVBAMode() ) try
                     {
                         uno::Reference< frame::XModel > xModel( GetModel(), uno::UNO_SET_THROW );
-                        
+
                         // create VBAGlobals object if not yet done (this also creates the "ThisExcelDoc" symbol)
                         uno::Reference< lang::XMultiServiceFactory > xFactory( xModel, uno::UNO_QUERY_THROW );
                         xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
@@ -933,7 +954,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 BOOL __EXPORT ScDocShell::LoadFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::LoadFrom" );
-
+    LoadMediumGuard aLoadGuard(&aDocument);
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
     WaitObject aWait( GetActiveDialogParent() );
@@ -985,34 +1006,13 @@ static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLa
     rDateConvert = static_cast<bool>(aTokens[1].toInt32());
 }
 
-namespace {
-
-class LoadMediumGuard
-{
-public:
-    explicit LoadMediumGuard(ScDocument* pDoc) :
-        mpDoc(pDoc)
-    {
-        mpDoc->SetLoadingMedium(true);
-    }
-
-    ~LoadMediumGuard()
-    {
-        mpDoc->SetLoadingMedium(false);
-    }
-private:
-    ScDocument* mpDoc;
-};
-
-}
-
 BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertFrom" );
 
     LoadMediumGuard aLoadGuard(&aDocument);
 
-    BOOL bRet = FALSE;				// FALSE heisst Benutzerabbruch !!
+    BOOL bRet = FALSE;              // FALSE heisst Benutzerabbruch !!
                                     // bei Fehler: Fehler am Stream setzen!!
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
@@ -1030,10 +1030,10 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
     aConvFilterName.Erase(); //@ #BugId 54198
 
-    //	Alle Filter brauchen die komplette Datei am Stueck (nicht asynchron),
-    //	darum vorher per CreateFileStream dafuer sorgen, dass die komplette
-    //	Datei uebertragen wird.
-    rMedium.GetPhysicalName();	//! CreateFileStream direkt rufen, wenn verfuegbar
+    //  Alle Filter brauchen die komplette Datei am Stueck (nicht asynchron),
+    //  darum vorher per CreateFileStream dafuer sorgen, dass die komplette
+    //  Datei uebertragen wird.
+    rMedium.GetPhysicalName();  //! CreateFileStream direkt rufen, wenn verfuegbar
 
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
     nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
@@ -1070,7 +1070,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
         else if (aFltName.EqualsAscii(pFilterLotus))
         {
             String sItStr;
-            SfxItemSet*	 pSet = rMedium.GetItemSet();
+            SfxItemSet*  pSet = rMedium.GetItemSet();
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
@@ -1080,8 +1080,8 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             if (sItStr.Len() == 0)
             {
-                //	default for lotus import (from API without options):
-                //	IBM_437 encoding
+                //  default for lotus import (from API without options):
+                //  IBM_437 encoding
                 sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_437 );
             }
 
@@ -1116,14 +1116,14 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             else if ( aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx97Temp) )
                 eFormat = EIF_BIFF8;
 
-            MakeDrawLayer();				//! im Filter
+            MakeDrawLayer();                //! im Filter
             CalcOutputFactor();             // #93255# prepare update of row height
             ScColumn::bDoubleAlloc = TRUE;
             FltError eError = ScFormatFilter::Get().ScImportExcel( rMedium, &aDocument, eFormat );
             ScColumn::bDoubleAlloc = FALSE;
             aDocument.UpdateFontCharSet();
             if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
-                aDocument.UpdateChartListenerCollection();				//! fuer alle Importe?
+                aDocument.UpdateChartListenerCollection();              //! fuer alle Importe?
 
             // #75299# all graphics objects must have names
             aDocument.EnsureGraphicNames();
@@ -1147,7 +1147,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
         }
         else if (aFltName.EqualsAscii(pFilterAscii))
         {
-            SfxItemSet*	 pSet = rMedium.GetItemSet();
+            SfxItemSet*  pSet = rMedium.GetItemSet();
             const SfxPoolItem* pItem;
             ScAsciiOptions aOptions;
             BOOL bOptInit = FALSE;
@@ -1161,8 +1161,8 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             if ( !bOptInit )
             {
-                //	default for ascii import (from API without options):
-                //	ISO8859-1/MS_1252 encoding, comma, double quotes
+                //  default for ascii import (from API without options):
+                //  ISO8859-1/MS_1252 encoding, comma, double quotes
 
                 aOptions.SetCharSet( RTL_TEXTENCODING_MS_1252 );
                 aOptions.SetFieldSeps( (sal_Unicode) ',' );
@@ -1174,7 +1174,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             if( ! rMedium.IsStorage() )
             {
-                ScImportExport	aImpEx( &aDocument );
+                ScImportExport  aImpEx( &aDocument );
                 aImpEx.SetExtOptions( aOptions );
 
                 SvStream* pInStream = rMedium.GetInStream();
@@ -1210,7 +1210,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
         else if (aFltName.EqualsAscii(pFilterDBase))
         {
             String sItStr;
-            SfxItemSet*	 pSet = rMedium.GetItemSet();
+            SfxItemSet*  pSet = rMedium.GetItemSet();
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
@@ -1220,8 +1220,8 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             if (sItStr.Len() == 0)
             {
-                //	default for dBase import (from API without options):
-                //	IBM_850 encoding
+                //  default for dBase import (from API without options):
+                //  IBM_850 encoding
 
                 sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_850 );
             }
@@ -1238,7 +1238,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             else
                 bRet = TRUE;
 
-            aColWidthRange.aStart.SetRow( 1 );	// Spaltenheader nicht
+            aColWidthRange.aStart.SetRow( 1 );  // Spaltenheader nicht
             bSetColWidths = TRUE;
             bSetSimpleTextColWidths = TRUE;
             // Memo-Felder fuehren zu einem bSimpleColWidth[nCol]==FALSE
@@ -1255,7 +1255,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             {
                 FltError eError;
                 String sItStr;
-                SfxItemSet*	 pSet = rMedium.GetItemSet();
+                SfxItemSet*  pSet = rMedium.GetItemSet();
                 const SfxPoolItem* pItem;
                 if ( pSet && SFX_ITEM_SET ==
                      pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
@@ -1265,8 +1265,8 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
                 if (sItStr.Len() == 0)
                 {
-                    //	default for DIF import (from API without options):
-                    //	ISO8859-1/MS_1252 encoding
+                    //  default for DIF import (from API without options):
+                    //  ISO8859-1/MS_1252 encoding
 
                     sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_MS_1252 );
                 }
@@ -1382,7 +1382,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 {
                     LanguageType eLang = LANGUAGE_SYSTEM;
                     bool bDateConvert = false;
-                    SfxItemSet*	 pSet = rMedium.GetItemSet();
+                    SfxItemSet*  pSet = rMedium.GetItemSet();
                     const SfxPoolItem* pItem;
                     if ( pSet && SFX_ITEM_SET ==
                          pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
@@ -1437,13 +1437,13 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
     InitItems();
     CalcOutputFactor();
     if ( bRet && (bSetColWidths || bSetRowHeights) )
-    {	// Spaltenbreiten/Zeilenhoehen anpassen, Basis 100% Zoom
+    {   // Spaltenbreiten/Zeilenhoehen anpassen, Basis 100% Zoom
         Fraction aZoom( 1, 1 );
         double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom
-            / GetOutputFactor();	// Faktor ist Drucker zu Bildschirm
+            / GetOutputFactor();    // Faktor ist Drucker zu Bildschirm
         double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
         VirtualDevice aVirtDev;
-        //	all sheets (for Excel import)
+        //  all sheets (for Excel import)
         SCTAB nTabCount = aDocument.GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
         {
@@ -1467,15 +1467,15 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                         nWidth + (USHORT)ScGlobal::nLastColWidthExtra );
                 }
             }
-//			if ( bSetRowHeights )
-//			{
-//				//	nExtra must be 0
-//				aDocument.SetOptimalHeight(	0, nEndRow, nTab, 0, &aVirtDev,
-//					nPPTX, nPPTY, aZoom, aZoom, FALSE );
-//			}
+//          if ( bSetRowHeights )
+//          {
+//              //  nExtra must be 0
+//              aDocument.SetOptimalHeight( 0, nEndRow, nTab, 0, &aVirtDev,
+//                  nPPTX, nPPTY, aZoom, aZoom, FALSE );
+//          }
         }
         if ( bSetRowHeights )
-            UpdateAllRowHeights();		// with vdev or printer, depending on configuration
+            UpdateAllRowHeights();      // with vdev or printer, depending on configuration
     }
     FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
 
@@ -1535,7 +1535,7 @@ BOOL __EXPORT ScDocShell::Save()
 
     PrepareSaveGuard aPrepareGuard( *this);
 
-    //	wait cursor is handled with progress bar
+    //  wait cursor is handled with progress bar
     BOOL bRet = SfxObjectShell::Save();
     if( bRet )
         bRet = SaveXML( GetMedium(), NULL );
@@ -1561,7 +1561,7 @@ BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
 
     PrepareSaveGuard aPrepareGuard( *this);
 
-    //	wait cursor is handled with progress bar
+    //  wait cursor is handled with progress bar
     BOOL bRet = SfxObjectShell::SaveAs( rMedium );
     if( bRet )
         bRet = SaveXML( &rMedium, NULL );
@@ -1575,7 +1575,7 @@ BOOL __EXPORT ScDocShell::IsInformationLost()
 /*
     const SfxFilter *pFilt = GetMedium()->GetFilter();
     BOOL bRet = pFilt && pFilt->IsAlienFormat() && bNoInformLost;
-    if (bNoInformLost)					// nur einmal!!
+    if (bNoInformLost)                  // nur einmal!!
         bNoInformLost = FALSE;
     return bRet;
 */
@@ -1589,7 +1589,7 @@ BOOL __EXPORT ScDocShell::IsInformationLost()
 xub_StrLen lcl_ScDocShell_GetColWidthInChars( USHORT nWidth )
 {
     // double fColScale = 1.0;
-    double	f = nWidth;
+    double  f = nWidth;
     f *= 1328.0 / 25.0;
     f += 90.0;
     f *= 1.0 / 23.0;
@@ -1697,7 +1697,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
 
     String aString;
 
-    ScTabViewShell*	pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
     const ScViewOptions& rOpt = (pViewSh)
                                 ? pViewSh->GetViewData()->GetOptions()
                                 : aDocument.GetViewOptions();
@@ -1717,7 +1717,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     ScBaseCell* pCell;
     while ( ( pCell = aIter.GetNext( nCol, nRow ) ) != NULL )
     {
-        BOOL bProgress = FALSE;		// only upon line change
+        BOOL bProgress = FALSE;     // only upon line change
         if ( nNextRow < nRow )
         {   // empty rows or/and empty columns up to end of row
             bProgress = TRUE;
@@ -1782,7 +1782,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
             if ( pProtAttr->GetHideCell() ||
                     ( eType == CELLTYPE_FORMULA && bShowFormulas &&
                       pProtAttr->GetHideFormula() ) )
-                eType = CELLTYPE_NONE;	// hide
+                eType = CELLTYPE_NONE;  // hide
         }
         BOOL bString;
         switch ( eType )
@@ -1995,7 +1995,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     if ( nNextRow <= nEndRow )
     {
         for ( nEmptyCol = nNextCol; nEmptyCol < nEndCol; nEmptyCol++ )
-        {	// remaining empty columns of last row
+        {   // remaining empty columns of last row
             if ( bFixedWidth )
                 lcl_ScDocShell_WriteEmptyFixedWidthString( rStream,
                         aDocument, nTab, nEmptyCol );
@@ -2006,7 +2006,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         nNextRow++;
     }
     for ( nEmptyRow = nNextRow; nEmptyRow <= nEndRow; nEmptyRow++ )
-    {	// entire empty rows
+    {   // entire empty rows
         for ( nEmptyCol = nStartCol; nEmptyCol < nEndCol; nEmptyCol++ )
         {
             if ( bFixedWidth )
@@ -2032,7 +2032,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
     //  it's already in ExecuteSave (as for Save and SaveAs)
 
     if (pAutoStyleList)
-        pAutoStyleList->ExecuteAllNow();				// Vorlagen-Timeouts jetzt ausfuehren
+        pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
     if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
         SfxObjectShell::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
 
@@ -2127,7 +2127,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         if (pStream)
         {
             String sItStr;
-            SfxItemSet*	 pSet = rMed.GetItemSet();
+            SfxItemSet*  pSet = rMed.GetItemSet();
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
@@ -2137,8 +2137,8 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 
             if ( sItStr.Len() == 0 )
             {
-                //	default for ascii export (from API without options):
-                //	ISO8859-1/MS_1252 encoding, comma, double quotes
+                //  default for ascii export (from API without options):
+                //  ISO8859-1/MS_1252 encoding, comma, double quotes
 
                 ScImportOptions aDefOptions( ',', '"', RTL_TEXTENCODING_MS_1252 );
                 sItStr = aDefOptions.BuildString();
@@ -2157,7 +2157,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
     else if (aFltName.EqualsAscii(pFilterDBase))
     {
         String sCharSet;
-        SfxItemSet*	pSet = rMed.GetItemSet();
+        SfxItemSet* pSet = rMed.GetItemSet();
         const SfxPoolItem* pItem;
         if ( pSet && SFX_ITEM_SET ==
              pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
@@ -2167,8 +2167,8 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 
         if (sCharSet.Len() == 0)
         {
-            //	default for dBase export (from API without options):
-            //	IBM_850 encoding
+            //  default for dBase export (from API without options):
+            //  IBM_850 encoding
 
             sCharSet = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_850 );
         }
@@ -2183,12 +2183,12 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 
         if ( eError != eERR_OK && (eError & ERRCODE_WARNING_MASK) )
         {
-//!			if ( !rMed.GetError() )
-//!				rMed.SetError( eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+//!         if ( !rMed.GetError() )
+//!             rMed.SetError( eError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             eError = eERR_OK;
         }
-//!		else if ( aDocument.GetTableCount() > 1 && !rMed.GetError() )
-//!			rMed.SetError( SCWARN_EXPORT_ASCII, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+//!     else if ( aDocument.GetTableCount() > 1 && !rMed.GetError() )
+//!         rMed.SetError( SCWARN_EXPORT_ASCII, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
         INetURLObject aTmpFile( rMed.GetPhysicalName(), INET_PROT_FILE );
         if ( bHasMemo )
@@ -2228,7 +2228,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         if (pStream)
         {
             String sItStr;
-            SfxItemSet*	 pSet = rMed.GetItemSet();
+            SfxItemSet*  pSet = rMed.GetItemSet();
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
@@ -2238,8 +2238,8 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 
             if (sItStr.Len() == 0)
             {
-                //	default for DIF export (from API without options):
-                //	ISO8859-1/MS_1252 encoding
+                //  default for DIF export (from API without options):
+                //  ISO8859-1/MS_1252 encoding
 
                 sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_MS_1252 );
             }
@@ -2306,7 +2306,7 @@ BOOL __EXPORT ScDocShell::DoSaveCompleted( SfxMedium * pNewStor )
 {
     BOOL bRet = SfxObjectShell::DoSaveCompleted( pNewStor );
 
-    //	SC_HINT_DOC_SAVED fuer Wechsel ReadOnly -> Read/Write
+    //  SC_HINT_DOC_SAVED fuer Wechsel ReadOnly -> Read/Write
     Broadcast( SfxSimpleHint( SC_HINT_DOC_SAVED ) );
     return bRet;
 }
@@ -2315,7 +2315,7 @@ BOOL __EXPORT ScDocShell::DoSaveCompleted( SfxMedium * pNewStor )
 sal_Bool ScDocShell::QuerySlotExecutable( USHORT nSlotId )
 {
     // #i112634# ask VBA event handlers whether to save or print the document
-    
+
     using namespace ::com::sun::star::script::vba;
 
     sal_Int32 nVbaEventId = VBAEventId::NO_EVENT;
@@ -2398,27 +2398,27 @@ USHORT __EXPORT ScDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     // end handler code
 
     USHORT nRet = SfxObjectShell::PrepareClose( bUI, bForBrowsing );
-    if (nRet == TRUE)						// TRUE = schliessen
-        aDocument.DisableIdle(TRUE);		// nicht mehr drin rumpfuschen !!!
+    if (nRet == TRUE)                       // TRUE = schliessen
+        aDocument.DisableIdle(TRUE);        // nicht mehr drin rumpfuschen !!!
 
     return nRet;
 }
 
 void ScDocShell::PrepareReload()
 {
-    SfxObjectShell::PrepareReload();	// tut nichts?
+    SfxObjectShell::PrepareReload();    // tut nichts?
 
-    //	Das Disconnect von DDE-Links kann Reschedule ausloesen.
-    //	Wenn die DDE-Links erst im Dokument-dtor geloescht werden, kann beim Reload
-    //	aus diesem Reschedule das DDE-Link-Update fuer das neue Dokument ausgeloest
-    //	werden. Dabei verklemmt sicht dann irgendwas.
-    //	-> Beim Reload die DDE-Links des alten Dokuments vorher disconnecten
+    //  Das Disconnect von DDE-Links kann Reschedule ausloesen.
+    //  Wenn die DDE-Links erst im Dokument-dtor geloescht werden, kann beim Reload
+    //  aus diesem Reschedule das DDE-Link-Update fuer das neue Dokument ausgeloest
+    //  werden. Dabei verklemmt sicht dann irgendwas.
+    //  -> Beim Reload die DDE-Links des alten Dokuments vorher disconnecten
 
     aDocument.DisconnectDdeLinks();
 }
 
 
-String ScDocShell::GetOwnFilterName()			// static
+String ScDocShell::GetOwnFilterName()           // static
 {
     return String::CreateFromAscii(pFilterSc50);
 }
@@ -2428,35 +2428,35 @@ String ScDocShell::GetHtmlFilterName()
     return String::CreateFromAscii(pFilterHtml);
 }
 
-String ScDocShell::GetWebQueryFilterName()		// static
+String ScDocShell::GetWebQueryFilterName()      // static
 {
     return String::CreateFromAscii(pFilterHtmlWebQ);
 }
 
-String ScDocShell::GetAsciiFilterName()			// static
+String ScDocShell::GetAsciiFilterName()         // static
 {
     return String::CreateFromAscii(pFilterAscii);
 }
 
-String ScDocShell::GetLotusFilterName()			// static
+String ScDocShell::GetLotusFilterName()         // static
 {
     return String::CreateFromAscii(pFilterLotus);
 }
 
-String ScDocShell::GetDBaseFilterName()			// static
+String ScDocShell::GetDBaseFilterName()         // static
 {
     return String::CreateFromAscii(pFilterDBase);
 }
 
-String ScDocShell::GetDifFilterName()			// static
+String ScDocShell::GetDifFilterName()           // static
 {
     return String::CreateFromAscii(pFilterDif);
 }
 
-BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )		// static
+BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
 {
-    //	TRUE for those filters that keep the default table name
-    //	(which is language specific)
+    //  TRUE for those filters that keep the default table name
+    //  (which is language specific)
 
     return rFilter.EqualsAscii( pFilterAscii )
         || rFilter.EqualsAscii( pFilterLotus )
@@ -2472,24 +2472,24 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )		// static
 //==================================================================
 
 #define __SCDOCSHELL_INIT \
-        aDocument		( SCDOCMODE_DOCUMENT, this ), \
+        aDocument       ( SCDOCMODE_DOCUMENT, this ), \
         aDdeTextFmt(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TEXT"))), \
         nPrtToScreenFactor( 1.0 ), \
         pImpl           ( new DocShell_Impl ), \
-        bHeaderOn		( TRUE ), \
-        bFooterOn		( TRUE ), \
+        bHeaderOn       ( TRUE ), \
+        bFooterOn       ( TRUE ), \
         bNoInformLost   ( TRUE ), \
-        bIsEmpty		( TRUE ), \
-        bIsInUndo		( FALSE ), \
+        bIsEmpty        ( TRUE ), \
+        bIsInUndo       ( FALSE ), \
         bDocumentModifiedPending( FALSE ), \
-        nDocumentLock	( 0 ), \
+        nDocumentLock   ( 0 ), \
         nCanUpdate (com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG), \
         bUpdateEnabled  ( TRUE ), \
         pOldAutoDBRange ( NULL ), \
-        pDocHelper 		( NULL ), \
-        pAutoStyleList	( NULL ), \
-        pPaintLockData	( NULL ), \
-        pOldJobSetup	( NULL ), \
+        pDocHelper      ( NULL ), \
+        pAutoStyleList  ( NULL ), \
+        pPaintLockData  ( NULL ), \
+        pOldJobSetup    ( NULL ), \
         pSolverSaveData ( NULL ), \
         pSheetSaveData  ( NULL ), \
         pModificator    ( NULL )
@@ -2511,7 +2511,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell )
 
     pDocFunc = new ScDocFunc(*this);
 
-    //	SetBaseModel needs exception handling
+    //  SetBaseModel needs exception handling
     ScModelObj::CreateAndSet( this );
 
     StartListening(*this);
@@ -2522,13 +2522,13 @@ ScDocShell::ScDocShell( const ScDocShell& rShell )
     GetPageOnFromPageStyleSet( NULL, 0, bHeaderOn, bFooterOn );
     SetHelpId( HID_SCSHELL_DOCSH );
 
-    //	InitItems und CalcOutputFactor werden jetzt nach bei Load/ConvertFrom/InitNew gerufen
+    //  InitItems und CalcOutputFactor werden jetzt nach bei Load/ConvertFrom/InitNew gerufen
 }
 
 //------------------------------------------------------------------
 
 ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags )
-    :	SfxObjectShell( i_nSfxCreationFlags )
+    :   SfxObjectShell( i_nSfxCreationFlags )
     ,   __SCDOCSHELL_INIT
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
@@ -2536,11 +2536,11 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags )
     SetPool( &SC_MOD()->GetPool() );
 
     bIsInplace = (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
-    //	wird zurueckgesetzt, wenn nicht inplace
+    //  wird zurueckgesetzt, wenn nicht inplace
 
     pDocFunc = new ScDocFunc(*this);
 
-    //	SetBaseModel needs exception handling
+    //  SetBaseModel needs exception handling
     ScModelObj::CreateAndSet( this );
 
     StartListening(*this);
@@ -2552,14 +2552,14 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags )
     aDocument.GetDBCollection()->SetRefreshHandler(
         LINK( this, ScDocShell, RefreshDBDataHdl ) );
 
-    //	InitItems und CalcOutputFactor werden jetzt nach bei Load/ConvertFrom/InitNew gerufen
+    //  InitItems und CalcOutputFactor werden jetzt nach bei Load/ConvertFrom/InitNew gerufen
 }
 
 //------------------------------------------------------------------
 
 __EXPORT ScDocShell::~ScDocShell()
 {
-    ResetDrawObjectShell();	// #55570# falls der Drawing-Layer noch versucht, darauf zuzugreifen
+    ResetDrawObjectShell(); // #55570# falls der Drawing-Layer noch versucht, darauf zuzugreifen
 
     SfxStyleSheetPool* pStlPool = aDocument.GetStyleSheetPool();
     if (pStlPool)
@@ -2569,7 +2569,7 @@ __EXPORT ScDocShell::~ScDocShell()
     delete pAutoStyleList;
 
     SfxApplication *pSfxApp = SFX_APP();
-    if ( pSfxApp->GetDdeService() )				// DDE vor Dokument loeschen
+    if ( pSfxApp->GetDdeService() )             // DDE vor Dokument loeschen
         pSfxApp->RemoveDdeTopic( this );
 
     delete pDocFunc;
@@ -2579,7 +2579,7 @@ __EXPORT ScDocShell::~ScDocShell()
 
     delete pPaintLockData;
 
-    delete pOldJobSetup;		// gesetzt nur bei Fehler in StartJob()
+    delete pOldJobSetup;        // gesetzt nur bei Fehler in StartJob()
 
     delete pSolverSaveData;
     delete pSheetSaveData;
@@ -2611,16 +2611,16 @@ void ScDocShell::SetModified( BOOL bModified )
 
 void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
 {
-    //	BroadcastUno muss auch mit pPaintLockData sofort passieren
-    //!	auch bei SetDrawModified, wenn Drawing angebunden ist
-    //!	dann eigener Hint???
+    //  BroadcastUno muss auch mit pPaintLockData sofort passieren
+    //! auch bei SetDrawModified, wenn Drawing angebunden ist
+    //! dann eigener Hint???
 
     if ( pPaintLockData && bIsModified )
     {
         //! BCA_BRDCST_ALWAYS etc. also needed here?
         aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 
-        pPaintLockData->SetModified();			// spaeter...
+        pPaintLockData->SetModified();          // spaeter...
         return;
     }
 
@@ -2641,18 +2641,18 @@ void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
                 aDocument.CalcFormulaTree( TRUE );
             PostDataChanged();
 
-            //	Detective AutoUpdate:
-            //	Update if formulas were modified (DetectiveDirty) or the list contains
-            //	"Trace Error" entries (#75362# - Trace Error can look completely different
-            //	after changes to non-formula cells).
+            //  Detective AutoUpdate:
+            //  Update if formulas were modified (DetectiveDirty) or the list contains
+            //  "Trace Error" entries (#75362# - Trace Error can look completely different
+            //  after changes to non-formula cells).
 
             ScDetOpList* pList = aDocument.GetDetOpList();
             if ( pList && ( aDocument.IsDetectiveDirty() || pList->HasAddError() ) &&
                  pList->Count() && !IsInUndo() && SC_MOD()->GetAppOptions().GetDetectiveAuto() )
             {
-                GetDocFunc().DetectiveRefresh(TRUE);	// TRUE = caused by automatic update
+                GetDocFunc().DetectiveRefresh(TRUE);    // TRUE = caused by automatic update
             }
-            aDocument.SetDetectiveDirty(FALSE);			// always reset, also if not refreshed
+            aDocument.SetDetectiveDirty(FALSE);         // always reset, also if not refreshed
         }
 
         // #b6697848# notify UNO objects after BCA_BRDCST_ALWAYS etc.
@@ -2660,9 +2660,9 @@ void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
     }
 }
 
-//	SetDrawModified - ohne Formel-Update
-//	(Drawing muss auch beim normalen SetDocumentModified upgedated werden,
-//	 z.B. bei Tabelle loeschen etc.)
+//  SetDrawModified - ohne Formel-Update
+//  (Drawing muss auch beim normalen SetDocumentModified upgedated werden,
+//   z.B. bei Tabelle loeschen etc.)
 
 void ScDocShell::SetDrawModified( BOOL bIsModified /* = TRUE */ )
 {
@@ -2695,7 +2695,7 @@ void ScDocShell::SetDrawModified( BOOL bIsModified /* = TRUE */ )
         if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
         {
             aDocument.UpdateChartListenerCollection();
-            SFX_APP()->Broadcast(SfxSimpleHint( SC_HINT_DRAW_CHANGED ));	// Navigator
+            SFX_APP()->Broadcast(SfxSimpleHint( SC_HINT_DRAW_CHANGED ));    // Navigator
         }
         SC_MOD()->AnythingChanged();
     }
@@ -2725,7 +2725,7 @@ SfxDocumentInfoDialog* __EXPORT ScDocShell::CreateDocumentInfoDialog(
                                          Window *pParent, const SfxItemSet &rSet )
 {
     SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );
-    ScDocShell*			   pDocSh = PTR_CAST(ScDocShell,SfxObjectShell::Current());
+    ScDocShell*            pDocSh = PTR_CAST(ScDocShell,SfxObjectShell::Current());
 
     //nur mit Statistik, wenn dieses Doc auch angezeigt wird, nicht
     //aus dem Doc-Manager
@@ -2734,23 +2734,23 @@ SfxDocumentInfoDialog* __EXPORT ScDocShell::CreateDocumentInfoDialog(
     {
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
-        ::CreateTabPage ScDocStatPageCreate = 	pFact->GetTabPageCreatorFunc( RID_SCPAGE_STAT );
+        ::CreateTabPage ScDocStatPageCreate =   pFact->GetTabPageCreatorFunc( RID_SCPAGE_STAT );
         DBG_ASSERT(ScDocStatPageCreate, "Tabpage create fail!");//CHINA001
         pDlg->AddTabPage( 42,
             ScGlobal::GetRscString( STR_DOC_STAT ),
             ScDocStatPageCreate,
             NULL);
-//CHINA001		pDlg->AddTabPage( 42,
-//CHINA001		ScGlobal::GetRscString( STR_DOC_STAT ),
-//CHINA001		ScDocStatPage::Create,
-//CHINA001		NULL );
+//CHINA001      pDlg->AddTabPage( 42,
+//CHINA001      ScGlobal::GetRscString( STR_DOC_STAT ),
+//CHINA001      ScDocStatPage::Create,
+//CHINA001      NULL );
     }
     return pDlg;
 }
 
 Window* ScDocShell::GetActiveDialogParent()
 {
-    ScTabViewShell* pViewSh	= ScTabViewShell::GetActiveViewShell();
+    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )
         return pViewSh->GetDialogParent();
     else
@@ -2816,7 +2816,7 @@ ScDocShellModificator::~ScDocShellModificator()
     ScDocument* pDoc = rDocShell.GetDocument();
     pDoc->SetAutoCalcShellDisabled( bAutoCalcShellDisabled );
     if ( !bAutoCalcShellDisabled && rDocShell.IsDocumentModifiedPending() )
-        rDocShell.SetDocumentModified();	// last one shuts off the lights
+        rDocShell.SetDocumentModified();    // last one shuts off the lights
     pDoc->DisableIdle( bIdleDisabled );
 }
 
@@ -2860,7 +2860,7 @@ bool ScDocShell::IsChangeRecording() const
     return pChangeTrack != NULL;
 }
 
-    
+
 bool ScDocShell::HasChangeRecordProtection() const
 {
     bool bRes = false;
@@ -2870,7 +2870,7 @@ bool ScDocShell::HasChangeRecordProtection() const
     return bRes;
 }
 
-    
+
 void ScDocShell::SetChangeRecording( bool bActivate )
 {
     bool bOldChangeRecording = IsChangeRecording();
@@ -2896,9 +2896,9 @@ void ScDocShell::SetChangeRecording( bool bActivate )
         if (pBindings)
             pBindings->InvalidateAll(FALSE);
     }
-}    
+}
 
-        
+
 bool ScDocShell::SetProtectionPassword( const String &rNewPassword )
 {
     bool bRes = false;
@@ -2911,7 +2911,7 @@ bool ScDocShell::SetProtectionPassword( const String &rNewPassword )
         {
             // when password protection is applied change tracking must always be active
             SetChangeRecording( true );
-        
+
             ::com::sun::star::uno::Sequence< sal_Int8 > aProtectionHash;
             SvPasswordHelper::GetHashPassword( aProtectionHash, rNewPassword );
             pChangeTrack->SetProtection( aProtectionHash );
@@ -2930,9 +2930,9 @@ bool ScDocShell::SetProtectionPassword( const String &rNewPassword )
     }
 
     return bRes;
-}    
+}
 
-        
+
 bool ScDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash )
 {
     bool bRes = false;
@@ -2943,6 +2943,6 @@ bool ScDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
         bRes = true;
     }
     return bRes;
-}    
+}
 
-        
+

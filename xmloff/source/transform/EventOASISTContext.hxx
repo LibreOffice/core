@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,20 +37,20 @@ class XMLEventOASISTransformerContext : public XMLRenameElemTransformerContext
 public:
     TYPEINFO();
 
-    XMLEventOASISTransformerContext( XMLTransformerBase& rTransformer, 
+    XMLEventOASISTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
     virtual ~XMLEventOASISTransformerContext();
 
     static XMLTransformerOASISEventMap_Impl *CreateFormEventMap();
     static XMLTransformerOASISEventMap_Impl *CreateEventMap();
     static void FlushEventMap( XMLTransformerOASISEventMap_Impl *p );
-    static ::rtl::OUString GetEventName( sal_uInt16 nPrefix, 
+    static ::rtl::OUString GetEventName( sal_uInt16 nPrefix,
                              const ::rtl::OUString& rName,
                              XMLTransformerOASISEventMap_Impl& rMap,
-                             XMLTransformerOASISEventMap_Impl* pMap2	);
+                             XMLTransformerOASISEventMap_Impl* pMap2    );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-#endif	//  _XMLOFF_EVENTOASISTCONTEXT_HXX
+#endif  //  _XMLOFF_EVENTOASISTCONTEXT_HXX
 

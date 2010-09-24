@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,11 +97,11 @@ DEFINE_INIT_SERVICE(
             it's not neccessary to do anything here.
  */
 DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        //	init baseclasses first!
-        //	Attention: Don't change order of initialization!
+        //  init baseclasses first!
+        //  Attention: Don't change order of initialization!
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
         , ::cppu::OWeakObject(                               )
-        //	init member
+        //  init member
         , m_xDispatchRecorder( NULL                          )
         , m_xFactory         ( xFactory                      )
 {
@@ -218,4 +218,4 @@ void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&
     }
 }
 
-}	// namespace framework
+}   // namespace framework

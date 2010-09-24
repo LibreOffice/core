@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ using namespace ::ooo::vba;
 
 bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, ScRange& refRange, ScRangeList& aCellRanges, formula::FormulaGrammar::AddressConvention aConv = formula::FormulaGrammar::CONV_XL_A1 ) throw ( uno::RuntimeException );
 
-ScVbaPageSetup::ScVbaPageSetup(const uno::Reference< XHelperInterface >& xParent, 
+ScVbaPageSetup::ScVbaPageSetup(const uno::Reference< XHelperInterface >& xParent,
                 const uno::Reference< uno::XComponentContext >& xContext,
                 const uno::Reference< sheet::XSpreadsheet >& xSheet,
                 const uno::Reference< frame::XModel >& xModel) throw (uno::RuntimeException):
@@ -65,7 +65,7 @@ ScVbaPageSetup::ScVbaPageSetup(const uno::Reference< XHelperInterface >& xParent
     mxPageProps.set( xPageStyle->getByName(aStyleName), uno::UNO_QUERY_THROW );
     mnOrientLandscape = excel::XlPageOrientation::xlLandscape;
     mnOrientPortrait = excel::XlPageOrientation::xlPortrait;
-}		
+}
 
 rtl::OUString SAL_CALL ScVbaPageSetup::getPrintArea() throw (css::uno::RuntimeException)
 {
@@ -88,7 +88,7 @@ rtl::OUString SAL_CALL ScVbaPageSetup::getPrintArea() throw (css::uno::RuntimeEx
         ScDocument* pDoc = excel::getDocShell( mxModel )->GetDocument();
         aRangeList.Format( aPrintArea, nFlags, pDoc, formula::FormulaGrammar::CONV_XL_A1, ','  );
     }
-    
+
     return aPrintArea;
 }
 
@@ -106,7 +106,7 @@ void SAL_CALL ScVbaPageSetup::setPrintArea( const rtl::OUString& rAreas ) throw 
     {
         ScRangeList aCellRanges;
         ScRange aRange;
-        if( getScRangeListForAddress( rAreas, excel::getDocShell( mxModel ) , aRange, aCellRanges ) ) 
+        if( getScRangeListForAddress( rAreas, excel::getDocShell( mxModel ) , aRange, aCellRanges ) )
         {
             uno::Sequence< table::CellRangeAddress > aSeq( aCellRanges.Count() );
             USHORT i=0;
@@ -263,7 +263,7 @@ void SAL_CALL ScVbaPageSetup::setLeftHeader( const rtl::OUString& leftHeader) th
         {
             uno::Reference< text::XText > xText = xHeaderContent->getLeftText();
             xText->setString( leftHeader );
-            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightPageHeaderContent")), uno::makeAny(xHeaderContent) ); 
+            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightPageHeaderContent")), uno::makeAny(xHeaderContent) );
         }
     }
     catch( uno::Exception& )
@@ -299,7 +299,7 @@ void SAL_CALL ScVbaPageSetup::setCenterHeader( const rtl::OUString& centerHeader
         {
             uno::Reference< text::XText > xText = xHeaderContent->getCenterText();
             xText->setString( centerHeader );
-            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightPageHeaderContent")), uno::makeAny(xHeaderContent) ); 
+            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightPageHeaderContent")), uno::makeAny(xHeaderContent) );
         }
     }
     catch( uno::Exception& )
@@ -335,7 +335,7 @@ void SAL_CALL ScVbaPageSetup::setRightHeader( const rtl::OUString& rightHeader) 
         {
             uno::Reference< text::XText > xText = xHeaderContent->getRightText();
             xText->setString( rightHeader );
-            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightPageHeaderContent")), uno::makeAny(xHeaderContent) ); 
+            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightPageHeaderContent")), uno::makeAny(xHeaderContent) );
         }
     }
     catch( uno::Exception& )
@@ -371,7 +371,7 @@ void SAL_CALL ScVbaPageSetup::setLeftFooter( const rtl::OUString& leftFooter) th
         {
             uno::Reference< text::XText > xText = xFooterContent->getLeftText();
             xText->setString( leftFooter );
-            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightPageFooterContent")), uno::makeAny(xFooterContent) ); 
+            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightPageFooterContent")), uno::makeAny(xFooterContent) );
         }
     }
     catch( uno::Exception& )
@@ -407,7 +407,7 @@ void SAL_CALL ScVbaPageSetup::setCenterFooter( const rtl::OUString& centerFooter
         {
             uno::Reference< text::XText > xText = xFooterContent->getCenterText();
             xText->setString( centerFooter );
-            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightPageFooterContent")), uno::makeAny(xFooterContent) ); 
+            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightPageFooterContent")), uno::makeAny(xFooterContent) );
         }
     }
     catch( uno::Exception& )
@@ -444,7 +444,7 @@ void SAL_CALL ScVbaPageSetup::setRightFooter( const rtl::OUString& rightFooter) 
         {
             uno::Reference< text::XText > xText = xFooterContent->getRightText();
             xText->setString( rightFooter );
-            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightPageFooterContent")), uno::makeAny(xFooterContent) ); 
+            mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightPageFooterContent")), uno::makeAny(xFooterContent) );
         }
     }
     catch( uno::Exception& )
@@ -606,14 +606,14 @@ void SAL_CALL ScVbaPageSetup::setPrintHeadings( sal_Bool printHeadings) throw (c
     }
 }
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaPageSetup::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPageSetup") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 ScVbaPageSetup::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

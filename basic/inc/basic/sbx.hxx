@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,10 +95,10 @@ class SbxInfo : public SvRefBase
     friend class SbxVariable;
     friend class SbMethod;
 
-    String			aComment;
-    String			aHelpFile;
-    UINT32			nHelpId;
-    SbxParams		aParams;
+    String          aComment;
+    String          aHelpFile;
+    UINT32          nHelpId;
+    SbxParams       aParams;
 
 protected:
     BOOL LoadData( SvStream&, USHORT );
@@ -108,16 +108,16 @@ public:
     SbxInfo();
     SbxInfo( const String&, UINT32 );
 
-    void				AddParam( const String&, SbxDataType, USHORT=SBX_READ );
-    void				AddParam( const SbxParamInfo& );
-    const SbxParamInfo*	GetParam( USHORT n ) const;	// index starts with 1!
-    const String&		GetComment() const				{ return aComment; }
-    const String&		GetHelpFile() const    			{ return aHelpFile; }
-    UINT32				GetHelpId() const				{ return nHelpId;   }
+    void                AddParam( const String&, SbxDataType, USHORT=SBX_READ );
+    void                AddParam( const SbxParamInfo& );
+    const SbxParamInfo* GetParam( USHORT n ) const; // index starts with 1!
+    const String&       GetComment() const              { return aComment; }
+    const String&       GetHelpFile() const             { return aHelpFile; }
+    UINT32              GetHelpId() const               { return nHelpId;   }
 
-    void				SetComment( const String& r )	{ aComment = r; }
-    void				SetHelpFile( const String& r )	{ aHelpFile = r; }
-    void				SetHelpId( UINT32 nId )			{ nHelpId = nId; }
+    void                SetComment( const String& r )   { aComment = r; }
+    void                SetHelpFile( const String& r )  { aHelpFile = r; }
+    void                SetHelpId( UINT32 nId )         { nHelpId = nId; }
 };
 
 #endif

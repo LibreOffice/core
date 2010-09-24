@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,14 +85,14 @@ ScDataPilotServiceDlg::ScDataPilotServiceDlg( Window* pParent,
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aFtService      ( this, ScResId( FT_SERVICE ) ),
     aLbService      ( this, ScResId( LB_SERVICE ) ),
-    aFtSource		( this, ScResId( FT_SOURCE ) ),
-    aEdSource		( this, ScResId( ED_SOURCE ) ),
-    aFtName			( this, ScResId( FT_NAME ) ),
-    aEdName			( this, ScResId( ED_NAME ) ),
-    aFtUser			( this, ScResId( FT_USER ) ),
-    aEdUser			( this, ScResId( ED_USER ) ),
-    aFtPasswd		( this, ScResId( FT_PASSWD ) ),
-    aEdPasswd		( this, ScResId( ED_PASSWD ) ),
+    aFtSource       ( this, ScResId( FT_SOURCE ) ),
+    aEdSource       ( this, ScResId( ED_SOURCE ) ),
+    aFtName         ( this, ScResId( FT_NAME ) ),
+    aEdName         ( this, ScResId( ED_NAME ) ),
+    aFtUser         ( this, ScResId( FT_USER ) ),
+    aEdUser         ( this, ScResId( ED_USER ) ),
+    aFtPasswd       ( this, ScResId( FT_PASSWD ) ),
+    aEdPasswd       ( this, ScResId( ED_PASSWD ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) )

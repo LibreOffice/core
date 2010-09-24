@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,62 +39,62 @@ class SfxPoolItem;
 class SvParser;
 class SvxFieldItem;
 
-enum EETextFormat		{ EE_FORMAT_TEXT = 0x20, EE_FORMAT_RTF, EE_FORMAT_BIN = 0x31, EE_FORMAT_HTML, EE_FORMAT_XML };
+enum EETextFormat       { EE_FORMAT_TEXT = 0x20, EE_FORMAT_RTF, EE_FORMAT_BIN = 0x31, EE_FORMAT_HTML, EE_FORMAT_XML };
 enum EEHorizontalTextDirection { EE_HTEXTDIR_DEFAULT, EE_HTEXTDIR_L2R, EE_HTEXTDIR_R2L };
-enum EESelectionMode	{ EE_SELMODE_STD, EE_SELMODE_TXTONLY, EE_SELMODE_HIDDEN };
+enum EESelectionMode    { EE_SELMODE_STD, EE_SELMODE_TXTONLY, EE_SELMODE_HIDDEN };
     // EE_SELMODE_HIDDEN can be used to completely hide the selection. This is usefull e.g. when you want show the selection
     // only as long as your window (which the edit view works on) has the focus
-enum EESpellState		{ EE_SPELL_OK, EE_SPELL_NOLANGUAGE, EE_SPELL_LANGUAGENOTINSTALLED, EE_SPELL_NOSPELLER, EE_SPELL_ERRORFOUND };
-enum EVAnchorMode		{
-            ANCHOR_TOP_LEFT, 	ANCHOR_VCENTER_LEFT, 	ANCHOR_BOTTOM_LEFT,
-            ANCHOR_TOP_HCENTER,	ANCHOR_VCENTER_HCENTER,	ANCHOR_BOTTOM_HCENTER,
-            ANCHOR_TOP_RIGHT,	ANCHOR_VCENTER_RIGHT,	ANCHOR_BOTTOM_RIGHT };
+enum EESpellState       { EE_SPELL_OK, EE_SPELL_NOLANGUAGE, EE_SPELL_LANGUAGENOTINSTALLED, EE_SPELL_NOSPELLER, EE_SPELL_ERRORFOUND };
+enum EVAnchorMode       {
+            ANCHOR_TOP_LEFT,    ANCHOR_VCENTER_LEFT,    ANCHOR_BOTTOM_LEFT,
+            ANCHOR_TOP_HCENTER, ANCHOR_VCENTER_HCENTER, ANCHOR_BOTTOM_HCENTER,
+            ANCHOR_TOP_RIGHT,   ANCHOR_VCENTER_RIGHT,   ANCHOR_BOTTOM_RIGHT };
 
-#define EE_PARA_NOT_FOUND		0xFFFF
-#define EE_PARA_APPEND			0xFFFF
-#define EE_PARA_ALL				0xFFFF
-#define EE_APPEND				0xFFFF
-#define EE_INDEX_NOT_FOUND		0xFFFF
+#define EE_PARA_NOT_FOUND       0xFFFF
+#define EE_PARA_APPEND          0xFFFF
+#define EE_PARA_ALL             0xFFFF
+#define EE_APPEND               0xFFFF
+#define EE_INDEX_NOT_FOUND      0xFFFF
 
 // Fehlermeldungen fuer Read/Write-Methode
-#define EE_READWRITE_OK				 (SVSTREAM_OK)
-#define EE_READWRITE_WRONGFORMAT	 (SVSTREAM_ERRBASE_USER+1)
-#define EE_READWRITE_GENERALERROR	 (SVSTREAM_ERRBASE_USER+2)
+#define EE_READWRITE_OK              (SVSTREAM_OK)
+#define EE_READWRITE_WRONGFORMAT     (SVSTREAM_ERRBASE_USER+1)
+#define EE_READWRITE_GENERALERROR    (SVSTREAM_ERRBASE_USER+2)
 
-#define EDITUNDO_START				100
-#define EDITUNDO_REMOVECHARS		100
-#define EDITUNDO_CONNECTPARAS		101
-#define EDITUNDO_REMOVEFEATURE		102
-#define EDITUNDO_MOVEPARAGRAPHS		103
-#define EDITUNDO_INSERTFEATURE		104
-#define EDITUNDO_SPLITPARA			105
-#define EDITUNDO_INSERTCHARS		106
-#define EDITUNDO_DELCONTENT			107
-#define EDITUNDO_DELETE				108
-#define EDITUNDO_CUT				109
-#define EDITUNDO_PASTE				110
-#define EDITUNDO_INSERT				111
-#define EDITUNDO_SRCHANDREPL		112
-#define EDITUNDO_MOVEPARAS			113
-#define EDITUNDO_PARAATTRIBS		114
-#define EDITUNDO_ATTRIBS			115
-#define EDITUNDO_DRAGANDDROP		116
-#define EDITUNDO_READ				117
-#define EDITUNDO_STYLESHEET			118
-#define EDITUNDO_REPLACEALL			119
-#define EDITUNDO_STRETCH			120
-#define EDITUNDO_RESETATTRIBS		121
-#define EDITUNDO_INDENTBLOCK		122
-#define EDITUNDO_UNINDENTBLOCK		123
-#define EDITUNDO_MARKSELECTION		124
-#define EDITUNDO_TRANSLITERATE		125
-#define EDITUNDO_END				125
+#define EDITUNDO_START              100
+#define EDITUNDO_REMOVECHARS        100
+#define EDITUNDO_CONNECTPARAS       101
+#define EDITUNDO_REMOVEFEATURE      102
+#define EDITUNDO_MOVEPARAGRAPHS     103
+#define EDITUNDO_INSERTFEATURE      104
+#define EDITUNDO_SPLITPARA          105
+#define EDITUNDO_INSERTCHARS        106
+#define EDITUNDO_DELCONTENT         107
+#define EDITUNDO_DELETE             108
+#define EDITUNDO_CUT                109
+#define EDITUNDO_PASTE              110
+#define EDITUNDO_INSERT             111
+#define EDITUNDO_SRCHANDREPL        112
+#define EDITUNDO_MOVEPARAS          113
+#define EDITUNDO_PARAATTRIBS        114
+#define EDITUNDO_ATTRIBS            115
+#define EDITUNDO_DRAGANDDROP        116
+#define EDITUNDO_READ               117
+#define EDITUNDO_STYLESHEET         118
+#define EDITUNDO_REPLACEALL         119
+#define EDITUNDO_STRETCH            120
+#define EDITUNDO_RESETATTRIBS       121
+#define EDITUNDO_INDENTBLOCK        122
+#define EDITUNDO_UNINDENTBLOCK      123
+#define EDITUNDO_MARKSELECTION      124
+#define EDITUNDO_TRANSLITERATE      125
+#define EDITUNDO_END                125
 
-#define EDITUNDO_USER				200
+#define EDITUNDO_USER               200
 
 
-#define EE_COMPATIBLEMODE_PARAGRAPHSPACING_SUMMATION			0x0001
-#define EE_COMPATIBLEMODE_PARAGRAPHSPACING_BEFOREFIRSTPARAGRAPH	0x0002
+#define EE_COMPATIBLEMODE_PARAGRAPHSPACING_SUMMATION            0x0001
+#define EE_COMPATIBLEMODE_PARAGRAPHSPACING_BEFOREFIRSTPARAGRAPH 0x0002
 
 class EditView;
 class EditEngine;
@@ -103,14 +103,14 @@ class ImpEditEngine;
 class EditTextObject;
 class SfxStyleSheet;
 
-#define RGCHK_NONE			0	// Keine Korrektur der ViusArea beim Scrollen
-#define RGCHK_NEG			1	// Keine neg. ViusArea beim Scrollen
-#define RGCHK_PAPERSZ1		2	// VisArea muss in Papierbreite,Texthoehe liegen
+#define RGCHK_NONE          0   // Keine Korrektur der ViusArea beim Scrollen
+#define RGCHK_NEG           1   // Keine neg. ViusArea beim Scrollen
+#define RGCHK_PAPERSZ1      2   // VisArea muss in Papierbreite,Texthoehe liegen
 
 struct EPosition
 {
-    USHORT		nPara;
-    xub_StrLen	nIndex;
+    USHORT      nPara;
+    xub_StrLen  nIndex;
 
     EPosition() :
         nPara( EE_PARA_NOT_FOUND ),
@@ -127,10 +127,10 @@ struct EPosition
 
 struct ESelection
 {
-    USHORT		nStartPara;
-    xub_StrLen	nStartPos;
-    USHORT		nEndPara;
-    xub_StrLen	nEndPos;
+    USHORT      nStartPara;
+    xub_StrLen  nStartPos;
+    USHORT      nEndPara;
+    xub_StrLen  nEndPos;
 
     ESelection() : nStartPara( 0 ), nStartPos( 0 ), nEndPara( 0 ), nEndPos( 0 ) {}
 
@@ -150,12 +150,12 @@ struct ESelection
     {
     }
 
-    void	Adjust();
+    void    Adjust();
     BOOL    IsEqual( const ESelection& rS ) const;
     BOOL    IsLess( const ESelection& rS ) const;
     BOOL    IsGreater( const ESelection& rS ) const;
     BOOL    IsZero() const;
-    BOOL	HasRange() const;
+    BOOL    HasRange() const;
 };
 
 inline BOOL ESelection::HasRange() const
@@ -234,41 +234,41 @@ struct EDITENG_DLLPUBLIC EFieldInfo
 // -----------------------------------------------------------------------
 
 enum ImportState {
-                    RTFIMP_START, RTFIMP_END, 				// nur pParser, nPara, nIndex
-                    RTFIMP_NEXTTOKEN, RTFIMP_UNKNOWNATTR,	// nToken+nTokenValue
-                    RTFIMP_SETATTR, 						// pAttrs
-                    RTFIMP_INSERTTEXT, 						// aText
-                    RTFIMP_INSERTPARA,						// -
-                    HTMLIMP_START, HTMLIMP_END, 			// nur pParser, nPara, nIndex
-                    HTMLIMP_NEXTTOKEN, HTMLIMP_UNKNOWNATTR,	// nToken
-                    HTMLIMP_SETATTR, 						// pAttrs
-                    HTMLIMP_INSERTTEXT, 					// aText
-                    HTMLIMP_INSERTPARA, HTMLIMP_INSERTFIELD	// -
+                    RTFIMP_START, RTFIMP_END,               // nur pParser, nPara, nIndex
+                    RTFIMP_NEXTTOKEN, RTFIMP_UNKNOWNATTR,   // nToken+nTokenValue
+                    RTFIMP_SETATTR,                         // pAttrs
+                    RTFIMP_INSERTTEXT,                      // aText
+                    RTFIMP_INSERTPARA,                      // -
+                    HTMLIMP_START, HTMLIMP_END,             // nur pParser, nPara, nIndex
+                    HTMLIMP_NEXTTOKEN, HTMLIMP_UNKNOWNATTR, // nToken
+                    HTMLIMP_SETATTR,                        // pAttrs
+                    HTMLIMP_INSERTTEXT,                     // aText
+                    HTMLIMP_INSERTPARA, HTMLIMP_INSERTFIELD // -
                     };
 
 struct ImportInfo
 {
-    SvParser*				pParser;
-    ESelection				aSelection;
-    ImportState				eState;
+    SvParser*               pParser;
+    ESelection              aSelection;
+    ImportState             eState;
 
-    int 					nToken;
-    short 					nTokenValue;
+    int                     nToken;
+    short                   nTokenValue;
 
-    String					aText;
+    String                  aText;
 
-    void*					pAttrs;	// RTF: SvxRTFItemStackType*, HTML: SfxItemSet*
+    void*                   pAttrs; // RTF: SvxRTFItemStackType*, HTML: SfxItemSet*
 
     ImportInfo( ImportState eState, SvParser* pPrsrs, const ESelection& rSel );
     ~ImportInfo();
 };
 
-#define EE_SEARCH_WORDONLY		0x0001
-#define EE_SEARCH_EXACT			0x0002
-#define EE_SEARCH_BACKWARD		0x0004
-#define EE_SEARCH_INSELECTION	0x0008
-#define EE_SEARCH_REGEXPR		0x0010
-#define EE_SEARCH_PATTERN		0x0020
+#define EE_SEARCH_WORDONLY      0x0001
+#define EE_SEARCH_EXACT         0x0002
+#define EE_SEARCH_BACKWARD      0x0004
+#define EE_SEARCH_INSELECTION   0x0008
+#define EE_SEARCH_REGEXPR       0x0010
+#define EE_SEARCH_PATTERN       0x0020
 
 struct ParagraphInfos
 {
@@ -282,26 +282,26 @@ struct ParagraphInfos
         , nFirstLineMaxAscent( 0 )
         , bValid( 0 )
         {}
-    USHORT	nParaHeight;
-    USHORT	nLines;
+    USHORT  nParaHeight;
+    USHORT  nLines;
 
-    USHORT	nFirstLineStartX;
+    USHORT  nFirstLineStartX;
 
-    USHORT	nFirstLineOffset;
-    USHORT	nFirstLineHeight;
-    USHORT	nFirstLineTextHeight;
-    USHORT	nFirstLineMaxAscent;
+    USHORT  nFirstLineOffset;
+    USHORT  nFirstLineHeight;
+    USHORT  nFirstLineTextHeight;
+    USHORT  nFirstLineMaxAscent;
 
-    BOOL	bValid;	// Bei einer Abfrage waehrend der Formatierung ungueltig!
+    BOOL    bValid; // Bei einer Abfrage waehrend der Formatierung ungueltig!
 };
 
 struct EECharAttrib
 {
-    const SfxPoolItem*	pAttr;
+    const SfxPoolItem*  pAttr;
 
-    USHORT				nPara;
-    xub_StrLen			nStart;
-    xub_StrLen			nEnd;
+    USHORT              nPara;
+    xub_StrLen          nStart;
+    xub_StrLen          nEnd;
 };
 
 SV_DECL_VARARR_VISIBILITY( EECharAttribArray, EECharAttrib, 0, 4, EDITENG_DLLPUBLIC )

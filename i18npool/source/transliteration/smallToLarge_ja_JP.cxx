@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,9 @@ namespace com { namespace sun { namespace star { namespace i18n {
 // ftp://ftp.unicode.org/Public/3.0-Update/UnicodeData-3.0.0.html
 // http://charts.unicode.org/Web/U3040.html Hiragana (U+3040..U+309F)
 // http://charts.unicode.org/Web/U30A0.html Katakana (U+30A0..U+30FF)
-// http://charts.unicode.org/Web/UFF00.html 
+// http://charts.unicode.org/Web/UFF00.html
 
-OneToOneMappingTable_t small2large[] = {        
+OneToOneMappingTable_t small2large[] = {
     MAKE_PAIR( 0x3041, 0x3042 ),  // HIRAGANA LETTER SMALL A --> HIRAGANA LETTER A
     MAKE_PAIR( 0x3043, 0x3044 ),  // HIRAGANA LETTER SMALL I --> HIRAGANA LETTER I
     MAKE_PAIR( 0x3045, 0x3046 ),  // HIRAGANA LETTER SMALL U --> HIRAGANA LETTER U

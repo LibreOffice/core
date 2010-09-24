@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@
 \************************************************************************/
 
 XOutdevItemPool::XOutdevItemPool(
-    SfxItemPool* _pMaster, 
-    sal_uInt16 nAttrStart, 
-    sal_uInt16 nAttrEnd, 
+    SfxItemPool* _pMaster,
+    sal_uInt16 nAttrStart,
+    sal_uInt16 nAttrEnd,
     sal_Bool bLoadRefCounts)
-:	SfxItemPool(String("XOutdevItemPool", gsl_getSystemTextEncoding()), nAttrStart, nAttrEnd, 0L, 0L, bLoadRefCounts)
+:   SfxItemPool(String("XOutdevItemPool", gsl_getSystemTextEncoding()), nAttrStart, nAttrEnd, 0L, 0L, bLoadRefCounts)
 {
     // prepare some defaults
     const XubString aNullStr;
@@ -60,15 +60,15 @@ XOutdevItemPool::XOutdevItemPool(
     const XHatch aNullHatch(aNullLineCol);
 
     // get master pointer, evtl. add myself to the end of the pools
-    if(!_pMaster) 
+    if(!_pMaster)
     {
         _pMaster = this;
-    } 
-    else 
+    }
+    else
     {
         SfxItemPool* pParent = _pMaster;
 
-        while(pParent->GetSecondaryPool()) 
+        while(pParent->GetSecondaryPool())
         {
             pParent = pParent->GetSecondaryPool();
         }
@@ -90,27 +90,27 @@ XOutdevItemPool::XOutdevItemPool(
     mppLocalPoolDefaults[XATTR_LINESTARTCENTER    -XATTR_START] = new XLineStartCenterItem;
     mppLocalPoolDefaults[XATTR_LINEENDCENTER      -XATTR_START] = new XLineEndCenterItem;
     mppLocalPoolDefaults[XATTR_LINETRANSPARENCE   -XATTR_START] = new XLineTransparenceItem;
-    mppLocalPoolDefaults[XATTR_LINEJOINT	        -XATTR_START] = new XLineJointItem;
-    mppLocalPoolDefaults[XATTR_FILLSTYLE				-XATTR_START] = new XFillStyleItem;
-    mppLocalPoolDefaults[XATTR_FILLCOLOR				-XATTR_START] = new XFillColorItem   (aNullStr,aNullFillCol);
-    mppLocalPoolDefaults[XATTR_FILLGRADIENT			-XATTR_START] = new XFillGradientItem(this,aNullGrad);
-    mppLocalPoolDefaults[XATTR_FILLHATCH				-XATTR_START] = new XFillHatchItem   (this,aNullHatch);
-    mppLocalPoolDefaults[XATTR_FILLBITMAP				-XATTR_START] = new XFillBitmapItem  (this,aNullBmp);
-    mppLocalPoolDefaults[XATTR_FILLTRANSPARENCE		-XATTR_START] = new XFillTransparenceItem;
-    mppLocalPoolDefaults[XATTR_GRADIENTSTEPCOUNT		-XATTR_START] = new XGradientStepCountItem;
-    mppLocalPoolDefaults[XATTR_FILLBMP_TILE			-XATTR_START] = new XFillBmpTileItem;
-    mppLocalPoolDefaults[XATTR_FILLBMP_POS			-XATTR_START] = new XFillBmpPosItem;
-    mppLocalPoolDefaults[XATTR_FILLBMP_SIZEX			-XATTR_START] = new XFillBmpSizeXItem;
-    mppLocalPoolDefaults[XATTR_FILLBMP_SIZEY			-XATTR_START] = new XFillBmpSizeYItem;
-    mppLocalPoolDefaults[XATTR_FILLBMP_SIZELOG		-XATTR_START] = new XFillBmpSizeLogItem;
-    mppLocalPoolDefaults[XATTR_FILLBMP_TILEOFFSETX	-XATTR_START] = new XFillBmpTileOffsetXItem;
-    mppLocalPoolDefaults[XATTR_FILLBMP_TILEOFFSETY	-XATTR_START] = new XFillBmpTileOffsetYItem;
-    mppLocalPoolDefaults[XATTR_FILLBMP_STRETCH		-XATTR_START] = new XFillBmpStretchItem;
-    mppLocalPoolDefaults[XATTR_FILLBMP_POSOFFSETX		-XATTR_START] = new XFillBmpPosOffsetXItem;
-    mppLocalPoolDefaults[XATTR_FILLBMP_POSOFFSETY		-XATTR_START] = new XFillBmpPosOffsetYItem;
-    mppLocalPoolDefaults[XATTR_FILLFLOATTRANSPARENCE	-XATTR_START] = new XFillFloatTransparenceItem( this, aNullGrad, FALSE );
-    mppLocalPoolDefaults[XATTR_SECONDARYFILLCOLOR		-XATTR_START] = new XSecondaryFillColorItem(aNullStr, aNullFillCol);
-    mppLocalPoolDefaults[XATTR_FILLBACKGROUND			-XATTR_START] = new XFillBackgroundItem;
+    mppLocalPoolDefaults[XATTR_LINEJOINT            -XATTR_START] = new XLineJointItem;
+    mppLocalPoolDefaults[XATTR_FILLSTYLE                -XATTR_START] = new XFillStyleItem;
+    mppLocalPoolDefaults[XATTR_FILLCOLOR                -XATTR_START] = new XFillColorItem   (aNullStr,aNullFillCol);
+    mppLocalPoolDefaults[XATTR_FILLGRADIENT         -XATTR_START] = new XFillGradientItem(this,aNullGrad);
+    mppLocalPoolDefaults[XATTR_FILLHATCH                -XATTR_START] = new XFillHatchItem   (this,aNullHatch);
+    mppLocalPoolDefaults[XATTR_FILLBITMAP               -XATTR_START] = new XFillBitmapItem  (this,aNullBmp);
+    mppLocalPoolDefaults[XATTR_FILLTRANSPARENCE     -XATTR_START] = new XFillTransparenceItem;
+    mppLocalPoolDefaults[XATTR_GRADIENTSTEPCOUNT        -XATTR_START] = new XGradientStepCountItem;
+    mppLocalPoolDefaults[XATTR_FILLBMP_TILE         -XATTR_START] = new XFillBmpTileItem;
+    mppLocalPoolDefaults[XATTR_FILLBMP_POS          -XATTR_START] = new XFillBmpPosItem;
+    mppLocalPoolDefaults[XATTR_FILLBMP_SIZEX            -XATTR_START] = new XFillBmpSizeXItem;
+    mppLocalPoolDefaults[XATTR_FILLBMP_SIZEY            -XATTR_START] = new XFillBmpSizeYItem;
+    mppLocalPoolDefaults[XATTR_FILLBMP_SIZELOG      -XATTR_START] = new XFillBmpSizeLogItem;
+    mppLocalPoolDefaults[XATTR_FILLBMP_TILEOFFSETX  -XATTR_START] = new XFillBmpTileOffsetXItem;
+    mppLocalPoolDefaults[XATTR_FILLBMP_TILEOFFSETY  -XATTR_START] = new XFillBmpTileOffsetYItem;
+    mppLocalPoolDefaults[XATTR_FILLBMP_STRETCH      -XATTR_START] = new XFillBmpStretchItem;
+    mppLocalPoolDefaults[XATTR_FILLBMP_POSOFFSETX       -XATTR_START] = new XFillBmpPosOffsetXItem;
+    mppLocalPoolDefaults[XATTR_FILLBMP_POSOFFSETY       -XATTR_START] = new XFillBmpPosOffsetYItem;
+    mppLocalPoolDefaults[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = new XFillFloatTransparenceItem( this, aNullGrad, FALSE );
+    mppLocalPoolDefaults[XATTR_SECONDARYFILLCOLOR       -XATTR_START] = new XSecondaryFillColorItem(aNullStr, aNullFillCol);
+    mppLocalPoolDefaults[XATTR_FILLBACKGROUND           -XATTR_START] = new XFillBackgroundItem;
     mppLocalPoolDefaults[XATTR_FORMTXTSTYLE       -XATTR_START] = new XFormTextStyleItem;
     mppLocalPoolDefaults[XATTR_FORMTXTADJUST      -XATTR_START] = new XFormTextAdjustItem;
     mppLocalPoolDefaults[XATTR_FORMTXTDISTANCE    -XATTR_START] = new XFormTextDistanceItem;
@@ -133,7 +133,7 @@ XOutdevItemPool::XOutdevItemPool(
 
     // create ItemInfos
     mpLocalItemInfos = new SfxItemInfo[GetLastWhich() - GetFirstWhich() + 1];
-    for(sal_uInt16 i(GetFirstWhich()); i <= GetLastWhich(); i++) 
+    for(sal_uInt16 i(GetFirstWhich()); i <= GetLastWhich(); i++)
     {
         mpLocalItemInfos[i - XATTR_START]._nSID = 0;
         mpLocalItemInfos[i - XATTR_START]._nFlags = SFX_ITEM_POOLABLE;
@@ -182,8 +182,8 @@ XOutdevItemPool::XOutdevItemPool(
 |*
 \************************************************************************/
 
-XOutdevItemPool::XOutdevItemPool(const XOutdevItemPool& rPool) 
-:	SfxItemPool(rPool, TRUE),
+XOutdevItemPool::XOutdevItemPool(const XOutdevItemPool& rPool)
+:   SfxItemPool(rPool, TRUE),
     mppLocalPoolDefaults(0L),
     mpLocalItemInfos(0L)
 {
@@ -226,7 +226,7 @@ XOutdevItemPool::~XOutdevItemPool()
         delete[] mppLocalPoolDefaults;
     }
 
-    if(mpLocalItemInfos) 
+    if(mpLocalItemInfos)
     {
         delete[] mpLocalItemInfos;
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ class ViewShell;
 class SwTxtFrm;
 
 /*************************************************************************
- *						class SwAttrIter
+ *                      class SwAttrIter
  *************************************************************************/
 
 class SwAttrIter
@@ -59,7 +59,7 @@ protected:
     ViewShell *pShell;
     SwFont *pFnt;
     SwpHints  *pHints;
-    const SwAttrSet* pAttrSet;		 // das Char-Attribut-Set
+    const SwAttrSet* pAttrSet;       // das Char-Attribut-Set
     SwScriptInfo* pScriptInfo;
 
 private:
@@ -78,8 +78,8 @@ protected:
     void Chg( SwTxtAttr *pHt );
     void Rst( SwTxtAttr *pHt );
     void CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm = 0 );
-    inline SwAttrIter(SwTxtNode* pTxtNode) 
-        : pShell(0), pFnt(0), pLastOut(0),	nChgCnt(0), pRedln(0), nPropFont(0), m_pTxtNode(pTxtNode) {}
+    inline SwAttrIter(SwTxtNode* pTxtNode)
+        : pShell(0), pFnt(0), pLastOut(0),  nChgCnt(0), pRedln(0), nPropFont(0), m_pTxtNode(pTxtNode) {}
 
 public:
     // Konstruktor, Destruktor

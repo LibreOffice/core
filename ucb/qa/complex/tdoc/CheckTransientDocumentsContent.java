@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ public class CheckTransientDocumentsContent extends ComplexTestCase{
     public String[] getTestMethodNames() {
         return new String[] {"checkTransientDocumentsContent"};
     }
-   
+
     public void before() {
         xMSF = (XMultiServiceFactory)param.getMSF();
         xTextDoc = new XTextDocument[countDocs];
@@ -76,21 +76,21 @@ public class CheckTransientDocumentsContent extends ComplexTestCase{
             xTextDoc[i].dispose();
         }
     }
-    
+
     /**
      * Check the content of one document
      */
     public void checkTransientDocumentsContent() {
         try {
             // create the ucb
-            XContentIdentifierFactory xContentIdentifierFactory = 
+            XContentIdentifierFactory xContentIdentifierFactory =
                             (XContentIdentifierFactory)UnoRuntime.queryInterface(
                             XContentIdentifierFactory.class, xMSF.createInstance(
                             "com.sun.star.ucb.UniversalContentBroker"));
-            XContentProvider xContentProvider = 
+            XContentProvider xContentProvider =
                             (XContentProvider)UnoRuntime.queryInterface(XContentProvider.class, xContentIdentifierFactory);
             // create a content identifier from the ucb for tdoc
-            XContentIdentifier xContentIdentifier = 
+            XContentIdentifier xContentIdentifier =
                                xContentIdentifierFactory.createContentIdentifier("vnd.sun.star.tdoc:/1");
             // get content
             XContent xContent = xContentProvider.queryContent(xContentIdentifier);
@@ -101,10 +101,10 @@ public class CheckTransientDocumentsContent extends ComplexTestCase{
             Command command = new Command();
             command.Name = "getPropertySetInfo";
             command.Handle = -1;
-            
+
             // execute the command
             Object result = xCommandProcessor.execute(command, 0, null);
-            
+
             // check the result
             log.println("Result: "+ result.getClass().toString());
             XPropertySetInfo xPropertySetInfo = (XPropertySetInfo)UnoRuntime.queryInterface(XPropertySetInfo.class, result);
@@ -116,7 +116,7 @@ public class CheckTransientDocumentsContent extends ComplexTestCase{
                 log.println("Found property: " + propName + "   type: " + props[i].Type.getTypeName());
             }
             assure("Did not find property 'DocumentModel' in the Property array.", res);
-            
+
             // get on property
             command.Name = "getPropertyValues";
             command.Handle = -1;
@@ -125,10 +125,10 @@ public class CheckTransientDocumentsContent extends ComplexTestCase{
             prop[0].Name = "DocumentModel";
             prop[0].Handle = -1;
             command.Argument = prop;
-            
+
             // execute the command
             result = xCommandProcessor.execute(command, 0, null);
-            
+
             // check the result
             log.println("Result: "+ result.getClass().toString());
 
@@ -139,7 +139,7 @@ public class CheckTransientDocumentsContent extends ComplexTestCase{
             e.printStackTrace((java.io.PrintWriter)log);
             failed("Could not create test objects.");
         }
-        
+
     }
-    
+
 }

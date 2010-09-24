@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,9 +117,9 @@ Error:
                 m_nFilePos = 0;
             break;
         case IResultSetHelper::BOOKMARK:
-            m_nFilePos = nTempPos;	 // vorherige Position
+            m_nFilePos = nTempPos;   // vorherige Position
     }
-    //	aStatus.Set(SDB_STAT_NO_DATA_FOUND);
+    //  aStatus.Set(SDB_STAT_NO_DATA_FOUND);
     return sal_False;
 
 End:
@@ -131,7 +131,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::ReadMemo" );
     BOOL bIsText = TRUE;
-    //	SdbConnection* pConnection = GetConnection();
+    //  SdbConnection* pConnection = GetConnection();
 
     m_pMemoStream->Seek(nBlockNo * m_aMemoHeader.db_size);
     switch (m_aMemoHeader.db_typ)
@@ -141,7 +141,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             const char cEOF = (char) 0x1a;
             ByteString aBStr;
             static char aBuf[514];
-            aBuf[512] = 0;			// sonst kann der Zufall uebel mitspielen
+            aBuf[512] = 0;          // sonst kann der Zufall uebel mitspielen
             BOOL bReady = sal_False;
 
             do
@@ -172,13 +172,13 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             {
                 if (((BYTE)sHeader[0]) != 0 || ((BYTE)sHeader[1]) != 0 || ((BYTE)sHeader[2]) != 0)
                 {
-//					String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
-//					aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
-//					aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
-//					aStatus.Set(SDB_STAT_ERROR,
-//							String::CreateFromAscii("01000"),
-//							aStatus.CreateErrorMessage(aText),
-//							0, String() );
+//                  String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
+//                  aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
+//                  aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
+//                  aStatus.Set(SDB_STAT_ERROR,
+//                          String::CreateFromAscii("01000"),
+//                          aStatus.CreateErrorMessage(aText),
+//                          0, String() );
                     return sal_False;
                 }
 
@@ -186,13 +186,13 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             }
             else if (((BYTE)sHeader[0]) != 0xFF || ((BYTE)sHeader[1]) != 0xFF || ((BYTE)sHeader[2]) != 0x08)
             {
-//				String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
-//				aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
-//				aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
-//				aStatus.Set(SDB_STAT_ERROR,
-//						String::CreateFromAscii("01000"),
-//						aStatus.CreateErrorMessage(aText),
-//						0, String() );
+//              String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
+//              aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
+//              aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
+//              aStatus.Set(SDB_STAT_ERROR,
+//                      String::CreateFromAscii("01000"),
+//                      aStatus.CreateErrorMessage(aText),
+//                      0, String() );
                 return sal_False;
             }
 
@@ -202,7 +202,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             if (m_aMemoHeader.db_typ == MemodBaseIV)
                 nLength -= 8;
 
-            //	char cChar;
+            //  char cChar;
             ::rtl::OUString aStr;
             while ( nLength > STRING_MAXLEN )
             {
@@ -217,7 +217,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                 ByteString aBStr;
                 aBStr.Expand(static_cast<xub_StrLen>(nLength));
                 m_pMemoStream->Read(aBStr.AllocBuffer(static_cast<xub_StrLen>(nLength)),nLength);
-                //	aBStr.ReleaseBufferAccess();
+                //  aBStr.ReleaseBufferAccess();
 
                 aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
 
@@ -245,7 +245,7 @@ void ODbaseTable::AllocBuffer()
     if (m_pBuffer == NULL && nSize)
     {
         m_nBufferSize = nSize;
-        m_pBuffer		= new BYTE[m_nBufferSize+1];
+        m_pBuffer       = new BYTE[m_nBufferSize+1];
     }
 }
 // -----------------------------------------------------------------------------
@@ -293,7 +293,7 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
         aBuf.ReleaseBufferAccess();
         aBuf.EraseTrailingChars();
 
-        //	aKey = ONDXKey((aBuf,rIndex.GetDBFConnection()->GetCharacterSet()) ,aKey.nRecord);
+        //  aKey = ONDXKey((aBuf,rIndex.GetDBFConnection()->GetCharacterSet()) ,aKey.nRecord);
         aKey = ONDXKey(::rtl::OUString(aBuf.GetBuffer(),aBuf.Len(),rIndex.m_pTable->getConnection()->getTextEncoding()) ,aKey.nRecord);
     }
     rStream >> aChild;
@@ -312,7 +312,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
     if (!rIndex.isUnique() || rPage.IsLeaf())
         rStream << (sal_uInt32)aKey.nRecord; // schluessel
     else
-        rStream << (sal_uInt32)0;	// schluessel
+        rStream << (sal_uInt32)0;   // schluessel
 
     if (rIndex.getHeader().db_keytype) // double
     {
@@ -364,7 +364,7 @@ BOOL ONDXKey::IsText(sal_Int32 eType)
 StringCompare ONDXKey::Compare(const ONDXKey& rKey) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ONDXKey::Compare" );
-    //	DBG_ASSERT(is(), "Falscher Indexzugriff");
+    //  DBG_ASSERT(is(), "Falscher Indexzugriff");
     StringCompare eResult;
 
     if (getValue().isNull())
@@ -468,7 +468,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
     rStream >> nValue >> rPage.aChild;
     rPage.nCount = USHORT(nValue);
 
-//	DBG_ASSERT(rPage.nCount && rPage.nCount < rPage.GetIndex().GetMaxNodes(), "Falscher Count");
+//  DBG_ASSERT(rPage.nCount && rPage.nCount < rPage.GetIndex().GetMaxNodes(), "Falscher Count");
     for (USHORT i = 0; i < rPage.nCount; i++)
         rPage[i].Read(rStream, rPage.GetIndex());
     return rStream;

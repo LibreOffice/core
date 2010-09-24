@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ namespace canvas
 
             @param rPos
             Output position
-                
+
             @param rTransform
             Output transformation (does not affect output position)
         */
@@ -87,12 +87,12 @@ namespace canvas
 
             @param rPos
             Output position
-                
+
             @param rArea
             Subset of the surface to render. Coordinate system are
             surface area pixel, given area will be clipped to the
             surface bounds.
-                
+
             @param rTransform
             Output transformation (does not affect output position)
         */
@@ -109,11 +109,11 @@ namespace canvas
 
             @param rPos
             Output position
-                
+
             @param rClipPoly
             Clip polygon for the surface. The clip polygon is also
             subject to the output transformation.
-                
+
             @param rTransform
             Output transformation (does not affect output position)
         */

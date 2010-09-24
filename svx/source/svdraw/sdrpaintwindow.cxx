@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrPreRenderDevice::SdrPreRenderDevice(OutputDevice& rOriginal)
-:	mrOutputDevice(rOriginal)
+:   mrOutputDevice(rOriginal)
 {
 }
 
@@ -83,8 +83,8 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const Region& rExpandedRegion)
         const Size aSize(aRegionRectanglePixel.GetSize());
 
         mrOutputDevice.DrawOutDev(
-            aTopLeft, aSize, 
-            aTopLeft, aSize, 
+            aTopLeft, aSize,
+            aTopLeft, aSize,
             maPreRenderDevice);
 
 #ifdef DBG_UTIL
@@ -114,7 +114,7 @@ void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
     // overlay manager.  Save the current one so that later we can move its
     // overlay objects to the new one.
     sdr::overlay::OverlayManager* pOldOverlayManager = NULL;
-    
+
     if(mbUseBuffer != bUseBuffer)
     {
         mbUseBuffer = bUseBuffer;
@@ -134,7 +134,7 @@ void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
                 // buffered OverlayManager, buffers it's background and refreshes from there
                 // for pure overlay changes (no system redraw). The 3rd parameter specifies
                 // if that refresh itself will use a 2nd vdev to avoid flickering.
-                // Also hand over the evtl. existing old OverlayManager; this means to take over 
+                // Also hand over the evtl. existing old OverlayManager; this means to take over
                 // the registered OverlayObjects from it
                 mpOverlayManager = new ::sdr::overlay::OverlayManagerBuffered(GetOutputDevice(), pOldOverlayManager, true);
             }
@@ -142,7 +142,7 @@ void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
             {
                 // unbuffered OverlayManager, just invalidates places where changes
                 // take place
-                // Also hand over the evtl. existing old OverlayManager; this means to take over 
+                // Also hand over the evtl. existing old OverlayManager; this means to take over
                 // the registered OverlayObjects from it
                 mpOverlayManager = new ::sdr::overlay::OverlayManager(GetOutputDevice(), pOldOverlayManager);
             }
@@ -181,7 +181,7 @@ void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
 }
 
 SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut)
-:	mrOutputDevice(rOut),
+:   mrOutputDevice(rOut),
     mrPaintView(rNewPaintView),
     mpOverlayManager(0L),
     mpPreRenderDevice(0L),
@@ -201,8 +201,8 @@ SdrPaintWindow::~SdrPaintWindow()
     DestroyPreRenderDevice();
 }
 
-::sdr::overlay::OverlayManager* SdrPaintWindow::GetOverlayManager() const 
-{ 
+::sdr::overlay::OverlayManager* SdrPaintWindow::GetOverlayManager() const
+{
     if(!mpOverlayManager)
     {
         // Create buffered overlay manager by default.
@@ -298,14 +298,14 @@ void SdrPaintWindow::HideOverlay(const Region& rRegion)
     }
 }
 
-const Region& SdrPaintWindow::GetRedrawRegion() const 
-{ 
-    return maRedrawRegion; 
+const Region& SdrPaintWindow::GetRedrawRegion() const
+{
+    return maRedrawRegion;
 }
 
-void SdrPaintWindow::SetRedrawRegion(const Region& rNew) 
-{ 
-    maRedrawRegion = rNew; 
+void SdrPaintWindow::SetRedrawRegion(const Region& rNew)
+{
+    maRedrawRegion = rNew;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

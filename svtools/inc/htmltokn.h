@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,13 +49,13 @@ int GetHTMLOption( const String& rName );
 SVT_DLLPUBLIC ULONG GetHTMLColor( const String& rName );
 
 // beginnen immer ab 256, groesser als ein char
-const int HTML_TOKEN_START		= 0x100;
-const int HTML_TOKEN_ONOFF		= 0x200;
-const int HTML_TOKEN_MICROSOFT	= 0x1000;
+const int HTML_TOKEN_START      = 0x100;
+const int HTML_TOKEN_ONOFF      = 0x200;
+const int HTML_TOKEN_MICROSOFT  = 0x1000;
 
 enum HTML_TOKEN_IDS
 {
-    HTML_TEXTTOKEN						= HTML_TOKEN_START,
+    HTML_TEXTTOKEN                      = HTML_TOKEN_START,
     HTML_SINGLECHAR,
     HTML_NEWPARA,
     HTML_TABCHAR,
@@ -67,22 +67,22 @@ enum HTML_TOKEN_IDS
     HTML_BASE, // HTML 3.0
     HTML_COMMENT,
     HTML_DOCTYPE,
-    HTML_EMBED, // Netscape 2.0			   </EMBED> ignorieren
+    HTML_EMBED, // Netscape 2.0            </EMBED> ignorieren
     HTML_FIGUREOVERLAY, // HTML 3.0
-    HTML_HORZRULE,						// </HR> ignorieren
+    HTML_HORZRULE,                      // </HR> ignorieren
     HTML_HORZTAB, // HTML 3.0
-    HTML_IMAGE,							// </IMG> ignorieren
-    HTML_INPUT,							// </INPUT> ignorieren
+    HTML_IMAGE,                         // </IMG> ignorieren
+    HTML_INPUT,                         // </INPUT> ignorieren
     HTML_ISINDEX, // HTML 3.0
-    HTML_LINEBREAK,						// </BR> -> <BR>
+    HTML_LINEBREAK,                     // </BR> -> <BR>
     HTML_LINK, // HTML 3.0
-    HTML_META, // HTML 3.0				   </META> ignorieren
+    HTML_META, // HTML 3.0                 </META> ignorieren
     HTML_NEXTID, // HTML 3.0
     HTML_OF, // HTML 3.0
-    HTML_OPTION,						// </OPTION> ignorieren
+    HTML_OPTION,                        // </OPTION> ignorieren
     HTML_PARAM, // HotJava
     HTML_RANGE, // HTML 3.0
-    HTML_SPACER, // Netscape 3.0b5		// </SPACER> ignorieren
+    HTML_SPACER, // Netscape 3.0b5      // </SPACER> ignorieren
     HTML_WBR, // Netscape
 
     // Tokens, die ueber HTML-Charakter erkannt werden
@@ -90,7 +90,7 @@ enum HTML_TOKEN_IDS
     HTML_SOFTHYPH,
 
     // diese werden wieder abgeschaltet,
-    //	der off-Wert liegt immer dahinter (+1) !!
+    //  der off-Wert liegt immer dahinter (+1) !!
     HTML_ABBREVIATION_ON = HTML_TOKEN_ONOFF, // HTML 3.0
     HTML_ABBREVIATION_OFF, // HTML 3.0
     HTML_ABOVE_ON, // HTML 3.0
@@ -249,8 +249,8 @@ enum HTML_TOKEN_IDS
     HTML_ROW_OFF, // HTML 3.0
     HTML_SAMPLE_ON,
     HTML_SAMPLE_OFF,
-    HTML_SCRIPT_ON,	// HTML 3.2
-    HTML_SCRIPT_OFF,	// HTML 3.2
+    HTML_SCRIPT_ON, // HTML 3.2
+    HTML_SCRIPT_OFF,    // HTML 3.2
     HTML_SELECT_ON,
     HTML_SELECT_OFF,
     HTML_SHORTQUOTE_ON, // HTML 3.0
@@ -337,14 +337,14 @@ enum HTML_TOKEN_IDS
 // HTML Attribut-Token (=Optionen)
 
 // beginnen immer ab 256, groesser als ein char
-const int HTML_OPTION_START	= 0x100;
+const int HTML_OPTION_START = 0x100;
 
 enum HTML_OPTION_IDS
 {
-HTML_OPTION_BOOL_START			= HTML_OPTION_START,
+HTML_OPTION_BOOL_START          = HTML_OPTION_START,
 
 // Attribute ohne Wert
-    HTML_O_BOX					= HTML_OPTION_BOOL_START,
+    HTML_O_BOX                  = HTML_OPTION_BOOL_START,
     HTML_O_CHECKED,
     HTML_O_COMPACT,
     HTML_O_CONTINUE,
@@ -367,8 +367,8 @@ HTML_OPTION_BOOL_START			= HTML_OPTION_START,
 HTML_OPTION_BOOL_END,
 
 // Attribute mit einem String als Wert
-HTML_OPTION_STRING_START		= HTML_OPTION_BOOL_END,
-    HTML_O_ABOVE				= HTML_OPTION_STRING_START,
+HTML_OPTION_STRING_START        = HTML_OPTION_BOOL_END,
+    HTML_O_ABOVE                = HTML_OPTION_STRING_START,
     HTML_O_ACCEPT,
     HTML_O_ACCESSKEY,
     HTML_O_ADD_DATE, // Netscape internal
@@ -410,8 +410,8 @@ HTML_OPTION_STRING_START		= HTML_OPTION_BOOL_END,
 HTML_OPTION_STRING_END,
 
 // Attribute mit einem SGML-Identifier als Wert
-HTML_OPTION_SGMLID_START		= HTML_OPTION_STRING_END,
-    HTML_O_FROM					= HTML_OPTION_SGMLID_START,
+HTML_OPTION_SGMLID_START        = HTML_OPTION_STRING_END,
+    HTML_O_FROM                 = HTML_OPTION_SGMLID_START,
     HTML_O_ID,
     HTML_O_TARGET, // Netscape 2.0
     HTML_O_TO,
@@ -419,8 +419,8 @@ HTML_OPTION_SGMLID_START		= HTML_OPTION_STRING_END,
 HTML_OPTION_SGMLID_END,
 
 // Attribute mit einem URI als Wert
-HTML_OPTION_URI_START			= HTML_OPTION_SGMLID_END,
-    HTML_O_ACTION				= HTML_OPTION_URI_START,
+HTML_OPTION_URI_START           = HTML_OPTION_SGMLID_END,
+    HTML_O_ACTION               = HTML_OPTION_URI_START,
     HTML_O_ARCHIVE,
     HTML_O_BACKGROUND,
     HTML_O_CLASSID,
@@ -437,14 +437,14 @@ HTML_OPTION_URI_START			= HTML_OPTION_SGMLID_END,
 HTML_OPTION_URI_END,
 
 // Attribute mit Entity-Namen als Wert
-HTML_OPTION_ENTITY_START		= HTML_OPTION_URI_END,
-    HTML_O_DINGBAT				= HTML_OPTION_ENTITY_START,
+HTML_OPTION_ENTITY_START        = HTML_OPTION_URI_END,
+    HTML_O_DINGBAT              = HTML_OPTION_ENTITY_START,
     HTML_O_SYM,
 HTML_OPTION_ENTITY_END,
 
 // Attribute mit einer Farbe als Wert (alle Netscape)
-HTML_OPTION_COLOR_START			= HTML_OPTION_ENTITY_END,
-    HTML_O_ALINK				= HTML_OPTION_COLOR_START,
+HTML_OPTION_COLOR_START         = HTML_OPTION_ENTITY_END,
+    HTML_O_ALINK                = HTML_OPTION_COLOR_START,
     HTML_O_BGCOLOR,
     HTML_O_BORDERCOLOR, // IExplorer 2.0
     HTML_O_BORDERCOLORLIGHT, // IExplorer 2.0
@@ -456,8 +456,8 @@ HTML_OPTION_COLOR_START			= HTML_OPTION_ENTITY_END,
 HTML_OPTION_COLOR_END,
 
 // Attribute mit einem numerischen Wert
-HTML_OPTION_NUMBER_START		= HTML_OPTION_COLOR_END,
-    HTML_O_BORDER				= HTML_OPTION_NUMBER_START,
+HTML_OPTION_NUMBER_START        = HTML_OPTION_COLOR_END,
+    HTML_O_BORDER               = HTML_OPTION_NUMBER_START,
     HTML_O_CELLSPACING, // HTML3 Table Model Draft
     HTML_O_CELLPADDING, // HTML3 Table Model Draft
     HTML_O_CHAROFF, // HTML3 Table Model Draft
@@ -466,7 +466,7 @@ HTML_OPTION_NUMBER_START		= HTML_OPTION_COLOR_END,
     HTML_O_GUTTER, // Netscape 3.0b5
     HTML_O_INDENT,
     HTML_O_HEIGHT,
-    HTML_O_HSPACE,			// Netscape
+    HTML_O_HSPACE,          // Netscape
     HTML_O_LEFT,
     HTML_O_LEFTMARGIN, // IExplorer 2.0
     HTML_O_LOOP, // IExplorer 2.0
@@ -487,7 +487,7 @@ HTML_OPTION_NUMBER_START		= HTML_OPTION_COLOR_END,
     HTML_O_TABINDEX,
     HTML_O_TOP,
     HTML_O_TOPMARGIN, // IExplorer 2.0
-    HTML_O_VSPACE,			// Netscape
+    HTML_O_VSPACE,          // Netscape
     HTML_O_WEIGHT,
     HTML_O_WIDTH,
     HTML_O_X,
@@ -496,8 +496,8 @@ HTML_OPTION_NUMBER_START		= HTML_OPTION_COLOR_END,
 HTML_OPTION_NUMBER_END,
 
 // Attribute mit Enum-Werten
-HTML_OPTION_ENUM_START			= HTML_OPTION_NUMBER_END,
-    HTML_O_BEHAVIOR				= HTML_OPTION_ENUM_START, // IExplorer 2.0
+HTML_OPTION_ENUM_START          = HTML_OPTION_NUMBER_END,
+    HTML_O_BEHAVIOR             = HTML_OPTION_ENUM_START, // IExplorer 2.0
     HTML_O_BGPROPERTIES, // IExplorer 2.0
     HTML_O_CLEAR,
     HTML_O_DIR,
@@ -521,39 +521,39 @@ HTML_OPTION_ENUM_START			= HTML_OPTION_NUMBER_END,
 HTML_OPTION_ENUM_END,
 
 // Attribute mit Script-Code als Wert
-HTML_OPTION_SCRIPT_START		= HTML_OPTION_ENUM_END,
-    HTML_O_ONABORT				= HTML_OPTION_SCRIPT_START, // JavaScaript
-    HTML_O_ONBLUR,		// JavaScript
-    HTML_O_ONCHANGE,	// JavaScript
-    HTML_O_ONCLICK,		// JavaScript
-    HTML_O_ONERROR,		// JavaScript
-    HTML_O_ONFOCUS,		// JavaScript
-    HTML_O_ONLOAD,		// JavaScript
-    HTML_O_ONMOUSEOUT,	// JavaScript
-    HTML_O_ONMOUSEOVER,	// JavaScript
-    HTML_O_ONRESET,		// JavaScript
-    HTML_O_ONSELECT,	// JavaScript
-    HTML_O_ONSUBMIT,	// JavaScript
-    HTML_O_ONUNLOAD,	// JavaScript
+HTML_OPTION_SCRIPT_START        = HTML_OPTION_ENUM_END,
+    HTML_O_ONABORT              = HTML_OPTION_SCRIPT_START, // JavaScaript
+    HTML_O_ONBLUR,      // JavaScript
+    HTML_O_ONCHANGE,    // JavaScript
+    HTML_O_ONCLICK,     // JavaScript
+    HTML_O_ONERROR,     // JavaScript
+    HTML_O_ONFOCUS,     // JavaScript
+    HTML_O_ONLOAD,      // JavaScript
+    HTML_O_ONMOUSEOUT,  // JavaScript
+    HTML_O_ONMOUSEOVER, // JavaScript
+    HTML_O_ONRESET,     // JavaScript
+    HTML_O_ONSELECT,    // JavaScript
+    HTML_O_ONSUBMIT,    // JavaScript
+    HTML_O_ONUNLOAD,    // JavaScript
 
-    HTML_O_SDONABORT, 		// StarBasic
-    HTML_O_SDONBLUR,		// StarBasic
-    HTML_O_SDONCHANGE, 		// StarBasic
-    HTML_O_SDONCLICK, 		// StarBasic
-    HTML_O_SDONERROR, 		// StarBasic
-    HTML_O_SDONFOCUS, 		// StarBasic
-    HTML_O_SDONLOAD, 		// StarBasic
-    HTML_O_SDONMOUSEOUT,	// StarBasic
-    HTML_O_SDONMOUSEOVER, 	// StarBasic
-    HTML_O_SDONRESET,		// StarBasic
-    HTML_O_SDONSELECT, 		// StarBasic
-    HTML_O_SDONSUBMIT, 		// StarBasic
-    HTML_O_SDONUNLOAD, 		// StarBasic
+    HTML_O_SDONABORT,       // StarBasic
+    HTML_O_SDONBLUR,        // StarBasic
+    HTML_O_SDONCHANGE,      // StarBasic
+    HTML_O_SDONCLICK,       // StarBasic
+    HTML_O_SDONERROR,       // StarBasic
+    HTML_O_SDONFOCUS,       // StarBasic
+    HTML_O_SDONLOAD,        // StarBasic
+    HTML_O_SDONMOUSEOUT,    // StarBasic
+    HTML_O_SDONMOUSEOVER,   // StarBasic
+    HTML_O_SDONRESET,       // StarBasic
+    HTML_O_SDONSELECT,      // StarBasic
+    HTML_O_SDONSUBMIT,      // StarBasic
+    HTML_O_SDONUNLOAD,      // StarBasic
 HTML_OPTION_SCRIPT_END,
 
 // Attribute mit Kontext-abhaengigen Werten
-HTML_OPTION_CONTEXT_START		= HTML_OPTION_SCRIPT_END,
-    HTML_O_ALIGN				= HTML_OPTION_CONTEXT_START,
+HTML_OPTION_CONTEXT_START       = HTML_OPTION_SCRIPT_END,
+    HTML_O_ALIGN                = HTML_OPTION_CONTEXT_START,
     HTML_O_COLS, // Netscape 2.0 vs HTML 2.0
     HTML_O_ROWS, // Netscape 2.0 vs HTML 2.0
     HTML_O_SIZE,
@@ -562,8 +562,8 @@ HTML_OPTION_CONTEXT_START		= HTML_OPTION_SCRIPT_END,
 HTML_OPTION_CONTEXT_END,
 
 // eine unbekannte Option
-HTML_O_UNKNOWN 					= HTML_OPTION_CONTEXT_END,
+HTML_O_UNKNOWN                  = HTML_OPTION_CONTEXT_END,
 HTML_OPTION_END
 };
 
-#endif	// _HTMLTOKN_H
+#endif  // _HTMLTOKN_H

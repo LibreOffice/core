@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -223,7 +223,7 @@ SwFtnInfo& SwFtnInfo::operator=(const SwFtnInfo& rInfo)
 
 BOOL SwFtnInfo::operator==( const SwFtnInfo& rInfo ) const
 {
-    return	ePos == rInfo.ePos &&
+    return  ePos == rInfo.ePos &&
             eNum == rInfo.eNum &&
             SwEndNoteInfo::operator==(rInfo) &&
             aQuoVadis == rInfo.aQuoVadis &&
@@ -408,7 +408,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
     ULONG nIdx;
     BOOL bChg = FALSE;
     BOOL bTypeChgd = FALSE;
-    USHORT n = nPos;		// sichern
+    USHORT n = nPos;        // sichern
     while( nPos < rFtnArr.Count() &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ nPos++ ] )))
                 < nEndNd || ( nIdx == nEndNd &&
@@ -440,7 +440,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
             }
         }
 
-    nPos = n;		// nach vorne gibt es auch noch welche !
+    nPos = n;       // nach vorne gibt es auch noch welche !
     while( nPos &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ --nPos ] )))
                 > nSttNd || ( nIdx == nSttNd &&

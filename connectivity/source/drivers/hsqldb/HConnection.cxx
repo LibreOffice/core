@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -169,7 +169,7 @@ namespace connectivity { namespace hsqldb
     void SAL_CALL OHsqlConnection::flush(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
-            
+
         try
         {
             if ( m_xConnection.is() )
@@ -302,7 +302,7 @@ namespace connectivity { namespace hsqldb
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),
                 makeAny( _rxDocumentUI->getApplicationMainWindow() )
             );
-                
+
             aContext.createComponentWithArguments( "com.sun.star.sdb.hsql.LinkedTableEditor", aArguments, xDialog );
             if ( !xDialog.is() )
                 throw ServiceNotRegisteredException( ::rtl::OUString::createFromAscii( "com.sun.star.sdb.hsql.LinkedTableEditor" ), *this );

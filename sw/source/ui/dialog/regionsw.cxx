@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 #include <view.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>               	// fuer Undo-Ids
+#include <swundo.hxx>                   // fuer Undo-Ids
 #include <column.hxx>
 #include <fmtfsize.hxx>
 #include <swunodef.hxx>
@@ -68,7 +68,7 @@
 #include "swabstdlg.hxx"
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Bereiche einfuegen
+    Beschreibung:   Bereiche einfuegen
  --------------------------------------------------------------------*/
 
 
@@ -224,7 +224,7 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Bereich bearbeiten
+    Beschreibung:   Bereich bearbeiten
  --------------------------------------------------------------------*/
 
 void SwBaseShell::EditRegionDialog(SfxRequest& rReq)

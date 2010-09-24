@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 
-#define CGM_BREAK_ACTION	0xffffffff
+#define CGM_BREAK_ACTION    0xffffffff
 #include <osl/endian.h>
 #include <vcl/virdev.hxx>
 #include <vcl/graph.hxx>
@@ -64,12 +64,12 @@ void CGM::ImplCGMInit()
 
 #ifdef CGM_EXPORT_IMPRESS
 
-CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )	:
-    mpGraphic				( NULL ),
-    mpCommentOut			( NULL ),
-    mbStatus				( sal_True ),
-    mpOutAct				( new CGMImpressOutAct( *this, rModel ) ),
-    mnMode					( nMode )
+CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )  :
+    mpGraphic               ( NULL ),
+    mpCommentOut            ( NULL ),
+    mbStatus                ( sal_True ),
+    mpOutAct                ( new CGMImpressOutAct( *this, rModel ) ),
+    mnMode                  ( nMode )
 {
     mnMode |= CGM_EXPORT_IMPRESS;
     ImplCGMInit();
@@ -209,7 +209,7 @@ long CGM::ImplGetI( sal_uInt32 nPrecision )
     {
         case 1 :
         {
-            return	(char)*pSource;
+            return  (char)*pSource;
         }
 
         case 2 :
@@ -240,7 +240,7 @@ sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
     switch( nPrecision )
     {
         case 1 :
-            return	(sal_Int8)*pSource;
+            return  (sal_Int8)*pSource;
         case 2 :
         {
             return (sal_uInt16)( ( pSource[ 0 ] << 8 ) | pSource[ 1 ] );
@@ -265,7 +265,7 @@ void CGM::ImplGetSwitch4( sal_uInt8* pSource, sal_uInt8* pDest )
 {
     for ( int i = 0; i < 4; i++ )
     {
-        pDest[ i ] = pSource[ i ^ 3 ];			// Little Endian <-> Big Endian switch
+        pDest[ i ] = pSource[ i ^ 3 ];          // Little Endian <-> Big Endian switch
     }
 }
 
@@ -275,7 +275,7 @@ void CGM::ImplGetSwitch8( sal_uInt8* pSource, sal_uInt8* pDest )
 {
     for ( int i = 0; i < 8; i++ )
     {
-        pDest[ i ] = pSource[ i ^ 7 ];			// Little Endian <-> Big Endian switch
+        pDest[ i ] = pSource[ i ^ 7 ];          // Little Endian <-> Big Endian switch
     }
 }
 
@@ -283,12 +283,12 @@ void CGM::ImplGetSwitch8( sal_uInt8* pSource, sal_uInt8* pDest )
 
 double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
 {
-    void*	pPtr;
-    sal_uInt8	aBuf[8];
-    sal_Bool	bCompatible;
-    double	nRetValue;
-    double	fDoubleBuf;
-    float	fFloatBuf;
+    void*   pPtr;
+    sal_uInt8   aBuf[8];
+    sal_Bool    bCompatible;
+    double  nRetValue;
+    double  fDoubleBuf;
+    float   fFloatBuf;
 
 #ifdef OSL_BIGENDIAN
         bCompatible = sal_True;
@@ -320,11 +320,11 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
     }
     else // ->RP_FIXED
     {
-        long	nVal;
-        int		nSwitch = ( bCompatible ) ? 0 : 1 ;
+        long    nVal;
+        int     nSwitch = ( bCompatible ) ? 0 : 1 ;
         if ( nRealSize == 4 )
         {
-            sal_uInt16*	pShort = (sal_uInt16*)pPtr;
+            sal_uInt16* pShort = (sal_uInt16*)pPtr;
             nVal = pShort[ nSwitch ];
             nVal <<= 16;
             nVal |= pShort[ nSwitch ^ 1 ];
@@ -460,11 +460,11 @@ sal_uInt32 CGM::ImplGetBitmapColor( sal_Bool bDirect )
 {
     // the background color is always a direct color
 
-    sal_uInt32	nTmp;
+    sal_uInt32  nTmp;
     if ( ( pElement->eColorSelectionMode == CSM_DIRECT ) || bDirect )
     {
-        sal_uInt32		nColor = ImplGetByte( ImplGetUI( pElement->nColorPrecision ), 1 );
-        sal_uInt32		nDiff = pElement->nColorValueExtent[ 3 ] - pElement->nColorValueExtent[ 0 ] + 1;
+        sal_uInt32      nColor = ImplGetByte( ImplGetUI( pElement->nColorPrecision ), 1 );
+        sal_uInt32      nDiff = pElement->nColorValueExtent[ 3 ] - pElement->nColorValueExtent[ 0 ] + 1;
 
         if ( !nDiff )
             nDiff++;
@@ -555,7 +555,7 @@ void CGM::ImplMapDouble( double& nNumb )
 
             case DVPM_METRIC :
             {
-//				nNumb *= ( 100 * pElement->nDeviceViewPortScale );
+//              nNumb *= ( 100 * pElement->nDeviceViewPortScale );
                 nNumb *= ( mnXFraction + mnYFraction ) / 2;
                 if ( pElement->nDeviceViewPortScale < 0 )
                     nNumb = -nNumb;
@@ -597,7 +597,7 @@ void CGM::ImplMapX( double& nNumb )
 
             case DVPM_METRIC :
             {
-//				nNumb *= ( 100 * pElement->nDeviceViewPortScale );
+//              nNumb *= ( 100 * pElement->nDeviceViewPortScale );
                 nNumb *= mnXFraction;
                 if ( pElement->nDeviceViewPortScale < 0 )
                     nNumb = -nNumb;
@@ -640,7 +640,7 @@ void CGM::ImplMapY( double& nNumb )
 
             case DVPM_METRIC :
             {
-//				nNumb *= ( 100 * pElement->nDeviceViewPortScale );
+//              nNumb *= ( 100 * pElement->nDeviceViewPortScale );
                 nNumb *= mnYFraction;
                 if ( pElement->nDeviceViewPortScale < 0 )
                     nNumb = -nNumb;
@@ -750,18 +750,18 @@ void CGM::ImplDoClass()
 
 void CGM::ImplDefaultReplacement()
 {
-    sal_uInt8*	pBuf = (sal_uInt8*)maDefRepList.First();
+    sal_uInt8*  pBuf = (sal_uInt8*)maDefRepList.First();
     if ( pBuf )
     {
-        sal_uInt32	nElementSize = (sal_uInt32)(sal_uIntPtr)maDefRepSizeList.First();
-        sal_uInt32	nOldEscape = mnEscape;
-        sal_uInt32	nOldElementClass = mnElementClass;
-        sal_uInt32	nOldElementID = mnElementID;
-        sal_uInt32	nOldElementSize = mnElementSize;
-        sal_uInt8*	pOldBuf = mpSource;
+        sal_uInt32  nElementSize = (sal_uInt32)(sal_uIntPtr)maDefRepSizeList.First();
+        sal_uInt32  nOldEscape = mnEscape;
+        sal_uInt32  nOldElementClass = mnElementClass;
+        sal_uInt32  nOldElementID = mnElementID;
+        sal_uInt32  nOldElementSize = mnElementSize;
+        sal_uInt8*  pOldBuf = mpSource;
         while( pBuf )
         {
-            sal_uInt32	nCount = 0;
+            sal_uInt32  nCount = 0;
             while ( mbStatus && ( nCount < nElementSize ) )
             {
                 mpSource = pBuf + nCount;
@@ -780,7 +780,7 @@ void CGM::ImplDefaultReplacement()
                 if ( mnElementSize & 1 )
                     nCount++;
                 nCount += mnElementSize;
-                if ( ( mnElementClass != 1 ) || ( mnElementID != 0xc ) )	// rekursion hier nicht moeglich!!
+                if ( ( mnElementClass != 1 ) || ( mnElementID != 0xc ) )    // rekursion hier nicht moeglich!!
                     ImplDoClass();
             }
             nElementSize = (sal_uInt32)(sal_uIntPtr)maDefRepSizeList.Next();
@@ -849,14 +849,14 @@ SvStream& operator>>( SvStream& rOStm, CGM& /*rCGM*/ )
 
 extern "C" sal_uInt32 __LOADONCALLAPI ImportCGM( String& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uInt32 nMode, void* pProgressBar )
 {
-                                        
-    sal_uInt32	nStatus = 0;			// retvalue == 0 -> ERROR
-                                        //			== 0xffrrggbb -> background color in the lower 24 bits
-    sal_Bool	bProgressBar = sal_False;
+
+    sal_uInt32  nStatus = 0;            // retvalue == 0 -> ERROR
+                                        //          == 0xffrrggbb -> background color in the lower 24 bits
+    sal_Bool    bProgressBar = sal_False;
 
     if( rXModel.is() )
     {
-        CGM*		pCGM= NULL;
+        CGM*        pCGM= NULL;
 
         try
         {
@@ -870,13 +870,13 @@ extern "C" sal_uInt32 __LOADONCALLAPI ImportCGM( String& rFileName, uno::Referen
                     {
                         pIn->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
                         pIn->Seek( STREAM_SEEK_TO_END );
-                        sal_uInt32	nInSize = pIn->Tell();
+                        sal_uInt32  nInSize = pIn->Tell();
                         pIn->Seek( 0 );
 
 #ifdef CGM_EXPORT_IMPRESS
                         uno::Reference< task::XStatusIndicator >  aXStatInd;
-                        sal_uInt32	nNext = 0;
-                        sal_uInt32	nAdd = nInSize / 20;
+                        sal_uInt32  nNext = 0;
+                        sal_uInt32  nAdd = nInSize / 20;
                         if ( pProgressBar )
                             aXStatInd = *(uno::Reference< task::XStatusIndicator > *)pProgressBar;
                         bProgressBar = aXStatInd.is();

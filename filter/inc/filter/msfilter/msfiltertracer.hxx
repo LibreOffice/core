@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,17 +44,17 @@
 class FilterConfigItem;
 class MSFILTER_DLLPUBLIC MSFilterTracer
 {
-        FilterConfigItem*	mpCfgItem;
-        SvXMLAttributeList*	mpAttributeList;
-        SvStream*			mpStream;
-        sal_Bool			mbEnabled;
+        FilterConfigItem*   mpCfgItem;
+        SvXMLAttributeList* mpAttributeList;
+        SvStream*           mpStream;
+        sal_Bool            mbEnabled;
 
         ::com::sun::star::util::SearchOptions maSearchOptions;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >				mxFilterTracer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XTextSearch >				mxTextSearch;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               mxFilterTracer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XTextSearch >             mxTextSearch;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::logging::XLogger >		mxLogger;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >	mxHandler;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::logging::XLogger >        mxLogger;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    mxHandler;
 
     public :
 

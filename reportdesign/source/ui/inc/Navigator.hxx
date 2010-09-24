@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ namespace rptui
     class ONavigatorImpl;
     class ONavigator :  public FloatingWindow
     {
-        OModuleClient	    m_aModuleClient;
+        OModuleClient       m_aModuleClient;
         ::std::auto_ptr<ONavigatorImpl> m_pImpl;
         ONavigator(const ONavigator&);
         void operator =(const ONavigator&);
@@ -46,7 +46,7 @@ namespace rptui
         virtual ~ONavigator();
 
         // window
-        virtual void	Resize();
+        virtual void    Resize();
         virtual void GetFocus();
     };
 // =============================================================================

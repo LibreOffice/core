@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,30 +51,30 @@ public:
     static const SfxItemPropertyMapEntry* GetPropertyMap();
 
     static sal_Bool setPropertyValue( ScDocOptions& rOptions,
-                                    const SfxItemPropertyMap& rPropMap, 
+                                    const SfxItemPropertyMap& rPropMap,
                                     const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue );
     static ::com::sun::star::uno::Any getPropertyValue(
                                     const ScDocOptions& rOptions,
-                                    const SfxItemPropertyMap& rPropMap, 
+                                    const SfxItemPropertyMap& rPropMap,
                                     const ::rtl::OUString& PropertyName );
 };
 
 
-//	empty doc object to supply only doc options
+//  empty doc object to supply only doc options
 
 class ScDocOptionsObj : public ScModelObj
 {
 private:
-    ScDocOptions	aOptions;
+    ScDocOptions    aOptions;
 
 public:
                             ScDocOptionsObj( const ScDocOptions& rOpt );
-    virtual					~ScDocOptionsObj();
+    virtual                 ~ScDocOptionsObj();
 
     // get/setPropertyValue overloaded to used stored options instead of document
 
-    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,

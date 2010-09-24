@@ -58,11 +58,11 @@ namespace drawinglayer
     {
         enum GradientStyle
         {
-            GRADIENTSTYLE_LINEAR, 
-            GRADIENTSTYLE_AXIAL, 
+            GRADIENTSTYLE_LINEAR,
+            GRADIENTSTYLE_AXIAL,
             GRADIENTSTYLE_RADIAL,
-            GRADIENTSTYLE_ELLIPTICAL, 
-            GRADIENTSTYLE_SQUARE, 
+            GRADIENTSTYLE_ELLIPTICAL,
+            GRADIENTSTYLE_SQUARE,
             GRADIENTSTYLE_RECT
         };
     } // end of namespace attribute
@@ -82,13 +82,13 @@ namespace drawinglayer
         public:
             /// constructors/assignmentoperator/destructor
             FillGradientAttribute(
-                GradientStyle eStyle, 
-                double fBorder, 
-                double fOffsetX, 
-                double fOffsetY, 
-                double fAngle, 
-                const basegfx::BColor& rStartColor, 
-                const basegfx::BColor& rEndColor, 
+                GradientStyle eStyle,
+                double fBorder,
+                double fOffsetX,
+                double fOffsetY,
+                double fAngle,
+                const basegfx::BColor& rStartColor,
+                const basegfx::BColor& rEndColor,
                 sal_uInt16 nSteps);
             FillGradientAttribute();
             FillGradientAttribute(const FillGradientAttribute& rCandidate);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace cppu
 {
 
 /** Creates a simple registry service instance.
-    
+
     @rBootstrapPath optional bootstrap path for initial components
     @return simple registry service instance
 */
@@ -53,7 +53,7 @@ SAL_CALL createSimpleRegistry(
     SAL_THROW( () );
 
 /** Creates a nested registry service instance.
-    
+
     @rBootstrapPath optional bootstrap path for initial components
     @return nested registry service instance
 */
@@ -63,7 +63,7 @@ SAL_CALL createNestedRegistry(
     SAL_THROW( () );
 
 /** Installs type description manager instance, i.e. registers a callback at cppu core.
-    
+
     @param xTDMgr manager instance
     @return true, if successfully registered
 */
@@ -77,7 +77,7 @@ sal_Bool SAL_CALL installTypeDescriptionManager(
       - simple registry, nested registry,
       - implementation registration
       - registry typedescription provider, typedescription manager (also installs it into cppu core)
-      
+
     @param xRegistry registry for service manager and singleton objects of context (may be null)
     @param rBootstrapPath optional bootstrap path for initial components
     @return component context
@@ -96,16 +96,16 @@ bootstrap_InitialComponentContext(
       - simple registry, nested registry,
       - implementation registration
       - registry typedescription provider, typedescription manager (also installs it into cppu core)
-      
+
     This function tries to find its parameters via these bootstrap variables:
-    
+
       - UNO_TYPES         -- a space separated list of file urls of type rdbs
       - UNO_SERVICES      -- a space separated list of file urls of service rdbs
       - UNO_WRITERDB      -- a file url of a write rdb (e.g. user.rdb)
-      
+
     Please look at http://udk.openoffice.org/common/man/concept/uno_default_bootstrapping.html
     for further info.
-    
+
     @return component context
 */
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
@@ -119,13 +119,13 @@ defaultBootstrap_InitialComponentContext() SAL_THROW( (::com::sun::star::uno::Ex
       - simple registry, nested registry,
       - implementation registration
       - registry typedescription provider, typedescription manager (also installs it into cppu core)
-      
+
     This function tries to find its parameters via these bootstrap variables:
-    
+
       - UNO_TYPES         -- a space separated list of file urls of type rdbs
       - UNO_SERVICES      -- a space separated list of file urls of service rdbs
       - UNO_WRITERDB      -- a file url of a write rdb (e.g. user.rdb)
-      
+
     Please look at http://udk.openoffice.org/common/man/concept/uno_default_bootstrapping.html
     for further info.
 
@@ -135,7 +135,7 @@ defaultBootstrap_InitialComponentContext() SAL_THROW( (::com::sun::star::uno::Ex
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
 defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile) SAL_THROW( (::com::sun::star::uno::Exception) );
 
-/** 
+/**
  * An exception indicating a bootstrap error.
  *
  * @since UDK 3.2.0
@@ -144,11 +144,11 @@ class BootstrapException
 {
 public:
     /**
-     * Constructs a BootstrapException. 
+     * Constructs a BootstrapException.
      */
     BootstrapException();
 
-    /** 
+    /**
      * Constructs a BootstrapException with the specified detail message.
      *
      * @param rMessage
@@ -178,14 +178,14 @@ public:
         this BootstrapException.
      */
     const ::rtl::OUString & getMessage() const;
-    
+
 private:
     ::rtl::OUString m_aMessage;
 };
 
 /**
  * Bootstraps the component context from a UNO installation.
- *   
+ *
  * @return a bootstrapped component context
  * @exception BootstrapException
  * Thrown in case bootstrap() signals an exception due to a
@@ -193,7 +193,7 @@ private:
  *
  * @since UDK 3.2.0
  */
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > 
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
 SAL_CALL bootstrap();
 
 /**

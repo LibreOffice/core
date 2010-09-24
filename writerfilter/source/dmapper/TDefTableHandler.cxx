@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ void TDefTableHandler::attribute(Id rName, Value & rVal)
         break;
         //from LN_tc
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-        case NS_rtf::LN_FFIRSTMERGED: 
+        case NS_rtf::LN_FFIRSTMERGED:
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FMERGED:
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
@@ -171,9 +171,9 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
         m_nLineWidth = m_nLineType = m_nLineColor = m_nLineDistance = 0;
         pProperties->resolve( *this );
         table::BorderLine aBorderLine;
-        ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,  
+        ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
                                                                         aBorderLine, m_bOOXML );
-                
+
         /* WRITERFILTERSTATUS: table: TDefTable_localresolve */
         switch( rName )
         {
@@ -190,7 +190,7 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
                 m_aLeftBorderLines.push_back(aBorderLine);
             break;
             /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
-            case NS_ooxml::LN_CT_TcBorders_bottom: 
+            case NS_ooxml::LN_CT_TcBorders_bottom:
             /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             case NS_rtf::LN_BRCBOTTOM:
                 m_aBottomBorderLines.push_back(aBorderLine);
@@ -224,14 +224,14 @@ void TDefTableHandler::sprm(Sprm & rSprm)
         /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TcBorders_left:
         /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
-        case NS_ooxml::LN_CT_TcBorders_bottom: 
+        case NS_ooxml::LN_CT_TcBorders_bottom:
         /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TcBorders_right:
         case NS_ooxml::LN_CT_TcBorders_insideH:
         case NS_ooxml::LN_CT_TcBorders_insideV:
-        case NS_ooxml::LN_CT_TcBorders_tl2br: 
+        case NS_ooxml::LN_CT_TcBorders_tl2br:
         case NS_ooxml::LN_CT_TcBorders_tr2bl:
-        {    
+        {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             localResolve( rSprm.getId(), pProperties );
         }
@@ -245,19 +245,19 @@ void TDefTableHandler::sprm(Sprm & rSprm)
 PropertyMapPtr  TDefTableHandler::getRowProperties() const
 {
     PropertyMapPtr pPropertyMap(new PropertyMap);
-    
+
     // Writer only wants the separators, Word provides also the outer border positions
     if( m_aCellBorderPositions.size() > 2 )
     {
-        //determine table width 
+        //determine table width
         double nFullWidth = m_aCellBorderPositions[m_aCellBorderPositions.size() - 1] - m_aCellBorderPositions[0];
-        //the positions have to be distibuted in a range of 10000 
+        //the positions have to be distibuted in a range of 10000
         const double nFullWidthRelative = 10000.;
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_aCellBorderPositions.size() - 2 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         for( sal_uInt32 nBorder = 1; nBorder < m_aCellBorderPositions.size() - 1; ++nBorder )
         {
-            sal_Int16 nRelPos = 
+            sal_Int16 nRelPos =
                 sal::static_int_cast< sal_Int16 >(double(m_aCellBorderPositions[nBorder]) * nFullWidthRelative / nFullWidth );
 
             pSeparators[nBorder - 1].Position =  nRelPos;
@@ -271,7 +271,7 @@ PropertyMapPtr  TDefTableHandler::getRowProperties() const
 /*-- 10.05.2007 16:10:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void TDefTableHandler::fillCellProperties( 
+void TDefTableHandler::fillCellProperties(
             size_t nCell, ::boost::shared_ptr< TablePropertyMap > pCellProperties ) const
 {
     if( m_aCellBorderPositions.size() > nCell )
@@ -282,9 +282,9 @@ void TDefTableHandler::fillCellProperties(
             case 1: nVertOrient = text::VertOrientation::CENTER; break;
             case 2: nVertOrient = text::VertOrientation::BOTTOM; break;
             default:;
-        }    
+        }
         pCellProperties->Insert( PROP_VERT_ORIENT, false, uno::makeAny( nVertOrient ) );
-    }    
+    }
     if( m_aTopBorderLines.size() > nCell )
         pCellProperties->Insert( PROP_TOP_BORDER, false, uno::makeAny( m_aTopBorderLines[nCell] ) );
     if( m_aLeftBorderLines.size() > nCell )
@@ -306,13 +306,13 @@ sal_Int32 TDefTableHandler::getTableWidth() const
     sal_Int32 nWidth = 0;
     if( m_aCellBorderPositions.size() > 1 )
     {
-        //determine table width 
+        //determine table width
         nWidth = m_aCellBorderPositions[m_aCellBorderPositions.size() - 1] - m_aCellBorderPositions[0];
     }
     return nWidth;
 }
 /*-- 10.05.2007 16:09:10---------------------------------------------------
-            
+
   -----------------------------------------------------------------------*/
 size_t TDefTableHandler::getCellCount() const
 {

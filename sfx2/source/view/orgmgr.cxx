@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,18 +70,18 @@ using namespace ::com::sun::star;
 
 struct _FileListEntry
 {
-    String aFileName;			// Dateiname mit komplettem Pfad
-    String aBaseName;			// Dateiname
+    String aFileName;           // Dateiname mit komplettem Pfad
+    String aBaseName;           // Dateiname
     const CollatorWrapper* pCollator;
     SfxObjectShellLock aDocShell; // ObjectShell als Ref-Klasse
 
-//REMOVE		SvStorageRef aStor;			// Referenz auf Storage, wenn wir diesen geoeffnet haben
+//REMOVE        SvStorageRef aStor;         // Referenz auf Storage, wenn wir diesen geoeffnet haben
     //uno::Reference< embed::XStorage > xStorage;
 
-    BOOL bFile;					// als Datei auf Platte
+    BOOL bFile;                 // als Datei auf Platte
                                 // (!= unbenannt1, nicht als Dok. geladen;
                                 // diese werden nicht gespeichert!)
-    BOOL bOwner;				// selbst erzeugt
+    BOOL bOwner;                // selbst erzeugt
     BOOL bNoName;
     BOOL bOwnFormat;
 
@@ -151,7 +151,7 @@ BOOL _FileListEntry::DeleteObjectShell()
 
     Freigabe der DokumentShell
 
-    [Returnwert]			TRUE: alles Ok
+    [Returnwert]            TRUE: alles Ok
                             FALSE: es ist ein Fehler aufgetreten (das
                             Dokument konnte nicht gesichert werden)
 
@@ -181,7 +181,7 @@ BOOL _FileListEntry::DeleteObjectShell()
                 {
                 }
 
-//				aDocShell->SfxObjectShell::DoSaveCompleted();
+//              aDocShell->SfxObjectShell::DoSaveCompleted();
             }
         }
         else
@@ -287,7 +287,7 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
 
     Zugriff auf die DokumentShell an der Position nIdx
 
-    [Returnwert]			Referenz auf die DokumentShell
+    [Returnwert]            Referenz auf die DokumentShell
 
 */
 
@@ -349,7 +349,7 @@ BOOL SfxOrganizeMgr::DeleteObjectShell(USHORT nIdx)
 
     Freigabe der DokumentShell an der Position nIdx
 
-    [Returnwert]			TRUE: alles Ok
+    [Returnwert]            TRUE: alles Ok
                             FALSE: es ist ein Fehler aufgetreten (das
                             Dokument konnte nicht gesichert werden)
 
@@ -367,7 +367,7 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell(USHORT nRegion,
     Zugriff auf die DokumentShell an der Position nIdx im Bereich
     nRegion (Dokumentvorlage)
 
-    [Returnwert]			Referenz auf die DokumentShell
+    [Returnwert]            Referenz auf die DokumentShell
 
 */
 {
@@ -384,7 +384,7 @@ BOOL SfxOrganizeMgr::DeleteObjectShell(USHORT nRegion, USHORT nIdx)
     Freigabe der DokumentShell an der Position nIdx im Bereich
     nRegion (Dokumentvorlage)
 
-    [Returnwert]			TRUE: alles Ok
+    [Returnwert]            TRUE: alles Ok
                             FALSE: es ist ein Fehler aufgetreten (das
                             Dokument konnte nicht gesichert werden)
 
@@ -396,7 +396,7 @@ BOOL SfxOrganizeMgr::DeleteObjectShell(USHORT nRegion, USHORT nIdx)
 
 //-------------------------------------------------------------------------
 
-BOOL	SfxOrganizeMgr::Copy(USHORT nTargetRegion,
+BOOL    SfxOrganizeMgr::Copy(USHORT nTargetRegion,
                             USHORT nTargetIdx,
                             USHORT nSourceRegion,
                             USHORT nSourceIdx)
@@ -407,13 +407,13 @@ BOOL	SfxOrganizeMgr::Copy(USHORT nTargetRegion,
 
     [Parameter]
 
-    USHORT nTargetRegion			Index des Zielbereiches
-    USHORT nTargetIdx				Index Zielposition
-    USHORT nSourceRegion			Index des Quellbereiches
-    USHORT nSourceIdx				Index der zu kopierenden / z uverschiebenden
+    USHORT nTargetRegion            Index des Zielbereiches
+    USHORT nTargetIdx               Index Zielposition
+    USHORT nSourceRegion            Index des Quellbereiches
+    USHORT nSourceIdx               Index der zu kopierenden / z uverschiebenden
                                     Dokumentvorlage
 
-    [R"uckgabewert]					Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
 
 
     [Querverweise]
@@ -426,7 +426,7 @@ BOOL	SfxOrganizeMgr::Copy(USHORT nTargetRegion,
 */
 
 {
-    if(nSourceIdx == USHRT_MAX)	// keine Verzeichnisse kopieren
+    if(nSourceIdx == USHRT_MAX) // keine Verzeichnisse kopieren
         return FALSE ;
     const BOOL bOk = pTemplates->Copy(nTargetRegion, nTargetIdx,
                                         nSourceRegion, nSourceIdx);
@@ -437,7 +437,7 @@ BOOL	SfxOrganizeMgr::Copy(USHORT nTargetRegion,
 
 //-------------------------------------------------------------------------
 
-BOOL	SfxOrganizeMgr::Move(USHORT nTargetRegion,
+BOOL    SfxOrganizeMgr::Move(USHORT nTargetRegion,
                             USHORT nTargetIdx,
                             USHORT nSourceRegion,
                             USHORT nSourceIdx)
@@ -448,13 +448,13 @@ BOOL	SfxOrganizeMgr::Move(USHORT nTargetRegion,
 
     [Parameter]
 
-    USHORT nTargetRegion			Index des Zielbereiches
-    USHORT nTargetIdx				Index Zielposition
-    USHORT nSourceRegion			Index des Quellbereiches
-    USHORT nSourceIdx				Index der zu kopierenden / z uverschiebenden
+    USHORT nTargetRegion            Index des Zielbereiches
+    USHORT nTargetIdx               Index Zielposition
+    USHORT nSourceRegion            Index des Quellbereiches
+    USHORT nSourceIdx               Index der zu kopierenden / z uverschiebenden
                                     Dokumentvorlage
 
-    [R"uckgabewert]					Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
 
 
     [Querverweise]
@@ -467,7 +467,7 @@ BOOL	SfxOrganizeMgr::Move(USHORT nTargetRegion,
 */
 
 {
-    if(nSourceIdx == USHRT_MAX)	// keine Verzeichnisse verschieben
+    if(nSourceIdx == USHRT_MAX) // keine Verzeichnisse verschieben
         return FALSE ;
     const BOOL bOk = pTemplates->Move(nTargetRegion, nTargetIdx,
                                         nSourceRegion, nSourceIdx);
@@ -478,7 +478,7 @@ BOOL	SfxOrganizeMgr::Move(USHORT nTargetRegion,
 
 //-------------------------------------------------------------------------
 
-BOOL	SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
+BOOL    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
                                 USHORT nRegion, USHORT nIdx)
 
 /*  [Beschreibung]
@@ -487,15 +487,15 @@ BOOL	SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
 
     [Parameter]
 
-    SfxOrganizeListBox *pCaller		rufende ListBox; da dieses
+    SfxOrganizeListBox *pCaller     rufende ListBox; da dieses
                                     Event durch das Men"u oder
                                     durch das Keyboard angetriggert wird,
                                     mu"s das Model der ListBox anschlie"send
                                     aktualisiert werden.
-    USHORT nRegion					Index des Bereiches
-    USHORT nIdx						Index der Dokumentvorlage
+    USHORT nRegion                  Index des Bereiches
+    USHORT nIdx                     Index der Dokumentvorlage
 
-    [R"uckgabewert]					Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
 
 
     [Querverweise]
@@ -563,18 +563,18 @@ BOOL	SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
 
 //-------------------------------------------------------------------------
 
-BOOL	SfxOrganizeMgr::InsertDir
+BOOL    SfxOrganizeMgr::InsertDir
 (
-    SfxOrganizeListBox_Impl*	pCaller,/*	rufende ListBox; da dieses Event
+    SfxOrganizeListBox_Impl*    pCaller,/*  rufende ListBox; da dieses Event
                                             durch das Men"u oder durch das
                                             Keyboard angetriggert wird,
                                             mu\s das Model der ListBox
                                             anschlie\send aktualisiert werden */
-    const String&				rText,	//	logischer Name des Bereiches
-    USHORT						nRegion //	Index des Bereiches
+    const String&               rText,  //  logischer Name des Bereiches
+    USHORT                      nRegion //  Index des Bereiches
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Einf"ugen eines Bereiches
 
@@ -615,11 +615,11 @@ BOOL SfxOrganizeMgr::SetName(const String &rName,
 
     [Parameter]
 
-    const String &rName				der neue Name
-    USHORT nRegion					Index des Bereiches
-    USHORT nIdx						Index der Dokumentvorlage
+    const String &rName             der neue Name
+    USHORT nRegion                  Index des Bereiches
+    USHORT nIdx                     Index der Dokumentvorlage
 
-    [R"uckgabewert]					Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
 
 
     [Querverweise]
@@ -645,11 +645,11 @@ BOOL SfxOrganizeMgr::CopyTo(USHORT nRegion, USHORT nIdx, const String &rName) co
 
     [Parameter]
 
-    USHORT nRegion					Index des Bereiches
-    USHORT nIdx						Index der Dokumentvorlage
-    const String &rName				Dateiname
+    USHORT nRegion                  Index des Bereiches
+    USHORT nIdx                     Index der Dokumentvorlage
+    const String &rName             Dateiname
 
-    [R"uckgabewert]					Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
 
 
     [Querverweise]
@@ -673,15 +673,15 @@ BOOL SfxOrganizeMgr::CopyFrom(SfxOrganizeListBox_Impl *pCaller,
 
     [Parameter]
 
-    SfxOrganizeListBox *pCaller		rufende ListBox; da dieses
+    SfxOrganizeListBox *pCaller     rufende ListBox; da dieses
                                     Event durch das Men"u angetriggert wird,
                                     mu"s das Model der ListBox anschlie"send
                                     aktualisiert werden.
-    USHORT nRegion					Index des Bereiches
-    USHORT nIdx						Index der Dokumentvorlage
-    String &rName					Dateiname
+    USHORT nRegion                  Index des Bereiches
+    USHORT nIdx                     Index der Dokumentvorlage
+    String &rName                   Dateiname
 
-    [R"uckgabewert]					Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
 
 
     [Querverweise]
@@ -726,13 +726,13 @@ BOOL SfxOrganizeMgr::InsertFile( SfxOrganizeListBox_Impl* pCaller, const String&
 
     [Parameter]
 
-    SfxOrganizeListBox *pCaller		rufende ListBox; da dieses
+    SfxOrganizeListBox *pCaller     rufende ListBox; da dieses
                                     Event durch das Men"u angetriggert wird,
                                     mu"s das Model der ListBox anschlie"send
                                     aktualisiert werden.
-    const String &rFileName			Name der hinzuf"ugenden Datei
+    const String &rFileName         Name der hinzuf"ugenden Datei
 
-    [R"uckgabewert]					Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
 
 */
 
@@ -760,8 +760,8 @@ BOOL SfxOrganizeMgr::Rescan()
 
     [R"uckgabewert]
 
-    TRUE					es bestanden Unterschiede
-    FALSE					keine "Anderung
+    TRUE                    es bestanden Unterschiede
+    FALSE                   keine "Anderung
 
     [Querverweise]
 
@@ -787,7 +787,7 @@ void SfxOrganizeMgr::SaveAll(Window *pParent)
 
     [Parameter]
 
-    Window *pParent			Parent der Boxen f"ur Fehlermeldungen
+    Window *pParent         Parent der Boxen f"ur Fehlermeldungen
 
 */
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,45 +24,45 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_PolyPolygonShape3D_idl__ 
-#define __com_sun_star_drawing_PolyPolygonShape3D_idl__ 
- 
-#ifndef __com_sun_star_drawing_DoubleSequenceSequence_idl__ 
-#include <com/sun/star/drawing/DoubleSequenceSequence.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module drawing {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_drawing_PolyPolygonShape3D_idl__
+#define __com_sun_star_drawing_PolyPolygonShape3D_idl__
+
+#ifndef __com_sun_star_drawing_DoubleSequenceSequence_idl__
+#include <com/sun/star/drawing/DoubleSequenceSequence.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
 // DocMerge from xml: struct com::sun::star::drawing::PolyPolygonShape3D
 /** specifies the coordinates of a 3-dimensional poly polygon.
  */
 published struct PolyPolygonShape3D
 {
     // DocMerge: empty anyway
-    com::sun::star::drawing::DoubleSequenceSequence SequenceX; 
- 
-    //------------------------------------------------------------------------- 
-    // DOCUMENTATION OMITTED FOR PolyPolygonShape3D::SequenceY 
-    
+    com::sun::star::drawing::DoubleSequenceSequence SequenceX;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR PolyPolygonShape3D::SequenceY
+
     // DocMerge: empty anyway
-    com::sun::star::drawing::DoubleSequenceSequence SequenceY; 
- 
-    //------------------------------------------------------------------------- 
-    // DOCUMENTATION OMITTED FOR PolyPolygonShape3D::SequenceZ 
-    
+    com::sun::star::drawing::DoubleSequenceSequence SequenceY;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR PolyPolygonShape3D::SequenceZ
+
     // DocMerge: empty anyway
-    com::sun::star::drawing::DoubleSequenceSequence SequenceZ; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    com::sun::star::drawing::DoubleSequenceSequence SequenceZ;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
 

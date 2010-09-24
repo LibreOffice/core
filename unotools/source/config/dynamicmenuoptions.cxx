@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include <unotools/dynamicmenuoptions.hxx>
@@ -51,18 +51,18 @@
 #include <algorithm>
 
 //_________________________________________________________________________________________________________________
-//	namespaces
+//  namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace ::std					;
-using namespace ::utl					;
-using namespace ::rtl					;
-using namespace ::osl					;
-using namespace ::com::sun::star::uno	;
-using namespace ::com::sun::star::beans	;
+using namespace ::std                   ;
+using namespace ::utl                   ;
+using namespace ::rtl                   ;
+using namespace ::osl                   ;
+using namespace ::com::sun::star::uno   ;
+using namespace ::com::sun::star::beans ;
 
 //_________________________________________________________________________________________________________________
-//	const
+//  const
 //_________________________________________________________________________________________________________________
 
 #define ROOTNODE_MENUS                                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Menus/"     ))
@@ -88,7 +88,7 @@ using namespace ::com::sun::star::beans	;
 #define PATHPREFIX_USER                                 OUString(RTL_CONSTASCII_USTRINGPARAM("u"                        ))
 
 //_________________________________________________________________________________________________________________
-//	private declarations!
+//  private declarations!
 //_________________________________________________________________________________________________________________
 
 /*-****************************************************************************************************************
@@ -254,55 +254,55 @@ class SvtDynMenu
 class SvtDynamicMenuOptions_Impl : public ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
          SvtDynamicMenuOptions_Impl();
         ~SvtDynamicMenuOptions_Impl();
 
         //---------------------------------------------------------------------------------------------------------
-        //	overloaded methods of baseclass
+        //  overloaded methods of baseclass
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		called for notify of configmanager
-            @descr		These method is called from the ConfigManager before application ends or from the
+            @short      called for notify of configmanager
+            @descr      These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
-            @seealso	baseclass ConfigItem
+            @seealso    baseclass ConfigItem
 
             @param      "lPropertyNames" is the list of properties which should be updated.
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& lPropertyNames );
 
         /*-****************************************************************************************************//**
-            @short		write changes to configuration
-            @descr		These method writes the changed values into the sub tree
+            @short      write changes to configuration
+            @descr      These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
 
-            @seealso	baseclass ConfigItem
+            @seealso    baseclass ConfigItem
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Commit();
 
         //---------------------------------------------------------------------------------------------------------
-        //	public interface
+        //  public interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
@@ -310,12 +310,12 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
             @descr      These class is used as static member of "SvtDynamicMenuOptions" ...
                         => The code exist only for one time and isn't duplicated for every instance!
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         void                                    Clear       (           EDynamicMenuType    eMenu           );
@@ -327,23 +327,23 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
                                                                 const   OUString&           sTargetName     );
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
             @short      return list of key names of our configuration management which represent oue module tree
-            @descr		These methods return the current list of key names! We need it to get needed values from our
+            @descr      These methods return the current list of key names! We need it to get needed values from our
                         configuration management and support dynamical menu item lists!
 
-            @seealso	-
+            @seealso    -
 
             @param      "nNewCount"     ,   returns count of menu entries for "new"
             @param      "nWizardCount"  ,   returns count of menu entries for "wizard"
-            @return		A list of configuration key names is returned.
+            @return     A list of configuration key names is returned.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         Sequence< OUString > impl_GetPropertyNames( sal_uInt32& nNewCount, sal_uInt32& nWizardCount, sal_uInt32& nHelpBookmarksCount );
@@ -382,9 +382,9 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
             @param      "lSource"      ,   original list (e.g. [m1-m2-m3-m6-m0] )
             @param      "lDestination" ,   destination of operation
             @param      "sSetNode"     ,   name of configuration set to build complete path
-            @return		A list of configuration key names is returned.
+            @return     A list of configuration key names is returned.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         void impl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource      ,
@@ -392,7 +392,7 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
                                               const OUString&             sSetNode     );
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private member
+    //  private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
@@ -403,11 +403,11 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
 };
 
 //_________________________________________________________________________________________________________________
-//	definitions
+//  definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
 SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     // Init baseclasses first
@@ -522,7 +522,7 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//	destructor
+//  destructor
 //*****************************************************************************************************************
 SvtDynamicMenuOptions_Impl::~SvtDynamicMenuOptions_Impl()
 {
@@ -534,7 +534,7 @@ SvtDynamicMenuOptions_Impl::~SvtDynamicMenuOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtDynamicMenuOptions_Impl::Notify( const Sequence< OUString >& )
 {
@@ -542,7 +542,7 @@ void SvtDynamicMenuOptions_Impl::Notify( const Sequence< OUString >& )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtDynamicMenuOptions_Impl::Commit()
 {
@@ -631,7 +631,7 @@ void SvtDynamicMenuOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtDynamicMenuOptions_Impl::Clear( EDynamicMenuType eMenu )
 {
@@ -658,7 +658,7 @@ void SvtDynamicMenuOptions_Impl::Clear( EDynamicMenuType eMenu )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions_Impl::GetMenu( EDynamicMenuType eMenu ) const
 {
@@ -684,7 +684,7 @@ Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions_Impl::GetMenu( EDyna
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtDynamicMenuOptions_Impl::AppendItem(            EDynamicMenuType    eMenu           ,
                                                 const   OUString&           sURL            ,
@@ -717,7 +717,7 @@ void SvtDynamicMenuOptions_Impl::AppendItem(            EDynamicMenuType    eMen
 }
 
 //*****************************************************************************************************************
-//	private method
+//  private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt32& nNewCount, sal_uInt32& nWizardCount, sal_uInt32& nHelpBookmarksCount )
 {
@@ -772,7 +772,7 @@ class SelectByPrefix
 };
 
 //*****************************************************************************************************************
-//	private method
+//  private method
 //*****************************************************************************************************************
 void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource      ,
                                                                         Sequence< OUString >& lDestination ,
@@ -821,15 +821,15 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
 }
 
 //*****************************************************************************************************************
-//	initialize static member
-//	DON'T DO IT IN YOUR HEADER!
-//	see definition for further informations
+//  initialize static member
+//  DON'T DO IT IN YOUR HEADER!
+//  see definition for further informations
 //*****************************************************************************************************************
 SvtDynamicMenuOptions_Impl*     SvtDynamicMenuOptions::m_pDataContainer = NULL  ;
 sal_Int32                       SvtDynamicMenuOptions::m_nRefCount      = 0     ;
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
 SvtDynamicMenuOptions::SvtDynamicMenuOptions()
 {
@@ -846,7 +846,7 @@ SvtDynamicMenuOptions::SvtDynamicMenuOptions()
 }
 
 //*****************************************************************************************************************
-//	destructor
+//  destructor
 //*****************************************************************************************************************
 SvtDynamicMenuOptions::~SvtDynamicMenuOptions()
 {
@@ -864,7 +864,7 @@ SvtDynamicMenuOptions::~SvtDynamicMenuOptions()
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtDynamicMenuOptions::Clear( EDynamicMenuType eMenu )
 {
@@ -873,7 +873,7 @@ void SvtDynamicMenuOptions::Clear( EDynamicMenuType eMenu )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions::GetMenu( EDynamicMenuType eMenu ) const
 {
@@ -882,7 +882,7 @@ Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions::GetMenu( EDynamicMe
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtDynamicMenuOptions::AppendItem(         EDynamicMenuType    eMenu           ,
                                         const   OUString&           sURL            ,
@@ -895,7 +895,7 @@ void SvtDynamicMenuOptions::AppendItem(         EDynamicMenuType    eMenu       
 }
 
 //*****************************************************************************************************************
-//	private method
+//  private method
 //*****************************************************************************************************************
 Mutex& SvtDynamicMenuOptions::GetOwnStaticMutex()
 {

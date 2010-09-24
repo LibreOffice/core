@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace unnamed_svl_inettype {
 struct MediaTypeEntry
 {
     sal_Char const * m_pTypeName;
-    INetContentType	m_eTypeID;
+    INetContentType m_eTypeID;
     sal_Char const * m_pExtension;
 };
 
@@ -75,7 +75,7 @@ struct TypeNameMapEntry: public UniString
 //============================================================================
 struct ExtensionMapEntry: public UniString
 {
-    INetContentType	m_eTypeID;
+    INetContentType m_eTypeID;
 
     ExtensionMapEntry(const UniString & rExt):
         UniString(rExt), m_eTypeID(CONTENT_TYPE_UNKNOWN) {}
@@ -298,6 +298,7 @@ MediaTypeEntry const aStaticTypeNameMap[CONTENT_TYPE_LAST + 1]
         { CONTENT_TYPE_STR_AUDIO_AIFF, CONTENT_TYPE_AUDIO_AIFF, "aif" },
         { CONTENT_TYPE_STR_AUDIO_BASIC, CONTENT_TYPE_AUDIO_BASIC, "au" },
         { CONTENT_TYPE_STR_AUDIO_MIDI, CONTENT_TYPE_AUDIO_MIDI, "mid" },
+        { CONTENT_TYPE_STR_AUDIO_VORBIS, CONTENT_TYPE_AUDIO_VORBIS, "ogg" },
         { CONTENT_TYPE_STR_AUDIO_WAV, CONTENT_TYPE_AUDIO_WAV, "wav" },
         { CONTENT_TYPE_STR_IMAGE_GENERIC, CONTENT_TYPE_IMAGE_GENERIC, "tmp" },
         { CONTENT_TYPE_STR_IMAGE_GIF, CONTENT_TYPE_IMAGE_GIF, "gif" },
@@ -328,6 +329,7 @@ MediaTypeEntry const aStaticTypeNameMap[CONTENT_TYPE_LAST + 1]
         { CONTENT_TYPE_STR_TEXT_VCALENDAR, CONTENT_TYPE_TEXT_VCALENDAR,
           "vcs" },
         { CONTENT_TYPE_STR_TEXT_VCARD, CONTENT_TYPE_TEXT_VCARD, "vcf" },
+        { CONTENT_TYPE_STR_VIDEO_THEORA, CONTENT_TYPE_VIDEO_THEORA, "ogg" },
         { CONTENT_TYPE_STR_VIDEO_VDO, CONTENT_TYPE_VIDEO_VDO, "vdo" },
         { CONTENT_TYPE_STR_VIDEO_MSVIDEO, CONTENT_TYPE_VIDEO_MSVIDEO, "avi" },
         { CONTENT_TYPE_STR_X_STARMAIL, CONTENT_TYPE_X_STARMAIL, "smd" },
@@ -338,7 +340,7 @@ MediaTypeEntry const aStaticTypeNameMap[CONTENT_TYPE_LAST + 1]
 /** A mapping from type IDs to presentation resource IDs.  Sorted by type ID.
  */
 USHORT const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
-    = {	STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_UNKNOWN
+    = { STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_UNKNOWN
         STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_APP_OCTSTREAM
         STR_SVT_MIMETYPE_APP_PDF, // CONTENT_TYPE_APP_PDF
         STR_SVT_MIMETYPE_APP_RTF, // CONTENT_TYPE_APP_RTF
@@ -356,6 +358,7 @@ USHORT const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
         STR_SVT_MIMETYPE_AUDIO_AIFF, // CONTENT_TYPE_AUDIO_AIFF
         STR_SVT_MIMETYPE_AUDIO_BASIC, // CONTENT_TYPE_AUDIO_BASIC
         STR_SVT_MIMETYPE_AUDIO_MIDI, // CONTENT_TYPE_AUDIO_MIDI
+        STR_SVT_MIMETYPE_AUDIO_VORBIS, // CONTENT_TYPE_AUDIO_VORBIS
         STR_SVT_MIMETYPE_AUDIO_WAV, // CONTENT_TYPE_AUDIO_WAV
         STR_SVT_MIMETYPE_IMAGE_GIF, // CONTENT_TYPE_IMAGE_GIF
         STR_SVT_MIMETYPE_IMAGE_JPEG, // CONTENT_TYPE_IMAGE_JPEG
@@ -367,6 +370,7 @@ USHORT const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
         STR_SVT_MIMETYPE_TEXT_PLAIN, // CONTENT_TYPE_TEXT_PLAIN
         STR_SVT_MIMETYPE_TEXT_URL, // CONTENT_TYPE_TEXT_URL
         STR_SVT_MIMETYPE_TEXT_VCARD, // CONTENT_TYPE_TEXT_VCARD
+        STR_SVT_MIMETYPE_VIDEO_THEORA, // CONTENT_TYPE_VIDEO_THEORA
         STR_SVT_MIMETYPE_VIDEO_VDO, // CONTENT_TYPE_VIDEO_VDO
         STR_SVT_MIMETYPE_VIDEO_MSVIDEO, // CONTENT_TYPE_VIDEO_MSVIDEO
         STR_SVT_MIMETYPE_CNT_MSG, // CONTENT_TYPE_X_CNT_MESSAGE
@@ -502,6 +506,7 @@ MediaTypeEntry const aStaticExtensionMap[]
         { "met", CONTENT_TYPE_IMAGE_GENERIC, "" },
         { "mid", CONTENT_TYPE_AUDIO_MIDI, "" },
         { "midi", CONTENT_TYPE_AUDIO_MIDI, "" },
+        { "ogg", CONTENT_TYPE_AUDIO_VORBIS, "" },
         { "pbm", CONTENT_TYPE_IMAGE_GENERIC, "" },
         { "pcd", CONTENT_TYPE_IMAGE_GENERIC, "" },
         { "pct", CONTENT_TYPE_IMAGE_GENERIC, "" },

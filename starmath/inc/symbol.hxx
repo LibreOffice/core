@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 
 
 #define SYMBOLSET_NONE  0xFFFF
-#define SYMBOL_NONE		0xFFFF
+#define SYMBOL_NONE     0xFFFF
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -92,7 +92,7 @@ public:
           const String& rSet, BOOL bIsPredefined = FALSE);
     SmSym(const SmSym& rSymbol);
 
-    SmSym&	   	operator = (const SmSym& rSymbol);
+    SmSym&      operator = (const SmSym& rSymbol);
 
     const Font&     GetFace() const { return m_aFace; }
     sal_Unicode     GetCharacter() const { return m_cChar; }
@@ -138,8 +138,8 @@ typedef std::vector< const SmSym * >            SymbolPtrVec_t;
 
 struct lt_SmSymPtr : public std::binary_function< const SmSym *, const SmSym *, bool >
 {
-    bool operator() ( const SmSym *pSym1, const SmSym *pSym2 ) 
-    { 
+    bool operator() ( const SmSym *pSym1, const SmSym *pSym2 )
+    {
         return pSym1->GetCharacter() < pSym2->GetCharacter();
     }
 };
@@ -172,12 +172,12 @@ public:
     bool                    AddOrReplaceSymbol( const SmSym & rSymbol, bool bForceChange = false );
     void                    RemoveSymbol( const String & rSymbolName );
 
-    SmSym	    *	GetSymbolByName(const String& rSymbolName);
-    const SmSym *	GetSymbolByName(const String& rSymbolName) const
+    SmSym       *   GetSymbolByName(const String& rSymbolName);
+    const SmSym *   GetSymbolByName(const String& rSymbolName) const
     {
         return ((SmSymbolManager *) this)->GetSymbolByName(rSymbolName);
     }
-    
+
     bool        IsModified() const          { return m_bModified; }
     void        SetModified(bool bModify)   { m_bModified = bModify; }
 

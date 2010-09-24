@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@
 module com { module sun { module star { module ui { module dialogs {
 
 //=============================================================================
-/**	These constants are used to specify common controls of a FilePicker dialog.
-    
+/** These constants are used to specify common controls of a FilePicker dialog.
+
  */
 
 published constants CommonFilePickerElementIds
@@ -63,21 +63,21 @@ published constants CommonFilePickerElementIds
     /** Is used to refer to the edit line where a file or path can be entered by the user.
     */
     const short EDIT_FILEURL = 5;
-    
+
     //---------------------------------------------------------------------
     /** The label of the filter listbox of a FilePicker dialog.
 
         @since OOo 1.1.2
     */
     const short LISTBOX_FILTER_LABEL = 6;
-    
+
     //---------------------------------------------------------------------
     /** The label of the file name listbox of a FilePicker dialog.
 
         @since OOo 1.1.2
     */
     const short EDIT_FILEURL_LABEL = 7;
-};	
+};
 
 //=============================================================================
 

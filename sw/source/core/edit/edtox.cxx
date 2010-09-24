@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@
 #endif
 #include <bookmrk.hxx>
 #include <xmloff/odffields.hxx>
- 
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -123,7 +123,7 @@ BOOL SwEditShell::IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const
 {
     ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
-    return 	rTOXSect.IsProtect();
+    return  rTOXSect.IsProtect();
 }
 /* -----------------18.10.99 15:53-------------------
 
@@ -143,14 +143,14 @@ void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, BOOL bReadonly)
 /* -----------------02.09.99 07:47-------------------
 
  --------------------------------------------------*/
-const SwTOXBase* 	SwEditShell::GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate )
+const SwTOXBase*    SwEditShell::GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate )
 {
     return GetDoc()->GetDefaultTOXBase( eTyp, bCreate );
 }
 /* -----------------02.09.99 08:05-------------------
 
  --------------------------------------------------*/
-void	SwEditShell::SetDefaultTOXBase(const SwTOXBase& rBase)
+void    SwEditShell::SetDefaultTOXBase(const SwTOXBase& rBase)
 {
     GetDoc()->SetDefaultTOXBase(rBase);
 }
@@ -234,7 +234,7 @@ BOOL SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     return bRet;
 }
 
-BOOL SwEditShell::UpdateField( sw::mark::IFieldmark &fieldBM) 
+BOOL SwEditShell::UpdateField( sw::mark::IFieldmark &fieldBM)
 {
 //    SwDocShell* pDocSh = pDoc->GetDocShell();
     //@TODO implement me...; add undo etc...
@@ -335,7 +335,7 @@ BOOL SwEditShell::IsUpdateTOX() const
 /* -----------------26.08.99 13:49-------------------
 
  --------------------------------------------------*/
-const String&	SwEditShell::GetTOIAutoMarkURL() const
+const String&   SwEditShell::GetTOIAutoMarkURL() const
 {
     return GetDoc()->GetTOIAutoMarkURL();
 }
@@ -355,7 +355,7 @@ void SwEditShell::ApplyAutoMark()
     BOOL bDoesUndo = DoesUndo();
     DoUndo(FALSE);
     //1. remove all automatic generated index entries if AutoMarkURL has a
-    //	 length and the file exists
+    //   length and the file exists
     //2. load file
     //3. select all occurrences of the searched words
     //4. apply index entries
@@ -384,15 +384,15 @@ void SwEditShell::ApplyAutoMark()
         //
         // SearchOptions to be used in loop below
         //
-        //SearchAlgorithms eSrchType	= SearchAlgorithms_ABSOLUTE;
-        //OUString aSrchStr	= rText;
-        BOOL bCaseSensitive	= TRUE;
-        BOOL bWordOnly		= FALSE;
-        BOOL bSrchInSel		= FALSE;
-        BOOL bLEV_Relaxed	= TRUE;
-        INT32 nLEV_Other	= 2;	//  -> changedChars;
-        INT32 nLEV_Longer	= 3;	//! -> deletedChars;
-        INT32 nLEV_Shorter	= 1;	//!	-> insertedChars;
+        //SearchAlgorithms eSrchType    = SearchAlgorithms_ABSOLUTE;
+        //OUString aSrchStr = rText;
+        BOOL bCaseSensitive = TRUE;
+        BOOL bWordOnly      = FALSE;
+        BOOL bSrchInSel     = FALSE;
+        BOOL bLEV_Relaxed   = TRUE;
+        INT32 nLEV_Other    = 2;    //  -> changedChars;
+        INT32 nLEV_Longer   = 3;    //! -> deletedChars;
+        INT32 nLEV_Shorter  = 1;    //! -> insertedChars;
         INT32 nTransliterationFlags = 0;
         //
         INT32 nSrchFlags = 0;
@@ -435,14 +435,14 @@ void SwEditShell::ApplyAutoMark()
                 if( sToSelect.Len() )
                 {
                     String sAlternative = sLine.GetToken(0, ';', nTokenPos);
-                    String sPrimary 	= sLine.GetToken(0, ';', nTokenPos);
-                    String sSecondary 	= sLine.GetToken(0, ';', nTokenPos);
+                    String sPrimary     = sLine.GetToken(0, ';', nTokenPos);
+                    String sSecondary   = sLine.GetToken(0, ';', nTokenPos);
                     String sCase        = sLine.GetToken(0, ';', nTokenPos);
-                    String sWordOnly 	= sLine.GetToken(0, ';', nTokenPos);
+                    String sWordOnly    = sLine.GetToken(0, ';', nTokenPos);
 
                     //3.
-                    bCaseSensitive	= sCase.Len() && sCase != sZero;
-                    bWordOnly		= sWordOnly.Len() && sWordOnly != sZero;
+                    bCaseSensitive  = sCase.Len() && sCase != sZero;
+                    bWordOnly       = sWordOnly.Len() && sWordOnly != sZero;
                     //
                     if (!bCaseSensitive)
                     {

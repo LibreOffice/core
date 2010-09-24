@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,20 +37,20 @@
 class SVX_DLLPUBLIC SvxZoomStatusBarControl : public SfxStatusBarControl
 {
 private:
-    USHORT	nZoom;
+    USHORT  nZoom;
     USHORT  nValueSet;
 
 public:
-    virtual void	StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
     virtual void    Paint( const UserDrawEvent& rEvt );
-    virtual void	Command( const CommandEvent& rCEvt );
+    virtual void    Command( const CommandEvent& rCEvt );
 
     SFX_DECL_STATUSBAR_CONTROL();
 
     SvxZoomStatusBarControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
 
-    static	ULONG	GetDefItemWidth(const StatusBar& rStb);
+    static  ULONG   GetDefItemWidth(const StatusBar& rStb);
 
 };
 

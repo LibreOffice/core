@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,31 +33,31 @@
 
 class SbiParser;
 
-class SbiBuffer { 					// Code/Konstanten-Puffer:
-    SbiParser* pParser;				// fuer Fehlermeldungen
-    char*	pBuf;					// Puffer-Pointer
-    char*	pCur;					// aktueller Puffer-Pointer
-    UINT32	nOff;					// aktuelles Offset
-    UINT32	nSize;					// aktuelle Groesse
-    short	nInc;					// Inkrement
-    BOOL    Check( USHORT );		// Buffergroesse testen
+class SbiBuffer {                   // Code/Konstanten-Puffer:
+    SbiParser* pParser;             // fuer Fehlermeldungen
+    char*   pBuf;                   // Puffer-Pointer
+    char*   pCur;                   // aktueller Puffer-Pointer
+    UINT32  nOff;                   // aktuelles Offset
+    UINT32  nSize;                  // aktuelle Groesse
+    short   nInc;                   // Inkrement
+    BOOL    Check( USHORT );        // Buffergroesse testen
 public:
-    SbiBuffer( SbiParser*, short );	// Inkrement
+    SbiBuffer( SbiParser*, short ); // Inkrement
    ~SbiBuffer();
-    void Patch( UINT32, UINT32 );	// Patchen
-    void Chain( UINT32 );			// Back-Chain
-    void Align( INT32 );			// Alignment
+    void Patch( UINT32, UINT32 );   // Patchen
+    void Chain( UINT32 );           // Back-Chain
+    void Align( INT32 );            // Alignment
     BOOL Add( const void*, USHORT );// Element anfuegen
     BOOL operator += (const String&);// Basic-String speichern
-    BOOL operator += (INT8);		// Zeichen speichern
-    BOOL operator += (INT16);		// Integer speichern
-    BOOL operator += (UINT8);		// Zeichen speichern
-    BOOL operator += (UINT16);		// Integer speichern
-    BOOL operator += (UINT32);		// Integer speichern
-    BOOL operator += (INT32);		// Integer speichern
-    char*  GetBuffer();				// Puffer rausgeben (selbst loeschen!)
+    BOOL operator += (INT8);        // Zeichen speichern
+    BOOL operator += (INT16);       // Integer speichern
+    BOOL operator += (UINT8);       // Zeichen speichern
+    BOOL operator += (UINT16);      // Integer speichern
+    BOOL operator += (UINT32);      // Integer speichern
+    BOOL operator += (INT32);       // Integer speichern
+    char*  GetBuffer();             // Puffer rausgeben (selbst loeschen!)
     char*  GetBufferPtr(){ return pBuf; }
-    UINT32 GetSize()				{ return nOff; }
+    UINT32 GetSize()                { return nOff; }
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@
 // it has the size of 64 because I use a uInt64
 #define BITFIELDSIZE 64
 
-using namespace	::utl;
-using namespace	::rtl;
-using namespace	::com::sun::star;
-using namespace	::com::sun::star::accessibility;
+using namespace ::utl;
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::accessibility;
 
 class AccessibleStateSetHelperImpl
 {
@@ -68,7 +68,7 @@ public:
                         AccessibleStateSetHelperImpl* pNewStates)
         throw (uno::RuntimeException);
 
-    inline void	AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) );
+    inline void AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) );
 
 private:
 #if 0

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,16 +66,16 @@ namespace svt
     //--------------------------------------------------------------------
     RegistrationDialog::RegistrationDialog( Window* _pWindow, const ResId& _rResId, bool _bEvalVersion )
         :ModalDialog( _pWindow, _rResId )
-        ,m_eResponse		( urRegisterLater )
-        ,m_aLogo 			( this, ResId( FI_LOGO, *_rResId.GetResMgr() ) )
-        ,m_aIntro			( this, ResId( FT_INTRO, *_rResId.GetResMgr() ) )
-        ,m_aNow				( this, ResId( RB_NOW, *_rResId.GetResMgr() ) )
-        ,m_aLater			( this, ResId( RB_LATER, *_rResId.GetResMgr() ) )
-        ,m_aNever			( this, ResId( RB_NEVER, *_rResId.GetResMgr() ) )
-        ,m_aAlreadyDone		( this, ResId( RB_DONE, *_rResId.GetResMgr() ) )
-        ,m_aSeparator		( this, ResId( FL_SEPARATOR, *_rResId.GetResMgr() ) )
-        ,m_aOK				( this, ResId( BTN_OK, *_rResId.GetResMgr() ) )
-        ,m_aHelp			( this, ResId( BTN_HELP, *_rResId.GetResMgr() ) )
+        ,m_eResponse        ( urRegisterLater )
+        ,m_aLogo            ( this, ResId( FI_LOGO, *_rResId.GetResMgr() ) )
+        ,m_aIntro           ( this, ResId( FT_INTRO, *_rResId.GetResMgr() ) )
+        ,m_aNow             ( this, ResId( RB_NOW, *_rResId.GetResMgr() ) )
+        ,m_aLater           ( this, ResId( RB_LATER, *_rResId.GetResMgr() ) )
+        ,m_aNever           ( this, ResId( RB_NEVER, *_rResId.GetResMgr() ) )
+        ,m_aAlreadyDone     ( this, ResId( RB_DONE, *_rResId.GetResMgr() ) )
+        ,m_aSeparator       ( this, ResId( FL_SEPARATOR, *_rResId.GetResMgr() ) )
+        ,m_aOK              ( this, ResId( BTN_OK, *_rResId.GetResMgr() ) )
+        ,m_aHelp            ( this, ResId( BTN_HELP, *_rResId.GetResMgr() ) )
     {
         if ( _bEvalVersion )
         {   // if we're an eval version, we need to hide two of the options
@@ -152,7 +152,7 @@ namespace svt
     {
         long nHandled;
         if( rNEvt.GetType() == EVENT_KEYINPUT &&
-            rNEvt.GetKeyEvent()->GetCharCode() && 
+            rNEvt.GetKeyEvent()->GetCharCode() &&
             rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_ESCAPE)
         {
             EndDialog(RET_CANCEL);
@@ -161,11 +161,11 @@ namespace svt
         else
             nHandled = ModalDialog::PreNotify( rNEvt );
         return nHandled;
-    }            
+    }
 
 
 //........................................................................
-}	// namespace svt
+}   // namespace svt
 //........................................................................
 
 

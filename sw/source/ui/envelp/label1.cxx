@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,7 +144,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
 
     GetOKButton().SetText(String(SW_RES(STR_BTN_NEW_DOC)));
     GetOKButton().SetHelpId(HID_LABEL_INSERT);
-    GetOKButton().SetHelpText(aEmptyStr);	// Damit generierter Hilfetext verwendet wird
+    GetOKButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
 
     AddTabPage(TP_LAB_LAB, m_bLabel ? sFormat : sMedium ,SwLabPage   ::Create, 0, sal_False, 0);
     AddTabPage(TP_VISITING_CARDS, SwVisitingCardPage::Create, 0);
@@ -216,7 +216,7 @@ void SwLabDlg::GetLabItem(SwLabItem &rItem)
     const SwLabItem& rOldItem = (const SwLabItem&)GetInputSetImpl()->Get(FN_LABEL);
 
     if (rActItem != rOldItem)
-    {	// Wurde schon mal mit (hoffentlich) korrektem Inhalt "geputtet"
+    {   // Wurde schon mal mit (hoffentlich) korrektem Inhalt "geputtet"
         rItem = rActItem;
     }
     else
@@ -250,7 +250,7 @@ SwLabRec* SwLabDlg::GetRecord(const String &rRecName, sal_Bool bCont)
             break;
         }
     }
-    if (!bFound)	// Benutzerdefiniert
+    if (!bFound)    // Benutzerdefiniert
         pRec = Recs()[0];
 
     return(pRec);
@@ -270,10 +270,10 @@ Printer *SwLabDlg::GetPrt()
 SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_LAB_LAB), rSet),
     pNewDBMgr(NULL),
-    aItem		   ((const SwLabItem&) rSet.Get(FN_LABEL)),
+    aItem          ((const SwLabItem&) rSet.Get(FN_LABEL)),
 
     aWritingText   (this, SW_RES(TXT_WRITING)),
-    aAddrBox	   (this, SW_RES(BOX_ADDR   )),
+    aAddrBox       (this, SW_RES(BOX_ADDR   )),
     aWritingEdit   (this, SW_RES(EDT_WRITING)),
     aDatabaseFT    (this, SW_RES(FT_DATABASE)),
     aDatabaseLB    (this, SW_RES(LB_DATABASE)),
@@ -285,10 +285,10 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     aWritingFL     (this, SW_RES(FL_WRITING)),
     aContButton    (this, SW_RES(BTN_CONT   )),
     aSheetButton   (this, SW_RES(BTN_SHEET  )),
-    aMakeText	   (this, SW_RES(TXT_MAKE   )),
-    aMakeBox	   (this, SW_RES(BOX_MAKE   )),
-    aTypeText	   (this, SW_RES(TXT_TYPE   )),
-    aTypeBox	   (this, SW_RES(BOX_TYPE   )),
+    aMakeText      (this, SW_RES(TXT_MAKE   )),
+    aMakeBox       (this, SW_RES(BOX_MAKE   )),
+    aTypeText      (this, SW_RES(TXT_TYPE   )),
+    aTypeBox       (this, SW_RES(BOX_TYPE   )),
     aHiddenSortTypeBox(this, WB_SORT|WB_HIDE),
     aFormatInfo    (this, SW_RES(INF_FORMAT )),
     aFormatFL      (this, SW_RES(FL_FORMAT ))
@@ -300,14 +300,14 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
 
 
     // Handler installieren
-    aAddrBox	   .SetClickHdl (LINK(this, SwLabPage, AddrHdl		   ));
-    aDatabaseLB    .SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl	   ));
-    aTableLB       .SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl	   ));
-    aInsertBT      .SetClickHdl	(LINK(this, SwLabPage, FieldHdl		   ));
-    aContButton    .SetClickHdl (LINK(this, SwLabPage, PageHdl		   ));
-    aSheetButton   .SetClickHdl (LINK(this, SwLabPage, PageHdl		   ));
-    aMakeBox	   .SetSelectHdl(LINK(this, SwLabPage, MakeHdl		   ));
-    aTypeBox	   .SetSelectHdl(LINK(this, SwLabPage, TypeHdl		   ));
+    aAddrBox       .SetClickHdl (LINK(this, SwLabPage, AddrHdl         ));
+    aDatabaseLB    .SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
+    aTableLB       .SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
+    aInsertBT      .SetClickHdl (LINK(this, SwLabPage, FieldHdl        ));
+    aContButton    .SetClickHdl (LINK(this, SwLabPage, PageHdl         ));
+    aSheetButton   .SetClickHdl (LINK(this, SwLabPage, PageHdl         ));
+    aMakeBox       .SetSelectHdl(LINK(this, SwLabPage, MakeHdl         ));
+    aTypeBox       .SetSelectHdl(LINK(this, SwLabPage, TypeHdl         ));
 
     InitDatabaseBox();
 
@@ -321,7 +321,7 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
         if ( rStr == String(aItem.aLstMake) )
             nLstGroup = i;
     }
-//	Reset(rSet);
+//  Reset(rSet);
     aMakeBox.SelectEntryPos( nLstGroup );
     aMakeBox.GetSelectHdl().Call( &aMakeBox );
 }
@@ -463,7 +463,7 @@ IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
     GetParent()->ReplaceGroup( aMake );
     aItem.aLstMake = aMake;
 
-    const sal_Bool 	 bCont 	  = aContButton.IsChecked();
+    const sal_Bool   bCont    = aContButton.IsChecked();
     const sal_uInt16 nCount   = GetParent()->Recs().Count();
           sal_uInt16 nLstType = 0;
 
@@ -527,8 +527,8 @@ void SwLabPage::DisplayFormat()
     FieldUnit aMetric = ::GetDfltMetric(FALSE);
     SetMetric(aField, aMetric);
     aField.SetDecimalDigits(2);
-    aField.SetMin		  (0);
-    aField.SetMax		  (LONG_MAX);
+    aField.SetMin         (0);
+    aField.SetMax         (LONG_MAX);
 
     SwLabRec* pRec = GetSelectedEntryPos();
     aItem.aLstType = pRec->aType;
@@ -648,8 +648,8 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
 
     String aWriting( aItem.aWriting );
 
-    aAddrBox	.Check		( aItem.bAddr );
-    aWritingEdit.SetText	( aWriting.ConvertLineEnd() );
+    aAddrBox    .Check      ( aItem.bAddr );
+    aWritingEdit.SetText    ( aWriting.ConvertLineEnd() );
 
     const sal_uInt16 nCount = (sal_uInt16)GetParent()->Makes().Count();
     for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -660,7 +660,7 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
     }
 
 
-    aMakeBox	.SelectEntry( aItem.aMake );
+    aMakeBox    .SelectEntry( aItem.aMake );
     //save the current type
     String sType(aItem.aType);
     aMakeBox.GetSelectHdl().Call( &aMakeBox );
@@ -715,11 +715,11 @@ void SwVisitingCardPage::SetUserData( sal_uInt32 nCnt,
 
 SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_VISITING_CARDS), rSet),
-    aAutoTextLB(this, 		SW_RES( LB_AUTO_TEXT			)),
-    aAutoTextGroupFT(this, 	SW_RES( FT_AUTO_TEXT_GROUP	)),
-    aAutoTextGroupLB(this, 	SW_RES( LB_AUTO_TEXT_GROUP	)),
+    aAutoTextLB(this,       SW_RES( LB_AUTO_TEXT            )),
+    aAutoTextGroupFT(this,  SW_RES( FT_AUTO_TEXT_GROUP  )),
+    aAutoTextGroupLB(this,  SW_RES( LB_AUTO_TEXT_GROUP  )),
     aContentFL(this,        SW_RES( FL_CONTENT           )),
-    aExampleWIN(this, 		SW_RES( WIN_EXAMPLE			)),
+    aExampleWIN(this,       SW_RES( WIN_EXAMPLE         )),
     sVisCardGroup(SW_RES(ST_VISCARD_GROUP)),
     pExampleFrame(0)
 {
@@ -949,24 +949,24 @@ sal_Bool SwPrivateDataPage::FillItemSet(SfxItemSet& rSet)
 {
 
     SwLabItem aItem = (const SwLabItem&) GetTabDialog()->GetExampleSet()->Get(FN_LABEL);
-    aItem.aPrivFirstName = aFirstNameED	.GetText();
-    aItem.aPrivName		 = aNameED     	.GetText(  );
-    aItem.aPrivShortCut	 = aShortCutED 	.GetText(  );
-    aItem.aPrivFirstName2 = aFirstName2ED	.GetText();
-    aItem.aPrivName2	 = aName2ED     .GetText(  );
+    aItem.aPrivFirstName = aFirstNameED .GetText();
+    aItem.aPrivName      = aNameED      .GetText(  );
+    aItem.aPrivShortCut  = aShortCutED  .GetText(  );
+    aItem.aPrivFirstName2 = aFirstName2ED   .GetText();
+    aItem.aPrivName2     = aName2ED     .GetText(  );
     aItem.aPrivShortCut2 = aShortCut2ED .GetText(  );
-    aItem.aPrivStreet	 = aStreetED   	.GetText(  );
-    aItem.aPrivZip		 = aZipED      	.GetText(  );
-    aItem.aPrivCity		 = aCityED     	.GetText(  );
-    aItem.aPrivCountry	 = aCountryED  	.GetText(  );
-    aItem.aPrivState	 = aStateED    	.GetText(  );
-    aItem.aPrivTitle	 = aTitleED    	.GetText(  );
-    aItem.aPrivProfession= aProfessionED.GetText(	);
-    aItem.aPrivPhone	 = aPhoneED    	.GetText(  );
-    aItem.aPrivMobile 	 = aMobilePhoneED.GetText(  );
-    aItem.aPrivFax		 = aFaxED      	.GetText(  );
-    aItem.aPrivWWW		 = aHomePageED 	.GetText(  );
-    aItem.aPrivMail		 = aMailED     	.GetText(  );
+    aItem.aPrivStreet    = aStreetED    .GetText(  );
+    aItem.aPrivZip       = aZipED       .GetText(  );
+    aItem.aPrivCity      = aCityED      .GetText(  );
+    aItem.aPrivCountry   = aCountryED   .GetText(  );
+    aItem.aPrivState     = aStateED     .GetText(  );
+    aItem.aPrivTitle     = aTitleED     .GetText(  );
+    aItem.aPrivProfession= aProfessionED.GetText(   );
+    aItem.aPrivPhone     = aPhoneED     .GetText(  );
+    aItem.aPrivMobile    = aMobilePhoneED.GetText(  );
+    aItem.aPrivFax       = aFaxED       .GetText(  );
+    aItem.aPrivWWW       = aHomePageED  .GetText(  );
+    aItem.aPrivMail      = aMailED      .GetText(  );
 
     rSet.Put(aItem);
     return sal_True;
@@ -1002,30 +1002,30 @@ void SwPrivateDataPage::Reset(const SfxItemSet& rSet)
 SwBusinessDataPage::SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_BUSINESS_DATA), rSet),
     aDataFL             (this, SW_RES( FL_DATA       )),
-    aCompanyFT			(this, SW_RES( FT_COMP		)),
-    aCompanyED			(this, SW_RES( ED_COMP		)),
-    aCompanyExtFT		(this, SW_RES( FT_COMP_EXT	)),
-    aCompanyExtED		(this, SW_RES( ED_COMP_EXT	)),
-    aSloganFT			(this, SW_RES( FT_SLOGAN		)),
-    aSloganED			(this, SW_RES( ED_SLOGAN		)),
-    aStreetFT			(this, SW_RES( FT_STREET		)),
-    aStreetED			(this, SW_RES( ED_STREET		)),
-    aZipCityFT			(this, SW_RES( FT_ZIPCITY	)),
-    aZipED				(this, SW_RES( ED_ZIP		)),
-    aCityED				(this, SW_RES( ED_CITY		)),
-    aCountryStateFT		(this, SW_RES( FT_COUNTRYSTATE	)),
-    aCountryED			(this, SW_RES( ED_COUNTRY	)),
-    aStateED			(this, SW_RES( ED_STATE		)),
-    aPositionFT			(this, SW_RES( FT_POSITION	)),
-    aPositionED			(this, SW_RES( ED_POSITION	)),
-    aPhoneFT			(this, SW_RES( FT_PHONE_MOBILE	)),
-    aPhoneED			(this, SW_RES( ED_PHONE		)),
-    aMobilePhoneED		(this, SW_RES( ED_MOBILE		)),
-    aFaxFT				(this, SW_RES( FT_FAX		)),
-    aFaxED				(this, SW_RES( ED_FAX		)),
-    aWWWMailFT			(this, SW_RES( FT_WWWMAIL	)),
-    aHomePageED			(this, SW_RES( ED_WWW		)),
-    aMailED				(this, SW_RES( ED_MAIL		))
+    aCompanyFT          (this, SW_RES( FT_COMP      )),
+    aCompanyED          (this, SW_RES( ED_COMP      )),
+    aCompanyExtFT       (this, SW_RES( FT_COMP_EXT  )),
+    aCompanyExtED       (this, SW_RES( ED_COMP_EXT  )),
+    aSloganFT           (this, SW_RES( FT_SLOGAN        )),
+    aSloganED           (this, SW_RES( ED_SLOGAN        )),
+    aStreetFT           (this, SW_RES( FT_STREET        )),
+    aStreetED           (this, SW_RES( ED_STREET        )),
+    aZipCityFT          (this, SW_RES( FT_ZIPCITY   )),
+    aZipED              (this, SW_RES( ED_ZIP       )),
+    aCityED             (this, SW_RES( ED_CITY      )),
+    aCountryStateFT     (this, SW_RES( FT_COUNTRYSTATE  )),
+    aCountryED          (this, SW_RES( ED_COUNTRY   )),
+    aStateED            (this, SW_RES( ED_STATE     )),
+    aPositionFT         (this, SW_RES( FT_POSITION  )),
+    aPositionED         (this, SW_RES( ED_POSITION  )),
+    aPhoneFT            (this, SW_RES( FT_PHONE_MOBILE  )),
+    aPhoneED            (this, SW_RES( ED_PHONE     )),
+    aMobilePhoneED      (this, SW_RES( ED_MOBILE        )),
+    aFaxFT              (this, SW_RES( FT_FAX       )),
+    aFaxED              (this, SW_RES( ED_FAX       )),
+    aWWWMailFT          (this, SW_RES( FT_WWWMAIL   )),
+    aHomePageED         (this, SW_RES( ED_WWW       )),
+    aMailED             (this, SW_RES( ED_MAIL      ))
 {
     FreeResource();
     SetExchangeSupport();
@@ -1067,20 +1067,20 @@ sal_Bool SwBusinessDataPage::FillItemSet(SfxItemSet& rSet)
 {
     SwLabItem aItem = (const SwLabItem&) GetTabDialog()->GetExampleSet()->Get(FN_LABEL);
 
-    aItem.aCompCompany	 = aCompanyED	   .GetText();
+    aItem.aCompCompany   = aCompanyED      .GetText();
     aItem.aCompCompanyExt= aCompanyExtED   .GetText();
-    aItem.aCompSlogan	 = aSloganED       .GetText();
-    aItem.aCompStreet	 = aStreetED       .GetText();
-    aItem.aCompZip		 = aZipED          .GetText();
-    aItem.aCompCity		 = aCityED         .GetText();
-    aItem.aCompCountry	 = aCountryED      .GetText();
-    aItem.aCompState	 = aStateED        .GetText();
-    aItem.aCompPosition	 = aPositionED     .GetText();
-    aItem.aCompPhone	 = aPhoneED        .GetText();
-    aItem.aCompMobile	 = aMobilePhoneED  .GetText();
-    aItem.aCompFax		 = aFaxED          .GetText();
-    aItem.aCompWWW		 = aHomePageED     .GetText();
-    aItem.aCompMail		 = aMailED         .GetText();
+    aItem.aCompSlogan    = aSloganED       .GetText();
+    aItem.aCompStreet    = aStreetED       .GetText();
+    aItem.aCompZip       = aZipED          .GetText();
+    aItem.aCompCity      = aCityED         .GetText();
+    aItem.aCompCountry   = aCountryED      .GetText();
+    aItem.aCompState     = aStateED        .GetText();
+    aItem.aCompPosition  = aPositionED     .GetText();
+    aItem.aCompPhone     = aPhoneED        .GetText();
+    aItem.aCompMobile    = aMobilePhoneED  .GetText();
+    aItem.aCompFax       = aFaxED          .GetText();
+    aItem.aCompWWW       = aHomePageED     .GetText();
+    aItem.aCompMail      = aMailED         .GetText();
 
     rSet.Put(aItem);
     return sal_True;

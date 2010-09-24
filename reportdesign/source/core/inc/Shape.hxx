@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@
 
 namespace reportdesign
 {
-    typedef ::cppu::PropertySetMixin<		 com::sun::star::report::XShape	> ShapePropertySet;
+    typedef ::cppu::PropertySetMixin<        com::sun::star::report::XShape > ShapePropertySet;
     typedef ::cppu::WeakComponentImplHelper2<    com::sun::star::report::XShape
-                                                ,com::sun::star::lang::XServiceInfo	> ShapeBase;
+                                                ,com::sun::star::lang::XServiceInfo > ShapeBase;
 
     /** \class OShape Defines the implementation of a \interface com:::sun::star::report::XShape
      * \ingroup reportdesign_api
      *
      */
-    class OShape :	public comphelper::OBaseMutex,
+    class OShape :  public comphelper::OBaseMutex,
                     public ShapeBase,
                     public ShapePropertySet
     {
@@ -68,7 +68,7 @@ namespace reportdesign
         OShape(const OShape&);
         OShape& operator=(const OShape&);
 
-        template <typename T> void set(	 const ::rtl::OUString& _sProperty
+        template <typename T> void set(  const ::rtl::OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)
         {
@@ -145,12 +145,12 @@ namespace reportdesign
 
         // XComponent
         virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException) 
-        { 
+        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
+        {
             cppu::WeakComponentImplHelperBase::addEventListener(aListener);
         }
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        { 
+        {
             cppu::WeakComponentImplHelperBase::removeEventListener(aListener);
         }
 

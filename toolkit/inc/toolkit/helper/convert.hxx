@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,4 +64,4 @@ inline ::Rectangle VCLRectangle( const ::com::sun::star::awt::Rectangle& rAWTRec
     return ::Rectangle( ::Point( rAWTRect.X, rAWTRect.Y ), ::Size( rAWTRect.Width, rAWTRect.Height ) );
 }
 
-#endif	// _TOOLKIT_HELPER_CONVERT_HXX_
+#endif  // _TOOLKIT_HELPER_CONVERT_HXX_

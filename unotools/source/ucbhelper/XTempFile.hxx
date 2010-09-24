@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,28 +45,28 @@
 class SvStream;
 namespace utl { class TempFile; }
 
-typedef	 ::cppu::WeakImplHelper5<	::com::sun::star::io::XTempFile
-                                    ,	::com::sun::star::io::XInputStream
-                                                  ,	::com::sun::star::io::XOutputStream
-                                                  ,	::com::sun::star::io::XTruncate
-                                                  ,	::com::sun::star::lang::XServiceInfo
+typedef  ::cppu::WeakImplHelper5<   ::com::sun::star::io::XTempFile
+                                    ,   ::com::sun::star::io::XInputStream
+                                                  , ::com::sun::star::io::XOutputStream
+                                                  , ::com::sun::star::io::XTruncate
+                                                  , ::com::sun::star::lang::XServiceInfo
                                                   >
                                     OTempFileBase;
 
-class OTempFileService : 
+class OTempFileService :
     public OTempFileBase,
     public ::cppu::PropertySetMixin< ::com::sun::star::io::XTempFile >
 {
 protected:
-    ::utl::TempFile* 	mpTempFile;
-    ::osl::Mutex		maMutex;
-    SvStream* 			mpStream;
-    sal_Bool			mbRemoveFile;
-    sal_Bool			mbInClosed;
-    sal_Bool			mbOutClosed;
+    ::utl::TempFile*    mpTempFile;
+    ::osl::Mutex        maMutex;
+    SvStream*           mpStream;
+    sal_Bool            mbRemoveFile;
+    sal_Bool            mbInClosed;
+    sal_Bool            mbOutClosed;
 
-    sal_Int64			mnCachedPos;
-    sal_Bool			mbHasCachedPos;
+    sal_Int64           mnCachedPos;
+    sal_Bool            mbHasCachedPos;
 
     void checkError () const;
     void checkConnected ();
@@ -75,20 +75,20 @@ public:
     OTempFileService (::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);
 
     //Methods
-    //	XInterface
+    //  XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  )
         throw ();
     virtual void SAL_CALL release(  )
         throw ();
-    //	XTypeProvider
+    //  XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //	XTempFile
+    //  XTempFile
     virtual ::sal_Bool SAL_CALL getRemoveFile()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRemoveFile( ::sal_Bool _removefile )

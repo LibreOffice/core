@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,8 +31,8 @@ import java.net.URL;
 
 import java.io.ByteArrayInputStream;
 
-import java.util.Vector; 
-import java.util.StringTokenizer; 
+import java.util.Vector;
+import java.util.StringTokenizer;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -57,13 +57,13 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     private String locationPlaceHolder = "";
     private String source;
     private Parcel parent;
-    
-     
+
+
     public ScriptMetaData( Parcel parent, ScriptEntry entry,
                            String source )
     {
         super( entry );
-        this.parent = parent; 
+        this.parent = parent;
         if ( source != null )
         {
             this.hasSource = true;
@@ -78,7 +78,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     }
     public String getSource()
     {
-        
+
         if ( source !=null && hasSource )
         {
             return source;
@@ -86,7 +86,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         else
         {
             return null;
-        }        
+        }
     }
 
     public byte[] getSourceBytes()
@@ -98,8 +98,8 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         else
         {
             return null;
-        }        
- 
+        }
+
     }
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
@@ -172,11 +172,11 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         else if ( url.indexOf(SHARE) == 0 )
         {
             result = "share";
-        } 
+        }
         else if ( url.indexOf(USER) == 0 )
         {
             result = "user";
-        } 
+        }
         else if ( url.indexOf("vnd.sun.star.tdoc:") == 0 )
         {
             result = "document";
@@ -214,11 +214,11 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         else if ( pathToParcel.indexOf(SHARE) == 0 )
         {
             placeHolder = "share";
-        } 
+        }
         else if ( pathToParcel.indexOf(USER) == 0 )
         {
             placeHolder = "user";
-        } 
+        }
         else if ( pathToParcel.indexOf("vnd.sun.star.tdoc:") == 0 )
         {
             placeHolder = "document";
@@ -232,20 +232,20 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
 
     // TODO probably should be private should not be necessary
     // to be exposed at all only used in lang providers at the moment
-    // to generate URL for script, editors should use a model of script 
+    // to generate URL for script, editors should use a model of script
     // source and not interact with the URL
     // Also if it is to remain needs to be renamed to getParcelLocationURL
-  
-    // return  URL string  to parcel 
+
+    // return  URL string  to parcel
     public String getParcelLocation()
     {
         return parent.getPathToParcel();
     }
 
 
-    public String toString() 
+    public String toString()
     {
-        return "\nParcelLocation = " + getParcelLocation() + "\nLocationPlaceHolder = " + locationPlaceHolder + super.toString(); 
+        return "\nParcelLocation = " + getParcelLocation() + "\nLocationPlaceHolder = " + locationPlaceHolder + super.toString();
     }
 
     public URL[] getClassPath() throws java.net.MalformedURLException
@@ -269,21 +269,21 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
 
         // replace \ with /
         parcelPath = parcelPath.replace( '\\', '/' );
-        
+
         Vector classPathVec =  new Vector();
         StringTokenizer stk = new StringTokenizer(classpath, ":");
-        while (  stk.hasMoreElements() ) 
+        while (  stk.hasMoreElements() )
         {
             String relativeClasspath =  (String)stk.nextElement();
             String pathToProcess  = PathUtils.make_url( parcelPath, relativeClasspath);
             URL url = createURL( pathToProcess );
-            if ( url != null ) 
+            if ( url != null )
             {
                 classPathVec.add (  url  );
             }
-    
+
         }
-        if ( classPathVec.size() == 0) 
+        if ( classPathVec.size() == 0)
         {
             URL url = createURL( parcelPath );
             if ( url != null )
@@ -341,18 +341,18 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
                     catch (java.io.IOException ignore ) {
                         LogUtils.DEBUG("** Failed to read scriot from url " + ignore.toString() );
                     }
-                    
+
                     source = buf.toString();
                     hasSource = true;
                 }
-            }    
+            }
             catch (java.io.IOException e) {
                 LogUtils.DEBUG("** Failed to read scriot from url " + e.toString());
             }
-            
+
         }
     protected boolean writeSourceFile()
-    { 
+    {
         String parcelLocation = parent.getPathToParcel();
         String sourceFilePath = parent.getPathToParcel() + "/" + getLanguageName();
         boolean result = false;
@@ -360,7 +360,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         try
         {
             XSimpleFileAccess2 xSFA2 = ( XSimpleFileAccess2 )
-                UnoRuntime.queryInterface( XSimpleFileAccess2.class, 
+                UnoRuntime.queryInterface( XSimpleFileAccess2.class,
                     parent.m_xSFA );
             if ( xSFA2 != null )
             {

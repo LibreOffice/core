@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,10 @@ namespace rptxml
     class OXMLSection : public SvXMLImportContext
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >	            m_xSection;
-        sal_Bool    															            m_bPageHeader;
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >              m_xSection;
+        sal_Bool                                                                            m_bPageHeader;
         ORptFilter& GetOwnImport();
-    
+
         OXMLSection(const OXMLSection&);
         void operator =(const OXMLSection&);
     public:

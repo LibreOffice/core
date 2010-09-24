@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@
 module com { module sun { module star { module datatransfer { module dnd {
 
 //=============================================================================
-/** This interface will be used by a <type>XDragGestureRecognizer</type> 
-    when it detects a drag initiating gesture. 
+/** This interface will be used by a <type>XDragGestureRecognizer</type>
+    when it detects a drag initiating gesture.
 
-    <p>The implementor of this interface is responsible for starting the drag 
+    <p>The implementor of this interface is responsible for starting the drag
     as a result of receiving such notification.</p>
 
 */
@@ -52,8 +52,8 @@ module com { module sun { module star { module datatransfer { module dnd {
 published interface XDragGestureListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
-    /** A <type>XDragGestureRecognizer</type> has detected a platform-dependent 
-        drag initiating gesture and is notifying this listener in order 
+    /** A <type>XDragGestureRecognizer</type> has detected a platform-dependent
+        drag initiating gesture and is notifying this listener in order
         for it to initiate the action for the user.
 
         @param dge

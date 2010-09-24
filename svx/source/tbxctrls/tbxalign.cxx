@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include "tbxdraw.hxx"
 #include "tbxdraw.hrc"
 #include <tools/shl.hxx>
-#ifndef	_SFX_IMAGEMGR_HXX
+#ifndef _SFX_IMAGEMGR_HXX
 #include <sfx2/imagemgr.hxx>
 #endif
 #include <vcl/svapp.hxx>
@@ -83,7 +83,7 @@ SfxPopupWindowType SvxTbxCtlAlign::GetPopupWindowType() const
 |*
 \************************************************************************/
 
-SfxPopupWindow*	SvxTbxCtlAlign::CreatePopupWindow()
+SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( GetSlotId() == SID_OBJECT_ALIGN )
@@ -103,7 +103,7 @@ SfxPopupWindow*	SvxTbxCtlAlign::CreatePopupWindow()
 
 ::rtl::OUString SAL_CALL SvxTbxCtlAlign::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException)
 {
-    // Provide the controlled sub-toolbar name, so we are notified whenever 
+    // Provide the controlled sub-toolbar name, so we are notified whenever
     // this toolbar executes a function.
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     return m_aSubTbName;

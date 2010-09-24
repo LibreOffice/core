@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,18 +28,18 @@
 #ifndef __com_sun_star_accessibility_XAccessibleMultiLineText_idl__
 #define __com_sun_star_accessibility_XAccessibleMultiLineText_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessibleText_idl__ 
-#include <com/sun/star/accessibility/XAccessibleText.idl> 
-#endif 
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__ 
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl> 
-#endif 
+#ifndef __com_sun_star_accessibility_XAccessibleText_idl__
+#include <com/sun/star/accessibility/XAccessibleText.idl>
+#endif
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
 #ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
 #endif
 
 module com { module sun { module star { module accessibility {
-        
+
 /** Implement this interface to give provide a mapping between text index
     and line numbers.
 
@@ -55,15 +55,15 @@ interface XAccessibleMultiLineText
     : ::com::sun::star::accessibility::XAccessibleText
 {
     /** Returns the line number at the specified index.
-    
+
         <p>For a text object that is spread over multiple lines, this method
         provides a mapping from a text index to the corresponding line number.
         </p>
-        
+
         @param nIndex
             Index for which the line number should be returned.
             The valid range is 0..length.
-            
+
         @return
             Returns the line number of the specified text index.
 
@@ -74,17 +74,17 @@ interface XAccessibleMultiLineText
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
     /** Retuns the text of the specified line.
-    
+
         <p>Returns the substring of text that makes up the specified line
         number.</p>
 
-        <p>The number of lines can be obtained by calling 
+        <p>The number of lines can be obtained by calling
         <member>XAccessibleMultiLineText::getLineNumberAtIndex</member>
         with the index of the last character. In a loop, the last line
         has been reached when <member>TextSegment::SegmentEnd</member>
-        of the returned value is equal to the index of the last 
+        of the returned value is equal to the index of the last
         character of the text.</p>
-        
+
         @param nLineNo
             The number of the line to return the substring from.
             The valid range is 0..getLineNumberAtIndex(getCharacterCount()).
@@ -99,21 +99,21 @@ interface XAccessibleMultiLineText
 
     TextSegment getTextAtLineNumber([in] long nLineNo)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
-    
+
     /** Returns the text of the line in which the caret is located.
-    
+
         <p>The substring returned will most of the time be identical to
-        calling <member>XAccessibleText::getTextAtIndex</member> with 
+        calling <member>XAccessibleText::getTextAtIndex</member> with
         the index returned by <member>XAccessibleText::getCaretPosition</member>
         and type  <const scope="AccessibleTextType">LINE</type> beside the
         following special case:</p>
 
-        <p>Some text implementations place the caret at the end of the current 
+        <p>Some text implementations place the caret at the end of the current
         line when the <b>End</b> key gets pressed. Since the index of this position
         is identical to the one of the first character of the following line,
-        <member>XAccessibleMultiLineText::getLineNumberAtIndex</member> will 
+        <member>XAccessibleMultiLineText::getLineNumberAtIndex</member> will
         return the line following the current one in this case.</p>
-        
+
         @return
             Returns the requested text portion. This portion may be empty
             or invalid if the paragraph object does not have a valid caret
@@ -121,20 +121,20 @@ interface XAccessibleMultiLineText
     */
 
     TextSegment getTextAtLineWithCaret();
-  
+
     /** Returns the number of the line in which the caret is located.
-    
+
         <p>The line number returned will most of the time be identical to
         calling <member>XAccessibleMultiLineText::getLineNumberAtIndex</member>
         with the index returned by <member>XAccessibleText::getCaretPosition</member>
         beside the following special case:</p>
 
-        <p>Some text implementations place the caret at the end of the current 
+        <p>Some text implementations place the caret at the end of the current
         line when the <b>End</b> key gets pressed. Since the index of this position
         is identical to the one of the first character of the following line,
-        <member>XAccessibleMultiLineText::getLineNumberAtIndex</member> will 
+        <member>XAccessibleMultiLineText::getLineNumberAtIndex</member> will
         return the line following the current one in this case.</p>
-        
+
         @return
             Returns the index of the line in which the caret is located or -1
             if the paragraph does not have a valid caret position.
@@ -142,7 +142,7 @@ interface XAccessibleMultiLineText
 
     long getNumberOfLineWithCaret();
 };
-          
+
 }; }; }; };
 
 #endif

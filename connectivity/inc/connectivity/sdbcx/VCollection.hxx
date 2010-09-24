@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,15 +100,15 @@ namespace connectivity
             public OCollectionBase
         {
         protected:
-            ::std::auto_ptr<IObjectCollection>		m_pElements;
+            ::std::auto_ptr<IObjectCollection>      m_pElements;
 
-            ::cppu::OInterfaceContainerHelper		m_aContainerListeners;
-            ::cppu::OInterfaceContainerHelper		m_aRefreshListeners;
+            ::cppu::OInterfaceContainerHelper       m_aContainerListeners;
+            ::cppu::OInterfaceContainerHelper       m_aRefreshListeners;
 
         protected:
-            ::cppu::OWeakObject&					m_rParent;			// parent of the collection
-            ::osl::Mutex&							m_rMutex;			// mutex of the parent
-            sal_Bool								m_bUseIndexOnly;	// is only TRUE when only an indexaccess is needed
+            ::cppu::OWeakObject&                    m_rParent;          // parent of the collection
+            ::osl::Mutex&                           m_rMutex;           // mutex of the parent
+            sal_Bool                                m_bUseIndexOnly;    // is only TRUE when only an indexaccess is needed
 
             // the implementing class should refresh their elements
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) = 0;
@@ -178,9 +178,9 @@ namespace connectivity
 
 
             /** return the object, if not existent it creates it.
-                @param	_nIndex
+                @param  _nIndex
                     The index of the object to create.
-                @return	ObjectType
+                @return ObjectType
             */
             ObjectType getObject(sal_Int32 _nIndex);
 

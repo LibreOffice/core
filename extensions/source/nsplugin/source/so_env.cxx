@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ restoreUTF8(char *pPath)
     unsigned char *s, *d;
 
 #define XDIGIT(c) ((c) <= '9' ? (c) - '0' : ((c) & 0x4F) - 'A' + 10)
-                                                                                                                                                       
+
     s = d = (unsigned char *)pPath;
     do {
         if (*s == '%' && s[1] && s[2]) {
@@ -224,7 +224,7 @@ int nspluginOOoModuleHook (void** aResult)
     *aResult = realFileName;
 
     fprintf (stderr, "OpenOffice path is '%s'\n", realFileName);
-   
+
     return 0;
 }
 #endif

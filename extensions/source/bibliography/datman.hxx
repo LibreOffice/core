@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,28 +72,28 @@ public:
     BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch);
 
     void ReleaseInterceptor();
-    
+
     // XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw (::com::sun::star::uno::RuntimeException);
-    // XDispatchProviderInterceptor 
+    // XDispatchProviderInterceptor
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setSlaveDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewMasterDispatchProvider ) throw (::com::sun::star::uno::RuntimeException);
 };
 
-typedef cppu::WeakComponentImplHelper2	<	::com::sun::star::beans::XPropertyChangeListener
-                                        ,	::com::sun::star::form::XLoadable
-                                        >	BibDataManager_Base;
+typedef cppu::WeakComponentImplHelper2  <   ::com::sun::star::beans::XPropertyChangeListener
+                                        ,   ::com::sun::star::form::XLoadable
+                                        >   BibDataManager_Base;
 class BibDataManager
             :public ::comphelper::OMutexAndBroadcastHelper
             ,public BibDataManager_Base
 {
 private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > 					    m_xForm;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > 			    m_xGridModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > 			    m_xSourceProps;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                       m_xForm;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >                m_xGridModel;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               m_xSourceProps;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   m_xParser;
         ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xFormCtrl;
         // #100312# -------------------
@@ -101,24 +101,24 @@ private:
         BibInterceptorHelper* m_pInterceptorHelper;
 
         ::rtl::OUString                     aActiveDataTable;
-        ::rtl::OUString						aDataSourceURL;
-        ::rtl::OUString						aQuoteChar;
-        ::com::sun::star::uno::Any						aUID;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > 				xBibCursor;
+        ::rtl::OUString                     aDataSourceURL;
+        ::rtl::OUString                     aQuoteChar;
+        ::com::sun::star::uno::Any                      aUID;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >              xBibCursor;
 
-        ::cppu::OInterfaceContainerHelper	m_aLoadListeners;
+        ::cppu::OInterfaceContainerHelper   m_aLoadListeners;
 
-        ::bib::BibView* 			pBibView;
-        BibToolBar*					pToolbar;
+        ::bib::BibView*             pBibView;
+        BibToolBar*                 pToolbar;
 
-        rtl::OUString 				sIdentifierMapping;
+        rtl::OUString               sIdentifierMapping;
 protected:
 
-        void						InsertFields(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
-        void						SetMeAsUidListener();
-        void						RemoveMeAsUidListener();
+        void                        InsertFields(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
+        void                        SetMeAsUidListener();
+        void                        RemoveMeAsUidListener();
 
-        void						UpdateAddressbookCursor(::rtl::OUString aSourceName);
+        void                        UpdateAddressbookCursor(::rtl::OUString aSourceName);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
                                     updateGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xDbForm);
@@ -140,53 +140,53 @@ public:
         BibDataManager();
         ~BibDataManager();
 
-        virtual void				SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt)
+        virtual void                SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt)
                                                                 throw( ::com::sun::star::uno::RuntimeException );
-        virtual void 				SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
+        virtual void                SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
                                                                 throw( ::com::sun::star::uno::RuntimeException );
 
 
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > 					createDatabaseForm(	BibDBDescriptor&	aDesc);
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                   createDatabaseForm( BibDBDescriptor&    aDesc);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > 			updateGridModel();
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            updateGridModel();
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString>			getDataSources();
+        ::com::sun::star::uno::Sequence< ::rtl::OUString>           getDataSources();
 
-        ::rtl::OUString				getActiveDataSource() {return aDataSourceURL;}
-        void						setActiveDataSource(const ::rtl::OUString& rURL);
+        ::rtl::OUString             getActiveDataSource() {return aDataSourceURL;}
+        void                        setActiveDataSource(const ::rtl::OUString& rURL);
 
-        ::rtl::OUString				getActiveDataTable();
-        void						setActiveDataTable(const ::rtl::OUString& rTable);
+        ::rtl::OUString             getActiveDataTable();
+        void                        setActiveDataTable(const ::rtl::OUString& rTable);
 
-        void						setFilter(const ::rtl::OUString& rQuery);
-        ::rtl::OUString						getFilter();
+        void                        setFilter(const ::rtl::OUString& rQuery);
+        ::rtl::OUString                     getFilter();
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString>			getQueryFields();
-        ::rtl::OUString						getQueryField();
-        void						startQueryWith(const ::rtl::OUString& rQuery);
+        ::com::sun::star::uno::Sequence< ::rtl::OUString>           getQueryFields();
+        ::rtl::OUString                     getQueryField();
+        void                        startQueryWith(const ::rtl::OUString& rQuery);
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >&    getParser()	{ return m_xParser; }
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& 					    getForm()	{ return m_xForm; }
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >&    getParser() { return m_xParser; }
+        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >&                        getForm()   { return m_xForm; }
 
 
-        ::rtl::OUString						getControlName(sal_Int32 nFormatKey );
+        ::rtl::OUString                     getControlName(sal_Int32 nFormatKey );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > 			loadControlModel(const ::rtl::OUString& rName,
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            loadControlModel(const ::rtl::OUString& rName,
                                                         sal_Bool bForceListBox = sal_False);
 
-        void						CreateMappingDialog(Window* pParent);
+        void                        CreateMappingDialog(Window* pParent);
         ::rtl::OUString             CreateDBChangeDialog(Window* pParent);
 
         void                        DispatchDBChangeDialog();
-        sal_Bool                    HasActiveConnection() const; 
+        sal_Bool                    HasActiveConnection() const;
 
-        void						SetView( ::bib::BibView* pView ) { pBibView = pView; }
+        void                        SetView( ::bib::BibView* pView ) { pBibView = pView; }
 
-        void						SetToolbar(BibToolBar* pSet);
+        void                        SetToolbar(BibToolBar* pSet);
 
-        const rtl::OUString&		GetIdentifierMapping();
-        void						ResetIdentifierMapping() {sIdentifierMapping = rtl::OUString();}
+        const rtl::OUString&        GetIdentifierMapping();
+        void                        ResetIdentifierMapping() {sIdentifierMapping = rtl::OUString();}
 
         ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > GetFormController();
         // #100312# ----------

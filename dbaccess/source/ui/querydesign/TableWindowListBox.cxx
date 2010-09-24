@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@
 #ifndef _SVX_DBEXCH_HRC
 #include <svx/dbexch.hrc>
 #endif
-#ifndef _SV_SVAPP_HXX 
+#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
 
@@ -63,9 +63,9 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
 
-OJoinExchangeData::OJoinExchangeData(OTableWindowListBox* pBox) 
+OJoinExchangeData::OJoinExchangeData(OTableWindowListBox* pBox)
     : pListBox(pBox)
-    , pEntry(pBox->FirstSelected()) 
+    , pEntry(pBox->FirstSelected())
 { }
 
 const ULONG SCROLLING_TIMESPAN = 500;
@@ -177,15 +177,15 @@ long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
     {
         case EVENT_KEYINPUT:
         {
-            const KeyEvent* pKeyEvent =	rNEvt.GetKeyEvent();
+            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             const KeyCode& rCode = pKeyEvent->GetKeyCode();
-            
+
             if (rCode.GetCode() != KEY_RETURN)
             {
                 if(m_pTabWin)
                 {
                     bHandled = m_pTabWin->HandleKeyInput(*pKeyEvent);
-                    //	bHandled = TRUE;
+                    //  bHandled = TRUE;
                 }
                 break;
             }
@@ -215,7 +215,7 @@ IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
         ScrollOutputArea( -1 );
         pEntry = GetEntry( m_aMousePos );
         Select( pEntry, TRUE );
-//		m_aScrollTimer.Start();
+//      m_aScrollTimer.Start();
     }
 
     return 0;
@@ -233,7 +233,7 @@ IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
         ScrollOutputArea( 1 );
         pEntry = GetEntry( m_aMousePos );
         Select( pEntry, TRUE );
-//		m_aScrollTimer.Start();
+//      m_aScrollTimer.Start();
     }
 
     return 0;
@@ -264,9 +264,9 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     // check the format
     if ( !OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_TABID) // this means that the first entry is to be draged
         && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_JOIN) )
-    {	// don't drop into the window if it's the drag source itself
+    {   // don't drop into the window if it's the drag source itself
 
-        
+
         // remove the selection if the dragging operation is leaving the window
         if (_rEvt.mbLeaving)
             SelectAll(FALSE);
@@ -354,9 +354,9 @@ sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
     TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
     if ( OJoinExchObj::isFormatAvailable(aDropped.GetDataFlavorExVector()))
-    {	// don't drop into the window if it's the drag source itself
-        m_aDropInfo.aSource	= OJoinExchangeData(this);
-        m_aDropInfo.aDest	= OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
+    {   // don't drop into the window if it's the drag source itself
+        m_aDropInfo.aSource = OJoinExchangeData(this);
+        m_aDropInfo.aDest   = OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
 
         if (m_nDropEvent)
             Application::RemoveUserEvent(m_nDropEvent);
@@ -392,7 +392,7 @@ void OTableWindowListBox::GetFocus()
         else
             ShowFocusRect(FirstSelected());
     }
-    SvTreeListBox::GetFocus();	
+    SvTreeListBox::GetFocus();
 }
 
 //------------------------------------------------------------------------------

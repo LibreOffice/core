@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@
 
 #include <osl/mutex.hxx>
 
-//	used in XComponent implementations to construct a Mutex before the
-//	OComponentHelper base class
+//  used in XComponent implementations to construct a Mutex before the
+//  OComponentHelper base class
 
 class ScMutexHelper
 {

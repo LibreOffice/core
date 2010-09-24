@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,45 +54,45 @@ using namespace ::com::sun::star;
         aAny <<= uno::Reference< xint >(this)
 
 
-#define WID_DATE	0
-#define WID_BOOL1	1
-#define WID_BOOL2	2
-#define WID_INT32	3
-#define WID_INT16	4
-#define WID_STRING1	5
-#define WID_STRING2	6
-#define WID_STRING3	7
+#define WID_DATE    0
+#define WID_BOOL1   1
+#define WID_BOOL2   2
+#define WID_INT32   3
+#define WID_INT16   4
+#define WID_STRING1 5
+#define WID_STRING2 6
+#define WID_STRING3 7
 
 class SvxUnoFieldData_Impl
 {
 public:
-    sal_Bool	mbBoolean1;
-    sal_Bool	mbBoolean2;
-    sal_Int32	mnInt32;
-    sal_Int16	mnInt16;
-    OUString	msString1;
-    OUString	msString2;
-    OUString	msString3;
+    sal_Bool    mbBoolean1;
+    sal_Bool    mbBoolean2;
+    sal_Int32   mnInt32;
+    sal_Int16   mnInt16;
+    OUString    msString1;
+    OUString    msString2;
+    OUString    msString3;
     util::DateTime maDateTime;
 
-    OUString	msPresentation;
+    OUString    msPresentation;
 };
 
 const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
 {
     static SfxItemPropertyMapEntry aExDateTimeFieldPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN("DateTime"),			WID_DATE,		&::getCppuType((const util::DateTime*)0),		0, 0 },
-        { MAP_CHAR_LEN("IsFixed"),			WID_BOOL1,		&::getBooleanCppuType(),				0, 0 },
-        { MAP_CHAR_LEN("IsDate"),			WID_BOOL2,		&::getBooleanCppuType(),				0, 0 },
-        { MAP_CHAR_LEN("NumberFormat"),		WID_INT32,		&::getCppuType((const sal_Int16*)0),	0, 0 },
+        { MAP_CHAR_LEN("DateTime"),         WID_DATE,       &::getCppuType((const util::DateTime*)0),       0, 0 },
+        { MAP_CHAR_LEN("IsFixed"),          WID_BOOL1,      &::getBooleanCppuType(),                0, 0 },
+        { MAP_CHAR_LEN("IsDate"),           WID_BOOL2,      &::getBooleanCppuType(),                0, 0 },
+        { MAP_CHAR_LEN("NumberFormat"),     WID_INT32,      &::getCppuType((const sal_Int16*)0),    0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aExDateTimeFieldPropertySet_Impl(aExDateTimeFieldPropertyMap_Impl);
 
     static SfxItemPropertyMapEntry aDateTimeFieldPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN("IsDate"),			WID_BOOL2,		&::getBooleanCppuType(),				0, 0 },
+        { MAP_CHAR_LEN("IsDate"),           WID_BOOL2,      &::getBooleanCppuType(),                0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aDateTimeFieldPropertySet_Impl(aDateTimeFieldPropertyMap_Impl);
@@ -100,10 +100,10 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
     static SfxItemPropertyMapEntry aUrlFieldPropertyMap_Impl[] =
     {
 
-        { MAP_CHAR_LEN("Format"),			WID_INT16,		&::getCppuType((const sal_Int16*)0),	0, 0 },
-        { MAP_CHAR_LEN("Representation"),	WID_STRING1,	&::getCppuType((const OUString*)0),		0, 0 },
-        { MAP_CHAR_LEN("TargetFrame"),		WID_STRING2,	&::getCppuType((const OUString*)0),		0, 0 },
-        { MAP_CHAR_LEN("URL"),				WID_STRING3,	&::getCppuType((const OUString*)0),		0, 0 },
+        { MAP_CHAR_LEN("Format"),           WID_INT16,      &::getCppuType((const sal_Int16*)0),    0, 0 },
+        { MAP_CHAR_LEN("Representation"),   WID_STRING1,    &::getCppuType((const OUString*)0),     0, 0 },
+        { MAP_CHAR_LEN("TargetFrame"),      WID_STRING2,    &::getCppuType((const OUString*)0),     0, 0 },
+        { MAP_CHAR_LEN("URL"),              WID_STRING3,    &::getCppuType((const OUString*)0),     0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aUrlFieldPropertySet_Impl(aUrlFieldPropertyMap_Impl);
@@ -116,27 +116,27 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
 
     static SfxItemPropertyMapEntry aExtFileFieldPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN("IsFixed"),				WID_BOOL1,	&::getBooleanCppuType(),				0, 0 },
-        { MAP_CHAR_LEN("FileFormat"),			WID_INT16,	&::getCppuType((const sal_Int16*)0),	0, 0 },
-        { MAP_CHAR_LEN("CurrentPresentation"),	WID_STRING1,&::getCppuType((const OUString*)0),		0, 0 },
+        { MAP_CHAR_LEN("IsFixed"),              WID_BOOL1,  &::getBooleanCppuType(),                0, 0 },
+        { MAP_CHAR_LEN("FileFormat"),           WID_INT16,  &::getCppuType((const sal_Int16*)0),    0, 0 },
+        { MAP_CHAR_LEN("CurrentPresentation"),  WID_STRING1,&::getCppuType((const OUString*)0),     0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aExtFileFieldPropertySet_Impl(aExtFileFieldPropertyMap_Impl);
 
     static SfxItemPropertyMapEntry aAuthorFieldPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN("IsFixed"),				WID_BOOL1,	&::getBooleanCppuType(),				0, 0 },
-        { MAP_CHAR_LEN("CurrentPresentation"),	WID_STRING1,&::getCppuType((const OUString*)0),		0, 0 },
-        { MAP_CHAR_LEN("Content"),				WID_STRING2,&::getCppuType((const OUString*)0),		0, 0 },
-        { MAP_CHAR_LEN("AuthorFormat"),			WID_INT16,	&::getCppuType((const sal_Int16*)0),	0, 0 },
-        { MAP_CHAR_LEN("FullName"),				WID_BOOL2,	&::getBooleanCppuType(),				0, 0 },
+        { MAP_CHAR_LEN("IsFixed"),              WID_BOOL1,  &::getBooleanCppuType(),                0, 0 },
+        { MAP_CHAR_LEN("CurrentPresentation"),  WID_STRING1,&::getCppuType((const OUString*)0),     0, 0 },
+        { MAP_CHAR_LEN("Content"),              WID_STRING2,&::getCppuType((const OUString*)0),     0, 0 },
+        { MAP_CHAR_LEN("AuthorFormat"),         WID_INT16,  &::getCppuType((const sal_Int16*)0),    0, 0 },
+        { MAP_CHAR_LEN("FullName"),             WID_BOOL2,  &::getBooleanCppuType(),                0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aAuthorFieldPropertySet_Impl(aAuthorFieldPropertyMap_Impl);
 
     static SfxItemPropertyMapEntry aMeasureFieldPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN("Kind"),					WID_INT16,	&::getCppuType((const sal_Int16*)0),	0, 0 },
+        { MAP_CHAR_LEN("Kind"),                 WID_INT16,  &::getCppuType((const sal_Int16*)0),    0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aMeasureFieldPropertySet_Impl(aMeasureFieldPropertyMap_Impl);
@@ -157,13 +157,13 @@ const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
         return &aAuthorFieldPropertySet_Impl;
     case ID_MEASUREFIELD:
         return &aMeasureFieldPropertySet_Impl;
-//	case ID_PAGEFIELD:
-//	case ID_PAGESFIELD:
-//	case ID_FILEFIELD:
-//	case ID_TABLEFIELD:
-//	case ID_HEADERFIELD:
-//	case ID_FOOTERFIELD:
-//	case ID_DATETIMEFIELD::
+//  case ID_PAGEFIELD:
+//  case ID_PAGESFIELD:
+//  case ID_FILEFIELD:
+//  case ID_TABLEFIELD:
+//  case ID_HEADERFIELD:
+//  case ID_FOOTERFIELD:
+//  case ID_DATETIMEFIELD::
     default:
         return &aEmptyPropertySet_Impl;
     }
@@ -195,10 +195,10 @@ static sal_Int16 getFileNameDisplayFormat( SvxFileFormat nFormat )
 {
     switch( nFormat )
     {
-    case SVXFILEFORMAT_NAME_EXT:	return text::FilenameDisplayFormat::NAME_AND_EXT;
-    case SVXFILEFORMAT_FULLPATH:	return text::FilenameDisplayFormat::FULL;
-    case SVXFILEFORMAT_PATH:	return text::FilenameDisplayFormat::PATH;
-//	case SVXFILEFORMAT_NAME:
+    case SVXFILEFORMAT_NAME_EXT:    return text::FilenameDisplayFormat::NAME_AND_EXT;
+    case SVXFILEFORMAT_FULLPATH:    return text::FilenameDisplayFormat::FULL;
+    case SVXFILEFORMAT_PATH:    return text::FilenameDisplayFormat::PATH;
+//  case SVXFILEFORMAT_NAME:
     default: return text::FilenameDisplayFormat::NAME;
     }
 }
@@ -207,10 +207,10 @@ static SvxFileFormat setFileNameDisplayFormat( sal_Int16 nFormat )
 {
     switch( nFormat )
     {
-    case text::FilenameDisplayFormat::FULL:	return SVXFILEFORMAT_FULLPATH;
-    case text::FilenameDisplayFormat::PATH:	return SVXFILEFORMAT_PATH;
-    case text::FilenameDisplayFormat::NAME:	return SVXFILEFORMAT_NAME;
-//	case text::FilenameDisplayFormat::NAME_AND_EXT:
+    case text::FilenameDisplayFormat::FULL: return SVXFILEFORMAT_FULLPATH;
+    case text::FilenameDisplayFormat::PATH: return SVXFILEFORMAT_PATH;
+    case text::FilenameDisplayFormat::NAME: return SVXFILEFORMAT_NAME;
+//  case text::FilenameDisplayFormat::NAME_AND_EXT:
     default:
         return SVXFILEFORMAT_NAME_EXT;
     }
@@ -261,10 +261,10 @@ inline Time setTime( util::DateTime& rDate )
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoTextField );
 
 SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
-:	OComponentHelper( getMutex() )
-,	mpPropSet(NULL)
-,	mnServiceId(nServiceId)
-,	mpImpl( new SvxUnoFieldData_Impl )
+:   OComponentHelper( getMutex() )
+,   mpPropSet(NULL)
+,   mnServiceId(nServiceId)
+,   mpImpl( new SvxUnoFieldData_Impl )
 {
     mpPropSet = ImplGetFieldItemPropertySet(mnServiceId);
 
@@ -315,11 +315,11 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
 }
 
 SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, const OUString& rPresentation, const SvxFieldData* pData ) throw()
-:	OComponentHelper( getMutex() )
-,	mxAnchor( xAnchor )
-,	mpPropSet(NULL)
-,	mnServiceId(ID_UNKNOWN)
-,	mpImpl( new SvxUnoFieldData_Impl )
+:   OComponentHelper( getMutex() )
+,   mxAnchor( xAnchor )
+,   mpPropSet(NULL)
+,   mnServiceId(ID_UNKNOWN)
+,   mpImpl( new SvxUnoFieldData_Impl )
 {
     DBG_ASSERT(pData, "pFieldData == NULL! [CL]" );
 
@@ -379,14 +379,14 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
             case ID_AUTHORFIELD:
                 mpImpl->msString1  = ((SvxAuthorField*)pData)->GetFormatted();
                 mpImpl->msString2  = ((SvxAuthorField*)pData)->GetFormatted();
-                mpImpl->mnInt16	   = sal::static_int_cast< sal_Int16 >(
+                mpImpl->mnInt16    = sal::static_int_cast< sal_Int16 >(
                     ((SvxAuthorField*)pData)->GetFormat());
                 mpImpl->mbBoolean1 = ((SvxAuthorField*)pData)->GetType() == SVXAUTHORTYPE_FIX;
                 mpImpl->mbBoolean2 = ((SvxAuthorField*)pData)->GetFormat() != SVXAUTHORFORMAT_SHORTNAME;
                 break;
 
             case ID_MEASUREFIELD:
-                mpImpl->mnInt16		= sal::static_int_cast< sal_Int16 >(((SdrMeasureField*)pData)->GetMeasureFieldKind());
+                mpImpl->mnInt16     = sal::static_int_cast< sal_Int16 >(((SdrMeasureField*)pData)->GetMeasureFieldKind());
                 break;
             }
         }
@@ -424,7 +424,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
             {
                 Time aTime( setTime( mpImpl->maDateTime ) );
                 pData = new SvxExtTimeField( aTime, mpImpl->mbBoolean1?SVXTIMETYPE_FIX:SVXTIMETYPE_VAR );
-    
+
                 if( mpImpl->mnInt32 >= SVXTIMEFORMAT_APPDEFAULT && mpImpl->mnInt32 <= SVXTIMEFORMAT_AM_HMSH )
                     ((SvxExtTimeField*)pData)->SetFormat( (SvxTimeFormat)mpImpl->mnInt32 );
             }
@@ -567,7 +567,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextField >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);		
+        *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
     }
     return maTypeSequence;
 }
@@ -1027,9 +1027,9 @@ sal_Int32 SvxUnoTextField::GetFieldId( const SvxFieldData* pFieldData ) const th
         return ID_PAGEFIELD;
     else if( pFieldData->ISA( SvxPagesField ) )
         return ID_PAGESFIELD;
-    else if( pFieldData->ISA( SvxTimeField )	)
+    else if( pFieldData->ISA( SvxTimeField )    )
         return ID_TIMEFIELD;
-    else if( pFieldData->ISA( SvxFileField )	)
+    else if( pFieldData->ISA( SvxFileField )    )
         return ID_FILEFIELD;
     else if( pFieldData->ISA( SvxTableField ) )
         return ID_TABLEFIELD;
@@ -1041,7 +1041,7 @@ sal_Int32 SvxUnoTextField::GetFieldId( const SvxFieldData* pFieldData ) const th
         return ID_AUTHORFIELD;
     else if( pFieldData->ISA( SvxDateField ) )
         return ID_EXT_DATEFIELD;
-    else if( pFieldData->ISA( SdrMeasureField )	)
+    else if( pFieldData->ISA( SdrMeasureField ) )
         return ID_MEASUREFIELD;
     else if( pFieldData->ISA( SvxHeaderField ) )
         return ID_HEADERFIELD;
@@ -1066,7 +1066,7 @@ static const sal_Char* pOldServiceNames[] =
     "com.sun.star.text.TextField.PageNumber",
     "com.sun.star.text.TextField.PageCount",
     "com.sun.star.text.TextField.DateTime",
-    "com.sun.star.text.TextField.DocInfo.Title",	// SvxFileField is used for title
+    "com.sun.star.text.TextField.DocInfo.Title",    // SvxFileField is used for title
     "com.sun.star.text.TextField.SheetName",
     "com.sun.star.text.TextField.DateTime",
     "com.sun.star.text.TextField.FileName",
@@ -1120,7 +1120,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
     uno::Reference< uno::XInterface > xRet;
 
     const OUString aTextFieldPrexit( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.textfield.") );
-    
+
     // #i93308# up to OOo 3.2 we used this wrong namespace name with the capital T & F. This is
     // fixed since OOo 3.2 but for compatibility we will still provide support for the wrong notation.
     const OUString aTextFieldPrexit2( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.") );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ public class InstallData
     static private Vector installPackages = new Vector();
     static private Vector oldPackages = new Vector();
     static private Vector systemLanguages = new Vector();
-    
+
     public static InstallData getInstance()
     {
       if (instance == null) {
@@ -149,20 +149,20 @@ public class InstallData
         }
     }
 
-    private void setInstallationMode() {        
+    private void setInstallationMode() {
         // Exists a directory "uninstalldata" below the resource root?
         File uninstallDir = new File(resourceRoot, uninstallDirName);
         File installDir = new File(resourceRoot, installDirName);
-        
+
         if ( SystemManager.exists_directory(uninstallDir.getPath())) {
             isInstallationMode = false;
             isUninstallationMode = true;
             infoRoot = uninstallDir;
-            System.err.println("Mode: uninstallation");            
+            System.err.println("Mode: uninstallation");
         } else if ( SystemManager.exists_directory(installDir.getPath())) {
             isInstallationMode = true;
             isUninstallationMode = false;
-            infoRoot = installDir;         
+            infoRoot = installDir;
             System.err.println("Mode: installation");
         } else {
             // isInstallationMode = null;
@@ -173,7 +173,7 @@ public class InstallData
             System.exit(1);
         }
     }
-    
+
     private void setSolarisUserInstall() {
         if (( isUserInstallation ) && (osType.equalsIgnoreCase("SunOS"))) {
             isSolarisUserInstallation = true;
@@ -188,7 +188,7 @@ public class InstallData
         File htmlDirectory = getInfoRoot("html");
         ResourceManager.checkFileExistence(htmlDirectory);
     }
-    
+
     private void setBidiSupport() {
         Locale locale = Locale.getDefault();
         if (( locale.getLanguage().equals(new Locale("he", "", "").getLanguage()) )
@@ -196,11 +196,11 @@ public class InstallData
             useRtl = true;
         }
     }
-    
+
     private void setInstallationPrivileges(boolean isUserInstallation) {
         if ( isUserInstallation ) {
             installationPrivileges = "user";
-        } else {            
+        } else {
             installationPrivileges = "root";
         }
     }
@@ -230,9 +230,9 @@ public class InstallData
     }
 
     public File getResourceRoot(String subDirectory) {
-        
+
         File dir = getResourceRoot();
-        
+
         if (dir != null) {
             dir = new File(dir, subDirectory);
             if (!dir.exists()) {
@@ -319,7 +319,7 @@ public class InstallData
     public String getUninstallDirName() {
         return uninstallDirName;
     }
-    
+
     public String getInstallDir() {
         return installDir;
     }
@@ -382,7 +382,7 @@ public class InstallData
     public String getLocalTempPath() {
         return localTempPath;
     }
-    
+
     public void setLocalTempPath(String path) {
         localTempPath = path;
     }
@@ -390,7 +390,7 @@ public class InstallData
     public int getAvailableDiscSpace() {
         return availableDiscSpace;
     }
-    
+
     public void setAvailableDiscSpace(int space) {
         availableDiscSpace = space;
     }
@@ -398,7 +398,7 @@ public class InstallData
     public int getPreselectedLanguages() {
         return preselectedLanguages;
     }
-    
+
     public void setPreselectedLanguages(int count) {
         preselectedLanguages = count;
     }
@@ -434,7 +434,7 @@ public class InstallData
     public void setAdminFileNameNoRelocNoDepends(String fileName) {
         adminFileNameNoRelocNoDepends = fileName;
     }
-    
+
     public String getGetUidPath() {
         return getUidPath;
     }
@@ -454,7 +454,7 @@ public class InstallData
     public void setStillRunning(boolean running) {
         stillRunning = running;
     }
-    
+
     public boolean stillRunning() {
         return stillRunning;
     }
@@ -462,7 +462,7 @@ public class InstallData
     public void setStillAnalyzing(boolean running) {
         stillAnalyzing = running;
     }
-    
+
     public boolean stillAnalyzing() {
         return stillAnalyzing;
     }
@@ -470,7 +470,7 @@ public class InstallData
     public void setDatabaseAnalyzed(boolean analyzed) {
         databaseAnalyzed = analyzed;
     }
-    
+
     public boolean databaseAnalyzed() {
         return databaseAnalyzed;
     }
@@ -478,7 +478,7 @@ public class InstallData
     public void setModuleSizeSet(boolean set) {
         moduleSizeSet = set;
     }
-    
+
     public boolean moduleSizeSet() {
         return moduleSizeSet;
     }
@@ -486,7 +486,7 @@ public class InstallData
     public void setPreInstallDone(boolean done) {
         preInstallDone = done;
     }
-    
+
     public boolean preInstallDone() {
         return preInstallDone;
     }
@@ -494,7 +494,7 @@ public class InstallData
     public boolean isChangeInstallation() {
         return isChangeInstallation;
     }
-    
+
     public void setIsChangeInstallation(boolean changeInstallation) {
         isChangeInstallation = changeInstallation;
     }
@@ -510,7 +510,7 @@ public class InstallData
     public boolean isAbortedInstallation() {
         return isAbortedInstallation;
     }
-    
+
     public void setIsAbortedInstallation(boolean abortedInstallation) {
         isAbortedInstallation = abortedInstallation;
     }
@@ -518,7 +518,7 @@ public class InstallData
     public boolean isErrorInstallation() {
         return isErrorInstallation;
     }
-    
+
     public void setIsErrorInstallation(boolean errorInstallation) {
         isErrorInstallation = errorInstallation;
     }
@@ -526,7 +526,7 @@ public class InstallData
     public boolean isMultiLingual() {
         return isMultiLingual;
     }
-    
+
     public void setIsMultiLingual(boolean multiLingual) {
         isMultiLingual = multiLingual;
     }
@@ -534,11 +534,11 @@ public class InstallData
     public boolean logModuleStates() {
         return logModuleStates;
     }
-    
+
     public void setLogModuleStates(boolean log) {
         logModuleStates = log;
     }
-    
+
     public boolean visibleModulesChecked() {
         return visibleModulesChecked;
     }
@@ -566,7 +566,7 @@ public class InstallData
     public boolean isMaskedCompleteUninstallation() {
         return isMaskedCompleteUninstallation;
     }
-    
+
     public void setMaskedCompleteUninstallation(boolean masked) {
         isMaskedCompleteUninstallation = masked;
     }
@@ -574,7 +574,7 @@ public class InstallData
     public boolean typicalSelectionStateSaved() {
         return typicalSelectionStateSaved;
     }
-    
+
     public void setTypicalSelectionStateSaved(boolean saved) {
         typicalSelectionStateSaved = saved;
     }
@@ -582,7 +582,7 @@ public class InstallData
     public boolean customSelectionStateSaved() {
         return customSelectionStateSaved;
     }
-    
+
     public void setCustomSelectionStateSaved(boolean saved) {
         customSelectionStateSaved = saved;
     }
@@ -590,7 +590,7 @@ public class InstallData
     public boolean startSelectionStateSaved() {
         return startSelectionStateSaved;
     }
-    
+
     public void setStartSelectionStateSaved(boolean saved) {
         startSelectionStateSaved = saved;
     }
@@ -690,7 +690,7 @@ public class InstallData
     public HashMap getDatabaseMap() {
         return databaseMap;
     }
-    
+
     public void setDatabaseMap(HashMap map) {
         databaseMap = map;
     }
@@ -702,7 +702,7 @@ public class InstallData
     public Vector getInstallPackages() {
         return installPackages;
     }
-    
+
     public void setInstallPackages(Vector packages) {
         installPackages = packages;
     }
@@ -710,7 +710,7 @@ public class InstallData
     public Vector getOldPackages() {
         return oldPackages;
     }
-    
+
     public void setOldPackages(Vector packages) {
         oldPackages = packages;
     }
@@ -718,7 +718,7 @@ public class InstallData
     public Vector getSystemLanguages() {
         return systemLanguages;
     }
-    
+
     public void setSystemLanguages(Vector languages) {
         systemLanguages = languages;
     }

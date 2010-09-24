@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-#define USERITEM_NAME			OUString::createFromAscii( "UserItem" )
+#define USERITEM_NAME           OUString::createFromAscii( "UserItem" )
 
 TYPEINIT1(LAYOUT_NS_SFX_TABDIALOG SfxTabDialogItem,SfxSetItem);
 
@@ -79,23 +79,23 @@ NAMESPACE_LAYOUT_SFX_TABDIALOG
 
 struct Data_Impl
 {
-    USHORT nId;					 // Die ID
-    CreateTabPage fnCreatePage;	 // Pointer auf die Factory
+    USHORT nId;                  // Die ID
+    CreateTabPage fnCreatePage;  // Pointer auf die Factory
     GetTabPageRanges fnGetRanges;// Pointer auf die Ranges-Funktion
-    SfxTabPage* pTabPage;		 // die TabPage selber
-    BOOL bOnDemand;				 // Flag: ItemSet onDemand
-    BOOL bRefresh; 				 // Flag: Seite mu\s neu initialisiert werden
+    SfxTabPage* pTabPage;        // die TabPage selber
+    BOOL bOnDemand;              // Flag: ItemSet onDemand
+    BOOL bRefresh;               // Flag: Seite mu\s neu initialisiert werden
 
     // Konstruktor
     Data_Impl( USHORT Id, CreateTabPage fnPage,
                GetTabPageRanges fnRanges, BOOL bDemand ) :
 
-        nId			( Id ),
+        nId         ( Id ),
         fnCreatePage( fnPage ),
-        fnGetRanges	( fnRanges ),
-        pTabPage	( 0 ),
-        bOnDemand	( bDemand ),
-        bRefresh	( FALSE )
+        fnGetRanges ( fnRanges ),
+        pTabPage    ( 0 ),
+        bOnDemand   ( bDemand ),
+        bRefresh    ( FALSE )
     {
         if ( !fnCreatePage  )
         {
@@ -196,22 +196,22 @@ DECL_PTRARRAY(SfxTabDlgData_Impl, Data_Impl *, 4,4)
 
 struct TabDlg_Impl
 {
-    BOOL				bModified		: 1,
-                        bModal			: 1,
-                        bInOK			: 1,
-                        bHideResetBtn	: 1;
-    SfxTabDlgData_Impl*	pData;
+    BOOL                bModified       : 1,
+                        bModal          : 1,
+                        bInOK           : 1,
+                        bHideResetBtn   : 1;
+    SfxTabDlgData_Impl* pData;
 
-    PushButton*			pApplyButton;
+    PushButton*         pApplyButton;
     SfxTabDialogController* pController;
 
     TabDlg_Impl( BYTE nCnt ) :
 
-        bModified		( FALSE ),
-        bModal			( TRUE ),
-        bInOK			( FALSE ),
-        bHideResetBtn	( FALSE ),
-        pData			( new SfxTabDlgData_Impl( nCnt ) ),
+        bModified       ( FALSE ),
+        bModal          ( TRUE ),
+        bInOK           ( FALSE ),
+        bHideResetBtn   ( FALSE ),
+        pData           ( new SfxTabDlgData_Impl( nCnt ) ),
         pApplyButton    ( NULL ),
         pController     ( NULL )
     {}
@@ -262,20 +262,20 @@ SfxTabPage::SfxTabPage( Window *pParent,
 
     TabPage( pParent, rResId ),
 
-    pSet				( &rAttrSet ),
-    bHasExchangeSupport	( FALSE ),
-    pTabDlg				( NULL ),
-    pImpl				( new TabPageImpl )
+    pSet                ( &rAttrSet ),
+    bHasExchangeSupport ( FALSE ),
+    pTabDlg             ( NULL ),
+    pImpl               ( new TabPageImpl )
 
 {
 }
 // -----------------------------------------------------------------------
 SfxTabPage:: SfxTabPage( Window *pParent, WinBits nStyle, const SfxItemSet &rAttrSet ) :
     TabPage(pParent, nStyle),
-    pSet				( &rAttrSet ),
-    bHasExchangeSupport	( FALSE ),
-    pTabDlg				( NULL ),
-    pImpl				( new TabPageImpl )
+    pSet                ( &rAttrSet ),
+    bHasExchangeSupport ( FALSE ),
+    pTabDlg             ( NULL ),
+    pImpl               ( new TabPageImpl )
 {
 }
 // -----------------------------------------------------------------------
@@ -480,22 +480,22 @@ void SfxTabPage::AddItemConnection( sfx::ItemConnectionBase* pConnection )
 #endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
 
 #define INI_LIST(ItemSetPtr) \
-    aTabCtrl	( this, ResId(ID_TABCONTROL,*rResId.GetResMgr() ) ),\
-    aOKBtn		( this ),\
-    pUserBtn	( pUserButtonText? new PushButton(this): 0 ),\
-    aCancelBtn	( this ),\
-    aHelpBtn	( this ),\
-    aResetBtn	( this ),\
-    aBaseFmtBtn	( this ),\
+    aTabCtrl    ( this, ResId(ID_TABCONTROL,*rResId.GetResMgr() ) ),\
+    aOKBtn      ( this ),\
+    pUserBtn    ( pUserButtonText? new PushButton(this): 0 ),\
+    aCancelBtn  ( this ),\
+    aHelpBtn    ( this ),\
+    aResetBtn   ( this ),\
+    aBaseFmtBtn ( this ),\
     pSet        ( ItemSetPtr ),\
-    pOutSet		( 0 ),\
-    pImpl		( new TabDlg_Impl( (BYTE)aTabCtrl.GetPageCount() ) ), \
-    pRanges		( 0 ), \
-    nResId		( rResId.GetId() ), \
-    nAppPageId	( USHRT_MAX ), \
-    bItemsReset	( FALSE ),\
-    bFmt		( bEditFmt ),\
-    pExampleSet	( 0 )
+    pOutSet     ( 0 ),\
+    pImpl       ( new TabDlg_Impl( (BYTE)aTabCtrl.GetPageCount() ) ), \
+    pRanges     ( 0 ), \
+    nResId      ( rResId.GetId() ), \
+    nAppPageId  ( USHRT_MAX ), \
+    bItemsReset ( FALSE ),\
+    bFmt        ( bEditFmt ),\
+    pExampleSet ( 0 )
 
 // -----------------------------------------------------------------------
 
@@ -507,14 +507,14 @@ SfxTabDialog::SfxTabDialog
 */
 
 (
-    SfxViewFrame* pViewFrame,		// Frame, zu dem der Dialog geh"ort
-    Window* pParent,				// Parent-Fenster
-    const ResId& rResId, 			// ResourceId
-    const SfxItemSet* pItemSet,		// Itemset mit den Daten;
+    SfxViewFrame* pViewFrame,       // Frame, zu dem der Dialog geh"ort
+    Window* pParent,                // Parent-Fenster
+    const ResId& rResId,            // ResourceId
+    const SfxItemSet* pItemSet,     // Itemset mit den Daten;
                                     // kann NULL sein, wenn Pages onDemand
-    BOOL bEditFmt,		// Flag: es werden Vorlagen bearbeitet
+    BOOL bEditFmt,      // Flag: es werden Vorlagen bearbeitet
                         // wenn ja -> zus"atzlicher Button f"ur Standard
-    const String* pUserButtonText 	// Text fuer BenutzerButton;
+    const String* pUserButtonText   // Text fuer BenutzerButton;
                                     // wenn != 0, wird der UserButton erzeugt
 ) :
     TabDialog( pParent, rResId ),
@@ -534,13 +534,13 @@ SfxTabDialog::SfxTabDialog
 */
 
 (
-    Window* pParent,				// Parent-Fenster
-    const ResId& rResId, 			// ResourceId
-    const SfxItemSet* pItemSet,		// Itemset mit den Daten; kann NULL sein,
+    Window* pParent,                // Parent-Fenster
+    const ResId& rResId,            // ResourceId
+    const SfxItemSet* pItemSet,     // Itemset mit den Daten; kann NULL sein,
                                     // wenn Pages onDemand
-    BOOL bEditFmt,		// Flag: es werden Vorlagen bearbeitet
+    BOOL bEditFmt,      // Flag: es werden Vorlagen bearbeitet
                         // wenn ja -> zus"atzlicher Button f"ur Standard
-    const String* pUserButtonText 	// Text f"ur BenutzerButton;
+    const String* pUserButtonText   // Text f"ur BenutzerButton;
                                     // wenn != 0, wird der UserButton erzeugt
 ) :
     TabDialog( pParent, rResId ),
@@ -559,13 +559,13 @@ SfxTabDialog::SfxTabDialog
 */
 
 (
-    Window* pParent,				// Parent-Fenster
-    const ResId& rResId, 			// ResourceId
+    Window* pParent,                // Parent-Fenster
+    const ResId& rResId,            // ResourceId
     USHORT nSetId,
     SfxBindings& rBindings,
-    BOOL bEditFmt,		// Flag: es werden Vorlagen bearbeitet
+    BOOL bEditFmt,      // Flag: es werden Vorlagen bearbeitet
                         // wenn ja -> zus"atzlicher Button f"ur Standard
-    const String* pUserButtonText 	// Text f"ur BenutzerButton;
+    const String* pUserButtonText   // Text f"ur BenutzerButton;
                                     // wenn != 0, wird der UserButton erzeugt
 ) :
     TabDialog( pParent, rResId ),
@@ -891,11 +891,11 @@ void SfxTabDialog::AddTabPage
 */
 
 (
-    USHORT nId,						// ID der Seite
-    CreateTabPage pCreateFunc,		// Pointer auf die Factory-Methode
-    GetTabPageRanges pRangesFunc, 	// Pointer auf die Methode f"ur das
+    USHORT nId,                     // ID der Seite
+    CreateTabPage pCreateFunc,      // Pointer auf die Factory-Methode
+    GetTabPageRanges pRangesFunc,   // Pointer auf die Methode f"ur das
                                     // Erfragen der Ranges onDemand
-    BOOL bItemsOnDemand				// gibt an, ob das Set dieser Seite beim
+    BOOL bItemsOnDemand             // gibt an, ob das Set dieser Seite beim
                                     // Erzeugen der Seite erfragt wird
 )
 {
@@ -951,7 +951,7 @@ void SfxTabDialog::AddTabPage
     USHORT nPos
 )
 {
-    DBG_ASSERT(	TAB_PAGE_NOTFOUND == aTabCtrl.GetPagePos( nId ),
+    DBG_ASSERT( TAB_PAGE_NOTFOUND == aTabCtrl.GetPagePos( nId ),
                 "Doppelte Page-Ids in der Tabpage" );
     aTabCtrl.InsertPage( nId, rRiderBitmap, nPos );
     pImpl->pData->Append(
@@ -1012,8 +1012,8 @@ void SfxTabDialog::PageCreated
 */
 
 (
-    USHORT,			// Id der erzeugten Seite
-    SfxTabPage&		// Referenz auf die erzeugte Seite
+    USHORT,         // Id der erzeugten Seite
+    SfxTabPage&     // Referenz auf die erzeugte Seite
 )
 {
 }
@@ -1077,7 +1077,7 @@ short SfxTabDialog::Ok()
 
     [R"uckgabewert]
 
-    RET_OK:	wenn mindestens eine Seite TRUE als Returnwert von
+    RET_OK: wenn mindestens eine Seite TRUE als Returnwert von
             FillItemSet geliefert hat, sonst RET_CANCEL.
 */
 
@@ -1087,7 +1087,7 @@ short SfxTabDialog::Ok()
     if ( !pOutSet )
     {
         if ( !pExampleSet && pSet )
-            pOutSet = pSet->Clone( FALSE );	// ohne Items
+            pOutSet = pSet->Clone( FALSE ); // ohne Items
         else if ( pExampleSet )
             pOutSet = new SfxItemSet( *pExampleSet );
     }
@@ -1525,8 +1525,8 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
             nRet = pPage->DeactivatePage( &aTmp );
         else
             nRet = pPage->DeactivatePage( NULL );
-//!		else
-//!			pPage->FillItemSet( aTmp );
+//!     else
+//!         pPage->FillItemSet( aTmp );
 
         if ( ( SfxTabPage::LEAVE_PAGE & nRet ) == SfxTabPage::LEAVE_PAGE &&
              aTmp.Count() )
@@ -1590,7 +1590,7 @@ const SfxItemSet* SfxTabDialog::GetOutputItemSet
 */
 
 (
-    USHORT nId	// die Id, unter der die Seite bei AddTabPage()
+    USHORT nId  // die Id, unter der die Seite bei AddTabPage()
                 // hinzugef"ugt wurde.
 ) const
 {
@@ -1741,7 +1741,7 @@ const USHORT* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
                 break;
         pRanges[j++] = aUS[i++];
     }
-    pRanges[j] = 0;		// terminierende NULL
+    pRanges[j] = 0;     // terminierende NULL
     */
 
     pRanges = new USHORT[aUS.Count() + 1];

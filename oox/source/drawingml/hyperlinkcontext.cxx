@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,9 +74,9 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
     if ( aAction.getLength() )
     {
         // reserved values of the unrestricted string aAction:
-        // ppaction://customshow?id=SHOW_ID				// custom presentation
-        // ppaction://hlinkfile							// external file via r:id
-        // ppaction://hlinkpres?slideindex=SLIDE_NUM	// external presentation via r:id
+        // ppaction://customshow?id=SHOW_ID             // custom presentation
+        // ppaction://hlinkfile                         // external file via r:id
+        // ppaction://hlinkpres?slideindex=SLIDE_NUM    // external presentation via r:id
         // ppaction://hlinkshowjump?jump=endshow
         // ppaction://hlinkshowjump?jump=firstslide
         // ppaction://hlinkshowjump?jump=lastslide
@@ -138,7 +138,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
                             sURL = CREATE_OUSTRING( "#Slide " ).concat( rtl::OUString::valueOf( nPageNumber ) );
                         else if ( aSlideType.match( sNotesSlide ) )
                             sURL = CREATE_OUSTRING( "#Notes " ).concat( rtl::OUString::valueOf( nPageNumber ) );
-//						else: todo for other types such as notesMaster or slideMaster as they can't be referenced easily			
+//                      else: todo for other types such as notesMaster or slideMaster as they can't be referenced easily
                     }
                 }
             }

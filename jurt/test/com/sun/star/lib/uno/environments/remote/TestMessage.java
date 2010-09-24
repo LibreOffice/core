@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class TestMessage implements IMessage {
     Object   _result;
     String   _operation;
     Object   _params[];
-    
+
     TestMessage(boolean synchron, ITypeDescription iTypeDescription, String oid, ThreadId threadId, Object result, String operation, Object params[]) {
         _synchron  = synchron;
         _iTypeDescription      = iTypeDescription;
@@ -50,39 +50,39 @@ class TestMessage implements IMessage {
         _operation = operation;
         _params    = params;
     }
-    
+
     public String getOperation() {
         return _operation;
     }
-    
+
     public ThreadId getThreadId() {
         return _threadId;
     }
-    
+
     public ITypeDescription getInterface() {
         return _iTypeDescription;
     }
-    
+
     public boolean isSynchron() {
         return _synchron;
     }
-    
+
     public boolean mustReply() {
         return _synchron;
     }
-    
+
     public boolean isException() {
         return false;
     }
-    
+
     public String getOid() {
         return _oid;
     }
-    
+
     public Object getData(Object params[][]) {
         params[0] = _params;
         return _result;
-//  			return new Integer(_requestId);
+//              return new Integer(_requestId);
     }
 }
 

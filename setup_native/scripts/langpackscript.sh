@@ -111,19 +111,19 @@ echo "Unpacking and installing..."
 #    index=1
 #    for s in $sum
 #    do
-#	case $index in
-#	1)  sum1=$s;
+#   case $index in
+#   1)  sum1=$s;
 #     index=2;
-#	    ;;
-#	2)  sum2=$s;
-#	    index=3;
-#	    ;;
-#	esac
+#       ;;
+#   2)  sum2=$s;
+#       index=3;
+#       ;;
+#   esac
 #    done
 #    if expr $sum1 != <sum1replace> || expr $sum2 != <sum2replace> ; then
-#	echo "The download file appears to be corrupted.  Please refer"
-#	echo "to the Troubleshooting section of the Installation"
-#	exit 1
+#   echo "The download file appears to be corrupted.  Please refer"
+#   echo "to the Troubleshooting section of the Installation"
+#   exit 1
 #   fi
 #else
 #    echo "Can't find /usr/bin/sum to do checksum.  Continuing anyway."

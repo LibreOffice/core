@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,15 +98,15 @@ public:
             for new and deleted children, i.e. that holds a list of
             listeners to be informed.
     */
-    ChildrenManager (const ::com::sun::star::uno::Reference< 
+    ChildrenManager (const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rxParent,
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShapes>& rxShapeList,
         const AccessibleShapeTreeInfo& rShapeTreeInfo,
         AccessibleContextBase& rContext);
 
     /** If there still are managed children these are marked as DEFUNC and
-        released. 
+        released.
     */
     virtual ~ChildrenManager (void);
 
@@ -114,9 +114,9 @@ public:
         @return
             If there are no children a 0 is returned.
     */
-    long GetChildCount (void) const throw (); 
+    long GetChildCount (void) const throw ();
 
-    /**	Return the requested accessible child or throw and
+    /** Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.
         @param nIndex
             Index of the requested child.  Call getChildCount for obtaining
@@ -152,7 +152,7 @@ public:
         @param xShapeList
             The new list of shapes.
     */
-    void SetShapeList (const ::com::sun::star::uno::Reference< 
+    void SetShapeList (const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShapes>& xShapeList);
 
     /** Add an accessible shape.  The difference to the UNO shapes in the
@@ -198,7 +198,7 @@ public:
     void RemoveFocus (void);
 
     //=====  IAccessibleViewForwarderListener  ================================
-    virtual void ViewForwarderChanged (ChangeType aChangeType, 
+    virtual void ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder);
 
 protected:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,35 +84,35 @@ enum SdrEndTextEditKind {SDRENDTEXTEDIT_UNCHANGED, // Textobjekt unveraendert
 
 class SVX_DLLPUBLIC SdrObjEditView: public SdrGlueEditView
 {
-    friend class				SdrPageView;
-    friend class				ImpSdrEditPara;
+    friend class                SdrPageView;
+    friend class                ImpSdrEditPara;
 
 protected:
     // TextEdit
-    SdrObjectWeakRef			mxTextEditObj;          // Aktuell im TextEdit befindliches Obj
-    SdrPageView*				pTextEditPV;
-    SdrOutliner*				pTextEditOutliner;     // Na eben der Outliner fuers TextEdit
-    OutlinerView*				pTextEditOutlinerView; // die aktuelle View des Outliners
-    Window*						pTextEditWin;          // passendes Win zu pTextEditOutlinerView
-    Cursor*						pTextEditCursorMerker; // Zum Restaurieren des Cursors am jeweiligen Win
-    ImpSdrEditPara*				pEditPara; // Da hau' ich erstmal alles rein um kompatibel zu bleiben...
-    SdrObject*					pMacroObj;
-    SdrPageView*				pMacroPV;
-    Window*						pMacroWin;
+    SdrObjectWeakRef            mxTextEditObj;          // Aktuell im TextEdit befindliches Obj
+    SdrPageView*                pTextEditPV;
+    SdrOutliner*                pTextEditOutliner;     // Na eben der Outliner fuers TextEdit
+    OutlinerView*               pTextEditOutlinerView; // die aktuelle View des Outliners
+    Window*                     pTextEditWin;          // passendes Win zu pTextEditOutlinerView
+    Cursor*                     pTextEditCursorMerker; // Zum Restaurieren des Cursors am jeweiligen Win
+    ImpSdrEditPara*             pEditPara; // Da hau' ich erstmal alles rein um kompatibel zu bleiben...
+    SdrObject*                  pMacroObj;
+    SdrPageView*                pMacroPV;
+    Window*                     pMacroWin;
 
-    Rectangle					aTextEditArea;
-    Rectangle					aMinTextEditArea;
-    Link						aOldCalcFieldValueLink; // Zum rufen des alten Handlers
-    Point						aMacroDownPos;
+    Rectangle                   aTextEditArea;
+    Rectangle                   aMinTextEditArea;
+    Link                        aOldCalcFieldValueLink; // Zum rufen des alten Handlers
+    Point                       aMacroDownPos;
 
-    USHORT						nMacroTol;
+    USHORT                      nMacroTol;
 
-    unsigned					bTextEditDontDelete : 1;   // Outliner und View bei SdrEndTextEdit nicht deleten (f. Rechtschreibpruefung)
-    unsigned					bTextEditOnlyOneView : 1;  // Nur eine OutlinerView (f. Rechtschreibpruefung)
-    unsigned					bTextEditNewObj : 1;       // Aktuell editiertes Objekt wurde gerade neu erzeugt
-    unsigned					bQuickTextEditMode : 1;    // persistent(->CrtV). Default=TRUE
-    unsigned					bMacroMode : 1;            // persistent(->CrtV). Default=TRUE
-    unsigned					bMacroDown : 1;
+    unsigned                    bTextEditDontDelete : 1;   // Outliner und View bei SdrEndTextEdit nicht deleten (f. Rechtschreibpruefung)
+    unsigned                    bTextEditOnlyOneView : 1;  // Nur eine OutlinerView (f. Rechtschreibpruefung)
+    unsigned                    bTextEditNewObj : 1;       // Aktuell editiertes Objekt wurde gerade neu erzeugt
+    unsigned                    bQuickTextEditMode : 1;    // persistent(->CrtV). Default=TRUE
+    unsigned                    bMacroMode : 1;            // persistent(->CrtV). Default=TRUE
+    unsigned                    bMacroDown : 1;
 
     rtl::Reference< sdr::SelectionController > mxSelectionController;
     rtl::Reference< sdr::SelectionController > mxLastSelectionController;
@@ -283,7 +283,7 @@ public:
 
     /** returns true if the shape identified by its inventor and identifier supports format paint brush operation */
     virtual bool SupportsFormatPaintbrush( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const;
-    
+
     /** returns a format paint brush set from the current selection */
     virtual bool TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& rFormatSet  );
 
@@ -291,15 +291,15 @@ public:
         if bNoCharacterFormats is true, no character attributes are changed.
         if bNoParagraphFormats is true, no paragraph attributes are changed.
     */
-    virtual void ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats );	
+    virtual void ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats );
 
     /** helper function for selections with multiple SdrText for one SdrTextObj (f.e. tables ) */
-    void ApplyFormatPaintBrushToText( SfxItemSet& rFormatSet, SdrTextObj& rTextObj, SdrText* pText, bool bNoCharacterFormats, bool bNoParagraphFormats );    
+    void ApplyFormatPaintBrushToText( SfxItemSet& rFormatSet, SdrTextObj& rTextObj, SdrText* pText, bool bNoCharacterFormats, bool bNoParagraphFormats );
 
 protected:
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
     virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos );
-    
+
 };
 
 #endif //_SVDEDXV_HXX

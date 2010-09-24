@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ struct osl_file_error_entry
 };
 
 static const struct osl_file_error_entry errtable[] = {
-  {  ERROR_SUCCESS,				   osl_File_E_None     },  /* 0 */
+  {  ERROR_SUCCESS,                osl_File_E_None     },  /* 0 */
   {  ERROR_INVALID_FUNCTION,       osl_File_E_INVAL    },  /* 1 */
   {  ERROR_FILE_NOT_FOUND,         osl_File_E_NOENT    },  /* 2 */
   {  ERROR_PATH_NOT_FOUND,         osl_File_E_NOENT    },  /* 3 */
@@ -93,7 +93,7 @@ static const struct osl_file_error_entry errtable[] = {
   {  ERROR_NOT_ENOUGH_QUOTA,       osl_File_E_NOMEM    },  /* 1816 */
   {  ERROR_UNEXP_NET_ERR,          osl_File_E_NETWORK  }   /* 59 */
 };
-    
+
 /* The following two constants must be the minimum and maximum
    values in the (contiguous) range of osl_File_E_xec Failure errors.
 */
@@ -117,8 +117,8 @@ oslFileError oslTranslateFileError (/*DWORD*/ unsigned long dwError)
             return (oslFileError)(errtable[i].errnocode);
     }
 
-    /* The error code wasn't in the table.  We check for a range of 
-       osl_File_E_ACCES errors or exec failure errors (ENOEXEC).  
+    /* The error code wasn't in the table.  We check for a range of
+       osl_File_E_ACCES errors or exec failure errors (ENOEXEC).
        Otherwise osl_File_E_INVAL is returned.
     */
     if ( (dwError >= MIN_EACCES_RANGE) && (dwError <= MAX_EACCES_RANGE) )
@@ -129,7 +129,7 @@ oslFileError oslTranslateFileError (/*DWORD*/ unsigned long dwError)
         return osl_File_E_INVAL;
 }
 
-//##################################################### 
+//#####################################################
 #if OSL_DEBUG_LEVEL > 0
 void _osl_warnFile( const char *message, rtl_uString *ustrFile )
 {
@@ -137,7 +137,7 @@ void _osl_warnFile( const char *message, rtl_uString *ustrFile )
 
     if (ustrFile)
     {
-        rtl_String	*strFile = NULL;
+        rtl_String  *strFile = NULL;
 
         rtl_uString2String( &strFile, rtl_uString_getStr( ustrFile ), rtl_uString_getLength( ustrFile ),
                             osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
         sGroup = msName.copy( 0, msName.lastIndexOf( sal_Unicode('.') ) );
        // OSL_TRACE("SwVbaTemplate::AutoTextEntries: %s", rtl::OUStringToOString( sGroup, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
-    
+
     uno::Reference< container::XIndexAccess > xGroup;
     if( xAutoTextContainer->hasByName( sGroup ) )
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,24 +50,24 @@ class SmPrintUIOptions;
 
 class SmGraphicWindow : public ScrollableWindow
 {
-    Point			aFormulaDrawPos;
-    Rectangle		aCursorRect;
+    Point           aFormulaDrawPos;
+    Rectangle       aCursorRect;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible >  xAccessible;
     SmGraphicAccessible *                                       pAccessible;
 
     SmViewShell    *pViewShell;
-    USHORT			nZoom;
-    short			nModifyCount;
-    BOOL			bIsCursorVisible;
+    USHORT          nZoom;
+    short           nModifyCount;
+    BOOL            bIsCursorVisible;
 
 protected:
-    void		SetFormulaDrawPos(const Point &rPos) { aFormulaDrawPos = rPos; }
-    void		SetIsCursorVisible(BOOL bVis) { bIsCursorVisible = bVis; }
+    void        SetFormulaDrawPos(const Point &rPos) { aFormulaDrawPos = rPos; }
+    void        SetIsCursorVisible(BOOL bVis) { bIsCursorVisible = bVis; }
     using   Window::SetCursor;
     void        SetCursor(const SmNode *pNode);
-    void 		SetCursor(const Rectangle &rRect);
+    void        SetCursor(const Rectangle &rRect);
 
     virtual void DataChanged( const DataChangedEvent& );
     virtual void Paint(const Rectangle&);
@@ -119,8 +119,8 @@ protected:
     SmGraphicWindow &rGraphic;
 public:
     SmGraphicController(SmGraphicWindow &, USHORT, SfxBindings & );
-    virtual void StateChanged(USHORT			 nSID,
-                              SfxItemState		 eState,
+    virtual void StateChanged(USHORT             nSID,
+                              SfxItemState       eState,
                               const SfxPoolItem* pState);
 };
 
@@ -137,8 +137,8 @@ public:
     virtual ~SmEditController();
 #endif
 
-    virtual void StateChanged(USHORT			 nSID,
-                              SfxItemState		 eState,
+    virtual void StateChanged(USHORT             nSID,
+                              SfxItemState       eState,
                               const SfxPoolItem* pState);
 };
 
@@ -146,12 +146,12 @@ public:
 
 class SmCmdBoxWindow : public SfxDockingWindow
 {
-    SmEditWindow		aEdit;
-    SmEditController	aController;
+    SmEditWindow        aEdit;
+    SmEditController    aController;
     BOOL                bExiting;
-    
+
     Timer               aInitialFocusTimer;
-    
+
     DECL_LINK(InitialFocusTimerHdl, Timer *);
 
 protected :
@@ -166,12 +166,12 @@ protected :
     virtual SfxChildAlignment CheckAlignment(SfxChildAlignment eActual,
                                              SfxChildAlignment eWish);
 
-    virtual void	ToggleFloatingMode();
+    virtual void    ToggleFloatingMode();
 
 public:
-    SmCmdBoxWindow(SfxBindings	  *pBindings,
+    SmCmdBoxWindow(SfxBindings    *pBindings,
                    SfxChildWindow *pChildWindow,
-                   Window		  *pParent);
+                   Window         *pParent);
 
     virtual ~SmCmdBoxWindow ();
 
@@ -188,9 +188,9 @@ class SmCmdBoxWrapper : public SfxChildWindow
     SFX_DECL_CHILDWINDOW(SmCmdBoxWrapper);
 
 protected:
-    SmCmdBoxWrapper(Window			*pParentWindow,
-                    USHORT			 nId,
-                    SfxBindings 	*pBindings,
+    SmCmdBoxWrapper(Window          *pParentWindow,
+                    USHORT           nId,
+                    SfxBindings     *pBindings,
                     SfxChildWinInfo *pInfo);
 
 #if OSL_DEBUG_LEVEL > 1
@@ -216,15 +216,15 @@ class SmViewShell: public SfxViewShell
     // for handling the PasteClipboardState
     friend class SmClipboardChangeListener;
 
-    SmGraphicWindow 	aGraphic;
+    SmGraphicWindow     aGraphic;
     SmGraphicController aGraphicController;
-    String				StatusText;
+    String              StatusText;
 
     ::com::sun::star::uno:: Reference <
             ::com::sun::star::lang:: XEventListener > xClipEvtLstnr;
-    SmClipboardChangeListener*	pClipEvtLstnr;
+    SmClipboardChangeListener*  pClipEvtLstnr;
     SmViewShell_Impl*   pImpl;
-    BOOL				bPasteState;
+    BOOL                bPasteState;
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -235,14 +235,14 @@ protected:
                          const String& rLine);
     Size GetTextSize(OutputDevice& rDevice,
                      const String& rText,
-                     long		   MaxWidth);
+                     long          MaxWidth);
     void DrawTextLine(OutputDevice& rDevice,
-                      const Point&	rPosition,
+                      const Point&  rPosition,
                       const String& rLine);
     void DrawText(OutputDevice& rDevice,
-                  const Point&	rPosition,
+                  const Point&  rPosition,
                   const String& rText,
-                  USHORT		MaxWidth);
+                  USHORT        MaxWidth);
 
     virtual USHORT Print(SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0);
     virtual SfxPrinter *GetPrinter(BOOL bCreate = FALSE);
@@ -252,7 +252,7 @@ protected:
     BOOL        Insert( SfxMedium& rMedium );
     BOOL        InsertFrom(SfxMedium &rMedium);
 
-    virtual SfxTabPage *CreatePrintOptionsPage(Window			*pParent,
+    virtual SfxTabPage *CreatePrintOptionsPage(Window           *pParent,
                                                const SfxItemSet &rOptions);
     virtual void Deactivate(BOOL IsMDIActivate);
     virtual void Activate(BOOL IsMDIActivate);
@@ -275,14 +275,14 @@ public:
     }
 
     SmEditWindow * GetEditWindow();
-          SmGraphicWindow & GetGraphicWindow() 		 { return aGraphic; }
+          SmGraphicWindow & GetGraphicWindow()       { return aGraphic; }
     const SmGraphicWindow & GetGraphicWindow() const { return aGraphic; }
 
-    void		SetStatusText(const String& Text);
+    void        SetStatusText(const String& Text);
 
-    void		ShowError( const SmErrorDesc *pErrorDesc );
-    void		NextError();
-    void		PrevError();
+    void        ShowError( const SmErrorDesc *pErrorDesc );
+    void        NextError();
+    void        PrevError();
 
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+2)
     SFX_DECL_VIEWFACTORY(SmViewShell);

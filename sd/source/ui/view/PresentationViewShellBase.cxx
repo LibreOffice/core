@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,13 +62,13 @@ SfxViewFactory* PresentationViewShellBase::pFactory;
 SfxViewShell* __EXPORT PresentationViewShellBase::CreateInstance (
     SfxViewFrame *_pFrame, SfxViewShell *pOldView)
 {
-    PresentationViewShellBase* pBase = 
+    PresentationViewShellBase* pBase =
         new PresentationViewShellBase(_pFrame, pOldView);
     pBase->LateInit(framework::FrameworkHelper::msPresentationViewURL);
     return pBase;
 }
 void PresentationViewShellBase::RegisterFactory( USHORT nPrio )
-{ 
+{
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,SdResId(STR_DEFAULTVIEW));
     InitFactory();
@@ -82,7 +82,7 @@ void PresentationViewShellBase::InitFactory()
 
 
 PresentationViewShellBase::PresentationViewShellBase (
-    SfxViewFrame* _pFrame, 
+    SfxViewFrame* _pFrame,
     SfxViewShell* pOldShell)
     : ViewShellBase (_pFrame, pOldShell)
 {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@ package com.sun.star.help;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.registry.XRegistryKey;
-    
+
 /*
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -88,7 +88,7 @@ public class HelpComponent
     public static XSingleComponentFactory __getComponentFactory(String sImplName)
     {
         XSingleComponentFactory xFactory = null;
-    
+
         if ( sImplName.equals( HelpSearch._HelpSearch.class.getName() ) )
             xFactory = Factory.createComponentFactory(HelpSearch._HelpSearch.class,
                                              HelpSearch._HelpSearch.getServiceNames());

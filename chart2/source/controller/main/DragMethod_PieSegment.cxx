@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,7 +106,7 @@ void DragMethod_PieSegment::MoveSdrDrag(const Point& rPnt)
             m_fAdditionalOffset = -m_fInitialOffset;
         else if( m_fAdditionalOffset > (1.0-m_fInitialOffset) )
             m_fAdditionalOffset = 1.0 - m_fInitialOffset;
-        
+
         B2DVector aNewPosVector = m_aStartVector + (m_aDragDirection * m_fAdditionalOffset);
         Point aNewPos = Point( (long)(aNewPosVector.getX()), (long)(aNewPosVector.getY()) );
         if( aNewPos != DragStat().GetNow() )

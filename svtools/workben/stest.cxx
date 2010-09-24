@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@ public:
 
 class SearchWindow : public WorkWindow
 {
-    PushButton		aPB;
-    FixedText 		aFT1, aFT2, aFT3;
-    MultiLineEdit 	aEText, aESrch;
-    RadioButton 	aModeN, aModeR, aModeL;
-    SearchParam 	aParam;
+    PushButton      aPB;
+    FixedText       aFT1, aFT2, aFT3;
+    MultiLineEdit   aEText, aESrch;
+    RadioButton     aModeN, aModeR, aModeL;
+    SearchParam     aParam;
 
 public:
                     SearchWindow();
@@ -121,7 +121,7 @@ IMPL_LINK( SearchWindow, ClickHdl, Button *, pButton )
         String sText( aEText.GetText() );
         String sSrch( aESrch.GetText() );
 
-/*		InfoBox( this, String( "T: " ) + sText +
+/*      InfoBox( this, String( "T: " ) + sText +
                        String( "\nS: " ) + sSrch ).Execute();
 */
         BOOL bRet = FALSE;
@@ -132,7 +132,7 @@ IMPL_LINK( SearchWindow, ClickHdl, Button *, pButton )
             SearchText aSrchText( aParam, GetpApp()->GetAppInternational() );
             bRet = aSrchText.SearchFrwrd( sText, &nStt, &nEnd );
 
-//			BOOL SearchBkwrd( const String &rStr, USHORT* pStart, USHORT* pEnde );
+//          BOOL SearchBkwrd( const String &rStr, USHORT* pStart, USHORT* pEnde );
         }
 
         String sFound( "gefunden" );
@@ -174,7 +174,7 @@ IMPL_LINK( SearchWindow, ClickHdl, Button *, pButton )
 
 void MyApp::Main( )
 {
-    SearchWindow*	pSearchWindow = new SearchWindow;
+    SearchWindow*   pSearchWindow = new SearchWindow;
     pSearchWindow->Show();
     Execute();
     delete pSearchWindow;

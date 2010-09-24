@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ public class XInputStreamWrapper extends InputStream {
         }
         catch (com.sun.star.io.IOException ioe) {
             throw new java.io.IOException(ioe.getMessage());
-        } 
+        }
 
         if (numRead != 1) {
             return -1;
@@ -60,9 +60,9 @@ public class XInputStreamWrapper extends InputStream {
         byteRet[0] = b;
         try
         {
-           return m_xInputStream.readBytes( byteRet, b.length ); 
+           return m_xInputStream.readBytes( byteRet, b.length );
         }
-        catch ( com.sun.star.io.IOException ioe) 
+        catch ( com.sun.star.io.IOException ioe)
         {
             throw new java.io.IOException(ioe.getMessage());
         }

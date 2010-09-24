@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ namespace vcl
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
 // benoetigt werden.
 // Zur Zeit wird fuer die DrawPage das PreView Flag benoetigt
-#define VSHELLFLAG_ISPREVIEW 			((long)0x1)
+#define VSHELLFLAG_ISPREVIEW            ((long)0x1)
 
 
 class SW_DLLPUBLIC ViewShell : public Ring
@@ -121,18 +121,18 @@ class SW_DLLPUBLIC ViewShell : public Ring
     static BitmapEx*    pErrorBmp;      // error display of missed images
     // <--
 
-    static sal_Bool bLstAct;			// sal_True wenn Das EndAction der letzten Shell
+    static sal_Bool bLstAct;            // sal_True wenn Das EndAction der letzten Shell
                                     // laeuft; also die EndActions der
                                     // anderen Shells auf das Dokument
                                     // abgearbeitet sind.
 
-    Point		  aPrtOffst;		 //Ofst fuer den Printer,
+    Point         aPrtOffst;         //Ofst fuer den Printer,
                                      //nicht bedruckbarer Rand.
-     Size		  aBrowseBorder;	//Rand fuer Framedokumente
-    SwRect 		  aInvalidRect;
+     Size         aBrowseBorder;    //Rand fuer Framedokumente
+    SwRect        aInvalidRect;
 
     SfxViewShell *pSfxViewShell;
-    SwViewImp 	 *pImp;				//Core-Interna der ViewShell.
+    SwViewImp    *pImp;             //Core-Interna der ViewShell.
                                     //Der Pointer ist niemals 0.
 
     Window       *pWin;              // = 0 during printing or pdf export
@@ -147,19 +147,19 @@ class SW_DLLPUBLIC ViewShell : public Ring
     SwAccessibilityOptions* pAccOptions;
 
 
-    sal_Bool  bDocSizeChgd	   :1;	//Fuer DocChgNotify(): Neue DocGroesse bei
+    sal_Bool  bDocSizeChgd     :1;  //Fuer DocChgNotify(): Neue DocGroesse bei
                                 //EndAction an das DocMDI melden.
-    sal_Bool  bPaintWorks	   :1;	//Normal Painten wenn sal_True,
+    sal_Bool  bPaintWorks      :1;  //Normal Painten wenn sal_True,
                                 //Paint merken wenn sal_False
-    sal_Bool  bPaintInProgress :1;	//Kein zweifaches Paint durchlassen.
-    sal_Bool  bViewLocked	   :1;	//Lockt den sichtbaren Bereich,
+    sal_Bool  bPaintInProgress :1;  //Kein zweifaches Paint durchlassen.
+    sal_Bool  bViewLocked      :1;  //Lockt den sichtbaren Bereich,
                                 //MakeVisible laeuft dann in's leere.
-    sal_Bool  bInEndAction	   :1;  //Fiese unstaende vermeiden, siehe viewsh.cxx
-    sal_Bool  bPreView		   :1;	//Ist sal_True wenns eine PreView-ViewShell ist.
-    sal_Bool  bFrameView	   :1;  //sal_True wenn es ein (HTML-)Frame ist.
-    sal_Bool  bEnableSmooth    :1;	//Disable des SmoothScroll z.B. fuer
+    sal_Bool  bInEndAction     :1;  //Fiese unstaende vermeiden, siehe viewsh.cxx
+    sal_Bool  bPreView         :1;  //Ist sal_True wenns eine PreView-ViewShell ist.
+    sal_Bool  bFrameView       :1;  //sal_True wenn es ein (HTML-)Frame ist.
+    sal_Bool  bEnableSmooth    :1;  //Disable des SmoothScroll z.B. fuer
                                 //Drag der Scrollbars.
-    sal_Bool  bEndActionByVirDev:1;	//Paints aus der EndAction immer ueber virtuelles
+    sal_Bool  bEndActionByVirDev:1; //Paints aus der EndAction immer ueber virtuelles
 
                                 //Device (etwa beim Browsen)
 
@@ -167,17 +167,17 @@ class SW_DLLPUBLIC ViewShell : public Ring
     bool mbInConstructor:1;
 
     // #i74769#
-    SdrPaintWindow*			mpTargetPaintWindow;
-    OutputDevice*			mpBufferedOut;
+    SdrPaintWindow*         mpTargetPaintWindow;
+    OutputDevice*           mpBufferedOut;
 
     //Initialisierung, wird von den verschiedenen Konstruktoren gerufen.
     SW_DLLPRIVATE void Init( const SwViewOption *pNewOpt );
 
     inline void ResetInvalidRect();
 
-    SW_DLLPRIVATE void Reformat();			//Invalidert das ges. Layout (ApplyViewOption)
+    SW_DLLPRIVATE void Reformat();          //Invalidert das ges. Layout (ApplyViewOption)
 
-    SW_DLLPRIVATE void PaintDesktop( const SwRect & );		// sammeln der Werte fuers
+    SW_DLLPRIVATE void PaintDesktop( const SwRect & );      // sammeln der Werte fuers
                                                 // Malen der Wiese und rufen
     // PaintDesktop gesplittet, dieser Teil wird auch von PreViewPage benutzt
     SW_DLLPRIVATE void _PaintDesktop( const SwRegionRects &rRegion );
@@ -190,14 +190,14 @@ class SW_DLLPUBLIC ViewShell : public Ring
     SW_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 
 protected:
-    static ShellResource*	pShellRes;		// Resourcen fuer die Shell
-    static Window*			pCareWindow;	// diesem Fenster ausweichen
+    static ShellResource*   pShellRes;      // Resourcen fuer die Shell
+    static Window*          pCareWindow;    // diesem Fenster ausweichen
 
-    SwRect					aVisArea;		//Die moderne Ausfuerung der VisArea
-    SwDoc					*pDoc;			//Das Dokument, niemals 0
+    SwRect                  aVisArea;       //Die moderne Ausfuerung der VisArea
+    SwDoc                   *pDoc;          //Das Dokument, niemals 0
 
     sal_uInt16 nStartAction; //ist != 0 wenn mindestens eine ::com::sun::star::chaos::Action laeuft
-    sal_uInt16 nLockPaint;	 //ist != 0 wenn das Paint gelocked ist.
+    sal_uInt16 nLockPaint;   //ist != 0 wenn das Paint gelocked ist.
 
 public:
     TYPEINFO();
@@ -219,13 +219,13 @@ public:
     sal_Bool ActionPend() const { return nStartAction != 0; }
     sal_Bool IsInEndAction() const { return bInEndAction; }
 
-    void SetEndActionByVirDev( sal_Bool b )	{ bEndActionByVirDev = b; }
+    void SetEndActionByVirDev( sal_Bool b ) { bEndActionByVirDev = b; }
     sal_Bool IsEndActionByVirDev()          { return bEndActionByVirDev; }
 
-    // 	Per UNO wird am RootFrame fuer alle shells der ActionCount kurzfristig
+    //  Per UNO wird am RootFrame fuer alle shells der ActionCount kurzfristig
     //  auf Null gesetzt und wieder restauriert
-    void	SetRestoreActions(sal_uInt16 nSet);
-    sal_uInt16 	GetRestoreActions() const;
+    void    SetRestoreActions(sal_uInt16 nSet);
+    sal_uInt16  GetRestoreActions() const;
 
     inline sal_Bool HasInvalidRect() const { return aInvalidRect.HasArea(); }
     void ChgHyphenation() { Reformat(); }
@@ -238,9 +238,9 @@ public:
     //////////////////////////////////////////////////////////////////////////////
     // #i72754# set of Pre/PostPaints with lock counter and initial target OutDev
 protected:
-    sal_uInt32				mnPrePostPaintCount;
-    OutputDevice*			mpPrePostOutDev;
-    MapMode					maPrePostMapMode;
+    sal_uInt32              mnPrePostPaintCount;
+    OutputDevice*           mpPrePostOutDev;
+    MapMode                 maPrePostMapMode;
 public:
     void PrePaint();
     void DLPrePaint2(const Region& rRegion);
@@ -267,25 +267,25 @@ public:
 
     //Bei naechster Gelegenheit die neue Dokuemntgroesse an das UI weiterreichen.
     void SizeChgNotify();
-    void UISizeNotify();			//Das weiterreichen der aktuellen groesse.
+    void UISizeNotify();            //Das weiterreichen der aktuellen groesse.
 
     Point GetPagePos( sal_uInt16 nPageNum ) const;
 
-    sal_uInt16 GetNumPages();	//Anzahl der aktuellen Seiten Layout erfragen.
+    sal_uInt16 GetNumPages();   //Anzahl der aktuellen Seiten Layout erfragen.
     sal_Bool   IsDummyPage( USHORT nPageNum ) const;  // An empty page?
 
     //Invalidierung der ersten Sichtbaren Seite fuer alle Shells im Ring.
     void SetFirstVisPageInvalid();
 
-    SwRootFrm	*GetLayout() const;
-    sal_Bool		 IsNewLayout() const; //Wurde das Layout geladen oder neu
+    SwRootFrm   *GetLayout() const;
+    sal_Bool         IsNewLayout() const; //Wurde das Layout geladen oder neu
                                       //erzeugt?
 
      Size GetDocSize() const;// erfrage die Groesse des Dokuments
 
-    void CalcLayout();	//Durchformatierung des Layouts erzwingen.
+    void CalcLayout();  //Durchformatierung des Layouts erzwingen.
 
-    inline SwDoc *GetDoc()	const { return pDoc; }	//niemals 0.
+    inline SwDoc *GetDoc()  const { return pDoc; }  //niemals 0.
 
     /** Provides access to the document setting interface
      */
@@ -445,7 +445,7 @@ public:
     static void           SetCareWin( Window* pNew );
     static Window*        GetCareWin(ViewShell& rVSh)
                           { return pCareWindow ? pCareWindow : CareChildWin(rVSh); }
-    static Window* 		  CareChildWin(ViewShell& rVSh);
+    static Window*        CareChildWin(ViewShell& rVSh);
 
     inline SfxViewShell   *GetSfxViewShell() { return pSfxViewShell; }
     inline void           SetSfxViewShell(SfxViewShell *pNew) { pSfxViewShell = pNew; }
@@ -470,7 +470,7 @@ public:
     void AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions );
 
     sal_Bool IsViewLocked() const { return bViewLocked; }
-    void LockView( sal_Bool b )	  { bViewLocked = b;	}
+    void LockView( sal_Bool b )   { bViewLocked = b;    }
 
     inline void LockPaint();
            void ImplLockPaint();

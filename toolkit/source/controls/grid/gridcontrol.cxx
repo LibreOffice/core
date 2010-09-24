@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,9 +52,9 @@ using namespace ::com::sun::star::view;
 
 namespace toolkit
 {
-//	----------------------------------------------------
-//	class UnoGridModel
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class UnoGridModel
+//  ----------------------------------------------------
 UnoGridModel::UnoGridModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -90,7 +90,7 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
 : UnoControlModel( rModel )
 {
 }
-                        
+
 UnoControlModel* UnoGridModel::Clone() const
 {
     return new UnoGridModel( *this );
@@ -104,9 +104,9 @@ OUString UnoGridModel::getServiceName() throw(RuntimeException)
 Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     switch( nPropId )
-    { 
+    {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_GridControl ) ); 
+            return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_GridControl ) );
         case BASEPROPERTY_GRID_SELECTIONMODE:
             return uno::makeAny( SelectionType(1) );
         case BASEPROPERTY_GRID_SHOWROWHEADER:
@@ -126,9 +126,9 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         case BASEPROPERTY_GRID_ROW_BACKGROUND:
             return uno::makeAny(com::sun::star::util::Color(0xFFFFFF) );
         default:
-            return UnoControlModel::ImplGetDefaultValue( nPropId ); 
+            return UnoControlModel::ImplGetDefaultValue( nPropId );
     }
-    
+
 }
 
 ::cppu::IPropertyArrayHelper& UnoGridModel::getInfoHelper()
@@ -136,7 +136,7 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
+        Sequence<sal_Int32> aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -150,9 +150,9 @@ Reference< XPropertySetInfo > UnoGridModel::getPropertySetInfo(  ) throw(Runtime
 }
 
 
-//	----------------------------------------------------
-//	class UnoGridControl
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class UnoGridControl
+//  ----------------------------------------------------
 UnoGridControl::UnoGridControl()
 : mSelectionMode(SelectionType(1)),
     m_aSelectionListeners( *this )
@@ -178,7 +178,7 @@ void UnoGridControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
 
     Reference< XGridControl >  xGrid( getPeer(), UNO_QUERY_THROW );
     xGrid->addSelectionListener(&m_aSelectionListeners);
- 
+
     Reference<XGridDataListener> xListener ( getPeer(), UNO_QUERY_THROW );
     Reference<XGridColumnListener> xColListener ( getPeer(), UNO_QUERY_THROW );
     Reference<XPropertySet> xPropSet ( getModel(), UNO_QUERY_THROW );
@@ -190,7 +190,7 @@ void UnoGridControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
     if(xGridColumnModel != NULL)
     {
         for(int i = 0;i<xGridColumnModel->getColumnCount();i++)
-        {		
+        {
             xGridColumnModel->getColumn(i)->addColumnListener(xColListener);
         }
     }

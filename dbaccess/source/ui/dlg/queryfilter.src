@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,11 +84,11 @@ ModalDialog DLG_FILTERCRIT
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-//		STRLST_AND_OR
+//      STRLST_AND_OR
         StringList [ en-US ] =
         {
-            < "AND" ; Default ; > ; 
-            < "OR" ; Default ; > ; 
+            < "AND" ; Default ; > ;
+            < "OR" ; Default ; > ;
         };
     };
     ListBox LB_WHEREFIELD2
@@ -124,11 +124,11 @@ ModalDialog DLG_FILTERCRIT
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-//		STRLST_AND_OR
+//      STRLST_AND_OR
         StringList [ en-US ] =
         {
-            < "AND" ; Default ; > ; 
-            < "OR" ; Default ; > ; 
+            < "AND" ; Default ; > ;
+            < "OR" ; Default ; > ;
         };
     };
     ListBox LB_WHEREFIELD3

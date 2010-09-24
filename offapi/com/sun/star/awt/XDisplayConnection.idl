@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ published interface XDisplayConnection: com::sun::star::uno::XInterface
     /** registers an event handler.
 
         @param window
-        the platform specific window id. If empty, the handler should be 
+        the platform specific window id. If empty, the handler should be
         registered for all windows.
 
         @param eventHandler
@@ -66,14 +66,14 @@ published interface XDisplayConnection: com::sun::star::uno::XInterface
     /** removes a eventHandler from the handler list.
 
         @param window
-        the platform specific window id the handler should be deregistered for. 
+        the platform specific window id the handler should be deregistered for.
         If empty, the handler should be deregistered completly.
 
         @param eventHandler
         the handler to remove.
     */
     [oneway] void removeEventHandler( [in] any window, [in] XEventHandler eventHandler );
-    
+
     //-------------------------------------------------------------------------
 
     /** register an error handler for toolkit specific errors.
@@ -99,7 +99,7 @@ published interface XDisplayConnection: com::sun::star::uno::XInterface
         @returns a unique platform dependend identifier for a display connection.
     */
     any getIdentifier();
-    
+
 };
 
 //=============================================================================

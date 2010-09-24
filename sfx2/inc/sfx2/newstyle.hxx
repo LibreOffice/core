@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,13 @@ class SfxStyleSheetBasePool;
 class SFX2_DLLPUBLIC SfxNewStyleDlg : public ModalDialog
 {
 private:
-    FixedLine				aColFL;
-    ComboBox				aColBox;
-    OKButton				aOKBtn;
-    CancelButton			aCancelBtn;
+    FixedLine               aColFL;
+    ComboBox                aColBox;
+    OKButton                aOKBtn;
+    CancelButton            aCancelBtn;
 
-    QueryBox				aQueryOverwriteBox;
-    SfxStyleSheetBasePool&	rPool;
+    QueryBox                aQueryOverwriteBox;
+    SfxStyleSheetBasePool&  rPool;
 
 //#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( OKHdl, Control * );
@@ -60,7 +60,7 @@ public:
     SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& );
     ~SfxNewStyleDlg();
 
-    String 					GetName() const { return aColBox.GetText().EraseLeadingChars(); }
+    String                  GetName() const { return aColBox.GetText().EraseLeadingChars(); }
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,7 +129,7 @@ Listener::Listener (
         {
             StartListening (*pMainViewShell);
         }
-    
+
         Link aLink (LINK(this, Listener, EventMultiplexerCallback));
         mpBase->GetEventMultiplexer()->AddEventListener(
             aLink,
@@ -212,13 +212,13 @@ void Listener::ReleaseListeners (void)
 void Listener::ConnectToController (void)
 {
     ViewShell* pShell = mrSlideSorter.GetViewShell();
-    
+
     // Register at the controller of the main view shell (if we are that not
     // ourself).
     if (pShell==NULL || ! pShell->IsMainViewShell())
     {
         Reference<frame::XController> xController (mrSlideSorter.GetXController());
-        
+
         // Listen to changes of certain properties.
         Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
         if (xSet.is())
@@ -269,10 +269,10 @@ void Listener::DisconnectFromController (void)
             if (xSet.is())
             {
                 xSet->removePropertyChangeListener (
-                    String::CreateFromAscii("CurrentPage"), 
+                    String::CreateFromAscii("CurrentPage"),
                     this);
                 xSet->removePropertyChangeListener (
-                    String::CreateFromAscii("IsMasterPageMode"), 
+                    String::CreateFromAscii("IsMasterPageMode"),
                     this);
             }
 
@@ -371,11 +371,11 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         }
         break;
 
-        
+
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
             mbIsMainViewChangePending = true;
             break;
-        
+
         case tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED:
             if (mbIsMainViewChangePending && mpBase != NULL)
             {
@@ -397,7 +397,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         }
         break;
 
-        
+
         case tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED:
             DisconnectFromController();
             break;
@@ -420,7 +420,7 @@ void SAL_CALL Listener::disposing (
 {
     if ((mbListeningToDocument || mbListeningToUNODocument)
         && mrSlideSorter.GetModel().GetDocument()!=NULL
-        && rEventObject.Source 
+        && rEventObject.Source
            == mrSlideSorter.GetModel().GetDocument()->getUnoModel())
     {
         mbListeningToDocument = false;

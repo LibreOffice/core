@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,13 +118,13 @@ namespace xmloff
     class XMLOFF_DLLPUBLIC OControlPropertyHandlerFactory : public XMLPropertyHandlerFactory
     {
     protected:
-        mutable XMLConstantsPropertyHandler*	m_pTextAlignHandler;
+        mutable XMLConstantsPropertyHandler*    m_pTextAlignHandler;
         mutable OControlBorderHandler*          m_pControlBorderStyleHandler;
         mutable OControlBorderHandler*          m_pControlBorderColorHandler;
-        mutable ORotationAngleHandler*			m_pRotationAngleHandler;
-        mutable OFontWidthHandler*				m_pFontWidthHandler;
-        mutable XMLConstantsPropertyHandler*	m_pFontEmphasisHandler;
-        mutable XMLConstantsPropertyHandler*	m_pFontReliefHandler;
+        mutable ORotationAngleHandler*          m_pRotationAngleHandler;
+        mutable OFontWidthHandler*              m_pFontWidthHandler;
+        mutable XMLConstantsPropertyHandler*    m_pFontEmphasisHandler;
+        mutable XMLConstantsPropertyHandler*    m_pFontReliefHandler;
 
     protected:
         virtual ~OControlPropertyHandlerFactory();
@@ -136,7 +136,7 @@ namespace xmloff
     };
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_

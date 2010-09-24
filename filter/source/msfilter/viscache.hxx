@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,21 +37,21 @@
 *************************************************************************/
 class Impl_OlePres
 {
-    ULONG	nFormat;
-    USHORT	nAspect;
-    Bitmap *		pBmp;
-    GDIMetaFile *	pMtf;
+    ULONG   nFormat;
+    USHORT  nAspect;
+    Bitmap *        pBmp;
+    GDIMetaFile *   pMtf;
 
     UINT32  nAdvFlags;
-    INT32 	nJobLen;
-    BYTE*	pJob;
-    Size	aSize;		// Groesse in 100TH_MM
+    INT32   nJobLen;
+    BYTE*   pJob;
+    Size    aSize;      // Groesse in 100TH_MM
 public:
                     Impl_OlePres( ULONG nF )
                         : nFormat( nF )
                         , pBmp( NULL )
                         , pMtf( NULL )
-                        , nAdvFlags( 0x2 )	// in Dokument gefunden
+                        , nAdvFlags( 0x2 )  // in Dokument gefunden
                         , nJobLen( 0 )
                         , pJob( NULL )
                     {}
@@ -61,7 +61,7 @@ public:
                         delete pBmp;
                         delete pMtf;
                     }
-    void	SetMtf( const GDIMetaFile & rMtf )
+    void    SetMtf( const GDIMetaFile & rMtf )
             {
                 if( pMtf )
                     delete pMtf;
@@ -69,14 +69,14 @@ public:
             }
     Bitmap *GetBitmap() const { return pBmp; }
     GDIMetaFile *GetMetaFile() const { return pMtf; }
-    ULONG	GetFormat() const { return nFormat; }
-    void	SetAspect( USHORT nAsp ) { nAspect = nAsp; }
-    ULONG	GetAdviseFlags() const { return nAdvFlags; }
-    void	SetAdviseFlags( ULONG nAdv ) { nAdvFlags = nAdv; }
-    void	SetSize( const Size & rSize ) { aSize = rSize; }
+    ULONG   GetFormat() const { return nFormat; }
+    void    SetAspect( USHORT nAsp ) { nAspect = nAsp; }
+    ULONG   GetAdviseFlags() const { return nAdvFlags; }
+    void    SetAdviseFlags( ULONG nAdv ) { nAdvFlags = nAdv; }
+    void    SetSize( const Size & rSize ) { aSize = rSize; }
             /// return FALSE => unknown format
-    BOOL 	Read( SvStream & rStm );
-    void 	Write( SvStream & rStm );
+    BOOL    Read( SvStream & rStm );
+    void    Write( SvStream & rStm );
 };
 
 

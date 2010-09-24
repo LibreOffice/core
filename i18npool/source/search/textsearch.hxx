@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 #include <com/sun/star/util/XTextSearch.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <cppuhelper/implbase2.hxx>		// helper for implementations
+#include <cppuhelper/implbase2.hxx>     // helper for implementations
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -42,9 +42,9 @@ class Regexpr;
 class WLevDistance;
 typedef ::std::map< sal_Unicode, sal_Int32 > TextSearchJumpTable;
 
-//	----------------------------------------------------
-//	class SearchClass
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class SearchClass
+//  ----------------------------------------------------
 class TextSearch: public cppu::WeakImplHelper2
 <
     ::com::sun::star::util::XTextSearch,
@@ -77,7 +77,7 @@ class TextSearch: public cppu::WeakImplHelper2
     TextSearchJumpTable* pJumpTable;
     TextSearchJumpTable* pJumpTable2;
     bool bIsForwardTab;
-    bool bUsePrimarySrchStr;  
+    bool bUsePrimarySrchStr;
     void MakeForwardTab();
     void MakeForwardTab2();
     void MakeBackwardTab();
@@ -150,5 +150,5 @@ public:
                 throw( ::com::sun::star::uno::RuntimeException );
 };
 
- 
+
 #endif

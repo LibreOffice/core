@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,18 +59,18 @@ public:
     virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
     virtual SvStream&       Store(SvStream& rOut, USHORT nItemVersion ) const;
 
-    virtual	sal_Bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	sal_Bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
-    virtual FASTBOOL		HasMetrics() const;
-    virtual FASTBOOL		ScaleMetrics(long nMul, long nDiv);
+    virtual FASTBOOL        HasMetrics() const;
+    virtual FASTBOOL        ScaleMetrics(long nMul, long nDiv);
 
-    const XDash&			GetDashValue(const XDashTable* pTable = 0) const; // GetValue -> GetDashValue
-    void					SetDashValue(const XDash& rNew)   { aDash = rNew; Detach(); } // SetValue -> SetDashValue
+    const XDash&            GetDashValue(const XDashTable* pTable = 0) const; // GetValue -> GetDashValue
+    void                    SetDashValue(const XDash& rNew)   { aDash = rNew; Detach(); } // SetValue -> SetDashValue
 
     static BOOL CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XLineDashItem* checkForUniqueItem( SdrModel* pModel ) const;

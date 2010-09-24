@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,14 +77,14 @@ namespace dbaccess
     public:
     };
 
-typedef ::cppu::ImplHelper1	<	::com::sun::star::sdbcx::XRename
-                                >	OCommandDefinition_Base;
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::sdbcx::XRename
+                                >   OCommandDefinition_Base;
 class OCommandDefinition;
 typedef ::comphelper::OPropertyArrayUsageHelper< OCommandDefinition >
-                        OCommandDefinition_PROP;			
-                                    
+                        OCommandDefinition_PROP;
 
-class OCommandDefinition	:public OComponentDefinition
+
+class OCommandDefinition    :public OComponentDefinition
                             ,public OCommandDefinition_Base
                             ,public OCommandDefinition_PROP
 {
@@ -92,7 +92,7 @@ protected:
     virtual ~OCommandDefinition();
 
     OCommandDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&	_xParentContainer
+        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
         ,const TContentPtr& _pImpl
         );
 
@@ -136,7 +136,7 @@ private:
 };
 
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 
 #endif // _DBA_COREDATAACESS_COMMANDDEFINITION_HXX_

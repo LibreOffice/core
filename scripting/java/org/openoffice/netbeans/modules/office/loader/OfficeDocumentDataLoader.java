@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,23 +43,23 @@ import org.openoffice.netbeans.modules.office.actions.MountDocumentAction;
  * @author tomaso
  */
 public class OfficeDocumentDataLoader extends UniFileLoader {
-    
+
     public OfficeDocumentDataLoader() {
         this("org.openoffice.netbeans.modules.office.loader.OfficeDocumentDataObject");
     }
-    
+
     // Can be useful for subclasses:
     protected OfficeDocumentDataLoader(String recognizedObjectClass) {
         super(recognizedObjectClass);
     }
-    
+
     protected String defaultDisplayName() {
         return "Office Document";
     }
-    
+
     protected void initialize() {
         super.initialize();
-        
+
         ExtensionList extensions = new ExtensionList();
         extensions.addExtension("sxw");
         extensions.addExtension("sxc");
@@ -67,15 +67,15 @@ public class OfficeDocumentDataLoader extends UniFileLoader {
         extensions.addExtension("sxi");
         setExtensions(extensions);
     }
-    
+
     protected FileObject findPrimaryFile(FileObject fo) {
         ExtensionList extensions = getExtensions();
         if (extensions.isRegistered(fo) == false)
             return null;
-        
+
         File document = FileUtil.toFile(fo);
         JarFileSystem jarFs = new JarFileSystem();
-        
+
         try {
             jarFs.setJarFile(document);
         }
@@ -88,7 +88,7 @@ public class OfficeDocumentDataLoader extends UniFileLoader {
         }
         return fo;
     }
-    
+
     protected SystemAction[] defaultActions() {
         return new SystemAction[] {
             SystemAction.get(OpenAction.class),
@@ -105,7 +105,7 @@ public class OfficeDocumentDataLoader extends UniFileLoader {
             SystemAction.get(PropertiesAction.class),
         };
     }
-    
+
     protected MultiDataObject createMultiObject(FileObject primaryFile) throws DataObjectExistsException, IOException {
         return new OfficeDocumentDataObject(primaryFile, this);
     }

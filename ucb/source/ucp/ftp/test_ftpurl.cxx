@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,21 +56,21 @@ struct ServerInfo {
 
 class FTPHandleProviderI
     : public ftp::FTPHandleProvider {
-    
+
 public:
 
     FTPHandleProviderI()
         : p(new ftp::FTPLoaderThread) {
     }
-    
+
     ~FTPHandleProviderI() {
         delete p;
     }
 
-    virtual CURL* handle() { 
-        return p->handle(); 
+    virtual CURL* handle() {
+        return p->handle();
     }
-    
+
     bool forHost(const rtl::OUString& host,
                  const rtl::OUString& port,
                  const rtl::OUString& username,
@@ -78,17 +78,17 @@ public:
                  rtl::OUString& account)
     {
         for(unsigned int i = 0; i < m_ServerInfo.size(); ++i)
-            if(host == m_ServerInfo[i].host && 
+            if(host == m_ServerInfo[i].host &&
                port == m_ServerInfo[i].port &&
                username == m_ServerInfo[i].username ) {
                 password = m_ServerInfo[i].password;
                 account = m_ServerInfo[i].account;
                 return true;
             }
-        
+
         return false;
     }
-    
+
     virtual bool setHost(const rtl::OUString& host,
                          const rtl::OUString& port,
                          const rtl::OUString& username,
@@ -104,23 +104,23 @@ public:
 
         bool present(false);
         for(unsigned int i = 0; i < m_ServerInfo.size(); ++i)
-            if(host == m_ServerInfo[i].host && 
+            if(host == m_ServerInfo[i].host &&
                port == m_ServerInfo[i].port) {
                 m_ServerInfo[i] = inf;
                 present = true;
             }
-    
+
         if(!present)
             m_ServerInfo.push_back(inf);
 
         return !present;
 
     }
-    
+
 
 private:
-    
-    std::vector<ServerInfo> m_ServerInfo;	
+
+    std::vector<ServerInfo> m_ServerInfo;
     ftp::FTPLoaderThread *p;
 };
 
@@ -142,16 +142,16 @@ int test_ftpurl(void) {
 
     FTPHandleProviderI prov;
     char* ascii,*n,*p;
-    
+
     ascii = "ftp://abi:psswd@host/eins/../drei", n = "abi", p = "psswd";
     TESTURL;
 
     ascii = "ftp://:psswd@host:22/eins/../drei", n = "anonymous", p = "psswd";
     TESTURL;
-    
+
     ascii = "ftp://host/bla/../../test/", n = "anonymous", p = "";
     TESTURL;
-    
+
     TESTEVAL;
 }
 
@@ -159,9 +159,9 @@ int test_ftpurl(void) {
 int test_ftplist(void) {
     int number_of_errors = 0;
     const char* name = "test_ftplist";
-        
+
     FTPHandleProviderI provider;
-    
+
     ftp::FTPURL url(
         rtl::OUString::createFromAscii(
             "ftp://abi:psswd@abi-1/dir"),
@@ -169,17 +169,17 @@ int test_ftplist(void) {
 
     std::vector<ftp::FTPDirentry> vec =
         url.list(com::sun::star::ucb::OpenMode::ALL);
-    
+
     if(vec.size() != 3)
         ++number_of_errors;
-    
+
     if(!(vec[0].m_aName.equalsAscii("dir1") &&
          vec[1].m_aName.equalsAscii("dir2") &&
          vec[2].m_aName.equalsAscii("file1")))
        ++number_of_errors;
-       
+
     TESTEVAL;
-}	
+}
 
 
 #define TESTPARENT   \
@@ -198,7 +198,7 @@ int test_ftpparent(void) {
 
     rtl::OUString urlStr;
     char *ascii,*expect;
-    
+
     ascii = "ftp://abi:psswd@abi-1/file";
     expect = "ftp://abi:psswd@abi-1/";
     TESTPARENT;
@@ -210,7 +210,7 @@ int test_ftpparent(void) {
     ascii = "ftp://abi:psswd@abi-1/..";
     expect = "ftp://abi:psswd@abi-1/../..";
     TESTPARENT;
-    
+
     ascii = "ftp://abi:psswd@abi-1/../../dir";
     expect = "ftp://abi:psswd@abi-1/../..";
     TESTPARENT;
@@ -219,7 +219,7 @@ int test_ftpparent(void) {
     expect = "ftp://abi:psswd@abi-1/..";
     TESTPARENT;
 
-    TESTEVAL;    
+    TESTEVAL;
 }
 
 
@@ -227,33 +227,33 @@ int test_ftpproperties(void) {
     int number_of_errors = 0;
     const char* name = "test_ftpproperties";
     FTPHandleProviderI provider;
-    
+
     ftp::FTPURL url(
         rtl::OUString::createFromAscii(
             "ftp://abi:psswd@abi-1/file"),
         &provider);
 
     ftp::FTPDirentry ade(url.direntry());
-    
+
     if(!(ade.m_aName.equalsAscii("file") &&
          ade.isFile()))
         ++number_of_errors;
-    
+
     TESTEVAL;
 }
 
 
-int test_ftpopen(void) 
+int test_ftpopen(void)
 {
     int number_of_errors = 0;
     const char* name = "test_ftpopen";
-    
+
     FTPHandleProviderI provider;
     ftp::FTPURL url(
         rtl::OUString::createFromAscii(
             "ftp://abi:psswd@abi-1/file"),
         &provider);
-    
+
     FILE* file = url.open();
     if(file) {
         int nbuf,ndest;
@@ -270,14 +270,14 @@ int test_ftpopen(void)
             strncat(dest,buff,nbuf);
         } while(nbuf == bffsz-1);
         fclose(file);
-        
+
         const char* expected = "You are now looking at the filecontent.\n";
         if(strcmp(expected,dest))
             ++number_of_errors;
         free(dest);
     } else
         ++number_of_errors;
-    
+
     TESTEVAL;
 }
 

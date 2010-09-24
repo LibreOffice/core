@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ import java.util.Vector;
  * <p>Class representing a Pocket Word Document.</p>
  *
  * <p><code>PocketWordDocument</code> is used to create new Pocket Word documents
- *    and to read existing data to allow for conversion to OpenOffice Writer 
+ *    and to read existing data to allow for conversion to OpenOffice Writer
  *    format.</p>
  *
  * @author  Mark Murnane
@@ -53,15 +53,15 @@ import java.util.Vector;
  */
 public class PocketWordDocument implements Document, PocketWordConstants {
     private String      docName;
-    
+
     private byte[] preamble;
     private Vector fonts;
     private DocumentDescriptor descriptor;
     private Vector paragraphs;
-    
+
     private ParaStyle   pStyle;
     private Paragraph   currentPara;
-    
+
     /*
      * The trailer currently appears to be constant, but if its found to
      * have a variable component, then this initialisation should be moved
@@ -70,70 +70,70 @@ public class PocketWordDocument implements Document, PocketWordConstants {
      * Padding is sometimes needed before the trailer to ensure the file
      * ends on a 4-byte boundary, but this is handled in write().
      */
-    private static final byte[] trailer = new byte[] { (byte)0x82, 0x00, 
-                                                             0x09, 0x00, 
-                                                             0x03, 0x00, 
-                                                             (byte)0x82, 0x00, 
-                                                             0x00, 0x00, 
-                                                             0x00, 0x00, 
-                                                             0x00, 0x00, 
+    private static final byte[] trailer = new byte[] { (byte)0x82, 0x00,
+                                                             0x09, 0x00,
+                                                             0x03, 0x00,
+                                                             (byte)0x82, 0x00,
+                                                             0x00, 0x00,
+                                                             0x00, 0x00,
+                                                             0x00, 0x00,
                                                              0x00, 0x00,
                                                              0x00, 0x00 };
 
-    
+
     /**
      * <p>Constructs a new Pocket Word Document.</p>
      *
-     * <p>This new document does notcontain any information.  Document data must 
-     *    either be added using appropriate methods, or an existing file can be 
+     * <p>This new document does notcontain any information.  Document data must
+     *    either be added using appropriate methods, or an existing file can be
      *    {@link #read(InputStream) read} from an <code>InputStream</code>.</p>
      *
      * @param   name    The name of the <code>PocketWordDocument</code>.
      */
     public PocketWordDocument(String name) {
-        
+
         docName = trimDocumentName(name);
-        
+
         preamble   = new byte[52];
         fonts      = new Vector(0, 1);
         descriptor = new DocumentDescriptor();
         paragraphs = new Vector(0, 1);
     }
-    
-    
+
+
     /**
-     * <p>This method reads <code>byte</code> data from the InputStream and 
+     * <p>This method reads <code>byte</code> data from the InputStream and
      *    extracts font and paragraph data from the file.</p>
-     * 
+     *
      * @param   is      InputStream containing a Pocket Word data file.
      *
      * @throws  IOException     In case of any I/O errors.
      */
     public void read(InputStream docData) throws IOException {
-        
+
         if (docData == null) {
             throw new IOException ("No input stream to convert");
         }
-            
+
         // The preamble may become important for font declarations.
         int readValue = docData.read(preamble);
-        // #i33702# check for an empty InputStream. 
+        // #i33702# check for an empty InputStream.
         if(readValue == -1) {
             System.err.println("Error:invalid input stream");
             return;
         }
-        
+
         byte[] font = new byte[80];
         int numfonts = 0;
         do {
-            docData.read(font);           
-            
+            docData.read(font);
+
             String name = new String(font, 0, 64, "UTF-16LE");
             fonts.add(name.trim());
-            
-        } while (!(font[76] == 5 && font[77] == 0 
-                            && font[78] == 1 && font[79] == 0)); 
-                            
+
+        } while (!(font[76] == 5 && font[77] == 0
+                            && font[78] == 1 && font[79] == 0));
+
         /*
          * TODO:  The document descriptor data that follows the fonts ends with
          *        a variable section containing data for each of the paragraphs.
@@ -141,27 +141,27 @@ public class PocketWordDocument implements Document, PocketWordConstants {
          *        positions for each paragraph rather than iterating through the
          *        entire byte stream.
          */
-        
+
         int value;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         while ((value = docData.read()) != -1) {
             bos.write(value);
         }
-        
+
 
         byte[] contentData = bos.toByteArray();
         int start = 0, end = 0;
         boolean sawMarker = false;
-        
+
         for (int i = 0; i < contentData.length; i += 4) {
-            if (contentData[i  + 2] == (byte)0xFF 
+            if (contentData[i  + 2] == (byte)0xFF
                         && contentData[i + 3] == (byte)0xFF && !sawMarker)  {
                 start = i - 8;
                 sawMarker = true;
                 continue;
             }
-            
-            if (contentData[i + 2] == (byte)0xFF 
+
+            if (contentData[i + 2] == (byte)0xFF
                         && contentData[i + 3] == (byte)0xFF && sawMarker) {
                 end = i - 8;
                 ByteArrayOutputStream paragraph = new ByteArrayOutputStream();
@@ -172,9 +172,9 @@ public class PocketWordDocument implements Document, PocketWordConstants {
                 sawMarker = false;
                 i -= 4;  // Skip back
             }
-            
+
         }
-        
+
         /*
          * Special case, the last paragraph
          * If we got here, and the marker is set then we saw the start of the
@@ -189,15 +189,15 @@ public class PocketWordDocument implements Document, PocketWordConstants {
         }
         paragraphs.add(new Paragraph(paragraph.toByteArray()));
     }
-    
-    
+
+
     /*
      * Utility method to make sure the document name is stripped of any file
      * extensions before use.
      */
     private String trimDocumentName(String name) {
         String temp = name.toLowerCase();
-        
+
         if (temp.endsWith(FILE_EXTENSION)) {
             // strip the extension
             int nlen = name.length();
@@ -207,10 +207,10 @@ public class PocketWordDocument implements Document, PocketWordConstants {
 
         return name;
     }
-    
-    
+
+
     /**
-     * <p>Method to provide access to all of the <code>Paragraph</code> objects  
+     * <p>Method to provide access to all of the <code>Paragraph</code> objects
      *    in the <code>Document</code>.</p>
      *
      * @return <code>Enumeration</code> over the paragraphs in the document.
@@ -218,8 +218,8 @@ public class PocketWordDocument implements Document, PocketWordConstants {
     public Enumeration getParagraphEnumeration() {
         return paragraphs.elements();
     }
-    
-    
+
+
     /**
      * <p>Returns the <code>Document</code> name with no file extension.</p>
      *
@@ -228,8 +228,8 @@ public class PocketWordDocument implements Document, PocketWordConstants {
     public String getName() {
         return docName;
     }
-    
-    
+
+
     /**
      * <p>Returns the <code>Document</code> name with file extension.</p>
      *
@@ -238,8 +238,8 @@ public class PocketWordDocument implements Document, PocketWordConstants {
     public String getFileName() {
         return new String(docName + FILE_EXTENSION);
     }
-    
-    
+
+
     /**
      * <p>Writes out the <code>Document</code> content to the specified
      * <code>OutputStream</code>.</p>
@@ -256,54 +256,54 @@ public class PocketWordDocument implements Document, PocketWordConstants {
      */
     public void write(OutputStream os) throws IOException {
         DataOutputStream dos = new DataOutputStream(os);
-        
+
         initPreamble();
         dos.write(preamble);
-        
+
         loadFonts();
         for (int i = 0; i < fonts.size(); i++ ) {
             ByteArrayOutputStream fontData = (ByteArrayOutputStream)fonts.elementAt(i);
             dos.write(fontData.toByteArray());
         }
-              
-        
+
+
         for (int i = 0; i < paragraphs.size(); i++) {
             Paragraph para = (Paragraph)paragraphs.elementAt(i);
             descriptor.addParagraph((short)para.getTextLength(), para.getLines());
         }
         dos.write(descriptor.getDescriptor());
-        
+
         for (int i = 0; i < paragraphs.size(); i++ ) {
             Paragraph para = (Paragraph)paragraphs.elementAt(i);
-                    
+
             // Last paragraph has some extra data
             if (i + 1 == paragraphs.size()) {
                 para.setLastParagraph(true);
             }
             dos.write(para.getParagraphData());
         }
-        
-        
+
+
         /*
-         * Before we write out the trailer, we need to make sure that it will 
+         * Before we write out the trailer, we need to make sure that it will
          * lead to the file ending on a 4 byte boundary.
          */
         if (dos.size() % 4 == 0) {
             dos.write((byte)0x00);
             dos.write((byte)0x00);
         }
-        
+
         dos.write(trailer);
-        
+
         dos.flush();
         dos.close();
     }
-    
-    
+
+
     /**
-     * <p>This method adds a new paragraph element to the document.  No string 
+     * <p>This method adds a new paragraph element to the document.  No string
      *    data is added to the paragraph.</p>
-     * 
+     *
      * <p><b>N.B.</b> The newly added paragraph becomes the current paragraph and
      *    is used as the target for all subsequent calls to addParagraphData().</p>
      *
@@ -313,25 +313,25 @@ public class PocketWordDocument implements Document, PocketWordConstants {
      *                      false otherwise.
      */
     public void addParagraph(ParaStyle style, boolean listElement)  {
-        /* For the moment, only support basic text entry in a single paragraph */      
+        /* For the moment, only support basic text entry in a single paragraph */
         Paragraph para = new Paragraph(style);
-               
+
         paragraphs.add(para);
-        
+
         pStyle = style;
         currentPara = para;
-        
+
         if (listElement) {
             para.setBullets(true);
         }
     }
-    
-        
+
+
     /**
      * <p>This method adds text to the current paragraph.</p>
-     * 
+     *
      * <p>If no paragraphs exist within the document, it creates one.</p>
-     * 
+     *
      * @param   data        The string data for this segment.
      * @param   style       Text Style object describing the formatting of this
      *                      segment.  Can be null.
@@ -342,10 +342,10 @@ public class PocketWordDocument implements Document, PocketWordConstants {
         }
         currentPara.addTextSegment(data, style);
     }
-    
-    
-    /* 
-     * Preamble is the portion before font specification which never 
+
+
+    /*
+     * Preamble is the portion before font specification which never
      * seems to change from one file, or one saved version, to the next.
      *
      * Bytes 18h and 19h seem to contain the number of fonts and should
@@ -361,11 +361,11 @@ public class PocketWordDocument implements Document, PocketWordConstants {
                                  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                  0x00, 0x00, 0x00, 0x00 };
     }
-    
-    
+
+
     /*
      * This method writes the minimum font data that is used by the converter.
-     * Currently, all documents convert to 10 point Courier New.  Tahoma is 
+     * Currently, all documents convert to 10 point Courier New.  Tahoma is
      * always mentioned in Pocket Word files, however, even if it is not used.
      *
      * TODO:    Rewrite to allow for multiple fonts once font support issues
@@ -373,7 +373,7 @@ public class PocketWordDocument implements Document, PocketWordConstants {
      */
     private void loadFonts() {
         ByteArrayOutputStream fontData = new ByteArrayOutputStream();
-        
+
         try {
             fontData.write(new String("Tahoma").getBytes("UTF-16LE"));
             fontData.write(new byte[52]);       // Rest of font name?
@@ -381,24 +381,24 @@ public class PocketWordDocument implements Document, PocketWordConstants {
             fontData.write(new byte[] { 0x00, 0x00, 0x01, 0x00 } );
             fontData.write(new byte[] { 0x00, 0x00, 0x00, 0x00 } );
             fontData.write(new byte[] { 0x00, 0x00, 0x00, 0x00 } );
-            
+
             fonts.add(fontData);
-            
+
             fontData = new ByteArrayOutputStream();
-            
+
             fontData.write(new String("Courier New").getBytes("UTF-16LE"));
             fontData.write(new byte[42]);
             fontData.write(new byte[] { 0x14, 0x00, 0x04, 0x00 } );
             fontData.write(new byte[] { 0x01, 0x00, 0x00, 0x00 } );
             fontData.write(new byte[] { 0x00, 0x00, 0x15, 0x00 } );
-        
+
             // Next part indicates that this is the last font
             fontData.write(new byte[] { 0x05, 0x00, 0x01, 0x00 } );
-            
+
             fonts.add(fontData);
         }
         catch (IOException ioe) {
-            // Shouldn't happen as this is a memory based stream 
+            // Shouldn't happen as this is a memory based stream
         }
     }
 }

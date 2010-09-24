@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,7 +103,7 @@ private:
     osl::Mutex              maMutex;
 
     rtl::OUString           msNextVersion;
-    rtl::OUString           msDownloadPath;     
+    rtl::OUString           msDownloadPath;
     rtl::OUString           msDownloadFile;
     rtl::OUString           msDescriptionMsg;
     rtl::OUString           msChecking;         // RID_UPDATE_STR_CHECKING

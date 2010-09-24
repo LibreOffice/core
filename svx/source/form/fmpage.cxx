@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -237,7 +237,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
             // testen, ob es ein Protokoll-Typ ist, den ich anzeigen will
             INetProtocol aProtocol = aUrl.GetProtocol();
             static const INetProtocol s_aQuickHelpSupported[] =
-                {	INET_PROT_FTP, INET_PROT_HTTP, INET_PROT_FILE, INET_PROT_MAILTO, INET_PROT_NEWS,
+                {   INET_PROT_FTP, INET_PROT_HTTP, INET_PROT_FILE, INET_PROT_MAILTO, INET_PROT_NEWS,
                     INET_PROT_HTTPS, INET_PROT_JAVASCRIPT, INET_PROT_IMAP, INET_PROT_POP3,
                     INET_PROT_VIM, INET_PROT_LDAP
                 };

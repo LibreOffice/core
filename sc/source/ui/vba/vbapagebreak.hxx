@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,12 +46,12 @@ protected:
     css::uno::Reference< css::beans::XPropertySet > mxRowColPropertySet;
     css::sheet::TablePageBreakData maTablePageBreakData;
 public:
-    ScVbaPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent, 
+    ScVbaPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     css::uno::Reference< css::beans::XPropertySet >& xProps,
                     css::sheet::TablePageBreakData aTablePageBreakData) throw (css::uno::RuntimeException);
     virtual ~ScVbaPageBreak(){}
-    
+
     virtual sal_Int32 SAL_CALL getType( ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL setType(sal_Int32 type) throw (css::uno::RuntimeException);
 
@@ -69,14 +69,14 @@ typedef ScVbaPageBreak < ov::excel::XHPageBreak > ScVbaHPageBreak_BASE;
 class ScVbaHPageBreak :  public ScVbaHPageBreak_BASE
 {
 public:
-    ScVbaHPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent, 
+    ScVbaHPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     css::uno::Reference< css::beans::XPropertySet >& xProps,
                     css::sheet::TablePageBreakData aTablePageBreakData) throw (css::uno::RuntimeException):
               ScVbaHPageBreak_BASE( xParent,xContext,xProps,aTablePageBreakData ){}
-            
+
     virtual ~ScVbaHPageBreak(){}
-    
+
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
@@ -88,13 +88,13 @@ typedef ScVbaPageBreak < ov::excel::XVPageBreak > ScVbaVPageBreak_BASE;
 class ScVbaVPageBreak :  public ScVbaVPageBreak_BASE
 {
 public:
-    ScVbaVPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent, 
+    ScVbaVPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
                      const css::uno::Reference< css::uno::XComponentContext >& xContext,
                      css::uno::Reference< css::beans::XPropertySet >& xProps,
                      css::sheet::TablePageBreakData aTablePageBreakData) throw (css::uno::RuntimeException);
-            
+
     virtual ~ScVbaVPageBreak();
-    
+
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

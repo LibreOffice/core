@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
 {
     Reference < XExtendedCalendar > xOldCalendar( xCalendar );  // backup
     sal_Int32 i;
-    
+
     for (i = 0; i < sal::static_int_cast<sal_Int32>(lookupTable.size()); i++) {
         lookupTableItem *listItem = lookupTable[i];
         if (uniqueID == listItem->uniqueID) {
@@ -290,7 +290,7 @@ CalendarImpl::isValid() throw(RuntimeException)
         throw ERROR ;
 }
 
-OUString SAL_CALL 
+OUString SAL_CALL
 CalendarImpl::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
     throw (RuntimeException)
 {

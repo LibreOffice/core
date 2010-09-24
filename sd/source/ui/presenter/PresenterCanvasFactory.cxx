@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -205,7 +205,7 @@ Reference<rendering::XCanvas> PresenterCanvasFactory::CreateCanvasForSprite (
 {
     OSL_ASSERT(rxSharedWindow.is());
     (void)rxWindow.is();
-    
+
     SharedWindowContainer::iterator iDescriptor (
         mpSharedWindows->FindDescriptor(rxSharedWindow));
     if (iDescriptor != mpSharedWindows->end())
@@ -238,14 +238,14 @@ Reference<rendering::XCanvas> PresenterCanvasFactory::CreateCanvas (
     if (pWindow != NULL)
     {
         Sequence<Any> aArg (5);
-        
+
         // common: first any is VCL pointer to window (for VCL canvas)
         aArg[0] = makeAny(reinterpret_cast<sal_Int64>(pWindow));
         aArg[1] = Any();
         aArg[2] = makeAny(::com::sun::star::awt::Rectangle());
         aArg[3] = makeAny(sal_False);
         aArg[4] = makeAny(rxWindow);
-        
+
         Reference<lang::XMultiServiceFactory> xFactory (::comphelper::getProcessServiceFactory());
         return Reference<rendering::XCanvas>(
             xFactory->createInstanceWithArguments(

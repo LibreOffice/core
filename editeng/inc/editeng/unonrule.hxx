@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ const SvxNumRule& SvxGetNumRule( ::com::sun::star::uno::Reference< ::com::sun::s
 bool SvxGetNumRule( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > xRule, SvxNumRule& rNumRule );
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > SvxCreateNumRuleCompare() throw();
 
-class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper5< com::sun::star::container::XIndexReplace, com::sun::star::ucb::XAnyCompare, 
+class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper5< com::sun::star::container::XIndexReplace, com::sun::star::ucb::XAnyCompare,
     com::sun::star::lang::XUnoTunnel, com::sun::star::util::XCloneable, com::sun::star::lang::XServiceInfo >
 {
 private:
@@ -62,7 +62,7 @@ public:
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(com::sun::star::uno::RuntimeException) ;
-    virtual com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(com::sun::star::lang::IndexOutOfBoundsException, 
+    virtual com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(com::sun::star::lang::IndexOutOfBoundsException,
         com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException);
 
     //XElementAccess

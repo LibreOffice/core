@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,9 +107,9 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
 
         // 'translate' mnemonics
         pSalMenuItem->mText.SearchAndReplace( '~', '&' );
-        
+
         pSalMenuItem->mInfo.fMask = MIIM_TYPE | MIIM_STATE | MIIM_ID | MIIM_DATA;
-        pSalMenuItem->mInfo.fType = MFT_STRING; 
+        pSalMenuItem->mInfo.fType = MFT_STRING;
 #ifdef OWNERDRAW
         if( pItemData->pMenu && !pItemData->pMenu->IsMenuBar() )
             pSalMenuItem->mInfo.fType |= MFT_OWNERDRAW;
@@ -117,7 +117,7 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
 #endif
         pSalMenuItem->mInfo.dwTypeData = (LPWSTR) pSalMenuItem->mText.GetBuffer();
         pSalMenuItem->mInfo.cch = pSalMenuItem->mText.Len();
-        
+
         pSalMenuItem->mInfo.wID = pItemData->nId;
         pSalMenuItem->mInfo.dwItemData = (ULONG_PTR) pSalMenuItem; // user data
     }

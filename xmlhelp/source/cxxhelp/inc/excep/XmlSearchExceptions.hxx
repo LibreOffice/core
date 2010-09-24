@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,43 +31,43 @@
 
 
 namespace xmlsearch {
-  
+
     namespace excep {
-    
-        
+
+
         class XmlSearchException
         {
         public:
-      
+
             XmlSearchException( const rtl::OUString& message )
                 : _message( message )
             {
             }
-      
+
             rtl::OUString getMessage() const
             {
                 return _message;
             }
-      
-      
+
+
         private:
-            
+
             rtl::OUString _message;
-        }; 
-        
+        };
+
 
         class IOException
             : public virtual XmlSearchException
         {
         public:
-            
+
             IOException( const rtl::OUString& message )
                 : XmlSearchException( message )
             {
             }
         };
-        
-        
+
+
         class NoFactoryException
             : public virtual XmlSearchException
         {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,15 +38,15 @@ class SwNumRule;
 
 class NumberingPreview : public Window
 {
-    const SwNumRule* 	pActNum;
-    Font 				aStdFont;
-    long				nPageWidth;
-    const String* 		pOutlineNames;
-    BOOL				bPosition;
-    UINT16 				nActLevel;
+    const SwNumRule*    pActNum;
+    Font                aStdFont;
+    long                nPageWidth;
+    const String*       pOutlineNames;
+    BOOL                bPosition;
+    UINT16              nActLevel;
 
     protected:
-        virtual void		Paint( const Rectangle& rRect );
+        virtual void        Paint( const Rectangle& rRect );
 
     public:
         NumberingPreview(Window* pParent, const ResId& rResId ) :
@@ -54,15 +54,15 @@ class NumberingPreview : public Window
             pActNum(0),nPageWidth(0), pOutlineNames(0), bPosition(FALSE), nActLevel(USHRT_MAX) {}
         ~NumberingPreview();
 
-        void	SetNumRule(const SwNumRule* pNum)
+        void    SetNumRule(const SwNumRule* pNum)
                     {pActNum = pNum; Invalidate();};
-        void	SetPageWidth(long nPgWidth)
+        void    SetPageWidth(long nPgWidth)
                                 {nPageWidth = nPgWidth;}
-        void	SetOutlineNames(const String* pNames)
+        void    SetOutlineNames(const String* pNames)
                         {pOutlineNames = pNames;}
-        void	SetPositionMode()
+        void    SetPositionMode()
                         { bPosition = TRUE;}
-        void	SetLevel(USHORT nSet) {nActLevel = nSet;}
+        void    SetLevel(USHORT nSet) {nActLevel = nSet;}
 
 };
 

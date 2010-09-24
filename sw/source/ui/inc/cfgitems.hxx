@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class SwShdwCrsrOptionsTabPage;
 class SwDocEditDialog;
 
 SfxPrinter* GetPrt( ViewShell* );
-void 		SetPrt( SfxPrinter* );
+void        SetPrt( SfxPrinter* );
 
 
 /*--------OS 12.01.95 -----------------------------------
@@ -82,10 +82,10 @@ public:
                                                                 USHORT nWhich );
 
 
-    virtual SfxPoolItem*    	Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             	operator==( const SfxPoolItem& ) const;
-    void             			operator=( const SwDocDisplayItem& );
-    void 						FillViewOptions( SwViewOption& rVOpt) const;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int                 operator==( const SfxPoolItem& ) const;
+    void                        operator=( const SwDocDisplayItem& );
+    void                        FillViewOptions( SwViewOption& rVOpt) const;
 };
 /*--------OS 12.01.95 -----------------------------------
 Item fuer Einstellungsdialog, Elementeseite
@@ -94,22 +94,22 @@ class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
 {
     //view
     BOOL bHorzScrollbar :1;
-    BOOL bVertScrollbar	:1;
+    BOOL bVertScrollbar :1;
     BOOL bAnyRuler : 1;
     BOOL bHorzRuler     :1;
-    BOOL bVertRuler		:1;
+    BOOL bVertRuler     :1;
     BOOL bVertRulerRight:1;
     BOOL bSmoothScroll  :1;
     //visual aids
-    BOOL bCrosshair		:1;
-    BOOL bHandles		:1;
-    BOOL bBigHandles	:1;
+    BOOL bCrosshair     :1;
+    BOOL bHandles       :1;
+    BOOL bBigHandles    :1;
     //display
     BOOL bTable             :1;
-    BOOL bGraphic 			:1;
-    BOOL bDrawing 			:1;
-    BOOL bFieldName			:1;
-    BOOL bNotes				:1;
+    BOOL bGraphic           :1;
+    BOOL bDrawing           :1;
+    BOOL bFieldName         :1;
+    BOOL bNotes             :1;
 
     friend class SwContentOptPage;
 
@@ -122,9 +122,9 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
-    void             		operator=( const SwElemItem& );
+    void                    operator=( const SwElemItem& );
 
-    void 					FillViewOptions( SwViewOption& rVOpt) const;
+    void                    FillViewOptions( SwViewOption& rVOpt) const;
 
 };
 /*--------OS 12.01.95 -----------------------------------
@@ -148,7 +148,7 @@ public:
     virtual int          operator==( const SfxPoolItem& ) const;
 
     const rtl::OUString &GetFax() const              { return sFaxName; }
-    void		  SetFax( const String& rFax) { sFaxName = rFax; }
+    void          SetFax( const String& rFax) { sFaxName = rFax; }
 
 
     BOOL   IsPrintProspect() const      { return bPrintProspect; }
@@ -158,7 +158,7 @@ public:
     BOOL IsPrintGraphic () const { return bPrintGraphic; }
     BOOL IsPrintTable () const { return bPrintTable; }
     BOOL IsPrintDraw () const { return bPrintDraw; }
-    BOOL IsPrintControl	() const { return bPrintControl; }
+    BOOL IsPrintControl () const { return bPrintControl; }
     BOOL IsPrintLeftPage () const { return bPrintLeftPages; }
     BOOL IsPrintRightPage() const { return bPrintRightPages; }
     BOOL IsPrintReverse  () const { return bPrintReverse; }
@@ -193,15 +193,15 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
-    void             		operator=( const SwShadowCursorItem& );
+    void                    operator=( const SwShadowCursorItem& );
 
     void FillViewOptions( SwViewOption& rVOpt) const;
 
-    BYTE GetMode() const				{ return eMode; }
-    BOOL IsOn() const					{ return bOn; }
+    BYTE GetMode() const                { return eMode; }
+    BOOL IsOn() const                   { return bOn; }
 
-    void SetMode( BYTE eM ) 			{ eMode = eM; }
-    void SetOn( BOOL bFlag ) 			{ bOn = bFlag; }
+    void SetMode( BYTE eM )             { eMode = eM; }
+    void SetOn( BOOL bFlag )            { bOn = bFlag; }
 };
 
 #ifdef DBG_UTIL
@@ -215,14 +215,14 @@ class SW_DLLPUBLIC SwTestItem : public SfxPoolItem
     friend class SwTestTabPage;
     friend class SwDocEditDialog;
 
-    BOOL	bTest1:1;
-    BOOL	bTest2:1;
-    BOOL	bTest3:1;
-    BOOL	bTest4:1;
-    BOOL	bTest5:1;
-    BOOL	bTest6:1;
-    BOOL	bTest7:1;
-    BOOL	bTest8:1;
+    BOOL    bTest1:1;
+    BOOL    bTest2:1;
+    BOOL    bTest3:1;
+    BOOL    bTest4:1;
+    BOOL    bTest5:1;
+    BOOL    bTest6:1;
+    BOOL    bTest7:1;
+    BOOL    bTest8:1;
     BOOL    bTest9:1;
     BOOL    bTest10:1;
 

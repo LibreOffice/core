@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,7 +135,7 @@ namespace drawinglayer
                 // create primitive
                 const Primitive2DReference xRef(
                     new PolyPolygonColorPrimitive2D(
-                        basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(getObjectRange())), 
+                        basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(getObjectRange())),
                         rColors[0]));
                 aRetval[0] = xRef;
             }
@@ -150,7 +150,7 @@ namespace drawinglayer
                 // create solid fill
                 const Primitive2DReference xRef(
                     new PolyPolygonColorPrimitive2D(
-                        basegfx::B2DPolyPolygon(aNewPoly), 
+                        basegfx::B2DPolyPolygon(aNewPoly),
                         rColors[a + 1]));
                 aRetval[a + 1] = xRef;
             }
@@ -176,7 +176,7 @@ namespace drawinglayer
                 sal_uInt32 nIndex(0);
 
                 aRetval.realloc(nEntryCount);
-                
+
                 if(rColors.size())
                 {
                     basegfx::B2DRange aOuterPolyRange(aOuterPoly.getB2DRange());
@@ -210,7 +210,7 @@ namespace drawinglayer
             // prepare shape of the Unit Polygon
             basegfx::B2DPolygon aUnitPolygon;
 
-            if(attribute::GRADIENTSTYLE_RADIAL == getFillGradient().getStyle() 
+            if(attribute::GRADIENTSTYLE_RADIAL == getFillGradient().getStyle()
                 || attribute::GRADIENTSTYLE_ELLIPTICAL == getFillGradient().getStyle())
             {
                 aUnitPolygon = basegfx::tools::createPolygonFromCircle(
@@ -261,9 +261,9 @@ namespace drawinglayer
         }
 
         FillGradientPrimitive2D::FillGradientPrimitive2D(
-            const basegfx::B2DRange& rObjectRange, 
+            const basegfx::B2DRange& rObjectRange,
             const attribute::FillGradientAttribute& rFillGradient)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maObjectRange(rObjectRange),
             maFillGradient(rFillGradient)
         {
@@ -275,7 +275,7 @@ namespace drawinglayer
             {
                 const FillGradientPrimitive2D& rCompare = (FillGradientPrimitive2D&)rPrimitive;
 
-                return (getObjectRange() == rCompare.getObjectRange() 
+                return (getObjectRange() == rCompare.getObjectRange()
                     && getFillGradient() == rCompare.getFillGradient());
             }
 

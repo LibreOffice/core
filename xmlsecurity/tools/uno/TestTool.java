@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,8 +27,8 @@
 
 package com.sun.star.xml.security.uno;
 
-import javax.xml.parsers.DocumentBuilder; 
-import javax.xml.parsers.DocumentBuilderFactory;  
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import java.io.File;
@@ -93,7 +93,7 @@ import com.sun.star.xml.sax.XDocumentHandler;
 
 import com.sun.star.xml.crypto.*;
 import com.sun.star.xml.crypto.sax.*;
-    
+
 public class TestTool extends JFrame implements ActionListener
 {
     /*
@@ -104,7 +104,7 @@ public class TestTool extends JFrame implements ActionListener
     public static String ENCRYPTOR_COMPONENT = "com.sun.star.xml.crypto.sax.Encryptor";
     public static String DECRYPTOR_COMPONENT = "com.sun.star.xml.crypto.sax.Decryptor";
     public static String SAXEVENTKEEPER_COMPONENT = "com.sun.star.xml.crypto.sax.SAXEventKeeper";
-     
+
     /*
      * Java-based component names
      */
@@ -112,7 +112,7 @@ public class TestTool extends JFrame implements ActionListener
     public static String XMLSIGNATURE_COMPONENT_JAVA = "com.sun.star.xml.security.bridge.jxsec.XMLSignature_JxsecImpl";
     public static String XMLENCRYPTION_COMPONENT_JAVA = "com.sun.star.xml.security.bridge.jxsec.XMLEncryption_JxsecImpl";
     public static String XMLDOCUMENTWRAPPER_COMPONENT_JAVA = "com.sun.star.xml.security.bridge.jxsec.XMLDocumentWrapper_JxsecImpl";
-                    
+
     /*
      * C-based component names
      */
@@ -120,19 +120,19 @@ public class TestTool extends JFrame implements ActionListener
     public static String XMLSIGNATURE_COMPONENT_C = "com.sun.star.xml.crypto.XMLSignature";
     public static String XMLENCRYPTION_COMPONENT_C = "com.sun.star.xml.crypto.XMLEncryption";
     public static String XMLDOCUMENTWRAPPER_COMPONENT_C = "com.sun.star.xml.wrapper.XMLDocumentWrapper";
-    
+
     /* url resolver name */
     public static String UNOURLRESOLVER = "com.sun.star.bridge.UnoUrlResolver";
-    
+
     /*
      * connection URL
      */
     private String m_unoURL = "uno:socket,host=localhost,port=2002;urp;StarOffice.ServiceManager";
-    
+
     /* key file */
     private String m_javaTokenFile = null;
     private String m_nssTokenPath = null;
-    
+
     /* User Interfaces */
     private JButton m_goButton;
     private JButton m_stepButton;
@@ -151,21 +151,21 @@ public class TestTool extends JFrame implements ActionListener
     private JLabel m_saxChainLabel;
     private JTextField m_saxEventText;
     private JTable m_unsolvedReferenceTable;
-    
+
     /*
-     * whether a batch file is running, 
-     * if so, no message box is popped up 
+     * whether a batch file is running,
+     * if so, no message box is popped up
      */
     private boolean m_bIsBatchRunning = false;
-    
-    /* 
+
+    /*
      * whether the UI needs to be updated.
      * when user click the "go" button, the UI needs
      * not to be updated step by step for performance
      * reason
      */
     private boolean m_bIsUIUpdateSuppressed = false;
-    
+
     /*
      * three DOM tree adapter
      */
@@ -174,33 +174,33 @@ public class TestTool extends JFrame implements ActionListener
     private DomToTreeModelAdapter m_rightTreeModelAdapter;
 
     /*
-     * the current directory, which reserves the default 
+     * the current directory, which reserves the default
      * location when user open/save a file.
      */
     private File m_currentDirectory = null;
-    
+
     /*
      * the log file
      */
     private FileOutputStream m_logFileOutputStream = null;
-    
+
     /*
      * the thread which is parsing the current XML
      * file
      */
     private ParsingThread m_parsingThread;
-    
+
     /*
      * whether is exporting or importing
      */
     private boolean m_bIsExporting;
-    
+
     /*
      * whether java based component or c based component
      * is used now
      */
     private boolean m_bIsJavaBased;
-    
+
     /*
      * XML security component interface
      */
@@ -221,10 +221,10 @@ public class TestTool extends JFrame implements ActionListener
      * security framework controller
      */
     private XMLSecurityFrameworkController m_xmlSecurityFrameworkController = null;
-    
+
     /* org.w3c.dom.Document */
     private Document m_document;
-    
+
     /* represents whether "Go" or "Step" */
     private boolean stepMode = true;
 
@@ -245,55 +245,55 @@ public class TestTool extends JFrame implements ActionListener
         m_leftTreeModelAdapter = new DomToTreeModelAdapter(m_document);
         m_middleTreeModelAdapter = new DomToTreeModelAdapter(m_document);
         m_rightTreeModelAdapter = new DomToTreeModelAdapter(m_document);
-            
+
         m_parsingThread = null;
-            
+
         m_leftTree.setModel(m_leftTreeModelAdapter);
         m_middleTree.setModel(m_middleTreeModelAdapter);
         m_rightTree.setModel(m_rightTreeModelAdapter);
     }
-    
+
     /*
      * constructs the user interface.
      */
     private Container buildUI(int width, int height)
     {
         JPanel mainPanel = new JPanel();
-        
+
         int frameHeight = height-40;
         int leftWindowWidth = (width-40)/3;
         int middleWindowWidth = leftWindowWidth;
         int rightWindowWidth = leftWindowWidth;
         int leftPaneWidth = leftWindowWidth+middleWindowWidth;
         int frameWidth = leftPaneWidth + rightWindowWidth;
-    
+
         /* Make a nice border */
         EmptyBorder emptyBorder = new EmptyBorder(5,5,5,5);
         BevelBorder bevelBorder = new BevelBorder(BevelBorder.LOWERED);
         CompoundBorder compoundBorder = new CompoundBorder(emptyBorder,bevelBorder);
         mainPanel.setBorder(new CompoundBorder(compoundBorder,emptyBorder));
-        
+
         /* Set up the tree */
         m_leftTreeModelAdapter = new DomToTreeModelAdapter(m_document);
         m_middleTreeModelAdapter = new DomToTreeModelAdapter(m_document);
         m_rightTreeModelAdapter = new DomToTreeModelAdapter(m_document);
-        
+
         m_leftTree = new JTree(m_leftTreeModelAdapter);
         m_leftTextArea = new JTextArea();
         m_middleTree = new JTree(m_middleTreeModelAdapter);
         m_rightTree = new JTree(m_rightTreeModelAdapter);
-        
+
         ToolTipManager.sharedInstance().registerComponent(m_leftTree);
         ToolTipManager.sharedInstance().registerComponent(m_middleTree);
         ToolTipManager.sharedInstance().registerComponent(m_rightTree);
-        
+
         /* Builds left tab pane */
         JScrollPane leftTreePane = new JScrollPane(m_leftTree);
         JScrollPane leftTextPane = new JScrollPane(m_leftTextArea);
         m_leftTabPane= new JTabbedPane();
         m_leftTabPane.add("Tree View",leftTreePane);
         m_leftTabPane.add("Text View",leftTextPane);
-        
+
         /* Builds middle tree pane */
         JScrollPane middleTreePane = new JScrollPane(m_middleTree);
 
@@ -302,17 +302,17 @@ public class TestTool extends JFrame implements ActionListener
         rightTreePane.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Result"),
                         BorderFactory.createEmptyBorder(8,8,8,8)));
-        
-        m_leftTabPane.setPreferredSize(  
+
+        m_leftTabPane.setPreferredSize(
             new Dimension( leftWindowWidth, frameHeight ));
-        middleTreePane.setPreferredSize(  
+        middleTreePane.setPreferredSize(
             new Dimension( middleWindowWidth, frameHeight ));
-        rightTreePane.setPreferredSize(  
+        rightTreePane.setPreferredSize(
             new Dimension( rightWindowWidth, frameHeight ));
 
         /* Builds the SAX event text box */
         m_saxEventText = new JTextField();
-        
+
         /* Builds the unsolved reference table */
         m_unsolvedReferenceTable = new JTable(
                 new UnsolvedReferenceTableModel(this));
@@ -322,93 +322,93 @@ public class TestTool extends JFrame implements ActionListener
 
         /* Builds the SAX chain information label */
         m_saxChainLabel = new JLabel();
-        
+
         /* Builds the left pane */
         JPanel tabPaneWithSaxEventPane = new JPanel();
         tabPaneWithSaxEventPane.setLayout(new BorderLayout());
         tabPaneWithSaxEventPane.add("Center",m_leftTabPane);
         tabPaneWithSaxEventPane.add("South",new JScrollPane(m_saxEventText));
-        
-        JSplitPane leftPane = 
+
+        JSplitPane leftPane =
             new JSplitPane( JSplitPane.VERTICAL_SPLIT,
                 tabPaneWithSaxEventPane,
                 new JScrollPane(m_unsolvedReferenceTable));
         leftPane.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Original"),
                         BorderFactory.createEmptyBorder(8,8,8,8)));
-                        
+
         leftPane.setContinuousLayout( true );
         leftPane.setDividerLocation( frameHeight*2/3 );
-        leftPane.setPreferredSize( 
+        leftPane.setPreferredSize(
             new Dimension( leftWindowWidth, frameHeight ));
-        
+
         /* Builds the middle pane */
         JPanel bufferNodeWithSaxChainPane = new JPanel();
         bufferNodeWithSaxChainPane.setLayout(new BorderLayout());
         bufferNodeWithSaxChainPane.add("Center",m_bufferNodeTextArea);
         bufferNodeWithSaxChainPane.add("South",new JScrollPane(m_saxChainLabel));
-        
-        JSplitPane middlePane = 
+
+        JSplitPane middlePane =
             new JSplitPane( JSplitPane.VERTICAL_SPLIT,
                 middleTreePane,
                 new JScrollPane(bufferNodeWithSaxChainPane));
-                
+
         middlePane.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Insight SAXEventKeeper"),
                         BorderFactory.createEmptyBorder(8,8,8,8)));
-                
+
         middlePane.setContinuousLayout( true );
         middlePane.setDividerLocation( frameHeight/2+5 );
-        middlePane.setPreferredSize( 
+        middlePane.setPreferredSize(
             new Dimension( middleWindowWidth, frameHeight ));
 
         /* Builds the whole frame pane */
-        JSplitPane leftWithMiddlePane = 
+        JSplitPane leftWithMiddlePane =
             new JSplitPane( JSplitPane.HORIZONTAL_SPLIT,
                 leftPane,
                 middlePane );
         leftWithMiddlePane.setContinuousLayout( true );
         leftWithMiddlePane.setDividerLocation( leftWindowWidth );
-        leftWithMiddlePane.setPreferredSize( 
+        leftWithMiddlePane.setPreferredSize(
             new Dimension( leftPaneWidth + 10, frameHeight+10 ));
-        
-        JSplitPane framePane = 
+
+        JSplitPane framePane =
             new JSplitPane( JSplitPane.HORIZONTAL_SPLIT,
                 leftWithMiddlePane,
                 rightTreePane );
-                
-                
+
+
         framePane.setContinuousLayout( true );
         framePane.setDividerLocation(leftPaneWidth+10 );
-        framePane.setPreferredSize( 
+        framePane.setPreferredSize(
             new Dimension( frameWidth + 20, frameHeight+10 ));
-        
+
         /* Adds all GUI components to the main panel */
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add("Center", framePane );
-        
+
         m_openButton = new JButton("Open...");
         m_openButton.addActionListener(this);
-        
+
         m_goButton = new JButton("Go!");
         m_goButton.addActionListener(this);
-        
+
         m_stepButton = new JButton("Step");
         m_stepButton.addActionListener(this);
-        
+
         m_startButton = new JButton("Start");
         m_startButton.addActionListener(this);
         m_startButton.setEnabled(false);
-        
+
         m_isExportingButton = new JCheckBox("export, not import", true);
         m_isJavaComponentButton = new JCheckBox("use java component", false);
-        
+
         m_saveButton = new JButton("Save...");
         m_saveButton.addActionListener(this);
 
         m_batchButton = new JButton("Batch...");
         m_batchButton.addActionListener(this);
-        
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(m_batchButton);
         buttonPanel.add(m_openButton);
@@ -418,11 +418,11 @@ public class TestTool extends JFrame implements ActionListener
         buttonPanel.add(m_isExportingButton);
         buttonPanel.add(m_isJavaComponentButton);
         buttonPanel.add(m_saveButton);
-        
+
         mainPanel.add("South", buttonPanel);
-        
+
         enableGoButton(false);
-        
+
         return mainPanel;
     }
 
@@ -434,7 +434,7 @@ public class TestTool extends JFrame implements ActionListener
         m_goButton.setEnabled(enabled);
         m_stepButton.setEnabled(enabled);
     }
-    
+
     /*
      * updates the unsolved reference information.
      */
@@ -442,7 +442,7 @@ public class TestTool extends JFrame implements ActionListener
     {
         m_unsolvedReferenceTable.setModel(new UnsolvedReferenceTableModel(this));
     }
-    
+
     /*
      * adjusts the view of the tree in order to make the
      * particular Node into the focus tree leaf.
@@ -451,23 +451,23 @@ public class TestTool extends JFrame implements ActionListener
     {
         int i=0;
         int currentLine = 0;
-        
+
         while (i<tree.getRowCount())
         {
             TreePath treePath = tree.getPathForRow(i);
             tree.expandPath(treePath);
-            
+
             AdapterNode adapterNode = (AdapterNode)treePath.getLastPathComponent();
-            
+
             if (node == adapterNode.getNode())
             {
                 tree.addSelectionPath(treePath);
                 currentLine = i;
             }
-            
+
             ++i;
         }
-        
+
         tree.setCellRenderer(new XMLTreeCellRanderer(node));
         tree.scrollRowToVisible(currentLine);
     }
@@ -475,7 +475,7 @@ public class TestTool extends JFrame implements ActionListener
     /******************************************************************************
      * action listener related methods.
      ******************************************************************************/
-    
+
     /*
      * reads in a document, either the document is a file or
      * is a text paragraph.
@@ -493,7 +493,7 @@ public class TestTool extends JFrame implements ActionListener
         else
         {
             String text = m_leftTextArea.getText();
-            
+
             try
             {
                 parseStream(new ByteArrayInputStream(text.getBytes("UTF-8")));
@@ -502,11 +502,11 @@ public class TestTool extends JFrame implements ActionListener
             {
                 e.printStackTrace();
             }
-            
+
             m_leftTabPane.setSelectedIndex(0);
         }
     }
-    
+
     /*
      * save the result tree to a file.
      */
@@ -514,10 +514,10 @@ public class TestTool extends JFrame implements ActionListener
     {
         saveFile();
     }
-    
+
     /*
      * selects a batch file to excute.
-     */ 
+     */
     private void openBatch()
     {
         File f = openFile();
@@ -534,21 +534,21 @@ public class TestTool extends JFrame implements ActionListener
     {
         enableGoButton(false);
         m_parsingThread = null;
-        
+
         if (m_xmlSecurityFrameworkController != null)
         {
             m_xmlSecurityFrameworkController.endMission();
         }
-        
+
         updatesUIs();
-        
+
         m_xmlSecurityFrameworkController = null;
         freeComponents();
-        
+
         System.gc();
     }
-    
-    
+
+
     /******************************************************************************
      * UNO component related methods
      ******************************************************************************/
@@ -562,7 +562,7 @@ public class TestTool extends JFrame implements ActionListener
         {
             m_unoURL = new String(unoUrlString);
         }
-        
+
         try
         {
             m_xRemoteServiceManager = getRemoteServiceManager(m_unoURL);
@@ -572,7 +572,7 @@ public class TestTool extends JFrame implements ActionListener
             e.printStackTrace();
         }
     }
-    
+
     /*
      * creates UNO components.
      */
@@ -584,7 +584,7 @@ public class TestTool extends JFrame implements ActionListener
             String XMLSignature_comp;
             String XMLEncryption_comp;
             String tokenPath;
-            
+
             if (m_bIsJavaBased)
             {
                 SEInitializer_comp = SEINITIALIZER_COMPONENT_JAVA;
@@ -599,24 +599,24 @@ public class TestTool extends JFrame implements ActionListener
                 XMLEncryption_comp = XMLENCRYPTION_COMPONENT_C;
                 tokenPath = m_nssTokenPath;
             }
-                
+
             Object seInitializerObj = m_xRemoteServiceManager.createInstanceWithContext(
                 SEInitializer_comp, m_xRemoteContext);
-                
+
             if (seInitializerObj == null)
             {
                 freeComponents();
                 return false;
             }
-            
+
             m_xSEInitializer = (XSEInitializer)UnoRuntime.queryInterface(
-                        XSEInitializer.class, seInitializerObj); 
-                        
+                        XSEInitializer.class, seInitializerObj);
+
             m_xXMLSecurityContext = m_xSEInitializer.createSecurityContext(tokenPath);
-            
+
             Object xmlSignatureObj = m_xRemoteServiceManager.createInstanceWithContext(
                 XMLSignature_comp, m_xRemoteContext);
-                
+
             if (xmlSignatureObj == null)
             {
                 freeComponents();
@@ -624,11 +624,11 @@ public class TestTool extends JFrame implements ActionListener
             }
 
             m_xXMLSignature = (XXMLSignature)UnoRuntime.queryInterface(
-                        XXMLSignature.class, xmlSignatureObj); 
-            
+                        XXMLSignature.class, xmlSignatureObj);
+
             Object xmlEncryptionObj = m_xRemoteServiceManager.createInstanceWithContext(
                 XMLEncryption_comp, m_xRemoteContext);
-                
+
             if (xmlEncryptionObj == null)
             {
                 freeComponents();
@@ -636,8 +636,8 @@ public class TestTool extends JFrame implements ActionListener
             }
 
             m_xXMLEncryption = (XXMLEncryption)UnoRuntime.queryInterface(
-                        XXMLEncryption.class, xmlEncryptionObj); 
-                        
+                        XXMLEncryption.class, xmlEncryptionObj);
+
             return true;
         }
         catch(Exception e)
@@ -647,7 +647,7 @@ public class TestTool extends JFrame implements ActionListener
             return false;
         }
     }
-        
+
         /*
          * frees UNO components.
          */
@@ -660,7 +660,7 @@ public class TestTool extends JFrame implements ActionListener
                 m_xSEInitializer.freeSecurityContext(m_xXMLSecurityContext);
                 m_xXMLSecurityContext = null;
             }
-            
+
             m_xXMLSignature = null;
             m_xXMLEncryption = null;
             m_xSEInitializer = null;
@@ -670,13 +670,13 @@ public class TestTool extends JFrame implements ActionListener
             e.printStackTrace();
         }
     }
-    
+
     /*
      * getRemoteServiceManager
      */
-    private XMultiComponentFactory getRemoteServiceManager(String unoUrl) throws java.lang.Exception 
+    private XMultiComponentFactory getRemoteServiceManager(String unoUrl) throws java.lang.Exception
     {
-        if (m_xRemoteContext == null) 
+        if (m_xRemoteContext == null)
         {
             /*
              * First step: create local component context, get local servicemanager and
@@ -692,7 +692,7 @@ public class TestTool extends JFrame implements ActionListener
              */
             XUnoUrlResolver xUnoUrlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
                 XUnoUrlResolver.class, urlResolver );
-                
+
             /*
              * Second step: use xUrlResolver interface to import the remote StarOffice.ServiceManager,
              * retrieve its property DefaultContext and get the remote servicemanager
@@ -706,21 +706,21 @@ public class TestTool extends JFrame implements ActionListener
         }
         return m_xRemoteContext.getServiceManager();
     }
-    
+
 
     /******************************************************************************
      * XML related methods
      ******************************************************************************/
 
     /*
-     * removes all empty text node inside the particular element 
+     * removes all empty text node inside the particular element
      */
     private void removeEmptyText(Node node)
     {
         int type = node.getNodeType();
         NodeList children;
         int i;
-        
+
         switch (type)
         {
         case Node.DOCUMENT_NODE:
@@ -730,9 +730,9 @@ public class TestTool extends JFrame implements ActionListener
             {
                 Node nextSibling = child.getNextSibling();
                 int childType = child.getNodeType();
-                
+
                 if (childType==Node.TEXT_NODE)
-                {	
+                {
                     String message = child.getNodeValue().trim();
                     if (message == null || message.length()<=0)
                     {
@@ -743,7 +743,7 @@ public class TestTool extends JFrame implements ActionListener
                 {
                     removeEmptyText(child);
                 }
-                
+
                 child = nextSibling;
             }
             break;
@@ -762,22 +762,22 @@ public class TestTool extends JFrame implements ActionListener
             m_document = null;
             m_startButton.setEnabled(false);
             initUI();
-            
+
             /* factory.setValidating(true); */
             /* factory.setNamespaceAware(true); */
-            
-            try 
+
+            try
             {
                 DocumentBuilder builder = factory.newDocumentBuilder();
                 m_document = builder.parse(is);
                 m_startButton.setEnabled(true);
                 initUI();
             }
-            catch (ParserConfigurationException pce) 
+            catch (ParserConfigurationException pce)
             {
                 pce.printStackTrace();
             }
-            catch (IOException ioe) 
+            catch (IOException ioe)
             {
                 ioe.printStackTrace();
             }
@@ -792,7 +792,7 @@ public class TestTool extends JFrame implements ActionListener
     /******************************************************************************
      * file operation related methods
      ******************************************************************************/
-    
+
     /*
      * opens a file, and parses it into the original tree.
      */
@@ -810,21 +810,21 @@ public class TestTool extends JFrame implements ActionListener
         }
     }
 
-    
+
     /*
      * selects a file to open
      */
     private File openFile()
     {
         File rc = null;
-        
+
         JFileChooser fileChooser= new JFileChooser();
-        
+
         fileChooser.setDialogTitle("Select File To Open");
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-            
+
         fileChooser.setApproveButtonText("Ok");
-        
+
         if (m_currentDirectory == null)
         {
             fileChooser.rescanCurrentDirectory();
@@ -833,7 +833,7 @@ public class TestTool extends JFrame implements ActionListener
         {
             fileChooser.setCurrentDirectory(m_currentDirectory);
         }
-        
+
         fileChooser.setFileFilter(new XMLFileFilter());
 
         int result = fileChooser.showDialog(this,null);
@@ -842,19 +842,19 @@ public class TestTool extends JFrame implements ActionListener
             m_currentDirectory = fileChooser.getCurrentDirectory();
             rc = fileChooser.getSelectedFile();
         }
-        
+
         return rc;
     }
-    
+
     private void saveFile()
     {
         JFileChooser fileChooser= new JFileChooser();
-        
+
         fileChooser.setDialogTitle("Select File To Save");
         fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-            
+
         fileChooser.setApproveButtonText("Ok");
-        
+
         if (m_currentDirectory == null)
         {
             fileChooser.rescanCurrentDirectory();
@@ -863,7 +863,7 @@ public class TestTool extends JFrame implements ActionListener
         {
             fileChooser.setCurrentDirectory(m_currentDirectory);
         }
-        
+
         fileChooser.setFileFilter(new XMLFileFilter());
 
         int result = fileChooser.showDialog(this,null);
@@ -888,20 +888,20 @@ public class TestTool extends JFrame implements ActionListener
     private void runBatch(File f)
     {
         FileInputStream fis = null;
-        
+
         try
         {
             fis = new FileInputStream(f);
             StringBuffer commandBuffer = new StringBuffer();
-            
+
             m_logFileOutputStream = new FileOutputStream("TestTool-log.txt");
             m_bIsBatchRunning = true;
             int ch = 0;
-            
+
             while (ch != -1)
             {
                 ch = fis.read();
-                
+
                 if (ch != 0x0a && ch != -1)
                 {
                     if (ch != 0x0d)
@@ -943,7 +943,7 @@ public class TestTool extends JFrame implements ActionListener
                         {
                             m_isExportingButton.setSelected(false);
                         }
-                        
+
                         startsUp();
                         if (m_parsingThread != null)
                         {
@@ -957,7 +957,7 @@ public class TestTool extends JFrame implements ActionListener
                                 System.out.println("exception happen during batch:"+e);
                                 e.printStackTrace();
                             }
-                                                        
+
                             m_bIsUIUpdateSuppressed = false;
                             updatesUIs();
                         }
@@ -970,15 +970,15 @@ public class TestTool extends JFrame implements ActionListener
                         saveFile(new File(fileName));
                         m_logFileOutputStream.write("command end \n\n".getBytes());
                     }
-                    
+
                     commandBuffer = new StringBuffer();
                 }
             }
-    
+
             m_bIsBatchRunning = false;
             m_logFileOutputStream.close();
             m_logFileOutputStream = null;
-            
+
             fis.close();
             fis = null;
         }
@@ -1007,7 +1007,7 @@ public class TestTool extends JFrame implements ActionListener
     /******************************************************************************
      * others
      ******************************************************************************/
-    
+
     /*
      * starts up the operation.
      */
@@ -1017,20 +1017,20 @@ public class TestTool extends JFrame implements ActionListener
         {
             m_parsingThread = null;
         }
-        
+
         m_bIsExporting = m_isExportingButton.isSelected();
         m_bIsJavaBased = m_isJavaComponentButton.isSelected();
-        
+
         if (createComponents())
         {
             m_rightTreeEventCollector = new SAXEventCollector(this);
-            
+
             m_parsingThread = new ParsingThread(
                 m_document,
                 null,
                 this);
-            
-            m_xmlSecurityFrameworkController = 
+
+            m_xmlSecurityFrameworkController =
                 new XMLSecurityFrameworkController(
                     this,
                     m_bIsExporting,
@@ -1042,7 +1042,7 @@ public class TestTool extends JFrame implements ActionListener
                     m_xXMLEncryption,
                     m_xRemoteServiceManager,
                     m_xRemoteContext);
-                
+
             enableGoButton(true);
         }
         else
@@ -1050,15 +1050,15 @@ public class TestTool extends JFrame implements ActionListener
             showMessage("Error in creating XML Security Components!");
         }
     }
-    
+
 /**************************************************************************************
  * protected methods
  **************************************************************************************/
- 
+
     /******************************************************************************
      * UI related methods
      ******************************************************************************/
-    
+
     /*
      * updates the sax chain information.
      */
@@ -1074,7 +1074,7 @@ public class TestTool extends JFrame implements ActionListener
     {
         m_saxEventText.setText(event);
     }
-    
+
     /*
      * updates all information in the UI.
      */
@@ -1084,7 +1084,7 @@ public class TestTool extends JFrame implements ActionListener
         {
             m_leftTree.clearSelection();
             updatesTree(null, m_leftTree);
-            
+
             if (m_xmlSecurityFrameworkController != null)
             {
                 String bufferNodeTreeText = m_xmlSecurityFrameworkController.getBufferNodeTreeInformation();
@@ -1097,7 +1097,7 @@ public class TestTool extends JFrame implements ActionListener
                 {
                     m_middleTreeEventCollector = new SAXEventCollector(null);
                     m_xmlSecurityFrameworkController.getDocument(m_middleTreeEventCollector);
-                    
+
                     m_middleTreeModelAdapter = new DomToTreeModelAdapter(m_middleTreeEventCollector.getDocument());
                     m_middleTree.setModel(m_middleTreeModelAdapter);
                     updatesTree(null, m_middleTree);
@@ -1110,18 +1110,18 @@ public class TestTool extends JFrame implements ActionListener
                 m_middleTree.setVisible(false);
                 m_bufferNodeTextArea.setText("No XMLImporter/XMLExporter");
             }
-            
+
             if (m_rightTreeEventCollector != null)
             {
                 m_rightTreeModelAdapter = new DomToTreeModelAdapter((Document)m_rightTreeEventCollector.getDocument());
                 m_rightTree.setModel(m_rightTreeModelAdapter);
                 updatesTree((Node)m_rightTreeEventCollector.getCurrentElement(), m_rightTree);
             }
-    
+
             updatesUnsolvedReferencesInformation();
         }
     }
-    
+
     /*
      * shows a message.
      */
@@ -1135,7 +1135,7 @@ public class TestTool extends JFrame implements ActionListener
                 {
                     byte [] b = msg.getBytes();
                     m_logFileOutputStream.write("        ".getBytes());
-                    
+
                     for (int i=0; i<b.length; ++i)
                     {
                         m_logFileOutputStream.write(b[i]);
@@ -1162,7 +1162,7 @@ public class TestTool extends JFrame implements ActionListener
             else
             {
                 Object[] options = { "OK", "Go back to step mode" };
-                if (1 == JOptionPane.showOptionDialog(this, msg, "TestTool Notification", 
+                if (1 == JOptionPane.showOptionDialog(this, msg, "TestTool Notification",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                     null, options, options[0]))
                 {
@@ -1185,7 +1185,7 @@ public class TestTool extends JFrame implements ActionListener
     protected Vector getUnsolvedReferenceIds()
     {
         Vector rc;
-        
+
         if (m_xmlSecurityFrameworkController == null)
         {
             rc = new Vector();
@@ -1195,10 +1195,10 @@ public class TestTool extends JFrame implements ActionListener
             rc = ((XMLSecurityFrameworkController)m_xmlSecurityFrameworkController).
                 getUnsolvedReferenceIds();
         }
-        
+
         return rc;
     }
-    
+
     /*
      * gets all unsolved reference keeper ids.
      * a reference keeper id is the id which the SAXEventKeeper uses
@@ -1207,7 +1207,7 @@ public class TestTool extends JFrame implements ActionListener
     protected Vector getUnsolvedReferenceKeeperIds()
     {
         Vector rc;
-        
+
         if (m_xmlSecurityFrameworkController == null)
         {
             rc = new Vector();
@@ -1217,7 +1217,7 @@ public class TestTool extends JFrame implements ActionListener
             rc = ((XMLSecurityFrameworkController)m_xmlSecurityFrameworkController).
                 getUnsolvedReferenceKeeperIds();
         }
-        
+
         return rc;
     }
 
@@ -1229,7 +1229,7 @@ public class TestTool extends JFrame implements ActionListener
     protected Vector getUnsolvedReferenceRefNum()
     {
         Vector rc;
-        
+
         if (m_xmlSecurityFrameworkController == null)
         {
             rc = new Vector();
@@ -1239,7 +1239,7 @@ public class TestTool extends JFrame implements ActionListener
             rc = ((XMLSecurityFrameworkController)m_xmlSecurityFrameworkController).
                 getUnsolvedReferenceRefNum();
         }
-        
+
         return rc;
     }
 
@@ -1272,7 +1272,7 @@ public class TestTool extends JFrame implements ActionListener
                 {
                     if (stepMode) break;
                 }
-                
+
                 if (!notOver) endMission();
             }
         }
@@ -1299,14 +1299,14 @@ public class TestTool extends JFrame implements ActionListener
             openBatch();
         }
     }
-    
+
     /*
      * void-consturctor method
      */
     public TestTool()
     {
             getRootPane().putClientProperty("defeatSystemEventQueueCheck", Boolean.TRUE);
-            
+
             try
             {
                 m_currentDirectory = new File(System.getProperty("user.dir"));
@@ -1316,7 +1316,7 @@ public class TestTool extends JFrame implements ActionListener
             System.out.println("getProperty error :"+e);
         }
     }
-    
+
     /*
      * consturctor method with a specific connection URL
      */
@@ -1325,24 +1325,24 @@ public class TestTool extends JFrame implements ActionListener
         this();
         m_unoURL = new String(connecturl);
     }
-    
+
     public static void main(String argv[])
     {
-        Dimension screenSize = 
+        Dimension screenSize =
             Toolkit.getDefaultToolkit().getScreenSize();
-        
+
         TestTool tt;
-        
+
         if (argv.length < 1)
         {
             System.out.println("Usage: java TestTool [javaTokenFile] [nssTokenPath] [xml file]?");
             return;
         }
-        
+
         boolean hasFile = false;
         boolean hasBatch = false;
         String fileName = null;
-        
+
         if (argv.length >= 3)
         {
             if (argv[2].startsWith("-b"))
@@ -1356,25 +1356,25 @@ public class TestTool extends JFrame implements ActionListener
                 hasFile = true;
             }
         }
-        
+
         tt = new TestTool();
         tt.m_javaTokenFile = new String(argv[0]);
         tt.m_nssTokenPath = new String(argv[1]);
         tt.connectSO(null);
-        
+
         /* Set up a GUI framework */
         JFrame myFrame = new JFrame("XML Security Components Tester");
         myFrame.addWindowListener(
             new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {System.exit(0);}
-            }  
+            }
             );
-            
+
         myFrame.setContentPane(tt.buildUI(screenSize.width, screenSize.height));
         myFrame.pack();
         int w = screenSize.width-30;
         int h = screenSize.height-30;
-        myFrame.setLocation(screenSize.width/2 - w/2, 
+        myFrame.setLocation(screenSize.width/2 - w/2,
         screenSize.height/2 - h/2);
         myFrame.setSize(w, h);
         myFrame.setVisible(true);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,31 +72,31 @@ const sal_Char sAPI_Locale[] = "Locale";
 TYPEINIT1( XMLIndexAlphabeticalSourceContext, XMLIndexSourceBaseContext );
 
 XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
-    SvXMLImport& rImport, 
+    SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet)
-:	XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, sal_False)
-,	sMainEntryCharacterStyleName(RTL_CONSTASCII_USTRINGPARAM(sAPI_MainEntryCharacterStyleName))
-,	sUseAlphabeticalSeparators(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseAlphabeticalSeparators))
-,	sUseCombinedEntries(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseCombinedEntries))
-,	sIsCaseSensitive(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsCaseSensitive))
-,	sUseKeyAsEntry(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseKeyAsEntry))
-,	sUseUpperCase(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseUpperCase))
-,	sUseDash(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseDash))
-,	sUsePP(RTL_CONSTASCII_USTRINGPARAM(sAPI_UsePP))
-,	sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated"))
-,	sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM(sAPI_SortAlgorithm))
-,	sLocale(RTL_CONSTASCII_USTRINGPARAM(sAPI_Locale))
-,	bMainEntryStyleNameOK(sal_False)
-,	bSeparators(sal_False)
-,	bCombineEntries(sal_True)
-,	bCaseSensitive(sal_True)
-,	bEntry(sal_False)
-,	bUpperCase(sal_False)
-,	bCombineDash(sal_False)
-,	bCombinePP(sal_True)
-,	bCommaSeparated(sal_False)
+:   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, sal_False)
+,   sMainEntryCharacterStyleName(RTL_CONSTASCII_USTRINGPARAM(sAPI_MainEntryCharacterStyleName))
+,   sUseAlphabeticalSeparators(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseAlphabeticalSeparators))
+,   sUseCombinedEntries(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseCombinedEntries))
+,   sIsCaseSensitive(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsCaseSensitive))
+,   sUseKeyAsEntry(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseKeyAsEntry))
+,   sUseUpperCase(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseUpperCase))
+,   sUseDash(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseDash))
+,   sUsePP(RTL_CONSTASCII_USTRINGPARAM(sAPI_UsePP))
+,   sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated"))
+,   sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM(sAPI_SortAlgorithm))
+,   sLocale(RTL_CONSTASCII_USTRINGPARAM(sAPI_Locale))
+,   bMainEntryStyleNameOK(sal_False)
+,   bSeparators(sal_False)
+,   bCombineEntries(sal_True)
+,   bCaseSensitive(sal_True)
+,   bEntry(sal_False)
+,   bUpperCase(sal_False)
+,   bCombineDash(sal_False)
+,   bCombinePP(sal_True)
+,   bCommaSeparated(sal_False)
 {
 }
 
@@ -105,7 +105,7 @@ XMLIndexAlphabeticalSourceContext::~XMLIndexAlphabeticalSourceContext()
 }
 
 void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
-    enum IndexSourceParamEnum eParam, 
+    enum IndexSourceParamEnum eParam,
     const OUString& rValue)
 {
     sal_Bool bTmp;
@@ -115,7 +115,7 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
         case XML_TOK_INDEXSOURCE_MAIN_ENTRY_STYLE:
             {
                 sMainEntryStyleName = rValue;
-                OUString sDisplayStyleName = GetImport().GetStyleDisplayName( 
+                OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
                     XML_STYLE_FAMILY_TEXT_TEXT, sMainEntryStyleName );
                 const Reference < ::com::sun::star::container::XNameContainer >&
                     rStyles = GetImport().GetTextImport()->GetTextStyles();
@@ -247,7 +247,7 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
     XMLIndexSourceBaseContext::EndElement();
 }
 
-SvXMLImportContext* XMLIndexAlphabeticalSourceContext::CreateChildContext( 
+SvXMLImportContext* XMLIndexAlphabeticalSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
@@ -255,16 +255,16 @@ SvXMLImportContext* XMLIndexAlphabeticalSourceContext::CreateChildContext(
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
          IsXMLToken( rLocalName, XML_ALPHABETICAL_INDEX_ENTRY_TEMPLATE ) )
     {
-        return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet, 
+        return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
                                            nPrefix, rLocalName,
                                            aLevelNameAlphaMap,
                                            XML_OUTLINE_LEVEL,
                                            aLevelStylePropNameAlphaMap,
                                            aAllowedTokenTypesAlpha);
     }
-    else 
+    else
     {
-        return XMLIndexSourceBaseContext::CreateChildContext(nPrefix, 
+        return XMLIndexSourceBaseContext::CreateChildContext(nPrefix,
                                                              rLocalName,
                                                              xAttrList);
     }

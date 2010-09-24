@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,15 +24,15 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_DriverPropertyInfo_idl__ 
-#define __com_sun_star_sdbc_DriverPropertyInfo_idl__ 
- 
- module com {  module sun {  module star {  module sdbc { 
- 
- 
+#ifndef __com_sun_star_sdbc_DriverPropertyInfo_idl__
+#define __com_sun_star_sdbc_DriverPropertyInfo_idl__
+
+ module com {  module sun {  module star {  module sdbc {
+
+
 /** describes the driver properties for making a connection.
-    
-    
+
+
     <p>
     The DriverPropertyInfo is of interest only to advanced programmers
     who need to interact with a driver to discover and supply properties
@@ -43,45 +43,45 @@ published struct DriverPropertyInfo
 {
     /** is the name of the property.
      */
-    string Name; 
- 
-     
+    string Name;
+
+
     /** is a brief description of the property, which may be null.
      */
-    string Description; 
- 
-     
+    string Description;
+
+
     /** is
         <TRUE/>
         if a value must be supplied for this property
-        during 
+        during
         <code>Driver.connect</code>
         and
         <FALSE/>
         otherwise.
      */
-    boolean IsRequired; 
- 
-     
+    boolean IsRequired;
+
+
     /** specifies the current value of the property,
         based on the driver-supplied default values.  This field
         may be empty if no value is known.
      */
-    string Value; 
- 
-     
-    /** contains a sequence of possible values if the value for the field 
+    string Value;
+
+
+    /** contains a sequence of possible values if the value for the field
             <code>DriverPropertyInfo.value</code>
-            may be selected 
+            may be selected
             from a particular set of values; otherwise empty.
      */
-    sequence<string> Choices; 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    sequence<string> Choices;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

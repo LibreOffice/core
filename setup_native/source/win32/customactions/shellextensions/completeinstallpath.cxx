@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,22 +40,22 @@
 
 #ifdef UNICODE
 #define _UNICODE
-#define _tstring	wstring
+#define _tstring    wstring
 #else
-#define _tstring	string
+#define _tstring    string
 #endif
 #include <tchar.h>
 #include <string>
 
 using namespace std;
 
-namespace 
+namespace
 {
     std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
     {
-        std::_tstring	result;
-        TCHAR	szDummy[1] = TEXT("");
-        DWORD	nChars = 0;
+        std::_tstring   result;
+        TCHAR   szDummy[1] = TEXT("");
+        DWORD   nChars = 0;
 
         if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
         {
@@ -66,7 +66,7 @@ namespace
             result = buffer;
         }
 
-        return	result;
+        return  result;
     }
 } // namespace
 
@@ -78,49 +78,49 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
     // this causes in an update installation, that INSTALLLOCATION is set to "c:\program files",
     // so that in an OOo 3.3 or later, the directory "program" or "share" are directly created
     // below "c:\program files".
-    
-    TCHAR	szValue[8192];
-    DWORD	nValueSize = sizeof(szValue);
-    HKEY	hKey;
-    std::_tstring	sInstDir;
-    std::_tstring	mystr;
 
-    // Reading property OFFICEDIRHOSTNAME_, that contains the part of the path behind 
+    TCHAR   szValue[8192];
+    DWORD   nValueSize = sizeof(szValue);
+    HKEY    hKey;
+    std::_tstring   sInstDir;
+    std::_tstring   mystr;
+
+    // Reading property OFFICEDIRHOSTNAME_, that contains the part of the path behind
     // the program files folder.
-    
-    std::_tstring	sInstallLocation = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
-    std::_tstring	sOfficeDirHostname = GetMsiProperty( handle, TEXT("OFFICEDIRHOSTNAME_") );
-    
+
+    std::_tstring   sInstallLocation = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
+    std::_tstring   sOfficeDirHostname = GetMsiProperty( handle, TEXT("OFFICEDIRHOSTNAME_") );
+
     // If sInstallLocation ends with (contains) the string sOfficeDirHostname,
     // INSTALLLOCATION is good and nothing has to be done here.
-    
+
     bool pathCompletionRequired = true;
 
     if ( _tcsstr( sInstallLocation.c_str(), sOfficeDirHostname.c_str() ) )
     {
-        pathCompletionRequired = false;  // nothing to do 
+        pathCompletionRequired = false;  // nothing to do
         // mystr = "Nothing to do, officedir is included into installlocation";
         // MessageBox( NULL, mystr.c_str(), "It is part of installlocation", MB_OK );
     }
-    
+
     // If the path INSTALLLOCATION does not end with this string, INSTALLLOCATION is maybe
     // transfered from an OOo 3.0, OOo 3.1 and OOo 3.2 and need to be changed therefore.
 
     if ( pathCompletionRequired )
     {
-        std::_tstring	sManufacturer = GetMsiProperty( handle, TEXT("Manufacturer") );
-        std::_tstring	sDefinedName = GetMsiProperty( handle, TEXT("DEFINEDPRODUCT") );
-        std::_tstring	sUpgradeCode = GetMsiProperty( handle, TEXT("UpgradeCode") );
+        std::_tstring   sManufacturer = GetMsiProperty( handle, TEXT("Manufacturer") );
+        std::_tstring   sDefinedName = GetMsiProperty( handle, TEXT("DEFINEDPRODUCT") );
+        std::_tstring   sUpgradeCode = GetMsiProperty( handle, TEXT("UpgradeCode") );
 
         // sUpdateVersion can be "3.0", "3.1" or "3.2"
 
-        std::_tstring	sProductKey30 = "Software\\" + sManufacturer + "\\" + sDefinedName +
+        std::_tstring   sProductKey30 = "Software\\" + sManufacturer + "\\" + sDefinedName +
                                             "\\" + "3.0" + "\\" + sUpgradeCode;
 
-        std::_tstring	sProductKey31 = "Software\\" + sManufacturer + "\\" + sDefinedName +
+        std::_tstring   sProductKey31 = "Software\\" + sManufacturer + "\\" + sDefinedName +
                                             "\\" + "3.1" + "\\" + sUpgradeCode;
 
-        std::_tstring	sProductKey32 = "Software\\" + sManufacturer + "\\" + sDefinedName +
+        std::_tstring   sProductKey32 = "Software\\" + sManufacturer + "\\" + sDefinedName +
                                             "\\" + "3.2" + "\\" + sUpgradeCode;
 
         // mystr = "ProductKey: " + sProductKey;
@@ -128,7 +128,7 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
 
         // mystr = "Checking registry";
         // MessageBox( NULL, mystr.c_str(), "registry search", MB_OK );
-    
+
         bool oldVersionExists = false;
 
         if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey30.c_str(), &hKey ) )
@@ -139,29 +139,29 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
         else if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey31.c_str(), &hKey ) )
         {
             oldVersionExists = true;
-            RegCloseKey( hKey );		
+            RegCloseKey( hKey );
         }
         else if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey32.c_str(), &hKey ) )
         {
             oldVersionExists = true;
-            RegCloseKey( hKey );		
+            RegCloseKey( hKey );
         }
         else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey30.c_str(), &hKey ) )
         {
             oldVersionExists = true;
-            RegCloseKey( hKey );		
+            RegCloseKey( hKey );
         }
         else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey31.c_str(), &hKey ) )
         {
             oldVersionExists = true;
-            RegCloseKey( hKey );		
+            RegCloseKey( hKey );
         }
         else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey32.c_str(), &hKey ) )
         {
             oldVersionExists = true;
-            RegCloseKey( hKey );		
+            RegCloseKey( hKey );
         }
-    
+
         if ( oldVersionExists )
         {
             // Adding the new path content sOfficeDirHostname

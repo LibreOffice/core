@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,26 +40,26 @@ TODO: gibt es noch irgend welche Star-Basic Besonderheiten ?
 BEMERKUNG: Visual-Basic behandelt folgende (ung"ultige) Format-Strings
       wie angezeigt:
 
-        ##0##.##0##		--> ##000.000##
+        ##0##.##0##     --> ##000.000##
 
       (diese Klasse verh"alt sich genau so).
 */
 
-#include <stdio.h>			// f"ur: sprintf()
-#include <float.h>			// f"ur: DBL_DIG, DBL_EPSILON
-#include <math.h>			// f"ur: floor(), fabs(), log10(), pow()
+#include <stdio.h>          // f"ur: sprintf()
+#include <float.h>          // f"ur: DBL_DIG, DBL_EPSILON
+#include <math.h>           // f"ur: floor(), fabs(), log10(), pow()
 
 //=================================================================
 //=========================== DEFINES =============================
 //=================================================================
 
-#define _NO_DIGIT					-1
+#define _NO_DIGIT                   -1
 
-#define MAX_NO_OF_EXP_DIGITS		5
+#define MAX_NO_OF_EXP_DIGITS        5
                     // +4 wegen dem Wertebereich: zwischen -308 und +308
                     // +1 f"ur abschliessende 0
-#define MAX_NO_OF_DIGITS			DBL_DIG
-#define MAX_DOUBLE_BUFFER_LENGTH	MAX_NO_OF_DIGITS + 9
+#define MAX_NO_OF_DIGITS            DBL_DIG
+#define MAX_DOUBLE_BUFFER_LENGTH    MAX_NO_OF_DIGITS + 9
                     // +1 f"ur Vorzeichen
                     // +1 f"ur Ziffer vor dem Dezimal-Punkt
                     // +1 f"ur Dezimal-Punkt
@@ -68,38 +68,38 @@ BEMERKUNG: Visual-Basic behandelt folgende (ung"ultige) Format-Strings
                     // +1 f"ur abschliessende 0
 
 // Defines f"ur die Ziffern:
-#define ASCII_0	  					'0'	// 48
-#define ASCII_9						'9'	// 57
+#define ASCII_0                     '0' // 48
+#define ASCII_9                     '9' // 57
 
-#define CREATE_1000SEP_CHAR 		'@'
+#define CREATE_1000SEP_CHAR         '@'
 
-#define FORMAT_SEPARATOR 			';'
+#define FORMAT_SEPARATOR            ';'
 
 // vordefinierte Formate f"ur den Format$()-Befehl:
-#define BASICFORMAT_GENERALNUMBER	"General Number"
-#define BASICFORMAT_CURRENCY		"Currency"
-#define BASICFORMAT_FIXED			"Fixed"
-#define BASICFORMAT_STANDARD		"Standard"
-#define BASICFORMAT_PERCENT			"Percent"
-#define BASICFORMAT_SCIENTIFIC		"Scientific"
-#define BASICFORMAT_YESNO     		"Yes/No"
-#define BASICFORMAT_TRUEFALSE  		"True/False"
-#define BASICFORMAT_ONOFF	  		"On/Off"
+#define BASICFORMAT_GENERALNUMBER   "General Number"
+#define BASICFORMAT_CURRENCY        "Currency"
+#define BASICFORMAT_FIXED           "Fixed"
+#define BASICFORMAT_STANDARD        "Standard"
+#define BASICFORMAT_PERCENT         "Percent"
+#define BASICFORMAT_SCIENTIFIC      "Scientific"
+#define BASICFORMAT_YESNO           "Yes/No"
+#define BASICFORMAT_TRUEFALSE       "True/False"
+#define BASICFORMAT_ONOFF           "On/Off"
 
-#define EMPTYFORMATSTRING			""
+#define EMPTYFORMATSTRING           ""
 
 // Bem.: Visual-Basic hat bei Floating-Point-Zahlen maximal 12 Stellen
-//		 nach dem Dezimal-Punkt.
+//       nach dem Dezimal-Punkt.
 // Alle Format-Strings sind kompatibel zu Visual-Basic:
-#define GENERALNUMBER_FORMAT		"0.############"
+#define GENERALNUMBER_FORMAT        "0.############"
             // max. 12 Stellen in Visual-Basic !
-#define CURRENCY_FORMAT				"@$0.00;@($0.00)"
-#define FIXED_FORMAT				"0.00"
-#define STANDARD_FORMAT				"@0.00"
-#define PERCENT_FORMAT				"0.00%"
-#define SCIENTIFIC_FORMAT			"#.00E+00"
+#define CURRENCY_FORMAT             "@$0.00;@($0.00)"
+#define FIXED_FORMAT                "0.00"
+#define STANDARD_FORMAT             "@0.00"
+#define PERCENT_FORMAT              "0.00%"
+#define SCIENTIFIC_FORMAT           "#.00E+00"
 // BEMERKUNG: das Zeichen @ bedeutet, das Tausender-Separatoren erzeugt
-//			  weden sollen. Dies ist eine StarBasic 'Erweiterung'.
+//            weden sollen. Dies ist eine StarBasic 'Erweiterung'.
 
 //=================================================================
 
@@ -144,7 +144,7 @@ SbxBasicFormater::SbxBasicFormater( sal_Unicode _cDecPoint, sal_Unicode _cThousa
 /*
 void SbxBasicFormater::ShowError( char * sErrMsg )
 {
-//	cout << "ERROR in Format$(): " << sErrMsg << endl;
+//  cout << "ERROR in Format$(): " << sErrMsg << endl;
 }
 */
 // verschiebt alle Zeichen des Strings, angefangen von der nStartPos,
@@ -396,7 +396,7 @@ short SbxBasicFormater::GetDigitAtPos( double dNumber, short nPos,
     nMaxDigit = (short)get_number_of_digits( dNumber );
     // f"uhrende Ziffern 'l"oschen'
     // Bem.: Fehler nur bei Zahlen gr"osser 0, d.h. bei Ziffern vor dem
-    //		 Dezimal-Punkt
+    //       Dezimal-Punkt
     if( nMaxDigit<nPos && !bFoundFirstDigit && nPos>=0 )
         return _NO_DIGIT;
     // Ziffer gefunden, setze Flag:
@@ -422,7 +422,7 @@ short SbxBasicFormater::RoundDigit( double dNumber )
     // ist der Wertebereich g"ultig ?
     if( dNumber<0.0 || dNumber>10.0 )
         return -1;
-    short nTempHigh = (short)(dNumber+0.5);	// ggf. floor( )
+    short nTempHigh = (short)(dNumber+0.5); // ggf. floor( )
     return nTempHigh;
 }
 
@@ -434,7 +434,7 @@ short SbxBasicFormater::RoundDigit( double dNumber )
 // werden muss
 String SbxBasicFormater::GetPosFormatString( const String& sFormatStrg, BOOL & bFound )
 {
-    bFound = FALSE;		// default...
+    bFound = FALSE;     // default...
     USHORT nPos = sFormatStrg.Search( FORMAT_SEPARATOR );
 
     if( nPos!=STRING_NOTFOUND )
@@ -453,7 +453,7 @@ String SbxBasicFormater::GetPosFormatString( const String& sFormatStrg, BOOL & b
 // siehe auch GetPosFormatString()
 String SbxBasicFormater::GetNegFormatString( const String& sFormatStrg, BOOL & bFound )
 {
-    bFound = FALSE;		// default...
+    bFound = FALSE;     // default...
     USHORT nPos = sFormatStrg.Search( FORMAT_SEPARATOR );
 
     if( nPos!=STRING_NOTFOUND )
@@ -480,7 +480,7 @@ String SbxBasicFormater::GetNegFormatString( const String& sFormatStrg, BOOL & b
 // siehe auch GetPosFormatString()
 String SbxBasicFormater::Get0FormatString( const String& sFormatStrg, BOOL & bFound )
 {
-    bFound = FALSE;		// default...
+    bFound = FALSE;     // default...
     USHORT nPos = sFormatStrg.Search( FORMAT_SEPARATOR );
 
     if( nPos!=STRING_NOTFOUND )
@@ -512,7 +512,7 @@ String SbxBasicFormater::Get0FormatString( const String& sFormatStrg, BOOL & bFo
 // siehe auch GetPosFormatString()
 String SbxBasicFormater::GetNullFormatString( const String& sFormatStrg, BOOL & bFound )
 {
-    bFound = FALSE;		// default...
+    bFound = FALSE;     // default...
     USHORT nPos = sFormatStrg.Search( FORMAT_SEPARATOR );
 
     if( nPos!=STRING_NOTFOUND )
@@ -583,7 +583,7 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
                     nNoOfDigitsLeft++;
 // TODO  hier ggf. bessere Fehler-"Uberpr"ufung der Mantisse auf g"ultige Syntax (siehe Grammatik)
                     // ACHTUNG: 'undefiniertes' Verhalten falls # und 0
-                    //	 gemischt werden !!!
+                    //   gemischt werden !!!
                     // BEMERKUNG: eigentlich sind #-Platzhalter bei Scientific
                     //   Darstellung vor dem Dezimal-Punkt sinnlos !
                     if( c=='#' )
@@ -591,16 +591,16 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
                 }
                 else if( nState==1 )
                     nNoOfDigitsRight++;
-                else if( nState==-1 )	// suche 0 im Exponent
+                else if( nState==-1 )   // suche 0 im Exponent
                 {
-                    if( c=='#' )	// # schaltet den Zustand weiter
+                    if( c=='#' )    // # schaltet den Zustand weiter
                     {
                         nNoOfOptionalExponentDigits++;
                         nState = -2;
                     }
                     nNoOfExponentDigits++;
                 }
-                else if( nState==-2 )	// suche # im Exponent
+                else if( nState==-2 )   // suche # im Exponent
                 {
                     if( c=='0' )
                         // ERROR: 0 nach # im Exponent ist NICHT erlaubt !!
@@ -612,14 +612,14 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
             case '.':
                 nState++;
                 if( nState>1 )
-                    return -1;	// ERROR: zu viele Dezimal-Punkte
+                    return -1;  // ERROR: zu viele Dezimal-Punkte
                 break;
             case '%':
                 bPercent = TRUE;
                 /* old:
                 bPercent++;
                 if( bPercent>1 )
-                    return -2;	// ERROR: zu viele Prozent-Zeichen
+                    return -2;  // ERROR: zu viele Prozent-Zeichen
                 */
                 break;
             case '(':
@@ -632,19 +632,19 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
                 // Zeichen gepr"uft
                 if( ch!=0 && (ch==',' || ch=='.') )
                     nMultipleThousandSeparators++;
-            }	break;
+            }   break;
             case 'e':
             case 'E':
                 // #i13821 not when no digits before
                 if( nNoOfDigitsLeft > 0 || nNoOfDigitsRight > 0 )
                 {
-                     nState = -1;	// breche jetzt das Z"ahlen der Stellen ab
+                     nState = -1;   // breche jetzt das Z"ahlen der Stellen ab
                     bScientific = TRUE;
                 }
                 /* old:
                 bScientific++;
                 if( bScientific>1 )
-                    return -3;	// ERROR: zu viele Exponent-Zeichen
+                    return -3;  // ERROR: zu viele Exponent-Zeichen
                 */
                 break;
             // EIGENES Kommando-Zeichen, das die Erzeugung der
@@ -667,10 +667,10 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                                 const String& sFormatStrg, String& sReturnStrg,
                                 BOOL bCreateSign )
 {
-    short 	/*nErr,*/nNoOfDigitsLeft,nNoOfDigitsRight,nNoOfOptionalDigitsLeft,
+    short   /*nErr,*/nNoOfDigitsLeft,nNoOfDigitsRight,nNoOfOptionalDigitsLeft,
             nNoOfExponentDigits,nNoOfOptionalExponentDigits,
             nMultipleThousandSeparators;
-    BOOL 	bPercent,bCurrency,bScientific,bGenerateThousandSeparator;
+    BOOL    bPercent,bCurrency,bScientific,bGenerateThousandSeparator;
 
     // Initialisiere den Return-String
     sReturnStrg = String();
@@ -737,7 +737,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
         if( bScientific )
         {
             //if( nNoOfOptionalDigitsLeft>0 )
-            //	ShowError( "# in scientific-format in front of the decimal-point has no effect" );
+            //  ShowError( "# in scientific-format in front of the decimal-point has no effect" );
             // beim Exponent ggf. "uberz"ahlige Stellen vor dem Komma abziehen
             dExponent = dExponent - (double)(nNoOfDigitsLeft-1);
             nDigitPos = nMaxDigit;
@@ -816,13 +816,13 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                         // muss f"ur eine leere Stelle eventuell eine 0 ausgegeben werden ?
                         if( nMaxDigit<nDigitPos && ( c=='0' || bZeroSpaceOn ) )
                         {
-                            AppendDigit( sReturnStrg,0 );		// Ja
+                            AppendDigit( sReturnStrg,0 );       // Ja
                             // jetzt wurde wirklich eine Ziffer ausgegeben, Flag setzen
                             bFirstDigit = FALSE;
                             bZeroSpaceOn = 1;
                             // BEM.: bei Visual-Basic schaltet die erste 0 f"ur alle
                             //       nachfolgenden # (bis zum Dezimal-Punkt) die 0 ein,
-                            //		 dieses Verhalten wird hier mit dem Flag simmuliert.
+                            //       dieses Verhalten wird hier mit dem Flag simmuliert.
                             // muss ggf. ein Tausender-Trennzeichen erzeugt werden?
                             if( bGenerateThousandSeparator && ( c=='0' || nMaxDigit>=nDigitPos ) && nDigitPos>0 && (nDigitPos % 3 == 0) )
                                 StrAppendChar( sReturnStrg,cThousandSep );
@@ -869,7 +869,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                         }
                         // muss f"ur eine leere Stelle eventuell eine 0 ausgegeben werden ?
                         if( nMaxExponentDigit<nExponentPos && c=='0' )
-                            AppendDigit( sReturnStrg,0 );		// Ja
+                            AppendDigit( sReturnStrg,0 );       // Ja
                         else
 #ifdef _with_sprintf
                             AppendDigit( sReturnStrg,GetDigitAtPosExpScan( dExponent,nExponentPos,bFoundFirstDigit ) );
@@ -880,7 +880,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                     }
                     break;
                 case '.':
-                    if( bDigitPosNegative )	// #i13821: If no digits before .
+                    if( bDigitPosNegative ) // #i13821: If no digits before .
                     {
                         bDigitPosNegative = false;
                         nDigitPos = 0;
@@ -940,7 +940,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                     nState++;
                     // gebe Exponent-Zeichen aus
                     StrAppendChar( sReturnStrg,c );
-                    // i++;	// MANIPULATION der Schleifen-Variable !
+                    // i++; // MANIPULATION der Schleifen-Variable !
                     c = sFormatStrg.GetChar( ++i );
                     // und gebe Vorzeichen / Exponent aus
                     if( c!=0 )
@@ -960,18 +960,18 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                                 StrAppendChar( sReturnStrg,'+' );
                         }
                         //else
-                        //	ShowError( "operator e/E did not find + or -" );
+                        //  ShowError( "operator e/E did not find + or -" );
                     }
                     //else
-                    //	ShowError( "operator e/E ended with 0" );
+                    //  ShowError( "operator e/E ended with 0" );
                     break;
                 case ',':
                     // ACHTUNG: nur falls Zahl bisher ausgegeben wurde
-                    //			das Zeichen ausgeben
+                    //          das Zeichen ausgeben
                     ////--> Siehe Kommentar vom 11.7. in AnalyseFormatString()
                     ////if( !bFirstDigit )
-                    ////	// gebe Tausender-Trennzeichen aus
-                    ////	StrAppendChar( sReturnStrg,cThousandSep );
+                    ////    // gebe Tausender-Trennzeichen aus
+                    ////    StrAppendChar( sReturnStrg,cThousandSep );
                     break;
                 case ';':
                     break;
@@ -1006,7 +1006,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                     if( c!=0 )
                         StrAppendChar( sReturnStrg,c );
                     //else
-                    //	ShowError( "operator \\ ended with 0" );
+                    //  ShowError( "operator \\ ended with 0" );
                     break;
                 case CREATE_1000SEP_CHAR:
                     // hier ignorieren, Aktion wurde schon in

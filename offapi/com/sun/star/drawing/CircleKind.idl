@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,54 +24,54 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_CircleKind_idl__ 
-#define __com_sun_star_drawing_CircleKind_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module drawing {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_drawing_CircleKind_idl__
+#define __com_sun_star_drawing_CircleKind_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
 // DocMerge from xml: enum com::sun::star::drawing::CircleKind
 /** This enumeration defines a circle.
  */
 published enum CircleKind
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::drawing::CircleKind::FULL
     /** a full circle
      */
-    FULL, 
- 
-    //------------------------------------------------------------------------- 
-     
+    FULL,
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::drawing::CircleKind::SECTION
     /** a circle with a cut connected by a line
      */
-    SECTION, 
- 
-    //------------------------------------------------------------------------- 
-     
+    SECTION,
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::drawing::CircleKind::CUT
     /** a circle with a cut connected by two lines
      */
-    CUT, 
- 
-    //------------------------------------------------------------------------- 
-     
+    CUT,
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::drawing::CircleKind::ARC
     /** a circle with an open cut
      */
-    ARC 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    ARC
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
 

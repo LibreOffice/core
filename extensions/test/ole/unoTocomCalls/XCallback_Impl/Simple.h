@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // CSimple
-class ATL_NO_VTABLE CSimple : 
+class ATL_NO_VTABLE CSimple :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CSimple, &CLSID_Simple>,
     public IDispatchImpl<ISimple, &IID_ISimple, &LIBID_XCALLBACK_IMPLLib>
@@ -54,8 +54,8 @@ END_COM_MAP()
 
 // ISimple
 public:
- 
-    STDMETHOD(get__implementedInterfaces)(/*[out, retval]*/ LPSAFEARRAY	*pVal);
+
+    STDMETHOD(get__implementedInterfaces)(/*[out, retval]*/ LPSAFEARRAY *pVal);
     STDMETHOD(func3)(/*[in]*/ BSTR message);
     STDMETHOD(func2)(/*[in]*/ BSTR message);
     STDMETHOD(func)( BSTR message);

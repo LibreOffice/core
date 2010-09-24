@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,12 +75,12 @@ using namespace ::svx;
 
 namespace css = ::com::sun::star;
 
-#define CFGNAME_DATANAVIGATOR		DEFINE_CONST_UNICODE("DataNavigator")
-#define CFGNAME_SHOWDETAILS			DEFINE_CONST_UNICODE("ShowDetails")
-#define MSG_VARIABLE				DEFINE_CONST_UNICODE("%1")
-#define MODELNAME					DEFINE_CONST_UNICODE("$MODELNAME")
-#define INSTANCENAME				DEFINE_CONST_UNICODE("$INSTANCENAME")
-#define ELEMENTNAME					DEFINE_CONST_UNICODE("$ELEMENTNAME")
+#define CFGNAME_DATANAVIGATOR       DEFINE_CONST_UNICODE("DataNavigator")
+#define CFGNAME_SHOWDETAILS         DEFINE_CONST_UNICODE("ShowDetails")
+#define MSG_VARIABLE                DEFINE_CONST_UNICODE("%1")
+#define MODELNAME                   DEFINE_CONST_UNICODE("$MODELNAME")
+#define INSTANCENAME                DEFINE_CONST_UNICODE("$INSTANCENAME")
+#define ELEMENTNAME                 DEFINE_CONST_UNICODE("$ELEMENTNAME")
 #define ATTRIBUTENAME               DEFINE_CONST_UNICODE("$ATTRIBUTENAME")
 #define SUBMISSIONNAME              DEFINE_CONST_UNICODE("$SUBMISSIONNAME")
 #define BINDINGNAME                 DEFINE_CONST_UNICODE("$BINDINGNAME")
@@ -91,62 +91,62 @@ namespace svxform
 //............................................................................
 
     // properties of instance
-    #define PN_INSTANCE_MODEL		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Instance" ) )
-    #define PN_INSTANCE_ID			::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) )
+    #define PN_INSTANCE_MODEL       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Instance" ) )
+    #define PN_INSTANCE_ID          ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) )
     #define PN_INSTANCE_URL         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) )
     #define PN_INSTANCE_URLONCE     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URLOnce" ) )
 
     // properties of binding
-    #define PN_BINDING_ID			::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingID" ) )
-    #define PN_BINDING_EXPR			::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingExpression" ) )
-    #define PN_BINDING_MODEL		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) )
-    #define PN_BINDING_NAMESPACES	::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModelNamespaces" ) )
-    #define PN_BINDING_MODELID		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModelID" ) )
-    #define PN_READONLY_EXPR		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadonlyExpression" ) )
-    #define PN_RELEVANT_EXPR		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RelevantExpression" ) )
-    #define PN_REQUIRED_EXPR		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RequiredExpression" ) )
-    #define PN_CONSTRAINT_EXPR		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ConstraintExpression" ) )
-    #define PN_CALCULATE_EXPR		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CalculateExpression" ) )
-    #define PN_BINDING_TYPE			::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) )
-    #define PN_BINDING_READONLY		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ) )
-    #define PN_BINDING_ENABLED		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enabled" ) )
+    #define PN_BINDING_ID           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingID" ) )
+    #define PN_BINDING_EXPR         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingExpression" ) )
+    #define PN_BINDING_MODEL        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) )
+    #define PN_BINDING_NAMESPACES   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModelNamespaces" ) )
+    #define PN_BINDING_MODELID      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModelID" ) )
+    #define PN_READONLY_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadonlyExpression" ) )
+    #define PN_RELEVANT_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RelevantExpression" ) )
+    #define PN_REQUIRED_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RequiredExpression" ) )
+    #define PN_CONSTRAINT_EXPR      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ConstraintExpression" ) )
+    #define PN_CALCULATE_EXPR       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CalculateExpression" ) )
+    #define PN_BINDING_TYPE         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) )
+    #define PN_BINDING_READONLY     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ) )
+    #define PN_BINDING_ENABLED      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enabled" ) )
 
     // properties of submission
-    #define PN_SUBMISSION_ID		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) )
-    #define PN_SUBMISSION_BIND		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bind" ) )
-    #define PN_SUBMISSION_REF		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Ref" ) )
-    #define PN_SUBMISSION_ACTION	::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Action" ) )
-    #define PN_SUBMISSION_METHOD	::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Method" ) )
-    #define PN_SUBMISSION_MODEL		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) )
-    #define PN_SUBMISSION_REPLACE	::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Replace" ) )
+    #define PN_SUBMISSION_ID        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) )
+    #define PN_SUBMISSION_BIND      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bind" ) )
+    #define PN_SUBMISSION_REF       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Ref" ) )
+    #define PN_SUBMISSION_ACTION    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Action" ) )
+    #define PN_SUBMISSION_METHOD    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Method" ) )
+    #define PN_SUBMISSION_MODEL     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) )
+    #define PN_SUBMISSION_REPLACE   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Replace" ) )
 
     // submission methods
-    #define SUBMITMETHOD_POST		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "post" ) )
-    #define SUBMITMETHOD_GET		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "get" ) )
-    #define SUBMITMETHOD_PUT		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "put" ) )
+    #define SUBMITMETHOD_POST       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "post" ) )
+    #define SUBMITMETHOD_GET        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "get" ) )
+    #define SUBMITMETHOD_PUT        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "put" ) )
 
     // other const strings
-    #define TRUE_VALUE				::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true()" ) )
-    #define FALSE_VALUE				::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false()" ) )
-    #define NEW_ELEMENT				::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "newElement" ) )
+    #define TRUE_VALUE              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true()" ) )
+    #define FALSE_VALUE             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false()" ) )
+    #define NEW_ELEMENT             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "newElement" ) )
     #define NEW_ATTRIBUTE           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "newAttribute" ) )
     #define EVENTTYPE_SUBTREE       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DOMSubtreeModified" ) )
     #define EVENTTYPE_CHARDATA      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DOMCharacterDataModified" ) )
     #define EVENTTYPE_ATTR          ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DOMAttrModified" ) )
 
-    #define MIN_PAGE_COUNT			3 // at least one instance, one submission and one binding page
+    #define MIN_PAGE_COUNT          3 // at least one instance, one submission and one binding page
 
     struct ItemNode
     {
-        Reference< css::xml::dom::XNode >	m_xNode;
-        Reference< XPropertySet > 			m_xPropSet;
+        Reference< css::xml::dom::XNode >   m_xNode;
+        Reference< XPropertySet >           m_xPropSet;
 
         ItemNode( const Reference< css::xml::dom::XNode >& _rxNode ) :
             m_xNode( _rxNode ) {}
         ItemNode( const Reference< XPropertySet >& _rxSet ) :
             m_xPropSet( _rxSet ) {}
 
-        DataGroupType	GetDataGroupType() const;
+        DataGroupType   GetDataGroupType() const;
     };
 
     //========================================================================
@@ -156,8 +156,8 @@ namespace svxform
 
         SvTreeListBox( pPage, rResId ),
 
-        m_pXFormsPage	( pPage ),
-        m_eGroup		( _eGroup )
+        m_pXFormsPage   ( pPage ),
+        m_eGroup        ( _eGroup )
 
     {
         EnableContextMenuHandling();
@@ -299,12 +299,12 @@ namespace svxform
 
         TabPage( pParent, SVX_RES( RID_SVX_XFORMS_TABPAGES ) ),
 
-        m_aToolBox		( this, SVX_RES( TB_ITEMS ) ),
-        m_aItemList		( this, _eGroup, SVX_RES( LB_ITEMS ) ),
-        m_pNaviWin		( _pNaviWin ),
-        m_bHasModel		( false ),
-        m_eGroup		( _eGroup ),
-        m_TbxImageList	( SVX_RES( IL_TBX_BMPS ) ),
+        m_aToolBox      ( this, SVX_RES( TB_ITEMS ) ),
+        m_aItemList     ( this, _eGroup, SVX_RES( LB_ITEMS ) ),
+        m_pNaviWin      ( _pNaviWin ),
+        m_bHasModel     ( false ),
+        m_eGroup        ( _eGroup ),
+        m_TbxImageList  ( SVX_RES( IL_TBX_BMPS ) ),
         m_TbxHCImageList( SVX_RES( IL_TBX_BMPS_HC ) )
 
     {
@@ -1542,23 +1542,23 @@ namespace svxform
 
         Window( pParent, SVX_RES( RID_SVXWIN_DATANAVIGATOR ) ),
 
-        m_aModelsBox		( this, SVX_RES( LB_MODELS ) ),
-        m_aModelBtn			( this, SVX_RES( MB_MODELS ) ),
-        m_aTabCtrl			( this, SVX_RES( TC_ITEMS ) ),
-        m_aInstanceBtn		( this, SVX_RES( MB_INSTANCES ) ),
+        m_aModelsBox        ( this, SVX_RES( LB_MODELS ) ),
+        m_aModelBtn         ( this, SVX_RES( MB_MODELS ) ),
+        m_aTabCtrl          ( this, SVX_RES( TC_ITEMS ) ),
+        m_aInstanceBtn      ( this, SVX_RES( MB_INSTANCES ) ),
 
-        m_pInstPage			( NULL ),
-        m_pSubmissionPage	( NULL ),
-        m_pBindingPage		( NULL ),
+        m_pInstPage         ( NULL ),
+        m_pSubmissionPage   ( NULL ),
+        m_pBindingPage      ( NULL ),
 
-        m_nMinWidth			( 0 ),
-        m_nMinHeight		( 0 ),
-        m_nBorderHeight		( 0 ),
-        m_nLastSelectedPos	( LISTBOX_ENTRY_NOTFOUND ),
-        m_bShowDetails		( false ),
+        m_nMinWidth         ( 0 ),
+        m_nMinHeight        ( 0 ),
+        m_nBorderHeight     ( 0 ),
+        m_nLastSelectedPos  ( LISTBOX_ENTRY_NOTFOUND ),
+        m_bShowDetails      ( false ),
         m_bIsNotifyDisabled ( false ),
 
-        m_aItemImageList	(		SVX_RES( IL_ITEM_BMPS ) ),
+        m_aItemImageList    (       SVX_RES( IL_ITEM_BMPS ) ),
         m_aItemHCImageList  (       SVX_RES( IL_ITEM_BMPS_HC ) ),
         m_xDataListener     ( new DataListener( this ) )
 
@@ -2507,35 +2507,35 @@ namespace svxform
 
         ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_DATAITEM ) ),
 
-        m_aItemFL		( this, SVX_RES( FL_ITEM ) ),
-        m_aNameFT		( this, SVX_RES( FT_NAME ) ),
-        m_aNameED		( this, SVX_RES( ED_NAME ) ),
-        m_aDefaultFT	( this, SVX_RES( FT_DEFAULT ) ),
-        m_aDefaultED	( this, SVX_RES( ED_DEFAULT ) ),
-        m_aDefaultBtn	( this, SVX_RES( PB_DEFAULT ) ),
-        m_aSettingsFL	( this, SVX_RES( FL_SETTINGS ) ),
-        m_aDataTypeFT	( this, SVX_RES( FT_DATATYPE ) ),
-        m_aDataTypeLB	( this, SVX_RES( LB_DATATYPE ) ),
-        m_aRequiredCB	( this, SVX_RES( CB_REQUIRED ) ),
-        m_aRequiredBtn	( this, SVX_RES( PB_REQUIRED ) ),
-        m_aRelevantCB	( this, SVX_RES( CB_RELEVANT ) ),
-        m_aRelevantBtn	( this, SVX_RES( PB_RELEVANT ) ),
-        m_aConstraintCB	( this, SVX_RES( CB_CONSTRAINT ) ),
+        m_aItemFL       ( this, SVX_RES( FL_ITEM ) ),
+        m_aNameFT       ( this, SVX_RES( FT_NAME ) ),
+        m_aNameED       ( this, SVX_RES( ED_NAME ) ),
+        m_aDefaultFT    ( this, SVX_RES( FT_DEFAULT ) ),
+        m_aDefaultED    ( this, SVX_RES( ED_DEFAULT ) ),
+        m_aDefaultBtn   ( this, SVX_RES( PB_DEFAULT ) ),
+        m_aSettingsFL   ( this, SVX_RES( FL_SETTINGS ) ),
+        m_aDataTypeFT   ( this, SVX_RES( FT_DATATYPE ) ),
+        m_aDataTypeLB   ( this, SVX_RES( LB_DATATYPE ) ),
+        m_aRequiredCB   ( this, SVX_RES( CB_REQUIRED ) ),
+        m_aRequiredBtn  ( this, SVX_RES( PB_REQUIRED ) ),
+        m_aRelevantCB   ( this, SVX_RES( CB_RELEVANT ) ),
+        m_aRelevantBtn  ( this, SVX_RES( PB_RELEVANT ) ),
+        m_aConstraintCB ( this, SVX_RES( CB_CONSTRAINT ) ),
         m_aConstraintBtn( this, SVX_RES( PB_CONSTRAINT ) ),
-        m_aReadonlyCB	( this, SVX_RES( CB_READONLY ) ),
-        m_aReadonlyBtn	( this, SVX_RES( PB_READONLY ) ),
-        m_aCalculateCB	( this, SVX_RES( CB_CALCULATE ) ),
-        m_aCalculateBtn	( this, SVX_RES( PB_CALCULATE ) ),
-        m_aButtonsFL	( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn		( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn		( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn		( this, SVX_RES( BTN_DATANAV_HELP ) ),
+        m_aReadonlyCB   ( this, SVX_RES( CB_READONLY ) ),
+        m_aReadonlyBtn  ( this, SVX_RES( PB_READONLY ) ),
+        m_aCalculateCB  ( this, SVX_RES( CB_CALCULATE ) ),
+        m_aCalculateBtn ( this, SVX_RES( PB_CALCULATE ) ),
+        m_aButtonsFL    ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn        ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn       ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn      ( this, SVX_RES( BTN_DATANAV_HELP ) ),
 
-        m_xUIHelper		( _rUIHelper ),
-        m_pItemNode		( _pNode ),
-        m_eItemType		( DITNone ),
-        m_sFL_Element	( SVX_RES( STR_FIXEDLINE_ELEMENT ) ),
-        m_sFL_Attribute	( SVX_RES( STR_FIXEDLINE_ATTRIBUTE ) ),
+        m_xUIHelper     ( _rUIHelper ),
+        m_pItemNode     ( _pNode ),
+        m_eItemType     ( DITNone ),
+        m_sFL_Element   ( SVX_RES( STR_FIXEDLINE_ELEMENT ) ),
+        m_sFL_Attribute ( SVX_RES( STR_FIXEDLINE_ATTRIBUTE ) ),
         m_sFL_Binding   ( SVX_RES( STR_FIXEDLINE_BINDING ) ),
         m_sFT_BindingExp( SVX_RES( STR_FIXEDTEXT_BINDING ) )
 
@@ -3026,18 +3026,18 @@ namespace svxform
 
         ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_CONDITION ) ),
 
-        m_aConditionFT		( this, SVX_RES( FT_CONDITION ) ),
-        m_aConditionED		( this, SVX_RES( ED_CONDITION ) ),
-        m_aResultFT			( this, SVX_RES( FT_RESULT ) ),
-        m_aResultWin		( this, SVX_RES( FT_RESULT_PREVIEW ) ),
+        m_aConditionFT      ( this, SVX_RES( FT_CONDITION ) ),
+        m_aConditionED      ( this, SVX_RES( ED_CONDITION ) ),
+        m_aResultFT         ( this, SVX_RES( FT_RESULT ) ),
+        m_aResultWin        ( this, SVX_RES( FT_RESULT_PREVIEW ) ),
         m_aEditNamespacesBtn( this, SVX_RES( PB_EDIT_NAMESPACES ) ),
-        m_aButtonsFL		( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn			( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn			( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn			( this, SVX_RES( BTN_DATANAV_HELP ) ),
+        m_aButtonsFL        ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn            ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn           ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn          ( this, SVX_RES( BTN_DATANAV_HELP ) ),
 
-        m_sPropertyName		( _rPropertyName ),
-        m_xBinding			( _rPropSet )
+        m_sPropertyName     ( _rPropertyName ),
+        m_xBinding          ( _rPropSet )
 
     {
         FreeResource();
@@ -3063,7 +3063,7 @@ namespace svxform
                 }
                 else
                 {
-//!					m_xBinding->setPropertyValue( m_sPropertyName, makeAny( TRUE_VALUE ) );
+//!                 m_xBinding->setPropertyValue( m_sPropertyName, makeAny( TRUE_VALUE ) );
                     m_aConditionED.SetText( TRUE_VALUE );
                 }
 
@@ -3165,18 +3165,18 @@ namespace svxform
 
         ModalDialog( _pCondDlg, SVX_RES( RID_SVXDLG_NAMESPACE_ITEM ) ),
 
-        m_aNamespacesFT			( this, SVX_RES( FT_NAMESPACES ) ),
-        m_aNamespacesList		( this, SVX_RES( LB_NAMESPACES ) ),
-        m_aAddNamespaceBtn		( this, SVX_RES( PB_ADD_NAMESPACE ) ),
-        m_aEditNamespaceBtn		( this, SVX_RES( PB_EDIT_NAMESPACE ) ),
-        m_aDeleteNamespaceBtn	( this, SVX_RES( PB_DELETE_NAMESPACE ) ),
-        m_aButtonsFL			( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn				( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn				( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn				( this, SVX_RES( BTN_DATANAV_HELP ) ),
+        m_aNamespacesFT         ( this, SVX_RES( FT_NAMESPACES ) ),
+        m_aNamespacesList       ( this, SVX_RES( LB_NAMESPACES ) ),
+        m_aAddNamespaceBtn      ( this, SVX_RES( PB_ADD_NAMESPACE ) ),
+        m_aEditNamespaceBtn     ( this, SVX_RES( PB_EDIT_NAMESPACE ) ),
+        m_aDeleteNamespaceBtn   ( this, SVX_RES( PB_DELETE_NAMESPACE ) ),
+        m_aButtonsFL            ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn                ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn               ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn              ( this, SVX_RES( BTN_DATANAV_HELP ) ),
 
-        m_pConditionDlg			( _pCondDlg ),
-        m_rNamespaces			( _rContainer )
+        m_pConditionDlg         ( _pCondDlg ),
+        m_rNamespaces           ( _rContainer )
 
     {
         static long aStaticTabs[]= { 3, 0, 35, 200 };
@@ -3338,16 +3338,16 @@ namespace svxform
 
         ModalDialog( pParent, SVX_RES( RID_SVXDLG_MANAGE_NAMESPACE ) ),
 
-        m_aPrefixFT		( this, SVX_RES( FT_PREFIX ) ),
-        m_aPrefixED		( this, SVX_RES( ED_PREFIX ) ),
-        m_aUrlFT		( this, SVX_RES( FT_URL ) ),
-        m_aUrlED		( this, SVX_RES( ED_URL ) ),
-        m_aButtonsFL	( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn		( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn		( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn		( this, SVX_RES( BTN_DATANAV_HELP ) ),
+        m_aPrefixFT     ( this, SVX_RES( FT_PREFIX ) ),
+        m_aPrefixED     ( this, SVX_RES( ED_PREFIX ) ),
+        m_aUrlFT        ( this, SVX_RES( FT_URL ) ),
+        m_aUrlED        ( this, SVX_RES( ED_URL ) ),
+        m_aButtonsFL    ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn        ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn       ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn      ( this, SVX_RES( BTN_DATANAV_HELP ) ),
 
-        m_pConditionDlg	( _pCondDlg )
+        m_pConditionDlg ( _pCondDlg )
 
     {
         if ( _bIsEdit )
@@ -3400,28 +3400,28 @@ namespace svxform
 
         ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_SUBMISSION ) ),
 
-        m_aSubmissionFL	( this, SVX_RES( FL_SUBMISSION ) ),
-        m_aNameFT		( this, SVX_RES( FT_SUBMIT_NAME ) ),
-        m_aNameED		( this, SVX_RES( ED_SUBMIT_NAME ) ),
-        m_aActionFT		( this, SVX_RES( FT_SUBMIT_ACTION ) ),
-        m_aActionED		( this, SVX_RES( ED_SUBMIT_ACTION ) ),
-        m_aMethodFT		( this, SVX_RES( FT_SUBMIT_METHOD ) ),
-        m_aMethodLB		( this, SVX_RES( LB_SUBMIT_METHOD ) ),
-        m_aRefFT		( this, SVX_RES( FT_SUBMIT_REF ) ),
-        m_aRefED		( this, SVX_RES( ED_SUBMIT_REF ) ),
-        m_aRefBtn		( this, SVX_RES( PB_SUBMIT_REF ) ),
-        m_aBindFT		( this, SVX_RES( FT_SUBMIT_BIND ) ),
-        m_aBindLB		( this, SVX_RES( LB_SUBMIT_BIND ) ),
-        m_aReplaceFT	( this, SVX_RES( FT_SUBMIT_REPLACE ) ),
-        m_aReplaceLB	( this, SVX_RES( LB_SUBMIT_REPLACE ) ),
+        m_aSubmissionFL ( this, SVX_RES( FL_SUBMISSION ) ),
+        m_aNameFT       ( this, SVX_RES( FT_SUBMIT_NAME ) ),
+        m_aNameED       ( this, SVX_RES( ED_SUBMIT_NAME ) ),
+        m_aActionFT     ( this, SVX_RES( FT_SUBMIT_ACTION ) ),
+        m_aActionED     ( this, SVX_RES( ED_SUBMIT_ACTION ) ),
+        m_aMethodFT     ( this, SVX_RES( FT_SUBMIT_METHOD ) ),
+        m_aMethodLB     ( this, SVX_RES( LB_SUBMIT_METHOD ) ),
+        m_aRefFT        ( this, SVX_RES( FT_SUBMIT_REF ) ),
+        m_aRefED        ( this, SVX_RES( ED_SUBMIT_REF ) ),
+        m_aRefBtn       ( this, SVX_RES( PB_SUBMIT_REF ) ),
+        m_aBindFT       ( this, SVX_RES( FT_SUBMIT_BIND ) ),
+        m_aBindLB       ( this, SVX_RES( LB_SUBMIT_BIND ) ),
+        m_aReplaceFT    ( this, SVX_RES( FT_SUBMIT_REPLACE ) ),
+        m_aReplaceLB    ( this, SVX_RES( LB_SUBMIT_REPLACE ) ),
 
-        m_aButtonsFL	( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn		( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn		( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn		( this, SVX_RES( BTN_DATANAV_HELP ) ),
+        m_aButtonsFL    ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn        ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn       ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn      ( this, SVX_RES( BTN_DATANAV_HELP ) ),
 
-        m_pItemNode		( _pNode ),
-        m_xUIHelper		( _rUIHelper )
+        m_pItemNode     ( _pNode ),
+        m_xUIHelper     ( _rUIHelper )
 
     {
         FillAllBoxes(); // we need local resources here, so call before FreeResource!!!
@@ -3517,7 +3517,7 @@ namespace svxform
     void AddSubmissionDialog::FillAllBoxes()
     {
         // method box
-        m_aMethodLB.InsertEntry( String( SVX_RES( STR_METHOD_POST	) ) );
+        m_aMethodLB.InsertEntry( String( SVX_RES( STR_METHOD_POST   ) ) );
         m_aMethodLB.InsertEntry( String( SVX_RES( STR_METHOD_PUT ) ) );
         m_aMethodLB.InsertEntry( String( SVX_RES( STR_METHOD_GET ) ) );
         m_aMethodLB.SelectEntryPos(0);
@@ -3634,14 +3634,14 @@ namespace svxform
 
         ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_MODEL ) ),
 
-        m_aModelFL		( this, SVX_RES( FL_MODEL ) ),
-        m_aNameFT		( this, SVX_RES( FT_MODEL_NAME ) ),
-        m_aNameED		( this, SVX_RES( ED_MODEL_NAME ) ),
+        m_aModelFL      ( this, SVX_RES( FL_MODEL ) ),
+        m_aNameFT       ( this, SVX_RES( FT_MODEL_NAME ) ),
+        m_aNameED       ( this, SVX_RES( ED_MODEL_NAME ) ),
         m_aModifyCB     ( this, SVX_RES( CB_MODIFIES_DOCUMENT ) ),
-        m_aButtonsFL	( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn		( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn		( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn		( this, SVX_RES( BTN_DATANAV_HELP ) )
+        m_aButtonsFL    ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn        ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn       ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn      ( this, SVX_RES( BTN_DATANAV_HELP ) )
 
     {
         if ( _bEdit )
@@ -3662,17 +3662,17 @@ namespace svxform
 
         ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_INSTANCE ) ),
 
-        m_aInstanceFL		( this, SVX_RES( FL_INSTANCE ) ),
-        m_aNameFT			( this, SVX_RES( FT_INST_NAME ) ),
-        m_aNameED			( this, SVX_RES( ED_INST_NAME ) ),
-        m_aURLFT			( this, SVX_RES( FT_INST_URL ) ),
-        m_aURLED			( this, SVX_RES( ED_INST_URL ) ),
-        m_aFilePickerBtn	( this, SVX_RES( PB_FILEPICKER ) ),
-        m_aLinkInstanceCB	( this, SVX_RES( CB_INST_LINKINST ) ),
-        m_aButtonsFL		( this, SVX_RES( FL_DATANAV_BTN ) ),
-        m_aOKBtn			( this, SVX_RES( BTN_DATANAV_OK ) ),
-        m_aEscBtn			( this, SVX_RES( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn			( this, SVX_RES( BTN_DATANAV_HELP ) )
+        m_aInstanceFL       ( this, SVX_RES( FL_INSTANCE ) ),
+        m_aNameFT           ( this, SVX_RES( FT_INST_NAME ) ),
+        m_aNameED           ( this, SVX_RES( ED_INST_NAME ) ),
+        m_aURLFT            ( this, SVX_RES( FT_INST_URL ) ),
+        m_aURLED            ( this, SVX_RES( ED_INST_URL ) ),
+        m_aFilePickerBtn    ( this, SVX_RES( PB_FILEPICKER ) ),
+        m_aLinkInstanceCB   ( this, SVX_RES( CB_INST_LINKINST ) ),
+        m_aButtonsFL        ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn            ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn           ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn          ( this, SVX_RES( BTN_DATANAV_HELP ) )
 
     {
         if ( _bEdit )
@@ -3726,7 +3726,7 @@ namespace svxform
     }
 
 //............................................................................
-}	// namespace svxform
+}   // namespace svxform
 //............................................................................
 
 

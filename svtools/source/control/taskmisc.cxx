@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,30 +113,30 @@ void WindowArrange::ImplTile( const Rectangle& rRect )
         return;
     }
 
-    USHORT		i;
-    USHORT		j;
-    USHORT		nCols;
-    USHORT		nRows;
-    USHORT		nActRows;
-    USHORT		nOffset;
-    long		nOverWidth;
-    long		nOverHeight;
-    Window* 	pWindow;
-    long		nX = rRect.Left();
-    long		nY = rRect.Top();
-    long		nWidth = rRect.GetWidth();
-    long		nHeight = rRect.GetHeight();
-    long		nRectY = nY;
-    long		nRectWidth = nWidth;
-    long		nRectHeight = nHeight;
-    long		nTempWidth;
-    long		nTempHeight;
+    USHORT      i;
+    USHORT      j;
+    USHORT      nCols;
+    USHORT      nRows;
+    USHORT      nActRows;
+    USHORT      nOffset;
+    long        nOverWidth;
+    long        nOverHeight;
+    Window*     pWindow;
+    long        nX = rRect.Left();
+    long        nY = rRect.Top();
+    long        nWidth = rRect.GetWidth();
+    long        nHeight = rRect.GetHeight();
+    long        nRectY = nY;
+    long        nRectWidth = nWidth;
+    long        nRectHeight = nHeight;
+    long        nTempWidth;
+    long        nTempHeight;
 
-    nCols	= ImplCeilSqareRoot( nCount );
+    nCols   = ImplCeilSqareRoot( nCount );
     nOffset = (nCols*nCols) - nCount;
     if ( nOffset >= nCols )
     {
-        nRows	 = nCols -1;
+        nRows    = nCols -1;
         nOffset = nOffset - nCols;
     }
     else
@@ -195,15 +195,15 @@ void WindowArrange::ImplTile( const Rectangle& rRect )
 
 void WindowArrange::ImplHorz( const Rectangle& rRect )
 {
-    long		nCount = (long)mpWinList->Count();
-    long		nX = rRect.Left();
-    long		nY = rRect.Top();
-    long		nWidth = rRect.GetWidth();
-    long		nHeight = rRect.GetHeight();
-    long		nRectHeight = nHeight;
-    long		nOver;
-    long		nTempHeight;
-    Window* 	pWindow;
+    long        nCount = (long)mpWinList->Count();
+    long        nX = rRect.Left();
+    long        nY = rRect.Top();
+    long        nWidth = rRect.GetWidth();
+    long        nHeight = rRect.GetHeight();
+    long        nRectHeight = nHeight;
+    long        nOver;
+    long        nTempHeight;
+    Window*     pWindow;
 
     nHeight /= nCount;
     if ( nHeight < 1 )
@@ -229,15 +229,15 @@ void WindowArrange::ImplHorz( const Rectangle& rRect )
 
 void WindowArrange::ImplVert( const Rectangle& rRect )
 {
-    long		nCount = (long)mpWinList->Count();
-    long		nX = rRect.Left();
-    long		nY = rRect.Top();
-    long		nWidth = rRect.GetWidth();
-    long		nHeight = rRect.GetHeight();
-    long		nRectWidth = nWidth;
-    long		nOver;
-    long		nTempWidth;
-    Window* 	pWindow;
+    long        nCount = (long)mpWinList->Count();
+    long        nX = rRect.Left();
+    long        nY = rRect.Top();
+    long        nWidth = rRect.GetWidth();
+    long        nHeight = rRect.GetHeight();
+    long        nRectWidth = nWidth;
+    long        nOver;
+    long        nTempWidth;
+    Window*     pWindow;
 
     nWidth /= nCount;
     if ( nWidth < 1 )
@@ -263,29 +263,29 @@ void WindowArrange::ImplVert( const Rectangle& rRect )
 
 void WindowArrange::ImplCascade( const Rectangle& rRect )
 {
-    long		nX = rRect.Left();
-    long		nY = rRect.Top();
-    long		nWidth = rRect.GetWidth();
-    long		nHeight = rRect.GetHeight();
-    long		nRectWidth = nWidth;
-    long		nRectHeight = nHeight;
-    long		nOff;
-    long		nCascadeWins;
-    sal_Int32	nLeftBorder;
-    sal_Int32	nTopBorder;
-    sal_Int32	nRightBorder;
-    sal_Int32	nBottomBorder;
-    long		nStartOverWidth;
-    long		nStartOverHeight;
-    long		nOverWidth = 0;
-    long		nOverHeight = 0;
-    long		nTempX;
-    long		nTempY;
-    long		nTempWidth;
-    long		nTempHeight;
-    long		i;
-    Window* 	pWindow;
-    Window* 	pTempWindow;
+    long        nX = rRect.Left();
+    long        nY = rRect.Top();
+    long        nWidth = rRect.GetWidth();
+    long        nHeight = rRect.GetHeight();
+    long        nRectWidth = nWidth;
+    long        nRectHeight = nHeight;
+    long        nOff;
+    long        nCascadeWins;
+    sal_Int32   nLeftBorder;
+    sal_Int32   nTopBorder;
+    sal_Int32   nRightBorder;
+    sal_Int32   nBottomBorder;
+    long        nStartOverWidth;
+    long        nStartOverHeight;
+    long        nOverWidth = 0;
+    long        nOverHeight = 0;
+    long        nTempX;
+    long        nTempY;
+    long        nTempWidth;
+    long        nTempHeight;
+    long        i;
+    Window*     pWindow;
+    Window*     pTempWindow;
 
     // Border-Fenster suchen um den Versatz zu ermitteln
     pTempWindow = (Window*)mpWinList->First();
@@ -305,7 +305,7 @@ void WindowArrange::ImplCascade( const Rectangle& rRect )
     nCascadeWins = nRectHeight / 3 / nOff;
     if ( !nCascadeWins )
         nCascadeWins = 1;
-    nWidth	 -= nCascadeWins*nOff;
+    nWidth   -= nCascadeWins*nOff;
     nHeight  -= nCascadeWins*nOff;
     if ( nWidth < 1 )
         nWidth = 1;

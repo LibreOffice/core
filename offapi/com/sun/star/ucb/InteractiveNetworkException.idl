@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,11 +34,11 @@
 
 //=============================================================================
 
-module com { module sun { module star { module ucb { 
+module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** An error related to network operations.
-    
+
     <p> Various meaningful errors are derived from this exception. </p>
 */
 published exception InteractiveNetworkException: com::sun::star::task::ClassifiedInteractionRequest
@@ -47,6 +47,6 @@ published exception InteractiveNetworkException: com::sun::star::task::Classifie
 
 //=============================================================================
 
-}; }; }; }; 
+}; }; }; };
 
 #endif

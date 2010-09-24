@@ -41,7 +41,7 @@ while ( <NAMESPACES> )
         # Start a new group
         $i = 0;
         $group++;
-    } 
+    }
     elsif ( $_ =~ m/^[^#]/ )
     {
         # Neither an empty line nor a comment

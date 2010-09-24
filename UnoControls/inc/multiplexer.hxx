@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define _UNOCONTROLS_MULTIPLEXER_HXX
 
 //____________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //____________________________________________________________________________________________________________
 
 #include <com/sun/star/awt/XKeyListener.hpp>
@@ -58,44 +58,44 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 //____________________________________________________________________________________________________________
-//	includes of my own project
+//  includes of my own project
 //____________________________________________________________________________________________________________
 
 //____________________________________________________________________________________________________________
-//	"namespaces"
+//  "namespaces"
 //____________________________________________________________________________________________________________
 
 namespace unocontrols{
 
-#define	UNO3_OWEAKOBJECT							::cppu::OWeakObject
-#define	UNO3_XWINDOW								::com::sun::star::awt::XWindow
-#define	UNO3_REFERENCE								::com::sun::star::uno::Reference
-#define	UNO3_WEAKREFERENCE							::com::sun::star::uno::WeakReference
-#define	UNO3_MUTEX									::osl::Mutex
-#define	UNO3_XWINDOWLISTENER						::com::sun::star::awt::XWindowListener
-#define	UNO3_XKEYLISTENER							::com::sun::star::awt::XKeyListener
-#define	UNO3_XMOUSELISTENER							::com::sun::star::awt::XMouseListener
-#define	UNO3_XMOUSEMOTIONLISTENER					::com::sun::star::awt::XMouseMotionListener
-#define	UNO3_XPAINTLISTENER							::com::sun::star::awt::XPaintListener
-#define	UNO3_XTOPWINDOWLISTENER						::com::sun::star::awt::XTopWindowListener
-#define	UNO3_XFOCUSLISTENER							::com::sun::star::awt::XFocusListener
-#define	UNO3_ANY									::com::sun::star::uno::Any
-#define	UNO3_TYPE									::com::sun::star::uno::Type
-#define	UNO3_RUNTIMEEXCEPTION						::com::sun::star::uno::RuntimeException
-#define	UNO3_XINTERFACE								::com::sun::star::uno::XInterface
-#define	UNO3_EVENTOBJECT							::com::sun::star::lang::EventObject
-#define	UNO3_FOCUSEVENT								::com::sun::star::awt::FocusEvent
-#define	UNO3_WINDOWEVENT							::com::sun::star::awt::WindowEvent
-#define	UNO3_KEYEVENT								::com::sun::star::awt::KeyEvent
-#define	UNO3_MOUSEEVENT								::com::sun::star::awt::MouseEvent
-#define	UNO3_PAINTEVENT								::com::sun::star::awt::PaintEvent
-#define	UNO3_OMULTITYPEINTERFACECONTAINERHELPER		::cppu::OMultiTypeInterfaceContainerHelper
+#define UNO3_OWEAKOBJECT                            ::cppu::OWeakObject
+#define UNO3_XWINDOW                                ::com::sun::star::awt::XWindow
+#define UNO3_REFERENCE                              ::com::sun::star::uno::Reference
+#define UNO3_WEAKREFERENCE                          ::com::sun::star::uno::WeakReference
+#define UNO3_MUTEX                                  ::osl::Mutex
+#define UNO3_XWINDOWLISTENER                        ::com::sun::star::awt::XWindowListener
+#define UNO3_XKEYLISTENER                           ::com::sun::star::awt::XKeyListener
+#define UNO3_XMOUSELISTENER                         ::com::sun::star::awt::XMouseListener
+#define UNO3_XMOUSEMOTIONLISTENER                   ::com::sun::star::awt::XMouseMotionListener
+#define UNO3_XPAINTLISTENER                         ::com::sun::star::awt::XPaintListener
+#define UNO3_XTOPWINDOWLISTENER                     ::com::sun::star::awt::XTopWindowListener
+#define UNO3_XFOCUSLISTENER                         ::com::sun::star::awt::XFocusListener
+#define UNO3_ANY                                    ::com::sun::star::uno::Any
+#define UNO3_TYPE                                   ::com::sun::star::uno::Type
+#define UNO3_RUNTIMEEXCEPTION                       ::com::sun::star::uno::RuntimeException
+#define UNO3_XINTERFACE                             ::com::sun::star::uno::XInterface
+#define UNO3_EVENTOBJECT                            ::com::sun::star::lang::EventObject
+#define UNO3_FOCUSEVENT                             ::com::sun::star::awt::FocusEvent
+#define UNO3_WINDOWEVENT                            ::com::sun::star::awt::WindowEvent
+#define UNO3_KEYEVENT                               ::com::sun::star::awt::KeyEvent
+#define UNO3_MOUSEEVENT                             ::com::sun::star::awt::MouseEvent
+#define UNO3_PAINTEVENT                             ::com::sun::star::awt::PaintEvent
+#define UNO3_OMULTITYPEINTERFACECONTAINERHELPER     ::cppu::OMultiTypeInterfaceContainerHelper
 
 //____________________________________________________________________________________________________________
-//	class
+//  class
 //____________________________________________________________________________________________________________
 
-class OMRCListenerMultiplexerHelper	: public UNO3_XFOCUSLISTENER
+class OMRCListenerMultiplexerHelper : public UNO3_XFOCUSLISTENER
                                     , public UNO3_XWINDOWLISTENER
                                     , public UNO3_XKEYLISTENER
                                     , public UNO3_XMOUSELISTENER
@@ -106,666 +106,666 @@ class OMRCListenerMultiplexerHelper	: public UNO3_XFOCUSLISTENER
 {
 
 //____________________________________________________________________________________________________________
-//	public methods
+//  public methods
 //____________________________________________________________________________________________________________
 
 public:
 
     //________________________________________________________________________________________________________
-    //	construct/destruct
+    //  construct/destruct
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		constructor
-        @descr		Create a Multiplexer of XWindowEvents.
+        @short      constructor
+        @descr      Create a Multiplexer of XWindowEvents.
 
-        @seealso	-
+        @seealso    -
 
-        @param		rControl	The control. All listeners think that this is the original broadcaster.
-        @param		rPeer		The peer from which the original events are dispatched. Null is allowed.
+        @param      rControl    The control. All listeners think that this is the original broadcaster.
+        @param      rPeer       The peer from which the original events are dispatched. Null is allowed.
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    OMRCListenerMultiplexerHelper(	const	UNO3_REFERENCE< UNO3_XWINDOW >&	xControl	,
-                                    const	UNO3_REFERENCE< UNO3_XWINDOW >&	xPeer		);
+    OMRCListenerMultiplexerHelper(  const   UNO3_REFERENCE< UNO3_XWINDOW >& xControl    ,
+                                    const   UNO3_REFERENCE< UNO3_XWINDOW >& xPeer       );
 
     /**_______________________________________________________________________________________________________
-        @short		copy-constructor
+        @short      copy-constructor
         @descr
 
-        @seealso	-
+        @seealso    -
 
-        @param		rCopyInstance	C++-Reference to instance to make copy from.
+        @param      rCopyInstance   C++-Reference to instance to make copy from.
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     OMRCListenerMultiplexerHelper( const OMRCListenerMultiplexerHelper& aCopyInstance );
 
     /**_______________________________________________________________________________________________________
-        @short		destructor
-        @descr		-
+        @short      destructor
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     ~OMRCListenerMultiplexerHelper();
 
     //________________________________________________________________________________________________________
-    //	XInterface
+    //  XInterface
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		give answer, if interface is supported
-        @descr		The interfaces are searched by type.
+        @short      give answer, if interface is supported
+        @descr      The interfaces are searched by type.
 
-        @seealso	XInterface
+        @seealso    XInterface
 
         @param      "rType" is the type of searched interface.
 
-        @return		Any		information about found interface
+        @return     Any     information about found interface
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual UNO3_ANY SAL_CALL queryInterface( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
 
     /**_______________________________________________________________________________________________________
-        @short		increment refcount
-        @descr		-
+        @short      increment refcount
+        @descr      -
 
-        @seealso	XInterface
-        @seealso	release()
+        @seealso    XInterface
+        @seealso    release()
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL acquire() throw();
 
     /**_______________________________________________________________________________________________________
-        @short		decrement refcount
-        @descr		-
+        @short      decrement refcount
+        @descr      -
 
-        @seealso	XInterface
-        @seealso	acquire()
+        @seealso    XInterface
+        @seealso    acquire()
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	A RuntimeException is thrown.
+        @onerror    A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL release() throw();
 
     //________________________________________________________________________________________________________
-    //	operator
+    //  operator
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     operator UNO3_REFERENCE< UNO3_XINTERFACE >() const;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     OMRCListenerMultiplexerHelper& operator= ( const OMRCListenerMultiplexerHelper& aCopyInstance );
 
     //________________________________________________________________________________________________________
-    //	container methods
+    //  container methods
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		Remove all listeners from the previous set peer and add the needed listeners to rPeer.
-        @descr		-
+        @short      Remove all listeners from the previous set peer and add the needed listeners to rPeer.
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		rPeer		The peer from which the original events are dispatched. Null is allowed.
+        @param      rPeer       The peer from which the original events are dispatched. Null is allowed.
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     void setPeer( const UNO3_REFERENCE< UNO3_XWINDOW >& xPeer );
 
     /**_______________________________________________________________________________________________________
-        @short		Remove all listeners and send a disposing message.
-        @descr		-
+        @short      Remove all listeners and send a disposing message.
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     void disposeAndClear();
 
     /**_______________________________________________________________________________________________________
-        @short		Add the specified listener to the source.
-        @descr		-
+        @short      Add the specified listener to the source.
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    void advise(	const	UNO3_TYPE&							aType		,
-                    const	UNO3_REFERENCE< UNO3_XINTERFACE >&	xListener	);
+    void advise(    const   UNO3_TYPE&                          aType       ,
+                    const   UNO3_REFERENCE< UNO3_XINTERFACE >&  xListener   );
 
     /**_______________________________________________________________________________________________________
-        @short		Remove the specified listener from the source.
-        @descr		-
+        @short      Remove the specified listener from the source.
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    void unadvise(	const	UNO3_TYPE&							aType		,
-                    const	UNO3_REFERENCE< UNO3_XINTERFACE >&	xListener	);
+    void unadvise(  const   UNO3_TYPE&                          aType       ,
+                    const   UNO3_REFERENCE< UNO3_XINTERFACE >&  xListener   );
 
     //________________________________________________________________________________________________________
-    //	XEventListener
+    //  XEventListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL disposing(const UNO3_EVENTOBJECT& aSource) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     //________________________________________________________________________________________________________
-    //	XFocusListener
+    //  XFocusListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL focusGained(const UNO3_FOCUSEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL focusLost(const UNO3_FOCUSEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     //________________________________________________________________________________________________________
-    //	XWindowListener
+    //  XWindowListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowResized(const UNO3_WINDOWEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowMoved(const UNO3_WINDOWEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowShown(const UNO3_EVENTOBJECT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowHidden(const UNO3_EVENTOBJECT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     //________________________________________________________________________________________________________
-    //	XKeyListener
+    //  XKeyListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL keyPressed( const UNO3_KEYEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL keyReleased( const UNO3_KEYEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     //________________________________________________________________________________________________________
-    //	XMouseListener
+    //  XMouseListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL mousePressed(const UNO3_MOUSEEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL mouseReleased(const UNO3_MOUSEEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL mouseEntered(const UNO3_MOUSEEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL mouseExited(const UNO3_MOUSEEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     //________________________________________________________________________________________________________
-    //	XMouseMotionListener
+    //  XMouseMotionListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL mouseDragged(const UNO3_MOUSEEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL mouseMoved(const UNO3_MOUSEEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     //________________________________________________________________________________________________________
-    //	XPaintListener
+    //  XPaintListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowPaint(const UNO3_PAINTEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     //________________________________________________________________________________________________________
-    //	XTopWindowListener
+    //  XTopWindowListener
     //________________________________________________________________________________________________________
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowOpened( const UNO3_EVENTOBJECT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowClosing( const UNO3_EVENTOBJECT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowClosed( const UNO3_EVENTOBJECT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowMinimized( const UNO3_EVENTOBJECT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowNormalized( const UNO3_EVENTOBJECT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowActivated( const UNO3_EVENTOBJECT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
-        @seealso	-
+        @seealso    -
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     virtual void SAL_CALL windowDeactivated( const UNO3_EVENTOBJECT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION ) ;
 
 //____________________________________________________________________________________________________________
-//	protected methods
+//  protected methods
 //____________________________________________________________________________________________________________
 
 protected:
 
     /**_______________________________________________________________________________________________________
-        @short		Remove the listener from the peer.
-        @descr		-
+        @short      Remove the listener from the peer.
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		xPeer	The peer from which the listener is removed.
-        @param		rType	The listener type, which specify the type of the listener.
+        @param      xPeer   The peer from which the listener is removed.
+        @param      rType   The listener type, which specify the type of the listener.
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    void impl_adviseToPeer(	const	UNO3_REFERENCE< UNO3_XWINDOW >&	xPeer	,
-                            const	UNO3_TYPE&						aType	);
+    void impl_adviseToPeer( const   UNO3_REFERENCE< UNO3_XWINDOW >& xPeer   ,
+                            const   UNO3_TYPE&                      aType   );
 
     /**_______________________________________________________________________________________________________
-        @short		Add the listener to the peer.
-        @descr		-
+        @short      Add the listener to the peer.
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		xPeer	The peer to which the listener is added.
-        @param		rType	The listener type, which specify the type of the listener.
+        @param      xPeer   The peer to which the listener is added.
+        @param      rType   The listener type, which specify the type of the listener.
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
-    void impl_unadviseFromPeer(	const	UNO3_REFERENCE< UNO3_XWINDOW >&	xPeer	,
-                                const	UNO3_TYPE&						aType	);
+    void impl_unadviseFromPeer( const   UNO3_REFERENCE< UNO3_XWINDOW >& xPeer   ,
+                                const   UNO3_TYPE&                      aType   );
 
 //____________________________________________________________________________________________________________
-//	private variables
+//  private variables
 //____________________________________________________________________________________________________________
 
 private:
 
-    UNO3_MUTEX									m_aMutex			;
-    UNO3_REFERENCE< UNO3_XWINDOW >				m_xPeer				;	/// The source of the events. Normally this is the peer object.
-    UNO3_WEAKREFERENCE< UNO3_XWINDOW >          m_xControl			;
-    UNO3_OMULTITYPEINTERFACECONTAINERHELPER		m_aListenerHolder	;
+    UNO3_MUTEX                                  m_aMutex            ;
+    UNO3_REFERENCE< UNO3_XWINDOW >              m_xPeer             ;   /// The source of the events. Normally this is the peer object.
+    UNO3_WEAKREFERENCE< UNO3_XWINDOW >          m_xControl          ;
+    UNO3_OMULTITYPEINTERFACECONTAINERHELPER     m_aListenerHolder   ;
 
-};	// class OMRCListenerMultiplexerHelper
+};  // class OMRCListenerMultiplexerHelper
 
-}	// namespace unocontrols
+}   // namespace unocontrols
 
-#endif	// ifndef _UNOCONTROLS_MULTIPLEXER_HXX
+#endif  // ifndef _UNOCONTROLS_MULTIPLEXER_HXX

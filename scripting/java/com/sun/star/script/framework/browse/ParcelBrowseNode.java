@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ public class ParcelBrowseNode extends PropertySet
     public boolean editable  = false;
     public boolean creatable = false;
     public boolean renamable = true;
-    
+
     public ParcelBrowseNode( ScriptProvider provider, ParcelContainer container, String parcelName ) {
         this.provider = provider;
         this.name = parcelName;
@@ -85,7 +85,7 @@ public class ParcelBrowseNode extends PropertySet
         }
         catch ( Exception e )
         {
-            
+
             LogUtils.DEBUG("** Exception: " + e );
             LogUtils.DEBUG(" ** Failed to get parcel named " +
                            parcelName + " from container" );
@@ -108,10 +108,10 @@ public class ParcelBrowseNode extends PropertySet
         XMultiComponentFactory xFac = xCtx.getServiceManager();
         try
         {
-            XSimpleFileAccess xSFA = ( XSimpleFileAccess) 
-                UnoRuntime.queryInterface( XSimpleFileAccess.class, 
+            XSimpleFileAccess xSFA = ( XSimpleFileAccess)
+                UnoRuntime.queryInterface( XSimpleFileAccess.class,
                     xFac.createInstanceWithContext(
-                        "com.sun.star.ucb.SimpleFileAccess", 
+                        "com.sun.star.ucb.SimpleFileAccess",
                         xCtx ) );
             if ( xSFA != null && ( xSFA.isReadOnly( parcelDirUrl ) ||
                 container.isUnoPkg() ) )
@@ -138,10 +138,10 @@ public class ParcelBrowseNode extends PropertySet
 
     public XBrowseNode[] getChildNodes() {
         try
-        { 
-    
+        {
+
             if ( hasChildNodes() )
-            { 
+            {
                 String[] names = parcel.getElementNames();
                 browsenodes = new ArrayList( names.length );
 
@@ -150,7 +150,7 @@ public class ParcelBrowseNode extends PropertySet
                     browsenodes.add( new ScriptBrowseNode( provider, parcel, names[ index ] ));
                 }
             }
-            else 
+            else
             {
                 LogUtils.DEBUG("ParcelBrowseNode.getChildeNodes no children " );
                 return new XBrowseNode[0];
@@ -213,14 +213,14 @@ public class ParcelBrowseNode extends PropertySet
                 {
                     String prompt = "Enter name for new Script";
                     String title = "Create Script";
-                                                                                
+
                     // try to get a DialogFactory instance, if it fails
                     // just use a Swing JOptionPane to prompt for the name
                     try
                     {
                         DialogFactory dialogFactory =
                             DialogFactory.getDialogFactory();
-                                                                                
+
                         newName = dialogFactory.showInputDialog(title, prompt);
                     }
                     catch (Exception e)
@@ -256,8 +256,8 @@ public class ParcelBrowseNode extends PropertySet
                             LogUtils.DEBUG("browsenodes null!!");
                             browsenodes = new ArrayList(4);
                     }
-                    browsenodes.add(sbn); 
-                                                                                
+                    browsenodes.add(sbn);
+
                     result = new Any(new Type(XBrowseNode.class), sbn);
                 }
             }
@@ -287,7 +287,7 @@ public class ParcelBrowseNode extends PropertySet
             catch (Exception e)
             {
                 result =  new Any(new Type(Boolean.class), Boolean.FALSE);
-                                                                                
+
                 // throw new com.sun.star.reflection.InvocationTargetException(
                 //     "Error deleting parcel: " + e.getMessage());
             }
@@ -303,14 +303,14 @@ public class ParcelBrowseNode extends PropertySet
                 {
                     String prompt = "Enter new name for Library";
                     String title = "Rename Library";
-                                                                                
+
                     // try to get a DialogFactory instance, if it fails
                     // just use a Swing JOptionPane to prompt for the name
                     try
                     {
                         DialogFactory dialogFactory =
                             DialogFactory.getDialogFactory();
-                                                                                
+
                         newName = dialogFactory.showInputDialog(title, prompt);
                     }
                     catch (Exception e)
@@ -344,7 +344,7 @@ public class ParcelBrowseNode extends PropertySet
                 //     "Error renaming parcel: " + e.getMessage());
             }
         }
-        
+
         else {
             throw new com.sun.star.lang.IllegalArgumentException(
                 "Function " + aFunctionName + " not supported.");

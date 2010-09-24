@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -208,7 +208,7 @@ public:
     static void ExportBibliographyConfiguration(SvXMLExport& rExport);
 
     /** export a heading for every level. This is used by master documents
-     * 	to not loose the heading information if master documents are exported
+     *  to not loose the heading information if master documents are exported
      *  without section contents
      */
     void ExportMasterDocHeadingDummies();
@@ -310,7 +310,7 @@ protected:
      * been set at the GetExport() before calling this method.
      */
     void ExportBaseIndexSource(
-        SectionTypeEnum eType,				  /// index type
+        SectionTypeEnum eType,                /// index type
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > & rSection);
 
@@ -318,7 +318,7 @@ protected:
      * Export the index body (common for all index types).
      */
     void ExportBaseIndexBody(
-        SectionTypeEnum eType,				  /// index type
+        SectionTypeEnum eType,                /// index type
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > & rSection);
 
@@ -333,8 +333,8 @@ protected:
 
     /// export one template for the specific index type
     sal_Bool ExportIndexTemplate(
-        SectionTypeEnum eType,				  /// index type
-        sal_Int32 nLevel, 					  /// outline level (if applicable)
+        SectionTypeEnum eType,                /// index type
+        sal_Int32 nLevel,                     /// outline level (if applicable)
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         ::com::sun::star::uno::Sequence<

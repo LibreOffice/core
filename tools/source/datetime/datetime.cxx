@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -337,12 +337,12 @@ DateTime& DateTime::operator +=( double fTimeInDays )
         fInt = ::rtl::math::approxFloor( fTimeInDays );
         fFrac = fInt >= fTimeInDays ? 0.0 : fTimeInDays - fInt;
     }
-    Date::operator+=( long(fInt) );		// full days
+    Date::operator+=( long(fInt) );     // full days
     if ( fFrac )
     {
-        Time aTime(0);	// default ctor calls system time, we don't need that
-        fFrac *= 24UL * 60 * 60 * 1000;		// time expressed in milliseconds
-        aTime.MakeTimeFromMS( long(fFrac) );	// method handles negative ms
+        Time aTime(0);  // default ctor calls system time, we don't need that
+        fFrac *= 24UL * 60 * 60 * 1000;     // time expressed in milliseconds
+        aTime.MakeTimeFromMS( long(fFrac) );    // method handles negative ms
         operator+=( aTime );
     }
     return *this;
@@ -374,7 +374,7 @@ double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
     if ( nTime )
     {
         double fTime = double(nTime);
-        fTime /= 24UL * 60 * 60 * 1000;	// convert from milliseconds to fraction
+        fTime /= 24UL * 60 * 60 * 1000; // convert from milliseconds to fraction
         if ( nDays < 0 && fTime > 0.0 )
             fTime = 1.0 - fTime;
         return double(nDays) + fTime;

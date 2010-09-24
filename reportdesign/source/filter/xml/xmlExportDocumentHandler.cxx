@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -329,7 +329,7 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     if ( !m_xDatabaseDataProvider.is() || !m_xDatabaseDataProvider->getActiveConnection().is() )
         throw uno::Exception();
 
-    uno::Reference< reflection::XProxyFactory >	xProxyFactory( m_xContext->getServiceManager()->createInstanceWithContext(
+    uno::Reference< reflection::XProxyFactory > xProxyFactory( m_xContext->getServiceManager()->createInstanceWithContext(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory")),m_xContext),
         uno::UNO_QUERY);
     m_xProxy = xProxyFactory->createProxy(m_xDelegatee.get());

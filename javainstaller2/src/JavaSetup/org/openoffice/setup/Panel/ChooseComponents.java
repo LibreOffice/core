@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,19 +57,19 @@ import org.openoffice.setup.InstallData;
 public class ChooseComponents extends JPanel implements MouseListener, KeyListener, TreeSelectionListener {
 
     private JTree componentTree;
-    private PanelLabel descriptionLabel;    
+    private PanelLabel descriptionLabel;
     private PanelLabel sizeLabel;
-    
+
     private String sizeString;
     private PanelTitle titleBox;
-    
+
     public ChooseComponents() {
 
         InstallData data = InstallData.getInstance();
 
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
-              
+
         String titleText    = ResourceManager.getString("String_ChooseComponents1");
         String subtitleText = ResourceManager.getString("String_ChooseComponents2");
         titleBox = new PanelTitle(titleText, subtitleText, 2, 40);
@@ -88,25 +88,25 @@ public class ChooseComponents extends JPanel implements MouseListener, KeyListen
         componentTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         componentTree.addTreeSelectionListener(this);
         // if ( data.useRtl() ) { componentTree.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
-       
+
         String BorderTitle = ResourceManager.getString("String_ChooseComponents3");
         TitledBorder PanelBorder = BorderFactory.createTitledBorder(BorderTitle);
-        
+
         BorderLayout PanelLayout = new BorderLayout();
         PanelLayout.setHgap(20);
         JPanel DescriptionPanel = new JPanel();
         DescriptionPanel.setBorder(PanelBorder);
         DescriptionPanel.setLayout(PanelLayout);
-        
+
         String DescriptionText = "";
-        descriptionLabel = new PanelLabel(DescriptionText, 3, 20);        
+        descriptionLabel = new PanelLabel(DescriptionText, 3, 20);
         sizeString = ResourceManager.getString("String_ChooseComponents4");
         sizeLabel = new PanelLabel(sizeString, 1, 5);
-        
+
         DescriptionPanel.add(descriptionLabel, BorderLayout.CENTER);
         DescriptionPanel.add(sizeLabel, BorderLayout.EAST);
         if ( data.useRtl() ) { DescriptionPanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
-        
+
         add(new JScrollPane(componentTree), BorderLayout.CENTER);
         add(DescriptionPanel, BorderLayout.SOUTH);
     }
@@ -122,16 +122,16 @@ public class ChooseComponents extends JPanel implements MouseListener, KeyListen
 
             DefaultTreeModel model = (DefaultTreeModel)componentTree.getModel();
             // model.nodeChanged(node);
-            
-            // The following line was included because of task i78481. 
+
+            // The following line was included because of task i78481.
             // In Java 1.6 nodeChanged does not work correctly.
             model.nodeStructureChanged(node);
-            
+
             descriptionLabel.setText(nodeInfo.getDescription());
             sizeLabel.setText(sizeString + nodeInfo.getSize());
         }
     }
- 
+
     /**
      * Implement the MouseListener Interface
      */
@@ -146,14 +146,14 @@ public class ChooseComponents extends JPanel implements MouseListener, KeyListen
         if ((selPath != null) && (componentTree.getPathBounds(selPath).getX() + 20 >= event.getX())) {
             updateNode((DefaultMutableTreeNode)selPath.getLastPathComponent());
         }
-    } 
+    }
     public void mouseReleased(MouseEvent e) {
     }
-    
+
     /**
      * Implement the KeyListener Interface
      */
-    public void keyPressed(KeyEvent event)  {   
+    public void keyPressed(KeyEvent event)  {
     }
     public void keyReleased(KeyEvent event) {
     }
@@ -165,9 +165,9 @@ public class ChooseComponents extends JPanel implements MouseListener, KeyListen
             }
         }
     }
-    
-    /** 
-     * Implement the TreeSelectionListener Interface. 
+
+    /**
+     * Implement the TreeSelectionListener Interface.
      */
     public void valueChanged(TreeSelectionEvent event) {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)componentTree.getLastSelectedPathComponent();

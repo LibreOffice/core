@@ -4,9 +4,9 @@ $basedir = dirname($0);
 $productname = 'OpenOffice.org';
 $mimedir = $basedir.'/../mimetypes';
 
-$FS= ' ';		# field seperator (space) - for documents.ulf 
-$, = "\n";		# set output field separator (newline)
-$\ = "\n";		# set output record separator (newline)
+$FS= ' ';       # field seperator (space) - for documents.ulf
+$, = "\n";      # set output field separator (newline)
+$\ = "\n";      # set output record separator (newline)
 
 ## get list of components and corresponding translations from documents.ulf
 open(DOCUMENTS_ULF, $ARGV[0]) || die 'Cannot open "documents.ulf".';
@@ -86,4 +86,4 @@ sub getMimedata {
     die "Could not get glob-pattern fom $desktop_file" if ($glob eq "");
 }
 
-## END vim: set ts=4: 
+## END vim: set ts=4:

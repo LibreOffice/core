@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,14 +39,14 @@ struct PasswordToOpenModifyDialog_Impl;
 class PasswordToOpenModifyDialog : public SfxModalDialog
 {
     std::auto_ptr< PasswordToOpenModifyDialog_Impl >  m_pImpl;
-    
+
     // disallow use of copy c-tor and assignment operator
     PasswordToOpenModifyDialog( const PasswordToOpenModifyDialog & );
     PasswordToOpenModifyDialog & operator = ( const PasswordToOpenModifyDialog & );
-    
+
 public:
-    PasswordToOpenModifyDialog( Window * pParent, sal_uInt16 nMinPasswdLen, 
-            sal_uInt16 nMaxPasswdLen /* 0 -> no max len enforced */, 
+    PasswordToOpenModifyDialog( Window * pParent, sal_uInt16 nMinPasswdLen,
+            sal_uInt16 nMaxPasswdLen /* 0 -> no max len enforced */,
             bool bIsPasswordToModify );
     virtual ~PasswordToOpenModifyDialog();
 

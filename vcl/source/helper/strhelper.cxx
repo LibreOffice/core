@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,12 +126,12 @@ String GetCommandLineToken( int nToken, const String& rLine )
     int nLen = rLine.Len();
     if( ! nLen )
         return String();
-    
+
     int nActualToken = 0;
     sal_Unicode* pBuffer = (sal_Unicode*)alloca( sizeof(sal_Unicode)*( nLen + 1 ) );
     const sal_Unicode* pRun = rLine.GetBuffer();
     sal_Unicode* pLeap = NULL;
-    
+
     while( *pRun && nActualToken <= nToken )
     {
         while( *pRun && isSpace( *pRun ) )
@@ -167,7 +167,7 @@ String GetCommandLineToken( int nToken, const String& rLine )
     }
 
     *pLeap = 0;
-    
+
     String aRet( pBuffer );
     return aRet;
 }
@@ -177,12 +177,12 @@ ByteString GetCommandLineToken( int nToken, const ByteString& rLine )
     int nLen = rLine.Len();
     if( ! nLen )
         return ByteString();
-    
+
     int nActualToken = 0;
     char* pBuffer = (char*)alloca( nLen + 1 );
     const char* pRun = rLine.GetBuffer();
     char* pLeap = NULL;
-    
+
     while( *pRun && nActualToken <= nToken )
     {
         while( *pRun && isSpace( *pRun ) )
@@ -218,7 +218,7 @@ ByteString GetCommandLineToken( int nToken, const ByteString& rLine )
     }
 
     *pLeap = 0;
-    
+
     ByteString aRet( pBuffer );
     return aRet;
 }
@@ -227,10 +227,10 @@ int GetCommandLineTokenCount( const String& rLine )
 {
     if( ! rLine.Len() )
         return 0;
-    
+
     int nTokenCount = 0;
     const sal_Unicode *pRun = rLine.GetBuffer();
-    
+
 
     while( *pRun )
     {
@@ -270,7 +270,7 @@ int GetCommandLineTokenCount( const String& rLine )
         }
         nTokenCount++;
     }
-    
+
     return nTokenCount;
 }
 
@@ -278,10 +278,10 @@ int GetCommandLineTokenCount( const ByteString& rLine )
 {
     if( ! rLine.Len() )
         return 0;
-    
+
     int nTokenCount = 0;
     const char *pRun = rLine.GetBuffer();
-    
+
 
     while( *pRun )
     {
@@ -321,7 +321,7 @@ int GetCommandLineTokenCount( const ByteString& rLine )
         }
         nTokenCount++;
     }
-    
+
     return nTokenCount;
 }
 
@@ -330,7 +330,7 @@ String WhitespaceToSpace( const String& rLine, BOOL bProtect )
     int nLen = rLine.Len();
     if( ! nLen )
         return String();
-    
+
     sal_Unicode *pBuffer = (sal_Unicode*)alloca( sizeof(sal_Unicode)*(nLen + 1) );
     const sal_Unicode *pRun = rLine.GetBuffer();
     sal_Unicode *pLeap = pBuffer;
@@ -379,7 +379,7 @@ String WhitespaceToSpace( const String& rLine, BOOL bProtect )
         *pLeap = 0;
 
     String aRet( *pBuffer == ' ' ? pBuffer+1 : pBuffer );
-    return aRet;    
+    return aRet;
 }
 
 ByteString WhitespaceToSpace( const ByteString& rLine, BOOL bProtect )
@@ -387,7 +387,7 @@ ByteString WhitespaceToSpace( const ByteString& rLine, BOOL bProtect )
     int nLen = rLine.Len();
     if( ! nLen )
         return ByteString();
-    
+
     char *pBuffer = (char*)alloca( nLen + 1 );
     const char *pRun = rLine.GetBuffer();
     char *pLeap = pBuffer;
@@ -436,7 +436,7 @@ ByteString WhitespaceToSpace( const ByteString& rLine, BOOL bProtect )
         *pLeap = 0;
 
     ByteString aRet( *pBuffer == ' ' ? pBuffer+1 : pBuffer );
-    return aRet;    
+    return aRet;
 }
 
 } // namespace

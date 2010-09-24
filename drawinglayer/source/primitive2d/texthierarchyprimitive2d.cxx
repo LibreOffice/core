@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         TextHierarchyLinePrimitive2D::TextHierarchyLinePrimitive2D(const Primitive2DSequence& rChildren)
-        :	GroupPrimitive2D(rChildren)
+        :   GroupPrimitive2D(rChildren)
         {
         }
 
@@ -59,7 +59,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         TextHierarchyParagraphPrimitive2D::TextHierarchyParagraphPrimitive2D(const Primitive2DSequence& rChildren)
-        :	GroupPrimitive2D(rChildren)
+        :   GroupPrimitive2D(rChildren)
         {
         }
 
@@ -76,7 +76,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         TextHierarchyBulletPrimitive2D::TextHierarchyBulletPrimitive2D(const Primitive2DSequence& rChildren)
-        :	GroupPrimitive2D(rChildren)
+        :   GroupPrimitive2D(rChildren)
         {
         }
 
@@ -93,7 +93,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         TextHierarchyBlockPrimitive2D::TextHierarchyBlockPrimitive2D(const Primitive2DSequence& rChildren)
-        :	GroupPrimitive2D(rChildren)
+        :   GroupPrimitive2D(rChildren)
         {
         }
 
@@ -113,7 +113,7 @@ namespace drawinglayer
             const Primitive2DSequence& rChildren,
             const FieldType& rFieldType,
             const rtl::OUString& rString)
-        :	GroupPrimitive2D(rChildren),
+        :   GroupPrimitive2D(rChildren),
             meType(rFieldType),
             maString(rString)
         {
@@ -144,7 +144,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         TextHierarchyEditPrimitive2D::TextHierarchyEditPrimitive2D(const Primitive2DSequence& rChildren)
-        :	GroupPrimitive2D(rChildren)
+        :   GroupPrimitive2D(rChildren)
         {
         }
 

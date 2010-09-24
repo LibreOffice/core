@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,30 +58,30 @@ using namespace osl;
 
 template <class Type> class safe_list : public osl::Mutex, public std::list< Type > {};
 
-class OSimpleContentIdentifier :	public OWeakObject,
+class OSimpleContentIdentifier :    public OWeakObject,
                                     public XContentIdentifier
 {
 private:
-    OUString	Identifier;
-    OUString	ProviderScheme;
+    OUString    Identifier;
+    OUString    ProviderScheme;
 
 public:
     OSimpleContentIdentifier( const OUString& rIdentifier, const OUString& rProviderScheme );
 
     // XInterface
-    virtual Any			SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
-    virtual void 		SAL_CALL acquire() throw(RuntimeException);
-    virtual void 		SAL_CALL release() throw(RuntimeException);
+    virtual Any         SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
+    virtual void        SAL_CALL acquire() throw(RuntimeException);
+    virtual void        SAL_CALL release() throw(RuntimeException);
 
     // XContentIdentifier
-    virtual OUString 	SAL_CALL getContentIdentifier() throw(RuntimeException);
-    virtual OUString 	SAL_CALL getContentProviderScheme() throw(RuntimeException);
+    virtual OUString    SAL_CALL getContentIdentifier() throw(RuntimeException);
+    virtual OUString    SAL_CALL getContentProviderScheme() throw(RuntimeException);
 };
 
 
 //---------------------------------------------------------------------------
 //
-//	FileSystemContent
+//  FileSystemContent
 //
 //---------------------------------------------------------------------------
 
@@ -97,8 +97,8 @@ public XComponent
 public:
     struct PropertyChangeEventInfo
     {
-        OUString	Name;
-        long		Handle;
+        OUString    Name;
+        long        Handle;
 
         PropertyChangeEventInfo() : Handle( -1 ) {}
 
@@ -112,8 +112,8 @@ public:
 
     struct PropertyChangeListenerInfo
     {
-        Reference< XPropertiesChangeListener >	xListener;
-        list< PropertyChangeEventInfo >			aEventInfos;
+        Reference< XPropertiesChangeListener >  xListener;
+        list< PropertyChangeEventInfo >         aEventInfos;
 
         inline int operator ==( const PropertyChangeListenerInfo& crInfo ) const
         { return xListener == crInfo.xListener; }
@@ -126,9 +126,9 @@ public:
 protected:
     Sequence< PropertyChangeEvent > matchListenerEvents( const Sequence< PropertyChangeEvent >& crEvents, const PropertyChangeListenerInfo & crInfo );
 
-    safe_list< Reference< XContentEventListener > >	m_aContentListeners;
-    safe_list< Reference< XEventListener > >		m_aComponentListeners;
-    safe_list< PropertyChangeListenerInfo >			m_aPropertyChangeListeners;
+    safe_list< Reference< XContentEventListener > > m_aContentListeners;
+    safe_list< Reference< XEventListener > >        m_aComponentListeners;
+    safe_list< PropertyChangeListenerInfo >         m_aPropertyChangeListeners;
 public:
     virtual ~OContent() {}
 
@@ -139,7 +139,7 @@ public:
     virtual Any doCommand( const Command & crCommand ) = 0;
 
     // XInterface
-    virtual Any			SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
+    virtual Any         SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
 
     virtual void SAL_CALL acquire() throw(RuntimeException);
     virtual void SAL_CALL release() throw(RuntimeException);
@@ -158,7 +158,7 @@ public:
 
     // XCommandInfo
     virtual CommandInfo SAL_CALL getCommandInfoByName( const OUString& rName ) throw( UnsupportedCommandException );
-    virtual CommandInfo SAL_CALL getCommandInfoByHandle( long nHandle )	throw( UnsupportedCommandException );
+    virtual CommandInfo SAL_CALL getCommandInfoByHandle( long nHandle ) throw( UnsupportedCommandException );
     virtual sal_Bool SAL_CALL hasCommandByName( const OUString& rName ) throw();
     virtual sal_Bool SAL_CALL hasCommandByHandle( long nHandle ) throw();
 
@@ -174,19 +174,19 @@ public:
 
 //---------------------------------------------------------------------------
 //
-//	FolderContent
+//  FolderContent
 //
 //---------------------------------------------------------------------------
 
 // supported Commands
-static const sal_Int32 OPEN		= 0;
-static const sal_Int32 CLOSE	= 1;
+static const sal_Int32 OPEN     = 0;
+static const sal_Int32 CLOSE    = 1;
 
 class OFolderContent : public OContent
 {
 protected:
     // Already provided children
-    safe_list< XContent >	m_aChildList;
+    safe_list< XContent >   m_aChildList;
 
     // OContent
     virtual Any doCommand( const Command & crCommand );
@@ -209,7 +209,7 @@ public:
 
 //---------------------------------------------------------------------------
 //
-//	OContentTask
+//  OContentTask
 //
 //---------------------------------------------------------------------------
 
@@ -217,12 +217,12 @@ class OContentTask :
 public OWeakObject,
 public XContentTask
 {
-    Guard< OContent >						m_aContentGuard;
+    Guard< OContent >                       m_aContentGuard;
 protected:
-    OContent								*m_pContent;
-    Reference< XContentTaskEnvironment >	m_xEnvironment;
-    ContentTaskStatus						m_eStatus;
-    oslThread								m_aThread;
+    OContent                                *m_pContent;
+    Reference< XContentTaskEnvironment >    m_xEnvironment;
+    ContentTaskStatus                       m_eStatus;
+    oslThread                               m_aThread;
 
     static void executeWorker( void * );
     virtual ContentTaskStatus setStatus( ContentTaskStatus eStatus );
@@ -234,7 +234,7 @@ public:
     virtual ~OContentTask();
 
     // XInterface
-    virtual Any			SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
+    virtual Any         SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
 
     virtual void SAL_CALL acquire() throw(RuntimeException);
     virtual void SAL_CALL release() throw(RuntimeException);
@@ -249,7 +249,7 @@ public:
 
 //---------------------------------------------------------------------------
 //
-//	OCommandTask
+//  OCommandTask
 //
 //---------------------------------------------------------------------------
 
@@ -258,8 +258,8 @@ public OContentTask,
 public XCommandTask
 {
 protected:
-    Command				m_aCommand;
-    Any					m_aResult;
+    Command             m_aCommand;
+    Any                 m_aResult;
 
 public:
     OCommandTask( const Reference< XContentTaskEnvironment >& xEnv, OContent *pContent, const Command& rCommand );
@@ -268,9 +268,9 @@ public:
     virtual void doExecute();
 
     // XInterface
-    virtual Any			SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
-    virtual void 		SAL_CALL acquire() throw(RuntimeException);
-    virtual void 		SAL_CALL release() throw(RuntimeException);
+    virtual Any         SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
+    virtual void        SAL_CALL acquire() throw(RuntimeException);
+    virtual void        SAL_CALL release() throw(RuntimeException);
 
     // XContentTask
     virtual void SAL_CALL start() throw();
@@ -286,7 +286,7 @@ public:
 
 //---------------------------------------------------------------------------
 //
-//	OPropertyTask
+//  OPropertyTask
 //
 //---------------------------------------------------------------------------
 
@@ -295,11 +295,11 @@ public OContentTask,
 public XPropertyTask
 {
 protected:
-    Sequence< PropertyValueInfo >	m_aProperties;
-    PropertyTaskType				m_eType;
+    Sequence< PropertyValueInfo >   m_aProperties;
+    PropertyTaskType                m_eType;
 public:
     OPropertyTask(const Reference< XContentTaskEnvironment >& Environment, OContent *pContent, const Sequence< PropertyValue >& Properties, PropertyTaskType Type );
-    virtual	~OPropertyTask();
+    virtual ~OPropertyTask();
 
     virtual void doExecute();
 
@@ -308,9 +308,9 @@ public:
     virtual void getPropertyValue( PropertyValueInfo & rProperty ) = 0;
 
     // XInterface
-    virtual Any			SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
-    virtual void 		SAL_CALL acquire() throw(RuntimeException);
-    virtual void 		SAL_CALL release() throw(RuntimeException);
+    virtual Any         SAL_CALL queryInterface( const Type &type ) throw( RuntimeException );
+    virtual void        SAL_CALL acquire() throw(RuntimeException);
+    virtual void        SAL_CALL release() throw(RuntimeException);
 
     // XContentTask
     virtual void SAL_CALL start() throw();

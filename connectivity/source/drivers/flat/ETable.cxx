@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 #include <comphelper/sequence.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
-#include <stdio.h>		//sprintf
+#include <stdio.h>      //sprintf
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
 #include "flat/EDriver.hxx"
@@ -287,7 +287,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                     break;
                 default:
                     eType = DataType::VARCHAR;
-                    nPrecision = 0;	// nyi: Daten koennen aber laenger sein!
+                    nPrecision = 0; // nyi: Daten koennen aber laenger sein!
                     nScale = 0;
                     {
                         static const ::rtl::OUString s_sVARCHAR(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
@@ -382,8 +382,8 @@ void OFlatTable::construct()
 
         // Buffersize abhaengig von der Filegroesse
         m_pFileStream->SetBufferSize(nSize > 1000000 ? 32768 :
-                                    nSize > 100000	? 16384 :
-                                    nSize > 10000	? 4096	: 1024);
+                                    nSize > 100000  ? 16384 :
+                                    nSize > 10000   ? 4096  : 1024);
 
         fillColumns(aAppLocale);
 
@@ -450,7 +450,7 @@ void OFlatTable::refreshColumns()
     if(m_pColumns)
         m_pColumns->reFill(aVector);
     else
-        m_pColumns	= new OFlatColumns(this,m_aMutex,aVector);
+        m_pColumns  = new OFlatColumns(this,m_aMutex,aVector);
 }
 
 // -------------------------------------------------------------------------
@@ -471,10 +471,10 @@ Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!(*pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0)	||
-            *pBegin == ::getCppuType((const Reference<XRename>*)0)			||
+        if(!(*pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0)   ||
+            *pBegin == ::getCppuType((const Reference<XRename>*)0)          ||
             *pBegin == ::getCppuType((const Reference<XIndexesSupplier>*)0) ||
-            *pBegin == ::getCppuType((const Reference<XAlterTable>*)0)		||
+            *pBegin == ::getCppuType((const Reference<XAlterTable>*)0)      ||
             *pBegin == ::getCppuType((const Reference<XDataDescriptorFactory>*)0)))
         {
             aOwnTypes.push_back(*pBegin);
@@ -487,10 +487,10 @@ Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Any SAL_CALL OFlatTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0)		||
-        rType == ::getCppuType((const Reference<XIndexesSupplier>*)0)	||
-        rType == ::getCppuType((const Reference<XRename>*)0)			||
-        rType == ::getCppuType((const Reference<XAlterTable>*)0)		||
+    if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0)      ||
+        rType == ::getCppuType((const Reference<XIndexesSupplier>*)0)   ||
+        rType == ::getCppuType((const Reference<XRename>*)0)            ||
+        rType == ::getCppuType((const Reference<XAlterTable>*)0)        ||
         rType == ::getCppuType((const Reference<XDataDescriptorFactory>*)0))
         return Any();
 
@@ -532,7 +532,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
     if (!bRetrieveData)
         return TRUE;
     if ( m_bNeedToReadLine )
-    {        
+    {
         sal_Int32 nCurrentPos = 0;
         m_pFileStream->Seek(m_nFilePos);
         readLine(nCurrentPos);
@@ -558,18 +558,18 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
         else
         {
             // Laengen je nach Datentyp:
-            sal_Int32	nLen,
+            sal_Int32   nLen,
                         nType = 0;
             if(bIsTable)
             {
-                nLen	= m_aPrecisions[i-1];
-                nType	= m_aTypes[i-1];
+                nLen    = m_aPrecisions[i-1];
+                nType   = m_aTypes[i-1];
             }
             else
             {
                 Reference< XPropertySet> xColumn = *aIter;
-                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))	>>= nLen;
-                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))		>>= nType;
+                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))  >>= nLen;
+                xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))       >>= nType;
             }
             switch(nType)
             {
@@ -597,13 +597,13 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
                     {
                         (_rRow->get())[i]->setNull();
                     }
-                }	break;
+                }   break;
                 case DataType::DOUBLE:
                 case DataType::INTEGER:
-                case DataType::DECIMAL:				// #99178# OJ
+                case DataType::DECIMAL:             // #99178# OJ
                 case DataType::NUMERIC:
                 {
-                    
+
                     String aStrConverted;
                     if ( DataType::INTEGER != nType )
                     {
@@ -617,7 +617,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
                         // In Standard-Notation (DezimalPUNKT ohne Tausender-Komma) umwandeln:
                         for (xub_StrLen j = 0; j < aStr.Len(); ++j)
                         {
-                            const sal_Unicode cChar = aStr.GetChar(j); 
+                            const sal_Unicode cChar = aStr.GetChar(j);
                             if (cDecimalDelimiter && cChar == cDecimalDelimiter)
                                 *pData++ = '.';
                                 //aStrConverted.Append( '.' );
@@ -680,7 +680,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
             // run through
         case IResultSetHelper::NEXT:
             {
-                ++m_nRowPos;            
+                ++m_nRowPos;
                 ::std::map<sal_Int32,TRowPositionsInFile::iterator>::const_iterator aFind = m_aRowPosToFilePos.find(m_nRowPos);
                 m_bNeedToReadLine = aFind != m_aRowPosToFilePos.end();
                 if ( m_bNeedToReadLine )
@@ -697,13 +697,13 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                     {
                         m_nMaxRowCount = m_nRowPos -1;
                         return sal_False;
-                    } // if ( m_pFileStream->IsEof() || !readLine(nCurPos) /*|| !checkHeaderLine()*/) 
+                    } // if ( m_pFileStream->IsEof() || !readLine(nCurPos) /*|| !checkHeaderLine()*/)
 
                     TRowPositionsInFile::iterator aPos = m_aFilePosToEndLinePos.insert(TRowPositionsInFile::value_type(m_nFilePos,nCurPos)).first;
                     m_aRowPosToFilePos.insert(::std::map<sal_Int32,TRowPositionsInFile::iterator>::value_type(m_nRowPos,aPos));
                 }
             }
-            
+
             break;
         case IResultSetHelper::PRIOR:
             --m_nRowPos;
@@ -725,11 +725,11 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                 m_nRowPos  = aLastPos->first;
                 m_nFilePos = aLastPos->second->first;
                 nCurPos    = aLastPos->second->second;
-                
+
                 //m_pFileStream->Seek(m_nFilePos);
                 m_bNeedToReadLine = true;
                 //if ( m_pFileStream->IsEof() /*|| !checkHeaderLine()*/ || !readLine(nCurPos) )
-                //	return sal_False;
+                //  return sal_False;
             }
             else
             {
@@ -762,7 +762,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                     //m_pFileStream->Seek(m_nFilePos);
                     m_bNeedToReadLine = true;
                     //if ( m_pFileStream->IsEof() /*|| !checkHeaderLine()*/ || !readLine(nCurPos) )
-                    //	return sal_False;
+                    //  return sal_False;
                 }
                 else if(m_nMaxRowCount && nOffset > m_nMaxRowCount) // offset is outside the table
                 {
@@ -775,7 +775,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                     if(aIter == m_aRowPosToFilePos.end())
                     {
                         ::std::map<sal_Int32,TRowPositionsInFile::iterator>::reverse_iterator aLastPos = m_aRowPosToFilePos.rbegin();
-                        m_nRowPos	= aLastPos->first;
+                        m_nRowPos   = aLastPos->first;
                         nCurPos = m_nFilePos = aLastPos->second->first;
                         while(m_nRowPos != nOffset)
                             seekRow(IResultSetHelper::NEXT,1,nCurPos);
@@ -783,13 +783,13 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                     else
                     {
                         --aIter;
-                        m_nRowPos	= aIter->first;
-                        m_nFilePos	= aIter->second->first;
-                        nCurPos	    = aIter->second->second;
+                        m_nRowPos   = aIter->first;
+                        m_nFilePos  = aIter->second->first;
+                        nCurPos     = aIter->second->second;
                         //m_pFileStream->Seek(m_nFilePos);
                         m_bNeedToReadLine = true;
                         //if ( m_pFileStream->IsEof() /*|| !checkHeaderLine()*/ || !readLine(nCurPos) )
-                        //	return sal_False;
+                        //  return sal_False;
                     }
                 }
             }
@@ -804,7 +804,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                     m_nFilePos  = aFind->first;
                     nCurPos = aFind->second;
                 }
-                else 
+                else
                 {
                     m_nFilePos = nOffset;
                     m_pFileStream->Seek(nOffset);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ sal_Bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMe
             }
             break;
 
-        case MID_ZOOMSLIDER_CURRENTZOOM : 
+        case MID_ZOOMSLIDER_CURRENTZOOM :
             {
                 rVal <<= (sal_Int32) GetValue();
             }
@@ -197,7 +197,7 @@ sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
                             ++nConvertedCount;
                         }
                     }
-    
+
                     if ( bAllConverted && nConvertedCount == ZOOMSLIDER_PARAMS )
                     {
                         SetValue( (UINT16)nCurrentZoom );

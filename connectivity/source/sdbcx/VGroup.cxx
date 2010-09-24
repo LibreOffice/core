@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,13 +48,13 @@ using namespace ::com::sun::star::beans;
 
 IMPLEMENT_SERVICE_INFO(OGroup,"com.sun.star.sdbcx.VGroup","com.sun.star.sdbcx.Group");
 // -------------------------------------------------------------------------
-OGroup::OGroup(sal_Bool _bCase) :	OGroup_BASE(m_aMutex)
-                ,	ODescriptor(OGroup_BASE::rBHelper,_bCase)
-                ,	m_pUsers(NULL)
+OGroup::OGroup(sal_Bool _bCase) :   OGroup_BASE(m_aMutex)
+                ,   ODescriptor(OGroup_BASE::rBHelper,_bCase)
+                ,   m_pUsers(NULL)
 {
 }
 // -------------------------------------------------------------------------
-OGroup::OGroup(const ::rtl::OUString& _Name,sal_Bool _bCase) :	OGroup_BASE(m_aMutex)
+OGroup::OGroup(const ::rtl::OUString& _Name,sal_Bool _bCase) :  OGroup_BASE(m_aMutex)
                         ,ODescriptor(OGroup_BASE::rBHelper,_bCase)
                         ,m_pUsers(NULL)
 {

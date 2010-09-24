@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -214,7 +214,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             if ( pArgIter->Name.equalsAscii("HasCategories") )
             {
                 pArgIter->Value >>= bHasCategories;
-                
+
             }
             else if ( pArgIter->Name.equalsAscii("ComplexColumnDescriptions") )
             {
@@ -356,12 +356,12 @@ void SAL_CALL DatabaseDataProvider::setColumnDescriptions( const uno::Sequence< 
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL DatabaseDataProvider::getRowDescriptions()    throw (uno::RuntimeException)
-{    
+{
     return m_xComplexDescriptionAccess->getRowDescriptions();
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL DatabaseDataProvider::getColumnDescriptions()    throw (uno::RuntimeException)
-{    
+{
     return m_xComplexDescriptionAccess->getColumnDescriptions();
 }
 
@@ -718,7 +718,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
     while( xRes->next() && (!m_RowLimit || nRowCount < m_RowLimit) )
     {
         ++nRowCount;
-        
+
         aValue.fill(1,aColumnTypes[0],xRow);
         aRowLabels.push_back(aValue.getString());
         ::std::vector< double > aRow;
@@ -760,7 +760,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
             ::std::vector< double > aRow;
             const sal_Int32 nSize = sizeof(fDefaultData)/sizeof(fDefaultData[0]);
             for (sal_Int32 j = 0; j < (nCount-1); ++j,++k)
-            {            
+            {
                 if ( k >= nSize )
                     k = 0;
                 aRow.push_back(fDefaultData[k]);
@@ -768,7 +768,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
             aDataValues.push_back(aRow);
         }
     } // if ( !nRowCount )
-        
+
     uno::Reference< chart::XChartDataArray> xData(m_xInternal,uno::UNO_QUERY);
     xData->setRowDescriptions(uno::Sequence< ::rtl::OUString >(&(*aRowLabels.begin()),aRowLabels.size()));
     xData->setColumnDescriptions(uno::Sequence< ::rtl::OUString >(aColumns.getArray()+ (_bHasCategories ? 1 : 0),aColumns.getLength() - (_bHasCategories ? 1 : 0) ));

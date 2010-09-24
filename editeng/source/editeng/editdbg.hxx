@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,17 +40,17 @@ class SfxItemSet;
 class SfxItemPool;
 class SfxPoolItem;
 
-ByteString 	DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem );
-void 		DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, BOOL bSearchInParent, BOOL bShowALL );
+ByteString  DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem );
+void        DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, BOOL bSearchInParent, BOOL bShowALL );
 
 class EditDbg
 {
 public:
-    static void			ShowEditEngineData( EditEngine* pEditEngine, BOOL bInfoBox = TRUE );
-    static void			ShowPortionData( ParaPortion* pPortion );
-    static ByteString	GetPortionInfo( ParaPortion* pPPortion );
-    static ByteString	GetTextPortionInfo( TextPortionList& rPortions );
-    static ByteString	GetUndoDebStr( EditUndoList* pUndoList );
+    static void         ShowEditEngineData( EditEngine* pEditEngine, BOOL bInfoBox = TRUE );
+    static void         ShowPortionData( ParaPortion* pPortion );
+    static ByteString   GetPortionInfo( ParaPortion* pPPortion );
+    static ByteString   GetTextPortionInfo( TextPortionList& rPortions );
+    static ByteString   GetUndoDebStr( EditUndoList* pUndoList );
 };
 
 

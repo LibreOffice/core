@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -13,7 +13,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 //
-// Liang-Barsky clipping 
+// Liang-Barsky clipping
 //
 //----------------------------------------------------------------------------
 #ifndef AGG_CLIP_LIANG_BARSKY_INCLUDED
@@ -25,7 +25,7 @@ namespace agg
 {
 
     //----------------------------------------------------------clipping_flags
-    // Determine the clipping code of the vertex according to the 
+    // Determine the clipping code of the vertex according to the
     // Cyrus-Beck line clipping algorithm
     //
     //        |        |
@@ -41,7 +41,7 @@ namespace agg
     //        |        |
     //  clip_box.x1  clip_box.x2
     //
-    // 
+    //
     template<class T>
     inline unsigned clipping_flags(T x, T y, const rect_base<T>& clip_box)
     {
@@ -62,7 +62,7 @@ namespace agg
         const double nearzero = 1e-30;
 
         double deltax = x2 - x1;
-        double deltay = y2 - y1; 
+        double deltay = y2 - y1;
         double xin;
         double xout;
         double yin;
@@ -70,52 +70,52 @@ namespace agg
         double tinx;
         double tiny;
         double toutx;
-        double touty;  
+        double touty;
         double tin1;
         double tin2;
         double tout1;
         unsigned np = 0;
 
-        if(deltax == 0.0) 
-        {   
+        if(deltax == 0.0)
+        {
             // bump off of the vertical
             deltax = (x1 > clip_box.x1) ? -nearzero : nearzero;
         }
 
-        if(deltay == 0.0) 
-        { 
-            // bump off of the horizontal 
+        if(deltay == 0.0)
+        {
+            // bump off of the horizontal
             deltay = (y1 > clip_box.y1) ? -nearzero : nearzero;
         }
-        
-        if(deltax > 0.0) 
-        {                
+
+        if(deltax > 0.0)
+        {
             // points to right
             xin  = clip_box.x1;
             xout = clip_box.x2;
         }
-        else 
+        else
         {
             xin  = clip_box.x2;
             xout = clip_box.x1;
         }
 
-        if(deltay > 0.0) 
+        if(deltay > 0.0)
         {
             // points up
             yin  = clip_box.y1;
             yout = clip_box.y2;
         }
-        else 
+        else
         {
             yin  = clip_box.y2;
             yout = clip_box.y1;
         }
-        
+
         tinx = (xin - x1) / deltax;
         tiny = (yin - y1) / deltay;
-        
-        if (tinx < tiny) 
+
+        if (tinx < tiny)
         {
             // hits x first
             tin1 = tinx;
@@ -127,10 +127,10 @@ namespace agg
             tin1 = tiny;
             tin2 = tinx;
         }
-        
-        if(tin1 <= 1.0) 
+
+        if(tin1 <= 1.0)
         {
-            if(0.0 < tin1) 
+            if(0.0 < tin1)
             {
                 *x++ = (T)xin;
                 *y++ = (T)yin;
@@ -141,21 +141,21 @@ namespace agg
             {
                 toutx = (xout - x1) / deltax;
                 touty = (yout - y1) / deltay;
-                
+
                 tout1 = (toutx < touty) ? toutx : touty;
-                
-                if(tin2 > 0.0 || tout1 > 0.0) 
+
+                if(tin2 > 0.0 || tout1 > 0.0)
                 {
-                    if(tin2 <= tout1) 
+                    if(tin2 <= tout1)
                     {
-                        if(tin2 > 0.0) 
+                        if(tin2 > 0.0)
                         {
-                            if(tinx > tiny) 
+                            if(tinx > tiny)
                             {
                                 *x++ = (T)xin;
                                 *y++ = (T)(y1 + tinx * deltay);
                             }
-                            else 
+                            else
                             {
                                 *x++ = (T)(x1 + tiny * deltax);
                                 *y++ = (T)yin;
@@ -163,34 +163,34 @@ namespace agg
                             ++np;
                         }
 
-                        if(tout1 < 1.0) 
+                        if(tout1 < 1.0)
                         {
-                            if(toutx < touty) 
+                            if(toutx < touty)
                             {
                                 *x++ = (T)xout;
                                 *y++ = (T)(y1 + toutx * deltay);
                             }
-                            else 
+                            else
                             {
                                 *x++ = (T)(x1 + touty * deltax);
                                 *y++ = (T)yout;
                             }
                         }
-                        else 
+                        else
                         {
                             *x++ = x2;
                             *y++ = y2;
                         }
                         ++np;
                     }
-                    else 
+                    else
                     {
-                        if(tinx > tiny) 
+                        if(tinx > tiny)
                         {
                             *x++ = (T)xin;
                             *y++ = (T)yout;
                         }
-                        else 
+                        else
                         {
                             *x++ = (T)xout;
                             *y++ = (T)yin;
@@ -202,7 +202,7 @@ namespace agg
         }
         return np;
     }
-    
+
 
 }
 

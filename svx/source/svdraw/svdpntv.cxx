@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,10 +87,10 @@ using namespace ::com::sun::star;
 class ImplEncirclementOverlay
 {
     // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList				maObjects;
+    ::sdr::overlay::OverlayObjectList               maObjects;
 
     // The remembered second position in logical coodinates
-    basegfx::B2DPoint								maSecondPosition;
+    basegfx::B2DPoint                               maSecondPosition;
 
 public:
     ImplEncirclementOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos);
@@ -100,7 +100,7 @@ public:
 };
 
 ImplEncirclementOverlay::ImplEncirclementOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos)
-:	maSecondPosition(rStartPos)
+:   maSecondPosition(rStartPos)
 {
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
@@ -187,7 +187,7 @@ SdrPaintWindow* SdrPaintView::RemovePaintWindow(SdrPaintWindow& rOld)
 }
 
 OutputDevice* SdrPaintView::GetFirstOutputDevice() const
-{ 
+{
     if(PaintWindowCount())
     {
         return &(GetPaintWindow(0)->GetOutputDevice());
@@ -226,9 +226,9 @@ void SdrPaintView::ImpClearVars()
     bPageBorderVisible=TRUE;
     bBordVisible=TRUE;
     bGridVisible=TRUE;
-    bGridFront	=FALSE;
+    bGridFront  =FALSE;
     bHlplVisible=TRUE;
-    bHlplFront	=TRUE;
+    bHlplFront  =TRUE;
     bGlueVisible=FALSE;
     bGlueVisible2=FALSE;
     bGlueVisible3=FALSE;
@@ -252,7 +252,7 @@ void SdrPaintView::ImpClearVars()
     nGraphicManagerDrawMode = GRFMGR_DRAW_STANDARD;
     aComeBackTimer.SetTimeout(1);
     aComeBackTimer.SetTimeoutHdl(LINK(this,SdrPaintView,ImpComeBackHdl));
-    String aNam;	// System::GetUserName() just return an empty string
+    String aNam;    // System::GetUserName() just return an empty string
 
     if (pMod)
         SetDefaultStyleSheet(pMod->GetDefaultStyleSheet(), TRUE);
@@ -264,7 +264,7 @@ void SdrPaintView::ImpClearVars()
 }
 
 SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
-:	mpEncirclementOverlay(0L),
+:   mpEncirclementOverlay(0L),
     mpPageView(0L),
     aDefaultAttr(pModel1->GetItemPool()),
     mbBufferedOutputAllowed(false),
@@ -279,7 +279,7 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
     pMod=pModel1;
     ImpClearVars();
 
-    if(pOut) 
+    if(pOut)
     {
         AddWindowToPaintView(pOut);
     }
@@ -301,7 +301,7 @@ SdrPaintView::~SdrPaintView()
     ClearPageView();
 
 #ifdef DBG_UTIL
-    if(pItemBrowser) 
+    if(pItemBrowser)
     {
         delete pItemBrowser;
     }
@@ -343,9 +343,9 @@ void __EXPORT SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             }
             if (eKind==HINT_PAGEORDERCHG) {
                 const SdrPage* pPg=pSdrHint->GetPage();
-                
-                if(pPg && !pPg->IsInserted()) 
-                { 
+
+                if(pPg && !pPg->IsInserted())
+                {
                     if(mpPageView && mpPageView->GetPage() == pPg)
                     {
                         HideSdrPage();
@@ -398,7 +398,7 @@ void SdrPaintView::ModelHasChanged()
     }
 
 #ifdef DBG_UTIL
-    if(pItemBrowser) 
+    if(pItemBrowser)
     {
         pItemBrowser->SetDirty();
     }
@@ -414,7 +414,7 @@ BOOL SdrPaintView::IsAction() const
 
 void SdrPaintView::MovAction(const Point& rPnt)
 {
-    if (IsEncirclement()) 
+    if (IsEncirclement())
     {
         MovEncirclement(rPnt);
     }
@@ -422,7 +422,7 @@ void SdrPaintView::MovAction(const Point& rPnt)
 
 void SdrPaintView::EndAction()
 {
-    if(IsEncirclement()) 
+    if(IsEncirclement())
     {
         EndEncirclement();
     }
@@ -440,7 +440,7 @@ void SdrPaintView::BrkAction()
 
 void SdrPaintView::TakeActionRect(Rectangle& rRect) const
 {
-    if(IsEncirclement()) 
+    if(IsEncirclement())
     {
         rRect = Rectangle(aDragStat.GetStart(),aDragStat.GetNow());
     }
@@ -464,7 +464,7 @@ SdrPageView* SdrPaintView::GetTextEditPageView() const
 USHORT SdrPaintView::ImpGetMinMovLogic(short nMinMov, const OutputDevice* pOut) const
 {
     if (nMinMov>=0) return USHORT(nMinMov);
-    if (pOut==NULL) 
+    if (pOut==NULL)
     {
         pOut = GetFirstOutputDevice();
     }
@@ -478,7 +478,7 @@ USHORT SdrPaintView::ImpGetMinMovLogic(short nMinMov, const OutputDevice* pOut) 
 USHORT SdrPaintView::ImpGetHitTolLogic(short nHitTol, const OutputDevice* pOut) const
 {
     if (nHitTol>=0) return USHORT(nHitTol);
-    if (pOut==NULL) 
+    if (pOut==NULL)
     {
         pOut = GetFirstOutputDevice();
     }
@@ -520,7 +520,7 @@ void SdrPaintView::BegEncirclement(const Point& rPnt)
 
 void SdrPaintView::MovEncirclement(const Point& rPnt)
 {
-    if(IsEncirclement() && aDragStat.CheckMinMoved(rPnt)) 
+    if(IsEncirclement() && aDragStat.CheckMinMoved(rPnt))
     {
         aDragStat.NextMove(rPnt);
 
@@ -536,10 +536,10 @@ Rectangle SdrPaintView::EndEncirclement(sal_Bool bNoJustify)
 
     if(IsEncirclement())
     {
-        if(aDragStat.IsMinMoved()) 
+        if(aDragStat.IsMinMoved())
         {
             aRetval = Rectangle(aDragStat.GetStart(), aDragStat.GetNow());
-            
+
             if(!bNoJustify)
             {
                 aRetval.Justify();
@@ -555,7 +555,7 @@ Rectangle SdrPaintView::EndEncirclement(sal_Bool bNoJustify)
 
 void SdrPaintView::BrkEncirclement()
 {
-    if(IsEncirclement()) 
+    if(IsEncirclement())
     {
         DBG_ASSERT(mpEncirclementOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
         delete mpEncirclementOverlay;
@@ -616,7 +616,7 @@ void SdrPaintView::AddWindowToPaintView(OutputDevice* pNewWin)
     }
 
 #ifdef DBG_UTIL
-    if (pItemBrowser!=NULL) 
+    if (pItemBrowser!=NULL)
         pItemBrowser->ForceParent();
 #endif
 }
@@ -638,7 +638,7 @@ void SdrPaintView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
     }
 
 #ifdef DBG_UTIL
-    if (pItemBrowser!=NULL) 
+    if (pItemBrowser!=NULL)
         pItemBrowser->ForceParent();
 #endif
 }
@@ -687,7 +687,7 @@ bool SdrPaintView::IsLayerLocked(const XubString& rName) const
     {
         return mpPageView->IsLayerLocked(rName);
     }
-    
+
     return false;
 }
 
@@ -739,7 +739,7 @@ void SdrPaintView::PrePaint()
 void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
 #ifdef SVX_REPAINT_TIMER_TEST
-#define REMEMBERED_TIMES_COUNT	(10)
+#define REMEMBERED_TIMES_COUNT  (10)
     static bool bDoTimerTest(false);
     static bool bTimesInited(false);
     static sal_uInt32 nRepeatCount(10L);
@@ -758,11 +758,11 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::c
 #endif // SVX_REPAINT_TIMER_TEST
 
     // #i74769# check if pOut is a win and has a ClipRegion. If Yes, the Region
-    // rReg may be made more granular (fine) with using it. Normally, rReg 
-    // does come from Window::Paint() anyways and thus is based on a single 
+    // rReg may be made more granular (fine) with using it. Normally, rReg
+    // does come from Window::Paint() anyways and thus is based on a single
     // rectangle which was derived from exactly that repaint region
     Region aOptimizedRepaintRegion(rReg);
-    
+
     if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType())
     {
         Window* pWindow = (Window*)pOut;
@@ -780,7 +780,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::c
                 {
                     RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());
                     Rectangle aRegionRectangle;
-                    
+
                     while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
                     {
                         pWindow->SetLineColor(COL_LIGHTGREEN);
@@ -956,11 +956,11 @@ SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& 
         if(pKnownTarget)
         {
             // #i74769# check if pOut is a win and has a ClipRegion. If Yes, the Region
-            // rReg may be made more granular (fine) with using it. Normally, rReg 
-            // does come from Window::Paint() anyways and thus is based on a single 
+            // rReg may be made more granular (fine) with using it. Normally, rReg
+            // does come from Window::Paint() anyways and thus is based on a single
             // rectangle which was derived from exactly that repaint region
             Region aOptimizedRepaintRegion(rReg);
-            
+
             // #i76114# Intersecting the region with the Window's paint region is disabled
             // for print preview in Calc, because the intersection can be empty (if the paint
             // region is outside of the table area of the page), and then no clip region
@@ -982,7 +982,7 @@ SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& 
                         {
                             RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());
                             Rectangle aRegionRectangle;
-                            
+
                             while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
                             {
                                 pWindow->SetLineColor(COL_LIGHTGREEN);
@@ -1075,7 +1075,7 @@ void SdrPaintView::GlueInvalidate() const
     {
         SdrPaintWindow* pPaintWindow = GetPaintWindow(nWinNum);
 
-        if(pPaintWindow->OutputToWindow()) 
+        if(pPaintWindow->OutputToWindow())
         {
             OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
 
@@ -1103,7 +1103,7 @@ void SdrPaintView::InvalidateAllWin()
     {
         SdrPaintWindow* pPaintWindow = GetPaintWindow(a);
 
-        if(pPaintWindow->OutputToWindow()) 
+        if(pPaintWindow->OutputToWindow())
         {
             InvalidateOneWin((Window&)pPaintWindow->GetOutputDevice());
         }
@@ -1118,26 +1118,26 @@ void SdrPaintView::InvalidateAllWin(const Rectangle& rRect, BOOL bPlus1Pix)
     {
         SdrPaintWindow* pPaintWindow = GetPaintWindow(a);
 
-        if(pPaintWindow->OutputToWindow()) 
+        if(pPaintWindow->OutputToWindow())
         {
             OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
             Rectangle aRect(rRect);
 
-            if(bPlus1Pix) 
+            if(bPlus1Pix)
             {
                 Size aPixSiz(1,1);
                 Size aSiz(rOutDev.PixelToLogic(aPixSiz));
-                aRect.Left	()-=aSiz.Width();
-                aRect.Top	()-=aSiz.Height();
+                aRect.Left  ()-=aSiz.Width();
+                aRect.Top   ()-=aSiz.Height();
                 aRect.Right ()+=aSiz.Width();
                 aRect.Bottom()+=aSiz.Height();
             }
-            
+
             Point aOrg(rOutDev.GetMapMode().GetOrigin());
             aOrg.X()=-aOrg.X(); aOrg.Y()=-aOrg.Y();
             Rectangle aOutRect(aOrg, rOutDev.GetOutputSize());
-            
-            if (aRect.IsOver(aOutRect)) 
+
+            if (aRect.IsOver(aOutRect))
             {
                 InvalidateOneWin((Window&)rOutDev, aRect);
             }
@@ -1380,16 +1380,16 @@ void SdrPaintView::DoConnect(SdrOle2Obj* /*pOleObj*/)
 {
 }
 
-void SdrPaintView::SetAnimationEnabled( BOOL bEnable ) 
-{ 
-    SetAnimationMode( bEnable ? SDR_ANIMATION_ANIMATE : SDR_ANIMATION_DISABLE ); 
+void SdrPaintView::SetAnimationEnabled( BOOL bEnable )
+{
+    SetAnimationMode( bEnable ? SDR_ANIMATION_ANIMATE : SDR_ANIMATION_DISABLE );
 }
 
-void SdrPaintView::SetAnimationPause( bool bSet ) 
-{ 
+void SdrPaintView::SetAnimationPause( bool bSet )
+{
     if((bool)bAnimationPause != bSet)
     {
-        bAnimationPause = bSet; 
+        bAnimationPause = bSet;
 
         if(mpPageView)
         {
@@ -1408,9 +1408,9 @@ void SdrPaintView::SetAnimationPause( bool bSet )
     }
 }
 
-void SdrPaintView::SetAnimationMode( const SdrAnimationMode eMode ) 
-{ 
-    eAnimationMode = eMode; 
+void SdrPaintView::SetAnimationMode( const SdrAnimationMode eMode )
+{
+    eAnimationMode = eMode;
 }
 
 void SdrPaintView::VisAreaChanged(const OutputDevice* pOut)
@@ -1481,8 +1481,8 @@ void SdrPaintView::SetApplicationDocumentColor(Color aDocumentColor)
 }
 
 // #114898#
-bool SdrPaintView::IsBufferedOutputAllowed() const 
-{ 
+bool SdrPaintView::IsBufferedOutputAllowed() const
+{
     return (mbBufferedOutputAllowed && maDrawinglayerOpt.IsPaintBuffer());
 }
 
@@ -1495,8 +1495,8 @@ void SdrPaintView::SetBufferedOutputAllowed(bool bNew)
     }
 }
 
-bool SdrPaintView::IsBufferedOverlayAllowed() const 
-{ 
+bool SdrPaintView::IsBufferedOverlayAllowed() const
+{
     return (mbBufferedOverlayAllowed && maDrawinglayerOpt.IsOverlayBuffer());
 }
 
@@ -1508,9 +1508,9 @@ void SdrPaintView::SetBufferedOverlayAllowed(bool bNew)
     }
 }
 
-sal_Bool SdrPaintView::IsPagePaintingAllowed() const 
-{ 
-    return mbPagePaintingAllowed; 
+sal_Bool SdrPaintView::IsPagePaintingAllowed() const
+{
+    return mbPagePaintingAllowed;
 }
 
 void SdrPaintView::SetPagePaintingAllowed(bool bNew)

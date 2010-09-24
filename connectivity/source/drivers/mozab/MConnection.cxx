@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,7 +119,7 @@ const sal_Char* getSchemeURI( MozillaScheme _eScheme )
 
 // -----------------------------------------------------------------------------
 
-OConnection::OConnection(MozabDriver*	_pDriver)
+OConnection::OConnection(MozabDriver*   _pDriver)
     :OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
     ,m_pDriver(_pDriver)
     ,m_pImplData( new ConnectionImplData )
@@ -150,7 +150,7 @@ void SAL_CALL OConnection::release() throw()
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     OSL_TRACE("IN OConnection::construct()\n" );
-    //	open file
+    //  open file
     setURL(url);
     //
     // Skip 'sdbc:mozab: part of URL
@@ -376,7 +376,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     OPreparedStatement* pPrepared = new OPreparedStatement(this,_sSql);
     Reference< XPreparedStatement > xReturn = pPrepared;
     pPrepared->lateInit();
-    
+
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }

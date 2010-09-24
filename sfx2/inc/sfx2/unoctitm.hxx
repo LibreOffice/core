@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,16 +52,16 @@ class SfxBindings;
 class SfxFrame;
 class SfxDispatcher;
 
-class SfxUnoControllerItem :	public ::com::sun::star::frame::XStatusListener	,
-                                public ::com::sun::star::lang::XTypeProvider	,
+class SfxUnoControllerItem :    public ::com::sun::star::frame::XStatusListener ,
+                                public ::com::sun::star::lang::XTypeProvider    ,
                                 public ::cppu::OWeakObject
 {
-    ::com::sun::star::util::URL							aCommand;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > 				xDispatch;
-    SfxControllerItem*			pCtrlItem;
-    SfxBindings*				pBindings;
+    ::com::sun::star::util::URL                         aCommand;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >              xDispatch;
+    SfxControllerItem*          pCtrlItem;
+    SfxBindings*                pBindings;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > 				TryGetDispatch( SfxFrame* pFrame );
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >              TryGetDispatch( SfxFrame* pFrame );
 
 public:
     SFX_DECL_XINTERFACE_XTYPEPROVIDER
@@ -70,19 +70,19 @@ public:
                                 SfxUnoControllerItem( SfxControllerItem*, SfxBindings&, const String& );
                                 ~SfxUnoControllerItem();
 
-    const ::com::sun::star::util::URL&					GetCommand() const
+    const ::com::sun::star::util::URL&                  GetCommand() const
                                 { return aCommand; }
-    void						Execute();
+    void                        Execute();
 
     // XStatusListener
     virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
 
     // Something else
-    virtual void 	SAL_CALL			disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
-    void						UnBind();
-    void 						GetNewDispatch();
-    void 						ReleaseDispatch();
-    void						ReleaseBindings();
+    virtual void    SAL_CALL            disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
+    void                        UnBind();
+    void                        GetNewDispatch();
+    void                        ReleaseDispatch();
+    void                        ReleaseBindings();
 };
 
 struct SfxStatusDispatcher_Impl_hashType
@@ -97,8 +97,8 @@ class SfxStatusDispatcher   :   public ::com::sun::star::frame::XNotifyingDispat
                                 public ::com::sun::star::lang::XTypeProvider,
                                 public ::cppu::OWeakObject
 {
-    ::osl::Mutex		aMutex;
-    SfxStatusDispatcher_Impl_ListenerContainer	aListeners;
+    ::osl::Mutex        aMutex;
+    SfxStatusDispatcher_Impl_ListenerContainer  aListeners;
 
 public:
     SFX_DECL_XINTERFACE_XTYPEPROVIDER
@@ -114,7 +114,7 @@ public:
     virtual void SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException );
 
     // Something else
-    void				ReleaseAll();
+    void                ReleaseAll();
     SfxStatusDispatcher_Impl_ListenerContainer& GetListeners()
                         { return aListeners; }
 };
@@ -142,10 +142,10 @@ public:
                                                           const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
                                                           const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener )
                                 throw( ::com::sun::star::uno::RuntimeException );
-    virtual void   SAL_CALL		dispatch( const ::com::sun::star::util::URL& aURL,
+    virtual void   SAL_CALL     dispatch( const ::com::sun::star::util::URL& aURL,
                                           const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
                                 throw( ::com::sun::star::uno::RuntimeException );
-    virtual void   SAL_CALL		addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl,
+    virtual void   SAL_CALL     addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl,
                                                    const ::com::sun::star::util::URL& aURL)
                                 throw( ::com::sun::star::uno::RuntimeException );
 
@@ -170,8 +170,8 @@ class SfxDispatchController_Impl : public SfxControllerItem
     ::com::sun::star::util::URL aDispatchURL;
     SfxDispatcher*              pDispatcher;
     SfxBindings*                pBindings;
-    const SfxPoolItem*	        pLastState;
-    sal_uInt16			        nSlot;
+    const SfxPoolItem*          pLastState;
+    sal_uInt16                  nSlot;
     SfxOfficeDispatch*          pDispatch;
     sal_Bool                    bMasterSlave;
     sal_Bool                    bVisible;
@@ -194,7 +194,7 @@ public:
     static rtl::OUString getSlaveCommand( const ::com::sun::star::util::URL& rURL );
 
     void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer* pServ );
-    virtual void		StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void                setMasterSlaveCommand( sal_Bool bSet );
     sal_Bool            isMasterSlaveCommand() const;
     void SAL_CALL       dispatch( const ::com::sun::star::util::URL& aURL,

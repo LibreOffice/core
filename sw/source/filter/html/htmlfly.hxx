@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,30 +60,30 @@ enum SwHTMLFrmType
     HTML_FRMTYPE_END
 };
 
-#define HTML_OUT_TBLNODE 	0x00
-#define HTML_OUT_GRFNODE	0x01
-#define HTML_OUT_OLENODE	0x02
-#define HTML_OUT_DIV		0x03
-#define HTML_OUT_MULTICOL	0x04
-#define HTML_OUT_SPACER		0x05
-#define HTML_OUT_CONTROL	0x06
-#define HTML_OUT_AMARQUEE	0x07
-#define HTML_OUT_MARQUEE	0x08
-#define HTML_OUT_GRFFRM		0x09
-#define HTML_OUT_OLEGRF		0x0a
-#define HTML_OUT_SPAN		0x0b
-#define HTML_OUT_MASK		0x0f
+#define HTML_OUT_TBLNODE    0x00
+#define HTML_OUT_GRFNODE    0x01
+#define HTML_OUT_OLENODE    0x02
+#define HTML_OUT_DIV        0x03
+#define HTML_OUT_MULTICOL   0x04
+#define HTML_OUT_SPACER     0x05
+#define HTML_OUT_CONTROL    0x06
+#define HTML_OUT_AMARQUEE   0x07
+#define HTML_OUT_MARQUEE    0x08
+#define HTML_OUT_GRFFRM     0x09
+#define HTML_OUT_OLEGRF     0x0a
+#define HTML_OUT_SPAN       0x0b
+#define HTML_OUT_MASK       0x0f
 
-#define HTML_POS_PREFIX		0x00
-#define HTML_POS_BEFORE		0x10
-#define HTML_POS_INSIDE		0x20
-#define HTML_POS_ANY		0x30
-#define HTML_POS_MASK		0x30
+#define HTML_POS_PREFIX     0x00
+#define HTML_POS_BEFORE     0x10
+#define HTML_POS_INSIDE     0x20
+#define HTML_POS_ANY        0x30
+#define HTML_POS_MASK       0x30
 
-#define HTML_CNTNR_NONE		0x00
-#define HTML_CNTNR_SPAN		0x40
-#define HTML_CNTNR_DIV		0x80
-#define HTML_CNTNR_MASK		0xc0
+#define HTML_CNTNR_NONE     0x00
+#define HTML_CNTNR_SPAN     0x40
+#define HTML_CNTNR_DIV      0x80
+#define HTML_CNTNR_MASK     0xc0
 
 
 const USHORT MAX_FRMTYPES = HTML_FRMTYPE_END;
@@ -97,12 +97,12 @@ extern BYTE aHTMLOutFrmAsCharTable[MAX_FRMTYPES][MAX_BROWSERS];
 
 class SwHTMLPosFlyFrm
 {
-    const SwFrmFmt 		*pFrmFmt;		// der Rahmen
-    const SdrObject		*pSdrObject;	// ggf. Sdr-Objekt
-    SwNodeIndex 		*pNdIdx;		// Node-Index
-    UINT32 				nOrdNum;		// Aus SwPosFlyFrm
-    xub_StrLen			nCntntIdx;		// seine Position im Content
-    BYTE				nOutputMode;	// Ausgabe-Infos
+    const SwFrmFmt      *pFrmFmt;       // der Rahmen
+    const SdrObject     *pSdrObject;    // ggf. Sdr-Objekt
+    SwNodeIndex         *pNdIdx;        // Node-Index
+    UINT32              nOrdNum;        // Aus SwPosFlyFrm
+    xub_StrLen          nCntntIdx;      // seine Position im Content
+    BYTE                nOutputMode;    // Ausgabe-Infos
 
 public:
 
@@ -117,7 +117,7 @@ public:
 
     const SwNodeIndex& GetNdIndex() const { return *pNdIdx; }
 
-    xub_StrLen GetCntntIndex() const 	{ return nCntntIdx; }
+    xub_StrLen GetCntntIndex() const    { return nCntntIdx; }
 
     BYTE GetOutMode() const { return nOutputMode; }
 

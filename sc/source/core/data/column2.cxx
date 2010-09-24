@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@
 #include "editutil.hxx"
 #include "subtotal.hxx"
 #include "markdata.hxx"
-#include "compiler.hxx"			// ScTokenArray GetCodeLen
+#include "compiler.hxx"         // ScTokenArray GetCodeLen
 #include "dbcolect.hxx"
 #include "fillinfo.hxx"
 #include "segmenttree.hxx"
@@ -73,13 +73,13 @@
 // -----------------------------------------------------------------------
 
 // factor from font size to optimal cell height (text width)
-#define SC_ROT_BREAK_FACTOR		6
+#define SC_ROT_BREAK_FACTOR     6
 
 // -----------------------------------------------------------------------
 
 inline BOOL IsAmbiguousScript( BYTE nScript )
 {
-    //!	move to a header file
+    //! move to a header file
     return ( nScript != SCRIPTTYPE_LATIN &&
              nScript != SCRIPTTYPE_ASIAN &&
              nScript != SCRIPTTYPE_COMPLEX );
@@ -88,7 +88,7 @@ inline BOOL IsAmbiguousScript( BYTE nScript )
 // -----------------------------------------------------------------------------------------
 
 //
-//	Datei-Operationen
+//  Datei-Operationen
 //
 
 // -----------------------------------------------------------------------------------------
@@ -182,7 +182,7 @@ inline BOOL IsAmbiguousScript( BYTE nScript )
 
 // -----------------------------------------------------------------------------------------
 
-                                    //	GetNeededSize: optimale Hoehe / Breite in Pixeln
+                                    //  GetNeededSize: optimale Hoehe / Breite in Pixeln
 
 long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                               double nPPTX, double nPPTY,
@@ -199,11 +199,11 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         if (!pPattern)
             pPattern = pAttrArray->GetPattern( nRow );
 
-        //		zusammengefasst?
-        //		Merge nicht in bedingter Formatierung
+        //      zusammengefasst?
+        //      Merge nicht in bedingter Formatierung
 
-        const ScMergeAttr*		pMerge = (const ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
-        const ScMergeFlagAttr*	pFlag = (const ScMergeFlagAttr*)&pPattern->GetItem(ATTR_MERGE_FLAG);
+        const ScMergeAttr*      pMerge = (const ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
+        const ScMergeFlagAttr*  pFlag = (const ScMergeFlagAttr*)&pPattern->GetItem(ATTR_MERGE_FLAG);
 
         if ( bWidth )
         {
@@ -220,12 +220,12 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                 return 0;
         }
 
-        //		bedingte Formatierung
+        //      bedingte Formatierung
         const SfxItemSet* pCondSet = NULL;
         if ( ((const SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue() )
             pCondSet = pDocument->GetCondResult( nCol, nRow, nTab );
 
-        //	Zeilenumbruch?
+        //  Zeilenumbruch?
 
         const SfxPoolItem* pCondItem;
         SvxCellHorJustify eHorJust;
@@ -248,7 +248,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             // Cell has a value.  Disable line break.
             bBreak = false;
 
-        //	get other attributes from pattern and conditional formatting
+        //  get other attributes from pattern and conditional formatting
 
         SvxCellOrientation eOrient = pPattern->GetCellOrientation( pCondSet );
         BOOL bAsianVertical = ( eOrient == SVX_ORIENTATION_STACKED &&
@@ -256,7 +256,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         if ( bAsianVertical )
             bBreak = false;
 
-        if ( bWidth && bBreak )		// after determining bAsianVertical (bBreak may be reset)
+        if ( bWidth && bBreak )     // after determining bAsianVertical (bBreak may be reset)
             return 0;
 
         long nRotate = 0;
@@ -278,7 +278,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                                                 pPattern->GetItem(ATTR_ROTATE_MODE)).GetValue();
 
                 if ( nRotate == 18000 )
-                    eRotMode = SVX_ROTATE_MODE_STANDARD;	// keinen Ueberlauf
+                    eRotMode = SVX_ROTATE_MODE_STANDARD;    // keinen Ueberlauf
             }
         }
 
@@ -309,8 +309,8 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pCell );
         if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
-        //	also call SetFont for edit cells, because bGetFont may be set only once
-        //	bGetFont is set also if script type changes
+        //  also call SetFont for edit cells, because bGetFont may be set only once
+        //  bGetFont is set also if script type changes
         if (rOptions.bGetFont)
         {
             Fraction aFontZoom = ( eOrient == SVX_ORIENTATION_STANDARD ) ? rZoomX : rZoomY;
@@ -328,7 +328,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                                 IsAmbiguousScript( nScript ) ||
                                 ((eCellType == CELLTYPE_FORMULA) && ((ScFormulaCell*)pCell)->IsMultilineResult()) );
 
-        if (!bEditEngine)									// direkte Ausgabe
+        if (!bEditEngine)                                   // direkte Ausgabe
         {
             String aValStr;
             Color* pColor;
@@ -339,7 +339,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                                         TRUE, rOptions.bFormula, ftCheck );
             if (aValStr.Len())
             {
-                //	SetFont ist nach oben verschoben
+                //  SetFont ist nach oben verschoben
 
                 Size aSize( pDev->GetTextWidth( aValStr ), pDev->GetTextHeight() );
                 if ( eOrient != SVX_ORIENTATION_STANDARD )
@@ -350,9 +350,9 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                 }
                 else if ( nRotate )
                 {
-                    //!	unterschiedliche Skalierung X/Y beruecksichtigen
+                    //! unterschiedliche Skalierung X/Y beruecksichtigen
 
-                    double nRealOrient = nRotate * F_PI18000;	// nRotate sind 1/100 Grad
+                    double nRealOrient = nRotate * F_PI18000;   // nRotate sind 1/100 Grad
                     double nCosAbs = fabs( cos( nRealOrient ) );
                     double nSinAbs = fabs( sin( nRealOrient ) );
                     long nHeight = (long)( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );
@@ -363,18 +363,18 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                     {
                         nWidth = (long) ( pDocument->GetColWidth( nCol,nTab ) * nPPT );
                         bAddMargin = FALSE;
-                        //	nur nach rechts:
-                        //!	unterscheiden nach Ausrichtung oben/unten (nur Text/ganze Hoehe)
+                        //  nur nach rechts:
+                        //! unterscheiden nach Ausrichtung oben/unten (nur Text/ganze Hoehe)
                         if ( pPattern->GetRotateDir( pCondSet ) == SC_ROTDIR_RIGHT )
                             nWidth += (long)( pDocument->GetRowHeight( nRow,nTab ) *
                                                 nPPT * nCosAbs / nSinAbs );
                     }
                     else
-                        nWidth  = (long)( aSize.Height() / nSinAbs );	//! begrenzen?
+                        nWidth  = (long)( aSize.Height() / nSinAbs );   //! begrenzen?
 
                     if ( bBreak && !rOptions.bTotalSize )
                     {
-                        //	#47744# limit size for line break
+                        //  #47744# limit size for line break
                         long nCmp = pDev->GetFont().GetSize().Height() * SC_ROT_BREAK_FACTOR;
                         if ( nHeight > nCmp )
                             nHeight = nCmp;
@@ -398,18 +398,18 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                                   (long) ( pMargin->GetBottomMargin() * nPPT );
                 }
 
-                                                //	Zeilenumbruch ausgefuehrt ?
+                                                //  Zeilenumbruch ausgefuehrt ?
 
                 if ( bBreak && !bWidth )
                 {
-                    //	Test mit EditEngine zur Sicherheit schon bei 90%
-                    //	(wegen Rundungsfehlern und weil EditEngine teilweise anders formatiert)
+                    //  Test mit EditEngine zur Sicherheit schon bei 90%
+                    //  (wegen Rundungsfehlern und weil EditEngine teilweise anders formatiert)
 
                     long nDocPixel = (long) ( ( pDocument->GetColWidth( nCol,nTab ) -
                                         pMargin->GetLeftMargin() - pMargin->GetRightMargin() -
                                         nIndent )
                                         * nPPT );
-                    nDocPixel = (nDocPixel * 9) / 10;			// zur Sicherheit
+                    nDocPixel = (nDocPixel * 9) / 10;           // zur Sicherheit
                     if ( aSize.Width() > nDocPixel )
                         bEditEngine = TRUE;
                 }
@@ -418,7 +418,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
 
         if (bEditEngine)
         {
-            //	der Font wird bei !bEditEngine nicht jedesmal neu gesetzt
+            //  der Font wird bei !bEditEngine nicht jedesmal neu gesetzt
             Font aOldFont = pDev->GetFont();
 
             MapMode aHMMMode( MAP_100TH_MM, Point(), rZoomX, rZoomY );
@@ -436,8 +436,8 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
             pPattern->FillEditItemSet( pSet, pCondSet );
 
-//			no longer needed, are setted with the text (is faster)
-//			pEngine->SetDefaults( pSet );
+//          no longer needed, are setted with the text (is faster)
+//          pEngine->SetDefaults( pSet );
 
             if ( ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() ) {
 
@@ -454,9 +454,9 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                 BOOL bTextWysiwyg = ( pDev->GetOutDevType() == OUTDEV_PRINTER );
                 if ( bTextWysiwyg )
                 {
-                    //	#95593# if text is formatted for printer, don't use PixelToLogic,
-                    //	to ensure the exact same paper width (and same line breaks) as in
-                    //	ScEditUtil::GetEditArea, used for output.
+                    //  #95593# if text is formatted for printer, don't use PixelToLogic,
+                    //  to ensure the exact same paper width (and same line breaks) as in
+                    //  ScEditUtil::GetEditArea, used for output.
 
                     fWidthFactor = HMM_PER_TWIPS;
                 }
@@ -469,7 +469,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                         nDocWidth += (long) ( pDocument->GetColWidth(nCol+nColAdd,nTab) * fWidthFactor );
                 nDocWidth -= (long) ( pMargin->GetLeftMargin() * fWidthFactor )
                            + (long) ( pMargin->GetRightMargin() * fWidthFactor )
-                           + 1; 	// Ausgabebereich ist Breite-1 Pixel (wegen Gitterlinien)
+                           + 1;     // Ausgabebereich ist Breite-1 Pixel (wegen Gitterlinien)
                 if ( nIndent )
                     nDocWidth -= (long) ( nIndent * fWidthFactor );
 
@@ -514,10 +514,10 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                 bEdWidth = !bEdWidth;
             if ( nRotate )
             {
-                //!	unterschiedliche Skalierung X/Y beruecksichtigen
+                //! unterschiedliche Skalierung X/Y beruecksichtigen
 
                 Size aSize( pEngine->CalcTextWidth(), pEngine->GetTextHeight() );
-                double nRealOrient = nRotate * F_PI18000;	// nRotate sind 1/100 Grad
+                double nRealOrient = nRotate * F_PI18000;   // nRotate sind 1/100 Grad
                 double nCosAbs = fabs( cos( nRealOrient ) );
                 double nSinAbs = fabs( sin( nRealOrient ) );
                 long nHeight = (long)( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );
@@ -533,7 +533,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                                             nPPT * nCosAbs / nSinAbs );
                 }
                 else
-                    nWidth  = (long)( aSize.Height() / nSinAbs );	//! begrenzen?
+                    nWidth  = (long)( aSize.Height() / nSinAbs );   //! begrenzen?
                 aSize = Size( nWidth, nHeight );
 
                 Size aPixSize = pDev->LogicToPixel( aSize, aHMMMode );
@@ -545,7 +545,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
 
                     if ( bBreak && !rOptions.bTotalSize )
                     {
-                        //	#47744# limit size for line break
+                        //  #47744# limit size for line break
                         long nCmp = aOldFont.GetSize().Height() * SC_ROT_BREAK_FACTOR;
                         if ( nValue > nCmp )
                             nValue = nCmp;
@@ -560,7 +560,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                     nValue = pDev->LogicToPixel(Size( pEngine->CalcTextWidth(), 0 ),
                                         aHMMMode).Width();
             }
-            else			// Hoehe
+            else            // Hoehe
             {
                 nValue = pDev->LogicToPixel(Size( 0, pEngine->GetTextHeight() ),
                                     aHMMMode).Height();
@@ -582,13 +582,13 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
 
                     if ( bAsianVertical && pDev->GetOutDevType() != OUTDEV_PRINTER )
                     {
-                        //	add 1pt extra (default margin value) for line breaks with SetVertical
+                        //  add 1pt extra (default margin value) for line breaks with SetVertical
                         nValue += (long) ( 20 * nPPT );
                     }
                 }
             }
 
-            //	EditEngine is cached and re-used, so the old vertical flag must be restored
+            //  EditEngine is cached and re-used, so the old vertical flag must be restored
             pEngine->SetVertical( bEngineVertical );
 
             pDocument->DisposeFieldEditEngine(pEngine);
@@ -599,9 +599,9 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
 
         if (bWidth)
         {
-            //		Platz fuer Autofilter-Button
-            //		20 * nZoom/100
-            //		bedingte Formatierung hier nicht interessant
+            //      Platz fuer Autofilter-Button
+            //      20 * nZoom/100
+            //      bedingte Formatierung hier nicht interessant
 
             INT16 nFlags = ((const ScMergeFlagAttr&)pPattern->GetItem(ATTR_MERGE_FLAG)).GetValue();
             if (nFlags & SC_MF_AUTO)
@@ -646,13 +646,13 @@ USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nP
     if (nCount == 0)
         return nOldWidth;
 
-    USHORT	nWidth = (USHORT) (nOldWidth * nPPTX);
-    BOOL	bFound = FALSE;
+    USHORT  nWidth = (USHORT) (nOldWidth * nPPTX);
+    BOOL    bFound = FALSE;
 
     SCSIZE nIndex;
     ScMarkedDataIter aDataIter(this, pMarkData, TRUE);
     if ( bSimpleTextImport )
-    {	// alles eins bis auf NumberFormate
+    {   // alles eins bis auf NumberFormate
         const ScPatternAttr* pPattern = GetPattern( 0 );
         Font aFont;
         // font color doesn't matter here
@@ -722,13 +722,13 @@ USHORT lcl_GetAttribHeight( const ScPatternAttr& rPattern, USHORT nFontHeightId 
     USHORT nHeight = (USHORT) ((const SvxFontHeightItem&) rPattern.GetItem(nFontHeightId)).GetHeight();
     const SvxMarginItem* pMargin = (const SvxMarginItem*) &rPattern.GetItem(ATTR_MARGIN);
     nHeight += nHeight / 5;
-    //	gibt bei 10pt 240
+    //  gibt bei 10pt 240
 
     if ( ((const SvxEmphasisMarkItem&)rPattern.
             GetItem(ATTR_FONT_EMPHASISMARK)).GetEmphasisMark() != EMPHASISMARK_NONE )
     {
-        //	add height for emphasis marks
-        //!	font metrics should be used instead
+        //  add height for emphasis marks
+        //! font metrics should be used instead
         nHeight += nHeight / 4;
     }
 
@@ -738,8 +738,8 @@ USHORT lcl_GetAttribHeight( const ScPatternAttr& rPattern, USHORT nFontHeightId 
         nHeight -= 240;
     }
 
-    //	Standard-Hoehe: TextHeight + Raender - 23
-    //	-> 257 unter Windows
+    //  Standard-Hoehe: TextHeight + Raender - 23
+    //  -> 257 unter Windows
 
     if (nHeight > STD_ROWHEIGHT_DIFF)
         nHeight -= STD_ROWHEIGHT_DIFF;
@@ -749,9 +749,9 @@ USHORT lcl_GetAttribHeight( const ScPatternAttr& rPattern, USHORT nFontHeightId 
     return nHeight;
 }
 
-//	pHeight in Twips
-//	nMinHeight, nMinStart zur Optimierung: ab nRow >= nMinStart ist mindestens nMinHeight
-//	(wird nur bei bStdAllowed ausgewertet)
+//  pHeight in Twips
+//  nMinHeight, nMinStart zur Optimierung: ab nRow >= nMinStart ist mindestens nMinHeight
+//  (wird nur bei bStdAllowed ausgewertet)
 
 void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight,
                                 OutputDevice* pDev,
@@ -766,18 +766,18 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
     SCROW nEditPos = 0;
     SCROW nNextEnd = 0;
 
-    //	bei bedingter Formatierung werden immer die einzelnen Zellen angesehen
+    //  bei bedingter Formatierung werden immer die einzelnen Zellen angesehen
 
     const ScPatternAttr* pPattern = aIter.Next(nStart,nEnd);
     while ( pPattern )
     {
-        const ScMergeAttr*		pMerge = (const ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
-        const ScMergeFlagAttr*	pFlag = (const ScMergeFlagAttr*)&pPattern->GetItem(ATTR_MERGE_FLAG);
+        const ScMergeAttr*      pMerge = (const ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
+        const ScMergeFlagAttr*  pFlag = (const ScMergeFlagAttr*)&pPattern->GetItem(ATTR_MERGE_FLAG);
         if ( pMerge->GetRowMerge() > 1 || pFlag->IsOverlapped() )
         {
-            //	nix - vertikal bei der zusammengefassten und den ueberdeckten,
-            //		  horizontal nur bei den ueberdeckten (unsichtbaren) -
-            //		  eine nur horizontal zusammengefasste wird aber beruecksichtigt
+            //  nix - vertikal bei der zusammengefassten und den ueberdeckten,
+            //        horizontal nur bei den ueberdeckten (unsichtbaren) -
+            //        eine nur horizontal zusammengefasste wird aber beruecksichtigt
         }
         else
         {
@@ -804,20 +804,20 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
             }
 
             if (bStdOnly)
-                if (HasEditCells(nStart,nEnd,nEditPos))		// includes mixed script types
+                if (HasEditCells(nStart,nEnd,nEditPos))     // includes mixed script types
                 {
                     if (nEditPos == nStart)
                     {
                         bStdOnly = FALSE;
                         if (nEnd > nEditPos)
                             nNextEnd = nEnd;
-                        nEnd = nEditPos;				// einzeln ausrechnen
-                        bStdAllowed = FALSE;			// wird auf jeden Fall per Zelle berechnet
+                        nEnd = nEditPos;                // einzeln ausrechnen
+                        bStdAllowed = FALSE;            // wird auf jeden Fall per Zelle berechnet
                     }
                     else
                     {
                         nNextEnd = nEnd;
-                        nEnd = nEditPos - 1;			// Standard - Teil
+                        nEnd = nEditPos - 1;            // Standard - Teil
                     }
                 }
 
@@ -835,8 +835,8 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
                 else
                     nDefHeight = nLatHeight = lcl_GetAttribHeight( *pPattern, ATTR_FONT_HEIGHT );
 
-                //	if everything below is already larger, the loop doesn't have to
-                //	be run again
+                //  if everything below is already larger, the loop doesn't have to
+                //  be run again
                 SCROW nStdEnd = nEnd;
                 if ( nDefHeight <= nMinHeight && nStdEnd >= nMinStart )
                     nStdEnd = (nMinStart>0) ? nMinStart-1 : 0;
@@ -847,8 +847,8 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
 
                 if ( bStdOnly )
                 {
-                    //	if cells are not handled individually below,
-                    //	check for cells with different script type
+                    //  if cells are not handled individually below,
+                    //  check for cells with different script type
 
                     SCSIZE nIndex;
                     Search(nStart,nIndex);
@@ -884,7 +884,7 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
                 }
             }
 
-            if (!bStdOnly)						// belegte Zellen suchen
+            if (!bStdOnly)                      // belegte Zellen suchen
             {
                 ScNeededSizeOptions aOptions;
 
@@ -892,7 +892,7 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
                 Search(nStart,nIndex);
                 while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEnd) : FALSE )
                 {
-                    //	Zellhoehe nur berechnen, wenn sie spaeter auch gebraucht wird (#37928#)
+                    //  Zellhoehe nur berechnen, wenn sie spaeter auch gebraucht wird (#37928#)
 
                     if ( bShrink || !(pDocument->GetRowFlags(nRow, nTab) & CR_MANUALSIZE) )
                     {
@@ -983,27 +983,27 @@ void ScColumn::RemoveAutoSpellObj()
         {
             ScEditCell* pOldCell = (ScEditCell*) pItems[i].pCell;
             const EditTextObject* pData = pOldCell->GetData();
-            //	keine Abfrage auf HasOnlineSpellErrors, damit es auch
-            //	nach dem Laden funktioniert
+            //  keine Abfrage auf HasOnlineSpellErrors, damit es auch
+            //  nach dem Laden funktioniert
 
-            //	Fuer den Test auf harte Formatierung (ScEditAttrTester) sind die Defaults
-            //	in der EditEngine unwichtig. Wenn der Tester spaeter einmal gleiche
-            //	Attribute in Default und harter Formatierung erkennen und weglassen sollte,
-            //	muessten an der EditEngine zu jeder Zelle die richtigen Defaults gesetzt
-            //	werden!
+            //  Fuer den Test auf harte Formatierung (ScEditAttrTester) sind die Defaults
+            //  in der EditEngine unwichtig. Wenn der Tester spaeter einmal gleiche
+            //  Attribute in Default und harter Formatierung erkennen und weglassen sollte,
+            //  muessten an der EditEngine zu jeder Zelle die richtigen Defaults gesetzt
+            //  werden!
 
-            //	auf Attribute testen
+            //  auf Attribute testen
             if ( !pEngine )
                 pEngine = new ScTabEditEngine(pDocument);
             pEngine->SetText( *pData );
             ScEditAttrTester aTester( pEngine );
-            if ( aTester.NeedsObject() )					// nur Spell-Errors entfernen
+            if ( aTester.NeedsObject() )                    // nur Spell-Errors entfernen
             {
-                EditTextObject* pNewData = pEngine->CreateTextObject();	// ohne BIGOBJ
+                EditTextObject* pNewData = pEngine->CreateTextObject(); // ohne BIGOBJ
                 pOldCell->SetData( pNewData, pEngine->GetEditTextObjectPool() );
                 delete pNewData;
             }
-            else											// String erzeugen
+            else                                            // String erzeugen
             {
                 String aText = ScEditUtil::GetSpaceDelimitedString( *pEngine );
                 ScBaseCell* pNewCell = new ScStringCell( aText );
@@ -1029,18 +1029,18 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
             ScEditCell* pOldCell = (ScEditCell*) pItems[i].pCell;
             const EditTextObject* pData = pOldCell->GetData();
 
-            //	Fuer den Test auf harte Formatierung (ScEditAttrTester) sind die Defaults
-            //	in der EditEngine unwichtig. Wenn der Tester spaeter einmal gleiche
-            //	Attribute in Default und harter Formatierung erkennen und weglassen sollte,
-            //	muessten an der EditEngine zu jeder Zelle die richtigen Defaults gesetzt
-            //	werden!
+            //  Fuer den Test auf harte Formatierung (ScEditAttrTester) sind die Defaults
+            //  in der EditEngine unwichtig. Wenn der Tester spaeter einmal gleiche
+            //  Attribute in Default und harter Formatierung erkennen und weglassen sollte,
+            //  muessten an der EditEngine zu jeder Zelle die richtigen Defaults gesetzt
+            //  werden!
 
-            //	auf Attribute testen
+            //  auf Attribute testen
             if ( !pEngine )
             {
                 //pEngine = new ScTabEditEngine(pDocument);
                 pEngine = new ScFieldEditEngine( pDocument->GetEditPool() );
-                //	EE_CNTRL_ONLINESPELLING falls schon Fehler drin sind
+                //  EE_CNTRL_ONLINESPELLING falls schon Fehler drin sind
                 pEngine->SetControlWord( pEngine->GetControlWord() | EE_CNTRL_ONLINESPELLING );
                 pEngine->SetForbiddenCharsTable( pDocument->GetForbiddenCharacters() );
                 pEngine->SetAsianCompressionMode( pDocument->GetAsianCompression() );
@@ -1054,18 +1054,18 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
                 const SfxItemSet& rOld = pEngine->GetParaAttribs( nPar );
                 if ( rOld.Count() )
                 {
-                    SfxItemSet aNew( *rOld.GetPool(), rOld.GetRanges() );	// leer
+                    SfxItemSet aNew( *rOld.GetPool(), rOld.GetRanges() );   // leer
                     pEngine->SetParaAttribs( nPar, aNew );
                 }
             }
-            //	URL-Felder in Text wandeln (andere gibt's nicht, darum pType=0)
+            //  URL-Felder in Text wandeln (andere gibt's nicht, darum pType=0)
             pEngine->RemoveFields( TRUE );
 
             BOOL bSpellErrors = pEngine->HasOnlineSpellErrors();
-            BOOL bNeedObject = bSpellErrors || nParCount>1;			// Errors/Absaetze behalten
-            //	ScEditAttrTester nicht mehr noetig, Felder sind raus
+            BOOL bNeedObject = bSpellErrors || nParCount>1;         // Errors/Absaetze behalten
+            //  ScEditAttrTester nicht mehr noetig, Felder sind raus
 
-            if ( bNeedObject )										// bleibt Edit-Zelle
+            if ( bNeedObject )                                      // bleibt Edit-Zelle
             {
                 ULONG nCtrl = pEngine->GetControlWord();
                 ULONG nWantBig = bSpellErrors ? EE_CNTRL_ALLOWBIGOBJS : 0;
@@ -1075,7 +1075,7 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
                 pOldCell->SetData( pNewData, pEngine->GetEditTextObjectPool() );
                 delete pNewData;
             }
-            else											// String erzeugen
+            else                                            // String erzeugen
             {
                 String aText = ScEditUtil::GetSpaceDelimitedString( *pEngine );
                 ScBaseCell* pNewCell = new ScStringCell( aText );
@@ -1134,9 +1134,9 @@ BOOL ScColumnIterator::Next( SCROW& rRow, ScBaseCell*& rpCell )
     return FALSE;
 }
 
-SCSIZE ScColumnIterator::GetIndex() const			// Index zur letzen abgefragten Zelle
+SCSIZE ScColumnIterator::GetIndex() const           // Index zur letzen abgefragten Zelle
 {
-    return nPos - 1;		// bei Next ist Pos hochgezaehlt worden
+    return nPos - 1;        // bei Next ist Pos hochgezaehlt worden
 }
 
 // -----------------------------------------------------------------------------------------
@@ -1166,17 +1166,17 @@ BOOL ScMarkedDataIter::Next( SCSIZE& rIndex )
         {
             if (!pMarkIter || !pMarkIter->Next( nTop, nBottom ))
             {
-                if (bAll)					// ganze Spalte
+                if (bAll)                   // ganze Spalte
                 {
-                    nTop	= 0;
-                    nBottom	= MAXROW;
+                    nTop    = 0;
+                    nBottom = MAXROW;
                 }
                 else
                     return FALSE;
             }
             pColumn->Search( nTop, nPos );
             bNext = FALSE;
-            bAll  = FALSE;					// nur beim ersten Versuch
+            bAll  = FALSE;                  // nur beim ersten Versuch
         }
 
         if ( nPos >= pColumn->nCount )
@@ -1238,7 +1238,7 @@ BOOL ScColumn::IsEmptyVisData(BOOL bNotes) const
 
 SCSIZE ScColumn::VisibleCount( SCROW nStartRow, SCROW nEndRow ) const
 {
-    //	Notizen werden nicht mitgezaehlt
+    //  Notizen werden nicht mitgezaehlt
 
     SCSIZE nVisCount = 0;
     SCSIZE nIndex;
@@ -1321,6 +1321,10 @@ BOOL ScColumn::IsEmpty() const
 
 BOOL ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes) const
 {
+    Rectangle aRect;
+    if (pAttrArray->HasLines(nStartRow, nEndRow, aRect, TRUE, TRUE))
+        return FALSE;
+
     if ( nCount == 0 || !pItems )
         return TRUE;
 
@@ -1329,10 +1333,10 @@ BOOL ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes) c
     while ( nIndex < nCount && pItems[nIndex].nRow <= nEndRow )
     {
         if ( !pItems[nIndex].pCell->IsBlank( bIgnoreNotes ) )   // found a cell
-            return FALSE;							// not empty
+            return FALSE;                           // not empty
         ++nIndex;
     }
-    return TRUE;									// no cell found
+    return TRUE;                                    // no cell found
 }
 
 SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const
@@ -1408,11 +1412,11 @@ BOOL ScColumn::GetPrevDataPos(SCROW& rRow) const
     return bFound;
 }
 
-BOOL ScColumn::GetNextDataPos(SCROW& rRow) const		// greater than rRow
+BOOL ScColumn::GetNextDataPos(SCROW& rRow) const        // greater than rRow
 {
     SCSIZE nIndex;
     if (Search( rRow, nIndex ))
-        ++nIndex;					// next cell
+        ++nIndex;                   // next cell
 
     BOOL bMore = ( nIndex < nCount );
     if ( bMore )
@@ -1500,11 +1504,11 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
 
 BOOL ScColumn::HasDataAt(SCROW nRow) const
 {
-/*	SCSIZE nIndex;
+/*  SCSIZE nIndex;
     return Search( nRow, nIndex );
 */
-        //	immer nur sichtbare interessant ?
-        //!	dann HasVisibleDataAt raus
+        //  immer nur sichtbare interessant ?
+        //! dann HasVisibleDataAt raus
 
     SCSIZE nIndex;
     if (Search(nRow, nIndex))
@@ -1650,11 +1654,11 @@ void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
                     pCell->DeleteBroadcaster();
             }
         }
-//		else
-//			DBG_ERROR("ScColumn::EndListening - kein Broadcaster");
+//      else
+//          DBG_ERROR("ScColumn::EndListening - kein Broadcaster");
     }
-//	else
-//		DBG_ERROR("ScColumn::EndListening - keine Zelle");
+//  else
+//      DBG_ERROR("ScColumn::EndListening - keine Zelle");
 }
 
 void ScColumn::CompileDBFormula()
@@ -1714,12 +1718,12 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
             break;
         case CELLTYPE_FORMULA:
             {
-                if ( rData.eFunc != SUBTOTAL_FUNC_CNT2 )		// da interessiert's nicht
+                if ( rData.eFunc != SUBTOTAL_FUNC_CNT2 )        // da interessiert's nicht
                 {
                     ScFormulaCell* pFC = (ScFormulaCell*)pCell;
                     if ( pFC->GetErrCode() )
                     {
-                        if ( rData.eFunc != SUBTOTAL_FUNC_CNT )	// fuer Anzahl einfach weglassen
+                        if ( rData.eFunc != SUBTOTAL_FUNC_CNT ) // fuer Anzahl einfach weglassen
                             rData.bError = TRUE;
                     }
                     else if (pFC->IsValue())
@@ -1754,11 +1758,11 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
                         rData.bError = TRUE;
                 }
                 break;
-            case SUBTOTAL_FUNC_CNT:				// nur Werte
+            case SUBTOTAL_FUNC_CNT:             // nur Werte
                 if (bVal)
                     ++rData.nCount;
                 break;
-            case SUBTOTAL_FUNC_CNT2:			// alle
+            case SUBTOTAL_FUNC_CNT2:            // alle
                 if (bCell)
                     ++rData.nCount;
                 break;
@@ -1780,7 +1784,7 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
     }
 }
 
-//	Mehrfachselektion:
+//  Mehrfachselektion:
 void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
                                         ScFunctionData& rData,
                                         ScFlatBoolRowSegments& rHiddenRows,
@@ -1798,7 +1802,7 @@ void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
     }
 }
 
-//	bei bNoMarked die Mehrfachselektion weglassen
+//  bei bNoMarked die Mehrfachselektion weglassen
 void ScColumn::UpdateAreaFunction( ScFunctionData& rData,
                                    ScFlatBoolRowSegments& rHiddenRows,
                                     SCROW nStartRow, SCROW nEndRow )
@@ -1819,7 +1823,7 @@ ULONG ScColumn::GetWeightedCount() const
 {
     ULONG nTotal = 0;
 
-    //	Notizen werden nicht gezaehlt
+    //  Notizen werden nicht gezaehlt
 
     for (SCSIZE i=0; i<nCount; i++)
     {

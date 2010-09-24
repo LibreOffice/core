@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ public:
     /** Return the joined minimum width of all children, i.e. the largest of
         the minimum widths.
     */
-    virtual sal_Int32 GetMinimumWidth (void); 
+    virtual sal_Int32 GetMinimumWidth (void);
 
     /** The default implementaion always returns <FALSE/>
     */
@@ -93,7 +93,7 @@ public:
         called node has to be changed, e.g. when the layout menu shows more
         or less items than before.  As a typical result the node will layout
         and resize its children according to their size requirements.
-        
+
         Please remember that the size of the children can be changed in the
         first place because scroll bars can give a node the space it needs.
 
@@ -156,7 +156,7 @@ public:
             The accessible parent of the accessible object to create.  It is
             not necessaryly the accessible object of the parent window of
             GetWindow().
-            
+
     */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> CreateAccessibleObject (
@@ -179,7 +179,7 @@ public:
     void FireStateChangeEvent (
         TreeNodeStateChangeEventId eEventId,
         TreeNode* pChild = NULL) const;
-    
+
 protected:
     ::std::auto_ptr<ControlContainer> mpControlContainer;
 

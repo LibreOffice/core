@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,9 @@ namespace drawinglayer
     {
         SdrOle2Primitive2D::SdrOle2Primitive2D(
             const Primitive2DSequence& rOLEContent,
-            const basegfx::B2DHomMatrix& rTransform, 
+            const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute)
-        :	BasePrimitive2D(),
+        :   BasePrimitive2D(),
             maOLEContent(rOLEContent),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute)
@@ -90,21 +90,21 @@ namespace drawinglayer
             const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createUnitPolygon());
 
             // add fill
-            if(!bBehaveCompatibleToPaintVersion 
+            if(!bBehaveCompatibleToPaintVersion
                 && !getSdrLFSTAttribute().getFill().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline), 
-                        getTransform(), 
-                        getSdrLFSTAttribute().getFill(), 
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        getSdrLFSTAttribute().getFill(),
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
             // add line
             // #i97981# condition was inverse to purpose. When being compatible to paint version,
             // border needs to be suppressed
-            if(!bBehaveCompatibleToPaintVersion 
+            if(!bBehaveCompatibleToPaintVersion
                 && !getSdrLFSTAttribute().getLine().isDefault())
             {
                 // if line width is given, polygon needs to be grown by half of it to make the
@@ -123,19 +123,19 @@ namespace drawinglayer
                     const basegfx::B2DRange aExpandedRange(-fScaleX, -fScaleY, 1.0 + fScaleX, 1.0 + fScaleY);
                     basegfx::B2DPolygon aExpandedUnitOutline(basegfx::tools::createPolygonFromRect(aExpandedRange));
 
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                         createPolygonLinePrimitive(
-                            aExpandedUnitOutline, 
-                            getTransform(), 
+                            aExpandedUnitOutline,
+                            getTransform(),
                             getSdrLFSTAttribute().getLine(),
                             attribute::SdrLineStartEndAttribute()));
                 }
                 else
                 {
-                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
+                    appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                         createPolygonLinePrimitive(
-                            aUnitOutline, 
-                            getTransform(), 
+                            aUnitOutline,
+                            getTransform(),
                             getSdrLFSTAttribute().getLine(),
                             attribute::SdrLineStartEndAttribute()));
                 }
@@ -157,23 +157,23 @@ namespace drawinglayer
             // always supported by the old paints, too
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createTextPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline), 
-                        getTransform(), 
-                        getSdrLFSTAttribute().getText(), 
-                        getSdrLFSTAttribute().getLine(), 
-                        false, 
-                        false, 
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        getTransform(),
+                        getSdrLFSTAttribute().getText(),
+                        getSdrLFSTAttribute().getLine(),
+                        false,
+                        false,
                         false));
             }
 
             // add shadow
-            if(!bBehaveCompatibleToPaintVersion 
+            if(!bBehaveCompatibleToPaintVersion
                 && !getSdrLFSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
-                    aRetval, 
+                    aRetval,
                     getSdrLFSTAttribute().getShadow());
             }
 

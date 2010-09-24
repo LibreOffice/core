@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -312,18 +312,18 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
             String aTmpName( SwStyleNameMapper::GetSpecialExtraProgName( rDesc.GetSequenceName() ) );
             lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LABEL_CATEGORY, aTmpName );
-            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_LABELS,	!rDesc.IsCreateFromObjectNames());
+            lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_LABELS,  !rDesc.IsCreateFromObjectNames());
 
             sal_Int16 nSet = text::ChapterFormat::NAME_NUMBER;
             switch (rDesc.GetCaptionDisplay())
             {
                 case CAPTION_COMPLETE:  nSet = text::ChapterFormat::NAME_NUMBER;break;
-                case CAPTION_NUMBER  :  nSet = text::ChapterFormat::NUMBER;	break;
+                case CAPTION_NUMBER  :  nSet = text::ChapterFormat::NUMBER; break;
                 case CAPTION_TEXT    :  nSet = text::ChapterFormat::NAME;      break;
             }
             lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LABEL_DISPLAY_TYPE, nSet);
 
-            sal_uInt16 	nOLEOptions = rDesc.GetOLEOptions();
+            sal_uInt16  nOLEOptions = rDesc.GetOLEOptions();
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_MATH,   0 != (nsSwTOOElements::TOO_MATH &nOLEOptions           ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_CHART,  0 != (nsSwTOOElements::TOO_CHART    &nOLEOptions       ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_STAR_CALC,   0 != (nsSwTOOElements::TOO_CALC &nOLEOptions           ));
@@ -486,12 +486,12 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             }
         }
 /*
-    const String&	GetAutoMarkURL() const { return sAutoMarkURL;}
-    const String&	GetMainEntryCharStyle() const {return sMainEntryCharStyle;}
+    const String&   GetAutoMarkURL() const { return sAutoMarkURL;}
+    const String&   GetMainEntryCharStyle() const {return sMainEntryCharStyle;}
 
-    String			GetAuthBrackets() const {return sAuthBrackets;}
-    sal_Bool			IsAuthSequence() const {return bIsAuthSequence;}
-    sal_Bool			IsSortByDocument()const {return bSortByDocument ;}
+    String          GetAuthBrackets() const {return sAuthBrackets;}
+    sal_Bool            IsAuthSequence() const {return bIsAuthSequence;}
+    sal_Bool            IsSortByDocument()const {return bSortByDocument ;}
 
     SwTOXSortKey GetSortKey1() const {return eSortKey1;}
     SwTOXSortKey GetSortKey2() const {return eSortKey2;}
@@ -501,10 +501,10 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
         pxIndexSectionsArr[nTOXIndex]->xDocumentIndex->update();
 
 //#if OSL_DEBUG_LEVEL > 1
-//	    uno::Reference< frame::XStorable >  xStor(xModel, uno::UNO_QUERY);
-//		String sURL("file:///e|/temp/sw/idxexample.sdw");
-//	 uno::Sequence< beans::PropertyValue > aArgs(0);
-//		xStor->storeToURL(S2U(sURL), aArgs);
+//      uno::Reference< frame::XStorable >  xStor(xModel, uno::UNO_QUERY);
+//      String sURL("file:///e|/temp/sw/idxexample.sdw");
+//   uno::Sequence< beans::PropertyValue > aArgs(0);
+//      xStor->storeToURL(S2U(sURL), aArgs);
 //#endif
 
     }

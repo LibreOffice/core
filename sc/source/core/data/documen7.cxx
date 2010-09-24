@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,14 @@
 #include "brdcst.hxx"
 #include "bcaslot.hxx"
 #include "cell.hxx"
-#include "formula/errorcodes.hxx"		// errCircularReference
+#include "formula/errorcodes.hxx"       // errCircularReference
 #include "scerrors.hxx"
 #include "docoptio.hxx"
 #include "refupdat.hxx"
 #include "table.hxx"
 #include "progress.hxx"
-#include "scmod.hxx"   		// SC_MOD
-#include "inputopt.hxx" 	// GetExpandRefs
+#include "scmod.hxx"        // SC_MOD
+#include "inputopt.hxx"     // GetExpandRefs
 #include "conditio.hxx"
 #include "sheetevents.hxx"
 #include <tools/shl.hxx>
@@ -58,7 +58,7 @@
 
 #include "globstr.hrc"
 
-extern const ScFormulaCell* pLastFormulaTreeTop;	// cellform.cxx Err527 WorkAround
+extern const ScFormulaCell* pLastFormulaTreeTop;    // cellform.cxx Err527 WorkAround
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -92,7 +92,7 @@ void ScDocument::Broadcast( ULONG nHint, const ScAddress& rAddr,
     )
 {
     if ( !pBASM )
-        return ;	// Clipboard or Undo
+        return ;    // Clipboard or Undo
     ScHint aHint( nHint, rAddr, pCell );
     Broadcast( aHint );
 }
@@ -101,7 +101,7 @@ void ScDocument::Broadcast( ULONG nHint, const ScAddress& rAddr,
 void ScDocument::Broadcast( const ScHint& rHint )
 {
     if ( !pBASM )
-        return ;	// Clipboard or Undo
+        return ;    // Clipboard or Undo
     if ( !nHardRecalcState )
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
@@ -120,7 +120,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
             TrackFormulas( rHint.GetId() );
     }
 
-    //	Repaint fuer bedingte Formate mit relativen Referenzen:
+    //  Repaint fuer bedingte Formate mit relativen Referenzen:
     if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
         pCondFormList->SourceChanged( rHint.GetAddress() );
 
@@ -136,7 +136,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
 void ScDocument::AreaBroadcast( const ScHint& rHint )
 {
     if ( !pBASM )
-        return ;	// Clipboard or Undo
+        return ;    // Clipboard or Undo
     if ( !nHardRecalcState )
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
@@ -144,7 +144,7 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
             TrackFormulas( rHint.GetId() );
     }
 
-    //	Repaint fuer bedingte Formate mit relativen Referenzen:
+    //  Repaint fuer bedingte Formate mit relativen Referenzen:
     if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
         pCondFormList->SourceChanged( rHint.GetAddress() );
 }
@@ -226,7 +226,7 @@ void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
     if ( pEOFormulaTree )
         pEOFormulaTree->SetNext( pCell );
     else
-        pFormulaTree = pCell;				// kein Ende, kein Anfang..
+        pFormulaTree = pCell;               // kein Ende, kein Anfang..
     pCell->SetPrevious( pEOFormulaTree );
     pCell->SetNext( 0 );
     pEOFormulaTree = pCell;
@@ -243,13 +243,13 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
     {
         ScFormulaCell* pNext = pCell->GetNext();
         if ( pPrev )
-            pPrev->SetNext( pNext );		// gibt Vorlaeufer
+            pPrev->SetNext( pNext );        // gibt Vorlaeufer
         else
-            pFormulaTree = pNext;			// ist erste Zelle
+            pFormulaTree = pNext;           // ist erste Zelle
         if ( pNext )
-            pNext->SetPrevious( pPrev );	// gibt Nachfolger
+            pNext->SetPrevious( pPrev );    // gibt Nachfolger
         else
-            pEOFormulaTree = pPrev;			// ist letzte Zelle
+            pEOFormulaTree = pPrev;         // ist letzte Zelle
         pCell->SetPrevious( 0 );
         pCell->SetNext( 0 );
         USHORT nRPN = pCell->GetCode()->GetCodeLen();
@@ -298,7 +298,7 @@ void ScDocument::CalcFormulaTree( BOOL bOnlyForced, BOOL bNoProgress )
         while ( pCell )
         {
             if ( pCell->GetDirty() )
-                pCell = pCell->GetNext();		// alles klar
+                pCell = pCell->GetNext();       // alles klar
             else
             {
                 if ( pCell->GetCode()->IsRecalcModeAlways() )
@@ -311,7 +311,7 @@ void ScDocument::CalcFormulaTree( BOOL bOnlyForced, BOOL bNoProgress )
                     pCell = pNext;
                 }
                 else
-                {	// andere simpel berechnen
+                {   // andere simpel berechnen
                     pCell->SetDirtyVar();
                     pCell = pCell->GetNext();
                 }
@@ -404,7 +404,7 @@ void ScDocument::AppendToFormulaTrack( ScFormulaCell* pCell )
     if ( pEOFormulaTrack )
         pEOFormulaTrack->SetNextTrack( pCell );
     else
-        pFormulaTrack = pCell;				// kein Ende, kein Anfang..
+        pFormulaTrack = pCell;              // kein Ende, kein Anfang..
     pCell->SetPreviousTrack( pEOFormulaTrack );
     pCell->SetNextTrack( 0 );
     pEOFormulaTrack = pCell;
@@ -421,13 +421,13 @@ void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
     {
         ScFormulaCell* pNext = pCell->GetNextTrack();
         if ( pPrev )
-            pPrev->SetNextTrack( pNext );		// gibt Vorlaeufer
+            pPrev->SetNextTrack( pNext );       // gibt Vorlaeufer
         else
-            pFormulaTrack = pNext;				// ist erste Zelle
+            pFormulaTrack = pNext;              // ist erste Zelle
         if ( pNext )
-            pNext->SetPreviousTrack( pPrev );	// gibt Nachfolger
+            pNext->SetPreviousTrack( pPrev );   // gibt Nachfolger
         else
-            pEOFormulaTrack = pPrev;  			// ist letzte Zelle
+            pEOFormulaTrack = pPrev;            // ist letzte Zelle
         pCell->SetPreviousTrack( 0 );
         pCell->SetNextTrack( 0 );
         --nFormulaTrackCount;
@@ -465,7 +465,7 @@ void ScDocument::TrackFormulas( ULONG nHintId )
             if ( ( pBC = pTrack->GetBroadcaster() ) != NULL )
                 pBC->Broadcast( aHint );
             pBASM->AreaBroadcast( aHint );
-            //	Repaint fuer bedingte Formate mit relativen Referenzen:
+            //  Repaint fuer bedingte Formate mit relativen Referenzen:
             if ( pCondFormList )
                 pCondFormList->SourceChanged( pTrack->aPos );
             // for "calculate" event, keep track of which sheets are affected by tracked formulas

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,11 +41,11 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtAnchor: public SfxPoolItem
 {
-    SwPosition *pCntntAnchor;	//0 Fuer Seitengebundene Rahmen.
+    SwPosition *pCntntAnchor;   //0 Fuer Seitengebundene Rahmen.
                                 //Index fuer Absatzgebundene Rahmen.
                                 //Position fuer Zeichengebundene Rahmen
     RndStdIds  nAnchorId;
-    USHORT	   nPageNum;		//Seitennummer bei Seitengeb. Rahmen.
+    USHORT     nPageNum;        //Seitennummer bei Seitengeb. Rahmen.
 
     // OD 2004-05-05 #i28701# - getting anchor positions ordered
     sal_uInt32 mnOrder;
@@ -56,20 +56,20 @@ public:
     SwFmtAnchor( const SwFmtAnchor &rCpy );
     ~SwFmtAnchor();
 
-    //	Zuweisungsoperator
+    //  Zuweisungsoperator
     SwFmtAnchor &operator=( const SwFmtAnchor& );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual	BOOL        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	BOOL			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     RndStdIds GetAnchorId() const { return nAnchorId; }
     USHORT GetPageNum() const { return nPageNum; }

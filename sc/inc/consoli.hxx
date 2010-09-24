@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,97 +35,97 @@ class ScDocument;
 
 // -----------------------------------------------------------------------
 
-struct ScReferenceEntry				// ohne Constructor !
+struct ScReferenceEntry             // ohne Constructor !
 {
-    SCCOL	nCol;
-    SCROW	nRow;
-    SCTAB	nTab;
+    SCCOL   nCol;
+    SCROW   nRow;
+    SCTAB   nTab;
 };
 
 
-//!		Delta-Wert fuer Daten benutzen?
+//!     Delta-Wert fuer Daten benutzen?
 
-class ScReferenceList			// ohne Constructor !
+class ScReferenceList           // ohne Constructor !
 {
 private:
-    SCSIZE				nCount;
-    SCSIZE				nFullSize;			// inkl. Fuell-Eintraege
-    ScReferenceEntry*	pData;
+    SCSIZE              nCount;
+    SCSIZE              nFullSize;          // inkl. Fuell-Eintraege
+    ScReferenceEntry*   pData;
 
 public:
-    void					Init() 						{ nCount=0; nFullSize=0; pData=NULL; }
-    void					Clear() 					{ delete[] pData; }
+    void                    Init()                      { nCount=0; nFullSize=0; pData=NULL; }
+    void                    Clear()                     { delete[] pData; }
 
-    SCSIZE					GetCount()					{ return nCount; }
-    const ScReferenceEntry&	GetEntry( SCSIZE nPos )		{ return pData[nPos]; }
-    void					SetFullSize( SCSIZE nNew )	{ nFullSize = nNew; }
+    SCSIZE                  GetCount()                  { return nCount; }
+    const ScReferenceEntry& GetEntry( SCSIZE nPos )     { return pData[nPos]; }
+    void                    SetFullSize( SCSIZE nNew )  { nFullSize = nNew; }
 
-    void					AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    void                    AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab );
 };
 
 // -----------------------------------------------------------------------
 
 
 //
-//	Reihenfolge:
-//		1)	ScConsData anlegen
-//		2)	Parameter (Size/Flags)
-//		3)	AddFields fuer alle Bereiche (nur noetig bei bColByName oder bRowByName)
-//		4)	DoneFields					 ( 		"						"		   )
-//		5)	AddData fuer alle Bereiche
-//			evtl. AddName nach jedem Bereich
-//		6)	OutputToDocument
+//  Reihenfolge:
+//      1)  ScConsData anlegen
+//      2)  Parameter (Size/Flags)
+//      3)  AddFields fuer alle Bereiche (nur noetig bei bColByName oder bRowByName)
+//      4)  DoneFields                   (      "                       "          )
+//      5)  AddData fuer alle Bereiche
+//          evtl. AddName nach jedem Bereich
+//      6)  OutputToDocument
 //
 
-//!	ab bestimmter Groesse ScDocument Struktur benutzen?
+//! ab bestimmter Groesse ScDocument Struktur benutzen?
 
 
 class ScConsData
 {
 private:
-    ScSubTotalFunc		eFunction;
-    BOOL				bReference;
-    BOOL				bColByName;
-    BOOL				bRowByName;
-    BOOL				bSubTitles;
-    SCSIZE				nColCount;
-    SCSIZE				nRowCount;
-    BOOL**				ppUsed;
-    double**			ppSum;
-    double**			ppCount;
-    double**			ppSumSqr;
-    ScReferenceList**	ppRefs;
-    String**			ppColHeaders;
-    String**			ppRowHeaders;
-    SCSIZE				nDataCount;
-    SCSIZE				nTitleCount;
-    String**			ppTitles;
-    SCSIZE**		    ppTitlePos;
-    BOOL				bCornerUsed;
-    String				aCornerText;		// nur bei bColByName && bRowByName
+    ScSubTotalFunc      eFunction;
+    BOOL                bReference;
+    BOOL                bColByName;
+    BOOL                bRowByName;
+    BOOL                bSubTitles;
+    SCSIZE              nColCount;
+    SCSIZE              nRowCount;
+    BOOL**              ppUsed;
+    double**            ppSum;
+    double**            ppCount;
+    double**            ppSumSqr;
+    ScReferenceList**   ppRefs;
+    String**            ppColHeaders;
+    String**            ppRowHeaders;
+    SCSIZE              nDataCount;
+    SCSIZE              nTitleCount;
+    String**            ppTitles;
+    SCSIZE**            ppTitlePos;
+    BOOL                bCornerUsed;
+    String              aCornerText;        // nur bei bColByName && bRowByName
 
 public:
                 ScConsData();
                 ~ScConsData();
 
-    void		SetSize( SCCOL nCols, SCROW nRows );
-    void		SetFlags( ScSubTotalFunc eFunc, BOOL bColName, BOOL bRowName, BOOL bRef );
+    void        SetSize( SCCOL nCols, SCROW nRows );
+    void        SetFlags( ScSubTotalFunc eFunc, BOOL bColName, BOOL bRowName, BOOL bRef );
 
-    void		InitData(BOOL bDelete=TRUE);
-    void		DeleteData();
+    void        InitData(BOOL bDelete=TRUE);
+    void        DeleteData();
 
-    void		AddFields( ScDocument* pSrcDoc, SCTAB nTab,
+    void        AddFields( ScDocument* pSrcDoc, SCTAB nTab,
                             SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
-    void		DoneFields();
+    void        DoneFields();
 
-    void		AddData( ScDocument* pSrcDoc, SCTAB nTab,
+    void        AddData( ScDocument* pSrcDoc, SCTAB nTab,
                             SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
-    void		AddName( const String& rName );
+    void        AddName( const String& rName );
 
-    void		OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow, SCTAB nTab );
+    void        OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow, SCTAB nTab );
 
-    void		GetSize( SCCOL& rCols, SCROW& rRows ) const;
-    SCROW		GetInsertCount() const;
+    void        GetSize( SCCOL& rCols, SCROW& rRows ) const;
+    SCROW       GetInsertCount() const;
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@
 // the same, but in complex text cell skip over legatures and char skip
 // into it.
 // These defines exist only to cut off the dependicies to I18N project.
-const USHORT CRSR_SKIP_CHARS  =	0;
-const USHORT CRSR_SKIP_CELLS  =	1;
+const USHORT CRSR_SKIP_CHARS  = 0;
+const USHORT CRSR_SKIP_CELLS  = 1;
 const USHORT CRSR_SKIP_HIDDEN = 2;
 
 #endif

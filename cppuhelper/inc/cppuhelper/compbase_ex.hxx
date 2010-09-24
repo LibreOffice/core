@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ protected:
     /** boradcast helper for disposing events
     */
     ::cppu::OBroadcastHelper rBHelper;
-    
+
     /** this function is called upon disposing the component
     */
     virtual void SAL_CALL disposing();
@@ -62,7 +62,7 @@ public:
     /** Destructor
     */
     virtual ~WeakComponentImplHelperBase() SAL_THROW( () );
-    
+
     // these are here to force memory de/allocation to sal lib.
     inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
@@ -72,7 +72,7 @@ public:
         { return pMem; }
     inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
         {}
-    
+
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         ::com::sun::star::uno::Type const & rType )
         throw (::com::sun::star::uno::RuntimeException);
@@ -100,15 +100,15 @@ class SAL_NO_VTABLE WeakAggComponentImplHelperBase
 {
 protected:
     ::cppu::OBroadcastHelper rBHelper;
-    
+
     /** Is called upon disposing the component.
     */
     virtual void SAL_CALL disposing();
-    
+
     WeakAggComponentImplHelperBase( ::osl::Mutex & rMutex ) SAL_THROW( () );
 public:
     virtual ~WeakAggComponentImplHelperBase() SAL_THROW( () );
-    
+
     // these are here to force memory de/allocation to sal lib.
     inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
@@ -118,7 +118,7 @@ public:
         { return pMem; }
     inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
         {}
-    
+
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         ::com::sun::star::uno::Type const & rType )
         throw (::com::sun::star::uno::RuntimeException);

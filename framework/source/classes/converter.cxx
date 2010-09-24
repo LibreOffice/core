@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -154,7 +154,7 @@ css::uno::Sequence< ::rtl::OUString > Converter::convert_OUStringList2seqOUStrin
 css::uno::Sequence< css::beans::PropertyValue > Converter::convert_OUStringHash2seqProp( const OUStringHash& lSource )
 {
     css::uno::Sequence< css::beans::PropertyValue > lDestination (lSource.size());
-    css::beans::PropertyValue*						pDestination = lDestination.getArray();
+    css::beans::PropertyValue*                      pDestination = lDestination.getArray();
     sal_Int32 nItem = 0;
     for (OUStringHash::const_iterator pItem=lSource.begin(); pItem!=lSource.end(); ++pItem)
     {
@@ -172,7 +172,7 @@ css::uno::Sequence< css::beans::PropertyValue > Converter::convert_OUStringHash2
 OUStringHash Converter::convert_seqProp2OUStringHash( const css::uno::Sequence< css::beans::PropertyValue >& lSource )
 {
     OUStringHash lDestination;
-    sal_Int32						 nCount  = lSource.getLength();
+    sal_Int32                        nCount  = lSource.getLength();
     const css::beans::PropertyValue* pSource = lSource.getConstArray();
     for (sal_Int32 nItem=0; nItem<nCount; ++nItem)
     {
@@ -313,4 +313,4 @@ DateTime Converter::convert_String2DateTime( /*IN*/ const ::rtl::OUString& sSour
     return sBuffer.makeStringAndClear();
 }
 
-}		//	namespace framework
+}       //  namespace framework

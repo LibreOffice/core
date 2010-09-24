@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ namespace basebmp
 {
 
 /// Get bitmask for data at given intra-word position, for given bit depth
-template< typename value_type, 
-          int      bits_per_pixel, 
-          bool     MsbFirst, 
-          typename difference_type > 
+template< typename value_type,
+          int      bits_per_pixel,
+          bool     MsbFirst,
+          typename difference_type >
 inline value_type get_mask( difference_type d )
 {
     BOOST_STATIC_ASSERT(bits_per_pixel > 0);
@@ -55,20 +55,20 @@ inline value_type get_mask( difference_type d )
     const unsigned int nIntraWordPositions( sizeof(value_type)*8 / bits_per_pixel );
 
     //      create bits_per_pixel 1s      shift to intra-word position
-    return ((~(~0 << bits_per_pixel)) << bits_per_pixel*(MsbFirst ? 
-                                                         (nIntraWordPositions-1 - (d % nIntraWordPositions)) : 
+    return ((~(~0 << bits_per_pixel)) << bits_per_pixel*(MsbFirst ?
+                                                         (nIntraWordPositions-1 - (d % nIntraWordPositions)) :
                                                          (d % nIntraWordPositions)));
 }
 
 template< int num_intraword_positions, int bits_per_pixel, bool MsbFirst, typename difference_type > inline difference_type get_shift( difference_type remainder )
 {
-    return bits_per_pixel*(MsbFirst ? 
+    return bits_per_pixel*(MsbFirst ?
                            (num_intraword_positions - 1 - remainder) :
                            remainder);
 }
 
-template< typename Valuetype, 
-          int      bits_per_pixel, 
+template< typename Valuetype,
+          int      bits_per_pixel,
           bool     MsbFirst > class PackedPixelColumnIterator : public NonStandardIterator
 {
 public:
@@ -238,8 +238,8 @@ public:
     }
 };
 
-template< typename Valuetype,           
-          int      bits_per_pixel, 
+template< typename Valuetype,
+          int      bits_per_pixel,
           bool     MsbFirst > class PackedPixelRowIterator : public NonStandardIterator
 {
 public:
@@ -279,12 +279,12 @@ private:
         remainder_ = newValue % num_intraword_positions;
 
         const mask_type shifted_mask(
-            MsbFirst ? 
-            unsigned_cast<mask_type>(mask_) >> bits_per_pixel : 
+            MsbFirst ?
+            unsigned_cast<mask_type>(mask_) >> bits_per_pixel :
             mask_ << bits_per_pixel );
 
         // data_offset is 0 for shifted mask, and 1 for wrapped-around mask
-        mask_ = (1-data_offset)*shifted_mask + data_offset*(MsbFirst ? 
+        mask_ = (1-data_offset)*shifted_mask + data_offset*(MsbFirst ?
                                                             bit_mask << bits_per_pixel*(num_intraword_positions-1) :
                                                             bit_mask);
     }
@@ -307,12 +307,12 @@ private:
         remainder_ = newRemainder + isNegative*num_intraword_positions;
 
         const mask_type shifted_mask(
-            MsbFirst ? 
+            MsbFirst ?
             mask_ << bits_per_pixel :
             unsigned_cast<mask_type>(mask_) >> bits_per_pixel );
 
         // data_offset is 0 for shifted mask, and 1 for wrapped-around mask
-        mask_ = (1-data_offset)*shifted_mask + data_offset*(MsbFirst ? 
+        mask_ = (1-data_offset)*shifted_mask + data_offset*(MsbFirst ?
                                                             bit_mask :
                                                             bit_mask << bits_per_pixel*(num_intraword_positions-1));
     }
@@ -324,8 +324,8 @@ private:
 
     bool less( PackedPixelRowIterator const & rhs ) const
     {
-        return data_ == rhs.data_ ? 
-            (remainder_ < rhs.remainder_) : 
+        return data_ == rhs.data_ ?
+            (remainder_ < rhs.remainder_) :
             (data_ < rhs.data_);
     }
 
@@ -448,9 +448,9 @@ public:
 
     value_type get() const
     {
-        return unsigned_cast<value_type>(*data_ & mask_) >> 
-            get_shift<num_intraword_positions, 
-                      bits_per_pixel, 
+        return unsigned_cast<value_type>(*data_ & mask_) >>
+            get_shift<num_intraword_positions,
+                      bits_per_pixel,
                       MsbFirst>(remainder_);
     }
 
@@ -463,9 +463,9 @@ public:
 
     void set( value_type v ) const
     {
-        const value_type pixel_value( 
-            (v << 
-             get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder_)) 
+        const value_type pixel_value(
+            (v <<
+             get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder_))
             & mask_ );
         *data_ = (*data_ & ~mask_) | pixel_value;
     }
@@ -484,8 +484,8 @@ public:
     one pixel into an machine data type (like one bit per pixel, eight
     of which packed into one char)
  */
-template< typename Valuetype,           
-          int      bits_per_pixel, 
+template< typename Valuetype,
+          int      bits_per_pixel,
           bool     MsbFirst > class PackedPixelIterator : public NonStandardIterator
 {
 public:
@@ -494,10 +494,10 @@ public:
     typedef vigra::Diff2D                               difference_type;
     typedef image_traverser_tag                         iterator_category;
     typedef PackedPixelRowIterator<value_type,
-                                   bits_per_pixel, 
+                                   bits_per_pixel,
                                    MsbFirst>            row_iterator;
     typedef PackedPixelColumnIterator<value_type,
-                                      bits_per_pixel, 
+                                      bits_per_pixel,
                                       MsbFirst>         column_iterator;
 
     typedef value_type*                                 pointer;
@@ -518,12 +518,12 @@ public:
 
 private:
     pointer current() const
-    { 
+    {
         return y() + (x / num_intraword_positions);
     }
 
     pointer current(int dx, int dy) const
-    { 
+    {
         return y(dy) + ((x+dx)/num_intraword_positions);
     }
 
@@ -605,27 +605,27 @@ public:
     {
         const int remainder( x % num_intraword_positions );
 
-        return (unsigned_cast<value_type>(*current() & 
+        return (unsigned_cast<value_type>(*current() &
                                           get_mask<value_type, bits_per_pixel, MsbFirst>(remainder))
-                >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder)); 
+                >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder));
     }
 
     value_type get(difference_type const & d) const
     {
         const int remainder( x(d.x) % num_intraword_positions );
 
-        return (unsigned_cast<value_type>(*current(d.x,d.y) & 
+        return (unsigned_cast<value_type>(*current(d.x,d.y) &
                                           get_mask<value_type, bits_per_pixel, MsbFirst>(remainder))
-                >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder)); 
+                >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder));
     }
 
     void set( value_type v ) const
     {
         const int remainder( x % num_intraword_positions );
         const int mask( get_mask<value_type, bits_per_pixel, MsbFirst>(remainder) );
-        const value_type pixel_value( 
-            (v << 
-             get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder)) 
+        const value_type pixel_value(
+            (v <<
+             get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder))
             & mask );
         pointer p = current();
         *p = (*p & ~mask) | pixel_value;
@@ -635,9 +635,9 @@ public:
     {
         const int remainder( (x + d.x) % num_intraword_positions );
         const int mask( get_mask<value_type, bits_per_pixel, MsbFirst>(remainder) );
-        const value_type pixel_value( 
+        const value_type pixel_value(
             (v <<
-             get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder)) 
+             get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder))
              & mask );
         pointer p = current(d.x,d.y);
         *p = (*p & ~mask) | pixel_value;
@@ -649,11 +649,11 @@ public:
 // partial specialization for the accessor traits masked_accessor
 // selector metafunction - can employ fast mask functor for the 1bpp
 // case.
-template< class Accessor, 
-          class MaskAccessor, 
+template< class Accessor,
+          class MaskAccessor,
           class Iterator,
           bool  polarity,
-          bool  MsbFirst > struct maskedAccessorSelector< Accessor, 
+          bool  MsbFirst > struct maskedAccessorSelector< Accessor,
                                                           MaskAccessor,
                                                           Iterator,
                                                           PackedPixelIterator< typename MaskAccessor::value_type,
@@ -661,7 +661,7 @@ template< class Accessor,
                                                                                MsbFirst >,
                                                           polarity >
 {
-    typedef TernarySetterFunctionAccessorAdapter< 
+    typedef TernarySetterFunctionAccessorAdapter<
         Accessor,
         MaskAccessor,
         typename outputMaskFunctorSelector<

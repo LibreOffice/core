@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ extern "C"
 
 /** Generic function type declaration for entering an Environment.
     (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
-    
+
     @param context
     @since UDK 3.2.7
 */
@@ -48,7 +48,7 @@ typedef void uno_Enterable_enter     (void * context);
 
 /** Generic function type declaration for levaing an Environment.
     (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
-    
+
     @param context
     @since UDK 3.2.7
 */
@@ -57,7 +57,7 @@ typedef void uno_Enterable_leave     (void * context);
 
 /** Generic function type declaration for calling into an Environment.
     (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
-    
+
     @param context
     @param pCallee  the function to be called
     @param pParam   the parameter pointer to be passed to the function
@@ -68,7 +68,7 @@ typedef void uno_Enterable_callInto_v(void * context, uno_EnvCallee * pCallee, v
 
 /** Generic function type declaration for calling out of an Environment.
     (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
-    
+
     @param context
     @param pCallee  the function to be called
     @param pParam   the parameter pointer to be passed to the function
@@ -80,7 +80,7 @@ typedef void uno_Enterable_callOut_v (void * context, uno_EnvCallee * pCallee, v
 /** Generic function type declaration for checking if calling on managed object is
     valid.
     (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
-    
+
     @param  context
     @param  ppReason  the reason, in case calling is not valid
     @return           0 == calling is not valid, 1 == calling is valid
@@ -94,14 +94,14 @@ typedef int  uno_Enterable_isValid_v (void * context, rtl_uString ** ppReason);
 
     @since UDK 3.2.7
 */
-typedef struct 
+typedef struct
 {
     uno_Enterable_enter      * m_enter;
     uno_Enterable_leave      * m_leave;
     uno_Enterable_callInto_v * m_callInto_v;
     uno_Enterable_callOut_v  * m_callOut_v;
     uno_Enterable_isValid_v  * m_isValid;
-} 
+}
 uno_Enterable;
 
 

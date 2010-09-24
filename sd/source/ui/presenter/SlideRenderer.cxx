@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -205,7 +205,7 @@ BitmapEx SlideRenderer::CreatePreview (
             OUString::createFromAscii("SlideRenderer::createPreview() called with invalid slide"),
             static_cast<XWeak*>(this),
             0);
-    
+
     // Determine the size of the current slide and its aspect ratio.
     Size aPageSize = pPage->GetSize();
     if (aPageSize.Height() <= 0)
@@ -230,14 +230,14 @@ BitmapEx SlideRenderer::CreatePreview (
         nFactor = 1;
     else if (nFactor > 10)
         nFactor = 10;
-    
+
     // Create the preview.  When the super sample factor n is greater than 1
     // then a preview is created in size (n*width, n*height) and then scaled
     // down to (width, height).  This is a poor mans antialiasing for the
     // time being.  When we have true antialiasing support this workaround
     // can be removed.
     const Image aPreview = maPreviewRenderer.RenderPage (
-        pPage, 
+        pPage,
         Size(aPreviewSize.Width*nFactor, aPreviewSize.Height*nFactor),
         ::rtl::OUString());
     if (nFactor == 1)

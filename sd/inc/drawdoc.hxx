@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -161,11 +161,11 @@ namespace sd
 class SdDrawDocument : public FmFormModel
 {
 private:
-    ::sd::Outliner*		mpOutliner;		    // local outliner for outline mode
-    ::sd::Outliner*		mpInternalOutliner;  // internal outliner for creation of text objects
-    Timer*			    mpWorkStartupTimer;
+    ::sd::Outliner*     mpOutliner;         // local outliner for outline mode
+    ::sd::Outliner*     mpInternalOutliner;  // internal outliner for creation of text objects
+    Timer*              mpWorkStartupTimer;
     Timer*              mpOnlineSpellingTimer;
-    sd::ShapeList*		mpOnlineSpellingList;
+    sd::ShapeList*      mpOnlineSpellingList;
     SvxSearchItem*      mpOnlineSearchItem;
     List*               mpFrameViewList;
     List*               mpCustomShowList;
@@ -173,26 +173,26 @@ private:
     SdTransferable *    mpCreatingTransferable;
     BOOL                mbHasOnlineSpellErrors;
     BOOL                mbInitialOnlineSpellingEnabled;
-    String              maBookmarkFile; 
-    ::sd::DrawDocShellRef   mxBookmarkDocShRef; 
+    String              maBookmarkFile;
+    ::sd::DrawDocShellRef   mxBookmarkDocShRef;
 
     sd::PresentationSettings maPresentationSettings;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentation2 > mxPresentation;
 
-    BOOL			    mbNewOrLoadCompleted;
+    BOOL                mbNewOrLoadCompleted;
 
-    BOOL			    mbOnlineSpell;
+    BOOL                mbOnlineSpell;
     BOOL                mbSummationOfParagraphs;
-    bool				mbStartWithPresentation;		// is set to true when starting with command line parameter -start
-    LanguageType	    meLanguage;
-    LanguageType	    meLanguageCJK;
-    LanguageType	    meLanguageCTL;
-    SvxNumType		    mePageNumType;
+    bool                mbStartWithPresentation;        // is set to true when starting with command line parameter -start
+    LanguageType        meLanguage;
+    LanguageType        meLanguageCJK;
+    LanguageType        meLanguageCTL;
+    SvxNumType          mePageNumType;
     ::sd::DrawDocShellRef   mxAllocedDocShRef;   // => AllocModel()
-    BOOL			    mbAllocDocSh;		// => AllocModel()
+    BOOL                mbAllocDocSh;       // => AllocModel()
     DocumentType        meDocType;
-    CharClass*		    mpCharClass;
+    CharClass*          mpCharClass;
     ::com::sun::star::lang::Locale* mpLocale;
 
     // #109538#
@@ -209,7 +209,7 @@ private:
                         DECL_LINK(OnlineSpellEventHdl, EditStatus*);
 
     std::vector< rtl::OUString > maAnnotationAuthors;
-    
+
 protected:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
@@ -231,46 +231,46 @@ public:
     virtual void        SetChanged(sal_Bool bFlag = sal_True);
     virtual SvStream*   GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
 
-    SfxItemPool&	    GetPool() { return( *pItemPool ); }
+    SfxItemPool&        GetPool() { return( *pItemPool ); }
 
     ::sd::Outliner* GetOutliner(BOOL bCreateOutliner=TRUE);
     SD_DLLPUBLIC ::sd::Outliner* GetInternalOutliner(BOOL bCreateOutliner=TRUE);
-                        
+
     ::sd::DrawDocShell*     GetDocSh() const { return mpDocSh; }
 
-    LanguageType	    GetLanguage( const USHORT nId ) const;
-    void			    SetLanguage( const LanguageType eLang, const USHORT nId );
+    LanguageType        GetLanguage( const USHORT nId ) const;
+    void                SetLanguage( const LanguageType eLang, const USHORT nId );
 
     SvxNumType          GetPageNumType() const;
-    void			    SetPageNumType(SvxNumType eType) { mePageNumType = eType; }
+    void                SetPageNumType(SvxNumType eType) { mePageNumType = eType; }
     SD_DLLPUBLIC String              CreatePageNumValue(USHORT nNum) const;
 
     DocumentType        GetDocumentType() const { return meDocType; }
 
-    void			    SetAllocDocSh(BOOL bAlloc);
+    void                SetAllocDocSh(BOOL bAlloc);
 
-    void	            CreatingDataObj( SdTransferable* pTransferable ) { mpCreatingTransferable = pTransferable; }
-                        
+    void                CreatingDataObj( SdTransferable* pTransferable ) { mpCreatingTransferable = pTransferable; }
+
     /** if the document does not contain at least one handout, one slide and one notes page with
         at least one master each this methods creates them.
         If a reference document is given, the sizes and border settings of that document are used
         for newly created slides.
     */
-    SD_DLLPUBLIC void	CreateFirstPages( SdDrawDocument* pRefDocument = 0 );
+    SD_DLLPUBLIC void   CreateFirstPages( SdDrawDocument* pRefDocument = 0 );
     SD_DLLPUBLIC BOOL                CreateMissingNotesAndHandoutPages();
 
-    void	            MovePage(USHORT nPgNum, USHORT nNewPos);
-    void	            InsertPage(SdrPage* pPage, USHORT nPos=0xFFFF);
-    void	            DeletePage(USHORT nPgNum);
+    void                MovePage(USHORT nPgNum, USHORT nNewPos);
+    void                InsertPage(SdrPage* pPage, USHORT nPos=0xFFFF);
+    void                DeletePage(USHORT nPgNum);
     SdrPage*            RemovePage(USHORT nPgNum);
 
     virtual void     InsertMasterPage(SdrPage* pPage, USHORT nPos=0xFFFF);
     virtual SdrPage* RemoveMasterPage(USHORT nPgNum);
 
-    void	            RemoveUnnecessaryMasterPages( SdPage* pMaster=NULL, BOOL bOnlyDuplicatePages=FALSE, BOOL bUndo=TRUE );
-    SD_DLLPUBLIC void 	SetMasterPage(USHORT nSdPageNum, const String& rLayoutName,
+    void                RemoveUnnecessaryMasterPages( SdPage* pMaster=NULL, BOOL bOnlyDuplicatePages=FALSE, BOOL bUndo=TRUE );
+    SD_DLLPUBLIC void   SetMasterPage(USHORT nSdPageNum, const String& rLayoutName,
                                       SdDrawDocument* pSourceDoc, BOOL bMaster, BOOL bCheckMasters);
-                        
+
     SD_DLLPUBLIC SdDrawDocument* OpenBookmarkDoc(const String& rBookmarkFile);
     SdDrawDocument*     OpenBookmarkDoc(SfxMedium& rMedium);
     BOOL                InsertBookmark(List* pBookmarkList, List* pExchangeList, BOOL bLink,
@@ -334,11 +334,11 @@ public:
     BOOL                InsertBookmarkAsObject(List* pBookmarkList, List* pExchangeListL,
                                                 BOOL bLink, ::sd::DrawDocShell* pBookmarkDocSh,
                                                 Point* pObjPos);
-    void 				IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* pBookmarkList,
+    void                IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* pBookmarkList,
                                               USHORT nBMSdPageCount,
                                               InsertBookmarkAsPage_PageFunctorBase& rPageIterator );
-    SD_DLLPUBLIC void	CloseBookmarkDoc();
-                        
+    SD_DLLPUBLIC void   CloseBookmarkDoc();
+
     SdrObject*          GetObj(const String& rObjName) const;
 
     /** Return the first page that has the given name.  Regular pages and
@@ -356,23 +356,23 @@ public:
     */
     USHORT GetPageByName(const String& rPgName, BOOL& rbIsMasterPage ) const;
     SD_DLLPUBLIC SdPage*GetSdPage(USHORT nPgNum, PageKind ePgKind) const;
-    SD_DLLPUBLIC USHORT	GetSdPageCount(PageKind ePgKind) const;
+    SD_DLLPUBLIC USHORT GetSdPageCount(PageKind ePgKind) const;
 
-    void	            SetSelected(SdPage* pPage, BOOL bSelect);
-    BOOL	            MovePages(USHORT nTargetPage);
-                        
+    void                SetSelected(SdPage* pPage, BOOL bSelect);
+    BOOL                MovePages(USHORT nTargetPage);
+
     SD_DLLPUBLIC SdPage*GetMasterSdPage(USHORT nPgNum, PageKind ePgKind);
-    SD_DLLPUBLIC USHORT	GetMasterSdPageCount(PageKind ePgKind) const;
-                        
-    USHORT	            GetMasterPageUserCount(SdrPage* pMaster) const;
-                        
+    SD_DLLPUBLIC USHORT GetMasterSdPageCount(PageKind ePgKind) const;
+
+    USHORT              GetMasterPageUserCount(SdrPage* pMaster) const;
+
     const sd::PresentationSettings& getPresentationSettings() const { return maPresentationSettings; }
     sd::PresentationSettings& getPresentationSettings() { return maPresentationSettings; }
-                                            
+
     const ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentation2 >& getPresentation() const;
 
        void                SetSummationOfParagraphs( BOOL bOn = TRUE ) { mbSummationOfParagraphs = bOn; }
-    BOOL	        IsSummationOfParagraphs() const { return mbSummationOfParagraphs; }
+    BOOL            IsSummationOfParagraphs() const { return mbSummationOfParagraphs; }
 
     /** Set the mode that controls whether (and later how) the formatting of the document
         depends on the current printer metrics.
@@ -410,20 +410,20 @@ public:
 
     List*               GetFrameViewList() const { return mpFrameViewList; }
     SD_DLLPUBLIC List*  GetCustomShowList(BOOL bCreate = FALSE);
-                        
+
     void                NbcSetChanged(sal_Bool bFlag = sal_True);
 
     void                SetTextDefaults() const;
 
     void                CreateLayoutTemplates();
     void                RenameLayoutTemplate(const String& rOldLayoutName, const String& rNewName);
-                        
-    void				CreateDefaultCellStyles();
+
+    void                CreateDefaultCellStyles();
 
     SD_DLLPUBLIC void   StopWorkStartupDelay();
-                        
+
     void                NewOrLoadCompleted(DocCreationMode eMode);
-    void				NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool );
+    void                NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool );
     BOOL                IsNewOrLoadCompleted() const {return mbNewOrLoadCompleted; }
 
     ::sd::FrameView* GetFrameView(ULONG nPos) {
@@ -433,16 +433,16 @@ public:
     /** deprecated*/
     SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;
 
-    SD_DLLPUBLIC static 	SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
+    SD_DLLPUBLIC static     SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
 
     SdIMapInfo*         GetIMapInfo( SdrObject* pObject ) const;
     IMapObject*         GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const ::Window& rCmpWnd );
 
-    CharClass*	        GetCharClass() const { return mpCharClass; }
+    CharClass*          GetCharClass() const { return mpCharClass; }
 
     void                RestoreLayerNames();
 
-    void	            UpdateAllLinks();
+    void                UpdateAllLinks();
 
     void                CheckMasterPages();
 
@@ -451,7 +451,7 @@ public:
                                 USHORT nDestPos=0xFFFF,
                                 FASTBOOL bMergeMasterPages=FALSE, FASTBOOL bAllMasterPages=FALSE,
                                 FASTBOOL bUndo=TRUE, FASTBOOL bTreadSourceAsConst=FALSE);
-                        
+
     SD_DLLPUBLIC ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
     void SetDefaultWritingMode( ::com::sun::star::text::WritingMode eMode );
 

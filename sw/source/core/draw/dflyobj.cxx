@@ -80,10 +80,10 @@ TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
 
 /*************************************************************************
 |*
-|*	SwFlyDrawObj::Ctor
+|*  SwFlyDrawObj::Ctor
 |*
-|*	Ersterstellung		MA 18. Apr. 95
-|*	Letzte Aenderung	MA 28. May. 96
+|*  Ersterstellung      MA 18. Apr. 95
+|*  Letzte Aenderung    MA 28. May. 96
 |*
 *************************************************************************/
 
@@ -151,10 +151,10 @@ SwFlyDrawObj::~SwFlyDrawObj()
 
 /*************************************************************************
 |*
-|*	SwFlyDrawObj::Factory-Methoden
+|*  SwFlyDrawObj::Factory-Methoden
 |*
-|*	Ersterstellung		MA 23. Feb. 95
-|*	Letzte Aenderung	MA 23. Feb. 95
+|*  Ersterstellung      MA 23. Feb. 95
+|*  Letzte Aenderung    MA 23. Feb. 95
 |*
 *************************************************************************/
 
@@ -164,7 +164,7 @@ UINT32 __EXPORT SwFlyDrawObj::GetObjInventor() const
 }
 
 
-UINT16 __EXPORT SwFlyDrawObj::GetObjIdentifier()	const
+UINT16 __EXPORT SwFlyDrawObj::GetObjIdentifier()    const
 {
     return SwFlyDrawObjIdentifier;
 }
@@ -177,10 +177,10 @@ UINT16 __EXPORT SwFlyDrawObj::GetObjVersion() const
 
 /*************************************************************************
 |*
-|*	SwVirtFlyDrawObj::CToren, Dtor
+|*  SwVirtFlyDrawObj::CToren, Dtor
 |*
-|*	Ersterstellung		MA 08. Dec. 94
-|*	Letzte Aenderung	MA 28. May. 96
+|*  Ersterstellung      MA 08. Dec. 94
+|*  Letzte Aenderung    MA 28. May. 96
 |*
 *************************************************************************/
 
@@ -195,7 +195,7 @@ namespace drawinglayer
         {
         private:
             const SwVirtFlyDrawObj&                 mrSwVirtFlyDrawObj;
-            const basegfx::B2DRange					maOuterRange;
+            const basegfx::B2DRange                 maOuterRange;
 
         protected:
             // method which is to be used to implement the local decomposition of a 2D primitive
@@ -241,14 +241,14 @@ namespace drawinglayer
             if(!getOuterRange().isEmpty())
             {
                 // currently this SW object has no primitive representation. As long as this is the case,
-                // create invisible geometry to allow corfect HitTest and BoundRect calculations for the 
+                // create invisible geometry to allow corfect HitTest and BoundRect calculations for the
                 // object. Use a filled primitive to get 'inside' as default object hit. The special cases from
                 // the old SwVirtFlyDrawObj::CheckHit implementation are handled now in SwDrawView::PickObj;
                 // this removed the 'hack' to get a view from inside model data or to react on null-tolerance
                 // as it was done in the old implementation
                 const Primitive2DReference aHitTestReference(
                     createHiddenGeometryPrimitives2D(
-                        true, 
+                        true,
                         getOuterRange()));
 
                 aRetval = Primitive2DSequence(&aHitTestReference, 1);
@@ -438,16 +438,16 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
 
 __EXPORT SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
 {
-    if ( GetPage() )	//Der SdrPage die Verantwortung entziehen.
+    if ( GetPage() )    //Der SdrPage die Verantwortung entziehen.
         GetPage()->RemoveObject( GetOrdNum() );
 }
 
 /*************************************************************************
 |*
-|*	SwVirtFlyDrawObj::GetFmt()
+|*  SwVirtFlyDrawObj::GetFmt()
 |*
-|*	Ersterstellung		MA 08. Dec. 94
-|*	Letzte Aenderung	MA 08. Dec. 94
+|*  Ersterstellung      MA 08. Dec. 94
+|*  Letzte Aenderung    MA 08. Dec. 94
 |*
 *************************************************************************/
 
@@ -464,10 +464,10 @@ SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
 
 /*************************************************************************
 |*
-|*	SwVirtFlyDrawObj::Paint()
+|*  SwVirtFlyDrawObj::Paint()
 |*
-|*	Ersterstellung		MA 20. Dec. 94
-|*	Letzte Aenderung	MA 18. Dec. 95
+|*  Ersterstellung      MA 20. Dec. 94
+|*  Letzte Aenderung    MA 18. Dec. 95
 |*
 *************************************************************************/
 
@@ -512,32 +512,32 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 
 /*************************************************************************
 |*
-|*	SwVirtFlyDrawObj::TakeObjInfo()
+|*  SwVirtFlyDrawObj::TakeObjInfo()
 |*
-|*	Ersterstellung		MA 03. May. 95
-|*	Letzte Aenderung	MA 03. May. 95
+|*  Ersterstellung      MA 03. May. 95
+|*  Letzte Aenderung    MA 03. May. 95
 |*
 *************************************************************************/
 
 void __EXPORT SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 {
-    rInfo.bSelectAllowed	 = rInfo.bMoveAllowed =
+    rInfo.bSelectAllowed     = rInfo.bMoveAllowed =
     rInfo.bResizeFreeAllowed = rInfo.bResizePropAllowed = TRUE;
 
     rInfo.bRotateFreeAllowed = rInfo.bRotate90Allowed =
     rInfo.bMirrorFreeAllowed = rInfo.bMirror45Allowed =
-    rInfo.bMirror90Allowed   = rInfo.bShearAllowed	  =
-    rInfo.bCanConvToPath	 = rInfo.bCanConvToPoly	  =
+    rInfo.bMirror90Allowed   = rInfo.bShearAllowed    =
+    rInfo.bCanConvToPath     = rInfo.bCanConvToPoly   =
     rInfo.bCanConvToPathLineToArea = rInfo.bCanConvToPolyLineToArea = FALSE;
 }
 
 
 /*************************************************************************
 |*
-|*	SwVirtFlyDrawObj::Groessenermittlung
+|*  SwVirtFlyDrawObj::Groessenermittlung
 |*
-|*	Ersterstellung		MA 12. Jan. 95
-|*	Letzte Aenderung	MA 10. Nov. 95
+|*  Ersterstellung      MA 12. Jan. 95
+|*  Letzte Aenderung    MA 10. Nov. 95
 |*
 *************************************************************************/
 
@@ -635,10 +635,10 @@ void __EXPORT SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
 
 /*************************************************************************
 |*
-|*	SwVirtFlyDrawObj::Move() und Resize()
+|*  SwVirtFlyDrawObj::Move() und Resize()
 |*
-|*	Ersterstellung		MA 12. Jan. 95
-|*	Letzte Aenderung	MA 26. Jul. 96
+|*  Ersterstellung      MA 12. Jan. 95
+|*  Letzte Aenderung    MA 26. Jul. 96
 |*
 *************************************************************************/
 

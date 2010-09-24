@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -177,17 +177,17 @@ public:
     /** Clone the matrix. */
     ScMatrix* Clone() const;
 
-    /** Clone the matrix if mbCloneIfConst (immutable) is set, otherwise 
+    /** Clone the matrix if mbCloneIfConst (immutable) is set, otherwise
         return _this_ matrix, to be assigned to a ScMatrixRef. */
     ScMatrix* CloneIfConst();
 
-    /** Set the matrix to (im)mutable for CloneIfConst(), only the interpreter 
+    /** Set the matrix to (im)mutable for CloneIfConst(), only the interpreter
         should do this and know the consequences. */
     inline void SetImmutable( bool bVal ) { mbCloneIfConst = bVal; }
 
-    /** 
+    /**
      * Resize the matrix to specified new dimension.  Note that this operation
-     * clears all stored values. 
+     * clears all stored values.
      */
     void Resize( SCSIZE nC, SCSIZE nR);
 
@@ -344,7 +344,7 @@ public:
 
     /// @return <TRUE/> if string or empty or empty path, in fact non-value.
     BOOL IsString( SCSIZE nC, SCSIZE nR ) const
-    { 
+    {
         ValidColRowReplicated( nC, nR );
         return mnValType && IsNonValueType( mnValType[ nC * nRowCount + nR ]);
     }

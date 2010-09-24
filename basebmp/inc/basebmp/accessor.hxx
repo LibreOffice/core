@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ public:
 
     template< class Iterator >
     value_type operator()(Iterator const& i) const
-    { 
+    {
         return *i;
     }
 
@@ -61,7 +61,7 @@ public:
 
     template< typename V, class Iterator >
     void set(V const& value, Iterator const& i) const
-    { 
+    {
         *i = vigra::detail::RequiresExplicitCast<value_type>::cast(value);
     }
 
@@ -88,8 +88,8 @@ public:
 
     template< class Iterator >
     value_type operator()(Iterator const& i) const
-    { 
-        return i.get(); 
+    {
+        return i.get();
     }
 
     template< class Iterator, class Difference >
@@ -102,14 +102,14 @@ public:
 
     template< typename V, class Iterator >
     void set(V const& value, Iterator const& i) const
-    { 
+    {
         i.set( vigra::detail::RequiresExplicitCast<value_type>::cast(value) );
     }
 
     template< typename V, class Iterator, class Difference >
     void set(V const& value, Iterator const& i, Difference const& diff) const
     {
-        i.set( vigra::detail::RequiresExplicitCast<value_type>::cast(value), 
+        i.set( vigra::detail::RequiresExplicitCast<value_type>::cast(value),
                diff );
     }
 };

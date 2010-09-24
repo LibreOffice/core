@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,18 +41,18 @@ class Window;
 struct FltCallDialogParameter
 {
 
-    Window*		pWindow;
-    ResMgr*		pResMgr;
-    FieldUnit	eFieldUnit;
-    String		aFilterExt;
+    Window*     pWindow;
+    ResMgr*     pResMgr;
+    FieldUnit   eFieldUnit;
+    String      aFilterExt;
 
     // In and Out PropertySequence for all filter dialogs
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFilterData;
 
     FltCallDialogParameter( Window* pW, ResMgr* pRsMgr, FieldUnit eFiUni ) :
-        pWindow			( pW ),
-        pResMgr			( pRsMgr ),
-        eFieldUnit		( eFiUni ) {};
+        pWindow         ( pW ),
+        pResMgr         ( pRsMgr ),
+        eFieldUnit      ( eFiUni ) {};
 };
 
 typedef BOOL (*PFilterCall)(SvStream & rStream, Graphic & rGraphic,

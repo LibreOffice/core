@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,55 +66,55 @@ namespace ucbhelper_impl
 //
 //=========================================================================
 
-const sal_uInt32 NO_VALUE_SET 				= 0x00000000;
-const sal_uInt32 STRING_VALUE_SET 		 	= 0x00000001;
-const sal_uInt32 BOOLEAN_VALUE_SET 		 	= 0x00000002;
-const sal_uInt32 BYTE_VALUE_SET 			= 0x00000004;
-const sal_uInt32 SHORT_VALUE_SET 			= 0x00000008;
-const sal_uInt32 INT_VALUE_SET 			 	= 0x00000010;
-const sal_uInt32 LONG_VALUE_SET 			= 0x00000020;
-const sal_uInt32 FLOAT_VALUE_SET 			= 0x00000040;
-const sal_uInt32 DOUBLE_VALUE_SET 		 	= 0x00000080;
-const sal_uInt32 BYTES_VALUE_SET 			= 0x00000100;
-const sal_uInt32 DATE_VALUE_SET 			= 0x00000200;
-const sal_uInt32 TIME_VALUE_SET 			= 0x00000400;
-const sal_uInt32 TIMESTAMP_VALUE_SET 		= 0x00000800;
-const sal_uInt32 BINARYSTREAM_VALUE_SET 	= 0x00001000;
-const sal_uInt32 CHARACTERSTREAM_VALUE_SET 	= 0x00002000;
-const sal_uInt32 REF_VALUE_SET 			 	= 0x00004000;
-const sal_uInt32 BLOB_VALUE_SET 			= 0x00008000;
-const sal_uInt32 CLOB_VALUE_SET 			= 0x00010000;
-const sal_uInt32 ARRAY_VALUE_SET 			= 0x00020000;
-const sal_uInt32 OBJECT_VALUE_SET 		 	= 0x00040000;
+const sal_uInt32 NO_VALUE_SET               = 0x00000000;
+const sal_uInt32 STRING_VALUE_SET           = 0x00000001;
+const sal_uInt32 BOOLEAN_VALUE_SET          = 0x00000002;
+const sal_uInt32 BYTE_VALUE_SET             = 0x00000004;
+const sal_uInt32 SHORT_VALUE_SET            = 0x00000008;
+const sal_uInt32 INT_VALUE_SET              = 0x00000010;
+const sal_uInt32 LONG_VALUE_SET             = 0x00000020;
+const sal_uInt32 FLOAT_VALUE_SET            = 0x00000040;
+const sal_uInt32 DOUBLE_VALUE_SET           = 0x00000080;
+const sal_uInt32 BYTES_VALUE_SET            = 0x00000100;
+const sal_uInt32 DATE_VALUE_SET             = 0x00000200;
+const sal_uInt32 TIME_VALUE_SET             = 0x00000400;
+const sal_uInt32 TIMESTAMP_VALUE_SET        = 0x00000800;
+const sal_uInt32 BINARYSTREAM_VALUE_SET     = 0x00001000;
+const sal_uInt32 CHARACTERSTREAM_VALUE_SET  = 0x00002000;
+const sal_uInt32 REF_VALUE_SET              = 0x00004000;
+const sal_uInt32 BLOB_VALUE_SET             = 0x00008000;
+const sal_uInt32 CLOB_VALUE_SET             = 0x00010000;
+const sal_uInt32 ARRAY_VALUE_SET            = 0x00020000;
+const sal_uInt32 OBJECT_VALUE_SET           = 0x00040000;
 
 struct PropertyValue
 {
     ::rtl::OUString
                 sPropertyName;
 
-    sal_uInt32	nPropsSet;
+    sal_uInt32  nPropsSet;
     sal_uInt32  nOrigValue;
 
-    OUString	aString;	// getString
-    sal_Bool 	bBoolean;	// getBoolean
-    sal_Int8	nByte;		// getByte
-    sal_Int16	nShort;		// getShort
-    sal_Int32 	nInt;		// getInt
-    sal_Int64 	nLong;		// getLong
-    float		nFloat;		// getFloat
-    double		nDouble;	// getDouble
+    OUString    aString;    // getString
+    sal_Bool    bBoolean;   // getBoolean
+    sal_Int8    nByte;      // getByte
+    sal_Int16   nShort;     // getShort
+    sal_Int32   nInt;       // getInt
+    sal_Int64   nLong;      // getLong
+    float       nFloat;     // getFloat
+    double      nDouble;    // getDouble
 
-    Sequence< sal_Int8 > 		aBytes; 			// getBytes
-    Date                		aDate;				// getDate
-    Time                		aTime;				// getTime
-    DateTime            		aTimestamp;			// getTimestamp
-    Reference< XInputStream >	xBinaryStream;		// getBinaryStream
-    Reference< XInputStream >	xCharacterStream;	// getCharacterStream
-    Reference< XRef >			xRef;				// getRef
-    Reference< XBlob >			xBlob;				// getBlob
-    Reference< XClob >			xClob;				// getClob
-    Reference< XArray >			xArray;				// getArray
-    Any							aObject;			// getObject
+    Sequence< sal_Int8 >        aBytes;             // getBytes
+    Date                        aDate;              // getDate
+    Time                        aTime;              // getTime
+    DateTime                    aTimestamp;         // getTimestamp
+    Reference< XInputStream >   xBinaryStream;      // getBinaryStream
+    Reference< XInputStream >   xCharacterStream;   // getCharacterStream
+    Reference< XRef >           xRef;               // getRef
+    Reference< XBlob >          xBlob;              // getBlob
+    Reference< XClob >          xClob;              // getClob
+    Reference< XArray >         xArray;             // getArray
+    Any                         aObject;            // getObject
 
     inline PropertyValue()
         : nPropsSet( NO_VALUE_SET ), nOrigValue( NO_VALUE_SET ),
@@ -156,12 +156,12 @@ class PropertyValues : public PropertyValuesVector {};
                                                                               \
     osl::MutexGuard aGuard( m_aMutex );                                       \
                                                                               \
-    _type_ aValue = _type_();	/* default ctor	*/							  \
+    _type_ aValue = _type_();   /* default ctor */                            \
                                                                               \
-    m_bWasNull = sal_True;                                					  \
+    m_bWasNull = sal_True;                                                    \
                                                                               \
-    if ( ( columnIndex < 1 )												  \
-         || ( columnIndex > sal_Int32( m_pValues->size() ) ) )         		  \
+    if ( ( columnIndex < 1 )                                                  \
+         || ( columnIndex > sal_Int32( m_pValues->size() ) ) )                \
     {                                                                         \
         OSL_ENSURE( sal_False, "PropertyValueSet - index out of range!" );    \
     }                                                                         \
@@ -170,13 +170,13 @@ class PropertyValues : public PropertyValuesVector {};
         ucbhelper_impl::PropertyValue& rValue                                 \
             = (*m_pValues)[ columnIndex - 1 ];                                \
                                                                               \
-        if ( rValue.nOrigValue != NO_VALUE_SET )							  \
+        if ( rValue.nOrigValue != NO_VALUE_SET )                              \
         {                                                                     \
-            if ( rValue.nPropsSet & _type_name_ )							  \
+            if ( rValue.nPropsSet & _type_name_ )                             \
             {                                                                 \
-                /* Values is present natively... */							  \
+                /* Values is present natively... */                           \
                 aValue = rValue._member_name_;                                \
-                m_bWasNull = sal_False;                   					  \
+                m_bWasNull = sal_False;                                       \
             }                                                                 \
             else                                                              \
             {                                                                 \
@@ -187,37 +187,37 @@ class PropertyValues : public PropertyValuesVector {};
                 }                                                             \
                                                                               \
                 if ( rValue.nPropsSet & OBJECT_VALUE_SET )                    \
-                {															  \
+                {                                                             \
                     /* Value is available as Any. */                          \
                                                                               \
-                    if ( rValue.aObject.hasValue() )						  \
+                    if ( rValue.aObject.hasValue() )                          \
                     {                                                         \
                         /* Try to convert into native value. */               \
                         if ( rValue.aObject >>= aValue )                      \
                         {                                                     \
-                            rValue._member_name_ = aValue;					  \
-                            rValue.nPropsSet |= _type_name_;				  \
-                            m_bWasNull = sal_False;           				  \
+                            rValue._member_name_ = aValue;                    \
+                            rValue.nPropsSet |= _type_name_;                  \
+                            m_bWasNull = sal_False;                           \
                         }                                                     \
                         else                                                  \
                         {                                                     \
                             /* Last chance. Try type converter service... */  \
                                                                               \
                             Reference< XTypeConverter > xConverter            \
-                                                    = getTypeConverter(); 	  \
+                                                    = getTypeConverter();     \
                             if ( xConverter.is() )                            \
                             {                                                 \
                                 try                                           \
                                 {                                             \
                                     Any aConvAny = xConverter->convertTo(     \
-                                                             rValue.aObject,	  \
-                                                            _cppu_type_ );	  \
+                                                             rValue.aObject,      \
+                                                            _cppu_type_ );    \
                                                                               \
                                     if ( aConvAny >>= aValue )                \
-                                    {                           			  \
-                                        rValue._member_name_ = aValue;		  \
+                                    {                                         \
+                                        rValue._member_name_ = aValue;        \
                                         rValue.nPropsSet |= _type_name_;      \
-                                        m_bWasNull = sal_False;   			  \
+                                        m_bWasNull = sal_False;               \
                                     }                                         \
                                 }                                             \
                                 catch ( IllegalArgumentException )            \
@@ -231,24 +231,24 @@ class PropertyValues : public PropertyValuesVector {};
                     }                                                         \
                 }                                                             \
             }                                                                 \
-        }																	  \
+        }                                                                     \
     }                                                                         \
     return aValue;
 
-#define GETVALUE_IMPL( _type_, _type_name_, _member_name_ )					  \
-    GETVALUE_IMPL_TYPE( _type_,												  \
-                        _type_name_,										  \
+#define GETVALUE_IMPL( _type_, _type_name_, _member_name_ )                   \
+    GETVALUE_IMPL_TYPE( _type_,                                               \
+                        _type_name_,                                          \
                         _member_name_,                                        \
                         getCppuType( static_cast< const _type_ * >( 0 ) ) )
 
-#define SETVALUE_IMPL( _prop_name_, _type_name_, _member_name_, _value_ ) 	  \
+#define SETVALUE_IMPL( _prop_name_, _type_name_, _member_name_, _value_ )     \
                                                                               \
-    osl::MutexGuard aGuard( m_aMutex );				                          \
+    osl::MutexGuard aGuard( m_aMutex );                                       \
                                                                               \
     ucbhelper_impl::PropertyValue aNewValue;                                  \
     aNewValue.sPropertyName = _prop_name_;                                    \
-    aNewValue.nPropsSet  	= _type_name_;                                    \
-    aNewValue.nOrigValue 	= _type_name_;                                    \
+    aNewValue.nPropsSet     = _type_name_;                                    \
+    aNewValue.nOrigValue    = _type_name_;                                    \
     aNewValue._member_name_ = _value_;                                        \
                                                                               \
     m_pValues->push_back( aNewValue );
@@ -263,10 +263,10 @@ namespace ucbhelper {
 //=========================================================================
 //=========================================================================
 
-#define PROPERTYVALUESET_INIT() 			\
-  m_xSMgr( rxSMgr ),						\
-  m_pValues( new PropertyValues ),			\
-  m_bWasNull( sal_False ),      			\
+#define PROPERTYVALUESET_INIT()             \
+  m_xSMgr( rxSMgr ),                        \
+  m_pValues( new PropertyValues ),          \
+  m_bWasNull( sal_False ),                  \
   m_bTriedToGetTypeConverter( sal_False )
 
 //=========================================================================
@@ -483,7 +483,7 @@ Any SAL_CALL PropertyValueSet::getObject(
     }
     else
     {
-        ucbhelper_impl::PropertyValue& rValue 
+        ucbhelper_impl::PropertyValue& rValue
             = (*m_pValues)[ columnIndex - 1 ];
 
         if ( rValue.nPropsSet & OBJECT_VALUE_SET )
@@ -832,9 +832,9 @@ void PropertyValueSet::appendPropertySet(
         Reference< XPropertySetInfo > xInfo = rxSet->getPropertySetInfo();
         if ( xInfo.is() )
         {
-            Sequence< Property > aProps 	 = xInfo->getProperties();
-            const Property* 	 pProps 	 = aProps.getConstArray();
-            sal_Int32 			 nPropsCount = aProps.getLength();
+            Sequence< Property > aProps      = xInfo->getProperties();
+            const Property*      pProps      = aProps.getConstArray();
+            sal_Int32            nPropsCount = aProps.getLength();
 
             Reference< XPropertyAccess > xPropertyAccess( rxSet, UNO_QUERY );
             if ( xPropertyAccess.is() )

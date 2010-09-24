@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,16 +41,16 @@ public:
         SvxDrawToolItem(USHORT nWhichP) : SfxEnumItem(nWhichP){}
 
 
-    virtual String      		GetValueText() const;
+    virtual String              GetValueText() const;
 
 
-    virtual String				GetValueText(USHORT nVal) const;
-    virtual USHORT 				GetValueCount() const
+    virtual String              GetValueText(USHORT nVal) const;
+    virtual USHORT              GetValueCount() const
                                     {return((USHORT)SVX_SNAP_DRAW_TEXT);}
 
-    virtual SfxPoolItem*    	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
 
-    virtual SfxPoolItem*    	Create( SvStream& rStream, USHORT nVer ) const;
+    virtual SfxPoolItem*        Create( SvStream& rStream, USHORT nVer ) const;
 
     inline SvxDrawToolItem& operator=(const  SvxDrawToolItem&
                                                         rDrawTool)

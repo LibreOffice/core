@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace basegfx { namespace tools
         double h=0, s=0, l=0;
 
         l = (maxVal + minVal) / 2.0;
-    
+
         if( ::basegfx::fTools::equalZero(d) )
         {
             s = h = 0; // hue undefined (achromatic case)
@@ -87,7 +87,7 @@ namespace basegfx { namespace tools
             return nValue2;
         else if( nHue < 240.0 )
             return nValue1 + (nValue2 - nValue1)*(240.0 - nHue)/60.0;
-        else 
+        else
             return nValue1;
     }
 
@@ -103,16 +103,16 @@ namespace basegfx { namespace tools
 
         return BColor(
             hsl2rgbHelper(nVal2,
-                          nVal1, 
+                          nVal1,
                           h + 120.0),
-            hsl2rgbHelper(nVal2, 
+            hsl2rgbHelper(nVal2,
                           nVal1,
                           h),
             hsl2rgbHelper(nVal2,
                           nVal1,
                           h - 120.0) );
     }
-    
+
     BColor rgb2hsv(const BColor& rRGBColor)
     {
         const double r=rRGBColor.getRed(), g=rRGBColor.getGreen(), b=rRGBColor.getBlue();

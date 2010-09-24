@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ public:
 
     virtual void SAL_CALL exec( CFilePickerState* aFilePickerState ) = 0;
 
-    // the client inherits the ownership of the returned 
+    // the client inherits the ownership of the returned
     // CControlCommandResult and has to delete it or he may
     // use the auto_ptr template for automatic deletion
     virtual CControlCommandResult* SAL_CALL handleRequest( CControlCommandRequest* aRequest );
@@ -65,7 +65,7 @@ public:
     // pointer only temporary because it's not ref-counted
     // and the ownerhsip belongs to this instance
     CControlCommand* SAL_CALL getNextCommand( ) const;
-    
+
     // transfers the ownership to this class
     void SAL_CALL setNextCommand( CControlCommand* nextCommand );
 
@@ -84,8 +84,8 @@ private:
 class CValueControlCommand : public CControlCommand
 {
 public:
-    CValueControlCommand(         
-        sal_Int16 aControlId, 
+    CValueControlCommand(
+        sal_Int16 aControlId,
         sal_Int16 aControlAction,
         const ::com::sun::star::uno::Any& aValue );
 
@@ -96,10 +96,10 @@ public:
     sal_Int16 SAL_CALL getControlAction( ) const;
 
     ::com::sun::star::uno::Any SAL_CALL getValue( ) const;
-    
+
 private:
     sal_Int16                  m_aControlAction;
-    ::com::sun::star::uno::Any m_aValue;    
+    ::com::sun::star::uno::Any m_aValue;
 };
 
 //---------------------------------------------
@@ -109,8 +109,8 @@ private:
 class CLabelControlCommand : public CControlCommand
 {
 public:
-    CLabelControlCommand(        
-        sal_Int16 aControlId,         
+    CLabelControlCommand(
+        sal_Int16 aControlId,
         const rtl::OUString& aLabel );
 
     virtual void SAL_CALL exec( CFilePickerState* aFilePickerState );
@@ -130,8 +130,8 @@ private:
 class CEnableControlCommand : public CControlCommand
 {
 public:
-    CEnableControlCommand(        
-        sal_Int16 controlId,         
+    CEnableControlCommand(
+        sal_Int16 controlId,
         sal_Bool bEnable );
 
     virtual void SAL_CALL exec( CFilePickerState* aFilePickerState );

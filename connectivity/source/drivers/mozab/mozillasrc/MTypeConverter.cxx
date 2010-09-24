@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ void MTypeConverter::ouStringToNsString(::rtl::OUString const &ous, nsString &ns
 
     const char *cs = os.getStr();
     PRUint32 csLen = os.getLength();
-    
+
     NS_ConvertUTF8toUCS2 mozString(cs, csLen);
     //const PRUnichar* uniMozString = (const PRUnichar*) mozString;
     nss = mozString; // temp.

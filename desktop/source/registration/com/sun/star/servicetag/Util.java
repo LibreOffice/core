@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -207,8 +207,8 @@ class Util {
     private static byte[] stringToByteArray(String str) {
         return (str + "\u0000").getBytes();
     }
-    
-    /** 
+
+    /**
      * Converts a null-terminated byte array to java string
      */
     private static String byteArrayToString(byte[] array) {
@@ -216,7 +216,7 @@ class Util {
     }
 
     /**
-     * Gets the stclient path using a well known location from 
+     * Gets the stclient path using a well known location from
      * the Windows platform Registry, otherwise it will return null.
      */
     static File getWindowsStClientFile() {
@@ -235,7 +235,7 @@ class Util {
     }
 
     /**
-     * This uses reflection to access a private java windows registry 
+     * This uses reflection to access a private java windows registry
      * interface, any changes to that Class must be appropriately adjusted.
      * Returns a null if unsuccessful.
      */
@@ -245,15 +245,15 @@ class Util {
             Class<?> clazz = Class.forName("java.util.prefs.WindowsPreferences");
 
         // Get the registry methods
-            Method winRegOpenKeyM = clazz.getDeclaredMethod("WindowsRegOpenKey", 
+            Method winRegOpenKeyM = clazz.getDeclaredMethod("WindowsRegOpenKey",
                     int.class, byte[].class, int.class);
             winRegOpenKeyM.setAccessible(true);
 
-            Method winRegCloseKeyM = clazz.getDeclaredMethod("WindowsRegCloseKey", 
+            Method winRegCloseKeyM = clazz.getDeclaredMethod("WindowsRegCloseKey",
                     int.class);
             winRegCloseKeyM.setAccessible(true);
 
-            Method winRegQueryValueM = clazz.getDeclaredMethod("WindowsRegQueryValueEx", 
+            Method winRegQueryValueM = clazz.getDeclaredMethod("WindowsRegQueryValueEx",
                     int.class, byte[].class);
             winRegQueryValueM.setAccessible(true);
 
@@ -272,7 +272,7 @@ class Util {
             int[] result = (int[]) winRegOpenKeyM.invoke(null, HKLM, reg, KEY_READ);
 
             if (result[ERROR_CODE] == ERROR_SUCCESS) {
-                byte[] stvalue = (byte[]) winRegQueryValueM.invoke(null, 
+                byte[] stvalue = (byte[]) winRegQueryValueM.invoke(null,
                     result[NATIVE_HANDLE], key);
                 out = byteArrayToString(stvalue);
                 winRegCloseKeyM.invoke(null, result[NATIVE_HANDLE]);

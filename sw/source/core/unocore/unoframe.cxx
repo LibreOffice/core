@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -217,7 +217,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const 
         {
             SvxBrushItem aBrush ( static_cast < const :: SvxBrushItem & > ( rFromSet.Get ( RES_BACKGROUND ) ) );
             if(pCol )
-                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pCol,MID_BACK_COLOR	);
+                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pCol,MID_BACK_COLOR    );
             if(pColTrans)
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
             if(pRGBCol)
@@ -380,7 +380,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const 
     {
         SwFmtSurround aSrnd ( static_cast < const :: SwFmtSurround & > ( rFromSet.Get ( RES_SURROUND ) ) );
         if(pSur)
-            bRet &= ((SfxPoolItem&)aSrnd).PutValue(*pSur, MID_SURROUND_SURROUNDTYPE	);
+            bRet &= ((SfxPoolItem&)aSrnd).PutValue(*pSur, MID_SURROUND_SURROUNDTYPE );
         if(pSurAnch)
             bRet &= ((SfxPoolItem&)aSrnd).PutValue(*pSurAnch, MID_SURROUND_ANCHORONLY);
         rToSet.Put(aSrnd);
@@ -403,17 +403,17 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const 
     GetProperty(RES_BOX, CONVERT_TWIPS|TOP_BORDER_DISTANCE,  pTopDistance);
     const ::uno::Any* pBottomDistance  = 0;
     GetProperty(RES_BOX, CONVERT_TWIPS|BOTTOM_BORDER_DISTANCE,   pBottomDistance);
-    if(	pLeft || pRight || pTop ||	pBottom || pDistance ||
+    if( pLeft || pRight || pTop ||  pBottom || pDistance ||
         pLeftDistance  || pRightDistance || pTopDistance || pBottomDistance )
     {
         SvxBoxItem aBox ( static_cast < const :: SvxBoxItem & > ( rFromSet.Get ( RES_BOX ) ) );
-        if(	pLeft )
+        if( pLeft )
             bRet &= ((SfxPoolItem&)aBox).PutValue(*pLeft, CONVERT_TWIPS|LEFT_BORDER );
-        if(	pRight )
+        if( pRight )
             bRet &= ((SfxPoolItem&)aBox).PutValue(*pRight, CONVERT_TWIPS|RIGHT_BORDER );
-        if(	pTop )
+        if( pTop )
             bRet &= ((SfxPoolItem&)aBox).PutValue(*pTop, CONVERT_TWIPS|TOP_BORDER);
-        if(	pBottom )
+        if( pBottom )
             bRet &= ((SfxPoolItem&)aBox).PutValue(*pBottom, CONVERT_TWIPS|BOTTOM_BORDER);
         if( pDistance )
             bRet &= ((SfxPoolItem&)aBox).PutValue(*pDistance, CONVERT_TWIPS|BORDER_DISTANCE);
@@ -637,7 +637,7 @@ inline void lcl_FillMirror ( SfxItemSet &rToSet, const :: SfxItemSet &rFromSet, 
     }
 }
 
-sal_Bool 	SwGraphicProperties_Impl::AnyToItemSet(
+sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
             SwDoc* pDoc,
             SfxItemSet& rFrmSet,
             SfxItemSet& rGrSet,
@@ -737,7 +737,7 @@ sal_Bool  SwOLEProperties_Impl::AnyToItemSet(
 }
 
 /******************************************************************
- *	SwXFrame
+ *  SwXFrame
  ******************************************************************/
 /* -----------------------------10.03.00 18:02--------------------------------
 
@@ -1207,7 +1207,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             if(pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
-//				SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
+//              SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
                 SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
                 if(!pGrfNode)
                 {
@@ -1554,7 +1554,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             if(pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
-//				SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
+//              SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
                 SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
                 if(!pGrfNode)
                     throw uno::RuntimeException();
@@ -1995,7 +1995,7 @@ void SwXFrame::removeEventListener(const uno::Reference< lang::XEventListener > 
 /*-- 11.12.98 15:05:06---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void 	SwXFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void    SwXFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
@@ -2086,7 +2086,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     OTextCursorHelper* pCursor = 0;
     if(xRangeTunnel.is())
     {
-        pRange 	= reinterpret_cast< SwXTextRange * >(
+        pRange  = reinterpret_cast< SwXTextRange * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
         pCursor = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
@@ -2104,14 +2104,14 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         aPam.Move( fnMoveBackward, fnGoDoc );
         static sal_uInt16 __READONLY_DATA aFrmAttrRange[] =
         {
-            RES_FRMATR_BEGIN, 		RES_FRMATR_END-1,
-            SID_ATTR_BORDER_INNER,	SID_ATTR_BORDER_INNER,
+            RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
+            SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
             RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
             0
         };
         static sal_uInt16 __READONLY_DATA aGrAttrRange[] =
         {
-            RES_GRFATR_BEGIN, 		RES_GRFATR_END-1,
+            RES_GRFATR_BEGIN,       RES_GRFATR_END-1,
             0
         };
         SfxItemSet aGrSet(pDoc->GetAttrPool(), aGrAttrRange );
@@ -2422,7 +2422,7 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
         OTextCursorHelper* pCursor = 0;
         if(xRangeTunnel.is())
         {
-            pRange 	= reinterpret_cast< SwXTextRange * >(
+            pRange  = reinterpret_cast< SwXTextRange * >(
                     sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
             pCursor = reinterpret_cast< OTextCursorHelper * >(
                     sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
@@ -2491,7 +2491,7 @@ OUString SwXFrame::getShapeType(void) throw( uno::RuntimeException )
 
 
 /******************************************************************
- *	SwXTextFrame
+ *  SwXTextFrame
  ******************************************************************/
 /*-- 14.01.99 11:27:51---------------------------------------------------
 
@@ -2707,11 +2707,11 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void)
         ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
                 GetDoc()->CreateUnoCrsr(aPos, sal_False));
         pUnoCursor->Move(fnMoveForward, fnGoNode);
-//		// no Cursor in protected sections
-//		SwCrsrSaveState aSave( *pUnoCrsr );
-//		if(pUnoCrsr->IsInProtectTable( sal_True ) ||
-//			pUnoCrsr->IsSelOvr( SELOVER_TOGGLE | SELOVER_CHANGEPOS ))
-//			throw  uno::RuntimeException() );
+//      // no Cursor in protected sections
+//      SwCrsrSaveState aSave( *pUnoCrsr );
+//      if(pUnoCrsr->IsInProtectTable( sal_True ) ||
+//          pUnoCrsr->IsSelOvr( SELOVER_TOGGLE | SELOVER_CHANGEPOS ))
+//          throw  uno::RuntimeException() );
         aRef = new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FRAME);
     }
     return aRef;
@@ -2848,7 +2848,7 @@ sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& 
     return aRet;
 }
 /******************************************************************
- *	SwXTextGraphicObject
+ *  SwXTextGraphicObject
  ******************************************************************/
 /*-- 14.01.99 11:27:51---------------------------------------------------
 
@@ -3158,12 +3158,12 @@ void SwXTextEmbeddedObject::removeEventListener(const uno::Reference< lang::XEve
 uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) throw( uno::RuntimeException )
 {
     uno::Reference< lang::XComponent >  xRet;
-    SwFrmFmt* 	pFmt = GetFrmFmt();
+    SwFrmFmt*   pFmt = GetFrmFmt();
     if(pFmt)
     {
         SwDoc* pDoc = pFmt->GetDoc();
         const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
-        DBG_ASSERT(	pCnt->GetCntntIdx() &&
+        DBG_ASSERT( pCnt->GetCntntIdx() &&
                        pDoc->GetNodes()[ pCnt->GetCntntIdx()->
                                         GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
 
@@ -3205,12 +3205,12 @@ uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExte
         throw( uno::RuntimeException )
 {
     uno::Reference< embed::XEmbeddedObject > xResult;
-    SwFrmFmt* 	pFmt = GetFrmFmt();
+    SwFrmFmt*   pFmt = GetFrmFmt();
     if(pFmt)
     {
         SwDoc* pDoc = pFmt->GetDoc();
         const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
-        DBG_ASSERT(	pCnt->GetCntntIdx() &&
+        DBG_ASSERT( pCnt->GetCntntIdx() &&
                        pDoc->GetNodes()[ pCnt->GetCntntIdx()->
                                         GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
 
@@ -3245,12 +3245,12 @@ uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExte
 
 sal_Int64 SAL_CALL SwXTextEmbeddedObject::getAspect() throw (uno::RuntimeException)
 {
-    SwFrmFmt* 	pFmt = GetFrmFmt();
+    SwFrmFmt*   pFmt = GetFrmFmt();
     if(pFmt)
     {
         SwDoc* pDoc = pFmt->GetDoc();
         const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
-        DBG_ASSERT(	pCnt->GetCntntIdx() &&
+        DBG_ASSERT( pCnt->GetCntntIdx() &&
                        pDoc->GetNodes()[ pCnt->GetCntntIdx()->
                                         GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
 
@@ -3262,12 +3262,12 @@ sal_Int64 SAL_CALL SwXTextEmbeddedObject::getAspect() throw (uno::RuntimeExcepti
 
 void SAL_CALL SwXTextEmbeddedObject::setAspect( sal_Int64 nAspect ) throw (uno::RuntimeException)
 {
-    SwFrmFmt* 	pFmt = GetFrmFmt();
+    SwFrmFmt*   pFmt = GetFrmFmt();
     if(pFmt)
     {
         SwDoc* pDoc = pFmt->GetDoc();
         const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
-        DBG_ASSERT(	pCnt->GetCntntIdx() &&
+        DBG_ASSERT( pCnt->GetCntntIdx() &&
                        pDoc->GetNodes()[ pCnt->GetCntntIdx()->
                                         GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
 
@@ -3277,12 +3277,12 @@ void SAL_CALL SwXTextEmbeddedObject::setAspect( sal_Int64 nAspect ) throw (uno::
 
 uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplacementGraphic() throw (uno::RuntimeException)
 {
-    SwFrmFmt* 	pFmt = GetFrmFmt();
+    SwFrmFmt*   pFmt = GetFrmFmt();
     if(pFmt)
     {
         SwDoc* pDoc = pFmt->GetDoc();
         const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
-        DBG_ASSERT(	pCnt->GetCntntIdx() &&
+        DBG_ASSERT( pCnt->GetCntntIdx() &&
                        pDoc->GetNodes()[ pCnt->GetCntntIdx()->
                                         GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
 

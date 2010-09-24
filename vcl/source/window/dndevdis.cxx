@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -225,7 +225,7 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     else
     {
         // fire dragOver on listeners of current window
-        nListeners = fireDragOverEvent( pChildWindow, dtde.Context,	dtde.DropAction, location,
+        nListeners = fireDragOverEvent( pChildWindow, dtde.Context, dtde.DropAction, location,
             dtde.SourceActions );
     }
 
@@ -302,7 +302,7 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
 
 void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent& dge )
     throw(RuntimeException)
-{	MutexGuard aImplGuard( m_aMutex );
+{   MutexGuard aImplGuard( m_aMutex );
 
     Point origin( dge.DragOriginX, dge.DragOriginY );
 
@@ -324,7 +324,7 @@ void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent&
         pChildWindow->ImplReMirror( origin );
 
     aSolarGuard.clear();
-    
+
     fireDragGestureEvent( pChildWindow, dge.DragSource, dge.Event, origin, dge.DragAction );
 }
 
@@ -368,7 +368,7 @@ sal_Int32 DNDEventDispatcher::fireDragEnterEvent( Window *pWindow,
     if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
         OClearableGuard aGuard( Application::GetSolarMutex() );
-        
+
         // set an UI lock
         pWindow->IncrementLockCount();
 
@@ -531,9 +531,9 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
 // DNDEventDispatcher::fireDragGestureRecognized
 //==================================================================================================
 
-sal_Int32 DNDEventDispatcher::fireDragGestureEvent( Window *pWindow, 
-    const Reference< XDragSource >& xSource, const Any event, 
-    const Point& rOrigin, const sal_Int8 nDragAction 
+sal_Int32 DNDEventDispatcher::fireDragGestureEvent( Window *pWindow,
+    const Reference< XDragSource >& xSource, const Any event,
+    const Point& rOrigin, const sal_Int8 nDragAction
 )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -559,6 +559,6 @@ sal_Int32 DNDEventDispatcher::fireDragGestureEvent( Window *pWindow,
         // release UI lock
         pWindow->DecrementLockCount();
     }
-    
+
     return n;
 }

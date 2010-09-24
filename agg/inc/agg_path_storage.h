@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -22,16 +22,16 @@ namespace agg
 {
 
     //------------------------------------------------------------path_storage
-    // A container to store vertices with their flags. 
-    // A path consists of a number of contours separated with "move_to" 
+    // A container to store vertices with their flags.
+    // A path consists of a number of contours separated with "move_to"
     // commands. The path storage can keep and maintain more than one
-    // path. 
+    // path.
     // To navigate to the beginning of a particular path, use rewind(path_id);
     // Where path_id is what start_new_path() returns. So, when you call
     // start_new_path() you need to store its return value somewhere else
     // to navigate to the path afterwards.
     //
-    // See Implementation: agg_path_storage.cpp 
+    // See Implementation: agg_path_storage.cpp
     // See also: vertex_source concept
     //------------------------------------------------------------------------
     class path_storage
@@ -52,7 +52,7 @@ namespace agg
         {
             void vertex()
             {
-                if(m_vertex_idx < m_path->total_vertices()) 
+                if(m_vertex_idx < m_path->total_vertices())
                 {
                     m_vertex.cmd = m_path->vertex(m_vertex_idx, &m_vertex.x, &m_vertex.y);
                 }
@@ -66,21 +66,21 @@ namespace agg
         public:
             const_iterator() {}
             const_iterator(unsigned cmd) { m_vertex.cmd = cmd; }
-            const_iterator(const const_iterator& i) : 
+            const_iterator(const const_iterator& i) :
                 m_path(i.m_path),
                 m_vertex_idx(i.m_vertex_idx),
-                m_vertex(i.m_vertex) 
+                m_vertex(i.m_vertex)
             {
             }
 
-            const_iterator(const path_storage& p, unsigned id) : 
+            const_iterator(const path_storage& p, unsigned id) :
                 m_path(&p),
                 m_vertex_idx(id)
             {
                 vertex();
             }
 
-            const_iterator& operator++() 
+            const_iterator& operator++()
             {
                 ++m_vertex_idx;
                 vertex();
@@ -90,9 +90,9 @@ namespace agg
             const vertex_type& operator*() const { return m_vertex; }
             const vertex_type* operator->() const { return &m_vertex; }
 
-            bool operator != (const const_iterator& i) 
-            { 
-                return m_vertex.cmd != i.m_vertex.cmd; 
+            bool operator != (const const_iterator& i)
+            {
+                return m_vertex.cmd != i.m_vertex.cmd;
             }
 
         private:
@@ -130,28 +130,28 @@ namespace agg
                      bool sweep_flag,
                      double dx, double dy);
 
-        void curve3(double x_ctrl, double y_ctrl, 
+        void curve3(double x_ctrl, double y_ctrl,
                     double x_to,   double y_to);
 
-        void curve3_rel(double dx_ctrl, double dy_ctrl, 
+        void curve3_rel(double dx_ctrl, double dy_ctrl,
                         double dx_to,   double dy_to);
 
         void curve3(double x_to, double y_to);
 
         void curve3_rel(double dx_to, double dy_to);
 
-        void curve4(double x_ctrl1, double y_ctrl1, 
-                    double x_ctrl2, double y_ctrl2, 
+        void curve4(double x_ctrl1, double y_ctrl1,
+                    double x_ctrl2, double y_ctrl2,
                     double x_to,    double y_to);
 
-        void curve4_rel(double dx_ctrl1, double dy_ctrl1, 
-                        double dx_ctrl2, double dy_ctrl2, 
+        void curve4_rel(double dx_ctrl1, double dy_ctrl1,
+                        double dx_ctrl2, double dy_ctrl2,
                         double dx_to,    double dy_to);
 
-        void curve4(double x_ctrl2, double y_ctrl2, 
+        void curve4(double x_ctrl2, double y_ctrl2,
                     double x_to,    double y_to);
 
-        void curve4_rel(double x_ctrl2, double y_ctrl2, 
+        void curve4_rel(double x_ctrl2, double y_ctrl2,
                         double x_to,    double y_to);
 
 
@@ -162,13 +162,13 @@ namespace agg
             end_poly(path_flags_close | flags);
         }
 
-        void add_poly(const double* vertices, unsigned num, 
+        void add_poly(const double* vertices, unsigned num,
                       bool solid_path = false,
                       unsigned end_flags = path_flags_none);
 
-        template<class VertexSource> 
-        void add_path(VertexSource& vs, 
-                      unsigned path_id = 0, 
+        template<class VertexSource>
+        void add_path(VertexSource& vs,
+                      unsigned path_id = 0,
                       bool solid_path = true)
         {
             double x, y;
@@ -176,7 +176,7 @@ namespace agg
             vs.rewind(path_id);
             while(!is_stop(cmd = vs.vertex(&x, &y)))
             {
-                if(is_move_to(cmd) && solid_path && m_total_vertices) 
+                if(is_move_to(cmd) && solid_path && m_total_vertices)
                 {
                     cmd = path_cmd_line_to;
                 }
@@ -217,7 +217,7 @@ namespace agg
 
         // Arrange the orientation of all the polygons. After calling this
         // method all the polygons will have the same orientation
-        // determined by the new_orientation flag, i.e., 
+        // determined by the new_orientation flag, i.e.,
         // path_flags_cw or path_flags_ccw
         unsigned arrange_orientations(unsigned path_id, path_flags_e new_orientation);
         void arrange_orientations_all_paths(path_flags_e new_orientation);
@@ -225,14 +225,14 @@ namespace agg
         // Flip all the vertices horizontally or vertically
         void flip_x(double x1, double x2);
         void flip_y(double y1, double y2);
-        
-        // This function adds a vertex with its flags directly. Since there's no 
+
+        // This function adds a vertex with its flags directly. Since there's no
         // checking for errors, keeping proper path integrity is the responsibility
-        // of the caller. It can be said the function is "not very public". 
+        // of the caller. It can be said the function is "not very public".
         void add_vertex(double x, double y, unsigned cmd);
 
-        // Allows you to modify vertex coordinates. The caller must know 
-        // the index of the vertex. 
+        // Allows you to modify vertex coordinates. The caller must know
+        // the index of the vertex.
         void modify_vertex(unsigned idx, double x, double y)
         {
             double* pv = m_coord_blocks[idx >> block_shift] + ((idx & block_mask) << 1);
@@ -240,8 +240,8 @@ namespace agg
             *pv   = y;
         }
 
-        // Allows you to modify vertex command. The caller must know 
-        // the index of the vertex. 
+        // Allows you to modify vertex command. The caller must know
+        // the index of the vertex.
         void modify_command(unsigned idx, unsigned cmd)
         {
             m_cmd_blocks[idx >> block_shift][idx & block_mask] = (unsigned char)cmd;
@@ -251,7 +251,7 @@ namespace agg
     private:
         void allocate_block(unsigned nb);
         unsigned char* storage_ptrs(double** xy_ptr);
-        unsigned perceive_polygon_orientation(unsigned idx, 
+        unsigned perceive_polygon_orientation(unsigned idx,
                                               double xs, double ys,
                                               unsigned* orientation);
         void reverse_polygon(unsigned start, unsigned end);

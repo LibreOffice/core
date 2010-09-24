@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ namespace xmloff
     class OFormsRootExport
     {
     private:
-        SvXMLElementExport*		m_pImplElement;
+        SvXMLElementExport*     m_pImplElement;
 
     public:
         OFormsRootExport( SvXMLExport& _rExp );
@@ -96,7 +96,7 @@ namespace xmloff
     };
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_OFFICEFORMS_HXX_

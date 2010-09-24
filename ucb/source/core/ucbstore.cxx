@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,12 +100,12 @@ rtl::OUString makeHierarchalNameSegment( const rtl::OUString & rIn  )
 
 //=========================================================================
 
-#define STORE_CONTENTPROPERTIES_KEY	"/org.openoffice.ucb.Store/ContentProperties"
+#define STORE_CONTENTPROPERTIES_KEY "/org.openoffice.ucb.Store/ContentProperties"
 
 // describe path of cfg entry
-#define	CFGPROPERTY_NODEPATH		"nodepath"
+#define CFGPROPERTY_NODEPATH        "nodepath"
 // true->async. update; false->sync. update
-#define	CFGPROPERTY_LAZYWRITE		"lazywrite"
+#define CFGPROPERTY_LAZYWRITE       "lazywrite"
 
 //=========================================================================
 
@@ -147,11 +147,11 @@ PropertySetMap_Impl;
 //=========================================================================
 
 class PropertySetInfo_Impl :
-        public OWeakObject,	public XTypeProvider, public XPropertySetInfo
+        public OWeakObject, public XTypeProvider, public XPropertySetInfo
 {
     Reference< XMultiServiceFactory > m_xSMgr;
-    Sequence< Property >* 			  m_pProps;
-    PersistentPropertySet*			  m_pOwner;
+    Sequence< Property >*             m_pProps;
+    PersistentPropertySet*            m_pOwner;
 
 public:
     PropertySetInfo_Impl( const Reference< XMultiServiceFactory >& rxSMgr,
@@ -184,8 +184,8 @@ public:
 
 struct UcbStore_Impl
 {
-    osl::Mutex						  m_aMutex;
-    Sequence< Any > 				  m_aInitArgs;
+    osl::Mutex                        m_aMutex;
+    Sequence< Any >                   m_aInitArgs;
     Reference< XPropertySetRegistry > m_xTheRegistry;
 };
 
@@ -199,7 +199,7 @@ struct UcbStore_Impl
 //=========================================================================
 //=========================================================================
 
-UcbStore::UcbStore(	const Reference< XMultiServiceFactory >& rXSMgr )
+UcbStore::UcbStore( const Reference< XMultiServiceFactory >& rXSMgr )
 : m_xSMgr( rXSMgr ),
   m_pImpl( new UcbStore_Impl() )
 {
@@ -323,14 +323,14 @@ const Sequence< Any >& UcbStore::getInitArgs() const
 
 struct PropertySetRegistry_Impl
 {
-    UcbStore*  						  m_pCreator;
-    PropertySetMap_Impl 			  m_aPropSets;
+    UcbStore*                         m_pCreator;
+    PropertySetMap_Impl               m_aPropSets;
     Reference< XMultiServiceFactory > m_xConfigProvider;
-    Reference< XInterface >			  m_xRootReadAccess;
-    Reference< XInterface >			  m_xRootWriteAccess;
-    osl::Mutex						  m_aMutex;
-    sal_Bool			  			  m_bTriedToGetRootReadAccess;  // #82494#
-    sal_Bool			  			  m_bTriedToGetRootWriteAccess; // #82494#
+    Reference< XInterface >           m_xRootReadAccess;
+    Reference< XInterface >           m_xRootWriteAccess;
+    osl::Mutex                        m_aMutex;
+    sal_Bool                          m_bTriedToGetRootReadAccess;  // #82494#
+    sal_Bool                          m_bTriedToGetRootWriteAccess; // #82494#
 
     PropertySetRegistry_Impl( UcbStore& rCreator )
     : m_pCreator( &rCreator ),
@@ -480,10 +480,10 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
                             {
                                 // Fill new item...
 
-//								// Set Values
-//								xNameReplace->replaceByName(
-//										OUString::createFromAscii( "Values" ),
-//										makeAny( ... ) );
+//                              // Set Values
+//                              xNameReplace->replaceByName(
+//                                      OUString::createFromAscii( "Values" ),
+//                                      makeAny( ... ) );
 
                                 // Insert new item.
                                 xContainer->insertByName(
@@ -1223,7 +1223,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
             if ( m_pImpl->m_xConfigProvider.is() )
             {
                 Sequence< Any > aArguments( 2 );
-                PropertyValue	aProperty;
+                PropertyValue   aProperty;
 
                 aProperty.Name
                     = OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -1231,13 +1231,13 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
                 aProperty.Value
                     <<= OUString( RTL_CONSTASCII_USTRINGPARAM(
                                             STORE_CONTENTPROPERTIES_KEY ) );
-                aArguments[ 0 ]	<<= aProperty;
+                aArguments[ 0 ] <<= aProperty;
 
                 aProperty.Name
-                    = OUString(	RTL_CONSTASCII_USTRINGPARAM(
+                    = OUString( RTL_CONSTASCII_USTRINGPARAM(
                                             CFGPROPERTY_LAZYWRITE ) );
-                aProperty.Value	<<= sal_True;
-                aArguments[ 1 ]	<<= aProperty;
+                aProperty.Value <<= sal_True;
+                aArguments[ 1 ] <<= aProperty;
 
                 m_pImpl->m_bTriedToGetRootWriteAccess = sal_True;
 
@@ -1262,7 +1262,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
                 if ( xNA.is() )
                 {
                     Reference< XInterface > xInterface;
-                    xNA->getByHierarchicalName( rPath )	>>= xInterface;
+                    xNA->getByHierarchicalName( rPath ) >>= xInterface;
 
                     if ( xInterface.is() )
                         return xInterface;
@@ -1321,14 +1321,14 @@ typedef OMultiTypeInterfaceContainerHelperVar
 
 struct PersistentPropertySet_Impl
 {
-    PropertySetRegistry* 		m_pCreator;
-    PropertySetInfo_Impl*		m_pInfo;
-    OUString			 		m_aKey;
-    OUString			 		m_aFullKey;
-    osl::Mutex       			m_aMutex;
-    OInterfaceContainerHelper*	m_pDisposeEventListeners;
+    PropertySetRegistry*        m_pCreator;
+    PropertySetInfo_Impl*       m_pInfo;
+    OUString                    m_aKey;
+    OUString                    m_aFullKey;
+    osl::Mutex                  m_aMutex;
+    OInterfaceContainerHelper*  m_pDisposeEventListeners;
     OInterfaceContainerHelper*  m_pPropSetChangeListeners;
-    PropertyListeners_Impl*		m_pPropertyChangeListeners;
+    PropertyListeners_Impl*     m_pPropertyChangeListeners;
 
     PersistentPropertySet_Impl( PropertySetRegistry& rCreator,
                                 const OUString& rKey )
@@ -1581,10 +1581,10 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
                         aValueName = aFullPropName;
                         aValueName += OUString::createFromAscii( "/Handle" );
                         sal_Int32 nHandle = -1;
-                        xRootHierNameAccess->getByHierarchicalName(	aValueName )
+                        xRootHierNameAccess->getByHierarchicalName( aValueName )
                             >>= nHandle;
 
-                        aEvt.Source 	    = (OWeakObject*)this;
+                        aEvt.Source         = (OWeakObject*)this;
                         aEvt.PropertyName   = aPropertyName;
                         aEvt.PropertyHandle = nHandle;
                         aEvt.Further        = sal_False;
@@ -1660,7 +1660,7 @@ void SAL_CALL PersistentPropertySet::addPropertyChangeListener(
            WrappedTargetException,
            RuntimeException )
 {
-//	load();
+//  load();
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
         m_pImpl->m_pPropertyChangeListeners =
@@ -1679,7 +1679,7 @@ void SAL_CALL PersistentPropertySet::removePropertyChangeListener(
            WrappedTargetException,
            RuntimeException )
 {
-//	load();
+//  load();
 
     if ( m_pImpl->m_pPropertyChangeListeners )
         m_pImpl->m_pPropertyChangeListeners->removeInterface(
@@ -1697,9 +1697,9 @@ void SAL_CALL PersistentPropertySet::addVetoableChangeListener(
            WrappedTargetException,
            RuntimeException )
 {
-//	load();
-//	OSL_ENSURE( sal_False,
-//				"PersistentPropertySet::addVetoableChangeListener - N.Y.I." );
+//  load();
+//  OSL_ENSURE( sal_False,
+//              "PersistentPropertySet::addVetoableChangeListener - N.Y.I." );
 }
 
 //=========================================================================
@@ -1711,9 +1711,9 @@ void SAL_CALL PersistentPropertySet::removeVetoableChangeListener(
            WrappedTargetException,
            RuntimeException )
 {
-//	load();
-//	OSL_ENSURE( sal_False,
-//				"PersistentPropertySet::removeVetoableChangeListener - N.Y.I." );
+//  load();
+//  OSL_ENSURE( sal_False,
+//              "PersistentPropertySet::removeVetoableChangeListener - N.Y.I." );
 }
 
 //=========================================================================
@@ -2341,7 +2341,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                         if ( m_pImpl->m_pPropertyChangeListeners )
                         {
                             PropertyChangeEvent aEvt;
-                            aEvt.Source 	    = (OWeakObject*)this;
+                            aEvt.Source         = (OWeakObject*)this;
                             aEvt.PropertyName   = rNewValue.Name;
                             aEvt.PropertyHandle = rNewValue.Handle;
                             aEvt.Further        = sal_False;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,44 +24,44 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_SystemDependentXWindow_idl__ 
+#ifndef __com_sun_star_awt_SystemDependentXWindow_idl__
 #define __com_sun_star_awt_SystemDependentXWindow_idl__
 
 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
 /** specifies a system dependent XWindow.
 
     <p>This is the structure returned in the
     <member>XSystemDependentWindowPeer::getWindowHandle</member> call,
     if the system type is
     <const scope="com::sun::star::lang">SystemDependent::XWINDOW</const>.</p>
-    
+
     @deprecated
  */
 published struct SystemDependentXWindow
 {
-    //------------------------------------------------------------------------- 
-    
+    //-------------------------------------------------------------------------
+
     /** The XWindow handle if possible, otherwise 0.
      */
-    long	WindowHandle; 
-     
+    long    WindowHandle;
+
     //-------------------------------------------------------------------------
-    
+
     /** The display pointer.
      */
-    hyper	DisplayPointer;
-    
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
- 
-#endif 
+    hyper   DisplayPointer;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+
+#endif

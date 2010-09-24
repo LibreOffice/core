@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,21 +57,21 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
     {
         if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
         {
-            fprintf(stderr, "%s: warning, could	not create key '%s' in '%s'\n",
+            fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                     idlc()->getOptions()->getProgramName().getStr(),
                     getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
             return sal_False;
         }
     }
 
-    sal_uInt16 		 	nConst = getNodeCount(NT_const);
+    sal_uInt16          nConst = getNodeCount(NT_const);
 
     if ( nConst > 0 )
     {
         RTTypeClass typeClass = RT_TYPE_MODULE;
         if ( getNodeType() == NT_constants )
             typeClass = RT_TYPE_CONSTANTS;
-        
+
         typereg::Writer aBlob(
             m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
             getDocumentation(), emptyStr, typeClass,
@@ -99,14 +99,14 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
         sal_uInt32 aBlobSize;
         void const * pBlob = aBlob.getBlob(&aBlobSize);
 
-        if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY, 
+        if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY,
                                 (RegValue)pBlob, aBlobSize))
         {
-            fprintf(stderr, "%s: warning, could	not set value of key \"%s\" in %s\n",
+            fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                     idlc()->getOptions()->getProgramName().getStr(),
                     getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
             return sal_False;
-        }				
+        }
     } else
     {
         RTTypeClass typeClass = RT_TYPE_MODULE;
@@ -124,14 +124,14 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
 
         if ( getNodeType() != NT_root )
         {
-            if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY, 
+            if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY,
                                     (RegValue)pBlob, aBlobSize))
             {
-                fprintf(stderr, "%s: warning, could	not set value of key \"%s\" in %s\n",
+                fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                         idlc()->getOptions()->getProgramName().getStr(),
                         getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
                 return sal_False;
-            }				
+            }
         }
     }
     if ( getNodeType() == NT_root )
@@ -139,7 +139,7 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
         localKey.releaseKey();
     }
     return AstDeclaration::dump(rKey);
-}	
+}
 
 sal_Bool AstTypeDef::dump(RegistryKey& rKey)
 {
@@ -147,7 +147,7 @@ sal_Bool AstTypeDef::dump(RegistryKey& rKey)
     RegistryKey localKey;
     if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
     {
-        fprintf(stderr, "%s: warning, could	not create key '%s' in '%s'\n",
+        fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
         return sal_False;
@@ -167,14 +167,14 @@ sal_Bool AstTypeDef::dump(RegistryKey& rKey)
 
     if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY, (RegValue)pBlob, aBlobSize))
     {
-        fprintf(stderr, "%s: warning, could	not set value of key \"%s\" in %s\n",
+        fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
                 getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
         return sal_False;
     }
 
     return sal_True;
-}	
+}
 
 sal_Bool AstService::dump(RegistryKey& rKey)
 {
@@ -362,7 +362,7 @@ sal_Bool AstAttribute::dumpBlob(
 
     if (isReadonly())
     {
-        accessMode |= RT_ACCESS_READONLY;		
+        accessMode |= RT_ACCESS_READONLY;
     } else
     {
         accessMode |= RT_ACCESS_READWRITE;
@@ -413,7 +413,7 @@ sal_Bool AstAttribute::dumpBlob(
         methodIndex);
 
     return sal_True;
-}	
+}
 
 void AstAttribute::dumpExceptions(
     typereg::Writer & writer, rtl::OUString const & documentation,
@@ -441,7 +441,7 @@ void AstAttribute::dumpExceptions(
     }
 }
 
-const sal_Char*	AstSequence::getRelativName() const
+const sal_Char* AstSequence::getRelativName() const
 {
     if ( !m_pRelativName )
     {
@@ -449,6 +449,6 @@ const sal_Char*	AstSequence::getRelativName() const
         AstDeclaration const * pType = resolveTypedefs( m_pMemberType );
         *m_pRelativName += pType->getRelativName();
     }
-    
+
     return m_pRelativName->getStr();
-}	
+}

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@ private:
 
 protected:
 
-    virtual void		AddSupportedFormats();
-    virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual void		ObjectReleased();
+    virtual void        AddSupportedFormats();
+    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual void        ObjectReleased();
 
 public:
     // object, replacement image, and the aspect

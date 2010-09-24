@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@ class SwView;
 class SfxItemSet;
 
 //DialogModes:
-#define DLG_STD			0
-#define DLG_ENVELOP		2
+#define DLG_STD         0
+#define DLG_ENVELOP     2
 
 #endif

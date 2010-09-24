@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -24,8 +24,8 @@ namespace agg
 
 
     //=====================================================span_image_resample
-    template<class ColorT, class Interpolator, class Allocator> 
-    class span_image_resample : 
+    template<class ColorT, class Interpolator, class Allocator>
+    class span_image_resample :
     public span_image_filter<ColorT, Interpolator, Allocator>
     {
     public:
@@ -35,7 +35,7 @@ namespace agg
         typedef span_image_filter<color_type, interpolator_type, alloc_type> base_type;
 
         //--------------------------------------------------------------------
-        span_image_resample(alloc_type& alloc) : 
+        span_image_resample(alloc_type& alloc) :
             base_type(alloc),
             m_scale_limit(20),
             m_blur_x(image_subpixel_size),
@@ -44,7 +44,7 @@ namespace agg
 
         //--------------------------------------------------------------------
         span_image_resample(alloc_type& alloc,
-                            const rendering_buffer& src, 
+                            const rendering_buffer& src,
                             const color_type& back_color,
                             interpolator_type& inter,
                             const image_filter_lut& filter) :
@@ -64,7 +64,7 @@ namespace agg
         double blur_y() const { return double(m_blur_y) / double(image_subpixel_size); }
         void blur_x(double v) { m_blur_x = int(v * double(image_subpixel_size) + 0.5); }
         void blur_y(double v) { m_blur_y = int(v * double(image_subpixel_size) + 0.5); }
-        void blur(double v)   { m_blur_x = 
+        void blur(double v)   { m_blur_x =
                                 m_blur_y = int(v * double(image_subpixel_size) + 0.5); }
 
     protected:
@@ -81,8 +81,8 @@ namespace agg
 
 
     //==============================================span_image_resample_affine
-    template<class ColorT, class Allocator> 
-    class span_image_resample_affine : 
+    template<class ColorT, class Allocator>
+    class span_image_resample_affine :
     public span_image_filter<ColorT, span_interpolator_linear<trans_affine>, Allocator>
     {
     public:
@@ -92,7 +92,7 @@ namespace agg
         typedef span_image_filter<color_type, interpolator_type, alloc_type> base_type;
 
         //--------------------------------------------------------------------
-        span_image_resample_affine(alloc_type& alloc) : 
+        span_image_resample_affine(alloc_type& alloc) :
             base_type(alloc),
             m_scale_limit(200.0),
             m_blur_x(1.0),
@@ -101,7 +101,7 @@ namespace agg
 
         //--------------------------------------------------------------------
         span_image_resample_affine(alloc_type& alloc,
-                                   const rendering_buffer& src, 
+                                   const rendering_buffer& src,
                                    const color_type& back_color,
                                    interpolator_type& inter,
                                    const image_filter_lut& filter_) :
@@ -125,7 +125,7 @@ namespace agg
 
 
         //--------------------------------------------------------------------
-        void prepare(unsigned max_span_len) 
+        void prepare(unsigned max_span_len)
         {
             base_type::prepare(max_span_len);
 

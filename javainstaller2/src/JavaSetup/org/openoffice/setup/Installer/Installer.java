@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@ import org.openoffice.setup.InstallData;
 import org.openoffice.setup.SetupData.PackageDescription;
 
 public abstract class Installer {
-    
+
     public Installer() {
     }
 
@@ -70,7 +70,7 @@ public abstract class Installer {
     public abstract void installPackage(PackageDescription packageData);
 
     public abstract void uninstallPackage(PackageDescription packageData);
-    
+
     public abstract boolean isPackageInstalled(PackageDescription packageData, InstallData installData);
 
     public abstract boolean isInstalledPackageOlder(PackageDescription packageData, InstallData installData);

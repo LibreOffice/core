@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_image_ImageMap_idl__ 
-#define __com_sun_star_image_ImageMap_idl__ 
- 
-#ifndef __com_sun_star_container_XNamed_idl__ 
-#include <com/sun/star/container/XNamed.idl> 
-#endif 
+#ifndef __com_sun_star_image_ImageMap_idl__
+#define __com_sun_star_image_ImageMap_idl__
 
-#ifndef __com_sun_star_container_XIndexContainer_idl__ 
-#include <com/sun/star/container/XIndexContainer.idl> 
-#endif 
-  
-//============================================================================= 
- 
- module com {  module sun {  module star {  module image {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
+#endif
+
+#ifndef __com_sun_star_container_XIndexContainer_idl__
+#include <com/sun/star/container/XIndexContainer.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module image {
+
+//=============================================================================
+
 /** This service specifies a html image map.
  */
 published service ImageMap
@@ -57,8 +57,8 @@ published service ImageMap
     interface ::com::sun::star::container::XIndexContainer;
 };
 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+//=============================================================================
+
+}; }; }; };
+
+#endif

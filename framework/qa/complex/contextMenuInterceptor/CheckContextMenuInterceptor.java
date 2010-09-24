@@ -54,10 +54,10 @@ public class CheckContextMenuInterceptor extends ComplexTestCase {
     XFrame xFrame = null;
     Point point = null;
     XWindow xWindow = null;
-    
+
     public void before() {
         xMSF = (XMultiServiceFactory)param.getMSF();
-    } 
+    }
 
     public void after() {
         log.println("release the popup menu");
@@ -71,7 +71,7 @@ public class CheckContextMenuInterceptor extends ComplexTestCase {
         } catch (java.awt.AWTException e) {
             log.println("couldn't press mouse button");
         }
-            
+
         com.sun.star.util.XCloseable xClose = (com.sun.star.util.XCloseable)UnoRuntime.queryInterface(
                 com.sun.star.util.XCloseable.class, xFrame);
 
@@ -86,14 +86,14 @@ public class CheckContextMenuInterceptor extends ComplexTestCase {
 
         xFrame = null;
     }
-    
+
     public String[] getTestMethodNames() {
         return new String[]{"checkContextMenuInterceptor"};
     }
-    
+
     public void checkContextMenuInterceptor() {
         log.println(" **** Context Menu Interceptor *** ");
-        
+
         try {
             // intialize the test document
             com.sun.star.lang.XComponent xDrawDoc = DrawTools.createDrawDoc(xMSF);
@@ -101,25 +101,25 @@ public class CheckContextMenuInterceptor extends ComplexTestCase {
             SOfficeFactory SOF = SOfficeFactory.getFactory( xMSF);
             XShape oShape = SOF.createShape(xDrawDoc,5000,5000,1500,1000,"GraphicObject");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
-            
-            com.sun.star.frame.XModel xModel = 
+
+            com.sun.star.frame.XModel xModel =
                 (com.sun.star.frame.XModel)UnoRuntime.queryInterface(
                 com.sun.star.frame.XModel.class, xDrawDoc);
-                
+
             // get the frame for later usage
             xFrame = xModel.getCurrentController().getFrame();
-                                
+
             // ensure that the document content is optimal visible
             DesktopTools.zoomToEntirePage(xDrawDoc);
-                        
+
             XBitmap xBitmap = null;
-            
+
             // adding graphic as ObjRelation for GraphicObjectShape
             XPropertySet oShapeProps = (XPropertySet)
                                 UnoRuntime.queryInterface(XPropertySet.class,oShape);
             log.println( "Inserting a shape into the document");
-            
-            try 
+
+            try
             {
                 oShapeProps.setPropertyValue(
                     "GraphicURL",util.utils.getFullTestURL("space-metal.jpg"));
@@ -130,46 +130,46 @@ public class CheckContextMenuInterceptor extends ComplexTestCase {
             } catch (com.sun.star.lang.IllegalArgumentException e) {
             } catch (com.sun.star.beans.PropertyVetoException e) {
             } catch (com.sun.star.beans.UnknownPropertyException e) {
-            }			
-         
+            }
+
             // reuse the frame
             com.sun.star.frame.XController xController = xFrame.getController();
             com.sun.star.ui.XContextMenuInterception xContextMenuInterception = null;
             com.sun.star.ui.XContextMenuInterceptor xContextMenuInterceptor = null;
-            
-            if ( xController != null ) 
+
+            if ( xController != null )
             {
                 log.println( "Creating context menu interceptor");
-                
+
                 // add our context menu interceptor
-                xContextMenuInterception = 
-                    (com.sun.star.ui.XContextMenuInterception)UnoRuntime.queryInterface( 
+                xContextMenuInterception =
+                    (com.sun.star.ui.XContextMenuInterception)UnoRuntime.queryInterface(
                     com.sun.star.ui.XContextMenuInterception.class, xController );
-                
-                if( xContextMenuInterception != null ) 
+
+                if( xContextMenuInterception != null )
                 {
                     ContextMenuInterceptor aContextMenuInterceptor = new ContextMenuInterceptor( xBitmap );
-                    xContextMenuInterceptor = 
-                        (com.sun.star.ui.XContextMenuInterceptor)UnoRuntime.queryInterface( 
+                    xContextMenuInterceptor =
+                        (com.sun.star.ui.XContextMenuInterceptor)UnoRuntime.queryInterface(
                             com.sun.star.ui.XContextMenuInterceptor.class, aContextMenuInterceptor );
-                    
+
                     log.println( "Register context menu interceptor");
                     xContextMenuInterception.registerContextMenuInterceptor( xContextMenuInterceptor );
                 }
             }
-            
-        //	utils.shortWait(10000);
-            
+
+        //  utils.shortWait(10000);
+
             openContextMenu((XModel) UnoRuntime.queryInterface(XModel.class, xDrawDoc));
-            
+
             checkHelpEntry();
-                        
+
             // remove our context menu interceptor
             if ( xContextMenuInterception != null &&
                  xContextMenuInterceptor  != null    ) {
                 log.println( "Release context menu interceptor");
                 xContextMenuInterception.releaseContextMenuInterceptor(
-                    xContextMenuInterceptor ); 
+                    xContextMenuInterceptor );
             }
         }
         catch ( com.sun.star.uno.RuntimeException ex ) {
@@ -184,7 +184,7 @@ public class CheckContextMenuInterceptor extends ComplexTestCase {
 
     private void checkHelpEntry(){
         XInterface toolkit = null;
-        
+
         log.println("get accesibility...");
         try{
             toolkit = (XInterface) xMSF.createInstance("com.sun.star.awt.Toolkit");
@@ -199,15 +199,15 @@ public class CheckContextMenuInterceptor extends ComplexTestCase {
         AccessibilityTools at = new AccessibilityTools();
 
         try {
-            xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
+            xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
                                                           tk.getTopWindow(0));
-            
+
             xRoot = at.getAccessibleObject(xWindow);
-            
+
 //            at.printAccessibleTree((PrintWriter)log, xRoot, param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
             at.printAccessibleTree((PrintWriter)log, xRoot, true);
-        } 
-        catch (com.sun.star.lang.IndexOutOfBoundsException e) 
+        }
+        catch (com.sun.star.lang.IndexOutOfBoundsException e)
         {
             log.println("Couldn't get Window");
         }
@@ -215,29 +215,29 @@ public class CheckContextMenuInterceptor extends ComplexTestCase {
         XAccessibleContext oPopMenu = at.getAccessibleObjectForRole(xRoot, AccessibleRole.POPUP_MENU);
 
         log.println("ImplementationName: " + util.utils.getImplName(oPopMenu));
-        
+
         XAccessible xHelp = null;
         try{
             log.println("Try to get first entry of context menu...");
             xHelp = oPopMenu.getAccessibleChild(0);
-            
+
         } catch (IndexOutOfBoundsException e){
             failed("Not possible to get first entry of context menu");
         }
-        
+
         if (xHelp == null) failed("first entry of context menu is NULL");
-        
+
         XAccessibleContext xHelpCont = xHelp.getAccessibleContext();
 
-        if ( xHelpCont == null ) 
+        if ( xHelpCont == null )
             failed("No able to retrieve accessible context from first entry of context menu");
-        
+
         String aAccessibleName = xHelpCont.getAccessibleName();
         if ( !aAccessibleName.equals( "Help" )) {
             log.println("Accessible name found = "+aAccessibleName );
             failed("First entry of context menu is not from context menu interceptor");
         }
-        
+
         try
         {
             log.println("try to get first children of Help context...");
@@ -246,11 +246,11 @@ public class CheckContextMenuInterceptor extends ComplexTestCase {
         } catch (IndexOutOfBoundsException e){
             failed("not possible to get first children of Help context");
         }
-        
+
     }
-    
+
     private void openContextMenu(XModel aModel){
-    
+
         log.println("try to open contex menu...");
         AccessibilityTools at = new AccessibilityTools();
 
@@ -265,7 +265,7 @@ public class CheckContextMenuInterceptor extends ComplexTestCase {
 
         point = window.getLocationOnScreen();
         Rectangle rect = window.getBounds();
-        
+
         log.println("klick mouse button...");
         try {
             Robot rob = new Robot();
@@ -280,8 +280,8 @@ public class CheckContextMenuInterceptor extends ComplexTestCase {
         } catch (java.awt.AWTException e) {
             log.println("couldn't press mouse button");
         }
-        
+
         utils.shortWait(3000);
-        
+
     }
 }

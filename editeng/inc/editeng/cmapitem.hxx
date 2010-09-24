@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace rtl
 
 // class SvxCaseMapItem --------------------------------------------------
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Dieses Item beschreibt die Schrift-Ausrichtung (Versalien, Kapitaelchen,...).
 */
@@ -62,12 +62,12 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&		Store(SvStream &, USHORT nItemVersion) const;
-    virtual String			GetValueTextByPos( USHORT nPos ) const;
+    virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
+    virtual String          GetValueTextByPos( USHORT nPos ) const;
     virtual USHORT          GetValueCount() const;
 
     // MS VC4.0 kommt durcheinander
-    void			 		SetValue( USHORT nNewVal )
+    void                    SetValue( USHORT nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
 
     inline SvxCaseMapItem& operator=(const SvxCaseMapItem& rMap)
@@ -77,12 +77,12 @@ public:
         }
 
     // enum cast
-    SvxCaseMap 				GetCaseMap() const
+    SvxCaseMap              GetCaseMap() const
                                 { return (SvxCaseMap)GetValue(); }
-    void 					SetCaseMap( SvxCaseMap eNew )
+    void                    SetCaseMap( SvxCaseMap eNew )
                                 { SetValue( (USHORT)eNew ); }
-    virtual	sal_Bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	sal_Bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 #endif

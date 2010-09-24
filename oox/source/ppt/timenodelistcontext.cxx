@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -971,7 +971,7 @@ namespace oox { namespace ppt {
                 sal_Int32 nDir = xAttribs->getOptionalValueToken( XML_transition, 0 );
                 OUString sFilter = xAttribs->getOptionalValue( XML_filter );
                 // TODO
-//				OUString sPrList = xAttribs->getOptionalValue( XML_prLst );
+//              OUString sPrList = xAttribs->getOptionalValue( XML_prLst );
 
                 if( sFilter.getLength() )
                 {

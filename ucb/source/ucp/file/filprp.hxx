@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,9 +35,9 @@
 
 
 namespace fileaccess {
-    
+
     class shell;
-    
+
     class XPropertySetInfo_impl
         : public cppu::OWeakObject,
           public com::sun::star::lang::XTypeProvider,
@@ -46,45 +46,45 @@ namespace fileaccess {
     public:
         XPropertySetInfo_impl( shell* pMyShell,const rtl::OUString& aUnqPath );
         XPropertySetInfo_impl( shell* pMyShell,const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& seq );
-        
+
         virtual ~XPropertySetInfo_impl();
-  
+
         // XInterface
         virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface( 
-            const com::sun::star::uno::Type& aType ) 
+        queryInterface(
+            const com::sun::star::uno::Type& aType )
             throw( com::sun::star::uno::RuntimeException);
-  
+
         virtual void SAL_CALL
-        acquire( 
-            void ) 
+        acquire(
+            void )
             throw();
-  
+
         virtual void SAL_CALL
         release(
-            void ) 
+            void )
             throw();
-  
+
 
         // XTypeProvider
-        
+
         XTYPEPROVIDER_DECL()
-    
+
         virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property > SAL_CALL
-        getProperties( 
-            void ) 
+        getProperties(
+            void )
             throw( com::sun::star::uno::RuntimeException );
-  
+
         virtual com::sun::star::beans::Property SAL_CALL
-        getPropertyByName( 
-            const rtl::OUString& aName ) 
-            throw( com::sun::star::beans::UnknownPropertyException, 
+        getPropertyByName(
+            const rtl::OUString& aName )
+            throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::uno::RuntimeException);
-  
+
         virtual sal_Bool SAL_CALL
-        hasPropertyByName( const rtl::OUString& Name ) 
+        hasPropertyByName( const rtl::OUString& Name )
             throw( com::sun::star::uno::RuntimeException );
-        
+
     private:
         shell*                                                                     m_pMyShell;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >    m_xProvider;

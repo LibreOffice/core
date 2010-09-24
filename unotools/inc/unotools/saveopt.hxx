@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,14 +101,14 @@ public:
     void                    SetSaveRelFSys( sal_Bool b );
     sal_Bool                IsSaveRelFSys() const;
 
-    void					SetSaveUnpacked( sal_Bool b );
-    sal_Bool				IsSaveUnpacked() const;
+    void                    SetSaveUnpacked( sal_Bool b );
+    sal_Bool                IsSaveUnpacked() const;
 
     void                    SetLoadUserSettings(sal_Bool b);
     sal_Bool                IsLoadUserSettings() const;
 
-    void					SetPrettyPrinting( sal_Bool _bEnable );
-    sal_Bool				IsPrettyPrinting( ) const;
+    void                    SetPrettyPrinting( sal_Bool _bEnable );
+    sal_Bool                IsPrettyPrinting( ) const;
 
     void                    SetWarnAlienFormat( sal_Bool _bEnable );
     sal_Bool                IsWarnAlienFormat( ) const;

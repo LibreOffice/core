@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -491,13 +491,13 @@ void EditEngine::SetPaperSize( const Size& rNewSize )
             // Aendern der Breite hat bei AutoPageSize keine Wirkung, da durch
             // Textbreite bestimmt.
             // Optimierung erst nach Vobis-Auslieferung aktivieren...
-//			if ( !bAutoPageSize )
+//          if ( !bAutoPageSize )
                 pImpEditEngine->FormatFullDoc();
-//			else
-//			{
-//				pImpEditEngine->FormatDoc();			// PageSize, falls Aenderung
-//				pImpEditEngine->CheckAutoPageSize();	// Falls nichts formatiert wurde
-//			}
+//          else
+//          {
+//              pImpEditEngine->FormatDoc();            // PageSize, falls Aenderung
+//              pImpEditEngine->CheckAutoPageSize();    // Falls nichts formatiert wurde
+//          }
 
             pImpEditEngine->UpdateViews( pImpEditEngine->GetActiveView() );
 
@@ -709,14 +709,14 @@ sal_uInt16 EditEngine::GetLineLen( sal_uInt16 nParagraph, sal_uInt16 nLine ) con
         pImpEditEngine->FormatDoc();
     return pImpEditEngine->GetLineLen( nParagraph, nLine );
 }
-    
+
 void EditEngine::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
     return pImpEditEngine->GetLineBoundaries( rStart, rEnd, nParagraph, nLine );
-}    
+}
 
 USHORT EditEngine::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
 {
@@ -724,7 +724,7 @@ USHORT EditEngine::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
     return pImpEditEngine->GetLineNumberAtIndex( nPara, nIndex );
-}    
+}
 
 sal_uInt32 EditEngine::GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine )
 {
@@ -829,10 +829,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
 
     sal_Bool bDone = sal_True;
 
-    sal_Bool bModified	= sal_False;
-    sal_Bool bMoved		= sal_False;
+    sal_Bool bModified  = sal_False;
+    sal_Bool bMoved     = sal_False;
     sal_Bool bAllowIdle = sal_True;
-    sal_Bool bReadOnly	= pEditView->IsReadOnly();
+    sal_Bool bReadOnly  = pEditView->IsReadOnly();
 
     USHORT nNewCursorFlags = 0;
     BOOL bSetCursorFlags = TRUE;
@@ -865,7 +865,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             }
             // break;
 
-            default:	// wird dann evtl. unten bearbeitet.
+            default:    // wird dann evtl. unten bearbeitet.
                         eFunc = KEYFUNC_DONTKNOW;
         }
     }
@@ -1025,7 +1025,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                         // length may have changed as well )
                         pImpEditEngine->FormatAndUpdate( pImpEditEngine->GetActiveView() );
 
-                        if (bBulletIsVisible)	// bullet just turned invisible...
+                        if (bBulletIsVisible)   // bullet just turned invisible...
                             break;
                     }
 
@@ -1153,7 +1153,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                     xub_Unicode nCharCode = rKeyEvent.GetCharCode();
                     pEditView->pImpEditView->DrawSelection();
                     // Autokorrektur ?
-                    SvxAutoCorrect*	pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+                    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
                     if ( ( pImpEditEngine->GetStatus().DoAutoCorrect() ) &&
                         ( SvxAutoCorrect::IsAutoCorrectChar( nCharCode ) ||
                           pAutoCorrect->HasRunNext() ) )
@@ -1361,13 +1361,13 @@ ULONG EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
     return rOutput.GetError();
 }
 
-EditTextObject*	EditEngine::CreateTextObject()
+EditTextObject* EditEngine::CreateTextObject()
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->CreateTextObject();
 }
 
-EditTextObject*	EditEngine::CreateTextObject( const ESelection& rESelection )
+EditTextObject* EditEngine::CreateTextObject( const ESelection& rESelection )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     EditSelection aSel( pImpEditEngine->CreateSel( rESelection ) );
@@ -1456,7 +1456,7 @@ void EditEngine::SetEndPasteOrDropHdl( const Link& rLink )
     pImpEditEngine->aEndPasteOrDropHdl = rLink;
 }
 
-EditTextObject*	EditEngine::CreateTextObject( sal_uInt16 nPara, sal_uInt16 nParas )
+EditTextObject* EditEngine::CreateTextObject( sal_uInt16 nPara, sal_uInt16 nParas )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     DBG_ASSERT( nPara < pImpEditEngine->GetEditDoc().Count(), "CreateTextObject: Startpara out of Range" );
@@ -1802,7 +1802,7 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
                     ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
                     ParaPortion* pPortion = pImpEditEngine->GetParaPortions().GetObject( n );
                     sal_Bool bWrongs = ( bSpellingChanged || ( nWord & EE_CNTRL_ONLINESPELLING ) ) ? pNode->GetWrongList()->HasWrongs() : sal_False;
-                    if ( bSpellingChanged ) 		// Also aus
+                    if ( bSpellingChanged )         // Also aus
                         pNode->DestroyWrongList();  // => vorm Paint weghaun.
                     if ( bWrongs )
                     {
@@ -1874,7 +1874,7 @@ Point EditEngine::GetDocPosTopLeft( sal_uInt16 nParagraph )
         else
         {
             const SvxLRSpaceItem& rLRItem = pImpEditEngine->GetLRSpaceItem( pPPortion->GetNode() );
-// TL_NF_LR			aPoint.X() = pImpEditEngine->GetXValue( (short)(rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst()) );
+// TL_NF_LR         aPoint.X() = pImpEditEngine->GetXValue( (short)(rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst()) );
             sal_Int32 nSpaceBefore = 0;
             pImpEditEngine->GetSpaceBeforeAndMinLabelWidth( pPPortion->GetNode(), &nSpaceBefore );
             short nX = (short)(rLRItem.GetTxtLeft()
@@ -2743,9 +2743,9 @@ sal_Bool EditEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
             case KEYFUNC_UNDO:
             case KEYFUNC_REDO:
             case KEYFUNC_CUT:
-            case KEYFUNC_PASTE:	bDoesChange = sal_True;
+            case KEYFUNC_PASTE: bDoesChange = sal_True;
             break;
-            default:	// wird dann evtl. unten bearbeitet.
+            default:    // wird dann evtl. unten bearbeitet.
                         eFunc = KEYFUNC_DONTKNOW;
         }
     }
@@ -2754,7 +2754,7 @@ sal_Bool EditEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
         switch ( rKeyEvent.GetKeyCode().GetCode() )
         {
             case KEY_DELETE:
-            case KEY_BACKSPACE:	bDoesChange = sal_True;
+            case KEY_BACKSPACE: bDoesChange = sal_True;
             break;
             case KEY_RETURN:
             case KEY_TAB:
@@ -2804,14 +2804,14 @@ void EditEngine::ImportBulletItem( SvxNumBulletItem& /*rNumBullet*/, sal_uInt16 
             SvxExtNumType eNumType;
             switch( pOldBullet->GetStyle() )
             {
-                case BS_BMP:			eNumType = SVX_NUM_BITMAP;				break;
-                case BS_BULLET:			eNumType = SVX_NUM_CHAR_SPECIAL;		break;
-                case BS_ROMAN_BIG:		eNumType = SVX_NUM_ROMAN_UPPER;			break;
-                case BS_ROMAN_SMALL:	eNumType = SVX_NUM_ROMAN_LOWER;			break;
-                case BS_ABC_BIG:		eNumType = SVX_NUM_CHARS_UPPER_LETTER;	break;
-                case BS_ABC_SMALL:		eNumType = SVX_NUM_CHARS_LOWER_LETTER;	break;
-                case BS_123:			eNumType = SVX_NUM_ARABIC;				break;
-                default:				eNumType = SVX_NUM_NUMBER_NONE;			break;
+                case BS_BMP:            eNumType = SVX_NUM_BITMAP;              break;
+                case BS_BULLET:         eNumType = SVX_NUM_CHAR_SPECIAL;        break;
+                case BS_ROMAN_BIG:      eNumType = SVX_NUM_ROMAN_UPPER;         break;
+                case BS_ROMAN_SMALL:    eNumType = SVX_NUM_ROMAN_LOWER;         break;
+                case BS_ABC_BIG:        eNumType = SVX_NUM_CHARS_UPPER_LETTER;  break;
+                case BS_ABC_SMALL:      eNumType = SVX_NUM_CHARS_LOWER_LETTER;  break;
+                case BS_123:            eNumType = SVX_NUM_ARABIC;              break;
+                default:                eNumType = SVX_NUM_NUMBER_NONE;         break;
             }
             pNumberFormat->SetNumberingType(
                 sal::static_int_cast< sal_Int16 >( eNumType ) );
@@ -2820,9 +2820,9 @@ void EditEngine::ImportBulletItem( SvxNumBulletItem& /*rNumBullet*/, sal_uInt16 
             SvxAdjust eAdjust;
             switch( pOldBullet->GetJustification() & (BJ_HRIGHT|BJ_HCENTER|BJ_HLEFT) )
             {
-                case BJ_HRIGHT:		eAdjust = SVX_ADJUST_RIGHT;		break;
-                case BJ_HCENTER:	eAdjust = SVX_ADJUST_CENTER;	break;
-                default:			eAdjust = SVX_ADJUST_LEFT;		break;
+                case BJ_HRIGHT:     eAdjust = SVX_ADJUST_RIGHT;     break;
+                case BJ_HCENTER:    eAdjust = SVX_ADJUST_CENTER;    break;
+                default:            eAdjust = SVX_ADJUST_LEFT;      break;
             }
             pNumberFormat->SetNumAdjust(eAdjust);
 

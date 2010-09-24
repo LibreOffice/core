@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,12 +62,12 @@ namespace internal
             ViewUpdateSharedPtr,
             std::vector<ViewUpdateSharedPtr> > maUpdaters;
 
-        /// Views that have been notified for update 
+        /// Views that have been notified for update
         UpdateRequestVector                    maViewUpdateRequests;
 
         /// List of View. Used to issue screen updates on.
         UnoViewContainer const&                mrViewContainer;
- 
+
         /// True, if a notifyUpdate() for all views has been issued.
         bool                                   mbUpdateAllRequest;
 
@@ -76,7 +76,7 @@ namespace internal
 
         /// The screen is updated only when mnLockCount==0
         sal_Int32 mnLockCount;
-        
+
         explicit ImplScreenUpdater( UnoViewContainer const& rViewContainer ) :
             maUpdaters(),
             maViewUpdateRequests(),
@@ -101,11 +101,11 @@ namespace internal
     {
         mpImpl->mbUpdateAllRequest = true;
     }
-    
-    void ScreenUpdater::notifyUpdate( const UnoViewSharedPtr& rView, 
+
+    void ScreenUpdater::notifyUpdate( const UnoViewSharedPtr& rView,
                                       bool                    bViewClobbered )
     {
-        mpImpl->maViewUpdateRequests.push_back( 
+        mpImpl->maViewUpdateRequests.push_back(
             std::make_pair(rView, bViewClobbered) );
 
         if( bViewClobbered )
@@ -116,10 +116,10 @@ namespace internal
     {
         if (mpImpl->mnLockCount > 0)
             return;
-        
+
         // cases:
         //
-        // (a) no update necessary at all 
+        // (a) no update necessary at all
         //
         // (b) no ViewUpdate-generated update
         //     I. update all views requested -> for_each( mrViewContainer )
@@ -130,12 +130,12 @@ namespace internal
 
         // any ViewUpdate-triggered updates?
         const bool bViewUpdatesNeeded(
-            mpImpl->maUpdaters.apply( 
+            mpImpl->maUpdaters.apply(
                 boost::mem_fn(&ViewUpdate::needsUpdate)) );
 
         if( bViewUpdatesNeeded )
         {
-            mpImpl->maUpdaters.applyAll( 
+            mpImpl->maUpdaters.applyAll(
                 boost::mem_fn((bool (ViewUpdate::*)())&ViewUpdate::update) );
         }
 
@@ -145,8 +145,8 @@ namespace internal
             // unconditionally update all views
             std::for_each( mpImpl->mrViewContainer.begin(),
                            mpImpl->mrViewContainer.end(),
-                           mpImpl->mbViewClobbered ? 
-                           boost::mem_fn(&View::paintScreen) : 
+                           mpImpl->mbViewClobbered ?
+                           boost::mem_fn(&View::paintScreen) :
                            boost::mem_fn(&View::updateScreen) );
         }
         else if( !mpImpl->maViewUpdateRequests.empty() )

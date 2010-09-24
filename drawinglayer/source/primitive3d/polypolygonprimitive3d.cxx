@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ namespace drawinglayer
     namespace primitive3d
     {
         PolyPolygonMaterialPrimitive3D::PolyPolygonMaterialPrimitive3D(
-            const basegfx::B3DPolyPolygon& rPolyPolygon, 
-            const attribute::MaterialAttribute3D& rMaterial, 
+            const basegfx::B3DPolyPolygon& rPolyPolygon,
+            const attribute::MaterialAttribute3D& rMaterial,
             bool bDoubleSided)
-        :	BasePrimitive3D(),
+        :   BasePrimitive3D(),
             maPolyPolygon(rPolyPolygon),
             maMaterial(rMaterial),
             mbDoubleSided(bDoubleSided)

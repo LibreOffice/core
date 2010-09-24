@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,12 +34,12 @@
 
 
 namespace xmlsearch {
-  
+
     namespace util {
-    
-    
+
+
         class CompressorIterator;
-    
+
 
 
         class ConceptList
@@ -47,21 +47,21 @@ namespace xmlsearch {
               public xmlsearch::qe::NonnegativeIntegerGenerator
         {
         public:
-      
+
             ConceptList( sal_Int8* array,sal_Int32 arrl,sal_Int32 index )
                 : k_( array[index] ),
                   value_( 0 ),
                   list_( arrl,array,index + 1 )  { }
-      
+
             void value( sal_Int32 val ) { value_ += val; }
-      
+
         private:
 
-            sal_Int32             k_,value_;      
+            sal_Int32             k_,value_;
             ByteArrayDecompressor list_;
 
         };
-    
+
     }
 
 }

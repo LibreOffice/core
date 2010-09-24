@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,18 +28,18 @@
 #define _TXTPAINT_HXX
 #include <vcl/outdev.hxx>
 
-class SwRect;				// SwSaveClip
+class SwRect;               // SwSaveClip
 #include <txtfrm.hxx>
 
 /*************************************************************************
- *						class SwSaveClip
+ *                      class SwSaveClip
  *************************************************************************/
 
 class SwSaveClip
 {
-    Region	 aClip;
-    const sal_Bool	   bOn;
-          sal_Bool	   bChg;
+    Region   aClip;
+    const sal_Bool     bOn;
+          sal_Bool     bChg;
 protected:
     OutputDevice* pOut;
     void _ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
@@ -51,7 +51,7 @@ public:
                          sal_Bool bEnlargeRect = sal_False)
              { if( pOut ) _ChgClip( rRect, pFrm, bEnlargeRect ); }
            void Reset();
-    inline sal_Bool IsOn()	const { return bOn; }
+    inline sal_Bool IsOn()  const { return bOn; }
     inline sal_Bool IsChg() const { return bChg; }
     inline sal_Bool IsOut() const { return 0 != pOut; }
     inline OutputDevice *GetOut() { return pOut; }
@@ -71,7 +71,7 @@ inline SwSaveClip::~SwSaveClip()
 #ifdef DBG_UTIL
 
 /*************************************************************************
- *							class SwDbgOut
+ *                          class SwDbgOut
  *************************************************************************/
 
 class SwDbgOut
@@ -83,7 +83,7 @@ public:
 };
 
 /*************************************************************************
- *							class DbgColor
+ *                          class DbgColor
  *************************************************************************/
 
 class DbgColor
@@ -97,12 +97,12 @@ public:
 };
 
 /*************************************************************************
- *							class DbgBrush
+ *                          class DbgBrush
  *************************************************************************/
 
 class DbgBackColor : public SwDbgOut
 {
-        Color 	aOldFillColor;
+        Color   aOldFillColor;
 public:
         DbgBackColor( OutputDevice* pOut, const sal_Bool bOn = sal_True,
                   ColorData nColor = COL_YELLOW );
@@ -110,7 +110,7 @@ public:
 };
 
 /*************************************************************************
- *							class DbgRect
+ *                          class DbgRect
  *************************************************************************/
 
 class DbgRect : public SwDbgOut
@@ -122,7 +122,7 @@ public:
 };
 
 /*************************************************************************
- *						Inline-Implementierung
+ *                      Inline-Implementierung
  *************************************************************************/
 
 inline SwDbgOut::SwDbgOut( OutputDevice* pOutDev, const sal_Bool bOn )

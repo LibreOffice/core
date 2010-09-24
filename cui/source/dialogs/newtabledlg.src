@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ ModalDialog RID_SVX_NEWTABLE_DLG
     Moveable = TRUE ;
     Size = MAP_APPFONT ( 181 , 6+15+15+15+14+6 ) ;
     Text [ en-US ] = "Insert Table" ;
-    
+
     FixedText FT_COLUMNS
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
@@ -84,7 +84,7 @@ ModalDialog RID_SVX_NEWTABLE_DLG
         Pos = MAP_APPFONT ( 6 , 6+15+15+15 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-    };	
+    };
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 69 , 6+15+15+15 ) ;

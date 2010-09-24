@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,8 +69,8 @@ class FmFilterAdapter;
 class FmFilterData
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
-    FmParentData*			m_pParent;
-    ::rtl::OUString			m_aText;
+    FmParentData*           m_pParent;
+    ::rtl::OUString         m_aText;
 
 public:
     TYPEINFO();
@@ -140,7 +140,7 @@ public:
     FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory):FmParentData(_rxFactory,NULL, ::rtl::OUString()){}
     FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmFormItem* pParent, const ::rtl::OUString& rText ):FmParentData(_rxFactory,pParent, rText){}
 
-    FmFilterItem* Find( const ::sal_Int32 _nFilterComponentIndex ) const;	
+    FmFilterItem* Find( const ::sal_Int32 _nFilterComponentIndex ) const;
     virtual Image GetImage( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
 };
 
@@ -171,13 +171,13 @@ class FmFilterModel : public FmParentData
                      ,public SfxBroadcaster
                      ,public ::svxform::OSQLParserClient
 {
-    friend class FmFilterAdapter;	
+    friend class FmFilterAdapter;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >           m_xControllers;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xController;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >        m_xORB;
-    FmFilterAdapter*		m_pAdapter;
-    FmFilterItems*			m_pCurrentItems;
+    FmFilterAdapter*        m_pAdapter;
+    FmFilterItems*          m_pCurrentItems;
 
 public:
     TYPEINFO();
@@ -214,18 +214,18 @@ protected:
 //========================================================================
 //========================================================================
 class OFilterItemExchange : public OLocalExchange
-{	
-    ::std::vector<FmFilterItem*>	m_aDraggedEntries;	
-    FmFormItem*				m_pFormItem;		// ensure that we drop on the same form
+{
+    ::std::vector<FmFilterItem*>    m_aDraggedEntries;
+    FmFormItem*             m_pFormItem;        // ensure that we drop on the same form
 
-public:	
+public:
     OFilterItemExchange();
 
-    static sal_uInt32		getFormatId( );
-    inline static sal_Bool	hasFormat( const DataFlavorExVector& _rFormats );
+    static sal_uInt32       getFormatId( );
+    inline static sal_Bool  hasFormat( const DataFlavorExVector& _rFormats );
 
-    const ::std::vector<FmFilterItem*>& getDraggedEntries() const { return m_aDraggedEntries; }	
-    void setDraggedEntries(const ::std::vector<FmFilterItem*>& _rList) { m_aDraggedEntries = _rList; }	
+    const ::std::vector<FmFilterItem*>& getDraggedEntries() const { return m_aDraggedEntries; }
+    void setDraggedEntries(const ::std::vector<FmFilterItem*>& _rList) { m_aDraggedEntries = _rList; }
     FmFormItem* getFormItem() const { return m_pFormItem; }
 
     void setFormItem( FmFormItem* _pItem ) { m_pFormItem = _pItem; }
@@ -258,10 +258,10 @@ protected:
 class FmFilterNavigator : public SvTreeListBox, public SfxListener
 {
     enum DROP_ACTION{ DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
-    
-    FmFilterModel*			m_pModel;
-    SvLBoxEntry*			m_pEditingCurrently;
-    OFilterExchangeHelper	m_aControlExchange;
+
+    FmFilterModel*          m_pModel;
+    SvLBoxEntry*            m_pEditingCurrently;
+    OFilterExchangeHelper   m_aControlExchange;
 
 
     AutoTimer           m_aDropActionTimer;
@@ -290,9 +290,9 @@ protected:
     virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection& rSelection );
     virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
 
-    virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8	ExecuteDrop( const ExecuteDropEvent& rEvt );
-    virtual void		StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     void DeleteSelection();
     void Clear();
@@ -306,18 +306,18 @@ protected:
 
 private:
     /** returns the first form item and the selected FilterItems in the vector
-        @param	_rItemList
+        @param  _rItemList
             Is filled inside. <OUT/>
         @return
             The first form item.
     */
     FmFormItem* getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList);
     /* inserts the filter items into the tree model and creates new FilterItems if needed.
-        @param	_rFilterList
+        @param  _rFilterList
             The items which should be inserted.
-        @param	_pTargetItems
+        @param  _pTargetItems
             The target where to insert the items.
-        @param	_bCopy
+        @param  _bCopy
             If <TRUE/> the items will not be removed from the model, otherwise they will.
     */
     void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,sal_Bool _bCopy = sal_False);
@@ -365,7 +365,7 @@ public:
 };
 
 //........................................................................
-}	// namespace svxform
+}   // namespace svxform
 //........................................................................
 
 #endif // _SVX_FILTNAV_HXX

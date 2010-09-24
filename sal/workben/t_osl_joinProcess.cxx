@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,25 +41,25 @@
 #endif
 
 const rtl::OUString CWD        = rtl::OUString::createFromAscii(".");
-        
+
 //------------------------------
-// 
+//
 //------------------------------
 
 class Test_osl_Process : public CppUnit::TestFixture
 {
 public:
-    
+
     /*-------------------------------------
         Start a process and join with this
         process specify a timeout so that
-        osl_joinProcessWithTimeout returns 
+        osl_joinProcessWithTimeout returns
         osl_Process_E_TimedOut
      -------------------------------------*/
 
     void test_osl_joinProcessWithTimeout_timeout_failure()
-    {                           
-        oslProcess process;        
+    {
+        oslProcess process;
         oslProcessError osl_error = osl_executeProcess(
             IMAGE_NAME.pData,
             NULL,
@@ -70,46 +70,46 @@ public:
             NULL,
             0,
             &process);
-                    
+
         CPPUNIT_ASSERT_MESSAGE
         (
-            "osl_createProcess failed", 
+            "osl_createProcess failed",
             osl_error == osl_Process_E_None
         );
-        
+
         TimeValue timeout;
         timeout.Seconds = 1;
         timeout.Nanosec = 0;
-        
+
         osl_error = osl_joinProcessWithTimeout(process, &timeout);
-                
+
         CPPUNIT_ASSERT_MESSAGE
         (
-            "osl_joinProcessWithTimeout returned without timeout failure", 
+            "osl_joinProcessWithTimeout returned without timeout failure",
             osl_Process_E_TimedOut == osl_error
-        );        
-        
+        );
+
         osl_error = osl_terminateProcess(process);
-        
+
         CPPUNIT_ASSERT_MESSAGE
         (
-            "osl_terminateProcess failed", 
+            "osl_terminateProcess failed",
             osl_error == osl_Process_E_None
         );
-        
-        osl_freeProcessHandle(process);    
+
+        osl_freeProcessHandle(process);
     }
-    
+
     /*-------------------------------------
         Start a process and join with this
         process specify a timeout so that
-        osl_joinProcessWithTimeout returns 
+        osl_joinProcessWithTimeout returns
         osl_Process_E_None
      -------------------------------------*/
 
     void test_osl_joinProcessWithTimeout_without_timeout_failure()
     {
-        oslProcess process;        
+        oslProcess process;
         oslProcessError osl_error = osl_executeProcess(
             IMAGE_NAME.pData,
             NULL,
@@ -120,36 +120,36 @@ public:
             NULL,
             0,
             &process);
-                    
+
         CPPUNIT_ASSERT_MESSAGE
         (
-            "osl_createProcess failed", 
+            "osl_createProcess failed",
             osl_error == osl_Process_E_None
         );
-        
+
         TimeValue timeout;
         timeout.Seconds = 10;
         timeout.Nanosec = 0;
-        
+
         osl_error = osl_joinProcessWithTimeout(process, &timeout);
-                
+
         CPPUNIT_ASSERT_MESSAGE
         (
-            "osl_joinProcessWithTimeout returned with failure", 
+            "osl_joinProcessWithTimeout returned with failure",
             osl_Process_E_None == osl_error
-        );        
-                                       
-        osl_freeProcessHandle(process); 
+        );
+
+        osl_freeProcessHandle(process);
     }
-    
+
      /*-------------------------------------
         Start a process and join with this
-        process specify an infinite timeout 
+        process specify an infinite timeout
      -------------------------------------*/
 
     void test_osl_joinProcessWithTimeout_infinite()
     {
-        oslProcess process;        
+        oslProcess process;
         oslProcessError osl_error = osl_executeProcess(
             IMAGE_NAME.pData,
             NULL,
@@ -160,32 +160,32 @@ public:
             NULL,
             0,
             &process);
-                    
+
         CPPUNIT_ASSERT_MESSAGE
         (
-            "osl_createProcess failed", 
+            "osl_createProcess failed",
             osl_error == osl_Process_E_None
         );
-                
+
         osl_error = osl_joinProcessWithTimeout(process, NULL);
-                
+
         CPPUNIT_ASSERT_MESSAGE
         (
-            "osl_joinProcessWithTimeout returned with failure", 
+            "osl_joinProcessWithTimeout returned with failure",
             osl_Process_E_None == osl_error
-        );        
-                                        
-        osl_freeProcessHandle(process); 
+        );
+
+        osl_freeProcessHandle(process);
     }
-    
+
      /*-------------------------------------
         Start a process and join with this
         process using osl_joinProcess
      -------------------------------------*/
-     
+
      void test_osl_joinProcess()
     {
-        oslProcess process;        
+        oslProcess process;
         oslProcessError osl_error = osl_executeProcess(
             IMAGE_NAME.pData,
             NULL,
@@ -196,24 +196,24 @@ public:
             NULL,
             0,
             &process);
-                    
+
         CPPUNIT_ASSERT_MESSAGE
         (
-            "osl_createProcess failed", 
+            "osl_createProcess failed",
             osl_error == osl_Process_E_None
         );
-                
+
         osl_error = osl_joinProcess(process);
-                
+
         CPPUNIT_ASSERT_MESSAGE
         (
-            "osl_joinProcess returned with failure", 
+            "osl_joinProcess returned with failure",
             osl_Process_E_None == osl_error
-        );        
-                                        
-        osl_freeProcessHandle(process); 
+        );
+
+        osl_freeProcessHandle(process);
     }
-             
+
     CPPUNIT_TEST_SUITE(Test_osl_Process);
     CPPUNIT_TEST(test_osl_joinProcessWithTimeout_timeout_failure);
     CPPUNIT_TEST(test_osl_joinProcessWithTimeout_without_timeout_failure);

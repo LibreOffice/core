@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
             maPasswordED.SetSelection( Selection( 0, nLen ) );
             maPasswordED.ReplaceSelected( aFilter.makeStringAndClear() );
         }
-        
+
     }
     maOKBtn.Enable( maPasswordED.GetText().Len() >= mnMinLen );
     return 0;
@@ -97,20 +97,24 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
 
     ModalDialog( pParent, SfxResId ( DLG_PASSWD ) ),
 
-    maUserFT		( this, SfxResId( FT_PASSWD_USER ) ),
-    maUserED		( this, SfxResId( ED_PASSWD_USER ) ),
-    maPasswordFT	( this, SfxResId( FT_PASSWD_PASSWORD ) ),
-    maPasswordED	( this, SfxResId( ED_PASSWD_PASSWORD ) ),
-    maConfirmFT		( this, SfxResId( FT_PASSWD_CONFIRM ) ),
-    maConfirmED		( this, SfxResId( ED_PASSWD_CONFIRM ) ),
-    maPasswordBox	( this, SfxResId( GB_PASSWD_PASSWORD ) ),
-    maOKBtn			( this, SfxResId( BTN_PASSWD_OK ) ),
-    maCancelBtn		( this, SfxResId( BTN_PASSWD_CANCEL ) ),
-    maHelpBtn		( this, SfxResId( BTN_PASSWD_HELP ) ),
-    maConfirmStr	( 		SfxResId( STR_PASSWD_CONFIRM ) ),
+    maUserFT        ( this, SfxResId( FT_PASSWD_USER ) ),
+    maUserED        ( this, SfxResId( ED_PASSWD_USER ) ),
+    maPasswordFT    ( this, SfxResId( FT_PASSWD_PASSWORD ) ),
+    maPasswordED    ( this, SfxResId( ED_PASSWD_PASSWORD ) ),
+    maConfirmFT     ( this, SfxResId( FT_PASSWD_CONFIRM ) ),
+    maConfirmED     ( this, SfxResId( ED_PASSWD_CONFIRM ) ),
+    maMinLengthFT   ( this, SfxResId( FT_PASSWD_MINLEN ) ),
+    maPasswordBox   ( this, SfxResId( GB_PASSWD_PASSWORD ) ),
+    maOKBtn         ( this, SfxResId( BTN_PASSWD_OK ) ),
+    maCancelBtn     ( this, SfxResId( BTN_PASSWD_CANCEL ) ),
+    maHelpBtn       ( this, SfxResId( BTN_PASSWD_HELP ) ),
+    maConfirmStr    (       SfxResId( STR_PASSWD_CONFIRM ) ),
 
-    mnMinLen		( 5 ),
-    mnExtras		( 0 ),
+    mnMinLen        ( 5 ),
+    maMinLenPwdStr  ( SfxResId( STR_PASSWD_MIN_LEN ) ),
+    maEmptyPwdStr   ( SfxResId( STR_PASSWD_EMPTY ) ),
+    maMainPwdStr    ( ),
+    mnExtras        ( 0 ),
     mbAsciiOnly     ( false )
 
 {
@@ -123,6 +127,25 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
 
     if ( pGroupText )
           maPasswordBox.SetText( *pGroupText );
+
+//set the text to the pasword length
+    SetPasswdText();
+}
+
+// -----------------------------------------------------------------------
+
+void SfxPasswordDialog::SetPasswdText( )
+{
+//set the new string to the minimum password length
+    if( mnMinLen == 0 )
+        maMinLengthFT.SetText( maEmptyPwdStr );
+    else
+    {
+        maMainPwdStr = maMinLenPwdStr;
+        maMainPwdStr.SearchAndReplace( String::CreateFromAscii( "$(MINLEN)" ), String::CreateFromInt32((sal_Int32) mnMinLen ), 0);
+        maMinLengthFT.SetText( maMainPwdStr );
+        maMinLengthFT.Show();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -130,6 +153,7 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
 void SfxPasswordDialog::SetMinLen( USHORT nLen )
 {
     mnMinLen = nLen;
+    SetPasswdText();
     EditModifyHdl( NULL );
 }
 
@@ -189,8 +213,10 @@ short SfxPasswordDialog::Execute()
             aPos = maUserED.GetPosPixel();
             maPasswordED.SetPosPixel( aPos );
 
+            aPos = maConfirmFT.GetPosPixel();
             maConfirmFT.SetPosPixel( aPwdPos1 );
             maConfirmED.SetPosPixel( aPwdPos2 );
+            maMinLengthFT.SetPosPixel(aPos);
         }
 
         Size aBoxSize = maPasswordBox.GetSizePixel();

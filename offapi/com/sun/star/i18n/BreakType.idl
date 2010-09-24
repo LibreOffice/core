@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@ module com {  module sun {  module star {  module i18n {
 published constants BreakType
 {
     /// Line break is a word break.
-    const short WORDBOUNDARY			= 1;
+    const short WORDBOUNDARY            = 1;
 
     /// Line break is a result of hyphenation.
-    const short HYPHENATION				= 2;
+    const short HYPHENATION             = 2;
 
     /// Line break - hanging punctuation recognized.
-    const short HANGINGPUNCTUATION		= 3;
+    const short HANGINGPUNCTUATION      = 3;
 };
 
 //=============================================================================

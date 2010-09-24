@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@
 #include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <stdlib.h>	// qsort
+#include <stdlib.h> // qsort
 
 using namespace ::com::sun::star;
 
@@ -74,11 +74,11 @@ using namespace ::com::sun::star;
 USHORT GetScriptItemId( USHORT nItemId, short nScriptType )
 {
     USHORT nId = nItemId;
-    
+
     if ( ( nScriptType == i18n::ScriptType::ASIAN ) ||
          ( nScriptType == i18n::ScriptType::COMPLEX ) )
     {
-        switch ( nItemId ) 
+        switch ( nItemId )
         {
             case EE_CHAR_LANGUAGE:
                 nId = ( nScriptType == i18n::ScriptType::ASIAN ) ? EE_CHAR_LANGUAGE_CJK : EE_CHAR_LANGUAGE_CTL;
@@ -97,15 +97,15 @@ USHORT GetScriptItemId( USHORT nItemId, short nScriptType )
             break;
         }
     }
-    
+
     return nId;
 }
 
 BOOL IsScriptItemValid( USHORT nItemId, short nScriptType )
 {
     BOOL bValid = TRUE;
-    
-    switch ( nItemId ) 
+
+    switch ( nItemId )
     {
         case EE_CHAR_LANGUAGE:
             bValid = nScriptType == i18n::ScriptType::LATIN;
@@ -170,14 +170,14 @@ DBG_NAME( EE_CharAttribList );
 
 SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },         // EE_PARA_WRITINGDIR
-        { 0, SFX_ITEM_POOLABLE },								// EE_PARA_XMLATTRIBS
-        { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },	// EE_PARA_HANGINGPUNCTUATION
+        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_XMLATTRIBS
+        { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },   // EE_PARA_HANGINGPUNCTUATION
         { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEM_POOLABLE },
-        { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },	    // EE_PARA_ASIANCJKSPACING
-        { SID_ATTR_NUMBERING_RULE, SFX_ITEM_POOLABLE },		    // EE_PARA_NUMBULL
-        { 0, SFX_ITEM_POOLABLE },							    // EE_PARA_HYPHENATE
-        { 0, SFX_ITEM_POOLABLE },							    // EE_PARA_BULLETSTATE
-        { 0, SFX_ITEM_POOLABLE },							    // EE_PARA_OUTLLRSPACE
+        { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },       // EE_PARA_ASIANCJKSPACING
+        { SID_ATTR_NUMBERING_RULE, SFX_ITEM_POOLABLE },         // EE_PARA_NUMBULL
+        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_HYPHENATE
+        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_BULLETSTATE
+        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_OUTLLRSPACE
         { SID_ATTR_PARA_OUTLLEVEL, SFX_ITEM_POOLABLE },
         { SID_ATTR_PARA_BULLET, SFX_ITEM_POOLABLE },
         { SID_ATTR_LRSPACE, SFX_ITEM_POOLABLE },
@@ -212,12 +212,12 @@ SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },
-        { 0, SFX_ITEM_POOLABLE },							// EE_CHAR_RUBI_DUMMY
-        { 0, SFX_ITEM_POOLABLE },							// EE_CHAR_XMLATTRIBS
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_RUBI_DUMMY
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_XMLATTRIBS
         { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },
-        { 0, SFX_ITEM_POOLABLE },							// EE_FEATURE_TAB
-        { 0, SFX_ITEM_POOLABLE },							// EE_FEATURE_LINEBR
-        { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },	// EE_FEATURE_NOTCONV
+        { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_TAB
+        { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_LINEBR
+        { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },  // EE_FEATURE_NOTCONV
         { SID_FIELD, SFX_ITEM_POOLABLE }
 };
 
@@ -227,22 +227,22 @@ USHORT aV1Map[] = {
 };
 
 USHORT aV2Map[] = {
-    3999, 4000, 4001, 4002, 4003, 4004, 4005, 4006,	4007, 4008, 4009,
+    3999, 4000, 4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009,
     4010, 4011, 4012, 4013, 4014, 4015, 4016, 4018, 4019, 4020
 };
 
 USHORT aV3Map[] = {
-    3997, 3998, 3999, 4000, 4001, 4002, 4003, 4004, 4005, 4006,	4007,
+    3997, 3998, 3999, 4000, 4001, 4002, 4003, 4004, 4005, 4006, 4007,
     4009, 4010, 4011, 4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019,
     4020, 4021
 };
 
 USHORT aV4Map[] = {
-    3994, 3995, 3996, 3997, 3998, 3999, 4000, 4001, 4002, 4003, 
-    4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013, 
-    4014, 4015, 4016, 4017, 4018, 
+    3994, 3995, 3996, 3997, 3998, 3999, 4000, 4001, 4002, 4003,
+    4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013,
+    4014, 4015, 4016, 4017, 4018,
     /* CJK Items inserted here: EE_CHAR_LANGUAGE - EE_CHAR_XMLATTRIBS */
-    4034, 4035, 4036, 4037 
+    4034, 4035, 4036, 4037
 };
 
 USHORT aV5Map[] = {
@@ -379,7 +379,7 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, US
         break;
         case EE_CHAR_XMLATTRIBS:
         {
-            pNew = new EditCharAttrib( rNew, nS, nE );	// Attrib is only for holding XML information...
+            pNew = new EditCharAttrib( rNew, nS, nE );  // Attrib is only for holding XML information...
         }
         break;
         case EE_FEATURE_TAB:
@@ -414,7 +414,7 @@ EditLine::EditLine()
     DBG_CTOR( EE_EditLine, 0 );
 
     nStart = nEnd = 0;
-    nStartPortion = 0;				// damit in ungueltiger Zeile ohne Portions von einer gueltigen Zeile mit der Portion Nr0 unterscieden werden kann.
+    nStartPortion = 0;              // damit in ungueltiger Zeile ohne Portions von einer gueltigen Zeile mit der Portion Nr0 unterscieden werden kann.
     nEndPortion = 0;
     nHeight = 0;
     nStartPosX = 0;
@@ -457,16 +457,16 @@ EditLine* EditLine::Clone() const
     {
         pL->aPositions.Insert (aPositions.GetData(), aPositions.Count(), 0);
     }
-    pL->nStartPosX 		= nStartPosX;
-    pL->nStart 			= nStart;
-    pL->nEnd 			= nEnd;
-    pL->nStartPortion 	= nStartPortion;
-    pL->nEndPortion 	= nEndPortion;
-    pL->nHeight 		= nHeight;
-    pL->nTxtWidth 		= nTxtWidth;
-    pL->nTxtHeight 		= nTxtHeight;
-    pL->nCrsrHeight 	= nCrsrHeight;
-    pL->nMaxAscent 		= nMaxAscent;
+    pL->nStartPosX      = nStartPosX;
+    pL->nStart          = nStart;
+    pL->nEnd            = nEnd;
+    pL->nStartPortion   = nStartPortion;
+    pL->nEndPortion     = nEndPortion;
+    pL->nHeight         = nHeight;
+    pL->nTxtWidth       = nTxtWidth;
+    pL->nTxtHeight      = nTxtHeight;
+    pL->nCrsrHeight     = nCrsrHeight;
+    pL->nMaxAscent      = nMaxAscent;
 
     return pL;
 }
@@ -529,7 +529,7 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
             }
             break;
             case PORTIONKIND_TAB:
-//			case PORTIONKIND_EXTRASPACE:
+//          case PORTIONKIND_EXTRASPACE:
             {
                 aSz.Width() += pPortion->GetSize().Width();
             }
@@ -765,7 +765,7 @@ void ContentNode::ExpandAttribs( USHORT nIndex, USHORT nNew, SfxItemPool& rItemP
                 // Wenn spaeter doch Ueberpruefung:
                 //   Spezialfall: Start == 0; AbsLen == 1, nNew = 1 => Expand, weil durch Absatzumbruch!
                 // Start <= nIndex, End >= nIndex => Start=End=nIndex!
-//				if ( pAttrib->GetStart() == nIndex )
+//              if ( pAttrib->GetStart() == nIndex )
                 pAttrib->Expand( nNew );
                 if ( pAttrib->GetStart() == 0 )
                     bExpandedEmptyAtIndexNull = TRUE;
@@ -776,7 +776,7 @@ void ContentNode::ExpandAttribs( USHORT nIndex, USHORT nNew, SfxItemPool& rItemP
                 // Nur expandieren, wenn kein Feature,
                 // und wenn nicht in ExcludeListe!
                 // Sonst geht z.B. ein UL bis zum neuen ULDB, beide expandieren
-//				if ( !pAttrib->IsFeature() && !rExclList.FindAttrib( pAttrib->Which() ) )
+//              if ( !pAttrib->IsFeature() && !rExclList.FindAttrib( pAttrib->Which() ) )
                 if ( !pAttrib->IsFeature() && !aCharAttribList.FindEmptyAttrib( pAttrib->Which(), nIndex ) )
                 {
                     if ( !pAttrib->IsEdge() )
@@ -899,7 +899,7 @@ void ContentNode::CollapsAttribs( USHORT nIndex, USHORT nDeleted, SfxItemPool& r
                 // Spezialfall: Attrubt deckt genau den Bereich ab
                 // => als leeres Attribut behalten.
                 if ( !pAttrib->IsFeature() && ( pAttrib->GetStart() == nIndex ) && ( pAttrib->GetEnd() == nEndChanges ) )
-                    pAttrib->GetEnd() = nIndex;	// leer
+                    pAttrib->GetEnd() = nIndex; // leer
                 else
                     bDelAttr = TRUE;
             }
@@ -907,10 +907,10 @@ void ContentNode::CollapsAttribs( USHORT nIndex, USHORT nDeleted, SfxItemPool& r
             else if ( ( pAttrib->GetStart() <= nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
             {
                 DBG_ASSERT( !pAttrib->IsFeature(), "Collapsing Feature!" );
-                if ( pAttrib->GetEnd() <= nEndChanges )	// endet drinnen
+                if ( pAttrib->GetEnd() <= nEndChanges ) // endet drinnen
                     pAttrib->GetEnd() = nIndex;
                 else
-                    pAttrib->Collaps( nDeleted );		// endet dahinter
+                    pAttrib->Collaps( nDeleted );       // endet dahinter
             }
             // 3. Attribut beginnt drinnen, endet dahinter...
             else if ( ( pAttrib->GetStart() >= nIndex ) && ( pAttrib->GetEnd() > nEndChanges ) )
@@ -998,7 +998,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
         else
         {
             // alle dahinter verschieben in den neuen Node (this)
-//			pPrevNode->GetCharAttribs().RemoveAttrib( pAttrib );
+//          pPrevNode->GetCharAttribs().RemoveAttrib( pAttrib );
             pPrevNode->GetCharAttribs().GetAttribs().Remove( nAttr );
             aCharAttribList.InsertAttrib( pAttrib );
             DBG_ASSERT( pAttrib->GetStart() >= nCut, "Start < nCut!" );
@@ -1076,7 +1076,7 @@ void ContentNode::CreateDefFont()
     SfxStyleSheet* pS = aContentAttribs.GetStyleSheet();
     if ( pS )
         CreateFont( GetCharAttribs().GetDefFont(), pS->GetItemSet() );
-    
+
     // ... dann die harte Absatzformatierung rueberbuegeln...
     CreateFont( GetCharAttribs().GetDefFont(),
         GetContentAttribs().GetItems(), pS == NULL );
@@ -1085,7 +1085,7 @@ void ContentNode::CreateDefFont()
 void ContentNode::SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyle )
 {
     aContentAttribs.SetStyleSheet( pS );
-    
+
     // Erst alle Informationen aus dem Style verwenden...
     GetCharAttribs().GetDefFont() = rFontFromStyle;
     // ... dann die harte Absatzformatierung rueberbuegeln...
@@ -1116,10 +1116,10 @@ void ContentNode::CreateWrongList()
 #endif
 }
 
-void ContentNode::SetWrongList( WrongList* p ) 	
-{ 
+void ContentNode::SetWrongList( WrongList* p )
+{
     DBG_ASSERT( !pWrongList, "WrongList existiert schon!" );
-    pWrongList = p; 
+    pWrongList = p;
 }
 
 // -------------------------------------------------------------------------
@@ -1200,9 +1200,9 @@ BOOL ContentAttribs::HasItem( USHORT nWhich )
 
 
 
-//	----------------------------------------------------------------------
-//	class ItemList
-//	----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+//  class ItemList
+//  ----------------------------------------------------------------------
 const SfxPoolItem* ItemList::FindAttrib( USHORT nWhich )
 {
     const SfxPoolItem* pItem = First();
@@ -1217,7 +1217,7 @@ const SfxPoolItem* ItemList::FindAttrib( USHORT nWhich )
 // -------------------------------------------------------------------------
 EditDoc::EditDoc( SfxItemPool* pPool )
 {
-    if ( pPool ) 
+    if ( pPool )
     {
         pItemPool = pPool;
         bOwnerOfPool = FALSE;
@@ -1227,7 +1227,7 @@ EditDoc::EditDoc( SfxItemPool* pPool )
         pItemPool = new EditEngineItemPool( FALSE );
         bOwnerOfPool = TRUE;
     }
-    
+
     nDefTab = DEFTAB;
     bIsVertical = FALSE;
     bIsFixedCellHeight = FALSE;
@@ -1240,7 +1240,7 @@ EditDoc::EditDoc( SfxItemPool* pPool )
 EditDoc::~EditDoc()
 {
     ImplDestroyContents();
-    if ( bOwnerOfPool ) 
+    if ( bOwnerOfPool )
         SfxItemPool::Free(pItemPool);
 }
 
@@ -1330,7 +1330,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, s
     // So ggf ein MakeUniqFont im Font mehr, dafuer bei Aenderung schnellerer
     // Abbruch der Abfrage, oder ich musste noch jedesmal ein bChanged pflegen.
     if ( rFont == aPrevFont  )
-        rFont = aPrevFont;	// => Gleicher ImpPointer fuer IsSameInstance
+        rFont = aPrevFont;  // => Gleicher ImpPointer fuer IsSameInstance
 }
 
 void EditDoc::CreateDefFont( BOOL bUseStyles )
@@ -1421,10 +1421,10 @@ XubString EditDoc::GetParaAsString( ContentNode* pNode, USHORT nStartPos, USHORT
         if ( pNextFeature && ( pNextFeature->GetStart() < nEnd ) )
             nEnd = pNextFeature->GetStart();
         else
-            pNextFeature = 0;	// Feature interessiert unten nicht
+            pNextFeature = 0;   // Feature interessiert unten nicht
 
         DBG_ASSERT( nEnd >= nIndex, "Ende vorm Index?" );
-        //!! beware of sub string length  of -1 which is also defined as STRING_LEN and 
+        //!! beware of sub string length  of -1 which is also defined as STRING_LEN and
         //!! thus would result in adding the whole sub string up to the end of the node !!
         if (nEnd > nIndex)
             aStr += XubString( *pNode, nIndex, nEnd - nIndex );
@@ -1433,14 +1433,14 @@ XubString EditDoc::GetParaAsString( ContentNode* pNode, USHORT nStartPos, USHORT
         {
             switch ( pNextFeature->GetItem()->Which() )
             {
-                case EE_FEATURE_TAB:	aStr += '\t';
+                case EE_FEATURE_TAB:    aStr += '\t';
                 break;
-                case EE_FEATURE_LINEBR:	aStr += '\x0A';
+                case EE_FEATURE_LINEBR: aStr += '\x0A';
                 break;
-                case EE_FEATURE_FIELD:	if ( bResolveFields )
+                case EE_FEATURE_FIELD:  if ( bResolveFields )
                                             aStr += ((EditCharAttribField*)pNextFeature)->GetFieldValue();
                 break;
-                default:	DBG_ERROR( "Was fuer ein Feature ?" );
+                default:    DBG_ERROR( "Was fuer ein Feature ?" );
             }
             pNextFeature = pNode->GetCharAttribs().FindFeature( ++nEnd );
         }
@@ -1489,8 +1489,8 @@ EditPaM EditDoc::Clear()
     return aPaM;
 }
 
-void EditDoc::SetModified( BOOL b )	
-{ 
+void EditDoc::SetModified( BOOL b )
+{
     bModified = b;
     if ( bModified )
     {
@@ -1718,10 +1718,10 @@ BOOL EditDoc::RemoveAttribs( ContentNode* pNode, USHORT nStart, USHORT nEnd, Edi
                 bChanged = TRUE;
                 if ( pAttr->GetEnd() > nEnd )
                 {
-                    pAttr->GetStart() = nEnd;	// dann faengt es dahinter an
+                    pAttr->GetStart() = nEnd;   // dann faengt es dahinter an
                     rpStarting = pAttr;
                     if ( nWhich )
-                        break;	// es kann kein weiteres Attrib hier liegen
+                        break;  // es kann kein weiteres Attrib hier liegen
                 }
                 else if ( !pAttr->IsFeature() || ( pAttr->GetStart() == nStart ) )
                 {
@@ -1736,7 +1736,7 @@ BOOL EditDoc::RemoveAttribs( ContentNode* pNode, USHORT nStart, USHORT nEnd, Edi
                 bChanged = TRUE;
                 if ( ( pAttr->GetStart() < nStart ) && !pAttr->IsFeature() )
                 {
-                    pAttr->GetEnd() = nStart;	// dann hoert es hier auf
+                    pAttr->GetEnd() = nStart;   // dann hoert es hier auf
                     rpEnding = pAttr;
                 }
                 else if ( !pAttr->IsFeature() || ( pAttr->GetStart() == nStart ) )
@@ -1754,14 +1754,14 @@ BOOL EditDoc::RemoveAttribs( ContentNode* pNode, USHORT nStart, USHORT nEnd, Edi
                     pAttr->GetStart() = nEnd;
                     rpStarting = pAttr;
                     if ( nWhich )
-                        break;	// es kann weitere Attribute geben!
+                        break;  // es kann weitere Attribute geben!
                 }
                 else if ( pAttr->GetEnd() == nEnd )
                 {
                     pAttr->GetEnd() = nStart;
                     rpEnding = pAttr;
                     if ( nWhich )
-                        break;	// es kann weitere Attribute geben!
+                        break;  // es kann weitere Attribute geben!
                 }
                 else // Attribut muss gesplittet werden...
                 {
@@ -1770,7 +1770,7 @@ BOOL EditDoc::RemoveAttribs( ContentNode* pNode, USHORT nStart, USHORT nEnd, Edi
                     rpEnding = pAttr;
                     InsertAttrib( *pAttr->GetItem(), pNode, nEnd, nOldEnd );
                     if ( nWhich )
-                        break;	// es kann weitere Attribute geben!
+                        break;  // es kann weitere Attribute geben!
                 }
             }
         }
@@ -1831,7 +1831,7 @@ void EditDoc::InsertAttrib( ContentNode* pNode, USHORT nStart, USHORT nEnd, cons
         pAttr = pNode->GetCharAttribs().FindAttrib( rPoolItem.Which(), nStart );
         if ( pAttr )
         {
-            if ( pAttr->IsInside( nStart ) )	// splitten
+            if ( pAttr->IsInside( nStart ) )    // splitten
             {
                 // ???????????????????????????????
                 // eigentlich noch pruefen, ob wirklich splittet, oder return !
@@ -1885,7 +1885,7 @@ void EditDoc::FindAttribs( ContentNode* pNode, USHORT nStartPos, USHORT nEndPos,
             // Attribut beginnt hier
             else if ( ( pAttr->GetStart() == nStartPos ) && ( pAttr->GetEnd() > nStartPos ) )
             {
-                if ( nStartPos == 0 ) 	// Sonderfall
+                if ( nStartPos == 0 )   // Sonderfall
                     pItem = pAttr->GetItem();
             }
 
@@ -1909,7 +1909,7 @@ void EditDoc::FindAttribs( ContentNode* pNode, USHORT nStartPos, USHORT nEndPos,
             pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
         }
     }
-    else	// Selektion
+    else    // Selektion
     {
         while ( pAttr && ( pAttr->GetStart() < nEndPos) )
         {
@@ -2153,7 +2153,7 @@ EditCharAttrib* CharAttribList::FindEmptyAttrib( USHORT nWhich, USHORT nPos )
     return 0;
 }
 
-EditCharAttrib*	CharAttribList::FindFeature( USHORT nPos ) const
+EditCharAttrib* CharAttribList::FindFeature( USHORT nPos ) const
 {
 
     USHORT nAttr = 0;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ class XMLImageMapExport
 
     SvXMLExport& mrExport;
 
-    sal_Bool mbWhiteSpace;	/// use whitespace between image map elements?
+    sal_Bool mbWhiteSpace;  /// use whitespace between image map elements?
 
 public:
     XMLImageMapExport(SvXMLExport& rExport);
@@ -65,10 +65,10 @@ public:
     ~XMLImageMapExport();
 
     /**
-     * Get the ImageMap object from the "ImageMap" property and subsequently 
+     * Get the ImageMap object from the "ImageMap" property and subsequently
      * export the map (if present).
      */
-    void Export( 
+    void Export(
         /// the property set containing the ImageMap property
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropertySet);
@@ -108,7 +108,7 @@ protected:
             ::com::sun::star::beans::XPropertySet> & rPropertySet);
 
     /**
-     * Export the specifics of a polygonal image map entry; 
+     * Export the specifics of a polygonal image map entry;
      * To be called by ExportMapEntry.
      */
     void ExportPolygon(

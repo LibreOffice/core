@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ private:
     void lock() { mnLock++; }
     void unlock() { mnLock--; }
 
-    sal_Int32	mnLock;
+    sal_Int32   mnLock;
 };
 
 class ScopeLockGuard
@@ -55,4 +55,4 @@ private:
 
 } // namespace sd
 
-#endif	   // _SD_UNDOMANAGER_HXX
+#endif     // _SD_UNDOMANAGER_HXX

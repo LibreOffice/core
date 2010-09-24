@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,19 +50,19 @@ namespace drawinglayer
         {
         private:
             /// the PolyPolygon geometry
-            basegfx::B3DPolyPolygon						maPolyPolygon;
+            basegfx::B3DPolyPolygon                     maPolyPolygon;
 
             /// the fill parameters
-            attribute::MaterialAttribute3D				maMaterial;
+            attribute::MaterialAttribute3D              maMaterial;
 
             /// bitfield
-            unsigned									mbDoubleSided : 1;
+            unsigned                                    mbDoubleSided : 1;
 
         public:
             /// constructor
             PolyPolygonMaterialPrimitive3D(
-                const basegfx::B3DPolyPolygon& rPolyPolygon, 
-                const attribute::MaterialAttribute3D& rMaterial, 
+                const basegfx::B3DPolyPolygon& rPolyPolygon,
+                const attribute::MaterialAttribute3D& rMaterial,
                 bool bDoubleSided);
 
             /// data read access

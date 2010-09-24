@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ SlideSorterModule::SlideSorterModule (
         AddActiveMainView(FrameworkHelper::msImpressViewURL);
         AddActiveMainView(FrameworkHelper::msOutlineViewURL);
         AddActiveMainView(FrameworkHelper::msNotesViewURL);
-        
+
         AddActiveMainView(FrameworkHelper::msDrawViewURL);
 
         mxConfigurationController->addConfigurationChangeListener(
@@ -82,7 +82,7 @@ SlideSorterModule::SlideSorterModule (
 SlideSorterModule::~SlideSorterModule (void)
 {
 }
-    
+
 
 
 

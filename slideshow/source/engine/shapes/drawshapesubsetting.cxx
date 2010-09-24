@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -254,14 +254,14 @@ namespace slideshow
             maCurrentSubsets(),
             mbNodeTreeInitialized( false )
         {
-            ENSURE_OR_THROW( mpMtf, 
+            ENSURE_OR_THROW( mpMtf,
                               "DrawShapeSubsetting::DrawShapeSubsetting(): Invalid metafile" );
 
             initCurrentSubsets();
         }
 
-        DrawShapeSubsetting::DrawShapeSubsetting( const DocTreeNode&			rShapeSubset,
-                                                  const GDIMetaFileSharedPtr&	rMtf ) :
+        DrawShapeSubsetting::DrawShapeSubsetting( const DocTreeNode&            rShapeSubset,
+                                                  const GDIMetaFileSharedPtr&   rMtf ) :
             maActionClassVector(),
             mpMtf( rMtf ),
             maSubset( rShapeSubset ),
@@ -271,7 +271,7 @@ namespace slideshow
             maCurrentSubsets(),
             mbNodeTreeInitialized( false )
         {
-            ENSURE_OR_THROW( mpMtf, 
+            ENSURE_OR_THROW( mpMtf,
                               "DrawShapeSubsetting::DrawShapeSubsetting(): Invalid metafile" );
 
             initCurrentSubsets();
@@ -332,9 +332,9 @@ namespace slideshow
 
             // subset shape already created for this DocTreeNode?
             SubsetEntry aEntry;
-            
-            aEntry.mnStartActionIndex 	= rTreeNode.getStartIndex();
-            aEntry.mnEndActionIndex 	= rTreeNode.getEndIndex();
+
+            aEntry.mnStartActionIndex   = rTreeNode.getStartIndex();
+            aEntry.mnEndActionIndex     = rTreeNode.getEndIndex();
 
             ShapeSet::const_iterator aIter;
             if( (aIter=maSubsetShapes.find( aEntry )) != maSubsetShapes.end() )
@@ -353,9 +353,9 @@ namespace slideshow
             // subset shape already created for this DocTreeNode?
             SubsetEntry aEntry;
             const DocTreeNode& rEffectiveSubset( rShape->getSubsetNode() );
-            
-            aEntry.mnStartActionIndex 	= rEffectiveSubset.getStartIndex();
-            aEntry.mnEndActionIndex 	= rEffectiveSubset.getEndIndex();
+
+            aEntry.mnStartActionIndex   = rEffectiveSubset.getStartIndex();
+            aEntry.mnEndActionIndex     = rEffectiveSubset.getEndIndex();
 
             ShapeSet::const_iterator aIter;
             if( (aIter=maSubsetShapes.find( aEntry )) != maSubsetShapes.end() )
@@ -371,9 +371,9 @@ namespace slideshow
                 // not yet created, init entry
                 aEntry.mnSubsetQueriedCount = 1;
                 aEntry.mpShape = rShape;
-                
+
                 maSubsetShapes.insert( aEntry );
-                
+
                 // update cached subset borders
                 updateSubsetBounds( aEntry );
                 updateSubsets();
@@ -387,9 +387,9 @@ namespace slideshow
             // lookup subset shape
             SubsetEntry aEntry;
             const DocTreeNode& rEffectiveSubset( rShape->getSubsetNode() );
-            
-            aEntry.mnStartActionIndex 	= rEffectiveSubset.getStartIndex();
-            aEntry.mnEndActionIndex 	= rEffectiveSubset.getEndIndex();
+
+            aEntry.mnStartActionIndex   = rEffectiveSubset.getStartIndex();
+            aEntry.mnEndActionIndex     = rEffectiveSubset.getEndIndex();
 
             ShapeSet::iterator aIter;
             if( (aIter=maSubsetShapes.find( aEntry )) == maSubsetShapes.end() )
@@ -429,7 +429,7 @@ namespace slideshow
             mnMinSubsetActionIndex = SAL_MAX_INT32;
             mnMaxSubsetActionIndex = 0;
 
-            // TODO(P2): This is quite expensive, when 
+            // TODO(P2): This is quite expensive, when
             // after every subset effect end, we have to scan
             // the whole shape set
 
@@ -466,8 +466,8 @@ namespace slideshow
                 element (i.e. the iterators from the start to the end
                 of this element).
                 <pre>
-                bool operator()( IndexClassificator								 eCurrElemClassification
-                                 sal_Int32										 nCurrElemCount,
+                bool operator()( IndexClassificator                              eCurrElemClassification
+                                 sal_Int32                                       nCurrElemCount,
                                  const IndexClassificatorVector::const_iterator& rCurrElemBegin,
                                  const IndexClassificatorVector::const_iterator& rCurrElemEnd );
                 </pre>
@@ -486,7 +486,7 @@ namespace slideshow
                 @return the number of shapes found in the metafile
              */
             template< typename FunctorT > void iterateActionClassifications(
-                FunctorT& 															 io_rFunctor,
+                FunctorT&                                                            io_rFunctor,
                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rBegin,
                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rEnd )
             {
@@ -539,7 +539,7 @@ namespace slideshow
 
                         case DrawShapeSubsetting::CLASS_SHAPE_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_SHAPE_END,
-                                              nCurrShapeCount, 
+                                              nCurrShapeCount,
                                               aLastShapeStart,
                                               aNext ) )
                             {
@@ -551,7 +551,7 @@ namespace slideshow
                             // ends lines
                         case DrawShapeSubsetting::CLASS_PARAGRAPH_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_PARAGRAPH_END,
-                                              nCurrParaCount, 
+                                              nCurrParaCount,
                                               aLastParaStart,
                                               aNext ) )
                             {
@@ -564,7 +564,7 @@ namespace slideshow
                             // ends line
                         case DrawShapeSubsetting::CLASS_LINE_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_LINE_END,
-                                              nCurrLineCount, 
+                                              nCurrLineCount,
                                               aLastLineStart,
                                               aNext ) )
                             {
@@ -591,7 +591,7 @@ namespace slideshow
                             // FALLTHROUGH intended
                         case DrawShapeSubsetting::CLASS_SENTENCE_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_SENTENCE_END,
-                                              nCurrSentenceCount, 
+                                              nCurrSentenceCount,
                                               aLastSentenceStart,
                                               aNext ) )
                             {
@@ -603,7 +603,7 @@ namespace slideshow
                             // FALLTHROUGH intended
                         case DrawShapeSubsetting::CLASS_WORD_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_WORD_END,
-                                              nCurrWordCount, 
+                                              nCurrWordCount,
                                               aLastWordStart,
                                               aNext ) )
                             {
@@ -615,7 +615,7 @@ namespace slideshow
                             // FALLTHROUGH intended
                         case DrawShapeSubsetting::CLASS_CHARACTER_CELL_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_CHARACTER_CELL_END,
-                                              nCurrCharCount, 
+                                              nCurrCharCount,
                                               aLastCharStart,
                                               aNext ) )
                             {
@@ -668,16 +668,16 @@ namespace slideshow
             class CountClassFunctor
             {
             public:
-                CountClassFunctor( DrawShapeSubsetting::IndexClassificator eClass ) : 
+                CountClassFunctor( DrawShapeSubsetting::IndexClassificator eClass ) :
                     meClass( eClass ),
                     mnCurrCount(0)
                 {
                 }
 
-                bool operator()( DrawShapeSubsetting::IndexClassificator								eCurrElemClassification,
-                                 sal_Int32																/*nCurrElemCount*/,
-                                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator&	/*rCurrElemBegin*/,
-                                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator&	/*rCurrElemEnd*/ )
+                bool operator()( DrawShapeSubsetting::IndexClassificator                                eCurrElemClassification,
+                                 sal_Int32                                                              /*nCurrElemCount*/,
+                                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator&   /*rCurrElemBegin*/,
+                                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator&   /*rCurrElemEnd*/ )
                 {
                     if( eCurrElemClassification == meClass )
                         ++mnCurrCount;
@@ -692,15 +692,15 @@ namespace slideshow
 
             private:
                 DrawShapeSubsetting::IndexClassificator meClass;
-                sal_Int32								mnCurrCount;
+                sal_Int32                               mnCurrCount;
             };
         }
 
         sal_Int32 DrawShapeSubsetting::implGetNumberOfTreeNodes( const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rBegin,
                                                                  const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rEnd,
-                                                                 DocTreeNode::NodeType 												  eNodeType ) const
+                                                                 DocTreeNode::NodeType                                                eNodeType ) const
         {
-            const IndexClassificator eRequestedClass( 
+            const IndexClassificator eRequestedClass(
                 mapDocTreeNode( eNodeType ) );
 
             // create a counting functor for the requested class of
@@ -735,17 +735,17 @@ namespace slideshow
             class FindNthElementFunctor
             {
             public:
-                FindNthElementFunctor( sal_Int32 								nNodeIndex,
-                                       DrawShapeSubsetting::IndexClassificator	eClass ) :
+                FindNthElementFunctor( sal_Int32                                nNodeIndex,
+                                       DrawShapeSubsetting::IndexClassificator  eClass ) :
                     mnNodeIndex( nNodeIndex ),
                     meClass( eClass )
                 {
                 }
 
-                bool operator()( DrawShapeSubsetting::IndexClassificator								eCurrElemClassification,
-                                 sal_Int32																nCurrElemCount,
-                                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator&	rCurrElemBegin,
-                                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator&	rCurrElemEnd )
+                bool operator()( DrawShapeSubsetting::IndexClassificator                                eCurrElemClassification,
+                                 sal_Int32                                                              nCurrElemCount,
+                                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator&   rCurrElemBegin,
+                                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator&   rCurrElemEnd )
                 {
                     if( eCurrElemClassification == meClass &&
                         nCurrElemCount == mnNodeIndex )
@@ -772,16 +772,16 @@ namespace slideshow
                 }
 
             private:
-                sal_Int32														mnNodeIndex;
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator	maLastBegin;
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator	maLastEnd;
-                DrawShapeSubsetting::IndexClassificator							meClass;
+                sal_Int32                                                       mnNodeIndex;
+                DrawShapeSubsetting::IndexClassificatorVector::const_iterator   maLastBegin;
+                DrawShapeSubsetting::IndexClassificatorVector::const_iterator   maLastEnd;
+                DrawShapeSubsetting::IndexClassificator                         meClass;
             };
 
             DocTreeNode makeTreeNode( const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rBegin,
                                       const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rStart,
                                       const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rEnd,
-                                      DocTreeNode::NodeType												   eNodeType )
+                                      DocTreeNode::NodeType                                                eNodeType )
             {
                 return DocTreeNode( ::std::distance(rBegin,
                                                     rStart),
@@ -791,12 +791,12 @@ namespace slideshow
             }
         }
 
-        DocTreeNode DrawShapeSubsetting::implGetTreeNode( const IndexClassificatorVector::const_iterator&	rBegin,
-                                                          const IndexClassificatorVector::const_iterator&	rEnd,
-                                                          sal_Int32											nNodeIndex,
-                                                          DocTreeNode::NodeType								eNodeType ) const
+        DocTreeNode DrawShapeSubsetting::implGetTreeNode( const IndexClassificatorVector::const_iterator&   rBegin,
+                                                          const IndexClassificatorVector::const_iterator&   rEnd,
+                                                          sal_Int32                                         nNodeIndex,
+                                                          DocTreeNode::NodeType                             eNodeType ) const
         {
-            const IndexClassificator eRequestedClass( 
+            const IndexClassificator eRequestedClass(
                 mapDocTreeNode( eNodeType ) );
 
             // create a nth element functor for the requested class of
@@ -813,8 +813,8 @@ namespace slideshow
                                  eNodeType );
         }
 
-        DocTreeNode DrawShapeSubsetting::getTreeNode( sal_Int32				nNodeIndex,
-                                                      DocTreeNode::NodeType	eNodeType ) const
+        DocTreeNode DrawShapeSubsetting::getTreeNode( sal_Int32             nNodeIndex,
+                                                      DocTreeNode::NodeType eNodeType ) const
         {
             ensureInitializedNodeTree();
 
@@ -824,8 +824,8 @@ namespace slideshow
                                     eNodeType );
         }
 
-        sal_Int32 DrawShapeSubsetting::getNumberOfSubsetTreeNodes( const DocTreeNode&  		rParentNode,
-                                                                   DocTreeNode::NodeType	eNodeType ) const
+        sal_Int32 DrawShapeSubsetting::getNumberOfSubsetTreeNodes( const DocTreeNode&       rParentNode,
+                                                                   DocTreeNode::NodeType    eNodeType ) const
         {
             ensureInitializedNodeTree();
 
@@ -839,9 +839,9 @@ namespace slideshow
                                              eNodeType );
         }
 
-        DocTreeNode DrawShapeSubsetting::getSubsetTreeNode( const DocTreeNode& 		rParentNode,
-                                                            sal_Int32				nNodeIndex,
-                                                            DocTreeNode::NodeType	eNodeType ) const
+        DocTreeNode DrawShapeSubsetting::getSubsetTreeNode( const DocTreeNode&      rParentNode,
+                                                            sal_Int32               nNodeIndex,
+                                                            DocTreeNode::NodeType   eNodeType ) const
         {
             ensureInitializedNodeTree();
 
@@ -860,6 +860,6 @@ namespace slideshow
         {
             return maCurrentSubsets;
         }
-        
+
     }
 }

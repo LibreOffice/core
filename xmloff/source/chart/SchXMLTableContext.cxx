@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -379,7 +379,7 @@ void SchXMLTableContext::StartElement( const uno::Reference< xml::sax::XAttribut
             IsXMLToken( aLocalName, XML_NAME ) )
         {
             mrTable.aTableNameOfFile = xAttrList->getValueByIndex( i );
-            break;	 // we only need this attribute
+            break;   // we only need this attribute
         }
     }
 }
@@ -716,7 +716,7 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     rtl::OUString aValue;
     rtl::OUString aLocalName;
-    rtl::OUString aCellContent;	
+    rtl::OUString aCellContent;
     SchXMLCellType eValueType  = SCH_CELL_TYPE_UNKNOWN;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetCellAttrTokenMap();
 
@@ -822,7 +822,7 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
     Reference< chart2::data::XDataProvider >  xDataProv( xChartDoc->getDataProvider() );
     if( !xDataProv.is() )
         return;
-    
+
     //prepare the read local table data
     sal_Int32 nNumRows( static_cast< sal_Int32 >( rTable.aData.size()));
     sal_Int32 nRowOffset = 0;
@@ -838,7 +838,7 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
         --nNumColumns;
         nColOffset = 1;
     }
-    
+
     Sequence< Sequence< double > > aDataInRows( nNumRows );
     Sequence< Sequence< OUString > > aComplexRowDescriptions( nNumRows );
     Sequence< Sequence< OUString > > aComplexColumnDescriptions( nNumColumns );
@@ -868,7 +868,7 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
                 // row label
                 if( rTable.bHasHeaderColumn )
                     lcl_ApplyCellToComplexLabel( rRow.front(), aComplexRowDescriptions[nRow] );
-                
+
                 // values
                 Sequence< double >& rTargetRow = aDataInRows[nRow];
                 lcl_ApplyCellToData aApplyCellToData = ::std::for_each( rRow.begin() + nColOffset, rRow.end(), lcl_ApplyCellToData( rTargetRow ) );
@@ -1038,7 +1038,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                         continue;
                     Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesContainer->getDataSeries() );
                     std::vector< Reference< chart2::XDataSeries > > aRemainingSeries;
-                    
+
                     for( sal_Int32 nS = 0; nS < aSeriesSeq.getLength(); nS++ )
                     {
                         Reference< chart2::data::XDataSource > xDataSource( aSeriesSeq[nS], uno::UNO_QUERY );
@@ -1075,7 +1075,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                             if( bHasUnhiddenColumns )
                                 aRemainingSeries.push_back( aSeriesSeq[nS] );
                         }
-                    }                    
+                    }
 
                     if( static_cast<sal_Int32>(aRemainingSeries.size()) != aSeriesSeq.getLength() )
                     {
@@ -1125,7 +1125,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                                     continue;
                                 aSequenceIndexesToDelete.push_back(nSequenceIndex);
                             }
-                            
+
                             // delete unnecessary sequences of the internal data
                             // iterate using greatest index first, so that deletion does not
                             // shift other sequences that will be deleted later

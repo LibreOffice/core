@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace dbaxml
         ::rtl::OUString m_sCellStyleName;
         ::rtl::OUString m_sHelpMessage;
         ::com::sun::star::uno::Any m_aDefaultValue;
-        sal_Bool		m_bHidden;
+        sal_Bool        m_bHidden;
 
         ODBFilter& GetOwnImport();
     public:

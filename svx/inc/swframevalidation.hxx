@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #define _SVXSWFRAMEVALIDATION_HXX
 #include <sal/types.h>
 #include <tools/gen.hxx>
-#include <limits.h>     
+#include <limits.h>
 
 /* -----------------03.03.2004 16:31-----------------
     struct to determine min/max values for fly frame positioning in Writer
@@ -77,7 +77,7 @@ struct SvxSwFrameValidation
         nWidth( 283 * 4 ), //2.0 cm
         nMinWidth(0),
         nMaxWidth(SAL_MAX_INT32),
-        nHeight( 283 ), //0.5 cm 
+        nHeight( 283 ), //0.5 cm
         nMaxHeight(SAL_MAX_INT32)
     {
     }

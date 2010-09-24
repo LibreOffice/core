@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_beans_Property_idl__ 
-#define __com_sun_star_beans_Property_idl__ 
- 
-#ifndef __com_sun_star_reflection_XIdlClass_idl__ 
-#include <com/sun/star/reflection/XIdlClass.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module beans {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_beans_Property_idl__
+#define __com_sun_star_beans_Property_idl__
+
+#ifndef __com_sun_star_reflection_XIdlClass_idl__
+#include <com/sun/star/reflection/XIdlClass.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
 /** This structure describes a property.
-    
-    
+
+
     <dl>There are three types of properties:
         <dt>- bound properties</dt>
         <dt>- constrained properties</dt>
@@ -50,43 +50,43 @@ module com {  module sun {  module star {  module beans {
 published struct Property
 {
     /** specifies the name of the property.
-        
+
         <p>The name is unique within an <type>XPropertySet</type>.
         Upper and lower case are distinguished.</p>
      */
-    string Name; 
- 
-    //------------------------------------------------------------------------- 
-     
+    string Name;
+
+    //-------------------------------------------------------------------------
+
     /** contains an implementation-specific handle for the property.
-        
-        <p>It may be -1 if the implementation has no handle. You can use 
+
+        <p>It may be -1 if the implementation has no handle. You can use
         this handle to get values from the <type>XFastPropertySet</type>.</p>
      */
-    long Handle; 
- 
-    //------------------------------------------------------------------------- 
-     
+    long Handle;
+
+    //-------------------------------------------------------------------------
+
     /** contains an object that identifies the declared type for
-        the property. 
-        
-        <p>If the property has multiple types or the type is not 
-        known, <strong>but not an <atom>any</atom></strong>, then 
+        the property.
+
+        <p>If the property has multiple types or the type is not
+        known, <strong>but not an <atom>any</atom></strong>, then
         <const>void</const> must be returned.</p>
      */
-    type Type; 
- 
-    //------------------------------------------------------------------------- 
-     
+    type Type;
+
+    //-------------------------------------------------------------------------
+
     /** This field may contain zero or more constants of the
         <type>PropertyAttribute</type> constants group.
      */
-    short Attributes; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    short Attributes;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

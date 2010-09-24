@@ -8,20 +8,20 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-namespace frm 
+namespace frm
 {
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> 
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
     SAL_CALL Binding_CreateInstance(
-        const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory) 
+        const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
         throw( com::sun::star::uno::RuntimeException );
 
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> 
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
     SAL_CALL Model_CreateInstance(
-        const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory) 
+        const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
         throw( com::sun::star::uno::RuntimeException );
 
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> 
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
     SAL_CALL XForms_CreateInstance(
-        const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory) 
+        const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
         throw( com::sun::star::uno::RuntimeException );
 }

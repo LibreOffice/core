@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@ import com.sun.star.comp.juhtest.SmoketestCommandEnvironment;
  * by this class.
  */
 public class JavaUNOHelperServices {
- 
+
         static private final String __service_smoketestCommandEnv =
         "com.sun.star.deployment.test.SmoketestCommandEnvironment";
-    
+
      /**
      * Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -55,11 +55,11 @@ public class JavaUNOHelperServices {
     public static XSingleComponentFactory __getComponentFactory(String sImplName)
     {
         XSingleComponentFactory xFactory = null;
-    
+
         if ( sImplName.equals( SmoketestCommandEnvironment.class.getName() ) )
             xFactory = Factory.createComponentFactory(SmoketestCommandEnvironment.class,
                                             SmoketestCommandEnvironment.getServiceNames());
-        
+
         return xFactory;
     }
 
@@ -75,7 +75,7 @@ public class JavaUNOHelperServices {
         return Factory.writeRegistryServiceInfo(SmoketestCommandEnvironment.class.getName(),
                                                 SmoketestCommandEnvironment.getServiceNames(),
                                                 regKey);
-    }     
+    }
 }
 
 

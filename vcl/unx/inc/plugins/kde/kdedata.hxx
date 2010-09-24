@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ class KDEData : public X11SalData
 public:
     KDEData() {}
     virtual ~KDEData();
-    
+
     virtual void Init();
     virtual void initNWF();
     virtual void deInitNWF();
@@ -56,9 +56,9 @@ class KDESalFrame : public X11SalFrame
 
     struct GraphicsHolder
     {
-        X11SalGraphics*		pGraphics;
-        bool				bInUse;
-        GraphicsHolder() 
+        X11SalGraphics*     pGraphics;
+        bool                bInUse;
+        GraphicsHolder()
                 : pGraphics( NULL ),
                   bInUse( false )
         {}
@@ -80,7 +80,7 @@ public:
 class KDESalInstance : public X11SalInstance
 {
 public:
-    KDESalInstance( SalYieldMutex* pMutex ) 
+    KDESalInstance( SalYieldMutex* pMutex )
             : X11SalInstance( pMutex ) {}
     virtual ~KDESalInstance() {}
     virtual SalFrame* CreateFrame( SalFrame* pParent, ULONG nStyle );
@@ -103,7 +103,7 @@ public:
         {}
     virtual ~KDEXLib();
     virtual void Init();
-    
+
     void doStartup();
 };
 

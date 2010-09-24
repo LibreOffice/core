@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
     pImplDlg = new SwRedlineAcceptDlg(this, TRUE);
 
     pImplDlg->Initialize(GetExtraData());
-    pImplDlg->Activate();	// Zur Initialisierung der Daten
+    pImplDlg->Activate();   // Zur Initialisierung der Daten
 
     FreeResource();
 }
@@ -101,7 +101,7 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
 
 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 {
-    AcceptAll(FALSE);	// Alles uebriggebliebene ablehnen
+    AcceptAll(FALSE);   // Alles uebriggebliebene ablehnen
     pImplDlg->FillInfo(GetExtraData());
 
     delete pImplDlg;
@@ -136,7 +136,7 @@ void SwModalRedlineAcceptDlg::AcceptAll( BOOL bAccept )
     if (pFilterTP->IsDate() || pFilterTP->IsAuthor() ||
         pFilterTP->IsRange() || pFilterTP->IsAction())
     {
-        pFilterTP->CheckDate(FALSE);	// Alle Filter abschalten
+        pFilterTP->CheckDate(FALSE);    // Alle Filter abschalten
         pFilterTP->CheckAuthor(FALSE);
         pFilterTP->CheckRange(FALSE);
         pFilterTP->CheckAction(FALSE);

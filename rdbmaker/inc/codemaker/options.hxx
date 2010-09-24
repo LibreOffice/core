@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,24 +28,24 @@
 #ifndef _CODEMAKER_OPTIONS_HXX_
 #define _CODEMAKER_OPTIONS_HXX_
 
-#include	<hash_map>
-#include	<codemaker/global.hxx>
+#include    <hash_map>
+#include    <codemaker/global.hxx>
 
 #if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
-typedef	::std::__hash_map__
-<	
-    ::rtl::OString, 
-    ::rtl::OString, 
-    HashString, 
-    EqualString, 
+typedef ::std::__hash_map__
+<
+    ::rtl::OString,
+    ::rtl::OString,
+    HashString,
+    EqualString,
     NewAlloc
 > OptionMap;
 #else
-typedef	::std::hash_map
-<	
-    ::rtl::OString, 
-    ::rtl::OString, 
-    HashString, 
+typedef ::std::hash_map
+<
+    ::rtl::OString,
+    ::rtl::OString,
+    HashString,
     EqualString
 > OptionMap;
 #endif
@@ -56,7 +56,7 @@ public:
     CannotDumpException(const ::rtl::OString& msg)
         : m_message(msg) {}
 
-    ::rtl::OString	m_message;	
+    ::rtl::OString  m_message;
 };
 
 
@@ -66,7 +66,7 @@ public:
     IllegalArgument(const ::rtl::OString& msg)
         : m_message(msg) {}
 
-    ::rtl::OString	m_message;	
+    ::rtl::OString  m_message;
 };
 
 
@@ -76,23 +76,23 @@ public:
     Options();
     virtual ~Options();
 
-    virtual sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False) 
+    virtual sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
         throw( IllegalArgument ) = 0;
 
-    virtual ::rtl::OString	prepareHelp() = 0;
+    virtual ::rtl::OString  prepareHelp() = 0;
 
-    const ::rtl::OString&	getProgramName() const;
-    sal_Bool				isValid(const ::rtl::OString& option);
-    const ::rtl::OString	getOption(const ::rtl::OString& option)
+    const ::rtl::OString&   getProgramName() const;
+    sal_Bool                isValid(const ::rtl::OString& option);
+    const ::rtl::OString    getOption(const ::rtl::OString& option)
         throw( IllegalArgument );
 
     const StringVector& getInputFiles();
 
 protected:
-    ::rtl::OString 	m_program;
-    StringVector	m_inputFiles;
-    OptionMap		m_options;
+    ::rtl::OString  m_program;
+    StringVector    m_inputFiles;
+    OptionMap       m_options;
 };
-    
+
 #endif // _CODEMAKER_OPTIONS_HXX_
 

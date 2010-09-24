@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,29 +30,29 @@
 
 #include "txttypes.hxx"
 #include "breakit.hxx"
-#include "porrst.hxx"	// SwHangingPortion
+#include "porrst.hxx"   // SwHangingPortion
 
 class SwTxtFormatInfo;
 
 /*************************************************************************
- *						class SwTxtGuess
+ *                      class SwTxtGuess
  *************************************************************************/
 
 class SwTxtGuess
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord >  xHyphWord;
     SwHangingPortion *pHanging; // for hanging punctuation
-    xub_StrLen nCutPos;			// this character doesn't fit
+    xub_StrLen nCutPos;         // this character doesn't fit
     xub_StrLen nBreakStart;     // start index of word containing line break
-    xub_StrLen nBreakPos;		// start index of break position
+    xub_StrLen nBreakPos;       // start index of break position
     xub_StrLen nFieldDiff;      // absolut positions can be wrong if we
                                 // a field in the text has been expanded
-    KSHORT nBreakWidth;			// width of the broken portion
+    KSHORT nBreakWidth;         // width of the broken portion
 public:
     inline SwTxtGuess(): pHanging( NULL ), nCutPos(0), nBreakStart(0),
                         nBreakPos(0), nFieldDiff(0), nBreakWidth(0)
         { }
-    ~SwTxtGuess() {	delete pHanging; }
+    ~SwTxtGuess() { delete pHanging; }
 
     // true, if current portion still fits to current line
     sal_Bool Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,

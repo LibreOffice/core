@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,70 +44,70 @@ class ScRangeUtil;
 class ScTpUserLists : public SfxTabPage
 {
 public:
-    static	SfxTabPage*	Create			( Window*				pParent,
-                                          const SfxItemSet& 	rAttrSet );
-    static	USHORT*		GetRanges		();
-    virtual	BOOL		FillItemSet		( SfxItemSet& rCoreAttrs );
-    virtual	void		Reset			( const SfxItemSet& rCoreAttrs );
+    static  SfxTabPage* Create          ( Window*               pParent,
+                                          const SfxItemSet&     rAttrSet );
+    static  USHORT*     GetRanges       ();
+    virtual BOOL        FillItemSet     ( SfxItemSet& rCoreAttrs );
+    virtual void        Reset           ( const SfxItemSet& rCoreAttrs );
     using SfxTabPage::DeactivatePage;
-    virtual int			DeactivatePage	( SfxItemSet* pSet = NULL );
+    virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL );
 
 private:
-            ScTpUserLists( Window*			 	pParent,
-                           const SfxItemSet&	rArgSet );
+            ScTpUserLists( Window*              pParent,
+                           const SfxItemSet&    rArgSet );
             ~ScTpUserLists();
 
 private:
-    FixedText		aFtLists;
-    ListBox			aLbLists;
-    FixedText		aFtEntries;
-    MultiLineEdit	aEdEntries;
-    FixedText		aFtCopyFrom;
-    Edit			aEdCopyFrom;
-    PushButton		aBtnNew;
-    PushButton		aBtnAdd;
-    PushButton		aBtnRemove;
-    PushButton		aBtnCopy;
+    FixedText       aFtLists;
+    ListBox         aLbLists;
+    FixedText       aFtEntries;
+    MultiLineEdit   aEdEntries;
+    FixedText       aFtCopyFrom;
+    Edit            aEdCopyFrom;
+    PushButton      aBtnNew;
+    PushButton      aBtnAdd;
+    PushButton      aBtnRemove;
+    PushButton      aBtnCopy;
 
-    const String	aStrQueryRemove;
-    const String	aStrNew;
-    const String	aStrCancel;
-    const String	aStrAdd;
-    const String	aStrModify;
-    const String	aStrCopyList;
-    const String	aStrCopyFrom;
-    const String	aStrCopyErr;
+    const String    aStrQueryRemove;
+    const String    aStrNew;
+    const String    aStrCancel;
+    const String    aStrAdd;
+    const String    aStrModify;
+    const String    aStrCopyList;
+    const String    aStrCopyFrom;
+    const String    aStrCopyErr;
 
-    const USHORT	nWhichUserLists;
-    ScUserList*		pUserLists;
+    const USHORT    nWhichUserLists;
+    ScUserList*     pUserLists;
 
-    ScDocument*		pDoc;
-    ScViewData*		pViewData;
-    ScRangeUtil*	pRangeUtil;
-    String			aStrSelectedArea;
+    ScDocument*     pDoc;
+    ScViewData*     pViewData;
+    ScRangeUtil*    pRangeUtil;
+    String          aStrSelectedArea;
 
-    BOOL			bModifyMode;
-    BOOL			bCancelMode;
-    BOOL			bCopyDone;
-    USHORT			nCancelPos;
+    BOOL            bModifyMode;
+    BOOL            bCancelMode;
+    BOOL            bCopyDone;
+    USHORT          nCancelPos;
 
 #ifdef _TPUSRLST_CXX
 private:
-    void	Init				();
-    USHORT	UpdateUserListBox	();
-    void	UpdateEntries		( USHORT nList );
-    void	MakeListStr			( String& rListStr );
-    void	AddNewList			( const String& rEntriesStr );
-    void	RemoveList			( USHORT nList );
-    void	ModifyList			( USHORT		nSelList,
+    void    Init                ();
+    USHORT  UpdateUserListBox   ();
+    void    UpdateEntries       ( USHORT nList );
+    void    MakeListStr         ( String& rListStr );
+    void    AddNewList          ( const String& rEntriesStr );
+    void    RemoveList          ( USHORT nList );
+    void    ModifyList          ( USHORT        nSelList,
                                   const String& rEntriesStr );
-    void	CopyListFromArea	( const ScRefAddress& rStartPos,
+    void    CopyListFromArea    ( const ScRefAddress& rStartPos,
                                   const ScRefAddress& rEndPos );
 
     // Handler:
-    DECL_LINK( LbSelectHdl, 	ListBox* );
-    DECL_LINK( BtnClickHdl,		PushButton* );
-    DECL_LINK( EdEntriesModHdl,	MultiLineEdit* );
+    DECL_LINK( LbSelectHdl,     ListBox* );
+    DECL_LINK( BtnClickHdl,     PushButton* );
+    DECL_LINK( EdEntriesModHdl, MultiLineEdit* );
 #endif
 };
 

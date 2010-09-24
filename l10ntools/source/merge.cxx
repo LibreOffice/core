@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,13 +57,13 @@ BOOL PFormEntrys::GetTransex3Text( ByteString &rReturn,
     ByteString test( rReturn );
     for( USHORT idx = 0; idx < rReturn.Len(); idx++ )
     {
-        if( rReturn.GetChar( idx ) == '\"' && ( idx >= 1 )  &&  rReturn.GetChar( idx-1 ) == '\\' )  
-        {  
+        if( rReturn.GetChar( idx ) == '\"' && ( idx >= 1 )  &&  rReturn.GetChar( idx-1 ) == '\\' )
+        {
             rReturn.Erase( idx-1 , 1 );
         }
     }
     //if( !rReturn.Equals( test ) )
-    //    printf("*CHANGED******************\n%s\n%s\n",test.GetBuffer(),rReturn.GetBuffer()); 
+    //    printf("*CHANGED******************\n%s\n%s\n",test.GetBuffer(),rReturn.GetBuffer());
     return rc;
 }
 /*****************************************************************************/
@@ -73,7 +73,7 @@ BOOL PFormEntrys::GetText( ByteString &rReturn,
 {
 
     /*printf("DBG: PFormEntrys::GetText(nId=%s)\n",nLangIndex.GetBuffer() );
-    
+
             // DEBUG******************
             ByteStringHashMap::const_iterator idbg;
             std::cout << "HASHKEYS : \n";
@@ -111,7 +111,7 @@ BOOL PFormEntrys::GetText( ByteString &rReturn,
             bTitleFirst[ nLangIndex ] = FALSE;
             break;
     }
-    //printf("Returning '%s'\n",rReturn.GetBuffer()); 
+    //printf("Returning '%s'\n",rReturn.GetBuffer());
     return bReturn;
 }
 
@@ -130,15 +130,15 @@ MergeData::~MergeData()
 PFormEntrys* MergeData::GetPFormEntrys( ResData *pResData )
 /*****************************************************************************/
 {
-    
+
     (void) pResData;    // FIXME
-        if( aMap.find( ByteString("HACK") ) != aMap.end() ){ 
+        if( aMap.find( ByteString("HACK") ) != aMap.end() ){
             return aMap[ ByteString("HACK") ];
         }
-        else{ 
-            return 0; 
+        else{
+            return 0;
         }
-} 
+}
 
 void MergeData::Insert( const ByteString& rPFO , PFormEntrys* pfEntrys ){
     (void) rPFO;    // FIXME
@@ -147,9 +147,9 @@ void MergeData::Insert( const ByteString& rPFO , PFormEntrys* pfEntrys ){
 }
 ByteString MergeData::Dump(){
     ByteString sRet( "MergeData\n" );
-    
+
     printf("MergeData sTyp = %s , sGid = %s , sLid =%s , sFilename = %s\n",sTyp.GetBuffer(),sGID.GetBuffer(),sLID.GetBuffer(), sFilename.GetBuffer() );
-    
+
     PFormEntrysHashMap::const_iterator idbg;
     for( idbg = aMap.begin() ; idbg != aMap.end(); ++idbg ){
         printf("aMap[ %s ] = " ,idbg->first.GetBuffer());
@@ -159,7 +159,7 @@ ByteString MergeData::Dump(){
     printf("\n") ;
     return sRet;
 }
-    
+
 PFormEntrys* MergeData::GetPFObject( const ByteString& rPFO ){
     if( aMap.find( ByteString("HACK") ) != aMap.end() ){
         return aMap[ rPFO ];
@@ -178,7 +178,7 @@ PFormEntrys *MergeData::InsertEntry( const ByteString &rPForm )
     aMap.insert( PFormEntrysHashMap::value_type( rPForm , pFEntrys ) );
     return pFEntrys;
 }
- 
+
 /*****************************************************************************/
 BOOL MergeData::operator==( ResData *pData )
 /*****************************************************************************/
@@ -187,7 +187,7 @@ BOOL MergeData::operator==( ResData *pData )
     sResTyp_upper.ToUpperAscii();
     ByteString sTyp_upper( sTyp );
     sTyp_upper.ToUpperAscii();
-    
+
     return (( pData->sId == sLID ) &&
             ( pData->sGId == sGID ) &&
             ( sResTyp_upper  ==  sTyp_upper )
@@ -198,19 +198,19 @@ BOOL MergeData::operator==( ResData *pData )
 // class MergeDataFile
 //
 
-#define FFORMAT_UNKNOWN	0x0000
-#define FFORMAT_NEW		0x0001
-#define FFORMAT_OLD		0x0002
+#define FFORMAT_UNKNOWN 0x0000
+#define FFORMAT_NEW     0x0001
+#define FFORMAT_OLD     0x0002
 
 /*****************************************************************************/
 MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFile ,BOOL bErrLog,
-//							CharSet aCharSet, BOOL bUTF8 , bool bCaseSensitive )
+//                          CharSet aCharSet, BOOL bUTF8 , bool bCaseSensitive )
                             CharSet aCharSet, bool bCaseSensitive )
 
 /*****************************************************************************/
                 : bErrorLog( bErrLog )
 {
-    
+
     SvFileStream aInputStream( String( rFileName, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
     aInputStream.SetStreamCharSet( aCharSet );
     ByteString sLine;
@@ -224,9 +224,9 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
     ByteString sQHTEXT;
     ByteString sTITLE;
     ByteString sHACK("HACK");
-    
+
     const ByteString sEmpty("");
-    
+
     if( !aInputStream.IsOpen() ) {
         printf("Warning : Can't open %s\n", rFileName.GetBuffer());
         //exit( -1 );
@@ -242,9 +242,9 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
             // Skip all wrong filenames
             ByteString filename = sLine.GetToken( 1 , '\t' );
             filename = filename.Copy( filename.SearchCharBackward( "\\" )+1 , filename.Len() );
-             
+
             if( sFile.Equals( sEmpty ) || ( !sFile.Equals( sEmpty ) && filename.Equals( sFile )  ) )
-            { 
+            {
               xub_StrLen rIdx = 0;
               sTYP = sLine.GetToken( 3, '\t', rIdx );
               sGID = sLine.GetToken( 0, '\t', rIdx ); // 4
@@ -274,7 +274,7 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
                     aLanguageList.push_back( nLANG );
                   } else
                     aLANG = lit->first;
-                  
+
                   InsertEntry( sTYP, sGID, sLID, sPFO, aLANG, sTEXT, sQHTEXT, sTITLE , filename , bCaseSensitive );
                 }
             }
@@ -333,7 +333,7 @@ void MergeDataFile::WriteError( const ByteString &rLine )
     else
         fprintf( stderr, "%s\n", rLine.GetBuffer());
 }
-std::vector<ByteString> MergeDataFile::GetLanguages(){ 
+std::vector<ByteString> MergeDataFile::GetLanguages(){
     return aLanguageList;
 }
 
@@ -353,7 +353,7 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
     pResData->sId = sLID;
     //printf("MergeData:: Search gid=%s lid=%s filename=%s \n", pResData->sGId.GetBuffer(),pResData->sId.GetBuffer(),pResData->sFilename.GetBuffer()  );
     ByteString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId , pResData->sFilename , bCaseSensitive );
-    
+
     //printf("DBG: Searching [%s]\n",sKey.GetBuffer());
     if( aMap.find( sKey ) != aMap.end() ){
         pResData->sGId = sOldG;
@@ -411,7 +411,7 @@ void MergeDataFile::InsertEntry(
         aFilenames.insert (ByteStringHashMap::value_type (aFilename, aFilename));
     } else
         aFilename = fit->first;
-    
+
     // search for MergeData
 
     ByteString sKey = CreateKey( rTYP , rGID , rLID , aFilename , bCaseSensitive );
@@ -419,7 +419,7 @@ void MergeDataFile::InsertEntry(
     mit = aMap.find( sKey );
     if( mit != aMap.end() ){
         pData = mit->second;
-    }else{ 
+    }else{
         pData = new MergeData( rTYP, rGID, rLID, aFilename );
         aMap.insert( MergeDataHashMap::value_type( sKey, pData ) );
     }
@@ -428,22 +428,22 @@ void MergeDataFile::InsertEntry(
     PFormEntrys *pFEntrys = 0;
 
     // search for PFormEntrys
-    
+
     pFEntrys = pData->GetPFObject( rPFO );
     if( !pFEntrys ){
         // create new PFormEntrys, cause no one exists with current properties
         pFEntrys = new PFormEntrys( rPFO );
         pData->Insert( rPFO , pFEntrys );
-    } 
+    }
 
     // finaly insert the cur string
 
     pFEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE );
-    
+
     //printf("DBG: MergeDataFile::Insert[]=( sKey=%s,nLang=%s,rTEXT=%s)\n",sKey2.GetBuffer(),nLANG.GetBuffer(),rTEXT.GetBuffer());
 }
 ByteString MergeDataFile::CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename , bool bCaseSensitive ){
-    
+
     ByteString sKey( rTYP );
     sKey.Append( '-'        );
     sKey.Append( rGID       );
@@ -451,9 +451,9 @@ ByteString MergeDataFile::CreateKey( const ByteString& rTYP , const ByteString& 
     sKey.Append( rLID       );
     sKey.Append( '-'        );
     sKey.Append( rFilename  );
-    
+
     if( bCaseSensitive ) return sKey;         // officecfg case sensitive identifier
-    else return sKey.ToUpperAscii(); 
+    else return sKey.ToUpperAscii();
 }
 
 

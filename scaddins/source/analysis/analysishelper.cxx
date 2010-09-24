@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -197,9 +197,9 @@ void DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt
     if( nDays < 0 )
         throw lang::IllegalArgumentException();
 
-    sal_Int32	nTempDays;
-    sal_Int32	i = 0;
-    sal_Bool	bCalc;
+    sal_Int32   nTempDays;
+    sal_Int32   i = 0;
+    sal_Bool    bCalc;
 
     do
     {
@@ -252,8 +252,8 @@ sal_Int32 GetNullDate( constREFXPS& xOpt ) THROWDEF_RTE
     {
         try
         {
-            ANY	aAny = xOpt->getPropertyValue( STRFROMASCII( "NullDate" ) );
-            util::Date	aDate;
+            ANY aAny = xOpt->getPropertyValue( STRFROMASCII( "NullDate" ) );
+            util::Date  aDate;
             if( aAny >>= aDate )
                 return DateToDays( aDate.Day, aDate.Month, aDate.Year );
         }
@@ -281,7 +281,7 @@ sal_Int32 GetDiffDate360(
     {
         if( bUSAMethod && nDay1 != 30 )
         {
-            //aDate2 += 1;		-> 1.xx.yyyy
+            //aDate2 += 1;      -> 1.xx.yyyy
             nDay2 = 1;
             if( nMonth2 == 12 )
             {
@@ -315,14 +315,14 @@ sal_Int32 GetDiffDate360( sal_Int32 nNullDate, sal_Int32 nDate1, sal_Int32 nDate
 
 sal_Int32 GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 )
 {
-    sal_uInt16	nLeaps = 0;
+    sal_uInt16  nLeaps = 0;
     for( sal_uInt16 n = nYear1 ; n <= nYear2 ; n++ )
     {
         if( IsLeapYear( n ) )
             nLeaps++;
     }
 
-    sal_uInt32	nSum = 1;
+    sal_uInt32  nSum = 1;
     nSum += nYear2;
     nSum -= nYear1;
     nSum *= 365;
@@ -337,35 +337,35 @@ void GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate
 {
     if( nStartDate > nEndDate )
     {
-        sal_Int32	n = nEndDate;
+        sal_Int32   n = nEndDate;
         nEndDate = nStartDate;
         nStartDate = n;
     }
 
-    sal_Int32	nDate1 = nStartDate + nNullDate;
-    sal_Int32	nDate2 = nEndDate + nNullDate;
+    sal_Int32   nDate1 = nStartDate + nNullDate;
+    sal_Int32   nDate2 = nEndDate + nNullDate;
 
-    sal_uInt16	nDay1, nDay2;
-    sal_uInt16	nMonth1, nMonth2;
-    sal_uInt16	nYear1, nYear2;
+    sal_uInt16  nDay1, nDay2;
+    sal_uInt16  nMonth1, nMonth2;
+    sal_uInt16  nYear1, nYear2;
 
     DaysToDate( nDate1, nDay1, nMonth1, nYear1 );
     DaysToDate( nDate2, nDay2, nMonth2, nYear2 );
 
-    sal_uInt16	nYears;
+    sal_uInt16  nYears;
 
-    sal_Int32	nDayDiff, nDaysInYear;
+    sal_Int32   nDayDiff, nDaysInYear;
 
     switch( nMode )
     {
-        case 0:			// 0=USA (NASD) 30/360
-        case 4:			// 4=Europe 30/360
+        case 0:         // 0=USA (NASD) 30/360
+        case 4:         // 4=Europe 30/360
             nDaysInYear = 360;
             nYears = nYear2 - nYear1;
             nDayDiff = GetDiffDate360( nDay1, nMonth1, nYear1, IsLeapYear( nYear1 ),
                                         nDay2, nMonth2, nYear2, nMode == 0 ) - nYears * nDaysInYear;
             break;
-        case 1:			// 1=exact/exact
+        case 1:         // 1=exact/exact
             nYears = nYear2 - nYear1;
 
             nDaysInYear = IsLeapYear( nYear1 )? 366 : 365;
@@ -382,13 +382,13 @@ void GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate
                 nDayDiff += nDaysInYear;
 
             break;
-        case 2:			// 2=exact/360
+        case 2:         // 2=exact/360
             nDaysInYear = 360;
             nYears = sal_uInt16( ( nDate2 - nDate1 ) / nDaysInYear );
             nDayDiff = nDate2 - nDate1;
             nDayDiff %= nDaysInYear;
             break;
-        case 3:			//3=exact/365
+        case 3:         //3=exact/365
             nDaysInYear = 365;
             nYears = sal_uInt16( ( nDate2 - nDate1 ) / nDaysInYear );
             nDayDiff = nDate2 - nDate1;
@@ -407,23 +407,23 @@ void GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate
 sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
     sal_Int32* pOptDaysIn1stYear ) THROWDEF_RTE_IAE
 {
-    sal_Bool	bNeg = nStartDate > nEndDate;
+    sal_Bool    bNeg = nStartDate > nEndDate;
 
     if( bNeg )
     {
-        sal_Int32	n = nEndDate;
+        sal_Int32   n = nEndDate;
         nEndDate = nStartDate;
         nStartDate = n;
     }
 
-    sal_Int32		nRet;
+    sal_Int32       nRet;
 
     switch( nMode )
     {
-        case 0:			// 0=USA (NASD) 30/360
-        case 4:			// 4=Europe 30/360
+        case 0:         // 0=USA (NASD) 30/360
+        case 4:         // 4=Europe 30/360
             {
-            sal_uInt16		nD1, nM1, nY1, nD2, nM2, nY2;
+            sal_uInt16      nD1, nM1, nY1, nD2, nM2, nY2;
 
             nStartDate += nNullDate;
             nEndDate += nNullDate;
@@ -431,8 +431,8 @@ sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEnd
             DaysToDate( nStartDate, nD1, nM1, nY1 );
             DaysToDate( nEndDate, nD2, nM2, nY2 );
 
-            sal_Bool		bLeap = IsLeapYear( nY1 );
-            sal_Int32		nDays, nMonths/*, nYears*/;
+            sal_Bool        bLeap = IsLeapYear( nY1 );
+            sal_Int32       nDays, nMonths/*, nYears*/;
 
             nMonths = nM2 - nM1;
             nDays = nD2 - nD1;
@@ -447,10 +447,10 @@ sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEnd
                 *pOptDaysIn1stYear = 360;
             }
             break;
-        case 1:			// 1=exact/exact
+        case 1:         // 1=exact/exact
             if( pOptDaysIn1stYear )
             {
-                sal_uInt16		nD, nM, nY;
+                sal_uInt16      nD, nM, nY;
 
                 DaysToDate( nStartDate + nNullDate, nD, nM, nY );
 
@@ -458,12 +458,12 @@ sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEnd
             }
             nRet = nEndDate - nStartDate;
             break;
-        case 2:			// 2=exact/360
+        case 2:         // 2=exact/360
             nRet = nEndDate - nStartDate;
             if( pOptDaysIn1stYear )
                 *pOptDaysIn1stYear = 360;
             break;
-        case 3:			//3=exact/365
+        case 3:         //3=exact/365
             nRet = nEndDate - nStartDate;
             if( pOptDaysIn1stYear )
                 *pOptDaysIn1stYear = 365;
@@ -478,8 +478,8 @@ sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEnd
 
 double GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) THROWDEF_RTE_IAE
 {
-    sal_Int32	nDays1stYear;
-    sal_Int32	nTotalDays = GetDiffDate( nNullDate, nStartDate, nEndDate, nMode, &nDays1stYear );
+    sal_Int32   nDays1stYear;
+    sal_Int32   nTotalDays = GetDiffDate( nNullDate, nStartDate, nEndDate, nMode, &nDays1stYear );
 
     return double( nTotalDays ) / double( nDays1stYear );
 }
@@ -489,18 +489,18 @@ sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode )
 {
     switch( nMode )
     {
-        case 0:			// 0=USA (NASD) 30/360
-        case 2:			// 2=exact/360
-        case 4:			// 4=Europe 30/360
+        case 0:         // 0=USA (NASD) 30/360
+        case 2:         // 2=exact/360
+        case 4:         // 4=Europe 30/360
             return 360;
-        case 1:			// 1=exact/exact
+        case 1:         // 1=exact/exact
             {
-            sal_uInt16	nD, nM, nY;
+            sal_uInt16  nD, nM, nY;
             nDate += nNullDate;
             DaysToDate( nDate, nD, nM, nY );
             return IsLeapYear( nY )? 366 : 365;
             }
-        case 3:			//3=exact/365
+        case 3:         //3=exact/365
             return 365;
         default:
             THROW_IAE;
@@ -511,10 +511,10 @@ sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode )
 double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) THROWDEF_RTE_IAE
 {
     if( nStartDate == nEndDate )
-        return 0.0;		// nothing to do...
+        return 0.0;     // nothing to do...
 
-    sal_uInt16	nYears;
-    sal_Int32	nDayDiff, nDaysInYear;
+    sal_uInt16  nYears;
+    sal_Int32   nDayDiff, nDaysInYear;
 
     GetDiffParam( nNullDate, nStartDate, nEndDate, nMode, nYears, nDayDiff, nDaysInYear );
 
@@ -526,8 +526,8 @@ double Fak( sal_Int32 n )
 {
     if( n > 0 )
     {
-        double	fRet = n;
-        double	f = n - 1;
+        double  fRet = n;
+        double  f = n - 1;
 
         while( f >= 2.0 )
         {
@@ -546,7 +546,7 @@ double Fak( sal_Int32 n )
 
 double GetGcd( double f1, double f2 )
 {
-    double	f = fmod( f1, f2 );
+    double  f = fmod( f1, f2 );
     while( f > 0.0 )
     {
         f1 = f2;
@@ -563,23 +563,23 @@ double ConvertToDec( const STRING& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim )
     if ( nBase < 2 || nBase > 36 )
         THROW_IAE;
 
-    sal_uInt32		nStrLen = aStr.getLength();
+    sal_uInt32      nStrLen = aStr.getLength();
     if( nStrLen > nCharLim )
         THROW_IAE;
     else if( !nStrLen )
         return 0.0;
 
-    double			fVal = 0.0;
+    double          fVal = 0.0;
 
-    register const sal_Unicode*	p = aStr.getStr();
+    register const sal_Unicode* p = aStr.getStr();
 
-    sal_uInt16			nFirstDig = 0;
-    sal_Bool			bFirstDig = sal_True;
-    double				fBase = nBase;
+    sal_uInt16          nFirstDig = 0;
+    sal_Bool            bFirstDig = sal_True;
+    double              fBase = nBase;
 
     while ( *p )
     {
-        sal_uInt16		n;
+        sal_uInt16      n;
 
         if( '0' <= *p && *p <= '9' )
             n = *p - '0';
@@ -608,8 +608,8 @@ double ConvertToDec( const STRING& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim )
     }
 
     if( nStrLen == nCharLim && !bFirstDig && (nFirstDig >= nBase / 2) )
-    {	// handling negativ values
-        fVal = ( pow( double( nBase ), double( nCharLim ) ) - fVal );	// complement
+    {   // handling negativ values
+        fVal = ( pow( double( nBase ), double( nCharLim ) ) - fVal );   // complement
         fVal *= -1.0;
     }
 
@@ -619,7 +619,7 @@ double ConvertToDec( const STRING& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim )
 
 static inline sal_Char GetMaxChar( sal_uInt16 nBase )
 {
-    const sal_Char*	c = "--123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const sal_Char* c = "--123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return c[ nBase ];
 }
 
@@ -635,11 +635,11 @@ STRING ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase,
         THROW_IAE;
 
     sal_Int64 nNum = static_cast< sal_Int64 >( fNum );
-    sal_Bool		bNeg = nNum < 0;
+    sal_Bool        bNeg = nNum < 0;
     if( bNeg )
         nNum = sal_Int64( pow( double( nBase ), double( nMaxPlaces ) ) ) + nNum;
 
-    STRING			aRet( STRING::valueOf( nNum, nBase ).toAsciiUpperCase() );
+    STRING          aRet( STRING::valueOf( nNum, nBase ).toAsciiUpperCase() );
 
 
     if( bUsePlaces )
@@ -652,10 +652,10 @@ STRING ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase,
         else if( ( bNeg && nLen < nMaxPlaces ) || ( !bNeg && nLen < nPlaces ) )
         {
             sal_Int32   nLeft = nPlaces - nLen;
-            sal_Char*	p = new sal_Char[ nLeft + 1 ];
+            sal_Char*   p = new sal_Char[ nLeft + 1 ];
             memset( p, bNeg? GetMaxChar( nBase ) : '0', nLeft );
             p[ nLeft ] = 0x00;
-            STRING	aTmp( p, nLeft, RTL_TEXTENCODING_MS_1252 );
+            STRING  aTmp( p, nLeft, RTL_TEXTENCODING_MS_1252 );
             aTmp += aRet;
             aRet = aTmp;
 
@@ -710,22 +710,22 @@ inline sal_uInt16 GetVal( sal_Unicode c )
 
 sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
 {
-    double				fInt = 0.0;
-    double				fFrac = 0.0;
-    double				fMult = 0.1;	// multiplier to multiply digits with, when adding fractional ones
-    sal_Int32			nExp = 0;
-    sal_Int32			nMaxExp = 307;
-    sal_uInt16			nDigCnt = 18;	// max. number of digits to read in, rest doesn't matter
+    double              fInt = 0.0;
+    double              fFrac = 0.0;
+    double              fMult = 0.1;    // multiplier to multiply digits with, when adding fractional ones
+    sal_Int32           nExp = 0;
+    sal_Int32           nMaxExp = 307;
+    sal_uInt16          nDigCnt = 18;   // max. number of digits to read in, rest doesn't matter
 
-    enum State	{ S_End = 0, S_Sign, S_IntStart, S_Int, S_IgnoreIntDigs, S_Frac, S_IgnoreFracDigs, S_ExpSign, S_Exp };
+    enum State  { S_End = 0, S_Sign, S_IntStart, S_Int, S_IgnoreIntDigs, S_Frac, S_IgnoreFracDigs, S_ExpSign, S_Exp };
 
-    State			eS = S_Sign;
+    State           eS = S_Sign;
 
-    sal_Bool			bNegNum = sal_False;
-    sal_Bool			bNegExp = sal_False;
+    sal_Bool            bNegNum = sal_False;
+    sal_Bool            bNegExp = sal_False;
 
-    const sal_Unicode*	p = rp;
-    sal_Unicode			c;
+    const sal_Unicode*  p = rp;
+    sal_Unicode         c;
 
     while( eS )
     {
@@ -786,7 +786,7 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
                 break;
             case S_IgnoreIntDigs:
                 if( IsNum( c ) )
-                    nExp++;			// just multiply num with 10... ;-)
+                    nExp++;         // just multiply num with 10... ;-)
                 else if( IsComma( c ) )
                     eS = S_Frac;
                 else if( IsExpStart( c ) )
@@ -847,11 +847,11 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
         p++;
     }
 
-    p--;		// set pointer back to last
+    p--;        // set pointer back to last
     rp = p;
 
     fInt += fFrac;
-    sal_Int32	nLog10 = sal_Int32( log10( fInt ) );
+    sal_Int32   nLog10 = sal_Int32( log10( fInt ) );
 
     if( bNegExp )
         nExp = -nExp;
@@ -872,16 +872,16 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
 
 STRING GetString( double f, sal_Bool bLeadingSign, sal_uInt16 nMaxDig )
 {
-    const int		nBuff = 256;
-    sal_Char		aBuff[ nBuff + 1 ];
-    const char*		pFormStr = bLeadingSign? "%+.*g" : "%.*g";
+    const int       nBuff = 256;
+    sal_Char        aBuff[ nBuff + 1 ];
+    const char*     pFormStr = bLeadingSign? "%+.*g" : "%.*g";
     int             nLen = snprintf( aBuff, nBuff, pFormStr, int( nMaxDig ), f );
                     // you never know which underlying implementation you get ...
                     aBuff[nBuff] = 0;
                     if ( nLen < 0 || nLen > nBuff )
                         nLen = strlen( aBuff );
 
-    STRING			aRet( aBuff, nLen, RTL_TEXTENCODING_MS_1252 );
+    STRING          aRet( aBuff, nLen, RTL_TEXTENCODING_MS_1252 );
 
     return aRet;
 }
@@ -893,9 +893,9 @@ double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int
     if( nBase == 2 )
         THROW_IAE;
 
-    sal_uInt32	nPer = sal_uInt32( fPer );
-    double		fUsePer = 1.0 / fRate;
-    double		fAmorCoeff;
+    sal_uInt32  nPer = sal_uInt32( fPer );
+    double      fUsePer = 1.0 / fRate;
+    double      fAmorCoeff;
 
     if( fUsePer < 3.0 )
         fAmorCoeff = 1.0;
@@ -907,9 +907,9 @@ double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int
         fAmorCoeff = 2.5;
 
     fRate *= fAmorCoeff;
-    double		fNRate = ::rtl::math::round( GetYearFrac( nNullDate, nDate, nFirstPer, nBase ) * fRate * fCost, 0 );
+    double      fNRate = ::rtl::math::round( GetYearFrac( nNullDate, nDate, nFirstPer, nBase ) * fRate * fCost, 0 );
     fCost -= fNRate;
-    double		fRest = fCost - fRestVal;	// Anschaffungskosten - Restwert - Summe aller Abschreibungen
+    double      fRest = fCost - fRestVal;   // Anschaffungskosten - Restwert - Summe aller Abschreibungen
 
     for( sal_uInt32 n = 0 ; n < nPer ; n++ )
     {
@@ -941,11 +941,11 @@ double GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int3
     if( nBase == 2 )
         THROW_IAE;
 
-    sal_uInt32	nPer = sal_uInt32( fPer );
-    double		fOneRate = fCost * fRate;
-    double		fCostDelta = fCost - fRestVal;
-    double		f0Rate = GetYearFrac( nNullDate, nDate, nFirstPer, nBase ) * fRate * fCost;
-    sal_uInt32	nNumOfFullPeriods = sal_uInt32( ( fCost - fRestVal - f0Rate) / fOneRate );
+    sal_uInt32  nPer = sal_uInt32( fPer );
+    double      fOneRate = fCost * fRate;
+    double      fCostDelta = fCost - fRestVal;
+    double      f0Rate = GetYearFrac( nNullDate, nDate, nFirstPer, nBase ) * fRate * fCost;
+    sal_uInt32  nNumOfFullPeriods = sal_uInt32( ( fCost - fRestVal - f0Rate) / fOneRate );
 
     if( nPer == 0 )
         return f0Rate;
@@ -961,17 +961,17 @@ double GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int3
 double GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup,
     double fYield, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    double			fYearfrac = GetYearFrac( nNullDate, nSettle, nMat, nBase );
-    double			fNumOfCoups = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase );
-    double			fDur = 0.0;
-    const double	f100 = 100.0;
-    fCoup *= f100 / double( nFreq );	// fCoup is used as cash flow
+    double          fYearfrac = GetYearFrac( nNullDate, nSettle, nMat, nBase );
+    double          fNumOfCoups = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase );
+    double          fDur = 0.0;
+    const double    f100 = 100.0;
+    fCoup *= f100 / double( nFreq );    // fCoup is used as cash flow
     fYield /= nFreq;
     fYield += 1.0;
 
     double nDiff = fYearfrac * nFreq - fNumOfCoups;
 
-    double			t;
+    double          t;
 
     for( t = 1.0 ; t < fNumOfCoups ; t++ )
         fDur += ( t + nDiff ) * ( fCoup ) / pow( fYield, t + nDiff );
@@ -994,11 +994,11 @@ double GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, doub
 double GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
     double fRate, double fPrice, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    double		fIssMat = GetYearFrac( nNullDate, nIssue, nMat, nBase );
-    double		fIssSet = GetYearFrac( nNullDate, nIssue, nSettle, nBase );
-    double		fSetMat = GetYearFrac( nNullDate, nSettle, nMat, nBase );
+    double      fIssMat = GetYearFrac( nNullDate, nIssue, nMat, nBase );
+    double      fIssSet = GetYearFrac( nNullDate, nIssue, nSettle, nBase );
+    double      fSetMat = GetYearFrac( nNullDate, nSettle, nMat, nBase );
 
-    double		y = 1.0 + fIssMat * fRate;
+    double      y = 1.0 + fIssMat * fRate;
     y /= fPrice / 100.0 + fIssSet * fRate;
     y--;
     y /= fSetMat;
@@ -1013,21 +1013,21 @@ double GetOddfprice( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
 {
     THROW_RTE;  // #87380#
 /*
-    double		fN = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase ) - 1.0;
-    double		fNq = GetCoupnum( nNullDate, nSettle, nFirstCoup, nFreq, nBase ) - 1.0;
-    double		fDSC = GetCoupdaysnc( nNullDate, nSettle, nFirstCoup, nFreq, nBase );
-    double		fDSC_E = fDSC / GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase );
-    double		fNC = GetCoupnum( nNullDate, nIssue, nFirstCoup, nFreq, nBase );
-    sal_uInt32	nNC = sal_uInt32( fNC );
-    sal_uInt16	nMonthDelta = 12 / sal_uInt16( nFreq );
+    double      fN = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase ) - 1.0;
+    double      fNq = GetCoupnum( nNullDate, nSettle, nFirstCoup, nFreq, nBase ) - 1.0;
+    double      fDSC = GetCoupdaysnc( nNullDate, nSettle, nFirstCoup, nFreq, nBase );
+    double      fDSC_E = fDSC / GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase );
+    double      fNC = GetCoupnum( nNullDate, nIssue, nFirstCoup, nFreq, nBase );
+    sal_uInt32  nNC = sal_uInt32( fNC );
+    sal_uInt16  nMonthDelta = 12 / sal_uInt16( nFreq );
 
-    sal_uInt32	i;
-    double		f1YieldFreq = 1.0 + fYield / double( nFreq );
-    double		f100RateFreq = 100.0 * fRate / double( nFreq );
+    sal_uInt32  i;
+    double      f1YieldFreq = 1.0 + fYield / double( nFreq );
+    double      f100RateFreq = 100.0 * fRate / double( nFreq );
 
-    double*		pDC = new double[ nNC + 1 ];
-    double*		pNL = new double[ nNC + 1 ];
-    double*		pA = new double[ nNC + 1 ];
+    double*     pDC = new double[ nNC + 1 ];
+    double*     pNL = new double[ nNC + 1 ];
+    double*     pA = new double[ nNC + 1 ];
 
     pDC[ 0 ] = pNL[ 0 ] = pA[ 0 ] = 1.0;
 
@@ -1051,19 +1051,19 @@ double GetOddfprice( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
         }
     }
 
-    double		fT1 = fRedemp / pow( f1YieldFreq, fN + fNq + fDSC_E );
+    double      fT1 = fRedemp / pow( f1YieldFreq, fN + fNq + fDSC_E );
 
-    double		fT2 = 0.0;
+    double      fT2 = 0.0;
     for( i = 1 ; i <= nNC ; i++ )
         fT2 += pDC[ i ] / pNL[ i ];
     fT2 *= f100RateFreq / pow( f1YieldFreq, fNq + fDSC_E );
 
-    double		fT3 = 0.0;
+    double      fT3 = 0.0;
     for( double k = 2.0 ; k <= fN ; k++ )
         fT3 += 1.0 / pow( f1YieldFreq, k - fNq + fDSC_E );
     fT3 *= f100RateFreq;
 
-    double		fT4 = 0.0;
+    double      fT4 = 0.0;
     for( i = 1 ; i <= nNC ; i++ )
         fT4 += pA[ i ] / pNL[ i ];
     fT4 *= f100RateFreq;
@@ -1083,13 +1083,13 @@ double GetOddfprice( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
 double getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice,
                     double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    double		fRate = fCoup;
-    double		fPriceN = 0.0;
-    double		fYield1 = 0.0;
-    double		fYield2 = 1.0;
-    double		fPrice1 = getPrice_( nNullDate, nSettle, nMat, fRate, fYield1, fRedemp, nFreq, nBase );
-    double		fPrice2 = getPrice_( nNullDate, nSettle, nMat, fRate, fYield2, fRedemp, nFreq, nBase );
-    double		fYieldN = ( fYield2 - fYield1 ) * 0.5;
+    double      fRate = fCoup;
+    double      fPriceN = 0.0;
+    double      fYield1 = 0.0;
+    double      fYield2 = 1.0;
+    double      fPrice1 = getPrice_( nNullDate, nSettle, nMat, fRate, fYield1, fRedemp, nFreq, nBase );
+    double      fPrice2 = getPrice_( nNullDate, nSettle, nMat, fRate, fYield2, fRedemp, nFreq, nBase );
+    double      fYieldN = ( fYield2 - fYield1 ) * 0.5;
 
     for( sal_uInt32 nIter = 0 ; nIter < 100 && fPriceN != fPrice ; nIter++ )
     {
@@ -1126,7 +1126,7 @@ double getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double
     }
 
     if( fabs( fPrice - fPriceN ) > fPrice / 100.0 )
-        THROW_IAE;		// result not precise enough
+        THROW_IAE;      // result not precise enough
 
     return fYieldN;
 }
@@ -1135,18 +1135,18 @@ double getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double
 double getPrice_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield,
                     double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    double		fFreq = nFreq;
+    double      fFreq = nFreq;
 
-    double		fE = GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase );
-    double		fDSC_E = GetCoupdaysnc( nNullDate, nSettle, nMat, nFreq, nBase ) / fE;
-    double		fN = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase );
+    double      fE = GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase );
+    double      fDSC_E = GetCoupdaysnc( nNullDate, nSettle, nMat, nFreq, nBase ) / fE;
+    double      fN = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase );
     double      fA = GetCoupdaybs( nNullDate, nSettle, nMat, nFreq, nBase );
 
-    double		fRet = fRedemp / ( pow( 1.0 + fYield / fFreq, fN - 1.0 + fDSC_E ) );
+    double      fRet = fRedemp / ( pow( 1.0 + fYield / fFreq, fN - 1.0 + fDSC_E ) );
     fRet -= 100.0 * fRate / fFreq * fA / fE;
 
-    double		fT1 = 100.0 * fRate / fFreq;
-    double		fT2 = 1.0 + fYield / fFreq;
+    double      fT1 = 100.0 * fRate / fFreq;
+    double      fT2 = 1.0 + fYield / fFreq;
 
     for( double fK = 0.0 ; fK < fN ; fK++ )
         fRet += fT1 / pow( fT2, fK + fDSC_E );
@@ -1164,12 +1164,12 @@ double GetOddfyield( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
     //GetOddfprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
     //sal_Int32 nFirstCoup, double fRate, double fYield, double fRedemp, sal_Int32 nFreq,
     //sal_Int32 nBase )
-    double		fPriceN = 0.0;
-    double		fYield1 = 0.0;
-    double		fYield2 = 1.0;
-    double		fPrice1 = GetOddfprice( nNullDate, nSettle, nMat, nIssue, nFirstCoup, fRate, fYield1, fRedemp, nFreq, nBase );
-    double		fPrice2 = GetOddfprice( nNullDate, nSettle, nMat, nIssue, nFirstCoup, fRate, fYield2, fRedemp, nFreq, nBase );
-    double		fYieldN = ( fYield2 - fYield1 ) * 0.5;
+    double      fPriceN = 0.0;
+    double      fYield1 = 0.0;
+    double      fYield2 = 1.0;
+    double      fPrice1 = GetOddfprice( nNullDate, nSettle, nMat, nIssue, nFirstCoup, fRate, fYield1, fRedemp, nFreq, nBase );
+    double      fPrice2 = GetOddfprice( nNullDate, nSettle, nMat, nIssue, nFirstCoup, fRate, fYield2, fRedemp, nFreq, nBase );
+    double      fYieldN = ( fYield2 - fYield1 ) * 0.5;
 
     for( sal_uInt32 nIter = 0 ; nIter < 100 && fPriceN != fPrice ; nIter++ )
     {
@@ -1206,7 +1206,7 @@ double GetOddfyield( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
     }
 
     if( fabs( fPrice - fPriceN ) > fPrice / 100.0 )
-        THROW_IAE;		// result not precise enough
+        THROW_IAE;      // result not precise enough
 
     return fYieldN;
 */
@@ -1216,12 +1216,12 @@ double GetOddfyield( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
 double GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastCoup,
     double fRate, double fYield, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    double		fFreq = double( nFreq );
-    double		fDCi = GetYearFrac( nNullDate, nLastCoup, nMat, nBase ) * fFreq;
-    double		fDSCi = GetYearFrac( nNullDate, nSettle, nMat, nBase ) * fFreq;
-    double		fAi = GetYearFrac( nNullDate, nLastCoup, nSettle, nBase ) * fFreq;
+    double      fFreq = double( nFreq );
+    double      fDCi = GetYearFrac( nNullDate, nLastCoup, nMat, nBase ) * fFreq;
+    double      fDSCi = GetYearFrac( nNullDate, nSettle, nMat, nBase ) * fFreq;
+    double      fAi = GetYearFrac( nNullDate, nLastCoup, nSettle, nBase ) * fFreq;
 
-    double		p = fRedemp + fDCi * 100.0 * fRate / fFreq;
+    double      p = fRedemp + fDCi * 100.0 * fRate / fFreq;
     p /= fDSCi * fYield / fFreq + 1.0;
     p -= fAi * 100.0 * fRate / fFreq;
 
@@ -1232,12 +1232,12 @@ double GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
 double GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastCoup,
     double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    double		fFreq = double( nFreq );
-    double		fDCi = GetYearFrac( nNullDate, nLastCoup, nMat, nBase ) * fFreq;
-    double		fDSCi = GetYearFrac( nNullDate, nSettle, nMat, nBase ) * fFreq;
-    double		fAi = GetYearFrac( nNullDate, nLastCoup, nSettle, nBase ) * fFreq;
+    double      fFreq = double( nFreq );
+    double      fDCi = GetYearFrac( nNullDate, nLastCoup, nMat, nBase ) * fFreq;
+    double      fDSCi = GetYearFrac( nNullDate, nSettle, nMat, nBase ) * fFreq;
+    double      fAi = GetYearFrac( nNullDate, nLastCoup, nSettle, nBase ) * fFreq;
 
-    double		y = fRedemp + fDCi * 100.0 * fRate / fFreq;
+    double      y = fRedemp + fDCi * 100.0 * fRate / fFreq;
     y /= fPrice + fAi * 100.0 * fRate / fFreq;
     y--;
     y *= fFreq / fDSCi;
@@ -1248,12 +1248,12 @@ double GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
 
 double GetRmz( double fZins, double fZzr, double fBw, double fZw, sal_Int32 nF )
 {
-    double		fRmz;
+    double      fRmz;
     if( fZins == 0.0 )
         fRmz = ( fBw + fZw ) / fZzr;
     else
     {
-        double	fTerm = pow( 1.0 + fZins, fZzr );
+        double  fTerm = pow( 1.0 + fZins, fZzr );
         if( nF > 0 )
             fRmz = ( fZw * fZins / ( fTerm - 1.0 ) + fBw * fZins / ( 1.0 - 1.0 / fTerm ) ) / ( 1.0 + fZins );
         else
@@ -1266,12 +1266,12 @@ double GetRmz( double fZins, double fZzr, double fBw, double fZw, sal_Int32 nF )
 
 double GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF )
 {
-    double		fZw;
+    double      fZw;
     if( fZins == 0.0 )
         fZw = fBw + fRmz * fZzr;
     else
     {
-        double	fTerm = pow( 1.0 + fZins, fZzr );
+        double  fTerm = pow( 1.0 + fZins, fZzr );
         if( nF > 0 )
             fZw = fBw * fTerm + fRmz * ( 1.0 + fZins ) * ( fTerm - 1.0 ) / fZins;
         else
@@ -1284,12 +1284,12 @@ double GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF )
 
 /*double TBillYield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice ) THROWDEF_RTE_IAE
 {
-    sal_Int32	nDiff = GetDiffDate360( xOpt, nSettle, nMat, sal_True );
+    sal_Int32   nDiff = GetDiffDate360( xOpt, nSettle, nMat, sal_True );
 
     if( fPrice <= 0.0 || nSettle >= nMat || nDiff > 360 )
         THROW_IAE;
 
-    double		fRet = 100.0;
+    double      fRet = 100.0;
     fRet /= fPrice;
     fRet--;
     fRet *= double( nDiff );
@@ -1436,7 +1436,7 @@ void MyList::_Grow( void )
 {
     nSize += nIncrSize;
 
-    void**			pNewData = new void*[ nSize ];
+    void**          pNewData = new void*[ nSize ];
     memcpy( pNewData, pData, nNew * sizeof( void* ) );
 
     delete[] pData;
@@ -1466,7 +1466,7 @@ void MyList::Insert( void* p, sal_uInt32 n )
     {
         Grow();
 
-        void**		pIns = pData + n;
+        void**      pIns = pData + n;
         memmove( pIns + 1, pIns, ( nNew - n ) * sizeof( void* ) );
 
         *pIns = p;
@@ -1488,7 +1488,7 @@ StringList::~StringList()
 class AnalysisRscStrArrLoader : public Resource
 {
 private:
-    ResStringArray			aStrArray;
+    ResStringArray          aStrArray;
 public:
                             AnalysisRscStrArrLoader( sal_uInt16 nRsc, sal_uInt16 nArrayId, ResMgr& rResMgr ) :
                                 Resource( AnalysisResId( nRsc, rResMgr ) ),
@@ -1497,7 +1497,7 @@ public:
                                 FreeResource();
                             }
 
-    const ResStringArray&	GetStringArray() const { return aStrArray; }
+    const ResStringArray&   GetStringArray() const { return aStrArray; }
 };
 
 
@@ -1513,12 +1513,12 @@ FuncData::FuncData( const FuncDataBase& r, ResMgr& rResMgr ) :
     nCompID( r.nCompListID ),
     eCat( r.eCat )
 {
-    AnalysisRscStrArrLoader	aArrLoader( RID_ANALYSIS_DEFFUNCTION_NAMES, nCompID, rResMgr );
-//	ResStringArray		aDefFuncNameArray( AnalysisResId( nCompID, rResMgr ) );
-    const ResStringArray&	rArr = aArrLoader.GetStringArray();
+    AnalysisRscStrArrLoader aArrLoader( RID_ANALYSIS_DEFFUNCTION_NAMES, nCompID, rResMgr );
+//  ResStringArray      aDefFuncNameArray( AnalysisResId( nCompID, rResMgr ) );
+    const ResStringArray&   rArr = aArrLoader.GetStringArray();
 
-    sal_uInt16				nCount = sal::static_int_cast<sal_uInt16>( rArr.Count() );
-    sal_uInt16				n;
+    sal_uInt16              nCount = sal::static_int_cast<sal_uInt16>( rArr.Count() );
+    sal_uInt16              n;
 
     for( n = 0 ; n < nCount ; n++ )
         aCompList.Append( rArr.GetString( n ) );
@@ -1546,7 +1546,7 @@ sal_uInt16 FuncData::GetStrIndex( sal_uInt16 nParamNum ) const
 
 FuncDataList::FuncDataList( ResMgr& rResMgr )
 {
-    const sal_uInt32	nNum = sizeof( pFuncDatas ) / sizeof( FuncDataBase );
+    const sal_uInt32    nNum = sizeof( pFuncDatas ) / sizeof( FuncDataBase );
 
     for( sal_uInt16 n = 0 ; n < nNum ; n++ )
         Append( new FuncData( pFuncDatas[ n ], rResMgr ) );
@@ -1567,10 +1567,10 @@ const FuncData* FuncDataList::Get(  const OUString& aProgrammaticName ) const
 
     ( ( FuncDataList* ) this )->aLastName = aProgrammaticName;
 
-    sal_uInt32	nE = Count();
+    sal_uInt32  nE = Count();
     for( sal_uInt32 n = 0 ; n < nE ; n++ )
     {
-        const FuncData*	p = Get( n );
+        const FuncData* p = Get( n );
         if( p->Is( aProgrammaticName ) )
         {
             ( ( FuncDataList* ) this )->nLast = n;
@@ -1641,7 +1641,7 @@ void SortedIndividualInt32List::Insert(
 
 sal_Bool SortedIndividualInt32List::Find( sal_Int32 nVal ) const
 {
-    sal_uInt32	nE = Count();
+    sal_uInt32  nE = Count();
 
     if( !nE || nVal < Get( 0 ) || nVal > Get( nE - 1 ) )
         return sal_False;
@@ -1650,7 +1650,7 @@ sal_Bool SortedIndividualInt32List::Find( sal_Int32 nVal ) const
 
     for( sal_uInt32 n = 0 ; n < nE ; n++ )
     {
-        sal_Int32	nRef = Get( n );
+        sal_Int32   nRef = Get( n );
 
         if( nRef == nVal )
             return sal_True;
@@ -1842,7 +1842,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
 {
     rCompl.c = '\0';    // do not force a symbol, if only real part present
 
-    const sal_Unicode*		pStr = ( const sal_Unicode * ) rStr;
+    const sal_Unicode*      pStr = ( const sal_Unicode * ) rStr;
 
     if( IsImagUnit( *pStr ) && rStr.getLength() == 1)
     {
@@ -1852,17 +1852,17 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
         return sal_True;
     }
 
-    double					f;
+    double                  f;
 
     if( !ParseDouble( pStr, f ) )
         return sal_False;
 
     switch( *pStr )
     {
-        case '-':	// imag part follows
+        case '-':   // imag part follows
         case '+':
             {
-            double		r = f;
+            double      r = f;
             if( IsImagUnit( pStr[ 1 ] ) )
             {
                 rCompl.c = pStr[ 1 ];
@@ -1897,7 +1897,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
                 return sal_True;
             }
             break;
-        case 0:		// only real-part
+        case 0:     // only real-part
             rCompl.r = f;
             rCompl.i = 0.0;
             return sal_True;
@@ -1946,7 +1946,7 @@ double Complex::Arg( void ) const THROWDEF_RTE_IAE
     if( r == 0.0 && i == 0.0 )
         THROW_IAE;
 
-    double	phi = acos( r / Abs() );
+    double  phi = acos( r / Abs() );
 
     if( i < 0.0 )
         phi = -phi;
@@ -1968,7 +1968,7 @@ void Complex::Power( double fPower ) THROWDEF_RTE_IAE
             THROW_IAE;
     }
 
-    double		p, phi;
+    double      p, phi;
 
     p = Abs();
 
@@ -1986,9 +1986,9 @@ void Complex::Power( double fPower ) THROWDEF_RTE_IAE
 
 void Complex::Sqrt( void )
 {
-    static const double	fMultConst = 0.7071067811865475;	// ...2440084436210485 = 1/sqrt(2)
-    double	p = Abs();
-    double	i_ = sqrt( p - r ) * fMultConst;
+    static const double fMultConst = 0.7071067811865475;    // ...2440084436210485 = 1/sqrt(2)
+    double  p = Abs();
+    double  i_ = sqrt( p - r ) * fMultConst;
 
     r = sqrt( p + r ) * fMultConst;
     i = ( i < 0.0 )? -i_ : i_;
@@ -2008,7 +2008,7 @@ void Complex::Sin( void ) THROWDEF_RTE_IAE
 
     if( i )
     {
-        double	r_;
+        double  r_;
 
         r_ = sin( r ) * cosh( i );
         i = cos( r ) * sinh( i );
@@ -2026,7 +2026,7 @@ void Complex::Cos( void ) THROWDEF_RTE_IAE
 
     if( i )
     {
-        double		r_;
+        double      r_;
 
         r_ = cos( r ) * cosh( i );
         i = -( sin( r ) * sinh( i ) );
@@ -2042,12 +2042,12 @@ void Complex::Div( const Complex& z ) THROWDEF_RTE_IAE
     if( z.r == 0 && z.i == 0 )
         THROW_IAE;
 
-    double	a1 = r;
-    double	a2 = z.r;
-    double	b1 = i;
-    double	b2 = z.i;
+    double  a1 = r;
+    double  a2 = z.r;
+    double  b1 = i;
+    double  b2 = z.i;
 
-    double	f = 1.0 / ( a2 * a2 + b2 * b2 );
+    double  f = 1.0 / ( a2 * a2 + b2 * b2 );
 
     r = ( a1 * a2 + b1 * b2 ) * f;
     i = ( a2 * b1 - a1 * b2 ) * f;
@@ -2058,7 +2058,7 @@ void Complex::Div( const Complex& z ) THROWDEF_RTE_IAE
 
 void Complex::Exp( void )
 {
-    double	fE = exp( r );
+    double  fE = exp( r );
     r = fE * cos( i );
     i = fE * sin( i );
 }
@@ -2069,8 +2069,8 @@ void Complex::Ln( void ) THROWDEF_RTE_IAE
     if( r == 0.0 && i == 0.0 )
         THROW_IAE;
 
-    double		fAbs = Abs();
-    sal_Bool	bNegi = i < 0.0;
+    double      fAbs = Abs();
+    sal_Bool    bNegi = i < 0.0;
 
     i = acos( r / fAbs );
 
@@ -2084,14 +2084,14 @@ void Complex::Ln( void ) THROWDEF_RTE_IAE
 void Complex::Log10( void ) THROWDEF_RTE_IAE
 {
     Ln();
-    Mult( 0.434294481903251828 );	// * log10( e )
+    Mult( 0.434294481903251828 );   // * log10( e )
 }
 
 
 void Complex::Log2( void ) THROWDEF_RTE_IAE
 {
     Ln();
-    Mult( 1.442695040888963407 );	// * log2( e )
+    Mult( 1.442695040888963407 );   // * log2( e )
 }
 
 
@@ -2106,20 +2106,20 @@ ComplexList::~ComplexList()
 
 void ComplexList::Append( const SEQSEQ( STRING )& r, ComplListAppendHandl eAH ) THROWDEF_RTE_IAE
 {
-    sal_Int32	n1, n2;
-    sal_Int32	nE1 = r.getLength();
-    sal_Int32	nE2;
-    sal_Bool	bEmpty0 = eAH == AH_EmpyAs0;
-    sal_Bool	bErrOnEmpty = eAH == AH_EmptyAsErr;
+    sal_Int32   n1, n2;
+    sal_Int32   nE1 = r.getLength();
+    sal_Int32   nE2;
+    sal_Bool    bEmpty0 = eAH == AH_EmpyAs0;
+    sal_Bool    bErrOnEmpty = eAH == AH_EmptyAsErr;
 
     for( n1 = 0 ; n1 < nE1 ; n1++ )
     {
-        const SEQ( STRING )&	rList = r[ n1 ];
+        const SEQ( STRING )&    rList = r[ n1 ];
         nE2 = rList.getLength();
 
         for( n2 = 0 ; n2 < nE2 ; n2++ )
         {
-            const STRING&	rStr = rList[ n2 ];
+            const STRING&   rStr = rList[ n2 ];
 
             if( rStr.getLength() )
                 Append( new Complex( rStr ) );
@@ -2134,19 +2134,19 @@ void ComplexList::Append( const SEQSEQ( STRING )& r, ComplListAppendHandl eAH ) 
 
 void ComplexList::Append( const SEQ( ANY )& aMultPars, ComplListAppendHandl eAH ) THROWDEF_RTE_IAE
 {
-    sal_Int32		nEle = aMultPars.getLength();
-    sal_Bool		bEmpty0 = eAH == AH_EmpyAs0;
-    sal_Bool		bErrOnEmpty = eAH == AH_EmptyAsErr;
+    sal_Int32       nEle = aMultPars.getLength();
+    sal_Bool        bEmpty0 = eAH == AH_EmpyAs0;
+    sal_Bool        bErrOnEmpty = eAH == AH_EmptyAsErr;
 
     for( sal_Int32 i = 0 ; i < nEle ; i++ )
     {
-        const ANY&	r = aMultPars[ i ];
+        const ANY&  r = aMultPars[ i ];
         switch( r.getValueTypeClass() )
         {
-            case uno::TypeClass_VOID:		break;
+            case uno::TypeClass_VOID:       break;
             case uno::TypeClass_STRING:
                 {
-                const STRING*		pStr = ( const STRING* ) r.getValue();
+                const STRING*       pStr = ( const STRING* ) r.getValue();
 
                 if( pStr->getLength() )
                     Append( new Complex( *( STRING* ) r.getValue() ) );
@@ -2161,11 +2161,11 @@ void ComplexList::Append( const SEQ( ANY )& aMultPars, ComplListAppendHandl eAH 
                 break;
             case uno::TypeClass_SEQUENCE:
                 {
-                SEQSEQ( ANY )			aValArr;
+                SEQSEQ( ANY )           aValArr;
                 if( r >>= aValArr )
                 {
-                    sal_Int32			nE = aValArr.getLength();
-                    const SEQ( ANY )*	pArr = aValArr.getConstArray();
+                    sal_Int32           nE = aValArr.getLength();
+                    const SEQ( ANY )*   pArr = aValArr.getConstArray();
                     for( sal_Int32 n = 0 ; n < nE ; n++ )
                         Append( pArr[ n ], eAH );
                 }
@@ -2209,7 +2209,7 @@ sal_Int16 ConvertData::GetMatchingLevel( const STRING& rRef ) const
         return 0;
     else
     {
-        const sal_Unicode*	p = aStr.getStr();
+        const sal_Unicode*  p = aStr.getStr();
 
         nLen = aStr.getLength();
         bool bPref = IsPrefixSupport();
@@ -2217,18 +2217,18 @@ sal_Int16 ConvertData::GetMatchingLevel( const STRING& rRef ) const
         if (bOneChar || (bPref && nLen > 2 && (aName == p + 2) &&
                     *p == 'd' && *(p+1) == 'a'))
         {
-            sal_Int16		n;
+            sal_Int16       n;
             switch( *p )
             {
-                case 'y':	n = -24;	break;		// yocto
-                case 'z':	n = -21;	break;		// zepto
-                case 'a':	n = -18;	break;
-                case 'f':	n = -15;	break;
-                case 'p':	n = -12;	break;
-                case 'n':	n = -9;		break;
-                case 'u':	n = -6;		break;
-                case 'm':	n = -3;		break;
-                case 'c':	n = -2;		break;
+                case 'y':   n = -24;    break;      // yocto
+                case 'z':   n = -21;    break;      // zepto
+                case 'a':   n = -18;    break;
+                case 'f':   n = -15;    break;
+                case 'p':   n = -12;    break;
+                case 'n':   n = -9;     break;
+                case 'u':   n = -6;     break;
+                case 'm':   n = -3;     break;
+                case 'c':   n = -2;     break;
                 case 'd':
                     {
                         if ( bOneChar )
@@ -2237,16 +2237,16 @@ sal_Int16 ConvertData::GetMatchingLevel( const STRING& rRef ) const
                             n = 1;                  // deca
                     }
                     break;
-                case 'e':	n = 1;		break;
-                case 'h':	n = 2;		break;
-                case 'k':	n = 3;		break;
-                case 'M':	n = 6;		break;
-                case 'G':	n = 9;		break;
-                case 'T':	n = 12;		break;
-                case 'P':	n = 15;		break;
-                case 'E':	n = 18;		break;
-                case 'Z':	n = 21;		break;		// zetta
-                case 'Y':	n = 24;		break;		// yotta
+                case 'e':   n = 1;      break;
+                case 'h':   n = 2;      break;
+                case 'k':   n = 3;      break;
+                case 'M':   n = 6;      break;
+                case 'G':   n = 9;      break;
+                case 'T':   n = 12;     break;
+                case 'P':   n = 15;     break;
+                case 'E':   n = 18;     break;
+                case 'Z':   n = 21;     break;      // zetta
+                case 'Y':   n = 24;     break;      // yotta
                 default:
                             n = INV_MATCHLEV;
             }
@@ -2317,7 +2317,7 @@ double ConvertData::Convert(
         }
         else if ( bBinFromLev )
             f *= ( r.fConst / fConst ) * ( pow( 2.0, nLevFrom ) / pow( 10.0, nLevTo ) );
-        else 
+        else
             f *= ( r.fConst / fConst ) * ( pow( 10.0, nLevFrom ) / pow( 2.0, nLevTo ) );
         return f;
     }
@@ -2356,7 +2356,7 @@ double ConvertDataLinear::Convert(
     if( Class() != r.Class() )
         THROW_IAE;
 
-//	return ::rtl::math::round( r.ConvertFromBase( ConvertToBase( f, nLevFrom ), nLevTo ), 13 );
+//  return ::rtl::math::round( r.ConvertFromBase( ConvertToBase( f, nLevFrom ), nLevTo ), 13 );
     return r.ConvertFromBase( ConvertToBase( f, nLevFrom ), nLevTo );
 }
 
@@ -2389,10 +2389,10 @@ double ConvertDataLinear::ConvertFromBase( double f, sal_Int16 n ) const
 
 ConvertDataList::ConvertDataList( void )
 {
-#define NEWD(str,unit,cl)	Append(new ConvertData(str,unit,cl))
-#define NEWDP(str,unit,cl)	Append(new ConvertData(str,unit,cl,sal_True))
-#define NEWL(str,unit,offs,cl)	Append(new ConvertDataLinear(str,unit,offs,cl))
-#define NEWLP(str,unit,offs,cl)	Append(new ConvertDataLinear(str,unit,offs,cl,sal_True))
+#define NEWD(str,unit,cl)   Append(new ConvertData(str,unit,cl))
+#define NEWDP(str,unit,cl)  Append(new ConvertData(str,unit,cl,sal_True))
+#define NEWL(str,unit,offs,cl)  Append(new ConvertDataLinear(str,unit,offs,cl))
+#define NEWLP(str,unit,offs,cl) Append(new ConvertDataLinear(str,unit,offs,cl,sal_True))
 
     // *** are extra and not standard Excel Analysis Addin!
 
@@ -2414,7 +2414,7 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "uk_cwt",     1.9684130552221213E-05, CDC_Mass ); // Imperial hundredweight
     NEWD( "lcwt",       1.9684130552221213E-05, CDC_Mass ); // Imperial hundredweight also
     NEWD( "hweight",    1.9684130552221213E-05, CDC_Mass ); // Imperial hundredweight also
-    NEWD( "uk_ton",     9.8420652761106063E-07, CDC_Mass ); // Imperial ton 
+    NEWD( "uk_ton",     9.8420652761106063E-07, CDC_Mass ); // Imperial ton
     NEWD( "LTON",       9.8420652761106063E-07, CDC_Mass ); // Imperial ton also
 
     // LENGTH: 1 Meter is...
@@ -2563,7 +2563,7 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "ludicrous speed", 2.0494886343432328E-14, CDC_Speed ); // ***
     NEWD( "laecherliche Geschwindigkeit", 4.0156958471424288E-06, CDC_Speed); // ***
     NEWD( "ridiculous speed", 4.0156958471424288E-06, CDC_Speed); // ***
-    
+
     // INFORMATION: 1 Bit is...
     NEWDP( "bit",   1.00E00,  CDC_Information); // *** Bit
     NEWDP( "byte",  1.25E-01, CDC_Information); // *** Byte
@@ -2583,28 +2583,28 @@ double ConvertDataList::Convert( double fVal, const STRING& rFrom, const STRING&
 //   if( rFrom == rTo )
 //       return fVal;
 
-    ConvertData*	pFrom = NULL;
-    ConvertData*	pTo = NULL;
-    sal_Bool		bSearchFrom = sal_True;
-    sal_Bool		bSearchTo = sal_True;
-    sal_Int16		nLevelFrom = 0;
-    sal_Int16		nLevelTo = 0;
+    ConvertData*    pFrom = NULL;
+    ConvertData*    pTo = NULL;
+    sal_Bool        bSearchFrom = sal_True;
+    sal_Bool        bSearchTo = sal_True;
+    sal_Int16       nLevelFrom = 0;
+    sal_Int16       nLevelTo = 0;
 
-    ConvertData*	p = First();
+    ConvertData*    p = First();
     while( p && ( bSearchFrom || bSearchTo ) )
     {
         if( bSearchFrom )
         {
-            sal_Int16	n = p->GetMatchingLevel( rFrom );
+            sal_Int16   n = p->GetMatchingLevel( rFrom );
             if( n != INV_MATCHLEV )
             {
                 if( n )
-                {	// only first match for partial equality rulz a little bit more
+                {   // only first match for partial equality rulz a little bit more
                     pFrom = p;
                     nLevelFrom = n;
                 }
                 else
-                {	// ... but exact match rulz most
+                {   // ... but exact match rulz most
                     pFrom = p;
                     bSearchFrom = sal_False;
                     nLevelFrom = n;
@@ -2614,16 +2614,16 @@ double ConvertDataList::Convert( double fVal, const STRING& rFrom, const STRING&
 
         if( bSearchTo )
         {
-            sal_Int16	n = p->GetMatchingLevel( rTo );
+            sal_Int16   n = p->GetMatchingLevel( rTo );
             if( n != INV_MATCHLEV )
             {
                 if( n )
-                {	// only first match for partial equality rulz a little bit more
+                {   // only first match for partial equality rulz a little bit more
                     pTo = p;
                     nLevelTo = n;
                 }
                 else
-                {	// ... but exact match rulz most
+                {   // ... but exact match rulz most
                     pTo = p;
                     bSearchTo = sal_False;
                     nLevelTo = n;

@@ -244,7 +244,7 @@ NPN_ForceRedraw(NPP instance)
  * Wrapper functions : Netscape Navigator -> plugin
  *
  * These functions let the plugin developer just create the APIs
- * as documented and defined in npapi.h, without needing to 
+ * as documented and defined in npapi.h, without needing to
  * install those functions in the function table or worry about
  * setting up globals for 68K plugins.
  *
@@ -257,7 +257,7 @@ Private_New(NPMIMEType pluginType, NPP instance, uint16 mode,
     NPError ret;
     PLUGINDEBUGSTR("New");
     ret = NPP_New(pluginType, instance, mode, argc, argn, argv, saved);
-    return ret; 
+    return ret;
 }
 
 NPError
@@ -325,7 +325,7 @@ Private_DestroyStream(NPP instance, NPStream* stream, NPError reason)
 void
 Private_URLNotify(NPP instance, const char* url,
                 NPReason reason, void* notifyData)
-                
+
 {
     PLUGINDEBUGSTR("URLNotify");
     NPP_URLNotify(instance, url, reason, notifyData);
@@ -353,7 +353,7 @@ Private_GetJavaClass(void)
 }
 #endif
 
-/*********************************************************************** 
+/***********************************************************************
  *
  * These functions are located automagically by netscape.
  *
@@ -406,12 +406,12 @@ NP_Initialize(NPNetscapeFuncs* nsTable, NPPluginFuncs* pluginFuncs)
     NPError err = NPERR_NO_ERROR;
 
     PLUGINDEBUGSTR("NP_Initialize");
-    
+
     /* validate input parameters */
 
     if ((nsTable == NULL) || (pluginFuncs == NULL))
         err = NPERR_INVALID_FUNCTABLE_ERROR;
-    
+
     /*
      * Check the major version passed in Netscape's function table.
      * We won't load if the major version is newer than what we expect.
@@ -426,11 +426,11 @@ NP_Initialize(NPNetscapeFuncs* nsTable, NPPluginFuncs* pluginFuncs)
             err = NPERR_INCOMPATIBLE_VERSION_ERROR;
         if (nsTable->size < sizeof(NPNetscapeFuncs))
             err = NPERR_INVALID_FUNCTABLE_ERROR;
-        if (pluginFuncs->size < sizeof(NPPluginFuncs))      
+        if (pluginFuncs->size < sizeof(NPPluginFuncs))
             err = NPERR_INVALID_FUNCTABLE_ERROR;
     }
-        
-    
+
+
     if (err == NPERR_NO_ERROR) {
         /*
          * Copy all the fields of Netscape function table into our
@@ -485,7 +485,7 @@ NP_Initialize(NPNetscapeFuncs* nsTable, NPPluginFuncs* pluginFuncs)
 
         err = NPP_Initialize();
     }
-    
+
     return err;
 }
 

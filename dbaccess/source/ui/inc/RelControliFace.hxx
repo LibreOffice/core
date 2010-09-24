@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ namespace dbaui
         virtual TTableConnectionData::value_type getConnectionData() const = 0;
 
         /** setValid set the valid inside, can be used for OK buttons
-            @param	_bValid	true when the using control allows an update
+            @param  _bValid true when the using control allows an update
         */
         virtual void setValid(sal_Bool _bValid) = 0;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() = 0;
 
         /** notifyConnectionChange is callback which is called when the table selection has changed and a new connection exists
-            @param	_pConnectionData	the connection which exists between the new tables
+            @param  _pConnectionData    the connection which exists between the new tables
         */
         virtual void notifyConnectionChange() = 0;
     };

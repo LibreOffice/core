@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 
 #include "gsicheck.hxx"
 
-#define HAS_FLAG( nFlags, nFlag )		( ( nFlags & nFlag ) != 0 )
-#define SET_FLAG( nFlags, nFlag )		( nFlags |= nFlag )
-#define RESET_FLAG( nFlags, nFlag )		( nFlags &= ~nFlag )	// ~ = Bitweises NOT
+#define HAS_FLAG( nFlags, nFlag )       ( ( nFlags & nFlag ) != 0 )
+#define SET_FLAG( nFlags, nFlag )       ( nFlags |= nFlag )
+#define RESET_FLAG( nFlags, nFlag )     ( nFlags &= ~nFlag )    // ~ = Bitweises NOT
 
 
 
@@ -95,7 +95,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
     String aDelims( String::CreateFromAscii( " \\=>/" ) );
     String aPortion;
     String aValue;      // store the value of a property
-    ByteString aName;   // store the name of a property/tag 
+    ByteString aName;   // store the name of a property/tag
     BOOL bCheckName = FALSE;
     BOOL bCheckEmpty = FALSE;
     sal_Unicode cDelim;
@@ -111,7 +111,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
         aPortion = aTokenString.Copy( nLastPos, nCheckPos-nLastPos );
 
         if ( aTokenString.GetChar( nCheckPos ) == '\\' )
-            nCheckPos++;         
+            nCheckPos++;
 
         cDelim = aTokenString.GetChar( nCheckPos );
         nCheckPos++;
@@ -128,7 +128,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                     case ' ':  aState = TC_HAS_TAG_NAME;
                                bCheckName = TRUE;
                                break;
-                    case '/':  
+                    case '/':
                         {
                             if ( aPortion.Len() == 0 )
                             {
@@ -215,7 +215,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
             case TC_INSIDE_STRING:
                 switch ( cDelim )
                 {
-                    case '\"': 
+                    case '\"':
                         {
                             aState = TC_PROP_FINISHED;
                             aValue += aPortion;
@@ -235,7 +235,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                             }
                         }
                                break;
-                    default:   
+                    default:
                         {
                             aState = TC_INSIDE_STRING;
                             aValue += aPortion;
@@ -335,7 +335,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
             else
             {
                 aName = ByteString( aPortion, RTL_TEXTENCODING_UTF8 );
-                // "a-zA-Z_-.0-9" 
+                // "a-zA-Z_-.0-9"
                 xub_StrLen nCount;
                 BOOL bBroken = FALSE;
                 const sal_Char* aBuf = aName.GetBuffer();
@@ -395,7 +395,7 @@ BOOL TokenInfo::IsPropertyRelevant( const ByteString &aName, const String &aValu
         return FALSE;
     if ( aTagName.EqualsAscii( "image" ) && (aName.Equals( "width" ) || aName.Equals( "height" )) )
         return FALSE;
-    
+
     return TRUE;
 }
 
@@ -437,10 +437,10 @@ BOOL TokenInfo::IsPropertyInvariant( const ByteString &aName, const String &aVal
 BOOL TokenInfo::IsPropertyFixable( const ByteString &aName ) const
 {
     // name everything that is allowed to be fixed automatically here
-    if ( (aTagName.EqualsAscii( "ahelp" ) && aName.Equals( "hid" )) 
-      || (aTagName.EqualsAscii( "link" ) && aName.Equals( "href" )) 
-      || (aTagName.EqualsAscii( "alt" ) && aName.Equals( "id" )) 
-      || (aTagName.EqualsAscii( "variable" ) && aName.Equals( "id" )) 
+    if ( (aTagName.EqualsAscii( "ahelp" ) && aName.Equals( "hid" ))
+      || (aTagName.EqualsAscii( "link" ) && aName.Equals( "href" ))
+      || (aTagName.EqualsAscii( "alt" ) && aName.Equals( "id" ))
+      || (aTagName.EqualsAscii( "variable" ) && aName.Equals( "id" ))
       || (aTagName.EqualsAscii( "image" ) && aName.Equals( "src" ))
       || (aTagName.EqualsAscii( "image" ) && aName.Equals( "id" ) ))
         return TRUE;
@@ -513,7 +513,7 @@ BOOL TokenInfo::MatchesTranslation( TokenInfo& rInfo, BOOL bGenErrors, ParserMes
         }
     }
 
-    // if we reach here eather 
+    // if we reach here eather
     //   the tags match completely or
     //   the tags match but not the properties and we generated errors for that
     return TRUE;
@@ -578,7 +578,7 @@ struct Tag
 static const Tag aKnownTags[] =
 {
 /*  commenting oldstyle tags
-//	{ "<#GROUP_FORMAT>", TAG_GROUP_FORMAT },
+//  { "<#GROUP_FORMAT>", TAG_GROUP_FORMAT },
     { "<#BOLD>", TAG_BOLDON },
     { "<#/BOLD>", TAG_BOLDOFF },
     { "<#ITALIC>", TAG_ITALICON },
@@ -586,12 +586,12 @@ static const Tag aKnownTags[] =
     { "<#UNDER>", TAG_UNDERLINEON },
     { "<#/UNDER>", TAG_UNDERLINEOFF },
 
-//	{ "<#GROUP_NOTALLOWED>", TAG_GROUP_NOTALLOWED },
+//  { "<#GROUP_NOTALLOWED>", TAG_GROUP_NOTALLOWED },
     { "<#HELPID>", TAG_HELPID },
     { "<#MODIFY>", TAG_MODIFY },
     { "<#REFNR>", TAG_REFNR },
 
-//	{ "<#GROUP_STRUCTURE>", TAG_GROUP_STRUCTURE },
+//  { "<#GROUP_STRUCTURE>", TAG_GROUP_STRUCTURE },
     { "<#NAME>", TAG_NAME },
     { "<#HREF>", TAG_HREF },
     { "<#AVIS>", TAG_AVIS },
@@ -607,13 +607,13 @@ static const Tag aKnownTags[] =
     { "<#GRAPHIC>", TAG_GRAPHIC },
     { "<#NEXTVERSION>", TAG_NEXTVERSION },
 
-    //	{ "<#GROUP_SYSSWITCH>", TAG_GROUP_SYSSWITCH },
+    //  { "<#GROUP_SYSSWITCH>", TAG_GROUP_SYSSWITCH },
     { "<#WIN>", TAG_WIN },
     { "<#UNIX>", TAG_UNIX },
     { "<#MAC>", TAG_MAC },
     { "<#OS2>", TAG_OS2 },
 
-//	{ "<#GROUP_PROGSWITCH>", TAG_GROUP_PROGSWITCH },
+//  { "<#GROUP_PROGSWITCH>", TAG_GROUP_PROGSWITCH },
     { "<#WRITER>", TAG_WRITER },
     { "<#CALC>", TAG_CALC },
     { "<#DRAW>", TAG_DRAW },
@@ -624,7 +624,7 @@ static const Tag aKnownTags[] =
     { "<#CHART>", TAG_CHART },
     { "<#OFFICE>", TAG_OFFICE },
   */
-//	{ "<#TAG_GROUP_META>", TAG_GROUP_META },
+//  { "<#TAG_GROUP_META>", TAG_GROUP_META },
     { "$[officefullname]", TAG_OFFICEFULLNAME },
     { "$[officename]", TAG_OFFICENAME },
     { "$[officepath]", TAG_OFFICEPATH },
@@ -635,10 +635,10 @@ static const Tag aKnownTags[] =
     { "$[portalversion]", TAG_PORTALVERSION },
     { "$[portalshortname]", TAG_PORTALSHORTNAME },
 /*  commenting oldstyle tags
-//	{ "<#TAG_GROUP_SINGLE>", TAG_GROUP_SINGLE },
+//  { "<#TAG_GROUP_SINGLE>", TAG_GROUP_SINGLE },
     { "<#REFINSERT>", TAG_REFINSERT },
 
-//	{ "<#GROUP_MULTI>", TAG_GROUP_MULTI },
+//  { "<#GROUP_MULTI>", TAG_GROUP_MULTI },
     { "<#END>", TAG_END },
     { "<#ELSE>", TAG_ELSE },
     { "<#VERSIONEND>", TAG_VERSIONEND },
@@ -741,7 +741,7 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
 
 String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, USHORT &rTagStartPos )
 {
-//	USHORT nStyle1StartPos = aSource.SearchAscii( "<#", nPos );
+//  USHORT nStyle1StartPos = aSource.SearchAscii( "<#", nPos );
     USHORT nStyle2StartPos = aSource.SearchAscii( "$[", nPos );
     USHORT nStyle3StartPos = aSource.SearchAscii( "\\<", nPos );
     USHORT nStyle4StartPos = aSource.SearchAscii( "\\\\", nPos );    // this is only to kick out quoted backslashes
@@ -762,8 +762,8 @@ String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, USHORT &
         return GetNextTokenString( rErrorList, rTagStartPos );
     }
 
-/*	if ( nStyle1StartPos < nStyle2StartPos && nStyle1StartPos <= nStyle3StartPos )  // <= to make sure our spechial tags are recognized before all others
-    {	// test for <# ... > style tokens
+/*  if ( nStyle1StartPos < nStyle2StartPos && nStyle1StartPos <= nStyle3StartPos )  // <= to make sure our spechial tags are recognized before all others
+    {   // test for <# ... > style tokens
         USHORT nEndPos = aSource.SearchAscii( ">", nStyle1StartPos );
         if ( nEndPos == STRING_NOTFOUND )
         {   // Token is incomplete. Skip start and search for better ones
@@ -775,7 +775,7 @@ String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, USHORT &
         return aSource.Copy( nStyle1StartPos, nEndPos-nStyle1StartPos +1 ).ToUpperAscii();
     }
     else*/ if ( nStyle2StartPos < nStyle3StartPos )
-    {	// test for $[ ... ] style tokens
+    {   // test for $[ ... ] style tokens
         USHORT nEndPos = aSource.SearchAscii( "]", nStyle2StartPos);
         if ( nEndPos == STRING_NOTFOUND )
         {   // Token is incomplete. Skip start and search for better ones
@@ -787,7 +787,7 @@ String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, USHORT &
         return aSource.Copy( nStyle2StartPos, nEndPos-nStyle2StartPos +1 );
     }
     else
-    {	// test for \< ... \> style tokens
+    {   // test for \< ... \> style tokens
         USHORT nEndPos = aSource.SearchAscii( "\\>", nStyle3StartPos);
         USHORT nQuotedBackPos = aSource.SearchAscii( "\\\\", nStyle3StartPos );    // this is only to kick out quoted backslashes
         while ( nQuotedBackPos <= nEndPos && nQuotedBackPos != STRING_NOTFOUND )
@@ -876,7 +876,7 @@ void TokenParser::Parse( const String &aCode, ParserMessageList* pList )
                     ParseError( 17, "<#UNDER> expected before <#/UNDER>.", aTag );
                 }
                 break;
-/*			case TAG_MISSPARENTHESIS:
+/*          case TAG_MISSPARENTHESIS:
                 {
                     ParseError( 14, "missing closing parenthesis '>'", aTag );
                 }
@@ -1293,7 +1293,7 @@ void TokenParser::TagRef()
                     TokenId aThisToken = aTag.nId;
                     match( aTag, aTag );
                     if ( aThisToken != TAG_NAME )
-                    {	// TAG_NAME has no TAG_END
+                    {   // TAG_NAME has no TAG_END
                         SET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
                         Paragraph();
                         match( aTag, TAG_END );

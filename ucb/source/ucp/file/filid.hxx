@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,53 +41,53 @@ namespace fileaccess {
         public com::sun::star::lang::XTypeProvider,
         public com::sun::star::ucb::XContentIdentifier
     {
-        
+
         // This implementation has to be reworked
     public:
         FileContentIdentifier( shell* pMyShell,
                                const rtl::OUString& aUnqPath,
                                sal_Bool IsNormalized = true );
-      
+
         virtual ~FileContentIdentifier();
-        
+
         // XInterface
         virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface( 
-            const com::sun::star::uno::Type& aType ) 
+        queryInterface(
+            const com::sun::star::uno::Type& aType )
             throw( com::sun::star::uno::RuntimeException );
-      
-        virtual void SAL_CALL 
-        acquire( 
-            void ) 
+
+        virtual void SAL_CALL
+        acquire(
+            void )
             throw();
-      
+
         virtual void SAL_CALL
         release(
-            void ) 
+            void )
             throw();
-      
+
         // XTypeProvider
         virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
         getTypes(
-            void ) 
-            throw( com::sun::star::uno::RuntimeException );
-  
-        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
-        getImplementationId( 
             void )
             throw( com::sun::star::uno::RuntimeException );
-      
+
+        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+        getImplementationId(
+            void )
+            throw( com::sun::star::uno::RuntimeException );
+
         // XContentIdentifier
         virtual rtl::OUString SAL_CALL
-        getContentIdentifier( 
+        getContentIdentifier(
             void )
             throw( com::sun::star::uno::RuntimeException );
-        
+
         virtual rtl::OUString SAL_CALL
         getContentProviderScheme(
             void )
             throw( com::sun::star::uno::RuntimeException );
-        
+
     private:
         shell* m_pMyShell;
         rtl::OUString m_aContentId;              // The URL string

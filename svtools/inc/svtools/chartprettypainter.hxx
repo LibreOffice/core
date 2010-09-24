@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 namespace svt { class EmbeddedObjectRef; }
 
 /** use this class for a correct view representation of charts
-see issues #i82893#, #i75867#: charts must be painted resolution dependent!! 
+see issues #i82893#, #i75867#: charts must be painted resolution dependent!!
 
 example usage when painting ole objects:
 if( ChartPrettyPainter::IsChart(xObjRef) && ChartPrettyPainter::ShouldPrettyPaintChartOnThisDevice( pOutDev )

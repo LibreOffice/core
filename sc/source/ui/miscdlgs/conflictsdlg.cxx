@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ bool ScConflictsListEntry::HasOwnAction( ULONG nOwnAction ) const
 //UNUSED2008-05              return true;
 //UNUSED2008-05          }
 //UNUSED2008-05      }
-//UNUSED2008-05  
+//UNUSED2008-05
 //UNUSED2008-05      return false;
 //UNUSED2008-05  }
 
@@ -188,7 +188,7 @@ ScConflictsFinder::ScConflictsFinder( ScChangeTrack* pTrack, ULONG nStartShared,
     ,mrConflictsList( rConflictsList )
 {
 }
-    
+
 ScConflictsFinder::~ScConflictsFinder()
 {
 }

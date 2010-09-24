@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -185,16 +185,16 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory() throw( uno::RuntimeEx
     if (m_nDialogType == NAVIGATIONSERVICES_DIRECTORY) {
         files = [(NSOpenPanel*)m_pDialog URLs];
     }
-    
+
     long nFiles = [files count];
     OSL_TRACE("# of items: %d", nFiles);
-    
+
     if (nFiles < 1) {
         throw uno::RuntimeException(rtl::OUString::createFromAscii("no directory selected"), static_cast< XFolderPicker* >( this ));
     }
-    
+
     rtl::OUString aDirectory;
-    
+
     NSURL *url = [files objectAtIndex:0];
     OSL_TRACE("handling %s", [[url description] UTF8String]);
 
@@ -212,7 +212,7 @@ void SAL_CALL SalAquaFolderPicker::setDescription( const rtl::OUString& rDescrip
     throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "description", rDescription);
-    
+
     [m_pDialog setMessage:[NSString stringWithOUString:rDescription]];
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);

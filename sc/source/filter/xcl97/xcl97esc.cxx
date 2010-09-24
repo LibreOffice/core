@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -198,7 +198,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         nAdditionalText++;
     BOOL bInGroup = ( pCurrXclObj != NULL );
     if ( bInGroup )
-    {	// stacked recursive group object
+    {   // stacked recursive group object
         if ( !pCurrAppData->IsStackedGroup() )
         {   //! UpdateDffFragmentEnd only once
             pCurrAppData->SetStackedGroup( TRUE );
@@ -262,7 +262,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     if ( pCurrXclObj )
     {
         if ( !mrObjMgr.AddObj( pCurrXclObj ) )
-        {	// maximum count reached, object got deleted
+        {   // maximum count reached, object got deleted
             pCurrXclObj = NULL;
         }
         else
@@ -487,7 +487,7 @@ void XclEscherEx::DeleteCurrAppData()
 // --- class XclEscherClientData -------------------------------------
 
 void XclEscherClientData::WriteData( EscherEx& rEx ) const
-{	// actual data is in the following OBJ record
+{   // actual data is in the following OBJ record
     rEx.AddAtom( 0, ESCHER_ClientData );
 }
 

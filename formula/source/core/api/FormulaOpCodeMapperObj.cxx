@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ sal_Bool SAL_CALL FormulaOpCodeMapperObj::supportsService( const ::rtl::OUString
     return ::comphelper::findValue( getSupportedServiceNames_Static(), _rServiceName, sal_True ).getLength() != 0;
 }
 //------------------------------------------------------------------------
-FormulaOpCodeMapperObj::FormulaOpCodeMapperObj(::std::auto_ptr<FormulaCompiler> _pCompiler) 
+FormulaOpCodeMapperObj::FormulaOpCodeMapperObj(::std::auto_ptr<FormulaCompiler> _pCompiler)
 : m_pCompiler(_pCompiler)
 {
 }
@@ -105,7 +105,7 @@ SAL_CALL FormulaOpCodeMapperObj::getAvailableMappings(
 // --------------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
-    return getSupportedServiceNames_Static();    
+    return getSupportedServiceNames_Static();
 }
 uno::Sequence< rtl::OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames_Static()
 {

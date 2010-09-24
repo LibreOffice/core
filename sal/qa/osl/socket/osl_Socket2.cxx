@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
     if you are not including ws2_32.lib in makefile.mk,  the including format will be like this:
 
     .IF "$(GUI)" == "WNT"
-    SHL1STDLIBS +=	$(SOLARLIBDIR)$/cppunit.lib
+    SHL1STDLIBS +=  $(SOLARLIBDIR)$/cppunit.lib
     SHL1STDLIBS +=  ws2_32.lib
     .ENDIF
 
@@ -216,7 +216,7 @@ namespace osl_Socket
         {
 #ifdef WNT
             oslSocket sHandleRaw = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeRaw, osl_Socket_ProtocolIp );
-// LLA: ?			::osl::Socket sSocket( sHandleRaw );
+// LLA: ?           ::osl::Socket sSocket( sHandleRaw );
             CPPUNIT_ASSERT_MESSAGE( " type osl_Socket_TypeRaw socket create failed on UNX ", sHandleRaw != NULL);
 #else
             oslSocket sHandleRaw = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeRaw, osl_Socket_ProtocolIp );
@@ -228,7 +228,7 @@ namespace osl_Socket
         {
             oslSocket sHandleIpx = osl_createSocket( osl_Socket_FamilyIpx, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
             CPPUNIT_ASSERT_MESSAGE( " family osl_Socket_FamilyIpx socket create failed! ", sHandleIpx != NULL);
-            ::osl::Socket sSocket( sHandleIpx );		//, SAL_NO_ACQUIRE );
+            ::osl::Socket sSocket( sHandleIpx );        //, SAL_NO_ACQUIRE );
             t_print("#Type is %d \n", sSocket.getType( ) );
 
             CPPUNIT_ASSERT_MESSAGE(" test for create new Socket instance that family is osl_Socket_FamilyIpx",
@@ -391,7 +391,7 @@ namespace osl_Socket
             myAcceptorThread.join();
 
             CPPUNIT_ASSERT_MESSAGE( "test for close when is accepting: the socket will quit accepting status.",
-                                myAcceptorThread.isOK()	== sal_True );
+                                myAcceptorThread.isOK() == sal_True );
 //#endif
         }
 
@@ -407,7 +407,7 @@ namespace osl_Socket
             myAcceptorThread.join();
 
             CPPUNIT_ASSERT_MESSAGE( "test for close when is accepting: the socket will quit accepting status.",
-                                myAcceptorThread.isOK()	== sal_True );
+                                myAcceptorThread.isOK() == sal_True );
         }
 
         CPPUNIT_TEST_SUITE( close );
@@ -467,7 +467,7 @@ namespace osl_Socket
 
 
     /** testing the method:
-        inline sal_Int32	SAL_CALL getLocalPort() const;
+        inline sal_Int32    SAL_CALL getLocalPort() const;
     */
 
     class getLocalPort : public CppUnit::TestFixture
@@ -552,7 +552,7 @@ namespace osl_Socket
 
         CPPUNIT_TEST_SUITE( getLocalPort );
         CPPUNIT_TEST( getLocalPort_001 );
-// LLA:		CPPUNIT_TEST( getLocalPort_002 );
+// LLA:     CPPUNIT_TEST( getLocalPort_002 );
         CPPUNIT_TEST( getLocalPort_003 );
         CPPUNIT_TEST_SUITE_END();
 
@@ -636,7 +636,7 @@ namespace osl_Socket
 
     /** testing the methods:
         inline void SAL_CALL getPeerAddr( SocketAddr & Addr) const;
-        inline sal_Int32	SAL_CALL getPeerPort() const;
+        inline sal_Int32    SAL_CALL getPeerPort() const;
         inline ::rtl::OUString SAL_CALL getPeerHost() const;
     */
     class getPeer : public CppUnit::TestFixture
@@ -764,7 +764,7 @@ namespace osl_Socket
 
 
     /** testing the methods:
-        inline sal_Bool	SAL_CALL isRecvReady(const TimeValue *pTimeout = 0) const;
+        inline sal_Bool SAL_CALL isRecvReady(const TimeValue *pTimeout = 0) const;
 
     */
     class isRecvReady : public CppUnit::TestFixture
@@ -828,7 +828,7 @@ namespace osl_Socket
 
 
     /** testing the methods:
-        inline sal_Bool	SAL_CALL isSendReady(const TimeValue *pTimeout = 0) const;
+        inline sal_Bool SAL_CALL isSendReady(const TimeValue *pTimeout = 0) const;
     */
     class isSendReady : public CppUnit::TestFixture
     {
@@ -892,7 +892,7 @@ namespace osl_Socket
 
 
     /** testing the methods:
-        inline oslSocketType	SAL_CALL getType() const;
+        inline oslSocketType    SAL_CALL getType() const;
 
     */
 
@@ -1122,26 +1122,26 @@ namespace osl_Socket
 
             t_print("#setOption_001: getOption is %d \n", *pGetBuffer);
 
-// LLA: 			sal_Bool * pbDontTouteSet = ( sal_Bool * )malloc( sizeof ( sal_Bool ) );
-// LLA: 			*pbDontTouteSet = sal_True;
-// LLA: 			sal_Bool * pbDontTouteGet = ( sal_Bool * )malloc( sizeof ( sal_Bool ) );
-// LLA: 			*pbDontTouteGet = sal_False;
-// LLA: 			asAcceptorSocket.setOption( osl_Socket_OptionDontRoute,  pbDontTouteSet, sizeof ( sal_Bool ) );
-// LLA: 			asAcceptorSocket.getOption( osl_Socket_OptionDontRoute,  pbDontTouteGet, sizeof ( sal_Bool ) );
-// LLA: 			::rtl::OUString suError = outputError(::rtl::OUString::valueOf((sal_Int32)*pbDontTouteGet),
-// LLA: 				::rtl::OUString::valueOf((sal_Int32)*pbDontTouteSet),
-// LLA: 				"test for setOption function: set osl_Socket_OptionDontRoute and then check");
+// LLA:             sal_Bool * pbDontTouteSet = ( sal_Bool * )malloc( sizeof ( sal_Bool ) );
+// LLA:             *pbDontTouteSet = sal_True;
+// LLA:             sal_Bool * pbDontTouteGet = ( sal_Bool * )malloc( sizeof ( sal_Bool ) );
+// LLA:             *pbDontTouteGet = sal_False;
+// LLA:             asAcceptorSocket.setOption( osl_Socket_OptionDontRoute,  pbDontTouteSet, sizeof ( sal_Bool ) );
+// LLA:             asAcceptorSocket.getOption( osl_Socket_OptionDontRoute,  pbDontTouteGet, sizeof ( sal_Bool ) );
+// LLA:             ::rtl::OUString suError = outputError(::rtl::OUString::valueOf((sal_Int32)*pbDontTouteGet),
+// LLA:                 ::rtl::OUString::valueOf((sal_Int32)*pbDontTouteSet),
+// LLA:                 "test for setOption function: set osl_Socket_OptionDontRoute and then check");
 // LLA:
-// LLA: 			sal_Bool bOK = ( sal_True  ==  *pbDontTouteGet );
-// LLA: 			free( pbDontTouteSet );
-// LLA: 			free( pbDontTouteGet );
+// LLA:             sal_Bool bOK = ( sal_True  ==  *pbDontTouteGet );
+// LLA:             free( pbDontTouteSet );
+// LLA:             free( pbDontTouteGet );
 
             CPPUNIT_ASSERT_MESSAGE( "test for setOption function: set option of a socket and then check.",
                                       ( sal_True == bOK ) && (sal_True == bOK2) );
 
             free( pbDontRouteSet );
             free( pGetBuffer );
-// LLA: 			CPPUNIT_ASSERT_MESSAGE( suError, sal_True == bOK );
+// LLA:             CPPUNIT_ASSERT_MESSAGE( suError, sal_True == bOK );
         }
 
         void setOption_002()
@@ -1197,11 +1197,11 @@ namespace osl_Socket
         {
             /// set and get option.
             // LLA: this does not work, due to the fact that SO_LINGER is a structure
-// LLA:			asAcceptorSocket.setOption( osl_Socket_OptionLinger,  7 );
-// LLA:			sal_Bool bOK = ( 7  ==  asAcceptorSocket.getOption( osl_Socket_OptionLinger ) );
+// LLA:         asAcceptorSocket.setOption( osl_Socket_OptionLinger,  7 );
+// LLA:         sal_Bool bOK = ( 7  ==  asAcceptorSocket.getOption( osl_Socket_OptionLinger ) );
 
-// LLA:			CPPUNIT_ASSERT_MESSAGE( "test for setOption function: set option of a socket and then check.",
-// LLA: 									( sal_True == bOK ) );
+// LLA:         CPPUNIT_ASSERT_MESSAGE( "test for setOption function: set option of a socket and then check.",
+// LLA:                                     ( sal_True == bOK ) );
         }
 
         CPPUNIT_TEST_SUITE( setOption );
@@ -1209,7 +1209,7 @@ namespace osl_Socket
         CPPUNIT_TEST( setOption_002 );
         CPPUNIT_TEST( setOption_003 );
         CPPUNIT_TEST( setOption_simple_001 );
-// LLA:		CPPUNIT_TEST( setOption_simple_002 );
+// LLA:     CPPUNIT_TEST( setOption_simple_002 );
         CPPUNIT_TEST_SUITE_END();
 
     }; // class setOption
@@ -1294,7 +1294,7 @@ namespace osl_Socket
     }; // class isNonBlockingMode
 
     /** testing the method:
-        inline void	SAL_CALL clearError() const;
+        inline void SAL_CALL clearError() const;
     */
     class clearError : public CppUnit::TestFixture
     {

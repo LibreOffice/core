@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 using namespace ::rtl;
 
 /** Cached native widgets.
- 
+
     A class which caches and paints the native widgets.
 */
 class WidgetPainter
@@ -194,7 +194,7 @@ class WidgetPainter
     /** Identifiers of popup menu items.
      */
     int           m_nPopupMenuEnabledItem, m_nPopupMenuDisabledItem;
-    
+
     /** cached progress bar
       */
     QProgressBar *m_pProgressBar;
@@ -338,9 +338,9 @@ class WidgetPainter
       @see pushButton()
     */
     QPopupMenu   *popupMenu( const Rectangle& rControlRegion );
-    
+
     /** 'Get' method for progress bar
-    
+
       @see pushButton()
     */
     QProgressBar *progressBar( const Rectangle& rControlRegion );
@@ -452,13 +452,13 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
 
     // Use the background of the widget
     qPixmap.fill( pWidget, QPoint(0, 0) );
-    
+
     // Convert the flags
     QStyle::SFlags nStyle = vclStateValue2SFlags( nState, aValue );
-    
+
     // Store the widget class
     const char *pClassName = pWidget->className();
-    
+
     // Draw the widget to the pixmap
     if ( strcmp( "QPushButton", pClassName ) == 0 )
     {
@@ -471,7 +471,7 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
         pPushButton->setOn     ( nStyle & QStyle::Style_On );
         pPushButton->setEnabled( nStyle & QStyle::Style_Enabled );
     }
-    
+
     kapp->style().drawControl( QStyle::CE_PushButton,
         &qPainter, pWidget, qRect,
         pWidget->colorGroup(), nStyle );
@@ -504,15 +504,15 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
     kapp->style().drawComplexControl( QStyle::CC_ComboBox,
         &qPainter, pWidget, qRect,
         pWidget->colorGroup(), nStyle );
-    
+
     // Editable combo box uses the background of the associated edit box
     QComboBox *pComboBox = static_cast<QComboBox *>( pWidget->qt_cast( "QComboBox" ) );
     if ( pComboBox && pComboBox->editable() && pComboBox->lineEdit() )
     {
         QColorGroup::ColorRole eColorRole = ( pComboBox->isEnabled() )?
         QColorGroup::Base: QColorGroup::Background;
-        qPainter.fillRect( 
-            kapp->style().querySubControlMetrics( QStyle::CC_ComboBox, 
+        qPainter.fillRect(
+            kapp->style().querySubControlMetrics( QStyle::CC_ComboBox,
             pComboBox, QStyle::SC_ComboBoxEditField ),
             pComboBox->lineEdit()->colorGroup().brush( eColorRole ) );
     }
@@ -526,7 +526,7 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
     else if ( strcmp( "QSpinWidget", pClassName ) == 0 )
     {
     const SpinbuttonValue *pValue = static_cast<const SpinbuttonValue *> ( &aValue );
-    
+
     // Is any of the buttons pressed?
     QStyle::SCFlags eActive = QStyle::SC_None;
     if ( pValue )
@@ -559,8 +559,8 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
     {
         QColorGroup::ColorRole eColorRole = ( pSpinWidget->isEnabled() )?
         QColorGroup::Base: QColorGroup::Background;
-        qPainter.fillRect( 
-            kapp->style().querySubControlMetrics( QStyle::CC_SpinWidget, 
+        qPainter.fillRect(
+            kapp->style().querySubControlMetrics( QStyle::CC_SpinWidget,
             pSpinWidget, QStyle::SC_SpinWidgetEditField ),
             pSpinWidget->editWidget()->colorGroup().brush( eColorRole ) );
     }
@@ -568,7 +568,7 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
     // Adjust the frame (needed for Motif Plus style)
     QRect qFrameRect = kapp->style().querySubControlMetrics( QStyle::CC_SpinWidget,
         pWidget, QStyle::SC_SpinWidgetFrame );
-    
+
     kapp->style().drawComplexControl( QStyle::CC_SpinWidget,
         &qPainter, pWidget, qFrameRect,
         pWidget->colorGroup(), nStyle,
@@ -577,7 +577,7 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
     else if ( strcmp( "QTabBar", pClassName ) == 0 )
     {
     const TabitemValue *pValue = static_cast<const TabitemValue *> ( &aValue );
-    
+
     QTab *pTab = NULL;
     if ( pValue )
     {
@@ -592,9 +592,9 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
     }
     if ( !pTab )
         return FALSE;
-    
+
     pTab->setRect( qRect );
-    
+
     kapp->style().drawControl( QStyle::CE_TabBarTab,
         &qPainter, pWidget, qRect,
         pWidget->colorGroup(), nStyle,
@@ -664,7 +664,7 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
         else
         pWidget->setEnabled( false );
     }
-    
+
     // Is it a horizontal scroll bar?
     QScrollBar *pScrollBar = static_cast<QScrollBar *> ( pWidget->qt_cast( "QScrollBar" ) );
     QStyle::StyleFlags eHoriz = QStyle::Style_Default;
@@ -692,11 +692,11 @@ BOOL WidgetPainter::drawStyledWidget( QWidget *pWidget,
 
         kapp->style().drawPrimitive( QStyle::PE_PanelDockWindow,
                 &qPainter, qRect, pWidget->colorGroup(), nStyle );
-        
+
         if ( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
         {
             const ToolbarValue *pValue = static_cast< const ToolbarValue * >( &aValue );
-            
+
             QRect qThumbRect = region2QRect( pValue->maGripRect );
             qThumbRect.moveBy( -qWidgetPos.x(), -qWidgetPos.y() );
             if ( bIsHorizontal )
@@ -816,7 +816,7 @@ QPushButton *WidgetPainter::pushButton( const Rectangle& rControlRegion,
     m_pPushButton->setDefault( true );
     QSize qDefSize = kapp->style().sizeFromContents( QStyle::CT_PushButton,
         m_pPushButton, qContentsSize );
-    
+
     int nIndicatorSize = kapp->style().pixelMetric(
         QStyle::PM_ButtonDefaultIndicator, m_pPushButton );
     if ( qNormalSize.width() == qDefSize.width() )
@@ -824,7 +824,7 @@ QPushButton *WidgetPainter::pushButton( const Rectangle& rControlRegion,
     if ( qNormalSize.height() == qDefSize.height() )
         qRect.addCoords( 0, nIndicatorSize, 0, -nIndicatorSize );
     }
-    
+
     m_pPushButton->move( qRect.topLeft() );
     m_pPushButton->resize( qRect.size() );
     m_pPushButton->setDefault( bDefault );
@@ -845,19 +845,19 @@ QRadioButton *WidgetPainter::radioButton( const Rectangle& rControlRegion )
     if ( strcmp( "KThemeStyle", pStyleName ) == 0 )
     {
     QRect qOldRect( qRect );
-    
+
     qRect.setWidth( kapp->style().pixelMetric(
         QStyle::PM_ExclusiveIndicatorWidth, m_pRadioButton ) );
     qRect.setHeight( kapp->style().pixelMetric(
         QStyle::PM_ExclusiveIndicatorHeight, m_pRadioButton ) );
-    
+
     qRect.moveBy( ( qOldRect.width() - qRect.width() ) / 2,
         ( qOldRect.height() - qRect.height() ) / 2 );
     }
 
     m_pRadioButton->move( qRect.topLeft() );
     m_pRadioButton->resize( qRect.size() );
-    
+
     return m_pRadioButton;
 }
 
@@ -874,12 +874,12 @@ QCheckBox *WidgetPainter::checkBox( const Rectangle& rControlRegion )
     if ( strcmp( "KThemeStyle", pStyleName ) == 0 )
     {
     QRect qOldRect( qRect );
-    
+
     qRect.setWidth( kapp->style().pixelMetric(
         QStyle::PM_IndicatorWidth, m_pCheckBox ) );
     qRect.setHeight( kapp->style().pixelMetric(
         QStyle::PM_IndicatorHeight, m_pCheckBox ) );
-    
+
     qRect.moveBy( ( qOldRect.width() - qRect.width() ) / 2,
         ( qOldRect.height() - qRect.height() ) / 2 );
     }
@@ -908,7 +908,7 @@ QComboBox *WidgetPainter::comboBox( const Rectangle& rControlRegion,
     }
 
     QRect qRect = region2QRect( rControlRegion );
-    
+
     pComboBox->move( qRect.topLeft() );
     pComboBox->resize( qRect.size() );
 
@@ -921,7 +921,7 @@ QLineEdit *WidgetPainter::lineEdit( const Rectangle& rControlRegion )
     m_pLineEdit = new QLineEdit( NULL, "line_edit" );
 
     QRect qRect = region2QRect( rControlRegion );
-    
+
     m_pLineEdit->move( qRect.topLeft() );
     m_pLineEdit->resize( qRect.size() );
 
@@ -933,13 +933,13 @@ QSpinWidget *WidgetPainter::spinWidget( const Rectangle& rControlRegion )
     if ( !m_pSpinWidget )
     {
     m_pSpinWidget = new QSpinWidget( NULL, "spin_widget" );
-    
+
     m_pSpinEdit = new QLineEdit( NULL, "line_edit_spin" );
     m_pSpinWidget->setEditWidget( m_pSpinEdit );
     }
 
     QRect qRect = region2QRect( rControlRegion );
-    
+
     m_pSpinWidget->move( qRect.topLeft() );
     m_pSpinWidget->resize( qRect.size() );
     m_pSpinWidget->arrange();
@@ -955,7 +955,7 @@ QTabBar *WidgetPainter::tabBar( const Rectangle& rControlRegion )
         m_pTabBarParent = new QWidget( NULL, "tab_bar_parent" );
 
     m_pTabBar = new QTabBar( m_pTabBarParent, "tab_bar" );
-    
+
     m_pTabLeft = new QTab();
     m_pTabMiddle = new QTab();
     m_pTabRight = new QTab();
@@ -970,7 +970,7 @@ QTabBar *WidgetPainter::tabBar( const Rectangle& rControlRegion )
 
     m_pTabBar->move( qRect.topLeft() );
     m_pTabBar->resize( qRect.size() );
-    
+
     m_pTabBar->setShape( QTabBar::RoundedAbove );
 
     return m_pTabBar;
@@ -983,10 +983,10 @@ QTabWidget *WidgetPainter::tabWidget( const Rectangle& rControlRegion )
 
     QRect qRect = region2QRect( rControlRegion );
     --qRect.rTop();
-    
+
     m_pTabWidget->move( qRect.topLeft() );
     m_pTabWidget->resize( qRect.size() );
-    
+
     return m_pTabWidget;
 }
 
@@ -996,7 +996,7 @@ QListView *WidgetPainter::listView( const Rectangle& rControlRegion )
     m_pListView = new QListView( NULL, "list_view" );
 
     QRect qRect = region2QRect( rControlRegion );
-    
+
     m_pListView->move( qRect.topLeft() );
     m_pListView->resize( qRect.size() );
 
@@ -1014,7 +1014,7 @@ QScrollBar *WidgetPainter::scrollBar( const Rectangle& rControlRegion,
     }
 
     QRect qRect = region2QRect( rControlRegion );
-    
+
     m_pScrollBar->move( qRect.topLeft() );
     m_pScrollBar->resize( qRect.size() );
     m_pScrollBar->setOrientation( bHorizontal? Qt::Horizontal: Qt::Vertical );
@@ -1123,9 +1123,9 @@ QProgressBar *WidgetPainter::progressBar( const Rectangle& rControlRegion )
 {
     if ( !m_pProgressBar )
     m_pProgressBar = new QProgressBar( NULL, "progress_bar" );
-    
+
     QRect qRect = region2QRect( rControlRegion );
-    
+
     m_pProgressBar->move( qRect.topLeft() );
     m_pProgressBar->resize( qRect.size() );
 
@@ -1195,10 +1195,10 @@ class KDESalGraphics : public X11SalGraphics
 
     @param nType
     Type of the widget.
-    
+
     @param nPart
     Specification of the widget's part if it consists of more than one.
-  
+
     @return TRUE if the platform supports native drawing of the widget nType
     defined by nPart.
 */
@@ -1249,7 +1249,7 @@ BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
     rIsInside = FALSE;
 
     BOOL bHorizontal = ( nPart == PART_BUTTON_LEFT || nPart == PART_BUTTON_RIGHT );
-    
+
     QScrollBar *pScrollBar = pWidgetPainter->scrollBar( rControlRegion,
         bHorizontal, ImplControlValue() );
     QRect qRectSubLine = kapp->style().querySubControlMetrics(
@@ -1297,7 +1297,7 @@ BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
             rIsInside = qRectAddLine.contains( aPos.getX(), aPos.getY() );
         }
         break;
-        
+
         case PART_BUTTON_UP:
         if ( !bPlatinumStyle && qRectSubLine.contains( aPos.getX(), aPos.getY() ) )
             rIsInside = TRUE;
@@ -1307,21 +1307,21 @@ BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
             rIsInside = qRectAddLine.contains( aPos.getX(), aPos.getY() );
         }
         break;
-        
+
         case PART_BUTTON_RIGHT:
         if ( bTwoSubButtons )
             qRectAddLine.setLeft( qRectAddLine.left() + qRectAddLine.width() / 2 );
 
         rIsInside = qRectAddLine.contains( aPos.getX(), aPos.getY() );
         break;
-        
+
         case PART_BUTTON_DOWN:
         if ( bTwoSubButtons )
             qRectAddLine.setTop( qRectAddLine.top() + qRectAddLine.height() / 2 );
 
         rIsInside = qRectAddLine.contains( aPos.getX(), aPos.getY() );
         break;
-        
+
         // cases PART_TRACK_HORZ_AREA and PART_TRACK_VERT_AREA
         default:
         return FALSE;
@@ -1335,13 +1335,13 @@ BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
 
 
 /** Draw the requested control described by nPart/nState.
- 
+
     @param rControlRegion
     The bounding region of the complete control in VCL frame coordinates.
-    
+
     @param aValue
     An optional value (tristate/numerical/string).
-    
+
     @param aCaption
     A caption or title string (like button text etc.)
 */
@@ -1355,7 +1355,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
     Display *dpy = GetXDisplay();
     XLIB_Window drawable = GetDrawable();
     GC gc = SelectPen(); //SelectFont(); // GC with current clipping region set
-    
+
     if ( (nType == CTRL_PUSHBUTTON) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
@@ -1474,16 +1474,16 @@ BOOL KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
 
 
 /** Draw text on the widget.
- 
+
     OPTIONAL. Draws the requested text for the control described by nPart/nState.
     Used if text is not drawn by DrawNativeControl().
- 
+
     @param rControlRegion
     The bounding region of the complete control in VCL frame coordinates.
-    
+
     @param aValue
     An optional value (tristate/numerical/string)
-    
+
     @param aCaption
     A caption or title string (like button text etc.)
 */
@@ -1505,10 +1505,10 @@ BOOL KDESalGraphics::drawNativeControlText( ControlType, ControlPart,
 
     @param rControlRegion
     The bounding region of the control in VCL frame coordinates.
-    
+
     @param aValue
     An optional value (tristate/numerical/string)
-    
+
     @param aCaption
     A caption or title string (like button text etc.)
 */
@@ -1521,7 +1521,7 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     BOOL bReturn = FALSE;
     QRect qBoundingRect = WidgetPainter::region2QRect( rControlRegion );
     QRect qRect;
-    
+
     QWidget *pWidget = NULL;
     switch ( nType )
     {
@@ -1659,7 +1659,7 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
                 qRect.setBottom( 0 );
             }
             }
-            
+
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
 
             bReturn = TRUE;
@@ -1702,7 +1702,7 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     Size  aSize( qRect.width(), qRect.height() );
     rNativeContentRegion = Rectangle( aPoint, aSize );
     }
-    
+
     return bReturn;
 }
 
@@ -1754,13 +1754,13 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
 {
     psp::FastPrintFontInfo aInfo;
     QFontInfo qFontInfo( rQFont );
-    
+
     // set family name
     aInfo.m_aFamilyName = String( rQFont.family().utf8(), RTL_TEXTENCODING_UTF8 );
 
     // set italic
     aInfo.m_eItalic = ( qFontInfo.italic()? psp::italic::Italic: psp::italic::Upright );
-    
+
     // set weight
     int nWeight = qFontInfo.weight();
     if ( nWeight <= QFont::Light )
@@ -1773,7 +1773,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
         aInfo.m_eWeight = psp::weight::Bold;
     else
         aInfo.m_eWeight = psp::weight::UltraBold;
-    
+
     // set width
     int nStretch = rQFont.stretch();
     if ( nStretch <= QFont::UltraCondensed )
@@ -1794,7 +1794,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
         aInfo.m_eWidth = psp::width::ExtraExpanded;
     else
         aInfo.m_eWidth = psp::width::UltraExpanded;
-    
+
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "font name BEFORE system match: \"%s\"\n", OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
@@ -1812,7 +1812,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
     int nPointHeight = qFontInfo.pointSize();
     if ( nPointHeight <= 0 )
         nPointHeight = rQFont.pointSize();
-    
+
     // Create the font
     Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
     if( aInfo.m_eWeight != psp::weight::Unknown )
@@ -1887,7 +1887,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     Color aBack = toColor( qColorGroup.background() );
     Color aText = toColor( qColorGroup.text() );
     Color aBase = toColor( qColorGroup.base() );
-    
+
     // Foreground
     aStyleSettings.SetRadioCheckTextColor( aFore );
     aStyleSettings.SetLabelTextColor( aFore );
@@ -1906,7 +1906,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetHelpColor( aBase );
     aStyleSettings.SetWindowColor( aBase );
     aStyleSettings.SetActiveTabColor( aBase );
-    
+
     // Buttons
     aStyleSettings.SetButtonTextColor( toColor( qColorGroup.buttonText() ) );
     aStyleSettings.SetButtonRolloverTextColor( toColor( qColorGroup.buttonText() ) );
@@ -1971,7 +1971,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     {
         // Color
         QColorGroup qMenuCG = pMenuBar->colorGroup();
-        
+
         // Menu text and background color, theme specific
         Color aMenuFore = toColor( qMenuCG.foreground() );
         Color aMenuBack = toColor( qMenuCG.background() );
@@ -1983,7 +1983,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
             aMenuFore = toColor( qMenuCG.buttonText() );
             aMenuBack = toColor( qMenuCG.button() );
         }
-        
+
         aStyleSettings.SetMenuTextColor( aMenuFore );
         aStyleSettings.SetMenuBarTextColor( aMenuFore );
         aStyleSettings.SetMenuColor( aMenuBack );
@@ -2002,7 +2002,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         }
         else
             aStyleSettings.SetMenuHighlightTextColor( aMenuFore );
-        
+
         // set special menubar higlight text color
         if ( kapp->style().inherits( "HighContrastStyle" ) )
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.highlightedText() );
@@ -2024,7 +2024,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Scroll bar size
     aStyleSettings.SetScrollBarSize( kapp->style().pixelMetric( QStyle::PM_ScrollBarExtent ) );
-    
+
     rSettings.SetStyleSettings( aStyleSettings );
 }
 
@@ -2046,7 +2046,7 @@ SalGraphics* KDESalFrame::GetGraphics()
             }
         }
     }
-    
+
     return NULL;
 }
 

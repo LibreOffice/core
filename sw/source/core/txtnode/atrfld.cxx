@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ SwFmtFld::~SwFmtFld()
     SwFieldType* pType = pField ? pField->GetTyp() : 0;
 
     if (pType && pType->Which() == RES_DBFLD)
-        pType = 0;	// DB-Feldtypen zerstoeren sich selbst
+        pType = 0;  // DB-Feldtypen zerstoeren sich selbst
 
     Broadcast( SwFmtFldHint( this, SWFMTFLD_REMOVED ) );
     delete pField;
@@ -255,7 +255,7 @@ BOOL SwFmtFld::IsProtect() const
 |*
 |*    Beschreibung      Attribut fuer automatischen Text, Ctor
 |*    Ersterstellung    BP 30.04.92
-|*    Letzte Aenderung	JP 15.08.94
+|*    Letzte Aenderung  JP 15.08.94
 |*
 *************************************************************************/
 
@@ -284,7 +284,7 @@ SwTxtFld::~SwTxtFld( )
 |*
 |*    Beschreibung      exandiert das Feld und tauscht den Text im Node
 |*    Ersterstellung    BP 30.04.92
-|*    Letzte Aenderung	JP 15.08.94
+|*    Letzte Aenderung  JP 15.08.94
 |*
 *************************************************************************/
 
@@ -312,7 +312,7 @@ void SwTxtFld::Expand() const
         {
             // BP: das muesste man noch optimieren!
             //JP 12.06.97: stimmt, man sollte auf jedenfall eine Status-
-            //				aenderung an die Frames posten
+            //              aenderung an die Frames posten
             if( m_pTxtNode->CalcHiddenParaField() )
             {
                 m_pTxtNode->Modify( 0, 0 );
@@ -381,7 +381,7 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
     {
         // erzeuge aus der internen (fuer CORE) die externe (fuer UI) Formel
         const SwTableNode* pTblNd = m_pTxtNode->FindTableNode();
-        if( pTblNd )		// steht in einer Tabelle
+        if( pTblNd )        // steht in einer Tabelle
             ((SwTblField*)rFmtFld.GetFld())->PtrToBoxNm( &pTblNd->GetTable() );
     }
 }

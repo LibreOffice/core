@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,26 +71,26 @@ view::PageObject* PageObjectFactory::CreatePageObject (
 
 
 
-::sdr::contact::ViewContact* 
+::sdr::contact::ViewContact*
     PageObjectFactory::CreateViewContact (
         view::PageObject* pPageObject,
         const model::SharedPageDescriptor& rpDescriptor) const
 {
     return new view::PageObjectViewContact (
-        *pPageObject, 
+        *pPageObject,
         rpDescriptor);
 }
 
 
 
 
-::sdr::contact::ViewObjectContact* 
+::sdr::contact::ViewObjectContact*
     PageObjectFactory::CreateViewObjectContact (
         ::sdr::contact::ObjectContact& rObjectContact,
         ::sdr::contact::ViewContact& rViewContact) const
 {
     return new view::PageObjectViewObjectContact (
-        rObjectContact, 
+        rObjectContact,
         rViewContact,
         mpPageCache,
         mpProperties);

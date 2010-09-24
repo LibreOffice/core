@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ class DrawViewShell;
 
 /** This class implements the DrawViewShell specific part of the controller.
 */
-class SdUnoDrawView 
+class SdUnoDrawView
     : private cppu::BaseMutex,
       public DrawSubControllerInterfaceBase
 {
@@ -61,34 +61,34 @@ public:
     virtual ~SdUnoDrawView (void) throw();
 
     // XSelectionSupplier
-    
+
     virtual sal_Bool SAL_CALL select (
         const css::uno::Any& aSelection)
         throw(css::lang::IllegalArgumentException,
             css::uno::RuntimeException);
-    
+
     virtual css::uno::Any SAL_CALL getSelection (void)
         throw(css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL addSelectionChangeListener (
         const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
         throw(css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL removeSelectionChangeListener (
         const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
         throw(css::uno::RuntimeException);
 
-    
+
     // XDrawView
-    
+
     virtual void SAL_CALL setCurrentPage (
         const css::uno::Reference<css::drawing::XDrawPage >& xPage)
         throw(css::uno::RuntimeException);
-    
+
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
         throw(css::uno::RuntimeException);
 
-    
+
     // XFastPropertySet
 
     virtual void SAL_CALL setFastPropertyValue (
@@ -99,13 +99,13 @@ public:
             css::lang::IllegalArgumentException,
             css::lang::WrappedTargetException,
             css::uno::RuntimeException);
-    
+
     virtual css::uno::Any SAL_CALL getFastPropertyValue (
         sal_Int32 nHandle)
         throw(css::beans::UnknownPropertyException,
             css::lang::WrappedTargetException,
             css::uno::RuntimeException);
-    
+
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);

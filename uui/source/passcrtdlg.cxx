@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ PasswordCreateDialog::PasswordCreateDialog( Window* _pParent, ResMgr * pResMgr, 
     ,aOKBtn   ( this, ResId( BTN_PASSCRT_OK, *pResMgr )    )
     ,aCancelBtn   ( this, ResId( BTN_PASSCRT_CANCEL, *pResMgr )    )
     ,aHelpBtn   ( this, ResId( BTN_PASSCRT_HELP, *pResMgr )    )
-    ,pResourceMgr			( pResMgr )
+    ,pResourceMgr           ( pResMgr )
     ,nMinLen(1) // if it should be changed for ODF, it must stay 1 for bMSCryptoMode
 {
     FreeResource();
@@ -103,7 +103,7 @@ PasswordCreateDialog::PasswordCreateDialog( Window* _pParent, ResMgr * pResMgr, 
     Rectangle aRect = aFTWarning.GetTextRect( aLabelRect, aFTWarning.GetText() );
 
     long nNewLabelHeight = 0;
-    for( nNewLabelHeight = ( nTextWidth / nLabelWidth + 1 ) * nTextHeight; 
+    for( nNewLabelHeight = ( nTextWidth / nLabelWidth + 1 ) * nTextHeight;
         nNewLabelHeight < aRect.GetHeight();
         nNewLabelHeight += nTextHeight ) {} ;
 

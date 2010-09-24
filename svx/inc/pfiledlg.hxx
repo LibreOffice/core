@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 class SVX_DLLPUBLIC SvxPluginFileDlg
 {
 private:
-    sfx2::FileDialogHelper			maFileDlg;
+    sfx2::FileDialogHelper          maFileDlg;
 
 public:
     // with nKind = SID_INSERT_SOUND    or
@@ -49,14 +49,14 @@ public:
     SvxPluginFileDlg (Window *pParent, USHORT nKind );
     ~SvxPluginFileDlg ();
 
-    ErrCode					 Execute();
-    String					 GetPath() const;
+    ErrCode                  Execute();
+    String                   GetPath() const;
 
     static bool IsAvailable (USHORT nKind);
 
     // setting HelpId and/or context of FileDialogHelper
-    void					SetDialogHelpId( const sal_Int32 nHelpId );
-    void					SetContext( sfx2::FileDialogHelper::Context eNewContext );
+    void                    SetDialogHelpId( const sal_Int32 nHelpId );
+    void                    SetContext( sfx2::FileDialogHelper::Context eNewContext );
 };
 
 #endif // _SVX_PFILEDLG_HXX

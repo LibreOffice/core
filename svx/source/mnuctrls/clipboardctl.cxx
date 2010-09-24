@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ SvxClipBoardControl::SvxClipBoardControl(
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     pClipboardFmtItem( 0 ),
-     pPopup		(0),
+     pPopup     (0),
     nItemId     (nId),
     bDisabled( FALSE )
 {
@@ -97,8 +97,8 @@ SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
         USHORT nId = GetId();
         rBox.SetItemDown( nId, TRUE );
 
-        pPopup->Execute( &rBox, rBox.GetItemRect( nId ), 
-            (rBox.GetAlign() == WINDOWALIGN_TOP || rBox.GetAlign() == WINDOWALIGN_BOTTOM) ? 
+        pPopup->Execute( &rBox, rBox.GetItemRect( nId ),
+            (rBox.GetAlign() == WINDOWALIGN_TOP || rBox.GetAlign() == WINDOWALIGN_BOTTOM) ?
                 POPUPMENU_EXECUTE_DOWN : POPUPMENU_EXECUTE_RIGHT );
 
         rBox.SetItemDown( nId, FALSE );

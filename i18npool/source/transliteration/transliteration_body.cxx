@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,8 +72,8 @@ sal_Bool SAL_CALL Transliteration_body::equals(
     throw RuntimeException();
 }
 
-Sequence< OUString > SAL_CALL 
-Transliteration_body::transliterateRange( const OUString& str1, const OUString& str2 ) 
+Sequence< OUString > SAL_CALL
+Transliteration_body::transliterateRange( const OUString& str1, const OUString& str2 )
     throw( RuntimeException)
 {
     Sequence< OUString > ostr(2);
@@ -95,7 +95,7 @@ static sal_uInt8 lcl_getMappingTypeForToggleCase( sal_uInt8 nMappingType, sal_Un
         const sal_Int16 nType = unicode::getUnicodeType( cChar );
         if (nType & 0x02 /* lower case*/)
             nRes = MappingTypeLowerToUpper;
-        else 
+        else
         {
             // should also work properly for non-upper characters like white spacs, numbers, ...
             nRes = MappingTypeUpperToLower;
@@ -106,10 +106,10 @@ static sal_uInt8 lcl_getMappingTypeForToggleCase( sal_uInt8 nMappingType, sal_Un
 }
 
 
-OUString SAL_CALL 
-Transliteration_body::transliterate( 
-    const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, 
-    Sequence< sal_Int32 >& offset) 
+OUString SAL_CALL
+Transliteration_body::transliterate(
+    const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+    Sequence< sal_Int32 >& offset)
     throw(RuntimeException)
 {
 #if 0
@@ -254,7 +254,7 @@ Transliteration_body::transliterate(
 #endif
 }
 
-OUString SAL_CALL 
+OUString SAL_CALL
 Transliteration_body::transliterateChar2String( sal_Unicode inChar ) throw(RuntimeException)
 {
         const Mapping &map = casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
@@ -269,7 +269,7 @@ Transliteration_body::transliterateChar2String( sal_Unicode inChar ) throw(Runti
         return OUString( pStr, SAL_NO_ACQUIRE );
 }
 
-sal_Unicode SAL_CALL 
+sal_Unicode SAL_CALL
 Transliteration_body::transliterateChar2Char( sal_Unicode inChar ) throw(MultipleCharsOutputException, RuntimeException)
 {
         const Mapping &map = casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
@@ -279,7 +279,7 @@ Transliteration_body::transliterateChar2Char( sal_Unicode inChar ) throw(Multipl
 }
 
 OUString SAL_CALL
-Transliteration_body::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, 
+Transliteration_body::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& offset) throw(RuntimeException)
 {
     return this->transliterate(inStr, startPos, nCount, offset);
@@ -387,9 +387,9 @@ static rtl::OUString lcl_ResolveLigature( sal_uInt32 cChar )
 #endif // if 0
 
 static rtl::OUString transliterate_titlecase_Impl(
-    const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, 
+    const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     const Locale &rLocale,
-    Sequence< sal_Int32 >& offset ) 
+    Sequence< sal_Int32 >& offset )
     throw(RuntimeException)
 {
     const OUString aText( inStr.copy( startPos, nCount ) );
@@ -400,7 +400,7 @@ static rtl::OUString transliterate_titlecase_Impl(
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         CharacterClassificationImpl aCharClassImpl( xMSF );
 
-        // because aCharClassImpl.toTitle does not handle ligatures or ß but will raise 
+        // because aCharClassImpl.toTitle does not handle ligatures or ß but will raise
         // an exception we need to handle the first chara manually...
 
         // we don't want to change surrogates by accident, thuse we use proper code point iteration
@@ -441,9 +441,9 @@ static rtl::OUString transliterate_titlecase_Impl(
 
 // this function expects to be called on a word-by-word basis,
 // namely that startPos points to the first char of the word
-rtl::OUString SAL_CALL Transliteration_titlecase::transliterate( 
-    const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, 
-    Sequence< sal_Int32 >& offset ) 
+rtl::OUString SAL_CALL Transliteration_titlecase::transliterate(
+    const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+    Sequence< sal_Int32 >& offset )
     throw(RuntimeException)
 {
     return transliterate_titlecase_Impl( inStr, startPos, nCount, aLocale, offset );
@@ -460,8 +460,8 @@ Transliteration_sentencecase::Transliteration_sentencecase()
 
 // this function expects to be called on a sentence-by-sentence basis,
 // namely that startPos points to the first word (NOT first char!) in the sentence
-rtl::OUString SAL_CALL Transliteration_sentencecase::transliterate( 
-    const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, 
+rtl::OUString SAL_CALL Transliteration_sentencecase::transliterate(
+    const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& offset )
     throw(RuntimeException)
 {

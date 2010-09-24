@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@ namespace slideshow {
 namespace internal {
 
 /** Templated setter for animation values
-    
+
     This template class implements the AnimationActivity
     interface, but only the perform() and
     setAttributeLayer() methods are functional. To be used for set animations.
-    
+
     @see AnimationSetNode.
 */
 template <class AnimationT>
@@ -55,7 +55,7 @@ class SetActivity : public AnimationActivity
 public:
     typedef ::boost::shared_ptr< AnimationT >   AnimationSharedPtrT;
     typedef typename AnimationT::ValueType      ValueT;
-    
+
     SetActivity( const ActivitiesFactory::CommonParameters& rParms,
                  const AnimationSharedPtrT&                 rAnimation,
                  const ValueT&                              rToValue )
@@ -69,7 +69,7 @@ public:
     {
         ENSURE_OR_THROW( mpAnimation, "Invalid animation" );
     }
-    
+
     virtual void dispose()
     {
         mbIsActive = false;
@@ -81,19 +81,19 @@ public:
             mpEndEvent->dispose();
         mpEndEvent.reset();
     }
-    
+
     virtual double calcTimeLag() const
     {
         return 0.0;
     }
-    
+
     virtual bool perform()
     {
         if (! isActive())
             return false;
         // we're going inactive immediately:
         mbIsActive = false;
-        
+
         if (mpAnimation && mpAttributeLayer && mpShape) {
             mpAnimation->start( mpShape, mpAttributeLayer );
             (*mpAnimation)(maToValue);
@@ -102,15 +102,15 @@ public:
         // fire end event, if any
         if (mpEndEvent)
             mrEventQueue.addEvent( mpEndEvent );
-        
+
         return false; // don't reinsert
     }
-    
+
     virtual bool isActive() const
     {
         return mbIsActive;
     }
-    
+
     virtual void dequeued()
     {
     }
@@ -119,17 +119,17 @@ public:
     {
         perform();
     }
-    
+
     virtual void setTargets( const AnimatableShapeSharedPtr&        rShape,
                              const ShapeAttributeLayerSharedPtr&    rAttrLayer )
     {
         ENSURE_OR_THROW( rShape, "Invalid shape" );
         ENSURE_OR_THROW( rAttrLayer, "Invalid attribute layer" );
-        
+
         mpShape = rShape;
         mpAttributeLayer = rAttrLayer;
     }
-    
+
 private:
     AnimationSharedPtrT             mpAnimation;
     AnimatableShapeSharedPtr        mpShape;

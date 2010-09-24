@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,45 +42,45 @@ class SwCompatibilityOptPage : public SfxTabPage
 {
 private:
     // controls
-    FixedLine				m_aMainFL;
-    FixedText				m_aFormattingFT;
-    ListBox					m_aFormattingLB;
-    FixedText				m_aOptionsFT;
-    SvxCheckListBox			m_aOptionsLB;
-    PushButton				m_aResetPB;
-    PushButton				m_aDefaultPB;
+    FixedLine               m_aMainFL;
+    FixedText               m_aFormattingFT;
+    ListBox                 m_aFormattingLB;
+    FixedText               m_aOptionsFT;
+    SvxCheckListBox         m_aOptionsLB;
+    PushButton              m_aResetPB;
+    PushButton              m_aDefaultPB;
     // config item
-    SvtCompatibilityOptions	m_aConfigItem;
+    SvtCompatibilityOptions m_aConfigItem;
     // text of the user entry
-    String					m_sUserEntry;
+    String                  m_sUserEntry;
     // text of the "use as default" querybox
-    String					m_sUseAsDefaultQuery;
+    String                  m_sUseAsDefaultQuery;
     // shell of the current document
-    SwWrtShell*				m_pWrtShell;
+    SwWrtShell*             m_pWrtShell;
     // impl object
     SwCompatibilityOptPage_Impl* m_pImpl;
     // saved options after "Reset"; used in "FillItemSet" for comparison
-    ULONG					m_nSavedOptions;
+    ULONG                   m_nSavedOptions;
 
     // handler
-    DECL_LINK( 				SelectHdl, ListBox* );
-    DECL_LINK(				UseAsDefaultHdl, PushButton* );
+    DECL_LINK(              SelectHdl, ListBox* );
+    DECL_LINK(              UseAsDefaultHdl, PushButton* );
 
     // private methods
-    void					InitControls( const SfxItemSet& rSet );
-    void					ReplaceFormatName( String& rEntry );
-    void					SetCurrentOptions( ULONG nOptions );
-    ULONG					GetDocumentOptions() const;
-    void					WriteOptions();
+    void                    InitControls( const SfxItemSet& rSet );
+    void                    ReplaceFormatName( String& rEntry );
+    void                    SetCurrentOptions( ULONG nOptions );
+    ULONG                   GetDocumentOptions() const;
+    void                    WriteOptions();
 
 public:
     SwCompatibilityOptPage( Window* pParent, const SfxItemSet& rSet );
     ~SwCompatibilityOptPage();
 
-    static SfxTabPage*		Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual	BOOL 			FillItemSet( SfxItemSet& rSet );
-    virtual	void 			Reset( const SfxItemSet& rSet );
+    virtual BOOL            FillItemSet( SfxItemSet& rSet );
+    virtual void            Reset( const SfxItemSet& rSet );
 };
 
 #endif

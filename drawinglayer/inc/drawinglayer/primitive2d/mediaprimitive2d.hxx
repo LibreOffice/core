@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace drawinglayer
             This is a unified primitive for Media visualisation, e.g. animations
             or sounds. It's geometry is defined by Transform. For conveinience,
             it also contains a discrete border size (aka Pixels) which will be added
-            if used. This makes it a view-dependent primitive. It also gets a filled 
+            if used. This makes it a view-dependent primitive. It also gets a filled
             background and the decomposition will try to create a graphic representation
             if te content (defined by the URL), e.g. a still frome for animated stuff.
          */
@@ -51,16 +51,16 @@ namespace drawinglayer
         {
         private:
             /// the geometry definition
-            basegfx::B2DHomMatrix						maTransform;
+            basegfx::B2DHomMatrix                       maTransform;
 
             /// the content definition
-            rtl::OUString								maURL;
+            rtl::OUString                               maURL;
 
             /// style: background color
-            basegfx::BColor								maBackgroundColor;
+            basegfx::BColor                             maBackgroundColor;
 
             /// discrete border (in 'pixels')
-            sal_uInt32									mnDiscreteBorder;
+            sal_uInt32                                  mnDiscreteBorder;
 
         protected:
             /// local decomposition

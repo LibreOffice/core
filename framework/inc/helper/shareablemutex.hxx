@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,12 +52,12 @@ class ShareableMutex
         {
             MutexRef() : m_refCount(0) {}
             void acquire()
-            { 
+            {
                 osl_incrementInterlockedCount( &m_refCount );
             }
-            
+
             void release()
-            { 
+            {
                 if ( osl_decrementInterlockedCount( &m_refCount ) == 0 )
                     delete this;
             }
@@ -77,7 +77,7 @@ class ShareGuard
         {
             m_rShareMutex.acquire();
         }
-        
+
         ~ShareGuard()
         {
             m_rShareMutex.release();
@@ -89,7 +89,7 @@ class ShareGuard
 
         ShareableMutex& m_rShareMutex;
 };
-                            
+
 }
 
 #endif // #ifndef __FRAMEWORK_HELPER_SHAREABLEMUTEX_HXX_

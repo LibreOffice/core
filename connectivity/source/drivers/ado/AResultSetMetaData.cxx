@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 OResultSetMetaData::OResultSetMetaData( ADORecordset* _pRecordSet)
-                    :	m_pRecordSet(_pRecordSet),
+                    :   m_pRecordSet(_pRecordSet),
                         m_nColCount(-1)
 {
     if ( m_pRecordSet )
@@ -78,9 +78,9 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, Ru
     if ( !m_pRecordSet )
         return 0;
 
-    ADOFields* pFields	= NULL;
+    ADOFields* pFields  = NULL;
     m_pRecordSet->get_Fields(&pFields);
-    WpOLEAppendCollection<ADOFields, ADOField, WpADOField>	aFields(pFields);
+    WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(pFields);
     m_nColCount = aFields.GetItemCount();
     return m_nColCount;
 }
@@ -237,7 +237,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLEx
     WpADOField aField = ADOS::getField(m_pRecordSet,column);
     if(aField.IsValid())
     {
-        //	return (aField.GetStatus() & adFieldReadOnly) == adFieldReadOnly;
+        //  return (aField.GetStatus() & adFieldReadOnly) == adFieldReadOnly;
     }
     return sal_False;
 }

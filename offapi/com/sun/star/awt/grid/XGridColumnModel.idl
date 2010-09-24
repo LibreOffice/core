@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,30 +24,30 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_grid_XGridColumnModel_idl__ 
-#define __com_sun_star_awt_grid_XGridColumnModel_idl__ 
- 
-#include <com/sun/star/uno/XInterface.idl> 
+#ifndef __com_sun_star_awt_grid_XGridColumnModel_idl__
+#define __com_sun_star_awt_grid_XGridColumnModel_idl__
 
-#include <com/sun/star/awt/grid/XGridColumn.idl> 
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/awt/grid/XGridColumn.idl>
 
 #include <com/sun/star/awt/grid/XGridColumnListener.idl>
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module awt { module grid { 
- 
-//============================================================================= 
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt { module grid {
+
+//=============================================================================
 
 /** An instance of this interface is used by the <type>UnoControlGrid</type> to
     retrieve the column structure that is displayed in the actual control.
 
     If you do not need your own model implementation, you can also use the <type>DefaultGridColumnModel</type>.
-    
+
     @since OOo 3.3.0
-*/     
+*/
 interface XGridColumnModel
-{ 
+{
     ///** Specifies whether column selection is allowed
     //*/
     //[attribute] boolean ColumnSelectionAllowed;
@@ -61,7 +61,7 @@ interface XGridColumnModel
                 the number of columns.
     */
     long getColumnCount();
-    
+
     /** Adds a column to the model.
         @param column
             the column to add to the model.
@@ -73,11 +73,11 @@ interface XGridColumnModel
 
     /*
     long getSelectedCount();
-    
+
     sequence<XGridColumn> getSelectedColumns();
-    
+
     sequence<long> getSelectedIndex();
-    
+
     */
 
     /** Returns all columns of the model.
@@ -85,7 +85,7 @@ interface XGridColumnModel
                  all columns associated with the model in a sequence of <type>XGridColumn</type>.
     */
     sequence<XGridColumn> getColumns();
-    
+
     /** Returns a specific column.
         @param index
                 the position of the requested column.
@@ -100,20 +100,20 @@ interface XGridColumnModel
     */
     void setDefaultColumns([in] long elements);
 
-    /**Creates new XGridColumn with the settings of other column. To be used if the columns which are added to 
+    /**Creates new XGridColumn with the settings of other column. To be used if the columns which are added to
         the column model have the same settings.
         @param column
-            the column, which is already created	
+            the column, which is already created
     */
     XGridColumn copyColumn( [in] XGridColumn column );
-    
+
     /*
     long getTotalColumnWidth();
     */
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; }; 
- 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

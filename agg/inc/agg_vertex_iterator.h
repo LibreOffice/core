@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -13,8 +13,8 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 //
-// classes: vertex_iterator 
-//          vertex_source_adaptor 
+// classes: vertex_iterator
+//          vertex_source_adaptor
 //          vertex_source_adaptor_with_id
 //
 //----------------------------------------------------------------------------
@@ -39,7 +39,7 @@ namespace agg
             m_vs->rewind(id);
             m_vertex.cmd = m_vs->vertex(&m_vertex.x, &m_vertex.y);
         }
-        vertex_iterator& operator++() 
+        vertex_iterator& operator++()
         {
             m_vertex.cmd = m_vs->vertex(&m_vertex.x, &m_vertex.y);
             return *this;
@@ -48,9 +48,9 @@ namespace agg
         const vertex_type& operator*() const { return m_vertex; }
         const vertex_type* operator->() const { return &m_vertex; }
 
-        bool operator != (const vertex_iterator& i) 
-        { 
-            return m_vertex.cmd != i.m_vertex.cmd; 
+        bool operator != (const vertex_iterator& i)
+        {
+            return m_vertex.cmd != i.m_vertex.cmd;
         }
 
     private:
@@ -65,7 +65,7 @@ namespace agg
     public:
         vertex_source_adaptor(const VertexContainer& container) :
             m_container(&container) {}
-        
+
         void rewind(unsigned)
         {
             m_iterator = m_container->begin();
@@ -99,7 +99,7 @@ namespace agg
     public:
         vertex_source_adaptor_with_id(const VertexContainer& container) :
             m_container(&container) {}
-        
+
         void rewind(unsigned id)
         {
             m_iterator = m_container->begin(id);

@@ -49,7 +49,7 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) throw (css::uno::RuntimeException);
-    
+
 protected:
     virtual bool implEventsEnabled() throw (css::uno::RuntimeException);
     virtual bool implPrepareEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::uno::RuntimeException);
@@ -73,7 +73,7 @@ private:
     css::uno::Any createHyperlink( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
     /** Creates a VBA Window object. */
     css::uno::Any createWindow() const throw (css::uno::RuntimeException);
-    
+
 private:
     mutable css::uno::WeakReference< ov::excel::XApplication > mxApplication;
     ::rtl::Reference< ScVbaEventsListener > mxListener;

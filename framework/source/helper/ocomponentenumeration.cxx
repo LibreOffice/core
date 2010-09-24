@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <helper/ocomponentenumeration.hxx>
 
@@ -38,49 +38,49 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
-using namespace ::com::sun::star::container		;
-using namespace ::com::sun::star::lang			;
-using namespace ::com::sun::star::uno			;
-using namespace ::cppu							;
-using namespace ::osl							;
-using namespace ::rtl							;
+using namespace ::com::sun::star::container     ;
+using namespace ::com::sun::star::lang          ;
+using namespace ::com::sun::star::uno           ;
+using namespace ::cppu                          ;
+using namespace ::osl                           ;
+using namespace ::rtl                           ;
 
 //_________________________________________________________________________________________________________________
-//	non exported const
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//	non exported definitions
+//  non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  non exported definitions
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
+//  declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
 OComponentEnumeration::OComponentEnumeration( const Sequence< Reference< XComponent > >& seqComponents )
-        //	Init baseclasses first
-        //	Attention:
-        //		Don't change order of initialization!
+        //  Init baseclasses first
+        //  Attention:
+        //      Don't change order of initialization!
         //      ThreadHelpBase is a struct with a mutex as member. We can't use a mutex as member, while
-        //		we must garant right initialization and a valid value of this! First initialize
-        //		baseclasses and then members. And we need the mutex for other baseclasses !!!
+        //      we must garant right initialization and a valid value of this! First initialize
+        //      baseclasses and then members. And we need the mutex for other baseclasses !!!
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
         // Init member
         ,   m_nPosition     ( 0                             )   // 0 is the first position for a valid list and the right value for an invalid list to!
@@ -92,7 +92,7 @@ OComponentEnumeration::OComponentEnumeration( const Sequence< Reference< XCompon
 }
 
 //*****************************************************************************************************************
-//	destructor
+//  destructor
 //*****************************************************************************************************************
 OComponentEnumeration::~OComponentEnumeration()
 {
@@ -101,7 +101,7 @@ OComponentEnumeration::~OComponentEnumeration()
 }
 
 //*****************************************************************************************************************
-//	XEventListener
+//  XEventListener
 //*****************************************************************************************************************
 void SAL_CALL OComponentEnumeration::disposing( const EventObject&
 #if OSL_DEBUG_LEVEL > 0
@@ -121,7 +121,7 @@ aEvent
 }
 
 //*****************************************************************************************************************
-//	XEnumeration
+//  XEnumeration
 //*****************************************************************************************************************
 sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeException )
 {
@@ -136,11 +136,11 @@ sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeExcepti
 }
 
 //*****************************************************************************************************************
-//	XEnumeration
+//  XEnumeration
 //*****************************************************************************************************************
-Any SAL_CALL OComponentEnumeration::nextElement() throw(	NoSuchElementException	,
-                                                             WrappedTargetException	,
-                                                            RuntimeException		)
+Any SAL_CALL OComponentEnumeration::nextElement() throw(    NoSuchElementException  ,
+                                                             WrappedTargetException ,
+                                                            RuntimeException        )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -163,7 +163,7 @@ Any SAL_CALL OComponentEnumeration::nextElement() throw(	NoSuchElementException	
 }
 
 //*****************************************************************************************************************
-//	proteced method
+//  proteced method
 //*****************************************************************************************************************
 void OComponentEnumeration::impl_resetObject()
 {
@@ -183,7 +183,7 @@ void OComponentEnumeration::impl_resetObject()
 }
 
 //_________________________________________________________________________________________________________________
-//	debug methods
+//  debug methods
 //_________________________________________________________________________________________________________________
 
 /*-----------------------------------------------------------------------------------------------------------------
@@ -205,7 +205,7 @@ sal_Bool OComponentEnumeration::impldbg_checkParameter_OComponentEnumerationCtor
     // Set default return value.
     sal_Bool bOK = sal_True;
     // Check parameter.
-    if	(
+    if  (
             ( &seqComponents == NULL )
         )
     {
@@ -221,9 +221,9 @@ sal_Bool OComponentEnumeration::impldbg_checkParameter_disposing( const EventObj
     // Set default return value.
     sal_Bool bOK = sal_True;
     // Check parameter.
-    if	(
-            ( &aEvent				==	NULL		)	||
-            ( aEvent.Source.is()	==	sal_False	)
+    if  (
+            ( &aEvent               ==  NULL        )   ||
+            ( aEvent.Source.is()    ==  sal_False   )
         )
     {
         bOK = sal_False ;
@@ -232,6 +232,6 @@ sal_Bool OComponentEnumeration::impldbg_checkParameter_disposing( const EventObj
     return bOK ;
 }
 
-#endif	//	#ifdef ENABLE_ASSERTIONS
+#endif  //  #ifdef ENABLE_ASSERTIONS
 
-}		//	namespace framework
+}       //  namespace framework

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,6 +55,7 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
@@ -101,7 +102,7 @@
 
 
 #define ScFormatShell
-#define	TableFont
+#define TableFont
 #define FormatForSelection
 #include "scslots.hxx"
 
@@ -158,7 +159,7 @@ ScFormatShell::ScFormatShell(ScViewData* pData) :
     SfxShell(pData->GetViewShell()),
     pViewData(pData)
 {
-    ScTabViewShell*	pTabViewShell = GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
 
     SetPool( &pTabViewShell->GetPool() );
     SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
@@ -179,19 +180,19 @@ ScFormatShell::~ScFormatShell()
 
 void __EXPORT ScFormatShell::GetStyleState( SfxItemSet& rSet )
 {
-    ScDocument*				pDoc  		= GetViewData()->GetDocument();
-    ScTabViewShell*	pTabViewShell  		= GetViewData()->GetViewShell();
-    SfxStyleSheetBasePool*	pStylePool	= pDoc->GetStyleSheetPool();
+    ScDocument*             pDoc        = GetViewData()->GetDocument();
+    ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
+    SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
 
     BOOL bProtected = FALSE;
     SCTAB nTabCount = pDoc->GetTableCount();
     for (SCTAB i=0; i<nTabCount; i++)
-        if (pDoc->IsTabProtected(i))				// ueberhaupt eine Tabelle geschuetzt?
+        if (pDoc->IsTabProtected(i))                // ueberhaupt eine Tabelle geschuetzt?
             bProtected = TRUE;
 
-    SfxWhichIter	aIter(rSet);
-    USHORT			nWhich = aIter.FirstWhich();
-    USHORT			nSlotId = 0;
+    SfxWhichIter    aIter(rSet);
+    USHORT          nWhich = aIter.FirstWhich();
+    USHORT          nSlotId = 0;
 
     while ( nWhich )
     {
@@ -206,7 +207,7 @@ void __EXPORT ScFormatShell::GetStyleState( SfxItemSet& rSet )
                     rSet.DisableItem( nSlotId );
                 break;
 
-            case SID_STYLE_FAMILY2:		// Zellvorlagen
+            case SID_STYLE_FAMILY2:     // Zellvorlagen
             {
                 SfxStyleSheet* pStyleSheet = (SfxStyleSheet*)
                                              pTabViewShell->GetStyleSheetFromMarked();
@@ -218,11 +219,11 @@ void __EXPORT ScFormatShell::GetStyleState( SfxItemSet& rSet )
             }
             break;
 
-            case SID_STYLE_FAMILY4:		// Seitenvorlagen
+            case SID_STYLE_FAMILY4:     // Seitenvorlagen
             {
-                SCTAB			nCurTab		= GetViewData()->GetTabNo();
-                String			aPageStyle  = pDoc->GetPageStyle( nCurTab );
-                SfxStyleSheet*	pStyleSheet = (SfxStyleSheet*)pStylePool->
+                SCTAB           nCurTab     = GetViewData()->GetTabNo();
+                String          aPageStyle  = pDoc->GetPageStyle( nCurTab );
+                SfxStyleSheet*  pStyleSheet = (SfxStyleSheet*)pStylePool->
                                     Find( aPageStyle, SFX_STYLE_FAMILY_PAGE );
 
                 if ( pStyleSheet )
@@ -281,17 +282,17 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     }
 
     //--------------------------------------------------------------------
-    SfxBindings&		rBindings	= pViewData->GetBindings();
-    const SfxItemSet*   pArgs   	= rReq.GetArgs();
-    const USHORT        nSlotId 	= rReq.GetSlot();
-    const SCTAB		    nCurTab		= GetViewData()->GetTabNo();
-    ScDocShell*			pDocSh		= GetViewData()->GetDocShell();
-    ScTabViewShell*		pTabViewShell= GetViewData()->GetViewShell();
-    ScDocument*         pDoc    	= pDocSh->GetDocument();
-    ScMarkData&			rMark		= GetViewData()->GetMarkData();
-    ScModule*			pScMod		= SC_MOD();
-    String				aRefName;
-    BOOL				bUndo		= pDoc->IsUndoEnabled();
+    SfxBindings&        rBindings   = pViewData->GetBindings();
+    const SfxItemSet*   pArgs       = rReq.GetArgs();
+    const USHORT        nSlotId     = rReq.GetSlot();
+    const SCTAB         nCurTab     = GetViewData()->GetTabNo();
+    ScDocShell*         pDocSh      = GetViewData()->GetDocShell();
+    ScTabViewShell*     pTabViewShell= GetViewData()->GetViewShell();
+    ScDocument*         pDoc        = pDocSh->GetDocument();
+    ScMarkData&         rMark       = GetViewData()->GetMarkData();
+    ScModule*           pScMod      = SC_MOD();
+    String              aRefName;
+    BOOL                bUndo       = pDoc->IsUndoEnabled();
 
     if (   (nSlotId == SID_STYLE_NEW)
         || (nSlotId == SID_STYLE_EDIT)
@@ -302,13 +303,13 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         || (nSlotId == SID_STYLE_NEW_BY_EXAMPLE)
         || (nSlotId == SID_STYLE_UPDATE_BY_EXAMPLE) )
     {
-        SfxStyleSheetBasePool*  pStylePool	= pDoc->GetStyleSheetPool();
+        SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
         SfxStyleSheetBase*      pStyleSheet = NULL;
 
         BOOL bStyleToMarked = FALSE;
         BOOL bListAction = FALSE;
-        BOOL bAddUndo = FALSE;			// add ScUndoModifyStyle (style modified)
-        ScStyleSaveData aOldData;		// for undo/redo
+        BOOL bAddUndo = FALSE;          // add ScUndoModifyStyle (style modified)
+        ScStyleSaveData aOldData;       // for undo/redo
         ScStyleSaveData aNewData;
 
         SfxStyleFamily eFamily = SFX_STYLE_FAMILY_PARA;
@@ -491,18 +492,18 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         // muss noch darauf geachtet werden, Items aus Vorlagen nicht
                         // zu uebernehmen (GetSelectionPattern sammelt auch Items aus
                         // Vorlagen zusammen) (#44748#)
-                        //		pAttrItem = GetSelectionPattern();
+                        //      pAttrItem = GetSelectionPattern();
 
                         // ScViewData* pViewData = GetViewData();
-                        SCCOL		nCol = pViewData->GetCurX();
-                        SCROW		nRow = pViewData->GetCurY();
+                        SCCOL       nCol = pViewData->GetCurX();
+                        SCROW       nRow = pViewData->GetCurY();
                         pAttrItem = pDoc->GetPattern( nCol, nRow, nCurTab );
 
                         SfxItemSet aAttrSet = pAttrItem->GetItemSet();
                         aAttrSet.ClearItem( ATTR_MERGE );
                         aAttrSet.ClearItem( ATTR_MERGE_FLAG );
-                        //	bedingte Formatierung und Gueltigkeit nicht uebernehmen,
-                        //	weil sie in der Vorlage nicht editiert werden koennen
+                        //  bedingte Formatierung und Gueltigkeit nicht uebernehmen,
+                        //  weil sie in der Vorlage nicht editiert werden koennen
                         aAttrSet.ClearItem( ATTR_VALIDDATA );
                         aAttrSet.ClearItem( ATTR_CONDITIONAL );
 
@@ -515,8 +516,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 bListAction = TRUE;
                             }
 
-                            BOOL			bConvertBack = FALSE;
-                            SfxStyleSheet*	pSheetInUse = (SfxStyleSheet*)
+                            BOOL            bConvertBack = FALSE;
+                            SfxStyleSheet*  pSheetInUse = (SfxStyleSheet*)
                                                           pTabViewShell->GetStyleSheetFromMarked();
 
                             // wenn neuer Style vorhanden und in der Selektion
@@ -558,8 +559,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             pStyleSheet->GetItemSet().Put( aAttrSet );
                             pTabViewShell->UpdateStyleSheetInUse( (SfxStyleSheet*)pStyleSheet );
 
-                            //	call SetStyleSheetToMarked after adding the ScUndoModifyStyle
-                            //	(pStyleSheet pointer is used!)
+                            //  call SetStyleSheetToMarked after adding the ScUndoModifyStyle
+                            //  (pStyleSheet pointer is used!)
                             bStyleToMarked = TRUE;
                         }
                         else // ( nSlotId == SID_STYLE_UPDATE_BY_EXAMPLE )
@@ -580,8 +581,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 pStyleSheet->GetItemSet().Put( aAttrSet );
                                 pTabViewShell->UpdateStyleSheetInUse( (SfxStyleSheet*)pStyleSheet );
 
-                                //	call SetStyleSheetToMarked after adding the ScUndoModifyStyle
-                                //	(pStyleSheet pointer is used!)
+                                //  call SetStyleSheetToMarked after adding the ScUndoModifyStyle
+                                //  (pStyleSheet pointer is used!)
                                 bStyleToMarked = TRUE;
                             }
                         }
@@ -662,10 +663,10 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                         if ( rStrCurStyle != aStyleName )
                         {
-                            SfxStyleSheetBase*	pCurStyle = pStylePool->Find( rStrCurStyle, eFamily );
-                            SfxItemSet			aAttrSet  = pCurStyle->GetItemSet();
-                            SCTAB				nInTab;
-                            BOOL				bUsed = pDoc->IsPageStyleInUse( aStyleName, &nInTab );
+                            SfxStyleSheetBase*  pCurStyle = pStylePool->Find( rStrCurStyle, eFamily );
+                            SfxItemSet          aAttrSet  = pCurStyle->GetItemSet();
+                            SCTAB               nInTab;
+                            BOOL                bUsed = pDoc->IsPageStyleInUse( aStyleName, &nInTab );
 
                             // wenn bereits vorhanden, erstmal entfernen...
                             if ( pStyleSheet )
@@ -708,14 +709,14 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             {
                 SvxNumberInfoItem* pNumberInfoItem = NULL;
 
-                SfxStyleFamily	eFam    = pStyleSheet->GetFamily();
+                SfxStyleFamily  eFam    = pStyleSheet->GetFamily();
                 // ScDocument*     pDoc    = GetViewData()->GetDocument();
                 // ScDocShell*     pDocSh  = GetViewData()->GetDocShell();
-                //CHINA001 ScStyleDlg*		pDlg    = NULL;
+                //CHINA001 ScStyleDlg*      pDlg    = NULL;
                 SfxAbstractTabDialog* pDlg    = NULL; //CHINA001
-                USHORT			nRsc	= 0;
+                USHORT          nRsc    = 0;
 
-                //	#37034#/#37245# alte Items aus der Vorlage merken
+                //  #37034#/#37245# alte Items aus der Vorlage merken
                 SfxItemSet aOldSet = pStyleSheet->GetItemSet();
                 String aOldName = pStyleSheet->GetName();
 
@@ -757,14 +758,14 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             pDocSh->PutItem( *pNumberInfoItem );
                             nRsc = RID_SCDLG_STYLES_PAR;
 
-                            //	auf jeden Fall ein SvxBoxInfoItem mit Table = FALSE im Set:
-                            //	(wenn gar kein Item da ist, loescht der Dialog auch das
-                            //	 BORDER_OUTER SvxBoxItem aus dem Vorlagen-Set)
+                            //  auf jeden Fall ein SvxBoxInfoItem mit Table = FALSE im Set:
+                            //  (wenn gar kein Item da ist, loescht der Dialog auch das
+                            //   BORDER_OUTER SvxBoxItem aus dem Vorlagen-Set)
 
                             if ( rSet.GetItemState( ATTR_BORDER_INNER, FALSE ) != SFX_ITEM_SET )
                             {
                                 SvxBoxInfoItem aBoxInfoItem( ATTR_BORDER_INNER );
-                                aBoxInfoItem.SetTable(FALSE);		// keine inneren Linien
+                                aBoxInfoItem.SetTable(FALSE);       // keine inneren Linien
                                 aBoxInfoItem.SetDist(TRUE);
                                 aBoxInfoItem.SetMinDist(FALSE);
                                 rSet.Put( aBoxInfoItem );
@@ -773,18 +774,18 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         break;
                 }
 
-                //	If GetDefDialogParent is a dialog, it must be used
-                //	(style catalog)
+                //  If GetDefDialogParent is a dialog, it must be used
+                //  (style catalog)
 
                 Window* pParent = Application::GetDefDialogParent();
                 if ( !pParent || !pParent->IsDialog() )
                 {
-                    //	#107256# GetDefDialogParent currently doesn't return the window
-                    //	that was set with SetDefDialogParent (but dynamically finds the
-                    //	topmost parent of the focus window), so IsDialog above is FALSE
-                    //	even if called from the style catalog.
-                    //	-> Use NULL if a modal dialog is open, to enable the Dialog's
-                    //	default parent handling.
+                    //  #107256# GetDefDialogParent currently doesn't return the window
+                    //  that was set with SetDefDialogParent (but dynamically finds the
+                    //  topmost parent of the focus window), so IsDialog above is FALSE
+                    //  even if called from the style catalog.
+                    //  -> Use NULL if a modal dialog is open, to enable the Dialog's
+                    //  default parent handling.
                     if ( Application::IsInModalMode() )
                         pParent = NULL;
                     else
@@ -810,12 +811,12 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     {
                         nRetMask = pStyleSheet->GetMask();
 
-                        //	#37034#/#37245# Attribut-Vergleiche (frueher in ModifyStyleSheet)
-                        //	jetzt hier mit den alten Werten (Style ist schon veraendert)
+                        //  #37034#/#37245# Attribut-Vergleiche (frueher in ModifyStyleSheet)
+                        //  jetzt hier mit den alten Werten (Style ist schon veraendert)
 
                         if ( SFX_STYLE_FAMILY_PARA == eFam )
                         {
-//							pDoc->CellStyleChanged( *pStyleSheet, aOldSet );
+//                          pDoc->CellStyleChanged( *pStyleSheet, aOldSet );
 
                             SfxItemSet& rNewSet = pStyleSheet->GetItemSet();
                             BOOL bNumFormatChanged;
@@ -846,7 +847,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         }
                         else
                         {
-                            //!	auch fuer Seitenvorlagen die Abfragen hier
+                            //! auch fuer Seitenvorlagen die Abfragen hier
 
                             String aNewName = pStyleSheet->GetName();
                             if ( aNewName != aOldName &&
@@ -882,8 +883,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         pStylePool->Remove( pStyleSheet );
                     else
                     {
-                        //	falls zwischendurch etwas mit dem temporaer geaenderten
-                        //	ItemSet gepainted wurde:
+                        //  falls zwischendurch etwas mit dem temporaer geaenderten
+                        //  ItemSet gepainted wurde:
                         pDocSh->PostPaintGridAll();
                     }
                 }
@@ -891,7 +892,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             }
         }
 
-//		if ( nRetMask != 0xffff )// Irgendein Wert MUSS geliefert werden JN
+//      if ( nRetMask != 0xffff )// Irgendein Wert MUSS geliefert werden JN
             rReq.SetReturnValue( SfxUInt16Item( nSlotId, nRetMask ) );
 
 //      #96983# only stylist sends focus to sheet
@@ -904,8 +905,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
         if ( bStyleToMarked )
         {
-            //	call SetStyleSheetToMarked after adding the ScUndoModifyStyle,
-            //	so redo will find the modified style
+            //  call SetStyleSheetToMarked after adding the ScUndoModifyStyle,
+            //  so redo will find the modified style
             pTabViewShell->SetStyleSheetToMarked( (SfxStyleSheet*)pStyleSheet );
             pTabViewShell->InvalidateAttribs();
         }
@@ -921,12 +922,13 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
 void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 {
-    ScModule*			pScMod		= SC_MOD();
-    ScTabViewShell*	pTabViewShell  	= GetViewData()->GetViewShell();
-    const SfxItemSet*	pReqArgs	= rReq.GetArgs();
-    USHORT				nSlot		= rReq.GetSlot();
+    ScModule*           pScMod      = SC_MOD();
+    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    const SfxItemSet*   pReqArgs    = rReq.GetArgs();
+    USHORT              nSlot       = rReq.GetSlot();
+    SfxBindings& rBindings          = pTabViewShell->GetViewFrame()->GetBindings();
 
-    pTabViewShell->HideListBox();					// Autofilter-DropDown-Listbox
+    pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 
                                     // Eingabe beenden
     if ( GetViewData()->HasEditView( GetViewData()->GetActivePart() ) )
@@ -957,30 +959,57 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
         }
     }
 
+    short nType = GetCurrentNumberFormatType();
+    SfxItemSet aSet( GetPool(), nSlot, nSlot );
     switch ( nSlot )
     {
         case SID_NUMBER_TWODEC:
-            pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER, 4 );		// Standard+4 = #.##0,00
+            pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER, 4 );       // Standard+4 = #.##0,00
             rReq.Done();
             break;
         case SID_NUMBER_SCIENTIFIC:
-            pTabViewShell->SetNumberFormat( NUMBERFORMAT_SCIENTIFIC );
+            if ((nType & NUMBERFORMAT_SCIENTIFIC))
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER );
+            else
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_SCIENTIFIC );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & NUMBERFORMAT_SCIENTIFIC)) );
+            rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_DATE:
-            pTabViewShell->SetNumberFormat( NUMBERFORMAT_DATE );
+            if ((nType & NUMBERFORMAT_DATE))
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER );
+            else
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_DATE );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & NUMBERFORMAT_DATE)) );
+            rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_TIME:
-            pTabViewShell->SetNumberFormat( NUMBERFORMAT_TIME );
+            if ((nType & NUMBERFORMAT_TIME))
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER );
+            else
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_TIME );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & NUMBERFORMAT_TIME)) );
+            rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_CURRENCY:
-            pTabViewShell->SetNumberFormat( NUMBERFORMAT_CURRENCY );
+            if ((nType & NUMBERFORMAT_CURRENCY))
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER );
+            else
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_CURRENCY );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & NUMBERFORMAT_CURRENCY)) );
+            rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_PERCENT:
-            pTabViewShell->SetNumberFormat( NUMBERFORMAT_PERCENT );
+            if ((nType & NUMBERFORMAT_PERCENT))
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_NUMBER );
+            else
+                pTabViewShell->SetNumberFormat( NUMBERFORMAT_PERCENT );
+            aSet.Put( SfxBoolItem(nSlot, !(nType & NUMBERFORMAT_PERCENT)) );
+            rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_STANDARD:
@@ -1037,7 +1066,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 //------------------------------------------------------------------
 
 #define APPLY_HOR_JUSTIFY(j) \
-    {																		\
+    {                                                                       \
         if ( !pHorJustify || (eHorJustify != (j) ) )                        \
             pTabViewShell->ApplyAttr( SvxHorJustifyItem( (j) ) );                          \
         else                                                                \
@@ -1045,7 +1074,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
     }
 
 #define APPLY_VER_JUSTIFY(j) \
-    {																		\
+    {                                                                       \
         if ( !pVerJustify || (eVerJustify != (j) ) )                        \
             pTabViewShell->ApplyAttr( SvxVerJustifyItem( (j) ) );                          \
         else                                                                \
@@ -1054,12 +1083,12 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 
 void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
 {
-    ScTabViewShell*	pTabViewShell  		= GetViewData()->GetViewShell();
-    SfxBindings&			rBindings	= pViewData->GetBindings();
-    const SfxItemSet*       pSet		= rReq.GetArgs();
-    USHORT					nSlot		= rReq.GetSlot();
+    ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
+    SfxBindings&            rBindings   = pViewData->GetBindings();
+    const SfxItemSet*       pSet        = rReq.GetArgs();
+    USHORT                  nSlot       = rReq.GetSlot();
 
-    pTabViewShell->HideListBox();	// Autofilter-DropDown-Listbox
+    pTabViewShell->HideListBox();   // Autofilter-DropDown-Listbox
 
     switch( nSlot )
     {
@@ -1144,14 +1173,14 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
 
 void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 {
-    ScTabViewShell*	pTabViewShell  		= GetViewData()->GetViewShell();
-    SfxBindings&			rBindings	= pViewData->GetBindings();
-    const ScPatternAttr*    pAttrs		= pTabViewShell->GetSelectionPattern();
-    const SfxItemSet*       pSet		= rReq.GetArgs();
-    USHORT					nSlot		= rReq.GetSlot();
-    SfxAllItemSet*			pNewSet = 0;
+    ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
+    SfxBindings&            rBindings   = pViewData->GetBindings();
+    const ScPatternAttr*    pAttrs      = pTabViewShell->GetSelectionPattern();
+    const SfxItemSet*       pSet        = rReq.GetArgs();
+    USHORT                  nSlot       = rReq.GetSlot();
+    SfxAllItemSet*          pNewSet = 0;
 
-    pTabViewShell->HideListBox();					// Autofilter-DropDown-Listbox
+    pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 
     if (  (nSlot == SID_ATTR_CHAR_WEIGHT)
         ||(nSlot == SID_ATTR_CHAR_POSTURE)
@@ -1176,7 +1205,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     aSetItem.PutItemForScriptType( nScript, pSet->Get( ATTR_FONT_WEIGHT ) );
                 else
                 {
-                    //	toggle manually
+                    //  toggle manually
 
                     FontWeight eWeight = WEIGHT_BOLD;
                     SvxScriptSetItem aOldSetItem( nSlot, rPool );
@@ -1203,7 +1232,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     aSetItem.PutItemForScriptType( nScript, pSet->Get( ATTR_FONT_POSTURE ) );
                 else
                 {
-                    //	toggle manually
+                    //  toggle manually
 
                     FontItalic eItalic = ITALIC_NORMAL;
                     SvxScriptSetItem aOldSetItem( nSlot, rPool );
@@ -1251,7 +1280,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
             case SID_ULINE_VAL_NONE:
                 pTabViewShell->ApplyAttr( SvxUnderlineItem( UNDERLINE_NONE, ATTR_FONT_UNDERLINE ) );
                 break;
-            case SID_ULINE_VAL_SINGLE:		// Toggles
+            case SID_ULINE_VAL_SINGLE:      // Toggles
             case SID_ULINE_VAL_DOUBLE:
             case SID_ULINE_VAL_DOTTED:
                 {
@@ -1287,7 +1316,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
          * Button ist gedrueckt
          */
 
-        const SfxItemSet&		 rAttrSet	= pTabViewShell->GetSelectionPattern()->GetItemSet();
+        const SfxItemSet&        rAttrSet   = pTabViewShell->GetSelectionPattern()->GetItemSet();
         const SfxPoolItem*       pItem       = NULL;
         const SvxHorJustifyItem* pHorJustify = NULL;
         const SvxVerJustifyItem* pVerJustify = NULL;
@@ -1314,7 +1343,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_HOR_JUSTIFY_LEFT : SVX_HOR_JUSTIFY_STANDARD, SID_H_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//				APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_LEFT );
+//              APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_LEFT );
                 //break;
 
             case SID_ALIGNRIGHT:
@@ -1324,7 +1353,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_STANDARD, SID_H_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//				APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_RIGHT );
+//              APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_RIGHT );
                 //break;
 
             case SID_ALIGNCENTERHOR:
@@ -1334,7 +1363,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_HOR_JUSTIFY_CENTER : SVX_HOR_JUSTIFY_STANDARD, SID_H_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//				APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_CENTER );
+//              APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_CENTER );
                 //break;
 
             case SID_ALIGNBLOCK:
@@ -1344,7 +1373,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_HOR_JUSTIFY_BLOCK : SVX_HOR_JUSTIFY_STANDARD, SID_H_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//				APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_BLOCK );
+//              APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_BLOCK );
                 //break;
 
             case SID_ALIGNTOP:
@@ -1354,7 +1383,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_VER_JUSTIFY_TOP : SVX_VER_JUSTIFY_STANDARD, SID_V_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//				APPLY_VER_JUSTIFY( SVX_VER_JUSTIFY_TOP );
+//              APPLY_VER_JUSTIFY( SVX_VER_JUSTIFY_TOP );
                 //break;
 
             case SID_ALIGNBOTTOM:
@@ -1364,7 +1393,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_VER_JUSTIFY_BOTTOM : SVX_VER_JUSTIFY_STANDARD, SID_V_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//				APPLY_VER_JUSTIFY( SVX_VER_JUSTIFY_BOTTOM );
+//              APPLY_VER_JUSTIFY( SVX_VER_JUSTIFY_BOTTOM );
                 //break;
 
             case SID_ALIGNCENTERVER:
@@ -1374,7 +1403,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     SVX_VER_JUSTIFY_CENTER : SVX_VER_JUSTIFY_STANDARD, SID_V_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
-//				APPLY_VER_JUSTIFY( SVX_VER_JUSTIFY_CENTER );
+//              APPLY_VER_JUSTIFY( SVX_VER_JUSTIFY_CENTER );
                 //break;
 
             default:
@@ -1384,7 +1413,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
     }
 
     rBindings.Update();
-//	rReq.Done();
+//  rReq.Done();
 
     if( pNewSet )
     {
@@ -1405,11 +1434,11 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 
 void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 {
-    ScTabViewShell*	pTabViewShell  		= GetViewData()->GetViewShell();
-    SfxBindings&		rBindings = pViewData->GetBindings();
-    const SfxItemSet*	pNewAttrs = rReq.GetArgs();
+    ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
+    SfxBindings&        rBindings = pViewData->GetBindings();
+    const SfxItemSet*   pNewAttrs = rReq.GetArgs();
 
-    pTabViewShell->HideListBox();					// Autofilter-DropDown-Listbox
+    pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 
     if ( !pNewAttrs )
     {
@@ -1419,10 +1448,10 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
         {
             case SID_ATTR_CHAR_FONT:
             case SID_ATTR_CHAR_FONTHEIGHT:
-                pTabViewShell->ExecuteCellFormatDlg( rReq, TP_FONT );	    // wenn ToolBar vertikal
+                pTabViewShell->ExecuteCellFormatDlg( rReq, TP_FONT );       // wenn ToolBar vertikal
                 break;
 
-            case SID_ATTR_ALIGN_LINEBREAK:					// ohne Parameter als Toggle
+            case SID_ATTR_ALIGN_LINEBREAK:                  // ohne Parameter als Toggle
                 {
                     const ScPatternAttr* pAttrs = pTabViewShell->GetSelectionPattern();
                     BOOL bOld = ((const SfxBoolItem&)pAttrs->GetItem(ATTR_LINEBREAK)).GetValue();
@@ -1439,7 +1468,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
             case SID_BACKGROUND_COLOR:
                 {
-                    //	SID_BACKGROUND_COLOR without arguments -> set transparent background
+                    //  SID_BACKGROUND_COLOR without arguments -> set transparent background
 
                     SvxBrushItem        aBrushItem( (const SvxBrushItem&)
                                             pTabViewShell->GetSelectionPattern()->
@@ -1575,11 +1604,11 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     if ( pNewAttrs->GetItemState( ATTR_BORDER, TRUE, &pItem )
                          == SFX_ITEM_SET )
                     {
-                        //	#100959# The SvxFrameToolBoxControl toolbox controller uses a default
-                        //	SvxBorderLine (all widths 0) to mark the lines that should be set.
-                        //	Macro recording uses a SvxBoxItem with the real values (OutWidth > 0)
-                        //	or NULL pointers for no lines.
-                        //	-> Substitute existing lines with pDefLine only if widths are 0.
+                        //  #100959# The SvxFrameToolBoxControl toolbox controller uses a default
+                        //  SvxBorderLine (all widths 0) to mark the lines that should be set.
+                        //  Macro recording uses a SvxBoxItem with the real values (OutWidth > 0)
+                        //  or NULL pointers for no lines.
+                        //  -> Substitute existing lines with pDefLine only if widths are 0.
                         SvxBoxItem aBoxItem ( *(const SvxBoxItem*)pItem );
                         if ( aBoxItem.GetTop() && aBoxItem.GetTop()->GetOutWidth() == 0 )
                             aBoxItem.SetLine( pDefLine, BOX_LINE_TOP );
@@ -1669,8 +1698,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
 void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 {
-    ScTabViewShell*	pTabViewShell  	= GetViewData()->GetViewShell();
-    const SfxItemSet&	 rAttrSet	= pTabViewShell->GetSelectionPattern()->GetItemSet();
+    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    const SfxItemSet&    rAttrSet   = pTabViewShell->GetSelectionPattern()->GetItemSet();
     const SvxBorderLine* pLine      = pTabViewShell->GetDefaultFrameLine();
     const SvxBrushItem&  rBrushItem = (const SvxBrushItem&)rAttrSet.Get( ATTR_BACKGROUND );
     SfxWhichIter aIter( rSet );
@@ -1678,8 +1707,8 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 
     rSet.Put( rAttrSet, FALSE );
 
-    //	choose font info according to selection script type
-    BYTE nScript = 0;		// GetSelectionScriptType never returns 0
+    //  choose font info according to selection script type
+    BYTE nScript = 0;       // GetSelectionScriptType never returns 0
     if ( rSet.GetItemState( ATTR_FONT ) != SFX_ITEM_UNKNOWN )
     {
         if (!nScript) nScript = pTabViewShell->GetSelectionScriptType();
@@ -1710,7 +1739,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                 rSet.Put( rBrushItem, GetPool().GetWhich(nWhich) );
             }
             break;
-/*			case SID_ATTR_ALIGN_LINEBREAK:
+/*          case SID_ATTR_ALIGN_LINEBREAK:
             {
                 const SfxBoolItem& rBreakItem = (const SfxBoolItem&)rAttrSet.Get( ATTR_LINEBREAK );
                 rSet.Put( rBreakItem, GetPool().GetWhich(nWhich) );
@@ -1726,12 +1755,12 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 
 void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 {
-    ScTabViewShell*	pTabViewShell  	= GetViewData()->GetViewShell();
-    const SfxItemSet& rAttrSet	= pTabViewShell->GetSelectionPattern()->GetItemSet();
+    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    const SfxItemSet& rAttrSet  = pTabViewShell->GetSelectionPattern()->GetItemSet();
     rSet.Put( rAttrSet, FALSE ); // ItemStates mitkopieren
 
-    //	choose font info according to selection script type
-    BYTE nScript = 0;		// GetSelectionScriptType never returns 0
+    //  choose font info according to selection script type
+    BYTE nScript = 0;       // GetSelectionScriptType never returns 0
     if ( rSet.GetItemState( ATTR_FONT_WEIGHT ) != SFX_ITEM_UNKNOWN )
     {
         if (!nScript) nScript = pTabViewShell->GetSelectionScriptType();
@@ -1744,7 +1773,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     }
 
     SfxItemState eState;
-//	const SfxPoolItem* pItem;
+//  const SfxPoolItem* pItem;
 
     //--------------------------------------------------------------------
     // eigene Kontrolle ueber RadioButton-Funktionalitaet:
@@ -1767,9 +1796,9 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
         USHORT nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)
         {
-            case UNDERLINE_SINGLE:	nId = SID_ULINE_VAL_SINGLE;	break;
-            case UNDERLINE_DOUBLE:	nId = SID_ULINE_VAL_DOUBLE;	break;
-            case UNDERLINE_DOTTED:	nId = SID_ULINE_VAL_DOTTED;	break;
+            case UNDERLINE_SINGLE:  nId = SID_ULINE_VAL_SINGLE; break;
+            case UNDERLINE_DOUBLE:  nId = SID_ULINE_VAL_DOUBLE; break;
+            case UNDERLINE_DOTTED:  nId = SID_ULINE_VAL_DOTTED; break;
             default:
                 break;
         }
@@ -1784,11 +1813,11 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     const SvxVerJustifyItem* pVerJustify = NULL;
     SvxCellHorJustify        eHorJustify = SVX_HOR_JUSTIFY_STANDARD;
     SvxCellVerJustify        eVerJustify = SVX_VER_JUSTIFY_STANDARD;
-    USHORT		 			 nWhich		 = 0;
-    BOOL					 bJustifyStd = FALSE;
-    SfxBoolItem				 aBoolItem	 ( 0, TRUE );
+    USHORT                   nWhich      = 0;
+    BOOL                     bJustifyStd = FALSE;
+    SfxBoolItem              aBoolItem   ( 0, TRUE );
 
-    eState 	 = rAttrSet.GetItemState( ATTR_HOR_JUSTIFY, TRUE,
+    eState   = rAttrSet.GetItemState( ATTR_HOR_JUSTIFY, TRUE,
                                         (const SfxPoolItem**)&pHorJustify );
     switch ( eState )
     {
@@ -1845,10 +1874,10 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     else if ( bJustifyStd )
     {
         aBoolItem.SetValue( FALSE );
-        aBoolItem.SetWhich( SID_ALIGNLEFT );	  rSet.Put( aBoolItem );
-        aBoolItem.SetWhich( SID_ALIGNRIGHT );	  rSet.Put( aBoolItem );
+        aBoolItem.SetWhich( SID_ALIGNLEFT );      rSet.Put( aBoolItem );
+        aBoolItem.SetWhich( SID_ALIGNRIGHT );     rSet.Put( aBoolItem );
         aBoolItem.SetWhich( SID_ALIGNCENTERHOR ); rSet.Put( aBoolItem );
-        aBoolItem.SetWhich( SID_ALIGNBLOCK );	  rSet.Put( aBoolItem );
+        aBoolItem.SetWhich( SID_ALIGNBLOCK );     rSet.Put( aBoolItem );
         bJustifyStd = FALSE;
     }
 
@@ -1909,8 +1938,8 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     else if ( bJustifyStd )
     {
         aBoolItem.SetValue( FALSE );
-        aBoolItem.SetWhich( SID_ALIGNTOP );	  	  rSet.Put( aBoolItem );
-        aBoolItem.SetWhich( SID_ALIGNBOTTOM );	  rSet.Put( aBoolItem );
+        aBoolItem.SetWhich( SID_ALIGNTOP );       rSet.Put( aBoolItem );
+        aBoolItem.SetWhich( SID_ALIGNBOTTOM );    rSet.Put( aBoolItem );
         aBoolItem.SetWhich( SID_ALIGNCENTERVER ); rSet.Put( aBoolItem );
     }
 }
@@ -1920,9 +1949,9 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 
 void ScFormatShell::GetBorderState( SfxItemSet& rSet )
 {
-    ScTabViewShell*	pTabViewShell  	= GetViewData()->GetViewShell();
-    SvxBoxItem		aBoxItem( ATTR_BORDER );
-    SvxBoxInfoItem	aInfoItem( ATTR_BORDER_INNER );
+    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    SvxBoxItem      aBoxItem( ATTR_BORDER );
+    SvxBoxInfoItem  aInfoItem( ATTR_BORDER_INNER );
 
     pTabViewShell->GetSelectionFrame( aBoxItem, aInfoItem );
 
@@ -1936,10 +1965,10 @@ void ScFormatShell::GetBorderState( SfxItemSet& rSet )
 
 void ScFormatShell::GetAlignState( SfxItemSet& rSet )
 {
-    ScTabViewShell*	pTabViewShell  	= GetViewData()->GetViewShell();
+    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     const SfxItemSet& rAttrSet    = pTabViewShell->GetSelectionPattern()->GetItemSet();
-    SfxWhichIter	aIter(rSet);
-    USHORT			nWhich = aIter.FirstWhich();
+    SfxWhichIter    aIter(rSet);
+    USHORT          nWhich = aIter.FirstWhich();
 
     SvxCellHorJustify eHAlign = SVX_HOR_JUSTIFY_STANDARD;
     bool bHasHAlign = rAttrSet.GetItemState( ATTR_HOR_JUSTIFY ) != SFX_ITEM_DONTCARE;
@@ -1985,10 +2014,9 @@ void ScFormatShell::GetAlignState( SfxItemSet& rSet )
 
 void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
 {
-    ScTabViewShell*	pTabViewShell  	= GetViewData()->GetViewShell();
-
-    // ScViewData* pViewData   = GetViewData();
-    ScDocument* pDoc		= pViewData->GetDocument();
+    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
+    ScDocument* pDoc                = pViewData->GetDocument();
+    short nType                     = GetCurrentNumberFormatType();
 
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
@@ -1998,7 +2026,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
         {
             case SID_NUMBER_FORMAT:
                 {
-                    String aFormatCode;			// bleibt leer, wenn dont-care
+                    String aFormatCode;         // bleibt leer, wenn dont-care
 
                     const SfxItemSet& rAttrSet  = pTabViewShell->GetSelectionPattern()->GetItemSet();
                     if ( rAttrSet.GetItemState( ATTR_VALUE_FORMAT ) != SFX_ITEM_DONTCARE )
@@ -2015,7 +2043,21 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                     rSet.Put( SfxStringItem( nWhich, aFormatCode ) );
                 }
                 break;
-
+            case SID_NUMBER_SCIENTIFIC:
+                rSet.Put( SfxBoolItem(nWhich, (nType & NUMBERFORMAT_SCIENTIFIC)) );
+                break;
+            case SID_NUMBER_DATE:
+                rSet.Put( SfxBoolItem(nWhich, (nType & NUMBERFORMAT_DATE)) );
+                break;
+            case SID_NUMBER_CURRENCY:
+                rSet.Put( SfxBoolItem(nWhich, (nType & NUMBERFORMAT_CURRENCY)) );
+                break;
+            case SID_NUMBER_PERCENT:
+                rSet.Put( SfxBoolItem(nWhich, (nType & NUMBERFORMAT_PERCENT)) );
+                break;
+            case SID_NUMBER_TIME:
+                rSet.Put( SfxBoolItem(nWhich, (nType & NUMBERFORMAT_TIME)) );
+                break;
         }
         nWhich = aIter.NextWhich();
     }
@@ -2087,7 +2129,7 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
             eBidiDir = EE_HTEXTDIR_L2R;
     }
 
-    SvtLanguageOptions	aLangOpt;
+    SvtLanguageOptions  aLangOpt;
     BOOL bDisableCTLFont = !aLangOpt.IsCTLFontEnabled();
     BOOL bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
 
@@ -2166,3 +2208,67 @@ void ScFormatShell::StateFormatPaintbrush( SfxItemSet& rSet )
         rSet.Put( SfxBoolItem( SID_FORMATPAINTBRUSH, pViewData->GetView()->HasPaintBrush() ) );
 }
 
+short ScFormatShell::GetCurrentNumberFormatType()
+{
+    short nType = NUMBERFORMAT_ALL;
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScMarkData aMark(GetViewData()->GetMarkData());
+    const SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    if (!pFormatter)
+        return nType;
+
+    // TODO: Find out how to get a selected table range in case multiple tables
+    // are selected.  Currently we only check for the current active table.
+
+    if ( aMark.IsMarked() || aMark.IsMultiMarked() )
+    {
+        aMark.MarkToMulti();
+        ScRange aRange;
+        aMark.GetMultiMarkArea(aRange);
+
+        const ScMarkArray* pArray = aMark.GetArray();
+        if (!pArray)
+            return nType;
+
+        short nComboType = NUMBERFORMAT_ALL;
+        bool bFirstItem = true;
+        for (SCCOL nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); ++nCol)
+        {
+            const ScMarkArray& rColArray = pArray[nCol];
+            if (!rColArray.HasMarks())
+                continue;
+
+            SCROW nRow1, nRow2;
+            ScMarkArrayIter aMarkIter(&rColArray);
+            while (aMarkIter.Next(nRow1, nRow2))
+            {
+                ScRange aColRange(nCol, nRow1, aRange.aStart.Tab());
+                aColRange.aEnd.SetRow(nRow2);
+                sal_uInt32 nNumFmt = pDoc->GetNumberFormat(aColRange);
+                const SvNumberformat* pEntry = pFormatter->GetEntry(nNumFmt);
+                if (!pEntry)
+                    return 0;
+
+                short nThisType = pEntry->GetType();
+                if (bFirstItem)
+                {
+                    bFirstItem = false;
+                    nComboType = nThisType;
+                }
+                else if (nComboType != nThisType)
+                    // mixed number format type.
+                    return NUMBERFORMAT_ALL;
+            }
+        }
+        nType = nComboType;
+    }
+    else
+    {
+        sal_uInt32 nNumFmt;
+        pDoc->GetNumberFormat( pViewData->GetCurX(), pViewData->GetCurY(),
+                               pViewData->GetTabNo(), nNumFmt );
+        const SvNumberformat* pEntry = pFormatter->GetEntry( nNumFmt );
+        nType = pEntry ? pEntry->GetType() : 0;
+    }
+    return nType;
+}

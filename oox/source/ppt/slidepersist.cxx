@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,35 +83,35 @@ SlidePersist::~SlidePersist()
 
 sal_Int16 SlidePersist::getLayoutFromValueToken()
 {
-    sal_Int16 nLayout = 20;		// 20 == blanc (so many magic numbers :-( the description at com.sun.star.presentation.DrawPage.Layout does not help)
+    sal_Int16 nLayout = 20;     // 20 == blanc (so many magic numbers :-( the description at com.sun.star.presentation.DrawPage.Layout does not help)
     switch( mnLayoutValueToken )
     {
-        case XML_blank:				nLayout = 20; break;
-        case XML_chart:				nLayout =  2; break;
-        case XML_chartAndTx:		nLayout =  7; break;
-        case XML_clipArtAndTx:		nLayout =  9; break;
-        case XML_clipArtAndVertTx:	nLayout = 24; break;
-        case XML_fourObj:			nLayout = 18; break;
-        case XML_obj:				nLayout = 11; break;
-        case XML_objAndTx:			nLayout = 13; break;
-        case XML_objOverTx:			nLayout = 14; break;
-        case XML_tbl:				nLayout =  8; break;
-        case XML_title:				nLayout =  0; break;
-        case XML_titleOnly:			nLayout = 19; break;
+        case XML_blank:             nLayout = 20; break;
+        case XML_chart:             nLayout =  2; break;
+        case XML_chartAndTx:        nLayout =  7; break;
+        case XML_clipArtAndTx:      nLayout =  9; break;
+        case XML_clipArtAndVertTx:  nLayout = 24; break;
+        case XML_fourObj:           nLayout = 18; break;
+        case XML_obj:               nLayout = 11; break;
+        case XML_objAndTx:          nLayout = 13; break;
+        case XML_objOverTx:         nLayout = 14; break;
+        case XML_tbl:               nLayout =  8; break;
+        case XML_title:             nLayout =  0; break;
+        case XML_titleOnly:         nLayout = 19; break;
         case XML_twoObj:
-        case XML_twoColTx:			nLayout =  3; break;
-        case XML_twoObjAndTx:		nLayout = 15; break;
-        case XML_twoObjOverTx:		nLayout = 16; break;
-        case XML_tx:				nLayout =  1; break;
-        case XML_txAndChart:		nLayout =  4; break;
-        case XML_txAndClipArt:		nLayout =  6; break;
-        case XML_txAndMedia:		nLayout =  6; break;
-        case XML_txAndObj:			nLayout = 10; break;
-        case XML_txAndTwoObj:		nLayout = 12; break;
-        case XML_txOverObj:			nLayout = 17; break;
-        case XML_vertTitleAndTx:	nLayout = 22; break;
+        case XML_twoColTx:          nLayout =  3; break;
+        case XML_twoObjAndTx:       nLayout = 15; break;
+        case XML_twoObjOverTx:      nLayout = 16; break;
+        case XML_tx:                nLayout =  1; break;
+        case XML_txAndChart:        nLayout =  4; break;
+        case XML_txAndClipArt:      nLayout =  6; break;
+        case XML_txAndMedia:        nLayout =  6; break;
+        case XML_txAndObj:          nLayout = 10; break;
+        case XML_txAndTwoObj:       nLayout = 12; break;
+        case XML_txOverObj:         nLayout = 17; break;
+        case XML_vertTitleAndTx:    nLayout = 22; break;
         case XML_vertTitleAndTxOverChart: nLayout = 21; break;
-        case XML_vertTx:			nLayout = 23; break;
+        case XML_vertTx:            nLayout = 23; break;
 
         case XML_twoTxTwoObj:
         case XML_twoObjAndObj:
@@ -225,39 +225,39 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
                 const rtl::OUString sStandard( RTL_CONSTASCII_USTRINGPARAM( "standard" ) );
                 const rtl::OUString sSubtitle( RTL_CONSTASCII_USTRINGPARAM( "subtitle" ) );
 
-                for( int i = 0; i < 4; i++ )	// todo: aggregation of bodystyle (subtitle)
+                for( int i = 0; i < 4; i++ )    // todo: aggregation of bodystyle (subtitle)
                 {
                     switch( i )
                     {
-                        case 0 :	// title style
+                        case 0 :    // title style
                         {
                             pTextListStylePtr = maTitleTextStylePtr;
                             aStyle = sTitle;
                             aFamily= aXNamed->getName();
                             break;
                         }
-                        case 1 :	// body style
+                        case 1 :    // body style
                         {
                             pTextListStylePtr = maBodyTextStylePtr;
                             aStyle = sOutline;
                             aFamily= aXNamed->getName();
                             break;
                         }
-                        case 3 :	// notes style
+                        case 3 :    // notes style
                         {
                             pTextListStylePtr = maNotesTextStylePtr;
                             aStyle = sTitle;
                             aFamily= aXNamed->getName();
                             break;
                         }
-                        case 4 :	// standard style
+                        case 4 :    // standard style
                         {
                             pTextListStylePtr = maOtherTextStylePtr;
                             aStyle = sStandard;
                             aFamily = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
                             break;
                         }
-                        case 5 :	// subtitle
+                        case 5 :    // subtitle
                         {
                             pTextListStylePtr = maBodyTextStylePtr;
                             aStyle = sSubtitle;

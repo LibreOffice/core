@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,20 +50,20 @@ namespace connectivity
     //= OPoolCollection - the one-instance service for PooledConnections
     //= manages the active connections and the connections in the pool
     //==========================================================================
-    typedef	::cppu::WeakImplHelper5<	::com::sun::star::sdbc::XDriverManager,
+    typedef ::cppu::WeakImplHelper5<    ::com::sun::star::sdbc::XDriverManager,
                                         ::com::sun::star::sdbc::XDriverAccess,
                                         ::com::sun::star::lang::XServiceInfo,
                                         ::com::sun::star::frame::XTerminateListener,
                                         ::com::sun::star::beans::XPropertyChangeListener
-                                        >	OPoolCollection_Base;
+                                        >   OPoolCollection_Base;
 
     /// OPoolCollection: controll the whole connection pooling for oo
     class OPoolCollection : public OPoolCollection_Base
     {
-        
+
         //==========================================================================
-        typedef ::comphelper::OInterfaceCompare< ::com::sun::star::sdbc::XDriver >	ODriverCompare;		
-        DECLARE_STL_USTRINGACCESS_MAP(OConnectionPool*,	OConnectionPools);
+        typedef ::comphelper::OInterfaceCompare< ::com::sun::star::sdbc::XDriver >  ODriverCompare;
+        DECLARE_STL_USTRINGACCESS_MAP(OConnectionPool*, OConnectionPools);
 
         DECLARE_STL_MAP(
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >,
@@ -71,49 +71,49 @@ namespace connectivity
                 ODriverCompare,
                 MapDriver2DriverRef );
 
-        MapDriver2DriverRef																	m_aDriverProxies;
-        ::osl::Mutex																		m_aMutex;
-        OConnectionPools																	m_aPools;		   // the driver pools
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_xServiceFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverManager >			m_xManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverAccess >			m_xDriverAccess;
-        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >		m_xProxyFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >				m_xConfigNode;		// config node for generel connection pooling
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop>				m_xDesktop;
+        MapDriver2DriverRef                                                                 m_aDriverProxies;
+        ::osl::Mutex                                                                        m_aMutex;
+        OConnectionPools                                                                    m_aPools;          // the driver pools
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverManager >          m_xManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverAccess >           m_xDriverAccess;
+        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >     m_xProxyFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xConfigNode;      // config node for generel connection pooling
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop>                m_xDesktop;
 
     private:
-        OPoolCollection();							// never implemented
-        OPoolCollection(const OPoolCollection&);	// never implemented
-        int operator= (const OPoolCollection&);			// never implemented
+        OPoolCollection();                          // never implemented
+        OPoolCollection(const OPoolCollection&);    // never implemented
+        int operator= (const OPoolCollection&);         // never implemented
 
         OPoolCollection(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&	_rxFactory);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
         // some configuration helper methods
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createWithServiceFactory(const ::rtl::OUString& _rPath) const;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getConfigPoolRoot();
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createWithProvider(	const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxConfProvider,
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createWithProvider(   const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxConfProvider,
                                                                                                     const ::rtl::OUString& _rPath) const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > openNode(	const ::rtl::OUString& _rPath,
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > openNode( const ::rtl::OUString& _rPath,
                                                                                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xTreeNode) const throw();
         sal_Bool isPoolingEnabled();
         sal_Bool isDriverPoolingEnabled(const ::rtl::OUString& _sDriverImplName,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
-        sal_Bool isPoolingEnabledByUrl(	const ::rtl::OUString& _sUrl,
+        sal_Bool isPoolingEnabledByUrl( const ::rtl::OUString& _sUrl,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _rxDriver,
                                         ::rtl::OUString& _rsImplName,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
 
-        OConnectionPool* getConnectionPool(	const ::rtl::OUString& _sImplName,
+        OConnectionPool* getConnectionPool( const ::rtl::OUString& _sImplName,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _xDriver,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
         void clearConnectionPools(sal_Bool _bDispose);
         void clearDesktop();
     protected:
         virtual ~OPoolCollection();
-    public:		
+    public:
 
-        static ::com::sun::star::uno::Any getNodeValue(	const ::rtl::OUString& _rPath,
+        static ::com::sun::star::uno::Any getNodeValue( const ::rtl::OUString& _rPath,
                                                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xTreeNode)throw();
 
     // XDriverManager

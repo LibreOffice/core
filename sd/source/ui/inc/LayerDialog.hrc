@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,4 +26,4 @@
  ************************************************************************/
 #define FLT_WIN_LAYER_DIALOG 791
 
-#define TB_LAYERS			1
+#define TB_LAYERS           1

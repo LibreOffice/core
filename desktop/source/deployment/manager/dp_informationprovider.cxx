@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,8 +70,8 @@ namespace xml = com::sun::star::xml ;
 
 namespace dp_info {
 
-class PackageInformationProvider : 
-    public ::cppu::WeakImplHelper3< deployment::XPackageInformationProvider, 
+class PackageInformationProvider :
+    public ::cppu::WeakImplHelper3< deployment::XPackageInformationProvider,
                                     css_ucb::XCommandEnvironment,
                                     task::XInteractionHandler >
 {
@@ -90,8 +90,8 @@ class PackageInformationProvider :
         throw ( uno::RuntimeException ) { return static_cast<task::XInteractionHandler*>(this); };
 
     virtual uno::Reference< css_ucb::XProgressHandler > SAL_CALL getProgressHandler()
-        throw ( uno::RuntimeException ) { return uno::Reference< css_ucb::XProgressHandler >(); }; 
-        
+        throw ( uno::RuntimeException ) { return uno::Reference< css_ucb::XProgressHandler >(); };
+
     // XPackageInformationProvider
     virtual rtl::OUString SAL_CALL getPackageLocation( const rtl::OUString& extensionId )
         throw ( uno::RuntimeException );
@@ -101,7 +101,7 @@ class PackageInformationProvider :
         throw ( uno::RuntimeException );
 //---------
 private:
-    
+
     uno::Reference< uno::XComponentContext> mxContext;
 
     rtl::OUString getPackageLocation( const rtl::OUString& repository,
@@ -112,7 +112,7 @@ private:
 
 //------------------------------------------------------------------------------
 
-PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XComponentContext > const& xContext) : 
+PackageInformationProvider::PackageInformationProvider( uno::Reference< uno::XComponentContext > const& xContext) :
     mxContext( xContext ),
     mxUpdateInformation( deployment::UpdateInformationProvider::create( xContext ) )
 {
@@ -143,7 +143,7 @@ rtl::OUString PackageInformationProvider::getPackageLocation(
     rtl::OUString aLocationURL;
     uno::Reference<deployment::XExtensionManager> xManager =
         deployment::ExtensionManager::get(mxContext);
-    
+
     if ( xManager.is() )
     {
         const uno::Sequence< uno::Reference< deployment::XPackage > > packages(
@@ -204,7 +204,7 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
     throw ( uno::RuntimeException )
 {
     uno::Sequence< uno::Sequence< rtl::OUString > > aList;
-     
+
     uno::Reference<deployment::XExtensionManager> extMgr =
         deployment::ExtensionManager::get(mxContext);
 
@@ -254,7 +254,7 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
             if ( ! ds.getLength() )
                 sOnlineVersion = info.version;
         }
-        
+
         rtl::OUString sVersionUser;
         rtl::OUString sVersionShared;
         rtl::OUString sVersionBundled;
@@ -273,9 +273,9 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
             sVersionShared = extensions[1]->getVersion();
         if (extensions[2].is() )
             sVersionBundled = extensions[2]->getVersion();
-            
+
         bool bSharedReadOnly = extMgr->isReadOnlyRepository(OUSTR("shared"));
-            
+
         dp_misc::UPDATE_SOURCE sourceUser = dp_misc::isUpdateUserExtension(
             bSharedReadOnly, sVersionUser, sVersionShared, sVersionBundled, sOnlineVersion);
         dp_misc::UPDATE_SOURCE sourceShared = dp_misc::isUpdateSharedExtension(
@@ -296,13 +296,13 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
             updateVersion = updateVersionShared;
         if (updateVersion.getLength())
         {
-            
+
             rtl::OUString aNewEntry[2];
             aNewEntry[0] = i->first;
             aNewEntry[1] = updateVersion;
             aList.realloc( ++nCount );
             aList[ nCount-1 ] = ::uno::Sequence< rtl::OUString >( aNewEntry, 2 );
-        }                
+        }
     }
     return aList;
 }
@@ -321,9 +321,9 @@ uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL PackageInformationProvi
         allExt =  mgr->getAllExtensions(
             uno::Reference< task::XAbortChannel >(),
             static_cast < XCommandEnvironment *> (this) );
-    
+
     uno::Sequence< uno::Sequence< rtl::OUString > > retList;
-    
+
     sal_Int32 cAllIds = allExt.getLength();
     retList.realloc(cAllIds);
 

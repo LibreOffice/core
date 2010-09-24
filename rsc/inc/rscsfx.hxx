@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,13 +27,13 @@
 #ifndef _RSCSFX_HXX
 #define _RSCSFX_HXX
 
-// StarView 	(RSC_NOTYPE) bis (RSC_NOTYPE + 0x190)
-// Sfx 			(RSC_NOTYPE + 0x200) bis (RSC_NOTYPE + 0x20F)
+// StarView     (RSC_NOTYPE) bis (RSC_NOTYPE + 0x190)
+// Sfx          (RSC_NOTYPE + 0x200) bis (RSC_NOTYPE + 0x20F)
 #define RSC_SFX_STYLE_FAMILIES     (0x100 + 0x201)
 #define RSC_SFX_STYLE_FAMILY_ITEM  (0x100 + 0x202)
 #define RSC_SFX_SLOT_INFO          (0x100 + 0x203)
-// StarMoney	(RSC_NOTYPE + 0x210) bis (RSC_NOTYPE + 0x22F)
-// Public   	(RSC_NOTYPE + 0x300) bis (RSC_NOTYPE + 0x3FF)
+// StarMoney    (RSC_NOTYPE + 0x210) bis (RSC_NOTYPE + 0x22F)
+// Public       (RSC_NOTYPE + 0x300) bis (RSC_NOTYPE + 0x3FF)
 
 //========== S F X =======================================
 enum SfxStyleFamily { SFX_STYLE_FAMILY_CHAR    = 1,

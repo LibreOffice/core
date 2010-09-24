@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ namespace connectivity
         class WpADOTable : public WpOLEBase<_ADOTable>
         {
         public:
-            WpADOTable(_ADOTable* pInt=NULL)	:	WpOLEBase<_ADOTable>(pInt){}
+            WpADOTable(_ADOTable* pInt=NULL)    :   WpOLEBase<_ADOTable>(pInt){}
             WpADOTable(const WpADOTable& rhs){operator=(rhs);}
 
             inline WpADOTable& operator=(const WpADOTable& rhs)
@@ -47,18 +47,18 @@ namespace connectivity
             void Create();
 
             ::rtl::OUString get_Name() const;
-            void			put_Name(const ::rtl::OUString& _rName);
+            void            put_Name(const ::rtl::OUString& _rName);
             ::rtl::OUString get_Type() const;
-            WpADOColumns	get_Columns() const;
-            WpADOIndexes	get_Indexes() const;
-            WpADOKeys		get_Keys() const;
-            WpADOCatalog	get_ParentCatalog() const;
+            WpADOColumns    get_Columns() const;
+            WpADOIndexes    get_Indexes() const;
+            WpADOKeys       get_Keys() const;
+            WpADOCatalog    get_ParentCatalog() const;
             WpADOProperties get_Properties() const;
-            void			putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject);
+            void            putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject);
         };
 
-        
-        typedef WpOLEAppendCollection<ADOTables,	_ADOTable,	WpADOTable>		WpADOTables;
+
+        typedef WpOLEAppendCollection<ADOTables,    _ADOTable,  WpADOTable>     WpADOTables;
     }
 }
 

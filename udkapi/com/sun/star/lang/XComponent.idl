@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,29 +24,29 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_lang_XComponent_idl__ 
-#define __com_sun_star_lang_XComponent_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module lang {  
- 
- published interface XEventListener; 
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_lang_XComponent_idl__
+#define __com_sun_star_lang_XComponent_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module lang {
+
+ published interface XEventListener;
+
+//=============================================================================
+
 // DocMerge from xml: interface com::sun::star::lang::XComponent
 /** allows to exclicitly free resources and break cyclic references.
-    
-    <p>Actually the real lifetime of an UNO object is controlled by 
+
+    <p>Actually the real lifetime of an UNO object is controlled by
     references kept on interfaces of this object. But there are two
     distinct meanings in keeping a reference to an interface:
     1st to own the object and 2nd to know the object.
-    
+
     <p>You are only allowed to keep references of interfaces
     to UNO objects if you are by definition the owner of that object or
     your reference is very temporary or you have registered an
@@ -54,9 +54,9 @@ module com {  module sun {  module star {  module lang {
     "disposing" is called.</p>
  */
 published interface XComponent: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::lang::XComponent::dispose
     /** The owner of an object calls this method to explicitly free all
         resources kept by this object and thus break cyclic references.
@@ -75,11 +75,11 @@ published interface XComponent: com::sun::star::uno::XInterface
         </p>
 
         <p>After this method has been called, the object should behave as passive
-        as possible, thus it should ignore all calls 
+        as possible, thus it should ignore all calls
         in case it can comply with its specification (for instance addEventListener()).
         Often the object can't fulfill its specification anymore,
         in this case it must throw the <type>DisposedException</type>
-        (which is derived from <type scope="com::sun::star::uno">RuntimeException</type>) 
+        (which is derived from <type scope="com::sun::star::uno">RuntimeException</type>)
     when it gets called.</p>
 
         <p>For some objects no real owner can be identified, thus it can be
@@ -87,14 +87,14 @@ published interface XComponent: com::sun::star::uno::XInterface
         the object should be able to cope with multiple dispose()-calls (which
         are inevitable in a multithreaded environment).
      */
-    void dispose(); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void dispose();
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::lang::XComponent::addEventListener
-    /** adds an event listener to the object. 
-        
-        <p>The broadcaster fires the disposing method of this listener 
+    /** adds an event listener to the object.
+
+        <p>The broadcaster fires the disposing method of this listener
         if the <member>XComponent::dispose</member> method is called.</p>
 
         <p>It is suggested to allow multiple registration of the same listener,
@@ -112,10 +112,10 @@ published interface XComponent: com::sun::star::uno::XInterface
 
         @see XComponent::removeEventListener
      */
-    void addEventListener( [in] XEventListener xListener ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void addEventListener( [in] XEventListener xListener );
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::lang::XComponent::removeEventListener
     /** removes an event listener from the listener list.
 
@@ -132,12 +132,12 @@ published interface XComponent: com::sun::star::uno::XInterface
 
         @see XComponent::addEventListener
      */
-    void removeEventListener( [in] XEventListener aListener ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    void removeEventListener( [in] XEventListener aListener );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

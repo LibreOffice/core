@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,23 +29,23 @@
 
 // defines ------------------------------------------------------------------
 
-#define CT_SHOWSET		10
-#define FT_FONT			11
-#define LB_FONT			12
-#define CT_SHOWTEXT		13
-#define FT_SYMBOLE		14
-#define CT_SHOWCHAR		15
-#define FT_CHARCODE		16
-#define BTN_CHAR_OK	   	17
-#define BTN_CHAR_CANCEL	18
-#define BTN_CHAR_HELP	19
-#define BTN_DELETE		20
-#define FT_SUBSET		30
-#define LB_SUBSET		31
-#define ED_SHORTCUT		32
-#define BT_ASSIGN		33
-#define FT_ASSIGN		34
-#define CT_ASSIGN		35
+#define CT_SHOWSET      10
+#define FT_FONT         11
+#define LB_FONT         12
+#define CT_SHOWTEXT     13
+#define FT_SYMBOLE      14
+#define CT_SHOWCHAR     15
+#define FT_CHARCODE     16
+#define BTN_CHAR_OK     17
+#define BTN_CHAR_CANCEL 18
+#define BTN_CHAR_HELP   19
+#define BTN_DELETE      20
+#define FT_SUBSET       30
+#define LB_SUBSET       31
+#define ED_SHORTCUT     32
+#define BT_ASSIGN       33
+#define FT_ASSIGN       34
+#define CT_ASSIGN       35
 
 #endif
 

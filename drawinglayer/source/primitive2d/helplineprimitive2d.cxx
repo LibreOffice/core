@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ namespace drawinglayer
                         aLineA.transform(rViewInformation.getInverseObjectToViewTransformation());
                         PolygonMarkerPrimitive2D* pNewA = new PolygonMarkerPrimitive2D(aLineA, getRGBColA(), getRGBColB(), getDiscreteDashLength());
                         aTempPrimitiveTarget.push_back(pNewA);
-                        
+
                         const basegfx::B2DVector aPerpendicularNormalizedDirection(basegfx::getPerpendicular(aNormalizedDirection));
                         const basegfx::B2DPoint aStartB(aViewPosition - aPerpendicularNormalizedDirection);
                         const basegfx::B2DPoint aEndB(aViewPosition + aPerpendicularNormalizedDirection);
@@ -134,7 +134,7 @@ namespace drawinglayer
                                 aTempPrimitiveTarget.push_back(pNew);
                             }
                         }
-                        
+
                         break;
                     }
                 }
@@ -153,17 +153,17 @@ namespace drawinglayer
         }
 
         HelplinePrimitive2D::HelplinePrimitive2D(
-            const basegfx::B2DPoint& rPosition, 
-            const basegfx::B2DVector& rDirection, 
-            HelplineStyle2D eStyle, 
-            const basegfx::BColor& rRGBColA, 
-            const basegfx::BColor& rRGBColB, 
+            const basegfx::B2DPoint& rPosition,
+            const basegfx::B2DVector& rDirection,
+            HelplineStyle2D eStyle,
+            const basegfx::BColor& rRGBColA,
+            const basegfx::BColor& rRGBColB,
             double fDiscreteDashLength)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPosition(rPosition),
             maDirection(rDirection),
             meStyle(eStyle),
-            maRGBColA(rRGBColA), 
+            maRGBColA(rRGBColA),
             maRGBColB(rRGBColB),
             mfDiscreteDashLength(fDiscreteDashLength),
             maLastObjectToViewTransformation(),
@@ -189,7 +189,7 @@ namespace drawinglayer
         }
 
         Primitive2DSequence HelplinePrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
-        { 
+        {
             ::osl::MutexGuard aGuard( m_aMutex );
 
             if(getBuffered2DDecomposition().hasElements())

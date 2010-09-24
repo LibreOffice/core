@@ -1,7 +1,7 @@
-/************************************************************************* 
+/*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,15 +92,15 @@ public class ScriptSourceModel {
             // public void run() {
                 if ( cl != null )
                 {
-                    // sets this threads class loader 
+                    // sets this threads class loader
                     // hopefully any threads spawned by this
                     // will inherit this cl
-                    // this enables any class files imported 
+                    // this enables any class files imported
                     // from the interpreter to be loaded
-                    // note: setting the classloader on the  
-                    // interpreter has a slightly different 
-                    // meaning in that the classloader for 
-                    // the interpreter seems only to look for 
+                    // note: setting the classloader on the
+                    // interpreter has a slightly different
+                    // meaning in that the classloader for
+                    // the interpreter seems only to look for
                     // source files ( bla.java ) in the classpath
                     Thread.currentThread().setContextClassLoader(cl);
                 }
@@ -117,7 +117,7 @@ public class ScriptSourceModel {
                 // reset position
                 currentPosition = -1;
                 view.update();
-                
+
                 interpreter.set("XSCRIPTCONTEXT", context);
                 interpreter.set("ARGUMENTS", new Object[0]);
 
@@ -128,7 +128,7 @@ public class ScriptSourceModel {
                     result = interpreter.eval(getText());
                 }
             // }
-        // };    
+        // };
         // execThread.start();
         return result;
     }

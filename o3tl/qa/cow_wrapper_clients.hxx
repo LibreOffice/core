@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public:
     void makeUnique() { maImpl.make_unique(); }
     bool is_unique() const { return maImpl.is_unique(); }
     oslInterlockedCount use_count() const { return maImpl.use_count(); }
-    void swap( cow_wrapper_client1& r ) { o3tl::swap(maImpl, r.maImpl); } 
+    void swap( cow_wrapper_client1& r ) { o3tl::swap(maImpl, r.maImpl); }
 
     bool operator==( const cow_wrapper_client1& rRHS ) const { return maImpl == rRHS.maImpl; }
     bool operator!=( const cow_wrapper_client1& rRHS ) const { return maImpl != rRHS.maImpl; }

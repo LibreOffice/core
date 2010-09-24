@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 
 class ScPaintHint : public SfxHint
 {
-    ScRange		aRange;
-    USHORT		nParts;
-    BOOL		bPrint;		//	Flag, ob auch Druck/Vorschau betroffen ist
+    ScRange     aRange;
+    USHORT      nParts;
+    BOOL        bPrint;     //  Flag, ob auch Druck/Vorschau betroffen ist
 
     ScPaintHint(); // disabled
 
@@ -47,9 +47,9 @@ public:
                     ScPaintHint( const ScRange& rRng, USHORT nPaint = PAINT_ALL );
                     ~ScPaintHint();
 
-    void			SetPrintFlag(BOOL bSet)	{ bPrint = bSet; }
+    void            SetPrintFlag(BOOL bSet) { bPrint = bSet; }
 
-    const ScRange&	GetRange() const		{ return aRange; }
+    const ScRange&  GetRange() const        { return aRange; }
     SCCOL           GetStartCol() const     { return aRange.aStart.Col(); }
     SCROW           GetStartRow() const     { return aRange.aStart.Row(); }
     SCTAB           GetStartTab() const     { return aRange.aStart.Tab(); }
@@ -57,17 +57,17 @@ public:
     SCROW           GetEndRow() const       { return aRange.aEnd.Row(); }
     SCTAB           GetEndTab() const       { return aRange.aEnd.Tab(); }
     USHORT          GetParts() const        { return nParts; }
-    BOOL			GetPrintFlag() const	{ return bPrint; }
+    BOOL            GetPrintFlag() const    { return bPrint; }
 };
 
 
 class ScUpdateRefHint : public SfxHint
 {
-    UpdateRefMode	eUpdateRefMode;
-    ScRange			aRange;
-    SCsCOL			nDx;
-    SCsROW			nDy;
-    SCsTAB			nDz;
+    UpdateRefMode   eUpdateRefMode;
+    ScRange         aRange;
+    SCsCOL          nDx;
+    SCsROW          nDy;
+    SCsTAB          nDz;
 
 public:
                     TYPEINFO();
@@ -76,19 +76,19 @@ public:
                                         SCsCOL nX, SCsROW nY, SCsTAB nZ );
                     ~ScUpdateRefHint();
 
-    UpdateRefMode	GetMode() const			{ return eUpdateRefMode; }
-    const ScRange&	GetRange() const		{ return aRange; }
-    SCsCOL			GetDx() const			{ return nDx; }
-    SCsROW			GetDy() const			{ return nDy; }
-    SCsTAB			GetDz() const			{ return nDz; }
+    UpdateRefMode   GetMode() const         { return eUpdateRefMode; }
+    const ScRange&  GetRange() const        { return aRange; }
+    SCsCOL          GetDx() const           { return nDx; }
+    SCsROW          GetDy() const           { return nDy; }
+    SCsTAB          GetDz() const           { return nDz; }
 };
 
 
-#define SC_POINTERCHANGED_NUMFMT	1
+#define SC_POINTERCHANGED_NUMFMT    1
 
 class ScPointerChangedHint : public SfxHint
 {
-    USHORT			nFlags;
+    USHORT          nFlags;
 
 public:
                     TYPEINFO();
@@ -96,55 +96,55 @@ public:
 //UNUSED2008-05     ScPointerChangedHint( USHORT nF );
                     ~ScPointerChangedHint();
 
-    USHORT			GetFlags() const			{ return nFlags; }
+    USHORT          GetFlags() const            { return nFlags; }
 };
 
 
-//!	move ScLinkRefreshedHint to a different file?
+//! move ScLinkRefreshedHint to a different file?
 
-#define SC_LINKREFTYPE_NONE		0
-#define SC_LINKREFTYPE_SHEET	1
-#define SC_LINKREFTYPE_AREA		2
-#define SC_LINKREFTYPE_DDE		3
+#define SC_LINKREFTYPE_NONE     0
+#define SC_LINKREFTYPE_SHEET    1
+#define SC_LINKREFTYPE_AREA     2
+#define SC_LINKREFTYPE_DDE      3
 
 class ScLinkRefreshedHint : public SfxHint
 {
-    USHORT		nLinkType;	// SC_LINKREFTYPE_...
-    String		aUrl;		// used for sheet links
-    String		aDdeAppl;	// used for dde links:
-    String		aDdeTopic;
-    String		aDdeItem;
-    BYTE		nDdeMode;
-    ScAddress	aDestPos;	// used to identify area links
-                            //!	also use source data for area links?
+    USHORT      nLinkType;  // SC_LINKREFTYPE_...
+    String      aUrl;       // used for sheet links
+    String      aDdeAppl;   // used for dde links:
+    String      aDdeTopic;
+    String      aDdeItem;
+    BYTE        nDdeMode;
+    ScAddress   aDestPos;   // used to identify area links
+                            //! also use source data for area links?
 
 public:
                     TYPEINFO();
                     ScLinkRefreshedHint();
                     ~ScLinkRefreshedHint();
 
-    void			SetSheetLink( const String& rSourceUrl );
-    void			SetDdeLink( const String& rA, const String& rT, const String& rI, BYTE nM );
-    void			SetAreaLink( const ScAddress& rPos );
+    void            SetSheetLink( const String& rSourceUrl );
+    void            SetDdeLink( const String& rA, const String& rT, const String& rI, BYTE nM );
+    void            SetAreaLink( const ScAddress& rPos );
 
-    USHORT				GetLinkType() const	{ return nLinkType; }
-    const String&		GetUrl() const		{ return aUrl; }
-    const String&		GetDdeAppl() const	{ return aDdeAppl; }
-    const String&		GetDdeTopic() const	{ return aDdeTopic; }
-    const String&		GetDdeItem() const	{ return aDdeItem; }
-    BYTE				GetDdeMode() const	{ return nDdeMode; }
-    const ScAddress&	GetDestPos() const	{ return aDestPos; }
+    USHORT              GetLinkType() const { return nLinkType; }
+    const String&       GetUrl() const      { return aUrl; }
+    const String&       GetDdeAppl() const  { return aDdeAppl; }
+    const String&       GetDdeTopic() const { return aDdeTopic; }
+    const String&       GetDdeItem() const  { return aDdeItem; }
+    BYTE                GetDdeMode() const  { return nDdeMode; }
+    const ScAddress&    GetDestPos() const  { return aDestPos; }
 };
 
 
-//!	move ScAutoStyleHint to a different file?
+//! move ScAutoStyleHint to a different file?
 
 class ScAutoStyleHint : public SfxHint
 {
-    ScRange		aRange;
-    String		aStyle1;
-    String		aStyle2;
-    ULONG		nTimeout;
+    ScRange     aRange;
+    String      aStyle1;
+    String      aStyle2;
+    ULONG       nTimeout;
 
 public:
                     TYPEINFO();
@@ -152,10 +152,10 @@ public:
                                         ULONG nT, const String& rSt2 );
                     ~ScAutoStyleHint();
 
-    const ScRange&	GetRange() const	{ return aRange; }
-    const String&	GetStyle1() const	{ return aStyle1; }
-    UINT32			GetTimeout() const	{ return nTimeout; }
-    const String&	GetStyle2() const	{ return aStyle2; }
+    const ScRange&  GetRange() const    { return aRange; }
+    const String&   GetStyle1() const   { return aStyle1; }
+    UINT32          GetTimeout() const  { return nTimeout; }
+    const String&   GetStyle2() const   { return aStyle2; }
 };
 
 class ScDBRangeRefreshedHint : public SfxHint
@@ -167,7 +167,7 @@ public:
                     ScDBRangeRefreshedHint( const ScImportParam& rP );
                     ~ScDBRangeRefreshedHint();
 
-    const ScImportParam&  GetImportParam() const	{ return aParam; }
+    const ScImportParam&  GetImportParam() const    { return aParam; }
 };
 
 class ScDataPilotModifiedHint : public SfxHint

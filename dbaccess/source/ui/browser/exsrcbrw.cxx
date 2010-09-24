@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -217,7 +217,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
 
         // create the col
         Reference< ::com::sun::star::form::XGridColumnFactory >  xColFactory(getControlModel(), UNO_QUERY);
-        Reference< ::com::sun::star::beans::XPropertySet >	xNewCol = xColFactory->createColumn(sControlType);
+        Reference< ::com::sun::star::beans::XPropertySet >  xNewCol = xColFactory->createColumn(sControlType);
         Reference< XPropertySetInfo > xNewColProperties;
         if (xNewCol.is())
             xNewColProperties = xNewCol->getPropertySetInfo();
@@ -235,9 +235,9 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
                 catch(Exception&)
                 {
                     OSL_ENSURE(sal_False,
-                        (	ByteString("SbaExternalSourceBrowser::dispatch : could not set a column property (")
-                        +=	ByteString(pControlProps->Name.getStr(), (sal_uInt16)pControlProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
-                        +=	ByteString(")!")).GetBuffer());
+                        (   ByteString("SbaExternalSourceBrowser::dispatch : could not set a column property (")
+                        +=  ByteString(pControlProps->Name.getStr(), (sal_uInt16)pControlProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
+                        +=  ByteString(")!")).GetBuffer());
                 }
             }
         }
@@ -293,22 +293,22 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
 
     m_bInQueryDispatch = sal_True;
 
-    if	(	(aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/AttachToForm")))
+    if  (   (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/AttachToForm")))
             // attach a new external form
-        ||	(aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/AddGridColumn")))
+        ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/AddGridColumn")))
             // add a column to the grid
-        ||	(aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/ClearView")))
+        ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/ClearView")))
             // clear the grid
         )
         xReturn = (::com::sun::star::frame::XDispatch*)this;
 
-    if	(	!xReturn.is()
-        &&	(	(aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/moveToFirst")))
-            ||	(aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/moveToPrev")))
-            ||	(aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/moveToNext")))
-            ||	(aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/moveToLast")))
-            ||	(aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/moveToNew")))
-            ||	(aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/undoRecord")))
+    if  (   !xReturn.is()
+        &&  (   (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/moveToFirst")))
+            ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/moveToPrev")))
+            ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/moveToNext")))
+            ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/moveToLast")))
+            ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/moveToNew")))
+            ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:FormSlots/undoRecord")))
             )
         )
     {
@@ -382,8 +382,8 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
 {
     Any aOldPos;
     sal_Bool bWasInsertRow = sal_False;
-    sal_Bool bBeforeFirst	= sal_True;
-    sal_Bool bAfterLast 	= sal_True;
+    sal_Bool bBeforeFirst   = sal_True;
+    sal_Bool bAfterLast     = sal_True;
     Reference< XResultSet > xResultSet(xMaster, UNO_QUERY);
     Reference< XRowLocate > xCursor(xMaster, UNO_QUERY);
     Reference< XPropertySet > xMasterProps(xMaster, UNO_QUERY);
@@ -399,7 +399,7 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
         if (xCursor.is() && xResultSet.is())
         {
             bBeforeFirst = xResultSet->isBeforeFirst();
-            bAfterLast	 = xResultSet->isAfterLast();
+            bAfterLast   = xResultSet->isAfterLast();
             if(!bBeforeFirst && !bAfterLast)
                 aOldPos = xCursor->getBookmark();
         }
@@ -481,7 +481,7 @@ void SbaExternalSourceBrowser::startListening()
 {
     if (m_pDataSourceImpl && m_pDataSourceImpl->getAttachedForm().is())
     {
-        Reference< ::com::sun::star::form::XLoadable >	xLoadable(m_pDataSourceImpl->getAttachedForm(), UNO_QUERY);
+        Reference< ::com::sun::star::form::XLoadable >  xLoadable(m_pDataSourceImpl->getAttachedForm(), UNO_QUERY);
         xLoadable->addLoadListener((::com::sun::star::form::XLoadListener*)this);
     }
 }
@@ -491,7 +491,7 @@ void SbaExternalSourceBrowser::stopListening()
 {
     if (m_pDataSourceImpl && m_pDataSourceImpl->getAttachedForm().is())
     {
-        Reference< ::com::sun::star::form::XLoadable >	xLoadable(m_pDataSourceImpl->getAttachedForm(), UNO_QUERY);
+        Reference< ::com::sun::star::form::XLoadable >  xLoadable(m_pDataSourceImpl->getAttachedForm(), UNO_QUERY);
         xLoadable->removeLoadListener((::com::sun::star::form::XLoadListener*)this);
     }
 }

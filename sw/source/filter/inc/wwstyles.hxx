@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,9 +144,9 @@ namespace ww
         stiUser = 0x0ffe,               // user styles are distinguished by name
         stiNil = 0x0fff                 // max for 12 bits
     };
-   
+
     /** Find the WinWord sti index of an english style name.
-    
+
         When importing a RTF document we would like to treat styles as similiar
         to how word does as possible, to this end word will treat some styles
         with special names as inbuilt styles, and some as user defined styles.
@@ -171,10 +171,10 @@ namespace ww
     sti GetCanonicalStiFromEnglishName(const String &rString) throw();
 
     /** Find the WinWord sti index of an old <= Word2 stc (style code)
-    
-        When importing a Word 2 document we would like to treat styles as 
-        similiar to how word 8 does as possible, to this end word will treat 
-        some styles with special codes as inbuilt styles, and some as user 
+
+        When importing a Word 2 document we would like to treat styles as
+        similiar to how word 8 does as possible, to this end word will treat
+        some styles with special codes as inbuilt styles, and some as user
         defined styles.
 
         @param
@@ -190,7 +190,7 @@ namespace ww
     sti GetCanonicalStiFromStc(sal_uInt8 stc) throw();
 
     /** Find the WinWord english name from a sti index
-    
+
         Map the word style index to it's english name
 
         @param
@@ -205,7 +205,7 @@ namespace ww
     const sal_Char* GetEnglishNameFromSti(sti eSti) throw();
 
     /** Determine if the WinWord sti is standard Character Style
-    
+
         @param
         sti the Style index
 

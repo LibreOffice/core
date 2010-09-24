@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ namespace drawinglayer
 
             // #i101443# remember last TextBackgroundColor to decide if a new decomposition is
             // needed because of background color change
-            Color									maLastTextBackgroundColor;
+            Color                                   maLastTextBackgroundColor;
 
             // bitfield
             // is there a PageNumber, Header, Footer or DateTimeField used? Evaluated at construction
@@ -90,7 +90,7 @@ namespace drawinglayer
 
         public:
             SdrTextPrimitive2D(
-                const SdrText* pSdrText, 
+                const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr);
 
             // get data
@@ -120,10 +120,10 @@ namespace drawinglayer
         {
         private:
             // unit contour polygon (scaled to [0.0 .. 1.0])
-            basegfx::B2DPolyPolygon				maUnitPolyPolygon;
+            basegfx::B2DPolyPolygon             maUnitPolyPolygon;
 
             // complete contour polygon transform (scale, rotate, shear, translate)
-            basegfx::B2DHomMatrix				maObjectTransform;
+            basegfx::B2DHomMatrix               maObjectTransform;
 
         protected:
             // local decomposition.
@@ -133,7 +133,7 @@ namespace drawinglayer
             SdrContourTextPrimitive2D(
                 const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr,
-                const basegfx::B2DPolyPolygon& rUnitPolyPolygon, 
+                const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
                 const basegfx::B2DHomMatrix& rObjectTransform);
 
             // get data
@@ -162,7 +162,7 @@ namespace drawinglayer
         {
         private:
             // the path to use. Each paragraph will use one Polygon.
-            basegfx::B2DPolyPolygon				maPathPolyPolygon;
+            basegfx::B2DPolyPolygon             maPathPolyPolygon;
 
             // the Fontwork parameters
             attribute::SdrFormTextAttribute     maSdrFormTextAttribute;
@@ -204,18 +204,18 @@ namespace drawinglayer
         {
         private:
             // text range transformation from unit range ([0.0 .. 1.0]) to text range
-            basegfx::B2DHomMatrix					maTextRangeTransform;
+            basegfx::B2DHomMatrix                   maTextRangeTransform;
 
             // text alignments
             SdrTextHorzAdjust                       maSdrTextHorzAdjust;
             SdrTextVertAdjust                       maSdrTextVertAdjust;
 
             // bitfield
-            unsigned								mbFixedCellHeight : 1;
-            unsigned								mbUnlimitedPage : 1;	// force layout with no text break
-            unsigned								mbCellText : 1;			// this is a cell text as block text
+            unsigned                                mbFixedCellHeight : 1;
+            unsigned                                mbUnlimitedPage : 1;    // force layout with no text break
+            unsigned                                mbCellText : 1;         // this is a cell text as block text
             unsigned                                mbWordWrap : 1;         // for CustomShapes text layout
-            unsigned								mbClipOnBounds : 1;		// for CustomShapes text layout
+            unsigned                                mbClipOnBounds : 1;     // for CustomShapes text layout
 
         protected:
             // local decomposition.
@@ -266,10 +266,10 @@ namespace drawinglayer
         {
         private:
             // text range transformation from unit range ([0.0 .. 1.0]) to text range
-            basegfx::B2DHomMatrix					maTextRangeTransform;
+            basegfx::B2DHomMatrix                   maTextRangeTransform;
 
             // bitfield
-            unsigned								mbFixedCellHeight : 1;
+            unsigned                                mbFixedCellHeight : 1;
 
         protected:
             // local decomposition.
@@ -291,6 +291,47 @@ namespace drawinglayer
 
             // transformed clone operator
             virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
+
+            // provide unique ID
+            DeclPrimitrive2DIDBlock()
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        class SdrAutoFitTextPrimitive2D : public SdrTextPrimitive2D
+        {
+        private:
+            ::basegfx::B2DHomMatrix                 maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
+
+            // bitfield
+            unsigned                                mbWordWrap : 1;         // for CustomShapes text layout
+
+        protected:
+            // local decomposition.
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+
+        public:
+            SdrAutoFitTextPrimitive2D(
+                const SdrText* pSdrText,
+                const OutlinerParaObject& rOutlinerParaObjectPtr,
+                const ::basegfx::B2DHomMatrix& rTextRangeTransform,
+                bool bWordWrap);
+
+            // get data
+            const basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
+            bool getWordWrap() const { return mbWordWrap; }
+
+            // compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+
+            // transformed clone operator
+            virtual SdrTextPrimitive2D* createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

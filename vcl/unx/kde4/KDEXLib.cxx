@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@
 #include <stdio.h>
 #endif
 
-KDEXLib::KDEXLib() : 
-    SalXLib(),	m_bStartupDone(false), m_pApplication(0),
+KDEXLib::KDEXLib() :
+    SalXLib(),  m_bStartupDone(false), m_pApplication(0),
     m_pFreeCmdLineArgs(0), m_pAppCmdLineArgs(0), m_nFakeCmdLineArgs( 0 )
 {
 }
@@ -60,13 +60,13 @@ KDEXLib::KDEXLib() :
 KDEXLib::~KDEXLib()
 {
     delete (VCLKDEApplication*)m_pApplication;
-    
+
     // free the faked cmdline arguments no longer needed by KApplication
     for( int i = 0; i < m_nFakeCmdLineArgs; i++ )
     {
         free( m_pFreeCmdLineArgs[i] );
     }
-    
+
     delete [] m_pFreeCmdLineArgs;
     delete [] m_pAppCmdLineArgs;
 }
@@ -87,7 +87,7 @@ void KDEXLib::Init()
             ki18n( "OpenOffice.org is an office suite.\n" ),
             "http://kde.openoffice.org/index.html",
             "dev@kde.openoffice.org" );
-            
+
     kAboutData->addAuthor( ki18n( "Jan Holesovsky" ),
             ki18n( "Original author and maintainer of the KDE NWF." ),
             "kendy@artax.karlin.mff.cuni.cz",
@@ -98,7 +98,7 @@ void KDEXLib::Init()
     kAboutData->addAuthor( ki18n("Eric Bischoff"),
             ki18n( "Accessibility fixes, porting to KDE 4." ),
             "bischoff@kde.org" );
-            
+
     //kAboutData->setProgramIconName("OpenOffice");
 
     m_nFakeCmdLineArgs = 1;
@@ -108,7 +108,7 @@ void KDEXLib::Init()
     rtl::OString aDisplay;
     rtl::OUString aParam, aBin;
 
-    for ( nIdx = 0; nIdx < nParams; ++nIdx ) 
+    for ( nIdx = 0; nIdx < nParams; ++nIdx )
     {
         aCommandLine.getCommandArg( nIdx, aParam );
         if ( !m_pFreeCmdLineArgs && aParam.equalsAscii( "-display" ) && nIdx + 1 < nParams )
@@ -138,14 +138,14 @@ void KDEXLib::Init()
         m_pAppCmdLineArgs[i] = m_pFreeCmdLineArgs[i];
 
     KCmdLineArgs::init( m_nFakeCmdLineArgs, m_pAppCmdLineArgs, kAboutData );
-    
+
     m_pApplication = new VCLKDEApplication();
     kapp->disableSessionManagement();
     KApplication::setQuitOnLastWindowClosed(false);
-    
+
     Display* pDisp = QX11Info::display();
     SalKDEDisplay *pSalDisplay = new SalKDEDisplay(pDisp);
-    
+
     ((VCLKDEApplication*)m_pApplication)->disp = pSalDisplay;
 
     pInputMethod->CreateMethod( pDisp );

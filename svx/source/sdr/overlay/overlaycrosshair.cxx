@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace sdr
                 const basegfx::BColor aRGBColorA(getOverlayManager()->getStripeColorA().getBColor());
                 const basegfx::BColor aRGBColorB(getOverlayManager()->getStripeColorB().getBColor());
                 const double fStripeLengthPixel(getOverlayManager()->getStripeLengthPixel());
-                
+
                 const drawinglayer::primitive2d::Primitive2DReference aReference(
                     new drawinglayer::primitive2d::OverlayCrosshairPrimitive(
                         getBasePosition(),
@@ -70,10 +70,10 @@ namespace sdr
         }
 
         OverlayCrosshairStriped::OverlayCrosshairStriped(const basegfx::B2DPoint& rBasePos)
-        :	OverlayObjectWithBasePosition(rBasePos, Color(COL_BLACK))
+        :   OverlayObjectWithBasePosition(rBasePos, Color(COL_BLACK))
         {
         }
-        
+
         OverlayCrosshairStriped::~OverlayCrosshairStriped()
         {
         }

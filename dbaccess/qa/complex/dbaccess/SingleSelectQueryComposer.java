@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
                 realValue.equals(_attributeValue));
         log.println("  (results in " + (String) m_composer.getQuery() + ")");
     }
-    
+
     /** tests setCommand of the composer
      */
     public void testSetCommand()
@@ -140,11 +140,11 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             final String table = "SELECT * FROM \"customers\"";
             m_composer.setCommand("customers",CommandType.TABLE);
             assure("setCommand/getQuery TABLE inconsistent", m_composer.getQuery().equals(table));
-            
+
             m_database.getDatabase().getDataSource().createQuery("set command test", "SELECT * FROM \"orders for customer\" \"a\", \"customers\" \"b\" WHERE \"a\".\"Product Name\" = \"b\".\"Name\"");
             m_composer.setCommand("set command test",CommandType.QUERY);
             assure("setCommand/getQuery QUERY inconsistent", m_composer.getQuery().equals(m_database.getDatabase().getDataSource().getQueryDefinition("set command test").getCommand()));
-            
+
             final String sql = "SELECT * FROM \"orders for customer\" WHERE \"Product Name\" = 'test'";
             m_composer.setCommand(sql,CommandType.COMMAND);
             assure("setCommand/getQuery COMMAND inconsistent", m_composer.getQuery().equals(sql));
@@ -166,7 +166,7 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
             final String simpleQuery2 = "SELECT * FROM \"customers\" WHERE \"Name\" = 'oranges'";
             m_composer.setElementaryQuery(simpleQuery2);
             assure("setElementaryQuery/getQuery inconsistent", m_composer.getQuery().equals(simpleQuery2));
-            
+
             log.println("check setQuery");
             final String simpleQuery = "SELECT * FROM \"customers\"";
             m_composer.setQuery(simpleQuery);

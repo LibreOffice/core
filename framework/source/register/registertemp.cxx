@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 //_________________________________________________________________________________________________________________
-//	includes of my own project
+//  includes of my own project
 //_________________________________________________________________________________________________________________
 #include <macros/registration.hxx>
 
@@ -47,11 +47,11 @@
 
         COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-        COMPONENTWRITEINFO	(	COMPONENTINFO( Service1 )
+        COMPONENTWRITEINFO  (   COMPONENTINFO( Service1 )
                                  COMPONENTINFO( Service2 )
                             )
 
-        COMPONENTGETFACTORY	(	IFFACTORIE( Service1 )
+        COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
                              )
@@ -82,7 +82,7 @@
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper	)
+COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
                         COMPONENTINFO( ::framework::MailToDispatcher                        )
                         COMPONENTINFO( ::framework::NewMenuController                       )
                         COMPONENTINFO( ::framework::ToolbarsMenuController                  )
@@ -104,13 +104,13 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper	)
                         COMPONENTINFO( ::framework::DispatchRecorderSupplier                )
                         COMPONENTINFO( ::framework::Oxt_Handler                             )
                         COMPONENTINFO( ::framework::License                                 )
-                        COMPONENTINFO( ::framework::PopupMenuController						)
+                        COMPONENTINFO( ::framework::PopupMenuController                     )
                     )
 
-COMPONENTGETFACTORY	(	IFFACTORY( ::framework::MediaTypeDetectionHelper		)	
+COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )
                         IFFACTORY( ::framework::MailToDispatcher                        ) else
                         IFFACTORY( ::framework::ServiceHandler                          )   else
-                        IFFACTORY( ::framework::LogoTextStatusbarController             )	else
+                        IFFACTORY( ::framework::LogoTextStatusbarController             )   else
                         IFFACTORY( ::framework::LogoImageStatusbarController            )   else
                         IFFACTORY( ::framework::License                                 )   else
                         IFFACTORY( ::framework::PopupMenuDispatcher                     )   else
@@ -119,7 +119,7 @@ COMPONENTGETFACTORY	(	IFFACTORY( ::framework::MediaTypeDetectionHelper		)
                         IFFACTORY( ::framework::DispatchRecorder                        )   else
                         IFFACTORY( ::framework::DispatchRecorderSupplier                )   else
                         IFFACTORY( ::framework::SimpleTextStatusbarController           )   else
-                        IFFACTORY( ::framework::ToolbarsMenuController                  )	else
+                        IFFACTORY( ::framework::ToolbarsMenuController                  )   else
                         IFFACTORY( ::framework::FontMenuController                      )   else
                         IFFACTORY( ::framework::MacrosMenuController                    )   else
                         IFFACTORY( ::framework::NewMenuController                       )   else
@@ -128,6 +128,6 @@ COMPONENTGETFACTORY	(	IFFACTORY( ::framework::MediaTypeDetectionHelper		)
                         IFFACTORY( ::framework::FooterMenuController                    )   else
                         IFFACTORY( ::framework::HeaderMenuController                    )   else
                         IFFACTORY( ::framework::LanguageSelectionMenuController         )   else
-                        IFFACTORY( ::framework::Oxt_Handler                             )	else
-                        IFFACTORY( ::framework::PopupMenuController						)
+                        IFFACTORY( ::framework::Oxt_Handler                             )   else
+                        IFFACTORY( ::framework::PopupMenuController                     )
                     )

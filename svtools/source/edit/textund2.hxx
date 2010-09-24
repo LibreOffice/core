@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,101 +33,101 @@
 class TextUndoDelPara : public TextUndo
 {
 private:
-    BOOL 			mbDelObject;
-    ULONG 			mnPara;
-    TextNode* 		mpNode;	// Zeigt auf das gueltige, nicht zerstoerte Objekt!
+    BOOL            mbDelObject;
+    ULONG           mnPara;
+    TextNode*       mpNode; // Zeigt auf das gueltige, nicht zerstoerte Objekt!
 
 public:
                     TYPEINFO();
                     TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, ULONG nPara );
                     ~TextUndoDelPara();
 
-    virtual void 	Undo();
-    virtual void 	Redo();
+    virtual void    Undo();
+    virtual void    Redo();
 };
 
 
 class TextUndoConnectParas : public TextUndo
 {
 private:
-    ULONG 			mnPara;
-    USHORT			mnSepPos;
+    ULONG           mnPara;
+    USHORT          mnSepPos;
 
 public:
                     TYPEINFO();
                     TextUndoConnectParas( TextEngine* pTextEngine, ULONG nPara, USHORT nSepPos );
                     ~TextUndoConnectParas();
 
-    virtual void 	Undo();
-    virtual void 	Redo();
+    virtual void    Undo();
+    virtual void    Redo();
 };
 
 
 class TextUndoSplitPara : public TextUndo
 {
 private:
-    ULONG 			mnPara;
-    USHORT			mnSepPos;
+    ULONG           mnPara;
+    USHORT          mnSepPos;
 
 public:
                     TYPEINFO();
                     TextUndoSplitPara( TextEngine* pTextEngine, ULONG nPara, USHORT nSepPos );
                     ~TextUndoSplitPara();
 
-    virtual void 	Undo();
-    virtual void 	Redo();
+    virtual void    Undo();
+    virtual void    Redo();
 };
 
 
 class TextUndoInsertChars : public TextUndo
 {
 private:
-    TextPaM			maTextPaM;
-    String			maText;
+    TextPaM         maTextPaM;
+    String          maText;
 
 public:
                     TYPEINFO();
                     TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const String& rStr );
 
-//	const TextPaM&	GetTextPaM() { return aTextPaM; }
-//	String&			GetStr() { return aText; }
+//  const TextPaM&  GetTextPaM() { return aTextPaM; }
+//  String&         GetStr() { return aText; }
 
-    virtual void 	Undo();
-    virtual void 	Redo();
+    virtual void    Undo();
+    virtual void    Redo();
 
-    virtual BOOL	Merge( SfxUndoAction *pNextAction );
+    virtual BOOL    Merge( SfxUndoAction *pNextAction );
 };
 
 
 class TextUndoRemoveChars : public TextUndo
 {
 private:
-    TextPaM			maTextPaM;
-    String			maText;
+    TextPaM         maTextPaM;
+    String          maText;
 
 public:
                     TYPEINFO();
                     TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const String& rStr );
 
-//	const TextPaM&		GetTextPaM() { return aTextPaM; }
-//	String&			GetStr() { return aText; }
+//  const TextPaM&      GetTextPaM() { return aTextPaM; }
+//  String&         GetStr() { return aText; }
 
-    virtual void 	Undo();
-    virtual void 	Redo();
+    virtual void    Undo();
+    virtual void    Redo();
 };
 
 
 class TextUndoSetAttribs: public TextUndo
 {
 private:
-    TextSelection		maSelection;
-//	SfxItemSet			aNewAttribs;
-//	TextInfoArray		aPrevAttribs;
-//	BYTE				nSpecial;
-//	BOOL				bSetIsRemove;
-//	USHORT				nRemoveWhich;
+    TextSelection       maSelection;
+//  SfxItemSet          aNewAttribs;
+//  TextInfoArray       aPrevAttribs;
+//  BYTE                nSpecial;
+//  BOOL                bSetIsRemove;
+//  USHORT              nRemoveWhich;
 //
-//	void				ImpSetSelection( TextView* pView );
+//  void                ImpSetSelection( TextView* pView );
 
 
 public:
@@ -135,14 +135,14 @@ public:
                         TextUndoSetAttribs( TextEngine* pTextEngine, const TextSelection& rESel );
                         ~TextUndoSetAttribs();
 
-//	TextInfoArray&		GetTextInfos()	{ return aPrevAttribs; }
-//	SfxItemSet&			GetNewAttribs()		{ return aNewAttribs; }
-//	void				SetSpecial( BYTE n ) 			{ nSpecial = n; }
-//	void				SetRemoveAttribs( BOOL b ) 		{ bSetIsRemove = b; }
-//	void				SetRemoveWhich( USHORT n )		{ nRemoveWhich = n; }
+//  TextInfoArray&      GetTextInfos()  { return aPrevAttribs; }
+//  SfxItemSet&         GetNewAttribs()     { return aNewAttribs; }
+//  void                SetSpecial( BYTE n )            { nSpecial = n; }
+//  void                SetRemoveAttribs( BOOL b )      { bSetIsRemove = b; }
+//  void                SetRemoveWhich( USHORT n )      { nRemoveWhich = n; }
 
-    virtual void		Undo();
-    virtual void		Redo();
+    virtual void        Undo();
+    virtual void        Redo();
 };
 
 #endif // _TEXTUND2_HXX

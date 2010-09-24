@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-//!	SearchWords sucht in ganzen Zellen - umbenennen ???
+//! SearchWords sucht in ganzen Zellen - umbenennen ???
 
 //  SfxItemPropertyMapEntry nur fuer GetPropertySetInfo
 
@@ -56,18 +56,18 @@ const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
 {
     static SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_SRCHBACK),		0,	 	&getBooleanCppuType(), 		 0, 0},
-        {MAP_CHAR_LEN(SC_UNO_SRCHBYROW),	0,	 	&getBooleanCppuType(), 		 0, 0},
-        {MAP_CHAR_LEN(SC_UNO_SRCHCASE),		0,	 	&getBooleanCppuType(), 		 0, 0},
-        {MAP_CHAR_LEN(SC_UNO_SRCHREGEXP),	0,		&getBooleanCppuType(), 		 0, 0},
-        {MAP_CHAR_LEN(SC_UNO_SRCHSIM),		0,	 	&getBooleanCppuType(), 		 0, 0},
-        {MAP_CHAR_LEN(SC_UNO_SRCHSIMADD),	0,	 	&getCppuType((sal_Int16*)0), 0, 0},
-        {MAP_CHAR_LEN(SC_UNO_SRCHSIMEX),	0,		&getCppuType((sal_Int16*)0), 0, 0},
-        {MAP_CHAR_LEN(SC_UNO_SRCHSIMREL),	0, 		&getBooleanCppuType(), 		 0, 0},
-        {MAP_CHAR_LEN(SC_UNO_SRCHSIMREM),	0, 		&getCppuType((sal_Int16*)0), 0, 0},
-        {MAP_CHAR_LEN(SC_UNO_SRCHSTYLES),	0, 		&getBooleanCppuType(), 		 0, 0},
-        {MAP_CHAR_LEN(SC_UNO_SRCHTYPE),		0, 		&getCppuType((sal_Int16*)0), 0, 0},	// enum TableSearch ist weg
-        {MAP_CHAR_LEN(SC_UNO_SRCHWORDS),	0, 		&getBooleanCppuType(), 		 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SRCHBACK),     0,      &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SRCHBYROW),    0,      &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SRCHCASE),     0,      &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SRCHREGEXP),   0,      &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SRCHSIM),      0,      &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SRCHSIMADD),   0,      &getCppuType((sal_Int16*)0), 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SRCHSIMEX),    0,      &getCppuType((sal_Int16*)0), 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SRCHSIMREL),   0,      &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SRCHSIMREM),   0,      &getCppuType((sal_Int16*)0), 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SRCHSTYLES),   0,      &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SRCHTYPE),     0,      &getCppuType((sal_Int16*)0), 0, 0}, // enum TableSearch ist weg
+        {MAP_CHAR_LEN(SC_UNO_SRCHWORDS),    0,      &getBooleanCppuType(),       0, 0},
         {0,0,0,0,0,0}
     };
     return aSearchPropertyMap_Impl;
@@ -75,8 +75,8 @@ const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
 
 //------------------------------------------------------------------------
 
-#define SCSEARCHDESCRIPTOR_SERVICE		"com.sun.star.util.SearchDescriptor"
-#define SCREPLACEDESCRIPTOR_SERVICE		"com.sun.star.util.ReplaceDescriptor"
+#define SCSEARCHDESCRIPTOR_SERVICE      "com.sun.star.util.SearchDescriptor"
+#define SCREPLACEDESCRIPTOR_SERVICE     "com.sun.star.util.ReplaceDescriptor"
 
 //------------------------------------------------------------------------
 
@@ -84,11 +84,11 @@ ScCellSearchObj::ScCellSearchObj() :
     aPropSet(lcl_GetSearchPropertyMap())
 {
     pSearchItem = new SvxSearchItem( SCITEM_SEARCHDATA );
-    //	Defaults:
+    //  Defaults:
     pSearchItem->SetWordOnly(FALSE);
     pSearchItem->SetExact(FALSE);
     pSearchItem->SetMatchFullHalfWidthForms(FALSE);
-    pSearchItem->SetUseAsianOptions(FALSE);		// or all asian bits would have to be handled
+    pSearchItem->SetUseAsianOptions(FALSE);     // or all asian bits would have to be handled
     pSearchItem->SetBackward(FALSE);
     pSearchItem->SetSelection(FALSE);
     pSearchItem->SetRegExp(FALSE);
@@ -98,11 +98,11 @@ ScCellSearchObj::ScCellSearchObj() :
     pSearchItem->SetLEVOther(2);
     pSearchItem->SetLEVShorter(2);
     pSearchItem->SetLEVLonger(2);
-    //	Calc-Flags
+    //  Calc-Flags
     pSearchItem->SetRowDirection(FALSE);
     pSearchItem->SetCellType(SVX_SEARCHIN_FORMULA);
 
-    //	Selection-Flag wird beim Aufruf gesetzt
+    //  Selection-Flag wird beim Aufruf gesetzt
 }
 
 ScCellSearchObj::~ScCellSearchObj()
@@ -160,11 +160,11 @@ void SAL_CALL ScCellSearchObj::setPropertyValue(
     ScUnoGuard aGuard;
     String aString(aPropertyName);
 
-    if (aString.EqualsAscii( SC_UNO_SRCHBACK ))		   pSearchItem->SetBackward( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    if (aString.EqualsAscii( SC_UNO_SRCHBACK ))        pSearchItem->SetBackward( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if (aString.EqualsAscii( SC_UNO_SRCHBYROW ))  pSearchItem->SetRowDirection( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if (aString.EqualsAscii( SC_UNO_SRCHCASE ))   pSearchItem->SetExact( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if (aString.EqualsAscii( SC_UNO_SRCHREGEXP )) pSearchItem->SetRegExp( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if (aString.EqualsAscii( SC_UNO_SRCHSIM ))	   pSearchItem->SetLevenshtein( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if (aString.EqualsAscii( SC_UNO_SRCHSIM ))    pSearchItem->SetLevenshtein( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if (aString.EqualsAscii( SC_UNO_SRCHSIMREL )) pSearchItem->SetLEVRelaxed( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if (aString.EqualsAscii( SC_UNO_SRCHSTYLES )) pSearchItem->SetPattern( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if (aString.EqualsAscii( SC_UNO_SRCHWORDS ))  pSearchItem->SetWordOnly( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
@@ -182,11 +182,11 @@ uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const rtl::OUString& aPrope
     String aString(aPropertyName);
     uno::Any aRet;
 
-    if (aString.EqualsAscii( SC_UNO_SRCHBACK ))		   ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetBackward() );
+    if (aString.EqualsAscii( SC_UNO_SRCHBACK ))        ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetBackward() );
     else if (aString.EqualsAscii( SC_UNO_SRCHBYROW ))  ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetRowDirection() );
     else if (aString.EqualsAscii( SC_UNO_SRCHCASE ))   ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetExact() );
     else if (aString.EqualsAscii( SC_UNO_SRCHREGEXP )) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetRegExp() );
-    else if (aString.EqualsAscii( SC_UNO_SRCHSIM ))	   ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsLevenshtein() );
+    else if (aString.EqualsAscii( SC_UNO_SRCHSIM ))    ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsLevenshtein() );
     else if (aString.EqualsAscii( SC_UNO_SRCHSIMREL )) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsLEVRelaxed() );
     else if (aString.EqualsAscii( SC_UNO_SRCHSTYLES )) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetPattern() );
     else if (aString.EqualsAscii( SC_UNO_SRCHWORDS ))  ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetWordOnly() );

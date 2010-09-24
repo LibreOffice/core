@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,11 +117,11 @@ using ::com::sun::star::util::SearchOptions;
 #define SRC_SEARCHOPTIONS (0xFFFF & ~(SEARCH_OPTIONS_FORMAT|SEARCH_OPTIONS_FAMILIES|SEARCH_OPTIONS_SEARCH_ALL))
 
 // Druckraender -> wie Basic - Ide
-#define LMARGPRN		1700
-#define RMARGPRN		 900
-#define TMARGPRN    	2000
-#define BMARGPRN    	1000
-#define BORDERPRN		300
+#define LMARGPRN        1700
+#define RMARGPRN         900
+#define TMARGPRN        2000
+#define BMARGPRN        1000
+#define BORDERPRN       300
 
 
 
@@ -134,7 +134,7 @@ SFX_IMPL_VIEWFACTORY(SwSrcView, SW_RES(STR_NONAME))
 SFX_IMPL_INTERFACE( SwSrcView, SfxViewShell, SW_RES(0) )
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_SRCVIEW_POPUPMENU));
-    SFX_OBJECTBAR_REGISTRATION(	SFX_OBJECTBAR_TOOLS|
+    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS|
                                 SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                 SW_RES(RID_WEBTOOLS_TOOLBOX) );
     SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
@@ -149,7 +149,7 @@ TYPEINIT1(SwSrcView, SfxViewShell)
 
 void lcl_PrintHeader( OutputDevice &rOutDev, USHORT nPages, USHORT nCurPage, const String& rTitle )
 {
-    short nLeftMargin 	= LMARGPRN;
+    short nLeftMargin   = LMARGPRN;
     Size aSz = rOutDev.GetOutputSize();
     short nBorder = BORDERPRN;
 
@@ -236,7 +236,7 @@ void lcl_ConvertTabsToSpaces( String& rLine )
                 rLine.Insert( aBlanker, nPos );
                 nMax = rLine.Len();
             }
-            nPos++;	// Nicht optimal, falls Tab, aber auch nicht verkehrt...
+            nPos++; // Nicht optimal, falls Tab, aber auch nicht verkehrt...
         }
     }
 }
@@ -276,7 +276,7 @@ SwSrcView::~SwSrcView()
     sal_Int32 delay = xDocProps->getAutoloadSecs();
     pDocShell->SetAutoLoad(INetURLObject(url), delay,
                             (delay != 0) || !url.equalsAscii(""));
-//	EndListening(*GetViewFrame());
+//  EndListening(*GetViewFrame());
     EndListening(*pDocShell);
     delete pSearchItem;
 }
@@ -311,7 +311,7 @@ void SwSrcView::Init()
         aEditWin.SetReadonly(TRUE);
     }
 
-//	StartListening(*GetViewFrame());
+//  StartListening(*GetViewFrame());
     StartListening(*pDocShell,TRUE);
 }
 
@@ -319,7 +319,7 @@ void SwSrcView::Init()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SwDocShell*		SwSrcView::GetDocShell()
+SwDocShell*     SwSrcView::GetDocShell()
 {
     SfxObjectShell* pObjShell = GetViewFrame()->GetObjectShell();
     return PTR_CAST(SwDocShell, pObjShell);
@@ -332,7 +332,7 @@ SwDocShell*		SwSrcView::GetDocShell()
 
 void SwSrcView::SaveContent(const String& rTmpFile)
 {
-    SfxMedium aMedium( rTmpFile,	STREAM_WRITE, TRUE);
+    SfxMedium aMedium( rTmpFile,    STREAM_WRITE, TRUE);
     SvStream* pOutStream = aMedium.GetOutStream();
     pOutStream->SetStreamCharSet( lcl_GetStreamCharSet(eLoadEncoding) );
     aEditWin.Write(*pOutStream);//, EE_FORMAT_TEXT);
@@ -358,7 +358,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 TemplateDescription::FILESAVE_AUTOEXTENSION,
                 TemplateDescription::FILESAVE_SIMPLE );
             uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
-//			pFileDlg->SetHelpId(HID_FILEDLG_SRCVIEW);
+//          pFileDlg->SetHelpId(HID_FILEDLG_SRCVIEW);
             uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 
             // search for an html filter for export
@@ -749,7 +749,7 @@ USHORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool )
     }
     return 0;
 }
-                                        
+
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -764,7 +764,7 @@ SfxPrinter* SwSrcView::GetPrinter( BOOL bCreate )
  --------------------------------------------------------------------*/
 sal_Int32 SwSrcView::PrintSource(
     OutputDevice *pOutDev,
-    sal_Int32 nPage, 
+    sal_Int32 nPage,
     bool bCalcNumPagesOnly )
 {
     if (!pOutDev || nPage <= 0)
@@ -829,7 +829,7 @@ sal_Int32 SwSrcView::PrintSource(
         }
         aPos.Y() += nParaSpace;
     }
-    
+
     pOutDev->Pop();
 
     DBG_ASSERT( bCalcNumPagesOnly || nPage <= nCurPage, "page number out of range" );

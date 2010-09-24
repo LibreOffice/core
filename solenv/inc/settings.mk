@@ -147,6 +147,9 @@ JAVAI:=$(JAVAINTERPRETER)
 .IF "$(JAVACISGCJ)" == "yes"
 JAVAC+=--encoding=UTF-8 -O2 -fno-assert -Wno-deprecated -C
 .ENDIF
+.IF "$(JDK)" != "gcj" && $(JAVACISKAFFE) != "yes"
+JAVAC+=-source $(JAVA_SOURCE_VER) -target $(JAVA_TARGET_VER)
+.ENDIF
 
 #classpath and response
 .IF "$(JDK)" == "J++"
@@ -1166,6 +1169,10 @@ CDEFS+=-DENABLE_LAYOUT_EXPERIMENTAL=1
 .ELSE # ENABLE_LAYOUT_EXPERIMENTAL != TRUE
 CFLAGS+=-DENABLE_LAYOUT_EXPERIMENTAL=0
 .ENDIF # ENABLE_LAYOUT_EXPERIMENTAL != TRUE
+
+.IF "$(ENABLE_GSTREAMER)" == "TRUE"
+CDEFS+=-DGSTREAMER
+.ENDIF
 
 # compose flags and defines for GUI
 .IF "$(TARGETTYPE)"=="GUI"

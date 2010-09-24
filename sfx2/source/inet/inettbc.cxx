@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,7 +123,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL /*bNew*/ ) co
     if ( xDispatchProvider.is() && m_xServiceManager.is() )
     {
         URL             aTargetURL;
-        ::rtl::OUString	aTarget( ::rtl::OUString::createFromAscii( "_default" ));
+        ::rtl::OUString aTarget( ::rtl::OUString::createFromAscii( "_default" ));
 
         aTargetURL.Complete = aName;
 

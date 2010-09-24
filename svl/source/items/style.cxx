@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,8 +53,8 @@
 #include <unotools/syslocale.hxx>
 #include <algorithm>
 
-#define STYLESTREAM 			"SfxStyleSheets"
-#define STYLESTREAM_VERSION 	USHORT(50)
+#define STYLESTREAM             "SfxStyleSheets"
+#define STYLESTREAM_VERSION     USHORT(50)
 
 #ifdef DBG_UTIL
 class DbgStyleSheetReferences
@@ -86,19 +86,19 @@ TYPEINIT1(SfxStyleSheetPoolHint, SfxHint);
 
 SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
 (
-    USHORT				nAction,		// SFX_STYLESHEET_... (s.o.)
+    USHORT              nAction,        // SFX_STYLESHEET_... (s.o.)
     const String&       rOldName
 )
-:	SfxStyleSheetHint( nAction ),
+:   SfxStyleSheetHint( nAction ),
     aName( rOldName )
 {}
 SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
 (
-    USHORT				nAction,		// SFX_STYLESHEET_... (s.o.)
+    USHORT              nAction,        // SFX_STYLESHEET_... (s.o.)
     const String&       rOldName,
-    SfxStyleSheetBase&	rStyleSheet 	// geh"ort weiterhin dem Aufrufer
+    SfxStyleSheetBase&  rStyleSheet     // geh"ort weiterhin dem Aufrufer
 )
-:	SfxStyleSheetHint( nAction, rStyleSheet ),
+:   SfxStyleSheetHint( nAction, rStyleSheet ),
     aName( rOldName )
 {}
 
@@ -106,18 +106,18 @@ SfxStyleSheetHintExtended::SfxStyleSheetHintExtended
 
 SfxStyleSheetHint::SfxStyleSheetHint
 (
-    USHORT				nAction,		// SFX_STYLESHEET_... (s.o.)
-    SfxStyleSheetBase&	rStyleSheet 	// geh"ort weiterhin dem Aufrufer
+    USHORT              nAction,        // SFX_STYLESHEET_... (s.o.)
+    SfxStyleSheetBase&  rStyleSheet     // geh"ort weiterhin dem Aufrufer
 )
-:	pStyleSh( &rStyleSheet ),
+:   pStyleSh( &rStyleSheet ),
     nHint( nAction )
 {}
 
 SfxStyleSheetHint::SfxStyleSheetHint
 (
-    USHORT				nAction		// SFX_STYLESHEET_... (s.o.)
+    USHORT              nAction     // SFX_STYLESHEET_... (s.o.)
 )
-:	pStyleSh( NULL ),
+:   pStyleSh( NULL ),
     nHint( nAction )
 {}
 
@@ -961,7 +961,7 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
                 // damit eigene ItemSets untergeschoben werden koennen
                 SfxItemSet& rSet = rSheet.GetItemSet();
                 rSet.ClearItem();
-    //! 		SfxItemSet aTmpSet( *pTmpPool );
+    //!         SfxItemSet aTmpSet( *pTmpPool );
                 /*!aTmpSet*/ rSet.Load( rStream );
                 //! rSet.Put( aTmpSet );
             }
@@ -974,7 +974,7 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
             rStream.Seek( nPos );
         }
 
-        //	#72939# only loop through the styles that were really inserted
+        //  #72939# only loop through the styles that were really inserted
         ULONG n = aStyles.size();
 
         //! delete pTmpPool;
@@ -1061,7 +1061,7 @@ BOOL SfxStyleSheetBasePool::Load1_Impl( SvStream& rStream )
             // damit eigene ItemSets untergeschoben werden koennen
             SfxItemSet& rSet = rSheet.GetItemSet();
             rSet.ClearItem();
-//! 		SfxItemSet aTmpSet( *pTmpPool );
+//!         SfxItemSet aTmpSet( *pTmpPool );
             /*!aTmpSet*/ rSet.Load( rStream );
             //! rSet.Put( aTmpSet );
         }

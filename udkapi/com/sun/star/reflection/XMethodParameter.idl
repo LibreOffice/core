@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,24 +24,24 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_reflection_XMethodParameter_idl__ 
-#define __com_sun_star_reflection_XMethodParameter_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_reflection_XTypeDescription_idl__ 
-#include <com/sun/star/reflection/XTypeDescription.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module reflection {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_reflection_XMethodParameter_idl__
+#define __com_sun_star_reflection_XMethodParameter_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_reflection_XTypeDescription_idl__
+#include <com/sun/star/reflection/XTypeDescription.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
 /** Reflects a method parameter.
 
     <p>This type is superseded by <type>XParameter</type>, which supports
@@ -51,48 +51,48 @@
     @see XInterfaceMethodTypeDescription
 */
 published interface XMethodParameter: com::sun::star::uno::XInterface
-{ 
+{
     /** Returns the name of the parameter
 
         @return
                 name of parameter
     */
-    string getName(); 
-    
+    string getName();
+
     /** Returns the type of the parameter.
 
         @return
                 type of parameter
     */
-    com::sun::star::reflection::XTypeDescription getType(); 
-    
+    com::sun::star::reflection::XTypeDescription getType();
+
     /** Returns true, if the parameter is declared as [in] or [inout] in IDL.
 
         @return
                 true, if declared [in] or [inout] parameter
     */
-    boolean isIn(); 
-    
+    boolean isIn();
+
     /** Returns true, if the parameter is declared as [out] or [inout] in IDL.
-        
+
         @return
                 true, if declared [out] or [inout] parameter
     */
-    boolean isOut(); 
-    
+    boolean isOut();
+
     /** Returns the position of the parameter regarding the IDL method declaration.
-        
+
         @return
                 position of the parameter
     */
     long getPosition();
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

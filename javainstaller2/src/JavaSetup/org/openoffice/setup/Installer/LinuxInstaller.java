@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,13 @@ import java.util.Map;
 import java.util.Vector;
 
 public class LinuxInstaller extends Installer {
-    
+
     LinuxHelper helper = new LinuxHelper();
-    
+
     public LinuxInstaller() {
         super();
     }
-    
+
     public void preInstall(PackageDescription packageData) {
         InstallData installData = InstallData.getInstance();
         // Collecting package names
@@ -108,8 +108,8 @@ public class LinuxInstaller extends Installer {
         String installDir = null;
         InstallData installData = InstallData.getInstance();
 
-        String packageName = packageData.getPkgRealName(); 
-        
+        String packageName = packageData.getPkgRealName();
+
         if ( packageName != null ) {
             String rpmCommand = "rpm -q --queryformat %{INSTALLPREFIX} " + packageName;
             String[] rpmCommandArray = new String[5];
@@ -118,19 +118,19 @@ public class LinuxInstaller extends Installer {
             rpmCommandArray[2] = "--queryformat";
             rpmCommandArray[3] = "%{INSTALLPREFIX}";
             rpmCommandArray[4] = packageName;
-            
+
             Vector returnVector = new Vector();
             Vector returnErrorVector = new Vector();
             int returnValue = ExecuteProcess.executeProcessReturnVector(rpmCommandArray, returnVector, returnErrorVector);
             String returnString = (String) returnVector.get(0);
             returnString = returnString.replaceAll("//","/");
-            
+
             String log = rpmCommand + "<br><b>Returns: " + returnString + "</b><br>";
             LogManager.addCommandsLogfileComment(log);
-            
-            installDir = returnString;            
+
+            installDir = returnString;
         }
-        
+
         return installDir;
     }
 
@@ -142,7 +142,7 @@ public class LinuxInstaller extends Installer {
         // String log = "<br><b>Package: " + packageData.getName() + "</b>";
         // LogManager.addCommandsLogfileComment(log);
         String log = "";
-        
+
         // setting installDir
         String installDir = data.getInstallDir();
         String packagePath = data.getPackagePath();
@@ -160,52 +160,52 @@ public class LinuxInstaller extends Installer {
         } else {
             log = "<b>Package Name: " + packageName + "</b>";
             LogManager.addCommandsLogfileComment(log);
-        
+
             File completePackage = new File(packagePath, packageName);
             packageName = completePackage.getPath();
             packageName = "\"" + packageName + "\""; // Quoting is necessary, if the path the the packages contains white spaces.
-        
+
             if ( completePackage.exists() ) {
                 String relocations = helper.getRelocationString(packageData, packageName);
                 if ( relocations != null ) {
                     // Problem: If Prefix = "/" the packages are not relocatable with RPM version 3.x .
-                    // Therefore Prefix has to be "/opt" in spec file, although packages shall not be 
+                    // Therefore Prefix has to be "/opt" in spec file, although packages shall not be
                     // relocatable (except for installations with root privileges). So /opt has to be
-                    // listed left and right of equal sign: --relocate /opt=<installDir>/opt 
+                    // listed left and right of equal sign: --relocate /opt=<installDir>/opt
                     // -> /opt has to be added to the installDir
                     File localInstallDir = new File(installDir, relocations);  // "/" -> "/opt"
                     String localInstallDirString = localInstallDir.getPath();
 
                     // Fixing problem with installation directory and RPM version 3.x
-                    String fixedInstallDir = helper.fixInstallationDirectory(localInstallDirString);    
+                    String fixedInstallDir = helper.fixInstallationDirectory(localInstallDirString);
                     relocations = relocations + "=" + fixedInstallDir;
                     // relocations: "/opt/staroffice8=" + fixedInstallDir;
                 }
-                
-                // Some packages have to be installed with parameter "--force", if the link "/usr/bin/soffice" 
+
+                // Some packages have to be installed with parameter "--force", if the link "/usr/bin/soffice"
                 // already exists. These pacakges return true with methode "useForce()".
                 boolean useForce = false;
                 if ( packageData.useForce() ) {
                     File sofficeLink = new File("/usr/bin/soffice");
                     if ( sofficeLink.exists() ) { useForce = true; }
                 }
-                
+
                 // On Debian based systems, rpms can be installed with the switch --force-debian, if a rpm
                 // is installed.
 
                 String forceDebianString = "";
                 String nodepsString = "";
-                
+
                 if ( ! data.debianInvestigated() ) {
                     helper.investigateDebian(data);
                     data.setDebianInvestigated(true);
                 }
-                
+
                 if ( data.isDebianSystem() ) {
                     forceDebianString = "--force-debian";
                     nodepsString = "--nodeps";
                 }
-                
+
                 String rpmCommand = "";
                 String[] rpmCommandArray;
                 String databasePath = null;
@@ -219,12 +219,12 @@ public class LinuxInstaller extends Installer {
                         data.setDatabasePath(databasePath);
                     }
                 }
-        
+
                 if (( databasePath != null ) && (! databasePath.equalsIgnoreCase("null"))) {
                     databaseString = "--dbpath";
                     useLocalDatabase = true;
                 }
-                
+
                 if (useForce) {
                     if (useLocalDatabase) {
                         if ( relocations != null ) {
@@ -243,9 +243,9 @@ public class LinuxInstaller extends Installer {
                             rpmCommandArray[8] = relocations;
                             rpmCommandArray[9] = databaseString;
                             rpmCommandArray[10] = databasePath;
-                            rpmCommandArray[11] = packageName;                    
+                            rpmCommandArray[11] = packageName;
                         } else {
-                            rpmCommand = "rpm --upgrade --ignoresize --force " + forceDebianString + " " + nodepsString + " -vh " + 
+                            rpmCommand = "rpm --upgrade --ignoresize --force " + forceDebianString + " " + nodepsString + " -vh " +
                                     databaseString + " " + databasePath + " " + packageName;
                             rpmCommandArray = new String[10];
                             rpmCommandArray[0] = "rpm";
@@ -287,7 +287,7 @@ public class LinuxInstaller extends Installer {
                             rpmCommandArray[6] = "-vh";
                             rpmCommandArray[7] = packageName;
                         }
-                    }                
+                    }
                 } else {
                     if (useLocalDatabase) {
                         if ( relocations != null ) {
@@ -305,7 +305,7 @@ public class LinuxInstaller extends Installer {
                             rpmCommandArray[7] = relocations;
                             rpmCommandArray[8] = databaseString;
                             rpmCommandArray[9] = databasePath;
-                            rpmCommandArray[10] = packageName;                    
+                            rpmCommandArray[10] = packageName;
                         } else {
                             rpmCommand = "rpm --upgrade --ignoresize " + forceDebianString + " " + nodepsString + " -vh " +
                                     databaseString + " " + databasePath + " " + packageName;
@@ -357,7 +357,7 @@ public class LinuxInstaller extends Installer {
                 if ( returnValue == 0 ) {
                     log = rpmCommand + "<br><b>Returns: " + returnValue + " Successful installation</b><br>";
                     LogManager.addCommandsLogfileComment(log);
-                } else {    // an error occured during installation 
+                } else {    // an error occured during installation
                     if ( packageData.installCanFail() ) {
                         log = rpmCommand + "<br><b>Returns: " + returnValue + " Problem during installation. Can be ignored.</b><br>";
                         LogManager.addCommandsLogfileComment(log);
@@ -395,21 +395,21 @@ public class LinuxInstaller extends Installer {
         // LogManager.addCommandsLogfileComment(log);
 
         String rpmPackageName = packageData.getPackageName();
-        
+
         if (( rpmPackageName.equals("")) || ( rpmPackageName == null )) {
             log = "<b>No package name specified. Nothing to do</b>";
             LogManager.addCommandsLogfileComment(log);
         } else {
             log = "<b>Package Name: " + rpmPackageName + "</b>";
             LogManager.addCommandsLogfileComment(log);
- 
+
             String packageName = packageData.getPkgRealName();
             String databasePath = data.getDatabasePath();
             String databaseString = "";
             boolean useLocalDatabase = false;
             String rpmCommand;
             String[] rpmCommandArray;
-        
+
             if (( databasePath != null ) && (! databasePath.equalsIgnoreCase("null"))) {
                 databaseString = "--dbpath";
                 useLocalDatabase = true;
@@ -420,22 +420,22 @@ public class LinuxInstaller extends Installer {
 
             String forceDebianString = "";
             String nodepsString = "";
-                
+
             if ( ! data.debianInvestigated() ) {
                 helper.investigateDebian(data);
                 data.setDebianInvestigated(true);
             }
-                
+
             if ( data.isDebianSystem() ) {
                 forceDebianString = "--force-debian";
                 nodepsString = "--nodeps";
             }
-          
-            // Code duplication for isDebianSystem is necessary, because there is no valid position 
+
+            // Code duplication for isDebianSystem is necessary, because there is no valid position
             // for forceDebianString, if it is empty. This is no problem in installPackage.
 
             if ( data.isDebianSystem() ) {
-            
+
                 if (useLocalDatabase) {
                     rpmCommand = "rpm " + forceDebianString + " " + nodepsString + " -ev" + " " + databaseString + " " + databasePath + " " + packageName;
                     rpmCommandArray = new String[7];
@@ -445,7 +445,7 @@ public class LinuxInstaller extends Installer {
                     rpmCommandArray[3] = "-ev";
                     rpmCommandArray[4] = databaseString;
                     rpmCommandArray[5] = databasePath;
-                    rpmCommandArray[6] = packageName;                
+                    rpmCommandArray[6] = packageName;
                 } else {
                     rpmCommand = "rpm " + forceDebianString + " " + nodepsString + " -ev" + " " + packageName;
                     rpmCommandArray = new String[5];
@@ -463,14 +463,14 @@ public class LinuxInstaller extends Installer {
                     rpmCommandArray[1] = "-ev";
                     rpmCommandArray[2] = databaseString;
                     rpmCommandArray[3] = databasePath;
-                    rpmCommandArray[4] = packageName;                
+                    rpmCommandArray[4] = packageName;
                 } else {
                     rpmCommand = "rpm -ev" + " " + packageName;
                     rpmCommandArray = new String[3];
                     rpmCommandArray[0] = "rpm";
                     rpmCommandArray[1] = "-ev";
                     rpmCommandArray[2] = packageName;
-                }            	
+                }
             }
 
             Vector returnVector = new Vector();
@@ -479,8 +479,8 @@ public class LinuxInstaller extends Installer {
 
             if ( returnValue == 0 ) {
                 log = rpmCommand + "<br><b>Returns: " + returnValue + " Successful uninstallation</b><br>";
-                LogManager.addCommandsLogfileComment(log);                        
-            } else {    // an error occured during installation                    
+                LogManager.addCommandsLogfileComment(log);
+            } else {    // an error occured during installation
                 if ( packageData.uninstallCanFail() ) {
                     log = rpmCommand + "<br><b>Returns: " + returnValue + " Problem during uninstallation. Can be ignored.</b><br>";
                     LogManager.addCommandsLogfileComment(log);
@@ -495,23 +495,23 @@ public class LinuxInstaller extends Installer {
             }
         }
     }
-     
+
     public boolean isPackageInstalledClassic(PackageDescription packageData, InstallData installData) {
-        
+
         boolean isInstalled = false;
         boolean doCheck = false;
-        
-        // only checking existing packages (and always at uninstallation)        
+
+        // only checking existing packages (and always at uninstallation)
         if ( (packageData.pkgExists()) || (installData.isUninstallationMode()) ) {
             doCheck = true;
         }
-        
+
         String rpmPackageName = packageData.getPackageName();
 
         if ( rpmPackageName.equals("") ) {
             rpmPackageName = null;
         }
-                
+
         if (( rpmPackageName != null ) && ( doCheck )) {
 
             String databaseString = "";
@@ -523,17 +523,17 @@ public class LinuxInstaller extends Installer {
             if (installData.isUserInstallation()) {
                 databasePath = installData.getDatabasePath();
             }
-        
+
             if (( databasePath != null ) && (! databasePath.equals("null"))) {
                 databaseString = "--dbpath";
                 useLocalDatabase = true;
             }
-            
+
             if (packageName != null) {
-                
+
                 String rpmCommand;
                 String[] rpmCommandArray;
-                
+
                 if (useLocalDatabase) {
                     rpmCommand = "rpm" + " " + databaseString + " " + databasePath + " --query " + packageName;
                     rpmCommandArray = new String[5];
@@ -541,7 +541,7 @@ public class LinuxInstaller extends Installer {
                     rpmCommandArray[1] = databaseString;
                     rpmCommandArray[2] = databasePath;
                     rpmCommandArray[3] = "--query";
-                    rpmCommandArray[4] = packageName; 
+                    rpmCommandArray[4] = packageName;
                 } else {
                     rpmCommand = "rpm" + " --query " + packageName;
                     rpmCommandArray = new String[3];
@@ -549,7 +549,7 @@ public class LinuxInstaller extends Installer {
                     rpmCommandArray[1] = "--query";
                     rpmCommandArray[2] = packageName;
                 }
-                
+
                 int returnValue = ExecuteProcess.executeProcessReturnValue(rpmCommandArray);
 
                 if ( returnValue == 0 ) {
@@ -566,26 +566,26 @@ public class LinuxInstaller extends Installer {
 
         return isInstalled;
     }
-    
+
     private void queryAllDatabase(InstallData installData) {
 
         String databaseString = "";
         String databasePath = null;
         HashMap map = new HashMap();;
         boolean useLocalDatabase = false;
-    
+
         if (installData.isUserInstallation()) {
             databasePath = installData.getDatabasePath();
         }
-    
+
         if (( databasePath != null ) && (! databasePath.equals("null"))) {
             databaseString = "--dbpath";
             useLocalDatabase = true;
         }
-     
+
         String rpmCommand;
         String[] rpmCommandArray;
-        
+
         if (useLocalDatabase) {
             rpmCommand = "rpm" + " " + databaseString + " " + databasePath + " --query" + " -a";
             rpmCommandArray = new String[5];
@@ -593,7 +593,7 @@ public class LinuxInstaller extends Installer {
             rpmCommandArray[1] = databaseString;
             rpmCommandArray[2] = databasePath;
             rpmCommandArray[3] = "--query";
-            rpmCommandArray[4] = "-a"; 
+            rpmCommandArray[4] = "-a";
         } else {
             rpmCommand = "rpm" + " --query" + " -a";
             rpmCommandArray = new String[3];
@@ -601,15 +601,15 @@ public class LinuxInstaller extends Installer {
             rpmCommandArray[1] = "--query";
             rpmCommandArray[2] = "-a";
         }
-    
+
         Vector returnVector = new Vector();
         Vector returnErrorVector = new Vector();
         int returnValue = ExecuteProcess.executeProcessReturnVector(rpmCommandArray, returnVector, returnErrorVector);
-    
+
         String log = rpmCommand + "<br><b>Returns: " + returnValue + "</b><br>";
         LogManager.addCommandsLogfileComment(log);
         String value = "1";
-        
+
         if ( ! returnVector.isEmpty()) {
             for (int i = 0; i < returnVector.size(); i++) {
                 String onePackage = (String)returnVector.get(i);
@@ -621,15 +621,15 @@ public class LinuxInstaller extends Installer {
         }
 
         installData.setDatabaseQueried(true);
-        installData.setDatabaseMap(map);    
+        installData.setDatabaseMap(map);
     }
 
     public boolean isPackageInstalled(PackageDescription packageData, InstallData installData) {
-        
+
         boolean isInstalled = false;
         boolean doCheck = false;
-        
-        // only checking existing packages (and always at uninstallation)        
+
+        // only checking existing packages (and always at uninstallation)
         if ( (packageData.pkgExists()) || (installData.isUninstallationMode()) ) {
             doCheck = true;
         }
@@ -639,10 +639,10 @@ public class LinuxInstaller extends Installer {
         if ( rpmPackageName.equals("") ) {
             rpmPackageName = null;
         }
-                
+
         if (( rpmPackageName != null ) && ( doCheck )) {
             String packageName = packageData.getPkgRealName();
-            
+
             if (packageName != null) {
 
                 HashMap map = null;
@@ -651,13 +651,13 @@ public class LinuxInstaller extends Installer {
                 }
 
                 map = installData.getDatabaseMap();
-                
+
                 if ( map.containsKey(packageName)) {
                     isInstalled = true;
-                }                
+                }
             } else {
-                System.err.println("Error: No packageName defined for package: " + packageData.getPackageName());                
-            }                
+                System.err.println("Error: No packageName defined for package: " + packageData.getPackageName());
+            }
         }
 
         return isInstalled;
@@ -678,39 +678,39 @@ public class LinuxInstaller extends Installer {
     }
 
     private boolean findOlderPackage(PackageDescription packageData, InstallData installData, boolean checkIfInstalledIsOlder) {
-        
+
         // The information about the new package is stored in packageData (the version and the release).
         // This information can be stored in xpd files. If it is not stored in xpd files, it is determined
         // during installation process by querying the rpm file. This process costs much time and should
         // therefore be done by the process, that creates the xpd files. On the other hand this requires,
         // that the xpd files contain the correct information.
-        
+
         boolean isOlder = false;
-        
+
         // get the version of the installed package
         String rpmPackageName = packageData.getPackageName();
         String log;
-        
+
         if ( rpmPackageName.equals("")) {
             rpmPackageName = null;
         }
- 
+
         if ( rpmPackageName != null ) {
             String databaseString = "";
             String databasePath = null;
-            String packageName =  packageData.getPkgRealName(); 
+            String packageName =  packageData.getPkgRealName();
             Vector allPackages = null;
             boolean useLocalDatabase = false;
 
             if (installData.isUserInstallation()) {
                 databasePath = installData.getDatabasePath();
             }
-        
+
             if (( databasePath != null ) && (! databasePath.equals("null"))) {
                 databaseString = "--dbpath";
                 useLocalDatabase = true;
             }
-            
+
             if (packageName != null) {
                 // Collect information about the installed package by querying the database.
                 // Instead of rpm file name, the real package name has to be used.
@@ -727,7 +727,7 @@ public class LinuxInstaller extends Installer {
                     rpmCommandArray[3] = "-q";
                     rpmCommandArray[4] = "--queryformat";
                     rpmCommandArray[5] = "%{VERSION}\\n";
-                    rpmCommandArray[6] = packageName;                    
+                    rpmCommandArray[6] = packageName;
                 } else {
                     rpmCommand = "rpm" + " -q --queryformat %{VERSION}\\n " + packageName;
                     rpmCommandArray = new String[5];
@@ -750,13 +750,13 @@ public class LinuxInstaller extends Installer {
                     installData.setInstalledProductMinor(productMinor);
                     installData.setInstalledProductMinorSet(true);
                 }
-                
+
                 if (useLocalDatabase) {
                     rpmCommand = "rpm" + " " + databaseString + " " + databasePath + " -q --queryformat %{RELEASE}\\n " + packageName;
                     rpmCommandArray[5] = "%{RELEASE}\\n";
                 } else {
                     rpmCommand = "rpm" + " -q --queryformat %{RELEASE}\\n " + packageName;
-                    rpmCommandArray[3] = "%{RELEASE}\\n";                    
+                    rpmCommandArray[3] = "%{RELEASE}\\n";
                 }
 
                 Vector releaseVector = new Vector();
@@ -767,7 +767,7 @@ public class LinuxInstaller extends Installer {
                 LogManager.addCommandsLogfileComment(log);
 
                 isOlder = helper.compareVersionAndRelease(version, release, packageData, checkIfInstalledIsOlder);
-                
+
                 if ( checkIfInstalledIsOlder ) {
                     if ( isOlder ) {
                         LogManager.addCommandsLogfileComment("<b>-> Installed package is older</b><br>");
@@ -779,11 +779,11 @@ public class LinuxInstaller extends Installer {
                         LogManager.addCommandsLogfileComment("<b>-> Package in installation set is older</b><br>");
                     } else {
                         LogManager.addCommandsLogfileComment("<b>-> Package in installation set is not older</b><br>");
-                    }                    
+                    }
                 }
 
             } else {
-                System.err.println("Error: No packageName defined for package: " + rpmPackageName);                
+                System.err.println("Error: No packageName defined for package: " + rpmPackageName);
             }
         }
 

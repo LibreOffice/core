@@ -13,13 +13,13 @@ import org.openide.util.NbBundle;
  * @author tomaso
  */
 public class ParcelPropertiesVisualPanel extends javax.swing.JPanel {
-    
+
     /** The wizard panel descriptor associated with this GUI panel.
      * If you need to fire state changes or something similar, you can
      * use this handle to do so.
      */
     private final ParcelPropertiesPanel panel;
-    
+
     /** Create the wizard panel and set up some basic properties. */
     public ParcelPropertiesVisualPanel(ParcelPropertiesPanel panel) {
         this.panel = panel;
@@ -42,7 +42,7 @@ public class ParcelPropertiesVisualPanel extends javax.swing.JPanel {
         }
          */
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -138,14 +138,14 @@ public class ParcelPropertiesVisualPanel extends javax.swing.JPanel {
     private void recipeNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recipeNameActionPerformed
         changeName();
     }//GEN-LAST:event_recipeNameActionPerformed
-    
+
     private void changeName() {
         String name = recipeName.getText().trim();
         if (name.equals(""))
             name = null;
         panel.setName(name);
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField recipeName;
     private javax.swing.JLabel jLabel2;
@@ -153,5 +153,5 @@ public class ParcelPropertiesVisualPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JComboBox languagesComboBox;
     // End of variables declaration//GEN-END:variables
-    
+
 }

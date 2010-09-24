@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -277,14 +277,14 @@ void XPlugin_Impl::freeArgs()
 
 void XPlugin_Impl::prependArg( const char* pName, const char* pValue )
 {
-    const char** pNewNames		= new const char*[m_nArgs+1];
-    const char** pNewValues	= new const char*[m_nArgs+1];
-    
-    pNewNames[0]		= strdup( pName );
-    pNewValues[0]		= strdup( pValue );
+    const char** pNewNames      = new const char*[m_nArgs+1];
+    const char** pNewValues = new const char*[m_nArgs+1];
+
+    pNewNames[0]        = strdup( pName );
+    pNewValues[0]       = strdup( pValue );
     for( int nIndex = 0; nIndex < m_nArgs; ++nIndex )
     {
-        pNewNames[nIndex+1]	= m_pArgn[nIndex];
+        pNewNames[nIndex+1] = m_pArgn[nIndex];
         pNewValues[nIndex+1]= m_pArgv[nIndex];
     }
     // free old arrays
@@ -319,7 +319,7 @@ void XPlugin_Impl::handleSpecialArgs()
             {
             }
         }
-        
+
         if( aURL.getLength() )
         {
             // set new args, old args need not be freed as there were none set
@@ -328,23 +328,23 @@ void XPlugin_Impl::handleSpecialArgs()
             m_pArgv = new const char*[m_nArgs];
 
             // SRC
-            m_pArgn[0]		= strdup( "SRC" );
-            m_pArgv[0]		= strdup( OUStringToOString( aURL, m_aEncoding ).getStr() );
+            m_pArgn[0]      = strdup( "SRC" );
+            m_pArgv[0]      = strdup( OUStringToOString( aURL, m_aEncoding ).getStr() );
             // WIDTH
-            m_pArgn[1]		= strdup( "WIDTH" );
-            m_pArgv[1]		= strdup( "200" );
+            m_pArgn[1]      = strdup( "WIDTH" );
+            m_pArgv[1]      = strdup( "200" );
             // HEIGHT
-            m_pArgn[2]		= strdup( "HEIGHT" );
-            m_pArgv[2]		= strdup( "200" );
+            m_pArgn[2]      = strdup( "HEIGHT" );
+            m_pArgv[2]      = strdup( "200" );
             // CONTROLS
-            m_pArgn[3]		= strdup( "CONTROLS" );
-            m_pArgv[3]		= strdup( "PlayButton,StopButton,ImageWindow" );
+            m_pArgn[3]      = strdup( "CONTROLS" );
+            m_pArgv[3]      = strdup( "PlayButton,StopButton,ImageWindow" );
             // AUTOSTART
-            m_pArgn[4]		= strdup( "AUTOSTART" );
-            m_pArgv[4]		= strdup( "TRUE" );
+            m_pArgn[4]      = strdup( "AUTOSTART" );
+            m_pArgv[4]      = strdup( "TRUE" );
             // NOJAVA
-            m_pArgn[5]		= strdup( "NOJAVA" );
-            m_pArgv[5]		= strdup( "TRUE" );
+            m_pArgn[5]      = strdup( "NOJAVA" );
+            m_pArgv[5]      = strdup( "TRUE" );
         }
     }
     // #69333# special for pdf
@@ -352,7 +352,7 @@ void XPlugin_Impl::handleSpecialArgs()
         m_aPluginMode = PluginMode::FULL;
 
     // see if we have a TYPE tag
-    int nIndex;    
+    int nIndex;
     for( nIndex = 0; nIndex < m_nArgs; ++nIndex )
         if( m_pArgn[nIndex][0] == 'T' &&
             m_pArgn[nIndex][1] == 'Y' &&
@@ -869,15 +869,15 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
 
     PluginControl_Impl::setPosSize(nX_, nY_, nWidth_, nHeight_, nFlags);
 
-    m_aNPWindow.x       			= 0;
-    m_aNPWindow.y       			= 0;
-    m_aNPWindow.width   			= nWidth_;
-    m_aNPWindow.height  			= nHeight_;
-    m_aNPWindow.clipRect.top		= 0;
-    m_aNPWindow.clipRect.left		= 0;
-    m_aNPWindow.clipRect.right		= ::sal::static_int_cast< uint16, sal_Int32 >( nWidth_ );
-    m_aNPWindow.clipRect.bottom		= ::sal::static_int_cast< uint16, sal_Int32 >( nHeight_ );
-    
+    m_aNPWindow.x                   = 0;
+    m_aNPWindow.y                   = 0;
+    m_aNPWindow.width               = nWidth_;
+    m_aNPWindow.height              = nHeight_;
+    m_aNPWindow.clipRect.top        = 0;
+    m_aNPWindow.clipRect.left       = 0;
+    m_aNPWindow.clipRect.right      = ::sal::static_int_cast< uint16, sal_Int32 >( nWidth_ );
+    m_aNPWindow.clipRect.bottom     = ::sal::static_int_cast< uint16, sal_Int32 >( nHeight_ );
+
     if( getPluginComm() )
         getPluginComm()->NPP_SetWindow( this );
 }

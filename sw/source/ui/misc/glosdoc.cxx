@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <swtypes.hxx>
-#include <errhdl.hxx>		// ASSERT
+#include <errhdl.hxx>       // ASSERT
 #include <uitool.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
@@ -76,7 +76,7 @@ String lcl_CheckFileName( const String& rNewFilePath,
     for( xub_StrLen i = 0; i < rNewGroupName.Len(); i++ )
     {
         sal_Unicode cChar = rNewGroupName.GetChar(i);
-        if(	(cChar >= 'A' && cChar <= 'Z') ||
+        if( (cChar >= 'A' && cChar <= 'Z') ||
             (cChar >= 'a' && cChar <= 'z') ||
             (cChar >= '0' && cChar <= '9') ||
             cChar == '_' || cChar == 0x20 )
@@ -116,7 +116,7 @@ String lcl_CheckFileName( const String& rNewFilePath,
 ------------------------------------------------------------------------*/
 
 
-String	SwGlossaries::GetDefName()
+String  SwGlossaries::GetDefName()
 {
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "standard" ));
 
@@ -135,7 +135,7 @@ sal_uInt16 SwGlossaries::GetGroupCnt()
 ------------------------------------------------------------------------*/
 sal_Bool SwGlossaries::FindGroupName(String & rGroup)
 {
-    //	enthaelt der Gruppenname keinen Pfad, kann hier ein passender
+    //  enthaelt der Gruppenname keinen Pfad, kann hier ein passender
     // Gruppeneintrag gesucht werden;
     sal_uInt16 nCount = GetGroupCnt();
     sal_uInt16 i;
@@ -177,9 +177,9 @@ String SwGlossaries::GetGroupName(sal_uInt16 nGroupId)
 /* -----------------------------08.02.00 13:04--------------------------------
 
  ---------------------------------------------------------------------------*/
-String	SwGlossaries::GetGroupTitle( const String& rGroupName )
+String  SwGlossaries::GetGroupTitle( const String& rGroupName )
 {
-    String	sRet;
+    String  sRet;
     String sGroup(rGroupName);
     if(STRING_NOTFOUND == sGroup.Search(GLOS_DELIM))
         FindGroupName(sGroup);
@@ -213,7 +213,7 @@ SwTextBlocks* SwGlossaries::GetGroupDoc(const String &rName,
                 break;
         }
         if(i == nCount)
-        {	// Baustein nicht in der Liste
+        {   // Baustein nicht in der Liste
             String *pTmp = new String(aName);
             m_pGlosArr->Insert(pTmp, m_pGlosArr->Count());
         }
@@ -222,14 +222,14 @@ SwTextBlocks* SwGlossaries::GetGroupDoc(const String &rName,
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Loeschen Textblock
+ Beschreibung:  Loeschen Textblock
 ------------------------------------------------------------------------*/
 
 void SwGlossaries::PutGroupDoc(SwTextBlocks *pBlock) {
     delete pBlock;
 }
 /*------------------------------------------------------------------------
-    Beschreibung:	Erzeugt ein neues Dokument mit dem Gruppenname
+    Beschreibung:   Erzeugt ein neues Dokument mit dem Gruppenname
                     Wird temp. auch als File angelegt, damit die
                     Gruppen auch spaeter (ohne Zugriff) vorhanden sind.
 ------------------------------------------------------------------------*/
@@ -259,7 +259,7 @@ sal_Bool SwGlossaries::NewGroupDoc(String& rGroupName, const String& rTitle)
 /* -----------------23.11.98 13:13-------------------
  *
  * --------------------------------------------------*/
-sal_Bool	SwGlossaries::RenameGroupDoc(
+sal_Bool    SwGlossaries::RenameGroupDoc(
     const String& rOldGroup, String& rNewGroup, const String& rNewTitle )
 {
     sal_Bool bRet = sal_False;
@@ -470,7 +470,7 @@ SwGlossaries::SwGlossaries() :
 ------------------------------------------------------------------------*/
 
 /* -----------------21.01.99 15:36-------------------
-*	#61050# Doppelte Pfade fuehren zu Verwirrung - als raus damit
+*   #61050# Doppelte Pfade fuehren zu Verwirrung - als raus damit
  * --------------------------------------------------*/
 sal_Bool lcl_FindSameEntry(const SvStrings& rDirArr, const String& rEntryURL)
 {
@@ -582,7 +582,7 @@ void SwGlossaries::RemoveFileFromList( const String& rGroup )
                 rtl::OUString aUName = rGroup;
                 {
                     // tell the UNO AutoTextGroup object that it's not valid anymore
-                    for	(	UnoAutoTextGroups::iterator aLoop = m_aGlossaryGroups.begin();
+                    for (   UnoAutoTextGroups::iterator aLoop = m_aGlossaryGroups.begin();
                             aLoop != m_aGlossaryGroups.end();
                             ++aLoop
                         )
@@ -601,7 +601,7 @@ void SwGlossaries::RemoveFileFromList( const String& rGroup )
 
                 {
                     // tell all our UNO AutoTextEntry objects that they're not valid anymore
-                    for	(	UnoAutoTextEntries::iterator aLoop = m_aGlossaryEntries.begin();
+                    for (   UnoAutoTextEntries::iterator aLoop = m_aGlossaryEntries.begin();
                             aLoop != m_aGlossaryEntries.end();
                         )
                     {
@@ -654,7 +654,7 @@ String SwGlossaries::GetCompleteGroupName( const rtl::OUString& GroupName )
 void SwGlossaries::InvalidateUNOOjects()
 {
     // invalidate all the AutoTextGroup-objects
-    for	(	UnoAutoTextGroups::iterator aGroupLoop = m_aGlossaryGroups.begin();
+    for (   UnoAutoTextGroups::iterator aGroupLoop = m_aGlossaryGroups.begin();
             aGroupLoop != m_aGlossaryGroups.end();
             ++aGroupLoop
         )
@@ -667,7 +667,7 @@ void SwGlossaries::InvalidateUNOOjects()
     m_aGlossaryGroups.swap( aTmpg );
 
     // invalidate all the AutoTextEntry-objects
-    for	(	UnoAutoTextEntries::const_iterator aEntryLoop = m_aGlossaryEntries.begin();
+    for (   UnoAutoTextEntries::const_iterator aEntryLoop = m_aGlossaryEntries.begin();
             aEntryLoop != m_aGlossaryEntries.end();
             ++aEntryLoop
         )
@@ -713,9 +713,9 @@ Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const ::rtl::O
         }
 
         if ( _rGroupName == pSwGroup->getName() )
-        {	                            // the group is already cached
+        {                               // the group is already cached
             if ( sCompleteGroupName.Len() )
-            {	// the group still exists -> return it
+            {   // the group still exists -> return it
                 xGroup = pSwGroup;
                 break;
             }
@@ -780,9 +780,9 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry( const String& 
             continue;
         }
 
-        if	(	pEntry
-            &&	( COMPARE_EQUAL == pEntry->GetGroupName().CompareTo( sGroupName ) )
-            &&	( COMPARE_EQUAL == pEntry->GetEntryName().CompareTo( sEntryName ) )
+        if  (   pEntry
+            &&  ( COMPARE_EQUAL == pEntry->GetGroupName().CompareTo( sGroupName ) )
+            &&  ( COMPARE_EQUAL == pEntry->GetEntryName().CompareTo( sEntryName ) )
             )
         {
             xReturn = pEntry;

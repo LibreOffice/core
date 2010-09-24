@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ SwEditShell::~SwEditShell() // USED
 }
 
 /******************************************************************************
- *					sal_Bool SwEditShell::IsModified() const
+ *                  sal_Bool SwEditShell::IsModified() const
  ******************************************************************************/
 
 
@@ -77,7 +77,7 @@ sal_Bool SwEditShell::IsModified() const
     return GetDoc()->IsModified();
 }
 /******************************************************************************
- *					  void SwEditShell::SetModified()
+ *                    void SwEditShell::SetModified()
  ******************************************************************************/
 
 
@@ -86,7 +86,7 @@ void SwEditShell::SetModified()
     GetDoc()->SetModified();
 }
 /******************************************************************************
- *					 void SwEditShell::ResetModified()
+ *                   void SwEditShell::ResetModified()
  ******************************************************************************/
 
 
@@ -102,7 +102,7 @@ void SwEditShell::SetUndoNoResetModified()
 }
 
 /******************************************************************************
- *				   void SwEditShell::StartAllAction()
+ *                 void SwEditShell::StartAllAction()
  ******************************************************************************/
 
 
@@ -118,7 +118,7 @@ void SwEditShell::StartAllAction()
     } while(pSh != this);
 }
 /******************************************************************************
- *					void SwEditShell::EndAllAction()
+ *                  void SwEditShell::EndAllAction()
  ******************************************************************************/
 
 
@@ -135,7 +135,7 @@ void SwEditShell::EndAllAction()
 }
 
 /******************************************************************************
- *					void SwEditShell::CalcLayout()
+ *                  void SwEditShell::CalcLayout()
  ******************************************************************************/
 
 
@@ -157,7 +157,7 @@ void SwEditShell::CalcLayout()
 }
 
 /******************************************************************************
- *						Inhaltsform bestimmen, holen
+ *                      Inhaltsform bestimmen, holen
  ******************************************************************************/
 // OPT: wird fuer jedes Attribut gerufen?
 
@@ -171,7 +171,7 @@ sal_uInt16 SwEditShell::GetCntType() const
     else
         switch( GetCrsr()->GetNode()->GetNodeType() )
         {
-        case ND_TEXTNODE:   nRet = CNT_TXT;	break;
+        case ND_TEXTNODE:   nRet = CNT_TXT; break;
         case ND_GRFNODE:    nRet = CNT_GRF; break;
         case ND_OLENODE:    nRet = CNT_OLE; break;
         }
@@ -204,7 +204,7 @@ sal_Bool SwEditShell::HasOtherCnt() const
 }
 
 /******************************************************************************
- *				Zugriffsfunktionen fuer Filename-Behandlung
+ *              Zugriffsfunktionen fuer Filename-Behandlung
  ******************************************************************************/
 
 
@@ -221,8 +221,8 @@ SwActKontext::~SwActKontext()
 }
 
 /******************************************************************************
- * 			Klasse fuer den automatisierten Aufruf von Start- und
- * 								EndCrsrMove();
+ *          Klasse fuer den automatisierten Aufruf von Start- und
+ *                              EndCrsrMove();
  ******************************************************************************/
 
 
@@ -238,7 +238,7 @@ SwMvKontext::~SwMvKontext()
 }
 
 
-SwFrmFmt *SwEditShell::GetTableFmt()	// OPT: schnellster Test auf Tabelle?
+SwFrmFmt *SwEditShell::GetTableFmt()    // OPT: schnellster Test auf Tabelle?
 {
     const SwTableNode* pTblNd = IsCrsrInTbl();
     return pTblNd ? (SwFrmFmt*)pTblNd->GetTable().GetFrmFmt() : 0;

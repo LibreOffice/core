@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,12 +49,12 @@
 #define KAPITAELCHENPROP 66
 
 #ifndef REDUCEDSVXFONT
-    const sal_Unicode CH_BLANK = sal_Unicode(' ');  	// ' ' Leerzeichen
+    const sal_Unicode CH_BLANK = sal_Unicode(' ');      // ' ' Leerzeichen
     static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 #endif
 
 /*************************************************************************
- *						class SvxFont
+ *                      class SvxFont
  *************************************************************************/
 
 SvxFont::SvxFont()
@@ -75,7 +75,7 @@ SvxFont::SvxFont( const Font &rFont )
 }
 
 /*************************************************************************
- *						class SvxFont: Copy-Ctor
+ *                      class SvxFont: Copy-Ctor
  *************************************************************************/
 
 SvxFont::SvxFont( const SvxFont &rFont )
@@ -89,7 +89,7 @@ SvxFont::SvxFont( const SvxFont &rFont )
 }
 
 /*************************************************************************
- *				 static	SvxFont::DrawArrow
+ *               static SvxFont::DrawArrow
  *************************************************************************/
 
 void SvxFont::DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
@@ -196,7 +196,7 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
 #ifndef REDUCEDSVXFONT
 
 /*************************************************************************
- *						class SvxDoCapitals
+ *                      class SvxDoCapitals
  * die virtuelle Methode Do wird von SvxFont::DoOnCapitals abwechselnd mit
  * den "Gross-" und "Kleinbuchstaben"-Teilen aufgerufen.
  * Die Ableitungen von SvxDoCapitals erfuellen diese Methode mit Leben.
@@ -236,7 +236,7 @@ void SvxDoCapitals::Do( const XubString &/*_rTxt*/, const xub_StrLen /*_nIdx*/,
     const xub_StrLen /*_nLen*/, const BOOL /*bUpper*/ ) { }
 
 /*************************************************************************
- *					SvxFont::DoOnCapitals() const
+ *                  SvxFont::DoOnCapitals() const
  * zerlegt den String in Gross- und Kleinbuchstaben und ruft jeweils die
  * Methode SvxDoCapitals::Do( ) auf.
  *************************************************************************/
@@ -259,8 +259,8 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
     const LanguageType eLng = LANGUAGE_DONTKNOW == eLang
                             ? LANGUAGE_SYSTEM : eLang;
 
-    CharClass	aCharClass( SvxCreateLocale( eLng ) );
-    String		aCharString;
+    CharClass   aCharClass( SvxCreateLocale( eLng ) );
+    String      aCharString;
 
     while( nPos < nTxtLen )
     {
@@ -289,7 +289,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
                 // potential difference
                 const XubString aSnippet(rTxt, nIdx + nOldPos, nPos-nOldPos);
                 XubString aNewText = CalcCaseMap(aSnippet);
-                
+
                 rDo.Do( aNewText, 0, aNewText.Len(), TRUE );
             }
             else
@@ -302,7 +302,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
         // Nun werden die Lower-Chars verarbeitet (ohne Blanks)
         while( nPos < nTxtLen )
         {
-            sal_uInt32	nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
+            sal_uInt32  nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
             if ( ( nCharacterType & ::com::sun::star::i18n::KCharacterType::UPPER ) )
                 break;
             if ( CH_BLANK == aCharString )
@@ -319,7 +319,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
                 // potential difference
                 const XubString aSnippet(rTxt, nIdx + nOldPos, nPos - nOldPos);
                 XubString aNewText = CalcCaseMap(aSnippet);
-                
+
                 rDo.Do( aNewText, 0, aNewText.Len(), FALSE );
             }
             else
@@ -336,7 +336,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
         if( nOldPos != nPos )
         {
             rDo.DoSpace( FALSE );
-            
+
             if(bCaseMapLengthDiffers)
             {
                 // #108210#
@@ -344,7 +344,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
                 // potential difference
                 const XubString aSnippet(rTxt, nIdx + nOldPos, nPos - nOldPos);
                 XubString aNewText = CalcCaseMap(aSnippet);
-                
+
                 rDo.Do( aNewText, 0, aNewText.Len(), FALSE );
             }
             else
@@ -360,7 +360,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
 }
 
 /**************************************************************************
- *					  SvxFont::SetPhysFont()
+ *                    SvxFont::SetPhysFont()
  *************************************************************************/
 
 void SvxFont::SetPhysFont( OutputDevice *pOut ) const
@@ -375,7 +375,7 @@ void SvxFont::SetPhysFont( OutputDevice *pOut ) const
     {
         Font aNewFont( *this );
         Size aSize( aNewFont.GetSize() );
-        aNewFont.SetSize( Size(	aSize.Width() * nPropr / 100L,
+        aNewFont.SetSize( Size( aSize.Width() * nPropr / 100L,
                                     aSize.Height() * nPropr / 100L ) );
         if ( !rCurrentFont.IsSameInstance( aNewFont ) )
             pOut->SetFont( aNewFont );
@@ -383,7 +383,7 @@ void SvxFont::SetPhysFont( OutputDevice *pOut ) const
 }
 
 /*************************************************************************
- *					  SvxFont::ChgPhysFont()
+ *                    SvxFont::ChgPhysFont()
  *************************************************************************/
 
 Font SvxFont::ChgPhysFont( OutputDevice *pOut ) const
@@ -394,7 +394,7 @@ Font SvxFont::ChgPhysFont( OutputDevice *pOut ) const
 }
 
 /*************************************************************************
- *					  SvxFont::GetPhysTxtSize()
+ *                    SvxFont::GetPhysTxtSize()
  *************************************************************************/
 
 Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const XubString &rTxt,
@@ -486,14 +486,14 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const XubString &rTxt,
 }
 
 /*************************************************************************
- *					  SvxFont::GetTxtSize()
+ *                    SvxFont::GetTxtSize()
  *************************************************************************/
 
 Size SvxFont::GetTxtSize( const OutputDevice *pOut, const XubString &rTxt,
                          const xub_StrLen nIdx, const xub_StrLen nLen )
 {
     xub_StrLen nTmp = nLen;
-    if ( nTmp == STRING_LEN )	// schon initialisiert?
+    if ( nTmp == STRING_LEN )   // schon initialisiert?
         nTmp = rTxt.Len();
     Font aOldFont( ChgPhysFont((OutputDevice *)pOut) );
     Size aTxtSize;
@@ -507,16 +507,16 @@ Size SvxFont::GetTxtSize( const OutputDevice *pOut, const XubString &rTxt,
 }
 
 /*************************************************************************
- *					  SvxFont::DrawText()
+ *                    SvxFont::DrawText()
  *************************************************************************/
 
 void SvxFont::DrawText( OutputDevice *pOut,
                const Point &rPos, const XubString &rTxt,
                const xub_StrLen nIdx, const xub_StrLen nLen ) const
 {
-    if( !nLen || !rTxt.Len() )	return;
+    if( !nLen || !rTxt.Len() )  return;
     xub_StrLen nTmp = nLen;
-    if ( nTmp == STRING_LEN )	// schon initialisiert?
+    if ( nTmp == STRING_LEN )   // schon initialisiert?
         nTmp = rTxt.Len();
     Point aPos( rPos );
     if ( nEsc )
@@ -602,7 +602,7 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
         return;
     xub_StrLen nTmp = nLen;
 
-    if ( nTmp == STRING_LEN )	// schon initialisiert?
+    if ( nTmp == STRING_LEN )   // schon initialisiert?
         nTmp = rTxt.Len();
     Point aPos( rPos );
 
@@ -675,7 +675,7 @@ SvxFont& SvxFont::operator=( const SvxFont& rFont )
 
 
 /*************************************************************************
- *					  class SvxDoGetCapitalSize
+ *                    class SvxDoGetCapitalSize
  * wird von SvxFont::GetCapitalSize() zur Berechnung der TxtSize bei
  * eingestellten Kapitaelchen benutzt.
  *************************************************************************/
@@ -683,9 +683,9 @@ SvxFont& SvxFont::operator=( const SvxFont& rFont )
 class SvxDoGetCapitalSize : public SvxDoCapitals
 {
 protected:
-    SvxFont*	pFont;
-    Size 		aTxtSize;
-    short    	nKern;
+    SvxFont*    pFont;
+    Size        aTxtSize;
+    short       nKern;
 public:
       SvxDoGetCapitalSize( SvxFont *_pFnt, const OutputDevice *_pOut,
                            const XubString &_rTxt, const xub_StrLen _nIdx,
@@ -726,7 +726,7 @@ void SvxDoGetCapitalSize::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
 }
 
 /*************************************************************************
- *					  SvxFont::GetCapitalSize()
+ *                    SvxFont::GetCapitalSize()
  * berechnet TxtSize, wenn Kapitaelchen eingestellt sind.
  *************************************************************************/
 
@@ -748,7 +748,7 @@ Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const XubString &rTxt,
 }
 
 /*************************************************************************
- *					   class SvxDoDrawCapital
+ *                     class SvxDoDrawCapital
  * wird von SvxFont::DrawCapital zur Ausgabe von Kapitaelchen benutzt.
  *************************************************************************/
 

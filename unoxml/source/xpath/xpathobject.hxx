@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace XPath
     public:
     CXPathObject(xmlXPathObjectPtr xpathObj);
 
-    /**      
+    /**
         get object type
     */
     virtual XPathObjectType SAL_CALL getObjectType() throw (RuntimeException);
@@ -106,7 +106,7 @@ namespace XPath
         get string value
     */
     virtual OUString SAL_CALL getString() throw (RuntimeException);
-    
+
     };
 }
 

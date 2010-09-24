@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,18 +86,18 @@ SvNumberFormatter* SvNumberFormatsSupplierObj::GetNumberFormatter() const
 
 void SvNumberFormatsSupplierObj::SetNumberFormatter(SvNumberFormatter* pNew)
 {
-    //	der alte Numberformatter ist ungueltig geworden, nicht mehr darauf zugreifen!
+    //  der alte Numberformatter ist ungueltig geworden, nicht mehr darauf zugreifen!
     pImpl->pFormatter = pNew;
 }
 
 void SvNumberFormatsSupplierObj::NumberFormatDeleted(sal_uInt32)
 {
-    //	Basis-Implementierung tut nix...
+    //  Basis-Implementierung tut nix...
 }
 
 void SvNumberFormatsSupplierObj::SettingsChanged()
 {
-    //	Basis-Implementierung tut nix...
+    //  Basis-Implementierung tut nix...
 }
 
 // XNumberFormatsSupplier
@@ -123,8 +123,8 @@ uno::Reference<util::XNumberFormats> SAL_CALL SvNumberFormatsSupplierObj::getNum
 sal_Int64 SAL_CALL SvNumberFormatsSupplierObj::getSomething(
                 const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
 {
-    if ( rId.getLength() == 16 && 
-          0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),  
+    if ( rId.getLength() == 16 &&
+          0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));

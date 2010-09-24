@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ public:
                              ~SfxMetricItem() {
                                  DBG_DTOR(SfxMetricItem, 0); }
 
-    virtual int				 ScaleMetrics( long lMult, long lDiv );
-    virtual	int				 HasMetrics() const;
+    virtual int              ScaleMetrics( long lMult, long lDiv );
+    virtual int              HasMetrics() const;
 
 };
 

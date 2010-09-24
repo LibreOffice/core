@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,25 +38,25 @@ namespace css = com::sun::star ;
 namespace uno = css::uno ;
 namespace lang = css::lang ;
 
-class WinInetBackend : public ::cppu::WeakImplHelper2 < 
+class WinInetBackend : public ::cppu::WeakImplHelper2 <
         css::beans::XPropertySet,
         lang::XServiceInfo > {
-        
+
     public :
-        
+
         static WinInetBackend* createInstance();
 
         // XServiceInfo
-        virtual rtl::OUString SAL_CALL 
-            getImplementationName(  ) 
-                throw (uno::RuntimeException) ;
-        
-        virtual sal_Bool SAL_CALL 
-            supportsService( const rtl::OUString& aServiceName ) 
+        virtual rtl::OUString SAL_CALL
+            getImplementationName(  )
                 throw (uno::RuntimeException) ;
 
-        virtual uno::Sequence<rtl::OUString> SAL_CALL 
-            getSupportedServiceNames(  ) 
+        virtual sal_Bool SAL_CALL
+            supportsService( const rtl::OUString& aServiceName )
+                throw (uno::RuntimeException) ;
+
+        virtual uno::Sequence<rtl::OUString> SAL_CALL
+            getSupportedServiceNames(  )
                 throw (uno::RuntimeException) ;
 
         /**

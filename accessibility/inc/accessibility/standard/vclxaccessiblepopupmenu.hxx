@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,14 +31,14 @@
 #include <accessibility/standard/accessiblemenucomponent.hxx>
 
 
-//	----------------------------------------------------
-//	class VCLXAccessiblePopupMenu
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXAccessiblePopupMenu
+//  ----------------------------------------------------
 
-class VCLXAccessiblePopupMenu :	public OAccessibleMenuComponent
+class VCLXAccessiblePopupMenu : public OAccessibleMenuComponent
 {
 protected:
-    virtual sal_Bool		IsFocused();
+    virtual sal_Bool        IsFocused();
 
 public:
     VCLXAccessiblePopupMenu( Menu* pMenu );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,17 +61,17 @@
 #include <svx/svxdlg.hxx>
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Der Traeger des Dialoges
+    Beschreibung:   Der Traeger des Dialoges
  --------------------------------------------------------------------*/
 
 SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
-                    Window*				pParent,
-                    const SfxItemSet& 	rCoreSet,
-                    BOOL 				bNewFrm,
-                    USHORT				nResType,
+                    Window*             pParent,
+                    const SfxItemSet&   rCoreSet,
+                    BOOL                bNewFrm,
+                    USHORT              nResType,
                     BOOL                bFormat,
-                    UINT16				nDefPage,
-                    const String* 		pStr) :
+                    UINT16              nDefPage,
+                    const String*       pStr) :
 
     SfxTabDialog(pViewFrame, pParent, SW_RES(nResType), &rCoreSet, pStr != 0),
     m_bFormat(bFormat),
@@ -93,18 +93,18 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
         aTmp += *pStr;
         aTmp += ')';
     }
-    AddTabPage(TP_FRM_STD,	SwFrmPage::Create, 0);
-    AddTabPage(TP_FRM_ADD,	SwFrmAddPage::Create, 0);
-    AddTabPage(TP_FRM_WRAP,	SwWrapTabPage::Create, 0);
-    AddTabPage(TP_FRM_URL,	SwFrmURLPage::Create, 0);
+    AddTabPage(TP_FRM_STD,  SwFrmPage::Create, 0);
+    AddTabPage(TP_FRM_ADD,  SwFrmAddPage::Create, 0);
+    AddTabPage(TP_FRM_WRAP, SwWrapTabPage::Create, 0);
+    AddTabPage(TP_FRM_URL,  SwFrmURLPage::Create, 0);
     if(m_nDlgType == DLG_FRM_GRF)
     {
-        AddTabPage( TP_GRF_EXT,	SwGrfExtPage::Create, 0 );
+        AddTabPage( TP_GRF_EXT, SwGrfExtPage::Create, 0 );
         AddTabPage( RID_SVXPAGE_GRFCROP );
     }
     if (m_nDlgType == DLG_FRM_STD)
     {
-        AddTabPage(TP_COLUMN,	SwColumnPage::Create,  	 0);
+        AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");
@@ -190,7 +190,7 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
     case TP_MACRO_ASSIGN:
         {
         SfxAllItemSet aNewSet(*aSet.GetPool());
-        aNewSet.Put( SwMacroAssignDlg::AddEvents( 
+        aNewSet.Put( SwMacroAssignDlg::AddEvents(
             DLG_FRM_GRF == m_nDlgType ? MACASSGN_GRAPHIC : DLG_FRM_OLE == m_nDlgType ? MACASSGN_OLE : MACASSGN_FRMURL ) );
         if ( m_pWrtShell )
             rPage.SetFrame( m_pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() );

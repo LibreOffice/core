@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListene
 class OObjectListener: public TPropertyChangeListenerHelper
 {
 private:
-    OObjectBase*		m_pObject;
+    OObjectBase*        m_pObject;
     OObjectListener(const OObjectListener&);
     void operator =(const OObjectListener&);
 protected:
     virtual ~OObjectListener();
 public:
     OObjectListener(OObjectBase* _pObject);
-    
+
     // XEventListener
     virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 

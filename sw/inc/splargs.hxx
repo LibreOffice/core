@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,17 +107,17 @@ struct SwConversionArgs : SwArgsBase
 struct SwSpellArgs : SwArgsBase
 {
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 >  	xSpeller;
+        ::com::sun::star::linguistic2::XSpellChecker1 >     xSpeller;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellAlternatives >	xSpellAlt;
+        ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt;
 
     bool bIsGrammarCheck;
 
     SwSpellArgs(::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XSpellChecker1 > &rxSplChk,
             SwTxtNode* pStart, SwIndex& rStart,
-            SwTxtNode* pEnd, SwIndex& rEnd, 
+            SwTxtNode* pEnd, SwIndex& rEnd,
             bool bGrammar )
         :   SwArgsBase( pStart, rStart, pEnd, rEnd ),
             xSpeller( rxSplChk ),
@@ -126,22 +126,22 @@ struct SwSpellArgs : SwArgsBase
 };
 
 /*************************************************************************
- *						class SwInterHyphInfo
+ *                      class SwInterHyphInfo
  *************************************************************************/
 
 // Parameter-Klasse fuer Hyphenate
-// docedt.cxx:	SwDoc::Hyphenate()
-// txtedt.cxx:	SwTxtNode::Hyphenate()
+// docedt.cxx:  SwDoc::Hyphenate()
+// txtedt.cxx:  SwTxtNode::Hyphenate()
 // txthyph.cxx: SwTxtFrm::Hyphenate()
 
 class SwInterHyphInfo
 {
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenatedWord > 	xHyphWord;
-    const	Point aCrsrPos;
-    sal_Bool	bAuto	: 1;
-    sal_Bool	bNoLang	: 1;
-    sal_Bool	bCheck 	: 1;
+        ::com::sun::star::linguistic2::XHyphenatedWord >    xHyphWord;
+    const   Point aCrsrPos;
+    sal_Bool    bAuto   : 1;
+    sal_Bool    bNoLang : 1;
+    sal_Bool    bCheck  : 1;
 public:
     xub_StrLen nStart;
     xub_StrLen nLen;

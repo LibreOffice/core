@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,11 +60,11 @@ IMPL_CONTAINER_SORT( XMLFontAutoStylePoolNames_Impl,
 
 class XMLFontAutoStylePoolEntry_Impl
 {
-    OUString	sName;
-    OUString	sFamilyName;
-    OUString	sStyleName;
-    sal_Int16	nFamily;
-    sal_Int16	nPitch;
+    OUString    sName;
+    OUString    sFamilyName;
+    OUString    sStyleName;
+    sal_Int16   nFamily;
+    sal_Int16   nPitch;
     rtl_TextEncoding eEnc;
 
 public:
@@ -84,10 +84,10 @@ public:
             sal_Int16 nPitch,
             rtl_TextEncoding eEnc );
 
-    const OUString&	GetName() const { return sName; }
-    const OUString&	GetFamilyName() const { return sFamilyName; }
-    const OUString&	GetStyleName() const { return sStyleName; }
-    sal_Int16 GetFamily() const {	return nFamily; }
+    const OUString& GetName() const { return sName; }
+    const OUString& GetFamilyName() const { return sFamilyName; }
+    const OUString& GetStyleName() const { return sStyleName; }
+    sal_Int16 GetFamily() const {   return nFamily; }
     sal_Int16 GetPitch() const { return nPitch; }
     rtl_TextEncoding GetEncoding() const { return eEnc; }
 };

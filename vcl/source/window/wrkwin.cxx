@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -298,7 +298,7 @@ BOOL WorkWindow::Close()
     // Ist es das Applikationsfenster, dann beende die Applikation
     if ( bCanClose && ( ImplGetSVData()->maWinData.mpAppWin == this ) )
         GetpApp()->Quit();
-    
+
     return bCanClose;
 }
 
@@ -314,8 +314,8 @@ BOOL WorkWindow::IsMaximized() const
     SalFrameState aState;
     if( mpWindowImpl->mpFrame->GetWindowState( &aState ) )
     {
-        if( aState.mnState & (SAL_FRAMESTATE_MAXIMIZED			|
-                              SAL_FRAMESTATE_MAXIMIZED_HORZ		|
+        if( aState.mnState & (SAL_FRAMESTATE_MAXIMIZED          |
+                              SAL_FRAMESTATE_MAXIMIZED_HORZ     |
                               SAL_FRAMESTATE_MAXIMIZED_VERT ) )
             bRet = TRUE;
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@
 
 void CGM::ImplDoClass3()
 {
-    sal_uInt32	nUInteger;
-    long	nI0, nI1;
+    sal_uInt32  nUInteger;
+    long    nI0, nI1;
     switch ( mnElementID )
     {
         case 0x01 : ComOut( CGM_LEVEL1, "VDC Integer Precision" )
@@ -52,8 +52,8 @@ void CGM::ImplDoClass3()
         case 0x02 : ComOut( CGM_LEVEL1, "VDC Real Precision" )
         {
             nUInteger = ImplGetUI16();
-            nI0 = ImplGetI( pElement->nIntegerPrecision );	// exponent
-            nI1 = ImplGetI( pElement->nIntegerPrecision );	// mantisse
+            nI0 = ImplGetI( pElement->nIntegerPrecision );  // exponent
+            nI1 = ImplGetI( pElement->nIntegerPrecision );  // mantisse
             switch( nUInteger )
             {
                 case 0 :
@@ -119,20 +119,20 @@ void CGM::ImplDoClass3()
             }
         }
         break;
-        case 0x07 : ComOut( CGM_LEVEL2, "Line Clipping Mode" ) break;				// NS
-        case 0x08 : ComOut( CGM_LEVEL2, "Marker Clipping Mode" ) break;				// NS
-        case 0x09 : ComOut( CGM_LEVEL2, "Edge Clipping Mode" ) break;				// NS
+        case 0x07 : ComOut( CGM_LEVEL2, "Line Clipping Mode" ) break;               // NS
+        case 0x08 : ComOut( CGM_LEVEL2, "Marker Clipping Mode" ) break;             // NS
+        case 0x09 : ComOut( CGM_LEVEL2, "Edge Clipping Mode" ) break;               // NS
         case 0x0a : ComOut( CGM_LEVEL2, "New Region" )
             mpOutAct->NewRegion();
         break;
-        case 0x0b : ComOut( CGM_LEVEL2, "Save Primitive Context" ) break;			// NS
-        case 0x0c : ComOut( CGM_LEVEL2, "Restore Primitive Context" ) break;		// NS
+        case 0x0b : ComOut( CGM_LEVEL2, "Save Primitive Context" ) break;           // NS
+        case 0x0c : ComOut( CGM_LEVEL2, "Restore Primitive Context" ) break;        // NS
         case 0x11 : ComOut( CGM_LEVEL3, "Protection Region Indicator" ) break;
-        case 0x12 : ComOut( CGM_LEVEL3, "Generalized Text Path Mode" ) break;		// NS
+        case 0x12 : ComOut( CGM_LEVEL3, "Generalized Text Path Mode" ) break;       // NS
         case 0x13 : ComOut( CGM_LEVEL3, "Mitre Limit" )
             pElement->nMitreLimit = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
-        break;																		// NS
-        case 0x14 : ComOut( CGM_LEVEL3, "Transparent Cell Color" ) break;			// NS
+        break;                                                                      // NS
+        case 0x14 : ComOut( CGM_LEVEL3, "Transparent Cell Color" ) break;           // NS
         case 0xfc : ComOut( CGM_GDSF_ONLY, "Text Path Alignment Modes" ) break;
         case 0xfd : ComOut( CGM_GDSF_ONLY, "Pop Transformation Stack" ) break;
         case 0xfe : ComOut( CGM_GDSF_ONLY, "Push Transformation Stack" ) break;

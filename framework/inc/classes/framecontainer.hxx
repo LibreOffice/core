@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <algorithm>
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 
@@ -47,14 +47,14 @@
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weakref.hxx>
 #include <vos/ref.hxx>
@@ -62,22 +62,22 @@
 #include <vcl/evntpost.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	exported const
+//  exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	exported definitions
+//  exported definitions
 //_________________________________________________________________________________________________________________
 
-typedef ::std::vector< css::uno::Reference< css::frame::XFrame > >	TFrameContainer		;
-typedef TFrameContainer::iterator									TFrameIterator		;
-typedef TFrameContainer::const_iterator								TConstFrameIterator	;
+typedef ::std::vector< css::uno::Reference< css::frame::XFrame > >  TFrameContainer     ;
+typedef TFrameContainer::iterator                                   TFrameIterator      ;
+typedef TFrameContainer::const_iterator                             TConstFrameIterator ;
 
 /*-************************************************************************************************************//**
     @short          implement a container to hold childs of frame, task or desktop
@@ -90,8 +90,8 @@ typedef TFrameContainer::const_iterator								TConstFrameIterator	;
     @base           ThreadHelpBase
                         guarantee right initialized lock member during boostrap!
 
-    @devstatus		ready to use
-    @threadsafe		yes
+    @devstatus      ready to use
+    @threadsafe     yes
     @modified       01.07.2002 14:39, as96863
 *//*-*************************************************************************************************************/
 class FrameContainer : private ThreadHelpBase

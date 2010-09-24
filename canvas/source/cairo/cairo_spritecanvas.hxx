@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,9 +67,9 @@ namespace cairocanvas
                                                 ::com::sun::star::awt::XWindowListener,
                                                 ::com::sun::star::util::XUpdatable,
                                                 ::com::sun::star::beans::XPropertySet,
-                                                ::com::sun::star::lang::XServiceName >	WindowGraphicDeviceBase_Base;
+                                                ::com::sun::star::lang::XServiceName >  WindowGraphicDeviceBase_Base;
     typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
-                                                 SpriteDeviceHelper, 
+                                                 SpriteDeviceHelper,
                                                  ::osl::MutexGuard,
                                                  ::cppu::OWeakObject > SpriteCanvasBase_Base;
     /** Mixin SpriteSurface
@@ -96,9 +96,9 @@ namespace cairocanvas
     };
 
     typedef ::canvas::SpriteCanvasBase< SpriteCanvasBaseSpriteSurface_Base,
-                                        SpriteCanvasHelper, 
+                                        SpriteCanvasHelper,
                                         ::osl::MutexGuard,
-                                        ::cppu::OWeakObject >			SpriteCanvasBaseT;
+                                        ::cppu::OWeakObject >           SpriteCanvasBaseT;
 
     /** Product of this component's factory.
 
@@ -113,9 +113,9 @@ namespace cairocanvas
                          public RepaintTarget
     {
     public:
-        SpriteCanvas( const ::com::sun::star::uno::Sequence< 
+        SpriteCanvas( const ::com::sun::star::uno::Sequence<
                             ::com::sun::star::uno::Any >&               aArguments,
-                      const ::com::sun::star::uno::Reference< 
+                      const ::com::sun::star::uno::Reference<
                             ::com::sun::star::uno::XComponentContext >& rxContext );
 
         void initialize();
@@ -132,7 +132,7 @@ namespace cairocanvas
         //                                    Classname     Base doing refcounting        Base implementing the XComponent interface
         //                                       |                 |                            |
         //                                       V                 V                            V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase ); 
+        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase );
 
         // XBufferController (partial)
         virtual ::sal_Bool SAL_CALL showBuffer( ::sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
@@ -153,7 +153,7 @@ namespace cairocanvas
 
         // RepaintTarget
         virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
-                              const ::com::sun::star::rendering::ViewState&	  viewState,
+                              const ::com::sun::star::rendering::ViewState&   viewState,
                               const ::com::sun::star::rendering::RenderState& renderState );
 
         SurfaceSharedPtr getWindowSurface();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,59 +98,59 @@ SV_DECL_PTRARR_SORT_DEL( SwInsDBColumns, SwInsDBColumnPtr, 32, 32 )
 
 class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
 {
-    FixedText 		aFtInsertData;
-    RadioButton 	aRbAsTable;
-    RadioButton 	aRbAsField;
-    RadioButton 	aRbAsText;
+    FixedText       aFtInsertData;
+    RadioButton     aRbAsTable;
+    RadioButton     aRbAsField;
+    RadioButton     aRbAsText;
 
     FixedLine       aFlHead;
-    FixedText 		aFtDbColumn;
+    FixedText       aFtDbColumn;
 
-    ListBox 		aLbTblDbColumn;
-    ListBox 		aLbTxtDbColumn;
+    ListBox         aLbTblDbColumn;
+    ListBox         aLbTxtDbColumn;
 
     FixedLine       aFlFormat;
-    RadioButton 	aRbDbFmtFromDb;
-    RadioButton 	aRbDbFmtFromUsr;
+    RadioButton     aRbDbFmtFromDb;
+    RadioButton     aRbDbFmtFromUsr;
     NumFormatListBox aLbDbFmtFromUsr;
 
     /* ----- Page Text/Field ------- */
     ImageButton     aIbDbcolToEdit;
-    MultiLineEdit 	aEdDbText;
-    FixedText 		aFtDbParaColl;
-    ListBox 		aLbDbParaColl;
+    MultiLineEdit   aEdDbText;
+    FixedText       aFtDbParaColl;
+    ListBox         aLbDbParaColl;
 
     /* ----- Page Table ------------ */
     ImageButton     aIbDbcolAllTo;
     ImageButton     aIbDbcolOneTo;
     ImageButton     aIbDbcolOneFrom;
     ImageButton     aIbDbcolAllFrom;
-    FixedText 		aFtTableCol;
-    ListBox 		aLbTableCol;
-    CheckBox 		aCbTableHeadon;
-    RadioButton 	aRbHeadlColnms;
-    RadioButton 	aRbHeadlEmpty;
-    PushButton 		aPbTblFormat;
-    PushButton 		aPbTblAutofmt;
+    FixedText       aFtTableCol;
+    ListBox         aLbTableCol;
+    CheckBox        aCbTableHeadon;
+    RadioButton     aRbHeadlColnms;
+    RadioButton     aRbHeadlEmpty;
+    PushButton      aPbTblFormat;
+    PushButton      aPbTblAutofmt;
 
-    OKButton 		aBtOk;
-    CancelButton 	aBtCancel;
-    HelpButton 		aBtHelp;
+    OKButton        aBtOk;
+    CancelButton    aBtCancel;
+    HelpButton      aBtHelp;
 
     FixedLine       aFlBottom;
 
     SwInsDBColumns  aDBColumns;
-    const SwDBData	aDBData;
+    const SwDBData  aDBData;
 
-    Link			aOldNumFmtLnk;
-    String			sNoTmpl;
+    Link            aOldNumFmtLnk;
+    String          sNoTmpl;
 
-    SwView* 		pView;
-    SwTableAutoFmt*	pTAutoFmt;
+    SwView*         pView;
+    SwTableAutoFmt* pTAutoFmt;
 
-    SfxItemSet*		pTblSet;
-    SwTableRep* 	pRep;
-    USHORT			nGBFmtLen;
+    SfxItemSet*     pTblSet;
+    SwTableRep*     pRep;
+    USHORT          nGBFmtLen;
 
     DECL_LINK( PageHdl, Button* );
     DECL_LINK( AutoFmtHdl, PushButton* );
@@ -164,8 +164,8 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     BOOL SplitTextToColArr( const String& rTxt, _DB_Columns& rColArr, BOOL bInsField );
         using SfxModalDialog::Notify;
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
-    virtual void			Commit();
-    void 					Load();
+    virtual void            Commit();
+    void                    Load();
 
     // setze die Tabellen - Eigenschaften
     void SetTabSet();

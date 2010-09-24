@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 #include <rtl/ustring.hxx>
 
 //-------------------------------------------------------------
-// A simple unicode buffer management class, the class itself 
-// is responsible for the allocated unicode buffer, any 
-// modification of the buffer size outside the class may lead 
+// A simple unicode buffer management class, the class itself
+// is responsible for the allocated unicode buffer, any
+// modification of the buffer size outside the class may lead
 // to undefined behaviour
 //-------------------------------------------------------------
 
@@ -62,20 +62,20 @@ public:
 
     // returns the size of the buffer
     size_t SAL_CALL size( ) const;
-    
+
     // conversion operator
     operator sal_Unicode*( );
-    
+
     // address operator
     sal_Unicode* operator&( );
-    
+
     const sal_Unicode* operator&( ) const;
 
 private:
     void SAL_CALL init( );
 
 private:
-    size_t m_buffSize; // the number of unicode chars	
+    size_t m_buffSize; // the number of unicode chars
     sal_Unicode* m_pBuff;
 };
 

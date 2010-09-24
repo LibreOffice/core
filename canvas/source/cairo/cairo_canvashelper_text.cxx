@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,31 +53,31 @@ namespace cairocanvas
         LINE_COLOR, FILL_COLOR, TEXT_COLOR, IGNORE_COLOR
     };
 
-    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas* 					, 
-                                                                       const rendering::FontRequest& 				fontRequest, 
-                                                                       const uno::Sequence< beans::PropertyValue >& extraFontProperties, 
-                                                                       const geometry::Matrix2D& 					fontMatrix )
+    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                    ,
+                                                                       const rendering::FontRequest&                fontRequest,
+                                                                       const uno::Sequence< beans::PropertyValue >& extraFontProperties,
+                                                                       const geometry::Matrix2D&                    fontMatrix )
     {
         return uno::Reference< rendering::XCanvasFont >( new CanvasFont( fontRequest, extraFontProperties, fontMatrix, mpSurfaceProvider ));
     }
 
-    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas* 						, 
-                                                                            const rendering::FontInfo& 						/*aFilter*/, 
-                                                                            const uno::Sequence< beans::PropertyValue >& 	/*aFontProperties*/ )
+    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       ,
+                                                                            const rendering::FontInfo&                      /*aFilter*/,
+                                                                            const uno::Sequence< beans::PropertyValue >&    /*aFontProperties*/ )
     {
         // TODO
         return uno::Sequence< rendering::FontInfo >();
     }
 
     static bool
-    setupFontTransform( ::OutputDevice&				    rOutDev,
-                        ::Point&						o_rPoint,
-                        ::Font& 						io_rVCLFont, 
-                        const rendering::ViewState& 	rViewState,
-                        const rendering::RenderState& 	rRenderState )
+    setupFontTransform( ::OutputDevice&                 rOutDev,
+                        ::Point&                        o_rPoint,
+                        ::Font&                         io_rVCLFont,
+                        const rendering::ViewState&     rViewState,
+                        const rendering::RenderState&   rRenderState )
     {
         ::basegfx::B2DHomMatrix aMatrix;
-            
+
         ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
                                                      rViewState,
                                                      rRenderState);
@@ -85,7 +85,7 @@ namespace cairocanvas
         ::basegfx::B2DTuple aScale;
         ::basegfx::B2DTuple aTranslate;
         double nRotate, nShearX;
-            
+
         aMatrix.decompose( aScale, aTranslate, nRotate, nShearX );
 
         // query font metric _before_ tampering with width and height
@@ -124,9 +124,9 @@ namespace cairocanvas
     static int
     setupOutDevState( OutputDevice&                 rOutDev,
                       const rendering::XCanvas*     pOwner,
-                      const rendering::ViewState& 	viewState,
+                      const rendering::ViewState&   viewState,
                       const rendering::RenderState& renderState,
-                      ColorType						eColorType )
+                      ColorType                     eColorType )
     {
         ::canvas::tools::verifyInput( renderState,
                                       BOOST_CURRENT_FUNCTION,
@@ -146,7 +146,7 @@ namespace cairocanvas
 
         if( viewState.Clip.is() )
         {
-            ::basegfx::B2DPolyPolygon aClipPoly( 
+            ::basegfx::B2DPolyPolygon aClipPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
                     viewState.Clip) );
 
@@ -155,22 +155,22 @@ namespace cairocanvas
                 // setup non-empty clipping
                 ::basegfx::B2DHomMatrix aMatrix;
                 aClipPoly.transform(
-                    ::basegfx::unotools::homMatrixFromAffineMatrix( aMatrix, 
+                    ::basegfx::unotools::homMatrixFromAffineMatrix( aMatrix,
                                                                     viewState.AffineTransform ) );
-                
+
                 aClipRegion = Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
             }
         }
 
         if( renderState.Clip.is() )
         {
-            ::basegfx::B2DPolyPolygon aClipPoly( 
+            ::basegfx::B2DPolyPolygon aClipPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
                     renderState.Clip) );
 
             ::basegfx::B2DHomMatrix aMatrix;
             aClipPoly.transform(
-                ::canvas::tools::mergeViewAndRenderTransform( aMatrix, 
+                ::canvas::tools::mergeViewAndRenderTransform( aMatrix,
                                                               viewState,
                                                               renderState ) );
 
@@ -240,7 +240,7 @@ namespace cairocanvas
                     break;
 
                 default:
-                    ENSURE_OR_THROW( false, 
+                    ENSURE_OR_THROW( false,
                                       "CanvasHelper::setupOutDevState(): Unexpected color type");
                     break;
             }
@@ -251,17 +251,17 @@ namespace cairocanvas
 
     bool setupTextOutput( OutputDevice&                                     rOutDev,
                           const rendering::XCanvas*                         pOwner,
-                          ::Point&										    o_rOutPos,
-                          const rendering::ViewState& 					    viewState,
-                          const rendering::RenderState& 					renderState,
-                          const uno::Reference< rendering::XCanvasFont >&	xFont	)
+                          ::Point&                                          o_rOutPos,
+                          const rendering::ViewState&                       viewState,
+                          const rendering::RenderState&                     renderState,
+                          const uno::Reference< rendering::XCanvasFont >&   xFont   )
     {
         setupOutDevState( rOutDev, pOwner, viewState, renderState, TEXT_COLOR );
 
         ::Font aVCLFont;
 
         CanvasFont* pFont = dynamic_cast< CanvasFont* >( xFont.get() );
-        
+
         ENSURE_ARG_OR_THROW( pFont,
                          "CanvasHelper::setupTextOutput(): Font not compatible with this canvas" );
 
@@ -288,12 +288,12 @@ namespace cairocanvas
         return true;
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas* 						pOwner, 
-                                                                          const rendering::StringContext& 					text, 
-                                                                          const uno::Reference< rendering::XCanvasFont >& 	xFont, 
-                                                                          const rendering::ViewState& 						viewState, 
-                                                                          const rendering::RenderState& 					renderState, 
-                                                                          sal_Int8				 							textDirection )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         pOwner,
+                                                                          const rendering::StringContext&                   text,
+                                                                          const uno::Reference< rendering::XCanvasFont >&   xFont,
+                                                                          const rendering::ViewState&                       viewState,
+                                                                          const rendering::RenderState&                     renderState,
+                                                                          sal_Int8                                          textDirection )
     {
 #ifdef CAIRO_CANVAS_PERF_TRACE
         struct timespec aTimer;
@@ -351,10 +351,10 @@ namespace cairocanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas* 						pOwner, 
-                                                                                const uno::Reference< rendering::XTextLayout >& xLayoutedText, 
-                                                                                const rendering::ViewState& 					viewState, 
-                                                                                const rendering::RenderState& 					renderState )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       pOwner,
+                                                                                const uno::Reference< rendering::XTextLayout >& xLayoutedText,
+                                                                                const rendering::ViewState&                     viewState,
+                                                                                const rendering::RenderState&                   renderState )
     {
         ENSURE_ARG_OR_THROW( xLayoutedText.is(),
                          "CanvasHelper::drawTextLayout(): layout is NULL");

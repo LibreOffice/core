@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,13 +30,13 @@
 #include <uielement/fontmenucontroller.hxx>
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -45,7 +45,7 @@
 
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #ifndef _VCL_MENU_HXX_
@@ -62,9 +62,9 @@
 #include <vos/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
-//	Defines
+//  Defines
 //_________________________________________________________________________________________________________________
-// 
+//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -83,9 +83,9 @@ bool lcl_I18nCompareString(const rtl::OUString& rStr1, const rtl::OUString& rStr
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   FontMenuController						,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   FontMenuController                      ,
                                             OWeakObject                             ,
-                                            SERVICENAME_POPUPMENUCONTROLLER			,
+                                            SERVICENAME_POPUPMENUCONTROLLER         ,
                                             IMPLEMENTATIONNAME_FONTMENUCONTROLLER
                                         )
 
@@ -106,13 +106,13 @@ void FontMenuController::fillPopupMenu( const Sequence< ::rtl::OUString >& rFont
     const rtl::OUString*    pFontNameArray = rFontNameSeq.getConstArray();
     VCLXPopupMenu*          pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*              pVCLPopupMenu = 0;
-    
+
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-    
+
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
         pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
-        
+
     if ( pVCLPopupMenu )
     {
         vector<rtl::OUString> aVector;
@@ -179,7 +179,7 @@ void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event 
 // XMenuListener
 void FontMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
-    Sequence<PropertyValue>	     aArgs;
+    Sequence<PropertyValue>      aArgs;
     if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
         UiEventLogHelper(::rtl::OUString::createFromAscii("FontMenuController")).log(
             m_xServiceManager,
@@ -194,7 +194,7 @@ void FontMenuController::impl_select(const Reference< XDispatch >& _xDispatch,co
 void SAL_CALL FontMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
     osl::MutexGuard aLock( m_aMutex );
-    
+
     if ( m_xPopupMenu.is() )
     {
         // find new font name and set check mark!
@@ -232,14 +232,14 @@ void SAL_CALL FontMenuController::activate( const css::awt::MenuEvent& ) throw (
 void FontMenuController::impl_setPopupMenu()
 {
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-    
+
     com::sun::star::util::URL aTargetURL;
     // Register for font list updates to get the current font list from the controller
     aTargetURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontNameList" ));
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xFontListDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 }
-        
+
 void SAL_CALL FontMenuController::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException )
 {
     svt::PopupMenuControllerBase::updatePopupMenu();

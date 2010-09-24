@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,8 +86,8 @@ uno::Reference< io::XInputStream > OSeekableInputWrapper::CheckSeekableCanWrap(
     if ( xSeek.is() )
         return xInStream;
 
-    uno::Reference< io::XInputStream > xNewStream( 
-            static_cast< io::XInputStream* >( 
+    uno::Reference< io::XInputStream > xNewStream(
+            static_cast< io::XInputStream* >(
                 new OSeekableInputWrapper( xInStream, xFactory ) ) );
     return xNewStream;
 }
@@ -263,5 +263,5 @@ sal_Int64 SAL_CALL OSeekableInputWrapper::getLength()
     return m_xCopySeek->getLength();
 }
 
-}	// namespace comphelper
+}   // namespace comphelper
 

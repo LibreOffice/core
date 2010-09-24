@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,26 +42,26 @@ class SfxItemSet;
 class SdInsertLayerDlg : public ModalDialog
 {
 private:
-    FixedText			maFtName;
-    Edit				maEdtName;
-    FixedText			maFtTitle;
-    Edit				maEdtTitle;
-    FixedText			maFtDesc;
-    MultiLineEdit		maEdtDesc;
-    CheckBox			maCbxVisible;
-    CheckBox			maCbxPrintable;
-    CheckBox			maCbxLocked;
-    FixedLine			maFixedLine;
-    HelpButton			maBtnHelp;
-    OKButton			maBtnOK;
-    CancelButton		maBtnCancel;
+    FixedText           maFtName;
+    Edit                maEdtName;
+    FixedText           maFtTitle;
+    Edit                maEdtTitle;
+    FixedText           maFtDesc;
+    MultiLineEdit       maEdtDesc;
+    CheckBox            maCbxVisible;
+    CheckBox            maCbxPrintable;
+    CheckBox            maCbxLocked;
+    FixedLine           maFixedLine;
+    HelpButton          maBtnHelp;
+    OKButton            maBtnOK;
+    CancelButton        maBtnCancel;
 
-    const SfxItemSet&	mrOutAttrs;
+    const SfxItemSet&   mrOutAttrs;
 
 public:
 
     SdInsertLayerDlg( Window* pWindow, const SfxItemSet& rInAttrs, bool bDeletable, String aStr );
-    void				GetAttr( SfxItemSet& rOutAttrs );
+    void                GetAttr( SfxItemSet& rOutAttrs );
 };
 
 #endif // _SD_LAYER_DLG_HXX_

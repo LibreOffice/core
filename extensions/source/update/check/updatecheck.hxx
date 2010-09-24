@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class UpdateCheck;
 class UpdateCheckConfig;
 
 class UpdateCheckInitData {
-    
+
 public:
     inline rtl::Reference< UpdateCheck > SAL_CALL operator() () const;
 };
@@ -57,7 +57,7 @@ public:
     virtual void SAL_CALL cancel() = 0;
 };
 
-class UpdateCheck : 
+class UpdateCheck :
     public UpdateCheckConfigListener,
     public IActionListener,
     public DownloadInteractionHandler,
@@ -65,30 +65,30 @@ class UpdateCheck :
     public rtl::StaticWithInit< rtl::Reference< UpdateCheck >, UpdateCheckInitData >
 {
     UpdateCheck() : m_eState(NOT_INITIALIZED), m_eUpdateState(UPDATESTATES_COUNT), m_pThread(NULL) {};
-    
+
 public:
     inline SAL_CALL operator rtl::Reference< UpdateCheckConfigListener > ()
         { return static_cast< UpdateCheckConfigListener * > (this); }
-       
+
     void initialize(const com::sun::star::uno::Sequence<com::sun::star::beans::NamedValue>& rValues,
                     const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext);
-        
+
     /* Returns an instance of the specified service obtained from the specified
      * component context
      */
-    
+
     static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > createService(
-        const rtl::OUString& aServiceName, 
+        const rtl::OUString& aServiceName,
         const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext);
-    
+
     // Update internal update info member
     void setUpdateInfo(const UpdateInfo& aInfo);
-    
-    /* This method turns on the menubar icon, triggers the bubble window or    
+
+    /* This method turns on the menubar icon, triggers the bubble window or
      * updates the dialog text when appropriate
      */
     void setUIState(UpdateState eState, bool suppressBubble = false);
-    
+
     // Returns the UI state that matches rInfo best
     static UpdateState getUIState(const UpdateInfo& rInfo);
 
@@ -97,7 +97,7 @@ public:
 
     // Executes the update check dialog for manual checks and downloads interaction
     void showDialog(bool forceCheck = false);
-        
+
     // Returns true if the update dialog is currently showing
     bool isDialogShowing() const;
     bool shouldShowExtUpdDlg() const { return ( m_bShowExtUpdDlg && m_bHasExtensionUpdate ); }
@@ -116,28 +116,28 @@ public:
 
     // Cancels the download action (and resumes checking if enabled)
     void cancelDownload();
- 
+
     // Returns the XInteractionHandler of the UpdateHandler instance if present (and visible)
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
 
     // UpdateCheckConfigListener
-    virtual void autoCheckStatusChanged(bool enabled); 
+    virtual void autoCheckStatusChanged(bool enabled);
     virtual void autoCheckIntervalChanged();
 
-    // IActionListener    
+    // IActionListener
     void cancel();
     void download();
     void install();
     void pause();
     void resume();
     void closeAfterFailure();
-                
+
     // rtl::IReference
     virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(());
     virtual oslInterlockedCount SAL_CALL release() SAL_THROW(());
 
 private:
-    
+
     // Schedules or cancels next automatic check for updates
     void enableAutoCheck(bool enable);
 
@@ -167,19 +167,19 @@ private:
         DOWNLOADING,
         DOWNLOAD_PAUSED
     };
-        
+
     State m_eState;
     UpdateState m_eUpdateState;
 
     mutable osl::Mutex m_aMutex;
     WorkerThread *m_pThread;
     osl::Condition m_aCondition;
-    
+
     UpdateInfo m_aUpdateInfo;
     rtl::OUString m_aImageName;
     bool m_bHasExtensionUpdate;
     bool m_bShowExtUpdDlg;
-    
+
     rtl::Reference<UpdateHandler> m_aUpdateHandler;
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> m_xMenuBarUI;
     com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> m_xContext;

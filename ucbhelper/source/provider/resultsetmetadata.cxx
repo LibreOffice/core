@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,10 +61,10 @@ namespace ucbhelper_impl {
 
 struct ResultSetMetaData_Impl
 {
-    osl::Mutex						   	            m_aMutex;
+    osl::Mutex                                      m_aMutex;
     std::vector< ::ucbhelper::ResultSetColumnData > m_aColumnData;
-    sal_Bool 						   	            m_bObtainedTypes;
-    sal_Bool							            m_bGlobalReadOnlyValue;
+    sal_Bool                                        m_bObtainedTypes;
+    sal_Bool                                        m_bGlobalReadOnlyValue;
 
     ResultSetMetaData_Impl( sal_Int32 nSize )
     : m_aColumnData( nSize ), m_bObtainedTypes( sal_False ),
@@ -482,34 +482,34 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
     if ( rType == getCppuType( static_cast< const rtl::OUString * >( 0 ) ) )
         nType = DataType::VARCHAR;  // XRow::getString
     else if ( rType == getCppuBooleanType() )
-        nType = DataType::BIT;		// XRow::getBoolean
+        nType = DataType::BIT;      // XRow::getBoolean
     else if ( rType == getCppuType( static_cast< const sal_Int32 * >( 0 ) ) )
-        nType = DataType::INTEGER;	// XRow::getInt
+        nType = DataType::INTEGER;  // XRow::getInt
     else if ( rType == getCppuType( static_cast< const sal_Int64 * >( 0 ) ) )
-        nType = DataType::BIGINT;	// XRow::getLong
+        nType = DataType::BIGINT;   // XRow::getLong
     else if ( rType == getCppuType( static_cast< const sal_Int16 * >( 0 ) ) )
-        nType = DataType::SMALLINT;	// XRow::getShort
+        nType = DataType::SMALLINT; // XRow::getShort
     else if ( rType == getCppuType( static_cast< const sal_Int8 * >( 0 ) ) )
-        nType = DataType::TINYINT;	// XRow::getByte
+        nType = DataType::TINYINT;  // XRow::getByte
     else if ( rType == getCppuType( static_cast< const float * >( 0 ) ) )
-        nType = DataType::REAL;  	// XRow::getFloat
+        nType = DataType::REAL;     // XRow::getFloat
     else if ( rType == getCppuType( static_cast< const double * >( 0 ) ) )
-        nType = DataType::DOUBLE;  	// XRow::getDouble
+        nType = DataType::DOUBLE;   // XRow::getDouble
     else if ( rType == getCppuType( static_cast< const Sequence< sal_Int8 > * >( 0 ) ) )
         nType = DataType::VARBINARY;// XRow::getBytes
     else if ( rType == getCppuType( static_cast< const Date * >( 0 ) ) )
-        nType = DataType::DATE;		// XRow::getDate
+        nType = DataType::DATE;     // XRow::getDate
     else if ( rType == getCppuType( static_cast< const Time * >( 0 ) ) )
-        nType = DataType::TIME;		// XRow::getTime
+        nType = DataType::TIME;     // XRow::getTime
     else if ( rType == getCppuType( static_cast< const DateTime * >( 0 ) ) )
         nType = DataType::TIMESTAMP;// XRow::getTimestamp
     else if ( rType == getCppuType( static_cast< Reference< XInputStream > * >( 0 ) ) )
-        nType = DataType::LONGVARBINARY;	// XRow::getBinaryStream
-//		nType = DataType::LONGVARCHAR;		// XRow::getCharacterStream
+        nType = DataType::LONGVARBINARY;    // XRow::getBinaryStream
+//      nType = DataType::LONGVARCHAR;      // XRow::getCharacterStream
     else if ( rType == getCppuType( static_cast< Reference< XClob > * >( 0 ) ) )
-        nType = DataType::CLOB;	// XRow::getClob
+        nType = DataType::CLOB; // XRow::getClob
     else if ( rType == getCppuType( static_cast< Reference< XBlob > * >( 0 ) ) )
-        nType = DataType::BLOB;	// XRow::getBlob
+        nType = DataType::BLOB; // XRow::getBlob
     else if ( rType == getCppuType( static_cast< Reference< XArray > * >( 0 ) ) )
         nType = DataType::ARRAY;// XRow::getArray
     else if ( rType == getCppuType( static_cast< Reference< XRef > * >( 0 ) ) )

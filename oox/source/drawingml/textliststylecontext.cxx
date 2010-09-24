@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ Reference< XFastContextHandler > TextListStyleContext::createFastChildContext( s
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML|XML_defPPr:		// CT_TextParagraphProperties
+        case NMSP_DRAWINGML|XML_defPPr:     // CT_TextParagraphProperties
             xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 0 ] ) );
             break;
         case NMSP_DRAWINGML|XML_outline1pPr:

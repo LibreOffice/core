@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,25 +105,25 @@ public:
                             DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 
                             SdModule(SfxObjectFactory* pDrawObjFact, SfxObjectFactory* pGraphicObjFact);
-    virtual					~SdModule();
+    virtual                 ~SdModule();
 
-    SdTransferable*			pTransferClip;
-    SdTransferable*			pTransferDrag;
-    SdTransferable*			pTransferSelection;
+    SdTransferable*         pTransferClip;
+    SdTransferable*         pTransferDrag;
+    SdTransferable*         pTransferSelection;
 
-    void					Execute(SfxRequest& rReq);
-    void					GetState(SfxItemSet&);
+    void                    Execute(SfxRequest& rReq);
+    void                    GetState(SfxItemSet&);
 
-    virtual void			FillStatusBar(StatusBar& rBar);
+    virtual void            FillStatusBar(StatusBar& rBar);
 
-    SdOptions*				GetSdOptions(DocumentType eDocType);
-    SD_DLLPUBLIC SvStorageStreamRef		GetOptionStream( const String& rOptionName, SdOptionStreamMode eMode );
+    SdOptions*              GetSdOptions(DocumentType eDocType);
+    SD_DLLPUBLIC SvStorageStreamRef     GetOptionStream( const String& rOptionName, SdOptionStreamMode eMode );
 
-    BOOL					GetWaterCan() const { return bWaterCan; }
-    void					SetWaterCan( BOOL bWC ) { bWaterCan = bWC; }
+    BOOL                    GetWaterCan() const { return bWaterCan; }
+    void                    SetWaterCan( BOOL bWC ) { bWaterCan = bWC; }
 
-    SvxSearchItem*			GetSearchItem() { return (pSearchItem); }
-    void					SetSearchItem(SvxSearchItem* pItem) { pSearchItem = pItem; }
+    SvxSearchItem*          GetSearchItem() { return (pSearchItem); }
+    void                    SetSearchItem(SvxSearchItem* pItem) { pSearchItem = pItem; }
 
     /** Return the virtual device that can be used for printer independent
         layout.
@@ -139,30 +139,30 @@ public:
     */
     OutputDevice* GetRefDevice (::sd::DrawDocShell& rDocShell);
 
-    SD_DLLPUBLIC SvNumberFormatter*		GetNumberFormatter();
+    SD_DLLPUBLIC SvNumberFormatter*     GetNumberFormatter();
 
     //virtuelle Methoden fuer den Optionendialog
-    virtual SfxItemSet*	 CreateItemSet( USHORT nId );
-    virtual void		 ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
-    virtual	SfxTabPage*	 CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet );
+    virtual SfxItemSet*  CreateItemSet( USHORT nId );
+    virtual void         ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
+    virtual SfxTabPage*  CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet );
 
 protected:
 
-    SdOptions*				pImpressOptions;
-    SdOptions*				pDrawOptions;
-    SvxSearchItem*			pSearchItem;
+    SdOptions*              pImpressOptions;
+    SdOptions*              pDrawOptions;
+    SvxSearchItem*          pSearchItem;
     SvNumberFormatter*      pNumberFormatter;
-    SvStorageRef			xOptionStorage;
-    BOOL					bAutoSave;
-    BOOL					bWaterCan;
-    SfxErrorHandler*		mpErrorHdl;
+    SvStorageRef            xOptionStorage;
+    BOOL                    bAutoSave;
+    BOOL                    bWaterCan;
+    SfxErrorHandler*        mpErrorHdl;
     /** This device is used for printer independent layout.  It is virtual
         in the sense that it does not represent a printer.  The pointer may
         be NULL when the virtual device could not be created.
     */
     OutputDevice*           mpVirtualRefDevice;
 
-    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 private:
     SfxFrame* ExecuteNewDocument( SfxRequest& rReq );

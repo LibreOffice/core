@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -240,9 +240,9 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
         if (aConvSel.HasRange())
         {
             // user selection: convert to end of selection
-            pConvInfo->aConvTo.nPara	= aConvSel.nEndPara;
-            pConvInfo->aConvTo.nIndex	= aConvSel.nEndPos;
-            pConvInfo->bConvToEnd		= sal_False;
+            pConvInfo->aConvTo.nPara    = aConvSel.nEndPara;
+            pConvInfo->aConvTo.nIndex   = aConvSel.nEndPos;
+            pConvInfo->bConvToEnd       = sal_False;
         }
         else
         {
@@ -266,7 +266,7 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
 }
 
 
-void TextConvWrapper::ConvEnd_impl()                          
+void TextConvWrapper::ConvEnd_impl()
 {
 }
 
@@ -317,15 +317,15 @@ void TextConvWrapper::SetLanguageAndFont( const ESelection &rESel,
 }
 
 
-void TextConvWrapper::SelectNewUnit_impl( 
-        const sal_Int32 nUnitStart, 
+void TextConvWrapper::SelectNewUnit_impl(
+        const sal_Int32 nUnitStart,
         const sal_Int32 nUnitEnd )
 {
     BOOL bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
     DBG_ASSERT( bOK, "invalid arguments" );
     if (!bOK)
         return;
-    
+
     ESelection  aSelection = pEditView->GetSelection();
     DBG_ASSERT( aSelection.nStartPara == aSelection.nEndPara,
         "paragraph mismatch in selection" );
@@ -335,13 +335,13 @@ void TextConvWrapper::SelectNewUnit_impl(
 }
 
 
-void TextConvWrapper::GetNextPortion( 
+void TextConvWrapper::GetNextPortion(
         ::rtl::OUString& /* [out] */ rNextPortion,
         LanguageType&    /* [out] */ rLangOfPortion,
         sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText )
 {
     bAllowChange = _bAllowImplicitChangesForNotConvertibleText;
-    
+
     FindConvText_impl();
     rNextPortion    = aConvText;
     rLangOfPortion  = nConvTextLang;
@@ -356,8 +356,8 @@ void TextConvWrapper::GetNextPortion(
 }
 
 
-void TextConvWrapper::HandleNewUnit( 
-        const sal_Int32 nUnitStart, 
+void TextConvWrapper::HandleNewUnit(
+        const sal_Int32 nUnitStart,
         const sal_Int32 nUnitEnd )
 {
     SelectNewUnit_impl( nUnitStart, nUnitEnd );
@@ -367,7 +367,7 @@ void TextConvWrapper::HandleNewUnit(
 void TextConvWrapper::ReplaceUnit(
         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
         const ::rtl::OUString& rOrigText,
-        const ::rtl::OUString& rReplaceWith, 
+        const ::rtl::OUString& rReplaceWith,
         const ::com::sun::star::uno::Sequence< sal_Int32 > &rOffsets,
         ReplacementAction eAction,
         LanguageType *pNewUnitLanguage )
@@ -407,14 +407,14 @@ void TextConvWrapper::ReplaceUnit(
     }
     nUnitOffset = sal::static_int_cast< USHORT >(
         nUnitOffset + nUnitStart + aNewTxt.getLength());
-    
+
     // remember current original language for kater use
     ImpEditEngine *pImpEditEng = pEditView->GetImpEditEngine();
-    ESelection _aOldSel		= pEditView->GetSelection();
+    ESelection _aOldSel     = pEditView->GetSelection();
     //EditSelection aOldEditSel = pEditView->GetImpEditView()->GetEditSelection();
-    
+
 #ifdef DBG_UTIL
-    LanguageType nOldLang	= pImpEditEng->GetLanguage( pImpEditEng->CreateSel( _aOldSel ).Min() );
+    LanguageType nOldLang   = pImpEditEng->GetLanguage( pImpEditEng->CreateSel( _aOldSel ).Min() );
 #endif
 
     pImpEditEng->UndoActionStart( EDITUNDO_INSERT );
@@ -431,18 +431,18 @@ void TextConvWrapper::ReplaceUnit(
     // change language and font if necessary
     if (bIsChineseConversion)
     {
-        DBG_ASSERT( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL, 
+        DBG_ASSERT( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
                 "TextConvWrapper::ReplaceUnit : unexpected target language" );
-        
+
         ESelection aOldSel = pEditView->GetSelection();
         ESelection aNewSel( aOldSel );
         aNewSel.nStartPos = sal::static_int_cast< xub_StrLen >(
             aNewSel.nStartPos - aNewTxt.getLength());
-//		DBG_ASSERT( aOldSel.nEndPos >= 0, "error while building selection" );
+//      DBG_ASSERT( aOldSel.nEndPos >= 0, "error while building selection" );
 
         if (pNewUnitLanguage)
         {
-            DBG_ASSERT(!IsSimilarChinese( *pNewUnitLanguage, nOldLang ), 
+            DBG_ASSERT(!IsSimilarChinese( *pNewUnitLanguage, nOldLang ),
                     "similar language should not be changed!");
             SetLanguageAndFont( aNewSel, *pNewUnitLanguage, EE_CHAR_LANGUAGE_CJK,
                                           GetTargetFont(), EE_CHAR_FONTINFO_CJK );
@@ -471,7 +471,7 @@ void TextConvWrapper::ReplaceUnit(
 }
 
 
-void TextConvWrapper::ChangeText( const String &rNewText, 
+void TextConvWrapper::ChangeText( const String &rNewText,
         const OUString& rOrigText,
         const uno::Sequence< sal_Int32 > *pOffsets,
         ESelection *pESelection )
@@ -485,7 +485,7 @@ void TextConvWrapper::ChangeText( const String &rNewText,
     if (pOffsets && pESelection)  // try to keep as much attributation as possible ?
     {
         pESelection->Adjust();
-        
+
         // remember cursor start position for later setting of the cursor
         const xub_StrLen nStartIndex = pESelection->nStartPos;
 
@@ -497,15 +497,15 @@ void TextConvWrapper::ChangeText( const String &rNewText,
         xub_StrLen nChgLen = 0;
         xub_StrLen nConvChgPos = STRING_NOTFOUND;
         xub_StrLen nConvChgLen = 0;
-        
-        // offset to calculate the position in the text taking into 
+
+        // offset to calculate the position in the text taking into
         // account that text may have been replaced with new text of
         // different length. Negative values allowed!
         long nCorrectionOffset = 0;
-        
-        DBG_ASSERT(nIndices == 0 || nIndices == nConvTextLen, 
+
+        DBG_ASSERT(nIndices == 0 || nIndices == nConvTextLen,
                 "mismatch between string length and sequence length!" );
-        
+
         // find all substrings that need to be replaced (and only those)
         while (sal_True)
         {
@@ -541,8 +541,8 @@ void TextConvWrapper::ChangeText( const String &rNewText,
 #ifdef DEBUG
                     String aSelTxt1( pEditView->GetSelected() );
 #endif
-                    
-                    // replace selected sub string with the corresponding 
+
+                    // replace selected sub string with the corresponding
                     // sub string from the new text while keeping as
                     // much from the attributes as possible
                     ChangeText_impl( aInNew, sal_True );
@@ -568,7 +568,7 @@ void TextConvWrapper::ChangeText( const String &rNewText,
         }
 
         // set cursor to the end of the inserted text
-        // (as it would happen after ChangeText_impl (Delete and Insert) 
+        // (as it would happen after ChangeText_impl (Delete and Insert)
         // of the whole text in the 'else' branch below)
         pESelection->nStartPos = pESelection->nEndPos = nStartIndex + nConvTextLen;
     }
@@ -584,8 +584,8 @@ void TextConvWrapper::ChangeText_impl( const String &rNewText, sal_Bool bKeepAtt
     if (bKeepAttributes)
     {
         // save attributes to be restored
-        SfxItemSet aSet( pEditView->GetAttribs() ); 
-        
+        SfxItemSet aSet( pEditView->GetAttribs() );
+
 #ifdef DEBUG
         String aSelTxt1( pEditView->GetSelected() );
 #endif
@@ -597,8 +597,8 @@ void TextConvWrapper::ChangeText_impl( const String &rNewText, sal_Bool bKeepAtt
 
         // since 'SetAttribs' below function like merging with the attributes
         // from the itemset with any existing ones we have to get rid of all
-        // all attributes now. (Those attributes that may take effect left 
-        // to the position where the new text gets inserted after the old text 
+        // all attributes now. (Those attributes that may take effect left
+        // to the position where the new text gets inserted after the old text
         // was deleted)
         pEditView->RemoveAttribs();
         // apply saved attributes to new inserted text

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@ namespace dbaccess
         {
             if ( _sUrl.GetTokenCount(':') >= 2 )
             {
-                _sHostname		= _sUrl.GetToken(0,':');
-                _nPortNumber	= _sUrl.GetToken(1,':').ToInt32();
+                _sHostname      = _sUrl.GetToken(0,':');
+                _nPortNumber    = _sUrl.GetToken(1,':').ToInt32();
             }
         }
     }
@@ -118,7 +118,7 @@ String ODsnTypeCollection::cutPrefix(const ::rtl::OUString& _sURL) const
             sOldPattern = *aIter;
         }
     }
-    
+
     return sRet;
 }
 
@@ -143,7 +143,7 @@ String ODsnTypeCollection::getPrefix(const ::rtl::OUString& _sURL) const
             sOldPattern = *aIter;
         }
     }
-    
+
     return sRet;
 }
 
@@ -211,14 +211,14 @@ String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUStrin
 // -----------------------------------------------------------------------------
 bool ODsnTypeCollection::isShowPropertiesEnabled( const ::rtl::OUString& _sURL ) const
 {
-    return !(    _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:embedded:hsqldb",sizeof("sdbc:embedded:hsqldb")-1) 
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:outlook",sizeof("sdbc:address:outlook")-1) 
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:outlookexp",sizeof("sdbc:address:outlookexp")-1) 
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:mozilla:",sizeof("sdbc:address:mozilla:")-1) 
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:kab",sizeof("sdbc:address:kab")-1) 
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:evolution:local",sizeof("sdbc:address:evolution:local")-1) 
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:evolution:groupwise",sizeof("sdbc:address:evolution:groupwise")-1) 
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:evolution:ldap",sizeof("sdbc:address:evolution:ldap")-1) 
+    return !(    _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:embedded:hsqldb",sizeof("sdbc:embedded:hsqldb")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:outlook",sizeof("sdbc:address:outlook")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:outlookexp",sizeof("sdbc:address:outlookexp")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:mozilla:",sizeof("sdbc:address:mozilla:")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:kab",sizeof("sdbc:address:kab")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:evolution:local",sizeof("sdbc:address:evolution:local")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:evolution:groupwise",sizeof("sdbc:address:evolution:groupwise")-1)
+            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:evolution:ldap",sizeof("sdbc:address:evolution:ldap")-1)
             ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:macab",sizeof("sdbc:address:macab")-1)  );
 }
 // -----------------------------------------------------------------------------
@@ -326,7 +326,7 @@ bool ODsnTypeCollection::isEmbeddedDatabase( const ::rtl::OUString& _sURL ) cons
         if ( aInstalled.hasByName("EmbeddedDatabases/DefaultEmbeddedDatabase/Value") )
         {
             static const ::rtl::OUString s_sValue(RTL_CONSTASCII_USTRINGPARAM("EmbeddedDatabases/DefaultEmbeddedDatabase/Value"));
-            
+
             aInstalled.getNodeValue(s_sValue) >>= sEmbeddedDatabaseURL;
             if ( sEmbeddedDatabaseURL.getLength() )
                 aInstalled.getNodeValue(s_sValue + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sEmbeddedDatabaseURL + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/URL"))) >>= sEmbeddedDatabaseURL;
@@ -547,7 +547,7 @@ sal_Int32 ODsnTypeCollection::getIndexOf(const ::rtl::OUString& _sURL) const
             sOldPattern = *aIter;
         }
     }
-    
+
     return nRet;
 }
 // -----------------------------------------------------------------------------
@@ -600,7 +600,7 @@ String ODsnTypeCollection::TypeIterator::getDisplayName() const
     return m_pContainer->m_aDsnPrefixes[m_nPosition];
 }
 //-------------------------------------------------------------------------
-const ODsnTypeCollection::TypeIterator&	ODsnTypeCollection::TypeIterator::operator++()
+const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operator++()
 {
     DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::operator++ : invalid position!");
     if (m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size())
@@ -609,7 +609,7 @@ const ODsnTypeCollection::TypeIterator&	ODsnTypeCollection::TypeIterator::operat
 }
 
 //-------------------------------------------------------------------------
-const ODsnTypeCollection::TypeIterator&	ODsnTypeCollection::TypeIterator::operator--()
+const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operator--()
 {
     DBG_ASSERT(m_nPosition >= 0, "ODsnTypeCollection::TypeIterator::operator-- : invalid position!");
     if (m_nPosition >= 0)
@@ -624,6 +624,6 @@ bool operator==(const ODsnTypeCollection::TypeIterator& lhs, const ODsnTypeColle
 }
 
 //.........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //.........................................................................
 

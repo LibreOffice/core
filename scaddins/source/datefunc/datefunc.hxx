@@ -1,7 +1,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -332,7 +332,7 @@ class ScaDateAddIn : public ::cppu::WeakImplHelper6<
 private:
     ::com::sun::star::lang::Locale  aFuncLoc;
     ::com::sun::star::lang::Locale* pDefLocales;
-    ResMgr*						pResMgr;
+    ResMgr*                     pResMgr;
     ScaFuncDataList*            pFuncDataList;
 
 

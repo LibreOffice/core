@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace cppcanvas
             mxGraphicDevice()
         {
             OSL_ENSURE( mpCanvas.get() != NULL &&
-                        mpCanvas->getUNOCanvas().is(), 
+                        mpCanvas->getUNOCanvas().is(),
                         "CanvasGraphicHelper::CanvasGraphicHelper: no valid canvas" );
 
             if( mpCanvas.get() != NULL &&
@@ -73,11 +73,11 @@ namespace cppcanvas
         {
             ::canvas::tools::setRenderStateTransform( maRenderState, rMatrix );
         }
-        
+
         ::basegfx::B2DHomMatrix CanvasGraphicHelper::getTransformation() const
         {
             ::basegfx::B2DHomMatrix aMatrix;
-            return ::canvas::tools::getRenderStateTransform( aMatrix, 
+            return ::canvas::tools::getRenderStateTransform( aMatrix,
                                                              maRenderState );
         }
 
@@ -117,13 +117,13 @@ namespace cppcanvas
 
         void CanvasGraphicHelper::setRGBAColor( Color::IntSRGBA aColor )
         {
-            maRenderState.DeviceColor = tools::intSRGBAToDoubleSequence( mxGraphicDevice, 
+            maRenderState.DeviceColor = tools::intSRGBAToDoubleSequence( mxGraphicDevice,
                                                                          aColor );
         }
 
         Color::IntSRGBA CanvasGraphicHelper::getRGBAColor() const
         {
-            return tools::doubleSequenceToIntSRGBA( mxGraphicDevice, 
+            return tools::doubleSequenceToIntSRGBA( mxGraphicDevice,
                                                     maRenderState.DeviceColor );
         }
 
@@ -142,10 +142,10 @@ namespace cppcanvas
             return mpCanvas;
         }
 
-        uno::Reference< rendering::XGraphicDevice >	CanvasGraphicHelper::getGraphicDevice() const
+        uno::Reference< rendering::XGraphicDevice > CanvasGraphicHelper::getGraphicDevice() const
         {
             return mxGraphicDevice;
         }
-        
+
     }
 }

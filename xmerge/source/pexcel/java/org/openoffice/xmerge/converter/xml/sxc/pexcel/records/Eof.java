@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,25 +46,25 @@ public class Eof implements BIFFRecord {
     }
 
     /**
-     * Get the hex code for this particular <code>BIFFRecord</code> 
+     * Get the hex code for this particular <code>BIFFRecord</code>
      *
      * @return the hex code for <code>BeginningOfFile</code>
      */
     public short getBiffType() {
         return PocketExcelConstants.EOF_MARKER;
     }
-    
+
     public int read(InputStream input) throws IOException {
         return 0;
     }
-    
+
     public void write(OutputStream output) throws IOException {
 
         output.write(getBiffType());
 
         Debug.log(Debug.TRACE,"Writing Eof record");
 
-    
+
     }
-    
+
 }

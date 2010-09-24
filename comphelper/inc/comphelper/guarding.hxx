@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,17 +46,17 @@ namespace comphelper
 template <class MUTEX>
 class ORelease
 {
-    MUTEX&	m_rMutex;
+    MUTEX&  m_rMutex;
 
 public:
     ORelease(MUTEX& _rMutex) : m_rMutex(_rMutex) { _rMutex.release(); }
     ~ORelease() { m_rMutex.acquire(); }
 };
 
-typedef ORelease< ::osl::Mutex >	MutexRelease;
+typedef ORelease< ::osl::Mutex >    MutexRelease;
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 #endif // _COMPHELPER_GUARDING_HXX_

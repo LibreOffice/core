@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -225,15 +225,15 @@ BOOL CHatchWin::Init(HWND hWndParent, UINT uID, HWND hWndAssoc)
         , SZCLASSHATCHWIN, WS_CHILD | WS_CLIPSIBLINGS
         | WS_CLIPCHILDREN, 0, 0, 100, 100, hWndParent, (HMENU)uID
         , m_hInst, this);
-    
+
     m_uID=uID;
     m_hWndAssociate=hWndAssoc;
-    
+
     return (NULL!=m_hWnd);
 }
 
 
-void CHatchWin::SetTrans() 
+void CHatchWin::SetTrans()
 {
     HRGN hrgn = CreateRectRgn(0,0,0,0);
     SetWindowRgn(m_hWnd,hrgn,true);
@@ -316,14 +316,14 @@ void CHatchWin::RectsSet(LPRECT prcPos, LPRECT prcClip)
 //                  , prcPos->bottom-prcPos->top, SWP_NOZORDER | SWP_NOACTIVATE);
 
     RECT newRC;
-    GetClientRect(m_hWnd,&newRC);    
+    GetClientRect(m_hWnd,&newRC);
     m_aTracker = Tracker(
         &newRC,
-        Tracker::hatchInside | 
+        Tracker::hatchInside |
         Tracker::hatchedBorder |
         Tracker::resizeInside
     );
-    
+
     return;
 }
 
@@ -405,10 +405,10 @@ LRESULT APIENTRY winwrap::HatchWndProc(
     PCHatchWin  phw;
     HDC         hDC;
     PAINTSTRUCT ps;
-    
+
     phw=(PCHatchWin)GetWindowLong(hWnd, HWWL_STRUCTURE);
     POINT ptMouse;
-    
+
     switch (iMsg)
     {
         case WM_CREATE:
@@ -424,7 +424,7 @@ LRESULT APIENTRY winwrap::HatchWndProc(
         case WM_LBUTTONDOWN:
             GetCursorPos(&ptMouse);
             ScreenToClient(hWnd,&ptMouse);
-            
+
             // track in case we have to
             if(phw->m_aTracker.Track(hWnd,ptMouse,FALSE,GetParent(hWnd)))
             {
@@ -443,7 +443,7 @@ LRESULT APIENTRY winwrap::HatchWndProc(
             //We need this since the container will SetFocus to us.
             if (NULL!=phw->m_hWndKid)
                 SetFocus(phw->m_hWndKid);
-            
+
             break;
         case WM_LBUTTONDBLCLK:
             /*
@@ -465,11 +465,11 @@ LRESULT APIENTRY winwrap::HatchWndProc(
         default:
             return DefWindowProc(hWnd, iMsg, wParam, lParam);
     }
-    
+
     return 0L;
 }
 
-// Fix strange warnings about some 
+// Fix strange warnings about some
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed
 #if defined(_MSC_VER)

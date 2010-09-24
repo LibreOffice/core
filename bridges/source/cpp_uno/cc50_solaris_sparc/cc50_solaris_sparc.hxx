@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@ namespace __Crun
     struct static_type_info
     {
         std::ptrdiff_t m_pClassName;
-        int			m_nSkip1; // must be 0
-        void*		m_pMagic; // points to some magic data
-        int			m_nMagic[ 4 ];
-        int			m_nSkip2[2]; // must be 0
+        int         m_nSkip1; // must be 0
+        void*       m_pMagic; // points to some magic data
+        int         m_nMagic[ 4 ];
+        int         m_nSkip2[2]; // must be 0
     };
     void* ex_alloc(unsigned);
     void ex_throw( void*, const static_type_info*, void(*)(void*));

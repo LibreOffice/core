@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ rtl::OUString InsertFixedText( AboutDialog& rAboutDialog, const rtl::OUString& r
         TKGet( TK_TabIndex ),
         TKGet( TK_Width ) };
 
-    Any	pValues[] = {
+    Any pValues[] = {
         Any( nHeight ),
         Any( rLabel ),
         Any( bMultiLine ),
@@ -79,8 +79,8 @@ rtl::OUString InsertFixedText( AboutDialog& rAboutDialog, const rtl::OUString& r
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >	aNames( pNames, nCount );
-    Sequence< Any >				aValues( pValues, nCount );
+    Sequence< rtl::OUString >   aNames( pNames, nCount );
+    Sequence< Any >             aValues( pValues, nCount );
 
     rAboutDialog.insertFixedText( rControlName, aNames, aValues );
     return rControlName;
@@ -98,7 +98,7 @@ rtl::OUString InsertSeparator( AboutDialog& rAboutDialog, const OUString& rContr
         TKGet( TK_Step ),
         TKGet( TK_Width ) };
 
-    Any	pValues[] = {
+    Any pValues[] = {
         Any( nHeight ),
         Any( nOrientation ),
         Any( nPosX ),
@@ -108,8 +108,8 @@ rtl::OUString InsertSeparator( AboutDialog& rAboutDialog, const OUString& rContr
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >	aNames( pNames, nCount );
-    Sequence< Any >				aValues( pValues, nCount );
+    Sequence< rtl::OUString >   aNames( pNames, nCount );
+    Sequence< Any >             aValues( pValues, nCount );
 
     rAboutDialog.insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFixedLineModel" ) ),
         rControlName, aNames, aValues );
@@ -130,7 +130,7 @@ rtl::OUString InsertImage( AboutDialog& rAboutDialog, const OUString& rControlNa
         TKGet( TK_ScaleImage ),
         TKGet( TK_Width ) };
 
-    Any	pValues[] = {
+    Any pValues[] = {
         Any( sal_Int16( 1 ) ),
         Any( nHeight ),
         Any( rURL ),
@@ -140,8 +140,8 @@ rtl::OUString InsertImage( AboutDialog& rAboutDialog, const OUString& rControlNa
         Any( nWidth ) };
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >	aNames( pNames, nCount );
-    Sequence< Any >				aValues( pValues, nCount );
+    Sequence< rtl::OUString >   aNames( pNames, nCount );
+    Sequence< Any >             aValues( pValues, nCount );
 
     rAboutDialog.insertImage( rControlName, aNames, aValues );
     return rControlName;
@@ -161,7 +161,7 @@ rtl::OUString InsertButton( AboutDialog& rAboutDialog, const OUString& rControlN
         TKGet( TK_TabIndex ),
         TKGet( TK_Width ) };
 
-    Any	pValues[] = {
+    Any pValues[] = {
         Any( sal_True ),
         Any( nHeight ),
         Any( rAboutDialog.getString( nResID ) ),
@@ -175,8 +175,8 @@ rtl::OUString InsertButton( AboutDialog& rAboutDialog, const OUString& rControlN
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >	aNames( pNames, nCount );
-    Sequence< Any >				aValues( pValues, nCount );
+    Sequence< rtl::OUString >   aNames( pNames, nCount );
+    Sequence< Any >             aValues( pValues, nCount );
 
     rAboutDialog.insertButton( rControlName, xActionListener, aNames, aValues );
     return rControlName;
@@ -195,7 +195,7 @@ void AboutDialog::InitDialog()
         TKGet( TK_Title ),
         TKGet( TK_Width ) };
 
-    Any	pValues[] = {
+    Any pValues[] = {
         Any( sal_Int32( 0xffffff ) ),
         Any( sal_True ),
         Any( sal_Int32( ABOUT_DIALOG_HEIGHT ) ),
@@ -204,17 +204,17 @@ void AboutDialog::InitDialog()
         Any( sal_Int32( 42 ) ),
         Any( getString( STR_ABOUT_VERSION2 ) ),
         Any( sal_Int32( ABOUT_DIALOG_WIDTH ) ) };
-    
+
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >	aNames( pNames, nCount );
-    Sequence< Any >				aValues( pValues, nCount );
+    Sequence< rtl::OUString >   aNames( pNames, nCount );
+    Sequence< Any >             aValues( pValues, nCount );
 
     rtl::OUString sBitmapPath( getPath( TK_BitmapPath ) );
     rtl::OUString sBitmap( rtl::OUString::createFromAscii( "/aboutlogo.png" ) );
     rtl::OUString sURL( sBitmapPath += sBitmap );
 
-    mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues ); 
+    mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
     sal_Int32 nWidth = getMapsFromPixels( 387 );
     if ( nWidth )
         mxDialogModelPropertySet->setPropertyValue( TKGet( TK_Width ), Any( nWidth ) );
@@ -225,7 +225,7 @@ void AboutDialog::InitDialog()
 
     InsertImage( *this, rtl::OUString( rtl::OUString::createFromAscii( "aboutimage" ) ), sURL, 0, 0, nWidth, 60 );
     InsertFixedText( *this, rtl::OUString( rtl::OUString::createFromAscii( "fixedtext" ) ), getString( STR_ABOUT_PRN ), 9, 66, nWidth - 18, 50, sal_True, 0 );
-//	InsertSeparator( *this, rtl::OUString( rtl::OUString::createFromAscii( "separator" ) ), 0, 0, ABOUT_DIALOG_HEIGHT - 25, nWidth, 8 );
+//  InsertSeparator( *this, rtl::OUString( rtl::OUString::createFromAscii( "separator" ) ), 0, 0, ABOUT_DIALOG_HEIGHT - 25, nWidth, 8 );
     InsertButton( *this, rtl::OUString( rtl::OUString::createFromAscii( "button" ) ), mxActionListener, ( nWidth / 2 ) - 25, 120, 50, 14, 1, STR_OK );
 }
 
@@ -241,7 +241,7 @@ AboutDialog::AboutDialog( const Reference< XComponentContext > &rxMSF, Reference
     Reference< XFrame > xFrame( mxController->getFrame() );
     Reference< XWindow > xContainerWindow( xFrame->getContainerWindow() );
     Reference< XWindowPeer > xWindowPeer( xContainerWindow, UNO_QUERY_THROW );
-    createWindowPeer( xWindowPeer );		
+    createWindowPeer( xWindowPeer );
 
     InitDialog();
 }

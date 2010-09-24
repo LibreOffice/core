@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrViewEvent::SdrViewEvent()
-:	  pHdl(NULL),
+:     pHdl(NULL),
       pObj(NULL),
       pRootObj(NULL),
       pPV(NULL),
@@ -174,7 +174,7 @@ SdrDropMarkerOverlay::~SdrDropMarkerOverlay()
 TYPEINIT1(SdrView,SdrCreateView);
 
 SdrView::SdrView(SdrModel* pModel1, OutputDevice* pOut)
-:	SdrCreateView(pModel1,pOut),
+:   SdrCreateView(pModel1,pOut),
     bNoExtendedMouseDispatcher(FALSE),
     bNoExtendedKeyDispatcher(FALSE),
     bNoExtendedCommandDispatcher(FALSE),
@@ -306,7 +306,7 @@ SdrHitKind SdrView::PickAnything(const MouseEvent& rMEvt, USHORT nEventKind, Sdr
     rVEvt.nMouseMode=rMEvt.GetMode();
     rVEvt.nMouseCode=rMEvt.GetButtons() | rMEvt.GetModifier();
     const OutputDevice* pOut=pActualOutDev;
-    if (pOut==NULL) 
+    if (pOut==NULL)
     {
         pOut = GetFirstOutputDevice();
         //pOut=GetWin(0);
@@ -343,7 +343,7 @@ SdrHitKind SdrView::PickAnything(const MouseEvent& rMEvt, USHORT nEventKind, Sdr
 SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) const
 {
     const OutputDevice* pOut=pActualOutDev;
-    if (pOut==NULL) 
+    if (pOut==NULL)
     {
         pOut = GetFirstOutputDevice();
         //pOut=GetWin(0);
@@ -497,13 +497,12 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                     pOutliner = &pTextObj->GetModel()->GetHitTestOutliner();
 
                 pTextObj->TakeTextRect( *pOutliner, aTextRect, FALSE, &aAnchor, FALSE );
-                
+
                 // #i73628# Use a text-relative position for hit test in hit test outliner
                 Point aTemporaryTextRelativePosition(aLocalLogicPosition - aTextRect.TopLeft());
-                
+
                 // FitToSize berueksichtigen
-                SdrFitToSizeType eFit=pTextObj->GetFitToSize();
-                BOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+                BOOL bFitToSize(pTextObj->IsFitToSize());
                 if (bFitToSize) {
                     Fraction aX(aTextRect.GetWidth()-1,aAnchor.GetWidth()-1);
                     Fraction aY(aTextRect.GetHeight()-1,aAnchor.GetHeight()-1);
@@ -554,7 +553,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             nTolerance = pOut->PixelToLogic(Size(2, 0)).Width();
         }
 
-        if(	(aLocalLogicPosition.X() >= aBoundRect.Left() - nTolerance && aLocalLogicPosition.X() <= aBoundRect.Left() + nTolerance)
+        if( (aLocalLogicPosition.X() >= aBoundRect.Left() - nTolerance && aLocalLogicPosition.X() <= aBoundRect.Left() + nTolerance)
          || (aLocalLogicPosition.X() >= aBoundRect.Right() - nTolerance && aLocalLogicPosition.X() <= aBoundRect.Right() + nTolerance)
          || (aLocalLogicPosition.Y() >= aBoundRect.Top() - nTolerance && aLocalLogicPosition.Y() <= aBoundRect.Top() + nTolerance)
          || (aLocalLogicPosition.Y() >= aBoundRect.Bottom() - nTolerance && aLocalLogicPosition.Y() <= aBoundRect.Bottom() + nTolerance))
@@ -562,7 +561,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             bBoundRectHit = sal_True;
         }
 
-        if(!bBoundRectHit) 
+        if(!bBoundRectHit)
         {
             bool bTEHit(pPV &&
                 SdrObjectPrimitiveHit(*pHitObj, aLocalLogicPosition, 0, *pPV, &pPV->GetVisibleLayers(), true));
@@ -684,7 +683,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 }
                 else if (bMarked)
                 {
-                    eEvent=SDREVENT_BEGDRAGOBJ; // MarkState nicht aendern, nur Drag	
+                    eEvent=SDREVENT_BEGDRAGOBJ; // MarkState nicht aendern, nur Drag
                 }
             }
         }
@@ -852,16 +851,16 @@ BOOL SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             if (!EndCreateObj(eCmd)) { // Event fuer Create nicht ausgewerten? -> Markieren
                 if (eHit==SDRHIT_UNMARKEDOBJECT || eHit==SDRHIT_TEXTEDIT) {
                     MarkObj(rVEvt.pRootObj,rVEvt.pPV);
-                    if (eHit==SDRHIT_TEXTEDIT) 
+                    if (eHit==SDRHIT_TEXTEDIT)
                     {
                         BOOL bRet2(pActualOutDev && OUTDEV_WINDOW == pActualOutDev->GetOutDevType() &&
                             SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, (Window*)pActualOutDev, sal_False, (SdrOutliner*)0L));
-                    
-                        if(bRet2) 
+
+                        if(bRet2)
                         {
                             MouseEvent aMEvt(pActualOutDev->LogicToPixel(aLogicPos),
                                              1,rVEvt.nMouseMode,rVEvt.nMouseCode,rVEvt.nMouseCode);
-                            
+
                             OutlinerView* pOLV=GetTextEditOutlinerView();
                             if (pOLV!=NULL) {
                                 pOLV->MouseButtonDown(aMEvt); // Event an den Outliner, aber ohne Doppelklick
@@ -948,7 +947,7 @@ BOOL SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             bRet = pActualOutDev && OUTDEV_WINDOW == pActualOutDev->GetOutDevType()&&
                  SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, (Window*)pActualOutDev, sal_False, (SdrOutliner*)0L);
 
-            if(bRet) 
+            if(bRet)
             {
                 MouseEvent aMEvt(pActualOutDev->LogicToPixel(aLogicPos),
                                  1,rVEvt.nMouseMode,rVEvt.nMouseCode,rVEvt.nMouseCode);
@@ -979,7 +978,7 @@ BOOL SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
 Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, USHORT nModifier, BOOL bLeftDown) const
 {
     // Actions
-    if (IsCreateObj()) 
+    if (IsCreateObj())
     {
         return pAktCreate->GetCreatePointer();
     }
@@ -1007,9 +1006,9 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
     }
     //USHORT nTol=nHitTolLog;
     // TextEdit, ObjEdit, Macro
-    if (IsTextEdit() && (IsTextEditInSelectionMode() || IsTextEditHit(rMousePos,0/*nTol*/))) 
+    if (IsTextEdit() && (IsTextEditInSelectionMode() || IsTextEditHit(rMousePos,0/*nTol*/)))
     {
-        if(!pOut || IsTextEditInSelectionMode()) 
+        if(!pOut || IsTextEditInSelectionMode())
         {
             if(pTextEditOutliner->IsVertical())
                 return Pointer(POINTER_TEXT_VERTICAL);
@@ -1019,7 +1018,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
         // hier muss besser der Outliner was liefern:
         Point aPos(pOut->LogicToPixel(rMousePos));
         Pointer aPointer(pTextEditOutlinerView->GetPointer(aPos));
-        if (aPointer==POINTER_ARROW) 
+        if (aPointer==POINTER_ARROW)
         {
             if(pTextEditOutliner->IsVertical())
                 aPointer = POINTER_TEXT_VERTICAL;
@@ -1041,7 +1040,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
     {
         case SDREVENT_BEGCREATEOBJ:
             return aAktCreatePointer;
-        case SDREVENT_MARKOBJ: 
+        case SDREVENT_MARKOBJ:
         case SDREVENT_BEGMARK:
             return Pointer(POINTER_ARROW);
         case SDREVENT_MARKPOINT:
@@ -1065,17 +1064,17 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
         }
         default: break;
     } // switch
-    
-    switch(eHit) 
+
+    switch(eHit)
     {
         case SDRHIT_CELL:
             return Pointer(POINTER_ARROW);
-        case SDRHIT_HELPLINE : 
+        case SDRHIT_HELPLINE :
             return aVEvt.pPV->GetHelpLines()[aVEvt.nHlplIdx].GetPointer();
-        case SDRHIT_GLUEPOINT: 
+        case SDRHIT_GLUEPOINT:
             return Pointer(POINTER_MOVEPOINT);
-        case SDRHIT_TEXTEDIT : 
-        case SDRHIT_TEXTEDITOBJ: 
+        case SDRHIT_TEXTEDIT :
+        case SDRHIT_TEXTEDITOBJ:
         {
             SdrTextObj* pText = dynamic_cast< SdrTextObj* >( aVEvt.pObj );
             if(pText && pText->HasText())
@@ -1231,39 +1230,39 @@ XubString SdrView::GetStatusText()
                 mpCurrentSdrDragMethod->TakeSdrDragComment(aStr);
             }
         }
-    } 
-    else if(IsMarkObj()) 
+    }
+    else if(IsMarkObj())
     {
-        if(AreObjectsMarked()) 
+        if(AreObjectsMarked())
         {
             aStr = ImpGetResStr(STR_ViewMarkMoreObjs);
-        } 
-        else 
+        }
+        else
         {
             aStr = ImpGetResStr(STR_ViewMarkObjs);
         }
-    } 
-    else if(IsMarkPoints()) 
+    }
+    else if(IsMarkPoints())
     {
-        if(HasMarkedPoints()) 
+        if(HasMarkedPoints())
         {
             aStr = ImpGetResStr(STR_ViewMarkMorePoints);
-        } 
-        else 
+        }
+        else
         {
             aStr = ImpGetResStr(STR_ViewMarkPoints);
         }
-    } else if (IsMarkGluePoints()) 
+    } else if (IsMarkGluePoints())
     {
-        if(HasMarkedGluePoints()) 
+        if(HasMarkedGluePoints())
         {
             aStr = ImpGetResStr(STR_ViewMarkMoreGluePoints);
-        } 
-        else 
+        }
+        else
         {
             aStr = ImpGetResStr(STR_ViewMarkGluePoints);
         }
-    } 
+    }
     else if (IsTextEdit() && pTextEditOutlinerView!=NULL) {
         aStr=ImpGetResStr(STR_ViewTextEdit); // "TextEdit - Zeile y  Spalte x";
         ESelection aSel(pTextEditOutlinerView->GetSelection());
@@ -1354,7 +1353,7 @@ SdrViewContext SdrView::GetContext() const
     if( GetMarkedObjectCount() )
     {
         BOOL bGraf = TRUE, bMedia = TRUE, bTable = TRUE;
-        
+
         for( ULONG nMarkNum = 0; nMarkNum < nMarkAnz && ( bGraf || bMedia ); nMarkNum++ )
         {
             const SdrObject* pMarkObj = GetMarkedObjectByIndex( nMarkNum );
@@ -1365,7 +1364,7 @@ SdrViewContext SdrView::GetContext() const
 
             if( !pMarkObj->ISA( SdrGrafObj ) )
                 bGraf = FALSE;
-            
+
             if( !pMarkObj->ISA( SdrMediaObj ) )
                 bMedia = FALSE;
 
@@ -1571,17 +1570,17 @@ SvtAccessibilityOptions& SdrView::getAccessibilityOptions()
 {
     return maAccessibilityOptions;
 }
-    
+
 /** method is called whenever the global SvtAccessibilityOptions is changed */
 void SdrView::onAccessibilityOptionsChanged()
 {
 }
 
-void SdrView::SetMasterPagePaintCaching(sal_Bool bOn) 
-{ 
+void SdrView::SetMasterPagePaintCaching(sal_Bool bOn)
+{
     if(mbMasterPagePaintCaching != bOn)
     {
-        mbMasterPagePaintCaching = bOn; 
+        mbMasterPagePaintCaching = bOn;
 
         // reset at all SdrPageWindow's
         SdrPageView* pPageView = GetSdrPageView();

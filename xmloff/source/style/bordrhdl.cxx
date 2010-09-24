@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,9 +92,9 @@ using namespace ::xmloff::token;
 #define DEF_DOUBLE_LINE9_IN     DEF_LINE_WIDTH_0
 #define DEF_DOUBLE_LINE9_DIST   DEF_LINE_WIDTH_2
 
-#define DEF_DOUBLE_LINE10_OUT	DEF_LINE_WIDTH_3
-#define DEF_DOUBLE_LINE10_IN	DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE10_DIST	DEF_LINE_WIDTH_2
+#define DEF_DOUBLE_LINE10_OUT   DEF_LINE_WIDTH_3
+#define DEF_DOUBLE_LINE10_IN    DEF_LINE_WIDTH_0
+#define DEF_DOUBLE_LINE10_DIST  DEF_LINE_WIDTH_2
 
 // finished copy
 
@@ -108,24 +108,24 @@ using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry pXML_BorderStyles[] =
 {
-    { XML_NONE,				    SVX_XML_BORDER_STYLE_NONE	},
-    { XML_HIDDEN, 				SVX_XML_BORDER_STYLE_NONE	},
-    { XML_SOLID, 				SVX_XML_BORDER_STYLE_SOLID	},
-    { XML_DOUBLE,				SVX_XML_BORDER_STYLE_DOUBLE	},
-    { XML_DOTTED, 				SVX_XML_BORDER_STYLE_SOLID  },
-    { XML_DASHED, 				SVX_XML_BORDER_STYLE_SOLID	},
-    { XML_GROOVE, 				SVX_XML_BORDER_STYLE_SOLID	},
-    { XML_RIDGE,  				SVX_XML_BORDER_STYLE_SOLID  },
-    { XML_INSET,  				SVX_XML_BORDER_STYLE_SOLID  },
-    { XML_OUTSET, 				SVX_XML_BORDER_STYLE_SOLID	},
+    { XML_NONE,                 SVX_XML_BORDER_STYLE_NONE   },
+    { XML_HIDDEN,               SVX_XML_BORDER_STYLE_NONE   },
+    { XML_SOLID,                SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_DOUBLE,               SVX_XML_BORDER_STYLE_DOUBLE },
+    { XML_DOTTED,               SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_DASHED,               SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_GROOVE,               SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_RIDGE,                SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_INSET,                SVX_XML_BORDER_STYLE_SOLID  },
+    { XML_OUTSET,               SVX_XML_BORDER_STYLE_SOLID  },
     { XML_TOKEN_INVALID,        0 }
 };
 
 SvXMLEnumMapEntry pXML_NamedBorderWidths[] =
 {
-    { XML_THIN,	            SVX_XML_BORDER_WIDTH_THIN	},
-    { XML_MIDDLE,	        SVX_XML_BORDER_WIDTH_MIDDLE	},
-    { XML_THICK,	        SVX_XML_BORDER_WIDTH_THICK	},
+    { XML_THIN,             SVX_XML_BORDER_WIDTH_THIN   },
+    { XML_MIDDLE,           SVX_XML_BORDER_WIDTH_MIDDLE },
+    { XML_THICK,            SVX_XML_BORDER_WIDTH_THICK  },
     { XML_TOKEN_INVALID,    0 }
 };
 // mapping tables to map external xml input to intarnal box line widths
@@ -190,7 +190,7 @@ void lcl_frmitems_setXMLBorderWidth( table::BorderLine &rBorderLine,
 
     sal_uInt16 i = (nSize / sizeof(sal_uInt16)) - 4;
     while( i>0 &&
-           nWidth <= ((aWidths[i] + aWidths[i-4]) / 2)	)
+           nWidth <= ((aWidths[i] + aWidths[i-4]) / 2)  )
     {
         i -= 4;
     }
@@ -205,7 +205,7 @@ void lcl_frmitems_setXMLBorderWidth( table::BorderLine &rBorderLine,
         sal_uInt16 nSize = sizeof( aDBorderWidths );
         sal_uInt16 i = (nSize / sizeof(sal_uInt16)) - 4;
         while( i>0 &&
-               nWidth <= ((aWidths[i] + aWidths[i-4]) / 2)	)
+               nWidth <= ((aWidths[i] + aWidths[i-4]) / 2)  )
         {
             i -= 4;
         }
@@ -216,7 +216,7 @@ void lcl_frmitems_setXMLBorderWidth( table::BorderLine &rBorderLine,
     }
     else
     {
-        rBorderLine.OuterLineWidth = 0 == nWidth ? DEF_LINE_WIDTH_0 : nWidth; 
+        rBorderLine.OuterLineWidth = 0 == nWidth ? DEF_LINE_WIDTH_0 : nWidth;
         rBorderLine.InnerLineWidth = 0;
         rBorderLine.LineDistance = 0;
 
@@ -236,7 +236,7 @@ XMLBorderWidthHdl::~XMLBorderWidthHdl()
 }
 
 sal_Bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{ 
+{
     SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
 
     sal_Int32 nInWidth, nDistance, nOutWidth;
@@ -282,11 +282,11 @@ sal_Bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& r
     aBorderLine.LineDistance   = sal::static_int_cast< sal_Int16 >(nDistance);
 
     rValue <<= aBorderLine;
-    return sal_True; 
+    return sal_True;
 }
 
 sal_Bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{ 
+{
     OUStringBuffer aOut;
 
     table::BorderLine aBorderLine;
@@ -317,7 +317,7 @@ XMLBorderHdl::~XMLBorderHdl()
 }
 
 sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{ 
+{
     OUString aToken;
     SvXMLTokenEnumerator aTokens( rStrImpValue );
 
@@ -416,7 +416,7 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
 }
 
 sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{ 
+{
     OUStringBuffer aOut;
 
     table::BorderLine aBorderLine;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ namespace dbaccess
 {
 //........................................................................
 /// helper class for column property change events which holds the OComponentDefinition weak
-typedef ::cppu::WeakImplHelper1	< XPropertyChangeListener > TColumnPropertyListener_BASE;
+typedef ::cppu::WeakImplHelper1 < XPropertyChangeListener > TColumnPropertyListener_BASE;
 class OColumnPropertyListener : public TColumnPropertyListener_BASE
 {
     OComponentDefinition* m_pComponent;
@@ -103,7 +103,7 @@ public:
     }
     void clear() { m_pComponent = NULL; }
 };
-DBG_NAME(OComponentDefinition_Impl)    
+DBG_NAME(OComponentDefinition_Impl)
 OComponentDefinition_Impl::OComponentDefinition_Impl()
 {
     DBG_CTOR(OComponentDefinition_Impl,NULL);
@@ -111,7 +111,7 @@ OComponentDefinition_Impl::OComponentDefinition_Impl()
 // -----------------------------------------------------------------------------
 OComponentDefinition_Impl::~OComponentDefinition_Impl()
 {
-    DBG_DTOR(OComponentDefinition_Impl,NULL);    
+    DBG_DTOR(OComponentDefinition_Impl,NULL);
 }
 //==========================================================================
 //= OComponentDefinition
@@ -140,7 +140,7 @@ void OComponentDefinition::registerProperties()
 
 //--------------------------------------------------------------------------
 OComponentDefinition::OComponentDefinition(const Reference< XMultiServiceFactory >& _xORB
-                                           ,const Reference< XInterface >&	_xParentContainer
+                                           ,const Reference< XInterface >&  _xParentContainer
                                            ,const TContentPtr& _pImpl
                                            ,sal_Bool _bTable)
     :OContentHelper(_xORB,_xParentContainer,_pImpl)
@@ -157,7 +157,7 @@ OComponentDefinition::~OComponentDefinition()
 }
 
 //--------------------------------------------------------------------------
-OComponentDefinition::OComponentDefinition(	const Reference< XInterface >& _rxContainer
+OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxContainer
                                        ,const ::rtl::OUString& _rElementName
                                        ,const Reference< XMultiServiceFactory >& _xORB
                                        ,const TContentPtr& _pImpl
@@ -195,7 +195,7 @@ Sequence< ::rtl::OUString > OComponentDefinition::getSupportedServiceNames_stati
     Sequence< ::rtl::OUString > aServices(2);
     aServices.getArray()[0] = SERVICE_SDB_TABLEDEFINITION;
     aServices.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.Content"));
-    
+
     return aServices;
 }
 
@@ -277,7 +277,7 @@ OColumn* OComponentDefinition::createColumn(const ::rtl::OUString& _rName) const
     if ( aFind != rDefinition.end() )
     {
         aFind->second->addPropertyChangeListener(::rtl::OUString(),m_xColumnPropertyListener.getRef());
-        return new OTableColumnWrapper( aFind->second, aFind->second, true );        
+        return new OTableColumnWrapper( aFind->second, aFind->second, true );
     }
     OSL_ENSURE( false, "OComponentDefinition::createColumn: is this a valid case?" );
         // This here is the last place creating a OTableColumn, and somehow /me thinks it is not needed ...
@@ -295,7 +295,7 @@ void OComponentDefinition::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,co
     notifyDataSourceModified();
 }
 // -----------------------------------------------------------------------------
-void OComponentDefinition::columnDropped(const ::rtl::OUString& _sName) 
+void OComponentDefinition::columnDropped(const ::rtl::OUString& _sName)
 {
     getDefinition().erase( _sName );
     notifyDataSourceModified();
@@ -323,6 +323,6 @@ void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxS
 }
 
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,25 +67,25 @@ private:
     friend class MacroSecurityLevelTP;
     friend class MacroSecurityTrustedSourcesTP;
 
-    TabControl			maTabCtrl;
-    OKButton			maOkBtn;
-    CancelButton		maCancelBtn;
-    HelpButton			maHelpBtn;
-    PushButton			maResetBtn;
+    TabControl          maTabCtrl;
+    OKButton            maOkBtn;
+    CancelButton        maCancelBtn;
+    HelpButton          maHelpBtn;
+    PushButton          maResetBtn;
 
-    cssu::Reference< cssu::XComponentContext >	mxCtx;
-    cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >	mxSecurityEnvironment;
-    SvtSecurityOptions											maSecOptions;
+    cssu::Reference< cssu::XComponentContext >  mxCtx;
+    cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >  mxSecurityEnvironment;
+    SvtSecurityOptions                                          maSecOptions;
 
-    MacroSecurityTP*	mpLevelTP;
-    MacroSecurityTP*	mpTrustSrcTP;
+    MacroSecurityTP*    mpLevelTP;
+    MacroSecurityTP*    mpTrustSrcTP;
 
-    DECL_LINK(			OkBtnHdl, void* );
+    DECL_LINK(          OkBtnHdl, void* );
 public:
     MacroSecurity( Window* pParent, const cssu::Reference< cssu::XComponentContext>& rxCtx, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment );
-    virtual				~MacroSecurity();
+    virtual             ~MacroSecurity();
 
-    inline void		EnableReset( bool _bEnable = true );
+    inline void     EnableReset( bool _bEnable = true );
 };
 
 inline void MacroSecurity::EnableReset( bool _bEnable )
@@ -96,12 +96,12 @@ inline void MacroSecurity::EnableReset( bool _bEnable )
 class MacroSecurityTP : public TabPage
 {
 protected:
-    MacroSecurity*		mpDlg;
+    MacroSecurity*      mpDlg;
 public:
                         MacroSecurityTP( Window* _pParent, const ResId& _rResId, MacroSecurity* _pDlg );
-    inline void			SetTabDlg( MacroSecurity* pTabDlg );
+    inline void         SetTabDlg( MacroSecurity* pTabDlg );
 
-    virtual void		ClosePage( void ) = 0;
+    virtual void        ClosePage( void ) = 0;
 };
 
 inline void MacroSecurityTP::SetTabDlg( MacroSecurity* _pTabDlg )
@@ -113,61 +113,61 @@ inline void MacroSecurityTP::SetTabDlg( MacroSecurity* _pTabDlg )
 class MacroSecurityLevelTP : public MacroSecurityTP
 {
 private:
-    FixedLine			maSecLevelFL;
+    FixedLine           maSecLevelFL;
     ReadOnlyImage       maSecReadonlyFI;
     RadioButton         maVeryHighRB;
-    RadioButton			maHighRB;
-    RadioButton			maMediumRB;
-    RadioButton			maLowRB;
+    RadioButton         maHighRB;
+    RadioButton         maMediumRB;
+    RadioButton         maLowRB;
 
     USHORT              mnCurLevel;
 
 protected:
-    DECL_LINK(			RadioButtonHdl, RadioButton* );
+    DECL_LINK(          RadioButtonHdl, RadioButton* );
 
 public:
                         MacroSecurityLevelTP( Window* pParent, MacroSecurity* _pDlg );
 
-    virtual void		ClosePage( void );
+    virtual void        ClosePage( void );
 };
 
 
 class MacroSecurityTrustedSourcesTP : public MacroSecurityTP
 {
 private:
-    FixedLine			maTrustCertFL;
+    FixedLine           maTrustCertFL;
     ReadOnlyImage       maTrustCertROFI;
     SvxSimpleTable      maTrustCertLB;  // PB 2006/02/02 #i48648 now SvHeaderTabListBox
-    PushButton			maAddCertPB;
-    PushButton			maViewCertPB;
-    PushButton			maRemoveCertPB;
-    FixedLine			maTrustFileLocFL;
+    PushButton          maAddCertPB;
+    PushButton          maViewCertPB;
+    PushButton          maRemoveCertPB;
+    FixedLine           maTrustFileLocFL;
     ReadOnlyImage       maTrustFileROFI;
     FixedInfo           maTrustFileLocFI;
-    ListBox				maTrustFileLocLB;
-    PushButton			maAddLocPB;
-    PushButton			maRemoveLocPB;
+    ListBox             maTrustFileLocLB;
+    PushButton          maAddLocPB;
+    PushButton          maRemoveLocPB;
 
     cssu::Sequence< SvtSecurityOptions::Certificate > maTrustedAuthors;
 
     sal_Bool            mbAuthorsReadonly;
     sal_Bool            mbURLsReadonly;
 
-    DECL_LINK(			ViewCertPBHdl, void* );
-    DECL_LINK(			RemoveCertPBHdl, void* );
-    DECL_LINK(			AddLocPBHdl, void* );
-    DECL_LINK(			RemoveLocPBHdl, void* );
-    DECL_LINK(			TrustCertLBSelectHdl, void* );
-    DECL_LINK(			TrustFileLocLBSelectHdl, void* );
+    DECL_LINK(          ViewCertPBHdl, void* );
+    DECL_LINK(          RemoveCertPBHdl, void* );
+    DECL_LINK(          AddLocPBHdl, void* );
+    DECL_LINK(          RemoveLocPBHdl, void* );
+    DECL_LINK(          TrustCertLBSelectHdl, void* );
+    DECL_LINK(          TrustFileLocLBSelectHdl, void* );
 
-    void				FillCertLB( void );
+    void                FillCertLB( void );
     void                ImplCheckButtons();
 
 public:
                         MacroSecurityTrustedSourcesTP( Window* pParent, MacroSecurity* _pDlg );
 
-    virtual void		ActivatePage();
-    virtual void		ClosePage( void );
+    virtual void        ActivatePage();
+    virtual void        ClosePage( void );
 };
 
 

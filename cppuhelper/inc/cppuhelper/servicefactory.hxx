@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,22 +37,22 @@ namespace cppu
 {
 
 /** Deprecated.  Use cppuhelper/bootstrap.hxx functions instead.
-    
-    This bootstraps an initial service factory working on a registry. If the first or both 
+
+    This bootstraps an initial service factory working on a registry. If the first or both
     parameters contain a value then the service factory is initialized with a simple registry
     or a nested registry. Otherwise the service factory must be initialized later with a valid
     registry.
-    
+
     @param rWriteRegistryFile
     file name of the simple registry or the first registry file of
     the nested registry which will be opened with read/write rights. This
     file will be created if necessary.
     @param rReadRegistryFile
-    file name of the second registry file of the nested registry 
+    file name of the second registry file of the nested registry
     which will be opened with readonly rights.
     @param bReadOnly
-    flag which specify that the first registry file will be opened with 
-    readonly rights. Default is FALSE. If this flag is used the registry 
+    flag which specify that the first registry file will be opened with
+    readonly rights. Default is FALSE. If this flag is used the registry
     will not be created if not exist.
     @param rBootstrapPath
     specifies a path where the bootstrap components could be find. If this
@@ -62,7 +62,7 @@ namespace cppu
 */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
 createRegistryServiceFactory(
-    const ::rtl::OUString & rWriteRegistryFile, 
+    const ::rtl::OUString & rWriteRegistryFile,
     const ::rtl::OUString & rReadRegistryFile,
     sal_Bool bReadOnly = sal_False,
     const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
@@ -70,15 +70,15 @@ createRegistryServiceFactory(
 
 
 /** Deprecated.  Use cppuhelper/bootstrap.hxx functions instead.
-    
+
     This bootstraps an initial service factory working on a registry file.
-    
+
     @param rRegistryFile
     file name of the registry to use/ create; if this is an empty
     string, the default registry is used instead
     @param bReadOnly
-    flag which specify that the registry file will be opened with 
-    readonly rights. Default is FALSE. If this flag is used the registry 
+    flag which specify that the registry file will be opened with
+    readonly rights. Default is FALSE. If this flag is used the registry
     will not be created if not exist.
     @param rBootstrapPath
     specifies a path where the bootstrap components could be find. If this
@@ -88,7 +88,7 @@ createRegistryServiceFactory(
 */
 inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
 createRegistryServiceFactory(
-    const ::rtl::OUString & rRegistryFile, 
+    const ::rtl::OUString & rRegistryFile,
     sal_Bool bReadOnly = sal_False,
     const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
     SAL_THROW( (::com::sun::star::uno::Exception) )
@@ -98,7 +98,7 @@ createRegistryServiceFactory(
 }
 
 /** Deprecated.  Use cppuhelper/bootstrap.hxx functions instead.
-    
+
     This bootstraps a service factory without initialize a registry.
 
     @param rBootstrapPath

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,15 +57,15 @@ public:
 class SvxDefaultColorOptPage : public SfxTabPage
 {
 private:
-    FixedLine       		aGbChartColors;
-    ChartColorLB			aLbChartColors;
-    FixedLine       		aGbColorBox;
-    ValueSet				aValSetColorBox;
-    PushButton				aPBDefault;
+    FixedLine               aGbChartColors;
+    ChartColorLB            aLbChartColors;
+    FixedLine               aGbColorBox;
+    ValueSet                aValSetColorBox;
+    PushButton              aPBDefault;
 
-    SvxChartOptions*		pChartOptions;
-    SvxChartColorTableItem*	pColorConfig;
-    XColorTable*			pColorTab;
+    SvxChartOptions*        pChartOptions;
+    SvxChartColorTableItem* pColorConfig;
+    XColorTable*            pColorTab;
 
     DECL_LINK( ResetToDefaults, void * );
     DECL_LINK( ListClickedHdl, ChartColorLB * );
@@ -78,7 +78,7 @@ public:
     SvxDefaultColorOptPage( Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxDefaultColorOptPage();
 
-    void	Construct();
+    void    Construct();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rInAttrs );
     virtual BOOL        FillItemSet( SfxItemSet& rOutAttrs );

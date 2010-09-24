@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -256,7 +256,7 @@ static sal_Bool test_rtl_OString_ctor_006( hTestResult hRtlTestResult )
         )
     );
 }
-extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_ctors( 
+extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_ctors(
                     hTestResult hRtlTestResult )
 {
 
@@ -360,13 +360,13 @@ TestCase arrTestCase[]={
         new OString()},
     {"empty(def.constructor) and non empty", sal_False, new OString(),
         new OString(kTestStr2)},
-    {"non empty and empty(def. constructor)", sal_False, 
+    {"non empty and empty(def. constructor)", sal_False,
         new OString(kTestStr1),new OString()},
-    {"two empty strings(string arg = '\\0')", sal_True, 
+    {"two empty strings(string arg = '\\0')", sal_True,
         new OString(""),new OString("")},
-    {"empty(string arg = '\\0') and non empty", sal_False, 
+    {"empty(string arg = '\\0') and non empty", sal_False,
         new OString(""),new OString(kTestStr2)},
-    {"non empty and empty(string arg = '\\0')", sal_False, 
+    {"non empty and empty(string arg = '\\0')", sal_False,
         new OString(kTestStr1),new OString("")}
     };
 
@@ -376,7 +376,7 @@ TestCase arrTestCase[]={
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         sal_Bool lastRes =
-                 ( arrTestCase[i].input1->equals(*(arrTestCase[i].input2)) ==  
+                 ( arrTestCase[i].input1->equals(*(arrTestCase[i].input2)) ==
                     arrTestCase[i].expVal );
 
           c_rtl_tres_state
@@ -414,17 +414,17 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_equalsIgnoreAsciiCase(
 } TestCase;
 
 TestCase arrTestCase[]={
-        {"same strings but different cases",sal_True,new OString(kTestStr4), 
+        {"same strings but different cases",sal_True,new OString(kTestStr4),
             new OString(kTestStr5)},
-        {"same strings",sal_True,new OString(kTestStr4), 
+        {"same strings",sal_True,new OString(kTestStr4),
             new OString(kTestStr4)},
-        {"with equal beginning",sal_False,new OString(kTestStr2), 
+        {"with equal beginning",sal_False,new OString(kTestStr2),
             new OString(kTestStr4)},
-        {"empty(def.constructor) and non empty",sal_False,new OString(), 
+        {"empty(def.constructor) and non empty",sal_False,new OString(),
             new OString(kTestStr5)},
         {"non empty and empty(def.constructor)",sal_False,
             new OString(kTestStr4), new OString()},
-        {"two empty strings(def.constructor)",sal_True,new OString(), 
+        {"two empty strings(def.constructor)",sal_True,new OString(),
             new OString()},
         {"different strings with equal length",sal_False,
             new OString(kTestStr10), new OString(kTestStr11)}
@@ -436,7 +436,7 @@ TestCase arrTestCase[]={
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         sal_Bool lastRes =
-        (arrTestCase[i].input1->equalsIgnoreAsciiCase(*arrTestCase[i].input2) 
+        (arrTestCase[i].input1->equalsIgnoreAsciiCase(*arrTestCase[i].input2)
             == arrTestCase[i].expVal);
 
          c_rtl_tres_state
@@ -471,33 +471,33 @@ static sal_Bool SAL_CALL test_rtl_OString_compareTo_001(
 
 TestCase arrTestCase[]={
 
-        {"simple compare, str1 to str5",-1,new OString(kTestStr1), 
+        {"simple compare, str1 to str5",-1,new OString(kTestStr1),
             new OString(kTestStr5)},
-        {"simple compare, str2 to str5",-1,new OString(kTestStr2), 
+        {"simple compare, str2 to str5",-1,new OString(kTestStr2),
             new OString(kTestStr5)},
-        {"simple compare, str1 to str9",-1,new OString(kTestStr1), 
+        {"simple compare, str1 to str9",-1,new OString(kTestStr1),
             new OString(kTestStr9)},
-        {"simple compare, str1 to str2",-1,new OString(kTestStr1), 
+        {"simple compare, str1 to str2",-1,new OString(kTestStr1),
             new OString(kTestStr2)},
-        {"simple compare, str4 to str5",-1,new OString(kTestStr4), 
+        {"simple compare, str4 to str5",-1,new OString(kTestStr4),
             new OString(kTestStr5)},
-        {"simple compare, str1 to str3",-1,new OString(kTestStr1), 
+        {"simple compare, str1 to str3",-1,new OString(kTestStr1),
             new OString(kTestStr3)},
-        {"simple compare, str5 to str1",+1,new OString(kTestStr5), 
+        {"simple compare, str5 to str1",+1,new OString(kTestStr5),
             new OString(kTestStr1)},
-        {"simple compare, str2 to str1",+1,new OString(kTestStr2), 
+        {"simple compare, str2 to str1",+1,new OString(kTestStr2),
             new OString(kTestStr1)},
-        {"simple compare, str9 to str5",+1,new OString(kTestStr9), 
+        {"simple compare, str9 to str5",+1,new OString(kTestStr9),
             new OString(kTestStr5)},
-        {"simple compare, str5 to str4",+1,new OString(kTestStr5), 
+        {"simple compare, str5 to str4",+1,new OString(kTestStr5),
             new OString(kTestStr4)},
-        {"simple compare, str1 to str1",0,new OString(kTestStr1), 
+        {"simple compare, str1 to str1",0,new OString(kTestStr1),
             new OString(kTestStr1)},
-        {"simple compare, nullString to nullString",0,new OString(), 
+        {"simple compare, nullString to nullString",0,new OString(),
             new OString()},
-        {"simple compare, nullString to str2",-1,new OString(), 
+        {"simple compare, nullString to str2",-1,new OString(),
             new OString(kTestStr2)},
-        {"simple compare, str1 to nullString",+1,new OString(kTestStr1), 
+        {"simple compare, str1 to nullString",+1,new OString(kTestStr1),
             new OString()}
     };
 
@@ -506,7 +506,7 @@ TestCase arrTestCase[]={
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
-        sal_Int32 cmpRes = 
+        sal_Int32 cmpRes =
             arrTestCase[i].input1->compareTo(*arrTestCase[i].input2);
         cmpRes = ( cmpRes == 0 ) ? 0 : ( cmpRes > 0 ) ? +1 : -1 ;
         sal_Bool lastRes = ( cmpRes == arrTestCase[i].expVal);
@@ -571,7 +571,7 @@ static sal_Bool SAL_CALL test_rtl_OString_compareTo_002(
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         sal_Int32 cmpRes =
-                    arrTestCase[i].input1->compareTo(*arrTestCase[i].input2, 
+                    arrTestCase[i].input1->compareTo(*arrTestCase[i].input2,
                             arrTestCase[i].maxLength);
         cmpRes = (cmpRes == 0) ? 0 : (cmpRes > 0) ? +1 : -1 ;
         sal_Bool lastRes = (cmpRes == arrTestCase[i].expVal);
@@ -797,7 +797,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_op_g(
 {
     sal_Char methName[MAXBUFLENGTH];
     sal_Char* pMeth = methName;
-    
+
     c_rtl_tres_state_start(hRtlTestResult, "op_g");
     typedef struct TestCase
     {
@@ -820,9 +820,9 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_op_g(
             new OString(kTestStr1), new OString(kTestStr2)},
         {"!('Sun Microsystems'>'Sun Microsystems'",sal_False,
             new OString(kTestStr1), new OString(kTestStr1)},
-        {"'Sun Microsystems'>''",sal_True,new OString(kTestStr1), 
+        {"'Sun Microsystems'>''",sal_True,new OString(kTestStr1),
             new OString()},
-        {"!(''>'Sun Microsystems')",sal_False,new OString(), 
+        {"!(''>'Sun Microsystems')",sal_False,new OString(),
             new OString(kTestStr1)},
         {"!(''>'')",sal_False,new OString(), new OString()}
 };
@@ -883,9 +883,9 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_op_l(
             new OString(kTestStr2), new OString(kTestStr1)},
         {"!('Sun Microsystems'<'Sun Microsystems'", sal_False,
             new OString(kTestStr1), new OString(kTestStr1)},
-        {"'Sun Microsystems'<''",sal_False,new OString(kTestStr1), 
+        {"'Sun Microsystems'<''",sal_False,new OString(kTestStr1),
             new OString()},
-        {"''<'Sun Microsystems Java Technology'",sal_True,new OString(), 
+        {"''<'Sun Microsystems Java Technology'",sal_True,new OString(),
             new OString(kTestStr2)},
         {"!(''<'')",sal_False,new OString(), new OString()}
     };
@@ -945,9 +945,9 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_op_ge(
             new OString(kTestStr2), new OString(kTestStr1)},
         {"'Sun Microsystems'>='Sun Microsystems'", sal_True,
             new OString(kTestStr1), new OString(kTestStr1)},
-        {"'Sun Microsystems'>=''",sal_True,new OString(kTestStr1), 
+        {"'Sun Microsystems'>=''",sal_True,new OString(kTestStr1),
             new OString()},
-        { "''>='Sun microsystems'",sal_False,new OString(), 
+        { "''>='Sun microsystems'",sal_False,new OString(),
             new OString(kTestStr3)},
         {"''>=''",sal_True,new OString(), new OString()}
     };
@@ -1002,16 +1002,16 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_op_le(
         {"'Sun Microsystems'<='Sun microsystems'",sal_True,
             new OString(kTestStr1), new OString(kTestStr3)},
         {"'Sun Microsystems'<='Sun Microsystems Java Technology'",sal_True,
-            new OString(kTestStr1), 
+            new OString(kTestStr1),
             new OString(kTestStr2)},
         {"!('Sun Microsystems Java Technology'<='Sun Microsystems')",sal_False,
-            new OString(kTestStr2), 
+            new OString(kTestStr2),
             new OString(kTestStr1)},
         {"!('Sun Microsystems'<='Sun Microsystems'", sal_True,
             new OString(kTestStr1), new OString(kTestStr1)},
-        {"'Sun Microsystems'<=''",sal_False,new OString(kTestStr1), 
+        {"'Sun Microsystems'<=''",sal_False,new OString(kTestStr1),
             new OString()},
-        {"''<='Sun Microsystems Java Technology'",sal_True,new OString(), 
+        {"''<='Sun Microsystems Java Technology'",sal_True,new OString(),
             new OString(kTestStr2)},
         {"!(''<='')",sal_True,new OString(), new OString()}
     };
@@ -1060,13 +1060,13 @@ static sal_Bool test_rtl_OString_op_eq_001( hTestResult hRtlTestResult )
 
     TestCase arrTestCase[] =
     {
-        {"'' = str1, str1 == str2",sal_True,new OString(kTestStr1), 
+        {"'' = str1, str1 == str2",sal_True,new OString(kTestStr1),
             new OString()},
-        {"str1 = str2, str1 == str2",sal_True,new OString(kTestStr1), 
+        {"str1 = str2, str1 == str2",sal_True,new OString(kTestStr1),
             new OString(kTestStr6)},
-        {"str2 = '', str1 == str2",sal_True,new OString(), 
+        {"str2 = '', str1 == str2",sal_True,new OString(),
             new OString(kTestStr2)},
-        {"'' = '', str1 == str2",sal_True,new OString(), 
+        {"'' = '', str1 == str2",sal_True,new OString(),
             new OString()}
     };
 
@@ -1077,7 +1077,7 @@ static sal_Bool test_rtl_OString_op_eq_001( hTestResult hRtlTestResult )
     {
        *(arrTestCase[i].input1) = *(arrTestCase[i].input2);
 
-        sal_Bool cmpRes = 
+        sal_Bool cmpRes =
             (*(arrTestCase[i].input1) == *(arrTestCase[i].input2));
         sal_Bool lastRes = (cmpRes == arrTestCase[i].expVal);
 
@@ -1095,7 +1095,7 @@ static sal_Bool test_rtl_OString_op_eq_001( hTestResult hRtlTestResult )
     return ( res );
 }
 
-static sal_Bool test_rtl_OString_op_eq_002( 
+static sal_Bool test_rtl_OString_op_eq_002(
                     hTestResult hRtlTestResult )
 {
     ::rtl::OString aStr;
@@ -1113,7 +1113,7 @@ static sal_Bool test_rtl_OString_op_eq_002(
     );
 }
 
-static sal_Bool test_rtl_OString_op_eq_003( 
+static sal_Bool test_rtl_OString_op_eq_003(
                     hTestResult hRtlTestResult )
 {
     sal_Bool bTCState = false;
@@ -1178,7 +1178,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_op_plus(
             new OString(kTestStr1), new OString("")},
         {"str1 = '' + str1", new OString(kTestStr1),
             new OString(""), new OString(kTestStr1)},
-        {" '' = '' + '' ", new OString(""),new OString(""), 
+        {" '' = '' + '' ", new OString(""),new OString(""),
             new OString("")},
         {"str1 = str1 + def.constr", new OString(kTestStr1),
             new OString(kTestStr1), new OString()},
@@ -1244,7 +1244,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_op_peq(
             new OString(kTestStr1), new OString()},
         {" str1 == (def.constr += str1)",new OString(kTestStr1),
             new OString(), new OString(kTestStr1)},
-        {" def.constr== (def.constr += def.constr)", 
+        {" def.constr== (def.constr += def.constr)",
             new OString(),new OString(), new OString()}
     };
 
@@ -1376,20 +1376,20 @@ static sal_Bool SAL_CALL test_rtl_OString_copy_001(
     {
     sal_Char*                    comments;
     const sal_Char*              srcStr;
-    const sal_Char*              arrExpStr;   
+    const sal_Char*              arrExpStr;
                     // string for comparing with result
-    sal_Int32                    beginIndex;  
+    sal_Int32                    beginIndex;
                     // beginIndex for the method copy
     sal_Int32                    lengthForCmp;
                     // number of symbols for comparing
     // (if value is equal to 0 then pointers to buffers must be equal)
-    sal_Int32                    expLength;   
+    sal_Int32                    expLength;
                     //expected length of the result string
     } TestCase;
 
     TestCase arrTestCase[] =
     {
-        {"beginIndex == 0 ( whole string )", kTestStr2,kTestStr2, 
+        {"beginIndex == 0 ( whole string )", kTestStr2,kTestStr2,
          0, kTestStr2Len, kTestStr2Len},
         {"beginIndex == strlen-2 ( last two char )",  kTestStr2,"gy",
                     kTestStr2Len-2, 2, 2},
@@ -1411,21 +1411,21 @@ static sal_Bool SAL_CALL test_rtl_OString_copy_001(
         // rtl_String* pDataDst = dst.pData;
 
         sal_Bool lastRes;
-     
+
         lastRes= (dst== arrTestCase[i].arrExpStr);
-          
+
 
         c_rtl_tres_state
         (
             hRtlTestResult,
             lastRes,
             arrTestCase[i].comments,
-            createName( pMeth, 
+            createName( pMeth,
                 "copy_001(beginIndex)(check buffer and length)", i )
         );
 
         res &= lastRes;
-               
+
     }
 
     return (res);
@@ -1444,11 +1444,11 @@ static sal_Bool SAL_CALL test_rtl_OString_copy_002(
     typedef struct TestCase
     {
     sal_Char*               comments;
-    const sal_Char*          arrExpStr;   
-    sal_Int32                beginIndex; 
-    sal_Int32                count;       
+    const sal_Char*          arrExpStr;
+    sal_Int32                beginIndex;
+    sal_Int32                count;
     sal_Int32                expLen;
-               
+
     } TestCase;
 
     TestCase arrTestCase[] ={
@@ -1482,20 +1482,20 @@ static sal_Bool SAL_CALL test_rtl_OString_copy_002(
         //t_print("dst length =%d\n", pDataDst->length);
         //t_print("count =%d\n", arrTestCase[i].count);
         //t_print("expLen =%d\n", arrTestCase[i].expLen);
-        
+
         lastRes = (dst.equals(arrTestCase[i].arrExpStr)) ? sal_True : sal_False;
-                
+
         c_rtl_tres_state
         (
             hRtlTestResult,
             lastRes,
             arrTestCase[i].comments,
-            createName( pMeth, 
+            createName( pMeth,
                 "copy_002(beginIndex,count)(check buffer and length)", i)
         );
         res &= lastRes;
-        
-        
+
+
     }
 
     return (res);
@@ -1564,7 +1564,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_copy(
     res &= test_rtl_OString_copy_003(hRtlTestResult);
     res &= test_rtl_OString_copy_004(hRtlTestResult);
     c_rtl_tres_state_end(hRtlTestResult, "copy");
- 
+
 //    return ( res );
 }
 
@@ -1590,13 +1590,13 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_concat(
     TestCase arrTestCase[] =
     {
         {"concatenates two strings",new OString(kTestStr1),
-            new OString(kTestStr7), 
+            new OString(kTestStr7),
             new OString(kTestStr8)},
         {"concatenates empty string",new OString(kTestStr1),
-            new OString(kTestStr1), 
+            new OString(kTestStr1),
             new OString("")},
         {"concatenates to empty string",new OString(kTestStr1),
-            new OString(""), 
+            new OString(""),
             new OString(kTestStr1)},
         {"concatenates two empty strings",new OString(""),new OString(""),
              new OString("")},
@@ -1615,7 +1615,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_concat(
     sal_uInt32 i;
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
-        OString str = 
+        OString str =
             arrTestCase[i].input1->concat(*arrTestCase[i].input2);
         sal_Bool lastRes = (str == *arrTestCase[i].expVal);
 
@@ -1859,7 +1859,7 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_sal_Bool(
     return ( res );
 }
 
-sal_Bool SAL_CALL test_rtl_OString_valueOf_sal_Char( 
+sal_Bool SAL_CALL test_rtl_OString_valueOf_sal_Char(
                     hTestResult hRtlTestResult )
 {
     sal_Char methName[MAXBUFLENGTH];
@@ -1886,7 +1886,7 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_sal_Char(
         {"\n",'\n', new OString("\n")},
         {"\'",'\'', new OString("\'")},
         {"\"",'\"', new OString("\"")}
-        
+
     };
 
     sal_Bool res = sal_True;
@@ -2055,7 +2055,7 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int32_Bounderies(
             (
                 hRtlTestResult,
                 test_valueOf_Int32((const char**)kBinaryMaxNumsStr,
-                kInt32MaxNumsCount, kRadixBinary, hRtlTestResult, 
+                kInt32MaxNumsCount, kRadixBinary, hRtlTestResult,
                     kInt32MaxNums),
                 "kRadixBinary",
                 "valueOf(salInt32, radix 2) Bounderies"
@@ -2065,7 +2065,7 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int32_Bounderies(
             (
                 hRtlTestResult,
                 test_valueOf_Int32((const char**)kOctolMaxNumsStr,
-                 kInt32MaxNumsCount, kRadixOctol, hRtlTestResult, 
+                 kInt32MaxNumsCount, kRadixOctol, hRtlTestResult,
                     kInt32MaxNums),
                 "kRadixOctol",
                 "valueOf(salInt32, radix 8) Bounderies"
@@ -2477,16 +2477,16 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int64_SmallestNegativeValue(
 // LLA: {
 // LLA:     sal_Char methName[MAXBUFLENGTH];
 // LLA:     sal_Char* pMeth =methName;
-// LLA: 
+// LLA:
 // LLA:     typedef struct TestCase
 // LLA:     {
 // LLA:     sal_Char*                    comments;
 // LLA:     float                         input1;
 // LLA:     OString*                     expVal;
-// LLA: 
+// LLA:
 // LLA:     ~TestCase() {delete expVal;}
 // LLA:     } TestCase;
-// LLA: 
+// LLA:
 // LLA:     TestCase arrTestCase[] =
 // LLA:     {
 // LLA:         { "3.0", 3.0, new OString("3.0") },
@@ -2497,16 +2497,16 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int64_SmallestNegativeValue(
 // LLA:         { "3.5025255", 3.5025255f, new OString("3.5025255") },
 // LLA:         { "3.0039062", 3.00390625f, new OString("3.0039062") }
 // LLA:     };
-// LLA: 
+// LLA:
 // LLA:     sal_Bool res = sal_True;
 // LLA:     sal_Int32 i;
-// LLA: 
+// LLA:
 // LLA:     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
 // LLA:     {
 // LLA:         ::rtl::OString aStr1;
 // LLA:         aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
 // LLA:         sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
-// LLA: 
+// LLA:
 // LLA:         c_rtl_tres_state
 // LLA:         (
 // LLA:             hRtlTestResult,
@@ -2514,11 +2514,11 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int64_SmallestNegativeValue(
 // LLA:             arrTestCase[i].comments,
 // LLA:             createName( pMeth, "valueof_float", i)
 // LLA:         );
-// LLA: 
+// LLA:
 // LLA:         res &= lastRes;
-// LLA: 
+// LLA:
 // LLA:     }
-// LLA: 
+// LLA:
 // LLA:     return ( res );
 // LLA: }
 
@@ -2533,16 +2533,16 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int64_SmallestNegativeValue(
 // LLA: {
 // LLA:     sal_Char methName[MAXBUFLENGTH];
 // LLA:     sal_Char* pMeth =methName;
-// LLA: 
+// LLA:
 // LLA:     typedef struct TestCase
 // LLA:     {
 // LLA:     sal_Char*                    comments;
 // LLA:     float                         input1;
 // LLA:     OString*                     expVal;
-// LLA: 
+// LLA:
 // LLA:     ~TestCase() {delete expVal;}
 // LLA:     } TestCase;
-// LLA: 
+// LLA:
 // LLA:     TestCase arrTestCase[] =
 // LLA:     {
 // LLA:         { "-3.0", -3.0, new OString("-3.0") },
@@ -2553,16 +2553,16 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int64_SmallestNegativeValue(
 // LLA:         { "-3.5025255", -3.5025255f, new OString("-3.5025255") },
 // LLA:         { "-3.0039062", -3.00390625f, new OString("-3.0039062") }
 // LLA:     };
-// LLA: 
+// LLA:
 // LLA:     sal_Bool res = sal_True;
 // LLA:     sal_Int32 i;
-// LLA: 
+// LLA:
 // LLA:     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
 // LLA:     {
 // LLA:         ::rtl::OString aStr1;
 // LLA:         aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
 // LLA:         sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
-// LLA: 
+// LLA:
 // LLA:         c_rtl_tres_state
 // LLA:         (
 // LLA:             hRtlTestResult,
@@ -2570,11 +2570,11 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int64_SmallestNegativeValue(
 // LLA:             arrTestCase[i].comments,
 // LLA:             createName( pMeth, "valueof_negative float", i)
 // LLA:         );
-// LLA: 
+// LLA:
 // LLA:         res &= lastRes;
-// LLA: 
+// LLA:
 // LLA:     }
-// LLA: 
+// LLA:
 // LLA:     return ( res );
 // LLA: }
 
@@ -2586,41 +2586,41 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int64_SmallestNegativeValue(
 // LLA: {
 // LLA:     sal_Char methName[MAXBUFLENGTH];
 // LLA:     sal_Char* pMeth =methName;
-// LLA: 
+// LLA:
 // LLA:     typedef struct TestCase
 // LLA:     {
 // LLA:     sal_Char*                    comments;
 // LLA:     double                         input1;
 // LLA:     OString*                     expVal;
-// LLA: 
+// LLA:
 // LLA:     ~TestCase() {delete expVal;}
 // LLA:     } TestCase;
-// LLA: 
+// LLA:
 // LLA:     TestCase arrTestCase[] =
 // LLA:     {
 // LLA:         {"3.0", 3.0, new OString("3.0")},
 // LLA:         {"3.5", 3.5, new OString("3.5")},
 // LLA:         {"3.0625", 3.0625, new OString("3.0625")},
 // LLA:         {"3.1415926535", 3.1415926535, new OString("3.1415926535")},
-// LLA:         {"3.1415926535897931", 3.141592653589793, 
+// LLA:         {"3.1415926535897931", 3.141592653589793,
 // LLA:             new OString("3.1415926535897931")},
-// LLA:         {"3.1415926535897931", 3.1415926535897932, 
+// LLA:         {"3.1415926535897931", 3.1415926535897932,
 // LLA:             new OString("3.1415926535897931")},
-// LLA:         {"3.1415926535897931", 3.14159265358979323, 
+// LLA:         {"3.1415926535897931", 3.14159265358979323,
 // LLA:             new OString("3.1415926535897931")},
-// LLA:         {"3.1415926535897931", 3.141592653589793238462643, 
+// LLA:         {"3.1415926535897931", 3.141592653589793238462643,
 // LLA:             new OString("3.1415926535897931")}
 // LLA:     };
-// LLA: 
+// LLA:
 // LLA:     sal_Bool res = sal_True;
 // LLA:     sal_Int32 i;
-// LLA: 
+// LLA:
 // LLA:     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
 // LLA:     {
 // LLA:         ::rtl::OString aStr1;
 // LLA:         aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
 // LLA:         sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
-// LLA: 
+// LLA:
 // LLA:         c_rtl_tres_state
 // LLA:         (
 // LLA:             hRtlTestResult,
@@ -2628,11 +2628,11 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int64_SmallestNegativeValue(
 // LLA:             arrTestCase[i].comments,
 // LLA:             createName( pMeth, "valueof_double", i)
 // LLA:         );
-// LLA: 
+// LLA:
 // LLA:         res &= lastRes;
-// LLA: 
+// LLA:
 // LLA:     }
-// LLA: 
+// LLA:
 // LLA:     return ( res );
 // LLA: }
 
@@ -2645,41 +2645,41 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int64_SmallestNegativeValue(
 // LLA: {
 // LLA:     sal_Char methName[MAXBUFLENGTH];
 // LLA:     sal_Char* pMeth =methName;
-// LLA: 
+// LLA:
 // LLA:     typedef struct TestCase
 // LLA:     {
 // LLA:     sal_Char*                    comments;
 // LLA:     double                         input1;
 // LLA:     OString*                     expVal;
-// LLA: 
+// LLA:
 // LLA:     ~TestCase() {delete expVal;}
 // LLA:     } TestCase;
-// LLA: 
+// LLA:
 // LLA:     TestCase arrTestCase[] =
 // LLA:     {
 // LLA:         {"-3.0", -3.0, new OString("-3.0")},
 // LLA:         {"-3.5", -3.5, new OString("-3.5")},
 // LLA:         {"-3.0625", -3.0625, new OString("-3.0625")},
 // LLA:         {"-3.1415926535", -3.1415926535, new OString("-3.1415926535")},
-// LLA:         {"-3.1415926535897931", -3.141592653589793, 
+// LLA:         {"-3.1415926535897931", -3.141592653589793,
 // LLA:             new OString("-3.1415926535897931")},
-// LLA:         {"-3.1415926535897931", -3.1415926535897932, 
+// LLA:         {"-3.1415926535897931", -3.1415926535897932,
 // LLA:             new OString("-3.1415926535897931")},
-// LLA:         {"-3.1415926535897931", -3.14159265358979323, 
+// LLA:         {"-3.1415926535897931", -3.14159265358979323,
 // LLA:             new OString("-3.1415926535897931")},
-// LLA:         {"-3.1415926535897931", -3.141592653589793238462643, 
+// LLA:         {"-3.1415926535897931", -3.141592653589793238462643,
 // LLA:             new OString("-3.1415926535897931")}
 // LLA:     };
-// LLA: 
+// LLA:
 // LLA:     sal_Bool res = sal_True;
 // LLA:     sal_Int32 i;
-// LLA: 
+// LLA:
 // LLA:     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
 // LLA:     {
 // LLA:         ::rtl::OString aStr1;
 // LLA:         aStr1 = aStr1.valueOf( arrTestCase[i].input1 );
 // LLA:         sal_Bool lastRes = (arrTestCase[i].expVal->compareTo(aStr1) == 0);
-// LLA: 
+// LLA:
 // LLA:         c_rtl_tres_state
 // LLA:         (
 // LLA:             hRtlTestResult,
@@ -2687,11 +2687,11 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_Int64_SmallestNegativeValue(
 // LLA:             arrTestCase[i].comments,
 // LLA:             createName( pMeth, "valueof_nagative double", i)
 // LLA:         );
-// LLA: 
+// LLA:
 // LLA:         res &= lastRes;
-// LLA: 
+// LLA:
 // LLA:     }
-// LLA: 
+// LLA:
 // LLA:     return ( res );
 // LLA: }
 
@@ -2761,7 +2761,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toChar(
         {"-", '-',new OString("-")},
         {"_", '_',new OString("_")},
 
-//  TODO: may be UTF-8 values 
+//  TODO: may be UTF-8 values
 //        {"¥", '¥',new OString("¥")},
 //        { "¦", '¦',new OString("¦")},
 //        {"ô", 'ô',new OString("ô")},
@@ -2833,7 +2833,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toFloat(
         {3.141592f, new OString("3.141592"), 3e-7f},
         {3.1415926f, new OString("3.1415926"), 3e-7f},
         {3.14159265f, new OString("3.14159265"), 3e-7f},
-        {3.141592653589793238462643f, 
+        {3.141592653589793238462643f,
             new OString("3.141592653589793238462643"), 3e-7f},
         {6.5822e-16f, new OString("6.5822e-16"), 6e-16f * 1e-7f},
         {9.1096e-31f, new OString("9.1096e-31"), 9e-31f * 1e-7f},
@@ -2892,7 +2892,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toFloat(
 // LLA: {
 // LLA:     sal_Char methName[MAXBUFLENGTH];
 // LLA:     sal_Char* pMeth = methName;
-// LLA: 
+// LLA:
 // LLA:     c_rtl_tres_state_start(hRtlTestResult, "toDouble");
 // LLA:     typedef struct TestCase
 // LLA:     {
@@ -2901,21 +2901,21 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toFloat(
 // LLA:     OString*                     input1;
 // LLA:     ~TestCase() {delete input1;}
 // LLA:     } TestCase;
-// LLA: 
-// LLA: 
+// LLA:
+// LLA:
 // LLA:     TestCase arrTestCase[] =
 // LLA:     {
 // LLA:         {3.0, 1e-35, new OString("3")},
 // LLA:         {3.1, 1e-2, new OString("3.1")},
 // LLA:         {3.1415, 1e-5, new OString("3.1415")},
 // LLA:         {3.1415926535, 1e-11, new OString("3.1415926535")},
-// LLA:         {3.141592653589793, 1e-15, 
+// LLA:         {3.141592653589793, 1e-15,
 // LLA:             new OString("3.141592653589793")},
-// LLA:         {3.1415926535897932, 1e-16, 
+// LLA:         {3.1415926535897932, 1e-16,
 // LLA:             new OString("3.1415926535897932")},
-// LLA:         {3.14159265358979323, 1e-15, 
+// LLA:         {3.14159265358979323, 1e-15,
 // LLA:             new OString("3.14159265358979323")},
-// LLA:         {3.141592653589793238462643, 1e-15, 
+// LLA:         {3.141592653589793238462643, 1e-15,
 // LLA:             new OString("3.141592653589793238462643")},
 // LLA:         {6.5822e-16, 1e-20, new OString("6.5822e-16")},
 // LLA:         {9.1096e-31, 1e-35, new OString("9.1096e-31")},
@@ -2929,24 +2929,24 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toFloat(
 // LLA:         {3.1, 1e-2, new OString("+3.1")},
 // LLA:         {0.0, 1e-2, new OString("-0.0")}
 // LLA:     };
-// LLA: 
+// LLA:
 // LLA:     sal_Bool res = sal_True;
 // LLA:     sal_Int32 i;
-// LLA: 
+// LLA:
 // LLA:     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++ )
 // LLA:     {
 // LLA:         double dRes = arrTestCase[i].input1->toDouble();
 // LLA:         double dErg = dRes - arrTestCase[i].expVal ;
 // LLA:         double dComp = fabs( dErg );
 // LLA:         sal_Bool lastRes = ( dComp <= arrTestCase[i].expDiff );
-// LLA: 
+// LLA:
 // LLA:         char com[MAXBUFLENGTH];
 // LLA:         com[0] = '\'';
 // LLA:         cpynstr(com + 1, (*arrTestCase[i].input1), MAXBUFLENGTH);
 // LLA:         int length = AStringLen( (*arrTestCase[i].input1) );
 // LLA:         com[length + 1] = '\'';
 // LLA:         com[length + 2] = 0;
-// LLA: 
+// LLA:
 // LLA:         c_rtl_tres_state
 // LLA:         (
 // LLA:             hRtlTestResult,
@@ -2954,9 +2954,9 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toFloat(
 // LLA:             com,
 // LLA:             createName( pMeth, "toDouble", i )
 // LLA:         );
-// LLA: 
+// LLA:
 // LLA:     }
-// LLA: 
+// LLA:
 // LLA:     c_rtl_tres_state_end(hRtlTestResult, "toDouble");
 // LLA: //    return (res);
 // LLA: }
@@ -3014,7 +3014,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toBoolean(
 //------------------------------------------------------------------------
 // testing the method toInt32( sal_Int16 radix = 2,8,10,16,36 )
 //------------------------------------------------------------------------
-sal_Bool test_toInt32(  int num, const sal_Char** in, 
+sal_Bool test_toInt32(  int num, const sal_Char** in,
 const sal_Int32 *expVal,sal_Int16 radix, hTestResult hRtlTestResult )
 {
     sal_Bool res = sal_True;
@@ -3204,7 +3204,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toInt32(
 //------------------------------------------------------------------------
 // testing the method toInt64( sal_Int16 radix = 2,8,10,16,36 )
 //------------------------------------------------------------------------
-sal_Bool test_toInt64( int num, const sal_Char** in, 
+sal_Bool test_toInt64( int num, const sal_Char** in,
 const sal_Int64 *expVal,sal_Int16 radix, hTestResult hRtlTestResult )
 {
     sal_Bool res = sal_True;
@@ -3416,9 +3416,9 @@ TestCase arrTestCase[]={
 
     {"string differs", new OString(kTestStr18),
         new OString(kTestStr4),'S','s'},
-    {"string differs", new OString(kTestStr19), 
+    {"string differs", new OString(kTestStr19),
         new OString(kTestStr17),(sal_Char)' ',(sal_Char)'-'},
-    {"same string, no replace ", new OString(kTestStr22), 
+    {"same string, no replace ", new OString(kTestStr22),
         new OString(kTestStr22),'*','8'}
     };
 
@@ -3595,9 +3595,9 @@ void RegisterAdditionalFunctions(FktRegFuncPtr _pFunc)
 }
 
 /*
-D:\local\644\SRX644\sal\qa\rtl_OString.cxx(3559) : error C2664: 
+D:\local\644\SRX644\sal\qa\rtl_OString.cxx(3559) : error C2664:
 'unsigned char (void (__cdecl *)(void *),const char *)'
- : cannot convert parameter 1 from 
+ : cannot convert parameter 1 from
 'unsigned char (__cdecl *)(void *)' to 'void (__cdecl *)(void *)'
 
         This conversion requires a reinterpret_cast, a C-style cast or function-

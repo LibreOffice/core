@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -133,7 +133,7 @@ uno::Any Stripe::getPolyPolygonShape3D() const
 drawing::Direction3D Stripe::getNormal() const
 {
     drawing::Direction3D aRet(1.0,0.0,0.0);
-    
+
     if( m_bManualNormalSet )
         aRet = m_aManualNormal;
     else
@@ -212,7 +212,7 @@ uno::Any Stripe::getTexturePolygon( short nRotatedTexture ) const
         *pInnerSequenceX++ = 0.0;
         *pInnerSequenceY++ = 0.0;
         *pInnerSequenceZ++ = 0.0;
-        
+
         *pInnerSequenceX++ = 0.0;
         *pInnerSequenceY++ = 1.0;
         *pInnerSequenceZ++ = 0.0;
@@ -234,7 +234,7 @@ uno::Any Stripe::getTexturePolygon( short nRotatedTexture ) const
         *pInnerSequenceX++ = 0.0;
         *pInnerSequenceY++ = 0.0;
         *pInnerSequenceZ++ = 0.0;
-        
+
         *pInnerSequenceX++ = 0.0;
         *pInnerSequenceY++ = 1.0;
         *pInnerSequenceZ++ = 0.0;
@@ -256,7 +256,7 @@ uno::Any Stripe::getTexturePolygon( short nRotatedTexture ) const
         *pInnerSequenceX++ = 0.0;
         *pInnerSequenceY++ = 0.0;
         *pInnerSequenceZ++ = 0.0;
-        
+
         *pInnerSequenceX++ = 0.0;
         *pInnerSequenceY++ = 1.0;
         *pInnerSequenceZ++ = 0.0;
@@ -288,7 +288,7 @@ uno::Any Stripe::getTexturePolygon( short nRotatedTexture ) const
         *pInnerSequenceX++ = 1.0;
         *pInnerSequenceY++ = 1.0;
         *pInnerSequenceZ++ = 0.0;
-        
+
         *pInnerSequenceX++ = 0.0;
         *pInnerSequenceY++ = 1.0;
         *pInnerSequenceZ++ = 0.0;
@@ -310,7 +310,7 @@ uno::Any Stripe::getTexturePolygon( short nRotatedTexture ) const
         *pInnerSequenceX++ = 1.0;
         *pInnerSequenceY++ = 1.0;
         *pInnerSequenceZ++ = 0.0;
-        
+
         *pInnerSequenceX++ = 0.0;
         *pInnerSequenceY++ = 1.0;
         *pInnerSequenceZ++ = 0.0;

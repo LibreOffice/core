@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,12 +69,12 @@ public:
 
     /// Output text.
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet );
-    
+
     /// Output text (without markup).
     virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );
 
     /// Output ruby start.
-    virtual void StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby );
+    virtual void StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby );
 
     /// Output ruby end.
     virtual void EndRuby();
@@ -139,7 +139,8 @@ public:
 
     /// Start of a style in the styles table.
     virtual void StartStyle( const String& rName, bool bPapFmt,
-            USHORT nBase, USHORT nNext, USHORT nWwIdi, USHORT nId );
+            USHORT nBase, USHORT nNext, USHORT nWwIdi, USHORT nId,
+            bool bAutoUpdate );
 
     /// End of a style in the styles table.
     virtual void EndStyle();
@@ -395,13 +396,13 @@ protected:
 
     /// Sfx item RES_FRAMEDIR
     virtual void FormatFrameDirection( const SvxFrameDirectionItem& );
-    
+
     /// Write the expanded field
     virtual void WriteExpand( const SwField* pFld );
-    
+
     virtual void RefField ( const SwField& rFld, const String& rRef );
     virtual void HiddenField( const SwField& rFld );
-    virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd ); 
+    virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd );
     virtual void PostitField( const SwField* pFld );
     virtual bool DropdownField( const SwField* pFld );
 
@@ -443,7 +444,7 @@ public:
 protected:
     /// Output the bold etc. attributes
     void OutputWW8Attribute( BYTE nId, bool bVal );
-    
+
     /// Output the bold etc. attributes, the Complex Text Layout version
     void OutputWW8AttributeCTL( BYTE nId, bool bVal );
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@ namespace comphelper
     {
         friend class OContainerListenerAdapter;
     protected:
-        OContainerListenerAdapter*	m_pAdapter;
-        ::osl::Mutex&				m_rMutex;
+        OContainerListenerAdapter*  m_pAdapter;
+        ::osl::Mutex&               m_rMutex;
 
     public:
         OContainerListener(::osl::Mutex& _rMutex);
@@ -78,8 +78,8 @@ namespace comphelper
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >
                                 m_xContainer;
-        OContainerListener*		m_pListener;
-        sal_Int32				m_nLockCount;
+        OContainerListener*     m_pListener;
+        sal_Int32               m_nLockCount;
 
         virtual ~OContainerListenerAdapter();
 
@@ -96,19 +96,19 @@ namespace comphelper
         virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 
         // locking the multiplexer
-        void		lock();
-        void		unlock();
-        sal_Int32	locked() const { return m_nLockCount; }
+        void        lock();
+        void        unlock();
+        sal_Int32   locked() const { return m_nLockCount; }
 
         /// dispose the object. No multiplexing anymore
-        void		dispose();
+        void        dispose();
 
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >&
                     getContainer() const { return m_xContainer; }
     };
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // _COMPHELPER_CONTAINERMULTIPLEXER_HXX_

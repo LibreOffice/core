@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,13 +124,13 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     sal_Bool bHTMLTemplSet = sal_False;
     if( bRet )
     {
-        AddLink();		// pDoc / pIo ggf. anlegen
+        AddLink();      // pDoc / pIo ggf. anlegen
 
         sal_Bool bWeb = ISA( SwWebDocShell );
         if ( bWeb )
             bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );//Styles aus HTML.vor
         else if( ISA( SwGlobalDocShell ) )
-            GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);		// Globaldokument
+            GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);       // Globaldokument
 
 
 /*
@@ -368,7 +368,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Ctor mit SfxCreateMode ?????
+    Beschreibung:   Ctor mit SfxCreateMode ?????
  --------------------------------------------------------------------*/
 
 
@@ -425,7 +425,7 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Dtor
+    Beschreibung:   Dtor
  --------------------------------------------------------------------*/
 
 
@@ -490,7 +490,7 @@ void SwDocShell::AddLink()
     }
     else
         pDoc->acquire();
-    pDoc->SetDocShell( this );		// am Doc den DocShell-Pointer setzen
+    pDoc->SetDocShell( this );      // am Doc den DocShell-Pointer setzen
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Reactivate(this);
 
@@ -501,7 +501,7 @@ void SwDocShell::AddLink()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	neue FontList erzeugen Aenderung Drucker
+    Beschreibung:   neue FontList erzeugen Aenderung Drucker
  --------------------------------------------------------------------*/
 
 
@@ -591,9 +591,9 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
         switch( GetCreateMode() )
         {
-//		case SFX_CREATE_MODE_INTERNAL:
-//			nErr = 0;
-//			break;
+//      case SFX_CREATE_MODE_INTERNAL:
+//          nErr = 0;
+//          break;
 
         case SFX_CREATE_MODE_ORGANIZER:
             {
@@ -693,9 +693,9 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
     if( pDoc )
         RemoveLink();
 
-    AddLink();		// Link setzen und Daten updaten !!
+    AddLink();      // Link setzen und Daten updaten !!
 
-    do {		// middle check loop
+    do {        // middle check loop
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
         //const String& rNm = pStor->GetName();
         String aStreamName;
@@ -763,7 +763,7 @@ void SwDocShell::SubInitNew()
 
     sal_Bool bWeb = ISA(SwWebDocShell);
 
-    sal_uInt16 nRange[] =	{
+    sal_uInt16 nRange[] =   {
         RES_PARATR_ADJUST, RES_PARATR_ADJUST,
         RES_CHRATR_COLOR, RES_CHRATR_COLOR,
         RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ enum AccessibleTableControlObjType
 
 // ============================================================================
 
-#define	XACC ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+#define XACC ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
 
 /** This abstract class provides methods to implement an accessible table object.
 */
@@ -72,21 +72,21 @@ class IAccessibleTable
 {
 public:
     /** @return  The position of the current row. */
-    virtual sal_Int32				GetCurrentRow() const = 0;
+    virtual sal_Int32               GetCurrentRow() const = 0;
     /** @return  The position of the current column. */
-    virtual sal_Int32				GetCurrentColumn() const = 0;
+    virtual sal_Int32               GetCurrentColumn() const = 0;
     /** Creates and returns the accessible object of the whole GridControl. */
     virtual XACC CreateAccessible()= 0;
     virtual XACC CreateAccessibleControl( sal_Int32 _nIndex )= 0;
     virtual ::rtl::OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const= 0;
-    virtual sal_Bool	GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow )= 0;
-    virtual sal_Bool	HasColHeader() = 0;
-    virtual sal_Bool	HasRowHeader() = 0;
+    virtual sal_Bool    GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow )= 0;
+    virtual sal_Bool    HasColHeader() = 0;
+    virtual sal_Bool    HasRowHeader() = 0;
 
     /** return the description of the specified object.
-        @param	eObjType
+        @param  eObjType
             The type to ask for
-        @param	_nPosition
+        @param  _nPosition
             The position of a tablecell (index position), header bar  colum/row cell
         @return
             The description of the specified object.
@@ -102,12 +102,12 @@ public:
     virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const = 0;
     virtual void GrabFocus()= 0;
     virtual XACC GetAccessible( BOOL bCreate = TRUE )= 0;
-    virtual Window*	GetAccessibleParentWindow() const= 0;
-    virtual Window*	GetWindowInstance()= 0;
+    virtual Window* GetAccessibleParentWindow() const= 0;
+    virtual Window* GetWindowInstance()= 0;
     virtual sal_Int32 GetAccessibleControlCount() const = 0;
     virtual sal_Bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )= 0;
-    virtual	long GetRowCount() const= 0;
-    virtual	long GetColumnCount() const= 0;
+    virtual long GetRowCount() const= 0;
+    virtual long GetColumnCount() const= 0;
     virtual sal_Bool HasRowHeader() const= 0;
     virtual sal_Int32 GetSelectedRowCount() const= 0;
     virtual bool IsRowSelected( long _nRow ) const= 0;
@@ -117,10 +117,10 @@ public:
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)= 0;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)= 0;
     virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const= 0;
-    virtual ::rtl::OUString	GetRowDescription( sal_Int32 _nRow ) const = 0;
+    virtual ::rtl::OUString GetRowDescription( sal_Int32 _nRow ) const = 0;
     virtual ::rtl::OUString GetRowName(sal_Int32 _nIndex) const = 0;
-    virtual ::rtl::OUString	GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
-    virtual ::rtl::OUString	GetColumnName( sal_Int32 _nIndex ) const = 0;
+    virtual ::rtl::OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
+    virtual ::rtl::OUString GetColumnName( sal_Int32 _nIndex ) const = 0;
     virtual ::com::sun::star::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
     virtual std::vector<sal_Int32>& GetSelectedRows() = 0;
     virtual void RemoveSelectedRow(sal_Int32 _nRowPos) = 0;

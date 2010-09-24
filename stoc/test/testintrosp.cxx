@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,8 +76,8 @@ typedef WeakImplHelper4< XIntroTest, XPropertySet, XNameAccess, XIndexAccess > I
 typedef WeakImplHelper1< XPropertySetInfo > ImplPropertySetInfoHelper;
 
 
-#define DEFAULT_INDEX_ACCESS_COUNT	10
-#define DEFAULT_NAME_ACCESS_COUNT	5
+#define DEFAULT_INDEX_ACCESS_COUNT  10
+#define DEFAULT_NAME_ACCESS_COUNT   5
 
 #if OSL_DEBUG_LEVEL > 0
 #define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
@@ -130,19 +130,19 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
     OUString aRetStr;
     switch( eType )
     {
-        case TypeClass_TYPE:			aRetStr = OUString::createFromAscii("TYPE TYPE");				break;
-        case TypeClass_INTERFACE:		aRetStr = OUString::createFromAscii("TYPE INTERFACE");		break;
-        case TypeClass_SERVICE:			aRetStr = OUString::createFromAscii("TYPE SERVICE");			break;
-        case TypeClass_STRUCT:			aRetStr = OUString::createFromAscii("TYPE STRUCT");			break;
-        case TypeClass_TYPEDEF:			aRetStr = OUString::createFromAscii("TYPE TYPEDEF");			break;
-        case TypeClass_UNION:			aRetStr = OUString::createFromAscii("TYPE UNION");			break;
-        case TypeClass_ENUM:			aRetStr = OUString::createFromAscii("TYPE ENUM");				break;
-        case TypeClass_EXCEPTION:		aRetStr = OUString::createFromAscii("TYPE EXCEPTION");		break;
-        case TypeClass_ARRAY:			aRetStr = OUString::createFromAscii("TYPE ARRAY");			break;
-        case TypeClass_SEQUENCE:		aRetStr = OUString::createFromAscii("TYPE SEQUENCE");			break;
-        case TypeClass_VOID:			aRetStr = OUString::createFromAscii("TYPE void");				break;
-        case TypeClass_ANY:				aRetStr = OUString::createFromAscii("TYPE any");				break;
-        case TypeClass_UNKNOWN:			aRetStr = OUString::createFromAscii("TYPE unknown");			break;
+        case TypeClass_TYPE:            aRetStr = OUString::createFromAscii("TYPE TYPE");               break;
+        case TypeClass_INTERFACE:       aRetStr = OUString::createFromAscii("TYPE INTERFACE");      break;
+        case TypeClass_SERVICE:         aRetStr = OUString::createFromAscii("TYPE SERVICE");            break;
+        case TypeClass_STRUCT:          aRetStr = OUString::createFromAscii("TYPE STRUCT");         break;
+        case TypeClass_TYPEDEF:         aRetStr = OUString::createFromAscii("TYPE TYPEDEF");            break;
+        case TypeClass_UNION:           aRetStr = OUString::createFromAscii("TYPE UNION");          break;
+        case TypeClass_ENUM:            aRetStr = OUString::createFromAscii("TYPE ENUM");               break;
+        case TypeClass_EXCEPTION:       aRetStr = OUString::createFromAscii("TYPE EXCEPTION");      break;
+        case TypeClass_ARRAY:           aRetStr = OUString::createFromAscii("TYPE ARRAY");          break;
+        case TypeClass_SEQUENCE:        aRetStr = OUString::createFromAscii("TYPE SEQUENCE");           break;
+        case TypeClass_VOID:            aRetStr = OUString::createFromAscii("TYPE void");               break;
+        case TypeClass_ANY:             aRetStr = OUString::createFromAscii("TYPE any");                break;
+        case TypeClass_UNKNOWN:         aRetStr = OUString::createFromAscii("TYPE unknown");            break;
         case TypeClass_BOOLEAN:
         {
             sal_Bool b = *(sal_Bool*)aValue.getValue();
@@ -241,30 +241,30 @@ UsrAny StringToAny( UString aStr, TypeClass eTargetType )
     UsrAny aRetAny;
     switch( eTargetType )
     {
-        case TypeClass_INTERFACE:		break;
-        case TypeClass_SERVICE:			break;
-        case TypeClass_STRUCT:			break;
-        case TypeClass_TYPEDEF:			break;
-        case TypeClass_UNION:			break;
-        case TypeClass_ENUM:			break;
-        case TypeClass_EXCEPTION:		break;
-        case TypeClass_ARRAY:			break;
-        case TypeClass_SEQUENCE:		break;
-        case TypeClass_VOID:			break;
-        case TypeClass_ANY:				break;
-        case TypeClass_UNKNOWN:			break;
-        case TypeClass_BOOLEAN:			aRetAny.setBOOL( short(aStr)!=0 );	break;
-        case TypeClass_CHAR:			aRetAny.setChar( char(aStr) );		break;
-        case TypeClass_STRING:			aRetAny.setString( aStr );			break;
-        case TypeClass_FLOAT:			aRetAny.setFloat( (float)strtod( aStr.GetStr(), NULL ) );	break;
-        case TypeClass_DOUBLE:			aRetAny.setDouble( strtod( aStr.GetStr(), NULL ) );	break;
-        case TypeClass_BYTE:			aRetAny.setBYTE( BYTE(short(aStr)) );	break;
-        case TypeClass_SHORT:			aRetAny.setINT16( short(aStr) );	break;
-        case TypeClass_LONG:			aRetAny.setINT32( long(aStr) );		break;
-        case TypeClass_HYPER:			break;
-        case TypeClass_UNSIGNED_SHORT:	aRetAny.setUINT16( USHORT(aStr) );	break;
-        case TypeClass_UNSIGNED_LONG:	aRetAny.setUINT32( ULONG(aStr) );	break;
-        case TypeClass_UNSIGNED_HYPER:	break;
+        case TypeClass_INTERFACE:       break;
+        case TypeClass_SERVICE:         break;
+        case TypeClass_STRUCT:          break;
+        case TypeClass_TYPEDEF:         break;
+        case TypeClass_UNION:           break;
+        case TypeClass_ENUM:            break;
+        case TypeClass_EXCEPTION:       break;
+        case TypeClass_ARRAY:           break;
+        case TypeClass_SEQUENCE:        break;
+        case TypeClass_VOID:            break;
+        case TypeClass_ANY:             break;
+        case TypeClass_UNKNOWN:         break;
+        case TypeClass_BOOLEAN:         aRetAny.setBOOL( short(aStr)!=0 );  break;
+        case TypeClass_CHAR:            aRetAny.setChar( char(aStr) );      break;
+        case TypeClass_STRING:          aRetAny.setString( aStr );          break;
+        case TypeClass_FLOAT:           aRetAny.setFloat( (float)strtod( aStr.GetStr(), NULL ) );   break;
+        case TypeClass_DOUBLE:          aRetAny.setDouble( strtod( aStr.GetStr(), NULL ) ); break;
+        case TypeClass_BYTE:            aRetAny.setBYTE( BYTE(short(aStr)) );   break;
+        case TypeClass_SHORT:           aRetAny.setINT16( short(aStr) );    break;
+        case TypeClass_LONG:            aRetAny.setINT32( long(aStr) );     break;
+        case TypeClass_HYPER:           break;
+        case TypeClass_UNSIGNED_SHORT:  aRetAny.setUINT16( USHORT(aStr) );  break;
+        case TypeClass_UNSIGNED_LONG:   aRetAny.setUINT32( ULONG(aStr) );   break;
+        case TypeClass_UNSIGNED_HYPER:  break;
     }
     return aRetAny;
 }
@@ -288,9 +288,9 @@ public:
 
 /*
     // Methoden von XInterface
-    virtual sal_Bool	SAL_CALL queryInterface( const Uik & rUik, Any & ifc ) throw( RuntimeException );
-    virtual void		SAL_CALL acquire() throw() { OWeakObject::acquire(); }
-    virtual void		SAL_CALL release() throw() { OWeakObject::release(); }
+    virtual sal_Bool    SAL_CALL queryInterface( const Uik & rUik, Any & ifc ) throw( RuntimeException );
+    virtual void        SAL_CALL acquire() throw() { OWeakObject::acquire(); }
+    virtual void        SAL_CALL release() throw() { OWeakObject::release(); }
     //ALT: sal_Bool queryInterface( Uik aUik, Reference<XInterface> & rOut );
 */
 
@@ -625,7 +625,7 @@ void ImplIntroTest::Init( void )
 
     // Einmal fuer den internen Gebrauch die PropertySetInfo abholen
     m_xMyInfo = getPropertySetInfo();
-    m_xMyInfo->acquire();		// sonst raucht es am Programm-Ende ab
+    m_xMyInfo->acquire();       // sonst raucht es am Programm-Ende ab
 
     m_nMarkusAge = 33;
     m_nMarkusChildrenCount = 2;
@@ -702,14 +702,14 @@ Reference< XPropertySetInfo > ImplIntroTest::getPropertySetInfo()
     return &aInfo;
 
     //if( m_xMyInfo == NULL )
-    //	((ImplIntroTest*)this)->m_xMyInfo = new ImplPropertySetInfo( this );
+    //  ((ImplIntroTest*)this)->m_xMyInfo = new ImplPropertySetInfo( this );
     //return m_xMyInfo;
 }
 
 void ImplIntroTest::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 //void ImplIntroTest::setPropertyValue( const UString& aPropertyName, const Any& aValue )
-//	THROWS( (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, UsrSystemException) )
+//  THROWS( (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, UsrSystemException) )
 {
     if( aPropChangeListener.is() && aPropertyName == aPropChangeListenerStr )
     {
@@ -943,7 +943,7 @@ struct DefItem
 };
 
 // Spezial-Wert fuer Method-Concept, um "normale" Funktionen kennzeichnen zu koennen
-#define  MethodConcept_NORMAL_IMPL		0x80000000
+#define  MethodConcept_NORMAL_IMPL      0x80000000
 
 
 // Test-Objekt liefern
@@ -987,32 +987,32 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     };
 
     // Tabelle der Property-Namen, die gefunden werden muessen
-// 	char* pDemandedPropNames[] =
-// 	{
-// 		"Factor",
-// 		"MyCount",
-// 		"Info",
-// 		"ObjectName",
-// 		"FirstName",
-// 		"LastName",
-// 		"Age",
-// 		"ChildrenCount",
-// 		"FirstStruct",
-// 		"SecondStruct",
-// 		"Droenk",
-// 		"IntroTest",
-// 		"Bla",
-// 		"Blub",
-// 		"Gulp",
-// 		"Strings",
-// 		"MultiSequence",
-// 		"PropertySetInfo",
-// 		"ElementType",
-// 		"ElementNames",
-// 		"Count",
-// 		"Types"
-// 		"ImplementationId"
-// 	};
+//  char* pDemandedPropNames[] =
+//  {
+//      "Factor",
+//      "MyCount",
+//      "Info",
+//      "ObjectName",
+//      "FirstName",
+//      "LastName",
+//      "Age",
+//      "ChildrenCount",
+//      "FirstStruct",
+//      "SecondStruct",
+//      "Droenk",
+//      "IntroTest",
+//      "Bla",
+//      "Blub",
+//      "Gulp",
+//      "Strings",
+//      "MultiSequence",
+//      "PropertySetInfo",
+//      "ElementType",
+//      "ElementNames",
+//      "Count",
+//      "Types"
+//      "ImplementationId"
+//  };
 
     char const * pDemandedPropVals[] =
     {
@@ -1177,7 +1177,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     //Reference< XInterface > xPropSetIface = xAccess->queryAdapter( aPropertySetUik );
     Reference< XPropertySet > xPropSet( xPropSetIface, UNO_QUERY );
     //XPropertySetRef xPropSet = (XPropertySet*)xPropSetIface->
-    //	queryInterface( XPropertySet::getSmartUik() );
+    //  queryInterface( XPropertySet::getSmartUik() );
     TEST_ENSHURE( xPropSet.is(), "Could not get XPropertySet by queryAdapter()" );
 
     // XExactName
@@ -1440,7 +1440,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
         //aMethodSeq = xAccess->getMethods
         Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( nRealConcepts );
         //Sequence<XIdlMethodRef> aMethodSeq = xAccess->getMethods
-        //	( MethodConcept::ALL - MethodConcept::DANGEROUS - MethodConcept::PROPERTY );
+        //  ( MethodConcept::ALL - MethodConcept::DANGEROUS - MethodConcept::PROPERTY );
         sal_Int32 nLen = aMethodSeq.getLength();
         // cout << "\n\n*** Methoden ***\n";
         // cout << "Introspection hat " << nLen << " Methoden gefunden:\n";
@@ -1484,7 +1484,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             aErrorStr += "\"";
             TEST_ENSHURE( aNameStr == aDemandedName, aErrorStr.getStr() );
             // cout << "Methode " << (i+1) << ": " << (const char*) UStringToString(rxMethod->getReturnType()->getName(), CHARSET_SYSTEM)
-            //	 << " " << (const char*) UStringToString(rxMethod->getName(), CHARSET_SYSTEM) << "( ";
+            //   << " " << (const char*) UStringToString(rxMethod->getName(), CHARSET_SYSTEM) << "( ";
 
             // Checken, ob alle Methoden auch einzeln gefunden werden
             aErrorStr  = "method \"";
@@ -1559,7 +1559,7 @@ SAL_IMPLEMENT_MAIN()
         // Register services
         OUString libName( RTL_CONSTASCII_USTRINGPARAM(
                               "reflection.uno" SAL_DLLEXTENSION) );
-//  		ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("corefl"), libName);
+//          ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("corefl"), libName);
         fprintf(stderr, "1\n" );
         xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );
@@ -1570,7 +1570,7 @@ SAL_IMPLEMENT_MAIN()
         // Introspection
         libName = OUString::createFromAscii(
             "introspection.uno" SAL_DLLEXTENSION);
-//  		ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("insp"), libName);
+//          ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("insp"), libName);
         fprintf(stderr, "3\n" );
         xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );

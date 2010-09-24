@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,14 +86,14 @@ namespace impl
 
 // Note: needed for queryInterface (if it calls the base-class implementation)
 typedef ::comphelper::WeakImplHelper20<
-// 		 ::com::sun::star::frame::XModel		//comprehends XComponent (required interface), base of XChartDocument
-         ::com::sun::star::util::XCloseable		//comprehends XCloseBroadcaster
-        ,::com::sun::star::frame::XStorable2	//(extension of XStorable)
-// 		,::com::sun::star::frame::XStorable		//(required interface) base of XStorable2
-        ,::com::sun::star::util::XModifiable	//comprehends XModifyBroadcaster (required interface)
-    //	,::com::sun::star::uno::XWeak			// implemented by WeakImplHelper(optional interface)
-    //	,::com::sun::star::uno::XInterface		// implemented by WeakImplHelper(optional interface)
-    //	,::com::sun::star::lang::XTypeProvider	// implemented by WeakImplHelper
+//       ::com::sun::star::frame::XModel        //comprehends XComponent (required interface), base of XChartDocument
+         ::com::sun::star::util::XCloseable     //comprehends XCloseBroadcaster
+        ,::com::sun::star::frame::XStorable2    //(extension of XStorable)
+//      ,::com::sun::star::frame::XStorable     //(required interface) base of XStorable2
+        ,::com::sun::star::util::XModifiable    //comprehends XModifyBroadcaster (required interface)
+    //  ,::com::sun::star::uno::XWeak           // implemented by WeakImplHelper(optional interface)
+    //  ,::com::sun::star::uno::XInterface      // implemented by WeakImplHelper(optional interface)
+    //  ,::com::sun::star::lang::XTypeProvider  // implemented by WeakImplHelper
         ,::com::sun::star::lang::XServiceInfo
         ,::com::sun::star::chart2::XChartDocument  // derived from XModel
         ,::com::sun::star::chart2::data::XDataReceiver   // public API
@@ -119,23 +119,23 @@ class ChartModel : public impl::ChartModel_Base
 {
 
 private:
-    mutable ::apphelper::CloseableLifeTimeManager	m_aLifeTimeManager;
+    mutable ::apphelper::CloseableLifeTimeManager   m_aLifeTimeManager;
 
-    mutable ::osl::Mutex	m_aModelMutex;
-    sal_Bool volatile		m_bReadOnly;
-    sal_Bool volatile		m_bModified;
+    mutable ::osl::Mutex    m_aModelMutex;
+    sal_Bool volatile       m_bReadOnly;
+    sal_Bool volatile       m_bModified;
     sal_Int32               m_nInLoad;
-    sal_Bool volatile		m_bUpdateNotificationsPending;
+    sal_Bool volatile       m_bUpdateNotificationsPending;
 
-    ::rtl::OUString																m_aResource;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >	m_aMediaDescriptor;
+    ::rtl::OUString                                                             m_aResource;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aMediaDescriptor;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > m_xDocumentProperties;
 
     ::cppu::OInterfaceContainerHelper                                           m_aControllers;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >	m_xCurrentController;
-    sal_uInt16																	m_nControllerLockCount;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >    m_xCurrentController;
+    sal_uInt16                                                                  m_nControllerLockCount;
 
-//	::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >	m_aPrinterOptions;
+//  ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aPrinterOptions;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >      m_xOldModelAgg;
@@ -184,7 +184,7 @@ private:
     ::rtl::OUString impl_g_getLocation();
 
     sal_Bool
-        impl_isControllerConnected(	const com::sun::star::uno::Reference<
+        impl_isControllerConnected( const com::sun::star::uno::Reference<
                             com::sun::star::frame::XController >& xController );
 
     com::sun::star::uno::Reference< com::sun::star::frame::XController >
@@ -256,10 +256,10 @@ public:
                             throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::rtl::OUString SAL_CALL
-        getURL()			throw (::com::sun::star::uno::RuntimeException);
+        getURL()            throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
-        getArgs()			throw (::com::sun::star::uno::RuntimeException);
+        getArgs()           throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
         connectController( const ::com::sun::star::uno::Reference<
@@ -272,7 +272,7 @@ public:
                             throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        lockControllers()	throw (::com::sun::star::uno::RuntimeException);
+        lockControllers()   throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
         unlockControllers() throw (::com::sun::star::uno::RuntimeException);
@@ -300,7 +300,7 @@ public:
     // ::com::sun::star::lang::XComponent (base of XModel)
     //-----------------------------------------------------------------
     virtual void SAL_CALL
-        dispose()			throw (::com::sun::star::uno::RuntimeException);
+        dispose()           throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
         addEventListener( const ::com::sun::star::uno::Reference<
@@ -346,16 +346,16 @@ public:
     // ::com::sun::star::frame::XStorable (required interface)
     //-----------------------------------------------------------------
     virtual sal_Bool SAL_CALL
-        hasLocation()		throw (::com::sun::star::uno::RuntimeException);
+        hasLocation()       throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::rtl::OUString SAL_CALL
-        getLocation()		throw (::com::sun::star::uno::RuntimeException);
+        getLocation()       throw (::com::sun::star::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL
-        isReadonly()		throw (::com::sun::star::uno::RuntimeException);
+        isReadonly()        throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        store()				throw (::com::sun::star::io::IOException
+        store()             throw (::com::sun::star::io::IOException
                             , ::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
@@ -376,7 +376,7 @@ public:
     // ::com::sun::star::util::XModifiable (required interface)
     //-----------------------------------------------------------------
     virtual sal_Bool SAL_CALL
-        isModified()		throw (::com::sun::star::uno::RuntimeException);
+        isModified()        throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
         setModified( sal_Bool bModified )

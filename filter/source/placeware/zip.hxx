@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ private:
 private:
     bool isError() const { return osl::File::E_None != mnRC; }
 
-    osl::File& mrFile;				/* file we're writing to */
+    osl::File& mrFile;              /* file we're writing to */
     bool mbOpen;
     osl::File::RC mnRC;
     std::vector<ZipEntry*> maEntries;

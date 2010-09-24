@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@
 #include <charfmt.hxx>
 #include <doc.hxx>
 #include <node.hxx>
-#include <paratr.hxx>		// fuer SetModifyAtAttr
-#include <cellatr.hxx>		// fuer SetModifyAtAttr
+#include <paratr.hxx>       // fuer SetModifyAtAttr
+#include <cellatr.hxx>      // fuer SetModifyAtAttr
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -196,8 +196,8 @@ void  SwAttrSet::Changed( const SfxPoolItem& rOld,
 // ----------------------------------------------------------------
 // Sonderbehandlung fuer einige Attribute
 // Setze den Modify-Pointer (alten pDefinedIn) bei folgenden Attributen:
-//	- SwFmtDropCaps
-//	- SwFmtPageDesc
+//  - SwFmtDropCaps
+//  - SwFmtPageDesc
 // (Wird beim Einfuegen in Formate/Nodes gerufen)
 // ----------------------------------------------------------------
 
@@ -326,7 +326,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             // <--
 
             // JP 04.02.99: Task #61467# Seitenvorlagenwechsel mit kopieren
-            //				Gegenueber dem alten Verhalten, sie zu entfernen
+            //              Gegenueber dem alten Verhalten, sie zu entfernen
             const SwPageDesc* pPgDesc;
             if( pSrcDoc != pDstDoc && SFX_ITEM_SET == GetItemState(
                                             RES_PAGEDESC, FALSE, &pItem ) &&

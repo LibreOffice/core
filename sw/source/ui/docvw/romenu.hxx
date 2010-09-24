@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,14 +48,14 @@ class SwReadOnlyPopup : public PopupMenu
     const SvxBrushItem *pItem;
     const Point &rDocPos;
                 Graphic aGraphic;
-    String		sURL,
+    String      sURL,
                 sTargetFrameName,
                 sDescription,
                 sGrfName;
-    List		aThemeList;
-    BOOL 		bGrfToGalleryAsLnk;
-    ImageMap*	pImageMap;
-    INetImage*	pTargetURL;
+    List        aThemeList;
+    BOOL        bGrfToGalleryAsLnk;
+    ImageMap*   pImageMap;
+    INetImage*  pTargetURL;
 
     void Check( USHORT nMID, USHORT nSID, SfxDispatcher &rDis );
     String SaveGraphic( USHORT nId );
@@ -65,7 +65,7 @@ class SwReadOnlyPopup : public PopupMenu
 public:
     SwReadOnlyPopup( const Point &rDPos, SwView &rV );
     ~SwReadOnlyPopup();
-    
+
     void Execute( Window* pWin, const Point &rPPos );
     void Execute( Window* pWin, USHORT nId );
 };

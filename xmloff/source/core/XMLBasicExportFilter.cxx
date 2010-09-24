@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ XMLBasicExportFilter::~XMLBasicExportFilter()
 // XDocumentHandler
 // -----------------------------------------------------------------------------
 
-void XMLBasicExportFilter::startDocument() 
+void XMLBasicExportFilter::startDocument()
     throw (xml::sax::SAXException, RuntimeException)
 {
     // do nothing, filter this
@@ -60,7 +60,7 @@ void XMLBasicExportFilter::startDocument()
 
 // -----------------------------------------------------------------------------
 
-void XMLBasicExportFilter::endDocument() 
+void XMLBasicExportFilter::endDocument()
     throw (xml::sax::SAXException, RuntimeException)
 {
     // do nothing, filter this
@@ -105,7 +105,7 @@ void XMLBasicExportFilter::ignorableWhitespace( const ::rtl::OUString& aWhitespa
 
 // -----------------------------------------------------------------------------
 
-void XMLBasicExportFilter::processingInstruction( const ::rtl::OUString& aTarget, 
+void XMLBasicExportFilter::processingInstruction( const ::rtl::OUString& aTarget,
         const ::rtl::OUString& aData )
     throw (xml::sax::SAXException, RuntimeException)
 {

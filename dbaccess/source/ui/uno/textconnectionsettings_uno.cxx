@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -192,7 +192,7 @@ namespace dbaui
     }
 
     //---------------------------------------------------------------------
-    Dialog*	OTextConnectionSettingsDialog::createDialog(Window* _pParent)
+    Dialog* OTextConnectionSettingsDialog::createDialog(Window* _pParent)
     {
         return new TextConnectionSettingsDialog( _pParent, *m_pDatasourceItems );
     }
@@ -216,7 +216,7 @@ namespace dbaui
             OTextConnectionSettingsDialog::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
         }
     }
-    
+
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL OTextConnectionSettingsDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue) throw(IllegalArgumentException)
     {
@@ -237,7 +237,7 @@ namespace dbaui
 
         return bModified;
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL OTextConnectionSettingsDialog::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {

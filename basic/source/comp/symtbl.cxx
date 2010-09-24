@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ SV_IMPL_PTRARR(SbiSymbols,SbiSymDef*)
 
 /***************************************************************************
 |*
-|*	SbiStringPool
+|*  SbiStringPool
 |*
 ***************************************************************************/
 
@@ -100,16 +100,16 @@ short SbiStringPool::Add( double n, SbxDataType t )
 
 /***************************************************************************
 |*
-|*	SbiSymPool
+|*  SbiSymPool
 |*
 ***************************************************************************/
 
 SbiSymPool::SbiSymPool( SbiStringPool& r, SbiSymScope s ) : rStrings( r )
 {
-    pParser	 = r.GetParser();
+    pParser  = r.GetParser();
     eScope   = s;
     pParent  = NULL;
-    nCur	 =
+    nCur     =
     nProcId  = 0;
 }
 
@@ -143,9 +143,9 @@ SbiSymDef* SbiSymPool::AddSym( const String& rName )
 {
     SbiSymDef* p = new SbiSymDef( rName );
     p->nPos    = aData.Count();
-    p->nId	   = rStrings.Add( rName );
+    p->nId     = rStrings.Add( rName );
     p->nProcId = nProcId;
-    p->pIn	   = this;
+    p->pIn     = this;
     const SbiSymDef* q = p;
     aData.Insert( q, q->nPos );
     return p;
@@ -155,10 +155,10 @@ SbiProcDef* SbiSymPool::AddProc( const String& rName )
 {
     SbiProcDef* p = new SbiProcDef( pParser, rName );
     p->nPos    = aData.Count();
-    p->nId	   = rStrings.Add( rName );
+    p->nId     = rStrings.Add( rName );
     // Procs sind immer global
     p->nProcId = 0;
-    p->pIn	   = this;
+    p->pIn     = this;
     const SbiSymDef* q = p;
     aData.Insert( q, q->nPos );
     return p;
@@ -249,7 +249,7 @@ UINT32 SbiSymPool::Define( const String& rName )
 {
     SbiSymDef* p = Find( rName );
     if( p )
-    {	if( p->IsDefined() )
+    {   if( p->IsDefined() )
             pParser->Error( SbERR_LABEL_DEFINED, rName );
     }
     else
@@ -281,31 +281,31 @@ void SbiSymPool::CheckRefs()
 
 /***************************************************************************
 |*
-|*	Symbol-Definitionen
+|*  Symbol-Definitionen
 |*
 ***************************************************************************/
 
 SbiSymDef::SbiSymDef( const String& rName ) : aName( rName )
 {
-    eType	 = SbxEMPTY;
-    nDims	 = 0;
+    eType    = SbxEMPTY;
+    nDims    = 0;
     nTypeId  = 0;
     nProcId  = 0;
-    nId 	 = 0;
-    nPos	 = 0;
-    nLen	 = 0;
-    nChain	 = 0;
-    bAs		 =
-    bNew	 =
-    bStatic	 =
-    bOpt	 =
+    nId      = 0;
+    nPos     = 0;
+    nLen     = 0;
+    nChain   = 0;
+    bAs      =
+    bNew     =
+    bStatic  =
+    bOpt     =
     bParamArray =
     bWithEvents =
-    bByVal	 =
+    bByVal   =
     bChained =
     bGlobal  = FALSE;
-    pIn		 =
-    pPool	 = NULL;
+    pIn      =
+    pPool    = NULL;
     nDefaultId = 0;
     nFixedStringLength = -1;
 }
@@ -389,7 +389,7 @@ UINT32 SbiSymDef::Define()
 SbiSymPool& SbiSymDef::GetPool()
 {
     if( !pPool )
-        pPool = new SbiSymPool( pIn->pParser->aGblStrings, SbLOCAL );	// wird gedumpt
+        pPool = new SbiSymPool( pIn->pParser->aGblStrings, SbLOCAL );   // wird gedumpt
     return *pPool;
 }
 
@@ -402,8 +402,8 @@ SbiSymScope SbiSymDef::GetScope() const
 
 // Die Prozedur-Definition hat drei Pools:
 // 1) aParams: wird durch die Definition gefuellt. Enthaelt die Namen
-//	  der Parameter, wie sie innerhalb des Rumpfes verwendet werden.
-//	  Das erste Element ist der Returnwert.
+//    der Parameter, wie sie innerhalb des Rumpfes verwendet werden.
+//    Das erste Element ist der Returnwert.
 // 2) pPool: saemtliche lokale Variable
 // 3) aLabels: Labels
 
@@ -411,17 +411,17 @@ SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName,
                         BOOL bProcDecl )
          : SbiSymDef( rName )
          , aParams( pParser->aGblStrings, SbPARAM )  // wird gedumpt
-         , aLabels( pParser->aLclStrings, SbLOCAL )	 // wird nicht gedumpt
+         , aLabels( pParser->aLclStrings, SbLOCAL )  // wird nicht gedumpt
          , mbProcDecl( bProcDecl )
 {
     aParams.SetParent( &pParser->aPublics );
     pPool = new SbiSymPool( pParser->aGblStrings, SbLOCAL ); // Locals
     pPool->SetParent( &aParams );
-    nLine1	=
-    nLine2	= 0;
+    nLine1  =
+    nLine2  = 0;
     mePropMode = PROPERTY_MODE_NONE;
     bPublic = TRUE;
-    bCdecl	= FALSE;
+    bCdecl  = FALSE;
     bStatic = FALSE;
     // Fuer Returnwerte ist das erste Element der Parameterliste
     // immer mit dem Namen und dem Typ der Proc definiert
@@ -482,23 +482,23 @@ void SbiProcDef::Match( SbiProcDef* pOld )
 }
 
 void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
-{ 
+{
     mePropMode = ePropMode;
     if( mePropMode != PROPERTY_MODE_NONE )
     {
         // Prop name = original scanned procedure name
         maPropName = aName;
 
-        // CompleteProcName includes "Property xxx " 
+        // CompleteProcName includes "Property xxx "
         // to avoid conflicts with other symbols
         String aCompleteProcName;
         aCompleteProcName.AppendAscii( "Property " );
         switch( mePropMode )
         {
-            case PROPERTY_MODE_GET:		aCompleteProcName.AppendAscii( "Get " ); break;
-            case PROPERTY_MODE_LET:		aCompleteProcName.AppendAscii( "Let " ); break;
-            case PROPERTY_MODE_SET:		aCompleteProcName.AppendAscii( "Set " ); break;
-            case PROPERTY_MODE_NONE:	
+            case PROPERTY_MODE_GET:     aCompleteProcName.AppendAscii( "Get " ); break;
+            case PROPERTY_MODE_LET:     aCompleteProcName.AppendAscii( "Let " ); break;
+            case PROPERTY_MODE_SET:     aCompleteProcName.AppendAscii( "Set " ); break;
+            case PROPERTY_MODE_NONE:
                 DBG_ERROR( "Illegal PropertyMode PROPERTY_MODE_NONE" );
                 break;
         }

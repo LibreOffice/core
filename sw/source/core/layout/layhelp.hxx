@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,17 +93,17 @@ public:
 class SwActualSection
 {
     SwActualSection *pUpper;
-    SwSectionFrm	*pSectFrm;
-    SwSectionNode	*pSectNode;
+    SwSectionFrm    *pSectFrm;
+    SwSectionNode   *pSectNode;
 public:
     SwActualSection( SwActualSection *pUpper,
-                     SwSectionFrm	 *pSect,
-                     SwSectionNode	 *pNd );
+                     SwSectionFrm    *pSect,
+                     SwSectionNode   *pNd );
 
-    SwSectionFrm	*GetSectionFrm()					{ return pSectFrm; }
-    void			 SetSectionFrm( SwSectionFrm *p )	{ pSectFrm = p; }
-    SwSectionNode   *GetSectionNode()					{ return pSectNode;}
-    SwActualSection *GetUpper()							{ return pUpper; }
+    SwSectionFrm    *GetSectionFrm()                    { return pSectFrm; }
+    void             SetSectionFrm( SwSectionFrm *p )   { pSectFrm = p; }
+    SwSectionNode   *GetSectionNode()                   { return pSectNode;}
+    SwActualSection *GetUpper()                         { return pUpper; }
 };
 
 /*************************************************************************
@@ -156,28 +156,28 @@ public:
  * layout cache.
  *************************************************************************/
 
-#define SW_LAYCACHE_IO_REC_PAGES	'p'
-#define SW_LAYCACHE_IO_REC_PARA		'P'
-#define SW_LAYCACHE_IO_REC_TABLE	'T'
+#define SW_LAYCACHE_IO_REC_PAGES    'p'
+#define SW_LAYCACHE_IO_REC_PARA     'P'
+#define SW_LAYCACHE_IO_REC_TABLE    'T'
 #define SW_LAYCACHE_IO_REC_FLY      'F'
 
-#define SW_LAYCACHE_IO_VERSION_MAJOR	1
+#define SW_LAYCACHE_IO_VERSION_MAJOR    1
 #define SW_LAYCACHE_IO_VERSION_MINOR    1
 
 class SwLayCacheIoImpl
 {
-    SvBytes		   	aRecTypes;
-    SvULongs		aRecSizes;
+    SvBytes         aRecTypes;
+    SvULongs        aRecSizes;
 
-    SvStream       	*pStream;
+    SvStream        *pStream;
 
-    ULONG			nFlagRecEnd;
+    ULONG           nFlagRecEnd;
 
-    USHORT			nMajorVersion;
-    USHORT 			nMinorVersion;
+    USHORT          nMajorVersion;
+    USHORT          nMinorVersion;
 
-    BOOL			bWriteMode : 1;
-    BOOL			bError : 1;
+    BOOL            bWriteMode : 1;
+    BOOL            bError : 1;
 
 public:
     SwLayCacheIoImpl( SvStream& rStrm, BOOL bWrtMd );

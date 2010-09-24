@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
-//#include <svx/labdlg.hxx>	CHINA001
+//#include <svx/labdlg.hxx> CHINA001
 #include <svl/srchitem.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/tabline.hxx>
@@ -113,11 +113,11 @@ void lcl_setModified( SfxObjectShell*  pShell )
 
 void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 {
-    USHORT				nSlot		= rReq.GetSlot();
-    Window* 			pWin		= pViewData->GetActiveWin();
-//	SfxViewFrame*		pViewFrame	= SfxViewShell::Current()->GetViewFrame(); //!!! koennte knallen
-    ScDrawView* 		pView		= pViewData->GetScDrawView();
-    SdrModel*			pDoc		= pViewData->GetDocument()->GetDrawLayer();
+    USHORT              nSlot       = rReq.GetSlot();
+    Window*             pWin        = pViewData->GetActiveWin();
+//  SfxViewFrame*       pViewFrame  = SfxViewShell::Current()->GetViewFrame(); //!!! koennte knallen
+    ScDrawView*         pView       = pViewData->GetScDrawView();
+    SdrModel*           pDoc        = pViewData->GetDocument()->GetDrawLayer();
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
@@ -134,7 +134,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             }
             break;
 
-        case SID_TEXT_STANDARD:	// Harte Textattributierung loeschen
+        case SID_TEXT_STANDARD: // Harte Textattributierung loeschen
             {
                 SfxItemSet aEmptyAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
                 pView->SetAttributes(aEmptyAttr, TRUE);
@@ -372,24 +372,24 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
 
 void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
 {
-    ScDrawView*			pView		= pViewData->GetScDrawView();
-    BOOL 				bHasMarked	= pView->AreObjectsMarked();
-    const SdrObject* 	pObj		= NULL;
-    const SdrMarkList&	rMarkList	= pView->GetMarkedObjectList();
+    ScDrawView*         pView       = pViewData->GetScDrawView();
+    BOOL                bHasMarked  = pView->AreObjectsMarked();
+    const SdrObject*    pObj        = NULL;
+    const SdrMarkList&  rMarkList   = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-    SfxItemSet	aNewAttr( pView->GetDefaultAttr() );
+    SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, FALSE );
 
-//CHINA001	SvxLineTabDialog* pDlg
-//CHINA001	= new SvxLineTabDialog( pViewData->GetDialogParent(),
-//CHINA001	&aNewAttr,
-//CHINA001	pViewData->GetDocument()->GetDrawLayer(),
-//CHINA001	pObj,
-//CHINA001	bHasMarked );
+//CHINA001  SvxLineTabDialog* pDlg
+//CHINA001  = new SvxLineTabDialog( pViewData->GetDialogParent(),
+//CHINA001  &aNewAttr,
+//CHINA001  pViewData->GetDocument()->GetDrawLayer(),
+//CHINA001  pObj,
+//CHINA001  bHasMarked );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
         SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
@@ -417,18 +417,18 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
 
 void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
 {
-    ScDrawView*	pView		= pViewData->GetScDrawView();
-    BOOL		bHasMarked	= pView->AreObjectsMarked();
+    ScDrawView* pView       = pViewData->GetScDrawView();
+    BOOL        bHasMarked  = pView->AreObjectsMarked();
 
-    SfxItemSet	aNewAttr( pView->GetDefaultAttr() );
+    SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, FALSE );
 
     //CHINA001 SvxAreaTabDialog* pDlg
-    //CHINA001 	= new SvxAreaTabDialog( pViewData->GetDialogParent(),
-//CHINA001 								&aNewAttr,
-//CHINA001 								pViewData->GetDocument()->GetDrawLayer(),
-//CHINA001 								pView );
+    //CHINA001  = new SvxAreaTabDialog( pViewData->GetDialogParent(),
+//CHINA001                              &aNewAttr,
+//CHINA001                              pViewData->GetDocument()->GetDrawLayer(),
+//CHINA001                              pView );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
@@ -464,9 +464,9 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
 
 void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT /* nTabPage */ )
 {
-    ScDrawView*	pView		= pViewData->GetScDrawView();
-    BOOL		bHasMarked	= pView->AreObjectsMarked();
-    SfxItemSet	aNewAttr	( pView->GetDefaultAttr() );
+    ScDrawView* pView       = pViewData->GetScDrawView();
+    BOOL        bHasMarked  = pView->AreObjectsMarked();
+    SfxItemSet  aNewAttr    ( pView->GetDefaultAttr() );
 
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, FALSE );

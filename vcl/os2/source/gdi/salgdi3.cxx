@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,7 +103,7 @@ inline int IntTimes256FromFixed(W32FIXED f)
 // -----------
 
 // this is a special codepage code, used to identify OS/2 symbol font.
-#define SYMBOL_CHARSET					65400
+#define SYMBOL_CHARSET                  65400
 
 // =======================================================================
 
@@ -344,7 +344,7 @@ static ImplDevFontAttributes Os2Font2DevFontAttributes( const PFONTMETRICS pFont
         ||  aDFA.maName.EqualsAscii( "ZapfChancery" )
         ||  aDFA.maName.EqualsAscii( "ZapfDingbats" ) )
             aDFA.mnQuality += 500;
-    }    
+    }
 
     aDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
     aDFA.meAntiAlias = ANTIALIAS_DONTKNOW;
@@ -362,7 +362,7 @@ static ImplDevFontAttributes Os2Font2DevFontAttributes( const PFONTMETRICS pFont
 
 ImplOs2FontData::ImplOs2FontData( PFONTMETRICS _pFontMetric,
     int nHeight, BYTE nPitchAndFamily )
-:	ImplFontData( Os2Font2DevFontAttributes(_pFontMetric), 0 ),
+:   ImplFontData( Os2Font2DevFontAttributes(_pFontMetric), 0 ),
     pFontMetric( _pFontMetric ),
     meOs2CharSet( _pFontMetric->usCodePage),
     mnPitchAndFamily( nPitchAndFamily ),
@@ -408,8 +408,8 @@ void ImplOs2FontData::UpdateFromHPS( HPS hPS ) const
 
     // even if the font works some fonts have problems with the glyph API
     // => the heuristic below tries to figure out which fonts have the problem
-    DWORD	fontType = Ft2QueryFontType( 0, pFontMetric->szFacename);
-    if( fontType != FT2_FONTTYPE_TRUETYPE 
+    DWORD   fontType = Ft2QueryFontType( 0, pFontMetric->szFacename);
+    if( fontType != FT2_FONTTYPE_TRUETYPE
         && (pFontMetric->fsDefn & FM_DEFN_GENERIC) == 0)
         mbDisableGlyphApi = true;
 }
@@ -622,16 +622,16 @@ USHORT Os2SalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFon
 #endif
 
     ImplOs2FontData* pFontData = (ImplOs2FontData*)i_pFont->mpFontData;
-    PFONTMETRICS 	pFontMetric = NULL;
-    FATTRS		  	aFAttrs;
-    BOOL		  	bOutline = FALSE;
-    APIRET			rc;			
+    PFONTMETRICS    pFontMetric = NULL;
+    FATTRS          aFAttrs;
+    BOOL            bOutline = FALSE;
+    APIRET          rc;
 
     memset( &aFAttrs, 0, sizeof( FATTRS ) );
     aFAttrs.usRecordLength = sizeof( FATTRS );
 
     aFAttrs.lMaxBaselineExt = i_pFont->mnHeight;
-    aFAttrs.lAveCharWidth	= i_pFont->mnWidth;
+    aFAttrs.lAveCharWidth   = i_pFont->mnWidth;
 
     // do we have a pointer to the FONTMETRICS of the selected font? -> use it!
     if ( pFontData )
@@ -641,9 +641,9 @@ USHORT Os2SalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFon
         bOutline = (pFontMetric->fsDefn & FM_DEFN_OUTLINE) != 0;
 
         // use match&registry fields to get correct match
-        aFAttrs.lMatch	     	= pFontMetric->lMatch;
-        aFAttrs.idRegistry 		= pFontMetric->idRegistry;			
-        aFAttrs.usCodePage 		= pFontMetric->usCodePage;
+        aFAttrs.lMatch          = pFontMetric->lMatch;
+        aFAttrs.idRegistry      = pFontMetric->idRegistry;
+        aFAttrs.usCodePage      = pFontMetric->usCodePage;
 
         if ( bOutline )
         {
@@ -654,14 +654,14 @@ USHORT Os2SalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFon
         else
         {
             aFAttrs.lMaxBaselineExt = pFontMetric->lMaxBaselineExt;
-            aFAttrs.lAveCharWidth	= pFontMetric->lAveCharWidth;
+            aFAttrs.lAveCharWidth   = pFontMetric->lAveCharWidth;
         }
 
     }
 
     // use family name for outline fonts
     if ( mbPrinter ) {
-        // use font face name for printers because otherwise ft2lib will fail 
+        // use font face name for printers because otherwise ft2lib will fail
         // to select the correct font for GPI (ticket#117)
         strncpy( (char*)(aFAttrs.szFacename), pFontMetric->szFacename, sizeof( aFAttrs.szFacename ) );
     } else if ( !pFontMetric) {
@@ -738,7 +738,7 @@ USHORT Os2SalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFon
         {
             nAttrs |= CBB_ANGLE;
             double alpha = (double)(i_pFont->mnOrientation);
-            alpha *= 0.0017453292;	 // *PI / 1800
+            alpha *= 0.0017453292;   // *PI / 1800
             mnOrientationY = (long) (1000.0 * sin( alpha ));
             mnOrientationX = (long) (1000.0 * cos( alpha ));
             aBundle.ptlAngle.x = mnOrientationX;
@@ -867,8 +867,8 @@ void Os2SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     }
 #endif
 
-    pMetric->maName 			= UniString( aOS2Metric.szFamilyname, gsl_getSystemTextEncoding());
-    pMetric->maStyleName		= ImpStyleNameToSal( aOS2Metric.szFamilyname,
+    pMetric->maName             = UniString( aOS2Metric.szFamilyname, gsl_getSystemTextEncoding());
+    pMetric->maStyleName        = ImpStyleNameToSal( aOS2Metric.szFamilyname,
                                                      aOS2Metric.szFacename,
                                                      strlen( aOS2Metric.szFamilyname ) );
 
@@ -900,17 +900,17 @@ void Os2SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     // transformation dependend font metrics
     if ( aOS2Metric.fsDefn & FM_DEFN_OUTLINE )
     {
-        pMetric->mnWidth	   = aOS2Metric.lEmInc;
+        pMetric->mnWidth       = aOS2Metric.lEmInc;
     }
     else
     {
-        pMetric->mnWidth	   = aOS2Metric.lAveCharWidth;
+        pMetric->mnWidth       = aOS2Metric.lAveCharWidth;
         pMetric->mnOrientation = 0;
     }
-    pMetric->mnIntLeading		= aOS2Metric.lInternalLeading;
-    pMetric->mnExtLeading		= aOS2Metric.lExternalLeading;
-    pMetric->mnAscent			= aOS2Metric.lMaxAscender;
-    pMetric->mnDescent			= aOS2Metric.lMaxDescender;
+    pMetric->mnIntLeading       = aOS2Metric.lInternalLeading;
+    pMetric->mnExtLeading       = aOS2Metric.lExternalLeading;
+    pMetric->mnAscent           = aOS2Metric.lMaxAscender;
+    pMetric->mnDescent          = aOS2Metric.lMaxDescender;
 
     // #107888# improved metric compatibility for Asian fonts...
     // TODO: assess workaround below for CWS >= extleading
@@ -1024,9 +1024,9 @@ bool Os2SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
 
 void Os2SalGraphics::GetDevFontList( ImplDevFontList* pList )
 {
-    PFONTMETRICS	pFontMetrics;
-    ULONG			nFontMetricCount;
-    SalData*		pSalData;
+    PFONTMETRICS    pFontMetrics;
+    ULONG           nFontMetricCount;
+    SalData*        pSalData;
 
 #if OSL_DEBUG_LEVEL>0
     debug_printf("Os2SalGraphics::GetDevFontList\n");
@@ -1034,12 +1034,12 @@ void Os2SalGraphics::GetDevFontList( ImplDevFontList* pList )
 
     // install OpenSymbol
     HMODULE hMod;
-    ULONG	ObjNum, Offset, rc;
-    CHAR	Buff[2*_MAX_PATH];
-    char 	drive[_MAX_DRIVE], dir[_MAX_DIR];
-    char 	fname[_MAX_FNAME], ext[_MAX_EXT];
+    ULONG   ObjNum, Offset, rc;
+    CHAR    Buff[2*_MAX_PATH];
+    char    drive[_MAX_DRIVE], dir[_MAX_DIR];
+    char    fname[_MAX_FNAME], ext[_MAX_EXT];
     // get module handle (and name)
-    rc = DosQueryModFromEIP( &hMod, &ObjNum, sizeof( Buff), Buff, 
+    rc = DosQueryModFromEIP( &hMod, &ObjNum, sizeof( Buff), Buff,
                             &Offset, (ULONG)ImplSalGetUniString);
     DosQueryModuleName(hMod, sizeof(Buff), Buff);
     // replace module path with font path
@@ -1056,20 +1056,20 @@ void Os2SalGraphics::GetDevFontList( ImplDevFontList* pList )
         // dies im unabhaengigen Teil auch so gemacht wird und wir
         // ansonsten auf geloeschten Systemdaten arbeiten koennten
         pSalData = GetSalData();
-        nFontMetricCount	= pSalData->mnFontMetricCount;
-        pFontMetrics		= pSalData->mpFontMetrics;
+        nFontMetricCount    = pSalData->mnFontMetricCount;
+        pFontMetrics        = pSalData->mpFontMetrics;
         // Bei Bildschirm-Devices holen wir uns die Fontliste jedesmal neu
         if ( pFontMetrics )
         {
             delete pFontMetrics;
-            pFontMetrics		= NULL;
-            nFontMetricCount	= 0;
+            pFontMetrics        = NULL;
+            nFontMetricCount    = 0;
         }
     }
     else
     {
-        nFontMetricCount	= mnFontMetricCount;
-        pFontMetrics		= mpFontMetrics;
+        nFontMetricCount    = mnFontMetricCount;
+        pFontMetrics        = mpFontMetrics;
     }
 
     // do we have to create the cached font list first?
@@ -1099,13 +1099,13 @@ void Os2SalGraphics::GetDevFontList( ImplDevFontList* pList )
 
         if ( !mbPrinter )
         {
-            pSalData->mnFontMetricCount 		= nFontMetricCount;
-            pSalData->mpFontMetrics 			= pFontMetrics;
+            pSalData->mnFontMetricCount         = nFontMetricCount;
+            pSalData->mpFontMetrics             = pFontMetrics;
         }
         else
         {
-            mnFontMetricCount	= nFontMetricCount;
-            mpFontMetrics		= pFontMetrics;
+            mnFontMetricCount   = nFontMetricCount;
+            mpFontMetrics       = pFontMetrics;
         }
     }
 
@@ -1120,7 +1120,7 @@ void Os2SalGraphics::GetDevFontList( ImplDevFontList* pList )
             continue;
 
         // skip bitmap fonts (but keep WarpSans)
-        if ( (pFontMetric->fsDefn & FM_DEFN_OUTLINE) == 0 
+        if ( (pFontMetric->fsDefn & FM_DEFN_OUTLINE) == 0
             && strncmp( pFontMetric->szFacename, "WarpSans", 8) )
             // Font nicht aufnehmen
             continue;
@@ -1131,7 +1131,7 @@ void Os2SalGraphics::GetDevFontList( ImplDevFontList* pList )
             *dash++ = ' ';
 
         // create new font list element
-        ImplOs2FontData* pData 		= new ImplOs2FontData( pFontMetric, 0, 0 );
+        ImplOs2FontData* pData      = new ImplOs2FontData( pFontMetric, 0, 0 );
 
         // add font list element to font list
         pList->Add( pData );
@@ -1361,7 +1361,7 @@ BOOL Os2SalGraphics::GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& rB
         const double fFactor((1.0/256) * mfFontScale);
         rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(fFactor, fFactor));
     }
-    
+
     return bRet;
 }
 
@@ -1477,8 +1477,8 @@ BOOL Os2SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
     // open font file
     sal_uInt32 nFaceNum = 0;
-    if( !*xRawFontData.get() )	// TTC candidate
-        nFaceNum = ~0U;	 // indicate "TTC font extracts only"
+    if( !*xRawFontData.get() )  // TTC candidate
+        nFaceNum = ~0U;  // indicate "TTC font extracts only"
 
     ScopedTrueTypeFont aSftTTF;
     int nRC = aSftTTF.open( xRawFontData.get(), nFontSize1, nFaceNum );
@@ -1487,18 +1487,18 @@ BOOL Os2SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
     TTGlobalFontInfo aTTInfo;
     ::GetTTGlobalFontInfo( aSftTTF.get(), &aTTInfo );
-    rInfo.m_nFontType	= SAL_FONTSUBSETINFO_TYPE_TRUETYPE;
-    rInfo.m_aPSName		= ImplSalGetUniString( aTTInfo.psname );
-    rInfo.m_nAscent		= +aTTInfo.winAscent;
-    rInfo.m_nDescent	= -aTTInfo.winDescent;
-    rInfo.m_aFontBBox	= Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
+    rInfo.m_nFontType   = SAL_FONTSUBSETINFO_TYPE_TRUETYPE;
+    rInfo.m_aPSName     = ImplSalGetUniString( aTTInfo.psname );
+    rInfo.m_nAscent     = +aTTInfo.winAscent;
+    rInfo.m_nDescent    = -aTTInfo.winDescent;
+    rInfo.m_aFontBBox   = Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
                                     Point( aTTInfo.xMax, aTTInfo.yMax ) );
-    rInfo.m_nCapHeight	= aTTInfo.yMax; // Well ...
+    rInfo.m_nCapHeight  = aTTInfo.yMax; // Well ...
 
     // subset glyphs and get their properties
     // take care that subset fonts require the NotDef glyph in pos 0
     int nOrigCount = nGlyphCount;
-    USHORT	  aShortIDs[ 256 ];
+    USHORT    aShortIDs[ 256 ];
     sal_uInt8 aTempEncs[ 256 ];
 
     int nNotDef=-1, i;
@@ -1543,9 +1543,9 @@ BOOL Os2SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         ::GetTTSimpleGlyphMetrics( aSftTTF.get(), aShortIDs, nGlyphCount, aIFSD.mbVertical );
     if( !pMetrics )
         return FALSE;
-    sal_uInt16 nNotDefAdv	= pMetrics[0].adv;
-    pMetrics[0].adv			= pMetrics[nNotDef].adv;
-    pMetrics[nNotDef].adv	= nNotDefAdv;
+    sal_uInt16 nNotDefAdv   = pMetrics[0].adv;
+    pMetrics[0].adv         = pMetrics[nNotDef].adv;
+    pMetrics[nNotDef].adv   = nNotDefAdv;
     for( i = 0; i < nOrigCount; ++i )
         pGlyphWidths[i] = pMetrics[i].adv;
     free( pMetrics );
@@ -1584,18 +1584,18 @@ const void* Os2SalGraphics::GetEmbedFontData( const ImplFontData* pFont,
     DWORD nFontSize2 = Ft2GetFontData( mhPS, 0, 0, pData, nFontSize1 );
     if( nFontSize1 != nFontSize2 )
         *pDataLen = 0;
-    
+
     // get important font properties
     FONTMETRICS aOS2Metric;
     if (Ft2QueryFontMetrics( mhPS, sizeof( aOS2Metric ), &aOS2Metric ) == GPI_ERROR)
             *pDataLen = 0;
-    rInfo.m_nFontType	= SAL_FONTSUBSETINFO_TYPE_TYPE1;
-    rInfo.m_aPSName		= ImplSalGetUniString( aOS2Metric.szFacename );
-    rInfo.m_nAscent		= +aOS2Metric.lMaxAscender;
-    rInfo.m_nDescent	= -aOS2Metric.lMaxDescender;
-    rInfo.m_aFontBBox	= Rectangle( Point( 0, -aOS2Metric.lMaxDescender ),
+    rInfo.m_nFontType   = SAL_FONTSUBSETINFO_TYPE_TYPE1;
+    rInfo.m_aPSName     = ImplSalGetUniString( aOS2Metric.szFacename );
+    rInfo.m_nAscent     = +aOS2Metric.lMaxAscender;
+    rInfo.m_nDescent    = -aOS2Metric.lMaxDescender;
+    rInfo.m_aFontBBox   = Rectangle( Point( 0, -aOS2Metric.lMaxDescender ),
               Point( aOS2Metric.lMaxCharInc, aOS2Metric.lMaxAscender+aOS2Metric.lExternalLeading ) );
-    rInfo.m_nCapHeight	= aOS2Metric.lMaxAscender; // Well ...
+    rInfo.m_nCapHeight  = aOS2Metric.lMaxAscender; // Well ...
 
     // get individual character widths
     for( int i = 0; i < 256; ++i )
@@ -1631,14 +1631,14 @@ const Ucs2SIntMap* Os2SalGraphics::GetFontEncodingVector( const ImplFontData* pF
 
     // fill the encoding vector
     Ucs2SIntMap& rMap = *new Ucs2SIntMap;
-#if 0	 
+#if 0
     // TODO: get correct encoding vector
     ImplWinFontData* pWinFontData = reinterpret_cast<ImplWinFontData*>(pFont);
-    
+
     GLYPHSET aGlyphSet;
     aGlyphSet.cbThis = sizeof(aGlyphSet);
     DWORD aW = ::GetFontUnicodeRanges( mhDC, &aGlyphSet);
-#else	 
+#else
     for( sal_Unicode i = 32; i < 256; ++i )
         rMap[i] = i;
     if( pNonEncoded )
@@ -1661,10 +1661,10 @@ void Os2SalGraphics::GetGlyphWidths( const ImplFontData* pFont,
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
-    
+
     float fScale = 0.0;
     ImplDoSetFont( &aIFSD, fScale, 0);
-    
+
     if( pFont->IsSubsettable() )
     {
         // get raw font file data
@@ -1680,12 +1680,12 @@ void Os2SalGraphics::GetGlyphWidths( const ImplFontData* pFont,
         sal_uInt32 nFaceNum = 0;
         if( !*xRawFontData.get() )  // TTC candidate
             nFaceNum = ~0U;  // indicate "TTC font extracts only"
-    
+
         ScopedTrueTypeFont aSftTTF;
         int nRC = aSftTTF.open( xRawFontData.get(), nFontSize1, nFaceNum );
         if( nRC != SF_OK )
             return;
-    
+
         int nGlyphs = GetTTGlyphCount( aSftTTF.get() );
         if( nGlyphs > 0 )
         {
@@ -1739,7 +1739,7 @@ void Os2SalGraphics::GetGlyphWidths( const ImplFontData* pFont,
                 rWidths.push_back( nCharWidth );
             }
         }
-    }    
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -1755,14 +1755,14 @@ SystemFontData Os2SalGraphics::GetSysFontData( int nFallbacklevel ) const
 
     if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
     if (nFallbacklevel < 0 ) nFallbacklevel = 0;
-    
+
     aSysFontData.nSize = sizeof( SystemFontData );
-    aSysFontData.hFont = mhFonts[nFallbacklevel]; 
+    aSysFontData.hFont = mhFonts[nFallbacklevel];
     aSysFontData.bFakeBold = false;
     aSysFontData.bFakeItalic = false;
     aSysFontData.bAntialias = true;
     aSysFontData.bVerticalCharacterType = false;
-        
+
     return aSysFontData;
 }
 

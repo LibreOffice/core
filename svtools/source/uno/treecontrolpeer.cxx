@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,10 +108,10 @@ public:
 
     sal_uInt32 insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,ULONG nPos=LIST_APPEND );
 
-    virtual void	RequestingChilds( SvLBoxEntry* pParent );
+    virtual void    RequestingChilds( SvLBoxEntry* pParent );
 
-    virtual BOOL	EditingEntry( SvLBoxEntry* pEntry, Selection& );
-    virtual BOOL	EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
+    virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& );
+    virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
 
     DECL_LINK( OnSelectionChangeHdl, UnoTreeListBoxImpl* );
     DECL_LINK( OnExpandingHdl, UnoTreeListBoxImpl* );
@@ -128,23 +128,23 @@ class SVT_DLLPUBLIC UnoTreeListItem : public SvLBoxItem
 public:
                     UnoTreeListItem( SvLBoxEntry* );
                     UnoTreeListItem();
-    virtual			~UnoTreeListItem();
-    virtual USHORT	IsA();
-    void			InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    OUString		GetText() const;
-    void 			SetText( const OUString& rText );
-    Image			GetImage() const;
-    void			SetImage( const Image& rImage );
-    OUString		GetGraphicURL() const;
-    void			SetGraphicURL( const OUString& rGraphicURL );
-    void			Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
-    SvLBoxItem* 	Create() const;
-    void 			Clone( SvLBoxItem* pSource );
+    virtual         ~UnoTreeListItem();
+    virtual USHORT  IsA();
+    void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
+    OUString        GetText() const;
+    void            SetText( const OUString& rText );
+    Image           GetImage() const;
+    void            SetImage( const Image& rImage );
+    OUString        GetGraphicURL() const;
+    void            SetGraphicURL( const OUString& rGraphicURL );
+    void            Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
+    SvLBoxItem*     Create() const;
+    void            Clone( SvLBoxItem* pSource );
 
 private:
-    OUString		maText;
-    OUString		maGraphicURL;
-    Image			maImage;
+    OUString        maText;
+    OUString        maGraphicURL;
+    Image           maImage;
 };
 
 // --------------------------------------------------------------------
@@ -338,7 +338,7 @@ bool TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
             if( pContextGraphicItem->msExpandedGraphicURL != pEntry->mxNode->getExpandedGraphicURL() )
             {
                 Image aImage;
-                if(	loadImage( pEntry->mxNode->getExpandedGraphicURL(), aImage ) )
+                if( loadImage( pEntry->mxNode->getExpandedGraphicURL(), aImage ) )
                 {
                     pContextGraphicItem->msExpandedGraphicURL = pEntry->mxNode->getExpandedGraphicURL();
                     mpTreeImpl->SetExpandedEntryBmp( pEntry, aImage );
@@ -348,7 +348,7 @@ bool TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
             if( pContextGraphicItem->msCollapsedGraphicURL != pEntry->mxNode->getCollapsedGraphicURL() )
             {
                 Image aImage;
-                if(	loadImage( pEntry->mxNode->getCollapsedGraphicURL(), aImage ) )
+                if( loadImage( pEntry->mxNode->getCollapsedGraphicURL(), aImage ) )
                 {
                     pContextGraphicItem->msCollapsedGraphicURL = pEntry->mxNode->getCollapsedGraphicURL();
                     mpTreeImpl->SetCollapsedEntryBmp( pEntry, aImage );
@@ -681,7 +681,7 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createSelectionEnumeration()
     ::vos::OGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
-    
+
     sal_uInt32 nSelectionCount = rTree.GetSelectionCount();
     std::list< Any > aSelection( nSelectionCount );
 
@@ -705,7 +705,7 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createReverseSelectionEnumer
     ::vos::OGuard aGuard( GetMutex() );
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
-    
+
     sal_uInt32 nSelectionCount = rTree.GetSelectionCount();
     std::list< Any > aSelection;
 
@@ -1105,7 +1105,7 @@ void TreeControlPeer::updateNode( UnoTreeListBoxImpl& rTree, const Reference< XT
             Reference< XTreeNode > xParentNode( xNode->getParent() );
             UnoTreeListEntry* pParentEntry = 0;
             ULONG nChild = LIST_APPEND;
-            
+
             if( xParentNode.is() )
             {
                 pParentEntry = getEntry( xParentNode  );
@@ -1345,11 +1345,11 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
                 SelectionMode eSelMode;
                 switch( eSelectionType )
                 {
-                case SelectionType_SINGLE:	eSelMode = SINGLE_SELECTION; break;
-                case SelectionType_RANGE:	eSelMode = RANGE_SELECTION; break;
-                case SelectionType_MULTI:	eSelMode = MULTIPLE_SELECTION; break;
-    //			case SelectionType_NONE:		
-                default:					eSelMode = NO_SELECTION; break;
+                case SelectionType_SINGLE:  eSelMode = SINGLE_SELECTION; break;
+                case SelectionType_RANGE:   eSelMode = RANGE_SELECTION; break;
+                case SelectionType_MULTI:   eSelMode = MULTIPLE_SELECTION; break;
+    //          case SelectionType_NONE:
+                default:                    eSelMode = NO_SELECTION; break;
                 }
                 if( rTree.GetSelectionMode() != eSelMode )
                     rTree.SetSelectionMode( eSelMode );
@@ -1357,7 +1357,7 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
             break;
         }
 
-        case BASEPROPERTY_TREE_DATAMODEL:			
+        case BASEPROPERTY_TREE_DATAMODEL:
             onChangeDataModel( rTree, Reference< XTreeDataModel >( aValue, UNO_QUERY ) );
             break;
         case BASEPROPERTY_TREE_ROWHEIGHT:
@@ -1437,11 +1437,11 @@ Any TreeControlPeer::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
             SelectionMode eSelMode = rTree.GetSelectionMode();
             switch( eSelMode )
             {
-            case SINGLE_SELECTION:	eSelectionType = SelectionType_SINGLE; break;
-            case RANGE_SELECTION:	eSelectionType = SelectionType_RANGE; break;
+            case SINGLE_SELECTION:  eSelectionType = SelectionType_SINGLE; break;
+            case RANGE_SELECTION:   eSelectionType = SelectionType_RANGE; break;
             case MULTIPLE_SELECTION:eSelectionType = SelectionType_MULTI; break;
-//			case NO_SELECTION:		
-            default:				eSelectionType = SelectionType_NONE; break;
+//          case NO_SELECTION:
+            default:                eSelectionType = SelectionType_NONE; break;
             }
             return Any( eSelectionType );
         }

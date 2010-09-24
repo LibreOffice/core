@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace rptui
     enum Action
     {
         Inserted = 1,
-        Removed	 = 2
+        Removed  = 2
     };
 
     /** Helper class to allow std::mem_fun for SAL_CALL
@@ -83,9 +83,9 @@ namespace rptui
             :m_xGroup(_xGroup)
         {
         }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >	getHeader() { return m_xGroup->getHeader(); }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >	getFooter() { return m_xGroup->getFooter(); }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >		getGroup() { return m_xGroup; }
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >   getHeader() { return m_xGroup->getHeader(); }
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >   getFooter() { return m_xGroup->getFooter(); }
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >     getGroup() { return m_xGroup; }
 
         inline ::sal_Bool getHeaderOn() { return m_xGroup->getHeaderOn(); }
         inline ::sal_Bool getFooterOn() { return m_xGroup->getFooterOn(); }
@@ -107,9 +107,9 @@ namespace rptui
         }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getReportHeader() { return m_xReport->getReportHeader(); }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getReportFooter() { return m_xReport->getReportFooter(); }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getPageHeader()	{ return m_xReport->getPageHeader(); }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getPageFooter()	{ return m_xReport->getPageFooter(); }
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getDetail()	    { return m_xReport->getDetail(); }
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getPageHeader()   { return m_xReport->getPageHeader(); }
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getPageFooter()   { return m_xReport->getPageFooter(); }
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getDetail()       { return m_xReport->getDetail(); }
 
         inline ::sal_Bool getReportHeaderOn() { return m_xReport->getReportHeaderOn(); }
         inline ::sal_Bool getReportFooterOn() { return m_xReport->getReportFooterOn(); }
@@ -139,18 +139,18 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC OCommentUndoAction : public SdrUndoAction
     {
     protected:
-        String					m_strComment; // undo, redo comment
-        ::dbaui::IController*	m_pController;
+        String                  m_strComment; // undo, redo comment
+        ::dbaui::IController*   m_pController;
 
     public:
         TYPEINFO();
-        OCommentUndoAction(	SdrModel& rMod
+        OCommentUndoAction( SdrModel& rMod
                             ,USHORT nCommentID);
         virtual ~OCommentUndoAction();
 
-        virtual UniString	GetComment() const { return m_strComment; }
-        virtual void		Undo();
-        virtual void		Redo();
+        virtual UniString   GetComment() const { return m_strComment; }
+        virtual void        Undo();
+        virtual void        Redo();
     };
     //==================================================================
     // OUndoContainerAction
@@ -163,12 +163,12 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         m_xElement;     // object not owned by the action
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                        m_xOwnElement;	// object owned by the action
+                        m_xOwnElement;  // object owned by the action
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
                         m_xContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
                         m_xSection;
-        Action			m_eAction;
+        Action          m_eAction;
 
     public:
         OUndoContainerAction(SdrModel& rMod
@@ -191,7 +191,7 @@ namespace rptui
     //==================================================================
     class REPORTDESIGN_DLLPUBLIC OUndoReportSectionAction : public OUndoContainerAction
     {
-        OReportHelper								m_aReportHelper;
+        OReportHelper                               m_aReportHelper;
         ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
                                     ,OReportHelper> m_pMemberFunction;
     public:
@@ -213,7 +213,7 @@ namespace rptui
     //==================================================================
     class REPORTDESIGN_DLLPUBLIC OUndoGroupSectionAction : public OUndoContainerAction
     {
-        OGroupHelper								m_aGroupHelper;
+        OGroupHelper                                m_aGroupHelper;
         ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
                                     ,OGroupHelper> m_pMemberFunction;
     public:
@@ -236,9 +236,9 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC ORptUndoPropertyAction: public OCommentUndoAction
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> m_xObj;
-        ::rtl::OUString						m_aPropertyName;
-        ::com::sun::star::uno::Any			m_aNewValue;
-        ::com::sun::star::uno::Any			m_aOldValue;
+        ::rtl::OUString                     m_aPropertyName;
+        ::com::sun::star::uno::Any          m_aNewValue;
+        ::com::sun::star::uno::Any          m_aOldValue;
 
         /** sets either the old value or the new value again at the property set.
          *
@@ -254,7 +254,7 @@ namespace rptui
         virtual void Undo();
         virtual void Redo();
 
-        virtual String			GetComment() const;
+        virtual String          GetComment() const;
     };
 
     //==================================================================
@@ -262,7 +262,7 @@ namespace rptui
     //==================================================================
     class REPORTDESIGN_DLLPUBLIC OUndoPropertyReportSectionAction : public ORptUndoPropertyAction
     {
-        OReportHelper								m_aReportHelper;
+        OReportHelper                               m_aReportHelper;
         ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
                                     ,OReportHelper> m_pMemberFunction;
     protected:
@@ -281,7 +281,7 @@ namespace rptui
     //==================================================================
     class REPORTDESIGN_DLLPUBLIC OUndoPropertyGroupSectionAction : public ORptUndoPropertyAction
     {
-        OGroupHelper								m_aGroupHelper;
+        OGroupHelper                                m_aGroupHelper;
         ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
                                     ,OGroupHelper> m_pMemberFunction;
     protected:

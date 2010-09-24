@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,9 +96,9 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     mnAction = rAction;
 
     // Liegt ein Objekt an der Position rPos?
-    SdrGrafObj*		pNewGrafObj = NULL;
-    SdrPageView*	pPV = GetSdrPageView();
-    SdrObject*		pPickObj = pObj;
+    SdrGrafObj*     pNewGrafObj = NULL;
+    SdrPageView*    pPV = GetSdrPageView();
+    SdrObject*      pPickObj = pObj;
 
     if(pPV && this->ISA(::sd::slidesorter::view::SlideSorterView))
     {
@@ -118,7 +118,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if( bIsGraphic || pObj->IsEmptyPresObj() )
         {
             if( IsUndoEnabled() )
-                BegUndo(String(SdResId(STR_INSERTGRAPHIC)));	
+                BegUndo(String(SdResId(STR_INSERTGRAPHIC)));
 
             SdPage* pPage = (SdPage*) pPickObj->GetPage();
 
@@ -206,10 +206,10 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         aPageSize.Width()  -= pPage->GetLftBorder() + pPage->GetRgtBorder();
         aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
         pNewGrafObj->AdjustToMaxRect( Rectangle( Point(), aPageSize ), TRUE );
-//		pNewGrafObj->AdjustToMaxRect( Rectangle( pPV->GetOffset(), aPageSize ), TRUE );
+//      pNewGrafObj->AdjustToMaxRect( Rectangle( pPV->GetOffset(), aPageSize ), TRUE );
 
-        ULONG	nOptions = SDRINSERT_SETDEFLAYER;
-        BOOL	bIsPresTarget = FALSE;
+        ULONG   nOptions = SDRINSERT_SETDEFLAYER;
+        BOOL    bIsPresTarget = FALSE;
 
         if ((mpViewSh
                 && mpViewSh->GetViewShell()!=NULL
@@ -290,9 +290,9 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
     SdrEndTextEdit();
     mnAction = rAction;
 
-    SdrMediaObj*	pNewMediaObj = NULL;
-    SdrPageView*	pPV = GetSdrPageView();
-    SdrObject*		pPickObj = GetEmptyPresentationObject( PRESOBJ_MEDIA );
+    SdrMediaObj*    pNewMediaObj = NULL;
+    SdrPageView*    pPV = GetSdrPageView();
+    SdrObject*      pPickObj = GetEmptyPresentationObject( PRESOBJ_MEDIA );
 
     if(pPV && this->ISA(::sd::slidesorter::view::SlideSorterView ))
     {
@@ -376,7 +376,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
     {
         String          aCurrentDropFile( *aIter );
         INetURLObject   aURL( aCurrentDropFile );
-        BOOL		    bOK = FALSE;
+        BOOL            bOK = FALSE;
 
         if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
@@ -386,7 +386,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
         }
 
         GraphicFilter*  pGraphicFilter = GraphicFilter::GetGraphicFilter();
-        Graphic			aGraphic;
+        Graphic         aGraphic;
 
         aCurrentDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
@@ -406,14 +406,14 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
             if( !bOK )
             {
                 const SfxFilter*        pFoundFilter = NULL;
-                SfxMedium	            aSfxMedium( aCurrentDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
-                ErrCode		            nErr = SFX_APP()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFoundFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
+                SfxMedium               aSfxMedium( aCurrentDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
+                ErrCode                 nErr = SFX_APP()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFoundFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
                 if( pFoundFilter && !nErr )
                 {
                     ::std::vector< String > aFilterVector;
-                    const String	        aFilterName( pFoundFilter->GetFilterName() );
-                    String	        		aLowerAsciiFileName( aCurrentDropFile );
+                    const String            aFilterName( pFoundFilter->GetFilterName() );
+                    String                  aLowerAsciiFileName( aCurrentDropFile );
                     aLowerAsciiFileName.ToLowerAscii();
 
                     FuInsertFile::GetSupportedFilterVector( aFilterVector );
@@ -486,7 +486,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                         {
                             // TODO/LEAN: VisualArea access can switch the object to running state
                             sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-                            
+
                             xPersist->storeOwn();
 
                             awt::Size aSz;
@@ -498,7 +498,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                             {
                                 // the default size will be set later
                             }
-                            
+
                             Size        aSize( aSz.Width, aSz.Height );
                             Rectangle   aRect;
 

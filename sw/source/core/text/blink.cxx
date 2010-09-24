@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,15 +32,15 @@
 #include <tools/debug.hxx>
 #include "viewsh.hxx"
 #include "rootfrm.hxx"  // GetOleShell()
-#include "txtfrm.hxx"	// FindRootFrm()
+#include "txtfrm.hxx"   // FindRootFrm()
 #include "blink.hxx"
 #include "porlin.hxx"
 #include "porlay.hxx"   // SwLineLayout
 
 // Sichtbare Zeit:
-#define BLINK_ON_TIME		2400L
+#define BLINK_ON_TIME       2400L
 // Nihct sichtbare Zeit:
-#define BLINK_OFF_TIME		800L
+#define BLINK_OFF_TIME      800L
 
 /*************************************************************************
  * pBlink zeigt auf die Instanz, bei der sich blinkende Portions anmelden

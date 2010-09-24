@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@ namespace abp
     //= OABSPilotUno
     //=====================================================================
     class OABSPilotUno;
-    typedef ::svt::OGenericUnoDialog								OABSPilotUno_DBase;
-    typedef ::cppu::ImplHelper1< ::com::sun::star::task::XJob >		OABSPilotUno_JBase;
-    typedef ::comphelper::OPropertyArrayUsageHelper< OABSPilotUno >	OABSPilotUno_PBase;
+    typedef ::svt::OGenericUnoDialog                                OABSPilotUno_DBase;
+    typedef ::cppu::ImplHelper1< ::com::sun::star::task::XJob >     OABSPilotUno_JBase;
+    typedef ::comphelper::OPropertyArrayUsageHelper< OABSPilotUno > OABSPilotUno_PBase;
     /// the UNO wrapper for the address book source pilot
     class OABSPilotUno
             :public OABSPilotUno_DBase
@@ -89,12 +89,12 @@ namespace abp
         using OABSPilotUno_DBase::execute;
     protected:
     // OGenericUnoDialog overridables
-        virtual Dialog*	createDialog(Window* _pParent);
+        virtual Dialog* createDialog(Window* _pParent);
         virtual void executedDialog(sal_Int16 _nExecutionResult);
     };
 
 //.........................................................................
-}	// namespace abp
+}   // namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABP_UNODIALOG_HXX

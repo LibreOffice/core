@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OAdabasTable::OAdabasTable(	sdbcx::OCollection* _pTables,
+OAdabasTable::OAdabasTable( sdbcx::OCollection* _pTables,
                            OAdabasConnection* _pConnection)
     :OTable_TYPEDEF(_pTables,_pConnection,sal_True)
     ,m_pConnection(_pConnection)
@@ -64,14 +64,14 @@ OAdabasTable::OAdabasTable(	sdbcx::OCollection* _pTables,
     construct();
 }
 // -------------------------------------------------------------------------
-OAdabasTable::OAdabasTable(	sdbcx::OCollection* _pTables,
+OAdabasTable::OAdabasTable( sdbcx::OCollection* _pTables,
                            OAdabasConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description ,
                     const ::rtl::OUString& _SchemaName,
                     const ::rtl::OUString& _CatalogName
-                ) : OTableHelper(	_pTables,
+                ) : OTableHelper(   _pTables,
                                     _pConnection,
                                     sal_True,
                                     _Name,
@@ -151,27 +151,27 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
             // first check the types
             sal_Int32 nOldType = 0,nNewType = 0,nOldPrec = 0,nNewPrec = 0,nOldScale = 0,nNewScale = 0;
 
-            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))			>>= nOldType;
-            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))	>>= nNewType;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))         >>= nOldType;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))    >>= nNewType;
             // and precsions and scale
-            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))	>>= nOldPrec;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))    >>= nOldPrec;
             descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))>>= nNewPrec;
-            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))		>>= nOldScale;
-            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))	>>= nNewScale;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))        >>= nOldScale;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))   >>= nNewScale;
 
             if(nOldType != nNewType || nOldPrec != nNewPrec || nOldScale != nNewScale)
                 alterColumnType(colName,descriptor);
 
             // second: check the "is nullable" value
             sal_Int32 nOldNullable = 0,nNewNullable = 0;
-            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))		>>= nOldNullable;
-            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))	>>= nNewNullable;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))       >>= nOldNullable;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))  >>= nNewNullable;
             if(nNewNullable != nOldNullable)
                 alterNotNullValue(nNewNullable,colName);
 
             // third: check the default values
             ::rtl::OUString sNewDefault,sOldDefault;
-            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))		>>= sOldDefault;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
             descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
 
             if(sOldDefault.getLength())

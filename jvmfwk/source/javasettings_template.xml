@@ -2,8 +2,8 @@
 
 <!--
 This file shows what elements the javasettings_platform.xml can contain.
-The children of javaInfo are only created when a JRE is selected. The children of 
-vmParameters are only created when parameters are added and the children of 
+The children of javaInfo are only created when a JRE is selected. The children of
+vmParameters are only created when parameters are added and the children of
 jreLocations are only created when the paths are added.
 See CNodeJava::loadFromSettings and CNodeJava::writeSettings for details.
 When extending the javavendors.xml then use the schema to verify it.

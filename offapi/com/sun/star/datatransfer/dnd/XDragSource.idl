@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,27 +53,27 @@ module com { module sun { module star { module datatransfer { module dnd {
 //=============================================================================
 /** This interface is implemented by a view or window that supports drag
     operations and will be received as part of a <type>DragGestureEvent</type>
-    through a <member scope="com::sun::star::datatransfer::dnd">XDragGestureListener::dragGestureRecognized()</member> 
+    through a <member scope="com::sun::star::datatransfer::dnd">XDragGestureListener::dragGestureRecognized()</member>
     callback.
 
     <p>Differently to Java, the association between view and interface is fixed
-    and can not be changed. Otherwise, the AWT messaging would have to be 
+    and can not be changed. Otherwise, the AWT messaging would have to be
     implemented for any window supporting Drag and Drop operations, which would
     be a real performance issue.</p>
 */
 
 published interface XDragSource: com::sun::star::uno::XInterface
 {
-  
+
     //-------------------------------------------------------------------------
     /** In order to query if drag image support is available.
 
-        @returns 
-        A boolean indicating whether or not drag image support is 
-        available on the underlying platform. 
+        @returns
+        A boolean indicating whether or not drag image support is
+        available on the underlying platform.
     */
-    
-    boolean isDragImageSupported(); 
+
+    boolean isDragImageSupported();
 
     //-------------------------------------------------------------------------
     /** To get the default cursor for a specified drag action.
@@ -81,24 +81,24 @@ published interface XDragSource: com::sun::star::uno::XInterface
         @param dragAction
         A drag action as specified in <type>DNDConstants</type>.
 
-        @returns 
+        @returns
         The default drag cursor for the specified drag action.
         <p>The returned value may be used as parameter for the method
         <member scope="com::sun::star::datatransfer::dnd">XDragSourceContext::setCursor()</member>.</p>
     */
-    
-    long getDefaultCursor( [in] byte dragAction ) 
+
+    long getDefaultCursor( [in] byte dragAction )
         raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
     /** Starts the drag operation.
 
-        <p>Note: this call does <em>not</em> block until the drag and drop 
+        <p>Note: this call does <em>not</em> block until the drag and drop
         operation ends. If the Drag and Drop system is unable to initiate
         a drag operation or if the user attempts to start a drag while an
         existing drag operation is still executing, the action fails immediately.
-        This is indicated by calling 
-        <member scope="com::sun::star::datatransfer::dnd">XDragSourceListener::dragDropEnd()</member> 
+        This is indicated by calling
+        <member scope="com::sun::star::datatransfer::dnd">XDragSourceListener::dragDropEnd()</member>
         on the parameter listener with a DragSourceDragEvent showing a failure.</p>
 
         @param trigger
@@ -113,22 +113,22 @@ published interface XDragSource: com::sun::star::uno::XInterface
 
         @param image
         The initial drag image id or 0 as default.
-        
+
         @param trans
         The transferable object dragged.
 
         @param listener
         The <type>XDragSourceListener</type>.
-            
-        @see com::sun::star::datatransfer::XTransferable	
+
+        @see com::sun::star::datatransfer::XTransferable
     */
-    
+
     [oneway] void startDrag(
         [in] DragGestureEvent trigger,
         [in] byte sourceActions,
-        [in] long cursor, 
+        [in] long cursor,
         [in] long image,
-        [in] com::sun::star::datatransfer::XTransferable trans,	
+        [in] com::sun::star::datatransfer::XTransferable trans,
         [in] XDragSourceListener listener );
 };
 

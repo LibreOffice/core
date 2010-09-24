@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ import com.sun.star.rdf.*;
  *
  * Actually, this is not a service, so we need to create a document and
  * go from there...
- * 
+ *
  * @author mst
  */
 public class DocumentMetadataAccessTest extends ComplexTestCase
@@ -563,7 +563,7 @@ public class DocumentMetadataAccessTest extends ComplexTestCase
             Statement xFoobar_FooBarFoo4 =
                 new Statement(foo, bar, foo, xFoobar4);
             assure("loadMetadataFromMedium (re-load)",
-                eq(xStmtsEnum, merge(manifestStmts4, merge(metadataStmts4, 
+                eq(xStmtsEnum, merge(manifestStmts4, merge(metadataStmts4,
                         new Statement[] { xFoobar_FooBarFoo4 }))));
 
             log.println("...done");
@@ -601,7 +601,7 @@ public class DocumentMetadataAccessTest extends ComplexTestCase
             xStmtsEnum = xRep.getStatements(null, null, null);
             XEnumeration xStmtsEnum2 = xRep2.getStatements(null, null, null);
             assure("load: repository differs",
-                eq(xStmtsEnum2, merge(manifestStmts5, merge(metadataStmts5, 
+                eq(xStmtsEnum2, merge(manifestStmts5, merge(metadataStmts5,
                         new Statement[] { xFoobar_FooBarFoo5 }))));
 
             log.println("...done");

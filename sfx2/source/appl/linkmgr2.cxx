@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -269,15 +269,15 @@ BOOL LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                 break;
         }
     }
-    
+
     return bRet;
 }
 
 
-void LinkManager::UpdateAllLinks( 
-    BOOL bAskUpdate, 
+void LinkManager::UpdateAllLinks(
+    BOOL bAskUpdate,
     BOOL /*bCallErrHdl*/,
-    BOOL bUpdateGrfLinks, 
+    BOOL bUpdateGrfLinks,
     Window* pParentWin )
 {
     SvStringsDtor aApps, aTopics, aItems;
@@ -312,7 +312,7 @@ void LinkManager::UpdateAllLinks(
             }
 
         if( USHRT_MAX == nFndPos )
-            continue;					// war noch nicht vorhanden!
+            continue;                   // war noch nicht vorhanden!
 
         // Graphic-Links noch nicht updaten
         if( !pLink->IsVisible() ||
@@ -323,8 +323,8 @@ void LinkManager::UpdateAllLinks(
         {
             int nRet = QueryBox( pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ) ).Execute();
             if( RET_YES != nRet )
-                return ;		// es soll nichts geupdatet werden
-            bAskUpdate = FALSE;		// einmal reicht
+                return ;        // es soll nichts geupdatet werden
+            bAskUpdate = FALSE;     // einmal reicht
         }
 
         pLink->Update();
@@ -425,8 +425,8 @@ void LinkManager::CancelTransfers()
         if( 0 != ( pLnk = &(*rLnks[ --n ])) &&
             OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & pLnk->GetObjType()) &&
             0 != ( pFileObj = (SvFileObject*)pLnk->GetObj() ) )
-//			0 != ( pFileObj = (SvFileObject*)SvFileObject::ClassFactory()->
-//									CastAndAddRef( pLnk->GetObj() )) )
+//          0 != ( pFileObj = (SvFileObject*)SvFileObject::ClassFactory()->
+//                                  CastAndAddRef( pLnk->GetObj() )) )
             pFileObj->CancelTransfers();
 }
 
@@ -442,7 +442,7 @@ ULONG LinkManager::RegisterStatusInfoId()
     if( !nFormat )
     {
 // wie sieht die neue Schnittstelle aus?
-//		nFormat = Exchange::RegisterFormatName( "StatusInfo vom SvxInternalLink" );
+//      nFormat = Exchange::RegisterFormatName( "StatusInfo vom SvxInternalLink" );
         nFormat = SotExchange::RegisterFormatName(
                     String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
                                 "StatusInfo vom SvxInternalLink" )));
@@ -521,7 +521,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         com::sun::star::lang::Locale aLocale;
         MsLangId::convertLanguageToLocale( LANGUAGE_SYSTEM, aLocale );
         CharClass aCC( aLocale );
-        
+
         String sNm( sTopic ), sTmp;
         aCC.toLower( sNm );
 
@@ -556,7 +556,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
 
             aCC.toLower( sTmp );
-            if( sTmp == sNmURL )		// die wollen wir haben
+            if( sTmp == sNmURL )        // die wollen wir haben
             {
                 pFndShell = pShell;
                 break;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,10 +65,10 @@ void cpp2uno_call(
     typelib_TypeDescription * pReturnTypeDescr = 0;
     if (pReturnTypeRef)
         TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    
+
     void * pUnoReturn = 0;
     void * pCppReturn = 0; // complex return ptr: if != 0 && != pUnoReturn, reconversion need
-    
+
     if (pReturnTypeDescr)
     {
         // xxx todo: test PolyStructy<STRUCT<long>> foo()
@@ -98,9 +98,9 @@ void cpp2uno_call(
     sal_Int32 * pTempIndizes = (sal_Int32 *)(pUnoArgs + (2 * nParams));
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
-    
+
     sal_Int32 nTempIndizes   = 0;
-    
+
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
@@ -157,7 +157,7 @@ void cpp2uno_call(
         }
         pCppStack += sizeof(sal_Int32); // standard parameter length
     }
-    
+
     // ExceptionHolder
     uno_Any aUnoExc; // Any will be constructed by callee
     uno_Any * pUnoExc = &aUnoExc;
@@ -165,7 +165,7 @@ void cpp2uno_call(
     // invoke uno dispatch call
     (*pThis->getUnoI()->pDispatcher)(
         pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
-    
+
     // in case an exception occured...
     if (pUnoExc)
     {
@@ -173,14 +173,14 @@ void cpp2uno_call(
         for ( ; nTempIndizes--; )
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
-            
+
             if (pParams[nIndex].bIn) // is in/inout => was constructed
                 uno_destructData( pUnoArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], 0 );
             TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
         }
         if (pReturnTypeDescr)
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
-        
+
         CPPU_CURRENT_NAMESPACE::raiseException(
             &aUnoExc, pThis->getBridge()->getUno2Cpp() );
             // has to destruct the any
@@ -192,7 +192,7 @@ void cpp2uno_call(
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
             typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
-            
+
             if (pParams[nIndex].bOut) // inout/out
             {
                 // convert and assign
@@ -202,7 +202,7 @@ void cpp2uno_call(
             }
             // destroy temp uno param
             uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 );
-            
+
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
         // return
@@ -235,7 +235,7 @@ extern "C" void cpp_vtable_call(
     void * pReturnValue )
 {
     OSL_ENSURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
-    
+
     // pCallStack: ret adr, [ret *], this, params
     void * pThis;
     if( nFunctionIndex & 0x80000000 )
@@ -253,11 +253,11 @@ extern "C" void cpp_vtable_call(
             pThis);
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "%p %p %p pThis=%p, pCppI=%p, function index=%d, vtable offset=%d\n", pCallStack[0], pCallStack[1], pCallStack[2], pThis, pCppI, nFunctionIndex, nVtableOffset );
-#endif    
+#endif
     typelib_InterfaceTypeDescription * pTypeDescr = pCppI->getTypeDescr();
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "name=%s\n", rtl::OUStringToOString(pTypeDescr->aBase.pTypeName, RTL_TEXTENCODING_UTF8).getStr() );
-#endif	
+#endif
     OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
@@ -265,7 +265,7 @@ extern "C" void cpp_vtable_call(
             rtl::OUString::createFromAscii("illegal vtable index!"),
             (XInterface *)pThis );
     }
-    
+
     // determine called method
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
     OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!" );
@@ -273,7 +273,7 @@ extern "C" void cpp_vtable_call(
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 #if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "calling %s\n", rtl::OUStringToOString(aMemberDescr.get()->pTypeName, RTL_TEXTENCODING_UTF8).getStr());
-#endif    
+#endif
     switch (aMemberDescr.get()->eTypeClass)
     {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
@@ -293,9 +293,9 @@ extern "C" void cpp_vtable_call(
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
                 ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
-            aParam.bIn		= sal_True;
-            aParam.bOut		= sal_False;
-            
+            aParam.bIn      = sal_True;
+            aParam.bOut     = sal_False;
+
             cpp2uno_call(
                 pCppI, aMemberDescr.get(),
                 0, // indicates void return
@@ -326,7 +326,7 @@ extern "C" void cpp_vtable_call(
                     pCppI->getBridge()->getCppEnv(),
                     (void **)&pInterface, pCppI->getOid().pData,
                     (typelib_InterfaceTypeDescription *)pTD );
-            
+
                 if (pInterface)
                 {
                     ::uno_any_construct(

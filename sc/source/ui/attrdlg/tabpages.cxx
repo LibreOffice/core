@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,31 +54,31 @@ static USHORT pProtectionRanges[] =
 // Zellschutz-Tabpage:
 //========================================================================
 
-ScTabPageProtection::ScTabPageProtection( Window*			pParent,
+ScTabPageProtection::ScTabPageProtection( Window*           pParent,
                                           const SfxItemSet& rCoreAttrs )
-    :	SfxTabPage			( pParent,
+    :   SfxTabPage          ( pParent,
                               ScResId( RID_SCPAGE_PROTECTION ),
                               rCoreAttrs ),
         //
         aFlProtect          ( this, ScResId( FL_PROTECTION      ) ),
-        aBtnHideCell		( this, ScResId( BTN_HIDE_ALL 		) ),
-        aBtnProtect 		( this, ScResId( BTN_PROTECTED		) ),
-        aBtnHideFormula 	( this, ScResId( BTN_HIDE_FORMULAR	) ),
-        aTxtHint			( this, ScResId( FT_HINT			) ),
+        aBtnHideCell        ( this, ScResId( BTN_HIDE_ALL       ) ),
+        aBtnProtect         ( this, ScResId( BTN_PROTECTED      ) ),
+        aBtnHideFormula     ( this, ScResId( BTN_HIDE_FORMULAR  ) ),
+        aTxtHint            ( this, ScResId( FT_HINT            ) ),
         aFlPrint            ( this, ScResId( FL_PRINT           ) ),
-        aBtnHidePrint		( this, ScResId( BTN_HIDE_PRINT		) ),
+        aBtnHidePrint       ( this, ScResId( BTN_HIDE_PRINT     ) ),
         aTxtHint2           ( this, ScResId( FT_HINT2           ) )
 {
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
-    //	States werden in Reset gesetzt
+    //  States werden in Reset gesetzt
     bTriEnabled = bDontCare = bProtect = bHideForm = bHideCell = bHidePrint = FALSE;
 
-    aBtnProtect.SetClickHdl(	 LINK( this, ScTabPageProtection, ButtonClickHdl ) );
-    aBtnHideCell.SetClickHdl(	 LINK( this, ScTabPageProtection, ButtonClickHdl ) );
+    aBtnProtect.SetClickHdl(     LINK( this, ScTabPageProtection, ButtonClickHdl ) );
+    aBtnHideCell.SetClickHdl(    LINK( this, ScTabPageProtection, ButtonClickHdl ) );
     aBtnHideFormula.SetClickHdl( LINK( this, ScTabPageProtection, ButtonClickHdl ) );
-    aBtnHidePrint.SetClickHdl(	 LINK( this, ScTabPageProtection, ButtonClickHdl ) );
+    aBtnHidePrint.SetClickHdl(   LINK( this, ScTabPageProtection, ButtonClickHdl ) );
 
     FreeResource();
 }
@@ -98,8 +98,8 @@ USHORT* __EXPORT ScTabPageProtection::GetRanges()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTabPageProtection::Create( Window*			pParent,
-                                                  const SfxItemSet&	rAttrSet )
+SfxTabPage* __EXPORT ScTabPageProtection::Create( Window*           pParent,
+                                                  const SfxItemSet& rAttrSet )
 {
     return ( new ScTabPageProtection( pParent, rAttrSet ) );
 }
@@ -108,7 +108,7 @@ SfxTabPage* __EXPORT ScTabPageProtection::Create( Window*			pParent,
 
 void __EXPORT ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
 {
-    //	Variablen initialisieren
+    //  Variablen initialisieren
 
     USHORT nWhich = GetWhich( SID_SCATTR_PROTECTION );
     const ScProtectionAttr* pProtAttr = NULL;
@@ -120,13 +120,13 @@ void __EXPORT ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
         pProtAttr = (const ScProtectionAttr*)&(rCoreAttrs.Get(nWhich));
     // bei SFX_ITEM_DONTCARE auf 0 lassen
 
-    bTriEnabled = ( pProtAttr == NULL );				// TriState, wenn DontCare
+    bTriEnabled = ( pProtAttr == NULL );                // TriState, wenn DontCare
     bDontCare = bTriEnabled;
     if (bTriEnabled)
     {
-        //	Defaults, die erscheinen wenn ein TriState weggeklickt wird:
-        //	(weil alles zusammen ein Attribut ist, kann auch nur alles zusammen
-        //	auf DontCare stehen - #38543#)
+        //  Defaults, die erscheinen wenn ein TriState weggeklickt wird:
+        //  (weil alles zusammen ein Attribut ist, kann auch nur alles zusammen
+        //  auf DontCare stehen - #38543#)
         bProtect = TRUE;
         bHideForm = bHideCell = bHidePrint = FALSE;
     }
@@ -138,12 +138,12 @@ void __EXPORT ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
         bHidePrint = pProtAttr->GetHidePrint();
     }
 
-    //	Controls initialisieren
+    //  Controls initialisieren
 
-    aBtnProtect		.EnableTriState( bTriEnabled );
-    aBtnHideCell	.EnableTriState( bTriEnabled );
-    aBtnHideFormula	.EnableTriState( bTriEnabled );
-    aBtnHidePrint	.EnableTriState( bTriEnabled );
+    aBtnProtect     .EnableTriState( bTriEnabled );
+    aBtnHideCell    .EnableTriState( bTriEnabled );
+    aBtnHideFormula .EnableTriState( bTriEnabled );
+    aBtnHidePrint   .EnableTriState( bTriEnabled );
 
     UpdateButtons();
 }
@@ -152,12 +152,12 @@ void __EXPORT ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
 
 BOOL __EXPORT ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
 {
-    BOOL 				bAttrsChanged	= FALSE;
-    USHORT				nWhich			= GetWhich( SID_SCATTR_PROTECTION );
-    const SfxPoolItem*	pOldItem		= GetOldItem( rCoreAttrs, SID_SCATTR_PROTECTION );
-    const SfxItemSet&	rOldSet			= GetItemSet();
-    SfxItemState		eItemState		= rOldSet.GetItemState( nWhich, FALSE );
-    ScProtectionAttr	aProtAttr;
+    BOOL                bAttrsChanged   = FALSE;
+    USHORT              nWhich          = GetWhich( SID_SCATTR_PROTECTION );
+    const SfxPoolItem*  pOldItem        = GetOldItem( rCoreAttrs, SID_SCATTR_PROTECTION );
+    const SfxItemSet&   rOldSet         = GetItemSet();
+    SfxItemState        eItemState      = rOldSet.GetItemState( nWhich, FALSE );
+    ScProtectionAttr    aProtAttr;
 
     if ( !bDontCare )
     {
@@ -167,7 +167,7 @@ BOOL __EXPORT ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
         aProtAttr.SetHidePrint( bHidePrint );
 
         if ( bTriEnabled )
-            bAttrsChanged = TRUE;					// DontCare -> richtiger Wert
+            bAttrsChanged = TRUE;                   // DontCare -> richtiger Wert
         else
             bAttrsChanged = !pOldItem || !( aProtAttr == *(const ScProtectionAttr*)pOldItem );
     }
@@ -198,11 +198,11 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
 {
     TriState eState = pBox->GetState();
     if ( eState == STATE_DONTKNOW )
-        bDontCare = TRUE;							// alles zusammen auf DontCare
+        bDontCare = TRUE;                           // alles zusammen auf DontCare
     else
     {
-        bDontCare = FALSE;							// DontCare ueberall aus
-        BOOL bOn = ( eState == STATE_CHECK );		// ausgewaehlter Wert
+        bDontCare = FALSE;                          // DontCare ueberall aus
+        BOOL bOn = ( eState == STATE_CHECK );       // ausgewaehlter Wert
 
         if ( pBox == &aBtnProtect )
             bProtect = bOn;
@@ -218,7 +218,7 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
         }
     }
 
-    UpdateButtons();		// TriState und Enable-Logik
+    UpdateButtons();        // TriState und Enable-Logik
 
     return 0;
 }

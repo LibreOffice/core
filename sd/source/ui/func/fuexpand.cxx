@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -194,7 +194,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                     // Title-Textobjekt erstellen
                     SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE);
-                    
+
 //
                     OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( (USHORT) nParaPos, 1);
                     pOutlinerParaObject->SetOutlinerMode(OUTLINERMODE_TITLEOBJECT);
@@ -233,13 +233,13 @@ void FuExpandPage::DoExecute( SfxRequest& )
 // --
                         SdrOutliner* pTempOutl = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, mpDoc );
                         pTempOutl->SetText( *pOPO );
-                        
+
                         ULONG nParaCount2 = pTempOutl->GetParagraphCount();
                         ULONG nPara;
                         for( nPara = 0; nPara < nParaCount2; nPara++ )
                         {
                             pTempOutl->SetDepth (
-                                pTempOutl->GetParagraph( nPara ), 
+                                pTempOutl->GetParagraph( nPara ),
                                 pTempOutl->GetDepth((USHORT) nPara ) - 1);
                         }
 

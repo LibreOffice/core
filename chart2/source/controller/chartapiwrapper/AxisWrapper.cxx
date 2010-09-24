@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,7 +144,7 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
-    
+
     rOutProperties.push_back(
         Property( C2U( "AutoMax" ),
                   PROP_AXIS_AUTO_MAX,
@@ -206,7 +206,7 @@ void lcl_AddPropertiesToVector(
                   PROP_AXIS_CROSSOVER_VALUE,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
-    
+
 
     rOutProperties.push_back(
         Property( C2U( "Origin" ),
@@ -242,7 +242,7 @@ void lcl_AddPropertiesToVector(
                   PROP_AXIS_MARK_POSITION,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisMarkPosition * >(0)),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
-    
+
 
     //Properties for labels:
     rOutProperties.push_back(
@@ -538,7 +538,7 @@ const Sequence< beans::Property >& AxisWrapper::getPropertySequence()
 const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
 {
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
-    
+
     aWrappedProperties.push_back( new WrappedTextRotationProperty() );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "Marks" ), C2U( "MajorTickmarks" ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "HelpMarks" ), C2U( "MinorTickmarks" ) ) );
@@ -568,10 +568,10 @@ const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
     }
 
     WrappedScaleProperty::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
-        
+
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
     WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
-    
+
     return aWrappedProperties;
 }
 

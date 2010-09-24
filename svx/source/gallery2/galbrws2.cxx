@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,10 +79,10 @@ GalleryBrowserMode GalleryBrowser2::meInitMode = GALLERYBROWSERMODE_ICON;
 class GalleryBackgroundPopup : public PopupMenu, public SfxControllerItem
 {
     const GalleryTheme* mpTheme;
-    ULONG				mnObjectPos;
+    ULONG               mnObjectPos;
 
-    virtual void		Select();
-    virtual void		StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void        Select();
+    virtual void        StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
 
 public:
 
@@ -93,9 +93,9 @@ public:
 // ------------------------------------------------------------------------
 
 GalleryBackgroundPopup::GalleryBackgroundPopup( const GalleryTheme* pTheme, ULONG nObjectPos ) :
-            SfxControllerItem	( SID_GALLERY_BG_BRUSH, SfxViewFrame::Current()->GetBindings() ),
-            mpTheme				( pTheme ),
-            mnObjectPos			( nObjectPos )
+            SfxControllerItem   ( SID_GALLERY_BG_BRUSH, SfxViewFrame::Current()->GetBindings() ),
+            mpTheme             ( pTheme ),
+            mnObjectPos         ( nObjectPos )
 {
     SfxViewFrame::Current()->GetBindings().Update( SID_GALLERY_BG_BRUSH );
     RemoveDisabledEntries();
@@ -113,8 +113,8 @@ void GalleryBackgroundPopup::StateChanged( USHORT nSID, SfxItemState eState, con
 {
     if ( ( nSID == SID_GALLERY_BG_BRUSH ) && pItem && ( eState != SFX_ITEM_DISABLED ) )
     {
-        SfxStringListItem*	pStrLstItem;
-        SfxStringItem*		pStrItem;
+        SfxStringListItem*  pStrLstItem;
+        SfxStringItem*      pStrItem;
 
         PopupMenu::Clear();
 
@@ -141,10 +141,10 @@ void GalleryBackgroundPopup::Select()
 {
     Menu::Select();
 
-    const INetURLObject	aURL( mpTheme->GetObjectURL( mnObjectPos ) );
-    const SvxBrushItem	aBrushItem( aURL.GetMainURL( INetURLObject::NO_DECODE ), String(), GPOS_TILED, SID_GALLERY_BG_BRUSH );
+    const INetURLObject aURL( mpTheme->GetObjectURL( mnObjectPos ) );
+    const SvxBrushItem  aBrushItem( aURL.GetMainURL( INetURLObject::NO_DECODE ), String(), GPOS_TILED, SID_GALLERY_BG_BRUSH );
     const SfxUInt16Item aPosItem( SID_GALLERY_BG_POS, GetCurItemId() - 1 );
-    const SfxStringItem	aPathItem( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    const SfxStringItem aPathItem( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( SID_GALLERY_BG_BRUSH,
                               SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
@@ -157,12 +157,12 @@ void GalleryBackgroundPopup::Select()
 
 class GalleryThemePopup : public PopupMenu, public SfxControllerItem
 {
-    GalleryBackgroundPopup	maBackgroundPopup;
-    const GalleryTheme*		mpTheme;
-    ULONG					mnObjectPos;
-    BOOL					mbPreview;
+    GalleryBackgroundPopup  maBackgroundPopup;
+    const GalleryTheme*     mpTheme;
+    ULONG                   mnObjectPos;
+    BOOL                    mbPreview;
 
-    virtual void			StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void            StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
 
 public:
 
@@ -173,16 +173,16 @@ public:
 // ------------------------------------------------------------------------
 
 GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectPos, BOOL bPreview ) :
-    PopupMenu			( GAL_RESID( RID_SVXMN_GALLERY2 ) ),
-    SfxControllerItem	( SID_GALLERY_ENABLE_ADDCOPY, SfxViewFrame::Current()->GetBindings() ),
-    maBackgroundPopup	( pTheme, nObjectPos ),
-    mpTheme				( pTheme ),
-    mnObjectPos			( nObjectPos ),
-    mbPreview			( bPreview )
+    PopupMenu           ( GAL_RESID( RID_SVXMN_GALLERY2 ) ),
+    SfxControllerItem   ( SID_GALLERY_ENABLE_ADDCOPY, SfxViewFrame::Current()->GetBindings() ),
+    maBackgroundPopup   ( pTheme, nObjectPos ),
+    mpTheme             ( pTheme ),
+    mnObjectPos         ( nObjectPos ),
+    mbPreview           ( bPreview )
 {
-    const SgaObjKind	eObjKind = mpTheme->GetObjectKind( mnObjectPos );
-    PopupMenu*			pAddMenu = GetPopupMenu( MN_ADDMENU );
-    SfxBindings&		rBindings = SfxViewFrame::Current()->GetBindings();
+    const SgaObjKind    eObjKind = mpTheme->GetObjectKind( mnObjectPos );
+    PopupMenu*          pAddMenu = GetPopupMenu( MN_ADDMENU );
+    SfxBindings&        rBindings = SfxViewFrame::Current()->GetBindings();
     INetURLObject       aURL;
 
     const_cast< GalleryTheme* >( mpTheme )->GetURL( mnObjectPos, aURL );
@@ -193,7 +193,7 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectP
 
     EnableItem( MN_ADDMENU, pAddMenu->IsItemEnabled( MN_ADD ) || pAddMenu->IsItemEnabled( MN_ADD_LINK ) );
     EnableItem( MN_PREVIEW, bValidURL );
-    
+
     CheckItem( MN_PREVIEW, mbPreview );
 
     if( mpTheme->IsReadOnly() || !mpTheme->GetObjectCount() )
@@ -203,7 +203,7 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectP
 
         if( mpTheme->IsReadOnly() )
             EnableItem( MN_PASTECLIPBOARD, FALSE );
-        
+
         if( !mpTheme->GetObjectCount() )
             EnableItem( MN_COPYCLIPBOARD, FALSE );
     }
@@ -218,8 +218,8 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectP
 #ifdef GALLERY_USE_CLIPBOARD
     if( IsItemEnabled( MN_PASTECLIPBOARD ) )
     {
-        TransferableDataHelper	aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( this ) );
-        BOOL					bEnable = FALSE;
+        TransferableDataHelper  aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( this ) );
+        BOOL                    bEnable = FALSE;
 
         if( aDataHelper.GetFormatCount() )
         {
@@ -267,10 +267,10 @@ void GalleryThemePopup::StateChanged( USHORT nSID, SfxItemState eState, const Sf
     if( ( nSID == SID_GALLERY_ENABLE_ADDCOPY ) && pItem && ( eState != SFX_ITEM_DISABLED ) )
     {
         SfxBoolItem*        pBoolItem = PTR_CAST( SfxBoolItem, pItem );
-        const SgaObjKind	eObjKind = mpTheme->GetObjectKind( mnObjectPos );
-        
+        const SgaObjKind    eObjKind = mpTheme->GetObjectKind( mnObjectPos );
+
         DBG_ASSERT( pBoolItem || pBoolItem == 0, "SfxBoolItem erwartet!");
-        
+
         GetPopupMenu( MN_ADDMENU )->EnableItem( MN_ADD, pBoolItem->GetValue() && ( eObjKind != SGA_OBJ_SOUND ) );
     }
 }
@@ -303,16 +303,16 @@ void GalleryToolBox::KeyInput( const KeyEvent& rKEvt )
 // -------------------
 
 GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, Gallery* pGallery ) :
-    Control				( pParent, rResId ),
-    mpGallery			( pGallery ),
-    mpCurTheme			( NULL ),
+    Control             ( pParent, rResId ),
+    mpGallery           ( pGallery ),
+    mpCurTheme          ( NULL ),
     mpIconView          ( new GalleryIconView( this, NULL ) ),
     mpListView          ( new GalleryListView( this, NULL ) ),
     mpPreview           ( new GalleryPreview( this, NULL ) ),
-    maViewBox           ( this ), 
+    maViewBox           ( this ),
     maSeparator         ( this, WB_VERT ),
-    maInfoBar			( this, WB_LEFT | WB_VCENTER ),
-    mnCurActionPos		( 0xffffffff ),
+    maInfoBar           ( this, WB_LEFT | WB_VCENTER ),
+    mnCurActionPos      ( 0xffffffff ),
     meMode              ( GALLERYBROWSERMODE_NONE ),
     meLastMode          ( GALLERYBROWSERMODE_NONE ),
     mbCurActionIsLinkage( FALSE )
@@ -322,7 +322,7 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     Font        aInfoFont( maInfoBar.GetControlFont() );
 
     maMiscOptions.AddListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
-    
+
     maViewBox.InsertItem( TBX_ID_ICON, aDummyImage );
     maViewBox.SetItemBits( TBX_ID_ICON, TIB_RADIOCHECK | TIB_AUTOCHECK );
     maViewBox.SetHelpId( TBX_ID_ICON, HID_GALLERY_ICONVIEW );
@@ -354,7 +354,7 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
 GalleryBrowser2::~GalleryBrowser2()
 {
     maMiscOptions.RemoveListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
-    
+
     delete mpPreview;
     delete mpListView;
     delete mpIconView;
@@ -372,7 +372,7 @@ void GalleryBrowser2::InitSettings()
     aInfoFont.SetWeight( WEIGHT_BOLD );
     aInfoFont.SetColor( GALLERY_FG_COLOR );
     maInfoBar.SetControlFont( aInfoFont );
-    
+
     maInfoBar.SetBackground( Wallpaper( GALLERY_DLG_COLOR ) );
     maInfoBar.SetControlBackground( GALLERY_DLG_COLOR );
 
@@ -399,18 +399,18 @@ void GalleryBrowser2::Resize()
 
     mpIconView->Hide();
     mpListView->Hide();
-    mpPreview->Hide(); 
+    mpPreview->Hide();
 
-    const Size	aOutSize( GetOutputSizePixel() );
+    const Size  aOutSize( GetOutputSizePixel() );
     const Size  aBoxSize( maViewBox.GetOutputSizePixel() );
     const long  nOffset = 2, nSepWidth = 2;
     const long  nInfoBarX = aBoxSize.Width() + ( nOffset * 3 ) + nSepWidth;
-    const Point	aPt( 0, aBoxSize.Height() + 3 );
-    const Size	aSz( aOutSize.Width(), aOutSize.Height() - aPt.Y() );
-    
+    const Point aPt( 0, aBoxSize.Height() + 3 );
+    const Size  aSz( aOutSize.Width(), aOutSize.Height() - aPt.Y() );
+
     maSeparator.SetPosSizePixel( Point( aBoxSize.Width() + nOffset, 0 ), Size( nSepWidth, aBoxSize.Height() ) );
     maInfoBar.SetPosSizePixel( Point( nInfoBarX, 0 ), Size( aOutSize.Width() - nInfoBarX, aBoxSize.Height() ) );
-    
+
     mpIconView->SetPosSizePixel( aPt, aSz );
     mpListView->SetPosSizePixel( aPt, aSz );
     mpPreview->SetPosSizePixel( aPt, aSz );
@@ -483,9 +483,9 @@ sal_Int8 GalleryBrowser2::ExecuteDrop( DropTargetHelper&, const ExecuteDropEvent
 
     if( mpCurTheme )
     {
-        Point		aSelPos;
+        Point       aSelPos;
         const ULONG nItemId = ImplGetSelectedItemId( &rEvt.maPosPixel, aSelPos );
-        const ULONG	nInsertPos = ( nItemId ? ( nItemId - 1 ) : LIST_APPEND );
+        const ULONG nInsertPos = ( nItemId ? ( nItemId - 1 ) : LIST_APPEND );
 
         if( mpCurTheme->IsDragging() )
             mpCurTheme->ChangeObjectPos( mpCurTheme->GetDragPos(), nInsertPos );
@@ -502,7 +502,7 @@ void GalleryBrowser2::StartDrag( Window*, const Point* pDragPoint )
 {
     if( mpCurTheme )
     {
-        Point		aSelPos;
+        Point       aSelPos;
         const ULONG nItemId = ImplGetSelectedItemId( pDragPoint, aSelPos );
 
         if( nItemId )
@@ -522,7 +522,7 @@ void GalleryBrowser2::TogglePreview( Window*, const Point* )
 
 void GalleryBrowser2::ShowContextMenu( Window*, const Point* pContextPoint )
 {
-    Point		aSelPos;
+    Point       aSelPos;
     const ULONG nItemId = ImplGetSelectedItemId( pContextPoint, aSelPos );
 
     if( mpCurTheme && nItemId && ( nItemId <= mpCurTheme->GetObjectCount() ) )
@@ -546,18 +546,18 @@ void GalleryBrowser2::ShowContextMenu( Window*, const Point* pContextPoint )
 
 BOOL GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 {
-    Point		aSelPos;
-    const ULONG	nItemId = ImplGetSelectedItemId( NULL, aSelPos );
+    Point       aSelPos;
+    const ULONG nItemId = ImplGetSelectedItemId( NULL, aSelPos );
     BOOL        bRet = static_cast< GalleryBrowser* >( GetParent() )->KeyInput( rKEvt, pWindow );
 
     if( !bRet && !maViewBox.HasFocus() && nItemId && mpCurTheme )
     {
         USHORT              nExecuteId = 0;
-        const SgaObjKind	eObjKind = mpCurTheme->GetObjectKind( nItemId - 1 );
+        const SgaObjKind    eObjKind = mpCurTheme->GetObjectKind( nItemId - 1 );
         INetURLObject       aURL;
 
         const_cast< GalleryTheme* >( mpCurTheme )->GetURL( nItemId - 1, aURL );
-        
+
         const BOOL  bValidURL = ( aURL.GetProtocol() != INET_PROT_NOT_VALID );
         BOOL        bPreview = bValidURL;
         BOOL        bAdd = bValidURL;
@@ -594,7 +594,7 @@ BOOL GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
                     nExecuteId = MN_ADD;
             }
             break;
-        
+
             case( KEY_DELETE ):
             case( KEY_D ):
             {
@@ -631,12 +631,12 @@ void GalleryBrowser2::SelectTheme( const String& rThemeName )
     delete mpIconView, mpIconView = NULL;
     delete mpListView, mpListView = NULL;
     delete mpPreview, mpPreview = NULL;
-    
+
     if( mpCurTheme )
         mpGallery->ReleaseTheme( mpCurTheme, *this );
 
     mpCurTheme = mpGallery->AcquireTheme( rThemeName, *this );
-    
+
     mpIconView = new GalleryIconView( this, mpCurTheme );
     mpListView = new GalleryListView( this, mpCurTheme );
     mpPreview = new GalleryPreview( this, mpCurTheme );
@@ -705,9 +705,9 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
             case( GALLERYBROWSERMODE_PREVIEW ):
             {
-                Graphic		aGraphic;
-                Point		aSelPos;
-                const ULONG	nItemId = ImplGetSelectedItemId( NULL, aSelPos );
+                Graphic     aGraphic;
+                Point       aSelPos;
+                const ULONG nItemId = ImplGetSelectedItemId( NULL, aSelPos );
 
                 if( nItemId )
                 {
@@ -718,7 +718,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
                     if( mpCurTheme )
                         mpCurTheme->GetGraphic( nPos, aGraphic );
-                    
+
                     mpPreview->SetGraphic( aGraphic );
                      mpPreview->Show();
 
@@ -764,7 +764,7 @@ void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
 {
     if( mpCurTheme )
     {
-        Point		aSelPos;
+        Point       aSelPos;
         const ULONG nItemId = ImplGetSelectedItemId( NULL, aSelPos );
 
         if( nItemId )
@@ -793,7 +793,7 @@ void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
 
                 if( GALLERYBROWSERMODE_PREVIEW == GetMode() )
                 {
-                    Graphic		aGraphic;
+                    Graphic     aGraphic;
                     const ULONG nPos = nNewItemId - 1;
 
                     mpCurTheme->GetGraphic( nPos, aGraphic );
@@ -815,7 +815,7 @@ void GalleryBrowser2::ImplUpdateViews( USHORT nSelectionId )
 {
     mpIconView->Hide();
     mpListView->Hide();
-    mpPreview->Hide(); 
+    mpPreview->Hide();
 
     mpIconView->Clear();
     mpListView->Clear();
@@ -852,7 +852,7 @@ void GalleryBrowser2::ImplUpdateInfoBar()
 
     if( mpCurTheme )
     {
-        Point		aSelPos;
+        Point       aSelPos;
         const ULONG nItemId = ImplGetSelectedItemId( NULL, aSelPos );
 
         if( nItemId )
@@ -883,11 +883,11 @@ ULONG GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& rSelP
 {
     const Size  aOutputSizePixel( GetOutputSizePixel() );
     ULONG       nRet = 0;
-    
+
     if( GALLERYBROWSERMODE_PREVIEW == GetMode() )
     {
         nRet = ( ( GALLERYBROWSERMODE_ICON == meLastMode ) ? mpIconView->GetSelectItemId() : ( mpListView->FirstSelectedRow() + 1 ) );
-            
+
         if( pSelPos )
             rSelPos = GetPointerPosPixel();
         else
@@ -922,7 +922,7 @@ ULONG GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& rSelP
 
     rSelPos.X() = Max( Min( rSelPos.X(), aOutputSizePixel.Width() - 1L ), 0L );
     rSelPos.Y() = Max( Min( rSelPos.Y(), aOutputSizePixel.Height() - 1L ), 0L );
-    
+
     if( nRet && ( !mpCurTheme || ( nRet > mpCurTheme->GetObjectCount() ) ) )
     {
         nRet = 0;
@@ -947,7 +947,7 @@ void GalleryBrowser2::ImplSelectItemId( ULONG nItemId )
 
 void GalleryBrowser2::ImplExecute( USHORT nId )
 {
-    Point		aSelPos;
+    Point       aSelPos;
     const ULONG nItemId = ImplGetSelectedItemId( NULL, aSelPos );
 
     if( mpCurTheme && nItemId )
@@ -962,7 +962,7 @@ void GalleryBrowser2::ImplExecute( USHORT nId )
                 sal_uInt32 nFormat = 0;
 
                 mbCurActionIsLinkage = ( MN_ADD_LINK == nId );
-        
+
                 switch( mpCurTheme->GetObjectKind( mnCurActionPos ) )
                 {
                     case( SGA_OBJ_BMP ):
@@ -984,7 +984,7 @@ void GalleryBrowser2::ImplExecute( USHORT nId )
                 }
 
                 const SfxUInt32Item aItem( SID_GALLERY_FORMATS, nFormat );
-                SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( 
+                SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
                     SID_GALLERY_FORMATS, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
             }
             break;
@@ -1010,7 +1010,7 @@ void GalleryBrowser2::ImplExecute( USHORT nId )
                 if( pObj )
                 {
                     const String    aOldTitle( GetItemText( *mpCurTheme, *pObj, GALLERY_ITEM_TITLE ) );
-                    //CHINA001 TitleDialog	    aDlg( this, aOldTitle );
+                    //CHINA001 TitleDialog      aDlg( this, aOldTitle );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
@@ -1031,7 +1031,7 @@ void GalleryBrowser2::ImplExecute( USHORT nId )
                         }
 
                         mpCurTheme->ReleaseObject( pObj );
-                        delete aDlg; //add CHINA001 
+                        delete aDlg; //add CHINA001
                     }
                 }
             }
@@ -1123,7 +1123,7 @@ String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject
         if( aPath.Len() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
             aRet += ')';
     }
-    
+
     return aRet;
 }
 
@@ -1151,10 +1151,10 @@ String GalleryBrowser2::GetFilterName() const
 
         if( ( SGA_OBJ_BMP == eObjKind ) || ( SGA_OBJ_ANIM == eObjKind ) )
         {
-            GraphicFilter*		pFilter = GraphicFilter::GetGraphicFilter();
-            INetURLObject		aURL; mpCurTheme->GetURL( mnCurActionPos, aURL );
-            sal_uInt16			nFilter = pFilter->GetImportFormatNumberForShortName( aURL.GetExtension() );
-            
+            GraphicFilter*      pFilter = GraphicFilter::GetGraphicFilter();
+            INetURLObject       aURL; mpCurTheme->GetURL( mnCurActionPos, aURL );
+            sal_uInt16          nFilter = pFilter->GetImportFormatNumberForShortName( aURL.GetExtension() );
+
             if( GRFILTER_FORMAT_DONTKNOW != nFilter )
                 aFilterName = pFilter->GetImportFormatName( nFilter );
         }
@@ -1170,7 +1170,7 @@ Graphic GalleryBrowser2::GetGraphic() const
     Graphic aGraphic;
 
     if( mpCurTheme && mnCurActionPos != 0xffffffff )
-        mpCurTheme->GetGraphic(	mnCurActionPos, aGraphic );
+        mpCurTheme->GetGraphic( mnCurActionPos, aGraphic );
 
     return aGraphic;
 }
@@ -1220,7 +1220,7 @@ IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox )
         SetMode( GALLERYBROWSERMODE_ICON );
     else if( pBox->GetCurItemId() == TBX_ID_LIST )
         SetMode( GALLERYBROWSERMODE_LIST );
-        
+
     return 0L;
 }
 
@@ -1229,24 +1229,24 @@ IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox )
 IMPL_LINK( GalleryBrowser2, MiscHdl, void*, EMPTYARG )
 {
     const sal_Bool  bHC = maViewBox.GetSettings().GetStyleSettings().GetHighContrastMode();
- 
+
     maViewBox.SetOutStyle( maMiscOptions.GetToolboxStyle() );
-    
+
     BitmapEx aIconBmpEx = BitmapEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_ICON_HC : RID_SVXIMG_GALLERY_VIEW_ICON ) ).GetBitmapEx() );
     BitmapEx aListBmpEx = BitmapEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_LIST_HC : RID_SVXIMG_GALLERY_VIEW_LIST ) ).GetBitmapEx() );
-    
+
     if( maMiscOptions.AreCurrentSymbolsLarge() )
     {
         const Size aLargeSize( 24, 24);
-    
+
         aIconBmpEx.Scale( aLargeSize );
         aListBmpEx.Scale( aLargeSize );
     }
-    
+
     maViewBox.SetItemImage( TBX_ID_ICON, aIconBmpEx );
     maViewBox.SetItemImage( TBX_ID_LIST, aListBmpEx );
     maViewBox.SetSizePixel( maViewBox.CalcWindowSizePixel() );
-    
+
     Resize();
 
     return 0L;

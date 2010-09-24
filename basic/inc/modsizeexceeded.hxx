@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ class ModuleSizeExceeded : public ::cppu::WeakImplHelper1< ::com::sun::star::tas
 {
     // C++ interface
     public:
-    ModuleSizeExceeded( const com::sun::star::uno::Sequence< ::rtl::OUString>& sModules ); 
+    ModuleSizeExceeded( const com::sun::star::uno::Sequence< ::rtl::OUString>& sModules );
 
     sal_Bool isAbort() const;
     sal_Bool isApprove() const;
@@ -54,7 +54,7 @@ class ModuleSizeExceeded : public ::cppu::WeakImplHelper1< ::com::sun::star::tas
     com::sun::star::uno::Any m_aRequest;
     com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation > > m_lContinuations;
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation > m_xAbort;
-    com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation> m_xApprove; 
+    com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation> m_xApprove;
 };
 
 #endif

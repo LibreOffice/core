@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,9 +30,9 @@
 
 /*************************************************************************
  *
- *	  ATTENTION
- *	  This file is intended to work inside and outside the StarOffice environment.
- *	  Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
+ *    ATTENTION
+ *    This file is intended to work inside and outside the StarOffice environment.
+ *    Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
  *
  ************************************************************************/
 #include <osl/endian.h>
@@ -61,7 +61,7 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_ULONG nUId )
     Write(comm_USHORT(SIReturn));
     Write(nRet);
     Write(nUId);
-    Write(comm_USHORT(PARAM_NONE));				// Typ der folgenden Parameter
+    Write(comm_USHORT(PARAM_NONE));             // Typ der folgenden Parameter
 }
 
 void CmdBaseStream::GenReturn (comm_USHORT nRet, SmartId *pUId, comm_ULONG nNr )
@@ -69,7 +69,7 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, SmartId *pUId, comm_ULONG nNr )
     Write(comm_USHORT(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_ULONG_1));			// Typ der folgenden Parameter
+    Write(comm_USHORT(PARAM_ULONG_1));          // Typ der folgenden Parameter
     Write(nNr);
 }
 
@@ -78,7 +78,7 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, SmartId *pUId, comm_String *pSt
     Write(comm_USHORT(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_STR_1));				// Typ der folgenden Parameter
+    Write(comm_USHORT(PARAM_STR_1));                // Typ der folgenden Parameter
     Write(pString);
 }
 
@@ -87,7 +87,7 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, SmartId *pUId, comm_BOOL bBool 
     Write(comm_USHORT(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_BOOL_1));			// Typ der folgenden Parameter
+    Write(comm_USHORT(PARAM_BOOL_1));           // Typ der folgenden Parameter
     Write(bBool);
 }
 
@@ -96,7 +96,7 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, SmartId *pUId, comm_ULONG nNr, 
     Write(comm_USHORT(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_ULONG_1|PARAM_STR_1|PARAM_BOOL_1));		// Typ der folgenden Parameter
+    Write(comm_USHORT(PARAM_ULONG_1|PARAM_STR_1|PARAM_BOOL_1));     // Typ der folgenden Parameter
     Write(nNr);
     Write(pString);
     Write(bBool);
@@ -108,7 +108,7 @@ void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMet
     Write(comm_USHORT(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_USHORT_1));		// Typ der folgenden Parameter
+    Write(comm_USHORT(PARAM_USHORT_1));     // Typ der folgenden Parameter
     Write(nMethod);
 }
 
@@ -117,7 +117,7 @@ void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMet
     Write(comm_USHORT(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_USHORT_1|PARAM_STR_1));		// Typ der folgenden Parameter
+    Write(comm_USHORT(PARAM_USHORT_1|PARAM_STR_1));     // Typ der folgenden Parameter
     Write(nMethod);
     Write(pString);
 }
@@ -127,7 +127,7 @@ void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMet
     Write(comm_USHORT(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_USHORT_1|PARAM_STR_1|PARAM_BOOL_1));		// Typ der folgenden Parameter
+    Write(comm_USHORT(PARAM_USHORT_1|PARAM_STR_1|PARAM_BOOL_1));        // Typ der folgenden Parameter
     Write(nMethod);
     Write(pString);
     Write(bBool);
@@ -138,7 +138,7 @@ void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMet
     Write(comm_USHORT(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_USHORT_1|PARAM_BOOL_1));		// Typ der folgenden Parameter
+    Write(comm_USHORT(PARAM_USHORT_1|PARAM_BOOL_1));        // Typ der folgenden Parameter
     Write(nMethod);
     Write(bBool);
 }
@@ -148,7 +148,7 @@ void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMet
     Write(comm_USHORT(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_USHORT(PARAM_USHORT_1|PARAM_ULONG_1));		// Typ der folgenden Parameter
+    Write(comm_USHORT(PARAM_USHORT_1|PARAM_ULONG_1));       // Typ der folgenden Parameter
     Write(nMethod);
     Write(nNr);
 }
@@ -184,7 +184,7 @@ void CmdBaseStream::Read (comm_UniChar* &aString, comm_USHORT &nLenInChars )
 #ifdef DBG_UTIL
     if (nId != BinString) DBG_ERROR1( "Falscher Typ im Stream: Erwartet String, gefunden :%hu", nId );
 #endif
-    
+
     *pCommStream >> nLenInChars;
 
     aString = new comm_UniChar [nLenInChars];
@@ -234,7 +234,7 @@ void CmdBaseStream::Write( const comm_UniChar* aString, comm_USHORT nLenInChars 
 
     comm_USHORT n;
 
-    // remove BiDi and zero-width-markers    0x200B - 0x200F 
+    // remove BiDi and zero-width-markers    0x200B - 0x200F
     // remove BiDi and paragraph-markers     0x2028 - 0x202E
 
     comm_UniChar* aNoBiDiString;
@@ -279,23 +279,23 @@ void CmdBaseStream::Write( comm_BOOL bBool )
 
 void CmdBaseStream::Read ( comm_String* &pString )
 {
-    (void) pString; /* avoid warning about unused parameter */ 
+    (void) pString; /* avoid warning about unused parameter */
     DBG_ERROR("Read ( comm_String* &pString ) Not Implemented");
 }
 void CmdBaseStream::Read ( SmartId* &pId )
-{ 
-    (void) pId; /* avoid warning about unused parameter */ 
+{
+    (void) pId; /* avoid warning about unused parameter */
     DBG_ERROR("Read ( SmartId* &pId ) Not Implemented");
 }
 
 void CmdBaseStream::Write( comm_String *pString )
 {
-    (void) pString; /* avoid warning about unused parameter */ 
+    (void) pString; /* avoid warning about unused parameter */
     DBG_ERROR("Write( comm_String *pString ) Not Implemented");
 }
 void CmdBaseStream::Write( SmartId* pId )
 {
-    (void) pId; /* avoid warning about unused parameter */ 
+    (void) pId; /* avoid warning about unused parameter */
     DBG_ERROR("Write( SmartId* pId ) Not Implemented");
 }
 

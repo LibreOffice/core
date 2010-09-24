@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace connectivity
     {
     protected:
         java::sql::ConnectionLog    m_aLogger;
-        java_sql_Connection*	    m_pConnection;
+        java_sql_Connection*        m_pConnection;
         sal_Int32                   m_nColumnCount;
 
         // statische Daten fuer die Klasse
@@ -51,7 +51,7 @@ namespace connectivity
         virtual ~java_sql_ResultSetMetaData();
     public:
         virtual jclass getMyClass() const;
-        
+
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rResultSetLogger, java_sql_Connection& _rCon  );
 

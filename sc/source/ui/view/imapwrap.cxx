@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ USHORT ScIMapChildWindowId()
 
 SvxIMapDlg* ScGetIMapDlg()
 {
-    //!	pass view frame here and in SVXIMAPDLG()
+    //! pass view frame here and in SVXIMAPDLG()
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if( pViewFrm && pViewFrm->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
@@ -66,7 +66,7 @@ const void* ScIMapDlgGetObj( SvxIMapDlg* pDlg )
         return NULL;
 }
 
-const ImageMap&	ScIMapDlgGetMap( SvxIMapDlg* pDlg )
+const ImageMap& ScIMapDlgGetMap( SvxIMapDlg* pDlg )
 {
     return pDlg->GetImageMap();
 }

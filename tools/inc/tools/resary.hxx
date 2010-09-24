@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@
 
 struct ImplResStringItem
 {
-    XubString	maStr;
-    long		mnValue;
+    XubString   maStr;
+    long        mnValue;
 
 //#if 0 // _SOLAR__PRIVATE
 #ifdef _TOOLS_RESARY_CXX
@@ -62,32 +62,32 @@ class TOOLS_DLLPUBLIC ResStringArray
     // ---------------------
     struct ImplResStringItem
     {
-        XubString	m_aStr;
-        long		m_nValue;
-        
+        XubString   m_aStr;
+        long        m_nValue;
+
         ImplResStringItem( const XubString& rStr, long nValue = 0 ) :
         m_aStr( rStr ),
         m_nValue( nValue )
         {}
     };
-    
+
     std::vector< ImplResStringItem >    m_aStrings;
-    
+
     public:
     ResStringArray( const ResId& rResId );
     ~ResStringArray();
-    
-    const XubString&	GetString( sal_uInt32 nIndex ) const
+
+    const XubString&    GetString( sal_uInt32 nIndex ) const
     { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_aStr : String::EmptyString(); }
-    long				GetValue( sal_uInt32 nIndex ) const
+    long                GetValue( sal_uInt32 nIndex ) const
     { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_nValue : -1; }
-    sal_uInt32			Count() const { return sal_uInt32(m_aStrings.size()); }
-    
-    sal_uInt32			FindIndex( long nValue ) const;
-    
+    sal_uInt32          Count() const { return sal_uInt32(m_aStrings.size()); }
+
+    sal_uInt32          FindIndex( long nValue ) const;
+
     private:
     ResStringArray( const ResStringArray& );
-    ResStringArray& 	operator=( const ResStringArray& );
+    ResStringArray&     operator=( const ResStringArray& );
 };
 
-#endif	// _TOOLS_RESARY_HXX
+#endif  // _TOOLS_RESARY_HXX

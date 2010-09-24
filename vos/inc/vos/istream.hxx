@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,10 @@
 #define _VOS_ISTREAM_HXX_
 
 #include "sal/types.h"
-#	include	<vos/types.hxx>
+#   include <vos/types.hxx>
 
 namespace vos
-{     
+{
 
 /** Interface for a stream of data, on that you can read and write blocks of bytes.
 */
@@ -42,15 +42,15 @@ public:
 
     IStream() { }
     virtual ~IStream() { }
-    
-    
+
+
     /** Retrieve n bytes from the stream and copy them into pBuffer.
         @param pBuffer receives the read data.
         @param n the number of bytes to read. pBuffer must be large enough
         to hold the n bytes!
         @return the number of read bytes
     */
-    virtual sal_Int32 SAL_CALL read(void* pBuffer, 
+    virtual sal_Int32 SAL_CALL read(void* pBuffer,
                          sal_uInt32 n) const= 0;
 
     /** Write n bytes from pBuffer to the stream.
@@ -58,16 +58,16 @@ public:
         @param n the number of bytes to write.
         @return the number of written bytes
     */
-    virtual sal_Int32 SAL_CALL write(const void* pBuffer, 
+    virtual sal_Int32 SAL_CALL write(const void* pBuffer,
                           sal_uInt32 n)= 0;
-    
+
     /** Checks if stream is closed for further reading.
         @return True is stream has ended (e.g. was closed).
     */
     virtual sal_Bool SAL_CALL isEof() const = 0;
 };
 
-}     
+}
 
-#endif	// _VOS_ISTREAM_HXX_
+#endif  // _VOS_ISTREAM_HXX_
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,12 +72,12 @@ public:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 protected:
 // OGenericUnoDialog overridables
-    virtual Dialog*	createDialog(Window* _pParent);
+    virtual Dialog* createDialog(Window* _pParent);
     virtual void executedDialog(sal_Int16 _nExecutionResult);
 };
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // DBAUI_DBTYPEWIZDLG_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,8 +28,8 @@
  * DataHandler.java
  *
  * take the data from the reader
- * and put it to the Writer 
- * 
+ * and put it to the Writer
+ *
  */
 
 package com.sun.star.tooling.converter;
@@ -37,17 +37,17 @@ package com.sun.star.tooling.converter;
 import java.util.*;
 
 /**
- * Handle the Data to get it from the Source 
- * readable to the Target 
- * 
+ * Handle the Data to get it from the Source
+ * readable to the Target
+ *
  * @author Christian Schmidt
  */
 public class DataHandler {
 
     /**
-     * An arrays that holds the names that will be 
+     * An arrays that holds the names that will be
      * keys for the HashMap containing the data
-     * 
+     *
      */
     private final String[]      dataNames = { "BlockNr", "Project",
             "SourceFile", "Dummy", "ResType", "GID", "LID", "HID", "Platform",
@@ -58,7 +58,7 @@ public class DataHandler {
     private static final String EMPTY     = new String("");
 
     /**
-     * The HashMap containing the data 
+     * The HashMap containing the data
      */
     private final Map           data      = new ExtMap(dataNames, null);
 
@@ -68,7 +68,7 @@ public class DataHandler {
 
     /**
      * fill the data from the desired source
-     * 
+     *
      * @param source where to get the data from
      * @return true if data is read and false if null is read
      * @throws IOException
@@ -81,20 +81,20 @@ public class DataHandler {
 
         line = source.getData();
         if (line == null){
-            
+
             return false;
-        }else{   
-        
+        }else{
+
             this.data.putAll(line);
             return true;
         }
-       
+
 
     }
 
     /**
      * fill this data with the inData
-     * 
+     *
      * @param inData the data to handle by this handler
      */
     public void fillDataWith(Map inData) {
@@ -109,7 +109,7 @@ public class DataHandler {
 
     /**
      * The designated output is filled with the content of this handler
-     * 
+     *
      * @param output an array of Maps [0] should hold the source language data [1] the target language data
      * @throws java.io.IOException
      */
@@ -127,7 +127,7 @@ public class DataHandler {
     }
     /**
      * The designated output is filled with the content of this handler
-     * 
+     *
      * @param output a Map that should hold the source language data and the target language data
      * @throws java.io.IOException
      */

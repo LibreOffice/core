@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class Constraint
 {
 public:
     virtual bool operator() (
-        const Container& rContainer, 
+        const Container& rContainer,
         const Container::iterator& rIterator) const = 0;
 };
 
@@ -61,10 +61,10 @@ public:
 
     ConstrainedIterator (void);
     ConstrainedIterator (
-        const Container& rContainer, 
+        const Container& rContainer,
         const Container::iterator& rIterator);
     ConstrainedIterator (
-        const Container& rContainer, 
+        const Container& rContainer,
         const Container::iterator& rIterator,
         const Constraint<Container>& pConstraint);
     ConstrainedIterator (

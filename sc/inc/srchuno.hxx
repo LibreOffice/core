@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,23 +44,23 @@ class ScCellSearchObj : public cppu::WeakImplHelper3<
                                 com::sun::star::lang::XServiceInfo >
 {
 private:
-    SfxItemPropertySet		aPropSet;
-    SvxSearchItem*			pSearchItem;
+    SfxItemPropertySet      aPropSet;
+    SvxSearchItem*          pSearchItem;
 
 public:
                             ScCellSearchObj();
-    virtual					~ScCellSearchObj();
+    virtual                 ~ScCellSearchObj();
 
-    SvxSearchItem*			GetSearchItem() const		{ return pSearchItem; }
+    SvxSearchItem*          GetSearchItem() const       { return pSearchItem; }
 
                             // XReplaceDescriptor
     virtual ::rtl::OUString SAL_CALL getReplaceString() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	setReplaceString( const ::rtl::OUString& aReplaceString )
+    virtual void SAL_CALL   setReplaceString( const ::rtl::OUString& aReplaceString )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XSearchDescriptor
     virtual ::rtl::OUString SAL_CALL getSearchString() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	setSearchString( const ::rtl::OUString& aString )
+    virtual void SAL_CALL   setSearchString( const ::rtl::OUString& aString )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // Search/Replace muss von aussen (vom XSearchable) gerufen werden...
@@ -69,7 +69,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -81,25 +81,25 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& xListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XPropertyChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::beans::XVetoableChangeListener >& aListener )
                                 throw(::com::sun::star::beans::UnknownPropertyException,

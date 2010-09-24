@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,21 +39,21 @@ class GridWindow : public ModalDialog
     // helper class for handles
     struct impHandle
     {
-        Point			maPos;
-        sal_uInt16		mnOffX;
-        sal_uInt16		mnOffY;
+        Point           maPos;
+        sal_uInt16      mnOffX;
+        sal_uInt16      mnOffY;
 
-        impHandle(const Point& rPos, sal_uInt16 nX, sal_uInt16 nY) 
-        :	maPos(rPos), mnOffX(nX), mnOffY(nY) 
+        impHandle(const Point& rPos, sal_uInt16 nX, sal_uInt16 nY)
+        :   maPos(rPos), mnOffX(nX), mnOffY(nY)
         {
         }
-        
-        bool operator<(const impHandle& rComp) const 
-        { 
-            return (maPos.X() < rComp.maPos.X()); 
+
+        bool operator<(const impHandle& rComp) const
+        {
+            return (maPos.X() < rComp.maPos.X());
         }
 
-        void draw(Window& rWin, const BitmapEx& rBitmapEx) 
+        void draw(Window& rWin, const BitmapEx& rBitmapEx)
         {
             const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
             rWin.DrawBitmapEx(maPos - aOffset, rBitmapEx);
@@ -67,39 +67,39 @@ class GridWindow : public ModalDialog
         }
     };
 
-    Rectangle		m_aGridArea;
+    Rectangle       m_aGridArea;
 
-    double 			m_fMinX;
-    double			m_fMinY;
-    double			m_fMaxX;
-    double			m_fMaxY;
+    double          m_fMinX;
+    double          m_fMinY;
+    double          m_fMaxX;
+    double          m_fMaxY;
 
-    double			m_fChunkX;
-    double			m_fMinChunkX;
-    double			m_fChunkY;
-    double			m_fMinChunkY;
+    double          m_fChunkX;
+    double          m_fMinChunkX;
+    double          m_fChunkY;
+    double          m_fMinChunkY;
 
-    double*			m_pXValues;
-    double*			m_pOrigYValues;
-    int				m_nValues;
-    double*			m_pNewYValues;
+    double*         m_pXValues;
+    double*         m_pOrigYValues;
+    int             m_nValues;
+    double*         m_pNewYValues;
 
-    sal_uInt16		m_BmOffX;
-    sal_uInt16		m_BmOffY;
+    sal_uInt16      m_BmOffX;
+    sal_uInt16      m_BmOffY;
 
-    BOOL			m_bCutValues;
+    BOOL            m_bCutValues;
 
     // stuff for handles
-    std::vector< impHandle >	m_aHandles;
-    sal_uInt32					m_nDragIndex;
+    std::vector< impHandle >    m_aHandles;
+    sal_uInt32                  m_nDragIndex;
 
-    BitmapEx 		m_aMarkerBitmap;
+    BitmapEx        m_aMarkerBitmap;
 
-    OKButton		m_aOKButton;
-    CancelButton	m_aCancelButton;
+    OKButton        m_aOKButton;
+    CancelButton    m_aCancelButton;
 
-    ListBox			m_aResetTypeBox;
-    PushButton		m_aResetButton;
+    ListBox         m_aResetTypeBox;
+    PushButton      m_aResetButton;
 
 
     Point transform( double x, double y );

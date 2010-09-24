@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ using namespace ::rtl;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 OUString SAL_CALL IndexEntrySupplier_ja_phonetic::getIndexCharacter( const OUString& rIndexEntry,
-    const lang::Locale& /*rLocale*/, const OUString& /*rSortAlgorithm*/ ) 
+    const lang::Locale& /*rLocale*/, const OUString& /*rSortAlgorithm*/ )
     throw (com::sun::star::uno::RuntimeException)
 {
     sal_Unicode ch=rIndexEntry.toChar();
@@ -53,13 +53,13 @@ OUString SAL_CALL IndexEntrySupplier_ja_phonetic::getIndexCharacter( const OUStr
 }
 
 OUString SAL_CALL IndexEntrySupplier_ja_phonetic::getIndexKey( const OUString& IndexEntry,
-    const OUString& PhoneticEntry, const lang::Locale& rLocale ) 
+    const OUString& PhoneticEntry, const lang::Locale& rLocale )
     throw (com::sun::star::uno::RuntimeException)
 {
     return getIndexCharacter( PhoneticEntry.getLength() > 0 ? PhoneticEntry : IndexEntry, rLocale, OUString());
 }
 
-sal_Int16 SAL_CALL IndexEntrySupplier_ja_phonetic::compareIndexEntry( 
+sal_Int16 SAL_CALL IndexEntrySupplier_ja_phonetic::compareIndexEntry(
     const OUString& IndexEntry1, const OUString& PhoneticEntry1, const lang::Locale& rLocale1,
     const OUString& IndexEntry2, const OUString& PhoneticEntry2, const lang::Locale& rLocale2 )
     throw (com::sun::star::uno::RuntimeException)
@@ -70,7 +70,7 @@ sal_Int16 SAL_CALL IndexEntrySupplier_ja_phonetic::compareIndexEntry(
 
     if (result == 0)
         return IndexEntrySupplier_Common::compareIndexEntry(
-                    IndexEntry1, PhoneticEntry1, rLocale1, 
+                    IndexEntry1, PhoneticEntry1, rLocale1,
                     IndexEntry2, PhoneticEntry2, rLocale2);
     return result;
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,17 +36,17 @@ DialogListBox::DialogListBox( Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle ),
     mpChild( 0 )
 {
-    mpVScrollBar	= new ScrollBar( this, WB_VSCROLL | WB_DRAG );
-    mpHScrollBar	= new ScrollBar( this, WB_HSCROLL | WB_DRAG );
-    mpScrollBarBox	= new ScrollBarBox( this );
+    mpVScrollBar    = new ScrollBar( this, WB_VSCROLL | WB_DRAG );
+    mpHScrollBar    = new ScrollBar( this, WB_HSCROLL | WB_DRAG );
+    mpScrollBarBox  = new ScrollBarBox( this );
 
     Link aLink( LINK( this, DialogListBox, ScrollBarHdl ) );
     mpVScrollBar->SetScrollHdl( aLink );
     mpHScrollBar->SetScrollHdl( aLink );
 
-    mbVScroll		= false;
-    mbHScroll		= false;
-    mbAutoHScroll	= ( nWinStyle & WB_AUTOHSCROLL ) ? true : false;
+    mbVScroll       = false;
+    mbHScroll       = false;
+    mbAutoHScroll   = ( nWinStyle & WB_AUTOHSCROLL ) ? true : false;
 }
 
 // -----------------------------------------------------------------------

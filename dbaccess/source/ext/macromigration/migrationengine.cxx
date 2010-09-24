@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1132,7 +1132,7 @@ namespace dbmm
     bool MigrationEngine_Impl::impl_handleDocument_nothrow( const SubDocument& _rDocument ) const
     {
         OSL_ENSURE( m_nCurrentDocumentID == -1,
-            "MigrationEngine_Impl::impl_handleDocument_nothrow: there already is a current document!"); 
+            "MigrationEngine_Impl::impl_handleDocument_nothrow: there already is a current document!");
         m_nCurrentDocumentID = m_rLogger.startedDocument( _rDocument.eType, _rDocument.sHierarchicalName );
 
         // start the progress

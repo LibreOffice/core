@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace internal {
 
 namespace {
 /** Little wrapper for HSL to RGB mapping.
-    
+
     This class implements the HSLColorAnimation interface,
     internally converting to RGB and forwarding to
     ColorAnimation.
@@ -61,7 +61,7 @@ public:
             mpAnimation,
             "HSLWrapper::HSLWrapper(): Invalid color animation delegate" );
     }
-    
+
     virtual void prefetch( const AnimatableShapeSharedPtr&,
                            const ShapeAttributeLayerSharedPtr& )
     {}
@@ -71,22 +71,22 @@ public:
     {
         mpAnimation->start( rShape, rAttrLayer );
     }
-    
+
     virtual void end()
     {
         mpAnimation->end();
     }
-    
+
     virtual bool operator()( const HSLColor& rColor )
     {
         return (*mpAnimation)( RGBColor( rColor ) );
     }
-    
+
     virtual HSLColor getUnderlyingValue() const
     {
         return HSLColor( mpAnimation->getUnderlyingValue() );
     }
-    
+
 private:
     ColorAnimationSharedPtr mpAnimation;
 };
@@ -96,39 +96,39 @@ private:
 AnimationActivitySharedPtr AnimationColorNode::createActivity() const
 {
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
-    
+
     switch( mxColorNode->getColorInterpolation() )
     {
     case animations::AnimationColorSpace::RGB:
         return ActivitiesFactory::createAnimateActivity(
             aParms,
-            AnimationFactory::createColorPropertyAnimation( 
+            AnimationFactory::createColorPropertyAnimation(
                 mxColorNode->getAttributeName(),
                 getShape(),
                 getContext().mpSubsettableShapeManager,
                 getSlideSize() ),
             getXAnimateNode() );
-        
+
     case animations::AnimationColorSpace::HSL:
         // Wrap a plain ColorAnimation with the HSL
         // wrapper, which implements the HSLColorAnimation
-        // interface, and internally converts HSL to RGB color 
+        // interface, and internally converts HSL to RGB color
         return ActivitiesFactory::createAnimateActivity(
             aParms,
             HSLColorAnimationSharedPtr(
                 new HSLWrapper(
-                    AnimationFactory::createColorPropertyAnimation( 
+                    AnimationFactory::createColorPropertyAnimation(
                         mxColorNode->getAttributeName(),
                         getShape(),
                         getContext().mpSubsettableShapeManager,
                         getSlideSize() ))),
             mxColorNode );
-        
+
     default:
         ENSURE_OR_THROW( false, "AnimationColorNode::createColorActivity(): "
                           "Unexpected color space" );
     }
-    
+
     return AnimationActivitySharedPtr();
 }
 

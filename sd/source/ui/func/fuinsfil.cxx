@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,9 +86,9 @@ namespace sd {
 
 TYPEINIT1( FuInsertFile, FuPoor );
 
-#define POOL_BUFFER_SIZE		(USHORT)32768
-#define BASIC_BUFFER_SIZE		(USHORT)8192
-#define DOCUMENT_BUFFER_SIZE	(USHORT)32768
+#define POOL_BUFFER_SIZE        (USHORT)32768
+#define BASIC_BUFFER_SIZE       (USHORT)8192
+#define DOCUMENT_BUFFER_SIZE    (USHORT)32768
 
 /*************************************************************************
 |*
@@ -98,10 +98,10 @@ TYPEINIT1( FuInsertFile, FuPoor );
 
 FuInsertFile::FuInsertFile (
     ViewShell*    pViewSh,
-    ::sd::Window*	   pWin,
-    ::sd::View*		   pView,
+    ::sd::Window*      pWin,
+    ::sd::View*        pView,
     SdDrawDocument* pDoc,
-    SfxRequest&	   rReq)
+    SfxRequest&    rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
 }
@@ -128,7 +128,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
         Reference< XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
         String aOwnCont;
         String aOtherCont;
-        const SfxFilter*	        pFilter = NULL;
+        const SfxFilter*            pFilter = NULL;
 
         aFileDialog.SetTitle( String( SdResId(STR_DLG_INSERT_PAGES_FROM_FILE ) ) );
 
@@ -270,12 +270,12 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
     mpDocSh->SetWaitCursor( TRUE );
 
-    SfxMedium*			pMedium = new SfxMedium( aFile, STREAM_READ | STREAM_NOCREATE, FALSE );
-    const SfxFilter*	pFilter = NULL;
-    
+    SfxMedium*          pMedium = new SfxMedium( aFile, STREAM_READ | STREAM_NOCREATE, FALSE );
+    const SfxFilter*    pFilter = NULL;
+
     SFX_APP()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
-    
-    BOOL				bDrawMode = mpViewShell && mpViewShell->ISA(DrawViewShell);
+
+    BOOL                bDrawMode = mpViewShell && mpViewShell->ISA(DrawViewShell);
     BOOL                bInserted = FALSE;
 
     if( pFilter )
@@ -513,11 +513,11 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         // was zeichnen muessen;
         // der globale Outliner koennte in SdPage::CreatePresObj
         // benutzt werden
-//		SfxItemPool* pPool = mpDoc->GetDrawOutliner().GetEmptyItemSet().GetPool();
+//      SfxItemPool* pPool = mpDoc->GetDrawOutliner().GetEmptyItemSet().GetPool();
         SdrOutliner* pOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
-//		pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)mpDoc->GetStyleSheetPool());
-//		pOutliner->SetEditTextObjectPool(pPool);
-//		pOutliner->SetForbiddenCharsTable( mpDoc->GetForbiddenCharsTable() );
+//      pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)mpDoc->GetStyleSheetPool());
+//      pOutliner->SetEditTextObjectPool(pPool);
+//      pOutliner->SetForbiddenCharsTable( mpDoc->GetForbiddenCharsTable() );
 
         // Referenz-Device setzen
         pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
@@ -635,9 +635,9 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     else if( aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND )
         nFormat = EE_FORMAT_HTML;
 
-    ::Outliner*	   pDocliner = static_cast<OutlineView*>(mpView)->GetOutliner();
-    List*		   pList	 = pDocliner->GetView(0)->CreateSelectionList();
-    Paragraph*	   pPara	 = (Paragraph*)pList->First();
+    ::Outliner*    pDocliner = static_cast<OutlineView*>(mpView)->GetOutliner();
+    List*          pList     = pDocliner->GetView(0)->CreateSelectionList();
+    Paragraph*     pPara     = (Paragraph*)pList->First();
 
     // wo soll eingefuegt werden?
     while( !pDocliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
@@ -775,14 +775,14 @@ BOOL FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
         pOutliner->SetParaInsertedHdl( Link(NULL, NULL));
         Link aOldParagraphRemovingHdl = pOutliner->GetParaRemovingHdl();
         pOutliner->SetParaRemovingHdl( Link(NULL, NULL));
-        Link aOldDepthChangedHdl	  = pOutliner->GetDepthChangedHdl();
+        Link aOldDepthChangedHdl      = pOutliner->GetDepthChangedHdl();
         pOutliner->SetDepthChangedHdl( Link(NULL, NULL));
-        Link aOldBeginMovingHdl 	  = pOutliner->GetBeginMovingHdl();
+        Link aOldBeginMovingHdl       = pOutliner->GetBeginMovingHdl();
         pOutliner->SetBeginMovingHdl( Link(NULL, NULL));
-        Link aOldEndMovingHdl		  = pOutliner->GetEndMovingHdl();
+        Link aOldEndMovingHdl         = pOutliner->GetEndMovingHdl();
         pOutliner->SetEndMovingHdl( Link(NULL, NULL));
 
-        Link aOldStatusEventHdl 	  = pOutliner->GetStatusEventHdl();
+        Link aOldStatusEventHdl       = pOutliner->GetStatusEventHdl();
         pOutliner->SetStatusEventHdl(Link(NULL, NULL));
 
         pOutliner->Clear();

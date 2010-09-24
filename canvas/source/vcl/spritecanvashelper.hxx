@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace vclcanvas
     public:
         SpriteCanvasHelper();
 
-        void init( const OutDevProviderSharedPtr& rOutDev, 
+        void init( const OutDevProviderSharedPtr& rOutDev,
                    SpriteCanvas&                  rOwningSpriteCanvas,
                    ::canvas::SpriteRedrawManager& rManager,
                    bool                           bProtect,
@@ -60,23 +60,23 @@ namespace vclcanvas
         void disposing();
 
         // XSpriteCanvas
-        ::com::sun::star::uno::Reference< 
-              ::com::sun::star::rendering::XAnimatedSprite > 		createSpriteFromAnimation( 
+        ::com::sun::star::uno::Reference<
+              ::com::sun::star::rendering::XAnimatedSprite >        createSpriteFromAnimation(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimation >& animation );
 
-        ::com::sun::star::uno::Reference< 
-              ::com::sun::star::rendering::XAnimatedSprite > 		createSpriteFromBitmaps( 
-                const ::com::sun::star::uno::Sequence< 
-                      ::com::sun::star::uno::Reference< 
-                            ::com::sun::star::rendering::XBitmap > >& animationBitmaps, 
+        ::com::sun::star::uno::Reference<
+              ::com::sun::star::rendering::XAnimatedSprite >        createSpriteFromBitmaps(
+                const ::com::sun::star::uno::Sequence<
+                      ::com::sun::star::uno::Reference<
+                            ::com::sun::star::rendering::XBitmap > >& animationBitmaps,
                 sal_Int8                                              interpolationMode );
-    
-        ::com::sun::star::uno::Reference< 
-              ::com::sun::star::rendering::XCustomSprite > 		createCustomSprite( 
+
+        ::com::sun::star::uno::Reference<
+              ::com::sun::star::rendering::XCustomSprite >      createCustomSprite(
                 const ::com::sun::star::geometry::RealSize2D& spriteSize );
-    
-        ::com::sun::star::uno::Reference< 
-              ::com::sun::star::rendering::XSprite > 				createClonedSprite( 
+
+        ::com::sun::star::uno::Reference<
+              ::com::sun::star::rendering::XSprite >                createClonedSprite(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite >& original );
 
         /** Actually perform the screen update
@@ -90,7 +90,7 @@ namespace vclcanvas
             yes, we're performing a full update, anyway)
          */
         sal_Bool updateScreen( sal_Bool bUpdateAll,
-                               bool&	io_bSurfaceDirty );
+                               bool&    io_bSurfaceDirty );
 
         // SpriteRedrawManager functor calls
         // -------------------------------------------------
@@ -115,9 +115,9 @@ namespace vclcanvas
             All info necessary, should rMoveStart be partially or
             fully outside the outdev
          */
-        void scrollUpdate( const ::basegfx::B2DRange& 							rMoveStart, 
-                           const ::basegfx::B2DRange& 							rMoveEnd,
-                           const ::canvas::SpriteRedrawManager::UpdateArea& 	rUpdateArea );
+        void scrollUpdate( const ::basegfx::B2DRange&                           rMoveStart,
+                           const ::basegfx::B2DRange&                           rMoveEnd,
+                           const ::canvas::SpriteRedrawManager::UpdateArea&     rUpdateArea );
 
         void opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
                            const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
@@ -125,22 +125,22 @@ namespace vclcanvas
         void genericUpdate( const ::basegfx::B2DRange&                          rTotalArea,
                             const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
 
-        ::com::sun::star::uno::Any isUnsafeScrolling() const 
-        { 
-            return ::com::sun::star::uno::makeAny(mbIsUnsafeScrolling); 
+        ::com::sun::star::uno::Any isUnsafeScrolling() const
+        {
+            return ::com::sun::star::uno::makeAny(mbIsUnsafeScrolling);
         }
-        void enableUnsafeScrolling( const ::com::sun::star::uno::Any& rAny ) 
-        { 
-            mbIsUnsafeScrolling = rAny.get<bool>(); 
+        void enableUnsafeScrolling( const ::com::sun::star::uno::Any& rAny )
+        {
+            mbIsUnsafeScrolling = rAny.get<bool>();
         }
 
         ::com::sun::star::uno::Any isSpriteBounds() const
-        { 
-            return ::com::sun::star::uno::makeAny(mbShowSpriteBounds); 
+        {
+            return ::com::sun::star::uno::makeAny(mbShowSpriteBounds);
         }
         void enableSpriteBounds( const ::com::sun::star::uno::Any& rAny )
-        { 
-            mbShowSpriteBounds = rAny.get<bool>(); 
+        {
+            mbShowSpriteBounds = rAny.get<bool>();
         }
 
     private:
@@ -149,7 +149,7 @@ namespace vclcanvas
         void renderMemUsage( OutputDevice& rOutDev );
 
         /// Set from the SpriteCanvas: instance coordinating sprite redraw
-        ::canvas::SpriteRedrawManager*					mpRedrawManager;
+        ::canvas::SpriteRedrawManager*                  mpRedrawManager;
 
         /// Set from the init method. used to generate sprites
         SpriteCanvas*                                   mpOwningSpriteCanvas;
@@ -159,16 +159,16 @@ namespace vclcanvas
             Typically, sprites will be composited in the background,
             before pushing them to screen. This happens here.
          */
-        ::canvas::vcltools::VCLObject< VirtualDevice >	maVDev;
+        ::canvas::vcltools::VCLObject< VirtualDevice >  maVDev;
 
         /// For the frame counter timings
-        ::canvas::tools::ElapsedTime					maLastUpdate;
+        ::canvas::tools::ElapsedTime                    maLastUpdate;
 
         /// When true, canvas displays debug info on each frame
-        bool											mbShowFrameInfo;
+        bool                                            mbShowFrameInfo;
 
         /// When true, canvas creates all new sprites with red lines in the corners
-        bool											mbShowSpriteBounds;
+        bool                                            mbShowSpriteBounds;
 
         /// When true, canvas uses the scroll optimization (direct scrolls in front buffer)
         bool                                            mbIsUnsafeScrolling;

@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -27,14 +27,14 @@ namespace agg
 {
 
     //-------------------------------------------------------------conv_stroke
-    template<class VertexSource, class Markers=null_markers> 
-    struct conv_stroke : 
+    template<class VertexSource, class Markers=null_markers>
+    struct conv_stroke :
     public conv_adaptor_vcgen<VertexSource, vcgen_stroke, Markers>
     {
         typedef Markers marker_type;
         typedef conv_adaptor_vcgen<VertexSource, vcgen_stroke, Markers> base_type;
 
-        conv_stroke(VertexSource& vs) : 
+        conv_stroke(VertexSource& vs) :
             conv_adaptor_vcgen<VertexSource, vcgen_stroke, Markers>(vs)
         {
         }
@@ -63,7 +63,7 @@ namespace agg
 
     private:
        conv_stroke(const conv_stroke<VertexSource, Markers>&);
-       const conv_stroke<VertexSource, Markers>& 
+       const conv_stroke<VertexSource, Markers>&
            operator = (const conv_stroke<VertexSource, Markers>&);
 
     };

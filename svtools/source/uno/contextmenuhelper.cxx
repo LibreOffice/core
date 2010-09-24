@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <osl/conditn.hxx> 
+#include <osl/conditn.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vos/mutex.hxx>
@@ -52,7 +52,7 @@
 #include <toolkit/unohlp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
- 
+
 using namespace ::com::sun::star;
 
 namespace svt
@@ -74,13 +74,13 @@ class StateEventHelper : public ::com::sun::star::frame::XStatusListener,
         virtual uno::Any SAL_CALL queryInterface( const uno::Type& aType ) throw ( uno::RuntimeException);
         virtual void SAL_CALL acquire() throw ();
         virtual void SAL_CALL release() throw ();
- 
+
         // XEventListener
         virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( uno::RuntimeException );
-        
+
         // XStatusListener
         virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& Event) throw( uno::RuntimeException );
-     
+
     private:
         StateEventHelper();
         StateEventHelper( const StateEventHelper& );
@@ -90,7 +90,7 @@ class StateEventHelper : public ::com::sun::star::frame::XStatusListener,
         ::rtl::OUString                            m_aCommandURL;
         uno::Reference< frame::XDispatchProvider > m_xDispatchProvider;
         uno::Reference< util::XURLTransformer >    m_xURLTransformer;
-        osl::Condition                             m_aCondition;         
+        osl::Condition                             m_aCondition;
 };
 
 StateEventHelper::StateEventHelper(
@@ -112,13 +112,13 @@ uno::Any SAL_CALL StateEventHelper::queryInterface(
     const uno::Type& aType )
 throw ( uno::RuntimeException )
 {
-    uno::Any a = ::cppu::queryInterface( 
+    uno::Any a = ::cppu::queryInterface(
                 aType,
                 SAL_STATIC_CAST( XStatusListener*, this ));
-    
+
     if( a.hasValue() )
         return a;
-        
+
     return ::cppu::OWeakObject::queryInterface( aType );
 }
 
@@ -134,21 +134,21 @@ throw ()
     ::cppu::OWeakObject::release();
 }
 
-void SAL_CALL StateEventHelper::disposing( 
+void SAL_CALL StateEventHelper::disposing(
     const lang::EventObject& )
 throw ( uno::RuntimeException )
 {
-    vos::OGuard	aSolarGuard( Application::GetSolarMutex() );
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     m_xDispatchProvider.clear();
     m_xURLTransformer.clear();
     m_aCondition.set();
 }
 
-void SAL_CALL StateEventHelper::statusChanged( 
+void SAL_CALL StateEventHelper::statusChanged(
     const frame::FeatureStateEvent& Event )
 throw ( uno::RuntimeException )
 {
-    vos::OGuard	aSolarGuard( Application::GetSolarMutex() );
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     m_bCurrentCommandEnabled = Event.IsEnabled;
     m_aCondition.set();
 }
@@ -156,17 +156,17 @@ throw ( uno::RuntimeException )
 bool StateEventHelper::isCommandEnabled()
 {
     // Be sure that we cannot die during condition wait
-    uno::Reference< frame::XStatusListener > xSelf( 
+    uno::Reference< frame::XStatusListener > xSelf(
         SAL_STATIC_CAST( frame::XStatusListener*, this ));
-   
+
     uno::Reference< frame::XDispatch > xDispatch;
     util::URL                          aTargetURL;
     {
-        vos::OGuard	aSolarGuard( Application::GetSolarMutex() );
+        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
         if ( m_xDispatchProvider.is() && m_xURLTransformer.is() )
         {
             ::rtl::OUString aSelf( RTL_CONSTASCII_USTRINGPARAM( "_self" ));
-            
+
             aTargetURL.Complete = m_aCommandURL;
             m_xURLTransformer->parseStrict( aTargetURL );
 
@@ -192,7 +192,7 @@ bool StateEventHelper::isCommandEnabled()
             // add/remove ourself to retrieve status by callback
             xDispatch->addStatusListener( xSelf, aTargetURL );
             xDispatch->removeStatusListener( xSelf, aTargetURL );
-            
+
             // wait for anwser
             m_aCondition.wait();
         }
@@ -204,22 +204,22 @@ bool StateEventHelper::isCommandEnabled()
         {
         }
 
-        vos::OGuard	aSolarGuard( Application::GetSolarMutex() );
+        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
         bResult = m_bCurrentCommandEnabled;
     }
-    
+
     return bResult;
 }
 
 /*************************************************************************/
-    
+
 struct ExecuteInfo
 {
     uno::Reference< frame::XDispatch >    xDispatch;
     util::URL                             aTargetURL;
     uno::Sequence< beans::PropertyValue > aArgs;
 };
-    
+
 static const PopupMenu* lcl_FindPopupFromItemId( const PopupMenu* pPopupMenu, sal_uInt16 nItemId )
 {
     if ( pPopupMenu )
@@ -233,7 +233,7 @@ static const PopupMenu* lcl_FindPopupFromItemId( const PopupMenu* pPopupMenu, sa
             else
             {
                 const PopupMenu* pResult( 0 );
-                
+
                 const PopupMenu* pSubPopup = pPopupMenu->GetPopupMenu( i );
                 if ( pPopupMenu )
                     pResult = lcl_FindPopupFromItemId( pSubPopup, nItemId );
@@ -258,7 +258,7 @@ static ::rtl::OUString lcl_GetItemCommandRecursive( const PopupMenu* pPopupMenu,
 /*************************************************************************/
 
 ContextMenuHelper::ContextMenuHelper(
-    const uno::Reference< frame::XFrame >& xFrame, 
+    const uno::Reference< frame::XFrame >& xFrame,
     bool bAutoRefresh ) :
     m_xWeakFrame( xFrame ),
     m_aSelf( RTL_CONSTASCII_USTRINGPARAM( "_self" )),
@@ -271,25 +271,25 @@ ContextMenuHelper::~ContextMenuHelper()
 {
 }
 
-void 
-ContextMenuHelper::completeAndExecute( 
-    const Point& aPos, 
+void
+ContextMenuHelper::completeAndExecute(
+    const Point& aPos,
     PopupMenu& rPopupMenu )
 {
-    vos::OGuard	aSolarGuard( Application::GetSolarMutex() );
-    
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     associateUIConfigurationManagers();
     completeMenuProperties( &rPopupMenu );
     executePopupMenu( aPos, &rPopupMenu );
     resetAssociations();
 }
 
-void 
-ContextMenuHelper::completeAndExecute( 
-    const Point& aPos, 
+void
+ContextMenuHelper::completeAndExecute(
+    const Point& aPos,
     const uno::Reference< awt::XPopupMenu >& xPopupMenu )
 {
-    vos::OGuard	aSolarGuard( Application::GetSolarMutex() );
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
 
     VCLXMenu* pXMenu = VCLXMenu::GetImplementation( xPopupMenu );
     if ( pXMenu )
@@ -306,17 +306,17 @@ ContextMenuHelper::completeAndExecute(
     }
 }
 
-uno::Reference< awt::XPopupMenu > 
-ContextMenuHelper::create( 
+uno::Reference< awt::XPopupMenu >
+ContextMenuHelper::create(
     const ::rtl::OUString& /*aPopupMenuResourceId*/ )
 {
     // NOT IMPLEMENTED YET!
     return uno::Reference< awt::XPopupMenu >();
 }
 
-bool 
-ContextMenuHelper::createAndExecute( 
-    const Point& /*aPos*/, 
+bool
+ContextMenuHelper::createAndExecute(
+    const Point& /*aPos*/,
     const ::rtl::OUString& /*aPopupMenuResourceId*/ )
 {
     // NOT IMPLEMENTED YET!
@@ -325,8 +325,8 @@ ContextMenuHelper::createAndExecute(
 
 // private member
 
-void 
-ContextMenuHelper::executePopupMenu( 
+void
+ContextMenuHelper::executePopupMenu(
     const Point& rPos,
     PopupMenu* pMenu )
 {
@@ -353,19 +353,19 @@ ContextMenuHelper::executePopupMenu(
 }
 
 bool
-ContextMenuHelper::dispatchCommand( 
+ContextMenuHelper::dispatchCommand(
     const uno::Reference< ::frame::XFrame >& rFrame,
     const ::rtl::OUString& aCommandURL )
 {
     if ( !m_xURLTransformer.is() )
     {
-        m_xURLTransformer = uno::Reference< util::XURLTransformer >( 
+        m_xURLTransformer = uno::Reference< util::XURLTransformer >(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.util.URLTransformer" ))),
             uno::UNO_QUERY );
     }
-    
+
     util::URL aTargetURL;
     uno::Reference< frame::XDispatch > xDispatch;
     if ( m_xURLTransformer.is() )
@@ -373,7 +373,7 @@ ContextMenuHelper::dispatchCommand(
         aTargetURL.Complete = aCommandURL;
         m_xURLTransformer->parseStrict( aTargetURL );
 
-        uno::Reference< frame::XDispatchProvider > xDispatchProvider( 
+        uno::Reference< frame::XDispatchProvider > xDispatchProvider(
             rFrame, uno::UNO_QUERY );
         if ( xDispatchProvider.is() )
         {
@@ -433,9 +433,9 @@ ContextMenuHelper::associateUIConfigurationManagers()
                 uno::Reference< ui::XUIConfigurationManagerSupplier > xSupplier( xModel, uno::UNO_QUERY );
                 if ( xSupplier.is() )
                 {
-                    uno::Reference< ui::XUIConfigurationManager > xDocUICfgMgr( 
+                    uno::Reference< ui::XUIConfigurationManager > xDocUICfgMgr(
                         xSupplier->getUIConfigurationManager(), uno::UNO_QUERY );
-                    m_xDocImageMgr = uno::Reference< ui::XImageManager >( 
+                    m_xDocImageMgr = uno::Reference< ui::XImageManager >(
                         xDocUICfgMgr->getImageManager(), uno::UNO_QUERY );
                 }
             }
@@ -445,7 +445,7 @@ ContextMenuHelper::associateUIConfigurationManagers()
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.frame.ModuleManager" ))),
                 uno::UNO_QUERY );
-            
+
             uno::Reference< ui::XImageManager > xModuleImageManager;
             rtl::OUString                       aModuleId;
             if ( xModuleManager.is() )
@@ -460,11 +460,11 @@ ContextMenuHelper::associateUIConfigurationManagers()
                         uno::UNO_QUERY );
                 if ( xModuleCfgMgrSupplier.is() )
                 {
-                    uno::Reference< ui::XUIConfigurationManager > xUICfgMgr( 
+                    uno::Reference< ui::XUIConfigurationManager > xUICfgMgr(
                         xModuleCfgMgrSupplier->getUIConfigurationManager( aModuleId ));
                     if ( xUICfgMgr.is() )
                     {
-                        m_xModuleImageMgr = uno::Reference< ui::XImageManager >( 
+                        m_xModuleImageMgr = uno::Reference< ui::XImageManager >(
                             xUICfgMgr->getImageManager(), uno::UNO_QUERY );
                     }
                 }
@@ -502,8 +502,8 @@ ContextMenuHelper::associateUIConfigurationManagers()
     return true;
 }
 
-Image 
-ContextMenuHelper::getImageFromCommandURL( 
+Image
+ContextMenuHelper::getImageFromCommandURL(
     const ::rtl::OUString& aCmdURL,
     bool                   bHiContrast ) const
 {
@@ -512,11 +512,11 @@ ContextMenuHelper::getImageFromCommandURL(
                           ui::ImageType::SIZE_DEFAULT );
     if ( bHiContrast )
         nImageType |= ui::ImageType::COLOR_HIGHCONTRAST;
-    
+
     uno::Sequence< uno::Reference< graphic::XGraphic > > aGraphicSeq;
     uno::Sequence< ::rtl::OUString > aImageCmdSeq( 1 );
     aImageCmdSeq[0] = aCmdURL;
-    
+
     if ( m_xDocImageMgr.is() )
     {
         try
@@ -536,7 +536,7 @@ ContextMenuHelper::getImageFromCommandURL(
         {
         }
     }
-    
+
     if ( m_xModuleImageMgr.is() )
     {
         try
@@ -561,11 +561,11 @@ ContextMenuHelper::getImageFromCommandURL(
 }
 
 rtl::OUString
-ContextMenuHelper::getLabelFromCommandURL( 
+ContextMenuHelper::getLabelFromCommandURL(
     const ::rtl::OUString& aCmdURL ) const
 {
     ::rtl::OUString aLabel;
-    
+
     if ( m_xUICommandLabels.is() )
     {
         try
@@ -600,8 +600,8 @@ ContextMenuHelper::getLabelFromCommandURL(
     return aLabel;
 }
 
-void 
-ContextMenuHelper::completeMenuProperties( 
+void
+ContextMenuHelper::completeMenuProperties(
     Menu* pMenu )
 {
     // Retrieve some settings necessary to display complete context
@@ -609,21 +609,21 @@ ContextMenuHelper::completeMenuProperties(
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     bool  bShowMenuImages( rSettings.GetUseImagesInMenus() );
     bool  bIsHiContrast( rSettings.GetHighContrastMode() );
-    
+
     if ( pMenu )
     {
         uno::Reference< frame::XFrame > xFrame( m_xWeakFrame );
         uno::Reference< frame::XDispatchProvider > xDispatchProvider( xFrame, uno::UNO_QUERY );
-        
+
         if ( !m_xURLTransformer.is() )
         {
-            m_xURLTransformer = uno::Reference< util::XURLTransformer >( 
+            m_xURLTransformer = uno::Reference< util::XURLTransformer >(
                 ::comphelper::getProcessServiceFactory()->createInstance(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.util.URLTransformer" ))),
                 uno::UNO_QUERY );
         }
-        
+
         for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
         {
             sal_uInt16 nId        = pMenu->GetItemId( nPos );
@@ -633,7 +633,7 @@ ContextMenuHelper::completeMenuProperties(
             if ( pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
             {
                 ::rtl::OUString aCmdURL( pMenu->GetItemCommand( nId ));
-                
+
                 if ( bShowMenuImages )
                 {
                     Image aImage;
@@ -651,8 +651,8 @@ ContextMenuHelper::completeMenuProperties(
                 }
 
                 // Use helper to retrieve state of the command URL
-                StateEventHelper* pHelper = new StateEventHelper( 
-                                                    xDispatchProvider, 
+                StateEventHelper* pHelper = new StateEventHelper(
+                                                    xDispatchProvider,
                                                     m_xURLTransformer,
                                                     aCmdURL );
 
@@ -666,7 +666,7 @@ ContextMenuHelper::completeMenuProperties(
 
 IMPL_STATIC_LINK_NOINSTANCE( ContextMenuHelper, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
-    // Release solar mutex to prevent deadlocks with clipboard thread    
+    // Release solar mutex to prevent deadlocks with clipboard thread
     const sal_uInt32 nRef = Application::ReleaseSolarMutex();
     try
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ namespace dbaui
     struct OJoinExchangeData
     {
     public:
-        OTableWindowListBox*	pListBox;		// die ListBox innerhalb desselben (daraus kann man sich das TabWin und daraus den WinName besorgen)
-        SvLBoxEntry*			pEntry;			// der Eintrag, der gedraggt oder auf den gedroppt wurde
+        OTableWindowListBox*    pListBox;       // die ListBox innerhalb desselben (daraus kann man sich das TabWin und daraus den WinName besorgen)
+        SvLBoxEntry*            pEntry;         // der Eintrag, der gedraggt oder auf den gedroppt wurde
 
         OJoinExchangeData(OTableWindowListBox* pBox);
         OJoinExchangeData() : pListBox(NULL), pEntry(NULL) { }
@@ -60,38 +60,38 @@ namespace dbaui
         DECL_LINK( ScrollDownHdl, SvTreeListBox* );
         DECL_LINK( DropHdl, void* );
         DECL_LINK( LookForUiHdl, void* );
-        
-        Timer						m_aScrollTimer;
-        Point						m_aMousePos;
 
-        OTableWindow*				m_pTabWin;
-        ULONG						m_nDropEvent;
-        ULONG						m_nUiEvent;
-        OJoinDropData				m_aDropInfo;
+        Timer                       m_aScrollTimer;
+        Point                       m_aMousePos;
 
-        BOOL						m_bReallyScrolled : 1;
-        BOOL						m_bDragSource : 1;
+        OTableWindow*               m_pTabWin;
+        ULONG                       m_nDropEvent;
+        ULONG                       m_nUiEvent;
+        OJoinDropData               m_aDropInfo;
+
+        BOOL                        m_bReallyScrolled : 1;
+        BOOL                        m_bDragSource : 1;
 
     protected:
         virtual void LoseFocus();
         virtual void GetFocus();
-        virtual	void NotifyScrolled();
+        virtual void NotifyScrolled();
         virtual void NotifyEndScroll();
 
         virtual long PreNotify(NotifyEvent& rNEvt);
 
         virtual void dragFinished( );
-        
-        
+
+
 
     public:
         OTableWindowListBox(OTableWindow* pParent);
         virtual ~OTableWindowListBox();
 
         // DnD stuff
-        virtual void		StartDrag( sal_Int8 nAction, const Point& rPosPixel );
-        virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
-        virtual sal_Int8	ExecuteDrop( const ExecuteDropEvent& rEvt );
+        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
         // window
         virtual void Command(const CommandEvent& rEvt);

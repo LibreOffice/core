@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,10 +33,10 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//	----------------------------------------------------
-//	class IndexEntrySupplier
-//	----------------------------------------------------
-class IndexEntrySupplier : public cppu::WeakImplHelper2 
+//  ----------------------------------------------------
+//  class IndexEntrySupplier
+//  ----------------------------------------------------
+class IndexEntrySupplier : public cppu::WeakImplHelper2
 <
     com::sun::star::i18n::XExtendedIndexEntrySupplier,
     com::sun::star::lang::XServiceInfo
@@ -46,50 +46,50 @@ public:
     IndexEntrySupplier( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
 
     // Methods
-    virtual com::sun::star::uno::Sequence < com::sun::star::lang::Locale > SAL_CALL getLocaleList() 
+    virtual com::sun::star::uno::Sequence < com::sun::star::lang::Locale > SAL_CALL getLocaleList()
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual com::sun::star::uno::Sequence < rtl::OUString > SAL_CALL getAlgorithmList( 
+    virtual com::sun::star::uno::Sequence < rtl::OUString > SAL_CALL getAlgorithmList(
         const com::sun::star::lang::Locale& rLocale )
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL loadAlgorithm( 
+    virtual sal_Bool SAL_CALL loadAlgorithm(
         const com::sun::star::lang::Locale& rLocale,
-        const rtl::OUString& SortAlgorithm, sal_Int32 collatorOptions ) 
+        const rtl::OUString& SortAlgorithm, sal_Int32 collatorOptions )
         throw (com::sun::star::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL usePhoneticEntry(
-        const com::sun::star::lang::Locale& rLocale ) 
+        const com::sun::star::lang::Locale& rLocale )
         throw (com::sun::star::uno::RuntimeException);
 
     virtual rtl::OUString SAL_CALL getPhoneticCandidate( const rtl::OUString& IndexEntry,
-        const com::sun::star::lang::Locale& rLocale ) 
+        const com::sun::star::lang::Locale& rLocale )
         throw (com::sun::star::uno::RuntimeException);
 
     virtual rtl::OUString SAL_CALL getIndexKey( const rtl::OUString& IndexEntry,
-        const rtl::OUString& PhoneticEntry, const com::sun::star::lang::Locale& rLocale ) 
+        const rtl::OUString& PhoneticEntry, const com::sun::star::lang::Locale& rLocale )
         throw (com::sun::star::uno::RuntimeException);
 
     virtual sal_Int16 SAL_CALL compareIndexEntry( const rtl::OUString& IndexEntry1,
         const rtl::OUString& PhoneticEntry1, const com::sun::star::lang::Locale& rLocale1,
-        const rtl::OUString& IndexEntry2, const ::rtl::OUString& PhoneticEntry2, 
+        const rtl::OUString& IndexEntry2, const ::rtl::OUString& PhoneticEntry2,
         const com::sun::star::lang::Locale& rLocale2 )
         throw (com::sun::star::uno::RuntimeException);
 
     virtual rtl::OUString SAL_CALL getIndexCharacter( const rtl::OUString& IndexEntry,
-        const com::sun::star::lang::Locale& rLocale, const rtl::OUString& SortAlgorithm ) 
+        const com::sun::star::lang::Locale& rLocale, const rtl::OUString& SortAlgorithm )
         throw (com::sun::star::uno::RuntimeException);
 
     virtual rtl::OUString SAL_CALL getIndexFollowPageWord( sal_Bool MorePages,
-        const com::sun::star::lang::Locale& rLocale ) 
+        const com::sun::star::lang::Locale& rLocale )
         throw (com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName() 
+    virtual rtl::OUString SAL_CALL getImplementationName()
         throw( com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) 
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
         throw( com::sun::star::uno::RuntimeException );
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() 
+    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw( com::sun::star::uno::RuntimeException );
 
 private:
@@ -105,6 +105,6 @@ protected:
     rtl::OUString aSortAlgorithm;
 };
 
-} } } } 
+} } } }
 
 #endif

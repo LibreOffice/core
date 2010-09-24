@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,11 +76,6 @@ class DocxExport : public MSWordExportBase
     /// Footer counter.
     sal_Int32 m_nFooters;
 
-    /// Used to split the runs according to the bookmarks start and ends
-    typedef std::vector< ::sw::mark::IMark* > IMarkVector;
-    IMarkVector m_rSortedMarksStart;
-    IMarkVector m_rSortedMarksEnd;
-
     /// Exporter of the VML shapes.
     oox::vml::VMLExport *m_pVMLExport;
 
@@ -113,7 +108,7 @@ public:
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters( BYTE nHeadFootFlags,
-            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt );
+            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, BYTE nBreakCode );
 
     /// Write the field
     virtual void OutputField( const SwField* pFld, ww::eField eFldType,
@@ -121,7 +116,8 @@ public:
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );
-    
+    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark );
+
     virtual void DoComboBox(const rtl::OUString &rName,
                     const rtl::OUString &rHelp,
                     const rtl::OUString &ToolTip,
@@ -129,7 +125,7 @@ public:
                     com::sun::star::uno::Sequence<rtl::OUString> &rListItems);
 
     virtual void DoFormText(const SwInputField * pFld);
-    
+
     virtual ULONG ReplaceCr( BYTE nChar );
 
 protected:
@@ -138,7 +134,7 @@ protected:
 
     /// Output page/section breaks
     virtual void OutputPageSectionBreaks( const SwTxtNode& );
-    
+
     /// Output SwEndNode
     virtual void OutputEndNode( const SwEndNode& );
 
@@ -154,7 +150,7 @@ protected:
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum );
 
-    virtual void SectionBreaksAndFrames( const SwTxtNode& rNode ) {}
+    virtual void SectionBreaksAndFrames( const SwTxtNode& /*rNode*/ ) {}
 
     /// Get ready for a new section.
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
@@ -162,25 +158,8 @@ protected:
                                      const SwFmtPageDesc* pNewPgDescFmt = 0,
                                      const SwPageDesc* pNewPgDesc = 0 );
 
-    /// Get the next position in the text node to output
-    virtual xub_StrLen GetNextPos( SwAttrIter* pAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos );
-
-    /// Update the information for GetNextPos().
-    virtual void UpdatePosition( SwAttrIter* pAttrIter, xub_StrLen nAktPos, xub_StrLen nEnd );
-
 private:
-    /// Find the nearest bookmark from the current position.
-    ///
-    /// Returns false when there is no bookmark.
-    bool NearestBookmark( xub_StrLen& rNearest );
-    
-    void GetSortedBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos, 
-                xub_StrLen nLen );
-
-    bool GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt, xub_StrLen nEnd,
-            IMarkVector& rArr );
-
-    /// Setup pStyles and write styles.xml 
+    /// Setup pStyles and write styles.xml
     void InitStyles();
 
     /// Write footnotes.xml and endnotes.xml.

@@ -33,7 +33,7 @@ public class Test15 implements StorageTest {
         for ( int nInd = 0; nInd < 4; ++nInd, aStreamPrefix += "SubStorage" + nInd )
             if ( !testForPath( aStreamPrefix ) )
                 return false;
-        
+
         return true;
     }
 
@@ -52,7 +52,7 @@ public class Test15 implements StorageTest {
                 m_aTestHelper.Error( "No valid temporary file was created!" );
                 return false;
             }
-    
+
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
@@ -75,7 +75,7 @@ public class Test15 implements StorageTest {
                 m_aTestHelper.Message( "Optional interface XEncryptionProtectedSource is not implemented, feature can not be tested!" );
                 return true;
             }
-            
+
             String sPass1 = "12345";
             String sPass2 = "54321";
 
@@ -112,7 +112,7 @@ public class Test15 implements StorageTest {
             if ( !m_aTestHelper.WBToSubstrOfEncrH( xTempFileStorage, aSubStream4Path, "MediaType2", true, pBytes1, true, false ) )
                 return false;
 
-    
+
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempFileStorage,
                                                             "MediaType3",
@@ -152,7 +152,7 @@ public class Test15 implements StorageTest {
                 m_aTestHelper.Error( "XEncryptionProtectedSource is supported, but can not be retrieved!" );
                 return false;
             }
-            
+
             try {
                 xTempStorageEncryption.setEncryptionPassword( sPass2 );
             }
@@ -229,7 +229,7 @@ public class Test15 implements StorageTest {
                 m_aTestHelper.Error( "XEncryptionProtectedSource is supported, but can not be retrieved!" );
                 return false;
             }
-            
+
             try {
                 xTempStorageEncryption.setEncryptionPassword( sPass1 );
             }
@@ -262,7 +262,7 @@ public class Test15 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 
 }
 

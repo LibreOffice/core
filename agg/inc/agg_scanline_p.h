@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -25,11 +25,11 @@ namespace agg
 {
 
     //==============================================================scanline_p
-    // 
-    // This is a general purpose scaline container which supports the interface 
+    //
+    // This is a general purpose scaline container which supports the interface
     // used in the rasterizer::render(). See description of agg_scanline_u
     // for details.
-    // 
+    //
     //------------------------------------------------------------------------
     template<class T> class scanline_p
     {
@@ -88,7 +88,7 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<class T> 
+    template<class T>
     void scanline_p<T>::reset(int min_x, int max_x)
     {
         unsigned max_len = max_x - min_x + 3;
@@ -108,7 +108,7 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<class T> 
+    template<class T>
     void scanline_p<T>::reset_spans()
     {
         m_last_x    = 0x7FFFFFF0;
@@ -119,7 +119,7 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<class T> 
+    template<class T>
     void scanline_p<T>::add_cell(int x, unsigned cover)
     {
         *m_cover_ptr = (T)cover;
@@ -140,7 +140,7 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<class T> 
+    template<class T>
     void scanline_p<T>::add_cells(int x, unsigned len, const T* covers)
     {
         memcpy(m_cover_ptr, covers, len * sizeof(T));
@@ -161,11 +161,11 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<class T> 
+    template<class T>
     void scanline_p<T>::add_span(int x, unsigned len, unsigned cover)
     {
-        if(x == m_last_x+1 && 
-           m_cur_span->len < 0 && 
+        if(x == m_last_x+1 &&
+           m_cur_span->len < 0 &&
            cover == *m_cur_span->covers)
         {
             m_cur_span->len -= (int16)len;

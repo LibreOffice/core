@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,14 +45,14 @@ ScVbaDialogs::Item( const uno::Any &aItem ) throw (uno::RuntimeException)
     return uno::Any( aDialog );
 }
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaDialogs::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaDialogs") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 ScVbaDialogs::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

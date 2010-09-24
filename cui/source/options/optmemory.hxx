@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <vcl/fixed.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
-#define FOLDERWEBVIEW_DEFAULTFILE	"folder.so"
+#define FOLDERWEBVIEW_DEFAULTFILE   "folder.so"
 
 // class OfaMiscTabPage --------------------------------------------------
 
@@ -42,36 +42,36 @@ class OfaMemoryOptionsPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 private:
     FixedLine           aUndoBox;
-    FixedText			aUndoText;
-    NumericField		aUndoEdit;
+    FixedText           aUndoText;
+    NumericField        aUndoEdit;
 
     FixedLine           aGbGraphicCache;
-    FixedText			aFtGraphicCache;
-    NumericField		aNfGraphicCache;
+    FixedText           aFtGraphicCache;
+    NumericField        aNfGraphicCache;
     FixedText           aFtGraphicCacheUnit;
-    FixedText			aFtGraphicObjectCache;
-    NumericField		aNfGraphicObjectCache;
+    FixedText           aFtGraphicObjectCache;
+    NumericField        aNfGraphicObjectCache;
     FixedText           aFtGraphicObjectCacheUnit;
-    FixedText			aFtGraphicObjectTime;
-    TimeField			aTfGraphicObjectTime;
+    FixedText           aFtGraphicObjectTime;
+    TimeField           aTfGraphicObjectTime;
     FixedText           aFtGraphicObjectTimeUnit;
 
     FixedLine           aGbOLECache;
-    FixedText			aFtOLECache;
-    NumericField		aNfOLECache;
+    FixedText           aFtOLECache;
+    NumericField        aNfOLECache;
 
     FixedLine           aQuickLaunchFL;
     CheckBox            aQuickLaunchCB;
 
     DECL_LINK( GraphicCacheConfigHdl, NumericField* );
 
-    inline long			GetNfGraphicCacheVal( void ) const;					// returns # of Bytes
-    inline void			SetNfGraphicCacheVal( long nSizeInBytes );
+    inline long         GetNfGraphicCacheVal( void ) const;                 // returns # of Bytes
+    inline void         SetNfGraphicCacheVal( long nSizeInBytes );
 
-    long				GetNfGraphicObjectCacheVal( void ) const;			// returns # of Bytes
-    void				SetNfGraphicObjectCacheVal( long nSizeInBytes );
-    inline void			SetNfGraphicObjectCacheMax( long nSizeInBytes );
-    inline void			SetNfGraphicObjectCacheLast( long nSizeInBytes );
+    long                GetNfGraphicObjectCacheVal( void ) const;           // returns # of Bytes
+    void                SetNfGraphicObjectCacheVal( long nSizeInBytes );
+    inline void         SetNfGraphicObjectCacheMax( long nSizeInBytes );
+    inline void         SetNfGraphicObjectCacheLast( long nSizeInBytes );
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
 
@@ -79,10 +79,10 @@ public:
     OfaMemoryOptionsPage( Window* pParent, const SfxItemSet& rSet );
     ~OfaMemoryOptionsPage();
 
-    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
-    virtual	void 		Reset( const SfxItemSet& rSet );
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
 };
 
 

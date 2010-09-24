@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class ParagraphData
     friend class OutlinerParaObject;
 
 protected:
-    sal_Int16			nDepth;
+    sal_Int16           nDepth;
     sal_Int16           mnNumberingStartValue;
     sal_Bool            mbParaIsNumberingRestart;
 

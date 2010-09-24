@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,15 +49,15 @@ namespace dbtools
     void OCharsetMap::lateConstruct()
     {
         const rtl_TextEncoding eFirstEncoding = RTL_TEXTENCODING_DONTKNOW;
-        const rtl_TextEncoding eLastEncoding = 100;		// TODO: a define in rtl/textenc.h would be fine here ...
+        const rtl_TextEncoding eLastEncoding = 100;     // TODO: a define in rtl/textenc.h would be fine here ...
         OSL_ENSURE( 0 == eFirstEncoding, "OCharsetMap::OCharsetMap: somebody changed the numbers!" );
 
         rtl_TextEncodingInfo aInfo; aInfo.StructSize = sizeof( rtl_TextEncodingInfo );
         for ( rtl_TextEncoding eEncoding = eFirstEncoding; eEncoding < eLastEncoding; ++eEncoding )
         {
-            if	(	( RTL_TEXTENCODING_DONTKNOW == eEncoding )	// this is always allowed - it has the special meaning "system encoding"
-                ||	(	rtl_getTextEncodingInfo( eEncoding, &aInfo )
-                    &&	approveEncoding( eEncoding, aInfo )
+            if  (   ( RTL_TEXTENCODING_DONTKNOW == eEncoding )  // this is always allowed - it has the special meaning "system encoding"
+                ||  (   rtl_getTextEncodingInfo( eEncoding, &aInfo )
+                    &&  approveEncoding( eEncoding, aInfo )
                     )
                 )
             {
@@ -102,14 +102,14 @@ namespace dbtools
     }
 
     //-------------------------------------------------------------------------
-    OCharsetMap::CharsetIterator	OCharsetMap::find(const rtl_TextEncoding _eEncoding) const
+    OCharsetMap::CharsetIterator    OCharsetMap::find(const rtl_TextEncoding _eEncoding) const
     {
         ensureConstructed( );
         return CharsetIterator( this, m_aEncodings.find( _eEncoding ) );
     }
 
     //-------------------------------------------------------------------------
-    OCharsetMap::CharsetIterator	OCharsetMap::find(const ::rtl::OUString& _rIanaName, const IANA&) const
+    OCharsetMap::CharsetIterator    OCharsetMap::find(const ::rtl::OUString& _rIanaName, const IANA&) const
     {
         ensureConstructed( );
 
@@ -122,7 +122,7 @@ namespace dbtools
             eEncoding = rtl_getTextEncodingFromMimeCharset( sMimeByteString.getStr() );
 
             if ( RTL_TEXTENCODING_DONTKNOW == eEncoding )
-            {	// if we're here, the name is not empty, but unknown -> this is an invalid name
+            {   // if we're here, the name is not empty, but unknown -> this is an invalid name
                 return end();
             }
         }
@@ -193,7 +193,7 @@ namespace dbtools
         ::rtl::OUString sIanaName;
 
         if ( RTL_TEXTENCODING_DONTKNOW != eEncoding )
-        {	// it's not the virtual "system charset"
+        {   // it's not the virtual "system charset"
             const char* pIanaName = rtl_getMimeCharsetFromTextEncoding( eEncoding );
             OSL_ENSURE( pIanaName, "OCharsetMap::CharsetIterator: invalid mime name!" );
             if ( pIanaName )
@@ -203,7 +203,7 @@ namespace dbtools
     }
 
     //-------------------------------------------------------------------------
-    const OCharsetMap::CharsetIterator&	OCharsetMap::CharsetIterator::operator++()
+    const OCharsetMap::CharsetIterator& OCharsetMap::CharsetIterator::operator++()
     {
         OSL_ENSURE( m_aPos != m_pContainer->m_aEncodings.end(), "OCharsetMap::CharsetIterator::operator++ : invalid position!" );
         if ( m_aPos != m_pContainer->m_aEncodings.end())
@@ -212,7 +212,7 @@ namespace dbtools
     }
 
     //-------------------------------------------------------------------------
-    const OCharsetMap::CharsetIterator&	OCharsetMap::CharsetIterator::operator--()
+    const OCharsetMap::CharsetIterator& OCharsetMap::CharsetIterator::operator--()
     {
         OSL_ENSURE( m_aPos != m_pContainer->m_aEncodings.begin(), "OCharsetMap::CharsetIterator::operator-- : invalid position!" );
         if ( m_aPos != m_pContainer->m_aEncodings.begin() )
@@ -227,6 +227,6 @@ namespace dbtools
     }
 
 //.........................................................................
-}	// namespace dbtools
+}   // namespace dbtools
 //.........................................................................
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,12 +28,12 @@
 #ifndef __com_sun_star_accessibility_XAccessibleHyperlink_idl__
 #define __com_sun_star_accessibility_XAccessibleHyperlink_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessibleAction_idl__ 
-#include <com/sun/star/accessibility/XAccessibleAction.idl> 
-#endif 
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__ 
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl> 
-#endif 
+#ifndef __com_sun_star_accessibility_XAccessibleAction_idl__
+#include <com/sun/star/accessibility/XAccessibleAction.idl>
+#endif
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
 
 module com { module sun { module star { module accessibility {
 
@@ -49,7 +49,7 @@ module com { module sun { module star { module accessibility {
     <member>XAccessibleHyperlink::getAccessibleActionAnchor</member> and
     <member>XAccessibleHyperlink::getAccessibleActionObject</member>
     methods.</p>
-        
+
     <p>Furhtermore, the object that implements this interface has to be
     connected implicitely or explicitely with an object that implements the
     the <type>XAccessibleText</type> interface.  The
@@ -59,21 +59,21 @@ module com { module sun { module star { module accessibility {
 
     @since OOo 1.1.2
 */
-published interface XAccessibleHyperlink : 
+published interface XAccessibleHyperlink :
     ::com::sun::star::accessibility::XAccessibleAction
 {
     /** Returns an object that represents the link anchor, as appropriate
         for that link.
-        
+
         <p>For an HTML link for example, this method would return the string
         enclosed by the &lt&a href&gt; tag.</p>
-        
+
         @param nIndex
             This index identifies the anchor when, as in the case of an
             image map, there is more than one link represented by this
             object.  The valid maximal index can be determinded by calling
             the <member>XAccessibleAction::getActionCount</member> method.
-            
+
         @return
             If the index is not valid then an exception is thrown.
             Otherwise it returns an implementation dependent value.
@@ -83,16 +83,16 @@ published interface XAccessibleHyperlink :
 
     /** Returns an object that represents the link anchor, as appropriate
         for that link.
-        
+
         <p>For an HTML link for example, this method would return the URL of
         the &lt&a href&gt; tag.</p>
-        
+
         @param nIndex
             This index identifies the action object when, as in the case of
             an image map, there is more than one link represented by this
             object.  The valid maximal index can be determinded by calling
             the <member>XAccessibleAction::getActionCount</member> method.
-            
+
         @return
             If the index is not valid then an exception is thrown.
             Otherwise it returns an implementation dependent value.
@@ -102,10 +102,10 @@ published interface XAccessibleHyperlink :
 
     /** Returns the index at which the textual representation of the
         hyperlink (group) starts.
-        
+
         <p>The returned value relates to the <type>XAccessibleText</type>
         interface that ownes this hyperlink.</p>
-        
+
         @return
             The index relates to the text exposed by the
             <type>XAccessibleHypertext</type> interface.
@@ -114,10 +114,10 @@ published interface XAccessibleHyperlink :
 
     /** Returns the index at which the textual rerpesentation of the
         hyperlink (group) ends.
-        
+
         <p>The returned value relates to the <type>XAccessibleText</type>
         interface that ownes this hyperlink.</p>
-        
+
         @return
             The index relates to the text exposed by the
             <type>XAccessibleText</type> interface.
@@ -126,17 +126,17 @@ published interface XAccessibleHyperlink :
 
     /** Returns whether the document referenced by this links is
         still valid.
-        
+
         <p>This is a volatile state that may change without further warning
         like e.g. sending an appropriate event.</p>
-        
+
         @return
             Returns <TRUE/> if the referenced document is still valid and
             <FALSE/> otherwise.
     */
     boolean isValid ();
 };
-          
+
 }; }; }; };
 
 #endif

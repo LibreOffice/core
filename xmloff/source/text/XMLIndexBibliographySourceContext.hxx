@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
 } } }
-namespace rtl {	class OUString; }
+namespace rtl { class OUString; }
 
 
 /**
@@ -50,10 +50,10 @@ public:
     TYPEINFO();
 
     XMLIndexBibliographySourceContext(
-        SvXMLImport& rImport, 
+        SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName,
-        ::com::sun::star::uno::Reference< 
+        ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet);
 
     ~XMLIndexBibliographySourceContext();
@@ -61,15 +61,15 @@ public:
 protected:
 
     virtual void ProcessAttribute(
-        enum IndexSourceParamEnum eParam, 
+        enum IndexSourceParamEnum eParam,
         const ::rtl::OUString& rValue);
 
     virtual void EndElement();
 
-    virtual SvXMLImportContext* CreateChildContext( 
+    virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,10 +72,10 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* TODO: missing in OASIS spec */
     { XML_NAMESPACE_DRAW, XML_AUTO_GROW_WIDTH, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
-                                                 XML_AUTO_GROW_HEIGHT	), 0, 0 },
+                                                 XML_AUTO_GROW_HEIGHT   ), 0, 0 },
     { XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
-                                                 XML_AUTO_GROW_WIDTH	), 0, 0 },
+                                                 XML_AUTO_GROW_WIDTH    ), 0, 0 },
     { XML_NAMESPACE_DRAW, XML_FIT_TO_SIZE, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_TEXTAREA_VERTICAL_ALIGN, XML_ATACTION_COPY,
@@ -164,8 +164,8 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DR3D, XML_EDGE_ROUNDING, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-//	{ XML_NAMESPACE_DR3D, XML_EDGE_ROUNDING_MODE, XML_ATACTION_COPY,
-//	  	NO_PARAMS }, /* TODO: does not exist! */
+//  { XML_NAMESPACE_DR3D, XML_EDGE_ROUNDING_MODE, XML_ATACTION_COPY,
+//      NO_PARAMS }, /* TODO: does not exist! */
     { XML_NAMESPACE_DR3D, XML_BACK_SCALE, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DR3D, XML_DEPTH, XML_ATACTION_INCH2IN,
@@ -286,8 +286,8 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_WRAP, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-//	{ XML_NAMESPACE_STYLE, XML_WRAP_DYNAMIC_TRESHOLD, XML_ATACTION_COPY,
-//	  	NO_PARAMS }, /* new attribute */
+//  { XML_NAMESPACE_STYLE, XML_WRAP_DYNAMIC_TRESHOLD, XML_ATACTION_COPY,
+//      NO_PARAMS }, /* new attribute */
     { XML_NAMESPACE_STYLE, XML_NUMBER_WRAPPED_PARAGRAPHS, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_WRAP_CONTOUR, XML_ATACTION_COPY,
@@ -298,8 +298,8 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_FLOW_WITH_TEXT, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-//	{ XML_NAMESPACE_STYLE, XML_OVERFLOW_BEHAVIOR, XML_ATACTION_COPY,
-//	  	NO_PARAMS }, /* new attribute */
+//  { XML_NAMESPACE_STYLE, XML_OVERFLOW_BEHAVIOR, XML_ATACTION_COPY,
+//      NO_PARAMS }, /* new attribute */
     // --> OD 2005-05-12 #i49139# - rename attribute values of <style:mirror>:
     // horizontal-on-left-pages --> horizontal-on-even
     // horizontal-on-right-pages --> horizontal-on-odd
@@ -407,8 +407,8 @@ XMLTransformerActionInit aDrawingPagePropertyOOoAttrActionTable[] =
         NO_PARAMS  },
     { XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH, XML_ATACTION_INCH2IN, NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT, XML_ATACTION_INCH2IN, NO_PARAMS }, /* generated entry */
-//	{ XML_NAMESPACE_DRAW, XML_OPACITY_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF,
-//		NO_PARAMS  },
+//  { XML_NAMESPACE_DRAW, XML_OPACITY_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF,
+//      NO_PARAMS  },
 
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
@@ -578,8 +578,8 @@ XMLTransformerActionInit aTextPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_FONT_SIZE_REL_COMPLEX, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
-//	{ XML_NAMESPACE_STYLE, XML_SCRIPT_TYPE, XML_ATACTION_COPY,
-//	  	NO_PARAMS }, /* new attribute*/
+//  { XML_NAMESPACE_STYLE, XML_SCRIPT_TYPE, XML_ATACTION_COPY,
+//      NO_PARAMS }, /* new attribute*/
     { XML_NAMESPACE_FO, XML_LETTER_SPACING, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_FO, XML_LANGUAGE, XML_ATACTION_COPY,
@@ -622,7 +622,7 @@ XMLTransformerActionInit aTextPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_TEXT_BACKGROUND_COLOR, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_FO,
-                                                 XML_BACKGROUND_COLOR	), 0, 0 },
+                                                 XML_BACKGROUND_COLOR   ), 0, 0 },
     { XML_NAMESPACE_STYLE, XML_TEXT_COMBINE, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_TEXT_COMBINE_START_CHAR, XML_ATACTION_COPY,
@@ -749,8 +749,8 @@ XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_DRAW, XML_WRITING_MODE, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_STYLE,
                                                  XML_WRITING_MODE ), 0, 0 },
-//	{ XML_NAMESPACE_STYLE, XML_WRITING_MODE_AUTOMATIC, XML_ATACTION_COPY,
-//	  	NO_PARAMS }, /* new attribute */
+//  { XML_NAMESPACE_STYLE, XML_WRITING_MODE_AUTOMATIC, XML_ATACTION_COPY,
+//      NO_PARAMS }, /* new attribute */
     { XML_NAMESPACE_STYLE, XML_SNAP_TO_LAYOUT_GRID, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_PAGE_NUMBER, XML_ATACTION_COPY,
@@ -928,16 +928,16 @@ XMLTransformerActionInit aChartPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_CHART, XML_DEEP, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-//	{ XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_ATACTION_COPY,
-//	  	NO_PARAMS }, /* new attribute */
-//	{ XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_ATACTION_COPY,
-//	  	NO_PARAMS }, /* new attribute */
-//	{ XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_ATACTION_COPY,
-//	  	NO_PARAMS }, /* new attribute */
-//	{ XML_NAMESPACE_CHART, XML_SYMBOL_NAME, XML_ATACTION_COPY,
-//	  	NO_PARAMS }, /* new attribute */
-//	{ XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_ATACTION_COPY,
-//	  	NO_PARAMS }, /* new attribute */
+//  { XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_ATACTION_COPY,
+//      NO_PARAMS }, /* new attribute */
+//  { XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_ATACTION_COPY,
+//      NO_PARAMS }, /* new attribute */
+//  { XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_ATACTION_COPY,
+//      NO_PARAMS }, /* new attribute */
+//  { XML_NAMESPACE_CHART, XML_SYMBOL_NAME, XML_ATACTION_COPY,
+//      NO_PARAMS }, /* new attribute */
+//  { XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_ATACTION_COPY,
+//      NO_PARAMS }, /* new attribute */
     { XML_NAMESPACE_XLINK, XML_HREF, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_CHART, XML_SYMBOL_WIDTH, XML_ATACTION_INCH2IN,
@@ -952,10 +952,10 @@ XMLTransformerActionInit aChartPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_CHART, XML_OVERLAP, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-//	{ XML_NAMESPACE_CHART, XML_JAPANESE_CANDLE_STICK, XML_ATACTION_COPY,
-//	  	NO_PARAMS }, /* TODO: renamed? */
-//	{ XML_NAMESPACE_CHART, XML_INTERPOLATION, XML_ATACTION_COPY,
-//	  	NO_PARAMS }, /* TODO: renamed? */
+//  { XML_NAMESPACE_CHART, XML_JAPANESE_CANDLE_STICK, XML_ATACTION_COPY,
+//      NO_PARAMS }, /* TODO: renamed? */
+//  { XML_NAMESPACE_CHART, XML_INTERPOLATION, XML_ATACTION_COPY,
+//      NO_PARAMS }, /* TODO: renamed? */
     { XML_NAMESPACE_CHART, XML_SPLINE_ORDER, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_CHART, XML_SPLINE_RESOLUTION, XML_ATACTION_COPY,

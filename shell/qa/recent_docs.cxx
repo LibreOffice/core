@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -195,20 +195,20 @@ public:
 
         OUString url = OUString::createFromAscii("file:///home_athene/test.sxw");
         syssh::AddToRecentDocumentList(url, SXW_MIME_TYPE);
-        
+
         char buffer[256];
         memset(buffer, 0, sizeof(buffer));
         read_recently_used(buffer, sizeof(buffer));
-        
+
         char* expected = "<?xml version=\"1.0\"?>\n<RecentFiles>";
-        CPPUNIT_ASSERT_MESSAGE("Unexpected recently-used content", (0 == strncmp(buffer, expected, strlen(expected))));		
+        CPPUNIT_ASSERT_MESSAGE("Unexpected recently-used content", (0 == strncmp(buffer, expected, strlen(expected))));
     }
-    
+
     //------------------------------------------------
     CPPUNIT_TEST_SUITE(Test_AddToRecentDocs);
-    CPPUNIT_TEST(test_existing_recently_used_file_with_valid_xml); 
+    CPPUNIT_TEST(test_existing_recently_used_file_with_valid_xml);
     CPPUNIT_TEST(test_non_existing_recently_used_file);
-    CPPUNIT_TEST(test_existing_recently_used_file_without_xml);	
+    CPPUNIT_TEST(test_existing_recently_used_file_without_xml);
     CPPUNIT_TEST(test_existing_recently_used_with_unknown_xml);
     CPPUNIT_TEST(test_existing_empty_recently_used_file);
     CPPUNIT_TEST(test_existing_recently_used_file_with_invalid_xml);

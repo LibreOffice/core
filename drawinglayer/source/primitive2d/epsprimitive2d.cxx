@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rEpsTransform,
             const GfxLink& rGfxLink,
             const GDIMetaFile& rMetaFile)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maEpsTransform(rEpsTransform),
             maGfxLink(rGfxLink),
             maMetaFile(rMetaFile)

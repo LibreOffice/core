@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,23 +142,23 @@ void CommunicationTester::Main()
     Execute();
 }
 
-#define SWITCH( pManager, ManagerClass )					\
-{															\
-    if ( pManager )											\
-    {														\
-        pManager->StopCommunication();						\
-        new DelayedDeleter( 1000, pManager );				\
-        pTB->SetItemState( pTB->GetCurItemId(), STATE_NOCHECK );	\
-        pManager = NULL;									\
-    }														\
-    else													\
-    {														\
-        pManager = new ManagerClass;						\
+#define SWITCH( pManager, ManagerClass )                    \
+{                                                           \
+    if ( pManager )                                         \
+    {                                                       \
+        pManager->StopCommunication();                      \
+        new DelayedDeleter( 1000, pManager );               \
+        pTB->SetItemState( pTB->GetCurItemId(), STATE_NOCHECK );    \
+        pManager = NULL;                                    \
+    }                                                       \
+    else                                                    \
+    {                                                       \
+        pManager = new ManagerClass;                        \
         pManager->SetConnectionOpenedHdl( LINK( this, CommunicationTester, ConnectionOpened ) );\
         pManager->SetConnectionClosedHdl( LINK( this, CommunicationTester, ConnectionClosed ) );\
         pManager->SetDataReceivedHdl( LINK( this, CommunicationTester, DataReceived ) );\
-        pTB->SetItemState( pTB->GetCurItemId(), STATE_CHECK );	\
-    }														\
+        pTB->SetItemState( pTB->GetCurItemId(), STATE_CHECK );  \
+    }                                                       \
 }
 
 
@@ -170,14 +170,14 @@ IMPL_LINK( CommunicationTester, TBClick, ToolBox*, pTB )
             {
                 SWITCH( pServerTcp, CommunicationManagerServerViaSocket( TCP_PORT, (USHORT) 32000 ) );
                 if ( pServerTcp )
-                    pServerTcp->StartCommunication();	// Am Port horchen
+                    pServerTcp->StartCommunication();   // Am Port horchen
             }
             break;
         case CLIENT_TCP:
             {
                 SWITCH( pClientTcp, CommunicationManagerClientViaSocket( "localhost", TCP_PORT ) );
                 if ( pClientTcp )
-                    pClientTcp->StartCommunication();	// Eine Verbindung aufbauen
+                    pClientTcp->StartCommunication();   // Eine Verbindung aufbauen
             }
             break;
         case BCST_BROOKER:

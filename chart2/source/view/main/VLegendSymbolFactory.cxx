@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -247,7 +247,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                     xResultGroup->add( xLine );
                     xLine->setSize(  awt::Size( 0, 2000 ));
                     xLine->setPosition( awt::Point( 1500, 0 ));
-                    
+
                     lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType ); // PROP_TYPE_LINE_SERIES );
                 }
             }

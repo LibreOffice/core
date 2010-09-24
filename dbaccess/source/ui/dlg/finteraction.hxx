@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef DBAUI_FILEPICKER_INTERACTION_HXX
 #define DBAUI_FILEPICKER_INTERACTION_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_ 
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
@@ -43,8 +43,8 @@ namespace dbaui
     //====================================================================
     //= OFilePickerInteractionHandler
     //====================================================================
-    typedef ::cppu::WeakImplHelper1	<	::com::sun::star::task::XInteractionHandler
-                                    >	OFilePickerInteractionHandler_Base;
+    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XInteractionHandler
+                                    >   OFilePickerInteractionHandler_Base;
 
     /** a InteractionHandler implementation which extends another handler with some customizability
     */
@@ -52,13 +52,13 @@ namespace dbaui
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
-                    m_xMaster;		// our master handler
-        sal_Bool	m_bDoesNotExist;
+                    m_xMaster;      // our master handler
+        sal_Bool    m_bDoesNotExist;
 
     public:
         OFilePickerInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxMaster );
 
-        inline sal_Bool	isDoesNotExist( ) const { return m_bDoesNotExist; }
+        inline sal_Bool isDoesNotExist( ) const { return m_bDoesNotExist; }
 
     protected:
         // XInteractionHandler
@@ -68,7 +68,7 @@ namespace dbaui
     };
 
 //........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //........................................................................
 
 #endif // DBAUI_FILEPICKER_INTERACTION_HXX

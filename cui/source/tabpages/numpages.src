@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 
 /**************************************************************************/
 /*                                                                        */
-/* 	TabPage                                                               */
+/*  TabPage                                                               */
 /*                                                                        */
 /**************************************************************************/
 TabPage RID_SVXPAGE_PICK_BULLET
@@ -56,7 +56,7 @@ TabPage RID_SVXPAGE_PICK_BULLET
 };
 /**************************************************************************/
 /*                                                                        */
-/* 	TabPage                                                               */
+/*  TabPage                                                               */
 /*                                                                        */
 /**************************************************************************/
 TabPage RID_SVXPAGE_PICK_SINGLE_NUM
@@ -80,7 +80,7 @@ TabPage RID_SVXPAGE_PICK_SINGLE_NUM
 };
 /**************************************************************************/
 /*                                                                        */
-/* 	TabPage                                                               */
+/*  TabPage                                                               */
 /*                                                                        */
 /**************************************************************************/
 TabPage RID_SVXPAGE_PICK_NUM
@@ -104,7 +104,7 @@ TabPage RID_SVXPAGE_PICK_NUM
 };
 /**************************************************************************/
 /*                                                                        */
-/* 	TabPage                                                               */
+/*  TabPage                                                               */
 /*                                                                        */
 /**************************************************************************/
 TabPage RID_SVXPAGE_PICK_BMP
@@ -144,7 +144,7 @@ TabPage RID_SVXPAGE_PICK_BMP
 };
 /**************************************************************************/
 /*                                                                        */
-/* 	TabPage Numerierungsoptionen                                          */
+/*  TabPage Numerierungsoptionen                                          */
 /*                                                                        */
 /**************************************************************************/
 TabPage RID_SVXPAGE_NUM_OPTIONS
@@ -189,17 +189,17 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         CurPos = 0 ;
         StringList [ en-US ] =
         {
-            < "1, 2, 3, ... " ; 				4/*SVX_NUM_ARABIC              */; > ;
-            < "A, B, C, ... " ; 				0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-            < "a, b, c, ..." ; 				1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-            < "I, II, III, ... " ;			2/*SVX_NUM_ROMAN_UPPER         */; > ;
-            < "i, ii, iii, ... " ; 			3/*SVX_NUM_ROMAN_LOWER         */; > ;
-            < "A, .., AA, .., AAA, ... " ; 	9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "1, 2, 3, ... " ;                 4/*SVX_NUM_ARABIC              */; > ;
+            < "A, B, C, ... " ;                 0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ... " ;          2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ... " ;          3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ... " ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
             < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-            < "Bullet" ; 					6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-            < "Graphics" ; 					8/*SVX_NUM_BITMAP              */; > ;
-            < "Linked graphics" ; 			0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-            < "None" ;						5/*SVX_NUM_NUMBER_NONE         */; > ;
+            < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Graphics" ;                  8/*SVX_NUM_BITMAP              */; > ;
+            < "Linked graphics" ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "None" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
             < "Native Numbering" ;                      12 /*NATIVE_NUMBERING                   */; > ;
             < "А, Б, .., Аа, Аб, ... (Bulgarian)" ;     38 /*CHARS_CYRILLIC_UPPER_LETTER_BG     */; > ;
             < "а, б, .., аа, аб, ... (Bulgarian)" ;     39 /*CHARS_CYRILLIC_LOWER_LETTER_BG     */; > ;
@@ -520,7 +520,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
 };
 /**************************************************************************/
 /*                                                                        */
-/* 	TabPage Positionen                                                    */
+/*  TabPage Positionen                                                    */
 /*                                                                        */
 /**************************************************************************/
 TabPage RID_SVXPAGE_NUM_POSITION

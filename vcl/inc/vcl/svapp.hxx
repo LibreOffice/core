@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -159,12 +159,12 @@ inline BOOL ApplicationAddress::IsConnectToSame( const ApplicationAddress& rAdr 
         return FALSE;
 }
 
-#define APPEVENT_PARAM_DELIMITER    	'\n'
+#define APPEVENT_PARAM_DELIMITER        '\n'
 
-#define APPEVENT_OPEN_STRING        	"Open"
-#define APPEVENT_PRINT_STRING       	"Print"
-#define APPEVENT_DISKINSERT_STRING  	"DiskInsert"
-#define APPEVENT_SAVEDOCUMENTS_STRING	"SaveDocuments"
+#define APPEVENT_OPEN_STRING            "Open"
+#define APPEVENT_PRINT_STRING           "Print"
+#define APPEVENT_DISKINSERT_STRING      "DiskInsert"
+#define APPEVENT_SAVEDOCUMENTS_STRING   "SaveDocuments"
 
 class VCL_DLLPUBLIC ApplicationEvent
 {
@@ -315,7 +315,7 @@ public:
         <TRUE/> if the system font is suitable for our UI
         <FALSE/> if the test string could not be displayed with the system font
      */
-    static bool					ValidateSystemFont();
+    static bool                 ValidateSystemFont();
 
     static void                 SetSettings( const AllSettings& rSettings );
     static const AllSettings&   GetSettings();
@@ -328,11 +328,11 @@ public:
     static void                 ImplCallEventListeners( ULONG nEvent, Window* pWin, void* pData );
     static void                 ImplCallEventListeners( VclSimpleEvent* pEvent );
     static BOOL                 HandleKey( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent );
-    
+
     static ULONG                PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent );
     static ULONG                PostMouseEvent( ULONG nEvent, Window *pWin, MouseEvent* pMouseEvent );
-    static void					RemoveMouseAndKeyEvents( Window *pWin );
-    static BOOL					IsProcessedMouseOrKeyEvent( ULONG nEventId );
+    static void                 RemoveMouseAndKeyEvents( Window *pWin );
+    static BOOL                 IsProcessedMouseOrKeyEvent( ULONG nEventId );
 
     static ULONG                PostUserEvent( ULONG nEvent, void* pEventData = NULL );
     static ULONG                PostUserEvent( const Link& rLink, void* pCaller = NULL );
@@ -367,7 +367,7 @@ public:
 
     static void                 SetDisplayName( const UniString& rDisplayName );
     static UniString            GetDisplayName();
-    
+
     static unsigned int         GetScreenCount();
     // IsMultiDisplay returns:
     //        true:  different screens are separate and windows cannot be moved
@@ -378,7 +378,7 @@ public:
     static bool                 IsMultiDisplay();
     static Rectangle            GetScreenPosSizePixel( unsigned int nScreen );
     static Rectangle            GetWorkAreaPosSizePixel( unsigned int nScreen );
-    static rtl::OUString		GetScreenName( unsigned int nScreen );
+    static rtl::OUString        GetScreenName( unsigned int nScreen );
     static unsigned int         GetDefaultDisplayNumber();
     // if IsMultiDisplay() == false the return value will be
     // nearest screen of the target rectangle
@@ -440,12 +440,12 @@ public:
 
     static void                 SetFilterHdl( const Link& rLink );
     static const Link&          GetFilterHdl();
-    
+
     static BOOL                 IsAccessibilityEnabled();
 
     static void                 EnableHeadlessMode( BOOL bEnable = TRUE );
     static BOOL                 IsHeadlessModeEnabled();
-    
+
     static void                 ShowNativeErrorBox(const String& sTitle  ,
                                                    const String& sMessage);
 
@@ -473,19 +473,19 @@ public:
         Can be called without the Solar mutex locked.
      */
     static bool GetShowImeStatusWindowDefault();
-    
-    /** Returns a string representing the desktop environment 
+
+    /** Returns a string representing the desktop environment
         the process is currently running in.
      */
     static const ::rtl::OUString& GetDesktopEnvironment();
 
     /** Add a file to the system shells recent document list if there is any.
-          This function may have no effect under Unix because there is no 
+          This function may have no effect under Unix because there is no
           standard API among the different desktop managers.
-          
+
           @param rFileUrl
                     The file url of the document.
-                    
+
           @param rMimeType
           The mime content type of the document specified by aFileUrl.
           If an empty string will be provided "application/octet-stream"

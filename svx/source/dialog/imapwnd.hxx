@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,21 +48,21 @@
 
 struct NotifyInfo
 {
-    String	aMarkURL;
+    String  aMarkURL;
     String  aMarkAltText;
-    String	aMarkTarget;
-    BOOL	bNewObj;
-    BOOL	bOneMarked;
-    BOOL	bActivated;
+    String  aMarkTarget;
+    BOOL    bNewObj;
+    BOOL    bOneMarked;
+    BOOL    bActivated;
 };
 
 
 struct NotifyPosSize
 {
-    Size	aPictureSize;
-    Point	aMousePos;
-    BOOL	bPictureSize;
-    BOOL	bMousePos;
+    Size    aPictureSize;
+    Point   aMousePos;
+    BOOL    bPictureSize;
+    BOOL    bMousePos;
 };
 
 
@@ -72,7 +72,7 @@ struct NotifyPosSize
 |*
 \************************************************************************/
 
-#define SVD_IMAP_USERDATA	0x0001
+#define SVD_IMAP_USERDATA   0x0001
 
 const UINT32 IMapInventor = UINT32('I') * 0x00000001+
                             UINT32('M') * 0x00000100+
@@ -85,29 +85,29 @@ typedef boost::shared_ptr< IMapObject > IMapObjectPtr;
 class IMapUserData : public SdrObjUserData
 {
     // #i98386# use boost::shared_ptr here due to cloning possibilities
-    IMapObjectPtr			mpObj;
+    IMapObjectPtr           mpObj;
 
 public:
 
                             IMapUserData() :
-                                SdrObjUserData	( IMapInventor, SVD_IMAP_USERDATA, 0 ),
-                                mpObj			( ) {}
+                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
+                                mpObj           ( ) {}
 
                             IMapUserData( const IMapObjectPtr& rIMapObj ) :
-                                SdrObjUserData	( IMapInventor, SVD_IMAP_USERDATA, 0 ),
-                                mpObj			( rIMapObj ) {}
+                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
+                                mpObj           ( rIMapObj ) {}
 
                             IMapUserData( const IMapUserData& rIMapUserData ) :
-                                SdrObjUserData	( IMapInventor, SVD_IMAP_USERDATA, 0 ),
-                                mpObj			( rIMapUserData.mpObj ) {}
+                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
+                                mpObj           ( rIMapUserData.mpObj ) {}
 
                             ~IMapUserData() { }
 
     virtual SdrObjUserData* Clone( SdrObject * ) const { return new IMapUserData( *this ); }
 
-    void					SetObject( const IMapObjectPtr& rIMapObj ) { mpObj = rIMapObj; }
-    const IMapObjectPtr		GetObject() const { return mpObj; }
-    void					ReplaceObject( const IMapObjectPtr& pNewIMapObject ) { mpObj = pNewIMapObject; }
+    void                    SetObject( const IMapObjectPtr& rIMapObj ) { mpObj = rIMapObj; }
+    const IMapObjectPtr     GetObject() const { return mpObj; }
+    void                    ReplaceObject( const IMapObjectPtr& pNewIMapObject ) { mpObj = pNewIMapObject; }
 };
 
 
@@ -116,20 +116,20 @@ public:
 |*
 |*
 \************************************************************************/
-/* move to cui //CHINA001 
+/* move to cui //CHINA001
 class URLDlg : public ModalDialog
 {
     FixedLine           aFlURL;
-    FixedText			aFtURL1;
-    Edit				aEdtURL;
-    FixedText			aFtURLDescription;
-    Edit				aEdtURLDescription;
-    FixedText			aFtTarget;
-    ComboBox			aCbbTargets;
-    FixedText			aFtName;
-    Edit				aEdtName;
-    OKButton			aBtnOk;
-    CancelButton		aBtnCancel;
+    FixedText           aFtURL1;
+    Edit                aEdtURL;
+    FixedText           aFtURLDescription;
+    Edit                aEdtURLDescription;
+    FixedText           aFtTarget;
+    ComboBox            aCbbTargets;
+    FixedText           aFtName;
+    Edit                aEdtName;
+    OKButton            aBtnOk;
+    CancelButton        aBtnCancel;
 
 public:
 
@@ -138,10 +138,10 @@ public:
                                 const String& rTarget, const String& rName,
                                 TargetList& rTargetList );
 
-    String				GetURL() const { return aEdtURL.GetText(); }
-    String				GetDescription() const { return aEdtURLDescription.GetText(); }
-    String				GetTarget() const { return aCbbTargets.GetText(); }
-    String				GetName() const { return aEdtName.GetText(); }
+    String              GetURL() const { return aEdtURL.GetText(); }
+    String              GetDescription() const { return aEdtURLDescription.GetText(); }
+    String              GetTarget() const { return aCbbTargets.GetText(); }
+    String              GetName() const { return aEdtName.GetText(); }
 };
 */
 
@@ -153,12 +153,12 @@ public:
 
 class IMapWindow : public GraphCtrl, public DropTargetHelper
 {
-    NotifyInfo			aInfo;
-    ImageMap			aIMap;
-    TargetList			aTargetList;
-    Link				aInfoLink;
-    SfxItemPool*		pIMapPool;
-    SfxItemInfo*		pItemInfo;
+    NotifyInfo          aInfo;
+    ImageMap            aIMap;
+    TargetList          aTargetList;
+    Link                aInfoLink;
+    SfxItemPool*        pIMapPool;
+    SfxItemInfo*        pItemInfo;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                         mxDocumentFrame;
 
@@ -168,57 +168,57 @@ class IMapWindow : public GraphCtrl, public DropTargetHelper
 protected:
 
     // GraphCtrl
-    virtual void		MouseButtonUp(const MouseEvent& rMEvt);
-    virtual void		Command(const CommandEvent& rCEvt);
-    virtual void		RequestHelp( const HelpEvent& rHEvt );
-    virtual void		SdrObjCreated( const SdrObject& rObj );
-    virtual void		SdrObjChanged( const SdrObject& rObj );
-    virtual void		MarkListHasChanged();
-    virtual	void		InitSdrModel();
+    virtual void        MouseButtonUp(const MouseEvent& rMEvt);
+    virtual void        Command(const CommandEvent& rCEvt);
+    virtual void        RequestHelp( const HelpEvent& rHEvt );
+    virtual void        SdrObjCreated( const SdrObject& rObj );
+    virtual void        SdrObjChanged( const SdrObject& rObj );
+    virtual void        MarkListHasChanged();
+    virtual void        InitSdrModel();
 
     // DropTargetHelper
-    virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8	ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
-    void				CreateImageMap();
-    void				ReplaceImageMap( const ImageMap& rNewImageMap, BOOL bScaleToGraphic );
+    void                CreateImageMap();
+    void                ReplaceImageMap( const ImageMap& rNewImageMap, BOOL bScaleToGraphic );
 
-    void				ClearTargetList();
+    void                ClearTargetList();
 
-    SdrObject*			CreateObj( const IMapObject* pIMapObj );
-    IMapObject*			GetIMapObj( const SdrObject* pSdrObj ) const;
-    SdrObject*			GetSdrObj( const IMapObject* pIMapObj ) const;
-    SdrObject*			GetHitSdrObj( const Point& rPosPixel ) const;
+    SdrObject*          CreateObj( const IMapObject* pIMapObj );
+    IMapObject*         GetIMapObj( const SdrObject* pSdrObj ) const;
+    SdrObject*          GetSdrObj( const IMapObject* pIMapObj ) const;
+    SdrObject*          GetHitSdrObj( const Point& rPosPixel ) const;
 
-    void				UpdateInfo( BOOL bNewObj );
+    void                UpdateInfo( BOOL bNewObj );
 
 public:
 
                         IMapWindow( Window* pParent, const ResId& rResId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame );
                         ~IMapWindow();
 
-    BOOL				ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );
+    BOOL                ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );
 
-    void				SetImageMap( const ImageMap& rImageMap );
-    const ImageMap&		GetImageMap();
+    void                SetImageMap( const ImageMap& rImageMap );
+    const ImageMap&     GetImageMap();
 
-    void				SetCurrentObjState( BOOL bActive );
-    void				DoMacroAssign();
-    void				DoPropertyDialog();
+    void                SetCurrentObjState( BOOL bActive );
+    void                DoMacroAssign();
+    void                DoPropertyDialog();
 
-    void				SetInfoLink( const Link& rLink ) { aInfoLink = rLink; }
-    const Link&			GetInfoLink() const { return aInfoLink; }
+    void                SetInfoLink( const Link& rLink ) { aInfoLink = rLink; }
+    const Link&         GetInfoLink() const { return aInfoLink; }
 
-    void				SetTargetList( TargetList& rTargetList );
-    const TargetList&	GetTargetList() const { return aTargetList; }
+    void                SetTargetList( TargetList& rTargetList );
+    const TargetList&   GetTargetList() const { return aTargetList; }
 
-    const NotifyInfo&	GetInfo() const { return aInfo; }
+    const NotifyInfo&   GetInfo() const { return aInfo; }
 
-    void				CreateDefaultObject();
-    void				SelectFirstObject();
-    void				StartPolyEdit();
+    void                CreateDefaultObject();
+    void                SelectFirstObject();
+    void                StartPolyEdit();
 
-    virtual void		KeyInput( const KeyEvent& rKEvt );
+    virtual void        KeyInput( const KeyEvent& rKEvt );
 };
 
 

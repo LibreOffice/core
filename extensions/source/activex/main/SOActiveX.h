@@ -49,38 +49,38 @@ class ATL_NO_VTABLE CSOActiveX :
     public IOleInPlaceActiveObjectImpl<CSOActiveX>,
     public IViewObjectExImpl<CSOActiveX>,
     public IOleInPlaceObjectWindowlessImpl<CSOActiveX>,
-//	public IConnectionPointContainerImpl<CSOActiveX>,
+//  public IConnectionPointContainerImpl<CSOActiveX>,
     public CComCoClass<CSOActiveX, &CLSID_SOActiveX>,
-//	public CProxy_ItryPluginEvents< CSOActiveX >,
+//  public CProxy_ItryPluginEvents< CSOActiveX >,
     public IPersistPropertyBagImpl< CSOActiveX >,
-    public IProvideClassInfo2Impl<	&CLSID_SOActiveX,
+    public IProvideClassInfo2Impl<  &CLSID_SOActiveX,
                                     &DIID__ISOActiveXEvents,
                                     &LIBID_SO_ACTIVEXLib >,
     public IObjectSafetyImpl< CSOActiveX,
                               INTERFACESAFE_FOR_UNTRUSTED_DATA >
 {
 protected:
-    CComPtr<IWebBrowser2>	mWebBrowser2;
-    DWORD					mCookie;
+    CComPtr<IWebBrowser2>   mWebBrowser2;
+    DWORD                   mCookie;
 
-    CComPtr<IDispatch> 		mpDispFactory;
-    CComPtr<IDispatch> 		mpDispFrame;
-    CComPtr<IDispatch> 		mpInstanceLocker;
-    CComPtr<IDispatch> 		mpDispWin;
-    OLECHAR*          		mCurFileUrl;
-    BOOL					mbLoad;
-    BOOL					mbViewOnly;
+    CComPtr<IDispatch>      mpDispFactory;
+    CComPtr<IDispatch>      mpDispFrame;
+    CComPtr<IDispatch>      mpInstanceLocker;
+    CComPtr<IDispatch>      mpDispWin;
+    OLECHAR*                mCurFileUrl;
+    BOOL                    mbLoad;
+    BOOL                    mbViewOnly;
     WNDCLASS                mPWinClass;
-    HWND					mParentWin;
-    HWND					mOffWin;
+    HWND                    mParentWin;
+    HWND                    mOffWin;
 
     SODispatchInterceptor*  mpDispatchInterceptor;
-    SOVersion				mnVersion;
+    SOVersion               mnVersion;
 
-    BOOL					mbReadyForActivation;
-    CComPtr<IDispatch> 		mpDispTempFile;
+    BOOL                    mbReadyForActivation;
+    CComPtr<IDispatch>      mpDispTempFile;
 
-    BOOL					mbDrawLocked;
+    BOOL                    mbDrawLocked;
 
 public:
     CSOActiveX();
@@ -104,7 +104,7 @@ BEGIN_COM_MAP(CSOActiveX)
     COM_INTERFACE_ENTRY(IOleObject)
     COM_INTERFACE_ENTRY(IPersistStreamInit)
     COM_INTERFACE_ENTRY2(IPersist, IPersistStreamInit)
-//	COM_INTERFACE_ENTRY(IConnectionPointContainer)
+//  COM_INTERFACE_ENTRY(IConnectionPointContainer)
     COM_INTERFACE_ENTRY(IProvideClassInfo)
     COM_INTERFACE_ENTRY(IProvideClassInfo2)
     COM_INTERFACE_ENTRY(IPersistPropertyBag)
@@ -161,7 +161,7 @@ public:
     HRESULT CallDispatchMethod( OLECHAR* sUrl, CComVariant* sArgNames, CComVariant* sArgVal, unsigned int count );
     HRESULT CallLoadComponentFromURL1PBool( OLECHAR* sUrl, OLECHAR* sArgName, BOOL sArgVal );
     HRESULT GetUrlStruct( OLECHAR* sUrl, CComPtr<IDispatch>& pdispUrl );
-    HRESULT	Cleanup();
+    HRESULT Cleanup();
     HRESULT TerminateOffice();
     HRESULT GetURL( const OLECHAR* url,
                                 const OLECHAR* target );

@@ -47,7 +47,8 @@ SCPDEFS+=-DSYSTEM_AGG
 .ENDIF
 
 PARFILES= canvascommons.par		\
-          vclcanvas.par
+          vclcanvas.par         \
+          mtfrenderer.par
 
 .IF "$(ENABLE_CAIRO)" == "TRUE"
 PARFILES+= cairocanvas.par

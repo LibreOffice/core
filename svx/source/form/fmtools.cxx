@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,7 +114,7 @@ using namespace ::com::sun::star::form;
 using namespace ::svxform;
 using namespace ::connectivity::simple;
 
-//	------------------------------------------------------------------------------
+//  ------------------------------------------------------------------------------
 namespace
 {
     static bool lcl_shouldDisplayError( const Any& _rError )
@@ -137,7 +137,7 @@ namespace
     }
 }
 
-//	------------------------------------------------------------------------------
+//  ------------------------------------------------------------------------------
 void displayException(const Any& _rExcept, Window* _pParent)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::displayException" );
@@ -154,7 +154,7 @@ void displayException(const Any& _rExcept, Window* _pParent)
         Sequence< Any > aArgs(2);
         aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("SQLException"), 0, _rExcept, PropertyState_DIRECT_VALUE);
         aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE);
-        
+
         static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog");
         Reference< XExecutableDialog > xErrorDialog(
             ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(s_sDialogServiceName, aArgs), UNO_QUERY);
@@ -169,25 +169,25 @@ void displayException(const Any& _rExcept, Window* _pParent)
     }
 }
 
-//	------------------------------------------------------------------------------
+//  ------------------------------------------------------------------------------
 void displayException(const ::com::sun::star::sdbc::SQLException& _rExcept, Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
-//	------------------------------------------------------------------------------
+//  ------------------------------------------------------------------------------
 void displayException(const ::com::sun::star::sdbc::SQLWarning& _rExcept, Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
-//	------------------------------------------------------------------------------
+//  ------------------------------------------------------------------------------
 void displayException(const ::com::sun::star::sdb::SQLContext& _rExcept, Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
-//	------------------------------------------------------------------------------
+//  ------------------------------------------------------------------------------
 void displayException(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent, Window* _pParent)
 {
     displayException(_rEvent.Reason, _pParent);
@@ -278,14 +278,14 @@ void CursorWrapper::ImplConstruct(const Reference< ::com::sun::star::sdbc::XResu
         }
     }
     else
-        m_xMoveOperations	= _rxCursor;
+        m_xMoveOperations   = _rxCursor;
 
-    m_xBookmarkOperations	= m_xBookmarkOperations.query( m_xMoveOperations );
-    m_xColumnsSupplier		= m_xColumnsSupplier.query( m_xMoveOperations );
-    m_xPropertyAccess		= m_xPropertyAccess.query( m_xMoveOperations );
+    m_xBookmarkOperations   = m_xBookmarkOperations.query( m_xMoveOperations );
+    m_xColumnsSupplier      = m_xColumnsSupplier.query( m_xMoveOperations );
+    m_xPropertyAccess       = m_xPropertyAccess.query( m_xMoveOperations );
 
     if ( !m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is() || !m_xPropertyAccess.is() )
-    {	// all or nothing !!
+    {   // all or nothing !!
         m_xMoveOperations = NULL;
         m_xBookmarkOperations = NULL;
         m_xColumnsSupplier = NULL;
@@ -301,7 +301,7 @@ const CursorWrapper& CursorWrapper::operator=(const Reference< ::com::sun::star:
     m_xBookmarkOperations = Reference< ::com::sun::star::sdbcx::XRowLocate>(_rxCursor, UNO_QUERY);
     m_xColumnsSupplier = Reference< ::com::sun::star::sdbcx::XColumnsSupplier>(_rxCursor, UNO_QUERY);
     if (!m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is())
-    {	// all or nothing !!
+    {   // all or nothing !!
         m_xMoveOperations = NULL;
         m_xBookmarkOperations = NULL;
         m_xColumnsSupplier = NULL;
@@ -396,7 +396,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
         return OBJ_FM_CONTROL;
 
     ::rtl::OUString sPersistentServiceName = xPersistence->getServiceName();
-    if (sPersistentServiceName.equals(FM_COMPONENT_EDIT))	// 5.0-Name
+    if (sPersistentServiceName.equals(FM_COMPONENT_EDIT))   // 5.0-Name
     {
         // may be a simple edit field or a formatted field, dependent of the supported services
         if (_rxObject->supportsService(FM_SUN_COMPONENT_FORMATTEDFIELD))
@@ -419,7 +419,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
         return OBJ_FM_GROUPBOX;
     if (sPersistentServiceName.equals(FM_COMPONENT_COMBOBOX))
         return OBJ_FM_COMBOBOX;
-    if (sPersistentServiceName.equals(FM_COMPONENT_GRID))	// 5.0-Name
+    if (sPersistentServiceName.equals(FM_COMPONENT_GRID))   // 5.0-Name
         return OBJ_FM_GRID;
     if (sPersistentServiceName.equals(FM_COMPONENT_GRIDCONTROL))
         return OBJ_FM_GRID;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,50 +34,50 @@
 
 /****************** T Y P E S ********************************************/
 typedef sal_uInt32 RSCVAR;
-#define VAR_POINTER 	0x0001
-#define VAR_HIDDEN		0x0002
-#define VAR_NODATAINST	0x0004
-#define VAR_NORC		0x0008
-#define VAR_SVDYNAMIC	0x0010
-#define VAR_NOENUM		0x0020
-#define VAR_EXTENDABLE	0x0040	/* Auch die Ableitung einer Klasse kann angegeben werden */
+#define VAR_POINTER     0x0001
+#define VAR_HIDDEN      0x0002
+#define VAR_NODATAINST  0x0004
+#define VAR_NORC        0x0008
+#define VAR_SVDYNAMIC   0x0010
+#define VAR_NOENUM      0x0020
+#define VAR_EXTENDABLE  0x0040  /* Auch die Ableitung einer Klasse kann angegeben werden */
 
 /****************** C L A S S E S ****************************************/
 /******************* R s c C l a s s *************************************/
 class RscTop : public RefNode
 {
-    RscTop *		pSuperClass;
-    RSCINST 		aDfltInst;
-    sal_uInt32			nTypId;
-    RscTop *		pRefClass;
+    RscTop *        pSuperClass;
+    RSCINST         aDfltInst;
+    sal_uInt32          nTypId;
+    RscTop *        pRefClass;
 
 protected:
                     RscTop( Atom nId, sal_uInt32 nTypIdent,
                             RscTop * pSuperCl = NULL );
 
 public:
-    ByteString		aCallPar1;		// Klassenaufruf ohne Typen bis ResId
-    ByteString		aCallPar2;		// Klassenaufruf ohne Typen ab ResId
-    ByteString		aCallParType;	// Klassenaufruf mit Typen
+    ByteString      aCallPar1;      // Klassenaufruf ohne Typen bis ResId
+    ByteString      aCallPar2;      // Klassenaufruf ohne Typen ab ResId
+    ByteString      aCallParType;   // Klassenaufruf mit Typen
 
-            void	SetSuperClass( RscTop * pClass )
+            void    SetSuperClass( RscTop * pClass )
                     {
                         pSuperClass = pClass;
                     }
             RscTop* GetSuperClass() const
                     { return pSuperClass; }
                     // Gibt den Typidentifier zurueck
-            sal_uInt32	GetTypId() const
+            sal_uInt32  GetTypId() const
                     { return nTypId; };
                     // Gibt die Oberklasse zurueck
-            BOOL	InHierarchy( RscTop * pClass );
-            BOOL	IsCodeWriteable() const
+            BOOL    InHierarchy( RscTop * pClass );
+            BOOL    IsCodeWriteable() const
                     {
                         return( 0 != aCallParType.Len() );
                     }
-            void	SetCallPar( const ByteString & rPar1, const ByteString & rPar2,
+            void    SetCallPar( const ByteString & rPar1, const ByteString & rPar2,
                                 const ByteString & rParType );
-            void	SetRefClass( RscTop * pRef ) { pRefClass = pRef; }
+            void    SetRefClass( RscTop * pRef ) { pRefClass = pRef; }
             RscTop* GetRefClass() const { return pRefClass; }
     virtual RSCCLASS_TYPE GetClassType() const = 0;
             RSCINST GetDefault();
@@ -86,14 +86,14 @@ public:
                     // Da die Klassen gegenseitige Abhaengigkeiten
                     // aufweisen koennen, kann man im dtor nicht davon
                     // ausgehen, dass alle Klassenzeiger noch gueltig sind
-    virtual void	Pre_dtor();
+    virtual void    Pre_dtor();
 
-    virtual Atom	GetConstant( sal_uInt32 );
+    virtual Atom    GetConstant( sal_uInt32 );
 
-    virtual RscTop *	GetTypeClass() const;
+    virtual RscTop *    GetTypeClass() const;
 
                     // Gibt die Groesse der Klasse in Bytes
-    virtual sal_uInt32	Size();
+    virtual sal_uInt32  Size();
 
                     // Gibt die Referenz zurueck
     virtual ERRTYPE GetRef( const RSCINST & rInst, RscId * );
@@ -108,7 +108,7 @@ public:
                                  Atom nDataBaseName = InvalidAtom );
 
                     // Zaehlt alle Variablen auf
-    virtual void	EnumVariables( void * pData, VarEnumCallbackProc );
+    virtual void    EnumVariables( void * pData, VarEnumCallbackProc );
 
                     // Liefert Instanz der Variablen zurueck
                     // pData, pClass im return koennen NULL sein
@@ -187,38 +187,38 @@ public:
                             const RSCINST & rDefInst, BOOL bOwnClass = FALSE );
 
                     // Instanz zerstoeren
-    virtual void	Destroy( const RSCINST & rInst );
+    virtual void    Destroy( const RSCINST & rInst );
 
                     // prueft auf konsistenz
-    virtual BOOL	IsConsistent( const RSCINST & rInst,
+    virtual BOOL    IsConsistent( const RSCINST & rInst,
                                   RscInconsList * pList = NULL );
 
                     // Alles auf Default setzen
-    virtual void	SetToDefault( const RSCINST & rInst );
+    virtual void    SetToDefault( const RSCINST & rInst );
 
                     // Ist Eingabe = Default
-    virtual BOOL	IsDefault( const RSCINST & rInst );
+    virtual BOOL    IsDefault( const RSCINST & rInst );
 
                     // Gleiche Werte auf Default setzen
-    virtual BOOL	IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    virtual BOOL    IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
                     // Instanz auf Default setzen
-    virtual void	SetDefault( const RSCINST & rInst, Atom nVarId );
+    virtual void    SetDefault( const RSCINST & rInst, Atom nVarId );
 
                     // Default zu einer Variablen holen
     virtual RSCINST GetDefault( Atom nVarId );
 
-    virtual void	Delete( const RSCINST & rInst, RscTop * pClass,
+    virtual void    Delete( const RSCINST & rInst, RscTop * pClass,
                             const RscId & rId );
 
-    virtual void	DeletePos( const RSCINST & rInst, sal_uInt32 nPos );
+    virtual void    DeletePos( const RSCINST & rInst, sal_uInt32 nPos );
 
                     // Schreibt den Kopf und das Ende einer Resource
                     // Script Datei
-    virtual void	WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
+    virtual void    WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
                                     RscTypCont * pTC, sal_uInt32 nTab,
                                     const RscId & aId, const char * );
-    virtual void	WriteSrc( const RSCINST & rInst, FILE * fOutput,
+    virtual void    WriteSrc( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab,const char * );
     virtual ERRTYPE WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                    RscTypCont * pTC, const RscId & aId,
@@ -239,9 +239,9 @@ public:
             void WriteSyntaxHeader( FILE * fOutput, RscTypCont * pTC  );
     virtual void WriteSyntax( FILE * fOutput, RscTypCont * pTC );
 
-    virtual void	WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
+    virtual void    WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
-    virtual void	WriteRcCtor( FILE * fOutput, RscTypCont * pTC );
+    virtual void    WriteRcCtor( FILE * fOutput, RscTypCont * pTC );
 };
 
 #endif //_RSCTOP_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,7 +137,7 @@ namespace sfx2
                     documentStorageHasMacros() const = 0;
 
         /** provides access to the XEmbeddedScripts interface of the document
-        
+
             Implementations are allowed to return <NULL/> here if and only if they
             do not (yet) support embedding scripts.
 
@@ -291,7 +291,7 @@ namespace sfx2
             BeanShell-/JavaScript-/Python-Scripts are stored, and a sub storage named "Basic" (where
             Basic scripts are stored).
         */
-        static sal_Bool 
+        static sal_Bool
                 storageHasMacros( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage );
 
         /** checks the macro execution mode while loading the document.

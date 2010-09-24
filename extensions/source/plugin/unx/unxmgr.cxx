@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,18 +113,18 @@ static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rD
         if( aMIME.getLength() > 0 )
         {
             OString aLine = aMIME.makeStringAndClear();
-            
+
             sal_Int32 nIndex = 0;
             while( nIndex != -1 )
             {
                 OString aType = aLine.getToken( 0, ';', nIndex );
 
                 sal_Int32 nTypeIndex = 0;
-                OString aMimetype	= aType.getToken( 0, ':', nTypeIndex );
-                OString aExtLine	= aType.getToken( 0, ':', nTypeIndex );
+                OString aMimetype   = aType.getToken( 0, ':', nTypeIndex );
+                OString aExtLine    = aType.getToken( 0, ':', nTypeIndex );
                 if( nTypeIndex < 0 ) // ensure at least three tokens
                     continue;
-                OString aDesc		= aType.getToken( 0, ':', nTypeIndex );
+                OString aDesc       = aType.getToken( 0, ':', nTypeIndex );
 
                 // create extension list string
                 sal_Int32 nExtIndex = 0;
@@ -141,11 +141,11 @@ static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rD
 
                 PluginDescription* pNew = new PluginDescription;
                 // set plugin name (path to library)
-                pNew->PluginName	= OStringToOUString( rPath, aEncoding );
+                pNew->PluginName    = OStringToOUString( rPath, aEncoding );
                 // set mimetype
-                pNew->Mimetype 	= OStringToOUString( aMimetype, aEncoding );
+                pNew->Mimetype  = OStringToOUString( aMimetype, aEncoding );
                 // set extension line
-                pNew->Extension	= OStringToOUString( aExtension.makeStringAndClear(), aEncoding );
+                pNew->Extension = OStringToOUString( aExtension.makeStringAndClear(), aEncoding );
                 // set description
                 pNew->Description= OStringToOUString( aDesc, aEncoding );
                 rDescriptions.push_back( pNew );
@@ -201,7 +201,7 @@ static void CheckPluginRegistryFiles( const rtl::OString& rPath, list< PluginDes
         }
         fclose( fp );
     }
-    
+
     // check subdirectories
     DIR* pDIR = opendir( rPath.getStr() );
     struct dirent* pDirEnt = NULL;
@@ -216,7 +216,7 @@ static void CheckPluginRegistryFiles( const rtl::OString& rPath, list< PluginDes
             aBuf.append( rPath );
             aBuf.append( '/' );
             aBuf.append( pBaseName );
-            
+
             if( ! stat( aBuf.getStr(), &aStat ) )
             {
                 if( S_ISDIR( aStat.st_mode ) )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ namespace dbaccess
                           public ::comphelper::OPropertyArrayUsageHelper < OResultColumn >
     {
     protected:
-        ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >	m_xMetaData;
+        ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData > m_xMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xDBMetaData;
-        sal_Int32				    m_nPos;
+        sal_Int32                   m_nPos;
         ::com::sun::star::uno::Any  m_aIsRowVersion;
         mutable ::boost::optional< sal_Bool > m_isSigned;
         mutable ::boost::optional< sal_Bool > m_isCurrency;

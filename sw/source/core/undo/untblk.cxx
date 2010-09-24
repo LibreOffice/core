@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <swundo.hxx>			// fuer die UndoIds
+#include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>
@@ -60,7 +60,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
         if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
 
-        if( !nSttCntnt )	// dann werden Flys mitgenommen !!
+        if( !nSttCntnt )    // dann werden Flys mitgenommen !!
         {
             USHORT nArrLen = pDoc->GetSpzFrmFmts()->Count();
             for( USHORT n = 0; n < nArrLen; ++n )
@@ -105,9 +105,9 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, BOOL bScanFlys,
         nSttNode = pTmpPos->nNode.GetIndex();
         nSttCntnt = pTmpPos->nContent.GetIndex();
 
-        if( !bSttIsTxtNd )		// wird eine Tabellenselektion eingefuegt,
+        if( !bSttIsTxtNd )      // wird eine Tabellenselektion eingefuegt,
         {
-            ++nSttNode;			// dann stimmt der CopyPam nicht ganz
+            ++nSttNode;         // dann stimmt der CopyPam nicht ganz
             bSttWasTxtNd = FALSE;
         }
     }
@@ -146,11 +146,11 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, BOOL bScanFlys,
 
 SwUndoInserts::~SwUndoInserts()
 {
-    if( pPos )		// loesche noch den Bereich aus dem UndoNodes Array
+    if( pPos )      // loesche noch den Bereich aus dem UndoNodes Array
     {
         // Insert speichert den Inhalt in der IconSection
         SwNodes& rUNds = pPos->nNode.GetNodes();
-        if( pPos->nContent.GetIndex() )			// nicht den gesamten Node loeschen
+        if( pPos->nContent.GetIndex() )         // nicht den gesamten Node loeschen
         {
             SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
             ASSERT( pTxtNd, "kein TextNode, aus dem geloescht werden soll" );
@@ -230,7 +230,7 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
     SwTxtNode* pTxtNode = rIdx.GetNode().GetTxtNode();
     if( pTxtNode )
     {
-        if( !pTxtFmtColl )		// falls 0, dann war hier auch kein TextNode,
+        if( !pTxtFmtColl )      // falls 0, dann war hier auch kein TextNode,
         {                       // dann muss dieser geloescht werden,
             SwNodeIndex aDelIdx( rIdx );
             rIdx++;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ published service TextColumns
     [readonly, property]  boolean IsAutomatic;
     //------------------------------------------------------------------------
     /** contains the distance between the columns. It is valid if the property IsAutomatic is set.
- <!-- The h -->Half of this distance is set to the left and right margins of all columns, 
+ <!-- The h -->Half of this distance is set to the left and right margins of all columns,
     except for the left margin of the first column, and the right margin of the last column.*/
     [property]  long AutomaticDistance;
     //------------------------------------------------------------------------

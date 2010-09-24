@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,14 +51,14 @@
 #include <salbmp.h>
 #include <vcl/salimestatus.hxx>
 #include <vcl/timer.hxx>
-#include <wincomp.hxx>	// CS_DROPSHADOW
+#include <wincomp.hxx>  // CS_DROPSHADOW
 #include <tools/solarmutex.hxx>
 
 #ifndef min
-#define min(a,b)	(((a) < (b)) ? (a) : (b))
+#define min(a,b)    (((a) < (b)) ? (a) : (b))
 #endif
 #ifndef max
-#define max(a,b)	(((a) > (b)) ? (a) : (b))
+#define max(a,b)    (((a) > (b)) ? (a) : (b))
 #endif
 
 #if defined _MSC_VER
@@ -368,7 +368,7 @@ void SalData::initKeyCodeMap()
     initKey( '+', KEY_ADD );
     initKey( '-', KEY_SUBTRACT );
     initKey( '*', KEY_MULTIPLY );
-    initKey( '/', KEY_DIVIDE );                                             
+    initKey( '/', KEY_DIVIDE );
     initKey( '.', KEY_POINT );
     initKey( ',', KEY_COMMA );
     initKey( '<', KEY_LESS );
@@ -376,6 +376,8 @@ void SalData::initKeyCodeMap()
     initKey( '=', KEY_EQUAL );
     initKey( '~', KEY_TILDE );
     initKey( '`', KEY_QUOTELEFT );
+    initKey( '[', KEY_BRACKETLEFT );
+    initKey( ']', KEY_BRACKETRIGHT );
 }
 
 // =======================================================================
@@ -439,7 +441,7 @@ SalData::SalData()
 
     // init with NULL
     gdiplusToken = 0;
-    
+
     initKeyCodeMap();
 
     SetSalData( this );
@@ -715,7 +717,7 @@ void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
 {
     MSG aMsg;
     bool bWasMsg = false, bOneEvent = false;
-    
+
     int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
     do
     {
@@ -755,7 +757,7 @@ void WinSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
     if ( pSalData->mnAppThreadId != nCurThreadId )
     {
-        // #97739# A SendMessage call blocks until the called thread (here: the main thread) 
+        // #97739# A SendMessage call blocks until the called thread (here: the main thread)
         // returns. During a yield however, messages are processed in the main thread that might
         // result in a new message loop due to opening a dialog. Thus, SendMessage would not
         // return which will block this thread!
@@ -840,7 +842,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             break;
         case SAL_MSG_DESTROYHWND:
             //We only destroy the native window here. We do NOT destroy the SalFrame contained
-            //in the structure (GetWindowPtr()). 
+            //in the structure (GetWindowPtr()).
             if (DestroyWindow((HWND)lParam) == 0)
             {
                 OSL_ENSURE(0, "DestroyWindow failed!");
@@ -980,7 +982,7 @@ bool WinSalInstance::AnyInput( USHORT nType )
             if ( ImplPeekMessage( &aMsg, 0, WM_PAINT, WM_PAINT,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
-            
+
             if ( ImplPeekMessage( &aMsg, 0, WM_SIZE, WM_SIZE,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
@@ -1067,7 +1069,7 @@ void WinSalInstance::DestroyFrame( SalFrame* pFrame )
 
 SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
                                          SystemWindowData* /*pWindowData*/, // SystemWindowData meaningless on Windows
-                                         BOOL /*bShow*/ ) 
+                                         BOOL /*bShow*/ )
 {
     // Um auf Main-Thread umzuschalten
     return (SalObject*)ImplSendMessage( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (LPARAM)static_cast<WinSalFrame*>(pParent) );
@@ -1092,9 +1094,9 @@ void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
 // -----------------------------------------------------------------------
 
 /** Add a file to the system shells recent document list if there is any.
-      This function may have no effect under Unix because there is no 
+      This function may have no effect under Unix because there is no
       standard API among the different desktop managers.
-      
+
       @param aFileUrl
                 The file url of the document.
 */
@@ -1102,11 +1104,11 @@ void WinSalInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, cons
 {
     rtl::OUString system_path;
     osl::FileBase::RC rc = osl::FileBase::getSystemPathFromFileURL(rFileUrl, system_path);
-    
+
     OSL_ENSURE(osl::FileBase::E_None == rc, "Invalid file url");
-    
+
     if (osl::FileBase::E_None == rc)
-        SHAddToRecentDocs(SHARD_PATHW, system_path.getStr());        
+        SHAddToRecentDocs(SHARD_PATHW, system_path.getStr());
 }
 
 // -----------------------------------------------------------------------
@@ -1128,7 +1130,7 @@ class WinImeStatus : public SalI18NImeStatus
   public:
     WinImeStatus() {}
     virtual ~WinImeStatus() {}
-    
+
     // asks whether there is a status window available
     // to toggle into menubar
     virtual bool canToggle() { return false; }

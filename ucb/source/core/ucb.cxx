@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ using namespace com::sun::star;
 using namespace ucbhelper;
 
 
-#define CONFIG_CONTENTPROVIDERS_KEY	\
+#define CONFIG_CONTENTPROVIDERS_KEY \
                 "/org.openoffice.ucb.Configuration/ContentProviders"
 
 
@@ -539,7 +539,7 @@ Reference< XContent > SAL_CALL UniversalContentBroker::queryContent(
     Reference< XContentProvider > xProv =
         queryContentProvider( Identifier->getContentIdentifier(), sal_True );
     if ( xProv.is() )
-        return	xProv->queryContent( Identifier );
+        return  xProv->queryContent( Identifier );
 
     return Reference< XContent >();
 }
@@ -698,7 +698,7 @@ void SAL_CALL UniversalContentBroker::abort( sal_Int32 )
 // XChangesListener methods
 //
 //=========================================================================
-// virtual 
+// virtual
 void SAL_CALL UniversalContentBroker::changesOccurred( const util::ChangesEvent& Event )
         throw( uno::RuntimeException )
 {
@@ -707,7 +707,7 @@ void SAL_CALL UniversalContentBroker::changesOccurred( const util::ChangesEvent&
     {
         uno::Reference< container::XHierarchicalNameAccess > xHierNameAccess;
         Event.Base >>= xHierNameAccess;
-        
+
         OSL_ASSERT( xHierNameAccess.is() );
 
         const util::ElementChange* pElementChanges
@@ -745,7 +745,7 @@ void SAL_CALL UniversalContentBroker::changesOccurred( const util::ChangesEvent&
 // XEventListener methods
 //
 //=========================================================================
-// virtual 
+// virtual
 void SAL_CALL UniversalContentBroker::disposing(const lang::EventObject&)
     throw( uno::RuntimeException )
 {
@@ -900,12 +900,12 @@ bool UniversalContentBroker::getContentProviderData(
                     aElemBuffer.appendAscii( "['" );
                     makeAndAppendXMLName( aElemBuffer, pElems[ n ] );
                     aElemBuffer.appendAscii( "']" );
-                    
+
                     OSL_VERIFY(
                         createContentProviderData(
                             aElemBuffer.makeStringAndClear(), xHierNameAccess,
                             aInfo));
-                    
+
                     rListToFill.push_back( aInfo );
                 }
                 catch ( container::NoSuchElementException& )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,9 +58,9 @@ module com {  module sun {  module star {  module table {
 
 //=============================================================================
 
-/** The accessible view of a cell in a text document or in the page preview 
-      of a spreadsheet document. See 
-    <type scope="::com::sun::star::sheet">AccessibleCell</type> for cells in 
+/** The accessible view of a cell in a text document or in the page preview
+      of a spreadsheet document. See
+    <type scope="::com::sun::star::sheet">AccessibleCell</type> for cells in
     the edit view of a spreadsheet.
     @since OOo 1.1.2
 */
@@ -72,7 +72,7 @@ published service AccessibleCellView
         <li>The parent returned by <method scope="::com::sun::star::accessibility"
             >XAccessibleContext::getAccessibleParent</method>
             is the accessible table view.</li>
-        <li>The children returned by 
+        <li>The children returned by
             <method scope="::com::sun::star::accessibility"
             >XAccessibleContext::getAccessibleChild</method> all
             support the interface XAccessible. Calling
@@ -90,7 +90,7 @@ published service AccessibleCellView
         <li>The description is the name or the content of the given note.</li>
         <li>The role is <const scope="::com::sun::star::accessibility"
             >AccessibleRole::TABLE_CELL</const></li>
-        <li>For spreadsheets, there are relations between the cell and the 
+        <li>For spreadsheets, there are relations between the cell and the
             shapes with an anchor on this cell.</li>
         <li>The following states are supported:
             <ul>
@@ -117,12 +117,12 @@ published service AccessibleCellView
                     >AccessibleStateType::SELECTED</const> is true, if the cell
                     is selected. This is not possible in the page preview.</li>
                 <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SHOWING</const>Is true if the 
-                    Bounding Box lies in the Bounding Box of the parent. 
+                    >AccessibleStateType::SHOWING</const>Is true if the
+                    Bounding Box lies in the Bounding Box of the parent.
                     Otherwise it is false.</li>
                 <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::TRANSIENT</const>Is true if the cell 
-                    is showed in a spreadsheet page preview. Otherwise it is 
+                    >AccessibleStateType::TRANSIENT</const>Is true if the cell
+                    is showed in a spreadsheet page preview. Otherwise it is
                     false.</li>
                 <li><const scope="::com::sun::star::accessibility"
                     >AccessibleStateType::VISIBLE</const>Is always true.</li>

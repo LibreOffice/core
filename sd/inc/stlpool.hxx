@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,8 +64,8 @@ class SdStyleSheetPool : public SdStyleSheetPoolBase, public SfxListener
 public:
                         SdStyleSheetPool(SfxItemPool const& rPool, SdDrawDocument* pDocument);
 
-    void				SetActualStyleSheet(SfxStyleSheetBase* pActStyleSheet)	{ mpActualStyleSheet = pActStyleSheet; }
-    SfxStyleSheetBase*	GetActualStyleSheet()									{ return mpActualStyleSheet; }
+    void                SetActualStyleSheet(SfxStyleSheetBase* pActStyleSheet)  { mpActualStyleSheet = pActStyleSheet; }
+    SfxStyleSheetBase*  GetActualStyleSheet()                                   { return mpActualStyleSheet; }
 
     SfxStyleSheetBase*  GetTitleSheet(const String& rLayoutName);
 
@@ -75,27 +75,27 @@ public:
     /** creates all layout style sheets for the givin layout name if they
         don't exist yet.
 
-        @param rLayoutName	Must be the name of a master page
-        @param bCheck		If set to true, the debug version will assert if a style
+        @param rLayoutName  Must be the name of a master page
+        @param bCheck       If set to true, the debug version will assert if a style
                             had to be created. This is used to assert errors in documents
                             when styles are missing.
     */
     SD_DLLPUBLIC void                CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck = sal_False );
     List*               CreateLayoutSheetNames(const String& rLayoutName) const;
-    void				CreateLayoutSheetList(const String& rLayoutName, SdStyleSheetVector& rLayoutSheets);
+    void                CreateLayoutSheetList(const String& rLayoutName, SdStyleSheetVector& rLayoutSheets);
     void                CopyLayoutSheets(const String& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets );
     void                CopyGraphicSheets(SdStyleSheetPool& rSourcePool);
     void                CopyCellSheets(SdStyleSheetPool& rSourcePool);
     void                CopyTableStyles(SdStyleSheetPool& rSourcePool);
 
     void                CreatePseudosIfNecessary();
-    void				UpdateStdNames();
-    static void			PutNumBulletItem( SfxStyleSheetBase* pSheet, Font& rBulletFont );
+    void                UpdateStdNames();
+    static void         PutNumBulletItem( SfxStyleSheetBase* pSheet, Font& rBulletFont );
     Font                GetBulletFont() const;
 
-    SdDrawDocument* 	GetDoc() const { return mpDoc; }
+    SdDrawDocument*     GetDoc() const { return mpDoc; }
 
-    static 	SdStyleSheetVector CreateChildList( SdStyleSheet* pSheet );
+    static  SdStyleSheetVector CreateChildList( SdStyleSheet* pSheet );
 
 
 public:
@@ -139,13 +139,13 @@ protected:
     void RemoveStyleFamily( const SdPage* pPage );
 
 private:
-    SfxStyleSheetBase*		mpActualStyleSheet;
-    SdDrawDocument*			mpDoc;
-    SdStyleFamilyRef		mxGraphicFamily;
-    SdStyleFamilyRef		mxCellFamily;
-    SdStyleFamilyMap		maStyleFamilyMap;
+    SfxStyleSheetBase*      mpActualStyleSheet;
+    SdDrawDocument*         mpDoc;
+    SdStyleFamilyRef        mxGraphicFamily;
+    SdStyleFamilyRef        mxCellFamily;
+    SdStyleFamilyMap        maStyleFamilyMap;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > mxTableFamily;
-    rtl::OUString			msTableFamilyName;
+    rtl::OUString           msTableFamilyName;
 };
 
-#endif	   // _SD_STLPOOL_HXX
+#endif     // _SD_STLPOOL_HXX

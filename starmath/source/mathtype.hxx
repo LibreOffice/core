@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,23 +61,23 @@ typedef ::std::set< MathTypeFont, LessMathTypeFont > MathTypeFontSet;
 class MathType
 {
 public:
-    MathType(String &rIn) : 
+    MathType(String &rIn) :
         rRet(rIn), nHAlign(0), nVAlign(0), nDefaultSize(12),
         nLSize(0), nDSize(0), nCurSize(0), nLastSize(0), bIsSilent(sal_False)
     {
         Init();
     }
 
-    MathType(String &rIn,SmNode *pIn) : 
+    MathType(String &rIn,SmNode *pIn) :
         rRet(rIn), pTree(pIn), nHAlign(2), nVAlign(0), nInsertion(0), nDefaultSize(12),
         nLSize(0), nDSize(0), nCurSize(0), nLastSize(0), nSpec(0), bIsSilent(sal_False)
     {
         Init();
     }
-    
+
     int Parse( SotStorage* pStor );
     int ConvertFromStarMath( SfxMedium& rMedium );
-    
+
 private:
 /*Ver 2 Header*/
     sal_uInt8 nVersion;

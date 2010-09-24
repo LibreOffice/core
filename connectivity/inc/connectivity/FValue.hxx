@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,20 +54,20 @@ namespace connectivity
     {
         union
         {
-            sal_Bool		m_bBool;
-            sal_Int8		m_nInt8;
-            sal_Int16		m_nInt16;
-            sal_Int32		m_nInt32;
-            rtl_uString*	m_pString;
+            sal_Bool        m_bBool;
+            sal_Int8        m_nInt8;
+            sal_Int16       m_nInt16;
+            sal_Int32       m_nInt32;
+            rtl_uString*    m_pString;
 
-            void*			m_pValue;			// can contains double, etc
+            void*           m_pValue;           // can contains double, etc
         } m_aValue;
 
-        sal_Int32			m_eTypeKind;		// the database type
-        sal_Bool			m_bNull		: 1;	// value is null
-        sal_Bool			m_bBound	: 1;	// is bound
-        sal_Bool			m_bModified : 1;	// value was changed
-        sal_Bool			m_bSigned	: 1;	// value is signed
+        sal_Int32           m_eTypeKind;        // the database type
+        sal_Bool            m_bNull     : 1;    // value is null
+        sal_Bool            m_bBound    : 1;    // is bound
+        sal_Bool            m_bModified : 1;    // value was changed
+        sal_Bool            m_bSigned   : 1;    // value is signed
 
         void free();
 
@@ -258,13 +258,13 @@ namespace connectivity
         // we the possiblity to save a any for bookmarks
         ORowSetValue& operator=(const ::com::sun::star::uno::Any& _rAny);
 
-        operator sal_Bool() const	{	return isNull() ? sal_False : getBool();	}
-        operator sal_Int8() const	{	return isNull() ? static_cast<sal_Int8>(0) : getInt8();	}
-        operator sal_Int16() const	{	return isNull() ? static_cast<sal_Int16>(0) : getInt16();	}
-        operator sal_Int32() const	{	return isNull() ? 0			: getInt32();	}
-        operator sal_Int64() const	{	return isNull() ? 0			: getLong();	}
-        operator float() const		{	return isNull() ? (float)0.0: getFloat();	}
-        operator double() const		{	return isNull() ? 0.0		: getDouble();	}
+        operator sal_Bool() const   {   return isNull() ? sal_False : getBool();    }
+        operator sal_Int8() const   {   return isNull() ? static_cast<sal_Int8>(0) : getInt8(); }
+        operator sal_Int16() const  {   return isNull() ? static_cast<sal_Int16>(0) : getInt16();   }
+        operator sal_Int32() const  {   return isNull() ? 0         : getInt32();   }
+        operator sal_Int64() const  {   return isNull() ? 0         : getLong();    }
+        operator float() const      {   return isNull() ? (float)0.0: getFloat();   }
+        operator double() const     {   return isNull() ? 0.0       : getDouble();  }
 
         operator ::rtl::OUString() const
         {
@@ -297,55 +297,55 @@ namespace connectivity
             return !( *this == _rRH );
         }
 
-        sal_Bool	isNull() const
+        sal_Bool    isNull() const
         {
             return m_bNull;
         }
-        void		setNull()
+        void        setNull()
         {
             free();
             m_bNull = sal_True;
             m_aValue.m_pString = NULL;
         }
 
-        sal_Bool	isBound() const						{ return m_bBound;		}
-        void		setBound(sal_Bool _bBound)			{ m_bBound = _bBound ? true : false; }
+        sal_Bool    isBound() const                     { return m_bBound;      }
+        void        setBound(sal_Bool _bBound)          { m_bBound = _bBound ? true : false; }
 
-        sal_Bool	isModified() const					{ return m_bModified;	}
-        void		setModified(sal_Bool _bMod=sal_True){ m_bModified = _bMod ? true : false;	}
+        sal_Bool    isModified() const                  { return m_bModified;   }
+        void        setModified(sal_Bool _bMod=sal_True){ m_bModified = _bMod ? true : false;   }
 
-        sal_Bool	isSigned() const					{ return m_bSigned;	}
-        void		setSigned(sal_Bool _bMod=sal_True);
+        sal_Bool    isSigned() const                    { return m_bSigned; }
+        void        setSigned(sal_Bool _bMod=sal_True);
 
-        sal_Int32	getTypeKind() const					{ return m_eTypeKind;	}
-        void		setTypeKind(sal_Int32 _eType);
+        sal_Int32   getTypeKind() const                 { return m_eTypeKind;   }
+        void        setTypeKind(sal_Int32 _eType);
 
         // before calling one of this methods, be sure that the value is not null
-        void*			getValue()	const				{ OSL_ENSURE(m_bBound,"Value is not bound!");return m_aValue.m_pValue;				}
-        sal_Bool		getBool()	const;
-        sal_Int8		getInt8()	const;
-        sal_Int16		getInt16()	const;
-        sal_Int32		getInt32()	const;
-        sal_Int64		getLong()	const;
-        double			getDouble() const;
-        float			getFloat() const;
+        void*           getValue()  const               { OSL_ENSURE(m_bBound,"Value is not bound!");return m_aValue.m_pValue;              }
+        sal_Bool        getBool()   const;
+        sal_Int8        getInt8()   const;
+        sal_Int16       getInt16()  const;
+        sal_Int32       getInt32()  const;
+        sal_Int64       getLong()   const;
+        double          getDouble() const;
+        float           getFloat() const;
         // convert the double to the type _nDataType
-        void			setFromDouble(const double& _rVal,sal_Int32 _nDatatype);
+        void            setFromDouble(const double& _rVal,sal_Int32 _nDatatype);
 
-        ::rtl::OUString getString() const;		// makes a automatic conversion if type isn't a string
-        ::com::sun::star::util::Date				getDate()		const;
-        ::com::sun::star::util::Time				getTime()		const;
-        ::com::sun::star::util::DateTime			getDateTime()	const;
-        ::com::sun::star::uno::Sequence<sal_Int8>	getSequence()	const;
+        ::rtl::OUString getString() const;      // makes a automatic conversion if type isn't a string
+        ::com::sun::star::util::Date                getDate()       const;
+        ::com::sun::star::util::Time                getTime()       const;
+        ::com::sun::star::util::DateTime            getDateTime()   const;
+        ::com::sun::star::uno::Sequence<sal_Int8>   getSequence()   const;
         // only use for anys
-        ::com::sun::star::uno::Any					getAny()		const { return *(::com::sun::star::uno::Any*)m_aValue.m_pValue; }
-        ::com::sun::star::uno::Any					makeAny()		const;
+        ::com::sun::star::uno::Any                  getAny()        const { return *(::com::sun::star::uno::Any*)m_aValue.m_pValue; }
+        ::com::sun::star::uno::Any                  makeAny()       const;
 
         /**
             fetches a single value out of the row
-            @param _nPos	the current column position
-            @param _nType	the type of the current column
-            @param _xRow	the row where to fetch the data from
+            @param _nPos    the current column position
+            @param _nType   the type of the current column
+            @param _xRow    the row where to fetch the data from
         */
         void fill(sal_Int32 _nPos,
                   sal_Int32 _nType,
@@ -353,10 +353,10 @@ namespace connectivity
 
         /**
             fetches a single value out of the row
-            @param _nPos	the current column position
-            @param _nType	the type of the current column
+            @param _nPos    the current column position
+            @param _nType   the type of the current column
             @param _bNullable   if true then it will be checked if the result could be NULL, otherwise not.
-            @param _xRow	the row where to fetch the data from
+            @param _xRow    the row where to fetch the data from
         */
         void fill(sal_Int32 _nPos,
                   sal_Int32 _nType,
@@ -375,22 +375,22 @@ namespace connectivity
     /// ORowSetValueDecorator decorates a ORowSetValue so the value is "refcounted"
     class OOO_DLLPUBLIC_DBTOOLS ORowSetValueDecorator : public ::vos::OReference
     {
-        ORowSetValue	m_aValue;	// my own value
+        ORowSetValue    m_aValue;   // my own value
     public:
         ORowSetValueDecorator(){m_aValue.setBound(sal_True);}
         ORowSetValueDecorator(const ORowSetValue& _aValue) : m_aValue(_aValue){m_aValue.setBound(sal_True);}
         ORowSetValueDecorator& operator=(const ORowSetValue& _aValue);
 
-        inline operator const ORowSetValue&()	const				{ return m_aValue; }
-        inline bool operator ==( const ORowSetValue & _rRH )	    { return m_aValue == _rRH; }
-        inline const ORowSetValue& getValue()	const				{ return m_aValue; }
-        inline ORowSetValue& get()									{ return m_aValue; }
-        inline void setValue(const ORowSetValue& _aValue)			{ m_aValue = _aValue; }
-        inline void setNull()										{ m_aValue.setNull(); }
-        inline void setBound(sal_Bool _bBound )						{ m_aValue.setBound(_bBound);}
-        inline sal_Bool isBound( ) const							{ return m_aValue.isBound();}
-        inline void setTypeKind(sal_Int32 _nType)					{ m_aValue.setTypeKind(_nType); }
-        inline void setModified(sal_Bool _bModified)				{ m_aValue.setModified(_bModified); }
+        inline operator const ORowSetValue&()   const               { return m_aValue; }
+        inline bool operator ==( const ORowSetValue & _rRH )        { return m_aValue == _rRH; }
+        inline const ORowSetValue& getValue()   const               { return m_aValue; }
+        inline ORowSetValue& get()                                  { return m_aValue; }
+        inline void setValue(const ORowSetValue& _aValue)           { m_aValue = _aValue; }
+        inline void setNull()                                       { m_aValue.setNull(); }
+        inline void setBound(sal_Bool _bBound )                     { m_aValue.setBound(_bBound);}
+        inline sal_Bool isBound( ) const                            { return m_aValue.isBound();}
+        inline void setTypeKind(sal_Int32 _nType)                   { m_aValue.setTypeKind(_nType); }
+        inline void setModified(sal_Bool _bModified)                { m_aValue.setModified(_bModified); }
 
     };
     typedef ::vos::ORef<ORowSetValueDecorator> ORowSetValueDecoratorRef;
@@ -420,29 +420,29 @@ namespace connectivity
     // ----------------------------------------------------------------------------
     template< class VectorVal > class  ODeleteVector : public connectivity::ORowVector< VectorVal >
     {
-        sal_Bool	m_bDeleted;
+        sal_Bool    m_bDeleted;
     public:
-        ODeleteVector()				: connectivity::ORowVector< VectorVal >()		,m_bDeleted(sal_False)	{}
-        ODeleteVector(size_t _st)	: connectivity::ORowVector< VectorVal >(_st)	,m_bDeleted(sal_False)	{}
+        ODeleteVector()             : connectivity::ORowVector< VectorVal >()       ,m_bDeleted(sal_False)  {}
+        ODeleteVector(size_t _st)   : connectivity::ORowVector< VectorVal >(_st)    ,m_bDeleted(sal_False)  {}
 
-        sal_Bool	isDeleted() const				{ return m_bDeleted;		}
-        void		setDeleted(sal_Bool _bDeleted)	{ m_bDeleted = _bDeleted;	}
+        sal_Bool    isDeleted() const               { return m_bDeleted;        }
+        void        setDeleted(sal_Bool _bDeleted)  { m_bDeleted = _bDeleted;   }
     };
 
-    typedef	ODeleteVector< ORowSetValue >				OValueVector;
+    typedef ODeleteVector< ORowSetValue >               OValueVector;
 
     class OOO_DLLPUBLIC_DBTOOLS OValueRefVector : public ODeleteVector< ORowSetValueDecoratorRef >
     {
     public:
         OValueRefVector(){}
-        OValueRefVector(size_t _st)	: ODeleteVector< ORowSetValueDecoratorRef >(_st)
+        OValueRefVector(size_t _st) : ODeleteVector< ORowSetValueDecoratorRef >(_st)
         {
             for(OValueRefVector::Vector::iterator aIter = get().begin() ; aIter != get().end() ;++aIter)
                 *aIter = new ORowSetValueDecorator;
         }
     };
 
-#define SQL_NO_PARAMETER (SAL_MAX_UINT32)		
+#define SQL_NO_PARAMETER (SAL_MAX_UINT32)
     class OAssignValues : public OValueRefVector
     {
         ::std::vector<sal_Int32> m_nParameterIndexes;
@@ -458,8 +458,8 @@ namespace connectivity
 
 
 
-    typedef ::vos::ORef< OValueVector >					OValueRow;
-    typedef ::vos::ORef< OValueRefVector >				OValueRefRow;
+    typedef ::vos::ORef< OValueVector >                 OValueRow;
+    typedef ::vos::ORef< OValueRefVector >              OValueRefRow;
 }
 
 #endif // #ifndef _CONNECTIVITY_FILE_VALUE_HXX_

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class Window;
 |* Textfunktionen im Outlinermodus
 |*
 \************************************************************************/
-class FuOutlineText 
+class FuOutlineText
     : public FuOutline
 {
 public:
@@ -61,8 +61,8 @@ public:
     virtual void DoCopy();
     virtual void DoPaste();
 
-    virtual void Activate();		   // Function aktivieren
-    virtual void Deactivate();		   // Function deaktivieren
+    virtual void Activate();           // Function aktivieren
+    virtual void Deactivate();         // Function deaktivieren
 
     /** Call this method when the text in the outliner (may) has changed.
         It will invalidate some slots of the view frame and update the
@@ -72,10 +72,10 @@ public:
 
 protected:
     FuOutlineText (
-        ViewShell* pViewShell, 
-        ::sd::Window* pWin, 
+        ViewShell* pViewShell,
+        ::sd::Window* pWin,
         ::sd::View* pView,
-        SdDrawDocument* pDoc, 
+        SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
 };

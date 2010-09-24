@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@
 #include "basesh.hxx"
 #include "docsh.hxx"
 #include "globals.hrc"
-#include "cmdid.h"		 	// FN_		 ...
+#include "cmdid.h"          // FN_       ...
 #include "globdoc.hxx"
 #include "wview.hxx"
 #include "shells.hrc"
@@ -139,7 +139,7 @@ TYPEINIT1(SwView,SfxViewShell)
 /*-----------------13.12.97 11:06-------------------
 
 --------------------------------------------------*/
-ShellModes	SwView::GetShellMode()
+ShellModes  SwView::GetShellMode()
 {
     return pViewImpl->GetShellMode();
 }

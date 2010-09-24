@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ import com.sun.star.document.XDocumentSubStorageSupplier;
 import complexlib.ComplexTestCase;
 
 import java.io.PrintWriter;
- 
+
 import util.utils;
 import java.util.*;
 import java.io.*;
@@ -59,7 +59,7 @@ import com.sun.star.embed.XStorage;
 
 public class DriverTest extends ComplexTestCase {
 
-    
+
     public String[] getTestMethodNames() {
         return new String[] { "test" };
     }
@@ -67,7 +67,7 @@ public class DriverTest extends ComplexTestCase {
     public String getTestObjectName() {
         return "DriverTest";
     }
-    
+
     public void assurePublic(String sMessage,boolean check){
         addResult(sMessage,check);
     }
@@ -82,7 +82,7 @@ public class DriverTest extends ComplexTestCase {
         } catch(Exception ex) {
                 throw new RuntimeException("factory: unable to construct data source" );
         }
-        
+
         try{
             XDocumentSubStorageSupplier doc = (XDocumentSubStorageSupplier)UnoRuntime.queryInterface(XDocumentSubStorageSupplier.class,ds);
             XStorage stor = doc.getDocumentSubStorage("database",4);
@@ -118,13 +118,13 @@ public class DriverTest extends ComplexTestCase {
             info = new com.sun.star.beans.PropertyValue[]{
                 new com.sun.star.beans.PropertyValue("Storage",0,stor,PropertyState.DIRECT_VALUE)
                 ,new com.sun.star.beans.PropertyValue("URL",0,mod.getURL(),PropertyState.DIRECT_VALUE)
-            };        
+            };
             drv = (XDriver)UnoRuntime.queryInterface(XDriver.class,((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.sdbcx.comp.hsqldb.Driver"));
-        
+
 
             TestCacheSize test = new TestCacheSize(((XMultiServiceFactory)param.getMSF()),info,drv);
 
-            StopWatch     sw   = new StopWatch();      
+            StopWatch     sw   = new StopWatch();
 
             try{
                 test.setUp();
@@ -143,20 +143,20 @@ public class DriverTest extends ComplexTestCase {
     public void test2(){
         mThreadTimeOut = 10000000;
         System.gc();
-       
+
         com.sun.star.beans.PropertyValue[] info = null;
         XDriver drv = null;
         try{
             info = new com.sun.star.beans.PropertyValue[]{
                 new com.sun.star.beans.PropertyValue("JavaDriverClass",0,"org.hsqldb.jdbcDriver",PropertyState.DIRECT_VALUE)
                 ,new com.sun.star.beans.PropertyValue("ParameterNameSubstitution",0,new Boolean(false),PropertyState.DIRECT_VALUE)
-            };        
+            };
             drv = (XDriver)UnoRuntime.queryInterface(XDriver.class,((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.comp.sdbc.JDBCDriver"));
             TestCacheSize test = new TestCacheSize(((XMultiServiceFactory)param.getMSF()),info,drv);
             test.setURL("jdbc:hsqldb:g:\\hsql\\db");
 
 
-            StopWatch     sw   = new StopWatch();      
+            StopWatch     sw   = new StopWatch();
 
             try{
                 test.setUp();

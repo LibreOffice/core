@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,11 +28,11 @@
 #ifndef _VOS_RUNNABLE_HXX_
 #define _VOS_RUNNABLE_HXX_
 
-#	include <vos/types.hxx>
-#	include <vos/refernce.hxx>
+#   include <vos/types.hxx>
+#   include <vos/refernce.hxx>
 
 namespace vos
-{     
+{
 
 
 /** IRunnable
@@ -51,8 +51,8 @@ public:
 
     IRunnable() { }
     virtual ~IRunnable() { }
-    
-    
+
+
     /** overload to implement your functionality.
     */
     virtual void SAL_CALL run()= 0;

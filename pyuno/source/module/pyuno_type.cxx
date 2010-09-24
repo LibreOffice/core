@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -176,7 +176,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
             USTR_ASCII( "attributes typeName and/or value of uno.Enum are not strings" ),
             Reference< XInterface > () );
     }
-    
+
     OUString strTypeName( OUString::createFromAscii( PyString_AsString( typeName.get() ) ) );
     char *stringValue = PyString_AsString( value.get() );
 
@@ -192,9 +192,9 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
             buf.appendAscii( ", expected ENUM" );
             throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface>  () );
         }
-           
+
         desc.makeComplete();
-        
+
         typelib_EnumTypeDescription *pEnumDesc = (typelib_EnumTypeDescription*) desc.get();
         int i = 0;
         for( i = 0; i < pEnumDesc->nEnumValues ; i ++ )
@@ -376,7 +376,7 @@ static PyObject* callCtor( const Runtime &r , const char * clazz, const PyRef & 
     PyRef instance( PyObject_CallObject( code.get(), args.get()  ), SAL_NO_ACQUIRE);
     Py_XINCREF( instance.get() );
     return instance.get();
-    
+
 }
 
 
@@ -400,11 +400,11 @@ PyObject* PyUNO_Type_new (const char *typeName , TypeClass t , const Runtime &r 
     if( ! typeClass )
         return NULL;
     PyTuple_SetItem( args.get() , 1 , typeClass);
-    
+
     return callCtor( r, "Type" , args );
 }
 
-PyObject* PyUNO_char_new ( sal_Unicode val , const Runtime &r ) 
+PyObject* PyUNO_char_new ( sal_Unicode val , const Runtime &r )
 {
     // retrieve type object
     PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE );
@@ -426,6 +426,6 @@ PyObject *PyUNO_ByteSequence_new(
     PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE );
     PyTuple_SetItem( args.get() , 0 , str.getAcquired() );
     return callCtor( r, "ByteSequence" , args );
-    
+
 }
 }

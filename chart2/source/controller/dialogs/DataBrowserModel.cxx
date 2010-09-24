@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -869,7 +869,7 @@ void DataBrowserModel::updateFromModel()
                             }
                             else if( aRole.equals( C2U( "values-x" ) ) )
                                 nSequenceNumberFormatKey = nXAxisNumberFormat;
-                            
+
                             if( ::std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
                                              lcl_RepresentationsOfLSeqMatch( aLSeqs[nSeqIdx] )) == aSharedSequences.end())
                             {

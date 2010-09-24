@@ -21,7 +21,7 @@ public class BooleanValidator extends integration.forms.ControlValidator
         m_preventChecked = preventChecked;
         m_converter = new com.sun.star.uno.AnyConverter();
     }
-    
+
     public String explainInvalid( Object Value )
     {
         try
@@ -38,7 +38,7 @@ public class BooleanValidator extends integration.forms.ControlValidator
         }
         return "";
     }
-    
+
     public boolean isValid( Object Value )
     {
         try

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 #include "sc.hrc" // ->RID_SCDLG_PIVOT_LAYOUT
 
-#define BTN_OK 					1
+#define BTN_OK                  1
 #define BTN_CANCEL              2
 #define BTN_HELP                3
 #define BTN_MORE                4
@@ -67,15 +67,15 @@
 #define RB_INAREA               41
 #define ED_INAREA               42
 
-#define PIVOTSTR_SUM			1
-#define PIVOTSTR_COUNT			2
-#define PIVOTSTR_AVG			3
-#define PIVOTSTR_MAX			4
-#define PIVOTSTR_MIN			5
-#define PIVOTSTR_PROD			6
-#define PIVOTSTR_COUNT2			7
-#define PIVOTSTR_DEV			8
-#define PIVOTSTR_DEV2			9
-#define PIVOTSTR_VAR			10
-#define PIVOTSTR_VAR2			11
+#define PIVOTSTR_SUM            1
+#define PIVOTSTR_COUNT          2
+#define PIVOTSTR_AVG            3
+#define PIVOTSTR_MAX            4
+#define PIVOTSTR_MIN            5
+#define PIVOTSTR_PROD           6
+#define PIVOTSTR_COUNT2         7
+#define PIVOTSTR_DEV            8
+#define PIVOTSTR_DEV2           9
+#define PIVOTSTR_VAR            10
+#define PIVOTSTR_VAR2           11
 

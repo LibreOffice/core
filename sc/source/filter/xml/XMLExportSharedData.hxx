@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,14 +53,14 @@ class ScMyNoteShapesContainer;
 
 class ScMySharedData
 {
-    std::vector<sal_Int32>		nLastColumns;
-    std::vector<sal_Int32>		nLastRows;
-    ScMyTableShapes*			pTableShapes;
-    ScMyDrawPages*				pDrawPages;
-    ScMyShapesContainer*		pShapesContainer;
-    ScMyDetectiveObjContainer*	pDetectiveObjContainer;
+    std::vector<sal_Int32>      nLastColumns;
+    std::vector<sal_Int32>      nLastRows;
+    ScMyTableShapes*            pTableShapes;
+    ScMyDrawPages*              pDrawPages;
+    ScMyShapesContainer*        pShapesContainer;
+    ScMyDetectiveObjContainer*  pDetectiveObjContainer;
     ScMyNoteShapesContainer*    pNoteShapes;
-    sal_Int32					nTableCount;
+    sal_Int32                   nTableCount;
 public:
     ScMySharedData(const sal_Int32 nTableCount);
     ~ScMySharedData();

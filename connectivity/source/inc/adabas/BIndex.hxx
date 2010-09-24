@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@ namespace connectivity
         class OAdabasTable;
         class OAdabasIndex : public sdbcx::OIndex
         {
-            OAdabasTable*	m_pTable;
+            OAdabasTable*   m_pTable;
         public:
             virtual void refreshColumns();
         public:
             OAdabasIndex(OAdabasTable* _pTable);
-            OAdabasIndex(	OAdabasTable* _pTable,
+            OAdabasIndex(   OAdabasTable* _pTable,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Catalog,
                     sal_Bool _isUnique,

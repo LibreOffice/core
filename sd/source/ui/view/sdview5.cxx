@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ namespace sd {
 static bool implIsMultiPresObj( PresObjKind eKind )
 {
     switch( eKind )
-    {						
+    {
     case PRESOBJ_OUTLINE:
     case PRESOBJ_GRAPHIC:
     case PRESOBJ_OBJECT:
@@ -56,7 +56,7 @@ SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
 {
     SdrObject* pEmptyObj = 0;
 
-    SdrPageView*	pPV = GetSdrPageView();
+    SdrPageView*    pPV = GetSdrPageView();
     if( pPV )
     {
         SdPage* pPage = static_cast< SdPage* >( pPV->GetPage() );
@@ -95,7 +95,7 @@ SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
             if( !pEmptyObj )
             {
                 const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
-                
+
                 for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); iter++ )
                 {
                     if( (*iter)->IsEmptyPresObj() && implIsMultiPresObj(pPage->GetPresObjKind(*iter)) )

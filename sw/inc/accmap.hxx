@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -295,7 +295,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
         const long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )	throw (::com::sun::star::uno::RuntimeException);
+    )   throw (::com::sun::star::uno::RuntimeException);
 
     // additional Core/Pixel conversions for internal use; also works
     // for preview

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,24 +47,24 @@ namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
 
-class SelectionFunction 
+class SelectionFunction
     : public SlideFunction
 {
 public:
     TYPEINFO();
 
     static FunctionReference Create( SlideSorter& rSlideSorter, SfxRequest& rRequest );
-                                
+
     // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
     virtual void Paint(const Rectangle&, ::sd::Window* );
-                                
-    virtual void Activate();		   // Function aktivieren
-    virtual void Deactivate();		   // Function deaktivieren
-                                
+
+    virtual void Activate();           // Function aktivieren
+    virtual void Deactivate();         // Function deaktivieren
+
     virtual void ScrollStart();
     virtual void ScrollEnd();
 
@@ -81,7 +81,7 @@ public:
         This is used when a function gets a KEY_ESCAPE but can also
         be called directly.
 
-        @returns 
+        @returns
             true if a active function was aborted
     */
     virtual bool cancel();
@@ -109,7 +109,7 @@ private:
 
     /// Box of the insert marker in model coordinates.
     Rectangle maInsertionMarkerBox;
-    
+
     /** We use this flag to filter out the cases where MouseMotion() is called
         with a pressed mouse button but without a prior MouseButtonDown()
         call.  This is an indication that the mouse button was pressed over

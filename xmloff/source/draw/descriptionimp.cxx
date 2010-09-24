@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ using namespace ::xmloff::token;
 
 TYPEINIT1( SdXMLDescriptionContext, SvXMLImportContext );
 
-SdXMLDescriptionContext::SdXMLDescriptionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,	const OUString& rLocalName,
+SdXMLDescriptionContext::SdXMLDescriptionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,   const OUString& rLocalName,
         const Reference< XAttributeList>&, const Reference< XShape >& rxShape)
 : SvXMLImportContext(rImport, nPrfx, rLocalName), mxShape( rxShape )
 {

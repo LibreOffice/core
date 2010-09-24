@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,29 +37,29 @@ class SwView;
 class SwHyphWrapper : public SvxSpellWrapper {
 private:
     SwView* pView;
-    ::com::sun::star::uno::Reference< 
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >  xHyph;
-    Link			aOldLnk;
-    LanguageType		nLangError;		// nicht vorhandene Sprache
-    sal_uInt16			nPageCount;		// Seitenanzahl fuer Progressanzeige
-    sal_uInt16			nPageStart;		// 1. gepruefte Seite
-    sal_Bool			bInSelection : 1; // Trennen von selektiertem Text
-    sal_Bool			bShowError : 1; // nicht vorhandene Sprache melden
-    sal_Bool			bAutomatic : 1; // Trennstellen ohne Rueckfrage einfuegen
+    Link            aOldLnk;
+    LanguageType        nLangError;     // nicht vorhandene Sprache
+    sal_uInt16          nPageCount;     // Seitenanzahl fuer Progressanzeige
+    sal_uInt16          nPageStart;     // 1. gepruefte Seite
+    sal_Bool            bInSelection : 1; // Trennen von selektiertem Text
+    sal_Bool            bShowError : 1; // nicht vorhandene Sprache melden
+    sal_Bool            bAutomatic : 1; // Trennstellen ohne Rueckfrage einfuegen
     sal_Bool            bInfoBox : 1;   // display info-box when ending
     DECL_LINK( SpellError, LanguageType * );
 
 protected:
-    virtual	void SpellStart( SvxSpellArea eSpell );
-    virtual	sal_Bool SpellContinue();
-    virtual	void SpellEnd( );
-    virtual	sal_Bool SpellMore();
+    virtual void SpellStart( SvxSpellArea eSpell );
+    virtual sal_Bool SpellContinue();
+    virtual void SpellEnd( );
+    virtual sal_Bool SpellMore();
     virtual void InsertHyphen( const sal_uInt16 nPos ); // Hyphen einfuegen
 
 public:
-    SwHyphWrapper( SwView* pVw, 
-                   ::com::sun::star::uno::Reference< 
-                        ::com::sun::star::linguistic2::XHyphenator >  &rxHyph, 
+    SwHyphWrapper( SwView* pVw,
+                   ::com::sun::star::uno::Reference<
+                        ::com::sun::star::linguistic2::XHyphenator >  &rxHyph,
                    sal_Bool bStart, sal_Bool bOther, sal_Bool bSelect );
     ~SwHyphWrapper();
 };

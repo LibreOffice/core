@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,38 +59,38 @@
 
 namespace dbaccess
 {
-    typedef ::cppu::WeakAggComponentImplHelper12    <	::com::sun::star::sdb::XResultSetAccess
-                                                    ,	::com::sun::star::sdb::XRowSetApproveBroadcaster
-                                                    ,	::com::sun::star::sdb::XRowsChangeBroadcaster
-                                                    ,	::com::sun::star::sdbcx::XDeleteRows
-                                                    ,	::com::sun::star::sdbc::XParameters
-                                                    ,	::com::sun::star::lang::XEventListener
-                                                    ,	::com::sun::star::sdbc::XResultSetUpdate
-                                                    ,	::com::sun::star::sdbc::XRowUpdate
-                                                    ,	::com::sun::star::util::XCancellable
-                                                    ,	::com::sun::star::sdb::XCompletedExecution
-                                                    ,	::com::sun::star::sdb::XParametersSupplier
-                                                    ,	::com::sun::star::sdbc::XWarningsSupplier
-                                                    >	ORowSet_BASE1;
+    typedef ::cppu::WeakAggComponentImplHelper12    <   ::com::sun::star::sdb::XResultSetAccess
+                                                    ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
+                                                    ,   ::com::sun::star::sdb::XRowsChangeBroadcaster
+                                                    ,   ::com::sun::star::sdbcx::XDeleteRows
+                                                    ,   ::com::sun::star::sdbc::XParameters
+                                                    ,   ::com::sun::star::lang::XEventListener
+                                                    ,   ::com::sun::star::sdbc::XResultSetUpdate
+                                                    ,   ::com::sun::star::sdbc::XRowUpdate
+                                                    ,   ::com::sun::star::util::XCancellable
+                                                    ,   ::com::sun::star::sdb::XCompletedExecution
+                                                    ,   ::com::sun::star::sdb::XParametersSupplier
+                                                    ,   ::com::sun::star::sdbc::XWarningsSupplier
+                                                    >   ORowSet_BASE1;
 
     class OTableContainer;
-    class ORowSet :	public comphelper::OBaseMutex
+    class ORowSet : public comphelper::OBaseMutex
                     , public ORowSet_BASE1
                     , public ORowSetBase
                     , public ::comphelper::OPropertyArrayUsageHelper<ORowSet>
     {
         friend class ORowSetClone;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >			m_xOldConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >			m_xActiveConnection;
-        ::com::sun::star::uno::Any														m_aActiveConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >	m_xTypeMap;
-        ::com::sun::star::uno::Any														m_aTypeMap;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >	m_xStatement;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer > 	m_xComposer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > 	m_xColumns; // the columns from a table or query
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xOldConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xActiveConnection;
+        ::com::sun::star::uno::Any                                                      m_aActiveConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTypeMap;
+        ::com::sun::star::uno::Any                                                      m_aTypeMap;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >  m_xStatement;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   m_xComposer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns; // the columns from a table or query
 
-        connectivity::OWeakRefArray					m_aClones;
+        connectivity::OWeakRefArray                 m_aClones;
         /** our parameters as XPropertySet instances and ORowSetValue instances
         */
         ::dbtools::param::ParametersContainerRef    m_pParameters;
@@ -102,49 +102,49 @@ namespace dbaccess
         ::std::bit_vector                           m_aParametersSet;
         ::std::bit_vector                           m_aReadOnlyDataColumns;
 
-        ::cppu::OInterfaceContainerHelper			m_aRowsetListeners;
-        ::cppu::OInterfaceContainerHelper			m_aApproveListeners;
-        ::cppu::OInterfaceContainerHelper			m_aRowsChangeListener;
+        ::cppu::OInterfaceContainerHelper           m_aRowsetListeners;
+        ::cppu::OInterfaceContainerHelper           m_aApproveListeners;
+        ::cppu::OInterfaceContainerHelper           m_aRowsChangeListener;
 
         ::dbtools::WarningsContainer                m_aWarnings;
 
-        OTableContainer*							m_pTables;
+        OTableContainer*                            m_pTables;
 
-        rtl::OUString								m_aCommand;
-        rtl::OUString								m_aDataSourceName;
-        rtl::OUString								m_aURL;
-        rtl::OUString								m_aUser;
-        rtl::OUString								m_aPassword;
-        rtl::OUString								m_aFilter;
-        rtl::OUString								m_aHavingClause;
-        rtl::OUString								m_aGroupBy;
-        rtl::OUString								m_aOrder;
-        rtl::OUString								m_aActiveCommand;
-        rtl::OUString								m_aCursorName;
-        rtl::OUString								m_aUpdateCatalogName; // is set by a query
-        rtl::OUString								m_aUpdateSchemaName; // is set by a query
-        rtl::OUString								m_aUpdateTableName; // is set by a query
+        rtl::OUString                               m_aCommand;
+        rtl::OUString                               m_aDataSourceName;
+        rtl::OUString                               m_aURL;
+        rtl::OUString                               m_aUser;
+        rtl::OUString                               m_aPassword;
+        rtl::OUString                               m_aFilter;
+        rtl::OUString                               m_aHavingClause;
+        rtl::OUString                               m_aGroupBy;
+        rtl::OUString                               m_aOrder;
+        rtl::OUString                               m_aActiveCommand;
+        rtl::OUString                               m_aCursorName;
+        rtl::OUString                               m_aUpdateCatalogName; // is set by a query
+        rtl::OUString                               m_aUpdateSchemaName; // is set by a query
+        rtl::OUString                               m_aUpdateTableName; // is set by a query
 
-        sal_Int32					m_nFetchDirection;
-        sal_Int32					m_nFetchSize;
-        sal_Int32					m_nMaxFieldSize;
-        sal_Int32					m_nMaxRows;
-        sal_Int32					m_nQueryTimeOut;
-        sal_Int32					m_nCommandType;
-        sal_Int32					m_nTransactionIsolation;
-        sal_Int32					m_nPrivileges;
+        sal_Int32                   m_nFetchDirection;
+        sal_Int32                   m_nFetchSize;
+        sal_Int32                   m_nMaxFieldSize;
+        sal_Int32                   m_nMaxRows;
+        sal_Int32                   m_nQueryTimeOut;
+        sal_Int32                   m_nCommandType;
+        sal_Int32                   m_nTransactionIsolation;
+        sal_Int32                   m_nPrivileges;
         sal_Int32                   m_nLastKnownRowCount;
         oslInterlockedCount         m_nInAppend;
         sal_Bool                    m_bLastKnownRowCountFinal;
-        sal_Bool					m_bUseEscapeProcessing ;
-        sal_Bool					m_bApplyFilter ;
-        sal_Bool					m_bCommandFacetsDirty;  // any of the facets which define the active command is dirty
-        sal_Bool					m_bModified ;
-        sal_Bool					m_bRebuildConnOnExecute ;
-        sal_Bool					m_bIsBookmarable ;
-        sal_Bool					m_bNew ;
-        sal_Bool					m_bCanUpdateInsertedRows;
-        sal_Bool					m_bOwnConnection;
+        sal_Bool                    m_bUseEscapeProcessing ;
+        sal_Bool                    m_bApplyFilter ;
+        sal_Bool                    m_bCommandFacetsDirty;  // any of the facets which define the active command is dirty
+        sal_Bool                    m_bModified ;
+        sal_Bool                    m_bRebuildConnOnExecute ;
+        sal_Bool                    m_bIsBookmarable ;
+        sal_Bool                    m_bNew ;
+        sal_Bool                    m_bCanUpdateInsertedRows;
+        sal_Bool                    m_bOwnConnection;
 
     private:
         /** builds m_aActiveCommand from our settings
@@ -244,10 +244,10 @@ namespace dbaccess
         virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard);
         virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard);
 
-        virtual void		doCancelModification( );
-        virtual sal_Bool	isModification( );
-        virtual sal_Bool	isModified( );
-        virtual sal_Bool	isNew( );
+        virtual void        doCancelModification( );
+        virtual sal_Bool    isModification( );
+        virtual sal_Bool    isModified( );
+        virtual sal_Bool    isNew( );
 
         virtual ~ORowSet();
 
@@ -408,14 +408,14 @@ namespace dbaccess
     protected:
         /** implement the <method>execute</method>, without calling the approve listeners and without building a new
             connection
-            @param		_rClearForNotification		mutex to clear before doing the final notifications
+            @param      _rClearForNotification      mutex to clear before doing the final notifications
         */
-        void	execute_NoApprove_NoNewConn(::osl::ResettableMutexGuard& _rClearForNotification);
+        void    execute_NoApprove_NoNewConn(::osl::ResettableMutexGuard& _rClearForNotification);
 
         /** call the RowSetApproveListeners<p/>
             throws an RowSetVetoException if one of the listeners vetoed
         */
-        void	approveExecution() throw (::com::sun::star::sdb::RowSetVetoException, ::com::sun::star::uno::RuntimeException);
+        void    approveExecution() throw (::com::sun::star::sdb::RowSetVetoException, ::com::sun::star::uno::RuntimeException);
 
         /// set m_xActiveConnection, fire a PropertyChangeEvent if necessary, do the event listener handling etc
         void setActiveConnection( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxNewConn, sal_Bool _bFireEvent = sal_True );
@@ -470,17 +470,17 @@ namespace dbaccess
                          ,public ::comphelper::OPropertyArrayUsageHelper < ORowSetClone >
     {
     protected:
-        ORowSet*					m_pParent;
-        sal_Int32					m_nFetchDirection;
-        sal_Int32					m_nFetchSize;
-        sal_Bool					m_bIsBookmarable;
+        ORowSet*                    m_pParent;
+        sal_Int32                   m_nFetchDirection;
+        sal_Int32                   m_nFetchSize;
+        sal_Bool                    m_bIsBookmarable;
 
     protected:
         // the clone can not insert anything
-        virtual void		doCancelModification( );
-        virtual sal_Bool	isModification( );
-        virtual sal_Bool	isModified( );
-        virtual sal_Bool	isNew( );
+        virtual void        doCancelModification( );
+        virtual sal_Bool    isModification( );
+        virtual sal_Bool    isModified( );
+        virtual sal_Bool    isNew( );
 
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
     public:

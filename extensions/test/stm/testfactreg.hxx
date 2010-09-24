@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,32 +27,32 @@
 XInterfaceRef OPipeTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception));
 Sequence<UString> OPipeTest_getSupportedServiceNames(void) THROWS( () );
 UString     OPipeTest_getServiceName() THROWS( () );
-UString 	OPipeTest_getImplementationName() THROWS( () );
+UString     OPipeTest_getImplementationName() THROWS( () );
 
 XInterfaceRef ODataStreamTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception));
 Sequence<UString> ODataStreamTest_getSupportedServiceNames( int i) THROWS( () );
 UString     ODataStreamTest_getServiceName( int i) THROWS( ( ) );
-UString 	ODataStreamTest_getImplementationName( int i) THROWS( () );
+UString     ODataStreamTest_getImplementationName( int i) THROWS( () );
 
 XInterfaceRef OMarkableOutputStreamTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception));
 Sequence<UString> OMarkableOutputStreamTest_getSupportedServiceNames(void) THROWS( () );
 UString     OMarkableOutputStreamTest_getServiceName() THROWS( () );
-UString 	OMarkableOutputStreamTest_getImplementationName() THROWS( () );
+UString     OMarkableOutputStreamTest_getImplementationName() THROWS( () );
 
 XInterfaceRef OMarkableInputStreamTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception));
 Sequence<UString> OMarkableInputStreamTest_getSupportedServiceNames(void) THROWS( () );
 UString     OMarkableInputStreamTest_getServiceName() THROWS( () );
-UString 	OMarkableInputStreamTest_getImplementationName() THROWS( () );
+UString     OMarkableInputStreamTest_getImplementationName() THROWS( () );
 
 XInterfaceRef OObjectStreamTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception));
 Sequence<UString> OObjectStreamTest_getSupportedServiceNames( int i) THROWS( () );
 UString     OObjectStreamTest_getServiceName( int i) THROWS( () );
-UString 	OObjectStreamTest_getImplementationName( int i) THROWS( () );
+UString     OObjectStreamTest_getImplementationName( int i) THROWS( () );
 
-XInterfaceRef 		OMyPersistObject_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception));
-Sequence<UString> 	OMyPersistObject_getSupportedServiceNames( ) THROWS( () );
-UString     		OMyPersistObject_getServiceName( ) THROWS( () );
-UString 			OMyPersistObject_getImplementationName( ) THROWS( () );
+XInterfaceRef       OMyPersistObject_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception));
+Sequence<UString>   OMyPersistObject_getSupportedServiceNames( ) THROWS( () );
+UString             OMyPersistObject_getServiceName( ) THROWS( () );
+UString             OMyPersistObject_getImplementationName( ) THROWS( () );
 
 Sequence<BYTE> createSeq( char * p );
 Sequence<BYTE> createIntSeq( INT32 i );
@@ -74,7 +74,7 @@ Sequence<BYTE> createIntSeq( INT32 i );
         m_seqErrors.getArray()[ m_seqErrors.getLen()-1] = StringToOUString( str , CHARSET_SYSTEM ); \
         }\
         ((void)0)
-        
+
 
 #define WARNING_ASSERT(expr, Message) \
         if( ! (expr) ) { \

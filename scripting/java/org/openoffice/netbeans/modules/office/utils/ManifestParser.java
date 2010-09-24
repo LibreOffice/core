@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ public class ManifestParser implements XMLParser {
 
     private ManifestParser() {
     }
-    
+
     public static ManifestParser getManifestParser() {
         if (parser == null) {
             synchronized(ManifestParser.class) {
@@ -87,7 +87,7 @@ public class ManifestParser implements XMLParser {
             System.out.println("Sax Error parsing stream: " + se.getMessage());
             return null;
         }
-        
+
         return result;
     }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef _CHCMPRSE_HXX
 #define _CHCMPRSE_HXX
 
-enum SwCharCompressType{ 	CHARCOMPRESS_NONE,
+enum SwCharCompressType{    CHARCOMPRESS_NONE,
                             CHARCOMPRESS_PUNCTUATION,
                             CHARCOMPRESS_PUNCTUATION_KANA };
 

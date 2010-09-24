@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,30 +26,30 @@
  ************************************************************************/
 #ifndef __com_sun_star_packages_zip_ZipIOException_idl__
 #define __com_sun_star_packages_zip_ZipIOException_idl__
- 
-#ifndef __com_sun_star_io_IOException_idl__ 
-#include <com/sun/star/io/IOException.idl> 
-#endif 
- 
-//============================================================================= 
- 
+
+#ifndef __com_sun_star_io_IOException_idl__
+#include <com/sun/star/io/IOException.idl>
+#endif
+
+//=============================================================================
+
 module com {  module sun {  module star {   module packages {  module zip {
- 
-//============================================================================= 
- 
+
+//=============================================================================
+
 /** used to indicate that a ZIP exception has occurred.
     usualy can be thrown from XInputStream interface implementations.
-    <p>This interface is an IDL version of the Java interface 
+    <p>This interface is an IDL version of the Java interface
     <em>java.util.zip.ZipException</em> with some minor adaptations.</p>
 
     @since OOo 1.1.2
  */
 published exception ZipIOException: com::sun::star::io::IOException
-{ 
-}; 
- 
-//============================================================================= 
- 
+{
+};
+
+//=============================================================================
+
 }; }; }; }; };
- 
-#endif 
+
+#endif

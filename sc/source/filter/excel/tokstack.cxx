@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 
 #include <stdio.h> // printf
 
-const UINT16	TokenPool::nScTokenOff = 8192;
+const UINT16    TokenPool::nScTokenOff = 8192;
 
 
 TokenStack::TokenStack( UINT16 nNewSize )
@@ -64,12 +64,12 @@ TokenStack::~TokenStack()
 
 // !ACHTUNG!: nach Aussen hin beginnt die Nummerierung mit 1!
 // !ACHTUNG!: SC-Token werden mit einem Offset nScTokenOff abgelegt
-//				-> Unterscheidung von anderen Token
+//              -> Unterscheidung von anderen Token
 
 
 TokenPool::TokenPool( void )
 {
-    UINT16	nLauf = nScTokenOff;
+    UINT16  nLauf = nScTokenOff;
 
     // Sammelstelle fuer Id-Folgen
     nP_Id = 256;
@@ -122,7 +122,7 @@ TokenPool::TokenPool( void )
 
 TokenPool::~TokenPool()
 {
-    UINT16	n;
+    UINT16  n;
 
     delete[] pP_Id;
     delete[] pElement;
@@ -172,10 +172,10 @@ TokenPool::~TokenPool()
 
 void TokenPool::GrowString( void )
 {
-    UINT16		nP_StrNew = nP_Str * 2;
-    UINT16		nL;
+    UINT16      nP_StrNew = nP_Str * 2;
+    UINT16      nL;
 
-    String**	ppP_StrNew = new String *[ nP_StrNew ];
+    String**    ppP_StrNew = new String *[ nP_StrNew ];
 
     for( nL = 0 ; nL < nP_Str ; nL++ )
         ppP_StrNew[ nL ] = ppP_Str[ nL ];
@@ -184,16 +184,16 @@ void TokenPool::GrowString( void )
 
     nP_Str = nP_StrNew;
 
-    delete[]	ppP_Str;
+    delete[]    ppP_Str;
     ppP_Str = ppP_StrNew;
 }
 
 
 void TokenPool::GrowDouble( void )
 {
-    UINT16		nP_DblNew = nP_Dbl * 2;
+    UINT16      nP_DblNew = nP_Dbl * 2;
 
-    double*		pP_DblNew = new double[ nP_DblNew ];
+    double*     pP_DblNew = new double[ nP_DblNew ];
 
     for( UINT16 nL = 0 ; nL < nP_Dbl ; nL++ )
         pP_DblNew[ nL ] = pP_Dbl[ nL ];
@@ -208,14 +208,14 @@ void TokenPool::GrowDouble( void )
 //UNUSED2009-05 void TokenPool::GrowError( void )
 //UNUSED2009-05 {
 //UNUSED2009-05     UINT16      nP_ErrNew = nP_Err * 2;
-//UNUSED2009-05 
+//UNUSED2009-05
 //UNUSED2009-05     USHORT*     pP_ErrNew = new USHORT[ nP_ErrNew ];
-//UNUSED2009-05 
+//UNUSED2009-05
 //UNUSED2009-05     for( UINT16 nL = 0 ; nL < nP_Err ; nL++ )
 //UNUSED2009-05         pP_ErrNew[ nL ] = pP_Err[ nL ];
-//UNUSED2009-05 
+//UNUSED2009-05
 //UNUSED2009-05     nP_Err = nP_ErrNew;
-//UNUSED2009-05 
+//UNUSED2009-05
 //UNUSED2009-05     delete[] pP_Err;
 //UNUSED2009-05     pP_Err = pP_ErrNew;
 //UNUSED2009-05 }
@@ -223,10 +223,10 @@ void TokenPool::GrowDouble( void )
 
 void TokenPool::GrowTripel( void )
 {
-    UINT16			nP_RefTrNew = nP_RefTr * 2;
-    UINT16			nL;
+    UINT16          nP_RefTrNew = nP_RefTr * 2;
+    UINT16          nL;
 
-    ScSingleRefData**	ppP_RefTrNew = new ScSingleRefData *[ nP_RefTrNew ];
+    ScSingleRefData**   ppP_RefTrNew = new ScSingleRefData *[ nP_RefTrNew ];
 
     for( nL = 0 ; nL < nP_RefTr ; nL++ )
         ppP_RefTrNew[ nL ] = ppP_RefTr[ nL ];
@@ -242,9 +242,9 @@ void TokenPool::GrowTripel( void )
 
 void TokenPool::GrowId( void )
 {
-    UINT16	nP_IdNew = nP_Id * 2;
+    UINT16  nP_IdNew = nP_Id * 2;
 
-    UINT16*	pP_IdNew = new UINT16[ nP_IdNew ];
+    UINT16* pP_IdNew = new UINT16[ nP_IdNew ];
 
     for( UINT16 nL = 0 ; nL < nP_Id ; nL++ )
         pP_IdNew[ nL ] = pP_Id[ nL ];
@@ -258,11 +258,11 @@ void TokenPool::GrowId( void )
 
 void TokenPool::GrowElement( void )
 {
-    UINT16	nElementNew = nElement * 2;
+    UINT16  nElementNew = nElement * 2;
 
-    UINT16*	pElementNew = new UINT16[ nElementNew ];
-    E_TYPE*	pTypeNew = new E_TYPE[ nElementNew ];
-    UINT16*	pSizeNew = new UINT16[ nElementNew ];
+    UINT16* pElementNew = new UINT16[ nElementNew ];
+    E_TYPE* pTypeNew = new E_TYPE[ nElementNew ];
+    UINT16* pSizeNew = new UINT16[ nElementNew ];
 
     for( UINT16 nL = 0 ; nL < nElement ; nL++ )
     {
@@ -284,9 +284,9 @@ void TokenPool::GrowElement( void )
 
 void TokenPool::GrowExt( void )
 {
-    UINT16		nNewSize = nP_Ext * 2;
+    UINT16      nNewSize = nP_Ext * 2;
 
-    EXTCONT**	ppNew = new EXTCONT*[ nNewSize ];
+    EXTCONT**   ppNew = new EXTCONT*[ nNewSize ];
 
     memset( ppNew, 0, sizeof( EXTCONT* ) * nNewSize );
     memcpy( ppNew, ppP_Ext, sizeof( EXTCONT* ) * nP_Ext );
@@ -299,9 +299,9 @@ void TokenPool::GrowExt( void )
 
 void TokenPool::GrowNlf( void )
 {
-    UINT16		nNewSize = nP_Nlf * 2;
+    UINT16      nNewSize = nP_Nlf * 2;
 
-    NLFCONT**	ppNew = new NLFCONT*[ nNewSize ];
+    NLFCONT**   ppNew = new NLFCONT*[ nNewSize ];
 
     memset( ppNew, 0, sizeof( NLFCONT* ) * nNewSize );
     memcpy( ppNew, ppP_Nlf, sizeof( NLFCONT* ) * nP_Nlf );
@@ -357,7 +357,7 @@ void TokenPool::GetElement( const UINT16 nId )
                 break;
             case T_RefA:
                 {
-                ScComplexRefData	aScComplexRefData;
+                ScComplexRefData    aScComplexRefData;
                 aScComplexRefData.Ref1 = *ppP_RefTr[ pElement[ nId ] ];
                 aScComplexRefData.Ref2 = *ppP_RefTr[ pElement[ nId ] + 1 ];
                 pScToken->AddDoubleReference( aScComplexRefData );
@@ -368,8 +368,8 @@ void TokenPool::GetElement( const UINT16 nId )
                 break;
             case T_Ext:
                 {
-                UINT16			n = pElement[ nId ];
-                EXTCONT*		p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
+                UINT16          n = pElement[ nId ];
+                EXTCONT*        p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
 
                 if( p )
                 {
@@ -382,8 +382,8 @@ void TokenPool::GetElement( const UINT16 nId )
                 break;
             case T_Nlf:
                 {
-                UINT16			n = pElement[ nId ];
-                NLFCONT*		p = ( n < nP_Nlf )? ppP_Nlf[ n ] : NULL;
+                UINT16          n = pElement[ nId ];
+                NLFCONT*        p = ( n < nP_Nlf )? ppP_Nlf[ n ] : NULL;
 
                 if( p )
                         pScToken->AddColRowName( p->aRef );
@@ -445,8 +445,8 @@ void TokenPool::GetElementRek( const UINT16 nId )
     DBG_ASSERT( pType[ nId ] == T_Id, "-TokenPool::GetElementRek(): nId nicht Id-Folge!" );
 
 
-    UINT16		nAnz = pSize[ nId ];
-    UINT16*		pAkt = &pP_Id[ pElement[ nId ] ];
+    UINT16      nAnz = pSize[ nId ];
+    UINT16*     pAkt = &pP_Id[ pElement[ nId ] ];
     for( ; nAnz > 0 ; nAnz--, pAkt++ )
     {
         if( *pAkt < nScTokenOff )
@@ -472,7 +472,7 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     break;
                 case T_RefA:
                     {
-                    ScComplexRefData	aScComplexRefData;
+                    ScComplexRefData    aScComplexRefData;
                     aScComplexRefData.Ref1 = *ppP_RefTr[ pElement[ *pAkt ] ];
                     aScComplexRefData.Ref2 = *ppP_RefTr[ pElement[ *pAkt ] + 1 ];
                     pScToken->AddDoubleReference( aScComplexRefData );
@@ -483,8 +483,8 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     break;
                 case T_Ext:
                     {
-                    UINT16		n = pElement[ *pAkt ];
-                    EXTCONT*	p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
+                    UINT16      n = pElement[ *pAkt ];
+                    EXTCONT*    p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
 
                     if( p )
                         pScToken->AddExternal( p->aText, p->eId );
@@ -492,8 +492,8 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     break;
                 case T_Nlf:
                     {
-                    UINT16		n = pElement[ *pAkt ];
-                    NLFCONT*	p = ( n < nP_Nlf )? ppP_Nlf[ n ] : NULL;
+                    UINT16      n = pElement[ *pAkt ];
+                    NLFCONT*    p = ( n < nP_Nlf )? ppP_Nlf[ n ] : NULL;
 
                     if( p )
                         pScToken->AddColRowName( p->aRef );
@@ -540,7 +540,7 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     DBG_ERROR("-TokenPool::GetElementRek(): Zustand undefiniert!?");
             }
         }
-        else	// elementarer SC_Token
+        else    // elementarer SC_Token
             pScToken->AddOpCode( ( DefTokenId ) ( *pAkt - nScTokenOff ) );
     }
 
@@ -558,12 +558,12 @@ void TokenPool::operator >>( TokenId& rId )
     if( nElementAkt >= nElement )
         GrowElement();
 
-    pElement[ nElementAkt ] = nP_IdLast;	// Start der Token-Folge
-    pType[ nElementAkt ] = T_Id;			// Typinfo eintragen
+    pElement[ nElementAkt ] = nP_IdLast;    // Start der Token-Folge
+    pType[ nElementAkt ] = T_Id;            // Typinfo eintragen
     pSize[ nElementAkt ] = nP_IdAkt - nP_IdLast;
         // von nP_IdLast bis nP_IdAkt-1 geschrieben -> Laenge der Folge
 
-    nElementAkt++;			// Startwerte fuer naechste Folge
+    nElementAkt++;          // Startwerte fuer naechste Folge
     nP_IdLast = nP_IdAkt;
 }
 
@@ -576,12 +576,12 @@ const TokenId TokenPool::Store( const double& rDouble )
     if( nP_DblAkt >= nP_Dbl )
         GrowDouble();
 
-    pElement[ nElementAkt ] = nP_DblAkt;	// Index in Double-Array
-    pType[ nElementAkt ] = T_D;				// Typinfo Double eintragen
+    pElement[ nElementAkt ] = nP_DblAkt;    // Index in Double-Array
+    pType[ nElementAkt ] = T_D;             // Typinfo Double eintragen
 
     pP_Dbl[ nP_DblAkt ] = rDouble;
 
-    pSize[ nElementAkt ] = 1;			// eigentlich Banane
+    pSize[ nElementAkt ] = 1;           // eigentlich Banane
 
     nElementAkt++;
     nP_DblAkt++;
@@ -595,11 +595,11 @@ const TokenId TokenPool::Store( const UINT16 nIndex )
     if( nElementAkt >= nElement )
         GrowElement();
 
-    pElement[ nElementAkt ] = nIndex;			// Daten direkt im Index!
-    pType[ nElementAkt ] = T_RN;				// Typinfo Range Name eintragen
+    pElement[ nElementAkt ] = nIndex;           // Daten direkt im Index!
+    pType[ nElementAkt ] = T_RN;                // Typinfo Range Name eintragen
 
     nElementAkt++;
-    return ( const TokenId ) nElementAkt;				// Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt;               // Ausgabe von altem Wert + 1!
 }
 
 
@@ -613,8 +613,8 @@ const TokenId TokenPool::Store( const String& rString )
     if( nP_StrAkt >= nP_Str )
         GrowString();
 
-    pElement[ nElementAkt ] = nP_StrAkt;	// Index in String-Array
-    pType[ nElementAkt ] = T_Str;			// Typinfo String eintragen
+    pElement[ nElementAkt ] = nP_StrAkt;    // Index in String-Array
+    pType[ nElementAkt ] = T_Str;           // Typinfo String eintragen
 
     // String anlegen
     if( !ppP_Str[ nP_StrAkt ] )
@@ -644,7 +644,7 @@ const TokenId TokenPool::Store( const ScSingleRefData& rTr )
         GrowTripel();
 
     pElement[ nElementAkt ] = nP_RefTrAkt;
-    pType[ nElementAkt ] = T_RefC;			// Typinfo Cell-Reff eintragen
+    pType[ nElementAkt ] = T_RefC;          // Typinfo Cell-Reff eintragen
 
     if( !ppP_RefTr[ nP_RefTrAkt ] )
         ppP_RefTr[ nP_RefTrAkt ] = new ScSingleRefData( rTr );
@@ -667,7 +667,7 @@ const TokenId TokenPool::Store( const ScComplexRefData& rTr )
         GrowTripel();
 
     pElement[ nElementAkt ] = nP_RefTrAkt;
-    pType[ nElementAkt ] = T_RefA;			// Typinfo Area-Reff eintragen
+    pType[ nElementAkt ] = T_RefA;          // Typinfo Area-Reff eintragen
 
     if( !ppP_RefTr[ nP_RefTrAkt ] )
         ppP_RefTr[ nP_RefTrAkt ] = new ScSingleRefData( rTr.Ref1 );
@@ -696,7 +696,7 @@ const TokenId TokenPool::Store( const DefTokenId e, const String& r )
         GrowExt();
 
     pElement[ nElementAkt ] = nP_ExtAkt;
-    pType[ nElementAkt ] = T_Ext;			// Typinfo String eintragen
+    pType[ nElementAkt ] = T_Ext;           // Typinfo String eintragen
 
     if( ppP_Ext[ nP_ExtAkt ] )
     {
@@ -767,7 +767,7 @@ const TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const String& rName )
 
     pElement[nElementAkt] = static_cast<UINT16>(maExtNames.size());
     pType[nElementAkt] = T_ExtName;
-    
+
     maExtNames.push_back(ExtName());
     ExtName& r = maExtNames.back();
     r.mnFileId = nFileId;
@@ -785,7 +785,7 @@ const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName
 
     pElement[nElementAkt] = static_cast<UINT16>(maExtCellRefs.size());
     pType[nElementAkt] = T_ExtRefC;
-    
+
     maExtCellRefs.push_back(ExtCellRef());
     ExtCellRef& r = maExtCellRefs.back();
     r.mnFileId = nFileId;
@@ -804,7 +804,7 @@ const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName
 
     pElement[nElementAkt] = static_cast<UINT16>(maExtAreaRefs.size());
     pType[nElementAkt] = T_ExtRefA;
-    
+
     maExtAreaRefs.push_back(ExtAreaRef());
     ExtAreaRef& r = maExtAreaRefs.back();
     r.mnFileId = nFileId;
@@ -835,10 +835,10 @@ BOOL TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
         {// Tokenfolge?
             if( pSize[ nId ] == 1 )
             {// GENAU 1 Token
-                UINT16	nSecId = pP_Id[ pElement[ nId ] ];
+                UINT16  nSecId = pP_Id[ pElement[ nId ] ];
                 if( nSecId >= nScTokenOff )
                 {// Default-Token?
-                    return ( DefTokenId ) ( nSecId - nScTokenOff ) == eId;	// Gesuchter?
+                    return ( DefTokenId ) ( nSecId - nScTokenOff ) == eId;  // Gesuchter?
                 }
             }
         }
@@ -873,7 +873,7 @@ const String* TokenPool::GetExternal( const TokenId& rId ) const
 //UNUSED2008-05          if( pType[ n ] == T_Str )
 //UNUSED2008-05              p = ppP_Str[ pElement[ n ] ];
 //UNUSED2008-05      }
-//UNUSED2008-05  
+//UNUSED2008-05
 //UNUSED2008-05      return p;
 //UNUSED2008-05  }
 

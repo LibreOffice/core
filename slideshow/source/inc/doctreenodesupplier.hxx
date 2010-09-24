@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,9 +91,9 @@ namespace slideshow
 
                 @throws ShapeLoadFailedException, if tree node structure
                 cannot be determined.
-            */ 
-            virtual DocTreeNode getTreeNode( sal_Int32				nNodeIndex,
-                                             DocTreeNode::NodeType	eNodeType ) const = 0; // throw ShapeLoadFailedException;
+            */
+            virtual DocTreeNode getTreeNode( sal_Int32              nNodeIndex,
+                                             DocTreeNode::NodeType  eNodeType ) const = 0; // throw ShapeLoadFailedException;
 
             /** Query number of tree nodes of the given type this
                 subset contains.
@@ -113,7 +113,7 @@ namespace slideshow
                 @throws ShapeLoadFailedException, if tree node structure
                 cannot be determined.
              */
-            virtual sal_Int32 getNumberOfSubsetTreeNodes( const DocTreeNode& 	rParentNode,
+            virtual sal_Int32 getNumberOfSubsetTreeNodes( const DocTreeNode&    rParentNode,
                                                           DocTreeNode::NodeType eNodeType ) const = 0; // throw ShapeLoadFailedException;
 
             /** Create DocTreeNode from shape subset.
@@ -139,10 +139,10 @@ namespace slideshow
 
                 @throws ShapeLoadFailedException, if tree node structure
                 cannot be determined.
-            */ 
-            virtual DocTreeNode getSubsetTreeNode( const DocTreeNode& 		rParentNode,
-                                                   sal_Int32				nNodeIndex,
-                                                   DocTreeNode::NodeType	eNodeType ) const = 0; // throw ShapeLoadFailedException;
+            */
+            virtual DocTreeNode getSubsetTreeNode( const DocTreeNode&       rParentNode,
+                                                   sal_Int32                nNodeIndex,
+                                                   DocTreeNode::NodeType    eNodeType ) const = 0; // throw ShapeLoadFailedException;
         };
 
     }

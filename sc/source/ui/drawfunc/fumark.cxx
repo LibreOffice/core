@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ BOOL FuMarkRect::MouseButtonDown(const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     pWindow->CaptureMouse();
-    pView->UnmarkAll();			// der Einheitlichkeit halber und wegen #50558#
+    pView->UnmarkAll();         // der Einheitlichkeit halber und wegen #50558#
     bStartDrag = TRUE;
 
     aBeginPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
@@ -139,7 +139,7 @@ BOOL FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
     {
         // Klick auf der Stelle
 
-        aZoomRect.SetSize(Size());		// dann ganz leer
+        aZoomRect.SetSize(Size());      // dann ganz leer
     }
 
     bStartDrag = FALSE;
@@ -148,15 +148,15 @@ BOOL FuMarkRect::MouseButtonUp(const MouseEvent& rMEvt)
     pViewShell->GetViewData()->GetDispatcher().
         Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
 
-        //	Daten an der View merken
+        //  Daten an der View merken
 
     pViewShell->SetChartArea( aSourceRange, aZoomRect );
 
-        //	Chart-Dialog starten:
+        //  Chart-Dialog starten:
 
-//	USHORT nId  = ScChartDlgWrapper::GetChildWindowId();
-//	SfxChildWindow* pWnd = pViewShell->GetViewFrame()->GetChildWindow( nId );
-//	SC_MOD()->SetRefDialog( nId, pWnd ? FALSE : TRUE );
+//  USHORT nId  = ScChartDlgWrapper::GetChildWindowId();
+//  SfxChildWindow* pWnd = pViewShell->GetViewFrame()->GetChildWindow( nId );
+//  SC_MOD()->SetRefDialog( nId, pWnd ? FALSE : TRUE );
 
     return TRUE;
 }
@@ -171,8 +171,8 @@ BYTE FuMarkRect::Command(const CommandEvent& rCEvt)
 {
     if ( COMMAND_STARTDRAG == rCEvt.GetCommand() )
     {
-        //	#29877# nicht anfangen, auf der Tabelle rumzudraggen,
-        //	aber Maus-Status nicht zuruecksetzen
+        //  #29877# nicht anfangen, auf der Tabelle rumzudraggen,
+        //  aber Maus-Status nicht zuruecksetzen
         return SC_CMD_IGNORE;
     }
     else
@@ -195,7 +195,7 @@ BOOL FuMarkRect::KeyInput(const KeyEvent& rKEvt)
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
         case KEY_ESCAPE:
-            //	beenden
+            //  beenden
             pViewShell->GetViewData()->GetDispatcher().
                 Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
             bReturn = TRUE;
@@ -240,7 +240,7 @@ void FuMarkRect::Activate()
 {
     FuPoor::Activate();
 
-        //	Markierung merken, bevor evtl. Tabelle umgeschaltet wird
+        //  Markierung merken, bevor evtl. Tabelle umgeschaltet wird
 
     ScViewData* pViewData = pViewShell->GetViewData();
     ScMarkData& rMark = pViewData->GetMarkData();
@@ -248,9 +248,9 @@ void FuMarkRect::Activate()
     if ( !rMark.IsMultiMarked() && !rMark.IsMarked() )
         pViewShell->MarkDataArea( TRUE );
 
-    pViewData->GetMultiArea( aSourceRange );		// Mehrfachselektion erlaubt
+    pViewData->GetMultiArea( aSourceRange );        // Mehrfachselektion erlaubt
 
-//	pViewShell->Unmark();
+//  pViewShell->Unmark();
 
     ForcePointer(NULL);
 }

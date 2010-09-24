@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ DBG_NAME(OXMLHierarchyCollection)
 OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
                 ,const ::rtl::OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList 
+                ,const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XNameAccess >& _xParentContainer
                 ,const ::rtl::OUString& _sCollectionServiceName
                 ,const ::rtl::OUString& _sComponentServiceName) :
@@ -165,13 +165,13 @@ SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
-    const SvXMLTokenMap&	rTokenMap	= GetOwnImport().GetDocumentsElemTokenMap();
+    const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetDocumentsElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
-//		case XML_TOK_QUERY:
-//			pContext = new OXMLQuery( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer );
-//			break;
+//      case XML_TOK_QUERY:
+//          pContext = new OXMLQuery( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer );
+//          break;
         case XML_TOK_COMPONENT:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLComponent( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_sComponentServiceName );
@@ -180,7 +180,7 @@ SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLColumn( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_xTable);
             break;
-        //	case XML_TOK_QUERY_COLLECTION:
+        //  case XML_TOK_QUERY_COLLECTION:
         case XML_TOK_COMPONENT_COLLECTION:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLHierarchyCollection( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_sCollectionServiceName,m_sComponentServiceName);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,7 +126,7 @@ public final class DocumentSerializerImpl
         //
         Record records[] = encoder.getRecords();
         ConvertData cd = new ConvertData();
-        
+
         PalmDocument palmDoc = new PalmDocument(docName,
             DocConstants.CREATOR_ID, DocConstants.TYPE_ID,
             0, PalmDB.PDB_HEADER_ATTR_BACKUP, records);
@@ -260,7 +260,7 @@ public final class DocumentSerializerImpl
 
 
     /**
-     *  This method traverses an <code>Element</code> <code>Node</code> 
+     *  This method traverses an <code>Element</code> <code>Node</code>
      *  within a paragraph.
      *
      *  @param  node  <code>Element</code> <code>Node</code> within a
@@ -520,7 +520,7 @@ public final class DocumentSerializerImpl
 
     /**
      *  Logs debug messages.
-     * 
+     *
      *  @param  str  The debug message.
      */
     private void log(String str) {

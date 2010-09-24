@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -309,12 +309,12 @@ void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const Rectangle& 
         {
             aPropOpt.CreateFillProperties( aXPropSet,  sal_True);
 
-            aPropOpt.AddOpt( ESCHER_Prop_lTxid, 0 );						// undocumented
-        aPropOpt.AddOpt( 0x0158, 0x00000000 );							// undocumented
+            aPropOpt.AddOpt( ESCHER_Prop_lTxid, 0 );                        // undocumented
+        aPropOpt.AddOpt( 0x0158, 0x00000000 );                          // undocumented
 
             sal_uInt32 nValue = 0;
             if(!aPropOpt.GetOpt( ESCHER_Prop_FitTextToShape, nValue ))
-                aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );		// bool field
+                aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );      // bool field
 
             if(aPropOpt.GetOpt( ESCHER_Prop_fillColor, nValue ))
             {
@@ -335,15 +335,15 @@ void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const Rectangle& 
             if(!aPropOpt.GetOpt( ESCHER_Prop_fillBackColor, nValue ))
                 aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x08000050 );
         if(!aPropOpt.GetOpt( ESCHER_Prop_fNoFillHitTest, nValue ))
-                aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00110010 );		// bool field
+                aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00110010 );      // bool field
         if(!aPropOpt.GetOpt( ESCHER_Prop_shadowColor, nValue ))
                 aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x00000000 );
-        if(!aPropOpt.GetOpt( ESCHER_Prop_fshadowObscured, nValue ))		// bool field
-                aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured, 0x00030003 );		// bool field
+        if(!aPropOpt.GetOpt( ESCHER_Prop_fshadowObscured, nValue ))     // bool field
+                aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured, 0x00030003 );     // bool field
         }
     }
 
-    nGrbit = 0;		// all off: AutoLine, AutoFill, Printable, Locked
+    nGrbit = 0;     // all off: AutoLine, AutoFill, Printable, Locked
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
     mrEscherEx.AddShape( ESCHER_ShpInst_TextBox, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
     sal_uInt32 nFlags = 0x000A0000;
@@ -384,15 +384,15 @@ XclObjDropDown::XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& r
     SetPrintable( FALSE );
     SetAutoFill( TRUE );
     SetAutoLine( FALSE );
-    nGrbit |= 0x0100;	// undocumented
+    nGrbit |= 0x0100;   // undocumented
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
     mrEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
     EscherPropertyContainer aPropOpt;
-    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x01040104 );	// bool field
-    aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );		// bool field
-    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00010000 );		// bool field
-    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080000 );		// bool field
-    aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x000A0000 );				// bool field
+    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x01040104 ); // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );      // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00010000 );      // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080000 );     // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x000A0000 );              // bool field
     aPropOpt.Commit( mrEscherEx.GetStream() );
 
     XclExpDffDropDownAnchor( rObjMgr.GetRoot(), rPos ).WriteDffData( mrEscherEx );
@@ -598,10 +598,10 @@ XclObjOle::~XclObjOle()
 void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
 {
     // write only as embedded, not linked
-    String			aStorageName( RTL_CONSTASCII_USTRINGPARAM( "MBD" ) );
-    sal_Char		aBuf[ sizeof(UINT32) * 2 + 1 ];
+    String          aStorageName( RTL_CONSTASCII_USTRINGPARAM( "MBD" ) );
+    sal_Char        aBuf[ sizeof(UINT32) * 2 + 1 ];
     // FIXME Eeek! Is this just a way to get a unique id?
-    UINT32			nPictureId = UINT32(sal_uIntPtr(this) >> 2);
+    UINT32          nPictureId = UINT32(sal_uIntPtr(this) >> 2);
     sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );        // #100211# - checked
     aStorageName.AppendAscii( aBuf );
     SotStorageRef    xOleStg = pRootStorage->OpenSotStorage( aStorageName,
@@ -613,8 +613,8 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
         {
             // set version to "old" version, because it must be
             // saved in MS notation.
-            UINT32					nFl = 0;
-            SvtFilterOptions*		pFltOpts = SvtFilterOptions::Get();
+            UINT32                  nFl = 0;
+            SvtFilterOptions*       pFltOpts = SvtFilterOptions::Get();
             if( pFltOpts )
             {
                 if( pFltOpts->IsMath2MathType() )
@@ -630,7 +630,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
                     nFl |= OLE_STARIMPRESS_2_POWERPOINT;
             }
 
-            SvxMSExportOLEObjects	aOLEExpFilt( nFl );
+            SvxMSExportOLEObjects   aOLEExpFilt( nFl );
             aOLEExpFilt.ExportOLEObject( xObj, *xOleStg );
 
             // OBJCF subrecord, undocumented as usual
@@ -702,19 +702,19 @@ void XclObjAny::Save( XclExpStream& rStrm )
 
 ExcBof8_Base::ExcBof8_Base()
 {
-    nVers		  	= 0x0600;
-    nRupBuild	  	= 0x0dbb;
-    nRupYear	  	= 0x07cc;
-//	nFileHistory  	= 0x00000001;	// last edited by Microsoft Excel for Windows
-    nFileHistory  	= 0x00000000;
-    nLowestBiffVer	= 0x00000006;	// Biff8
+    nVers           = 0x0600;
+    nRupBuild       = 0x0dbb;
+    nRupYear        = 0x07cc;
+//  nFileHistory    = 0x00000001;   // last edited by Microsoft Excel for Windows
+    nFileHistory    = 0x00000000;
+    nLowestBiffVer  = 0x00000006;   // Biff8
 }
 
 
 void ExcBof8_Base::SaveCont( XclExpStream& rStrm )
 {
     rStrm.DisableEncryption();
-    rStrm	<< nVers << nDocType << nRupBuild << nRupYear
+    rStrm   << nVers << nDocType << nRupBuild << nRupYear
             << nFileHistory << nLowestBiffVer;
 }
 
@@ -781,7 +781,7 @@ void ExcBundlesheet8::SaveCont( XclExpStream& rStrm )
 
 
 sal_Size ExcBundlesheet8::GetLen() const
-{	// Text max 255 chars
+{   // Text max 255 chars
     return 8 + GetName().GetBufferSize();
 }
 
@@ -882,10 +882,10 @@ void ExcEScenarioCell::SaveXml( XclExpXmlStream& rStrm )
 
 ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
 {
-    String	sTmpName;
-    String	sTmpComm;
-    Color	aDummyCol;
-    USHORT	nFlags;
+    String  sTmpName;
+    String  sTmpComm;
+    Color   aDummyCol;
+    USHORT  nFlags;
 
     ScDocument& rDoc = rRoot.GetDoc();
     rDoc.GetName( nTab, sTmpName );
@@ -905,11 +905,11 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
     if( !pRList )
         return;
 
-    BOOL	bContLoop = TRUE;
-    SCROW	nRow;
-    SCCOL	nCol;
-    String	sText;
-    double	fVal;
+    BOOL    bContLoop = TRUE;
+    SCROW   nRow;
+    SCCOL   nCol;
+    String  sText;
+    double  fVal;
 
     for( UINT32 nRange = 0; (nRange < pRList->Count()) && bContLoop; nRange++ )
     {
@@ -953,9 +953,9 @@ BOOL ExcEScenario::Append( UINT16 nCol, UINT16 nRow, const String& rTxt )
 
 void ExcEScenario::SaveCont( XclExpStream& rStrm )
 {
-    rStrm	<< (UINT16) List::Count()		// number of cells
-            << nProtected		            // fProtection
-            << (UINT8) 0					// fHidden
+    rStrm   << (UINT16) List::Count()       // number of cells
+            << nProtected                   // fProtection
+            << (UINT8) 0                    // fHidden
             << (UINT8) sName.Len()          // length of scen name
             << (UINT8) sComment.Len()       // length of comment
             << (UINT8) sUserName.Len();     // length of user name
@@ -969,9 +969,9 @@ void ExcEScenario::SaveCont( XclExpStream& rStrm )
 
     ExcEScenarioCell* pCell;
     for( pCell = _First(); pCell; pCell = _Next() )
-        pCell->WriteAddress( rStrm );			// pos of cell
+        pCell->WriteAddress( rStrm );           // pos of cell
     for( pCell = _First(); pCell; pCell = _Next() )
-        pCell->WriteText( rStrm );				// string content
+        pCell->WriteText( rStrm );              // string content
     rStrm.SetSliceSize( 2 );
     rStrm.WriteZeroBytes( 2 * List::Count() );  // date format
 }
@@ -1014,8 +1014,8 @@ ExcEScenarioManager::ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab ) 
     if( rDoc.IsScenario( nTab ) )
         return;
 
-    SCTAB nFirstTab	= nTab + 1;
-    SCTAB nNewTab		= nFirstTab;
+    SCTAB nFirstTab = nTab + 1;
+    SCTAB nNewTab       = nFirstTab;
 
     while( rDoc.IsScenario( nNewTab ) )
     {
@@ -1035,10 +1035,10 @@ ExcEScenarioManager::~ExcEScenarioManager()
 
 void ExcEScenarioManager::SaveCont( XclExpStream& rStrm )
 {
-    rStrm	<< (UINT16) List::Count()		// number of scenarios
-            << nActive						// active scen
-            << nActive						// last displayed
-            << (UINT16) 0;					// reference areas
+    rStrm   << (UINT16) List::Count()       // number of scenarios
+            << nActive                      // active scen
+            << nActive                      // last displayed
+            << (UINT16) 0;                  // reference areas
 }
 
 void ExcEScenarioManager::Save( XclExpStream& rStrm )

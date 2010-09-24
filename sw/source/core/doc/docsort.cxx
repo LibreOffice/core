@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,13 +60,13 @@
 
 using namespace ::com::sun::star::lang;
 
-SwSortOptions*		SwSortElement::pOptions = 0;
-SwDoc* 				SwSortElement::pDoc = 0;
-const FlatFndBox*	SwSortElement::pBox = 0;
-CollatorWrapper* 	SwSortElement::pSortCollator = 0;
-Locale* 			SwSortElement::pLocale = 0;
-String* 			SwSortElement::pLastAlgorithm = 0;
-LocaleDataWrapper* 	SwSortElement::pLclData = 0;
+SwSortOptions*      SwSortElement::pOptions = 0;
+SwDoc*              SwSortElement::pDoc = 0;
+const FlatFndBox*   SwSortElement::pBox = 0;
+CollatorWrapper*    SwSortElement::pSortCollator = 0;
+Locale*             SwSortElement::pLocale = 0;
+String*             SwSortElement::pLastAlgorithm = 0;
+LocaleDataWrapper*  SwSortElement::pLclData = 0;
 
 SV_IMPL_OP_PTRARR_SORT( SwSortElements, SwSortElementPtr );
 
@@ -96,8 +96,8 @@ void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
 
     pSortCollator = new CollatorWrapper(
                                 ::comphelper::getProcessServiceFactory() );
-//	pSortCollator->loadCollatorAlgorithm( sAlgorithm, aLocale,
-//						rOpt.bIgnoreCase ? SW_COLLATOR_IGNORES : 0 );
+//  pSortCollator->loadCollatorAlgorithm( sAlgorithm, aLocale,
+//                      rOpt.bIgnoreCase ? SW_COLLATOR_IGNORES : 0 );
 }
 
 
@@ -277,14 +277,14 @@ String SwSortBoxElement::GetKey(USHORT nKey) const
     USHORT nCol = pOptions->aKeys[nKey]->nColumnId-1;
 
     if( SRT_ROWS == pOptions->eDirection )
-        pFndBox = pBox->GetBox(nCol, nRow);			// Zeilen sortieren
+        pFndBox = pBox->GetBox(nCol, nRow);         // Zeilen sortieren
     else
-        pFndBox = pBox->GetBox(nRow, nCol);			// Spalten sortieren
+        pFndBox = pBox->GetBox(nRow, nCol);         // Spalten sortieren
 
     // Den Text rausfieseln
     String aRetStr;
     if( pFndBox )
-    {	// StartNode holen und ueberlesen
+    {   // StartNode holen und ueberlesen
         const SwTableBox* pMyBox = pFndBox->GetBox();
         ASSERT(pMyBox, "Keine atomare Box");
 
@@ -306,9 +306,9 @@ double SwSortBoxElement::GetValue( USHORT nKey ) const
     USHORT nCol = pOptions->aKeys[nKey]->nColumnId-1;
 
     if( SRT_ROWS == pOptions->eDirection )
-        pFndBox = pBox->GetBox(nCol, nRow);			// Zeilen sortieren
+        pFndBox = pBox->GetBox(nCol, nRow);         // Zeilen sortieren
     else
-        pFndBox = pBox->GetBox(nRow, nCol);			// Spalten sortieren
+        pFndBox = pBox->GetBox(nRow, nCol);         // Spalten sortieren
 
     double nVal;
     if( pFndBox )
@@ -437,9 +437,9 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     for ( USHORT n = 0; n < aSortArr.Count(); ++n )
     {
         SwSortTxtElement* pBox = (SwSortTxtElement*)aSortArr[n];
-        aStart 		= nBeg + n;
-        aRg.aStart 	= pBox->aPos.GetIndex();
-        aRg.aEnd 	= aRg.aStart.GetIndex() + 1;
+        aStart      = nBeg + n;
+        aRg.aStart  = pBox->aPos.GetIndex();
+        aRg.aEnd    = aRg.aStart.GetIndex() + 1;
 
         // Nodes verschieben
         MoveNodeRange( aRg, aStart,
@@ -581,7 +581,7 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     if(bUndo)
     {
         ClearRedo();
-        pUndoSort =	new SwUndoSort( rBoxes[0]->GetSttIdx(),
+        pUndoSort = new SwUndoSort( rBoxes[0]->GetSttIdx(),
                                     rBoxes[rBoxes.Count()-1]->GetSttIdx(),
                                    *pTblNd, rOpt, aFlatBox.HasItemSets() );
         AppendUndo(pUndoSort);
@@ -647,7 +647,7 @@ void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, USHORT nS, USHORT nT,
              SwMovedBoxes& rMovedList, SwUndoSort* pUD)
 {
     for( USHORT i=0; i < rBox.GetCols(); ++i )
-    {	// Alte Zellen-Pos bestimmen und merken
+    {   // Alte Zellen-Pos bestimmen und merken
         const _FndBox* pSource = rBox.GetBox(i, nS);
 
         // neue Zellen-Pos
@@ -695,7 +695,7 @@ void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, USHORT nS, USHORT nT,
              SwMovedBoxes& rMovedList, SwUndoSort* pUD)
 {
     for(USHORT i=0; i < rBox.GetRows(); ++i)
-    {	// Alte Zellen-Pos bestimmen und merken
+    {   // Alte Zellen-Pos bestimmen und merken
         const _FndBox* pSource = rBox.GetBox(nS, i);
 
         // neue Zellen-Pos
@@ -765,7 +765,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
     // Ist das Ziel leer(1 leerer Node vorhanden)
     // -> diesen loeschen und move
     // Ziel
-    SwNodeIndex	aTar( *pTar->GetSttNd() );
+    SwNodeIndex aTar( *pTar->GetSttNd() );
     pNd = pDoc->GetNodes().GoNext( &aTar );     // naechsten ContentNode
     ULONG nCount = pNd->EndOfSectionIndex() - pNd->StartOfSectionIndex();
 
@@ -777,7 +777,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
     }
 
     if(!bDelFirst)
-    {	// Es besteht schon Inhalt -> alter I n h a l t  Section Down
+    {   // Es besteht schon Inhalt -> alter I n h a l t  Section Down
         SwNodeRange aRgTar( aTar.GetNode(), 0, *pNd->EndOfSectionNode() );
         pDoc->GetNodes().SectionDown( &aRgTar );
     }
@@ -832,7 +832,7 @@ FlatFndBox::~FlatFndBox()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Alle Lines einer Box muessen gleichviel Boxen haben
+    Beschreibung:   Alle Lines einer Box muessen gleichviel Boxen haben
  --------------------------------------------------------------------*/
 
 
@@ -843,7 +843,7 @@ BOOL FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 
     // UeberLines iterieren
     for(USHORT i=0; i < rLines.Count(); ++i)
-    {	// Die Boxen einer Line
+    {   // Die Boxen einer Line
         _FndLine* pLn = rLines[i];
         const _FndBoxes& rBoxes = pLn->GetBoxes();
 
@@ -859,7 +859,7 @@ BOOL FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Box auf Symmetrie pruefen
+    Beschreibung:   Box auf Symmetrie pruefen
                     Alle Boxen einer Line muessen gleichviele Lines haben
  --------------------------------------------------------------------*/
 
@@ -871,7 +871,7 @@ BOOL FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
 
     // Ueber Boxes iterieren
     for(USHORT i=0; i < rBoxes.Count(); ++i)
-    {	// Die Boxen einer Line
+    {   // Die Boxen einer Line
         _FndBox* pBox = rBoxes[i];
         const _FndLines& rLines = pBox->GetLines();
 
@@ -905,7 +905,7 @@ USHORT FlatFndBox::GetColCount(const _FndBox& rBox)
         USHORT nCount = 0;
         const _FndBoxes& rBoxes = rLines[i]->GetBoxes();
         for( USHORT j=0; j < rBoxes.Count(); ++j )
-                //	Rekursiv wirder ueber die Lines Iterieren
+                //  Rekursiv wirder ueber die Lines Iterieren
             nCount += rBoxes[j]->GetLines().Count()
                         ? GetColCount(*rBoxes[j]) : 1;
 
@@ -928,12 +928,12 @@ USHORT FlatFndBox::GetRowCount(const _FndBox& rBox)
 
     USHORT nLines = 0;
     for(USHORT i=0; i < rLines.Count(); ++i)
-    {	// Die Boxen einer Line
+    {   // Die Boxen einer Line
         const _FndBoxes& rBoxes = rLines[i]->GetBoxes();
         USHORT nLn = 1;
         for(USHORT j=0; j < rBoxes.Count(); ++j)
             if( rBoxes[j]->GetLines().Count() )
-                //	Rekursiv ueber die Lines Iterieren
+                //  Rekursiv ueber die Lines Iterieren
                 nLn = Max(GetRowCount(*rBoxes[j]), nLn);
 
         nLines = nLines + nLn;
@@ -961,7 +961,7 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, BOOL bLastBox)
         for( USHORT j = 0; j < rBoxes.Count(); ++j )
         {
             // Die Box pruefen ob es eine atomare Box ist
-            const _FndBox* 	 pBox 	= rBoxes[ j ];
+            const _FndBox*   pBox   = rBoxes[ j ];
 
             if( !pBox->GetLines().Count() )
             {

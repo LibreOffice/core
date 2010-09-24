@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,8 +144,8 @@ void SdDocPreviewWin::Paint( const Rectangle& rRect )
     {
         SvtAccessibilityOptions aAccOptions;
         bool bUseContrast = aAccOptions.GetIsForPagePreviews() && Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-        SetDrawMode( bUseContrast 
-            ? ::sd::ViewShell::OUTPUT_DRAWMODE_CONTRAST 
+        SetDrawMode( bUseContrast
+            ? ::sd::ViewShell::OUTPUT_DRAWMODE_CONTRAST
             : ::sd::ViewShell::OUTPUT_DRAWMODE_COLOR );
 
         ImpPaint( pMetaFile, (VirtualDevice*)this );
@@ -171,7 +171,7 @@ void SdDocPreviewWin::startPreview()
             {
                 if( !mxSlideShow.is() )
                     mxSlideShow = sd::SlideShow::Create( pDoc );
-            
+
                 Reference< XDrawPage > xDrawPage( pPage->getUnoPage(), UNO_QUERY );
                 Reference< XAnimationNode > xAnimationNode;
 
@@ -230,10 +230,10 @@ void SdDocPreviewWin::updateViewSettings()
 
             pMtf = new GDIMetaFile;
 
-            VirtualDevice		aVDev;
+            VirtualDevice       aVDev;
 
-            const Fraction		aFrac( pDoc->GetScaleFraction() );
-            const MapMode 		aMap( pDoc->GetScaleUnit(), Point(), aFrac, aFrac );
+            const Fraction      aFrac( pDoc->GetScaleFraction() );
+            const MapMode       aMap( pDoc->GetScaleUnit(), Point(), aFrac, aFrac );
 
             aVDev.SetMapMode( aMap );
 
@@ -251,11 +251,11 @@ void SdDocPreviewWin::updateViewSettings()
             pView->SetPageVisible( FALSE );
             pView->ShowSdrPage( pPage );
 
-            const Point	aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
+            const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
             const Size aNewSize( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
                                   aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
             const Rectangle aClipRect( aNewOrg, aNewSize );
-            MapMode			aVMap( aMap );
+            MapMode         aVMap( aMap );
 
             aVDev.Push();
             aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );

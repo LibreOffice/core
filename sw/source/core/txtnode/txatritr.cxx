@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -186,7 +186,7 @@ void SwTxtAttrIterator::SearchNextChg()
     {
         aSIter.Next();
         pParaItem = 0;
-        nAttrPos = 0; 		// must be restart at the beginning, because
+        nAttrPos = 0;       // must be restart at the beginning, because
                             // some attributes can start before or inside
                             // the current scripttype!
         aStack.Remove( 0, aStack.Count() );

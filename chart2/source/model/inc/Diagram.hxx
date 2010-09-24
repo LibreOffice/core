@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,12 +109,12 @@ protected:
     virtual void SAL_CALL getFastPropertyValue(
         ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
 
-// 	virtual sal_Bool SAL_CALL convertFastPropertyValue
+//  virtual sal_Bool SAL_CALL convertFastPropertyValue
 //         ( ::com::sun::star::uno::Any & rConvertedValue,
 //           ::com::sun::star::uno::Any & rOldValue,
 //           sal_Int32 nHandle,
 //           const ::com::sun::star::uno::Any& rValue )
-// 		throw (::com::sun::star::lang::IllegalArgumentException);
+//      throw (::com::sun::star::lang::IllegalArgumentException);
 
     // ____ XDiagram ____
 //     virtual ::rtl::OUString SAL_CALL getChartTypeTemplateServiceName()
@@ -136,8 +136,8 @@ protected:
     virtual void SAL_CALL setDefaultColorScheme(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XColorScheme >& xColorScheme )
         throw (::com::sun::star::uno::RuntimeException);
-    
-    
+
+
     // ____ XCoordinateSystemContainer ____
     virtual void SAL_CALL addCoordinateSystem(
         const ::com::sun::star::uno::Reference<
@@ -159,7 +159,7 @@ protected:
                 ::com::sun::star::chart2::XCoordinateSystem > >& aCoordinateSystems )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
-    
+
     // ____ XTitled ____
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XTitle > SAL_CALL getTitleObject()

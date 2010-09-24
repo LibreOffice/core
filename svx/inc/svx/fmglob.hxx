@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,27 +37,27 @@ const sal_uInt32 FmFormInventor = sal_uInt32('F')*0x00000001+
                               sal_uInt32('0')*0x00010000+
                               sal_uInt32('1')*0x01000000;
 
-const sal_uInt16 OBJ_FM_CONTROL			=	::com::sun::star::form::FormComponentType::CONTROL;
+const sal_uInt16 OBJ_FM_CONTROL         =   ::com::sun::star::form::FormComponentType::CONTROL;
                                                                     // fuer FormularKomponenten
-const sal_uInt16 OBJ_FM_EDIT			=	::com::sun::star::form::FormComponentType::TEXTFIELD;
-const sal_uInt16 OBJ_FM_BUTTON			=	::com::sun::star::form::FormComponentType::COMMANDBUTTON;
-const sal_uInt16 OBJ_FM_FIXEDTEXT		=	::com::sun::star::form::FormComponentType::FIXEDTEXT;
-const sal_uInt16 OBJ_FM_LISTBOX			=	::com::sun::star::form::FormComponentType::LISTBOX;
-const sal_uInt16 OBJ_FM_CHECKBOX		=	::com::sun::star::form::FormComponentType::CHECKBOX;
-const sal_uInt16 OBJ_FM_COMBOBOX		=	::com::sun::star::form::FormComponentType::COMBOBOX;
-const sal_uInt16 OBJ_FM_RADIOBUTTON		=	::com::sun::star::form::FormComponentType::RADIOBUTTON;
-const sal_uInt16 OBJ_FM_GROUPBOX		=	::com::sun::star::form::FormComponentType::GROUPBOX;
-const sal_uInt16 OBJ_FM_GRID			=	::com::sun::star::form::FormComponentType::GRIDCONTROL;
-const sal_uInt16 OBJ_FM_IMAGEBUTTON		=	::com::sun::star::form::FormComponentType::IMAGEBUTTON;
-const sal_uInt16 OBJ_FM_FILECONTROL		=	::com::sun::star::form::FormComponentType::FILECONTROL;
-const sal_uInt16 OBJ_FM_DATEFIELD		=	::com::sun::star::form::FormComponentType::DATEFIELD;
-const sal_uInt16 OBJ_FM_TIMEFIELD		=	::com::sun::star::form::FormComponentType::TIMEFIELD;
-const sal_uInt16 OBJ_FM_NUMERICFIELD	=	::com::sun::star::form::FormComponentType::NUMERICFIELD;
-const sal_uInt16 OBJ_FM_CURRENCYFIELD	=	::com::sun::star::form::FormComponentType::CURRENCYFIELD;
-const sal_uInt16 OBJ_FM_PATTERNFIELD	=	::com::sun::star::form::FormComponentType::PATTERNFIELD;
-const sal_uInt16 OBJ_FM_HIDDEN			=	::com::sun::star::form::FormComponentType::HIDDENCONTROL;
-const sal_uInt16 OBJ_FM_IMAGECONTROL	=	::com::sun::star::form::FormComponentType::IMAGECONTROL;
-const sal_uInt16 OBJ_FM_FORMATTEDFIELD	=	::com::sun::star::form::FormComponentType::PATTERNFIELD + 1;
+const sal_uInt16 OBJ_FM_EDIT            =   ::com::sun::star::form::FormComponentType::TEXTFIELD;
+const sal_uInt16 OBJ_FM_BUTTON          =   ::com::sun::star::form::FormComponentType::COMMANDBUTTON;
+const sal_uInt16 OBJ_FM_FIXEDTEXT       =   ::com::sun::star::form::FormComponentType::FIXEDTEXT;
+const sal_uInt16 OBJ_FM_LISTBOX         =   ::com::sun::star::form::FormComponentType::LISTBOX;
+const sal_uInt16 OBJ_FM_CHECKBOX        =   ::com::sun::star::form::FormComponentType::CHECKBOX;
+const sal_uInt16 OBJ_FM_COMBOBOX        =   ::com::sun::star::form::FormComponentType::COMBOBOX;
+const sal_uInt16 OBJ_FM_RADIOBUTTON     =   ::com::sun::star::form::FormComponentType::RADIOBUTTON;
+const sal_uInt16 OBJ_FM_GROUPBOX        =   ::com::sun::star::form::FormComponentType::GROUPBOX;
+const sal_uInt16 OBJ_FM_GRID            =   ::com::sun::star::form::FormComponentType::GRIDCONTROL;
+const sal_uInt16 OBJ_FM_IMAGEBUTTON     =   ::com::sun::star::form::FormComponentType::IMAGEBUTTON;
+const sal_uInt16 OBJ_FM_FILECONTROL     =   ::com::sun::star::form::FormComponentType::FILECONTROL;
+const sal_uInt16 OBJ_FM_DATEFIELD       =   ::com::sun::star::form::FormComponentType::DATEFIELD;
+const sal_uInt16 OBJ_FM_TIMEFIELD       =   ::com::sun::star::form::FormComponentType::TIMEFIELD;
+const sal_uInt16 OBJ_FM_NUMERICFIELD    =   ::com::sun::star::form::FormComponentType::NUMERICFIELD;
+const sal_uInt16 OBJ_FM_CURRENCYFIELD   =   ::com::sun::star::form::FormComponentType::CURRENCYFIELD;
+const sal_uInt16 OBJ_FM_PATTERNFIELD    =   ::com::sun::star::form::FormComponentType::PATTERNFIELD;
+const sal_uInt16 OBJ_FM_HIDDEN          =   ::com::sun::star::form::FormComponentType::HIDDENCONTROL;
+const sal_uInt16 OBJ_FM_IMAGECONTROL    =   ::com::sun::star::form::FormComponentType::IMAGECONTROL;
+const sal_uInt16 OBJ_FM_FORMATTEDFIELD  =   ::com::sun::star::form::FormComponentType::PATTERNFIELD + 1;
 const sal_uInt16 OBJ_FM_SCROLLBAR       =   ::com::sun::star::form::FormComponentType::PATTERNFIELD + 2;
 const sal_uInt16 OBJ_FM_SPINBUTTON      =   ::com::sun::star::form::FormComponentType::PATTERNFIELD + 3;
 const sal_uInt16 OBJ_FM_NAVIGATIONBAR   =   ::com::sun::star::form::FormComponentType::PATTERNFIELD + 4;

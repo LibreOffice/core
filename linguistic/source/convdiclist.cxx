@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <rtl/instance.hxx>
-#include <cppuhelper/factory.hxx>	// helper for factories
+#include <cppuhelper/factory.hxx>   // helper for factories
 #include <unotools/localfilehelper.hxx>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
@@ -319,7 +319,7 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
     {
         try
         {
-            ::ucbhelper::Content	aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ),
+            ::ucbhelper::Content    aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ),
                                     uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
             aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
         }

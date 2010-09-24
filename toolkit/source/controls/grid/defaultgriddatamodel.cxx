@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,9 +76,9 @@ void DefaultGridDataModel::broadcast( broadcast_type eType, const GridDataEvent&
             XGridDataListener* pListener = static_cast<XGridDataListener*>(aListIter.next());
             switch( eType )
             {
-            case row_added:		pListener->rowAdded(aEvent); break;
-            case row_removed:	pListener->rowRemoved(aEvent); break;
-            case data_changed:	pListener->dataChanged(aEvent); break;
+            case row_added:     pListener->rowAdded(aEvent); break;
+            case row_removed:   pListener->rowRemoved(aEvent); break;
+            case data_changed:  pListener->dataChanged(aEvent); break;
             }
         }
     }
@@ -95,7 +95,7 @@ void DefaultGridDataModel::broadcast_changed( ::rtl::OUString name, sal_Int32 in
 
 //---------------------------------------------------------------------
 
-void DefaultGridDataModel::broadcast_add( sal_Int32 index, const ::rtl::OUString & headerName, 
+void DefaultGridDataModel::broadcast_add( sal_Int32 index, const ::rtl::OUString & headerName,
                                          ::com::sun::star::uno::Sequence< Any > rowData ) throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
@@ -105,7 +105,7 @@ void DefaultGridDataModel::broadcast_add( sal_Int32 index, const ::rtl::OUString
 
 //---------------------------------------------------------------------
 
-void DefaultGridDataModel::broadcast_remove( sal_Int32 index, const ::rtl::OUString & headerName, 
+void DefaultGridDataModel::broadcast_remove( sal_Int32 index, const ::rtl::OUString & headerName,
                                             ::com::sun::star::uno::Sequence< Any > rowData ) throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
@@ -179,13 +179,13 @@ void SAL_CALL DefaultGridDataModel::addRow(const ::rtl::OUString & headername, c
     // store row data
     std::vector< Any > newRow;
     for ( int i = 0; i < rRowdata.getLength();i++)
-    {		
+    {
         newRow.push_back(rRowdata[i]);
     }
 
     data.push_back( newRow );
-    
-    broadcast_add( data.size()-1, headername, comphelper::containerToSequence(newRow));  
+
+    broadcast_add( data.size()-1, headername, comphelper::containerToSequence(newRow));
 
 }
 
@@ -198,21 +198,21 @@ void SAL_CALL DefaultGridDataModel::removeRow(::sal_Int32 index) throw (::com::s
         ::rtl::OUString headerName( (::rtl::OUString) rowHeaders[index] );
         rowHeaders.erase(rowHeaders.begin() + index);
 
-        Sequence< Any >& rowData ( (Sequence< Any >&)data[index] ); 
+        Sequence< Any >& rowData ( (Sequence< Any >&)data[index] );
         data.erase(data.begin() + index);
-        broadcast_remove( index, headerName, rowData);  
+        broadcast_remove( index, headerName, rowData);
     }
-    else 
+    else
         return;
 }
 //---------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< Any > > SAL_CALL DefaultGridDataModel::getData() throw (::com::sun::star::uno::RuntimeException)
 {
-    
+
     std::vector< std::vector< Any > >::iterator iterator;
     std::vector< Sequence< Any  > > dummyContainer(0);
 
-    
+
     for(iterator = data.begin(); iterator != data.end(); iterator++)
     {
         Sequence< Any > cols(comphelper::containerToSequence(*iterator));
@@ -241,7 +241,7 @@ void SAL_CALL DefaultGridDataModel::removeAll() throw (RuntimeException)
 {
     rowHeaders.clear();
     data.clear();
-    broadcast_remove( -1, ::rtl::OUString(), 0); 
+    broadcast_remove( -1, ::rtl::OUString(), 0);
 }
 //---------------------------------------------------------------------
 void SAL_CALL DefaultGridDataModel::setRowHeaderWidth(sal_Int32 _value) throw (::com::sun::star::uno::RuntimeException)

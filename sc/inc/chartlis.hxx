@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,11 +73,11 @@ private:
     ::std::auto_ptr<ExternalRefListener>                mpExtRefListener;
     ::std::auto_ptr< ::std::vector<ScSharedTokenRef> >  mpTokens;
 
-    ScChartUnoData*	pUnoData;
-    ScDocument* 	pDoc;
-    BOOL			bUsed;	// fuer ScChartListenerCollection::FreeUnused
-    BOOL			bDirty;
-    BOOL			bSeriesRangesScheduled;
+    ScChartUnoData* pUnoData;
+    ScDocument*     pDoc;
+    BOOL            bUsed;  // fuer ScChartListenerCollection::FreeUnused
+    BOOL            bDirty;
+    BOOL            bSeriesRangesScheduled;
 
                     // not implemented
     ScChartListener& operator=( const ScChartListener& );
@@ -90,42 +90,42 @@ public:
                     ScChartListener( const String& rName, ScDocument* pDoc,
                                      ::std::vector<ScSharedTokenRef>* pTokens );
                     ScChartListener( const ScChartListener& );
-    virtual			~ScChartListener();
-    virtual ScDataObject*	Clone() const;
+    virtual         ~ScChartListener();
+    virtual ScDataObject*   Clone() const;
 
-    void			SetUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
+    void            SetUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
                             const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
-    com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >	GetUnoListener() const;
-    com::sun::star::uno::Reference< com::sun::star::chart::XChartData >						GetUnoSource() const;
+    com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >  GetUnoListener() const;
+    com::sun::star::uno::Reference< com::sun::star::chart::XChartData >                     GetUnoSource() const;
 
-    BOOL			IsUno() const	{ return (pUnoData != NULL); }
+    BOOL            IsUno() const   { return (pUnoData != NULL); }
 
-    virtual void 	Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
-    void			StartListeningTo();
-    void			EndListeningTo();
-    void			ChangeListening( const ScRangeListRef& rRangeListRef,
+    virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
+    void            StartListeningTo();
+    void            EndListeningTo();
+    void            ChangeListening( const ScRangeListRef& rRangeListRef,
                                     BOOL bDirty = FALSE );
-    void			Update();
-    ScRangeListRef	GetRangeList() const;
-    void			SetRangeList( const ScRangeListRef& rNew );
-    void			SetRangeList( const ScRange& rNew );
-    BOOL			IsUsed() const { return bUsed; }
-    void			SetUsed( BOOL bFlg ) { bUsed = bFlg; }
-    BOOL			IsDirty() const { return bDirty; }
-    void			SetDirty( BOOL bFlg ) { bDirty = bFlg; }
+    void            Update();
+    ScRangeListRef  GetRangeList() const;
+    void            SetRangeList( const ScRangeListRef& rNew );
+    void            SetRangeList( const ScRange& rNew );
+    BOOL            IsUsed() const { return bUsed; }
+    void            SetUsed( BOOL bFlg ) { bUsed = bFlg; }
+    BOOL            IsDirty() const { return bDirty; }
+    void            SetDirty( BOOL bFlg ) { bDirty = bFlg; }
 
     void            UpdateChartIntersecting( const ScRange& rRange );
 
     // if chart series ranges are to be updated later on (e.g. DeleteTab, InsertTab)
-    void			ScheduleSeriesRanges()		{ bSeriesRangesScheduled = TRUE; }
-    void			UpdateScheduledSeriesRanges();
-    void			UpdateSeriesRanges();
+    void            ScheduleSeriesRanges()      { bSeriesRangesScheduled = TRUE; }
+    void            UpdateScheduledSeriesRanges();
+    void            UpdateSeriesRanges();
 
     ExternalRefListener* GetExtRefListener();
     void            SetUpdateQueue();
 
-    BOOL			operator==( const ScChartListener& );
-    BOOL			operator!=( const ScChartListener& r )
+    BOOL            operator==( const ScChartListener& );
+    BOOL            operator!=( const ScChartListener& r )
                         { return !operator==( r ); }
 };
 
@@ -154,8 +154,8 @@ public:
 private:
     ::std::list<RangeListenerItem> maHiddenListeners;
 
-    Timer			aTimer;
-    ScDocument*		pDoc;
+    Timer           aTimer;
+    ScDocument*     pDoc;
 
                     DECL_LINK( TimerHdl, Timer* );
 
@@ -167,48 +167,48 @@ private:
 public:
                     ScChartListenerCollection( ScDocument* pDoc );
                     ScChartListenerCollection( const ScChartListenerCollection& );
-    virtual	ScDataObject*	Clone() const;
+    virtual ScDataObject*   Clone() const;
 
-    virtual			~ScChartListenerCollection();
+    virtual         ~ScChartListenerCollection();
 
                     // nur nach copy-ctor noetig, wenn neu ins Dok gehaengt
-    void			StartAllListeners();
+    void            StartAllListeners();
 
-    void			ChangeListening( const String& rName,
+    void            ChangeListening( const String& rName,
                                     const ScRangeListRef& rRangeListRef,
                                     BOOL bDirty = FALSE );
     // FreeUnused nur wie in ScDocument::UpdateChartListenerCollection verwenden!
-    void			FreeUnused();
-    void			FreeUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
+    void            FreeUnused();
+    void            FreeUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
                              const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
-    void			StartTimer();
-    void			UpdateDirtyCharts();
+    void            StartTimer();
+    void            UpdateDirtyCharts();
     void SC_DLLPUBLIC SetDirty();
-    void			SetDiffDirty( const ScChartListenerCollection&,
+    void            SetDiffDirty( const ScChartListenerCollection&,
                         BOOL bSetChartRangeLists = FALSE );
 
-    void			SetRangeDirty( const ScRange& rRange );		// z.B. Zeilen/Spalten
+    void            SetRangeDirty( const ScRange& rRange );     // z.B. Zeilen/Spalten
 
-    void			UpdateScheduledSeriesRanges();
+    void            UpdateScheduledSeriesRanges();
     void            UpdateChartsContainingTab( SCTAB nTab );
 
-    BOOL			operator==( const ScChartListenerCollection& );
+    BOOL            operator==( const ScChartListenerCollection& );
 
-    /** 
-     * Start listening on hide/show change within specified cell range.  A 
-     * single listener may listen on multiple ranges when the caller passes 
-     * the same pointer multiple times with different ranges. 
-     *  
-     * Note that the caller is responsible for managing the life-cycle of the 
-     * listener instance. 
+    /**
+     * Start listening on hide/show change within specified cell range.  A
+     * single listener may listen on multiple ranges when the caller passes
+     * the same pointer multiple times with different ranges.
+     *
+     * Note that the caller is responsible for managing the life-cycle of the
+     * listener instance.
      */
-    void            StartListeningHiddenRange( const ScRange& rRange, 
+    void            StartListeningHiddenRange( const ScRange& rRange,
                                                ScChartHiddenRangeListener* pListener );
 
-    /** 
-     * Remove all ranges associated with passed listener instance from the 
-     * list of hidden range listeners.  This does not delete the passed 
-     * listener instance. 
+    /**
+     * Remove all ranges associated with passed listener instance from the
+     * list of hidden range listeners.  This does not delete the passed
+     * listener instance.
      */
     void            EndListeningHiddenRange( ScChartHiddenRangeListener* pListener );
 };

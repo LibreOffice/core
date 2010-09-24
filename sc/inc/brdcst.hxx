@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,24 +34,24 @@
 #include <svl/smplhint.hxx>
 class ScBaseCell;
 
-#define SC_HINT_DYING		SFX_HINT_DYING
-#define SC_HINT_DATACHANGED	SFX_HINT_DATACHANGED
-#define SC_HINT_TABLEOPDIRTY	SFX_HINT_USER00
+#define SC_HINT_DYING       SFX_HINT_DYING
+#define SC_HINT_DATACHANGED SFX_HINT_DATACHANGED
+#define SC_HINT_TABLEOPDIRTY    SFX_HINT_USER00
 #define SC_HINT_CALCALL         SFX_HINT_USER01
 
 class ScHint : public SfxSimpleHint
 {
 private:
-    ScAddress	aAddress;
+    ScAddress   aAddress;
     ScBaseCell* pCell;
 
 public:
     TYPEINFO();
                         ScHint( ULONG n, const ScAddress& a, ScBaseCell* p )
                             : SfxSimpleHint( n ), aAddress( a ), pCell( p ) {}
-    ScBaseCell*			GetCell() const { return pCell; }
+    ScBaseCell*         GetCell() const { return pCell; }
     void                SetCell( ScBaseCell* p )    { pCell = p; }
-    const ScAddress&	GetAddress() const { return aAddress; }
+    const ScAddress&    GetAddress() const { return aAddress; }
           ScAddress&    GetAddress()       { return aAddress; }
     void                SetAddress( const ScAddress& rAdr ) { aAddress = rAdr; }
 };
@@ -59,11 +59,11 @@ public:
 class ScAreaChangedHint : public SfxHint
 {
 private:
-    ScRange	aNewRange;
+    ScRange aNewRange;
 public:
                     TYPEINFO();
                     ScAreaChangedHint(const ScRange& rRange) : aNewRange(rRange) {}
-    const ScRange&	GetRange() const { return aNewRange; }
+    const ScRange&  GetRange() const { return aNewRange; }
 };
 
 

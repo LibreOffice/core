@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,14 +49,14 @@ namespace nullcanvas
     typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XTextLayout,
                                                ::com::sun::star::lang::XServiceInfo > TextLayout_Base;
 
-    class TextLayout : public ::comphelper::OBaseMutex, 
+    class TextLayout : public ::comphelper::OBaseMutex,
                        public TextLayout_Base,
                        private UsageCounter< TextLayout >,
                        private ::boost::noncopyable
     {
     public:
-        TextLayout( const ::com::sun::star::rendering::StringContext& aText, 
-                    sal_Int8                                                  nDirection, 
+        TextLayout( const ::com::sun::star::rendering::StringContext& aText,
+                    sal_Int8                                                  nDirection,
                     sal_Int64                                                 nRandomSeed,
                     const CanvasFont::ImplRef&                                rFont );
 
@@ -81,15 +81,15 @@ namespace nullcanvas
         virtual sal_Int8 SAL_CALL getMainTextDirection(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::rendering::StringContext SAL_CALL getText(  ) throw (::com::sun::star::uno::RuntimeException);
-        
+
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw( ::com::sun::star::uno::RuntimeException );
 
-        bool draw( const ::com::sun::star::rendering::ViewState&         rViewState, 
+        bool draw( const ::com::sun::star::rendering::ViewState&         rViewState,
                    const ::com::sun::star::rendering::RenderState&       rRenderState,
-                   const ::com::sun::star::uno::Reference< 
+                   const ::com::sun::star::uno::Reference<
                          ::com::sun::star::rendering::XGraphicDevice >&  xGraphicDevice ) const;
 
     protected:

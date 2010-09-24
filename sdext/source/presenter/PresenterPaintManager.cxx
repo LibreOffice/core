@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ void PresenterPaintManager::Invalidate (
     sal_Int16 nInvalidateMode (awt::InvalidateStyle::CHILDREN);
     if (bSynchronous)
         nInvalidateMode |= awt::InvalidateStyle::UPDATE;
-    
+
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor(
         mpPaneContainer->FindContentWindow(rxWindow));
     if (pDescriptor.get()==NULL || ! pDescriptor->mbIsOpaque)
@@ -128,7 +128,7 @@ void PresenterPaintManager::Invalidate (
     sal_Int16 nInvalidateMode (awt::InvalidateStyle::CHILDREN);
     if (bSynchronous)
         nInvalidateMode |= awt::InvalidateStyle::UPDATE;
-    
+
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor(
         mpPaneContainer->FindContentWindow(rxWindow));
     if (pDescriptor.get()==NULL || ! pDescriptor->mbIsOpaque)

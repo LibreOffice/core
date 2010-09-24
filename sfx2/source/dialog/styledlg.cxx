@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,14 +48,14 @@
 
 SfxStyleDialog::SfxStyleDialog
 (
-    Window* pParent,			// Parent
-    const ResId& rResId,		// ResId
-    SfxStyleSheetBase& rStyle,	// zu bearbeitendes StyleSheet
-    BOOL bFreeRes,				// Flag Resourcen freigeben
+    Window* pParent,            // Parent
+    const ResId& rResId,        // ResId
+    SfxStyleSheetBase& rStyle,  // zu bearbeitendes StyleSheet
+    BOOL bFreeRes,              // Flag Resourcen freigeben
     const String* pUserBtnTxt
 ) :
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Konstruktor: Verwalten-TabPage zuf"ugen, ExampleSet vom Style setzen.
 */
@@ -86,7 +86,7 @@ SfxStyleDialog::SfxStyleDialog
         sTxt += rStyle.GetName();
         SetText( sTxt );
     }
-    delete pExampleSet;	// im SfxTabDialog::Ctor() schon angelegt
+    delete pExampleSet; // im SfxTabDialog::Ctor() schon angelegt
     pExampleSet = &pStyle->GetItemSet();
 
     if ( bFreeRes )
@@ -98,7 +98,7 @@ SfxStyleDialog::SfxStyleDialog
 
 SfxStyleDialog::~SfxStyleDialog()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Destruktor: ExampleSet auf NULL setzen, damit der SfxTabDialog nicht den
     Set vom Style l"oscht.

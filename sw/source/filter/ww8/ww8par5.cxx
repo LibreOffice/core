@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -327,7 +327,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     if(    !pName || pName->EqualsIgnoreCaseAscii( "_Toc", 0, 4 )
         || pName->EqualsIgnoreCaseAscii( "_Hlt", 0, 4 ) )
         return 0;
-#endif 
+#endif
 
     //JP 16.11.98: ToUpper darf auf keinen Fall gemacht werden, weil der
     //Bookmark- name ein Hyperlink-Ziel sein kann!
@@ -788,7 +788,7 @@ FieldEntry &FieldEntry::operator=(const FieldEntry &rOther) throw()
     return msMarkType;
 }
 
-void FieldEntry::SetBookmarkName(::rtl::OUString bookmarkName) 
+void FieldEntry::SetBookmarkName(::rtl::OUString bookmarkName)
 {
     msBookmarkName=bookmarkName;
 }
@@ -985,9 +985,12 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         pStrm->Seek( nOldPos );
 
         //#124725# field codes which contain '/' or '.' are not displayed in WinWord
-        if (!aStr.EqualsAscii(" ADDIN", 0, 6) &&
-            (aStr.Search('.') != STRING_NOTFOUND ||
-             aStr.Search('/') != STRING_NOTFOUND))
+        xub_StrLen nSpacePos = aStr.Search( ' ', 1 );
+        if ( STRING_NOTFOUND == nSpacePos )
+            nSpacePos = aStr.Len( );
+        xub_StrLen nSearchPos = STRING_NOTFOUND;
+        if ( ( ( nSearchPos = aStr.Search('.') ) != STRING_NOTFOUND && nSearchPos < nSpacePos ) ||
+             ( ( nSearchPos = aStr.Search('/') ) != STRING_NOTFOUND && nSearchPos < nSpacePos ) )
             return aF.nLen;
         else
             return aF.nLen - aF.nLRes - 1;  // so viele ueberlesen, das Resultfeld

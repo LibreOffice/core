@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,7 +153,7 @@ implnCopy( const uno::Reference< frame::XModel>& xModel )
         pViewShell->CopyToClip(NULL,false,false,true);
 }
 
-void 
+void
 implnCut( const uno::Reference< frame::XModel>& xModel )
 {
     ScTabViewShell* pViewShell =  getBestViewShell( xModel );
@@ -170,18 +170,18 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, USHORT nFl
     ScTabViewShell* pTabViewShell = getBestViewShell( xModel );
     if ( pTabViewShell )
     {
-        ScViewData* pView = pTabViewShell->GetViewData();	
+        ScViewData* pView = pTabViewShell->GetViewData();
         Window* pWin = ( pView != NULL ) ? pView->GetActiveWin() : NULL;
         if ( pView && pWin )
         {
             if ( bAsLink && bOtherDoc )
                 pTabViewShell->PasteFromSystem(0);//SOT_FORMATSTR_ID_LINK
-            else 
+            else
             {
                 ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
-                ScDocument* pDoc = NULL; 
+                ScDocument* pDoc = NULL;
                 if ( pOwnClip )
-                    pDoc = pOwnClip->GetDocument();	
+                    pDoc = pOwnClip->GetDocument();
                 pTabViewShell->PasteFromClip( nFlags, pDoc,
                     nFunction, bSkipEmpty, bTranspose, bAsLink,
                     eMoveMode, IDF_NONE, TRUE );
@@ -192,8 +192,8 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, USHORT nFl
 
 }
 
-ScDocShell* 
-getDocShell( const css::uno::Reference< css::frame::XModel>& xModel ) 
+ScDocShell*
+getDocShell( const css::uno::Reference< css::frame::XModel>& xModel )
 {
     uno::Reference< uno::XInterface > xIf( xModel, uno::UNO_QUERY_THROW );
     ScModelObj* pModel = dynamic_cast< ScModelObj* >( xIf.get() );
@@ -204,7 +204,7 @@ getDocShell( const css::uno::Reference< css::frame::XModel>& xModel )
 
 }
 
-ScTabViewShell* 
+ScTabViewShell*
 getBestViewShell( const css::uno::Reference< css::frame::XModel>& xModel )
 {
     ScDocShell* pDocShell = getDocShell( xModel );
@@ -213,23 +213,23 @@ getBestViewShell( const css::uno::Reference< css::frame::XModel>& xModel )
     return NULL;
 }
 
-ScTabViewShell* 
+ScTabViewShell*
 getCurrentBestViewShell(  const uno::Reference< uno::XComponentContext >& xContext )
-{ 
+{
     uno::Reference< frame::XModel > xModel = getCurrentExcelDoc( xContext );
     return getBestViewShell( xModel );
 }
 
-SfxViewFrame* 
+SfxViewFrame*
 getViewFrame( const uno::Reference< frame::XModel >& xModel )
 {
-    ScTabViewShell* pViewShell = getBestViewShell( xModel );	
+    ScTabViewShell* pViewShell = getBestViewShell( xModel );
     if ( pViewShell )
         return pViewShell->GetViewFrame();
     return NULL;
 }
 
-uno::Reference< XHelperInterface > 
+uno::Reference< XHelperInterface >
 getUnoSheetModuleObj( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
 {
     uno::Reference< sheet::XSheetCellRange > xSheetRange( xRange, uno::UNO_QUERY_THROW );
@@ -238,15 +238,15 @@ getUnoSheetModuleObj( const uno::Reference< table::XCellRange >& xRange ) throw 
     xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CodeName") ) ) >>= sCodeName;
     // #TODO #FIXME ideally we should 'throw' here if we don't get a valid parent, but... it is possible
     // to create a module ( and use 'Option VBASupport 1' ) for a calc document, in this scenario there
-    // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at 
-    // the document in the future could fix this, especially IF the switching of the vba mode takes care to 
+    // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at
+    // the document in the future could fix this, especially IF the switching of the vba mode takes care to
     // create the special document module objects if they don't exist.
     uno::Reference< XHelperInterface > xParent( ov::getUnoDocModule( sCodeName, GetDocShellFromRange( xRange ) ), uno::UNO_QUERY );
 
     return xParent;
 }
 
-uno::Reference< XHelperInterface > 
+uno::Reference< XHelperInterface >
 getUnoSheetModuleObj( const uno::Reference< sheet::XSheetCellRangeContainer >& xRanges ) throw ( uno::RuntimeException )
 {
     uno::Reference< container::XEnumerationAccess > xEnumAccess( xRanges, uno::UNO_QUERY_THROW );
@@ -264,5 +264,5 @@ ScVbaCellRangeAccess::GetDataSet( ScCellRangesBase* pRangeObj )
 
 
 } //excel
-} //vba 
-} //ooo 
+} //vba
+} //ooo

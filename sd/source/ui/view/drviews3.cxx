@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,7 +149,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             }
     }
 
-    //	USHORT nSlot = rReq.GetSlot();
+    //  USHORT nSlot = rReq.GetSlot();
     switch (nSlot)
     {
         case SID_SWITCHPAGE:  // BASIC
@@ -194,8 +194,8 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                         }
 
                         nSelectedPage = (short) nWhatPage;
-                        mePageKind	  = (PageKind) nWhatKind;
-                        bWasBasic	  = TRUE;
+                        mePageKind    = (PageKind) nWhatKind;
+                        bWasBasic     = TRUE;
                     }
                 }
                 else
@@ -240,7 +240,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             break;
         }
 
-        case SID_PAGEMODE:	// BASIC
+        case SID_PAGEMODE:  // BASIC
         {
 
             const SfxItemSet *pArgs = rReq.GetArgs ();
@@ -849,7 +849,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     {
         rSet.DisableItem( SID_RULER_OBJECT );
         rSet.DisableItem( EE_PARA_TABS );
-//		rSet.DisableItem( SID_RULER_TEXT_RIGHT_TO_LEFT );
+//      rSet.DisableItem( SID_RULER_TEXT_RIGHT_TO_LEFT );
     }
 
     rSet.Put( aLRSpace );
@@ -898,10 +898,10 @@ void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
 void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
 {
     SdrPageView* pPV;
-    Point	aMPos = GetActiveWindow()->PixelToLogic(maMousePos);
-    USHORT	nHitLog = (USHORT) GetActiveWindow()->PixelToLogic(
+    Point   aMPos = GetActiveWindow()->PixelToLogic(maMousePos);
+    USHORT  nHitLog = (USHORT) GetActiveWindow()->PixelToLogic(
         Size(FuPoor::HITPIX,0)).Width();
-    USHORT	nHelpLine;
+    USHORT  nHelpLine;
 
     if ( mpDrawView->PickHelpLine(aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
     {

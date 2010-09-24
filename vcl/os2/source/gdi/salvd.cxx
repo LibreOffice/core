@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,9 +59,9 @@ HBITMAP ImplCreateVirDevBitmap( HDC hDC, HPS hPS, long nDX, long nDY,
     HBITMAP hBitmap;
     BITMAPINFOHEADER2 aBitmapInfo;
     memset( &aBitmapInfo, 0, sizeof( BITMAPINFOHEADER2 ) );
-    aBitmapInfo.cbFix	  = sizeof( BITMAPINFOHEADER2 );
-    aBitmapInfo.cx		  = nDX;
-    aBitmapInfo.cy		  = nDY;
+    aBitmapInfo.cbFix     = sizeof( BITMAPINFOHEADER2 );
+    aBitmapInfo.cx        = nDX;
+    aBitmapInfo.cy        = nDY;
     aBitmapInfo.cPlanes   = nPlanes;
     aBitmapInfo.cBitCount = (nBitCount < 4) ? 4 : nBitCount;
     hBitmap  = GpiCreateBitmap( hPS, &aBitmapInfo, 0, NULL, NULL );
@@ -76,8 +76,8 @@ SalVirtualDevice* Os2SalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
                                                        const SystemGraphicsData* pData )
 {
     Os2SalGraphics* pGraphics = static_cast<Os2SalGraphics*>(pSGraphics);
-    HAB 	hAB = GetSalData()->mhAB;
-    SIZEL	size;
+    HAB     hAB = GetSalData()->mhAB;
+    SIZEL   size;
 
     // create device context (at this time allways display compatible)
     DEVOPENSTRUC aDevOpenStruc = { NULL, "DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL };
@@ -105,26 +105,26 @@ SalVirtualDevice* Os2SalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
     }
 
     // init data
-    Os2SalVirtualDevice*	pVDev				= new Os2SalVirtualDevice;
-    Os2SalGraphics*		pVirGraphics		= new Os2SalGraphics;
+    Os2SalVirtualDevice*    pVDev               = new Os2SalVirtualDevice;
+    Os2SalGraphics*     pVirGraphics        = new Os2SalGraphics;
 
-    pVirGraphics->mhDC		= hDC;
-    pVirGraphics->mhPS		= hPS;
-    pVirGraphics->mhWnd		= 0;
-    pVirGraphics->mnHeight	= nDY;
-    pVirGraphics->mbPrinter	= FALSE;
-    pVirGraphics->mbVirDev	= TRUE;
-    pVirGraphics->mbWindow	= FALSE;
-    pVirGraphics->mbScreen	= pGraphics->mbScreen;
+    pVirGraphics->mhDC      = hDC;
+    pVirGraphics->mhPS      = hPS;
+    pVirGraphics->mhWnd     = 0;
+    pVirGraphics->mnHeight  = nDY;
+    pVirGraphics->mbPrinter = FALSE;
+    pVirGraphics->mbVirDev  = TRUE;
+    pVirGraphics->mbWindow  = FALSE;
+    pVirGraphics->mbScreen  = pGraphics->mbScreen;
     ImplSalInitGraphics( pVirGraphics );
 
-    pVDev->mhDC				= hDC;
-    pVDev->mhPS				= hPS;
-    pVDev->mhBmp			= hBmp;
-    pVDev->mhDefBmp			= Ft2SetBitmap( hPS, hBmp );
-    pVDev->mpGraphics		= pVirGraphics;
-    pVDev->mnBitCount		= nBitCount;
-    pVDev->mbGraphics		= FALSE;
+    pVDev->mhDC             = hDC;
+    pVDev->mhPS             = hPS;
+    pVDev->mhBmp            = hBmp;
+    pVDev->mhDefBmp         = Ft2SetBitmap( hPS, hBmp );
+    pVDev->mpGraphics       = pVirGraphics;
+    pVDev->mnBitCount       = nBitCount;
+    pVDev->mbGraphics       = FALSE;
     return pVDev;
 }
 

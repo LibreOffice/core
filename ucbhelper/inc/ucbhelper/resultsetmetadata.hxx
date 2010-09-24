@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include "ucbhelper/ucbhelperdllapi.h"
 
 namespace com { namespace sun { namespace star {
-    namespace lang	{ class XMultiServiceFactory; }
+    namespace lang  { class XMultiServiceFactory; }
     namespace beans { struct Property; }
 } } }
 
@@ -87,10 +87,10 @@ struct ResultSetColumnData
     ::rtl::OUString schemaName;
 
     /** @see ResultSetMetaData::getPrecision */
-    sal_Int32 		precision;
+    sal_Int32       precision;
 
     /** @see ResultSetMetaData::getScale */
-    sal_Int32 		scale;
+    sal_Int32       scale;
 
     /** @see ResultSetMetaData::getTableName */
     ::rtl::OUString tableName;
@@ -102,13 +102,13 @@ struct ResultSetColumnData
     ::rtl::OUString columnTypeName;
 
     /** @see ResultSetMetaData::isReadOnly */
-    sal_Bool 		isReadOnly;
+    sal_Bool        isReadOnly;
 
     /** @see ResultSetMetaData::isWritable */
-    sal_Bool 		isWritable;
+    sal_Bool        isWritable;
 
     /** @see ResultSetMetaData::isDefinitelyWritable */
-    sal_Bool 		isDefinitelyWritable;
+    sal_Bool        isDefinitelyWritable;
 
     /** @see ResultSetMetaData::getColumnServiceName */
     ::rtl::OUString columnServiceName;
@@ -155,16 +155,16 @@ protected:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
     ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::Property > 		   m_aProps;
+        ::com::sun::star::beans::Property >            m_aProps;
     sal_Bool m_bReadOnly;
 
 public:
 
     /**
-      *	Constructor.
+      * Constructor.
       *
-      *	@param rxSMgr is a Servive Manager.
-      *	@param rProps is a sequence of properties (partially) describing the
+      * @param rxSMgr is a Servive Manager.
+      * @param rProps is a sequence of properties (partially) describing the
       *        columns of a resultset.
       * @param bReadOnly is used to specify whether the whole(!) resultset
       *        is read-only.
@@ -177,17 +177,17 @@ public:
             sal_Bool bReadOnly = sal_True );
 
     /**
-      *	Constructor.
+      * Constructor.
       *
-      *	@param rxSMgr is a Servive Manager.
-      *	@param rProps is a sequence of properties (partially) describing the
+      * @param rxSMgr is a Servive Manager.
+      * @param rProps is a sequence of properties (partially) describing the
       *        columns of a resultset.
-      *	@param rColumnData contains additional meta data for the columns of
-      *	       a resultset, which override the default values returned by the
-      *		   appropriate methods of this class. The length of rColumnData
-      *		   must be the same as length of rProps.
-      *		   rColumnData[ 0 ] corresponds to data in rProps[ 0 ],
-      *		   rColumnData[ 1 ] corresponds to data in rProps[ 1 ], ...
+      * @param rColumnData contains additional meta data for the columns of
+      *        a resultset, which override the default values returned by the
+      *        appropriate methods of this class. The length of rColumnData
+      *        must be the same as length of rProps.
+      *        rColumnData[ 0 ] corresponds to data in rProps[ 0 ],
+      *        rColumnData[ 1 ] corresponds to data in rProps[ 1 ], ...
       */
     ResultSetMetaData(
             const ::com::sun::star::uno::Reference<
@@ -197,7 +197,7 @@ public:
             const std::vector< ResultSetColumnData >& rColumnData );
 
     /**
-      *	Destructor.
+      * Destructor.
       */
     virtual ~ResultSetMetaData();
 
@@ -212,30 +212,30 @@ public:
     /**
       * Returns the number of columns of the resultset.
       *
-      *	@return the length of the property sequence.
+      * @return the length of the property sequence.
       */
     virtual sal_Int32 SAL_CALL
     getColumnCount()
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	Checks whether column is automatically numbered, which makes it
-      *	read-only.
+      * Checks whether column is automatically numbered, which makes it
+      * read-only.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return true, if column is automatically numbered.
+      * @return true, if column is automatically numbered.
       */
     virtual sal_Bool SAL_CALL
     isAutoIncrement( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	Checks whether column is case sensitive.
+      * Checks whether column is case sensitive.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return true, if column is case sensitive.
+      * @return true, if column is case sensitive.
       */
     virtual sal_Bool SAL_CALL
     isCaseSensitive( sal_Int32 column )
@@ -243,35 +243,35 @@ public:
                ::com::sun::star::uno::RuntimeException );
     /**
       * Checks whether the value stored in column can be used in a
-      *	WHERE clause.
+      * WHERE clause.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return true, if the column is searchable.
+      * @return true, if the column is searchable.
       */
     virtual sal_Bool SAL_CALL
     isSearchable( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	Checks whether column is a cash value.
+      * Checks whether column is a cash value.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return true, if the column is a cash value.
+      * @return true, if the column is a cash value.
       */
     virtual sal_Bool SAL_CALL
     isCurrency( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	Checks whether a NULL can be stored in column.
+      * Checks whether a NULL can be stored in column.
       *
-      *	@see com::sun::star::sdbc::ColumnValue
+      * @see com::sun::star::sdbc::ColumnValue
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return ::com::sun::star::sdbc::ColumnValue::NULLABLE, if a NULL
+      * @return ::com::sun::star::sdbc::ColumnValue::NULLABLE, if a NULL
       *         can be stored in the column.
       */
     virtual sal_Int32 SAL_CALL
@@ -279,100 +279,100 @@ public:
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	Checks whether the value stored in column is a signed number.
+      * Checks whether the value stored in column is a signed number.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return true, if the value stored in column is a signed number.
+      * @return true, if the value stored in column is a signed number.
       */
     virtual sal_Bool SAL_CALL
     isSigned( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	Gets the normal maximum width in characters for column.
+      * Gets the normal maximum width in characters for column.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return the normal maximum width in characters for column.
+      * @return the normal maximum width in characters for column.
       */
     virtual sal_Int32 SAL_CALL
     getColumnDisplaySize( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	Gets the suggested column title for column, to be used in print-
-      *	outs and displays.
+      * Gets the suggested column title for column, to be used in print-
+      * outs and displays.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return the column label.
+      * @return the column label.
       */
     virtual ::rtl::OUString SAL_CALL
     getColumnLabel( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	Gets the name of column.
+      * Gets the name of column.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return the name of the property that corresponds to column.
+      * @return the name of the property that corresponds to column.
       */
     virtual ::rtl::OUString SAL_CALL
     getColumnName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	Gets the schema name for the table from which column of this
-      *	result set was derived.
-      *	Because this feature is not widely supported, the return value
-      *	for many DBMSs will be an empty string.
+      * Gets the schema name for the table from which column of this
+      * result set was derived.
+      * Because this feature is not widely supported, the return value
+      * for many DBMSs will be an empty string.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return the schema name of column or an empty string.
+      * @return the schema name of column or an empty string.
       */
     virtual ::rtl::OUString SAL_CALL
     getSchemaName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	For number types, getprecision gets the number of decimal digits
-      *	in column.
-      *	For character types, it gets the maximum length in characters for
-      *	column.
-      *	For binary types, it gets the maximum length in bytes for column.
+      * For number types, getprecision gets the number of decimal digits
+      * in column.
+      * For character types, it gets the maximum length in characters for
+      * column.
+      * For binary types, it gets the maximum length in bytes for column.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return the precision for the column.
+      * @return the precision for the column.
       */
     virtual sal_Int32 SAL_CALL
     getPrecision( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	Gets the number of digits to the right of the decimal point for
-      *	values in column.
+      * Gets the number of digits to the right of the decimal point for
+      * values in column.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return the scale of the column.
+      * @return the scale of the column.
       */
     virtual sal_Int32 SAL_CALL
     getScale( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	Gets the name of the table from which column of this result set
-      *	was derived or "" if there is none (for example, for a join).
-      *	Because this feature is not widely supported, the return value
-      *	for many DBMSs will be an empty string.
+      * Gets the name of the table from which column of this result set
+      * was derived or "" if there is none (for example, for a join).
+      * Because this feature is not widely supported, the return value
+      * for many DBMSs will be an empty string.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return the table name for column or an empty string.
+      * @return the table name for column or an empty string.
       */
     virtual ::rtl::OUString SAL_CALL
     getTableName( sal_Int32 column )
@@ -380,27 +380,27 @@ public:
                ::com::sun::star::uno::RuntimeException );
     virtual ::rtl::OUString SAL_CALL
     /**
-      *	Gets the catalog name for the table from which column of this
-      *	result set was derived.
-      *	Because this feature is not widely supported, the return value
-      *	for many DBMSs will be an empty string.
+      * Gets the catalog name for the table from which column of this
+      * result set was derived.
+      * Because this feature is not widely supported, the return value
+      * for many DBMSs will be an empty string.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return the catalog name for column or an empty string.
+      * @return the catalog name for column or an empty string.
       */
     getCatalogName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	Gets the JDBC type for the value stored in column. ... The STRUCT
-      *	and DISTINCT type codes are always returned for structured and
-      *	distinct types, regardless of whether the value will be mapped
-      *	according to the standard mapping or be a custom mapping.
+      * Gets the JDBC type for the value stored in column. ... The STRUCT
+      * and DISTINCT type codes are always returned for structured and
+      * distinct types, regardless of whether the value will be mapped
+      * according to the standard mapping or be a custom mapping.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return the type of the property that corresponds to column - mapped
+      * @return the type of the property that corresponds to column - mapped
       *         from UNO-Type to SQL-Type.
       */
     virtual sal_Int32 SAL_CALL
@@ -408,14 +408,14 @@ public:
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
     /**
-      *	Gets the type name used by this particular data source for the
-      *	values stored in column. If the type code for the type of value
-      *	stored in column is STRUCT, DISTINCT or JAVA_OBJECT, this method
-      *	returns a fully-qualified SQL type name.
+      * Gets the type name used by this particular data source for the
+      * values stored in column. If the type code for the type of value
+      * stored in column is STRUCT, DISTINCT or JAVA_OBJECT, this method
+      * returns a fully-qualified SQL type name.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return the column type name.
+      * @return the column type name.
       */
     virtual ::rtl::OUString SAL_CALL
     getColumnTypeName( sal_Int32 column )
@@ -426,7 +426,7 @@ public:
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return true, if the column is definetely not writable.
+      * @return true, if the column is definetely not writable.
       */
     virtual sal_Bool SAL_CALL
     isReadOnly( sal_Int32 column )
@@ -437,7 +437,7 @@ public:
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return true, if it is possible for a write to succeed.
+      * @return true, if it is possible for a write to succeed.
       */
     virtual sal_Bool SAL_CALL
     isWritable( sal_Int32 column )
@@ -448,7 +448,7 @@ public:
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return true, if a write on the column will definetely succeed.
+      * @return true, if a write on the column will definetely succeed.
       */
     virtual sal_Bool SAL_CALL
     isDefinitelyWritable( sal_Int32 column )
@@ -456,13 +456,13 @@ public:
                ::com::sun::star::uno::RuntimeException );
     /**
       * Returns the fully-qualified name of the service whose instances
-      *	are manufactured if the method
+      * are manufactured if the method
       * com::sun::star::sdbc::ResultSet::getObject is called to retrieve a
       * value from the column.
       *
       * @param  column is the number of the column for that a value shall
       *         be returned. The first column is 1, the second is 2, ...
-      *	@return the service name for column or an empty string, if no service
+      * @return the service name for column or an empty string, if no service
       *         is applicable.
       */
     virtual ::rtl::OUString SAL_CALL

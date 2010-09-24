@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@ namespace dxcanvas
         // overridden, to clear mpPath
         virtual void modifying() const;
 
-        GDIPlusUserSharedPtr			mpGdiPlusUser;
-        mutable GraphicsPathSharedPtr	mpPath;
+        GDIPlusUserSharedPtr            mpGdiPlusUser;
+        mutable GraphicsPathSharedPtr   mpPath;
     };
 }
 

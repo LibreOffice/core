@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class DlgEdForm;
 class DlgEdPage : public SdrPage
 {
 private:
-    DlgEdForm*		pDlgEdForm;
+    DlgEdForm*      pDlgEdForm;
 
 public:
     TYPEINFO();
@@ -52,8 +52,8 @@ public:
     using SdrPage::Clone;
     virtual SdrPage* Clone() const;
 
-    void			SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
-    DlgEdForm*		GetDlgEdForm() const { return pDlgEdForm; }
+    void            SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
+    DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }
 
     virtual SdrObject* SetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum);
 };

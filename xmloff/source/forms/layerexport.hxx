@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,15 +73,15 @@ namespace xmloff
         friend class OFormLayerXMLExport;
 
     protected:
-        SvXMLExport&		m_rContext;
-        SvXMLNumFmtExport*	m_pControlNumberStyles;
+        SvXMLExport&        m_rContext;
+        SvXMLNumFmtExport*  m_pControlNumberStyles;
 
         // ignore list for control models
-        PropertySetBag		m_aIgnoreList;
+        PropertySetBag      m_aIgnoreList;
 
         // style handling
-        ::vos::ORef< XMLPropertyHandlerFactory >	m_xPropertyHandlerFactory;
-        ::vos::ORef< SvXMLExportPropertyMapper >	m_xStyleExportMapper;
+        ::vos::ORef< XMLPropertyHandlerFactory >    m_xPropertyHandlerFactory;
+        ::vos::ORef< SvXMLExportPropertyMapper >    m_xStyleExportMapper;
 
         // we need our own number formats supplier:
         // Controls which have a number formats do not work with the formats supplier of the document they reside
@@ -102,10 +102,10 @@ namespace xmloff
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >
                                                     m_xControlNumberFormats;
 
-        MapPropertySet2Map	m_aControlIds;
+        MapPropertySet2Map  m_aControlIds;
             // the control ids of all controls on all pages we ever examined
 
-        MapPropertySet2Map	m_aReferringControls;
+        MapPropertySet2Map  m_aReferringControls;
             // for a given page (iter->first), and a given control (iter->second->first), this is the comma-separated
             // lists of ids of the controls refering to the control given.
 
@@ -120,10 +120,10 @@ namespace xmloff
         // export of a single page should be introduced.
 
         DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, sal_Int32, OPropertySetCompare, MapPropertySet2Int);
-        MapPropertySet2Int	m_aControlNumberFormats;
+        MapPropertySet2Int  m_aControlNumberFormats;
             // maps controls to format keys, which are relative to our own formats supplier
 
-        MapPropertySet2String	m_aGridColumnStyles;
+        MapPropertySet2String   m_aGridColumnStyles;
             // style names of grid columns
 
     public:
@@ -133,21 +133,21 @@ namespace xmloff
     protected:
         /** exports one single grid column
         */
-        void	exportGridColumn(
+        void    exportGridColumn(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
             );
 
         /** exports one single control
         */
-        void	exportControl(
+        void    exportControl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
             );
 
         /** exports one single form
         */
-        void	exportForm(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps,
+        void    exportForm(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
             );
 
@@ -158,7 +158,7 @@ namespace xmloff
             @see
                 getControlId
         */
-        sal_Bool	seekPage(
+        sal_Bool    seekPage(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
 
         /** get the id of the given control.
@@ -177,11 +177,11 @@ namespace xmloff
                 getControlNumberStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl );
 
         // IFormsExportContext
-        virtual void										exportCollectionElements(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection);
-        virtual SvXMLExport&								getGlobalContext();
-        virtual ::rtl::OUString								getObjectStyleName(
+        virtual void                                        exportCollectionElements(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection);
+        virtual SvXMLExport&                                getGlobalContext();
+        virtual ::rtl::OUString                             getObjectStyleName(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject );
-        virtual ::vos::ORef< SvXMLExportPropertyMapper >	getStylePropertyMapper();
+        virtual ::vos::ORef< SvXMLExportPropertyMapper >    getStylePropertyMapper();
 
         /** clear any structures which have been build in the recent <method>examine</method> calls.
         */
@@ -232,11 +232,11 @@ namespace xmloff
 
         /** exports the controls number styles
         */
-        void	exportControlNumberStyles();
+        void    exportControlNumberStyles();
 
         /** exports the automatic control number styles
         */
-        void	exportAutoControlNumberStyles();
+        void    exportAutoControlNumberStyles();
 
         /** exports the auto-styles collected during the examineForms calls
         */
@@ -285,13 +285,13 @@ namespace xmloff
                 the format key of the control's format relative to our own formats supplier
 
         */
-        sal_Int32	ensureTranslateFormat(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxFormattedControl);
+        sal_Int32   ensureTranslateFormat(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxFormattedControl);
 
         /// returns the instance exporting our control's number styles
-        SvXMLNumFmtExport*	getControlNumberStyleExport();
+        SvXMLNumFmtExport*  getControlNumberStyleExport();
 
         /// ensures that the instance exporting our control's number styles exists
-        void				ensureControlNumberStyleExport();
+        void                ensureControlNumberStyleExport();
 
         /** determines the number format style for the given object without remembering it
         */
@@ -313,7 +313,7 @@ namespace xmloff
     };
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_LAYEREXPORT_HXX_

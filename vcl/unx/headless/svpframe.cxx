@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ using namespace basegfx;
 
 SvpSalFrame* SvpSalFrame::s_pFocusFrame = NULL;
 
-SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance, 
+SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,
                           ULONG nSalFrameStyle,
                           SystemParentData* ) :
@@ -50,24 +50,24 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_nMaxWidth( 0 ),
     m_nMaxHeight( 0 )
 {
-    m_aSystemChildData.nSize 		= sizeof( SystemChildData );
-    m_aSystemChildData.pDisplay		= NULL;
-    m_aSystemChildData.aWindow		= 0;
-    m_aSystemChildData.pSalFrame 	= this;
-    m_aSystemChildData.pWidget		= NULL;
-    m_aSystemChildData.pVisual		= NULL;
-    m_aSystemChildData.nDepth		= 24;
-    m_aSystemChildData.aColormap	= 0;
-    m_aSystemChildData.pAppContext	= NULL;
-    m_aSystemChildData.aShellWindow	= 0;
-    m_aSystemChildData.pShellWidget	= NULL;
-    
+    m_aSystemChildData.nSize        = sizeof( SystemChildData );
+    m_aSystemChildData.pDisplay     = NULL;
+    m_aSystemChildData.aWindow      = 0;
+    m_aSystemChildData.pSalFrame    = this;
+    m_aSystemChildData.pWidget      = NULL;
+    m_aSystemChildData.pVisual      = NULL;
+    m_aSystemChildData.nDepth       = 24;
+    m_aSystemChildData.aColormap    = 0;
+    m_aSystemChildData.pAppContext  = NULL;
+    m_aSystemChildData.aShellWindow = 0;
+    m_aSystemChildData.pShellWidget = NULL;
+
     if( m_pParent )
         m_pParent->m_aChildren.push_back( this );
-    
+
     if( m_pInstance )
         m_pInstance->registerFrame( this );
-    
+
     SetPosSize( 0, 0, 800, 600, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
 }
 
@@ -75,14 +75,14 @@ SvpSalFrame::~SvpSalFrame()
 {
     if( m_pInstance )
         m_pInstance->deregisterFrame( this );
-    
+
     std::list<SvpSalFrame*> Children = m_aChildren;
     for( std::list<SvpSalFrame*>::iterator it = Children.begin();
          it != Children.end(); ++it )
          (*it)->SetParent( m_pParent );
     if( m_pParent )
         m_pParent->m_aChildren.remove( this );
-    
+
     if( s_pFocusFrame == this )
     {
         s_pFocusFrame = NULL;
@@ -304,7 +304,7 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
             nWidth = pState->mnWidth;
         if (pState->mnMask & SAL_FRAMESTATE_MASK_HEIGHT)
             nHeight = pState->mnHeight;
-            
+
         SetPosSize( nX, nY, nWidth, nHeight,
                     SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y |
                     SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
@@ -314,8 +314,8 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
 BOOL SvpSalFrame::GetWindowState( SalFrameState* pState )
 {
     pState->mnState = SAL_FRAMESTATE_NORMAL;
-    pState->mnX 	 = maGeometry.nX;
-    pState->mnY 	 = maGeometry.nY;
+    pState->mnX      = maGeometry.nX;
+    pState->mnY      = maGeometry.nY;
     pState->mnWidth  = maGeometry.nWidth;
     pState->mnHeight = maGeometry.nHeight;
     pState->mnMask   = _FRAMESTATE_MASK_GEOMETRY | SAL_FRAMESTATE_MASK_STATE;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,54 +24,54 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_XRow_idl__ 
-#define __com_sun_star_sdbc_XRow_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_util_Date_idl__ 
-#include <com/sun/star/util/Date.idl> 
-#endif 
- 
-#ifndef __com_sun_star_util_DateTime_idl__ 
-#include <com/sun/star/util/DateTime.idl> 
-#endif 
- 
-#ifndef __com_sun_star_util_Time_idl__ 
-#include <com/sun/star/util/Time.idl> 
-#endif 
- 
- module com {  module sun {  module star {  module io { 
- published interface XInputStream; 
-};};};}; 
- 
- module com {  module sun {  module star {  module container { 
- published interface XNameAccess; 
-};};};}; 
- 
-#ifndef __com_sun_star_sdbc_SQLException_idl__ 
-#include <com/sun/star/sdbc/SQLException.idl> 
-#endif 
- 
- module com {  module sun {  module star {  module sdbc { 
- 
- published interface XRef; 
- published interface XArray; 
- published interface XBlob; 
- published interface XClob; 
- 
- 
+#ifndef __com_sun_star_sdbc_XRow_idl__
+#define __com_sun_star_sdbc_XRow_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_util_Date_idl__
+#include <com/sun/star/util/Date.idl>
+#endif
+
+#ifndef __com_sun_star_util_DateTime_idl__
+#include <com/sun/star/util/DateTime.idl>
+#endif
+
+#ifndef __com_sun_star_util_Time_idl__
+#include <com/sun/star/util/Time.idl>
+#endif
+
+ module com {  module sun {  module star {  module io {
+ published interface XInputStream;
+};};};};
+
+ module com {  module sun {  module star {  module container {
+ published interface XNameAccess;
+};};};};
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XRef;
+ published interface XArray;
+ published interface XBlob;
+ published interface XClob;
+
+
 /** is used to access data which is collected in a row.
-    All methods raise a 
+    All methods raise a
     <type scope="com::sun::star::sdbc">SQLException</type>
     if a database access error occurs.
  */
 published interface XRow: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** reports whether the last column read had a value of SQL NULL.
         Note that you must first call getXXX on a column to try to read
         its value and then call wasNull() to see if the value read was
@@ -79,159 +79,159 @@ published interface XRow: com::sun::star::uno::XInterface
 
         @returns
             <TRUE/> if last column read was SQL NULL and <FALSE/> otherwise
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    boolean wasNull() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean wasNull() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the value of a column in the current row as a string.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    string getString([in]long columnIndex) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getString([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the value of a column in the current row as boolean.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    boolean getBoolean([in]long columnIndex) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean getBoolean([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** get the value of a column in the current row as a byte.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    byte getByte([in]long columnIndex) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    byte getByte([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the value of a column in the current row as a short.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    short getShort([in]long columnIndex) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    short getShort([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** get the value of a column in the current row as an integer.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    long getInt([in]long columnIndex) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getInt([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** get the value of a column in the current row as a long.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    hyper getLong([in]long columnIndex) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    hyper getLong([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the value of a column in the current row as a float.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    float getFloat([in]long columnIndex) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    float getFloat([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the value of a column in the current row as a double.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    double getDouble([in]long columnIndex) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
-    /** gets the value of a column in the current row as a byte array. 
-             The bytes represent the raw values returned by the driver. 
-             @param columnIndex 
-                the first column is 1, the second is 2, ... 
-             @returns 
-                the column value; if the value is SQL NULL, the result is empty. 
-             @throws SQLException 
+    double getDouble([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** gets the value of a column in the current row as a byte array.
+             The bytes represent the raw values returned by the driver.
+             @param columnIndex
+                the first column is 1, the second is 2, ...
+             @returns
+                the column value; if the value is SQL NULL, the result is empty.
+             @throws SQLException
                 if a database access error occurs.
      */
-    sequence<byte> getBytes([in]long columnIndex) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    sequence<byte> getBytes([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the value of a column in the current row as a date object.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    com::sun::star::util::Date getDate([in]long columnIndex) 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    com::sun::star::util::Date getDate([in]long columnIndex)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the value of a column in the current row as a time object.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    com::sun::star::util::Time getTime([in]long columnIndex) 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    com::sun::star::util::Time getTime([in]long columnIndex)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the value of a column in the current row as a datetime object.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    com::sun::star::util::DateTime getTimestamp([in]long columnIndex) 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    com::sun::star::util::DateTime getTimestamp([in]long columnIndex)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the value of a column in the current row as a stream of
         uninterpreted bytes. The value can then be read in chunks from the
         stream. This method is particularly suitable for retrieving large
         LONGVARBINARY values.
-        
-        
+
+
         <p>
         <b>Note:</b> All the data in the returned stream must be
         read prior to getting the value of any other column. The next
         call to a get method implicitly closes the stream. Also, a
-        stream may return 0 when the method 
+        stream may return 0 when the method
         <member scope="com::sun::star::io">XInputStream::available()</member>
         is called whether there is data
         available or not.
@@ -240,24 +240,24 @@ published interface XRow: com::sun::star::uno::XInterface
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    com::sun::star::io::XInputStream getBinaryStream([in]long columnIndex) 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    com::sun::star::io::XInputStream getBinaryStream([in]long columnIndex)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the value of a column in the current row as a stream of
         uninterpreted bytes. The value can then be read in chunks from the
         stream. This method is particularly suitable for retrieving large
         LONGVARBINARY or LONGVARCHAR values.
-        
-        
+
+
         <p>
         <b>Note:</b> All the data in the returned stream must be
         read prior to getting the value of any other column. The next
         call to a get method implicitly closes the stream. Also, a
-        stream may return 0 when the method 
+        stream may return 0 when the method
         <member scope="com::sun::star::io">XInputStream::available()</member>
         is called whether there is data
         available or not.
@@ -266,15 +266,15 @@ published interface XRow: com::sun::star::uno::XInterface
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    com::sun::star::io::XInputStream getCharacterStream([in]long columnIndex) 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    com::sun::star::io::XInputStream getCharacterStream([in]long columnIndex)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** returns the value of a column in the current row as an object.
-        This method uses the given 
+        This method uses the given
         <code>Map</code>
         object for the custom mapping of the SQL structure or distinct type
         that is being retrieved.
@@ -284,66 +284,66 @@ published interface XRow: com::sun::star::uno::XInterface
             the map of types which should be used to get the column value
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    any getObject([in]long columnIndex, 
-                  [in]com::sun::star::container::XNameAccess typeMap) 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    any getObject([in]long columnIndex,
+                  [in]com::sun::star::container::XNameAccess typeMap)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a REF(&amp;lt;structured-type&amp;gt;) column value from the current row.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    XRef getRef([in]long columnIndex) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XRef getRef([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a BLOB value in the current row.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    XBlob getBlob([in]long columnIndex) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
-    /** gets a CLOB value in the current row of this 
-        <code>ResultSet</code> 
+    XBlob getBlob([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** gets a CLOB value in the current row of this
+        <code>ResultSet</code>
         object.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XClob getClob([in]long columnIndex) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
-    /** gets a SQL ARRAY value from the current row of this 
-        <code>ResultSet</code> 
+    XClob getClob([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** gets a SQL ARRAY value from the current row of this
+        <code>ResultSet</code>
         object.
         @param columnIndex
             the first column is 1, the second is 2,
         @returns
             the column value; if the value is SQL NULL, the result is null
-        @throws SQLException 
+        @throws SQLException
                 if a database access error occurs.
      */
-    XArray getArray([in]long columnIndex) raises (SQLException); 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    XArray getArray([in]long columnIndex) raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

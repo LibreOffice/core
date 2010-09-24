@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@
 // - Defines -
 // -----------
 
-#define IMPSYSIMAGEITEM_MASK		( 0x01 )
-#define IMPSYSIMAGEITEM_ALPHA		( 0x02 )
-#define DISA_ALL					( 0xffff )
+#define IMPSYSIMAGEITEM_MASK        ( 0x01 )
+#define IMPSYSIMAGEITEM_ALPHA       ( 0x02 )
+#define DISA_ALL                    ( 0xffff )
 
 // ----------------
 // - ImageAryData -
@@ -253,9 +253,9 @@ void ImplImageBmp::Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHe
 
 void ImplImageBmp::Expand( USHORT nGrowSize )
 {
-    const ULONG 	nDX = nGrowSize * maSize.Width();
-    const USHORT	nOldSize = mnSize;
-    BYTE*			pNewAry = new BYTE[ mnSize = sal::static_int_cast<USHORT>(mnSize+nGrowSize) ];
+    const ULONG     nDX = nGrowSize * maSize.Width();
+    const USHORT    nOldSize = mnSize;
+    BYTE*           pNewAry = new BYTE[ mnSize = sal::static_int_cast<USHORT>(mnSize+nGrowSize) ];
 
     maBmpEx.Expand( nDX, 0UL );
 
@@ -357,8 +357,8 @@ void ImplImageBmp::ColorTransform( BmpColorMode eColorMode )
 
 BitmapEx ImplImageBmp::GetBitmapEx( USHORT nPosCount, USHORT* pPosAry ) const
 {
-    const Bitmap	aNewBmp( Size( nPosCount * maSize.Width(), maSize.Height() ),  maBmpEx.GetBitmap().GetBitCount() );
-    BitmapEx 		aRet;
+    const Bitmap    aNewBmp( Size( nPosCount * maSize.Width(), maSize.Height() ),  maBmpEx.GetBitmap().GetBitCount() );
+    BitmapEx        aRet;
     if( maBmpEx.IsAlpha() )
     {
         // initialize target bitmap with an empty alpha mask
@@ -373,7 +373,7 @@ BitmapEx ImplImageBmp::GetBitmapEx( USHORT nPosCount, USHORT* pPosAry ) const
     for( USHORT i = 0; i < nPosCount; i++ )
     {
         const Point     aSrcPos( pPosAry[ i ] * maSize.Width(), 0L );
-        const Point		aPos( i * maSize.Width(), 0L );
+        const Point     aPos( i * maSize.Width(), 0L );
         const Rectangle aSrcRect( aSrcPos, maSize );
         const Rectangle aDstRect( aPos, maSize );
 
@@ -392,7 +392,7 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
     if( pOutDev->IsDeviceOutputNecessary() )
     {
         const Point aSrcPos( nPos * maSize.Width(), 0 );
-        Size 		aOutSize;
+        Size        aOutSize;
 
         aOutSize = ( pSize ? *pSize : pOutDev->PixelToLogic( maSize ) );
 
@@ -433,15 +433,15 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
 
                     if( pAcc )
                     {
-                        const StyleSettings&	rSettings = pOutDev->GetSettings().GetStyleSettings();
-                        Color					aColor;
-                        BitmapColor				aCol;
-                        const long				nW = pAcc->Width();
-                        const long				nH = pAcc->Height();
-                        BYTE*					pMapR = new BYTE[ 256 ];
-                        BYTE*					pMapG = new BYTE[ 256 ];
-                        BYTE*					pMapB = new BYTE[ 256 ];
-                        long					nX, nY;
+                        const StyleSettings&    rSettings = pOutDev->GetSettings().GetStyleSettings();
+                        Color                   aColor;
+                        BitmapColor             aCol;
+                        const long              nW = pAcc->Width();
+                        const long              nH = pAcc->Height();
+                        BYTE*                   pMapR = new BYTE[ 256 ];
+                        BYTE*                   pMapG = new BYTE[ 256 ];
+                        BYTE*                   pMapB = new BYTE[ 256 ];
+                        long                    nX, nY;
 
                         if( nStyle & IMAGE_DRAW_HIGHLIGHT )
                             aColor = rSettings.GetHighlightColor();
@@ -604,7 +604,7 @@ void ImplImageBmp::ImplUpdateDisabledBmpEx( int nPos )
 
     if( pBmp && pBmpAlphaMask && pGrey && pGreyAlphaMask )
     {
-        BitmapColor	aGreyVal( 0 );
+        BitmapColor aGreyVal( 0 );
         BitmapColor aGreyAlphaMaskVal( 0 );
         const Point aPos( ( nPos < 0 ) ? 0 : ( nPos * maSize.Width() ), 0 );
         const int  nLeft = aPos.X(), nRight = nLeft + ( ( nPos < 0 ) ? aTotalSize.Width() : maSize.Width() );

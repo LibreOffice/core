@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,8 +62,8 @@ SvXMLImportContext* ScXMLLabelRangesContext::CreateChildContext(
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext*		pContext(NULL);
-    const SvXMLTokenMap&	rTokenMap(GetScImport().GetLabelRangesElemTokenMap());
+    SvXMLImportContext*     pContext(NULL);
+    const SvXMLTokenMap&    rTokenMap(GetScImport().GetLabelRangesElemTokenMap());
 
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
@@ -92,15 +92,15 @@ ScXMLLabelRangeContext::ScXMLLabelRangeContext(
     SvXMLImportContext( rImport, nPrfx, rLName ),
     bColumnOrientation( sal_False )
 {
-    sal_Int16				nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    const SvXMLTokenMap&	rAttrTokenMap(GetScImport().GetLabelRangeAttrTokenMap());
+    sal_Int16               nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
+    const SvXMLTokenMap&    rAttrTokenMap(GetScImport().GetLabelRangeAttrTokenMap());
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName	(xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sValue		(xAttrList->getValueByIndex( nIndex ));
-        OUString	aLocalName;
-        USHORT		nPrefix		(GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName ));
+        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
+        OUString    aLocalName;
+        USHORT      nPrefix     (GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {

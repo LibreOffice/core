@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,8 +115,8 @@ public:
                 : 0;
         }
 
-    ULONG GetLineCount() const		{ return aLines.Count(); }
-    ULONG GetLineOffset() const  	{ return nSttLineNum; }
+    ULONG GetLineCount() const      { return aLines.Count(); }
+    ULONG GetLineOffset() const     { return nSttLineNum; }
     const CompareLine* GetLine( ULONG nLine ) const
             { return aLines.GetObject( nLine ); }
     void InsertLine( CompareLine* pLine )
@@ -336,7 +336,7 @@ static const ULONG primes[] =
   8388593,
   16777213,
   33554393,
-  67108859,			/* Preposterously large . . . */
+  67108859,         /* Preposterously large . . . */
   134217689,
   268435399,
   536870909,
@@ -689,16 +689,16 @@ void Compare::CompareSequence::Compare( ULONG nStt1, ULONG nEnd1,
 ULONG Compare::CompareSequence::CheckDiag( ULONG nStt1, ULONG nEnd1,
                                     ULONG nStt2, ULONG nEnd2, ULONG* pCost )
 {
-    const long dmin = nStt1 - nEnd2;	/* Minimum valid diagonal. */
-    const long dmax = nEnd1 - nStt2;	/* Maximum valid diagonal. */
-    const long fmid = nStt1 - nStt2;	/* Center diagonal of top-down search. */
-    const long bmid = nEnd1 - nEnd2;	/* Center diagonal of bottom-up search. */
+    const long dmin = nStt1 - nEnd2;    /* Minimum valid diagonal. */
+    const long dmax = nEnd1 - nStt2;    /* Maximum valid diagonal. */
+    const long fmid = nStt1 - nStt2;    /* Center diagonal of top-down search. */
+    const long bmid = nEnd1 - nEnd2;    /* Center diagonal of bottom-up search. */
 
-    long fmin = fmid, fmax = fmid;	/* Limits of top-down search. */
-    long bmin = bmid, bmax = bmid;	/* Limits of bottom-up search. */
+    long fmin = fmid, fmax = fmid;  /* Limits of top-down search. */
+    long bmin = bmid, bmax = bmid;  /* Limits of bottom-up search. */
 
-    long c;			/* Cost. */
-    long odd = (fmid - bmid) & 1;	/* True if southeast corner is on an odd
+    long c;         /* Cost. */
+    long odd = (fmid - bmid) & 1;   /* True if southeast corner is on an odd
                      diagonal with respect to the northwest. */
 
     pFDiag[fmid] = nStt1;
@@ -706,7 +706,7 @@ ULONG Compare::CompareSequence::CheckDiag( ULONG nStt1, ULONG nEnd1,
 
     for (c = 1;; ++c)
     {
-        long d;			/* Active diagonal. */
+        long d;         /* Active diagonal. */
         long big_snake = 0;
 
         /* Extend the top-down search by an edit step in each diagonal. */
@@ -1048,11 +1048,11 @@ BOOL SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
                     // the same type of TOX?
                     const SwTOXBase* pSrcTOX = rSrcSect.GetTOXBase();
                     const SwTOXBase* pDstTOX = rDstSect.GetTOXBase();
-                    bRet =	pSrcTOX && pDstTOX
+                    bRet =  pSrcTOX && pDstTOX
                             && pSrcTOX->GetType() == pDstTOX->GetType()
                             && pSrcTOX->GetTitle() == pDstTOX->GetTitle()
                             && pSrcTOX->GetTypeName() == pDstTOX->GetTypeName()
-//							&& pSrcTOX->GetTOXName() == pDstTOX->GetTOXName()
+//                          && pSrcTOX->GetTOXName() == pDstTOX->GetTOXName()
                             ;
                 }
                 break;
@@ -1121,7 +1121,7 @@ String SwCompareLine::GetText() const
                     if( pTOX )
                         sRet.Append( pTOX->GetTitle() )
                             .Append( pTOX->GetTypeName() )
-//							.Append( pTOX->GetTOXName() )
+//                          .Append( pTOX->GetTOXName() )
                             .Append( String::CreateFromInt32( pTOX->GetType() ));
                 }
                 break;
@@ -1438,7 +1438,7 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo )
     SwPaM* pTmp = pDelRing;
 
     // Bug #83296#: get the Author / TimeStamp from the "other"
-    //				document info
+    //              document info
     USHORT nAuthor = rDoc.GetRedlineAuthor();
     DateTime aTimeStamp;
     SwDocShell *pDocShell(rDoc.GetDocShell());

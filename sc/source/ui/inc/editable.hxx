@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@ class ScRange;
 
 class ScEditableTester
 {
-    BOOL	bIsEditable;
-    BOOL	bOnlyMatrix;
+    BOOL    bIsEditable;
+    BOOL    bOnlyMatrix;
 
 public:
             // no test in ctor
@@ -51,7 +51,7 @@ public:
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
 
             // calls TestSelectedBlock
-            ScEditableTester( ScDocument* pDoc, 
+            ScEditableTester( ScDocument* pDoc,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark );
 
@@ -68,18 +68,18 @@ public:
 
             // Several calls to the Test... methods check if *all* of the ranges
             // are editable. For several independent checks, Reset() has to be used.
-    void	TestBlock( ScDocument* pDoc, SCTAB nTab,
+    void    TestBlock( ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
-    void	TestSelectedBlock( ScDocument* pDoc, 
+    void    TestSelectedBlock( ScDocument* pDoc,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark );
-    void	TestRange( ScDocument* pDoc, const ScRange& rRange );
-    void	TestSelection( ScDocument* pDoc, const ScMarkData& rMark );
-    void	TestView( ScViewFunc* pView );
+    void    TestRange( ScDocument* pDoc, const ScRange& rRange );
+    void    TestSelection( ScDocument* pDoc, const ScMarkData& rMark );
+    void    TestView( ScViewFunc* pView );
 
-    BOOL	IsEditable() const			{ return bIsEditable; }
-    BOOL	IsFormatEditable() const	{ return bIsEditable || bOnlyMatrix; }
-    USHORT	GetMessageId() const;
+    BOOL    IsEditable() const          { return bIsEditable; }
+    BOOL    IsFormatEditable() const    { return bIsEditable || bOnlyMatrix; }
+    USHORT  GetMessageId() const;
 };
 
 #endif

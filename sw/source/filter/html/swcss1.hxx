@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ protected:
                               SvxCSS1PropertyInfo& rPropInfo );
 
     using CSS1Parser::ParseStyleSheet;
-    
+
 public:
     SwCSS1Parser( SwDoc *pDoc, sal_uInt32 aFHeight[7], const String& rBaseURL, BOOL bNewDoc );
     virtual ~SwCSS1Parser();
@@ -103,7 +103,7 @@ public:
     // eine TextFmtColl zu einer Pool-Id ermitteln
     SwTxtFmtColl *GetTxtFmtColl( USHORT nTxtColl, const String& rClass );
 
-    // This methods do the same as the one of SwDoc, but change the 
+    // This methods do the same as the one of SwDoc, but change the
     // encoding if required.
     SwTxtFmtColl *GetTxtCollFromPool( USHORT nPoolId ) const;
     SwCharFmt *GetCharFmtFromPool( USHORT nPoolId ) const;
@@ -132,7 +132,7 @@ public:
                            const SvxCSS1PropertyInfo& rPropInfo );
 
     // Fuellen eines DropCap-Attributs
-    void FillDropCap( SwFmtDrop& rDrop,	SfxItemSet& rItemSet,
+    void FillDropCap( SwFmtDrop& rDrop, SfxItemSet& rItemSet,
                       const String *pName=0 );
 
     BOOL SetFmtBreak( SfxItemSet& rItemSet,
@@ -146,7 +146,7 @@ public:
     static BOOL MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                                  BOOL bAutoWidth=FALSE );
 
-    static sal_uInt16 GetScriptFromClass( String& rClass, 
+    static sal_uInt16 GetScriptFromClass( String& rClass,
                                       sal_Bool bSubClassOnly = sal_True );
 
     BOOL IsBodyBGColorSet() const { return bBodyBGColorSet; }
@@ -170,14 +170,14 @@ public:
     inline void SetTDTagStyles();
     inline void SetATagStyles();
     inline void SetDelayedStyles();
-    
+
     virtual void SetDfltEncoding( rtl_TextEncoding eEnc );
 };
 
 
 inline void SwCSS1Parser::AddFirstLetterExt( String& rFmtName )
 {
-    rFmtName.AppendAscii( ".FL", 3 );	// first letter
+    rFmtName.AppendAscii( ".FL", 3 );   // first letter
 }
 
 inline const SwPageDesc* SwCSS1Parser::GetFirstPageDesc( BOOL bCreate )

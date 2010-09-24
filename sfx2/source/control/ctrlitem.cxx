@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,7 +139,7 @@ void SfxControllerItem::BindInternal_Impl( USHORT nNewId, SfxBindings *pBindinx 
 
 void SfxControllerItem::UnBind()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     "ost die Verbindung dieses SfxControllerItems mit der SfxBindings-Instanz,
     an der es zur Zeit gebunden ist. Ab diesem Zeitpunkt erh"alt es keine
@@ -165,7 +165,7 @@ void SfxControllerItem::UnBind()
 
 void SfxControllerItem::ReBind()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Binded dieses SfxControllerItem wieder an die SfxBindings-Instanz,
     an der es zuletzt gebunden war. Ab diesem Zeitpunkt erh"alt es wieder
@@ -191,7 +191,7 @@ DBG_CHKTHIS(SfxControllerItem, 0);
 
 void SfxControllerItem::UpdateSlot()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Holt den Status 'hart' neu.
 
@@ -212,7 +212,7 @@ void SfxControllerItem::UpdateSlot()
 
 void SfxControllerItem::ClearCache()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     "oscht den Status-Cache f"ur dieses SfxControllerItem. D.h. beim
     n"achsten Status-Update wird das <SfxPoolItem> auf jeden Fall geschickt,
@@ -312,12 +312,12 @@ SfxControllerItem::~SfxControllerItem()
 
 void SfxControllerItem::StateChanged
 (
-    USHORT				,	// <SID> des ausl"osenden Slot
-    SfxItemState		, 	// <SfxItemState> von 'pState'
-    const SfxPoolItem*		// Slot-Status, ggf. 0 oder IsInvalidItem()
+    USHORT              ,   // <SID> des ausl"osenden Slot
+    SfxItemState        ,   // <SfxItemState> von 'pState'
+    const SfxPoolItem*      // Slot-Status, ggf. 0 oder IsInvalidItem()
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese virtuelle Methode wird vom SFx gerufen, um <SfxControllerItem>s
     dar"uber zu benachrichtigen, da\s sich der Status des Slots 'nSID'
@@ -352,9 +352,9 @@ void SfxControllerItem::DeleteFloatingWindow()
 
 void SfxStatusForwarder::StateChanged
 (
-    USHORT				nSID,		// <SID> des ausl"osenden Slot
-    SfxItemState		eState, 	// <SfxItemState> von 'pState'
-    const SfxPoolItem*	pState		// Slot-Status, ggf. 0 oder IsInvalidItem()
+    USHORT              nSID,       // <SID> des ausl"osenden Slot
+    SfxItemState        eState,     // <SfxItemState> von 'pState'
+    const SfxPoolItem*  pState      // Slot-Status, ggf. 0 oder IsInvalidItem()
 )
 
 {
@@ -375,11 +375,11 @@ SfxStatusForwarder::SfxStatusForwarder(
 
 SfxItemState SfxControllerItem::GetItemState
 (
-    const SfxPoolItem* pState 	/* 	Pointer auf das <SfxPoolItem>, dessen
+    const SfxPoolItem* pState   /*  Pointer auf das <SfxPoolItem>, dessen
                                     Status erfragt werden soll. */
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Statische Methode zum Ermitteln des Status des SfxPoolItem-Pointers,
     in der Methode <SfxControllerItem::StateChanged(const SfxPoolItem*)>
@@ -387,7 +387,7 @@ SfxItemState SfxControllerItem::GetItemState
 
     [R"uckgabewert]
 
-    SfxItemState		SFX_ITEM_UNKNOWN
+    SfxItemState        SFX_ITEM_UNKNOWN
                         Enabled, aber keine weitere Statusinformation
                         verf"ugbar. Typisch f"ur <Slot>s, die allenfalls
                         zeitweise disabled sind, aber ihre Darstellung sonst
@@ -422,7 +422,7 @@ SfxItemState SfxControllerItem::GetItemState
 
 SfxMapUnit SfxControllerItem::GetCoreMetric() const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Holt vom zust"andigen Pool die Ma\seinheit ab, in der das Status-Item
     vorliegt.

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,9 +33,9 @@
 
 /***************************   dummy tag readers   ***************************/
 
-/** Implements the ITag interface but does 
-    nothing (Null object pattern), may be used for 
-    tags we are not interessted in to avoid if-else 
+/** Implements the ITag interface but does
+    nothing (Null object pattern), may be used for
+    tags we are not interessted in to avoid if-else
     branches.
 */
 class CDummyTag : public ITag
@@ -50,8 +50,8 @@ class CDummyTag : public ITag
         virtual void addAttributes(const XmlTagAttributes_t& /*attributes*/){};
 
         virtual std::wstring getTagContent( void )
-        { 
-            return EMPTY_STRING; 
+        {
+            return EMPTY_STRING;
         };
 
         virtual ::std::wstring const getTagAttribute( ::std::wstring  const & /*attrname*/ ){ return ::std::wstring(EMPTY_STRING); };

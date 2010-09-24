@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,12 +131,12 @@ SvxTransformTabDialog::SvxTransformTabDialog( Window* pParent, const SfxItemSet*
 
     //different positioning page in Writer
     if(nAnchorCtrls & 0x00ff)
-    {        
+    {
         AddTabPage(RID_SVXPAGE_SWPOSSIZE, SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges);
         RemoveTabPage(RID_SVXPAGE_POSITION_SIZE);
     }
     else
-    {        
+    {
         AddTabPage(RID_SVXPAGE_POSITION_SIZE, SvxPositionSizeTabPage::Create, SvxPositionSizeTabPage::GetRanges);
         RemoveTabPage(RID_SVXPAGE_SWPOSSIZE);
     }
@@ -162,7 +162,7 @@ void SvxTransformTabDialog::PageCreated(USHORT nId, SfxTabPage &rPage)
             SvxPositionSizeTabPage& rSvxPos =  static_cast<SvxPositionSizeTabPage&>(rPage);
             rSvxPos.SetView(pView);
             rSvxPos.Construct();
-            
+
             if(nAnchorCtrls & SVX_OBJ_NORESIZE)
             {
                 rSvxPos.DisableResize();
@@ -173,7 +173,7 @@ void SvxTransformTabDialog::PageCreated(USHORT nId, SfxTabPage &rPage)
                 rSvxPos.DisableProtect();
                 rSvxPos.UpdateControlStates();
             }
-        
+
             break;
         }
         case RID_SVXPAGE_SWPOSSIZE :
@@ -193,7 +193,7 @@ void SvxTransformTabDialog::PageCreated(USHORT nId, SfxTabPage &rPage)
 
             rSvxAng.SetView( pView );
             rSvxAng.Construct();
-        
+
             break;
         }
 
@@ -225,18 +225,18 @@ void SvxTransformTabDialog::SetValidateFramePosLink(const Link& rLink)
 
 SvxAngleTabPage::SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
     SvxTabPage              ( pParent, CUI_RES( RID_SVXPAGE_ANGLE ), rInAttrs ),
-    aFlPosition				( this, CUI_RES( FL_POSITION ) ),
+    aFlPosition             ( this, CUI_RES( FL_POSITION ) ),
     aFtPosX                 ( this, CUI_RES( FT_POS_X ) ),
     aMtrPosX                ( this, CUI_RES( MTR_FLD_POS_X ) ),
     aFtPosY                 ( this, CUI_RES( FT_POS_Y ) ),
     aMtrPosY                ( this, CUI_RES( MTR_FLD_POS_Y ) ),
-    aFtPosPresets			( this, CUI_RES(FT_POSPRESETS) ),	
+    aFtPosPresets           ( this, CUI_RES(FT_POSPRESETS) ),
     aCtlRect                ( this, CUI_RES( CTL_RECT ) ),
-    
+
     aFlAngle                ( this, CUI_RES( FL_ANGLE ) ),
     aFtAngle                ( this, CUI_RES( FT_ANGLE ) ),
     aMtrAngle               ( this, CUI_RES( MTR_FLD_ANGLE ) ),
-    aFtAnglePresets			( this, CUI_RES(FT_ANGLEPRESETS) ),	
+    aFtAnglePresets         ( this, CUI_RES(FT_ANGLEPRESETS) ),
     aCtlAngle               ( this, CUI_RES( CTL_ANGLE ),
                                 RP_RB, 200, 80, CS_ANGLE ),
     rOutAttrs               ( rInAttrs )
@@ -706,34 +706,34 @@ void SvxSlantTabPage::PointChanged( Window* , RECT_POINT  )
 
 SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
     SvxTabPage      ( pParent, CUI_RES( RID_SVXPAGE_POSITION_SIZE ), rInAttrs ),
-    maFlPosition		( this, CUI_RES( FL_POSITION ) ),
-    maFtPosX			( this, CUI_RES( FT_POS_X ) ),
-    maMtrPosX			( this, CUI_RES( MTR_FLD_POS_X ) ),
-    maFtPosY			( this, CUI_RES( FT_POS_Y ) ),
-    maMtrPosY			( this, CUI_RES( MTR_FLD_POS_Y ) ),
+    maFlPosition        ( this, CUI_RES( FL_POSITION ) ),
+    maFtPosX            ( this, CUI_RES( FT_POS_X ) ),
+    maMtrPosX           ( this, CUI_RES( MTR_FLD_POS_X ) ),
+    maFtPosY            ( this, CUI_RES( FT_POS_Y ) ),
+    maMtrPosY           ( this, CUI_RES( MTR_FLD_POS_Y ) ),
     maFtPosReference    ( this, CUI_RES( FT_POSREFERENCE ) ),
     maCtlPos            ( this, CUI_RES( CTL_POSRECT ), RP_LT ),
-    
+
     maFlSize                         ( this, CUI_RES( FL_SIZE ) ),
     maFtWidth                        ( this, CUI_RES( FT_WIDTH ) ),
     maMtrWidth                       ( this, CUI_RES( MTR_FLD_WIDTH ) ),
     maFtHeight                       ( this, CUI_RES( FT_HEIGHT ) ),
     maMtrHeight                      ( this, CUI_RES( MTR_FLD_HEIGHT ) ),
     maCbxScale                       ( this, CUI_RES( CBX_SCALE ) ),
-    maFtSizeReference                ( this, CUI_RES( FT_SIZEREFERENCE) ),       
+    maFtSizeReference                ( this, CUI_RES( FT_SIZEREFERENCE) ),
     maCtlSize                        ( this, CUI_RES( CTL_SIZERECT ), RP_LT ),
-    
+
     maFlProtect         ( this, CUI_RES( FL_PROTECT) ),
     maTsbPosProtect     ( this, CUI_RES( TSB_POSPROTECT ) ),
     maTsbSizeProtect                 ( this, CUI_RES( TSB_SIZEPROTECT ) ),
-    
+
 
     maFlAdjust                       ( this, CUI_RES( FL_ADJUST ) ),
-    maTsbAutoGrowWidth				( this, CUI_RES( TSB_AUTOGROW_WIDTH ) ),
-    maTsbAutoGrowHeight				( this, CUI_RES( TSB_AUTOGROW_HEIGHT ) ),
+    maTsbAutoGrowWidth              ( this, CUI_RES( TSB_AUTOGROW_WIDTH ) ),
+    maTsbAutoGrowHeight             ( this, CUI_RES( TSB_AUTOGROW_HEIGHT ) ),
 
-    maFlDivider						(this, CUI_RES( FL_DIVIDER ) ),
-    
+    maFlDivider                     (this, CUI_RES( FL_DIVIDER ) ),
+
     mrOutAttrs       ( rInAttrs ),
     mnProtectSizeState( STATE_NOCHECK ),
     mbPageDisabled   ( FALSE ),
@@ -829,7 +829,7 @@ void SvxPositionSizeTabPage::Construct()
         }
     }
 
-    // this should happen via SID_ATTR_TRANSFORM_AUTOSIZE 
+    // this should happen via SID_ATTR_TRANSFORM_AUTOSIZE
     if(1 == rMarkList.GetMarkCount())
     {
         const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -1621,7 +1621,7 @@ IMPL_LINK( SvxPositionSizeTabPage, ChangeWidthHdl, void *, EMPTYARG )
     if( maCbxScale.IsChecked() && maCbxScale.IsEnabled() )
     {
         sal_Int64 nHeight(basegfx::fround64((mfOldHeight * (double)maMtrWidth.GetValue()) / mfOldWidth));
-        
+
         if(nHeight <= maMtrHeight.GetMax(FUNIT_NONE))
         {
             maMtrHeight.SetUserValue(nHeight, FUNIT_NONE);
@@ -1630,7 +1630,7 @@ IMPL_LINK( SvxPositionSizeTabPage, ChangeWidthHdl, void *, EMPTYARG )
         {
             nHeight = maMtrHeight.GetMax(FUNIT_NONE);
             maMtrHeight.SetUserValue(nHeight);
-            
+
             const sal_Int64 nWidth(basegfx::fround64((mfOldWidth * (double)nHeight) / mfOldHeight));
             maMtrWidth.SetUserValue(nWidth, FUNIT_NONE);
         }

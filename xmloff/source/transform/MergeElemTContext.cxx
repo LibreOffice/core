@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
-class XMLParagraphTransformerContext : public XMLTransformerContext 
+class XMLParagraphTransformerContext : public XMLTransformerContext
 {
 public:
     TYPEINFO();
 
-    XMLParagraphTransformerContext( XMLTransformerBase& rTransformer, 
+    XMLParagraphTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 
     virtual ~XMLParagraphTransformerContext();
@@ -77,8 +77,8 @@ public:
 
 TYPEINIT1( XMLParagraphTransformerContext, XMLTransformerContext );
 
-XMLParagraphTransformerContext::XMLParagraphTransformerContext( 
-        XMLTransformerBase& rImp, 
+XMLParagraphTransformerContext::XMLParagraphTransformerContext(
+        XMLTransformerBase& rImp,
         const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName )
 {
@@ -96,7 +96,7 @@ XMLTransformerContext *XMLParagraphTransformerContext::CreateChildContext(
 {
     XMLTransformerContext *pContext = 0;
 
-    pContext = new XMLIgnoreTransformerContext( GetTransformer(), 
+    pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                 rQName, sal_True );
 
     return pContext;
@@ -164,7 +164,7 @@ void XMLMergeElemTransformerContext::ExportStartElement()
     {
         XMLPersTextContentTContext *pContext = (*aIter).get();
         static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
-            ->AddAttribute( pContext->GetExportQName(), 
+            ->AddAttribute( pContext->GetExportQName(),
                             pContext->GetTextContent() );
     }
     XMLTransformerContext::StartElement( m_xAttrList );
@@ -172,8 +172,8 @@ void XMLMergeElemTransformerContext::ExportStartElement()
     m_bStartElementExported = sal_True;
 }
 
-XMLMergeElemTransformerContext::XMLMergeElemTransformerContext( 
-        XMLTransformerBase& rImp, 
+XMLMergeElemTransformerContext::XMLMergeElemTransformerContext(
+        XMLTransformerBase& rImp,
         const OUString& rQName,
        sal_uInt16 nActionMap ) :
     XMLTransformerContext( rImp, rQName ),
@@ -186,10 +186,10 @@ XMLMergeElemTransformerContext::~XMLMergeElemTransformerContext()
 {
 }
 
-void XMLMergeElemTransformerContext::StartElement( 
+void XMLMergeElemTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {
-    XMLMutableAttributeList *pMutableAttrList = 
+    XMLMutableAttributeList *pMutableAttrList =
         new XMLMutableAttributeList( rAttrList, sal_True );
     m_xAttrList = pMutableAttrList;
 
@@ -199,7 +199,7 @@ void XMLMergeElemTransformerContext::StartElement(
         const OUString& rAttrName = m_xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, 
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                                 &aLocalName );
         sal_Bool bRemove = sal_True;
         if( XML_NAMESPACE_OFFICE == nPrefix)
@@ -232,7 +232,7 @@ XMLTransformerContext *XMLMergeElemTransformerContext::CreateChildContext(
 
     if( !m_bStartElementExported )
     {
-        XMLTransformerActions *pActions = 
+        XMLTransformerActions *pActions =
             GetTransformer().GetUserDefinedActions( m_nActionMap );
         OSL_ENSURE( pActions, "go no actions" );
         if( pActions )
@@ -260,7 +260,7 @@ XMLTransformerContext *XMLMergeElemTransformerContext::CreateChildContext(
                 case XML_ATACTION_MOVE_FROM_ELEM:
                     {
                         XMLPersTextContentTContext *pTC =
-                            new XMLPersTextContentTContext( 
+                            new XMLPersTextContentTContext(
                                     GetTransformer(), rQName,
                                     (*aIter).second.GetQNamePrefixFromParam1(),
                                     (*aIter).second.GetQNameTokenFromParam1() );
@@ -288,7 +288,7 @@ XMLTransformerContext *XMLMergeElemTransformerContext::CreateChildContext(
     }
     else
     {
-        XMLTransformerActions *pActions = 
+        XMLTransformerActions *pActions =
             GetTransformer().GetUserDefinedActions( m_nActionMap );
         OSL_ENSURE( pActions, "go no actions" );
         if( pActions )

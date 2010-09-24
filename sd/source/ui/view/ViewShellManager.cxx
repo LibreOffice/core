@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,10 +119,10 @@ public:
     ~Implementation (void);
 
     void AddShellFactory (
-        const SfxShell* pViewShell, 
+        const SfxShell* pViewShell,
         const SharedShellFactory& rpFactory);
     void RemoveShellFactory (
-        const SfxShell* pViewShell, 
+        const SfxShell* pViewShell,
         const SharedShellFactory& rpFactory);
     void ActivateViewShell (
         ViewShell* pViewShell);
@@ -189,12 +189,12 @@ private:
     typedef ::std::list<ShellDescriptor> SubShellSubList;
     typedef ::std::hash_map<const SfxShell*,SubShellSubList,ShellHash> SubShellList;
     SubShellList maActiveSubShells;
-    
+
     /** In this member we remember what shells we have pushed on the shell
         stack.
     */
     typedef ::std::vector<SfxShell*> ShellStack;
-    
+
     int mnUpdateLockCount;
 
     /** When this flag is set then the main view shell is always kept at the
@@ -218,7 +218,7 @@ private:
     void GatherActiveShells (ShellStack& rShellList);
 
     void UpdateShellStack (void);
-    
+
     void CreateShells (void);
 
     /** This method rebuilds the stack of shells that are stacked upon the
@@ -271,7 +271,7 @@ ViewShellManager::~ViewShellManager (void)
 
 
 void ViewShellManager::AddSubShellFactory (
-    ViewShell* pViewShell, 
+    ViewShell* pViewShell,
     const SharedShellFactory& rpFactory)
 {
     if (mbValid)
@@ -282,7 +282,7 @@ void ViewShellManager::AddSubShellFactory (
 
 
 void ViewShellManager::RemoveSubShellFactory (
-    ViewShell* pViewShell, 
+    ViewShell* pViewShell,
     const SharedShellFactory& rpFactory)
 {
     if (mbValid)
@@ -665,7 +665,7 @@ void ViewShellManager::Implementation::ActivateSubShell (
         if (iList == maActiveSubShells.end())
             iList = maActiveSubShells.insert(
                 SubShellList::value_type(&rParentShell,SubShellSubList())).first;
-        
+
         // Do not activate an object bar that is already active.  Requesting
         // this is not exactly an error but may be an indication of one.
         SubShellSubList& rList (iList->second);
@@ -705,7 +705,7 @@ void ViewShellManager::Implementation::DeactivateSubShell (
         SfxShell* pShell = iShell->mpShell;
         if (pShell == NULL)
             break;
-        
+
         UpdateLock aLock (*this);
 
         ShellDescriptor aDescriptor(*iShell);
@@ -782,7 +782,7 @@ void ViewShellManager::Implementation::MoveToTop (const SfxShell& rShell)
             bMove = false;
         }
         else if (iShell == ++maActiveViewShells.begin()
-            && ! iShell->IsMainViewShell() 
+            && ! iShell->IsMainViewShell()
             && mbKeepMainViewShellOnTop)
         {
             // The shell is a the second-to-top position, not the main view
@@ -798,7 +798,7 @@ void ViewShellManager::Implementation::MoveToTop (const SfxShell& rShell)
         // that.
         bMove = false;
     }
-    
+
     // When the shell is not at the right position it is removed from the
     // internal list of shells and inserted at the correct position.
     if (bMove)
@@ -806,7 +806,7 @@ void ViewShellManager::Implementation::MoveToTop (const SfxShell& rShell)
         UpdateLock aLock (*this);
 
         ShellDescriptor aDescriptor(*iShell);
-        
+
         TakeShellsFromStack(&rShell);
         maActiveViewShells.erase(iShell);
 
@@ -920,12 +920,12 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
     // 1. Create the missing shells.
     CreateShells();
 
-    
+
     // 2. Create the internal target stack.
     ShellStack aTargetStack;
     CreateTargetStack(aTargetStack);
 
-    
+
     // 3. Get SFX shell stack.
     ShellStack aSfxShellStack;
     USHORT nIndex (0);
@@ -943,7 +943,7 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
     DumpShellStack(aTargetStack);
 #endif
 
-    
+
     // 4. Find the lowest shell in which the two stacks differ.
     ShellStack::const_iterator iSfxShell (aSfxShellStack.begin());
     ShellStack::iterator iTargetShell (aTargetStack.begin());
@@ -955,7 +955,7 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
         ++iTargetShell;
     }
 
-    
+
     // 5. Remove all shells above and including the differing shell from the
     // SFX stack starting with the shell on top of the stack.
     while (iSfxShell != aSfxShellStack.end())
@@ -968,7 +968,7 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
         mrBase.RemoveSubShell(pShell);
     }
 
-    
+
     // 6. Push shells from the given stack onto the SFX stack.
     mbShellStackIsUpToDate = false;
     while (iTargetShell != aTargetStack.end())
@@ -1037,7 +1037,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
         else if (pShellOnStack == pShell)
             break;
     }
-    
+
     if (pShell != NULL)
     {
         // 1. Deactivate our shells on the stack before they are removed so
@@ -1119,7 +1119,7 @@ void ViewShellManager::Implementation::CreateTargetStack (ShellStack& rStack) co
     // stack.  We can thus safly create the required shells wile still
     // having a valid shell stack.
     for (ActiveShellList::const_reverse_iterator iViewShell (maActiveViewShells.rbegin());
-         iViewShell != maActiveViewShells.rend(); 
+         iViewShell != maActiveViewShells.rend();
          ++iViewShell)
     {
         // Possibly place the form shell below the current view shell.
@@ -1129,7 +1129,7 @@ void ViewShellManager::Implementation::CreateTargetStack (ShellStack& rStack) co
         {
             rStack.push_back(mpFormShell);
         }
-        
+
         // Put the view shell itself on the local stack.
         rStack.push_back (iViewShell->mpShell);
 
@@ -1161,7 +1161,7 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent*,
 {
     if (pEvent != NULL)
     {
-        ::Window* pEventWindow 
+        ::Window* pEventWindow
             = static_cast<VclWindowEvent*>(pEvent)->GetWindow();
 
         switch (pEvent->GetId())
@@ -1169,7 +1169,7 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent*,
             case VCLEVENT_WINDOW_GETFOCUS:
             {
                 for (ActiveShellList::iterator aI(maActiveViewShells.begin());
-                     aI!=maActiveViewShells.end(); 
+                     aI!=maActiveViewShells.end();
                      aI++)
                 {
                     if (pEventWindow == static_cast< ::Window*>(aI->GetWindow()))
@@ -1219,7 +1219,7 @@ ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
             break;
         }
     }
-    
+
     return aResult;
 }
 
@@ -1230,7 +1230,7 @@ void ViewShellManager::Implementation::DestroyViewShell (
     const ShellDescriptor& rDescriptor)
 {
     OSL_ASSERT(rDescriptor.mpShell != NULL);
-    
+
     ::Window* pWindow = rDescriptor.GetWindow();
     if (pWindow != NULL)
     {
@@ -1291,7 +1291,7 @@ void ViewShellManager::Implementation::Shutdown (void)
     {
         UpdateLock aLock (*this);
 
-        
+
         while ( ! maActiveViewShells.empty())
         {
             SfxShell* pShell = maActiveViewShells.front().mpShell;
@@ -1312,7 +1312,7 @@ void ViewShellManager::Implementation::Shutdown (void)
         }
     }
     mrBase.RemoveSubShell (NULL);
-    
+
     maShellFactories.clear();
 }
 
@@ -1324,7 +1324,7 @@ void ViewShellManager::Implementation::DumpShellStack (const ShellStack& rStack)
     ShellStack::const_reverse_iterator iEntry;
     for (iEntry=rStack.rbegin(); iEntry!=rStack.rend(); ++iEntry)
         if (*iEntry != NULL)
-            OSL_TRACE ("    %p : %s\r", 
+            OSL_TRACE ("    %p : %s\r",
                 *iEntry,
                 ::rtl::OUStringToOString((*iEntry)->GetName(),RTL_TEXTENCODING_UTF8).getStr());
         else

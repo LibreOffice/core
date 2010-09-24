@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ void SvpSalGraphics::setDevice( BitmapDeviceSharedPtr& rDevice )
 
     // determine matching bitmap format for masks
     sal_uInt32 nDeviceFmt = m_aDevice->getScanlineFormat();
-    DBG_ASSERT( (nDeviceFmt <= (sal_uInt32)Format::MAX), "SVP::setDevice() with invalid bitmap format" ); 
+    DBG_ASSERT( (nDeviceFmt <= (sal_uInt32)Format::MAX), "SVP::setDevice() with invalid bitmap format" );
     switch( nDeviceFmt )
     {
         case Format::EIGHT_BIT_GREY:
@@ -172,7 +172,7 @@ BOOL SvpSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeigh
     if( m_aClipMap )
     {
         B2DPolyPolygon aFull;
-        aFull.append( tools::createPolygonFromRect( B2DRectangle( nX, nY, nX+nWidth, nY+nHeight ) ) ); 
+        aFull.append( tools::createPolygonFromRect( B2DRectangle( nX, nY, nX+nWidth, nY+nHeight ) ) );
         m_aClipMap->fillPolyPolygon( aFull, basebmp::Color(0), DrawMode_PAINT );
     }
     else
@@ -278,7 +278,7 @@ void SvpSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
                          aColor,
                          m_aDrawMode,
                          m_aClipMap
-                         ); 
+                         );
     dbgOut( m_aDevice );
 }
 
@@ -433,7 +433,7 @@ void SvpSalGraphics::copyArea( long nDestX,
 void SvpSalGraphics::copyBits( const SalTwoRect* pPosAry,
                                SalGraphics*      pSrcGraphics )
 {
-    SvpSalGraphics* pSrc = pSrcGraphics ? 
+    SvpSalGraphics* pSrc = pSrcGraphics ?
         static_cast<SvpSalGraphics*>(pSrcGraphics) : this;
     B2IRange aSrcRect( pPosAry->mnSrcX, pPosAry->mnSrcY,
                        pPosAry->mnSrcX+pPosAry->mnSrcWidth,
@@ -441,7 +441,7 @@ void SvpSalGraphics::copyBits( const SalTwoRect* pPosAry,
     B2IRange aDestRect( pPosAry->mnDestX, pPosAry->mnDestY,
                         pPosAry->mnDestX+pPosAry->mnDestWidth,
                         pPosAry->mnDestY+pPosAry->mnDestHeight );
-    m_aDevice->drawBitmap( pSrc->m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );    
+    m_aDevice->drawBitmap( pSrc->m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -455,7 +455,7 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     B2IRange aDestRect( pPosAry->mnDestX, pPosAry->mnDestY,
                         pPosAry->mnDestX+pPosAry->mnDestWidth,
                         pPosAry->mnDestY+pPosAry->mnDestHeight );
-    m_aDevice->drawBitmap( rSrc.getBitmap(), aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );    
+    m_aDevice->drawBitmap( rSrc.getBitmap(), aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -561,7 +561,7 @@ SystemFontData SvpSalGraphics::GetSysFontData( int nFallbacklevel ) const
 
     if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
     if (nFallbacklevel < 0 ) nFallbacklevel = 0;
-    
+
     aSysFontData.nSize = sizeof( SystemFontData );
     aSysFontData.nFontId = 0;
     aSysFontData.nFontFlags = 0;

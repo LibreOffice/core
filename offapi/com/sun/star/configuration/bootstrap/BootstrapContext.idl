@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,48 +29,48 @@
 
 #ifndef __com_sun_star_uno_XComponentContext_idl__
 #include <com/sun/star/uno/XComponentContext.idl>
-#endif 
+#endif
 
-//============================================================================= 
+//=============================================================================
 
 module com { module sun { module star { module configuration { module bootstrap {
 
-//============================================================================= 
+//=============================================================================
 
 /**
-    provides access to a component context that is enhanced with 
-    bootstrap parameters for configuration services from the 
+    provides access to a component context that is enhanced with
+    bootstrap parameters for configuration services from the
     associated metaconfiguration mechanism.
 
-    <p> The contained settings are used to initialize the 
+    <p> The contained settings are used to initialize the
         <type scope="com::sun::star::configuration">DefaultProvider</type> and
-        <type scope="com::sun::star::configuration::backend">DefaultBackend</type> of the 
-        component context. 
+        <type scope="com::sun::star::configuration::backend">DefaultBackend</type> of the
+        component context.
     </p>
-    <p> The implementation is usally available as singleton in the context 
-        that it wraps.. 
+    <p> The implementation is usally available as singleton in the context
+        that it wraps..
     </p>
-  
+
     @since OOo 1.1.2
 */
-published service BootstrapContext 
+published service BootstrapContext
 {
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /**
       provides access to metaconfiguration data.
 
-      <p>Some values are retrieved from external metaconfiguration, 
+      <p>Some values are retrieved from external metaconfiguration,
         if they are not overridden in the wrapped context.
-      </p> 
+      </p>
       */
     interface com::sun::star::uno::XComponentContext ;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 } ;
 
-//============================================================================= 
+//=============================================================================
 
-} ; } ; } ; } ; } ; 
+} ; } ; } ; } ; } ;
 
-#endif 
+#endif

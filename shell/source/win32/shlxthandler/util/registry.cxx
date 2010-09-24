@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <windows.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif 
+#endif
 #include <malloc.h>
 #include "internal/dbgmacros.hxx"
 #include "internal/registry.hxx"
@@ -45,7 +45,7 @@
 #include <objbase.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif 
+#endif
 
 //---------------------------------------
 //
@@ -65,7 +65,7 @@ bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, co
     // open or create the desired key
     int rc = RegCreateKeyExA(
         RootKey, KeyName, 0, "", REG_OPTION_NON_VOLATILE, KEY_WRITE, 0, &hSubKey, 0);
-    
+
     if (ERROR_SUCCESS == rc)
     {
         rc = RegSetValueExA(
@@ -94,9 +94,9 @@ bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
 
     if ( rc == ERROR_FILE_NOT_FOUND )
         return true;
-    
+
     if (ERROR_SUCCESS == rc)
-    {	
+    {
         char* SubKey;
         DWORD nMaxSubKeyLen;
 
@@ -104,7 +104,7 @@ bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
             hKey, 0, 0, 0, 0,
             &nMaxSubKeyLen,
             0, 0, 0, 0, 0, 0);
-    
+
         nMaxSubKeyLen++; // space for trailing '\0'
 
         SubKey = reinterpret_cast<char*>(
@@ -133,7 +133,7 @@ bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
 
         } // while
 
-        RegCloseKey(hKey);        
+        RegCloseKey(hKey);
 
     } // if
 
@@ -148,11 +148,11 @@ bool HasSubkeysRegistryKey(HKEY RootKey, const char* KeyName, /* out */ bool& bR
     HKEY hKey;
 
     LONG rc = RegOpenKeyExA(RootKey, KeyName, 0, KEY_READ, &hKey);
-    
+
     if (ERROR_SUCCESS == rc)
     {
         DWORD nSubKeys = 0;
-        
+
         rc = RegQueryInfoKeyA(hKey, 0, 0, 0, &nSubKeys, 0, 0, 0, 0, 0, 0, 0);
 
         bResult = (nSubKeys > 0);
@@ -163,7 +163,7 @@ bool HasSubkeysRegistryKey(HKEY RootKey, const char* KeyName, /* out */ bool& bR
 
 // Convert a CLSID to a char string.
 std::string ClsidToString(const CLSID& clsid)
-{	
+{
     // Get CLSID
     LPOLESTR wszCLSID = NULL;
     StringFromCLSID(clsid, &wszCLSID);
@@ -192,13 +192,13 @@ bool QueryRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, 
         0,
         KEY_READ,
         &hKey);
-    
+
     if (ERROR_SUCCESS == rc)
-    {	
+    {
         rc = RegQueryValueExA(
             hKey, ValueName, NULL, NULL, (LPBYTE)pszData,&dwBufLen);
 
-        RegCloseKey(hKey);    
+        RegCloseKey(hKey);
     }
 
     return (ERROR_SUCCESS == rc);

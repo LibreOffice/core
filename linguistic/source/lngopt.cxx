@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@
 #include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
 
-#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx>	// helper for implementations
+#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase1.hxx> // helper for implementations
 
-#include <cppuhelper/factory.hxx>	// helper for factories
+#include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -63,8 +63,8 @@ using namespace com::sun::star::registry;
 
 
 // static member intialization
-SvtLinguOptions *	LinguOptions::pData	= NULL;
-vos::ORefCount		LinguOptions::aRefCount;
+SvtLinguOptions *   LinguOptions::pData = NULL;
+vos::ORefCount      LinguOptions::aRefCount;
 
 
 LinguOptions::LinguOptions()
@@ -89,11 +89,11 @@ LinguOptions::LinguOptions(const LinguOptions & /*rOpt*/)
 
 LinguOptions::~LinguOptions()
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     if (--aRefCount == 0)
     {
-        delete pData;	pData  = NULL;
+        delete pData;   pData  = NULL;
     }
 }
 
@@ -102,12 +102,12 @@ BOOL LinguOptions::SetLocale_Impl( INT16 &rLanguage, Any &rOld, const Any &rVal,
 {
     BOOL bRes = FALSE;
 
-    Locale	aNew;
+    Locale  aNew;
     rVal >>= aNew;
         INT16 nNew = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aNew), nType);
     if (nNew != rLanguage)
     {
-        Locale	aLocale( CreateLocale( rLanguage ) );
+        Locale  aLocale( CreateLocale( rLanguage ) );
         rOld.setValue( &aLocale, ::getCppuType((Locale*)0 ));
         rLanguage = nNew;
         bRes = TRUE;
@@ -119,7 +119,7 @@ BOOL LinguOptions::SetLocale_Impl( INT16 &rLanguage, Any &rOld, const Any &rVal,
 
 BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     BOOL bRes = FALSE;
 
@@ -129,22 +129,22 @@ BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
     switch( nWID )
     {
         case WID_IS_GERMAN_PRE_REFORM :     /*! deprecated !*/ break;
-        case WID_IS_USE_DICTIONARY_LIST :	pbVal = &pData->bIsUseDictionaryList;	break;
-        case WID_IS_IGNORE_CONTROL_CHARACTERS :	pbVal = &pData->bIsIgnoreControlCharacters;	break;
-        case WID_IS_HYPH_AUTO : 			pbVal = &pData->bIsHyphAuto;	break;
-        case WID_IS_HYPH_SPECIAL : 			pbVal = &pData->bIsHyphSpecial;	break;
-        case WID_IS_SPELL_AUTO : 			pbVal = &pData->bIsSpellAuto;	break;
+        case WID_IS_USE_DICTIONARY_LIST :   pbVal = &pData->bIsUseDictionaryList;   break;
+        case WID_IS_IGNORE_CONTROL_CHARACTERS : pbVal = &pData->bIsIgnoreControlCharacters; break;
+        case WID_IS_HYPH_AUTO :             pbVal = &pData->bIsHyphAuto;    break;
+        case WID_IS_HYPH_SPECIAL :          pbVal = &pData->bIsHyphSpecial; break;
+        case WID_IS_SPELL_AUTO :            pbVal = &pData->bIsSpellAuto;   break;
         case WID_IS_SPELL_HIDE :            /*! deprecated !*/ break;
         case WID_IS_SPELL_IN_ALL_LANGUAGES :/*! deprecated !*/ break;
-        case WID_IS_SPELL_SPECIAL : 		pbVal = &pData->bIsSpellSpecial;	break;
-        case WID_IS_WRAP_REVERSE : 			pbVal = &pData->bIsSpellReverse;	break;
-        case WID_DEFAULT_LANGUAGE :			pnVal = &pData->nDefaultLanguage;	break;
-        case WID_IS_SPELL_CAPITALIZATION :	pbVal = &pData->bIsSpellCapitalization;		break;
-        case WID_IS_SPELL_WITH_DIGITS :		pbVal = &pData->bIsSpellWithDigits;	break;
-        case WID_IS_SPELL_UPPER_CASE :		pbVal = &pData->bIsSpellUpperCase;		break;
-        case WID_HYPH_MIN_LEADING :			pnVal = &pData->nHyphMinLeading;		break;
-        case WID_HYPH_MIN_TRAILING :		pnVal = &pData->nHyphMinTrailing;	break;
-        case WID_HYPH_MIN_WORD_LENGTH :		pnVal = &pData->nHyphMinWordLength;	break;
+        case WID_IS_SPELL_SPECIAL :         pbVal = &pData->bIsSpellSpecial;    break;
+        case WID_IS_WRAP_REVERSE :          pbVal = &pData->bIsSpellReverse;    break;
+        case WID_DEFAULT_LANGUAGE :         pnVal = &pData->nDefaultLanguage;   break;
+        case WID_IS_SPELL_CAPITALIZATION :  pbVal = &pData->bIsSpellCapitalization;     break;
+        case WID_IS_SPELL_WITH_DIGITS :     pbVal = &pData->bIsSpellWithDigits; break;
+        case WID_IS_SPELL_UPPER_CASE :      pbVal = &pData->bIsSpellUpperCase;      break;
+        case WID_HYPH_MIN_LEADING :         pnVal = &pData->nHyphMinLeading;        break;
+        case WID_HYPH_MIN_TRAILING :        pnVal = &pData->nHyphMinTrailing;   break;
+        case WID_HYPH_MIN_WORD_LENGTH :     pnVal = &pData->nHyphMinWordLength; break;
         case WID_DEFAULT_LOCALE :
         {
             bRes = SetLocale_Impl( pData->nDefaultLanguage, rOld, rVal, ::com::sun::star::i18n::ScriptType::LATIN );
@@ -190,15 +190,15 @@ BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
         }
     }
 
-//	if (bRes)
-//		pData->SetModified();
+//  if (bRes)
+//      pData->SetModified();
 
     return bRes;
 }
 
 void LinguOptions::GetValue( Any &rVal, INT32 nWID ) const
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     INT16 *pnVal = 0;
     BOOL  *pbVal = 0;
@@ -207,22 +207,22 @@ void LinguOptions::GetValue( Any &rVal, INT32 nWID ) const
     switch( nWID )
     {
         case WID_IS_GERMAN_PRE_REFORM :     pbVal = &bDummy; /*! deprecated !*/ break;
-        case WID_IS_USE_DICTIONARY_LIST :	pbVal = &pData->bIsUseDictionaryList;	break;
-        case WID_IS_IGNORE_CONTROL_CHARACTERS :	pbVal = &pData->bIsIgnoreControlCharacters;	break;
-        case WID_IS_HYPH_AUTO : 			pbVal = &pData->bIsHyphAuto;	break;
-        case WID_IS_HYPH_SPECIAL : 			pbVal = &pData->bIsHyphSpecial;	break;
-        case WID_IS_SPELL_AUTO : 			pbVal = &pData->bIsSpellAuto;	break;
+        case WID_IS_USE_DICTIONARY_LIST :   pbVal = &pData->bIsUseDictionaryList;   break;
+        case WID_IS_IGNORE_CONTROL_CHARACTERS : pbVal = &pData->bIsIgnoreControlCharacters; break;
+        case WID_IS_HYPH_AUTO :             pbVal = &pData->bIsHyphAuto;    break;
+        case WID_IS_HYPH_SPECIAL :          pbVal = &pData->bIsHyphSpecial; break;
+        case WID_IS_SPELL_AUTO :            pbVal = &pData->bIsSpellAuto;   break;
         case WID_IS_SPELL_HIDE :            pbVal = &bDummy; /*! deprecated !*/ break;
         case WID_IS_SPELL_IN_ALL_LANGUAGES :pbVal = &bDummy; /*! deprecated !*/ break;
-        case WID_IS_SPELL_SPECIAL : 		pbVal = &pData->bIsSpellSpecial;	break;
-        case WID_IS_WRAP_REVERSE : 			pbVal = &pData->bIsSpellReverse;	break;
-        case WID_DEFAULT_LANGUAGE :			pnVal = &pData->nDefaultLanguage;	break;
-        case WID_IS_SPELL_CAPITALIZATION :	pbVal = &pData->bIsSpellCapitalization;		break;
-        case WID_IS_SPELL_WITH_DIGITS :		pbVal = &pData->bIsSpellWithDigits;	break;
-        case WID_IS_SPELL_UPPER_CASE :		pbVal = &pData->bIsSpellUpperCase;		break;
-        case WID_HYPH_MIN_LEADING :			pnVal = &pData->nHyphMinLeading;		break;
-        case WID_HYPH_MIN_TRAILING :		pnVal = &pData->nHyphMinTrailing;	break;
-        case WID_HYPH_MIN_WORD_LENGTH :		pnVal = &pData->nHyphMinWordLength;	break;
+        case WID_IS_SPELL_SPECIAL :         pbVal = &pData->bIsSpellSpecial;    break;
+        case WID_IS_WRAP_REVERSE :          pbVal = &pData->bIsSpellReverse;    break;
+        case WID_DEFAULT_LANGUAGE :         pnVal = &pData->nDefaultLanguage;   break;
+        case WID_IS_SPELL_CAPITALIZATION :  pbVal = &pData->bIsSpellCapitalization;     break;
+        case WID_IS_SPELL_WITH_DIGITS :     pbVal = &pData->bIsSpellWithDigits; break;
+        case WID_IS_SPELL_UPPER_CASE :      pbVal = &pData->bIsSpellUpperCase;      break;
+        case WID_HYPH_MIN_LEADING :         pnVal = &pData->nHyphMinLeading;        break;
+        case WID_HYPH_MIN_TRAILING :        pnVal = &pData->nHyphMinTrailing;   break;
+        case WID_HYPH_MIN_WORD_LENGTH :     pnVal = &pData->nHyphMinWordLength; break;
         case WID_DEFAULT_LOCALE :
         {
             Locale aLocale( MsLangId::convertLanguageToLocale( pData->nDefaultLanguage ) );
@@ -256,8 +256,8 @@ void LinguOptions::GetValue( Any &rVal, INT32 nWID ) const
 
 struct WID_Name
 {
-    INT32		 nWID;
-    const char	*pPropertyName;
+    INT32        nWID;
+    const char  *pPropertyName;
 };
 
 //! order of entries is import (see LinguOptions::GetName)
@@ -293,7 +293,7 @@ WID_Name aWID_Name[] =
 
 OUString LinguOptions::GetName( INT32 nWID )
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     OUString aRes;
 
@@ -365,8 +365,8 @@ const SfxItemPropertyMapEntry* lcl_GetLinguProps()
     return aLinguProps;
 }
 LinguProps::LinguProps() :
-    aEvtListeners	(GetLinguMutex()),
-    aPropListeners	(GetLinguMutex()),
+    aEvtListeners   (GetLinguMutex()),
+    aPropListeners  (GetLinguMutex()),
     aPropertyMap(lcl_GetLinguProps())
 {
     bDisposing = FALSE;
@@ -399,7 +399,7 @@ Reference< XInterface > SAL_CALL LinguProps_CreateInstance(
 Reference< XPropertySetInfo > SAL_CALL LinguProps::getPropertySetInfo()
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     static Reference< XPropertySetInfo > aRef =
             new SfxItemPropertySetInfo( &aPropertyMap );
@@ -411,7 +411,7 @@ void SAL_CALL LinguProps::setPropertyValue(
         throw(UnknownPropertyException, PropertyVetoException,
               IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     const SfxItemPropertySimpleEntry* pCur = aPropertyMap.getByName( rPropertyName );
     if (pCur)
@@ -435,7 +435,7 @@ void SAL_CALL LinguProps::setPropertyValue(
 Any SAL_CALL LinguProps::getPropertyValue( const OUString& rPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     Any aRet;
 
@@ -459,7 +459,7 @@ void SAL_CALL LinguProps::addPropertyChangeListener(
             const Reference< XPropertyChangeListener >& rxListener )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     if (!bDisposing && rxListener.is())
     {
@@ -480,7 +480,7 @@ void SAL_CALL LinguProps::removePropertyChangeListener(
             const Reference< XPropertyChangeListener >& rxListener )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     if (!bDisposing && rxListener.is())
     {
@@ -501,7 +501,7 @@ void SAL_CALL LinguProps::addVetoableChangeListener(
             const Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-//	MutexGuard	aGuard( GetLinguMutex() );
+//  MutexGuard  aGuard( GetLinguMutex() );
 }
 
 void SAL_CALL LinguProps::removeVetoableChangeListener(
@@ -509,7 +509,7 @@ void SAL_CALL LinguProps::removeVetoableChangeListener(
             const Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-//	MutexGuard	aGuard( GetLinguMutex() );
+//  MutexGuard  aGuard( GetLinguMutex() );
 }
 
 
@@ -517,7 +517,7 @@ void SAL_CALL LinguProps::setFastPropertyValue( sal_Int32 nHandle, const Any& rV
         throw(UnknownPropertyException, PropertyVetoException,
               IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     Any aOld( aConfig.GetProperty( nHandle ) );
     if (aOld != rValue && aConfig.SetProperty( nHandle, rValue ))
@@ -532,7 +532,7 @@ void SAL_CALL LinguProps::setFastPropertyValue( sal_Int32 nHandle, const Any& rV
 Any SAL_CALL LinguProps::getFastPropertyValue( sal_Int32 nHandle )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     Any aRes( aConfig.GetProperty( nHandle ) );
     return aRes;
@@ -543,7 +543,7 @@ Sequence< PropertyValue > SAL_CALL
     LinguProps::getPropertyValues()
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     INT32 nLen = aPropertyMap.getSize();
     Sequence< PropertyValue > aProps( nLen );
@@ -557,8 +557,8 @@ Sequence< PropertyValue > SAL_CALL
 
         rVal.Name   = aIt->sName;
         rVal.Handle = aIt->nWID;
-        rVal.Value	= aAny;
-        rVal.State	= PropertyState_DIRECT_VALUE ;
+        rVal.Value  = aAny;
+        rVal.State  = PropertyState_DIRECT_VALUE ;
     }
     return aProps;
 }
@@ -568,7 +568,7 @@ void SAL_CALL
         throw(UnknownPropertyException, PropertyVetoException,
               IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     INT32 nLen = rProps.getLength();
     const PropertyValue *pVal = rProps.getConstArray();
@@ -583,7 +583,7 @@ void SAL_CALL
     LinguProps::dispose()
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     if (!bDisposing)
     {
@@ -591,9 +591,9 @@ void SAL_CALL
 
         //! its too late to save the options here!
         // (see AppExitListener for saving)
-        //aOpt.Save();	// save (possible) changes before exiting
+        //aOpt.Save();  // save (possible) changes before exiting
 
-        EventObject	aEvtObj( (XPropertySet *) this );
+        EventObject aEvtObj( (XPropertySet *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
         aPropListeners.disposeAndClear( aEvtObj );
     }
@@ -603,7 +603,7 @@ void SAL_CALL
     LinguProps::addEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     if (!bDisposing && rxListener.is())
         aEvtListeners.addInterface( rxListener );
@@ -613,7 +613,7 @@ void SAL_CALL
     LinguProps::removeEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     if (!bDisposing && rxListener.is())
         aEvtListeners.removeInterface( rxListener );
@@ -628,7 +628,7 @@ void SAL_CALL
 OUString SAL_CALL LinguProps::getImplementationName()
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
     return getImplementationName_Static();
 }
 
@@ -636,7 +636,7 @@ OUString SAL_CALL LinguProps::getImplementationName()
 sal_Bool SAL_CALL LinguProps::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     uno::Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
@@ -650,7 +650,7 @@ sal_Bool SAL_CALL LinguProps::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL LinguProps::getSupportedServiceNames()
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
     return getSupportedServiceNames_Static();
 }
 
@@ -658,9 +658,9 @@ uno::Sequence< OUString > SAL_CALL LinguProps::getSupportedServiceNames()
 uno::Sequence< OUString > LinguProps::getSupportedServiceNames_Static()
         throw()
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
-    uno::Sequence< OUString > aSNS( 1 );	// auch mehr als 1 Service moeglich
+    uno::Sequence< OUString > aSNS( 1 );    // auch mehr als 1 Service moeglich
     aSNS.getArray()[0] = A2OU( SN_LINGU_PROPERTIES );
     return aSNS;
 }

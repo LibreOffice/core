@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -519,7 +519,7 @@ com::sun::star::util::DateTime convertDateTime( const ::rtl::OUString& rDateTime
     if( nDateIndex > 0)
         aRet.Day = (sal_uInt16)sDate.getToken( 0, '-', nDateIndex ).toInt32();
     ::rtl::OUString sTime;
-    if(nIndex > 0) 
+    if(nIndex > 0)
     {
         sTime = ( rDateTimeString.getToken( 0, 'Z', nIndex ));
         sal_Int32 nTimeIndex = 0;
@@ -533,14 +533,14 @@ com::sun::star::util::DateTime convertDateTime( const ::rtl::OUString& rDateTime
             aRet.Seconds = (sal_uInt16)sSeconds.getToken( 0, '.', nTimeIndex ).toInt32();
             aRet.HundredthSeconds = (sal_uInt16)sSeconds.getToken( 0, '.', nTimeIndex ).toInt32();
         }
-        
-// todo: ignore time offset for a while - there's no time zone available 
+
+// todo: ignore time offset for a while - there's no time zone available
 //        nIndex = 0;
 //        ::rtl::OUString sOffset( rDateTimeString.getToken( 1, 'Z', nIndex ));
 //        if( sOffset.getLength() )
 //        {
 //              add hour and minute offset and increase/decrease date if necessary
-//        }    
+//        }
     }
     return aRet;
 }
@@ -553,24 +553,24 @@ sal_Int16 ConvertNumberingType(sal_Int32 nNFC)
     switch(nNFC)
     {
         case NS_ooxml::LN_Value_ST_NumberFormat_decimal:
-        case 0: 
-            nRet = style::NumberingType::ARABIC;                
+        case 0:
+            nRet = style::NumberingType::ARABIC;
             break;
         case NS_ooxml::LN_Value_ST_NumberFormat_upperRoman:
-        case 1: 
-            nRet = style::NumberingType::ROMAN_UPPER;           
+        case 1:
+            nRet = style::NumberingType::ROMAN_UPPER;
             break;
         case NS_ooxml::LN_Value_ST_NumberFormat_lowerRoman:
-        case 2: 
+        case 2:
             nRet = style::NumberingType::ROMAN_LOWER;
             break;
-        case 3: 
-            nRet = style::NumberingType::CHARS_UPPER_LETTER_N; 
+        case 3:
+            nRet = style::NumberingType::CHARS_UPPER_LETTER_N;
             break;
         case 4:
             nRet = style::NumberingType::CHARS_LOWER_LETTER_N;
             break;
-        case 5: 
+        case 5:
             nRet = style::NumberingType::ARABIC;
             break;//ORDINAL
         case NS_ooxml::LN_Value_ST_NumberFormat_bullet:
@@ -579,7 +579,7 @@ sal_Int16 ConvertNumberingType(sal_Int32 nNFC)
             nRet = style::NumberingType::CHAR_SPECIAL;
         break;
         case NS_ooxml::LN_Value_ST_NumberFormat_none:
-        case 255: 
+        case 255:
             nRet = style::NumberingType::NUMBER_NONE;
             break;
         case NS_ooxml::LN_Value_ST_NumberFormat_upperLetter:
@@ -684,7 +684,7 @@ sal_Int16 ConvertNumberingType(sal_Int32 nNFC)
     NS_ooxml::LN_Value_ST_NumberFormat_thaiCounting = 91736;*/
     return nRet;
 }
- 
+
 
 } // namespace ConversionHelper
 } //namespace dmapper

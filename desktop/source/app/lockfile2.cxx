@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ bool Lockfile_execWarning( Lockfile * that )
     ByteString aUser  = aConfig.ReadKey( that->Userkey() );
     ByteString aStamp = aConfig.ReadKey( that->Stampkey() );
     ByteString aTime  = aConfig.ReadKey( that->Timekey() );
-    
+
     // display warning and return response
     QueryBox aBox( NULL, DesktopResId( QBX_USERDATALOCKED ) );
     // set box title

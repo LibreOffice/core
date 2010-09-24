@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -239,8 +239,8 @@ namespace xmloff
         sal_uInt16 nStyle = 1;
         Color aColor;
 
-        while	(	aTokens.getNextToken(sToken)	// have a new token
-                &&	(0 != sToken.getLength())		// really have a new token
+        while   (   aTokens.getNextToken(sToken)    // have a new token
+                &&  (0 != sToken.getLength())       // really have a new token
                 )
         {
             // try interpreting the token as border style
@@ -279,8 +279,8 @@ namespace xmloff
         case STYLE:
         {
             sal_Int16 nBorder = 0;
-            bSuccess =	(_rValue >>= nBorder)
-                    &&	SvXMLUnitConverter::convertEnum( aOut, nBorder, OEnumMapper::getEnumMap( OEnumMapper::epBorderWidth ) );
+            bSuccess =  (_rValue >>= nBorder)
+                    &&  SvXMLUnitConverter::convertEnum( aOut, nBorder, OEnumMapper::getEnumMap( OEnumMapper::epBorderWidth ) );
         }
         break;
         case COLOR:
@@ -385,6 +385,6 @@ namespace xmloff
     }
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 

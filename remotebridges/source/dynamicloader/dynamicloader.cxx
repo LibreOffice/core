@@ -189,7 +189,7 @@ namespace dynamic_loader {
         return implname;
     }
 
-    sal_Bool SAL_CALL DynamicLoader::supportsService(const OUString & ServiceName) throw(RuntimeException)	{
+    sal_Bool SAL_CALL DynamicLoader::supportsService(const OUString & ServiceName) throw(RuntimeException)  {
         sal_Bool bSupport = sal_False;
 
         Sequence<OUString> aSNL = getSupportedServiceNames();
@@ -377,7 +377,7 @@ namespace dynamic_loader {
 
 
 extern "C" {
-    void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment **)	{
+    void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment **)   {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
@@ -385,7 +385,7 @@ extern "C" {
         sal_Bool bRes = sal_False;
 
         if (pRegistryKey) {
-            try	{
+            try {
                 OUString x = OUString::createFromAscii("/");
                 x += ::dynamic_loader::DynamicLoader::implname;
                 x += OUString::createFromAscii("/UNO/SERVICES");

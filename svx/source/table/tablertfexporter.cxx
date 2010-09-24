@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,7 +148,7 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
 
     mrStrm << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH << "30" << OOO_STRING_SVTOOLS_RTF_TRLEFT << "-30";
     mrStrm << OOO_STRING_SVTOOLS_RTF_TRRH << ByteString::CreateFromInt32( nRowHeight ).GetBuffer();
-    
+
     const sal_Int32 nColCount = mxTable->getColumnCount();
     for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
     {
@@ -163,25 +163,25 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
         const sal_Int32 nColSpan = xCell->getColumnSpan();
 
         const sal_Char* pChar;
-        
+
         if( !bIsMerged && ((nRowSpan > 1) || (nColSpan > 1)) )
             mrStrm << OOO_STRING_SVTOOLS_RTF_CLMGF; // The first cell in a range of table cells to be merged.
 
         SdrTextVertAdjust eVAdj = xCell->GetTextVerticalAdjust();
         switch( eVAdj )
         {
-            case SVX_VER_JUSTIFY_TOP:		pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALT;	break;
-            case SVX_VER_JUSTIFY_CENTER:	pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALC;	break;
-            case SVX_VER_JUSTIFY_BOTTOM:	pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;	break;
-            case SVX_VER_JUSTIFY_STANDARD:	pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;	break;	//! Bottom
-            default:						pChar = NULL;			break;
+            case SVX_VER_JUSTIFY_TOP:       pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALT;   break;
+            case SVX_VER_JUSTIFY_CENTER:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALC;   break;
+            case SVX_VER_JUSTIFY_BOTTOM:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;
+            case SVX_VER_JUSTIFY_STANDARD:  pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;  //! Bottom
+            default:                        pChar = NULL;           break;
         }
         if ( pChar )
             mrStrm << pChar;
 */
         mrStrm << OOO_STRING_SVTOOLS_RTF_CELLX << ByteString::CreateFromInt32( aColumnStart[nCol] ).GetBuffer();
         if ( (nCol & 0x0F) == 0x0F )
-            mrStrm << RTFOutFuncs::sNewLine;		// Zeilen nicht zu lang werden lassen
+            mrStrm << RTFOutFuncs::sNewLine;        // Zeilen nicht zu lang werden lassen
     }
     mrStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << OOO_STRING_SVTOOLS_RTF_INTBL << RTFOutFuncs::sNewLine;
 
@@ -216,7 +216,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
 
     if( pParaObj == 0 )
         pParaObj = xCell->GetOutlinerParaObject();
-    
+
     if(pParaObj)
     {
         // handle outliner attributes
@@ -238,34 +238,34 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
 
     const SfxItemSet& rCellSet = xCell->GetItemSet();
 
-    const SvxWeightItem&		rWeightItem		= (const SvxWeightItem&)    rCellSet.Get( EE_CHAR_WEIGHT );
-    const SvxPostureItem&		rPostureItem	= (const SvxPostureItem&)   rCellSet.Get( EE_CHAR_ITALIC );
-    const SvxUnderlineItem&		rUnderlineItem	= (const SvxUnderlineItem&)	rCellSet.Get( EE_CHAR_UNDERLINE );
+    const SvxWeightItem&        rWeightItem     = (const SvxWeightItem&)    rCellSet.Get( EE_CHAR_WEIGHT );
+    const SvxPostureItem&       rPostureItem    = (const SvxPostureItem&)   rCellSet.Get( EE_CHAR_ITALIC );
+    const SvxUnderlineItem&     rUnderlineItem  = (const SvxUnderlineItem&) rCellSet.Get( EE_CHAR_UNDERLINE );
 
     const sal_Char* pChar;
 
     switch( eHAdj )
     {
-        case SDRTEXTHORZADJUST_CENTER:	pChar = OOO_STRING_SVTOOLS_RTF_QC;	break;
-        case SDRTEXTHORZADJUST_BLOCK:	pChar = OOO_STRING_SVTOOLS_RTF_QJ;	break;
-        case SDRTEXTHORZADJUST_RIGHT:	pChar = OOO_STRING_SVTOOLS_RTF_QR;	break;
+        case SDRTEXTHORZADJUST_CENTER:  pChar = OOO_STRING_SVTOOLS_RTF_QC;  break;
+        case SDRTEXTHORZADJUST_BLOCK:   pChar = OOO_STRING_SVTOOLS_RTF_QJ;  break;
+        case SDRTEXTHORZADJUST_RIGHT:   pChar = OOO_STRING_SVTOOLS_RTF_QR;  break;
         case SDRTEXTHORZADJUST_LEFT:
-        default:						pChar = OOO_STRING_SVTOOLS_RTF_QL;	break;
+        default:                        pChar = OOO_STRING_SVTOOLS_RTF_QL;  break;
     }
     mrStrm << pChar;
 
     if ( rWeightItem.GetWeight() >= WEIGHT_BOLD )
-    {	// bold
+    {   // bold
         bResetAttr = true;
         mrStrm << OOO_STRING_SVTOOLS_RTF_B;
     }
     if ( rPostureItem.GetPosture() != ITALIC_NONE )
-    {	// italic
+    {   // italic
         bResetAttr = true;
         mrStrm << OOO_STRING_SVTOOLS_RTF_I;
     }
     if ( rUnderlineItem.GetLineStyle() != UNDERLINE_NONE )
-    {	// underline
+    {   // underline
         bResetAttr = true;
         mrStrm << OOO_STRING_SVTOOLS_RTF_UL;
     }

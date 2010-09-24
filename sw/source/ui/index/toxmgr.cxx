@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ void SwTOXMgr::DeleteTOXMark()
 /* -----------------20.08.99 10:48-------------------
 
  --------------------------------------------------*/
-void	SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
+void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
 {
     SwTOXMark* pMark = 0;
     switch(rDesc.GetTOXType())
@@ -200,7 +200,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
     if(rDesc.GetAltStr())
     {
         // JP 26.08.96: Bug 30344 - entweder der Text aus dem Doc oder
-        //							ein Alternativ-Text, beides gibts nicht!
+        //                          ein Alternativ-Text, beides gibts nicht!
         BOOL bReplace = pCurTOXMark->IsAlternativeText();
         if( bReplace )
             pCurTOXMark->SetAlternativeText( *rDesc.GetAltStr() );
@@ -227,7 +227,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:	UserTypeID ermitteln
+    Beschreibung:   UserTypeID ermitteln
  --------------------------------------------------------------------*/
 
 
@@ -346,9 +346,9 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                 USHORT nPos  = 0;
                 USHORT nSize = pSh->GetTOXTypeCount(eCurTOXType);
                 for(USHORT i=0; rDesc.GetTOUName() && i < nSize; ++i)
-                {	const SwTOXType* pType = pSh->GetTOXType(TOX_USER, i);
+                {   const SwTOXType* pType = pSh->GetTOXType(TOX_USER, i);
                     if(pType->GetTypeName() == *rDesc.GetTOUName())
-                    {	nPos = i;
+                    {   nPos = i;
                         break;
                     }
                 }
@@ -407,7 +407,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                     pSh->DelRight();
                 pNewTOX = (SwTOXBase*)pCurTOX;
             }
-//			pTOX->SetOptions(rDesc.GetIndexOptions());
+//          pTOX->SetOptions(rDesc.GetIndexOptions());
             pNewTOX->SetFromObjectNames(rDesc.IsCreateFromObjectNames());
             pNewTOX->SetOLEOptions(rDesc.GetOLEOptions());
         }

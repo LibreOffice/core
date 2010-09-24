@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,27 +36,27 @@ class XclImpOutlineBuffer
 {
     // -> exctools.cxx
     private:
-        BYTE*			pLevel;
-        BOOL*			pOuted;
-        BOOL*			pHidden;
-        SCSIZE			nSize;
-        SCSIZE			nLast;
-        BYTE			nMaxLevel;
-        ScOutlineArray*	pOutlineArray;
-        BOOL			bButtonNormal;	// TRUE -> right / under
+        BYTE*           pLevel;
+        BOOL*           pOuted;
+        BOOL*           pHidden;
+        SCSIZE          nSize;
+        SCSIZE          nLast;
+        BYTE            nMaxLevel;
+        ScOutlineArray* pOutlineArray;
+        BOOL            bButtonNormal;  // TRUE -> right / under
     public:
                         XclImpOutlineBuffer( SCSIZE nNewSize );
                         ~XclImpOutlineBuffer();
-        void			SetLevel( SCSIZE nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden );
-        void			SetOutlineArray( ScOutlineArray* pOArray );
-        void			Reset( void );
-        void			MakeScOutline( void );
-        void			SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
+        void            SetLevel( SCSIZE nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden );
+        void            SetOutlineArray( ScOutlineArray* pOArray );
+        void            Reset( void );
+        void            MakeScOutline( void );
+        void            SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
                             BOOL bOuted, BOOL bHidden );
 
-        inline BOOL		HasOutline( void ) const;
+        inline BOOL     HasOutline( void ) const;
 
-        inline void		SetButtonMode( const BOOL bRightOrUnder );
+        inline void     SetButtonMode( const BOOL bRightOrUnder );
 };
 
 

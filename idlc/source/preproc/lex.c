@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,17 +53,17 @@
  *      nextstate: 6 bits; ?\ marker: 1 bit; tokentype: 9 bits.
  */
 
-#define	MAXSTATE		32
-#define	ACT(tok,act)	((tok<<7)+act)
-#define	QBSBIT			0100
-#define	GETACT(st)		((st>>7)&0x1ff)
+#define MAXSTATE        32
+#define ACT(tok,act)    ((tok<<7)+act)
+#define QBSBIT          0100
+#define GETACT(st)      ((st>>7)&0x1ff)
 
 /* character classes */
-#define	C_WS	1
-#define	C_ALPH	2
-#define	C_NUM	3
-#define	C_EOF	4
-#define	C_XX	5
+#define C_WS    1
+#define C_ALPH  2
+#define C_NUM   3
+#define C_EOF   4
+#define C_XX    5
 
 enum state
 {
@@ -381,7 +381,7 @@ continue2:
             oldstate = state;
 
             c = *ip;
-                        
+
             if ((state = bigfsm[c][state]) >= 0)
             {
                 ip += runelen;
@@ -427,7 +427,7 @@ continue2:
                     if (c == '\n')
                     {
                         while (s->inp + 1 >= s->inl && fillbuf(s) != EOF);
-                    
+
                         if (s->inp[1] == '\r')
                         {
                             memmove(s->inp + 1, s->inp + 2, s->inl - s->inp + 2);
@@ -440,7 +440,7 @@ continue2:
                     if (c == '\r')
                     {
                         while (s->inp + 1 >= s->inl && fillbuf(s) != EOF);
-                    
+
                         if (s->inp[1] == '\n')
                         {
                             memmove(s->inp, s->inp + 1, s->inl - s->inp + 1);

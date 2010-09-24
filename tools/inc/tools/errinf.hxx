@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -202,14 +202,14 @@ class TOOLS_DLLPUBLIC ErrorHandler
 private:
     ErrHdl_Impl*        pImpl;
 
-    static USHORT       HandleError_Impl( ULONG lId, 
-                      USHORT nFlags, 
-                      BOOL bJustCreateString, 
+    static USHORT       HandleError_Impl( ULONG lId,
+                      USHORT nFlags,
+                      BOOL bJustCreateString,
                       String & rError);
 protected:
-    virtual BOOL        CreateString( const ErrorInfo *, 
+    virtual BOOL        CreateString( const ErrorInfo *,
                       String &, USHORT& nMask ) const = 0;
-            BOOL        ForwCreateString( const ErrorInfo*, 
+            BOOL        ForwCreateString( const ErrorInfo*,
                       String&, USHORT& nMask ) const;
 
 public:
@@ -231,7 +231,7 @@ public:
 class TOOLS_DLLPUBLIC SimpleErrorHandler : private ErrorHandler
 {
 protected:
-    virtual BOOL        CreateString( const ErrorInfo*, String &, 
+    virtual BOOL        CreateString( const ErrorInfo*, String &,
                                       USHORT &nMask ) const;
 
 public:

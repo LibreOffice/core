@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ uno::Sequence< ::rtl::OUString > lcl_getImageOptionals()
             , PROPERTY_CHARWORDMODECOMPLEX
             , PROPERTY_CHARROTATIONCOMPLEX
             , PROPERTY_CHARSCALEWIDTHCOMPLEX
-            , PROPERTY_CHARLOCALECOMPLEX   
+            , PROPERTY_CHARLOCALECOMPLEX
 
     };
     return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
@@ -126,7 +126,7 @@ uno::Sequence< ::rtl::OUString > lcl_getImageOptionals()
 DBG_NAME( rpt_OImageControl )
 // -----------------------------------------------------------------------------
 OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _xContext)
-:ImageControlBase(m_aMutex) 
+:ImageControlBase(m_aMutex)
 ,ImageControlPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getImageOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nScaleMode(awt::ImageScaleMode::None)
@@ -139,7 +139,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _xContext
                            ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
                            ,uno::Reference< drawing::XShape >& _xShape)
-:ImageControlBase(m_aMutex) 
+:ImageControlBase(m_aMutex)
 ,ImageControlPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getImageOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nScaleMode(awt::ImageScaleMode::None)
@@ -176,7 +176,7 @@ uno::Any SAL_CALL OImageControl::queryInterface( const uno::Type& _rType ) throw
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL OImageControl::dispose() throw(uno::RuntimeException) 
+void SAL_CALL OImageControl::dispose() throw(uno::RuntimeException)
 {
     ImageControlPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
@@ -197,7 +197,7 @@ uno::Sequence< ::rtl::OUString > OImageControl::getSupportedServiceNames_Static(
 {
     uno::Sequence< ::rtl::OUString > aServices(1);
     aServices.getArray()[0] = SERVICE_IMAGECONTROL;
-    
+
     return aServices;
 }
 //------------------------------------------------------------------------------
@@ -223,61 +223,61 @@ REPORTCOMPONENT_IMPL2(OImageControl,m_aProps.aComponent)
 REPORTCOMPONENT_NOMASTERDETAIL(OImageControl)
 //REPORTCONTROLFORMAT_IMPL(OImageControl,m_aProps.aFormatProperties)
 NO_REPORTCONTROLFORMAT_IMPL(OImageControl)
-::rtl::OUString SAL_CALL OImageControl::getHyperLinkURL() throw (uno::RuntimeException, beans::UnknownPropertyException) 
-{ 
-    ::osl::MutexGuard aGuard(m_aMutex); 
-    return m_aProps.aFormatProperties.sHyperLinkURL; 
-} 
-void SAL_CALL OImageControl::setHyperLinkURL(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) 
-{ 
-    set(PROPERTY_HYPERLINKURL,the_value,m_aProps.aFormatProperties.sHyperLinkURL); 
+::rtl::OUString SAL_CALL OImageControl::getHyperLinkURL() throw (uno::RuntimeException, beans::UnknownPropertyException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return m_aProps.aFormatProperties.sHyperLinkURL;
 }
-::rtl::OUString SAL_CALL OImageControl::getHyperLinkTarget() throw (uno::RuntimeException, beans::UnknownPropertyException) 
-{ 
-    ::osl::MutexGuard aGuard(m_aMutex); 
-    return m_aProps.aFormatProperties.sHyperLinkTarget; 
-} 
-void SAL_CALL OImageControl::setHyperLinkTarget(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) 
-{ 
-    set(PROPERTY_HYPERLINKTARGET,the_value,m_aProps.aFormatProperties.sHyperLinkTarget); 
+void SAL_CALL OImageControl::setHyperLinkURL(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException)
+{
+    set(PROPERTY_HYPERLINKURL,the_value,m_aProps.aFormatProperties.sHyperLinkURL);
 }
-::rtl::OUString SAL_CALL OImageControl::getHyperLinkName() throw (uno::RuntimeException, beans::UnknownPropertyException) 
-{ 
-    ::osl::MutexGuard aGuard(m_aMutex); 
-    return m_aProps.aFormatProperties.sHyperLinkName; 
-} 
-void SAL_CALL OImageControl::setHyperLinkName(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) 
-{ 
-    set(PROPERTY_HYPERLINKNAME,the_value,m_aProps.aFormatProperties.sHyperLinkName); 
+::rtl::OUString SAL_CALL OImageControl::getHyperLinkTarget() throw (uno::RuntimeException, beans::UnknownPropertyException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return m_aProps.aFormatProperties.sHyperLinkTarget;
+}
+void SAL_CALL OImageControl::setHyperLinkTarget(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException)
+{
+    set(PROPERTY_HYPERLINKTARGET,the_value,m_aProps.aFormatProperties.sHyperLinkTarget);
+}
+::rtl::OUString SAL_CALL OImageControl::getHyperLinkName() throw (uno::RuntimeException, beans::UnknownPropertyException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return m_aProps.aFormatProperties.sHyperLinkName;
+}
+void SAL_CALL OImageControl::setHyperLinkName(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException)
+{
+    set(PROPERTY_HYPERLINKNAME,the_value,m_aProps.aFormatProperties.sHyperLinkName);
 }
 
 // -----------------------------------------------------------------------------
-::sal_Int32 SAL_CALL OImageControl::getControlBackground() throw (beans::UnknownPropertyException, uno::RuntimeException) 
-{ 
-    ::osl::MutexGuard aGuard(m_aMutex); 
-    return m_aProps.aFormatProperties.m_bBackgroundTransparent ? COL_TRANSPARENT : m_aProps.aFormatProperties.nBackgroundColor; 
-} 
- 
+::sal_Int32 SAL_CALL OImageControl::getControlBackground() throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return m_aProps.aFormatProperties.m_bBackgroundTransparent ? COL_TRANSPARENT : m_aProps.aFormatProperties.nBackgroundColor;
+}
+
 void SAL_CALL OImageControl::setControlBackground( ::sal_Int32 _backgroundcolor ) throw (uno::RuntimeException, beans::UnknownPropertyException)
-{ 
+{
     sal_Bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);
     setControlBackgroundTransparent(bTransparent);
     if ( !bTransparent )
         set(PROPERTY_CONTROLBACKGROUND,_backgroundcolor,m_aProps.aFormatProperties.nBackgroundColor);
-} 
- 
-::sal_Bool SAL_CALL OImageControl::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException) 
-{ 
-    ::osl::MutexGuard aGuard(m_aMutex); 
-    return m_aProps.aFormatProperties.m_bBackgroundTransparent; 
-} 
- 
-void SAL_CALL OImageControl::setControlBackgroundTransparent( ::sal_Bool _controlbackgroundtransparent ) throw (beans::UnknownPropertyException, uno::RuntimeException) 
-{ 
+}
+
+::sal_Bool SAL_CALL OImageControl::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return m_aProps.aFormatProperties.m_bBackgroundTransparent;
+}
+
+void SAL_CALL OImageControl::setControlBackgroundTransparent( ::sal_Bool _controlbackgroundtransparent ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
     set(PROPERTY_CONTROLBACKGROUNDTRANSPARENT,_controlbackgroundtransparent,m_aProps.aFormatProperties.m_bBackgroundTransparent);
     if ( _controlbackgroundtransparent )
         set(PROPERTY_CONTROLBACKGROUND,static_cast<sal_Int32>(COL_TRANSPARENT),m_aProps.aFormatProperties.nBackgroundColor);
-} 
+}
 
 // -----------------------------------------------------------------------------
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OImageControl::getPropertySetInfo(  ) throw(uno::RuntimeException)

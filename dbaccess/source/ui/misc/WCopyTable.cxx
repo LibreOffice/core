@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ using namespace dbtools;
 
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
-#define MAX_PAGES	4	// max. Pages die angezeigt werden
+#define MAX_PAGES   4   // max. Pages die angezeigt werden
 
 DBG_NAME(OCopyTableWizard)
 namespace
@@ -192,8 +192,8 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
         ::rtl::OUString sStatement(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
         sStatement += sTargetName;
         sStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE 0=1"));
-        
-        
+
+
         for ( i=0; i < sizeof( aProperties ) / sizeof( aProperties[0] ); ++i )
         {
             if ( m_xObjectPSI->hasPropertyByName( aProperties[i].first ) )
@@ -211,7 +211,7 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
                 }
             }
         }
-        
+
         _xConnection->createStatement()->executeQuery(sStatement);
 
         if ( m_xObjectPSI->hasPropertyByName( PROPERTY_APPLYFILTER ) )
@@ -632,7 +632,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
         ::rtl::OUString sCatalog;
         ::rtl::OUString sSchema;
         ::rtl::OUString sTable;
-        ::dbtools::qualifiedNameComponents(	xSrcMeta,
+        ::dbtools::qualifiedNameComponents( xSrcMeta,
                                             m_sName,
                                             sCatalog,
                                             sSchema,
@@ -658,7 +658,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
 // -----------------------------------------------------------------------------
 OCopyTableWizard::OCopyTableWizard( Window* pParent, const ::rtl::OUString& _rDefaultName, sal_Int16 _nOperation,
         const ODatabaseExport::TColumns& _rSourceColumns, const ODatabaseExport::TColumnVector& _rSourceColVec,
-        const Reference< XConnection >& _xConnection, const Reference< XNumberFormatter >&	_xFormatter,
+        const Reference< XConnection >& _xConnection, const Reference< XNumberFormatter >&  _xFormatter,
         TypeSelectionPageFactory _pTypeSelectionPageFactory, SvStream& _rTypeSelectionPageArg, const Reference< XMultiServiceFactory >& _rM )
     :WizardDialog( pParent, ModuleRes(WIZ_RTFCOPYTABLE))
     ,m_vSourceColumns(_rSourceColumns)
@@ -842,7 +842,7 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
         }
 
         if ( bContainsColumns )
-        {	// we have dest columns so look for the matching column 
+        {   // we have dest columns so look for the matching column
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
             ODatabaseExport::TColumnVector::const_iterator aSrcEnd = m_vSourceVec.end();
             for(;aSrcIter != aSrcEnd;++aSrcIter)
@@ -867,7 +867,7 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
         {
             Reference< XDatabaseMetaData > xMetaData( m_xDestConnection->getMetaData() );
             ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
-            sal_Int32 nMaxNameLen		= getMaxColumnNameLength();
+            sal_Int32 nMaxNameLen       = getMaxColumnNameLength();
 
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
             ODatabaseExport::TColumnVector::const_iterator aSrcEnd = m_vSourceVec.end();
@@ -879,7 +879,7 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
                 pField->SetType(pType);
                 if ( !bPKeyAllowed )
                     pField->SetPrimaryKey(sal_False);
-                
+
                 // now create a column
                 insertColumn(m_vDestColumns.size(),pField);
                 m_vColumnPos.push_back(ODatabaseExport::TPositions::value_type(m_vDestColumns.size(),m_vDestColumns.size()));
@@ -904,10 +904,10 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
             case CopyTableOperation::CopyDefinitionOnly:
             {
                 sal_Bool bOnFirstPage = GetCurLevel() == 0;
-                if ( bOnFirstPage ) 
+                if ( bOnFirstPage )
                 {
                     // we came from the first page so we have to clear
-                    // all column information already collected 
+                    // all column information already collected
                     clearDestColumns();
                     m_mNameMapping.clear();
                 }
@@ -919,7 +919,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                     OWizTypeSelect* pPage = static_cast<OWizTypeSelect*>(GetPage(3));
                     if ( pPage )
                     {
-                        m_mNameMapping.clear();                        
+                        m_mNameMapping.clear();
                         pPage->setDisplayRow(nBreakPos);
                         ShowPage(3);
                         return 0;
@@ -1048,7 +1048,7 @@ void OCopyTableWizard::CheckButtons()
 void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::EnableButton" );
-//	CheckButtons();
+//  CheckButtons();
     Button* pButton;
     if(eStyle == WIZARD_NEXT)
         pButton = &m_pbNext;
@@ -1102,7 +1102,7 @@ void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,
         m_vDestColumns.erase(_sOldName);
         OSL_ENSURE( m_vDestColumns.find(_pField->GetName()) == m_vDestColumns.end(),"Column with that name already exist!");
 
-        m_aDestVec[_nPos] = 
+        m_aDestVec[_nPos] =
             m_vDestColumns.insert(ODatabaseExport::TColumns::value_type(_pField->GetName(),_pField)).first;
     }
 }
@@ -1144,9 +1144,9 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
         if ( !pActFieldDescr )
             continue;
 
-        sal_Int32 nType			  = pActFieldDescr->GetType();
-        sal_Int32 nScale		  = pActFieldDescr->GetScale();
-        sal_Int32 nPrecision	  = pActFieldDescr->GetPrecision();
+        sal_Int32 nType           = pActFieldDescr->GetType();
+        sal_Int32 nScale          = pActFieldDescr->GetScale();
+        sal_Int32 nPrecision      = pActFieldDescr->GetPrecision();
         sal_Bool bAutoIncrement   = pActFieldDescr->IsAutoIncrement();
         ::rtl::OUString sTypeName = pActFieldDescr->GetTypeName();
 
@@ -1330,7 +1330,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         if(xAppend.is())
             xAppend->appendByDescriptor(xTable);
 
-        //	xTable = NULL;
+        //  xTable = NULL;
         // we need to reget the table because after appending it it is no longer valid
         if(xTables->hasByName(m_sName))
             xTables->getByName(m_sName) >>= xTable;
@@ -1360,7 +1360,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
             Reference<XNameAccess> xNameAccess = xSuppDestinationColumns->getColumns();
             Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
             const ::rtl::OUString* pIter = aSeq.getConstArray();
-            const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
+            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
 
             ::std::vector<int> aAlreadyFound(m_vColumnPos.size(),0);
 
@@ -1484,10 +1484,10 @@ sal_Int16 OCopyTableWizard::getOperation() const
     return m_nOperation;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&	_rCmpFunctor,
-                                                    const ::rtl::OUString&	_sColumnName,
-                                                    const ::rtl::OUString&	_sExtraChars,
-                                                    sal_Int32				_nMaxNameLen)
+::rtl::OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFunctor,
+                                                    const ::rtl::OUString&  _sColumnName,
+                                                    const ::rtl::OUString&  _sExtraChars,
+                                                    sal_Int32               _nMaxNameLen)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::convertColumnName" );
     ::rtl::OUString sAlias = _sColumnName;

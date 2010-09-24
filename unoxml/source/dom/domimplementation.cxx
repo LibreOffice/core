@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@ namespace DOM
     Creates a DOM Document object of the specified type with its document element.
     */
     Reference <XDocument > SAL_CALL CDOMImplementation::createDocument(
-           const OUString& namespaceURI, 
-           const OUString& qualifiedName, 
+           const OUString& namespaceURI,
+           const OUString& qualifiedName,
            const Reference< XDocumentType >& doctype)
         throw (RuntimeException)
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,7 +126,7 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
 
     {
         SvXMLElementExport aCreatorElem( rExport, XML_NAMESPACE_DC,
-                                            XML_CREATOR, sal_True, 
+                                            XML_CREATOR, sal_True,
                                             sal_False );
         rtl::OUString sAuthor(pAction->GetUser());
         rExport.Characters(sAuthor);
@@ -136,10 +136,10 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
         rtl::OUStringBuffer sDate;
         ScXMLConverter::ConvertDateTimeToString(pAction->GetDateTimeUTC(), sDate);
         SvXMLElementExport aDateElem( rExport, XML_NAMESPACE_DC,
-                                          XML_DATE, sal_True, 
+                                          XML_DATE, sal_True,
                                           sal_False );
         rExport.Characters(sDate.makeStringAndClear());
-    } 	
+    }
 
     rtl::OUString sComment(pAction->GetComment());
     if (sComment.getLength())
@@ -333,7 +333,7 @@ void ScChangeTrackingExportHelper::WriteValueCell(const ScBaseCell* pCell, const
     {
         SetValueAttributes(pValueCell->GetValue(), sValue);
         SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, sal_True, sal_True);
-/*		if (sValue.Len())
+/*      if (sValue.Len())
         {
             SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
             sal_Bool bPrevCharWasSpace(sal_True);
@@ -419,12 +419,12 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, con
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MATRIX_COVERED, XML_TRUE);
             }
             rtl::OUString sMatrixFormula = sOUFormula.copy(1, sOUFormula.getLength() - 2);
-            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sMatrixFormula, sal_False ); 
+            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sMatrixFormula, sal_False );
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue);
         }
         else
         {
-            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sFormula, sal_False ); 
+            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sFormula, sal_False );
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue);
         }
         if (pFormulaCell->IsValue())
@@ -792,7 +792,7 @@ void ScChangeTrackingExportHelper::CollectAndWriteChanges()
 {
     if (pChangeTrack)
     {
-/*		if (pChangeTrack->IsProtected())
+/*      if (pChangeTrack->IsProtected())
         {
             rtl::OUStringBuffer aBuffer;
             SvXMLUnitConverter::encodeBase64(aBuffer, pChangeTrack->GetProtection());

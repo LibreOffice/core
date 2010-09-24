@@ -36,7 +36,7 @@ public class RegressionTest_i35095 implements StorageTest {
             XStream xTempFileStream = m_aTestHelper.CreateTempFileStream( m_xMSF );
             if ( xTempFileStream == null )
                 return false;
-        
+
             // create storage based on the temporary stream
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) xTempFileStream;
@@ -69,7 +69,7 @@ public class RegressionTest_i35095 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-    
+
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempSubStorage, "SubStream2", "MediaType2", false, pBytes, sPass ) )
                 return false;
@@ -139,7 +139,7 @@ public class RegressionTest_i35095 implements StorageTest {
                 m_aTestHelper.Error( "Can't open existing substorage!" );
                 return false;
             }
-    
+
             if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType4", false, ElementModes.READ ) )
                 return false;
 
@@ -160,7 +160,7 @@ public class RegressionTest_i35095 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 
 }
 

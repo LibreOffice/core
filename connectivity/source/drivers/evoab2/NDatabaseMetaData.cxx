@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace connectivity
         static ColumnProperty **pFields=NULL;
         static guint        nFields = 0;
 
-        static const char *pBlackList[] = 
+        static const char *pBlackList[] =
         {
             "id",
             "list-show-addresses",
@@ -88,11 +88,11 @@ namespace connectivity
         return evo_addr;
     }
 
-    static void 
+    static void
     splitColumn (ColumnProperty **pToBeFields)
     {
         const SplitEvoColumns* evo_addr( get_evo_addr() );
-        for (int i = 0; i < OTHER_ZIP; i++) 
+        for (int i = 0; i < OTHER_ZIP; i++)
         {
             pToBeFields[nFields] = g_new0(ColumnProperty,1);
             pToBeFields[nFields]->bIsSplittedValue = true;
@@ -134,7 +134,7 @@ namespace connectivity
                                     break;
                                 }
                             }
-                            if( bAdd ) 
+                            if( bAdd )
                             {
                                 pToBeFields[nFields]= g_new0(ColumnProperty,1);
                                 pToBeFields[nFields]->bIsSplittedValue=false;
@@ -146,7 +146,7 @@ namespace connectivity
                             break;
                     }
                 }
-            
+
                 splitColumn(pToBeFields);
                 pFields = pToBeFields;
             }
@@ -191,7 +191,7 @@ namespace connectivity
 
     guint findEvoabField(const rtl::OUString& aColName)
     {
-        guint nRet = (guint)-1;	
+        guint nRet = (guint)-1;
         sal_Bool bFound = sal_False;
         initFields();
         for (guint i=0;(i < nFields) && !bFound;i++)
@@ -235,24 +235,24 @@ namespace connectivity
         return aName;
     }
 
-    void  
+    void
     free_column_resources()
     {
-        for (int i=nFields-1;i > 0;i--) 
+        for (int i=nFields-1;i > 0;i--)
         {
-            if (pFields && pFields[i] ) 
+            if (pFields && pFields[i] )
             {
-                if (pFields[i]->pField) 
+                if (pFields[i]->pField)
                     g_param_spec_unref(pFields[i]->pField);
                 g_free(pFields[i]);
             }
         }
-       if(pFields) 
+       if(pFields)
         {
             g_free(pFields);
             pFields=NULL;
         }
-    
+
     }
 
 
@@ -276,11 +276,11 @@ ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const 
     static ODatabaseMetaDataResultSet::ORows aRows;
     ODatabaseMetaDataResultSet::ORow  aRow(19);
     aRows.clear();
-    
+
     // ****************************************************
     // Some entries in a row never change, so set them now
     // ****************************************************
-    
+
     // Catalog
     aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii(""));
     // Schema
@@ -332,7 +332,7 @@ ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const 
     return aRows ;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString OEvoabDatabaseMetaData::impl_getCatalogSeparator_throw(  ) 
+::rtl::OUString OEvoabDatabaseMetaData::impl_getCatalogSeparator_throw(  )
 {
     return ::rtl::OUString();
 }
@@ -392,7 +392,7 @@ sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxTableNameLength(  ) throw(SQLEx
     return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
-sal_Int32 OEvoabDatabaseMetaData::impl_getMaxTablesInSelect_throw(  ) 
+sal_Int32 OEvoabDatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 {
     // We only support a single table
     return 1;
@@ -414,7 +414,7 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(S
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool OEvoabDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  ) 
+sal_Bool OEvoabDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     return sal_False;
 }
@@ -460,7 +460,7 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsNonNullableColumns(  ) throw(S
     return aVal;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString OEvoabDatabaseMetaData::impl_getIdentifierQuoteString_throw(  ) 
+::rtl::OUString OEvoabDatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     // normally this is "
     ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("\"");
@@ -1030,7 +1030,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
         aRow.push_back(new ORowSetValueDecorator(sTableTypes[i]));
-               
+
         // bound row
         aRows.push_back(aRow);
     }
@@ -1041,8 +1041,8 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw
 // -------------------------------------------------------------------------
 Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
-    /* 
-     * Return the proper type information required by evo driver  
+    /*
+     * Return the proper type information required by evo driver
      */
 
     ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
@@ -1106,20 +1106,20 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
-    
+
     // check if any type is given
     // when no types are given then we have to return all tables e.g. TABLE
-    
+
     const ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
-    
+
     sal_Bool bTableFound = sal_True;
     sal_Int32 nLength = types.getLength();
     if(nLength)
         {
             bTableFound = sal_False;
-            
+
             const ::rtl::OUString* pBegin = types.getConstArray();
-            const ::rtl::OUString* pEnd	= pBegin + nLength;
+            const ::rtl::OUString* pEnd = pBegin + nLength;
             for(;pBegin != pEnd;++pBegin)
                 {
                     if(*pBegin == aTable)
@@ -1133,7 +1133,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
         return xRef;
 
     ODatabaseMetaDataResultSet::ORows aRows;
-    
+
     ESourceList *pSourceList;
     if( !e_book_get_addressbooks (&pSourceList, NULL) )
             pSourceList = NULL;
@@ -1148,17 +1148,17 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
         case SDBCAddress::EVO_GWISE:
                     if (0==strncmp( "groupwise://", p, 11 ))
                         break;
-                    else 
+                    else
                         continue;
         case SDBCAddress::EVO_LOCAL:
                     if (0==strncmp( "file://", p, 6 ))
                         break;
                     else
                         continue;
-        case SDBCAddress::EVO_LDAP: 
+        case SDBCAddress::EVO_LDAP:
                     if (0==strncmp( "ldap://", p, 6 ))
                         break;
-                    else 
+                    else
                         continue;
         case SDBCAddress::Unknown:
             break;

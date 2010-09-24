@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -23,10 +23,10 @@ namespace agg
     template<class Renderer> class rasterizer_outline
     {
     public:
-        rasterizer_outline(Renderer& ren) : 
-            m_ren(&ren), 
-            m_start_x(0), 
-            m_start_y(0), 
+        rasterizer_outline(Renderer& ren) :
+            m_ren(&ren),
+            m_start_x(0),
+            m_start_y(0),
             m_vertices(0)
         {
         }
@@ -70,11 +70,11 @@ namespace agg
         //--------------------------------------------------------------------
         void add_vertex(double x, double y, unsigned cmd)
         {
-            if(is_move_to(cmd)) 
+            if(is_move_to(cmd))
             {
                 move_to_d(x, y);
             }
-            else 
+            else
             {
                 if(is_end_poly(cmd))
                 {
@@ -106,8 +106,8 @@ namespace agg
 
         //--------------------------------------------------------------------
         template<class VertexSource, class ColorStorage, class PathId>
-        void render_all_paths(VertexSource& vs, 
-                              const ColorStorage& colors, 
+        void render_all_paths(VertexSource& vs,
+                              const ColorStorage& colors,
                               const PathId& id,
                               unsigned num_paths)
         {

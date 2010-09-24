@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 
-#include "svgfilter.hxx" 
+#include "svgfilter.hxx"
 #include "svgreader.hxx"
 
 #include "rtl/ref.hxx"
@@ -84,4 +84,4 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     SVGReader aReader(mxMSF, xInputStream, xInternalHandler);
     return aReader.parseAndConvert();
 }
-    
+

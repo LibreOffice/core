@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ namespace connectivity
             KabConnection* m_pConnection;
 
         public:
-            KabTable(	sdbcx::OCollection* _pTables, KabConnection* _pConnection);
-            KabTable(	sdbcx::OCollection* _pTables, 
+            KabTable(   sdbcx::OCollection* _pTables, KabConnection* _pConnection);
+            KabTable(   sdbcx::OCollection* _pTables,
                     KabConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,

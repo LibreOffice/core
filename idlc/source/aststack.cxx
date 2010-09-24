@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,22 +42,22 @@ AstStack::AstStack()
 
 AstStack::~AstStack()
 {
-    for(sal_uInt32 i=0; i < m_top; i++) 
+    for(sal_uInt32 i=0; i < m_top; i++)
     {
-        if (m_stack[i]) 
+        if (m_stack[i])
             delete(m_stack[i]);
     }
-    
+
     rtl_freeMemory(m_stack);
 }
 
 sal_uInt32 AstStack::depth()
-{ 
+{
     return m_top;
 }
 
 AstScope* AstStack::top()
-{ 
+{
     if (m_top < 1)
         return NULL;
     return m_stack[m_top - 1];
@@ -67,8 +67,8 @@ AstScope* AstStack::bottom()
 {
     if (m_top == 0)
         return NULL;
-    return m_stack[0];	
-}	
+    return m_stack[0];
+}
 
 AstScope* AstStack::nextToTop()
 {
@@ -77,37 +77,37 @@ AstScope* AstStack::nextToTop()
     if (depth() < 2)
         return NULL;
 
-    tmp = top();		// Save top
-    (void) pop();		// Pop it
-    retval = top();		// Get next one down
-    (void) push(tmp);	// Push top back
-    return retval;		// Return next one down
-}	
+    tmp = top();        // Save top
+    (void) pop();       // Pop it
+    retval = top();     // Get next one down
+    (void) push(tmp);   // Push top back
+    return retval;      // Return next one down
+}
 
 AstScope* AstStack::topNonNull()
 {
     for (sal_uInt32 i = m_top; i > 0; i--)
     {
-        if ( m_stack[i - 1] ) 
+        if ( m_stack[i - 1] )
             return m_stack[i - 1];
       }
     return NULL;
-}	
+}
 
 AstStack* AstStack::push(AstScope* pScope)
-{ 
-    AstScope		**tmp;
-//	AstDeclaration	*pDecl = ScopeAsDecl(pScope);
-    sal_uInt32	newSize;
-    sal_uInt32	i;
+{
+    AstScope        **tmp;
+//  AstDeclaration  *pDecl = ScopeAsDecl(pScope);
+    sal_uInt32  newSize;
+    sal_uInt32  i;
 
     // Make sure there's space for one more
-    if (m_size == m_top) 
+    if (m_size == m_top)
     {
         newSize = m_size;
         newSize += STACKSIZE_INCREMENT;
-        tmp	= (AstScope**)rtl_allocateZeroMemory(sizeof(AstScope*) * newSize);
-    
+        tmp = (AstScope**)rtl_allocateZeroMemory(sizeof(AstScope*) * newSize);
+
         for(i=0; i < m_size; i++)
             tmp[i] = m_stack[i];
 
@@ -122,7 +122,7 @@ AstStack* AstStack::push(AstScope* pScope)
 }
 
 void AstStack::pop()
-{ 
+{
     AstScope *pScope;
 
     if (m_top < 1)
@@ -131,7 +131,7 @@ void AstStack::pop()
 }
 
 void AstStack::clear()
-{ 
+{
     m_top = 0;
 }
 

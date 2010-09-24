@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ namespace pcr
             ::std::copy( _rBag.begin(), _rBag.end(), _rArray.getArray() );
         }
     }
-        
+
     //====================================================================
     //= PropertyComposer
     //====================================================================
@@ -139,28 +139,28 @@ namespace pcr
         MethodGuard aGuard( *this );
         return m_aSlaveHandlers[0]->getPropertyValue( _rPropertyName );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL PropertyComposer::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         MethodGuard aGuard( *this );
         ::std::for_each( m_aSlaveHandlers.begin(), m_aSlaveHandlers.end(), SetPropertyValue( _rPropertyName, _rValue ) );
     }
-    
+
     //--------------------------------------------------------------------
     Any SAL_CALL PropertyComposer::convertToPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_aSlaveHandlers[0]->convertToPropertyValue( _rPropertyName, _rControlValue );
     }
-    
+
     //--------------------------------------------------------------------
     Any SAL_CALL PropertyComposer::convertToControlValue( const ::rtl::OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_aSlaveHandlers[0]->convertToControlValue( _rPropertyName, _rPropertyValue, _rControlValueType );
     }
-    
+
     //--------------------------------------------------------------------
     PropertyState SAL_CALL PropertyComposer::getPropertyState( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
@@ -199,21 +199,21 @@ namespace pcr
 
         return eState;
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL PropertyComposer::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_aPropertyListeners.addListener( _rxListener );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL PropertyComposer::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_aPropertyListeners.removeListener( _rxListener );
     }
-    
+
     //--------------------------------------------------------------------
     Sequence< Property > SAL_CALL PropertyComposer::getSupportedProperties() throw (RuntimeException)
     {
@@ -269,7 +269,7 @@ namespace pcr
         copyBagToArray( m_aSupportedProperties, aSurvived );
         return aSurvived;
     }
-    
+
     //--------------------------------------------------------------------
     void uniteStringArrays( const PropertyComposer::HandlerArray& _rHandlers, Sequence< ::rtl::OUString > (SAL_CALL XPropertyHandler::*pGetter)( void ),
         Sequence< ::rtl::OUString >& /* [out] */ _rUnion )
@@ -299,7 +299,7 @@ namespace pcr
         uniteStringArrays( m_aSlaveHandlers, &XPropertyHandler::getSupersededProperties, aSuperseded );
         return aSuperseded;
     }
-    
+
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL PropertyComposer::getActuatingProperties( ) throw (RuntimeException)
     {
@@ -310,7 +310,7 @@ namespace pcr
         uniteStringArrays( m_aSlaveHandlers, &XPropertyHandler::getActuatingProperties, aActuating );
         return aActuating;
     }
-    
+
     //--------------------------------------------------------------------
     LineDescriptor SAL_CALL PropertyComposer::describePropertyLine( const ::rtl::OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
@@ -319,7 +319,7 @@ namespace pcr
         MethodGuard aGuard( *this );
         return m_aSlaveHandlers[0]->describePropertyLine( _rPropertyName, _rxControlFactory );
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL PropertyComposer::isComposable( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
@@ -377,7 +377,7 @@ namespace pcr
 
         return eResult;
     }
-    
+
     //--------------------------------------------------------------------
     void PropertyComposer::impl_ensureUIRequestComposer( const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {

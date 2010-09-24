@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,24 +30,24 @@
 
 // defines ------------------------------------------------------------------
 
-#define PB_OK						1
-#define PB_CANCEL 					1
-#define PB_HELP						1
+#define PB_OK                       1
+#define PB_CANCEL                   1
+#define PB_HELP                     1
 
-#define ET_CATALOG					1
-#define ET_SCHEMA					2
-#define ET_TITLE					3
+#define ET_CATALOG                  1
+#define ET_SCHEMA                   2
+#define ET_TITLE                    3
 
-#define FT_DESCRIPTION				1
-#define FT_CATALOG					2
-#define FT_SCHEMA					3
-#define FT_TITLE					4
+#define FT_DESCRIPTION              1
+#define FT_CATALOG                  2
+#define FT_SCHEMA                   3
+#define FT_TITLE                    4
 
-#define STR_TBL_LABEL						1
-#define STR_VW_LABEL						2
-#define STR_QRY_LABEL						3
-#define STR_TITLE_RENAME					4
-#define STR_TITLE_PASTE_AS					6
+#define STR_TBL_LABEL                       1
+#define STR_VW_LABEL                        2
+#define STR_QRY_LABEL                       3
+#define STR_TITLE_RENAME                    4
+#define STR_TITLE_PASTE_AS                  6
 
 #endif // DBAUI_DLGSAVE_HRC
 

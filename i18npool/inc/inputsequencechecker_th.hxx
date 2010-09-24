@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//	----------------------------------------------------
-//	class InputSequenceChecker_th
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class InputSequenceChecker_th
+//  ----------------------------------------------------
 class InputSequenceChecker_th : public InputSequenceCheckerImpl
 {
 public:
@@ -47,6 +47,6 @@ public:
         sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(com::sun::star::uno::RuntimeException);
 };
 
-} } } } 
+} } } }
 
 #endif // _I18N_BREAKITERATOR_HXX_

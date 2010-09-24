@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,11 +88,11 @@ TYPEINIT1( FuConstructRectangle, FuConstruct );
 \************************************************************************/
 
 FuConstructRectangle::FuConstructRectangle (
-    ViewShell* 	pViewSh,
-    ::sd::Window*		pWin,
-    ::sd::View*			pView,
-    SdDrawDocument*	pDoc,
-    SfxRequest&		rReq)
+    ViewShell*  pViewSh,
+    ::sd::Window*       pWin,
+    ::sd::View*         pView,
+    SdDrawDocument* pDoc,
+    SfxRequest&     rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
 }
@@ -127,11 +127,11 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                 SFX_REQUEST_ARG (rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X, FALSE);
                 SFX_REQUEST_ARG (rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y, FALSE);
 
-                Rectangle	aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
+                Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
                                            pCenterY->GetValue () - pAxisY->GetValue () / 2,
                                            pCenterX->GetValue () + pAxisX->GetValue () / 2,
                                            pCenterY->GetValue () + pAxisY->GetValue () / 2);
-                SdrCircObj	*pNewCircle = new SdrCircObj (OBJ_CIRC, aNewRectangle);
+                SdrCircObj  *pNewCircle = new SdrCircObj (OBJ_CIRC, aNewRectangle);
                 SdrPageView *pPV = mpView->GetSdrPageView();
 
                 mpView->InsertObjectAtView(pNewCircle, *pPV, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
@@ -145,11 +145,11 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
                 SFX_REQUEST_ARG (rReq, pMouseEndX, SfxUInt32Item, ID_VAL_MOUSEEND_X, FALSE);
                 SFX_REQUEST_ARG (rReq, pMouseEndY, SfxUInt32Item, ID_VAL_MOUSEEND_Y, FALSE);
 
-                Rectangle	aNewRectangle (pMouseStartX->GetValue (),
+                Rectangle   aNewRectangle (pMouseStartX->GetValue (),
                                            pMouseStartY->GetValue (),
                                            pMouseEndX->GetValue (),
                                            pMouseEndY->GetValue ());
-                SdrRectObj	*pNewRect = new SdrRectObj (aNewRectangle);
+                SdrRectObj  *pNewRect = new SdrRectObj (aNewRectangle);
                 SdrPageView *pPV = mpView->GetSdrPageView();
 
                 mpView->InsertObjectAtView(pNewRect, *pPV, SDRINSERT_SETDEFLAYER | SDRINSERT_SETDEFATTR);
@@ -185,13 +185,13 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
         nSlotId == SID_CONNECTOR_LINES_ARROWS       ||
         nSlotId == SID_CONNECTOR_LINES_CIRCLE_START ||
         nSlotId == SID_CONNECTOR_LINES_CIRCLE_END   ||
-        nSlotId == SID_CONNECTOR_LINES_CIRCLES		||
-        nSlotId == SID_LINE_ARROW_START				||
-        nSlotId == SID_LINE_ARROW_END				||
-        nSlotId == SID_LINE_ARROWS					||
-        nSlotId == SID_LINE_ARROW_CIRCLE			||
-        nSlotId == SID_LINE_CIRCLE_ARROW			||
-        nSlotId == SID_LINE_ARROW_SQUARE			||
+        nSlotId == SID_CONNECTOR_LINES_CIRCLES      ||
+        nSlotId == SID_LINE_ARROW_START             ||
+        nSlotId == SID_LINE_ARROW_END               ||
+        nSlotId == SID_LINE_ARROWS                  ||
+        nSlotId == SID_LINE_ARROW_CIRCLE            ||
+        nSlotId == SID_LINE_CIRCLE_ARROW            ||
+        nSlotId == SID_LINE_ARROW_SQUARE            ||
         nSlotId == SID_LINE_SQUARE_ARROW )
     {
         mpView->UnmarkAll();
@@ -355,21 +355,21 @@ void FuConstructRectangle::Activate()
         break;
 
         case SID_DRAW_RECT             :
-        case SID_DRAW_RECT_NOFILL	   :
-        case SID_DRAW_RECT_ROUND	   :
+        case SID_DRAW_RECT_NOFILL      :
+        case SID_DRAW_RECT_ROUND       :
         case SID_DRAW_RECT_ROUND_NOFILL:
-        case SID_DRAW_SQUARE		   :
+        case SID_DRAW_SQUARE           :
         case SID_DRAW_SQUARE_NOFILL    :
-        case SID_DRAW_SQUARE_ROUND	   :
+        case SID_DRAW_SQUARE_ROUND     :
         case SID_DRAW_SQUARE_ROUND_NOFILL:
         {
             aObjKind = OBJ_RECT;
         }
         break;
 
-        case SID_DRAW_ELLIPSE		:
+        case SID_DRAW_ELLIPSE       :
         case SID_DRAW_ELLIPSE_NOFILL:
-        case SID_DRAW_CIRCLE		:
+        case SID_DRAW_CIRCLE        :
         case SID_DRAW_CIRCLE_NOFILL :
         {
             aObjKind = OBJ_CIRC;
@@ -464,13 +464,13 @@ void FuConstructRectangle::Deactivate()
         nSlotId == SID_CONNECTOR_LINES_ARROWS       ||
         nSlotId == SID_CONNECTOR_LINES_CIRCLE_START ||
         nSlotId == SID_CONNECTOR_LINES_CIRCLE_END   ||
-        nSlotId == SID_CONNECTOR_LINES_CIRCLES		||
-        nSlotId == SID_LINE_ARROW_START				||
-        nSlotId == SID_LINE_ARROW_END				||
-        nSlotId == SID_LINE_ARROWS					||
-        nSlotId == SID_LINE_ARROW_CIRCLE			||
-        nSlotId == SID_LINE_CIRCLE_ARROW			||
-        nSlotId == SID_LINE_ARROW_SQUARE			||
+        nSlotId == SID_CONNECTOR_LINES_CIRCLES      ||
+        nSlotId == SID_LINE_ARROW_START             ||
+        nSlotId == SID_LINE_ARROW_END               ||
+        nSlotId == SID_LINE_ARROWS                  ||
+        nSlotId == SID_LINE_ARROW_CIRCLE            ||
+        nSlotId == SID_LINE_CIRCLE_ARROW            ||
+        nSlotId == SID_LINE_ARROW_SQUARE            ||
         nSlotId == SID_LINE_SQUARE_ARROW )
     {
         mpView->SetGlueVisible( FALSE );
@@ -988,8 +988,8 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                     }
 
                     // For task #105815# the default text is not inserted anymore.
-                    //	String aText(SdResId(STR_POOLSHEET_TEXT));
-                    //	((SdrCaptionObj*)pObj)->SetText(aText);
+                    //  String aText(SdResId(STR_POOLSHEET_TEXT));
+                    //  ((SdrCaptionObj*)pObj)->SetText(aText);
 
                     ((SdrCaptionObj*)pObj)->SetLogicRect(aRect);
                     ((SdrCaptionObj*)pObj)->SetTailPos(

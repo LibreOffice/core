@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 //i20156 - new file for xmlsecurity module
 
 /** -- idl definition -- **/
@@ -121,7 +121,7 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     void showPackageSignatures(
                         [in] ::com::sun::star::embed::XStorage xStorage,
                         [in] ::com::sun::star::io::XInputStream xSignInStream );
- 
+
     /** allows to get the default stream name for storing of the signature of
         the package.
      */
@@ -129,8 +129,8 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
 
 
     void showCertificate( [in] com::sun::star::security::XCertificate Certificate );
-    
-    
+
+
        /** manages trusted sources (Authors and pathes )
      */
 
@@ -141,13 +141,13 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     // These method should raise confirmation dialog, so it can not used from bad macros...
     void    addAuthorToTrustedSources( [in] com::sun::star::security::XCertificate Author );
     void    addLocationToTrustedSources( [in] string Location );
-    
+
 
 
 } ;
 
 } ; } ; } ; } ;
 
-#endif 
+#endif
 
 

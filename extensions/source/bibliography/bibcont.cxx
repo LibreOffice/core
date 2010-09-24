@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::rtl;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
-#define PROPERTY_FRAME						1
+#define PROPERTY_FRAME                      1
 //split window size is a percent value
 #define WIN_MIN_HEIGHT 10
 #define WIN_STEP_SIZE 5
@@ -100,7 +100,7 @@ BibWindowContainer::BibWindowContainer( Window* pParent, BibShortCutHandler* pCh
 {
     if(pChild!=NULL)
     {
-        Window*	pChildWindow = GetChild();
+        Window* pChildWindow = GetChild();
         pChildWindow->SetParent(this);
         pChildWindow->Show();
         pChildWindow->SetPosPixel(Point(0,0));
@@ -112,7 +112,7 @@ BibWindowContainer::~BibWindowContainer()
     if( pChild )
     {
         Window* pDel = GetChild();
-        pChild = NULL;			// prevents GetFocus for child while deleting!
+        pChild = NULL;          // prevents GetFocus for child while deleting!
         delete pDel;
     }
 }
@@ -157,14 +157,14 @@ BibBookContainer::~BibBookContainer()
     if( pTopWin )
     {
         Window* pDel = pTopWin;
-        pTopWin = NULL;			// prevents GetFocus for child while deleting!
+        pTopWin = NULL;         // prevents GetFocus for child while deleting!
         delete pDel;
     }
 
     if( pBottomWin )
     {
         Window* pDel = pBottomWin;
-        pBottomWin = NULL;		// prevents GetFocus for child while deleting!
+        pBottomWin = NULL;      // prevents GetFocus for child while deleting!
         delete pDel;
     }
 
@@ -177,10 +177,10 @@ void BibBookContainer::Split()
 }
 IMPL_LINK( BibBookContainer, SplitHdl, Timer*,/*pT*/)
 {
-    long nSize=	GetItemSize( TOP_WINDOW);
+    long nSize= GetItemSize( TOP_WINDOW);
     BibConfig* pConfig = BibModul::GetConfig();
     pConfig->setBeamerSize(nSize);
-    nSize =	GetItemSize( BOTTOM_WINDOW);
+    nSize = GetItemSize( BOTTOM_WINDOW);
     pConfig->setViewSize(nSize);
     return 0;
 }

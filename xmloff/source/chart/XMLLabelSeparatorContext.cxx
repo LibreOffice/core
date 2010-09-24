@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ SvXMLImportContext* XMLLabelSeparatorContext::CreateChildContext(
     SvXMLImportContext* pContext = NULL;
     if( xmloff::token::IsXMLToken( rLocalName, xmloff::token::XML_P ) )
     {
-        pContext = new SchXMLParagraphContext( GetImport(), 
+        pContext = new SchXMLParagraphContext( GetImport(),
                             rLocalName, m_aSeparator );
     }
     if( !pContext )

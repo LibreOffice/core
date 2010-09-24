@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,10 +43,10 @@ using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry __READONLY_DATA aPostureGenericMapping[] =
 {
-    { XML_POSTURE_NORMAL,		ITALIC_NONE		},
-    { XML_POSTURE_ITALIC,		ITALIC_NORMAL	},
-    { XML_POSTURE_OBLIQUE,		ITALIC_OBLIQUE	},
-    { XML_TOKEN_INVALID,		0 				}
+    { XML_POSTURE_NORMAL,       ITALIC_NONE     },
+    { XML_POSTURE_ITALIC,       ITALIC_NORMAL   },
+    { XML_POSTURE_OBLIQUE,      ITALIC_OBLIQUE  },
+    { XML_TOKEN_INVALID,        0               }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -60,23 +60,23 @@ XMLPosturePropHdl::~XMLPosturePropHdl()
 }
 
 sal_Bool XMLPosturePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_uInt16 ePosture;
     sal_Bool bRet = SvXMLUnitConverter::convertEnum( ePosture, rStrImpValue, aPostureGenericMapping );
     if( bRet )
         rValue <<= (awt::FontSlant)ePosture;
 
-    return bRet; 
+    return bRet;
 }
 
 sal_Bool XMLPosturePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     awt::FontSlant eSlant;
 
     if( !( rValue >>= eSlant ) )
     {
         sal_Int32 nValue = 0;
-        
+
         if( !( rValue >>= nValue ) )
             return sal_False;
 

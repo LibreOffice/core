@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@ Transliteration_caseignore::Transliteration_caseignore()
 }
 
 #if 0
-/* NOTE: We had this, derived from Transliteration_caseignore, but it was 
- * unused code. Deactivated with #i89580# but left for reference in case 
+/* NOTE: We had this, derived from Transliteration_caseignore, but it was
+ * unused code. Deactivated with #i89580# but left for reference in case
  * MappingTypeSimpleFolding would be needed at some time.
  */
 Transliteration_simplecaseignore::Transliteration_simplecaseignore()
@@ -63,7 +63,7 @@ Transliteration_simplecaseignore::Transliteration_simplecaseignore()
 }
 #endif
 
-void SAL_CALL 
+void SAL_CALL
 Transliteration_caseignore::loadModule( TransliterationModules modName, const Locale& rLocale )
     throw(RuntimeException)
 {
@@ -79,7 +79,7 @@ sal_Int16 SAL_CALL Transliteration_caseignore::getType() throw(RuntimeException)
 
 
 Sequence< OUString > SAL_CALL
-Transliteration_caseignore::transliterateRange( const OUString& str1, const OUString& str2 ) 
+Transliteration_caseignore::transliterateRange( const OUString& str1, const OUString& str2 )
     throw( RuntimeException)
 {
     if (str1.getLength() != 1 || str2.getLength() != 1)

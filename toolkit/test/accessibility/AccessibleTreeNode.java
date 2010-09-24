@@ -23,14 +23,14 @@ class AccessibleTreeNode
         // Empty
     }
 
-    public AccessibleTreeNode getParent () 
+    public AccessibleTreeNode getParent ()
     {
-        return maParent; 
+        return maParent;
     }
 
-    public Object getDisplayObject () 
+    public Object getDisplayObject ()
     {
-        return maDisplayObject; 
+        return maDisplayObject;
     }
 
     public int getChildCount ()
@@ -78,7 +78,7 @@ class AccessibleTreeNode
         return aPath.toArray();
     }
 
-    public boolean isLeaf() 
+    public boolean isLeaf()
     {
         return true;
     }
@@ -89,13 +89,13 @@ class AccessibleTreeNode
     }
 
     /** get names of suported actions */
-    public String[] getActions () 
-    { 
+    public String[] getActions ()
+    {
         return new String[] {};
     }
 
     /** perform action */
-    public void performAction (int nIndex) 
+    public void performAction (int nIndex)
     {
     }
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ public:
                             TYPEINFO();
                             TbxImageItem( USHORT nWhich = 0, UINT16 nImage = 0 );
 
-    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
-    virtual int 			operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual int             operator==( const SfxPoolItem& ) const;
 };
 
 // -------------------------------
@@ -56,13 +56,13 @@ class SVX_DLLPUBLIC SvxGrafFilterToolBoxControl : public SfxToolBoxControl
 public:
 
                                 SFX_DECL_TOOLBOX_CONTROL();
-                                
+
                                 SvxGrafFilterToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
                                 ~SvxGrafFilterToolBoxControl();
 
-    virtual void				StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual SfxPopupWindowType	GetPopupWindowType() const;
-    virtual SfxPopupWindow*		CreatePopupWindow();
+    virtual void                StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual SfxPopupWindowType  GetPopupWindowType() const;
+    virtual SfxPopupWindow*     CreatePopupWindow();
 };
 
 // -------------------------
@@ -77,8 +77,8 @@ public:
                         SvxGrafToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
                         ~SvxGrafToolBoxControl();
 
-    virtual void		StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual Window*		CreateItemWindow( Window *pParent );
+    virtual void        StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual Window*     CreateItemWindow( Window *pParent );
 };
 
 // ----------------------------
@@ -169,8 +169,8 @@ public:
                         SvxGrafModeToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
                         ~SvxGrafModeToolBoxControl();
 
-    virtual void		StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual Window*		CreateItemWindow( Window *pParent );
+    virtual void        StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual Window*     CreateItemWindow( Window *pParent );
 };
 
 // ---------------------
@@ -184,8 +184,8 @@ class SVX_DLLPUBLIC SvxGrafAttrHelper
 {
 public:
 
-    static void		ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView );
-    static void		GetGrafAttrState( SfxItemSet& rSet, SdrView& rView );
+    static void     ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView );
+    static void     GetGrafAttrState( SfxItemSet& rSet, SdrView& rView );
 };
 
 #endif // _SVX_GRAFCTRL_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,17 +37,17 @@
 class IntroWindow_Impl : public WorkWindow
 {
 private:
-    Bitmap			aIntroBmp;
+    Bitmap          aIntroBmp;
 
-    void			Init();
+    void            Init();
 
 public:
     IntroWindow_Impl( const Bitmap& rBmp );
     ~IntroWindow_Impl();
 
-    virtual void	Paint( const Rectangle& );
+    virtual void    Paint( const Rectangle& );
 
-    void			Slide();
+    void            Slide();
 };
 
 #endif // #ifndef _SFX_INTRO_HXX

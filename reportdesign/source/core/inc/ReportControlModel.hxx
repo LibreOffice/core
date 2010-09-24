@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,19 +51,19 @@ namespace reportdesign
 
     struct OFormatProperties
     {
-        ::sal_Int16			                                nAlign;
-        ::com::sun::star::awt::FontDescriptor				aFontDescriptor;
-        ::com::sun::star::awt::FontDescriptor				aAsianFontDescriptor;
-        ::com::sun::star::awt::FontDescriptor				aComplexFontDescriptor;
+        ::sal_Int16                                         nAlign;
+        ::com::sun::star::awt::FontDescriptor               aFontDescriptor;
+        ::com::sun::star::awt::FontDescriptor               aAsianFontDescriptor;
+        ::com::sun::star::awt::FontDescriptor               aComplexFontDescriptor;
         ::com::sun::star::lang::Locale                      aCharLocale;
         ::com::sun::star::lang::Locale                      aCharLocaleAsian;
         ::com::sun::star::lang::Locale                      aCharLocaleComplex;
-        ::sal_Int16											nFontEmphasisMark;
-        ::sal_Int16											nFontRelief;
-        ::sal_Int32											nTextColor;
-        ::sal_Int32											nTextLineColor;
-        ::sal_Int32											nCharUnderlineColor;
-        ::sal_Int32											nBackgroundColor;
+        ::sal_Int16                                         nFontEmphasisMark;
+        ::sal_Int16                                         nFontRelief;
+        ::sal_Int32                                         nTextColor;
+        ::sal_Int32                                         nTextLineColor;
+        ::sal_Int32                                         nCharUnderlineColor;
+        ::sal_Int32                                         nBackgroundColor;
         ::rtl::OUString                                     sCharCombinePrefix;
         ::rtl::OUString                                     sCharCombineSuffix;
         ::rtl::OUString                                     sHyperLinkURL;
@@ -72,17 +72,17 @@ namespace reportdesign
         ::rtl::OUString                                     sVisitedCharStyleName;
         ::rtl::OUString                                     sUnvisitedCharStyleName;
         com::sun::star::style::VerticalAlignment            aVerticalAlignment;
-        ::sal_Int16											nCharEscapement;
-        ::sal_Int16											nCharCaseMap;
-        ::sal_Int16											nCharKerning;
-        ::sal_Int8										    nCharEscapementHeight;
-        ::sal_Bool										    m_bBackgroundTransparent;
-        ::sal_Bool										    bCharFlash;
-        ::sal_Bool										    bCharAutoKerning;
-        ::sal_Bool										    bCharCombineIsOn;
-        ::sal_Bool										    bCharHidden;
-        ::sal_Bool										    bCharShadowed;
-        ::sal_Bool										    bCharContoured;
+        ::sal_Int16                                         nCharEscapement;
+        ::sal_Int16                                         nCharCaseMap;
+        ::sal_Int16                                         nCharKerning;
+        ::sal_Int8                                          nCharEscapementHeight;
+        ::sal_Bool                                          m_bBackgroundTransparent;
+        ::sal_Bool                                          bCharFlash;
+        ::sal_Bool                                          bCharAutoKerning;
+        ::sal_Bool                                          bCharCombineIsOn;
+        ::sal_Bool                                          bCharHidden;
+        ::sal_Bool                                          bCharShadowed;
+        ::sal_Bool                                          bCharContoured;
         OFormatProperties();
     };
     class OReportControlModel
@@ -91,16 +91,16 @@ namespace reportdesign
         OReportControlModel(OReportControlModel&);
         void operator =(OReportControlModel&);
     public:
-        ::cppu::OInterfaceContainerHelper		            aContainerListeners;
-        OReportComponentProperties							aComponent;
-        OFormatProperties									aFormatProperties;
+        ::cppu::OInterfaceContainerHelper                   aContainerListeners;
+        OReportComponentProperties                          aComponent;
+        OFormatProperties                                   aFormatProperties;
         ::com::sun::star::container::XContainer*            m_pOwner;
-        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormatCondition> > 
+        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormatCondition> >
                                                             m_aFormatConditions;
         osl::Mutex&                                         m_rMutex;
-        ::rtl::OUString										aDataField;
-        ::rtl::OUString										aConditionalPrintExpression;
-        sal_Bool											bPrintWhenGroupChange;
+        ::rtl::OUString                                     aDataField;
+        ::rtl::OUString                                     aConditionalPrintExpression;
+        sal_Bool                                            bPrintWhenGroupChange;
 
         OReportControlModel(osl::Mutex& _rMutex
                             ,::com::sun::star::container::XContainer* _pOwner

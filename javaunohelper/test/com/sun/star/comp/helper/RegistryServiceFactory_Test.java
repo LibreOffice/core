@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,10 +50,10 @@ import com.sun.star.loader.XImplementationLoader;
 import com.sun.star.registry.XSimpleRegistry;
 
 public class RegistryServiceFactory_Test {
-    
+
     static public boolean test(String applicat) throws java.lang.Exception {
         boolean passed = false;
-        System.err.println();			
+        System.err.println();
         System.out.println("*******************************************************************");
         System.err.println("RegistryServiceFactory - doing tests...");
         System.err.println();
@@ -66,12 +66,12 @@ public class RegistryServiceFactory_Test {
             if (services.length == 0)
                 System.out.println("No services avialable!");
 
-            else 			
+            else
                 for ( int i=0; i<services.length; i++ )
                     System.out.println(services[i]);
-                    
+
             passed = true;
-        }		
+        }
         catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,7 +94,7 @@ public class RegistryServiceFactory_Test {
     static public void main(String args[]) throws java.lang.Exception {
         if ( args.length != 1 )
             usage();
-        System.exit( test(args[0]) == true ? 0: -1 );		
+        System.exit( test(args[0]) == true ? 0: -1 );
     }
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ SwLabelConfig::~SwLabelConfig()
 /* -----------------------------06.09.00 16:43--------------------------------
 
  ---------------------------------------------------------------------------*/
-void	SwLabelConfig::Commit()
+void    SwLabelConfig::Commit()
 {
     // the config item is not writable yet
 }
@@ -125,11 +125,11 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
     return pNewRec;
 }
 //-----------------------------------------------------------------------------
-Sequence<PropertyValue>	lcl_CreateProperties(
+Sequence<PropertyValue> lcl_CreateProperties(
     Sequence<OUString>& rPropNames, const SwLabRec& rRec)
 {
     const OUString* pNames = rPropNames.getConstArray();
-    Sequence<PropertyValue>	aRet(rPropNames.getLength());
+    Sequence<PropertyValue> aRet(rPropNames.getLength());
     PropertyValue* pValues = aRet.getArray();
     OUString sColon(C2U(";"));
 
@@ -159,7 +159,7 @@ Sequence<PropertyValue>	lcl_CreateProperties(
     return aRet;
 }
 //-----------------------------------------------------------------------------
-void	SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr)
+void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr)
 {
     OUString sManufacturer(wrapConfigurationElementName(rManufacturer));
     const Sequence<OUString> aLabels = GetNodeNames(sManufacturer);
@@ -171,7 +171,7 @@ void	SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr
         sPrefix += pLabels[nLabel];
         sPrefix += C2U("/");
         Sequence<OUString> aPropNames = lcl_CreatePropertyNames(sPrefix);
-        Sequence<Any>	aValues = GetProperties(aPropNames);
+        Sequence<Any>   aValues = GetProperties(aPropNames);
         SwLabRec* pNewRec = lcl_CreateSwLabRec(aValues, rManufacturer);
         rLabArr.C40_INSERT( SwLabRec, pNewRec, rLabArr.Count() );
     }
@@ -179,7 +179,7 @@ void	SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr
 /* -----------------------------23.01.01 11:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Bool	SwLabelConfig::HasLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType)
+sal_Bool    SwLabelConfig::HasLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType)
 {
     const OUString* pNode = aNodeNames.getConstArray();
     sal_Bool bFound = sal_False;
@@ -202,7 +202,7 @@ sal_Bool	SwLabelConfig::HasLabel(const rtl::OUString& rManufacturer, const rtl::
             Sequence<OUString> aProperties(1);
             aProperties.getArray()[0] = sPrefix;
             aProperties.getArray()[0] += C2U("Name");
-            Sequence<Any>	aValues = GetProperties(aProperties);
+            Sequence<Any>   aValues = GetProperties(aProperties);
             const Any* pValues = aValues.getConstArray();
             if(pValues[0].hasValue())
             {
@@ -227,8 +227,8 @@ sal_Bool lcl_Exists(const OUString& rNode, const Sequence<OUString>& rLabels)
     return sal_False;
 }
 //-----------------------------------------------------------------------------
-void SwLabelConfig::SaveLabel( 	const rtl::OUString& rManufacturer,
-        const rtl::OUString& rType,	const SwLabRec& rRec)
+void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
+        const rtl::OUString& rType, const SwLabRec& rRec)
 {
     const OUString* pNode = aNodeNames.getConstArray();
     sal_Bool bFound = sal_False;
@@ -263,7 +263,7 @@ void SwLabelConfig::SaveLabel( 	const rtl::OUString& rManufacturer,
         Sequence<OUString> aProperties(1);
         aProperties.getArray()[0] = sPrefix;
         aProperties.getArray()[0] += C2U("Name");
-        Sequence<Any>	aValues = GetProperties(aProperties);
+        Sequence<Any>   aValues = GetProperties(aProperties);
         const Any* pValues = aValues.getConstArray();
         if(pValues[0].hasValue())
         {
@@ -294,7 +294,7 @@ void SwLabelConfig::SaveLabel( 	const rtl::OUString& rManufacturer,
     sPrefix += sFoundNode;
     sPrefix += C2U("/");
     Sequence<OUString> aPropNames = lcl_CreatePropertyNames(sPrefix);
-    Sequence<PropertyValue>	aPropValues = lcl_CreateProperties(aPropNames, rRec);
+    Sequence<PropertyValue> aPropValues = lcl_CreateProperties(aPropNames, rRec);
     SetSetProperties(wrapConfigurationElementName(rManufacturer), aPropValues);
 
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
-#include <swundo.hxx>			// fuer die UndoIds
+#include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>
@@ -93,9 +93,9 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 // zwei Zugriffs-Funktionen
 inline SwPosition* IterPt( SwUndoIter& rUIter )
-{	return rUIter.pAktPam->GetPoint();	}
+{   return rUIter.pAktPam->GetPoint();  }
 inline SwPosition* IterMk( SwUndoIter& rUIter )
-{	return rUIter.pAktPam->GetMark();	}
+{   return rUIter.pAktPam->GetMark();   }
 
 //------------------------------------------------------------
 
@@ -241,7 +241,7 @@ SwUndoInsert::~SwUndoInsert()
                                     pPos->nNode.GetIndex() );
         delete pPos;
     }
-    else if( pTxt )		// der eingefuegte Text
+    else if( pTxt )     // der eingefuegte Text
         delete pTxt;
     delete pRedlData;
 }
@@ -291,7 +291,7 @@ void SwUndoInsert::Undo( SwUndoIter& rUndoIter )
                 pTxt = new String( pTxtNode->GetTxt().Copy(nCntnt-nLen, nLen) );
                 pTxtNode->EraseText( aPaM.GetPoint()->nContent, nLen );
             }
-            else				// ansonsten Grafik/OLE/Text/...
+            else                // ansonsten Grafik/OLE/Text/...
             {
                 aPaM.Move(fnMoveBackward);
                 if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
@@ -412,7 +412,7 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
     SwNodeIndex aNd( rDoc.GetNodes(), nNode );
     SwCntntNode* pCNd = aNd.GetNode().GetCntntNode();;
 
-    if( !bIsAppend && 1 == nLen )		// >1 dann immer nur Text, ansonsten Grafik/OLE/Text/...
+    if( !bIsAppend && 1 == nLen )       // >1 dann immer nur Text, ansonsten Grafik/OLE/Text/...
     {
         SwPaM aPaM( *pCNd, nCntnt );
         aPaM.SetMark();
@@ -529,7 +529,7 @@ void SwUndoReplace::Undo( SwUndoIter& rUndoIter )
 
     aArr[ --nAktPos ]->Undo( rUndoIter );
 
-    if( !nAktPos )		// alten Status wieder zurueck
+    if( !nAktPos )      // alten Status wieder zurueck
         rUndoIter.bWeiter = bOldIterFlag;
 }
 
@@ -548,7 +548,7 @@ void SwUndoReplace::Redo( SwUndoIter& rUndoIter )
 
     aArr[ nAktPos ]->Redo( rUndoIter );
 
-    if( ++nAktPos >= aArr.Count() )	// alten Status wieder zurueck
+    if( ++nAktPos >= aArr.Count() ) // alten Status wieder zurueck
     {
         nAktPos = USHRT_MAX;
         rUndoIter.bWeiter = bOldIterFlag;

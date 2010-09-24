@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,65 +33,65 @@
 
 typedef struct LSElem
 {
-    Cstring *			pData;
-    struct LSElem *	pNext;
+    Cstring *           pData;
+    struct LSElem * pNext;
 } LSElem;
 
 
 typedef struct LSIterator
 {
-    LSElem *       	pElement;
+    LSElem *        pElement;
 } LSIterator;
 
 
 typedef struct ListCstring
 {
-    LSElem *			dpStart;
-    LSElem *			pEnd;
+    LSElem *            dpStart;
+    LSElem *            pEnd;
     Bool                bAutoDeleteData;
 } ListCstring;
 
 
-#define ListCstring_THIS  	ListCstring * pThis
-#define LSIterator_THIS	LSIterator * pThis
-#define LSElem_THIS	    LSElem * pThis
+#define ListCstring_THIS    ListCstring * pThis
+#define LSIterator_THIS LSIterator * pThis
+#define LSElem_THIS     LSElem * pThis
 
 
 
-void				ListCstring_CTOR( ListCstring_THIS,
+void                ListCstring_CTOR( ListCstring_THIS,
                         Bool                i_bAutoDeleteData );
-void				ListCstring_DTOR( ListCstring_THIS );
+void                ListCstring_DTOR( ListCstring_THIS );
 
-void				LS_Add( ListCstring_THIS,
-                        Cstring *			i_pData );
-void				LS_Empty( ListCstring_THIS,
-                        Bool				i_bDeleteData );
-void				LS_Append( ListCstring_THIS,
-                        char *				i_sStrings[],
+void                LS_Add( ListCstring_THIS,
+                        Cstring *           i_pData );
+void                LS_Empty( ListCstring_THIS,
+                        Bool                i_bDeleteData );
+void                LS_Append( ListCstring_THIS,
+                        char *              i_sStrings[],
                         intt                i_nNrOfStrings );
-Bool				LS_IsEmpty( ListCstring_THIS );
+Bool                LS_IsEmpty( ListCstring_THIS );
 
-LSIterator			LS_Begin( ListCstring_THIS );
-
-
-void				LSIterator_CTOR( LSIterator_THIS,
-                        LSElem *     		i_pElement );
-void				LSI_opp( LSIterator_THIS );  	/** operator++() */
-
-Bool				LSI_obool( LSIterator_THIS );
-Cstring *			LSI_optr( LSIterator_THIS );  	/** operator->() */
+LSIterator          LS_Begin( ListCstring_THIS );
 
 
-void				LSElem_CTOR( LSElem_THIS,
-                        Cstring *			i_pData );
-void				LSElem_DTOR( LSElem_THIS );
+void                LSIterator_CTOR( LSIterator_THIS,
+                        LSElem *            i_pElement );
+void                LSI_opp( LSIterator_THIS );     /** operator++() */
 
-Cstring *			LSE_Data( LSElem_THIS );
-LSElem *			LSE_Next( LSElem_THIS );
+Bool                LSI_obool( LSIterator_THIS );
+Cstring *           LSI_optr( LSIterator_THIS );    /** operator->() */
 
-void				LSE_SetNext( LSElem_THIS,
-                        LSElem *			i_pNext );
-void				LSE_DeleteData( LSElem_THIS );
+
+void                LSElem_CTOR( LSElem_THIS,
+                        Cstring *           i_pData );
+void                LSElem_DTOR( LSElem_THIS );
+
+Cstring *           LSE_Data( LSElem_THIS );
+LSElem *            LSE_Next( LSElem_THIS );
+
+void                LSE_SetNext( LSElem_THIS,
+                        LSElem *            i_pNext );
+void                LSE_DeleteData( LSElem_THIS );
 
 
 

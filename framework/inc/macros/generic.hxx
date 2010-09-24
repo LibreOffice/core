@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,14 +29,14 @@
 #define __FRAMEWORK_MACROS_GENERIC_HXX_
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include <rtl/ustring.hxx>
 #include <rtl/textenc.h>
 
 //*****************************************************************************************************************
-//	generic macros
+//  generic macros
 //*****************************************************************************************************************
 
 /*_________________________________________________________________________________________________________________
@@ -46,7 +46,7 @@
     zB. OUSting sTest = DECLARE_ASCII( "Test" )
 _________________________________________________________________________________________________________________*/
 
-#define	DECLARE_ASCII( SASCIIVALUE )																			\
+#define DECLARE_ASCII( SASCIIVALUE )                                                                            \
     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
 
 /*_________________________________________________________________________________________________________________
@@ -59,20 +59,20 @@ ________________________________________________________________________________
     We use UTF8 as default textencoding. If you will change this use U2B_ENC and B2U_ENC!
 _________________________________________________________________________________________________________________*/
 
-#define	U2B( SUNICODEVALUE )																					\
+#define U2B( SUNICODEVALUE )                                                                                    \
     ::rtl::OUStringToOString( SUNICODEVALUE, RTL_TEXTENCODING_UTF8 )
 
-#define	B2U( SASCIIVALUE )																						\
+#define B2U( SASCIIVALUE )                                                                                      \
     ::rtl::OStringToOUString( SASCIIVALUE, RTL_TEXTENCODING_UTF8 )
 
-#define	U2B_ENC( SUNICODEVALUE, AENCODING )																		\
+#define U2B_ENC( SUNICODEVALUE, AENCODING )                                                                     \
     ::rtl::OUStringToOString( SUNICODEVALUE, AENCODING )
 
-#define	B2U_ENC( SASCIIVALUE, AENCODING )																		\
+#define B2U_ENC( SASCIIVALUE, AENCODING )                                                                       \
     ::rtl::OStringToOUString( SASCIIVALUE, AENCODING )
 
 //*****************************************************************************************************************
-//	end of file
+//  end of file
 //*****************************************************************************************************************
 
-#endif	//	#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
+#endif  //  #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_

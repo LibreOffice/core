@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,21 +58,21 @@ public:
     virtual ImplFontData*   Clone() const;
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
     virtual sal_IntPtr      GetFontId() const;
-    
-    ImplFontCharMap*		GetImplFontCharMap() const;
-    bool					HasChar( sal_uInt32 cChar ) const;
 
-    void					ReadOs2Table() const;
-    void					ReadMacCmapEncoding() const;
-    bool					HasCJKSupport() const;
+    ImplFontCharMap*        GetImplFontCharMap() const;
+    bool                    HasChar( sal_uInt32 cChar ) const;
+
+    void                    ReadOs2Table() const;
+    void                    ReadMacCmapEncoding() const;
+    bool                    HasCJKSupport() const;
 
 private:
-    const ATSUFontID			mnFontId;
-    mutable ImplFontCharMap*	mpCharMap;
-    mutable bool				mbOs2Read;		 // true if OS2-table related info is valid
-    mutable bool				mbHasOs2Table;
-    mutable bool				mbCmapEncodingRead; // true if cmap encoding of Mac font is read
-    mutable bool				mbHasCJKSupport; // #i78970# CJK fonts need extra leading
+    const ATSUFontID            mnFontId;
+    mutable ImplFontCharMap*    mpCharMap;
+    mutable bool                mbOs2Read;       // true if OS2-table related info is valid
+    mutable bool                mbHasOs2Table;
+    mutable bool                mbCmapEncodingRead; // true if cmap encoding of Mac font is read
+    mutable bool                mbHasCJKSupport; // #i78970# CJK fonts need extra leading
 };
 
 // abstracting quartz color instead of having to use an CGFloat[] array
@@ -81,9 +81,9 @@ class RGBAColor
 public:
     RGBAColor( SalColor );
     RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha ); //NOTUSEDYET
-    const float* AsArray() const	{ return &mfRed; }
-    bool IsVisible() const			{ return (mfAlpha > 0); }
-    void SetAlpha( float fAlpha )	{ mfAlpha = fAlpha; }
+    const float* AsArray() const    { return &mfRed; }
+    bool IsVisible() const          { return (mfAlpha > 0); }
+    void SetAlpha( float fAlpha )   { mfAlpha = fAlpha; }
 private:
     float mfRed, mfGreen, mfBlue, mfAlpha;
 };
@@ -96,13 +96,13 @@ class AquaSalGraphics : public SalGraphics
     friend class ATSLayout;
 protected:
     AquaSalFrame*                           mpFrame;
-    CGLayerRef								mxLayer;	// Quartz graphics layer
-    CGContextRef		                    mrContext;	// Quartz drawing context
-    class XorEmulation*						mpXorEmulation;
+    CGLayerRef                              mxLayer;    // Quartz graphics layer
+    CGContextRef                            mrContext;  // Quartz drawing context
+    class XorEmulation*                     mpXorEmulation;
     int                                     mnXorMode; // 0: off 1: on 2: invert only
-    int										mnWidth;
-    int										mnHeight;
-    int										mnBitmapDepth;	// zero unless bitmap
+    int                                     mnWidth;
+    int                                     mnHeight;
+    int                                     mnBitmapDepth;  // zero unless bitmap
     /// device resolution of this graphics
     long                                    mnRealDPIX;
     long                                    mnRealDPIY;
@@ -114,7 +114,7 @@ protected:
     /// path representing current clip region
     CGMutablePathRef                        mxClipPath;
 
-    /// Drawing colors    
+    /// Drawing colors
     /// pen color RGBA
     RGBAColor                               maLineColor;
     /// brush color RGBA
@@ -123,7 +123,7 @@ protected:
     // Device Font settings
      const ImplMacFontData*                  mpMacFontData;
     /// ATSU style object which carries all font attributes
-    ATSUStyle			                    maATSUStyle;
+    ATSUStyle                               maATSUStyle;
     /// text rotation as ATSU angle
     Fixed                                   mnATSUIRotation;
     /// workaround to prevent ATSU overflows for huge font sizes
@@ -134,7 +134,7 @@ protected:
     bool                                    mbNonAntialiasedText;
 
     // Graphics types
-    
+
     /// is this a printer graphics
     bool                                    mbPrinter;
     /// is this a virtual device graphics
@@ -143,12 +143,12 @@ protected:
     bool                                    mbWindow;
 
 public:
-    AquaSalGraphics();	
+    AquaSalGraphics();
     virtual ~AquaSalGraphics();
 
-    bool                IsPenVisible() const	{ return maLineColor.IsVisible(); }
-    bool                IsBrushVisible() const	{ return maFillColor.IsVisible(); }
-    
+    bool                IsPenVisible() const    { return maLineColor.IsVisible(); }
+    bool                IsBrushVisible() const  { return maFillColor.IsVisible(); }
+
     void                SetWindowGraphics( AquaSalFrame* pFrame );
     void                SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY, double fFakeScale );
     void                SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0 );
@@ -156,7 +156,7 @@ public:
     void                initResolution( NSWindow* );
     void                copyResolution( AquaSalGraphics& );
     void                updateResolution();
-    
+
     bool                IsWindowGraphics()      const   { return mbWindow; }
     bool                IsPrinterGraphics()     const   { return mbPrinter; }
     bool                IsVirDevGraphics()      const   { return mbVirDev; }
@@ -164,67 +164,67 @@ public:
     void                setGraphicsFrame( AquaSalFrame* pFrame ) { mpFrame = pFrame; }
 
     void                ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
-    
+
     bool                CheckContext();
     void                UpdateWindow( NSRect& ); // delivered in NSView coordinates
-    void				RefreshRect( const CGRect& );
-    void				RefreshRect( const NSRect& );
-    void				RefreshRect(float lX, float lY, float lWidth, float lHeight);
+    void                RefreshRect( const CGRect& );
+    void                RefreshRect( const NSRect& );
+    void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void                SetState();
     void                UnsetState();
     // InvalidateContext does an UnsetState and sets mrContext to 0
     void                InvalidateContext();
 
-    virtual BOOL		unionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual bool		unionClipRegion( const ::basegfx::B2DPolyPolygon& );
+    virtual BOOL        unionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual bool        unionClipRegion( const ::basegfx::B2DPolyPolygon& );
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    virtual void		drawPixel( long nX, long nY );
-    virtual void		drawPixel( long nX, long nY, SalColor nSalColor );
-    virtual void		drawLine( long nX1, long nY1, long nX2, long nY2 );
-    virtual void		drawRect( long nX, long nY, long nWidth, long nHeight );
-    virtual void		drawPolyLine( ULONG nPoints, const SalPoint* pPtAry );
-    virtual void		drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
-    virtual void		drawPolyPolygon( ULONG nPoly, const ULONG* pPoints, PCONSTSALPOINT* pPtAry );
+    virtual void        drawPixel( long nX, long nY );
+    virtual void        drawPixel( long nX, long nY, SalColor nSalColor );
+    virtual void        drawLine( long nX1, long nY1, long nX2, long nY2 );
+    virtual void        drawRect( long nX, long nY, long nWidth, long nHeight );
+    virtual void        drawPolyLine( ULONG nPoints, const SalPoint* pPtAry );
+    virtual void        drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
+    virtual void        drawPolyPolygon( ULONG nPoly, const ULONG* pPoints, PCONSTSALPOINT* pPtAry );
     virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
-    virtual sal_Bool	drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
-    virtual sal_Bool	drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
-    virtual sal_Bool	drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
+    virtual sal_Bool    drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
+    virtual sal_Bool    drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
+    virtual sal_Bool    drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
     virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin );
 
     // CopyArea --> No RasterOp, but ClipRegion
-    virtual void		copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
+    virtual void        copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
                                   long nSrcHeight, USHORT nFlags );
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    virtual void		copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics );
-    virtual void		drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap );
-    virtual void		drawBitmap( const SalTwoRect* pPosAry,
+    virtual void        copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics );
+    virtual void        drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap );
+    virtual void        drawBitmap( const SalTwoRect* pPosAry,
                                     const SalBitmap& rSalBitmap,
                                     SalColor nTransparentColor );
-    virtual void		drawBitmap( const SalTwoRect* pPosAry,
+    virtual void        drawBitmap( const SalTwoRect* pPosAry,
                                     const SalBitmap& rSalBitmap,
                                     const SalBitmap& rTransparentBitmap );
-    virtual void		drawMask( const SalTwoRect* pPosAry,
+    virtual void        drawMask( const SalTwoRect* pPosAry,
                                   const SalBitmap& rSalBitmap,
                                   SalColor nMaskColor );
 
-    virtual SalBitmap*	getBitmap( long nX, long nY, long nWidth, long nHeight );
-    virtual SalColor	getPixel( long nX, long nY );
+    virtual SalBitmap*  getBitmap( long nX, long nY, long nWidth, long nHeight );
+    virtual SalColor    getPixel( long nX, long nY );
 
     // invert --> ClipRegion (only Windows or VirDevs)
-    virtual void		invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags);
-    virtual void		invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nFlags );
+    virtual void        invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags);
+    virtual void        invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
-    virtual BOOL		drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
+    virtual BOOL        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
 
-    virtual bool 			drawAlphaBitmap( const SalTwoRect&,
+    virtual bool            drawAlphaBitmap( const SalTwoRect&,
                                              const SalBitmap& rSourceBitmap,
                                              const SalBitmap& rAlphaBitmap );
 
-    virtual bool		    drawAlphaRect( long nX, long nY, long nWidth,
+    virtual bool            drawAlphaRect( long nX, long nY, long nWidth,
                                            long nHeight, sal_uInt8 nTransparency );
 
     CGPoint*                makeCGptArray(ULONG nPoints, const SalPoint*  pPtAry);
@@ -242,52 +242,52 @@ public:
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
     // get device resolution
-    virtual void			GetResolution( long& rDPIX, long& rDPIY );
+    virtual void            GetResolution( long& rDPIX, long& rDPIY );
     // get the depth of the device
-    virtual USHORT			GetBitCount();
+    virtual USHORT          GetBitCount();
     // get the width of the device
-    virtual long			GetGraphicsWidth() const;
+    virtual long            GetGraphicsWidth() const;
 
     // set the clip region to empty
-    virtual void			ResetClipRegion();
+    virtual void            ResetClipRegion();
     // begin setting the clip region, add rectangles to the
     // region with the UnionClipRegion call
-    virtual void			BeginSetClipRegion( ULONG nCount );
+    virtual void            BeginSetClipRegion( ULONG nCount );
     // all rectangles were added and the clip region should be set now
-    virtual void			EndSetClipRegion();
+    virtual void            EndSetClipRegion();
 
     // set the line color to transparent (= don't draw lines)
-    virtual void			SetLineColor();
+    virtual void            SetLineColor();
     // set the line color to a specific color
-    virtual void			SetLineColor( SalColor nSalColor );
+    virtual void            SetLineColor( SalColor nSalColor );
     // set the fill color to transparent (= don't fill)
-    virtual void			SetFillColor();
+    virtual void            SetFillColor();
     // set the fill color to a specific color, shapes will be
     // filled accordingly
-    virtual void          	SetFillColor( SalColor nSalColor );
+    virtual void            SetFillColor( SalColor nSalColor );
     // enable/disable XOR drawing
-    virtual void			SetXORMode( bool bSet, bool bInvertOnly );
+    virtual void            SetXORMode( bool bSet, bool bInvertOnly );
     // set line color for raster operations
-    virtual void			SetROPLineColor( SalROPColor nROPColor );
+    virtual void            SetROPLineColor( SalROPColor nROPColor );
     // set fill color for raster operations
-    virtual void			SetROPFillColor( SalROPColor nROPColor );
+    virtual void            SetROPFillColor( SalROPColor nROPColor );
     // set the text color to a specific color
-    virtual void			SetTextColor( SalColor nSalColor );
+    virtual void            SetTextColor( SalColor nSalColor );
     // set the font
     virtual USHORT         SetFont( ImplFontSelectData*, int nFallbackLevel );
     // get the current font's etrics
-    virtual void			GetFontMetric( ImplFontMetricData* );
+    virtual void            GetFontMetric( ImplFontMetricData* );
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
-    virtual ULONG			GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
+    virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
     virtual ImplFontCharMap* GetImplFontCharMap() const;
     // graphics must fill supplied font list
-    virtual void			GetDevFontList( ImplDevFontList* );
+    virtual void            GetDevFontList( ImplDevFontList* );
     // graphics should call ImplAddDevFontSubstitute on supplied
     // OutputDevice for all its device specific preferred font substitutions
-    virtual void			GetDevFontSubstList( OutputDevice* );
-    virtual bool			AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
+    virtual void            GetDevFontSubstList( OutputDevice* );
+    virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
     // CreateFontSubset: a method to get a subset of glyhps of a font
     // inside a new valid font file
     // returns TRUE if creation of subset was successfull
@@ -300,7 +300,7 @@ public:
     //             rInfo: additional outgoing information
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
-    virtual BOOL			CreateFontSubset( const rtl::OUString& rToFile,
+    virtual BOOL            CreateFontSubset( const rtl::OUString& rToFile,
                                               const ImplFontData* pFont,
                                               long* pGlyphIDs,
                                               sal_uInt8* pEncoding,
@@ -325,13 +325,13 @@ public:
     //                      pWidths MUST support at least 256 members;
     //             rInfo: additional outgoing information
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void*	GetEmbedFontData( const ImplFontData*,
+    virtual const void* GetEmbedFontData( const ImplFontData*,
                                           const sal_Ucs* pUnicodes,
                                           sal_Int32* pWidths,
                                           FontSubsetInfo& rInfo,
                                           long* pDataLen );
     // frees the font data again
-    virtual void			FreeEmbedFontData( const void* pData, long nDataLen );
+    virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
 
     virtual void            GetGlyphWidths( const ImplFontData*,
                                             bool bVertical,
@@ -342,7 +342,7 @@ public:
     virtual BOOL                    GetGlyphOutline( long nIndex, basegfx::B2DPolyPolygon& );
 
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
-    virtual void					 DrawServerFontLayout( const ServerFontLayout& );
+    virtual void                     DrawServerFontLayout( const ServerFontLayout& );
     virtual bool                    supportsOperation( OutDevSupportType ) const;
 
     // Query the platform layer for control support
@@ -366,25 +366,25 @@ class XorEmulation
 {
 public:
                     XorEmulation();
-    /*final*/		~XorEmulation();
+    /*final*/       ~XorEmulation();
 
-    void			SetTarget( int nWidth, int nHeight, int nBitmapDepth, CGContextRef, CGLayerRef );
-    bool			UpdateTarget();
-    void			Enable()			{ mbIsEnabled = true; }
-    void			Disable()			{ mbIsEnabled = false; }
-    bool 			IsEnabled() const	{ return mbIsEnabled; }
-    CGContextRef	GetTargetContext() const { return mxTargetContext; }
-    CGContextRef	GetMaskContext() const { return (mbIsEnabled ? mxMaskContext : NULL); }
+    void            SetTarget( int nWidth, int nHeight, int nBitmapDepth, CGContextRef, CGLayerRef );
+    bool            UpdateTarget();
+    void            Enable()            { mbIsEnabled = true; }
+    void            Disable()           { mbIsEnabled = false; }
+    bool            IsEnabled() const   { return mbIsEnabled; }
+    CGContextRef    GetTargetContext() const { return mxTargetContext; }
+    CGContextRef    GetMaskContext() const { return (mbIsEnabled ? mxMaskContext : NULL); }
 
 private:
-    CGLayerRef		mxTargetLayer;
-    CGContextRef	mxTargetContext;
-    CGContextRef	mxMaskContext;
-    CGContextRef	mxTempContext;
-    ULONG*			mpMaskBuffer;
-    ULONG*			mpTempBuffer;
-    int				mnBufferLongs;
-    bool			mbIsEnabled;
+    CGLayerRef      mxTargetLayer;
+    CGContextRef    mxTargetContext;
+    CGContextRef    mxMaskContext;
+    CGContextRef    mxTempContext;
+    ULONG*          mpMaskBuffer;
+    ULONG*          mpTempBuffer;
+    int             mnBufferLongs;
+    bool            mbIsEnabled;
 };
 
 
@@ -401,17 +401,17 @@ inline void AquaSalGraphics::RefreshRect( const NSRect& rRect )
 }
 
 inline RGBAColor::RGBAColor( SalColor nSalColor )
-:	mfRed( SALCOLOR_RED(nSalColor) * (1.0/255))
-,	mfGreen( SALCOLOR_GREEN(nSalColor) * (1.0/255))
-,	mfBlue( SALCOLOR_BLUE(nSalColor) * (1.0/255))
-,	mfAlpha( 1.0 )	// opaque
+:   mfRed( SALCOLOR_RED(nSalColor) * (1.0/255))
+,   mfGreen( SALCOLOR_GREEN(nSalColor) * (1.0/255))
+,   mfBlue( SALCOLOR_BLUE(nSalColor) * (1.0/255))
+,   mfAlpha( 1.0 )  // opaque
 {}
 
 inline RGBAColor::RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha )
-:	mfRed( fRed )
-,	mfGreen( fGreen )
-,	mfBlue( fBlue )
-,	mfAlpha( fAlpha )
+:   mfRed( fRed )
+,   mfGreen( fGreen )
+,   mfBlue( fBlue )
+,   mfAlpha( fAlpha )
 {}
 
 #endif // _SV_SALGDI_H

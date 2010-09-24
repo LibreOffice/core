@@ -72,10 +72,10 @@
 #include <memory>
 
 #ifndef C2S
-#define C2S(cChar)	String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
+#define C2S(cChar)  String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
 #endif
 #ifndef C2U
-#define C2U(cChar)	rtl::OUString::createFromAscii(cChar)
+#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
 #endif
 
 using namespace ::com::sun::star;
@@ -1212,10 +1212,10 @@ sal_Int16 OCX_Control::ImportBorder(sal_uInt16 nSpecialEffect,
     sal_uInt16 nBorderStyle) const
 {
     if ((nSpecialEffect == 0) && (nBorderStyle == 0))
-        return 0;	//No Border
+        return 0;   //No Border
     else if ((nSpecialEffect == 0) && (nBorderStyle == 1))
-        return 2;	//Flat Border
-    return 1;	//3D Border
+        return 2;   //Flat Border
+    return 1;   //3D Border
 }
 
 sal_uInt8 OCX_Control::ExportBorder(sal_uInt16 nBorder,sal_uInt8 &rBorderStyle)
@@ -2792,7 +2792,7 @@ sal_Bool OCX_ListBox::Import(com::sun::star::uno::Reference<
     aTmp = bool2any(bTemp);
     rPropSet->setPropertyValue( WW8_ASCII2STR("MultiSelection"), aTmp);
 
-#if 0		//Don't delete this for now until I figure out if I can make this
+#if 0       //Don't delete this for now until I figure out if I can make this
     if (pValue)
     {
         aTmp <<= lclCreateOUString( pValue, nValueLen );
@@ -5225,7 +5225,7 @@ sal_Bool HTML_TextBox::Import(com::sun::star::uno::Reference<
         }
     }
 
-    //	aFontData.Import(rPropSet);
+    //  aFontData.Import(rPropSet);
     return sal_True;
 }
 
@@ -5455,7 +5455,7 @@ sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
     }
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("ImageURL"));
-//	OUString *pStr = (OUString *)aTmp.getValue();
+//  OUString *pStr = (OUString *)aTmp.getValue();
     /*Magically fetch that image and turn it into something that
      *we can store in ms controls, wmf,png,jpg are almost certainly
      *the options we have for export...*/

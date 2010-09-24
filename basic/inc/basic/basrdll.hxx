@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,23 +35,23 @@ class ResMgr;
 class BasicDLL
 {
 private:
-    ResMgr*		pSttResMgr;
+    ResMgr*     pSttResMgr;
     ResMgr*     pBasResMgr;
 
-    BOOL		bDebugMode;
-    BOOL		bBreakEnabled;
+    BOOL        bDebugMode;
+    BOOL        bBreakEnabled;
 
 public:
                 BasicDLL();
                 ~BasicDLL();
 
-    ResMgr*		GetSttResMgr() const { return pSttResMgr; }
-    ResMgr*		GetBasResMgr() const { return pBasResMgr; }
+    ResMgr*     GetSttResMgr() const { return pSttResMgr; }
+    ResMgr*     GetBasResMgr() const { return pBasResMgr; }
 
     static void BasicBreak();
 
-    static void	EnableBreak( BOOL bEnable );
-    static void	SetDebugMode( BOOL bDebugMode );
+    static void EnableBreak( BOOL bEnable );
+    static void SetDebugMode( BOOL bDebugMode );
 };
 
 #define BASIC_DLL() (*(BasicDLL**)GetAppData( SHL_BASIC ) )

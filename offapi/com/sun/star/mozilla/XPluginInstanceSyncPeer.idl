@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,50 +24,50 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_mozilla_XPluginInstanceSyncPeer_idl__ 
-#define __com_sun_star_mozilla_XPluginInstanceSyncPeer_idl__ 
+#ifndef __com_sun_star_mozilla_XPluginInstanceSyncPeer_idl__
+#define __com_sun_star_mozilla_XPluginInstanceSyncPeer_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
 
-#ifndef __com_sun_star_mozilla_XPluginInstance_idl__ 
-#include <com/sun/star/mozilla/XPluginInstance.idl> 
-#endif 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module mozilla { 
- 
-//============================================================================= 
+#ifndef __com_sun_star_mozilla_XPluginInstance_idl__
+#include <com/sun/star/mozilla/XPluginInstance.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module mozilla {
+
+//=============================================================================
 
 // DocMerge from xml: interface com::sun::star::mozilla::XPluginInstanceSyncPeer
 /** This interface is an extention for <type>XPluginInstancePeer</type> interface.
     An object can support this interface in addition to <type>XPluginInstancePeer</type> interface.
  */
 published interface XPluginInstanceSyncPeer : com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
- 
+{
+    //-------------------------------------------------------------------------
+
+
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstanceSyncPeer::openNewBrowserWindow
     /** Opens a new browser window with a plugin instance synchronously.
 
-        @param aInstance			[out]:	new plugin instance in case of success
-        @param Any					[out]:	linkage to the window data
-        @param embedded				[out]:	selects embedded or full page plugin mode
+        @param aInstance            [out]:  new plugin instance in case of success
+        @param Any                  [out]:  linkage to the window data
+        @param embedded             [out]:  selects embedded or full page plugin mode
 
 
      */
     void openNewBrowserWindow(
                                         [out] XPluginInstance aInstance,
                                         [out] any aLinkage,
-                                        [out] boolean embeded); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-#endif 
+                                        [out] boolean embeded);
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

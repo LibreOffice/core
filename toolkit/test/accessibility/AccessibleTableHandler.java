@@ -8,7 +8,7 @@ class AccessibleTableHandler extends NodeHandler
 {
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
-        XAccessibleTable xTable = 
+        XAccessibleTable xTable =
             (XAccessibleTable) UnoRuntime.queryInterface (
                 XAccessibleTable.class, xContext);
         if (xTable != null)

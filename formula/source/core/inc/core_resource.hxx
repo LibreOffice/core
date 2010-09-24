@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,9 +51,9 @@ namespace formula
     class ResourceManager
     {
         friend class OModuleClient;
-        static ::osl::Mutex	s_aMutex;		/// access safety
-        static sal_Int32	s_nClients;		/// number of registered clients
-        static ResMgr*	m_pImpl;        
+        static ::osl::Mutex s_aMutex;       /// access safety
+        static sal_Int32    s_nClients;     /// number of registered clients
+        static ResMgr*  m_pImpl;
 
     private:
         // no instantiation allowed
@@ -63,9 +63,9 @@ namespace formula
     protected:
         static void ensureImplExists();
         /// register a client for the module
-        static void	registerClient();
+        static void registerClient();
         /// revoke a client for the module
-        static void	revokeClient();
+        static void revokeClient();
 
     public:
         /** loads the string with the specified resource id
@@ -87,19 +87,19 @@ namespace formula
                 const ::rtl::OUString&  _rReplace
         );
 
-        static ResMgr*	getResManager();
+        static ResMgr*  getResManager();
     };
 
     //=========================================================================
     //= OModuleClient
     //=========================================================================
-    /** base class for objects which uses any global module-specific ressources 
+    /** base class for objects which uses any global module-specific ressources
     */
     class OModuleClient
     {
     public:
-        OModuleClient()		{ ResourceManager::registerClient(); }
-        ~OModuleClient()	{ ResourceManager::revokeClient(); }
+        OModuleClient()     { ResourceManager::registerClient(); }
+        ~OModuleClient()    { ResourceManager::revokeClient(); }
     };
 
 

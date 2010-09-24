@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@ DECLARE_LIST( RectangleList, Rectangle* )
 
 class ButtonFrame
 {
-    Rectangle	aRect;
-    Rectangle	aInnerRect;
-    String		aText;
-    BOOL		bPressed;
-    BOOL		bCurs;
-    BOOL		bAbbr;
-    BOOL		m_bDrawDisabled;
+    Rectangle   aRect;
+    Rectangle   aInnerRect;
+    String      aText;
+    BOOL        bPressed;
+    BOOL        bCurs;
+    BOOL        bAbbr;
+    BOOL        m_bDrawDisabled;
 
 public:
                ButtonFrame( const Point& rPt, const Size& rSz,
@@ -83,13 +83,13 @@ public:
 
 class BrowserColumn
 {
-    USHORT      		_nId;
-    ULONG				_nOriginalWidth;
-    ULONG       		_nWidth;
-    Image       		_aImage;
-    String      		_aTitle;
-    BOOL        		_bFrozen;
-    HeaderBarItemBits	_nFlags;
+    USHORT              _nId;
+    ULONG               _nOriginalWidth;
+    ULONG               _nWidth;
+    Image               _aImage;
+    String              _aTitle;
+    BOOL                _bFrozen;
+    HeaderBarItemBits   _nFlags;
 
 public:
                         BrowserColumn( USHORT nItemId, const Image &rImage,
@@ -97,21 +97,21 @@ public:
                                         HeaderBarItemBits nFlags );
     virtual            ~BrowserColumn();
 
-    USHORT				GetId() const { return _nId; }
+    USHORT              GetId() const { return _nId; }
 
-    ULONG				Width() { return _nWidth; }
-    Image&  			GetImage() { return _aImage; }
-    String& 			Title() { return _aTitle; }
-    HeaderBarItemBits&	Flags() { return _nFlags; }
+    ULONG               Width() { return _nWidth; }
+    Image&              GetImage() { return _aImage; }
+    String&             Title() { return _aTitle; }
+    HeaderBarItemBits&  Flags() { return _nFlags; }
 
-    BOOL				IsFrozen() const { return _bFrozen; }
-    void				Freeze( BOOL bFreeze = TRUE ) { _bFrozen = bFreeze; }
+    BOOL                IsFrozen() const { return _bFrozen; }
+    void                Freeze( BOOL bFreeze = TRUE ) { _bFrozen = bFreeze; }
 
-    virtual void		Draw( BrowseBox& rBox, OutputDevice& rDev,
+    virtual void        Draw( BrowseBox& rBox, OutputDevice& rDev,
                               const Point& rPos, BOOL bCurs  );
 
-    void				SetWidth(ULONG nNewWidthPixel, const Fraction& rCurrentZoom);
-    void				ZoomChanged(const Fraction& rNewZoom);
+    void                SetWidth(ULONG nNewWidthPixel, const Fraction& rCurrentZoom);
+    void                ZoomChanged(const Fraction& rNewZoom);
 };
 
 //===================================================================
@@ -122,34 +122,34 @@ class BrowserDataWin
             ,public DropTargetHelper
 {
 public:
-    BrowserHeader*	pHeaderBar;		// only for BROWSER_HEADERBAR_NEW
-    Window*			pEventWin;		// Window of forwarded events
-    ScrollBarBox*	pCornerWin;		// Window in the corner btw the ScrollBars
-    BOOL*			pDtorNotify;
+    BrowserHeader*  pHeaderBar;     // only for BROWSER_HEADERBAR_NEW
+    Window*         pEventWin;      // Window of forwarded events
+    ScrollBarBox*   pCornerWin;     // Window in the corner btw the ScrollBars
+    BOOL*           pDtorNotify;
     AutoTimer       aMouseTimer;    // recalls MouseMove on dragging out
     MouseEvent      aRepeatEvt;     // a MouseEvent to repeat
-    Point			aLastMousePos;	// verhindert pseudo-MouseMoves
+    Point           aLastMousePos;  // verhindert pseudo-MouseMoves
 
-    String			aRealRowCount;	// zur Anzeige im VScrollBar
+    String          aRealRowCount;  // zur Anzeige im VScrollBar
 
     RectangleList   aInvalidRegion; // invalidated Rectangles during !UpdateMode
-    FASTBOOL		bInPaint;		// TRUE while in Paint
-    FASTBOOL		bInCommand;		// TRUE while in Command
+    FASTBOOL        bInPaint;       // TRUE while in Paint
+    FASTBOOL        bInCommand;     // TRUE while in Command
     FASTBOOL        bNoScrollBack;  // nur vorwaerts scrollen
     FASTBOOL        bNoHScroll;     // kein horizontaler Scrollbar
     FASTBOOL        bNoVScroll;     // no vertical scrollbar
-    FASTBOOL		bAutoHScroll;	// autohide horizontaler Scrollbar
-    FASTBOOL		bAutoVScroll;	// autohide horizontaler Scrollbar
-    FASTBOOL		bUpdateMode;	// nicht SV-UpdateMode wegen Invalidate()
-    FASTBOOL		bAutoSizeLastCol;// last column always fills up window
-    FASTBOOL		bResizeOnPaint; // outstanding resize-event
-    FASTBOOL		bUpdateOnUnlock;	// Update() while locked
-    FASTBOOL		bInUpdateScrollbars;	// Rekursionsschutz
-    FASTBOOL		bHadRecursion;			// Rekursion war aufgetreten
-    FASTBOOL		bOwnDataChangedHdl;		// dont change colors in DataChanged
-    FASTBOOL		bCallingDropCallback;	// we're in a callback to AcceptDrop or ExecuteDrop curently
-    USHORT			nUpdateLock;	// lock count, dont call Control::Update()!
-    short			nCursorHidden;	// new conuter for DoHide/ShowCursor
+    FASTBOOL        bAutoHScroll;   // autohide horizontaler Scrollbar
+    FASTBOOL        bAutoVScroll;   // autohide horizontaler Scrollbar
+    FASTBOOL        bUpdateMode;    // nicht SV-UpdateMode wegen Invalidate()
+    FASTBOOL        bAutoSizeLastCol;// last column always fills up window
+    FASTBOOL        bResizeOnPaint; // outstanding resize-event
+    FASTBOOL        bUpdateOnUnlock;    // Update() while locked
+    FASTBOOL        bInUpdateScrollbars;    // Rekursionsschutz
+    FASTBOOL        bHadRecursion;          // Rekursion war aufgetreten
+    FASTBOOL        bOwnDataChangedHdl;     // dont change colors in DataChanged
+    FASTBOOL        bCallingDropCallback;   // we're in a callback to AcceptDrop or ExecuteDrop curently
+    USHORT          nUpdateLock;    // lock count, dont call Control::Update()!
+    short           nCursorHidden;  // new conuter for DoHide/ShowCursor
 
     long            m_nDragRowDividerLimit;
     long            m_nDragRowDividerOffset;
@@ -158,9 +158,9 @@ public:
                     BrowserDataWin( BrowseBox* pParent );
                     ~BrowserDataWin();
 
-    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     virtual void    Paint( const Rectangle& rRect );
-    virtual void	RequestHelp( const HelpEvent& rHEvt );
+    virtual void    RequestHelp( const HelpEvent& rHEvt );
     virtual void    Command( const CommandEvent& rEvt );
     virtual void    MouseButtonDown( const MouseEvent& rEvt );
     virtual void    MouseMove( const MouseEvent& rEvt );
@@ -175,19 +175,19 @@ public:
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     // DragSourceHelper overridables
-    virtual void	StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+    virtual void    StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
 
 
-    BrowseEvent 	CreateBrowseEvent( const Point& rPosPixel );
+    BrowseEvent     CreateBrowseEvent( const Point& rPosPixel );
     void            Repaint();
     BrowseBox*      GetParent() const
                          { return (BrowseBox*) Window::GetParent(); }
-    const String&	GetRealRowCount() const { return aRealRowCount; }
+    const String&   GetRealRowCount() const { return aRealRowCount; }
 
     void            SetUpdateMode( BOOL bMode );
     FASTBOOL        GetUpdateMode() const { return bUpdateMode; }
-    void			EnterUpdateLock() { ++nUpdateLock; }
-    void			LeaveUpdateLock();
+    void            EnterUpdateLock() { ++nUpdateLock; }
+    void            LeaveUpdateLock();
     void            Update();
     void            DoOutstandingInvalidations();
     void            Invalidate( USHORT nFlags = 0 );
@@ -213,14 +213,14 @@ inline void BrowserDataWin::Repaint()
 
 class BrowserScrollBar: public ScrollBar
 {
-    ULONG			_nTip;
-    ULONG			_nLastPos;
-    BrowserDataWin*	_pDataWin;
+    ULONG           _nTip;
+    ULONG           _nLastPos;
+    BrowserDataWin* _pDataWin;
 
 public:
                     BrowserScrollBar( Window* pParent, WinBits nStyle,
                                       BrowserDataWin *pDataWin )
-                    :	ScrollBar( pParent, nStyle ),
+                    :   ScrollBar( pParent, nStyle ),
                         _nTip( 0 ),
                         _nLastPos( ULONG_MAX ),
                         _pDataWin( pDataWin )
@@ -228,7 +228,7 @@ public:
                     //ScrollBar( Window* pParent, const ResId& rResId );
 
     virtual void    Tracking( const TrackingEvent& rTEvt );
-    virtual void	EndScroll();
+    virtual void    EndScroll();
 };
 
 //===================================================================

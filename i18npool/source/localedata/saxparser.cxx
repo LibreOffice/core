@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,7 +144,7 @@ class TestDocumentHandler :
 {
 public:
     TestDocumentHandler(const char* locale, const char* outFile ) :
-      rootNode(0), nError(0), nbOfCurrencies(0), nbOfCalendars(0), nbOfFormatElements(0), 
+      rootNode(0), nError(0), nbOfCurrencies(0), nbOfCalendars(0), nbOfFormatElements(0),
       nbOfTransliterations(0), nbOfCollations(0), nbOfDays(50), nbOfMonths(50), nbOfEras(10),
       flag(-1), of(outFile, locale), isStartDayOfWeek(false), foundDefaultName(false),
       foundVariant(false), openElement(false)
@@ -393,7 +393,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         // create and connect the document handler to the parser
         TestDocumentHandler *pDocHandler = new TestDocumentHandler( argv[1], argv[3]);
 
-        Reference < XDocumentHandler >	rDocHandler( (XDocumentHandler *) pDocHandler );
+        Reference < XDocumentHandler >  rDocHandler( (XDocumentHandler *) pDocHandler );
         Reference< XEntityResolver > rEntityResolver( (XEntityResolver *) pDocHandler );
 
         rParser->setDocumentHandler( rDocHandler );
@@ -402,7 +402,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         // create the input stream
         InputSource source;
         source.aInputStream = createStreamFromFile( argv[2] );
-        source.sSystemId 	= OUString::createFromAscii( argv[2] );
+        source.sSystemId    = OUString::createFromAscii( argv[2] );
 
         try
         {

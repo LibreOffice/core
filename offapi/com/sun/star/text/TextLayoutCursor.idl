@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,40 +24,40 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_TextLayoutCursor_idl__ 
-#define __com_sun_star_text_TextLayoutCursor_idl__ 
+#ifndef __com_sun_star_text_TextLayoutCursor_idl__
+#define __com_sun_star_text_TextLayoutCursor_idl__
 
-#ifndef __com_sun_star_text_TextCursor_idl__ 
-#include <com/sun/star/text/TextCursor.idl> 
-#endif 
+#ifndef __com_sun_star_text_TextCursor_idl__
+#include <com/sun/star/text/TextCursor.idl>
+#endif
 
-#ifndef __com_sun_star_text_XPageCursor_idl__ 
-#include <com/sun/star/text/XPageCursor.idl> 
-#endif 
+#ifndef __com_sun_star_text_XPageCursor_idl__
+#include <com/sun/star/text/XPageCursor.idl>
+#endif
 
 
-//============================================================================= 
+//=============================================================================
 
- module com {  module sun {  module star {  module text {  
- 
-//============================================================================= 
- 
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
 // DocMerge from xml: service com::sun::star::text::TextLayoutCursor
-/** A <type>TextLayoutCursor</type> is a <type>TextRange</type> which can 
+/** A <type>TextLayoutCursor</type> is a <type>TextRange</type> which can
     travel within a layout of a <type>Text</type> object.
  */
 published service TextLayoutCursor
-{ 
+{
     // DocMerge: empty anyway
-    service com::sun::star::text::TextCursor; 
-    
-    // DocMerge: empty anyway
-    interface com::sun::star::text::XPageCursor; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
+    service com::sun::star::text::TextCursor;
 
-#endif 
+    // DocMerge: empty anyway
+    interface com::sun::star::text::XPageCursor;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

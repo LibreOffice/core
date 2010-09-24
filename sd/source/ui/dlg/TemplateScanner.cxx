@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace { 
+namespace {
 
 const ::rtl::OUString TITLE            = ::rtl::OUString::createFromAscii ("Title");
 const ::rtl::OUString TARGET_DIR_URL   = ::rtl::OUString::createFromAscii ("TargetDirURL");
@@ -59,7 +59,7 @@ const ::rtl::OUString TARGET_URL       = ::rtl::OUString::createFromAscii ("Targ
 
 const ::rtl::OUString DOCTEMPLATES     = ::rtl::OUString::createFromAscii ("com.sun.star.frame.DocumentTemplates");
 
-//  These strings are used to find impress templates in the tree of 
+//  These strings are used to find impress templates in the tree of
 //  template files.  Should probably be determined dynamically.
 const ::rtl::OUString IMPRESS_BIN_TEMPLATE = ::rtl::OUString::createFromAscii ("application/vnd.stardivision.impress");
 const ::rtl::OUString IMPRESS_XML_TEMPLATE = MIMETYPE_VND_SUN_XML_IMPRESS;
@@ -127,7 +127,7 @@ int Classify (const ::rtl::OUString&, const ::rtl::OUString& rsURL)
         // highest priority.
         nPriority = 10;
     }
-    
+
     return nPriority;
 }
 
@@ -136,7 +136,7 @@ int Classify (const ::rtl::OUString&, const ::rtl::OUString& rsURL)
 
 
 
-namespace sd 
+namespace sd
 {
 
 class TemplateScanner::FolderDescriptorList
@@ -166,7 +166,7 @@ TemplateScanner::TemplateScanner (void)
 TemplateScanner::~TemplateScanner (void)
 {
     mpFolderDescriptors.reset();
-    
+
     // Delete all entries of the template list that have not been
     // transferred to another object.
     std::vector<TemplateDir*>::iterator I;
@@ -181,7 +181,7 @@ TemplateScanner::~TemplateScanner (void)
 TemplateScanner::State TemplateScanner::GetTemplateRoot (void)
 {
     State eNextState (INITIALIZE_FOLDER_SCANNING);
-    
+
     Reference<lang::XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory ();
     DBG_ASSERT (xFactory.is(), "TemplateScanner::GetTemplateRoot: xFactory is NULL");
 
@@ -227,7 +227,7 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning (void)
     }
     else
         eNextState = ERROR;
-    
+
     return eNextState;
 }
 
@@ -258,7 +258,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
                 //  first if necessary).
                 if (    (sContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE)
                     ||  (sContentType == IMPRESS_XML_TEMPLATE_OASIS)
-                    ||  (sContentType == IMPRESS_BIN_TEMPLATE) 
+                    ||  (sContentType == IMPRESS_BIN_TEMPLATE)
                     ||  (sContentType == IMPRESS_XML_TEMPLATE)
                     ||  (sContentType == IMPRESS_XML_TEMPLATE_B))
                 {
@@ -287,7 +287,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
             eNextState = SCAN_FOLDER;
         }
     }
-    
+
     return eNextState;
 }
 
@@ -310,7 +310,7 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning (void)
         Sequence<rtl::OUString> aProps (2);
         aProps[0] = TITLE;
         aProps[1] = TARGET_DIR_URL;
-        
+
         //  Create an cursor to iterate over the template folders.
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_ONLY;
         mxFolderResultSet = Reference<sdbc::XResultSet>(
@@ -332,7 +332,7 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning (void)
 TemplateScanner::State TemplateScanner::GatherFolderList (void)
 {
     State eNextState (ERROR);
-    
+
     Reference<com::sun::star::ucb::XContentAccess> xContentAccess (mxFolderResultSet, UNO_QUERY);
     if (xContentAccess.is() && mxFolderResultSet.is())
     {
@@ -357,7 +357,7 @@ TemplateScanner::State TemplateScanner::GatherFolderList (void)
 
         eNextState = SCAN_FOLDER;
     }
-    
+
     return eNextState;
 }
 
@@ -376,7 +376,7 @@ TemplateScanner::State TemplateScanner::ScanFolder (void)
         ::rtl::OUString sTitle (aDescriptor.msTitle);
         ::rtl::OUString sTargetDir (aDescriptor.msTargetDir);
         ::rtl::OUString aId (aDescriptor.msContentIdentifier);
-                        
+
         maFolderContent = ::ucbhelper::Content (aId, aDescriptor.mxFolderEnvironment);
         if (maFolderContent.isFolder())
         {
@@ -394,7 +394,7 @@ TemplateScanner::State TemplateScanner::ScanFolder (void)
     {
         eNextState = DONE;
     }
-    
+
     return eNextState;
 }
 
@@ -441,7 +441,7 @@ void TemplateScanner::RunNextStep (void)
         case INITIALIZE_ENTRY_SCAN:
             meState = InitializeEntryScanning();
             break;
-            
+
         case SCAN_ENTRY:
             meState = ScanEntry();
             break;

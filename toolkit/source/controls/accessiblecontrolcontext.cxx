@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ namespace toolkit
             m_xControlModel = m_xControlModel.query( xControl->getModel() );
         OSL_ENSURE( m_xControlModel.is(), "OAccessibleControlContext::Init: invalid creator (no control, or control without model!" );
         if ( !m_xControlModel.is() )
-            throw DisposedException();	// caught by the caller (the create method)
+            throw DisposedException();  // caught by the caller (the create method)
 
         // start listening at the model
         startModelListening();
@@ -189,7 +189,7 @@ namespace toolkit
             pStateSet = new ::utl::AccessibleStateSetHelper( implGetForeignControlledStates() );
         }
         else
-        {	// only the DEFUNC state if we're already disposed
+        {   // only the DEFUNC state if we're already disposed
             pStateSet = new ::utl::AccessibleStateSetHelper;
             pStateSet->AddState( AccessibleStateType::DEFUNC );
         }
@@ -214,7 +214,7 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString	OAccessibleControlContext::getModelStringProperty( const sal_Char* _pPropertyName )
+    ::rtl::OUString OAccessibleControlContext::getModelStringProperty( const sal_Char* _pPropertyName )
     {
         ::rtl::OUString sReturn;
         try
@@ -234,7 +234,7 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    Window*	OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
+    Window* OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
     {
         Reference< awt::XControl > xControl( getAccessibleCreator(), UNO_QUERY );
         Reference< awt::XWindow > xWindow;
@@ -375,6 +375,6 @@ namespace toolkit
     }
 
 //........................................................................
-}	//namespace toolkit
+}   //namespace toolkit
 //........................................................................
 

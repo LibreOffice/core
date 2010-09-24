@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,37 +75,37 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
-typedef ::cppu::WeakImplHelper4	<		::com::sun::star::lang::XServiceInfo
-                                    ,	::com::sun::star::lang::XInitialization
-                                    ,	::com::sun::star::task::XJob
-                                    ,	::com::sun::star::configuration::backend::XLayerHandler
-                                >	OCfgImport_COMPBASE;
+typedef ::cppu::WeakImplHelper4 <       ::com::sun::star::lang::XServiceInfo
+                                    ,   ::com::sun::star::lang::XInitialization
+                                    ,   ::com::sun::star::task::XJob
+                                    ,   ::com::sun::star::configuration::backend::XLayerHandler
+                                >   OCfgImport_COMPBASE;
 // -------------
 // - OCfgImport -
 // -------------
 class OCfgImport : public OCfgImport_COMPBASE
 {
 private:
-    typedef ::std::pair< ::rtl::OUString,	sal_Int16>	TElementType;
-    typedef ::std::stack< TElementType >				TElementStack;
-    typedef ::std::vector< PropertyValue >				TDataSourceSettings;
+    typedef ::std::pair< ::rtl::OUString,   sal_Int16>  TElementType;
+    typedef ::std::stack< TElementType >                TElementStack;
+    typedef ::std::vector< PropertyValue >              TDataSourceSettings;
 
-    Reference< XMultiServiceFactory >								m_xORB;
-    Reference< XMultiServiceFactory >								m_xOldORB;
-    Reference< ::com::sun::star::configuration::backend::XLayer>	m_xLayer;
-    Reference<XPropertySet>											m_xCurrentDS;
-    Reference<XModel>											    m_xModel;
-    Reference<XPropertySet>											m_xCurrentObject; /// can either be a query or a table
-    Reference<XPropertySet>											m_xCurrentColumn;
-    ::std::map< sal_Int16 ,Sequence< ::rtl::OUString> >			m_aProperties;
+    Reference< XMultiServiceFactory >                               m_xORB;
+    Reference< XMultiServiceFactory >                               m_xOldORB;
+    Reference< ::com::sun::star::configuration::backend::XLayer>    m_xLayer;
+    Reference<XPropertySet>                                         m_xCurrentDS;
+    Reference<XModel>                                               m_xModel;
+    Reference<XPropertySet>                                         m_xCurrentObject; /// can either be a query or a table
+    Reference<XPropertySet>                                         m_xCurrentColumn;
+    ::std::map< sal_Int16 ,Sequence< ::rtl::OUString> >         m_aProperties;
     ::std::map< sal_Int16 ,Sequence< Any> >                      m_aValues;
-    ::rtl::OUString													m_sCurrentDataSourceName;
-    ::rtl::OUString													m_sBookmarkName;
-    ::rtl::OUString													m_sDocumentLocation;
+    ::rtl::OUString                                                 m_sCurrentDataSourceName;
+    ::rtl::OUString                                                 m_sBookmarkName;
+    ::rtl::OUString                                                 m_sDocumentLocation;
 
-    TElementStack													m_aStack;
-    TDataSourceSettings												m_aDataSourceSettings;
-    sal_Bool														m_bPropertyMayBeVoid;
+    TElementStack                                                   m_aStack;
+    TDataSourceSettings                                             m_aDataSourceSettings;
+    sal_Bool                                                        m_bPropertyMayBeVoid;
 
     /** convert the old configuration settings into new database documents.
     */
@@ -115,9 +115,9 @@ private:
     void setProperties(sal_Int16 _eType);
 
 protected:
-    virtual	~OCfgImport()  throw();
+    virtual ~OCfgImport()  throw();
 public:
-    
+
     OCfgImport( const Reference< XMultiServiceFactory >& _rxMSF );
 
 
@@ -132,88 +132,88 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL execute( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XLayerHandler
-    virtual void SAL_CALL startLayer() 	 
+    virtual void SAL_CALL startLayer()
         throw(::com::sun::star::lang::WrappedTargetException);
 
-    virtual void SAL_CALL endLayer() 	 
-        throw(	 
+    virtual void SAL_CALL endLayer()
+        throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
 
-    virtual void SAL_CALL overrideNode( 
-            const rtl::OUString& aName, 
-            sal_Int16 aAttributes, 
+    virtual void SAL_CALL overrideNode(
+            const rtl::OUString& aName,
+            sal_Int16 aAttributes,
             sal_Bool bClear)
         throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
 
     virtual void SAL_CALL addOrReplaceNode(
-            const rtl::OUString& aName, 
-            sal_Int16 aAttributes) 
-        throw(	
-            ::com::sun::star::configuration::backend::MalformedDataException,
-            ::com::sun::star::lang::WrappedTargetException );
-
-    virtual void SAL_CALL  addOrReplaceNodeFromTemplate( 	 
             const rtl::OUString& aName,
-            const ::com::sun::star::configuration::backend::TemplateIdentifier& aTemplate,
-            sal_Int16 aAttributes ) 
+            sal_Int16 aAttributes)
         throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
 
-    virtual void SAL_CALL  endNode() 	 
-        throw(	 
+    virtual void SAL_CALL  addOrReplaceNodeFromTemplate(
+            const rtl::OUString& aName,
+            const ::com::sun::star::configuration::backend::TemplateIdentifier& aTemplate,
+            sal_Int16 aAttributes )
+        throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
 
-    virtual void SAL_CALL  dropNode( 	 
-            const rtl::OUString& aName ) 
-        throw( 
+    virtual void SAL_CALL  endNode()
+        throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
 
-    virtual void SAL_CALL  overrideProperty( 	 
+    virtual void SAL_CALL  dropNode(
+            const rtl::OUString& aName )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  overrideProperty(
             const rtl::OUString& aName,
             sal_Int16 aAttributes,
             const Type& aType,
-            sal_Bool bClear ) 
-        throw(	 
+            sal_Bool bClear )
+        throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
 
-    virtual void SAL_CALL  setPropertyValue( 	 
-            const Any& aValue ) 
-        throw( 
+    virtual void SAL_CALL  setPropertyValue(
+            const Any& aValue )
+        throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
 
-    virtual void SAL_CALL setPropertyValueForLocale( 	 
+    virtual void SAL_CALL setPropertyValueForLocale(
             const Any& aValue,
-            const rtl::OUString& aLocale ) 
-        throw(	 
+            const rtl::OUString& aLocale )
+        throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
 
-    virtual void SAL_CALL  endProperty() 	 
-        throw(	 
+    virtual void SAL_CALL  endProperty()
+        throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
 
-    virtual void SAL_CALL  addProperty( 	 
+    virtual void SAL_CALL  addProperty(
             const rtl::OUString& aName,
             sal_Int16 aAttributes,
             const Type& aType )
-        throw(	 
+        throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
 
-    virtual void SAL_CALL  addPropertyWithValue( 	 
+    virtual void SAL_CALL  addPropertyWithValue(
             const rtl::OUString& aName,
             sal_Int16 aAttributes,
-            const Any& aValue ) 
-        throw(	 
+            const Any& aValue )
+        throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
 };

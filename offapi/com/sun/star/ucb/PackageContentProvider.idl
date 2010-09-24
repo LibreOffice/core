@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ published service PackageContentProvider
         <ol>
         <li>
         A PCP Stream (<type>PackageStreamContent</type>) is a content which
-        represents a file inside a package.	It is always contained in a PCP
+        represents a file inside a package. It is always contained in a PCP
         Folder. A PCP Stream has no children.
         </li>
         <li>

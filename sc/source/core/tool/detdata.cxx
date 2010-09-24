@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,8 +107,8 @@ BOOL ScDetOpList::operator==( const ScDetOpList& r ) const
 
     USHORT nCount = Count();
     BOOL bEqual = ( nCount == r.Count() );
-    for (USHORT i=0; i<nCount && bEqual; i++)		// Reihenfolge muss auch gleich sein
-        if ( !(*(*this)[i] == *r[i]) )				// Eintraege unterschiedlich ?
+    for (USHORT i=0; i<nCount && bEqual; i++)       // Reihenfolge muss auch gleich sein
+        if ( !(*(*this)[i] == *r[i]) )              // Eintraege unterschiedlich ?
             bEqual = FALSE;
 
     return bEqual;

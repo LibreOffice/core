@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ public:
     SdXMLImport& mrImport;
 
     ShowsImpImpl( SdXMLImport& rImport )
-    :	mrImport( rImport )
+    :   mrImport( rImport )
     {}
 };
 
@@ -83,7 +83,7 @@ public:
 TYPEINIT1( SdXMLShowsContext, SvXMLImportContext );
 
 SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList )
-:	SvXMLImportContext(rImport, nPrfx, rLocalName)
+:   SvXMLImportContext(rImport, nPrfx, rLocalName)
 {
     mpImpl = new ShowsImpImpl( rImport );
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace sdr
 {
     namespace overlay
     {
-        void OverlayObject::objectChange() 
+        void OverlayObject::objectChange()
         {
             const basegfx::B2DRange aPreviousRange(maBaseRange);
             maBaseRange.reset();
@@ -66,7 +66,7 @@ namespace sdr
             }
         }
 
-        // OverlayObject implementations. 
+        // OverlayObject implementations.
         drawinglayer::primitive2d::Primitive2DSequence OverlayObject::createOverlayObjectPrimitive2DSequence()
         {
             // Default implementation has to assert a missing implementation. It cannot
@@ -89,7 +89,7 @@ namespace sdr
         }
 
         OverlayObject::OverlayObject(Color aBaseColor)
-        :	Event(0),
+        :   Event(0),
             mpOverlayManager(0),
             maBaseColor(aBaseColor),
             mbIsVisible(true),
@@ -126,7 +126,7 @@ namespace sdr
                 {
                     const drawinglayer::geometry::ViewInformation2D aViewInformation2D(getOverlayManager()->getCurrentViewInformation2D());
 
-                    const_cast< sdr::overlay::OverlayObject* >(this)->maBaseRange = 
+                    const_cast< sdr::overlay::OverlayObject* >(this)->maBaseRange =
                         drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(rSequence, aViewInformation2D);
                 }
             }
@@ -164,7 +164,7 @@ namespace sdr
             {
                 // remember new value
                 maBaseColor = aNew;
-                
+
                 // register change (after change)
                 objectChange();
             }
@@ -189,7 +189,7 @@ namespace sdr
     namespace overlay
     {
         OverlayObjectWithBasePosition::OverlayObjectWithBasePosition(const basegfx::B2DPoint& rBasePos, Color aBaseColor)
-        :	OverlayObject(aBaseColor),
+        :   OverlayObject(aBaseColor),
             maBasePosition(rBasePos)
         {
         }

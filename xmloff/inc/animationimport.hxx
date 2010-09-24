@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class AnimationsImportHelperImpl;
 
 class AnimationNodeContext : public SvXMLImportContext
 {
-    AnimationsImportHelperImpl*	mpHelper;
+    AnimationsImportHelperImpl* mpHelper;
     bool mbRootContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxNode;
 
@@ -49,11 +49,11 @@ class AnimationNodeContext : public SvXMLImportContext
 public:
     TYPEINFO();
 
-    AnimationNodeContext( 
+    AnimationNodeContext(
         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xParentNode,
-        SvXMLImport& rImport, 
+        SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName, 
+        const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         AnimationsImportHelperImpl* mpImpl = NULL );
     virtual ~AnimationNodeContext();
@@ -68,5 +68,5 @@ public:
 
 }
 
-#endif	//  _XMLOFF_ANIMATIONIMPORT_HXX
+#endif  //  _XMLOFF_ANIMATIONIMPORT_HXX
 

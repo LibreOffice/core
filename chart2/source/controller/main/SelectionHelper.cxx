@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ rtl::OUString lcl_getObjectName( SdrObject* pObj )
 void impl_selectObject( SdrObject* pObjectToSelect, DrawViewWrapper& rDrawViewWrapper )
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
-    
+
     if(pObjectToSelect)
     {
         SelectionHelper aSelectionHelper( pObjectToSelect );
@@ -183,13 +183,13 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
 {
     if( pDrawViewWrapper )
     {
-        //do not toggel multiclick selection if right clicked on the selected object or waiting for double click 
+        //do not toggel multiclick selection if right clicked on the selected object or waiting for double click
         bool bAllowMultiClickSelectionChange = !bIsRightMouse && !bWaitingForDoubleClick;
 
         ObjectIdentifier aLastSelectedObject( m_aSelectedOID );
 
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
-        
+
         //bAllowMultiClickSelectionChange==true -> a second click on the same object can lead to a changed selection (e.g. series -> single data point)
 
         //get object to select:
@@ -452,7 +452,7 @@ bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
         else if( bGetDiagramInsteadOf_Wall )
         {
             rtl::OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, rtl::OUString() ) );//@todo read CID from model
-            
+
             if( aRet.equals( aWallCID ) )
             {
                 rtl::OUString aDiagramCID = ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, rtl::OUString::valueOf( sal_Int32(0) ) );
@@ -473,7 +473,7 @@ bool SelectionHelper::isRotateableObject( const ::rtl::OUString& rCID
         return false;
 
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( ChartModelHelper::findDiagram( xChartModel ) );
-    
+
     if( nDimensionCount == 3 )
         return true;
     return false;
@@ -558,7 +558,7 @@ E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
 {
     //search wether the object or one of its children is a 3D object
     //if so, return the accessory 3DScene
-    
+
     E3dObject* pRotateable = 0;
 
     if(pObj)
@@ -579,7 +579,7 @@ E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
             }
         }
     }
-    
+
     E3dScene* pScene = 0;
     if(pRotateable)
     {

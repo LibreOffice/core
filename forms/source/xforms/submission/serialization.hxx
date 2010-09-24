@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ public:
     that control aspects of the serialization
     eachs serialization may support individual properties
     */
-    void setProperties(const CSS::uno::Sequence< CSS::beans::NamedValue >& props) 
+    void setProperties(const CSS::uno::Sequence< CSS::beans::NamedValue >& props)
     {
         m_properties.clear();
         rtl::OUString aValue;
@@ -87,7 +87,7 @@ public:
 
     /**
     get the serialized bytes.
-    reads up to buffer->getLength() bytes and returns the number of 
+    reads up to buffer->getLength() bytes and returns the number of
     bytes read.
     returns -1 on error
     */

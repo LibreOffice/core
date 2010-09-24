@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ class SfxItemPool;
 class SVL_DLLPUBLIC SfxItemIter
 {
     // Item-Feld - Start & Ende
-    const SfxItemSet&	_rSet;
-    USHORT				_nStt, _nEnd, _nAkt;
+    const SfxItemSet&   _rSet;
+    USHORT              _nStt, _nEnd, _nAkt;
 
 public:
     SfxItemIter( const SfxItemSet& rSet );
@@ -57,7 +57,7 @@ public:
     const SfxPoolItem* NextItem();
     const SfxPoolItem* PrevItem();
 
-    BOOL			   IsAtStart() const { return _nAkt == _nStt; }
+    BOOL               IsAtStart() const { return _nAkt == _nStt; }
     BOOL               IsAtEnd() const   { return _nAkt == _nEnd; }
 
     USHORT             GetCurPos() const { return _nAkt; }

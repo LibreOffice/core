@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,7 +132,7 @@ private:
     enum SprmType {L_FIX=0, L_VAR=1, L_VAR2=2};
 public:
     //7- ids are very different to 8+ ones
-    wwSprmParser(ww::WordVersion eVersion); 
+    wwSprmParser(ww::WordVersion eVersion);
     /// Return the SPRM id at the beginning of this byte sequence
     sal_uInt16 GetSprmId(const sal_uInt8* pSp) const;
 
@@ -160,7 +160,7 @@ class  WW8PLCFspecial;
 struct WW8PLCFxDesc;
 class  WW8PLCFx_PCD;
 
-String WW8ReadPString( SvStream& rStrm, rtl_TextEncoding eEnc, 
+String WW8ReadPString( SvStream& rStrm, rtl_TextEncoding eEnc,
     bool bAtEndSeekRel1 = true);
 
 /**
@@ -223,20 +223,20 @@ public:
         long nStruct, long nStartPos = -1 );
     ~WW8PLCFspecial() { delete[] pPLCF_PosArray; }
     long GetIdx() const { return nIdx; }
-    void SetIdx( long nI ) { nIdx = nI; }   
+    void SetIdx( long nI ) { nIdx = nI; }
     long GetIMax() const { return nIMax; }
     bool SeekPos(long nPos);            // geht ueber FC- bzw. CP-Wert
                                         // bzw. naechste groesseren Wert
     bool SeekPosExact(long nPos);
-    INT32 Where() const 
+    INT32 Where() const
         { return ( nIdx >= nIMax ) ? SAL_MAX_INT32 : pPLCF_PosArray[nIdx]; }
     bool Get(WW8_CP& rStart, void*& rpValue) const;
     bool GetData(long nIdx, WW8_CP& rPos, void*& rpValue) const;
 
-    const void* GetData( long nInIdx ) const 
+    const void* GetData( long nInIdx ) const
     {
-        return ( nInIdx >= nIMax ) ? 0 
-            : (const void*)&pPLCF_Contents[nInIdx * nStru]; 
+        return ( nInIdx >= nIMax ) ? 0
+            : (const void*)&pPLCF_Contents[nInIdx * nStru];
     }
     INT32 GetPos( long nInIdx ) const
         { return ( nInIdx >= nIMax ) ? SAL_MAX_INT32 : pPLCF_PosArray[nInIdx]; }
@@ -265,7 +265,7 @@ public:
     void  SetSprms( const BYTE* pSprms_, long nLen_ );
     const BYTE* FindSprm(USHORT nId);
     const BYTE*  operator ++( int );
-    const BYTE* GetSprms() const 
+    const BYTE* GetSprms() const
         { return ( pSprms && (0 < nRemLen) ) ? pSprms : 0; }
     const BYTE* GetAktParams() const { return pAktParams; }
     USHORT GetAktId() const { return nAktId; }
@@ -295,13 +295,13 @@ private:
 
     void MakeFailedPLCF();
 public:
-    WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct, 
+    WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct,
         WW8_CP nStartPos = -1 );
 
     /*
         folgender Ctor generiert ggfs. einen PLC aus nPN und ncpN
     */
-    WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct, 
+    WW8PLCF( SvStream* pSt, WW8_FC nFilePos, INT32 nPLCF, int nStruct,
         WW8_CP nStartPos, INT32 nPN, INT32 ncpN );
 
     ~WW8PLCF(){ delete[] pPLCF_PosArray; }
@@ -313,10 +313,10 @@ public:
     bool Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const;
     WW8PLCF& operator ++( int ) { if( nIdx < nIMax ) nIdx++; return *this; }
 
-    const void* GetData( INT32 nInIdx ) const 
+    const void* GetData( INT32 nInIdx ) const
     {
-        return ( nInIdx >= nIMax ) ? 0 : 
-            (const void*)&pPLCF_Contents[nInIdx * nStru]; 
+        return ( nInIdx >= nIMax ) ? 0 :
+            (const void*)&pPLCF_Contents[nInIdx * nStru];
     }
 };
 
@@ -351,11 +351,11 @@ public:
     bool SeekPos(long nPos);
     INT32 Where() const;
     bool Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const;
-    WW8PLCFpcd_Iter& operator ++( int ) 
-    { 
-        if( nIdx < rPLCF.nIMax ) 
-            nIdx++; 
-        return *this; 
+    WW8PLCFpcd_Iter& operator ++( int )
+    {
+        if( nIdx < rPLCF.nIMax )
+            nIdx++;
+        return *this;
     }
 };
 
@@ -380,7 +380,7 @@ private:
     WW8PLCFx(const WW8PLCFx&);
     WW8PLCFx& operator=(const WW8PLCFx&);
 public:
-    WW8PLCFx(ww::WordVersion eVersion, bool bSprm) 
+    WW8PLCFx(ww::WordVersion eVersion, bool bSprm)
         : meVer(eVersion), bIsSprm(bSprm), bDirty(false) {}
     virtual ~WW8PLCFx() {}
     bool IsSprm() const { return bIsSprm; }
@@ -440,7 +440,7 @@ private:
     WW8PLCFx_PCD(const WW8PLCFx_PCD&);
     WW8PLCFx_PCD& operator=(const WW8PLCFx_PCD&);
 public:
-    WW8PLCFx_PCD(ww::WordVersion eVersion, WW8PLCFpcd* pPLCFpcd, 
+    WW8PLCFx_PCD(ww::WordVersion eVersion, WW8PLCFpcd* pPLCFpcd,
         WW8_CP nStartCp, bool bVer67P);
     virtual ~WW8PLCFx_PCD();
     virtual ULONG GetIMax() const;
@@ -452,7 +452,7 @@ public:
     virtual WW8PLCFx& operator ++( int );
     WW8_CP AktPieceStartFc2Cp( WW8_FC nStartPos );
     WW8_FC AktPieceStartCp2Fc( WW8_CP nCp );
-    void AktPieceFc2Cp(WW8_CP& rStartPos, WW8_CP& rEndPos, 
+    void AktPieceFc2Cp(WW8_CP& rStartPos, WW8_CP& rEndPos,
         const WW8ScannerBase *pSBase);
     WW8PLCFpcd_Iter* GetPLCFIter() { return pPcdI; }
     void SetClipStart(WW8_CP nIn) { nClipStart = nIn; }
@@ -480,49 +480,49 @@ public:
         public:
             WW8_FC mnFC;
 
-            sal_uInt8* mpData;  
+            sal_uInt8* mpData;
             sal_uInt16 mnLen;
             sal_uInt16 mnIStd; // only for Fkp.Papx (actualy Style-Nr)
             bool mbMustDelete;
 
-            explicit Entry(WW8_FC nFC) : mnFC(nFC), mpData(0), mnLen(0), 
+            explicit Entry(WW8_FC nFC) : mnFC(nFC), mpData(0), mnLen(0),
                 mnIStd(0), mbMustDelete(false) {}
             Entry(const Entry &rEntry);
             ~Entry();
             bool operator<(const Entry& rEntry) const;
             Entry& operator=(const Entry& rEntry);
         };
-        
+
         sal_uInt8 maRawData[512];
         std::vector<Entry> maEntries;
 
         long nItemSize;     // entweder 1 Byte oder ein komplettes BX
 
         // Offset in Stream where last read of 52 bytes took place
-        long nFilePos;      
+        long nFilePos;
         sal_uInt8 mnIdx;         // Pos-Merker
         ePLCFT ePLCF;
         sal_uInt8 mnIMax;         // Anzahl der Eintraege
-        
+
         wwSprmParser maSprmParser;
     public:
-        WW8Fkp (ww::WordVersion eVersion, SvStream* pFKPStrm, 
-            SvStream* pDataStrm, long _nFilePos, long nItemSiz, ePLCFT ePl, 
+        WW8Fkp (ww::WordVersion eVersion, SvStream* pFKPStrm,
+            SvStream* pDataStrm, long _nFilePos, long nItemSiz, ePLCFT ePl,
             WW8_FC nStartFc = -1);
         void Reset(WW8_FC nPos);
         long GetFilePos() const { return nFilePos; }
         sal_uInt8 GetIdx() const { return mnIdx; }
         bool SetIdx(sal_uInt8 nI);
         bool SeekPos(WW8_FC nFc);
-        WW8_FC Where() const 
-        { 
-            return (mnIdx < mnIMax) ? maEntries[mnIdx].mnFC : WW8_FC_MAX; 
+        WW8_FC Where() const
+        {
+            return (mnIdx < mnIMax) ? maEntries[mnIdx].mnFC : WW8_FC_MAX;
         }
-        WW8Fkp& operator ++( int ) 
-        { 
+        WW8Fkp& operator ++( int )
+        {
             if (mnIdx < mnIMax)
                 mnIdx++;
-            return *this; 
+            return *this;
         }
         BYTE* Get( WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen ) const;
         sal_uInt16 GetIstd() const { return maEntries[mnIdx].mnIStd; }
@@ -604,7 +604,7 @@ private:
     WW8PLCFx_Cp_FKP(const WW8PLCFx_Cp_FKP&);
     WW8PLCFx_Cp_FKP& operator=(const WW8PLCFx_Cp_FKP&);
 public:
-    WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt, 
+    WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
         const WW8ScannerBase& rBase,  ePLCFT ePl );
     virtual ~WW8PLCFx_Cp_FKP();
     void ResetAttrStartEnd();
@@ -636,7 +636,7 @@ private:
     WW8PLCFx_SEPX(const WW8PLCFx_SEPX&);
     WW8PLCFx_SEPX& operator=(const WW8PLCFx_SEPX&);
 public:
-    WW8PLCFx_SEPX( SvStream* pSt, SvStream* pTblxySt, const WW8Fib& rFib, 
+    WW8PLCFx_SEPX( SvStream* pSt, SvStream* pTblxySt, const WW8Fib& rFib,
         WW8_CP nStartCp );
     virtual ~WW8PLCFx_SEPX();
     virtual ULONG GetIdx() const;
@@ -665,7 +665,7 @@ private:
     WW8PLCFx_SubDoc(const WW8PLCFx_SubDoc&);
     WW8PLCFx_SubDoc& operator=(const WW8PLCFx_SubDoc&);
 public:
-    WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion, WW8_CP nStartCp, 
+    WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion, WW8_CP nStartCp,
     long nFcRef, long nLenRef, long nFcTxt, long nLenTxt, long nStruc = 0);
     virtual ~WW8PLCFx_SubDoc();
     virtual ULONG GetIdx() const;
@@ -721,7 +721,7 @@ private:
     long nIMax;                         // Number of Booknotes
     USHORT nIsEnd;
     int nBookmarkId; // counter incremented by GetUniqueBookmarkName.
-    
+
     //No copying
     WW8PLCFx_Book(const WW8PLCFx_Book&);
     WW8PLCFx_Book& operator=(const WW8PLCFx_Book&);
@@ -838,7 +838,7 @@ private:
                                     //drawboxes we want the true offsets
 
     WW8PLCFxDesc aD[MAN_ANZ_PLCF];
-    WW8PLCFxDesc *pChp, *pPap, *pSep, *pFld, *pFtn, *pEdn, *pBkm, *pPcd, 
+    WW8PLCFxDesc *pChp, *pPap, *pSep, *pFld, *pFtn, *pEdn, *pBkm, *pPcd,
         *pPcdA, *pAnd;
     WW8PLCFspecial *pFdoa, *pTxbx, *pTxbxBkd,*pMagicTables, *pSubdocs;
     BYTE* pExtendedAtrds;
@@ -857,7 +857,7 @@ private:
     void AdvNoSprm(short nIdx, bool bStart);
     USHORT GetId(const WW8PLCFxDesc* p ) const;
 public:
-    WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp, 
+    WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         bool bDoingDrawTextBox = false);
     ~WW8PLCFMan();
 
@@ -884,11 +884,11 @@ public:
     const BYTE* HasCharSprm( USHORT nId ) const;
     bool HasCharSprm(USHORT nId, std::vector<const BYTE *> &rResult) const;
 
-    WW8PLCFx_Cp_FKP* GetChpPLCF() const 
+    WW8PLCFx_Cp_FKP* GetChpPLCF() const
         { return (WW8PLCFx_Cp_FKP*)pChp->pPLCFx; }
-    WW8PLCFx_Cp_FKP* GetPapPLCF() const 
+    WW8PLCFx_Cp_FKP* GetPapPLCF() const
         { return (WW8PLCFx_Cp_FKP*)pPap->pPLCFx; }
-    WW8PLCFx_SEPX* GetSepPLCF() const 
+    WW8PLCFx_SEPX* GetSepPLCF() const
         { return (WW8PLCFx_SEPX*)pSep->pPLCFx; }
     WW8PLCFxDesc* GetPap() const { return pPap; }
     bool TransferOpenSprms(std::stack<USHORT> &rStack);
@@ -914,7 +914,7 @@ struct WW8PLCFxSaveAll
 
 class WW8ScannerBase
 {
-friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(ww::WordVersion eVersion, 
+friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(ww::WordVersion eVersion,
     WW8PLCFx_PCD* pPLCFx_PCD, const WW8ScannerBase* pBase );
 friend WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream*, SvStream*, SvStream*,
     const WW8ScannerBase&, ePLCFT );
@@ -972,10 +972,10 @@ public:
     //given that we never write fastsaved files you can use it, otherwise
     //I will beat you with a stick
     WW8_CP WW8Fc2Cp(WW8_FC nFcPos) const ;
-    WW8_FC WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode = 0, 
+    WW8_FC WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode = 0,
         WW8_CP* pNextPieceCp = 0, bool* pTestFlag = 0) const;
 
-    xub_StrLen WW8ReadString(SvStream& rStrm, String& rStr, WW8_CP nAktStartCp, 
+    xub_StrLen WW8ReadString(SvStream& rStrm, String& rStr, WW8_CP nAktStartCp,
         long nTotalLen, rtl_TextEncoding eEnc ) const;
 
 };
@@ -988,6 +988,9 @@ public:
 */
 class WW8Fib
 {
+private:
+    sal_Unicode nNumDecimalSep;
+
 public:
     /**
         Program-Version asked for by us:
@@ -1418,7 +1421,7 @@ public:
 
     // 0x422 - 0x4D4 == ignore
     WW8_FC fcHplxsdr;    //bizarrely, word xp seems to require this set to shows dates from AtrdExtra
-    UINT32 lcbHplxsdr; 
+    UINT32 lcbHplxsdr;
 
     /*
         General-Varaiblen, die fuer Ver67 und Ver8 verwendet werden,
@@ -1429,7 +1432,7 @@ public:
     INT32 cpnBteChp;
     INT32 cpnBtePap;
     /*
-        The actual nFib, moved here because some readers assumed 
+        The actual nFib, moved here because some readers assumed
         they couldn't read any format with nFib > some constant
     */
     UINT16 nFib_actual; // 0x05bc #i56856#
@@ -1445,6 +1448,7 @@ public:
     static rtl_TextEncoding GetFIBCharset(UINT16 chs);
     ww::WordVersion GetFIBVersion() const;
     WW8_CP GetBaseCp(ManTypes nType) const;
+    sal_Unicode getNumDecimalSep() const;
 };
 
 class WW8Style
@@ -1463,11 +1467,11 @@ protected:
     UINT16  istdMaxFixedWhenSaved;     // How many fixed-index istds are there?
     UINT16  nVerBuiltInNamesWhenSaved; // Current version of built-in stylenames
     // ftc used by StandardChpStsh for this document
-    UINT16  ftcStandardChpStsh;     
+    UINT16  ftcStandardChpStsh;
     // CJK ftc used by StandardChpStsh for this document
-    UINT16  ftcStandardChpCJKStsh;  
+    UINT16  ftcStandardChpCJKStsh;
     // CTL ftc used by StandardChpStsh for this document
-    UINT16  ftcStandardChpCTLStsh;  
+    UINT16  ftcStandardChpCTLStsh;
 
     //No copying
     WW8Style(const WW8Style&);
@@ -1494,12 +1498,12 @@ public:
 typedef BYTE HdFtFlags;
 namespace nsHdFtFlags
 {
-    const HdFtFlags WW8_HEADER_EVEN 	= 0x01;
-    const HdFtFlags WW8_HEADER_ODD 		= 0x02;
-    const HdFtFlags WW8_FOOTER_EVEN 	= 0x04;
-    const HdFtFlags WW8_FOOTER_ODD 		= 0x08;
-    const HdFtFlags WW8_HEADER_FIRST 	= 0x10;
-    const HdFtFlags WW8_FOOTER_FIRST 	= 0x20; 
+    const HdFtFlags WW8_HEADER_EVEN     = 0x01;
+    const HdFtFlags WW8_HEADER_ODD      = 0x02;
+    const HdFtFlags WW8_FOOTER_EVEN     = 0x04;
+    const HdFtFlags WW8_FOOTER_ODD      = 0x08;
+    const HdFtFlags WW8_HEADER_FIRST    = 0x10;
+    const HdFtFlags WW8_FOOTER_FIRST    = 0x20;
 }
 
 /// Document Properties
@@ -1625,26 +1629,26 @@ public:
     UINT32 fTransparentMetafiles            :1; // see above
     UINT32 fShowBreaksInFrames              :1; // see above
     UINT32 fSwapBordersFacingPgs            :1; // see above
-    UINT32 fCompatabilityOptions_Unknown1_13	:1; // #i78591#
-    UINT32 fExpShRtn				:1; // #i78591# and #i56856#
-    UINT32 fCompatabilityOptions_Unknown1_15	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown1_16	:1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_13    :1; // #i78591#
+    UINT32 fExpShRtn                :1; // #i78591# and #i56856#
+    UINT32 fCompatabilityOptions_Unknown1_15    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_16    :1; // #i78591#
     UINT32 fSuppressTopSpacingMac5      :1; // Suppress extra line spacing at top
                                                                                 // of page like MacWord 5.x
     UINT32 fTruncDxaExpand                      :1; // Expand/Condense by whole number of points
     UINT32 fPrintBodyBeforeHdr              :1; // Print body text before header/footer
     UINT32 fNoLeading                                   :1; // Don't add extra spacebetween rows of text
-    UINT32 fCompatabilityOptions_Unknown1_21	:1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_21    :1; // #i78591#
     UINT32 fMWSmallCaps : 1;    // Use larger small caps like MacWord 5.x
-    UINT32 fCompatabilityOptions_Unknown1_23	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown1_24	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown1_25	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown1_26	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown1_27	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown1_28	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown1_29	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown1_30	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown1_31	:1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_23    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_24    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_25    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_26    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_27    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_28    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_29    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_30    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_31    :1; // #i78591#
     UINT32 fUsePrinterMetrics : 1;  //The magic option
 
     // hier sollte bei nFib <= 105  Schluss sein, sonst ist Datei fehlerhaft!
@@ -1684,38 +1688,38 @@ public:
     INT16 hpsZoonFontPag;
     INT16 dywDispPag;
 
-    UINT32 fCompatabilityOptions_Unknown2_1	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_2	:1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_1 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_2 :1; // #i78591#
     UINT32 fDontUseHTMLAutoSpacing:1;
-    UINT32 fCompatabilityOptions_Unknown2_4	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_5	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_6	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_7	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_8	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_9	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_10	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_11	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_12	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_13	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_14	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_15	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_16	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_17	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_18	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_19	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_20	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_21	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_22	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_23	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_24	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_25	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_26	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_27	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_28	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_29	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_30	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_31	:1; // #i78591#
-    UINT32 fCompatabilityOptions_Unknown2_32	:1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_4 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_5 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_6 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_7 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_8 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_9 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_10    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_11    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_12    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_13    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_14    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_15    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_16    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_17    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_18    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_19    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_20    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_21    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_22    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_23    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_24    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_25    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_26    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_27    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_28    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_29    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_30    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_31    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_32    :1; // #i78591#
 
     UINT16 fUnknown3:15;
     UINT16 fUseBackGroundInAllmodes:1;

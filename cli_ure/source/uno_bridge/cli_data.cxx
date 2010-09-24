@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ System::Object* Bridge::map_uno2cli(uno_Interface * pUnoI, typelib_InterfaceType
     //see if the interface was already mapped
     System::Type* ifaceType= mapUnoType(reinterpret_cast<typelib_TypeDescription*>(pTD));
     System::String* sOid= mapUnoString(oid.pData);
-    
+
     System::Threading::Monitor::Enter( CliEnvHolder::g_cli_env );
     try
     {
@@ -104,7 +104,7 @@ System::Object* Bridge::map_uno2cli(uno_Interface * pUnoI, typelib_InterfaceType
             {
                 UnoInterfaceProxy* p = static_cast<UnoInterfaceProxy*>(
                     srr::RemotingServices::GetRealProxy(retVal));
-                p->addUnoInterface(pUnoI, pTD);            
+                p->addUnoInterface(pUnoI, pTD);
             }
         }
         else
@@ -117,7 +117,7 @@ System::Object* Bridge::map_uno2cli(uno_Interface * pUnoI, typelib_InterfaceType
     {
         System::Threading::Monitor::Exit( CliEnvHolder::g_cli_env );
     }
-    
+
     return retVal;
 }
 
@@ -126,7 +126,7 @@ uno_Interface* Bridge::map_cli2uno(System::Object* cliObj, typelib_TypeDescripti
     uno_Interface* retIface = NULL;
     // get oid from dot net environment
     System::String* ds_oid = CliEnvHolder::g_cli_env->getObjectIdentifier( cliObj);
-    OUString ousOid = mapCliString(ds_oid);  
+    OUString ousOid = mapCliString(ds_oid);
     // look if interface is already mapped
     m_uno_env->getRegisteredInterface(m_uno_env, (void**) &retIface, ousOid.pData,
                                       (typelib_InterfaceTypeDescription*) pTD);
@@ -163,7 +163,7 @@ System::Type* loadCliType(System::String * unoName)
         //If unoName denotes a polymorphic type, e.g com.sun.star.beans.Defaulted<System.Char>
         //then we remove the type list, otherwise the type could not be loaded.
         bool bIsPolymorphic = false;
-        
+
         System::String * loadName = unoName;
         int index = unoName->IndexOf('<');
         if (index != -1)
@@ -301,7 +301,7 @@ System::Type* mapUnoType(typelib_TypeDescriptionReference const * pTD)
         case typelib_TypeClass_TYPE:
             retVal= System::Type::GetType(const_cast<System::String*>(Constants::sArType));
             break;
-        case typelib_TypeClass_ANY:    
+        case typelib_TypeClass_ANY:
         case typelib_TypeClass_ENUM:
         case typelib_TypeClass_EXCEPTION:
         case typelib_TypeClass_STRUCT:
@@ -441,7 +441,7 @@ typelib_TypeDescriptionReference* mapCliType(System::Type* cliType)
                 typelib_TypeClass_ANY );
             typelib_typedescriptionreference_acquire( retVal );
         }
-        //struct, interfaces, sequences 
+        //struct, interfaces, sequences
         else
         {
             OUString usTypeName;
@@ -472,7 +472,7 @@ typelib_TypeDescriptionReference* mapCliType(System::Type* cliType)
     return retVal;
 }
 
-/** 
+/**
     Otherwise a leading "unoidl." is removed.
  */
 System::String* mapUnoTypeName(rtl_uString const * typeName)
@@ -517,7 +517,7 @@ System::String* mapUnoTypeName(rtl_uString const * typeName)
     else if (sUnoName->Equals(const_cast<System::String*>(Constants::usDouble)))
         buf->Append(const_cast<System::String*>(Constants::sDouble));
     else if (sUnoName->Equals(const_cast<System::String*>(Constants::usString)))
-        buf->Append(const_cast<System::String*>(Constants::sString));    
+        buf->Append(const_cast<System::String*>(Constants::sString));
     else if (sUnoName->Equals(const_cast<System::String*>(Constants::usVoid)))
         buf->Append(const_cast<System::String*>(Constants::sVoid));
     else if (sUnoName->Equals(const_cast<System::String*>(Constants::usType)))
@@ -525,7 +525,7 @@ System::String* mapUnoTypeName(rtl_uString const * typeName)
     else if (sUnoName->Equals(const_cast<System::String*>(Constants::usXInterface)))
         buf->Append(const_cast<System::String*>(Constants::sObject));
     else if (sUnoName->Equals(const_cast<System::String*>(Constants::usAny)))
-    {        
+    {
         buf->Append(const_cast<System::String*>(Constants::sAny));
     }
     else
@@ -574,7 +574,7 @@ System::String* mapPolymorphicName(System::String* unoName, bool bCliToUno)
     int index = unoName->IndexOf('<');
     if (index == -1)
         return unoName;
-    
+
     System::Text::StringBuilder * builder = new System::Text::StringBuilder(256);
     builder->Append(unoName->Substring(0, index +1 ));
 
@@ -673,7 +673,7 @@ OUString mapCliTypeName(System::String* typeName)
         }
         cur--;
     }
-    
+
     if (bRightBracket || cur < 0)
         throw BridgeRuntimeError(
             OUSTR("Typename is wrong. ") +
@@ -710,7 +710,7 @@ OUString mapCliTypeName(System::String* typeName)
     else if (typeName->Equals(const_cast<System::String*>(Constants::sDouble)))
         buf->Append(const_cast<System::String*>(Constants::usDouble));
     else if (typeName->Equals(const_cast<System::String*>(Constants::sString)))
-        buf->Append(const_cast<System::String*>(Constants::usString));    
+        buf->Append(const_cast<System::String*>(Constants::usString));
     else if (typeName->Equals(const_cast<System::String*>(Constants::sVoid)))
         buf->Append(const_cast<System::String*>(Constants::usVoid));
     else if (typeName->Equals(const_cast<System::String*>(Constants::sType)))
@@ -736,7 +736,7 @@ inline System::String* mapUnoString( rtl_uString const * data)
     return new System::String((__wchar_t*) data->buffer, 0, data->length);
 }
 
-OUString mapCliString(System::String const * data)    
+OUString mapCliString(System::String const * data)
 {
 
     if (data != NULL)
@@ -755,7 +755,7 @@ OUString mapCliString(System::String const * data)
 // is a sal_Int16. This could be necessary if a scripting language (typeless) is used
 // @param assign the uno_data has to be destructed (in/out args)
 void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
-                        typelib_TypeDescriptionReference * type, 
+                        typelib_TypeDescriptionReference * type,
                         bool assign) const
 {
     try{
@@ -872,7 +872,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
             }
             uno::Any aAny= *__try_cast<uno::Any*>(cli_data);
             css::uno::Type  value_td( mapCliType(aAny.Type), SAL_NO_ACQUIRE);
-        
+
             if (assign)
                 uno_any_destruct( pAny, 0 );
 
@@ -906,7 +906,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
                 case typelib_TypeClass_LONG:
                     pAny->pData = &pAny->pReserved;
                     *(sal_Int32*) &pAny->pReserved =  *__try_cast<System::Int32*>(aAny.Value);
-                    break;                
+                    break;
                 case typelib_TypeClass_UNSIGNED_LONG:
                     pAny->pData = &pAny->pReserved;
                     *(sal_uInt32*) &pAny->pReserved =  *__try_cast<System::UInt32*>(aAny.Value);
@@ -923,7 +923,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
                         *(sal_Int64 *) mem.get()=  *__try_cast<System::Int64*>(aAny.Value);
                         pAny->pData = mem.release();
                     }
-                    break;                
+                    break;
                 case typelib_TypeClass_UNSIGNED_HYPER:
                     if (sizeof (sal_uInt64) <= sizeof (void *))
                     {
@@ -1035,10 +1035,10 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
             catch (...)
             {
                 if (assign)
-                    uno_any_construct( pAny, 0, 0, 0 ); // restore some valid any                
+                    uno_any_construct( pAny, 0, 0, 0 ); // restore some valid any
                 throw;
             }
-            
+
             pAny->pType = value_td.getTypeLibType();
             typelib_typedescriptionreference_acquire(pAny->pType);
             break;
@@ -1053,10 +1053,10 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
         case typelib_TypeClass_STRUCT:
         case typelib_TypeClass_EXCEPTION:
         {
-            css::uno::TypeDescription td(type);        
+            css::uno::TypeDescription td(type);
             typelib_CompoundTypeDescription * comp_td =
                 (typelib_CompoundTypeDescription*) td.get();
-            
+
             typelib_StructTypeDescription * struct_td = NULL;
             if (type->eTypeClass == typelib_TypeClass_STRUCT)
                 struct_td = (typelib_StructTypeDescription*) td.get();
@@ -1064,7 +1064,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
             if ( ! ((typelib_TypeDescription*) comp_td)->bComplete)
                 ::typelib_typedescription_complete(
                     (typelib_TypeDescription**) & comp_td );
-            
+
             sal_Int32 nMembers = comp_td->nMembers;
             boolean bException= false;
             System::Type* cliType = NULL;
@@ -1242,8 +1242,8 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
                 bException= true;
                 throw;
             }
-            __finally            
-            {    
+            __finally
+            {
                 if (bException && !assign) // if assign then caller cleans up
                 {
                     // cleanup the members which we have converted so far
@@ -1257,7 +1257,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
                         uno_destructData(
                             uno_data, (typelib_TypeDescription *)comp_td->pBaseTypeDescription, 0 );
                     }
-                }            
+                }
             }
             break;
         }
@@ -1266,15 +1266,15 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
             TypeDescr td( type );
             typelib_TypeDescriptionReference * element_type =
                 ((typelib_IndirectTypeDescription *)td.get())->pType;
-        
+
             auto_ptr< rtl_mem > seq;
-            
+
             System::Array* ar = NULL;
             if (cli_data != NULL)
             {
                 ar = __try_cast<System::Array*>(cli_data);
                 sal_Int32 nElements = ar->GetLength(0);
-            
+
                 try
                 {
                     switch (element_type->eTypeClass)
@@ -1343,7 +1343,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
                         System::String* arStr[]= __try_cast<System::String*[]>(cli_data);
                         for (int i= 0; i < nElements; i++)
                         {
-                            wchar_t const __pin * pdata= PtrToStringChars(arStr[i]);					
+                            wchar_t const __pin * pdata= PtrToStringChars(arStr[i]);
                             rtl_uString** pStr=  & ((rtl_uString**) &
                                                     ((uno_Sequence*) seq.get())->elements)[i];
                             *pStr= NULL;
@@ -1359,7 +1359,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
                             ((sal_Int32*) &((uno_Sequence*) seq.get())->elements)[i]=
                                 System::Convert::ToInt32(ar->GetValue(i));
                         }
-                        break;            
+                        break;
                     case typelib_TypeClass_TYPE:
                     case typelib_TypeClass_ANY:
                     case typelib_TypeClass_STRUCT:
@@ -1369,7 +1369,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
                     {
                         TypeDescr element_td( element_type );
                         seq = seq_allocate( nElements, element_td.get()->nSize );
-                        
+
                         for (sal_Int32 nPos = 0; nPos < nElements; ++nPos)
                         {
                             try
@@ -1404,7 +1404,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
                         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported sequence element type: ") );
                         buf.append( *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
                         throw BridgeRuntimeError( buf.makeStringAndClear() );
-                    }            
+                    }
                     }
                 }
                 catch (BridgeRuntimeError& e)
@@ -1433,7 +1433,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
                 }
                 __finally
                     {
-                        if (assign) 
+                        if (assign)
                             uno_destructData( uno_data, td.get(), 0 );
                     }
             }
@@ -1451,7 +1451,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
                 uno_Interface * p = *(uno_Interface **)uno_data;
                 if (0 != p)
                     (*p->release)( p );
-            }        
+            }
             if (0 == cli_data) // null-ref
             {
                 *(uno_Interface **)uno_data = 0;
@@ -1463,7 +1463,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
                 *(uno_Interface **)uno_data = pUnoI;
             }
             break;
-        }    
+        }
         default:
         {
             //ToDo check
@@ -1475,7 +1475,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
         }
         }
     }
-    // BridgeRuntimeError are allowed to be thrown 
+    // BridgeRuntimeError are allowed to be thrown
     catch (System::InvalidCastException* )
     {
         //ToDo check
@@ -1491,7 +1491,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(
                              "[map_to_uno()] Illegal null reference passed!\n"));
         buf.append(mapCliString(e->get_StackTrace()));
-        throw BridgeRuntimeError( buf.makeStringAndClear() );                
+        throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
     catch (BridgeRuntimeError& )
     {
@@ -1505,7 +1505,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object* cli_data,
 
 }
 
-/** 
+/**
    @param info
        The expected target type. Currently info is provdided when this method is called
        to convert the in/out and out parameters of a call from cli to uno. Then info
@@ -1579,7 +1579,7 @@ void Bridge::map_to_cli(
             map_to_cli(
                 &objCli, pAny->pData, pAny->pType, 0,
                 false);
-            
+
             uno::Any anyVal(mapUnoType(pAny->pType), objCli);
             *cli_data= __box(anyVal);
         }
@@ -1612,13 +1612,13 @@ void Bridge::map_to_cli(
                 ::typelib_typedescription_complete(
                     (typelib_TypeDescription**) & comp_td );
 
-        
+
         //create the type
         System::Type* cliType= loadCliType(td.get()->pTypeName);
         //detect if we recursivly convert inherited structures
         //If this point is reached because of a recursive call during convering a
         //struct then we must not create a new object rather we use the one in
-        // cli_data argument. 
+        // cli_data argument.
         System::Object* cliObj;
         if (bDontCreateObj)
             cliObj = *cli_data; // recursive call
@@ -1642,7 +1642,7 @@ void Bridge::map_to_cli(
 #if OSL_DEBUG_LEVEL >= 2
                     System::String* sMember;
                     sMember = mapUnoString(pCTD->ppMemberNames[i]);
-#endif                    
+#endif
                     if (usMessageMember.equals(pCTD->ppMemberNames[i]))
                     {
                         nPos = i;
@@ -1685,7 +1685,7 @@ void Bridge::map_to_cli(
                 cliObj = System::Activator::CreateInstance(cliType);
         }
         sal_Int32 * pMemberOffsets = comp_td->pMemberOffsets;
-        
+
         if (comp_td->pBaseTypeDescription)
         {
             //convert inherited struct
@@ -1707,7 +1707,7 @@ void Bridge::map_to_cli(
             if ( ! aField && usUnoException.equals(td.get()->pTypeName))
             {
                 continue;
-            }       
+            }
             void const * p = (char const *)uno_data + pMemberOffsets[ nPos ];
             switch (member_type->eTypeClass)
             {
@@ -1764,11 +1764,11 @@ void Bridge::map_to_cli(
         uno_Sequence const * seq = 0;
         seq = *(uno_Sequence * const *)uno_data;
         nElements = seq->nElements;
-        
+
         TypeDescr td( type );
         typelib_TypeDescriptionReference * element_type =
             ((typelib_IndirectTypeDescription *)td.get())->pType;
-        
+
         switch (element_type->eTypeClass)
         {
         case typelib_TypeClass_CHAR:
@@ -1923,7 +1923,7 @@ void Bridge::map_to_cli(
                 char * p = (char *) &seq->elements;
                 sal_Int32 nSize = element_td.get()->nSize;
                 for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
-                { 
+                {
                     System::Object* val;
                     map_to_cli(
                         &val, p + (nSize * nPos), element_type, 0, false);
@@ -1962,11 +1962,11 @@ void Bridge::map_to_cli(
             char * p = (char *)seq->elements;
             sal_Int32 nSize = element_td.get()->nSize;
             for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
-            { 
+            {
                 System::Object* val;
                 map_to_cli(
                     &val, p + (nSize * nPos), element_type, NULL, false);
-                   
+
                 ar->SetValue(val, nPos);
             }
             *cli_data= ar;
@@ -2004,7 +2004,7 @@ void Bridge::map_to_cli(
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_cli():") );
         buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported type!") );
-        throw BridgeRuntimeError( buf.makeStringAndClear() );        
+        throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
     }
 }

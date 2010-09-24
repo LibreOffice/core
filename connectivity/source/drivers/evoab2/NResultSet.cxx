@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ using namespace com::sun::star::io;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)	\
+::rtl::OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)   \
 {
     return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.evoab.ResultSet");
 }

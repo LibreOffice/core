@@ -14,7 +14,7 @@ public class LogStream extends PrintStream
 
     private String getTimeStamp()
     {
-         String timeStamp = formatter.format( new Date() ); 
+         String timeStamp = formatter.format( new Date() );
          return timeStamp;
     }
     public LogStream( String logFileName ) throws java.io.FileNotFoundException

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,14 +60,14 @@ namespace drawinglayer
             Primitive2DSequence                             maTextContent;
 
             /// the style to apply, the direction and the rotation center
-            const basegfx::B2DPoint							maRotationCenter;
-            double											mfDirection;
+            const basegfx::B2DPoint                         maRotationCenter;
+            double                                          mfDirection;
             TextEffectStyle2D                               meTextEffectStyle2D;
 
-            /** the last used object to view transformtion used from getDecomposition 
+            /** the last used object to view transformtion used from getDecomposition
                 for decide buffering
              */
-            basegfx::B2DHomMatrix							maLastObjectToViewTransformation;
+            basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;
 
         protected:
             /// create local decomposition

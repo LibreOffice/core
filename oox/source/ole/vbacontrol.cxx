@@ -442,7 +442,7 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
                 (for embedded container controls). */
             maControls.forEachMem( &VbaFormControl::importModelOrStorage,
                 ::boost::ref( aOStrm ), ::boost::ref( rStrg ), ::boost::cref( maClassTable ) );
-                
+
             /*  Reorder the controls (sorts all option buttons of an option
                 group together), and move all children of all embedded frames
                 (group boxes) to this control (UNO group boxes cannot contain
@@ -560,7 +560,7 @@ void VbaFormControl::finalizeEmbeddedControls()
         2)  Move all children of all embedded frames (group boxes) to this
             control (UNO group boxes cannot contain other controls).
      */
-                
+
     // first, sort all controls by original tab index
     ::std::sort( maControls.begin(), maControls.end(), &compareByTabIndex );
 

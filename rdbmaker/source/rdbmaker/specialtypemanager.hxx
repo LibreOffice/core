@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,14 +28,14 @@
 #ifndef _SPECIALTYPEMANAGER_HXX_
 #define _SPECIALTYPEMANAGER_HXX_
 
-#include	<codemaker/registry.hxx>
-#include	<codemaker/typemanager.hxx>
+#include    <codemaker/registry.hxx>
+#include    <codemaker/typemanager.hxx>
 
 
 struct SpecialTypeManagerImpl
 {
-    T2TypeClassMap	m_t2TypeClass;
-};	
+    T2TypeClassMap  m_t2TypeClass;
+};
 
 class SpecialTypeManager : public TypeManager
 {
@@ -53,10 +53,10 @@ public:
     using TypeManager::init;
     sal_Bool init(const ::rtl::OString& registryName);
 
-    sal_Bool  	isValidType(const ::rtl::OString&)
+    sal_Bool    isValidType(const ::rtl::OString&)
         { return sal_True; }
-    TypeReader 	getTypeReader(const ::rtl::OString& name);
-    RTTypeClass	getTypeClass(const ::rtl::OString& name);
+    TypeReader  getTypeReader(const ::rtl::OString& name);
+    RTTypeClass getTypeClass(const ::rtl::OString& name);
 
     sal_Int32 getSize() { return m_pImpl->m_t2TypeClass.size(); }
 
@@ -67,5 +67,5 @@ protected:
 protected:
     SpecialTypeManagerImpl* m_pImpl;
 };
-    
+
 #endif // _CODEMAKER_TYPEMANAGER_HXX_

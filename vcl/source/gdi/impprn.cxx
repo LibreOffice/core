@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,10 +51,10 @@
 
 struct QueuePage
 {
-    GDIMetaFile*	mpMtf;
-    JobSetup*		mpSetup;
-    USHORT			mnPage;
-    BOOL			mbEndJob;
+    GDIMetaFile*    mpMtf;
+    JobSetup*       mpSetup;
+    USHORT          mnPage;
+    BOOL            mbEndJob;
 
                     QueuePage() { mpMtf = NULL; mpSetup = NULL; }
                     ~QueuePage() { delete mpMtf; if ( mpSetup ) delete mpSetup; }
@@ -76,8 +76,8 @@ ImplQPrinter::ImplQPrinter( Printer* pParent ) :
     SetSelfAsQueuePrinter( TRUE );
     SetPrinterProps( pParent );
     SetPageQueueSize( 0 );
-    mnCopyCount 	= pParent->mnCopyCount;
-    mbCollateCopy	= pParent->mbCollateCopy;
+    mnCopyCount     = pParent->mnCopyCount;
+    mbCollateCopy   = pParent->mbCollateCopy;
 }
 
 // -----------------------------------------------------------------------
@@ -105,8 +105,8 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
 {
     for( MetaAction* pAct = rPrtMtf.FirstAction(); pAct && !mbAborted; pAct = rPrtMtf.NextAction() )
     {
-        const ULONG		nType = pAct->GetType();
-        sal_Bool		bExecuted = sal_False;
+        const ULONG     nType = pAct->GetType();
+        sal_Bool        bExecuted = sal_False;
 
         if( nType == META_COMMENT_ACTION )
         {
@@ -114,10 +114,10 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
             MetaCommentAction* pComment = (MetaCommentAction*) pAct;
 
             if( pComment->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )
-            {	
+            {
                 pAct = rPrtMtf.NextAction();
 
-                // if next action is a GradientEx action, execute this and 
+                // if next action is a GradientEx action, execute this and
                 // skip actions until a XGRAD_SEQ_END comment is found
                 if( pAct && ( pAct->GetType() == META_GRADIENTEX_ACTION ) )
                 {
@@ -129,7 +129,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
                     {
                         pAct = rPrtMtf.NextAction();
                     }
-                    while( pAct && 
+                    while( pAct &&
                            ( ( pAct->GetType() != META_COMMENT_ACTION ) ||
                              ( ( (MetaCommentAction*) pAct )->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_END" ) != COMPARE_EQUAL ) ) );
 
@@ -137,7 +137,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
                 }
             }
             else if( pComment->GetComment().CompareIgnoreCaseToAscii( "PRNSPOOL_TRANSPARENTBITMAP_BEGIN" ) == COMPARE_EQUAL )
-            {	
+            {
                 pAct = rPrtMtf.NextAction();
 
                 if( pAct && ( pAct->GetType() == META_BMPSCALE_ACTION ) )
@@ -160,7 +160,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
                     {
                         pAct = rPrtMtf.NextAction();
                     }
-                    while( pAct && 
+                    while( pAct &&
                            ( ( pAct->GetType() != META_COMMENT_ACTION ) ||
                              ( ( (MetaCommentAction*) pAct )->GetComment().CompareIgnoreCaseToAscii( "PRNSPOOL_TRANSPARENTBITMAP_END" ) != COMPARE_EQUAL ) ) );
 
@@ -180,8 +180,8 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
             const Bitmap&       rBmp = pBmpScaleAction->GetBitmap();
 
             DrawBitmap( pBmpScaleAction->GetPoint(), pBmpScaleAction->GetSize(),
-                        GetDownsampledBitmap( pBmpScaleAction->GetSize(), 
-                                              Point(), rBmp.GetSizePixel(), 
+                        GetDownsampledBitmap( pBmpScaleAction->GetSize(),
+                                              Point(), rBmp.GetSizePixel(),
                                               rBmp, nMaxBmpDPIX, nMaxBmpDPIY ) );
 
             bExecuted = sal_True;
@@ -193,7 +193,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
 
             DrawBitmap( pBmpScalePartAction->GetDestPoint(), pBmpScalePartAction->GetDestSize(),
                         GetDownsampledBitmap( pBmpScalePartAction->GetDestSize(),
-                                              pBmpScalePartAction->GetSrcPoint(), pBmpScalePartAction->GetSrcSize(), 
+                                              pBmpScalePartAction->GetSrcPoint(), pBmpScalePartAction->GetSrcSize(),
                                               rBmp, nMaxBmpDPIX, nMaxBmpDPIY ) );
 
             bExecuted = sal_True;
@@ -204,8 +204,8 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
             const BitmapEx&         rBmpEx = pBmpExScaleAction->GetBitmapEx();
 
             DrawBitmapEx( pBmpExScaleAction->GetPoint(), pBmpExScaleAction->GetSize(),
-                          GetDownsampledBitmapEx( pBmpExScaleAction->GetSize(), 
-                                                  Point(), rBmpEx.GetSizePixel(), 
+                          GetDownsampledBitmapEx( pBmpExScaleAction->GetSize(),
+                                                  Point(), rBmpEx.GetSizePixel(),
                                                   rBmpEx, nMaxBmpDPIX, nMaxBmpDPIY ) );
 
             bExecuted = sal_True;
@@ -217,15 +217,15 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
 
             DrawBitmapEx( pBmpExScalePartAction->GetDestPoint(), pBmpExScalePartAction->GetDestSize(),
                           GetDownsampledBitmapEx( pBmpExScalePartAction->GetDestSize(),
-                                                  pBmpExScalePartAction->GetSrcPoint(), pBmpExScalePartAction->GetSrcSize(), 
+                                                  pBmpExScalePartAction->GetSrcPoint(), pBmpExScalePartAction->GetSrcSize(),
                                                   rBmpEx, nMaxBmpDPIX, nMaxBmpDPIY ) );
 
             bExecuted = sal_True;
         }
         else if( nType == META_TRANSPARENT_ACTION )
         {
-            MetaTransparentAction* 	pTransAct = static_cast<MetaTransparentAction*>(pAct);
-            USHORT					nTransparency( pTransAct->GetTransparence() );
+            MetaTransparentAction*  pTransAct = static_cast<MetaTransparentAction*>(pAct);
+            USHORT                  nTransparency( pTransAct->GetTransparence() );
 
             // #i10613# Respect transparency for draw color
             if( nTransparency )
@@ -255,11 +255,11 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
         }
         else if( nType == META_FLOATTRANSPARENT_ACTION )
         {
-            MetaFloatTransparentAction*	pFloatAction = (MetaFloatTransparentAction*) pAct;
-            GDIMetaFile&				rMtf = (GDIMetaFile&) pFloatAction->GetGDIMetaFile();
-            MapMode						aDrawMap( rMtf.GetPrefMapMode() );
-            Point						aDestPoint( LogicToPixel( pFloatAction->GetPoint() ) ); 
-            Size						aDestSize( LogicToPixel( pFloatAction->GetSize() ) );
+            MetaFloatTransparentAction* pFloatAction = (MetaFloatTransparentAction*) pAct;
+            GDIMetaFile&                rMtf = (GDIMetaFile&) pFloatAction->GetGDIMetaFile();
+            MapMode                     aDrawMap( rMtf.GetPrefMapMode() );
+            Point                       aDestPoint( LogicToPixel( pFloatAction->GetPoint() ) );
+            Size                        aDestSize( LogicToPixel( pFloatAction->GetSize() ) );
 
             if( aDestSize.Width() && aDestSize.Height() )
             {
@@ -273,7 +273,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
 
                 Fraction aScaleX( aDestSize.Width(), aTmpPrefSize.Width() );
                 Fraction aScaleY( aDestSize.Height(), aTmpPrefSize.Height() );
-                
+
                 aDrawMap.SetScaleX( aScaleX *= aDrawMap.GetScaleX() );
                 aDrawMap.SetScaleY( aScaleY *= aDrawMap.GetScaleY() );
                 aDrawMap.SetOrigin( PixelToLogic( aDestPoint, aDrawMap ) );
@@ -328,7 +328,7 @@ void ImplQPrinter::PrePrintPage( QueuePage* pPage )
     // convert to greysacles
     if( rPrinterOptions.IsConvertToGreyscales() )
     {
-        SetDrawMode( GetDrawMode() | ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT | 
+        SetDrawMode( GetDrawMode() | ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
                                        DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
     }
 
@@ -366,7 +366,7 @@ void ImplQPrinter::PrintPage( unsigned int nPage )
     StartPage();
     ImplPrintMtf( maCurPageMetaFile, mnMaxBmpDPIX, mnMaxBmpDPIY );
     EndPage();
-    
+
     mnCurCopyCount--;
     if( mnCurCopyCount == 0 )
         PostPrintPage();
@@ -398,8 +398,8 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
     // Druck-Job zuende?
     QueuePage* pActPage = maQueue.front();
     maQueue.erase( maQueue.begin() );
-    
-    
+
+
     vcl::DeletionListener aDel( this );
     if ( pActPage->mbEndJob )
     {
@@ -413,7 +413,7 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
     else
     {
         mbDestroyAllowed = FALSE;
-        
+
         PrePrintPage( pActPage );
 
         USHORT nCopyCount = 1;
@@ -430,7 +430,7 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
             }
 
             StartPage();
-            
+
             if ( mbAborted )
                 break;
 
@@ -487,8 +487,8 @@ void ImplQPrinter::EndQueuePrint()
     }
     else
     {
-        QueuePage* pQueuePage	= new QueuePage;
-        pQueuePage->mbEndJob	= TRUE;
+        QueuePage* pQueuePage   = new QueuePage;
+        pQueuePage->mbEndJob    = TRUE;
         maQueue.push_back( pQueuePage );
     }
 }
@@ -498,21 +498,21 @@ void ImplQPrinter::EndQueuePrint()
 bool ImplQPrinter::GetPaperRanges( std::vector< ULONG >& o_rRanges, bool i_bIncludeOrientationChanges ) const
 {
     bool bRet = false;
-    
+
     if( ImplGetSVData()->maGDIData.mbPrinterPullModel )
     {
         bRet = true;
         o_rRanges.clear();
-        
+
         if( ! maQueue.empty() )
         {
             ULONG nCurPage = 0;
-            
+
             // get first job data
             const ImplJobSetup* pLastFormat = NULL;
             if( maQueue.front()->mpSetup )
                 pLastFormat = maQueue.front()->mpSetup->ImplGetConstData();
-            
+
             // begin first range
             o_rRanges.push_back( 0 );
             for( std::vector< QueuePage* >::const_iterator it = maQueue.begin();
@@ -549,11 +549,11 @@ bool ImplQPrinter::GetPaperRanges( std::vector< ULONG >& o_rRanges, bool i_bIncl
                     }
                 }
             }
-            
+
             o_rRanges.push_back( nCurPage );
         }
     }
-    
+
     return bRet;
 }
 
@@ -570,10 +570,10 @@ void ImplQPrinter::AbortQueuePrint()
 
 void ImplQPrinter::AddQueuePage( GDIMetaFile* pPage, USHORT nPage, BOOL bNewJobSetup )
 {
-    QueuePage* pQueuePage	= new QueuePage;
-    pQueuePage->mpMtf		= pPage;
-    pQueuePage->mnPage		= nPage;
-    pQueuePage->mbEndJob	= FALSE;
+    QueuePage* pQueuePage   = new QueuePage;
+    pQueuePage->mpMtf       = pPage;
+    pQueuePage->mnPage      = nPage;
+    pQueuePage->mbEndJob    = FALSE;
     // ensure that the first page has a valid setup, this is needed
     // in GetPaperRanges (used in pullmodel)
     // caution: this depends on mnCurPage in Printer being

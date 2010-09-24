@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 //========================================================================
 class SvxFmAbsRecWin : public NumericField
 {
-    SfxToolBoxControl*	m_pController;
+    SfxToolBoxControl*  m_pController;
         // for invalidating our content whe losing the focus
 public:
     SvxFmAbsRecWin( Window* _pParent, SfxToolBoxControl* _pController );
@@ -62,8 +62,8 @@ public:
     SvxFmConfigWin( USHORT nId, ResId aRIdWin, ResId aRIdTbx );
     ~SvxFmConfigWin();
 
-    void			Update();
-    virtual void	PopupModeEnd();
+    void            Update();
+    virtual void    PopupModeEnd();
 };
 
 
@@ -82,11 +82,11 @@ public:
     SvxFmTbxCtlConfig( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxFmTbxCtlConfig() {}
 
-    virtual void				Select( USHORT nModifier );
-    virtual void				StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                Select( USHORT nModifier );
+    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
-    virtual SfxPopupWindowType	GetPopupWindowType() const;
-    virtual SfxPopupWindow*		CreatePopupWindow();
+    virtual SfxPopupWindowType  GetPopupWindowType() const;
+    virtual SfxPopupWindow*     CreatePopupWindow();
 };
 
 //========================================================================
@@ -99,9 +99,9 @@ public:
     SvxFmTbxCtlAbsRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxFmTbxCtlAbsRec();
 
-    virtual Window*	CreateItemWindow( Window* pParent );
+    virtual Window* CreateItemWindow( Window* pParent );
 
-    virtual void	StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
 };
 
@@ -114,7 +114,7 @@ public:
     SvxFmTbxCtlRecText( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxFmTbxCtlRecText();
 
-    virtual Window*	CreateItemWindow( Window* pParent );
+    virtual Window* CreateItemWindow( Window* pParent );
 };
 
 //========================================================================
@@ -126,7 +126,7 @@ public:
     SvxFmTbxCtlRecFromText( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxFmTbxCtlRecFromText();
 
-    virtual Window*	CreateItemWindow( Window* pParent );
+    virtual Window* CreateItemWindow( Window* pParent );
 };
 
 //========================================================================
@@ -140,8 +140,8 @@ public:
     SvxFmTbxCtlRecTotal( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxFmTbxCtlRecTotal();
 
-    virtual Window*	CreateItemWindow( Window* pParent );
-    virtual void	StateChanged( USHORT nSID, SfxItemState eState,
+    virtual Window* CreateItemWindow( Window* pParent );
+    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
 };
 
@@ -149,17 +149,17 @@ public:
 class SvxFmTbxNextRec : public SfxToolBoxControl
 {
 public:
-    SFX_DECL_TOOLBOX_CONTROL();											 
-    SvxFmTbxNextRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx );	
+    SFX_DECL_TOOLBOX_CONTROL();
+    SvxFmTbxNextRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
 };
 
 //========================================================================
 class SvxFmTbxPrevRec : public SfxToolBoxControl
 {
 public:
-    SFX_DECL_TOOLBOX_CONTROL();											 
-    SvxFmTbxPrevRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx );	
-};					
+    SFX_DECL_TOOLBOX_CONTROL();
+    SvxFmTbxPrevRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+};
 
 
 #endif

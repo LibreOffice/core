@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@
 
 // =======================================================================
 
-#define STATUSBAR_OFFSET_X		STATUSBAR_OFFSET
-#define STATUSBAR_OFFSET_Y		2
-#define STATUSBAR_OFFSET_TEXTY	3
+#define STATUSBAR_OFFSET_X      STATUSBAR_OFFSET
+#define STATUSBAR_OFFSET_Y      2
+#define STATUSBAR_OFFSET_TEXTY  3
 
-#define STATUSBAR_PRGS_OFFSET	3
-#define STATUSBAR_PRGS_COUNT	100
-#define STATUSBAR_PRGS_MIN		5
+#define STATUSBAR_PRGS_OFFSET   3
+#define STATUSBAR_PRGS_COUNT    100
+#define STATUSBAR_PRGS_MIN      5
 
 // -----------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ public:
     ImplData();
     ~ImplData();
 
-    VirtualDevice*		mpVirDev;
+    VirtualDevice*      mpVirDev;
     long                mnItemBorderWidth;
     bool                mbTopBorder:1;
     bool                mbDrawItemFrames:1;
@@ -80,19 +80,19 @@ StatusBar::ImplData::~ImplData()
 
 struct ImplStatusItem
 {
-    USHORT				mnId;
-    StatusBarItemBits	mnBits;
-    long				mnWidth;
-    long				mnOffset;
-    long				mnExtraWidth;
-    long				mnX;
-    XubString			maText;
-    XubString			maHelpText;
-    XubString			maQuickHelpText;
-    ULONG				mnHelpId;
-    void*				mpUserData;
-    BOOL				mbVisible;
-    XubString			maAccessibleName;
+    USHORT              mnId;
+    StatusBarItemBits   mnBits;
+    long                mnWidth;
+    long                mnOffset;
+    long                mnExtraWidth;
+    long                mnX;
+    XubString           maText;
+    XubString           maHelpText;
+    XubString           maQuickHelpText;
+    ULONG               mnHelpId;
+    void*               mpUserData;
+    BOOL                mbVisible;
+    XubString           maAccessibleName;
     XubString           maCommand;
 };
 
@@ -149,20 +149,20 @@ void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
     Window::ImplInit( pParent, nStyle & ~WB_BORDER, NULL );
 
     // WinBits merken
-    mpItemList		= new ImplStatusItemList;
-    mpImplData->mpVirDev		= new VirtualDevice( *this );
-    mnCurItemId 	= 0;
-    mbFormat		= TRUE;
-    mbVisibleItems	= TRUE;
-    mbProgressMode	= FALSE;
-    mbInUserDraw	= FALSE;
-    mbBottomBorder	= FALSE;
+    mpItemList      = new ImplStatusItemList;
+    mpImplData->mpVirDev        = new VirtualDevice( *this );
+    mnCurItemId     = 0;
+    mbFormat        = TRUE;
+    mbVisibleItems  = TRUE;
+    mbProgressMode  = FALSE;
+    mbInUserDraw    = FALSE;
+    mbBottomBorder  = FALSE;
     mnItemsWidth    = STATUSBAR_OFFSET_X;
-    mnDX			= 0;
-    mnDY			= 0;
-    mnCalcHeight	= 0;
-    mnItemY 		= STATUSBAR_OFFSET_Y;
-    mnTextY 		= STATUSBAR_OFFSET_TEXTY;
+    mnDX            = 0;
+    mnDY            = 0;
+    mnCalcHeight    = 0;
+    mnItemY         = STATUSBAR_OFFSET_Y;
+    mnTextY         = STATUSBAR_OFFSET_TEXTY;
 
     ImplInitSettings( TRUE, TRUE, TRUE );
     SetLineColor();
@@ -256,7 +256,7 @@ void StatusBar::ImplInitSettings( BOOL bFont,
             aColor = rStyleSettings.GetWindowColor();
         SetBackground( aColor );
         mpImplData->mpVirDev->SetBackground( GetBackground() );
-        
+
         // NWF background
         if( ! IsControlBackground() &&
               IsNativeControlSupported( CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_WINDOW ) )
@@ -272,10 +272,10 @@ void StatusBar::ImplInitSettings( BOOL bFont,
 void StatusBar::ImplFormat()
 {
     ImplStatusItem* pItem;
-    long			nExtraWidth;
-    long			nExtraWidth2;
-    long			nX;
-    USHORT			nAutoSizeItems = 0;
+    long            nExtraWidth;
+    long            nExtraWidth2;
+    long            nX;
+    USHORT          nAutoSizeItems = 0;
 
     // Breiten zusammenrechnen
     mnItemsWidth = STATUSBAR_OFFSET_X;
@@ -299,9 +299,9 @@ void StatusBar::ImplFormat()
     {
         // Bei rechtsbuendiger Ausrichtung wird kein AutoSize ausgewertet,
         // da wir links den Text anzeigen, der mit SetText gesetzt wird
-        nX				= mnDX - mnItemsWidth;
-        nExtraWidth 	= 0;
-        nExtraWidth2	= 0;
+        nX              = mnDX - mnItemsWidth;
+        nExtraWidth     = 0;
+        nExtraWidth2    = 0;
     }
     else
     {
@@ -353,7 +353,7 @@ void StatusBar::ImplFormat()
 
 Rectangle StatusBar::ImplGetItemRectPos( USHORT nPos ) const
 {
-    Rectangle		aRect;
+    Rectangle       aRect;
     ImplStatusItem* pItem;
     pItem = mpItemList->GetObject( nPos );
     if ( pItem )
@@ -377,7 +377,7 @@ Rectangle StatusBar::ImplGetItemRectPos( USHORT nPos ) const
 USHORT StatusBar::ImplGetFirstVisiblePos() const
 {
     ImplStatusItem* pItem;
-    
+
     for( USHORT nPos = 0; nPos < mpItemList->Count(); nPos++ )
     {
         pItem = mpItemList->GetObject( nPos );
@@ -387,7 +387,7 @@ USHORT StatusBar::ImplGetFirstVisiblePos() const
                 return nPos;
         }
     }
-    
+
     return ~0;
 }
 
@@ -438,11 +438,11 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
         return;
 
     // Ausgabebereich berechnen
-    ImplStatusItem* 	pItem = mpItemList->GetObject( nPos );
+    ImplStatusItem*     pItem = mpItemList->GetObject( nPos );
     long nW = mpImplData->mnItemBorderWidth + 1;
-    Rectangle			aTextRect( aRect.Left()+nW, aRect.Top()+nW,
+    Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
                                    aRect.Right()-nW, aRect.Bottom()-nW );
-    Size				aTextRectSize( aTextRect.GetSize() );
+    Size                aTextRectSize( aTextRect.GetSize() );
 
     if ( bOffScreen )
         mpImplData->mpVirDev->SetOutputSizePixel( aTextRectSize );
@@ -455,8 +455,8 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
     // Text ausgeben
     if ( bDrawText )
     {
-        Size	aTextSize( GetTextWidth( pItem->maText ), GetTextHeight() );
-        Point	aTextPos = ImplGetItemTextPos( aTextRectSize, aTextSize, pItem->mnBits );
+        Size    aTextSize( GetTextWidth( pItem->maText ), GetTextHeight() );
+        Point   aTextPos = ImplGetItemTextPos( aTextRectSize, aTextSize, pItem->mnBits );
         if ( bOffScreen )
             mpImplData->mpVirDev->DrawText( aTextPos, pItem->maText );
         else
@@ -499,12 +499,12 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
             if( !(pItem->mnBits & SIB_FLAT) )
             {
                 USHORT nStyle;
-                
+
                 if ( pItem->mnBits & SIB_IN )
                     nStyle = FRAME_DRAW_IN;
                 else
                     nStyle = FRAME_DRAW_OUT;
-                
+
                 DecorationView aDecoView( this );
                 aDecoView.DrawFrame( aRect, nStyle );
             }
@@ -539,7 +539,7 @@ void DrawProgress( Window* pWindow, const Point& rPos,
     if( pWindow->IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
     {
         bool bNeedErase = ImplGetSVData()->maNWFData.mbProgressNeedsErase;
-        
+
         long nFullWidth = (nPrgsWidth + nOffset) * (10000 / nPercentCount);
         long nPerc = (nPercent2 > 10000) ? 10000 : nPercent2;
         ImplControlValue aValue( nFullWidth * (long)nPerc / 10000 );
@@ -580,7 +580,7 @@ void DrawProgress( Window* pWindow, const Point& rPos,
             return;
         }
     }
-    
+
     // Werte vorberechnen
     USHORT nPerc1 = nPercent1 / nPercentCount;
     USHORT nPerc2 = nPercent2 / nPercentCount;
@@ -588,11 +588,11 @@ void DrawProgress( Window* pWindow, const Point& rPos,
     if ( nPerc1 > nPerc2 )
     {
         // Support progress that can also decrease
-        
+
         // Rechteck berechnen
-        long		nDX = nPrgsWidth + nOffset;
-        long		nLeft = rPos.X()+((nPerc1-1)*nDX);
-        Rectangle	aRect( nLeft, rPos.Y(), nLeft+nPrgsWidth, rPos.Y()+nPrgsHeight );
+        long        nDX = nPrgsWidth + nOffset;
+        long        nLeft = rPos.X()+((nPerc1-1)*nDX);
+        Rectangle   aRect( nLeft, rPos.Y(), nLeft+nPrgsWidth, rPos.Y()+nPrgsHeight );
 
         do
         {
@@ -604,7 +604,7 @@ void DrawProgress( Window* pWindow, const Point& rPos,
         while ( nPerc1 > nPerc2 );
 
         pWindow->Flush();
-    }	
+    }
     else if ( nPerc1 < nPerc2 )
     {
         // Percent-Rechtecke malen
@@ -617,9 +617,9 @@ void DrawProgress( Window* pWindow, const Point& rPos,
         }
 
         // Rechteck berechnen
-        long		nDX = nPrgsWidth + nOffset;
-        long		nLeft = rPos.X()+(nPerc1*nDX);
-        Rectangle	aRect( nLeft, rPos.Y(), nLeft+nPrgsWidth, rPos.Y()+nPrgsHeight );
+        long        nDX = nPrgsWidth + nOffset;
+        long        nLeft = rPos.X()+(nPerc1*nDX);
+        Rectangle   aRect( nLeft, rPos.Y(), nLeft+nPrgsWidth, rPos.Y()+nPrgsHeight );
 
         do
         {
@@ -681,12 +681,12 @@ void StatusBar::ImplCalcProgressRect()
 {
     // calculate text size
     Size aPrgsTxtSize( GetTextWidth( maPrgsTxt ), GetTextHeight() );
-    maPrgsTxtPos.X()	= STATUSBAR_OFFSET_X+1;
-    
+    maPrgsTxtPos.X()    = STATUSBAR_OFFSET_X+1;
+
     // calculate progress frame
-    maPrgsFrameRect.Left()		= maPrgsTxtPos.X()+aPrgsTxtSize.Width()+STATUSBAR_OFFSET;
-    maPrgsFrameRect.Top()		= mnItemY;
-    maPrgsFrameRect.Bottom()	= mnCalcHeight - STATUSBAR_OFFSET_Y;
+    maPrgsFrameRect.Left()      = maPrgsTxtPos.X()+aPrgsTxtSize.Width()+STATUSBAR_OFFSET;
+    maPrgsFrameRect.Top()       = mnItemY;
+    maPrgsFrameRect.Bottom()    = mnCalcHeight - STATUSBAR_OFFSET_Y;
     if( IsTopBorder() )
         maPrgsFrameRect.Bottom()+=2;
 
@@ -728,7 +728,7 @@ void StatusBar::ImplCalcProgressRect()
         }
     }
     if( ! bNativeOK )
-        maPrgsTxtPos.Y()	= mnTextY;
+        maPrgsTxtPos.Y()    = mnTextY;
 }
 
 // -----------------------------------------------------------------------
@@ -886,7 +886,7 @@ void StatusBar::RequestHelp( const HelpEvent& rHEvt )
         }
         else if ( rHEvt.GetMode() & HELPMODE_QUICK )
         {
-            XubString	aStr = GetQuickHelpText( nItemId );
+            XubString   aStr = GetQuickHelpText( nItemId );
             // Show quickhelp if available
             if( aStr.Len() )
             {
@@ -1026,14 +1026,14 @@ void StatusBar::InsertItem( USHORT nItemId, ULONG nWidth,
 
     // Item anlegen
     long nFudge = GetTextHeight()/4;
-    ImplStatusItem* pItem	= new ImplStatusItem;
-    pItem->mnId 			= nItemId;
-    pItem->mnBits			= nBits;
-    pItem->mnWidth			= (long)nWidth+nFudge+STATUSBAR_OFFSET;
-    pItem->mnOffset 		= nOffset;
-    pItem->mnHelpId 		= 0;
-    pItem->mpUserData		= 0;
-    pItem->mbVisible		= TRUE;
+    ImplStatusItem* pItem   = new ImplStatusItem;
+    pItem->mnId             = nItemId;
+    pItem->mnBits           = nBits;
+    pItem->mnWidth          = (long)nWidth+nFudge+STATUSBAR_OFFSET;
+    pItem->mnOffset         = nOffset;
+    pItem->mnHelpId         = 0;
+    pItem->mpUserData       = 0;
+    pItem->mbVisible        = TRUE;
 
     // Item in die Liste einfuegen
     mpItemList->Insert( pItem, nPos );
@@ -1291,7 +1291,7 @@ Point StatusBar::GetItemTextPos( USHORT nItemId ) const
             ImplStatusItem* pItem = mpItemList->GetObject( nPos );
             Rectangle aRect = ImplGetItemRectPos( nPos );
             long nW = mpImplData->mnItemBorderWidth + 1;
-            Rectangle			aTextRect( aRect.Left()+nW, aRect.Top()+nW,
+            Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
                                            aRect.Right()-nW, aRect.Bottom()-nW );
             Point aPos = ImplGetItemTextPos( aTextRect.GetSize(),
                                              Size( GetTextWidth( pItem->maText ), GetTextHeight() ),
@@ -1361,7 +1361,7 @@ void StatusBar::SetItemText( USHORT nItemId, const XubString& rText )
             // adjust item width - see also DataChanged()
             long nFudge = GetTextHeight()/4;
             long nWidth = GetTextWidth( pItem->maText ) + nFudge;
-            if( (nWidth > pItem->mnWidth + STATUSBAR_OFFSET) || 
+            if( (nWidth > pItem->mnWidth + STATUSBAR_OFFSET) ||
                 ((nWidth < pItem->mnWidth) && (mnDX - STATUSBAR_OFFSET) < mnItemsWidth  ))
             {
                 pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
@@ -1585,9 +1585,9 @@ void StatusBar::StartProgressMode( const XubString& rText )
 {
     DBG_ASSERT( !mbProgressMode, "StatusBar::StartProgressMode(): progress mode is active" );
 
-    mbProgressMode	= TRUE;
-    mnPercent		= 0;
-    maPrgsTxt		= rText;
+    mbProgressMode  = TRUE;
+    mnPercent       = 0;
+    maPrgsTxt       = rText;
 
     // Groessen berechnen
     ImplCalcProgressRect();
@@ -1651,7 +1651,7 @@ void StatusBar::ResetProgressMode()
 {
     if ( mbProgressMode )
     {
-        mnPercent = 0;		
+        mnPercent = 0;
         maPrgsTxt.Erase();
         if ( IsReallyVisible() )
         {
@@ -1701,11 +1701,11 @@ void StatusBar::SetText( const XubString& rText )
 
 Size StatusBar::CalcWindowSizePixel() const
 {
-    ULONG	i = 0;
-    ULONG	nCount = mpItemList->Count();
-    long	nOffset = 0;
-    long	nCalcWidth = (STATUSBAR_OFFSET_X*2);
-    long	nCalcHeight;
+    ULONG   i = 0;
+    ULONG   nCount = mpItemList->Count();
+    long    nOffset = 0;
+    long    nCalcWidth = (STATUSBAR_OFFSET_X*2);
+    long    nCalcHeight;
 
     while ( i < nCount )
     {
@@ -1714,7 +1714,7 @@ Size StatusBar::CalcWindowSizePixel() const
         nOffset = pItem->mnOffset;
         i++;
     }
-    
+
     long nMinHeight = GetTextHeight();
     const long nBarTextOffset = STATUSBAR_OFFSET_TEXTY*2;
     long nProgressHeight = nMinHeight + nBarTextOffset;
@@ -1732,14 +1732,14 @@ Size StatusBar::CalcWindowSizePixel() const
             nProgressHeight = aNativeControlRegion.GetHeight();
         }
     }
-    
+
     if( mpImplData->mbDrawItemFrames &&
         pThis->IsNativeControlSupported( CTRL_FRAME, PART_BORDER ) )
     {
         ImplControlValue aControlValue( FRAME_DRAW_NODRAW );
         Rectangle aBound, aContent;
         Rectangle aNatRgn( Point( 0, 0 ), Size( 150, 50 ) );
-        if(	pThis->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
+        if( pThis->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
             aNatRgn, 0, aControlValue, rtl::OUString(), aBound, aContent) )
         {
             mpImplData->mnItemBorderWidth =
@@ -1750,7 +1750,7 @@ Size StatusBar::CalcWindowSizePixel() const
     nCalcHeight = nMinHeight+nBarTextOffset + 2*mpImplData->mnItemBorderWidth;
     if( nCalcHeight < nProgressHeight+2 )
         nCalcHeight = nProgressHeight+2;
-    
+
     // add border
     if( IsTopBorder() )
         nCalcHeight += 2;

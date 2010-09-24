@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,38 +110,38 @@ enum SdrEventKind  {SDREVENT_NONE,
 
 struct SVX_DLLPUBLIC SdrViewEvent
 {
-    SdrHdl*						pHdl;
-    SdrObject*					pObj;
-    SdrObject*					pRootObj;        // Dieses Markieren bei SdrBeginTextEdit
-    SdrPageView*				pPV;
-    const SvxURLField*			pURLField;
+    SdrHdl*                     pHdl;
+    SdrObject*                  pObj;
+    SdrObject*                  pRootObj;        // Dieses Markieren bei SdrBeginTextEdit
+    SdrPageView*                pPV;
+    const SvxURLField*          pURLField;
 
-    Point						aLogicPos;
-    SdrHitKind					eHit;
-    SdrEventKind				eEvent;
-    SdrHdlKind					eHdlKind;
-    SdrCreateCmd				eEndCreateCmd;   // auch fuer EndInsPoint
+    Point                       aLogicPos;
+    SdrHitKind                  eHit;
+    SdrEventKind                eEvent;
+    SdrHdlKind                  eHdlKind;
+    SdrCreateCmd                eEndCreateCmd;   // auch fuer EndInsPoint
 
-    UINT16						nMouseClicks;
-    UINT16						nMouseMode;
-    UINT16						nMouseCode;
-    UINT16						nHlplIdx;
-    UINT16						nGlueId;
+    UINT16                      nMouseClicks;
+    UINT16                      nMouseMode;
+    UINT16                      nMouseCode;
+    UINT16                      nHlplIdx;
+    UINT16                      nGlueId;
 
-    unsigned					bMouseDown : 1;
-    unsigned					bMouseUp : 1;
-    unsigned					bDoubleHdlSize : 1;  // Doppelte Handlegroesse wg. TextEdit
-    unsigned					bIsAction : 1;       // Action ist aktiv
-    unsigned					bIsTextEdit : 1;     // TextEdit laeuft zur Zeit
-    unsigned					bTextEditHit : 1;    // offene OutlinerView getroffen
-    unsigned					bAddMark : 1;
-    unsigned					bUnmark : 1;
-    unsigned					bPrevNextMark : 1;
-    unsigned					bMarkPrev : 1;
-    unsigned					bInsPointNewObj : 1;
-    unsigned					bDragWithCopy : 1;
-    unsigned					bCaptureMouse : 1;
-    unsigned					bReleaseMouse : 1;
+    unsigned                    bMouseDown : 1;
+    unsigned                    bMouseUp : 1;
+    unsigned                    bDoubleHdlSize : 1;  // Doppelte Handlegroesse wg. TextEdit
+    unsigned                    bIsAction : 1;       // Action ist aktiv
+    unsigned                    bIsTextEdit : 1;     // TextEdit laeuft zur Zeit
+    unsigned                    bTextEditHit : 1;    // offene OutlinerView getroffen
+    unsigned                    bAddMark : 1;
+    unsigned                    bUnmark : 1;
+    unsigned                    bPrevNextMark : 1;
+    unsigned                    bMarkPrev : 1;
+    unsigned                    bInsPointNewObj : 1;
+    unsigned                    bDragWithCopy : 1;
+    unsigned                    bCaptureMouse : 1;
+    unsigned                    bReleaseMouse : 1;
 
 public:
     SdrViewEvent();
@@ -157,7 +157,7 @@ public:
 class SVX_DLLPUBLIC SdrDropMarkerOverlay
 {
     // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList				maObjects;
+    ::sdr::overlay::OverlayObjectList               maObjects;
 
     void ImplCreateOverlays(const SdrView& rView, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
@@ -184,16 +184,16 @@ public:
 
 class SVX_DLLPUBLIC SdrView: public SdrCreateView, public tools::WeakBase< SdrView >
 {
-    friend class				SdrPageView;
+    friend class                SdrPageView;
 
-    unsigned					bNoExtendedMouseDispatcher : 1;
-    unsigned					bNoExtendedKeyDispatcher : 1;
-    unsigned					bNoExtendedCommandDispatcher : 1;
-    unsigned					bTextEditOnObjectsWithoutTextIfTextTool : 1;
-    unsigned					mbMasterPagePaintCaching : 1;
+    unsigned                    bNoExtendedMouseDispatcher : 1;
+    unsigned                    bNoExtendedKeyDispatcher : 1;
+    unsigned                    bNoExtendedCommandDispatcher : 1;
+    unsigned                    bTextEditOnObjectsWithoutTextIfTextTool : 1;
+    unsigned                    mbMasterPagePaintCaching : 1;
 
 protected:
-    SvtAccessibilityOptions	maAccessibilityOptions;
+    SvtAccessibilityOptions maAccessibilityOptions;
 
 public:
     TYPEINFO();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,19 +47,19 @@ private:
     FixedText       aFTInfoText;
     FixedLine       aFLInfoText;
 
-    FixedText		aFTMasterPasswordCrt;
-    Edit			aEDMasterPasswordCrt;
-    FixedText		aFTMasterPasswordRepeat;
-    Edit			aEDMasterPasswordRepeat;
+    FixedText       aFTMasterPasswordCrt;
+    Edit            aEDMasterPasswordCrt;
+    FixedText       aFTMasterPasswordRepeat;
+    Edit            aEDMasterPasswordRepeat;
 
     FixedText       aFTCautionText;
     FixedLine       aFLCautionText;
 
-    FixedText		aFTMasterPasswordWarning;
+    FixedText       aFTMasterPasswordWarning;
     FixedLine       aFL;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
-    HelpButton		aHelpBtn;
+    HelpButton      aHelpBtn;
 
 
     DECL_LINK( OKHdl_Impl, OKButton * );
@@ -68,11 +68,11 @@ private:
 public:
     MasterPasswordCreateDialog( Window* pParent, ResMgr * pResMgr );
 
-    String			GetMasterPassword() const { return aEDMasterPasswordCrt.GetText(); }
+    String          GetMasterPassword() const { return aEDMasterPasswordCrt.GetText(); }
 
 private:
-    ResMgr*											pResourceMgr;
-    sal_uInt16										nMinLen;
+    ResMgr*                                         pResourceMgr;
+    sal_uInt16                                      nMinLen;
 
     void            CalculateTextHeight();
 };

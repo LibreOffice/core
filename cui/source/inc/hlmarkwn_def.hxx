@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,9 @@
 #ifndef _SVX_BKWND_HYPERLINK_DEF_HXX
 #define _SVX_BKWND_HYPERLINK_DEF_HXX
 
-#define LERR_NOERROR		0
-#define LERR_NOENTRIES		1
-#define LERR_DOCNOTOPEN		2
+#define LERR_NOERROR        0
+#define LERR_NOENTRIES      1
+#define LERR_DOCNOTOPEN     2
 
 #endif
 

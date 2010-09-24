@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,16 +45,16 @@ namespace connectivity
     {
         typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
 
-        class OOO_DLLPUBLIC_FILE OFileTable :	public OTable_TYPEDEF
+        class OOO_DLLPUBLIC_FILE OFileTable :   public OTable_TYPEDEF
         {
         protected:
-            OConnection*										m_pConnection;
-            SvStream*											m_pFileStream;
-            ::vos::ORef<OSQLColumns>							m_aColumns;
-            sal_Int32											m_nFilePos;					// aktuelle IResultSetHelper::Movement
-            sal_uInt8*											m_pBuffer;
-            sal_uInt16											m_nBufferSize;	// Groesse des ReadBuffer, wenn pBuffer != NULL
-            sal_Bool											m_bWriteable;	// svstream cann't say if we are writeable
+            OConnection*                                        m_pConnection;
+            SvStream*                                           m_pFileStream;
+            ::vos::ORef<OSQLColumns>                            m_aColumns;
+            sal_Int32                                           m_nFilePos;                 // aktuelle IResultSetHelper::Movement
+            sal_uInt8*                                          m_pBuffer;
+            sal_uInt16                                          m_nBufferSize;  // Groesse des ReadBuffer, wenn pBuffer != NULL
+            sal_Bool                                            m_bWriteable;   // svstream cann't say if we are writeable
                                                                                 // so we have to
 
             virtual void FileClose();
@@ -65,7 +65,7 @@ namespace connectivity
             virtual void refreshIndexes();
         public:
             OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection);
-            OFileTable(	sdbcx::OCollection* _pTables,OConnection* _pConnection,
+            OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description = ::rtl::OUString(),
@@ -92,7 +92,7 @@ namespace connectivity
             virtual BOOL UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor);
             virtual void dropColumn(sal_Int32 _nPos);
-            // refresh the header of file based tables to see changes done by someone 
+            // refresh the header of file based tables to see changes done by someone
             virtual void refreshHeader();
 
             ::rtl::OUString SAL_CALL getName() throw() { return m_Name; }
@@ -104,7 +104,7 @@ namespace connectivity
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-            
+
             sal_Int32 getFilePos() const { return m_nFilePos; }
 
         public:

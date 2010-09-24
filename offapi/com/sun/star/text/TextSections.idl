@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,39 +24,39 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_TextSections_idl__ 
-#define __com_sun_star_text_TextSections_idl__ 
- 
-#ifndef __com_sun_star_container_XIndexAccess_idl__ 
-#include <com/sun/star/container/XIndexAccess.idl> 
-#endif 
- 
-#ifndef __com_sun_star_container_XNameAccess_idl__ 
-#include <com/sun/star/container/XNameAccess.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module text {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_text_TextSections_idl__
+#define __com_sun_star_text_TextSections_idl__
+
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNameAccess_idl__
+#include <com/sun/star/container/XNameAccess.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
 // DocMerge from xml: service com::sun::star::text::TextSections
 /** provides access to the text sections in a text document.
  */
 published service TextSections
-{ 
+{
     // DocMerge: empty anyway
-    interface com::sun::star::container::XIndexAccess; 
-    
+    interface com::sun::star::container::XIndexAccess;
+
     // DocMerge: empty anyway
-    interface com::sun::star::container::XNameAccess; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    interface com::sun::star::container::XNameAccess;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -37,13 +37,13 @@ $published = 0;
 $typeclass = "";
 while (<FILEIN>)
 {
-    if ($first == 0) 
+    if ($first == 0)
     {
-        if ( $linebefore =~ m#type class: published (.+)# ) 
+        if ( $linebefore =~ m#type class: published (.+)# )
         {
             $published = 1;
             $typeclass = $1;
-        } elsif ( $linebefore =~ m#type class: (.+)# ) 
+        } elsif ( $linebefore =~ m#type class: (.+)# )
         {
             $published = 0;
             $typeclass = $1;
@@ -52,12 +52,12 @@ while (<FILEIN>)
             $published = 0;
             $typeclass = "";
         }
-    } else 
+    } else
     {
         $first = 0;
     }
 
-    if ( (!$typeclass eq "") && ($_ =~ m# *type name: \"([^\[.]+)\"#) ) 
+    if ( (!$typeclass eq "") && ($_ =~ m# *type name: \"([^\[.]+)\"#) )
     {
         if ($DEBUG == 1)
         {
@@ -68,7 +68,7 @@ while (<FILEIN>)
             $main::currenttypes->{$1} = { PUBLISHED => $published,
                                           TYPECLASS => $typeclass,
                                           COUNT => 1 };
-#			print "### $main::currenttypes->{$1}->{PUBLISHED} $main::currenttypes->{$1}->{TYPECLASS} $main::currenttypes->{$1}->{COUNT}\n";
+#           print "### $main::currenttypes->{$1}->{PUBLISHED} $main::currenttypes->{$1}->{TYPECLASS} $main::currenttypes->{$1}->{COUNT}\n";
         }
     }
     $linebefore = $_;
@@ -90,13 +90,13 @@ $published = 0;
 $typeclass = "";
 while (<FILEIN>)
 {
-    if ($first == 0) 
+    if ($first == 0)
     {
-        if ( $linebefore =~ m#type class: published (.+)# ) 
+        if ( $linebefore =~ m#type class: published (.+)# )
         {
             $published = 1;
             $typeclass = $1;
-        } elsif ( $linebefore =~ m#type class: (.+)# ) 
+        } elsif ( $linebefore =~ m#type class: (.+)# )
         {
             $published = 0;
             $typeclass = $1;
@@ -105,12 +105,12 @@ while (<FILEIN>)
             $published = 0;
             $typeclass = "";
         }
-    } else 
+    } else
     {
         $first = 0;
     }
 
-    if ( (!$typeclass eq "") && ($_ =~ m# *type name: \"([^\[.]+)\"#) ) 
+    if ( (!$typeclass eq "") && ($_ =~ m# *type name: \"([^\[.]+)\"#) )
     {
         if ($DEBUG == 1)
         {
@@ -119,12 +119,12 @@ while (<FILEIN>)
         if ( ! exists $main::reftypes->{$1} )
         {
             $main::reftypes->{$1}++;
-            
+
             if ( exists $main::currenttypes->{$1} )
             {
                 $main::currenttypes->{$1}->{COUNT}++;
-#				print "###### $main::currenttypes->{$1}->{PUBLISHED} $main::currenttypes->{$1}->{TYPECLASS} $main::currenttypes->{$1}->{COUNT}\n";
-            } else 
+#               print "###### $main::currenttypes->{$1}->{PUBLISHED} $main::currenttypes->{$1}->{TYPECLASS} $main::currenttypes->{$1}->{COUNT}\n";
+            } else
             {
                 if ($published == 0)
                 {
@@ -132,7 +132,7 @@ while (<FILEIN>)
                                                   TYPECLASS => $typeclass };
                 } else
                 {
-                    print "ERROR: type $1 is only in reference type library, this can't be happen\n"; 
+                    print "ERROR: type $1 is only in reference type library, this can't be happen\n";
                 }
             }
         }
@@ -157,7 +157,7 @@ foreach $i ( sort @typekeys )
         $newunotypes++;
         my $t = $i;
         $t =~ s#/#\.#go;
-        if ($main::currenttypes->{$i}->{PUBLISHED} == 1) 
+        if ($main::currenttypes->{$i}->{PUBLISHED} == 1)
         {
             print "published ";
             $newpublished++;
@@ -165,7 +165,7 @@ foreach $i ( sort @typekeys )
         if ( $t =~ m#drafts\.com.+#)
         {
             $draftscount++;
-            if ($main::currenttypes->{$i}->{PUBLISHED} == 1) 
+            if ($main::currenttypes->{$i}->{PUBLISHED} == 1)
             {
                 $draftspublished++;
             }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 
-#include <cppuhelper/implbase1.hxx>	// helper for implementations
+#include <cppuhelper/implbase1.hxx> // helper for implementations
 
 
 //class XResultListenerRef;
@@ -47,23 +47,23 @@ class ScAddInResult : public cppu::WeakImplHelper1<
                                 com::sun::star::sheet::XVolatileResult>
 {
 private:
-    String					aArg;
-    long					nTickCount;
-    XResultListenerArr_Impl	aListeners;
-    Timer					aTimer;
+    String                  aArg;
+    long                    nTickCount;
+    XResultListenerArr_Impl aListeners;
+    Timer                   aTimer;
 
     DECL_LINK( TimeoutHdl, Timer* );
 
-    void 					NewValue();
+    void                    NewValue();
 
 public:
                             ScAddInResult(const String& rStr);
-    virtual					~ScAddInResult();
+    virtual                 ~ScAddInResult();
 
-//							SMART_UNO_DECLARATION( ScAddInResult, UsrObject );
+//                          SMART_UNO_DECLARATION( ScAddInResult, UsrObject );
 
-//	virtual BOOL			queryInterface( Uik, XInterfaceRef& );
-//	virtual XIdlClassRef	getIdlClass(void);
+//  virtual BOOL            queryInterface( Uik, XInterfaceRef& );
+//  virtual XIdlClassRef    getIdlClass(void);
 
                             // XVolatileResult
     virtual void SAL_CALL addResultListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);

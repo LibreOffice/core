@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 namespace framework
 {
 
-sal_Bool UIConfigurationImporterOOo1x::ImportCustomToolbars( 
+sal_Bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
     const uno::Reference< ui::XUIConfigurationManager >& rContainerFactory,
     uno::Sequence< uno::Reference< container::XIndexContainer > >& rSeqContainer,
     const uno::Reference< lang::XMultiServiceFactory >& rServiceManager,

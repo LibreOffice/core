@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 class SwToxPortion : public SwTxtPortion
 {
 public:
-    inline	SwToxPortion(){	SetWhichPor( POR_TOX ); }
+    inline  SwToxPortion(){ SetWhichPor( POR_TOX ); }
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     OUTPUT_OPERATOR
 };
@@ -65,7 +65,7 @@ public:
 };
 
 /*************************************************************************
- *					inline - Implementations
+ *                  inline - Implementations
  *************************************************************************/
 
 CLASSIO( SwToxPortion )

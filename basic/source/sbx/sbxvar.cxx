@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ using namespace com::sun::star::uno;
 TYPEINIT1(SbxVariable,SbxValue)
 TYPEINIT1(SbxHint,SfxSimpleHint)
 
-extern UINT32 nVarCreator;			// in SBXBASE.CXX, fuer LoadData()
+extern UINT32 nVarCreator;          // in SBXBASE.CXX, fuer LoadData()
 #ifdef DBG_UTIL
 static ULONG nVar = 0;
 #endif
@@ -57,8 +57,8 @@ static ULONG nVar = 0;
 class SbxVariableImpl
 {
     friend class SbxVariable;
-    String						m_aDeclareClassName;
-    Reference< XInterface >		m_xComListener;
+    String                      m_aDeclareClassName;
+    Reference< XInterface >     m_xComListener;
 
     SbxVariableImpl( void )
     {}
@@ -508,7 +508,7 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
 
 BOOL SbxVariable::StoreData( SvStream& rStrm ) const
 {
-    rStrm << (BYTE) 0xFF;		// Marker
+    rStrm << (BYTE) 0xFF;       // Marker
     BOOL bValStore;
     if( this->IsA( TYPE(SbxMethod) ) )
     {
@@ -536,7 +536,7 @@ BOOL SbxVariable::StoreData( SvStream& rStrm ) const
     rStrm << (UINT32)nUserData;
     if( pInfo.Is() )
     {
-        rStrm << (BYTE) 2;		// Version 2: mit UserData!
+        rStrm << (BYTE) 2;      // Version 2: mit UserData!
         pInfo->StoreData( rStrm );
     }
     else

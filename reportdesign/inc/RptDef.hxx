@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
 namespace rptui
 {
 // not all used at the moment
-#define RPT_LAYER_FRONT		    0
-#define RPT_LAYER_BACK		    1
+#define RPT_LAYER_FRONT         0
+#define RPT_LAYER_BACK          1
 #define RPT_LAYER_HIDDEN        2
 
 
@@ -89,13 +89,13 @@ public:
     }
 };
 /** returns teh object type depending on the service name
-    @param	_xComponent the report component
+    @param  _xComponent the report component
 */
 REPORTDESIGN_DLLPUBLIC sal_uInt16 getObjectType(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
 typedef ::std::pair< ::rtl::OUString, ::boost::shared_ptr<AnyConverter> > TPropertyConverter;
 DECLARE_STL_USTRINGACCESS_MAP(TPropertyConverter , TPropertyNamePair);
 /** returns the property name map for the givern property id
-    @param	_nObjectId	the object id
+    @param  _nObjectId  the object id
 */
 REPORTDESIGN_DLLPUBLIC const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId);
 REPORTDESIGN_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle> getUsedStyle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport);

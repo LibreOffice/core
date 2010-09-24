@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 class ScStringInputDlg : public ModalDialog
 {
 public:
-            ScStringInputDlg( 	  Window* pParent,
+            ScStringInputDlg(     Window* pParent,
                             const String& rTitle,
                             const String& rEditTitle,
                             const String& rDefault,
@@ -54,9 +54,9 @@ public:
 private:
     FixedText       aFtEditTitle;
     Edit            aEdInput;
-    OKButton		aBtnOk;
-    CancelButton	aBtnCancel;
-    HelpButton		aBtnHelp;
+    OKButton        aBtnOk;
+    CancelButton    aBtnCancel;
+    HelpButton      aBtnHelp;
 };
 
 #include <layout/layout-post.hxx>

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #ifndef __FRAMEWORK_DISPATCH_OXT_HANDLER_HXX_
@@ -60,7 +60,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/io/XInputStream.hpp>
@@ -68,7 +68,7 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
@@ -80,23 +80,23 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	non exported const
+//  non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	non exported definitions
+//  non exported definitions
 //_________________________________________________________________________________________________________________
 
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
@@ -143,7 +143,7 @@ DEFINE_INIT_SERVICE                 (   Oxt_Handler,
     @threadsafe yes
 *//*-*************************************************************************************************************/
 Oxt_Handler::Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        //	Init baseclasses first
+        //  Init baseclasses first
         :   ThreadHelpBase      (          )
         ,   ::cppu::OWeakObject (          )
         // Init member
@@ -207,7 +207,7 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
     rtl::OUString sServiceName = UNISTRING( "com.sun.star.deployment.ui.PackageManagerDialog" );
     css::uno::Sequence< css::uno::Any > lParams(1);
     lParams[0] <<= aURL.Main;
-    
+
     css::uno::Reference< css::uno::XInterface > xService;
 
     xService = m_xFactory->createInstanceWithArguments( sServiceName, lParams );

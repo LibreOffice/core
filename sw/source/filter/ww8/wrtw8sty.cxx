@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,6 +79,7 @@
 #include "ww8par.hxx"
 #include "ww8attributeoutput.hxx"
 #include "docxattributeoutput.hxx"
+#include "rtfattributeoutput.hxx"
 
 using namespace sw::util;
 using namespace nsHdFtFlags;
@@ -267,7 +268,7 @@ void MSWordStyles::BuildStylesTable()
         pFmt = (SwFmt*)rArr[n];
         pFmtA[ BuildGetSlot( *pFmt ) ] = pFmt;
     }
-    
+
     const SvPtrarr& rArr2 = *m_rExport.pDoc->GetTxtFmtColls();   // dann TxtFmtColls
     // das Default-TextStyle ( 0 ) wird nicht mit ausgegeben !
     for( n = 1; n < rArr2.Count(); n++ )
@@ -299,7 +300,7 @@ void WW8AttributeOutput::EndStyle()
 }
 
 void WW8AttributeOutput::StartStyle( const String& rName, bool bPapFmt, USHORT nWwBase,
-    USHORT nWwNext, USHORT nWwId, USHORT /*nId*/ )
+    USHORT nWwNext, USHORT nWwId, USHORT /*nId*/, bool bAutoUpdate )
 {
     BYTE aWW8_STD[ sizeof( WW8_STD ) ];
     BYTE* pData = aWW8_STD;
@@ -321,12 +322,12 @@ void WW8AttributeOutput::StartStyle( const String& rName, bool bPapFmt, USHORT n
 
     if( m_rWW8Export.bWrtWW8 )
     {
+        nBit16 = bAutoUpdate ? 1 : 0;  // fAutoRedef : 1
+        Set_UInt16( pData, nBit16 );
         //-------- jetzt neu:
         // ab Ver8 gibts zwei Felder mehr:
-        //UINT16    fAutoRedef : 1;    /* auto redefine style when appropriate */
         //UINT16    fHidden : 1;       /* hidden from UI? */
         //UINT16    : 14;              /* unused bits */
-        pData += sizeof( UINT16 );
     }
 
 
@@ -521,12 +522,17 @@ void MSWordStyles::OutputStyle( SwFmt* pFmt, USHORT nPos )
     {
         bool bFmtColl;
         USHORT nBase, nWwNext;
-        
+
         GetStyleData( pFmt, bFmtColl, nBase, nWwNext );
 
-        m_rExport.AttrOutput().StartStyle( pFmt->GetName(), bFmtColl,
-                nBase, nWwNext, GetWWId( *pFmt ), nPos );
-        
+        String aName = pFmt->GetName();
+        if ( aName.EqualsAscii( "Default" ) )
+            aName = String::CreateFromAscii( "Normal" );
+
+        m_rExport.AttrOutput().StartStyle( aName, bFmtColl,
+                nBase, nWwNext, GetWWId( *pFmt ), nPos,
+                pFmt->IsAutoUpdateFmt() );
+
         if ( bFmtColl )
             WriteProperties( pFmt, true, nPos, nBase==0xfff );           // UPX.papx
 
@@ -696,7 +702,6 @@ bool wwFont::Write(SvStream *pTableStrm) const
     return true;
 }
 
-#ifdef DOCX
 void wwFont::WriteDocx( const DocxAttributeOutput* rAttrOutput ) const
 {
     // no font embedding, panose id, subsetting, ... implemented
@@ -711,7 +716,17 @@ void wwFont::WriteDocx( const DocxAttributeOutput* rAttrOutput ) const
 
     rAttrOutput->EndFont();
 }
-#endif
+
+void wwFont::WriteRtf( const RtfAttributeOutput* rAttrOutput ) const
+{
+    rAttrOutput->FontFamilyType( meFamily, *this );
+    rAttrOutput->FontPitchType( mePitch );
+    rAttrOutput->FontCharset( sw::ms::rtl_TextEncodingToWinCharset( meChrSet ) );
+    rAttrOutput->StartFont( msFamilyNm );
+    if ( mbAlt )
+        rAttrOutput->FontAlternateName( msAltNm );
+    rAttrOutput->EndFont();
+}
 
 bool operator<(const wwFont &r1, const wwFont &r2)
 {
@@ -764,6 +779,22 @@ void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
     {
         GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
             pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
+    }
+
+    if (!bLoadAllFonts)
+        return;
+
+    const USHORT aTypes[] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, 0 };
+    for (const USHORT* pId = aTypes; *pId; ++pId)
+    {
+        USHORT nMaxItem = rPool.GetItemCount( *pId );
+        for( USHORT nGet = 0; nGet < nMaxItem; ++nGet )
+            if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem(
+                            *pId, nGet )) )
+            {
+                GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
+                            pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
+            }
     }
 }
 
@@ -829,7 +860,6 @@ void wwFontHelper::WriteFontTable(SvStream *pTableStream, WW8Fib& rFib)
     }
 }
 
-#ifdef DOCX
 void wwFontHelper::WriteFontTable( const DocxAttributeOutput& rAttrOutput )
 {
     ::std::vector<const wwFont *> aFontList( AsVector() );
@@ -837,7 +867,14 @@ void wwFontHelper::WriteFontTable( const DocxAttributeOutput& rAttrOutput )
     ::std::for_each( aFontList.begin(), aFontList.end(),
         ::std::bind2nd( ::std::mem_fun( &wwFont::WriteDocx ), &rAttrOutput ) );
 }
-#endif
+
+void wwFontHelper::WriteFontTable( const RtfAttributeOutput& rAttrOutput )
+{
+    ::std::vector<const wwFont *> aFontList( AsVector() );
+
+    ::std::for_each( aFontList.begin(), aFontList.end(),
+        ::std::bind2nd( ::std::mem_fun( &wwFont::WriteRtf ), &rAttrOutput ) );
+}
 
 /*  */
 
@@ -1116,7 +1153,7 @@ void MSWordSections::SetFooterFlag( BYTE& rHeadFootFlags, const SwFmt& rFmt,
 }
 
 void WW8_WrPlcSepx::OutHeaderFooter( WW8Export& rWrt, bool bHeader,
-                     const SwFmt& rFmt, ULONG& rCpPos, BYTE nHFFlags, 
+                     const SwFmt& rFmt, ULONG& rCpPos, BYTE nHFFlags,
                      BYTE nFlag,  BYTE nBreakCode)
 {
     if ( nFlag & nHFFlags )
@@ -1445,10 +1482,10 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         pPd = &const_cast<const SwDoc *>( pDoc )->GetPageDesc( 0 );
 
     pAktPageDesc = pPd;
-    
+
     if ( !pPd )
         return;
-    
+
     bool bOldPg = bOutPageDescs;
     bOutPageDescs = true;
 
@@ -1802,7 +1839,7 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFmt& rFmt, bool bHeader )
         ASSERT( rFt.GetFooterFmt(), "Footer text is not here" );
         pCntnt = &rFt.GetFooterFmt()->GetCntnt();
     }
-    
+
     const SwNodeIndex* pSttIdx = pCntnt->GetCntntIdx();
 
     if ( pSttIdx )

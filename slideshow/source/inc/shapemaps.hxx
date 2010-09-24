@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ namespace slideshow
         /// Maps XShape to shape listener
         typedef ::std::map< ::com::sun::star::uno::Reference<
                                 ::com::sun::star::drawing::XShape>,
-                            boost::shared_ptr< ::cppu::OInterfaceContainerHelper > 
+                            boost::shared_ptr< ::cppu::OInterfaceContainerHelper >
                             >                  ShapeEventListenerMap;
 
-        /// Maps XShape to mouse cursor 
+        /// Maps XShape to mouse cursor
         typedef ::std::map< ::com::sun::star::uno::Reference<
                                 ::com::sun::star::drawing::XShape>,
                             sal_Int16>         ShapeCursorMap;

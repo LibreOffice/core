@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,11 +48,11 @@
 #endif
 
 module com { module sun { module star { module awt {
-    
+
 /** specifies accessibility support for an edit.
-    
+
     @since OOo 1.1.2
- */    
+ */
 published service AccessibleEdit
 {
     /** This interface gives access to the structural information of an edit:
@@ -86,7 +86,7 @@ published service AccessibleEdit
             <li><const scope="com::sun::star::accessibility"
                 >AccessibleStateType::DEFUNC</const>
                 is set if the object has already been disposed
-                and subsequent calls to this object result in				
+                and subsequent calls to this object result in
                 <type scope="com::sun::star::lang">DisposedException</type>
                 exceptions.</li>
             <li><const scope="com::sun::star::accessibility"
@@ -110,18 +110,18 @@ published service AccessibleEdit
         </ul>
      */
     interface ::com::sun::star::accessibility::XAccessibleContext;
-    
+
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
-    
+
     interface ::com::sun::star::accessibility::XAccessibleComponent;
-    
+
     interface ::com::sun::star::accessibility::XAccessibleExtendedComponent;
 
     /** This interface gives read-only access to the text representation
         of an edit.
      */
     interface ::com::sun::star::accessibility::XAccessibleText;
-    
+
     /** This interface extends the
         <type scope="com::sun::star::accessibility">XAccessibleText</type>
         interface and gives read and write access to the text representation

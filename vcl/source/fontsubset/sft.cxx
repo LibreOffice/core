@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ struct PSPathElement
     int x1, y1;
     int x2, y2;
     int x3, y3;
-    
+
     PSPathElement( PathSegmentType i_eType ) : type( i_eType ),
                                    x1( 0 ), y1( 0 ),
                                    x2( 0 ), y2( 0 ),
@@ -541,11 +541,11 @@ static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoin
 
     /* printf("GetSimpleTTOutline(%d)\n", glyphID); */
 
-    if( glyphID >= ttf->nglyphs )			/*- glyph is not present in the font */
+    if( glyphID >= ttf->nglyphs )           /*- glyph is not present in the font */
         return 0;
     const sal_uInt8* ptr = table + ttf->goffsets[glyphID];
     const sal_Int16 numberOfContours = GetInt16(ptr, 0, 1);
-    if( numberOfContours <= 0 )				/*- glyph is not simple */
+    if( numberOfContours <= 0 )             /*- glyph is not simple */
         return 0;
 
     if (metrics) {                                                    /*- GetCompoundTTOutline() calls this function with NULL metrics -*/
@@ -809,7 +809,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
 
     pa = (ControlPoint*)calloc(np, sizeof(ControlPoint));
     assert(pa != 0);
-    
+
     memcpy( pa, &myPoints[0], np*sizeof(ControlPoint) );
 
     *pointArray = pa;
@@ -1177,7 +1177,7 @@ static void GetNames(TrueTypeFont *t)
     {
         t->subfamily = strdup("");
     }
-    
+
     /* #i60349# sanity check psname
      * psname parctically has to be 7bit ascii and should not contains spaces
      * there is a class of broken fonts which do not fullfill that at all, so let's try
@@ -1409,7 +1409,7 @@ static void FindCmap(TrueTypeFont *ttf)
     for (i = 0; i < ncmaps; i++) {
         sal_uInt32 offset;
         sal_uInt16 pID, eID;
-        
+
         /* sanity check, cmap entry must lie within table */
         if( i*8+4 > table_size )
             break;
@@ -1417,14 +1417,14 @@ static void FindCmap(TrueTypeFont *ttf)
         pID = GetUInt16(table, 4 + i * 8, 1);
         eID = GetUInt16(table, 6 + i * 8, 1);
         offset = GetUInt32(table, 8 + i * 8, 1);
-        
+
          /* sanity check, cmap must lie within file */
         if( (table - ttf->ptr) + offset > (sal_uInt32)ttf->fsize )
             continue;
 
         /* Unicode tables in Apple fonts */
         if (pID == 0) {
-            AppleUni = offset;	
+            AppleUni = offset;
         }
 
         if (pID == 3) {
@@ -1553,10 +1553,10 @@ static void KernGlyphsPrim1(TrueTypeFont *ttf, sal_uInt16 *glyphs, int nglyphs, 
 {
     (void)ttf; /* avoid warning */
     (void)glyphs; /* avoid warning */
-    (void)nglyphs; /* avoid warning */    
-    (void)wmode; /* avoid warning */    
-    (void)nglyphs; /* avoid warning */    
-    (void)kern; /* avoid warning */    
+    (void)nglyphs; /* avoid warning */
+    (void)wmode; /* avoid warning */
+    (void)nglyphs; /* avoid warning */
+    (void)kern; /* avoid warning */
     fprintf(stderr, "MacOS kerning tables have not been implemented yet!\n");
 }
 
@@ -1659,7 +1659,7 @@ int OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf )
     struct stat st;
 
     if (!fname || !*fname) return SF_BADFILE;
-    
+
     allocTrueTypeFont( ttf );
     if( ! *ttf )
         return SF_MEMORY;
@@ -1699,7 +1699,7 @@ int OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf )
         goto cleanup;
     }
     close(fd);
-    
+
     return doOpenTTFont( facenum, *ttf );
 
 cleanup:
@@ -1717,12 +1717,12 @@ int OpenTTFontBuffer(void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTyp
     allocTrueTypeFont( ttf );
     if( *ttf == NULL )
         return SF_MEMORY;
-    
+
     (*ttf)->fname = NULL;
     (*ttf)->fsize = nLen;
     (*ttf)->ptr   = (sal_uInt8*)pBuffer;
-    
-    return doOpenTTFont( facenum, *ttf ); 
+
+    return doOpenTTFont( facenum, *ttf );
 }
 
 static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
@@ -1811,8 +1811,8 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         if( !pHead )
             return SF_TTFORMAT;
         /* limit Head candidate to TTC extract's limits */
-        if( pHead > t->ptr + (t->fsize - 54) ) 
-            pHead = t->ptr + (t->fsize - 54); 
+        if( pHead > t->ptr + (t->fsize - 54) )
+            pHead = t->ptr + (t->fsize - 54);
         /* TODO: find better method than searching head table's magic */
         sal_uInt8* p = NULL;
         for( p = pHead + 12; p > t->ptr; --p ) {
@@ -1836,7 +1836,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
          * tables, but this would be quite time intensive.
          * Try to fix tables, so we can cope with minor problems.
          */
-        
+
         if( (sal_uInt8*)t->tables[i] < t->ptr )
         {
 #if OSL_DEBUG_LEVEL > 1
@@ -1893,7 +1893,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 
         for( i = 0; i <= (int)t->nglyphs; ++i )
             t->goffsets[i] = indexfmt ? GetUInt32(table, i << 2, 1) : (sal_uInt32)GetUInt16(table, i << 1, 1) << 1;
-    } else if( getTable(t, O_CFF) ) {			/* PS-OpenType */
+    } else if( getTable(t, O_CFF) ) {           /* PS-OpenType */
         t->goffsets = (sal_uInt32 *) calloc(1+t->nglyphs, sizeof(sal_uInt32));
         /* TODO: implement to get subsetting */
         assert(t->goffsets != 0);
@@ -2233,7 +2233,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     for (i = 0; i < nGlyphs; i++) {
         gID[i] = glyfAdd(glyf, GetTTRawGlyphData(ttf, glyphArray[i]), ttf);
     }
-        
+
     /**                       cmap                          **/
     cmap = TrueTypeTableNew_cmap();
 

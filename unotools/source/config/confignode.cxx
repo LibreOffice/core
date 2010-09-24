@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -280,7 +280,7 @@ namespace utl
         Reference< XSingleServiceFactory > xChildFactory(m_xContainerAccess, UNO_QUERY);
         OSL_ENSURE(xChildFactory.is(), "OConfigurationNode::createNode: object is invalid or read-only!");
 
-        if (xChildFactory.is())	// implies m_xContainerAccess.is()
+        if (xChildFactory.is()) // implies m_xContainerAccess.is()
         {
             Reference< XInterface > xNewChild;
             try
@@ -660,6 +660,6 @@ namespace utl
     }
 
 //........................................................................
-}	// namespace utl
+}   // namespace utl
 //........................................................................
 

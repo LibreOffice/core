@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ TransliterationWrapper::TransliterationWrapper(
         }
     }
     else
-    {	// try to get an instance somehow
+    {   // try to get an instance somehow
         DBG_ERRORFILE( "TransliterationWrapper: no service manager, trying own" );
         try
         {
@@ -192,7 +192,7 @@ void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
             if( !bLoad )
                 bLoad = needLanguageForTheMode();
         }
-        if( bLoad ) 
+        if( bLoad )
             loadModuleImpl();
     }
 }

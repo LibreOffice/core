@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ struct WSInternalData_Impl
     ::cppu::OTypeCollection* m_pTypeCollection;
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
     sal_Int32 m_nStorageType;
-    
+
     // the mutex reference MUST NOT be empty
     WSInternalData_Impl( const SotMutexHolderRef rMutexRef, sal_Int32 nStorageType )
     : m_rSharedMutexRef( rMutexRef )
@@ -105,12 +105,12 @@ struct OWriteStream_Impl : public PreCreationStruct
     friend class OWriteStream;
     friend class OInputCompStream;
 
-    OWriteStream*	m_pAntiImpl;
+    OWriteStream*   m_pAntiImpl;
     ::rtl::OUString m_aTempURL;
-    
+
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xCacheStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable > m_xCacheSeek;
-    
+
     InputStreamsList_Impl m_aInputStreamsList;
 
     sal_Bool                        m_bHasDataToFlush;    // only modified elements will be sent to the original content
@@ -130,7 +130,7 @@ struct OWriteStream_Impl : public PreCreationStruct
     sal_Bool m_bUseCommonPass;
     sal_Bool m_bHasCachedPassword;
     ::rtl::OUString m_aPass;
-    
+
     sal_Bool m_bCompressedSetExplicit;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > m_xPackage;
@@ -143,7 +143,7 @@ struct OWriteStream_Impl : public PreCreationStruct
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xOrigRelInfoStream;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > m_aOrigRelInfo;
     sal_Bool m_bOrigRelInfoBroken;
-    
+
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > m_aNewRelInfo;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xNewRelInfoStream;
     sal_Int16 m_nRelInfoStatus;
@@ -155,8 +155,8 @@ private:
 
     ::rtl::OUString GetFilledTempFileIfNo( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream );
     ::rtl::OUString FillTempGetFileName();
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >		GetTempFileAsStream();
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >	GetTempFileAsInputStream();
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >       GetTempFileAsStream();
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  GetTempFileAsInputStream();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream_Impl( sal_Int32 nStreamMode,
                                                                                         sal_Bool bHierarchyAccess );
@@ -181,7 +181,7 @@ public:
                     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >() );
 
     ~OWriteStream_Impl();
-    
+
     void CleanCacheStream();
 
     void AddLog( const ::rtl::OUString& aMessage );
@@ -216,7 +216,7 @@ public:
     void Revert();
 
     void Free( sal_Bool bMust ); // allows to try to disconnect from the temporary stream
-                                 // in case bMust is set to sal_True the method 
+                                 // in case bMust is set to sal_True the method
                                 // will throw exception in case the file is still busy
 
     void SetModified(); // can be done only by parent storage after renaming
@@ -314,26 +314,26 @@ public:
     void DeInit();
 
     // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType ) 
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
         throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
 
-    //	XTypeProvider
+    //  XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
         throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) 
+    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) 
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL available(  ) 
+    virtual sal_Int32 SAL_CALL available(  )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL closeInput(  ) 
+    virtual void SAL_CALL closeInput(  )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     // XOutputStream

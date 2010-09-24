@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,9 +27,9 @@
 
 /*************************************************************************
  *
- *	  ATTENTION
- *	  This file is intended to work inside and outside the StarOffice environment.
- *	  Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
+ *    ATTENTION
+ *    This file is intended to work inside and outside the StarOffice environment.
+ *    Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
  *
  ************************************************************************/
 
@@ -103,46 +103,46 @@
 Defines für Header Typen:
 
 Allgemeiner Header:
-        Byte	Länge		Inhalt
-        0..3		4		Länge des Paketes ohne diese 4 Byte
-        4			1		Prüfsumme über die Länge. Stimmt sie nicht wird die Verbindung geschlossen
-        5..6		2		Länge des Headers ohne diese 2 Byte
-        7..8		2		Typ des Headers
+        Byte    Länge       Inhalt
+        0..3        4       Länge des Paketes ohne diese 4 Byte
+        4           1       Prüfsumme über die Länge. Stimmt sie nicht wird die Verbindung geschlossen
+        5..6        2       Länge des Headers ohne diese 2 Byte
+        7..8        2       Typ des Headers
 
 CH_SimpleMultiChannel:
-        9..10		2		Channel
-CH_Handshake				Internal Use ONLY
+        9..10       2       Channel
+CH_Handshake                Internal Use ONLY
                             Keine Weiteren Daten!
 
 **/
 typedef comm_UINT16 CMProtocol;
 
-#define CM_PROTOCOL_OLDSTYLE		(CMProtocol)0x0001
-#define CM_PROTOCOL_MARS			(CMProtocol)0x0001
-#define CM_PROTOCOL_BROADCASTER		(CMProtocol)0x0002
-#define CM_PROTOCOL_USER_START		(CMProtocol)0x0100
+#define CM_PROTOCOL_OLDSTYLE        (CMProtocol)0x0001
+#define CM_PROTOCOL_MARS            (CMProtocol)0x0001
+#define CM_PROTOCOL_BROADCASTER     (CMProtocol)0x0002
+#define CM_PROTOCOL_USER_START      (CMProtocol)0x0100
 
 typedef comm_USHORT HandshakeType;
 typedef comm_USHORT CommunicationOption;
 
-#define CH_NoHeader					0x0000
-#define CH_SimpleMultiChannel		0x0001
-#define CH_Handshake				0x0002
+#define CH_NoHeader                 0x0000
+#define CH_SimpleMultiChannel       0x0001
+#define CH_Handshake                0x0002
 
-#define CH_REQUEST_HandshakeAlive	((HandshakeType)0x0101)	/// Fordert eine Alive Antwort an
-#define CH_RESPONSE_HandshakeAlive	((HandshakeType)0x0102)	/// Alive Antwort
+#define CH_REQUEST_HandshakeAlive   ((HandshakeType)0x0101) /// Fordert eine Alive Antwort an
+#define CH_RESPONSE_HandshakeAlive  ((HandshakeType)0x0102) /// Alive Antwort
 
 /**
     Announce supported options:
     Client announces available options
     Server returns subset of these options (note that the sbset can be the entire set also)
 **/
-#define CH_SUPPORT_OPTIONS			((HandshakeType)0x0103)
-#define OPT_USE_SHUTDOWN_PROTOCOL	((CommunicationOption)0x0001)
+#define CH_SUPPORT_OPTIONS          ((HandshakeType)0x0103)
+#define OPT_USE_SHUTDOWN_PROTOCOL   ((CommunicationOption)0x0001)
 
 /// these are for making sure all Data is read prior to shutting sown the link
-#define CH_REQUEST_ShutdownLink		((HandshakeType)0x0104)	/// Request to Shutdown this link
-#define CH_ShutdownLink				((HandshakeType)0x0105)	/// Shutdown this link
+#define CH_REQUEST_ShutdownLink     ((HandshakeType)0x0104) /// Request to Shutdown this link
+#define CH_ShutdownLink             ((HandshakeType)0x0105) /// Shutdown this link
 
-#define CH_SetApplication			((HandshakeType)0x0106)	/// Set Description of Client
+#define CH_SetApplication           ((HandshakeType)0x0106) /// Set Description of Client
 

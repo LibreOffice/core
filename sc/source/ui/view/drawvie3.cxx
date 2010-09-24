@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 #include "docsh.hxx"
 
 void ScIMapDlgSet( const Graphic& rGraphic, const ImageMap* pImageMap,
-                    const TargetList* pTargetList, void* pEditingObj );		// imapwrap
+                    const TargetList* pTargetList, void* pEditingObj );     // imapwrap
 USHORT ScIMapChildWindowId();
 
 // STATIC DATA -----------------------------------------------------------
@@ -120,7 +120,7 @@ ScAnchorType ScDrawView::GetAnchor() const
 
 void __EXPORT ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA(ScTabDeletedHint))						// Tabelle geloescht
+    if (rHint.ISA(ScTabDeletedHint))                        // Tabelle geloescht
     {
         SCTAB nDelTab = ((ScTabDeletedHint&)rHint).GetTab();
         if (ValidTab(nDelTab))
@@ -130,7 +130,7 @@ void __EXPORT ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 HideSdrPage();
         }
     }
-    else if (rHint.ISA(ScTabSizeChangedHint))				// Groesse geaendert
+    else if (rHint.ISA(ScTabSizeChangedHint))               // Groesse geaendert
     {
         if ( nTab == ((ScTabSizeChangedHint&)rHint).GetTab() )
             UpdateWorkArea();
@@ -145,8 +145,8 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
          pViewData->GetViewShell()->GetViewFrame()->HasChildWindow( ScIMapChildWindowId() ) &&
          pObj && ( pObj->ISA(SdrGrafObj) || pObj->ISA(SdrOle2Obj) ) )
     {
-        Graphic		aGraphic;
-        TargetList	aTargetList;
+        Graphic     aGraphic;
+        TargetList  aTargetList;
         ScIMapInfo* pIMapInfo = ScDrawLayer::GetIMapInfo( pObj );
         const ImageMap* pImageMap = NULL;
         if ( pIMapInfo )
@@ -165,7 +165,7 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
                 aGraphic = *pGraphic;
         }
 
-        ScIMapDlgSet( aGraphic, pImageMap, &aTargetList, pObj );	// aus imapwrap
+        ScIMapDlgSet( aGraphic, pImageMap, &aTargetList, pObj );    // aus imapwrap
 
         // TargetListe kann von uns wieder geloescht werden
         String* pEntry = aTargetList.First();

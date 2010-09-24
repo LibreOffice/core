@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,38 +80,38 @@ ScDocument* ScPatternAttr::pDoc = NULL;
 
 // -----------------------------------------------------------------------
 
-//!	move to some header file
-inline long TwipsToHMM(long nTwips)	{ return (nTwips * 127 + 36) / 72; }
-inline long HMMToTwips(long nHMM)	{ return (nHMM * 72 + 63) / 127; }
+//! move to some header file
+inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
+inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
 
 // -----------------------------------------------------------------------
 
 ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet, const String& rStyleName )
-    :	SfxSetItem	( ATTR_PATTERN, pItemSet ),
-        pName		( new String( rStyleName ) ),
-        pStyle		( NULL )
+    :   SfxSetItem  ( ATTR_PATTERN, pItemSet ),
+        pName       ( new String( rStyleName ) ),
+        pStyle      ( NULL )
 {
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet, ScStyleSheet* pStyleSheet )
-    :	SfxSetItem	( ATTR_PATTERN, pItemSet ),
-        pName		( NULL ),
-        pStyle		( pStyleSheet )
+    :   SfxSetItem  ( ATTR_PATTERN, pItemSet ),
+        pName       ( NULL ),
+        pStyle      ( pStyleSheet )
 {
     if ( pStyleSheet )
         GetItemSet().SetParent( &pStyleSheet->GetItemSet() );
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )
-    :	SfxSetItem	( ATTR_PATTERN, new SfxItemSet( *pItemPool, ATTR_PATTERN_START, ATTR_PATTERN_END ) ),
-        pName		( NULL ),
-        pStyle		( NULL )
+    :   SfxSetItem  ( ATTR_PATTERN, new SfxItemSet( *pItemPool, ATTR_PATTERN_START, ATTR_PATTERN_END ) ),
+        pName       ( NULL ),
+        pStyle      ( NULL )
 {
 }
 
 ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
-    :	SfxSetItem	( rPatternAttr ),
-        pStyle		( rPatternAttr.pStyle )
+    :   SfxSetItem  ( rPatternAttr ),
+        pStyle      ( rPatternAttr.pStyle )
 {
     if (rPatternAttr.pName)
         pName = new String(*rPatternAttr.pName);
@@ -165,8 +165,8 @@ int __EXPORT ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
 SfxPoolItem* __EXPORT ScPatternAttr::Create( SvStream& rStream, USHORT /* nVersion */ ) const
 {
     String* pStr;
-    BOOL	bHasStyle;
-    short	eFamDummy;
+    BOOL    bHasStyle;
+    short   eFamDummy;
 
     rStream >> bHasStyle;
 
@@ -196,7 +196,7 @@ SvStream& __EXPORT ScPatternAttr::Store(SvStream& rStream, USHORT /* nItemVersio
 
     if ( pStyle )
         rStream.WriteByteString( pStyle->GetName(), rStream.GetStreamCharSet() );
-    else if ( pName )					// wenn Style geloescht ist/war
+    else if ( pName )                   // wenn Style geloescht ist/war
         rStream.WriteByteString( *pName, rStream.GetStreamCharSet() );
     else
         rStream.WriteByteString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
@@ -240,7 +240,7 @@ void ScPatternAttr::GetFont(
         const SfxItemSet* pCondSet, BYTE nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor )
 {
-    //	Items auslesen
+    //  Items auslesen
 
     const SvxFontItem* pFontAttr;
     UINT32 nFontHeight;
@@ -376,9 +376,9 @@ void ScPatternAttr::GetFont(
     }
     DBG_ASSERT(pFontAttr,"nanu?");
 
-    //	auswerten
+    //  auswerten
 
-    //	FontItem:
+    //  FontItem:
 
     if (rFont.GetName() != pFontAttr->GetFamilyName())
         rFont.SetName( pFontAttr->GetFamilyName() );
@@ -391,7 +391,7 @@ void ScPatternAttr::GetFont(
 
     rFont.SetLanguage(eLang);
 
-    //	Groesse
+    //  Groesse
 
     if ( pOutDev != NULL )
     {
@@ -418,7 +418,7 @@ void ScPatternAttr::GetFont(
         rFont.SetSize( Size( 0, (long) nFontHeight ) );
     }
 
-    //	determine effective font color
+    //  determine effective font color
 
     if ( ( aColor.GetColor() == COL_AUTO && eAutoMode != SC_AUTOCOL_RAW ) ||
             eAutoMode == SC_AUTOCOL_IGNOREFONT || eAutoMode == SC_AUTOCOL_IGNOREALL )
@@ -427,7 +427,7 @@ void ScPatternAttr::GetFont(
             aColor.SetColor( COL_BLACK );
         else
         {
-            //	get background color from conditional or own set
+            //  get background color from conditional or own set
             Color aBackColor;
             if ( pCondSet )
             {
@@ -439,7 +439,7 @@ void ScPatternAttr::GetFont(
             else
                 aBackColor = ((const SvxBrushItem&)rItemSet.Get( ATTR_BACKGROUND )).GetColor();
 
-            //	if background color attribute is transparent, use window color for brightness comparisons
+            //  if background color attribute is transparent, use window color for brightness comparisons
             if ( aBackColor == COL_TRANSPARENT ||
                     eAutoMode == SC_AUTOCOL_IGNOREBACK || eAutoMode == SC_AUTOCOL_IGNOREALL )
             {
@@ -454,7 +454,7 @@ void ScPatternAttr::GetFont(
                     aBackColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
             }
 
-            //	get system text color for comparison
+            //  get system text color for comparison
             Color aSysTextColor;
             if ( eAutoMode == SC_AUTOCOL_PRINT )
                 aSysTextColor.SetColor( COL_BLACK );
@@ -466,26 +466,26 @@ void ScPatternAttr::GetFont(
             else
                 aSysTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
 
-            //	select the resulting color
+            //  select the resulting color
             if ( aBackColor.IsDark() && aSysTextColor.IsDark() )
             {
-                //	use white instead of dark on dark
+                //  use white instead of dark on dark
                 aColor.SetColor( COL_WHITE );
             }
             else if ( aBackColor.IsBright() && aSysTextColor.IsBright() )
             {
-                //	use black instead of bright on bright
+                //  use black instead of bright on bright
                 aColor.SetColor( COL_BLACK );
             }
             else
             {
-                //	use aSysTextColor (black for SC_AUTOCOL_PRINT, from style settings otherwise)
+                //  use aSysTextColor (black for SC_AUTOCOL_PRINT, from style settings otherwise)
                 aColor = aSysTextColor;
             }
         }
     }
 
-    //	set font effects
+    //  set font effects
     rFont.SetWeight( eWeight );
     rFont.SetItalic( eItalic );
     rFont.SetUnderline( eUnder );
@@ -512,29 +512,29 @@ void ScPatternAttr::GetFont(
 
 void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet )
 {
-    //	Items auslesen
+    //  Items auslesen
 
-    SvxColorItem	aColorItem(EE_CHAR_COLOR);				// use item as-is
-    SvxFontItem		aFontItem(EE_CHAR_FONTINFO);			// use item as-is
-    SvxFontItem		aCjkFontItem(EE_CHAR_FONTINFO_CJK);
-    SvxFontItem		aCtlFontItem(EE_CHAR_FONTINFO_CTL);
-    long			nTHeight, nCjkTHeight, nCtlTHeight;		// Twips
-    FontWeight		eWeight, eCjkWeight, eCtlWeight;
+    SvxColorItem    aColorItem(EE_CHAR_COLOR);              // use item as-is
+    SvxFontItem     aFontItem(EE_CHAR_FONTINFO);            // use item as-is
+    SvxFontItem     aCjkFontItem(EE_CHAR_FONTINFO_CJK);
+    SvxFontItem     aCtlFontItem(EE_CHAR_FONTINFO_CTL);
+    long            nTHeight, nCjkTHeight, nCtlTHeight;     // Twips
+    FontWeight      eWeight, eCjkWeight, eCtlWeight;
     SvxUnderlineItem aUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE);
     SvxOverlineItem aOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE);
-    BOOL			bWordLine;
-    FontStrikeout	eStrike;
-    FontItalic		eItalic, eCjkItalic, eCtlItalic;
-    BOOL			bOutline;
-    BOOL			bShadow;
-    BOOL			bForbidden;
+    BOOL            bWordLine;
+    FontStrikeout   eStrike;
+    FontItalic      eItalic, eCjkItalic, eCtlItalic;
+    BOOL            bOutline;
+    BOOL            bShadow;
+    BOOL            bForbidden;
     FontEmphasisMark eEmphasis;
-    FontRelief		eRelief;
-    LanguageType	eLang, eCjkLang, eCtlLang;
-    BOOL			bHyphenate;
+    FontRelief      eRelief;
+    LanguageType    eLang, eCjkLang, eCtlLang;
+    BOOL            bHyphenate;
     SvxFrameDirection eDirection;
 
-    //!	additional parameter to control if language is needed?
+    //! additional parameter to control if language is needed?
 
     if ( pCondSet )
     {
@@ -637,7 +637,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
             pItem = &rSrcSet.Get( ATTR_WRITINGDIR );
         eDirection = (SvxFrameDirection)((const SvxFrameDirectionItem*)pItem)->GetValue();
     }
-    else		// alles direkt aus Pattern
+    else        // alles direkt aus Pattern
     {
         aColorItem = (const SvxColorItem&) rSrcSet.Get( ATTR_FONT_COLOR );
         aFontItem = (const SvxFontItem&) rSrcSet.Get( ATTR_FONT );
@@ -695,15 +695,15 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     long nCjkHeight = TwipsToHMM(nCjkTHeight);
     long nCtlHeight = TwipsToHMM(nCtlTHeight);
 
-    //	put items into EditEngine ItemSet
+    //  put items into EditEngine ItemSet
 
     if ( aColorItem.GetValue().GetColor() == COL_AUTO )
     {
-        //	#108979# When cell attributes are converted to EditEngine paragraph attributes,
-        //	don't create a hard item for automatic color, because that would be converted
-        //	to black when the item's Store method is used in CreateTransferable/WriteBin.
-        //	COL_AUTO is the EditEngine's pool default, so ClearItem will result in automatic
-        //	color, too, without having to store the item.
+        //  #108979# When cell attributes are converted to EditEngine paragraph attributes,
+        //  don't create a hard item for automatic color, because that would be converted
+        //  to black when the item's Store method is used in CreateTransferable/WriteBin.
+        //  COL_AUTO is the EditEngine's pool default, so ClearItem will result in automatic
+        //  color, too, without having to store the item.
         rEditSet.ClearItem( EE_CHAR_COLOR );
     }
     else
@@ -869,8 +869,8 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
 
 void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
 {
-    //	in GetFromEditItemSet schon dabei, in FillEditItemSet aber nicht
-    //	Hor. Ausrichtung Standard wird immer als "links" umgesetzt
+    //  in GetFromEditItemSet schon dabei, in FillEditItemSet aber nicht
+    //  Hor. Ausrichtung Standard wird immer als "links" umgesetzt
 
     const SfxItemSet& rMySet = GetItemSet();
 
@@ -880,10 +880,10 @@ void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
     SvxAdjust eSvxAdjust;
     switch (eHorJust)
     {
-        case SVX_HOR_JUSTIFY_RIGHT:	 eSvxAdjust = SVX_ADJUST_RIGHT;	 break;
+        case SVX_HOR_JUSTIFY_RIGHT:  eSvxAdjust = SVX_ADJUST_RIGHT;  break;
         case SVX_HOR_JUSTIFY_CENTER: eSvxAdjust = SVX_ADJUST_CENTER; break;
-        case SVX_HOR_JUSTIFY_BLOCK:	 eSvxAdjust = SVX_ADJUST_BLOCK;	 break;
-        default:					 eSvxAdjust = SVX_ADJUST_LEFT;	 break;
+        case SVX_HOR_JUSTIFY_BLOCK:  eSvxAdjust = SVX_ADJUST_BLOCK;  break;
+        default:                     eSvxAdjust = SVX_ADJUST_LEFT;   break;
     }
     pEditSet->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
 }
@@ -898,19 +898,19 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
 
     for ( USHORT nSubWhich=ATTR_PATTERN_START; nSubWhich<=ATTR_PATTERN_END; nSubWhich++ )
     {
-        //	only items that are set are interesting
+        //  only items that are set are interesting
         if ( rThisSet.GetItemState( nSubWhich, FALSE, &pThisItem ) == SFX_ITEM_SET )
         {
             SfxItemState eOldState = rOldSet.GetItemState( nSubWhich, TRUE, &pOldItem );
             if ( eOldState == SFX_ITEM_SET )
             {
-                //	item is set in OldAttrs (or its parent) -> compare pointers
+                //  item is set in OldAttrs (or its parent) -> compare pointers
                 if ( pThisItem == pOldItem )
                     rThisSet.ClearItem( nSubWhich );
             }
             else if ( eOldState != SFX_ITEM_DONTCARE )
             {
-                //	not set in OldAttrs -> compare item value to default item
+                //  not set in OldAttrs -> compare item value to default item
                 if ( *pThisItem == rThisSet.GetPool()->GetDefaultItem( nSubWhich ) )
                     rThisSet.ClearItem( nSubWhich );
             }
@@ -936,9 +936,9 @@ void ScPatternAttr::ClearItems( const USHORT* pWhich )
 
 SfxStyleSheetBase* lcl_CopyStyleToPool
     (
-        SfxStyleSheetBase*		pSrcStyle,
-        SfxStyleSheetBasePool*	pSrcPool,
-        SfxStyleSheetBasePool*	pDestPool,
+        SfxStyleSheetBase*      pSrcStyle,
+        SfxStyleSheetBasePool*  pSrcPool,
+        SfxStyleSheetBasePool*  pDestPool,
         const SvNumberFormatterIndexTable*     pFormatExchangeList
     )
 {
@@ -950,9 +950,9 @@ SfxStyleSheetBase* lcl_CopyStyleToPool
 
     //--------------------------------------------------------
 
-    const String		 aStrSrcStyle = pSrcStyle->GetName();
-    const SfxStyleFamily eFamily	  = pSrcStyle->GetFamily();
-    SfxStyleSheetBase*	 pDestStyle   = pDestPool->Find( aStrSrcStyle, eFamily );
+    const String         aStrSrcStyle = pSrcStyle->GetName();
+    const SfxStyleFamily eFamily      = pSrcStyle->GetFamily();
+    SfxStyleSheetBase*   pDestStyle   = pDestPool->Find( aStrSrcStyle, eFamily );
 
     if ( !pDestStyle )
     {
@@ -1026,7 +1026,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 
             if ( nAttrId == ATTR_CONDITIONAL )
             {
-                //	Bedingte Formate ins neue Dokument kopieren
+                //  Bedingte Formate ins neue Dokument kopieren
 
                 ULONG nNewIndex = 0;
                 ScConditionalFormatList* pSrcList = pSrcDoc->GetCondFormList();
@@ -1038,8 +1038,8 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
                     {
                         nNewIndex = pDestDoc->AddCondFormat( *pOldData );
 
-                        //	zugehoerige Styles auch mitkopieren
-                        //!	nur wenn Format bei Add neu angelegt
+                        //  zugehoerige Styles auch mitkopieren
+                        //! nur wenn Format bei Add neu angelegt
 
                         ScStyleSheetPool* pSrcSPool = pSrcDoc->GetStyleSheetPool();
                         ScStyleSheetPool* pDestSPool = pDestDoc->GetStyleSheetPool();
@@ -1058,7 +1058,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
             }
             else if ( nAttrId == ATTR_VALIDDATA )
             {
-                //	Gueltigkeit ins neue Dokument kopieren
+                //  Gueltigkeit ins neue Dokument kopieren
 
                 ULONG nNewIndex = 0;
                 ScValidationDataList* pSrcList = pSrcDoc->GetValidationList();
@@ -1073,7 +1073,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
             }
             else if ( nAttrId == ATTR_VALUE_FORMAT && pDestDoc->GetFormatExchangeList() )
             {
-                //	Zahlformate nach Exchange-Liste
+                //  Zahlformate nach Exchange-Liste
 
                 ULONG nOldFormat = ((const SfxUInt32Item*)pSrcItem)->GetValue();
                 sal_uInt32* pNewFormat = static_cast<sal_uInt32*>(pDestDoc->GetFormatExchangeList()->Get(nOldFormat));
@@ -1154,7 +1154,7 @@ BOOL ScPatternAttr::IsVisibleEqual( const ScPatternAttr& rOther ) const
             OneEqual( rThisSet, rOtherSet, ATTR_BORDER_BLTR ) &&
             OneEqual( rThisSet, rOtherSet, ATTR_SHADOW );
 
-    //!		auch hier nur wirklich sichtbare Werte testen !!!
+    //!     auch hier nur wirklich sichtbare Werte testen !!!
 }
 
 const String* ScPatternAttr::GetStyleName() const
@@ -1167,7 +1167,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle )
 {
     if (pNewStyle)
     {
-        SfxItemSet&		  rPatternSet = GetItemSet();
+        SfxItemSet&       rPatternSet = GetItemSet();
         const SfxItemSet& rStyleSet = pNewStyle->GetItemSet();
 
         for (USHORT i=ATTR_PATTERN_START; i<=ATTR_PATTERN_END; i++)
@@ -1193,9 +1193,9 @@ void ScPatternAttr::UpdateStyleSheet()
     {
         pStyle = (ScStyleSheet*)pDoc->GetStyleSheetPool()->Find(*pName, SFX_STYLE_FAMILY_PARA);
 
-        //	wenn Style nicht gefunden, Standard nehmen,
-        //	damit keine leere Anzeige im Toolbox-Controller
-        //!	es wird vorausgesetzt, dass "Standard" immer der erste Eintrag ist!
+        //  wenn Style nicht gefunden, Standard nehmen,
+        //  damit keine leere Anzeige im Toolbox-Controller
+        //! es wird vorausgesetzt, dass "Standard" immer der erste Eintrag ist!
         if (!pStyle)
         {
             SfxStyleSheetIterator* pIter = pDoc->GetStyleSheetPool()->CreateIterator(
@@ -1257,13 +1257,13 @@ ULONG ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
     LanguageType eLang =
         ((SvxLanguageItem*)&GetItemSet().Get( ATTR_LANGUAGE_FORMAT ))->GetLanguage();
     if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLang == LANGUAGE_SYSTEM )
-        ;		// es bleibt wie es ist
+        ;       // es bleibt wie es ist
     else if ( pFormatter )
         nFormat = pFormatter->GetFormatForLanguageIfBuiltIn( nFormat, eLang );
     return nFormat;
 }
 
-//	dasselbe, wenn bedingte Formatierung im Spiel ist:
+//  dasselbe, wenn bedingte Formatierung im Spiel ist:
 
 ULONG ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
                                         const SfxItemSet* pCondSet ) const
@@ -1296,7 +1296,7 @@ const SfxPoolItem& ScPatternAttr::GetItem( USHORT nSubWhich, const SfxItemSet* p
     return GetItem( nSubWhich, GetItemSet(), pCondSet );
 }
 
-//	GetRotateVal testet vorher ATTR_ORIENTATION
+//  GetRotateVal testet vorher ATTR_ORIENTATION
 
 long ScPatternAttr::GetRotateVal( const SfxItemSet* pCondSet ) const
 {
@@ -1328,7 +1328,7 @@ BYTE ScPatternAttr::GetRotateDir( const SfxItemSet* pCondSet ) const
             nRet = SC_ROTDIR_CENTER;
         else if ( eRotMode == SVX_ROTATE_MODE_TOP || eRotMode == SVX_ROTATE_MODE_BOTTOM )
         {
-            long nRot180 = nAttrRotate % 18000;		// 1/100 Grad
+            long nRot180 = nAttrRotate % 18000;     // 1/100 Grad
             if ( nRot180 == 9000 )
                 nRet = SC_ROTDIR_CENTER;
             else if ( ( eRotMode == SVX_ROTATE_MODE_TOP && nRot180 < 9000 ) ||

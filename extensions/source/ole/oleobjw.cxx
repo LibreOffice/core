@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ using namespace com::sun::star::bridge::oleautomation;
 using namespace com::sun::star::bridge::ModelDependent;
 
 #define JSCRIPT_ID_PROPERTY L"_environment"
-#define JSCRIPT_ID			L"jscript"
+#define JSCRIPT_ID          L"jscript"
 namespace ole_adapter
 {
 
@@ -126,7 +126,7 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
 
     // remove entries in global maps
     typedef hash_map<sal_uInt32, sal_uInt32>::iterator _IT;
-    _IT it=	WrapperToAdapterMap.find( (sal_uInt32) xIntRoot);
+    _IT it= WrapperToAdapterMap.find( (sal_uInt32) xIntRoot);
     if( it != WrapperToAdapterMap.end())
     {
         sal_uInt32 adapter= it->second;
@@ -142,7 +142,7 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
 #if OSL_DEBUG_LEVEL > 0
     fprintf(stderr,"[automation bridge] ComPtrToWrapperMap  contains: %i \n",
             ComPtrToWrapperMap.size());
-#endif     
+#endif
 }
 
 Any IUnknownWrapper_Impl::queryInterface(const Type& t)
@@ -163,7 +163,7 @@ Reference<XIntrospectionAccess> SAL_CALL IUnknownWrapper_Impl::getIntrospection(
     throw (RuntimeException )
 {
     Reference<XIntrospectionAccess> ret;
-    
+
     return ret;
 }
 
@@ -181,7 +181,7 @@ Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
             OUSTR("[automation bridge] The object does not have an IDispatch interface"),
             Reference<XInterface>());
     }
-        
+
     Any ret;
 
     try
@@ -260,7 +260,7 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
                          OUSTR("\" is not supported"));
             throw UnknownPropertyException(msg, Reference<XInterface>());
         }
-        
+
         if ( (! aDescPut && aDescGet) || aVarDesc
              && aVarDesc->wVarFlags == VARFLAG_FREADONLY )
         {
@@ -280,14 +280,14 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
         CComVariant varResult;
         ExcepInfo excepinfo;
         unsigned int uArgErr;
-        
+
         // converting UNO value to OLE variant
         DISPID dispidPut= DISPID_PROPERTYPUT;
         dispparams.rgdispidNamedArgs = &dispidPut;
         dispparams.cArgs = 1;
         dispparams.cNamedArgs = 1;
         dispparams.rgvarg = & varArg;
-        
+
         OSL_ASSERT(aDescPut || aVarDesc);
 
         VARTYPE vt = 0;
@@ -305,7 +305,7 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
         {
             vt = getElementTypeDesc( & aVarDesc->elemdescVar.tdesc);
             dispid = aVarDesc->memid;
-            if (vt == VT_UNKNOWN || vt == VT_DISPATCH || 
+            if (vt == VT_UNKNOWN || vt == VT_DISPATCH ||
                 (vt & VT_ARRAY) || (vt & VT_BYREF))
             {
                 invkind = INVOKE_PROPERTYPUTREF;
@@ -331,8 +331,8 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
         // call to IDispatch
         hr = m_spDispatch->Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, ::sal::static_int_cast< WORD, INVOKEKIND >( invkind ),
                                  &dispparams, & varResult, & excepinfo, &uArgErr);
-       
-        // lookup error code			
+
+        // lookup error code
         switch (hr)
         {
         case S_OK:
@@ -377,7 +377,7 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
         default:
             throw  RuntimeException();
             break;
-        }		
+        }
     }
     catch (CannotConvertException &)
     {
@@ -423,27 +423,27 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
         ITypeInfo * pInfo = getTypeInfo();
         // I was going to implement an XServiceInfo interface to allow the type
         // of the automation object to be exposed.. but it seems
-        // from looking at comments in the code that it is possible for 
+        // from looking at comments in the code that it is possible for
         // this object to actually wrap an UNO object ( I guess if automation is
         // used from MSO to create Openoffice objects ) Therefore, those objects
         // will more than likely already have their own XServiceInfo interface.
         // Instead here I chose a name that should be illegal both in COM and
         // UNO ( from an IDL point of view ) therefore I think this is a safe
         // hack
-        if ( aPropertyName.equals( rtl::OUString::createFromAscii("$GetTypeName") )) 
+        if ( aPropertyName.equals( rtl::OUString::createFromAscii("$GetTypeName") ))
         {
             if ( pInfo && m_sTypeName.getLength() == 0 )
             {
                  m_sTypeName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IDispatch") );
                 CComBSTR sName;
-                
+
                 if ( SUCCEEDED( pInfo->GetDocumentation( -1, &sName, NULL, NULL, NULL  ) ) )
                 {
                     rtl::OUString sTmp( reinterpret_cast<const sal_Unicode*>(LPCOLESTR(sName)));
                     if ( sTmp.indexOf('_')  == 0 )
                        sTmp = sTmp.copy(1);
                     // do we own the memory for pTypeLib, msdn doco is vague
-                    // I'll assume we do 
+                    // I'll assume we do
                     CComPtr< ITypeLib > pTypeLib;
                     unsigned int index;
                     if ( SUCCEEDED(  pInfo->GetContainingTypeLib(  &pTypeLib.p, &index )) )
@@ -452,11 +452,11 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
                         {
                             rtl::OUString sLibName( reinterpret_cast<const sal_Unicode*>(LPCOLESTR(sName)));
                             m_sTypeName = sLibName.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".") ) ).concat( sTmp );
-                            
+
                         }
                     }
                 }
-                
+
             }
             ret <<= m_sTypeName;
             return ret;
@@ -474,7 +474,7 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
         }
         // write-only should not be possible
         OSL_ASSERT(  aDescGet  || ! aDescPut);
-        
+
         HRESULT hr;
         DISPPARAMS dispparams = {0, 0, 0, 0};
         CComVariant varResult;
@@ -487,20 +487,20 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
             dispid = aVarDesc->memid;
         else
             dispid = aDescPut->memid;
-        
-        hr = m_spDispatch->Invoke(dispid, 
+
+        hr = m_spDispatch->Invoke(dispid,
                                  IID_NULL,
-                                 LOCALE_USER_DEFAULT, 
+                                 LOCALE_USER_DEFAULT,
                                  DISPATCH_PROPERTYGET,
-                                 &dispparams, 
-                                 &varResult, 
+                                 &dispparams,
+                                 &varResult,
                                  &excepinfo,
                                  &uArgErr);
 
         // converting return value and out parameter back to UNO
         if (hr == S_OK)
         {
-            // If the com object implements uno interfaces then we have 
+            // If the com object implements uno interfaces then we have
             // to convert the attribute into the expected type.
             TypeDescription attrInfo;
             getAttributeInfo(aPropertyName, attrInfo);
@@ -509,8 +509,8 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
             else
                 variantToAny(&varResult, ret);
         }
-    
-        // lookup error code			
+
+        // lookup error code
         switch (hr)
         {
         case S_OK:
@@ -607,7 +607,7 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMethod( const OUString& aName )
         FuncDesc aDesc(pInfo);
         getFuncDesc(aName, & aDesc);
         // Automation properties can have arguments. Those are treated as methods and
-        //are called through XInvocation::invoke. 
+        //are called through XInvocation::invoke.
         if ( ! aDesc)
         {
             FuncDesc aDescGet(pInfo);
@@ -619,7 +619,7 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMethod( const OUString& aName )
                 ret = sal_True;
         }
         else
-            ret = sal_True;        
+            ret = sal_True;
     }
     catch (BridgeRuntimeError& e)
     {
@@ -658,8 +658,8 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasProperty( const OUString& aName )
         FuncDesc aDescPut(pInfo);
         VarDesc aVarDesc(pInfo);
         getPropDesc(aName, & aDescGet, & aDescPut, & aVarDesc);
-        // Automation properties can have parameters. If so, we access them through 
-        // XInvocation::invoke. Thas is, hasProperty must return false for such a 
+        // Automation properties can have parameters. If so, we access them through
+        // XInvocation::invoke. Thas is, hasProperty must return false for such a
         // property
         if (aVarDesc
             || aDescPut && aDescPut->cParams == 0
@@ -678,7 +678,7 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasProperty( const OUString& aName )
                                      "IUnknownWrapper_Impl::hasProperty ! Message : \n") +
                                e.Message, Reference<XInterface>());
 
-    }    
+    }
     catch (...)
     {
         throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
@@ -769,7 +769,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
             sarParams.reset(new CComVariant[ parameterCount]);
             pVarParams = sarParams.get();
         }
-        
+
         // Create the Array for the out an in/out parameter. These values
         // are referenced by the VT_BYREF VARIANTs in DISPPARAMS.
         // We need to find out the number of out and in/out parameter.
@@ -786,7 +786,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
             // build up the parameters for IDispatch::Invoke
             sal_Int32 outParamIndex=0;
             int i = 0;
-            try 
+            try
             {
                 for( i= 0; i < parameterCount; i++)
                 {
@@ -924,7 +924,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                         outParamIndex++;
                     } // end else if
                 } // end for
-            } 
+            }
             catch (IllegalArgumentException & e)
             {
                 e.ArgumentPosition = ::sal::static_int_cast< sal_Int16, int >( i );
@@ -1013,23 +1013,23 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
     }
 
 
-    CComVariant		varResult;
-    ExcepInfo 		excepinfo;
-    unsigned int 	uArgErr;
+    CComVariant     varResult;
+    ExcepInfo       excepinfo;
+    unsigned int    uArgErr;
     DISPPARAMS dispparams= { pVarParams, NULL, parameterCount, 0};
     // Get the DISPID
     FuncDesc aDesc(getTypeInfo());
     getFuncDesc(sFunctionName, & aDesc);
-    // invoking OLE method 		
-    hr = m_spDispatch->Invoke(aDesc->memid, 
+    // invoking OLE method
+    hr = m_spDispatch->Invoke(aDesc->memid,
                              IID_NULL,
-                             LOCALE_USER_DEFAULT, 
+                             LOCALE_USER_DEFAULT,
                              DISPATCH_METHOD,
-                             &dispparams, 
-                             &varResult, 
+                             &dispparams,
+                             &varResult,
                              &excepinfo,
                              &uArgErr);
-    
+
     // converting return value and out parameter back to UNO
     if (hr == S_OK)
     {
@@ -1046,10 +1046,10 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                     if( pMethod->pParams[i].bOut )
                     {
                         OutParamIndex[outIndex]= (sal_Int16) i;
-                        Any outAny;	
+                        Any outAny;
                         if( !bJScriptObject)
                         {
-                            variantToAny( &pVarParamsRef[outIndex], outAny, 
+                            variantToAny( &pVarParamsRef[outIndex], outAny,
                                         Type(pMethod->pParams[i].pTypeRef), sal_False);
                             OutParam[outIndex++]= outAny;
                         }
@@ -1063,7 +1063,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                                     CComVariant varOut;
                                     if( SUCCEEDED( pDisp.GetPropertyByName( L"0", &varOut)))
                                     {
-                                        variantToAny( &varOut, outAny, 
+                                        variantToAny( &varOut, outAny,
                                                     Type(pMethod->pParams[parameterCount - 1 - i].pTypeRef), sal_False);
                                         OutParam[outParameterCount - 1 - outIndex++]= outAny;
                                     }
@@ -1096,7 +1096,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
         {
             try
             {
-                if( pMethod	)
+                if( pMethod )
                     variantToAny(&varResult, ret, Type( pMethod->pReturnTypeRef), sal_False);
                 else
                     variantToAny(&varResult, ret, sal_False);
@@ -1117,11 +1117,11 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
             }
         }
     }
-    
+
     if( !bConvRet) // conversion of return or out parameter failed
         throw CannotConvertException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Call to COM object failed. Conversion of return or out value failed")),
-                                      Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY	), TypeClass_UNKNOWN,
-                                      FailReason::UNKNOWN, 0);// lookup error code			
+                                      Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY   ), TypeClass_UNKNOWN,
+                                      FailReason::UNKNOWN, 0);// lookup error code
     // conversion of return or out parameter failed
     switch (hr)
     {
@@ -1167,10 +1167,10 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
     default:
         throw RuntimeException();
         break;
-    }		
+    }
 
     return ret;
-}	
+}
 
 
 
@@ -1180,10 +1180,10 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
 {
     // 1.parameter is IUnknown
     // 2.parameter is a boolean which indicates if the the COM pointer was a IUnknown or IDispatch
-    // 3.parameter is a Sequence<Type> 
+    // 3.parameter is a Sequence<Type>
     o2u_attachCurrentThread();
     OSL_ASSERT(aArguments.getLength() == 3);
-    
+
     m_spUnknown= *(IUnknown**) aArguments[0].getValue();
 #ifdef __MINGW32__
     m_spUnknown->QueryInterface(IID_IDispatch, reinterpret_cast<LPVOID*>( & m_spDispatch.p));
@@ -1191,7 +1191,7 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
     m_spUnknown.QueryInterface( & m_spDispatch.p);
 #endif
 
-    aArguments[1] >>= m_bOriginalDispatch;    
+    aArguments[1] >>= m_bOriginalDispatch;
     aArguments[2] >>= m_seqTypes;
 
     ITypeInfo* pType = NULL;
@@ -1226,15 +1226,15 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
                 {
                     getFuncDesc( usName, &aDescGet );
                     if ( !aDescGet )
-                        throw BridgeRuntimeError( OUSTR("[automation bridge]IUnknownWrapper_Impl::initialize() Failed to get Function or Property desc. for " ) + usName ); 
+                        throw BridgeRuntimeError( OUSTR("[automation bridge]IUnknownWrapper_Impl::initialize() Failed to get Function or Property desc. for " ) + usName );
                 }
                 // now for some funny heuristics to make basic understand what to do
-                // a single aDescGet ( that doesn't take any params ) would be 
+                // a single aDescGet ( that doesn't take any params ) would be
                 // a read only ( defaultmember ) property e.g. this object
                 // should implement XDefaultProperty
                 // a single aDescGet ( that *does* ) take params is basically a
                 // default method e.g. implement XDefaultMethod
-                
+
                 // a DescPut ( I guess we only really support a default param with '1' param ) as a setValue ( but I guess we can leave it through, the object will fail if we don't get it right anyway )
                 if ( aDescPut || ( aDescGet && aDescGet->cParams == 0 ) )
                     m_bHasDfltProperty = true;
@@ -1277,7 +1277,7 @@ Reference< XInterface > IUnknownWrapper_Impl::createUnoWrapperInstance()
 }
 Reference<XInterface> IUnknownWrapper_Impl::createComWrapperInstance()
 {
-    Reference<XWeak> xWeak= static_cast<XWeak*>( new IUnknownWrapper_Impl( 
+    Reference<XWeak> xWeak= static_cast<XWeak*>( new IUnknownWrapper_Impl(
                             m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
@@ -1326,7 +1326,7 @@ TypeDescription IUnknownWrapper_Impl::getInterfaceMemberDescOfCurrentCall(const 
                 typelib_TypeDescription* pDescMember= NULL;
                 TYPELIB_DANGER_GET( &pDescMember, pTypeRefMember)
 
-                typelib_InterfaceMemberTypeDescription* pInterfaceMember= 
+                typelib_InterfaceMemberTypeDescription* pInterfaceMember=
                     (typelib_InterfaceMemberTypeDescription*) pDescMember;
                 if( OUString( pInterfaceMember->pMemberName) == sName)
                 {
@@ -1356,7 +1356,7 @@ sal_Bool IUnknownWrapper_Impl::isJScriptObject()
         if( disp)
         {
             CComVariant result;
-            if( SUCCEEDED(	disp.GetPropertyByName( JSCRIPT_ID_PROPERTY, &result)))
+            if( SUCCEEDED(  disp.GetPropertyByName( JSCRIPT_ID_PROPERTY, &result)))
             {
                 if(result.vt == VT_BSTR)
                 {
@@ -1378,7 +1378,7 @@ sal_Bool IUnknownWrapper_Impl::isJScriptObject()
 
 /** @internal
     The function ultimately calls IDispatch::Invoke on the wrapped COM object.
-    The COM object does not implement UNO Interfaces ( via IDispatch). This 
+    The COM object does not implement UNO Interfaces ( via IDispatch). This
     is the case when the OleObjectFactory service has been used to create a
     component.
     @exception IllegalArgumentException
@@ -1388,17 +1388,17 @@ sal_Bool IUnknownWrapper_Impl::isJScriptObject()
     @BridgeRuntimeError
 */
 Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
-                                                  const Sequence< Any >& Params, 
-                                                  Sequence< sal_Int16 >& OutParamIndex, 
-                                                  Sequence< Any >& OutParam) 
+                                                  const Sequence< Any >& Params,
+                                                  Sequence< sal_Int16 >& OutParamIndex,
+                                                  Sequence< Any >& OutParam)
 {
     Any ret;
     HRESULT result;
 
-    DISPPARAMS 		dispparams = {NULL, NULL, 0, 0};
-    CComVariant		varResult;
-    ExcepInfo 		excepinfo;
-    unsigned int 	uArgErr;
+    DISPPARAMS      dispparams = {NULL, NULL, 0, 0};
+    CComVariant     varResult;
+    ExcepInfo       excepinfo;
+    unsigned int    uArgErr;
     sal_Int32       i = 0;
     sal_Int32 nUnoArgs = Params.getLength();
     DISPID idPropertyPut = DISPID_PROPERTYPUT;
@@ -1420,7 +1420,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
     if (aFuncDesc->invkind == INVOKE_PROPERTYPUT
         || aFuncDesc->invkind == INVOKE_PROPERTYPUTREF)
         dispparams.rgdispidNamedArgs = & idPropertyPut;
-    
+
     //Determine the number of named arguments
     for (int iParam = 0; iParam < nUnoArgs; iParam ++)
     {
@@ -1435,7 +1435,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
     if (aFuncDesc->invkind == DISPATCH_PROPERTYPUT
         || aFuncDesc->invkind == DISPATCH_PROPERTYPUTREF)
         dispparams.cNamedArgs ++;
-    
+
     //Determine the number of all arguments and named arguments
     if (aFuncDesc->cParamsOpt == -1)
     {
@@ -1445,7 +1445,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
     }
     else
     {
-        //If there are namesd arguments, then the dispparams.cArgs 
+        //If there are namesd arguments, then the dispparams.cArgs
         //is the number of supplied args, otherwise it is the expected number.
         if (dispparams.cNamedArgs)
             dispparams.cArgs = nUnoArgs;
@@ -1461,7 +1461,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
         throw IllegalArgumentException( buf.makeStringAndClear(),
             Reference<XInterface>(), (sal_Int16) dispparams.cArgs);
     }
-    
+
     //Set up the array of DISPIDs (DISPPARAMS::rgdispidNamedArgs)
     //for the named arguments.
     //If there is only one named arg and if it is because of a property put
@@ -1482,7 +1482,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
         {
             nSizeAr = dispparams.cNamedArgs; //counts the DISID_PROPERTYPUT
         }
-        
+
         scoped_array<OLECHAR*> saNames(new OLECHAR*[nSizeAr]);
         OLECHAR ** arNames = saNames.get();
         arNames[0] = const_cast<OLECHAR*>(reinterpret_cast<LPCOLESTR>(sFuncName.getStr()));
@@ -1500,12 +1500,12 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                 arNames[nSizeAr - 1 - cNamedArg++] = const_cast<OLECHAR*>(reinterpret_cast<LPCOLESTR>(arg.Name.getStr()));
             }
         }
-    
+
         //Prepare the array of DISPIDs for ITypeInfo::GetIDsOfNames
         //it must be big enough to contain the DISPIDs of the member + parameters
-        arDispidNamedArgs.reset(new DISPID[nSizeAr]);   
+        arDispidNamedArgs.reset(new DISPID[nSizeAr]);
         HRESULT hr = getTypeInfo()->GetIDsOfNames(arNames, nSizeAr,
-                                                  arDispidNamedArgs.get()); 
+                                                  arDispidNamedArgs.get());
         if ( hr == E_NOTIMPL )
             hr = m_spDispatch->GetIDsOfNames(IID_NULL, arNames, nSizeAr, LOCALE_USER_DEFAULT, arDispidNamedArgs.get() );
 
@@ -1559,7 +1559,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
             Any  anyArg;
             if ( i < nUnoArgs)
                 anyArg= Params.getConstArray()[i];
-            
+
             //Test if the current parameter is a "vararg" parameter.
             if (bVarargParam || (aFuncDesc->cParamsOpt == -1 &&
                                 aFuncDesc->cParams == (i + 1)))
@@ -1567,7 +1567,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                 //type info available, except that it must be a VARIANT
                 bVarargParam = true;
             }
-            
+
             unsigned short paramFlags = PARAMFLAG_FOPT | PARAMFLAG_FIN;
             VARTYPE varType = VT_VARIANT;
             if ( ! bVarargParam)
@@ -1591,7 +1591,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                 throw IllegalArgumentException( buf.makeStringAndClear(),
                                                 Reference<XInterface>(), (sal_Int16) i);
             }
-            //make sure we get no void any for an in parameter. In StarBasic 
+            //make sure we get no void any for an in parameter. In StarBasic
             //this may be caused by
             // Dim arg
             // obj.func(arg)
@@ -1600,7 +1600,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                 && (i < nUnoArgs) && (paramFlags & PARAMFLAG_FIN) &&
                 Params.getConstArray()[i].getValueTypeClass() == TypeClass_VOID)
             {
-                OUStringBuffer buf(256);	
+                OUStringBuffer buf(256);
                 buf.appendAscii("ole automation bridge: The argument at position: ");
                 buf.append(OUString::valueOf((sal_Int32) i));
                 buf.appendAscii(" (index starts with 0) is uninitialized.");
@@ -1629,7 +1629,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                 VARTYPE type = ::sal::static_int_cast< VARTYPE, int >( varType ^ VT_BYREF );
                 if (i < nUnoArgs)
                 {
-                    arRefArgs[revIndex].vt= type;                    
+                    arRefArgs[revIndex].vt= type;
                 }
                 else
                 {
@@ -1676,9 +1676,9 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                     arRefArgs[revIndex].vt = VT_ERROR;
                     arRefArgs[revIndex].scode = DISP_E_PARAMNOTFOUND;
                 }
-                
+
                 // Set the converted arguments in the array which will be
-                // DISPPARAMS::rgvarg 
+                // DISPPARAMS::rgvarg
                 // byref arg VT_XXX |VT_BYREF
                 arArgs[revIndex].vt = varType;
                 if (revIndex == 0 && aFuncDesc->invkind == INVOKE_PROPERTYPUT)
@@ -1705,7 +1705,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
             }
             // in parameter no VT_BYREF except for array, interfaces
             else
-            {	// void any stands for optional param
+            {   // void any stands for optional param
                 if (i < nUnoArgs && anyArg.getValueTypeClass() != TypeClass_VOID)
                 {
                     anyToVariant( & arArgs[revIndex], anyArg, varType);
@@ -1727,7 +1727,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                 }
             }
         }
-    }	
+    }
     catch (IllegalArgumentException & e)
     {
         e.ArgumentPosition = ::sal::static_int_cast< sal_Int16, sal_Int32 >( i );
@@ -1741,19 +1741,19 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
     dispparams.rgvarg= arArgs;
     // invoking OLE method
     DWORD localeId = LOCALE_USER_DEFAULT;
-    result = m_spDispatch->Invoke(aFuncDesc->memid, 
+    result = m_spDispatch->Invoke(aFuncDesc->memid,
                                  IID_NULL,
-                                 localeId, 
+                                 localeId,
                                  ::sal::static_int_cast< WORD, INVOKEKIND >( aFuncDesc->invkind ),
-                                 &dispparams, 
-                                 &varResult, 
+                                 &dispparams,
+                                 &varResult,
                                  &excepinfo,
                                  &uArgErr);
 
     // converting return value and out parameter back to UNO
     if (result == S_OK)
     {
-        
+
         // allocate space for the out param Sequence and indices Sequence
         int outParamsCount= 0; // includes in/out parameter
         for (int i = 0; i < aFuncDesc->cParams; i++)
@@ -1781,14 +1781,14 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                     //of named args list to index of parameter list
                     realParamIndex = dispparams.rgdispidNamedArgs[revParamIndex];
                 }
-                
+
                 // no named arg, always come before named args
                 if (! (aFuncDesc->lprgelemdescParam[realParamIndex].paramdesc.wParamFlags
                        & PARAMFLAG_FOUT))
                     continue;
                 Any outAny;
                 // variantToAny is called with the "reduce range" parameter set to sal_False.
-                // That causes VT_I4 values not to be converted down to a "lower" type. That 
+                // That causes VT_I4 values not to be converted down to a "lower" type. That
                 // feature exist for JScript only because it only uses VT_I4 for integer types.
                 try
                 {
@@ -1807,14 +1807,14 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                 OutParam[outParamIndex] = outAny;
                 OutParamIndex[outParamIndex] = ::sal::static_int_cast< sal_Int16, int >( paramIndex );
                 outParamIndex++;
-            }   
+            }
             OutParam.realloc(outParamIndex);
             OutParamIndex.realloc(outParamIndex);
         }
-        // Return value		
+        // Return value
         variantToAny(&varResult, ret, sal_False);
     }
-        
+
     // map error codes to exceptions
     OUString message;
     switch (result)
@@ -1833,17 +1833,17 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
             break;
         case DISP_E_EXCEPTION:
                 message = OUSTR("[automation bridge]: ");
-                message += OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription), 
+                message += OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription),
                     ::SysStringLen(excepinfo.bstrDescription));
                 throw InvocationTargetException(message, Reference<XInterface>(), Any());
                 break;
         case DISP_E_MEMBERNOTFOUND:
             message = OUSTR("[automation bridge]: A function with the name \"")
                 + sFuncName + OUSTR("\" is not supported. Object returned "
-                "DISP_E_MEMBERNOTFOUND.");                            
+                "DISP_E_MEMBERNOTFOUND.");
             throw IllegalArgumentException(message, 0, 0);
             break;
-        case DISP_E_NONAMEDARGS:           
+        case DISP_E_NONAMEDARGS:
             throw IllegalArgumentException(OUSTR("[automation bridge] Object "
                   "returned DISP_E_NONAMEDARGS"),0, ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
             break;
@@ -1855,7 +1855,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
         case DISP_E_PARAMNOTFOUND:
             throw IllegalArgumentException(OUSTR("[automation bridge]Call failed."
                                                  "Object returned DISP_E_PARAMNOTFOUND."),
-                                           0, ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr )); 
+                                           0, ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
             break;
         case DISP_E_TYPEMISMATCH:
             throw CannotConvertException(OUSTR("[automation bridge] Call  failed. "
@@ -1880,10 +1880,10 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
         default:
             throw RuntimeException();
             break;
-    }		
-    
+    }
+
     return ret;
-}	
+}
 
 void IUnknownWrapper_Impl::getFuncDescForInvoke(const OUString & sFuncName,
                                                 const Sequence<Any> & seqArgs,
@@ -1913,7 +1913,7 @@ void IUnknownWrapper_Impl::getFuncDescForInvoke(const OUString & sFuncName,
                 OUSTR("[automation bridge] The object does not have a writeable property: ")
                 + sFuncName, Reference<XInterface>(), 0);
         }
-        *pFuncDesc = aDescPut.Detach();        
+        *pFuncDesc = aDescPut.Detach();
     }
     else
     {   // DISPATCH_METHOD
@@ -1942,7 +1942,7 @@ bool IUnknownWrapper_Impl::getDispid(const OUString& sFuncName, DISPID * id)
 {
     OSL_ASSERT(m_spDispatch);
     LPOLESTR lpsz = const_cast<LPOLESTR> (reinterpret_cast<LPCOLESTR>(sFuncName.getStr()));
-    HRESULT	hr = m_spDispatch->GetIDsOfNames(IID_NULL, &lpsz, 1, LOCALE_USER_DEFAULT, id);
+    HRESULT hr = m_spDispatch->GetIDsOfNames(IID_NULL, &lpsz, 1, LOCALE_USER_DEFAULT, id);
     return hr == S_OK ? true : false;
 }
 void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** pFuncDesc)
@@ -1961,13 +1961,13 @@ void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** p
         DISPID id;
         if (getDispid(sFuncName, &id))
         {
-            CComBSTR memberName; 
+            CComBSTR memberName;
             unsigned int pcNames=0;
             // get the case sensitive name
             if( SUCCEEDED(getTypeInfo()->GetNames( id, & memberName, 1, &pcNames)))
             {
                 //get the associated index and add an entry to the map
-                //with the name sFuncName which differs in the casing of the letters to 
+                //with the name sFuncName which differs in the casing of the letters to
                 //the actual name as obtained from ITypeInfo
                 cit itOrg  = m_mapComFunc.find(OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(memberName))));
                 OSL_ASSERT(itOrg != m_mapComFunc.end());
@@ -1977,15 +1977,15 @@ void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** p
             }
         }
     }
-    
-#if OSL_DEBUG_LEVEL >= 1   
+
+#if OSL_DEBUG_LEVEL >= 1
     // There must only be one entry if sFuncName represents a function or two
     // if it is a property
     pair<cit, cit> p = m_mapComFunc.equal_range(sFuncName.toAsciiLowerCase());
     int numEntries = 0;
     for ( ;p.first != p.second; p.first ++, numEntries ++);
     OSL_ASSERT( ! (numEntries > 3) );
-#endif    
+#endif
     if( itIndex != m_mapComFunc.end())
     {
         ITypeInfo* pType= getTypeInfo();
@@ -2023,13 +2023,13 @@ void IUnknownWrapper_Impl::getPropDesc(const OUString & sFuncName, FUNCDESC ** p
         DISPID id;
         if (getDispid(sFuncName, &id))
         {
-            CComBSTR memberName; 
+            CComBSTR memberName;
             unsigned int pcNames=0;
             // get the case sensitive name
             if( SUCCEEDED(getTypeInfo()->GetNames( id, & memberName, 1, &pcNames)))
             {
                 //As opposed to getFuncDesc, we do not add the value because we would
-                // need to find the get and set description for the property. This would 
+                // need to find the get and set description for the property. This would
                 //mean to iterate over all FUNCDESCs again.
                 p = m_mapComFunc.equal_range(OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(memberName))));
             }
@@ -2043,7 +2043,7 @@ void IUnknownWrapper_Impl::getPropDesc(const OUString & sFuncName, FUNCDESC ** p
         ITypeInfo* pType= getTypeInfo();
         FUNCDESC * pFuncDesc = NULL;
         if (SUCCEEDED( pType->GetFuncDesc(p.first->second, & pFuncDesc)))
-        {            
+        {
             if (pFuncDesc->invkind == INVOKE_PROPERTYGET)
             {
                 (*pFuncDescGet) = pFuncDesc;
@@ -2077,7 +2077,7 @@ void IUnknownWrapper_Impl::getPropDesc(const OUString & sFuncName, FUNCDESC ** p
         if (SUCCEEDED(pType->GetVarDesc(p.first->second, & pVD)))
             (*pVarDesc) = pVD;
     }
-   //else no entry for sFuncName, pFuncDesc will not be filled in    
+   //else no entry for sFuncName, pFuncDesc will not be filled in
 }
 
 VARTYPE IUnknownWrapper_Impl::getElementTypeDesc(const TYPEDESC *desc)
@@ -2097,7 +2097,7 @@ VARTYPE IUnknownWrapper_Impl::getElementTypeDesc(const TYPEDESC *desc)
     else if (desc->vt == VT_USERDEFINED)
     {
         ITypeInfo* thisInfo = getTypeInfo(); //kept by this instance
-        CComPtr<ITypeInfo>	spRefInfo;
+        CComPtr<ITypeInfo>  spRefInfo;
         thisInfo->GetRefTypeInfo(desc->hreftype, & spRefInfo.p);
         if (spRefInfo)
         {
@@ -2113,7 +2113,7 @@ VARTYPE IUnknownWrapper_Impl::getElementTypeDesc(const TYPEDESC *desc)
                 }
                 VarDesc var(spRefInfo);
                 spRefInfo->GetVarDesc(0, & var);
-                _type = var->lpvarValue->vt; 
+                _type = var->lpvarValue->vt;
             }
             else if (attr->typekind == TKIND_INTERFACE)
             {
@@ -2123,7 +2123,7 @@ VARTYPE IUnknownWrapper_Impl::getElementTypeDesc(const TYPEDESC *desc)
             {
                 _type = VT_DISPATCH;
             }
-            else 
+            else
             {
                 throw BridgeRuntimeError(OUSTR("[automation bridge] "
                     "Unhandled user defined type."));
@@ -2155,7 +2155,7 @@ void IUnknownWrapper_Impl::buildComTlbIndex()
                         FuncDesc funcDesc(pType);
                         if( SUCCEEDED( pType->GetFuncDesc( i, &funcDesc)))
                         {
-                            CComBSTR memberName; 
+                            CComBSTR memberName;
                             unsigned int pcNames=0;
                             if( SUCCEEDED(pType->GetNames( funcDesc->memid, & memberName, 1, &pcNames)))
                             {
@@ -2172,15 +2172,15 @@ void IUnknownWrapper_Impl::buildComTlbIndex()
                             sError = OUSTR("[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, " \
                                             "ITypeInfo::GetFuncDesc failed.");
                     }
-                    
-                    //If we create an Object in JScript and a a property then it 
+
+                    //If we create an Object in JScript and a a property then it
                     //has VARDESC instead of FUNCDESC
                     for (long i = 0; i < typeAttr->cVars; i++)
                     {
                         VarDesc varDesc(pType);
                         if (SUCCEEDED(pType->GetVarDesc(i, & varDesc)))
                         {
-                            CComBSTR memberName; 
+                            CComBSTR memberName;
                             unsigned int pcNames = 0;
                             if (SUCCEEDED(pType->GetNames(varDesc->memid, & memberName, 1, &pcNames)))
                             {
@@ -2200,7 +2200,7 @@ void IUnknownWrapper_Impl::buildComTlbIndex()
                         else
                             sError = OUSTR("[automation bridge] IUnknownWrapper_Impl::buildComTlbIndex, " \
                                            "ITypeInfo::GetVarDesc failed.");
-                        
+
                     }
                 }
                 else
@@ -2211,7 +2211,7 @@ void IUnknownWrapper_Impl::buildComTlbIndex()
                 {
                     throw BridgeRuntimeError(sError);
                 }
-                    
+
                 m_bComTlbIndexInit = true;
             }
         }
@@ -2241,8 +2241,8 @@ ITypeInfo* IUnknownWrapper_Impl::getTypeInfo()
                 TypeAttr typeAttr(spType.p);
                 if( SUCCEEDED(spType->GetTypeAttr( &typeAttr)))
                 {
-                    if (typeAttr->typekind == TKIND_INTERFACE && 
-                            typeAttr->wTypeFlags & TYPEFLAG_FDUAL)	
+                    if (typeAttr->typekind == TKIND_INTERFACE &&
+                            typeAttr->wTypeFlags & TYPEFLAG_FDUAL)
                     {
                         HREFTYPE refDispatch;
                         if (SUCCEEDED(spType->GetRefTypeOfImplType(::sal::static_int_cast< UINT, int >( -1 ), &refDispatch)))

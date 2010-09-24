@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 public class FileExtensionFilter implements FilenameFilter {
- 
+
     private String fileExtension;
 
     public FileExtensionFilter(String extension) {
@@ -40,7 +40,7 @@ public class FileExtensionFilter implements FilenameFilter {
             fileExtension = "." + fileExtension;
         }
     }
-        
+
     public boolean accept(File dir, String name) {
         if (name.endsWith(fileExtension)) {
             File candidate = new File(dir, name);

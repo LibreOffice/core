@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ SfxLockBytesItem::SfxLockBytesItem()
 // -----------------------------------------------------------------------
 
 SfxLockBytesItem::SfxLockBytesItem( USHORT nW, SvLockBytes *pLockBytes )
-:	SfxPoolItem( nW ),
+:   SfxPoolItem( nW ),
     _xVal( pLockBytes )
 {
 }
@@ -59,7 +59,7 @@ SfxLockBytesItem::SfxLockBytesItem( USHORT nW, SvLockBytes *pLockBytes )
 // -----------------------------------------------------------------------
 
 SfxLockBytesItem::SfxLockBytesItem( USHORT nW, SvStream &rStream )
-:	SfxPoolItem( nW )
+:   SfxPoolItem( nW )
 {
     rStream.Seek( 0L );
     _xVal = new SvLockBytes( new SvCacheStream(), TRUE );
@@ -71,7 +71,7 @@ SfxLockBytesItem::SfxLockBytesItem( USHORT nW, SvStream &rStream )
 // -----------------------------------------------------------------------
 
 SfxLockBytesItem::SfxLockBytesItem( const SfxLockBytesItem& rItem )
-:	SfxPoolItem( rItem ),
+:   SfxPoolItem( rItem ),
     _xVal( rItem._xVal )
 {
 }
@@ -98,7 +98,7 @@ SfxPoolItem* SfxLockBytesItem::Clone(SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-#define MAX_BUF	32000
+#define MAX_BUF 32000
 
 SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, USHORT ) const
 {

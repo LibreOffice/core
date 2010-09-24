@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,9 +52,9 @@ namespace svxform
     //====================================================================
     //= ODbtoolsClient
     //====================================================================
-    ::osl::Mutex	ODbtoolsClient::s_aMutex;
-    sal_Int32		ODbtoolsClient::s_nClients = 0;
-    oslModule		ODbtoolsClient::s_hDbtoolsModule = NULL;
+    ::osl::Mutex    ODbtoolsClient::s_aMutex;
+    sal_Int32       ODbtoolsClient::s_nClients = 0;
+    oslModule       ODbtoolsClient::s_hDbtoolsModule = NULL;
     createDataAccessToolsFactoryFunction
                     ODbtoolsClient::s_pFactoryCreationFunc = NULL;
 
@@ -73,7 +73,7 @@ namespace svxform
 
             registerClient();
             if ( s_pFactoryCreationFunc )
-            {	// loading the lib succeeded
+            {   // loading the lib succeeded
                 void* pUntypedFactory = (*s_pFactoryCreationFunc)();
                 IDataAccessToolsFactory* pDBTFactory = static_cast< IDataAccessToolsFactory* >( pUntypedFactory );
                 OSL_ENSURE( pDBTFactory, "ODbtoolsClient::ODbtoolsClient: no factory returned!" );
@@ -102,7 +102,7 @@ namespace svxform
     //--------------------------------------------------------------------
     extern "C" { static void SAL_CALL thisModule() {} }
 
-    void ODbtoolsClient::registerClient() 
+    void ODbtoolsClient::registerClient()
     {
         ::osl::MutexGuard aGuard(s_aMutex);
         if (1 == ++s_nClients)
@@ -127,7 +127,7 @@ namespace svxform
                     osl_getFunctionSymbol(s_hDbtoolsModule, sFactoryCreationFunc.pData));
 
                 if (NULL == s_pFactoryCreationFunc)
-                {	// did not find the symbol
+                {   // did not find the symbol
                     OSL_ENSURE(sal_False, "ODbtoolsClient::registerClient: could not find the symbol for creating the factory!");
                     osl_unloadModule(s_hDbtoolsModule);
                     s_hDbtoolsModule = NULL;
@@ -360,7 +360,7 @@ namespace svxform
     }
 
 //........................................................................
-}	// namespace svxform
+}   // namespace svxform
 //........................................................................
 
 

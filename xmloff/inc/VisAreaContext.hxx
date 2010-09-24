@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ public:
     virtual void EndElement();
 
 private:
-    void process(	const ::com::sun::star::uno::Reference<	::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    void process(   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                     ::com::sun::star::awt::Rectangle& rRect,
                     const sal_Int16 nMeasureUnit );
 

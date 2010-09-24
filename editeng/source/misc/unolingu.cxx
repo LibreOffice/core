@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx>	// helper for implementations
+#include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <i18npool/mslangid.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -417,17 +417,17 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
         // Since the check is on-demand occuring and executed once it should
         // not be too troublesome.
         // In OOo 3.0 we will not need the respective code anymore at all.
-//		aAny <<= nCurrentDataFilesChangedCheckValue;
-        aAny <<= (INT32) -1;	// keep the value set to 'need to check'
+//      aAny <<= nCurrentDataFilesChangedCheckValue;
+        aAny <<= (INT32) -1;    // keep the value set to 'need to check'
 
         aCfg.SetProperty( A2OU( "DataFilesChangedCheckValue" ), aAny );
 
         //! Note 1: the new values are commited when the 'aCfg' object
-        //!		gets destroyed.
+        //!     gets destroyed.
         //! Note 2: the new settings in the configuration get applied
-        //!		because the 'LngSvcMgr' (in linguistic/source/lngsvcmgr.hxx)
-        //!		listens to the configuration for changes of the relevant
-        //!		properties and then applies the new settings.
+        //!     because the 'LngSvcMgr' (in linguistic/source/lngsvcmgr.hxx)
+        //!     listens to the configuration for changes of the relevant
+        //!     properties and then applies the new settings.
 
         // nothing needs to be done anymore
         nNeedUpdating = 0;
@@ -864,17 +864,17 @@ typedef cppu::WeakImplHelper1 < XEventListener > LinguMgrAppExitLstnrBaseClass;
 
 class LinguMgrAppExitLstnr : public LinguMgrAppExitLstnrBaseClass
 {
-    uno::Reference< XComponent > 		xDesktop;
+    uno::Reference< XComponent >        xDesktop;
 
 public:
     LinguMgrAppExitLstnr();
     virtual ~LinguMgrAppExitLstnr();
 
-    virtual	void	AtExit() = 0;
+    virtual void    AtExit() = 0;
 
 
     // lang::XEventListener
-    virtual void 	SAL_CALL disposing(const EventObject& rSource)
+    virtual void    SAL_CALL disposing(const EventObject& rSource)
             throw( RuntimeException );
 };
 
@@ -898,7 +898,7 @@ LinguMgrAppExitLstnr::~LinguMgrAppExitLstnr()
     if (xDesktop.is())
     {
         xDesktop->removeEventListener( this );
-        xDesktop = NULL;	//! release reference to desktop
+        xDesktop = NULL;    //! release reference to desktop
     }
     DBG_ASSERT(!xDesktop.is(), "reference to desktop should be realeased");
 }
@@ -909,7 +909,7 @@ void LinguMgrAppExitLstnr::disposing(const EventObject& rSource)
     if (xDesktop.is()  &&  rSource.Source == xDesktop)
     {
         xDesktop->removeEventListener( this );
-        xDesktop = NULL;	//! release reference to desktop
+        xDesktop = NULL;    //! release reference to desktop
 
         AtExit();
     }
@@ -920,41 +920,41 @@ void LinguMgrAppExitLstnr::disposing(const EventObject& rSource)
 class LinguMgrExitLstnr : public LinguMgrAppExitLstnr
 {
 public:
-    virtual	void	AtExit();
+    virtual void    AtExit();
 };
 
 void LinguMgrExitLstnr::AtExit()
 {
     // release references
-    LinguMgr::xLngSvcMgr	= 0;
-    LinguMgr::xSpell		= 0;
-    LinguMgr::xHyph			= 0;
-    LinguMgr::xThes			= 0;
-    LinguMgr::xDicList		= 0;
-    LinguMgr::xProp			= 0;
-    LinguMgr::xIgnoreAll	= 0;
-    LinguMgr::xChangeAll	= 0;
+    LinguMgr::xLngSvcMgr    = 0;
+    LinguMgr::xSpell        = 0;
+    LinguMgr::xHyph         = 0;
+    LinguMgr::xThes         = 0;
+    LinguMgr::xDicList      = 0;
+    LinguMgr::xProp         = 0;
+    LinguMgr::xIgnoreAll    = 0;
+    LinguMgr::xChangeAll    = 0;
 
-    LinguMgr::bExiting		= sal_True;
+    LinguMgr::bExiting      = sal_True;
 
     //TL:TODO: MBA fragen wie ich ohne Absturz hier meinen Speicher
     //  wieder freibekomme...
     //delete LinguMgr::pExitLstnr;
-    LinguMgr::pExitLstnr	= 0;
+    LinguMgr::pExitLstnr    = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////
 
 
 // static member initialization
-LinguMgrExitLstnr * 			LinguMgr::pExitLstnr	= 0;
-sal_Bool						LinguMgr::bExiting		= sal_False;
-uno::Reference< XLinguServiceManager >	LinguMgr::xLngSvcMgr	= 0;
-uno::Reference< XSpellChecker1 > 	LinguMgr::xSpell		= 0;
-uno::Reference< XHyphenator > 		LinguMgr::xHyph			= 0;
-uno::Reference< XThesaurus > 		LinguMgr::xThes			= 0;
-uno::Reference< XDictionaryList > 	LinguMgr::xDicList		= 0;
-uno::Reference< XPropertySet > 		LinguMgr::xProp			= 0;
+LinguMgrExitLstnr *             LinguMgr::pExitLstnr    = 0;
+sal_Bool                        LinguMgr::bExiting      = sal_False;
+uno::Reference< XLinguServiceManager >  LinguMgr::xLngSvcMgr    = 0;
+uno::Reference< XSpellChecker1 >    LinguMgr::xSpell        = 0;
+uno::Reference< XHyphenator >       LinguMgr::xHyph         = 0;
+uno::Reference< XThesaurus >        LinguMgr::xThes         = 0;
+uno::Reference< XDictionaryList >   LinguMgr::xDicList      = 0;
+uno::Reference< XPropertySet >      LinguMgr::xProp         = 0;
 uno::Reference< XDictionary >       LinguMgr::xIgnoreAll    = 0;
 uno::Reference< XDictionary >       LinguMgr::xChangeAll    = 0;
 
@@ -1200,7 +1200,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
         {
             xTmpDicList->addDictionary( xTmp );
             xTmp->setActive( sal_True );
-        }    
+        }
         xDic = uno::Reference< XDictionary > ( xTmp, UNO_QUERY );
     }
 #if OSL_DEBUG_LEVEL > 1
@@ -1238,7 +1238,7 @@ uno::Reference< XDictionaryList >  SvxGetDictionaryList()
     return LinguMgr::GetDictionaryList();
 }
 
-uno::Reference< XPropertySet > 	SvxGetLinguPropertySet()
+uno::Reference< XPropertySet >  SvxGetLinguPropertySet()
 {
     return LinguMgr::GetLinguPropertySet();
 }
@@ -1274,11 +1274,11 @@ SvxAlternativeSpelling SvxGetAltSpelling(
     {
         OUString aWord( rHyphWord->getWord() ),
                  aAltWord( rHyphWord->getHyphenatedWord() );
-        INT16	nHyphenationPos		= rHyphWord->getHyphenationPos(),
-                nHyphenPos			= rHyphWord->getHyphenPos();
+        INT16   nHyphenationPos     = rHyphWord->getHyphenationPos(),
+                nHyphenPos          = rHyphWord->getHyphenPos();
         INT16   nLen    = (INT16)aWord.getLength();
         INT16   nAltLen = (INT16)aAltWord.getLength();
-        const sal_Unicode *pWord	= aWord.getStr(),
+        const sal_Unicode *pWord    = aWord.getStr(),
                           *pAltWord = aAltWord.getStr();
 
         // count number of chars from the left to the
@@ -1299,8 +1299,8 @@ SvxAlternativeSpelling SvxGetAltSpelling(
         aRes.aReplacement       = OUString( aAltWord.copy( nL, nAltLen - nL - nR ) );
         aRes.nChangedPos        = (INT16) nL;
         aRes.nChangedLength     = nLen - nL - nR;
-        aRes.bIsAltSpelling		= TRUE;
-        aRes.xHyphWord			= rHyphWord;
+        aRes.bIsAltSpelling     = TRUE;
+        aRes.xHyphWord          = rHyphWord;
     }
     return aRes;
 }
@@ -1309,7 +1309,7 @@ SvxAlternativeSpelling SvxGetAltSpelling(
 ///////////////////////////////////////////////////////////////////////////
 
 SvxDicListChgClamp::SvxDicListChgClamp( uno::Reference< XDictionaryList >  &rxDicList ) :
-    xDicList	( rxDicList )
+    xDicList    ( rxDicList )
 {
     if (xDicList.is())
     {
@@ -1335,7 +1335,7 @@ short SvxDicError( Window *pParent, sal_Int16 nError )
         int nRid;
         switch (nError)
         {
-            case DIC_ERR_FULL	  : nRid = RID_SVXSTR_DIC_ERR_FULL;  break;
+            case DIC_ERR_FULL     : nRid = RID_SVXSTR_DIC_ERR_FULL;  break;
             case DIC_ERR_READONLY : nRid = RID_SVXSTR_DIC_ERR_READONLY;  break;
             default:
                 nRid = RID_SVXSTR_DIC_ERR_UNKNOWN;
@@ -1348,7 +1348,7 @@ short SvxDicError( Window *pParent, sal_Int16 nError )
 
 LanguageType SvxLocaleToLanguage( const Locale& rLocale )
 {
-    //	empty Locale -> LANGUAGE_NONE
+    //  empty Locale -> LANGUAGE_NONE
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_NONE;
 
@@ -1357,7 +1357,7 @@ LanguageType SvxLocaleToLanguage( const Locale& rLocale )
 
 Locale& SvxLanguageToLocale( Locale& rLocale, LanguageType eLang )
 {
-    if ( eLang != LANGUAGE_NONE	/* &&  eLang != LANGUAGE_SYSTEM */)
+    if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
         MsLangId::convertLanguageToLocale( eLang, rLocale );
     else
         rLocale = Locale();

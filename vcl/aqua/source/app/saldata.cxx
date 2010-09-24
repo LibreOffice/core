@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ SalData::SalData()
     if( s_aAutoReleaseKey == 0 )
         s_aAutoReleaseKey = osl_createThreadKey( releasePool );
 }
-    
+
 SalData::~SalData()
 {
     CGPatternRelease( mxP50Pattern );
@@ -88,7 +88,7 @@ SalData::~SalData()
             osl_setThreadKeyData( s_aAutoReleaseKey, NULL );
             [pPool release];
         }
-        
+
         osl_destroyThreadKey( s_aAutoReleaseKey );
         s_aAutoReleaseKey = 0;
     }
@@ -246,11 +246,11 @@ NSCursor* SalData::getCursor( PointerStyle i_eStyle )
 {
     if( i_eStyle >= POINTER_COUNT )
         return nil;
-    
+
     NSCursor* pCurs = maCursors[ i_eStyle ];
     if( pCurs == INVALID_CURSOR_PTR )
     {
-        pCurs = nil;        
+        pCurs = nil;
         if( aCursorTab[ i_eStyle ].pBaseName )
         {
             NSPoint aHotSpot = aCursorTab[ i_eStyle ].aHotSpot;

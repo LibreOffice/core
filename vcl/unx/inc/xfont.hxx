@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,14 +44,14 @@ class ExtendedXlfd;
 
 struct VerticalTextItem
 {
-    BOOL				mbFixed;
-    XFontStruct*		mpXFontStruct;
-    const sal_Unicode* 	mpString;
-    int					mnLength;
-    int					mnTransX;
-    int					mnTransY;
-    int					mnFixedAdvance;
-    int*				mpAdvanceAry;
+    BOOL                mbFixed;
+    XFontStruct*        mpXFontStruct;
+    const sal_Unicode*  mpString;
+    int                 mnLength;
+    int                 mnTransX;
+    int                 mnTransY;
+    int                 mnFixedAdvance;
+    int*                mpAdvanceAry;
 
     VerticalTextItem( XFontStruct* pXFontStruct,
                         const sal_Unicode* pString,
@@ -111,38 +111,38 @@ class ExtendedFontStruct : public SvRefBase
         mutable sal_uInt32* mpRangeCodes;
         mutable int         mnRangeCount;
 
-        int					LoadEncoding( rtl_TextEncoding nEncoding );
-        FontPitch			GetSpacing( rtl_TextEncoding nEncoding );
-        bool				GetFontBoundingBox( XCharStruct *pCharStruct, 
+        int                 LoadEncoding( rtl_TextEncoding nEncoding );
+        FontPitch           GetSpacing( rtl_TextEncoding nEncoding );
+        bool                GetFontBoundingBox( XCharStruct *pCharStruct,
                                     int *pAscent, int *pDescent ) ;
 
-        sal_Size			GetDefaultWidth();
-        sal_Size 			GetCharWidth8( sal_Unicode nFrom, sal_Unicode nTo, 
-                                    sal_Int32 *pWidthArray, 
+        sal_Size            GetDefaultWidth();
+        sal_Size            GetCharWidth8( sal_Unicode nFrom, sal_Unicode nTo,
+                                    sal_Int32 *pWidthArray,
                                     rtl_TextEncoding nEncoding );
-        sal_Size 			GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo, 
+        sal_Size            GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
                                     sal_Int32 *pWidthArray );
-        sal_Size 			GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo, 
+        sal_Size            GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
                                     sal_Int32 *pWidthArray, ExtendedFontStruct *pFallback );
     public:
-                            ExtendedFontStruct( Display* pDisplay, 
+                            ExtendedFontStruct( Display* pDisplay,
                                     const Size& rPixelSize, sal_Bool bVertical,
                                     ExtendedXlfd* pXlfd );
                             ~ExtendedFontStruct();
-        bool 				Match( const ExtendedXlfd *pXlfd, 
+        bool                Match( const ExtendedXlfd *pXlfd,
                                     const Size& rPixelSize, sal_Bool bVertical ) const;
-        XFontStruct* 		GetFontStruct( rtl_TextEncoding nEncoding );
-        XFontStruct* 		GetFontStruct( sal_Unicode nChar, 
+        XFontStruct*        GetFontStruct( rtl_TextEncoding nEncoding );
+        XFontStruct*        GetFontStruct( sal_Unicode nChar,
                                     rtl_TextEncoding *pEncoding );
-        bool				ToImplFontMetricData( ImplFontMetricData *pMetric );
-        rtl_TextEncoding	GetAsciiEncoding( int *pAsciiRange = NULL ) const;
-        sal_Size			GetCharWidth( sal_Unicode, 
+        bool                ToImplFontMetricData( ImplFontMetricData *pMetric );
+        rtl_TextEncoding    GetAsciiEncoding( int *pAsciiRange = NULL ) const;
+        sal_Size            GetCharWidth( sal_Unicode,
                                     sal_Int32* pPhysWidth, sal_Int32* pLogWidth );
         int                 GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
         bool                HasUnicodeChar( sal_Unicode ) const;
 };
 
-// Declaration and Implementation for ExtendedFontStructRef: Add RefCounting 
+// Declaration and Implementation for ExtendedFontStructRef: Add RefCounting
 // to ExtendedFontStruct (it's not possible to separate decl and impl into
 // a separate source file: all ref member functions are inline
 SV_DECL_IMPL_REF( ExtendedFontStruct );

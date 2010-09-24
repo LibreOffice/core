@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,20 +54,20 @@ namespace rptui
     class DlgEdFunc;
     class DlgEdFactory;
 
-    class OReportWindow :	 public Window, public IMarkedSection
+    class OReportWindow :    public Window, public IMarkedSection
     {
-        Ruler					m_aHRuler;		
-        ODesignView*		    m_pView;
-        OScrollWindowHelper*	m_pParent;
-        OViewsWindow			m_aViewsWindow;
-        ::std::auto_ptr<DlgEdFactory>			
+        Ruler                   m_aHRuler;
+        ODesignView*            m_pView;
+        OScrollWindowHelper*    m_pParent;
+        OViewsWindow            m_aViewsWindow;
+        ::std::auto_ptr<DlgEdFactory>
                                 m_pObjFac;
-        
+
         void ImplInitSettings();
-        
+
         sal_Int32 GetTotalHeight() const;
         sal_Int32 impl_getRealPixelWidth() const;
-        
+
         OReportWindow(OReportWindow&);
         void operator =(OReportWindow&);
     protected:
@@ -82,11 +82,11 @@ namespace rptui
         // WINDOW overloads
         virtual void Resize();
 
-        inline ODesignView*	        getReportView() const { return m_pView; }
-        inline OScrollWindowHelper*	getScrollWindow() const { return m_pParent; }
+        inline ODesignView*         getReportView() const { return m_pView; }
+        inline OScrollWindowHelper* getScrollWindow() const { return m_pParent; }
 
-        void 			SetMode( DlgEdMode m_eMode );
-        void			SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
+        void            SetMode( DlgEdMode m_eMode );
+        void            SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
         rtl::OUString   GetInsertObjString() const;
         void            setGridSnap(BOOL bOn);
         void            setDragStripes(BOOL bOn);
@@ -95,7 +95,7 @@ namespace rptui
         */
         void Copy();
 
-        /**	returns if paste is allowed
+        /** returns if paste is allowed
         *
         * \return <TRUE/> if paste is allowed
         */
@@ -118,76 +118,76 @@ namespace rptui
         */
         BOOL HasSelection() const;
 
-        Point			getThumbPos() const;
+        Point           getThumbPos() const;
 
         /** removes the section at the given position.
         *
         * \param _nPosition Zero based.
         */
-        void			removeSection(USHORT _nPosition);
+        void            removeSection(USHORT _nPosition);
 
         /** adds a new section at position _nPosition.
             If the section is <NULL/> nothing happens.
             If the position is grater than the current elements, the section will be appended.
         */
-        void			addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
+        void            addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
                                     ,const ::rtl::OUString& _sColorEntry
                                     ,USHORT _nPosition = USHRT_MAX);
 
-        USHORT			getSectionCount() const;
+        USHORT          getSectionCount() const;
 
         /** turns the grid on or off
         *
         * \param _bVisible
         */
-        void			toggleGrid(sal_Bool _bVisible);
+        void            toggleGrid(sal_Bool _bVisible);
 
 
         /** shows the ruler
         */
-        void			showRuler(sal_Bool _bShow);
+        void            showRuler(sal_Bool _bShow);
 
         inline sal_Int32 getRulerHeight() const { return m_aHRuler.GetSizePixel().Height(); }
 
         /** returns the total width of the first section
         */
-        sal_Int32		GetTotalWidth() const;
+        sal_Int32       GetTotalWidth() const;
 
         /** calculate the max width of the markers
         *
-        * @param _bWithEnd	if <TRUE/> the end marker will be used for calculation as well otherwise not.
+        * @param _bWithEnd  if <TRUE/> the end marker will be used for calculation as well otherwise not.
         * \return the max width
         */
-        sal_Int32		getMaxMarkerWidth(sal_Bool _bWithEnd) const;
+        sal_Int32       getMaxMarkerWidth(sal_Bool _bWithEnd) const;
 
-        void			ScrollChildren(const Point& _aThumbPos);
+        void            ScrollChildren(const Point& _aThumbPos);
 
-        void			notifySizeChanged();
+        void            notifySizeChanged();
 
         /** unmark all objects on the views without the given one.
         *
         * @param _pSectionView The view where the objects should not be unmarked.
         */
-        void			unmarkAllObjects(OSectionView* _pSectionView);
+        void            unmarkAllObjects(OSectionView* _pSectionView);
 
         /** triggers the property browser with the report component or section
-            @param	_xReportComponent
+            @param  _xReportComponent
         */
-        void			showProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xReportComponent);
+        void            showProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xReportComponent);
 
         /** checks if the keycode is known by the child windows
-            @param	_rCode	the keycode
+            @param  _rCode  the keycode
             @return <TRUE/> if the keycode is handled otherwise <FALSE/>
         */
-        sal_Bool		handleKeyEvent(const KeyEvent& _rEvent);
+        sal_Bool        handleKeyEvent(const KeyEvent& _rEvent);
 
         /** the the section as marked or not marked
-            @param	_pSectionView	the section where to set the marked flag
-            @param	_bMark	the marked flag
+            @param  _pSectionView   the section where to set the marked flag
+            @param  _bMark  the marked flag
         */
-        void			setMarked(OSectionView* _pSectionView,sal_Bool _bMark);
-        void			setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,sal_Bool _bMark);
-        void			setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
+        void            setMarked(OSectionView* _pSectionView,sal_Bool _bMark);
+        void            setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,sal_Bool _bMark);
+        void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
 
         // IMarkedSection
         ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
@@ -206,12 +206,12 @@ namespace rptui
         * \param _aCollpasedSections The position of the sections which should be collapsed.
         */
         void collapseSections(const com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aCollpasedSections);
-        
+
         /** align all marked objects in all sections
         *
-        * \param eHor 
-        * \param eVert 
-        * \param bBoundRects 
+        * \param eHor
+        * \param eVert
+        * \param bBoundRects
         */
         void alignMarkedObjects(sal_Int32 _nControlModification, bool _bAlignAtSection, bool bBoundRects = false);
 
@@ -232,7 +232,7 @@ namespace rptui
         sal_uInt16 getZoomFactor(SvxZoomType _eType) const;
     };
 //==================================================================
-}	//rptui
+}   //rptui
 //==================================================================
 #endif // RPTUI_REPORT_WINDOW_HXX
 

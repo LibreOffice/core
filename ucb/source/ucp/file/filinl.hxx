@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ inline const com::sun::star::uno::Type& SAL_CALL shell::MyProperty::getType() co
     return Typ;
 }
 inline const com::sun::star::uno::Any& SAL_CALL shell::MyProperty::getValue() const
-{ 
+{
     return Value;
 }
 inline const com::sun::star::beans::PropertyState& SAL_CALL shell::MyProperty::getState() const

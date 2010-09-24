@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ private:
 
 public:
                     BasicLibUserData( const ScriptDocument& rDocument ) : m_aDocument( rDocument ) { }
-                    virtual 		~BasicLibUserData() {};
+                    virtual         ~BasicLibUserData() {};
 
     const ScriptDocument&
                     GetDocument() const { return m_aDocument; }
@@ -127,7 +127,7 @@ public:
 class BasicLibLBoxString : public SvLBoxString
 {
 public:
-    BasicLibLBoxString( SvLBoxEntry* pEntry, USHORT nFlags,	const String& rTxt ) :
+    BasicLibLBoxString( SvLBoxEntry* pEntry, USHORT nFlags, const String& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
     virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry );
@@ -173,7 +173,7 @@ BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId )
     ,m_aDocument( ScriptDocument::getApplicationScriptDocument() )
 {
     nMode = LIBMODE_MANAGER;
-    long aTabs_[] = { 1, 12 };	// Mindestens einen braucht die TabPos...
+    long aTabs_[] = { 1, 12 };  // Mindestens einen braucht die TabPos...
                                 // 12 wegen der Checkbox
     SetTabs( aTabs_ );
     Init();
@@ -1712,7 +1712,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                             std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
                         DBG_ASSERT( pEntry_, "InsertEntry fehlgeschlagen!" );
                         pBasicBox->SetCurEntry( pEntry_ );
-                        pBasicBox->Select( pBasicBox->GetCurEntry() );		// OV-Bug?!
+                        pBasicBox->Select( pBasicBox->GetCurEntry() );      // OV-Bug?!
                     }
                 }
             }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -372,7 +372,7 @@ public class Cache
          *          <li>...</li>
          *      </ul>
          */
-         
+
         System.out.println("TODO: must be adapted to java 1.3 :-(");
         System.exit(-1);
 //TODO_JAVA        aFactory.setExpandEntityReferences(false);
@@ -2144,7 +2144,7 @@ public class Cache
             java.util.HashMap  lFilterUINames = (java.util.HashMap)aFilter.get(PROPNAME_UINAME);
             java.util.HashMap  lTypeUINames   = (java.util.HashMap)aType.get(PROPNAME_UINAME);
             java.util.HashMap  lPatchUINames  = new java.util.HashMap();
-            
+
             java.util.Iterator pUINames = lTypeUINames.keySet().iterator();
             while(pUINames.hasNext())
             {
@@ -2152,7 +2152,7 @@ public class Cache
                 java.lang.String sValue  = (java.lang.String)lTypeUINames.get(sLocale);
                 lPatchUINames.put(sLocale, sValue);
             }
-            
+
             pUINames = lFilterUINames.keySet().iterator();
             while(pUINames.hasNext())
             {
@@ -2161,7 +2161,7 @@ public class Cache
                 lPatchUINames.put(sFilter+":"+sLocale, sValue);
             }
             aType.put(PROPNAME_UINAME, lPatchUINames);
-            
+
             // set generic filter service wrapper for our own native filters!
             // By the way: The format types of such filters can be detected by our
             // generic detector too.
@@ -2192,11 +2192,11 @@ public class Cache
             int     flags1     = ((java.lang.Integer)aFilter.get(PROPNAME_FLAGS)).intValue();
             java.lang.String sDocSrv = (java.lang.String)aFilter.get(PROPNAME_DOCUMENTSERVICE);
             if (sDocSrv.length()>0)// without a doc service its not a real filter - its a graphic filter!
-            {    
+            {
                 boolean preferred1 = ((flags1 & FLAGVAL_PREFERRED) == FLAGVAL_PREFERRED);
                 if (preferred1)
                     lPreferredFilters.add(aFilter);
-    
+
                 java.lang.String sAlreadyRegisteredFilter = (java.lang.String)aType.get(PROPNAME_PREFERREDFILTER);
                 // no registration => set this filter as "any possible one"!
                 if (sAlreadyRegisteredFilter.length() < 1)
@@ -2206,7 +2206,7 @@ public class Cache
                     java.util.HashMap aAlreadyRegisteredFilter = (java.util.HashMap)m_lFilters.get(sAlreadyRegisteredFilter);
                     int               flags2                   = ((java.lang.Integer)aAlreadyRegisteredFilter.get(PROPNAME_FLAGS)).intValue();
                     boolean           preferred2               = ((flags2 & FLAGVAL_PREFERRED) == FLAGVAL_PREFERRED);
-    
+
                     // two preferred filters for the same type! => error
                     if (preferred1 && preferred2)
                     {
@@ -2223,7 +2223,7 @@ public class Cache
                         aType.put(PROPNAME_PREFERREDFILTER, sFilter);
                 }
             }
-            
+
             // create the new combined filter flag if required
             if (bCreateCombineFilterFlag)
             {

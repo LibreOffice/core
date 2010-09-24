@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ import org.openoffice.accessibility.misc.Options;
     <p>The canvas listens to selection events of the associated JTree and
     highlights the first selected node of that tree.</p>
 */
-public class Canvas 
+public class Canvas
     extends JPanel
 {
     // This constant can be passed to SetZoomMode to always show the whole screen.
@@ -77,7 +77,7 @@ public class Canvas
 
 
     /** Tell the canvas which tree to use to highlight accessible
-        objects and to observe for changes in the tree structure. 
+        objects and to observe for changes in the tree structure.
     */
     public void SetTree (javax.swing.JTree aTree)
     {
@@ -116,10 +116,10 @@ public class Canvas
 
             Graphics2D g2 = (Graphics2D)g;
             if (Options.GetBoolean("Antialiasing"))
-                g2.setRenderingHint (RenderingHints.KEY_ANTIALIASING, 
+                g2.setRenderingHint (RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
             else
-                g2.setRenderingHint (RenderingHints.KEY_ANTIALIASING, 
+                g2.setRenderingHint (RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_OFF);
 
             setupTransformation ();
@@ -139,7 +139,7 @@ public class Canvas
             g2.fill (aScreen);
             g2.setColor (Color.BLACK);
             g2.draw (aScreen);
-            
+
             synchronized (maShapeList)
             {
                 Iterator aShapeIterator = maShapeList.GetIterator();
@@ -148,7 +148,7 @@ public class Canvas
                 boolean bShowText = Options.GetBoolean ("ShowText");
                 while (aShapeIterator.hasNext())
                 {
-                    CanvasShape aCanvasShape = 
+                    CanvasShape aCanvasShape =
                         (CanvasShape)aShapeIterator.next();
                     try
                     {
@@ -158,13 +158,13 @@ public class Canvas
                     }
                     catch (Exception aException)
                     {
-                        System.err.println ("caught exception while painting a shape:" 
+                        System.err.println ("caught exception while painting a shape:"
                             + aException);
                         aException.printStackTrace (System.err);
                     }
                 }
             }
-            
+
             // Paint highlighted frame around active object as the last thing.
             if (maActiveObject != null)
                 maActiveObject.paint_highlight (g2);
@@ -216,11 +216,11 @@ public class Canvas
                     // Calculate the scales that would map the screen onto the
                     // widget in both of the coordinate axes and select the
                     // smaller
-                    // of the two: it maps the screen onto the widget in both 
+                    // of the two: it maps the screen onto the widget in both
                     // axes at the same time.
-                    double nHScale = (aWidgetSize.getWidth() - 10) 
+                    double nHScale = (aWidgetSize.getWidth() - 10)
                            / aScreenSize.getWidth();
-                    double nVScale = (aWidgetSize.getHeight() - 10) 
+                    double nVScale = (aWidgetSize.getHeight() - 10)
                         / aScreenSize.getHeight();
                     if (nHScale < nVScale)
                         mnScale = nHScale;
@@ -234,15 +234,15 @@ public class Canvas
 
                 // Calculate offsets that center the scaled screen inside
                 // the widget.
-                mnHOffset = (aWidgetSize.getWidth() 
+                mnHOffset = (aWidgetSize.getWidth()
                              - mnScale*aScreenSize.getWidth()) / 2.0;
-                mnVOffset = (aWidgetSize.getHeight() 
+                mnVOffset = (aWidgetSize.getHeight()
                              - mnScale*aScreenSize.getHeight()) / 2.0;
                 if (mnHOffset < 0)
                     mnHOffset = 0;
                 if (mnVOffset < 0)
                     mnVOffset = 0;
-            
+
                 setPreferredSize (new Dimension (
                     (int)(2*mnHOffset + mnScale * aScreenSize.getWidth()),
                     (int)(2*mnVOffset + mnScale * aScreenSize.getHeight())));
@@ -259,8 +259,8 @@ public class Canvas
         }
         maLastWidgetSize = aWidgetSize;
     }
-    
-    
+
+
 
     protected boolean HighlightObject (CanvasShape aNewActiveObject)
     {
@@ -268,7 +268,7 @@ public class Canvas
         {
             if (maActiveObject != null)
                 maActiveObject.Highlight (false);
-            
+
             maActiveObject = aNewActiveObject;
             if (maActiveObject != null)
             {
@@ -292,7 +292,7 @@ public class Canvas
 
 
 
-    
+
     /** Called when the selection of the tree changes.  Highlight the
         corresponding graphical representation of the object.
     */
@@ -305,7 +305,7 @@ public class Canvas
 
 
 
-    private int 
+    private int
         mnXAnchor,
         mnYAnchor,
         maResizeFlag;

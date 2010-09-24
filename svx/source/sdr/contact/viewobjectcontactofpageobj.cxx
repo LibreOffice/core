@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@ using namespace com::sun::star;
 
 namespace sdr
 {
-    namespace contact 
-    {	
+    namespace contact
+    {
         class PagePrimitiveExtractor : public ObjectContactOfPagePainter, public Timer
         {
         private:
             // the ViewObjectContactOfPageObj using this painter
-            ViewObjectContactOfPageObj&			mrViewObjectContactOfPageObj;
+            ViewObjectContactOfPageObj&         mrViewObjectContactOfPageObj;
 
         public:
             // basic constructor/destructor
@@ -92,7 +92,7 @@ namespace sdr
 
         PagePrimitiveExtractor::PagePrimitiveExtractor(
             ViewObjectContactOfPageObj& rVOC)
-        :	ObjectContactOfPagePainter(0, rVOC.GetObjectContact()),
+        :   ObjectContactOfPagePainter(0, rVOC.GetObjectContact()),
             mrViewObjectContactOfPageObj(rVOC)
         {
             // make this renderer a preview renderer
@@ -108,7 +108,7 @@ namespace sdr
             // execute missing LazyInvalidates and stop timer
             Timeout();
         }
-        
+
         void PagePrimitiveExtractor::setLazyInvalidate(ViewObjectContact& /*rVOC*/)
         {
             // do NOT call parent, but remember that something is to do by
@@ -149,7 +149,7 @@ namespace sdr
                     // the content not to be physically clipped in any way. This
                     // would be possible, but would require the internal transformation
                     // which maps between the page visualisation object and the page
-                    // content, including the aspect ratios (for details see in 
+                    // content, including the aspect ratios (for details see in
                     // PagePreviewPrimitive2D::create2DDecomposition)
                     basegfx::B2DRange(),
 
@@ -183,7 +183,7 @@ namespace sdr
 
                 if(rRange.overlaps(aPageRange))
                 {
-                    // if object on the page is inside or overlapping with page, create ActionChanged() for 
+                    // if object on the page is inside or overlapping with page, create ActionChanged() for
                     // involved VOC
                     mrViewObjectContactOfPageObj.ActionChanged();
                 }
@@ -222,15 +222,15 @@ namespace sdr
             {
                 const Rectangle aPageObjectModelData(rPageObject.GetLastBoundRect());
                 const basegfx::B2DRange aPageObjectBound(
-                    aPageObjectModelData.Left(), aPageObjectModelData.Top(), 
+                    aPageObjectModelData.Left(), aPageObjectModelData.Top(),
                     aPageObjectModelData.Right(), aPageObjectModelData.Bottom());
-                
+
                 aPageObjectTransform.set(0, 0, aPageObjectBound.getWidth());
                 aPageObjectTransform.set(1, 1, aPageObjectBound.getHeight());
                 aPageObjectTransform.set(0, 2, aPageObjectBound.getMinX());
                 aPageObjectTransform.set(1, 2, aPageObjectBound.getMinY());
             }
-        
+
             // #i102637# add gray frame also when printing and page exists (handout pages)
             const bool bCreateGrayFrame(!GetObjectContact().isOutputToPrinter() || pPage);
 
@@ -242,7 +242,7 @@ namespace sdr
                 const Size aPageSize(pPage->GetSize());
                 const double fPageWidth(aPageSize.getWidth());
                 const double fPageHeight(aPageSize.getHeight());
-                
+
                 // The case that a PageObject contains another PageObject which visualizes the
                 // same page again would lead to a recursion. Limit that recursion depth to one
                 // by using a local static bool
@@ -302,7 +302,7 @@ namespace sdr
                 // on the handout page more simple, add hidden fill geometry
                 const drawinglayer::primitive2d::Primitive2DReference xFrameHit(
                     drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-                        false, 
+                        false,
                         aPageObjectTransform));
                 xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xFrameHit, 1);
             }
@@ -313,7 +313,7 @@ namespace sdr
                 const Color aFrameColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES).nColor);
                 basegfx::B2DPolygon aOwnOutline(basegfx::tools::createUnitPolygon());
                 aOwnOutline.transform(aPageObjectTransform);
-                
+
                 const drawinglayer::primitive2d::Primitive2DReference xGrayFrame(
                     new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOwnOutline, aFrameColor.getBColor()));
 
@@ -324,7 +324,7 @@ namespace sdr
         }
 
         ViewObjectContactOfPageObj::ViewObjectContactOfPageObj(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :	ViewObjectContactOfSdrObj(rObjectContact, rViewContact),
+        :   ViewObjectContactOfSdrObj(rObjectContact, rViewContact),
             mpExtractor(new PagePrimitiveExtractor(*this))
         {
         }

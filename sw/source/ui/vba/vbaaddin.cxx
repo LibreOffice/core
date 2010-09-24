@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,14 +83,14 @@ void SAL_CALL SwVbaAddin::setInstalled( ::sal_Bool _installed ) throw (uno::Runt
     }
 }
 
-rtl::OUString& 
+rtl::OUString&
 SwVbaAddin::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaAddin") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 SwVbaAddin::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

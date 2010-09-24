@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@ using namespace ::xmloff::token;
 
 static SvXMLEnumMapEntry pXML_Casemap_Enum[] =
 {
-    { XML_NONE,				    style::CaseMap::NONE },
-    { XML_CASEMAP_LOWERCASE,	style::CaseMap::LOWERCASE },
-    { XML_CASEMAP_UPPERCASE,	style::CaseMap::UPPERCASE },
-    { XML_CASEMAP_CAPITALIZE,	style::CaseMap::TITLE },
+    { XML_NONE,                 style::CaseMap::NONE },
+    { XML_CASEMAP_LOWERCASE,    style::CaseMap::LOWERCASE },
+    { XML_CASEMAP_UPPERCASE,    style::CaseMap::UPPERCASE },
+    { XML_CASEMAP_CAPITALIZE,   style::CaseMap::TITLE },
     { XML_TOKEN_INVALID,        0 }
 };
 
@@ -60,18 +60,18 @@ XMLCaseMapPropHdl::~XMLCaseMapPropHdl()
 }
 
 sal_Bool XMLCaseMapPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_uInt16 nVal;
     sal_Bool bRet = SvXMLUnitConverter::convertEnum(
         nVal, rStrImpValue, pXML_Casemap_Enum );
     if( ( bRet ) )
         rValue <<= nVal;
 
-    return bRet; 
+    return bRet;
 }
 
 sal_Bool XMLCaseMapPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_Bool bRet = sal_False;
     sal_uInt16 nValue = sal_uInt16();
     OUStringBuffer aOut;
@@ -83,7 +83,7 @@ sal_Bool XMLCaseMapPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
         if( bRet )
             rStrExpValue = aOut.makeStringAndClear();
     }
-    
+
     return bRet;
 }
 
@@ -98,7 +98,7 @@ XMLCaseMapVariantHdl::~XMLCaseMapVariantHdl()
 }
 
 sal_Bool XMLCaseMapVariantHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_Bool bRet = sal_False;
 
     if( IsXMLToken( rStrImpValue, XML_CASEMAP_SMALL_CAPS ) )
@@ -112,11 +112,11 @@ sal_Bool XMLCaseMapVariantHdl::importXML( const OUString& rStrImpValue, uno::Any
         bRet = sal_True;
     }
 
-    return bRet; 
+    return bRet;
 }
 
 sal_Bool XMLCaseMapVariantHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_uInt16 nValue = sal_uInt16();
     OUStringBuffer aOut;
 

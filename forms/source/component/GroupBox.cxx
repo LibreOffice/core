@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ OGroupBoxModel::OGroupBoxModel( const OGroupBoxModel* _pOriginal, const Referenc
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL	OGroupBoxModel::getSupportedServiceNames() throw(RuntimeException)
+StringSequence SAL_CALL OGroupBoxModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -109,7 +109,7 @@ void OGroupBoxModel::describeAggregateProperties( Sequence< Property >& _rAggreg
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OGroupBoxModel::getServiceName() throw(RuntimeException)
 {
-    return FRM_COMPONENT_GROUPBOX;	// old (non-sun) name for compatibility !
+    return FRM_COMPONENT_GROUPBOX;  // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -159,7 +159,7 @@ OGroupBoxControl::OGroupBoxControl(const Reference<starlang::XMultiServiceFactor
 }
 
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL	OGroupBoxControl::getSupportedServiceNames() throw(RuntimeException)
+StringSequence SAL_CALL OGroupBoxControl::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);

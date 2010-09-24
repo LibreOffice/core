@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -103,13 +103,13 @@ namespace agg
 
         if(vertices.size() > 2)
         {
-            if(vertices[vertices.size() - 2].dist * 10.0 < 
+            if(vertices[vertices.size() - 2].dist * 10.0 <
                vertices[vertices.size() - 3].dist)
             {
-                d = vertices[vertices.size() - 3].dist + 
+                d = vertices[vertices.size() - 3].dist +
                     vertices[vertices.size() - 2].dist;
 
-                vertices[vertices.size() - 2] = 
+                vertices[vertices.size() - 2] =
                     vertices[vertices.size() - 1];
 
                 vertices.remove_last();
@@ -149,7 +149,7 @@ namespace agg
     double trans_double_path::total_length1() const
     {
         if(m_base_length >= 1e-10) return m_base_length;
-        return (m_status1 == ready) ? 
+        return (m_status1 == ready) ?
             m_src_vertices1[m_src_vertices1.size() - 1].dist :
             0.0;
     }
@@ -159,15 +159,15 @@ namespace agg
     double trans_double_path::total_length2() const
     {
         if(m_base_length >= 1e-10) return m_base_length;
-        return (m_status2 == ready) ? 
+        return (m_status2 == ready) ?
             m_src_vertices2[m_src_vertices2.size() - 1].dist :
             0.0;
     }
 
 
     //------------------------------------------------------------------------
-    void trans_double_path::transform1(const vertex_storage& vertices, 
-                                       double kindex, double kx, 
+    void trans_double_path::transform1(const vertex_storage& vertices,
+                                       double kindex, double kx,
                                        double *x, double* y) const
     {
         double x1 = 0.0;
@@ -211,13 +211,13 @@ namespace agg
             if(m_preserve_x_scale)
             {
                 unsigned k;
-                for(i = 0; (j - i) > 1; ) 
+                for(i = 0; (j - i) > 1; )
                 {
-                    if(*x < vertices[k = (i + j) >> 1].dist) 
+                    if(*x < vertices[k = (i + j) >> 1].dist)
                     {
-                        j = k; 
+                        j = k;
                     }
-                    else 
+                    else
                     {
                         i = k;
                     }
@@ -250,7 +250,7 @@ namespace agg
         {
             if(m_base_length > 1e-10)
             {
-                *x *= m_src_vertices1[m_src_vertices1.size() - 1].dist / 
+                *x *= m_src_vertices1[m_src_vertices1.size() - 1].dist /
                       m_base_length;
             }
 

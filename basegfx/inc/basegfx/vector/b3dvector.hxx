@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,80 +48,80 @@ namespace basegfx
     class B3DVector : public ::basegfx::B3DTuple
     {
     public:
-        /**	Create a 3D Vector
+        /** Create a 3D Vector
 
             The vector is initialized to (0.0, 0.0, 0.0)
         */
         B3DVector()
-        :	B3DTuple()
+        :   B3DTuple()
         {}
 
-        /**	Create a 3D Vector
+        /** Create a 3D Vector
 
             @param fX
             This parameter is used to initialize the X-coordinate
             of the 3D Vector.
-            
+
             @param fY
             This parameter is used to initialize the Y-coordinate
             of the 3D Vector.
-            
+
             @param fZ
             This parameter is used to initialize the Z-coordinate
             of the 3D Vector.
         */
         B3DVector(double fX, double fY, double fZ)
-        :	B3DTuple(fX, fY, fZ)
+        :   B3DTuple(fX, fY, fZ)
         {}
 
-        /**	Create a copy of a 3D Vector
+        /** Create a copy of a 3D Vector
 
             @param rVec
             The 3D Vector which will be copied.
         */
-        B3DVector(const B3DVector& rVec) 
-        :	B3DTuple(rVec)
+        B3DVector(const B3DVector& rVec)
+        :   B3DTuple(rVec)
         {}
 
         /** constructor with tuple to allow copy-constructing
             from B3DTuple-based classes
         */
-        B3DVector(const ::basegfx::B3DTuple& rTuple) 
-        :	B3DTuple(rTuple)
+        B3DVector(const ::basegfx::B3DTuple& rTuple)
+        :   B3DTuple(rTuple)
         {}
 
-        ~B3DVector() 
+        ~B3DVector()
         {}
 
         /** *=operator to allow usage from B3DVector, too
         */
-        B3DVector& operator*=( const B3DVector& rPnt ) 
-        { 
+        B3DVector& operator*=( const B3DVector& rPnt )
+        {
             mfX *= rPnt.mfX;
-            mfY *= rPnt.mfY; 
-            mfZ *= rPnt.mfZ; 
-            return *this; 
+            mfY *= rPnt.mfY;
+            mfZ *= rPnt.mfZ;
+            return *this;
         }
 
         /** *=operator to allow usage from B3DVector, too
         */
-        B3DVector& operator*=(double t) 
-        { 
-            mfX *= t; 
-            mfY *= t; 
-            mfZ *= t; 
-            return *this; 
+        B3DVector& operator*=(double t)
+        {
+            mfX *= t;
+            mfY *= t;
+            mfZ *= t;
+            return *this;
         }
 
         /** assignment operator to allow assigning the results
             of B3DTuple calculations
         */
-        B3DVector& operator=( const ::basegfx::B3DTuple& rVec ) 
-        { 
+        B3DVector& operator=( const ::basegfx::B3DTuple& rVec )
+        {
             mfX = rVec.getX();
-            mfY = rVec.getY(); 
-            mfZ = rVec.getZ(); 
-            return *this; 
+            mfY = rVec.getY();
+            mfZ = rVec.getZ();
+            return *this;
         }
 
         /** Calculate the length of this 3D Vector
@@ -308,7 +308,7 @@ namespace basegfx
     bool areParallel( const B3DVector& rVecA, const B3DVector& rVecB );
 
     /** Transform vector by given transformation matrix.
-        
+
         Since this is a vector, translational components of the
         matrix are disregarded.
     */

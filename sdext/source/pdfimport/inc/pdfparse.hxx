@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,15 +47,15 @@ class EmitContext
     virtual unsigned int getCurPos() = 0;
     virtual bool copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen ) = 0;
     virtual unsigned int readOrigBytes( unsigned int nOrigOffset, unsigned int nLen, void* pBuf ) = 0;
-    
+
     EmitContext( const PDFContainer* pTop = NULL );
     virtual ~EmitContext();
-    
+
     // set this to deflate contained streams
     bool m_bDeflate;
     // set this to decrypt the PDF file
     bool m_bDecrypt;
-    
+
     private:
     friend struct PDFEntry;
     EmitImplData* m_pImplData;
@@ -65,10 +65,10 @@ struct PDFEntry
 {
     PDFEntry() {}
     virtual ~PDFEntry();
-    
+
     virtual bool emit( EmitContext& rWriteContext ) const = 0;
     virtual PDFEntry* clone() const = 0;
-    
+
     protected:
     EmitImplData* getEmitData( EmitContext& rContext ) const;
     void setEmitData( EmitContext& rContext, EmitImplData* pNewEmitData ) const;
@@ -101,7 +101,7 @@ struct PDFName : public PDFValue
     virtual ~PDFName();
     virtual bool emit( EmitContext& rWriteContext ) const;
     virtual PDFEntry* clone() const;
-    
+
     rtl::OUString getFilteredName() const;
 };
 
@@ -114,7 +114,7 @@ struct PDFString : public PDFValue
     virtual ~PDFString();
     virtual bool emit( EmitContext& rWriteContext ) const;
     virtual PDFEntry* clone() const;
-    
+
     rtl::OString getFilteredString() const;
 };
 
@@ -144,7 +144,7 @@ struct PDFObjectRef : public PDFValue
 {
     unsigned int    m_nNumber;
     unsigned int    m_nGeneration;
-    
+
     PDFObjectRef( unsigned int nNr, unsigned int nGen )
     : PDFValue(), m_nNumber( nNr ), m_nGeneration( nGen ) {}
     virtual ~PDFObjectRef();
@@ -172,7 +172,7 @@ struct PDFContainer : public PDFEntry
     virtual ~PDFContainer();
     virtual bool emitSubElements( EmitContext& rWriteContext ) const;
     virtual void cloneSubElements( std::vector<PDFEntry*>& rNewSubElements ) const;
-    
+
     PDFObject* findObject( unsigned int nNumber, unsigned int nGeneration ) const;
     PDFObject* findObject( PDFObjectRef* pRef ) const
     { return findObject( pRef->m_nNumber, pRef->m_nGeneration ); }
@@ -190,12 +190,12 @@ struct PDFDict : public PDFContainer
 {
     typedef std::hash_map<rtl::OString,PDFEntry*,rtl::OStringHash> Map;
     Map m_aMap;
-    
+
     PDFDict() {}
     virtual ~PDFDict();
     virtual bool emit( EmitContext& rWriteContext ) const;
     virtual PDFEntry* clone() const;
-    
+
     // inserting a value of NULL will remove rName and the previous value
     // from the dictionary
     void insertValue( const rtl::OString& rName, PDFEntry* pValue );
@@ -211,20 +211,20 @@ struct PDFStream : public PDFEntry
     unsigned int    m_nBeginOffset;
     unsigned int    m_nEndOffset; // offset of the byte after the stream
     PDFDict*        m_pDict;
-    
+
     PDFStream( unsigned int nBegin, unsigned int nEnd, PDFDict* pStreamDict )
     : PDFEntry(), m_nBeginOffset( nBegin ), m_nEndOffset( nEnd ), m_pDict( pStreamDict ) {}
     virtual ~PDFStream();
     virtual bool emit( EmitContext& rWriteContext ) const;
     virtual PDFEntry* clone() const;
-    
+
     unsigned int getDictLength( const PDFContainer* pObjectContainer = NULL ) const; // get contents of the "Length" entry of the dict
 };
 
 struct PDFTrailer : public PDFContainer
 {
     PDFDict*        m_pDict;
-    
+
     PDFTrailer() : PDFContainer(), m_pDict( NULL ) {}
     virtual ~PDFTrailer();
     virtual bool emit( EmitContext& rWriteContext ) const;
@@ -240,23 +240,23 @@ struct PDFFile : public PDFContainer
     public:
     unsigned int        m_nMajor;           // PDF major
     unsigned int        m_nMinor;           // PDF minor
-    
+
     PDFFile()
     : PDFContainer(),
       m_pData( NULL ),
       m_nMajor( 0 ), m_nMinor( 0 )
     {}
     virtual ~PDFFile();
-    
+
     virtual bool emit( EmitContext& rWriteContext ) const;
     virtual PDFEntry* clone() const;
-    
+
     bool isEncrypted() const;
     // this method checks whether rPwd is compatible with
     // either user or owner password and sets up decrypt data in that case
     // returns true if decryption can be done
     bool setupDecryptionData( const rtl::OString& rPwd ) const;
-    
+
     bool decrypt( const sal_uInt8* pInBuffer, sal_uInt32 nLen,
                   sal_uInt8* pOutBuffer,
                   unsigned int nObject, unsigned int nGeneration ) const;
@@ -268,16 +268,16 @@ struct PDFObject : public PDFContainer
     PDFStream*      m_pStream;
     unsigned int    m_nNumber;
     unsigned int    m_nGeneration;
-    
+
     PDFObject( unsigned int nNr, unsigned int nGen )
     : m_pObject( NULL ), m_pStream( NULL ), m_nNumber( nNr ), m_nGeneration( nGen ) {}
     virtual ~PDFObject();
     virtual bool emit( EmitContext& rWriteContext ) const;
     virtual PDFEntry* clone() const;
-    
+
     // writes only the contained stream, deflated if necessary
     bool writeStream( EmitContext& rContext, const PDFFile* pPDFFile ) const;
-    
+
     private:
     // returns true if stream is deflated
     // fills *ppStream and *pBytes with start of stream and count of bytes
@@ -299,7 +299,7 @@ class PDFReader
     public:
     PDFReader() {}
     ~PDFReader() {}
-    
+
     PDFEntry* read( const char* pFileName );
     PDFEntry* read( const char* pBuffer, unsigned int nLen );
 };

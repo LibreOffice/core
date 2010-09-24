@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace { struct lclMutex : public rtl::Static< ::vos::OMutex, lclMutex >{}; }
 //=========================================================================
 
 SfxCancelManager::SfxCancelManager( SfxCancelManager *pParent )
-:	_pParent( pParent )
+:   _pParent( pParent )
 {
 }
 
@@ -59,7 +59,7 @@ SfxCancelManager::~SfxCancelManager()
 
 BOOL SfxCancelManager::CanCancel() const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Liefert TRUE wenn an diesem CancelManager oder an einem Parent
     ein Job l"auft.
@@ -74,7 +74,7 @@ BOOL SfxCancelManager::CanCancel() const
 
 void SfxCancelManager::Cancel( BOOL bDeep )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode markiert alle angemeldeten <SfxCancellable>-Instanzen
     als suspendiert.
@@ -94,7 +94,7 @@ void SfxCancelManager::Cancel( BOOL bDeep )
 
 void SfxCancelManager::InsertCancellable( SfxCancellable *pJob )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese interne Methode tr"agt 'pJob' in die Liste der unterbrechbaren
     Jobs ein und Broadcastet dies. Jeder <SfxCancellable> darf nur
@@ -122,7 +122,7 @@ void SfxCancelManager::InsertCancellable( SfxCancellable *pJob )
 
 void SfxCancelManager::RemoveCancellable( SfxCancellable *pJob )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese interne Methode tr"agt 'pJob' aus die Liste der unterbrechbaren
     Jobs aus und Broadcastet dies. Dieser Aufruf mu\s paarig nach einem
@@ -156,7 +156,7 @@ SfxCancellable::~SfxCancellable()
 
 void SfxCancellable::Cancel()
 
-/*	[Description]
+/*  [Description]
 
     This virtual function is called when the user hits the cancel-button.
     If you overload it, you can stop your activities. Please always call

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,17 +37,17 @@ import com.sun.star.accessibility.XAccessibleEventListener;
  *
  */
 public class AccessibleEventMulticaster implements XAccessibleEventListener {
-           
+
     private final XAccessibleEventListener a;
     private final XAccessibleEventListener b;
-    
+
     /** Creates a new instance of AccessibleEventMulticaster */
-    protected AccessibleEventMulticaster(XAccessibleEventListener a, 
+    protected AccessibleEventMulticaster(XAccessibleEventListener a,
                                          XAccessibleEventListener b) {
         this.a = a;
         this.b = b;
     }
-    
+
     protected XAccessibleEventListener remove(XAccessibleEventListener l) {
         if (l == a)
             return b;
@@ -60,25 +60,25 @@ public class AccessibleEventMulticaster implements XAccessibleEventListener {
         }
         return add(a2, b2);
     }
-    
+
     public void notifyEvent(AccessibleEventObject accessibleEventObject) {
         a.notifyEvent(accessibleEventObject);
         b.notifyEvent(accessibleEventObject);
     }
-    
+
     public void disposing(EventObject eventObject) {
         a.disposing(eventObject);
         b.disposing(eventObject);
     }
-    
+
     public static XAccessibleEventListener add(XAccessibleEventListener a, XAccessibleEventListener b) {
         if (a == null)
             return b;
-        if (b == null) 
+        if (b == null)
             return a;
         return new AccessibleEventMulticaster(a,b);
     }
-    
+
     public static XAccessibleEventListener remove(XAccessibleEventListener l, XAccessibleEventListener oldl) {
         if (l == oldl || l == null) {
             return null;
@@ -88,5 +88,5 @@ public class AccessibleEventMulticaster implements XAccessibleEventListener {
             return l;
         }
     }
-    
+
 }

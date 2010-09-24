@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,8 +26,8 @@
  ************************************************************************/
 #include <sfx2/sfx.hrc>
 
-#define DLG_CUSTOMSHOW 			843
-#define DLG_DEFINE_CUSTOMSHOW	890
+#define DLG_CUSTOMSHOW          843
+#define DLG_DEFINE_CUSTOMSHOW   890
 #define BTN_OK 1
 #define BTN_NEW 1
 #define BTN_EDIT 2

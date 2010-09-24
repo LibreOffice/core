@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ extern BOOL ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType );
 
 // SBXINT.CXX
 
-double 	    ImpRound( double );
-INT16 	    ImpGetInteger( const SbxValues* );
+double      ImpRound( double );
+INT16       ImpGetInteger( const SbxValues* );
 void        ImpPutInteger( SbxValues*, INT16 );
-sal_Int64 	ImpGetInt64( const SbxValues* );
+sal_Int64   ImpGetInt64( const SbxValues* );
 void        ImpPutInt64( SbxValues*, sal_Int64 );
-sal_uInt64 	ImpGetUInt64( const SbxValues* );
+sal_uInt64  ImpGetUInt64( const SbxValues* );
 void        ImpPutUInt64( SbxValues*, sal_uInt64 );
 
 sal_Int64   ImpDoubleToSalInt64( double d );
@@ -57,17 +57,17 @@ double      ImpSalUInt64ToDouble( sal_uInt64 n );
 
 // SBXLNG.CXX
 
-INT32 	ImpGetLong( const SbxValues* );
+INT32   ImpGetLong( const SbxValues* );
 void    ImpPutLong( SbxValues*, INT32 );
 
 // SBXSNG.CXX
 
-float 	ImpGetSingle( const SbxValues* );
+float   ImpGetSingle( const SbxValues* );
 void    ImpPutSingle( SbxValues*, float );
 
 // SBXDBL.CXX
 
-double 	ImpGetDouble( const SbxValues* );
+double  ImpGetDouble( const SbxValues* );
 void    ImpPutDouble( SbxValues*, double, BOOL bCoreString=FALSE );
 
 #if FALSE
@@ -82,15 +82,15 @@ void      ImpPutUINT64( SbxValues*, const SbxUINT64& );
 // SBXCURR.CXX
 
 SbxUINT64 ImpDoubleToUINT64( double );
-double 	  ImpUINT64ToDouble( const SbxUINT64& );
+double    ImpUINT64ToDouble( const SbxUINT64& );
 SbxINT64  ImpDoubleToINT64( double );
-double 	  ImpINT64ToDouble( const SbxINT64& );
+double    ImpINT64ToDouble( const SbxINT64& );
 
 #if TRUE
-INT32	  ImpGetCurrLong( const SbxValues* );
+INT32     ImpGetCurrLong( const SbxValues* );
 void      ImpPutCurrLong( SbxValues*, INT32 );
-INT32 	  ImpDoubleToCurrLong( double );
-double 	  ImpCurrLongToDouble( INT32 );
+INT32     ImpDoubleToCurrLong( double );
+double    ImpCurrLongToDouble( INT32 );
 #endif
 
 SbxINT64  ImpGetCurrency( const SbxValues* );
@@ -99,7 +99,7 @@ inline
 SbxINT64  ImpDoubleToCurrency( double d )
           { return ImpDoubleToINT64( d * CURRENCY_FACTOR ); }
 inline
-double 	  ImpCurrencyToDouble( const SbxINT64 &r )
+double    ImpCurrencyToDouble( const SbxINT64 &r )
           { return ImpINT64ToDouble( r ) / CURRENCY_FACTOR; }
 
 
@@ -111,14 +111,14 @@ void ImpPutDecimal( SbxValues* p, SbxDecimal* pDec );
 
 // SBXDATE.CXX
 
-double 	ImpGetDate( const SbxValues* );
+double  ImpGetDate( const SbxValues* );
 void    ImpPutDate( SbxValues*, double );
 
 // SBXSTR.CXX
 
-::rtl::OUString 	ImpGetString( const SbxValues* );
-::rtl::OUString 	ImpGetCoreString( const SbxValues* );
-void   	ImpPutString( SbxValues*, const ::rtl::OUString* );
+::rtl::OUString     ImpGetString( const SbxValues* );
+::rtl::OUString     ImpGetCoreString( const SbxValues* );
+void    ImpPutString( SbxValues*, const ::rtl::OUString* );
 
 // SBXCHAR.CXX
 
@@ -126,17 +126,17 @@ sal_Unicode ImpGetChar( const SbxValues* );
 void    ImpPutChar( SbxValues*, sal_Unicode );
 
 // SBXBYTE.CXX
-BYTE 	ImpGetByte( const SbxValues* );
+BYTE    ImpGetByte( const SbxValues* );
 void    ImpPutByte( SbxValues*, BYTE );
 
 // SBXUINT.CXX
 
-UINT16 	ImpGetUShort( const SbxValues* );
+UINT16  ImpGetUShort( const SbxValues* );
 void    ImpPutUShort( SbxValues*, UINT16 );
 
 // SBXULNG.CXX
 
-UINT32 	ImpGetULong( const SbxValues* );
+UINT32  ImpGetULong( const SbxValues* );
 void    ImpPutULong( SbxValues*, UINT32 );
 
 // SBXBOOL.CXX

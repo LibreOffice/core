@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,18 +32,18 @@
 #include "uno/EnvDcp.h"
 
 
-namespace cppu 
+namespace cppu
 {
 namespace EnvDcp
 {
 /** Get the OBI type part of an environment descriptor.
     (http://wiki.services.openoffice.org/wiki/Uno/Cpp/Spec/Environment_Descriptor)
-    
+
     @param  rEnvDcp        the Environment Descriptor
     @return                the OBI type
     @since UDK 3.2.7
 */
-inline rtl::OUString getTypeName(rtl::OUString const & rEnvDcp) 
+inline rtl::OUString getTypeName(rtl::OUString const & rEnvDcp)
 {
     rtl::OUString typeName;
 
@@ -54,7 +54,7 @@ inline rtl::OUString getTypeName(rtl::OUString const & rEnvDcp)
 
 /** Get the purpose part of an environment descriptor.
     (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Descriptor)
-    
+
     @param  rEnvDcp        the Environment Descriptor
     @return                the purpose
     @since UDK 3.2.7

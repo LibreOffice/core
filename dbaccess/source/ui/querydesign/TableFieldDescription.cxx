@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ OTableFieldDesc::OTableFieldDesc()
 //------------------------------------------------------------------------------
 OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
     : ::vos::OReference()
-    
+
 {
     DBG_CTOR(OTableFieldDesc,NULL);
     *this = rRS;
@@ -82,7 +82,7 @@ OTableFieldDesc::OTableFieldDesc(const ::rtl::OUString& rT, const ::rtl::OUStrin
     ,m_bVisible(sal_False)
 {
     DBG_CTOR(OTableFieldDesc,NULL);
-    SetField( rF );	SetTable( rT );
+    SetField( rF ); SetTable( rT );
 }
 
 //------------------------------------------------------------------------------
@@ -98,10 +98,10 @@ OTableFieldDesc& OTableFieldDesc::operator=( const OTableFieldDesc& rRS )
 
     m_aCriteria = rRS.GetCriteria();
     m_aTableName = rRS.GetTable();
-    m_aAliasName = rRS.GetAlias();		// table range
-    m_aFieldName = rRS.GetField();		// column
-    m_aFieldAlias = rRS.GetFieldAlias();	// column alias
-    m_aFunctionName = rRS.GetFunction();	// Funktionsname
+    m_aAliasName = rRS.GetAlias();      // table range
+    m_aFieldName = rRS.GetField();      // column
+    m_aFieldAlias = rRS.GetFieldAlias();    // column alias
+    m_aFunctionName = rRS.GetFunction();    // Funktionsname
     m_pTabWindow = rRS.GetTabWindow();
     m_eDataType = rRS.GetDataType();
     m_eFunctionType = rRS.GetFunctionType();
@@ -120,14 +120,14 @@ sal_Bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
 
-    return (	m_eOrderDir != rDesc.GetOrderDir()		||
-                m_eDataType != rDesc.GetDataType()		||
-                m_aAliasName != rDesc.GetAlias()	 	||
-                m_aFunctionName != rDesc.GetFunction()	||
-                m_aFieldName != rDesc.GetField()		||
-                m_aTableName != rDesc.GetTable()	 	||
-                m_bGroupBy != rDesc.IsGroupBy()			||
-                m_aCriteria != rDesc.GetCriteria()	||
+    return (    m_eOrderDir != rDesc.GetOrderDir()      ||
+                m_eDataType != rDesc.GetDataType()      ||
+                m_aAliasName != rDesc.GetAlias()        ||
+                m_aFunctionName != rDesc.GetFunction()  ||
+                m_aFieldName != rDesc.GetField()        ||
+                m_aTableName != rDesc.GetTable()        ||
+                m_bGroupBy != rDesc.IsGroupBy()         ||
+                m_aCriteria != rDesc.GetCriteria()  ||
                 m_bVisible != rDesc.IsVisible() );
 
 }

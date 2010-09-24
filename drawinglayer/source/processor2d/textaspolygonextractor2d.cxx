@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,24 +52,24 @@ namespace drawinglayer
                     //
                     // - TextSimplePortionPrimitive2D
                     // - PolygonWavePrimitive2D
-                    //		- PolygonStrokePrimitive2D
+                    //      - PolygonStrokePrimitive2D
                     // - PolygonStrokePrimitive2D
-                    //		- PolyPolygonColorPrimitive2D
-                    //		- PolyPolygonHairlinePrimitive2D
-                    //			- PolygonHairlinePrimitive2D
+                    //      - PolyPolygonColorPrimitive2D
+                    //      - PolyPolygonHairlinePrimitive2D
+                    //          - PolygonHairlinePrimitive2D
                     // - ShadowPrimitive2D
-                    //		- ModifiedColorPrimitive2D
-                    //		- TransformPrimitive2D
+                    //      - ModifiedColorPrimitive2D
+                    //      - TransformPrimitive2D
                     // - TextEffectPrimitive2D
-                    //		- ModifiedColorPrimitive2D
-                    //		- TransformPrimitive2D
-                    //		- GroupPrimitive2D
-                    
+                    //      - ModifiedColorPrimitive2D
+                    //      - TransformPrimitive2D
+                    //      - GroupPrimitive2D
+
                     // encapsulate with flag and use decomposition
                     mnInText++;
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     mnInText--;
-                    
+
                     break;
                 }
                 case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
@@ -79,15 +79,15 @@ namespace drawinglayer
                     //
                     // - PolyPolygonColorPrimitive2D
                     // - TextEffectPrimitive2D
-                    //		- ModifiedColorPrimitive2D
-                    //		- TransformPrimitive2D
-                    //		- GroupPrimitive2D
-                    
+                    //      - ModifiedColorPrimitive2D
+                    //      - TransformPrimitive2D
+                    //      - GroupPrimitive2D
+
                     // encapsulate with flag and use decomposition
                     mnInText++;
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     mnInText--;
-                    
+
                     break;
                 }
 
@@ -178,7 +178,7 @@ namespace drawinglayer
                         process(rModifiedColorCandidate.getChildren());
                         maBColorModifierStack.pop();
                     }
-                    
+
                     break;
                 }
 
@@ -191,8 +191,8 @@ namespace drawinglayer
 
                     // create new transformations for CurrentTransformation and for local ViewInformation2D
                     const geometry::ViewInformation2D aViewInformation2D(
-                        getViewInformation2D().getObjectTransformation() * rTransformCandidate.getTransformation(), 
-                        getViewInformation2D().getViewTransformation(), 
+                        getViewInformation2D().getObjectTransformation() * rTransformCandidate.getTransformation(),
+                        getViewInformation2D().getViewTransformation(),
                         getViewInformation2D().getViewport(),
                         getViewInformation2D().getVisualizedPage(),
                         getViewInformation2D().getViewTime(),
@@ -230,7 +230,7 @@ namespace drawinglayer
         }
 
         TextAsPolygonExtractor2D::TextAsPolygonExtractor2D(const geometry::ViewInformation2D& rViewInformation)
-        :	BaseProcessor2D(rViewInformation),
+        :   BaseProcessor2D(rViewInformation),
             maTarget(),
             maBColorModifierStack(),
             mnInText(0)

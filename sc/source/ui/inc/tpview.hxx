@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,13 +46,13 @@ class ScViewOptions;
 class ScTpContentOptions : public SfxTabPage
 {
     FixedLine       aLinesGB;
-    CheckBox		aGridCB;
-    FixedText		aColorFT;
-    ColorListBox	aColorLB;
-    CheckBox		aBreakCB;
-    CheckBox		aGuideLineCB;
-    CheckBox		aHandleCB;
-    CheckBox		aBigHandleCB;
+    CheckBox        aGridCB;
+    FixedText       aColorFT;
+    ColorListBox    aColorLB;
+    CheckBox        aBreakCB;
+    CheckBox        aGuideLineCB;
+    CheckBox        aHandleCB;
+    CheckBox        aBigHandleCB;
 
     FixedLine       aSeparator1FL;
 
@@ -79,11 +79,11 @@ class ScTpContentOptions : public SfxTabPage
     FixedLine       aSeparator2FL;
 
     FixedLine       aWindowGB;
-    CheckBox		aRowColHeaderCB;
-    CheckBox		aHScrollCB;
-    CheckBox		aVScrollCB;
-    CheckBox		aTblRegCB;
-    CheckBox		aOutlineCB;
+    CheckBox        aRowColHeaderCB;
+    CheckBox        aHScrollCB;
+    CheckBox        aVScrollCB;
+    CheckBox        aTblRegCB;
+    CheckBox        aOutlineCB;
 
     ScViewOptions*  pLocalOptions;
 
@@ -92,19 +92,19 @@ class ScTpContentOptions : public SfxTabPage
     DECL_LINK( SelLbObjHdl, ListBox* );
     DECL_LINK( CBHdl, CheckBox* );
 
-            ScTpContentOptions( Window*			pParent,
-                             const SfxItemSet&	rArgSet );
+            ScTpContentOptions( Window*         pParent,
+                             const SfxItemSet&  rArgSet );
             ~ScTpContentOptions();
 
 public:
-    static	SfxTabPage*	Create			( Window*		 		pParent,
-                                          const SfxItemSet&		rCoreSet );
-    virtual	BOOL		FillItemSet		( SfxItemSet& rCoreSet );
-    virtual	void		Reset			( const SfxItemSet& rCoreSet );
+    static  SfxTabPage* Create          ( Window*               pParent,
+                                          const SfxItemSet&     rCoreSet );
+    virtual BOOL        FillItemSet     ( SfxItemSet& rCoreSet );
+    virtual void        Reset           ( const SfxItemSet& rCoreSet );
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual void		ActivatePage( const SfxItemSet& );
-    virtual int			DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void        ActivatePage( const SfxItemSet& );
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 
 };
@@ -128,16 +128,16 @@ class ScTpLayoutOptions : public SfxTabPage
     RadioButton     aNeverRB;
 
     FixedLine       aOptionsGB;
-    CheckBox		aAlignCB;
-    ListBox			aAlignLB;
-    CheckBox		aEditModeCB;
-    CheckBox		aFormatCB;
+    CheckBox        aAlignCB;
+    ListBox         aAlignLB;
+    CheckBox        aEditModeCB;
+    CheckBox        aFormatCB;
     CheckBox        aExpRefCB;
-    CheckBox		aMarkHdrCB;
-    CheckBox		aTextFmtCB;
+    CheckBox        aMarkHdrCB;
+    CheckBox        aTextFmtCB;
     CheckBox        aReplWarnCB;
 
-    SvxStringArray 	aUnitArr;
+    SvxStringArray  aUnitArr;
 
     DECL_LINK( CBHdl, CheckBox* );
 
@@ -146,21 +146,21 @@ class ScTpLayoutOptions : public SfxTabPage
 
     ScDocument *pDoc;
 
-    DECL_LINK(	UpdateHdl, CheckBox* );
+    DECL_LINK(  UpdateHdl, CheckBox* );
 
-            ScTpLayoutOptions( Window*			pParent,
-                             const SfxItemSet&	rArgSet );
+            ScTpLayoutOptions( Window*          pParent,
+                             const SfxItemSet&  rArgSet );
             ~ScTpLayoutOptions();
 
 public:
-    static	SfxTabPage*	Create			( Window*		 		pParent,
-                                          const SfxItemSet&		rCoreSet );
-    virtual	BOOL		FillItemSet		( SfxItemSet& rCoreSet );
-    virtual	void		Reset			( const SfxItemSet& rCoreSet );
+    static  SfxTabPage* Create          ( Window*               pParent,
+                                          const SfxItemSet&     rCoreSet );
+    virtual BOOL        FillItemSet     ( SfxItemSet& rCoreSet );
+    virtual void        Reset           ( const SfxItemSet& rCoreSet );
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual void		ActivatePage( const SfxItemSet& );
-    virtual int			DeactivatePage( SfxItemSet* pSet = 0 );
+    virtual void        ActivatePage( const SfxItemSet& );
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
     void                SetDocument(ScDocument* pPtr){pDoc = pPtr;}
 

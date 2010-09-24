@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,7 +119,7 @@ void SAL_CALL component_getImplementationEnvironment(
 }
 
 sal_Bool SAL_CALL component_writeInfo(  void*   /*pServiceManager*/,
-                                        void*	pRegistryKey	)
+                                        void*   pRegistryKey    )
 {
     Reference< registry::XRegistryKey >
             xKey( reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ) ) ;
@@ -211,9 +211,9 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplementationName,
     // Set default return value for this operation - if it failed.
     void* pReturn = NULL ;
 
-    if	(
-            ( pImplementationName	!=	NULL ) &&
-            ( pServiceManager		!=	NULL )
+    if  (
+            ( pImplementationName   !=  NULL ) &&
+            ( pServiceManager       !=  NULL )
         )
     {
         // Define variables which are used in following macros.

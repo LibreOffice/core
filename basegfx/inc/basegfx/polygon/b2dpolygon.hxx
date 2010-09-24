@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,11 +112,11 @@ namespace basegfx
         B2VectorContinuity getContinuityInPoint(sal_uInt32 nIndex) const;
 
         /** check edge for being a bezier segment
-            
-            This test the existance of control vectors, but do not apply 
-            testAndSolveTrivialBezier() to the bezier segment, so it is still useful 
+
+            This test the existance of control vectors, but do not apply
+            testAndSolveTrivialBezier() to the bezier segment, so it is still useful
             to do so.
-            Since it can use internal data representations, it is faster 
+            Since it can use internal data representations, it is faster
             than using getBezierSegment() and applying isBezier() on it.
 
             @param nIndex
@@ -126,14 +126,14 @@ namespace basegfx
             true if edge exists and at least one control vector is used
         */
         bool isBezierSegment(sal_uInt32 nIndex) const;
-        
+
         /** bezier segment access
-            
+
             This method also works when it is no bezier segment at all and will fill
             the given B2DCubicBezier as needed.
             In any case, the given B2DCubicBezier will be filled, if necessary with
             the single start point (if no valid edge exists).
-            
+
             @param nIndex
             Index of the addressed edge's start point
 
@@ -180,18 +180,18 @@ namespace basegfx
             (a) the range of the polygon points
             (b) the range of the polygon points and control points
             (c) the outer range of the subdivided bezier curve
-            
-            Ranges (a) and (c) are produced by tools::getRange(); resp. this 
+
+            Ranges (a) and (c) are produced by tools::getRange(); resp. this
             getB2DRange(). tools::getRangeWithControlPoints handles case (b).
-            
-            To get range (c) a simple solution would be to subdivide the polygon 
-            and use getRange() on it. Since subdivision is expensive and decreases 
+
+            To get range (c) a simple solution would be to subdivide the polygon
+            and use getRange() on it. Since subdivision is expensive and decreases
             the polygon quality, i added this new method. It will use a
             methodology suggested by HDU. First, it gets the range (a).
             Then it iterates over the bezier segments and for each it
             first tests if the outer range of the bezier segment is already
             contained in the result range.
-            
+
             The subdivision itself uses getAllExtremumPositions() to only
             calculate extremum points and to expand the result accordingly.
             Thus it calculates maximal four extremum points on the bezier

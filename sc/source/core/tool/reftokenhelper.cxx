@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -476,4 +476,20 @@ bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const 
             return false;
     }
     return true;
+}
+
+ScSharedTokenRef ScRefTokenHelper::createRefToken(const ScAddress& rAddr)
+{
+    ScSingleRefData aRefData;
+    aRefData.InitAddress(rAddr);
+    ScSharedTokenRef pRef(new ScSingleRefToken(aRefData));
+    return pRef;
+}
+
+ScSharedTokenRef ScRefTokenHelper::createRefToken(const ScRange& rRange)
+{
+    ScComplexRefData aRefData;
+    aRefData.InitRange(rRange);
+    ScSharedTokenRef pRef(new ScDoubleRefToken(aRefData));
+    return pRef;
 }

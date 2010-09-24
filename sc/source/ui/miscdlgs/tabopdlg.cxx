@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,25 +49,25 @@
 
 
 //============================================================================
-//	class ScTabOpDlg
+//  class ScTabOpDlg
 //----------------------------------------------------------------------------
 
 ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                         ScDocument*         pDocument,
-                        const ScRefAddress&	rCursorPos )
+                        const ScRefAddress& rCursorPos )
 
-    :	ScAnyRefDlg			( pB, pCW, pParent, RID_SCDLG_TABOP ),
+    :   ScAnyRefDlg         ( pB, pCW, pParent, RID_SCDLG_TABOP ),
         //
         aFlVariables        ( this, ScResId( FL_VARIABLES ) ),
         aFtFormulaRange     ( this, ScResId( FT_FORMULARANGE ) ),
         aEdFormulaRange     ( this, this, ScResId( ED_FORMULARANGE ) ),
-        aRBFormulaRange		( this, ScResId( RB_FORMULARANGE ), &aEdFormulaRange, this ),
-        aFtRowCell       	( this, ScResId( FT_ROWCELL ) ),
+        aRBFormulaRange     ( this, ScResId( RB_FORMULARANGE ), &aEdFormulaRange, this ),
+        aFtRowCell          ( this, ScResId( FT_ROWCELL ) ),
         aEdRowCell          ( this, this, ScResId( ED_ROWCELL ) ),
-        aRBRowCell			( this, ScResId( RB_ROWCELL ), &aEdRowCell, this ),
-        aFtColCell       	( this, ScResId( FT_COLCELL ) ),
+        aRBRowCell          ( this, ScResId( RB_ROWCELL ), &aEdRowCell, this ),
+        aFtColCell          ( this, ScResId( FT_COLCELL ) ),
         aEdColCell          ( this, this, ScResId( ED_COLCELL ) ),
-        aRBColCell			( this, ScResId( RB_COLCELL ), &aEdColCell, this ),
+        aRBColCell          ( this, ScResId( RB_COLCELL ), &aEdColCell, this ),
         aBtnOk              ( this, ScResId( BTN_OK ) ),
         aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp            ( this, ScResId( BTN_HELP ) ),
@@ -77,12 +77,12 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         nCurTab             ( theFormulaCell.Tab() ),
         pEdActive           ( NULL ),
         bDlgLostFocus       ( FALSE ),
-        errMsgNoFormula		( ScResId( STR_NOFORMULA ) ),
-        errMsgNoColRow		( ScResId( STR_NOCOLROW ) ),
-        errMsgWrongFormula	( ScResId( STR_WRONGFORMULA ) ),
-        errMsgWrongRowCol	( ScResId( STR_WRONGROWCOL ) ),
-        errMsgNoColFormula	( ScResId( STR_NOCOLFORMULA ) ),
-        errMsgNoRowFormula	( ScResId( STR_NOROWFORMULA ) )
+        errMsgNoFormula     ( ScResId( STR_NOFORMULA ) ),
+        errMsgNoColRow      ( ScResId( STR_NOCOLROW ) ),
+        errMsgWrongFormula  ( ScResId( STR_WRONGFORMULA ) ),
+        errMsgWrongRowCol   ( ScResId( STR_WRONGROWCOL ) ),
+        errMsgNoColFormula  ( ScResId( STR_NOCOLFORMULA ) ),
+        errMsgNoRowFormula  ( ScResId( STR_NOROWFORMULA ) )
 {
     Init();
     FreeResource();
@@ -99,8 +99,8 @@ __EXPORT ScTabOpDlg::~ScTabOpDlg()
 
 void __EXPORT ScTabOpDlg::Init()
 {
-    aBtnOk.			SetClickHdl		( LINK( this, ScTabOpDlg, BtnHdl ) );
-    aBtnCancel.		SetClickHdl		( LINK( this, ScTabOpDlg, BtnHdl ) );
+    aBtnOk.         SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
+    aBtnCancel.     SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
 
     Link aLink = LINK( this, ScTabOpDlg, GetFocusHdl );
     aEdFormulaRange.SetGetFocusHdl( aLink );
@@ -159,8 +159,8 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(pEdActive);
 
-        String		aStr;
-        USHORT	 	nFmt = ( rRef.aStart.Tab() == nCurTab )
+        String      aStr;
+        USHORT      nFmt = ( rRef.aStart.Tab() == nCurTab )
                                 ? SCR_ABS
                                 : SCR_ABS_3D;
 
@@ -190,7 +190,7 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 void ScTabOpDlg::RaiseError( ScTabOpErr eError )
 {
     const String* pMsg = &errMsgNoFormula;
-    Edit*		  pEd  = &aEdFormulaRange;
+    Edit*         pEd  = &aEdFormulaRange;
 
     switch ( eError )
     {
@@ -280,7 +280,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
             if (aEdRowCell.GetText().Len() > 0)
             {
-                if (!ConvertSingleRef( pDoc, aEdRowCell.GetText(), nCurTab, 
+                if (!ConvertSingleRef( pDoc, aEdRowCell.GetText(), nCurTab,
                                        theRowCell, eConv ))
                     nError = TABOPERR_WRONGROW;
                 else
@@ -299,7 +299,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
                     nError = TABOPERR_WRONGCOL;
                 else
                 {
-                    if (nMode == 1)							// beides
+                    if (nMode == 1)                         // beides
                     {
                         nMode = 2;
                         ConvertSingleRef( pDoc, aEdFormulaRange.GetText(), nCurTab,
@@ -322,7 +322,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
                                     theRowCell,
                                     theColCell,
                                     nMode );
-            ScTabOpItem	 aOutItem( SID_TABOP, &aOutParam );
+            ScTabOpItem  aOutItem( SID_TABOP, &aOutParam );
 
             SetDispatcherLock( FALSE );
             SwitchToDocument();

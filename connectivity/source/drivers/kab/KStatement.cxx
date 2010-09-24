@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ namespace
 
 IMPLEMENT_SERVICE_INFO(KabStatement, "com.sun.star.sdbc.drivers.KabStatement", "com.sun.star.sdbc.Statement");
 //------------------------------------------------------------------------------
-KabCommonStatement::KabCommonStatement(KabConnection* _pConnection ) 
+KabCommonStatement::KabCommonStatement(KabConnection* _pConnection )
     : KabCommonStatement_BASE(m_aMutex),
     OPropertySetHelper(KabCommonStatement_BASE::rBHelper),
     m_aParser(_pConnection->getDriver()->getMSFactory()),
@@ -143,9 +143,9 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
                 {
                     ::rtl::OUString sMatchString;
 
-                    if (pRight->isToken())						// WHERE Name = 'Doe'
+                    if (pRight->isToken())                      // WHERE Name = 'Doe'
                         sMatchString = pRight->getTokenValue();
-                    else if (SQL_ISRULE(pRight, parameter))		// WHERE Name = ?
+                    else if (SQL_ISRULE(pRight, parameter))     // WHERE Name = ?
                         getNextParameter(sMatchString);
 
                     switch (pMiddle->getNodeType())
@@ -188,10 +188,10 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
     else if (SQL_ISRULE(pParseNode, test_for_null) || SQL_ISRULE(pParseNode, like_predicate))
     {
         const OSQLParseNode *pLeft = pParseNode->getChild(0);
-        const OSQLParseNode* pPart2 = pParseNode->getChild(1);		
+        const OSQLParseNode* pPart2 = pParseNode->getChild(1);
         const OSQLParseNode *pMiddleLeft = pPart2->getChild(0),
                             *pMiddleRight = pPart2->getChild(1),
-                            *pRight = pPart2->getChild(2);		                    
+                            *pRight = pPart2->getChild(2);
 
         if (SQL_ISRULE(pParseNode, test_for_null))
         {
@@ -229,9 +229,9 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
                 {
                     ::rtl::OUString sMatchString;
 
-                    if (pMiddleRight->isToken())					// WHERE Name LIKE 'Sm%'
+                    if (pMiddleRight->isToken())                    // WHERE Name LIKE 'Sm%'
                         sMatchString = pMiddleRight->getTokenValue();
-                    else if (SQL_ISRULE(pMiddleRight, parameter))	// WHERE Name LIKE ?
+                    else if (SQL_ISRULE(pMiddleRight, parameter))   // WHERE Name LIKE ?
                         getNextParameter(sMatchString);
 
                     return new KabConditionSimilar(sColumnName, sMatchString);
@@ -310,8 +310,8 @@ sal_Bool KabCommonStatement::isTableKnown(KabResultSet *pResult) const
 //------------------------------------------------------------------------------
 void KabCommonStatement::setKabFields(KabResultSet *pResult) const throw(SQLException)
 {
-    ::vos::ORef<connectivity::OSQLColumns> xColumns;	// selected columns
-    KabResultSetMetaData *pMeta;				// meta information - holds the list of KAddressBook fields
+    ::vos::ORef<connectivity::OSQLColumns> xColumns;    // selected columns
+    KabResultSetMetaData *pMeta;                // meta information - holds the list of KAddressBook fields
 
     xColumns = m_aSQLIterator.getSelectColumns();
     if (!xColumns.isValid())
@@ -376,7 +376,7 @@ Any SAL_CALL KabCommonStatement::queryInterface( const Type & rType ) throw(Runt
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL KabCommonStatement::getTypes(  ) throw(RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes(	::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
+    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XPropertySet > *)0 ));
 
@@ -396,7 +396,7 @@ void SAL_CALL KabCommonStatement::close(  ) throw(SQLException, RuntimeException
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
-            
+
     }
     dispose();
 }
@@ -433,20 +433,20 @@ OSL_TRACE("KDE Address book - SQL Request: %s", OUtoCStr(sql));
     switch (m_aSQLIterator.getStatementType())
     {
         case SQL_STATEMENT_SELECT:
-            if (isTableKnown(pResult))		// FROM which table ?
+            if (isTableKnown(pResult))      // FROM which table ?
             {
-                setKabFields(pResult);		// SELECT which columns ?
-                selectAddressees(pResult);	// WHERE which condition ?
-                sortAddressees(pResult);	// ORDER BY which columns ?
+                setKabFields(pResult);      // SELECT which columns ?
+                selectAddressees(pResult);  // WHERE which condition ?
+                sortAddressees(pResult);    // ORDER BY which columns ?
 // To be continued: DISTINCT
-//				    etc...
+//                  etc...
             }
             break;
 
         default:
 // To be continued: UPDATE
-//				    DELETE
-//				    etc...
+//                  DELETE
+//                  etc...
             lcl_throwError(STR_QUERY_TOO_COMPLEX);
     }
 
@@ -457,7 +457,7 @@ Reference< XConnection > SAL_CALL KabCommonStatement::getConnection(  ) throw(SQ
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
-        
+
     // just return our connection here
     return (Reference< XConnection >) m_pConnection;
 }
@@ -466,8 +466,8 @@ sal_Int32 SAL_CALL KabCommonStatement::executeUpdate( const ::rtl::OUString& ) t
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
-        
-    // the return values gives information about how many rows are affected by executing the sql statement		
+
+    // the return values gives information about how many rows are affected by executing the sql statement
     return 0;
 }
 // -------------------------------------------------------------------------
@@ -494,12 +494,12 @@ void SAL_CALL KabCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeE
     Sequence< Property > aProps(10);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,	::rtl::OUString);
+    DECL_PROP0(CURSORNAME,  ::rtl::OUString);
     DECL_BOOL_PROP0(ESCAPEPROCESSING);
     DECL_PROP0(FETCHDIRECTION,sal_Int32);
-    DECL_PROP0(FETCHSIZE,	sal_Int32);
+    DECL_PROP0(FETCHSIZE,   sal_Int32);
     DECL_PROP0(MAXFIELDSIZE,sal_Int32);
-    DECL_PROP0(MAXROWS,		sal_Int32);
+    DECL_PROP0(MAXROWS,     sal_Int32);
     DECL_PROP0(QUERYTIMEOUT,sal_Int32);
     DECL_PROP0(RESULTSETCONCURRENCY,sal_Int32);
     DECL_PROP0(RESULTSETTYPE,sal_Int32);
@@ -520,7 +520,7 @@ sal_Bool KabCommonStatement::convertFastPropertyValue(
         const Any&) throw (::com::sun::star::lang::IllegalArgumentException)
 {
     sal_Bool bConverted = sal_False;
-    // here we have to try to convert 
+    // here we have to try to convert
     return bConverted;
 }
 // -------------------------------------------------------------------------

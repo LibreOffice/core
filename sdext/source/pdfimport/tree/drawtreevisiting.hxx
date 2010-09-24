@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace pdfi
         virtual void visit( PageElement&, const std::list< Element* >::const_iterator&  );
         virtual void visit( DocumentElement&, const std::list< Element* >::const_iterator&  );
     };
-   
+
     class DrawXmlFinalizer : public ElementTreeVisitor
     {
     private:
@@ -82,7 +82,7 @@ namespace pdfi
         virtual void visit( PageElement&, const std::list< Element* >::const_iterator&  );
         virtual void visit( DocumentElement&, const std::list< Element* >::const_iterator&  );
     };
-   
+
     class DrawXmlEmitter : public ElementTreeVisitor
     {
     private:
@@ -94,8 +94,8 @@ namespace pdfi
         /// writes Impress doc when false
         const bool   m_bWriteDrawDocument;
 
-        void fillFrameProps( DrawElement&       rElem, 
-                             PropertyMap&       rProps, 
+        void fillFrameProps( DrawElement&       rElem,
+                             PropertyMap&       rProps,
                              const EmitContext& rEmitContext );
 
     public:
@@ -114,7 +114,7 @@ namespace pdfi
         virtual void visit( ImageElement&, const std::list< Element* >::const_iterator&  );
         virtual void visit( PageElement&, const std::list< Element* >::const_iterator&  );
         virtual void visit( DocumentElement&, const std::list< Element* >::const_iterator&  );
-    };   
+    };
 }
 
 #endif

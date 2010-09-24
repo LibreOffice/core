@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -274,8 +274,8 @@ static OUString makeComponentPath(
 
 //==============================================================================
 static OUString getLibEnv(OUString         const & aModulePath,
-                          oslModule                lib, 
-                          uno::Environment       * pEnv, 
+                          oslModule                lib,
+                          uno::Environment       * pEnv,
                           OUString               * pSourceEnv_name,
                           uno::Environment const & cTargetEnv,
                           OUString         const & cImplName = OUString())
@@ -285,7 +285,7 @@ static OUString getLibEnv(OUString         const & aModulePath,
     sal_Char const * pEnvTypeName = NULL;
 
     OUString aGetEnvNameExt = OUSTR(COMPONENT_GETENVEXT);
-    component_getImplementationEnvironmentExtFunc pGetImplEnvExt = 
+    component_getImplementationEnvironmentExtFunc pGetImplEnvExt =
         (component_getImplementationEnvironmentExtFunc)osl_getFunctionSymbol(lib, aGetEnvNameExt.pData);
 
     if (pGetImplEnvExt)
@@ -296,8 +296,8 @@ static OUString getLibEnv(OUString         const & aModulePath,
     else
     {
         OUString aGetEnvName = OUSTR(COMPONENT_GETENV);
-        component_getImplementationEnvironmentFunc pGetImplEnv = 
-            (component_getImplementationEnvironmentFunc)osl_getFunctionSymbol( 
+        component_getImplementationEnvironmentFunc pGetImplEnv =
+            (component_getImplementationEnvironmentFunc)osl_getFunctionSymbol(
                 lib, aGetEnvName.pData );
         if (pGetImplEnv)
             pGetImplEnv(&pEnvTypeName, (uno_Environment **)pEnv);
@@ -310,7 +310,7 @@ static OUString getLibEnv(OUString         const & aModulePath,
             aExcMsg += OUSTR("- nor: ");
         }
     }
-    
+
     if (!pEnv->is() && pEnvTypeName)
     {
         *pSourceEnv_name = OUString::createFromAscii(pEnvTypeName);
@@ -328,15 +328,15 @@ static OUString getLibEnv(OUString         const & aModulePath,
                     *pSourceEnv_name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":log"));
                     break;
                 }
-            } while( nIndex != -1 );            
+            } while( nIndex != -1 );
         }
-        
+
     }
 
     return aExcMsg;
 }
 
-extern "C" {static void s_getFactory(va_list * pParam) 
+extern "C" {static void s_getFactory(va_list * pParam)
 {
     component_getFactoryFunc         pSym      = va_arg(*pParam, component_getFactoryFunc);
     OString                  const * pImplName = va_arg(*pParam, OString const *);
@@ -362,7 +362,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
             aModulePath,
             Reference< XInterface >() );
     }
-    
+
     oslModule lib = osl_loadModule(
         aModulePath.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (! lib)
@@ -391,7 +391,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 
             if (!env.is())
                 env = uno::Environment(aEnvTypeName);
-            
+
             if (env.is() && currentEnv.is())
             {
 #if OSL_DEBUG_LEVEL > 1
@@ -399,23 +399,23 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
                     rtl::OString libName(rtl::OUStringToOString(rLibName, RTL_TEXTENCODING_ASCII_US));
                     rtl::OString implName(rtl::OUStringToOString(rImplName, RTL_TEXTENCODING_ASCII_US));
                     rtl::OString envDcp(rtl::OUStringToOString(env.getTypeName(), RTL_TEXTENCODING_ASCII_US));
-                    
+
                     fprintf(stderr, "loadSharedLibComponentFactory envDcp: %-12.12s  implName: %30.30s  libName: %-15.15s\n", envDcp.getStr(), implName.getStr() + (implName.getLength() > 30 ? implName.getLength() - 30 : 0), libName.getStr());
                 }
 #endif
 
                 Mapping aCurrent2Env( currentEnv, env );
                 Mapping aEnv2Current( env, currentEnv );
-                
+
                 if (aCurrent2Env.is() && aEnv2Current.is())
                 {
                     void * pSMgr = aCurrent2Env.mapInterface(
                         xMgr.get(), ::getCppuType( &xMgr ) );
                     void * pKey = aCurrent2Env.mapInterface(
                         xKey.get(), ::getCppuType( &xKey ) );
-                    
+
                     void * pSSF = NULL;
-                    
+
                     env.invoke(s_getFactory, pSym, &aImplName, pSMgr, pKey, &pSSF);
 
                     if (pKey)
@@ -428,7 +428,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
                         (*env.get()->pExtEnv->releaseInterface)(
                             env.get()->pExtEnv, pSMgr );
                     }
-                    
+
                     if (pSSF)
                     {
                         aEnv2Current.mapInterface(
@@ -483,7 +483,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 }
 
 //==============================================================================
-extern "C" { static void s_writeInfo(va_list * pParam) 
+extern "C" { static void s_writeInfo(va_list * pParam)
 {
     component_writeInfoFunc         pSym      = va_arg(*pParam, component_writeInfoFunc);
     void                          * pSMgr     = va_arg(*pParam, void *);
@@ -509,7 +509,7 @@ void SAL_CALL writeSharedLibComponentInfo(
             aModulePath,
             Reference< XInterface >() );
     }
-    
+
     oslModule lib = osl_loadModule(
         aModulePath.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (! lib)
@@ -523,7 +523,7 @@ void SAL_CALL writeSharedLibComponentInfo(
 
     uno::Environment currentEnv(Environment::getCurrent());
     uno::Environment env;
-    
+
     OUString aEnvTypeName;
     OUString aExcMsg = getLibEnv(aModulePath, lib, &env, &aEnvTypeName, currentEnv);
     if (!aExcMsg.getLength())
@@ -534,7 +534,7 @@ void SAL_CALL writeSharedLibComponentInfo(
         {
             if (!env.is())
                 env = uno::Environment(aEnvTypeName);
-            
+
             if (env.is() && currentEnv.is())
             {
                 Mapping aCurrent2Env( currentEnv, env );
@@ -565,7 +565,7 @@ void SAL_CALL writeSharedLibComponentInfo(
                         aExcMsg += OUSTR(": registry is mandatory to invoke"
                                          " component_writeInfo()!");
                     }
-                    
+
                     if (pSMgr)
                     {
                         (*env.get()->pExtEnv->releaseInterface)(

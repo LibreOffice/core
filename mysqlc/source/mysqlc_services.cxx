@@ -1,6 +1,6 @@
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-* 
+*
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
         (
             const Reference< XMultiServiceFactory > & rServiceManager,
-            const OUString & rComponentName, 
+            const OUString & rComponentName,
             ::cppu::ComponentInstantiation pCreateFunction,
             const Sequence< OUString > & rServiceNames,
             rtl_ModuleCount* _pTemp
@@ -58,8 +58,8 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
 
 //---------------------------------------------------------------------------------------
 void REGISTER_PROVIDER(
-        const OUString& aServiceImplName, 
-        const Sequence< OUString>& Services, 
+        const OUString& aServiceImplName,
+        const Sequence< OUString>& Services,
         const Reference< XRegistryKey > & xKey)
 {
     ::rtl::OUStringBuffer aMainKeyName;
@@ -93,7 +93,7 @@ struct ProviderRequest
 
     /* {{{ CREATE_PROVIDER -I- */
     inline sal_Bool CREATE_PROVIDER(
-                const OUString& Implname, 
+                const OUString& Implname,
                 const Sequence< OUString > & Services,
                 ::cppu::ComponentInstantiation Factory,
                 createFactoryFunc creator
@@ -115,8 +115,8 @@ struct ProviderRequest
 
 /* {{{ component_getImplementationEnvironment -I- */
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-                const sal_Char	**ppEnvTypeName,
-                uno_Environment	** /* ppEnv */
+                const sal_Char  **ppEnvTypeName,
+                uno_Environment ** /* ppEnv */
             )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -128,11 +128,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnviron
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void * /* pServiceManager */, void * pRegistryKey)
 {
     if (pRegistryKey) {
-        try	{
+        try {
             Reference< XRegistryKey > xKey(reinterpret_cast< XRegistryKey*>(pRegistryKey));
 
             REGISTER_PROVIDER(
-                MysqlCDriver::getImplementationName_Static(), 
+                MysqlCDriver::getImplementationName_Static(),
                 MysqlCDriver::getSupportedServiceNames_Static(), xKey);
 
             return sal_True;

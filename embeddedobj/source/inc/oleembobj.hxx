@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace cppu {
 class VerbExecutionController
 {
     // the following mutex is allowed to be locked only for variables initialization, so no deadlock can be caused
-    ::osl::Mutex	m_aVerbExecutionMutex;
+    ::osl::Mutex    m_aVerbExecutionMutex;
 
     sal_Bool m_bVerbExecutionInProgress;
     oslThreadIdentifier m_nVerbExecutionThreadIdentifier;
@@ -115,9 +115,9 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
 {
     friend class OleComponent;
 
-    ::osl::Mutex	m_aMutex;
+    ::osl::Mutex    m_aMutex;
 
-    OleComponent*	m_pOleComponent;
+    OleComponent*   m_pOleComponent;
 
     ::cppu::OMultiTypeInterfaceContainerHelper* m_pInterfaceContainer;
 
@@ -179,7 +179,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
     ::rtl::OUString m_aLinkURL; // ???
 
     // points to own view provider if the the object has no server
-    OwnView_Impl*	m_pOwnView;
+    OwnView_Impl*   m_pOwnView;
 
     // whether the object should be initialized from clipboard in case of default initialization
     sal_Bool m_bFromClipboard;
@@ -191,7 +191,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
     // STAMPIT solution
     // the following member is used during verb execution to detect whether the verb execution modifies the object
     VerbExecutionController m_aVerbExecutionController;
-    
+
     // if the following member is set, the object works in wrapper mode
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > m_xWrappedObject;
     sal_Bool m_bTriedConversion;

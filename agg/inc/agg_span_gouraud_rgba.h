@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -13,12 +13,12 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 //
-// Adaptation for high precision colors has been sponsored by 
+// Adaptation for high precision colors has been sponsored by
 // Liberty Technology Systems, Inc., visit http://lib-sys.com
 //
 // Liberty Technology Systems, Inc. is the provider of
 // PostScript and PDF technology for software developers.
-// 
+//
 //----------------------------------------------------------------------------
 
 #ifndef AGG_SPAN_GOURAUD_RGBA_INCLUDED
@@ -100,14 +100,14 @@ namespace agg
         span_gouraud_rgba(alloc_type& alloc) : base_type(alloc) {}
 
         //--------------------------------------------------------------------
-        span_gouraud_rgba(alloc_type& alloc, 
-                          const color_type& c1, 
-                          const color_type& c2, 
+        span_gouraud_rgba(alloc_type& alloc,
+                          const color_type& c1,
+                          const color_type& c2,
                           const color_type& c3,
-                          double x1, double y1, 
+                          double x1, double y1,
                           double x2, double y2,
-                          double x3, double y3, 
-                          double d = 0) : 
+                          double x3, double y3,
+                          double d = 0) :
             base_type(alloc, c1, c2, c3, x1, y1, x2, y2, x3, y3, d)
         {}
 
@@ -121,7 +121,7 @@ namespace agg
 
             m_y2 = int(coord[1].y);
 
-            m_swap = calc_point_location(coord[0].x, coord[0].y, 
+            m_swap = calc_point_location(coord[0].x, coord[0].y,
                                          coord[2].x, coord[2].y,
                                          coord[1].x, coord[1].y) < 0.0;
 
@@ -167,9 +167,9 @@ namespace agg
             if(nx < x)
             {
                 unsigned d = unsigned(x - nx);
-                r += d; 
-                g += d; 
-                b += d; 
+                r += d;
+                g += d;
+                b += d;
                 a += d;
             }
 
@@ -180,9 +180,9 @@ namespace agg
                 span->g = (value_type)g.y();
                 span->b = (value_type)b.y();
                 span->a = (value_type)a.y();
-                ++r; 
-                ++g; 
-                ++b; 
+                ++r;
+                ++g;
+                ++b;
                 ++a;
                 ++span;
             }

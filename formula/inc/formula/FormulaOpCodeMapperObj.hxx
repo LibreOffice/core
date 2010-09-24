@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class FORMULA_DLLPUBLIC FormulaOpCodeMapperObj : public ::cppu::WeakImplHelper2<
 {
     ::std::auto_ptr<FormulaCompiler> m_pCompiler;
 public:
-    static ::rtl::OUString	getImplementationName_Static();
+    static ::rtl::OUString  getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString> getSupportedServiceNames_Static();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext);
 

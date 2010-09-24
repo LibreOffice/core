@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,10 +51,10 @@
 
 #include <editeng/unonrule.hxx>
 
-#define MM100_TO_TWIP(MM100)	((MM100*72L+63L)/127L)
+#define MM100_TO_TWIP(MM100)    ((MM100*72L+63L)/127L)
 
-#define DEF_WRITER_LSPACE 	500		//Standardeinrueckung
-#define DEF_DRAW_LSPACE 	800		//Standardeinrueckung
+#define DEF_WRITER_LSPACE   500     //Standardeinrueckung
+#define DEF_DRAW_LSPACE     800     //Standardeinrueckung
 
 #define NUMITEM_VERSION_01        0x01
 #define NUMITEM_VERSION_02        0x02
@@ -75,7 +75,7 @@ void lcl_getFormatter(com::sun::star::uno::Reference<com::sun::star::text::XNumb
     if(!_xFormatter.is())
        {
         try
-        { 
+        {
             Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
             Reference < XInterface > xI = xMSF->createInstance(
                 ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
@@ -126,7 +126,7 @@ String SvxNumberType::GetNumStr( ULONG nNo ) const
 /* -----------------28.10.98 15:56-------------------
  *
  * --------------------------------------------------*/
-String 	SvxNumberType::GetNumStr( ULONG nNo, const Locale& rLocale ) const
+String  SvxNumberType::GetNumStr( ULONG nNo, const Locale& rLocale ) const
 {
     lcl_getFormatter(xFormatter);
     String aTmpStr;
@@ -312,7 +312,7 @@ SvxNumberFormat::SvxNumberFormat(SvStream &rStream)
             }
         }
     }
-    
+
     if( NUMITEM_VERSION_04 <= nVersion )
     {
         rStream >> nUSHORT;
@@ -322,11 +322,11 @@ SvxNumberFormat::SvxNumberFormat(SvStream &rStream)
         long nLong;
         rStream >> nLong;
         mnListtabPos = nLong;
-        rStream >> nLong;        
+        rStream >> nLong;
         mnFirstLineIndent = nLong;
         rStream >> nLong;
         mnIndentAt = nLong;
-    }    
+    }
 }
 /* -----------------08.12.98 11:14-------------------
  *
@@ -407,17 +407,17 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
 SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
 {
     SetNumberingType(rFormat.GetNumberingType());
-        eNumAdjust			= rFormat.eNumAdjust ;
-        nInclUpperLevels 	= rFormat.nInclUpperLevels ;
-        nStart				= rFormat.nStart ;
-        cBullet				= rFormat.cBullet ;
+        eNumAdjust          = rFormat.eNumAdjust ;
+        nInclUpperLevels    = rFormat.nInclUpperLevels ;
+        nStart              = rFormat.nStart ;
+        cBullet             = rFormat.cBullet ;
         // --> OD 2008-01-09 #newlistlevelattrs#
         mePositionAndSpaceMode = rFormat.mePositionAndSpaceMode;
         // <--
-        nFirstLineOffset	= rFormat.nFirstLineOffset;
-        nAbsLSpace			= rFormat.nAbsLSpace ;
+        nFirstLineOffset    = rFormat.nFirstLineOffset;
+        nAbsLSpace          = rFormat.nAbsLSpace ;
         nLSpace             = rFormat.nLSpace ;
-        nCharTextDistance	= rFormat.nCharTextDistance ;
+        nCharTextDistance   = rFormat.nCharTextDistance ;
         // --> OD 2008-01-09 #newlistlevelattrs#
         meLabelFollowedBy = rFormat.meLabelFollowedBy;
         mnListtabPos = rFormat.mnListtabPos;
@@ -425,10 +425,10 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
         mnIndentAt = rFormat.mnIndentAt;
         // <--
         eVertOrient         = rFormat.eVertOrient ;
-        sPrefix  			= rFormat.sPrefix     ;
+        sPrefix             = rFormat.sPrefix     ;
         sSuffix             = rFormat.sSuffix     ;
-        aGraphicSize		= rFormat.aGraphicSize  ;
-        nBulletColor 		= rFormat.nBulletColor   ;
+        aGraphicSize        = rFormat.aGraphicSize  ;
+        nBulletColor        = rFormat.nBulletColor   ;
         nBulletRelSize      = rFormat.nBulletRelSize;
         SetShowSymbol(rFormat.IsShowSymbol());
         sCharStyleName      = rFormat.sCharStyleName;
@@ -449,37 +449,37 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
 BOOL  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
 {
     if( GetNumberingType()  != rFormat.GetNumberingType() ||
-        eNumAdjust			!= rFormat.eNumAdjust ||
-        nInclUpperLevels 	!= rFormat.nInclUpperLevels ||
-        nStart				!= rFormat.nStart ||
-        cBullet				!= rFormat.cBullet ||
+        eNumAdjust          != rFormat.eNumAdjust ||
+        nInclUpperLevels    != rFormat.nInclUpperLevels ||
+        nStart              != rFormat.nStart ||
+        cBullet             != rFormat.cBullet ||
         // --> OD 2008-01-09 #newlistlevelattrs#
         mePositionAndSpaceMode != rFormat.mePositionAndSpaceMode ||
         // <--
-        nFirstLineOffset	!= rFormat.nFirstLineOffset ||
-        nAbsLSpace			!= rFormat.nAbsLSpace ||
+        nFirstLineOffset    != rFormat.nFirstLineOffset ||
+        nAbsLSpace          != rFormat.nAbsLSpace ||
         nLSpace             != rFormat.nLSpace ||
-        nCharTextDistance	!= rFormat.nCharTextDistance ||
+        nCharTextDistance   != rFormat.nCharTextDistance ||
         // --> OD 2008-01-09 #newlistlevelattrs#
         meLabelFollowedBy != rFormat.meLabelFollowedBy ||
         mnListtabPos != rFormat.mnListtabPos ||
         mnFirstLineIndent != rFormat.mnFirstLineIndent ||
         mnIndentAt != rFormat.mnIndentAt ||
         // <--
-        eVertOrient			!= rFormat.eVertOrient ||
-        sPrefix  			!= rFormat.sPrefix     ||
+        eVertOrient         != rFormat.eVertOrient ||
+        sPrefix             != rFormat.sPrefix     ||
         sSuffix             != rFormat.sSuffix     ||
-        aGraphicSize		!= rFormat.aGraphicSize  ||
-        nBulletColor 		!= rFormat.nBulletColor   ||
+        aGraphicSize        != rFormat.aGraphicSize  ||
+        nBulletColor        != rFormat.nBulletColor   ||
         nBulletRelSize      != rFormat.nBulletRelSize ||
-        IsShowSymbol()		!= rFormat.IsShowSymbol() ||
+        IsShowSymbol()      != rFormat.IsShowSymbol() ||
         sCharStyleName      != rFormat.sCharStyleName
         )
         return FALSE;
     if (
         (pGraphicBrush && !rFormat.pGraphicBrush) ||
         (!pGraphicBrush && rFormat.pGraphicBrush) ||
-        (pGraphicBrush && *pGraphicBrush != *rFormat.pGraphicBrush) 
+        (pGraphicBrush && *pGraphicBrush != *rFormat.pGraphicBrush)
        )
     {
         return FALSE;
@@ -692,12 +692,12 @@ Size SvxNumberFormat::GetGraphicSizeMM100(const Graphic* pGraphic)
  * --------------------------------------------------*/
 String SvxNumberFormat::CreateRomanString( ULONG nNo, BOOL bUpper )
 {
-    nNo %= 4000;			// mehr kann nicht dargestellt werden
-//		i, ii, iii, iv, v, vi, vii, vii, viii, ix
-//							(Dummy),1000,500,100,50,10,5,1
+    nNo %= 4000;            // mehr kann nicht dargestellt werden
+//      i, ii, iii, iv, v, vi, vii, vii, viii, ix
+//                          (Dummy),1000,500,100,50,10,5,1
     const char *cRomanArr = bUpper
-                        ? "MDCLXVI--"	// +2 Dummy-Eintraege !!
-                        : "mdclxvi--";	// +2 Dummy-Eintraege !!
+                        ? "MDCLXVI--"   // +2 Dummy-Eintraege !!
+                        : "mdclxvi--";  // +2 Dummy-Eintraege !!
 
     String sRet;
     USHORT nMask = 1000;
@@ -716,21 +716,21 @@ String SvxNumberFormat::CreateRomanString( ULONG nNo, BOOL bUpper )
         }
         switch( nZahl )
         {
-        case 3:		{ sRet += sal_Unicode(*cRomanArr); }
-        case 2:		{ sRet += sal_Unicode(*cRomanArr); }
-        case 1:		{ sRet += sal_Unicode(*cRomanArr); }
+        case 3:     { sRet += sal_Unicode(*cRomanArr); }
+        case 2:     { sRet += sal_Unicode(*cRomanArr); }
+        case 1:     { sRet += sal_Unicode(*cRomanArr); }
                     break;
 
-        case 4:		{
+        case 4:     {
                         sRet += sal_Unicode(*cRomanArr);
                         sRet += sal_Unicode(*(cRomanArr-nDiff));
                     }
                     break;
-        case 5:		{ sRet += sal_Unicode(*(cRomanArr-nDiff)); }
+        case 5:     { sRet += sal_Unicode(*(cRomanArr-nDiff)); }
                     break;
         }
 
-        nMask /= 10;			// zur naechsten Dekade
+        nMask /= 10;            // zur naechsten Dekade
         cRomanArr += 2;
     }
     return sRet;
@@ -772,7 +772,7 @@ void SvxNumberFormat::GetCharStrN( ULONG nNo, String& rStr ) const
 /* -----------------------------22.02.01 13:31--------------------------------
 
  ---------------------------------------------------------------------------*/
-const String&	SvxNumberFormat::GetCharFmtName()const
+const String&   SvxNumberFormat::GetCharFmtName()const
 {
     return sCharStyleName;
 }
@@ -780,8 +780,8 @@ const String&	SvxNumberFormat::GetCharFmtName()const
  *
  * --------------------------------------------------*/
 sal_Int32 SvxNumRule::nRefCount = 0;
-static SvxNumberFormat*	pStdNumFmt = 0;
-static SvxNumberFormat*	pStdOutlineNumFmt = 0;
+static SvxNumberFormat* pStdNumFmt = 0;
+static SvxNumberFormat* pStdOutlineNumFmt = 0;
 // --> OD 2008-02-11 #newlistlevelattrs#
 SvxNumRule::SvxNumRule( ULONG nFeatures,
                         USHORT nLevels,
@@ -847,11 +847,11 @@ SvxNumRule::SvxNumRule( ULONG nFeatures,
 SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
 {
     ++nRefCount;
-    aLocale				= rCopy.aLocale;
+    aLocale             = rCopy.aLocale;
     nLevelCount          = rCopy.nLevelCount         ;
     nFeatureFlags        = rCopy.nFeatureFlags       ;
     bContinuousNumbering = rCopy.bContinuousNumbering;
-    eNumberingType		 = rCopy.eNumberingType;
+    eNumberingType       = rCopy.eNumberingType;
     memset( aFmts, 0, sizeof( aFmts ));
     for(USHORT i = 0; i < SVX_MAX_NUM; i++)
     {
@@ -999,7 +999,7 @@ int   SvxNumRule::operator==( const SvxNumRule& rCopy) const
 /* -----------------27.10.98 10:41-------------------
  *
  * --------------------------------------------------*/
-const SvxNumberFormat* 	SvxNumRule::Get(USHORT nLevel)const
+const SvxNumberFormat*  SvxNumRule::Get(USHORT nLevel)const
 {
     DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" );
     if( nLevel < SVX_MAX_NUM )
@@ -1010,7 +1010,7 @@ const SvxNumberFormat* 	SvxNumRule::Get(USHORT nLevel)const
 /* -----------------02.11.98 09:10-------------------
  *
  * --------------------------------------------------*/
-const SvxNumberFormat& 	SvxNumRule::GetLevel(USHORT nLevel)const
+const SvxNumberFormat&  SvxNumRule::GetLevel(USHORT nLevel)const
 {
     if(!pStdNumFmt)
     {
@@ -1037,7 +1037,7 @@ void SvxNumRule::SetLevel( USHORT i, const SvxNumberFormat& rNumFmt, BOOL bIsVal
         delete aFmts[ i ];
         aFmts[ i ] = new SvxNumberFormat( rNumFmt );
         aFmtsSet[i] = bIsValid;
-//		bInvalidRuleFlag = TRUE;
+//      bInvalidRuleFlag = TRUE;
     }
 }
 /* -----------------30.10.98 12:44-------------------
@@ -1062,7 +1062,7 @@ void SvxNumRule::SetLevel(USHORT nLevel, const SvxNumberFormat* pFmt)
 /* -----------------28.10.98 15:38-------------------
  *
  * --------------------------------------------------*/
-String 	SvxNumRule::MakeNumString( const SvxNodeNum& rNum, BOOL bInclStrings ) const
+String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, BOOL bInclStrings ) const
 {
     String aStr;
     if( SVX_NO_NUM > rNum.GetLevel() && !( SVX_NO_NUMLEVEL & rNum.GetLevel() ) )
@@ -1073,7 +1073,7 @@ String 	SvxNumRule::MakeNumString( const SvxNodeNum& rNum, BOOL bInclStrings ) c
             BYTE i = rNum.GetLevel();
 
             if( !IsContinuousNumbering() &&
-                1 < rMyNFmt.GetIncludeUpperLevels() )		// nur der eigene Level ?
+                1 < rMyNFmt.GetIncludeUpperLevels() )       // nur der eigene Level ?
             {
                 BYTE n = rMyNFmt.GetIncludeUpperLevels();
                 if( 1 < n )
@@ -1105,7 +1105,7 @@ String 	SvxNumRule::MakeNumString( const SvxNodeNum& rNum, BOOL bInclStrings ) c
                         bDot = sal_False;
                 }
                 else
-                    aStr += sal_Unicode('0');		// alle 0-Level sind eine 0
+                    aStr += sal_Unicode('0');       // alle 0-Level sind eine 0
                 if( i != rNum.GetLevel() && bDot)
                     aStr += sal_Unicode('.');
             }

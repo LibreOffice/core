@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ public abstract class AbstractDatabase implements DatabaseAccess
     {
         if ( m_connection == null )
             m_connection = new Connection( m_databaseDocument.getDataSource().getConnection("", "") );
-        
+
         return m_connection;
     }
 

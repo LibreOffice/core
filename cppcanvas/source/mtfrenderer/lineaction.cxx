@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas 
-{ 
+namespace cppcanvas
+{
     namespace internal
     {
         namespace
@@ -61,29 +61,29 @@ namespace cppcanvas
             {
             public:
                 LineAction( const ::basegfx::B2DPoint&,
-                            const ::basegfx::B2DPoint&,  
-                            const CanvasSharedPtr&, 
-                            const OutDevState& ); 
+                            const ::basegfx::B2DPoint&,
+                            const CanvasSharedPtr&,
+                            const OutDevState& );
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&					rSubset ) const;
+                                     const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&	rTransformation,
-                                                       const Subset&					rSubset ) const;
+                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
+                                                       const Subset&                    rSubset ) const;
 
                 virtual sal_Int32 getActionCount() const;
 
             private:
                 ::basegfx::B2DPoint     maStartPoint;
                 ::basegfx::B2DPoint     maEndPoint;
-                CanvasSharedPtr			mpCanvas;
-                rendering::RenderState	maState;
+                CanvasSharedPtr         mpCanvas;
+                rendering::RenderState  maState;
             };
 
-            LineAction::LineAction( const ::basegfx::B2DPoint& rStartPoint, 
-                                    const ::basegfx::B2DPoint& rEndPoint, 
+            LineAction::LineAction( const ::basegfx::B2DPoint& rStartPoint,
+                                    const ::basegfx::B2DPoint& rEndPoint,
                                     const CanvasSharedPtr&     rCanvas,
                                     const OutDevState&         rState ) :
                 maStartPoint( rStartPoint ),
@@ -103,7 +103,7 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
-                mpCanvas->getUNOCanvas()->drawLine( ::basegfx::unotools::point2DFromB2DPoint(maStartPoint), 
+                mpCanvas->getUNOCanvas()->drawLine( ::basegfx::unotools::point2DFromB2DPoint(maStartPoint),
                                                     ::basegfx::unotools::point2DFromB2DPoint(maEndPoint),
                                                     mpCanvas->getViewState(),
                                                     aLocalState );
@@ -111,8 +111,8 @@ namespace cppcanvas
                 return true;
             }
 
-            bool LineAction::render( const ::basegfx::B2DHomMatrix&	rTransformation,
-                                     const Subset&					rSubset ) const
+            bool LineAction::render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const
             {
                 // line only contains a single action, fail if subset
                 // requests different range
@@ -127,15 +127,15 @@ namespace cppcanvas
             {
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
-                
+
                 return tools::calcDevicePixelBounds( ::basegfx::B2DRange( maStartPoint,
                                                                           maEndPoint ),
                                                      mpCanvas->getViewState(),
                                                      aLocalState );
             }
 
-            ::basegfx::B2DRange LineAction::getBounds( const ::basegfx::B2DHomMatrix&	rTransformation,
-                                                       const Subset&					rSubset ) const
+            ::basegfx::B2DRange LineAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
+                                                       const Subset&                    rSubset ) const
             {
                 // line only contains a single action, empty bounds
                 // if subset requests different range
@@ -152,16 +152,16 @@ namespace cppcanvas
             }
         }
 
-        ActionSharedPtr LineActionFactory::createLineAction( const ::basegfx::B2DPoint&	rStartPoint,
-                                                             const ::basegfx::B2DPoint&	rEndPoint,  
-                                                             const CanvasSharedPtr&     rCanvas, 
-                                                             const OutDevState&         rState	)
+        ActionSharedPtr LineActionFactory::createLineAction( const ::basegfx::B2DPoint& rStartPoint,
+                                                             const ::basegfx::B2DPoint& rEndPoint,
+                                                             const CanvasSharedPtr&     rCanvas,
+                                                             const OutDevState&         rState  )
         {
             return ActionSharedPtr( new LineAction( rStartPoint,
-                                                    rEndPoint,  
-                                                    rCanvas, 
+                                                    rEndPoint,
+                                                    rCanvas,
                                                     rState) );
         }
-            
+
     }
 }

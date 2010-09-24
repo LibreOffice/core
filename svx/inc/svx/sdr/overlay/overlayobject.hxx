@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,14 +67,14 @@ namespace sdr
         {
         private:
             // Manager is allowed access to private Member mpOverlayManager
-            friend class									OverlayManager;
+            friend class                                    OverlayManager;
 
             // pointer to OverlayManager, if object is added. Changed by
             // OverlayManager, do not chnge Yourself.
-            OverlayManager*									mpOverlayManager;
+            OverlayManager*                                 mpOverlayManager;
 
             // Primitive2DSequence of the OverlayObject
-            drawinglayer::primitive2d::Primitive2DSequence	maPrimitive2DSequence;
+            drawinglayer::primitive2d::Primitive2DSequence  maPrimitive2DSequence;
 
         protected:
             // access methods to maPrimitive2DSequence. The usage of this methods may allow
@@ -90,22 +90,22 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
             // region in logical coordinates
-            basegfx::B2DRange								maBaseRange;
+            basegfx::B2DRange                               maBaseRange;
 
             // base color of this OverlayObject
-            Color											maBaseColor;
+            Color                                           maBaseColor;
 
             // bitfield
             // Flag for visibility
-            unsigned										mbIsVisible : 1;
+            unsigned                                        mbIsVisible : 1;
 
             // Flag to control hittability
-            unsigned										mbIsHittable : 1;
+            unsigned                                        mbIsHittable : 1;
 
             // Flag to hold info if this objects supports animation. Default is
             // false. If true, the Trigger() method should be overloaded
             // to implement the animation effect and to re-initiate the event.
-            unsigned										mbAllowsAnimation : 1;
+            unsigned                                        mbAllowsAnimation : 1;
 
             // Flag tocontrol if this OverlayObject allows AntiAliased visualisation.
             // Default is true, but e.g. for selection visualisation in SC and SW,
@@ -183,7 +183,7 @@ namespace sdr
         {
         protected:
             // base position in logical coordinates
-            basegfx::B2DPoint						maBasePosition;
+            basegfx::B2DPoint                       maBasePosition;
 
         public:
             OverlayObjectWithBasePosition(const basegfx::B2DPoint& rBasePos, Color aBaseColor);

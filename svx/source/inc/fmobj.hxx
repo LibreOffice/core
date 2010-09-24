@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,20 +39,20 @@ class FmFormView;
 class FmXForms;
 class FmFormObj: public SdrUnoObj
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >	aEvts;  // events des Objects
-    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor>	m_aEventsHistory;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >  aEvts;  // events des Objects
+    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor>   m_aEventsHistory;
                 // valid if and only if m_pEnvironmentHistory != NULL, this are the events which we're set when
                 // m_pEnvironmentHistory was created
 
     FmFormView*     m_pControlCreationView;
-    ULONG		m_nControlCreationEvent;
+    ULONG       m_nControlCreationEvent;
 
     // Informationen fuer die Controlumgebung
     // werden nur vorgehalten, wenn ein Object sich nicht in einer Objectliste befindet
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>		m_xParent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >	m_xEnvironmentHistory;
-    sal_Int32			m_nPos;
-    sal_Int32			m_nType;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>     m_xParent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >    m_xEnvironmentHistory;
+    sal_Int32           m_nPos;
+    sal_Int32           m_nType;
 
     OutputDevice*       m_pLastKnownRefDevice;
                             // the last ref device we know, as set at the model
@@ -85,9 +85,9 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void NbcReformatText();
 
-    virtual SdrObject*	Clone() const;
-    // #116235# virtual SdrObject*	Clone(SdrPage* pPage, SdrModel* pModel) const;
-    virtual void		operator= (const SdrObject& rObj);
+    virtual SdrObject*  Clone() const;
+    // #116235# virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
+    virtual void        operator= (const SdrObject& rObj);
 
     virtual void SetModel(SdrModel* pNewModel);
 
@@ -106,7 +106,7 @@ public:
 
     /** returns the type of this form object. See fmglob.hxx
     */
-    sal_Int32	getType() const;
+    sal_Int32   getType() const;
 
     virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& _rxModel );
 

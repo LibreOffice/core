@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,34 +50,34 @@
 #define DNDTARGET_REGKEY_NAME  "/com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1/UNO/SERVICES/com.sun.star.datatransfer.dnd.OleDropTarget"
 
 // This maps key states as occur as parameter, e.g. in IDropTarget::DragEnter,
-// IDropSource::QueryContinueDrag, to actions as are declared in 
+// IDropSource::QueryContinueDrag, to actions as are declared in
 // com::sun::star::datatransfer::dnd::DNDConstants ( ACTION_MOVE etc).
-// If the grfKeyState indicates the ALt or right mousebutton then the returned 
+// If the grfKeyState indicates the ALt or right mousebutton then the returned
 // values combines all possible actions. This is because those key and button are
 // used when the user expect a menu to appear when he drops. The menu then
 // contains entries, such as move, copy, link, cancel.
-// An odd fact is that the argument grfKeyState in IDropTarget::Drop does not 
-// contain mouse buttons (winnt 4 SP6). That indicates that the right mouse button 
+// An odd fact is that the argument grfKeyState in IDropTarget::Drop does not
+// contain mouse buttons (winnt 4 SP6). That indicates that the right mouse button
 // is not considered relevant in a drag operation. Contrarily the file explorer
-// gives that button a special meaning: the user has to select the effect from 
+// gives that button a special meaning: the user has to select the effect from
 // a context menu on drop.
 sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 sourceActions);
 
-// The function maps a windows DROPEFFECTs to actions 
+// The function maps a windows DROPEFFECTs to actions
 // ( com::sun::star::datatransfer::dnd::DNDConstants).
-// The argument can be a combination of different DROPEFFECTS, 
-// In that case the return value is also a combination of the 
+// The argument can be a combination of different DROPEFFECTS,
+// In that case the return value is also a combination of the
 // appropriate actions.
 sal_Int8 dndOleDropEffectsToActions( DWORD dwEffect);
 
 // The function maps actions ( com::sun::star::datatransfer::dnd::DNDConstants)
 // to window DROPEFFECTs.
 // The argument can be a combination of different actions
-// In that case the return value is also a combination of the 
+// In that case the return value is also a combination of the
 // appropriate DROPEFFECTS.
 DWORD dndActionsToDropEffects( sal_Int8 actions);
 
-// If the argument constitutes only one action then it is mapped to the 
+// If the argument constitutes only one action then it is mapped to the
 // corresponding DROPEFFECT otherwise DROPEFFECT_MOVE is returned. This is
 // why move is the default effect (no modifiers pressed, or right mouse button
 // or Alt).

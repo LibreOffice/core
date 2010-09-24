@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@ namespace pcr
     //= OControlFontDialog
     //====================================================================
     class OControlFontDialog;
-    typedef ::svt::OGenericUnoDialog										OControlFontDialog_DBase;
-    typedef ::comphelper::OPropertyArrayUsageHelper< OControlFontDialog >	OControlFontDialog_PBase;
+    typedef ::svt::OGenericUnoDialog                                        OControlFontDialog_DBase;
+    typedef ::comphelper::OPropertyArrayUsageHelper< OControlFontDialog >   OControlFontDialog_PBase;
 
     class OControlFontDialog
                 :public OControlFontDialog_DBase
@@ -57,9 +57,9 @@ namespace pcr
                 m_xControlModel;
         // </properties>
 
-        SfxItemSet*				m_pFontItems;			// item set for the dialog
-        SfxItemPool*			m_pItemPool;			// item pool for the item set for the dialog
-        SfxPoolItem**			m_pItemPoolDefaults;	// pool defaults
+        SfxItemSet*             m_pFontItems;           // item set for the dialog
+        SfxItemPool*            m_pItemPool;            // item pool for the item set for the dialog
+        SfxPoolItem**           m_pItemPoolDefaults;    // pool defaults
 
     public:
         OControlFontDialog(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& _rxContext);
@@ -87,13 +87,13 @@ namespace pcr
 
     protected:
     // OGenericUnoDialog overridables
-        virtual Dialog*	createDialog(Window* _pParent);
-        virtual void	destroyDialog();
-        virtual void	executedDialog(sal_Int16 _nExecutionResult);
+        virtual Dialog* createDialog(Window* _pParent);
+        virtual void    destroyDialog();
+        virtual void    executedDialog(sal_Int16 _nExecutionResult);
     };
 
 //........................................................................
-}	// namespace pcr
+}   // namespace pcr
 //........................................................................
 
 #endif // _EXTENSIONS_PROPCTRLR_CONTROLFONTDIALOG_HXX_

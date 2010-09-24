@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,21 +41,21 @@ class Os2SalGraphics;
 class Os2SalVirtualDevice : public SalVirtualDevice
 {
 public:
-    HPS 					mhPS;					// HPS
-    HDC 					mhDC;					// HDC
-    HBITMAP 				mhBmp;					// Memory Bitmap
-    HBITMAP 				mhDefBmp;				// Default Bitmap
-    Os2SalGraphics*			mpGraphics; 			// current VirDev graphics
-    USHORT					mnBitCount; 			// BitCount (0 or 1)
-    BOOL					mbGraphics; 			// is Graphics used
+    HPS                     mhPS;                   // HPS
+    HDC                     mhDC;                   // HDC
+    HBITMAP                 mhBmp;                  // Memory Bitmap
+    HBITMAP                 mhDefBmp;               // Default Bitmap
+    Os2SalGraphics*         mpGraphics;             // current VirDev graphics
+    USHORT                  mnBitCount;             // BitCount (0 or 1)
+    BOOL                    mbGraphics;             // is Graphics used
 
     Os2SalVirtualDevice();
     virtual ~Os2SalVirtualDevice();
 
-    virtual SalGraphics*			GetGraphics();
-    virtual void					ReleaseGraphics( SalGraphics* pGraphics );
+    virtual SalGraphics*            GetGraphics();
+    virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
     virtual BOOL                    SetSize( long nNewDX, long nNewDY );
-    virtual void				    GetSize( long& rWidth, long& rHeight );
+    virtual void                    GetSize( long& rWidth, long& rHeight );
 };
 
 // Help-Functions

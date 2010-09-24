@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const 
 
     ActivatePageHdl( &maTabCtrl );
 
-    AdjustLayout();	
+    AdjustLayout();
 }
 
 // -----------------------------------------------------------------------
@@ -166,7 +166,7 @@ bool XMLFilterTabDialog::onOk()
             }
         }
     }
-    
+
     // 2. see if the interface name is ok
     if( (mpNewInfo->maInterfaceName.getLength() == 0) || (mpNewInfo->maInterfaceName != mpOldInfo->maInterfaceName) )
     {

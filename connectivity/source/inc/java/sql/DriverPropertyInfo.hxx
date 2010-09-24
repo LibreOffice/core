@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #ifndef _CONNECTIVITY_JAVA_SQL_DRIVERPOPERTYINFO_HXX_
-#define	_CONNECTIVITY_JAVA_SQL_DRIVERPOPERTYINFO_HXX_
+#define _CONNECTIVITY_JAVA_SQL_DRIVERPOPERTYINFO_HXX_
 
 #include "java/lang/Object.hxx"
 #include <com/sun/star/sdbc/DriverPropertyInfo.hpp>
@@ -52,7 +52,7 @@ namespace connectivity
         ::rtl::OUString name();
         ::rtl::OUString description();
         ::rtl::OUString value();
-        sal_Bool		required();
+        sal_Bool        required();
                 ::com::sun::star::uno::Sequence< ::rtl::OUString> choices();
     };
 }

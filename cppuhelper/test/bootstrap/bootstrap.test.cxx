@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ using namespace com::sun::star;
 static rtl::OUString s_comment;
 
 static bool s_check_object_is_in(void * pObject)
-{ 
+{
     uno::Environment currentEnv(uno::Environment::getCurrent());
 
     rtl_uString * pOId = NULL;
@@ -64,7 +64,7 @@ static bool s_check_object_is_in(void * pObject)
     uno::TypeDescription typeDescription(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XInterface")));
 
     void * pRegisteredObject = NULL;
-    currentEnv.get()->pExtEnv->getRegisteredInterface(currentEnv.get()->pExtEnv, 
+    currentEnv.get()->pExtEnv->getRegisteredInterface(currentEnv.get()->pExtEnv,
                                                       &pRegisteredObject,
                                                       pOId,
                                                       (typelib_InterfaceTypeDescription *)typeDescription.get());
@@ -80,10 +80,10 @@ static bool s_check_object_is_in(void * pObject)
      return result;
 }
 
-static void s_test__loadSharedLibComponentFactory(rtl::OUString const & clientPurpose, 
-                                                  rtl::OUString const & servicePurpose) 
+static void s_test__loadSharedLibComponentFactory(rtl::OUString const & clientPurpose,
+                                                  rtl::OUString const & servicePurpose)
 {
-    cppu::EnvGuard envGuard(uno::Environment(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO)) 
+    cppu::EnvGuard envGuard(uno::Environment(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO))
                                                + clientPurpose, NULL));
     if (clientPurpose.getLength() && !envGuard.is())
     {
@@ -109,13 +109,13 @@ static void s_test__loadSharedLibComponentFactory(rtl::OUString const & clientPu
             uno::Reference<registry::XRegistryKey>()
             )
         );
-    
+
     if (!xItf.is())
     {
         s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tgot no object - FAILURE\n"));
         return;
     }
-    
+
     if (!clientPurpose.equals(servicePurpose) && !s_check_object_is_in(xItf.get()))
     {
         s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tcouldn't find object in current purpose \""));
@@ -131,22 +131,22 @@ static void s_test__loadSharedLibComponentFactory(rtl::OUString const & clientPu
     }
 }
 
-static void s_test__loadSharedLibComponentFactory__free_free() 
+static void s_test__loadSharedLibComponentFactory__free_free()
 {
     s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__loadSharedLibComponentFactory__free_free\n"));
 
     s_test__loadSharedLibComponentFactory(rtl::OUString(), rtl::OUString());
 }
 
-static void s_test__loadSharedLibComponentFactory__free_purpose() 
+static void s_test__loadSharedLibComponentFactory__free_purpose()
 {
     s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__loadSharedLibComponentFactory__free_purpose\n"));
 
-    s_test__loadSharedLibComponentFactory(rtl::OUString(), 
+    s_test__loadSharedLibComponentFactory(rtl::OUString(),
                                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":testenv")));
 }
 
-static void s_test__loadSharedLibComponentFactory__purpose_free() 
+static void s_test__loadSharedLibComponentFactory__purpose_free()
 {
     s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__loadSharedLibComponentFactory__purpose_free\n"));
 
@@ -154,11 +154,11 @@ static void s_test__loadSharedLibComponentFactory__purpose_free()
                                           rtl::OUString());
 }
 
-static void s_test__loadSharedLibComponentFactory__purpose_purpose() 
+static void s_test__loadSharedLibComponentFactory__purpose_purpose()
 {
     s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__loadSharedLibComponentFactory__purpose_purpose\n"));
 
-    s_test__loadSharedLibComponentFactory(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":testenv")), 
+    s_test__loadSharedLibComponentFactory(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":testenv")),
                                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":testenv")));
 }
 
@@ -191,7 +191,7 @@ static rtl::OUString s_getSDrive(void)
 
 static void s_test__createSimpleRegistry(rtl::OUString const & clientPurpose)
 {
-    cppu::EnvGuard envGuard(uno::Environment(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO)) 
+    cppu::EnvGuard envGuard(uno::Environment(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO))
                                                + clientPurpose, NULL));
     if (clientPurpose.getLength() && !envGuard.is())
     {
@@ -210,7 +210,7 @@ static void s_test__createSimpleRegistry(rtl::OUString const & clientPurpose)
         s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tgot no object - FAILURE\n"));
         return;
     }
-    
+
     if (clientPurpose.getLength() != 0 && !s_check_object_is_in(registry.get()))
     {
         s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tcouldn't find object in current purpose \""));
@@ -236,7 +236,7 @@ static void s_test__createSimpleRegistry__purpose(void)
 
 static void s_test__bootstrap_InitialComponentContext(rtl::OUString const & clientPurpose)
 {
-    cppu::EnvGuard envGuard(uno::Environment(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO)) 
+    cppu::EnvGuard envGuard(uno::Environment(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO))
                                                + clientPurpose, NULL));
     if (clientPurpose.getLength() && !envGuard.is())
     {
@@ -258,7 +258,7 @@ static void s_test__bootstrap_InitialComponentContext(rtl::OUString const & clie
         s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tgot no object - FAILURE\n"));
         return;
     }
-    
+
     if (clientPurpose.getLength() != 0 && !s_check_object_is_in(xContext.get()))
     {
         s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tcouldn't find object in current purpose \""));
@@ -304,16 +304,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(/*argc*/, argv)
         s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TESTS PASSED\n"));
         ret = 0;
     }
-    else 
+    else
     {
         s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TESTS _NOT_ PASSED\n"));
         ret = -1;
     }
 
-    std::cerr 
-        << argv[0] 
-        << std::endl 
-        << rtl::OUStringToOString(s_comment, RTL_TEXTENCODING_ASCII_US).getStr() 
+    std::cerr
+        << argv[0]
+        << std::endl
+        << rtl::OUStringToOString(s_comment, RTL_TEXTENCODING_ASCII_US).getStr()
         << std::endl;
 
     return ret;

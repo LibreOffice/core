@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
 //------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------
 
 #define RES_NAME svt
@@ -66,7 +66,7 @@ const sal_Unicode TILDE_SIGN = L'~';
 #define FOLDER_PICKER_DEF_DESCRIPTION 501
 
 //------------------------------------------------------------
-// we have to translate control ids to resource ids 
+// we have to translate control ids to resource ids
 //------------------------------------------------------------
 
 struct _Entry
@@ -98,7 +98,7 @@ const sal_Int32 SIZE_TABLE = sizeof( CtrlIdToResIdTable ) / sizeof( _Entry );
 //------------------------------------------------------------
 
 sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
-{    
+{
     sal_Int16 aResId = -1;
 
     for ( sal_Int32 i = 0; i < SIZE_TABLE; i++ )
@@ -108,8 +108,8 @@ sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
             aResId = CtrlIdToResIdTable[i].resId;
             break;
         }
-    }    
-    
+    }
+
     return aResId;
 }
 
@@ -126,7 +126,7 @@ public:
     //-------------------------------------
 
     CResourceProvider_Impl( )
-    {        
+    {
         m_ResMgr = CREATEVERSIONRESMGR( RES_NAME );
     }
 
@@ -138,7 +138,7 @@ public:
     {
         delete m_ResMgr;
     }
-    
+
     //-------------------------------------
     //
     //-------------------------------------
@@ -151,7 +151,7 @@ public:
         try
         {
             OSL_ASSERT( m_ResMgr );
-            
+
             // translate the control id to a resource id
             sal_Int16 aResId = CtrlIdToResId( aId );
 
@@ -159,8 +159,8 @@ public:
             {
                 aResString = String( ResId( aResId, m_ResMgr ) );
                 aResOUString = OUString( aResString );
-                                
-                // remove '~' signs, if there are two '~' signs 
+
+                // remove '~' signs, if there are two '~' signs
                 // in a row we remove only one of them
                 if ( aResOUString.indexOf( TILDE ) > -1 )
                 {
@@ -175,7 +175,7 @@ public:
                     {
                         // we insert the next character only if the current character
                         // in not a '~' or the following character is also a '~'
-                        if ( (*pPos != TILDE_SIGN) || 
+                        if ( (*pPos != TILDE_SIGN) ||
                              ((*pPos == TILDE_SIGN) && (pNext < pEnd) && (*pNext == TILDE_SIGN)) )
                         {
                             aBuffer.insert( i, *pPos );
@@ -183,7 +183,7 @@ public:
                         }
 
                         pPos++;
-                        pNext++;                        
+                        pNext++;
                     }
 
                     aResOUString = aBuffer.makeStringAndClear( );

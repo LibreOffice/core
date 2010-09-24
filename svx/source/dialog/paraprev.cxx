@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-#define FOUR_POINTS	80
+#define FOUR_POINTS 80
 
 // class SvxParaPrevWindow -----------------------------------------------
 
@@ -43,14 +43,14 @@ SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent, const ResId& rId ) :
     Window( pParent, rId ),
 
     nLeftMargin     ( 0 ),
-    nRightMargin	( 0 ),
+    nRightMargin    ( 0 ),
     nFirstLineOfst  ( 0 ),
     nUpper          ( 0 ),
-    nLower			( 0 ),
-    eAdjust			( SVX_ADJUST_LEFT ),
+    nLower          ( 0 ),
+    eAdjust         ( SVX_ADJUST_LEFT ),
     eLastLine       ( SVX_ADJUST_LEFT ),
-    eLine			( SVX_PREV_LINESPACE_1 ),
-    nLineVal		( 0 )
+    eLine           ( SVX_PREV_LINESPACE_1 ),
+    nLineVal        ( 0 )
 
 {
     // defaultmaessing in Twips rechnen
@@ -76,7 +76,7 @@ void SvxParaPrevWindow::Paint( const Rectangle& )
 
 // -----------------------------------------------------------------------
 
-#define DEF_MARGIN	120
+#define DEF_MARGIN  120
 
 void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
 {
@@ -133,13 +133,13 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
         {
             switch ( eLine )
             {
-                case SVX_PREV_LINESPACE_1:						break;
-                case SVX_PREV_LINESPACE_15:	aPnt.Y() += nH / 2;	break;
-                case SVX_PREV_LINESPACE_2:	aPnt.Y() += nH;		break;
+                case SVX_PREV_LINESPACE_1:                      break;
+                case SVX_PREV_LINESPACE_15: aPnt.Y() += nH / 2; break;
+                case SVX_PREV_LINESPACE_2:  aPnt.Y() += nH;     break;
 
                 case SVX_PREV_LINESPACE_PROP:
                 case SVX_PREV_LINESPACE_MIN:
-                case SVX_PREV_LINESPACE_DURCH:					break;
+                case SVX_PREV_LINESPACE_DURCH:                  break;
             }
         }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ published service Frame
         @see    <type scope="com::sun::star::xml">UserDefinedAttributesSupplier</type>
      */
     [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
-    
+
     //-------------------------------------------------------------------------
     /** allows the component to be loaded and accessed
         within the frame; it is the main connection to the
@@ -126,11 +126,11 @@ published service Frame
 
     //-------------------------------------------------------------------------
     /** provides information about supported commands
-    
+
         @since OOo 2.0.0
     */
     [optional] interface XDispatchInformationProvider;
-    
+
     //-------------------------------------------------------------------------
     /** supports interception mechanism for dispatched URLs
 
@@ -192,9 +192,9 @@ published service Frame
     @since OOo 1.1.2
      */
     [optional, property] XDispatchRecorderSupplier RecorderSupplier;
-    
+
     //-------------------------------------------------------------------------
-    /** provides access to the <type>LayoutManager</type> of the frame. 
+    /** provides access to the <type>LayoutManager</type> of the frame.
     */
     [optional, property] com::sun::star::uno::XInterface LayoutManager;
 };

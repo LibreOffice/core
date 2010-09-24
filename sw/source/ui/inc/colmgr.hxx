@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,48 +41,48 @@ public:
     ~SwColMgr();
 
 
-    inline USHORT 		GetCount() const;
-    void 				SetCount(USHORT nCount, USHORT nGutterWidth);
-    USHORT 				GetGutterWidth(USHORT nPos = USHRT_MAX) const;
-    void 				SetGutterWidth(USHORT nWidth, USHORT nPos = USHRT_MAX);
+    inline USHORT       GetCount() const;
+    void                SetCount(USHORT nCount, USHORT nGutterWidth);
+    USHORT              GetGutterWidth(USHORT nPos = USHRT_MAX) const;
+    void                SetGutterWidth(USHORT nWidth, USHORT nPos = USHRT_MAX);
 
-    USHORT 				GetColWidth(USHORT nIdx) const;
-    void 				SetColWidth(USHORT nIdx, USHORT nWidth);
+    USHORT              GetColWidth(USHORT nIdx) const;
+    void                SetColWidth(USHORT nIdx, USHORT nWidth);
 
-    inline BOOL 		IsAutoWidth() const;
-    void 				SetAutoWidth(BOOL bOn = TRUE, USHORT lGutterWidth = 0);
+    inline BOOL         IsAutoWidth() const;
+    void                SetAutoWidth(BOOL bOn = TRUE, USHORT lGutterWidth = 0);
 
-    inline BOOL			HasLine() const;
-    inline void 		SetNoLine();
+    inline BOOL         HasLine() const;
+    inline void         SetNoLine();
 
-    inline void 		SetLineWidthAndColor(ULONG nWidth, const Color& rCol);
-    inline ULONG		GetLineWidth() const;
+    inline void         SetLineWidthAndColor(ULONG nWidth, const Color& rCol);
+    inline ULONG        GetLineWidth() const;
     inline const Color& GetLineColor() const;
 
     inline SwColLineAdj GetAdjust() const;
-    inline void 		SetAdjust(SwColLineAdj);
+    inline void         SetAdjust(SwColLineAdj);
 
-    short 				GetLineHeightPercent() const;
-    void 				SetLineHeightPercent(short nPercent);
+    short               GetLineHeightPercent() const;
+    void                SetLineHeightPercent(short nPercent);
 
-    inline void			NoCols();
-    void 				Update();
+    inline void         NoCols();
+    void                Update();
 
-    const SwFmtCol& 	GetColumns() const { return aFmtCol; }
+    const SwFmtCol&     GetColumns() const { return aFmtCol; }
 
-    void				SetActualWidth(USHORT nW);
-    USHORT				GetActualSize() const { return nWidth; }
+    void                SetActualWidth(USHORT nW);
+    USHORT              GetActualSize() const { return nWidth; }
 
 
 private:
 
-    SwFmtCol 			aFmtCol;
-    USHORT 				nWidth;
+    SwFmtCol            aFmtCol;
+    USHORT              nWidth;
 };
 
 // INLINE METHODE --------------------------------------------------------
 
-inline 	USHORT SwColMgr::GetCount() const
+inline  USHORT SwColMgr::GetCount() const
 {
     return aFmtCol.GetNumCols();
 }
@@ -91,7 +91,7 @@ inline void         SwColMgr::SetLineWidthAndColor(ULONG nLWidth, const Color& r
     aFmtCol.SetLineWidth(nLWidth);
     aFmtCol.SetLineColor(rCol);
 }
-inline ULONG		SwColMgr::GetLineWidth() const
+inline ULONG        SwColMgr::GetLineWidth() const
 {
     return aFmtCol.GetLineWidth();
 }
@@ -99,11 +99,11 @@ inline const Color& SwColMgr::GetLineColor() const
 {
     return aFmtCol.GetLineColor();
 }
-inline	SwColLineAdj SwColMgr::GetAdjust() const
+inline  SwColLineAdj SwColMgr::GetAdjust() const
 {
     return aFmtCol.GetLineAdj();
 }
-inline	void SwColMgr::SetAdjust(SwColLineAdj eAdj)
+inline  void SwColMgr::SetAdjust(SwColLineAdj eAdj)
 {
     aFmtCol.SetLineAdj(eAdj);
 }
@@ -115,7 +115,7 @@ inline void SwColMgr::SetAutoWidth(BOOL bOn, USHORT nGutterWidth)
 {
     aFmtCol.SetOrtho(bOn, nGutterWidth, nWidth);
 }
-inline void	SwColMgr::NoCols()
+inline void SwColMgr::NoCols()
 {
     aFmtCol.GetColumns().DeleteAndDestroy(0, aFmtCol.GetColumns().Count());
 }

@@ -118,6 +118,8 @@ LIB1OBJFILES =  \
     $(SLO)$/warnbox.obj         \
     $(SLO)$/conflictsdlg.obj    \
     $(SLO)$/sharedocdlg.obj \
+    $(SLO)$/scuiautofmt.obj     \
+    $(SLO)$/strindlg.obj		\
     $(SLO)$/protectiondlg.obj \
     $(SLO)$/retypepassdlg.obj
 

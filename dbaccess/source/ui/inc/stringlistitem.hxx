@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,21 +51,21 @@ namespace dbaui
 */
 class OStringListItem : public SfxPoolItem
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >		m_aList;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >      m_aList;
 
 public:
     TYPEINFO();
     OStringListItem(sal_Int16 nWhich, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rList);
     OStringListItem(const OStringListItem& _rSource);
 
-    virtual int 			 operator==(const SfxPoolItem& _rItem) const;
-    virtual SfxPoolItem*	 Clone(SfxItemPool* _pPool = NULL) const;
+    virtual int              operator==(const SfxPoolItem& _rItem) const;
+    virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >	getList() const { return m_aList; }
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  getList() const { return m_aList; }
 };
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_STRINGLISTITEM_HXX_

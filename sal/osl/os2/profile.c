@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,9 +46,9 @@
 
 #define STR_INI_EXTENSION   ".ini"
 #define STR_INI_METAHOME    "?~"
-#define STR_INI_METASYS	    "?$"
-#define STR_INI_METACFG	    "?^"
-#define STR_INI_METAINS		"?#"
+#define STR_INI_METASYS     "?$"
+#define STR_INI_METACFG     "?^"
+#define STR_INI_METAINS     "?#"
 
 #define STR_INI_BOOLYES     "yes"
 #define STR_INI_BOOLON      "on"
@@ -63,16 +63,16 @@
 
 #define SVERSION_LOCATION   STR_INI_METACFG
 #define SVERSION_FALLBACK   STR_INI_METASYS
-#define SVERSION_NAME   	"sversion"
+#define SVERSION_NAME       "sversion"
 #define SVERSION_SECTION    "Versions"
 #define SVERSION_SOFFICE    "StarOffice"
 #define SVERSION_PROFILE    "soffice.ini"
 #define SVERSION_OPTION     "userid:"
-#define SVERSION_DIRS		{ "bin", "program" }
+#define SVERSION_DIRS       { "bin", "program" }
 #define SVERSION_USER       "user"
 
-#define _BUILD_STR_(n)	# n
-#define BUILD_STR(n)	_BUILD_STR_(n)
+#define _BUILD_STR_(n)  # n
+#define BUILD_STR(n)    _BUILD_STR_(n)
 
 /* implemented in file.c */
 extern oslFileError FileURLToPath( char *, size_t, rtl_uString* );
@@ -103,8 +103,8 @@ typedef struct _osl_TFile
 */
     sal_Char*   m_pReadPtr;
     sal_Char    m_ReadBuf[512];
-/*  	sal_Char*   m_pWritePtr; */
-/*  	sal_Char    m_WriteBuf[512]; */
+/*      sal_Char*   m_pWritePtr; */
+/*      sal_Char    m_WriteBuf[512]; */
     sal_Char*   m_pWriteBuf;
     sal_uInt32  m_nWriteBufLen;
     sal_uInt32  m_nWriteBufFree;
@@ -133,8 +133,8 @@ typedef struct _osl_TProfileSection
 */
 typedef struct _osl_TProfileImpl
 {
-    sal_uInt32	m_Flags;
-    osl_TFile*	m_pFile;
+    sal_uInt32  m_Flags;
+    osl_TFile*  m_pFile;
     osl_TStamp  m_Stamp;
     //sal_Char    m_Filename[_MAX_PATH + 1];
     sal_uInt32  m_NoLines;
@@ -143,8 +143,8 @@ typedef struct _osl_TProfileImpl
     sal_uInt32  m_MaxSections;
     sal_Char**  m_Lines;
     rtl_uString *m_strFileName;
-    osl_TProfileSection*	m_Sections;
-    HINI        			m_hIni;
+    osl_TProfileSection*    m_Sections;
+    HINI                    m_hIni;
 } osl_TProfileImpl;
 
 
@@ -200,14 +200,14 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
 {
     osl_TFile*        pFile;
     osl_TProfileImpl* pProfile;
-    rtl_uString		  *FileName=NULL;
-    
+    rtl_uString       *FileName=NULL;
+
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_openProfile\n");
 #endif
     OSL_VERIFY(strProfileName);
 
-/*	if (rtl_uString_getLength(strProfileName) == 0 )
+/*  if (rtl_uString_getLength(strProfileName) == 0 )
     {
         OSL_VERIFY(osl_getProfileName(NULL, NULL, &FileName));
     }
@@ -265,7 +265,7 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
 
     pProfile->m_Flags = Flags & FLG_USER;
     osl_getSystemPathFromFileURL(strProfileName, &pProfile->m_strFileName);
-//	rtl_uString_assign(&pProfile->m_strFileName, strProfileName);
+//  rtl_uString_assign(&pProfile->m_strFileName, strProfileName);
 
     if (Flags & (osl_Profile_READLOCK | osl_Profile_WRITELOCK))
         pProfile->m_pFile = pFile;
@@ -276,7 +276,7 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
 
     if (pProfile->m_pFile == NULL)
         closeFileImpl(pFile);
-    
+
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("Out osl_openProfile [ok]\n");
 #endif
@@ -310,8 +310,8 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
         {
             if ( !( pProfile->m_Flags & osl_Profile_READLOCK )  && ( pProfile->m_Flags & FLG_MODIFIED ) )
             {
-/*  				if (pProfile->m_pFile == NULL) */
-/*  					pProfile->m_pFile = openFileImpl(pProfile->m_Filename, sal_True); */
+/*                  if (pProfile->m_pFile == NULL) */
+/*                      pProfile->m_pFile = openFileImpl(pProfile->m_Filename, sal_True); */
 
                 storeProfile(pProfile->m_pFile, pProfile, sal_False);
             }
@@ -1099,7 +1099,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
 static osl_TStamp getFileStamp(osl_TFile* pFile)
 {
     osl_TStamp  FileTime;
-    FILESTATUS3	FileStatus;
+    FILESTATUS3 FileStatus;
     sal_uInt32  Bytes;
 
     Bytes = sizeof( FILESTATUS3 );
@@ -1118,7 +1118,7 @@ static osl_TStamp getFileStamp(osl_TFile* pFile)
 static sal_Bool lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
 {
     sal_uInt32  status = 1;
-    FILELOCK 	Lock;
+    FILELOCK    Lock;
 
     if (!pFile->m_Handle)
         return (sal_False);
@@ -1147,9 +1147,9 @@ static sal_Bool lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
 //static osl_TFile* openFile(rtl_uString* pszFilename, sal_Bool bWriteable)
 static osl_TFile* openFileImpl(rtl_uString *ustrFileName, oslProfileOption ProfileFlags )
 {
-    sal_uInt32 	action;
-    APIRET 		rc;
-    osl_TFile* 	pFile = (osl_TFile*)calloc(1, sizeof(osl_TFile));
+    sal_uInt32  action;
+    APIRET      rc;
+    osl_TFile*  pFile = (osl_TFile*)calloc(1, sizeof(osl_TFile));
 
         ULONG attributes;
         ULONG flags;
@@ -1160,7 +1160,7 @@ static osl_TFile* openFileImpl(rtl_uString *ustrFileName, oslProfileOption Profi
 
     /* check parameters */
     OSL_ASSERT( ustrFileName );
-    
+
     rtl_uString2String( &strFileName,
                             rtl_uString_getStr(ustrFileName),
                             rtl_uString_getLength(ustrFileName),
@@ -1176,7 +1176,7 @@ static osl_TFile* openFileImpl(rtl_uString *ustrFileName, oslProfileOption Profi
 #endif
         bWriteable=sal_True;
     }
-        
+
         if (bWriteable)
         {
             flags = FILE_NORMAL | FILE_ARCHIVED;
@@ -1209,7 +1209,7 @@ static osl_TFile* openFileImpl(rtl_uString *ustrFileName, oslProfileOption Profi
         }
 
     rtl_string_release(strFileName);
-        
+
     pFile->m_pWriteBuf=0;
     pFile->m_nWriteBufFree=0;
     pFile->m_nWriteBufLen=0;
@@ -1224,8 +1224,8 @@ static osl_TFile* openFileImpl(rtl_uString *ustrFileName, oslProfileOption Profi
     }
 
     /* mfe: new WriteBuf obsolete */
-/*	pFile->m_pWritePtr = pFile->m_Buf;*/
-/*	pFile->m_pReadPtr  = pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf);*/
+/*  pFile->m_pWritePtr = pFile->m_Buf;*/
+/*  pFile->m_pReadPtr  = pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf);*/
 
     return (pFile);
 }
@@ -1239,18 +1239,18 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile)
     {
         return stamp;
     }
-        
+
     if (pFile->m_Handle)
     {
         /* mfe: new WriteBuf obsolete */
         /* we just closing the file here, DO NOT write, it has to be handled in higher levels */
         //if (pFile->m_pWritePtr > pFile->m_WriteBuf)
         //{
-        //	sal_uInt32 Bytes;
+        //  sal_uInt32 Bytes;
 
-        //	DosWrite(pFile->m_Handle, pFile->m_WriteBuf,
-        //			 pFile->m_pWritePtr - pFile->m_WriteBuf,
-        //			 &Bytes);
+        //  DosWrite(pFile->m_Handle, pFile->m_WriteBuf,
+        //           pFile->m_pWritePtr - pFile->m_WriteBuf,
+        //           &Bytes);
         //}
 
         stamp = getFileStamp(pFile);
@@ -1264,7 +1264,7 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile)
     {
         free(pFile->m_pWriteBuf);
     }
-    
+
     free(pFile);
 
     return(stamp);
@@ -1290,9 +1290,9 @@ static sal_Bool rewindFile(osl_TFile* pFile, sal_Bool bTruncate)
         } */
 
         pFile->m_pReadPtr = pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf);
-        
+
         DosSetFilePtr(pFile->m_Handle, 0, FILE_BEGIN, &Position);
-        
+
         if (bTruncate)
             DosSetFileSize(pFile->m_Handle, 0);
     }
@@ -1305,7 +1305,7 @@ static sal_Bool getLine(osl_TFile* pFile, const sal_Char *pszLine, int MaxLen)
     int   Free, Bytes;
     sal_Char* pChr;
     sal_Char* pLine = (sal_Char *)pszLine;
-    sal_uInt32 	Max;
+    sal_uInt32  Max;
 
     if (pFile->m_Handle == 0)
         return (sal_False);
@@ -1439,7 +1439,7 @@ static sal_Bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
 
 static const sal_Char* stripBlanks(const sal_Char* String, sal_uInt32* pLen)
 {
-    if  ( (pLen != NULL) && ( *pLen != 0 ) ) 
+    if  ( (pLen != NULL) && ( *pLen != 0 ) )
     {
         while ((String[*pLen - 1] == ' ') || (String[*pLen - 1] == '\t'))
             (*pLen)--;
@@ -1481,7 +1481,7 @@ static const sal_Char* addLine(osl_TProfileImpl* pProfile, const sal_Char* Line)
         }
 
     }
-    
+
     pProfile->m_Lines[pProfile->m_NoLines++] = strdup(Line);
 
     return (pProfile->m_Lines[pProfile->m_NoLines - 1]);
@@ -1526,7 +1526,7 @@ static const sal_Char* insertLine(osl_TProfileImpl* pProfile, const sal_Char* Li
         for (i = 0; i < pProfile->m_NoSections; i++)
         {
             pSec = &pProfile->m_Sections[i];
-            
+
             if (pSec->m_Line >= LineNo)
                 pSec->m_Line++;
 
@@ -1535,9 +1535,9 @@ static const sal_Char* insertLine(osl_TProfileImpl* pProfile, const sal_Char* Li
                     pSec->m_Entries[n].m_Line++;
         }
     }
-    
+
     pProfile->m_NoLines++;
-    
+
     pProfile->m_Lines[LineNo] = strdup(Line);
 
     return (pProfile->m_Lines[LineNo]);
@@ -1560,7 +1560,7 @@ static void removeLine(osl_TProfileImpl* pProfile, sal_uInt32 LineNo)
             for (i = 0; i < pProfile->m_NoSections; i++)
             {
                 pSec = &pProfile->m_Sections[i];
-                
+
                 if (pSec->m_Line > LineNo)
                     pSec->m_Line--;
 
@@ -1703,7 +1703,7 @@ static void removeSection(osl_TProfileImpl* pProfile, osl_TProfileSection *pSect
 
         pProfile->m_NoSections--;
     }
-    
+
     return;
 }
 
@@ -1738,7 +1738,7 @@ static  sal_uInt32    Sect = 0;
     {
         Len = strlen(Entry);
         Entry = stripBlanks(Entry, &Len);
-        
+
         *pNoEntry = pSec->m_NoEntries;
 
         for (i = 0; i < pSec->m_NoEntries; i++)
@@ -1924,7 +1924,7 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
         {
             sal_Bool bWriteable = sal_False;
             char pszFilename[PATH_MAX] = "";
-        
+
             if ( pProfile->m_strFileName != 0  && pProfile->m_strFileName->buffer[0] != 0 )
                 FileURLToPath( pszFilename, PATH_MAX, pProfile->m_strFileName );
             /* hack: usualy you have a specific HAB, but NULL works here... */
@@ -1997,10 +1997,10 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
     if (*pszPath == '"')
     {
         int i = 0;
-        
+
         pszPath++;
 
-        while ((*pszPath != '"') && (*pszPath != '\0')) 
+        while ((*pszPath != '"') && (*pszPath != '\0'))
             Product[i++] = *pszPath++;
 
         Product[i] = '\0';
@@ -2023,7 +2023,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
             oslProfile hProfile;
 
             /* open sversion.ini in the system directory, and try to locate the entry
-               with the highest version for StarOffice */														   
+               with the highest version for StarOffice */
             if ((osl_getProfileName(SVERSION_FALLBACK, SVERSION_NAME, Profile, sizeof(Profile))) &&
                 (hProfile = osl_openProfile(Profile, osl_Profile_READLOCK)))
             {
@@ -2035,7 +2035,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
                     if ((strnicmp(pChr, SVERSION_SOFFICE, sizeof(SVERSION_SOFFICE) - 1) == 0) &&
                         (stricmp(Product, pChr) < 0))
                     {
-                        osl_readProfileString(hProfile, SVERSION_SECTION, pChr, 
+                        osl_readProfileString(hProfile, SVERSION_SECTION, pChr,
                                               Dir, sizeof(Dir), "");
 
                         /* check for existence of path */
@@ -2048,7 +2048,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
             }
 
             /* open sversion.ini in the users directory, and try to locate the entry
-               with the highest version for StarOffice */														   
+               with the highest version for StarOffice */
             if ((strcmp(SVERSION_LOCATION, SVERSION_FALLBACK) != 0) &&
                 (osl_getProfileName(SVERSION_LOCATION, SVERSION_NAME, Profile, sizeof(Profile))) &&
                 (hProfile = osl_openProfile(Profile, osl_Profile_READLOCK)))
@@ -2061,7 +2061,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
                     if ((strnicmp(pChr, SVERSION_SOFFICE, sizeof(SVERSION_SOFFICE) - 1) == 0) &&
                         (stricmp(Product, pChr) < 0))
                     {
-                        osl_readProfileString(hProfile, SVERSION_SECTION, pChr, 
+                        osl_readProfileString(hProfile, SVERSION_SECTION, pChr,
                                               Dir, sizeof(Dir), "");
 
                         /* check for existence of path */
@@ -2075,12 +2075,12 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
 
             /* remove any trailing build number */
             if ((pChr = strrchr(Product, '/')) != NULL)
-                *pChr = '\0';			
+                *pChr = '\0';
         }
     }
 
 
-    /* if we have an userid option eg. "-userid:rh[/usr/home/rh/staroffice]", 
+    /* if we have an userid option eg. "-userid:rh[/usr/home/rh/staroffice]",
        this will supercede all other locations */
     if (osl_getCommandArgs(Buffer, sizeof(Buffer)) == osl_Process_E_None)
     {
@@ -2090,16 +2090,16 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
             if (((*pChr == '-') || (*pChr == '+')) &&
                 (strnicmp(pChr + 1, SVERSION_OPTION, sizeof(SVERSION_OPTION) - 1) == 0))
             {
-                if (((pStart = strchr(pChr + sizeof(SVERSION_OPTION), '[')) != NULL) && 
+                if (((pStart = strchr(pChr + sizeof(SVERSION_OPTION), '[')) != NULL) &&
                     ((pEnd = strchr(pStart + 1, ']')) != NULL))
                 {
                     strncpy(Path, pStart + 1, pEnd - (pStart + 1));
                     Path[pEnd - (pStart + 1)] = '\0';
 
-                    /* build full path */						
+                    /* build full path */
                     if ((Path[strlen(Path) - 1] != '/') && (Path[strlen(Path) - 1] != '\\'))
                     {
-                        strcat(Path, "\\");				
+                        strcat(Path, "\\");
                     }
 
                     pChr =&Path[strlen(Path)];
@@ -2120,7 +2120,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
                     break;
                 }
             }
-    }	
+    }
 
     if (strlen(Path) <= 0)
     {
@@ -2144,7 +2144,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
 
             /* remove extension */
             if ((pChr = strrchr(Product, '.')) != NULL)
-                *pChr = '\0';			
+                *pChr = '\0';
         }
 
         /* remember last subdir */
@@ -2161,7 +2161,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
             strcat(Path,pszPath);
         }
 
-        /* if file not exists, remove any specified subdirectories 
+        /* if file not exists, remove any specified subdirectories
            like "bin" or "program" */
         if (((access(Path, 0) < 0) && (pStr != NULL)) || (strlen(pszPath) <= 0))
         {
@@ -2184,7 +2184,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
                     {
                         strcpy(pStr + 1, pszPath);
                     }
-                    
+
                     break;
                 }
         }
@@ -2203,7 +2203,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
             *pChr = '\0';
 
             /* open sversion.ini in the system directory, and try to locate the entry
-               with the highest version for StarOffice */														   
+               with the highest version for StarOffice */
             if ((osl_getProfileName(SVERSION_LOCATION, SVERSION_NAME, Profile, sizeof(Profile))) &&
                 (hProfile = osl_openProfile(Profile, osl_Profile_READLOCK)))
             {
@@ -2213,7 +2213,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
                 strcat(Product, "/");
                 strcat(Product, BUILD_STR(SUPD));
 
-                osl_readProfileString(hProfile, SVERSION_SECTION, Product, 
+                osl_readProfileString(hProfile, SVERSION_SECTION, Product,
                                       Buffer, sizeof(Buffer), "");
 
                 /* if not found, try it without build number */
@@ -2221,7 +2221,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
                 {
                     *pChr = '\0';
 
-                    osl_readProfileString(hProfile, SVERSION_SECTION, Product, 
+                    osl_readProfileString(hProfile, SVERSION_SECTION, Product,
                                           Buffer, sizeof(Buffer), "");
 
                     osl_closeProfile(hProfile);
@@ -2235,7 +2235,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
                             /* prepare build number */
                             *pChr = '/';
 
-                            osl_readProfileString(hProfile, SVERSION_SECTION, Product, 
+                            osl_readProfileString(hProfile, SVERSION_SECTION, Product,
                                                   Buffer, sizeof(Buffer), "");
 
                             /* if not found, try it without build number */
@@ -2243,9 +2243,9 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
                             {
                                 *pChr = '\0';
 
-                                osl_readProfileString(hProfile, SVERSION_SECTION, Product, 
+                                osl_readProfileString(hProfile, SVERSION_SECTION, Product,
                                                       Buffer, sizeof(Buffer), "");
-                            }								
+                            }
 
                             osl_closeProfile(hProfile);
                         }
@@ -2258,11 +2258,11 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
                 {
                     strcpy(Path, Buffer);
 
-                    /* build full path */						
+                    /* build full path */
                     if ((Path[strlen(Path) - 1] != '/') && (Path[strlen(Path) - 1] != '\\'))
                     {
                         if ((*pszPath != '/') && (*pszPath != '\\'))
-                            strcat(Path, "\\");				
+                            strcat(Path, "\\");
                     }
 
                     pChr=&Path[strlen(pszPath)];
@@ -2279,7 +2279,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
                         }
                     }
                 }
-            }			
+            }
         }
         else
             /* remove appended filename */

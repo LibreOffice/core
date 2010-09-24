@@ -56,7 +56,7 @@ my_sofficepath = \
     $(installationtest_instpath)'/opt/OpenOffice.org 3/program/soffice.exe'
 .ELSE
 my_sofficepath = \
-    $(installationtest_instpath)/opt/openoffice.org3/program/soffice
+    $(installationtest_instpath)/opt/program/soffice
 .END
 
 .IF "$(OOO_TEST_SOFFICE)" == ""

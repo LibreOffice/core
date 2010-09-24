@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,25 +47,25 @@ struct _Unwind_Exception
 } __attribute__((__aligned__));
 
 struct __cxa_exception
-{ 
+{
     ::std::type_info *exceptionType;
-    void (*exceptionDestructor)(void *); 
-    
+    void (*exceptionDestructor)(void *);
+
     ::std::unexpected_handler unexpectedHandler;
     ::std::terminate_handler terminateHandler;
-    
+
     __cxa_exception *nextException;
-    
+
     int handlerCount;
-    
+
     int handlerSwitchValue;
     const unsigned char *actionRecord;
     const unsigned char *languageSpecificData;
     void *catchTemp;
     void *adjustedPtr;
-    
+
     _Unwind_Exception unwindHeader;
-};    
+};
 
 extern "C" void *__cxa_allocate_exception(
     std::size_t thrown_size ) throw();

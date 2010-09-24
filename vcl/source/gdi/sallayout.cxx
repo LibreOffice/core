@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@
 #include <unicode/uchar.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif 
+#endif
 
 #include <algorithm>
 
@@ -117,7 +117,7 @@ bool IsDiacritic( sal_UCS4 nChar )
         if( (pRange->mnMin <= nChar) && (nChar < pRange->mnEnd) )
             return true;
 
-    return false;	
+    return false;
 }
 
 // =======================================================================
@@ -315,7 +315,7 @@ sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
         case LANGUAGE_FARSI         & LANGUAGE_MASK_PRIMARY:
         case LANGUAGE_URDU          & LANGUAGE_MASK_PRIMARY:
         case LANGUAGE_PUNJABI       & LANGUAGE_MASK_PRIMARY: //???
-        case LANGUAGE_SINDHI        & LANGUAGE_MASK_PRIMARY:	
+        case LANGUAGE_SINDHI        & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x06F0 - '0';  // eastern arabic-indic digits
             break;
         case LANGUAGE_BENGALI       & LANGUAGE_MASK_PRIMARY:
@@ -615,7 +615,7 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLen,
         UBiDi* pParaBidi = ubidi_openSized( mnLength, 0, &rcI18n );
         if( !pParaBidi )
             return;
-        ubidi_setPara( pParaBidi, reinterpret_cast<const UChar *>(mpStr), mnLength, nLevel, NULL, &rcI18n );	// UChar != sal_Unicode in MinGW
+        ubidi_setPara( pParaBidi, reinterpret_cast<const UChar *>(mpStr), mnLength, nLevel, NULL, &rcI18n );    // UChar != sal_Unicode in MinGW
 
         UBiDi* pLineBidi = pParaBidi;
         int nSubLength = mnEndCharPos - mnMinCharPos;
@@ -1054,7 +1054,7 @@ bool GenericSalLayout::GetCharWidths( sal_Int32* pCharWidths ) const
             if( pN->IsClusterStart() )
                 break;
             if( pN->IsDiacritic() )
-                continue;	// ignore diacritics
+                continue;   // ignore diacritics
             if( nXPosMax > pN->maLinearPos.X() )
                 nXPosMax = pN->maLinearPos.X();
         }
@@ -1317,10 +1317,10 @@ void GenericSalLayout::ApplyAsianKerning( const sal_Unicode* pStr, int nLength )
         {
             // ignore code ranges that are not affected by asian punctuation compression
             const sal_Unicode cHere = pStr[n];
-            if( ((0x3000 != (cHere & 0xFF00)) && (0x2010 != (cHere & 0xFFF0))) || (0xFF00 != (cHere & 0xFF00)) ) 
+            if( ((0x3000 != (cHere & 0xFF00)) && (0x2010 != (cHere & 0xFFF0))) || (0xFF00 != (cHere & 0xFF00)) )
                 continue;
             const sal_Unicode cNext = pStr[n+1];
-            if( ((0x3000 != (cNext & 0xFF00)) && (0x2010 != (cNext & 0xFFF0))) || (0xFF00 != (cNext & 0xFF00)) ) 
+            if( ((0x3000 != (cNext & 0xFF00)) && (0x2010 != (cNext & 0xFFF0))) || (0xFF00 != (cNext & 0xFF00)) )
                 continue;
 
             // calculate compression values
@@ -1580,7 +1580,7 @@ void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
         return;
 
     GlyphItem* pG = mpGlyphItems + nStart;
-    // the nNewXPos argument determines the new cell position 
+    // the nNewXPos argument determines the new cell position
     // as RTL-glyphs are right justified in their cell
     // the cell position needs to be adjusted to the glyph position
     if( pG->IsRTLGlyph() )
@@ -1900,7 +1900,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         if( n > 0 )
         {
             // drop the NotDef glyphs in the base layout run if a fallback run exists
-            while ( 
+            while (
                     (maFallbackRuns[ n-1 ].PosIsInRun( nCharPos[0] ) ) &&
                     (!maFallbackRuns[ n ].PosIsInAnyRun( nCharPos[0] ) )
                   )

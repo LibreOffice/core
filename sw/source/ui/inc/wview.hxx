@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 class SW_DLLPUBLIC SwWebView: public SwView
 {
 protected:
-    virtual void	SelectShell();
+    virtual void    SelectShell();
 public:
 
     SFX_DECL_VIEWFACTORY(SwWebView);

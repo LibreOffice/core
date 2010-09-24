@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,10 +116,10 @@ namespace formula
     {
     public:
         IStructHelper(){}
-        virtual SvLBoxEntry*	InsertEntry(const XubString& rText, SvLBoxEntry* pParent,
+        virtual SvLBoxEntry*    InsertEntry(const XubString& rText, SvLBoxEntry* pParent,
                                 USHORT nFlag,ULONG nPos=0,IFormulaToken* pScToken=NULL) = 0;
 
-        virtual String	        GetEntryText(SvLBoxEntry* pEntry) const = 0;
+        virtual String          GetEntryText(SvLBoxEntry* pEntry) const = 0;
         virtual SvLBoxEntry*    GetParent(SvLBoxEntry* pEntry) const = 0;
     };
 
@@ -155,7 +155,7 @@ namespace formula
         virtual void setDispatcherLock( BOOL bLock ) = 0;
         virtual void dispatch(BOOL _bOK,BOOL _bMartixChecked) = 0;
         virtual void doClose(BOOL _bOk) = 0;
-        virtual void insertEntryToLRUList(const IFunctionDescription*	pDesc) = 0;
+        virtual void insertEntryToLRUList(const IFunctionDescription*   pDesc) = 0;
         virtual void showReference(const String& _sFormula) = 0;
     };
 

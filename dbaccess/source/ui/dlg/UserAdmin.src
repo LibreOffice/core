@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,82 +40,82 @@
 
 TabPage TAB_PAGE_USERADMIN
 {
-    SVLook		= TRUE ;
-    HelpId		= HID_TAB_PAGE_USERADMIN ;
-    Size		= MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    SVLook      = TRUE ;
+    HelpId      = HID_TAB_PAGE_USERADMIN ;
+    Size        = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
     Hide = TRUE;
 
     FixedLine FL_USER
     {
-        Pos					= MAP_APPFONT ( 6 , 3  ) ;
-        Size				= MAP_APPFONT ( WINDOW_SIZE_X - 8, 8) ;
-        Text [ en-US ]	= "User selection";
+        Pos                 = MAP_APPFONT ( 6 , 3  ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8) ;
+        Text [ en-US ]  = "User selection";
     };
 
     FixedText FT_USER
     {
-        Pos					= MAP_APPFONT ( 12 , 14 ) ;
-        Size				= MAP_APPFONT ( 90 , 10 ) ;
-        Text [ en-US ]	= "Us~er:";
+        Pos                 = MAP_APPFONT ( 12 , 14 ) ;
+        Size                = MAP_APPFONT ( 90 , 10 ) ;
+        Text [ en-US ]  = "Us~er:";
     };
 
     ListBox LB_USER
     {
-        Border				= TRUE ;
-        Pos					= MAP_APPFONT ( 108 , 13) ;
-        Size				= MAP_APPFONT ( 105 , 97 ) ;
-        TabStop				= TRUE ;
-        HScroll				= TRUE ;
-        Sort				= TRUE ;
-        DropDown			= TRUE ;
-        HelpId				= HID_TAB_PAGE_LBUSER ;
+        Border              = TRUE ;
+        Pos                 = MAP_APPFONT ( 108 , 13) ;
+        Size                = MAP_APPFONT ( 105 , 97 ) ;
+        TabStop             = TRUE ;
+        HScroll             = TRUE ;
+        Sort                = TRUE ;
+        DropDown            = TRUE ;
+        HelpId              = HID_TAB_PAGE_LBUSER ;
     };
 
 
     PushButton PB_NEWUSER
     {
-        Pos					= MAP_APPFONT ( 12 , 29 ) ;
-        Size				= MAP_APPFONT ( 70 , 14 ) ;
-        TabStop				= TRUE ;
-        DefButton			= TRUE ;
-        HelpId				= HID_TAB_PAGE_PBUSER ;
+        Pos                 = MAP_APPFONT ( 12 , 29 ) ;
+        Size                = MAP_APPFONT ( 70 , 14 ) ;
+        TabStop             = TRUE ;
+        DefButton           = TRUE ;
+        HelpId              = HID_TAB_PAGE_PBUSER ;
         Text [ en-US ] = "~Add User...";
     };
 
     PushButton PB_CHANGEPWD
     {
-        Pos					= MAP_APPFONT ( 95 , 29 ) ;
-        Size				= MAP_APPFONT ( 70 , 14 ) ;
-        TabStop				= TRUE ;
-        DefButton			= TRUE ;
-        HelpId				= HID_TAB_PAGE_PBCHGPWD ;
+        Pos                 = MAP_APPFONT ( 95 , 29 ) ;
+        Size                = MAP_APPFONT ( 70 , 14 ) ;
+        TabStop             = TRUE ;
+        DefButton           = TRUE ;
+        HelpId              = HID_TAB_PAGE_PBCHGPWD ;
         Text [ en-US ] = "Change ~Password...";
     };
 
     PushButton PB_DELETEUSER
     {
-        Pos					= MAP_APPFONT ( WINDOW_SIZE_X - 82 , 29 ) ;
-        Size				= MAP_APPFONT ( 70 , 14 ) ;
-        TabStop				= TRUE ;
-        DefButton			= TRUE ;
-        HelpId				= HID_TAB_PAGE_PBUSERDELETE ;
+        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 82 , 29 ) ;
+        Size                = MAP_APPFONT ( 70 , 14 ) ;
+        TabStop             = TRUE ;
+        DefButton           = TRUE ;
+        HelpId              = HID_TAB_PAGE_PBUSERDELETE ;
         Text [ en-US ] = "~Delete User...";
     };
 
     FixedLine FL_TABLE_GRANTS
     {
-        Pos					= MAP_APPFONT ( 6 , 52  ) ;
-        Size				= MAP_APPFONT ( WINDOW_SIZE_X - 8, 8) ;
+        Pos                 = MAP_APPFONT ( 6 , 52  ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8) ;
         Text [ en-US ] = "Access rights for selected user";
     };
 
     Control CTRL_TABLE_GRANTS
     {
-        Pos					= MAP_APPFONT ( 12 , 63  ) ;
-        Size				= MAP_APPFONT ( WINDOW_SIZE_X - 22, WINDOW_SIZE_Y - 75 );
-        Border				= TRUE ;
-        TabStop				= TRUE ;
-        HelpId				= HID_TAB_PAGE_TBLGRANTS ;
+        Pos                 = MAP_APPFONT ( 12 , 63  ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 22, WINDOW_SIZE_Y - 75 );
+        Border              = TRUE ;
+        TabStop             = TRUE ;
+        HelpId              = HID_TAB_PAGE_TBLGRANTS ;
     };
 };
 
@@ -130,10 +130,10 @@ String STR_USERADMIN_NOT_AVAILABLE
     Text [ en-US ] = "The database does not support user administration." ;
 };
 
-#define EDIT_SIZE_X		50
-#define FT_SIZE_X		90
-#define WIN_X			220
-#define WIN_Y			72
+#define EDIT_SIZE_X     50
+#define FT_SIZE_X       90
+#define WIN_X           220
+#define WIN_Y           72
 
 ModalDialog DLG_PASSWORD
 {
@@ -191,7 +191,7 @@ ModalDialog DLG_PASSWORD
         Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
         PassWord = TRUE ;
     };
-    
+
     OKButton BTN_PASSWORD_OK
     {
         Pos = MAP_APPFONT ( WIN_X - 56 , 6 ) ;
@@ -207,7 +207,7 @@ ModalDialog DLG_PASSWORD
     {
         Pos = MAP_APPFONT ( WIN_X - 56 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-    };	
+    };
     Text [ en-US ] = "Change Password";
 };
 

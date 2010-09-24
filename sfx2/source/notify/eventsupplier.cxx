@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,13 +61,13 @@
 
 //--------------------------------------------------------------------------------------------------------
 
-#define MACRO_PRFIX			"macro://"
-#define MACRO_POSTFIX		"()"
+#define MACRO_PRFIX         "macro://"
+#define MACRO_POSTFIX       "()"
 
 //--------------------------------------------------------------------------------------------------------
 
-#define PROPERTYVALUE		::com::sun::star::beans::PropertyValue
-#define	UNO_QUERY			::com::sun::star::uno::UNO_QUERY
+#define PROPERTYVALUE       ::com::sun::star::beans::PropertyValue
+#define UNO_QUERY           ::com::sun::star::uno::UNO_QUERY
 
 namespace css = ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -83,7 +83,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
     ::osl::MutexGuard aGuard( maMutex );
 
     // find the event in the list and replace the data
-    long nCount	= maEventNames.getLength();
+    long nCount = maEventNames.getLength();
     for ( long i=0; i<nCount; i++ )
     {
         if ( maEventNames[i] == aName )
@@ -146,7 +146,7 @@ ANY SAL_CALL SfxEvents_Impl::getByName( const OUSTRING& aName )
 
     // find the event in the list and return the data
 
-    long nCount	= maEventNames.getLength();
+    long nCount = maEventNames.getLength();
 
     for ( long i=0; i<nCount; i++ )
     {
@@ -170,7 +170,7 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUSTRING& aName ) throw ( RUN
 
     // find the event in the list and return the data
 
-    long nCount	= maEventNames.getLength();
+    long nCount = maEventNames.getLength();
 
     for ( long i=0; i<nCount; i++ )
     {
@@ -207,10 +207,10 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
     if ( aEventData >>= aProperties )
     {
         OUSTRING        aPrefix = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
-        OUSTRING		aType;
-        OUSTRING		aScript;
-        OUSTRING		aLibrary;
-        OUSTRING		aMacroName;
+        OUSTRING        aType;
+        OUSTRING        aScript;
+        OUSTRING        aLibrary;
+        OUSTRING        aMacroName;
 
         sal_Int32 nCount = aProperties.getLength();
 
@@ -316,10 +316,10 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
 
     // get the event name, find the coresponding data, execute the data
 
-    OUSTRING	aName	= aEvent.EventName;
-    long		nCount	= maEventNames.getLength();
-    long		nIndex	= 0;
-    sal_Bool	bFound	= sal_False;
+    OUSTRING    aName   = aEvent.EventName;
+    long        nCount  = maEventNames.getLength();
+    long        nIndex  = 0;
+    sal_Bool    bFound  = sal_False;
 
     while ( !bFound && ( nIndex < nCount ) )
     {
@@ -332,7 +332,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
     if ( !bFound )
         return;
 
-    ANY	aEventData = maEventData[ nIndex ];
+    ANY aEventData = maEventData[ nIndex ];
     aGuard.clear();
     Execute( aEventData, css::document::DocumentEvent(aEvent.Source, aEvent.EventName, NULL, css::uno::Any()), mpObjShell );
 }
@@ -365,8 +365,8 @@ SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
 
     maEventData = SEQUENCE < ANY > ( maEventNames.getLength() );
 
-    mpObjShell		= pShell;
-    mxBroadcaster	= xBroadcaster;
+    mpObjShell      = pShell;
+    mxBroadcaster   = xBroadcaster;
 
     if ( mxBroadcaster.is() )
         mxBroadcaster->addEventListener( this );
@@ -390,10 +390,10 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 
     if ( aAny >>= aProperties )
     {
-        OUSTRING		aType;
-        OUSTRING		aScriptURL;
-        OUSTRING		aLibrary;
-        OUSTRING		aMacroName;
+        OUSTRING        aType;
+        OUSTRING        aScriptURL;
+        OUSTRING        aLibrary;
+        OUSTRING        aMacroName;
 
         long nCount = aProperties.getLength();
         long nIndex = 0;
@@ -418,7 +418,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
         }
 
         // Get the type
-        ScriptType	eType( STARBASIC );
+        ScriptType  eType( STARBASIC );
         if ( aType.compareToAscii( STAR_BASIC ) == COMPARE_EQUAL )
             eType = STARBASIC;
         else if ( aType.compareToAscii( "Script" ) == COMPARE_EQUAL && aScriptURL.getLength() )

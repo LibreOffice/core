@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <tools/debug.hxx>
 extern ResMgr* pSwResMgr;
 // Initialise UI names to 0
-SvStringsDtor	*SwStyleNameMapper::pTextUINameArray = 0,
+SvStringsDtor   *SwStyleNameMapper::pTextUINameArray = 0,
                 *SwStyleNameMapper::pListsUINameArray = 0,
                 *SwStyleNameMapper::pExtraUINameArray = 0,
                 *SwStyleNameMapper::pRegisterUINameArray = 0,
@@ -65,7 +65,7 @@ SvStringsDtor	*SwStyleNameMapper::pTextUINameArray = 0,
                 *SwStyleNameMapper::pPageDescProgNameArray = 0,
                 *SwStyleNameMapper::pNumRuleProgNameArray = 0;
 
-NameToIdHash	*SwStyleNameMapper::pParaUIMap = 0,
+NameToIdHash    *SwStyleNameMapper::pParaUIMap = 0,
                 *SwStyleNameMapper::pCharUIMap = 0,
                 *SwStyleNameMapper::pPageUIMap = 0,
                 *SwStyleNameMapper::pFrameUIMap = 0,
@@ -1010,77 +1010,77 @@ SvStringsDtor* SwStyleNameMapper::NewProgNameArray( SvStringsDtor*& pProgNameArr
 const SvStringsDtor& SwStyleNameMapper::GetTextProgNameArray()
 {
     return pTextProgNameArray ? *pTextProgNameArray :
-           *NewProgNameArray( pTextProgNameArray, TextProgNameTable, 
-            sizeof ( TextProgNameTable ) / sizeof ( SwTableEntry ) ); 
+           *NewProgNameArray( pTextProgNameArray, TextProgNameTable,
+            sizeof ( TextProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
 const SvStringsDtor& SwStyleNameMapper::GetListsProgNameArray()
 {
-    return pListsProgNameArray ? *pListsProgNameArray : 
-           *NewProgNameArray( pListsProgNameArray, ListsProgNameTable, 
+    return pListsProgNameArray ? *pListsProgNameArray :
+           *NewProgNameArray( pListsProgNameArray, ListsProgNameTable,
             sizeof ( ListsProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
 const SvStringsDtor& SwStyleNameMapper::GetExtraProgNameArray()
 {
-    return pExtraProgNameArray ? *pExtraProgNameArray : 
-           *NewProgNameArray( pExtraProgNameArray, ExtraProgNameTable, 
+    return pExtraProgNameArray ? *pExtraProgNameArray :
+           *NewProgNameArray( pExtraProgNameArray, ExtraProgNameTable,
             sizeof ( ExtraProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
 const SvStringsDtor& SwStyleNameMapper::GetRegisterProgNameArray()
 {
-    return pRegisterProgNameArray ? *pRegisterProgNameArray : 
-           *NewProgNameArray( pRegisterProgNameArray, RegisterProgNameTable, 
+    return pRegisterProgNameArray ? *pRegisterProgNameArray :
+           *NewProgNameArray( pRegisterProgNameArray, RegisterProgNameTable,
             sizeof ( RegisterProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
 const SvStringsDtor& SwStyleNameMapper::GetDocProgNameArray()
 {
-    return pDocProgNameArray ? *pDocProgNameArray : 
-           *NewProgNameArray( pDocProgNameArray, DocProgNameTable, 
+    return pDocProgNameArray ? *pDocProgNameArray :
+           *NewProgNameArray( pDocProgNameArray, DocProgNameTable,
             sizeof ( DocProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
 const SvStringsDtor& SwStyleNameMapper::GetHTMLProgNameArray()
 {
-    return pHTMLProgNameArray ? *pHTMLProgNameArray : 
-           *NewProgNameArray( pHTMLProgNameArray, HTMLProgNameTable, 
+    return pHTMLProgNameArray ? *pHTMLProgNameArray :
+           *NewProgNameArray( pHTMLProgNameArray, HTMLProgNameTable,
             sizeof ( HTMLProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
 const SvStringsDtor& SwStyleNameMapper::GetFrmFmtProgNameArray()
 {
-    return pFrmFmtProgNameArray ? *pFrmFmtProgNameArray : 
-           *NewProgNameArray( pFrmFmtProgNameArray, FrmFmtProgNameTable, 
+    return pFrmFmtProgNameArray ? *pFrmFmtProgNameArray :
+           *NewProgNameArray( pFrmFmtProgNameArray, FrmFmtProgNameTable,
             sizeof ( FrmFmtProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
 const SvStringsDtor& SwStyleNameMapper::GetChrFmtProgNameArray()
 {
-    return pChrFmtProgNameArray ? *pChrFmtProgNameArray : 
-           *NewProgNameArray( pChrFmtProgNameArray, ChrFmtProgNameTable, 
+    return pChrFmtProgNameArray ? *pChrFmtProgNameArray :
+           *NewProgNameArray( pChrFmtProgNameArray, ChrFmtProgNameTable,
             sizeof ( ChrFmtProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
 const SvStringsDtor& SwStyleNameMapper::GetHTMLChrFmtProgNameArray()
 {
-    return pHTMLChrFmtProgNameArray ? *pHTMLChrFmtProgNameArray : 
-           *NewProgNameArray( pHTMLChrFmtProgNameArray, HTMLChrFmtProgNameTable, 
+    return pHTMLChrFmtProgNameArray ? *pHTMLChrFmtProgNameArray :
+           *NewProgNameArray( pHTMLChrFmtProgNameArray, HTMLChrFmtProgNameTable,
             sizeof ( HTMLChrFmtProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
 const SvStringsDtor& SwStyleNameMapper::GetPageDescProgNameArray()
 {
-    return pPageDescProgNameArray ? *pPageDescProgNameArray : 
-           *NewProgNameArray( pPageDescProgNameArray, PageDescProgNameTable, 
+    return pPageDescProgNameArray ? *pPageDescProgNameArray :
+           *NewProgNameArray( pPageDescProgNameArray, PageDescProgNameTable,
             sizeof ( PageDescProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
 const SvStringsDtor& SwStyleNameMapper::GetNumRuleProgNameArray()
 {
-    return pNumRuleProgNameArray ? *pNumRuleProgNameArray : 
-           *NewProgNameArray( pNumRuleProgNameArray, NumRuleProgNameTable, 
+    return pNumRuleProgNameArray ? *pNumRuleProgNameArray :
+           *NewProgNameArray( pNumRuleProgNameArray, NumRuleProgNameTable,
             sizeof ( NumRuleProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 

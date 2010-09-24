@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,8 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 
 #define ACCESSIBLE_ACTION_COUNT     1
-#define AID_EXPAND					0
-#define AID_COLLAPSE				1
+#define AID_EXPAND                  0
+#define AID_COLLAPSE                1
 
 namespace
 {
@@ -90,12 +90,12 @@ namespace accessibility
                                                                   ULONG _nPos,
                                                                   const Reference< XAccessible >& _xParent ) :
 
-        AccessibleIconChoiceCtrlEntry_BASE	( m_aMutex ),
+        AccessibleIconChoiceCtrlEntry_BASE  ( m_aMutex ),
 
-        m_pIconCtrl		( &_rIconCtrl ),
-        m_nIndex		( _nPos ),
+        m_pIconCtrl     ( &_rIconCtrl ),
+        m_nIndex        ( _nPos ),
         m_nClientId     ( 0 ),
-        m_xParent		( _xParent )
+        m_xParent       ( _xParent )
 
     {
         osl_incrementInterlockedCount( &m_refCount );
@@ -451,7 +451,7 @@ throw(RuntimeException)
         // do nothing, because no focus for each item
     }
     // -----------------------------------------------------------------------------
-    sal_Int32 AccessibleIconChoiceCtrlEntry::getForeground(	) throw (RuntimeException)
+    sal_Int32 AccessibleIconChoiceCtrlEntry::getForeground( ) throw (RuntimeException)
     {
         ALBSolarGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -543,7 +543,7 @@ throw(RuntimeException)
         ::osl::MutexGuard aGuard( m_aMutex );
 
         String sText = getText();
-        if	( ( 0 > nStartIndex ) || ( sText.Len() <= nStartIndex )
+        if  ( ( 0 > nStartIndex ) || ( sText.Len() <= nStartIndex )
             || ( 0 > nEndIndex ) || ( sText.Len() <= nEndIndex ) )
             throw IndexOutOfBoundsException();
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,41 +26,41 @@
  ************************************************************************/
 
 //____________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //____________________________________________________________________________________________________________
 
 #include "basecontainercontrol.hxx"
 
 //____________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //____________________________________________________________________________________________________________
 #include <cppuhelper/typeprovider.hxx>
 
 //____________________________________________________________________________________________________________
-//	includes of my own project
+//  includes of my own project
 //____________________________________________________________________________________________________________
 
 //____________________________________________________________________________________________________________
-//	namespaces
+//  namespaces
 //____________________________________________________________________________________________________________
 
-using namespace ::cppu						;
-using namespace ::osl						;
-using namespace ::rtl						;
-using namespace ::com::sun::star::uno		;
-using namespace ::com::sun::star::lang		;
-using namespace ::com::sun::star::awt		;
-using namespace ::com::sun::star::container	;
+using namespace ::cppu                      ;
+using namespace ::osl                       ;
+using namespace ::rtl                       ;
+using namespace ::com::sun::star::uno       ;
+using namespace ::com::sun::star::lang      ;
+using namespace ::com::sun::star::awt       ;
+using namespace ::com::sun::star::container ;
 
 namespace unocontrols{
 
 //____________________________________________________________________________________________________________
-//	construct/destruct
+//  construct/destruct
 //____________________________________________________________________________________________________________
 
 BaseContainerControl::BaseContainerControl( const Reference< XMultiServiceFactory >& xFactory )
-    : BaseControl	( xFactory	)
-    , m_aListeners	( m_aMutex	)
+    : BaseControl   ( xFactory  )
+    , m_aListeners  ( m_aMutex  )
 {
     // initialize info list for controls
     m_pControlInfoList = new IMPL_ControlInfoList ;
@@ -72,13 +72,13 @@ BaseContainerControl::~BaseContainerControl()
 }
 
 //____________________________________________________________________________________________________________
-//	XInterface
+//  XInterface
 //____________________________________________________________________________________________________________
 
 Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType ) throw( RuntimeException )
 {
     // Attention:
-    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
     Any aReturn ;
     Reference< XInterface > xDel = BaseControl::impl_getDelegator();
     if ( xDel.is() == sal_True )
@@ -97,7 +97,7 @@ Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType ) throw( Ru
 }
 
 //____________________________________________________________________________________________________________
-//	XTypeProvider
+//  XTypeProvider
 //____________________________________________________________________________________________________________
 
 Sequence< Type > SAL_CALL BaseContainerControl::getTypes() throw( RuntimeException )
@@ -116,8 +116,8 @@ Sequence< Type > SAL_CALL BaseContainerControl::getTypes() throw( RuntimeExcepti
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection	(	::getCppuType(( const Reference< XControlModel		>*)NULL )	,
-                                                          ::getCppuType(( const Reference< XControlContainer	>*)NULL )	,
+            static OTypeCollection aTypeCollection  (   ::getCppuType(( const Reference< XControlModel      >*)NULL )   ,
+                                                          ::getCppuType(( const Reference< XControlContainer    >*)NULL )   ,
                                                         BaseControl::getTypes()
                                                     );
             // ... and set his address to static pointer!
@@ -129,16 +129,16 @@ Sequence< Type > SAL_CALL BaseContainerControl::getTypes() throw( RuntimeExcepti
 }
 
 //____________________________________________________________________________________________________________
-//	XAggregation
+//  XAggregation
 //____________________________________________________________________________________________________________
 
 Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType ) throw( RuntimeException )
 {
     // Ask for my own supported interfaces ...
     // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
-    Any aReturn	( ::cppu::queryInterface(	aType										,
-                                               static_cast< XControlModel*		> ( this )	,
-                                               static_cast< XControlContainer*	> ( this )
+    Any aReturn ( ::cppu::queryInterface(   aType                                       ,
+                                               static_cast< XControlModel*      > ( this )  ,
+                                               static_cast< XControlContainer*  > ( this )
                                         )
                 );
 
@@ -156,11 +156,11 @@ Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType ) throw( 
 }
 
 //____________________________________________________________________________________________________________
-//	XControl
+//  XControl
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseContainerControl::createPeer(	const	Reference< XToolkit >&		xToolkit	,
-                                                const	Reference< XWindowPeer >&	xParent		) throw( RuntimeException )
+void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&      xToolkit    ,
+                                                const   Reference< XWindowPeer >&   xParent     ) throw( RuntimeException )
 {
     if ( getPeer().is() == sal_False )
     {
@@ -168,8 +168,8 @@ void SAL_CALL BaseContainerControl::createPeer(	const	Reference< XToolkit >&		xT
         BaseControl::createPeer( xToolkit, xParent );
 
         // create peers at all childs
-        Sequence< Reference< XControl > >	seqControlList	= getControls();
-        sal_uInt32							nControls		= seqControlList.getLength();
+        Sequence< Reference< XControl > >   seqControlList  = getControls();
+        sal_uInt32                          nControls       = seqControlList.getLength();
 
         for ( sal_uInt32 n=0; n<nControls; n++ )
         {
@@ -189,7 +189,7 @@ void SAL_CALL BaseContainerControl::createPeer(	const	Reference< XToolkit >&		xT
 }
 
 //____________________________________________________________________________________________________________
-//	XControl
+//  XControl
 //____________________________________________________________________________________________________________
 
 sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& ) throw( RuntimeException )
@@ -199,7 +199,7 @@ sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel
 }
 
 //____________________________________________________________________________________________________________
-//	XControl
+//  XControl
 //____________________________________________________________________________________________________________
 
 Reference< XControlModel > SAL_CALL BaseContainerControl::getModel() throw( RuntimeException )
@@ -210,7 +210,7 @@ Reference< XControlModel > SAL_CALL BaseContainerControl::getModel() throw( Runt
 }
 
 //____________________________________________________________________________________________________________
-//	XComponent
+//  XComponent
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException )
@@ -222,17 +222,17 @@ void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException )
     MutexGuard aGuard( m_aMutex );
 
     // remove listeners
-    EventObject	aObject ;
+    EventObject aObject ;
 
     aObject.Source = Reference< XComponent > ( (XControlContainer*)this, UNO_QUERY );
     m_aListeners.disposeAndClear( aObject );
 
     // remove controls
-    Sequence< Reference< XControl > >	seqCtrls	=	getControls();
-    Reference< XControl > *				pCtrls		=	seqCtrls.getArray();
-    sal_uInt32							nCtrls		=	seqCtrls.getLength();
-    sal_uInt32							nMaxCount	=	m_pControlInfoList->Count();
-    sal_uInt32							nCount		=	0;
+    Sequence< Reference< XControl > >   seqCtrls    =   getControls();
+    Reference< XControl > *             pCtrls      =   seqCtrls.getArray();
+    sal_uInt32                          nCtrls      =   seqCtrls.getLength();
+    sal_uInt32                          nMaxCount   =   m_pControlInfoList->Count();
+    sal_uInt32                          nCount      =   0;
 
     for ( nCount = 0; nCount < nMaxCount; ++nCount )
     {
@@ -243,8 +243,8 @@ void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException )
 
     for ( nCount = 0; nCount < nCtrls; ++nCount )
     {
-        pCtrls [ nCount ] -> removeEventListener	( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) )	) ;
-        pCtrls [ nCount ] -> dispose				(		) ;
+        pCtrls [ nCount ] -> removeEventListener    ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) ) ;
+        pCtrls [ nCount ] -> dispose                (       ) ;
     }
 
     // call baseclass
@@ -252,7 +252,7 @@ void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//	XEventListener
+//  XEventListener
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseContainerControl::disposing( const EventObject& rEvent ) throw( RuntimeException )
@@ -264,7 +264,7 @@ void SAL_CALL BaseContainerControl::disposing( const EventObject& rEvent ) throw
 }
 
 //____________________________________________________________________________________________________________
-//	XControlContainer
+//  XControlContainer
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Reference< XControl > & rControl ) throw( RuntimeException )
@@ -281,15 +281,15 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
         MutexGuard aGuard (m_aMutex) ;
 
         // set control
-        pNewControl->sName		= rName 	;
-        pNewControl->xControl	= rControl	;
+        pNewControl->sName      = rName     ;
+        pNewControl->xControl   = rControl  ;
 
         // and insert in list
         m_pControlInfoList->Insert ( pNewControl, LIST_APPEND ) ;
 
         // initialize new control
-        pNewControl->xControl->setContext		( (OWeakObject*)this	) ;
-        pNewControl->xControl->addEventListener	( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) ) ;
+        pNewControl->xControl->setContext       ( (OWeakObject*)this    ) ;
+        pNewControl->xControl->addEventListener ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) ) ;
 
         // when container has a peer ...
         if (getPeer().is())
@@ -305,13 +305,13 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
         if (pInterfaceContainer)
         {
             // Build event
-            ContainerEvent	aEvent ;
+            ContainerEvent  aEvent ;
 
-            aEvent.Source	= *this		;
+            aEvent.Source   = *this     ;
             aEvent.Element <<= rControl ;
 
             // Get all listener
-            OInterfaceIteratorHelper	aIterator (*pInterfaceContainer) ;
+            OInterfaceIteratorHelper    aIterator (*pInterfaceContainer) ;
 
             // Send event
             while ( aIterator.hasMoreElements() )
@@ -323,7 +323,7 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
 }
 
 //____________________________________________________________________________________________________________
-//	XControlContainer
+//  XControlContainer
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseContainerControl::addContainerListener ( const Reference< XContainerListener > & rListener ) throw( RuntimeException )
@@ -335,7 +335,7 @@ void SAL_CALL BaseContainerControl::addContainerListener ( const Reference< XCon
 }
 
 //____________________________________________________________________________________________________________
-//	XControlContainer
+//  XControlContainer
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > & rControl ) throw( RuntimeException )
@@ -354,8 +354,8 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
             if ( rControl == pControl->xControl )
             {
                 //.is it found ... remove listener from control
-                pControl->xControl->removeEventListener	(static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) )) ;
-                pControl->xControl->setContext			( Reference< XInterface >  ()	) ;
+                pControl->xControl->removeEventListener (static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) )) ;
+                pControl->xControl->setContext          ( Reference< XInterface >  ()   ) ;
 
                 // ... free memory
                 delete pControl ;
@@ -366,12 +366,12 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
 
                 if (pInterfaceContainer)
                 {
-                    ContainerEvent	aEvent ;
+                    ContainerEvent  aEvent ;
 
-                    aEvent.Source	 = *this	;
-                    aEvent.Element <<= rControl	;
+                    aEvent.Source    = *this    ;
+                    aEvent.Element <<= rControl ;
 
-                    OInterfaceIteratorHelper	aIterator (*pInterfaceContainer) ;
+                    OInterfaceIteratorHelper    aIterator (*pInterfaceContainer) ;
 
                     while ( aIterator.hasMoreElements() )
                     {
@@ -386,7 +386,7 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
 }
 
 //____________________________________________________________________________________________________________
-//	XControlContainer
+//  XControlContainer
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseContainerControl::removeContainerListener ( const Reference< XContainerListener > & rListener ) throw( RuntimeException )
@@ -398,13 +398,13 @@ void SAL_CALL BaseContainerControl::removeContainerListener ( const Reference< X
 }
 
 //____________________________________________________________________________________________________________
-//	XControlContainer
+//  XControlContainer
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText ) throw( RuntimeException )
 {
     // go down to each parent
-    Reference< XControlContainer > 	xContainer ( getContext(), UNO_QUERY ) ;
+    Reference< XControlContainer >  xContainer ( getContext(), UNO_QUERY ) ;
 
     if ( xContainer.is () )
     {
@@ -413,16 +413,16 @@ void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText 
 }
 
 //____________________________________________________________________________________________________________
-//	XControlContainer
+//  XControlContainer
 //____________________________________________________________________________________________________________
 
-Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString& rName	) throw( RuntimeException )
+Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString& rName ) throw( RuntimeException )
 {
     // Ready for multithreading
-    MutexGuard	aGuard ( Mutex::getGlobalMutex() ) ;
+    MutexGuard  aGuard ( Mutex::getGlobalMutex() ) ;
 
-    Reference< XControl >  xRetControl	=	Reference< XControl >  		() ;
-    sal_uInt32				nControls	=	m_pControlInfoList->Count	() ;
+    Reference< XControl >  xRetControl  =   Reference< XControl >       () ;
+    sal_uInt32              nControls   =   m_pControlInfoList->Count   () ;
 
     // Search for right control
     for( sal_uInt32 nCount = 0; nCount < nControls; ++nCount )
@@ -442,18 +442,18 @@ Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString
 }
 
 //____________________________________________________________________________________________________________
-//	XControlContainer
+//  XControlContainer
 //____________________________________________________________________________________________________________
 
 Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls () throw( RuntimeException )
 {
     // Ready for multithreading
-    MutexGuard	aGuard ( Mutex::getGlobalMutex() ) ;
+    MutexGuard  aGuard ( Mutex::getGlobalMutex() ) ;
 
-    sal_uInt32							nControls		= m_pControlInfoList->Count ()	;
-    Sequence< Reference< XControl > >	aDescriptor		( nControls )					;
-    Reference< XControl > *				pDestination	= aDescriptor.getArray ()		;
-    sal_uInt32							nCount			= 0								;
+    sal_uInt32                          nControls       = m_pControlInfoList->Count ()  ;
+    Sequence< Reference< XControl > >   aDescriptor     ( nControls )                   ;
+    Reference< XControl > *             pDestination    = aDescriptor.getArray ()       ;
+    sal_uInt32                          nCount          = 0                             ;
 
     // Copy controls to sequence
     for( nCount = 0; nCount < nControls; ++nCount )
@@ -467,7 +467,7 @@ Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls () 
 }
 
 //____________________________________________________________________________________________________________
-//	XUnoControlContainer
+//  XUnoControlContainer
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseContainerControl::addTabController ( const Reference< XTabController > & rTabController ) throw( RuntimeException )
@@ -475,9 +475,9 @@ void SAL_CALL BaseContainerControl::addTabController ( const Reference< XTabCont
     // Ready for multithreading
     MutexGuard aGuard (m_aMutex) ;
 
-    sal_uInt32									nOldCount	= m_xTabControllerList.getLength () ;
-    Sequence< Reference< XTabController >  >	aNewList	( nOldCount + 1 ) 					;
-    sal_uInt32									nCount		= 0									;
+    sal_uInt32                                  nOldCount   = m_xTabControllerList.getLength () ;
+    Sequence< Reference< XTabController >  >    aNewList    ( nOldCount + 1 )                   ;
+    sal_uInt32                                  nCount      = 0                                 ;
 
     // Copy old elements of sequence to new list.
     for ( nCount = 0; nCount < nOldCount; ++nCount )
@@ -493,7 +493,7 @@ void SAL_CALL BaseContainerControl::addTabController ( const Reference< XTabCont
 }
 
 //____________________________________________________________________________________________________________
-//	XUnoControlContainer
+//  XUnoControlContainer
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseContainerControl::removeTabController ( const Reference< XTabController > & rTabController ) throw( RuntimeException )
@@ -501,8 +501,8 @@ void SAL_CALL BaseContainerControl::removeTabController ( const Reference< XTabC
     // Ready for multithreading
     MutexGuard aGuard (m_aMutex) ;
 
-    sal_uInt32	nMaxCount	= m_xTabControllerList.getLength ()	;
-    sal_uInt32	nCount		= 0									;
+    sal_uInt32  nMaxCount   = m_xTabControllerList.getLength () ;
+    sal_uInt32  nCount      = 0                                 ;
 
     // Search right tabcontroller ...
     for ( nCount = 0; nCount < nMaxCount; ++nCount )
@@ -517,7 +517,7 @@ void SAL_CALL BaseContainerControl::removeTabController ( const Reference< XTabC
 }
 
 //____________________________________________________________________________________________________________
-//	XUnoControlContainer
+//  XUnoControlContainer
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseContainerControl::setTabControllers ( const Sequence< Reference< XTabController >  >& rTabControllers ) throw( RuntimeException )
@@ -537,7 +537,7 @@ Sequence<Reference< XTabController > > SAL_CALL BaseContainerControl::getTabCont
 }
 
 //____________________________________________________________________________________________________________
-//	XWindow
+//  XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseContainerControl::setVisible ( sal_Bool bVisible ) throw( RuntimeException )
@@ -554,7 +554,7 @@ void SAL_CALL BaseContainerControl::setVisible ( sal_Bool bVisible ) throw( Runt
 }
 
 //____________________________________________________________________________________________________________
-//	protected method
+//  protected method
 //____________________________________________________________________________________________________________
 
 WindowDescriptor* BaseContainerControl::impl_getWindowDescriptor ( const Reference< XWindowPeer > & rParentPeer )
@@ -563,20 +563,20 @@ WindowDescriptor* BaseContainerControl::impl_getWindowDescriptor ( const Referen
     // - if you will change the descriptor-values, you must override thid virtuell function
     // - the caller must release the memory for this dynamical descriptor !!!
 
-    WindowDescriptor	*	aDescriptor	= new WindowDescriptor ;
+    WindowDescriptor    *   aDescriptor = new WindowDescriptor ;
 
-    aDescriptor->Type				= WindowClass_CONTAINER								;
-    aDescriptor->WindowServiceName	= OUString(RTL_CONSTASCII_USTRINGPARAM("window"))	;
-    aDescriptor->ParentIndex		= -1												;
-    aDescriptor->Parent				= rParentPeer										;
-    aDescriptor->Bounds				= getPosSize ()										;
-    aDescriptor->WindowAttributes	= 0													;
+    aDescriptor->Type               = WindowClass_CONTAINER                             ;
+    aDescriptor->WindowServiceName  = OUString(RTL_CONSTASCII_USTRINGPARAM("window"))   ;
+    aDescriptor->ParentIndex        = -1                                                ;
+    aDescriptor->Parent             = rParentPeer                                       ;
+    aDescriptor->Bounds             = getPosSize ()                                     ;
+    aDescriptor->WindowAttributes   = 0                                                 ;
 
     return aDescriptor ;
 }
 
 //____________________________________________________________________________________________________________
-//	protected method
+//  protected method
 //____________________________________________________________________________________________________________
 
 void BaseContainerControl::impl_paint ( sal_Int32 /*nX*/, sal_Int32 /*nY*/, const Reference< XGraphics > & /*rGraphics*/ )
@@ -595,7 +595,7 @@ void BaseContainerControl::impl_paint ( sal_Int32 /*nX*/, sal_Int32 /*nY*/, cons
 }
 
 //____________________________________________________________________________________________________________
-//	private method
+//  private method
 //____________________________________________________________________________________________________________
 
 void BaseContainerControl::impl_activateTabControllers ()
@@ -603,25 +603,25 @@ void BaseContainerControl::impl_activateTabControllers ()
     // Ready for multithreading
     MutexGuard aGuard (m_aMutex) ;
 
-    sal_uInt32	nMaxCount	=	m_xTabControllerList.getLength ()	;
-    sal_uInt32	nCount		=	0									;
+    sal_uInt32  nMaxCount   =   m_xTabControllerList.getLength ()   ;
+    sal_uInt32  nCount      =   0                                   ;
 
     for ( nCount = 0; nCount < nMaxCount; ++nCount )
     {
-         m_xTabControllerList.getArray () [nCount]->setContainer		( this	) ;
-         m_xTabControllerList.getArray () [nCount]->activateTabOrder	(		) ;
+         m_xTabControllerList.getArray () [nCount]->setContainer        ( this  ) ;
+         m_xTabControllerList.getArray () [nCount]->activateTabOrder    (       ) ;
     }
 }
 
 //____________________________________________________________________________________________________________
-//	private method
+//  private method
 //____________________________________________________________________________________________________________
 
 void BaseContainerControl::impl_cleanMemory ()
 {
     // Get count of listitems.
-    sal_uInt32	nMaxCount	=	m_pControlInfoList->Count ()	;
-    sal_uInt32	nCount		=	0								;
+    sal_uInt32  nMaxCount   =   m_pControlInfoList->Count ()    ;
+    sal_uInt32  nCount      =   0                               ;
 
     // Delete all items.
     for ( nCount = 0; nCount < nMaxCount; ++nCount )

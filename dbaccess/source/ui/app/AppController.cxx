@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -425,8 +425,8 @@ void SAL_CALL OApplicationController::disposing()
                 ::comphelper::NamedValueCollection aArgs( m_xModel->getArgs() );
                 if ( true == aArgs.getOrDefault( "PickListEntry", true ) )
                 {
-                    ::rtl::OUString		aFilter;
-                    INetURLObject		aURL( m_xModel->getURL() );
+                    ::rtl::OUString     aFilter;
+                    INetURLObject       aURL( m_xModel->getURL() );
                     const SfxFilter* pFilter = getStandardDatabaseFilter();
                     if ( pFilter )
                         aFilter = pFilter->GetFilterName();
@@ -1445,7 +1445,7 @@ void OApplicationController::describeSupportedFeatures()
 
     implDescribeSupportedFeature( ".uno:Save",               ID_BROWSER_SAVEDOC,        CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:SaveAs",             ID_BROWSER_SAVEASDOC,      CommandGroup::DOCUMENT );
-    implDescribeSupportedFeature( ".uno:SendMail",			 SID_MAIL_SENDDOC,			CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:SendMail",           SID_MAIL_SENDDOC,          CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:DBSendReportAsMail",SID_DB_APP_SENDREPORTASMAIL,
                                                                                         CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:DBSendReportToWriter",SID_DB_APP_SENDREPORTTOWRITER,
@@ -1457,7 +1457,7 @@ void OApplicationController::describeSupportedFeatures()
                                                              SID_FORM_CREATE_REPWIZ_PRE_SEL,
                                                                                         CommandGroup::APPLICATION );
 
-    implDescribeSupportedFeature( ".uno:DBNewReport",		 SID_APP_NEW_REPORT,		CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewReport",        SID_APP_NEW_REPORT,        CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewReportAutoPilot",
                                                              ID_DOCUMENT_CREATE_REPWIZ, CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewReportAutoPilotWithPreSelection",
@@ -1474,7 +1474,7 @@ void OApplicationController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DBNewViewSQL",       SID_DB_NEW_VIEW_SQL,       CommandGroup::INSERT );
 
     implDescribeSupportedFeature( ".uno:DBDelete",           SID_DB_APP_DELETE,         CommandGroup::EDIT );
-    implDescribeSupportedFeature( ".uno:Delete",			 SID_DB_APP_DELETE,         CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:Delete",             SID_DB_APP_DELETE,         CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBRename",           SID_DB_APP_RENAME,         CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBEdit",             SID_DB_APP_EDIT,           CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBEditSqlView",      SID_DB_APP_EDIT_SQL_VIEW,  CommandGroup::EDIT );
@@ -1535,18 +1535,18 @@ void OApplicationController::describeSupportedFeatures()
     // this one should not appear under Tools->Customize->Keyboard
     implDescribeSupportedFeature( ".uno:DBNewReportWithPreSelection",
                                                              SID_APP_NEW_REPORT_PRE_SEL,CommandGroup::INTERNAL );
-    implDescribeSupportedFeature( ".uno:DBDSImport",		SID_DB_APP_DSIMPORT, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBDSExport",		SID_DB_APP_DSEXPORT, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBDBAdmin",			SID_DB_APP_DBADMIN, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBDSImport",        SID_DB_APP_DSIMPORT, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBDSExport",        SID_DB_APP_DSEXPORT, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBDBAdmin",         SID_DB_APP_DBADMIN, CommandGroup::INTERNAL);
 
     // status info
-    implDescribeSupportedFeature( ".uno:DBStatusType",		SID_DB_APP_STATUS_TYPE, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBStatusDBName",	SID_DB_APP_STATUS_DBNAME, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBStatusUserName",	SID_DB_APP_STATUS_USERNAME, CommandGroup::INTERNAL);
-    implDescribeSupportedFeature( ".uno:DBStatusHostName",	SID_DB_APP_STATUS_HOSTNAME, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBStatusType",      SID_DB_APP_STATUS_TYPE, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBStatusDBName",    SID_DB_APP_STATUS_DBNAME, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBStatusUserName",  SID_DB_APP_STATUS_USERNAME, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBStatusHostName",  SID_DB_APP_STATUS_HOSTNAME, CommandGroup::INTERNAL);
 }
 // -----------------------------------------------------------------------------
-OApplicationView*	OApplicationController::getContainer() const
+OApplicationView*   OApplicationController::getContainer() const
 {
     return static_cast< OApplicationView* >( getView() );
 }
@@ -1663,7 +1663,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
                 default:
                     break;
             }
-            //	getContainer()->elementReplaced(getContainer()->getElementType(),sName,sNewName);
+            //  getContainer()->elementReplaced(getContainer()->getElementType(),sName,sNewName);
         }
         catch( Exception& )
         {
@@ -2154,7 +2154,7 @@ void OApplicationController::renameEntry()
                             {
                                 ::rtl::OUString sName = aDialog->getName();
                                 ::rtl::OUString sCatalog = aDialog->getCatalog();
-                                ::rtl::OUString sSchema	 = aDialog->getSchema();
+                                ::rtl::OUString sSchema  = aDialog->getSchema();
 
                                 sNewName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sName, sal_False, ::dbtools::eInDataManipulation );
                             }
@@ -2520,18 +2520,18 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
 
     m_nAsyncDrop = 0;
     m_aAsyncDrop.aDroppedData.clear();
-    m_aAsyncDrop.nType			= pView->getElementType();
-    m_aAsyncDrop.nAction		= _rEvt.mnAction;
-    m_aAsyncDrop.bError			= sal_False;
-    m_aAsyncDrop.bHtml			= sal_False;
-    m_aAsyncDrop.aUrl			= ::rtl::OUString();
+    m_aAsyncDrop.nType          = pView->getElementType();
+    m_aAsyncDrop.nAction        = _rEvt.mnAction;
+    m_aAsyncDrop.bError         = sal_False;
+    m_aAsyncDrop.bHtml          = sal_False;
+    m_aAsyncDrop.aUrl           = ::rtl::OUString();
 
 
     // loop through the available formats and see what we can do ...
     // first we have to check if it is our own format, if not we have to copy the stream :-(
     if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(aDroppedData.GetDataFlavorExVector()) )
     {
-        m_aAsyncDrop.aDroppedData	= ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
+        m_aAsyncDrop.aDroppedData   = ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
 
         // asyncron because we some dialogs and we aren't allowed to show them while in D&D
         m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
@@ -2837,7 +2837,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
     {
         ElementType eType = E_NONE;
         const NamedValue* pIter = aCurrentSelection.getConstArray();
-        const NamedValue* pEnd	= pIter + aCurrentSelection.getLength();
+        const NamedValue* pEnd  = pIter + aCurrentSelection.getLength();
         for(;pIter != pEnd;++pIter)
         {
             if ( pIter->Name.equalsAscii("Type") )
@@ -2999,6 +2999,6 @@ void OApplicationController::impl_migrateScripts_nothrow()
 }
 
 //........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //........................................................................
 

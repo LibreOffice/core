@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ public:
     virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& );
 
     /** returns true if the SmartTag consumes this event. */
-    virtual bool KeyInput( const KeyEvent& rKEvt ); 
+    virtual bool KeyInput( const KeyEvent& rKEvt );
 
     /** returns true if the SmartTag consumes this event. */
     virtual bool RequestHelp( const HelpEvent& rHEvt );
@@ -93,8 +93,8 @@ protected:
     bool mbSelected;
 
 private:
-    SmartTag( const SmartTag& );				// not implemented
-    SmartTag& operator=( const SmartTag& );	// not implemented
+    SmartTag( const SmartTag& );                // not implemented
+    SmartTag& operator=( const SmartTag& ); // not implemented
 };
 
 typedef rtl::Reference< SmartTag > SmartTagReference;
@@ -120,7 +120,7 @@ public:
     bool MouseButtonDown( const MouseEvent& );
 
     /** returns true if a SmartTag consumes this event. */
-    bool KeyInput( const KeyEvent& rKEvt ); 
+    bool KeyInput( const KeyEvent& rKEvt );
 
     /** returns true if a SmartTag consumes this event. */
     bool RequestHelp( const HelpEvent& rHEvt );
@@ -150,8 +150,8 @@ public:
     void CheckPossibilities();
 
 private:
-    SmartTagSet( const SmartTagSet& );				// not implemented
-    SmartTagSet& operator=( const SmartTagSet& );	// not implemented
+    SmartTagSet( const SmartTagSet& );              // not implemented
+    SmartTagSet& operator=( const SmartTagSet& );   // not implemented
 
     /** adds a new smart tag to this set */
     void add( const SmartTagReference& xTag );
@@ -184,5 +184,5 @@ protected:
 
 } // end of namespace sd
 
-#endif		// _SD_SMARTTAG_HXX_
+#endif      // _SD_SMARTTAG_HXX_
 

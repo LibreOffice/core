@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ Transform2DContext::Transform2DContext( ContextHandler& rParent, const Reference
 , mrShape( rShape )
 {
     AttributeList aAttributeList( xAttribs );
-    mrShape.setRotation( aAttributeList.getInteger( XML_rot, 0 ) );	// 60000ths of a degree Positive angles are clockwise; negative angles are counter-clockwise
+    mrShape.setRotation( aAttributeList.getInteger( XML_rot, 0 ) ); // 60000ths of a degree Positive angles are clockwise; negative angles are counter-clockwise
     mrShape.setFlip( aAttributeList.getBool( XML_flipH, sal_False ), aAttributeList.getBool( XML_flipV, sal_False ) );
 }
 
@@ -58,15 +58,15 @@ Reference< XFastContextHandler > Transform2DContext::createFastChildContext( sal
 {
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_off:		// horz/vert translation
+    case NMSP_DRAWINGML|XML_off:        // horz/vert translation
         mrShape.setPosition( Point( xAttribs->getOptionalValue( XML_x ).toInt32(), xAttribs->getOptionalValue( XML_y ).toInt32() ) );
         break;
-    case NMSP_DRAWINGML|XML_ext:		// horz/vert size
+    case NMSP_DRAWINGML|XML_ext:        // horz/vert size
         mrShape.setSize( Size( xAttribs->getOptionalValue( XML_cx ).toInt32(), xAttribs->getOptionalValue( XML_cy ).toInt32() ) );
         break;
 /* todo: what to do?
-    case NMSP_DRAWINGML|XML_chOff:	// horz/vert translation of children
-    case NMSP_DRAWINGML|XML_chExt:	// horz/vert size of children
+    case NMSP_DRAWINGML|XML_chOff:  // horz/vert translation of children
+    case NMSP_DRAWINGML|XML_chExt:  // horz/vert size of children
         break;
 */
     }

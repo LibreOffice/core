@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,22 +55,22 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
 {
     SwTOXSortTabBases aSortArr;
 
-    void 	UpdateMarks( const SwTOXInternational& rIntl,
+    void    UpdateMarks( const SwTOXInternational& rIntl,
                             const SwTxtNode* pOwnChapterNode );
-    void 	UpdateOutline( const SwTxtNode* pOwnChapterNode );
-    void 	UpdateTemplate( const SwTxtNode* pOwnChapterNode );
-    void 	UpdateCntnt( SwTOXElement eType,
+    void    UpdateOutline( const SwTxtNode* pOwnChapterNode );
+    void    UpdateTemplate( const SwTxtNode* pOwnChapterNode );
+    void    UpdateCntnt( SwTOXElement eType,
                             const SwTxtNode* pOwnChapterNode );
-    void 	UpdateTable( const SwTxtNode* pOwnChapterNode );
-    void 	UpdateSequence( const SwTxtNode* pOwnChapterNode );
-    void 	UpdateAuthorities( const SwTOXInternational& rIntl );
-    void	UpdateAll();
+    void    UpdateTable( const SwTxtNode* pOwnChapterNode );
+    void    UpdateSequence( const SwTxtNode* pOwnChapterNode );
+    void    UpdateAuthorities( const SwTOXInternational& rIntl );
+    void    UpdateAll();
 
     // Sortiert einfuegen ins Array fuer die Generierung
-    void	InsertSorted(SwTOXSortTabBase* pBase);
+    void    InsertSorted(SwTOXSortTabBase* pBase);
 
     // Alpha-Trennzeichen bei der Generierung einfuegen
-    void	InsertAlphaDelimitter( const SwTOXInternational& rIntl );
+    void    InsertAlphaDelimitter( const SwTOXInternational& rIntl );
 
     // Textrumpf generieren
     // OD 18.03.2003 #106329# - add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc>
@@ -81,7 +81,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
                        const SwPageDesc*  _pDefaultPageDesc );
 
     // Seitennummerplatzhalter gegen aktuelle Nummern austauschen
-    void	_UpdatePageNum( SwTxtNode* pNd,
+    void    _UpdatePageNum( SwTxtNode* pNd,
                             const SvUShorts& rNums,
                             const SvPtrarr &rDescs,
                             const SvUShorts* pMainEntryNums,
@@ -104,8 +104,8 @@ public:
     // a table-of-content. Default value: false
     void Update( const SfxItemSet* pAttr = 0,
                  const bool        _bNewTOX = false ); // Formatieren
-    void UpdatePageNum();   			// Seitennummern einfuegen
-    TYPEINFO();							// fuers rtti
+    void UpdatePageNum();               // Seitennummern einfuegen
+    TYPEINFO();                         // fuers rtti
 
     BOOL SetPosAtStartEnd( SwPosition& rPos, BOOL bAtStart = TRUE ) const;
 };
@@ -144,4 +144,4 @@ struct SwDefTOXBase_Impl
 
 };
 
-#endif	// _DOCTXM_HXX
+#endif  // _DOCTXM_HXX

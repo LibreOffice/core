@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ void ControlContainer::SetExpansionState (
     ExpansionState aState)
 {
     ::osl::MutexGuard aGuard (maMutex);
-    
+
     bool bResizeNecessary (false);
 
     if (mbMultiSelection)
@@ -252,7 +252,7 @@ sal_uInt32 ControlContainer::GetVisibleControlCount (void) const
         if (maControlList[nIndex]->GetWindow()->IsVisible())
             nCount += 1;
     }
-    
+
     return nCount;
 }
 
@@ -316,7 +316,7 @@ sal_uInt32 ControlContainer::GetPreviousIndex (
 
         // The candidate does not meet our constraints so do one more loop.
     }
-    
+
     return nCandidate;
 }
 
@@ -368,7 +368,7 @@ sal_uInt32 ControlContainer::GetNextIndex (
 
         // The candidate does not meet our constraints so do one more loop.
     }
-    
+
     return nCandidate;
 }
 

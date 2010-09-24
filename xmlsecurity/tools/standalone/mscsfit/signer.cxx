@@ -42,19 +42,19 @@ using namespace ::com::sun::star::xml::crypto ;
 
 int SAL_CALL main( int argc, char **argv )
 {
-    const char* 		n_pCertStore ;
-    HCERTSTORE			n_hStoreHandle ;
+    const char*         n_pCertStore ;
+    HCERTSTORE          n_hStoreHandle ;
 
-    xmlDocPtr			doc = NULL ;
-    xmlNodePtr			tplNode ;
-    xmlNodePtr			tarNode ;
-    xmlAttrPtr			idAttr ;
-    xmlChar*			idValue ;
-    xmlAttrPtr			uriAttr ;
-    xmlChar*			uriValue ;
-    OUString*			uri = NULL ;
-    Reference< XUriBinding >	xUriBinding ;
-    FILE*				dstFile = NULL ;
+    xmlDocPtr           doc = NULL ;
+    xmlNodePtr          tplNode ;
+    xmlNodePtr          tarNode ;
+    xmlAttrPtr          idAttr ;
+    xmlChar*            idValue ;
+    xmlAttrPtr          uriAttr ;
+    xmlChar*            uriValue ;
+    OUString*           uri = NULL ;
+    Reference< XUriBinding >    xUriBinding ;
+    FILE*               dstFile = NULL ;
 
     if( argc !=4 && argc != 5 ) {
         fprintf( stderr, "Usage: %s <file_url of template> <file_url of result> <rdb file>\n" , argv[0] ) ;
@@ -71,7 +71,7 @@ int SAL_CALL main( int argc, char **argv )
     xmlSubstituteEntitiesDefault(1);
 
     #ifndef XMLSEC_NO_XSLT
-    xmlIndentTreeOutput = 1; 
+    xmlIndentTreeOutput = 1;
     #endif // XMLSEC_NO_XSLT
 
     //Initialize the crypto engine
@@ -158,7 +158,7 @@ int SAL_CALL main( int argc, char **argv )
 
     if( strchr( ( const char* )uriValue, '/' ) != NULL && strchr( ( const char* )uriValue, '#' ) == NULL ) {
         fprintf( stdout , "### Find a stream URI [%s]\n", uriValue ) ;
-    //	uri = new ::rtl::OUString( ( const sal_Unicode* )uriValue ) ;
+    //  uri = new ::rtl::OUString( ( const sal_Unicode* )uriValue ) ;
         uri = new ::rtl::OUString( ( const sal_Char* )uriValue, xmlStrlen( uriValue ), RTL_TEXTENCODING_ASCII_US ) ;
     }
 
@@ -288,10 +288,10 @@ int SAL_CALL main( int argc, char **argv )
         xTemplate = xSigner->generate( xTemplate , xSecEnv ) ;
         OSL_ENSURE( xTemplate.is() ,
             "Signer - "
-            "Cannot generate the xml signature" ) ; 
-        
+            "Cannot generate the xml signature" ) ;
+
         SecurityOperationStatus m_nStatus = xTemplate->getStatus();
-        
+
         if (m_nStatus == SecurityOperationStatus_OPERATION_SUCCEEDED)
         {
             fprintf( stdout, "Operation succeeds.\n") ;
@@ -331,7 +331,7 @@ done:
 
     /* Shutdown libxslt/libxml */
     #ifndef XMLSEC_NO_XSLT
-    xsltCleanupGlobals();            
+    xsltCleanupGlobals();
     #endif /* XMLSEC_NO_XSLT */
     xmlCleanupParser();
 

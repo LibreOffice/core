@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -71,14 +71,14 @@ namespace agg
             return 0;
         }
     };
-    
+
 
 
     //===============================================================simul_eq
     template<unsigned Size, unsigned RightCols>
     struct simul_eq
     {
-        static bool solve(const double left[Size][Size], 
+        static bool solve(const double left[Size][Size],
                           const double right[Size][RightCols],
                           double result[Size][RightCols])
         {
@@ -92,7 +92,7 @@ namespace agg
                 for(j = 0; j < Size; j++)
                 {
                     tmp[i][j] = left[i][j];
-                } 
+                }
                 for(j = 0; j < RightCols; j++)
                 {
                     tmp[i][Size + j] = right[i][j];

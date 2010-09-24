@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,21 +63,21 @@
 
 /*************************************************************************
 |*
-|*	SwSaveHdl
+|*  SwSaveHdl
 |*
-|*	Ersterstellung		MA 14. Feb. 95
-|*	Letzte Aenderung	MA 02. Jun. 98
+|*  Ersterstellung      MA 14. Feb. 95
+|*  Letzte Aenderung    MA 02. Jun. 98
 |*
 |*************************************************************************/
 //SwSaveHdl::SwSaveHdl( SwViewImp *pI ) :
-//	pImp( pI ),
-//	bXorVis( FALSE )
+//  pImp( pI ),
+//  bXorVis( FALSE )
 //{
     //if ( pImp->HasDrawView() )
     //{
-    //	bXorVis = pImp->GetDrawView()->IsShownXorVisible( pImp->GetShell()->GetOut());
-    //	if ( bXorVis )
-    //		pImp->GetDrawView()->HideShownXor( pImp->GetShell()->GetOut() );
+    //  bXorVis = pImp->GetDrawView()->IsShownXorVisible( pImp->GetShell()->GetOut());
+    //  if ( bXorVis )
+    //      pImp->GetDrawView()->HideShownXor( pImp->GetShell()->GetOut() );
     //}
 //}
 
@@ -85,16 +85,16 @@
 //SwSaveHdl::~SwSaveHdl()
 //{
     //if ( bXorVis )
-    //	pImp->GetDrawView()->ShowShownXor( pImp->GetShell()->GetOut() );
+    //  pImp->GetDrawView()->ShowShownXor( pImp->GetShell()->GetOut() );
 //}
 
 
 /*************************************************************************
 |*
-|*	SwViewImp::StartAction(), EndAction()
+|*  SwViewImp::StartAction(), EndAction()
 |*
-|*	Ersterstellung		MA 14. Feb. 95
-|*	Letzte Aenderung	MA 14. Sep. 98
+|*  Ersterstellung      MA 14. Feb. 95
+|*  Letzte Aenderung    MA 14. Sep. 98
 |*
 |*************************************************************************/
 
@@ -105,7 +105,7 @@ void SwViewImp::StartAction()
     {
         SET_CURR_SHELL( GetShell() );
         if ( pSh->ISA(SwFEShell) )
-            ((SwFEShell*)pSh)->HideChainMarker();	//Kann sich geaendert haben
+            ((SwFEShell*)pSh)->HideChainMarker();   //Kann sich geaendert haben
         //bResetXorVisibility = GetDrawView()->IsShownXorVisible( GetShell()->GetOut());
         //GetDrawView()->HideShownXor( GetShell()->GetOut() );
     }
@@ -119,18 +119,18 @@ void SwViewImp::EndAction()
     {
         SET_CURR_SHELL( GetShell() );
         //if ( bResetXorVisibility )
-        //	GetDrawView()->ShowShownXor( GetShell()->GetOut() );
+        //  GetDrawView()->ShowShownXor( GetShell()->GetOut() );
         if ( pSh->ISA(SwFEShell) )
-            ((SwFEShell*)pSh)->SetChainMarker();	//Kann sich geaendert haben
+            ((SwFEShell*)pSh)->SetChainMarker();    //Kann sich geaendert haben
     }
 }
 
 /*************************************************************************
 |*
-|*	SwViewImp::LockPaint(), UnlockPaint()
+|*  SwViewImp::LockPaint(), UnlockPaint()
 |*
-|*	Ersterstellung		MA 11. Jun. 96
-|*	Letzte Aenderung	MA 11. Jun. 96
+|*  Ersterstellung      MA 11. Jun. 96
+|*  Letzte Aenderung    MA 11. Jun. 96
 |*
 |*************************************************************************/
 
@@ -141,7 +141,7 @@ void SwViewImp::LockPaint()
     {
         //HMHbShowHdlPaint = GetDrawView()->IsMarkHdlShown();
         //HMHif ( bShowHdlPaint )
-        //HMH	GetDrawView()->HideMarkHdl();
+        //HMH   GetDrawView()->HideMarkHdl();
         bResetHdlHiddenPaint = !GetDrawView()->areMarkHandlesHidden();
         GetDrawView()->hideMarkHandles();
     }
@@ -159,16 +159,16 @@ void SwViewImp::UnlockPaint()
     if ( bResetHdlHiddenPaint )
         GetDrawView()->showMarkHandles();
     //HMHif ( bShowHdlPaint )
-    //HMH	GetDrawView()->ShowMarkHdl();
+    //HMH   GetDrawView()->ShowMarkHdl();
 }
 
 
 /*************************************************************************
 |*
-|*	SwViewImp::PaintLayer(), PaintDispatcher()
+|*  SwViewImp::PaintLayer(), PaintDispatcher()
 |*
-|*	Ersterstellung		MA 20. Dec. 94
-|*	Letzte Aenderung	AMA 04. Jun. 98
+|*  Ersterstellung      MA 20. Dec. 94
+|*  Letzte Aenderung    AMA 04. Jun. 98
 |*
 |*************************************************************************/
 // OD 29.08.2002 #102450#
@@ -251,10 +251,10 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
 
 /*************************************************************************
 |*
-|*	SwViewImp::IsDragPossible()
+|*  SwViewImp::IsDragPossible()
 |*
-|*	Ersterstellung		MA 19. Jan. 93
-|*	Letzte Aenderung	MA 16. Jan. 95
+|*  Ersterstellung      MA 19. Jan. 93
+|*  Letzte Aenderung    MA 16. Jan. 95
 |*
 |*************************************************************************/
 #define WIEDUWILLST 400
@@ -281,19 +281,19 @@ BOOL SwViewImp::IsDragPossible( const Point &rPoint )
     else
         aRect = GetShell()->GetLayout()->Frm();
 
-    aRect.Top(	  aRect.Top()	 - WIEDUWILLST );
+    aRect.Top(    aRect.Top()    - WIEDUWILLST );
     aRect.Bottom( aRect.Bottom() + WIEDUWILLST );
-    aRect.Left(   aRect.Left()	 - WIEDUWILLST );
+    aRect.Left(   aRect.Left()   - WIEDUWILLST );
     aRect.Right(  aRect.Right()  + WIEDUWILLST );
     return aRect.IsInside( rPoint );
 }
 
 /*************************************************************************
 |*
-|*	SwViewImp::NotifySizeChg()
+|*  SwViewImp::NotifySizeChg()
 |*
-|*	Ersterstellung		MA 23. Jun. 93
-|*	Letzte Aenderung	MA 05. Oct. 98
+|*  Ersterstellung      MA 23. Jun. 93
+|*  Letzte Aenderung    MA 05. Oct. 98
 |*
 |*************************************************************************/
 
@@ -330,9 +330,9 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
             //nicht angepasst werden.
             const SwContact *pCont = (SwContact*)GetUserCall(pObj);
             //JP - 16.3.00 Bug 73920: this function might be called by the
-            //				InsertDocument, when a PageDesc-Attribute is
-            //				set on a node. Then the SdrObject must not have
-            //				an UserCall.
+            //              InsertDocument, when a PageDesc-Attribute is
+            //              set on a node. Then the SdrObject must not have
+            //              an UserCall.
             if( !pCont || !pCont->ISA(SwDrawContact) )
                 continue;
 

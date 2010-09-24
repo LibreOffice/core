@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ namespace pcr
         /// access to property states
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >             m_xPropertyState;
         /// the parent of our component
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > 				    m_xObjectParent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >                   m_xObjectParent;
 
         /// the database connection. Owned by us if and only if we created it ourself.
         mutable ::dbtools::SharedConnection                                                     m_xRowSetConnection;
@@ -102,7 +102,7 @@ namespace pcr
         /// our component has a "Command" property
         bool                            m_bHaveCommand : 1;
         /// the class id of the component - if appliable
-        sal_Int16				        m_nClassId;
+        sal_Int16                       m_nClassId;
 
     public:
         FormComponentPropertyHandler(

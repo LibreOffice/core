@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@
 
 #include "view.hxx"
 #include "basesh.hxx"
-#include "wrtsh.hxx"		//
+#include "wrtsh.hxx"        //
 #include "cmdid.h"
-#include "bookmark.hxx"		// SwInsertBookmarkDlg
-#include "IMark.hxx"	
+#include "bookmark.hxx"     // SwInsertBookmarkDlg
+#include "IMark.hxx"
 #include "bookmark.hrc"
 #include "misc.hrc"
 
@@ -79,8 +79,8 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 
     }
 
-    aOkBtn.Enable(!bSelEntries);  	// neue Textmarke
-    aDeleteBtn.Enable(bSelEntries);	// loeschbar?
+    aOkBtn.Enable(!bSelEntries);    // neue Textmarke
+    aDeleteBtn.Enable(bSelEntries); // loeschbar?
 
     return 0;
 }
@@ -97,10 +97,10 @@ IMPL_LINK( SwInsertBookmarkDlg, DeleteHdl, Button *, EMPTYARG )
         aBookmarkBox.RemoveEntry(aBookmarkBox.GetSelectEntryPos(i - 1));
 
     aBookmarkBox.SetText(aEmptyStr);
-    aDeleteBtn.Enable(FALSE);	// keine weiteren Eintraege vorhanden
+    aDeleteBtn.Enable(FALSE);   // keine weiteren Eintraege vorhanden
     // aBookmarkBox.SetText(aEmptyStr);
 
-    aOkBtn.Enable();			// Im OK Handler wird geloescht
+    aOkBtn.Enable();            // Im OK Handler wird geloescht
     return 0;
 }
 
@@ -126,8 +126,8 @@ void SwInsertBookmarkDlg::Apply()
     }
 
     // Textmarke einfuegen
-    USHORT		nLen = aBookmarkBox.GetText().Len();
-    SwBoxEntry	aTmpEntry(aBookmarkBox.GetText(), 0 );
+    USHORT      nLen = aBookmarkBox.GetText().Len();
+    SwBoxEntry  aTmpEntry(aBookmarkBox.GetText(), 0 );
 
     if ( nLen && (aBookmarkBox.GetEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND) )
     {

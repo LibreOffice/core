@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@ namespace connectivity
         class ONDXKey : public ONDXKey_BASE
         {
             friend class ONDXNode;
-            UINT32			nRecord;				/* Satzzeiger				*/
-            ORowSetValue	xValue;					/* Schluesselwert			*/
+            UINT32          nRecord;                /* Satzzeiger               */
+            ORowSetValue    xValue;                 /* Schluesselwert           */
 
         public:
             ONDXKey(UINT32 nRec=0);
@@ -66,13 +66,13 @@ namespace connectivity
 
             virtual const ORowSetValue& getValue() const;
 
-            UINT32 GetRecord() const		{ return nRecord;	}
-            void setRecord(UINT32 _nRec)	{ nRecord = _nRec;	}
-            void   ResetRecord()			{ nRecord = 0;		}
+            UINT32 GetRecord() const        { return nRecord;   }
+            void setRecord(UINT32 _nRec)    { nRecord = _nRec;  }
+            void   ResetRecord()            { nRecord = 0;      }
 
             BOOL operator == (const ONDXKey& rKey) const;
             BOOL operator != (const ONDXKey& rKey) const;
-            BOOL operator <	 (const ONDXKey& rKey) const;
+            BOOL operator <  (const ONDXKey& rKey) const;
             BOOL operator <= (const ONDXKey& rKey) const;
             BOOL operator >  (const ONDXKey& rKey) const;
             BOOL operator >= (const ONDXKey& rKey) const;
@@ -100,7 +100,7 @@ namespace connectivity
             friend  SvStream& operator << (SvStream &rStream, const ONDXPagePtr&);
             friend  SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
 
-            UINT32	nPagePos;		// Position in der Indexdatei
+            UINT32  nPagePos;       // Position in der Indexdatei
 
         public:
             ONDXPagePtr(UINT32 nPos = 0):nPagePos(nPos){}
@@ -112,7 +112,7 @@ namespace connectivity
 
             UINT32 GetPagePos() const {return nPagePos;}
             BOOL HasPage() const {return nPagePos != 0;}
-            //	sal_Bool Is() const { return isValid(); }
+            //  sal_Bool Is() const { return isValid(); }
         };
         //==================================================================
         // Index Seite
@@ -124,26 +124,26 @@ namespace connectivity
             friend  SvStream& operator << (SvStream &rStream, const ONDXPage&);
             friend  SvStream& operator >> (SvStream &rStream, ONDXPage&);
 
-            UINT32		nPagePos;				// Position in der Indexdatei
-            BOOL		bModified : 1;
-            USHORT		nCount;
+            UINT32      nPagePos;               // Position in der Indexdatei
+            BOOL        bModified : 1;
+            USHORT      nCount;
 
-            ONDXPagePtr	aParent,			// VaterSeite
-                        aChild;				// Zeiger auf rechte ChildPage
+            ONDXPagePtr aParent,            // VaterSeite
+                        aChild;             // Zeiger auf rechte ChildPage
             ODbaseIndex& rIndex;
-            ONDXNode*  ppNodes;				// array von Knoten
+            ONDXNode*  ppNodes;             // array von Knoten
 
         public:
             // Knoten Operationen
-            USHORT	Count() const {return nCount;}
+            USHORT  Count() const {return nCount;}
 
-            BOOL	Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft = 0);
-            BOOL	Insert(USHORT nIndex, ONDXNode& rNode);
-            BOOL	Append(ONDXNode& rNode);
-            BOOL	Delete(USHORT);
-            void	Remove(USHORT);
-            void	Release(BOOL bSave = TRUE);
-            void	ReleaseFull(BOOL bSave = TRUE);
+            BOOL    Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft = 0);
+            BOOL    Insert(USHORT nIndex, ONDXNode& rNode);
+            BOOL    Append(ONDXNode& rNode);
+            BOOL    Delete(USHORT);
+            void    Remove(USHORT);
+            void    Release(BOOL bSave = TRUE);
+            void    ReleaseFull(BOOL bSave = TRUE);
 
             // Aufteilen und Zerlegen
             ONDXNode Split(ONDXPage& rPage);
@@ -186,7 +186,7 @@ namespace connectivity
             void SetModified(BOOL bMod) {bModified = bMod;}
             void SetPagePos(UINT32 nPage) {nPagePos = nPage;}
 
-            BOOL Find(const ONDXKey&);	// rek. Abstieg
+            BOOL Find(const ONDXKey&);  // rek. Abstieg
             USHORT FindPos(const ONDXKey& rKey) const;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -221,7 +221,7 @@ namespace connectivity
         SvStream& operator << (SvStream &rStream, const ONDXPage& rPage);
 
 
-        typedef ::std::vector<ONDXPage*>	ONDXPageList;
+        typedef ::std::vector<ONDXPage*>    ONDXPageList;
 
         //==================================================================
         // Index Knoten
@@ -229,8 +229,8 @@ namespace connectivity
         class ONDXNode
         {
             friend class ONDXPage;
-            ONDXPagePtr aChild;				/* naechster Seitenverweis	*/
-            ONDXKey	  aKey;
+            ONDXPagePtr aChild;             /* naechster Seitenverweis  */
+            ONDXKey   aKey;
 
         public:
             ONDXNode(){}
@@ -239,16 +239,16 @@ namespace connectivity
                        :aChild(aPagePtr),aKey(rKey) {}
 
             // verweist der Knoten auf eine Seite
-            BOOL			HasChild() const {return aChild.HasPage();}
+            BOOL            HasChild() const {return aChild.HasPage();}
             // Ist ein Index angegeben, kann gegebenfalls die Seite nachgeladen werden
-            ONDXPagePtr&	GetChild(ODbaseIndex* pIndex = NULL, ONDXPage* = NULL);
+            ONDXPagePtr&    GetChild(ODbaseIndex* pIndex = NULL, ONDXPage* = NULL);
 
-            const ONDXKey& GetKey() const	{ return aKey;}
-            ONDXKey&	   GetKey()			{ return aKey;}
+            const ONDXKey& GetKey() const   { return aKey;}
+            ONDXKey&       GetKey()         { return aKey;}
 
             // Setzen des Childs, ueber Referenz, um die PagePos zu erhalten
-            void			SetChild(ONDXPagePtr aCh = ONDXPagePtr(), ONDXPage* = NULL);
-            void			SetKey(ONDXKey& rKey) {aKey = rKey;}
+            void            SetChild(ONDXPagePtr aCh = ONDXPagePtr(), ONDXPage* = NULL);
+            void            SetKey(ONDXKey& rKey) {aKey = rKey;}
 
             void Write(SvStream &rStream, const ONDXPage& rPage) const;
             void Read(SvStream &rStream, ODbaseIndex&);
@@ -256,32 +256,32 @@ namespace connectivity
         //==================================================================
         // inline implementation
         //==================================================================
-//		inline ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, UINT32 nRec)
-//			: ONDXKey_BASE(eType)
-//			, nRecord(nRec),xValue(rVal)
-//		{
-//		}
+//      inline ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, UINT32 nRec)
+//          : ONDXKey_BASE(eType)
+//          , nRecord(nRec),xValue(rVal)
+//      {
+//      }
 
 
-//		inline ONDXKey::ONDXKey(const rtl::OUString& aStr, UINT32 nRec)
-//					: ONDXKey_BASE(::com::sun::star::sdbc::DataType::VARCHAR)
-//					 ,nRecord(nRec)
-//		{
-//			if (aStr.len())
-//				xValue = aStr;
-//		}
+//      inline ONDXKey::ONDXKey(const rtl::OUString& aStr, UINT32 nRec)
+//                  : ONDXKey_BASE(::com::sun::star::sdbc::DataType::VARCHAR)
+//                   ,nRecord(nRec)
+//      {
+//          if (aStr.len())
+//              xValue = aStr;
+//      }
 
-//		inline ONDXKey::ONDXKey(double aVal, UINT32 nRec)
-//					 : ONDXKey_BASE(::com::sun::star::sdbc::DataType::DOUBLE)
-//					 ,nRecord(nRec)
-//					 ,xValue(aVal)
-//		{
-//		}
+//      inline ONDXKey::ONDXKey(double aVal, UINT32 nRec)
+//                   : ONDXKey_BASE(::com::sun::star::sdbc::DataType::DOUBLE)
+//                   ,nRecord(nRec)
+//                   ,xValue(aVal)
+//      {
+//      }
 
-//		inline ONDXKey::ONDXKey(UINT32 nRec)
-//					 :nRecord(nRec)
-//		{
-//		}
+//      inline ONDXKey::ONDXKey(UINT32 nRec)
+//                   :nRecord(nRec)
+//      {
+//      }
 
         inline ONDXKey::ONDXKey(const ONDXKey& rKey)
                      : ONDXKey_BASE(rKey.getDBType())

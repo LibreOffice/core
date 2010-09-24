@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ public:
     virtual ~SampleAddIn();
 
     // class specific code
-    static ::rtl::OUString	getImplementationName_Static();
+    static ::rtl::OUString  getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static();
 
     sal_Bool getLogicalPosition( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xAxis,
@@ -158,4 +158,4 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 };
 
-#endif	// _SAMPLEADDIN_HXX_
+#endif  // _SAMPLEADDIN_HXX_

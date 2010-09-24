@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _GOODIES_RENDERER_HXX 
-#define _GOODIES_RENDERER_HXX 
+#ifndef _GOODIES_RENDERER_HXX
+#define _GOODIES_RENDERER_HXX
 
 #include <tools/gen.hxx>
 #include <comphelper/propertysethelper.hxx>
@@ -53,13 +53,13 @@ class GraphicRendererVCL : public ::cppu::OWeakAggObject,
                            public ::com::sun::star::graphic::XGraphicRenderer
 {
 public:
-        
+
     GraphicRendererVCL();
     ~GraphicRendererVCL() throw();
 
     static ::rtl::OUString getImplementationName_Static() throw();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
-        
+
 protected:
 
     static ::comphelper::PropertySetInfo* createPropertySetInfo();
@@ -69,7 +69,7 @@ protected:
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
-    
+
     // XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
@@ -82,19 +82,19 @@ protected:
     // PropertySetHelper
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
-        
+
     // XGraphicRenderer
     virtual void SAL_CALL render( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& Graphic ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > mxDevice;
-    
-    OutputDevice*				mpOutDev;
-    Rectangle					maDestRect;
-    ::com::sun::star::uno::Any	maRenderData;
+
+    OutputDevice*               mpOutDev;
+    Rectangle                   maDestRect;
+    ::com::sun::star::uno::Any  maRenderData;
 };
 
 }
 
-#endif 
+#endif

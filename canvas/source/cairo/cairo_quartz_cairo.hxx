@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 namespace cairo {
 
-    class QuartzSurface : public Surface 
+    class QuartzSurface : public Surface
     {
         NSView*               mpView; // if NULL - bg surface
         CairoSurfaceSharedPtr mpSurface;
@@ -64,9 +64,9 @@ namespace cairo {
         virtual void flush() const;
 
         int getDepth() const;
-      
+
         CGContextRef getCGContext() const;
-        
+
     };
 }
 

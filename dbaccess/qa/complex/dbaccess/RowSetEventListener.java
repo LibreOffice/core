@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@ public class RowSetEventListener implements XRowSetApproveListener,XRowSetListen
     public static final int IS_MODIFIED         = 5;
     public static final int IS_NEW              = 6;
     public static final int ROW_COUNT           = 7;
-    public static final int IS_ROW_COUNT_FINAL  = 8;    
-    
+    public static final int IS_ROW_COUNT_FINAL  = 8;
+
     int callPos = 1;
     int calling [];
-    
+
     RowSetEventListener(){
         calling = new int [9];
         clearCalling();

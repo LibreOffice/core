@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,18 +52,18 @@ private:
     DECL_LINK( ActivatePageHdl, TabControl * );
     DECL_LINK( DeactivatePageHdl, TabControl * );
 
-    TabControl		maTabCtrl;
+    TabControl      maTabCtrl;
 
-    HeaderFooterTabPage*	mpSlideTabPage;
-    HeaderFooterTabPage*	mpNotesHandoutsTabPage;
+    HeaderFooterTabPage*    mpSlideTabPage;
+    HeaderFooterTabPage*    mpNotesHandoutsTabPage;
 
-    HeaderFooterSettings	maSlideSettings;
-    HeaderFooterSettings	maNotesHandoutSettings;
-    bool					mbNotOnTitle;
+    HeaderFooterSettings    maSlideSettings;
+    HeaderFooterSettings    maNotesHandoutSettings;
+    bool                    mbNotOnTitle;
 
-    SdDrawDocument*			mpDoc;
-    SdPage*					mpCurrentPage;
-    ViewShell*				mpViewShell;
+    SdDrawDocument*         mpDoc;
+    SdPage*                 mpCurrentPage;
+    ViewShell*              mpViewShell;
 
     void apply( bool bToAll, bool bForceSlides );
     void change( SdUndoGroup* pUndoGroup, SdPage* pPage, const HeaderFooterSettings& rNewSettings );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,9 +121,9 @@ namespace
         const SwPosition& rEnd,
         const SwPosition& rNewPos)
     {
-        for(int nb = 0; nb < 2; ++nb) 
-            if(rStart <= (pPam)->GetBound(BOOL(nb)) && 
-                (pPam)->GetBound(BOOL(nb)) <= rEnd ) 
+        for(int nb = 0; nb < 2; ++nb)
+            if(rStart <= (pPam)->GetBound(BOOL(nb)) &&
+                (pPam)->GetBound(BOOL(nb)) <= rEnd )
                 (pPam)->GetBound(BOOL(nb)) = rNewPos;
     };
 
@@ -138,7 +138,7 @@ namespace
                 (pPam)->GetBound(BOOL(nb)).nNode = rNewPos.nNode;
                 (pPam)->GetBound(BOOL(nb)).nContent.Assign(
                     const_cast<SwIndexReg*>(rNewPos.nContent.GetIdxReg()),
-                    nCntIdx + (pPam)->GetBound(BOOL(nb)).nContent.GetIndex()); 
+                    nCntIdx + (pPam)->GetBound(BOOL(nb)).nContent.GetIndex());
             }
     }
 }

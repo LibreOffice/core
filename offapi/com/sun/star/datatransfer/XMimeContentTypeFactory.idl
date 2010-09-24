@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,12 +44,12 @@
 module com { module sun { module star { module datatransfer {
 
 //-------------------------------------------------------------------------
-/** Implementations of this interface do create a 
+/** Implementations of this interface do create a
     <type scope="com::sun::star::datatransfer">XMimeContentType</type> from
-    a given string that represents a MIME content-type 
-    (see <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a> and 
+    a given string that represents a MIME content-type
+    (see <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a> and
     <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>).
-    
+
 */
 published interface XMimeContentTypeFactory : com::sun::star::uno::XInterface
 {
@@ -57,16 +57,16 @@ published interface XMimeContentTypeFactory : com::sun::star::uno::XInterface
     /** Creates an object that implements <type>XMimeContentType</type>.
 
         @param aContentType
-        A string that represents a MIME content-type as specified in 
-        <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a> and 
+        A string that represents a MIME content-type as specified in
+        <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a> and
         <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>.
 
         @returns
         An object that implements <type>XMimeContentType</type>.
-        
+
         @throws com::sun::star::lang::IllegalArgumentException
-        if the string does not conform to 
-        <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a> and 
+        if the string does not conform to
+        <a href="ftp://ftp.isi.edu/in-notes/rfc2045.txt">Rfc2045</a> and
         <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>;
         <p><strong>Exception:</strong> Quoted parameter values may contain spaces.</p>
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace sdr
         protected:
             // the owner of this ObjectContactOfPageView. Set from constructor and not
             // to be changed in any way.
-            SdrPageWindow&										mrPageWindow;
+            SdrPageWindow&                                      mrPageWindow;
 
             // Process the whole displaying, the real version
             void DoProcessDisplay(DisplayInfo& rDisplayInfo);
@@ -104,7 +104,7 @@ namespace sdr
 
             // check if asynchronious graphis loading is allowed. Default is sal_False.
             virtual bool IsAsynchronGraphicsLoadingAllowed() const;
-        
+
             // check if buffering of MasterPages is allowed. Default is sal_False.
             virtual bool IsMasterPageBufferingAllowed() const;
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,20 +24,20 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_reflection_XCompoundTypeDescription_idl__ 
-#define __com_sun_star_reflection_XCompoundTypeDescription_idl__ 
- 
-#ifndef __com_sun_star_reflection_XTypeDescription_idl__ 
-#include <com/sun/star/reflection/XTypeDescription.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module reflection {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_reflection_XCompoundTypeDescription_idl__
+#define __com_sun_star_reflection_XCompoundTypeDescription_idl__
+
+#ifndef __com_sun_star_reflection_XTypeDescription_idl__
+#include <com/sun/star/reflection/XTypeDescription.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
 /** Reflects a compound type, i.e. a struct or exception.
 
     <p>For struct types, this type is superseded by
@@ -45,15 +45,15 @@
     types.</p>
 */
 published interface XCompoundTypeDescription: com::sun::star::reflection::XTypeDescription
-{ 
+{
     /** Returns the type of the base type of the compound type.
         If the compound does not have a base type, the method returns a null interface.
-        
+
         @return
                 base interface or null
     */
-    com::sun::star::reflection::XTypeDescription getBaseType(); 
-    
+    com::sun::star::reflection::XTypeDescription getBaseType();
+
     /** Returns the member types of the struct/exception in IDL declaration order.
 
         <p>For a polymorphic struct type template, a member of parameterized
@@ -65,21 +65,21 @@ published interface XCompoundTypeDescription: com::sun::star::reflection::XTypeD
         @return
                 members of struct/exception
     */
-    sequence<com::sun::star::reflection::XTypeDescription> getMemberTypes(); 
-    
+    sequence<com::sun::star::reflection::XTypeDescription> getMemberTypes();
+
     /** Returns the member names of the struct/exception in IDL declaration order.
 
         @return
                 members names of struct/exception
     */
-    sequence<string> getMemberNames(); 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+    sequence<string> getMemberNames();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

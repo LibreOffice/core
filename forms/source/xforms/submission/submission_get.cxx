@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,12 +51,12 @@ using namespace std;
 
 
 CSubmissionGet::CSubmissionGet(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
-    : CSubmission(aURL, aFragment) 
+    : CSubmission(aURL, aFragment)
 {
 }
 
 CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler)
-{    
+{
     // GET always uses apllicatin/x-www-formurlencoded
     auto_ptr< CSerialization > apSerialization(new CSerializationURLEncoded());
     apSerialization->setSource(m_aFragment);
@@ -83,7 +83,7 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
         OStringBuffer aUTF8QueryURL(OUStringToOString(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE),
             RTL_TEXTENCODING_UTF8));
         OStringBuffer aQueryString;
-        
+
         const sal_Int32 size = 1024;
         sal_Int32 n = 0;
         Sequence< sal_Int8 > aByteBuffer(size);

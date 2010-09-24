@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,8 +94,8 @@ void SfxMacroConfig::Release_Impl()
 struct SfxMacroConfig_Impl
 {
     SfxMacroInfoArr_Impl    aArr;
-    sal_uInt32					nEventId;
-    sal_Bool					bWaitingForCallback;
+    sal_uInt32                  nEventId;
+    sal_Bool                    bWaitingForCallback;
 
                             SfxMacroConfig_Impl()
                             : nEventId( 0 )
@@ -234,7 +234,7 @@ SfxMacroInfo::SfxMacroInfo(bool _bAppBasic, const String& rLibName,
 //==========================================================================
 
 SfxMacroInfo::SfxMacroInfo(bool _bAppBasic, const String& rQualifiedName )
-:	pHelpText(0),
+:   pHelpText(0),
     nRefCnt(0),
     bAppBasic(_bAppBasic),
     nSlotId(0),
@@ -274,7 +274,7 @@ SfxMacroInfo::~SfxMacroInfo()
 sal_Bool SfxMacroInfo::operator==(const SfxMacroInfo& rOther) const
 {
     if ( GetQualifiedName() == rOther.GetQualifiedName() &&
-            bAppBasic	== rOther.bAppBasic )
+            bAppBasic   == rOther.bAppBasic )
         return sal_True;
     else
         return sal_False;
@@ -432,8 +432,8 @@ SvStream& operator >> (SvStream& rStream, SfxMacroInfo& rInfo)
     else
     {
         String aInput;
-        rStream	>> nAppBasic;
-        rStream.ReadByteString(aDocName,RTL_TEXTENCODING_UTF8);					// Vorsicht: kann bei AppName Unsinn sein!
+        rStream >> nAppBasic;
+        rStream.ReadByteString(aDocName,RTL_TEXTENCODING_UTF8);                 // Vorsicht: kann bei AppName Unsinn sein!
         rStream.ReadByteString(rInfo.aLibName,RTL_TEXTENCODING_UTF8);
         rStream.ReadByteString(rInfo.aModuleName,RTL_TEXTENCODING_UTF8);
         rStream.ReadByteString(aInput,RTL_TEXTENCODING_UTF8);
@@ -521,14 +521,14 @@ SFX_EXEC_STUB( SfxApplication, MacroExec_Impl )
 
 sal_uInt16 SfxMacroConfig::GetSlotId(SfxMacroInfoPtr pInfo)
 {
-    sal_uInt16 nCount = pImp->aArr.Count(); 	 // Macro suchen
+    sal_uInt16 nCount = pImp->aArr.Count();      // Macro suchen
     sal_uInt16 i;
     for (i=0; i<nCount; i++)
         if ((*(pImp->aArr)[i]) == (*pInfo))
             break;
 
     if (i == nCount)
-    {									// Macro noch unbekannt
+    {                                   // Macro noch unbekannt
         nCount = aIdArray.Count();
         sal_uInt16 n;
         for (n=0; n<nCount; n++) // freie SlotId suchen
@@ -829,9 +829,9 @@ IMPL_LINK( SfxMacroConfig, EventHdl_Impl, SfxMacroInfo*, pInfo )
     return 0;
 }
 
-sal_Bool SfxMacroConfig::IsBasic( 
-    SbxObject* /*pVCtrl*/, 
-    const String& rCode, 
+sal_Bool SfxMacroConfig::IsBasic(
+    SbxObject* /*pVCtrl*/,
+    const String& rCode,
     BasicManager* pMgr )
 {
     sal_Bool bFound;
@@ -841,11 +841,11 @@ sal_Bool SfxMacroConfig::IsBasic(
     return bFound;
 }
 
-ErrCode SfxMacroConfig::Call( 
+ErrCode SfxMacroConfig::Call(
     SbxObject* /*pVCtrl*/,
-    const String& rCode, 
-    BasicManager* pMgr, 
-    SbxArray *pArgs, 
+    const String& rCode,
+    BasicManager* pMgr,
+    SbxArray *pArgs,
     SbxValue *pRet )
 {
     SfxApplication *pApp = SFX_APP();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@
 
 
 
-// 16bit error flag constants for use in the 
+// 16bit error flag constants for use in the
 // SvXMLExport/SvXMLImport error flags
 #define ERROR_NO                0x0000
 #define ERROR_DO_NOTHING        0x0001
@@ -117,16 +117,16 @@ class XMLErrors
     typedef ::std::vector<ErrorRecord> ErrorList;
 
     ErrorList aErrors;  /// list of error records
-    
+
 public:
 
     XMLErrors();
     ~XMLErrors();
 
     /// add a new entry to the list of error messages
-    void AddRecord( 
+    void AddRecord(
         sal_Int32 nId, /// error ID == error flags + error class + error number
-        const ::com::sun::star::uno::Sequence< 
+        const ::com::sun::star::uno::Sequence<
                   ::rtl::OUString> & rParams,  /// parameters for error message
         const ::rtl::OUString& rExceptionMessage, /// original exception string
         sal_Int32 nRow,                     /// XLocator: file row number
@@ -134,23 +134,23 @@ public:
         const ::rtl::OUString& rPublicId,   /// XLocator: file public ID
         const ::rtl::OUString& rSystemId ); /// XLocator: file system ID
 
-    void AddRecord( 
+    void AddRecord(
         sal_Int32 nId, /// error ID == error flags + error class + error number
-        const ::com::sun::star::uno::Sequence< 
+        const ::com::sun::star::uno::Sequence<
                   ::rtl::OUString> & rParams,  /// parameters for error message
         const ::rtl::OUString& rExceptionMessage, /// original exception string
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
                  ::com::sun::star::xml::sax::XLocator> & rLocator); /// location
 
-    void AddRecord( 
+    void AddRecord(
         sal_Int32 nId, /// error ID == error flags + error class + error number
-        const ::com::sun::star::uno::Sequence< 
+        const ::com::sun::star::uno::Sequence<
                   ::rtl::OUString> & rParams,  /// parameters for error message
         const ::rtl::OUString& rExceptionMessage); /// original exception string
 
-    void AddRecord( 
+    void AddRecord(
         sal_Int32 nId, /// error ID == error flags + error class + error number
-        const ::com::sun::star::uno::Sequence< 
+        const ::com::sun::star::uno::Sequence<
                   ::rtl::OUString> & rParams); /// parameters for error message
 
 

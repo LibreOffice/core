@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ public:
     inline long Height() const;
     inline long Left()   const;
     inline long Right()  const;
-    inline long Top()	 const;
+    inline long Top()    const;
     inline long Bottom() const;
 
     //Damit Layoutseitig per Memberpointer auf die Member von Pos und SSize
@@ -107,8 +107,8 @@ public:
     inline Rectangle  SVRect() const;
 
     //Zortech wuerde hier fehlerhaften Code erzeugen.
-//	inline operator SRectangle()  const;
-//	inline operator Rectangle() const { return Rectangle( aPos, aSize ); }
+//  inline operator SRectangle()  const;
+//  inline operator Rectangle() const { return Rectangle( aPos, aSize ); }
 
     // Ausgabeoperator fuer die Debugging-Gemeinde
     friend SvStream &operator<<( SvStream &rStream, const SwRect &rRect );
@@ -253,7 +253,7 @@ inline long SwRect::Right()  const
 {
     return m_Size.getWidth() ? m_Point.getX() + m_Size.getWidth() - 1 : m_Point.getX();
 }
-inline long SwRect::Top()	 const
+inline long SwRect::Top()    const
 {
     return m_Point.Y();
 }
@@ -361,4 +361,4 @@ inline SwRect::SwRect( long X, long Y, long W, long H ) :
 }
 
 
-#endif	//_SWRECT_HXX
+#endif  //_SWRECT_HXX

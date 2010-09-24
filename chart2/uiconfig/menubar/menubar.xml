@@ -116,7 +116,7 @@
                 <menu:menuitem menu:id=".uno:DiagramType" menu:helpid="30528" menu:label="" />
                 <menu:menuitem menu:id=".uno:DataRanges" menu:helpid="30514" menu:label="" />
                 <menu:menuitem menu:id=".uno:View3D" menu:helpid="30527" menu:label="" />
-            
+
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu" menu:label="" >
@@ -148,7 +148,6 @@
             <menu:menuitem menu:id=".uno:ExtendedHelp"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HelpSupport"/>
-            <menu:menuitem menu:id=".uno:OnlineRegistrationDlg"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:About"/>
         </menu:menupopup>

@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -64,7 +64,7 @@ namespace agg
             while(*str)
             {
                 unsigned glyph = *str;
-                const int8u* bits = m_font + 4 + num_chars * 2 + 
+                const int8u* bits = m_font + 4 + num_chars * 2 +
                                     value(m_font + 4 + (glyph - start_char) * 2);
                 w += *bits;
                 ++str;
@@ -78,7 +78,7 @@ namespace agg
             unsigned start_char = m_font[2];
             unsigned num_chars = m_font[3];
 
-            m_bits = m_font + 4 + num_chars * 2 + 
+            m_bits = m_font + 4 + num_chars * 2 +
                      value(m_font + 4 + (glyph - start_char) * 2);
 
             m_glyph_width = *m_bits++;
@@ -96,7 +96,7 @@ namespace agg
                 r->y1 = int(y) - m_font[1] + 1;
                 r->y2 = r->y1 + m_font[0] - 1;
             }
-            r->dx = m_glyph_width; 
+            r->dx = m_glyph_width;
             r->dy = 0;
         }
 

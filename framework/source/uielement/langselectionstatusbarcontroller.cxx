@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,9 +92,9 @@ namespace framework
 
 ////////////////////////////////////////////////////////////
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   LangSelectionStatusbarController     	    ,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   LangSelectionStatusbarController            ,
                                             OWeakObject                             ,
-                                            SERVICENAME_STATUSBARCONTROLLER		    ,
+                                            SERVICENAME_STATUSBARCONTROLLER         ,
                                             IMPLEMENTATIONNAME_LANGSELECTIONSTATUSBARCONTROLLER
                                         )
 
@@ -199,10 +199,10 @@ throw (::com::sun::star::uno::RuntimeException)
     Reference< awt::XPopupMenu > subPopupMenu(m_xServiceManager->createInstance( s_sPopupMenu ), UNO_QUERY );
 
     SvtLanguageTable    aLanguageTable;
-    
+
     // get languages to be displayed in the menu
     std::set< OUString > aLangItems;
-    FillLangItems( aLangItems, aLanguageTable, m_xFrame, m_aLangGuessHelper, 
+    FillLangItems( aLangItems, aLanguageTable, m_xFrame, m_aLangGuessHelper,
             m_nScriptType, m_aCurLang, m_aKeyboardLang, m_aGuessedTextLang );
 
     //
@@ -431,7 +431,7 @@ throw ( RuntimeException )
         else if ( !Event.State.hasValue() )
         {
             pStatusBar->SetItemText( m_nID, String() );
-            m_bShowMenu = sal_False;	// no language -> no menu
+            m_bShowMenu = sal_False;    // no language -> no menu
         }
     }
 }

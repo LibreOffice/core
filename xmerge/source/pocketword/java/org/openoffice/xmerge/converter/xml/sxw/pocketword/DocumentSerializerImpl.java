@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ import java.io.IOException;
 
 
 /**
- * <p>Pocket Word implementation of <code>DocumentDeserializer</code> 
+ * <p>Pocket Word implementation of <code>DocumentDeserializer</code>
  * for use by {@link
  * org.openoffice.xmerge.converter.xml.sxw.pocketword.PluginFactoryImpl
  * PluginFactoryImpl}.</p>
@@ -57,17 +57,17 @@ import java.io.IOException;
  * @author      Mark Murnane
  * @version 1.1
  */
-public final class DocumentSerializerImpl 
+public final class DocumentSerializerImpl
             implements DocumentSerializer, OfficeConstants {
-                
+
     private PocketWordDocument pswDoc;
     private SxwDocument        sxwDoc;
-    
+
     private StyleCatalog styleCat = null;
-    
+
     private boolean inList = false;
-    
-    
+
+
     /**
      *  <p>Initialises a new <code>DocumentSerializerImpl</code> using the.<br>
      *     supplied <code>Document</code></p>
@@ -76,14 +76,14 @@ public final class DocumentSerializerImpl
      *    org.openoffice.xmerge.converter.xml.sxw.SxwDocument SxwDocument}
      *    object.</p>
      *
-     *  @param  document  The <code>Document</code> to convert.    
+     *  @param  document  The <code>Document</code> to convert.
      */
     public DocumentSerializerImpl(Document doc) {
         sxwDoc = (SxwDocument)doc;
         pswDoc = new PocketWordDocument(sxwDoc.getName());
     }
-    
-    
+
+
     /**
      *  <p>Convert the data passed into the <code>DocumentSerializerImpl</code>
      *  constructor into Pocket Word format.</p>
@@ -98,28 +98,28 @@ public final class DocumentSerializerImpl
      *  @throws  ConvertException  If any conversion error occurs.
      *  @throws  IOException       If any I/O error occurs.
      */
-    public ConvertData serialize() throws IOException, ConvertException {      
+    public ConvertData serialize() throws IOException, ConvertException {
         ConvertData cd = new ConvertData();
-        
+
         org.w3c.dom.Document doc = sxwDoc.getContentDOM();
-        
+
         // Load any style info before traversing the document content tree
         loadStyles();
-        
+
         NodeList list = doc.getElementsByTagName(TAG_OFFICE_BODY);
-        
+
         int len = list.getLength();
         if (len > 0) {
             Node node = list.item(0);
             traverseBody(node);
         }
-        
+
         cd.addDocument(pswDoc);
-        
+
         return cd;
     }
-    
-    
+
+
     /*
      * Handles the loading of defined styles from the style.xml file as well
      * as automatic styles from the content.xml file.
@@ -132,19 +132,19 @@ public final class DocumentSerializerImpl
         org.w3c.dom.Document styleDom   = sxwDoc.getStyleDOM();
 
         styleCat = new StyleCatalog(25);
-        
+
         NodeList nl = null;
-        String families[] = new String[] { PocketWordConstants.TEXT_STYLE_FAMILY, 
-                                           PocketWordConstants.PARAGRAPH_STYLE_FAMILY, 
+        String families[] = new String[] { PocketWordConstants.TEXT_STYLE_FAMILY,
+                                           PocketWordConstants.PARAGRAPH_STYLE_FAMILY,
                                            PocketWordConstants.PARAGRAPH_STYLE_FAMILY };
-        Class classes[]   = new Class[] { TextStyle.class, 
-                                          ParaStyle.class, 
+        Class classes[]   = new Class[] { TextStyle.class,
+                                          ParaStyle.class,
                                           TextStyle.class };
-        
+
         String[] styleTypes = new String[] { TAG_OFFICE_STYLES,
                                              TAG_OFFICE_AUTOMATIC_STYLES,
                                              TAG_OFFICE_MASTER_STYLES };
-        
+
         /*
          * Documents converted from PSW -> SXW will not have a style.xml when
          * being converted back to PSW.  This would occur if a document was
@@ -154,49 +154,49 @@ public final class DocumentSerializerImpl
          * portions of a complete Writer SXW file.
          */
         if (styleDom != null) {
-           // Process the Style XML tree 
-           for (int i = 0; i < styleTypes.length; i++ ) {                                   
+           // Process the Style XML tree
+           for (int i = 0; i < styleTypes.length; i++ ) {
                nl = styleDom.getElementsByTagName(styleTypes[i]);
                if (nl.getLength() != 0) {
                    styleCat.add(nl.item(0), families, classes, null, false);
                }
            }
         }
-                                             
+
         /*
-         * Process the content XML for any other style info.  
+         * Process the content XML for any other style info.
          * Should only be automatic types here.
          */
-        for (int i = 0; i < styleTypes.length; i++ ) {                                   
+        for (int i = 0; i < styleTypes.length; i++ ) {
             nl = contentDom.getElementsByTagName(styleTypes[i]);
             if (nl.getLength() != 0) {
                 styleCat.add(nl.item(0), families, classes, null, false);
             }
         }
     }
-    
-    
+
+
     /*
-     * Process the office:body tag.  
+     * Process the office:body tag.
      */
     private void traverseBody(Node node) throws IOException, ConvertException {
-        
+
         if (node.hasChildNodes()) {
             NodeList nList = node.getChildNodes();
             int len = nList.getLength();
-            
+
             for (int i = 0; i < len; i++) {
                 Node child = nList.item(i);
-                
+
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
                     String nodeName = child.getNodeName();
-                    
-                    if (nodeName.equals(TAG_PARAGRAPH) 
+
+                    if (nodeName.equals(TAG_PARAGRAPH)
                             || nodeName.equals(TAG_HEADING)) {
                         traverseParagraph(child);
                     }
-                    
-                    if (nodeName.equals(TAG_UNORDERED_LIST) || 
+
+                    if (nodeName.equals(TAG_UNORDERED_LIST) ||
                         nodeName.equals(TAG_ORDERED_LIST)) {
                         traverseList(child);
                     }
@@ -204,67 +204,67 @@ public final class DocumentSerializerImpl
             }
         }
     }
-    
-    
+
+
     /*
      * Process a text:p tag
      */
     private void traverseParagraph(Node node) throws IOException, ConvertException {
         String styleName = getAttribute(node, ATTRIBUTE_TEXT_STYLE_NAME);
-        
-        ParaStyle pstyle = (ParaStyle)styleCat.lookup(styleName, 
-                                PocketWordConstants.PARAGRAPH_STYLE_FAMILY, null, 
+
+        ParaStyle pstyle = (ParaStyle)styleCat.lookup(styleName,
+                                PocketWordConstants.PARAGRAPH_STYLE_FAMILY, null,
                                 ParaStyle.class);
         if (pstyle != null) {
             pstyle = (ParaStyle)pstyle.getResolved();
         }
-            
-        TextStyle tstyle = (TextStyle)styleCat.lookup(styleName, 
-                                PocketWordConstants.PARAGRAPH_STYLE_FAMILY, null, 
+
+        TextStyle tstyle = (TextStyle)styleCat.lookup(styleName,
+                                PocketWordConstants.PARAGRAPH_STYLE_FAMILY, null,
                                 TextStyle.class);
         if (pstyle != null) {
             tstyle = (TextStyle)tstyle.getResolved();
         }
-                
+
         try {
             pswDoc.addParagraph(pstyle, inList);
-        } 
+        }
         catch (Exception e) {
             throw new ConvertException(
                                 "Error adding paragraph to PocketWordDocument.\n"
                                 + e.toString());
         }
-        
+
         traverseParagraphContents(node, tstyle);
     }
-    
-    
+
+
     /*
      * Process the contents of a paragraph.  This method handles situations
-     * where the paragraph contains multiple children, each representing a 
+     * where the paragraph contains multiple children, each representing a
      * differently formatted piece of text.
      */
-    private void traverseParagraphContents (Node node, TextStyle defTextStyle) 
+    private void traverseParagraphContents (Node node, TextStyle defTextStyle)
         throws IOException, ConvertException {
         // First up, get the style of this little bit
         String styleName = getAttribute(node, ATTRIBUTE_TEXT_STYLE_NAME);
-        TextStyle tStyle = (TextStyle)styleCat.lookup(styleName, 
-                                PocketWordConstants.TEXT_STYLE_FAMILY, null, 
+        TextStyle tStyle = (TextStyle)styleCat.lookup(styleName,
+                                PocketWordConstants.TEXT_STYLE_FAMILY, null,
                                 TextStyle.class);
-                
+
         if (tStyle == null) {
             tStyle = defTextStyle;
         }
-        
+
         if (node.hasChildNodes()) {
             NodeList nList = node.getChildNodes();
             int len = nList.getLength();
-                       
+
             for (int i = 0; i < len; i++) {
-                
+
                 Node child = nList.item(i);
                 short nodeType = child.getNodeType();
-               
+
                 switch (nodeType) {
                     case Node.TEXT_NODE:
                         String s = child.getNodeValue();
@@ -274,31 +274,31 @@ public final class DocumentSerializerImpl
                             }
                             catch (Exception e) {
                                 throw new ConvertException(
-                                    "Error adding data to paragraph in " + 
+                                    "Error adding data to paragraph in " +
                                     "PocketWordDocument.\n" + e.toString());
-                                    
+
                             }
                         }
                         break;
-                        
+
                     case Node.ELEMENT_NODE:
                         if (child.getNodeName().equals(TAG_SPACE)) {
                             StringBuffer sb = new StringBuffer("");
                             int count = 1;
-                            
+
                             NamedNodeMap map = child.getAttributes();
-                            
+
                             if (map.getLength() > 0) {
                                 Node attr = map.getNamedItem(ATTRIBUTE_SPACE_COUNT);
                                 count = Integer.parseInt(attr.getNodeValue().trim());
                             }
-                            
+
                             for ( ; count > 0; count--) {
                                 sb.append(" ");
                             }
-                            
+
                             /*
-                             * May want to look at style info for spaces.  Could  
+                             * May want to look at style info for spaces.  Could
                              * be important when calculating font metrics.
                              */
                             try {
@@ -306,9 +306,9 @@ public final class DocumentSerializerImpl
                             }
                             catch (Exception e) {
                                 throw new ConvertException(
-                                    "Error adding data to paragraph in " + 
+                                    "Error adding data to paragraph in " +
                                     "PocketWordDocument.\n" + e.toString());
-                                    
+
                             }
                         }
                         else if (child.getNodeName().equals(TAG_TAB_STOP)) {
@@ -317,9 +317,9 @@ public final class DocumentSerializerImpl
                             }
                             catch (Exception e) {
                                 throw new ConvertException(
-                                    "Error adding data to paragraph in " + 
+                                    "Error adding data to paragraph in " +
                                     "PocketWordDocument.\n" + e.toString());
-                                    
+
                             }
                         }
                         else if (child.getNodeName().equals(TAG_LINE_BREAK)) {
@@ -355,41 +355,41 @@ public final class DocumentSerializerImpl
             pswDoc.addParagraphData("", tStyle);
         }
     }
-    
-    
+
+
     /*
      * Process a text:ordered-list or text:unordered-list tag.  Pocket Word has
-     * no concept of a list so there is no need to differentiate between the 
+     * no concept of a list so there is no need to differentiate between the
      * two.
      *
      * Each item on the list contains a text:p node.
      */
     private void traverseList (Node node) throws IOException, ConvertException {
         inList = true;
-        
+
         if (node.hasChildNodes()) {
             NodeList nList = node.getChildNodes();
             int len = nList.getLength();
-            
+
             for (int i = 0; i < len; i++) {
                 Node child = nList.item(i);
-                
+
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
                     String nodeName = child.getNodeName();
-                    
+
                     if (nodeName.equals(TAG_LIST_ITEM)) {
                         traverseListItem(child);
                     }
                 }
             }
         }
-        
+
         inList = false;
     }
-    
-    
+
+
     /*
-     * Process a text:list-item node.  They usually contain have a single 
+     * Process a text:list-item node.  They usually contain have a single
      * text:p child but can also have sections or other lists.
      *
      * For this case, only paragraphs are supported.
@@ -398,13 +398,13 @@ public final class DocumentSerializerImpl
         if (node.hasChildNodes()) {
             NodeList nList = node.getChildNodes();
             int len = nList.getLength();
-            
+
             for (int i = 0; i < len; i++) {
                 Node child = nList.item(i);
-                
+
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
                     String nodeName = child.getNodeName();
-                    
+
                     if (nodeName.equals(TAG_PARAGRAPH)) {
                         traverseParagraph(child);
                     }
@@ -413,21 +413,21 @@ public final class DocumentSerializerImpl
         }
 
     }
-    
-    
+
+
     /*
      * Utility method to retrieve a Node attribute.
      */
     private String getAttribute (Node node, String attribute) {
         NamedNodeMap attrNodes = node.getAttributes();
-        
+
         if (attrNodes != null) {
             Node attr = attrNodes.getNamedItem(attribute);
             if (attr != null) {
                 return attr.getNodeValue();
             }
         }
-        
+
         return null;
     }
 }

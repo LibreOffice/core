@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -155,7 +155,7 @@ SfxScriptLibraryContainer::SfxScriptLibraryContainer( const uno::Reference< embe
 // Methods to get library instances of the correct type
 SfxLibrary* SfxScriptLibraryContainer::implCreateLibrary( const OUString& aName )
 {
-    (void)aName;	// Only needed for SfxDialogLibrary
+    (void)aName;    // Only needed for SfxDialogLibrary
     SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxMSF, mxSFI );
     return pRet;
 }
@@ -164,7 +164,7 @@ SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink
     ( const OUString& aName, const OUString& aLibInfoFileURL,
       const OUString& StorageURL, sal_Bool ReadOnly )
 {
-    (void)aName;	// Only needed for SfxDialogLibrary
+    (void)aName;    // Only needed for SfxDialogLibrary
     SfxLibrary* pRet =
         new SfxScriptLibrary
             ( maModifiable, mxMSF, mxSFI, aLibInfoFileURL, StorageURL, ReadOnly );
@@ -246,7 +246,7 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
 
 Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
     ( const Reference < XNameContainer >& xLib,
-      const OUString& aElementName, const OUString& aFile, 
+      const OUString& aElementName, const OUString& aFile,
       const uno::Reference< io::XInputStream >& xInStream )
 {
     Any aRetAny;
@@ -287,7 +287,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
 
     InputSource source;
     source.aInputStream = xInput;
-    source.sSystemId 	= aFile;
+    source.sSystemId    = aFile;
 
     // start parsing
     xmlscript::ModuleDescriptor aMod;
@@ -360,9 +360,9 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
             {
                 try
                 {
-                    xVBACodeNameAccess.set( xSF->createInstance( 
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( 
-                            "ooo.vba.VBAObjectModuleObjectProvider"))), 
+                    xVBACodeNameAccess.set( xSF->createInstance(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "ooo.vba.VBAObjectModuleObjectProvider"))),
                         UNO_QUERY );
                 }
                 catch(uno::Exception&) {}
@@ -371,7 +371,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
             {
                 try
                 {
-                    aModInfo.ModuleObject.set( xVBACodeNameAccess->getByName( aElementName), uno::UNO_QUERY );    
+                    aModInfo.ModuleObject.set( xVBACodeNameAccess->getByName( aElementName), uno::UNO_QUERY );
                 }
                 catch(uno::Exception&)
                 {
@@ -1015,7 +1015,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                             throw io::IOException(); // read access denied, seems to be impossible
 
                         Reference< XNameContainer > xLib( pLib );
-                        Any aAny = importLibraryElement( xLib, 
+                        Any aAny = importLibraryElement( xLib,
                                         aElementName, aSourceStreamName,
                                            xInStream );
                         if( pLib->hasByName( aElementName ) )
@@ -1121,9 +1121,9 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                     throw io::IOException(); // read access denied, seems to be impossible
 
                                 Reference< XNameContainer > xLib( pLib );
-                                Any aAny = importLibraryElement( xLib, 
-                                                aElementName, 
-                                                aSourceStreamName, 
+                                Any aAny = importLibraryElement( xLib,
+                                                aElementName,
+                                                aSourceStreamName,
                                                 xInStream );
                                 if( pLib->hasByName( aElementName ) )
                                 {
@@ -1152,11 +1152,11 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
         }
     }
 
-//REMOVE	    // If the password is verified the library must remain modified, because
-//REMOVE	    // otherwise for saving the storage would be copied and that doesn't work
-//REMOVE	    // with mtg's storages when the password is verified
-//REMOVE	    if( !pLib->mbPasswordVerified )
-//REMOVE	        pLib->mbModified = sal_False;
+//REMOVE        // If the password is verified the library must remain modified, because
+//REMOVE        // otherwise for saving the storage would be copied and that doesn't work
+//REMOVE        // with mtg's storages when the password is verified
+//REMOVE        if( !pLib->mbPasswordVerified )
+//REMOVE            pLib->mbModified = sal_False;
     return bRet;
 }
 
@@ -1243,7 +1243,7 @@ SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
 // Provide modify state including resources
 sal_Bool SfxScriptLibrary::isModified( void )
 {
-    return implIsModified();	// No resources
+    return implIsModified();    // No resources
 }
 
 void SfxScriptLibrary::storeResources( void )
@@ -1287,7 +1287,7 @@ bool SAL_CALL SfxScriptLibrary::isLibraryElementValid( ::com::sun::star::uno::An
 IMPLEMENT_FORWARD_XINTERFACE2( SfxScriptLibrary, SfxLibrary, SfxScriptLibrary_BASE );
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( SfxScriptLibrary, SfxLibrary, SfxScriptLibrary_BASE );
 
-script::ModuleInfo SAL_CALL 
+script::ModuleInfo SAL_CALL
 SfxScriptLibrary::getModuleInfo( const ::rtl::OUString& ModuleName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     if ( !hasModuleInfo( ModuleName ) )

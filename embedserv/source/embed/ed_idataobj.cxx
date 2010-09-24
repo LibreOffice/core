@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -189,7 +189,7 @@ STDMETHODIMP EmbedDocument_Impl::GetDataHere( FORMATETC * pFormatetc, STGMEDIUM 
     {
         if ( !( pFormatetc->tymed & TYMED_ISTORAGE ) )
             return DV_E_TYMED;
-            
+
         if ( !pMedium->pstg ) return STG_E_MEDIUMFULL;
 
         HRESULT hr = SaveTo_Impl( pMedium->pstg );
@@ -217,17 +217,17 @@ STDMETHODIMP EmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )
         {
             if ( !( pFormatetc->tymed & TYMED_ENHMF ) )
                 return DV_E_TYMED;
-    
+
             return S_OK;
         }
         else if ( pFormatetc->cfFormat == CF_METAFILEPICT )
         {
-              if ( !( pFormatetc->tymed & TYMED_MFPICT ) ) 
+              if ( !( pFormatetc->tymed & TYMED_MFPICT ) )
                 return DV_E_TYMED;
-    
+
             return S_OK;
         }
-        else 
+        else
         {
             CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatA( "Embed Source" );
             CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
@@ -235,7 +235,7 @@ STDMETHODIMP EmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )
             {
                 if ( !( pFormatetc->tymed & TYMED_ISTORAGE ) )
                     return DV_E_TYMED;
-                    
+
                 return S_OK;
             }
         }
@@ -253,7 +253,7 @@ STDMETHODIMP EmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pFormatetcIn
     pFormatetcOut->ptd = NULL;
     pFormatetcOut->cfFormat = pFormatetcIn->cfFormat;
     pFormatetcOut->dwAspect = DVASPECT_CONTENT;
-    
+
     if ( pFormatetcIn->cfFormat == CF_ENHMETAFILE )
     {
         pFormatetcOut->tymed = TYMED_ENHMF;
@@ -264,7 +264,7 @@ STDMETHODIMP EmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pFormatetcIn
           pFormatetcOut->tymed = TYMED_MFPICT;
         return S_OK;
     }
-    else 
+    else
     {
         CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatA( "Embed Source" );
         CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
@@ -296,7 +296,7 @@ STDMETHODIMP EmbedDocument_Impl::DAdvise( FORMATETC * pFormatetc, DWORD advf, IA
     if ( !m_pDAdviseHolder )
         if ( !SUCCEEDED( CreateDataAdviseHolder( &m_pDAdviseHolder ) ) || !m_pDAdviseHolder )
             return E_OUTOFMEMORY;
-    
+
     return m_pDAdviseHolder->Advise( (IDataObject*)this, pFormatetc, advf, pAdvSink, pdwConnection );
 }
 
@@ -305,7 +305,7 @@ STDMETHODIMP EmbedDocument_Impl::DUnadvise( DWORD dwConnection )
     if ( !m_pDAdviseHolder )
         if ( !SUCCEEDED( CreateDataAdviseHolder( &m_pDAdviseHolder ) ) || !m_pDAdviseHolder )
             return E_OUTOFMEMORY;
-    
+
     return m_pDAdviseHolder->Unadvise( dwConnection );
 }
 
@@ -314,11 +314,11 @@ STDMETHODIMP EmbedDocument_Impl::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
     if ( !m_pDAdviseHolder )
         if ( !SUCCEEDED( CreateDataAdviseHolder( &m_pDAdviseHolder ) ) || !m_pDAdviseHolder )
             return E_OUTOFMEMORY;
-    
+
     return m_pDAdviseHolder->EnumAdvise( ppenumAdvise );
 }
 
-// Fix strange warnings about some 
+// Fix strange warnings about some
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed
 #if defined(_MSC_VER)

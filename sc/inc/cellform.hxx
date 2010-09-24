@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@ class SvNumberFormatter;
 class Color;
 
 enum ScForceTextFmt {
-    ftDontForce,			// Zahlen als Zahlen
-    ftForce,				// Zahlen als Text
-    ftCheck					// ist das Zahlenformat ein Textformat?
+    ftDontForce,            // Zahlen als Zahlen
+    ftForce,                // Zahlen als Text
+    ftCheck                 // ist das Zahlenformat ein Textformat?
 };
 
 //------------------------------------------------------------------------
@@ -48,13 +48,13 @@ enum ScForceTextFmt {
 class SC_DLLPUBLIC ScCellFormat
 {
 public:
-    static void		GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,
+    static void     GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,
                                Color** ppColor, SvNumberFormatter& rFormatter,
                                BOOL bNullVals = TRUE,
                                BOOL bFormula  = FALSE,
                                ScForceTextFmt eForceTextFmt = ftDontForce );
 
-    static void		GetInputString( ScBaseCell* pCell, ULONG nFormat, String& rString,
+    static void     GetInputString( ScBaseCell* pCell, ULONG nFormat, String& rString,
                                       SvNumberFormatter& rFormatter );
 };
 

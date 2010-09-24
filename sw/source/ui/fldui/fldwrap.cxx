@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, USHORT nId) :
 
 IMPL_LINK( SwChildWinWrapper, UpdateHdl, void*, EMPTYARG )
 {
-    GetWindow()->Activate();	// Dialog aktualisieren
+    GetWindow()->Activate();    // Dialog aktualisieren
 
     return 0;
 }
@@ -98,7 +98,7 @@ BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *)
     if (m_pDocSh != GetOldDocShell())
     {
         m_aUpdateTimer.Stop();
-        bRet = TRUE;			// Sofortiges Update
+        bRet = TRUE;            // Sofortiges Update
     }
     else
         m_aUpdateTimer.Start();
@@ -129,7 +129,7 @@ SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, USHORT nId,
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
-            
+
     AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent, DLG_FLD_INSERT );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");
     pDlgInterface = pDlg;
@@ -146,7 +146,7 @@ BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
     BOOL bRet;
 
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)	// Sofort aktualisieren, Dok-Wechsel
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // Sofort aktualisieren, Dok-Wechsel
     {
         pDlgInterface->ReInitDlg();
     }
@@ -186,11 +186,11 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, USHORT nId,
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
-            
+
     AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent, DLG_FLD_INSERT );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");
-    pDlgInterface = pDlg; 
-    
+    pDlgInterface = pDlg;
+
     pWindow = pDlg->GetWindow();
     pDlg->ActivateDatabasePage();
     pDlg->Start();

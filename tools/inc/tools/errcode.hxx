@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,10 +120,10 @@ inline ULONG ERRCODE_TOERROR( ULONG x )
 #define ERRCODE_AREA_SVX_END             (ERRCODE_AREA_SO-1)
 #define ERRCODE_AREA_SO                  (9UL   << ERRCODE_AREA_SHIFT)
 #define ERRCODE_AREA_SO_END              (ERRCODE_AREA_SBX-1)
-#define ERRCODE_AREA_SBX				 (10UL   << ERRCODE_AREA_SHIFT)
-#define ERRCODE_AREA_SBX_END			 ((11UL  << ERRCODE_AREA_SHIFT) - 1)
-#define ERRCODE_AREA_DB 				 (11UL   << ERRCODE_AREA_SHIFT)
-#define ERRCODE_AREA_DB_END			 	 ((12UL  << ERRCODE_AREA_SHIFT) - 1)
+#define ERRCODE_AREA_SBX                 (10UL   << ERRCODE_AREA_SHIFT)
+#define ERRCODE_AREA_SBX_END             ((11UL  << ERRCODE_AREA_SHIFT) - 1)
+#define ERRCODE_AREA_DB                  (11UL   << ERRCODE_AREA_SHIFT)
+#define ERRCODE_AREA_DB_END              ((12UL  << ERRCODE_AREA_SHIFT) - 1)
 #define ERRCODE_AREA_JAVA                (12UL  << ERRCODE_AREA_SHIFT)
 #define ERRCODE_AREA_JAVA_END            ((13UL  << ERRCODE_AREA_SHIFT) - 1)
 #define ERRCODE_AREA_UUI                 (13UL  << ERRCODE_AREA_SHIFT)
@@ -173,9 +173,9 @@ inline ULONG ERRCODE_TOERROR( ULONG x )
 #define ERRCODE_CLASS_EXPORT             (18UL  << ERRCODE_CLASS_SHIFT)
 #define ERRCODE_CLASS_FILTER             (19UL  << ERRCODE_CLASS_SHIFT)
 #define ERRCODE_CLASS_SO                 (20UL  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_SBX				 (21UL  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_RUNTIME			 (22UL  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_COMPILER			 (23UL  << ERRCODE_CLASS_SHIFT)
+#define ERRCODE_CLASS_SBX                (21UL  << ERRCODE_CLASS_SHIFT)
+#define ERRCODE_CLASS_RUNTIME            (22UL  << ERRCODE_CLASS_SHIFT)
+#define ERRCODE_CLASS_COMPILER           (23UL  << ERRCODE_CLASS_SHIFT)
 
 #define ERRCODE_NONE                  (0UL)
 #define ERRCODE_ABORT                 ERRCODE_IO_ABORT
@@ -238,23 +238,23 @@ inline ULONG ERRCODE_TOERROR( ULONG x )
                                          ERRCODE_AREA_IO)
 #define ERRCODE_IO_RECURSIVE          (30UL |ERRCODE_CLASS_PARAMETER|\
                                          ERRCODE_AREA_IO)
-#define ERRCODE_IO_NAMETOOLONG		  (31UL |ERRCODE_CLASS_PARAMETER|\
+#define ERRCODE_IO_NAMETOOLONG        (31UL |ERRCODE_CLASS_PARAMETER|\
                                          ERRCODE_AREA_IO)
-#define ERRCODE_IO_INVALIDLENGTH	  (32UL |ERRCODE_CLASS_PARAMETER|\
+#define ERRCODE_IO_INVALIDLENGTH      (32UL |ERRCODE_CLASS_PARAMETER|\
                                          ERRCODE_AREA_IO)
-#define ERRCODE_IO_CURRENTDIR		  (33UL |ERRCODE_CLASS_PARAMETER|\
+#define ERRCODE_IO_CURRENTDIR         (33UL |ERRCODE_CLASS_PARAMETER|\
                                          ERRCODE_AREA_IO)
-#define ERRCODE_IO_NOTSAMEDEVICE	  (34UL |ERRCODE_CLASS_PARAMETER|\
+#define ERRCODE_IO_NOTSAMEDEVICE      (34UL |ERRCODE_CLASS_PARAMETER|\
                                          ERRCODE_AREA_IO)
-#define ERRCODE_IO_DEVICENOTREADY	  (35UL |ERRCODE_CLASS_READ|\
+#define ERRCODE_IO_DEVICENOTREADY     (35UL |ERRCODE_CLASS_READ|\
                                          ERRCODE_AREA_IO)
-#define ERRCODE_IO_BADCRC			  (36UL |ERRCODE_CLASS_READ|\
+#define ERRCODE_IO_BADCRC             (36UL |ERRCODE_CLASS_READ|\
                                          ERRCODE_AREA_IO)
-#define ERRCODE_IO_WRITEPROTECTED	  (37UL |ERRCODE_CLASS_ACCESS|\
+#define ERRCODE_IO_WRITEPROTECTED     (37UL |ERRCODE_CLASS_ACCESS|\
                                          ERRCODE_AREA_IO)
-#define ERRCODE_IO_BROKENPACKAGE	  (38UL |ERRCODE_CLASS_FORMAT|\
+#define ERRCODE_IO_BROKENPACKAGE      (38UL |ERRCODE_CLASS_FORMAT|\
                                          ERRCODE_AREA_IO)
-#define ERRCODE_IO_NOTSTORABLEINBINARYFORMAT	  (39UL |ERRCODE_CLASS_FORMAT|\
+#define ERRCODE_IO_NOTSTORABLEINBINARYFORMAT      (39UL |ERRCODE_CLASS_FORMAT|\
                                          ERRCODE_AREA_IO)
 
 // FsysErrorCodes

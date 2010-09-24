@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ class COMPHELPER_DLLPUBLIC MimeConfigurationHelper
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xObjectConfig;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xVerbsConfig;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xMediaTypeConfig;
-    
+
 public:
 
     MimeConfigurationHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
@@ -64,7 +64,7 @@ public:
                                             GetConfigurationByPath( const ::rtl::OUString& aPath );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetObjConfiguration();
-    
+
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetVerbsConfiguration();
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetMediaTypeConfiguration();
 
@@ -112,7 +112,7 @@ public:
     ::rtl::OUString UpdateMediaDescriptorWithFilterName(
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObject );
-    sal_Bool AddFilterNameCheckOwnFile( 
+    sal_Bool AddFilterNameCheckOwnFile(
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr );
 
     ::rtl::OUString GetDefaultFilterFromServiceName( const ::rtl::OUString& aServName, sal_Int32 nVersion );

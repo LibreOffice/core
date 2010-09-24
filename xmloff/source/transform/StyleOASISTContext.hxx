@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,21 +34,21 @@
 
 class XMLTransformerActions;
 class XMLPropertiesTContext_Impl;
-class XMLStyleOASISTContext : public XMLPersElemContentTContext 
+class XMLStyleOASISTContext : public XMLPersElemContentTContext
 {
     ::rtl::Reference< XMLPropertiesTContext_Impl > m_xPropContext;
 
     sal_Bool m_bPersistent;
     sal_Bool m_bControlStyle;
 
-    ::rtl::OUString	m_aStyleFamily;
+    ::rtl::OUString m_aStyleFamily;
 public:
     TYPEINFO();
 
-    XMLStyleOASISTContext( XMLTransformerBase& rTransformer, 
+    XMLStyleOASISTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_Bool bPersistent=sal_False );
-    XMLStyleOASISTContext( XMLTransformerBase& rTransformer, 
+    XMLStyleOASISTContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken,
@@ -72,5 +72,5 @@ public:
     static XMLTransformerActions *CreateTransformerActions( sal_uInt16 nType );
 };
 
-#endif	//  _XMLOFF_STYLEOASISTCONTEXT_HXX
+#endif  //  _XMLOFF_STYLEOASISTCONTEXT_HXX
 

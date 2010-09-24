@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#include <svx/svxids.hrc>  
+#include <svx/svxids.hrc>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
@@ -96,8 +96,8 @@ using namespace com::sun::star::lang;
 
 SdActionDlg::SdActionDlg (
     ::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView ) :
-        SfxSingleTabDialog	( pParent, *pAttr, TP_ANIMATION_ACTION ),
-        rOutAttrs			( *pAttr )
+        SfxSingleTabDialog  ( pParent, *pAttr, TP_ANIMATION_ACTION ),
+        rOutAttrs           ( *pAttr )
 {
     // FreeResource();
     SfxTabPage* pNewPage = SdTPAction::Create( this, rOutAttrs );
@@ -117,32 +117,32 @@ SdActionDlg::SdActionDlg (
 
 /*************************************************************************
 |*
-|*	Action-TabPage
+|*  Action-TabPage
 |*
 \************************************************************************/
 
 SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
-        SfxTabPage  	( pWindow, SdResId( TP_ANIMATION ), rInAttrs ),
+        SfxTabPage      ( pWindow, SdResId( TP_ANIMATION ), rInAttrs ),
 
-        aFtAction   	( this, SdResId( FT_ACTION ) ),
-        aLbAction   	( this, SdResId( LB_ACTION ) ),
-        aFtTree     	( this, SdResId( FT_TREE ) ),
-        aLbTree     	( this, SdResId( LB_TREE ) ),
-        aLbTreeDocument	( this, SdResId( LB_TREE_DOCUMENT ) ),
-        aLbOLEAction	( this, SdResId( LB_OLE_ACTION ) ),
-        aFlSeparator	( this, SdResId( FL_SEPARATOR ) ),
-        aEdtSound		( this, SdResId( EDT_SOUND ) ),
-        aEdtBookmark  	( this, SdResId( EDT_BOOKMARK ) ),
-        aEdtDocument	( this, SdResId( EDT_DOCUMENT ) ),
+        aFtAction       ( this, SdResId( FT_ACTION ) ),
+        aLbAction       ( this, SdResId( LB_ACTION ) ),
+        aFtTree         ( this, SdResId( FT_TREE ) ),
+        aLbTree         ( this, SdResId( LB_TREE ) ),
+        aLbTreeDocument ( this, SdResId( LB_TREE_DOCUMENT ) ),
+        aLbOLEAction    ( this, SdResId( LB_OLE_ACTION ) ),
+        aFlSeparator    ( this, SdResId( FL_SEPARATOR ) ),
+        aEdtSound       ( this, SdResId( EDT_SOUND ) ),
+        aEdtBookmark    ( this, SdResId( EDT_BOOKMARK ) ),
+        aEdtDocument    ( this, SdResId( EDT_DOCUMENT ) ),
         aEdtProgram     ( this, SdResId( EDT_PROGRAM ) ),
         aEdtMacro       ( this, SdResId( EDT_MACRO ) ),
-        aBtnSearch		( this, SdResId( BTN_SEARCH ) ),
-        aBtnSeek    	( this, SdResId( BTN_SEEK ) ),
+        aBtnSearch      ( this, SdResId( BTN_SEARCH ) ),
+        aBtnSeek        ( this, SdResId( BTN_SEEK ) ),
 
-        rOutAttrs		( rInAttrs ),
-        mpView			( NULL ),
-        mpDoc			( NULL ),
-        bTreeUpdated	( FALSE )
+        rOutAttrs       ( rInAttrs ),
+        mpView          ( NULL ),
+        mpDoc           ( NULL ),
+        bTreeUpdated    ( FALSE )
 {
     FreeResource();
 
@@ -226,11 +226,11 @@ void SdTPAction::Construct()
             {
                 pGrafObj = (SdrGrafObj*) pObj;
             }
-//			// VCXControl ?
-//			else if( pObj->IsA( TYPE( VCSbxDrawObject ) ) )
-//			{
-//				bDisableAll = TRUE;
-//			}
+//          // VCXControl ?
+//          else if( pObj->IsA( TYPE( VCSbxDrawObject ) ) )
+//          {
+//              bDisableAll = TRUE;
+//          }
         }
     }
     if( pGrafObj )
@@ -344,7 +344,7 @@ BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
 void SdTPAction::Reset( const SfxItemSet& rAttrs )
 {
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
-    String		aFileName;
+    String      aFileName;
 
     // aLbAction
     if( rAttrs.GetItemState( ATTR_ACTION ) != SFX_ITEM_DONTCARE )
@@ -447,7 +447,7 @@ void SdTPAction::OpenFileDialog()
 
         if (bSound)
         {
-            SdOpenSoundFileDialog	aFileDialog;
+            SdOpenSoundFileDialog   aFileDialog;
 
             if( !aFile.Len() )
                 aFile = SvtPathOptions().GetGraphicPath();
@@ -709,7 +709,7 @@ IMPL_LINK( SdTPAction, CheckFileHdl, void *, EMPTYARG )
         // Ueberpruefen, ob es eine gueltige Draw-Datei ist
         SfxMedium aMedium( aFile,
                     STREAM_READ | STREAM_NOCREATE,
-                    TRUE ); 			  // Download
+                    TRUE );               // Download
 
         if( aMedium.IsStorage() )
         {
@@ -774,8 +774,8 @@ void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
 
 void SdTPAction::SetEditText( String const & rStr )
 {
-    presentation::ClickAction 	eCA = GetActualClickAction();
-    String						aText(rStr);
+    presentation::ClickAction   eCA = GetActualClickAction();
+    String                      aText(rStr);
 
     // possibly convert URI back to system path
     switch( eCA )
@@ -794,7 +794,7 @@ void SdTPAction::SetEditText( String const & rStr )
                 String aTmpStr(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
 
                 if( aTmpStr.Len() )
-                    aText = aTmpStr;	// was a system path
+                    aText = aTmpStr;    // was a system path
             }
             break;
         default:
@@ -915,8 +915,8 @@ USHORT SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
         case presentation::ClickAction_DOCUMENT:         return STR_CLICK_ACTION_DOCUMENT;
         case presentation::ClickAction_PROGRAM:          return STR_CLICK_ACTION_PROGRAM;
         case presentation::ClickAction_MACRO:            return STR_CLICK_ACTION_MACRO;
-        case presentation::ClickAction_SOUND:			 return STR_CLICK_ACTION_SOUND;
-        case presentation::ClickAction_VERB:			 return STR_CLICK_ACTION_VERB;
+        case presentation::ClickAction_SOUND:            return STR_CLICK_ACTION_SOUND;
+        case presentation::ClickAction_VERB:             return STR_CLICK_ACTION_VERB;
         case presentation::ClickAction_STOPPRESENTATION: return STR_CLICK_ACTION_STOPPRESENTATION;
         default: DBG_ERROR( "Keine StringResource fuer ClickAction vorhanden!" );
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,23 +40,23 @@ namespace canvas
         Use this interface to represent a surface of raw pixel (e.g. a
         bitmap) to the canvas rendering framework.
      */
-    struct IColorBuffer 
+    struct IColorBuffer
     {
         /// The underlying pixel format for this buffer
         enum Format
         {
-            // 24-bit RGB pixel format, 8 bits per channel. 
+            // 24-bit RGB pixel format, 8 bits per channel.
             FMT_R8G8B8,
-            
-            // 32-bit ARGB pixel format with alpha, 8 bits per channel. 
+
+            // 32-bit ARGB pixel format with alpha, 8 bits per channel.
             FMT_A8R8G8B8,
-            
-            // 32-bit RGB pixel format, 8 bits per channel. 
+
+            // 32-bit RGB pixel format, 8 bits per channel.
             FMT_X8R8G8B8,
-            
-            // for enum to 32bit    
+
+            // for enum to 32bit
             FMT_UNKNOWN = static_cast<sal_uInt32>(-1)
-        }; 
+        };
 
         virtual ~IColorBuffer() {}
 

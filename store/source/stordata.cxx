@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,7 +129,7 @@ static storeError store_truncate_Impl (
             if (eErrCode != store_E_InvalidChecksum)
                 return eErrCode;
         }
-  
+
         // Check for complete truncation.
         if ((nDouble + nSingle) == 0)
         {
@@ -159,7 +159,7 @@ static storeError store_truncate_Impl (
         storeError eErrCode = rBIOS.loadObjectAt (aTriple, nAddr);
         if (eErrCode != store_E_None)
             return eErrCode;
-  
+
         // Truncate to 'nTriple', 'nDouble', 'nSingle' pages.
         eErrCode = aTriple.truncate (nTriple, nDouble, nSingle, rBIOS);
         if (eErrCode != store_E_None)

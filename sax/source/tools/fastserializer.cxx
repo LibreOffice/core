@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,6 +33,10 @@
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 
 #include <string.h>
+
+#if DEBUG
+#include <cstdio>
+#endif
 
 using ::rtl::OString;
 using ::rtl::OUString;
@@ -97,12 +101,12 @@ namespace sax_fastparser {
         }
         return sBuf.makeStringAndClear();
     }
-    
+
     void FastSaxSerializer::write( const OUString& s )
     {
         OString sOutput( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ) );
-        writeBytes( Sequence< sal_Int8 >( 
-                    reinterpret_cast< const sal_Int8*>( sOutput.getStr() ), 
+        writeBytes( Sequence< sal_Int8 >(
+                    reinterpret_cast< const sal_Int8*>( sOutput.getStr() ),
                     sOutput.getLength() ) );
     }
 
@@ -111,7 +115,7 @@ namespace sax_fastparser {
         if (!mxOutputStream.is())
             return;
     }
-    
+
     void SAL_CALL FastSaxSerializer::writeId( ::sal_Int32 nElement )
     {
         if( HAS_NAMESPACE( nElement ) ) {
@@ -149,11 +153,11 @@ namespace sax_fastparser {
             write(Namespace);
             writeBytes(aColon);
         }
-        
+
         write(Name);
-        
+
         writeFastAttributeList(Attribs);
-            
+
         writeBytes(aClosingBracket);
     }
 
@@ -183,9 +187,9 @@ namespace sax_fastparser {
             write(Namespace);
             writeBytes(aColon);
         }
-        
+
         write(Name);
-        
+
         writeBytes(aClosingBracket);
     }
 
@@ -216,11 +220,11 @@ namespace sax_fastparser {
             write(Namespace);
             writeBytes(aColon);
         }
-        
+
         write(Name);
 
         writeFastAttributeList(Attribs);
-            
+
         writeBytes(aSlashAndClosingBracket);
     }
 
@@ -232,7 +236,7 @@ namespace sax_fastparser {
 
         write( aChars );
     }
-    
+
     void SAL_CALL FastSaxSerializer::setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream )
         throw (::com::sun::star::uno::RuntimeException)
     {
@@ -258,7 +262,7 @@ namespace sax_fastparser {
             write(escapeXml(pAttr[i].Value));
             writeBytes(aQuote);
         }
-        
+
         Sequence< FastAttribute > aFastAttrSeq = Attribs->getFastAttributes();
         const FastAttribute *pFastAttr = aFastAttrSeq.getConstArray();
         sal_Int32 nFastAttrLength = aFastAttrSeq.getLength();
@@ -268,11 +272,11 @@ namespace sax_fastparser {
 
             sal_Int32 nToken = pFastAttr[j].Token;
             writeId(nToken);
-            
+
             writeBytes(aEqualSignAndQuote);
-    
+
             write(escapeXml(Attribs->getValue(pFastAttr[j].Token)));
-            
+
             writeBytes(aQuote);
         }
     }
@@ -321,6 +325,28 @@ namespace sax_fastparser {
         maMarkStack.push( ForMerge() );
     }
 
+#if DEBUG
+    void FastSaxSerializer::printMarkStack( )
+    {
+        ::std::stack< ForMerge > aCopy( maMarkStack );
+        int nSize = aCopy.size();
+        int i = 0;
+        while ( !aCopy.empty() )
+        {
+            fprintf( stderr, "%d\n", nSize - i );
+
+            ForMerge aMarks = aCopy.top( );
+            aMarks.print();
+
+
+            fprintf( stderr, "\n" );
+
+            aCopy.pop( );
+            i++;
+        }
+    }
+#endif
+
     void FastSaxSerializer::mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType )
     {
         if ( maMarkStack.empty() )
@@ -356,9 +382,28 @@ namespace sax_fastparser {
     {
         merge( maData, maPostponed, true );
         maPostponed.realloc( 0 );
-        
+
         return maData;
     }
+
+#if DEBUG
+    void FastSaxSerializer::ForMerge::print( )
+    {
+        fprintf( stderr, "Data: " );
+        for ( sal_Int32 i=0, len=maData.getLength(); i < len; i++ )
+        {
+            fprintf( stderr, "%c", maData[i] );
+        }
+
+        fprintf( stderr, "\nPostponed: " );
+        for ( sal_Int32 i=0, len=maPostponed.getLength(); i < len; i++ )
+        {
+            fprintf( stderr, "%c", maPostponed[i] );
+        }
+
+        fprintf( stderr, "\n" );
+    }
+#endif
 
     void FastSaxSerializer::ForMerge::prepend( const Int8Sequence &rWhat )
     {

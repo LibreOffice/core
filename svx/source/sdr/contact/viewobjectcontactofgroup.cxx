@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContactOfGroup::ViewObjectContactOfGroup(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :	ViewObjectContactOfSdrObj(rObjectContact, rViewContact)
+        :   ViewObjectContactOfSdrObj(rObjectContact, rViewContact)
         {
         }
 
@@ -67,7 +67,7 @@ namespace sdr
                 if(nSubHierarchyCount)
                 {
                     const sal_Bool bDoGhostedDisplaying(
-                        GetObjectContact().DoVisualizeEnteredGroup() 
+                        GetObjectContact().DoVisualizeEnteredGroup()
                         && !GetObjectContact().isOutputToPrinter()
                         && GetObjectContact().getActiveViewContact() == &GetViewContact());
 
@@ -85,7 +85,7 @@ namespace sdr
                         const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
                         const ::basegfx::B2DRange aObjectRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xRetval, rViewInformation2D));
                         const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
-                        
+
                         // check geometrical visibility
                         if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
                         {

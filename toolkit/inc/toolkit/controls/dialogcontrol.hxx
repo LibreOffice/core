@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,20 +49,20 @@
 #include <cppuhelper/basemutex.hxx>
 #include <list>
 
-//	----------------------------------------------------
-//	class UnoControlDialogModel
-//	----------------------------------------------------
-typedef UnoControlModel		UnoControlDialogModel_Base;
-typedef ::cppu::ImplHelper6	<	::com::sun::star::lang::XMultiServiceFactory
-                            ,	::com::sun::star::container::XContainer
-                            ,	::com::sun::star::container::XNameContainer
-                            ,	::com::sun::star::awt::XTabControllerModel
-                            ,	::com::sun::star::util::XChangesNotifier
-                            ,	::com::sun::star::beans::XPropertyChangeListener
-                            >	UnoControlDialogModel_IBase;
+//  ----------------------------------------------------
+//  class UnoControlDialogModel
+//  ----------------------------------------------------
+typedef UnoControlModel     UnoControlDialogModel_Base;
+typedef ::cppu::ImplHelper6 <   ::com::sun::star::lang::XMultiServiceFactory
+                            ,   ::com::sun::star::container::XContainer
+                            ,   ::com::sun::star::container::XNameContainer
+                            ,   ::com::sun::star::awt::XTabControllerModel
+                            ,   ::com::sun::star::util::XChangesNotifier
+                            ,   ::com::sun::star::beans::XPropertyChangeListener
+                            >   UnoControlDialogModel_IBase;
 
-class UnoControlDialogModel :	public UnoControlDialogModel_IBase
-                            ,	public UnoControlDialogModel_Base
+class UnoControlDialogModel :   public UnoControlDialogModel_IBase
+                            ,   public UnoControlDialogModel_Base
 {
 public:
     // would like to make this typedef private, too, but the Forte 7 compiler does have
@@ -70,46 +70,46 @@ public:
     typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >, ::rtl::OUString >
                                                         UnoControlModelHolder;
 private:
-    typedef ::std::list< UnoControlModelHolder >		UnoControlModelHolderList;
+    typedef ::std::list< UnoControlModelHolder >        UnoControlModelHolderList;
 
     // for grouping control models (XTabControllerModel::getGroupXXX)
-    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >	
+    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >
                                                         ModelGroup;
-    typedef	::std::vector< ModelGroup >					AllGroups;
+    typedef ::std::vector< ModelGroup >                 AllGroups;
 
     friend struct CloneControlModel;
     friend struct FindControlModel;
     friend struct CompareControlModel;
 
 private:
-    ContainerListenerMultiplexer		maContainerListeners;
-    ::cppu::OInterfaceContainerHelper	maChangeListeners;
-    UnoControlModelHolderList			maModels;
+    ContainerListenerMultiplexer        maContainerListeners;
+    ::cppu::OInterfaceContainerHelper   maChangeListeners;
+    UnoControlModelHolderList           maModels;
 
-    AllGroups							maGroups;
-    sal_Bool							mbGroupsUpToDate;
+    AllGroups                           maGroups;
+    sal_Bool                            mbGroupsUpToDate;
 
-protected:	
-    ::com::sun::star::uno::Any			ImplGetDefaultValue( sal_uInt16 nPropId ) const;
-    ::cppu::IPropertyArrayHelper&		SAL_CALL getInfoHelper();
+protected:
+    ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
 
-    UnoControlModelHolderList::iterator			ImplFindElement( const ::rtl::OUString& rName );
+    UnoControlModelHolderList::iterator         ImplFindElement( const ::rtl::OUString& rName );
 
 public:
                         UnoControlDialogModel();
                         UnoControlDialogModel( const UnoControlDialogModel& rModel );
                         ~UnoControlDialogModel();
-                        
-    UnoControlModel*	Clone() const;
 
-    ::com::sun::star::uno::Any	SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlModel::queryInterface(rType); }
-    ::com::sun::star::uno::Any	SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void						SAL_CALL acquire() throw()	{ OWeakAggObject::acquire(); }
-    void						SAL_CALL release() throw()	{ OWeakAggObject::release(); }
+    UnoControlModel*    Clone() const;
+
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlModel::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::container::XContainer
     void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
@@ -118,14 +118,14 @@ public:
     // ::com::sun::star::container::XElementAcces
     ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
-    
+
     // ::com::sun::star::container::XIndexContainer, XIndexReplace, XIndexAcces
     // void SAL_CALL replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) = 0;
     // sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException) = 0;
     // ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) = 0;
     // void SAL_CALL insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) = 0;
     // void SAL_CALL removeByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) = 0;
-    
+
     // ::com::sun::star::container::XNameContainer, XNameReplace, XNameAccess
     void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -136,12 +136,12 @@ public:
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-    
+
     // ::com::sun::star::lang::XMultiServiceFactory
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const ::rtl::OUString& aServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-    
+
     // ::com::sun::star::io::XPersistObject
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
@@ -181,16 +181,16 @@ protected:
     void implUpdateGroupStructure();
 };
 
-//	----------------------------------------------------
-//	class UnoDialogControl
-//	----------------------------------------------------
-typedef ::cppu::ImplHelper6	<	::com::sun::star::container::XContainerListener
-                            ,	::com::sun::star::awt::XTopWindow
-                            ,	::com::sun::star::awt::XDialog2
-                            ,	::com::sun::star::util::XChangesListener
+//  ----------------------------------------------------
+//  class UnoDialogControl
+//  ----------------------------------------------------
+typedef ::cppu::ImplHelper6 <   ::com::sun::star::container::XContainerListener
+                            ,   ::com::sun::star::awt::XTopWindow
+                            ,   ::com::sun::star::awt::XDialog2
+                            ,   ::com::sun::star::util::XChangesListener
                             ,   ::com::sun::star::util::XModifyListener
                             ,   ::com::sun::star::awt::XWindowListener
-                            >	UnoDialogControl_IBase;
+                            >   UnoDialogControl_IBase;
 
 class ResourceListener  :public ::com::sun::star::util::XModifyListener,
                          public ::cppu::OWeakObject,
@@ -207,48 +207,48 @@ class ResourceListener  :public ::com::sun::star::util::XModifyListener,
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire() throw ();
         virtual void SAL_CALL release() throw ();
-        
+
         // XModifyListener
         virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
-        
+
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver > m_xResource;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >             m_xListener;
         bool                                                                                    m_bListening;
 };
 
-class UnoDialogControl	:public UnoControlContainer
+class UnoDialogControl  :public UnoControlContainer
                         ,public UnoDialogControl_IBase
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >			mxMenuBar;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >	mxTabController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > mxListener;                
-    TopWindowListenerMultiplexer	                                            maTopWindowListeners;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >         mxMenuBar;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >   mxTabController;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > mxListener;
+    TopWindowListenerMultiplexer                                                maTopWindowListeners;
     bool                                                                        mbWindowListener;
     bool                                                                        mbSizeModified;
     bool                                                                        mbPosModified;
 
 protected:
-    
-    void		ImplInsertControl( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel, const ::rtl::OUString& rName );
-    void		ImplRemoveControl( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel );
-    void		ImplSetPosSize( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxCtrl );
+
+    void        ImplInsertControl( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel, const ::rtl::OUString& rName );
+    void        ImplRemoveControl( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel );
+    void        ImplSetPosSize( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxCtrl );
     void        ImplUpdateResourceResolver();
     void        ImplStartListingForResourceEvents();
 
 public:
 
                                 UnoDialogControl();
-    ::rtl::OUString				GetComponentServiceName();
+    ::rtl::OUString             GetComponentServiceName();
 
-    ::com::sun::star::uno::Any	SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlContainer::queryInterface(rType); }
-    ::com::sun::star::uno::Any	SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void						SAL_CALL acquire() throw()	{ OWeakAggObject::acquire(); }
-    void						SAL_CALL release() throw()	{ OWeakAggObject::release(); }
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlContainer::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
@@ -266,12 +266,12 @@ public:
     virtual void SAL_CALL windowMoved( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL windowHidden( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
-    
+
     // ::com::sun::star::container::XContainerListener
     void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-    
+
     // ::com::sun::star::awt::XDialog2
     virtual void SAL_CALL endDialog( ::sal_Int32 Result ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setHelpId( ::sal_Int32 Id ) throw (::com::sun::star::uno::RuntimeException);
@@ -283,8 +283,8 @@ public:
     void SAL_CALL endExecute() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XControl
     sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model ) throw(::com::sun::star::uno::RuntimeException);
@@ -295,7 +295,7 @@ public:
 
     // XModifyListener
     virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
-    
+
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO( UnoDialogControl, szServiceName2_UnoControlDialog )
 

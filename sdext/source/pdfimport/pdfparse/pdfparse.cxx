@@ -84,7 +84,7 @@ class StringEmitContext : public EmitContext
         }
         return 0;
     }
-    
+
     OString getString() { return m_aBuf.makeStringAndClear(); }
 };
 
@@ -106,7 +106,7 @@ public:
     std::vector< PDFEntry* >    m_aObjectStack;
     rtl::OString                m_aErrorString;
     iteratorT                   m_aGlobalBegin;
-    
+
 public:
     struct pdf_string_parser
     {
@@ -116,7 +116,7 @@ public:
         operator()(ScannerT const& scan, result_t& result) const
         {
             std::ptrdiff_t len = 0;
-            
+
             int nBraceLevel = 0;
             while( ! scan.at_end() )
             {
@@ -149,11 +149,11 @@ public:
         definition( const PDFGrammar<iteratorT>& rSelf )
         {
             PDFGrammar<iteratorT>* pSelf = const_cast< PDFGrammar<iteratorT>* >( &rSelf );
-            
+
             // workaround workshop compiler: comment_p doesn't work
             // comment     = comment_p("%")[boost::bind(&PDFGrammar::pushComment, pSelf, _1, _2 )];
             comment     = lexeme_d[ (ch_p('%') >> *(~ch_p('\r') & ~ch_p('\n')) >> eol_p)[boost::bind(&PDFGrammar::pushComment, pSelf, _1, _2 )] ];
-            
+
             boolean     = (str_p("true") | str_p("false"))[boost::bind(&PDFGrammar::pushBool, pSelf, _1, _2)];
 
             // workaround workshop compiler: confix_p doesn't work
@@ -169,13 +169,13 @@ public:
             //stringtype  = ( confix_p("(",*anychar_p, ")") |
             //                confix_p("<",*xdigit_p,  ">") )
             //              [boost::bind(&PDFGrammar::pushString,pSelf, _1, _2)];
-            
+
             stringtype  = ( ( ch_p('(') >> functor_parser<pdf_string_parser>() >> ch_p(')') ) |
                             ( ch_p('<') >> *xdigit_p >> ch_p('>') ) )
                           [boost::bind(&PDFGrammar::pushString,pSelf, _1, _2)];
 
             null_object = str_p( "null" )[boost::bind(&PDFGrammar::pushNull, pSelf, _1, _2)];
-                          
+
             #ifdef USE_ASSIGN_ACTOR
             objectref   = ( uint_p[push_back_a(pSelf->m_aUIntStack)]
                             >> uint_p[push_back_a(pSelf->m_aUIntStack)]
@@ -201,10 +201,10 @@ public:
                           [boost::bind(&PDFGrammar::pushDouble, pSelf, _1, _2)]
                           | stringtype | boolean | null_object;
             #endif
-            
+
             dict_begin  = str_p( "<<" )[boost::bind(&PDFGrammar::beginDict, pSelf, _1, _2)];
             dict_end    = str_p( ">>" )[boost::bind(&PDFGrammar::endDict, pSelf, _1, _2)];
-            
+
             array_begin = str_p("[")[boost::bind(&PDFGrammar::beginArray,pSelf, _1, _2)];
             array_end   = str_p("]")[boost::bind(&PDFGrammar::endArray,pSelf, _1, _2)];
 
@@ -218,7 +218,7 @@ public:
                           >> str_p("obj" )[boost::bind(&PDFGrammar::beginObject, pSelf, _1, _2)];
             #endif
             object_end  = str_p( "endobj" )[boost::bind(&PDFGrammar::endObject, pSelf, _1, _2)];
-            
+
             xref        = str_p( "xref" ) >> uint_p >> uint_p
                           >> lexeme_d[
                                 +( repeat_p(10)[digit_p]
@@ -228,21 +228,21 @@ public:
                                    >> ( ch_p('n') | ch_p('f') )
                                    >> repeat_p(2)[space_p]
                                  ) ];
-                                
+
             dict_element= dict_begin | comment | simple_type
                           | array_begin | array_end | dict_end;
-                          
+
             object      = object_begin
                           >> *dict_element
                           >> !stream
                           >> object_end;
-            
+
             trailer     = str_p( "trailer" )[boost::bind(&PDFGrammar::beginTrailer,pSelf,_1,_2)]
                           >> *dict_element
                           >> str_p("startxref")
                           >> uint_p
                           >> str_p("%%EOF")[boost::bind(&PDFGrammar::endTrailer,pSelf,_1,_2)];
-            
+
             #ifdef USE_ASSIGN_ACTOR
             pdfrule     = ! (lexeme_d[
                                 str_p( "%PDF-" )
@@ -269,10 +269,10 @@ public:
                          objectref, array, value, dict_element, dict_begin, dict_end,
                          array_begin, array_end, object, object_begin, object_end,
                          xref, trailer, pdfrule;
-        
+
         const rule< ScannerT >& start() const { return pdfrule; }
     };
-    
+
     #ifndef USE_ASSIGN_ACTOR
     void push_back_action_uint( unsigned int i )
     {
@@ -283,12 +283,12 @@ public:
         m_fDouble = d;
     }
     #endif
-    
+
     void parseError( const char* pMessage, iteratorT pLocation )
     {
         throw_( pLocation, pMessage );
     }
-    
+
     rtl::OString iteratorToString( iteratorT first, iteratorT last ) const
     {
         rtl::OStringBuffer aStr( 32 );
@@ -299,7 +299,7 @@ public:
         }
         return aStr.makeStringAndClear();
     }
-    
+
     void haveFile( iteratorT pBegin, iteratorT /*pEnd*/ )
     {
         if( m_aObjectStack.empty() )
@@ -307,14 +307,14 @@ public:
             PDFFile* pFile = new PDFFile();
             pFile->m_nMinor = m_aUIntStack.back();
             m_aUIntStack.pop_back();
-            pFile->m_nMajor = m_aUIntStack.back();            
+            pFile->m_nMajor = m_aUIntStack.back();
             m_aUIntStack.pop_back();
             m_aObjectStack.push_back( pFile );
         }
         else
             parseError( "found file header in unusual place", pBegin );
     }
-    
+
     void pushComment( iteratorT first, iteratorT last )
     {
         // add a comment to the current stack element
@@ -327,7 +327,7 @@ public:
             parseError( "comment without container", first );
         pContainer->m_aSubElements.push_back( pComment );
     }
-    
+
     void insertNewValue( PDFEntry* pNewValue, iteratorT pPos )
     {
         PDFContainer* pContainer = NULL;
@@ -381,7 +381,7 @@ public:
             parseError( pMsg, pPos );
         }
     }
-    
+
     void pushName( iteratorT first, iteratorT last )
     {
         insertNewValue( new PDFName(iteratorToString(first,last)), first );
@@ -407,7 +407,7 @@ public:
         insertNewValue( new PDFNull(), first );
     }
 
-    
+
     void beginObject( iteratorT first, iteratorT /*last*/ )
     {
         if( m_aObjectStack.empty() )
@@ -417,12 +417,12 @@ public:
         m_aUIntStack.pop_back();
         unsigned int nObject = m_aUIntStack.back();
         m_aUIntStack.pop_back();
-        
+
         PDFObject* pObj = new PDFObject( nObject, nGeneration );
         pObj->m_nOffset = first - m_aGlobalBegin;
 
         PDFContainer* pContainer = dynamic_cast<PDFContainer*>(m_aObjectStack.back());
-        if( pContainer && 
+        if( pContainer &&
             ( dynamic_cast<PDFFile*>(pContainer) ||
               dynamic_cast<PDFPart*>(pContainer) ) )
         {
@@ -432,7 +432,7 @@ public:
         else
             parseError( "object in wrong place", first );
     }
-    
+
     void endObject( iteratorT first, iteratorT )
     {
         if( m_aObjectStack.empty() )
@@ -442,7 +442,7 @@ public:
         else
             m_aObjectStack.pop_back();
     }
-    
+
     void pushObjectRef( iteratorT first, iteratorT )
     {
         unsigned int nGeneration = m_aUIntStack.back();
@@ -451,7 +451,7 @@ public:
         m_aUIntStack.pop_back();
         insertNewValue( new PDFObjectRef(nObject,nGeneration), first );
     }
-    
+
     void beginDict( iteratorT first, iteratorT )
     {
         PDFDict* pDict = new PDFDict();
@@ -470,7 +470,7 @@ public:
             parseError( "spurious dictionary end", first );
         else
             m_aObjectStack.pop_back();
-        
+
         PDFEntry* pOffender = pDict->buildMap();
         if( pOffender )
         {
@@ -486,7 +486,7 @@ public:
     {
         PDFArray* pArray = new PDFArray();
         pArray->m_nOffset = first - m_aGlobalBegin;
-        
+
         insertNewValue( pArray, first );
         // will not come here if insertion fails (exception)
         m_aObjectStack.push_back( pArray );
@@ -501,7 +501,7 @@ public:
         else
             m_aObjectStack.pop_back();
     }
-    
+
     void emitStream( iteratorT first, iteratorT last )
     {
         if( m_aObjectStack.empty() )
@@ -511,7 +511,7 @@ public:
         {
             if( pObj->m_pStream )
                 parseError( "multiple streams in object", first );
-            
+
             PDFDict* pDict = dynamic_cast<PDFDict*>(pObj->m_pObject);
             if( pDict )
             {
@@ -534,7 +534,7 @@ public:
         pTrailer->m_nOffset = first - m_aGlobalBegin;
 
         PDFContainer* pContainer = dynamic_cast<PDFContainer*>(m_aObjectStack.back());
-        if( pContainer && 
+        if( pContainer &&
             ( dynamic_cast<PDFFile*>(pContainer) ||
               dynamic_cast<PDFPart*>(pContainer) ) )
         {
@@ -559,7 +559,7 @@ public:
 PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
 {
     PDFGrammar<const char*> aGrammar( pBuffer );
-    
+
     try
     {
         boost::spirit::parse_info<const char*> aInfo =
@@ -587,7 +587,7 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
         }
         #endif
     }
-    
+
     PDFEntry* pRet = NULL;
     unsigned int nEntries = aGrammar.m_aObjectStack.size();
     if( nEntries == 1 )
@@ -599,7 +599,7 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
     else if( nEntries > 1 )
         fprintf( stderr, "error got %u stack objects in parse\n", nEntries );
     #endif
-             
+
     return pRet;
 }
 
@@ -610,7 +610,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
        since converting to boost 1.39 file_iterator does not work anymore on all Windows systems
        C++ stdlib istream_iterator does not allow "-" apparently
        using spirit 2.0 doesn't work in our environment with the MSC
-       
+
        So for the time being bite the bullet and read the whole file.
        FIXME: give Spirit 2.x another try when we upgrade boost again.
     */
@@ -637,7 +637,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
         return NULL;
     file_iterator<> file_end = file_start.make_end();
     PDFGrammar< file_iterator<> > aGrammar( file_start );
-    
+
     try
     {
         boost::spirit::parse_info< file_iterator<> > aInfo =
@@ -665,7 +665,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
         }
         #endif
     }
-    
+
     PDFEntry* pRet = NULL;
     unsigned int nEntries = aGrammar.m_aObjectStack.size();
     if( nEntries == 1 )
@@ -696,6 +696,6 @@ PDFEntry* PDFReader::read( const char* pFileName )
 #pragma enable_warn
 #elif defined _MSC_VER
 #pragma warning(pop)
-#endif 
+#endif
 
 

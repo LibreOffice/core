@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,94 +50,94 @@ class SortedIndividualInt32List;
 class ScaAnyConverter;
 
 
-#define	PI			3.1415926535897932
-#define PI_2		(PI/2.0)
-//#define	EULER		2.7182818284590452
-#define	EOL			( ( const sal_Char* ) 1 )
-#define	EOE			( ( const sal_Char* ) 2 )
+#define PI          3.1415926535897932
+#define PI_2        (PI/2.0)
+//#define   EULER       2.7182818284590452
+#define EOL         ( ( const sal_Char* ) 1 )
+#define EOE         ( ( const sal_Char* ) 2 )
 
 
-//double				_Test( sal_Int32 nMode, double f1, double f2, double f3 );
+//double                _Test( sal_Int32 nMode, double f1, double f2, double f3 );
 inline sal_Bool     IsLeapYear( sal_uInt16 nYear );
-sal_uInt16			DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear );
-sal_Int32			DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear );
-void				DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear ) throw( ::com::sun::star::lang::IllegalArgumentException );
+sal_uInt16          DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear );
+sal_Int32           DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear );
+void                DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear ) throw( ::com::sun::star::lang::IllegalArgumentException );
 sal_Int32           GetNullDate( const REF( CSS::beans::XPropertySet )& xOptions ) THROWDEF_RTE;
-sal_Int32			GetDiffDate360(
+sal_Int32           GetDiffDate360(
                         sal_uInt16 nDay1, sal_uInt16 nMonth1, sal_uInt16 nYear1, sal_Bool bLeapYear1,
                         sal_uInt16 nDay2, sal_uInt16 nMonth2, sal_uInt16 nYear2,
                         sal_Bool bUSAMethod );
-inline sal_Int32	GetDiffDate360( constREFXPS& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod );
-sal_Int32			GetDiffDate360( sal_Int32 nNullDate, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod );
+inline sal_Int32    GetDiffDate360( constREFXPS& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod );
+sal_Int32           GetDiffDate360( sal_Int32 nNullDate, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod );
 
-sal_Int32			GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 );
-inline sal_Int16	GetDayOfWeek( sal_Int32 nDate );
-void				GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
+sal_Int32           GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 );
+inline sal_Int16    GetDayOfWeek( sal_Int32 nDate );
+void                GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
                         sal_uInt16& rYears, sal_Int32& rDayDiffPart, sal_Int32& rDaysInYear ) THROWDEF_RTE_IAE;
                         // rYears = full num of years
                         // rDayDiffPart = num of days for last year
                         // rDaysInYear = num of days in first year
-sal_Int32			GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
+sal_Int32           GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
                                 sal_Int32* pOptDaysIn1stYear = NULL ) THROWDEF_RTE_IAE;
-double				GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
+double              GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
                                 THROWDEF_RTE_IAE;
-sal_Int32			GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode ) THROWDEF_RTE_IAE;
-double				GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
+sal_Int32           GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode ) THROWDEF_RTE_IAE;
+double              GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
                         THROWDEF_RTE_IAE;
-inline double		GetYearFrac( constREFXPS& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
+inline double       GetYearFrac( constREFXPS& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
                         THROWDEF_RTE_IAE;
-inline void			AlignDate( sal_uInt16& rDay, sal_uInt16 nMonth, sal_uInt16 nYear );
+inline void         AlignDate( sal_uInt16& rDay, sal_uInt16 nMonth, sal_uInt16 nYear );
 
-double				Fak( sal_Int32 n );
-double				GetGcd( double f1, double f2 );
-double				ConvertToDec( const STRING& rFromNum, sal_uInt16 nBaseFrom, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE;
-STRING				ConvertFromDec(
+double              Fak( sal_Int32 n );
+double              GetGcd( double f1, double f2 );
+double              ConvertToDec( const STRING& rFromNum, sal_uInt16 nBaseFrom, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE;
+STRING              ConvertFromDec(
                         double fNum, double fMin, double fMax, sal_uInt16 nBase,
                         sal_Int32 nPlaces, sal_Int32 nMaxPlaces, sal_Bool bUsePlaces ) THROWDEF_RTE_IAE;
-double				Erf( double fX );
-double				Erfc( double fX );
-sal_Bool			ParseDouble( const sal_Unicode*& rpDoubleAsString, double& rReturn );
-STRING				GetString( double fNumber, sal_Bool bLeadingSign = sal_False, sal_uInt16 nMaxNumOfDigits = 15 );
-inline double		Exp10( sal_Int16 nPower );		// 10 ^ nPower
+double              Erf( double fX );
+double              Erfc( double fX );
+sal_Bool            ParseDouble( const sal_Unicode*& rpDoubleAsString, double& rReturn );
+STRING              GetString( double fNumber, sal_Bool bLeadingSign = sal_False, sal_uInt16 nMaxNumOfDigits = 15 );
+inline double       Exp10( sal_Int16 nPower );      // 10 ^ nPower
 
-double				GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
+double              GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
                                 double fRestVal, double fPer, double fRate, sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double				GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
+double              GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
                                 double fRestVal, double fPer, double fRate, sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double				GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup,
+double              GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup,
                                 double fYield, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double				GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
+double              GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
                                 double fRate, double fPrice, sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double				GetOddfprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
+double              GetOddfprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
                                 sal_Int32 nFirstCoup, double fRate, double fYield, double fRedemp,
                                 sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double				getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice,
+double              getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice,
                                 double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double				getPrice_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield,
+double              getPrice_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield,
                                 double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double				GetOddfyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
+double              GetOddfyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
                                 sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp,
                                 sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double				GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
+double              GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
                                 double fRate, double fYield, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double				GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
+double              GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
                                 double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double				GetRmz( double fZins, double fZzr, double fBw, double fZw, sal_Int32 nF );
-double				GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF );
-//double				TBillYield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice )THROWDEF_RTE_IAE;
+double              GetRmz( double fZins, double fZzr, double fBw, double fZw, sal_Int32 nF );
+double              GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF );
+//double                TBillYield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice )THROWDEF_RTE_IAE;
 
-double				GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
+double              GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
                                 sal_Int32 nBase ) THROWDEF_RTE_IAE;
 double              GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
                                 sal_Int32 nBase ) THROWDEF_RTE_IAE;
 double              GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
                                 sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double				GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
+double              GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
                                 sal_Int32 nBase ) THROWDEF_RTE_IAE;
 
 double              GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat,
                                 sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double				GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
+double              GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
                                 sal_Int32 nBase ) THROWDEF_RTE_IAE;
 
 
@@ -150,29 +150,29 @@ double				GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, s
 class MyList
 {
 private:
-    static const sal_uInt32	nStartSize;
-    static const sal_uInt32	nIncrSize;
+    static const sal_uInt32 nStartSize;
+    static const sal_uInt32 nIncrSize;
 
-    void**					pData;			// pointer array
-    sal_uInt32				nSize;			// array size
-    sal_uInt32				nNew;			// next index to be inserted at
-    sal_uInt32				nAct;			// actual for iterations
+    void**                  pData;          // pointer array
+    sal_uInt32              nSize;          // array size
+    sal_uInt32              nNew;           // next index to be inserted at
+    sal_uInt32              nAct;           // actual for iterations
 
-    void					_Grow( void );
-    inline void				Grow( void );
+    void                    _Grow( void );
+    inline void             Grow( void );
 protected:
 public:
                             MyList( void );
-    virtual					~MyList();
+    virtual                 ~MyList();
 
-    inline const void*		GetObject( sal_uInt32 nIndex ) const;
-    inline const void*		First( void );
-    inline const void*		Next( void );
+    inline const void*      GetObject( sal_uInt32 nIndex ) const;
+    inline const void*      First( void );
+    inline const void*      Next( void );
 
-    inline void				Append( void* pNewElement );
-    void					Insert( void* pNewLement, sal_uInt32 nPlace );
+    inline void             Append( void* pNewElement );
+    void                    Insert( void* pNewLement, sal_uInt32 nPlace );
 
-    inline sal_uInt32		Count( void ) const;
+    inline sal_uInt32       Count( void ) const;
 };
 
 
@@ -181,15 +181,15 @@ public:
 class StringList : protected MyList
 {
 public:
-    virtual					~StringList();
+    virtual                 ~StringList();
 
-    inline const STRING*	First( void );
-    inline const STRING*	Next( void );
-    inline const STRING*	Get( sal_uInt32 nIndex ) const;
+    inline const STRING*    First( void );
+    inline const STRING*    Next( void );
+    inline const STRING*    Get( sal_uInt32 nIndex ) const;
 
     using MyList::Append;
-    inline void				Append( STRING* pNew );
-    inline void				Append( const STRING& rNew );
+    inline void             Append( STRING* pNew );
+    inline void             Append( const STRING& rNew );
 
     using MyList::Count;
 };
@@ -210,14 +210,14 @@ enum FDCategory
 
 struct FuncDataBase
 {
-    const sal_Char*			pIntName;
-    sal_uInt16				nUINameID;			// resource ID to UI name
-    sal_uInt16				nDescrID;			// resource ID to description, parameter names and ~ description
-    sal_Bool				bDouble;			// name already exist in Calc
-    sal_Bool				bWithOpt;			// first parameter is internal
-    sal_uInt16				nCompListID;		// resource ID to list of valid names
-    sal_uInt16				nNumOfParams;		// number of named / described parameters
-    FDCategory				eCat;				// function category
+    const sal_Char*         pIntName;
+    sal_uInt16              nUINameID;          // resource ID to UI name
+    sal_uInt16              nDescrID;           // resource ID to description, parameter names and ~ description
+    sal_Bool                bDouble;            // name already exist in Calc
+    sal_Bool                bWithOpt;           // first parameter is internal
+    sal_uInt16              nCompListID;        // resource ID to list of valid names
+    sal_uInt16              nNumOfParams;       // number of named / described parameters
+    FDCategory              eCat;               // function category
 };
 
 
@@ -227,30 +227,30 @@ class FuncData
 {
 private:
     ::rtl::OUString         aIntName;
-    sal_uInt16				nUINameID;
-    sal_uInt16				nDescrID;			// leads also to parameter descriptions!
-    sal_Bool				bDouble;			// flag for names, wich already exist in Calc
-    sal_Bool				bWithOpt;			// has internal parameter on first position
+    sal_uInt16              nUINameID;
+    sal_uInt16              nDescrID;           // leads also to parameter descriptions!
+    sal_Bool                bDouble;            // flag for names, wich already exist in Calc
+    sal_Bool                bWithOpt;           // has internal parameter on first position
 
-    sal_uInt16				nParam;				// num of parameters
-    sal_uInt16				nCompID;
-    StringList				aCompList;			// list of all valid names
-    FDCategory				eCat;				// function category
+    sal_uInt16              nParam;             // num of parameters
+    sal_uInt16              nCompID;
+    StringList              aCompList;          // list of all valid names
+    FDCategory              eCat;               // function category
 public:
                             FuncData( const FuncDataBase& rBaseData, ResMgr& );
-    virtual					~FuncData();
+    virtual                 ~FuncData();
 
-    inline sal_uInt16		GetUINameID( void ) const;
-    inline sal_uInt16		GetDescrID( void ) const;
-    inline sal_Bool			IsDouble( void ) const;
-    inline sal_Bool			HasIntParam( void ) const;
+    inline sal_uInt16       GetUINameID( void ) const;
+    inline sal_uInt16       GetDescrID( void ) const;
+    inline sal_Bool         IsDouble( void ) const;
+    inline sal_Bool         HasIntParam( void ) const;
 
-    sal_uInt16				GetStrIndex( sal_uInt16 nParamNum ) const;
+    sal_uInt16              GetStrIndex( sal_uInt16 nParamNum ) const;
     inline sal_Bool         Is( const ::rtl::OUString& rCompareTo ) const;
 
-    inline const StringList&	GetCompNameList( void ) const;
+    inline const StringList&    GetCompNameList( void ) const;
 
-    inline FDCategory		GetCategory( void ) const;
+    inline FDCategory       GetCategory( void ) const;
 };
 
 
@@ -260,8 +260,8 @@ class CStrList : private MyList
 {
 public:
     using MyList::Append;
-    inline void				Append( const sal_Char* pNew );
-    inline const sal_Char*	Get( sal_uInt32 nIndex ) const;
+    inline void             Append( const sal_Char* pNew );
+    inline const sal_Char*  Get( sal_uInt32 nIndex ) const;
     using MyList::Count;
 };
 
@@ -271,13 +271,13 @@ public:
 class FuncDataList : private MyList
 {
     ::rtl::OUString         aLastName;
-    sal_uInt32				nLast;
+    sal_uInt32              nLast;
 public:
                             FuncDataList( ResMgr& );
-    virtual					~FuncDataList();
+    virtual                 ~FuncDataList();
     using MyList::Append;
-    inline void				Append( FuncData* pNew );
-    inline const FuncData*	Get( sal_uInt32 nIndex ) const;
+    inline void             Append( FuncData* pNew );
+    inline const FuncData*  Get( sal_uInt32 nIndex ) const;
     using MyList::Count;
 
     const FuncData*         Get( const ::rtl::OUString& aProgrammaticName ) const;
@@ -297,7 +297,7 @@ class AnalysisResId : public ResId
 class AnalysisRscStrLoader : public Resource
 {
 private:
-    String			aStr;
+    String          aStr;
 public:
     AnalysisRscStrLoader( sal_uInt16 nRsc, sal_uInt16 nStrId, ResMgr& rResMgr ) :
         Resource( AnalysisResId( nRsc, rResMgr ) ),
@@ -306,7 +306,7 @@ public:
         FreeResource();
     }
 
-    const String&	GetString() const { return aStr; }
+    const String&   GetString() const { return aStr; }
 
 };
 
@@ -442,39 +442,39 @@ public:
 
 class Complex
 {
-    double					r;
-    double					i;
+    double                  r;
+    double                  i;
     sal_Unicode             c;
 
 public:
     inline                  Complex( double fReal, double fImag = 0.0, sal_Char cC = '\0' );
                             Complex( const STRING& rComplexAsString ) THROWDEF_RTE_IAE;
 
-    inline static sal_Bool	IsImagUnit( sal_Unicode c );
-    static sal_Bool			ParseString( const STRING& rComplexAsString, Complex& rReturn );
+    inline static sal_Bool  IsImagUnit( sal_Unicode c );
+    static sal_Bool         ParseString( const STRING& rComplexAsString, Complex& rReturn );
     STRING                  GetString() const THROWDEF_RTE_IAE;
 
-    inline double			Real( void ) const;
-    inline double			Imag( void ) const;
+    inline double           Real( void ) const;
+    inline double           Imag( void ) const;
 
-    double					Arg( void ) const THROWDEF_RTE_IAE;
-    inline double			Abs( void ) const;
+    double                  Arg( void ) const THROWDEF_RTE_IAE;
+    inline double           Abs( void ) const;
 
     // following functions change the complex number itself to avoid unnecessary copy actions!
-    void					Power( double fPower ) THROWDEF_RTE_IAE;
-    void					Sqrt( void );
-    void					Sin( void ) THROWDEF_RTE_IAE;
-    void					Cos( void ) THROWDEF_RTE_IAE;
-    void					Div( const Complex& rDivisor ) THROWDEF_RTE_IAE;
-    void					Exp( void );
-    inline void				Conjugate( void );
-    void					Ln( void ) THROWDEF_RTE_IAE;
-    void					Log10( void ) THROWDEF_RTE_IAE;
-    void					Log2( void ) THROWDEF_RTE_IAE;
-    inline void				Mult( double fFact );
-    inline void				Mult( const Complex& rMult );
-    inline void				Sub( const Complex& rMult );
-    inline void				Add( const Complex& rAdd );
+    void                    Power( double fPower ) THROWDEF_RTE_IAE;
+    void                    Sqrt( void );
+    void                    Sin( void ) THROWDEF_RTE_IAE;
+    void                    Cos( void ) THROWDEF_RTE_IAE;
+    void                    Div( const Complex& rDivisor ) THROWDEF_RTE_IAE;
+    void                    Exp( void );
+    inline void             Conjugate( void );
+    void                    Ln( void ) THROWDEF_RTE_IAE;
+    void                    Log10( void ) THROWDEF_RTE_IAE;
+    void                    Log2( void ) THROWDEF_RTE_IAE;
+    inline void             Mult( double fFact );
+    inline void             Mult( const Complex& rMult );
+    inline void             Sub( const Complex& rMult );
+    inline void             Add( const Complex& rAdd );
 };
 
 
@@ -491,18 +491,18 @@ enum ComplListAppendHandl
 class ComplexList : protected MyList
 {
 public:
-    virtual					~ComplexList();
+    virtual                 ~ComplexList();
 
-    inline const Complex*	Get( sal_uInt32 nIndex ) const;
-    inline const Complex*	First( void );
-    inline const Complex*	Next( void );
+    inline const Complex*   Get( sal_uInt32 nIndex ) const;
+    inline const Complex*   First( void );
+    inline const Complex*   Next( void );
 
     using MyList::Count;
 
     using MyList::Append;
-    inline void				Append( Complex* pNew );
-    void					Append( const SEQSEQ( STRING )& rComplexNumList, ComplListAppendHandl eAH = AH_EmpyAs0 ) THROWDEF_RTE_IAE;
-    void					Append( const SEQ( ANY )& aMultPars,ComplListAppendHandl eAH = AH_EmpyAs0 ) THROWDEF_RTE_IAE;
+    inline void             Append( Complex* pNew );
+    void                    Append( const SEQSEQ( STRING )& rComplexNumList, ComplListAppendHandl eAH = AH_EmpyAs0 ) THROWDEF_RTE_IAE;
+    void                    Append( const SEQ( ANY )& aMultPars,ComplListAppendHandl eAH = AH_EmpyAs0 ) THROWDEF_RTE_IAE;
 };
 
 
@@ -515,7 +515,7 @@ enum ConvertDataClass
 };
 
 
-#define	INV_MATCHLEV		1764					// guess, what this is... :-)
+#define INV_MATCHLEV        1764                    // guess, what this is... :-)
 
 
 class ConvertDataList;
@@ -527,34 +527,34 @@ class ConvertData
 {
 protected:
     friend class ConvertDataList;
-    double					fConst;
-    STRING					aName;
-    ConvertDataClass		eClass;
+    double                  fConst;
+    STRING                  aName;
+    ConvertDataClass        eClass;
     sal_Bool                bPrefixSupport;
 public:
                             ConvertData(
-                                const sal_Char		pUnitName[],
-                                double				fConvertConstant,
-                                ConvertDataClass	eClass,
+                                const sal_Char      pUnitName[],
+                                double              fConvertConstant,
+                                ConvertDataClass    eClass,
                                 sal_Bool            bPrefSupport = sal_False );
 
     virtual                 ~ConvertData();
 
-    sal_Int16				GetMatchingLevel( const STRING& rRef ) const;
+    sal_Int16               GetMatchingLevel( const STRING& rRef ) const;
                                     // 0.0 = no equality
                                     // 1.0 = matches exact
                                     // rest = matches without an assumed prefix of one character
                                     //  rest gives power for 10 represented by the prefix (e.g. 3 for k or -9 for n
 
-    virtual double			Convert( double fVal, const ConvertData& rTo,
+    virtual double          Convert( double fVal, const ConvertData& rTo,
                                 sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const THROWDEF_RTE_IAE;
                                     // converts fVal from this unit to rFrom unit
                                     // throws exception if not from same class
                                     // this implementation is for proportional cases only
-    virtual double			ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const;
-    virtual double			ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const;
+    virtual double          ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const;
+    virtual double          ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const;
 
-    inline ConvertDataClass	Class( void ) const;
+    inline ConvertDataClass Class( void ) const;
     inline sal_Bool         IsPrefixSupport( void ) const;
 };
 
@@ -564,23 +564,23 @@ public:
 class ConvertDataLinear : public ConvertData
 {
 protected:
-    double					fOffs;
+    double                  fOffs;
 public:
-    inline					ConvertDataLinear(
-                                const sal_Char		pUnitName[],
-                                double				fConvertConstant,
-                                double				fConvertOffset,
-                                ConvertDataClass	eClass,
+    inline                  ConvertDataLinear(
+                                const sal_Char      pUnitName[],
+                                double              fConvertConstant,
+                                double              fConvertOffset,
+                                ConvertDataClass    eClass,
                                 sal_Bool            bPrefSupport = sal_False );
 
     virtual                 ~ConvertDataLinear();
 
-    virtual double			Convert( double fVal, const ConvertData& rTo,
+    virtual double          Convert( double fVal, const ConvertData& rTo,
                                 sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const THROWDEF_RTE_IAE;
                                     // for cases where f(x) = a + bx applies (e.g. Temperatures)
 
-    virtual double			ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const;
-    virtual double			ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const;
+    virtual double          ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const;
+    virtual double          ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const;
 };
 
 
@@ -590,13 +590,13 @@ class ConvertDataList : protected MyList
 {
 private:
 protected:
-    inline ConvertData*		First( void );
-    inline ConvertData*		Next( void );
+    inline ConvertData*     First( void );
+    inline ConvertData*     Next( void );
 public:
                             ConvertDataList( void );
-    virtual					~ConvertDataList();
+    virtual                 ~ConvertDataList();
 
-    double					Convert( double fVal, const STRING& rFrom, const STRING& rTo ) THROWDEF_RTE_IAE;
+    double                  Convert( double fVal, const STRING& rFrom, const STRING& rTo ) THROWDEF_RTE_IAE;
 };
 
 
@@ -615,7 +615,7 @@ inline sal_Int32 GetDiffDate360( constREFXPS& xOpt, sal_Int32 nDate1, sal_Int32 
 
 
 inline sal_Int16 GetDayOfWeek( sal_Int32 n )
-{	// monday = 0, ..., sunday = 6
+{   // monday = 0, ..., sunday = 6
     return static_cast< sal_Int16 >( ( n - 1 ) % 7 );
 }
 
@@ -628,7 +628,7 @@ inline double GetYearFrac( constREFXPS& xOpt, sal_Int32 nStartDate, sal_Int32 nE
 
 inline void AlignDate( sal_uInt16& rD, sal_uInt16 nM, sal_uInt16 nY )
 {
-    sal_uInt16	nMax = DaysInMonth( nM, nY );
+    sal_uInt16  nMax = DaysInMonth( nM, nY );
 
     if( rD > nMax )
         rD = nMax;
@@ -831,8 +831,8 @@ inline void Complex::Mult( double f )
 
 inline void Complex::Mult( const Complex& rM )
 {
-    double	r_ = r;
-    double	i_ = i;
+    double  r_ = r;
+    double  i_ = i;
 
     r = r_ * rM.r - i_ * rM.i;
     i = r_ * rM.i + i_ * rM.r;
@@ -885,7 +885,7 @@ inline void ComplexList::Append( Complex* p )
 
 
 
-inline ConvertDataClass	ConvertData::Class( void ) const
+inline ConvertDataClass ConvertData::Class( void ) const
 {
     return eClass;
 }
@@ -897,7 +897,7 @@ inline sal_Bool ConvertData::IsPrefixSupport( void ) const
     return bPrefixSupport;
 }
 
-inline ConvertDataLinear::ConvertDataLinear( const sal_Char* p, double fC, double fO, ConvertDataClass e, 
+inline ConvertDataLinear::ConvertDataLinear( const sal_Char* p, double fC, double fO, ConvertDataClass e,
         sal_Bool bPrefSupport ) :
     ConvertData( p, fC, e, bPrefSupport ),
     fOffs( fO )

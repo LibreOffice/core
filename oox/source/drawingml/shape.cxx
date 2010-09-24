@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -396,7 +396,7 @@ Reference< XShape > Shape::createAndInsert(
 
         ModelObjectHelper& rModelObjectHelper = rFilterBase.getModelObjectHelper();
         const GraphicHelper& rGraphicHelper = rFilterBase.getGraphicHelper();
-        
+
         LineProperties aLineProperties;
         aLineProperties.maLineFill.moFillType = XML_noFill;
         sal_Int32 nLinePhClr = -1;
@@ -430,13 +430,13 @@ Reference< XShape > Shape::createAndInsert(
         aFillProperties.assignUsed( getFillProperties() );
 
         PropertyMap aShapeProperties;
-        PropertyMap::const_iterator	aShapePropIter;
+        PropertyMap::const_iterator aShapePropIter;
 
         if( mxCreateCallback.get() )
         {
             for ( aShapePropIter = mxCreateCallback->getShapeProperties().begin();
                 aShapePropIter != mxCreateCallback->getShapeProperties().end(); aShapePropIter++ )
-                aShapeProperties[ (*aShapePropIter).first ] = (*aShapePropIter).second;		
+                aShapeProperties[ (*aShapePropIter).first ] = (*aShapePropIter).second;
         }
 
         // add properties from textbody to shape properties
@@ -444,7 +444,7 @@ Reference< XShape > Shape::createAndInsert(
         {
             for ( aShapePropIter = mpTextBody->getTextProperties().maPropertyMap.begin();
                 aShapePropIter != mpTextBody->getTextProperties().maPropertyMap.end(); aShapePropIter++ )
-                aShapeProperties[ (*aShapePropIter).first ] = (*aShapePropIter).second;		
+                aShapeProperties[ (*aShapePropIter).first ] = (*aShapePropIter).second;
         }
 
         aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );

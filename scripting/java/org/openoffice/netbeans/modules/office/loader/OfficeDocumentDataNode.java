@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,32 +44,32 @@ import org.openoffice.netbeans.modules.office.nodes.OfficeDocumentChildren;
  * @author tomaso
  */
 public class OfficeDocumentDataNode extends DataNode {
-    
+
     public OfficeDocumentDataNode(OfficeDocumentDataObject obj) {
         // this(obj, Children.LEAF);
         this(obj, new OfficeDocumentChildren((OfficeDocumentCookie)
             obj.getCookie(OfficeDocumentCookie.class)));
     }
-    
+
     public OfficeDocumentDataNode(OfficeDocumentDataObject obj, Children ch) {
         super(obj, ch);
         setIconBase("/org/openoffice/netbeans/modules/office/resources/OfficeIcon");
     }
-    
+
     protected OfficeDocumentDataObject getOfficeDocumentDataObject() {
         return (OfficeDocumentDataObject)getDataObject();
     }
-    
+
     // Allow for pasting of Script Parcels to Office Documents
     protected void createPasteTypes(Transferable t, List ls) {
         Node[] copies = NodeTransfer.nodes(t, NodeTransfer.COPY);
-        
+
         if (copies != null) {
             for (int i = 0; i < copies.length; i++) {
                 if (copies[i] instanceof ParcelDataNode) {
                     File source = FileUtil.toFile(((ParcelDataNode)copies[i]).getDataObject().getPrimaryFile());
                     File target = FileUtil.toFile(getDataObject().getPrimaryFile());
-                    
+
                     if (source.exists()  && source.canRead() &&
                         target.exists() && target.canWrite()) {
                         ls.add(new ParcelDataNode.ParcelPasteType((ParcelDataNode)copies[i], target, false));
@@ -77,14 +77,14 @@ public class OfficeDocumentDataNode extends DataNode {
                 }
             }
         }
-        
+
         Node[] moves = NodeTransfer.nodes(t, NodeTransfer.MOVE);
         if (moves != null) {
             for (int i = 0; i < moves.length; i++) {
                 if (moves[i] instanceof ParcelDataNode) {
                     File source = FileUtil.toFile(((ParcelDataNode)moves[i]).getDataObject().getPrimaryFile());
                     File target = FileUtil.toFile(getDataObject().getPrimaryFile());
-                    
+
                     if (source.exists() && source.canRead() &&
                         target.exists() && target.canWrite()) {
                         ls.add(new ParcelDataNode.ParcelPasteType((ParcelDataNode)moves[i], target, true));
@@ -96,7 +96,7 @@ public class OfficeDocumentDataNode extends DataNode {
         // Also try superclass, but give it lower priority:
         super.createPasteTypes(t, ls);
     }
-    
+
     /* Example of adding Executor / Debugger / Arguments to node:
     protected Sheet createSheet() {
         Sheet sheet = super.createSheet();
@@ -114,7 +114,7 @@ public class OfficeDocumentDataNode extends DataNode {
         return sheet;
     }
      */
-    
+
     // Don't use getDefaultAction(); just make that first in the data loader's getActions list
-    
+
 }

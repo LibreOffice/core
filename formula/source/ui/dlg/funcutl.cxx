@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,8 +89,8 @@ void ValWnd::SetValue( const String& rStrVal )
     if ( aStrValue != rStrVal )
     {
         aStrValue = rStrVal;
-        DrawRect( aRectOut );	// alten Text loeschen
-        Paint( aRectOut );		// und neu malen
+        DrawRect( aRectOut );   // alten Text loeschen
+        Paint( aRectOut );      // und neu malen
     }
 }
 
@@ -99,11 +99,11 @@ void ValWnd::SetValue( const String& rStrVal )
 //----------------------------------------------------------------------------
 
 ArgEdit::ArgEdit( Window* pParent, const ResId& rResId )
-    :	RefEdit( pParent, rResId ),
-        pEdPrev	( NULL ),
-        pEdNext	( NULL ),
-        pSlider	( NULL ),
-        nArgs	( 0 )
+    :   RefEdit( pParent, rResId ),
+        pEdPrev ( NULL ),
+        pEdNext ( NULL ),
+        pSlider ( NULL ),
+        nArgs   ( 0 )
 {
 }
 
@@ -112,10 +112,10 @@ ArgEdit::ArgEdit( Window* pParent, const ResId& rResId )
 void ArgEdit::Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
                     ScrollBar& rArgSlider, USHORT nArgCount )
 {
-    pEdPrev	= pPrevEdit;
-    pEdNext	= pNextEdit;
+    pEdPrev = pPrevEdit;
+    pEdNext = pNextEdit;
     pSlider = &rArgSlider;
-    nArgs	= nArgCount;
+    nArgs   = nArgCount;
 }
 
 //----------------------------------------------------------------------------
@@ -124,10 +124,10 @@ void ArgEdit::Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
 
 void __EXPORT ArgEdit::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode		aCode	= rKEvt.GetKeyCode();
-    BOOL		bUp		= (aCode.GetCode() == KEY_UP);
-    BOOL		bDown	= (aCode.GetCode() == KEY_DOWN);
-    ArgEdit*	pEd		= NULL;
+    KeyCode     aCode   = rKEvt.GetKeyCode();
+    BOOL        bUp     = (aCode.GetCode() == KEY_UP);
+    BOOL        bDown   = (aCode.GetCode() == KEY_DOWN);
+    ArgEdit*    pEd     = NULL;
 
     if (   pSlider
         && ( !aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
@@ -135,9 +135,9 @@ void __EXPORT ArgEdit::KeyInput( const KeyEvent& rKEvt )
     {
         if ( nArgs > 1 )
         {
-            long	nThumb		 = pSlider->GetThumbPos();
-            BOOL	bDoScroll	 = FALSE;
-            BOOL	bChangeFocus = FALSE;
+            long    nThumb       = pSlider->GetThumbPos();
+            BOOL    bDoScroll    = FALSE;
+            BOOL    bChangeFocus = FALSE;
 
             if ( bDown )
             {
@@ -205,16 +205,16 @@ void __EXPORT ArgEdit::KeyInput( const KeyEvent& rKEvt )
 
 
 /*************************************************************************
-#*	Member:		ArgInput									Datum:13.01.97
+#*  Member:     ArgInput                                    Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Konstruktor der Klasse ArgInput
+#*  Funktion:   Konstruktor der Klasse ArgInput
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -227,23 +227,23 @@ ArgInput::ArgInput()
 }
 
 /*************************************************************************
-#*	Member:		InitArgInput								Datum:13.01.97
+#*  Member:     InitArgInput                                Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Initialisiert die Pointer der Klasse
+#*  Funktion:   Initialisiert die Pointer der Klasse
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
-void ArgInput::InitArgInput(FixedText*		pftArg,
-                            ImageButton*	pbtnFx,
-                            ArgEdit*		pedArg,
-                            RefButton*	prefBtn)
+void ArgInput::InitArgInput(FixedText*      pftArg,
+                            ImageButton*    pbtnFx,
+                            ArgEdit*        pedArg,
+                            RefButton*  prefBtn)
 {
     pFtArg =pftArg;
     pBtnFx =pbtnFx;
@@ -269,16 +269,16 @@ void ArgInput::InitArgInput(FixedText*		pftArg,
 }
 
 /*************************************************************************
-#*	Member:		SetArgName									Datum:13.01.97
+#*  Member:     SetArgName                                  Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Setzt den Namen fuer das Argument
+#*  Funktion:   Setzt den Namen fuer das Argument
 #*
-#*  Input:		String
+#*  Input:      String
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void ArgInput::SetArgName(const String &aArg)
@@ -287,16 +287,16 @@ void ArgInput::SetArgName(const String &aArg)
 }
 
 /*************************************************************************
-#*	Member:		GetArgName									Datum:06.02.97
+#*  Member:     GetArgName                                  Datum:06.02.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Liefert den Namen fuer das Argument zurueck
+#*  Funktion:   Liefert den Namen fuer das Argument zurueck
 #*
-#*  Input:		String
+#*  Input:      String
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 String ArgInput::GetArgName()
@@ -310,72 +310,72 @@ String ArgInput::GetArgName()
 
 
 /*************************************************************************
-#*	Member:		SetArgName									Datum:13.01.97
+#*  Member:     SetArgName                                  Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Setzt den Namen fuer das Argument
+#*  Funktion:   Setzt den Namen fuer das Argument
 #*
-#*  Input:		String
+#*  Input:      String
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
-void ArgInput::SetArgNameFont	(const Font &aFont)
+void ArgInput::SetArgNameFont   (const Font &aFont)
 {
     if(pFtArg !=NULL) pFtArg->SetFont(aFont);
 }
 
 /*************************************************************************
-#*	Member:		SetArgSelection								Datum:13.01.97
+#*  Member:     SetArgSelection                             Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Stellt die Selection fuer die EditBox ein.
+#*  Funktion:   Stellt die Selection fuer die EditBox ein.
 #*
-#*  Input:		String
+#*  Input:      String
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
-void ArgInput::SetArgSelection	(const Selection& rSel )
+void ArgInput::SetArgSelection  (const Selection& rSel )
 {
     if(pEdArg !=NULL) pEdArg ->SetSelection(rSel );
 }
 
 /*************************************************************************
-#*	Member:		SetArgSelection								Datum:13.01.97
+#*  Member:     SetArgSelection                             Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Liefert die Selection fuer die EditBox zurueck.
+#*  Funktion:   Liefert die Selection fuer die EditBox zurueck.
 #*
-#*  Input:		String
+#*  Input:      String
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
-Selection ArgInput::GetArgSelection	()
+Selection ArgInput::GetArgSelection ()
 {
-    Selection	aSel;
+    Selection   aSel;
     if(pEdArg !=NULL) aSel=pEdArg ->GetSelection();
     return aSel;
 }
 
 /*************************************************************************
-#*	Member:		SetArgSelection								Datum:13.01.97
+#*  Member:     SetArgSelection                             Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Ersetzt die Selection in der EditBox.
+#*  Funktion:   Ersetzt die Selection in der EditBox.
 #*
-#*  Input:		String
+#*  Input:      String
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void ArgInput::ReplaceSelOfArg(const String& rStr )
@@ -386,16 +386,16 @@ void ArgInput::ReplaceSelOfArg(const String& rStr )
 
 
 /*************************************************************************
-#*	Member:		SetArgVal									Datum:13.01.97
+#*  Member:     SetArgVal                                   Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Setzt den Wert fuer das Argument
+#*  Funktion:   Setzt den Wert fuer das Argument
 #*
-#*  Input:		String
+#*  Input:      String
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void ArgInput::SetArgVal(const String &aVal)
@@ -407,16 +407,16 @@ void ArgInput::SetArgVal(const String &aVal)
 }
 
 /*************************************************************************
-#*	Member:		SetArgName									Datum:13.01.97
+#*  Member:     SetArgName                                  Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Liefert den Wert fuer das Argument
+#*  Funktion:   Liefert den Wert fuer das Argument
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		String
+#*  Output:     String
 #*
 #************************************************************************/
 String ArgInput::GetArgVal()
@@ -430,16 +430,16 @@ String ArgInput::GetArgVal()
 }
 
 /*************************************************************************
-#*	Member:		SetArgName									Datum:13.01.97
+#*  Member:     SetArgName                                  Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Versteckt die Controls
+#*  Funktion:   Versteckt die Controls
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void ArgInput::Hide()
@@ -454,16 +454,16 @@ void ArgInput::Hide()
 }
 
 /*************************************************************************
-#*	Member:		SetArgName									Datum:13.01.97
+#*  Member:     SetArgName                                  Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Zaubert die Controls wieder hervor.
+#*  Funktion:   Zaubert die Controls wieder hervor.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void ArgInput::Show()
@@ -478,16 +478,16 @@ void ArgInput::Show()
 }
 
 /*************************************************************************
-#*	Member:		FxClick										Datum:13.01.97
+#*  Member:     FxClick                                     Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Gibt den Event weiter.
+#*  Funktion:   Gibt den Event weiter.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void ArgInput::FxClick()
@@ -496,16 +496,16 @@ void ArgInput::FxClick()
 }
 
 /*************************************************************************
-#*	Member:		RefClick									Datum:13.01.97
+#*  Member:     RefClick                                    Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Gibt den Event weiter.
+#*  Funktion:   Gibt den Event weiter.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void ArgInput::RefClick()
@@ -514,16 +514,16 @@ void ArgInput::RefClick()
 }
 
 /*************************************************************************
-#*	Member:		FxFocus										Datum:13.01.97
+#*  Member:     FxFocus                                     Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Gibt den Event weiter.
+#*  Funktion:   Gibt den Event weiter.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void ArgInput::FxFocus()
@@ -532,16 +532,16 @@ void ArgInput::FxFocus()
 }
 
 /*************************************************************************
-#*	Member:		RefFocus									Datum:13.01.97
+#*  Member:     RefFocus                                    Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Gibt den Event weiter.
+#*  Funktion:   Gibt den Event weiter.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void ArgInput::RefFocus()
@@ -550,16 +550,16 @@ void ArgInput::RefFocus()
 }
 
 /*************************************************************************
-#*	Member:		EdFocus										Datum:13.01.97
+#*  Member:     EdFocus                                     Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Gibt den Event weiter.
+#*  Funktion:   Gibt den Event weiter.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void ArgInput::EdFocus()
@@ -568,16 +568,16 @@ void ArgInput::EdFocus()
 }
 
 /*************************************************************************
-#*	Member:		EdModify									Datum:13.01.97
+#*  Member:     EdModify                                    Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Gibt den Event weiter.
+#*  Funktion:   Gibt den Event weiter.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void ArgInput::EdModify()
@@ -586,16 +586,16 @@ void ArgInput::EdModify()
 }
 
 /*************************************************************************
-#*	Handle:		FxBtnHdl									Datum:13.01.97
+#*  Handle:     FxBtnHdl                                    Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Handle fuer Fx-Button Click-Event.
+#*  Funktion:   Handle fuer Fx-Button Click-Event.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 IMPL_LINK( ArgInput, FxBtnClickHdl, ImageButton*, pBtn )
@@ -606,16 +606,16 @@ IMPL_LINK( ArgInput, FxBtnClickHdl, ImageButton*, pBtn )
 }
 
 /*************************************************************************
-#*	Handle:		RefBtnClickHdl								Datum:13.01.97
+#*  Handle:     RefBtnClickHdl                              Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Handle fuer Fx-Button Click-Event.
+#*  Funktion:   Handle fuer Fx-Button Click-Event.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 IMPL_LINK( ArgInput, RefBtnClickHdl,RefButton*, pBtn )
@@ -626,16 +626,16 @@ IMPL_LINK( ArgInput, RefBtnClickHdl,RefButton*, pBtn )
 }
 
 /*************************************************************************
-#*	Handle:		FxBtnFocusHdl								Datum:13.01.97
+#*  Handle:     FxBtnFocusHdl                               Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Handle fuer Fx-Button Focus-Event.
+#*  Funktion:   Handle fuer Fx-Button Focus-Event.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 IMPL_LINK( ArgInput, FxBtnFocusHdl, ImageButton*, pBtn )
@@ -646,16 +646,16 @@ IMPL_LINK( ArgInput, FxBtnFocusHdl, ImageButton*, pBtn )
 }
 
 /*************************************************************************
-#*	Handle:		RefBtnFocusHdl								Datum:13.01.97
+#*  Handle:     RefBtnFocusHdl                              Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Handle fuer Fx-Button Focus-Event.
+#*  Funktion:   Handle fuer Fx-Button Focus-Event.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 IMPL_LINK( ArgInput, RefBtnFocusHdl,RefButton*, pBtn )
@@ -666,16 +666,16 @@ IMPL_LINK( ArgInput, RefBtnFocusHdl,RefButton*, pBtn )
 }
 
 /*************************************************************************
-#*	Handle:		EdFocusHdl									Datum:13.01.97
+#*  Handle:     EdFocusHdl                                  Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Handle fuer Fx-Button Focus-Event.
+#*  Funktion:   Handle fuer Fx-Button Focus-Event.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 IMPL_LINK( ArgInput, EdFocusHdl, ArgEdit*, pEd )
@@ -686,16 +686,16 @@ IMPL_LINK( ArgInput, EdFocusHdl, ArgEdit*, pEd )
 }
 
 /*************************************************************************
-#*	Handle:		RefBtnClickHdl								Datum:13.01.97
+#*  Handle:     RefBtnClickHdl                              Datum:13.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ArgInput
+#*  Klasse:     ArgInput
 #*
-#*  Funktion:	Handle fuer Fx-Button Focus-Event.
+#*  Funktion:   Handle fuer Fx-Button Focus-Event.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 IMPL_LINK( ArgInput, EdModifyHdl,ArgEdit*, pEd )
@@ -706,19 +706,19 @@ IMPL_LINK( ArgInput, EdModifyHdl,ArgEdit*, pEd )
 }
 
 /*************************************************************************
-#*	Member:		EditBox									Datum:20.01.97
+#*  Member:     EditBox                                 Datum:20.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		EditBox
+#*  Klasse:     EditBox
 #*
-#*  Funktion:	Konstruktor der Klasse ArgInput
+#*  Funktion:   Konstruktor der Klasse ArgInput
 #*
-#*  Input:		Parent, Window-Style
+#*  Input:      Parent, Window-Style
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
-EditBox::EditBox(	Window* pParent,WinBits nWinStyle)
+EditBox::EditBox(   Window* pParent,WinBits nWinStyle)
         :Control(pParent,nWinStyle|WB_DIALOGCONTROL)
 {
     pMEdit=new MultiLineEdit(this,WB_LEFT | WB_VSCROLL | (nWinStyle & WB_TABSTOP) |
@@ -729,16 +729,16 @@ EditBox::EditBox(	Window* pParent,WinBits nWinStyle)
 }
 
 /*************************************************************************
-#*	Member:		EditBox									Datum:20.01.97
+#*  Member:     EditBox                                 Datum:20.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		EditBox
+#*  Klasse:     EditBox
 #*
-#*  Funktion:	Konstruktor der Klasse ArgInput
+#*  Funktion:   Konstruktor der Klasse ArgInput
 #*
-#*  Input:		Parent, Resource
+#*  Input:      Parent, Resource
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 EditBox::EditBox( Window* pParent, const ResId& rResId )
@@ -756,8 +756,8 @@ EditBox::EditBox( Window* pParent, const ResId& rResId )
     WinBits nWinStyle=GetStyle() | WB_DIALOGCONTROL;
     SetStyle(nWinStyle);
 
-    //	#105582# the HelpId from the resource must be set for the MultiLineEdit,
-    //	not for the control that contains it.
+    //  #105582# the HelpId from the resource must be set for the MultiLineEdit,
+    //  not for the control that contains it.
     pMEdit->SetSmartHelpId( GetSmartHelpId() );
     SetSmartHelpId( SmartId() );
 }
@@ -770,17 +770,17 @@ EditBox::~EditBox()
     delete pTheEdit;
 }
 /*************************************************************************
-#*	Member:		EditBox									Datum:20.01.97
+#*  Member:     EditBox                                 Datum:20.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		EditBox
+#*  Klasse:     EditBox
 #*
-#*  Funktion:	Wenn sich die Selektion geaendert hat, so wird
-#*				diese Funktion aufgerufen.
+#*  Funktion:   Wenn sich die Selektion geaendert hat, so wird
+#*              diese Funktion aufgerufen.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void EditBox::SelectionChanged()
@@ -789,17 +789,17 @@ void EditBox::SelectionChanged()
 }
 
 /*************************************************************************
-#*	Member:		EditBox									Datum:20.05.98
+#*  Member:     EditBox                                 Datum:20.05.98
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		EditBox
+#*  Klasse:     EditBox
 #*
-#*  Funktion:	Wenn sich die Groesse geaendert hat, so muss
-#*				auch der MultiLineEdit angepasst werden..
+#*  Funktion:   Wenn sich die Groesse geaendert hat, so muss
+#*              auch der MultiLineEdit angepasst werden..
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void EditBox::Resize()
@@ -809,18 +809,18 @@ void EditBox::Resize()
 }
 
 /*************************************************************************
-#*	Member:		GetFocus									Datum:26.05.98
+#*  Member:     GetFocus                                    Datum:26.05.98
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		EditBox
+#*  Klasse:     EditBox
 #*
-#*  Funktion:	Wenn der Control aktiviert wird, so wird
-#*				die Selection aufgehoben und der Cursor ans
-#*				Ende gesetzt.
+#*  Funktion:   Wenn der Control aktiviert wird, so wird
+#*              die Selection aufgehoben und der Cursor ans
+#*              Ende gesetzt.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 void EditBox::GetFocus()
@@ -834,17 +834,17 @@ void EditBox::GetFocus()
 
 
 /*************************************************************************
-#*	Member:		EditBox									Datum:20.01.97
+#*  Member:     EditBox                                 Datum:20.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		EditBox
+#*  Klasse:     EditBox
 #*
-#*  Funktion:	Wenn ein Event ausgeloest wird, so wird diese Routine
-#*				zuerst aufgerufen und ein PostUserEvent verschickt.
+#*  Funktion:   Wenn ein Event ausgeloest wird, so wird diese Routine
+#*              zuerst aufgerufen und ein PostUserEvent verschickt.
 #*
-#*  Input:		Notify-Event
+#*  Input:      Notify-Event
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 long EditBox::PreNotify( NotifyEvent& rNEvt )
@@ -883,17 +883,17 @@ long EditBox::PreNotify( NotifyEvent& rNEvt )
 }
 
 /*************************************************************************
-#*	Member:		EditBox									Datum:21.01.97
+#*  Member:     EditBox                                 Datum:21.01.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		EditBox
+#*  Klasse:     EditBox
 #*
-#*  Funktion:	Wenn ein Event ausgeloest wurde, so wird diese Routine
-#*				zuerst aufgerufen.
+#*  Funktion:   Wenn ein Event ausgeloest wurde, so wird diese Routine
+#*              zuerst aufgerufen.
 #*
-#*  Input:		Key-Event
+#*  Input:      Key-Event
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 IMPL_LINK( EditBox, ChangedHdl, EditBox*, EMPTYARG )
@@ -913,8 +913,8 @@ IMPL_LINK( EditBox, ChangedHdl, EditBox*, EMPTYARG )
 
 void EditBox::UpdateOldSel()
 {
-    //	if selection is set for editing a function, store it as aOldSel,
-    //	so SelectionChanged isn't called in the next ChangedHdl call
+    //  if selection is set for editing a function, store it as aOldSel,
+    //  so SelectionChanged isn't called in the next ChangedHdl call
 
     if (pMEdit)
         aOldSel = pMEdit->GetSelection();
@@ -922,7 +922,7 @@ void EditBox::UpdateOldSel()
 //----------------------------------------------------------------------------
 
 //============================================================================
-//	class RefEdit
+//  class RefEdit
 //----------------------------------------------------------------------------
 
 #define SC_ENABLE_TIME 100
@@ -1027,7 +1027,7 @@ IMPL_LINK( RefEdit, UpdateHdl, Timer*, EMPTYARG )
 
 
 //============================================================================
-//	class RefButton
+//  class RefButton
 //----------------------------------------------------------------------------
 RefButton::RefButton( Window* _pParent, const ResId& rResId) :
     ImageButton( _pParent, rResId ),

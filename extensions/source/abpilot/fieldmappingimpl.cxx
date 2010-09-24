@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <tools/debug.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_ 
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
 #include <vcl/stdtext.hxx>
@@ -174,28 +174,28 @@ namespace abp
                 // So what we need first is a mapping from programmatic names (1) to programmatic names (2)
                 const sal_Char* pMappingProgrammatics[] =
                 {
-                    "FirstName",			"FirstName",
-                    "LastName",				"LastName",
-                    "Street",				"HomeAddress",
-                    "Zip",					"HomeZipCode",
-                    "City",					"HomeCity",
-                    "State",				"HomeState",
-                    "Country",				"HomeCountry",
-                    "PhonePriv",			"HomePhone",
-                    "PhoneComp",			"WorkPhone",
-                    "PhoneCell",			"CellularNumber",
-                    "Pager",				"PagerNumber",
-                    "Fax",					"FaxNumber",
-                    "EMail",				"PrimaryEmail",
-                    "URL",					"WebPage1",
-                    "Note",					"Notes",
-                    "Altfield1",			"Custom1",
-                    "Altfield2",			"Custom2",
-                    "Altfield3",			"Custom3",
-                    "Altfield4",			"Custom4",
-                    "Title",				"JobTitle",
-                    "Company",				"Company",
-                    "Department",			"Department"
+                    "FirstName",            "FirstName",
+                    "LastName",             "LastName",
+                    "Street",               "HomeAddress",
+                    "Zip",                  "HomeZipCode",
+                    "City",                 "HomeCity",
+                    "State",                "HomeState",
+                    "Country",              "HomeCountry",
+                    "PhonePriv",            "HomePhone",
+                    "PhoneComp",            "WorkPhone",
+                    "PhoneCell",            "CellularNumber",
+                    "Pager",                "PagerNumber",
+                    "Fax",                  "FaxNumber",
+                    "EMail",                "PrimaryEmail",
+                    "URL",                  "WebPage1",
+                    "Note",                 "Notes",
+                    "Altfield1",            "Custom1",
+                    "Altfield2",            "Custom2",
+                    "Altfield3",            "Custom3",
+                    "Altfield4",            "Custom4",
+                    "Title",                "JobTitle",
+                    "Company",              "Company",
+                    "Department",           "Department"
                 };
                     // (this list is not complete: both lists of programmatic names are larger in real,
                     // but this list above is the intersection)
@@ -219,7 +219,7 @@ namespace abp
                 ::rtl::OUString sAddressProgrammatic;
                 ::rtl::OUString sDriverProgrammatic;
                 ::rtl::OUString sDriverUI;
-                for	(	sal_Int32 i=0;
+                for (   sal_Int32 i=0;
                         i < nIntersectedProgrammatics;
                         ++i
                     )
@@ -286,7 +286,7 @@ namespace abp
                 // do we have a new alias for the programmatic?
                 MapString2StringIterator aPos = aFieldAssignment.find( *pExistentFields );
                 if ( aFieldAssignment.end() != aPos )
-                {	// yes
+                {   // yes
                     // -> set a new value
                     OConfigurationNode aExistentField = aFields.openNode( *pExistentFields );
                     aExistentField.setNodeValue( sAssignedNodeName, makeAny( aPos->second ) );
@@ -294,7 +294,7 @@ namespace abp
                     aFieldAssignment.erase( *pExistentFields );
                 }
                 else
-                {	// no
+                {   // no
                     // -> remove it
                     aFields.removeNode( *pExistentFields );
                 }
@@ -302,7 +302,7 @@ namespace abp
 
             // now everything remaining in aFieldAssignment marks a mapping entry which was not present
             // in the config before
-            for (	ConstMapString2StringIterator aNewMapping = aFieldAssignment.begin();
+            for (   ConstMapString2StringIterator aNewMapping = aFieldAssignment.begin();
                     aNewMapping != aFieldAssignment.end();
                     ++aNewMapping
                 )
@@ -321,7 +321,7 @@ namespace abp
         }
 
     //.....................................................................
-    }	// namespace fieldmapping
+    }   // namespace fieldmapping
     //.....................................................................
 
     //.....................................................................
@@ -366,10 +366,10 @@ namespace abp
         }
 
     //.....................................................................
-    }	// namespace addressconfig
+    }   // namespace addressconfig
     //.....................................................................
 
 //.........................................................................
-}	// namespace abp
+}   // namespace abp
 //.........................................................................
 

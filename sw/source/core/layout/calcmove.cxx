@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,16 +66,16 @@
 #include <ndtxt.hxx>
 
 //------------------------------------------------------------------------
-//				Move-Methoden
+//              Move-Methoden
 //------------------------------------------------------------------------
 
 /*************************************************************************
 |*
-|*	SwCntntFrm::ShouldBwdMoved()
+|*  SwCntntFrm::ShouldBwdMoved()
 |*
-|* 	Beschreibung		Returnwert sagt, ob der Frm verschoben werden sollte.
-|*	Ersterstellung		MA 05. Dec. 96
-|*	Letzte Aenderung	MA 05. Dec. 96
+|*  Beschreibung        Returnwert sagt, ob der Frm verschoben werden sollte.
+|*  Ersterstellung      MA 05. Dec. 96
+|*  Letzte Aenderung    MA 05. Dec. 96
 |*
 |*************************************************************************/
 
@@ -240,26 +240,26 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
 }
 
 //------------------------------------------------------------------------
-//				Calc-Methoden
+//              Calc-Methoden
 //------------------------------------------------------------------------
 
 /*************************************************************************
 |*
-|*	SwFrm::Prepare()
+|*  SwFrm::Prepare()
 |*
-|*	Beschreibung		Bereitet den Frm auf die 'Formatierung' (MakeAll())
-|*		vor. Diese Methode dient dazu auf dem Stack Platz einzusparen,
-|*		denn zur Positionsberechnung des Frm muss sichergestellt sein, dass
-|*		die Position von Upper und Prev gueltig sind, mithin also ein
-|*		rekursiver Aufruf (Schleife waere relativ teuer, da selten notwendig).
-|*		Jeder Aufruf von MakeAll verbraucht aber ca. 500Byte Stack -
-|*		das Ende ist leicht abzusehen. _Prepare benoetigt nur wenig Stack,
-|*		deshalb solle der Rekursive Aufruf hier kein Problem sein.
-|*		Ein weiterer Vorteil ist, das eines schoenen Tages das _Prepare und
-|*		damit die Formatierung von Vorgaengern umgangen werden kann.
-|*		So kann evtl. mal 'schnell' an's Dokumentende gesprungen werden.
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 13. Dec. 93
+|*  Beschreibung        Bereitet den Frm auf die 'Formatierung' (MakeAll())
+|*      vor. Diese Methode dient dazu auf dem Stack Platz einzusparen,
+|*      denn zur Positionsberechnung des Frm muss sichergestellt sein, dass
+|*      die Position von Upper und Prev gueltig sind, mithin also ein
+|*      rekursiver Aufruf (Schleife waere relativ teuer, da selten notwendig).
+|*      Jeder Aufruf von MakeAll verbraucht aber ca. 500Byte Stack -
+|*      das Ende ist leicht abzusehen. _Prepare benoetigt nur wenig Stack,
+|*      deshalb solle der Rekursive Aufruf hier kein Problem sein.
+|*      Ein weiterer Vorteil ist, das eines schoenen Tages das _Prepare und
+|*      damit die Formatierung von Vorgaengern umgangen werden kann.
+|*      So kann evtl. mal 'schnell' an's Dokumentende gesprungen werden.
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 13. Dec. 93
 |*
 |*************************************************************************/
 //Zwei kleine Freundschaften werden hier zu einem Geheimbund.
@@ -453,7 +453,7 @@ void SwFrm::PrepareCrsr()
         {
             ASSERT( pFrm, ":-( Layoutgeruest wackelig (this not found)." );
             if ( !pFrm )
-                return;	//Oioioioi ...
+                return; //Oioioioi ...
 
             if ( !pFrm->IsValid() )
             {
@@ -497,10 +497,10 @@ void SwFrm::PrepareCrsr()
 
 /*************************************************************************
 |*
-|*	SwFrm::MakePos()
+|*  SwFrm::MakePos()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 24. May. 93
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 24. May. 93
 |*
 |*************************************************************************/
 
@@ -546,7 +546,7 @@ void SwFrm::MakePos()
                  !pPrv->GetAttrSet()->GetKeep().GetValue()
                )
             {
-                pPrv->Calc();	//hierbei kann der Prev verschwinden!
+                pPrv->Calc();   //hierbei kann der Prev verschwinden!
             }
             else if ( pPrv->Frm().Top() == 0 )
             {
@@ -661,10 +661,10 @@ void SwFrm::MakePos()
 
 /*************************************************************************
 |*
-|*	SwPageFrm::MakeAll()
+|*  SwPageFrm::MakeAll()
 |*
-|*	Ersterstellung		MA 23. Feb. 93
-|*	Letzte Aenderung	MA 20. Jul. 98
+|*  Ersterstellung      MA 23. Feb. 93
+|*  Letzte Aenderung    MA 20. Jul. 98
 |*
 |*************************************************************************/
 // --> OD 2004-07-01 #i28701# - new type <SwSortedObjs>
@@ -704,8 +704,8 @@ void SwPageFrm::MakeAll()
 {
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
-    const SwRect aOldRect( Frm() );		//Anpassung der Root-Groesse
-    const SwLayNotify aNotify( this );	//uebernimmt im DTor die Benachrichtigung
+    const SwRect aOldRect( Frm() );     //Anpassung der Root-Groesse
+    const SwLayNotify aNotify( this );  //uebernimmt im DTor die Benachrichtigung
     SwBorderAttrAccess *pAccess = 0;
     const SwBorderAttrs*pAttrs = 0;
 
@@ -834,7 +834,7 @@ void SwPageFrm::MakeAll()
                     bValidSize = bValidPrtArea = TRUE;
                 }
                 else
-                {	//FixSize einstellen, bei Seiten nicht vom Upper sondern vom
+                {   //FixSize einstellen, bei Seiten nicht vom Upper sondern vom
                     //Attribut vorgegeben.
                     Frm().SSize( pAttrs->GetSize() );
                     Format( pAttrs );
@@ -860,10 +860,10 @@ void SwPageFrm::MakeAll()
 
 /*************************************************************************
 |*
-|*	SwLayoutFrm::MakeAll()
+|*  SwLayoutFrm::MakeAll()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 28. Nov. 95
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 28. Nov. 95
 |*
 |*************************************************************************/
 
@@ -948,10 +948,10 @@ void SwLayoutFrm::MakeAll()
 
 /*************************************************************************
 |*
-|*	SwCntntFrm::MakePrtArea()
+|*  SwCntntFrm::MakePrtArea()
 |*
-|*	Ersterstellung		MA 17. Nov. 92
-|*	Letzte Aenderung	MA 03. Mar. 96
+|*  Ersterstellung      MA 17. Nov. 92
+|*  Letzte Aenderung    MA 03. Mar. 96
 |*
 |*************************************************************************/
 bool SwTxtNode::IsCollapse() const
@@ -1081,7 +1081,7 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             //1. Der erste einer Kette hat keinen Rand nach oben
             //2. Nach unten gibt es nie einen Rand
             //3. Der Rand nach oben ist das Maximum aus dem Abstand des
-            //	 Prev nach unten und dem eigenen Abstand nach oben.
+            //   Prev nach unten und dem eigenen Abstand nach oben.
             //Die drei Regeln werden auf die Berechnung der Freiraeume, die von
             //UL- bzw. LRSpace vorgegeben werden, angewand. Es gibt in alle
             //Richtungen jedoch ggf. trotzdem einen Abstand; dieser wird durch
@@ -1130,10 +1130,10 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 
 /*************************************************************************
 |*
-|*	SwCntntFrm::MakeAll()
+|*  SwCntntFrm::MakeAll()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 16. Dec. 96
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 16. Dec. 96
 |*
 |*************************************************************************/
 
@@ -1197,33 +1197,33 @@ void SwCntntFrm::MakeAll()
     //uebernimmt im DTor die Benachrichtigung
     SwCntntNotify *pNotify = new SwCntntNotify( this );
 
-    BOOL	bMakePage	= TRUE;		//solange TRUE kann eine neue Seite
+    BOOL    bMakePage   = TRUE;     //solange TRUE kann eine neue Seite
                                     //angelegt werden (genau einmal)
-    BOOL 	bMovedBwd	= FALSE;	//Wird TRUE wenn der Frame zurueckfliesst
-    BOOL	bMovedFwd	= FALSE;	//solange FALSE kann der Frm zurueck-
+    BOOL    bMovedBwd   = FALSE;    //Wird TRUE wenn der Frame zurueckfliesst
+    BOOL    bMovedFwd   = FALSE;    //solange FALSE kann der Frm zurueck-
                                     //fliessen (solange, bis er einmal
                                     //vorwaerts ge'moved wurde).
-    BOOL	bFormatted	= FALSE;	//Fuer die Witwen und Waisen Regelung
+    BOOL    bFormatted  = FALSE;    //Fuer die Witwen und Waisen Regelung
                                     //wird der letzte CntntFrm einer Kette
                                     //u.U. zum Formatieren angeregt, dies
                                     //braucht nur einmal zu passieren.
                                     //Immer wenn der Frm gemoved wird muss
                                     //das Flag zurueckgesetzt werden.
-    BOOL	bMustFit	= FALSE;	//Wenn einmal die Notbremse gezogen wurde,
+    BOOL    bMustFit    = FALSE;    //Wenn einmal die Notbremse gezogen wurde,
                                     //werden keine anderen Prepares mehr
                                     //abgesetzt.
-    BOOL	bFitPromise = FALSE;	//Wenn ein Absatz nicht passte, mit WouldFit
+    BOOL    bFitPromise = FALSE;    //Wenn ein Absatz nicht passte, mit WouldFit
                                     //aber verspricht, dass er sich passend
                                     //einstellt wird dieses Flag gesetzt.
                                     //Wenn er dann sein Versprechen nicht haelt,
                                     //kann kontrolliert verfahren werden.
     BOOL bMoveable;
-    const BOOL bFly	= IsInFly();
+    const BOOL bFly = IsInFly();
     const BOOL bTab = IsInTab();
     const BOOL bFtn = IsInFtn();
     const BOOL bSct = IsInSct();
-    Point aOldFrmPos;				//Damit bei Turnarounds jew. mit der
-    Point aOldPrtPos;				//letzten Pos verglichen und geprueft
+    Point aOldFrmPos;               //Damit bei Turnarounds jew. mit der
+    Point aOldPrtPos;               //letzten Pos verglichen und geprueft
                                     //werden kann, ob ein Prepare sinnvoll ist.
 
     SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
@@ -1445,7 +1445,7 @@ void SwCntntFrm::MakeAll()
                 // bValidSize wird FALSE und das Format() wird gerufen.
                 Prepare( PREP_POS_CHGD, (const void*)&bFormatted, FALSE );
                 if ( bWidow && GetFollow() )
-                {	Prepare( PREP_WIDOWS_ORPHANS, 0, FALSE );
+                {   Prepare( PREP_WIDOWS_ORPHANS, 0, FALSE );
                     bValidSize = FALSE;
                 }
             }
@@ -1750,8 +1750,8 @@ void SwCntntFrm::MakeAll()
 
 /* MA 13. Oct. 98: Was soll das denn sein!?
  * AMA 14. Dec 98: Wenn ein spaltiger Bereich keinen Platz mehr fuer seinen ersten ContentFrm
- * 		bietet, so soll dieser nicht nur in die naechste Spalte, sondern ggf. bis zur naechsten
- * 		Seite wandern und dort einen Section-Follow erzeugen.
+ *      bietet, so soll dieser nicht nur in die naechste Spalte, sondern ggf. bis zur naechsten
+ *      Seite wandern und dort einen Section-Follow erzeugen.
  */
         if( IsInSct() && bMovedFwd && bMakePage && pOldUp->IsColBodyFrm() &&
             pOldUp->GetUpper()->GetUpper()->IsSctFrm() &&
@@ -1795,7 +1795,7 @@ void SwCntntFrm::MakeAll()
 #endif
         }
         if ( bMovedBwd && GetUpper() )
-        {	//Unuetz gewordene Invalidierungen zuruecknehmen.
+        {   //Unuetz gewordene Invalidierungen zuruecknehmen.
             GetUpper()->ResetCompletePaint();
             if( pPre && !pPre->IsSctFrm() )
                 ::ValidateSz( pPre );
@@ -1840,10 +1840,10 @@ void SwCntntFrm::MakeAll()
 
 /*************************************************************************
 |*
-|*	SwCntntFrm::_WouldFit()
+|*  SwCntntFrm::_WouldFit()
 |*
-|*	Ersterstellung		MA 28. Feb. 95
-|*	Letzte Aenderung	AMA 15. Feb. 99
+|*  Ersterstellung      MA 28. Feb. 95
+|*  Letzte Aenderung    AMA 15. Feb. 99
 |*
 |*************************************************************************/
 
@@ -1893,8 +1893,8 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
         pNxt->Format( &rAttrs );
     }
 
-    pFrm->bValidPos  	 = bOldPos;
-    pFrm->bValidSize 	 = bOldSz;
+    pFrm->bValidPos      = bOldPos;
+    pFrm->bValidSize     = bOldSz;
     pFrm->bValidPrtArea  = bOldPrt;
 }
 

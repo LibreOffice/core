@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -168,76 +168,6 @@ MSWordAttrIter::~MSWordAttrIter()
     m_rExport.pChpIter = pOld;
 }
 
-// Die Klasse SwAttrIter ist eine Hilfe zum Aufbauen der Fkp.chpx.
-// Dabei werden nur Zeichen-Attribute beachtet; Absatz-Attribute brauchen
-// diese Behandlung nicht.
-// Die Absatz- und Textattribute des Writers kommen rein, und es wird
-// mit Where() die naechste Position geliefert, an der sich die Attribute
-// aendern. IsTxtAtr() sagt, ob sich an der mit Where() gelieferten Position
-// ein Attribut ohne Ende und mit \xff im Text befindet.
-// Mit OutAttr() werden die Attribute an der angegebenen SwPos
-// ausgegeben.
-
-class SwAttrIter : public MSWordAttrIter
-{
-private:
-    const SwTxtNode& rNd;
-
-    CharRuns maCharRuns;
-    cCharRunIter maCharRunIter;
-
-    rtl_TextEncoding meChrSet;
-    sal_uInt16 mnScript;
-    bool mbCharIsRTL;
-
-    const SwRedline* pCurRedline;
-    xub_StrLen nAktSwPos;
-    USHORT nCurRedlinePos;
-
-    bool mbParaIsRTL;
-
-    const SwFmtDrop &mrSwFmtDrop;
-
-    sw::Frames maFlyFrms;     // #i2916#
-    sw::FrameIter maFlyIter;
-
-    xub_StrLen SearchNext( xub_StrLen nStartPos );
-    void FieldVanish( const String& rTxt );
-
-    void OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool bStart);
-
-    void IterToCurrent();
-
-    //No copying
-    SwAttrIter(const SwAttrIter&);
-    SwAttrIter& operator=(const SwAttrIter&);
-public:
-    SwAttrIter( MSWordExportBase& rWr, const SwTxtNode& rNd );
-
-    bool IsTxtAttr( xub_StrLen nSwPos );
-    bool IsRedlineAtEnd( xub_StrLen nPos ) const;
-    bool IsDropCap( int nSwPos );
-    bool RequiresImplicitBookmark();
-
-    void NextPos() { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
-
-    void OutAttr( xub_StrLen nSwPos );
-    virtual const SfxPoolItem* HasTextItem( USHORT nWhich ) const;
-    virtual const SfxPoolItem& GetItem( USHORT nWhich ) const;
-    int OutAttrWithRange(xub_StrLen nPos);
-    const SwRedlineData* GetRedline( xub_StrLen nPos );
-    void OutFlys(xub_StrLen nSwPos);
-
-    xub_StrLen WhereNext() const    { return nAktSwPos; }
-    sal_uInt16 GetScript() const { return mnScript; }
-    bool IsCharRTL() const { return mbCharIsRTL; }
-    bool IsParaRTL() const { return mbParaIsRTL; }
-    rtl_TextEncoding GetCharSet() const { return meChrSet; }
-    String GetSnippet(const String &rStr, xub_StrLen nAktPos,
-        xub_StrLen nLen) const;
-    const SwFmtDrop& GetSwFmtDrop() const { return mrSwFmtDrop; }
-};
-
 class sortswflys :
     public std::binary_function<const sw::Frame&, const sw::Frame&, bool>
 {
@@ -337,7 +267,7 @@ xub_StrLen SwAttrIter::SearchNext( xub_StrLen nStartPos )
     xub_StrLen pos = lcl_getMinPos( fieldEndPos, fieldStartPos );
     pos = lcl_getMinPos( pos, formElementPos );
 
-    if (pos!=STRING_NOTFOUND)  
+    if (pos!=STRING_NOTFOUND)
         nMinPos=pos;
 
     // first the redline, then the attributes
@@ -456,7 +386,14 @@ xub_StrLen SwAttrIter::SearchNext( xub_StrLen nStartPos )
     return nMinPos;
 }
 
-void SwAttrIter::OutAttr( xub_StrLen nSwPos )
+bool lcl_isFontsizeItem( const SfxPoolItem& rItem )
+{
+    return ( rItem.Which( ) == RES_CHRATR_FONTSIZE ||
+            rItem.Which( ) == RES_CHRATR_CJK_FONTSIZE ||
+            rItem.Which( ) == RES_CHRATR_CTL_FONTSIZE );
+}
+
+void SwAttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
 {
     m_rExport.AttrOutput().RTLAndCJKState( IsCharRTL(), GetScript() );
 
@@ -544,7 +481,10 @@ void SwAttrIter::OutAttr( xub_StrLen nSwPos )
 
     sw::cPoolItemIter aEnd = aRangeItems.end();
     for ( sw::cPoolItemIter aI = aRangeItems.begin(); aI != aEnd; ++aI )
-        aExportItems[aI->first] = aI->second;
+    {
+        if ( !bRuby || !lcl_isFontsizeItem( *aI->second ) )
+            aExportItems[aI->first] = aI->second;
+    }
 
     if ( !aExportItems.empty() )
     {
@@ -697,7 +637,7 @@ const SfxPoolItem& SwAttrIter::GetItem(USHORT nWhich) const
     return pRet ? *pRet : rNd.SwCntntNode::GetAttr(nWhich);
 }
 
-void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby )
+void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/, const SwFmtRuby& rRuby )
 {
     String aStr( FieldString( ww::eEQ ) );
     aStr.APPEND_CONST_ASC( "\\* jc" );
@@ -801,7 +741,14 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRu
     aStr += String::CreateFromInt32(nHeight);
     aStr += '(';
     aStr += rRuby.GetText();
-    aStr.APPEND_CONST_ASC( ");" );
+    aStr.APPEND_CONST_ASC( ")" );
+
+    // The parameter separator depends on the FIB.lid
+    if ( m_rWW8Export.pFib->getNumDecimalSep() == '.' )
+        aStr.APPEND_CONST_ASC( "," );
+    else
+        aStr.APPEND_CONST_ASC( ";" );
+
     m_rWW8Export.OutputField( 0, ww::eEQ, aStr,
             WRITEFIELD_START | WRITEFIELD_CMD_START );
 }
@@ -894,7 +841,7 @@ bool WW8AttributeOutput::AnalyzeURL( const String& rUrl, const String& rTarget, 
 
     if ( sMark.Len() )
         ( ( sURL.APPEND_CONST_ASC( " \\l \"" ) ) += sMark ) += '\"';
-    
+
     if ( rTarget.Len() )
         ( sURL.APPEND_CONST_ASC( " \\n " ) ) += rTarget;
 
@@ -1217,7 +1164,7 @@ int SwAttrIter::OutAttrWithRange(xub_StrLen nPos)
                 case RES_TXTATR_CJK_RUBY:
                     if ( nPos == *pHt->GetStart() )
                     {
-                        m_rExport.AttrOutput().StartRuby( rNd, *static_cast< const SwFmtRuby* >( pItem ) );
+                        m_rExport.AttrOutput().StartRuby( rNd, nPos, *static_cast< const SwFmtRuby* >( pItem ) );
                         ++nRet;
                     }
                     if ( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )
@@ -1344,10 +1291,10 @@ short MSWordExportBase::GetDefaultFrameDirection( ) const
         else if ( pOutFmtNode->ISA( SwTxtFmtColl ) )
             nDir = FRMDIR_HORI_LEFT_TOP;    //what else can we do :-(
     }
-    
+
     if ( nDir == FRMDIR_ENVIRONMENT )
         nDir = FRMDIR_HORI_LEFT_TOP;        //Set something
-    
+
     return nDir;
 }
 
@@ -1597,12 +1544,12 @@ void WW8AttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rS
     m_rWW8Export.WriteCR( pTextNodeInfoInner );
 
     if ( pTextNodeInfo.get() != NULL )
-    { 
-#ifdef DEBUG            
+    {
+#ifdef DEBUG
         ::std::clog << pTextNodeInfo->toString() << ::std::endl;
 #endif
 
-        TableInfoCell( pTextNodeInfoInner );        
+        TableInfoCell( pTextNodeInfoInner );
     }
 
     m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->Count(), m_rWW8Export.pO->GetData() );
@@ -1646,14 +1593,127 @@ void WW8AttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rS
     m_rWW8Export.pO->Remove( 0, m_rWW8Export.pO->Count() );
 }
 
-xub_StrLen MSWordExportBase::GetNextPos( SwAttrIter* aAttrIter, const SwTxtNode& /*rNode*/, xub_StrLen /*nAktPos*/  )
+xub_StrLen MSWordExportBase::GetNextPos( SwAttrIter* aAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos  )
 {
-   return aAttrIter->WhereNext();
+    // Get the bookmarks for the normal run
+    xub_StrLen nNextPos = aAttrIter->WhereNext();
+
+    GetSortedBookmarks( rNode, nAktPos, nNextPos - nAktPos );
+
+    xub_StrLen nNextBookmark = nNextPos;
+    NearestBookmark( nNextPos );
+
+    return std::min( nNextPos, nNextBookmark );
 }
 
-void MSWordExportBase::UpdatePosition( SwAttrIter* aAttrIter, xub_StrLen /*nAktPos*/, xub_StrLen /*nEnd*/ )
+void MSWordExportBase::UpdatePosition( SwAttrIter* aAttrIter, xub_StrLen nAktPos, xub_StrLen /*nEnd*/ )
 {
-    aAttrIter->NextPos();
+    xub_StrLen nNextPos;
+
+    // either no bookmark, or it is not at the current position
+    if ( !NearestBookmark( nNextPos ) || nNextPos > nAktPos )
+        aAttrIter->NextPos();
+}
+
+bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt,
+                    xub_StrLen nEnd, IMarkVector& rArr )
+{
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    ULONG nNd = rNd.GetIndex( );
+
+    const sal_Int32 nMarks = pMarkAccess->getMarksCount();
+    for ( sal_Int32 i = 0; i < nMarks; i++ )
+    {
+        IMark* pMark = ( pMarkAccess->getMarksBegin() + i )->get();
+
+        // Only keep the bookmarks starting or ending in this node
+        if ( pMark->GetMarkStart().nNode == nNd ||
+             pMark->GetMarkEnd().nNode == nNd )
+        {
+            xub_StrLen nBStart = pMark->GetMarkStart().nContent.GetIndex();
+            xub_StrLen nBEnd = pMark->GetMarkEnd().nContent.GetIndex();
+
+            // Keep only the bookmars starting or ending in the snippet
+            bool bIsStartOk = ( nBStart >= nStt ) && ( nBStart <= nEnd );
+            bool bIsEndOk = ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
+
+            if ( bIsStartOk || bIsEndOk )
+                rArr.push_back( pMark );
+        }
+    }
+    return ( rArr.size() > 0 );
+}
+
+class CompareMarksEnd : public std::binary_function < const IMark *, const IMark *, bool >
+{
+public:
+    inline bool operator() ( const IMark * pOneB, const IMark * pTwoB ) const
+    {
+        xub_StrLen nOEnd = pOneB->GetMarkEnd().nContent.GetIndex();
+        xub_StrLen nTEnd = pTwoB->GetMarkEnd().nContent.GetIndex();
+
+        return nOEnd < nTEnd;
+    }
+};
+
+bool MSWordExportBase::NearestBookmark( xub_StrLen& rNearest )
+{
+    bool bHasBookmark = false;
+
+    if ( m_rSortedMarksStart.size( ) > 0 )
+    {
+        IMark* pMarkStart = m_rSortedMarksStart.front();
+        rNearest = pMarkStart->GetMarkStart().nContent.GetIndex();
+        bHasBookmark = true;
+    }
+
+    if ( m_rSortedMarksEnd.size( ) > 0 )
+    {
+        IMark* pMarkEnd = m_rSortedMarksEnd[0];
+        if ( !bHasBookmark )
+            rNearest = pMarkEnd->GetMarkEnd().nContent.GetIndex();
+        else
+            rNearest = std::min( rNearest, pMarkEnd->GetMarkEnd().nContent.GetIndex() );
+        bHasBookmark = true;
+    }
+
+    return bHasBookmark;
+}
+
+void MSWordExportBase::GetSortedBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen )
+{
+    IMarkVector aMarksStart;
+    if ( GetBookmarks( rNode, nAktPos, nAktPos + nLen, aMarksStart ) )
+    {
+        IMarkVector aSortedEnd;
+        IMarkVector aSortedStart;
+        for ( IMarkVector::const_iterator it = aMarksStart.begin(), end = aMarksStart.end();
+              it < end; ++it )
+        {
+            IMark* pMark = (*it);
+
+            // Remove the positions egals to the current pos
+            xub_StrLen nStart = pMark->GetMarkStart().nContent.GetIndex();
+            xub_StrLen nEnd = pMark->GetMarkEnd().nContent.GetIndex();
+
+            if ( nStart > nAktPos )
+                aSortedStart.push_back( pMark );
+
+            if ( nEnd > nAktPos )
+                aSortedEnd.push_back( pMark );
+        }
+
+        // Sort the bookmarks by end position
+        std::sort( aSortedEnd.begin(), aSortedEnd.end(), CompareMarksEnd() );
+
+        m_rSortedMarksStart.swap( aSortedStart );
+        m_rSortedMarksEnd.swap( aSortedEnd );
+    }
+    else
+    {
+        m_rSortedMarksStart.clear( );
+        m_rSortedMarksEnd.clear( );
+    }
 }
 
 void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
@@ -1834,7 +1894,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 }
             }
         }
-        
+
         // Output the character attributes
         AttrOutput().StartRunProperties();
         aAttrIter.OutAttr( nAktPos );   // nAktPos - 1 ??
@@ -1887,7 +1947,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     while ( nAktPos < nEnd );
 
     AttrOutput().StartParagraphProperties( rNode );
-    
+
     AttrOutput().ParagraphStyle( nStyle );
 
     if ( mpParentFrame && !bIsInTable )    // Fly-Attrs
@@ -1903,7 +1963,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         if (pTextNodeInfoInner->isFirstInTable())
         {
             const SwTable * pTable = pTextNodeInfoInner->getTable();
-            const SwTableFmt * pTabFmt = 
+            const SwTableFmt * pTabFmt =
                 dynamic_cast<const SwTableFmt *>(pTable->GetRegisteredIn());
             if (pTabFmt != NULL)
             {
@@ -1911,8 +1971,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     AttrOutput().PageBreakBefore(true);
             }
         }
-    } 
-    
+    }
+
     if ( !bFlyInTable )
     {
         SfxItemSet* pTmpSet = 0;

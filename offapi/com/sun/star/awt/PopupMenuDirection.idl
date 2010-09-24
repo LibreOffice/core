@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,69 +24,69 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_PopupMenuDirection_idl__ 
-#define __com_sun_star_awt_PopupMenuDirection_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
-/** These values are used to specify the direction in which  
-    a popup menu will grow. 
-         
+#ifndef __com_sun_star_awt_PopupMenuDirection_idl__
+#define __com_sun_star_awt_PopupMenuDirection_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** These values are used to specify the direction in which
+    a popup menu will grow.
+
     <p>They may be expanded in future versions.</p>
  */
 published constants PopupMenuDirection
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** @deprecated
      */
-    const short DEFAULT = 0; 
- 
-    //------------------------------------------------------------------------- 
-     
+    const short DEFAULT = 0;
+
+    //-------------------------------------------------------------------------
+
     /** @deprecated
      */
-    const short DOWN = 1; 
- 
-    //------------------------------------------------------------------------- 
-        
+    const short DOWN = 1;
+
+    //-------------------------------------------------------------------------
+
     /** opens on execute in a default direction.
      */
-    const short EXECUTE_DEFAULT = 0; 
- 
-    //------------------------------------------------------------------------- 
-        
+    const short EXECUTE_DEFAULT = 0;
+
+    //-------------------------------------------------------------------------
+
     /** opens on execute downwards.
      */
-    const short EXECUTE_DOWN = 1; 
- 
-    //------------------------------------------------------------------------- 
-        
+    const short EXECUTE_DOWN = 1;
+
+    //-------------------------------------------------------------------------
+
     /** opens on execute upwards.
      */
-    const short EXECUTE_UP = 2; 
- 
-    //------------------------------------------------------------------------- 
-        
+    const short EXECUTE_UP = 2;
+
+    //-------------------------------------------------------------------------
+
     /** opens on execute to the left.
      */
-    const short EXECUTE_LEFT = 4; 
- 
-    //------------------------------------------------------------------------- 
-        
+    const short EXECUTE_LEFT = 4;
+
+    //-------------------------------------------------------------------------
+
     /** opens on execute to the right.
      */
-    const short EXECUTE_RIGHT = 8; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    const short EXECUTE_RIGHT = 8;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

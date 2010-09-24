@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -127,31 +127,31 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
 
-extern sal_Bool bNoInterrupt;		// in mainwn.cxx
+extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
-#define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT| 				\
+#define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT|               \
                       SFX_VIEW_HAS_PRINTOPTIONS)
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Statics
+    Beschreibung:   Statics
  --------------------------------------------------------------------*/
 
 int bDocSzUpdated = 1;
 
-SvxSearchItem*	SwView::pSrchItem 	= 0;
+SvxSearchItem*  SwView::pSrchItem   = 0;
 
-sal_uInt16 			SwView::nInsertCtrlState 		= FN_INSERT_TABLE;
-sal_uInt16 			SwView::nWebInsertCtrlState     = FN_INSERT_TABLE;
-sal_uInt16 			SwView::nInsertObjectCtrlState 	= SID_INSERT_DIAGRAM;
+sal_uInt16          SwView::nInsertCtrlState        = FN_INSERT_TABLE;
+sal_uInt16          SwView::nWebInsertCtrlState     = FN_INSERT_TABLE;
+sal_uInt16          SwView::nInsertObjectCtrlState  = SID_INSERT_DIAGRAM;
 
-sal_Bool			SwView::bExtra		= sal_False;
-sal_Bool			SwView::bFound		= sal_False;
-sal_Bool			SwView::bJustOpened	= sal_False;
+sal_Bool            SwView::bExtra      = sal_False;
+sal_Bool            SwView::bFound      = sal_False;
+sal_Bool            SwView::bJustOpened = sal_False;
 
 
-SvxSearchDialog*	SwView::pSrchDlg	= 0;
-SearchAttrItemList* SwView::pSrchList	= 0;
-SearchAttrItemList* SwView::pReplList	= 0;
+SvxSearchDialog*    SwView::pSrchDlg    = 0;
+SearchAttrItemList* SwView::pSrchList   = 0;
+SearchAttrItemList* SwView::pReplList   = 0;
 
 DBG_NAME(viewhdl)
 
@@ -251,7 +251,7 @@ void SwView::SelectShell()
 {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //
-//		Achtung: SelectShell fuer die WebView mitpflegen
+//      Achtung: SelectShell fuer die WebView mitpflegen
 //
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -287,10 +287,10 @@ void SwView::SelectShell()
         SfxDispatcher &rDispatcher = GetDispatcher();
         SwToolbarConfigItem *pBarCfg = SW_MOD()->GetToolbarConfig();
 
-    //	DELETEZ(pxSelectionObj); //Selektionsobjekt loeschen
+    //  DELETEZ(pxSelectionObj); //Selektionsobjekt loeschen
         if ( pShell )
         {
-            rDispatcher.Flush();		// alle gecachten Shells wirklich loeschen
+            rDispatcher.Flush();        // alle gecachten Shells wirklich loeschen
 
             //Zur alten Selektion merken welche Toolbar sichtbar war
             USHORT nId = static_cast< USHORT >( rDispatcher.GetObjectBarId( SFX_OBJECTBAR_OBJECT ));
@@ -517,7 +517,7 @@ IMPL_LINK( SwView, AttrChangedNotify, SwWrtShell *, EMPTYARG )
     if( !bAttrChgNotified )
     {
         if ( pWrtShell->BasicActionPend() || bNoInterrupt ||
-             GetDispatcher().IsLocked() ||				 //do not confuse the SFX
+             GetDispatcher().IsLocked() ||               //do not confuse the SFX
              GetViewFrame()->GetBindings().IsInUpdate() )//do not confuse the SFX
         {
             bAttrChgNotified = sal_True;
@@ -604,7 +604,7 @@ void SwView::_CheckReadonlyState()
     SfxItemState eStateRO, eStateProtAll;
     const SfxPoolItem *pItem;
     // JP 29.04.97: von einem nur uns bekannten Slot den Status abfragen.
-    //				Ansonsten kennen andere den Slot; wie z.B. die BasidIde
+    //              Ansonsten kennen andere den Slot; wie z.B. die BasidIde
     eStateRO = rDis.QueryState( FN_INSERT_BOOKMARK, pItem );
     eStateProtAll = rDis.QueryState( FN_EDIT_REGION, pItem );
     sal_Bool bChgd = sal_False;
@@ -613,37 +613,37 @@ void SwView::_CheckReadonlyState()
     {
         static sal_uInt16 aROIds[] =
         {
-            SID_DELETE, 				FN_BACKSPACE,				FN_SHIFT_BACKSPACE,
+            SID_DELETE,                 FN_BACKSPACE,               FN_SHIFT_BACKSPACE,
             SID_UNDO,
-            SID_REDO,					SID_REPEAT,					SID_PASTE,
+            SID_REDO,                   SID_REPEAT,                 SID_PASTE,
             SID_PASTE_UNFORMATTED,
             SID_PASTE_SPECIAL,            SID_SBA_BRW_INSERT,
             SID_BACKGROUND_COLOR,       FN_INSERT_BOOKMARK,
-            SID_CHARMAP,				FN_INSERT_SOFT_HYPHEN,
-            FN_INSERT_HARDHYPHEN,		FN_INSERT_HARD_SPACE,		FN_INSERT_BREAK,
-            FN_INSERT_LINEBREAK,		FN_INSERT_COLUMN_BREAK,		FN_INSERT_BREAK_DLG,
-            FN_DELETE_SENT,				FN_DELETE_BACK_SENT,		FN_DELETE_WORD,
-            FN_DELETE_BACK_WORD,		FN_DELETE_LINE,				FN_DELETE_BACK_LINE,
-            FN_DELETE_PARA,				FN_DELETE_BACK_PARA,		FN_DELETE_WHOLE_LINE,
-            FN_CALCULATE,				FN_FORMAT_RESET,
-            FN_POSTIT,			   		FN_JAVAEDIT,				SID_ATTR_PARA_ADJUST_LEFT,
-            SID_ATTR_PARA_ADJUST_RIGHT,	SID_ATTR_PARA_ADJUST_CENTER,SID_ATTR_PARA_ADJUST_BLOCK,
-            SID_ATTR_PARA_LINESPACE_10,	SID_ATTR_PARA_LINESPACE_15,	SID_ATTR_PARA_LINESPACE_20,
-            SID_ATTR_CHAR_FONT,			SID_ATTR_CHAR_FONTHEIGHT,	SID_ATTR_CHAR_COLOR_BACKGROUND,
-            SID_ATTR_CHAR_COLOR_BACKGROUND_EXT,						SID_ATTR_CHAR_COLOR_EXT,
-            SID_ATTR_CHAR_COLOR,		SID_ATTR_CHAR_WEIGHT,		SID_ATTR_CHAR_POSTURE,
+            SID_CHARMAP,                FN_INSERT_SOFT_HYPHEN,
+            FN_INSERT_HARDHYPHEN,       FN_INSERT_HARD_SPACE,       FN_INSERT_BREAK,
+            FN_INSERT_LINEBREAK,        FN_INSERT_COLUMN_BREAK,     FN_INSERT_BREAK_DLG,
+            FN_DELETE_SENT,             FN_DELETE_BACK_SENT,        FN_DELETE_WORD,
+            FN_DELETE_BACK_WORD,        FN_DELETE_LINE,             FN_DELETE_BACK_LINE,
+            FN_DELETE_PARA,             FN_DELETE_BACK_PARA,        FN_DELETE_WHOLE_LINE,
+            FN_CALCULATE,               FN_FORMAT_RESET,
+            FN_POSTIT,                  FN_JAVAEDIT,                SID_ATTR_PARA_ADJUST_LEFT,
+            SID_ATTR_PARA_ADJUST_RIGHT, SID_ATTR_PARA_ADJUST_CENTER,SID_ATTR_PARA_ADJUST_BLOCK,
+            SID_ATTR_PARA_LINESPACE_10, SID_ATTR_PARA_LINESPACE_15, SID_ATTR_PARA_LINESPACE_20,
+            SID_ATTR_CHAR_FONT,         SID_ATTR_CHAR_FONTHEIGHT,   SID_ATTR_CHAR_COLOR_BACKGROUND,
+            SID_ATTR_CHAR_COLOR_BACKGROUND_EXT,                     SID_ATTR_CHAR_COLOR_EXT,
+            SID_ATTR_CHAR_COLOR,        SID_ATTR_CHAR_WEIGHT,       SID_ATTR_CHAR_POSTURE,
             SID_ATTR_CHAR_OVERLINE,
-            SID_ATTR_CHAR_UNDERLINE,	SID_ATTR_FLASH,				SID_ATTR_CHAR_STRIKEOUT,
-            FN_UNDERLINE_DOUBLE,		SID_ATTR_CHAR_CONTOUR,		SID_ATTR_CHAR_SHADOWED,
-            SID_ATTR_CHAR_AUTOKERN,		SID_ATTR_CHAR_ESCAPEMENT,	FN_SET_SUPER_SCRIPT,
-            FN_SET_SUB_SCRIPT,			SID_ATTR_CHAR_CASEMAP,		SID_ATTR_CHAR_LANGUAGE,
-            SID_ATTR_CHAR_KERNING,		SID_CHAR_DLG,				SID_ATTR_CHAR_WORDLINEMODE,
-            FN_GROW_FONT_SIZE,			FN_SHRINK_FONT_SIZE,		FN_TXTATR_INET,
-            FN_FORMAT_DROPCAPS,			SID_ATTR_PARA_ADJUST,		SID_ATTR_PARA_LINESPACE,
-            SID_ATTR_PARA_SPLIT,		SID_ATTR_PARA_KEEP,			SID_ATTR_PARA_WIDOWS,
+            SID_ATTR_CHAR_UNDERLINE,    SID_ATTR_FLASH,             SID_ATTR_CHAR_STRIKEOUT,
+            FN_UNDERLINE_DOUBLE,        SID_ATTR_CHAR_CONTOUR,      SID_ATTR_CHAR_SHADOWED,
+            SID_ATTR_CHAR_AUTOKERN,     SID_ATTR_CHAR_ESCAPEMENT,   FN_SET_SUPER_SCRIPT,
+            FN_SET_SUB_SCRIPT,          SID_ATTR_CHAR_CASEMAP,      SID_ATTR_CHAR_LANGUAGE,
+            SID_ATTR_CHAR_KERNING,      SID_CHAR_DLG,               SID_ATTR_CHAR_WORDLINEMODE,
+            FN_GROW_FONT_SIZE,          FN_SHRINK_FONT_SIZE,        FN_TXTATR_INET,
+            FN_FORMAT_DROPCAPS,         SID_ATTR_PARA_ADJUST,       SID_ATTR_PARA_LINESPACE,
+            SID_ATTR_PARA_SPLIT,        SID_ATTR_PARA_KEEP,         SID_ATTR_PARA_WIDOWS,
             SID_ATTR_PARA_ORPHANS,
-            SID_ATTR_PARA_MODEL,		SID_PARA_DLG,
-            FN_SELECT_PARA,				SID_DEC_INDENT,
+            SID_ATTR_PARA_MODEL,        SID_PARA_DLG,
+            FN_SELECT_PARA,             SID_DEC_INDENT,
             SID_INC_INDENT
         };
         static sal_Bool bFirst = sal_True;
@@ -710,11 +710,11 @@ void SwView::_CheckReadonlySelection()
         case SHELL_MODE_TABLE_LIST_TEXT:
             {
 //JP 22.01.99: temporaere Loesung!!! Sollte bei jeder Cursorbewegung
-//			den Font von der akt. Einfuegeposition setzen, also ausserhalb
-// 			dieses if's. Aber TH wertet den Font zur Zeit nicht aus und
-//			das besorgen erscheint mir hier zu teuer zu sein.
-//			Ausserdem haben wir keinen Font, sondern nur Attribute aus denen
-//			die Textformatierung dann den richtigen Font zusammen baut.
+//          den Font von der akt. Einfuegeposition setzen, also ausserhalb
+//          dieses if's. Aber TH wertet den Font zur Zeit nicht aus und
+//          das besorgen erscheint mir hier zu teuer zu sein.
+//          Ausserdem haben wir keinen Font, sondern nur Attribute aus denen
+//          die Textformatierung dann den richtigen Font zusammen baut.
 
                 InputContext aCntxt( GetEditWin().GetInputContext() );
                 aCntxt.SetOptions( SW_DISABLE_ON_PROTECTED_CURSOR & nDisableFlags
@@ -864,7 +864,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         pWrtShell = new SwWrtShell( *((SwView*)pExistingSh)->pWrtShell,
                                     pEditWin, *this);
 //MA: Das kann doch nur zu einem GPF fuehren!
-//		nSelectionType = ((SwView*)pOldSh)->nSelectionType;
+//      nSelectionType = ((SwView*)pOldSh)->nSelectionType;
     }
     else
     {
@@ -917,7 +917,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     // <--
 
     // JP 05.02.99: Bug 61495 - damit unter anderem das HLineal im
-    //				ReadonlyFall nicht angezeigt wird
+    //              ReadonlyFall nicht angezeigt wird
     aUsrPref.SetReadonly( pWrtShell->GetViewOptions()->IsReadonly() );
 
     //Kein Margin fuer OLE!
@@ -1048,7 +1048,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     {
         SfxRequest aSfxRequest( FN_UPDATE_TOX, SFX_CALLMODE_SLOT, GetPool() );
         Execute( aSfxRequest );
-        pWrtShell->GetDoc()->SetUpdateTOX( sal_False );		// wieder zurueck setzen
+        pWrtShell->GetDoc()->SetUpdateTOX( sal_False );     // wieder zurueck setzen
         pWrtShell->SttEndDoc(TRUE);
     }
 
@@ -1058,7 +1058,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     // zur Zeit(360) wird die View erst nach dem Ctor eingetragen
     // der folgende Ausdruck funktioniert auch, wenn sich das aendert
     //JP 27.07.98: wenn per Undo nicht mehr die Modifizierung aufhebar ist,
-    //				so setze das Modified NICHT zurueck.
+    //              so setze das Modified NICHT zurueck.
     // --> OD 2005-02-11 #i38810# - no reset of modified state, if document
     // was already modified.
     if ( !pWrtShell->GetDoc()->IsUndoNoResetModified() &&
@@ -1108,6 +1108,12 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         pDocSh->EnableSetModified( sal_True );
     InvalidateBorder();
 
+    if( !pHScrollbar->IsVisible( TRUE ) )
+        ShowHScrollbar( FALSE );
+    if( !pVScrollbar->IsVisible( TRUE ) )
+        ShowVScrollbar( FALSE );
+
+    GetViewFrame()->GetWindow().AddChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
 }
 
 /*--------------------------------------------------------------------
@@ -1117,6 +1123,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
 SwView::~SwView()
 {
+    GetViewFrame()->GetWindow().RemoveChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
     delete mpPostItMgr;
     // --> OD 2009-03-10 #i100035#
     mpPostItMgr = 0;
@@ -1146,7 +1153,7 @@ SwView::~SwView()
     EndListening(*GetDocShell());
     delete pScrollFill;
     delete pWrtShell;
-    pWrtShell = 0;		// Auf 0 setzen, damit folgende DToren nicht drauf zugreifen
+    pWrtShell = 0;      // Auf 0 setzen, damit folgende DToren nicht drauf zugreifen
     pShell = 0;
     delete pHScrollbar;
     delete pVScrollbar;
@@ -1163,7 +1170,7 @@ SwView::~SwView()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	DocShell rausgrabbeln ueber das FrameWindow
+    Beschreibung:   DocShell rausgrabbeln ueber das FrameWindow
  --------------------------------------------------------------------*/
 
 
@@ -1174,7 +1181,7 @@ SwDocShell* SwView::GetDocShell()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	CursorPos merken
+    Beschreibung:   CursorPos merken
  --------------------------------------------------------------------*/
 
 
@@ -1248,8 +1255,8 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
         sal_uInt16 nZoomFactor =
             static_cast< sal_uInt16 >( rUserData.GetToken(0, ';', nPos ).ToInt32() );
 
-        long nLeft	= rUserData.GetToken(0, ';', nPos ).ToInt32(),
-             nTop	= rUserData.GetToken(0, ';', nPos ).ToInt32(),
+        long nLeft  = rUserData.GetToken(0, ';', nPos ).ToInt32(),
+             nTop   = rUserData.GetToken(0, ';', nPos ).ToInt32(),
              nRight = rUserData.GetToken(0, ';', nPos ).ToInt32(),
              nBottom= rUserData.GetToken(0, ';', nPos ).ToInt32();
 
@@ -1626,7 +1633,7 @@ void SwView::ShowCursor( FASTBOOL bOn )
 {
     //JP 10.10.2001: Bug 90461 - don't scroll the cursor into the visible area
     BOOL bUnlockView = !pWrtShell->IsViewLocked();
-    pWrtShell->LockView( TRUE );	//lock visible section
+    pWrtShell->LockView( TRUE );    //lock visible section
 
     if( !bOn )
         pWrtShell->HideCrsr();
@@ -1672,7 +1679,7 @@ String SwView::GetSelectionText( sal_Bool bCompleteWrds )
 /*-----------------09/16/97 09:50am-----------------
 
 --------------------------------------------------*/
-String	SwView::GetSelectionTextParam( sal_Bool bCompleteWrds,
+String  SwView::GetSelectionTextParam( sal_Bool bCompleteWrds,
                                        sal_Bool bEraseTrail )
 {
     String sReturn;
@@ -1805,8 +1812,8 @@ void SwView::ScannerEventHdl( const EventObject& /*rEventObject*/ )
     uno::Reference< XScannerManager > xScanMgr = SW_MOD()->GetScannerManager();
     if( xScanMgr.is() )
     {
-        const ScannerContext	aContext( xScanMgr->getAvailableScanners().getConstArray()[ 0 ] );
-        const ScanError			eError = xScanMgr->getError( aContext );
+        const ScannerContext    aContext( xScanMgr->getAvailableScanners().getConstArray()[ 0 ] );
+        const ScanError         eError = xScanMgr->getError( aContext );
 
         if( ScanError_ScanErrorNone == eError )
         {
@@ -1835,7 +1842,7 @@ void SwView::ScannerEventHdl( const EventObject& /*rEventObject*/ )
 --------------------------------------------------*/
 
 
-void	SwView::StopShellTimer()
+void    SwView::StopShellTimer()
 {
     if(aTimer.IsActive())
     {

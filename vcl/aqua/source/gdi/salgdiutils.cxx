@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, lon
     mbWindow    = false;
     mbPrinter   = true;
     mbVirDev    = false;
-    
+
     mrContext   = xContext;
     mfFakeDPIScale = fScale;
     mnRealDPIX  = nDPIX;
@@ -89,7 +89,7 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
     mbVirDev    = true;
 
     // set graphics properties
-    mxLayer	= xLayer;
+    mxLayer = xLayer;
     mrContext = xContext;
     mnBitmapDepth = nBitmapDepth;
 
@@ -247,7 +247,7 @@ void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeigh
         // this helps with antialiased rendering
         const Rectangle aVclRect(Point(static_cast<long int>(lX-1),
                     static_cast<long int>(lY-1) ),
-                 Size( 	static_cast<long int>(lWidth+2), 
+                 Size(  static_cast<long int>(lWidth+2),
                     static_cast<long int>(lHeight+2) ) );
         mpFrame->maInvalidRect.Union( aVclRect );
     }
@@ -256,14 +256,14 @@ void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeigh
 CGPoint* AquaSalGraphics::makeCGptArray(ULONG nPoints, const SalPoint*  pPtAry)
 {
     CGPoint *CGpoints = new (CGPoint[nPoints]);
-    if ( CGpoints ) 
+    if ( CGpoints )
       {
         for(ULONG i=0;i<nPoints;i++)
           {
-            CGpoints[i].x = (float)(pPtAry[i].mnX);  
-            CGpoints[i].y = (float)(pPtAry[i].mnY);  
+            CGpoints[i].x = (float)(pPtAry[i].mnX);
+            CGpoints[i].y = (float)(pPtAry[i].mnY);
           }
-      }    
+      }
     return CGpoints;
 }
 

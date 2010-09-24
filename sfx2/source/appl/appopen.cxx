@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -463,8 +463,8 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
 
                xDoc->GetStorage()->copyToStorage( xTempStorage );
 
-//REMOVE				// the following operations should be done in one step
-//REMOVE	       		xDoc->DoHandsOff();
+//REMOVE                // the following operations should be done in one step
+//REMOVE                xDoc->DoHandsOff();
             if ( !xDoc->DoSaveCompleted( new SfxMedium( xTempStorage, String() ) ) )
                 throw uno::RuntimeException();
         }
@@ -652,6 +652,29 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 
 //---------------------------------------------------------------------------
 
+namespace {
+
+/**
+ * Check if a given filter type should open the hyperlinked document
+ * natively.
+ *
+ * @param rFilter filter object
+ */
+bool lcl_isFilterNativelySupported(const SfxFilter& rFilter)
+{
+    if (rFilter.IsOwnFormat())
+        return true;
+
+    ::rtl::OUString aName = rFilter.GetFilterName();
+    if (aName.indexOf(::rtl::OUString::createFromAscii("MS Excel")) == 0)
+        // We can handle all Excel variants natively.
+        return true;
+
+    return false;
+}
+
+}
+
 void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
@@ -709,7 +732,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pStandardDirItem )
             sStandardDir = pStandardDirItem->GetValue();
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >	aBlackList;
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >  aBlackList;
 
         SFX_REQUEST_ARG( rReq, pBlackListItem, SfxStringListItem, SID_BLACK_LIST, FALSE );
         if ( pBlackListItem )
@@ -895,14 +918,14 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     // Mark without URL cannot be handled by hyperlink code
     if ( bHyperlinkUsed && aFileName.Len() && aFileName.GetChar(0) != '#' )
     {
-        Reference< ::com::sun::star::document::XTypeDetection >	xTypeDetection(
+        Reference< ::com::sun::star::document::XTypeDetection > xTypeDetection(
                                                                     ::comphelper::getProcessServiceFactory()->createInstance(
                                                                     ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" )),
                                                                     UNO_QUERY );
         if ( xTypeDetection.is() )
         {
-            URL				aURL;
-            ::rtl::OUString	aTypeName;
+            URL             aURL;
+            ::rtl::OUString aTypeName;
 
             aURL.Complete = aFileName;
             Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
@@ -928,7 +951,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         Window *pWindow = SFX_APP()->GetTopWindow();
 
                         String aSecurityWarningBoxTitle( SfxResId( RID_SECURITY_WARNING_TITLE ));
-                        WarningBox	aSecurityWarningBox( pWindow, SfxResId( RID_SECURITY_WARNING_HYPERLINK ));
+                        WarningBox  aSecurityWarningBox( pWindow, SfxResId( RID_SECURITY_WARNING_HYPERLINK ));
                         aSecurityWarningBox.SetText( aSecurityWarningBoxTitle );
 
                         // Replace %s with the real file name
@@ -961,7 +984,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             aTypeName = xTypeDetection->queryTypeByURL( aURL.Main );
             SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
             const SfxFilter* pFilter = rMatcher.GetFilter4EA( aTypeName );
-            if ( !pFilter || !( pFilter->IsOwnFormat() ))
+            if (!pFilter || !lcl_isFilterNativelySupported(*pFilter))
             {
                 // hyperlink does not link to own type => special handling (http, ftp) browser and (other external protocols) OS
                 Reference< XSystemShellExecute > xSystemShellExecute( ::comphelper::getProcessServiceFactory()->createInstance(

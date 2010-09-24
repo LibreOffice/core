@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,19 +54,19 @@ namespace slideshow
         public:
             /** Create an AnimatioNode for the given XAnimationNode
              */
-            static AnimationNodeSharedPtr createAnimationNode( const ::com::sun::star::uno::Reference< 
+            static AnimationNodeSharedPtr createAnimationNode( const ::com::sun::star::uno::Reference<
                                                                        ::com::sun::star::animations::XAnimationNode >& xNode,
                                                                const ::basegfx::B2DVector&                          rSlideSize,
-                                                               const SlideShowContext&								rContext );
+                                                               const SlideShowContext&                              rContext );
 
-            
+
 #if defined(VERBOSE) && defined(DBG_UTIL)
             static void showTree( AnimationNodeSharedPtr& pRootNode );
 # define SHOW_NODE_TREE(a) AnimationNodeFactory::showTree(a)
 #else
 # define SHOW_NODE_TREE(a)
 #endif
-            
+
         private:
             // default: constructor/destructor disabled
             AnimationNodeFactory();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-SwVbaPageSetup::SwVbaPageSetup(const uno::Reference< XHelperInterface >& xParent, 
+SwVbaPageSetup::SwVbaPageSetup(const uno::Reference< XHelperInterface >& xParent,
                 const uno::Reference< uno::XComponentContext >& xContext,
                 const uno::Reference< frame::XModel >& xModel,
                 const uno::Reference< beans::XPropertySet >& xProps ) throw (uno::RuntimeException):
@@ -46,7 +46,7 @@ SwVbaPageSetup::SwVbaPageSetup(const uno::Reference< XHelperInterface >& xParent
     mxPageProps.set( xProps, uno::UNO_QUERY_THROW );
     mnOrientPortrait = word::WdOrientation::wdOrientPortrait;
     mnOrientLandscape = word::WdOrientation::wdOrientLandscape;
-}		
+}
 
 double SAL_CALL SwVbaPageSetup::getGutter() throw (uno::RuntimeException)
 {
@@ -93,7 +93,7 @@ void SAL_CALL SwVbaPageSetup::setHeaderDistance( double _headerdistance ) throw 
     mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderIsOn"))) >>= isHeaderOn;
     if( !isHeaderOn )
         mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderIsOn")), uno::makeAny( sal_True ) );
-        
+
     mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TopMargin"))) >>= aktTopMargin;
     mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderBodyDistance"))) >>= aktSpacing;
     mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderHeight"))) >>= aktHeaderHeight;
@@ -127,7 +127,7 @@ void SAL_CALL SwVbaPageSetup::setFooterDistance( double _footerdistance ) throw 
     mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterIsOn"))) >>= isFooterOn;
     if( !isFooterOn )
         mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterIsOn")), uno::makeAny( sal_True ) );
-        
+
     mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BottomMargin"))) >>= aktBottomMargin;
     mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterBodyDistance"))) >>= aktSpacing;
     mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterHeight"))) >>= aktFooterHeight;
@@ -243,7 +243,7 @@ rtl::OUString SwVbaPageSetup::getStyleOfFirstPage() throw (uno::RuntimeException
         wdSectionStart = word::WdSectionStart::wdSectionOddPage;
     else
         wdSectionStart = word::WdSectionStart::wdSectionNewPage;
-    return wdSectionStart;    
+    return wdSectionStart;
 }
 
 void SAL_CALL SwVbaPageSetup::setSectionStart( ::sal_Int32 /*_sectionstart*/ ) throw (uno::RuntimeException)
@@ -252,14 +252,14 @@ void SAL_CALL SwVbaPageSetup::setSectionStart( ::sal_Int32 /*_sectionstart*/ ) t
     // #FIXME:
 }
 
-rtl::OUString& 
+rtl::OUString&
 SwVbaPageSetup::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaPageSetup") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 SwVbaPageSetup::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

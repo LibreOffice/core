@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ namespace framework{
 //-----------------------------------------------
 // definitions
 
-sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;	///	static counter for rescheduling
+sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for rescheduling
 static ::rtl::OUString PROGRESS_RESOURCE = ::rtl::OUString::createFromAscii("private:resource/progressbar/progressbar");
 
 //-----------------------------------------------
@@ -519,7 +519,7 @@ void StatusIndicatorFactory::impl_showProgress()
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::task::XStatusIndicator > xProgress;
-    
+
     if (xFrame.is())
     {
         // use frame layouted progress implementation
@@ -535,7 +535,7 @@ void StatusIndicatorFactory::impl_showProgress()
                 // CreateElement does nothing if there is already a valid progress.
                 xLayoutManager->createElement( PROGRESS_RESOURCE );
                 xLayoutManager->showElement( PROGRESS_RESOURCE );
-                
+
                 css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(PROGRESS_RESOURCE);
                 if (xProgressBar.is())
                     xProgress = css::uno::Reference< css::task::XStatusIndicator >(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);

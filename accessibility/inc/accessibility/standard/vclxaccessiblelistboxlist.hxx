@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-typedef ::cppu::ImplHelper1	<	::com::sun::star::accessibility::XAccessibleSelection
-                            >	VCLXAccessibleListBoxList_BASE;
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleSelection
+                            >   VCLXAccessibleListBoxList_BASE;
 
 
 class ListBox;
@@ -94,9 +94,9 @@ protected:
     virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent);
 
 private:
-    sal_Int32	m_nLastTopEntry;
-    USHORT		m_nLastSelectedPos;
-    bool		m_bDisableProcessEvent;
+    sal_Int32   m_nLastTopEntry;
+    USHORT      m_nLastSelectedPos;
+    bool        m_bDisableProcessEvent;
 
     void UpdateEntryRange_Impl (void);
     using VCLXAccessibleList::UpdateSelection_Impl;

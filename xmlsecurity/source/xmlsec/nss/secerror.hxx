@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,5 +36,5 @@ getCertError(PRErrorCode errNum);
 
 void
 printChainFailure(CERTVerifyLog *log);
-#endif	// _XSECERROR_HXX_
+#endif  // _XSECERROR_HXX_
 

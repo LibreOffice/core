@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,9 +104,9 @@ SV_DECL_IMPL_REF( UcbLockBytesHandler )
 
 class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
 {
-    vos::OCondition			m_aInitialized;
-    vos::OCondition			m_aTerminated;
-    vos::OMutex				m_aMutex;
+    vos::OCondition         m_aInitialized;
+    vos::OCondition         m_aTerminated;
+    vos::OMutex             m_aMutex;
 
     String                  m_aContentType;
     String                  m_aRealURL;
@@ -115,7 +115,7 @@ class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
     NS_UNO::Reference < NS_IO::XInputStream >  m_xInputStream;
     NS_UNO::Reference < NS_IO::XOutputStream > m_xOutputStream;
     NS_UNO::Reference < NS_IO::XSeekable >     m_xSeekable;
-    void*					m_pCommandThread; // is alive only for compatibility reasons
+    void*                   m_pCommandThread; // is alive only for compatibility reasons
     UcbLockBytesHandlerRef  m_xHandler;
 
     sal_uInt32              m_nRead;
@@ -126,7 +126,7 @@ class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
     sal_Bool                m_bDontClose : 1;
     sal_Bool                m_bStreamValid : 1;
 
-    DECL_LINK(				DataAvailHdl, void * );
+    DECL_LINK(              DataAvailHdl, void * );
 
                             UcbLockBytes( UcbLockBytesHandler* pHandler=NULL );
 protected:

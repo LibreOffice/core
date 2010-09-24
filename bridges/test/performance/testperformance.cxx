@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,20 +59,20 @@ static inline sal_uInt32 getSystemTicks()
 #ifdef SAL_W32
     return (sal_uInt32)GetTickCount();
 #else // only UNX supported for now
-    static sal_uInt32	nImplTicksPerSecond = 0;
-    static double		dImplTicksPerSecond;
-    static double		dImplTicksULONGMAX;
-    
-    struct tms			aTms;
+    static sal_uInt32   nImplTicksPerSecond = 0;
+    static double       dImplTicksPerSecond;
+    static double       dImplTicksULONGMAX;
+
+    struct tms          aTms;
     sal_uInt32 nTicks = (sal_uInt32)times( &aTms );
 
     if ( !nImplTicksPerSecond )
     {
         nImplTicksPerSecond = CLK_TCK;
         dImplTicksPerSecond = nImplTicksPerSecond;
-        dImplTicksULONGMAX	= (double)(sal_uInt32)ULONG_MAX;
+        dImplTicksULONGMAX  = (double)(sal_uInt32)ULONG_MAX;
     }
-    
+
     double fTicks = nTicks;
     fTicks *= 1000;
     fTicks /= dImplTicksPerSecond;
@@ -186,5 +186,5 @@ void main()
             OUString textEnc( RTL_CONSTASCII_USTRINGPARAM( "this is a test string" ) );
         }
     }
-        
+
 }

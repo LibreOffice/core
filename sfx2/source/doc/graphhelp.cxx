@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
             sal_Bool bFailed = (sal_Bool)GraphicConverter::Export( *pStream, aGraph, CVT_EMF );
             pStream->Flush();
             delete pStream;
-            
+
             if ( !bFailed )
                 pResult = GetEnhMetaFileA( aWinFile.getStr() );
         }
@@ -166,13 +166,13 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
                 sal_Int32 nLength = pStream->Seek( STREAM_SEEK_TO_END );
                 if ( nLength > 22 )
                 {
-                    HMETAFILE hMeta = SetMetaFileBitsEx( nLength - 22, 
+                    HMETAFILE hMeta = SetMetaFileBitsEx( nLength - 22,
                                     ( reinterpret_cast< const sal_uChar*>( pStream->GetData() ) ) + 22 );
 
                     if ( hMeta )
                     {
                         HGLOBAL hMemory = GlobalAlloc( GMEM_DDESHARE | GMEM_MOVEABLE, sizeof( METAFILEPICT ) );
-                
+
                         if ( hMemory )
                         {
                                METAFILEPICT* pMF = (METAFILEPICT*)GlobalLock( hMemory );
@@ -190,7 +190,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
                             }
                             else
                             {
-                                Size aWinSize = OutputDevice::LogicToLogic( Size( aMetaSize.Width(), aMetaSize.Height() ), 
+                                Size aWinSize = OutputDevice::LogicToLogic( Size( aMetaSize.Width(), aMetaSize.Height() ),
                                                                             pGDIMeta->GetPrefMapMode(),
                                                                             aWinMode );
                                 pMF->xExt = aWinSize.Width();
@@ -234,36 +234,36 @@ sal_Bool GraphicHelper::mergeBitmaps_Impl( const BitmapEx& rBmpEx, const BitmapE
 {
     // the implementation is provided by KA
 
-    Point			aNullPt;
-    Rectangle		aBmpRect( aNullPt, rBmpEx.GetSizePixel() );
-    VirtualDevice	aVDev;
-    
+    Point           aNullPt;
+    Rectangle       aBmpRect( aNullPt, rBmpEx.GetSizePixel() );
+    VirtualDevice   aVDev;
+
     if( !rReturn.IsEmpty() )
         rReturn.SetEmpty();
-    
+
     if( !rBmpEx.IsEmpty() && aVDev.SetOutputSizePixel( aBmpRect.GetSize() ) )
     {
         Rectangle aOverlayRect( rOverlayRect );
-        
+
         aOverlayRect.Intersection( aBmpRect );
-        
+
         if( rOverlay.IsEmpty() || rOverlayRect.IsEmpty() )
             rReturn = rBmpEx;
         else
         {
             aVDev.DrawBitmap( aNullPt, aVDev.GetOutputSizePixel(), rBmpEx.GetBitmap() );
             aVDev.DrawBitmapEx( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), rOverlay );
-        
+
             Bitmap aBmp( aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
             aBmp.Convert( BMP_CONVERSION_24BIT );
-                    
+
             if( !rBmpEx.IsTransparent() )
                 rReturn = aBmp;
             else
             {
                 aVDev.DrawBitmap( aNullPt, aVDev.GetOutputSizePixel(), rBmpEx.GetMask() );
                 Bitmap aOverlayMergeBmp( aVDev.GetBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize() ) );
-            
+
                 if( rOverlay.IsTransparent() )
                     aVDev.DrawBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), rOverlay.GetMask() );
                 else
@@ -271,8 +271,8 @@ sal_Bool GraphicHelper::mergeBitmaps_Impl( const BitmapEx& rBmpEx, const BitmapE
                     aVDev.SetLineColor( COL_BLACK );
                     aVDev.SetFillColor( COL_BLACK );
                     aVDev.DrawRect( aOverlayRect);
-                }			
-                    
+                }
+
                 aOverlayMergeBmp.CombineSimple( aVDev.GetBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize() ), BMP_COMBINE_AND );
                 aVDev.DrawBitmap( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), aOverlayMergeBmp );
                 rReturn = BitmapEx( aBmp, aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
@@ -288,28 +288,28 @@ sal_Bool GraphicHelper::mergeBitmaps_Impl( const BitmapEx& rBmpEx, const BitmapE
 // static
 sal_Bool GraphicHelper::createThumb_Impl( const GDIMetaFile& rMtf,
                        sal_uInt32 nMaximumExtent,
-                       BitmapEx& rBmpEx, 
+                       BitmapEx& rBmpEx,
                        const BitmapEx* pOverlay,
                        const Rectangle* pOverlayRect )
 {
     // the implementation is provided by KA
 
     // initialization seems to be complicated but is used to avoid rounding errors
-    VirtualDevice	aVDev;
+    VirtualDevice   aVDev;
     const Point     aNullPt;
     const Point     aTLPix( aVDev.LogicToPixel( aNullPt, rMtf.GetPrefMapMode() ) );
     const Point     aBRPix( aVDev.LogicToPixel( Point( rMtf.GetPrefSize().Width() - 1, rMtf.GetPrefSize().Height() - 1 ), rMtf.GetPrefMapMode() ) );
     Size            aDrawSize( aVDev.LogicToPixel( rMtf.GetPrefSize(), rMtf.GetPrefMapMode() ) );
-    Size			aSizePix( labs( aBRPix.X() - aTLPix.X() ) + 1, labs( aBRPix.Y() - aTLPix.Y() ) + 1 );
-    Point			aPosPix;
-    
+    Size            aSizePix( labs( aBRPix.X() - aTLPix.X() ) + 1, labs( aBRPix.Y() - aTLPix.Y() ) + 1 );
+    Point           aPosPix;
+
     if ( !rBmpEx.IsEmpty() )
         rBmpEx.SetEmpty();
 
     // determine size that has the same aspect ratio as image size and
     // fits into the rectangle determined by nMaximumExtent
-    if ( aSizePix.Width() && aSizePix.Height() && 
-            ( sal::static_int_cast<sal_uInt32>(aSizePix.Width()) > nMaximumExtent || 
+    if ( aSizePix.Width() && aSizePix.Height() &&
+            ( sal::static_int_cast<sal_uInt32>(aSizePix.Width()) > nMaximumExtent ||
               sal::static_int_cast<sal_uInt32>(aSizePix.Height()) > nMaximumExtent ) )
     {
         const Size  aOldSizePix( aSizePix );
@@ -325,23 +325,23 @@ sal_Bool GraphicHelper::createThumb_Impl( const GDIMetaFile& rMtf,
             aSizePix.Width() = nMaximumExtent;
             aSizePix.Height() = FRound(  nMaximumExtent / fWH );
         }
-        
+
         aDrawSize.Width() = FRound( ( static_cast< double >( aDrawSize.Width() ) * aSizePix.Width() ) / aOldSizePix.Width() );
         aDrawSize.Height() = FRound( ( static_cast< double >( aDrawSize.Height() ) * aSizePix.Height() ) / aOldSizePix.Height() );
     }
-    
-    Size 		aFullSize;
-    Point		aBackPosPix;
-    Rectangle 	aOverlayRect;
+
+    Size        aFullSize;
+    Point       aBackPosPix;
+    Rectangle   aOverlayRect;
 
     // calculate addigtional positions and sizes if an overlay image is used
     if (  pOverlay )
     {
         aFullSize = Size( nMaximumExtent, nMaximumExtent );
         aOverlayRect = Rectangle( aNullPt, aFullSize  );
-        
+
         aOverlayRect.Intersection( pOverlayRect ? *pOverlayRect : Rectangle( aNullPt, pOverlay->GetSizePixel() ) );
-         
+
         if ( !aOverlayRect.IsEmpty() )
             aBackPosPix = Point( ( nMaximumExtent - aSizePix.Width() ) >> 1, ( nMaximumExtent - aSizePix.Height() ) >> 1 );
         else
@@ -352,28 +352,28 @@ sal_Bool GraphicHelper::createThumb_Impl( const GDIMetaFile& rMtf,
         aFullSize = aSizePix;
         pOverlay = NULL;
     }
-        
+
     // draw image(s) into VDev and get resulting image
     if ( aVDev.SetOutputSizePixel( aFullSize ) )
     {
         // draw metafile into VDev
         const_cast< GDIMetaFile& >( rMtf ).WindStart();
         const_cast< GDIMetaFile& >( rMtf ).Play( &aVDev, aBackPosPix, aDrawSize );
-        
+
         // draw overlay if neccessary
         if ( pOverlay )
             aVDev.DrawBitmapEx( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), *pOverlay );
-        
+
         // get paint bitmap
         Bitmap aBmp( aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
-        
+
         // assure that we have a true color image
         if ( aBmp.GetBitCount() != 24 )
             aBmp.Convert( BMP_CONVERSION_24BIT );
-            
+
         rBmpEx = BitmapEx( aBmp );
     }
-    
+
     return !rBmpEx.IsEmpty();
 }
 

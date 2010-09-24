@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,7 +103,7 @@ namespace {
         {}
 
         void initControls( const uno::Reference<awt::XControlContainer>& xControls,
-                           const rtl::OUString&							 rFilename )
+                           const rtl::OUString&                          rFilename )
         {
             m_xListbox.set(xControls->getControl(
                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListBox" ))),
@@ -181,7 +181,7 @@ namespace {
     };
 #if 0 // code currently unused (see below)
     sal_Int32 queryDocumentTypeDialog( const uno::Reference<uno::XComponentContext>& xContext,
-                                       const rtl::OUString&							 rFilename )
+                                       const rtl::OUString&                          rFilename )
     {
         uno::Reference<awt::XDialogProvider2> xDialogProvider(
             xContext->getServiceManager()->createInstanceWithContext(
@@ -735,7 +735,7 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                         xEmbed.clear();
                                         break;
                                     }
-                                    
+
                                     rtl::OUString aDocName( rInPDFFileURL.copy( rInPDFFileURL.lastIndexOf( sal_Unicode('/') )+1 ) );
 
                                     bool bEntered = false;

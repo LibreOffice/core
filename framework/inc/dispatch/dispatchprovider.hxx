@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_DISPATCH_DISPATCHPROVIDER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <services/frame.hxx>
@@ -47,7 +47,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -56,13 +56,13 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
@@ -99,12 +99,12 @@ enum EDispatchHelper
     @attention      Use this class as member only! Never use it as baseclass.
                     XInterface will be ambigous and we hold a weakreference to ouer OWNER - not to ouer SUPERCLASS!
 
-    @base			ThreadHelpBase
+    @base           ThreadHelpBase
                         supports threadsafe mechanism
     @base           OWeakObject
                         provides ref count and weak mechanism
 
-    @devstatus		ready to use
+    @devstatus      ready to use
     @threadsafe     yes
     @modified       17.05.2002 07:56, as96863
 */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,17 +42,17 @@ class ImpWorkWindow;
 class EditWindow
 {
 protected:
-    ImpWorkWindow	*pImpWorkWindow;
+    ImpWorkWindow   *pImpWorkWindow;
     BOOL check();
 
-    WorkWindow	*pMemParent;
-    String		aMemName;
-    WinBits		iMemWstyle;
+    WorkWindow  *pMemParent;
+    String      aMemName;
+    WinBits     iMemWstyle;
 
-    String		aMemPreWinText;
-    BOOL		bShowWin;
+    String      aMemPreWinText;
+    BOOL        bShowWin;
 
-    xub_StrLen		nTextLen;	// aus Performanzgründen eigene Länge mitführen
+    xub_StrLen      nTextLen;   // aus Performanzgründen eigene Länge mitführen
 
 public:
     EditWindow( WorkWindow *pParent, const UniString &rName = UniString( RTL_CONSTASCII_USTRINGPARAM ( "Debug" ) ), WinBits iWstyle = WB_HSCROLL | WB_VSCROLL );

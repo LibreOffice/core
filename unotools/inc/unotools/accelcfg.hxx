@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ public:
 
                     // get special accelerators
     static SvtAcceleratorConfiguration* CreateFromStream( SvStream& rStream );
-    static String	GetStreamName();
+    static String   GetStreamName();
     static SvStream* GetDefaultStream( StreamMode );
 
                     virtual ~SvtAcceleratorConfiguration();

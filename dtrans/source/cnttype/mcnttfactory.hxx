@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,26 +57,26 @@ public:
 
     //------------------------------------------------
     // XMimeContentTypeFactory
-    //------------------------------------------------ 
-    
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentType > SAL_CALL createMimeContentType( const ::rtl::OUString& aContentType ) 
+    //------------------------------------------------
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentType > SAL_CALL createMimeContentType( const ::rtl::OUString& aContentType )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     // XServiceInfo
-    //------------------------------------------------ 
+    //------------------------------------------------
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(	 )
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
         throw(::com::sun::star::uno::RuntimeException);
 
 private:
-    ::osl::Mutex																	       m_aMutex;
+    ::osl::Mutex                                                                           m_aMutex;
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_SrvMgr;
 };
 

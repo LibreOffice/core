@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@ import org.openoffice.xmerge.converter.xml.OfficeDocument;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
 /**
- *  This class is an implementation of <code>OfficeDocument</code> for 
+ *  This class is an implementation of <code>OfficeDocument</code> for
  *  the SXC format.
  */
 public class SxcDocument extends OfficeDocument {
@@ -78,7 +78,7 @@ public class SxcDocument extends OfficeDocument {
     protected String getOfficeClassAttribute() {
         return OfficeConstants.SXC_TYPE;
     }
-    
+
     /**
      * Method to return the MIME type of the document.
      *
@@ -87,6 +87,6 @@ public class SxcDocument extends OfficeDocument {
     protected final String getDocumentMimeType() {
         return OfficeConstants.SXC_MIME_TYPE;
     }
-    
+
 }
 

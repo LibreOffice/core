@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -422,7 +422,7 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
         else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_COPYOUT) == 0)
             bCopyOutputData = ::cppu::any2bool(aSortProperties[i].Value);
 //      no longer supported
-/*		else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_ISCASE) == 0)
+/*      else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_ISCASE) == 0)
             bIsCaseSensitive = ::cppu::any2bool(aSortProperties[i].Value);*/
         else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_ISULIST) == 0)
             bIsUserListEnabled = ::cppu::any2bool(aSortProperties[i].Value);
@@ -433,7 +433,7 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
         else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_SORTFLD) == 0)
             aSortProperties[i].Value >>= aSortFields;
 //      no longer supported
-/*		else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_COLLLOC) == 0)
+/*      else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_COLLLOC) == 0)
             aSortProperties[i].Value >>= aCollatorLocale;
         else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_COLLALG) == 0)
             aSortProperties[i].Value >>= sCollatorAlgorithm;*/
@@ -450,8 +450,8 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sOUCellAddress);
         }
 //      no longer supported
-//		if (bIsCaseSensitive)
-//			rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
+//      if (bIsCaseSensitive)
+//          rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
 
         if (aSortFields[0].IsCaseSensitive)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
@@ -463,7 +463,7 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
         }
 #endif
 //      no longer supported
-/*		if (aCollatorLocale.Language.getLength())
+/*      if (aCollatorLocale.Language.getLength())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_LANGUAGE, aCollatorLocale.Language);
         if (aCollatorLocale.Country.getLength())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_COUNTRY, aCollatorLocale.Country);
@@ -529,9 +529,9 @@ void ScXMLExportDatabaseRanges::WriteSubTotalDescriptor(const com::sun::star::un
         if (nSubTotalFields > 0)
         {
             uno::Reference <beans::XPropertySet> xPropertySet (xSubTotalDescriptor, uno::UNO_QUERY);
-//			sal_Bool bEnableUserSortList = sal_False;
-//			sal_Bool bSortAscending = sal_True;
-//			sal_Int32 nUserSortListIndex = 0;
+//          sal_Bool bEnableUserSortList = sal_False;
+//          sal_Bool bSortAscending = sal_True;
+//          sal_Int32 nUserSortListIndex = 0;
             if (xPropertySet.is())
             {
                 if (!::cppu::any2bool(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT)))))
@@ -540,9 +540,9 @@ void ScXMLExportDatabaseRanges::WriteSubTotalDescriptor(const com::sun::star::un
                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PAGE_BREAKS_ON_GROUP_CHANGE, XML_TRUE);
                 if (::cppu::any2bool(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)))))
                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
-//				bSortAscending = ::cppu::any2bool(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SORTASCENDING))));
-//				if (::cppu::any2bool(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ENABLEUSERSORTLIST)))))
-//					xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERSORTLISTINDEX))) >>= nUserSortListIndex;
+//              bSortAscending = ::cppu::any2bool(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SORTASCENDING))));
+//              if (::cppu::any2bool(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ENABLEUSERSORTLIST)))))
+//                  xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERSORTLISTINDEX))) >>= nUserSortListIndex;
             }
             SvXMLElementExport aElemSTRs(rExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULES, sal_True, sal_True);
             rExport.CheckAttrList();
@@ -641,7 +641,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                                 if (::cppu::any2bool(xPropertySetDatabaseRange->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)))))
                                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_HAS_PERSISTENT_DATA, XML_FALSE);
                             }
-                            
+
                             uno::Reference< sheet::XSheetFilterDescriptor2 > xSheetFilterDescriptor(
                                     xDatabaseRange->getFilterDescriptor(), uno::UNO_QUERY );
                             uno::Sequence <beans::PropertyValue> aSortProperties(xDatabaseRange->getSortDescriptor());
@@ -654,7 +654,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONTAINS_HEADER, XML_FALSE);
 
                                     // #98317#; there is no orientation on the filter
-/*									table::TableOrientation eFilterOrient(table::TableOrientation_ROWS);
+/*                                  table::TableOrientation eFilterOrient(table::TableOrientation_ROWS);
                                     if (::cppu::any2bool(xFilterProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)))))
                                         eFilterOrient = table::TableOrientation_ROWS;*/
 

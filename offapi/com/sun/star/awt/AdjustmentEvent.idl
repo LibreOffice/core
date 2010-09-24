@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,44 +24,44 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_AdjustmentEvent_idl__ 
-#define __com_sun_star_awt_AdjustmentEvent_idl__ 
- 
-#ifndef __com_sun_star_lang_EventObject_idl__ 
-#include <com/sun/star/lang/EventObject.idl> 
-#endif 
- 
-#ifndef __com_sun_star_awt_AdjustmentType_idl__ 
-#include <com/sun/star/awt/AdjustmentType.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_AdjustmentEvent_idl__
+#define __com_sun_star_awt_AdjustmentEvent_idl__
+
+#ifndef __com_sun_star_lang_EventObject_idl__
+#include <com/sun/star/lang/EventObject.idl>
+#endif
+
+#ifndef __com_sun_star_awt_AdjustmentType_idl__
+#include <com/sun/star/awt/AdjustmentType.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
 /** adjustment event emitted by adjustable objects.
  */
 published struct AdjustmentEvent: com::sun::star::lang::EventObject
-{ 
-    //------------------------------------------------------------------------- 
-        
+{
+    //-------------------------------------------------------------------------
+
     /** contains the current value in the adjustment event.
      */
-    long Value; 
- 
-    //------------------------------------------------------------------------- 
-        
+    long Value;
+
+    //-------------------------------------------------------------------------
+
     /** contains the type of the adjustment event.
      */
-    com::sun::star::awt::AdjustmentType Type; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    com::sun::star::awt::AdjustmentType Type;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

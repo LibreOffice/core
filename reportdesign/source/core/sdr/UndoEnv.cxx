@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ public:
     ::osl::Mutex                                        m_aMutex;
     ::std::vector< uno::Reference< container::XChild> > m_aSections;
     oslInterlockedCount                                 m_nLocks;
-    sal_Bool	                                        m_bReadOnly;
+    sal_Bool                                            m_bReadOnly;
     sal_Bool                                            m_bIsUndo;
 
     OXUndoEnvironmentImpl(OReportModel& _rModel);
@@ -117,16 +117,16 @@ OXUndoEnvironment::~OXUndoEnvironment()
     DBG_DTOR( rpt_OXUndoEnvironment,NULL);
 }
 // -----------------------------------------------------------------------------
-void OXUndoEnvironment::Lock() 
-{ 
+void OXUndoEnvironment::Lock()
+{
     OSL_ENSURE(m_refCount,"Illegal call to dead object!");
-    osl_incrementInterlockedCount( &m_pImpl->m_nLocks ); 
+    osl_incrementInterlockedCount( &m_pImpl->m_nLocks );
 }
-void OXUndoEnvironment::UnLock() 
-{ 
+void OXUndoEnvironment::UnLock()
+{
     OSL_ENSURE(m_refCount,"Illegal call to dead object!");
 
-    osl_decrementInterlockedCount( &m_pImpl->m_nLocks ); 
+    osl_decrementInterlockedCount( &m_pImpl->m_nLocks );
 }
 sal_Bool OXUndoEnvironment::IsLocked() const { return m_pImpl->m_nLocks != 0; }
 // -----------------------------------------------------------------------------
@@ -173,7 +173,7 @@ void OXUndoEnvironment::Clear(const Accessor& /*_r*/)
     {
         OReportPage* pPage = PTR_CAST( OReportPage, m_pImpl->m_rModel.GetMasterPage(i) );
         RemoveSection(pPage);
-    }    
+    }
 
     m_pImpl->m_aSections.clear();
 
@@ -199,7 +199,7 @@ void OXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         ModeChanged();
 }
 // -----------------------------------------------------------------------------
-//	XEventListener
+//  XEventListener
 //------------------------------------------------------------------------------
 void SAL_CALL OXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeException )
 {
@@ -234,7 +234,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     if ( !pController )
         return;
 
-    // no Undo for transient and readonly props. 
+    // no Undo for transient and readonly props.
     // let's see if we know something about the set
 #if OSL_DEBUG_LEVEL > 0
     int nlen = m_pImpl->m_aPropertySetCache.size();
@@ -255,7 +255,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     AllProperties& rPropInfos = aSetPos->second;
     AllPropertiesIterator aPropertyPos = rPropInfos.find( _rEvent.PropertyName );
     if (aPropertyPos == rPropInfos.end())
-    {	// nothing 'til now ... have to change this ....
+    {   // nothing 'til now ... have to change this ....
         // the attributes
         INT32 nAttributes = xSet->getPropertySetInfo()->getPropertyByName( _rEvent.PropertyName ).Attributes;
         bool bTransReadOnly = ((nAttributes & PropertyAttribute::READONLY) != 0) || ((nAttributes & PropertyAttribute::TRANSIENT) != 0);
@@ -314,7 +314,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     if ( _xContainer.is() )
     {
         aFind = ::std::find(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),_xContainer);
-            
+
         if ( aFind == m_pImpl->m_aSections.end() )
         {
             Reference<container::XChild> xParent(_xContainer->getParent(),uno::UNO_QUERY);
@@ -340,7 +340,7 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) thro
             Reference< report::XSection > xContainer(evt.Source,uno::UNO_QUERY);
 
             ::std::vector< uno::Reference< container::XChild> >::const_iterator aFind = getSection(xContainer.get());
-            
+
             if ( aFind != m_pImpl->m_aSections.end() )
             {
                 OUndoEnvLock aLock(*this);
@@ -355,7 +355,7 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) thro
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }
-             
+
             }
         }
         else
@@ -412,7 +412,7 @@ void SAL_CALL OXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw
     {
         Reference< report::XSection > xContainer(evt.Source,uno::UNO_QUERY);
         ::std::vector< uno::Reference< container::XChild> >::const_iterator aFind = getSection(xContainer.get());
-        
+
         Reference< report::XReportComponent >  xReportComponent( xIface, UNO_QUERY );
         if ( aFind != m_pImpl->m_aSections.end() && xReportComponent.is() )
         {
@@ -443,7 +443,7 @@ void SAL_CALL OXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw
             }
         }
     }
-    
+
     if ( xIface.is() )
         RemoveElement(xIface);
 

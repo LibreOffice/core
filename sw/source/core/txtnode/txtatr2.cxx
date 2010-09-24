@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@
 #include <fmtinfmt.hxx>
 #include <charfmt.hxx>
 #include <ndtxt.hxx>        // SwCharFmt, SwTxtNode
-#include <poolfmt.hxx>		// RES_POOLCHR_INET_...
-#include <doc.hxx>			// SwDoc
+#include <poolfmt.hxx>      // RES_POOLCHR_INET_...
+#include <doc.hxx>          // SwDoc
 #include <fmtruby.hxx>
 #include <fmtmeta.hxx>
 
@@ -50,7 +50,7 @@ TYPEINIT1(SwTxtRuby,SwClient);
 
 
 /*************************************************************************
- *						class SwTxtCharFmt
+ *                      class SwTxtCharFmt
  *************************************************************************/
 
 SwTxtCharFmt::SwTxtCharFmt( SwFmtCharFmt& rAttr,
@@ -117,7 +117,7 @@ SwTxtAttrNesting::~SwTxtAttrNesting()
 
 
 /*************************************************************************
- *						class SwTxtINetFmt
+ *                      class SwTxtINetFmt
  *************************************************************************/
 
 SwTxtINetFmt::SwTxtINetFmt( SwFmtINetFmt& rAttr,
@@ -158,7 +158,7 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
             nId = static_cast<USHORT>(IsVisited() ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL);
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
-        //		correct charstyle.
+        //      correct charstyle.
         BOOL bResetMod = !pDoc->IsModified();
         Link aOle2Lnk;
         if( bResetMod )
@@ -219,7 +219,7 @@ BOOL SwTxtINetFmt::IsProtect( ) const
 }
 
 /*************************************************************************
- *						class SwTxtRuby
+ *                      class SwTxtRuby
  *************************************************************************/
 
 SwTxtRuby::SwTxtRuby( SwFmtRuby& rAttr,
@@ -275,7 +275,7 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
             nId = rFmt.GetCharFmtId();
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
-        //				correct charstyle.
+        //              correct charstyle.
         BOOL bResetMod = !pDoc->IsModified();
         Link aOle2Lnk;
         if( bResetMod )

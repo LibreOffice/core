@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,18 +65,18 @@ SaxNamespaceFilter::~SaxNamespaceFilter()
 
 // XDocumentHandler
 void SAL_CALL SaxNamespaceFilter::startDocument(void)
-    throw (	SAXException, RuntimeException )
+    throw ( SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL SaxNamespaceFilter::endDocument(void)
-    throw(	SAXException, RuntimeException )
+    throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL SaxNamespaceFilter::startElement(
     const rtl::OUString& rName, const Reference< XAttributeList > &xAttribs )
-    throw(	SAXException, RuntimeException )
+    throw(  SAXException, RuntimeException )
 {
     XMLNamespaces aXMLNamespaces;
     if ( !m_aNamespaceStack.empty() )
@@ -107,8 +107,8 @@ void SAL_CALL SaxNamespaceFilter::startElement(
                   aAttributeIndexes.begin());
               i != aAttributeIndexes.end(); ++i )
         {
-            ::rtl::OUString aAttributeName			 = xAttribs->getNameByIndex( *i );
-            ::rtl::OUString aValue					 = xAttribs->getValueByIndex( *i );
+            ::rtl::OUString aAttributeName           = xAttribs->getNameByIndex( *i );
+            ::rtl::OUString aValue                   = xAttribs->getValueByIndex( *i );
             ::rtl::OUString aNamespaceAttributeName = aXMLNamespaces.applyNSToAttributeName( aAttributeName );
             pNewList->AddAttribute( aNamespaceAttributeName, aXMLAttributeType, aValue );
         }
@@ -135,7 +135,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
 }
 
 void SAL_CALL SaxNamespaceFilter::endElement(const rtl::OUString& aName)
-    throw(	SAXException, RuntimeException )
+    throw(  SAXException, RuntimeException )
 {
     XMLNamespaces& aXMLNamespaces = m_aNamespaceStack.top();
     ::rtl::OUString aNamespaceElementName;
@@ -155,27 +155,27 @@ void SAL_CALL SaxNamespaceFilter::endElement(const rtl::OUString& aName)
 }
 
 void SAL_CALL SaxNamespaceFilter::characters(const rtl::OUString& aChars)
-    throw(	SAXException, RuntimeException )
+    throw(  SAXException, RuntimeException )
 {
     xDocumentHandler->characters( aChars );
 }
 
 void SAL_CALL SaxNamespaceFilter::ignorableWhitespace(const rtl::OUString& aWhitespaces)
-    throw(	SAXException, RuntimeException )
+    throw(  SAXException, RuntimeException )
 {
     xDocumentHandler->ignorableWhitespace( aWhitespaces );
 }
 
 void SAL_CALL SaxNamespaceFilter::processingInstruction(
     const rtl::OUString& aTarget, const rtl::OUString& aData)
-    throw(	SAXException, RuntimeException )
+    throw(  SAXException, RuntimeException )
 {
     xDocumentHandler->processingInstruction( aTarget, aData );
 }
 
 void SAL_CALL SaxNamespaceFilter::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-    throw(	SAXException, RuntimeException )
+    throw(  SAXException, RuntimeException )
 {
     m_xLocator = xLocator;
     xDocumentHandler->setDocumentLocator( xLocator );

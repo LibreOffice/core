@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@
 class SubTotal;
 #include "collect.hxx"
 
-#define PIVOT_DATA_FIELD		(MAXCOLCOUNT)
-#define PIVOT_FUNC_REF			(MAXCOLCOUNT)
+#define PIVOT_DATA_FIELD        (MAXCOLCOUNT)
+#define PIVOT_FUNC_REF          (MAXCOLCOUNT)
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
@@ -129,7 +129,7 @@ struct ScPivotParam
 
 // -----------------------------------------------------------------------
 
-typedef PivotField			PivotFieldArr[PIVOT_MAXFIELD];
+typedef PivotField          PivotFieldArr[PIVOT_MAXFIELD];
 typedef PivotField          PivotPageFieldArr[PIVOT_MAXPAGEFIELD];
 
 //------------------------------------------------------------------------
@@ -153,11 +153,11 @@ struct ScDPLabelData
 
         Member();
 
-        /** 
-         * return the name that should be displayed in the dp dialogs i.e. 
-         * when the layout name is present, use it, or else use the original 
-         * name. 
-         */ 
+        /**
+         * return the name that should be displayed in the dp dialogs i.e.
+         * when the layout name is present, use it, or else use the original
+         * name.
+         */
         ::rtl::OUString SC_DLLPUBLIC getDisplayName() const;
     };
     ::std::vector<Member>                               maMembers;
@@ -168,10 +168,10 @@ struct ScDPLabelData
 
     explicit            ScDPLabelData( const String& rName, short nCol, bool bIsValue );
 
-    /** 
-     * return the name that should be displayed in the dp dialogs i.e. when 
+    /**
+     * return the name that should be displayed in the dp dialogs i.e. when
      * the layout name is present, use it, or else use the original name.
-     */ 
+     */
     ::rtl::OUString SC_DLLPUBLIC getDisplayName() const;
 };
 

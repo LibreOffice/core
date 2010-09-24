@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@ namespace abp
     //---------------------------------------------------------------------
     FieldMappingPage::FieldMappingPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage( _pParent, ModuleRes( RID_PAGE_FIELDMAPPING ) )
-        ,m_aExplanation		( this, ModuleRes( FT_FIELDASSIGMENTEXPL ) )
-        ,m_aInvokeDialog	( this, ModuleRes( PB_INVOKE_FIELDS_DIALOG ) )
-        ,m_aHint			( this, ModuleRes( FT_ASSIGNEDFIELDS ) )
+        ,m_aExplanation     ( this, ModuleRes( FT_FIELDASSIGMENTEXPL ) )
+        ,m_aInvokeDialog    ( this, ModuleRes( PB_INVOKE_FIELDS_DIALOG ) )
+        ,m_aHint            ( this, ModuleRes( FT_ASSIGNEDFIELDS ) )
     {
         FreeResource();
 
@@ -114,6 +114,6 @@ namespace abp
     }
 
 //.........................................................................
-}	// namespace abp
+}   // namespace abp
 //.........................................................................
 

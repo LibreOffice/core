@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@
 #include <vcl/window.hxx>
 #include <tools/debug.hxx>
 
-//	----------------------------------------------------
-//	class VCLXContainer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXContainer
+//  ----------------------------------------------------
 
 void VCLXContainer::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -198,7 +198,7 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
             {
                 if ( pPrevRadio )
                 {
-                    bNewPrevWin = ( pPrevWin == pPrevRadio );	// Radio-Button wurde vor das PreWin sortiert....
+                    bNewPrevWin = ( pPrevWin == pPrevRadio );   // Radio-Button wurde vor das PreWin sortiert....
                     pSortBehind = pPrevRadio;
                 }
                 pPrevRadio = pWin;

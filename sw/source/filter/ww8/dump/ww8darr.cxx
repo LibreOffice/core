@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include <stdlib.h>
 
-#include "ww8dout.hxx"				// OutShort()
+#include "ww8dout.hxx"              // OutShort()
 #include "ww8darr.hxx"
 
 
@@ -43,17 +43,17 @@
 SprmDumpInfo aSprmDumpTab[] = {
     0, (FnOut)0, "NOP(0)",
     2, OutShort, "sprmPIstd",  // pap.istd (style code)
-    3, (FnOut)0, "sprmPIstdPermute", // pap.istd	permutation
+    3, (FnOut)0, "sprmPIstdPermute", // pap.istd    permutation
     4, OutByte,  "sprmPIncLv1", // pap.istddifference
     5, OutByte,  "sprmPJc", // pap.jc (justification)
     6, OutBool,  "sprmPFSideBySide", // pap.fSideBySide
     7, OutBool,  "sprmPFKeep", // pap.fKeep
-    8, OutBool,  "sprmPFKeepFollow ", //	pap.fKeepFollow
+    8, OutBool,  "sprmPFKeepFollow ", //    pap.fKeepFollow
     9, OutBool,  "sprmPPageBreakBefore", // pap.fPageBreakBefore
 
-    10, (FnOut)0, "sprmPBrcl", //	pap.brcl
+    10, (FnOut)0, "sprmPBrcl", //   pap.brcl
     11, (FnOut)0, "sprmPBrcp ", // pap.brcp
-    12, (FnOut)0, "sprmPAnld", //	pap.anld (ANLD structure)
+    12, (FnOut)0, "sprmPAnld", //   pap.anld (ANLD structure)
     13, OutByte,  "sprmPNLvlAnm", // pap.nLvlAnm nn
     14, OutBool,  "sprmPFNoLineNumb", //ap.fNoLnn
 
@@ -66,9 +66,9 @@ SprmDumpInfo aSprmDumpTab[] = {
     18, OutWord,  "sprmPNest", // pap.dxaLeft
     19, OutShort,  "sprmPDxaLeft1", // pap.dxaLeft1
 
-    20, OutShorts, "sprmPDyaLine", // pap.lspd	an LSPD
+    20, OutShorts, "sprmPDyaLine", // pap.lspd  an LSPD
     21, OutWord,  "sprmPDyaBefore", // pap.dyaBefore
-    22, OutWord,  "sprmPDyaAfter", //	pap.dyaAfter
+    22, OutWord,  "sprmPDyaAfter", //   pap.dyaAfter
 
 
     //??
@@ -123,7 +123,7 @@ SprmDumpInfo aSprmDumpTab[] = {
     72, OutShort, "sprmCRMReason", // chp.idslRMReason an index to a table
     73, (FnOut)0, "sprmCChse", // chp.fChsDiff and chp.chse see below 3 bytes
     74, (FnOut)0, "sprmCSymbol", // chp.fSpec, chp.chSym and chp.ftcSym
-    75, OutBool,  "sprmCFOle2", // chp.fOle2 1 or 0	bit
+    75, OutBool,  "sprmCFOle2", // chp.fOle2 1 or 0 bit
 
     80, OutShort, "sprmCIstd", // chp.istd istd, see stylesheet definition short
     81, (FnOut)0, "sprmCIstdPermute", // chp.istd permutation vector (see below)
@@ -168,7 +168,7 @@ SprmDumpInfo aSprmDumpTab[] = {
     118, OutBool,  "sprmCFObj", // chp.fObj 1 or 0 bit
     119, (FnOut)0, "sprmPicBrcl", // pic.brcl brcl (see PIC structure definition) byte
 
-    120,	(FnOut)0, "sprmPicScale", // pic.mx, pic.my, pic.dxaCropleft,
+    120,    (FnOut)0, "sprmPicScale", // pic.mx, pic.my, pic.dxaCropleft,
     121, (FnOut)0, "sprmPicBrcTop", // pic.brcTop BRC word
     122, (FnOut)0, "sprmPicBrcLeft", // pic.brcLeft BRC word
     123, (FnOut)0, "sprmPicBrcBottom", // pic.brcBottom BRC word

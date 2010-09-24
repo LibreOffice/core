@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@ namespace sdr
         class Event
         {
             // time of event in ms
-            sal_uInt32										mnTime;
+            sal_uInt32                                      mnTime;
 
             // pointer for simply linked list
-            Event*											mpNext;
+            Event*                                          mpNext;
 
         public:
             // constructor/destructor
@@ -76,7 +76,7 @@ namespace sdr
         class EventList
         {
             // pointer to first entry
-            Event*											mpHead;
+            Event*                                          mpHead;
 
         public:
             // constructor/destructor
@@ -106,17 +106,17 @@ namespace sdr
         class Scheduler : public Timer
         {
             // time in ms
-            sal_uInt32										mnTime;
+            sal_uInt32                                      mnTime;
 
             // next delta time
-            sal_uInt32										mnDeltaTime;
+            sal_uInt32                                      mnDeltaTime;
 
             // list of events
-            EventList										maList;
+            EventList                                       maList;
 
             // Flag which remembers if this timer is paused. Default
             // is false.
-            bool    										mbIsPaused;
+            bool                                            mbIsPaused;
 
         public:
             // constructor/destructor

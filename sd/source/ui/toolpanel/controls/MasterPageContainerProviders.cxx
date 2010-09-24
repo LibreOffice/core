@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ Image PagePreviewProvider::operator () (
     ::sd::PreviewRenderer& rRenderer)
 {
     Image aPreview;
-    
+
     if (pPage != NULL)
     {
         // Use the given renderer to create a preview of the given page
@@ -116,9 +116,9 @@ Image TemplatePreviewProvider::operator() (
 {
     // Unused parameters.
     (void)nWidth;
-    (void)pPage; 
+    (void)pPage;
     (void)rRenderer;
-    
+
     // Load the thumbnail from a template document.
     uno::Reference<io::XInputStream> xIStream;
 
@@ -129,11 +129,11 @@ Image TemplatePreviewProvider::operator() (
         try
         {
             uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
-                xServiceManager->createInstance( 
+                xServiceManager->createInstance(
                     ::rtl::OUString::createFromAscii(
                         "com.sun.star.embed.StorageFactory")),
                 uno::UNO_QUERY);
-        
+
             if (xStorageFactory.is())
             {
                 uno::Sequence<uno::Any> aArgs (2);
@@ -267,9 +267,9 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
 {
     // Unused parameters.
     (void)pContainerDocument;
-    
+
     SdPage* pPage = NULL;
-    
+
     mxDocumentShell = NULL;
     ::sd::DrawDocShell* pDocumentShell = NULL;
     try
@@ -400,7 +400,7 @@ ExistingPageProvider::ExistingPageProvider (SdPage* pPage)
 SdPage* ExistingPageProvider::operator() (SdDrawDocument* pDocument)
 {
     (void)pDocument; // Unused parameter.
-    
+
     return mpPage;
 }
 

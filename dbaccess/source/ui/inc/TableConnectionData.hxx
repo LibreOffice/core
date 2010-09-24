@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,20 +44,20 @@ namespace dbaui
 {
 #define MAX_CONN_COUNT 2
     //==================================================================
-    // ConnData		---------->*	ConnLineData
-    //    ^1							^1
-    //    |								|
-    //	Conn		---------->*	ConnLine
+    // ConnData     ---------->*    ConnLineData
+    //    ^1                            ^1
+    //    |                             |
+    //  Conn        ---------->*    ConnLine
     //==================================================================
 
-    
+
     //==================================================================
     /*
-        the class OTableConnectionData contains all connection data which exists between	two windows
+        the class OTableConnectionData contains all connection data which exists between    two windows
     **/
     class OTableConnectionData
     {
-        
+
     protected:
         TTableWindowData::value_type m_pReferencingTable;
         TTableWindowData::value_type m_pReferencedTable;
@@ -65,7 +65,7 @@ namespace dbaui
 
         OConnectionLineDataVec m_vConnLineData;
 
-        void	Init();
+        void    Init();
 
         virtual OConnectionLineDataRef CreateLineDataObj();
         virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData );

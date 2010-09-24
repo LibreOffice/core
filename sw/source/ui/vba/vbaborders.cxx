@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ class SwVbaBorder : public SwVbaBorder_Base
 {
 private:
     uno::Reference< beans::XPropertySet > m_xProps;
-    sal_Int32 m_LineType;	
+    sal_Int32 m_LineType;
     VbaPalette m_Palette;
     bool setBorderLine( table::BorderLine& rBorderLine )
     {
@@ -75,7 +75,7 @@ private:
                 aTableBorder.IsTopLineValid = sal_True;
                 aTableBorder.TopLine = rBorderLine;
                 break;
-            
+
             case word::WdBorderType::wdBorderBottom:
                 aTableBorder.IsBottomLineValid = sal_True;
                 aTableBorder.BottomLine = rBorderLine;
@@ -96,13 +96,13 @@ private:
             case word::WdBorderType::wdBorderDiagonalUp:
                 // #TODO have to ignore at the momement, would be
                 // nice to investigate what we can do here
-                break; 
+                break;
             default:
                     return false;
         }
         m_xProps->setPropertyValue( sTableBorder, uno::makeAny(aTableBorder) );
         return true;
-    }	
+    }
 
     bool getBorderLine( table::BorderLine& rBorderLine )
     {
@@ -139,18 +139,18 @@ private:
             case word::WdBorderType::wdBorderDiagonalUp:
                 // #TODO have to ignore at the momement, would be
                 // nice to investigate what we can do here
-                break; 
+                break;
             default:
                     return false;
         }
         return true;
-    }	
+    }
     SwVbaBorder(); // no impl
-protected: 
+protected:
     virtual rtl::OUString& getServiceImplName()
     {
         static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaBorder") );
-    return sImplName;		
+    return sImplName;
     }
     virtual css::uno::Sequence<rtl::OUString> getServiceNames()
     {
@@ -160,10 +160,10 @@ protected:
             aServiceNames.realloc( 1 );
             aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Border" ) );
         }
-        return aServiceNames;		
+        return aServiceNames;
     }
 public:
-    SwVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< uno::XComponentContext >& xContext, sal_Int32 lineType, VbaPalette& rPalette) : SwVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ), m_Palette( rPalette ) {}  	
+    SwVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< uno::XComponentContext >& xContext, sal_Int32 lineType, VbaPalette& rPalette) : SwVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ), m_Palette( rPalette ) {}
 
     uno::Any SAL_CALL getLineStyle() throw (uno::RuntimeException)
     {
@@ -186,7 +186,7 @@ public:
         }
         return uno::makeAny( nLineStyle );
     }
-    void SAL_CALL setLineStyle( const uno::Any& _linestyle ) throw (uno::RuntimeException) 
+    void SAL_CALL setLineStyle( const uno::Any& _linestyle ) throw (uno::RuntimeException)
     {
         // Urk no choice but to silently ignore we don't support this attribute
         // #TODO would be nice to support the word line styles
@@ -265,14 +265,14 @@ public:
     RangeBorders(  const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, VbaPalette& rPalette ) : m_xRange( xRange ), m_xContext( xContext ), m_Palette( rPalette )
     {
     }
-    // XIndexAccess 
+    // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
         return sizeof( supportedIndexTable ) / sizeof( supportedIndexTable[0] );
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException) 
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
     {
-            
+
         sal_Int32 nIndex = getTableIndex( Index );
         if ( nIndex >= 0 && nIndex < getCount() )
         {
@@ -291,7 +291,7 @@ public:
     }
 };
 
-uno::Reference< container::XIndexAccess > 
+uno::Reference< container::XIndexAccess >
 rangeToBorderIndexAccess( const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, VbaPalette& rPalette )
 {
     return new RangeBorders( xRange, xContext, rPalette );
@@ -334,7 +334,7 @@ SwVbaBorders::createCollectionObject( const css::uno::Any& aSource )
     return aSource; // its already a Border object
 }
 
-uno::Type 
+uno::Type
 SwVbaBorders::getElementType() throw (uno::RuntimeException)
 {
     return word::XBorders::static_type(0);
@@ -358,14 +358,14 @@ void SAL_CALL SwVbaBorders::setShadow( sal_Bool /*_shadow*/ ) throw (uno::Runtim
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
 }
 
-rtl::OUString& 
+rtl::OUString&
 SwVbaBorders::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaBorders") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 SwVbaBorders::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

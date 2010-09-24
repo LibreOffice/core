@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,11 +31,11 @@
 
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <doc.hxx>
-#include <frame.hxx>		// SwChapterFieldType::ChangeExpansion()
-#include <pam.hxx>			// fuer GetBodyTxtNode
+#include <frame.hxx>        // SwChapterFieldType::ChangeExpansion()
+#include <pam.hxx>          // fuer GetBodyTxtNode
 #include <ndtxt.hxx>
 #include <chpfld.hxx>
-#include <expfld.hxx>		// fuer GetBodyTxtNode
+#include <expfld.hxx>       // fuer GetBodyTxtNode
 #ifndef _UNOFLDMID_H
 #include <unofldmid.h>
 #endif
@@ -75,7 +75,7 @@ String SwChapterField::Expand() const
     String sStr( sNumber );
     switch( GetFormat() )
     {
-        case CF_TITLE:		sStr = sTitle;	break;
+        case CF_TITLE:      sStr = sTitle;  break;
 
         case CF_NUMBER:
         case CF_NUM_TITLE:  sStr.Insert( sPre, 0 );
@@ -84,7 +84,7 @@ String SwChapterField::Expand() const
                                 sStr += sTitle;
                             break;
 
-        case CF_NUM_NOPREPST_TITLE:	sStr += sTitle;	break;
+        case CF_NUM_NOPREPST_TITLE: sStr += sTitle; break;
     }
     return sStr;
 }
@@ -157,12 +157,12 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
                     // --> OD 2008-04-02 #refactorlists#
 //                    nLevel = GetRealLevel( pONd->GetTxtColl()->
 //                                            GetOutlineLevel() );
-                    //ASSERT( pONd->GetOutlineLevel() >= 0 && pONd->GetOutlineLevel() < MAXLEVEL,	//#outline level,zhaojianwei
+                    //ASSERT( pONd->GetOutlineLevel() >= 0 && pONd->GetOutlineLevel() < MAXLEVEL,   //#outline level,zhaojianwei
                     //        "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
                     //nLevel = static_cast<BYTE>(pONd->GetOutlineLevel());
-                    ASSERT( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,	
+                    ASSERT( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
                             "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
-                    nLevel = static_cast<BYTE>(pONd->GetAttrOutlineLevel());							//<-end,zhaojianwei
+                    nLevel = static_cast<BYTE>(pONd->GetAttrOutlineLevel());                            //<-end,zhaojianwei
                     // <--
 
                     if( nPrevLvl < nLevel )
@@ -242,7 +242,7 @@ BOOL SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
             sal_Int16 nRet;
             switch( GetFormat() )
             {
-                case CF_NUMBER:	nRet = text::ChapterFormat::NUMBER; break;
+                case CF_NUMBER: nRet = text::ChapterFormat::NUMBER; break;
                 case CF_TITLE:  nRet = text::ChapterFormat::NAME; break;
                 case CF_NUMBER_NOPREPST:
                     nRet = text::ChapterFormat::DIGIT;
@@ -251,7 +251,7 @@ BOOL SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
                     nRet = text::ChapterFormat::NO_PREFIX_SUFFIX;
                 break;
                 case CF_NUM_TITLE:
-                default:		nRet = text::ChapterFormat::NAME_NUMBER;
+                default:        nRet = text::ChapterFormat::NAME_NUMBER;
             }
             rAny <<= nRet;
         }
@@ -287,7 +287,7 @@ BOOL SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             rAny >>= nVal;
             switch( nVal )
             {
-                case text::ChapterFormat::NAME:	SetFormat(CF_TITLE); break;
+                case text::ChapterFormat::NAME: SetFormat(CF_TITLE); break;
                 case text::ChapterFormat::NUMBER:  SetFormat(CF_NUMBER); break;
                 case text::ChapterFormat::NO_PREFIX_SUFFIX:
                             SetFormat(CF_NUM_NOPREPST_TITLE);
@@ -296,7 +296,7 @@ BOOL SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
                         SetFormat(CF_NUMBER_NOPREPST);
                 break;
                 //case text::ChapterFormat::NAME_NUMBER:
-                default:		SetFormat(CF_NUM_TITLE);
+                default:        SetFormat(CF_NUM_TITLE);
             }
         }
         break;

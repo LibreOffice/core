@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <plugins/gtk/gtkdata.hxx>
 #include <plugins/gtk/gtkinst.hxx>
 
-GtkSalObject::GtkSalObject( GtkSalFrame* pParent, BOOL bShow ) 
+GtkSalObject::GtkSalObject( GtkSalFrame* pParent, BOOL bShow )
         : m_pSocket( NULL ),
           m_pRegion( NULL )
 {
@@ -56,25 +56,25 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, BOOL bShow )
 
         //system data
         SalDisplay* pDisp = GetX11SalData()->GetDisplay();
-        m_aSystemData.nSize 		= sizeof( SystemChildData );
-        m_aSystemData.pDisplay		= pDisp->GetDisplay();
-        m_aSystemData.aWindow		= GDK_WINDOW_XWINDOW(m_pSocket->window);
-        m_aSystemData.pSalFrame		= NULL;
-        m_aSystemData.pWidget		= m_pSocket;
-        m_aSystemData.pVisual		= pDisp->GetVisual(pParent->getScreenNumber()).GetVisual();
-        m_aSystemData.nScreen		= pParent->getScreenNumber();
-        m_aSystemData.nDepth		= pDisp->GetVisual(pParent->getScreenNumber()).GetDepth();
-        m_aSystemData.aColormap		= pDisp->GetColormap(pParent->getScreenNumber()).GetXColormap();
-        m_aSystemData.pAppContext	= NULL;
-        m_aSystemData.aShellWindow	= GDK_WINDOW_XWINDOW(GTK_WIDGET(pParent->getWindow())->window);
-        m_aSystemData.pShellWidget	= GTK_WIDGET(pParent->getWindow());
+        m_aSystemData.nSize         = sizeof( SystemChildData );
+        m_aSystemData.pDisplay      = pDisp->GetDisplay();
+        m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(m_pSocket->window);
+        m_aSystemData.pSalFrame     = NULL;
+        m_aSystemData.pWidget       = m_pSocket;
+        m_aSystemData.pVisual       = pDisp->GetVisual(pParent->getScreenNumber()).GetVisual();
+        m_aSystemData.nScreen       = pParent->getScreenNumber();
+        m_aSystemData.nDepth        = pDisp->GetVisual(pParent->getScreenNumber()).GetDepth();
+        m_aSystemData.aColormap     = pDisp->GetColormap(pParent->getScreenNumber()).GetXColormap();
+        m_aSystemData.pAppContext   = NULL;
+        m_aSystemData.aShellWindow  = GDK_WINDOW_XWINDOW(GTK_WIDGET(pParent->getWindow())->window);
+        m_aSystemData.pShellWidget  = GTK_WIDGET(pParent->getWindow());
 
         g_signal_connect( G_OBJECT(m_pSocket), "button-press-event", G_CALLBACK(signalButton), this );
         g_signal_connect( G_OBJECT(m_pSocket), "button-release-event", G_CALLBACK(signalButton), this );
         g_signal_connect( G_OBJECT(m_pSocket), "focus-in-event", G_CALLBACK(signalFocus), this );
         g_signal_connect( G_OBJECT(m_pSocket), "focus-out-event", G_CALLBACK(signalFocus), this );
         g_signal_connect( G_OBJECT(m_pSocket), "destroy", G_CALLBACK(signalDestroy), this );
-        
+
         // #i59255# necessary due to sync effects with java child windows
         pParent->Sync();
     }
@@ -119,11 +119,11 @@ void GtkSalObject::BeginSetClipRegion( ULONG )
 void GtkSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
     GdkRectangle aRect;
-    aRect.x			= nX;
-    aRect.y			= nY;
-    aRect.width		= nWidth;
-    aRect.height	= nHeight;
-    
+    aRect.x         = nX;
+    aRect.y         = nY;
+    aRect.width     = nWidth;
+    aRect.height    = nHeight;
+
     gdk_region_union_with_rect( m_pRegion, &aRect );
 }
 
@@ -176,7 +176,7 @@ const SystemEnvData* GtkSalObject::GetSystemData() const
     return &m_aSystemData;
 }
 
-   
+
 gboolean GtkSalObject::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer object )
 {
     GtkSalObject* pThis = (GtkSalObject*)object;
@@ -208,4 +208,13 @@ void GtkSalObject::signalDestroy( GtkObject* pObj, gpointer object )
     {
         pThis->m_pSocket = NULL;
     }
+}
+
+void GtkSalObject::SetForwardKey( BOOL bEnable )
+{
+    printf ("GtkSalObject::SetForwardKey\n");
+    if( bEnable )
+        gtk_widget_add_events( GTK_WIDGET( m_pSocket ), GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE );
+    else
+        gtk_widget_set_events( GTK_WIDGET( m_pSocket ), ~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE) & gtk_widget_get_events( GTK_WIDGET( m_pSocket ) ) );
 }

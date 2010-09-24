@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,9 +55,9 @@ using namespace ::com::sun::star;
 
 extern WorkWindow* lcl_GetDefaultWindow();
 
-//	----------------------------------------------------
-//	class UnoControlHolder
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class UnoControlHolder
+//  ----------------------------------------------------
 struct UnoControlHolder
 {
     uno::Reference< awt::XControl > mxControl;
@@ -65,7 +65,7 @@ struct UnoControlHolder
 
 public:
     UnoControlHolder( const ::rtl::OUString& rName, const uno::Reference< awt::XControl > & rControl )
-    :	mxControl( rControl ),
+    :   mxControl( rControl ),
         msName( rName )
     {
     }
@@ -327,10 +327,10 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdenti
     }
     throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "out of identifiers" ) ), NULL );
 }
-//	----------------------------------------------------
-//	Function to set the controls' visibility according
-//	to the dialog's "Step" property
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  Function to set the controls' visibility according
+//  to the dialog's "Step" property
+//  ----------------------------------------------------
 void implUpdateVisibility
 (
     sal_Int32 nDialogStep,
@@ -372,9 +372,9 @@ void implUpdateVisibility
 }
 
 
-//	----------------------------------------------------
-//	class DialogStepChangedListener
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class DialogStepChangedListener
+//  ----------------------------------------------------
 typedef ::cppu::WeakImplHelper1< beans::XPropertyChangeListener > PropertyChangeListenerHelper;
 
 class DialogStepChangedListener: public PropertyChangeListenerHelper
@@ -387,7 +387,7 @@ public:
         : mxControlContainer( xControlContainer ) {}
 
     // XEventListener
-    virtual void SAL_CALL disposing( const	lang::EventObject& Source ) throw( uno::RuntimeException);
+    virtual void SAL_CALL disposing( const  lang::EventObject& Source ) throw( uno::RuntimeException);
 
     // XPropertyChangeListener
     virtual void SAL_CALL propertyChange( const  beans::PropertyChangeEvent& evt ) throw( uno::RuntimeException);
@@ -400,7 +400,7 @@ void SAL_CALL DialogStepChangedListener::disposing( const  lang::EventObject& /*
     mxControlContainer.clear();
 }
 
-void SAL_CALL DialogStepChangedListener::propertyChange( const	beans::PropertyChangeEvent& evt )
+void SAL_CALL DialogStepChangedListener::propertyChange( const  beans::PropertyChangeEvent& evt )
     throw( uno::RuntimeException)
 {
     // evt.PropertyName HAS to be "Step" because we only use the listener for that
@@ -409,16 +409,16 @@ void SAL_CALL DialogStepChangedListener::propertyChange( const	beans::PropertyCh
     implUpdateVisibility( nDialogStep, mxControlContainer );
 }
 
-//	----------------------------------------------------
-//	class UnoControlContainer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class UnoControlContainer
+//  ----------------------------------------------------
 UnoControlContainer::UnoControlContainer() : maCListeners( *this )
 {
     mpControls = new UnoControlHolderList;
 }
 
 UnoControlContainer::UnoControlContainer( uno::Reference< awt::XWindowPeer >  xP )
-    :	maCListeners( *this )
+    :   maCListeners( *this )
 {
     setPeer( xP );
     mbDisposePeer = sal_False;
@@ -441,7 +441,7 @@ void UnoControlContainer::ImplActivateTabControllers()
 }
 
 // lang::XComponent
-void UnoControlContainer::dispose(	) throw(uno::RuntimeException)
+void UnoControlContainer::dispose(  ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -642,7 +642,7 @@ void UnoControlContainer::impl_createControlPeerIfNecessary( const uno::Referenc
 
     // if the container already has a peer, then also create a peer for the control
     uno::Reference< awt::XWindowPeer > xMyPeer( getPeer() );
-    
+
     if( xMyPeer.is() )
     {
         _rxControl->createPeer( NULL, xMyPeer );

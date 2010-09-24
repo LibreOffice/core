@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ inline void extract(
     BOOST_PP_CAT(T, n_) & BOOST_PP_CAT(v, n_)
 
 /** The following preprocessor repetitions generate functions like
-    
+
     <pre>
         template <typename T0, typename T1, ...>
         inline void unwrapArgs(
@@ -109,7 +109,7 @@ inline void extract(
     </pre>
     (full namespace qualification ::com::sun::star has been omitted
     for brevity)
-    
+
     which unwraps the passed sequence's elements, assigning them to the
     referenced values.  Specify optional arguments as boost::optional<T>.
     If the length of the sequence is greater than the count of arguments,
@@ -117,8 +117,8 @@ inline void extract(
     If too few arguments are given in the sequence and a missing argument is
     no boost::optional<T>, then an lang::IllegalArgumentException is thrown
     with the specified xErrorContext (defaults to null-ref).
-    
-    The maximum number of service declarations can be set by defining   
+
+    The maximum number of service declarations can be set by defining
     COMPHELPER_UNWRAPARGS_MAX_ARGS; its default is 12.
 */
 #define COMPHELPER_UNWRAPARGS_make(z_, n_, unused_) \

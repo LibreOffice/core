@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <vcl/salbtype.hxx>		// FRound
+#include <vcl/salbtype.hxx>     // FRound
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
@@ -63,7 +63,7 @@ ImpXPolygon::ImpXPolygon( USHORT nInitSize, USHORT _nResize )
     pFlagAry                = NULL;
     bDeleteOldPoints        = FALSE;
     nSize                   = 0;
-    nResize					= _nResize;
+    nResize                 = _nResize;
     nPoints                 = 0;
     nRefCount               = 1;
 
@@ -365,19 +365,19 @@ XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy)
         {
             switch ( nQuad )
             {
-                case 0:	aCenter = rRect.TopLeft();
+                case 0: aCenter = rRect.TopLeft();
                         aCenter.X() -= nRx;
                         aCenter.Y() += nRy;
                         break;
-                case 1:	aCenter = rRect.TopRight();
+                case 1: aCenter = rRect.TopRight();
                         aCenter.X() += nRx;
                         aCenter.Y() += nRy;
                         break;
-                case 2:	aCenter = rRect.BottomRight();
+                case 2: aCenter = rRect.BottomRight();
                         aCenter.X() += nRx;
                         aCenter.Y() -= nRy;
                         break;
-                case 3:	aCenter = rRect.BottomLeft();
+                case 3: aCenter = rRect.BottomLeft();
                         aCenter.X() -= nRx;
                         aCenter.Y() -= nRy;
                         break;
@@ -1038,7 +1038,7 @@ void XPolygon::CalcSmoothJoin(USHORT nCenter, USHORT nDrag, USHORT nPnt)
 {
     CheckReference();
 
-//	USHORT  nMaxPnt = pImpXPolygon->nPoints - 1;
+//  USHORT  nMaxPnt = pImpXPolygon->nPoints - 1;
 
 //  if ( nCenter == nMaxPnt )   nPnt = 1;
 //  else if ( nCenter == 0 )    nPnt = nMaxPnt - 1;
@@ -1475,7 +1475,7 @@ basegfx::B2DPolygon XPolygon::getB2DPolygon() const
     // the long run
     DBG_ASSERT(pImpXPolygon != 0, "XPolygon::getB2DPolygon(): XPolygon has no implementation incarnated (!)");
     const Polygon aSource(GetPointCount(), pImpXPolygon->pPointAry, pImpXPolygon->pFlagAry);
-    
+
     return aSource.getB2DPolygon();
 }
 

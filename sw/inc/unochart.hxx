@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -168,7 +168,7 @@ class SwChartDataProvider :
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > SAL_CALL Impl_createDataSource( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments, sal_Bool bTestOnly = sal_False ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL Impl_createDataSequenceByRangeRepresentation( const ::rtl::OUString& aRangeRepresentation, sal_Bool bTestOnly = sal_False  ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    
+
     rtl::OUString GetBrokenCellRangeForExport( const rtl::OUString &rCellRangeRepresentation );
 
 public:
@@ -282,7 +282,7 @@ class SwChartDataSequence :
     SwChartDataProvider *                   pDataProvider;
 
     SwUnoCrsr*                  pTblCrsr;   // cursor spanned over cells to use
-    SwDepend					aCursorDepend; //the cursor is removed after the doc has been removed
+    SwDepend                    aCursorDepend; //the cursor is removed after the doc has been removed
 
     const SfxItemPropertySet*   _pPropSet;
 
@@ -390,7 +390,7 @@ class SwChartLabeledDataSequence :
     SwChartLabeledDataSequence( const SwChartLabeledDataSequence & );
     SwChartLabeledDataSequence & operator = ( const SwChartLabeledDataSequence & );
 
-    void	SetDataSequence( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& rxDest, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& rxSource );
+    void    SetDataSequence( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& rxDest, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& rxSource );
 
 
 public:

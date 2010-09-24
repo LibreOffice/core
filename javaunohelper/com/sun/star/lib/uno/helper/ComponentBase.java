@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,15 +42,15 @@ public class ComponentBase extends WeakBase implements XComponent
     protected boolean bDisposed= false;
     static final Type  EVT_LISTENER_TYPE= new Type(XEventListener.class);
 
-    
+
     /** Creates a new instance of CompBase */
     public ComponentBase()
     {
         super();
         listenerContainer= new MultiTypeInterfaceContainer();
     }
-    
-    /** Override to perform extra clean-up work. Provided for subclasses. It is 
+
+    /** Override to perform extra clean-up work. Provided for subclasses. It is
         called during dispose()
      */
     protected void preDisposing()
@@ -61,9 +61,9 @@ public class ComponentBase extends WeakBase implements XComponent
     protected void postDisposing()
     {
     }
-    
-    
-    /** Method of XComponent. It is called by the owning client when the component is not needed 
+
+
+    /** Method of XComponent. It is called by the owning client when the component is not needed
      *  anymore. The registered listeners are notified that this method has been called.
      */
     public void dispose()
@@ -108,14 +108,14 @@ public class ComponentBase extends WeakBase implements XComponent
                 System.out.println("OComponentHelper::dispose() - dispose called twice" );
         }
     }
-    
+
     /** Method of XComponent.
      */
     public void removeEventListener(XEventListener xEventListener)
-    {   
+    {
         listenerContainer.removeInterface( EVT_LISTENER_TYPE, xEventListener);
     }
-    
+
     public void addEventListener(XEventListener listener)
     {
         boolean bDoDispose= false;
@@ -130,8 +130,8 @@ public class ComponentBase extends WeakBase implements XComponent
         {
             listener.disposing( new EventObject(this));
         }
-    }  
-    
+    }
+
     protected void finalize() throws Throwable
     {
         if ( ! bInDispose && ! bDisposed)

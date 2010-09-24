@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,15 +42,15 @@ namespace /* private */
     /*  Extracts the local part of tag without
         namespace decoration e.g. meta:creator -> creator */
     const XML_Char COLON = (XML_Char)':';
-    
+
     const XML_Char* get_local_name(const XML_Char* rawname)
     {
         const XML_Char* p = rawname;
 
         // go to the end
         while (*p) p++;
-        
-        // go back until the first ':' 
+
+        // go back until the first ':'
         while (*p != COLON && p > rawname)
             p--;
 
@@ -67,8 +67,8 @@ namespace /* private */
         return reinterpret_cast<xml_parser*>(XML_GetUserData(
             reinterpret_cast<XML_Parser>(data)));
     }
-    
-    //################################################    
+
+    //################################################
     bool has_only_whitespaces(const XML_Char* s, int len)
     {
         const XML_Char* p = s;
@@ -79,7 +79,7 @@ namespace /* private */
 }
 
 //###################################################
-xml_parser::xml_parser(const XML_Char* EncodingName) : 
+xml_parser::xml_parser(const XML_Char* EncodingName) :
     document_handler_(0),
     xml_parser_(XML_ParserCreate(EncodingName))
 {
@@ -88,12 +88,12 @@ xml_parser::xml_parser(const XML_Char* EncodingName) :
 
 //###################################################
 xml_parser::~xml_parser()
-{	
+{
     XML_ParserFree(xml_parser_);
 }
 
 //###################################################
-/* Callback functions will be called by the parser on 
+/* Callback functions will be called by the parser on
    different events */
 
 //###################################################
@@ -101,35 +101,35 @@ extern "C"
 {
 
 static void xml_start_element_handler(void* UserData, const XML_Char* name, const XML_Char** atts)
-{	
+{
     assert(UserData != NULL);
 
     xml_parser* pImpl  = get_parser_instance(UserData);
 
     i_xml_parser_event_handler* pDocHdl = pImpl->get_document_handler();
     if (pDocHdl)
-    {		
+    {
         xml_tag_attribute_container_t attributes;
 
         int i = 0;
 
         while(atts[i])
-        {			
+        {
             attributes[reinterpret_cast<const char_t*>(get_local_name(atts[i]))] = reinterpret_cast<const char_t*>(atts[i+1]);
             i += 2; // skip to next pair
         }
 
         pDocHdl->start_element(
             reinterpret_cast<const char_t*>(name), reinterpret_cast<const char_t*>(get_local_name(name)), attributes);
-    }		
+    }
 }
 
 //###################################################
 static void xml_end_element_handler(void* UserData, const XML_Char* name)
 {
     assert(UserData);
-    
-    xml_parser* pImpl  = get_parser_instance(UserData);			
+
+    xml_parser* pImpl  = get_parser_instance(UserData);
     i_xml_parser_event_handler* pDocHdl = pImpl->get_document_handler();
     if (pDocHdl)
         pDocHdl->end_element(reinterpret_cast<const char_t*>(name), reinterpret_cast<const char_t*>(get_local_name(name)));
@@ -139,8 +139,8 @@ static void xml_end_element_handler(void* UserData, const XML_Char* name)
 static void xml_character_data_handler(void* UserData, const XML_Char* s, int len)
 {
     assert(UserData);
-    
-    xml_parser* pImpl  = get_parser_instance(UserData);			
+
+    xml_parser* pImpl  = get_parser_instance(UserData);
     i_xml_parser_event_handler* pDocHdl = pImpl->get_document_handler();
     if (pDocHdl)
     {
@@ -148,7 +148,7 @@ static void xml_character_data_handler(void* UserData, const XML_Char* s, int le
             pDocHdl->ignore_whitespace(string_t(reinterpret_cast<const char_t*>(s), len));
         else
             pDocHdl->characters(string_t(reinterpret_cast<const char_t*>(s), len));
-    }    
+    }
 }
 
 //###################################################
@@ -156,7 +156,7 @@ static void xml_comment_handler(void* UserData, const XML_Char* Data)
 {
     assert(UserData);
 
-    xml_parser* pImpl  = get_parser_instance(UserData);	
+    xml_parser* pImpl  = get_parser_instance(UserData);
     i_xml_parser_event_handler* pDocHdl = pImpl->get_document_handler();
     if (pDocHdl)
         pDocHdl->comment(reinterpret_cast<const char_t*>(Data));
@@ -176,8 +176,8 @@ void xml_parser::init()
     XML_UseParserAsHandlerArg(xml_parser_);
 
     XML_SetElementHandler(
-        xml_parser_, 
-        xml_start_element_handler, 
+        xml_parser_,
+        xml_start_element_handler,
         xml_end_element_handler);
 
     XML_SetCharacterDataHandler(
@@ -185,14 +185,14 @@ void xml_parser::init()
         xml_character_data_handler);
 
     XML_SetCommentHandler(
-        xml_parser_, 
+        xml_parser_,
         xml_comment_handler);
 }
 
 //###################################################
 void xml_parser::parse(const char* XmlData, size_t Length, bool IsFinal)
 {
-    if (0 == XML_Parse(xml_parser_, XmlData, Length, IsFinal))			
+    if (0 == XML_Parse(xml_parser_, XmlData, Length, IsFinal))
         throw xml_parser_exception(
             (char*)XML_ErrorString(XML_GetErrorCode(xml_parser_)),
             (int)XML_GetErrorCode(xml_parser_),
@@ -205,7 +205,7 @@ void xml_parser::parse(const char* XmlData, size_t Length, bool IsFinal)
 void xml_parser::set_document_handler(
     i_xml_parser_event_handler* event_handler)
 {
-    document_handler_ = event_handler;	
+    document_handler_ = event_handler;
 }
 
 //###################################################

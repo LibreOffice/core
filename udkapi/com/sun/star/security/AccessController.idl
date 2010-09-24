@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,19 +24,19 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_security_AccessController_idl__ 
-#define __com_sun_star_security_AccessController_idl__ 
- 
+#ifndef __com_sun_star_security_AccessController_idl__
+#define __com_sun_star_security_AccessController_idl__
+
 #ifndef __com_sun_star_security_XAccessController_idl__
-#include <com/sun/star/security/XAccessController.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module security {  
- 
-//============================================================================= 
+#include <com/sun/star/security/XAccessController.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module security {
+
+//=============================================================================
 /** This meta service supports the XAccessController interface for checking
     security permissions.
 
@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module security {
     of bootstrapping problems, i.e. recurring calls during initialization
     have to be resolved.  This happens when the implementation calls other
     service implementations.
-    
+
     Also, it obviously has also to be ensured that the object is process-local
     to assure that permission checks are not corrupted via insecure inter-process
     communication.

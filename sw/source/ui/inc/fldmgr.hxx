@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,21 +113,21 @@ struct SwInsertFld_Data
 class SW_DLLPUBLIC SwFldMgr
 {
 private:
-    SwField*			pCurFld;
-    SbModule*			pModule;
-    const SvxMacroItem*	pMacroItem;
-    SwWrtShell* 		pWrtShell; // darf auch NULL sein!
-    String			aCurPar1;
-    String			aCurPar2;
-    String 			sCurFrame;
+    SwField*            pCurFld;
+    SbModule*           pModule;
+    const SvxMacroItem* pMacroItem;
+    SwWrtShell*         pWrtShell; // darf auch NULL sein!
+    String          aCurPar1;
+    String          aCurPar2;
+    String          sCurFrame;
 
     String          sMacroPath;
     String          sMacroName;
 
-    ULONG			nCurFmt;
-    BOOL			bEvalExp;
+    ULONG           nCurFmt;
+    BOOL            bEvalExp;
 
-    SW_DLLPRIVATE USHORT			GetCurrLanguage() const;
+    SW_DLLPRIVATE USHORT            GetCurrLanguage() const;
 
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> xDBContext;
     com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> xNumberingInfo;
@@ -138,13 +138,13 @@ public:
     ~SwFldMgr();
 
     void                SetWrtShell( SwWrtShell* pShell )
-                        {   pWrtShell = pShell;     }                                    
-    
+                        {   pWrtShell = pShell;     }
+
     // Feld einfuegen ueber TypeId (TYP_ ...)
     BOOL            InsertFld(  const SwInsertFld_Data& rData );
 
     // Direkt das aktuelle Feld aendern
-    void 			UpdateCurFld(ULONG nFormat,
+    void            UpdateCurFld(ULONG nFormat,
                                  const String& rPar1,
                                  const String& rPar2,
                                  SwField * _pField = 0); // #111840#
@@ -154,44 +154,44 @@ public:
     inline ULONG   GetCurFldFmt() const;
 
     // Ein Feld ermitteln
-    SwField*		GetCurFld();
+    SwField*        GetCurFld();
 
-    void			InsertFldType(SwFieldType& rType);
+    void            InsertFldType(SwFieldType& rType);
 
-    BOOL			ChooseMacro(const String &rSelMacro = aEmptyStr);
-    void			SetMacroPath(const String& rPath);
-    inline const String& GetMacroPath() const		  { return (sMacroPath); }
-    inline const String& GetMacroName() const		  { return (sMacroName); }
-    inline void		SetMacroModule(SbModule* pMod)	  { pModule = pMod; }
+    BOOL            ChooseMacro(const String &rSelMacro = aEmptyStr);
+    void            SetMacroPath(const String& rPath);
+    inline const String& GetMacroPath() const         { return (sMacroPath); }
+    inline const String& GetMacroName() const         { return (sMacroName); }
+    inline void     SetMacroModule(SbModule* pMod)    { pModule = pMod; }
 
     // Vorheriger Naechster gleichen Typ
     BOOL GoNextPrev( BOOL bNext = TRUE, SwFieldType* pTyp = 0 );
-    BOOL GoNext( SwFieldType* pTyp = 0 )	{ return GoNextPrev( TRUE, pTyp ); }
-    BOOL GoPrev( SwFieldType* pTyp = 0 )	{ return GoNextPrev( FALSE, pTyp ); }
+    BOOL GoNext( SwFieldType* pTyp = 0 )    { return GoNextPrev( TRUE, pTyp ); }
+    BOOL GoPrev( SwFieldType* pTyp = 0 )    { return GoNextPrev( FALSE, pTyp ); }
 
     // Erfragen von Werten aus Datenbankfeldern (BASIC )
-//	String			GetDataBaseFieldValue(const String &rDBName, const String &rFieldName, SwWrtShell* pSh);
-    BOOL			IsDBNumeric(const String& rDBName, const String& rTblQryName,
+//  String          GetDataBaseFieldValue(const String &rDBName, const String &rFieldName, SwWrtShell* pSh);
+    BOOL            IsDBNumeric(const String& rDBName, const String& rTblQryName,
                                         BOOL bIsTable, const String& rFldName);
 
     // RefMark mit Namen organisieren
-    BOOL 			CanInsertRefMark( const String& rStr );
+    BOOL            CanInsertRefMark( const String& rStr );
 
 
     // Zugriff ueber ResId auf Feldtypen
-    USHORT 			GetFldTypeCount(USHORT nResId = USHRT_MAX) const;
-    SwFieldType* 	GetFldType(USHORT nResId, USHORT nId = 0) const;
-    SwFieldType* 	GetFldType(USHORT nResId, const String& rName) const;
+    USHORT          GetFldTypeCount(USHORT nResId = USHRT_MAX) const;
+    SwFieldType*    GetFldType(USHORT nResId, USHORT nId = 0) const;
+    SwFieldType*    GetFldType(USHORT nResId, const String& rName) const;
 
-    void 			RemoveFldType(USHORT nResId, const String& rName);
+    void            RemoveFldType(USHORT nResId, const String& rName);
 
     // Zugriff ueber TypeId aus dem Dialog
     // Ids fuer einen Bereich von Feldern
     const SwFldGroupRgn& GetGroupRange(BOOL bHtmlMode, USHORT nGrpId) const;
-    USHORT			GetGroup(BOOL bHtmlMode, USHORT nTypeId, USHORT nSubType = 0) const;
+    USHORT          GetGroup(BOOL bHtmlMode, USHORT nTypeId, USHORT nSubType = 0) const;
 
     // TypeId des aktuellen Feldes
-    USHORT			GetCurTypeId() const;
+    USHORT          GetCurTypeId() const;
 
     // TypeId fuer einen konkrete Pos in der Liste
     static USHORT   GetTypeId(USHORT nPos);
@@ -205,16 +205,16 @@ public:
     BOOL            GetSubTypes(USHORT nId, SvStringsDtor& rToFill);
 
     // Formate zu einem Typ
-    USHORT 			GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode = FALSE) const;
-    String 			GetFormatStr(USHORT nTypeId, ULONG nFormatId) const;
-    USHORT			GetFormatId(USHORT nTypeId, ULONG nFormatId) const;
-    ULONG			GetDefaultFormat(USHORT nTypeId, BOOL bIsText, SvNumberFormatter* pFormatter, double* pVal = 0L);
+    USHORT          GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode = FALSE) const;
+    String          GetFormatStr(USHORT nTypeId, ULONG nFormatId) const;
+    USHORT          GetFormatId(USHORT nTypeId, ULONG nFormatId) const;
+    ULONG           GetDefaultFormat(USHORT nTypeId, BOOL bIsText, SvNumberFormatter* pFormatter, double* pVal = 0L);
 
     // Evaluierung der ExpressionFelder ausschalten fuer das Einfuegen
     // vieler Expressionfelder (siehe Etiketten)
     //
-    inline void		SetEvalExpFlds(BOOL bEval);
-    void			EvalExpFlds(SwWrtShell* pSh = NULL);
+    inline void     SetEvalExpFlds(BOOL bEval);
+    void            EvalExpFlds(SwWrtShell* pSh = NULL);
 };
 
 inline void SwFldMgr::SetEvalExpFlds(BOOL bEval)

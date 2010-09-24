@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,30 +36,30 @@ class CGM;
 class CGMBitmapDescriptor
 {
     public:
-        sal_uInt8*				mpBuf;
-        Bitmap*					mpBitmap;
-        BitmapWriteAccess*		mpAcc;
-        sal_Bool				mbStatus;
-        sal_Bool				mbVMirror;
-        sal_Bool				mbHMirror;
-        sal_uInt32				mnDstBitsPerPixel;
-        sal_uInt32				mnScanSize;			// bytes per line
-        FloatPoint				mnP, mnQ, mnR;
+        sal_uInt8*              mpBuf;
+        Bitmap*                 mpBitmap;
+        BitmapWriteAccess*      mpAcc;
+        sal_Bool                mbStatus;
+        sal_Bool                mbVMirror;
+        sal_Bool                mbHMirror;
+        sal_uInt32              mnDstBitsPerPixel;
+        sal_uInt32              mnScanSize;         // bytes per line
+        FloatPoint              mnP, mnQ, mnR;
 
-        FloatPoint				mnOrigin;
-        double					mndx, mndy;
-        double					mnOrientation;
+        FloatPoint              mnOrigin;
+        double                  mndx, mndy;
+        double                  mnOrientation;
 
-        sal_uInt32				mnX, mnY;
-        long					mnLocalColorPrecision;
-        sal_uInt32				mnCompressionMode;
+        sal_uInt32              mnX, mnY;
+        long                    mnLocalColorPrecision;
+        sal_uInt32              mnCompressionMode;
                                 CGMBitmapDescriptor() :
-                                mpBuf		( NULL ),
-                                mpBitmap	( NULL ),
-                                mpAcc		( NULL ),
-                                mbStatus	( sal_False ),
-                                mbVMirror	( sal_False ),
-                                mbHMirror	( sal_False ) { };
+                                mpBuf       ( NULL ),
+                                mpBitmap    ( NULL ),
+                                mpAcc       ( NULL ),
+                                mbStatus    ( sal_False ),
+                                mbVMirror   ( sal_False ),
+                                mbHMirror   ( sal_False ) { };
                                 ~CGMBitmapDescriptor()
                                 {
                                     if ( mpAcc )
@@ -71,17 +71,17 @@ class CGMBitmapDescriptor
 
 class CGMBitmap
 {
-        CGM*					mpCGM;
-        CGMBitmapDescriptor*	pCGMBitmapDescriptor;
-        sal_Bool				ImplGetDimensions( CGMBitmapDescriptor& );
-        void					ImplSetCurrentPalette( CGMBitmapDescriptor& );
-        void					ImplGetBitmap( CGMBitmapDescriptor& );
-        void					ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& rDest );
+        CGM*                    mpCGM;
+        CGMBitmapDescriptor*    pCGMBitmapDescriptor;
+        sal_Bool                ImplGetDimensions( CGMBitmapDescriptor& );
+        void                    ImplSetCurrentPalette( CGMBitmapDescriptor& );
+        void                    ImplGetBitmap( CGMBitmapDescriptor& );
+        void                    ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& rDest );
     public:
                                 CGMBitmap( CGM& rCGM );
                                 ~CGMBitmap();
-        CGMBitmapDescriptor*	GetBitmap();
-        CGMBitmap*				GetNext();
+        CGMBitmapDescriptor*    GetBitmap();
+        CGMBitmap*              GetNext();
 };
 #endif
 

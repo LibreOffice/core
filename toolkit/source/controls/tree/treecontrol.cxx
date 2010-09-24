@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,9 +52,9 @@ using namespace ::com::sun::star::view;
 
 namespace toolkit
 {
-//	----------------------------------------------------
-//	class UnoTreeModel
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class UnoTreeModel
+//  ----------------------------------------------------
 UnoTreeModel::UnoTreeModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -83,7 +83,7 @@ UnoTreeModel::UnoTreeModel( const UnoTreeModel& rModel )
 : UnoControlModel( rModel )
 {
 }
-                        
+
 UnoControlModel* UnoTreeModel::Clone() const
 {
     return new UnoTreeModel( *this );
@@ -123,7 +123,7 @@ Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
     {
-        Sequence<sal_Int32>	aIDs = ImplGetPropertyIds();
+        Sequence<sal_Int32> aIDs = ImplGetPropertyIds();
         pHelper = new UnoPropertyArrayHelper( aIDs );
     }
     return *pHelper;
@@ -137,9 +137,9 @@ Reference< XPropertySetInfo > UnoTreeModel::getPropertySetInfo(  ) throw(Runtime
 }
 
 
-//	----------------------------------------------------
-//	class UnoTreeControl
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class UnoTreeControl
+//  ----------------------------------------------------
 UnoTreeControl::UnoTreeControl()
 : maSelectionListeners( *this )
 , maTreeExpansionListeners( *this )

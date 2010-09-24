@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,12 +76,12 @@ void ScMarkArray::Reset( BOOL bMarked )
 
 BOOL ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
-    long	nLo 		= 0;
-    long	nHi 		= static_cast<long>(nCount) - 1;
-    long	nStartRow	= 0;
-    long	nEndRow 	= 0;
-    long	i			= 0;
-    BOOL	bFound		= (nCount == 1);
+    long    nLo         = 0;
+    long    nHi         = static_cast<long>(nCount) - 1;
+    long    nStartRow   = 0;
+    long    nEndRow     = 0;
+    long    i           = 0;
+    BOOL    bFound      = (nCount == 1);
     if (pData)
     {
         while ( !bFound && nLo <= nHi )
@@ -248,7 +248,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked )
             }
         }
     }
-//	InfoBox(0, String(nCount) + String(" Eintraege") ).Execute();
+//  InfoBox(0, String(nCount) + String(" Eintraege") ).Execute();
 }
 
 //UNUSED2009-05 void ScMarkArray::DeleteArea(SCROW nStartRow, SCROW nEndRow)
@@ -372,7 +372,7 @@ SCROW ScMarkArray::GetMarkEnd( SCROW nRow, BOOL bUp ) const
 }
 
 //
-//	-------------- Iterator ----------------------------------------------
+//  -------------- Iterator ----------------------------------------------
 //
 
 ScMarkArrayIter::ScMarkArrayIter( const ScMarkArray* pNewArray ) :

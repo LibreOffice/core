@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,29 +61,29 @@ enum SvxDistributeVertical
 
 class SvxDistributePage : public SvxTabPage
 {
-    SvxDistributeHorizontal		meDistributeHor;
-    SvxDistributeVertical		meDistributeVer;
+    SvxDistributeHorizontal     meDistributeHor;
+    SvxDistributeVertical       meDistributeVer;
 
-    FixedLine					maFlHorizontal		;
-    RadioButton					maBtnHorNone		;
-    RadioButton					maBtnHorLeft		;
-    RadioButton					maBtnHorCenter		;
-    RadioButton					maBtnHorDistance	;
-    RadioButton					maBtnHorRight		;
-    FixedImage					maHorLow			;
-    FixedImage					maHorCenter			;
-    FixedImage					maHorDistance		;
-    FixedImage					maHorHigh			;
-    FixedLine					maFlVertical		;
-    RadioButton					maBtnVerNone		;
-    RadioButton					maBtnVerTop			;
-    RadioButton					maBtnVerCenter		;
-    RadioButton					maBtnVerDistance	;
-    RadioButton					maBtnVerBottom		;
-    FixedImage					maVerLow			;
-    FixedImage					maVerCenter			;
-    FixedImage					maVerDistance		;
-    FixedImage					maVerHigh			;
+    FixedLine                   maFlHorizontal      ;
+    RadioButton                 maBtnHorNone        ;
+    RadioButton                 maBtnHorLeft        ;
+    RadioButton                 maBtnHorCenter      ;
+    RadioButton                 maBtnHorDistance    ;
+    RadioButton                 maBtnHorRight       ;
+    FixedImage                  maHorLow            ;
+    FixedImage                  maHorCenter         ;
+    FixedImage                  maHorDistance       ;
+    FixedImage                  maHorHigh           ;
+    FixedLine                   maFlVertical        ;
+    RadioButton                 maBtnVerNone        ;
+    RadioButton                 maBtnVerTop         ;
+    RadioButton                 maBtnVerCenter      ;
+    RadioButton                 maBtnVerDistance    ;
+    RadioButton                 maBtnVerBottom      ;
+    FixedImage                  maVerLow            ;
+    FixedImage                  maVerCenter         ;
+    FixedImage                  maVerDistance       ;
+    FixedImage                  maVerHigh           ;
 
 public:
     SvxDistributePage(Window* pWindow, const SfxItemSet& rInAttrs,
@@ -108,7 +108,7 @@ public:
 
 class SvxDistributeDialog : public SfxSingleTabDialog
 {
-    SvxDistributePage*			mpPage;
+    SvxDistributePage*          mpPage;
 
 public:
     SvxDistributeDialog(Window* pParent, const SfxItemSet& rAttr,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,8 +105,8 @@ namespace cairo
      *
      * Set the mpSurface as pSurface
      **/
-    X11Surface::X11Surface( const X11SysData&            rSysData, 
-                            const X11PixmapSharedPtr&    rPixmap, 
+    X11Surface::X11Surface( const X11SysData&            rSysData,
+                            const X11PixmapSharedPtr&    rPixmap,
                             const CairoSurfaceSharedPtr& pSurface ) :
         maSysData(rSysData),
         mpPixmap(rPixmap),
@@ -124,7 +124,7 @@ namespace cairo
      *
      * Set the mpSurface as pSurface
      **/
-    X11Surface::X11Surface( const CairoSurfaceSharedPtr& pSurface ) : 
+    X11Surface::X11Surface( const CairoSurfaceSharedPtr& pSurface ) :
         maSysData(),
         mpPixmap(),
         mpSurface(pSurface)
@@ -168,7 +168,7 @@ namespace cairo
      *
      * Set the mpSurface to the new surface or NULL
      **/
-    X11Surface::X11Surface( const X11SysData&       rSysData, 
+    X11Surface::X11Surface( const X11SysData&       rSysData,
                             const BitmapSystemData& rData ) :
         maSysData( rSysData ),
         mpPixmap(),
@@ -193,7 +193,7 @@ namespace cairo
     }
 
     /**
-     * Surface::getSimilar:  Create new similar Canvas surface 
+     * Surface::getSimilar:  Create new similar Canvas surface
      * @param aContent format of the new surface (cairo_content_t from cairo/src/cairo.h)
      * @param width width of the new surface
      * @param height height of the new surface
@@ -204,17 +204,17 @@ namespace cairo
      * Cairo surface from aContent (cairo_content_t)
      *
      * @return new surface or NULL
-     **/     
+     **/
     SurfaceSharedPtr X11Surface::getSimilar( Content aContent, int width, int height ) const
     {
         Pixmap hPixmap;
 
-        if( maSysData.pDisplay && maSysData.hDrawable ) 
+        if( maSysData.pDisplay && maSysData.hDrawable )
         {
             XRenderPictFormat* pFormat;
-            int	nFormat;
+            int nFormat;
 
-            switch (aContent) 
+            switch (aContent)
             {
                 case CAIRO_CONTENT_ALPHA:
                     nFormat = PictStandardA8;
@@ -236,20 +236,20 @@ namespace cairo
             X11SysData aSysData(maSysData);
             aSysData.pRenderFormat = pFormat;
             return SurfaceSharedPtr(
-                new X11Surface( aSysData, 
+                new X11Surface( aSysData,
                                 X11PixmapSharedPtr(
                                     new X11Pixmap(hPixmap, maSysData.pDisplay)),
                                 CairoSurfaceSharedPtr(
-                                    cairo_xlib_surface_create_with_xrender_format( 
-                                        (Display*)maSysData.pDisplay, 
+                                    cairo_xlib_surface_create_with_xrender_format(
+                                        (Display*)maSysData.pDisplay,
                                         hPixmap,
                                         ScreenOfDisplay((Display *)maSysData.pDisplay, maSysData.nScreen),
                                         pFormat, width, height ),
                                     &cairo_surface_destroy) ));
-        } 
+        }
         else
             return SurfaceSharedPtr(
-                new X11Surface( maSysData, 
+                new X11Surface( maSysData,
                                 X11PixmapSharedPtr(),
                                 CairoSurfaceSharedPtr(
                                     cairo_surface_create_similar( mpSurface.get(), aContent, width, height ),
@@ -290,7 +290,7 @@ namespace cairo
     /**
      * Surface::getDepth:  Get the color depth of the Canvas surface.
      *
-     * @return color depth 
+     * @return color depth
      **/
     int X11Surface::getDepth() const
     {
@@ -334,10 +334,10 @@ namespace cairo
     }
 
     SurfaceSharedPtr createBitmapSurface( const OutputDevice&     rRefDevice,
-                                          const BitmapSystemData& rData, 
+                                          const BitmapSystemData& rData,
                                           const Size&             rSize )
     {
-        OSL_TRACE( "requested size: %d x %d available size: %d x %d", 
+        OSL_TRACE( "requested size: %d x %d available size: %d x %d",
                    rSize.Width(), rSize.Height(), rData.mnWidth, rData.mnHeight );
         if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
         {

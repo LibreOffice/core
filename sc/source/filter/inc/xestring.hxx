@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ public:
 //UNUSED2008-05                          const XclFormatRunVec& rFormats,
 //UNUSED2008-05                          XclStrFlags nFlags = EXC_STR_DEFAULT,
 //UNUSED2008-05                          sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
-//UNUSED2008-05  
+//UNUSED2008-05
 //UNUSED2008-05  /** Constructs a formatted BIFF8 Unicode string.
 //UNUSED2008-05      @param rFormats  The formatting runs.
 //UNUSED2008-05      @param nFlags  Modifiers for string export.

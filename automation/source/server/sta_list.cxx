@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,13 +84,13 @@ SmartId StatementList::aWindowWaitOldHelpId = SmartId();
 SmartId StatementList::aWindowWaitOldUniqueId = SmartId();
 USHORT StatementList::nUseBindings = 0;
 
-SmartId StatementList::aSubMenuId1 = SmartId();	// Untermenüs bei PopupMenus
-SmartId StatementList::aSubMenuId2 = SmartId();	// erstmal 2-Stufig
-SmartId StatementList::aSubMenuId3 = SmartId();	// and now even 3 levels #i31512#
+SmartId StatementList::aSubMenuId1 = SmartId(); // Untermenüs bei PopupMenus
+SmartId StatementList::aSubMenuId2 = SmartId(); // erstmal 2-Stufig
+SmartId StatementList::aSubMenuId3 = SmartId(); // and now even 3 levels #i31512#
 SystemWindow *StatementList::pMenuWindow = NULL;
 TTProperties *StatementList::pTTProperties = NULL;
 
-USHORT StatementList::nMinTypeKeysDelay = 0;	// Verzögerung der einzelnen Anschläge für TypeKeys
+USHORT StatementList::nMinTypeKeysDelay = 0;    // Verzögerung der einzelnen Anschläge für TypeKeys
 USHORT StatementList::nMaxTypeKeysDelay = 0;
 BOOL StatementList::bDoTypeKeysDelay = FALSE;
 
@@ -143,7 +143,7 @@ StatementList::StatementList()
 , bStatementInQue(FALSE)
 {
     if (!pRet)
-        pRet = new RetStream;		// so Spät wie möglich, aber dennoch Zentral und auf jeden Fall rechtzeitig, da pRet private ist.
+        pRet = new RetStream;       // so Spät wie möglich, aber dennoch Zentral und auf jeden Fall rechtzeitig, da pRet private ist.
 }
 
 void StatementList::InitProfile()
@@ -208,7 +208,7 @@ void StatementList::QueStatement(StatementList *pAfterThis)
             pFirst = this;
         }
     }
-    else	// am Ende einfügen
+    else    // am Ende einfügen
     {
         pNext = NULL;
         if( !pFirst )
@@ -225,7 +225,7 @@ void StatementList::QueStatement(StatementList *pAfterThis)
 }
 
 void StatementList::Advance()
-{	// pFirst ist static!
+{   // pFirst ist static!
     pFirst = pNext;
     bStatementInQue = FALSE;
     pNext = NULL;
@@ -355,7 +355,7 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, BOOL MaybeB
         return pResult;
 
 //    if ( pBase->GetType() != WINDOW_BORDERWINDOW )
-//		return NULL;
+//      return NULL;
 
     if ( !aSearch.HasSearchFlag( SEARCH_NOOVERLAP ) )
     {
@@ -401,44 +401,44 @@ BOOL SearchUID::IsWinOK( Window *pWin )
             return FALSE;
         }
     }
-    else if ( pWin->GetType() == WINDOW_TOOLBOX )	// Buttons and Controls on ToolBox.
+    else if ( pWin->GetType() == WINDOW_TOOLBOX )   // Buttons and Controls on ToolBox.
     {
         ToolBox *pTB = ((ToolBox*)pWin);
         USHORT i;
         for ( i = 0; i < pTB->GetItemCount() ; i++ )
         {
             if ( aUId.Matches( pTB->GetItemCommand(pTB->GetItemId( i )) ) || aUId.Matches( pTB->GetHelpId(pTB->GetItemId( i )) ) )
-            {		// ID matches.
+            {       // ID matches.
                 Window *pItemWin;
                 pItemWin = pTB->GetItemWindow( pTB->GetItemId( i ) );
 
                 if ( bSearchButtonOnToolbox && pTB->GetItemType( i ) == TOOLBOXITEM_BUTTON && !pItemWin )
-                {		// We got a Control, see if its valid also.
+                {       // We got a Control, see if its valid also.
                         // Same as above.
                     if ( ( pTB->IsEnabled() || HasSearchFlag( SEARCH_FIND_DISABLED ) ) && pTB->IsVisible() )
-                    {	// We got a Button, see if its valid also.
+                    {   // We got a Button, see if its valid also.
                         if ( ( pTB->IsItemEnabled(pTB->GetItemId(i)) || HasSearchFlag( SEARCH_FIND_DISABLED ) )
                          && pTB->IsItemVisible(pTB->GetItemId(i)) )
-                            return TRUE;	// We got a Button.
+                            return TRUE;    // We got a Button.
                         else
-                        {	// better a disabled Button on a valid ToolBox than an invalid ToolBox as below
+                        {   // better a disabled Button on a valid ToolBox than an invalid ToolBox as below
                             pMaybeResult = pTB;
                             return FALSE;
                         }
                     }
                     else if ( !pMaybeResult )
-                    {	// invalid ToolBox
+                    {   // invalid ToolBox
                         pMaybeResult = pTB;
                         return FALSE;
                     }
                 }
                 if ( pItemWin )
-                {		// We got a Control, see if its valid also.
+                {       // We got a Control, see if its valid also.
                         // Same as above.
                     if ( ( pItemWin->IsEnabled() || HasSearchFlag( SEARCH_FIND_DISABLED ) ) && pItemWin->IsVisible() )
                     {
                         if ( !pAlternateResult )    // only take the first found ItemWindow #i35365
-                            pAlternateResult = pItemWin;	// since we cannot return a Window here
+                            pAlternateResult = pItemWin;    // since we cannot return a Window here
                         return FALSE;   // continue searching to prefer a window with the right ID #i32292
                     }
                     else if ( !pMaybeResult )
@@ -621,7 +621,7 @@ Menu* StatementList::GetMatchingMenu( Window* pWin, Menu* pBaseMenu )
 
 BOOL SearchActive::IsWinOK( Window *pWin )
 {
-//	return pWin->IsVisible() && ( (nRT == WINDOW_ANYTYPE && IsDialog(pWin) ) || pWin->GetType() == nRT )  && (nRT == WINDOW_FILEDIALOG || nRT == WINDOW_PATHDIALOG || nRT == WINDOW_PRINTDIALOG || nRT == WINDOW_PRINTERSETUPDIALOG || nRT == WINDOW_COLORDIALOG || ((SystemWindow*)pWin)->IsActive());
+//  return pWin->IsVisible() && ( (nRT == WINDOW_ANYTYPE && IsDialog(pWin) ) || pWin->GetType() == nRT )  && (nRT == WINDOW_FILEDIALOG || nRT == WINDOW_PATHDIALOG || nRT == WINDOW_PRINTDIALOG || nRT == WINDOW_PRINTERSETUPDIALOG || nRT == WINDOW_COLORDIALOG || ((SystemWindow*)pWin)->IsActive());
     // only matches ResID due to problems with UNIX Window Managers
     return pWin->IsVisible() && ( (nRT == WINDOW_ANYTYPE && IsDialog(pWin) ) || pWin->GetType() == nRT );
 }
@@ -1019,7 +1019,7 @@ String StatementList::ClientTree(Window *pBase, int Indent)
 
 BOOL StatementList::CheckWindowWait()
 {
-    static Time StartTime = Time(0L);	// Abbruch wenn Fenster absolut nicht schliesst.
+    static Time StartTime = Time(0L);   // Abbruch wenn Fenster absolut nicht schliesst.
     if ( StartTime == Time(0L) )
         StartTime = Time();
 
@@ -1036,7 +1036,7 @@ BOOL StatementList::CheckWindowWait()
 #endif
 
             // Ist die Zeit schonn abgelaufen?
-            if ( StartTime + Time(0,0,10) < Time() )	// 10 Sekunden reichen wohl
+            if ( StartTime + Time(0,0,10) < Time() )    // 10 Sekunden reichen wohl
             {
 #if OSL_DEBUG_LEVEL > 1
                 m_pDbgWin->AddText( "Close timed out. Going on!! " );
@@ -1085,13 +1085,13 @@ void StatementList::DirectLog( ULONG nType, String aMessage )
 }
 
 
-#define CALL_EVENT_WITH_NOTIFY( EventType, Event, WinP, Method )	\
-{																	\
-    if ( StatementList::WinPtrValid( WinP ) )						\
+#define CALL_EVENT_WITH_NOTIFY( EventType, Event, WinP, Method )    \
+{                                                                   \
+    if ( StatementList::WinPtrValid( WinP ) )                       \
     {                                                               \
-        NotifyEvent aNEvt( EventType, WinP, &Event );				\
-        if ( !WinP->PreNotify( aNEvt ) )							\
-            WinP->Method( Event );									\
+        NotifyEvent aNEvt( EventType, WinP, &Event );               \
+        if ( !WinP->PreNotify( aNEvt ) )                            \
+            WinP->Method( Event );                                  \
     }                                                               \
 }
 
@@ -1150,13 +1150,13 @@ void ImplMouseMove( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect )
     }
     else
     {
-    //	DragManager* pDragManager = DragManager::GetDragManager();
-    //	if ( pDragManager )
-    //		pDragManager->MouseMove( aMEvnt, pWin );
-    //	else 
+    //  DragManager* pDragManager = DragManager::GetDragManager();
+    //  if ( pDragManager )
+    //      pDragManager->MouseMove( aMEvnt, pWin );
+    //  else
             if ( pWin->IsTracking() )
         {
-            TrackingEvent	aTEvt( aMEvnt );
+            TrackingEvent   aTEvt( aMEvnt );
             pWin->Tracking( aTEvt );
         }
         else
@@ -1194,10 +1194,10 @@ void ImplMouseButtonUp( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect )
     }
     else
     {
-    //    	DragManager* pDragManager = DragManager::GetDragManager();
-    //	if ( pDragManager )
-    //		pDragManager->ButtonUp( aMEvnt, pWin );
-    //	else
+    //      DragManager* pDragManager = DragManager::GetDragManager();
+    //  if ( pDragManager )
+    //      pDragManager->ButtonUp( aMEvnt, pWin );
+    //  else
             if ( pWin->IsTracking() )
         {
             // siehe #64693 die Position ist für Toolboxen relevant
@@ -1205,7 +1205,7 @@ void ImplMouseButtonUp( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect )
             // Zuerst Tracking beenden ohne Event
             pWin->EndTracking( ENDTRACK_DONTCALLHDL );
             // dann eigenen Event mit richtigem Maus-Event senden
-            TrackingEvent	aTEvt( aMEvnt, ENDTRACK_END );
+            TrackingEvent   aTEvt( aMEvnt, ENDTRACK_END );
             pWin->Tracking( aTEvt );
         }
         else

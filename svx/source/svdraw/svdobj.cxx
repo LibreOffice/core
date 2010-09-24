@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/svdpool.hxx>
 #include <editeng/editeng.hxx>
-#include <vcl/salbtype.hxx>		// FRound
+#include <vcl/salbtype.hxx>     // FRound
 #include <svl/whiter.hxx>
 
 // #97849#
@@ -169,7 +169,7 @@ FASTBOOL SdrObjUserData::HasMacro(const SdrObject* /*pObj*/) const
 
 SdrObject* SdrObjUserData::CheckMacroHit(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const
 {
-    if(pObj) 
+    if(pObj)
     {
         if(rRec.pPageView)
         {
@@ -327,7 +327,7 @@ sdr::properties::BaseProperties& SdrObject::GetProperties() const
 {
     if(!mpProperties)
     {
-        const_cast< SdrObject* >(this)->mpProperties = 
+        const_cast< SdrObject* >(this)->mpProperties =
             const_cast< SdrObject* >(this)->CreateObjectSpecificProperties();
     }
 
@@ -363,7 +363,7 @@ sdr::contact::ViewContact& SdrObject::GetViewContact() const
 {
     if(!mpViewContact)
     {
-        const_cast< SdrObject* >(this)->mpViewContact = 
+        const_cast< SdrObject* >(this)->mpViewContact =
             const_cast< SdrObject* >(this)->CreateObjectSpecificViewContact();
     }
 
@@ -415,7 +415,7 @@ SdrObject::SdrObject()
     bEmptyPresObj    =FALSE;
     bNotVisibleAsMaster=FALSE;
     bClosedObj       =FALSE;
-    mbVisible		 = true;
+    mbVisible        = true;
 
     // #i25616#
     mbLineIsOutsideGeometry = sal_False;
@@ -1432,7 +1432,7 @@ FASTBOOL SdrObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     rStat.TakeCreateRect(aOutRect);
     aOutRect.Justify();
-    
+
     // #i101648# see description at MovCreate
     //
     // SetRectsDirty();
@@ -1841,8 +1841,8 @@ FASTBOOL SdrObject::HasMacro() const
 SdrObject* SdrObject::CheckMacroHit(const SdrObjMacroHitRec& rRec) const
 {
     SdrObjUserData* pData = ImpGetMacroUserData();
-    
-    if(pData) 
+
+    if(pData)
     {
         return pData->CheckMacroHit(rRec, this);
     }
@@ -1923,7 +1923,7 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
     rGeo.bMovProt      =bMovProt      ;
     rGeo.bSizProt      =bSizProt      ;
     rGeo.bNoPrint      =bNoPrint      ;
-    rGeo.mbVisible	   =mbVisible     ;
+    rGeo.mbVisible     =mbVisible     ;
     rGeo.bClosedObj    =bClosedObj    ;
     rGeo.mnLayerID = mnLayerID;
 
@@ -2341,8 +2341,8 @@ const SdrGluePointList* SdrObject::GetGluePointList() const
 
 //SdrGluePointList* SdrObject::GetGluePointList()
 //{
-//	if (pPlusData!=NULL) return pPlusData->pGluePoints;
-//	return NULL;
+//  if (pPlusData!=NULL) return pPlusData->pGluePoints;
+//  return NULL;
 //}
 
 SdrGluePointList* SdrObject::ForceGluePointList()
@@ -2864,12 +2864,12 @@ sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
     {
         SdrObjListIter aIter( *GetSubList(), IM_DEEPNOGROUPS );
 
-        for( SdrObject*	pO = aIter.Next(); pO && !bRet; pO = aIter.Next() )
+        for( SdrObject* pO = aIter.Next(); pO && !bRet; pO = aIter.Next() )
         {
             const SfxItemSet& rAttr = pO->GetMergedItemSet();
 
             if( ( ( (const XFillTransparenceItem&) rAttr.Get( XATTR_FILLTRANSPARENCE ) ).GetValue() ||
-                  ( (const XLineTransparenceItem&) rAttr.Get( XATTR_LINETRANSPARENCE ) ).GetValue()	) ||
+                  ( (const XLineTransparenceItem&) rAttr.Get( XATTR_LINETRANSPARENCE ) ).GetValue() ) ||
                 ( ( rAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SFX_ITEM_SET ) &&
                   ( (const XFillFloatTransparenceItem&) rAttr.Get( XATTR_FILLFLOATTRANSPARENCE ) ).IsEnabled() ) )
             {
@@ -2891,7 +2891,7 @@ sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
         const SfxItemSet& rAttr = GetMergedItemSet();
 
         if( ( ( (const XFillTransparenceItem&) rAttr.Get( XATTR_FILLTRANSPARENCE ) ).GetValue() ||
-              ( (const XLineTransparenceItem&) rAttr.Get( XATTR_LINETRANSPARENCE ) ).GetValue()	) ||
+              ( (const XLineTransparenceItem&) rAttr.Get( XATTR_LINETRANSPARENCE ) ).GetValue() ) ||
             ( ( rAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SFX_ITEM_SET ) &&
               ( (const XFillFloatTransparenceItem&) rAttr.Get( XATTR_FILLFLOATTRANSPARENCE ) ).IsEnabled() ) )
         {
@@ -3216,10 +3216,10 @@ SdrObject* SdrObjFactory::MakeNewObject(UINT32 nInvent, UINT16 nIdent, SdrPage* 
             case USHORT(OBJ_FRAME      ): pObj=new SdrOle2Obj(TRUE);            break;
             case USHORT(OBJ_CAPTION    ): pObj=new SdrCaptionObj;               break;
             case USHORT(OBJ_PAGE       ): pObj=new SdrPageObj;                  break;
-            case USHORT(OBJ_UNO        ): pObj=new SdrUnoObj(String());			break;
+            case USHORT(OBJ_UNO        ): pObj=new SdrUnoObj(String());         break;
             case USHORT(OBJ_CUSTOMSHAPE  ): pObj=new SdrObjCustomShape();       break;
-            case USHORT(OBJ_MEDIA 	   ): pObj=new SdrMediaObj();           	break;
-            case USHORT(OBJ_TABLE	   ): pObj=new ::sdr::table::SdrTableObj(pModel);	break;
+            case USHORT(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
+            case USHORT(OBJ_TABLE      ): pObj=new ::sdr::table::SdrTableObj(pModel);   break;
         }
     }
 

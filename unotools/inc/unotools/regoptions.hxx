@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC RegOptions
     {
     private:
-        RegOptionsImpl*		m_pImpl;
+        RegOptionsImpl*     m_pImpl;
 
         // the impl class is constructed upon need only (as this is expensive)
         UNOTOOLS_DLLPRIVATE void ensureImpl( );
@@ -55,24 +55,24 @@ namespace utl
         ~RegOptions( );
 
         // retrieves the URL which should be used for online registration
-        String				getRegistrationURL( ) const;
+        String              getRegistrationURL( ) const;
 
         // checks if the menu item which can be used to trigger the online registration should be available
-        sal_Bool			allowMenu( ) const;
+        sal_Bool            allowMenu( ) const;
 
         enum DialogPermission
-        {						// the registration dialog shall be executed ....
-            dpDisabled,			// ... never - it has been disabled
-            dpNotThisSession,	// ... later - no statement when, but _not now_
-            dpRemindLater,		// ... later at a reminder date
-            dpThisSession		// ... during this session
+        {                       // the registration dialog shall be executed ....
+            dpDisabled,         // ... never - it has been disabled
+            dpNotThisSession,   // ... later - no statement when, but _not now_
+            dpRemindLater,      // ... later at a reminder date
+            dpThisSession       // ... during this session
         };
 
         /** checks if the registration dialog is allowed
             <p>A return value of <TRUE/> does not mean that during this session, the dialog is allowed to
             be executed. It simply means executing it is allowed <em>in general</em></p>
         */
-        DialogPermission	getDialogPermission( ) const;
+        DialogPermission    getDialogPermission( ) const;
 
         /** claims that the current session is done with respect to the registration dialog.
 
@@ -87,7 +87,7 @@ namespace utl
                     <method>getDialogPermission</method> <em>may</em> return dpThisSession</li>
             </ul></p>
         */
-        void				markSessionDone( );
+        void                markSessionDone( );
 
         /** activates the reminder
 

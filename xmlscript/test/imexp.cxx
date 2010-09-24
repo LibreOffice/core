@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,26 +77,26 @@ Reference< XComponentContext > createInitialComponentContext(
     OUString const & inst_dir )
 {
     Reference< XComponentContext > xContext;
-    
+
     try
     {
         OUString file_url;
         oslFileError rc = osl_getFileURLFromSystemPath(
             inst_dir.pData, &file_url.pData );
         OSL_ASSERT( osl_File_E_None == rc );
-        
+
         ::rtl::OUString unorc = file_url + OUString(
             RTL_CONSTASCII_USTRINGPARAM("/program/" SAL_CONFIGFILE("uno")) );
-        
+
         return defaultBootstrap_InitialComponentContext( unorc );
     }
-    
+
     catch( Exception& rExc )
     {
         OString aStr( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( 0, aStr.getStr() );
     }
-    
+
     return xContext;
 }
 
@@ -114,15 +114,15 @@ Reference< container::XNameContainer > importFile(
         ::fseek( f, 0 ,SEEK_END );
         int nLength = ::ftell( f );
         ::fseek( f, 0, SEEK_SET );
-        
+
         ByteSequence bytes( nLength );
         ::fread( bytes.getArray(), nLength, 1, f );
         ::fclose( f );
-        
+
         Reference< container::XNameContainer > xModel( xContext->getServiceManager()->createInstanceWithContext(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ), xContext ), UNO_QUERY );
         ::xmlscript::importDialogModel( ::xmlscript::createInputStream( bytes ), xModel, xContext );
-        
+
         return xModel;
     }
     else
@@ -139,7 +139,7 @@ void exportToFile(
 {
     Reference< io::XInputStreamProvider > xProvider( ::xmlscript::exportDialogModel( xModel, xContext ) );
     Reference< io::XInputStream > xStream( xProvider->createInputStream() );
-    
+
     Sequence< sal_Int8 > bytes;
     sal_Int32 nRead = xStream->readBytes( bytes, xStream->available() );
     for (;;)
@@ -149,12 +149,12 @@ void exportToFile(
         if (! nRead)
             break;
         OSL_ASSERT( readBytes.getLength() >= nRead );
-        
+
         sal_Int32 nPos = bytes.getLength();
         bytes.realloc( nPos + nRead );
         ::rtl_copyMemory( bytes.getArray() + nPos, readBytes.getConstArray(), (sal_uInt32)nRead );
     }
-    
+
     FILE * f = ::fopen( fname, "w" );
     ::fwrite( bytes.getConstArray(), 1, bytes.getLength(), f );
     ::fflush( f );
@@ -185,14 +185,14 @@ void MyApp::Main()
         createInitialComponentContext( OUString( GetCommandLineParam( 0 ) ) ) );
     Reference< lang::XMultiServiceFactory > xMSF(
         xContext->getServiceManager(), UNO_QUERY );
-    
+
     try
     {
         ::comphelper::setProcessServiceFactory( xMSF );
-        
+
         Reference< awt::XToolkit> xToolkit( xMSF->createInstance(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
-        
+
         // import dialogs
         OString aParam1( OUStringToOString(
                              OUString( GetCommandLineParam( 1 ) ),
@@ -200,14 +200,14 @@ void MyApp::Main()
         Reference< container::XNameContainer > xModel(
             importFile( aParam1.getStr(), xContext ) );
         OSL_ASSERT( xModel.is() );
-        
+
         Reference< awt::XControl > xDlg( xMSF->createInstance(
             OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), UNO_QUERY );
         xDlg->setModel( Reference< awt::XControlModel >::query( xModel ) );
         xDlg->createPeer( xToolkit, 0 );
         Reference< awt::XDialog > xD( xDlg, UNO_QUERY );
         xD->execute();
-        
+
         if (GetCommandLineParamCount() == 3)
         {
             // write modified dialogs
@@ -232,7 +232,7 @@ void MyApp::Main()
         OString aStr( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( 0, aStr.getStr() );
     }
-    
+
     Reference< lang::XComponent > xComp( xContext, UNO_QUERY );
     if (xComp.is())
     {

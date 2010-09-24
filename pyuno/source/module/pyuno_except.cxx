@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ void raisePyExceptionWithAny( const com::sun::star::uno::Any &anyExc )
         {
             com::sun::star::uno::Exception e;
             anyExc >>= e;
-            
+
             OUStringBuffer buf;
             buf.appendAscii( "Couldn't convert uno exception to a python exception (" );
             buf.append(anyExc.getValueType().getTypeName());
@@ -164,7 +164,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     PyTuple_SetItem( args.get(), 0, pyTypeName.getAcquired());
     PyTuple_SetItem( args.get(), 1, bases.getAcquired() );
     PyTuple_SetItem( args.get(), 2, PyDict_New() );
-    
+
     PyRef ret(
         PyObject_CallObject(reinterpret_cast<PyObject *>(&PyClass_Type) , args.get()),
         SAL_NO_ACQUIRE );
@@ -183,7 +183,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
         PyRef getter = getObjectFromUnoModule( runtime,"_uno_struct__getattr__" );
         PyRef repr = getObjectFromUnoModule( runtime,"_uno_struct__repr__" );
         PyRef eq = getObjectFromUnoModule( runtime,"_uno_struct__eq__" );
-        
+
         PyObject_SetAttrString(
             ret.get(), const_cast< char * >("__pyunostruct__"),
             ustring2PyString(name).get() );
@@ -224,7 +224,7 @@ sal_Bool isInterfaceClass( const Runtime &runtime, PyObject * obj )
 PyRef getClass( const OUString & name , const Runtime &runtime)
 {
     PyRef ret;
-    
+
     RuntimeCargo *cargo =runtime.getImpl()->cargo;
     ExceptionClassMap::iterator ii = cargo->exceptionMap.find( name );
     if( ii == cargo->exceptionMap.end() )
@@ -234,7 +234,7 @@ PyRef getClass( const OUString & name , const Runtime &runtime)
         if( PyObject_HasAttrString(
                 ret.get(), const_cast< char * >("__pyunointerface__") ) )
             cargo->interfaceSet.insert( ret );
-        
+
         PyObject_SetAttrString(
             ret.get(), const_cast< char * >("__pyunointerface__"),
             ustring2PyString(name).get() );

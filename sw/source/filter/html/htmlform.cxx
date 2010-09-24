@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,29 +97,29 @@ const sal_uInt16 TABINDEX_MAX = 32767;
 
 static HTMLOptionEnum __FAR_DATA aHTMLFormMethodTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_METHOD_get,		FormSubmitMethod_GET	},
-    { OOO_STRING_SVTOOLS_HTML_METHOD_post,	FormSubmitMethod_POST	},
-    { 0,					0						}
+    { OOO_STRING_SVTOOLS_HTML_METHOD_get,       FormSubmitMethod_GET    },
+    { OOO_STRING_SVTOOLS_HTML_METHOD_post,  FormSubmitMethod_POST   },
+    { 0,                    0                       }
 };
 
 static HTMLOptionEnum __FAR_DATA aHTMLFormEncTypeTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_ET_url,			FormSubmitEncoding_URL			},
-    { OOO_STRING_SVTOOLS_HTML_ET_multipart,	FormSubmitEncoding_MULTIPART	},
-    { OOO_STRING_SVTOOLS_HTML_ET_text,		FormSubmitEncoding_TEXT			},
-    { 0,					0								}
+    { OOO_STRING_SVTOOLS_HTML_ET_url,           FormSubmitEncoding_URL          },
+    { OOO_STRING_SVTOOLS_HTML_ET_multipart, FormSubmitEncoding_MULTIPART    },
+    { OOO_STRING_SVTOOLS_HTML_ET_text,      FormSubmitEncoding_TEXT         },
+    { 0,                    0                               }
 };
 
 enum HTMLWordWrapMode { HTML_WM_OFF, HTML_WM_HARD, HTML_WM_SOFT };
 
 static HTMLOptionEnum __FAR_DATA aHTMLTextAreaWrapTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_WW_off,		HTML_WM_OFF	},
-    { OOO_STRING_SVTOOLS_HTML_WW_hard,	HTML_WM_HARD	},
-    { OOO_STRING_SVTOOLS_HTML_WW_soft,	HTML_WM_SOFT	},
-    { OOO_STRING_SVTOOLS_HTML_WW_physical,HTML_WM_HARD	},
-    { OOO_STRING_SVTOOLS_HTML_WW_virtual,	HTML_WM_SOFT	},
-    { 0,				0			   	}
+    { OOO_STRING_SVTOOLS_HTML_WW_off,       HTML_WM_OFF },
+    { OOO_STRING_SVTOOLS_HTML_WW_hard,  HTML_WM_HARD    },
+    { OOO_STRING_SVTOOLS_HTML_WW_soft,  HTML_WM_SOFT    },
+    { OOO_STRING_SVTOOLS_HTML_WW_physical,HTML_WM_HARD  },
+    { OOO_STRING_SVTOOLS_HTML_WW_virtual,   HTML_WM_SOFT    },
+    { 0,                0               }
 };
 
 HTMLEventType __FAR_DATA aEventTypeTable[] =
@@ -187,28 +187,28 @@ const sal_Char * __FAR_DATA aEventOptionTable[] =
 
 class SwHTMLForm_Impl
 {
-    SwDocShell 					*pDocSh;
+    SwDocShell                  *pDocSh;
 
-    SvKeyValueIterator			*pHeaderAttrs;
+    SvKeyValueIterator          *pHeaderAttrs;
 
     // gecachte Interfaces
-    uno::Reference< drawing::XDrawPage >  			xDrawPage;
-    uno::Reference< container::XIndexContainer > 	xForms;
-    uno::Reference< drawing::XShapes >   			xShapes;
-    uno::Reference< XMultiServiceFactory > 			xServiceFactory;
+    uno::Reference< drawing::XDrawPage >            xDrawPage;
+    uno::Reference< container::XIndexContainer >    xForms;
+    uno::Reference< drawing::XShapes >              xShapes;
+    uno::Reference< XMultiServiceFactory >          xServiceFactory;
 
-    uno::Reference< script::XEventAttacherManager > 	xControlEventManager;
-    uno::Reference< script::XEventAttacherManager > 	xFormEventManager;
+    uno::Reference< script::XEventAttacherManager >     xControlEventManager;
+    uno::Reference< script::XEventAttacherManager >     xFormEventManager;
 
     // Kontext-Informationen
-    uno::Reference< container::XIndexContainer > 	xFormComps;
-    uno::Reference< beans::XPropertySet > 			xFCompPropSet;
-    uno::Reference< drawing::XShape > 				xShape;
+    uno::Reference< container::XIndexContainer >    xFormComps;
+    uno::Reference< beans::XPropertySet >           xFCompPropSet;
+    uno::Reference< drawing::XShape >               xShape;
 
-    String						sText;
-    SvStringsDtor				aStringList;
-    SvStringsDtor				aValueList;
-    SvUShorts					aSelectedList;
+    String                      sText;
+    SvStringsDtor               aStringList;
+    SvStringsDtor               aValueList;
+    SvUShorts                   aSelectedList;
 
 public:
 
@@ -379,11 +379,11 @@ const uno::Reference< script::XEventAttacherManager >&
 class SwHTMLImageWatcher :
     public cppu::WeakImplHelper2< awt::XImageConsumer, XEventListener >
 {
-    uno::Reference< drawing::XShape >  		xShape;		// das control
-    uno::Reference< XImageProducerSupplier >	xSrc;
-    uno::Reference< awt::XImageConsumer > 	xThis;		// man selbst
-    sal_Bool 							bSetWidth;
-    sal_Bool							bSetHeight;
+    uno::Reference< drawing::XShape >       xShape;     // das control
+    uno::Reference< XImageProducerSupplier >    xSrc;
+    uno::Reference< awt::XImageConsumer >   xThis;      // man selbst
+    sal_Bool                            bSetWidth;
+    sal_Bool                            bSetHeight;
 
     void clear();
 
@@ -556,7 +556,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
                         pLayout->GetBrowseWidthByTable( *pDoc );
 
                     if ( nBrowseWidth )
-                    {        
+                    {
                         pLayout->Resize( nBrowseWidth, sal_True, sal_True,
                                          bLastGrf ? HTMLTABLE_RESIZE_NOW
                                                   : 500 );
@@ -659,10 +659,10 @@ static void lcl_html_setFixedFontProperty(
 
 class SwHTMLFormPendingStackData_Impl: public SwPendingStackData
 {
-    uno::Reference< drawing::XShape >  	xShape;
-    Size			aTextSz;
-    sal_Bool		bMinWidth;
-    sal_Bool		bMinHeight;
+    uno::Reference< drawing::XShape >   xShape;
+    Size            aTextSz;
+    sal_Bool        bMinWidth;
+    sal_Bool        bMinHeight;
 
 public:
 
@@ -728,7 +728,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
                 SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
                 bRemoveHidden = ( pHiddenItem == NULL || !pHiddenItem->GetValue() );
             }
-                
+
             pTempViewFrame = SfxViewFrame::LoadHiddenDocument( *pDocSh, 0 );
             CallStartAction();
             pDoc->GetEditShell( &pVSh );
@@ -1168,7 +1168,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         sal_Int16 nSurround = text::WrapTextMode_NONE;
         if( SVX_CSS1_POS_ABSOLUTE == rCSS1PropInfo.ePosition &&
             SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eLeftType &&
-            SVX_CSS1_LTYPE_TWIP	== rCSS1PropInfo.eTopType )
+            SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eTopType )
         {
             const SwStartNode *pFlySttNd =
                 pDoc->GetNodes()[pPam->GetPoint()->nNode]->FindFlyStartNode();
@@ -1590,7 +1590,7 @@ void SwHTMLParser::InsertInput()
             bSetEvent = sal_True;
             break;
 
-        case HTML_O_SDONBLUR:				// eigtl. nur EDIT
+        case HTML_O_SDONBLUR:               // eigtl. nur EDIT
             eScriptType2 = STARBASIC;
         case HTML_O_ONBLUR:
             nEvent = HTML_ET_ONLOSEFOCUS;
@@ -1604,14 +1604,14 @@ void SwHTMLParser::InsertInput()
             bSetEvent = sal_True;
             break;
 
-        case HTML_O_SDONCHANGE:				// eigtl. nur EDIT
+        case HTML_O_SDONCHANGE:             // eigtl. nur EDIT
             eScriptType2 = STARBASIC;
         case HTML_O_ONCHANGE:
             nEvent = HTML_ET_ONCHANGE;
             bSetEvent = sal_True;
             break;
 
-        case HTML_O_SDONSELECT:				// eigtl. nur EDIT
+        case HTML_O_SDONSELECT:             // eigtl. nur EDIT
             eScriptType2 = STARBASIC;
         case HTML_O_ONSELECT:
             nEvent = HTML_ET_ONSELECT;
@@ -1747,8 +1747,8 @@ void SwHTMLParser::InsertInput()
 
     aTmp <<= OUString(sText);
 
-    Size aSz( 0, 0 );		// defaults
-    Size aTextSz( 0, 0 );	// Text-Size
+    Size aSz( 0, 0 );       // defaults
+    Size aTextSz( 0, 0 );   // Text-Size
     sal_Bool bMinWidth = sal_False, bMinHeight = sal_False;
     sal_Bool bUseSize = sal_False;
     switch( eType )
@@ -2438,7 +2438,7 @@ void SwHTMLParser::NewSelect()
     }
     else
     {
-        if( nSelectEntryCnt <= 1 )		// 4 Zeilen als default
+        if( nSelectEntryCnt <= 1 )      // 4 Zeilen als default
             nSelectEntryCnt = 4;
 
         if( bMultiple )

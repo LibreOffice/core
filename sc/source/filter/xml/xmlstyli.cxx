@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -244,9 +244,9 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
             sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
             switch (nContextID)
             {
-                case CTF_SC_ROWHEIGHT					: pHeight = property; break;
-                case CTF_SC_ROWOPTIMALHEIGHT			: pOptimalHeight = property; break;
-                case CTF_SC_ROWBREAKBEFORE				: pPageBreak = property; break;
+                case CTF_SC_ROWHEIGHT                   : pHeight = property; break;
+                case CTF_SC_ROWOPTIMALHEIGHT            : pOptimalHeight = property; break;
+                case CTF_SC_ROWBREAKBEFORE              : pPageBreak = property; break;
             }
         }
     }
@@ -296,7 +296,7 @@ public:
 };
 
 ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,	const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+            const OUString& rLName, const uno::Reference< xml::sax::XAttributeList > & xAttrList )
     : SvXMLImportContext( rImport, nPrfx, rLName )
 {
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);

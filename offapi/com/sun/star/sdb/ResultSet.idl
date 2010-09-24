@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,39 +24,39 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_ResultSet_idl__ 
-#define __com_sun_star_sdb_ResultSet_idl__ 
- 
-#ifndef __com_sun_star_sdbcx_ResultSet_idl__ 
-#include <com/sun/star/sdbcx/ResultSet.idl> 
-#endif 
- 
- module com {  module sun {  module star {  module sdbcx { 
- published interface XColumnsSupplier; 
-};};};}; 
- 
- module com {  module sun {  module star {  module sdb { 
- 
- 
-/** extends the 
+#ifndef __com_sun_star_sdb_ResultSet_idl__
+#define __com_sun_star_sdb_ResultSet_idl__
+
+#ifndef __com_sun_star_sdbcx_ResultSet_idl__
+#include <com/sun/star/sdbcx/ResultSet.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbcx {
+ published interface XColumnsSupplier;
+};};};};
+
+ module com {  module sun {  module star {  module sdb {
+
+
+/** extends the
     <type scope="com::sun::star::sdbcx">ResultSet</type>
     by a more sophisticated access to the result sets
     data.
  */
 published service ResultSet
-{ 
-    service com::sun::star::sdbcx::ResultSet; 
- 
-     
+{
+    service com::sun::star::sdbcx::ResultSet;
+
+
     /** access to the description and data.
      */
-    interface com::sun::star::sdbcx::XColumnsSupplier; 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    interface com::sun::star::sdbcx::XColumnsSupplier;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

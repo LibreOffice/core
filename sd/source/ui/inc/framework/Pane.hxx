@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ namespace sd { namespace framework {
     This class has two responsibilities:
     1. It implements the XPane interface.  This is the most important
     interface of this class for API based views (of which there not that
-    many yet) because it gives access to the XWindow. 
+    many yet) because it gives access to the XWindow.
     2. It gives access to the underlying VCL Window by implementing the
     XUnoTunnel interface.  This is necessary at the moment and in the
     foreseeable future because many parts of the Draw and Impress views rely
@@ -90,7 +90,7 @@ public:
     virtual ~Pane (void) throw();
 
     virtual void SAL_CALL disposing (void);
-    
+
     static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId (void);
 
     /** This method is typically used together with the XUnoTunnel to obtain
@@ -98,7 +98,7 @@ public:
     */
     virtual ::Window* GetWindow (void);
 
-    
+
     //----- XPane -------------------------------------------------------------
 
     /** For a UNO API based implementation of a view this may the most
@@ -115,7 +115,7 @@ public:
 
 
     //----- XPane2 -------------------------------------------------------------
-    
+
     virtual sal_Bool SAL_CALL isVisible (void)
         throw (cssu::RuntimeException);
 
@@ -131,7 +131,7 @@ public:
 
 
     //----- XResource ---------------------------------------------------------
-    
+
     virtual ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>
         SAL_CALL getResourceId (void)
         throw (::com::sun::star::uno::RuntimeException);
@@ -142,7 +142,7 @@ public:
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException);
 
-    
+
     //----- XUnoTunnel --------------------------------------------------------
 
     virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)

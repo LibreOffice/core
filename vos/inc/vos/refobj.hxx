@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
     with reference-counting.
 */
 
-#	include <vos/refernce.hxx>
+#   include <vos/refernce.hxx>
 #ifndef _VOS_DIAGNOSE_HXX_
-#	include <vos/diagnose.hxx>
+#   include <vos/diagnose.hxx>
 #endif
 
 namespace vos
@@ -49,7 +49,7 @@ class ORefObj : public IReference
 {
 public:
     ORefObj(const T& Obj);
-    
+
     inline ~ORefObj();
 
     virtual RefCount SAL_CALL acquire()
@@ -67,11 +67,11 @@ public:
     T& SAL_CALL operator() ();
     const T& SAL_CALL operator() () const;
 
-    const	T& SAL_CALL getObj() const;
+    const   T& SAL_CALL getObj() const;
     T& SAL_CALL getObj();
 
 protected:
-    T	      m_Obj;
+    T         m_Obj;
     ORefCount m_RefCount;
 
 private:

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ namespace sdr
             // All VOCs which are created using this OC, thus remembering this OC
             // as a reference. All those VOCs need to be deleted when the OC goes down.
             // Registering and de-registering is done in the VOC constructors/destructors.
-            std::vector< ViewObjectContact* >				maViewObjectContactVector;
+            std::vector< ViewObjectContact* >               maViewObjectContactVector;
 
             // A new ViewObjectContact was created and shall be remembered.
             void AddViewObjectContact(ViewObjectContact& rVOContact);
@@ -81,21 +81,21 @@ namespace sdr
 
             // the primitiveAnimator which is used if this View and/or the contained primitives
             // support animatedSwitchPrimitives
-            sdr::animation::primitiveAnimator				maPrimitiveAnimator;
+            sdr::animation::primitiveAnimator               maPrimitiveAnimator;
 
             // the EventHandler for e.g. asynchronious loading of graphics
-            sdr::event::TimerEventHandler*					mpEventHandler;
+            sdr::event::TimerEventHandler*                  mpEventHandler;
 
             // The redirector. If set it is used to pipe all supported calls
             // to the redirector
-            ViewObjectContactRedirector*					mpViewObjectContactRedirector;
+            ViewObjectContactRedirector*                    mpViewObjectContactRedirector;
 
             // the Primitive2DParameters containing view information
-            drawinglayer::geometry::ViewInformation2D		maViewInformation2D;
+            drawinglayer::geometry::ViewInformation2D       maViewInformation2D;
 
             // bitfield
             // flag for preview renderer
-            unsigned										mbIsPreviewRenderer : 1;
+            unsigned                                        mbIsPreviewRenderer : 1;
 
             // method to create a EventHandler. Needs to give a result.
             sdr::event::TimerEventHandler* CreateEventHandler();
@@ -171,7 +171,7 @@ namespace sdr
             // access to ViewObjectContactRedirector
             ViewObjectContactRedirector* GetViewObjectContactRedirector() const;
             void SetViewObjectContactRedirector(ViewObjectContactRedirector* pNew);
-            
+
             // check if buffering of MasterPages is allowed. Default is sal_False.
             virtual bool IsMasterPageBufferingAllowed() const;
 
@@ -207,7 +207,7 @@ namespace sdr
 
             // access to SdrPageView. May return 0L like the default implementations do. Needs to be overloaded as needed.
             virtual SdrPageView* TryToGetSdrPageView() const;
-            
+
             // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
             virtual OutputDevice* TryToGetOutputDevice() const;
 

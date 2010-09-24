@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@
 namespace basebmp
 {
 
-// TODO(Q3): move to generic place (o3tl?)    
+// TODO(Q3): move to generic place (o3tl?)
 
 /** template meta function: add const qualifier to 2nd type, if given
     1st type has it
 */
-template<typename A, typename B> struct clone_const 
+template<typename A, typename B> struct clone_const
 {
     typedef B type;
 };
@@ -52,7 +52,7 @@ template<typename A, typename B> struct clone_const<const A,B>
 /** template meta function: add const qualifier to plain type (if not
     already there)
  */
-template <typename T> struct add_const 
+template <typename T> struct add_const
 {
     typedef const T type;
 };
@@ -62,7 +62,7 @@ template <typename T> struct add_const<const T>
 };
 
 /// template meta function: remove const qualifier from plain type
-template <typename T> struct remove_const 
+template <typename T> struct remove_const
 {
     typedef T type;
 };
@@ -134,10 +134,10 @@ inline bool is_negative( int x )
 template< typename T, typename trueCase, typename falseCase >
 struct ifScalarIntegral
 {
-    typedef  
-    typename vigra::If< 
+    typedef
+    typename vigra::If<
         typename vigra::NumericTraits< T >::isIntegral,
-        typename vigra::If< 
+        typename vigra::If<
             typename vigra::NumericTraits< T >::isScalar,
             trueCase,
             falseCase >::type,
@@ -148,11 +148,11 @@ struct ifScalarIntegral
 template< typename T, typename trueCase, typename falseCase >
 struct ifScalarNonIntegral
 {
-    typedef  
-    typename vigra::If< 
+    typedef
+    typename vigra::If<
         typename vigra::NumericTraits< T >::isIntegral,
         falseCase,
-        typename vigra::If< 
+        typename vigra::If<
             typename vigra::NumericTraits< T >::isScalar,
             trueCase,
             falseCase >::type >::type type;
@@ -162,11 +162,11 @@ struct ifScalarNonIntegral
 template< typename T1, typename T2, typename trueCase, typename falseCase >
 struct ifBothScalarIntegral
 {
-    typedef  
-    typename ifScalarIntegral< 
-        T1, 
-        typename ifScalarIntegral< 
-            T2, 
+    typedef
+    typename ifScalarIntegral<
+        T1,
+        typename ifScalarIntegral<
+            T2,
             trueCase,
             falseCase >::type,
         falseCase >::type type;
@@ -190,7 +190,7 @@ template<> struct numberOfTrailingZeros<0>
 
 //--------------------------------------------------------------
 
-/// Count number of one bits 
+/// Count number of one bits
 template< unsigned int val > struct bitcount
 {
     enum { next = val >> 1 };
@@ -204,13 +204,13 @@ template<> struct bitcount<0>
 
 //--------------------------------------------------------------
 
-/// Shift left for positive shift value, and right otherwise 
+/// Shift left for positive shift value, and right otherwise
 template< typename T > inline T shiftLeft( T v, int shift )
 {
     return shift > 0 ? v << shift : v >> (-shift);
 }
 
-/// Shift right for positive shift value, and left otherwise 
+/// Shift right for positive shift value, and left otherwise
 template< typename T > inline T shiftRight( T v, int shift )
 {
     return shift > 0 ? v >> shift : v << (-shift);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,12 +104,12 @@ static SwCrsrOszControl aOszCtrl = { 0, 0, 0 };
 
 /*************************************************************************
 |*
-|*	SwLayoutFrm::GetCrsrOfst()
+|*  SwLayoutFrm::GetCrsrOfst()
 |*
-|*	Beschreibung:		Sucht denjenigen CntntFrm, innerhalb dessen
-|* 						PrtArea der Point liegt.
-|*	Ersterstellung		MA 20. Jul. 92
-|*	Letzte Aenderung	MA 23. May. 95
+|*  Beschreibung:       Sucht denjenigen CntntFrm, innerhalb dessen
+|*                      PrtArea der Point liegt.
+|*  Ersterstellung      MA 20. Jul. 92
+|*  Letzte Aenderung    MA 23. May. 95
 |*
 |*************************************************************************/
 BOOL SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
@@ -141,19 +141,19 @@ BOOL SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 
 /*************************************************************************
 |*
-|*	SwPageFrm::GetCrsrOfst()
+|*  SwPageFrm::GetCrsrOfst()
 |*
-|*	Beschreibung:		Sucht die Seite, innerhalb der der gesuchte Point
-|*						liegt.
-|*	Ersterstellung		MA 20. Jul. 92
-|*	Letzte Aenderung	MA 18. Jul. 96
+|*  Beschreibung:       Sucht die Seite, innerhalb der der gesuchte Point
+|*                      liegt.
+|*  Ersterstellung      MA 20. Jul. 92
+|*  Letzte Aenderung    MA 18. Jul. 96
 |*
 |*************************************************************************/
 
 BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                              SwCrsrMoveState* pCMS ) const
 {
-    BOOL bRet	  = FALSE;
+    BOOL bRet     = FALSE;
     Point aPoint( rPoint );
 
     // check, if we have to adjust the point
@@ -290,13 +290,13 @@ bool SwRootFrm::FillSelection( SwSelectionList& aSelList, const SwRect& rRect) c
 
 /*************************************************************************
 |*
-|*	SwRootFrm::GetCrsrOfst()
+|*  SwRootFrm::GetCrsrOfst()
 |*
-|*	Beschreibung:		Reicht Primaer den Aufruf an die erste Seite weiter.
-|*						Wenn der 'reingereichte Point veraendert wird,
-|*						so wird FALSE zurueckgegeben.
-|*	Ersterstellung		MA 01. Jun. 92
-|*	Letzte Aenderung	MA 30. Nov. 94
+|*  Beschreibung:       Reicht Primaer den Aufruf an die erste Seite weiter.
+|*                      Wenn der 'reingereichte Point veraendert wird,
+|*                      so wird FALSE zurueckgegeben.
+|*  Ersterstellung      MA 01. Jun. 92
+|*  Letzte Aenderung    MA 30. Nov. 94
 |*
 |*************************************************************************/
 BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
@@ -344,14 +344,14 @@ BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 
 /*************************************************************************
 |*
-|*	SwCellFrm::GetCrsrOfst()
+|*  SwCellFrm::GetCrsrOfst()
 |*
-|*	Beschreibung		Wenn es sich um eine Cntnt-tragende Cell handelt wird
-|* 						der Crsr notfalls mit Gewalt in einen der CntntFrms
-|* 						gesetzt.
-|* 						In geschuetzte Zellen gibt es hier keinen Eingang.
-|*	Ersterstellung		MA 04. Jun. 93
-|*	Letzte Aenderung	MA 23. May. 95
+|*  Beschreibung        Wenn es sich um eine Cntnt-tragende Cell handelt wird
+|*                      der Crsr notfalls mit Gewalt in einen der CntntFrms
+|*                      gesetzt.
+|*                      In geschuetzte Zellen gibt es hier keinen Eingang.
+|*  Ersterstellung      MA 04. Jun. 93
+|*  Letzte Aenderung    MA 23. May. 95
 |*
 |*************************************************************************/
 BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
@@ -418,10 +418,10 @@ BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::GetCrsrOfst()
+|*  SwFlyFrm::GetCrsrOfst()
 |*
-|*	Ersterstellung		MA 15. Dec. 92
-|*	Letzte Aenderung	MA 23. May. 95
+|*  Ersterstellung      MA 15. Dec. 92
+|*  Letzte Aenderung    MA 23. May. 95
 |*
 |*************************************************************************/
 //Problem: Wenn zwei Flys genau gleich gross sind und auf derselben
@@ -514,9 +514,9 @@ BOOL SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 
 /*************************************************************************
 |*
-|*	  Beschreibung		Layoutabhaengiges Cursortravelling
-|*	  Ersterstellung	MA 23. Jul. 92
-|*	  Letzte Aenderung	MA 06. Sep. 93
+|*    Beschreibung      Layoutabhaengiges Cursortravelling
+|*    Ersterstellung    MA 23. Jul. 92
+|*    Letzte Aenderung  MA 06. Sep. 93
 |*
 |*************************************************************************/
 BOOL SwCntntFrm::LeftMargin(SwPaM *pPam) const
@@ -754,13 +754,13 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
         //verlassen.
         else if ( pCnt )
         {
-            const SwFrm *pUp = pStart->GetUpper();				 //Head/Foot
+            const SwFrm *pUp = pStart->GetUpper();               //Head/Foot
             while ( pUp && pUp->GetUpper() && !(pUp->GetType() & 0x0018 ) )
                 pUp = pUp->GetUpper();
             BOOL bSame = FALSE;
             const SwFrm *pCntUp = pCnt->GetUpper();
             while ( pCntUp && !bSame )
-            {	if ( pUp == pCntUp )
+            {   if ( pUp == pCntUp )
                     bSame = TRUE;
                 else
                     pCntUp = pCntUp->GetUpper();
@@ -779,7 +779,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             if ( !pCnt )
                 bEnd = TRUE;
             else
-            {	const SwTabFrm *pTab = pCnt->FindTabFrm();
+            {   const SwTabFrm *pTab = pCnt->FindTabFrm();
                 if( !pTab )
                     bEnd = TRUE;
                 else
@@ -854,7 +854,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
               (pCnt && pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow()));
 
     if( pCnt )
-    {	// setze den Point auf den Content-Node
+    {   // setze den Point auf den Content-Node
         SwCntntNode *pCNd = (SwCntntNode*)pCnt->GetNode();
         pPam->GetPoint()->nNode = *pCNd;
         if ( fnNxtPrv == lcl_GetPrvCnt )
@@ -878,15 +878,15 @@ BOOL SwCntntFrm::UnitDown( SwPaM* pPam, const SwTwips, BOOL bInReadOnly ) const
 
 /*************************************************************************
 |*
-|*	SwRootFrm::GetCurrPage()
+|*  SwRootFrm::GetCurrPage()
 |*
-|*	Beschreibung:		Liefert die Nummer der aktuellen Seite.
-|*			Wenn die Methode einen PaM bekommt, so ist die aktuelle Seite
-|*			diejenige in der der PaM sitzt. Anderfalls ist die aktuelle
-|*			Seite die erste Seite innerhalb der VisibleArea.
-|*			Es wird nur auf den vorhandenen Seiten gearbeitet!
-|*	Ersterstellung		MA 20. May. 92
-|*	Letzte Aenderung	MA 09. Oct. 97
+|*  Beschreibung:       Liefert die Nummer der aktuellen Seite.
+|*          Wenn die Methode einen PaM bekommt, so ist die aktuelle Seite
+|*          diejenige in der der PaM sitzt. Anderfalls ist die aktuelle
+|*          Seite die erste Seite innerhalb der VisibleArea.
+|*          Es wird nur auf den vorhandenen Seiten gearbeitet!
+|*  Ersterstellung      MA 20. May. 92
+|*  Letzte Aenderung    MA 09. Oct. 97
 |*
 |*************************************************************************/
 USHORT SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
@@ -901,16 +901,16 @@ USHORT SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
 
 /*************************************************************************
 |*
-|*	SwRootFrm::SetCurrPage()
+|*  SwRootFrm::SetCurrPage()
 |*
-|*	Beschreibung:		Liefert einen PaM der am Anfang der gewuenschten
-|*			Seite sitzt.
-|*			Formatiert wird soweit notwendig
-|*			Liefert Null, wenn die Operation nicht moeglich ist.
-|*			Der PaM sitzt in der letzten Seite, wenn die Seitenzahl zu gross
-|*			gewaehlt wurde.
-|*	Ersterstellung		MA 20. May. 92
-|*	Letzte Aenderung	MA 09. Oct. 97
+|*  Beschreibung:       Liefert einen PaM der am Anfang der gewuenschten
+|*          Seite sitzt.
+|*          Formatiert wird soweit notwendig
+|*          Liefert Null, wenn die Operation nicht moeglich ist.
+|*          Der PaM sitzt in der letzten Seite, wenn die Seitenzahl zu gross
+|*          gewaehlt wurde.
+|*  Ersterstellung      MA 20. May. 92
+|*  Letzte Aenderung    MA 09. Oct. 97
 |*
 |*************************************************************************/
 USHORT SwRootFrm::SetCurrPage( SwCursor* pToSet, USHORT nPageNum )
@@ -920,10 +920,10 @@ USHORT SwRootFrm::SetCurrPage( SwCursor* pToSet, USHORT nPageNum )
     SwPageFrm *pPage = (SwPageFrm*)Lower();
     BOOL bEnd =FALSE;
     while ( !bEnd && pPage->GetPhyPageNum() != nPageNum )
-    {	if ( pPage->GetNext() )
+    {   if ( pPage->GetNext() )
             pPage = (SwPageFrm*)pPage->GetNext();
         else
-        {	//Ersten CntntFrm Suchen, und solange Formatieren bis
+        {   //Ersten CntntFrm Suchen, und solange Formatieren bis
             //eine neue Seite angefangen wird oder bis die CntntFrm's alle
             //sind.
             const SwCntntFrm *pCntnt = pPage->ContainsCntnt();
@@ -972,17 +972,17 @@ USHORT SwRootFrm::SetCurrPage( SwCursor* pToSet, USHORT nPageNum )
 
 /*************************************************************************
 |*
-|*	  SwCntntFrm::StartxxPage(), EndxxPage()
+|*    SwCntntFrm::StartxxPage(), EndxxPage()
 |*
-|*	  Beschreibung		Cursor an Anfang/Ende der aktuellen/vorherigen/
-|*		naechsten Seite. Alle sechs Methoden rufen GetFrmInPage() mit der
-|*		entsprechenden Parametrisierung.
-|*		Zwei Parameter steuern die Richtung: einer bestimmt die Seite, der
-|*		andere Anfang/Ende.
-|*		Fuer die Bestimmung der Seite und des Cntnt (Anfang/Ende) werden
-|*		die im folgenden definierten Funktionen benutzt.
-|*	  Ersterstellung	MA 15. Oct. 92
-|*	  Letzte Aenderung	MA 28. Feb. 93
+|*    Beschreibung      Cursor an Anfang/Ende der aktuellen/vorherigen/
+|*      naechsten Seite. Alle sechs Methoden rufen GetFrmInPage() mit der
+|*      entsprechenden Parametrisierung.
+|*      Zwei Parameter steuern die Richtung: einer bestimmt die Seite, der
+|*      andere Anfang/Ende.
+|*      Fuer die Bestimmung der Seite und des Cntnt (Anfang/Ende) werden
+|*      die im folgenden definierten Funktionen benutzt.
+|*    Ersterstellung    MA 15. Oct. 92
+|*    Letzte Aenderung  MA 28. Feb. 93
 |*
 |*************************************************************************/
 SwCntntFrm *GetFirstSub( const SwLayoutFrm *pLayout )
@@ -1088,17 +1088,17 @@ BOOL GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
 
 /*************************************************************************
 |*
-|*	SwLayoutFrm::GetCntntPos()
+|*  SwLayoutFrm::GetCntntPos()
 |*
-|*	Beschreibung		Es wird der nachstliegende Cntnt zum uebergebenen
-|* 						gesucht. Betrachtet werden die vorhergehende, die
-|* 						aktuelle und die folgende Seite.
-|* 						Wenn kein Inhalt gefunden wird, so wird der Bereich
- * 						erweitert bis einer gefunden wird.
-|* 						Zurueckgegeben wird die 'Semantisch richtige' Position
-|* 						innerhalb der PrtArea des gefundenen CntntFrm
-|*	Ersterstellung		MA 15. Jul. 92
-|*	Letzte Aenderung	MA 09. Jan. 97
+|*  Beschreibung        Es wird der nachstliegende Cntnt zum uebergebenen
+|*                      gesucht. Betrachtet werden die vorhergehende, die
+|*                      aktuelle und die folgende Seite.
+|*                      Wenn kein Inhalt gefunden wird, so wird der Bereich
+ *                      erweitert bis einer gefunden wird.
+|*                      Zurueckgegeben wird die 'Semantisch richtige' Position
+|*                      innerhalb der PrtArea des gefundenen CntntFrm
+|*  Ersterstellung      MA 15. Jul. 92
+|*  Letzte Aenderung    MA 09. Jan. 97
 |*
 |*************************************************************************/
 ULONG CalcDiff( const Point &rPt1, const Point &rPt2 )
@@ -1164,7 +1164,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
     Point aPoint = rPoint;
     ULONG nDistance = ULONG_MAX;
 
-    while ( TRUE ) 	//Sicherheitsschleifchen, damit immer einer gefunden wird.
+    while ( TRUE )  //Sicherheitsschleifchen, damit immer einer gefunden wird.
     {
         while ( pCntnt &&
                 ((!bDontLeave || IsAnLower( pCntnt )) &&
@@ -1238,7 +1238,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
                     pCntnt = pCntnt->GetNextCntntFrm();
         }
         if ( !pActual )
-        {	//Wenn noch keiner gefunden wurde muss der Suchbereich erweitert
+        {   //Wenn noch keiner gefunden wurde muss der Suchbereich erweitert
             //werden, irgenwann muessen wir einen Finden!
             //MA 09. Jan. 97: Opt fuer viele leere Seiten, wenn wir nur im
             //Body suchen, koennen wir den Suchbereich gleich in einem
@@ -1255,13 +1255,13 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
                                 ? pStart->ContainsCntnt()
                                 : pStart->FindPageFrm()->FindFirstBodyCntnt();
                 }
-                if ( !pCntnt )	//irgendwann muessen wir mit irgendeinem Anfangen!
+                if ( !pCntnt )  //irgendwann muessen wir mit irgendeinem Anfangen!
                 {
                     pCntnt = pStart->FindPageFrm()->GetUpper()->ContainsCntnt();
                     while ( pCntnt && !pCntnt->IsInDocBody() )
                         pCntnt = pCntnt->GetNextCntntFrm();
                     if ( !pCntnt )
-                        return 0;	//Es gibt noch keine Dokumentinhalt!
+                        return 0;   //Es gibt noch keine Dokumentinhalt!
                 }
             }
             else
@@ -1347,13 +1347,13 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
 
 /*************************************************************************
 |*
-|*	SwPageFrm::GetCntntPosition()
+|*  SwPageFrm::GetCntntPosition()
 |*
-|*	Beschreibung		Analog zu SwLayoutFrm::GetCntntPos().
-|* 						Spezialisiert fuer Felder in Rahmen.
+|*  Beschreibung        Analog zu SwLayoutFrm::GetCntntPos().
+|*                      Spezialisiert fuer Felder in Rahmen.
 |*
-|*	Ersterstellung		MA 22. Mar. 95
-|*	Letzte Aenderung	MA 07. Nov. 95
+|*  Ersterstellung      MA 22. Mar. 95
+|*  Letzte Aenderung    MA 07. Nov. 95
 |*
 |*************************************************************************/
 void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
@@ -1373,8 +1373,8 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
         pCntnt = GetUpper()->ContainsCntnt();
 
     const SwCntntFrm *pAct = pCntnt;
-    Point aAct 		 = rPt;
-    ULONG nDist		 = ULONG_MAX;
+    Point aAct       = rPt;
+    ULONG nDist      = ULONG_MAX;
 
     while ( pCntnt )
     {
@@ -1404,9 +1404,9 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
         const ULONG nDiff = ::CalcDiff( aPoint, rPt );
         if ( nDiff < nDist )
         {
-            aAct	= aPoint;
-            nDist	= nDiff;
-            pAct	= pCntnt;
+            aAct    = aPoint;
+            nDist   = nDiff;
+            pAct    = pCntnt;
         }
         else if ( aCntFrm.Top() > Frm().Bottom() )
             //Dichter wirds im Sinne der Felder nicht mehr!
@@ -1445,12 +1445,12 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
 
 /*************************************************************************
 |*
-|*	SwRootFrm::GetNextPrevCntntPos()
+|*  SwRootFrm::GetNextPrevCntntPos()
 |*
-|*	Beschreibung		Es wird der naechstliegende Cntnt zum uebergebenen
-|* 						Point gesucht. Es wird nur im BodyText gesucht.
-|*	Ersterstellung		MA 15. Jul. 92
-|*	Letzte Aenderung	JP 11.10.2001
+|*  Beschreibung        Es wird der naechstliegende Cntnt zum uebergebenen
+|*                      Point gesucht. Es wird nur im BodyText gesucht.
+|*  Ersterstellung      MA 15. Jul. 92
+|*  Letzte Aenderung    JP 11.10.2001
 |*
 |*************************************************************************/
 
@@ -1563,16 +1563,16 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, BOOL bNext ) const
 
 /*************************************************************************
 |*
-|*	SwRootFrm::GetPagePos()
+|*  SwRootFrm::GetPagePos()
 |*
-|*	Beschreibung:	Liefert die absolute Dokumentpositon der gewuenschten
-|*			Seite.
-|*			Formatiert wird nur soweit notwendig und nur dann wenn bFormat=TRUE
-|*			Liefert Null, wenn die Operation nicht moeglich ist.
-|*			Die Pos ist die der letzten Seite, wenn die Seitenzahl zu gross
-|*			gewaehlt wurde.
-|*	Ersterstellung		MA 01. Jun. 92
-|*	Letzte Aenderung	MA 09. Oct. 97
+|*  Beschreibung:   Liefert die absolute Dokumentpositon der gewuenschten
+|*          Seite.
+|*          Formatiert wird nur soweit notwendig und nur dann wenn bFormat=TRUE
+|*          Liefert Null, wenn die Operation nicht moeglich ist.
+|*          Die Pos ist die der letzten Seite, wenn die Seitenzahl zu gross
+|*          gewaehlt wurde.
+|*  Ersterstellung      MA 01. Jun. 92
+|*  Letzte Aenderung    MA 09. Oct. 97
 |*
 |*************************************************************************/
 Point SwRootFrm::GetPagePos( USHORT nPageNum ) const
@@ -1634,14 +1634,14 @@ BOOL SwRootFrm::IsDummyPage( USHORT nPageNum ) const
 
 /*************************************************************************
 |*
-|*	  SwFrm::IsProtected()
+|*    SwFrm::IsProtected()
 |*
-|*	  Beschreibung		Ist der Frm bzw. die Section in der er steht
-|* 						geschuetzt?
-|* 						Auch Fly in Fly in ... und Fussnoten
+|*    Beschreibung      Ist der Frm bzw. die Section in der er steht
+|*                      geschuetzt?
+|*                      Auch Fly in Fly in ... und Fussnoten
 |*
-|*	  Ersterstellung	MA 28. Jul. 93
-|*	  Letzte Aenderung	MA 06. Nov. 97
+|*    Ersterstellung    MA 28. Jul. 93
+|*    Letzte Aenderung  MA 06. Nov. 97
 |*
 |*************************************************************************/
 BOOL SwFrm::IsProtected() const
@@ -1702,11 +1702,11 @@ BOOL SwFrm::IsProtected() const
 
 /*************************************************************************
 |*
-|*	  SwFrm::GetPhyPageNum()
-|*	  Beschreibung:		Liefert die physikalische Seitennummer
+|*    SwFrm::GetPhyPageNum()
+|*    Beschreibung:     Liefert die physikalische Seitennummer
 |*
-|*	  Ersterstellung	OK 06.07.93 08:35
-|*	  Letzte Aenderung	MA 30. Nov. 94
+|*    Ersterstellung    OK 06.07.93 08:35
+|*    Letzte Aenderung  MA 30. Nov. 94
 |*
 |*************************************************************************/
 USHORT SwFrm::GetPhyPageNum() const
@@ -1785,11 +1785,11 @@ BOOL SwFrm::WannaRightPage() const
 
 /*************************************************************************
 |*
-|*	  SwFrm::GetVirtPageNum()
-|*	  Beschreibung:		Liefert die virtuelle Seitennummer mit Offset
+|*    SwFrm::GetVirtPageNum()
+|*    Beschreibung:     Liefert die virtuelle Seitennummer mit Offset
 |*
-|*	  Ersterstellung	OK 06.07.93 08:35
-|*	  Letzte Aenderung	MA 30. Nov. 94
+|*    Ersterstellung    OK 06.07.93 08:35
+|*    Letzte Aenderung  MA 30. Nov. 94
 |*
 |*************************************************************************/
 USHORT SwFrm::GetVirtPageNum() const
@@ -1842,10 +1842,10 @@ USHORT SwFrm::GetVirtPageNum() const
 
 /*************************************************************************
 |*
-|*	SwRootFrm::MakeTblCrsrs()
+|*  SwRootFrm::MakeTblCrsrs()
 |*
-|*	Ersterstellung		MA 14. May. 93
-|*	Letzte Aenderung	MA 02. Feb. 94
+|*  Ersterstellung      MA 14. May. 93
+|*  Letzte Aenderung    MA 02. Feb. 94
 |*
 |*************************************************************************/
 //Ermitteln und einstellen derjenigen Zellen die von der Selektion
@@ -1965,41 +1965,41 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
 /*************************************************************************
 |*
-|*	SwRootFrm::CalcFrmRects
+|*  SwRootFrm::CalcFrmRects
 |*
-|*	Ersterstellung		MA 24. Aug. 92
-|*	Letzte Aenderung	MA 24. Aug. 93
+|*  Ersterstellung      MA 24. Aug. 92
+|*  Letzte Aenderung    MA 24. Aug. 93
 |*
 |*************************************************************************/
 
 /*
  * nun koennen folgende Situationen auftreten:
- *	1. Start und Ende liegen in einer Bildschirm - Zeile und im
- * 	   gleichen Node
- *		-> aus Start und End ein Rectangle, dann Ok
- *	2. Start und Ende liegen in einem Frame (dadurch im gleichen Node!)
- *		-> Start nach rechts, End nach links erweitern,
- *		   und bei mehr als 2 Bildschirm - Zeilen, das dazwischen
- *		   liegende berechnen
- * 	3. Start und Ende liegen in verschiedenen Frames
- *		-> Start nach rechts erweitern, bis Frame-Ende Rect berechnen
- *		   Ende nach links erweitern, bis Frame-Start Rect berechnen
- *		   und bei mehr als 2 Frames von allen dazwischen liegenden
- * 		   Frames die PrtArea dazu.
- *	4. Wenn es sich um eine Tabellenselektion handelt wird fuer jeden
- * 	   PaM im Ring der CellFrm besorgt, dessen PrtArea wird zu den
- * 	   Rechtecken addiert.
+ *  1. Start und Ende liegen in einer Bildschirm - Zeile und im
+ *     gleichen Node
+ *      -> aus Start und End ein Rectangle, dann Ok
+ *  2. Start und Ende liegen in einem Frame (dadurch im gleichen Node!)
+ *      -> Start nach rechts, End nach links erweitern,
+ *         und bei mehr als 2 Bildschirm - Zeilen, das dazwischen
+ *         liegende berechnen
+ *  3. Start und Ende liegen in verschiedenen Frames
+ *      -> Start nach rechts erweitern, bis Frame-Ende Rect berechnen
+ *         Ende nach links erweitern, bis Frame-Start Rect berechnen
+ *         und bei mehr als 2 Frames von allen dazwischen liegenden
+ *         Frames die PrtArea dazu.
+ *  4. Wenn es sich um eine Tabellenselektion handelt wird fuer jeden
+ *     PaM im Ring der CellFrm besorgt, dessen PrtArea wird zu den
+ *     Rechtecken addiert.
  *
  * Grosser Umbau wg. der FlyFrm; denn diese muessen ausgespart werden.
  * Ausnahmen: - Der Fly in dem die Selektion stattfindet (wenn sie in einem Fly
- *				stattfindet).
- * 			  - Die Flys, die vom Text unterlaufen werden.
+ *              stattfindet).
+ *            - Die Flys, die vom Text unterlaufen werden.
  * Arbeitsweise: Zuerst wird eine SwRegion mit der Root initialisiert.
- * 				 Aus der Region werden die zu invertierenden Bereiche
- * 				 ausgestantzt. Die Region wird Komprimiert und letztlich
- * 				 invertiert. Damit liegen dann die zu invertierenden
- * 				 Rechtecke vor.
- * 				 Am Ende werden die Flys aus der Region ausgestanzt.
+ *               Aus der Region werden die zu invertierenden Bereiche
+ *               ausgestantzt. Die Region wird Komprimiert und letztlich
+ *               invertiert. Damit liegen dann die zu invertierenden
+ *               Rechtecke vor.
+ *               Am Ende werden die Flys aus der Region ausgestanzt.
  */
 
 inline void Sub( SwRegionRects& rRegion, const SwRect& rRect )
@@ -2050,7 +2050,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
     const SwCntntFrm *pStartFrm = rNds[ pStartPos->nNode ]->
         GetCntntNode()->GetFrm( &rCrsr.GetSttPos(), pStartPos );
 
-    const SwCntntFrm *pEndFrm	= rNds[ pEndPos->nNode ]->
+    const SwCntntFrm *pEndFrm   = rNds[ pEndPos->nNode ]->
         GetCntntNode()->GetFrm( &rCrsr.GetEndPos(), pEndPos );
 
     ASSERT( (pStartFrm && pEndFrm), "Keine CntntFrms gefunden." );
@@ -2082,7 +2082,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
     {
         // falls eine nicht erlaubte Selection besteht, dann korrigiere das
         // nicht erlaubt ist Header/Footer/TableHeadline ueber 2 Seiten
-        do {	// middle check loop
+        do {    // middle check loop
             const SwLayoutFrm* pSttLFrm = pStartFrm->GetUpper();
             const USHORT cHdFtTblHd = FRM_HEADER | FRM_FOOTER | FRM_TAB;
             while( pSttLFrm &&
@@ -2420,8 +2420,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
 
                 SwRect aTmp = SwRect( aTmpSt, aTmpEnd );
                 // Bug 34888: falls Inhalt selektiert ist, der keinen Platz
-                //			  einnimmt (z.B. PostIts,RefMarks, TOXMarks),
-                //			  dann mindestens die Breite des Crsr setzen.
+                //            einnimmt (z.B. PostIts,RefMarks, TOXMarks),
+                //            dann mindestens die Breite des Crsr setzen.
                 if( 1 == (aTmp.*fnRect->fnGetWidth)() &&
                     pStartPos->nContent.GetIndex() !=
                     pEndPos->nContent.GetIndex() )
@@ -2580,7 +2580,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             Sub( aRegion, aSubRect );
         }
 
-//		aRegion.Compress( FALSE );
+//      aRegion.Compress( FALSE );
         aRegion.Invert();
         delete pSt2Pos;
         delete pEnd2Pos;
@@ -2588,11 +2588,11 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
 
     //Flys mit Durchlauf ausstanzen. Nicht ausgestanzt werden Flys:
     //- die Lower des StartFrm/EndFrm sind (FlyInCnt und alle Flys die wiederum
-    //	darin sitzen)
+    //  darin sitzen)
     //- in der Z-Order ueber denjenigen Flys stehen in denen sich der StartFrm
-    //	befindet.
-    const SwPageFrm *pPage		= pStartFrm->FindPageFrm();
-    const SwPageFrm *pEndPage	= pEndFrm->FindPageFrm();
+    //  befindet.
+    const SwPageFrm *pPage      = pStartFrm->FindPageFrm();
+    const SwPageFrm *pEndPage   = pEndFrm->FindPageFrm();
 
     while ( pPage )
     {
@@ -2622,7 +2622,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                                 "<SwRootFrm::CalcFrmRects(..)> - object in <aSortObjs> of unexcepted type" );
                         const SwFlyFrm* pTmp = static_cast<SwFlyFrm*>(aSortObjs[k]);
                         do
-                        {	if ( nPos < pTmp->GetVirtDrawObj()->GetOrdNumDirect() )
+                        {   if ( nPos < pTmp->GetVirtDrawObj()->GetOrdNumDirect() )
                                 bSub = FALSE;
                             else
                                 pTmp = pTmp->GetAnchorFrm()->FindFlyFrm();

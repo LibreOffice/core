@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ TableCellContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::
 
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_txBody:		// CT_TextBody
+    case NMSP_DRAWINGML|XML_txBody:     // CT_TextBody
         {
             oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
             mrTableCell.setTextBody( xTextBody );
@@ -74,17 +74,17 @@ TableCellContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::
         }
         break;
 
-    case NMSP_DRAWINGML|XML_tcPr:		// CT_TableCellProperties
+    case NMSP_DRAWINGML|XML_tcPr:       // CT_TableCellProperties
         {
             AttributeList aAttribs( xAttribs );
             mrTableCell.setLeftMargin( aAttribs.getInteger( XML_marL, 91440 ) );
             mrTableCell.setRightMargin( aAttribs.getInteger( XML_marR, 91440 ) );
             mrTableCell.setTopMargin( aAttribs.getInteger( XML_marT, 45720 ) );
             mrTableCell.setBottomMargin( aAttribs.getInteger( XML_marB, 45720 ) );
-            mrTableCell.setVertToken( xAttribs->getOptionalValueToken( XML_vert, XML_horz ) );					// ST_TextVerticalType
-            mrTableCell.setAnchorToken( xAttribs->getOptionalValueToken( XML_anchor, XML_t ) );					// ST_TextAnchoringType
+            mrTableCell.setVertToken( xAttribs->getOptionalValueToken( XML_vert, XML_horz ) );                  // ST_TextVerticalType
+            mrTableCell.setAnchorToken( xAttribs->getOptionalValueToken( XML_anchor, XML_t ) );                 // ST_TextAnchoringType
             mrTableCell.setAnchorCtr( aAttribs.getBool( XML_anchorCtr, sal_False ) );
-            mrTableCell.setHorzOverflowToken( xAttribs->getOptionalValueToken( XML_horzOverflow, XML_clip ) );	// ST_TextHorzOverflowType
+            mrTableCell.setHorzOverflowToken( xAttribs->getOptionalValueToken( XML_horzOverflow, XML_clip ) );  // ST_TextHorzOverflowType
         }
         break;
         case NMSP_DRAWINGML|XML_lnL:
@@ -105,10 +105,10 @@ TableCellContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::
         case NMSP_DRAWINGML|XML_lnBlToTr:
                 xRet.set( new oox::drawingml::LinePropertiesContext( *this, xAttribs, mrTableCell.maLinePropertiesBottomLeftToTopRight ) );
             break;
-        case NMSP_DRAWINGML|XML_cell3D:	// CT_Cell3D
+        case NMSP_DRAWINGML|XML_cell3D: // CT_Cell3D
         break;
 
-    case NMSP_DRAWINGML|XML_extLst:		// CT_OfficeArtExtensionList
+    case NMSP_DRAWINGML|XML_extLst:     // CT_OfficeArtExtensionList
     break;
 
     default:

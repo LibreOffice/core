@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,10 +47,10 @@ published service DatabaseNextSet
 {
     service  com::sun::star::text::DependentTextField;
 
-    /** specifies the database name. 
+    /** specifies the database name.
      */
     [property] string DataBaseName;
-    
+
     /** determines the interpretation of the property DataTableName.
         @see com::sun::star::sdb::CommandType
      */
@@ -74,7 +74,7 @@ published service DatabaseNextSet
         @since OOo 2.0.0
      */
     [optional, property] string DataBaseResource;
-    
+
 };
 
 //=============================================================================

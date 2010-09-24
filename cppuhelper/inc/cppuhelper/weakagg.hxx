@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,14 +32,14 @@
 
 
 namespace cppu
-{    
+{
 
 /** Base class to implement an UNO object supporting weak references, i.e. the object can be held
     weakly (by a ::com::sun::star::uno::WeakReference) and aggregation, i.e. the object can be
     aggregated by another (delegator).
     This implementation copes with reference counting.  Upon last release(), the virtual dtor
     is called.
-    
+
     @derive
     Inherit from this class and delegate acquire()/ release() calls.  Re-implement
     XAggregation::queryInterface().
@@ -53,7 +53,7 @@ public:
     */
     inline OWeakAggObject() SAL_THROW( () )
         {}
-    
+
     /** If a delegator is set, then the delegators gets acquired.  Otherwise call is delegated to
         base class ::cppu::OWeakObject.
     */
@@ -65,7 +65,7 @@ public:
     /** If a delegator is set, then the delegator is queried for the demanded interface.  If the
         delegator cannot provide the demanded interface, it calls queryAggregation() on its
         aggregated objects.
-        
+
         @param rType demanded interface type
         @return demanded type or empty any
         @see queryAggregation.
@@ -74,14 +74,14 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
 
     /** Set the delegator.  The delegator member reference is a weak reference.
-        
+
         @param Delegator the object that delegate its queryInterface to this aggregate.
     */
     virtual void SAL_CALL setDelegator( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & Delegator )
         throw(::com::sun::star::uno::RuntimeException);
     /** Called by the delegator or queryInterface. Re-implement this method instead of
         queryInterface.
-        
+
         @see queryInterface
     */
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType )
@@ -95,7 +95,7 @@ protected:
         exception upon destruction!
     */
     virtual ~OWeakAggObject() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
-    
+
     /** weak reference to delegator.
     */
     ::com::sun::star::uno::WeakReferenceHelper xDelegator;

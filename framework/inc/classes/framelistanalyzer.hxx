@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,22 +29,22 @@
 #define __FRAMEWORK_CLASSES_FRAMELISTANALYZER_HXX_
 
 //_______________________________________________
-//	interface includes
+//  interface includes
 #include <com/sun/star/frame/XFrame.hpp>
 
 //_______________________________________________
-//	other includes
+//  other includes
 
 //_______________________________________________
-//	namespace
+//  namespace
 
 namespace framework{
 
 //_______________________________________________
-//	exported const
+//  exported const
 
 //_______________________________________________
-//	exported definitions
+//  exported definitions
 
 /** analyze and split the current available frame list of a given frames supplier
     into different parts.

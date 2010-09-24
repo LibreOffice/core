@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,31 +47,31 @@ class SdrOle2Obj;
 class ScDrawTransferObj : public TransferableHelper
 {
 private:
-    SdrModel*						pModel;
-    TransferableDataHelper			aOleData;
-    TransferableObjectDescriptor	aObjDesc;
-//REMOVE		SvEmbeddedObjectRef				aDocShellRef;
-//REMOVE		SvEmbeddedObjectRef				aDrawPersistRef;
-    SfxObjectShellRef				aDocShellRef;
-    SfxObjectShellRef				aDrawPersistRef;
+    SdrModel*                       pModel;
+    TransferableDataHelper          aOleData;
+    TransferableObjectDescriptor    aObjDesc;
+//REMOVE        SvEmbeddedObjectRef             aDocShellRef;
+//REMOVE        SvEmbeddedObjectRef             aDrawPersistRef;
+    SfxObjectShellRef               aDocShellRef;
+    SfxObjectShellRef               aDrawPersistRef;
 
                                     // extracted from model in ctor:
-    Size							aSrcSize;
-    INetBookmark*					pBookmark;
-    BOOL							bGraphic;
-    BOOL							bGrIsBit;
-    BOOL							bOleObj;
+    Size                            aSrcSize;
+    INetBookmark*                   pBookmark;
+    BOOL                            bGraphic;
+    BOOL                            bGrIsBit;
+    BOOL                            bOleObj;
                                     // source information for drag&drop:
                                     // (view is needed to handle drawing obejcts)
-    SdrView*						pDragSourceView;
-    USHORT							nDragSourceFlags;
-    BOOL							bDragWasInternal;
+    SdrView*                        pDragSourceView;
+    USHORT                          nDragSourceFlags;
+    BOOL                            bDragWasInternal;
 
     sal_uInt32                      nSourceDocID;
 
 
-    void				InitDocShell();
-//REMOVE		SvInPlaceObjectRef	GetSingleObject();
+    void                InitDocShell();
+//REMOVE        SvInPlaceObjectRef  GetSingleObject();
     SdrOle2Obj* GetSingleObject();
 
 public:
@@ -79,23 +79,23 @@ public:
                                 const TransferableObjectDescriptor& rDesc );
     virtual ~ScDrawTransferObj();
 
-    virtual void		AddSupportedFormats();
-    virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual sal_Bool	WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+    virtual void        AddSupportedFormats();
+    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual void		ObjectReleased();
-    virtual void		DragFinished( sal_Int8 nDropAction );
+    virtual void        ObjectReleased();
+    virtual void        DragFinished( sal_Int8 nDropAction );
 
-    SdrModel*			GetModel()	{ return pModel; }
+    SdrModel*           GetModel()  { return pModel; }
 
-    void				SetDrawPersist( const SfxObjectShellRef& rRef );
-    void				SetDragSource( ScDrawView* pView );
-    void				SetDragSourceObj( SdrObject* pObj, SCTAB nTab );
-    void				SetDragSourceFlags( USHORT nFlags );
-    void				SetDragWasInternal();
+    void                SetDrawPersist( const SfxObjectShellRef& rRef );
+    void                SetDragSource( ScDrawView* pView );
+    void                SetDragSourceObj( SdrObject* pObj, SCTAB nTab );
+    void                SetDragSourceFlags( USHORT nFlags );
+    void                SetDragWasInternal();
 
-    SdrView*			GetDragSourceView()				{ return pDragSourceView; }
-    USHORT				GetDragSourceFlags() const		{ return nDragSourceFlags; }
+    SdrView*            GetDragSourceView()             { return pDragSourceView; }
+    USHORT              GetDragSourceFlags() const      { return nDragSourceFlags; }
 
     void                SetSourceDocID( sal_uInt32 nVal )
                             { nSourceDocID = nVal; }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -133,7 +133,7 @@ sal_Bool XMLPageExport::exportStyle(
                           GetExport().EncodeStyleName( sName, &bEncoded ) );
 
         if( bEncoded )
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME, 
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME,
                                    sName);
 
         OUString sPMName;
@@ -145,20 +145,20 @@ sal_Bool XMLPageExport::exportStyle(
         {
             OUString sNextName;
             xPropSet->getPropertyValue( sFollowStyle ) >>= sNextName;
-            
+
             if( sName != sNextName && sNextName.getLength() )
             {
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NEXT_STYLE_NAME,
                     GetExport().EncodeStyleName( sNextName ) );
             }
         }
-//		OUString sPageMaster = GetExport().GetAutoStylePool()->Find(
-//											XML_STYLE_FAMILY_PAGE_MASTER,
-//											xPropSet );
-//		if( sPageMaster.getLength() )
-//			GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-//									  XML_PAGE_MASTER_NAME,
-//									  sPageMaster );
+//      OUString sPageMaster = GetExport().GetAutoStylePool()->Find(
+//                                          XML_STYLE_FAMILY_PAGE_MASTER,
+//                                          xPropSet );
+//      if( sPageMaster.getLength() )
+//          GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+//                                    XML_PAGE_MASTER_NAME,
+//                                    sPageMaster );
 
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                   XML_MASTER_PAGE, sal_True, sal_True );
@@ -219,7 +219,7 @@ void XMLPageExport::exportStyles( sal_Bool bUsed, sal_Bool bAutoStyles )
     {
         uno::Sequence< ::rtl::OUString> aSeq = xPageStyles->getElementNames();
         const ::rtl::OUString* pIter = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
+        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
         for(;pIter != pEnd;++pIter)
         {
             Reference< XStyle > xStyle(xPageStyles->getByName( *pIter ),uno::UNO_QUERY);
@@ -251,13 +251,13 @@ void XMLPageExport::exportDefaultStyle()
 
             ::std::vector< XMLPropertyState > xPropStates =
                 xPageMasterExportPropMapper->FilterDefaults( xPropSet );
-            
+
             sal_Bool bExport = sal_False;
             UniReference < XMLPropertySetMapper > aPropMapper(xPageMasterExportPropMapper->getPropertySetMapper());
             for( ::std::vector< XMLPropertyState >::iterator aIter = xPropStates.begin(); aIter != xPropStates.end(); ++aIter )
             {
                 XMLPropertyState *pProp = &(*aIter);
-                sal_Int16 nContextId	= aPropMapper->GetEntryContextId( pProp->mnIndex );
+                sal_Int16 nContextId    = aPropMapper->GetEntryContextId( pProp->mnIndex );
                 if( nContextId == CTF_PM_STANDARD_MODE )
                 {
                     bExport = sal_True;
@@ -265,9 +265,9 @@ void XMLPageExport::exportDefaultStyle()
                 }
             }
 
-        //	if ( xPropStates.size() != 0 &&
+        //  if ( xPropStates.size() != 0 &&
           //          ( xPropStates.size() != 1 || xPropStates[0].mnIndex != -1 ) )
-            if( bExport )	
+            if( bExport )
             {
                 //<style:default-page-layout>
                 SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,

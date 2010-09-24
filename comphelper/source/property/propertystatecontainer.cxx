@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace comphelper
     //= OPropertyStateContainer
     //=====================================================================
     //---------------------------------------------------------------------
-    OPropertyStateContainer::OPropertyStateContainer( ::cppu::OBroadcastHelper&	_rBHelper )
+    OPropertyStateContainer::OPropertyStateContainer( ::cppu::OBroadcastHelper& _rBHelper )
         :OPropertyContainer( _rBHelper )
     {
     }
@@ -120,10 +120,10 @@ namespace comphelper
         PropertyState* pStates = aStates.getArray();
 
         cppu::IPropertyArrayHelper& rHelper = getInfoHelper();
-        Sequence< Property> aAllProperties	= rHelper.getProperties();
-        sal_Int32 nAllProperties			= aAllProperties.getLength();
-        const  Property* pAllProperties		= aAllProperties.getConstArray();
-        const  Property* pAllPropertiesEnd	= pAllProperties + nAllProperties;
+        Sequence< Property> aAllProperties  = rHelper.getProperties();
+        sal_Int32 nAllProperties            = aAllProperties.getLength();
+        const  Property* pAllProperties     = aAllProperties.getConstArray();
+        const  Property* pAllPropertiesEnd  = pAllProperties + nAllProperties;
 
         osl::MutexGuard aGuard( rBHelper.rMutex );
         for ( ; ( pAllProperties != pAllPropertiesEnd ) && ( pLookup != pLookupEnd ); ++pAllProperties )
@@ -190,7 +190,7 @@ namespace comphelper
     }
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 #ifdef FS_PRIV_DEBUG
@@ -213,16 +213,16 @@ namespace comphelper
     //=====================================================================
     //= Test - compiler test
     //=====================================================================
-    typedef ::cppu::OWeakAggObject	Test_RefCountBase;
-    class Test	:public OMutexAndBroadcastHelper
+    typedef ::cppu::OWeakAggObject  Test_RefCountBase;
+    class Test  :public OMutexAndBroadcastHelper
                 ,public OPropertyStateContainer
                 ,public OPropertyArrayUsageHelper< Test >
                 ,public Test_RefCountBase
     {
     private:
-        ::rtl::OUString			m_sStringProperty;
-        Reference< XInterface >	m_xInterfaceProperty;
-        Any						m_aMayBeVoidProperty;
+        ::rtl::OUString         m_sStringProperty;
+        Reference< XInterface > m_xInterfaceProperty;
+        Any                     m_aMayBeVoidProperty;
 
     protected:
         Test( );
@@ -332,7 +332,7 @@ namespace comphelper
     }
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 #endif

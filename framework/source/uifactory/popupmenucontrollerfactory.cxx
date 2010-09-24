@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include "uifactory/popupmenucontrollerfactory.hxx"
 #include <threadhelp/resetableguard.hxx>
@@ -37,7 +37,7 @@
 #include "uifactory/factoryconfiguration.hxx"
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -46,16 +46,16 @@
 #include <com/sun/star/container/XContainer.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
-//	Defines
+//  Defines
 //_________________________________________________________________________________________________________________
-// 
+//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -64,19 +64,19 @@ using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
 //_________________________________________________________________________________________________________________
-//	Namespace
+//  Namespace
 //_________________________________________________________________________________________________________________
-// 
+//
 
 namespace framework
 {
 
 //*****************************************************************************************************************
-//	XInterface, XTypeProvider, XServiceInfo
+//  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   PopupMenuControllerFactory				        ,
-                                            ::cppu::OWeakObject							    ,
-                                            SERVICENAME_POPUPMENUCONTROLLERFACTORY	        ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   PopupMenuControllerFactory                      ,
+                                            ::cppu::OWeakObject                             ,
+                                            SERVICENAME_POPUPMENUCONTROLLERFACTORY          ,
                                             IMPLEMENTATIONNAME_POPUPMENUCONTROLLERFACTORY
                                         )
 

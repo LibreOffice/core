@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,12 +91,12 @@ public:
     virtual void SAL_CALL warning( const Any& aSAXParseException ) throw (SAXException, RuntimeException);
 
 private:
-    XMLSourceFileDialog*	mpParent;
-    ListBox&	mrListBox;
+    XMLSourceFileDialog*    mpParent;
+    ListBox&    mrListBox;
 };
 
 XMLErrorHandler::XMLErrorHandler( XMLSourceFileDialog* pParent, ListBox& rListBox )
-:	mpParent( pParent ),
+:   mpParent( pParent ),
     mrListBox( rListBox )
 {
 }
@@ -224,8 +224,8 @@ void XMLFileWindow::Resize()
         aScrollPos = Point(aOutSz.Width() - nScrollStd, 0);
 
         pVScrollbar->SetPosSizePixel( aScrollPos, aScrollSz);
-        aOutSz.Width() 	-= nScrollStd;
-        aOutSz.Height() 	-= nScrollStd;
+        aOutSz.Width()  -= nScrollStd;
+        aOutSz.Height()     -= nScrollStd;
         pOutWin->SetOutputSizePixel(aOutSz);
         InitScrollBars();
 
@@ -364,7 +364,7 @@ void XMLFileWindow::CreateTextEngine()
     pTextEngine->EnableUndo( FALSE );
     pTextEngine->SetUpdateMode( TRUE );
 
-//	pTextView->ShowCursor( TRUE, TRUE );
+//  pTextView->ShowCursor( TRUE, TRUE );
     pTextView->HideCursor();
 
     InitScrollBars();
@@ -487,10 +487,10 @@ void XMLFileWindow::ShowWindow( const rtl::OUString& rFileName )
     if( Read( aStream ) )
     {
         long nPrevTextWidth = nCurTextWidth;
-        nCurTextWidth = pTextEngine->CalcTextWidth() + 25;	// kleine Toleranz
+        nCurTextWidth = pTextEngine->CalcTextWidth() + 25;  // kleine Toleranz
         if ( nCurTextWidth != nPrevTextWidth )
             SetScrollBarRanges();
-        
+
         TextPaM aPaM( pTextView->CursorStartOfDoc() );
         TextSelection aSelection( aPaM, aPaM );
         pTextView->SetSelection( aSelection, true );
@@ -511,10 +511,10 @@ void XMLFileWindow::showLine( sal_Int32 nLine )
 
 
 XMLSourceFileDialog::XMLSourceFileDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF  )
-:	WorkWindow( pParent, ResId( DLG_XML_SOURCE_FILE_DIALOG, rResMgr ) ),
+:   WorkWindow( pParent, ResId( DLG_XML_SOURCE_FILE_DIALOG, rResMgr ) ),
     mnOutputHeight( LogicToPixel( Size( 80, 80 ), MAP_APPFONT ).Height() ),
     mxMSF( rxMSF ),
-    mrResMgr( rResMgr ),	
+    mrResMgr( rResMgr ),
     maLBOutput( this ),
     maPBValidate( this, ResId( PB_VALIDATE, rResMgr ) )
 {
@@ -568,8 +568,8 @@ void XMLSourceFileDialog::Resize()
 
     Size aDialogSize( GetOutputSizePixel() );
 
-//	Point aButtonPos( aSpacing.X(), aSpacing.Y() );
-//	maPBValidate.SetPosSizePixel( aButtonPos, aButton );
+//  Point aButtonPos( aSpacing.X(), aSpacing.Y() );
+//  maPBValidate.SetPosSizePixel( aButtonPos, aButton );
 
     Size aOutputSize( aDialogSize.Width(), bOutputVisible ? mnOutputHeight : 0 );
 
@@ -626,7 +626,7 @@ void XMLSourceFileDialog::onValidate()
             /* osl::File::RC rc = */ aInputFile.open( OpenFlag_Read );
 
             Reference< XInputStream > xIS( new comphelper::OSLInputStreamWrapper( aInputFile ) );
-            
+
             Sequence< PropertyValue > aSourceData(3);
             aSourceData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) );
             aSourceData[0].Value <<= xIS;
@@ -638,7 +638,7 @@ void XMLSourceFileDialog::onValidate()
             Reference< XErrorHandler > xHandle( new XMLErrorHandler( this, maLBOutput ) );
             aSourceData[2].Value <<= xHandle;
 
-            Reference< XDocumentHandler > xWriter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ), UNO_QUERY );	
+            Reference< XDocumentHandler > xWriter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ), UNO_QUERY );
             Reference< XOutputStream > xOS( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pipe" ) ) ), UNO_QUERY );
             Reference< XActiveDataSource > xDocSrc( xWriter, UNO_QUERY );
             xDocSrc->setOutputStream( xOS );
@@ -646,7 +646,7 @@ void XMLSourceFileDialog::onValidate()
             Sequence< OUString > aFilterUserData( mpFilterInfo->getFilterUserData() );
             xImporter->importer( aSourceData, xWriter, aFilterUserData );
         }
-    }				
+    }
     catch(Exception& e)
     {
         String sErr( e.Message );
@@ -676,23 +676,23 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
 {
     const sal_Unicode cOpenBracket = '<';
     const sal_Unicode cCloseBracket= '>';
-    const sal_Unicode cSlash		= '/';
+    const sal_Unicode cSlash        = '/';
     const sal_Unicode cExclamation = '!';
-//	const sal_Unicode cQuote		= '"';
-//	const sal_Unicode cSQuote      = '\'';
-    const sal_Unicode cMinus		= '-';
-    const sal_Unicode cSpace		= ' ';
-    const sal_Unicode cTab			= 0x09;
+//  const sal_Unicode cQuote        = '"';
+//  const sal_Unicode cSQuote      = '\'';
+    const sal_Unicode cMinus        = '-';
+    const sal_Unicode cSpace        = ' ';
+    const sal_Unicode cTab          = 0x09;
     const sal_Unicode cLF          = 0x0a;
     const sal_Unicode cCR          = 0x0d;
 
 
     const USHORT nStrLen = rSource.Len();
-    USHORT nInsert = 0;			// Anzahl der eingefuegten Portions
-    USHORT nActPos = 0;			//Position, an der '<' gefunden wurde
-    USHORT nOffset = 0; 		//Offset von nActPos zur '<'
-    USHORT nPortStart = USHRT_MAX; 	// fuer die TextPortion
-    USHORT nPortEnd  = 	0;  //
+    USHORT nInsert = 0;         // Anzahl der eingefuegten Portions
+    USHORT nActPos = 0;         //Position, an der '<' gefunden wurde
+    USHORT nOffset = 0;         //Offset von nActPos zur '<'
+    USHORT nPortStart = USHRT_MAX;  // fuer die TextPortion
+    USHORT nPortEnd  =  0;  //
     SwTextPortion aText;
     while(nActPos < nStrLen)
     {
@@ -740,9 +740,9 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                 while(++nSrchPos < nStrLen - 1)
                 {
                     sal_Unicode cNext = rSource.GetChar(nSrchPos);
-                    if( cNext == cSpace	||
-                        cNext == cTab 	||
-                        cNext == cLF 	||
+                    if( cNext == cSpace ||
+                        cNext == cTab   ||
+                        cNext == cLF    ||
                         cNext == cCR)
                         break;
                     else if(cNext == cCloseBracket)
@@ -755,8 +755,8 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     //irgend ein String wurde gefunden
                     String sToken = rSource.Copy(nActPos + 1, nSrchPos - nActPos - 1 );
                     sToken.ToUpperAscii();
-//					int nToken = ::GetHTMLToken(sToken);
-//					if(nToken)
+//                  int nToken = ::GetHTMLToken(sToken);
+//                  if(nToken)
                     {
                         //Token gefunden
                         eFoundType = svtools::HTMLKEYWORD;
@@ -838,7 +838,7 @@ void XMLFileWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         return;
 
     SwTextPortion& rLast = aPortionList[nCount-1];
-    if ( rLast.nStart > rLast.nEnd ) 	// Nur bis Bug von MD behoeben
+    if ( rLast.nStart > rLast.nEnd )    // Nur bis Bug von MD behoeben
     {
         nCount--;
         aPortionList.Remove( nCount);
@@ -861,7 +861,7 @@ void XMLFileWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         {
             SwTextPortion& r = aPortionList[i];
             DBG_ASSERT( r.nLine == aPortionList[0].nLine, "doch mehrere Zeilen ?" );
-            if ( r.nStart > r.nEnd ) 	// Nur bis Bug von MD behoeben
+            if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
                 continue;
 
             if ( r.nStart > nLastEnd )
@@ -880,9 +880,9 @@ void XMLFileWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
     for ( USHORT i = 0; i < aPortionList.Count(); i++ )
     {
         SwTextPortion& r = aPortionList[i];
-        if ( r.nStart > r.nEnd ) 	// Nur bis Bug von MD behoeben
+        if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
             continue;
-//		USHORT nCol = r.eType;
+//      USHORT nCol = r.eType;
         if(r.eType !=  svtools::HTMLSGML    &&
             r.eType != svtools::HTMLCOMMENT &&
             r.eType != svtools::HTMLKEYWORD &&
@@ -958,7 +958,7 @@ IMPL_LINK( XMLFileWindow, SyntaxTimerHdl, Timer *, pTimer )
     // SyntaxTimerHdl wird gerufen, wenn Text-Aenderung
     // => gute Gelegenheit, Textbreite zu ermitteln!
     long nPrevTextWidth = nCurTextWidth;
-    nCurTextWidth = pTextEngine->CalcTextWidth() + 25;	// kleine Toleranz
+    nCurTextWidth = pTextEngine->CalcTextWidth() + 25;  // kleine Toleranz
     if ( nCurTextWidth != nPrevTextWidth )
         SetScrollBarRanges();
     bHighlighting = FALSE;

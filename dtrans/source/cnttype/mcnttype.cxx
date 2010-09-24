@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ CMimeContentType::CMimeContentType( const OUString& aCntType )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 OUString SAL_CALL CMimeContentType::getMediaType( ) throw(RuntimeException)
@@ -72,7 +72,7 @@ OUString SAL_CALL CMimeContentType::getMediaType( ) throw(RuntimeException)
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 OUString SAL_CALL CMimeContentType::getMediaSubtype( ) throw(RuntimeException)
@@ -81,7 +81,7 @@ OUString SAL_CALL CMimeContentType::getMediaSubtype( ) throw(RuntimeException)
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 OUString SAL_CALL CMimeContentType::getFullMediaType( ) throw(RuntimeException)
@@ -90,7 +90,7 @@ OUString SAL_CALL CMimeContentType::getFullMediaType( ) throw(RuntimeException)
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL CMimeContentType::getParameters( ) throw(RuntimeException)
@@ -112,7 +112,7 @@ Sequence< OUString > SAL_CALL CMimeContentType::getParameters( ) throw(RuntimeEx
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName ) throw(RuntimeException)
@@ -122,9 +122,9 @@ sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName ) throw(
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
-    
+
 OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName ) throw(NoSuchElementException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -136,7 +136,7 @@ OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName ) t
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void SAL_CALL CMimeContentType::init( const OUString& aCntType ) throw( IllegalArgumentException )
@@ -151,7 +151,7 @@ void SAL_CALL CMimeContentType::init( const OUString& aCntType ) throw( IllegalA
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void SAL_CALL CMimeContentType::getSym( void )
@@ -167,7 +167,7 @@ void SAL_CALL CMimeContentType::getSym( void )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void SAL_CALL CMimeContentType::acceptSym( const OUString& pSymTlb )
@@ -175,21 +175,21 @@ void SAL_CALL CMimeContentType::acceptSym( const OUString& pSymTlb )
     if ( pSymTlb.indexOf( m_nxtSym ) < 0 )
         throw IllegalArgumentException( );
 
-    getSym();		
+    getSym();
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void SAL_CALL CMimeContentType::skipSpaces( void )
 {
     while ( SPACE == m_nxtSym )
         getSym( );
-}		
+}
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void SAL_CALL CMimeContentType::type( void )
@@ -220,7 +220,7 @@ void SAL_CALL CMimeContentType::type( void )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void SAL_CALL CMimeContentType::subtype( void )
@@ -248,7 +248,7 @@ void SAL_CALL CMimeContentType::subtype( void )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void SAL_CALL CMimeContentType::trailer( void )
@@ -263,7 +263,7 @@ void SAL_CALL CMimeContentType::trailer( void )
         }
         else if ( m_nxtSym == OUString::createFromAscii( ";" ) )
         {
-            // get the parameter name			
+            // get the parameter name
             getSym( );
             skipSpaces( );
 
@@ -271,7 +271,7 @@ void SAL_CALL CMimeContentType::trailer( void )
                 throw IllegalArgumentException( );
 
             OUString pname = pName( );
-            
+
             skipSpaces();
             acceptSym( OUString::createFromAscii( "=" ) );
 
@@ -282,23 +282,23 @@ void SAL_CALL CMimeContentType::trailer( void )
 
             // insert into map
             if ( !m_ParameterMap.insert( pair < const OUString, OUString > ( pname, pvalue ) ).second )
-                throw IllegalArgumentException( );			
+                throw IllegalArgumentException( );
         }
         else
             throw IllegalArgumentException( );
-        
+
         skipSpaces( );
     }
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 OUString SAL_CALL CMimeContentType::pName( )
 {
     OUString pname;
-    
+
     while( m_nxtSym.getLength( ) )
     {
         if ( isInRange( m_nxtSym, TOKEN ) )
@@ -314,7 +314,7 @@ OUString SAL_CALL CMimeContentType::pName( )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 OUString SAL_CALL CMimeContentType::pValue( )
@@ -343,14 +343,14 @@ OUString SAL_CALL CMimeContentType::pValue( )
     }
     else
         throw IllegalArgumentException( );
-    
+
     return pvalue;
 }
 
 //------------------------------------------------------------------------
 // the following combinations within a quoted value are not allowed:
-// '";' (quote sign followed by semicolon) and '" ' (quote sign followed 
-// by space) 
+// '";' (quote sign followed by semicolon) and '" ' (quote sign followed
+// by space)
 //------------------------------------------------------------------------
 
 OUString SAL_CALL CMimeContentType::quotedPValue( )
@@ -359,7 +359,7 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
     sal_Bool bAfterQuoteSign = sal_False;
 
     while ( m_nxtSym.getLength( ) )
-    {					
+    {
         if ( bAfterQuoteSign && ((m_nxtSym == SPACE)||(m_nxtSym == SEMICOLON) ) )
             break;
         else if ( isInRange( m_nxtSym, TOKEN + TSPECIALS + SPACE ) )
@@ -371,7 +371,7 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
                 bAfterQuoteSign = sal_False;
         }
         else
-            throw IllegalArgumentException( );						
+            throw IllegalArgumentException( );
         getSym( );
     }
 
@@ -379,7 +379,7 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 OUString SAL_CALL CMimeContentType::nonquotedPValue( )
@@ -390,7 +390,7 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
     {
         if ( isInRange( m_nxtSym, TOKEN ) )
             pvalue += m_nxtSym;
-        else if ( isInRange( m_nxtSym, OUString::createFromAscii( "; " ) ) ) 
+        else if ( isInRange( m_nxtSym, OUString::createFromAscii( "; " ) ) )
             break;
         else
             throw IllegalArgumentException( );
@@ -401,7 +401,7 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void SAL_CALL CMimeContentType::comment( void )
@@ -409,7 +409,7 @@ void SAL_CALL CMimeContentType::comment( void )
     while ( m_nxtSym.getLength( ) )
     {
         if ( isInRange( m_nxtSym, TOKEN + SPACE ) )
-            getSym( );	
+            getSym( );
         else if ( m_nxtSym == OUString::createFromAscii( ")" ) )
             break;
         else
@@ -418,10 +418,10 @@ void SAL_CALL CMimeContentType::comment( void )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 sal_Bool SAL_CALL CMimeContentType::isInRange( const rtl::OUString& aChr, const rtl::OUString& aRange )
 {
-    return ( aRange.indexOf( aChr ) > -1 );	
+    return ( aRange.indexOf( aChr ) > -1 );
 }

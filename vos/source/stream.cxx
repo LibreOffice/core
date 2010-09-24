@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,9 +52,9 @@ OStream::~OStream()
 sal_Int32 OStream::read(void* pbuffer, sal_uInt32 n) const
 {
     return (m_rStream.read(pbuffer, n));
-} 
+}
 
-sal_Int32 OStream::read(IPositionableStream::Offset offset, 
+sal_Int32 OStream::read(IPositionableStream::Offset offset,
                       void* pbuffer, sal_uInt32 n) const
 {
     return (seekTo(offset) ? read(pbuffer, n) : -1);
@@ -67,7 +67,7 @@ sal_Int32 OStream::write(const void* pbuffer, sal_uInt32 n)
         && (m_rStream.write(pbuffer, n) == static_cast< sal_Int32 >(n));
 }
 
-sal_Int32 OStream::write(IPositionableStream::Offset offset, 
+sal_Int32 OStream::write(IPositionableStream::Offset offset,
                        const void* pbuffer, sal_uInt32 n)
 {
     return (seekTo(offset) && write(pbuffer, n));
@@ -83,7 +83,7 @@ sal_Bool OStream::seekTo(IPositionableStream::Offset pos) const
     return (m_rStream.seekTo(pos));
 }
 
-sal_Bool OStream::seekToEnd() const 
+sal_Bool OStream::seekToEnd() const
 {
     return (m_rStream.seekToEnd());
 }

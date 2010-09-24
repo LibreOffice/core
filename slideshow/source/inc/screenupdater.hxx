@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,20 +57,20 @@ namespace slideshow
             ~ScreenUpdater();
 
             /** Notify screen update
-        
+
                 This method records a screen content update request
                 for all views.
             */
             void notifyUpdate();
-    
+
             /** Notify screen update
-        
+
                 This method records a screen content update request
                 for the given view.
 
                 @param rView
                 The view that needs an update
-                
+
                 @param bViewClobbered
                 When true, notifies update that view content is
                 clobbered by external circumstances (e.g. by another

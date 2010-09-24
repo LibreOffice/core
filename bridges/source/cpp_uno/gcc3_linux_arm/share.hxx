@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,15 +41,15 @@ namespace CPPU_CURRENT_NAMESPACE
     // -- following decl from libstdc++-v3/libsupc++/unwind-cxx.h and unwind.h
 
     struct __cxa_exception
-    { 
+    {
         ::std::type_info *exceptionType;
-        void (*exceptionDestructor)(void *); 
-        
+        void (*exceptionDestructor)(void *);
+
         ::std::unexpected_handler unexpectedHandler;
         ::std::terminate_handler terminateHandler;
-        
+
         __cxa_exception *nextException;
-        
+
         int handlerCount;
 #ifdef __ARM_EABI__
     __cxa_exception *nextPropagatingException;
@@ -60,14 +60,14 @@ namespace CPPU_CURRENT_NAMESPACE
         const unsigned char *languageSpecificData;
         void *catchTemp;
         void *adjustedPtr;
-#endif    
+#endif
         _Unwind_Exception unwindHeader;
-    };    
+    };
 
     extern "C" void *__cxa_allocate_exception(
         std::size_t thrown_size ) throw();
     extern "C" void __cxa_throw (
-        void *thrown_exception, std::type_info *tinfo, 
+        void *thrown_exception, std::type_info *tinfo,
         void (*dest) (void *) ) __attribute__((noreturn));
 
     struct __cxa_eh_globals

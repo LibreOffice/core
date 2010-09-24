@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@ module com {  module sun {  module star {  module ui {
     <p> The GlobalAcceleratorConfiguration service can be created
     by using an UNO service manager. It provides then access to
     the global accelerator configuration.</p>
-    
+
     @since OOo 2.0.0
 */
-service GlobalAcceleratorConfiguration : XAcceleratorConfiguration 
+service GlobalAcceleratorConfiguration : XAcceleratorConfiguration
 {};
 
 }; }; }; }; // com.sun.star

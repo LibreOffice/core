@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ static SvXMLTokenMapEntry aChildren[] =
 
 
 SchemaContext::SchemaContext(
-    SvXMLImport& rImport, 
+    SvXMLImport& rImport,
     USHORT nPrefix,
     const OUString& rLocalName,
     const Reference<XDataTypeRepository>& rRepository ) :
@@ -81,20 +81,20 @@ SchemaContext::~SchemaContext()
 {
 }
 
-void SchemaContext::HandleAttribute( 
-    sal_uInt16, 
+void SchemaContext::HandleAttribute(
+    sal_uInt16,
     const OUString& )
 {
-}        
+}
 
-SvXMLImportContext* SchemaContext::HandleChild( 
+SvXMLImportContext* SchemaContext::HandleChild(
     sal_uInt16 nToken,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& )
 {
     return ( nToken == XML_SIMPLETYPE )
-        ? new SchemaSimpleTypeContext( GetImport(), nPrefix, rLocalName, 
+        ? new SchemaSimpleTypeContext( GetImport(), nPrefix, rLocalName,
                                        mxRepository )
         : new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }

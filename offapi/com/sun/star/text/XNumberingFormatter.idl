@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ module com { module sun { module star { module text {
     in various language environments.
     @see <type scope="com::sun::star::text">NumberingRules</type>
     @see <type scope="com::sun::star::text">NumberingLevel</type>
-    @version	1.0
-    @author		<a href="mailto:oliver.specht@germany.sun.com">Oliver Specht</a>
+    @version    1.0
+    @author     <a href="mailto:oliver.specht@germany.sun.com">Oliver Specht</a>
 */
 published interface XNumberingFormatter : com::sun::star::uno::XInterface
 {

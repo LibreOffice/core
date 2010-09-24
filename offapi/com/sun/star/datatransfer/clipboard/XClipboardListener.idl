@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 //=============================================================================
 /** Interface to be implemented to receive notifications on clipboard content
-    changes.	
+    changes.
 */
 
 published interface XClipboardListener: com::sun::star::lang::XEventListener
@@ -51,7 +51,7 @@ published interface XClipboardListener: com::sun::star::lang::XEventListener
     /** The content of the clipboard has changed.
 
         @param event
-        The event object containing the new clipboard content. 
+        The event object containing the new clipboard content.
 
         @see com::sun::star::datatransfer::clipboard::ClipboardEvent
     */

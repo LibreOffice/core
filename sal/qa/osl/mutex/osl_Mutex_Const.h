@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,11 +37,11 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-#ifndef	_OSL_THREAD_HXX
+#ifndef _OSL_THREAD_HXX
 #include <osl/thread.hxx>
 #endif
 
-#ifndef	_OSL_MUTEX_HXX
+#ifndef _OSL_MUTEX_HXX
 #include <osl/mutex.hxx>
 #endif
 #include <osl/time.h>

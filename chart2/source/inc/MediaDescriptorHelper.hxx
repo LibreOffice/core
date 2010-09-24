@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,101 +87,101 @@ public:
 
 
     //@todo define this for debug only, except URL
-    sal_Bool			AsTemplate; //document is a template.
-    sal_Bool			ISSET_AsTemplate;
-    ::rtl::OUString		Author; //
-    sal_Bool			ISSET_Author;
-    ::rtl::OUString		CharacterSet; //identifier of used character set.
-    sal_Bool			ISSET_CharacterSet;
-    ::rtl::OUString		Comment;//
-    sal_Bool			ISSET_Comment;
+    sal_Bool            AsTemplate; //document is a template.
+    sal_Bool            ISSET_AsTemplate;
+    ::rtl::OUString     Author; //
+    sal_Bool            ISSET_Author;
+    ::rtl::OUString     CharacterSet; //identifier of used character set.
+    sal_Bool            ISSET_CharacterSet;
+    ::rtl::OUString     Comment;//
+    sal_Bool            ISSET_Comment;
 
     ::com::sun::star::uno::Any
                         ComponentData;//
-    sal_Bool			ISSET_ComponentData;
-    ::rtl::OUString		FileName; //deprecated, same as url
-    sal_Bool			ISSET_FileName;
+    sal_Bool            ISSET_ComponentData;
+    ::rtl::OUString     FileName; //deprecated, same as url
+    sal_Bool            ISSET_FileName;
     ::com::sun::star::uno::Any
                         FilterData;//
-    sal_Bool			ISSET_FilterData;
-    ::rtl::OUString		FilterName; //internal filter name.
-    sal_Bool			ISSET_FilterName;
-    ::rtl::OUString		FilterFlags;//deprecated,
-    sal_Bool			ISSET_FilterFlags;
-    ::rtl::OUString		FilterOptions;//
-    sal_Bool			ISSET_FilterOptions;
+    sal_Bool            ISSET_FilterData;
+    ::rtl::OUString     FilterName; //internal filter name.
+    sal_Bool            ISSET_FilterName;
+    ::rtl::OUString     FilterFlags;//deprecated,
+    sal_Bool            ISSET_FilterFlags;
+    ::rtl::OUString     FilterOptions;//
+    sal_Bool            ISSET_FilterOptions;
             //not documented ... @todo remove?
-    ::rtl::OUString		FrameName; //name of target frame.
-    sal_Bool			ISSET_FrameName;
-    sal_Bool			Hidden; //load document, invisible.
-    sal_Bool			ISSET_Hidden;
+    ::rtl::OUString     FrameName; //name of target frame.
+    sal_Bool            ISSET_FrameName;
+    sal_Bool            Hidden; //load document, invisible.
+    sal_Bool            ISSET_Hidden;
 
-    ::rtl::OUString		HierarchicalDocumentName;
-    sal_Bool			ISSET_HierarchicalDocumentName;
+    ::rtl::OUString     HierarchicalDocumentName;
+    sal_Bool            ISSET_HierarchicalDocumentName;
 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         OutputStream; //a stream to receive the document data for saving
-    sal_Bool			ISSET_OutputStream;
+    sal_Bool            ISSET_OutputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                         InputStream; //content of document.
-    sal_Bool			ISSET_InputStream;
+    sal_Bool            ISSET_InputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                        InteractionHandler; //	//::com::sun::star::task::XInteractionHandler
-    sal_Bool			ISSET_InteractionHandler;
+                        InteractionHandler; //  //::com::sun::star::task::XInteractionHandler
+    sal_Bool            ISSET_InteractionHandler;
 
-    ::rtl::OUString		JumpMark;	//specifies the name of a mark within the document where the first view is to position itself.
-    sal_Bool			ISSET_JumpMark;
-    ::rtl::OUString		MediaType; //mime type.
-    sal_Bool			ISSET_MediaType;
-    ::rtl::OUString		OpenFlags; //deprecated
-    sal_Bool			ISSET_OpenFlags;
-    sal_Bool			OpenNewView; //opens a new view for an already loaded document.
-    sal_Bool			ISSET_OpenNewView;
-    sal_Bool			Overwrite; //opens a new view for an already loaded document.
-    sal_Bool			ISSET_Overwrite;
-    ::rtl::OUString		Password; //
-    sal_Bool			ISSET_Password;
+    ::rtl::OUString     JumpMark;   //specifies the name of a mark within the document where the first view is to position itself.
+    sal_Bool            ISSET_JumpMark;
+    ::rtl::OUString     MediaType; //mime type.
+    sal_Bool            ISSET_MediaType;
+    ::rtl::OUString     OpenFlags; //deprecated
+    sal_Bool            ISSET_OpenFlags;
+    sal_Bool            OpenNewView; //opens a new view for an already loaded document.
+    sal_Bool            ISSET_OpenNewView;
+    sal_Bool            Overwrite; //opens a new view for an already loaded document.
+    sal_Bool            ISSET_Overwrite;
+    ::rtl::OUString     Password; //
+    sal_Bool            ISSET_Password;
 
         //not documented ... @todo remove?
     ::com::sun::star::awt::Rectangle
                         PosSize; //position and size of document window.
-    sal_Bool			ISSET_PosSize;
+    sal_Bool            ISSET_PosSize;
 
     ::com::sun::star::uno::Sequence< sal_Int8 >
                         PostData; //contains the data for HTTP post method as a sequence of bytes.
-    sal_Bool			ISSET_PostData;
-    ::rtl::OUString		PostString; //deprecated, contains the data for HTTP post method as a sequence of bytes.
-    sal_Bool			ISSET_PostString;
-    sal_Bool			Preview; //show preview.
-    sal_Bool			ISSET_Preview;
-    sal_Bool			ReadOnly; //open document readonly.
-    sal_Bool			ISSET_ReadOnly;
-    ::rtl::OUString		Referer; //name of document referrer.
-    sal_Bool			ISSET_Referer;
+    sal_Bool            ISSET_PostData;
+    ::rtl::OUString     PostString; //deprecated, contains the data for HTTP post method as a sequence of bytes.
+    sal_Bool            ISSET_PostString;
+    sal_Bool            Preview; //show preview.
+    sal_Bool            ISSET_Preview;
+    sal_Bool            ReadOnly; //open document readonly.
+    sal_Bool            ISSET_ReadOnly;
+    ::rtl::OUString     Referer; //name of document referrer.
+    sal_Bool            ISSET_Referer;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         StatusIndicator; //  //::com::sun::star::task::XStatusIndicator
-    sal_Bool			ISSET_StatusIndicator;
+    sal_Bool            ISSET_StatusIndicator;
         //not documented ... @todo remove?
-    sal_Bool			Silent; //prevents dialogs to query for more information.
-    sal_Bool			ISSET_Silent;
-    ::rtl::OUString		TemplateName; //deprecated, name of the template instead of the URL.
-    sal_Bool			ISSET_TemplateName;
-    ::rtl::OUString		TemplateRegionName; //deprecated, name of the region of the template.
-    sal_Bool			ISSET_TemplateRegionName;
-    sal_Bool			Unpacked;
-    sal_Bool			ISSET_Unpacked;
+    sal_Bool            Silent; //prevents dialogs to query for more information.
+    sal_Bool            ISSET_Silent;
+    ::rtl::OUString     TemplateName; //deprecated, name of the template instead of the URL.
+    sal_Bool            ISSET_TemplateName;
+    ::rtl::OUString     TemplateRegionName; //deprecated, name of the region of the template.
+    sal_Bool            ISSET_TemplateRegionName;
+    sal_Bool            Unpacked;
+    sal_Bool            ISSET_Unpacked;
     ::rtl::OUString     URL;// FileName, URL of the document.
-    sal_Bool			ISSET_URL;
-    sal_Int16			Version; //storage version.
-    sal_Bool			ISSET_Version;
+    sal_Bool            ISSET_URL;
+    sal_Int16           Version; //storage version.
+    sal_Bool            ISSET_Version;
 
     ::com::sun::star::uno::Any
                         ViewData;//
-    sal_Bool			ISSET_ViewData;
-    sal_Int16			ViewId; //id of the initial view.
-    sal_Bool			ISSET_ViewId;
+    sal_Bool            ISSET_ViewData;
+    sal_Int16           ViewId; //id of the initial view.
+    sal_Bool            ISSET_ViewId;
 
     // new framework objects
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >

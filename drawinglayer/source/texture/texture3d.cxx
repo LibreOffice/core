@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxMono::GeoTexSvxMono(const basegfx::BColor& rSingleColor, double fOpacity)
-        :	maSingleColor(rSingleColor),
+        :   maSingleColor(rSingleColor),
             mfOpacity(fOpacity)
         {
         }
@@ -47,7 +47,7 @@ namespace drawinglayer
         bool GeoTexSvxMono::operator==(const GeoTexSvx& rGeoTexSvx) const
         {
             const GeoTexSvxMono* pCompare = dynamic_cast< const GeoTexSvxMono* >(&rGeoTexSvx);
-            return (pCompare 
+            return (pCompare
                 && maSingleColor == pCompare->maSingleColor
                 && mfOpacity == pCompare->mfOpacity);
         }
@@ -71,7 +71,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxBitmap::GeoTexSvxBitmap(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize)
-        :	maBitmap(rBitmap),
+        :   maBitmap(rBitmap),
             mpRead(0L),
             maTopLeft(rTopLeft),
             maSize(rSize),
@@ -115,8 +115,8 @@ namespace drawinglayer
                 const double fConvertColor(1.0 / 255.0);
                 const BitmapColor aBMCol(mpRead->GetColor(nY, nX));
                 const basegfx::BColor aBSource(
-                    (double)aBMCol.GetRed() * fConvertColor, 
-                    (double)aBMCol.GetGreen() * fConvertColor, 
+                    (double)aBMCol.GetRed() * fConvertColor,
+                    (double)aBMCol.GetGreen() * fConvertColor,
                     (double)aBMCol.GetBlue() * fConvertColor);
 
                 rBColor = aBSource;
@@ -153,7 +153,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxBitmapTiled::GeoTexSvxBitmapTiled(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize)
-        :	GeoTexSvxBitmap(rBitmap, rTopLeft, rSize)
+        :   GeoTexSvxBitmap(rBitmap, rTopLeft, rSize)
         {
         }
 
@@ -182,7 +182,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxMultiHatch::GeoTexSvxMultiHatch(const primitive3d::HatchTexturePrimitive3D& rPrimitive, double fLogicPixelSize)
-        :	mfLogicPixelSize(fLogicPixelSize),
+        :   mfLogicPixelSize(fLogicPixelSize),
             mp0(0L),
             mp1(0L),
             mp2(0L)
@@ -243,7 +243,7 @@ namespace drawinglayer
                 rfOpacity = 0.0;
             }
         }
-        
+
         void GeoTexSvxMultiHatch::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
         {
             if(mbFillBackground || impIsOnHatch(rUV))

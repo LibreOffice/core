@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,7 +147,7 @@ String SwTOXInternational::GetFollowingText( BOOL bMorePages ) const
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:	SortierElement fuer Verzeichniseintraege
+     Beschreibung:  SortierElement fuer Verzeichniseintraege
  --------------------------------------------------------------------*/
 
 
@@ -238,7 +238,7 @@ BOOL SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
         {
             // beide Pointer vorhanden -> vergleiche Text
             // beide Pointer nicht vorhanden -> vergleiche AlternativText
-            const xub_StrLen *pEnd	= pTxtMark->GetEnd(),
+            const xub_StrLen *pEnd  = pTxtMark->GetEnd(),
                                 *pEndCmp = rCmp.pTxtMark->GetEnd();
 
             String sMyTxt;
@@ -409,7 +409,7 @@ void SwTOXIndex::_GetText( String& rTxt, String& rTxtReading )
     const SwTOXMark& rTOXMark = pTxtMark->GetTOXMark();
     switch(nKeyLevel)
     {
-        case FORM_PRIMARY_KEY	 :
+        case FORM_PRIMARY_KEY    :
         {
             rTxt = rTOXMark.GetPrimaryKey();
             rTxtReading = rTOXMark.GetPrimaryKeyReading();
@@ -421,7 +421,7 @@ void SwTOXIndex::_GetText( String& rTxt, String& rTxtReading )
             rTxtReading = rTOXMark.GetSecondaryKeyReading();
         }
         break;
-        case FORM_ENTRY			 :
+        case FORM_ENTRY          :
         {
             rTxt = rTOXMark.GetText();
             rTxtReading = rTOXMark.GetTextReading();
@@ -550,7 +550,7 @@ SwTOXContent::SwTOXContent( const SwTxtNode& rNd, const SwTxtTOXMark* pMark,
 }
 
 
-//	Der Text des Inhalts
+//  Der Text des Inhalts
 //
 
 void SwTOXContent::_GetText( String& rTxt, String& rTxtReading )
@@ -689,13 +689,13 @@ void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) const
 USHORT SwTOXPara::GetLevel() const
 {
     USHORT nRet = m_nLevel;
-    const SwCntntNode*	pNd = aTOXSources[0].pNd;
+    const SwCntntNode*  pNd = aTOXSources[0].pNd;
 
     if( nsSwTOXElement::TOX_OUTLINELEVEL == eType && pNd->GetTxtNode() )
     {
         //USHORT nTmp = ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
         //if(nTmp < NO_NUMBERING)
-        //	nRet = nTmp + 1;
+        //  nRet = nTmp + 1;
         const int nTmp = ((SwTxtNode*)pNd)->GetAttrOutlineLevel();//#outline level,zhaojianwei????
         if(nTmp != 0 )
             nRet = static_cast<USHORT>(nTmp);
@@ -776,7 +776,7 @@ String SwTOXPara::GetURL() const
                 case nsSwTOXElement::TOX_OLE:       pStr = pMarkToOLE; break;
                 case nsSwTOXElement::TOX_GRAPHIC:   pStr = pMarkToGraphic; break;
                 case nsSwTOXElement::TOX_FRAME:     pStr = pMarkToFrame; break;
-                default:			pStr = 0;
+                default:            pStr = 0;
                 }
                 if( pStr )
                     aTxt.AppendAscii( pStr );
@@ -878,7 +878,7 @@ void SwTOXAuthority::_GetText( String& rTxt, String& )
 /* -----------------21.09.99 12:50-------------------
 
  --------------------------------------------------*/
-void 	SwTOXAuthority::FillText( SwTxtNode& rNd,
+void    SwTOXAuthority::FillText( SwTxtNode& rNd,
                         const SwIndex& rInsPos, USHORT nAuthField ) const
 {
     SwAuthorityField* pField = (SwAuthorityField*)m_rField.GetFld();
@@ -907,7 +907,7 @@ void 	SwTOXAuthority::FillText( SwTxtNode& rNd,
 /* -----------------14.10.99 09:35-------------------
 
  --------------------------------------------------*/
-BOOL 	SwTOXAuthority::operator==( const SwTOXSortTabBase& rCmp)
+BOOL    SwTOXAuthority::operator==( const SwTOXSortTabBase& rCmp)
 {
     return nType == rCmp.nType &&
             ((SwAuthorityField*)m_rField.GetFld())->GetHandle() ==
@@ -916,7 +916,7 @@ BOOL 	SwTOXAuthority::operator==( const SwTOXSortTabBase& rCmp)
 /* -----------------21.10.99 09:52-------------------
 
  --------------------------------------------------*/
-BOOL 	SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
+BOOL    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
 {
     BOOL bRet = FALSE;
     SwAuthorityField* pField = (SwAuthorityField*)m_rField.GetFld();
@@ -932,7 +932,7 @@ BOOL 	SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
 
         for(USHORT i = 0; i < pType->GetSortKeyCount(); i++)
         {
-            const SwTOXSortKey*	pKey = pType->GetSortKey(i);
+            const SwTOXSortKey* pKey = pType->GetSortKey(i);
             String sMyTxt = pField->GetFieldText(pKey->eField);
             String sMyTxtReading;
             String sOtherTxt = pCmpField->GetFieldText(pKey->eField);

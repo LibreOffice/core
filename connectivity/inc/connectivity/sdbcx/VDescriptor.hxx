@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ namespace connectivity
                     ,public ::com::sun::star::lang::XUnoTunnel
         {
         protected:
-            ::rtl::OUString			m_Name;
+            ::rtl::OUString         m_Name;
 
             /** helper for derived classes to implement OPropertyArrayUsageHelper::createArrayHelper
 
@@ -61,17 +61,17 @@ namespace connectivity
             ::cppu::IPropertyArrayHelper*   doCreateArrayHelper() const;
 
         private:
-            comphelper::UStringMixEqual	m_aCase;
-            sal_Bool					m_bNew;
+            comphelper::UStringMixEqual m_aCase;
+            sal_Bool                    m_bNew;
 
         public:
             ODescriptor(::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bCase, sal_Bool _bNew = sal_False);
 
             virtual ~ODescriptor();
-                    
-            sal_Bool isNew()  const			{ return m_bNew;	}
-            sal_Bool getNew() const			{ return m_bNew;	}
-            virtual	void	 setNew(sal_Bool _bNew);
+
+            sal_Bool isNew()  const         { return m_bNew;    }
+            sal_Bool getNew() const         { return m_bNew;    }
+            virtual void     setNew(sal_Bool _bNew);
 
             sal_Bool isCaseSensitive() const { return m_aCase.isCaseSensitive(); }
 
@@ -86,7 +86,7 @@ namespace connectivity
             {
                 return m_aCase(m_Name,_rRH);
             }
-            
+
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();

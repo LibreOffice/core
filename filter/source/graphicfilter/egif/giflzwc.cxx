@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,21 +39,21 @@ class GIFImageDataOutputStream
 {
 private:
 
-    void		FlushBlockBuf();
-    inline void	FlushBitsBufsFullBytes();
+    void        FlushBlockBuf();
+    inline void FlushBitsBufsFullBytes();
 
-    SvStream&	rStream;
-    BYTE*		pBlockBuf;
-    BYTE		nBlockBufSize;
-    ULONG		nBitsBuf;
-    USHORT		nBitsBufSize;
+    SvStream&   rStream;
+    BYTE*       pBlockBuf;
+    BYTE        nBlockBufSize;
+    ULONG       nBitsBuf;
+    USHORT      nBitsBufSize;
 
 public:
 
                 GIFImageDataOutputStream( SvStream & rGIF, BYTE nLZWDataSize );
                 ~GIFImageDataOutputStream();
 
-    inline void	WriteBits( USHORT nCode, USHORT nCodeLen );
+    inline void WriteBits( USHORT nCode, USHORT nCodeLen );
 };
 
 // ------------------------------------------------------------------------
@@ -125,10 +125,10 @@ void GIFImageDataOutputStream::FlushBlockBuf()
 struct GIFLZWCTreeNode
 {
 
-    GIFLZWCTreeNode*	pBrother;		// naechster Knoten, der den selben Vater hat
-    GIFLZWCTreeNode*	pFirstChild;	// erster Sohn
-    USHORT				nCode;			// Der Code fuer den String von Pixelwerten, der sich ergibt, wenn
-    USHORT				nValue;			// Der Pixelwert
+    GIFLZWCTreeNode*    pBrother;       // naechster Knoten, der den selben Vater hat
+    GIFLZWCTreeNode*    pFirstChild;    // erster Sohn
+    USHORT              nCode;          // Der Code fuer den String von Pixelwerten, der sich ergibt, wenn
+    USHORT              nValue;         // Der Pixelwert
 };
 
 // --------------------
@@ -185,9 +185,9 @@ void GIFLZWCompressor::Compress( HPBYTE pSrc, ULONG nSize )
 {
     if( pIDOS )
     {
-        GIFLZWCTreeNode*	p;
-        USHORT				i;
-        BYTE				nV;
+        GIFLZWCTreeNode*    p;
+        USHORT              i;
+        BYTE                nV;
 
         if( !pPrefix && nSize )
         {

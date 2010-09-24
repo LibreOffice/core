@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ void SvxSearchFormatDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
     {
         case RID_SVXPAGE_CHAR_NAME:
         {
-            const FontList*	pAppFontList = 0;
+            const FontList* pAppFontList = 0;
             SfxObjectShell* pSh = SfxObjectShell::Current();
 
             if ( pSh )
@@ -143,7 +143,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
     aAttrFL ( this, CUI_RES( FL_ATTR ) ),
     aAttrLB ( this, CUI_RES( LB_ATTR ) ),
     aOKBtn  ( this, CUI_RES( BTN_ATTR_OK ) ),
-    aEscBtn	( this, CUI_RES( BTN_ATTR_CANCEL ) ),
+    aEscBtn ( this, CUI_RES( BTN_ATTR_CANCEL ) ),
     aHelpBtn( this, CUI_RES( BTN_ATTR_HELP ) ),
 
     rList( rLst )
@@ -182,7 +182,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
             }
 
             // item resources are in svx
-            sal_uInt32 nId  = aAttrNames.FindIndex( nSlot );		
+            sal_uInt32 nId  = aAttrNames.FindIndex( nSlot );
             SvLBoxEntry* pEntry = NULL;
             if ( RESARRAY_INDEX_NOTFOUND != nId )
                 pEntry = aAttrLB.SvTreeListBox::InsertEntry( aAttrNames.GetString(nId) );
@@ -267,16 +267,16 @@ SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
 
     aFixedLine  ( this, CUI_RES( FL_SIMILARITY ) ),
     aOtherTxt   ( this, CUI_RES( FT_OTHER ) ),
-    aOtherFld	( this, CUI_RES( NF_OTHER	) ),
+    aOtherFld   ( this, CUI_RES( NF_OTHER   ) ),
     aLongerTxt  ( this, CUI_RES( FT_LONGER ) ),
     aLongerFld  ( this, CUI_RES( NF_LONGER ) ),
     aShorterTxt ( this, CUI_RES( FT_SHORTER ) ),
-    aShorterFld	( this, CUI_RES( NF_SHORTER ) ),
+    aShorterFld ( this, CUI_RES( NF_SHORTER ) ),
     aRelaxBox   ( this, CUI_RES( CB_RELAX ) ),
 
-    aOKBtn		( this, CUI_RES( BTN_ATTR_OK ) ),
-    aEscBtn		( this, CUI_RES( BTN_ATTR_CANCEL ) ),
-    aHelpBtn	( this, CUI_RES( BTN_ATTR_HELP ) )
+    aOKBtn      ( this, CUI_RES( BTN_ATTR_OK ) ),
+    aEscBtn     ( this, CUI_RES( BTN_ATTR_CANCEL ) ),
+    aHelpBtn    ( this, CUI_RES( BTN_ATTR_HELP ) )
 
 {
     FreeResource();

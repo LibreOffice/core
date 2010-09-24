@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ using namespace com::sun::star::plugin;
 
 namespace plugstringhelper
 {
-    
+
 rtl::OUString getString( CFStringRef i_xString )
 {
     rtl::OUStringBuffer aBuf;
@@ -69,7 +69,7 @@ CFMutableStringRef createString( const rtl::OUString& i_rString )
 
 CFURLRef createURL( const rtl::OUString& i_rString )
 {
-    
+
     CFMutableStringRef xMutableString = createString( i_rString );
     CFURLRef xURL = CFURLCreateWithString( NULL, xMutableString, NULL );
     CFRelease( xMutableString );
@@ -123,12 +123,12 @@ static int parsePlist( CFBundleRef i_xBundle, const rtl::OUString& i_rBundleURL 
     {
         return 0;
     }
-    
+
     // prepare an array of key and value refs
     std::vector< CFTypeRef > aKeys( nMimetypes, CFTypeRef(NULL) );
     std::vector< CFTypeRef > aValues( nMimetypes, CFTypeRef(NULL) );
     CFDictionaryGetKeysAndValues(static_cast<CFDictionaryRef>(xMimeDict), &aKeys[0], &aValues[0] );
-    
+
     int nAdded = 0;
     for( int i = 0; i < nMimetypes; i++ )
     {
@@ -137,7 +137,7 @@ static int parsePlist( CFBundleRef i_xBundle, const rtl::OUString& i_rBundleURL 
         if( ! xKey || CFGetTypeID(xKey) != CFStringGetTypeID() )
             continue;
         rtl::OUString aMimetype = getString( (CFStringRef)xKey );
-        
+
         // the correspoding value should be a dictionary
         CFTypeRef xDict = aValues[i];
         if( ! xDict || CFGetTypeID( xDict ) != CFDictionaryGetTypeID() )
@@ -147,7 +147,7 @@ static int parsePlist( CFBundleRef i_xBundle, const rtl::OUString& i_rBundleURL 
         CFTypeRef xExtArray = CFDictionaryGetValue( (CFDictionaryRef)xDict,  CFSTR("WebPluginExtensions" ) );
         if( !xExtArray || CFGetTypeID( xExtArray ) != CFArrayGetTypeID() )
             continue;
-        
+
         OUStringBuffer aExtBuf;
         int nExtensions = CFArrayGetCount( (CFArrayRef)xExtArray );
         for( int n = 0; n < nExtensions; n++ )
@@ -163,7 +163,7 @@ static int parsePlist( CFBundleRef i_xBundle, const rtl::OUString& i_rBundleURL 
                 aExtBuf.append( aExt );
             }
         }
-        
+
         // get the description string
         CFTypeRef xDescString = CFDictionaryGetValue( (CFDictionaryRef)xDict,  CFSTR("WebPluginTypeDescription" ) );
         if( !xDescString || CFGetTypeID( xDescString ) != CFStringGetTypeID() )
@@ -172,14 +172,14 @@ static int parsePlist( CFBundleRef i_xBundle, const rtl::OUString& i_rBundleURL 
 
         PluginDescription* pNew = new PluginDescription;
         // set plugin name (path to library)
-        pNew->PluginName	= i_rBundleURL;
+        pNew->PluginName    = i_rBundleURL;
         // set mimetype
-        pNew->Mimetype 	= aMimetype;
+        pNew->Mimetype  = aMimetype;
         // set extension line
-        pNew->Extension	= aExtBuf.makeStringAndClear();
+        pNew->Extension = aExtBuf.makeStringAndClear();
         // set description
         pNew->Description= aDescription;
-        
+
         io_rDescriptions.push_back( pNew );
         nAdded++;
 
@@ -194,9 +194,9 @@ static int parsePlist( CFBundleRef i_xBundle, const rtl::OUString& i_rBundleURL 
                  OUStringToOString( pNew->Description, RTL_TEXTENCODING_UTF8 ).getStr()
                  );
 #endif
-        
+
     }
-    
+
     return nAdded;
 }
 
@@ -204,12 +204,12 @@ static int parseMimeString( const rtl::OUString& i_rBundleURL , list< PluginDesc
 {
     if( ! i_pMime )
         return 0;
-    
+
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    
+
     OStringBuffer aMIME;
     aMIME.append( i_pMime );
-        
+
     if( aMIME.getLength() < 1 )
         return 0;
 
@@ -220,14 +220,14 @@ static int parseMimeString( const rtl::OUString& i_rBundleURL , list< PluginDesc
     while( nIndex != -1 )
     {
         OString aType = aLine.getToken( 0, ';', nIndex );
-        
+
         sal_Int32 nTypeIndex = 0;
-        OString aMimetype	= aType.getToken( 0, ':', nTypeIndex );
-        OString aExtLine	= aType.getToken( 0, ':', nTypeIndex );
+        OString aMimetype   = aType.getToken( 0, ':', nTypeIndex );
+        OString aExtLine    = aType.getToken( 0, ':', nTypeIndex );
         if( nTypeIndex < 0 ) // ensure at least three tokens
             continue;
-        OString aDesc		= aType.getToken( 0, ':', nTypeIndex );
-        
+        OString aDesc       = aType.getToken( 0, ':', nTypeIndex );
+
         // create extension list string
         sal_Int32 nExtIndex = 0;
         OStringBuffer aExtension;
@@ -240,19 +240,19 @@ static int parseMimeString( const rtl::OUString& i_rBundleURL , list< PluginDesc
             if( nExtIndex != -1 )
                 aExtension.append( ';' );
         }
-        
+
         PluginDescription* pNew = new PluginDescription;
         // set plugin name (path to library)
-        pNew->PluginName	= i_rBundleURL;
+        pNew->PluginName    = i_rBundleURL;
         // set mimetype
-        pNew->Mimetype 	= OStringToOUString( aMimetype, aEncoding );
+        pNew->Mimetype  = OStringToOUString( aMimetype, aEncoding );
         // set extension line
-        pNew->Extension	= OStringToOUString( aExtension.makeStringAndClear(), aEncoding );
+        pNew->Extension = OStringToOUString( aExtension.makeStringAndClear(), aEncoding );
         // set description
         pNew->Description= OStringToOUString( aDesc, aEncoding );
         io_rDescriptions.push_back( pNew );
         nAdded++;
-        
+
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr,
                  "Inserting from mime string:\n"
@@ -294,7 +294,7 @@ static int parseMimeResource( CFBundleRef i_xBundle,
     #endif
     xRes = 0;
     BPSupportedMIMETypes aMIMETypesStrangeStruct = {kBPSupportedMIMETypesStructVers_1, NULL, NULL};
-    
+
     BP_GetSupportedMIMETypesUPP pBPGetSupp = (BP_GetSupportedMIMETypesUPP)osl_getAsciiFunctionSymbol( i_rMod, "BP_GetSupportedMIMETypes" );
     if( pBPGetSupp &&
         noErr == pBPGetSupp( &aMIMETypesStrangeStruct, 0 ) &&
@@ -323,7 +323,7 @@ static int parseMimeResource( CFBundleRef i_xBundle,
             }
         }
     }
-    
+
     if( aMIMETypesStrangeStruct.typeStrings && aMIMETypesStrangeStruct.infoStrings )
     {
         short nVariantCount = (**(short**)aMIMETypesStrangeStruct.typeStrings) / 2;
@@ -352,19 +352,19 @@ static int parseMimeResource( CFBundleRef i_xBundle,
                 if( nExtIndex != -1 )
                     aExtension.append( sal_Unicode(';') );
             }
-            
+
             PluginDescription* pNew = new PluginDescription;
             // set plugin name (path to library)
-            pNew->PluginName	= i_rBundleURL;
+            pNew->PluginName    = i_rBundleURL;
             // set mimetype
-            pNew->Mimetype 	= aMimetype;
+            pNew->Mimetype  = aMimetype;
             // set extension line
-            pNew->Extension	= aExtension.makeStringAndClear();
+            pNew->Extension = aExtension.makeStringAndClear();
             // set description
             pNew->Description= aDescription;
             io_rDescriptions.push_back( pNew );
             nAdded++;
-            
+
             #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr,
                      "Inserting from resource:\n"
@@ -378,8 +378,8 @@ static int parseMimeResource( CFBundleRef i_xBundle,
             #endif
         }
     }
-    
-    
+
+
     // clean up
     if( aMIMETypesStrangeStruct.typeStrings )
     {
@@ -393,7 +393,7 @@ static int parseMimeResource( CFBundleRef i_xBundle,
     }
     if( xRes )
         CFBundleCloseBundleResourceMap( i_xBundle, xRes );
-    
+
     return nAdded;
 }
 
@@ -409,9 +409,9 @@ static bool checkBlackList( CFBundleRef i_xBundle )
     CFTypeRef bundleversion = CFBundleGetValueForInfoDictionaryKey( i_xBundle, CFSTR("CFBundleVersion"));
     if( bundleversion && CFGetTypeID(bundleversion) == CFStringGetTypeID() )
         aBundleVersion = getString( static_cast<CFStringRef>(bundleversion) );
-    
+
     bool bReject = false;
-    // #i102735# VLC plugin prior to 1.0 tends to crash 
+    // #i102735# VLC plugin prior to 1.0 tends to crash
     if( aBundleName.equalsAscii( "VLC Plug-in" ) )
     {
         sal_Int32 nIndex = 0;
@@ -426,7 +426,7 @@ static bool checkBlackList( CFBundleRef i_xBundle )
     {
         bReject = true;
     }
-    
+
     #if OSL_DEBUG_LEVEL > 1
     if( bReject )
         fprintf( stderr, "rejecting plugin \"%s\" version %s\n",
@@ -443,7 +443,7 @@ static int getPluginDescriptions( CFBundleRef i_xBundle , list< PluginDescriptio
     int nDescriptions = 0;
     if( ! i_xBundle )
         return nDescriptions;
-    
+
     if( checkBlackList( i_xBundle ) )
         return 0;
 
@@ -451,7 +451,7 @@ static int getPluginDescriptions( CFBundleRef i_xBundle , list< PluginDescriptio
     CFURLRef xURL = CFBundleCopyBundleURL( i_xBundle );
     aPlugURL = getString( xURL );
     CFRelease( xURL );
-    
+
     #if OSL_DEBUG_LEVEL > 1
     rtl::OUString aPlugName, aPlugDescription;
     CFTypeRef name = CFBundleGetValueForInfoDictionaryKey( i_xBundle, CFSTR("WebPluginName"));
@@ -461,15 +461,15 @@ static int getPluginDescriptions( CFBundleRef i_xBundle , list< PluginDescriptio
     CFTypeRef description = CFBundleGetValueForInfoDictionaryKey( i_xBundle, CFSTR("WebPluginDescription"));
     if( description && CFGetTypeID(description) == CFStringGetTypeID() )
         aPlugDescription = getString( static_cast<CFStringRef>(description) );
-    
+
     fprintf( stderr, "URL: %s\nname: %s\ndescription: %s\n",
         rtl::OUStringToOString( aPlugURL, RTL_TEXTENCODING_UTF8 ).getStr(),
         rtl::OUStringToOString( aPlugName, RTL_TEXTENCODING_UTF8 ).getStr(),
         rtl::OUStringToOString( aPlugDescription, RTL_TEXTENCODING_UTF8 ).getStr()
         );
     #endif
-    
-    
+
+
     // get location of plugin library
     CFURLRef xLibURL = CFBundleCopyExecutableURL( i_xBundle );
     if( ! xLibURL )
@@ -477,7 +477,7 @@ static int getPluginDescriptions( CFBundleRef i_xBundle , list< PluginDescriptio
     // get the file system path
     rtl::OUString aModuleURL( CFURLtoOSLURL( xLibURL ) );
     CFRelease( xLibURL );
-    
+
     #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "exec URL = %s\n", rtl::OUStringToOString( aModuleURL, RTL_TEXTENCODING_UTF8 ).getStr() );
     #endif
@@ -505,7 +505,7 @@ static int getPluginDescriptions( CFBundleRef i_xBundle , list< PluginDescriptio
         osl_unloadModule( aMod );
         return nDescriptions;
     }
-    
+
     // resolve the symbol that might get us the mimetypes
     const char* (*pGetMimeDescription)() = (const char*(*)())osl_getAsciiFunctionSymbol( aMod, "_NP_GetMIMEDescription" );
     if( pGetMimeDescription )
@@ -521,7 +521,7 @@ static int getPluginDescriptions( CFBundleRef i_xBundle , list< PluginDescriptio
             }
         }
     }
-    
+
     // and as last resort check the resource of the bundle
     nDescriptions = parseMimeResource( i_xBundle, aMod, aPlugURL, io_rDescriptions );
     osl_unloadModule( aMod );
@@ -535,24 +535,24 @@ static bool CheckPlugin( const rtl::OUString& rPath, list< PluginDescription* >&
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Trying path %s ... ", rtl::OUStringToOString( rPath, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
-    CFURLRef xURL = createURL( rPath );    
-    
+    CFURLRef xURL = createURL( rPath );
+
     CFArrayRef xBundles = CFBundleCreateBundlesFromDirectory( NULL, xURL, CFSTR("plugin") );
     if( ! xBundles )
         return false;
-    
+
     CFIndex nBundles = CFArrayGetCount( xBundles );
-    
+
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "got %d bundles\n", (int)nBundles );
 #endif
-    
+
     int nDescriptions = 0;
     for( CFIndex i = 0; i < nBundles; i++ )
     {
         CFBundleRef xBundle = (CFBundleRef)CFArrayGetValueAtIndex( xBundles, i );
         nDescriptions += getPluginDescriptions( xBundle, rDescriptions );
-        
+
         CFRelease( xBundle );
     }
     CFRelease( xBundles );
@@ -573,7 +573,7 @@ static rtl::OUString FindFolderURL(  FSVolumeRefNum vRefNum, OSType folderType )
         aRet = getString( xURL );
         CFRelease( xURL );
     }
-    
+
     return aRet;
 }
 
@@ -586,7 +586,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
         std::list<PluginDescription*> aPlugins;
 
         static const char* pNPXPluginPath = getenv( "MOZ_PLUGIN_PATH" );
-        
+
         // get directories
         std::list< rtl::OUString > aPaths;
         if( pNPXPluginPath )
@@ -598,7 +598,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
             aPaths.push_back( getString( xURL ) );
             CFRelease( xURL );
         }
-        
+
         rtl::OUString aPath = FindFolderURL( kUserDomain, kInternetPlugInFolderType );
         if( aPath.getLength() )
             aPaths.push_back( aPath );
@@ -608,14 +608,14 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
         aPath = FindFolderURL( kOnAppropriateDisk, kInternetPlugInFolderType );
         if( aPath.getLength() )
             aPaths.push_back( aPath );
-        
-        
+
+
         const Sequence< ::rtl::OUString >& rPaths( PluginManager::getAdditionalSearchPaths() );
         for( sal_Int32 i = 0; i < rPaths.getLength(); i++ )
         {
             aPaths.push_back( getURLFromPath( rPaths.getConstArray()[i] ) );
         }
-        
+
         for( std::list< rtl::OUString >::const_iterator it = aPaths.begin(); it != aPaths.end(); ++it )
         {
             rtl::OUString aPath( *it );
@@ -624,8 +624,8 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
 #endif
             CheckPlugin( aPath, aPlugins );
         }
-        
-        
+
+
         // create return value
         aDescriptions = Sequence<PluginDescription>( aPlugins.size() );
 #if OSL_DEBUG_LEVEL > 1

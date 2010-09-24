@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <osl/endian.h>
-#include <errhdl.hxx>		// for ASSERT
+#include <errhdl.hxx>       // for ASSERT
 #include <tools/string.hxx>
 #include <swdllapi.h>
 
@@ -115,7 +115,7 @@ public:
     static BOOL IsValidStgFilter( SotStorage& , const SfxFilter& );
     static BOOL IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
 
-    static bool IsDetectableText( const sal_Char* pBuf, ULONG &rLen, 
+    static bool IsDetectableText( const sal_Char* pBuf, ULONG &rLen,
             CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0, bool bEncodedFilter = false );
     //    static bool IsDetectableW4W(const String& rFileName, const String& rUserData);
 

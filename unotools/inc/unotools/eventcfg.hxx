@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,30 +37,30 @@
 #include <hash_map>
 #include <vector>
 
-#define STR_EVENT_STARTAPP					 0
-#define STR_EVENT_CLOSEAPP					 1
-#define STR_EVENT_DOCCREATED				 2
-#define STR_EVENT_CREATEDOC 				 3
+#define STR_EVENT_STARTAPP                   0
+#define STR_EVENT_CLOSEAPP                   1
+#define STR_EVENT_DOCCREATED                 2
+#define STR_EVENT_CREATEDOC                  3
 #define STR_EVENT_LOADFINISHED               4
-#define STR_EVENT_OPENDOC					 5
-#define STR_EVENT_PREPARECLOSEDOC			 6
-#define STR_EVENT_CLOSEDOC				     7
-#define STR_EVENT_SAVEDOC					 8
-#define STR_EVENT_SAVEDOCDONE				 9
+#define STR_EVENT_OPENDOC                    5
+#define STR_EVENT_PREPARECLOSEDOC            6
+#define STR_EVENT_CLOSEDOC                   7
+#define STR_EVENT_SAVEDOC                    8
+#define STR_EVENT_SAVEDOCDONE                9
 #define STR_EVENT_SAVEDOCFAILED             10
-#define STR_EVENT_SAVEASDOC 				11
-#define STR_EVENT_SAVEASDOCDONE				12
+#define STR_EVENT_SAVEASDOC                 11
+#define STR_EVENT_SAVEASDOCDONE             12
 #define STR_EVENT_SAVEASDOCFAILED           13
 #define STR_EVENT_SAVETODOC                 14
 #define STR_EVENT_SAVETODOCDONE             15
 #define STR_EVENT_SAVETODOCFAILED           16
-#define STR_EVENT_ACTIVATEDOC				17
-#define STR_EVENT_DEACTIVATEDOC 			18
-#define STR_EVENT_PRINTDOC 					19
+#define STR_EVENT_ACTIVATEDOC               17
+#define STR_EVENT_DEACTIVATEDOC             18
+#define STR_EVENT_PRINTDOC                  19
 #define STR_EVENT_VIEWCREATED               20
 #define STR_EVENT_PREPARECLOSEVIEW          21
 #define STR_EVENT_CLOSEVIEW                 22
-#define STR_EVENT_MODIFYCHANGED				23
+#define STR_EVENT_MODIFYCHANGED             23
 #define STR_EVENT_TITLECHANGED              24
 #define STR_EVENT_VISAREACHANGED            25
 #define STR_EVENT_MODECHANGED               26
@@ -83,8 +83,8 @@ public:
     ~GlobalEventConfig_Impl( );
 
     void EstablishFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
-    void 			Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
-    void			Commit();
+    void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    void            Commit();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);

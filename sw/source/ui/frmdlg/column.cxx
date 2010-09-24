@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,9 +102,9 @@ inline BOOL IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
 
 SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     SfxModalDialog(pParent, SW_RES(DLG_COLUMN)),
-    aOK(this, 		SW_RES(PB_OK)),
-    aCancel(this, 	SW_RES(PB_CANCEL)),
-    aHelp(this, 	SW_RES(PB_HELP)),
+    aOK(this,       SW_RES(PB_OK)),
+    aCancel(this,   SW_RES(PB_CANCEL)),
+    aHelp(this,     SW_RES(PB_HELP)),
     aApplyToFT(this, SW_RES(FT_APPLY_TO)),
     aApplyToLB(this, SW_RES(LB_APPLY_TO)),
     rWrtShell(rSh),
@@ -254,15 +254,15 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
         case LISTBOX_SELECTION  :
             pSet = pSelectionSet;
         break;
-        case LISTBOX_SECTION	:
+        case LISTBOX_SECTION    :
             pSet = pSectionSet;
             bSectionChanged = TRUE;
         break;
-        case LISTBOX_SECTIONS	:
+        case LISTBOX_SECTIONS   :
             pSet = pSectionSet;
             bSelSectionChanged = TRUE;
         break;
-        case LISTBOX_PAGE		:
+        case LISTBOX_PAGE       :
             pSet = pPageSet;
             bPageChanged = TRUE;
         break;
@@ -284,12 +284,12 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
             if( pSelectionSet )
                 pSet->Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
-        case LISTBOX_SECTION	:
-        case LISTBOX_SECTIONS	:
+        case LISTBOX_SECTION    :
+        case LISTBOX_SECTIONS   :
             pSet = pSectionSet;
             pSet->Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
-        case LISTBOX_PAGE		:
+        case LISTBOX_PAGE       :
             nWidth = nPageWidth;
             pSet = pPageSet;
             pSet->Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
@@ -320,15 +320,15 @@ IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
         case LISTBOX_SELECTION  :
             pSet = pSelectionSet;
         break;
-        case LISTBOX_SECTION	:
+        case LISTBOX_SECTION    :
             pSet = pSectionSet;
             bSectionChanged = TRUE;
         break;
-        case LISTBOX_SECTIONS	:
+        case LISTBOX_SECTIONS   :
             pSet = pSectionSet;
             bSelSectionChanged = TRUE;
         break;
-        case LISTBOX_PAGE		:
+        case LISTBOX_PAGE       :
             pSet = pPageSet;
             bPageChanged = TRUE;
         break;
@@ -442,7 +442,7 @@ void SwColumnPage::ResetColWidth()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Jetzt als TabPage
+    Beschreibung:   Jetzt als TabPage
  --------------------------------------------------------------------*/
 
 
@@ -605,7 +605,7 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
 
     delete pColMgr;
     pColMgr = new SwColMgr(rSet);
-    nCols 	= pColMgr->GetCount() ;
+    nCols   = pColMgr->GetCount() ;
     aCLNrEdt.SetMax(Max((USHORT)aCLNrEdt.GetMax(), (USHORT)nCols));
     aCLNrEdt.SetLast(Max(nCols,(USHORT)aCLNrEdt.GetMax()));
 
@@ -644,7 +644,7 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	TabPage erzeugen
+    Beschreibung:   TabPage erzeugen
  --------------------------------------------------------------------*/
 
 
@@ -655,7 +655,7 @@ SfxTabPage* SwColumnPage::Create(Window *pParent, const SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Attribute in den Set stopfen bei OK
+    Beschreibung:   Attribute in den Set stopfen bei OK
  --------------------------------------------------------------------*/
 
 
@@ -690,7 +690,7 @@ BOOL SwColumnPage::FillItemSet(SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	ColumnManager updaten
+    Beschreibung:   ColumnManager updaten
  --------------------------------------------------------------------*/
 
 
@@ -783,7 +783,7 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Initialisierung
+ Beschreibung:  Initialisierung
 ------------------------------------------------------------------------*/
 
 
@@ -816,7 +816,7 @@ void SwColumnPage::Init()
                 nColWidth[i] = nColumnWidthSum;
         }
         SwColLineAdj eAdj = pColMgr->GetAdjust();
-        if( COLADJ_NONE == eAdj )		// der Dialog kennt kein NONE!
+        if( COLADJ_NONE == eAdj )       // der Dialog kennt kein NONE!
         {
             eAdj = COLADJ_TOP;
             //ohne Adjust auch kein Linientyp
@@ -847,7 +847,7 @@ void SwColumnPage::Init()
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Die Anzahl der Spalten hat sich veraendert -- hier werden
+ Beschreibung:  Die Anzahl der Spalten hat sich veraendert -- hier werden
                 die Controls fuer die Bearbeitung der Spalten entsprechend
                 der Spaltenzahl en- oder disabled.
                 Falls es mehr als nVisCols (= 3) Spalten gibt, werden
@@ -862,8 +862,8 @@ void SwColumnPage::Init()
 void SwColumnPage::UpdateCols()
 {
     BOOL bEnableBtns= FALSE;
-    BOOL bEnable12	= FALSE;
-    BOOL bEnable3	= FALSE;
+    BOOL bEnable12  = FALSE;
+    BOOL bEnable3   = FALSE;
     const BOOL bEdit = !aAutoWidthBox.IsChecked();
     if ( nCols > nVisCols )
     {
@@ -922,7 +922,7 @@ void SwColumnPage::SetLabels( USHORT nVis )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Handler, der bei einer Veraenderung der Spaltenzahl
+ Beschreibung:  Handler, der bei einer Veraenderung der Spaltenzahl
                 gerufen wird.
                 Eine Aenderung der Spaltenzahl ueberschreibt eventuelle
                 Breiteneinstellungen des Benutzers; alle Spalten sind
@@ -956,7 +956,7 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Modify- Handler fuer eine Aenderung der Spaltenbreite
+ Beschreibung:  Modify- Handler fuer eine Aenderung der Spaltenbreite
                 oder des Spaltenabstandes.
                 Diese Aenderungen wirken sich erst zeitversetzt aus.
                 Durch eine Aenderung der Spaltenbreite wird die automatische
@@ -1051,7 +1051,7 @@ IMPL_LINK( SwColumnPage, EdModify, PercentField *, pField )
     return 0;
 }
 /*------------------------------------------------------------------------
- Beschreibung:	Handler hinter der Checkbox fuer automatische Breite.
+ Beschreibung:  Handler hinter der Checkbox fuer automatische Breite.
                 Ist die Box gecheckt, koennen keine expliziten Werte
                 fuer die Spaltenbreite eingegeben werden.
 ------------------------------------------------------------------------*/
@@ -1076,7 +1076,7 @@ IMPL_LINK( SwColumnPage, AutoWidthHdl, CheckBox *, pBox )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Raufscrollen der Inhalte der Edits.
+ Beschreibung:  Raufscrollen der Inhalte der Edits.
 ------------------------------------------------------------------------*/
 
 IMPL_LINK( SwColumnPage, Up, Button *, EMPTYARG )
@@ -1090,7 +1090,7 @@ IMPL_LINK( SwColumnPage, Up, Button *, EMPTYARG )
     return 0;
 }
 /*------------------------------------------------------------------------
- Beschreibung:	Runterscrollen der Inhalte der Edits.
+ Beschreibung:  Runterscrollen der Inhalte der Edits.
 ------------------------------------------------------------------------*/
 
 IMPL_LINK( SwColumnPage, Down, Button *, EMPTYARG )
@@ -1104,8 +1104,8 @@ IMPL_LINK( SwColumnPage, Down, Button *, EMPTYARG )
     return 0;
 }
 /*------------------------------------------------------------------------
- Beschreibung:	Relikt aus alten Zeiten - jetzt direkt ohne time
- * 				Timer- Handler; angetriggert durch eine Aenderung der
+ Beschreibung:  Relikt aus alten Zeiten - jetzt direkt ohne time
+ *              Timer- Handler; angetriggert durch eine Aenderung der
                 Spaltenbreite oder des Spaltenabstandes.
 ------------------------------------------------------------------------*/
 
@@ -1155,7 +1155,7 @@ IMPL_LINK( SwColumnPage, Timeout, Timer *, EMPTYARG )
     return 0;
 }
 /*------------------------------------------------------------------------
- Beschreibung:	Aktualisierung der Anzeige
+ Beschreibung:  Aktualisierung der Anzeige
 ------------------------------------------------------------------------*/
 
 
@@ -1191,7 +1191,7 @@ void SwColumnPage::Update()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Update Bsp
+    Beschreibung:   Update Bsp
  --------------------------------------------------------------------*/
 
 
@@ -1382,7 +1382,7 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     Rectangle aRect = rUDEvt.GetRect();
-    USHORT	nItemId = rUDEvt.GetItemId();
+    USHORT  nItemId = rUDEvt.GetItemId();
     long nRectWidth = aRect.GetWidth();
     long nRectHeight = aRect.GetHeight();
 
@@ -1410,11 +1410,11 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             nEnds[1] = nRectWidth * 9 / 10;
         break;
         case 3: nCols = 3;
-            nEnds[0] 	= nRectWidth * 30 / 100;
-            nStarts[1] 	= nEnds[0] + nStep;
-            nEnds[1] 	= nRectWidth * 63 / 100;
-            nStarts[2] 	= nEnds[1] + nStep;
-            nEnds[2] 	= nRectWidth * 9 / 10;
+            nEnds[0]    = nRectWidth * 30 / 100;
+            nStarts[1]  = nEnds[0] + nStep;
+            nEnds[1]    = nRectWidth * 63 / 100;
+            nStarts[2]  = nEnds[1] + nStep;
+            nEnds[2]    = nRectWidth * 9 / 10;
         break;
         case 4: nCols = 2;
             nEnds[0] = nRectWidth * 63 / 100;

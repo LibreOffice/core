@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,10 +34,10 @@ class ReadOnlyImage : public FixedImage
 public:
     ReadOnlyImage(Window* pParent, const ResId rResId);
     ~ReadOnlyImage();
-    
+
     virtual void        RequestHelp( const HelpEvent& rHEvt );
     static const String& GetHelpTip();
 
-};            
-#endif  // 
+};
+#endif  //
 

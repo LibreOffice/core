@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,9 +126,9 @@ __gc class TypeEmitter : public ::System::IDisposable
 {
     ::System::Reflection::Emit::ModuleBuilder * m_module_builder;
     ::System::Reflection::Assembly * m_extra_assemblies __gc [];
-    
+
     ::System::Reflection::MethodInfo * m_method_info_Type_GetTypeFromHandle;
-    
+
     ::System::Type * m_type_Exception;
     ::System::Type * get_type_Exception();
     ::System::Type * m_type_RuntimeException;
@@ -159,7 +159,7 @@ __gc class TypeEmitter : public ::System::IDisposable
         const css::uno::Sequence<
         css::uno::Reference<css::reflection::XCompoundTypeDescription> > & seqExceptionsTd);
 
-    
+
     __gc class iface_entry
     {
     public:
@@ -168,7 +168,7 @@ __gc class TypeEmitter : public ::System::IDisposable
     };
     ::System::Collections::Hashtable * m_incomplete_ifaces;
     ::System::Type * complete_iface_type( iface_entry * entry );
-    
+
     __gc class struct_entry
     {
     public:
@@ -184,10 +184,10 @@ __gc class TypeEmitter : public ::System::IDisposable
     ::System::Collections::Hashtable * m_incomplete_structs;
     ::System::Type * complete_struct_type( struct_entry * entry );
 
-    /*  returns the type for the name. If it is a struct then it may 
+    /*  returns the type for the name. If it is a struct then it may
         complete the struct if not already done. This also refers to its
-        base types.            
-        
+        base types.
+
         @param sName
             the full name of the type.
         @return the type object for sName. Not necessarily a struct.
@@ -202,7 +202,7 @@ __gc class TypeEmitter : public ::System::IDisposable
     };
     ::System::Collections::Hashtable * m_incomplete_services;
     ::System::Type * complete_service_type(service_entry * entry);
-    
+
     __gc class singleton_entry
     {
     public:
@@ -213,10 +213,10 @@ __gc class TypeEmitter : public ::System::IDisposable
 
     ::System::Collections::Hashtable * m_incomplete_singletons;
     ::System::Type * complete_singleton_type(singleton_entry * entry);
-    
-    
+
+
     ::System::Collections::Hashtable * m_generated_structs;
-    
+
     ::System::Type * get_type(
         ::System::String * cli_name, bool throw_exc );
     ::System::Type * get_type(
@@ -228,7 +228,7 @@ __gc class TypeEmitter : public ::System::IDisposable
     ::System::Type * get_type(
         css::uno::Reference<
         css::reflection::XEnumTypeDescription > const & xType );
-    /* returns the type for a struct or exception. In case of a polymorphic struct it may 
+    /* returns the type for a struct or exception. In case of a polymorphic struct it may
         return a ::uno::PolymorphicType (cli_basetypes.dll) only if the struct is already
         complete.
     */
@@ -256,10 +256,10 @@ public:
         ::System::Reflection::Assembly * assemblies __gc [] );
     // must be called to finish up uncompleted types
     void Dispose();
-    
+
     ::System::Reflection::Assembly * type_resolve(
         ::System::Object * sender, ::System::ResolveEventArgs * args );
-    
+
     ::System::Type * get_type(
         css::uno::Reference<
         css::reflection::XTypeDescription > const & xType );

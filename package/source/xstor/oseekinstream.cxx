@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ uno::Any SAL_CALL OInputSeekStream::queryInterface( const uno::Type& rType )
         throw( uno::RuntimeException )
 {
     // Attention:
-    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     uno::Any aReturn( ::cppu::queryInterface( rType,
                                            static_cast< io::XSeekable* >( this ) ) );
@@ -139,7 +139,7 @@ void SAL_CALL OInputSeekStream::seek( sal_Int64 location )
 }
 
 sal_Int64 SAL_CALL OInputSeekStream::getPosition()
-        throw ( io::IOException, 
+        throw ( io::IOException,
                 uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );

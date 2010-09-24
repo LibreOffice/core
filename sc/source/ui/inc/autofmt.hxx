@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,8 +69,8 @@ enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 //CHINA001 class ScAutoFormatDlg : public ModalDialog
 //CHINA001 {
 //CHINA001 public:
-//CHINA001 ScAutoFormatDlg( Window*					pParent,
-//CHINA001 ScAutoFormat*				pAutoFormat,
+//CHINA001 ScAutoFormatDlg( Window*                 pParent,
+//CHINA001 ScAutoFormat*                pAutoFormat,
 //CHINA001 const ScAutoFormatData*    pSelFormatData,
 //CHINA001 ScDocument*                pDoc );
 //CHINA001 ~ScAutoFormatDlg();
@@ -80,38 +80,38 @@ enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 //CHINA001
 //CHINA001 private:
 //CHINA001 FixedLine       aFlFormat;
-//CHINA001 ListBox			aLbFormat;
-//CHINA001 ScAutoFmtPreview*	pWndPreview;
-//CHINA001 OKButton		aBtnOk;
-//CHINA001 CancelButton	aBtnCancel;
-//CHINA001 HelpButton		aBtnHelp;
-//CHINA001 PushButton		aBtnAdd;
-//CHINA001 PushButton		aBtnRemove;
-//CHINA001 MoreButton		aBtnMore;
+//CHINA001 ListBox          aLbFormat;
+//CHINA001 ScAutoFmtPreview*    pWndPreview;
+//CHINA001 OKButton     aBtnOk;
+//CHINA001 CancelButton aBtnCancel;
+//CHINA001 HelpButton       aBtnHelp;
+//CHINA001 PushButton       aBtnAdd;
+//CHINA001 PushButton       aBtnRemove;
+//CHINA001 MoreButton       aBtnMore;
 //CHINA001 FixedLine       aFlFormatting;
-//CHINA001 CheckBox		aBtnNumFormat;
-//CHINA001 CheckBox		aBtnBorder;
-//CHINA001 CheckBox		aBtnFont;
-//CHINA001 CheckBox		aBtnPattern;
-//CHINA001 CheckBox		aBtnAlignment;
-//CHINA001 CheckBox		aBtnAdjust;
-//CHINA001 PushButton		aBtnRename;
-//CHINA001 String			aStrTitle;
-//CHINA001 String			aStrLabel;
-//CHINA001 String			aStrClose;
-//CHINA001 String			aStrDelTitle;
-//CHINA001 String			aStrDelMsg;
-//CHINA001 String			aStrRename;
+//CHINA001 CheckBox     aBtnNumFormat;
+//CHINA001 CheckBox     aBtnBorder;
+//CHINA001 CheckBox     aBtnFont;
+//CHINA001 CheckBox     aBtnPattern;
+//CHINA001 CheckBox     aBtnAlignment;
+//CHINA001 CheckBox     aBtnAdjust;
+//CHINA001 PushButton       aBtnRename;
+//CHINA001 String           aStrTitle;
+//CHINA001 String           aStrLabel;
+//CHINA001 String           aStrClose;
+//CHINA001 String           aStrDelTitle;
+//CHINA001 String           aStrDelMsg;
+//CHINA001 String           aStrRename;
 //CHINA001
 //CHINA001 //------------------------
-//CHINA001 ScAutoFormat*			pFormat;
-//CHINA001 const ScAutoFormatData*	pSelFmtData;
-//CHINA001 USHORT					nIndex;
-//CHINA001 BOOL					bCoreDataChanged;
-//CHINA001 BOOL					bFmtInserted;
+//CHINA001 ScAutoFormat*            pFormat;
+//CHINA001 const ScAutoFormatData*  pSelFmtData;
+//CHINA001 USHORT                   nIndex;
+//CHINA001 BOOL                 bCoreDataChanged;
+//CHINA001 BOOL                 bFmtInserted;
 //CHINA001
-//CHINA001 void Init			();
-//CHINA001 void UpdateChecks	();
+//CHINA001 void Init            ();
+//CHINA001 void UpdateChecks    ();
 //CHINA001 //------------------------
 //CHINA001 DECL_LINK( CheckHdl, Button * );
 //CHINA001 DECL_LINK( AddHdl, void * );
@@ -158,11 +158,11 @@ private:
     const String            aStrSum;
     SvNumberFormatter*      pNumFmt;
     //-------------------------------------------
-    SC_DLLPRIVATE void	Init			();
-    SC_DLLPRIVATE void	DoPaint			( const Rectangle& rRect );
-    SC_DLLPRIVATE void	CalcCellArray	( BOOL bFitWidth );
-    SC_DLLPRIVATE void	CalcLineMap		();
-    SC_DLLPRIVATE void	PaintCells		();
+    SC_DLLPRIVATE void  Init            ();
+    SC_DLLPRIVATE void  DoPaint         ( const Rectangle& rRect );
+    SC_DLLPRIVATE void  CalcCellArray   ( BOOL bFitWidth );
+    SC_DLLPRIVATE void  CalcLineMap     ();
+    SC_DLLPRIVATE void  PaintCells      ();
 
 /*  Usage of type size_t instead of SCCOL/SCROW is correct here - used in
     conjunction with class svx::frame::Array (svx/framelinkarray.hxx), which
@@ -181,28 +181,28 @@ private:
                               Font& rCJKFont,
                               Font& rCTLFont );
 
-    SC_DLLPRIVATE String	MakeNumberString( String cellString, BOOL bAddDec );
-    SC_DLLPRIVATE void	DrawFrameLine	( const SvxBorderLine&	rLineD,
-                              Point					from,
-                              Point					to,
-                              BOOL					bHorizontal,
-                              const SvxBorderLine&	rLineLT,
-                              const SvxBorderLine&	rLineL,
-                              const SvxBorderLine&	rLineLB,
-                              const SvxBorderLine&	rLineRT,
-                              const SvxBorderLine&	rLineR,
-                              const SvxBorderLine&	rLineRB );
-    SC_DLLPRIVATE void CheckPriority	( USHORT			nCurLine,
-                              AutoFmtLine		eLine,
-                              SvxBorderLine&	rLine );
-    SC_DLLPRIVATE void	GetLines		( USHORT nIndex, AutoFmtLine eLine,
-                              SvxBorderLine&	rLineD,
-                              SvxBorderLine&	rLineLT,
-                              SvxBorderLine&	rLineL,
-                              SvxBorderLine&	rLineLB,
-                              SvxBorderLine&	rLineRT,
-                              SvxBorderLine&	rLineR,
-                              SvxBorderLine&	rLineRB );
+    SC_DLLPRIVATE String    MakeNumberString( String cellString, BOOL bAddDec );
+    SC_DLLPRIVATE void  DrawFrameLine   ( const SvxBorderLine&  rLineD,
+                              Point                 from,
+                              Point                 to,
+                              BOOL                  bHorizontal,
+                              const SvxBorderLine&  rLineLT,
+                              const SvxBorderLine&  rLineL,
+                              const SvxBorderLine&  rLineLB,
+                              const SvxBorderLine&  rLineRT,
+                              const SvxBorderLine&  rLineR,
+                              const SvxBorderLine&  rLineRB );
+    SC_DLLPRIVATE void CheckPriority    ( USHORT            nCurLine,
+                              AutoFmtLine       eLine,
+                              SvxBorderLine&    rLine );
+    SC_DLLPRIVATE void  GetLines        ( USHORT nIndex, AutoFmtLine eLine,
+                              SvxBorderLine&    rLineD,
+                              SvxBorderLine&    rLineLT,
+                              SvxBorderLine&    rLineL,
+                              SvxBorderLine&    rLineLB,
+                              SvxBorderLine&    rLineRT,
+                              SvxBorderLine&    rLineR,
+                              SvxBorderLine&    rLineRB );
 };
 
 #endif // SC_AUTOFMT_HXX

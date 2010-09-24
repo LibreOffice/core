@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,9 +57,9 @@
 #include <breakit.hxx>
 #include <crsskip.hxx>
 #include <vcl/msgbox.hxx>
-#include <mdiexp.hxx>			// ...Percent()
+#include <mdiexp.hxx>           // ...Percent()
 #ifndef _STATSTR_HRC
-#include <statstr.hrc>			// ResId fuer Statusleiste
+#include <statstr.hrc>          // ResId fuer Statusleiste
 #endif
 #include <redline.hxx>      // SwRedline
 
@@ -110,7 +110,7 @@ struct _PercentHdl
         ::StartProgress( STR_STATSTR_SEARCH, nStt, nEnd, pDSh );
     }
 
-    ~_PercentHdl()  					{ ::EndProgress( pDSh ); }
+    ~_PercentHdl()                      { ::EndProgress( pDSh ); }
 
     void NextPos( ULONG nPos ) const
         { ::SetProgressState( bBack ? nActPos - nPos : nPos, pDSh ); }
@@ -134,7 +134,7 @@ SwCursor::SwCursor( const SwPosition &rPos, SwPaM* pRing, bool bColumnSel )
 
 // @@@ semantic: no copy ctor.
 SwCursor::SwCursor( SwCursor& rCpy )
-    : SwPaM( rCpy ), pSavePos( 0 ), mnRowSpanOffset( rCpy.mnRowSpanOffset ), 
+    : SwPaM( rCpy ), pSavePos( 0 ), mnRowSpanOffset( rCpy.mnRowSpanOffset ),
     nCursorBidiLevel( rCpy.nCursorBidiLevel ), mbColumnSelection( rCpy.mbColumnSelection )
 {
 }
@@ -359,7 +359,7 @@ BOOL SwCursor::IsSelOvr( int eFlags )
             SwNodeIndex& rPtIdx = GetPoint()->nNode;
             int bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
             while( 0 != ( pFrm = ( bGoNxt ? pFrm->GetNextCntntFrm()
-                                          :	pFrm->GetPrevCntntFrm() )) &&
+                                          : pFrm->GetPrevCntntFrm() )) &&
                     0 == pFrm->Frm().Height() )
                 ;
 
@@ -369,7 +369,7 @@ BOOL SwCursor::IsSelOvr( int eFlags )
             {
                 bGoNxt = !bGoNxt;
                 pFrm = ((SwCntntNode*)pNd)->GetFrm();
-                while ( pFrm && 0 == pFrm->Frm().Height() ) 
+                while ( pFrm && 0 == pFrm->Frm().Height() )
                 {
                     pFrm = bGoNxt ? pFrm->GetNextCntntFrm()
                         :   pFrm->GetPrevCntntFrm();
@@ -398,7 +398,7 @@ BOOL SwCursor::IsSelOvr( int eFlags )
         {
             DeleteMark();
             RestoreSavePos();
-            return TRUE;		// ohne Frames geht gar nichts!
+            return TRUE;        // ohne Frames geht gar nichts!
         }
     }
 
@@ -414,12 +414,12 @@ BOOL SwCursor::IsSelOvr( int eFlags )
         return FALSE;
 
     //JP 19.08.98: teste mal auf ungueltige Selektion - sprich ueber
-    // 				GrundSections:
+    //              GrundSections:
     if( !::CheckNodesRange( GetMark()->nNode, GetPoint()->nNode, TRUE ))
     {
         DeleteMark();
         RestoreSavePos();
-        return TRUE;		// ohne Frames geht gar nichts!
+        return TRUE;        // ohne Frames geht gar nichts!
     }
 
     const SwTableNode* pPtNd = pNd->FindTableNode();
@@ -429,7 +429,7 @@ BOOL SwCursor::IsSelOvr( int eFlags )
     {
         DeleteMark();
         RestoreSavePos();
-        return TRUE;		// ohne Frames geht gar nichts!
+        return TRUE;        // ohne Frames geht gar nichts!
     }
 
     const SwTableNode* pMrkNd = pNd->FindTableNode();
@@ -440,14 +440,14 @@ BOOL SwCursor::IsSelOvr( int eFlags )
 
     // in unterschiedlichen Tabellen oder nur Mark in der Tabelle
     if( ( pPtNd && pMrkNd ) || pMrkNd )
-    {						// dann lasse das nicht zu, alte Pos zurueck
+    {                       // dann lasse das nicht zu, alte Pos zurueck
         RestoreSavePos();
         // Crsr bleibt an der alten Position
         return TRUE;
     }
 
     // ACHTUNG: dieses kann nicht im TableMode geschehen !!
-    if( pPtNd )		// nur Point in Tabelle, dann gehe hinter/vor diese
+    if( pPtNd )     // nur Point in Tabelle, dann gehe hinter/vor diese
     {
         if( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags )
         {
@@ -460,7 +460,7 @@ BOOL SwCursor::IsSelOvr( int eFlags )
                 ULONG nSEIdx = pPtNd->EndOfSectionIndex();
                 ULONG nSttEndTbl = nSEIdx + 1; // dflt. Sel. nach unten
 
-                if( bSelTop )								// Sel. nach oben
+                if( bSelTop )                               // Sel. nach oben
                     nSttEndTbl = rNds[ nSEIdx ]->StartOfSectionIndex() - 1;
 
                 GetPoint()->nNode = nSttEndTbl;
@@ -507,9 +507,9 @@ BOOL SwCursor::IsSelOvr( int eFlags )
 
         // dann verbleibe auf der alten Position
         RestoreSavePos();
-        return TRUE;		// Crsr bleibt an der alten Position
+        return TRUE;        // Crsr bleibt an der alten Position
     }
-    return FALSE;		// was bleibt noch ??
+    return FALSE;       // was bleibt noch ??
 }
 
 #if defined( UNX )
@@ -561,7 +561,7 @@ BOOL SwCursor::IsInProtectTable( BOOL bMove, BOOL bChgCrsr )
         if( bChgCrsr )
             // restore the last save position
             RestoreSavePos();
-        return TRUE;		// Crsr bleibt an der alten Position
+        return TRUE;        // Crsr bleibt an der alten Position
     }
 
     // wir stehen in einer geschuetzten TabellenZelle
@@ -592,7 +592,7 @@ GoNextCell:
         } while( bProt );
 
 SetNextCrsr:
-        if( !bProt )		// eine freie Zelle gefunden
+        if( !bProt )        // eine freie Zelle gefunden
         {
             GetPoint()->nNode = IDX;
 #if defined( UNX )
@@ -624,7 +624,7 @@ SetNextCrsr:
         else if( pNd->IsTableNode() && IDX++ )
             goto GoNextCell;
 
-        bProt = FALSE;		// Index steht jetzt auf einem ContentNode
+        bProt = FALSE;      // Index steht jetzt auf einem ContentNode
         goto SetNextCrsr;
     }
 
@@ -653,7 +653,7 @@ GoPrevCell:
         } while( bProt );
 
 SetPrevCrsr:
-        if( !bProt )		// eine freie Zelle gefunden
+        if( !bProt )        // eine freie Zelle gefunden
         {
             GetPoint()->nNode = IDX;
 #if defined( UNX )
@@ -684,7 +684,7 @@ SetPrevCrsr:
         else if( pNd->StartOfSectionNode()->IsTableNode() && IDX-- )
             goto GoPrevCell;
 
-        bProt = FALSE;		// Index steht jetzt auf einem ContentNode
+        bProt = FALSE;      // Index steht jetzt auf einem ContentNode
         goto SetPrevCrsr;
     }
 }
@@ -718,7 +718,7 @@ BOOL SwCursor::IsAtValidPos( BOOL bPoint ) const
     return TRUE;
 }
 
-void SwCursor::SaveTblBoxCntnt( const SwPosition* )	{}
+void SwCursor::SaveTblBoxCntnt( const SwPosition* ) {}
 
 // setze den SRange fuer das Suchen im Dokument
 SwMoveFnCollection* SwCursor::MakeFindRange( SwDocPositions nStart,
@@ -788,7 +788,7 @@ ULONG lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
             if( !( FIND_NO_RING & nFndRet ))
             {
                 // Bug 24084: Ring richtig herum aufbauen -> gleiche Mimik
-                //			  wie beim CreateCrsr !!!!
+                //            wie beim CreateCrsr !!!!
 
                 SwCursor* pNew = pCurCrsr->Create( pFndRing );
                 if( !pFndRing )
@@ -834,8 +834,8 @@ ULONG lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
                 // bewege pSttPos hinter den gefundenen Bereich
                 *pSttPos = *pCurCrsr->End();
 
-            if( *pSttPos == *pEndPos )		// im Bereich, aber am Ende
-                break;						// fertig
+            if( *pSttPos == *pEndPos )      // im Bereich, aber am Ende
+                break;                      // fertig
 
             if( !nCrsrCnt && pPHdl )
             {
@@ -854,7 +854,7 @@ ULONG lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
 
     } while( pTmpCrsr != pSaveCrsr );
 
-    if( nFound && !pFndRing )		// falls kein Ring aufgebaut werden soll
+    if( nFound && !pFndRing )       // falls kein Ring aufgebaut werden soll
         pFndRing = pCurCrsr->Create();
 
     delete pPHdl;
@@ -882,7 +882,7 @@ int lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
     }
     else if( rSttNd.GetIndex() > rPam.GetPoint()->nNode.GetIndex() ||
              rPam.GetPoint()->nNode.GetIndex() >= rEndNd.GetIndex() )
-        return FALSE;		// steht nicht in dieser Section
+        return FALSE;       // steht nicht in dieser Section
 
     rPam.SetMark();
     rPam.GetPoint()->nNode = rEndNd;
@@ -914,7 +914,7 @@ int lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
     }
     else if( rEndNd.GetIndex() > rPam.GetPoint()->nNode.GetIndex() ||
              rPam.GetPoint()->nNode.GetIndex() >= rSttNd.GetIndex() )
-        return FALSE;		// steht nicht in dieser Section
+        return FALSE;       // steht nicht in dieser Section
 
     rPam.SetMark();
     rPam.GetPoint()->nNode = rEndNd;
@@ -973,7 +973,7 @@ ULONG SwCursor::FindAll( SwFindParas& rParas,
     {
         // Cursor als Kopie vom akt. und in den Ring aufnehmen
         // Verkettung zeigt immer auf den zuerst erzeugten, also vorwaerts
-        SwCursor* pSav = Create( this ); 	// sicher den aktuellen Crsr
+        SwCursor* pSav = Create( this );    // sicher den aktuellen Crsr
 
         // wenn schon ausserhalb vom Bodytext, suche von der Position,
         // ansonsten beginne mit der 1. GrundSection
@@ -1031,7 +1031,7 @@ ULONG SwCursor::FindAll( SwFindParas& rParas,
     }
     else if( FND_IN_SELALL & eFndRngs )
     {
-        SwCursor* pSav = Create( this ); 	// sicher den aktuellen Crsr
+        SwCursor* pSav = Create( this );    // sicher den aktuellen Crsr
 
         const SwNode* pSttNd = ( FND_IN_BODYONLY & eFndRngs )
                             ? rNds.GetEndOfContent().StartOfSectionNode()
@@ -1121,7 +1121,7 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
         bIsStart = FALSE;
         break;
 
-//	case DOCPOS_CURR:
+//  case DOCPOS_CURR:
     default:
         rPos = *GetPoint();
     }
@@ -1476,7 +1476,7 @@ BOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
                                     nPtPos, pBreakIt->GetLocale(
                                                 pTxtNd->GetLang( nPtPos ) ));
             if (nPtPos == 0)
-                return FALSE;	// the previous sentence is not in this paragraph
+                return FALSE;   // the previous sentence is not in this paragraph
             if (nPtPos > 0)
                 nPtPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfSentence(
                                     sNodeText,
@@ -1516,10 +1516,10 @@ BOOL SwCursor::ExpandToSentenceBorders()
         xub_StrLen nEndPos   = End()->nContent.GetIndex();
 
         nStartPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfSentence(
-                                sStartText, nStartPos, 
+                                sStartText, nStartPos,
                                 pBreakIt->GetLocale( pStartNd->GetLang( nStartPos ) ) );
         nEndPos   = (xub_StrLen)pBreakIt->GetBreakIter()->endOfSentence(
-                                sEndText, nEndPos, 
+                                sEndText, nEndPos,
                                 pBreakIt->GetLocale( pEndNd->GetLang( nEndPos ) ) );
 
         // it is allowed to place the PaM just behind the last
@@ -2079,7 +2079,7 @@ BOOL SwCursor::MoveSection( SwWhichSection fnWhichSect,
     BOOL MoveRegion( SwWhichRegion, SwPosRegion );
 */
 
-void SwCursor::RestoreSavePos()		// Point auf die SavePos setzen
+void SwCursor::RestoreSavePos()     // Point auf die SavePos setzen
 {
     if( pSavePos )
     {
@@ -2133,7 +2133,7 @@ BOOL lcl_SeekEntry( const SwSelBoxes& rTmp, const SwStartNode* pSrch, USHORT& rF
 
 SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 {
-    if( bChg )		// ???
+    if( bChg )      // ???
     {
         if( bParked )
         {
@@ -2201,7 +2201,7 @@ JP 20.07.98: der alte Code geht mit dem UNO-TableCrsr nicht
                     if( pAktCrsr->GetNext() == pAktCrsr )
                     {
                         pAktCrsr->DeleteMark();
-                        break;		// es gibt nichts mehr zu loeschen!
+                        break;      // es gibt nichts mehr zu loeschen!
                     }
                     pAktCrsr = (SwCursor*)pDel->GetPrev();
                 }

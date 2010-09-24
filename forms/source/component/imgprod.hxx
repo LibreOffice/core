@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,45 +54,45 @@ namespace com { namespace sun { namespace star { namespace io {
 }}}}
 
 
-class ImageProducer :	public ::com::sun::star::awt::XImageProducer, 
-                        public ::com::sun::star::lang::XInitialization, 
+class ImageProducer :   public ::com::sun::star::awt::XImageProducer,
+                        public ::com::sun::star::lang::XInitialization,
                         public ::cppu::OWeakObject
 {
 private:
 
-    ::rtl::OUString	maURL;
-    List			maConsList;
-    Graphic*		mpGraphic;
-    SvStream*		mpStm;
-    sal_uInt32		mnTransIndex;
-    sal_Bool		mbConsInit;
+    ::rtl::OUString maURL;
+    List            maConsList;
+    Graphic*        mpGraphic;
+    SvStream*       mpStm;
+    sal_uInt32      mnTransIndex;
+    sal_Bool        mbConsInit;
     Link            maDoneHdl;
 
-    sal_Bool		ImplImportGraphic( Graphic& rGraphic );
-    void			ImplUpdateData( const Graphic& rGraphic );
-    void			ImplInitConsumer( const Graphic& rGraphic );
-    void			ImplUpdateConsumer( const Graphic& rGraphic );
+    sal_Bool        ImplImportGraphic( Graphic& rGraphic );
+    void            ImplUpdateData( const Graphic& rGraphic );
+    void            ImplInitConsumer( const Graphic& rGraphic );
+    void            ImplUpdateConsumer( const Graphic& rGraphic );
 
 public:
 
                     ImageProducer();
                     ~ImageProducer();
 
-    void			SetImage( const ::rtl::OUString& rPath );
-    void			SetImage( SvStream& rStm );
+    void            SetImage( const ::rtl::OUString& rPath );
+    void            SetImage( SvStream& rStm );
 
-    void			NewDataAvailable();
+    void            NewDataAvailable();
 
     void            SetDoneHdl( const Link& i_rHdl ) { maDoneHdl = i_rHdl; }
     const Link&     GetDoneHdl() const { return maDoneHdl; }
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
-    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
-    
+    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
+    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+
     // MT: ???
-    void			setImage( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rStmRef );
+    void            setImage( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rStmRef );
 
     // ::com::sun::star::awt::XImageProducer
     void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& rxConsumer ) throw(::com::sun::star::uno::RuntimeException);

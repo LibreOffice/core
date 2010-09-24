@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,16 +32,16 @@
 #include "svx/svxdllapi.h"
 
 //-----------------------------------
-// class XFillFloatTransparenceItem	-
+// class XFillFloatTransparenceItem -
 //-----------------------------------
 
 class SVX_DLLPUBLIC XFillFloatTransparenceItem : public XFillGradientItem
 {
 private:
 
-    long					nDummy1;
-    long					nDummy2;
-    BOOL					bEnabled;
+    long                    nDummy1;
+    long                    nDummy2;
+    BOOL                    bEnabled;
 
 public:
                             TYPEINFO();
@@ -56,14 +56,14 @@ public:
     virtual int             operator==( const SfxPoolItem& rItem ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual USHORT          GetVersion( USHORT nFileFormatVersion ) const;
-    virtual	sal_Bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	sal_Bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres, SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric, String &rText, const IntlWrapper * pIntlWrapper = 0 ) const;
 
-    BOOL					IsEnabled() const { return bEnabled; }
-    void					SetEnabled( BOOL bEnable ) { bEnabled = bEnable; }
+    BOOL                    IsEnabled() const { return bEnabled; }
+    void                    SetEnabled( BOOL bEnable ) { bEnabled = bEnable; }
 
     static BOOL CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XFillFloatTransparenceItem* checkForUniqueItem( SdrModel* pModel ) const;

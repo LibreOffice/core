@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,7 +139,7 @@ ODefinitionContainer_Impl::iterator ODefinitionContainer_Impl::find( TContentPtr
 DBG_NAME(ODefinitionContainer)
 //--------------------------------------------------------------------------
 ODefinitionContainer::ODefinitionContainer(   const Reference< XMultiServiceFactory >& _xORB
-                                            , const Reference< XInterface >&	_xParentContainer
+                                            , const Reference< XInterface >&    _xParentContainer
                                             , const TContentPtr& _pImpl
                                             , bool _bCheckSlash
                                             )
@@ -154,7 +154,7 @@ ODefinitionContainer::ODefinitionContainer(   const Reference< XMultiServiceFact
 
     const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
     ODefinitionContainer_Impl::const_iterator aEnd = rDefinitions.end();
-    for	(	ODefinitionContainer_Impl::const_iterator aDefinition = rDefinitions.begin();
+    for (   ODefinitionContainer_Impl::const_iterator aDefinition = rDefinitions.begin();
             aDefinition != aEnd;
             ++aDefinition
         )
@@ -181,7 +181,7 @@ void SAL_CALL ODefinitionContainer::disposing()
     Documents::iterator aIter = m_aDocumentMap.begin();
     Documents::iterator aEnd = m_aDocumentMap.end();
 
-    for	(; aIter != aEnd; ++aIter)
+    for (; aIter != aEnd; ++aIter)
     {
         Reference<XContent> xProp = aIter->second;
         if ( xProp.is() )
@@ -432,7 +432,7 @@ Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOu
     Documents::iterator aPos = m_aDocuments[_nIndex];
     Reference<XContent> xProp = aPos->second;
     if (!xProp.is())
-    {	// that's the first access to the object
+    {   // that's the first access to the object
         // -> create it
         xProp = createObject(aPos->first);
         aPos->second = Documents::mapped_type();
@@ -460,7 +460,7 @@ Reference< XContent > ODefinitionContainer::implGetByName(const ::rtl::OUString&
     Reference< XContent > xProp = aMapPos->second;
 
     if (_bReadIfNeccessary && !xProp.is())
-    {	// the object has never been accessed before, so we have to read it now
+    {   // the object has never been accessed before, so we have to read it now
         // (that's the expensive part)
 
         // create the object and insert it into the map
@@ -480,7 +480,7 @@ Sequence< ::rtl::OUString > SAL_CALL ODefinitionContainer::getElementNames(  ) t
     Sequence< ::rtl::OUString > aNames(m_aDocumentMap.size());
     ::rtl::OUString* pNames = aNames.getArray();
     Documents::iterator aEnd = m_aDocumentMap.end();
-    for	(	Documents::iterator aNameIter = m_aDocumentMap.begin();
+    for (   Documents::iterator aNameIter = m_aDocumentMap.begin();
             aNameIter != aEnd;
             ++pNames, ++aNameIter
         )
@@ -507,7 +507,7 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) thr
     // it's one of our documents ....
     Documents::iterator aIter = m_aDocumentMap.begin();
     Documents::iterator aEnd = m_aDocumentMap.end();
-    for	(;aIter != aEnd;++aIter )
+    for (;aIter != aEnd;++aIter )
     {
         if ( xSource == aIter->second.get() )
         {

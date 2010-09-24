@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ namespace sdr
             const drawinglayer::attribute::SdrSceneAttribute& getSdrSceneAttribute() const;
             const drawinglayer::attribute::SdrLightingAttribute& getSdrLightingAttribute() const;
 
-            // scene primitive creators. If pLayerVisibility is given, a visibility test with the LayerID and the 
+            // scene primitive creators. If pLayerVisibility is given, a visibility test with the LayerID and the
             // given SetOfByte is done.
             drawinglayer::primitive2d::Primitive2DSequence createScenePrimitive2DSequence(const SetOfByte* pLayerVisibility) const;
 
@@ -91,14 +91,14 @@ namespace sdr
 
         protected:
             // the 3d transformation stack
-            drawinglayer::geometry::ViewInformation3D			maViewInformation3D;
+            drawinglayer::geometry::ViewInformation3D           maViewInformation3D;
 
             // the object transformation
-            basegfx::B2DHomMatrix								maObjectTransformation;
+            basegfx::B2DHomMatrix                               maObjectTransformation;
 
             // attributes
-            drawinglayer::attribute::SdrSceneAttribute			maSdrSceneAttribute;
-            drawinglayer::attribute::SdrLightingAttribute		maSdrLightingAttribute;
+            drawinglayer::attribute::SdrSceneAttribute          maSdrSceneAttribute;
+            drawinglayer::attribute::SdrLightingAttribute       maSdrLightingAttribute;
 
             // create methods for ViewInformation3D and ObjectTransformation
             void createViewInformation3D(const ::basegfx::B3DRange& rContentRange);

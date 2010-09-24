@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -307,18 +307,18 @@ public:
 
     uno::Reference< io::XStream > m_xLockingStream;
 
-    sal_uInt32					nLastStorageError;
-    ::rtl::OUString				aCharset;
+    sal_uInt32                  nLastStorageError;
+    ::rtl::OUString             aCharset;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xInteraction;
 
-    sal_Bool 		m_bRemoveBackup;
+    sal_Bool        m_bRemoveBackup;
     ::rtl::OUString m_aBackupURL;
 
     // the following member is changed and makes sence only during saving
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document
     //             in this case the member will hold this information
-    sal_uInt16		m_nSignatureState;
+    sal_uInt16      m_nSignatureState;
 
     util::DateTime m_aDateTime;
 
@@ -381,16 +381,16 @@ SfxMedium_Impl::~SfxMedium_Impl()
 
 //================================================================
 
-#define IMPL_CTOR(rootVal,URLVal)			\
+#define IMPL_CTOR(rootVal,URLVal)           \
      eError( SVSTREAM_OK ),                 \
                                             \
      bDirect( sal_False ),                  \
-     bRoot( rootVal ),						\
+     bRoot( rootVal ),                      \
      bSetFilter( sal_False ),               \
      bTriedStorage( sal_False ),            \
                                             \
      nStorOpenMode( SFX_STREAM_READWRITE ), \
-     pURLObj( URLVal ),						\
+     pURLObj( URLVal ),                     \
      pInStream(0),                          \
      pOutStream( 0 )
 
@@ -2187,7 +2187,7 @@ void SfxMedium::GetLockingStream_Impl()
         SFX_ITEMSET_ARG( pSet, pWriteStreamItem, SfxUnoAnyItem, SID_STREAM, sal_False);
         if ( pWriteStreamItem )
             pWriteStreamItem->GetValue() >>= pImp->m_xLockingStream;
-   
+
         if ( !pImp->m_xLockingStream.is() )
         {
             // open the original document
@@ -2477,7 +2477,7 @@ void SfxMedium::Init_Impl()
 
 //------------------------------------------------------------------
 SfxMedium::SfxMedium()
-:   IMPL_CTOR( sal_False, 0 ),	// bRoot, pURLObj
+:   IMPL_CTOR( sal_False, 0 ),  // bRoot, pURLObj
 
     pFilter(0),
     pSet(0),
@@ -2489,7 +2489,7 @@ SfxMedium::SfxMedium()
 
 SfxMedium::SfxMedium( const SfxMedium& rMedium, sal_Bool bTemporary )
 :   SvRefBase(),
-    IMPL_CTOR( sal_True,	// bRoot, pURLObj
+    IMPL_CTOR( sal_True,    // bRoot, pURLObj
         rMedium.pURLObj ? new INetURLObject(*rMedium.pURLObj) : 0 ),
     pImp(new SfxMedium_Impl( this ))
 {
@@ -2934,7 +2934,7 @@ SfxMedium::SfxMedium
     const String &rName, StreamMode nOpenMode,  sal_Bool bDirectP,
     const SfxFilter *pFlt, SfxItemSet *pInSet
 )
-:   IMPL_CTOR( sal_False, 0 ),	// bRoot, pURLObj
+:   IMPL_CTOR( sal_False, 0 ),  // bRoot, pURLObj
     pFilter(pFlt),
     pSet( pInSet ),
     pImp(new SfxMedium_Impl( this ))
@@ -3007,7 +3007,7 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
 //------------------------------------------------------------------
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p, sal_Bool bRootP )
-:   IMPL_CTOR( bRootP, 0 ),	// bRoot, pURLObj
+:   IMPL_CTOR( bRootP, 0 ), // bRoot, pURLObj
     pSet(0),
     pImp( new SfxMedium_Impl( this ))
 {

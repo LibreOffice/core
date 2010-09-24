@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,12 +33,12 @@
 namespace framework
 {
 
-static pfunc_getCommandURLFromKeyCode	_pGetCommandURLFromKeyCode = NULL;
-static pfunc_getKeyCodeFromCommandURL	_pGetKeyCodeFromCommandURL = NULL;
+static pfunc_getCommandURLFromKeyCode   _pGetCommandURLFromKeyCode = NULL;
+static pfunc_getKeyCodeFromCommandURL   _pGetKeyCodeFromCommandURL = NULL;
 
 pfunc_getCommandURLFromKeyCode SAL_CALL SetCommandURLFromKeyCode( pfunc_getCommandURLFromKeyCode pNewFunc )
 {
-    pfunc_getCommandURLFromKeyCode	pOldFunc = _pGetCommandURLFromKeyCode;
+    pfunc_getCommandURLFromKeyCode  pOldFunc = _pGetCommandURLFromKeyCode;
     _pGetCommandURLFromKeyCode = pNewFunc;
 
     return pOldFunc;
@@ -54,7 +54,7 @@ pfunc_getCommandURLFromKeyCode SAL_CALL SetCommandURLFromKeyCode( pfunc_getComma
 
 pfunc_getKeyCodeFromCommandURL SAL_CALL SetKeyCodeFromCommandURL( pfunc_getKeyCodeFromCommandURL pNewFunc )
 {
-    pfunc_getKeyCodeFromCommandURL	pOldFunc = _pGetKeyCodeFromCommandURL;
+    pfunc_getKeyCodeFromCommandURL  pOldFunc = _pGetKeyCodeFromCommandURL;
     _pGetKeyCodeFromCommandURL = pNewFunc;
 
     return pOldFunc;

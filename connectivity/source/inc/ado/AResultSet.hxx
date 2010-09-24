@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace connectivity
     {
         class OResultSetMetaData;
         /*
-        **	java_sql_ResultSet
+        **  java_sql_ResultSet
         */
         typedef ::cppu::WeakComponentImplHelper12<  ::com::sun::star::sdbc::XResultSet,
                                                     ::com::sun::star::sdbc::XRow,
@@ -69,22 +69,22 @@ namespace connectivity
                                                     ::com::sun::star::sdbcx::XDeleteRows,
                                                     ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
 
-        class OResultSet :	public comphelper::OBaseMutex,
-                            public	OResultSet_BASE,
-                            public	::cppu::OPropertySetHelper,
-                            public	::comphelper::OPropertyArrayUsageHelper<OResultSet>
+        class OResultSet :  public comphelper::OBaseMutex,
+                            public  OResultSet_BASE,
+                            public  ::cppu::OPropertySetHelper,
+                            public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
 
-            ADORecordset*					m_pRecordSet;
-            OStatement_Base*				m_pStmt;
+            ADORecordset*                   m_pRecordSet;
+            OStatement_Base*                m_pStmt;
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    m_xStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
-            ::std::vector<OLEVariant>		m_aBookmarks;
-            OLEVariant						m_aValue;
-            sal_Int32						m_nRowPos;
-            sal_Bool						m_bWasNull;
-            sal_Bool						m_bEOF;
-            sal_Bool						m_bOnFirstAfterOpen;
+            ::std::vector<OLEVariant>       m_aBookmarks;
+            OLEVariant                      m_aValue;
+            sal_Int32                       m_nRowPos;
+            sal_Bool                        m_bWasNull;
+            sal_Bool                        m_bEOF;
+            sal_Bool                        m_bOnFirstAfterOpen;
 
             sal_Int32 getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getResultSetType()        const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

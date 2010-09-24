@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@ module com { module sun { module star { module accessibility {
 
     <p>This list of constants defines the availabe types of relations that
     are usable by <type>AccessibleRelation</type>.</p>
-        
+
     <p>We are using constants instead of a more typesafe enum.  The reason
     for this is that IDL enums may not be extended.  Therefore, in order to
     include future extensions to the set of roles we have to use constants
@@ -44,53 +44,53 @@ module com { module sun { module star { module accessibility {
 published constants AccessibleRelationType
 {
     /** Invalid relation type.
-    
+
         <p>Indicates an invalid relation type.  This is used to indicate
         that a retrieval method could not find a requested relation.</p>
     */
     const short INVALID = 0;
 
     /** Content-flows-from relation.
-    
+
         <p>Indicates a content flow between the related objects.</p>
     */
     const short CONTENT_FLOWS_FROM = 1;
 
     /** Content-flows-to relation.
-    
+
         <p>Indicates a content flow between the related objects.</p>
     */
     const short CONTENT_FLOWS_TO = 2;
 
     /** Controlled-by relation type.
-        
+
         <p>Indicates an object is controlled by one or more target
         objects.</p>
     */
     const short CONTROLLED_BY = 3;
 
     /** Controller-for relation type.
-    
+
         <p>Indicates an object is a controller for one or more target
         objects.</p>
     */
     const short CONTROLLER_FOR = 4;
 
     /** Lable-for relation type.
-        
+
         <p>Indicates an object is a label for one or more target
         objects.</p>
     */
     const short LABEL_FOR = 5;
 
     /** Labeled-by relation type.
-    
+
         <p>Indicates an object is labeled by one or more target objects.</p>
     */
     const short LABELED_BY = 6;
 
     /** Member-of relation type.
-    
+
         <p>Indicates an object is a member of a group of one or more target
         objects.</p>
     */
@@ -107,8 +107,8 @@ published constants AccessibleRelationType
 
     /** Node-Child-of relation type.
 
-        <p>Indicates an object is a cell in a tree or treetable which is 
-        displayed because a cell in the same column is expanded and 
+        <p>Indicates an object is a cell in a tree or treetable which is
+        displayed because a cell in the same column is expanded and
         identifies that cell.</p>
 
         @since OOo 3.0

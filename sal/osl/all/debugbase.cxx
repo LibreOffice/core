@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ bool SAL_CALL osl_detail_ObjectRegistry_checkObjectCount(
         nSize = rData.m_addresses.size();
     else
         nSize = static_cast<std::size_t>(rData.m_nCount);
-    
+
     bool const bRet = (nSize == nExpected);
     if (! bRet) {
         rtl::OStringBuffer buf;

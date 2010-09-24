@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ namespace svxform
     typedef MapModelToShape::value_type ModelShapePair;
 
     //------------------------------------------------------------------------
-    void	collectShapeModelMapping( SdrPage* _pPage, MapModelToShape& _rMapping )
+    void    collectShapeModelMapping( SdrPage* _pPage, MapModelToShape& _rMapping )
     {
         OSL_ENSURE( _pPage, "collectShapeModelMapping: invalid arg!" );
 
@@ -138,7 +138,7 @@ namespace svxform
 
         MapModelToShape::const_iterator aPos = _rModelMap.find( _pEntry->GetElement() );
         if ( _rModelMap.end() != aPos )
-        {	// there is a shape for this model ....
+        {   // there is a shape for this model ....
             bIsMarked = _pView->IsObjMarked( aPos->second );
             if ( !bIsMarked )
             {
@@ -152,7 +152,7 @@ namespace svxform
                     SdrMark* pMark = _pView->GetMarkedObjectList().GetMark( i );
                     SdrObject* pObj = pMark ? pMark->GetMarkedSdrObj() : NULL;
                     if ( pObj && pObj->IsGroupObject() )
-                    {	// the i-th marked shape is a group shape
+                    {   // the i-th marked shape is a group shape
                         SdrObjListIter aIter( *pObj );
                         while ( aIter.IsMore() )
                         {
@@ -851,7 +851,7 @@ namespace svxform
         sal_Bool bSelfSource = _bDnD ? m_aControlExchange.isDragSource() : m_aControlExchange.isClipboardOwner();
 
         if ( bHasHiddenControlsFormat )
-        {	// bHasHiddenControlsFormat means that only hidden controls are part of the data
+        {   // bHasHiddenControlsFormat means that only hidden controls are part of the data
 
             // hidden controls can be copied to a form only
             if ( !_pTargetEntry || ( _pTargetEntry == m_pRootEntry ) || !IsFormEntry( _pTargetEntry ) )
@@ -860,7 +860,7 @@ namespace svxform
             return bSelfSource ? ( DND_ACTION_COPYMOVE & _nAction ) : DND_ACTION_COPY;
         }
 
-        if	( !bSelfSource )
+        if  ( !bSelfSource )
         {
             // DnD or CnP crossing navigator boundaries
             // The main problem here is that the current API does not allow us to sneak into the content which
@@ -1065,7 +1065,7 @@ namespace svxform
 #endif
 
         if ( DND_ACTION_COPY == _nAction )
-        {	// bHasHiddenControlsFormat means that only hidden controls are part of the data
+        {   // bHasHiddenControlsFormat means that only hidden controls are part of the data
             DBG_ASSERT( bHasHiddenControlsFormat, "NavigatorTree::implExecuteDataTransfer: copy allowed for hidden controls only!" );
             DBG_ASSERT( _pTargetEntry && ( _pTargetEntry != m_pRootEntry ) && IsFormEntry( _pTargetEntry ),
                 "NavigatorTree::implExecuteDataTransfer: should not be here!" );
@@ -1330,7 +1330,7 @@ namespace svxform
             else
             {
                 // the clipboard content
-                Reference< XClipboard >	xClipboard( GetClipboard() );
+                Reference< XClipboard > xClipboard( GetClipboard() );
                 Reference< XTransferable > xTransferable;
                 if ( xClipboard.is() )
                     xTransferable = xClipboard->getContents();
@@ -1826,9 +1826,9 @@ namespace svxform
         CollectSelectionData( SDI_NORMALIZED );
 
         // see below for why we need this mapping from models to shapes
-        FmFormView*		pFormView		= pFormShell->GetFormView();
-        SdrPageView*	pPageView		= pFormView ? pFormView->GetSdrPageView() : NULL;
-        SdrPage*		pPage			= pPageView ? pPageView->GetPage() : NULL;
+        FmFormView*     pFormView       = pFormShell->GetFormView();
+        SdrPageView*    pPageView       = pFormView ? pFormView->GetSdrPageView() : NULL;
+        SdrPage*        pPage           = pPageView ? pPageView->GetPage() : NULL;
         DBG_ASSERT( pPage, "NavigatorTree::DeleteSelection: invalid form page!" );
 
         MapModelToShape aModelShapes;
@@ -2195,9 +2195,9 @@ namespace svxform
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::MarkViewObjects" );
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
-        if( !pFormShell ) 
+        if( !pFormShell )
             return;
-        
+
         // first collect all sdrobjects
         ::std::set< Reference< XFormComponent > > aObjects;
         CollectObjects(pFormData,bDeep,aObjects);
@@ -2222,7 +2222,7 @@ namespace svxform
             {
                 // unfortunately, the writer doesn't like marking an already-marked object, again, so reset the mark first
                 pFormView->MarkObj( pSdrObject, pPageView, !bMark, sal_False );
-            }            
+            }
         } // while ( aIter.IsMore() )
         if ( bMark )
         {
@@ -2253,7 +2253,7 @@ namespace svxform
             {
                 pControlData = (FmControlData*)pEntryData;
                 _rObjects.insert(pControlData->GetFormComponent());
-            } // if( pEntryData->ISA(FmControlData) ) 
+            } // if( pEntryData->ISA(FmControlData) )
             else if (bDeep && (pEntryData->ISA(FmFormData)))
                 CollectObjects((FmFormData*)pEntryData,bDeep,_rObjects);
         } // for( sal_uInt32 i=0; i<pChildList->Count(); i++ )
@@ -2262,10 +2262,10 @@ namespace svxform
     void NavigatorTree::MarkViewObj( FmControlData* pControlData, sal_Bool bMarkHandles, sal_Bool bMark)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::MarkViewObj" );
-        if( !pControlData ) 
+        if( !pControlData )
             return;
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
-        if( !pFormShell ) 
+        if( !pFormShell )
             return;
 
         //////////////////////////////////////////////////////////////////////
@@ -2297,7 +2297,7 @@ namespace svxform
                 continue;
 
             bPaint = true;
-            
+
         } // while ( aIter.IsMore() )
         if ( bPaint )
         {
@@ -2316,7 +2316,7 @@ namespace svxform
     }
 
 //............................................................................
-}	// namespace svxform
+}   // namespace svxform
 //............................................................................
 
 

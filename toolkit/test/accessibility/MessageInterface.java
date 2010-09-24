@@ -1,5 +1,5 @@
 interface MessageInterface
 {
-    void    message   (String text);    
+    void    message   (String text);
 }
 

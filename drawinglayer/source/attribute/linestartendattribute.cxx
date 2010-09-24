@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,20 +42,20 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32								mnRefCount;
+            sal_uInt32                              mnRefCount;
 
             // data definitions
-            double									mfWidth;				// absolute line StartEndGeometry base width
-            basegfx::B2DPolyPolygon					maPolyPolygon;			// the StartEndGeometry PolyPolygon
+            double                                  mfWidth;                // absolute line StartEndGeometry base width
+            basegfx::B2DPolyPolygon                 maPolyPolygon;          // the StartEndGeometry PolyPolygon
 
             // bitfield
-            unsigned								mbCentered : 1;			// use centered to ineStart/End point?
+            unsigned                                mbCentered : 1;         // use centered to ineStart/End point?
 
             ImpLineStartEndAttribute(
-                double fWidth, 
-                const basegfx::B2DPolyPolygon& rPolyPolygon, 
+                double fWidth,
+                const basegfx::B2DPolyPolygon& rPolyPolygon,
                 bool bCentered)
-            :	mnRefCount(0),
+            :   mnRefCount(0),
                 mfWidth(fWidth),
                 maPolyPolygon(rPolyPolygon),
                 mbCentered(bCentered)
@@ -94,22 +94,22 @@ namespace drawinglayer
         };
 
         LineStartEndAttribute::LineStartEndAttribute(
-            double fWidth, 
-            const basegfx::B2DPolyPolygon& rPolyPolygon, 
+            double fWidth,
+            const basegfx::B2DPolyPolygon& rPolyPolygon,
             bool bCentered)
-        :	mpLineStartEndAttribute(new ImpLineStartEndAttribute(
+        :   mpLineStartEndAttribute(new ImpLineStartEndAttribute(
                 fWidth, rPolyPolygon, bCentered))
         {
         }
 
         LineStartEndAttribute::LineStartEndAttribute()
-        :	mpLineStartEndAttribute(ImpLineStartEndAttribute::get_global_default())
+        :   mpLineStartEndAttribute(ImpLineStartEndAttribute::get_global_default())
         {
             mpLineStartEndAttribute->mnRefCount++;
         }
 
         LineStartEndAttribute::LineStartEndAttribute(const LineStartEndAttribute& rCandidate)
-        :	mpLineStartEndAttribute(rCandidate.mpLineStartEndAttribute)
+        :   mpLineStartEndAttribute(rCandidate.mpLineStartEndAttribute)
         {
             mpLineStartEndAttribute->mnRefCount++;
         }
@@ -143,7 +143,7 @@ namespace drawinglayer
                 {
                     delete mpLineStartEndAttribute;
                 }
-                
+
                 mpLineStartEndAttribute = rCandidate.mpLineStartEndAttribute;
                 mpLineStartEndAttribute->mnRefCount++;
             }
@@ -166,26 +166,26 @@ namespace drawinglayer
             return (*rCandidate.mpLineStartEndAttribute == *mpLineStartEndAttribute);
         }
 
-        double LineStartEndAttribute::getWidth() const 
-        { 
-            return mpLineStartEndAttribute->getWidth(); 
+        double LineStartEndAttribute::getWidth() const
+        {
+            return mpLineStartEndAttribute->getWidth();
         }
 
-        const basegfx::B2DPolyPolygon& LineStartEndAttribute::getB2DPolyPolygon() const 
-        { 
-            return mpLineStartEndAttribute->getB2DPolyPolygon(); 
+        const basegfx::B2DPolyPolygon& LineStartEndAttribute::getB2DPolyPolygon() const
+        {
+            return mpLineStartEndAttribute->getB2DPolyPolygon();
         }
 
-        bool LineStartEndAttribute::isCentered() const 
-        { 
-            return mpLineStartEndAttribute->isCentered(); 
+        bool LineStartEndAttribute::isCentered() const
+        {
+            return mpLineStartEndAttribute->isCentered();
         }
 
-        bool LineStartEndAttribute::isActive() const 
-        { 
-            return (0.0 != getWidth() 
-                && 0 != getB2DPolyPolygon().count() 
-                && 0 != getB2DPolyPolygon().getB2DPolygon(0).count()); 
+        bool LineStartEndAttribute::isActive() const
+        {
+            return (0.0 != getWidth()
+                && 0 != getB2DPolyPolygon().count()
+                && 0 != getB2DPolyPolygon().getB2DPolygon(0).count());
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

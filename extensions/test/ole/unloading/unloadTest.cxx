@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ sal_Bool test1()
     osl_unloadModule( hMod);
 
     rtl_unloadUnusedModules( NULL);
-    
+
     OUString sFactoryFunc( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
     // true, instance alive
@@ -144,7 +144,7 @@ sal_Bool test3()
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
     xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("services.rdb")),
                 sal_False, sal_False );
-    
+
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
 
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
@@ -171,18 +171,18 @@ sal_Bool test3()
     Reference<XComponent> xcomp( context, UNO_QUERY);
     xcomp->dispose();
 
-//	for (int i=0; i < 10; i++)
-//	{	
-//		Reference<XSimpleRegistry> xreg= createSimpleRegistry();
-//		xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")),
-//							   sal_False, sal_False );
-//		Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);	
-//		Reference<XComponent> xcomp( context, UNO_QUERY);
-//		xcomp->dispose();
+//  for (int i=0; i < 10; i++)
+//  {
+//      Reference<XSimpleRegistry> xreg= createSimpleRegistry();
+//      xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")),
+//                             sal_False, sal_False );
+//      Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
+//      Reference<XComponent> xcomp( context, UNO_QUERY);
+//      xcomp->dispose();
 //
-//	}
+//  }
 
-//	return sal_True;
+//  return sal_True;
     return bTest1 && bTest2;
 }
 
@@ -216,7 +216,7 @@ sal_Bool test4()
     // ApplicationRegistration is a one-instance-service, therefore kill service manager first
     Reference<XComponent> xcomp( context, UNO_QUERY);
     xcomp->dispose();
-    
+
     }
     rtl_unloadUnusedModules( NULL);
     pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);

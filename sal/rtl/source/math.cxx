@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1100,9 +1100,9 @@ double SAL_CALL rtl_math_expm1( double fValue ) SAL_THROW_EXTERN_C()
 
 double SAL_CALL rtl_math_log1p( double fValue ) SAL_THROW_EXTERN_C()
 {
-    // Use volatile because a compiler may be too smart "optimizing" the 
-    // condition such that in certain cases the else path was called even if 
-    // (fp==1.0) was true, where the term (fp-1.0) then resulted in 0.0 and 
+    // Use volatile because a compiler may be too smart "optimizing" the
+    // condition such that in certain cases the else path was called even if
+    // (fp==1.0) was true, where the term (fp-1.0) then resulted in 0.0 and
     // hence the entire expression resulted in NaN.
     // Happened with g++ 3.4.1 and an input value of 9.87E-18
     volatile double fp = 1.0 + fValue;

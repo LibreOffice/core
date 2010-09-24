@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define _UNOCONTROLS_STATUSINDICATOR_CTRL_HXX
 
 //____________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //____________________________________________________________________________________________________________
 
 #include <com/sun/star/awt/XControlModel.hpp>
@@ -43,77 +43,77 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 //____________________________________________________________________________________________________________
-//	includes of my own project
+//  includes of my own project
 //____________________________________________________________________________________________________________
 #include "basecontainercontrol.hxx"
 
 //____________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //____________________________________________________________________________________________________________
 
 namespace unocontrols{
 
-#define	UNO3_ANY										::com::sun::star::uno::Any
-#define	UNO3_OUSTRING									::rtl::OUString
-#define	UNO3_RECTANGLE									::com::sun::star::awt::Rectangle
-#define	UNO3_REFERENCE									::com::sun::star::uno::Reference
-#define	UNO3_RUNTIMEEXCEPTION							::com::sun::star::uno::RuntimeException
-#define	UNO3_SEQUENCE									::com::sun::star::uno::Sequence
-#define	UNO3_SIZE										::com::sun::star::awt::Size
-#define	UNO3_TYPE										::com::sun::star::uno::Type
-#define	UNO3_XCONTROLMODEL								::com::sun::star::awt::XControlModel
-#define	UNO3_XFIXEDTEXT									::com::sun::star::awt::XFixedText
-#define	UNO3_XGRAPHICS									::com::sun::star::awt::XGraphics
-#define	UNO3_XLAYOUTCONSTRAINS							::com::sun::star::awt::XLayoutConstrains
-#define	UNO3_XMULTISERVICEFACTORY						::com::sun::star::lang::XMultiServiceFactory
-#define	UNO3_XPROGRESSBAR								::com::sun::star::awt::XProgressBar
-#define	UNO3_XSTATUSINDICATOR							::com::sun::star::task::XStatusIndicator
-#define	UNO3_XTOOLKIT									::com::sun::star::awt::XToolkit
-#define	UNO3_XWINDOWPEER								::com::sun::star::awt::XWindowPeer
+#define UNO3_ANY                                        ::com::sun::star::uno::Any
+#define UNO3_OUSTRING                                   ::rtl::OUString
+#define UNO3_RECTANGLE                                  ::com::sun::star::awt::Rectangle
+#define UNO3_REFERENCE                                  ::com::sun::star::uno::Reference
+#define UNO3_RUNTIMEEXCEPTION                           ::com::sun::star::uno::RuntimeException
+#define UNO3_SEQUENCE                                   ::com::sun::star::uno::Sequence
+#define UNO3_SIZE                                       ::com::sun::star::awt::Size
+#define UNO3_TYPE                                       ::com::sun::star::uno::Type
+#define UNO3_XCONTROLMODEL                              ::com::sun::star::awt::XControlModel
+#define UNO3_XFIXEDTEXT                                 ::com::sun::star::awt::XFixedText
+#define UNO3_XGRAPHICS                                  ::com::sun::star::awt::XGraphics
+#define UNO3_XLAYOUTCONSTRAINS                          ::com::sun::star::awt::XLayoutConstrains
+#define UNO3_XMULTISERVICEFACTORY                       ::com::sun::star::lang::XMultiServiceFactory
+#define UNO3_XPROGRESSBAR                               ::com::sun::star::awt::XProgressBar
+#define UNO3_XSTATUSINDICATOR                           ::com::sun::star::task::XStatusIndicator
+#define UNO3_XTOOLKIT                                   ::com::sun::star::awt::XToolkit
+#define UNO3_XWINDOWPEER                                ::com::sun::star::awt::XWindowPeer
 
 //____________________________________________________________________________________________________________
-//	defines
+//  defines
 //____________________________________________________________________________________________________________
 
-#define	SERVICENAME_STATUSINDICATOR						"com.sun.star.task.XStatusIndicator"
-#define	IMPLEMENTATIONNAME_STATUSINDICATOR				"stardiv.UnoControls.StatusIndicator"
+#define SERVICENAME_STATUSINDICATOR                     "com.sun.star.task.XStatusIndicator"
+#define IMPLEMENTATIONNAME_STATUSINDICATOR              "stardiv.UnoControls.StatusIndicator"
 #undef  FREEBORDER
 #define FREEBORDER                                      5                                                       // border around and between the controls
-#define FIXEDTEXT_SERVICENAME							"com.sun.star.awt.UnoControlFixedText"
-#define	FIXEDTEXT_MODELNAME								"com.sun.star.awt.UnoControlFixedTextModel"
-#define	CONTROLNAME_TEXT								"Text"													// identifier the control in container
-#define	CONTROLNAME_PROGRESSBAR							"ProgressBar"											//  			-||-
-#define	DEFAULT_TEXT									"\0"
-#define	BACKGROUNDCOLOR									TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )				// lighgray
-#define	LINECOLOR_BRIGHT								TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )				// white
-#define	LINECOLOR_SHADOW								TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )				// black
+#define FIXEDTEXT_SERVICENAME                           "com.sun.star.awt.UnoControlFixedText"
+#define FIXEDTEXT_MODELNAME                             "com.sun.star.awt.UnoControlFixedTextModel"
+#define CONTROLNAME_TEXT                                "Text"                                                  // identifier the control in container
+#define CONTROLNAME_PROGRESSBAR                         "ProgressBar"                                           //              -||-
+#define DEFAULT_TEXT                                    "\0"
+#define BACKGROUNDCOLOR                                 TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )                // lighgray
+#define LINECOLOR_BRIGHT                                TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )                // white
+#define LINECOLOR_SHADOW                                TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )                // black
 // Overwrite defines from basecontrol.hxx!!!
-#undef	DEFAULT_WIDTH
-#undef	DEFAULT_HEIGHT
-#define DEFAULT_WIDTH 									300
+#undef  DEFAULT_WIDTH
+#undef  DEFAULT_HEIGHT
+#define DEFAULT_WIDTH                                   300
 #define DEFAULT_HEIGHT                                   25
 
 //____________________________________________________________________________________________________________
-//	structs, types
+//  structs, types
 //____________________________________________________________________________________________________________
 
 //____________________________________________________________________________________________________________
-//	class declaration
+//  class declaration
 //____________________________________________________________________________________________________________
 
-class StatusIndicator	: public UNO3_XLAYOUTCONSTRAINS
+class StatusIndicator   : public UNO3_XLAYOUTCONSTRAINS
                         , public UNO3_XSTATUSINDICATOR
                         , public BaseContainerControl
 {
 
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //	construct/destruct
+        //  construct/destruct
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
@@ -144,399 +144,399 @@ class StatusIndicator	: public UNO3_XLAYOUTCONSTRAINS
             @onerror
         */
 
-        virtual	~StatusIndicator();
+        virtual ~StatusIndicator();
 
         //---------------------------------------------------------------------------------------------------------
-        //	XInterface
+        //  XInterface
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short		give answer, if interface is supported
-            @descr		The interfaces are searched by type.
+            @short      give answer, if interface is supported
+            @descr      The interfaces are searched by type.
 
-            @seealso	XInterface
+            @seealso    XInterface
 
             @param      "rType" is the type of searched interface.
 
-            @return		Any		information about found interface
+            @return     Any     information about found interface
 
-            @onerror	A RuntimeException is thrown.
+            @onerror    A RuntimeException is thrown.
         */
 
         virtual UNO3_ANY SAL_CALL queryInterface( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
 
         /**_______________________________________________________________________________________________________
-            @short		increment refcount
-            @descr		-
+            @short      increment refcount
+            @descr      -
 
-            @seealso	XInterface
-            @seealso	release()
+            @seealso    XInterface
+            @seealso    release()
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	A RuntimeException is thrown.
+            @onerror    A RuntimeException is thrown.
         */
 
         virtual void SAL_CALL acquire() throw();
 
         /**_______________________________________________________________________________________________________
-            @short		decrement refcount
-            @descr		-
+            @short      decrement refcount
+            @descr      -
 
-            @seealso	XInterface
-            @seealso	acquire()
+            @seealso    XInterface
+            @seealso    acquire()
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	A RuntimeException is thrown.
+            @onerror    A RuntimeException is thrown.
         */
 
         virtual void SAL_CALL release() throw();
 
         //---------------------------------------------------------------------------------------------------------
-        //	XTypeProvider
+        //  XTypeProvider
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short		get information about supported interfaces
+            @short      get information about supported interfaces
             @descr      -
 
-            @seealso	XTypeProvider
+            @seealso    XTypeProvider
 
             @param      -
 
-            @return		Sequence of types of all supported interfaces
+            @return     Sequence of types of all supported interfaces
 
-            @onerror	A RuntimeException is thrown.
+            @onerror    A RuntimeException is thrown.
         */
 
         virtual UNO3_SEQUENCE< UNO3_TYPE > SAL_CALL getTypes() throw( UNO3_RUNTIMEEXCEPTION );
 
         //---------------------------------------------------------------------------------------------------------
-        //	XAggregation
+        //  XAggregation
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
         virtual UNO3_ANY SAL_CALL queryAggregation( const UNO3_TYPE& aType ) throw( UNO3_RUNTIMEEXCEPTION );
 
         //---------------------------------------------------------------------------------------------------------
-        //	XStatusIndicator
+        //  XStatusIndicator
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL start(	const	UNO3_OUSTRING&	sText	,
-                                                sal_Int32		nRange	) throw( UNO3_RUNTIMEEXCEPTION );
+        virtual void SAL_CALL start(    const   UNO3_OUSTRING&  sText   ,
+                                                sal_Int32       nRange  ) throw( UNO3_RUNTIMEEXCEPTION );
 
         /*-****************************************************************************************************//**
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL end() throw( UNO3_RUNTIMEEXCEPTION );
 
         /*-****************************************************************************************************//**
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL reset() throw( UNO3_RUNTIMEEXCEPTION );
 
         /*-****************************************************************************************************//**
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL setText( const UNO3_OUSTRING& sText ) throw( UNO3_RUNTIMEEXCEPTION );
 
         /*-****************************************************************************************************//**
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void SAL_CALL setValue( sal_Int32 nValue ) throw( UNO3_RUNTIMEEXCEPTION );
 
         //---------------------------------------------------------------------------------------------------------
-        // 	XLayoutConstrains
+        //  XLayoutConstrains
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
         virtual UNO3_SIZE SAL_CALL getMinimumSize() throw( UNO3_RUNTIMEEXCEPTION );
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
         virtual UNO3_SIZE SAL_CALL getPreferredSize() throw( UNO3_RUNTIMEEXCEPTION );
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
         virtual UNO3_SIZE SAL_CALL calcAdjustedSize( const UNO3_SIZE& aNewSize ) throw( UNO3_RUNTIMEEXCEPTION );
 
         //---------------------------------------------------------------------------------------------------------
-        //	XControl
+        //  XControl
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
-        virtual void SAL_CALL createPeer(	const	UNO3_REFERENCE< UNO3_XTOOLKIT >&	xToolkit	,
-                                            const	UNO3_REFERENCE< UNO3_XWINDOWPEER >&	xParent		) throw( UNO3_RUNTIMEEXCEPTION );
+        virtual void SAL_CALL createPeer(   const   UNO3_REFERENCE< UNO3_XTOOLKIT >&    xToolkit    ,
+                                            const   UNO3_REFERENCE< UNO3_XWINDOWPEER >& xParent     ) throw( UNO3_RUNTIMEEXCEPTION );
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
         virtual sal_Bool SAL_CALL setModel( const UNO3_REFERENCE< UNO3_XCONTROLMODEL >& xModel ) throw( UNO3_RUNTIMEEXCEPTION );
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
         virtual UNO3_REFERENCE< UNO3_XCONTROLMODEL > SAL_CALL getModel() throw( UNO3_RUNTIMEEXCEPTION );
 
         //---------------------------------------------------------------------------------------------------------
-        //	XComponent
+        //  XComponent
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
         virtual void SAL_CALL dispose() throw( UNO3_RUNTIMEEXCEPTION );
 
         //---------------------------------------------------------------------------------------------------------
-        //	XWindow
+        //  XWindow
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
-        virtual void SAL_CALL setPosSize(	sal_Int32	nX		,
-                                            sal_Int32	nY		,
-                                            sal_Int32	nWidth	,
-                                            sal_Int32	nHeight	,
-                                            sal_Int16	nFlags	) throw( UNO3_RUNTIMEEXCEPTION );
+        virtual void SAL_CALL setPosSize(   sal_Int32   nX      ,
+                                            sal_Int32   nY      ,
+                                            sal_Int32   nWidth  ,
+                                            sal_Int32   nHeight ,
+                                            sal_Int16   nFlags  ) throw( UNO3_RUNTIMEEXCEPTION );
 
         //---------------------------------------------------------------------------------------------------------
-        //	BaseControl
+        //  BaseControl
         //---------------------------------------------------------------------------------------------------------
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
         static const UNO3_SEQUENCE< UNO3_OUSTRING > impl_getStaticSupportedServiceNames();
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
         static const UNO3_OUSTRING impl_getStaticImplementationName();
 
 //____________________________________________________________________________________________________________
-//	protected methods
+//  protected methods
 //____________________________________________________________________________________________________________
 
 protected:
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
         virtual UNO3_WINDOWDESCRIPTOR* impl_getWindowDescriptor( const UNO3_REFERENCE< UNO3_XWINDOWPEER >& xParentPeer );
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
         virtual void impl_paint ( sal_Int32 nX, sal_Int32 nY, const UNO3_REFERENCE< UNO3_XGRAPHICS > & rGraphics );
 
         /**_______________________________________________________________________________________________________
-            @short		-
-            @descr		-
+            @short      -
+            @descr      -
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
+            @param      -
 
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         */
 
         virtual void impl_recalcLayout( const UNO3_WINDOWEVENT& aEvent );
@@ -548,16 +548,16 @@ protected:
 private:
 
     /**_______________________________________________________________________________________________________
-        @short		-
-        @descr		-
+        @short      -
+        @descr      -
 
-        @seealso	-
+        @seealso    -
 
-        @param		-
+        @param      -
 
-        @return		-
+        @return     -
 
-        @onerror	-
+        @onerror    -
     */
 
     #if OSL_DEBUG_LEVEL > 1
@@ -570,11 +570,11 @@ private:
 
 private:
 
-    UNO3_REFERENCE< UNO3_XFIXEDTEXT > 		m_xText			;
-    UNO3_REFERENCE< UNO3_XPROGRESSBAR > 	m_xProgressBar	;
+    UNO3_REFERENCE< UNO3_XFIXEDTEXT >       m_xText         ;
+    UNO3_REFERENCE< UNO3_XPROGRESSBAR >     m_xProgressBar  ;
 
-};	// class StatusIndicator
+};  // class StatusIndicator
 
-}	// namespace unocontrols
+}   // namespace unocontrols
 
-#endif	// #ifndef _UNOCONTROLS_STATUSINDICATOR_CTRL_HXX
+#endif  // #ifndef _UNOCONTROLS_STATUSINDICATOR_CTRL_HXX

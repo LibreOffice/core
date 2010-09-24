@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ sal_uInt32 WW8BinTableImpl::getPageNumber(const Fc & rFc) const
     {
 #if 0
         sal_uInt32 n = getEntryCount();
-        
+
         while (rFc < getFc(n))
         {
             --n;
@@ -55,7 +55,7 @@ sal_uInt32 WW8BinTableImpl::getPageNumber(const Fc & rFc) const
 #else
         sal_uInt32 left = 0;
         sal_uInt32 right = getEntryCount();
-        
+
         while (right - left > 1)
         {
             sal_uInt32 middle = (right + left) / 2;
@@ -68,7 +68,7 @@ sal_uInt32 WW8BinTableImpl::getPageNumber(const Fc & rFc) const
                 left = middle;
 
         }
-        
+
         nResult = getPageNumber(left);
         mPageMap[rFc] = nResult;
 #endif

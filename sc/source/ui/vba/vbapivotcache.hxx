@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 typedef InheritedHelperInterfaceImpl1<ov::excel::XPivotCache > PivotCacheImpl_BASE;
 
 class ScVbaPivotCache : public PivotCacheImpl_BASE
-{		
+{
     css::uno::Reference< css::sheet::XDataPilotTable > m_xTable;
 public:
     ScVbaPivotCache( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XDataPilotTable >& xTable );

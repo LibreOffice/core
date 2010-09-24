@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ namespace frm
         m_xFirstDispatchInterceptor->setMasterDispatchProvider( NULL );
             // it's the first of the interceptor chain
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ControlFeatureInterception::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException )
     {
@@ -88,7 +88,7 @@ namespace frm
         Reference< XDispatchProviderInterceptor >  xChainWalk( m_xFirstDispatchInterceptor );
 
         if ( m_xFirstDispatchInterceptor == _rxInterceptor )
-        {	// our chain will have a new first element
+        {   // our chain will have a new first element
             Reference< XDispatchProviderInterceptor >  xSlave( m_xFirstDispatchInterceptor->getSlaveDispatchProvider(), UNO_QUERY );
             m_xFirstDispatchInterceptor = xSlave;
         }

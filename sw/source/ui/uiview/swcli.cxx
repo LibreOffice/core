@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
 
     // the aLogRect will get the preliminary size now
     aLogRect.SetSize( rSh.RequestObjectResize( SwRect( aLogRect ), GetObject() ) );
-        
+
     // the EndAllAction() call will trigger CalcAndSetScale() call,
     // so the embedded object must get the correct size before
     if ( aLogRect.GetSize() != GetScaledObjArea().GetSize() )
@@ -138,11 +138,11 @@ void SwOleClient::ViewChanged()
         // this is an error
         OSL_ENSURE( sal_False, "Something goes wrong on requesting object size!\n" );
     }
-    
+
     Size aVisSize( aSz.Width, aSz.Height );
 
     // Bug 24833: solange keine vernuenftige Size vom Object kommt,
-    // 				kann nichts skaliert werden
+    //              kann nichts skaliert werden
     if( !aVisSize.Width() || !aVisSize.Height() )
         return;
 
@@ -157,7 +157,7 @@ void SwOleClient::ViewChanged()
     aVisSize.Height()= Fraction( aVisSize.Height() ) * GetScaleHeight();
 
     SwRect aRect( Point( LONG_MIN, LONG_MIN ), aVisSize );
-    rSh.LockView( TRUE );	//Scrollen im EndAction verhindern
+    rSh.LockView( TRUE );   //Scrollen im EndAction verhindern
     rSh.StartAllAction();
     rSh.RequestObjectResize( aRect, GetObject() );
     rSh.EndAllAction();

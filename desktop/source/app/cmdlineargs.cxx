@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,15 +142,15 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
         UNO_QUERY);
 
     // parse command line arguments
-    sal_Bool	bPrintEvent		= sal_False;
-    sal_Bool	bOpenEvent		= sal_True;
-    sal_Bool	bViewEvent		= sal_False;
-    sal_Bool	bStartEvent		= sal_False;
-    sal_Bool	bPrintToEvent	= sal_False;
-    sal_Bool	bPrinterName	= sal_False;
-    sal_Bool	bForceOpenEvent	= sal_False;
-    sal_Bool	bForceNewEvent	= sal_False;
-    sal_Bool 	bDisplaySpec	= sal_False;
+    sal_Bool    bPrintEvent     = sal_False;
+    sal_Bool    bOpenEvent      = sal_True;
+    sal_Bool    bViewEvent      = sal_False;
+    sal_Bool    bStartEvent     = sal_False;
+    sal_Bool    bPrintToEvent   = sal_False;
+    sal_Bool    bPrinterName    = sal_False;
+    sal_Bool    bForceOpenEvent = sal_False;
+    sal_Bool    bForceNewEvent  = sal_False;
+    sal_Bool    bDisplaySpec    = sal_False;
     sal_Bool    bConversionEvent= sal_False;
     sal_Bool    bConversionParamsEvent= sal_False;
     sal_Bool    bBatchPrintEvent= sal_False;
@@ -161,20 +161,20 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 
     for (;;)
     {
-        ::rtl::OUString	aArg;
+        ::rtl::OUString aArg;
         if ( !supplier.next( &aArg ) )
         {
             break;
         }
         // convert file URLs to internal form #112849#
-        if (aArg.indexOf(OUString::createFromAscii("file:"))==0 && 
+        if (aArg.indexOf(OUString::createFromAscii("file:"))==0 &&
             xTranslator.is())
         {
             OUString tmp(xTranslator->translateToInternal(aArg));
             if (tmp.getLength() > 0)
                 aArg = tmp;
         }
-        String			aArgStr = aArg;
+        String          aArgStr = aArg;
 
         if ( aArg.getLength() > 0 )
         {
@@ -187,51 +187,51 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     if ( aArgStr.EqualsIgnoreCaseAscii( "-n" ))
                     {
                         // force new documents based on the following documents
-                        bForceNewEvent	= sal_True;
-                        bOpenEvent		= sal_False;
-                        bForceOpenEvent	= sal_False;
-                        bPrintToEvent	= sal_False;
-                        bPrintEvent		= sal_False;
+                        bForceNewEvent  = sal_True;
+                        bOpenEvent      = sal_False;
+                        bForceOpenEvent = sal_False;
+                        bPrintToEvent   = sal_False;
+                        bPrintEvent     = sal_False;
                         bViewEvent      = sal_False;
                         bStartEvent     = sal_False;
-                        bDisplaySpec	= sal_False;
+                        bDisplaySpec    = sal_False;
                      }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-o" ))
                     {
                         // force open documents regards if they are templates or not
                         bForceOpenEvent = sal_True;
-                        bOpenEvent		= sal_False;
-                        bForceNewEvent	= sal_False;
-                        bPrintToEvent	= sal_False;
-                        bPrintEvent		= sal_False;
+                        bOpenEvent      = sal_False;
+                        bForceNewEvent  = sal_False;
+                        bPrintToEvent   = sal_False;
+                        bPrintEvent     = sal_False;
                         bViewEvent      = sal_False;
                         bStartEvent     = sal_False;
-                        bDisplaySpec	= sal_False;
+                        bDisplaySpec    = sal_False;
                      }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-pt" ))
                     {
                         // Print to special printer
-                        bPrintToEvent	= sal_True;
-                        bPrinterName	= sal_True;
-                        bPrintEvent		= sal_False;
-                        bOpenEvent		= sal_False;
-                        bForceNewEvent	= sal_False;
+                        bPrintToEvent   = sal_True;
+                        bPrinterName    = sal_True;
+                        bPrintEvent     = sal_False;
+                        bOpenEvent      = sal_False;
+                        bForceNewEvent  = sal_False;
                         bViewEvent      = sal_False;
                         bStartEvent     = sal_False;
-                        bDisplaySpec	= sal_False;
+                        bDisplaySpec    = sal_False;
                          bForceOpenEvent = sal_False;
                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-p" ))
                     {
                         // Print to default printer
-                        bPrintEvent		= sal_True;
-                        bPrintToEvent	= sal_False;
-                        bOpenEvent		= sal_False;
-                        bForceNewEvent	= sal_False;
+                        bPrintEvent     = sal_True;
+                        bPrintToEvent   = sal_False;
+                        bOpenEvent      = sal_False;
+                        bForceNewEvent  = sal_False;
                         bForceOpenEvent = sal_False;
                         bViewEvent      = sal_False;
                         bStartEvent     = sal_False;
-                        bDisplaySpec	= sal_False;
+                        bDisplaySpec    = sal_False;
                      }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-view" ))
                     {
@@ -241,9 +241,9 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bPrintToEvent   = sal_False;
                         bForceNewEvent  = sal_False;
                         bForceOpenEvent = sal_False;
-                        bViewEvent      = sal_True; 
+                        bViewEvent      = sal_True;
                         bStartEvent     = sal_False;
-                        bDisplaySpec	= sal_False;
+                        bDisplaySpec    = sal_False;
                      }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-show" ))
                     {
@@ -255,7 +255,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bPrintToEvent   = sal_False;
                         bForceNewEvent  = sal_False;
                         bForceOpenEvent = sal_False;
-                        bDisplaySpec	= sal_False;
+                        bDisplaySpec    = sal_False;
                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-display" ))
                     {
@@ -267,7 +267,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bForceNewEvent  = sal_False;
                         bViewEvent      = sal_False;
                         bStartEvent     = sal_False;
-                        bDisplaySpec	= sal_True;
+                        bDisplaySpec    = sal_True;
                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-language" ))
                     {
@@ -278,7 +278,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bForceNewEvent  = sal_False;
                         bViewEvent      = sal_False;
                         bStartEvent     = sal_False;
-                        bDisplaySpec	= sal_False;
+                        bDisplaySpec    = sal_False;
                     }
 
                     #ifdef MACOSX
@@ -297,7 +297,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bForceNewEvent  = sal_False;
                         bViewEvent      = sal_False;
                         bStartEvent     = sal_False;
-                        bDisplaySpec	= sal_False;
+                        bDisplaySpec    = sal_False;
                     }
                     #endif
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-convert-to" ) )
@@ -980,7 +980,7 @@ sal_Bool CommandLineArgs::IsEmptyOrAcceptOnly() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
 
-    return m_eArgumentCount == NONE || 
+    return m_eArgumentCount == NONE ||
            ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_ACCEPT ].getLength() )) ||
            ( ( m_eArgumentCount == ONE ) && m_aBoolParams[ CMD_BOOLPARAM_PSN ] );
 }

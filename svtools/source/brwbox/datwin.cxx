@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,7 +126,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 BrowserColumn::BrowserColumn( USHORT nItemId, const class Image &rImage,
                               const String& rTitle, ULONG nWidthPixel, const Fraction& rCurrentZoom,
                               HeaderBarItemBits nFlags )
-:	_nId( nItemId ),
+:   _nId( nItemId ),
     _nWidth( nWidthPixel ),
     _aImage( rImage ),
     _aTitle( rTitle ),

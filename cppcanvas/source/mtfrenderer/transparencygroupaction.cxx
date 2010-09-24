@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,26 +71,26 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas 
-{ 
+namespace cppcanvas
+{
     namespace internal
     {
         // free support functions
         // ======================
         namespace
         {
-            class TransparencyGroupAction : public Action, private ::boost::noncopyable 
-            { 
-            public: 
+            class TransparencyGroupAction : public Action, private ::boost::noncopyable
+            {
+            public:
                 /** Create new transparency group action.
 
                     @param rGroupMtf
                     Metafile that groups all actions to be rendered
                     transparent
-                    
+
                     @param rParms
                     Render parameters
-                
+
                     @param rDstPoint
                     Left, top edge of destination, in current state
                     coordinate system
@@ -102,13 +102,13 @@ namespace cppcanvas
                     @param nAlpha
                     Alpha value, must be in the range [0,1]
                 */
-                TransparencyGroupAction( MtfAutoPtr&					rGroupMtf,
-                                         const Renderer::Parameters& 	rParms,
-                                         const ::basegfx::B2DPoint& 	rDstPoint,  
-                                         const ::basegfx::B2DVector& 	rDstSize,  
-                                         double 						nAlpha,
-                                         const CanvasSharedPtr&			rCanvas, 
-                                         const OutDevState& 			rState ); 
+                TransparencyGroupAction( MtfAutoPtr&                    rGroupMtf,
+                                         const Renderer::Parameters&    rParms,
+                                         const ::basegfx::B2DPoint&     rDstPoint,
+                                         const ::basegfx::B2DVector&    rDstSize,
+                                         double                         nAlpha,
+                                         const CanvasSharedPtr&         rCanvas,
+                                         const OutDevState&             rState );
 
                 /** Create new transparency group action.
 
@@ -131,41 +131,41 @@ namespace cppcanvas
                     Size of the transparency group object, in current
                     state coordinate system.
                 */
-                TransparencyGroupAction( MtfAutoPtr&					rGroupMtf,
-                                         GradientAutoPtr&				rAlphaGradient,
-                                         const Renderer::Parameters& 	rParms,
-                                         const ::basegfx::B2DPoint& 	rDstPoint,  
-                                         const ::basegfx::B2DVector& 	rDstSize,  
-                                         const CanvasSharedPtr&			rCanvas, 
-                                         const OutDevState& 			rState ); 
+                TransparencyGroupAction( MtfAutoPtr&                    rGroupMtf,
+                                         GradientAutoPtr&               rAlphaGradient,
+                                         const Renderer::Parameters&    rParms,
+                                         const ::basegfx::B2DPoint&     rDstPoint,
+                                         const ::basegfx::B2DVector&    rDstSize,
+                                         const CanvasSharedPtr&         rCanvas,
+                                         const OutDevState&             rState );
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
-                                     const Subset&					rSubset ) const;
+                                     const Subset&                  rSubset ) const;
 
                 virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const;
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&	rTransformation,
-                                                       const Subset&					rSubset ) const;
+                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
+                                                       const Subset&                    rSubset ) const;
 
                 virtual sal_Int32 getActionCount() const;
 
             private:
-                MtfAutoPtr											mpGroupMtf;
-                GradientAutoPtr										mpAlphaGradient;
+                MtfAutoPtr                                          mpGroupMtf;
+                GradientAutoPtr                                     mpAlphaGradient;
 
-                const Renderer::Parameters 							maParms;
+                const Renderer::Parameters                          maParms;
 
-                const ::basegfx::B2DSize 							maDstSize;
+                const ::basegfx::B2DSize                            maDstSize;
 
-                mutable uno::Reference< rendering::XBitmap > 		mxBufferBitmap; // contains last rendered version
-                mutable ::basegfx::B2DHomMatrix						maLastTransformation; // contains last active transformation
-                mutable Subset										maLastSubset; // contains last effective subset
+                mutable uno::Reference< rendering::XBitmap >        mxBufferBitmap; // contains last rendered version
+                mutable ::basegfx::B2DHomMatrix                     maLastTransformation; // contains last active transformation
+                mutable Subset                                      maLastSubset; // contains last effective subset
 
                 // transformation for
-                // mxBufferBitmap content 
-                CanvasSharedPtr										mpCanvas;            
-                rendering::RenderState								maState;
-                const double										mnAlpha;
+                // mxBufferBitmap content
+                CanvasSharedPtr                                     mpCanvas;
+                rendering::RenderState                              maState;
+                const double                                        mnAlpha;
             };
 
 
@@ -173,24 +173,24 @@ namespace cppcanvas
                 moved rPoint away, and scaled according to the ratio
                 given by src and dst size.
             */
-            void implSetupTransform( rendering::RenderState& 	rRenderState,
-                                     const ::basegfx::B2DPoint&	rDstPoint	)
+            void implSetupTransform( rendering::RenderState&    rRenderState,
+                                     const ::basegfx::B2DPoint& rDstPoint   )
             {
-                ::basegfx::B2DHomMatrix	aLocalTransformation;
-                
-                aLocalTransformation.translate( rDstPoint.getX(), 
+                ::basegfx::B2DHomMatrix aLocalTransformation;
+
+                aLocalTransformation.translate( rDstPoint.getX(),
                                                 rDstPoint.getY() );
                 ::canvas::tools::appendToRenderState( rRenderState,
                                                       aLocalTransformation );
             }
 
-            TransparencyGroupAction::TransparencyGroupAction( MtfAutoPtr&					rGroupMtf,
-                                                              const Renderer::Parameters& 	rParms,
-                                                              const ::basegfx::B2DPoint& 	rDstPoint,  
-                                                              const ::basegfx::B2DVector& 	rDstSize,  
-                                                              double 						nAlpha,
-                                                              const CanvasSharedPtr&		rCanvas, 
-                                                              const OutDevState& 			rState ) :
+            TransparencyGroupAction::TransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,
+                                                              const Renderer::Parameters&   rParms,
+                                                              const ::basegfx::B2DPoint&    rDstPoint,
+                                                              const ::basegfx::B2DVector&   rDstSize,
+                                                              double                        nAlpha,
+                                                              const CanvasSharedPtr&        rCanvas,
+                                                              const OutDevState&            rState ) :
                 mpGroupMtf( rGroupMtf ),
                 mpAlphaGradient(),
                 maParms( rParms ),
@@ -205,10 +205,10 @@ namespace cppcanvas
                 implSetupTransform( maState, rDstPoint );
 
                 // correct clip (which is relative to original transform)
-                tools::modifyClip( maState, 
-                                   rState, 
-                                   rCanvas, 
-                                   rDstPoint, 
+                tools::modifyClip( maState,
+                                   rState,
+                                   rCanvas,
+                                   rDstPoint,
                                    NULL,
                                    NULL );
 
@@ -216,13 +216,13 @@ namespace cppcanvas
                 maLastSubset.mnSubsetEnd = -1;
             }
 
-            TransparencyGroupAction::TransparencyGroupAction( MtfAutoPtr&					rGroupMtf,
-                                                              GradientAutoPtr&				rAlphaGradient,
-                                                              const Renderer::Parameters& 	rParms,
-                                                              const ::basegfx::B2DPoint& 	rDstPoint,  
-                                                              const ::basegfx::B2DVector& 	rDstSize,  
-                                                              const CanvasSharedPtr&		rCanvas, 
-                                                              const OutDevState& 			rState ) :
+            TransparencyGroupAction::TransparencyGroupAction( MtfAutoPtr&                   rGroupMtf,
+                                                              GradientAutoPtr&              rAlphaGradient,
+                                                              const Renderer::Parameters&   rParms,
+                                                              const ::basegfx::B2DPoint&    rDstPoint,
+                                                              const ::basegfx::B2DVector&   rDstSize,
+                                                              const CanvasSharedPtr&        rCanvas,
+                                                              const OutDevState&            rState ) :
                 mpGroupMtf( rGroupMtf ),
                 mpAlphaGradient( rAlphaGradient ),
                 maParms( rParms ),
@@ -237,10 +237,10 @@ namespace cppcanvas
                 implSetupTransform( maState, rDstPoint );
 
                 // correct clip (which is relative to original transform)
-                tools::modifyClip( maState, 
-                                   rState, 
-                                   rCanvas, 
-                                   rDstPoint, 
+                tools::modifyClip( maState,
+                                   rState,
+                                   rCanvas,
+                                   rDstPoint,
                                    NULL,
                                    NULL );
 
@@ -255,8 +255,8 @@ namespace cppcanvas
             // into the direction of having a direct GDIMetaFile2XCanvas
             // renderer, and maybe a separate metafile XCanvas
             // implementation.
-            bool TransparencyGroupAction::render( const ::basegfx::B2DHomMatrix&	rTransformation,
-                                                  const Subset&						rSubset ) const
+            bool TransparencyGroupAction::render( const ::basegfx::B2DHomMatrix&    rTransformation,
+                                                  const Subset&                     rSubset ) const
             {
                 RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TransparencyGroupAction::render()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::TransparencyGroupAction: 0x%X", this );
@@ -275,7 +275,7 @@ namespace cppcanvas
                 // does not matter, remove them before comparing
                 aTotalTransform.set( 0, 2, 0.0 );
                 aTotalTransform.set( 1, 2, 0.0 );
-            
+
                 // if there's no buffer bitmap, or as soon as the
                 // total transformation changes, we've got to
                 // re-render the bitmap
@@ -284,16 +284,16 @@ namespace cppcanvas
                     rSubset.mnSubsetBegin != maLastSubset.mnSubsetBegin ||
                     rSubset.mnSubsetEnd != maLastSubset.mnSubsetEnd )
                 {
-                    DBG_TESTSOLARMUTEX(); 
+                    DBG_TESTSOLARMUTEX();
 
                     // determine total scaling factor of the
                     // transformation matrix - need to make the bitmap
                     // large enough
                     ::basegfx::B2DTuple aScale;
                     ::basegfx::B2DTuple aTranslate;
-                    double				nRotate;
-                    double				nShearX;
-                    if( !aTotalTransform.decompose( aScale, 
+                    double              nRotate;
+                    double              nShearX;
+                    if( !aTotalTransform.decompose( aScale,
                                                     aTranslate,
                                                     nRotate,
                                                     nShearX ) )
@@ -327,7 +327,7 @@ namespace cppcanvas
                         // metaactions from mpGroupMtf
                         GDIMetaFile aMtf;
                         MetaAction* pCurrAct;
-                        int 		nCurrActionIndex;
+                        int         nCurrActionIndex;
 
                         // extract subset actions
                         for( nCurrActionIndex=0,
@@ -408,25 +408,25 @@ namespace cppcanvas
                             }
                         }
 
-                        aVDev.DrawTransparent( aMtf, 
-                                               aEmptyPoint,
-                                               aOutputSizePixel,
-                                               *mpAlphaGradient );                        
-                    }
-                    else
-                    {
-                        // no subsetting - render whole mtf
-                        aVDev.DrawTransparent( *mpGroupMtf, 
+                        aVDev.DrawTransparent( aMtf,
                                                aEmptyPoint,
                                                aOutputSizePixel,
                                                *mpAlphaGradient );
                     }
-                
+                    else
+                    {
+                        // no subsetting - render whole mtf
+                        aVDev.DrawTransparent( *mpGroupMtf,
+                                               aEmptyPoint,
+                                               aOutputSizePixel,
+                                               *mpAlphaGradient );
+                    }
+
 
                     // update buffered bitmap and transformation
-                    BitmapSharedPtr aBmp( VCLFactory::getInstance().createBitmap( 
+                    BitmapSharedPtr aBmp( VCLFactory::getInstance().createBitmap(
                                               mpCanvas,
-                                              aVDev.GetBitmapEx( 
+                                              aVDev.GetBitmapEx(
                                                   aEmptyPoint,
                                                   aBitmapSizePixel ) ) );
                     mxBufferBitmap = aBmp->getUNOBitmap();
@@ -450,7 +450,7 @@ namespace cppcanvas
                 // Translation*Rotation*Shear*Scale. Thus, to neutralize
                 // the contained scaling, we've got to right-multiply with
                 // the inverse.
-                ::basegfx::B2ISize aBmpSize( 
+                ::basegfx::B2ISize aBmpSize(
                     ::basegfx::unotools::b2ISizeFromIntegerSize2D( mxBufferBitmap->getSize() ) );
 
                 ::basegfx::B2DHomMatrix aScaleCorrection;
@@ -463,14 +463,14 @@ namespace cppcanvas
 
 #ifdef SPECIAL_DEBUG
                 aLocalState.Clip.clear();
-                aLocalState.DeviceColor = 
-                    ::vcl::unotools::colorToDoubleSequence( 
+                aLocalState.DeviceColor =
+                    ::vcl::unotools::colorToDoubleSequence(
                         ::Color( 0x80FF0000 ),
                         mpCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
 
                 if( maState.Clip.is() )
-                    mpCanvas->getUNOCanvas()->fillPolyPolygon( maState.Clip, 
-                                                               mpCanvas->getViewState(), 
+                    mpCanvas->getUNOCanvas()->fillPolyPolygon( maState.Clip,
+                                                               mpCanvas->getViewState(),
                                                                aLocalState );
 
                 aLocalState.DeviceColor = maState.DeviceColor;
@@ -488,7 +488,7 @@ namespace cppcanvas
                     // add alpha modulation value to DeviceColor
                     uno::Sequence<rendering::ARGBColor> aCols(1);
                     aCols[0] = rendering::ARGBColor( mnAlpha, 1.0, 1.0, 1.0);
-                    aLocalState.DeviceColor = 
+                    aLocalState.DeviceColor =
                         mpCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace()->convertFromARGB(
                             aCols);
 
@@ -516,13 +516,13 @@ namespace cppcanvas
 
                 return render( rTransformation, aSubset );
             }
-            
-            ::basegfx::B2DRange TransparencyGroupAction::getBounds( const ::basegfx::B2DHomMatrix&	rTransformation ) const
+
+            ::basegfx::B2DRange TransparencyGroupAction::getBounds( const ::basegfx::B2DHomMatrix&  rTransformation ) const
             {
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
-                
-                return tools::calcDevicePixelBounds( 
+
+                return tools::calcDevicePixelBounds(
                     ::basegfx::B2DRange( 0,0,
                                          maDstSize.getX(),
                                          maDstSize.getY() ),
@@ -530,8 +530,8 @@ namespace cppcanvas
                     aLocalState );
             }
 
-            ::basegfx::B2DRange TransparencyGroupAction::getBounds( const ::basegfx::B2DHomMatrix&	rTransformation,
-                                                                    const Subset&					rSubset ) const
+            ::basegfx::B2DRange TransparencyGroupAction::getBounds( const ::basegfx::B2DHomMatrix&  rTransformation,
+                                                                    const Subset&                   rSubset ) const
             {
                 // TODO(F3): Currently, the bounds for
                 // TransparencyGroupAction subsets equal those of the
@@ -554,13 +554,13 @@ namespace cppcanvas
 
         }
 
-        ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&					rGroupMtf,
-                                                                                       const Renderer::Parameters&	rParms,
-                                                                                       const ::basegfx::B2DPoint& 	rDstPoint,  
-                                                                                       const ::basegfx::B2DVector& 	rDstSize,  
-                                                                                       double 						nAlpha,
-                                                                                       const CanvasSharedPtr&		rCanvas, 
-                                                                                       const OutDevState& 			rState )
+        ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&                  rGroupMtf,
+                                                                                       const Renderer::Parameters&  rParms,
+                                                                                       const ::basegfx::B2DPoint&   rDstPoint,
+                                                                                       const ::basegfx::B2DVector&  rDstSize,
+                                                                                       double                       nAlpha,
+                                                                                       const CanvasSharedPtr&       rCanvas,
+                                                                                       const OutDevState&           rState )
         {
             return ActionSharedPtr( new TransparencyGroupAction(rGroupMtf,
                                                                 rParms,
@@ -571,13 +571,13 @@ namespace cppcanvas
                                                                 rState ) );
         }
 
-        ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&					rGroupMtf,
-                                                                                       GradientAutoPtr&				rAlphaGradient,
-                                                                                       const Renderer::Parameters&	rParms,
-                                                                                       const ::basegfx::B2DPoint& 	rDstPoint,  
-                                                                                       const ::basegfx::B2DVector&  rDstSize,  
-                                                                                       const CanvasSharedPtr&		rCanvas, 
-                                                                                       const OutDevState& 			rState )
+        ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&                  rGroupMtf,
+                                                                                       GradientAutoPtr&             rAlphaGradient,
+                                                                                       const Renderer::Parameters&  rParms,
+                                                                                       const ::basegfx::B2DPoint&   rDstPoint,
+                                                                                       const ::basegfx::B2DVector&  rDstSize,
+                                                                                       const CanvasSharedPtr&       rCanvas,
+                                                                                       const OutDevState&           rState )
         {
             return ActionSharedPtr( new TransparencyGroupAction(rGroupMtf,
                                                                 rAlphaGradient,
@@ -587,6 +587,6 @@ namespace cppcanvas
                                                                 rCanvas,
                                                                 rState ) );
         }
-        
+
     }
 }

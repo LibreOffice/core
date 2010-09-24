@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,9 +58,9 @@
 #include <gloshdl.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
-#include <swundo.hxx>               	// fuer Undo-Ids
+#include <swundo.hxx>                   // fuer Undo-Ids
 #include <expfld.hxx>
-#include <initui.hxx>					// fuer ::GetGlossaries()
+#include <initui.hxx>                   // fuer ::GetGlossaries()
 #include <gloslst.hxx>
 #include <swdtflvr.hxx>
 #ifndef _DOCSH_HXX
@@ -102,7 +102,7 @@ SV_DECL_PTRARR_DEL( TextBlockInfoArr, TextBlockInfo_ImplPtr, 0, 4 )
 SV_IMPL_PTRARR( TextBlockInfoArr, TextBlockInfo_ImplPtr )
 SV_IMPL_REF( SwDocShell )
 /*------------------------------------------------------------------------
-    Beschreibung:	Dialog fuer Bearbeiten Vorlagen
+    Beschreibung:   Dialog fuer Bearbeiten Vorlagen
 ------------------------------------------------------------------------*/
 
 
@@ -133,7 +133,7 @@ void SwGlossaryHdl::GlossaryDlg()
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung:	Setzen der aktuellen Gruppe; falls aus dem Dialog
+    Beschreibung:   Setzen der aktuellen Gruppe; falls aus dem Dialog
                     gerufen, wird die Gruppe temp. erzeugt fuer einen
                     schnelleren Zugriff
 ------------------------------------------------------------------------*/
@@ -172,11 +172,11 @@ void SwGlossaryHdl::SetCurGroup(const String &rGrp, BOOL bApi, BOOL bAlwaysCreat
                 sGroup.GetToken(0, GLOS_DELIM) == sCurBase)
                 bPathEqual = TRUE;
         }
-//		const String aMac_Tmp(pCurGrp->GetName());
+//      const String aMac_Tmp(pCurGrp->GetName());
         // Beim Pfadwechsel kann man sich auf den Namen nicht verlassen
         if(!bAlwaysCreateNew &&
                 bPathEqual
-//		aMac_Tmp == sGroup
+//      aMac_Tmp == sGroup
         )
             return;
     }
@@ -325,7 +325,7 @@ BOOL SwGlossaryHdl::DelGroup(const String &rGrpName)
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung:	Anzahl Textbausteine erfragen
+    Beschreibung:   Anzahl Textbausteine erfragen
 ------------------------------------------------------------------------*/
 
 
@@ -347,7 +347,7 @@ String SwGlossaryHdl::GetGlossaryName( USHORT nId )
 /* -----------------30.11.98 13:18-------------------
  *
  * --------------------------------------------------*/
-String	SwGlossaryHdl::GetGlossaryShortName(USHORT nId)
+String  SwGlossaryHdl::GetGlossaryShortName(USHORT nId)
 {
     ASSERT(nId < GetGlossaryCnt(), Textbausteinarray ueberindiziert.);
     return pCurGrp->GetShortName( nId );
@@ -355,7 +355,7 @@ String	SwGlossaryHdl::GetGlossaryShortName(USHORT nId)
 
 
 /*------------------------------------------------------------------------
-    Beschreibung:	Kurzname erfragen
+    Beschreibung:   Kurzname erfragen
 ------------------------------------------------------------------------*/
 
 
@@ -376,7 +376,7 @@ String SwGlossaryHdl::GetGlossaryShortName(const String &rName)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Kuerzel fuer Textbaustein bereits verwendet?
+ Beschreibung:  Kuerzel fuer Textbaustein bereits verwendet?
 ------------------------------------------------------------------------*/
 
 
@@ -413,7 +413,7 @@ BOOL    SwGlossaryHdl::ConvertToNew(SwTextBlocks& /*rOld*/)
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung:	Erzeugen eines Textbausteines
+    Beschreibung:   Erzeugen eines Textbausteines
 ------------------------------------------------------------------------*/
 
 BOOL SwGlossaryHdl::NewGlossary(const String& rName, const String& rShortName,
@@ -449,7 +449,7 @@ BOOL SwGlossaryHdl::NewGlossary(const String& rName, const String& rShortName,
     return BOOL( nSuccess != (USHORT) -1 );
 }
 /*------------------------------------------------------------------------
-    Beschreibung:	Loeschen eines Textbausteines
+    Beschreibung:   Loeschen eines Textbausteines
 ------------------------------------------------------------------------*/
 
 
@@ -519,7 +519,7 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
     String aShortName( rShortName );
     BOOL bCancel = FALSE;
     // search for text block
-    //#b6633427# - don't prefer current group depending on configuration setting 
+    //#b6633427# - don't prefer current group depending on configuration setting
     const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
     USHORT nFound = !pCfg->IsSearchInAllCategories() ? pGlossary->GetIndex( aShortName ) : -1;
     // if not found then search in all groups
@@ -700,7 +700,7 @@ BOOL SwGlossaryHdl::InsertGlossary(const String &rName)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Macro setzen / erfragen
+ Beschreibung:  Macro setzen / erfragen
 ------------------------------------------------------------------------*/
 
 
@@ -755,7 +755,7 @@ void SwGlossaryHdl::GetMacros( const String &rShortName,
 
 
 /*------------------------------------------------------------------------
-    Beschreibung:	ctor, dtor
+    Beschreibung:   ctor, dtor
 ------------------------------------------------------------------------*/
 
 
@@ -776,7 +776,7 @@ SwGlossaryHdl::~SwGlossaryHdl()
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung:	Umbenennen eines Textbausteines
+    Beschreibung:   Umbenennen eines Textbausteines
 ------------------------------------------------------------------------*/
 
 

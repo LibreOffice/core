@@ -5,7 +5,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -32,14 +32,14 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 while (<>) {
 
   if( /<prop/ ) {
-    $prop = $_;    
+    $prop = $_;
     next if( /Text/ || /Bubble/ );
   }
-  
+
   if( /<\/prop>/ ) {
     next if( $prop =~ /Text/ || $prop =~ /Bubble/ );
-  }  
-  
+  }
+
   if( /xml:lang/ ) {
     $lang = $_;
     $lang =~ s/.*xml:lang=\"//;
@@ -56,6 +56,6 @@ while (<>) {
     print $line;
     next;
   }
-  
+
   print;
 }

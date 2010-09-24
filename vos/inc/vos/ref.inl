@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,13 +33,13 @@
 #endif
 
 template <class T>
-inline ORef<T>::ORef() 
+inline ORef<T>::ORef()
 {
     m_refBody= 0;
 }
 
 template <class T>
-inline ORef<T>::ORef(T* pBody) 
+inline ORef<T>::ORef(T* pBody)
 {
     m_refBody= pBody;
 
@@ -48,7 +48,7 @@ inline ORef<T>::ORef(T* pBody)
 }
 
 template <class T>
-inline ORef<T>::ORef(const ORef<T>& handle) 
+inline ORef<T>::ORef(const ORef<T>& handle)
 {
     m_refBody= handle.m_refBody;
 
@@ -57,30 +57,30 @@ inline ORef<T>::ORef(const ORef<T>& handle)
 }
 
 template <class T>
-inline ORef<T>::~ORef() 
+inline ORef<T>::~ORef()
 {
     if (m_refBody)
         CAST_TO_IREFERENCE(m_refBody)->release();
 }
 
 template <class T>
-inline ORef<T>& ORef<T>::operator= (const ORef<T>& handle) 
+inline ORef<T>& ORef<T>::operator= (const ORef<T>& handle)
 {
-    if (m_refBody) 
+    if (m_refBody)
         CAST_TO_IREFERENCE(m_refBody)->release();
 
     m_refBody= handle.m_refBody;
-    
+
     if (m_refBody)
         CAST_TO_IREFERENCE(m_refBody)->acquire();
-    
+
     return *this;
 }
 
 template <class T>
-inline void ORef<T>::bind(T* pBody) 
+inline void ORef<T>::bind(T* pBody)
 {
-    if (m_refBody) 
+    if (m_refBody)
         CAST_TO_IREFERENCE(m_refBody)->release();
 
     m_refBody= pBody;
@@ -90,7 +90,7 @@ inline void ORef<T>::bind(T* pBody)
 }
 
 template <class T>
-inline ORef<T>& ORef<T>::unbind() 
+inline ORef<T>& ORef<T>::unbind()
 {
     if (m_refBody)
     {
@@ -101,7 +101,7 @@ inline ORef<T>& ORef<T>::unbind()
 }
 
 template <class T>
-inline void ORef<T>::operator= (T* pBody) 
+inline void ORef<T>::operator= (T* pBody)
 {
     bind(pBody);
 }
@@ -114,14 +114,14 @@ inline T& ORef<T>::operator() () const
 }
 
 template <class T>
-inline T& ORef<T>::operator* () const 
+inline T& ORef<T>::operator* () const
 {
     VOS_PRECOND(m_refBody, "ORef::operator*: can't deref nil body!");
     return *m_refBody;
 }
 
 template <class T>
-inline T* ORef<T>::operator->() const 
+inline T* ORef<T>::operator->() const
 {
     VOS_PRECOND(m_refBody, "ORef::operator->: nil body!");
     return m_refBody;

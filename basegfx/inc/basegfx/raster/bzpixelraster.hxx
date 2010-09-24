@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace basegfx
     {
     protected:
         // additionally, host a ZBuffer
-        sal_uInt16*					mpZBuffer;
+        sal_uInt16*                 mpZBuffer;
 
     public:
         // reset
@@ -54,7 +54,7 @@ namespace basegfx
 
         // constructor/destructor
         BZPixelRaster(sal_uInt32 nWidth, sal_uInt32 nHeight)
-        :	BPixelRaster(nWidth, nHeight),
+        :   BPixelRaster(nWidth, nHeight),
             mpZBuffer(new sal_uInt16[mnCount])
         {
             rtl_zeroMemory(mpZBuffer, sizeof(sal_uInt16) * mnCount);
@@ -69,7 +69,7 @@ namespace basegfx
         const sal_uInt16& getZ(sal_uInt32 nIndex) const
         {
 #ifdef DBG_UTIL
-            if(nIndex >= mnCount) 
+            if(nIndex >= mnCount)
             {
                 OSL_ENSURE(false, "getZ: Access out of range (!)");
                 return mpZBuffer[0L];
@@ -82,7 +82,7 @@ namespace basegfx
         sal_uInt16& getZ(sal_uInt32 nIndex)
         {
 #ifdef DBG_UTIL
-            if(nIndex >= mnCount) 
+            if(nIndex >= mnCount)
             {
                 OSL_ENSURE(false, "getZ: Access out of range (!)");
                 return mpZBuffer[0L];

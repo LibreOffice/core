@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,33 +32,33 @@
 #include <hintids.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/hyznitem.hxx>
-#include <pagefrm.hxx>		// ChangeFtnRef
-#include <ndtxt.hxx>		// MakeFrm()
-#include <dcontact.hxx>		// SwDrawContact
-#include <dflyobj.hxx>		// SwVirtFlyDrawObj
+#include <pagefrm.hxx>      // ChangeFtnRef
+#include <ndtxt.hxx>        // MakeFrm()
+#include <dcontact.hxx>     // SwDrawContact
+#include <dflyobj.hxx>      // SwVirtFlyDrawObj
 #include <flyfrm.hxx>
-#include <ftnfrm.hxx>		// SwFtnFrm
+#include <ftnfrm.hxx>       // SwFtnFrm
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <paratr.hxx>
-#include <viewopt.hxx>		// SwViewOptions
-#include <viewsh.hxx>	  	// ViewShell
+#include <viewopt.hxx>      // SwViewOptions
+#include <viewsh.hxx>       // ViewShell
 #include <frmatr.hxx>
 #include <pam.hxx>
 #include <flyfrms.hxx>
 #include <fmtanchr.hxx>
 #include <txtcfg.hxx>
-#include <itrform2.hxx> 	// SwTxtFormatter
-#include <widorp.hxx>		// Widows and Orphans
+#include <itrform2.hxx>     // SwTxtFormatter
+#include <widorp.hxx>       // Widows and Orphans
 #include <txtcache.hxx>
-#include <porrst.hxx>		// SwEmptyPortion
-#include <blink.hxx>		// pBlink
-#include <porfld.hxx>		// SwFldPortion
-#include <sectfrm.hxx>		// SwSectionFrm
-#include <pormulti.hxx> 	// SwMultiPortion
+#include <porrst.hxx>       // SwEmptyPortion
+#include <blink.hxx>        // pBlink
+#include <porfld.hxx>       // SwFldPortion
+#include <sectfrm.hxx>      // SwSectionFrm
+#include <pormulti.hxx>     // SwMultiPortion
 
 #include <rootfrm.hxx>
-#include <frmfmt.hxx>	  	// SwFrmFmt
+#include <frmfmt.hxx>       // SwFrmFmt
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 
@@ -74,10 +74,10 @@ public:
 MSHORT FormatLevel::nLevel = 0;
 
 /*************************************************************************
- *							ValidateTxt/Frm()
+ *                          ValidateTxt/Frm()
  *************************************************************************/
 
-void ValidateTxt( SwFrm *pFrm )		// Freund vom Frame
+void ValidateTxt( SwFrm *pFrm )     // Freund vom Frame
 {
     if ( ( ! pFrm->IsVertical() &&
              pFrm->Frm().Width() == pFrm->GetUpper()->Prt().Width() ) ||
@@ -109,7 +109,7 @@ void SwTxtFrm::ValidateFrm()
     SWAP_IF_SWAPPED( this )
 
     if ( !IsInFly() && !IsInTab() )
-    {	//Innerhalb eines Flys nur this validieren, der Rest sollte eigentlich
+    {   //Innerhalb eines Flys nur this validieren, der Rest sollte eigentlich
         //nur fuer Fussnoten notwendig sein und die gibt es innerhalb von
         //Flys nicht. Fix fuer 5544
         SwSectionFrm* pSct = FindSctFrm();
@@ -139,7 +139,7 @@ void SwTxtFrm::ValidateFrm()
 }
 
 /*************************************************************************
- *							ValidateBodyFrm()
+ *                          ValidateBodyFrm()
  *************************************************************************/
 
 // nach einem RemoveFtn muss der BodyFrm und alle innenliegenden kalkuliert
@@ -178,7 +178,7 @@ void SwTxtFrm::ValidateBodyFrm()
 }
 
 /*************************************************************************
- *						SwTxtFrm::FindBodyFrm()
+ *                      SwTxtFrm::FindBodyFrm()
  *************************************************************************/
 
 sal_Bool SwTxtFrm::_GetDropRect( SwRect &rRect ) const
@@ -210,7 +210,7 @@ sal_Bool SwTxtFrm::_GetDropRect( SwRect &rRect ) const
 }
 
 /*************************************************************************
- *						SwTxtFrm::FindBodyFrm()
+ *                      SwTxtFrm::FindBodyFrm()
  *************************************************************************/
 
 const SwBodyFrm *SwTxtFrm::FindBodyFrm() const
@@ -226,7 +226,7 @@ const SwBodyFrm *SwTxtFrm::FindBodyFrm() const
 }
 
 /*************************************************************************
- *						SwTxtFrm::CalcFollow()
+ *                      SwTxtFrm::CalcFollow()
  *************************************************************************/
 
 sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
@@ -396,7 +396,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
 }
 
 /*************************************************************************
- *						SwTxtFrm::AdjustFrm()
+ *                      SwTxtFrm::AdjustFrm()
  *************************************************************************/
 
 void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
@@ -457,7 +457,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                 {
                     SwFrm *pPre = GetUpper()->Lower();
                     do
-                    {	pPre->Calc();
+                    {   pPre->Calc();
                         pPre = pPre->GetNext();
                     } while ( pPre && pPre != this );
                 }
@@ -528,7 +528,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
             // Spaltengroesse ermitteln kann.
             if ( nRstHeight < nFrmHeight )
             {
-                if(	bHasToFit || !IsMoveable() ||
+                if( bHasToFit || !IsMoveable() ||
                     ( IsInSct() && !FindSctFrm()->MoveAllowed(this) ) )
                 {
                     SetUndersized( sal_True );
@@ -553,7 +553,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
 }
 
 /*************************************************************************
- *						SwTxtFrm::AdjustFollow()
+ *                      SwTxtFrm::AdjustFollow()
  *************************************************************************/
 
 /* AdjustFollow erwartet folgende Situation:
@@ -615,13 +615,13 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
         if ( nMode )
             GetFollow()->ManipOfst( 0 );
 
-        if ( CalcFollow( nNewOfst ) )	// CalcFollow erst zum Schluss, dort erfolgt ein SetOfst
+        if ( CalcFollow( nNewOfst ) )   // CalcFollow erst zum Schluss, dort erfolgt ein SetOfst
             rLine.SetOnceMore( sal_True );
     }
 }
 
 /*************************************************************************
- *						SwTxtFrm::JoinFrm()
+ *                      SwTxtFrm::JoinFrm()
  *************************************************************************/
 
 SwCntntFrm *SwTxtFrm::JoinFrm()
@@ -698,7 +698,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
 }
 
 /*************************************************************************
- *						SwTxtFrm::SplitFrm()
+ *                      SwTxtFrm::SplitFrm()
  *************************************************************************/
 
 SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
@@ -784,7 +784,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
 
 
 /*************************************************************************
- *						virtual SwTxtFrm::SetOfst()
+ *                      virtual SwTxtFrm::SetOfst()
  *************************************************************************/
 
 void SwTxtFrm::_SetOfst( const xub_StrLen nNewOfst )
@@ -811,7 +811,7 @@ void SwTxtFrm::_SetOfst( const xub_StrLen nNewOfst )
 }
 
 /*************************************************************************
- *						SwTxtFrm::CalcPreps
+ *                      SwTxtFrm::CalcPreps
  *************************************************************************/
 
 sal_Bool SwTxtFrm::CalcPreps()
@@ -1002,7 +1002,7 @@ sal_Bool SwTxtFrm::CalcPreps()
 
 
 /*************************************************************************
- *						SwTxtFrm::FormatAdjust()
+ *                      SwTxtFrm::FormatAdjust()
  *************************************************************************/
 
 // Hier werden die Fussnoten und "als Zeichen"-gebundenen Objekte umgehaengt
@@ -1199,7 +1199,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
 }
 
 /*************************************************************************
- *						SwTxtFrm::FormatLine()
+ *                      SwTxtFrm::FormatLine()
  *************************************************************************/
 
 // bPrev zeigt an, ob Reformat.Start() wegen Prev() vorgezogen wurde.
@@ -1219,7 +1219,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
     const xub_StrLen nOldLen    = pOldCur->GetLen();
     const KSHORT nOldAscent = pOldCur->GetAscent();
     const KSHORT nOldHeight = pOldCur->Height();
-    const SwTwips nOldWidth	= pOldCur->Width() + pOldCur->GetHangingMargin();
+    const SwTwips nOldWidth = pOldCur->Width() + pOldCur->GetHangingMargin();
     const sal_Bool bOldHyph = pOldCur->IsEndHyph();
     SwTwips nOldTop = 0;
     SwTwips nOldBottom = 0;
@@ -1348,7 +1348,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
 }
 
 /*************************************************************************
- *						SwTxtFrm::_Format()
+ *                      SwTxtFrm::_Format()
  *************************************************************************/
 
 void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
@@ -1364,7 +1364,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     const xub_StrLen nStrLen = rString.Len();
 
     SwCharRange &rReformat = *(pPara->GetReformat());
-    SwRepaint	&rRepaint = *(pPara->GetRepaint());
+    SwRepaint   &rRepaint = *(pPara->GetRepaint());
     SwRepaint *pFreeze = NULL;
 
     // Aus Performancegruenden wird in Init() rReformat auf STRING_LEN gesetzt.
@@ -1484,7 +1484,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
                   ( !pPara->IsPrepMustFit() || rLine.GetLineNr() > 1 );
     }
 
- /*	Bedeutung der folgenden Flags:
+ /* Bedeutung der folgenden Flags:
     Ist das Watch(End/Mid)Hyph-Flag gesetzt, so muss formatiert werden, wenn
     eine Trennung am (Zeilenende/Fly) vorliegt, sofern MaxHyph erreicht ist.
     Das Jump(End/Mid)Flag bedeutet, dass die naechste Zeile, bei der keine
@@ -1558,7 +1558,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
                 if( !bFormat )
                 {
                     SwLinePortion* pRest =
-                        rLine.MakeRestPortion( rLine.GetCurr(),	rLine.GetEnd() );
+                        rLine.MakeRestPortion( rLine.GetCurr(), rLine.GetEnd() );
                     if( pRest )
                         rInf.SetRest( pRest );
                 }
@@ -1669,7 +1669,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
         rLine.SetTruncLines( sal_False );
         if( nOldBottom )                    // Bei "gescollten" Absaetzen wird
         {                                   // noch ueberprueft, ob durch Schrumpfen
-            rLine.Bottom();					// das Scrolling ueberfluessig wurde.
+            rLine.Bottom();                 // das Scrolling ueberfluessig wurde.
             SwTwips nNewBottom = rLine.Y();
             if( nNewBottom < nOldBottom )
                 _SetOfst( 0 );
@@ -1678,7 +1678,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
 }
 
 /*************************************************************************
- *						SwTxtFrm::Format()
+ *                      SwTxtFrm::Format()
  *************************************************************************/
 
 void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
@@ -1695,7 +1695,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     sal_Bool bShrink = sal_False,
          bGrow   = sal_False,
          bGoOn   = rLine.IsOnceMore();
-    sal_uInt8 nGo	 = 0;
+    sal_uInt8 nGo    = 0;
     while( bGoOn )
     {
 #ifdef DBGTXT
@@ -1747,7 +1747,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *						SwTxtFrm::_Format()
+ *                      SwTxtFrm::_Format()
  *************************************************************************/
 
 
@@ -1757,9 +1757,9 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
 
     // AMA: Wozu soll das gut sein? Scheint mir zuoft zu einem kompletten
     // Formatieren und Repainten zu fuehren???
-//	if ( !(*pPara->GetDelta()) )
-//		*(pPara->GetDelta()) = nStrLen;
-//	else
+//  if ( !(*pPara->GetDelta()) )
+//      *(pPara->GetDelta()) = nStrLen;
+//  else
     if ( !nStrLen )
     {
         // Leere Zeilen werden nicht lange gequaelt:
@@ -1784,7 +1784,7 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
         SwapWidthAndHeight();
 
     SwTxtFormatInfo aInf( this );
-    SwTxtFormatter	aLine( this, &aInf );
+    SwTxtFormatter  aLine( this, &aInf );
 
     // OD 2004-01-15 #110582#
     HideAndShowObjects();
@@ -1817,7 +1817,7 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
 }
 
 /*************************************************************************
- *						SwTxtFrm::Format()
+ *                      SwTxtFrm::Format()
  *************************************************************************/
 
 /*
@@ -2064,7 +2064,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 }
 
 /*************************************************************************
- *						SwTxtFrm::FormatQuick()
+ *                      SwTxtFrm::FormatQuick()
  *
  * bForceQuickFormat is set if GetFormatted() has been called during the
  * painting process. Actually I cannot imagine a situation which requires
@@ -2115,10 +2115,10 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
 
     SwTxtFrmLocker aLock(this);
     SwTxtFormatInfo aInf( this, sal_False, sal_True );
-    if( 0 != aInf.MaxHyph() )	// 27483: MaxHyphen beachten!
+    if( 0 != aInf.MaxHyph() )   // 27483: MaxHyphen beachten!
         return sal_False;
 
-    SwTxtFormatter	aLine( this, &aInf );
+    SwTxtFormatter  aLine( this, &aInf );
 
     // DropCaps sind zu kompliziert...
     if( aLine.GetDropFmt() )

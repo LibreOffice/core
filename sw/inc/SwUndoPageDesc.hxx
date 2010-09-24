@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@ class SwUndoPageDesc : public SwUndo
     SwDoc * pDoc;
     bool bExchange;
 
-    // To avoid duplication of (header/footer)content nodes for simple page desc changes 
-    void ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDest ); 
-    
+    // To avoid duplication of (header/footer)content nodes for simple page desc changes
+    void ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDest );
+
 public:
     SwUndoPageDesc(const SwPageDesc & aOld, const SwPageDesc & aNew,
                    SwDoc * pDoc);

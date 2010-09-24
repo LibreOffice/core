@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 SvXMLEnumMapEntry aXML_TextGridMode_ConstantMap[] =
 {
     { XML_NONE,         text::TextGridMode::NONE },
-    { XML_LINE,	        text::TextGridMode::LINES },
+    { XML_LINE,         text::TextGridMode::LINES },
     { XML_BOTH,         text::TextGridMode::LINES_AND_CHARS },
     { XML_TOKEN_INVALID, 0 }
 };

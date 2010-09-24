@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ int SvxSmartTagItem::operator==( const SfxPoolItem& rAttr ) const
                mxController == rItem.mxController &&
                maApplicationName == rItem.maApplicationName &&
                maRangeText == rItem.maRangeText;
-               
+
     return bRet;
 }
 

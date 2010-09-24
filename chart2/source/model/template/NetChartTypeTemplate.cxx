@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
         //filled net chart?:
         if( m_bHasFilledArea )
             return sal_True;
-    
+
         // check symbol-style
         // for a template with symbols it is ok, if there is at least one series
         // with symbols, otherwise an unknown template is too easy to achieve
@@ -209,7 +209,7 @@ Reference< chart2::XChartType > SAL_CALL NetChartTypeTemplate::getChartTypeForNe
     throw (uno::RuntimeException)
 {
     Reference< chart2::XChartType > xResult( getChartTypeForIndex( 0 ) );
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );    
+    ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
     return xResult;
 }
 

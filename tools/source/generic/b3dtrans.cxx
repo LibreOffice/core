@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -324,7 +324,7 @@ void B3dTransformationSet::CalcViewport()
                 {
                     // X vergroessern
                     fFactor = 1.0 / fActRatio;
-                    fRight	*= fFactor;
+                    fRight  *= fFactor;
                     fLeft *= fFactor;
                 }
                 else
@@ -350,7 +350,7 @@ void B3dTransformationSet::CalcViewport()
                 {
                     // X verkleinern
                     fFactor = 1.0 / fActRatio;
-                    fRight	*= fFactor;
+                    fRight  *= fFactor;
                     fLeft *= fFactor;
                 }
                 break;
@@ -798,7 +798,7 @@ const basegfx::B2DPoint B3dTransformationSet::TransTextureCoor(const basegfx::B2
 \************************************************************************/
 
 B3dViewport::B3dViewport()
-:	B3dTransformationSet(),
+:   B3dTransformationSet(),
     aVRP(0, 0, 0),
     aVPN(0, 0, 1),
     aVUV(0, 1, 0)
@@ -853,7 +853,7 @@ void B3dViewport::CalcOrientation()
 B3dCamera::B3dCamera(
     const basegfx::B3DPoint& rPos, const basegfx::B3DVector& rLkAt,
     double fFocLen, double fBnkAng, sal_Bool bUseFocLen)
-:	B3dViewport(),
+:   B3dViewport(),
     aPosition(rPos),
     aCorrectedPosition(rPos),
     aLookAt(rLkAt),

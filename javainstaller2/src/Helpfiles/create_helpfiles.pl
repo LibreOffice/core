@@ -4,7 +4,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -79,20 +79,20 @@ for ( my $i = 0; $i <= $#{$allhelpfilenames}; $i++ )
   for ( my $j = 0; $j <= $#{$alllanguages}; $j++ )
   {
     my $language = ${$alllanguages}[$j];
-    
+
     # Creating content of help file
     my $helpfilecontent = collect_helpfile_content($helpfilename, $ulffile, $language);
-    
+
     # Saving helpfile
     my $savefilename = $helpfilename . "_" . $language . ".html";
     $savefilename = $outputpath . $separator . $savefilename;
-    save_file($savefilename, $helpfilecontent);  
+    save_file($savefilename, $helpfilecontent);
 
     if ( $language eq $defaultlanguage )
     {
       $savefilename = $helpfilename . ".html";
       $savefilename = $outputpath . $separator . $savefilename;
-      save_file($savefilename, $helpfilecontent);  
+      save_file($savefilename, $helpfilecontent);
     }
   }
 }
@@ -102,7 +102,7 @@ exit;
 sub main::read_directory
 {
   my ($dir, $ext) = @_;
-  
+
   my @content = ();
   my $direntry;
   opendir(DIR, $dir);
@@ -139,13 +139,13 @@ sub main::collect_helpfile_content
 
   my @helpfilecontent = ();
   my $stringhash = create_string_hash($ulffile, $language);
-  
+
   # Collecting all strings for one html file.
   # For "Prologue_de.html" all files need to begin with "STRING_PROLOGUE_X"
   # The "X" is the ordering number.
-  
+
   my $basestring = "STRING_" . uc($helpfilename) . "_";
-  
+
   for ( my $i = 0; $i <= 10; $i++ )  # 10 strings possible for each html file
   {
     my $key = $basestring . $i;
@@ -155,16 +155,16 @@ sub main::collect_helpfile_content
       push(@helpfilecontent, $content);
     }
   }
-  
+
   return \@helpfilecontent;
 }
 
 sub main::collect_helpfile_names
 {
     my ($helpfilecontent) = @_;
-    
+
     my @allhelpfiles = ();
-    
+
     for ( my $i = 0; $i <= $#{$helpfilecontent}; $i++ )
     {
         if ( ${$helpfilecontent}[$i] =~ /^\s*#/ ) { next; }  # comment line
@@ -173,7 +173,7 @@ sub main::collect_helpfile_names
         $filename =~ s/\s//g;
         push(@allhelpfiles, $filename);
     }
-    
+
     return \@allhelpfiles;
 }
 
@@ -183,31 +183,31 @@ sub main::get_all_languages
 
   my @languages = ();
   my $record = 0;
-  
+
   for ( my $i = 0; $i <= $#{$ulffile}; $i++ )
   {
     if (( ${$ulffile}[$i] =~ /^\s*\[.*]\s*$/ ) && ( $record )) { last; }
     if (( ${$ulffile}[$i] =~ /^\s*\[.*]\s*$/ ) && ( $record == 0 )) { $record = 1; }
-    
+
     if (( $record ) && ( ${$ulffile}[$i] =~ /^\s*(.+?)\s*\=/ ))
     {
       $language = $1;
       push(@languages, $language);
     }
   }
-  
+
   my $languagestring = "";
   for ( my $i = 0; $i <= $#languages; $i++ ) { $languagestring = $languagestring . $languages[$i] . ","; }
   $languagestring =~ s/,\s*$//;
   print "Languages: $languagestring\n";
-    
+
   return \@languages;
 }
 
 sub main::create_string_hash
 {
   my ($ulffile, $language) = @_;
-  
+
   my %stringhash = ();
   my $key = "";
   my $value_defined = 0;
@@ -222,24 +222,24 @@ sub main::create_string_hash
 
     if (( ${$ulffile}[$i] =~ /^\s*\Q$defaultlanguage\E\s*=\s*\"(.*)\"\s*$/ ) && ( ! $value_defined ))
     {
-      $value = $1;	# defaulting to english
+      $value = $1;  # defaulting to english
       $stringhash{$key} = $value;
     }
-        
+
     if (( ${$ulffile}[$i] =~ /^\s*\Q$language\E\s*=\s*\"(.*)\"\s*$/ ) && ( ! $value_defined ))
     {
       $value = $1;
       $stringhash{$key} = $value;
       $value_defined = 1;
     }
-  }  
+  }
 
   # additional replacement for ${LANGUAGE}, not defined in ulf file
   my $languagekey = "LANGUAGE";
   $stringhash{$languagekey} = $language;
 
   # print_hash(\%stringhash);
-  
+
   return \%stringhash;
 }
 
@@ -248,7 +248,7 @@ sub main::print_hash
   my ( $hashref ) = @_;
 
   print "Hash contains:\n";
-  
+
   my $key;
   foreach $key (keys %{$hashref} ) { print "Key: $key, Value: $hashref->{$key}\n"; }
 }
@@ -256,13 +256,13 @@ sub main::print_hash
 sub main::save_file
 {
   my ($filename, $filecontent) = @_;
-  
+
   if ( open( OUT, ">$filename" ) )
   {
     print OUT @{$filecontent};
-    close( OUT);	
+    close( OUT);
   }
-  
+
   push(@allnewpropertyfiles, $filename);
   print "Created file: $filename\n";
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -343,7 +343,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             { FormulaMapGroupSpecialOffset::MAT_REF           , ocMatRef }         ,
             { FormulaMapGroupSpecialOffset::DB_AREA           , ocDBArea }         ,
             { FormulaMapGroupSpecialOffset::MACRO             , ocMacro }          ,
-            { FormulaMapGroupSpecialOffset::COL_ROW_NAME      , ocColRowName }     
+            { FormulaMapGroupSpecialOffset::COL_ROW_NAME      , ocColRowName }
         };
         const size_t nCount = sizeof(aMap)/sizeof(aMap[0]);
         // Preallocate vector elements.
@@ -484,7 +484,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
         }
     }
     const FormulaOpCodeMapEntry* pRet = aVec.empty() ? 0 : &aVec[0];
-    return uno::Sequence< FormulaOpCodeMapEntry >(pRet, aVec.size()); 
+    return uno::Sequence< FormulaOpCodeMapEntry >(pRet, aVec.size());
 }
 //-----------------------------------------------------------------------------
 
@@ -567,6 +567,11 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetOpCodeMap( const sal_Int32 nLa
             if (!mxSymbolsNative)
                 InitSymbolsNative();
             xMap = mxSymbolsNative;
+            break;
+        case FormulaLanguage::XL_ENGLISH:
+            if (!mxSymbolsEnglishXL)
+                InitSymbolsEnglishXL();
+            xMap = mxSymbolsEnglishXL;
             break;
         default:
             ;   // nothing, NULL map returned
@@ -680,6 +685,22 @@ void FormulaCompiler::InitSymbolsODFF() const
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF,FormulaGrammar::GRAM_ODFF,s_sSymbol);
     mxSymbolsODFF = s_sSymbol;
 }
+// -----------------------------------------------------------------------------
+void FormulaCompiler::InitSymbolsEnglishXL() const
+{
+    static NonConstOpCodeMapPtr s_sSymbol;
+    if ( !s_sSymbol.get() )
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH,FormulaGrammar::GRAM_ENGLISH,s_sSymbol);
+    mxSymbolsEnglishXL = s_sSymbol;
+
+    // TODO: For now, just replace the separators to the Excel English
+    // variants. Later, if we want to properly map Excel functions with Calc
+    // functions, we'll need to do a little more work here.
+    mxSymbolsEnglishXL->putOpCode(sal_Unicode(','), ocSep);
+    mxSymbolsEnglishXL->putOpCode(sal_Unicode(','), ocArrayColSep);
+    mxSymbolsEnglishXL->putOpCode(sal_Unicode(';'), ocArrayRowSep);
+}
+
 // -----------------------------------------------------------------------------
 void FormulaCompiler::loadSymbols(USHORT _nSymbols,FormulaGrammar::Grammar _eGrammar,NonConstOpCodeMapPtr& _xMap) const
 {
@@ -1556,7 +1577,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuff
         DBG_ERRORFILE("unknown OpCode");
         rBuffer.append(GetNativeSymbol( ocErrName ));
     }
-    if( bNext ) 
+    if( bNext )
     {
         if (eOp == ocExternalRef)
         {
@@ -1678,6 +1699,17 @@ void FormulaCompiler::AppendString( rtl::OUStringBuffer& rBuffer, const String &
         rBuffer.append(sal_Unicode('"'));
     }
 }
+
+void FormulaCompiler::UpdateSeparatorsNative(
+    const rtl::OUString& rSep, const rtl::OUString& rArrayColSep, const rtl::OUString& rArrayRowSep )
+{
+    NonConstOpCodeMapPtr xSymbolsNative;
+    lcl_fillNativeSymbols(xSymbolsNative);
+    xSymbolsNative->putOpCode(rSep, ocSep);
+    xSymbolsNative->putOpCode(rArrayColSep, ocArrayColSep);
+    xSymbolsNative->putOpCode(rArrayRowSep, ocArrayRowSep);
+}
+
 // -----------------------------------------------------------------------------
 OpCode FormulaCompiler::NextToken()
 {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ namespace dbtools
         Reference< XInterface > xKeepAlive(static_cast< XWeak* >(this));
 
         try
-        {	// remove ourself as property change listener
+        {   // remove ourself as property change listener
             OSL_ENSURE( _rxEventSource.is(), "OAutoConnectionDisposer::stopPropertyListening: invalid event source (no XPropertySet)!" );
             if ( _rxEventSource.is() )
             {
@@ -146,7 +146,7 @@ namespace dbtools
     void SAL_CALL OAutoConnectionDisposer::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
     {
         if ( _rEvent.PropertyName.equals( getActiveConnectionPropertyName() ) )
-        {	// somebody set a new ActiveConnection
+        {   // somebody set a new ActiveConnection
 
             Reference< XConnection > xNewConnection;
             _rEvent.NewValue >>= xNewConnection;
@@ -242,6 +242,6 @@ namespace dbtools
     //---------------------------------------------------------------------
 
 //.........................................................................
-}	// namespace dbtools
+}   // namespace dbtools
 //.........................................................................
 

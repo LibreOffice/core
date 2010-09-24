@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,15 +47,15 @@
 
 #include <list>
 
-class ImplPropertyTable; 
+class ImplPropertyTable;
 
-//	----------------------------------------------------
-//	class UnoControlModel
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class UnoControlModel
+//  ----------------------------------------------------
 
-class TOOLKIT_DLLPUBLIC UnoControlModel :	public ::com::sun::star::awt::XControlModel, 
-                        public ::com::sun::star::beans::XPropertyState, 
-                        public ::com::sun::star::io::XPersistObject, 
+class TOOLKIT_DLLPUBLIC UnoControlModel :   public ::com::sun::star::awt::XControlModel,
+                        public ::com::sun::star::beans::XPropertyState,
+                        public ::com::sun::star::io::XPersistObject,
                         public ::com::sun::star::lang::XComponent,
                         public ::com::sun::star::lang::XServiceInfo,
                         public ::com::sun::star::lang::XTypeProvider,
@@ -66,16 +66,16 @@ class TOOLKIT_DLLPUBLIC UnoControlModel :	public ::com::sun::star::awt::XControl
                         public ::cppu::OWeakAggObject
 {
 private:
-    ImplPropertyTable*			mpData;
-    EventListenerMultiplexer	maDisposeListeners;
+    ImplPropertyTable*          mpData;
+    EventListenerMultiplexer    maDisposeListeners;
 
 protected:
-    void										ImplRegisterProperty( sal_uInt16 nPropType );
-    void										ImplRegisterProperties( const std::list< sal_uInt16 > &rIds );
-    void										ImplRegisterProperty( sal_uInt16 nPropId, const ::com::sun::star::uno::Any& rDefault );
-    ::com::sun::star::uno::Sequence<sal_Int32>	ImplGetPropertyIds() const;
-    virtual ::com::sun::star::uno::Any 			ImplGetDefaultValue( sal_uInt16 nPropId ) const;
-    sal_Bool 									ImplHasProperty( sal_uInt16 nPropId ) const;
+    void                                        ImplRegisterProperty( sal_uInt16 nPropType );
+    void                                        ImplRegisterProperties( const std::list< sal_uInt16 > &rIds );
+    void                                        ImplRegisterProperty( sal_uInt16 nPropId, const ::com::sun::star::uno::Any& rDefault );
+    ::com::sun::star::uno::Sequence<sal_Int32>  ImplGetPropertyIds() const;
+    virtual ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    sal_Bool                                    ImplHasProperty( sal_uInt16 nPropId ) const;
 
     /** called before setting multiple properties, allows to care for property dependencies
 
@@ -84,11 +84,11 @@ protected:
         the properties are internally really set.</p>
     */
     virtual void ImplNormalizePropertySequence(
-                    const sal_Int32					_nCount,		/// the number of entries in the arrays
-                    sal_Int32*						_pHandles,		/// the handles of the properties to set
-                    ::com::sun::star::uno::Any*		_pValues,		/// the values of the properties to set
-                    sal_Int32*						_pValidHandles	/// pointer to the valid handles, allowed to be adjusted
-                )	const SAL_THROW(());
+                    const sal_Int32                 _nCount,        /// the number of entries in the arrays
+                    sal_Int32*                      _pHandles,      /// the handles of the properties to set
+                    ::com::sun::star::uno::Any*     _pValues,       /// the values of the properties to set
+                    sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
+                )   const SAL_THROW(());
 
     /// ensures that two property values in a sequence have a certain order
     void    ImplEnsureHandleOrder(
@@ -99,31 +99,31 @@ protected:
                 sal_Int32 _nSecondHandle                /// second handle, which should supersede _nFirstHandle in the sequence
             ) const;
 
-public:	
+public:
                 UnoControlModel();
                 UnoControlModel( const UnoControlModel& rModel );
                 ~UnoControlModel();
-                
-    virtual UnoControlModel*	Clone() const = 0;
-    
-    // ::com::sun::star::uno::XAggregation
-    ::com::sun::star::uno::Any	SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return OWeakAggObject::queryInterface(rType); }
-    void						SAL_CALL acquire() throw()	{ OWeakAggObject::acquire(); }
-    void						SAL_CALL release() throw()	{ OWeakAggObject::release(); }
 
-    ::com::sun::star::uno::Any	SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual UnoControlModel*    Clone() const = 0;
+
+    // ::com::sun::star::uno::XAggregation
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return OWeakAggObject::queryInterface(rType); }
+    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
+
+    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XUnoTunnel
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >&	GetUnoTunnelId() throw();
-    static UnoControlModel*										GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
-    sal_Int64													SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
+    static UnoControlModel*                                     GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
+    sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::util::XCloneable
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XControlModel
 

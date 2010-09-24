@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,82 +31,82 @@
 #if 0
 ***********************************************************************
 *
-*	Hier folgt die Beschreibung fuer die exportierten Makros:
+*   Hier folgt die Beschreibung fuer die exportierten Makros:
 *
-*		SV_DECL_VARARR(nm, AE, IS, GS)
-*		SV_IMPL_VARARR( nm, AE )
-*			definiere/implementiere ein Array das einfache Objecte
-*			enthaelt. (Sie werden im Speicher verschoben, koennen also
-*			z.B. keine String sein)
+*       SV_DECL_VARARR(nm, AE, IS, GS)
+*       SV_IMPL_VARARR( nm, AE )
+*           definiere/implementiere ein Array das einfache Objecte
+*           enthaelt. (Sie werden im Speicher verschoben, koennen also
+*           z.B. keine String sein)
 *
-*		SV_DECL_OBJARR(nm, AE, IS, GS)
-*		SV_IMPL_OBJARR( nm, AE )
-*			definiere/implementiere ein Array das Objecte enthaelt.
-*			(Hier koennen es auch Strings sein)
-*
-*
-*		SV_DECL_PTRARR(nm, AE, IS, GS)
-*		SV_IMPL_PTRARR(nm, AE)
-*			definiere/implementiere ein Array das Pointer haelt. Diese
-*			werden von aussen angelegt und zerstoert. Das IMPL-Makro
-*			wird nur benoetigt, wenn die DeleteAndDestroy Methode genutzt
-*			wird, diese loescht dann die Pointer und ruft deren Destruktoren
-*
-*		SV_DECL_PTRARR_DEL(nm, AE, IS, GS)
-*		SV_IMPL_PTRARR(nm, AE)
-*			definiere/implementiere ein Array das Pointer haelt. Diese
-*			werden von aussen angelegt und im Destructor zerstoert.
+*       SV_DECL_OBJARR(nm, AE, IS, GS)
+*       SV_IMPL_OBJARR( nm, AE )
+*           definiere/implementiere ein Array das Objecte enthaelt.
+*           (Hier koennen es auch Strings sein)
 *
 *
-*		SV_DECL_PTRARR_SORT(nm, AE, IS, GS)
-*		SV_IMPL_PTRARR_SORT( nm,AE )
-*			defieniere/implementiere ein Sort-Array mit Pointern, das nach
-*			Pointern sortiert ist. Basiert auf einem PTRARR
+*       SV_DECL_PTRARR(nm, AE, IS, GS)
+*       SV_IMPL_PTRARR(nm, AE)
+*           definiere/implementiere ein Array das Pointer haelt. Diese
+*           werden von aussen angelegt und zerstoert. Das IMPL-Makro
+*           wird nur benoetigt, wenn die DeleteAndDestroy Methode genutzt
+*           wird, diese loescht dann die Pointer und ruft deren Destruktoren
 *
-*		SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, GS)
-*		SV_IMPL_PTRARR_SORT( nm,AE )
-*			defieniere/implementiere ein Sort-Array mit Pointern, das nach
-*			Pointern sortiert ist. Basiert auf einem PTRARR_DEL
+*       SV_DECL_PTRARR_DEL(nm, AE, IS, GS)
+*       SV_IMPL_PTRARR(nm, AE)
+*           definiere/implementiere ein Array das Pointer haelt. Diese
+*           werden von aussen angelegt und im Destructor zerstoert.
 *
-*		SV_DECL_PTRARR_SORT(nm, AE, IS, GS)
-*		SV_IMPL_OP_PTRARR_SORT( nm,AE )
-*			defieniere/implementiere ein Sort-Array mit Pointern, das nach
-*			Objecten sortiert ist. Basiert auf einem PTRARR.
-*			Sortierung mit Hilfe der Object-operatoren "<" und "=="
 *
-*		SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, GS)
-*		SV_IMPL_OP_PTRARR_SORT( nm,AE )
-*			defieniere/implementiere ein Sort-Array mit Pointern, das nach
-*			Objecten sortiert ist. Basiert auf einem PTRARR_DEL.
-*			Sortierung mit Hilfe der Object-operatoren "<" und "=="
+*       SV_DECL_PTRARR_SORT(nm, AE, IS, GS)
+*       SV_IMPL_PTRARR_SORT( nm,AE )
+*           defieniere/implementiere ein Sort-Array mit Pointern, das nach
+*           Pointern sortiert ist. Basiert auf einem PTRARR
 *
-*		SV_DECL_VARARR_SORT(nm, AE, IS, GS)
-*		SV_IMPL_VARARR_SORT( nm,AE )
-*			defieniere/implementiere ein Sort-Array mit einfachen Objecten.
-*			Basiert auf einem VARARR.
-*			Sortierung mit Hilfe der Object-operatoren "<" und "=="
+*       SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, GS)
+*       SV_IMPL_PTRARR_SORT( nm,AE )
+*           defieniere/implementiere ein Sort-Array mit Pointern, das nach
+*           Pointern sortiert ist. Basiert auf einem PTRARR_DEL
+*
+*       SV_DECL_PTRARR_SORT(nm, AE, IS, GS)
+*       SV_IMPL_OP_PTRARR_SORT( nm,AE )
+*           defieniere/implementiere ein Sort-Array mit Pointern, das nach
+*           Objecten sortiert ist. Basiert auf einem PTRARR.
+*           Sortierung mit Hilfe der Object-operatoren "<" und "=="
+*
+*       SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, GS)
+*       SV_IMPL_OP_PTRARR_SORT( nm,AE )
+*           defieniere/implementiere ein Sort-Array mit Pointern, das nach
+*           Objecten sortiert ist. Basiert auf einem PTRARR_DEL.
+*           Sortierung mit Hilfe der Object-operatoren "<" und "=="
+*
+*       SV_DECL_VARARR_SORT(nm, AE, IS, GS)
+*       SV_IMPL_VARARR_SORT( nm,AE )
+*           defieniere/implementiere ein Sort-Array mit einfachen Objecten.
+*           Basiert auf einem VARARR.
+*           Sortierung mit Hilfe der Object-operatoren "<" und "=="
 *
 * JP 23.12.94 neu:
-*		SV_DECL_PTRARR_STACK(nm, AE, IS, GS)
-*			ein Stack mit einem PtrArray als Grundlage.
+*       SV_DECL_PTRARR_STACK(nm, AE, IS, GS)
+*           ein Stack mit einem PtrArray als Grundlage.
 *
 * JP 09.10.96:  vordefinierte Arrays:
-*	VarArr:		SvBools, SvULongs, SvUShorts, SvLongs, SvShorts
-*	PtrArr:		SvStrings, SvStringsDtor
-*	SortArr:	SvStringsSort, SvStringsSortDtor,
-*				SvStringsISort, SvStringsISortDtor
+*   VarArr:     SvBools, SvULongs, SvUShorts, SvLongs, SvShorts
+*   PtrArr:     SvStrings, SvStringsDtor
+*   SortArr:    SvStringsSort, SvStringsSortDtor,
+*               SvStringsISort, SvStringsISortDtor
 ***********************************************************************
 #endif
 
 #include "svl/svldllapi.h"
 
 #ifndef INCLUDED_STRING_H
-#include <string.h> 	// memmove()
+#include <string.h>     // memmove()
 #define INCLUDED_STRING_H
 #endif
 
 #ifndef INCLUDED_LIMITS_H
-#include <limits.h> 	// USHRT_MAX
+#include <limits.h>     // USHRT_MAX
 #define INCLUDED_LIMITS_H
 #endif
 #include <rtl/alloc.h>
@@ -692,7 +692,7 @@ public:\
     void Insert( const AE *pE, USHORT nL );\
     void Remove( USHORT nP, USHORT nL = 1 );\
     void Remove( const AE& aE, USHORT nL = 1 );\
-    USHORT Count() const  {   return nm##_SAR::Count();	}\
+    USHORT Count() const  {   return nm##_SAR::Count(); }\
     const AE* GetData() const { return (const AE*)pData; }\
 \
 /* Das Ende stehe im DECL-Makro !!! */
@@ -860,7 +860,7 @@ void nm::Remove( const AE &aE, USHORT nL )\
         return SvPtrarr::GetPos((const VoidPtr&)aE);\
     }\
     void Remove( AE& aE, USHORT nL = 1 ) { \
-        Remove( (const AE&) aE, nL	);\
+        Remove( (const AE&) aE, nL  );\
     }
 
 #else
@@ -908,7 +908,7 @@ _SV_DECL_PTRARR_SORT(nm, AE, IS, GS, )
 
 #define SV_DECL_PTRARR_SORT_VISIBILITY(nm, AE, IS, GS, vis)\
 _SV_DECL_PTRARR_SORT(nm, AE, IS, GS, vis)
-                                                                                                                             
+
 
 #define _SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, GS, vis)\
 _SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, GS, vis)\
@@ -1050,4 +1050,4 @@ public:\
 #endif
 #endif
 
-#endif	//_SVARRAY_HXX
+#endif  //_SVARRAY_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ published constants UpdateDocMode
     */
 
     const short NO_UPDATE = 0;
-    
+
     //-------------------------------------------------------------------------
     /** Update document if it does not require a dialog.
         Otherwise do not update. For example a link to a database
@@ -54,7 +54,7 @@ published constants UpdateDocMode
     const short QUIET_UPDATE = 1;
 
     //-------------------------------------------------------------------------
-    /** Produce update according to configuration settings. 
+    /** Produce update according to configuration settings.
         If there are no settings use dialog.
     */
 

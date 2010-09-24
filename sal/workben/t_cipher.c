@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,8 +31,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#define NUM_VARIABLE_KEY_TESTS	34
-#define NUM_SET_KEY_TESTS		24
+#define NUM_VARIABLE_KEY_TESTS  34
+#define NUM_SET_KEY_TESTS       24
 
 /* plaintext bytes -- left halves */
 unsigned long plaintext_l[NUM_VARIABLE_KEY_TESTS + NUM_SET_KEY_TESTS] = {

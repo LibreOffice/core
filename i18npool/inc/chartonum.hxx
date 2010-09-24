@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,5 +57,5 @@ TRANSLITERATION_CHARTONUM(_th)
 #undef TRANSLITERATION_CHARTONUM
 
 } } } }
-        
+
 #endif // _L10N_TRANSLITERATION_CHARTONUM_HXX_

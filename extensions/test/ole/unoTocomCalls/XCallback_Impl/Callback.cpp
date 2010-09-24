@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ STDMETHODIMP CCallback::func1()
 STDMETHODIMP CCallback::returnInterface(IDispatch **ppdisp)
 {
     if( ! ppdisp)
-        return E_POINTER;	
+        return E_POINTER;
     CComPtr<IDispatch> spDisp;
     spDisp.CoCreateInstance( L"XCallback_Impl.Simple");
     *ppdisp= spDisp;
@@ -52,15 +52,15 @@ STDMETHODIMP CCallback::returnInterface(IDispatch **ppdisp)
 
 STDMETHODIMP CCallback::outInterface(IDispatch **ppdisp)
 {
-//	return S_OK;
+//  return S_OK;
     if( ! ppdisp)
-        return E_POINTER;	
+        return E_POINTER;
     CComPtr<IDispatch> spDisp;
     spDisp.CoCreateInstance( L"XCallback_Impl.Simple");
     *ppdisp= spDisp;
     (*ppdisp)->AddRef();
 
-//	MessageBox( NULL, _T("CCallback::outInterface"), _T(""), MB_OK);
+//  MessageBox( NULL, _T("CCallback::outInterface"), _T(""), MB_OK);
     return S_OK;
 }
 
@@ -75,7 +75,7 @@ STDMETHODIMP CCallback::outValuesMixed(long val, long *pval, BSTR string)
 }
 
 
-STDMETHODIMP CCallback::outValuesAll( 
+STDMETHODIMP CCallback::outValuesAll(
             /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdisp,
             /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppSimpleStruct,
             /* [out] */ long __RPC_FAR *aSimpleEnum,
@@ -91,11 +91,11 @@ STDMETHODIMP CCallback::outValuesAll(
             /* [out] */ long __RPC_FAR *aLong)
 //)
 {
-//	if( ! ppdisp || ! ppSimpleStruct || ! aSimpleEnum ||
-//		! outSeq || !varAny ||! aBool || ! aChar ||
-//		! aString || ! aFloat || ! aDouble || ! aByte ||
-//		! aShort || ! aLong || ! aUShort || ! aULong)
-//		return E_POINTER;
+//  if( ! ppdisp || ! ppSimpleStruct || ! aSimpleEnum ||
+//      ! outSeq || !varAny ||! aBool || ! aChar ||
+//      ! aString || ! aFloat || ! aDouble || ! aByte ||
+//      ! aShort || ! aLong || ! aUShort || ! aULong)
+//      return E_POINTER;
 
     HRESULT hr=S_OK;
     hr= outInterface( ppdisp);
@@ -116,11 +116,11 @@ STDMETHODIMP CCallback::outValuesAll(
 
 STDMETHODIMP CCallback::outStruct(IDispatch **outStruct)
 {
-//	return S_OK;	
+//  return S_OK;
     if( !outStruct)
         return E_POINTER;
     HRESULT hr= E_FAIL;
-//	MessageBox( NULL, _T("CCallback::outStruct"), _T(""), MB_OK);
+//  MessageBox( NULL, _T("CCallback::outStruct"), _T(""), MB_OK);
 
     CComPtr<IDispatch> _dispMgr;
     if( SUCCEEDED(hr= _dispMgr.CoCreateInstance(L"com.sun.star.ServiceManager")))
@@ -129,14 +129,14 @@ STDMETHODIMP CCallback::outStruct(IDispatch **outStruct)
         CComVariant param1(L"com.sun.star.reflection.CoreReflection");
         CComVariant varRet;
         hr= manager.Invoke1( L"createInstance", &param1, &varRet);
-        
+
         CComDispatchDriver reflection( varRet.pdispVal);
         param1= L"oletest.SimpleStruct";
         varRet.Clear();
         hr= reflection.Invoke1( L"forName", &param1, &varRet);
 
         CComDispatchDriver classSimpleStruct( varRet.pdispVal);
-        
+
         CComPtr<IDispatch> dispStruct;
         param1.vt= VT_DISPATCH | VT_BYREF;
         param1.ppdispVal= &dispStruct;
@@ -145,7 +145,7 @@ STDMETHODIMP CCallback::outStruct(IDispatch **outStruct)
             // Set the value
             CComDispatchDriver simpleStruct( dispStruct);
             param1=L" this is a property string";
-            hr=	simpleStruct.PutPropertyByName(L"message", &param1);
+            hr= simpleStruct.PutPropertyByName(L"message", &param1);
             *outStruct= dispStruct;
             (*outStruct)->AddRef();
             hr= S_OK;
@@ -164,14 +164,14 @@ STDMETHODIMP CCallback::outEnum(long *outEnum)
 
 STDMETHODIMP CCallback::outSeqAny(LPSAFEARRAY* outSeq)
 {
-//	_CrtDbgBreak();
+//  _CrtDbgBreak();
     SAFEARRAY* pArr= SafeArrayCreateVector( VT_VARIANT, 0, 3);
     CComVariant var[3];
     var[0]=L" variant 0";
     var[1]=L" variant 1";
     var[2]=L"variant 2";
     for( long i=0; i<3; i++)
-    {	
+    {
         SafeArrayPutElement( pArr, &i, (void*)&var[i]);
     }
 
@@ -297,7 +297,7 @@ STDMETHODIMP CCallback::inoutStruct(IDispatch **inoutVal)
     hr= outStruct( &dispStruct.p);
     var.Clear();
     var= L"This struct was created in XCallback_Imp.Callback";
-    hr=	dispStruct.PutPropertyByName(L"message", &var);
+    hr= dispStruct.PutPropertyByName(L"message", &var);
 
     *inoutVal= dispStruct;
     (*inoutVal)->AddRef();
@@ -331,7 +331,7 @@ STDMETHODIMP CCallback::inoutSeqAny(LPSAFEARRAY *pArray)
         var.Clear();
         hr= SafeArrayGetElement( *pArray, &i, (void*)&var);
     }
-    
+
     SafeArrayDestroy( *pArray);
 
     outSeqAny( pArray);
@@ -367,7 +367,7 @@ STDMETHODIMP CCallback::inoutChar(short *inoutVal)
         return E_POINTER;
     USES_CONVERSION;
     char buff[256];
-    sprintf( buff, "character value: %C", *inoutVal); 
+    sprintf( buff, "character value: %C", *inoutVal);
     MessageBox( NULL, A2T(buff), _T("XCallback_Impl.Callback"), MB_OK);
     *inoutVal= L'B';
     return S_OK;
@@ -425,7 +425,7 @@ STDMETHODIMP CCallback::inoutLong(long* inoutVal)
     return S_OK;
 }
 
-STDMETHODIMP CCallback::inoutValuesAll( 
+STDMETHODIMP CCallback::inoutValuesAll(
             /* [out][in] */ IDispatch __RPC_FAR *__RPC_FAR *aXSimple,
             /* [out][in] */ IDispatch __RPC_FAR *__RPC_FAR *aStruct,
             /* [out][in] */ long __RPC_FAR *aEnum,
@@ -456,7 +456,7 @@ STDMETHODIMP CCallback::inoutValuesAll(
 
     return S_OK;
 }
- 
+
 
 STDMETHODIMP CCallback::inValues(short aChar, long aLong, BSTR aString)
 {
@@ -503,7 +503,7 @@ STDMETHODIMP CCallback::inSeqXEventListener( LPSAFEARRAY listeners, LPSAFEARRAY 
             CComDispatchDriver disp( varListener.pdispVal);
             hr= disp.Invoke1(L"disposing", &varEvent);
         }
-        
+
     }
 
     return S_OK;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ private:
         because this method of the base class returns the wrong parent.
     */
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >	m_xParent;
+        ::com::sun::star::accessibility::XAccessible >  m_xParent;
 };
 
 #endif

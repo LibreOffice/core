@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,9 +79,9 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, BYTE nType ) :
         USHORT nId = 0;
         switch ( nType )
         {
-            case FRMMGR_TYPE_TEXT:	nId = RES_POOLFRM_FRAME;	break;
-            case FRMMGR_TYPE_OLE:	nId = RES_POOLFRM_OLE;		break;
-            case FRMMGR_TYPE_GRF:	nId = RES_POOLFRM_GRAPHIC;	break;
+            case FRMMGR_TYPE_TEXT:  nId = RES_POOLFRM_FRAME;    break;
+            case FRMMGR_TYPE_OLE:   nId = RES_POOLFRM_OLE;      break;
+            case FRMMGR_TYPE_GRF:   nId = RES_POOLFRM_GRAPHIC;  break;
         }
         aSet.SetParent( &pOwnSh->GetFmtFromPool( nId )->GetAttrSet());
         aSet.Put( SwFmtFrmSize( ATT_MIN_SIZE, DFLT_WIDTH, DFLT_HEIGHT ));
@@ -113,7 +113,7 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, const SfxItemSet &
 
 
 /*--------------------------------------------------------------------
-     Beschreibung:	Initialisieren
+     Beschreibung:  Initialisieren
  --------------------------------------------------------------------*/
 
 void SwFlyFrmAttrMgr::UpdateAttrMgr()
@@ -174,7 +174,7 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:	Rahmen einfuegen
+     Beschreibung:  Rahmen einfuegen
  --------------------------------------------------------------------*/
 
 BOOL SwFlyFrmAttrMgr::InsertFlyFrm()
@@ -195,15 +195,15 @@ BOOL SwFlyFrmAttrMgr::InsertFlyFrm()
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Rahmen des Typs eAnchorType einfuegen. Position und
+ Beschreibung:  Rahmen des Typs eAnchorType einfuegen. Position und
                 Groesse werden explizit angegeben.
                 Nicht erlaubte Werte des Aufzaehlungstypes werden
                 korrigiert.
 ------------------------------------------------------------------------*/
 
-void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds	eAnchorType,
-                                   const Point	&rPos,
-                                   const Size	&rSize,
+void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
+                                   const Point  &rPos,
+                                   const Size   &rSize,
                                    BOOL bAbs )
 {
     ASSERT( eAnchorType == FLY_AT_PAGE ||
@@ -223,7 +223,7 @@ void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds	eAnchorType,
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:	Anker setzen
+     Beschreibung:  Anker setzen
  --------------------------------------------------------------------*/
 
 void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
@@ -245,7 +245,7 @@ void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Setzen des Attributs fuer Spalten
+ Beschreibung:  Setzen des Attributs fuer Spalten
 ------------------------------------------------------------------------*/
 
 void SwFlyFrmAttrMgr::SetCol( const SwFmtCol &rCol )
@@ -253,7 +253,7 @@ void SwFlyFrmAttrMgr::SetCol( const SwFmtCol &rCol )
     aSet.Put( rCol );
 }
 /*--------------------------------------------------------------------
-     Beschreibung:	Absolute Position setzen
+     Beschreibung:  Absolute Position setzen
  --------------------------------------------------------------------*/
 
 void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
@@ -355,11 +355,11 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         if ( rVal.nHoriOrient != text::HoriOrientation::NONE )
             nH = aBoundRect.Left();
 
-        rVal.nMaxHPos	= aBoundRect.Right()  - rVal.nWidth;
+        rVal.nMaxHPos   = aBoundRect.Right()  - rVal.nWidth;
         rVal.nMaxHeight = aBoundRect.Bottom() - nV;
 
-        rVal.nMaxVPos	= aBoundRect.Bottom() - rVal.nHeight;
-        rVal.nMaxWidth	= aBoundRect.Right()  - nH;
+        rVal.nMaxVPos   = aBoundRect.Bottom() - rVal.nHeight;
+        rVal.nMaxWidth  = aBoundRect.Right()  - nH;
     }
     // OD 12.11.2003 #i22341# - handle to character anchored objects vertical
     // aligned at character or top of line in a special case
@@ -425,7 +425,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
                            ? aBoundRect.Top()
                            : rVal.nVPos;
         rVal.nMaxHeight  = rVal.nMaxVPos + rVal.nHeight - nV;
-        rVal.nMaxWidth	 = rVal.nMaxHPos + rVal.nWidth - nH;
+        rVal.nMaxWidth   = rVal.nMaxHPos + rVal.nWidth - nH;
     }
     // OD 12.11.2003 #i22341# - special case for to character anchored objects
     // vertical aligned at character or top of line.
@@ -484,10 +484,10 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         rVal.nMaxHPos = 0;
 
         rVal.nMaxHeight = aBoundRect.Height();
-        rVal.nMaxWidth	= aBoundRect.Width();
+        rVal.nMaxWidth  = aBoundRect.Width();
 
-        rVal.nMaxVPos	= aBoundRect.Height();
-        rVal.nMinVPos	= -aBoundRect.Height() + rVal.nHeight;
+        rVal.nMaxVPos   = aBoundRect.Height();
+        rVal.nMinVPos   = -aBoundRect.Height() + rVal.nHeight;
         if (rVal.nMaxVPos < rVal.nMinVPos)
         {
             rVal.nMinVPos = rVal.nMaxVPos;
@@ -515,28 +515,28 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
 SwTwips SwFlyFrmAttrMgr::CalcTopSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
-    const SvxBoxItem& 	 rBox 	 = GetBox();
+    const SvxBoxItem&    rBox    = GetBox();
     return rShadow.CalcShadowSpace(SHADOW_TOP ) + rBox.CalcLineSpace(BOX_LINE_TOP);
 }
 
 SwTwips SwFlyFrmAttrMgr::CalcBottomSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
-    const SvxBoxItem& rBox 		 = GetBox();
+    const SvxBoxItem& rBox       = GetBox();
     return rShadow.CalcShadowSpace(SHADOW_BOTTOM) + rBox.CalcLineSpace(BOX_LINE_BOTTOM);
 }
 
 SwTwips SwFlyFrmAttrMgr::CalcLeftSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
-    const SvxBoxItem&	 rBox 	 = GetBox();
+    const SvxBoxItem&    rBox    = GetBox();
     return rShadow.CalcShadowSpace(SHADOW_LEFT) + rBox.CalcLineSpace(BOX_LINE_LEFT);
 }
 
 SwTwips SwFlyFrmAttrMgr::CalcRightSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
-    const SvxBoxItem&	 rBox 	 = GetBox();
+    const SvxBoxItem&    rBox    = GetBox();
     return rShadow.CalcShadowSpace(SHADOW_RIGHT) + rBox.CalcLineSpace(BOX_LINE_RIGHT);
 }
 
@@ -578,10 +578,10 @@ void SwFlyFrmAttrMgr::SetPos( const Point& rPoint )
     SwFmtVertOrient aVertOrient( GetVertOrient() );
     SwFmtHoriOrient aHoriOrient( GetHoriOrient() );
 
-    aHoriOrient.SetPos		 ( rPoint.X() );
+    aHoriOrient.SetPos       ( rPoint.X() );
     aHoriOrient.SetHoriOrient( text::HoriOrientation::NONE  );
 
-    aVertOrient.SetPos		 ( rPoint.Y() );
+    aVertOrient.SetPos       ( rPoint.Y() );
     aVertOrient.SetVertOrient( text::VertOrientation::NONE  );
 
     aSet.Put( aVertOrient );

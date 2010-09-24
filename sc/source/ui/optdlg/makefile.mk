@@ -43,6 +43,7 @@ CXXFILES = \
         tpusrlst.cxx    \
         tpview.cxx      \
         tpcalc.cxx      \
+        tpformula.cxx   \
         tpprint.cxx     \
         opredlin.cxx
 
@@ -50,6 +51,7 @@ SLOFILES =  \
         $(SLO)$/tpusrlst.obj \
         $(SLO)$/tpview.obj   \
         $(SLO)$/tpcalc.obj	\
+        $(SLO)$/tpformula.obj	\
         $(SLO)$/tpprint.obj	\
         $(SLO)$/opredlin.obj
 

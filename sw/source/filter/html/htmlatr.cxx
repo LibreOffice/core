@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,9 +124,9 @@ using namespace ::com::sun::star;
 
 #endif
 
-#define HTML_BULLETCHAR_DISC	34
-#define HTML_BULLETCHAR_CIRCLE	38
-#define HTML_BULLETCHAR_SQUARE	36
+#define HTML_BULLETCHAR_DISC    34
+#define HTML_BULLETCHAR_CIRCLE  38
+#define HTML_BULLETCHAR_SQUARE  36
 
 #define COLFUZZY 20
 
@@ -134,10 +134,10 @@ using namespace ::com::sun::star;
 
 HTMLOutEvent __FAR_DATA aAnchorEventTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_O_SDonclick,		OOO_STRING_SVTOOLS_HTML_O_onclick,		SFX_EVENT_MOUSECLICK_OBJECT	},
-    { OOO_STRING_SVTOOLS_HTML_O_SDonmouseover,	OOO_STRING_SVTOOLS_HTML_O_onmouseover,	SFX_EVENT_MOUSEOVER_OBJECT	},
-    { OOO_STRING_SVTOOLS_HTML_O_SDonmouseout,		OOO_STRING_SVTOOLS_HTML_O_onmouseout,		SFX_EVENT_MOUSEOUT_OBJECT	},
-    { 0,						0,					  	0							}
+    { OOO_STRING_SVTOOLS_HTML_O_SDonclick,      OOO_STRING_SVTOOLS_HTML_O_onclick,      SFX_EVENT_MOUSECLICK_OBJECT },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonmouseover,  OOO_STRING_SVTOOLS_HTML_O_onmouseover,  SFX_EVENT_MOUSEOVER_OBJECT  },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonmouseout,       OOO_STRING_SVTOOLS_HTML_O_onmouseout,       SFX_EVENT_MOUSEOUT_OBJECT   },
+    { 0,                        0,                      0                           }
 };
 
 static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt );
@@ -198,7 +198,7 @@ void SwHTMLWriter::OutAndSetDefList( USHORT nNewLvl )
     {
         // output </pre> for the previous(!) pararagraph, if required.
         // Preferable, the <pre> is exported by OutHTML_SwFmtOff for the
-           // previous	paragraph already, but that's not possible, because a very
+           // previous  paragraph already, but that's not possible, because a very
         // deep look at the next paragraph (this one) is required to figure
         // out that a def list starts here.
 
@@ -277,13 +277,13 @@ sal_uInt16 SwHTMLWriter::GetCSS1ScriptForScriptType( sal_uInt16 nScriptType )
 
 struct SwHTMLTxtCollOutputInfo
 {
-    ByteString aToken;				// auszugendens End-Token
-    SfxItemSet *pItemSet;		// harte Attributierung
+    ByteString aToken;              // auszugendens End-Token
+    SfxItemSet *pItemSet;       // harte Attributierung
 
-    BOOL bInNumBulList;			// in einer Aufzaehlungs-Liste;
-    BOOL bParaPossible;			// ein </P> darf zusaetzlich ausgegeben werden
-    BOOL bOutPara;				// ein </P> soll ausgegeben werden
-    BOOL bOutDiv;				// write a </DIV>
+    BOOL bInNumBulList;         // in einer Aufzaehlungs-Liste;
+    BOOL bParaPossible;         // ein </P> darf zusaetzlich ausgegeben werden
+    BOOL bOutPara;              // ein </P> soll ausgegeben werden
+    BOOL bOutDiv;               // write a </DIV>
 
     SwHTMLTxtCollOutputInfo() :
         pItemSet( 0 ),
@@ -306,16 +306,16 @@ SwHTMLTxtCollOutputInfo::~SwHTMLTxtCollOutputInfo()
 
 struct SwHTMLFmtInfo
 {
-    const SwFmt *pFmt;		// das Format selbst
-    const SwFmt *pRefFmt;	// das Vergleichs-Format
+    const SwFmt *pFmt;      // das Format selbst
+    const SwFmt *pRefFmt;   // das Vergleichs-Format
 
-    ByteString aToken;			// das auszugebende Token
-    String aClass;			// die auszugebende Klasse
+    ByteString aToken;          // das auszugebende Token
+    String aClass;          // die auszugebende Klasse
 
-    SfxItemSet *pItemSet;	// der auszugebende Attribut-Set
+    SfxItemSet *pItemSet;   // der auszugebende Attribut-Set
 
-    sal_Int32 nLeftMargin;		// ein par default-Werte fuer
-    sal_Int32 nRightMargin;	// Absatz-Vorlagen
+    sal_Int32 nLeftMargin;      // ein par default-Werte fuer
+    sal_Int32 nRightMargin; // Absatz-Vorlagen
     short nFirstLineIndent;
 
     USHORT nTopMargin;
@@ -370,7 +370,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
     BOOL bTxtColl = pFmt->Which() == RES_TXTFMTCOLL ||
                     pFmt->Which() == RES_CONDTXTFMTCOLL;
 
-    const SwFmt *pReferenceFmt = 0;	// Vergleichs-Format
+    const SwFmt *pReferenceFmt = 0; // Vergleichs-Format
     sal_Bool bSetDefaults = sal_True, bClearSame = sal_True;
     if( nDeep != 0 )
     {
@@ -585,15 +585,15 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     USHORT nNumStart = USHRT_MAX;
     BOOL bForceDL = FALSE;
     BOOL bDT = FALSE;
-    rInfo.bInNumBulList = FALSE;  	// Wir sind in einer Liste?
-    BOOL bNumbered = FALSE;			// Der aktuelle Absatz ist numeriert
-    BOOL bPara = FALSE;				// das aktuelle Token ist <P>
-    rInfo.bParaPossible = FALSE;	// ein <P> darf zusaetzlich ausgegeben werden
-    BOOL bNoEndTag = FALSE;			// kein End-Tag ausgeben
+    rInfo.bInNumBulList = FALSE;    // Wir sind in einer Liste?
+    BOOL bNumbered = FALSE;         // Der aktuelle Absatz ist numeriert
+    BOOL bPara = FALSE;             // das aktuelle Token ist <P>
+    rInfo.bParaPossible = FALSE;    // ein <P> darf zusaetzlich ausgegeben werden
+    BOOL bNoEndTag = FALSE;         // kein End-Tag ausgeben
 
-    rHWrt.bNoAlign = FALSE;			// kein ALIGN=... moeglich
-    BOOL bNoStyle = FALSE;			// kein STYLE=... moeglich
-    BYTE nBulletGrfLvl = 255;	  	// Die auszugebende Bullet-Grafik
+    rHWrt.bNoAlign = FALSE;         // kein ALIGN=... moeglich
+    BOOL bNoStyle = FALSE;          // kein STYLE=... moeglich
+    BYTE nBulletGrfLvl = 255;       // Die auszugebende Bullet-Grafik
 
     // Sind wir in einer Aufzaehlungs- oder Numerierungliste?
     const SwTxtNode* pTxtNd = rWrt.pCurPam->GetNode()->GetTxtNode();
@@ -662,8 +662,8 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     }
 
     // Jetzt wird festgelegt, was aufgrund des Tokens so moeglich ist
-    USHORT nToken = 0;			// Token fuer Tag-Wechsel
-    BOOL bOutNewLine = FALSE;	// nur ein LF ausgeben?
+    USHORT nToken = 0;          // Token fuer Tag-Wechsel
+    BOOL bOutNewLine = FALSE;   // nur ein LF ausgeben?
     if( pFmtInfo->aToken.Len() )
     {
         // Es ist eine HTML-Tag-Vorlage oder die Vorlage ist von einer
@@ -673,19 +673,19 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         // der erste Buchstabe reicht meistens
         switch( rInfo.aToken.GetChar( 0 ) )
         {
-        case 'A':	ASSERT( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_address),
+        case 'A':   ASSERT( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_address),
                             "Doch kein ADDRESS?" );
                     rInfo.bParaPossible = TRUE;
                     rHWrt.bNoAlign = TRUE;
                     break;
 
-        case 'B':	ASSERT( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_blockquote),
+        case 'B':   ASSERT( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_blockquote),
                             "Doch kein BLOCKQUOTE?" );
                     rInfo.bParaPossible = TRUE;
                     rHWrt.bNoAlign = TRUE;
                     break;
 
-        case 'P':	if( rInfo.aToken.Len() == 1 )
+        case 'P':   if( rInfo.aToken.Len() == 1 )
                     {
                         bPara = TRUE;
                     }
@@ -706,7 +706,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                     }
                     break;
 
-        case 'D':	ASSERT( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_dt) ||
+        case 'D':   ASSERT( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_dt) ||
                             rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_dd),
                             "Doch kein DD/DT?" );
                     bDT = rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_dt);
@@ -774,7 +774,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     {
         // nur einen Zeilen-Umbruch (ohne Einrueckung) am Absatz-Anfang
         // ausgeben
-        rInfo.aToken.Erase();	// kein End-Tag ausgeben
+        rInfo.aToken.Erase();   // kein End-Tag ausgeben
         rWrt.Strm() << SwHTMLWriter::sNewLine;
 
         return;
@@ -794,7 +794,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     // Unteren Absatz-Abstand beachten ? (nie im letzen Absatz von
     // Tabellen)
-    BOOL bUseParSpace =	!rHWrt.bOutTable ||
+    BOOL bUseParSpace = !rHWrt.bOutTable ||
                         (rWrt.pCurPam->GetPoint()->nNode.GetIndex() !=
                          rWrt.pCurPam->GetMark()->nNode.GetIndex());
     // Wenn Styles exportiert werden, wird aus eingerueckten Absaetzen
@@ -1012,9 +1012,9 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     //      - ein unterer Abstand oder
     //      - eine Absatz-Ausrichtung existiert, ode
     // - Styles exportiert werden und,
-    //		- die Textkoerper-Vorlage geaendert wurde, oder
-    //   	- ein Benutzer-Format exportiert wird, oder
-    //		- Absatz-Attribute existieren
+    //      - die Textkoerper-Vorlage geaendert wurde, oder
+    //      - ein Benutzer-Format exportiert wird, oder
+    //      - Absatz-Attribute existieren
     if( !bPara ||
         (!rInfo.bInNumBulList && !rHWrt.nDefListLvl) ||
         (rInfo.bInNumBulList && !bNumbered) ||
@@ -1232,34 +1232,34 @@ HTMLSttEndPos::~HTMLSttEndPos()
 typedef HTMLSttEndPos *HTMLSttEndPosPtr;
 SV_DECL_PTRARR( _HTMLEndLst, HTMLSttEndPosPtr, 5, 5 )
 
-enum HTMLOnOffState { HTML_NOT_SUPPORTED, 	// nicht unterst. Attribut
-                      HTML_REAL_VALUE, 		// Attribut mit Wert
-                      HTML_ON_VALUE, 		// Attribut entspricht On-Tag
-                      HTML_OFF_VALUE,		// Attribut entspricht Off-Tag
-                      HTML_CHRFMT_VALUE,	// Attribut fuer Zeichenvorlage
-                      HTML_COLOR_VALUE,		// Attribut fuer Vordergrundfarbe
-                      HTML_STYLE_VALUE,		// Attribut muss als Style exp.
-                      HTML_DROPCAP_VALUE, 	// DropCap-Attributs
-                      HTML_AUTOFMT_VALUE };	// Attribute for automatic character styles
+enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // nicht unterst. Attribut
+                      HTML_REAL_VALUE,      // Attribut mit Wert
+                      HTML_ON_VALUE,        // Attribut entspricht On-Tag
+                      HTML_OFF_VALUE,       // Attribut entspricht Off-Tag
+                      HTML_CHRFMT_VALUE,    // Attribut fuer Zeichenvorlage
+                      HTML_COLOR_VALUE,     // Attribut fuer Vordergrundfarbe
+                      HTML_STYLE_VALUE,     // Attribut muss als Style exp.
+                      HTML_DROPCAP_VALUE,   // DropCap-Attributs
+                      HTML_AUTOFMT_VALUE }; // Attribute for automatic character styles
 
 
 class HTMLEndPosLst
 {
-    _HTMLEndLst aStartLst;	// nach Anfangs-Psoitionen sortierte Liste
-    _HTMLEndLst aEndLst;	// nach End-Psotionen sortierte Liste
-    SvXub_StrLens aScriptChgLst;	// positions where script changes
+    _HTMLEndLst aStartLst;  // nach Anfangs-Psoitionen sortierte Liste
+    _HTMLEndLst aEndLst;    // nach End-Psotionen sortierte Liste
+    SvXub_StrLens aScriptChgLst;    // positions where script changes
                                     // 0 is not contained in this list,
                                     // but the text length
-    SvUShorts aScriptLst;	// the script that is valif up to the position
+    SvUShorts aScriptLst;   // the script that is valif up to the position
                             // contained in aScriptChgList at the same index
 
-    SwDoc *pDoc;			// das aktuelle Dokument
-    SwDoc* pTemplate;		// die HTML-Vorlage (oder 0)
+    SwDoc *pDoc;            // das aktuelle Dokument
+    SwDoc* pTemplate;       // die HTML-Vorlage (oder 0)
     const Color* pDfltColor;// die Default-Vordergrund-Farbe
-    SvStringsSortDtor& rScriptTxtStyles;	//
+    SvStringsSortDtor& rScriptTxtStyles;    //
 
     ULONG nHTMLMode;
-    BOOL bOutStyles : 1;	// werden Styles exportiert
+    BOOL bOutStyles : 1;    // werden Styles exportiert
 
 
     // die Position eines Items in der Start-/Ende-Liste suchen
@@ -1529,9 +1529,9 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         eState = HTML_DROPCAP_VALUE;
         break;
 
-//	default:
-//		eState = HTML_NOT_SUPPORTED;
-//		break;
+//  default:
+//      eState = HTML_NOT_SUPPORTED;
+//      break;
     }
 
     return eState;
@@ -2097,7 +2097,7 @@ sal_uInt16 HTMLEndPosLst::GetScriptAtPos( xub_StrLen nPos ,
 }
 
 void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
-                                      HTMLOutContext *pContext	)
+                                      HTMLOutContext *pContext  )
 {
     rHWrt.bTagOn = TRUE;
 
@@ -2182,7 +2182,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     xub_StrLen nEnde = rStr.Len();
 
     // Besonderheit: leere Node und HR-Vorlage (horizontaler Strich)
-    // 				nur ein <HR> ausgeben
+    //              nur ein <HR> ausgeben
     USHORT nPoolId = pNd->GetAnyFmtColl().GetPoolFmtId();
 
     if( !nEnde && (RES_POOLCOLL_HTML_HR==nPoolId ||
@@ -2486,7 +2486,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset );
 
             nAttrPos++;
-            if( RES_TXTATR_FIELD == pHt->Which() )		// Felder nicht
+            if( RES_TXTATR_FIELD == pHt->Which() )      // Felder nicht
                 continue;                               // ausgeben
 
             if ( pHt->GetEnd() && !pHt->HasDummyChar() )
@@ -2539,7 +2539,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
             // Die an der aktuellen Position verankerten Rahmen ausgeben
             if( bFlysLeft )
-                bFlysLeft =	rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
+                bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
                                                 nStrPos, HTML_POS_INSIDE,
                                                 &aContext );
 
@@ -2559,8 +2559,8 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                         {
                             // Wenn erlaubt, wird das Ding als Spacer exportiert
 
-                            bOutChar = FALSE;	// Space nicht ausgeben
-                            bWriteBreak = FALSE;	// der Absatz ist aber auch nicht leer
+                            bOutChar = FALSE;   // Space nicht ausgeben
+                            bWriteBreak = FALSE;    // der Absatz ist aber auch nicht leer
                             HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
                             OutHTML_HoriSpacer( rWrt,
                                 ((const SvxKerningItem&)pHt->GetAttr()).GetValue() );
@@ -2596,7 +2596,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                                 RES_SCRIPTFLD != nFldWhich ) )
                                 bWriteBreak = FALSE;
                         }
-                        bOutChar = FALSE;		// keine 255 ausgeben
+                        bOutChar = FALSE;       // keine 255 ausgeben
                     }
                 } while( ++nAttrPos < nCntAttr && nStrPos ==
                     *( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
@@ -2765,7 +2765,7 @@ sal_uInt32 SwHTMLWriter::ToPixel( sal_uInt32 nVal ) const
     {
         nVal = Application::GetDefaultDevice()->LogicToPixel(
                     Size( nVal, nVal ), MapMode( MAP_TWIP ) ).Width();
-        if( !nVal )		// wo ein Twip ist sollte auch ein Pixel sein
+        if( !nVal )     // wo ein Twip ist sollte auch ein Pixel sein
             nVal = 1;
     }
     return nVal;
@@ -2794,8 +2794,8 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 
     // die Default-Farbe nur Schreiben, wenn sie als Hint vorkommt
     //if( rHTMLWrt.bTagOn && !rHTMLWrt.bTxtAttr && rHTMLWrt.pDfltColor
-    //	&& rColor == *rHTMLWrt.pDfltColor )
-    //	return rWrt;
+    //  && rColor == *rHTMLWrt.pDfltColor )
+    //  return rWrt;
 
     if( !rHTMLWrt.bTxtAttr && rHTMLWrt.bCfgOutStyles && rHTMLWrt.bCfgPreferStyles )
     {
@@ -3177,7 +3177,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, BOOL bOn )
     if( bEvents )
         HTMLOutFuncs::Out_Events( rWrt.Strm(), *pMacTable, aAnchorEventTable,
                                   rHTMLWrt.bCfgStarBasic, rHTMLWrt.eDestEnc,
-                                     &rHTMLWrt.aNonConvertableCharacters	);
+                                     &rHTMLWrt.aNonConvertableCharacters    );
     rWrt.Strm() << ">";
 
     return rWrt;
@@ -3345,37 +3345,37 @@ static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
 
 
 SwAttrFnTab aHTMLAttrFnTab = {
-/* RES_CHRATR_CASEMAP	*/          OutHTML_CSS1Attr,
-/* RES_CHRATR_CHARSETCOLOR	*/      0,
-/* RES_CHRATR_COLOR	*/              OutHTML_SvxColor,
-/* RES_CHRATR_CONTOUR	*/          0,
-/* RES_CHRATR_CROSSEDOUT	*/      OutHTML_SwCrossedOut,
-/* RES_CHRATR_ESCAPEMENT	*/      OutHTML_SvxEscapement,
-/* RES_CHRATR_FONT	*/              OutHTML_SvxFont,
-/* RES_CHRATR_FONTSIZE	*/          OutHTML_SvxFontHeight,
-/* RES_CHRATR_KERNING	*/          OutHTML_CSS1Attr,
-/* RES_CHRATR_LANGUAGE	*/          OutHTML_SvxLanguage,
-/* RES_CHRATR_POSTURE	*/          OutHTML_SwPosture,
+/* RES_CHRATR_CASEMAP   */          OutHTML_CSS1Attr,
+/* RES_CHRATR_CHARSETCOLOR  */      0,
+/* RES_CHRATR_COLOR */              OutHTML_SvxColor,
+/* RES_CHRATR_CONTOUR   */          0,
+/* RES_CHRATR_CROSSEDOUT    */      OutHTML_SwCrossedOut,
+/* RES_CHRATR_ESCAPEMENT    */      OutHTML_SvxEscapement,
+/* RES_CHRATR_FONT  */              OutHTML_SvxFont,
+/* RES_CHRATR_FONTSIZE  */          OutHTML_SvxFontHeight,
+/* RES_CHRATR_KERNING   */          OutHTML_CSS1Attr,
+/* RES_CHRATR_LANGUAGE  */          OutHTML_SvxLanguage,
+/* RES_CHRATR_POSTURE   */          OutHTML_SwPosture,
 /* RES_CHRATR_PROPORTIONALFONTSIZE*/0,
-/* RES_CHRATR_SHADOWED	*/          0,
-/* RES_CHRATR_UNDERLINE	*/          OutHTML_SwUnderline,
-/* RES_CHRATR_WEIGHT	*/          OutHTML_SwWeight,
-/* RES_CHRATR_WORDLINEMODE	*/      0,
-/* RES_CHRATR_AUTOKERN	*/          0,
-/* RES_CHRATR_BLINK	*/          	OutHTML_SwBlink,
-/* RES_CHRATR_NOHYPHEN	*/          0, // Neu: nicht trennen
+/* RES_CHRATR_SHADOWED  */          0,
+/* RES_CHRATR_UNDERLINE */          OutHTML_SwUnderline,
+/* RES_CHRATR_WEIGHT    */          OutHTML_SwWeight,
+/* RES_CHRATR_WORDLINEMODE  */      0,
+/* RES_CHRATR_AUTOKERN  */          0,
+/* RES_CHRATR_BLINK */              OutHTML_SwBlink,
+/* RES_CHRATR_NOHYPHEN  */          0, // Neu: nicht trennen
 /* RES_CHRATR_NOLINEBREAK */        0, // Neu: nicht umbrechen
-/* RES_CHRATR_BACKGROUND */        	OutHTML_CSS1Attr, // Neu: Zeichenhintergrund
-/* RES_CHRATR_CJK_FONT */			OutHTML_SvxFont,
-/* RES_CHRATR_CJK_FONTSIZE */		OutHTML_SvxFontHeight,
-/* RES_CHRATR_CJK_LANGUAGE */		OutHTML_SvxLanguage,
-/* RES_CHRATR_CJK_POSTURE */		OutHTML_SwPosture,
-/* RES_CHRATR_CJK_WEIGHT */			OutHTML_SwWeight,
-/* RES_CHRATR_CTL_FONT */			OutHTML_SvxFont,
-/* RES_CHRATR_CTL_FONTSIZE */		OutHTML_SvxFontHeight,
-/* RES_CHRATR_CTL_LANGUAGE */		OutHTML_SvxLanguage,
-/* RES_CHRATR_CTL_POSTURE */		OutHTML_SwPosture,
-/* RES_CHRATR_CTL_WEIGHT */			OutHTML_SwWeight,
+/* RES_CHRATR_BACKGROUND */         OutHTML_CSS1Attr, // Neu: Zeichenhintergrund
+/* RES_CHRATR_CJK_FONT */           OutHTML_SvxFont,
+/* RES_CHRATR_CJK_FONTSIZE */       OutHTML_SvxFontHeight,
+/* RES_CHRATR_CJK_LANGUAGE */       OutHTML_SvxLanguage,
+/* RES_CHRATR_CJK_POSTURE */        OutHTML_SwPosture,
+/* RES_CHRATR_CJK_WEIGHT */         OutHTML_SwWeight,
+/* RES_CHRATR_CTL_FONT */           OutHTML_SvxFont,
+/* RES_CHRATR_CTL_FONTSIZE */       OutHTML_SvxFontHeight,
+/* RES_CHRATR_CTL_LANGUAGE */       OutHTML_SvxLanguage,
+/* RES_CHRATR_CTL_POSTURE */        OutHTML_SwPosture,
+/* RES_CHRATR_CTL_WEIGHT */         OutHTML_SwWeight,
 /* RES_CHRATR_ROTATE */             0,
 /* RES_CHRATR_EMPHASIS_MARK */      0,
 /* RES_CHRATR_TWO_LINES */          0,
@@ -3397,26 +3397,26 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
 /* RES_TXTATR_DUMMY5 */             0,
 
-/* RES_TXTATR_FIELD	*/          	OutHTML_SwFmtFld,
-/* RES_TXTATR_FLYCNT */ 			OutHTML_SwFlyCnt,
-/* RES_TXTATR_FTN */				OutHTML_SwFmtFtn,
+/* RES_TXTATR_FIELD */              OutHTML_SwFmtFld,
+/* RES_TXTATR_FLYCNT */             OutHTML_SwFlyCnt,
+/* RES_TXTATR_FTN */                OutHTML_SwFmtFtn,
 /* RES_TXTATR_DUMMY4 */             0,
 /* RES_TXTATR_DUMMY3 */             0,
-/* RES_TXTATR_DUMMY1 */        	    0, // Dummy:
-/* RES_TXTATR_DUMMY2 */        	    0, // Dummy:
+/* RES_TXTATR_DUMMY1 */             0, // Dummy:
+/* RES_TXTATR_DUMMY2 */             0, // Dummy:
 
-/* RES_PARATR_LINESPACING	*/      0,
-/* RES_PARATR_ADJUST	*/          OutHTML_SvxAdjust,
-/* RES_PARATR_SPLIT	*/				0,
-/* RES_PARATR_WIDOWS	*/          0,
-/* RES_PARATR_ORPHANS	*/          0,
-/* RES_PARATR_TABSTOP	*/          0,
+/* RES_PARATR_LINESPACING   */      0,
+/* RES_PARATR_ADJUST    */          OutHTML_SvxAdjust,
+/* RES_PARATR_SPLIT */              0,
+/* RES_PARATR_WIDOWS    */          0,
+/* RES_PARATR_ORPHANS   */          0,
+/* RES_PARATR_TABSTOP   */          0,
 /* RES_PARATR_HYPHENZONE*/          0,
-/* RES_PARATR_DROP */				OutHTML_CSS1Attr,
-/* RES_PARATR_REGISTER */        	0, // neu:  Registerhaltigkeit
-/* RES_PARATR_NUMRULE */      	    0, // Dummy:
-/* RES_PARATR_SCRIPTSPACE */   	    0, // Dummy:
-/* RES_PARATR_HANGINGPUNCTUATION */	0, // Dummy:
+/* RES_PARATR_DROP */               OutHTML_CSS1Attr,
+/* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
+/* RES_PARATR_NUMRULE */            0, // Dummy:
+/* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
+/* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
 /* RES_PARATR_FORBIDDEN_RULES */    0, // new
 /* RES_PARATR_VERTALIGN */          0, // new
 /* RES_PARATR_SNAPTOGRID*/          0, // new
@@ -3428,41 +3428,41 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_PARATR_LIST_RESTARTVALUE */  0, // new
 /* RES_PARATR_LIST_ISCOUNTED */     0, // new
 
-/* RES_FILL_ORDER	*/				0,
-/* RES_FRM_SIZE	*/					0,
-/* RES_PAPER_BIN	*/              0,
-/* RES_LR_SPACE	*/                  0,
-/* RES_UL_SPACE	*/                  0,
-/* RES_PAGEDESC */					0,
-/* RES_BREAK */						0,
-/* RES_CNTNT */						0,
-/* RES_HEADER */		   			0,
-/* RES_FOOTER */		   			0,
-/* RES_PRINT */						0,
-/* RES_OPAQUE */					0,
-/* RES_PROTECT */					0,
-/* RES_SURROUND */					0,
-/* RES_VERT_ORIENT */				0,
-/* RES_HORI_ORIENT */				0,
-/* RES_ANCHOR */					0,
-/* RES_BACKGROUND */				0,
-/* RES_BOX	*/                      0,
-/* RES_SHADOW */					0,
-/* RES_FRMMACRO */					0,
-/* RES_COL */						0,
-/* RES_KEEP */						0,
-/* RES_URL */        	    		0,
-/* RES_EDIT_IN_READONLY */        	0,
-/* RES_LAYOUT_SPLIT */ 	    		0,
-/* RES_FRMATR_DUMMY1 */        	    0, // Dummy:
-/* RES_FRMATR_DUMMY2 */        	    0, // Dummy:
-/* RES_AUTO_STYLE */        	    0, // Dummy:
-/* RES_FRMATR_DUMMY4 */        	    0, // Dummy:
-/* RES_FRMATR_DUMMY5 */        	    0, // Dummy:
-/* RES_FRMATR_DUMMY6 */        	    0, // Dummy:
-/* RES_FRMATR_DUMMY7 */        	    0, // Dummy:
-/* RES_FRMATR_DUMMY8 */        	    0, // Dummy:
-/* RES_FRMATR_DUMMY9 */        	    0, // Dummy:
+/* RES_FILL_ORDER   */              0,
+/* RES_FRM_SIZE */                  0,
+/* RES_PAPER_BIN    */              0,
+/* RES_LR_SPACE */                  0,
+/* RES_UL_SPACE */                  0,
+/* RES_PAGEDESC */                  0,
+/* RES_BREAK */                     0,
+/* RES_CNTNT */                     0,
+/* RES_HEADER */                    0,
+/* RES_FOOTER */                    0,
+/* RES_PRINT */                     0,
+/* RES_OPAQUE */                    0,
+/* RES_PROTECT */                   0,
+/* RES_SURROUND */                  0,
+/* RES_VERT_ORIENT */               0,
+/* RES_HORI_ORIENT */               0,
+/* RES_ANCHOR */                    0,
+/* RES_BACKGROUND */                0,
+/* RES_BOX  */                      0,
+/* RES_SHADOW */                    0,
+/* RES_FRMMACRO */                  0,
+/* RES_COL */                       0,
+/* RES_KEEP */                      0,
+/* RES_URL */                       0,
+/* RES_EDIT_IN_READONLY */          0,
+/* RES_LAYOUT_SPLIT */              0,
+/* RES_FRMATR_DUMMY1 */             0, // Dummy:
+/* RES_FRMATR_DUMMY2 */             0, // Dummy:
+/* RES_AUTO_STYLE */                0, // Dummy:
+/* RES_FRMATR_DUMMY4 */             0, // Dummy:
+/* RES_FRMATR_DUMMY5 */             0, // Dummy:
+/* RES_FRMATR_DUMMY6 */             0, // Dummy:
+/* RES_FRMATR_DUMMY7 */             0, // Dummy:
+/* RES_FRMATR_DUMMY8 */             0, // Dummy:
+/* RES_FRMATR_DUMMY9 */             0, // Dummy:
 /* RES_FOLLOW_TEXT_FLOW */          0,
 /* RES_WRAP_INFLUENCE_ON_OBJPOS */  0,
 /* RES_FRMATR_DUMMY2 */             0, // Dummy:
@@ -3470,25 +3470,25 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_FRMATR_DUMMY4 */             0, // Dummy:
 /* RES_FRMATR_DUMMY5 */             0, // Dummy:
 
-/* RES_GRFATR_MIRRORGRF	*/			0,
-/* RES_GRFATR_CROPGRF	*/			0,
-/* RES_GRFATR_ROTATION */			0,
-/* RES_GRFATR_LUMINANCE */			0,
-/* RES_GRFATR_CONTRAST */			0,
-/* RES_GRFATR_CHANNELR */			0,
-/* RES_GRFATR_CHANNELG */			0,
-/* RES_GRFATR_CHANNELB */			0,
-/* RES_GRFATR_GAMMA */				0,
-/* RES_GRFATR_INVERT */				0,
-/* RES_GRFATR_TRANSPARENCY */		0,
-/* RES_GRFATR_DRWAMODE */			0,
-/* RES_GRFATR_DUMMY1 */				0,
-/* RES_GRFATR_DUMMY2 */				0,
-/* RES_GRFATR_DUMMY3 */				0,
-/* RES_GRFATR_DUMMY4 */				0,
-/* RES_GRFATR_DUMMY5 */				0,
+/* RES_GRFATR_MIRRORGRF */          0,
+/* RES_GRFATR_CROPGRF   */          0,
+/* RES_GRFATR_ROTATION */           0,
+/* RES_GRFATR_LUMINANCE */          0,
+/* RES_GRFATR_CONTRAST */           0,
+/* RES_GRFATR_CHANNELR */           0,
+/* RES_GRFATR_CHANNELG */           0,
+/* RES_GRFATR_CHANNELB */           0,
+/* RES_GRFATR_GAMMA */              0,
+/* RES_GRFATR_INVERT */             0,
+/* RES_GRFATR_TRANSPARENCY */       0,
+/* RES_GRFATR_DRWAMODE */           0,
+/* RES_GRFATR_DUMMY1 */             0,
+/* RES_GRFATR_DUMMY2 */             0,
+/* RES_GRFATR_DUMMY3 */             0,
+/* RES_GRFATR_DUMMY4 */             0,
+/* RES_GRFATR_DUMMY5 */             0,
 
-/* RES_BOXATR_FORMAT */				0,
-/* RES_BOXATR_FORMULA */			0,
-/* RES_BOXATR_VALUE */				0
+/* RES_BOXATR_FORMAT */             0,
+/* RES_BOXATR_FORMULA */            0,
+/* RES_BOXATR_VALUE */              0
 };

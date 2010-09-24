@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,11 @@
 #include "dialogs.hrc"
 #include "headerfooterdlg.hrc"
 
-#define TAB_WIDTH	290
-#define TAB_HEIGHT	186
+#define TAB_WIDTH   290
+#define TAB_HEIGHT  186
 
-#define DLG_WIDTH	TAB_WIDTH + 6
-#define DLG_HEIGHT	TAB_HEIGHT + 6
+#define DLG_WIDTH   TAB_WIDTH + 6
+#define DLG_HEIGHT  TAB_HEIGHT + 6
 
 TabDialog RID_SD_DLG_HEADERFOOTER
 {
@@ -68,38 +68,38 @@ TabDialog RID_SD_DLG_HEADERFOOTER
     };
 };
 
-#define SPACE_Y	3
-#define SPACE_X	3
+#define SPACE_Y 3
+#define SPACE_X 3
 
-#define C1	(RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT)
+#define C1  (RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT)
 #define C2  (RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT)
-#define C3	(RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + 2 * RSC_SP_CHK_TEXTINDENT)
-#define W1	(TAB_WIDTH - PUSHBUTTON_WIDTH - 10 * SPACE_X)
-#define W2	(60)
-#define W3	(W1 - C2 - W2 - SPACE_X)
-#define W4	((W1 - C3 - SPACE_X) / 2)
+#define C3  (RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + 2 * RSC_SP_CHK_TEXTINDENT)
+#define W1  (TAB_WIDTH - PUSHBUTTON_WIDTH - 10 * SPACE_X)
+#define W2  (60)
+#define W3  (W1 - C2 - W2 - SPACE_X)
+#define W4  ((W1 - C3 - SPACE_X) / 2)
 
-#define C4	(C2 + W2 + SPACE_X)
+#define C4  (C2 + W2 + SPACE_X)
 
-#define PUSHBUTTON_WIDTH	80
+#define PUSHBUTTON_WIDTH    80
 
 TabPage RID_SD_TABPAGE_HEADERFOOTER
 {
-//	HelpID = SID_ANIMATION_EFFECTS ;
+//  HelpID = SID_ANIMATION_EFFECTS ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( TAB_WIDTH , TAB_HEIGHT ) ;
     Hide = TRUE;
 
-#define Y0	(RSC_SP_TBPG_INNERBORDER_TOP )
-    
+#define Y0  (RSC_SP_TBPG_INNERBORDER_TOP )
+
     FixedLine FL_INCLUDE_ON_PAGE
     {
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT, Y0 ) ;
         Size = MAP_APPFONT ( W1 - RSC_SP_TBPG_INNERBORDER_LEFT , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text [ en-US ] = "Include on slide";
-    };	
-    
-#define Y1	(Y0 + RSC_CD_FIXEDLINE_HEIGHT + SPACE_Y)
+    };
+
+#define Y1  (Y0 + RSC_CD_FIXEDLINE_HEIGHT + SPACE_Y)
 
     CheckBox CB_HEADER
     {
@@ -108,7 +108,7 @@ TabPage RID_SD_TABPAGE_HEADERFOOTER
         TabStop = TRUE ;
         Text [ en-US ] = "Header";
     };
-    
+
     FixedText FT_HEADER
     {
         Pos = MAP_APPFONT ( C2, Y1 + SPACE_Y + RSC_CD_CHECKBOX_HEIGHT + 1 );
@@ -116,7 +116,7 @@ TabPage RID_SD_TABPAGE_HEADERFOOTER
         TabStop = TRUE ;
         Text [ en-US ] = "Header text";
     };
-    
+
     Edit TB_HEADER_FIXED
     {
         Pos = MAP_APPFONT ( C4, Y1 + SPACE_Y + RSC_CD_CHECKBOX_HEIGHT );
@@ -124,7 +124,7 @@ TabPage RID_SD_TABPAGE_HEADERFOOTER
         TabStop = TRUE ;
         Border = TRUE ;
     };
-    
+
 #define Y2 (Y1 + 2 * SPACE_Y + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT)
 
     FixedLine FL_DATETIME
@@ -140,7 +140,7 @@ TabPage RID_SD_TABPAGE_HEADERFOOTER
         TabStop = TRUE ;
         Text [ en-US ] = "~Date and time";
     };
-    
+
     RadioButton RB_DATETIME_FIXED
     {
         Pos = MAP_APPFONT ( C2, Y2 + 2 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + 1 );
@@ -148,31 +148,31 @@ TabPage RID_SD_TABPAGE_HEADERFOOTER
         TabStop = TRUE ;
         Text [ en-US ] = "Fi~xed";
     };
-    
+
     Edit TB_DATETIME_FIXED
     {
         Pos = MAP_APPFONT ( C4, Y2 + 2 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT );
         Size = MAP_APPFONT ( W3, RSC_CD_TEXTBOX_HEIGHT );
         TabStop = TRUE ;
         Border = TRUE ;
-    };	
-    
+    };
+
     RadioButton RB_DATETIME_AUTOMATIC
     {
         Pos = MAP_APPFONT ( C2, Y2 + 3 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT );
         Size = MAP_APPFONT ( 80, RSC_CD_RADIOBUTTON_HEIGHT );
         TabStop = TRUE ;
-        Text [ en-US ] = "~Variable";	
+        Text [ en-US ] = "~Variable";
     };
-    
+
     ListBox CB_DATETIME_FORMAT
     {
         Pos = MAP_APPFONT ( C3, Y2 + 4 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT + RSC_CD_RADIOBUTTON_HEIGHT  );
         Size = MAP_APPFONT ( W4, 80 );
         TabStop = TRUE ;
         DropDown = TRUE ;
-    };		
-    
+    };
+
     FixedText FT_DATETIME_LANGUAGE
     {
         Pos = MAP_APPFONT ( C3 + W4 + SPACE_X, Y2 + 3 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT + 1 );
@@ -180,23 +180,23 @@ TabPage RID_SD_TABPAGE_HEADERFOOTER
         TabStop = TRUE ;
         Text [ en-US ] = "~Language:";
     };
-    
+
     ListBox CB_DATETIME_LANGUAGE
     {
         Pos = MAP_APPFONT ( C3 + W4 + SPACE_X, Y2 + 4 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT + RSC_CD_RADIOBUTTON_HEIGHT  );
         Size = MAP_APPFONT ( W4, 80 );
         TabStop = TRUE ;
-        DropDown = TRUE ;	
-    };		
-    
-#define Y3	(Y2 + 5 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT + RSC_CD_RADIOBUTTON_HEIGHT + RSC_CD_DROPDOWN_HEIGHT )
+        DropDown = TRUE ;
+    };
+
+#define Y3  (Y2 + 5 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT + RSC_CD_RADIOBUTTON_HEIGHT + RSC_CD_DROPDOWN_HEIGHT )
 
     FixedLine FL_FOOTER
     {
         Pos = MAP_APPFONT ( C1, Y3 );
         Size = MAP_APPFONT ( W1 - C1, RSC_CD_FIXEDLINE_HEIGHT );
     };
-    
+
     CheckBox CB_FOOTER
     {
         Pos = MAP_APPFONT ( C1, Y3 + SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT );
@@ -204,7 +204,7 @@ TabPage RID_SD_TABPAGE_HEADERFOOTER
         TabStop = TRUE ;
         Text [ en-US ] = "Footer";
     };
-    
+
     FixedText FT_FOOTER
     {
         Pos = MAP_APPFONT ( C2, Y3 + 2 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + 1 );
@@ -212,7 +212,7 @@ TabPage RID_SD_TABPAGE_HEADERFOOTER
         TabStop = TRUE ;
         Text [ en-US ] = "Footer text";
     };
-    
+
     Edit TB_FOOTER_FIXED
     {
         Pos = MAP_APPFONT ( C4, Y3 + 2 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT );
@@ -221,14 +221,14 @@ TabPage RID_SD_TABPAGE_HEADERFOOTER
         Border = TRUE ;
     };
 
-#define Y4	(Y3 + 3 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT )
+#define Y4  (Y3 + 3 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_TEXTBOX_HEIGHT )
 
     FixedLine FL_SLIDENUMBER
     {
         Pos = MAP_APPFONT ( C1, Y4 );
         Size = MAP_APPFONT ( W1 - C1, RSC_CD_FIXEDLINE_HEIGHT );
     };
-    
+
     CheckBox CB_SLIDENUMBER
     {
         Pos = MAP_APPFONT ( C1, Y4 + SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT );
@@ -236,15 +236,15 @@ TabPage RID_SD_TABPAGE_HEADERFOOTER
         TabStop = TRUE ;
         Text [ en-US ] = "Slide number";
     };
-    
-#define Y5	(Y4 + 2 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT )
+
+#define Y5  (Y4 + 2 * SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT + RSC_CD_CHECKBOX_HEIGHT )
 
     FixedLine FL_NOTONTITLE
     {
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT, Y5 ) ;
         Size = MAP_APPFONT ( W1 - RSC_SP_TBPG_INNERBORDER_LEFT, RSC_CD_FIXEDLINE_HEIGHT );
     };
-    
+
     CheckBox CB_NOTONTITLE
     {
         Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT, Y5 + SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT );
@@ -282,18 +282,18 @@ TabPage RID_SD_TABPAGE_HEADERFOOTER
         Size = MAP_APPFONT ( PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
     };
-    
+
     Control CT_PREVIEW
     {
         Pos = MAP_APPFONT ( TAB_WIDTH - 7 * SPACE_X - PUSHBUTTON_WIDTH, TAB_HEIGHT - 6*SPACE_Y - PUSHBUTTON_WIDTH );
-        Size = MAP_APPFONT ( PUSHBUTTON_WIDTH, PUSHBUTTON_WIDTH );	
+        Size = MAP_APPFONT ( PUSHBUTTON_WIDTH, PUSHBUTTON_WIDTH );
     };
 
     String STR_PAGE_NUMBER
     {
         Text [ en-US ] = "Page number";
     };
-    
+
     String STR_INCLUDE_ON_PAGE
     {
         Text [ en-US ] = "Include on page";

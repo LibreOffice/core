@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -202,11 +202,11 @@ BOOL UCB_IsDirectory( const String& rURL )
     {
     }
     return bExists;
-} 
+}
 
     // get a list of files from the folder of the URL
     // options: pExtension = 0 -> all, else this specific extension
-    // 			pDateTime != 0 -> returns also the modified date/time of
+    //          pDateTime != 0 -> returns also the modified date/time of
     //                       the files in a SvPtrarr -->
     //                       !! objects must be deleted from the caller!!
 BOOL UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,

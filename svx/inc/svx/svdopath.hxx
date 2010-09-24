@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ class ImpPathForDragAndCreate;
 class SdrPathObjGeoData : public SdrTextObjGeoData
 {
 public:
-    basegfx::B2DPolyPolygon	maPathPolygon;
-    SdrObjKind					meKind;
+    basegfx::B2DPolyPolygon maPathPolygon;
+    SdrObjKind                  meKind;
 
     SdrPathObjGeoData();
     virtual ~SdrPathObjGeoData();
@@ -68,11 +68,11 @@ private:
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
-    basegfx::B2DPolyPolygon	maPathPolygon;
-    SdrObjKind					meKind;
+    basegfx::B2DPolyPolygon maPathPolygon;
+    SdrObjKind                  meKind;
 
     // for isolation of old Drag/Create code
-    ImpPathForDragAndCreate*	mpDAC;
+    ImpPathForDragAndCreate*    mpDAC;
 
 protected:
     // Hilfsfunktion fuer GET/SET/INS/etc. PNT
@@ -174,17 +174,17 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    // transformation interface for StarOfficeAPI. This implements support for 
+    // transformation interface for StarOfficeAPI. This implements support for
     // homogen 3x3 matrices containing the transformation of the SdrObject. At the
-    // moment it contains a shearX, rotation and translation, but for setting all linear 
+    // moment it contains a shearX, rotation and translation, but for setting all linear
     // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
     virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
-    // sets the base geometry of the object using infos contained in the homogen 3x3 matrix. 
-    // If it's an SdrPathObj it will use the provided geometry information. The Polygon has 
+    // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
+    // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
     // to use (0,0) as upper left and will be scaled to the given size in the matrix.
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 };

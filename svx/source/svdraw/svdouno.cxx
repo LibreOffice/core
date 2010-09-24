@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,11 +79,11 @@ using namespace ::sdr::contact;
 class SdrControlEventListenerImpl : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
 {
 protected:
-    SdrUnoObj*					pObj;
+    SdrUnoObj*                  pObj;
 
 public:
     SdrControlEventListenerImpl(SdrUnoObj* _pObj)
-    :	pObj(_pObj)
+    :   pObj(_pObj)
     {}
 
     // XEventListener
@@ -142,7 +142,7 @@ namespace
             DBG_ASSERT( pPageWindow, "lcl_ensureControlVisibility: invalid PageViewWindow!" );
             if ( !pPageWindow )
                 continue;
-            
+
             if ( !pPageWindow->HasObjectContact() )
                 continue;
 
@@ -165,7 +165,7 @@ namespace
 TYPEINIT1(SdrUnoObj, SdrRectObj);
 
 SdrUnoObj::SdrUnoObj(const String& rModelName, BOOL _bOwnUnoControlModel)
-:	m_pImpl( new SdrUnoObjDataHolder ),
+:   m_pImpl( new SdrUnoObjDataHolder ),
     bOwnUnoControlModel( _bOwnUnoControlModel )
 {
     bIsUnoObj = TRUE;
@@ -180,7 +180,7 @@ SdrUnoObj::SdrUnoObj(const String& rModelName, BOOL _bOwnUnoControlModel)
 SdrUnoObj::SdrUnoObj(const String& rModelName,
                      const uno::Reference< lang::XMultiServiceFactory >& rxSFac,
                      BOOL _bOwnUnoControlModel)
-:	m_pImpl( new SdrUnoObjDataHolder ),
+:   m_pImpl( new SdrUnoObjDataHolder ),
     bOwnUnoControlModel( _bOwnUnoControlModel )
 {
     bIsUnoObj = TRUE;
@@ -227,20 +227,20 @@ void SdrUnoObj::SetPage(SdrPage* pNewPage)
 
 void SdrUnoObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed		=	FALSE;
-    rInfo.bRotate90Allowed			=	FALSE;
-    rInfo.bMirrorFreeAllowed		=	FALSE;
-    rInfo.bMirror45Allowed			=	FALSE;
-    rInfo.bMirror90Allowed			=	FALSE;
+    rInfo.bRotateFreeAllowed        =   FALSE;
+    rInfo.bRotate90Allowed          =   FALSE;
+    rInfo.bMirrorFreeAllowed        =   FALSE;
+    rInfo.bMirror45Allowed          =   FALSE;
+    rInfo.bMirror90Allowed          =   FALSE;
     rInfo.bTransparenceAllowed = FALSE;
     rInfo.bGradientAllowed = FALSE;
-    rInfo.bShearAllowed 			=	FALSE;
-    rInfo.bEdgeRadiusAllowed		=	FALSE;
-    rInfo.bNoOrthoDesired			=	FALSE;
-    rInfo.bCanConvToPath			=	FALSE;
-    rInfo.bCanConvToPoly			=	FALSE;
-    rInfo.bCanConvToPathLineToArea	=	FALSE;
-    rInfo.bCanConvToPolyLineToArea	=	FALSE;
+    rInfo.bShearAllowed             =   FALSE;
+    rInfo.bEdgeRadiusAllowed        =   FALSE;
+    rInfo.bNoOrthoDesired           =   FALSE;
+    rInfo.bCanConvToPath            =   FALSE;
+    rInfo.bCanConvToPoly            =   FALSE;
+    rInfo.bCanConvToPathLineToArea  =   FALSE;
+    rInfo.bCanConvToPolyLineToArea  =   FALSE;
     rInfo.bCanConvToContour = FALSE;
 }
 
@@ -411,11 +411,11 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
             aRect.Move(aRect.Left()-aRect.Right(),aRect.Top()-aRect.Bottom());
         }
 
-        aGeo.nDrehWink	= 0;
+        aGeo.nDrehWink  = 0;
         aGeo.nShearWink = 0;
-        aGeo.nSin		= 0.0;
-        aGeo.nCos		= 1.0;
-        aGeo.nTan		= 0.0;
+        aGeo.nSin       = 0.0;
+        aGeo.nCos       = 1.0;
+        aGeo.nTan       = 0.0;
         SetRectsDirty();
     }
 }
@@ -435,7 +435,7 @@ bool SdrUnoObj::supportsFullDrag() const
     // to ckeck some things out. Current solution is working, so default is
     // enabled
     static bool bDoSupportFullDrag(true);
-    
+
     return bDoSupportFullDrag;
 }
 
@@ -446,7 +446,7 @@ SdrObject* SdrUnoObj::getFullDragClone() const
 
     if(bHandleSpecial)
     {
-        // special handling for SdrUnoObj (FormControl). Create a SdrGrafObj 
+        // special handling for SdrUnoObj (FormControl). Create a SdrGrafObj
         // for drag containing the graphical representation. This does not work too
         // well, so the default is to simply clone
         pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), this), GetLogicRect());
@@ -603,7 +603,7 @@ void SdrUnoObj::SetUnoControlModel( const uno::Reference< awt::XControlModel >& 
     ViewContactOfUnoControl* pVC = NULL;
     if ( impl_getViewContact( pVC ) )
     {
-        // flushViewObjectContacts() removes all existing VOCs for the local DrawHierarchy. This 
+        // flushViewObjectContacts() removes all existing VOCs for the local DrawHierarchy. This
         // is always allowed since they will be re-created on demand (and with the changed model)
         GetViewContact().flushViewObjectContacts(true);
     }
@@ -629,7 +629,7 @@ uno::Reference< awt::XControl > SdrUnoObj::GetUnoControl(const SdrView& _rView, 
     OSL_ENSURE( pUnoContact, "SdrUnoObj::GetUnoControl: wrong contact type!" );
     if ( pUnoContact )
         xControl = pUnoContact->getControl();
-  
+
     return xControl;
 }
 
@@ -638,11 +638,11 @@ uno::Reference< awt::XControl > SdrUnoObj::GetTemporaryControlForWindow(
     const Window& _rWindow, uno::Reference< awt::XControlContainer >& _inout_ControlContainer ) const
 {
     uno::Reference< awt::XControl > xControl;
-  
+
     ViewContactOfUnoControl* pVC = NULL;
     if ( impl_getViewContact( pVC ) )
         xControl = pVC->getTemporaryControlForWindow( _rWindow, _inout_ControlContainer );
-  
+
     return xControl;
 }
 

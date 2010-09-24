@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,22 +58,22 @@ SetTxtLeft SetTxtFirst GetLeft  GetTxtLeft  GetTxtFirst  (Was?)
     700       -500       200       700         -500
 */
 
-#define	LRSPACE_16_VERSION		((USHORT)0x0001)
-#define	LRSPACE_TXTLEFT_VERSION	((USHORT)0x0002)
-#define	LRSPACE_AUTOFIRST_VERSION ((USHORT)0x0003)
-#define	LRSPACE_NEGATIVE_VERSION ((USHORT)0x0004)
+#define LRSPACE_16_VERSION      ((USHORT)0x0001)
+#define LRSPACE_TXTLEFT_VERSION ((USHORT)0x0002)
+#define LRSPACE_AUTOFIRST_VERSION ((USHORT)0x0003)
+#define LRSPACE_NEGATIVE_VERSION ((USHORT)0x0004)
 
 class EDITENG_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
 {
-    short	nFirstLineOfst;     // Erstzeileneinzug _immer_ relativ zu nTxtLeft
-    long	nTxtLeft;           // wir spendieren einen USHORT
-    long	nLeftMargin;        // nLeft oder der neg. Erstzeileneinzug
-    long	nRightMargin;		// der unproblematische rechte Rand
+    short   nFirstLineOfst;     // Erstzeileneinzug _immer_ relativ zu nTxtLeft
+    long    nTxtLeft;           // wir spendieren einen USHORT
+    long    nLeftMargin;        // nLeft oder der neg. Erstzeileneinzug
+    long    nRightMargin;       // der unproblematische rechte Rand
 
-    USHORT	nPropFirstLineOfst, nPropLeftMargin, nPropRightMargin;
-    BOOL 	bAutoFirst	: 1;	// Automatische Berechnung der Erstzeileneinzugs
+    USHORT  nPropFirstLineOfst, nPropLeftMargin, nPropRightMargin;
+    BOOL    bAutoFirst  : 1;    // Automatische Berechnung der Erstzeileneinzugs
 
-    void   AdjustLeft();		// nLeftMargin und nTxtLeft werden angepasst.
+    void   AdjustLeft();        // nLeftMargin und nTxtLeft werden angepasst.
 
 public:
     TYPEINFO();
@@ -85,22 +85,22 @@ public:
     inline SvxLRSpaceItem& operator=( const SvxLRSpaceItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual int              operator==( const SfxPoolItem& ) const;
 
-    virtual	sal_Bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	sal_Bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*	 Create(SvStream &, USHORT) const;
-    virtual SvStream&		 Store(SvStream &, USHORT nItemVersion ) const;
-    virtual USHORT			 GetVersion( USHORT nFileVersion ) const;
-    virtual int				 ScaleMetrics( long nMult, long nDiv );
-    virtual	int				 HasMetrics() const;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
+    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
+    virtual USHORT           GetVersion( USHORT nFileVersion ) const;
+    virtual int              ScaleMetrics( long nMult, long nDiv );
+    virtual int              HasMetrics() const;
 
     // Die "Layout-Schnittstelle":
     inline void   SetLeft ( const long nL, const USHORT nProp = 100 );

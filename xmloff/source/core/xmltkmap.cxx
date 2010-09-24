@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@ using namespace ::xmloff::token;
 
 class SvXMLTokenMapEntry_Impl
 {
-    sal_uInt16	nPrefixKey;
-    OUString	sLocalName;
-    sal_uInt16	nToken;
+    sal_uInt16  nPrefixKey;
+    OUString    sLocalName;
+    sal_uInt16  nToken;
 
 public:
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 #endif
 
 //*****************************************************************************************************************
-//	special macros for assertion handling
+//  special macros for assertion handling
 //      1)  LOGTYPE                                                         use it to define the output of all assertions, errors, exception infos
 //      2)  LOGFILE_ASSERTIONS                                              use it to define the file name to log assertions if LOGTYPE=LOGTYPE_FILE...
 //      3)  LOGFILE_WARNINGS                                                use it to define the file name to log warnings if LOGTYPE=LOGTYPE_FILE...
@@ -71,7 +71,7 @@
         For follow macros we need a special log file. If user forget to specify anyone, we must do it for him!
     _____________________________________________________________________________________________________________*/
 
-    #ifndef	LOGFILE_ASSERTIONS
+    #ifndef LOGFILE_ASSERTIONS
         #define LOGFILE_ASSERTIONS  "_framework_assertions.log"
     #endif
 
@@ -83,24 +83,24 @@
         Set LOGTYPE to LOGTYPE_FILECONTINUE to do this.
         BCONDITION is inserted in "(...)" because user can call this macro with an complex expression!
     _____________________________________________________________________________________________________________*/
-    #if	LOGTYPE==LOGTYPE_FILECONTINUE
+    #if LOGTYPE==LOGTYPE_FILECONTINUE
 
-        #define	LOG_ASSERT( BCONDITION, STEXT )																	\
-                    if ( ( BCONDITION ) == sal_False )															\
-                    {																							\
-                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, STEXT )												\
+        #define LOG_ASSERT( BCONDITION, STEXT )                                                                 \
+                    if ( ( BCONDITION ) == sal_False )                                                          \
+                    {                                                                                           \
+                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, STEXT )                                              \
                     }
 
-        #define	LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )														\
-                    if ( ( BCONDITION ) == sal_True )															\
-                    {																							\
-                        ::rtl::OStringBuffer _sAssertBuffer( 256 );												\
-                        _sAssertBuffer.append( "ASSERT:\n\t"	);												\
-                        _sAssertBuffer.append( SMETHOD			);												\
-                        _sAssertBuffer.append( "\n\t\""			);												\
-                        _sAssertBuffer.append( STEXT			);												\
-                        _sAssertBuffer.append( "\"\n"			);												\
-                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, _sAssertBuffer.makeStringAndClear() )				\
+        #define LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )                                                       \
+                    if ( ( BCONDITION ) == sal_True )                                                           \
+                    {                                                                                           \
+                        ::rtl::OStringBuffer _sAssertBuffer( 256 );                                             \
+                        _sAssertBuffer.append( "ASSERT:\n\t"    );                                              \
+                        _sAssertBuffer.append( SMETHOD          );                                              \
+                        _sAssertBuffer.append( "\n\t\""         );                                              \
+                        _sAssertBuffer.append( STEXT            );                                              \
+                        _sAssertBuffer.append( "\"\n"           );                                              \
+                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, _sAssertBuffer.makeStringAndClear() )                \
                     }
 
     #endif
@@ -113,26 +113,26 @@
         Set LOGTYPE to LOGTYPE_FILEEXIT to do this.
         BCONDITION is inserted in "(...)" because user can call this macro with an complex expression!
     _____________________________________________________________________________________________________________*/
-    #if	LOGTYPE==LOGTYPE_FILEEXIT
+    #if LOGTYPE==LOGTYPE_FILEEXIT
 
-        #define	LOG_ASSERT( BCONDITION, STEXT )																	\
-                    if ( ( BCONDITION ) == sal_False )															\
-                    {																							\
-                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, STEXT )												\
-                        exit(-1);																				\
+        #define LOG_ASSERT( BCONDITION, STEXT )                                                                 \
+                    if ( ( BCONDITION ) == sal_False )                                                          \
+                    {                                                                                           \
+                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, STEXT )                                              \
+                        exit(-1);                                                                               \
                     }
 
-        #define	LOG_ASSERT2( BCONDITION, SMETHODE, STEXT )														\
-                    if ( ( BCONDITION ) == sal_True )															\
-                    {																							\
-                        ::rtl::OStringBuffer _sAssertBuffer( 256 );												\
-                        _sAssertBuffer.append( "ASSERT:\n\t"	);												\
-                        _sAssertBuffer.append( SMETHOD			);												\
-                        _sAssertBuffer.append( "\n\t\""			);												\
-                        _sAssertBuffer.append( STEXT			);												\
-                        _sAssertBuffer.append( "\"\n"			);												\
-                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, _sAssertBuffer.makeStringAndClear() )				\
-                        exit(-1);																				\
+        #define LOG_ASSERT2( BCONDITION, SMETHODE, STEXT )                                                      \
+                    if ( ( BCONDITION ) == sal_True )                                                           \
+                    {                                                                                           \
+                        ::rtl::OStringBuffer _sAssertBuffer( 256 );                                             \
+                        _sAssertBuffer.append( "ASSERT:\n\t"    );                                              \
+                        _sAssertBuffer.append( SMETHOD          );                                              \
+                        _sAssertBuffer.append( "\n\t\""         );                                              \
+                        _sAssertBuffer.append( STEXT            );                                              \
+                        _sAssertBuffer.append( "\"\n"           );                                              \
+                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, _sAssertBuffer.makeStringAndClear() )                \
+                        exit(-1);                                                                               \
                     }
 
     #endif
@@ -145,20 +145,20 @@
         Set LOGTYPE to LOGTYPE_MESSAGEBOX to do this.
         BCONDITION is inserted in "(...)" because user can call this macro with an complex expression!
     _____________________________________________________________________________________________________________*/
-    #if	LOGTYPE==LOGTYPE_MESSAGEBOX
+    #if LOGTYPE==LOGTYPE_MESSAGEBOX
 
-        #define	LOG_ASSERT( BCONDITION, STEXT )																	\
+        #define LOG_ASSERT( BCONDITION, STEXT )                                                                 \
                     OSL_ENSURE( ( BCONDITION ), STEXT );
 
-        #define	LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )														\
-                    {																							\
-                        ::rtl::OStringBuffer _sAssertBuffer( 256 );												\
-                        _sAssertBuffer.append( "ASSERT:\n\t"	);												\
-                        _sAssertBuffer.append( SMETHOD			);												\
-                        _sAssertBuffer.append( "\n\t\""			);												\
-                        _sAssertBuffer.append( STEXT			);												\
-                        _sAssertBuffer.append( "\"\n"			);												\
-                        OSL_ENSURE( !( BCONDITION ), _sAssertBuffer.makeStringAndClear() );						\
+        #define LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )                                                       \
+                    {                                                                                           \
+                        ::rtl::OStringBuffer _sAssertBuffer( 256 );                                             \
+                        _sAssertBuffer.append( "ASSERT:\n\t"    );                                              \
+                        _sAssertBuffer.append( SMETHOD          );                                              \
+                        _sAssertBuffer.append( "\n\t\""         );                                              \
+                        _sAssertBuffer.append( STEXT            );                                              \
+                        _sAssertBuffer.append( "\"\n"           );                                              \
+                        OSL_ENSURE( !( BCONDITION ), _sAssertBuffer.makeStringAndClear() );                     \
                     }
 
     #endif
@@ -169,16 +169,16 @@
         Show an error by using current set output mode by define LOGTYPE!
     _____________________________________________________________________________________________________________*/
 
-    #define	LOG_ERROR( SMETHOD, STEXT )																			\
+    #define LOG_ERROR( SMETHOD, STEXT )                                                                         \
                 LOG_ASSERT2( sal_True, SMETHOD, STEXT )
 
 #else
 
     // If right testmode is'nt set - implements these macros empty!
     #undef  LOGFILE_ASSERTIONS
-    #define	LOG_ASSERT( BCONDITION, STEXT )
-    #define	LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )
-    #define	LOG_ERROR( SMETHOD, STEXT )
+    #define LOG_ASSERT( BCONDITION, STEXT )
+    #define LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )
+    #define LOG_ERROR( SMETHOD, STEXT )
 
 #endif  // ENABLE_ASSERTIONS
 
@@ -202,13 +202,13 @@
         We use a seperated scope {} do protect us against multiple variable definitions.
     _____________________________________________________________________________________________________________*/
 
-    #define	LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )											\
-                {																								\
-                    ::rtl::OStringBuffer _sAssertBuffer2( 256 );												\
-                    _sAssertBuffer2.append( SOWNMESSAGE				);											\
-                    _sAssertBuffer2.append( "\n"					);											\
-                    _sAssertBuffer2.append( U2B(SEXCEPTIONMESSAGE)	);											\
-                    LOG_ERROR( SMETHOD, _sAssertBuffer2.makeStringAndClear() )									\
+    #define LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )                                            \
+                {                                                                                               \
+                    ::rtl::OStringBuffer _sAssertBuffer2( 256 );                                                \
+                    _sAssertBuffer2.append( SOWNMESSAGE             );                                          \
+                    _sAssertBuffer2.append( "\n"                    );                                          \
+                    _sAssertBuffer2.append( U2B(SEXCEPTIONMESSAGE)  );                                          \
+                    LOG_ERROR( SMETHOD, _sAssertBuffer2.makeStringAndClear() )                                  \
                 }
 
     /*_____________________________________________________________________________________________________________
@@ -232,4 +232,4 @@
 
 #endif  // ENABLE_WARNINGS
 
-#endif	// #ifndef __FRAMEWORK_MACROS_DEBUG_ASSERTION_HXX_
+#endif  // #ifndef __FRAMEWORK_MACROS_DEBUG_ASSERTION_HXX_

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,7 +163,7 @@ public:
                         { return ((mnCode & KEY_MOD1) != 0); }
     BOOL            IsMod2() const
                         { return ((mnCode & KEY_MOD2) != 0); }
-    BOOL	        IsMod3() const
+    BOOL            IsMod3() const
                         { return ((mnCode & KEY_MOD3) != 0); }
 };
 
@@ -318,7 +318,7 @@ class VCL_DLLPUBLIC CommandDialogData
     CommandDialogData( int nDialogId = SHOWDIALOG_ID_PREFERENCES )
     : m_nDialogId( nDialogId )
     {}
-    
+
     int GetDialogId() const { return m_nDialogId; }
 };
 
@@ -326,23 +326,23 @@ class VCL_DLLPUBLIC CommandDialogData
 // Media Commands
 // --------------
 
-#define MEDIA_COMMAND_CHANNEL_DOWN			 ((sal_Int16)1)	// Decrement the channel value, for example, for a TV or radio tuner. 
-#define MEDIA_COMMAND_CHANNEL_UP			 ((sal_Int16)2)	// Increment the channel value, for example, for a TV or radio tuner. 
-#define MEDIA_COMMAND_NEXTTRACK				 ((sal_Int16)3)	// Go to next media track/slide.
-#define MEDIA_COMMAND_PAUSE					 ((sal_Int16)4) // Pause. If already paused, take no further action. This is a direct PAUSE command that has no state.
-#define MEDIA_COMMAND_PLAY					 ((sal_Int16)5)	// Begin playing at the current position. If already paused, it will resume. This is a direct PLAY command that has no state.
-#define MEDIA_COMMAND_PLAY_PAUSE			 ((sal_Int16)6)	// Play or pause playback.
-#define MEDIA_COMMAND_PREVIOUSTRACK			 ((sal_Int16)7)	// Go to previous media track/slide.
-#define MEDIA_COMMAND_RECORD				 ((sal_Int16)8)	// Begin recording the current stream.
-#define MEDIA_COMMAND_REWIND				 ((sal_Int16)9)// Go backward in a stream at a higher rate of speed.
-#define MEDIA_COMMAND_STOP					 ((sal_Int16)10)// Stop playback.
-#define MEDIA_COMMAND_MIC_ON_OFF_TOGGLE		 ((sal_Int16)11)// Toggle the microphone.
+#define MEDIA_COMMAND_CHANNEL_DOWN           ((sal_Int16)1) // Decrement the channel value, for example, for a TV or radio tuner.
+#define MEDIA_COMMAND_CHANNEL_UP             ((sal_Int16)2) // Increment the channel value, for example, for a TV or radio tuner.
+#define MEDIA_COMMAND_NEXTTRACK              ((sal_Int16)3) // Go to next media track/slide.
+#define MEDIA_COMMAND_PAUSE                  ((sal_Int16)4) // Pause. If already paused, take no further action. This is a direct PAUSE command that has no state.
+#define MEDIA_COMMAND_PLAY                   ((sal_Int16)5) // Begin playing at the current position. If already paused, it will resume. This is a direct PLAY command that has no state.
+#define MEDIA_COMMAND_PLAY_PAUSE             ((sal_Int16)6) // Play or pause playback.
+#define MEDIA_COMMAND_PREVIOUSTRACK          ((sal_Int16)7) // Go to previous media track/slide.
+#define MEDIA_COMMAND_RECORD                 ((sal_Int16)8) // Begin recording the current stream.
+#define MEDIA_COMMAND_REWIND                 ((sal_Int16)9)// Go backward in a stream at a higher rate of speed.
+#define MEDIA_COMMAND_STOP                   ((sal_Int16)10)// Stop playback.
+#define MEDIA_COMMAND_MIC_ON_OFF_TOGGLE      ((sal_Int16)11)// Toggle the microphone.
 #define MEDIA_COMMAND_MICROPHONE_VOLUME_DOWN ((sal_Int16)12)// Increase microphone volume.
 #define MEDIA_COMMAND_MICROPHONE_VOLUME_MUTE ((sal_Int16)13)// Mute the microphone.
 #define MEDIA_COMMAND_MICROPHONE_VOLUME_UP   ((sal_Int16)14)// Decrease microphone volume.
-#define MEDIA_COMMAND_VOLUME_DOWN			 ((sal_Int16)15)// Lower the volume.
-#define MEDIA_COMMAND_VOLUME_MUTE			 ((sal_Int16)16)// Mute the volume.
-#define MEDIA_COMMAND_VOLUME_UP				 ((sal_Int16)17)// Raise the volume.
+#define MEDIA_COMMAND_VOLUME_DOWN            ((sal_Int16)15)// Lower the volume.
+#define MEDIA_COMMAND_VOLUME_MUTE            ((sal_Int16)16)// Mute the volume.
+#define MEDIA_COMMAND_VOLUME_UP              ((sal_Int16)17)// Raise the volume.
 #define MEDIA_COMMAND_MENU                   ((sal_Int16)18)// Button Menu pressed.
 #define MEDIA_COMMAND_MENU_HOLD              ((sal_Int16)19)// Button Menu (long) pressed.
 #define MEDIA_COMMAND_PLAY_HOLD              ((sal_Int16)20)// Button Play (long) pressed.
@@ -400,7 +400,7 @@ inline CommandSelectionChangeData::CommandSelectionChangeData( ULONG nStart,
 #define COMMAND_HANGUL_HANJA_CONVERSION ((USHORT)14)
 #define COMMAND_INPUTLANGUAGECHANGE     ((USHORT)15)
 #define COMMAND_SHOWDIALOG              ((USHORT)16)
-#define COMMAND_MEDIA					((USHORT)17)
+#define COMMAND_MEDIA                   ((USHORT)17)
 #define COMMAND_SELECTIONCHANGE         ((USHORT)18)
 #define COMMAND_PREPARERECONVERSION     ((USHORT)19)
 #define COMMAND_USER                    ((USHORT)4096)
@@ -428,9 +428,9 @@ public:
     const CommandWheelData*             GetWheelData() const;
     const CommandScrollData*            GetAutoScrollData() const;
     const CommandVoiceData*             GetVoiceData() const;
-    const CommandModKeyData*			GetModKeyData() const;
+    const CommandModKeyData*            GetModKeyData() const;
     const CommandDialogData*            GetDialogData() const;
-    sal_Int16							GetMediaCommand() const;
+    sal_Int16                           GetMediaCommand() const;
     const CommandSelectionChangeData*   GetSelectionChangeData() const;
 };
 

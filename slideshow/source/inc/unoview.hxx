@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,9 +57,9 @@ namespace slideshow
             /** Retrieve the underlying UNO slide view.
              */
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShowView > getUnoView() const = 0;
-            
+
             /** Dispose view
-                
+
                 This needs to be different from Disposable interface,
                 as the UNO XComponent also provides a dispose() (only
                 with a different calling convention under Windows).
@@ -77,8 +77,8 @@ namespace slideshow
             virtual void setIsSoundEnabled (const bool bValue) = 0;
         };
 
-        typedef ::boost::shared_ptr< UnoView > 		UnoViewSharedPtr;
-        typedef ::std::vector< UnoViewSharedPtr >	UnoViewVector;
+        typedef ::boost::shared_ptr< UnoView >      UnoViewSharedPtr;
+        typedef ::std::vector< UnoViewSharedPtr >   UnoViewVector;
     }
 }
 

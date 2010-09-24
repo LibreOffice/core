@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -160,7 +160,7 @@ void SvXMLImportPropertyMapper::importXML(
         // GetEntryIndex will start searching with position 0.
         // Otherwise GetEntryIndex will start with the next position specified.
         sal_Int32 nIndex =  nStartIdx - 1;
-        sal_uInt32 nFlags = 0;	// flags of actual property map entry
+        sal_uInt32 nFlags = 0;  // flags of actual property map entry
         sal_Bool bFound = sal_False;
 
         // for better error reporting: this should be set true if no
@@ -265,7 +265,7 @@ void SvXMLImportPropertyMapper::importXML(
                     continue;
                 }
             }
-            
+
             if( !bFound )
             {
                 if( (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) || (XML_NAMESPACE_NONE == nPrefix) || bAlienImport )
@@ -406,7 +406,7 @@ void SvXMLImportPropertyMapper::CheckSpecialContext(
     sal_Int32 nCount = aProperties.size();
 
     Reference< XPropertySetInfo > xInfo(rPropSet->getPropertySetInfo());
-    
+
     for( sal_Int32 i=0; i < nCount; i++ )
     {
         const XMLPropertyState& rProp = aProperties[i];

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@ namespace vclcanvas
     typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XTextLayout,
                                                ::com::sun::star::lang::XServiceInfo > TextLayout_Base;
 
-    class TextLayout : public ::comphelper::OBaseMutex, 
+    class TextLayout : public ::comphelper::OBaseMutex,
                        public TextLayout_Base,
                        private ::boost::noncopyable
     {
     public:
-        TextLayout( const ::com::sun::star::rendering::StringContext& 	aText, 
-                    sal_Int8                                            nDirection, 
+        TextLayout( const ::com::sun::star::rendering::StringContext&   aText,
+                    sal_Int8                                            nDirection,
                     sal_Int64                                           nRandomSeed,
                     const CanvasFont::Reference&                        rFont,
                     const ::com::sun::star::uno::Reference<
@@ -84,24 +84,24 @@ namespace vclcanvas
         virtual sal_Int8 SAL_CALL getMainTextDirection(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::rendering::StringContext SAL_CALL getText(  ) throw (::com::sun::star::uno::RuntimeException);
-        
+
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw( ::com::sun::star::uno::RuntimeException );
 
-        bool draw( OutputDevice&                                   rOutDev, 
-                   const Point&                                    rOutpos, 
-                   const ::com::sun::star::rendering::ViewState&   viewState, 
+        bool draw( OutputDevice&                                   rOutDev,
+                   const Point&                                    rOutpos,
+                   const ::com::sun::star::rendering::ViewState&   viewState,
                    const ::com::sun::star::rendering::RenderState& renderState ) const;
 
     private:
-        void setupTextOffsets( sal_Int32*										outputOffsets,
+        void setupTextOffsets( sal_Int32*                                       outputOffsets,
                                const ::com::sun::star::uno::Sequence< double >& inputOffsets,
-                               const ::com::sun::star::rendering::ViewState& 	viewState, 
-                               const ::com::sun::star::rendering::RenderState& 	renderState		) const;
+                               const ::com::sun::star::rendering::ViewState&    viewState,
+                               const ::com::sun::star::rendering::RenderState&  renderState     ) const;
 
-        ::com::sun::star::rendering::StringContext 	     maText;
+        ::com::sun::star::rendering::StringContext       maText;
         ::com::sun::star::uno::Sequence< double >        maLogicalAdvancements;
         CanvasFont::Reference                            mpFont;
         ::com::sun::star::uno::Reference<

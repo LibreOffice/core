@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,16 +163,16 @@ class SFX2_DLLPUBLIC SfxApplication: public SfxShell
     DECL_DLLPRIVATE_LINK(       GlobalBasicErrorHdl_Impl, StarBASIC* );
     SAL_DLLPRIVATE BOOL         SaveAll_Impl(BOOL bPrompt = FALSE, BOOL bAutoSave = FALSE);
     SAL_DLLPRIVATE short        QuerySave_Impl(SfxObjectShell &, BOOL bAutoSave = FALSE);
-    SAL_DLLPRIVATE void			InitializeDisplayName_Impl();
+    SAL_DLLPRIVATE void         InitializeDisplayName_Impl();
 //#endif
 
     static SfxApplication*      Create();
     void                        Init();
     void                        Exit();
-    void                		SettingsChange( USHORT, const AppSettings & );
+    void                        SettingsChange( USHORT, const AppSettings & );
     void                        Main( );
-    void                		PreInit( );
-    void                		Quit();
+    void                        PreInit( );
+    void                        Quit();
     void                        Deinitialize();
 
 public:
@@ -181,23 +181,23 @@ public:
 
                                 SfxApplication();
                                 ~SfxApplication();
-    static SfxApplication*		GetOrCreate();
+    static SfxApplication*      GetOrCreate();
 
     // Resource Manager
     bool                        InitLabelResMgr( const char* _pLabelPrefix, bool _bException = false );
     SfxResourceManager&         GetResourceManager() const;
     ResMgr*                     GetSfxResManager();
-    SimpleResMgr*				GetSimpleResManager();
+    SimpleResMgr*               GetSimpleResManager();
     ResMgr*                     GetLabelResManager() const;
     static ResMgr*              CreateResManager( const char *pPrefix );
-    SimpleResMgr*				CreateSimpleResManager();
+    SimpleResMgr*               CreateSimpleResManager();
 
     // DDE
-    long                		DdeExecute( const String& rCmd );
-    long						DdeGetData( const String& rItem,
+    long                        DdeExecute( const String& rCmd );
+    long                        DdeGetData( const String& rItem,
                                             const String& rMimeType,
                                         ::com::sun::star::uno::Any & rValue );
-    long						DdeSetData( const String& rItem,
+    long                        DdeSetData( const String& rItem,
                                             const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
     ::sfx2::SvLinkSource*       DdeCreateLinkSource( const String& rItem );
@@ -226,9 +226,9 @@ public:
     SfxEventConfiguration*      GetEventConfig() const;
 
     // Basic/Scripting
-    static sal_Bool				IsXScriptURL( const String& rScriptURL );
-    static ::rtl::OUString		ChooseScript();
-    static void         		MacroOrganizer( INT16 nTabId );
+    static sal_Bool             IsXScriptURL( const String& rScriptURL );
+    static ::rtl::OUString      ChooseScript();
+    static void                 MacroOrganizer( INT16 nTabId );
     BasicManager*               GetBasicManager();
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
                                 GetDialogContainer();
@@ -263,7 +263,7 @@ public:
     SAL_DLLPRIVATE SfxDispatcher* GetAppDispatcher_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl();
 
-    SAL_DLLPRIVATE BOOL    		QueryExit_Impl();
+    SAL_DLLPRIVATE BOOL         QueryExit_Impl();
     SAL_DLLPRIVATE void         SetOptions_Impl(const SfxItemSet &);
     SAL_DLLPRIVATE FASTBOOL     Initialize_Impl();
 
@@ -315,7 +315,7 @@ public:
     SAL_DLLPRIVATE SvUShorts*   GetDisabledSlotList_Impl();
     SAL_DLLPRIVATE SfxSlotPool& GetAppSlotPool_Impl() const;
     SAL_DLLPRIVATE SfxModule*   GetModule_Impl();
-    SAL_DLLPRIVATE ResMgr*		GetOffResManager_Impl();
+    SAL_DLLPRIVATE ResMgr*      GetOffResManager_Impl();
 //#endif
 
     /** loads the application logo as used in the about dialog and impress slideshow pause screen */

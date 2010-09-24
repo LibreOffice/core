@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,28 +46,28 @@ public:
                     ScMoveTableDlg( Window* pParent );
                     ~ScMoveTableDlg();
 
-    USHORT	GetSelectedDocument		() const;
-    SCTAB	GetSelectedTable		() const;
-    BOOL	GetCopyTable			() const;
-    void	SetCopyTable			(BOOL bFlag=TRUE);
-    void	EnableCopyTable			(BOOL bFlag=TRUE);
+    USHORT  GetSelectedDocument     () const;
+    SCTAB   GetSelectedTable        () const;
+    BOOL    GetCopyTable            () const;
+    void    SetCopyTable            (BOOL bFlag=TRUE);
+    void    EnableCopyTable         (BOOL bFlag=TRUE);
 
 private:
-    FixedText		aFtDoc;
-    ListBox			aLbDoc;
-    FixedText		aFtTable;
-    ListBox			aLbTable;
-    CheckBox		aBtnCopy;
-    OKButton		aBtnOk;
-    CancelButton	aBtnCancel;
-    HelpButton		aBtnHelp;
+    FixedText       aFtDoc;
+    ListBox         aLbDoc;
+    FixedText       aFtTable;
+    ListBox         aLbTable;
+    CheckBox        aBtnCopy;
+    OKButton        aBtnOk;
+    CancelButton    aBtnCancel;
+    HelpButton      aBtnHelp;
 
-    USHORT			nDocument;
-    SCTAB			nTable;
-    BOOL			bCopyTable;
+    USHORT          nDocument;
+    SCTAB           nTable;
+    BOOL            bCopyTable;
     //--------------------------------------
-    void	Init			();
-    void	InitDocListBox	();
+    void    Init            ();
+    void    InitDocListBox  ();
     DECL_LINK( OkHdl, void * );
     DECL_LINK( SelHdl, ListBox * );
 };

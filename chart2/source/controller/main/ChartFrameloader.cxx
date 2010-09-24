@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
 {
     //@todo ? need to add as terminate listener to desktop?
 
-    uno::Reference< frame::XModel >			xModel;
+    uno::Reference< frame::XModel >         xModel;
     bool bHaveLoadedModel = false;
 
     comphelper::MediaDescriptor aMediaDescriptor(rMediaDescriptor);
@@ -118,8 +118,8 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
     }
 
     //create the controller(+XWindow)
-    uno::Reference< frame::XController >	xController = NULL;
-    uno::Reference< awt::XWindow >			xComponentWindow = NULL;
+    uno::Reference< frame::XController >    xController = NULL;
+    uno::Reference< awt::XWindow >          xComponentWindow = NULL;
     {
         xController = uno::Reference< frame::XController >(
             m_xCC->getServiceManager()->createInstanceWithContext(

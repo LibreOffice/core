@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 //***********************************************************
 
 struct CollName {
-//		const char* pStr;
+//      const char* pStr;
         ULONG nCnd;
         ULONG nSubCond;
     };
@@ -76,9 +76,9 @@ rtl::OUString   GetCommandContextByIndex( sal_Int16 nIndex );
 
 class SW_DLLPUBLIC SwCondCollItem : public SfxPoolItem
 {
-    static CommandStruct		aCmds[COND_COMMAND_COUNT];
+    static CommandStruct        aCmds[COND_COMMAND_COUNT];
 
-    String 						sStyles[COND_COMMAND_COUNT];
+    String                      sStyles[COND_COMMAND_COUNT];
 
 public:
     SwCondCollItem(USHORT nWhich = FN_COND_COLL);
@@ -86,13 +86,13 @@ public:
 
                                 TYPEINFO();
 
-    virtual SfxPoolItem*    	Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             	operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int                 operator==( const SfxPoolItem& ) const;
 
-    static const CommandStruct*	GetCmds();
+    static const CommandStruct* GetCmds();
 
-    const String&				GetStyle(USHORT nPos) const;
-    void						SetStyle( const String* pStyle, USHORT nPos);
+    const String&               GetStyle(USHORT nPos) const;
+    void                        SetStyle( const String* pStyle, USHORT nPos);
 
 };
 

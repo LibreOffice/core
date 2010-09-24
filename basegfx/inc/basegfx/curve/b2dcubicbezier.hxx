@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,12 +45,12 @@ namespace basegfx
 {
     class B2DCubicBezier
     {
-        B2DPoint										maStartPoint;
-        B2DPoint										maEndPoint;
-        B2DPoint										maControlPointA;
-        B2DPoint										maControlPointB;
+        B2DPoint                                        maStartPoint;
+        B2DPoint                                        maEndPoint;
+        B2DPoint                                        maControlPointA;
+        B2DPoint                                        maControlPointB;
 
-    public:		
+    public:
         B2DCubicBezier();
         B2DCubicBezier(const B2DCubicBezier& rBezier);
         B2DCubicBezier(const B2DPoint& rStart, const B2DPoint& rEnd);
@@ -71,7 +71,7 @@ namespace basegfx
         // test if contained bezier is trivial and reset vectors accordingly
         void testAndSolveTrivialBezier();
 
-        /** get length of edge 
+        /** get length of edge
 
             This method handles beziers and simple edges. For
             beziers, the deviation describes the maximum allowed
@@ -100,10 +100,10 @@ namespace basegfx
         // data interface
         B2DPoint getStartPoint() const { return maStartPoint; }
         void setStartPoint(const B2DPoint& rValue) { maStartPoint = rValue; }
-        
+
         B2DPoint getEndPoint() const { return maEndPoint; }
         void setEndPoint(const B2DPoint& rValue) { maEndPoint = rValue; }
-        
+
         B2DPoint getControlPointA() const { return maControlPointA; }
         void setControlPointA(const B2DPoint& rValue) { maControlPointA = rValue; }
 
@@ -146,14 +146,14 @@ namespace basegfx
             value.
             No start point is added, but all necessary created edges
             and the end point
-            
+
             @param rPoly
             Output polygon. The subdivided bezier segment is added to
             this polygon via B2DPolygon::append().
-            
+
             @param rCurve
             The cubic bezier curve to subdivide
-            
+
             @param fDistanceBound
             Bound on the maximal distance of the approximation to the
             true curve.

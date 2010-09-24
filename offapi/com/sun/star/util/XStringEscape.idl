@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,21 +24,21 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_XStringEscape_idl__ 
-#define __com_sun_star_util_XStringEscape_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
-#include <com/sun/star/lang/IllegalArgumentException.idl> 
-#endif 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module util { 
- 
+#ifndef __com_sun_star_util_XStringEscape_idl__
+#define __com_sun_star_util_XStringEscape_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
 /** This interface is used to encode an arbitrary String into a
     escaped form.
 
@@ -61,23 +61,23 @@ module com {  module sun {  module star {  module util {
     unchanged or minimally modified.</p>
  */
 published interface XStringEscape: com::sun::star::uno::XInterface
-{ 
+{
     /** encodes an arbitrary string into an escaped form compatible with some naming rules.
      */
-    string escapeString([in] string aString) 
-        raises( com::sun::star::lang::IllegalArgumentException); 
- 
+    string escapeString([in] string aString)
+        raises( com::sun::star::lang::IllegalArgumentException);
+
     /** decodes an escaped string into the original form.
      */
-    string unescapeString([in] string aEscapedString) 
-        raises( com::sun::star::lang::IllegalArgumentException); 
-}; 
- 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-#endif 
- 
+    string unescapeString([in] string aEscapedString)
+        raises( com::sun::star::lang::IllegalArgumentException);
+};
+
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
 

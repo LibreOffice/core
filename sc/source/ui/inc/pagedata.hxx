@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,55 +38,55 @@ class ScDocShell;
 class ScPrintRangeData
 {
 private:
-    ScRange		aPrintRange;
-    size_t		nPagesX;
-    SCCOL*		pPageEndX;
-    size_t		nPagesY;
-    SCROW*		pPageEndY;
-    long		nFirstPage;
-    BOOL		bTopDown;
-    BOOL		bAutomatic;
+    ScRange     aPrintRange;
+    size_t      nPagesX;
+    SCCOL*      pPageEndX;
+    size_t      nPagesY;
+    SCROW*      pPageEndY;
+    long        nFirstPage;
+    BOOL        bTopDown;
+    BOOL        bAutomatic;
 
 public:
                 ScPrintRangeData();
                 ~ScPrintRangeData();
 
-    void			SetPrintRange( const ScRange& rNew )	{ aPrintRange = rNew; }
-    const ScRange&	GetPrintRange() const					{ return aPrintRange; }
+    void            SetPrintRange( const ScRange& rNew )    { aPrintRange = rNew; }
+    const ScRange&  GetPrintRange() const                   { return aPrintRange; }
 
-    void			SetPagesX( size_t nCount, const SCCOL* pEnd );
-    void			SetPagesY( size_t nCount, const SCROW* pEnd );
+    void            SetPagesX( size_t nCount, const SCCOL* pEnd );
+    void            SetPagesY( size_t nCount, const SCROW* pEnd );
 
-    size_t			GetPagesX() const		{ return nPagesX;   }
-    const SCCOL*	GetPageEndX() const		{ return pPageEndX; }
-    size_t			GetPagesY() const		{ return nPagesY;   }
-    const SCROW*	GetPageEndY() const		{ return pPageEndY; }
+    size_t          GetPagesX() const       { return nPagesX;   }
+    const SCCOL*    GetPageEndX() const     { return pPageEndX; }
+    size_t          GetPagesY() const       { return nPagesY;   }
+    const SCROW*    GetPageEndY() const     { return pPageEndY; }
 
-    void			SetFirstPage( long nNew )	{ nFirstPage = nNew; }
-    long			GetFirstPage() const		{ return nFirstPage; }
-    void			SetTopDown( BOOL bSet )		{ bTopDown = bSet; }
-    BOOL			IsTopDown() const			{ return bTopDown; }
-    void			SetAutomatic( BOOL bSet )	{ bAutomatic = bSet; }
-    BOOL			IsAutomatic() const			{ return bAutomatic; }
+    void            SetFirstPage( long nNew )   { nFirstPage = nNew; }
+    long            GetFirstPage() const        { return nFirstPage; }
+    void            SetTopDown( BOOL bSet )     { bTopDown = bSet; }
+    BOOL            IsTopDown() const           { return bTopDown; }
+    void            SetAutomatic( BOOL bSet )   { bAutomatic = bSet; }
+    BOOL            IsAutomatic() const         { return bAutomatic; }
 };
 
 class ScPageBreakData
 {
 private:
-    size_t				nAlloc;
-    size_t				nUsed;
-    ScPrintRangeData*	pData;			// Array
+    size_t              nAlloc;
+    size_t              nUsed;
+    ScPrintRangeData*   pData;          // Array
 
 public:
                 ScPageBreakData(size_t nMax);
                 ~ScPageBreakData();
 
-    size_t				GetCount() const			{ return nUsed; }
-    ScPrintRangeData&	GetData(size_t i);
+    size_t              GetCount() const            { return nUsed; }
+    ScPrintRangeData&   GetData(size_t i);
 
-    BOOL				IsEqual( const ScPageBreakData& rOther ) const;
+    BOOL                IsEqual( const ScPageBreakData& rOther ) const;
 
-    void				AddPages();
+    void                AddPages();
 };
 
 

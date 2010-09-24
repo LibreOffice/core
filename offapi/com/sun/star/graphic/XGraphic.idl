@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,29 +37,29 @@ module com { module sun { module star { module graphic
 /** This interface acts as a container for the loaded graphic.
 
     <p>The interface itself can be retrieved by using the appropriate
-    methods of <type>XGraphicProvider</type> interface. 
+    methods of <type>XGraphicProvider</type> interface.
     <type>XGraphicProvider</type> also offers a method to store
     the graphic content at a specific location</p>
-    
+
     <p>To render the graphic content onto a specific device, you
     have to create a <type>XGraphicRenderer</type> interface and pass
     this interface appropriately</p>
-    
+
     @see XGraphicProvider
     @see XGraphicRenderer
   */
 published interface XGraphic : ::com::sun::star::uno::XInterface
 {
     /** Get the type of the contained graphic
-    
+
         @returns
             The type of the contained graphic
-            
+
         @see GraphicType
     */
     byte getType();
 };
 
-} ; } ; } ; } ; 
+} ; } ; } ; } ;
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,64 +45,64 @@ namespace basegfx
     */
     class B2IPoint : public ::basegfx::B2ITuple
     {
-    public:					
-        /**	Create a 2D Point
+    public:
+        /** Create a 2D Point
 
             The point is initialized to (0, 0)
         */
-        B2IPoint() 
-        :	B2ITuple()
+        B2IPoint()
+        :   B2ITuple()
         {}
 
-        /**	Create a 2D Point
+        /** Create a 2D Point
 
             @param nX
             This parameter is used to initialize the X-coordinate
             of the 2D Point.
-            
+
             @param nY
             This parameter is used to initialize the Y-coordinate
             of the 2D Point.
         */
-        B2IPoint(sal_Int32 nX, sal_Int32 nY) 
-        :	B2ITuple(nX, nY)
+        B2IPoint(sal_Int32 nX, sal_Int32 nY)
+        :   B2ITuple(nX, nY)
         {}
 
-        /**	Create a copy of a 2D Point
+        /** Create a copy of a 2D Point
 
             @param rPoint
             The 2D Point which will be copied.
         */
-        B2IPoint(const B2IPoint& rPoint) 
-        :	B2ITuple(rPoint)
+        B2IPoint(const B2IPoint& rPoint)
+        :   B2ITuple(rPoint)
         {}
 
         /** constructor with tuple to allow copy-constructing
             from B2ITuple-based classes
         */
-        B2IPoint(const ::basegfx::B2ITuple& rTuple) 
-        :	B2ITuple(rTuple)
+        B2IPoint(const ::basegfx::B2ITuple& rTuple)
+        :   B2ITuple(rTuple)
         {}
 
-        ~B2IPoint() 
+        ~B2IPoint()
         {}
 
         /** *=operator to allow usage from B2IPoint, too
         */
-        B2IPoint& operator*=( const B2IPoint& rPnt ) 
-        { 
+        B2IPoint& operator*=( const B2IPoint& rPnt )
+        {
             mnX *= rPnt.mnX;
-            mnY *= rPnt.mnY; 
-            return *this; 
+            mnY *= rPnt.mnY;
+            return *this;
         }
 
         /** *=operator to allow usage from B2IPoint, too
         */
-        B2IPoint& operator*=(sal_Int32 t) 
-        { 
-            mnX *= t; 
-            mnY *= t; 
-            return *this; 
+        B2IPoint& operator*=(sal_Int32 t)
+        {
+            mnX *= t;
+            mnY *= t;
+            return *this;
         }
 
         /** assignment operator to allow assigning the results

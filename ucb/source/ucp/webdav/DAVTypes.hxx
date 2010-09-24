@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ enum ProppatchOperation { PROPSET = 0, PROPREMOVE = 1 };
 
 struct ProppatchValue
 {
-    ProppatchOperation 		 operation;
+    ProppatchOperation       operation;
     rtl::OUString            name;
     com::sun::star::uno::Any value;
 

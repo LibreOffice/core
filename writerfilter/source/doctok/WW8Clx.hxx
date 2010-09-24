@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,14 +51,14 @@ class WW8Clx : public WW8StructBase
 
     /// Offset where FCs begin
     sal_uInt32 nOffsetPieceTable;
-    
+
 public:
     /// Pointer to Clx.
     typedef boost::shared_ptr<WW8Clx> Pointer_t;
 
     WW8Clx(WW8Stream & rStream,
-           sal_uInt32 nOffset, sal_uInt32 nCount); 
-        
+           sal_uInt32 nOffset, sal_uInt32 nCount);
+
     virtual void dump(OutputWithDepth<string> & o) const;
 
     /**

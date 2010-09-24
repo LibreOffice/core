@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,15 +43,15 @@ class OTimerManagerCleanup;
 
 class NAMESPACE_VOS(OTimerManager) : public NAMESPACE_VOS(OThread)
 {
-    
+
 public:
 
     ///
       OTimerManager();
-    
+
     ///
       ~OTimerManager();
-    
+
       /// register timer
     sal_Bool SAL_CALL registerTimer(NAMESPACE_VOS(OTimer)* pTimer);
 
@@ -64,9 +64,9 @@ public:
     /// retrieves the "Singleton" TimerManager Instance
     static OTimerManager* SAL_CALL getTimerManager();
 
-    
+
 protected:
-    
+
      /// worker-function of thread
       virtual void SAL_CALL run();
 
@@ -75,13 +75,13 @@ protected:
 
     // cleanup Method
     virtual void SAL_CALL onTerminated();
-    
+
       // sorted-queue data
-      NAMESPACE_VOS(OTimer)*		m_pHead;
+      NAMESPACE_VOS(OTimer)*        m_pHead;
     // List Protection
-    NAMESPACE_VOS(OMutex)		m_Lock;
+    NAMESPACE_VOS(OMutex)       m_Lock;
     // Signal the insertion of a timer
-    NAMESPACE_VOS(OCondition)	m_notEmpty;
+    NAMESPACE_VOS(OCondition)   m_notEmpty;
 
     // Synchronize access to OTimerManager
     static NAMESPACE_VOS(OMutex) m_Access;
@@ -90,7 +90,7 @@ protected:
     static NAMESPACE_VOS(OTimerManager)* m_pManager;
 
     friend class OTimerManagerCleanup;
-    
+
 };
 
 using namespace vos;
@@ -106,7 +106,7 @@ VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OTimer, vos),
 
 OTimer::OTimer()
 {
-    m_TimeOut	  = 0;
+    m_TimeOut     = 0;
     m_Expired     = 0;
     m_RepeatDelta = 0;
       m_pNext       = 0;
@@ -114,7 +114,7 @@ OTimer::OTimer()
 
 OTimer::OTimer(const TTimeValue& Time)
 {
-    m_TimeOut	  = Time;
+    m_TimeOut     = Time;
     m_RepeatDelta = 0;
     m_Expired     = 0;
       m_pNext       = 0;
@@ -124,7 +124,7 @@ OTimer::OTimer(const TTimeValue& Time)
 
 OTimer::OTimer(const TTimeValue& Time, const TTimeValue& Repeat)
 {
-    m_TimeOut	  = Time;
+    m_TimeOut     = Time;
     m_RepeatDelta = Repeat;
     m_Expired     = 0;
       m_pNext       = 0;
@@ -298,16 +298,16 @@ void OTimerManager::onTerminated()
 {
     delete this; // mfe: AAARRRGGGHHH!!!
 }
-    
+
 OTimerManager* OTimerManager::getTimerManager()
-{    
-    OGuard Guard(&m_Access); 
-    
+{
+    OGuard Guard(&m_Access);
+
     if (! m_pManager)
         new OTimerManager;
 
     return (m_pManager);
-}	
+}
 
 sal_Bool OTimerManager::registerTimer(OTimer* pTimer)
 {
@@ -317,28 +317,28 @@ sal_Bool OTimerManager::registerTimer(OTimer* pTimer)
     {
         return sal_False;
     }
-    
+
     OGuard Guard(&m_Lock);
 
     // try to find one with equal or lower remaining time.
     OTimer** ppIter = &m_pHead;
-    
-    while (*ppIter) 
+
+    while (*ppIter)
     {
         if (pTimer->expiresBefore(*ppIter))
-        {	
-            // next element has higher remaining time, 
+        {
+            // next element has higher remaining time,
             // => insert new timer before
             break;
         }
         ppIter= &((*ppIter)->m_pNext);
-    } 
-  
-    // next element has higher remaining time, 
+    }
+
+    // next element has higher remaining time,
     // => insert new timer before
     pTimer->m_pNext= *ppIter;
     *ppIter = pTimer;
-    
+
 
     if (pTimer == m_pHead)
     {
@@ -358,27 +358,27 @@ sal_Bool OTimerManager::unregisterTimer(OTimer* pTimer)
     {
         return sal_False;
     }
-    
+
     // lock access
     OGuard Guard(&m_Lock);
 
     OTimer** ppIter = &m_pHead;
 
-    while (*ppIter) 
+    while (*ppIter)
     {
         if (pTimer == (*ppIter))
-        {	
+        {
             // remove timer from list
             *ppIter = (*ppIter)->m_pNext;
             return sal_True;
         }
         ppIter= &((*ppIter)->m_pNext);
-    } 
+    }
 
     return sal_False;
 }
 
-sal_Bool OTimerManager::lookupTimer(const OTimer* pTimer) 
+sal_Bool OTimerManager::lookupTimer(const OTimer* pTimer)
 {
     VOS_ASSERT(pTimer);
 
@@ -386,7 +386,7 @@ sal_Bool OTimerManager::lookupTimer(const OTimer* pTimer)
     {
         return sal_False;
     }
-    
+
     // lock access
     OGuard Guard(&m_Lock);
 
@@ -394,7 +394,7 @@ sal_Bool OTimerManager::lookupTimer(const OTimer* pTimer)
     for (OTimer* pIter = m_pHead; pIter != 0; pIter= pIter->m_pNext)
     {
         if (pIter == pTimer)
-        {    
+        {
             return sal_True;
         }
     }
@@ -409,7 +409,7 @@ void OTimerManager::checkForTimeout()
 
     if ( m_pHead == 0 )
     {
-        m_Lock.release();        
+        m_Lock.release();
         return;
     }
 
@@ -421,9 +421,9 @@ void OTimerManager::checkForTimeout()
         m_pHead = pTimer->m_pNext;
 
         pTimer->acquire();
-        
+
         m_Lock.release();
-        
+
         pTimer->onShot();
 
         // restart timer if specified
@@ -433,8 +433,8 @@ void OTimerManager::checkForTimeout()
 
             osl_getSystemTime(&Now);
 
-            Now.Seconds += pTimer->m_RepeatDelta.Seconds;				
-            Now.Nanosec += pTimer->m_RepeatDelta.Nanosec;				
+            Now.Seconds += pTimer->m_RepeatDelta.Seconds;
+            Now.Nanosec += pTimer->m_RepeatDelta.Nanosec;
 
             pTimer->m_Expired = Now;
 
@@ -451,16 +451,16 @@ void OTimerManager::checkForTimeout()
     return;
 }
 
-void OTimerManager::run() 
+void OTimerManager::run()
 {
     setPriority(TPriority_BelowNormal);
 
     while (schedule())
     {
-        TTimeValue		delay;
-        TTimeValue*		pDelay=0;
+        TTimeValue      delay;
+        TTimeValue*     pDelay=0;
 
-        
+
         m_Lock.acquire();
 
         if (m_pHead != 0)
@@ -472,13 +472,13 @@ void OTimerManager::run()
         {
             pDelay=0;
         }
-        
-        
+
+
         m_notEmpty.reset();
 
         m_Lock.release();
 
-        
+
         m_notEmpty.wait(pDelay);
 
         checkForTimeout();

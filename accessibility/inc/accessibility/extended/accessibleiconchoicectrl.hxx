@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace accessibility
 
     /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
     */
-    class AccessibleIconChoiceCtrl	:public AccessibleIconChoiceCtrl_BASE
+    class AccessibleIconChoiceCtrl  :public AccessibleIconChoiceCtrl_BASE
                                     ,public VCLXAccessibleComponent
     {
     protected:
@@ -58,17 +58,17 @@ namespace accessibility
         virtual ~AccessibleIconChoiceCtrl();
 
         /** this function is called upon disposing the component */
-        virtual void SAL_CALL	disposing();
+        virtual void SAL_CALL   disposing();
 
-        virtual void	ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-        virtual void	FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+        virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+        virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
         SvtIconChoiceCtrl* getCtrl();
     public:
         /** OAccessibleBase needs a valid view
-            @param	_rIconCtrl
+            @param  _rIconCtrl
                 is the box for which we implement an accessible object
-            @param	_xParent
+            @param  _xParent
                 is our parent accessible object
         */
         AccessibleIconChoiceCtrl( SvtIconChoiceCtrl& _rIconCtrl,

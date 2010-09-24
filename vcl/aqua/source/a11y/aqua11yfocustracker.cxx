@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ using namespace ::com::sun::star::uno;
 
 //------------------------------------------------------------------------------
 
-static inline Window * 
+static inline Window *
 getWindow(const ::VclSimpleEvent *pEvent)
 {
     return static_cast< const ::VclWindowEvent *> (pEvent)->GetWindow();
@@ -86,13 +86,13 @@ long AquaA11yFocusTracker::WindowEventHandler(AquaA11yFocusTracker *pFocusTracke
     default:
         break;
     };
-    
+
     return 0;
 }
 
 //------------------------------------------------------------------------------
 
-AquaA11yFocusTracker::AquaA11yFocusTracker() : 
+AquaA11yFocusTracker::AquaA11yFocusTracker() :
     m_aWindowEventLink(this, (PSTUB) WindowEventHandler),
     m_xDocumentFocusListener(new DocumentFocusListener(*this))
 {
@@ -105,9 +105,9 @@ AquaA11yFocusTracker::AquaA11yFocusTracker() :
 void AquaA11yFocusTracker::setFocusedObject(const Reference< XAccessible >& xAccessible)
 {
     if( xAccessible != m_xFocusedObject )
-    { 
+    {
         m_xFocusedObject = xAccessible;
-    
+
         if( m_aFocusListener.is() )
             m_aFocusListener->focusedObjectChanged(xAccessible);
     }
@@ -118,7 +118,7 @@ void AquaA11yFocusTracker::setFocusedObject(const Reference< XAccessible >& xAcc
 void AquaA11yFocusTracker::notify_toolbox_item_focus(ToolBox *pToolBox)
 {
     Reference< XAccessible > xAccessible( pToolBox->GetAccessible() );
-    
+
     if( xAccessible.is() )
     {
         Reference< XAccessibleContext > xContext(xAccessible->getAccessibleContext());
@@ -178,7 +178,7 @@ void AquaA11yFocusTracker::toolbox_highlight_on(Window *pWindow)
         if ( ! pToolBoxParent || ! pToolBoxParent->HasFocus() )
             return;
     }
-    
+
     notify_toolbox_item_focus(static_cast <ToolBox *> (pWindow));
 }
 
@@ -187,7 +187,7 @@ void AquaA11yFocusTracker::toolbox_highlight_on(Window *pWindow)
 void AquaA11yFocusTracker::toolbox_highlight_off(Window *pWindow)
 {
     ToolBox* pToolBoxParent = dynamic_cast< ToolBox * >( pWindow->GetParent() );
-    
+
     // Notify when leaving sub toolboxes
     if( pToolBoxParent && pToolBoxParent->HasFocus() )
         notify_toolbox_item_focus( pToolBoxParent );
@@ -198,14 +198,14 @@ void AquaA11yFocusTracker::toolbox_highlight_off(Window *pWindow)
 void AquaA11yFocusTracker::tabpage_activated(Window *pWindow)
 {
     Reference< XAccessible > xAccessible( pWindow->GetAccessible() );
-    
+
     if( xAccessible.is() )
     {
         Reference< XAccessibleSelection > xSelection(xAccessible->getAccessibleContext(), UNO_QUERY);
-        
+
         if( xSelection.is() )
             setFocusedObject( xSelection->getSelectedAccessibleChild(0) );
-    }    
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -213,7 +213,7 @@ void AquaA11yFocusTracker::tabpage_activated(Window *pWindow)
 void AquaA11yFocusTracker::menu_highlighted(const VclMenuEvent *pEvent)
 {
     Menu * pMenu = pEvent->GetMenu();
-    
+
     if( pMenu )
     {
         Reference< XAccessible > xAccessible( pMenu->GetAccessible() );
@@ -230,34 +230,34 @@ void AquaA11yFocusTracker::window_got_focus(Window *pWindow)
     // The menu bar is handled through VCLEVENT_MENU_HIGHLIGHTED
     if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WINDOW_MENUBARWINDOW )
         return;
-    
+
     // ToolBoxes are handled through VCLEVENT_TOOLBOX_HIGHLIGHT
     if( pWindow->GetType() == WINDOW_TOOLBOX )
         return;
-    
+
     if( pWindow->GetType() == WINDOW_TABCONTROL )
     {
         tabpage_activated( pWindow );
         return;
     }
-    
+
     Reference< XAccessible > xAccessible(pWindow->GetAccessible());
-    
+
     if( ! xAccessible.is() )
         return;
-    
+
     Reference< XAccessibleContext > xContext = xAccessible->getAccessibleContext();
-        
+
     if( ! xContext.is() )
         return;
-    
+
     Reference< XAccessibleStateSet > xStateSet = xContext->getAccessibleStateSet();
-        
+
     if( ! xStateSet.is() )
         return;
-    
+
 /* the UNO ToolBox wrapper does not (yet?) support XAccessibleSelection, so we
- * need to add listeners to the children instead of re-using the tabpage stuff 
+ * need to add listeners to the children instead of re-using the tabpage stuff
  */
     if( xStateSet->contains(AccessibleStateType::FOCUSED) && (pWindow->GetType() != WINDOW_TREELISTBOX) )
     {

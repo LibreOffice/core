@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,67 +120,67 @@ namespace svxform
     {
         return m_xDelegator->getCurrentControl();
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL LegacyFormController::addActivateListener( const Reference< form::XFormControllerListener >& _listener ) throw (RuntimeException)
     {
         m_xDelegator->addActivateListener( _listener );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL LegacyFormController::removeActivateListener( const Reference< form::XFormControllerListener >& _listener ) throw (RuntimeException)
     {
         m_xDelegator->removeActivateListener( _listener );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL LegacyFormController::setModel( const Reference< XTabControllerModel >& _model ) throw (RuntimeException)
     {
         m_xDelegator->setModel( _model );
     }
-    
+
     //--------------------------------------------------------------------
     Reference< XTabControllerModel > SAL_CALL LegacyFormController::getModel(  ) throw (RuntimeException)
     {
         return m_xDelegator->getModel();
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL LegacyFormController::setContainer( const Reference< XControlContainer >& _container ) throw (RuntimeException)
     {
         m_xDelegator->setContainer( _container );
     }
-    
+
     //--------------------------------------------------------------------
     Reference< XControlContainer > SAL_CALL LegacyFormController::getContainer(  ) throw (RuntimeException)
     {
         return m_xDelegator->getContainer();
     }
-    
+
     //--------------------------------------------------------------------
     Sequence< Reference< XControl > > SAL_CALL LegacyFormController::getControls(  ) throw (RuntimeException)
     {
         return m_xDelegator->getControls();
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL LegacyFormController::autoTabOrder(  ) throw (RuntimeException)
     {
         m_xDelegator->autoTabOrder();
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL LegacyFormController::activateTabOrder(  ) throw (RuntimeException)
     {
         m_xDelegator->activateTabOrder();
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL LegacyFormController::activateFirst(  ) throw (RuntimeException)
     {
         m_xDelegator->activateFirst();
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL LegacyFormController::activateLast(  ) throw (RuntimeException)
     {
@@ -192,7 +192,7 @@ namespace svxform
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.svx.LegacyFormController" ) );
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL LegacyFormController::supportsService( const ::rtl::OUString& _serviceName ) throw (RuntimeException)
     {
@@ -203,7 +203,7 @@ namespace svxform
                 return sal_True;
         return sal_False;
     }
-    
+
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL LegacyFormController::getSupportedServiceNames(  ) throw (RuntimeException)
     {

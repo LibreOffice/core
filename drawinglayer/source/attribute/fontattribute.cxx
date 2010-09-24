@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,18 +41,18 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32								mnRefCount;
+            sal_uInt32                              mnRefCount;
 
             /// core data
-            String   									maFamilyName;       // Font Family Name
-            String   									maStyleName;        // Font Style Name
-            sal_uInt16									mnWeight;           // Font weight
+            String                                      maFamilyName;       // Font Family Name
+            String                                      maStyleName;        // Font Style Name
+            sal_uInt16                                  mnWeight;           // Font weight
 
             /// bitfield
-            unsigned									mbSymbol : 1;       // Symbol Font Flag
-            unsigned									mbVertical : 1;     // Vertical Text Flag
-            unsigned									mbItalic : 1;       // Italic Flag
-            unsigned									mbOutline : 1;      // Outline Flag
+            unsigned                                    mbSymbol : 1;       // Symbol Font Flag
+            unsigned                                    mbVertical : 1;     // Vertical Text Flag
+            unsigned                                    mbItalic : 1;       // Italic Flag
+            unsigned                                    mbOutline : 1;      // Outline Flag
             unsigned                                    mbRTL : 1;          // RTL Flag
             unsigned                                    mbBiDiStrong : 1;   // BiDi Flag
 
@@ -66,7 +66,7 @@ namespace drawinglayer
                 bool bOutline,
                 bool bRTL,
                 bool bBiDiStrong)
-            :	mnRefCount(0),
+            :   mnRefCount(0),
                 maFamilyName(rFamilyName),
                 maStyleName(rStyleName),
                 mnWeight(nWeight),
@@ -132,19 +132,19 @@ namespace drawinglayer
             bool bOutline,
             bool bRTL,
             bool bBiDiStrong)
-        :	mpFontAttribute(new ImpFontAttribute(
+        :   mpFontAttribute(new ImpFontAttribute(
                 rFamilyName, rStyleName, nWeight, bSymbol, bVertical, bItalic, bOutline, bRTL, bBiDiStrong))
         {
         }
 
         FontAttribute::FontAttribute()
-        :	mpFontAttribute(ImpFontAttribute::get_global_default())
+        :   mpFontAttribute(ImpFontAttribute::get_global_default())
         {
             mpFontAttribute->mnRefCount++;
         }
 
         FontAttribute::FontAttribute(const FontAttribute& rCandidate)
-        :	mpFontAttribute(rCandidate.mpFontAttribute)
+        :   mpFontAttribute(rCandidate.mpFontAttribute)
         {
             mpFontAttribute->mnRefCount++;
         }
@@ -178,7 +178,7 @@ namespace drawinglayer
                 {
                     delete mpFontAttribute;
                 }
-                
+
                 mpFontAttribute = rCandidate.mpFontAttribute;
                 mpFontAttribute->mnRefCount++;
             }
@@ -201,49 +201,49 @@ namespace drawinglayer
             return (*rCandidate.mpFontAttribute == *mpFontAttribute);
         }
 
-        const String& FontAttribute::getFamilyName() const 
-        { 
-            return mpFontAttribute->getFamilyName(); 
+        const String& FontAttribute::getFamilyName() const
+        {
+            return mpFontAttribute->getFamilyName();
         }
 
-        const String& FontAttribute::getStyleName() const 
-        { 
-            return mpFontAttribute->getStyleName(); 
+        const String& FontAttribute::getStyleName() const
+        {
+            return mpFontAttribute->getStyleName();
         }
 
-        sal_uInt16 FontAttribute::getWeight() const 
-        { 
-            return mpFontAttribute->getWeight(); 
+        sal_uInt16 FontAttribute::getWeight() const
+        {
+            return mpFontAttribute->getWeight();
         }
 
-        bool FontAttribute::getSymbol() const 
-        { 
-            return mpFontAttribute->getSymbol(); 
+        bool FontAttribute::getSymbol() const
+        {
+            return mpFontAttribute->getSymbol();
         }
 
-        bool FontAttribute::getVertical() const 
-        { 
-            return mpFontAttribute->getVertical(); 
+        bool FontAttribute::getVertical() const
+        {
+            return mpFontAttribute->getVertical();
         }
 
-        bool FontAttribute::getItalic() const 
-        { 
-            return mpFontAttribute->getItalic(); 
+        bool FontAttribute::getItalic() const
+        {
+            return mpFontAttribute->getItalic();
         }
 
-        bool FontAttribute::getOutline() const 
-        { 
-            return mpFontAttribute->getOutline(); 
+        bool FontAttribute::getOutline() const
+        {
+            return mpFontAttribute->getOutline();
         }
 
-        bool FontAttribute::getRTL() const 
-        { 
-            return mpFontAttribute->getRTL(); 
+        bool FontAttribute::getRTL() const
+        {
+            return mpFontAttribute->getRTL();
         }
 
-        bool FontAttribute::getBiDiStrong() const 
-        { 
-            return mpFontAttribute->getBiDiStrong(); 
+        bool FontAttribute::getBiDiStrong() const
+        {
+            return mpFontAttribute->getBiDiStrong();
         }
 
     } // end of namespace attribute

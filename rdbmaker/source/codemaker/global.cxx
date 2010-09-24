@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include <rtl/strbuf.hxx>
 #endif
 #include <rtl/ustring.hxx>
-#include 	<osl/thread.h>
+#include    <osl/thread.h>
 #include    <osl/file.hxx>
 
 #include <stdlib.h>
@@ -45,7 +45,7 @@
 #include <errno.h>
 #include <unistd.h>
 #endif
-#include	<codemaker/global.hxx>
+#include    <codemaker/global.hxx>
 
 #ifdef SAL_UNX
 #define SEPARATOR '/'

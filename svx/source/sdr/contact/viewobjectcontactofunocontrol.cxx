@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -446,7 +446,7 @@ namespace sdr { namespace contact {
     {
         return m_rPageView.GetView().IsDesignMode();
     }
-    
+
     //--------------------------------------------------------------------
     Reference< XControlContainer > SdrPageViewAccess::getControlContainer( const OutputDevice& _rDevice ) const
     {
@@ -455,7 +455,7 @@ namespace sdr { namespace contact {
             "SdrPageViewAccess::getControlContainer: the output device is known, but there is no control container for it?" );
         return xControlContainer;
     }
-    
+
     //--------------------------------------------------------------------
     bool SdrPageViewAccess::isLayerVisible( SdrLayerID _nLayerID ) const
     {
@@ -489,7 +489,7 @@ namespace sdr { namespace contact {
     {
         return true;
     }
-    
+
     //--------------------------------------------------------------------
     Reference< XControlContainer > InvisibleControlViewAccess::getControlContainer( const OutputDevice& _rDevice ) const
     {
@@ -502,7 +502,7 @@ namespace sdr { namespace contact {
         }
         return m_rControlContainer;
     }
-    
+
     //--------------------------------------------------------------------
     bool InvisibleControlViewAccess::isLayerVisible( SdrLayerID /*_nLayerID*/ ) const
     {
@@ -537,13 +537,13 @@ namespace sdr { namespace contact {
     {
         return true;
     }
-    
+
     //--------------------------------------------------------------------
     Reference< XControlContainer > DummyPageViewAccess::getControlContainer( const OutputDevice& /*_rDevice*/ ) const
     {
         return NULL;
     }
-    
+
     //--------------------------------------------------------------------
     bool DummyPageViewAccess::isLayerVisible( SdrLayerID /*_nLayerID*/ ) const
     {
@@ -1453,33 +1453,33 @@ namespace sdr { namespace contact {
 
         DBG_ASSERT( Source.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::disposing: Who's this?" );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowResized( const WindowEvent& /*e*/ ) throw(RuntimeException)
     {
         // not interested in
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowMoved( const WindowEvent& /*e*/ ) throw(RuntimeException)
     {
         // not interested in
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowShown( const EventObject& /*e*/ ) throw(RuntimeException)
     {
         VOCGuard aGuard( *this );
         m_bControlIsVisible = true;
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowHidden( const EventObject& /*e*/ ) throw(RuntimeException)
     {
         VOCGuard aGuard( *this );
         m_bControlIsVisible = false;
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) throw(RuntimeException)
     {
@@ -1501,7 +1501,7 @@ namespace sdr { namespace contact {
             m_pAntiImpl->propertyChange();
         }
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::modeChanged( const ModeChangeEvent& _rSource ) throw (RuntimeException)
     {
@@ -1531,7 +1531,7 @@ namespace sdr { namespace contact {
     {
         // not interested in
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
     {
@@ -1547,7 +1547,7 @@ namespace sdr { namespace contact {
         if ( m_aControl == Event.Element )
             impl_dispose_nothrow( false );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
     {
@@ -1861,7 +1861,7 @@ namespace sdr { namespace contact {
         // call parent
         ViewObjectContactOfSdrObj::ActionChanged();
         const ControlHolder& rControl(m_pImpl->getExistentControl());
-        
+
         if(rControl.is() && !rControl.isDesignMode())
         {
             // #i93180# if layer visibility has changed and control is in live mode, it is necessary

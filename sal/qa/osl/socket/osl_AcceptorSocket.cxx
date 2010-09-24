@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
     if you are not including ws2_32.lib in makefile.mk,  the including format will be like this:
 
     .IF "$(GUI)" == "WNT"
-    SHL1STDLIBS +=	$(SOLARLIBDIR)$/cppunit.lib
+    SHL1STDLIBS +=  $(SOLARLIBDIR)$/cppunit.lib
     SHL1STDLIBS +=  ws2_32.lib
     .ENDIF
 
@@ -134,8 +134,8 @@ namespace osl_AcceptorSocket
 
     /** testing the methods:
         inline AcceptorSocket(oslAddrFamily Family = osl_Socket_FamilyInet,
-                              oslProtocol	Protocol = osl_Socket_ProtocolIp,
-                              oslSocketType	Type = osl_Socket_TypeStream);
+                              oslProtocol   Protocol = osl_Socket_ProtocolIp,
+                              oslSocketType Type = osl_Socket_TypeStream);
     */
 
     class ctors : public CppUnit::TestFixture
@@ -184,7 +184,7 @@ namespace osl_AcceptorSocket
             myAcceptorThread.join();
 
             CPPUNIT_ASSERT_MESSAGE( "test for close when is accepting: the socket will quit accepting status.",
-                                myAcceptorThread.isOK()	== sal_True );
+                                myAcceptorThread.isOK() == sal_True );
 
 
 #endif /* LINUX */
@@ -201,7 +201,7 @@ namespace osl_AcceptorSocket
     /** testing the method:
         inline sal_Bool SAL_CALL listen(sal_Int32 MaxPendingConnections= -1);
         inline oslSocketResult SAL_CALL acceptConnection( StreamSocket& Connection);
-        inline oslSocketResult SAL_CALL acceptConnection( StreamSocket&	Connection, SocketAddr & PeerAddr);
+        inline oslSocketResult SAL_CALL acceptConnection( StreamSocket& Connection, SocketAddr & PeerAddr);
     */
 
     class listen_accept : public CppUnit::TestFixture
@@ -219,13 +219,13 @@ namespace osl_AcceptorSocket
             pTimeout->Seconds = 3;
             pTimeout->Nanosec = 0;
             asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1);
-        //	sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
+        //  sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
         }
 
         void tearDown( )
         {
             free( pTimeout );
-        //	sHandle = NULL;
+        //  sHandle = NULL;
             asAcceptorSocket.close( );
             csConnectorSocket.close( );
         }

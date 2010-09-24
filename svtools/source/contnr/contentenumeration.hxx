@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace svt
         ::rtl::OUString maFilename;     // only filename in upper case - for compare purposes
         ::rtl::OUString maTitle;        //  -> be carefull when changing maTitle to update maFilename only when new
         ::rtl::OUString maLowerTitle;
-        
+
 
     public:
         ::rtl::OUString maType;

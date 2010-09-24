@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <editeng/editdata.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/dialmgr.hxx>					// SVX_RESSTR
+#include <svx/dialmgr.hxx>                  // SVX_RESSTR
 
 #include "eetext.hxx"
 #include <svx/svditer.hxx>
@@ -83,7 +83,7 @@
 
 using namespace ::sd;
 
-const long PRINT_OFFSET = 30;   	// siehe \svx\source\dialog\page.cxx (PB)
+const long PRINT_OFFSET = 30;       // siehe \svx\source\dialog\page.cxx (PB)
 
 using namespace com::sun::star;
 
@@ -261,15 +261,15 @@ USHORT SdDrawDocument::GetMasterSdPageCount(PageKind ePgKind) const
 
 /*************************************************************************
 |*
-|*	die in den Seitenobjekten der Notizseiten eingetragenen
-|*	Seitennummern anpassen
+|*  die in den Seitenobjekten der Notizseiten eingetragenen
+|*  Seitennummern anpassen
 |*
 \************************************************************************/
 
 void SdDrawDocument::UpdatePageObjectsInNotes(USHORT nStartPos)
 {
-    USHORT	nPageCount	= GetPageCount();
-    SdPage* pPage		= NULL;
+    USHORT  nPageCount  = GetPageCount();
+    SdPage* pPage       = NULL;
 
     for (USHORT nPage = nStartPos; nPage < nPageCount; nPage++)
     {
@@ -411,7 +411,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage* pPage, USHORT nPos, sal_Int3
 
 /*************************************************************************
 |*
-|*	Seite verschieben
+|*  Seite verschieben
 |*
 \************************************************************************/
 
@@ -427,7 +427,7 @@ void SdDrawDocument::MovePage(USHORT nPgNum, USHORT nNewPos)
 
 /*************************************************************************
 |*
-|*	Seite einfuegen
+|*  Seite einfuegen
 |*
 \************************************************************************/
 
@@ -448,7 +448,7 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, USHORT nPos)
 
 /*************************************************************************
 |*
-|*	Seite loeschen
+|*  Seite loeschen
 |*
 \************************************************************************/
 
@@ -461,14 +461,14 @@ void SdDrawDocument::DeletePage(USHORT nPgNum)
 
 /*************************************************************************
 |*
-|*	Seite entfernen
+|*  Seite entfernen
 |*
 \************************************************************************/
 
 SdrPage* SdDrawDocument::RemovePage(USHORT nPgNum)
 {
     SdrPage* pPage = FmFormModel::RemovePage(nPgNum);
-    
+
     bool bLast = ((nPgNum+1)/2 == (GetPageCount()+1)/2);
 
     ((SdPage*)pPage)->DisconnectLink();
@@ -799,18 +799,18 @@ BOOL SdDrawDocument::CreateMissingNotesAndHandoutPages()
 /*************************************************************************
 |*
 |* - selektierte Seiten hinter genannte Seite schieben
-|*	 (nTargetPage = (USHORT)-1	--> vor erste Seite schieben)
+|*   (nTargetPage = (USHORT)-1  --> vor erste Seite schieben)
 |* - ergibt TRUE, wenn Seiten verschoben wurden
 |*
 \************************************************************************/
 
 BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
 {
-    SdPage* pTargetPage 	   = NULL;
-    SdPage* pPage			   = NULL;
-    USHORT	nPage;
-    USHORT	nNoOfPages		   = GetSdPageCount(PK_STANDARD);
-    BOOL	bSomethingHappened = FALSE;
+    SdPage* pTargetPage        = NULL;
+    SdPage* pPage              = NULL;
+    USHORT  nPage;
+    USHORT  nNoOfPages         = GetSdPageCount(PK_STANDARD);
+    BOOL    bSomethingHappened = FALSE;
 
     const bool bUndo = IsUndoEnabled();
 
@@ -818,7 +818,7 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
         BegUndo(String(SdResId(STR_UNDO_MOVEPAGES)));
 
     // Liste mit selektierten Seiten
-    List	aPageList;
+    List    aPageList;
     for (nPage = 0; nPage < nNoOfPages; nPage++)
     {
         pPage = GetSdPage(nPage, PK_STANDARD);
@@ -873,14 +873,14 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
     {
         pTargetPage = GetSdPage(nPage, PK_STANDARD);
         nTargetPage = nPage;
-        nTargetPage = 2 * nTargetPage + 1;	  // PK_STANDARD --> absolut
+        nTargetPage = 2 * nTargetPage + 1;    // PK_STANDARD --> absolut
         while (aPageList.Count() > 0)
         {
             pPage = (SdPage*)aPageList.GetObject(0);
             nPage = pPage->GetPageNum();
             if (nPage > nTargetPage)
             {
-                nTargetPage += 2;		 // hinter (!) der Seite einfuegen
+                nTargetPage += 2;        // hinter (!) der Seite einfuegen
 
                 if (nPage != nTargetPage)
                 {
@@ -999,7 +999,7 @@ IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, EMPTYARG )
     if( mpDocSh )
         mpDocSh->SetWaitCursor( TRUE );
 
-    BOOL bChanged = IsChanged();		// merken
+    BOOL bChanged = IsChanged();        // merken
 
     // Autolayouts initialisieren
     SdPage* pHandoutMPage = GetMasterSdPage(0, PK_HANDOUT);
@@ -1077,8 +1077,8 @@ SdAnimationInfo* SdDrawDocument::GetAnimationInfo(SdrObject* pObject) const
 
 SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCreate /* = false */ )
 {
-    USHORT nUD			= 0;
-    USHORT nUDCount 	= rObject.GetUserDataCount();
+    USHORT nUD          = 0;
+    USHORT nUDCount     = rObject.GetUserDataCount();
     SdrObjUserData* pUD = 0;
     SdAnimationInfo* pRet = 0;
 
@@ -1114,8 +1114,8 @@ SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject* pObject ) const
     DBG_ASSERT(pObject, "ohne Objekt keine IMapInfo");
 
     SdrObjUserData* pUserData = NULL;
-    SdIMapInfo* 	pIMapInfo = NULL;
-    USHORT			nCount = pObject->GetUserDataCount();
+    SdIMapInfo*     pIMapInfo = NULL;
+    USHORT          nCount = pObject->GetUserDataCount();
 
     // gibt es in den User-Daten eine IMap-Information?
     for ( USHORT i = 0; i < nCount; i++ )
@@ -1145,19 +1145,19 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
 
     if ( pIMapInfo )
     {
-        const MapMode		aMap100( MAP_100TH_MM );
-        Size				aGraphSize;
-        Point				aRelPoint( rWinPoint );
-        ImageMap&			rImageMap = (ImageMap&) pIMapInfo->GetImageMap();
-        const Rectangle&	rRect = pObj->GetLogicRect();
-        BOOL				bObjSupported = FALSE;
+        const MapMode       aMap100( MAP_100TH_MM );
+        Size                aGraphSize;
+        Point               aRelPoint( rWinPoint );
+        ImageMap&           rImageMap = (ImageMap&) pIMapInfo->GetImageMap();
+        const Rectangle&    rRect = pObj->GetLogicRect();
+        BOOL                bObjSupported = FALSE;
 
         // HitTest ausfuehren
         if ( pObj->ISA( SdrGrafObj )  ) // einfaches Grafik-Objekt
         {
-            const SdrGrafObj*	pGrafObj = (const SdrGrafObj*) pObj;
-            const GeoStat&		rGeo = pGrafObj->GetGeoStat();
-            SdrGrafObjGeoData*	pGeoData = (SdrGrafObjGeoData*) pGrafObj->GetGeoData();
+            const SdrGrafObj*   pGrafObj = (const SdrGrafObj*) pObj;
+            const GeoStat&      rGeo = pGrafObj->GetGeoStat();
+            SdrGrafObjGeoData*  pGeoData = (SdrGrafObjGeoData*) pGrafObj->GetGeoData();
 
             // Drehung rueckgaengig
             if ( rGeo.nDrehWink )
@@ -1208,7 +1208,7 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
 */
 void SdDrawDocument::CheckMasterPages()
 {
-//	RemoveMasterPage(2); // code to test the creation of notes pages
+//  RemoveMasterPage(2); // code to test the creation of notes pages
 
     USHORT nMaxPages = GetMasterPageCount();
 

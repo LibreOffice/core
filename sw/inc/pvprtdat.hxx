@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,32 +45,32 @@ public:
             bLandscape(0),bStretch(0)
     {}
 
-    ULONG GetLeftSpace() const 			{ return nLeftSpace; }
-    void SetLeftSpace( ULONG n ) 		{ nLeftSpace = n; }
+    ULONG GetLeftSpace() const          { return nLeftSpace; }
+    void SetLeftSpace( ULONG n )        { nLeftSpace = n; }
 
-    ULONG GetRightSpace() const 		{ return nRightSpace; }
-    void SetRightSpace( ULONG n ) 		{ nRightSpace = n; }
+    ULONG GetRightSpace() const         { return nRightSpace; }
+    void SetRightSpace( ULONG n )       { nRightSpace = n; }
 
-    ULONG GetTopSpace() const 			{ return nTopSpace; }
-    void SetTopSpace( ULONG n ) 		{ nTopSpace = n; }
+    ULONG GetTopSpace() const           { return nTopSpace; }
+    void SetTopSpace( ULONG n )         { nTopSpace = n; }
 
-    ULONG GetBottomSpace() const 		{ return nBottomSpace; }
-    void SetBottomSpace( ULONG n ) 		{ nBottomSpace = n; }
+    ULONG GetBottomSpace() const        { return nBottomSpace; }
+    void SetBottomSpace( ULONG n )      { nBottomSpace = n; }
 
-    ULONG GetHorzSpace() const 			{ return nHorzSpace; }
-    void SetHorzSpace( ULONG n ) 		{ nHorzSpace = n; }
+    ULONG GetHorzSpace() const          { return nHorzSpace; }
+    void SetHorzSpace( ULONG n )        { nHorzSpace = n; }
 
-    ULONG GetVertSpace() const 			{ return nVertSpace; }
-    void SetVertSpace( ULONG n ) 		{ nVertSpace = n; }
+    ULONG GetVertSpace() const          { return nVertSpace; }
+    void SetVertSpace( ULONG n )        { nVertSpace = n; }
 
-    BYTE GetRow() const 				{ return nRow; }
-    void SetRow(BYTE n ) 				{ nRow = n; }
+    BYTE GetRow() const                 { return nRow; }
+    void SetRow(BYTE n )                { nRow = n; }
 
-    BYTE GetCol() const 				{ return nCol; }
-    void SetCol( BYTE n ) 				{ nCol = n; }
+    BYTE GetCol() const                 { return nCol; }
+    void SetCol( BYTE n )               { nCol = n; }
 
-    BOOL GetLandscape() const 			{ return bLandscape; }
-    void SetLandscape( BOOL b ) 		{ bLandscape = b; }
+    BOOL GetLandscape() const           { return bLandscape; }
+    void SetLandscape( BOOL b )         { bLandscape = b; }
 };
 
 

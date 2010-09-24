@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,21 +62,21 @@ SV_DECL_PTRARR( SwSections, SwSection*, 0, 4 )
 enum SectionType { CONTENT_SECTION,
                     TOX_HEADER_SECTION,
                     TOX_CONTENT_SECTION,
-                    DDE_LINK_SECTION	= OBJECT_CLIENT_DDE,
-                    FILE_LINK_SECTION	= OBJECT_CLIENT_FILE
+                    DDE_LINK_SECTION    = OBJECT_CLIENT_DDE,
+                    FILE_LINK_SECTION   = OBJECT_CLIENT_FILE
 /*
 // verbleiben noch:
-    OBJECT_CLIENT_SO			= 0x80,
-    OBJECT_CLIENT_OLE			= 0x82,
-    OBJECT_CLIENT_OLE_CACHE		= 0x83,
+    OBJECT_CLIENT_SO            = 0x80,
+    OBJECT_CLIENT_OLE           = 0x82,
+    OBJECT_CLIENT_OLE_CACHE     = 0x83,
 */
                     };
 
 enum LinkCreateType
 {
-    CREATE_NONE,			// nichts weiter tun
-    CREATE_CONNECT,			// Link gleich connecten
-    CREATE_UPDATE			// Link connecten und updaten
+    CREATE_NONE,            // nichts weiter tun
+    CREATE_CONNECT,         // Link gleich connecten
+    CREATE_UPDATE           // Link connecten und updaten
 };
 
 class SW_DLLPUBLIC SwSectionData
@@ -178,7 +178,7 @@ private:
             bool const bHidden, bool const bCondition);
 
 public:
-    TYPEINFO();		// rtti
+    TYPEINFO();     // rtti
 
     SwSection(SectionType const eType, String const& rName,
                 SwSectionFmt & rFormat);
@@ -193,8 +193,8 @@ public:
     SectionType GetType() const             { return m_Data.GetType(); }
     void SetType(SectionType const eType)   { return m_Data.SetType(eType); }
 
-    SwSectionFmt* GetFmt() 			{ return (SwSectionFmt*)pRegisteredIn; }
-    SwSectionFmt* GetFmt() const	{ return (SwSectionFmt*)pRegisteredIn; }
+    SwSectionFmt* GetFmt()          { return (SwSectionFmt*)pRegisteredIn; }
+    SwSectionFmt* GetFmt() const    { return (SwSectionFmt*)pRegisteredIn; }
 
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
@@ -296,13 +296,13 @@ class SW_DLLPUBLIC SwSectionFmt
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextSection> m_wXTextSection;
 
-    SW_DLLPRIVATE void UpdateParent();		// Parent wurde veraendert
+    SW_DLLPRIVATE void UpdateParent();      // Parent wurde veraendert
 
 protected:
     SwSectionFmt( SwSectionFmt* pDrvdFrm, SwDoc *pDoc );
 
 public:
-    TYPEINFO();		//Bereits in Basisklasse Client drin.
+    TYPEINFO();     //Bereits in Basisklasse Client drin.
     ~SwSectionFmt();
 
     //Vernichtet alle Frms in aDepend (Frms werden per PTR_CAST erkannt).
@@ -320,7 +320,7 @@ public:
     inline SwSection* GetParentSection() const;
 
     // alle Sections, die von dieser abgeleitet sind
-    // 	- sortiert nach : Name oder Position oder unsortiert
+    //  - sortiert nach : Name oder Position oder unsortiert
     //  - alle oder nur die, die sich im normalten Nodes-Array befinden
     USHORT GetChildSections( SwSections& rArr,
                             SectionSort eSort = SORTSECT_NOT,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include "svx/svxdllapi.h"
 
 //************************************************************
-//   Defines 
+//   Defines
 //************************************************************
 
 // folgendes ist noch nicht bzw. erst zum Teil implementiert:
@@ -86,7 +86,7 @@ enum SdrHitKind {SDRHIT_NONE,      // Nicht getroffen, Schnaps gesoffen
                  SDRHIT_MACRO,           // Objekt fuer BegMacroObj
                  SDRHIT_MARKEDOBJECT,    // Markiertes Objekt (z.B. zum Draggen)
                  SDRHIT_UNMARKEDOBJECT, // nichtmarkiertes Objekt (z.B. zum markieren)
-                 SDRHIT_CELL};			// hit on a cell inside a table shape (outside of the cells text area)
+                 SDRHIT_CELL};          // hit on a cell inside a table shape (outside of the cells text area)
 
 enum SdrViewEditMode {SDREDITMODE_EDIT,           // Auch bekannt aus Pfeil- oder Zeigermodus
                       SDREDITMODE_CREATE,         // Objekterzeugungswerkzeug
@@ -111,51 +111,51 @@ enum SdrViewEditMode {SDREDITMODE_EDIT,           // Auch bekannt aus Pfeil- ode
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ImplMarkingOverlay;
 
-class SVX_DLLPUBLIC SdrMarkView : public SdrSnapView 
+class SVX_DLLPUBLIC SdrMarkView : public SdrSnapView
 {
-    friend class				SdrPageView;
+    friend class                SdrPageView;
 
     // #114409#-3 Migrate selections
-    ImplMarkingOverlay*									mpMarkObjOverlay;
-    ImplMarkingOverlay*									mpMarkPointsOverlay;
-    ImplMarkingOverlay*									mpMarkGluePointsOverlay;
+    ImplMarkingOverlay*                                 mpMarkObjOverlay;
+    ImplMarkingOverlay*                                 mpMarkPointsOverlay;
+    ImplMarkingOverlay*                                 mpMarkGluePointsOverlay;
 
 protected:
-    SdrObject*					pMarkedObj;       // Wenn nur ein Objekt markiert ist.
-    SdrPageView*				pMarkedPV;        // Wenn alle markierten Objekt auf derselben PageView liegen.
+    SdrObject*                  pMarkedObj;       // Wenn nur ein Objekt markiert ist.
+    SdrPageView*                pMarkedPV;        // Wenn alle markierten Objekt auf derselben PageView liegen.
 
-    Point						aRef1;            // Persistent - Drehmittelpunkt/Spiegelachse
-    Point						aRef2;            // Persistent
-    Point						aLastCrookCenter; // Persistent
-    SdrHdlList					aHdl;
-    sdr::ViewSelection*			mpSdrViewSelection;
+    Point                       aRef1;            // Persistent - Drehmittelpunkt/Spiegelachse
+    Point                       aRef2;            // Persistent
+    Point                       aLastCrookCenter; // Persistent
+    SdrHdlList                  aHdl;
+    sdr::ViewSelection*         mpSdrViewSelection;
 
-    Rectangle					aMarkedObjRect;
-    Rectangle					aMarkedPointsRect;
-    Rectangle					aMarkedGluePointsRect;
+    Rectangle                   aMarkedObjRect;
+    Rectangle                   aMarkedPointsRect;
+    Rectangle                   aMarkedGluePointsRect;
 
-    USHORT						nFrameHandlesLimit;
-    ULONG					mnInsPointNum;      // Nummer des InsPoint
-    ULONG						nMarkableObjCount;
+    USHORT                      nFrameHandlesLimit;
+    ULONG                   mnInsPointNum;      // Nummer des InsPoint
+    ULONG                       nMarkableObjCount;
 
-    SdrDragMode					eDragMode;        // Persistent
-    SdrViewEditMode				eEditMode;      // Persistent
-    SdrViewEditMode				eEditMode0;     // Persistent
+    SdrDragMode                 eDragMode;        // Persistent
+    SdrViewEditMode             eEditMode;      // Persistent
+    SdrViewEditMode             eEditMode0;     // Persistent
 
-    //HMHunsigned					bHdlShown : 1;
-    unsigned					bRefHdlShownOnly : 1; // Spiegelachse waerend Dragging (ni)
-    unsigned					bDesignMode : 1;      // DesignMode fuer SdrUnoObj
-    unsigned					bForceFrameHandles : 1; // Persistent - FrameDrag auch bei Einzelobjekten
-    unsigned					bPlusHdlAlways : 1;   // Persistent
-    unsigned					bMarkHdlWhenTextEdit : 1; // Persistent, default=FALSE
-    unsigned					bInsPolyPoint : 1;     // z.Zt InsPolyPointDragging
-    unsigned					bMarkedObjRectDirty : 1;
-    unsigned					bMrkPntDirty : 1;
-    unsigned					bMarkedPointsRectsDirty : 1;
-    unsigned					bMarkableObjCountDirty : 1;
-    
+    //HMHunsigned                   bHdlShown : 1;
+    unsigned                    bRefHdlShownOnly : 1; // Spiegelachse waerend Dragging (ni)
+    unsigned                    bDesignMode : 1;      // DesignMode fuer SdrUnoObj
+    unsigned                    bForceFrameHandles : 1; // Persistent - FrameDrag auch bei Einzelobjekten
+    unsigned                    bPlusHdlAlways : 1;   // Persistent
+    unsigned                    bMarkHdlWhenTextEdit : 1; // Persistent, default=FALSE
+    unsigned                    bInsPolyPoint : 1;     // z.Zt InsPolyPointDragging
+    unsigned                    bMarkedObjRectDirty : 1;
+    unsigned                    bMrkPntDirty : 1;
+    unsigned                    bMarkedPointsRectsDirty : 1;
+    unsigned                    bMarkableObjCountDirty : 1;
+
     // flag to completely disable handles at the view
-    unsigned					mbMarkHandlesHidden : 1;
+    unsigned                    mbMarkHandlesHidden : 1;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();
@@ -227,7 +227,7 @@ public:
     BOOL ChkDragMode(SdrDragMode eMode) const;
     void SetFrameHandles(BOOL bOn);
     BOOL IsFrameHandles() const { return bForceFrameHandles; }
-    
+
     // Limit, ab wann implizit auf FrameHandles umgeschaltet wird. default=50.
     void SetFrameHandlesLimit(USHORT nAnz) { nFrameHandlesLimit=nAnz; }
     USHORT GetFrameHandlesLimit() const { return nFrameHandlesLimit; }
@@ -301,7 +301,7 @@ public:
 
     // Pick: Unterstuetzte Optionen fuer nOptions sind SEARCH_NEXT, SEARCH_BACKWARD (ni)
     SdrHdl* PickHandle(const Point& rPnt, ULONG nOptions=0, SdrHdl* pHdl0=NULL) const;
-    
+
     // Pick: Unterstuetzte Optionen fuer nOptions sind:
     // SDRSEARCH_DEEP SDRSEARCH_ALSOONMASTER SDRSEARCH_TESTMARKABLE SDRSEARCH_TESTTEXTEDIT
     // SDRSEARCH_WITHTEXT SDRSEARCH_TESTTEXTAREA SDRSEARCH_BACKWARD SDRSEARCH_MARKED
@@ -313,28 +313,28 @@ public:
 
     // Pick: Unterstuetzte Optionen fuer nOptions sind SDRSEARCH_PASS2BOUND und SDRSEARCH_PASS3NEAREST
     BOOL PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, ULONG* pnMarkNum=NULL, ULONG nOptions=0) const;
-    
+
     // Sucht sich das Oberste der markierten Objekte (O1) und sucht von dort
     // aus in Richtung nach Unten dann das erste nichtmarkierte Objekt (O2).
     // Bei Erfolg wird die Markierung von O1 entfernt, an O2 gesetzt und TRUE
     // returniert. Mit dem Parameter bPrev=TRUE geht die Suche genau in die
     // andere Richtung.
     BOOL MarkNextObj(BOOL bPrev=FALSE);
-    
+
     // Sucht sich das Oberste der markierten Objekte (O1) das von rPnt/nTol
     // getroffen wird und sucht von dort aus in Richtung nach Unten dann das
     // erste nichtmarkierte Objekt (O2). Bei Erfolg wird die Markierung von
     // O1 entfernt, an O2 gesetzt und TRUE returniert.
     // Mit dem Parameter bPrev=TRUE geht die Suche genau in die andere Richtung.
     BOOL MarkNextObj(const Point& rPnt, short nTol=-2, BOOL bPrev=FALSE);
-    
+
     // Alle Objekte innerhalb eines rechteckigen Bereichs markieren
     // Markiert werden nur Objekte, die vollstaendig eingeschlossen sind.
     BOOL MarkObj(const Rectangle& rRect, BOOL bUnmark=FALSE);
     void MarkObj(SdrObject* pObj, SdrPageView* pPV, BOOL bUnmark=FALSE, BOOL bImpNoSetMarkHdl=FALSE);
     void MarkAllObj(SdrPageView* pPV=NULL); // pPage=NULL => alle angezeigten Seiten
     void UnmarkAllObj(SdrPageView* pPV=NULL); // pPage=NULL => alle angezeigten Seiten
-    
+
     // Diese Funktion kostet etwas Zeit, da die MarkList durchsucht werden muss.
     BOOL IsObjMarked(SdrObject* pObj) const;
     // void MarkAll(SdrPageView* pPV=NULL) { MarkAllObj(pPV); } -> replace with inline
@@ -346,7 +346,7 @@ public:
     // Defaultwert ist 7, Mindestwert 3 Pixel.
     USHORT GetMarkHdlSizePixel() const;
     void SetMarkHdlSizePixel(USHORT nSiz);
-    
+
     // Die Groesse der Markierungs-Handles wird ueber die jeweilige Aufloesung
     // und die Groesse des Bereichs der markierten Objekte so angepasst, dass
     // sie sich bei einer Frame-Selektion moeglichst nicht ueberschneiden.
@@ -364,7 +364,7 @@ public:
     // Nicht alle Punkte lassen sich markieren:
     virtual BOOL IsPointMarkable(const SdrHdl& rHdl) const;
     virtual BOOL MarkPoint(SdrHdl& rHdl, BOOL bUnmark=FALSE);
-    
+
     /** should only be used from outside svx for special ui elements */
     BOOL MarkPointHelper(SdrHdl* pHdl, SdrMark* pMark, BOOL bUnmark);
 
@@ -376,21 +376,21 @@ public:
     BOOL MarkAllPoints() { return MarkPoints(NULL,FALSE); }
     BOOL UnmarkAllPoints() { return MarkPoints(NULL,TRUE); }
     BOOL UnMarkAllPoints() { return MarkPoints(NULL,TRUE); }
-    
+
     // Sucht sich den ersten markierten Punkt (P1) und sucht von dort
     // aus in den ersten nichtmarkierte Punkt (P2).
     // Bei Erfolg wird die Markierung von P1 entfernt, an P2 gesetzt und TRUE
     // returniert. Mit dem Parameter bPrev=TRUE geht die Suche genau in die
     // andere Richtung.
     BOOL MarkNextPoint(BOOL bPrev=FALSE);
-    
+
     // Sucht sich den ersten markierten Punkt (P1) das von rPnt
     // getroffen wird und sucht von dort aus den
     // ersten nichtmarkierten Punkt (P2). Bei Erfolg wird die Markierung von
     // P1 entfernt, an P2 gesetzt und TRUE returniert.
     // Mit dem Parameter bPrev=TRUE geht die Suche genau in die andere Richtung.
     BOOL MarkNextPoint(const Point& rPnt, BOOL bPrev=FALSE);
-    
+
     // Die Nummer des passenden Handles raussuchen. Nicht gefunden
     // liefert CONTAINER_ENTRY_NOTFOUND.
     ULONG GetHdlNum(SdrHdl* pHdl) const { return aHdl.GetHdlNum(pHdl); }
@@ -414,7 +414,7 @@ public:
     // Persistent, default=FALSE
     void SetMarkHdlWhenTextEdit(BOOL bOn) { bMarkHdlWhenTextEdit=bOn; }
     BOOL IsMarkHdlWhenTextEdit() const { return bMarkHdlWhenTextEdit; }
-    
+
     BOOL HasMarkableGluePoints() const;
     ULONG GetMarkableGluePointCount() const;
     BOOL HasMarkedGluePoints() const;
@@ -442,20 +442,20 @@ public:
     // GluePoints haben keine Handles
     SdrHdl* GetGluePointHdl(const SdrObject* pObj, USHORT nId) const;
     BOOL IsGluePoint(const SdrHdl& rHdl) const { return &rHdl!=NULL && rHdl.GetKind()==HDL_GLUE; }
-    
+
     // alle Punkte innerhalb dieses Rechtecks markieren (Viewkoordinaten)
     BOOL MarkGluePoints(const Rectangle& rRect) { return MarkGluePoints(&rRect,FALSE); }
     BOOL UnmarkGluePoints(const Rectangle& rRect) { return MarkGluePoints(&rRect,TRUE); }
     BOOL MarkAllGluePoints() { return MarkGluePoints(NULL,FALSE); }
     BOOL UnmarkAllGluePoints() { return MarkGluePoints(NULL,TRUE); }
-    
+
     // Sucht sich den ersten markierten Klebepunkt (P1) und sucht von dort
     // aus in den ersten nichtmarkierte Klebepunkt (P2).
     // Bei Erfolg wird die Markierung von P1 entfernt, an P2 gesetzt und TRUE
     // returniert. Mit dem Parameter bPrev=TRUE geht die Suche genau in die
     // andere Richtung.
     BOOL MarkNextGluePoint(BOOL bPrev=FALSE);
-    
+
     // Sucht sich den ersten markierten Klebepunkt (P1) das von rPnt
     // getroffen wird und sucht von dort aus den
     // ersten nichtmarkierten Klebepunkt (P2). Bei Erfolg wird die Markierung
@@ -472,7 +472,7 @@ public:
     sal_Bool EndMarkGluePoints();
     void BrkMarkGluePoints();
     sal_Bool IsMarkGluePoints() const { return (0L != mpMarkGluePointsOverlay); }
-    
+
     // bRestraintPaint=FALSE bewirkt, dass die Handles nicht sofort wieder gemalt werden.
     // AdjustMarkHdl wird eh' nur gerufen, wenn was geaendert wurde; was idR ein Invalidate
     // zur Folge hat. Am Ende von des Redraw werden die Handles automatisch gezeichnet.
@@ -504,21 +504,21 @@ public:
     // Den Mittelpunkt des letzten Crook-Dragging abholen. Den kann man
     // bei einem anschliessenden Rotate sinnvoll als Drehmittelpunkt setzen.
     const Point& GetLastCrookCenter() const { return aLastCrookCenter; }
-    
+
     // Wird automatisch von der DragView beim beenden eines Crook-Drag gesetzt.
     void SetLastCrookCenter(const Point& rPt) { aLastCrookCenter=rPt; }
-    
+
     // Rotationsmittelpunkt bzw. Startpunkt der Spiegelachse
     const Point& GetRef1() const { return aRef1; }
     void SetRef1(const Point& rPt);
-    
+
     // Endpunkt der Spiegelachse
     const Point& GetRef2() const { return aRef1; }
     void SetRef2(const Point& rPt);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // - Hit-Toleranzen:
 //   Die muessen natuerlich immer in logischen Koordinaten angegeben werden. Also
 //   immer brav den gewuenschten Pixelwert mit PixelToLogic in Logischen umrechnen.
@@ -532,7 +532,7 @@ public:
 //     einer Breite von 2*Tol (in diesem Beispiel also 200 Einheiten) um das Objekt
 //     herumgelegt. Waerend ein Hit direkt ins Objekt die Edit-Methode ruft,
 //     ermoeglicht ein Hit in den umliegenden sensitiven Bereich ein Dragging.
-// 
+//
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif //_SVDMRKV_HXX

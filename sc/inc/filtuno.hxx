@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,24 +55,24 @@ class ScFilterOptionsObj : public ::cppu::WeakImplHelper5<
                             ::com::sun::star::lang::XServiceInfo >
 {
 private:
-    ::rtl::OUString		aFileName;
-    ::rtl::OUString		aFilterName;
-    ::rtl::OUString		aFilterOptions;
+    ::rtl::OUString     aFileName;
+    ::rtl::OUString     aFilterName;
+    ::rtl::OUString     aFilterOptions;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::io::XInputStream > xInputStream;
-    sal_Bool			bExport;
+    sal_Bool            bExport;
 
 public:
                             ScFilterOptionsObj();
-    virtual					~ScFilterOptionsObj();
+    virtual                 ~ScFilterOptionsObj();
 
-    static ::rtl::OUString	getImplementationName_Static();
+    static ::rtl::OUString  getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString> getSupportedServiceNames_Static();
 
                             // XPropertyAccess
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                             SAL_CALL getPropertyValues() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL	setPropertyValues( const ::com::sun::star::uno::Sequence<
+    virtual void SAL_CALL   setPropertyValues( const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::beans::PropertyValue >& aProps )
                                 throw (::com::sun::star::beans::UnknownPropertyException,
                                         ::com::sun::star::beans::PropertyVetoException,
@@ -81,18 +81,18 @@ public:
                                         ::com::sun::star::uno::RuntimeException);
 
                             // XExecutableDialog
-    virtual void SAL_CALL	setTitle( const ::rtl::OUString& aTitle )
+    virtual void SAL_CALL   setTitle( const ::rtl::OUString& aTitle )
                                 throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL execute() throw (::com::sun::star::uno::RuntimeException);
 
                             // XImporter
-    virtual void SAL_CALL	setTargetDocument( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL   setTargetDocument( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::lang::XComponent >& xDoc )
                                 throw (::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::uno::RuntimeException);
 
                             // XExporter
-    virtual void SAL_CALL	setSourceDocument( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL   setSourceDocument( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::lang::XComponent >& xDoc )
                                 throw (::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::uno::RuntimeException);

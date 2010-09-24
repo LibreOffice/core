@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace comphelper
 {
 //.........................................................................
 
-    namespace staruno	= ::com::sun::star::uno;
+    namespace staruno   = ::com::sun::star::uno;
 
     //-------------------------------------------------------------------------
     /** search the given string within the given sequence, return the positions where it was found.
@@ -134,7 +134,7 @@ namespace comphelper
     {
     public:
         virtual sal_Bool hasMoreElements() const = 0;
-        virtual ::com::sun::star::uno::Any	nextElement() = 0;
+        virtual ::com::sun::star::uno::Any  nextElement() = 0;
     };
     /** a helper class for iterating through a sequence
     */
@@ -142,7 +142,7 @@ namespace comphelper
     class OSequenceIterator : public IIterator
     {
         const TYPE* m_pElements;
-        sal_Int32	m_nLen;
+        sal_Int32   m_nLen;
         const TYPE* m_pCurrent;
 
     public:
@@ -154,7 +154,7 @@ namespace comphelper
         OSequenceIterator(const ::com::sun::star::uno::Any& _rSequenceAny);
 
         virtual sal_Bool hasMoreElements() const;
-        virtual ::com::sun::star::uno::Any	nextElement();
+        virtual ::com::sun::star::uno::Any  nextElement();
 
     protected:
         void construct(const ::com::sun::star::uno::Sequence< TYPE >& _rSeq);
@@ -233,7 +233,7 @@ namespace comphelper
         values will be truncated. There's currently no measure to
         prevent or detect precision loss, overflow or truncation.
      */
-    template < typename DstType, typename SrcType > 
+    template < typename DstType, typename SrcType >
     ::com::sun::star::uno::Sequence< DstType > arrayToSequence( const SrcType* i_pArray, sal_Int32 nNum )
     {
         ::com::sun::star::uno::Sequence< DstType > result( nNum );
@@ -264,7 +264,7 @@ namespace comphelper
         will be truncated. There's currently no measure to prevent or
         detect precision loss, overflow or truncation.
      */
-    template < typename DstType, typename SrcType > 
+    template < typename DstType, typename SrcType >
     DstType* sequenceToArray( DstType* io_pArray, const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
     {
         ::std::copy( i_Sequence.getConstArray(), i_Sequence.getConstArray()+i_Sequence.getLength(), io_pArray );
@@ -294,7 +294,7 @@ namespace comphelper
         truncated. There's currently no measure to prevent or detect
         precision loss, overflow or truncation.
      */
-    template < typename DstType, typename SrcType > 
+    template < typename DstType, typename SrcType >
     ::com::sun::star::uno::Sequence< DstType > containerToSequence( const SrcType& i_Container )
     {
         ::com::sun::star::uno::Sequence< DstType > result( i_Container.size() );
@@ -334,7 +334,7 @@ namespace comphelper
         truncated. There's currently no measure to prevent or detect
         precision loss, overflow or truncation.
      */
-    template < typename DstType, typename SrcType > 
+    template < typename DstType, typename SrcType >
     DstType sequenceToContainer( const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
     {
         DstType result( i_Sequence.getLength() );
@@ -372,7 +372,7 @@ namespace comphelper
         truncated. There's currently no measure to prevent or detect
         precision loss, overflow or truncation.
      */
-    template < typename DstType, typename SrcType > 
+    template < typename DstType, typename SrcType >
     DstType& sequenceToContainer( DstType& o_Output, const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
     {
         o_Output.resize( i_Sequence.getLength() );
@@ -381,7 +381,7 @@ namespace comphelper
     }
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 

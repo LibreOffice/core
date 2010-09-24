@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,12 +110,12 @@ public:
         {}
     ~Options()
         {}
-    
+
     sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False);
 
     OString prepareHelp();
     OString prepareVersion();
-    
+
     const OString& getProgramName()
         { return m_program; }
     const OString& getIndexReg()
@@ -127,24 +127,24 @@ public:
     const OString& getBase()
         { return m_base; }
     sal_Bool forceOutput()
-        { return m_bForceOutput; }	
+        { return m_bForceOutput; }
 protected:
-    OString		m_program;
-    OString 	m_indexRegName;	
-    OString 	m_typeRegName;	
-    OString		m_base;
-    sal_Bool	m_bForceOutput;
-};	
+    OString     m_program;
+    OString     m_indexRegName;
+    OString     m_typeRegName;
+    OString     m_base;
+    sal_Bool    m_bForceOutput;
+};
 
 sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 {
     sal_Bool bRet = sal_True;
-    sal_uInt16	i=0;
+    sal_uInt16  i=0;
 
     if (!bCmdFile)
     {
         bCmdFile = sal_True;
-        
+
         m_program = av[0];
 
         if (ac < 2)
@@ -159,7 +159,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
         i = 0;
     }
 
-    char	*s=NULL;
+    char    *s=NULL;
     for (; i < ac; i++)
     {
         if (av[i][0] == '-')
@@ -273,10 +273,10 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         rargc++;
                     }
                     fclose(cmdFile);
-                    
+
                     bRet = initOptions(rargc, rargv, bCmdFile);
-                    
-                    for (long j=0; j < rargc; j++) 
+
+                    for (long j=0; j < rargc; j++)
                     {
                         free(rargv[j]);
                     }
@@ -305,16 +305,16 @@ OString Options::prepareHelp()
     help += "    -f        = force the output of all found singletons.\n";
     help += "    -h|-?     = print this help message and exit.\n";
     help += prepareVersion();
-    
+
     return help;
-}	
+}
 
 OString Options::prepareVersion()
 {
     OString version("\nSun Microsystems (R) ");
     version += m_program + " Version 1.0\n\n";
     return version;
-}	
+}
 
 static Options options;
 
@@ -324,7 +324,7 @@ static sal_Bool checkSingletons(RegistryKey& singletonKey, RegistryKey& typeKey)
     sal_uInt32 size = 0;
     OUString tmpName;
     sal_Bool bRet = sal_False;
-    
+
     RegError e = typeKey.getValueInfo(tmpName, &valueType, &size);
 
     if ( e != REG_VALUE_NOT_EXISTS && e != REG_INVALID_VALUE && valueType == RG_VALUETYPE_BINARY)
@@ -333,7 +333,7 @@ static sal_Bool checkSingletons(RegistryKey& singletonKey, RegistryKey& typeKey)
         RegValue value = rtl_allocateMemory(size);
 
         typeKey.getValue(tmpName, value);
-        
+
         RegistryTypeReader reader((sal_uInt8*)value, size, sal_False);
 
         if ( reader.isValid() && reader.getTypeClass() == RT_TYPE_SINGLETON )
@@ -347,7 +347,7 @@ static sal_Bool checkSingletons(RegistryKey& singletonKey, RegistryKey& typeKey)
             {
                 bRet = sal_True;
                 OUString value2 = reader.getSuperTypeName();
-                
+
                 if ( entryKey.setValue(tmpName, RG_VALUETYPE_UNICODE,
                                        (RegValue)value2.getStr(), sizeof(sal_Unicode)* (value2.getLength()+1)) )
                 {
@@ -363,9 +363,9 @@ static sal_Bool checkSingletons(RegistryKey& singletonKey, RegistryKey& typeKey)
             }
         }
 
-        rtl_freeMemory(value);	
+        rtl_freeMemory(value);
     }
-    
+
        RegistryKeyArray subKeys;
 
     typeKey.openSubKeys(tmpName, subKeys);
@@ -381,7 +381,7 @@ static sal_Bool checkSingletons(RegistryKey& singletonKey, RegistryKey& typeKey)
         }
     }
     return bRet;
-}	
+}
 
 #if (defined UNX) || (defined OS2) || (defined __MINGW32__)
 int main( int argc, char * argv[] )
@@ -396,7 +396,7 @@ int _cdecl main( int argc, char * argv[] )
 
     OUString indexRegName( convertToFileUrl(options.getIndexReg()) );
     OUString typeRegName( convertToFileUrl(options.getTypeReg()) );
-    
+
     Registry indexReg;
     Registry typeReg;
 
@@ -443,7 +443,7 @@ int _cdecl main( int argc, char * argv[] )
     {
         typeKey = typeRoot;
     }
-        
+
     if ( indexRoot.createKey(OUString::createFromAscii("SINGLETONS"), singletonKey) )
     {
         fprintf(stderr, "%s: open/create SINGLETONS key of registry \"%s\" failed\n",
@@ -470,8 +470,8 @@ int _cdecl main( int argc, char * argv[] )
             fprintf(stderr, "%s: destroy registry \"%s\" failed\n",
                     options.getProgramName().getStr(), options.getIndexReg().getStr());
             exit(10);
-        }		
-    }	
+        }
+    }
     if ( typeReg.close() )
     {
         fprintf(stderr, "%s: closing registry \"%s\" failed\n",

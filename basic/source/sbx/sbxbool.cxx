@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
             {
                 if( p->pOUString->equalsIgnoreAsciiCase( SbxRes( STRING_TRUE ) ) )
                     nRes = SbxTRUE;
-                else if( p->pOUString->equalsIgnoreAsciiCase( SbxRes( STRING_FALSE ) ) )
+                else if( !p->pOUString->equalsIgnoreAsciiCase( SbxRes( STRING_FALSE ) ) )
                 {
                     // Jetzt kann es noch in eine Zahl konvertierbar sein
                     BOOL bError = TRUE;
@@ -203,7 +203,7 @@ void ImpPutBool( SbxValues* p, INT16 n )
         case SbxLPSTR:
             if ( !p->pOUString )
                 p->pOUString = new ::rtl::OUString( SbxRes( n ? STRING_TRUE : STRING_FALSE ) );
-            else 
+            else
                 *p->pOUString = SbxRes( n ? STRING_TRUE : STRING_FALSE );
             break;
 

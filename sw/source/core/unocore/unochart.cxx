@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
                 catch ( uno::Exception& )
                 {
                 }
-                
+
             }
         }
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
@@ -376,7 +376,7 @@ static sal_Bool GetTableAndCellsFromRangeRep(
                 aEndCell    = aTmp;
             }
         }
-        else	// a single cell like in "Table1.B3"
+        else    // a single cell like in "Table1.B3"
         {
             aStartCell = aEndCell = aRange;
         }
@@ -1153,10 +1153,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             nCurValuesSeqLen = xCurValues->getData().getLength();
 
         // check for consistent use of 'first cell as label'
-        if (nLabelSeqLen == -1)		// set initial value to compare with below further on
+        if (nLabelSeqLen == -1)     // set initial value to compare with below further on
             nLabelSeqLen = nCurLabelSeqLen;
         if (nLabelSeqLen != nCurLabelSeqLen)
-            nLabelSeqLen = -2;	// failed / no consistent use of label cells
+            nLabelSeqLen = -2;  // failed / no consistent use of label cells
 
         // get table and cell names for label and values data sequences
         // (start and end cell will be sorted, i.e. start cell <= end cell)
@@ -1219,7 +1219,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             nDtaSrcIsColumns = nDirection;
         if (nDtaSrcIsColumns != nDirection)
         {
-            nDtaSrcIsColumns = -2;	// failed
+            nDtaSrcIsColumns = -2;  // failed
         }
 
 
@@ -1390,7 +1390,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         if (!pIt)
             return aResult; // failed -> return empty property sequence
         pSequenceMapping[i] = pIt - pSortedMapping;
-        
+
         if (i != pSequenceMapping[i])
             bNeedSequenceMapping = sal_True;
     }
@@ -1700,8 +1700,8 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
         if (!bDisposed)
             pTable->GetFrmFmt()->GetDoc()->GetChartControllerHelper().StartOrContinueLocking();
 
-        //! make a copy of the STL container! 
-        //! This is necessary since calling 'dispose' will implicitly remove an element 
+        //! make a copy of the STL container!
+        //! This is necessary since calling 'dispose' will implicitly remove an element
         //! of the original container, and thus any iterator in the original container
         //! would become invalid.
         const Set_DataSequenceRef_t aSet( aDataSequences[ pTable ] );
@@ -1752,12 +1752,12 @@ void SwChartDataProvider::AddRowCols(
     if (rTable.IsTblComplex())
         return;
 
-    const USHORT nBoxes		= rBoxes.Count();
+    const USHORT nBoxes     = rBoxes.Count();
     if (nBoxes < 1 || nLines < 1)
         return;
 
-    SwTableBox* pFirstBox	= *( rBoxes.GetData() + 0 );
-    SwTableBox* pLastBox	= *( rBoxes.GetData() + nBoxes - 1 );
+    SwTableBox* pFirstBox   = *( rBoxes.GetData() + 0 );
+    SwTableBox* pLastBox    = *( rBoxes.GetData() + nBoxes - 1 );
 
     sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
     if (pFirstBox && pLastBox)

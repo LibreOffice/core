@@ -2,19 +2,19 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
 //----------------------------------------------------------------------------
 //
-// Adaptation for high precision colors has been sponsored by 
+// Adaptation for high precision colors has been sponsored by
 // Liberty Technology Systems, Inc., visit http://lib-sys.com
 //
 // Liberty Technology Systems, Inc. is the provider of
 // PostScript and PDF technology for software developers.
-// 
+//
 //----------------------------------------------------------------------------
 // Contact: mcseem@antigrain.com
 //          mcseemagg@yahoo.com
@@ -143,7 +143,7 @@ namespace agg
 
         //--------------------------------------------------------------------
         static rgba from_wavelength(double wl, double gamma = 1.0);
-    
+
         //--------------------------------------------------------------------
         rgba(double wavelen, double gamma=1.0)
         {
@@ -176,7 +176,7 @@ namespace agg
             t.r = -1.0 * (wl - 440.0) / (440.0 - 380.0);
             t.b = 1.0;
         }
-        else 
+        else
         if(wl >= 440.0 && wl <= 490.0)
         {
             t.g = (wl - 440.0) / (490.0 - 440.0);
@@ -218,7 +218,7 @@ namespace agg
 
 
 
-    
+
     //===================================================================rgba8
     struct rgba8
     {
@@ -244,16 +244,16 @@ namespace agg
 
         //--------------------------------------------------------------------
         rgba8(unsigned r_, unsigned g_, unsigned b_, unsigned a_=base_mask) :
-            r(value_type(r_)), 
-            g(value_type(g_)), 
-            b(value_type(b_)), 
+            r(value_type(r_)),
+            g(value_type(g_)),
+            b(value_type(b_)),
             a(value_type(a_)) {}
 
         //--------------------------------------------------------------------
         rgba8(const rgba& c, double a_) :
-            r(value_type(c.r * double(base_mask) + 0.5)), 
-            g(value_type(c.g * double(base_mask) + 0.5)), 
-            b(value_type(c.b * double(base_mask) + 0.5)), 
+            r(value_type(c.r * double(base_mask) + 0.5)),
+            g(value_type(c.g * double(base_mask) + 0.5)),
+            b(value_type(c.b * double(base_mask) + 0.5)),
             a(value_type(a_  * double(base_mask) + 0.5)) {}
 
         //--------------------------------------------------------------------
@@ -262,9 +262,9 @@ namespace agg
 
         //--------------------------------------------------------------------
         rgba8(const rgba& c) :
-            r(value_type(c.r * double(base_mask) + 0.5)), 
-            g(value_type(c.g * double(base_mask) + 0.5)), 
-            b(value_type(c.b * double(base_mask) + 0.5)), 
+            r(value_type(c.r * double(base_mask) + 0.5)),
+            g(value_type(c.g * double(base_mask) + 0.5)),
+            b(value_type(c.b * double(base_mask) + 0.5)),
             a(value_type(c.a * double(base_mask) + 0.5)) {}
 
         //--------------------------------------------------------------------
@@ -272,7 +272,7 @@ namespace agg
         {
             r = g = b = a = 0;
         }
-        
+
         //--------------------------------------------------------------------
         const self_type& transparent()
         {
@@ -371,7 +371,7 @@ namespace agg
 
 
     //-------------------------------------------------------------rgba8_pre
-    inline rgba8 rgba8_pre(unsigned r, unsigned g, unsigned b, 
+    inline rgba8 rgba8_pre(unsigned r, unsigned g, unsigned b,
                            unsigned a = rgba8::base_mask)
     {
         return rgba8(r,g,b,a).premultiply();
@@ -443,9 +443,9 @@ namespace agg
 
         //--------------------------------------------------------------------
         rgba16(unsigned r_, unsigned g_, unsigned b_, unsigned a_=base_mask) :
-            r(value_type(r_)), 
-            g(value_type(g_)), 
-            b(value_type(b_)), 
+            r(value_type(r_)),
+            g(value_type(g_)),
+            b(value_type(b_)),
             a(value_type(a_)) {}
 
         //--------------------------------------------------------------------
@@ -454,30 +454,30 @@ namespace agg
 
         //--------------------------------------------------------------------
         rgba16(const rgba& c) :
-            r(value_type(c.r * double(base_mask) + 0.5)), 
-            g(value_type(c.g * double(base_mask) + 0.5)), 
-            b(value_type(c.b * double(base_mask) + 0.5)), 
+            r(value_type(c.r * double(base_mask) + 0.5)),
+            g(value_type(c.g * double(base_mask) + 0.5)),
+            b(value_type(c.b * double(base_mask) + 0.5)),
             a(value_type(c.a * double(base_mask) + 0.5)) {}
 
         //--------------------------------------------------------------------
         rgba16(const rgba& c, double a_) :
-            r(value_type(c.r * double(base_mask) + 0.5)), 
-            g(value_type(c.g * double(base_mask) + 0.5)), 
-            b(value_type(c.b * double(base_mask) + 0.5)), 
+            r(value_type(c.r * double(base_mask) + 0.5)),
+            g(value_type(c.g * double(base_mask) + 0.5)),
+            b(value_type(c.b * double(base_mask) + 0.5)),
             a(value_type(a_  * double(base_mask) + 0.5)) {}
 
         //--------------------------------------------------------------------
         rgba16(const rgba8& c) :
-            r(value_type((value_type(c.r) << 8) | c.r)), 
-            g(value_type((value_type(c.g) << 8) | c.g)), 
-            b(value_type((value_type(c.b) << 8) | c.b)), 
+            r(value_type((value_type(c.r) << 8) | c.r)),
+            g(value_type((value_type(c.g) << 8) | c.g)),
+            b(value_type((value_type(c.b) << 8) | c.b)),
             a(value_type((value_type(c.a) << 8) | c.a)) {}
 
         //--------------------------------------------------------------------
         rgba16(const rgba8& c, unsigned a_) :
-            r(value_type((value_type(c.r) << 8) | c.r)), 
-            g(value_type((value_type(c.g) << 8) | c.g)), 
-            b(value_type((value_type(c.b) << 8) | c.b)), 
+            r(value_type((value_type(c.r) << 8) | c.r)),
+            g(value_type((value_type(c.g) << 8) | c.g)),
+            b(value_type((value_type(c.b) << 8) | c.b)),
             a(value_type((             a_ << 8) | c.a)) {}
 
         //--------------------------------------------------------------------
@@ -485,7 +485,7 @@ namespace agg
         {
             r = g = b = a = 0;
         }
-        
+
         //--------------------------------------------------------------------
         const self_type& transparent()
         {
@@ -585,7 +585,7 @@ namespace agg
 
 
     //--------------------------------------------------------------rgba16_pre
-    inline rgba16 rgba16_pre(unsigned r, unsigned g, unsigned b, 
+    inline rgba16 rgba16_pre(unsigned r, unsigned g, unsigned b,
                              unsigned a = rgba16::base_mask)
     {
         return rgba16(r,g,b,a).premultiply();

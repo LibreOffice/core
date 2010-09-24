@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef	UDKSERVICE_XML_CD_HXX
-#define	UDKSERVICE_XML_CD_HXX
+#ifndef UDKSERVICE_XML_CD_HXX
+#define UDKSERVICE_XML_CD_HXX
 
 
 #include <tools/string.hxx>
@@ -34,15 +34,15 @@
 
 
 
-/**	Represents one Component description from an XML file.
+/** Represents one Component description from an XML file.
     DatumOf() is used for tags with only one value.
     DataOf() is used, if the tag has multiple values or if
-    you	don't know.
+    you don't know.
 **/
 class ComponentDescription
 {
   public:
-    /**	@ATTENTION
+    /** @ATTENTION
         Because the enum values are used as array indices:
             tag_None must be the first and have the value "0".
             tag_MAX must be the last.
@@ -65,7 +65,7 @@ class ComponentDescription
         tag_MAX
     };
 
-    virtual				~ComponentDescription() {}
+    virtual             ~ComponentDescription() {}
 
     /// @return All values of this tag. An empty vector for wrong indices.
     virtual const std::vector< ByteString > &
@@ -74,7 +74,7 @@ class ComponentDescription
                                                     i_eTag ) const = 0;
 
     /// @return The only or the first value of this tag. An empty string for wrong indices.
-    virtual ByteString 	DatumOf(
+    virtual ByteString  DatumOf(
                             ComponentDescription::E_Tag
                                                     i_eTag ) const = 0;
 };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,23 +37,23 @@ enum SVTOKEN_ENUM { SVTOKEN_EMPTY,      SVTOKEN_COMMENT,
                     SVTOKEN_INTEGER,    SVTOKEN_STRING,
                     SVTOKEN_BOOL,       SVTOKEN_IDENTIFIER,
                     SVTOKEN_CHAR,       SVTOKEN_RTTIBASE,
-                    SVTOKEN_EOF,		SVTOKEN_HASHID };
+                    SVTOKEN_EOF,        SVTOKEN_HASHID };
 
 /******************** class SvToken **************************************/
 class BigInt;
 class SvToken
 {
 friend class SvTokenStream;
-    ULONG               	nLine, nColumn;
-    SVTOKEN_ENUM        	nType;
-    ByteString              	aString;
+    ULONG                   nLine, nColumn;
+    SVTOKEN_ENUM            nType;
+    ByteString                  aString;
     union
     {
-        ULONG           	nLong;
-        BOOL            	bBool;
-        char            	cChar;
-//	    SvRttiBase *    	pComplexObj;
-        SvStringHashEntry *	pHash;
+        ULONG               nLong;
+        BOOL                bBool;
+        char                cChar;
+//      SvRttiBase *        pComplexObj;
+        SvStringHashEntry * pHash;
     };
 public:
             SvToken();
@@ -142,41 +142,41 @@ DECLARE_LIST( SvTokenList, SvToken * )
 class SvTokenStream
 {
     ULONG       nLine, nColumn;
-    int			nBufPos;
+    int         nBufPos;
     int         c;          // naechstes Zeichen
     CharSet     nCharSet;
     char *      pCharTab;   // Zeiger auf die Konverierungstabelle
     USHORT      nTabSize;   // Tabulator Laenge
-    ByteString		aStrTrue;
-    ByteString		aStrFalse;
-    ULONG		nMaxPos;
+    ByteString      aStrTrue;
+    ByteString      aStrFalse;
+    ULONG       nMaxPos;
 
     SvFileStream *  pInStream;
     SvStream &      rInStream;
     String          aFileName;
     SvTokenList     aTokList;
-    SvToken *		pCurToken;
+    SvToken *       pCurToken;
 
     void        InitCtor();
 
-    ByteString      	aBufStr;
-    int         	GetNextChar();
-    int         	GetFastNextChar()
+    ByteString          aBufStr;
+    int             GetNextChar();
+    int             GetFastNextChar()
                     {
                         return aBufStr.GetChar((USHORT)nBufPos++);
                     }
 
-    void			FillTokenList();
-    ULONG       	GetNumber();
-    BOOL        	MakeToken( SvToken & );
-    BOOL			IsEof() const { return rInStream.IsEof(); }
-    void			SetMax()
+    void            FillTokenList();
+    ULONG           GetNumber();
+    BOOL            MakeToken( SvToken & );
+    BOOL            IsEof() const { return rInStream.IsEof(); }
+    void            SetMax()
                     {
                         ULONG n = Tell();
                         if( n > nMaxPos )
                             nMaxPos = n;
                     }
-    void			CalcColumn()
+    void            CalcColumn()
                     {
                         // wenn Zeilenende berechnung sparen
                         if( 0 != c )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,7 +147,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 
     virtual SwDocUpdtFld& GetUpdtFlds() const = 0;
 
-    /*	@@@MAINTAINABILITY-HORROR@@@
+    /*  @@@MAINTAINABILITY-HORROR@@@
         SwNode (see parameter pChk) is (?) part of the private
         data structure of SwDoc and should not be exposed
     */

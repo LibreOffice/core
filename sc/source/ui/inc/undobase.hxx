@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,21 +45,21 @@ class ScSimpleUndo: public SfxUndoAction
 public:
                     TYPEINFO();
                     ScSimpleUndo( ScDocShell* pDocSh );
-    virtual 		~ScSimpleUndo();
+    virtual         ~ScSimpleUndo();
 
-    virtual BOOL	Merge( SfxUndoAction *pNextAction );
+    virtual BOOL    Merge( SfxUndoAction *pNextAction );
 
 protected:
-    ScDocShell*		pDocShell;
-    SfxUndoAction*	pDetectiveUndo;
+    ScDocShell*     pDocShell;
+    SfxUndoAction*  pDetectiveUndo;
 
-    void			BeginUndo();
-    void			EndUndo();
-    void			BeginRedo();
-    void			EndRedo();
+    void            BeginUndo();
+    void            EndUndo();
+    void            BeginRedo();
+    void            EndRedo();
 
-    static void		ShowTable( SCTAB nTab );
-    static void		ShowTable( const ScRange& rRange );
+    static void     ShowTable( SCTAB nTab );
+    static void     ShowTable( const ScRange& rRange );
 };
 
 //----------------------------------------------------------------------------
@@ -72,20 +72,20 @@ public:
                     TYPEINFO();
                     ScBlockUndo( ScDocShell* pDocSh, const ScRange& rRange,
                                  ScBlockUndoMode eBlockMode );
-    virtual 		~ScBlockUndo();
+    virtual         ~ScBlockUndo();
 
 protected:
-    ScRange			aBlockRange;
-    SdrUndoAction*	pDrawUndo;
-    ScBlockUndoMode	eMode;
+    ScRange         aBlockRange;
+    SdrUndoAction*  pDrawUndo;
+    ScBlockUndoMode eMode;
 
-    void			BeginUndo();
-    void			EndUndo();
-//	void			BeginRedo();
-    void			EndRedo();
+    void            BeginUndo();
+    void            EndUndo();
+//  void            BeginRedo();
+    void            EndRedo();
 
-    BOOL			AdjustHeight();
-    void			ShowBlock();
+    BOOL            AdjustHeight();
+    void            ShowBlock();
 };
 
 //----------------------------------------------------------------------------
@@ -116,28 +116,28 @@ public:
 
 enum ScMoveUndoMode { SC_UNDO_REFFIRST, SC_UNDO_REFLAST };
 
-class ScMoveUndo: public ScSimpleUndo				// mit Referenzen
+class ScMoveUndo: public ScSimpleUndo               // mit Referenzen
 {
 public:
                     TYPEINFO();
                     ScMoveUndo( ScDocShell* pDocSh,
                                 ScDocument* pRefDoc, ScRefUndoData* pRefData,
                                 ScMoveUndoMode eRefMode );
-    virtual			~ScMoveUndo();
+    virtual         ~ScMoveUndo();
 
 protected:
-    SdrUndoAction*	pDrawUndo;
-    ScDocument*		pRefUndoDoc;
-    ScRefUndoData*	pRefUndoData;
-    ScMoveUndoMode	eMode;
+    SdrUndoAction*  pDrawUndo;
+    ScDocument*     pRefUndoDoc;
+    ScRefUndoData*  pRefUndoData;
+    ScMoveUndoMode  eMode;
 
-    void			BeginUndo();
-    void			EndUndo();
-//	void			BeginRedo();
-//	void			EndRedo();
+    void            BeginUndo();
+    void            EndUndo();
+//  void            BeginRedo();
+//  void            EndRedo();
 
 private:
-    void			UndoRef();
+    void            UndoRef();
 };
 
 //----------------------------------------------------------------------------

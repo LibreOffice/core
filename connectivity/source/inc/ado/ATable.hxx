@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@ namespace connectivity
         typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
         typedef connectivity::sdbcx::OTableDescriptor_BASE OTableDescriptor_BASE_TYPEDEF;
 
-        class OAdoTable :	public OTable_TYPEDEF
+        class OAdoTable :   public OTable_TYPEDEF
         {
-            WpADOTable		m_aTable;
-            OCatalog*		m_pCatalog;
+            WpADOTable      m_aTable;
+            OCatalog*       m_pCatalog;
 
         protected:
             void fillPropertyValues();
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue)throw (::com::sun::star::uno::Exception);
-            
+
         public:
             virtual void refreshColumns();
             virtual void refreshKeys();
@@ -59,7 +59,7 @@ namespace connectivity
         public:
             OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable);
             OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog);
-            
+
 
             virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
             ::rtl::OUString getSchema() const { return m_SchemaName; }

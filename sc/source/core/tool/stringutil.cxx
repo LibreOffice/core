@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,6 +39,15 @@
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+
+ScSetStringParam::ScSetStringParam() :
+    mpNumFormatter(NULL),
+    mbDetectNumberFormat(true),
+    mbSetTextCellFormat(false)
+{
+}
+
+// ============================================================================-
 
 bool ScStringUtil::parseSimpleNumber(
     const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal)

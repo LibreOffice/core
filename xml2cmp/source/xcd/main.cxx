@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,24 +43,24 @@
 
 
 
-int      				Do_IndexCommandLine(
-                            const CommandLine &		i_rCommandLine );
-int      				Do_SingleFileCommandLine(
-                            const CommandLine &		i_rCommandLine );
-void					Create_TypeInfo(
-                            const char *		  	o_sOutputFile,
-                            ModuleDescription &	    i_rData );
+int                     Do_IndexCommandLine(
+                            const CommandLine &     i_rCommandLine );
+int                     Do_SingleFileCommandLine(
+                            const CommandLine &     i_rCommandLine );
+void                    Create_TypeInfo(
+                            const char *            o_sOutputFile,
+                            ModuleDescription &     i_rData );
 
 
 int
 #ifdef WNT
 _cdecl
 #endif
-main( int 		argc,
+main( int       argc,
       char *    argv[] )
 {
     // Variables
-    CommandLine				aCommandLine(argc, argv);
+    CommandLine             aCommandLine(argc, argv);
     int ret = 0;
 
     if (! aCommandLine.IsOk())
@@ -81,8 +81,8 @@ main( int 		argc,
 int
 Do_SingleFileCommandLine(const CommandLine & i_rCommandLine)
 {
-    ModuleDescription	aDescr;
-    X2CParser			aParser(aDescr);
+    ModuleDescription   aDescr;
+    X2CParser           aParser(aDescr);
 
     // Load file and create Function-file
     bool bLoadResult = aParser.LoadFile(i_rCommandLine.XmlSrcFile());
@@ -128,8 +128,8 @@ int
 Do_IndexCommandLine(const CommandLine & i_rCommandLine)
 {
     // Parsen files:
-    List<Simstr>	aFiles;
-    Index	        aIndex( i_rCommandLine.OutputDirectory(),
+    List<Simstr>    aFiles;
+    Index           aIndex( i_rCommandLine.OutputDirectory(),
                             i_rCommandLine.IdlRootPath(),
                             i_rCommandLine.IndexedTags() );
 
@@ -150,22 +150,22 @@ Do_IndexCommandLine(const CommandLine & i_rCommandLine)
 //********************      Creating of typeinfo       ********************//
 
 
-void					Put2StdOut_TypeInfo(
-                            ModuleDescription &	    i_rData );
-void					Put2File_TypeInfo(
+void                    Put2StdOut_TypeInfo(
+                            ModuleDescription &     i_rData );
+void                    Put2File_TypeInfo(
                             const char *            i_sOutputFile,
-                            ModuleDescription &	    i_rData );
-void					StreamOut_TypeInfo(
+                            ModuleDescription &     i_rData );
+void                    StreamOut_TypeInfo(
                             std::ostream &               o_rOut,
-                            ModuleDescription &	    i_rData,
+                            ModuleDescription &     i_rData,
                             const char *            i_sSeparator );
 
 
 
 
 void
-Create_TypeInfo( const char *	   		o_sOutputFile,
-                 ModuleDescription &	i_rData )
+Create_TypeInfo( const char *           o_sOutputFile,
+                 ModuleDescription &    i_rData )
 {
     if ( strcmp(o_sOutputFile, "stdout") == 0 )
         Put2StdOut_TypeInfo(i_rData);
@@ -184,8 +184,8 @@ Create_TypeInfo( const char *	   		o_sOutputFile,
         return;
     }
 
-    Heap 	aTypesHeap(12);
-    Simstr	sLibPrefix = i_rData.ModuleName();
+    Heap    aTypesHeap(12);
+    Simstr  sLibPrefix = i_rData.ModuleName();
 
     // Gather types:
     List< const MultipleTextElement * > aTypes;
@@ -228,7 +228,7 @@ Create_TypeInfo( const char *	   		o_sOutputFile,
         }
         else
             WriteStr( aOut, pHeapTop->Key() );
-    }	// end for
+    }   // end for
 
     if (pLastHeapTop != 0)
     {
@@ -241,14 +241,14 @@ Create_TypeInfo( const char *	   		o_sOutputFile,
 }
 
 void
-Put2StdOut_TypeInfo( ModuleDescription &	i_rData )
+Put2StdOut_TypeInfo( ModuleDescription &    i_rData )
 {
     StreamOut_TypeInfo(std::cout, i_rData, " ");
 }
 
 void
 Put2File_TypeInfo( const char *            i_sOutputFile,
-                   ModuleDescription &	   i_rData )
+                   ModuleDescription &     i_rData )
 {
     std::ofstream aOut(i_sOutputFile, std::ios::out
 #if defined(WNT) || defined(OS2)
@@ -261,7 +261,7 @@ Put2File_TypeInfo( const char *            i_sOutputFile,
         return;
     }
 
-    Simstr	sLibPrefix = i_rData.ModuleName();
+    Simstr  sLibPrefix = i_rData.ModuleName();
     WriteStr( aOut, sLibPrefix );
     WriteStr( aOut, "_XML2CMPTYPES= ");
 
@@ -272,10 +272,10 @@ Put2File_TypeInfo( const char *            i_sOutputFile,
 
 void
 StreamOut_TypeInfo( std::ostream &               o_rOut,
-                    ModuleDescription &	    i_rData,
+                    ModuleDescription &     i_rData,
                     const char *            i_sSeparator )
 {
-    Heap 	aTypesHeap(12);
+    Heap    aTypesHeap(12);
 
     // Gather types:
     List< const MultipleTextElement * > aTypes;
@@ -315,7 +315,7 @@ StreamOut_TypeInfo( std::ostream &               o_rOut,
         }
         else
             WriteStr( o_rOut, pHeapTop->Key() );
-    }	// end for
+    }   // end for
 
     if (pLastHeapTop != 0)
     {

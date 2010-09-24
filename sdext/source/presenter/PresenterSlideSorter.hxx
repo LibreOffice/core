@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,16 +86,16 @@ public:
 
     void SetActiveState (const bool bIsActive);
 
-    
+
     // lang::XEventListener
 
-    virtual void SAL_CALL 
+    virtual void SAL_CALL
         disposing (const css::lang::EventObject& rEventObject)
         throw (css::uno::RuntimeException);
 
 
     // XWindowListener
-    
+
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -131,10 +131,10 @@ public:
 
 
     // XMouseMotionListener
-    
+
     virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-    
+
     virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -154,9 +154,9 @@ public:
         const css::beans::PropertyChangeEvent& rEvent)
         throw(css::uno::RuntimeException);
 
-    
+
     // XSlidePreviewCacheListener
-    
+
     virtual void SAL_CALL notifyPreviewCreation (
         sal_Int32 nSlideIndex)
         throw(css::uno::RuntimeException);

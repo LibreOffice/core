@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ class SfxObjectShell;
 
 class SvxLineBox : public LineLB
 {
-    BmpColorMode	meBmpMode;
-    USHORT			nCurPos;
-    Timer			aDelayTimer;
+    BmpColorMode    meBmpMode;
+    USHORT          nCurPos;
+    Timer           aDelayTimer;
     Size            aLogicalSize;
     BOOL            bRelease;
     SfxObjectShell* mpSh;
@@ -53,10 +53,10 @@ class SvxLineBox : public LineLB
 #ifdef _SVX_ITEMWIN_CXX
                     DECL_LINK( DelayHdl_Impl, Timer * );
 
-    void			ReleaseFocus_Impl();
+    void            ReleaseFocus_Impl();
 #endif
 public:
-    SvxLineBox( Window* pParent, 
+    SvxLineBox( Window* pParent,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                 WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
     ~SvxLineBox();
@@ -64,9 +64,9 @@ public:
     void FillControl();
 
 protected:
-    virtual void 	Select();
-    virtual long	PreNotify( NotifyEvent& rNEvt );
-    virtual long	Notify( NotifyEvent& rNEvt );
+    virtual void    Select();
+    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual long    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 };
@@ -77,9 +77,9 @@ class SvxColorBox : public ColorLB
 {
     using Window::Update;
 
-    USHORT			nCurPos;
-    USHORT			nId;
-    Timer			aDelayTimer;
+    USHORT          nCurPos;
+    USHORT          nId;
+    Timer           aDelayTimer;
     Size            aLogicalSize;
     BOOL            bRelease;
     ::rtl::OUString maCommand;
@@ -88,22 +88,22 @@ class SvxColorBox : public ColorLB
 #ifdef _SVX_ITEMWIN_CXX
                     DECL_LINK( DelayHdl_Impl, Timer * );
 
-    void			ReleaseFocus_Impl();
+    void            ReleaseFocus_Impl();
 #endif
 
 public:
-    SvxColorBox( Window* pParent, 
+    SvxColorBox( Window* pParent,
                  const rtl::OUString& rCommand,
                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                  WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
     ~SvxColorBox();
 
-    void			Update( const XLineColorItem* pItem );
+    void            Update( const XLineColorItem* pItem );
 
 protected:
-    virtual void 	Select();
-    virtual long	PreNotify( NotifyEvent& rNEvt );
-    virtual long	Notify( NotifyEvent& rNEvt );
+    virtual void    Select();
+    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual long    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 };
@@ -114,34 +114,34 @@ class SVX_DLLPUBLIC SvxMetricField : public MetricField
 {
     using Window::Update;
 
-    String			aCurTxt;
-    SfxMapUnit		ePoolUnit;
-    FieldUnit		eDlgUnit;
+    String          aCurTxt;
+    SfxMapUnit      ePoolUnit;
+    FieldUnit       eDlgUnit;
     Size            aLogicalSize;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
 #ifdef _SVX_ITEMWIN_CXX
-    void			ReleaseFocus_Impl();
+    void            ReleaseFocus_Impl();
 #endif
 
 protected:
-    virtual void 	Modify();
+    virtual void    Modify();
     virtual void    Down();
-    virtual void    Up();		// Nur zur Sicherheit
+    virtual void    Up();       // Nur zur Sicherheit
 
-    virtual long	PreNotify( NotifyEvent& rNEvt );
-    virtual long	Notify( NotifyEvent& rNEvt );
+    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual long    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-    SvxMetricField( Window* pParent, 
+    SvxMetricField( Window* pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                     WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
     ~SvxMetricField();
 
-    void			Update( const XLineWidthItem* pItem );
-    void			SetCoreUnit( SfxMapUnit eUnit );
-    void			RefreshDlgUnit();
+    void            Update( const XLineWidthItem* pItem );
+    void            SetCoreUnit( SfxMapUnit eUnit );
+    void            RefreshDlgUnit();
 };
 
 // class SvxFillTypeBox --------------------------------------------------
@@ -152,20 +152,20 @@ public:
     SvxFillTypeBox( Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
     ~SvxFillTypeBox();
 
-    void			Selected() { bSelect = TRUE; }
+    void            Selected() { bSelect = TRUE; }
     BOOL            IsRelease() { return bRelease;}
 
 protected:
-    virtual long	PreNotify( NotifyEvent& rNEvt );
-    virtual long	Notify( NotifyEvent& rNEvt );
+    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual long    Notify( NotifyEvent& rNEvt );
 
 private:
-    USHORT			nCurPos;
-    BOOL			bSelect;
+    USHORT          nCurPos;
+    BOOL            bSelect;
     BOOL            bRelease;
 
 #ifdef _SVX_ITEMWIN_CXX
-    void			ReleaseFocus_Impl();
+    void            ReleaseFocus_Impl();
 #endif
 };
 
@@ -180,16 +180,16 @@ public:
     BOOL            IsRelease() { return bRelease;}
 
 protected:
-    virtual long	PreNotify( NotifyEvent& rNEvt );
-    virtual long	Notify( NotifyEvent& rNEvt );
-    virtual void	Select();
+    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual void    Select();
 
 private:
-    USHORT			nCurPos;
+    USHORT          nCurPos;
     BOOL            bRelease;
 
 #ifdef _SVX_ITEMWIN_CXX
-    void			ReleaseFocus_Impl();
+    void            ReleaseFocus_Impl();
 #endif
 };
 

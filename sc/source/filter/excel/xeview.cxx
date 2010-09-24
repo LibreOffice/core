@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ void XclExpWindow1::SaveXml( XclExpXmlStream& rStrm )
             XML_tabRatio,               OString::valueOf( (sal_Int32)mnTabBarSize ).getStr(),
             XML_firstSheet,             OString::valueOf( (sal_Int32)rTabInfo.GetFirstVisXclTab() ).getStr(),
             XML_activeTab,              OString::valueOf( (sal_Int32)rTabInfo.GetDisplayedXclTab() ).getStr(),
-            // OOXTODO: XML_autoFilterDateGrouping,     // bool; AUTOFILTER12? 87Eh 
+            // OOXTODO: XML_autoFilterDateGrouping,     // bool; AUTOFILTER12? 87Eh
             FSEND );
 }
 
@@ -313,7 +313,6 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
 
     const ScViewOptions& rViewOpt = GetDoc().GetViewOptions();
     maData.mbShowFormulas   = rViewOpt.GetOption( VOPT_FORMULAS );
-    maData.mbShowGrid       = rViewOpt.GetOption( VOPT_GRID );
     maData.mbShowHeadings   = rViewOpt.GetOption( VOPT_HEADER );
     maData.mbShowZeros      = rViewOpt.GetOption( VOPT_NULLVALS );
     maData.mbShowOutline    = rViewOpt.GetOption( VOPT_OUTLINER );
@@ -388,6 +387,7 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
             else
                 maData.maGridColor = rGridColor;
         }
+        maData.mbShowGrid       = rTabSett.mbShowGrid;
 
         // view mode and zoom
         maData.mbPageMode       = (GetBiff() == EXC_BIFF8) && rTabSett.mbPageMode;

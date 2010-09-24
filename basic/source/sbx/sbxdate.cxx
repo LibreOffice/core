@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,7 @@ double ImpGetDate( const SbxValues* p )
                 LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
 
                 SvNumberFormatter* pFormatter;
-                com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > 
+                com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
                     xFactory = comphelper::getProcessServiceFactory();
                 pFormatter = new SvNumberFormatter( xFactory, eLangType );
 
@@ -124,13 +124,13 @@ double ImpGetDate( const SbxValues* p )
                 String aStr( aDateStr );
                 aStr.AppendAscii( " HH:MM:SS" );
 
-                pFormatter->PutandConvertEntry( aStr, nCheckPos,	nType,
+                pFormatter->PutandConvertEntry( aStr, nCheckPos,    nType,
                     nIndex, LANGUAGE_GERMAN, eLangType );
                 BOOL bSuccess = pFormatter->IsNumberFormat( *p->pOUString, nIndex, nRes );
                 if ( bSuccess )
                 {
                     short nType_ = pFormatter->GetType( nIndex );
-                    if(!(nType_ & (	NUMBERFORMAT_DATETIME | NUMBERFORMAT_DATE |
+                    if(!(nType_ & ( NUMBERFORMAT_DATETIME | NUMBERFORMAT_DATE |
                                     NUMBERFORMAT_TIME | NUMBERFORMAT_DEFINED )))
                         bSuccess = FALSE;
                 }
@@ -236,7 +236,7 @@ start:
             {
             SbxDecimal* pDec = ImpCreateDecimal( p );
             if( !pDec->setDouble( n ) )
-                SbxBase::SetError( SbxERR_OVERFLOW ); 
+                SbxBase::SetError( SbxERR_OVERFLOW );
             break;
             }
         direct:
@@ -254,7 +254,7 @@ start:
 
             LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
             SvNumberFormatter* pFormatter;
-            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > 
+            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
                 xFactory = comphelper::getProcessServiceFactory();
             pFormatter = new SvNumberFormatter( xFactory, eLangType );
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,25 +58,25 @@ namespace cppu
             }
         }
 
-        ~EnvGuard() 
-        { 
-            m_env.enter(); 
+        ~EnvGuard()
+        {
+            m_env.enter();
         }
 
         /** Checks if the associated environment is non empty.
-    
+
             @return  0 == empty, 1 == non empty
         */
         sal_Bool SAL_CALL is() const SAL_THROW( () )
-        { 
-            return m_env.is(); 
+        {
+            return m_env.is();
         }
 
         /** Leaves the associated environment and clears
             the reference.
         */
-        void clear() 
-        { 
+        void clear()
+        {
             if (m_env.is())
             {
                 m_env.enter();
@@ -103,11 +103,11 @@ namespace cppu
             uno_Environment_enter(NULL);
         }
 
-        ~AntiEnvGuard() 
-        { 
+        ~AntiEnvGuard()
+        {
             m_env.enter();
         }
     };
-} 
+}
 
 #endif

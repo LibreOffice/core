@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ __gc struct Constants
 struct BridgeRuntimeError
 {
     ::rtl::OUString m_message;
-    
+
     inline BridgeRuntimeError( ::rtl::OUString const & message )
         : m_message( message )
         {}
@@ -134,7 +134,7 @@ struct rtl_mem
         { return mem; }
     inline static void operator delete ( void *, void * )
         {}
-    
+
     static inline ::std::auto_ptr< rtl_mem > allocate( ::std::size_t bytes );
 };
 //--------------------------------------------------------------------------------------------------
@@ -150,15 +150,15 @@ inline ::std::auto_ptr< rtl_mem > rtl_mem::allocate( ::std::size_t bytes )
 class TypeDescr
 {
     typelib_TypeDescription * m_td;
-    
+
     TypeDescr( TypeDescr & ); // not impl
     void operator = ( TypeDescr ); // not impl
-    
+
 public:
     inline explicit TypeDescr( typelib_TypeDescriptionReference * td_ref );
     inline ~TypeDescr() SAL_THROW( () )
         { TYPELIB_DANGER_RELEASE( m_td ); }
-    
+
     inline typelib_TypeDescription * get() const
         { return m_td; }
 };

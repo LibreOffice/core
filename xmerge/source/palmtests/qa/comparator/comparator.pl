@@ -5,7 +5,7 @@
  #*************************************************************************
  #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ sub process_cmdline
     {
         @arg= split('=', $i);
         @arg[0] =~ tr/A-Z/a-z/;
-        
+
         if (@arg[0] eq "-pdb-orig")
         {
             $pdb_orig=$arg[1];
@@ -183,7 +183,7 @@ sub process_cmdline
 sub set_env_from_props
 {
     open(PROPSFILE, $_[0]) || die "Could not open properties file";
-    
+
     while (<PROPSFILE>)
     {
         chomp $_;
@@ -211,7 +211,7 @@ sub set_env_from_props
         {
             $xml_new=$arg[1];
         }
-        
+
     }
     close PROPSFILE;
 }
@@ -220,8 +220,8 @@ sub print_usage
 {
     print "Usage : compartor.pl - compare Office or pdb files\n";
     print "\t-one=<file> :\t\t individual test case file to run\n";
-    print "\t-list=<file> :\t\t list of test case files\n"; 
-    print "\t-env=<file> :\t\t Properites like file defining env\n"; 
+    print "\t-list=<file> :\t\t list of test case files\n";
+    print "\t-env=<file> :\t\t Properites like file defining env\n";
     print "\t-pdb-orig=<path> :\t directory to hold original pdb files\n";
     print "\t-pdb-new=<path> :\t directory to hold new pdb files\n";
     print "\t-xml-orig=<path> :\t directory to hold original office documents\n";

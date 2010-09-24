@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ const Sequence< Property > & lcl_GetPropertySequence()
     {
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
-        
+
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
 //         ::chart::NamedProperties::AddPropertiesToVector( aProperties );
@@ -294,7 +294,7 @@ beans::PropertyState SAL_CALL UpDownBarWrapper::getPropertyState( const ::rtl::O
 {
     uno::Any aDefault( this->getPropertyDefault( rPropertyName ) );
     uno::Any aValue( this->getPropertyValue( rPropertyName ) );
-    
+
     if( aDefault == aValue )
         return beans::PropertyState_DEFAULT_VALUE;
 

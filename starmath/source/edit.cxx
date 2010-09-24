@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,10 @@
 
 
 #include "starmath.hrc"
-#define ITEMID_FONT 		1
-#define ITEMID_FONTHEIGHT	2
-#define ITEMID_LRSPACE		3
-#define ITEMID_WEIGHT		4
+#define ITEMID_FONT         1
+#define ITEMID_FONTHEIGHT   2
+#define ITEMID_LRSPACE      3
+#define ITEMID_WEIGHT       4
 
 
 #include <vcl/menu.hxx>
@@ -64,12 +64,12 @@
 #include "document.hxx"
 #include "config.hxx"
 
-#define SCROLL_LINE 		24
+#define SCROLL_LINE         24
 
-#define MINWIDTH		200
-#define MINHEIGHT		200
-#define MINSPLIT		40
-#define SPLITTERWIDTH	2
+#define MINWIDTH        200
+#define MINHEIGHT       200
+#define MINSPLIT        40
+#define SPLITTERWIDTH   2
 
 
 using namespace com::sun::star::accessibility;
@@ -84,13 +84,13 @@ void SmGetLeftSelectionPart(const ESelection aSel,
     // returns paragraph number and position of the selections left part
 {
     // compare start and end of selection and use the one that comes first
-    if (	aSel.nStartPara <  aSel.nEndPara
-        ||	(aSel.nStartPara == aSel.nEndPara  &&  aSel.nStartPos < aSel.nEndPos) )
-    {	nPara = aSel.nStartPara;
+    if (    aSel.nStartPara <  aSel.nEndPara
+        ||  (aSel.nStartPara == aSel.nEndPara  &&  aSel.nStartPos < aSel.nEndPos) )
+    {   nPara = aSel.nStartPara;
         nPos  = aSel.nStartPos;
     }
     else
-    {	nPara = aSel.nEndPara;
+    {   nPara = aSel.nEndPara;
         nPos  = aSel.nEndPos;
     }
 }
@@ -239,7 +239,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
         // unfortunately this resets the whole edit engine
         // thus we need to save at least the text
         String aTxt( pEditEngine->GetText( LINEEND_LF ) );
-        pEditEngine->Clear();	//#77957 incorrect font size
+        pEditEngine->Clear();   //#77957 incorrect font size
         pEditEngine->SetText( aTxt );
     }
 
@@ -262,7 +262,7 @@ IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
     // window and if it has changed (try to) set the formula-cursor
     // according to that.
 {
-    ESelection	aNewSelection   (GetSelection());
+    ESelection  aNewSelection   (GetSelection());
 
     if (!aNewSelection.IsEqual(aOldSelection))
     {   SmViewShell *pView = rCmdBox.GetView();
@@ -270,7 +270,7 @@ IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
         if (pView)
         {
             // get row and column to look for
-            USHORT	nRow, nCol;
+            USHORT  nRow, nCol;
             SmGetLeftSelectionPart(aNewSelection, nRow, nCol);
             nRow++;
             nCol++;

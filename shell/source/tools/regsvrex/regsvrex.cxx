@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <windows.h>
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif 
+#endif
 
 typedef HRESULT (__stdcall *lpfnDllRegisterServer)();
 typedef HRESULT (__stdcall *lpfnDllUnregisterServer)();
@@ -43,11 +43,11 @@ typedef HRESULT (__stdcall *lpfnDllUnregisterServer)();
 */
 bool IsUnregisterParameter(const char* Param)
 {
-    return ((0 == _stricmp(Param, "/u")) || 
+    return ((0 == _stricmp(Param, "/u")) ||
             (0 == _stricmp(Param, "-u")));
 }
 
-/**	
+/**
 */
 int main(int argc, char* argv[])
 {
@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
     if (2 == argc)
     {
         hmod = LoadLibraryA(argv[1]);
-        
+
         if (hmod)
         {
             lpfn_register = (lpfnDllRegisterServer)GetProcAddress(

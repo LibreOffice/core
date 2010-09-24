@@ -10,7 +10,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#define WIN32_LEAN_AND_MEAN		// Selten benutzte Teile der Windows-Header nicht einbinden
+#define WIN32_LEAN_AND_MEAN     // Selten benutzte Teile der Windows-Header nicht einbinden
 
 
 // Windows-Header-Dateien:

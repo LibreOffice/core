@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,13 +72,13 @@ public:
 
 class ShowBitmap : public WorkWindow
 {
-    Bitmap			aBmp;
+    Bitmap          aBmp;
 
 public:
                     ShowBitmap( Window* pParent, const Bitmap& rBmp );
 
-    virtual void	Paint( const Rectangle& );
-    virtual BOOL	Close();
+    virtual void    Paint( const Rectangle& );
+    virtual BOOL    Close();
 };
 
 // -----------------------------------------------------------------------
@@ -88,8 +88,8 @@ class ShowFont : public Control
 public:
                     ShowFont( Window* pParent );
 
-    virtual void	Paint( const Rectangle& );
-    void			SetFont( const Font& rFont )
+    virtual void    Paint( const Rectangle& );
+    void            SetFont( const Font& rFont )
                         { Invalidate(); Control::SetFont( rFont ); }
 };
 
@@ -100,7 +100,7 @@ class OrientSlider : public Slider
 public:
                 OrientSlider( Window* pParent );
 
-    short		GetOrientation() const { return (short)GetThumbPos(); }
+    short       GetOrientation() const { return (short)GetThumbPos(); }
 };
 
 // -----------------------------------------------------------------------
@@ -119,25 +119,25 @@ OrientSlider::OrientSlider( Window* pParent ) :
 class MyFontDialog : public ModalDialog
 {
 private:
-    FontList*		pList;
-    Font			aCurFont;
-    Printer 		aPrinter;
-    FontNameBox 	aFontBox;
-    FontStyleBox	aStyleBox;
-    FontSizeBox 	aSizeBox;
-    ListBox 		aUnderlineBox;
-    ListBox 		aStrikeoutBox;
-    CheckBox		aWordLineBox;
-    CheckBox		aShadowBox;
-    CheckBox		aOutlineBox;
-    ColorListBox	aColorBox;
-    GroupBox		aEffectBox;
-    OrientSlider	aLineOrientSlider;
-    ShowFont		aShowFont;
-    GroupBox		aSampleBox;
-    FixedText		aMapText;
-    OKButton		aOKBtn;
-    CancelButton	aCancelBtn;
+    FontList*       pList;
+    Font            aCurFont;
+    Printer         aPrinter;
+    FontNameBox     aFontBox;
+    FontStyleBox    aStyleBox;
+    FontSizeBox     aSizeBox;
+    ListBox         aUnderlineBox;
+    ListBox         aStrikeoutBox;
+    CheckBox        aWordLineBox;
+    CheckBox        aShadowBox;
+    CheckBox        aOutlineBox;
+    ColorListBox    aColorBox;
+    GroupBox        aEffectBox;
+    OrientSlider    aLineOrientSlider;
+    ShowFont        aShowFont;
+    GroupBox        aSampleBox;
+    FixedText       aMapText;
+    OKButton        aOKBtn;
+    CancelButton    aCancelBtn;
 
 public:
                     MyFontDialog( Window* pParent );
@@ -145,8 +145,8 @@ public:
                     DECL_LINK( SelectFont, ComboBox* );
                     DECL_LINK( SelectStyle, ComboBox* );
                     DECL_LINK( AttrHdl, Window * );
-    void			SetAttr();
-    short			Execute();
+    void            SetAttr();
+    short           Execute();
 };
 
 // -----------------------------------------------------------------------
@@ -158,22 +158,22 @@ public:
                               WinBits nWinStyle = WB_STDTABBAR ) :
                         TabBar( pParent, nWinStyle ) {}
 
-    virtual long	DeactivatePage();
-    virtual long	AllowRenaming();
-    virtual void	Split();
+    virtual long    DeactivatePage();
+    virtual long    AllowRenaming();
+    virtual void    Split();
 };
 
 // -----------------------------------------------------------------------
 
 class MyCalendar : public WorkWindow
 {
-    MenuBar 	aMenuBar;
-    PopupMenu	aWeekStartMenu;
-    PopupMenu	aWeekCountMenu;
-    Calendar	aCalendar;
-    Color		aInfoColor;
-    Color		aHolidayColor;
-    Color		aFrameColor;
+    MenuBar     aMenuBar;
+    PopupMenu   aWeekStartMenu;
+    PopupMenu   aWeekCountMenu;
+    Calendar    aCalendar;
+    Color       aInfoColor;
+    Color       aHolidayColor;
+    Color       aFrameColor;
 
 public:
                 MyCalendar( Window* pParent );
@@ -183,7 +183,7 @@ public:
                 DECL_LINK( DoubleClickHdl, Calendar* );
                 DECL_LINK( MenuSelectHdl, Menu* );
 
-    void		Resize();
+    void        Resize();
 };
 
 // -----------------------------------------------------------------------
@@ -191,27 +191,27 @@ public:
 class MyWin : public WorkWindow
 {
 private:
-    Printer 		aPrn;
-    ToolBox 		aBox;
-    StatusBar		aBar;
-    HeaderBar		aHeadBar;
-    ColorListBox	aColorList;
-    LineListBox 	aLineList;
-    ValueSet		aValueSet;
-    CalendarField	aCalendarField;
-    CalendarField	aCalendarField2;
-    MyTabBar		aTabBar;
-    ProgressBar 	aPrgsBar;
-    PushButton		aFontBtn;
-    PushButton		aCalendarBtn;
-    PushButton		aPrnSetupBtn;
-    PushButton		aPrnDlgBtn;
-    Size			aBoxSize;
-    MyCalendar* 	pCalendar;
-    PopupMenu*		pMenu;
-    FontNameMenu*	pNameMenu;
-    FontStyleMenu*	pStyleMenu;
-    FontSizeMenu*	pSizeMenu;
+    Printer         aPrn;
+    ToolBox         aBox;
+    StatusBar       aBar;
+    HeaderBar       aHeadBar;
+    ColorListBox    aColorList;
+    LineListBox     aLineList;
+    ValueSet        aValueSet;
+    CalendarField   aCalendarField;
+    CalendarField   aCalendarField2;
+    MyTabBar        aTabBar;
+    ProgressBar     aPrgsBar;
+    PushButton      aFontBtn;
+    PushButton      aCalendarBtn;
+    PushButton      aPrnSetupBtn;
+    PushButton      aPrnDlgBtn;
+    Size            aBoxSize;
+    MyCalendar*     pCalendar;
+    PopupMenu*      pMenu;
+    FontNameMenu*   pNameMenu;
+    FontStyleMenu*  pStyleMenu;
+    FontSizeMenu*   pSizeMenu;
 
 public:
                     MyWin( Window* pParent, WinBits aWinStyle );
@@ -220,13 +220,13 @@ public:
                     DECL_LINK( Test, PushButton* );
                     DECL_LINK( SelectHdl, Window* );
                     DECL_LINK( CalSelectHdl, CalendarField* );
-    void			ContextMenu( const Point& rPos );
+    void            ContextMenu( const Point& rPos );
 
-    void			Command( const CommandEvent& rCEvt );
-    void			MouseButtonDown( const MouseEvent& rMEvt );
-    void			KeyInput( const KeyEvent& rKEvt );
-    void			Paint( const Rectangle& rRect );
-    void			Resize();
+    void            Command( const CommandEvent& rCEvt );
+    void            MouseButtonDown( const MouseEvent& rMEvt );
+    void            KeyInput( const KeyEvent& rKEvt );
+    void            Paint( const Rectangle& rRect );
+    void            Resize();
 };
 
 // -----------------------------------------------------------------------
@@ -304,9 +304,9 @@ ShowFont::ShowFont( Window* pParent ) :
 void ShowFont::Paint( const Rectangle& )
 {
     const Font& rFont = GetFont();
-    String		aText;
-    Size		aWindowSize( GetOutputSize() );
-    long		x,y;
+    String      aText;
+    Size        aWindowSize( GetOutputSize() );
+    long        x,y;
 
     if ( rFont.GetOrientation() )
     {
@@ -422,22 +422,22 @@ MyFontDialog::MyFontDialog( Window* pParent ) :
     aColorBox.SetPosSizePixel( Point( 15, 305 ), Size( 130, 100 ) );
     aColorBox.SetSelectHdl( LINK( this, MyFontDialog, AttrHdl ) );
     aColorBox.SetUpdateMode( FALSE );
-    aColorBox.InsertEntry( Color( COL_BLACK ),		   XubString( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
-    aColorBox.InsertEntry( Color( COL_BLUE ),		   XubString( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
-    aColorBox.InsertEntry( Color( COL_GREEN ),		   XubString( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
-    aColorBox.InsertEntry( Color( COL_CYAN ),		   XubString( RTL_CONSTASCII_USTRINGPARAM( "Cyan" ) ) );
-    aColorBox.InsertEntry( Color( COL_RED ),		   XubString( RTL_CONSTASCII_USTRINGPARAM( "Red" ) ) );
-    aColorBox.InsertEntry( Color( COL_MAGENTA ),	   XubString( RTL_CONSTASCII_USTRINGPARAM( "Magenta" ) ) );
-    aColorBox.InsertEntry( Color( COL_BROWN ),		   XubString( RTL_CONSTASCII_USTRINGPARAM( "Brown" ) ) );
-    aColorBox.InsertEntry( Color( COL_GRAY ),		   XubString( RTL_CONSTASCII_USTRINGPARAM( "Gray" ) ) );
-    aColorBox.InsertEntry( Color( COL_LIGHTGRAY ),	   XubString( RTL_CONSTASCII_USTRINGPARAM( "LightGray" ) ) );
-    aColorBox.InsertEntry( Color( COL_LIGHTBLUE ),	   XubString( RTL_CONSTASCII_USTRINGPARAM( "LightBlue" ) ) );
+    aColorBox.InsertEntry( Color( COL_BLACK ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
+    aColorBox.InsertEntry( Color( COL_BLUE ),          XubString( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
+    aColorBox.InsertEntry( Color( COL_GREEN ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
+    aColorBox.InsertEntry( Color( COL_CYAN ),          XubString( RTL_CONSTASCII_USTRINGPARAM( "Cyan" ) ) );
+    aColorBox.InsertEntry( Color( COL_RED ),           XubString( RTL_CONSTASCII_USTRINGPARAM( "Red" ) ) );
+    aColorBox.InsertEntry( Color( COL_MAGENTA ),       XubString( RTL_CONSTASCII_USTRINGPARAM( "Magenta" ) ) );
+    aColorBox.InsertEntry( Color( COL_BROWN ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Brown" ) ) );
+    aColorBox.InsertEntry( Color( COL_GRAY ),          XubString( RTL_CONSTASCII_USTRINGPARAM( "Gray" ) ) );
+    aColorBox.InsertEntry( Color( COL_LIGHTGRAY ),     XubString( RTL_CONSTASCII_USTRINGPARAM( "LightGray" ) ) );
+    aColorBox.InsertEntry( Color( COL_LIGHTBLUE ),     XubString( RTL_CONSTASCII_USTRINGPARAM( "LightBlue" ) ) );
     aColorBox.InsertEntry( Color( COL_LIGHTGREEN ),    XubString( RTL_CONSTASCII_USTRINGPARAM( "LightGreen" ) ) );
-    aColorBox.InsertEntry( Color( COL_LIGHTCYAN ),	   XubString( RTL_CONSTASCII_USTRINGPARAM( "LightCyan" ) ) );
-    aColorBox.InsertEntry( Color( COL_LIGHTRED ),	   XubString( RTL_CONSTASCII_USTRINGPARAM( "LightRed" ) ) );
+    aColorBox.InsertEntry( Color( COL_LIGHTCYAN ),     XubString( RTL_CONSTASCII_USTRINGPARAM( "LightCyan" ) ) );
+    aColorBox.InsertEntry( Color( COL_LIGHTRED ),      XubString( RTL_CONSTASCII_USTRINGPARAM( "LightRed" ) ) );
     aColorBox.InsertEntry( Color( COL_LIGHTMAGENTA ),  XubString( RTL_CONSTASCII_USTRINGPARAM( "LightMagenta" ) ) );
-    aColorBox.InsertEntry( Color( COL_YELLOW ), 	   XubString( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
-    aColorBox.InsertEntry( Color( COL_WHITE ),		   XubString( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
+    aColorBox.InsertEntry( Color( COL_YELLOW ),        XubString( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
+    aColorBox.InsertEntry( Color( COL_WHITE ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
     aColorBox.SetUpdateMode( TRUE );
     aColorBox.Show();
     }
@@ -573,9 +573,9 @@ long MyTabBar::AllowRenaming()
 
 void MyTabBar::Split()
 {
-    Size	aSize = GetSizePixel();
-    long	nWidth = GetSplitSize();
-    long	nMaxWidth = GetParent()->GetOutputSizePixel().Width()-50;
+    Size    aSize = GetSizePixel();
+    long    nWidth = GetSplitSize();
+    long    nMaxWidth = GetParent()->GetOutputSizePixel().Width()-50;
     if ( nWidth < GetMinSize() )
         nWidth = GetMinSize();
     else if ( nWidth > nMaxWidth )
@@ -669,7 +669,7 @@ IMPL_LINK( MyCalendar, DoubleClickHdl, Calendar*, EMPTYARG )
 
 IMPL_LINK( MyCalendar, MenuSelectHdl, Menu*, pMenu )
 {
-    USHORT			nItemId = pMenu->GetCurItemId();
+    USHORT          nItemId = pMenu->GetCurItemId();
 
     if ( (nItemId >= 10) && (nItemId <= 19) )
         aCalendar.SetWeekStart( nItemId-10 );
@@ -751,22 +751,22 @@ MyWin::MyWin( Window* pParent, WinBits aWinStyle ) :
     {
     aColorList.SetPosSizePixel( Point( 10, nY ), Size( 130, 180 ) );
     aColorList.SetUpdateMode( FALSE );
-    aColorList.InsertEntry( Color( COL_BLACK ), 		XubString( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
-    aColorList.InsertEntry( Color( COL_BLUE ),			XubString( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
-    aColorList.InsertEntry( Color( COL_GREEN ), 		XubString( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
-    aColorList.InsertEntry( Color( COL_CYAN ),			XubString( RTL_CONSTASCII_USTRINGPARAM( "Cyan" ) ) );
-    aColorList.InsertEntry( Color( COL_RED ),			XubString( RTL_CONSTASCII_USTRINGPARAM( "Red" ) ) );
-    aColorList.InsertEntry( Color( COL_MAGENTA ),		XubString( RTL_CONSTASCII_USTRINGPARAM( "Magenta" ) ) );
-    aColorList.InsertEntry( Color( COL_BROWN ), 		XubString( RTL_CONSTASCII_USTRINGPARAM( "Brown" ) ) );
-    aColorList.InsertEntry( Color( COL_GRAY ),			XubString( RTL_CONSTASCII_USTRINGPARAM( "Gray" ) ) );
-    aColorList.InsertEntry( Color( COL_LIGHTGRAY ), 	XubString( RTL_CONSTASCII_USTRINGPARAM( "LightGray" ) ) );
-    aColorList.InsertEntry( Color( COL_LIGHTBLUE ), 	XubString( RTL_CONSTASCII_USTRINGPARAM( "LightBlue" ) ) );
-    aColorList.InsertEntry( Color( COL_LIGHTGREEN ),	XubString( RTL_CONSTASCII_USTRINGPARAM( "LightGreen" ) ) );
-    aColorList.InsertEntry( Color( COL_LIGHTCYAN ), 	XubString( RTL_CONSTASCII_USTRINGPARAM( "LightCyan" ) ) );
-    aColorList.InsertEntry( Color( COL_LIGHTRED ),		XubString( RTL_CONSTASCII_USTRINGPARAM( "LightRed" ) ) );
-    aColorList.InsertEntry( Color( COL_LIGHTMAGENTA ),	XubString( RTL_CONSTASCII_USTRINGPARAM( "LightMagenta" ) ) );
-    aColorList.InsertEntry( Color( COL_YELLOW ),		XubString( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
-    aColorList.InsertEntry( Color( COL_WHITE ), 		XubString( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
+    aColorList.InsertEntry( Color( COL_BLACK ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
+    aColorList.InsertEntry( Color( COL_BLUE ),          XubString( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
+    aColorList.InsertEntry( Color( COL_GREEN ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
+    aColorList.InsertEntry( Color( COL_CYAN ),          XubString( RTL_CONSTASCII_USTRINGPARAM( "Cyan" ) ) );
+    aColorList.InsertEntry( Color( COL_RED ),           XubString( RTL_CONSTASCII_USTRINGPARAM( "Red" ) ) );
+    aColorList.InsertEntry( Color( COL_MAGENTA ),       XubString( RTL_CONSTASCII_USTRINGPARAM( "Magenta" ) ) );
+    aColorList.InsertEntry( Color( COL_BROWN ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Brown" ) ) );
+    aColorList.InsertEntry( Color( COL_GRAY ),          XubString( RTL_CONSTASCII_USTRINGPARAM( "Gray" ) ) );
+    aColorList.InsertEntry( Color( COL_LIGHTGRAY ),     XubString( RTL_CONSTASCII_USTRINGPARAM( "LightGray" ) ) );
+    aColorList.InsertEntry( Color( COL_LIGHTBLUE ),     XubString( RTL_CONSTASCII_USTRINGPARAM( "LightBlue" ) ) );
+    aColorList.InsertEntry( Color( COL_LIGHTGREEN ),    XubString( RTL_CONSTASCII_USTRINGPARAM( "LightGreen" ) ) );
+    aColorList.InsertEntry( Color( COL_LIGHTCYAN ),     XubString( RTL_CONSTASCII_USTRINGPARAM( "LightCyan" ) ) );
+    aColorList.InsertEntry( Color( COL_LIGHTRED ),      XubString( RTL_CONSTASCII_USTRINGPARAM( "LightRed" ) ) );
+    aColorList.InsertEntry( Color( COL_LIGHTMAGENTA ),  XubString( RTL_CONSTASCII_USTRINGPARAM( "LightMagenta" ) ) );
+    aColorList.InsertEntry( Color( COL_YELLOW ),        XubString( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
+    aColorList.InsertEntry( Color( COL_WHITE ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
     aColorList.SetUpdateMode( TRUE );
     aColorList.SetSelectHdl( LINK( this, MyWin, SelectHdl ) );
     aColorList.Show();
@@ -794,22 +794,22 @@ MyWin::MyWin( Window* pParent, WinBits aWinStyle ) :
 
     {
     aValueSet.SetPosSizePixel( Point( 290, nY ), Size( 130, 180 ) );
-    aValueSet.InsertItem(  9, Color( COL_BLACK ),		  XubString( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
-    aValueSet.InsertItem( 10, Color( COL_BLUE ),		  XubString( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
-    aValueSet.InsertItem( 11, Color( COL_GREEN ),		  XubString( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
-    aValueSet.InsertItem( 12, Color( COL_CYAN ),		  XubString( RTL_CONSTASCII_USTRINGPARAM( "Cyan" ) ) );
-    aValueSet.InsertItem( 13, Color( COL_RED ), 		  XubString( RTL_CONSTASCII_USTRINGPARAM( "Red" ) ) );
-    aValueSet.InsertItem( 14, Color( COL_MAGENTA ), 	  XubString( RTL_CONSTASCII_USTRINGPARAM( "Magenta" ) ) );
-    aValueSet.InsertItem( 15, Color( COL_BROWN ),		  XubString( RTL_CONSTASCII_USTRINGPARAM( "Brown" ) ) );
-    aValueSet.InsertItem( 16, Color( COL_GRAY ),		  XubString( RTL_CONSTASCII_USTRINGPARAM( "Gray" ) ) );
-    aValueSet.InsertItem( 17, Color( COL_LIGHTGRAY ),	  XubString( RTL_CONSTASCII_USTRINGPARAM( "LightGray" ) ) );
-    aValueSet.InsertItem( 18, Color( COL_LIGHTBLUE ),	  XubString( RTL_CONSTASCII_USTRINGPARAM( "LightBlue" ) ) );
-    aValueSet.InsertItem( 19, Color( COL_LIGHTGREEN ),	  XubString( RTL_CONSTASCII_USTRINGPARAM( "LightGreen" ) ) );
-    aValueSet.InsertItem( 20, Color( COL_LIGHTCYAN ),	  XubString( RTL_CONSTASCII_USTRINGPARAM( "LightCyan" ) ) );
-    aValueSet.InsertItem( 21, Color( COL_LIGHTRED ),	  XubString( RTL_CONSTASCII_USTRINGPARAM( "LightRed" ) ) );
+    aValueSet.InsertItem(  9, Color( COL_BLACK ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
+    aValueSet.InsertItem( 10, Color( COL_BLUE ),          XubString( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
+    aValueSet.InsertItem( 11, Color( COL_GREEN ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
+    aValueSet.InsertItem( 12, Color( COL_CYAN ),          XubString( RTL_CONSTASCII_USTRINGPARAM( "Cyan" ) ) );
+    aValueSet.InsertItem( 13, Color( COL_RED ),           XubString( RTL_CONSTASCII_USTRINGPARAM( "Red" ) ) );
+    aValueSet.InsertItem( 14, Color( COL_MAGENTA ),       XubString( RTL_CONSTASCII_USTRINGPARAM( "Magenta" ) ) );
+    aValueSet.InsertItem( 15, Color( COL_BROWN ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Brown" ) ) );
+    aValueSet.InsertItem( 16, Color( COL_GRAY ),          XubString( RTL_CONSTASCII_USTRINGPARAM( "Gray" ) ) );
+    aValueSet.InsertItem( 17, Color( COL_LIGHTGRAY ),     XubString( RTL_CONSTASCII_USTRINGPARAM( "LightGray" ) ) );
+    aValueSet.InsertItem( 18, Color( COL_LIGHTBLUE ),     XubString( RTL_CONSTASCII_USTRINGPARAM( "LightBlue" ) ) );
+    aValueSet.InsertItem( 19, Color( COL_LIGHTGREEN ),    XubString( RTL_CONSTASCII_USTRINGPARAM( "LightGreen" ) ) );
+    aValueSet.InsertItem( 20, Color( COL_LIGHTCYAN ),     XubString( RTL_CONSTASCII_USTRINGPARAM( "LightCyan" ) ) );
+    aValueSet.InsertItem( 21, Color( COL_LIGHTRED ),      XubString( RTL_CONSTASCII_USTRINGPARAM( "LightRed" ) ) );
     aValueSet.InsertItem( 22, Color( COL_LIGHTMAGENTA ),  XubString( RTL_CONSTASCII_USTRINGPARAM( "LightMagenta" ) ) );
-    aValueSet.InsertItem( 23, Color( COL_YELLOW ),		  XubString( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
-    aValueSet.InsertItem( 24, Color( COL_WHITE ),		  XubString( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
+    aValueSet.InsertItem( 23, Color( COL_YELLOW ),        XubString( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
+    aValueSet.InsertItem( 24, Color( COL_WHITE ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
     aValueSet.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
     aValueSet.SetColCount( 4 );
     aValueSet.SetLineCount( 4 );
@@ -821,7 +821,7 @@ MyWin::MyWin( Window* pParent, WinBits aWinStyle ) :
     aCalendarField.EnableEmptyFieldValue( TRUE );
     aCalendarField.SetCalendarStyle( aCalendarField.GetCalendarStyle() | WB_RANGESELECT );
     aCalendarField.SetSelectHdl( LINK( this, MyWin, CalSelectHdl ) );
-//	  aCalendarField.SetDate( Date() );
+//    aCalendarField.SetDate( Date() );
     aCalendarField.SetEmptyDate();
     aCalendarField.EnableToday();
     aCalendarField.EnableNone();
@@ -1021,10 +1021,10 @@ void MyWin::ContextMenu( const Point& rPos )
 
     if ( !pMenu )
     {
-        pMenu		= new PopupMenu;
-        pNameMenu	= new FontNameMenu;
-        pStyleMenu	= new FontStyleMenu;
-        pSizeMenu	= new FontSizeMenu;
+        pMenu       = new PopupMenu;
+        pNameMenu   = new FontNameMenu;
+        pStyleMenu  = new FontStyleMenu;
+        pSizeMenu   = new FontSizeMenu;
 
         pMenu->InsertItem( 1, XubString( RTL_CONSTASCII_USTRINGPARAM( "Font" ) ) );
         pMenu->InsertItem( 2, XubString( RTL_CONSTASCII_USTRINGPARAM( "Attribute" ) ) );

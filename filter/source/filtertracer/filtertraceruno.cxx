@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /* pServiceManager */, v
         {
             NMSP_UNO::Reference< com::sun::star::registry::XRegistryKey > xNewKey(
                 reinterpret_cast< com::sun::star::registry::XRegistryKey * >( pRegistryKey )->createKey(
-                    FilterTracer_getImplementationName() ) ); 
+                    FilterTracer_getImplementationName() ) );
             xNewKey = xNewKey->createKey( B2UCONST( "/UNO/SERVICES" ) );
             const SEQ( rtl::OUString )& rSNL = FilterTracer_getSupportedServiceNames();
             const rtl::OUString * pArray = rSNL.getConstArray();
@@ -89,8 +89,8 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /* pServiceManager */, v
 extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
 {
     REF( NMSP_LANG::XSingleServiceFactory ) xFactory;
-    void*									pRet = 0;
-    
+    void*                                   pRet = 0;
+
     if( rtl_str_compare( pImplName, "com.sun.star.util.FilterTracer" ) == 0 )
     {
         const rtl::OUString aServiceName( B2UCONST( "com.sun.star.util.FilterTracer" ) );
@@ -105,6 +105,6 @@ extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void*
         xFactory->acquire();
         pRet = xFactory.get();
     }
-    
+
     return pRet;
 }

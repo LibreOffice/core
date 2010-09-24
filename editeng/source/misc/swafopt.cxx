@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bWithRedlining =
     bAutoCmpltEndless =
     bAutoCmpltAppendBlanc =
-    bAutoCmpltShowAsTip = FALSE; 
+    bAutoCmpltShowAsTip = FALSE;
 
     bSetBorder =
     bCreateTable =
@@ -77,7 +77,7 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bDummy6 = bDummy7 = bDummy8 =
          FALSE;
 
-    nRightMargin = 50;		// dflt. 50 %
+    nRightMargin = 50;      // dflt. 50 %
     nAutoCmpltExpandKey = KEY_RETURN;
 
     aBulletFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );

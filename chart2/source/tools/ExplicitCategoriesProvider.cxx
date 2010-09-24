@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,14 +70,14 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
             if( xChartDoc.is() )
             {
                 uno::Reference< data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
-                
+
                 if( xDataProvider.is() )
                 {
                     OUString aCatgoriesRange( DataSourceHelper::getRangeFromValues( m_xOriginalCategories ) );
                     const bool bFirstCellAsLabel = false;
                     const bool bHasCategories = false;
                     const uno::Sequence< sal_Int32 > aSequenceMapping;
-                                    
+
                     uno::Reference< data::XDataSource > xColumnCategoriesSource( xDataProvider->createDataSource(
                          DataSourceHelper::createArguments( aCatgoriesRange, aSequenceMapping, true /*bUseColumns*/
                             , bFirstCellAsLabel, bHasCategories ) ) );
@@ -175,7 +175,7 @@ uno::Sequence< rtl::OUString > lcl_DataToStringSequence( const uno::Reference< d
     if( !xDataSequence.is() )
         return aStrings;
 
-    
+
     uno::Reference< data::XTextualDataSequence > xTextualDataSequence( xDataSequence, uno::UNO_QUERY );
     if( xTextualDataSequence.is() )
     {
@@ -234,7 +234,7 @@ std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
     , const std::vector<sal_Int32>& rLimitingBorders, bool bCreateSingleCategories )
 {
     std::vector< ComplexCategory > aResult;
-    
+
     sal_Int32 nMaxCount = rStrings.getLength();
     OUString aPrevious;
     sal_Int32 nCurrentCount=0;
@@ -261,7 +261,7 @@ std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
     }
     if( nCurrentCount )
         aResult.push_back( ComplexCategory(aPrevious,nCurrentCount) );
-    
+
     return aResult;
 }
 
@@ -369,7 +369,7 @@ void ExplicitCategoriesProvider::init()
     {
         m_aExplicitCategories.realloc(0);
         m_aComplexCats.clear();//not one per index
-        
+
         if( m_xOriginalCategories.is() )
         {
             if( !hasComplexCategories() )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocumentFragment >
         createSubmissionDocument(const com::sun::star::uno::Reference< com::sun::star::xml::xpath::XXPathObject >& aObject,
                                  sal_Bool bRemoveWSNodes = sal_False);
-    com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocument > 
+    com::sun::star::uno::Reference< com::sun::star::xml::dom::XDocument >
         getInstanceDocument(const com::sun::star::uno::Reference< com::sun::star::xml::xpath::XXPathObject >& aObject);
 
     com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > m_aFactory;

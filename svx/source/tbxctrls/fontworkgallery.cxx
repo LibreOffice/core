@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,21 +79,21 @@ const int nColCount = 4;
 const int nLineCount = 4;
 
 /*************************************************************************
-|*	Svx3DWin - FloatingWindow
+|*  Svx3DWin - FloatingWindow
 \************************************************************************/
 FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, Window* pParent, sal_uInt16 /*nSID*/ ) :
         ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_FONTWORK_GALLERY ) ),
-        maCtlFavorites		( this, SVX_RES( CTL_FAVORITES ) ),
-        maFLFavorites		( this, SVX_RES( FL_FAVORITES ) ),
-        maOKButton			( this, SVX_RES( BTN_OK ) ),
-        maCancelButton		( this, SVX_RES( BTN_CANCEL ) ),
+        maCtlFavorites      ( this, SVX_RES( CTL_FAVORITES ) ),
+        maFLFavorites       ( this, SVX_RES( FL_FAVORITES ) ),
+        maOKButton          ( this, SVX_RES( BTN_OK ) ),
+        maCancelButton      ( this, SVX_RES( BTN_CANCEL ) ),
         maHelpButton        ( this, SVX_RES( BTN_HELP ) ),
-        mnThemeId			( 0xffff ),
-        mpSdrView			( pSdrView ),
-        mpModel				( (FmFormModel*)pSdrView->GetModel() ),
+        mnThemeId           ( 0xffff ),
+        mpSdrView           ( pSdrView ),
+        mpModel             ( (FmFormModel*)pSdrView->GetModel() ),
         maStrClickToAddText ( SVX_RES( STR_CLICK_TO_ADD_TEXT ) ),
-        mppSdrObject		( NULL ),
-        mpDestModel			( NULL )
+        mppSdrObject        ( NULL ),
+        mpDestModel         ( NULL )
 {
     FreeResource();
 
@@ -254,7 +254,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                     Rectangle aVisArea = pOutDev->PixelToLogic(Rectangle(Point(0,0), pOutDev->GetOutputSizePixel()));
 /*
                     sal_Int32 nObjHeight = aObjRect.GetHeight();
-                    VirtualDevice aVirDev( 1 );	// calculating the optimal textwidth
+                    VirtualDevice aVirDev( 1 ); // calculating the optimal textwidth
                     Font aFont;
                     aFont.SetHeight( nObjHeight );
                     aVirDev.SetMapMode( MAP_100TH_MM );
@@ -276,7 +276,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                     else if( pPV )
                     {
                             mpSdrView->InsertObjectAtView( pNewObject, *pPV );
-    //						changeText( PTR_CAST( SdrTextObj, pNewObject ) );
+    //                      changeText( PTR_CAST( SdrTextObj, pNewObject ) );
                     }
                 }
             }
@@ -307,7 +307,7 @@ IMPL_LINK( FontWorkGalleryDialog, DoubleClickFavoriteHdl, void*, EMPTYARG )
 //------------------------------------------------------------------------
 
 SFX_IMPL_TOOLBOX_CONTROL( FontWorkShapeTypeControl, SfxStringItem );
-FontWorkShapeTypeControl::FontWorkShapeTypeControl(	USHORT nSlotId, USHORT nId, ToolBox &rTbx )
+FontWorkShapeTypeControl::FontWorkShapeTypeControl( USHORT nSlotId, USHORT nId, ToolBox &rTbx )
 : SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
@@ -329,7 +329,7 @@ SfxPopupWindowType FontWorkShapeTypeControl::GetPopupWindowType() const
 
 // -----------------------------------------------------------------------
 
-SfxPopupWindow*	FontWorkShapeTypeControl::CreatePopupWindow()
+SfxPopupWindow* FontWorkShapeTypeControl::CreatePopupWindow()
 {
     rtl::OUString aSubTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/fontworkshapetype" ) );
     createAndPositionSubToolBar( aSubTbxResName );
@@ -373,7 +373,7 @@ private:
 
     DECL_LINK( SelectHdl, void * );
 
-    void	implSetAlignment( int nAlignmentMode, bool bEnabled );
+    void    implSetAlignment( int nAlignmentMode, bool bEnabled );
 };
 
 FontWorkAlignmentWindow::FontWorkAlignmentWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow )
@@ -493,7 +493,7 @@ public:
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );       
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     using  svt::PopupWindowController::createPopupWindow;
 };
@@ -569,8 +569,8 @@ private:
 
     DECL_LINK( SelectHdl, void * );
 
-    void	implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
-    void	implSetKernCharacterPairs( sal_Bool bKernOnOff, bool bEnabled );
+    void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
+    void    implSetKernCharacterPairs( sal_Bool bKernOnOff, bool bEnabled );
 
 };
 
@@ -686,7 +686,7 @@ IMPL_LINK( FontWorkCharacterSpacingWindow, SelectHdl, void *, EMPTYARG )
         case 4 : nCharacterSpacing = 150; break;
         default : nCharacterSpacing = 100; break;
     }
-    if ( nSelection == 5 )	// custom spacing
+    if ( nSelection == 5 )  // custom spacing
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = msFontworkCharacterSpacing.copy(5);
@@ -694,10 +694,10 @@ IMPL_LINK( FontWorkCharacterSpacingWindow, SelectHdl, void *, EMPTYARG )
 
         mrController.dispatchCommand( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkCharacterSpacingDialog" )), aArgs );
     }
-    else if ( nSelection == 6 )	// KernCharacterPairs
+    else if ( nSelection == 6 ) // KernCharacterPairs
     {
         rtl::OUString   aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkKernCharacterPairs" ));
-    
+
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = msFontworkKernCharacterPairs.copy(5);
         aArgs[0].Value <<= (sal_Bool) sal_True;
@@ -707,7 +707,7 @@ IMPL_LINK( FontWorkCharacterSpacingWindow, SelectHdl, void *, EMPTYARG )
         implSetKernCharacterPairs( sal_True, true );
     }
     else if( nSelection >= 0 )
-    {       
+    {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = msFontworkCharacterSpacing.copy(5);
         aArgs[0].Value <<=( sal_Int32)nCharacterSpacing;
@@ -733,7 +733,7 @@ public:
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );       
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     using svt::PopupWindowController::createPopupWindow;
 };
@@ -795,7 +795,7 @@ Sequence< OUString > SAL_CALL FontWorkCharacterSpacingControl::getSupportedServi
 // ========================================================================
 
 FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog( Window* pParent, sal_Int32 nScale )
-:	ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_FONTWORK_CHARSPACING ) ),
+:   ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_FONTWORK_CHARSPACING ) ),
     maFLScale( this, SVX_RES( FT_VALUE ) ),
     maMtrScale( this, SVX_RES( MF_VALUE ) ),
     maOKButton( this, SVX_RES( BTN_OK ) ),

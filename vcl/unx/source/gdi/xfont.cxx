@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,13 +46,13 @@
 
 #include <algorithm>
 
-#define VCLASS_ROTATE 			0
-#define VCLASS_ROTATE_REVERSE 	1
-#define VCLASS_TRANSFORM1 		2
-#define VCLASS_TRANSFORM2		3
-#define VCLASS_CJK 				4
-#define VCLASS_DONTKNOW	        5
-#define VCLASS_FONT_NUM			2 // Other than rotate and rotate_reverse,
+#define VCLASS_ROTATE           0
+#define VCLASS_ROTATE_REVERSE   1
+#define VCLASS_TRANSFORM1       2
+#define VCLASS_TRANSFORM2       3
+#define VCLASS_CJK              4
+#define VCLASS_DONTKNOW         5
+#define VCLASS_FONT_NUM         2 // Other than rotate and rotate_reverse,
                                   // don't have spacial font
 
 // Select the max size of a font, which is token for real
@@ -238,24 +238,24 @@ ExtendedFontStruct::GetFontBoundingBox( XCharStruct *pCharStruct,
 bool
 ExtendedFontStruct::ToImplFontMetricData(ImplFontMetricData *pFontMetric)
 {
-    pFontMetric->mnOrientation	= 0;
-    pFontMetric->mnSlant		= 0;
-    pFontMetric->mbDevice		= true;
-    pFontMetric->mbScalableFont	= mpXlfd->IsScalable();
-    pFontMetric->mbKernableFont	= false;
+    pFontMetric->mnOrientation  = 0;
+    pFontMetric->mnSlant        = 0;
+    pFontMetric->mbDevice       = true;
+    pFontMetric->mbScalableFont = mpXlfd->IsScalable();
+    pFontMetric->mbKernableFont = false;
     pFontMetric->mbSymbolFlag= mpXlfd->IsSymbolFont();
-    pFontMetric->meFamily  	= mpXlfd->GetFamilyType();
+    pFontMetric->meFamily   = mpXlfd->GetFamilyType();
     pFontMetric->meWeight   = mpXlfd->GetWeight();
-    pFontMetric->mePitch	= mpXlfd->GetPitch();
-    pFontMetric->meItalic  	= mpXlfd->GetSlant();
+    pFontMetric->mePitch    = mpXlfd->GetPitch();
+    pFontMetric->meItalic   = mpXlfd->GetSlant();
 
     int nAscent, nDescent;
     XCharStruct aBoundingBox;
     if ( GetFontBoundingBox(&aBoundingBox, &nAscent, &nDescent) )
     {
-        pFontMetric->mnWidth	 = aBoundingBox.width;
-        pFontMetric->mnAscent	 = aBoundingBox.ascent;
-        pFontMetric->mnDescent	 = aBoundingBox.descent;
+        pFontMetric->mnWidth     = aBoundingBox.width;
+        pFontMetric->mnAscent    = aBoundingBox.ascent;
+        pFontMetric->mnDescent   = aBoundingBox.descent;
         pFontMetric->mnIntLeading = std::max(0, aBoundingBox.ascent  - nAscent
                                           + aBoundingBox.descent - nDescent );
         pFontMetric->mnExtLeading = 0; // TODO!!!
@@ -565,7 +565,7 @@ ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
                             nChar, mnDefaultWidth );
             }
             else
-            if (   (pFont->max_bounds.width == 	pFont->min_bounds.width)
+            if (   (pFont->max_bounds.width ==  pFont->min_bounds.width)
                 || (pFont->per_char == NULL) )
             {
                 // fixed width font

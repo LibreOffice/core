@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace basegfx
     }
 
     RasterConverter3D::RasterConverter3D()
-    :	InterpolatorProvider3D(),
+    :   InterpolatorProvider3D(),
         maLineEntries()
     {}
 
@@ -106,7 +106,7 @@ namespace basegfx
 
                         if(!nStep || aCurrentEntry->decrementRasterConversionLineEntry3D(nStep))
                         {
-                            // add when exactly on current line or when incremet to it did not 
+                            // add when exactly on current line or when incremet to it did not
                             // completely consume it
                             if(nStep)
                             {
@@ -206,15 +206,15 @@ namespace basegfx
                     const double fEyeB(((*pViewToEye) * aEnd).getZ());
 
                     rEntry.setInverseTextureIndex(addInverseTextureInterpolator(
-                        rFill.getTextureCoordinate(a), 
-                        rFill.getTextureCoordinate(b), 
+                        rFill.getTextureCoordinate(a),
+                        rFill.getTextureCoordinate(b),
                         fEyeA, fEyeB, fInvYDelta));
                 }
                 else
                 {
                     rEntry.setTextureIndex(addTextureInterpolator(
-                        rFill.getTextureCoordinate(a), 
-                        rFill.getTextureCoordinate(b), 
+                        rFill.getTextureCoordinate(a),
+                        rFill.getTextureCoordinate(b),
                         fInvYDelta));
                 }
             }
@@ -236,7 +236,7 @@ namespace basegfx
             {
                 reset();
                 maLineEntries.clear();
-                
+
                 B2DVector aVector(aEnd.getX() - aStart.getX(), aEnd.getY() - aStart.getY());
                 aVector.normalize();
                 const B2DVector aPerpend(getPerpendicular(aVector) * ((static_cast<double>(nLineWidth) + 0.5) * 0.5));
@@ -270,7 +270,7 @@ namespace basegfx
                 {
                     reset();
                     maLineEntries.clear();
-                    
+
                     // horizontal line, create vertical entries. These will be sorted by
                     // X anyways, so no need to distinguish the case here
                     maLineEntries.push_back(RasterConversionLineEntry3D(
@@ -306,7 +306,7 @@ namespace basegfx
 
                 RasterConversionLineEntry3D& rEntry = maLineEntries[maLineEntries.size() - 1];
 
-                // need to choose a X-Distance for the 2nd edge which guarantees all pixels 
+                // need to choose a X-Distance for the 2nd edge which guarantees all pixels
                 // of the line to be set. This is exactly the X-Increment for one Y-Step.
                 // Same is true for Z, so in both cases, add one increment to them. To also
                 // guarantee one pixel per line, add a minimum of one for X.

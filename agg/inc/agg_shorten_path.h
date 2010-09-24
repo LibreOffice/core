@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -23,7 +23,7 @@ namespace agg
 {
 
     //===========================================================shorten_path
-    template<class VertexSequence> 
+    template<class VertexSequence>
     void shorten_path(VertexSequence& vs, double s, unsigned closed = 0)
     {
         typedef typename VertexSequence::value_type vertex_type;

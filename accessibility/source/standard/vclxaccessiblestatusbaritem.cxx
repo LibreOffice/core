@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@ VCLXAccessibleStatusBarItem::VCLXAccessibleStatusBarItem( StatusBar* pStatusBar,
 
     m_sItemName = GetItemName();
     m_sItemText = GetItemText();
-    m_bShowing	= IsShowing();
+    m_bShowing  = IsShowing();
 }
 
 // -----------------------------------------------------------------------------
@@ -175,12 +175,12 @@ void VCLXAccessibleStatusBarItem::FillAccessibleStateSet( utl::AccessibleStateSe
 }
 
 // -----------------------------------------------------------------------------
-// OCommonAccessibleComponent 
+// OCommonAccessibleComponent
 // -----------------------------------------------------------------------------
 
 awt::Rectangle VCLXAccessibleStatusBarItem::implGetBounds() throw (RuntimeException)
 {
-    awt::Rectangle aBounds( 0, 0, 0, 0 );	
+    awt::Rectangle aBounds( 0, 0, 0, 0 );
 
     if ( m_pStatusBar )
         aBounds = AWTRectangle( m_pStatusBar->GetItemRect( m_nItemId ) );
@@ -339,13 +339,13 @@ sal_Int16 VCLXAccessibleStatusBarItem::getAccessibleRole(  ) throw (RuntimeExcep
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString VCLXAccessibleStatusBarItem::getAccessibleDescription(	) throw (RuntimeException)
+::rtl::OUString VCLXAccessibleStatusBarItem::getAccessibleDescription(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
     ::rtl::OUString sDescription;
     if ( m_pStatusBar )
-        sDescription = m_pStatusBar->GetHelpText( m_nItemId ); 
+        sDescription = m_pStatusBar->GetHelpText( m_nItemId );
 
     return sDescription;
 }
@@ -420,7 +420,7 @@ void VCLXAccessibleStatusBarItem::grabFocus(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-sal_Int32 VCLXAccessibleStatusBarItem::getForeground(	) throw (RuntimeException)
+sal_Int32 VCLXAccessibleStatusBarItem::getForeground(   ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -430,7 +430,7 @@ sal_Int32 VCLXAccessibleStatusBarItem::getForeground(	) throw (RuntimeException)
     {
         Reference< XAccessibleComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
         if ( xParentComp.is() )
-            nColor = xParentComp->getForeground();	
+            nColor = xParentComp->getForeground();
     }
 
     return nColor;
@@ -448,7 +448,7 @@ sal_Int32 VCLXAccessibleStatusBarItem::getBackground(  ) throw (RuntimeException
     {
         Reference< XAccessibleComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
         if ( xParentComp.is() )
-            nColor = xParentComp->getBackground();	
+            nColor = xParentComp->getBackground();
     }
 
     return nColor;
@@ -468,7 +468,7 @@ Reference< awt::XFont > VCLXAccessibleStatusBarItem::getFont(  ) throw (RuntimeE
     {
         Reference< XAccessibleExtendedComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
         if ( xParentComp.is() )
-            xFont = xParentComp->getFont();	
+            xFont = xParentComp->getFont();
     }
 
     return xFont;
@@ -616,7 +616,7 @@ sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32
             Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
             if( xFlushableClipboard.is() )
                 xFlushableClipboard->flushClipboard();
-            
+
             Application::AcquireSolarMutex( nRef );
 
             bReturn = sal_True;

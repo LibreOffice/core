@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -185,13 +185,13 @@ BOOL SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
     {
         SwDoc* pDoc = rEditSh.GetDoc();
 
-//		if( !pDoc->IsAutoFmtRedline() &&
-//			pPam != &rCrsr )	// nur an akt. Position das Redline sichern
-//			pDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
+//      if( !pDoc->IsAutoFmtRedline() &&
+//          pPam != &rCrsr )    // nur an akt. Position das Redline sichern
+//          pDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
 
         if( pDoc->IsAutoFmtRedline() )
         {
-            if( nPos == pNd->GetTxt().Len() )		// am Ende erfolgt ein Insert
+            if( nPos == pNd->GetTxt().Len() )       // am Ende erfolgt ein Insert
             {
                 pDoc->InsertString( *pPam, rTxt );
             }
@@ -210,7 +210,7 @@ BOOL SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
         else
             pDoc->Overwrite( *pPam, rTxt );
 
-//		pDoc->SetRedlineMode_intern( eOld );
+//      pDoc->SetRedlineMode_intern( eOld );
         if( bUndoIdInitialized )
         {
             bUndoIdInitialized = true;
@@ -270,9 +270,9 @@ BOOL SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const String&
     // Dieser darf nicht leer sein!
     // Gibt es diesen nicht oder gibt es davor nur Leere, dann returne 0
     // Das Flag gibt an:
-    //		TRUE: den, vor der normalen Einfuegeposition (TRUE)
-    // 		FALSE: den, in den das korrigierte Wort eingfuegt wurde.
-    //				(Muss nicht der gleiche Absatz sein!!!!)
+    //      TRUE: den, vor der normalen Einfuegeposition (TRUE)
+    //      FALSE: den, in den das korrigierte Wort eingfuegt wurde.
+    //              (Muss nicht der gleiche Absatz sein!!!!)
 const String* SwAutoCorrDoc::GetPrevPara( BOOL bAtNormalPos )
 {
     const String* pStr = 0;
@@ -401,8 +401,8 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
 
 
     // wird nach dem austauschen der Zeichen von den Funktionen
-    //	- FnCptlSttWrd
-    // 	- FnCptlSttSntnc
+    //  - FnCptlSttWrd
+    //  - FnCptlSttSntnc
     // gerufen. Dann koennen die Worte ggfs. in die Ausnahmelisten
     // aufgenommen werden.
 void SwAutoCorrDoc::SaveCpltSttWord( ULONG nFlag, xub_StrLen nPos,
@@ -438,7 +438,7 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
         rPos.nContent.GetIndex() == nCntnt )
     {
         // die akt. Autokorrektur besorgen:
-        SvxAutoCorrect*	pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+        SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
 
         // dann in die Liste aufnehmen:
         if( CptlSttWrd & nFlags )
@@ -497,7 +497,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
             {
                 SwTxtAttr* pHt = pTxtNd->GetpSwpHints()->GetTextHint( n );
                 nAttrStart = *pHt->GetStart();
-                if( nAttrStart > nStart ) 		// ueber den Bereich hinaus
+                if( nAttrStart > nStart )       // ueber den Bereich hinaus
                     break;
 
                 if( 0 != ( pAttrEnd = pHt->GetEnd() ) &&

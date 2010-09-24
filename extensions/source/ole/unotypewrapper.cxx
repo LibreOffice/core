@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,7 @@ STDMETHODIMP UnoTypeWrapper::GetTypeInfo( UINT /*iTInfo*/,
 // UnoTypeWrapper, IDispatch --------------------------------------------
 STDMETHODIMP UnoTypeWrapper::GetIDsOfNames( REFIID /*riid*/,
                                             LPOLESTR *rgszNames,
-                                            UINT /*cNames*/,			
+                                            UINT /*cNames*/,
                                             LCID /*lcid*/,
                                             DISPID *rgDispId)
 {
@@ -125,12 +125,12 @@ STDMETHODIMP UnoTypeWrapper::Invoke( DISPID dispIdMember,
 {
     if (pDispParams == NULL)
         return DISP_E_EXCEPTION;
-        
+
     if( pDispParams->cNamedArgs)
         return DISP_E_NONAMEDARGS;
-    
-    
-    HRESULT ret= S_OK; 
+
+
+    HRESULT ret= S_OK;
     switch( dispIdMember)
     {
     case DISPID_VALUE: // DISPID_VALUE
@@ -155,7 +155,7 @@ STDMETHODIMP UnoTypeWrapper::Invoke( DISPID dispIdMember,
 
 // IUnoTypeWrapper-----------------------
 STDMETHODIMP UnoTypeWrapper::put_Name(BSTR  val)
-{	
+{
      Lock();
      HRESULT hr = S_OK;
     m_sName = val;

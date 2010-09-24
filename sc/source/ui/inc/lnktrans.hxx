@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,19 +34,19 @@
 class ScLinkTransferObj : public TransferableHelper
 {
 private:
-    String	aLinkURL;
-    String	aLinkText;
+    String  aLinkURL;
+    String  aLinkText;
 
 public:
             ScLinkTransferObj();
     virtual ~ScLinkTransferObj();
 
-    void				SetLinkURL( const String& rURL, const String& rText );
+    void                SetLinkURL( const String& rURL, const String& rText );
 
-    virtual void		AddSupportedFormats();
-    virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual void		ObjectReleased();
-    virtual void		DragFinished( sal_Int8 nDropAction );
+    virtual void        AddSupportedFormats();
+    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual void        ObjectReleased();
+    virtual void        DragFinished( sal_Int8 nDropAction );
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -176,7 +176,7 @@ sdr::contact::ViewContact* SdrEdgeObj::CreateObjectSpecificViewContact()
 TYPEINIT1(SdrEdgeObj,SdrTextObj);
 
 SdrEdgeObj::SdrEdgeObj()
-:	SdrTextObj(),
+:   SdrTextObj(),
     nNotifyingCount(0),
     bEdgeTrackDirty(sal_False),
     bEdgeTrackUserDefined(sal_False),
@@ -1649,7 +1649,7 @@ basegfx::B2DPolyPolygon SdrEdgeObj::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aPolyPolygon;
 
-    if (bEdgeTrackDirty) 
+    if (bEdgeTrackDirty)
     {
         ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
     }
@@ -1686,7 +1686,7 @@ basegfx::B2DPolyPolygon SdrEdgeObj::GetEdgeTrackPath() const
 {
     basegfx::B2DPolyPolygon aPolyPolygon;
 
-    if (bEdgeTrackDirty) 
+    if (bEdgeTrackDirty)
         ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
 
     aPolyPolygon.append( pEdgeTrack->getB2DPolygon() );
@@ -1700,23 +1700,23 @@ sal_uInt32 SdrEdgeObj::GetHdlCount() const
     sal_uInt32 nHdlAnz(0L);
     sal_uInt32 nPntAnz(pEdgeTrack->GetPointCount());
 
-    if(nPntAnz) 
+    if(nPntAnz)
     {
         nHdlAnz = 2L;
 
-        if ((eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) && nPntAnz >= 4L) 
+        if ((eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) && nPntAnz >= 4L)
         {
             sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0L ? aEdgeInfo.nObj1Lines - 1L : 0L);
             sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0L ? aEdgeInfo.nObj2Lines - 1L : 0L);
             sal_uInt32 nM(aEdgeInfo.nMiddleLine != 0xFFFF ? 1L : 0L);
             nHdlAnz += nO1 + nO2 + nM;
-        } 
-        else if (eKind==SDREDGE_THREELINES && nPntAnz == 4L) 
+        }
+        else if (eKind==SDREDGE_THREELINES && nPntAnz == 4L)
         {
-            if(GetConnectedNode(TRUE)) 
+            if(GetConnectedNode(TRUE))
                 nHdlAnz++;
 
-            if(GetConnectedNode(FALSE)) 
+            if(GetConnectedNode(FALSE))
                 nHdlAnz++;
         }
     }
@@ -1809,12 +1809,12 @@ SdrObject* SdrEdgeObj::getFullDragClone() const
 
 bool SdrEdgeObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
-    if(!rDrag.GetHdl()) 
+    if(!rDrag.GetHdl())
         return false;
 
     rDrag.SetEndDragChangesAttributes(true);
 
-    if(rDrag.GetHdl()->GetPointNum() < 2) 
+    if(rDrag.GetHdl()->GetPointNum() < 2)
     {
         rDrag.SetNoSnap(true);
     }
@@ -1837,7 +1837,7 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
         ConnectToNode(false, pOriginalEdge->GetConnection(false).GetObject());
     }
 
-    if(rDragStat.GetHdl()->GetPointNum() < 2) 
+    if(rDragStat.GetHdl()->GetPointNum() < 2)
     {
         // start or end point connector drag
         const bool bDragA(0 == rDragStat.GetHdl()->GetPointNum());
@@ -1862,9 +1862,9 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
                 ConnectToNode(bDragA, pNewConnection);
             }
 
-            if(rDragStat.GetView() && !bOriginalEdgeModified) 
+            if(rDragStat.GetView() && !bOriginalEdgeModified)
             {
-                // show IA helper, but only do this during IA, so not when the original 
+                // show IA helper, but only do this during IA, so not when the original
                 // Edge gets modified in the last call
                 rDragStat.GetView()->SetConnectMarker(*pDraggedOne, *rDragStat.GetPageView());
             }
@@ -1889,13 +1889,13 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
         aEdgeInfo.aObj2Line2 = Point();
         aEdgeInfo.aObj2Line3 = Point();
         aEdgeInfo.aMiddleLine = Point();
-    } 
-    else 
-    { 
+    }
+    else
+    {
         // control point connector drag
         const ImpEdgeHdl* pEdgeHdl = (ImpEdgeHdl*)rDragStat.GetHdl();
         const SdrEdgeLineCode eLineCode = pEdgeHdl->GetLineCode();
-        const Point aDist(rDragStat.GetNow() - rDragStat.GetStart()); 
+        const Point aDist(rDragStat.GetNow() - rDragStat.GetStart());
         sal_Int32 nDist(pEdgeHdl->IsHorzDrag() ? aDist.X() : aDist.Y());
 
         nDist += aEdgeInfo.ImpGetLineVersatz(eLineCode, *pEdgeTrack);
@@ -1912,7 +1912,7 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
     //SetRectsDirty();
     //SetChanged();
 
-    if(bOriginalEdgeModified && rDragStat.GetView()) 
+    if(bOriginalEdgeModified && rDragStat.GetView())
     {
         // hide connect marker helper again when original gets changed.
         // This happens at the end of the interaction
@@ -1934,7 +1934,7 @@ String SdrEdgeObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     {
         XubString aStr;
         ImpTakeDescriptionStr(STR_DragEdgeTail, aStr);
-     
+
         return aStr;
     }
 }
@@ -1945,25 +1945,25 @@ basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(SdrDragMethod& rDragMeth
 {
     basegfx::B2DPolygon aResult;
 
-    if(bDetail) 
+    if(bDetail)
     {
         SdrObjConnection aMyCon1(aCon1);
         SdrObjConnection aMyCon2(aCon2);
-        
-        if (bTail1) 
+
+        if (bTail1)
         {
             const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aMyCon1.aObjOfs.X(), aMyCon1.aObjOfs.Y()));
             aMyCon1.aObjOfs.X() = basegfx::fround(aTemp.getX());
             aMyCon1.aObjOfs.Y() = basegfx::fround(aTemp.getY());
         }
 
-        if (bTail2) 
+        if (bTail2)
         {
             const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aMyCon2.aObjOfs.X(), aMyCon2.aObjOfs.Y()));
             aMyCon2.aObjOfs.X() = basegfx::fround(aTemp.getX());
             aMyCon2.aObjOfs.Y() = basegfx::fround(aTemp.getY());
         }
-        
+
         SdrEdgeInfoRec aInfo(aEdgeInfo);
         XPolygon aXP(ImpCalcEdgeTrack(*pEdgeTrack, aMyCon1, aMyCon2, &aInfo));
 
@@ -1971,26 +1971,26 @@ basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(SdrDragMethod& rDragMeth
         {
             aResult = aXP.getB2DPolygon();
         }
-    } 
-    else 
+    }
+    else
     {
         Point aPt1((*pEdgeTrack)[0]);
         Point aPt2((*pEdgeTrack)[sal_uInt16(pEdgeTrack->GetPointCount() - 1)]);
-        
-        if (aCon1.pObj && (aCon1.bBestConn || aCon1.bBestVertex)) 
+
+        if (aCon1.pObj && (aCon1.bBestConn || aCon1.bBestVertex))
             aPt1 = aCon1.pObj->GetSnapRect().Center();
-        
-        if (aCon2.pObj && (aCon2.bBestConn || aCon2.bBestVertex)) 
+
+        if (aCon2.pObj && (aCon2.bBestConn || aCon2.bBestVertex))
             aPt2 = aCon2.pObj->GetSnapRect().Center();
-        
-        if (bTail1) 
+
+        if (bTail1)
         {
             const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aPt1.X(), aPt1.Y()));
             aPt1.X() = basegfx::fround(aTemp.getX());
             aPt1.Y() = basegfx::fround(aTemp.getY());
         }
 
-        if (bTail2) 
+        if (bTail2)
         {
             const basegfx::B2DPoint aTemp(rDragMethod.getCurrentTransformation() * basegfx::B2DPoint(aPt2.X(), aPt2.Y()));
             aPt2.X() = basegfx::fround(aTemp.getX());
@@ -2122,7 +2122,7 @@ FASTBOOL SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, 
                 USHORT nGesAnz=nConAnz+9;
                 FASTBOOL bUserFnd=FALSE;
                 ULONG nBestDist=0xFFFFFFFF;
-                for (USHORT i=0; i<nGesAnz; i++) 
+                for (USHORT i=0; i<nGesAnz; i++)
                 {
                     FASTBOOL bUser=i<nConAnz;
                     FASTBOOL bVertex=i>=nConAnz+0 && i<nConAnz+4;
@@ -2180,8 +2180,8 @@ FASTBOOL SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, 
                 }
                 // Falls kein Konnektor getroffen wird nochmal
                 // HitTest versucht fuer BestConnector (=bCenter)
-                if(!bFnd && 
-                    !bEdge && 
+                if(!bFnd &&
+                    !bEdge &&
                     SdrObjectPrimitiveHit(*pObj, rPt, nBoundHitTol, rPV, &rVisLayer, false))
                 {
                     // #109007#
@@ -2298,9 +2298,9 @@ Point SdrEdgeObj::GetPoint(sal_uInt32 i) const
 {
     ((SdrEdgeObj*)this)->ImpUndirtyEdgeTrack();
     USHORT nAnz=pEdgeTrack->GetPointCount();
-    if (0L == i) 
+    if (0L == i)
         return (*pEdgeTrack)[0];
-    else 
+    else
         return (*pEdgeTrack)[nAnz-1];
 }
 
@@ -2309,9 +2309,9 @@ void SdrEdgeObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
     // ToDo: Umconnekten fehlt noch
     ImpUndirtyEdgeTrack();
     USHORT nAnz=pEdgeTrack->GetPointCount();
-    if (0L == i) 
+    if (0L == i)
         (*pEdgeTrack)[0]=rPnt;
-    if (1L == i) 
+    if (1L == i)
         (*pEdgeTrack)[nAnz-1]=rPnt;
     SetEdgeTrackDirty();
     SetRectsDirty();
@@ -2396,9 +2396,9 @@ void SdrEdgeObj::SetTailPoint( BOOL bTail, const Point& rPt )
 }
 
 /** this method is used by the api to set a glue point for a connection
-    nId == -1 :		The best default point is automaticly choosen
+    nId == -1 :     The best default point is automaticly choosen
     0 <= nId <= 3 : One of the default points is choosen
-    nId >= 4 :		A user defined glue point is choosen
+    nId >= 4 :      A user defined glue point is choosen
 */
 void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ )
 {
@@ -2413,8 +2413,8 @@ void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ 
 
     if( nIndex > 3 )
     {
-//		nIndex -= 4;
-        nIndex -= 3;		// SJ: the start api index is 0, whereas the implementation in svx starts from 1
+//      nIndex -= 4;
+        nIndex -= 3;        // SJ: the start api index is 0, whereas the implementation in svx starts from 1
 
         // for user defined glue points we have
         // to get the id for this index first
@@ -2445,8 +2445,8 @@ sal_Int32 SdrEdgeObj::getGluePointIndex( sal_Bool bTail )
     {
         nId = rConn1.GetConnectorId();
         if( !rConn1.IsAutoVertex() )
-//			nId += 4;
-            nId += 3;		// SJ: the start api index is 0, whereas the implementation in svx starts from 1
+//          nId += 4;
+            nId += 3;       // SJ: the start api index is 0, whereas the implementation in svx starts from 1
     }
     return nId;
 }

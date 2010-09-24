@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,42 +31,42 @@
 
 #define YYBISON 1  /* Identify Bison output.  */
 
-#ifndef YYDEBUG 
+#ifndef YYDEBUG
 #define YYDEBUG 0
 #endif
 #ifndef YYMAXDEPTH
 #define YYMAXDEPTH 0
 #endif
 
-#define	ACCENT	257
-#define	SMALL_GREEK	258
-#define	CAPITAL_GREEK	259
-#define	BINARY_OPERATOR	260
-#define	RELATION_OPERATOR	261
-#define	ARROW	262
-#define	GENERAL_IDEN	263
-#define	GENERAL_OPER	264
-#define	BIG_SYMBOL	265
-#define	FUNCTION	266
-#define	ROOT	267
-#define	FRACTION	268
-#define	SUBSUP	269
-#define	EQOVER	270
-#define	DELIMETER	271
-#define	LARGE_DELIM	272
-#define	DECORATION	273
-#define	SPACE_SYMBOL	274
-#define	CHARACTER	275
-#define	STRING	276
-#define	OPERATOR	277
-#define	EQBEGIN	278
-#define	EQEND	279
-#define	EQLEFT	280
-#define	EQRIGHT	281
-#define	NEWLINE	282
-#define	LEFT_DELIM	283
-#define	RIGHT_DELIM	284
-#define	DIGIT	285
+#define ACCENT  257
+#define SMALL_GREEK 258
+#define CAPITAL_GREEK   259
+#define BINARY_OPERATOR 260
+#define RELATION_OPERATOR   261
+#define ARROW   262
+#define GENERAL_IDEN    263
+#define GENERAL_OPER    264
+#define BIG_SYMBOL  265
+#define FUNCTION    266
+#define ROOT    267
+#define FRACTION    268
+#define SUBSUP  269
+#define EQOVER  270
+#define DELIMETER   271
+#define LARGE_DELIM 272
+#define DECORATION  273
+#define SPACE_SYMBOL    274
+#define CHARACTER   275
+#define STRING  276
+#define OPERATOR    277
+#define EQBEGIN 278
+#define EQEND   279
+#define EQLEFT  280
+#define EQRIGHT 281
+#define NEWLINE 282
+#define LEFT_DELIM  283
+#define RIGHT_DELIM 284
+#define DIGIT   285
 
 #line 1 "grammar.y"
 
@@ -117,9 +117,9 @@ typedef union {
 
 
 
-#define	YYFINAL		102
-#define	YYFLAG		-32768
-#define	YYNTBASE	43
+#define YYFINAL     102
+#define YYFLAG      -32768
+#define YYNTBASE    43
 
 #define YYTRANSLATE(x) ((unsigned)(x) <= 285 ? yytranslate[x] : 66)
 
@@ -283,7 +283,7 @@ static const short yypgoto[] = {    -2,
 };
 
 
-#define	YYLAST		457
+#define YYLAST      457
 
 
 static const short yytable[] = {    50,
@@ -467,50 +467,50 @@ static const short yycheck[] = {    11,
    It is replaced by the list of actions, each action
    as one case of the switch.  */
 
-#define yyerrok		(yyerrstatus = 0)
-#define yyclearin	(yychar = YYEMPTY)
-#define YYEMPTY		-2
-#define YYEOF		0
-#define YYACCEPT	goto yyacceptlab
-#define YYABORT 	goto yyabortlab
-#define YYERROR		goto yyerrlab1
+#define yyerrok     (yyerrstatus = 0)
+#define yyclearin   (yychar = YYEMPTY)
+#define YYEMPTY     -2
+#define YYEOF       0
+#define YYACCEPT    goto yyacceptlab
+#define YYABORT     goto yyabortlab
+#define YYERROR     goto yyerrlab1
 /* Like YYERROR except do call yyerror.
    This remains here temporarily to ease the
    transition to the new meaning of YYERROR, for GCC.
    Once GCC version 2 has supplanted version 1, this can go.  */
-#define YYFAIL		goto yyerrlab
+#define YYFAIL      goto yyerrlab
 #define YYRECOVERING()  (!!yyerrstatus)
 #define YYBACKUP(token, value) \
-do								\
-  if (yychar == YYEMPTY && yylen == 1)				\
-    { yychar = (token), yylval = (value);			\
-      yychar1 = YYTRANSLATE (yychar);				\
-      YYPOPSTACK;						\
-      goto yybackup;						\
-    }								\
-  else								\
-    { yyerror ("syntax error: cannot back up"); YYERROR; }	\
+do                              \
+  if (yychar == YYEMPTY && yylen == 1)              \
+    { yychar = (token), yylval = (value);           \
+      yychar1 = YYTRANSLATE (yychar);               \
+      YYPOPSTACK;                       \
+      goto yybackup;                        \
+    }                               \
+  else                              \
+    { yyerror ("syntax error: cannot back up"); YYERROR; }  \
 while (0)
 
-#define YYTERROR	1
-#define YYERRCODE	256
+#define YYTERROR    1
+#define YYERRCODE   256
 
 #ifndef YYPURE
-#define YYLEX		yylex()
+#define YYLEX       yylex()
 #endif
 
 #ifdef YYPURE
 #ifdef YYLSP_NEEDED
 #ifdef YYLEX_PARAM
-#define YYLEX		yylex(&yylval, &yylloc, YYLEX_PARAM)
+#define YYLEX       yylex(&yylval, &yylloc, YYLEX_PARAM)
 #else
-#define YYLEX		yylex(&yylval, &yylloc)
+#define YYLEX       yylex(&yylval, &yylloc)
 #endif
 #else /* not YYLSP_NEEDED */
 #ifdef YYLEX_PARAM
-#define YYLEX		yylex(&yylval, YYLEX_PARAM)
+#define YYLEX       yylex(&yylval, YYLEX_PARAM)
 #else
-#define YYLEX		yylex(&yylval)
+#define YYLEX       yylex(&yylval)
 #endif
 #endif /* not YYLSP_NEEDED */
 #endif
@@ -519,27 +519,27 @@ while (0)
 
 #ifndef YYPURE
 
-int	yychar;			/*  the lookahead symbol		*/
-YYSTYPE	yylval;			/*  the semantic value of the		*/
-                /*  lookahead symbol			*/
+int yychar;         /*  the lookahead symbol        */
+YYSTYPE yylval;         /*  the semantic value of the       */
+                /*  lookahead symbol            */
 
 #ifdef YYLSP_NEEDED
-YYLTYPE yylloc;			/*  location data for the lookahead	*/
-                /*  symbol				*/
+YYLTYPE yylloc;         /*  location data for the lookahead */
+                /*  symbol              */
 #endif
 
-int yynerrs;			/*  number of parse errors so far       */
+int yynerrs;            /*  number of parse errors so far       */
 #endif  /* not YYPURE */
 
 #if YYDEBUG != 0
-int yydebug;			/*  nonzero means print parse trace	*/
+int yydebug;            /*  nonzero means print parse trace */
 /* Since this is uninitialized, it does not stop multiple parsers
    from coexisting.  */
 #endif
 
-/*  YYINITDEPTH indicates the initial size of the parser's stacks	*/
+/*  YYINITDEPTH indicates the initial size of the parser's stacks   */
 
-#ifndef	YYINITDEPTH
+#ifndef YYINITDEPTH
 #define YYINITDEPTH 200
 #endif
 
@@ -559,9 +559,9 @@ int yydebug;			/*  nonzero means print parse trace	*/
    definitions require.  With GCC, __builtin_memcpy takes an arg
    of type size_t, but it can handle unsigned int.  */
 
-#if defined __GNUC__ 
+#if defined __GNUC__
 #if __GNUC__ > 1        /* GNU C and GNU C++ define this.  */
-#define __yy_memcpy(TO,FROM,COUNT)	__builtin_memcpy(TO,FROM,COUNT)
+#define __yy_memcpy(TO,FROM,COUNT)  __builtin_memcpy(TO,FROM,COUNT)
 #endif
 #else               /* not GNU C or C++ */
 #ifndef __cplusplus
@@ -638,17 +638,17 @@ yyparse(YYPARSE_PARAM_ARG)
   register int yyn;
   register short *yyssp;
   register YYSTYPE *yyvsp;
-  int yyerrstatus;	/*  number of tokens to shift before error messages enabled */
-  int yychar1 = 0;		/*  lookahead token as an internal (translated) token number */
+  int yyerrstatus;  /*  number of tokens to shift before error messages enabled */
+  int yychar1 = 0;      /*  lookahead token as an internal (translated) token number */
 
-  short	yyssa[YYINITDEPTH];	/*  the state stack			*/
-  YYSTYPE yyvsa[YYINITDEPTH];	/*  the semantic value stack		*/
+  short yyssa[YYINITDEPTH]; /*  the state stack         */
+  YYSTYPE yyvsa[YYINITDEPTH];   /*  the semantic value stack        */
 
-  short *yyss = yyssa;		/*  refer to the stacks thru separate pointers */
-  YYSTYPE *yyvs = yyvsa;	/*  to allow yyoverflow to reallocate them elsewhere */
+  short *yyss = yyssa;      /*  refer to the stacks thru separate pointers */
+  YYSTYPE *yyvs = yyvsa;    /*  to allow yyoverflow to reallocate them elsewhere */
 
 #ifdef YYLSP_NEEDED
-  YYLTYPE yylsa[YYINITDEPTH];	/*  the location stack			*/
+  YYLTYPE yylsa[YYINITDEPTH];   /*  the location stack          */
   YYLTYPE *yyls = yylsa;
   YYLTYPE *yylsp;
 
@@ -669,10 +669,10 @@ yyparse(YYPARSE_PARAM_ARG)
 #endif
 #endif
 
-  YYSTYPE yyval;		/*  the variable used to return		*/
+  YYSTYPE yyval;        /*  the variable used to return     */
   yyval.dval = 0;
-                /*  semantic values from the action	*/
-                /*  routines				*/
+                /*  semantic values from the action */
+                /*  routines                */
 
   int yylen;
 
@@ -684,7 +684,7 @@ yyparse(YYPARSE_PARAM_ARG)
   yystate = 0;
   yyerrstatus = 0;
   yynerrs = 0;
-  yychar = YYEMPTY;		/* Cause a token to be read.  */
+  yychar = YYEMPTY;     /* Cause a token to be read.  */
 
   /* Initialize stack pointers.
      Waste one element of value and location stack
@@ -822,10 +822,10 @@ yynewstate:
 
   /* Convert token to internal form (in yychar1) for indexing tables with */
 
-  if (yychar <= 0)		/* This means end of input. */
+  if (yychar <= 0)      /* This means end of input. */
     {
       yychar1 = 0;
-      yychar = YYEOF;		/* Don't call YYLEX any more */
+      yychar = YYEOF;       /* Don't call YYLEX any more */
 
 #if YYDEBUG != 0
       if (yydebug)
@@ -1345,7 +1345,7 @@ yyerrlab1:   /* here on error raised explicitly by an action */
   /* Else will try to reuse lookahead token
      after shifting the error token.  */
 
-  yyerrstatus = 3;		/* Each real token shifted decrements this */
+  yyerrstatus = 3;      /* Each real token shifted decrements this */
 
   goto yyerrhandle;
 
@@ -1455,7 +1455,7 @@ Node *mainParse(const char *_code)
 
 void yyerror(const char * /*err*/)
 {
-//	printf("REALKING ERR[%s]\n",err);
+//  printf("REALKING ERR[%s]\n",err);
     // if error, delete all nodes.
     Node *pNode = 0L;
     int ncount = nodelist.count();

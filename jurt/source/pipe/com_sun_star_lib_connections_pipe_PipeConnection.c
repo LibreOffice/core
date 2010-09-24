@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,9 +68,9 @@ static rtl_uString * jstring2ustring(JNIEnv * env, jstring jstr);
 
 static oslPipe getPipe(JNIEnv * env, jobject obj_this)
 {
-    jclass		tclass;
-    jfieldID	fid;
-    tclass	= (*env)->GetObjectClass(env, obj_this);
+    jclass      tclass;
+    jfieldID    fid;
+    tclass  = (*env)->GetObjectClass(env, obj_this);
     if (tclass == NULL)
     {
         ThrowException(env,
@@ -79,7 +79,7 @@ static oslPipe getPipe(JNIEnv * env, jobject obj_this)
         return NULL;
     }
 
-    fid		= (*env)->GetFieldID(env, tclass, "_nPipeHandle", "J");
+    fid     = (*env)->GetFieldID(env, tclass, "_nPipeHandle", "J");
     if (fid == NULL)
     {
         ThrowException(env,
@@ -96,9 +96,9 @@ static oslPipe getPipe(JNIEnv * env, jobject obj_this)
 
 static rtl_uString * jstring2ustring(JNIEnv * env, jstring jstr)
 {
-    const char *	cstr;
-    rtl_uString *	ustr	= NULL;
-    cstr	= (*env)->GetStringUTFChars(env, jstr, NULL);
+    const char *    cstr;
+    rtl_uString *   ustr    = NULL;
+    cstr    = (*env)->GetStringUTFChars(env, jstr, NULL);
     rtl_uString_newFromAscii(&ustr, cstr);
     (*env)->ReleaseStringUTFChars(env, jstr, cstr);
     return ustr;
@@ -119,20 +119,20 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_createJNI
   (JNIEnv * env, jobject obj_this, jstring name)
 {
     enum {
-        START	= 0,
+        START   = 0,
         INMONITOR,
         GOTNAME,
         CREATED
     };
 
-    short		state	= START;
+    short       state   = START;
 
-    jclass		tclass;
-    jfieldID	fid;
+    jclass      tclass;
+    jfieldID    fid;
 
     oslSecurity     psec    = osl_getCurrentSecurity();
-    oslPipe			npipe	= NULL;
-    rtl_uString *	pname	= NULL;
+    oslPipe         npipe   = NULL;
+    rtl_uString *   pname   = NULL;
     if ((*env)->MonitorEnter(env, obj_this) != 0)
     {
         ThrowException(env,
@@ -140,10 +140,10 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_createJNI
                        "native pipe cannot synchronize on the object");
         goto error;
     }
-    state	= INMONITOR;
+    state   = INMONITOR;
 
     /* check connection state */
-    npipe	= getPipe(env, obj_this);
+    npipe   = getPipe(env, obj_this);
     if ((*env)->ExceptionOccurred(env) != NULL)
         goto error;
     if (npipe != NULL)
@@ -155,7 +155,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_createJNI
     }
 
     /* save the pipe name */
-    tclass	= (*env)->GetObjectClass(env, obj_this);
+    tclass  = (*env)->GetObjectClass(env, obj_this);
     if (tclass == NULL)
     {
         ThrowException(env,
@@ -164,7 +164,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_createJNI
         goto error;
     }
 
-    fid		= (*env)->GetFieldID(env, tclass,
+    fid     = (*env)->GetFieldID(env, tclass,
                                  "_aDescription", "Ljava/lang/String;");
     if (fid == NULL)
     {
@@ -177,7 +177,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_createJNI
     (*env)->SetObjectField(env, obj_this, fid, (jobject)name);
 
     /* convert pipe name to rtl_uString */
-    pname	= jstring2ustring(env, name);
+    pname   = jstring2ustring(env, name);
     if (pname == NULL)
     {
         ThrowException(env,
@@ -185,10 +185,10 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_createJNI
                        "native pipe cannot convert name");
         goto error;
     }
-    state	= GOTNAME;
+    state   = GOTNAME;
 
     /* try to connect */
-    npipe	= osl_createPipe(pname, osl_Pipe_OPEN, psec);
+    npipe   = osl_createPipe(pname, osl_Pipe_OPEN, psec);
     if (npipe == NULL)
     {
         ThrowException(env,
@@ -196,10 +196,10 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_createJNI
                        "cannot create native pipe");
         goto error;
     }
-    state	= CREATED;
+    state   = CREATED;
 
     /* save the pipe */
-    tclass	= (*env)->GetObjectClass(env, obj_this);
+    tclass  = (*env)->GetObjectClass(env, obj_this);
     if (tclass == NULL)
     {
         ThrowException(env,
@@ -208,7 +208,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_createJNI
         goto error;
     }
 
-    fid		= (*env)->GetFieldID(env, tclass, "_nPipeHandle", "J");
+    fid     = (*env)->GetFieldID(env, tclass, "_nPipeHandle", "J");
     if (fid == NULL)
     {
         ThrowException(env,
@@ -258,14 +258,14 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_closeJNI
   (JNIEnv * env, jobject obj_this)
 {
     enum {
-        START	= 0,
+        START   = 0,
         INMONITOR
     };
 
-    short		state	= START;
-    oslPipe		npipe;		/* native pipe */
-    jclass		tclass;		/* this class */
-    jfieldID	fid;		/* a field identifier */
+    short       state   = START;
+    oslPipe     npipe;      /* native pipe */
+    jclass      tclass;     /* this class */
+    jfieldID    fid;        /* a field identifier */
 
     if ((*env)->MonitorEnter(env, obj_this) != 0)
     {
@@ -274,10 +274,10 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_closeJNI
                        "native pipe cannot synchronize on the object");
         goto error;
     }
-    state	= INMONITOR;
+    state   = INMONITOR;
 
     /* check connection state */
-    npipe	= getPipe(env, obj_this);
+    npipe   = getPipe(env, obj_this);
     if ((*env)->ExceptionOccurred(env) != NULL)
         goto error;
     if (npipe == NULL)
@@ -289,7 +289,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_closeJNI
     }
 
     /* remove the reference to the pipe */
-    tclass	= (*env)->GetObjectClass(env, obj_this);
+    tclass  = (*env)->GetObjectClass(env, obj_this);
     if (tclass == NULL)
     {
         ThrowException(env,
@@ -298,7 +298,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_closeJNI
         goto error;
     }
 
-    fid		= (*env)->GetFieldID(env, tclass, "_nPipeHandle", "J");
+    fid     = (*env)->GetFieldID(env, tclass, "_nPipeHandle", "J");
     if (fid == NULL)
     {
         ThrowException(env,
@@ -344,13 +344,13 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_readJNI
   (JNIEnv * env, jobject obj_this, jobjectArray buffer, jint len)
 {
     enum {
-        START	= 0,
+        START   = 0,
         INMONITOR,
         AQUIRED,
         GOTBUFFER
     };
 
-    short		state	= START;
+    short       state   = START;
     oslPipe     npipe;          /* native pipe */
     void *      nbuff = NULL;   /* native read buffer */
     jbyteArray  bytes;          /* java read buffer */
@@ -367,7 +367,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_readJNI
     state = INMONITOR;
 
     /* check connection state */
-    npipe	= getPipe(env, obj_this);
+    npipe   = getPipe(env, obj_this);
     if ((*env)->ExceptionOccurred(env) != NULL)
         goto error;
     if (npipe == NULL)
@@ -411,7 +411,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_readJNI
     /* copy buffer */
     if (nread >= 0)
     {
-        bytes	= (*env)->NewByteArray(env, len);
+        bytes   = (*env)->NewByteArray(env, len);
         if (bytes == NULL)
         {
             ThrowException(env,
@@ -464,12 +464,12 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_writeJNI
   (JNIEnv * env, jobject obj_this, jbyteArray buffer)
 {
     enum {
-        START	= 0,
+        START   = 0,
         INMONITOR,
         GOTBUFFER
     };
 
-    short	state	= START;
+    short   state   = START;
     oslPipe npipe;          /* native pipe */
     long    count;          /* number of bytes has been written */
     jsize   nwrite;         /* number of bytes to write */
@@ -482,10 +482,10 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_writeJNI
                        "native pipe cannot synchronize on the object");
         goto error;
     }
-    state	= INMONITOR;
+    state   = INMONITOR;
 
     /* check connection state */
-    npipe	= getPipe(env, obj_this);
+    npipe   = getPipe(env, obj_this);
     if ((*env)->ExceptionOccurred(env) != NULL)
         goto error;
     if (npipe == NULL)
@@ -496,10 +496,10 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_writeJNI
         goto error;
     }
 
-    nwrite	= (*env)->GetArrayLength(env, buffer);
+    nwrite  = (*env)->GetArrayLength(env, buffer);
     if (nwrite > 0)
     {
-        nbuff	= (*env)->GetByteArrayElements(env, buffer, NULL);
+        nbuff   = (*env)->GetByteArrayElements(env, buffer, NULL);
         if (nbuff == NULL)
         {
             ThrowException(env,
@@ -507,11 +507,11 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_writeJNI
                            "native pipe out of memory");
             goto error;
         }
-        state	= GOTBUFFER;
+        state   = GOTBUFFER;
 
         (*env)->MonitorExit(env, obj_this);
         /* writing */
-        count	= osl_writePipe(npipe, nbuff, nwrite);
+        count   = osl_writePipe(npipe, nbuff, nwrite);
         if ((*env)->MonitorEnter(env, obj_this) != 0)
         {
             ThrowException(env,

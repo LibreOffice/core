@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ CharClass::CharClass(
         }
     }
     else
-    {	// try to get an instance somehow
+    {   // try to get an instance somehow
         getComponentInstance();
     }
 }
@@ -290,7 +290,7 @@ sal_Bool CharClass::isNumeric( const String& rStr ) const
 }
 
 
-sal_Bool CharClass::isAlphaNumeric( const String& rStr,	xub_StrLen nPos ) const
+sal_Bool CharClass::isAlphaNumeric( const String& rStr, xub_StrLen nPos ) const
 {
     sal_Unicode c = rStr.GetChar( nPos );
     if ( c < 128 )

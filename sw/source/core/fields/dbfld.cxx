@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -202,7 +202,7 @@ BOOL SwDBFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
  --------------------------------------------------------------------*/
 
 SwDBField::SwDBField(SwDBFieldType* pTyp, ULONG nFmt)
-    : 	SwValueField(pTyp, nFmt),
+    :   SwValueField(pTyp, nFmt),
         nSubType(0),
         bIsInBodyTxt(TRUE),
         bValidValue(FALSE),
@@ -270,11 +270,11 @@ String SwDBField::Expand() const
 SwField* SwDBField::Copy() const
 {
     SwDBField *pTmp = new SwDBField((SwDBFieldType*)GetTyp(), GetFormat());
-    pTmp->aContent 		= aContent;
-    pTmp->bIsInBodyTxt 	= bIsInBodyTxt;
-    pTmp->bValidValue 	= bValidValue;
-    pTmp->bInitialized	= bInitialized;
-    pTmp->nSubType		= nSubType;
+    pTmp->aContent      = aContent;
+    pTmp->bIsInBodyTxt  = bIsInBodyTxt;
+    pTmp->bValidValue   = bValidValue;
+    pTmp->bInitialized  = bInitialized;
+    pTmp->nSubType      = nSubType;
     pTmp->SetValue(GetValue());
     pTmp->sFieldCode = sFieldCode;
 
@@ -359,7 +359,7 @@ void SwDBField::Evaluate()
     if( DBL_MAX != nValue )
     {
         sal_Int32 nColumnType = pMgr->GetColumnType(aTmpData.sDataSource, aTmpData.sCommand, aColNm);
-        if(	DataType::DATE == nColumnType  || DataType::TIME == nColumnType  ||
+        if( DataType::DATE == nColumnType  || DataType::TIME == nColumnType  ||
                  DataType::TIMESTAMP  == nColumnType)
 
         {
@@ -382,7 +382,7 @@ void SwDBField::Evaluate()
 
             SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
             if (nFmt && nFmt != SAL_MAX_UINT32 && !pFormatter->IsTextFormat(nFmt))
-                bValidValue = TRUE;	// Wegen Bug #60339 nicht mehr bei allen Strings
+                bValidValue = TRUE; // Wegen Bug #60339 nicht mehr bei allen Strings
         }
         else
         {
@@ -813,7 +813,7 @@ void SwDBNumSetField::Evaluate(SwDoc* pDoc)
 
     if( bCondValid && pMgr && pMgr->IsInMerge() &&
                         pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, sal_True))
-    {	// Bedingug OK -> aktuellen Set einstellen
+    {   // Bedingug OK -> aktuellen Set einstellen
         pMgr->ToRecordId(Max((USHORT)aPar2.ToInt32(), USHORT(1))-1);
     }
 }

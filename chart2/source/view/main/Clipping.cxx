@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ using ::basegfx::B2DTuple;
 //-----------------------------------------------------------------------------
 
 namespace{
-/**	@descr	This is a supporting function for lcl_clip2d.  It computes a new parametric 
+/** @descr  This is a supporting function for lcl_clip2d.  It computes a new parametric
             value for an entering (dTE) or leaving (dTL) intersection point with one
             of the edges bounding the clipping area.
             For explanation of the parameters please refer to :
@@ -61,83 +61,83 @@ namespace{
 */
 bool lcl_CLIPt(double fDenom,double fNum, double & fTE, double & fTL)
 {
-    double	fT;
-    
-    if (fDenom > 0)				//	Intersection enters: PE
+    double  fT;
+
+    if (fDenom > 0)             //  Intersection enters: PE
     {
-        fT = fNum / fDenom;		//	Parametric value at the intersection.
-        if (fT > fTL)			//	fTE and fTL crossover
-            return false;		//	  therefore reject the line.
-        else if (fT > fTE)		//	A new fTE has been found.
+        fT = fNum / fDenom;     //  Parametric value at the intersection.
+        if (fT > fTL)           //  fTE and fTL crossover
+            return false;       //    therefore reject the line.
+        else if (fT > fTE)      //  A new fTE has been found.
             fTE = fT;
     }
-    else if (fDenom < 0)		//	Intersection leaves: PL
+    else if (fDenom < 0)        //  Intersection leaves: PL
     {
-        fT = fNum / fDenom;		//	Parametric Value at the intersection.
-        if (fT < fTE)			//	fTE and fTL crossover
-            return false;		//	  therefore reject the line.
-        else if (fT < fTL)		//	A new fTL has been found.
+        fT = fNum / fDenom;     //  Parametric Value at the intersection.
+        if (fT < fTE)           //  fTE and fTL crossover
+            return false;       //    therefore reject the line.
+        else if (fT < fTL)      //  A new fTL has been found.
             fTL = fT;
     }
     else if (fNum > 0)
-        return false;			//	Line lies on the outside of the edge.
-    
+        return false;           //  Line lies on the outside of the edge.
+
     return true;
 }
 
-/**	@descr	The line given by it's two endpoints rP0 and rP1 is clipped at the rectangle
+/** @descr  The line given by it's two endpoints rP0 and rP1 is clipped at the rectangle
             rRectangle.  If there is at least a part of it visible then TRUE is returned and
             the endpoints of that part are stored in rP0 and rP1.  The points rP0 and rP1
             may have the same coordinates.
-        @param	rP0 Start point of the line to clip.  Modified to contain a start point inside
+        @param  rP0 Start point of the line to clip.  Modified to contain a start point inside
             the clipping area if possible.
-        @param	rP1 End point of the line to clip.  Modified to contain an end point inside
+        @param  rP1 End point of the line to clip.  Modified to contain an end point inside
             the clipping area if possible.
-        @param	rRectangle Clipping area.
-        @return	If the line lies completely or partly inside the clipping area then TRUE
+        @param  rRectangle Clipping area.
+        @return If the line lies completely or partly inside the clipping area then TRUE
             is returned.  If the line lies completely outside then FALSE is returned and rP0 and
             rP1 are left unmodified.
 */
 bool lcl_clip2d(B2DTuple& rPoint0, B2DTuple& rPoint1, const B2DRectangle& rRectangle)
 {
-    //Direction vector of the line.						
+    //Direction vector of the line.
     B2DTuple aDirection = rPoint1 - rPoint0;
 
     if( aDirection.getX()==0 && aDirection.getY()==0 && rRectangle.isInside(rPoint0) )
     {
-        //	Degenerate case of a zero length line.
+        //  Degenerate case of a zero length line.
         return true;
     }
     else
     {
-        //	Values of the line parameter where the line enters resp. leaves the rectangle.
+        //  Values of the line parameter where the line enters resp. leaves the rectangle.
         double fTE = 0,
                fTL = 1;
-                
-        //	Test wether at least a part lies in the four half-planes with respect to 
-        //	the rectangles four edges.
+
+        //  Test wether at least a part lies in the four half-planes with respect to
+        //  the rectangles four edges.
         if( lcl_CLIPt(aDirection.getX(), rRectangle.getMinX() - rPoint0.getX(), fTE, fTL) )
             if( lcl_CLIPt(-aDirection.getX(), rPoint0.getX() - rRectangle.getMaxX(), fTE, fTL) )
                 if( lcl_CLIPt(aDirection.getY(), rRectangle.getMinY() - rPoint0.getY(), fTE, fTL) )
                     if( lcl_CLIPt(-aDirection.getY(), rPoint0.getY() - rRectangle.getMaxY(), fTE, fTL) )
                     {
-                        //	At least a part is visible.
+                        //  At least a part is visible.
                         if (fTL < 1)
                         {
-                            //	Compute the new end point.
+                            //  Compute the new end point.
                             rPoint1.setX( rPoint0.getX() + fTL * aDirection.getX() );
                             rPoint1.setY( rPoint0.getY() + fTL * aDirection.getY() );
                         }
                         if (fTE > 0)
                         {
-                            //	Compute the new starting point.
+                            //  Compute the new starting point.
                             rPoint0.setX( rPoint0.getX() + fTE * aDirection.getX() );
                             rPoint0.setY( rPoint0.getY() + fTE * aDirection.getY() );
                         }
                         return true;
                     }
-                    
-        //	Line is not visible.
+
+        //  Line is not visible.
         return false;
     }
 }
@@ -220,7 +220,7 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
 
     if(!rPolygon.SequenceX.getLength())
         return;
-    
+
     //need clipping?:
     {
         ::basegfx::B3DRange a3DRange( BaseGFXHelper::getBoundVolume( rPolygon ) );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,33 +46,33 @@ public class AcceptLicense extends JPanel {
 
         setLayout(new java.awt.BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
-  
+
         String titletext = ResourceManager.getString("String_AcceptLicense1");
         PanelTitle titlebox = new PanelTitle(titletext);
         add(titlebox, BorderLayout.NORTH);
 
         JPanel contentpanel = new JPanel();
         contentpanel.setLayout(new java.awt.BorderLayout());
-       
+
         String text1 = ResourceManager.getString("String_AcceptLicense2");
         PanelLabel label1 = new PanelLabel(text1);
-        
+
         String text2 = ResourceManager.getString("String_AcceptLicense3");
         PanelLabel label2 = new PanelLabel(text2, true);
 
         JEditorPane editorPane = createEditorPane();
         JScrollPane editorScrollPane = new JScrollPane(editorPane);
-        
+
         editorScrollPane.setPreferredSize(new Dimension(250, 145));
         editorScrollPane.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
-        
+
         contentpanel.add(label1, BorderLayout.NORTH);
         contentpanel.add(editorScrollPane, BorderLayout.CENTER);
-        contentpanel.add(label2, BorderLayout.SOUTH);                
-        
+        contentpanel.add(label2, BorderLayout.SOUTH);
+
         add(contentpanel, BorderLayout.CENTER);
     }
-    
+
     private JEditorPane createEditorPane() {
         JEditorPane editorPane = new JEditorPane();
         editorPane.setEditable(false);

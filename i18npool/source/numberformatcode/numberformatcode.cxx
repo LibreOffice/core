@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ NumberFormatCodeMapper::~NumberFormatCodeMapper()
 NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException)
 {
 
-    ::rtl::OUString elementType	= mapElementTypeShortToString(formatType);
+    ::rtl::OUString elementType = mapElementTypeShortToString(formatType);
     ::rtl::OUString elementUsage = mapElementUsageShortToString(formatUsage);
 
     getFormats( rLocale );
@@ -158,9 +158,9 @@ NumberFormatCodeMapper::getAllFormatCodes( const ::com::sun::star::lang::Locale&
 
 void NumberFormatCodeMapper::setupLocale( const ::com::sun::star::lang::Locale& rLocale )
 {
-    if ( aLocale.Country	!= rLocale.Country
-      || aLocale.Language	!= rLocale.Language
-      || aLocale.Variant	!= rLocale.Variant )
+    if ( aLocale.Country    != rLocale.Country
+      || aLocale.Language   != rLocale.Language
+      || aLocale.Variant    != rLocale.Variant )
     {
         bFormatsValid = sal_False;
         aLocale = rLocale;

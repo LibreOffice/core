@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,13 @@
 
 #include "classes/addonmenu.hxx"
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/frame/XFrame.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
@@ -54,26 +54,26 @@ class BmkMenu : public AddonMenu
 {
     public:
                         enum BmkMenuType
-                        { 
-                            BMK_NEWMENU, 
+                        {
+                            BMK_NEWMENU,
                             BMK_WIZARDMENU
                         };
-                        
-                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, 
+
+                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                  BmkMenuType nType );
                         ~BmkMenu();
 
-    void				Initialize(); // Synchrones Laden der Eintraege
+    void                Initialize(); // Synchrones Laden der Eintraege
 
     protected:
         BmkMenu::BmkMenuType m_nType;
-        USHORT			CreateMenuId();
+        USHORT          CreateMenuId();
 
     private:
-                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, 
+                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                  BmkMenuType, BmkMenu* pRoot );
 
-        BmkMenu_Impl*	_pImp;
+        BmkMenu_Impl*   _pImp;
 };
 
 } // namespace framework

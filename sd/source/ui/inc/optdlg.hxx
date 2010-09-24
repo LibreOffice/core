@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ class SfxItemSet;
 class SdOptionsDlg : public SfxTabDialog
 {
 private:
-    DocumentType	meDocType;
+    DocumentType    meDocType;
 
 public:
                 SdOptionsDlg( Window* pParent, const SfxItemSet& rInAttrs,
@@ -46,8 +46,8 @@ public:
 
 protected:
 
-    virtual void		PageCreated( USHORT nId, SfxTabPage &rPage );
-//	virtual SfxItemSet* CreateInputItemSet( USHORT nPageId );
+    virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
+//  virtual SfxItemSet* CreateInputItemSet( USHORT nPageId );
 };
 
 

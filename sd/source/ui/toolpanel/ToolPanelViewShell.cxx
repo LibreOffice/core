@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -239,7 +239,7 @@ public:
         If the panel is not active currently, nothing happens.
     */
     void    DeactivatePanelByResource( const ::rtl::OUString& i_rPanelResourceURL );
-    
+
     /** provides access to the the VCL window of the panel deck
     */
           ::sfx2::ModuleTaskPane& GetTaskPane()       { return *m_pTaskPane; }
@@ -595,13 +595,13 @@ void ToolPanelViewShell::KeyInput( const KeyEvent& i_rKeyEvent )
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-SdPage*	ToolPanelViewShell::GetActualPage()
+SdPage* ToolPanelViewShell::GetActualPage()
 {
     return NULL;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-SdPage*	ToolPanelViewShell::getCurrentPage() const
+SdPage* ToolPanelViewShell::getCurrentPage() const
 {
     return NULL;
 }

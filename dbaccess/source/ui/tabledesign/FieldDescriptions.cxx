@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,10 +58,10 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #endif
 
-#define DEFAULT_VARCHAR_PRECSION	50
-#define DEFAULT_OTHER_PRECSION		16
-#define DEFAULT_NUMERIC_PRECSION	5
-#define DEFAULT_NUMERIC_SCALE		0
+#define DEFAULT_VARCHAR_PRECSION    50
+#define DEFAULT_OTHER_PRECSION      16
+#define DEFAULT_NUMERIC_PRECSION    5
+#define DEFAULT_NUMERIC_SCALE       0
 
 
 using namespace dbaui;
@@ -254,7 +254,7 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bF
                                 nPrec = GetPrecision();
                             break;
                     }
-                    
+
                     if ( _pType->nPrecision )
                         SetPrecision(::std::min<sal_Int32>(nPrec ? nPrec : DEFAULT_NUMERIC_PRECSION,_pType->nPrecision));
                     if ( _pType->nMaximumScale )
@@ -506,7 +506,7 @@ void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString				OFieldDescription::GetName()				const
+::rtl::OUString             OFieldDescription::GetName()                const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_NAME) )
         return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_NAME));
@@ -514,7 +514,7 @@ void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
         return m_sName;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString				OFieldDescription::GetDescription()			const
+::rtl::OUString             OFieldDescription::GetDescription()         const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_DESCRIPTION) )
         return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_DESCRIPTION));
@@ -522,7 +522,7 @@ void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
         return m_sDescription;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString				OFieldDescription::GetHelpText()			const
+::rtl::OUString             OFieldDescription::GetHelpText()            const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
         return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_HELPTEXT));
@@ -530,7 +530,7 @@ void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
         return m_sHelpText;
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::uno::Any	OFieldDescription::GetControlDefault()		const
+::com::sun::star::uno::Any  OFieldDescription::GetControlDefault()      const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
         return m_xDest->getPropertyValue(PROPERTY_CONTROLDEFAULT);
@@ -538,7 +538,7 @@ void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
         return m_aControlDefault;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString				OFieldDescription::GetAutoIncrementValue()	const
+::rtl::OUString             OFieldDescription::GetAutoIncrementValue()  const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) )
         return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_AUTOINCREMENTCREATION));
@@ -546,7 +546,7 @@ void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
         return m_sAutoIncrementValue;
 }
 // -----------------------------------------------------------------------------
-sal_Int32					OFieldDescription::GetType()				const
+sal_Int32                   OFieldDescription::GetType()                const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_TYPE) )
         return ::comphelper::getINT32(m_xDest->getPropertyValue(PROPERTY_TYPE));
@@ -554,7 +554,7 @@ sal_Int32					OFieldDescription::GetType()				const
         return m_pType.get() ? m_pType->nType : m_nType;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString             OFieldDescription::GetTypeName()			const
+::rtl::OUString             OFieldDescription::GetTypeName()            const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_TYPENAME) )
         return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_TYPENAME));
@@ -562,7 +562,7 @@ sal_Int32					OFieldDescription::GetType()				const
         return m_pType.get() ? m_pType->aTypeName : m_sTypeName;
 }
 // -----------------------------------------------------------------------------
-sal_Int32					OFieldDescription::GetPrecision()			const
+sal_Int32                   OFieldDescription::GetPrecision()           const
 {
     sal_Int32 nPrec = m_nPrecision;
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_PRECISION) )
@@ -582,11 +582,11 @@ sal_Int32					OFieldDescription::GetPrecision()			const
                 break;
         } // switch ( pTypeInfo->nType )
     }
-    
+
     return nPrec;
 }
 // -----------------------------------------------------------------------------
-sal_Int32					OFieldDescription::GetScale()				const
+sal_Int32                   OFieldDescription::GetScale()               const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_SCALE) )
         return ::comphelper::getINT32(m_xDest->getPropertyValue(PROPERTY_SCALE));
@@ -594,7 +594,7 @@ sal_Int32					OFieldDescription::GetScale()				const
         return m_nScale;
 }
 // -----------------------------------------------------------------------------
-sal_Int32					OFieldDescription::GetIsNullable()			const
+sal_Int32                   OFieldDescription::GetIsNullable()          const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ISNULLABLE) )
         return ::comphelper::getINT32(m_xDest->getPropertyValue(PROPERTY_ISNULLABLE));
@@ -602,7 +602,7 @@ sal_Int32					OFieldDescription::GetIsNullable()			const
         return m_nIsNullable;
 }
 // -----------------------------------------------------------------------------
-sal_Int32					OFieldDescription::GetFormatKey()			const
+sal_Int32                   OFieldDescription::GetFormatKey()           const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
         return ::comphelper::getINT32(m_xDest->getPropertyValue(PROPERTY_FORMATKEY));
@@ -610,7 +610,7 @@ sal_Int32					OFieldDescription::GetFormatKey()			const
         return m_nFormatKey;
 }
 // -----------------------------------------------------------------------------
-SvxCellHorJustify			OFieldDescription::GetHorJustify()			const
+SvxCellHorJustify           OFieldDescription::GetHorJustify()          const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ALIGN) )
         return ::dbaui::mapTextJustify(::comphelper::getINT32(m_xDest->getPropertyValue(PROPERTY_ALIGN)));
@@ -618,12 +618,12 @@ SvxCellHorJustify			OFieldDescription::GetHorJustify()			const
         return m_eHorJustify;
 }
 // -----------------------------------------------------------------------------
-TOTypeInfoSP				OFieldDescription::getTypeInfo()			const
+TOTypeInfoSP                OFieldDescription::getTypeInfo()            const
 {
     return m_pType;
 }
 // -----------------------------------------------------------------------------
-TOTypeInfoSP				OFieldDescription::getSpecialTypeInfo()	const
+TOTypeInfoSP                OFieldDescription::getSpecialTypeInfo() const
 {
     TOTypeInfoSP pSpecialType( new OTypeInfo() );
     *pSpecialType = *m_pType;
@@ -632,7 +632,7 @@ TOTypeInfoSP				OFieldDescription::getSpecialTypeInfo()	const
     return pSpecialType;
 }
 // -----------------------------------------------------------------------------
-sal_Bool					OFieldDescription::IsAutoIncrement()		const
+sal_Bool                    OFieldDescription::IsAutoIncrement()        const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT) )
         return ::cppu::any2bool(m_xDest->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
@@ -640,17 +640,17 @@ sal_Bool					OFieldDescription::IsAutoIncrement()		const
         return m_bIsAutoIncrement;
 }
 // -----------------------------------------------------------------------------
-sal_Bool					OFieldDescription::IsPrimaryKey()			const
+sal_Bool                    OFieldDescription::IsPrimaryKey()           const
 {
     return m_bIsPrimaryKey;
 }
 // -----------------------------------------------------------------------------
-sal_Bool					OFieldDescription::IsCurrency()				const
+sal_Bool                    OFieldDescription::IsCurrency()             const
 {
         return m_bIsCurrency;
 }
 // -----------------------------------------------------------------------------
-sal_Bool					OFieldDescription::IsNullable()				const
+sal_Bool                    OFieldDescription::IsNullable()             const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ISNULLABLE) )
         return ::comphelper::getINT32(m_xDest->getPropertyValue(PROPERTY_ISNULLABLE)) == ::com::sun::star::sdbc::ColumnValue::NULLABLE;

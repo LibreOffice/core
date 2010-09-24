@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace drawinglayer
     {
         /** PointArrayPrimitive2D class
 
-            This primitive defines single,discrete 'pixels' for the given 
+            This primitive defines single,discrete 'pixels' for the given
             positions in the given color. This makes it view-dependent since
             the logic size of a 'pixel' depends on the view transformation.
 
@@ -52,13 +52,13 @@ namespace drawinglayer
         {
         private:
             /// the array of positions
-            std::vector< basegfx::B2DPoint >				maPositions;
+            std::vector< basegfx::B2DPoint >                maPositions;
 
             /// the color to use
-            basegfx::BColor									maRGBColor;
+            basegfx::BColor                                 maRGBColor;
 
             /// #i96669# add simple range buffering for this primitive
-            basegfx::B2DRange						        maB2DRange;
+            basegfx::B2DRange                               maB2DRange;
 
         public:
             /// constructor

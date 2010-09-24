@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ SVX_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::uno::XInterface > 
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SVX_DLLPUBLIC SvxShapeCollection :	public ::cppu::WeakAggImplHelper3<
+class SVX_DLLPUBLIC SvxShapeCollection :    public ::cppu::WeakAggImplHelper3<
                                             ::com::sun::star::drawing::XShapes,
                                             ::com::sun::star::lang::XServiceInfo,
                                             ::com::sun::star::lang::XComponent

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,33 +80,33 @@ namespace dxcanvas
         void clear();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-            drawTextLayout( const ::com::sun::star::rendering::XCanvas* 	pCanvas,
+            drawTextLayout( const ::com::sun::star::rendering::XCanvas*     pCanvas,
                             const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::rendering::XTextLayout >& layoutetText,
-                            const ::com::sun::star::rendering::ViewState& 	viewState,
+                            const ::com::sun::star::rendering::ViewState&   viewState,
                             const ::com::sun::star::rendering::RenderState& renderState );
 
         // BitmapCanvasHelper functionality
         // ================================
 
-        void copyRect( const ::com::sun::star::rendering::XCanvas* 			pCanvas,
+        void copyRect( const ::com::sun::star::rendering::XCanvas*          pCanvas,
                        const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::rendering::XBitmapCanvas >& 	sourceCanvas,
-                       const ::com::sun::star::geometry::RealRectangle2D& 	sourceRect,
-                       const ::com::sun::star::rendering::ViewState& 		sourceViewState,
-                       const ::com::sun::star::rendering::RenderState& 		sourceRenderState,
-                       const ::com::sun::star::geometry::RealRectangle2D& 	destRect,
-                       const ::com::sun::star::rendering::ViewState& 		destViewState,
-                       const ::com::sun::star::rendering::RenderState& 		destRenderState );
+                               ::com::sun::star::rendering::XBitmapCanvas >&    sourceCanvas,
+                       const ::com::sun::star::geometry::RealRectangle2D&   sourceRect,
+                       const ::com::sun::star::rendering::ViewState&        sourceViewState,
+                       const ::com::sun::star::rendering::RenderState&      sourceRenderState,
+                       const ::com::sun::star::geometry::RealRectangle2D&   destRect,
+                       const ::com::sun::star::rendering::ViewState&        destViewState,
+                       const ::com::sun::star::rendering::RenderState&      destRenderState );
 
         ::com::sun::star::geometry::IntegerSize2D getSize();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >
-            getScaledBitmap( const ::com::sun::star::geometry::RealSize2D& 	newSize,
-                             sal_Bool 										beFast );
+            getScaledBitmap( const ::com::sun::star::geometry::RealSize2D&  newSize,
+                             sal_Bool                                       beFast );
 
         ::com::sun::star::uno::Sequence< sal_Int8 >
-            getData( ::com::sun::star::rendering::IntegerBitmapLayout& 		bitmapLayout,
+            getData( ::com::sun::star::rendering::IntegerBitmapLayout&      bitmapLayout,
                      const ::com::sun::star::geometry::IntegerRectangle2D&  rect );
 
         void setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&         data,

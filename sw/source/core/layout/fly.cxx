@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,7 @@
 #include "ndindex.hxx"   // GetGrfArea
 #include "sectfrm.hxx"
 #include <vcl/svapp.hxx>
-#include <vcl/salbtype.hxx>		// FRound
+#include <vcl/salbtype.hxx>     // FRound
 
 using namespace ::com::sun::star;
 
@@ -104,10 +104,10 @@ TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::SwFlyFrm()
+|*  SwFlyFrm::SwFlyFrm()
 |*
-|*	Ersterstellung		MA 28. Sep. 92
-|*	Letzte Aenderung	MA 09. Apr. 99
+|*  Ersterstellung      MA 28. Sep. 92
+|*  Letzte Aenderung    MA 09. Apr. 99
 |*
 |*************************************************************************/
 
@@ -273,10 +273,10 @@ void SwFlyFrm::InsertCnt()
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::~SwFlyFrm()
+|*  SwFlyFrm::~SwFlyFrm()
 |*
-|*	Ersterstellung		MA 28. Sep. 92
-|*	Letzte Aenderung	MA 07. Jul. 95
+|*  Ersterstellung      MA 28. Sep. 92
+|*  Letzte Aenderung    MA 07. Jul. 95
 |*
 |*************************************************************************/
 
@@ -373,10 +373,10 @@ void SwFlyFrm::DeleteCnt()
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::InitDrawObj()
+|*  SwFlyFrm::InitDrawObj()
 |*
-|*	Ersterstellung		MA 02. Dec. 94
-|*	Letzte Aenderung	MA 30. Nov. 95
+|*  Ersterstellung      MA 02. Dec. 94
+|*  Letzte Aenderung    MA 30. Nov. 95
 |*
 |*************************************************************************/
 void SwFlyFrm::InitDrawObj( BOOL bNotify )
@@ -413,10 +413,10 @@ void SwFlyFrm::InitDrawObj( BOOL bNotify )
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::FinitDrawObj()
+|*  SwFlyFrm::FinitDrawObj()
 |*
-|*	Ersterstellung		MA 12. Dec. 94
-|*	Letzte Aenderung	MA 15. May. 95
+|*  Ersterstellung      MA 12. Dec. 94
+|*  Letzte Aenderung    MA 15. May. 95
 |*
 |*************************************************************************/
 
@@ -433,7 +433,7 @@ void SwFlyFrm::FinitDrawObj()
         {
             ViewShell *pSh = p1St;
             do
-            {	//z.Zt. kann das Drawing nur ein Unmark auf alles, weil das
+            {   //z.Zt. kann das Drawing nur ein Unmark auf alles, weil das
                 //Objekt bereits Removed wurde.
                 if( pSh->HasDrawView() )
                     pSh->Imp()->GetDrawView()->UnmarkAll();
@@ -471,17 +471,17 @@ void SwFlyFrm::FinitDrawObj()
         pMyContact->GetMaster()->SetUserCall( 0 );
     }
     GetVirtDrawObj()->SetUserCall( 0 ); //Ruft sonst Delete des ContactObj
-    delete GetVirtDrawObj();			//Meldet sich selbst beim Master ab.
+    delete GetVirtDrawObj();            //Meldet sich selbst beim Master ab.
     if ( pMyContact )
-        delete pMyContact;		//zerstoert den Master selbst.
+        delete pMyContact;      //zerstoert den Master selbst.
 }
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::ChainFrames()
+|*  SwFlyFrm::ChainFrames()
 |*
-|*	Ersterstellung		MA 29. Oct. 97
-|*	Letzte Aenderung	MA 20. Jan. 98
+|*  Ersterstellung      MA 29. Oct. 97
+|*  Letzte Aenderung    MA 20. Jan. 98
 |*
 |*************************************************************************/
 
@@ -574,10 +574,10 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::FindChainNeighbour()
+|*  SwFlyFrm::FindChainNeighbour()
 |*
-|*	Ersterstellung		MA 11. Nov. 97
-|*	Letzte Aenderung	MA 09. Apr. 99
+|*  Ersterstellung      MA 11. Nov. 97
+|*  Letzte Aenderung    MA 09. Apr. 99
 |*
 |*************************************************************************/
 
@@ -586,7 +586,7 @@ SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
     //Wir suchen denjenigen Fly, der in dem selben Bereich steht.
     //Bereiche koennen zunaechst nur Kopf-/Fusszeilen oder Flys sein.
 
-    if ( !pAnch )			//Wenn ein Anchor uebergeben Wurde zaehlt dieser: Ctor!
+    if ( !pAnch )           //Wenn ein Anchor uebergeben Wurde zaehlt dieser: Ctor!
         pAnch = AnchorFrm();
 
     SwLayoutFrm *pLay;
@@ -630,10 +630,10 @@ SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::FindLastLower()
+|*  SwFlyFrm::FindLastLower()
 |*
-|*	Ersterstellung		MA 29. Oct. 97
-|*	Letzte Aenderung	MA 29. Oct. 97
+|*  Ersterstellung      MA 29. Oct. 97
+|*  Letzte Aenderung    MA 29. Oct. 97
 |*
 |*************************************************************************/
 
@@ -644,7 +644,7 @@ SwFrm *SwFlyFrm::FindLastLower()
         pRet = pRet->FindTabFrm();
     SwFrm *pNxt = pRet;
     while ( pNxt && IsAnLower( pNxt ) )
-    {	pRet = pNxt;
+    {   pRet = pNxt;
         pNxt = pNxt->FindNext();
     }
     return pRet;
@@ -653,10 +653,10 @@ SwFrm *SwFlyFrm::FindLastLower()
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::FrmSizeChg()
+|*  SwFlyFrm::FrmSizeChg()
 |*
-|*	Ersterstellung		MA 17. Dec. 92
-|*	Letzte Aenderung	MA 24. Jul. 96
+|*  Ersterstellung      MA 17. Dec. 92
+|*  Letzte Aenderung    MA 24. Jul. 96
 |*
 |*************************************************************************/
 
@@ -688,7 +688,7 @@ BOOL SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
         if ( Lower()->IsColumnFrm() )
         {
             const SwRect aOld( GetObjRectWithSpaces() );
-            const Size	 aOldSz( Prt().SSize() );
+            const Size   aOldSz( Prt().SSize() );
             const SwTwips nDiffWidth = Frm().Width() - rFrmSize.GetWidth();
             aFrm.Height( aFrm.Height() - nDiffHeight );
             aFrm.Width ( aFrm.Width()  - nDiffWidth  );
@@ -713,10 +713,10 @@ BOOL SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::Modify()
+|*  SwFlyFrm::Modify()
 |*
-|*	Ersterstellung		MA 17. Dec. 92
-|*	Letzte Aenderung	MA 17. Jan. 97
+|*  Ersterstellung      MA 17. Dec. 92
+|*  Letzte Aenderung    MA 17. Jan. 97
 |*
 |*************************************************************************/
 
@@ -891,7 +891,7 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                     USHORT nCol = 0;
                     SwFrm *pTmp = Lower();
                     do
-                    {	++nCol;
+                    {   ++nCol;
                         pTmp = pTmp->GetNext();
                     } while ( pTmp );
                     aCol.Init( nCol, 0, 1000 );
@@ -1092,11 +1092,11 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 
 /*************************************************************************
 |*
-|*				  SwFlyFrm::GetInfo()
+|*                SwFlyFrm::GetInfo()
 |*
-|*	  Beschreibung		erfragt Informationen
-|*	  Ersterstellung	JP 31.03.94
-|*	  Letzte Aenderung	JP 31.03.94
+|*    Beschreibung      erfragt Informationen
+|*    Ersterstellung    JP 31.03.94
+|*    Letzte Aenderung  JP 31.03.94
 |*
 *************************************************************************/
 
@@ -1104,16 +1104,16 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 BOOL SwFlyFrm::GetInfo( SfxPoolItem & rInfo ) const
 {
     if( RES_AUTOFMT_DOCNODE == rInfo.Which() )
-        return FALSE;	// es gibt einen FlyFrm also wird er benutzt
-    return TRUE;		// weiter suchen
+        return FALSE;   // es gibt einen FlyFrm also wird er benutzt
+    return TRUE;        // weiter suchen
 }
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::_Invalidate()
+|*  SwFlyFrm::_Invalidate()
 |*
-|*	Ersterstellung		MA 15. Oct. 92
-|*	Letzte Aenderung	MA 26. Jun. 96
+|*  Ersterstellung      MA 15. Oct. 92
+|*  Letzte Aenderung    MA 26. Jun. 96
 |*
 |*************************************************************************/
 
@@ -1150,12 +1150,12 @@ void SwFlyFrm::_Invalidate( SwPageFrm *pPage )
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::ChgRelPos()
+|*  SwFlyFrm::ChgRelPos()
 |*
-|*	Beschreibung		Aenderung der relativen Position, die Position wird
-|*		damit automatisch Fix, das Attribut wird entprechend angepasst.
-|*	Ersterstellung		MA 25. Aug. 92
-|*	Letzte Aenderung	MA 09. Aug. 95
+|*  Beschreibung        Aenderung der relativen Position, die Position wird
+|*      damit automatisch Fix, das Attribut wird entprechend angepasst.
+|*  Ersterstellung      MA 25. Aug. 92
+|*  Letzte Aenderung    MA 09. Aug. 95
 |*
 |*************************************************************************/
 
@@ -1275,12 +1275,12 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
 }
 /*************************************************************************
 |*
-|*	SwFlyFrm::Format()
+|*  SwFlyFrm::Format()
 |*
-|*	Beschreibung:		"Formatiert" den Frame; Frm und PrtArea.
-|*						Die Fixsize wird hier nicht eingestellt.
-|*	Ersterstellung		MA 14. Jun. 93
-|*	Letzte Aenderung	MA 13. Jun. 96
+|*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea.
+|*                      Die Fixsize wird hier nicht eingestellt.
+|*  Ersterstellung      MA 14. Jun. 93
+|*  Letzte Aenderung    MA 13. Jun. 96
 |*
 |*************************************************************************/
 
@@ -1405,7 +1405,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
         }
         else
         {
-            bValidSize = TRUE;	//Fixe Frms formatieren sich nicht.
+            bValidSize = TRUE;  //Fixe Frms formatieren sich nicht.
                                 //Flys stellen ihre Groesse anhand des Attr ein.
             SwTwips nNewSize = bVert ? aRelSize.Width() : aRelSize.Height();
             nNewSize -= nUL;
@@ -1786,10 +1786,10 @@ void CalcCntnt( SwLayoutFrm *pLay,
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::MakeFlyPos()
+|*  SwFlyFrm::MakeFlyPos()
 |*
-|*	Ersterstellung		MA ??
-|*	Letzte Aenderung	MA 14. Nov. 96
+|*  Ersterstellung      MA ??
+|*  Letzte Aenderung    MA 14. Nov. 96
 |*
 |*************************************************************************/
 // OD 2004-03-23 #i26791#
@@ -1822,10 +1822,10 @@ void SwFlyFrm::MakeObjPos()
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::MakePrtArea()
+|*  SwFlyFrm::MakePrtArea()
 |*
-|*	Ersterstellung		MA 23. Jun. 93
-|*	Letzte Aenderung	MA 23. Jun. 93
+|*  Ersterstellung      MA 23. Jun. 93
+|*  Letzte Aenderung    MA 23. Jun. 93
 |*
 |*************************************************************************/
 void SwFlyFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
@@ -1846,10 +1846,10 @@ void SwFlyFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::_Grow(), _Shrink()
+|*  SwFlyFrm::_Grow(), _Shrink()
 |*
-|*	Ersterstellung		MA 05. Oct. 92
-|*	Letzte Aenderung	MA 05. Sep. 96
+|*  Ersterstellung      MA 05. Oct. 92
+|*  Letzte Aenderung    MA 05. Sep. 96
 |*
 |*************************************************************************/
 
@@ -1866,7 +1866,7 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, BOOL bTst )
             return 0L;
 
         if ( Lower()->IsColumnFrm() )
-        {	//Bei Spaltigkeit ubernimmt das Format die Kontrolle ueber
+        {   //Bei Spaltigkeit ubernimmt das Format die Kontrolle ueber
             //das Wachstum (wg. des Ausgleichs).
             if ( !bTst )
             {
@@ -1953,7 +1953,7 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, BOOL bTst )
             return 0L;
 
         if ( Lower()->IsColumnFrm() )
-        {	//Bei Spaltigkeit ubernimmt das Format die Kontrolle ueber
+        {   //Bei Spaltigkeit ubernimmt das Format die Kontrolle ueber
             //das Wachstum (wg. des Ausgleichs).
             if ( !bTst )
             {
@@ -2037,10 +2037,10 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, BOOL bTst )
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::ChgSize()
+|*  SwFlyFrm::ChgSize()
 |*
-|*	Ersterstellung		MA 05. Oct. 92
-|*	Letzte Aenderung	MA 04. Sep. 96
+|*  Ersterstellung      MA 05. Oct. 92
+|*  Letzte Aenderung    MA 04. Sep. 96
 |*
 |*************************************************************************/
 
@@ -2090,10 +2090,10 @@ Size SwFlyFrm::ChgSize( const Size& aNewSize )
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::IsLowerOf()
+|*  SwFlyFrm::IsLowerOf()
 |*
-|*	Ersterstellung		MA 27. Dec. 93
-|*	Letzte Aenderung	MA 27. Dec. 93
+|*  Ersterstellung      MA 27. Dec. 93
+|*  Letzte Aenderung    MA 27. Dec. 93
 |*
 |*************************************************************************/
 
@@ -2114,10 +2114,10 @@ BOOL SwFlyFrm::IsLowerOf( const SwLayoutFrm* pUpperFrm ) const
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::Cut()
+|*  SwFlyFrm::Cut()
 |*
-|*	Ersterstellung		MA 23. Feb. 94
-|*	Letzte Aenderung	MA 23. Feb. 94
+|*  Ersterstellung      MA 23. Feb. 94
+|*  Letzte Aenderung    MA 23. Feb. 94
 |*
 |*************************************************************************/
 
@@ -2127,10 +2127,10 @@ void SwFlyFrm::Cut()
 
 /*************************************************************************
 |*
-|*	SwFrm::AppendFly(), RemoveFly()
+|*  SwFrm::AppendFly(), RemoveFly()
 |*
-|*	Ersterstellung		MA 25. Aug. 92
-|*	Letzte Aenderung	MA 09. Jun. 95
+|*  Ersterstellung      MA 25. Aug. 92
+|*  Letzte Aenderung    MA 09. Jun. 95
 |*
 |*************************************************************************/
 
@@ -2219,7 +2219,7 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
 
 /*************************************************************************
 |*
-|*	SwFrm::AppendDrawObj(), RemoveDrawObj()
+|*  SwFrm::AppendDrawObj(), RemoveDrawObj()
 |*
 |*  --> OD 2004-07-06 #i28701# - new methods
 |*
@@ -2293,8 +2293,8 @@ void SwFrm::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
 |*
 |*  SwFrm::InvalidateObjs()
 |*
-|*	Ersterstellung		MA 29. Nov. 96
-|*	Letzte Aenderung	MA 29. Nov. 96
+|*  Ersterstellung      MA 29. Nov. 96
+|*  Letzte Aenderung    MA 29. Nov. 96
 |*
 |*************************************************************************/
 // --> OD 2004-07-01 #i28701# - change purpose of method and adjust its name
@@ -2458,10 +2458,10 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::NotifyDrawObj()
+|*  SwFlyFrm::NotifyDrawObj()
 |*
-|*	Ersterstellung		OK 22. Nov. 94
-|*	Letzte Aenderung	MA 10. Jan. 97
+|*  Ersterstellung      OK 22. Nov. 94
+|*  Letzte Aenderung    MA 10. Jan. 97
 |*
 |*************************************************************************/
 
@@ -2480,8 +2480,8 @@ void SwFlyFrm::NotifyDrawObj()
 |*
 |*  SwFlyFrm::CalcRel()
 |*
-|*	Ersterstellung		MA 13. Jun. 96
-|*	Letzte Aenderung	MA 10. Oct. 96
+|*  Ersterstellung      MA 13. Jun. 96
+|*  Letzte Aenderung    MA 10. Oct. 96
 |*
 |*************************************************************************/
 
@@ -2603,10 +2603,10 @@ SwTwips SwFlyFrm::CalcAutoWidth() const
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::AddSpacesToFrm
+|*  SwFlyFrm::AddSpacesToFrm
 |*
-|*	Ersterstellung		MA 11. Nov. 96
-|*	Letzte Aenderung	MA 10. Mar. 97
+|*  Ersterstellung      MA 11. Nov. 96
+|*  Letzte Aenderung    MA 10. Mar. 97
 |*
 |*************************************************************************/
 
@@ -2624,10 +2624,10 @@ SwTwips SwFlyFrm::CalcAutoWidth() const
 
 /*************************************************************************
 |*
-|*	SwFlyFrm::GetContour()
+|*  SwFlyFrm::GetContour()
 |*
-|*	Ersterstellung		MA 09. Jan. 97
-|*	Letzte Aenderung	MA 10. Jan. 97
+|*  Ersterstellung      MA 09. Jan. 97
+|*  Letzte Aenderung    MA 10. Jan. 97
 |*
 |*************************************************************************/
 /// OD 16.04.2003 #i13147# - If called for paint and the <SwNoTxtFrm> contains

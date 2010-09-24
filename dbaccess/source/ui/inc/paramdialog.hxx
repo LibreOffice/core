@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,15 +92,15 @@ namespace dbaui
     {
     protected:
         // the controls
-        FixedLine		m_aNamesFrame;
-        ListBox			m_aAllParams;
-        FixedText		m_aValueFrame;
-        Edit			m_aParam;
-        PushButton		m_aTravelNext;
-        OKButton		m_aOKBtn;
-        CancelButton	m_aCancelBtn;
+        FixedLine       m_aNamesFrame;
+        ListBox         m_aAllParams;
+        FixedText       m_aValueFrame;
+        Edit            m_aParam;
+        PushButton      m_aTravelNext;
+        OKButton        m_aOKBtn;
+        CancelButton    m_aCancelBtn;
 
-        sal_uInt16			m_nCurrentlySelected;
+        sal_uInt16          m_nCurrentlySelected;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
                         m_xParams;
@@ -112,13 +112,13 @@ namespace dbaui
                         m_aPredicateInput;
 
         ByteVector      m_aVisitedParams;
-        Timer		m_aResetVisitFlag;
+        Timer       m_aResetVisitFlag;
             // we reset the "visited flag" 1 second after and entry has been selected
 
-        sal_Bool	m_bNeedErrorOnCurrent;
+        sal_Bool    m_bNeedErrorOnCurrent;
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-                    m_aFinalValues;		/// the final values as entered by the user
+                    m_aFinalValues;     /// the final values as entered by the user
 
     public:
         OParameterDialog(Window* _pParent,
@@ -145,7 +145,7 @@ namespace dbaui
     };
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_PARAMDIALOG_HXX_

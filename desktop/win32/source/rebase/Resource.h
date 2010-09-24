@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,10 +28,10 @@
 #ifndef _RESOURCE_H
 #define _RESOURCE_H
 
-#define IDS_APP_TITLE					10
-#define	IDS_MSG_OPTIMIZED_FOR_CLIENT	11
-#define	IDS_MSG_OPTIMIZED_FOR_SERVER	12
-#define IDS_MSG_NO_INSTALLATION_FOUND	13
+#define IDS_APP_TITLE                   10
+#define IDS_MSG_OPTIMIZED_FOR_CLIENT    11
+#define IDS_MSG_OPTIMIZED_FOR_SERVER    12
+#define IDS_MSG_NO_INSTALLATION_FOUND   13
 
 #define IDI_REBASEGUI                   99
 

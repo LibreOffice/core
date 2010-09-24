@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ struct _AtkObjectWrapper
     ::com::sun::star::accessibility::XAccessibleTextMarkup     *mpTextMarkup;
     ::com::sun::star::accessibility::XAccessibleTextAttributes *mpTextAttributes;
     ::com::sun::star::accessibility::XAccessibleValue          *mpValue;
-    
+
     AtkObject *child_about_to_be_removed;
     gint       index_of_child_about_to_be_removed;
 //    ::rtl::OString * m_pKeyBindings
@@ -85,7 +85,7 @@ GType                  atk_object_wrapper_get_type (void) G_GNUC_CONST;
 AtkObject *            atk_object_wrapper_ref(
     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible,
     bool create = true );
-    
+
 AtkObject *            atk_object_wrapper_new(
     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible,
     AtkObject* parent = NULL );
@@ -120,6 +120,6 @@ OUStringToGChar(const rtl::OUString& rString )
     return g_strdup( aUtf8 );
 }
 
-#define OUStringToConstGChar( string ) rtl::OUStringToOString( string, RTL_TEXTENCODING_UTF8 ).getStr() 
+#define OUStringToConstGChar( string ) rtl::OUStringToOString( string, RTL_TEXTENCODING_UTF8 ).getStr()
 
 #endif /* __ATK_WRAPPER_HXX__ */

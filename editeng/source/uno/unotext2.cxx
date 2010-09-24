@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,20 +124,20 @@ static SvxUnoText* getDummyText() throw()
 }
 
 SvxUnoTextContent::SvxUnoTextContent() throw()
-:	SvxUnoTextRangeBase(*getDummyText())
-,	mnParagraph(0)
-,	mrParentText(*getDummyText())
-,	maDisposeListeners(maDisposeContainerMutex)
-,	mbDisposing( false )
+:   SvxUnoTextRangeBase(*getDummyText())
+,   mnParagraph(0)
+,   mrParentText(*getDummyText())
+,   maDisposeListeners(maDisposeContainerMutex)
+,   mbDisposing( false )
 {
 }
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw()
-:	SvxUnoTextRangeBase(rText)
-,	mnParagraph(nPara)
-,	mrParentText(rText)
-,	maDisposeListeners(maDisposeContainerMutex)
-,	mbDisposing( false )
+:   SvxUnoTextRangeBase(rText)
+,   mnParagraph(nPara)
+,   mrParentText(rText)
+,   maDisposeListeners(maDisposeContainerMutex)
+,   mbDisposing( false )
 {
     mxParentText = const_cast<SvxUnoTextBase*>(&rText);
     if( GetEditSource() && GetEditSource()->GetTextForwarder() )
@@ -145,14 +145,14 @@ SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nP
 }
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw()
-:	SvxUnoTextRangeBase(rContent)
-,	text::XTextContent()
-,	container::XEnumerationAccess()
-,	lang::XTypeProvider()
-,	cppu::OWeakAggObject()
-,	mrParentText(rContent.mrParentText)
-,	maDisposeListeners(maDisposeContainerMutex)
-,	mbDisposing( false )
+:   SvxUnoTextRangeBase(rContent)
+,   text::XTextContent()
+,   container::XEnumerationAccess()
+,   lang::XTypeProvider()
+,   cppu::OWeakAggObject()
+,   mrParentText(rContent.mrParentText)
+,   maDisposeListeners(maDisposeContainerMutex)
+,   mbDisposing( false )
 {
     mxParentText = rContent.mxParentText;
     mnParagraph  = rContent.mnParagraph;
@@ -262,7 +262,7 @@ void SAL_CALL SvxUnoTextContent::dispose()
     OGuard aGuard( Application::GetSolarMutex() );
 
     if( mbDisposing )
-        return;	// catched a recursion
+        return; // catched a recursion
 
     mbDisposing = true;
 
@@ -408,7 +408,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
 // ====================================================================
 
 SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw()
-:	mxParentText(  const_cast<SvxUnoTextBase*>(&rText) ),
+:   mxParentText(  const_cast<SvxUnoTextBase*>(&rText) ),
     mrParentText( rText ),
     mnParagraph( nPara ),
     mnNextPortion( 0 )
@@ -498,17 +498,17 @@ uno::Reference< uno::XInterface > SvxUnoTextCursor_NewInstance()
 }
 
 SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextBase& rText ) throw()
-:	SvxUnoTextRangeBase(rText),
+:   SvxUnoTextRangeBase(rText),
     mxParentText( const_cast<SvxUnoTextBase*>(&rText) )
 {
 }
 
 SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextCursor& rCursor ) throw()
-:	SvxUnoTextRangeBase(rCursor)
-,	text::XTextCursor()
-,	lang::XTypeProvider()
-,	cppu::OWeakAggObject()
-,	mxParentText(rCursor.mxParentText)
+:   SvxUnoTextRangeBase(rCursor)
+,   text::XTextCursor()
+,   lang::XTypeProvider()
+,   cppu::OWeakAggObject()
+,   mxParentText(rCursor.mxParentText)
 {
 }
 

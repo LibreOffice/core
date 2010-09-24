@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,10 +30,10 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-#ifndef _SV_TABCTRL_HXX 
+#ifndef _SV_TABCTRL_HXX
 #include <vcl/tabctrl.hxx>
 #endif
-#ifndef _SV_TABPAGE_HXX 
+#ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
 #endif
 #ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
@@ -50,9 +50,9 @@ namespace dbaui
                                 ,public IClipboardTest
     {
     private:
-        String			m_sHelpText;
-        MultiLineEdit*	m_pTextWin;
-        USHORT			m_nDummy;
+        String          m_sHelpText;
+        MultiLineEdit*  m_pTextWin;
+        USHORT          m_nDummy;
 
     protected:
         virtual void Resize();

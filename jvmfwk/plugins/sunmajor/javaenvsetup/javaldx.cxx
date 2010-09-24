@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         return -1;
     }
 
-    
+
     JavaInfo * pInfo = NULL;
     errcode = jfw_getSelectedJRE( & pInfo);
 
@@ -91,7 +91,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         fprintf(stderr,"javaldx failed! \n");
         return -1;
     }
-    
+
     if (pInfo == NULL)
     {
         if (false == findAndSelect(&pInfo))
@@ -113,7 +113,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             return -1;
         }
     }
-    
+
     //Only do something if the sunjavaplugin created this JavaInfo
     rtl::OUString sVendor1(RTL_CONSTASCII_USTRINGPARAM("Sun Microsystems Inc."));
     rtl::OUString sVendor2(RTL_CONSTASCII_USTRINGPARAM("IBM Corporation"));
@@ -132,11 +132,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             || sVendor7.equals(pInfo->sVendor) == sal_True
             || sVendor8.equals(pInfo->sVendor) == sal_True))
         return 0;
-    
+
     rtl::OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
     fprintf(stdout, "%s\n", sPaths.getStr());
     jfw_freeJavaInfo(pInfo);
-    
+
     return 0;
 }
 

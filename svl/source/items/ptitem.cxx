@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,12 +86,12 @@ SfxPointItem::SfxPointItem( const SfxPointItem& rItem ) :
 
 SfxItemPresentation SfxPointItem::GetPresentation
 (
-    SfxItemPresentation 	/*ePresentation*/,
-    SfxMapUnit				/*eCoreMetric*/,
-    SfxMapUnit				/*ePresentationMetric*/,
-    XubString& 				rText,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
+    XubString&              rText,
     const IntlWrapper *
-)	const
+)   const
 {
     DBG_CHKTHIS(SfxPointItem, 0);
     rText = UniString::CreateFromInt32(aVal.X());
@@ -172,16 +172,16 @@ BOOL SfxPointItem::PutValue( const uno::Any& rVal,
     awt::Point aValue;
     sal_Int32 nVal = 0;
     if ( !nMemberId )
-    {        
+    {
         bRet = ( rVal >>= aValue );
         if( bConvert )
         {
             aValue.X = MM100_TO_TWIP(aValue.X);
             aValue.Y = MM100_TO_TWIP(aValue.Y);
-        }        
+        }
     }
     else
-    {        
+    {
         bRet = ( rVal >>= nVal );
         if( bConvert )
             nVal = MM100_TO_TWIP( nVal );

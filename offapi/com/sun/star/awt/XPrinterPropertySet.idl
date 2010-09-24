@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,86 +24,86 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XPrinterPropertySet_idl__ 
-#define __com_sun_star_awt_XPrinterPropertySet_idl__ 
- 
-#ifndef __com_sun_star_beans_XPropertySet_idl__ 
-#include <com/sun/star/beans/XPropertySet.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_PropertyVetoException_idl__ 
-#include <com/sun/star/beans/PropertyVetoException.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
-#include <com/sun/star/lang/IllegalArgumentException.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_XPrinterPropertySet_idl__
+#define __com_sun_star_awt_XPrinterPropertySet_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyVetoException_idl__
+#include <com/sun/star/beans/PropertyVetoException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
 /** represents an extended property set for printer properties.
-            
+
     <p>All properties are vetoable properties. If you change the properties
     between <member scope="com::sun::star::awt">XPrinter::startPage</member>
-    and <member scope="com::sun::star::awt">XPrinter::endPage</member>, a 
-    <type scope="com::sun::star::beans">PropertyVetoException</type> 
+    and <member scope="com::sun::star::awt">XPrinter::endPage</member>, a
+    <type scope="com::sun::star::beans">PropertyVetoException</type>
     is thrown.</p>
 
-    @see XPrinter 
+    @see XPrinter
     @see XInfoPrinter
  */
 published interface XPrinterPropertySet: com::sun::star::beans::XPropertySet
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** sets the orientation.
      */
-    void setHorizontal( [in] boolean bHorizontal ) 
-            raises( com::sun::star::beans::PropertyVetoException, 
-                    com::sun::star::lang::IllegalArgumentException ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void setHorizontal( [in] boolean bHorizontal )
+            raises( com::sun::star::beans::PropertyVetoException,
+                    com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
     /** returns descriptions of all available printer forms.
      */
-    sequence<string> getFormDescriptions(); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** sets the form that should be used. 
-                        
+    sequence<string> getFormDescriptions();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the form that should be used.
+
         <p>Indirectly a printer is selected.</p>
      */
-    void selectForm( [in] string aFormDescription ) 
-            raises( com::sun::star::beans::PropertyVetoException, 
-                    com::sun::star::lang::IllegalArgumentException ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    void selectForm( [in] string aFormDescription )
+            raises( com::sun::star::beans::PropertyVetoException,
+                    com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
     /** returns a binary encoded version of the printer setup.
      */
-    sequence<byte> getBinarySetup(); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** sets the data specific to the printer driver. 
-                        
+    sequence<byte> getBinarySetup();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the data specific to the printer driver.
+
         <p>Get this data from the info printer and set the data to the
         printer.</p>
      */
-    void setBinarySetup( [in] sequence<byte> data ) 
-            raises( com::sun::star::beans::PropertyVetoException, 
-                    com::sun::star::lang::IllegalArgumentException ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    void setBinarySetup( [in] sequence<byte> data )
+            raises( com::sun::star::beans::PropertyVetoException,
+                    com::sun::star::lang::IllegalArgumentException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

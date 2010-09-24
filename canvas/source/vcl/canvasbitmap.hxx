@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,11 +55,11 @@ namespace vclcanvas
     typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::rendering::XBitmapCanvas,
                                                ::com::sun::star::rendering::XIntegerBitmap,
                                                 ::com::sun::star::lang::XServiceInfo,
-                                             ::com::sun::star::beans::XFastPropertySet >  	CanvasBitmapBase_Base;
-    typedef ::canvas::IntegerBitmapBase< ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >, 
-                                         CanvasBitmapHelper, 
+                                             ::com::sun::star::beans::XFastPropertySet >    CanvasBitmapBase_Base;
+    typedef ::canvas::IntegerBitmapBase< ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
+                                         CanvasBitmapHelper,
                                          tools::LocalGuard,
-                                         ::cppu::OWeakObject >							CanvasBitmap_Base;
+                                         ::cppu::OWeakObject >                          CanvasBitmap_Base;
 
     class CanvasBitmap : public CanvasBitmap_Base,
                          public RepaintTarget
@@ -84,7 +84,7 @@ namespace vclcanvas
         /// Must be called with locked Solar mutex
         CanvasBitmap( const BitmapEx&                              rBitmap,
                       ::com::sun::star::rendering::XGraphicDevice& rDevice,
-                      const OutDevProviderSharedPtr&               rOutDevProvider ); 
+                      const OutDevProviderSharedPtr&               rOutDevProvider );
 
         // overridden because of mpDevice
         virtual void SAL_CALL disposing();
@@ -98,7 +98,7 @@ namespace vclcanvas
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
                               const ::com::sun::star::rendering::ViewState&   viewState,
                               const ::com::sun::star::rendering::RenderState& renderState,
-                              const ::Point&                                  rPt, 
+                              const ::Point&                                  rPt,
                               const ::Size&                                   rSz,
                               const GraphicAttr&                              rAttr ) const;
 
@@ -120,7 +120,7 @@ namespace vclcanvas
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a
-            raw pointer (without refcounting) 
+            raw pointer (without refcounting)
         */
         ::com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> mxDevice;
     };

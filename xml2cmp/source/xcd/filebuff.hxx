@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,22 +32,22 @@
 class Buffer
 {
   public:
-                        Buffer() 			   	: s(0) {}
+                        Buffer()                : s(0) {}
                         ~Buffer()               { if (s) delete [] s; }
                         operator const char *() const
                                                 { return s; }
-    char *				Data() 					{ return s; }
-    void               	SetSize(
-                           unsigned	long 			    i_size )
+    char *              Data()                  { return s; }
+    void                SetSize(
+                           unsigned long                i_size )
                                                 { if (s) delete [] s; s = new char [i_size]; }
   private:
     char * s;
 };
 
 
-bool				LoadXmlFile(
-                        Buffer & 			o_rBuffer,
-                        const char *		i_sXmlFilePath );
+bool                LoadXmlFile(
+                        Buffer &            o_rBuffer,
+                        const char *        i_sXmlFilePath );
 
 
 

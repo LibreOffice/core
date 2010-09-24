@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,9 +65,9 @@ class StgStrm;
 class SvGlobalName;
 struct ClsId
 {
-    INT32	n1;
-    INT16	n2, n3;
-    UINT8	n4, n5, n6, n7, n8, n9, n10, n11;
+    INT32   n1;
+    INT16   n2, n3;
+    UINT8   n4, n5, n6, n7, n8, n9, n10, n11;
 };
 
 class SOT_DLLPUBLIC StorageBase : public SvRefBase
@@ -88,7 +88,7 @@ public:
     ULONG           GetError() const;
     BOOL            Good() const          { return BOOL( m_nError == SVSTREAM_OK ); }
     StreamMode      GetMode() const  { return m_nMode;  }
-    void			SetAutoCommit( BOOL bSet )
+    void            SetAutoCommit( BOOL bSet )
                     { m_bAutoCommit = bSet; }
 };
 
@@ -290,7 +290,7 @@ public:
     BOOL                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
 
-    SvStream*					GetModifySvStream();
+    SvStream*                   GetModifySvStream();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetXInputStream() const;
 };
@@ -312,21 +312,21 @@ public:
     static BOOL                 IsStorageFile( SvStream* );
     static BOOL                 IsStorageFile( const String& rName );
     static BOOL                 IsDiskSpannedFile( SvStream* );
-    static String				GetLinkedFile( SvStream& );
-    static String				CreateLinkFile( const String& rName );
+    static String               GetLinkedFile( SvStream& );
+    static String               CreateLinkFile( const String& rName );
 
                                 UCBStorage( const ::ucbhelper::Content& rContent, const String& rName, StreamMode nMode, BOOL bDirect = TRUE, BOOL bIsRoot = TRUE );
-                                UCBStorage( const String& rName, 
-                                            StreamMode nMode, 
-                                            BOOL bDirect = TRUE, 
+                                UCBStorage( const String& rName,
+                                            StreamMode nMode,
+                                            BOOL bDirect = TRUE,
                                             BOOL bIsRoot = TRUE );
 
-                                UCBStorage( const String& rName, 
-                                            StreamMode nMode, 
-                                            BOOL bDirect, 
-                                            BOOL bIsRoot, 
-                                            BOOL bIsRepair, 
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler > 
+                                UCBStorage( const String& rName,
+                                            StreamMode nMode,
+                                            BOOL bDirect,
+                                            BOOL bIsRoot,
+                                            BOOL bIsRepair,
+                                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler >
                                                 xProgressHandler );
 
                                 UCBStorage( UCBStorage_Impl* );
@@ -378,17 +378,17 @@ public:
     virtual BOOL                Equals( const BaseStorage& rStream ) const;
     BOOL                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
-    BOOL                		GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue );
+    BOOL                        GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue );
 
     // HACK to avoid incompatible build, can be done since this feature is only for development
     // should be removed before release
     UNOStorageHolderList* GetUNOStorageHolderList();
-    
+
 //#if _SOLAR__PRIVATE
     UCBStorageElement_Impl*     FindElement_Impl( const String& rName ) const;
     BOOL                        CopyStorageElement_Impl( UCBStorageElement_Impl& rElement,
                                     BaseStorage* pDest, const String& rNew ) const;
-    BaseStorage*        		OpenStorage_Impl( const String & rEleName,
+    BaseStorage*                OpenStorage_Impl( const String & rEleName,
                                        StreamMode, BOOL bDirect, BOOL bForceUCBStorage );
 //#endif
 

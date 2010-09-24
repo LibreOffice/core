@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,186 +24,186 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_XRowUpdate_idl__ 
-#define __com_sun_star_sdbc_XRowUpdate_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_util_Date_idl__ 
-#include <com/sun/star/util/Date.idl> 
-#endif 
- 
-#ifndef __com_sun_star_util_DateTime_idl__ 
-#include <com/sun/star/util/DateTime.idl> 
-#endif 
- 
-#ifndef __com_sun_star_util_Time_idl__ 
-#include <com/sun/star/util/Time.idl> 
-#endif 
- 
- module com {  module sun {  module star {  module io { 
- published interface XInputStream; 
-};};};}; 
- 
-#ifndef __com_sun_star_sdbc_SQLException_idl__ 
-#include <com/sun/star/sdbc/SQLException.idl> 
-#endif 
- 
- module com {  module sun {  module star {  module sdbc { 
- 
- 
+#ifndef __com_sun_star_sdbc_XRowUpdate_idl__
+#define __com_sun_star_sdbc_XRowUpdate_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_util_Date_idl__
+#include <com/sun/star/util/Date.idl>
+#endif
+
+#ifndef __com_sun_star_util_DateTime_idl__
+#include <com/sun/star/util/DateTime.idl>
+#endif
+
+#ifndef __com_sun_star_util_Time_idl__
+#include <com/sun/star/util/Time.idl>
+#endif
+
+ module com {  module sun {  module star {  module io {
+ published interface XInputStream;
+};};};};
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+
 /** is used to update data which is collected in a row.
  */
 published interface XRowUpdate: com::sun::star::uno::XInterface
-{ 
-     
+{
+
     /** gives a nullable column a null value.
         @param columnIndex
             the position of the column
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateNull([in]long columnIndex) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateNull([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with a boolean value.
         @param columnIndex
             the position of the column
         @param x
             the new column value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateBoolean([in]long columnIndex, [in]boolean x) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateBoolean([in]long columnIndex, [in]boolean x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with a byte value.
         @param columnIndex
             the position of the column
         @param x
             the new column value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateByte([in]long columnIndex, [in]byte x) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateByte([in]long columnIndex, [in]byte x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with a short value.
         @param columnIndex
             the position of the column
         @param x
             the new column value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateShort([in]long columnIndex, [in]short x) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateShort([in]long columnIndex, [in]short x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with an long value.
         @param columnIndex
             the position of the column
         @param x
             the new column value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateInt([in]long columnIndex, [in]long x) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateInt([in]long columnIndex, [in]long x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with a hyper value.
         @param columnIndex
             the position of the column
         @param x
             the new column value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateLong([in]long columnIndex, [in]hyper x) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateLong([in]long columnIndex, [in]hyper x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with a float value.
         @param columnIndex
             the position of the column
         @param x
             the new column value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateFloat([in]long columnIndex, [in]float x) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateFloat([in]long columnIndex, [in]float x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with a double value.
         @param columnIndex
             the position of the column
         @param x
             the new column value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateDouble([in]long columnIndex, [in]double x) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateDouble([in]long columnIndex, [in]double x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with a string value.
         @param columnIndex
             the position of the column
         @param x
             the new column value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateString([in]long columnIndex, [in]string x) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateString([in]long columnIndex, [in]string x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with a byte array value.
         @param columnIndex
             the position of the column
         @param x
             the new column value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateBytes([in]long columnIndex, [in]sequence<byte> x) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateBytes([in]long columnIndex, [in]sequence<byte> x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with a date value.
         @param columnIndex
             the position of the column
         @param x
             the new column value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateDate([in]long columnIndex, [in]com::sun::star::util::Date x) 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateDate([in]long columnIndex, [in]com::sun::star::util::Date x)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with a time value.
         @param columnIndex
             the position of the column
         @param x
             the new column value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateTime([in]long columnIndex, [in]com::sun::star::util::Time x) 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateTime([in]long columnIndex, [in]com::sun::star::util::Time x)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with a timestamp value.
         @param columnIndex
             the position of the column
         @param x
             the new column value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateTimestamp([in]long columnIndex, 
-                         [in]com::sun::star::util::DateTime x) 
-      raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateTimestamp([in]long columnIndex,
+                         [in]com::sun::star::util::DateTime x)
+      raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with a stream value.
         @param columnIndex
             the position of the column
@@ -211,14 +211,14 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
             the new column value
         @param length
             how much data should be read out of the stream
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateBinaryStream([in]long columnIndex, 
-                             [in]com::sun::star::io::XInputStream x, 
-                              [in]long length) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateBinaryStream([in]long columnIndex,
+                             [in]com::sun::star::io::XInputStream x,
+                              [in]long length) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with a stream value.
         @param columnIndex
             the position of the column
@@ -226,26 +226,26 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
             the new column value
         @param length
             how much data should be read out of the stream
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateCharacterStream([in]long columnIndex, 
-                                [in]com::sun::star::io::XInputStream x, 
-                                 [in]long length) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateCharacterStream([in]long columnIndex,
+                                [in]com::sun::star::io::XInputStream x,
+                                 [in]long length) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with an object value.
         @param columnIndex
             the position of the column
         @param x
             the new column value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateObject([in]long columnIndex, [in]any x) 
-      raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void updateObject([in]long columnIndex, [in]any x)
+      raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** updates a column with an object value.
         @param columnIndex
             the position of the column
@@ -253,17 +253,17 @@ published interface XRowUpdate: com::sun::star::uno::XInterface
             the new column value
         @param scale
             defines the scale which should be used to write the numeric value
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void updateNumericObject([in]long columnIndex, [in]any x, [in]long scale) 
-      raises (SQLException); 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    void updateNumericObject([in]long columnIndex, [in]any x, [in]long scale)
+      raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

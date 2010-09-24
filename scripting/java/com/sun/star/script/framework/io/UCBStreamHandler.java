@@ -1,7 +1,7 @@
-/************************************************************************* 
+/*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,10 +130,10 @@ public class UCBStreamHandler extends URLStreamHandler {
                     }
                     os = new XOutputStreamWrapper( xos );
                 }
-                if ( os == null ) 
+                if ( os == null )
                 {
                     throw new IOException("Failed to get OutputStream for " + sUrl );
-                } 
+                }
             }
             catch ( com.sun.star.ucb.CommandAbortedException cae )
             {
@@ -145,7 +145,7 @@ public class UCBStreamHandler extends URLStreamHandler {
                 LogUtils.DEBUG("caught unknown exception: " + e.toString() + " getting writable stream from " + url );
                 throw new IOException( e.toString() );
             }
-            return os; 
+            return os;
         }
     }
 
@@ -167,7 +167,7 @@ public class UCBStreamHandler extends URLStreamHandler {
                 else {
                     try {
                         is.reset();
-                    } 
+                    }
                     catch (IOException e) {
                         is.close();
                         is = getFileStreamFromUCB(path);
@@ -191,7 +191,7 @@ public class UCBStreamHandler extends URLStreamHandler {
                     LogUtils.DEBUG("Caught exception closing stream: " +
                         ioe.getMessage());
                 }
-            } 
+            }
         }
         return result;
     }
@@ -259,7 +259,7 @@ public class UCBStreamHandler extends URLStreamHandler {
             LogUtils.DEBUG("caught exception " + e );
             throw new IOException(e.getMessage());
         }
-        finally 
+        finally
         {
             if (xInputStream != null) {
                 try {

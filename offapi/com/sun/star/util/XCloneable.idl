@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,33 +24,33 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_XCloneable_idl__ 
-#define __com_sun_star_util_XCloneable_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module util {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_util_XCloneable_idl__
+#define __com_sun_star_util_XCloneable_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
 /** makes it possible to create a copy of the object which supports this interface.
  */
 published interface XCloneable: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
+{
+    //-------------------------------------------------------------------------
     /** creates a copy of the object.
      */
-    com::sun::star::util::XCloneable createClone(); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    com::sun::star::util::XCloneable createClone();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

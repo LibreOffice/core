@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,20 +79,20 @@ namespace
     class impTextBreakupHandler
     {
     private:
-        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >	maTextPortionPrimitives;
-        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >	maLinePrimitives;
-        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >	maParagraphPrimitives;
+        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >  maTextPortionPrimitives;
+        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >  maLinePrimitives;
+        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >  maParagraphPrimitives;
 
-        SdrOutliner&												mrOutliner;
-        basegfx::B2DHomMatrix										maNewTransformA;
-        basegfx::B2DHomMatrix										maNewTransformB;
+        SdrOutliner&                                                mrOutliner;
+        basegfx::B2DHomMatrix                                       maNewTransformA;
+        basegfx::B2DHomMatrix                                       maNewTransformB;
 
         // the visible area for contour text decomposition
         basegfx::B2DVector                                          maScale;
 
         // #SJ# ClipRange for BlockText decomposition; only text portions completely
         // inside are to be accepted, so this is different from geometric clipping
-        // (which would allow e.g. upper parts of portions to remain). Only used for 
+        // (which would allow e.g. upper parts of portions to remain). Only used for
         // BlockText (see there)
         basegfx::B2DRange                                           maClipRange;
 
@@ -114,7 +114,7 @@ namespace
 
     public:
         impTextBreakupHandler(SdrOutliner& rOutliner)
-        :	maTextPortionPrimitives(),
+        :   maTextPortionPrimitives(),
             maLinePrimitives(),
             maParagraphPrimitives(),
             mrOutliner(rOutliner),
@@ -334,11 +334,11 @@ namespace
 
                 // TextDecoratedPortionPrimitive2D is needed, create one
                 pNewPrimitive = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
-                    
+
                     // attributes for TextSimplePortionPrimitive2D
                     aNewTransform,
-                    rInfo.mrText, 
-                    rInfo.mnTextStart, 
+                    rInfo.mrText,
+                    rInfo.mnTextStart,
                     rInfo.mnTextLen,
                     aDXArray,
                     aFontAttribute,
@@ -364,8 +364,8 @@ namespace
                 // TextSimplePortionPrimitive2D is enough
                 pNewPrimitive = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                     aNewTransform,
-                    rInfo.mrText, 
-                    rInfo.mnTextStart, 
+                    rInfo.mrText,
+                    rInfo.mnTextStart,
                     rInfo.mnTextLen,
                     aDXArray,
                     aFontAttribute,
@@ -434,8 +434,8 @@ namespace
                             // need to take FontScaling out of values; it's already part of
                             // aNewTransform and would be double applied
                             const double fFontScaleX(aFontScaling.getX());
-                            
-                            if(!basegfx::fTools::equal(fFontScaleX, 1.0) 
+
+                            if(!basegfx::fTools::equal(fFontScaleX, 1.0)
                                 && !basegfx::fTools::equalZero(fFontScaleX))
                             {
                                 fStart /= fFontScaleX;
@@ -729,6 +729,140 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
     rTarget = aConverter.getPrimitive2DSequence();
 }
 
+void SdrTextObj::impDecomposeAutoFitTextPrimitive(
+    drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+    const drawinglayer::primitive2d::SdrAutoFitTextPrimitive2D& rSdrAutofitTextPrimitive,
+    const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
+{
+    // decompose matrix to have position and size of text
+    basegfx::B2DVector aScale, aTranslate;
+    double fRotate, fShearX;
+    rSdrAutofitTextPrimitive.getTextRangeTransform().decompose(aScale, aTranslate, fRotate, fShearX);
+
+    // use B2DRange aAnchorTextRange for calculations
+    basegfx::B2DRange aAnchorTextRange(aTranslate);
+    aAnchorTextRange.expand(aTranslate + aScale);
+
+    // prepare outliner
+    const SfxItemSet& rTextItemSet = rSdrAutofitTextPrimitive.getSdrText()->GetItemSet();
+    SdrOutliner& rOutliner = ImpGetDrawOutliner();
+    SdrTextVertAdjust eVAdj = GetTextVerticalAdjust(rTextItemSet);
+    SdrTextHorzAdjust eHAdj = GetTextHorizontalAdjust(rTextItemSet);
+    const sal_uInt32 nOriginalControlWord(rOutliner.GetControlWord());
+    const Size aNullSize;
+
+    // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
+    rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
+
+    rOutliner.SetControlWord(nOriginalControlWord|EE_CNTRL_AUTOPAGESIZE|EE_CNTRL_STRETCHING);
+    rOutliner.SetMinAutoPaperSize(aNullSize);
+    rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
+
+    // add one to rage sizes to get back to the old Rectangle and outliner measurements
+    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1L));
+    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
+    const OutlinerParaObject* pOutlinerParaObject = rSdrAutofitTextPrimitive.getSdrText()->GetOutlinerParaObject();
+    OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
+    const bool bVerticalWritintg(pOutlinerParaObject->IsVertical());
+    const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
+
+    if((rSdrAutofitTextPrimitive.getWordWrap() || IsTextFrame()))
+    {
+        rOutliner.SetMaxAutoPaperSize(aAnchorTextSize);
+    }
+
+    if(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg)
+    {
+        rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
+    }
+
+    if(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg)
+    {
+        rOutliner.SetMinAutoPaperSize(Size(0, nAnchorTextHeight));
+    }
+
+    rOutliner.SetPaperSize(aNullSize);
+    rOutliner.SetUpdateMode(true);
+    rOutliner.SetText(*pOutlinerParaObject);
+    ImpAutoFitText(rOutliner,aAnchorTextSize,bVerticalWritintg);
+
+    // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
+    rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
+
+    // now get back the layouted text size from outliner
+    const Size aOutlinerTextSiz(rOutliner.GetPaperSize());
+    const basegfx::B2DVector aOutlinerScale(aOutlinerTextSiz.Width(), aOutlinerTextSiz.Height());
+    basegfx::B2DVector aAdjustTranslate(0.0, 0.0);
+
+    // correct horizontal translation using the now known text size
+    if(SDRTEXTHORZADJUST_CENTER == eHAdj || SDRTEXTHORZADJUST_RIGHT == eHAdj)
+    {
+        const double fFree(aAnchorTextRange.getWidth() - aOutlinerScale.getX());
+
+        if(SDRTEXTHORZADJUST_CENTER == eHAdj)
+        {
+            aAdjustTranslate.setX(fFree / 2.0);
+        }
+
+        if(SDRTEXTHORZADJUST_RIGHT == eHAdj)
+        {
+            aAdjustTranslate.setX(fFree);
+        }
+    }
+
+    // correct vertical translation using the now known text size
+    if(SDRTEXTVERTADJUST_CENTER == eVAdj || SDRTEXTVERTADJUST_BOTTOM == eVAdj)
+    {
+        const double fFree(aAnchorTextRange.getHeight() - aOutlinerScale.getY());
+
+        if(SDRTEXTVERTADJUST_CENTER == eVAdj)
+        {
+            aAdjustTranslate.setY(fFree / 2.0);
+        }
+
+        if(SDRTEXTVERTADJUST_BOTTOM == eVAdj)
+        {
+            aAdjustTranslate.setY(fFree);
+        }
+    }
+
+    // prepare matrices to apply to newly created primitives. aNewTransformA
+    // will get coordinates in aOutlinerScale size and positive in X, Y.
+    basegfx::B2DHomMatrix aNewTransformA;
+    basegfx::B2DHomMatrix aNewTransformB;
+
+    // translate relative to given primitive to get same rotation and shear
+    // as the master shape we are working on. For vertical, use the top-right
+    // corner
+    const double fStartInX(bVerticalWritintg ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
+    aNewTransformA.translate(fStartInX, aAdjustTranslate.getY());
+
+    // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
+    // move the null point which was top left to bottom right.
+    const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
+    const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
+    aNewTransformB.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
+
+    // in-between the translations of the single primitives will take place. Afterwards,
+    // the object's transformations need to be applied
+    aNewTransformB.shearX(fShearX);
+    aNewTransformB.rotate(fRotate);
+    aNewTransformB.translate(aTranslate.getX(), aTranslate.getY());
+
+    basegfx::B2DRange aClipRange;
+
+    // now break up text primitives.
+    impTextBreakupHandler aConverter(rOutliner);
+    aConverter.decomposeBlockTextPrimitive(aNewTransformA, aNewTransformB, aClipRange);
+
+    // cleanup outliner
+    rOutliner.Clear();
+    rOutliner.setVisualizedPage(0);
+    rOutliner.SetControlWord(nOriginalControlWord);
+
+    rTarget = aConverter.getPrimitive2DSequence();
+}
+
 void SdrTextObj::impDecomposeBlockTextPrimitive(
     drawinglayer::primitive2d::Primitive2DSequence& rTarget,
     const drawinglayer::primitive2d::SdrBlockTextPrimitive2D& rSdrBlockTextPrimitive,
@@ -772,7 +906,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 
         // #i106214# To work with an unchangeable PaperSize (CellSize in
         // this case) Set(Min|Max)AutoPaperSize and SetPaperSize have to be used.
-        // #i106214# This was not completely correct; to still measure the real 
+        // #i106214# This was not completely correct; to still measure the real
         // text height to allow vertical adjust (and vice versa for VerticalWritintg)
         // only one aspect has to be set, but the other one to zero
         if(bVerticalWritintg)
@@ -810,9 +944,9 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         {
             // #i103454# maximal paper size hor/ver needs to be limited to text
             // frame size. If it's block text, still allow the 'other' direction
-            // to grow to get a correct real text size when using GetPaperSize(). 
+            // to grow to get a correct real text size when using GetPaperSize().
             // When just using aAnchorTextSize as maximum, GetPaperSize()
-            // would just return aAnchorTextSize again: this means, the wanted 
+            // would just return aAnchorTextSize again: this means, the wanted
             // 'measurement' of the real size of block text would not work
             Size aMaxAutoPaperSize(aAnchorTextSize);
 
@@ -826,7 +960,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
                 // allow to grow horizontal for vertical blocks
                 aMaxAutoPaperSize.setWidth(1000000);
             }
-            
+
             rOutliner.SetMaxAutoPaperSize(aMaxAutoPaperSize);
         }
 
@@ -893,7 +1027,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         {
             aAdjustTranslate.setY(fFree / 2.0);
         }
-        
+
         if(SDRTEXTVERTADJUST_BOTTOM == eVAdj)
         {
             aAdjustTranslate.setY(fFree);
@@ -941,7 +1075,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 }
 
 void SdrTextObj::impDecomposeStretchTextPrimitive(
-    drawinglayer::primitive2d::Primitive2DSequence& rTarget, 
+    drawinglayer::primitive2d::Primitive2DSequence& rTarget,
     const drawinglayer::primitive2d::SdrStretchTextPrimitive2D& rSdrStretchTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
 {
@@ -973,7 +1107,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     // now get back the layouted text size from outliner
     const Size aOutlinerTextSiz(rOutliner.CalcTextSize());
     const basegfx::B2DVector aOutlinerScale(
-        basegfx::fTools::equalZero(aOutlinerTextSiz.Width()) ? 1.0 : aOutlinerTextSiz.Width(), 
+        basegfx::fTools::equalZero(aOutlinerTextSiz.Width()) ? 1.0 : aOutlinerTextSiz.Width(),
         basegfx::fTools::equalZero(aOutlinerTextSiz.Height()) ? 1.0 : aOutlinerTextSiz.Height());
 
     // prepare matrices to apply to newly created primitives
@@ -1020,9 +1154,9 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
 
 //////////////////////////////////////////////////////////////////////////////
 // timing generators
-#define ENDLESS_LOOP	(0xffffffff)
-#define ENDLESS_TIME	((double)0xffffffff)
-#define PIXEL_DPI		(96.0)
+#define ENDLESS_LOOP    (0xffffffff)
+#define ENDLESS_TIME    ((double)0xffffffff)
+#define PIXEL_DPI       (96.0)
 
 void SdrTextObj::impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const
 {

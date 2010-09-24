@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,94 +35,94 @@
 
 class Outliner;
 
-//	SvxOutlinerForwarder - SvxTextForwarder fuer Outliner
+//  SvxOutlinerForwarder - SvxTextForwarder fuer Outliner
 
 class EDITENG_DLLPUBLIC SvxOutlinerForwarder : public SvxTextForwarder
 {
 private:
-    Outliner&			rOutliner;
-    BOOL				bOutlinerText;
+    Outliner&           rOutliner;
+    BOOL                bOutlinerText;
 
     /** this pointer may be null or point to an item set for the attribs of
         the selection maAttribsSelection */
     mutable SfxItemSet* mpAttribsCache;
 
     /** if we have a chached attribute item set, this is the selection of it */
-    mutable ESelection	maAttribCacheSelection;
+    mutable ESelection  maAttribCacheSelection;
 
     /** this pointer may be null or point to an item set for the paragraph
         mnParaAttribsCache */
-    mutable SfxItemSet*	mpParaAttribsCache;
+    mutable SfxItemSet* mpParaAttribsCache;
 
     /** if we have a cached para attribute item set, this is the paragraph of it */
-    mutable USHORT		mnParaAttribsCache;
+    mutable USHORT      mnParaAttribsCache;
 
 public:
                         SvxOutlinerForwarder( Outliner& rOutl, BOOL bOutlText = FALSE );
-    virtual				~SvxOutlinerForwarder();
+    virtual             ~SvxOutlinerForwarder();
 
-    virtual USHORT		GetParagraphCount() const;
-    virtual USHORT		GetTextLen( USHORT nParagraph ) const;
-    virtual String		GetText( const ESelection& rSel ) const;
-    virtual SfxItemSet	GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib = 0 ) const;
-    virtual	SfxItemSet	GetParaAttribs( USHORT nPara ) const;
-    virtual void		SetParaAttribs( USHORT nPara, const SfxItemSet& rSet );
+    virtual USHORT      GetParagraphCount() const;
+    virtual USHORT      GetTextLen( USHORT nParagraph ) const;
+    virtual String      GetText( const ESelection& rSel ) const;
+    virtual SfxItemSet  GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib = 0 ) const;
+    virtual SfxItemSet  GetParaAttribs( USHORT nPara ) const;
+    virtual void        SetParaAttribs( USHORT nPara, const SfxItemSet& rSet );
     virtual void        RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
-    virtual void		GetPortions( USHORT nPara, SvUShorts& rList ) const;
+    virtual void        GetPortions( USHORT nPara, SvUShorts& rList ) const;
 
-    virtual USHORT		GetItemState( const ESelection& rSel, USHORT nWhich ) const;
-    virtual USHORT		GetItemState( USHORT nPara, USHORT nWhich ) const;
+    virtual USHORT      GetItemState( const ESelection& rSel, USHORT nWhich ) const;
+    virtual USHORT      GetItemState( USHORT nPara, USHORT nWhich ) const;
 
-    virtual void		QuickInsertText( const String& rText, const ESelection& rSel );
-    virtual void		QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
-    virtual void		QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
-    virtual void		QuickInsertLineBreak( const ESelection& rSel );
+    virtual void        QuickInsertText( const String& rText, const ESelection& rSel );
+    virtual void        QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
+    virtual void        QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
+    virtual void        QuickInsertLineBreak( const ESelection& rSel );
 
     virtual SfxItemPool* GetPool() const;
 
     virtual XubString    CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor );
-    virtual void 	     FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos );
-    
-    virtual BOOL		IsValid() const;
+    virtual void         FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos );
 
-    Outliner&			GetOutliner() const { return rOutliner; }
+    virtual BOOL        IsValid() const;
 
-    virtual LanguageType 	GetLanguage( USHORT, USHORT ) const;
-    virtual USHORT			GetFieldCount( USHORT nPara ) const;
-    virtual EFieldInfo		GetFieldInfo( USHORT nPara, USHORT nField ) const;
+    Outliner&           GetOutliner() const { return rOutliner; }
+
+    virtual LanguageType    GetLanguage( USHORT, USHORT ) const;
+    virtual USHORT          GetFieldCount( USHORT nPara ) const;
+    virtual EFieldInfo      GetFieldInfo( USHORT nPara, USHORT nField ) const;
     virtual EBulletInfo     GetBulletInfo( USHORT nPara ) const;
-    virtual Rectangle		GetCharBounds( USHORT nPara, USHORT nIndex ) const;
-    virtual Rectangle		GetParaBounds( USHORT nPara ) const;
-    virtual MapMode			GetMapMode() const;
-    virtual OutputDevice*	GetRefDevice() const;
-    virtual sal_Bool		GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const;
-    virtual sal_Bool		GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const;
-    virtual sal_Bool 		GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const;
-    virtual USHORT			GetLineCount( USHORT nPara ) const;
-    virtual USHORT			GetLineLen( USHORT nPara, USHORT nLine ) const;
+    virtual Rectangle       GetCharBounds( USHORT nPara, USHORT nIndex ) const;
+    virtual Rectangle       GetParaBounds( USHORT nPara ) const;
+    virtual MapMode         GetMapMode() const;
+    virtual OutputDevice*   GetRefDevice() const;
+    virtual sal_Bool        GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const;
+    virtual sal_Bool        GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const;
+    virtual sal_Bool        GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const;
+    virtual USHORT          GetLineCount( USHORT nPara ) const;
+    virtual USHORT          GetLineLen( USHORT nPara, USHORT nLine ) const;
     virtual void            GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nPara, USHORT nLine ) const;
     virtual USHORT          GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const;
-    virtual sal_Bool		Delete( const ESelection& );
-    virtual sal_Bool		InsertText( const String&, const ESelection& );
-    virtual sal_Bool		QuickFormatDoc( BOOL bFull=FALSE );
-    virtual sal_Int16		GetDepth( USHORT nPara ) const;
-    virtual sal_Bool		SetDepth( USHORT nPara, sal_Int16 nNewDepth );
+    virtual sal_Bool        Delete( const ESelection& );
+    virtual sal_Bool        InsertText( const String&, const ESelection& );
+    virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE );
+    virtual sal_Int16       GetDepth( USHORT nPara ) const;
+    virtual sal_Bool        SetDepth( USHORT nPara, sal_Int16 nNewDepth );
     virtual sal_Int16       GetNumberingStartValue( sal_uInt16 nPara );
     virtual void            SetNumberingStartValue( sal_uInt16 nPara, sal_Int16 nNumberingStartValue );
 
-    virtual sal_Bool        IsParaIsNumberingRestart( sal_uInt16 nPara );   
+    virtual sal_Bool        IsParaIsNumberingRestart( sal_uInt16 nPara );
     virtual void            SetParaIsNumberingRestart( sal_uInt16 nPara, sal_Bool bParaIsNumberingRestart );
 
     /* this method flushes internal caches for this forwarder */
-    void				flushCache();
-    
+    void                flushCache();
+
     virtual const SfxItemSet*   GetEmptyItemSetPtr();
 
     // implementation functions for XParagraphAppend and XTextPortionAppend
     virtual void        AppendParagraph();
     virtual xub_StrLen  AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet &rSet );
     //XTextCopy
-    virtual void        CopyText(const SvxTextForwarder& rSource); 
+    virtual void        CopyText(const SvxTextForwarder& rSource);
 };
 
 #endif

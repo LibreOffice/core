@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,33 +62,33 @@ public:
     sal_UCS4        GetSelectCharacter() const;
 
     Link            GetDoubleClickHdl() const { return aDoubleClkHdl; }
-    void			SetDoubleClickHdl( const Link& rLink ) { aDoubleClkHdl = rLink; }
+    void            SetDoubleClickHdl( const Link& rLink ) { aDoubleClkHdl = rLink; }
     Link            GetSelectHdl() const { return aSelectHdl; }
     void            SetSelectHdl( const Link& rHdl ) { aSelectHdl = rHdl; }
     Link            GetHighlightHdl() const { return aHighHdl; }
-    void            SetHighlightHdl( const Link& rHdl )	{ aHighHdl = rHdl; }
+    void            SetHighlightHdl( const Link& rHdl ) { aHighHdl = rHdl; }
     Link            GetPreSelectHdl() const { return aHighHdl; }
-    void            SetPreSelectHdl( const Link& rHdl )	{ aPreSelectHdl = rHdl; }
+    void            SetPreSelectHdl( const Link& rHdl ) { aPreSelectHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
 
 #ifdef _SVX_CHARMAP_CXX_
-    ::svx::SvxShowCharSetItem*	ImplGetItem( int _nPos );
-    int							FirstInView( void) const;
-    int							LastInView( void) const;
-    int							PixelToMapIndex( const Point&) const;
-    void						SelectIndex( int index, BOOL bFocus = FALSE );
-    void						DeSelect();
-    inline sal_Bool				IsSelected(USHORT _nPos) const { return _nPos == nSelectedIndex; }
-    inline USHORT				GetSelectIndexId() const { return sal::static_int_cast<USHORT>(nSelectedIndex); }
-    USHORT						GetRowPos(USHORT _nPos) const;
-    USHORT						GetColumnPos(USHORT _nPos) const;
+    ::svx::SvxShowCharSetItem*  ImplGetItem( int _nPos );
+    int                         FirstInView( void) const;
+    int                         LastInView( void) const;
+    int                         PixelToMapIndex( const Point&) const;
+    void                        SelectIndex( int index, BOOL bFocus = FALSE );
+    void                        DeSelect();
+    inline sal_Bool             IsSelected(USHORT _nPos) const { return _nPos == nSelectedIndex; }
+    inline USHORT               GetSelectIndexId() const { return sal::static_int_cast<USHORT>(nSelectedIndex); }
+    USHORT                      GetRowPos(USHORT _nPos) const;
+    USHORT                      GetColumnPos(USHORT _nPos) const;
 
-    void						ImplFireAccessibleEvent( short nEventId,
+    void                        ImplFireAccessibleEvent( short nEventId,
                                                          const ::com::sun::star::uno::Any& rOldValue,
                                                          const ::com::sun::star::uno::Any& rNewValue );
-    ScrollBar*					getScrollBar();
-    void						ReleaseAccessible();
-    sal_Int32					getMaxCharCount() const;
+    ScrollBar*                  getScrollBar();
+    void                        ReleaseAccessible();
+    sal_Int32                   getMaxCharCount() const;
 #endif // _SVX_CHARMAP_CXX_
 
 protected:
@@ -100,8 +100,8 @@ protected:
     virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual void    GetFocus();
     virtual void    LoseFocus();
-    virtual void	StateChanged( StateChangedType nStateChange );
-    virtual void	DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    StateChanged( StateChangedType nStateChange );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
@@ -110,18 +110,18 @@ protected:
 
 private:
     typedef ::std::map<sal_Int32, ::svx::SvxShowCharSetItem*> ItemsMap;
-    ItemsMap		m_aItems;
+    ItemsMap        m_aItems;
     Link            aDoubleClkHdl;
     Link            aSelectHdl;
     Link            aHighHdl;
-    Link			aPreSelectHdl;
-    ::svx::SvxShowCharSetVirtualAcc*	m_pAccessible;
+    Link            aPreSelectHdl;
+    ::svx::SvxShowCharSetVirtualAcc*    m_pAccessible;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xAccessible;
-    long	        nX;
-    long			nY;
+    long            nX;
+    long            nY;
     BOOL            bDrag;
 
-    sal_Int32		nSelectedIndex;
+    sal_Int32       nSelectedIndex;
 
     FontCharMap     maFontCharMap;
     ScrollBar       aVscrollSB;

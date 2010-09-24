@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,38 +53,38 @@
 #include "op.h"
 
 // Konstanten ------------------------------------------------------------
-const UINT16		nBOF = 0x0000;
+const UINT16        nBOF = 0x0000;
 
 
 
 // externe Variablen -----------------------------------------------------
-extern WKTYP		eTyp;	// Typ der gerade in bearbeitung befindlichen Datei
-WKTYP				eTyp;
+extern WKTYP        eTyp;   // Typ der gerade in bearbeitung befindlichen Datei
+WKTYP               eTyp;
 
-extern BOOL			bEOF;			// zeigt Ende der Datei
-BOOL				bEOF;
+extern BOOL         bEOF;           // zeigt Ende der Datei
+BOOL                bEOF;
 
-extern CharSet		eCharNach;		// Zeichenkonvertierung von->nach
-CharSet				eCharNach;
+extern CharSet      eCharNach;      // Zeichenkonvertierung von->nach
+CharSet             eCharNach;
 
-extern CharSet		eCharVon;
-CharSet				eCharVon;
+extern CharSet      eCharVon;
+CharSet             eCharVon;
 
-extern ScDocument*	pDoc;			// Aufhaenger zum Dokumentzugriff
-ScDocument*			pDoc;
+extern ScDocument*  pDoc;           // Aufhaenger zum Dokumentzugriff
+ScDocument*         pDoc;
 
 
-extern sal_Char*	pPuffer;		// -> memory.cxx
-extern sal_Char*	pDummy1;		// -> memory.cxx
+extern sal_Char*    pPuffer;        // -> memory.cxx
+extern sal_Char*    pDummy1;        // -> memory.cxx
 
-extern OPCODE_FKT	pOpFkt[ FKT_LIMIT ];
+extern OPCODE_FKT   pOpFkt[ FKT_LIMIT ];
                                     // -> optab.cxx, Tabelle moeglicher Opcodes
-extern OPCODE_FKT	pOpFkt123[ FKT_LIMIT123 ];
+extern OPCODE_FKT   pOpFkt123[ FKT_LIMIT123 ];
                                     // -> optab.cxx, Table of possible Opcodes
 
-extern long			nDateiLaenge;	// -> datei.cpp, ...der gerade offenen Datei
+extern long         nDateiLaenge;   // -> datei.cpp, ...der gerade offenen Datei
 
-LOTUS_ROOT*			pLotusRoot = NULL;
+LOTUS_ROOT*         pLotusRoot = NULL;
 
 
 std::map<UINT16, ScPatternAttr> aLotusPatternPool;
@@ -107,9 +107,9 @@ generate_Opcodes( SvStream& aStream, ScDocument& rDoc,
         pOps = pOpFkt123;
         nOps = FKT_LIMIT123;
         break;
-        case eWK3:		return eERR_NI;
-        case eWK_Error:	return eERR_FORMAT;
-        default:		return eERR_UNKN_WK;
+        case eWK3:      return eERR_NI;
+        case eWK_Error: return eERR_FORMAT;
+        default:        return eERR_UNKN_WK;
      }
 
     // #i76299# seems that SvStream::IsEof() does not work correctly
@@ -167,7 +167,7 @@ WKTYP ScanVersion( SvStream& aStream )
 {
     // PREC:    pWKDatei:   Zeiger auf offene Datei
     // POST:    return:     Typ der Datei
-    UINT16			nOpcode, nVersNr, nRecLen;
+    UINT16          nOpcode, nVersNr, nRecLen;
 
     // erstes Byte muss wegen BOF zwingend 0 sein!
     aStream >> nOpcode;
@@ -197,7 +197,7 @@ WKTYP ScanVersion( SvStream& aStream )
             aStream >> nVersNr;
             if( aStream.IsEof() ) return eWK_Error;
             if( nVersNr == 0x0004 && nRecLen == 26 )
-            {	// 4 Bytes von 26 gelesen->22 ueberlesen
+            {   // 4 Bytes von 26 gelesen->22 ueberlesen
                 aStream.Read( pDummy1, 22 );
                 return eWK3;
             }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ class HierarchyEntry
     ::rtl::OUString m_aServiceSpecifier;
     ::rtl::OUString m_aName;
     ::rtl::OUString m_aPath;
-    ::osl::Mutex 	m_aMutex;
+    ::osl::Mutex    m_aMutex;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
     ::com::sun::star::uno::Reference<

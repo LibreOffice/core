@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,9 @@ namespace canvas
        be XInterface - reference holders to a Sprite must be able to
        control lifetime of reference target)
      */
-    
+
     /** Helper interface to connect SpriteCanvas with various
-        sprite implementations. 
+        sprite implementations.
 
         This interface should be implemented from every sprite class,
         as it provides essential repaint and update area facilitates.
@@ -109,8 +109,8 @@ namespace canvas
         {
             const double nPrioL( rLHS->getPriority() );
             const double nPrioR( rRHS->getPriority() );
-            
-            // if prios are equal, tie-break on ptr value   
+
+            // if prios are equal, tie-break on ptr value
             return nPrioL == nPrioR ? rLHS.get() < rRHS.get() : nPrioL < nPrioR;
         }
     };

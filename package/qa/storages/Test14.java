@@ -33,7 +33,7 @@ public class Test14 implements StorageTest {
         for ( int nInd = 0; nInd < 4; ++nInd, aStreamPrefix += "SubStorage" + nInd )
             if ( !testForPath( aStreamPrefix ) )
                 return false;
-        
+
         return true;
     }
 
@@ -51,7 +51,7 @@ public class Test14 implements StorageTest {
                 m_aTestHelper.Error( "No valid temporary file was created!" );
                 return false;
             }
-    
+
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
@@ -80,7 +80,7 @@ public class Test14 implements StorageTest {
             // and commit
             if ( !m_aTestHelper.WriteBytesToEncrStreamH( xTempFileStorage, aSubStream2Path, "MediaType2", false, pBytes2, sPass2, true ) )
                 return false;
-    
+
             // open a new substream hierarchically, set "MediaType" and "Compressed" properties to it, write some bytes
             // and don't commit
             if ( !m_aTestHelper.WriteBytesToEncrStreamH( xTempFileStorage, aSubStream3Path, "MediaType2", false, pBytes2, sPass2, false ) )
@@ -182,7 +182,7 @@ public class Test14 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 
 }
 

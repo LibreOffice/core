@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@ public:
     TYPEINFO();
 
                 SwDrawFormShell(SwView &rView);
-    virtual		~SwDrawFormShell();
+    virtual     ~SwDrawFormShell();
 
-    void		Execute(SfxRequest &);
-    void		GetState(SfxItemSet &);
+    void        Execute(SfxRequest &);
+    void        GetState(SfxItemSet &);
 };
 
 #endif

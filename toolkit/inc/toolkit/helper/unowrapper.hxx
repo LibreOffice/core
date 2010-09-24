@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@
 #include <vcl/unowrap.hxx>
 #include <vcl/window.hxx>
 
-//	----------------------------------------------------
-//	class UnoWrapper
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class UnoWrapper
+//  ----------------------------------------------------
 
 class UnoWrapper : public UnoWrapperBase
 {
@@ -47,39 +47,39 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>  mxToolkit;
     ::toolkit::AccessibilityClient                                      maAccessibleFactoryAccess;
 
-public:	
+public:
     UnoWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>& rxToolkit );
-    
+
     virtual void        Destroy();
-    
+
     // Toolkit
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> GetVCLToolkit();
 
     // Graphics
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics>	CreateGraphics( OutputDevice* pOutDev );
-    virtual void				ReleaseAllGraphics( OutputDevice* pOutDev );
-    
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> CreateGraphics( OutputDevice* pOutDev );
+    virtual void                ReleaseAllGraphics( OutputDevice* pOutDev );
+
     // Window
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( Window* pWindow, BOOL bCreate );
-    virtual void				SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xIFace );
+    virtual void                SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xIFace );
 
-    void				WindowDestroyed( Window* pWindow );
-    void 				WindowEvent_Move( Window* pWindow );
-    void 				WindowEvent_Resize( Window* pWindow );
-    void 				WindowEvent_Show( Window* pWindow, BOOL bShow );
-    void 				WindowEvent_Close( Window* pWindow );
-    void 				WindowEvent_Minimize( Window* pWindow );
-    void 				WindowEvent_Normalize( Window* pWindow );
-    void 				WindowEvent_Activate( Window* pWindow, BOOL bActivated );
-    void 				WindowEvent_MouseButtonUp( Window* pWindow, const MouseEvent& rEvt );
-    void 				WindowEvent_MouseButtonDown( Window* pWindow, const MouseEvent& rEvt );
-    void 				WindowEvent_MouseMove( Window* pWindow, const MouseEvent& rEvt );
-    void 				WindowEvent_Command( Window* pWindow, const CommandEvent& rCEvt );
-    void 				WindowEvent_KeyInput( Window* pWindow, const KeyEvent& rEvt );
-    void 				WindowEvent_KeyUp( Window* pWindow, const KeyEvent& rEvt );
-    void 				WindowEvent_GetFocus( Window* pWindow );
-    void 				WindowEvent_LoseFocus( Window* pWindow );
-    void 				WindowEvent_Paint( Window* pWindow, const Rectangle& rRect );
+    void                WindowDestroyed( Window* pWindow );
+    void                WindowEvent_Move( Window* pWindow );
+    void                WindowEvent_Resize( Window* pWindow );
+    void                WindowEvent_Show( Window* pWindow, BOOL bShow );
+    void                WindowEvent_Close( Window* pWindow );
+    void                WindowEvent_Minimize( Window* pWindow );
+    void                WindowEvent_Normalize( Window* pWindow );
+    void                WindowEvent_Activate( Window* pWindow, BOOL bActivated );
+    void                WindowEvent_MouseButtonUp( Window* pWindow, const MouseEvent& rEvt );
+    void                WindowEvent_MouseButtonDown( Window* pWindow, const MouseEvent& rEvt );
+    void                WindowEvent_MouseMove( Window* pWindow, const MouseEvent& rEvt );
+    void                WindowEvent_Command( Window* pWindow, const CommandEvent& rCEvt );
+    void                WindowEvent_KeyInput( Window* pWindow, const KeyEvent& rEvt );
+    void                WindowEvent_KeyUp( Window* pWindow, const KeyEvent& rEvt );
+    void                WindowEvent_GetFocus( Window* pWindow );
+    void                WindowEvent_LoseFocus( Window* pWindow );
+    void                WindowEvent_Paint( Window* pWindow, const Rectangle& rRect );
 
     // Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >

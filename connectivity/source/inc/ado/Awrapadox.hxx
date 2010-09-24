@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #ifndef __User_FWD_DEFINED__
 #define __User_FWD_DEFINED__
 typedef struct _ADOUser User;
-#endif 	/* __User_FWD_DEFINED__ */
+#endif  /* __User_FWD_DEFINED__ */
 
 #ifndef __Group_FWD_DEFINED__
 #define __Group_FWD_DEFINED__
@@ -43,7 +43,7 @@ typedef struct _ADOGroup Group;
 #ifndef __Column_FWD_DEFINED__
 #define __Column_FWD_DEFINED__
 typedef struct _ADOColumn Column;
-#endif 	/* __Column_FWD_DEFINED__ */
+#endif  /* __Column_FWD_DEFINED__ */
 
 #ifndef __Index_FWD_DEFINED__
 #define __Index_FWD_DEFINED__
@@ -53,12 +53,12 @@ typedef struct _ADOIndex Index;
 #ifndef __Key_FWD_DEFINED__
 #define __Key_FWD_DEFINED__
 typedef struct _ADOKey Key;
-#endif 	/* __Key_FWD_DEFINED__ */
+#endif  /* __Key_FWD_DEFINED__ */
 
 #ifndef __Table_FWD_DEFINED__
 #define __Table_FWD_DEFINED__
 typedef struct _ADOTable Table;
-#endif 	/* __Table_FWD_DEFINED__ */
+#endif  /* __Table_FWD_DEFINED__ */
 
 
 #include "ado_pre_sys_include.h"
@@ -84,7 +84,7 @@ namespace connectivity
         class WpADOView : public WpOLEBase<ADOView>
         {
         public:
-            WpADOView(ADOView* pInt=NULL)	:	WpOLEBase<ADOView>(pInt){}
+            WpADOView(ADOView* pInt=NULL)   :   WpOLEBase<ADOView>(pInt){}
             WpADOView(const WpADOView& rhs){operator=(rhs);}
 
             inline WpADOView& operator=(const WpADOView& rhs)
@@ -98,7 +98,7 @@ namespace connectivity
         class WpADOGroup : public WpOLEBase<ADOGroup>
         {
         public:
-            WpADOGroup(ADOGroup* pInt=NULL)	:	WpOLEBase<ADOGroup>(pInt){}
+            WpADOGroup(ADOGroup* pInt=NULL) :   WpOLEBase<ADOGroup>(pInt){}
             WpADOGroup(const WpADOGroup& rhs){operator=(rhs);}
 
             inline WpADOGroup& operator=(const WpADOGroup& rhs)
@@ -122,7 +122,7 @@ namespace connectivity
         class WpADOUser : public WpOLEBase<_ADOUser>
         {
         public:
-            WpADOUser(_ADOUser* pInt=NULL)	:	WpOLEBase<_ADOUser>(pInt){}
+            WpADOUser(_ADOUser* pInt=NULL)  :   WpOLEBase<_ADOUser>(pInt){}
             WpADOUser(const WpADOUser& rhs){operator=(rhs);}
 
             inline WpADOUser& operator=(const WpADOUser& rhs)

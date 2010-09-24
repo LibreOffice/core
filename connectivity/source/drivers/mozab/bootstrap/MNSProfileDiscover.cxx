@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,7 +116,7 @@ namespace connectivity
             profileName = aProfileName;
             profilePath = aProfilePath;
         }
-        ::rtl::OUString ProfileStruct::getProfilePath() 
+        ::rtl::OUString ProfileStruct::getProfilePath()
         {
 #ifdef MINIMAL_PROFILEDISCOVER
             return profilePath;
@@ -149,7 +149,7 @@ namespace connectivity
             LoadMozillaProfiles();
 #endif
             sal_Int32 count=static_cast<sal_Int32>(m_ProductProfileList[MozillaProductType_Mozilla].mProfileList.size());
-            
+
             //load thunderbird profiles to m_ProductProfileList
             count += LoadXPToolkitProfiles(MozillaProductType_Thunderbird);
 
@@ -186,7 +186,7 @@ namespace connectivity
 
             nsCOMPtr<nsIEnumerator> enumKeys;
             nsRegistryKey profilesTreeKey;
-            
+
             //step 3:Enumerator it
             rv = registry->GetKey(nsIRegistry::Common,
                         // PRUnichar != sal_Unicode in mingw
@@ -293,7 +293,7 @@ namespace connectivity
                 ::rtl::OUString profilePath;
                 ::rtl::OUString sIsRelative;
                 ::rtl::OUString sIsDefault;
-                
+
                 for(NameValueList::iterator itor=aSection->lList.begin();
                     itor != aSection->lList.end();
                     itor++)
@@ -323,7 +323,7 @@ namespace connectivity
                     {
                         isRelative = sIsRelative.toInt32();
                     }
-                    
+
 #ifndef MINIMAL_PROFILEDISCOVER
                     nsCOMPtr<nsILocalFile> rootDir;
                     rv = NS_NewLocalFile(EmptyString(), PR_TRUE,
@@ -332,7 +332,7 @@ namespace connectivity
 
                     OString sPath = OUStringToOString(profilePath, RTL_TEXTENCODING_UTF8);
                     nsCAutoString filePath(sPath.getStr());
-    
+
                     if (isRelative) {
                         // PRUnichar != sal_Unicode in mingw
                         nsAutoString registryDir( reinterpret_cast_mingw_only<const PRUnichar *>(regDir.getStr()) );
@@ -365,7 +365,7 @@ namespace connectivity
                         m_Product.mCurrentProfileName = profileName;
 
                 }
-            
+
             }
             return static_cast< ::sal_Int32 >(m_Product.mProfileList.size());
         }
@@ -374,7 +374,7 @@ namespace connectivity
         {
             sal_Int32 index=product;
             ProductStruct &m_Product = m_ProductProfileList[index];
-            if (!m_Product.mProfileList.size() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end()) 
+            if (!m_Product.mProfileList.size() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end())
             {
                 //Profile not found
                 return ::rtl::OUString();
@@ -403,7 +403,7 @@ namespace connectivity
                 list[i] = aProfile->getProfileName();
                 i++;
             }
-            
+
             return static_cast< ::sal_Int32 >(m_Product.mProfileList.size());
         }
 
@@ -431,11 +431,11 @@ namespace connectivity
             nsAutoString path;
             aFile->GetPath(path);
             rv = aFile->Exists(bExist);
-            NS_ENSURE_SUCCESS(rv, rv); 
+            NS_ENSURE_SUCCESS(rv, rv);
             if (!*bExist)
             {
                 rv = aFile->IsSymlink(bExist);
-                NS_ENSURE_SUCCESS(rv, rv); 
+                NS_ENSURE_SUCCESS(rv, rv);
             }
             return rv;
         }
@@ -456,29 +456,29 @@ namespace connectivity
 
             PRBool isDir;
             rv = aFile->IsDirectory(&isDir);
-            NS_ENSURE_SUCCESS(rv, rv); 
+            NS_ENSURE_SUCCESS(rv, rv);
             if (!isDir)
                 return NS_ERROR_FILE_NOT_DIRECTORY;
 
             nsCOMPtr<nsILocalFile> lockFile;
             rv = aFile->Clone((nsIFile **)((void **)getter_AddRefs(lockFile)));
-            NS_ENSURE_SUCCESS(rv, rv); 
+            NS_ENSURE_SUCCESS(rv, rv);
 
             rv = lockFile->Append(LOCKFILE_NAME);
-            NS_ENSURE_SUCCESS(rv, rv); 
+            NS_ENSURE_SUCCESS(rv, rv);
             PRBool nExist=PR_FALSE;
             rv = isExistFileOrSymlink(lockFile,&nExist);
-            NS_ENSURE_SUCCESS(rv, rv); 
+            NS_ENSURE_SUCCESS(rv, rv);
             if (!nExist) // Check OLD_LOCKFILE_NAME
             {
                 nsCOMPtr<nsILocalFile> oldlockFile;
                 rv = aFile->Clone((nsIFile **)((void **)getter_AddRefs(oldlockFile)));
-                NS_ENSURE_SUCCESS(rv, rv); 
-            
+                NS_ENSURE_SUCCESS(rv, rv);
+
                 rv = oldlockFile->Append(OLD_LOCKFILE_NAME);
-                NS_ENSURE_SUCCESS(rv, rv); 
+                NS_ENSURE_SUCCESS(rv, rv);
                 rv = isExistFileOrSymlink(oldlockFile,&nExist);
-                NS_ENSURE_SUCCESS(rv, rv); 
+                NS_ENSURE_SUCCESS(rv, rv);
             }
             return nExist;
         }
@@ -506,7 +506,7 @@ namespace connectivity
 
             PRBool exists = PR_FALSE;
             rv = localFile->Exists(&exists);
-            NS_ENSURE_SUCCESS(rv, sal_True); 
+            NS_ENSURE_SUCCESS(rv, sal_True);
             if (!exists)
                 return sal_True;
 
@@ -522,7 +522,7 @@ namespace connectivity
         {
             sal_Int32 index=product;
             ProductStruct &m_Product = m_ProductProfileList[index];
-            if (!m_Product.mProfileList.size() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end()) 
+            if (!m_Product.mProfileList.size() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end())
             {
                 return sal_False;
             }

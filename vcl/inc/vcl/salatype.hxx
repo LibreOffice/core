@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,12 +36,12 @@
 
 // Derzeit doppelt und in apptypes.hxx auch vorhanden
 
-#define INPUT_MOUSE 				0x0001
-#define INPUT_KEYBOARD				0x0002
-#define INPUT_PAINT 				0x0004
-#define INPUT_TIMER 				0x0008
-#define INPUT_OTHER 				0x0010
-#define INPUT_MOUSEANDKEYBOARD		(INPUT_MOUSE | INPUT_KEYBOARD)
-#define INPUT_ANY					(INPUT_MOUSEANDKEYBOARD | INPUT_PAINT | INPUT_TIMER | INPUT_OTHER)
+#define INPUT_MOUSE                 0x0001
+#define INPUT_KEYBOARD              0x0002
+#define INPUT_PAINT                 0x0004
+#define INPUT_TIMER                 0x0008
+#define INPUT_OTHER                 0x0010
+#define INPUT_MOUSEANDKEYBOARD      (INPUT_MOUSE | INPUT_KEYBOARD)
+#define INPUT_ANY                   (INPUT_MOUSEANDKEYBOARD | INPUT_PAINT | INPUT_TIMER | INPUT_OTHER)
 
 #endif // _SV_SALATYPE_HXX

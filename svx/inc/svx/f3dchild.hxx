@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,5 +47,5 @@ class SVX_DLLPUBLIC Svx3DChildWindow : public SfxChildWindow
     SFX_DECL_CHILDWINDOW(Svx3DChildWindow);
 };
 
-#endif		// _SVX_F3DCHILD_HXX
+#endif      // _SVX_F3DCHILD_HXX
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,18 +51,18 @@ namespace dbaui
     class DlgSize : public ModalDialog
     {
     private:
-        sal_Int32		m_nPrevValue, m_nStandard;
-        void			SetValue( sal_Int32 nVal );
+        sal_Int32       m_nPrevValue, m_nStandard;
+        void            SetValue( sal_Int32 nVal );
 
     protected:
         DECL_LINK( CbClickHdl, Button * );
 
-        FixedText		aFT_VALUE;
-        MetricField		aMF_VALUE;
-        CheckBox		aCB_STANDARD;
-        OKButton		aPB_OK;
-        CancelButton	aPB_CANCEL;
-        HelpButton		aPB_HELP;
+        FixedText       aFT_VALUE;
+        MetricField     aMF_VALUE;
+        CheckBox        aCB_STANDARD;
+        OKButton        aPB_OK;
+        CancelButton    aPB_CANCEL;
+        HelpButton      aPB_HELP;
 
     public:
         DlgSize( Window * pParent, sal_Int32 nVal, BOOL bRow, sal_Int32 _nAlternativeStandard = -1 );
@@ -71,7 +71,7 @@ namespace dbaui
         sal_Int32 GetValue();
     };
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_DLGSIZE_HXX

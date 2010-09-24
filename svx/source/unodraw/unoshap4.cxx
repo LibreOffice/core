@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -254,7 +254,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
     default:
         return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
     }
-    
+
     throw IllegalArgumentException();
 }
 
@@ -333,7 +333,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
         {
             MapMode aMapMode( MAP_100TH_MM ); // the API uses this map mode
             Size aTmp = ((SdrOle2Obj*)mpObj.get())->GetOrigObjSize( &aMapMode ); // get the size in the requested map mode
-            aVisArea = awt::Rectangle( 0, 0, aTmp.Width(), aTmp.Height() ); 
+            aVisArea = awt::Rectangle( 0, 0, aTmp.Width(), aTmp.Height() );
         }
 
         rValue <<= aVisArea;
@@ -854,7 +854,7 @@ bool SvxFrameShape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sf
 ***********************************************************************/
 
 SvxMediaShape::SvxMediaShape( SdrObject* pObj ) throw()
-:	SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_MEDIA), aSvxMapProvider.GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_MEDIA), aSvxMapProvider.GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MediaShape" ) ) );
 }

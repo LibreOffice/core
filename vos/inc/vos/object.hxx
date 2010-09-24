@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,11 @@
 #ifndef _VOS_OBJECT_HXX_
 #define _VOS_OBJECT_HXX_
 
-#	include <vos/types.hxx>
-#	include <vos/macros.hxx>
+#   include <vos/types.hxx>
+#   include <vos/macros.hxx>
 
 namespace vos
-{     
+{
 
 // ***************************************
 // Object super class
@@ -59,15 +59,15 @@ public:
     // compiler errors instead of unexpected behaviour if you pass objects
     // by value or assign objects.
 private:
-    OObject(const OObject& objectSrc);			// no implementation
-    void SAL_CALL operator=(const OObject& objectSrc);	// no implementation
+    OObject(const OObject& objectSrc);          // no implementation
+    void SAL_CALL operator=(const OObject& objectSrc);  // no implementation
 
 public:
     virtual ~OObject();
 
 public:
 
-    /** Define private new and delete operator because of compiler bug, 
+    /** Define private new and delete operator because of compiler bug,
         when allocating and deleteing a exported class
     */
     void* SAL_CALL operator new(::size_t size);
@@ -99,11 +99,11 @@ public:
 struct OCreateParam
 {
     sal_uInt32 m_Size;
-    void*	 m_pParam;
+    void*    m_pParam;
 
     ///
     OCreateParam(void *pParam)
-    {	
+    {
         m_Size = sizeof(OCreateParam);
         m_pParam = pParam;
     }
@@ -116,17 +116,17 @@ struct OClassInfo
     ///
     const sal_Char  *m_pClassName;
     ///
-    sal_Int32			 m_nObjectSize;
+    sal_Int32            m_nObjectSize;
     /// schema number of the loaded class
-    sal_uInt32	 m_wSchema;				
+    sal_uInt32   m_wSchema;
 
     ///
-    OObject* (SAL_CALL * m_pfnCreateObject)(const OCreateParam&);	// NULL => abstract class
+    OObject* (SAL_CALL * m_pfnCreateObject)(const OCreateParam&);   // NULL => abstract class
 
     /// linked list of registered classes
     const OClassInfo* m_pBaseClass;
     /// linked list of registered classes
-    const OClassInfo* m_pNextClass;			
+    const OClassInfo* m_pNextClass;
 
     ///
     OObject* SAL_CALL createObject(const OCreateParam& rParam) const;
@@ -140,7 +140,7 @@ struct OClassInfo
     ///
     OClassInfo(const sal_Char *pClassName, sal_Int32 ObjectSize,
                const OClassInfo* pBaseClass = NULL, sal_uInt32 Schema = (sal_uInt32)-1,
-               OObject* (SAL_CALL * fnCreateObject)(const OCreateParam&) = NULL); 
+               OObject* (SAL_CALL * fnCreateObject)(const OCreateParam&) = NULL);
 };
 
 // *****************************************************************
@@ -165,7 +165,7 @@ struct VOS_CLASSINIT
         { return (VOS_CLASSINFO(class_name)); } \
     const VOS_NAMESPACE(OClassInfo, vos)& SAL_CALL class_name::classInfo() \
         { return (__ClassInfo__); }
-    
+
 #define VOS_DECLARE_CLASSINFO(class_name) \
 public: \
     static const VOS_NAMESPACE(VOS_CLASSINIT, vos) __ClassInit__; \

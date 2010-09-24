@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,11 +65,11 @@ Size BarGeometryResources::GetSizePixel() const
     long nHeight = m_aLB_Geometry.GetPosPixel().Y()
         - m_aFT_Geometry.GetPosPixel().Y();
     nHeight += m_aLB_Geometry.GetSizePixel().Height();
-    
+
     long nWidth = m_aLB_Geometry.GetSizePixel().Width();
     if( nWidth < m_aFT_Geometry.GetSizePixel().Width() )
         nWidth = m_aFT_Geometry.GetSizePixel().Width();
-        
+
     return Size( nHeight, nWidth );
 }
 BarGeometryResources::~BarGeometryResources()

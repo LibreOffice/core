@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ namespace
 {
     static OString getHttpPostHeader(OString path, sal_Int32 length)
     {
-        OStringBuffer result = 
+        OStringBuffer result =
             "POST " + path + " HTTP/1.0\r\n"
             "Content-Type: text/xml; charset=\"utf-8\"\r\n"
             "Content-Length: ";
@@ -73,7 +73,7 @@ namespace oooimprovement
         : m_ServiceFactory(sf)
         , m_Url(url)
     { }
-    
+
     void SoapSender::send(const SoapRequest& request) const
     {
         Reference<XTempFile> temp_file(
@@ -85,19 +85,19 @@ namespace oooimprovement
         Reference<XURLTransformer> url_trans(
             m_ServiceFactory->createInstance(OUString::createFromAscii("com.sun.star.util.URLTransformer")),
             UNO_QUERY_THROW);
-    
-        // writing request to tempfile 
+
+        // writing request to tempfile
         {
             Reference<XOutputStream> temp_stream = temp_file->getOutputStream();
             request.writeTo(temp_stream);
             temp_stream->flush();
             temp_stream->closeOutput();
         }
-        
+
         // parse Url
         URL url;
         {
-            url.Complete = m_Url;          
+            url.Complete = m_Url;
             url_trans->parseStrict(url);
         }
 
@@ -111,7 +111,7 @@ namespace oooimprovement
                     OUString::createFromAscii("unable to connect to SOAP server"),
                     Reference<XInterface>());
         }
-        
+
         // send header
         {
             OStringBuffer path_on_server =
@@ -121,9 +121,9 @@ namespace oooimprovement
             if(socket->write(header.getStr(), header.getLength()) != static_cast<sal_Int32>(header.getLength()))
                 throw RuntimeException(
                     OUString::createFromAscii("error while sending HTTP header"),
-                    Reference<XInterface>()); 
+                    Reference<XInterface>());
         }
-        
+
         // send soap request
         {
             Reference<XInputStream> temp_stream = file_access->openFileRead(temp_file->getUri());
@@ -157,4 +157,4 @@ namespace oooimprovement
                     Reference<XInterface>());
         }
     }
-} 
+}

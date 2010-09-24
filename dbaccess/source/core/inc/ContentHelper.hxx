@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,13 +99,13 @@ namespace dbaccess
     class ODatabaseModelImpl;
     struct ContentProperties
     {
-        ::rtl::OUString aTitle;    		// Title
+        ::rtl::OUString aTitle;         // Title
         ::boost::optional< ::rtl::OUString >
                         aContentType;   // ContentType (aka MediaType aka MimeType)
         sal_Bool        bIsDocument;    // IsDocument
-        sal_Bool        bIsFolder;    	// IsFolder
-        sal_Bool		bAsTemplate;	// AsTemplate
-        ::rtl::OUString	sPersistentName;// persistent name of the document
+        sal_Bool        bIsFolder;      // IsFolder
+        sal_Bool        bAsTemplate;    // AsTemplate
+        ::rtl::OUString sPersistentName;// persistent name of the document
 
         ContentProperties()
             :bIsDocument( sal_True )
@@ -121,30 +121,30 @@ namespace dbaccess
         OContentHelper_Impl();
         virtual ~OContentHelper_Impl();
 
-        ContentProperties	m_aProps;
-        ODatabaseModelImpl*	m_pDataSource; // this will stay alive as long as the content exists
+        ContentProperties   m_aProps;
+        ODatabaseModelImpl* m_pDataSource; // this will stay alive as long as the content exists
     };
 
     typedef ::boost::shared_ptr<OContentHelper_Impl> TContentPtr;
 
 
-    typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<	::rtl::OUString,
+    typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString,
                                                             ::comphelper::UStringHash,
                                                             ::comphelper::UStringEqual
                                                         > PropertyChangeListenerContainer;
-    typedef ::comphelper::OBaseMutex	OContentHelper_MBASE;
-    typedef ::cppu::WeakComponentImplHelper9	<	::com::sun::star::ucb::XContent
-                                                ,	::com::sun::star::ucb::XCommandProcessor
-                                                ,	::com::sun::star::lang::XServiceInfo
-                                                ,	::com::sun::star::beans::XPropertiesChangeNotifier
-                                                ,	::com::sun::star::beans::XPropertyContainer
-                                                ,	::com::sun::star::lang::XInitialization
-                                                ,	::com::sun::star::lang::XUnoTunnel
-                                                ,	::com::sun::star::container::XChild
-                                                ,	::com::sun::star::sdbcx::XRename
-                                                >	OContentHelper_COMPBASE;
+    typedef ::comphelper::OBaseMutex    OContentHelper_MBASE;
+    typedef ::cppu::WeakComponentImplHelper9    <   ::com::sun::star::ucb::XContent
+                                                ,   ::com::sun::star::ucb::XCommandProcessor
+                                                ,   ::com::sun::star::lang::XServiceInfo
+                                                ,   ::com::sun::star::beans::XPropertiesChangeNotifier
+                                                ,   ::com::sun::star::beans::XPropertyContainer
+                                                ,   ::com::sun::star::lang::XInitialization
+                                                ,   ::com::sun::star::lang::XUnoTunnel
+                                                ,   ::com::sun::star::container::XChild
+                                                ,   ::com::sun::star::sdbcx::XRename
+                                                >   OContentHelper_COMPBASE;
 
-    class OContentHelper :	 public OContentHelper_MBASE
+    class OContentHelper :   public OContentHelper_MBASE
                             ,public OContentHelper_COMPBASE
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
@@ -159,18 +159,18 @@ namespace dbaccess
         void impl_rename_throw(const ::rtl::OUString& _sNewName,bool _bNotify = true);
 
     protected:
-        ::cppu::OInterfaceContainerHelper	    m_aContentListeners;
-        PropertyChangeListenerContainer		    m_aPropertyChangeListeners;
+        ::cppu::OInterfaceContainerHelper       m_aContentListeners;
+        PropertyChangeListenerContainer         m_aPropertyChangeListeners;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                                                 m_xParentContainer;
         const ::comphelper::ComponentContext    m_aContext;
         const ::connectivity::SQLError          m_aErrorHelper;
-        TContentPtr						        m_pImpl;
-        sal_uInt32						        m_nCommandId;
+        TContentPtr                             m_pImpl;
+        sal_uInt32                              m_nCommandId;
 
         // helper
         virtual void SAL_CALL disposing();
-        
+
         virtual void notifyDataSourceModified();
 
         /**
@@ -185,13 +185,13 @@ namespace dbaccess
     public:
 
         OContentHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&	_xParentContainer
+                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
                         ,const TContentPtr& _pImpl
                     );
 
         // com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< sal_Int8 >	getUnoTunnelImplementationId();
+        static ::com::sun::star::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId();
         // ::com::sun::star::lang::XServiceInfo
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -237,13 +237,13 @@ namespace dbaccess
 
         const ::comphelper::ComponentContext& getContext() const { return m_aContext; }
 
-        inline TContentPtr getImpl() const { return m_pImpl; } 
+        inline TContentPtr getImpl() const { return m_pImpl; }
 
     protected:
         virtual ::rtl::OUString determineContentType() const = 0;
     };
 
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 #endif // DBA_CONTENTHELPER_HXX

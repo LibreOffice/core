@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,15 +39,15 @@ namespace drawinglayer
         /** SdrSpherePrimitive3D class
 
             This 3D primitive expands the SdrPrimitive3D to a 3D sphere definition.
-            The sphere is implicitely in unit coordinates and the given transformation 
+            The sphere is implicitely in unit coordinates and the given transformation
             defines it's geometry in space.
          */
         class SdrSpherePrimitive3D : public SdrPrimitive3D
         {
         private:
             /// additional geometry definitions
-            sal_uInt32									mnHorizontalSegments;
-            sal_uInt32									mnVerticalSegments;
+            sal_uInt32                                  mnHorizontalSegments;
+            sal_uInt32                                  mnVerticalSegments;
 
         protected:
             /// local decomposition.
@@ -56,11 +56,11 @@ namespace drawinglayer
         public:
             /// constructor
             SdrSpherePrimitive3D(
-                const basegfx::B3DHomMatrix& rTransform, 
+                const basegfx::B3DHomMatrix& rTransform,
                 const basegfx::B2DVector& rTextureSize,
-                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute, 
-                const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute, 
-                sal_uInt32 nHorizontalSegments, 
+                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
+                const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute,
+                sal_uInt32 nHorizontalSegments,
                 sal_uInt32 nVerticalSegments);
 
             /// data read access

@@ -49,7 +49,7 @@ public class LogUtils {
         finally
         {
             try
-            { 
+            {
                 if ( baos != null )
                 {
                     baos.close();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@
 
 namespace reportdesign
 {
-    class OReportComponentProperties 
+    class OReportComponentProperties
     {
     public:
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XChild >	m_xParent;
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XChild > m_xParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > 
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                                                                     m_xFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       m_xShape;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >     m_xProxy;
@@ -55,16 +55,16 @@ namespace reportdesign
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >   m_xTypeProvider;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel >      m_xUnoTunnel;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >    m_xServiceInfo;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > 						    m_aMasterFields;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > 						    m_aDetailFields;
-        ::rtl::OUString 															m_sName;
-        ::sal_Int32 																m_nHeight;
-        ::sal_Int32 																m_nWidth;
-        ::sal_Int32 																m_nPosX;
-        ::sal_Int32 																m_nPosY;
-        ::sal_Int32 																m_nBorderColor;
-        ::sal_Int16																	m_nBorder;
-        ::sal_Bool																	m_bPrintRepeatedValues;
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >                          m_aMasterFields;
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >                          m_aDetailFields;
+        ::rtl::OUString                                                             m_sName;
+        ::sal_Int32                                                                 m_nHeight;
+        ::sal_Int32                                                                 m_nWidth;
+        ::sal_Int32                                                                 m_nPosX;
+        ::sal_Int32                                                                 m_nPosY;
+        ::sal_Int32                                                                 m_nBorderColor;
+        ::sal_Int16                                                                 m_nBorder;
+        ::sal_Bool                                                                  m_bPrintRepeatedValues;
 
         OReportComponentProperties(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & _xContext
             )

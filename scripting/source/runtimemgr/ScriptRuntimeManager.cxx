@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,7 +103,7 @@ throw( RuntimeException )
     {
         Reference< XInterface > xInterface;
 
-        Reference< storage::XScriptInfo > sinfo = 
+        Reference< storage::XScriptInfo > sinfo =
             Reference< storage::XScriptInfo >( scriptInfo, UNO_QUERY_THROW );
 
         OUStringBuffer *buf = new OUStringBuffer(80);
@@ -114,7 +114,7 @@ throw( RuntimeException )
 
         if ( sal_False == ( a >>= xInterface ) )
         {
-            throw RuntimeException( 
+            throw RuntimeException(
                 sinfo->getLanguage().concat( OUSTR( " runtime support is not installed for this language" ) ),
                 Reference< XInterface >() );
         }
@@ -192,7 +192,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
             throw RuntimeException( OUSTR(
                 "ScriptRuntimeManager::invoke : unable to get XPropSetScriptingContext from param" ),
                 Reference< XInterface > () );
-        }   
+        }
 
         Any any = xPropSetResolvedCtx->getPropertyValue(
             scriptingConstantsPool.RESOLVED_STORAGE_ID );
@@ -206,12 +206,12 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
 
         OSL_TRACE("Storage sid is: %d\n", resolvedSid);
 
-        // modifying the XPropertySet on the resolved Context to contain the 
-        // full script info 
+        // modifying the XPropertySet on the resolved Context to contain the
+        // full script info
         Any aResolvedScript;
         aResolvedScript <<= resolvedScript;
 
-        xPropSetResolvedCtx->setPropertyValue( scriptingConstantsPool.SCRIPT_INFO, 
+        xPropSetResolvedCtx->setPropertyValue( scriptingConstantsPool.SCRIPT_INFO,
                 aResolvedScript );
 
         Reference< runtime::XScriptInvocation > xScriptInvocation =
@@ -226,12 +226,12 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
                                              aOutParamIndex, aOutParam );
 
         // need to dispose of filesystem storage
-        OUString filesysString = OUString::createFromAscii( 
+        OUString filesysString = OUString::createFromAscii(
                                         "location=filesystem" );
         if ( scriptURI.indexOf( filesysString ) != -1 )
         {
-            Any a = m_xContext->getValueByName( 
-                    scriptingConstantsPool.SCRIPTSTORAGEMANAGER_SERVICE );   
+            Any a = m_xContext->getValueByName(
+                    scriptingConstantsPool.SCRIPTSTORAGEMANAGER_SERVICE );
             Reference < lang::XEventListener > xEL_ScriptStorageManager;
             if ( sal_False == ( a >>= xEL_ScriptStorageManager ) )
             {
@@ -301,7 +301,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
 
 //*************************************************************************
 // XScriptNameResolver implementation
-Reference< storage::XScriptInfo > SAL_CALL 
+Reference< storage::XScriptInfo > SAL_CALL
 ScriptRuntimeManager::resolve( const ::rtl::OUString& scriptURI,
     Any& invocationCtx )
 throw( lang::IllegalArgumentException, script::CannotConvertException, RuntimeException )
@@ -319,7 +319,7 @@ throw( lang::IllegalArgumentException, script::CannotConvertException, RuntimeEx
     }
     catch ( lang::IllegalArgumentException & iae )
     {
-        OUString temp = 
+        OUString temp =
             OUSTR( "ScriptRuntimeManager::resolve IllegalArgumentException: " );
         throw lang::IllegalArgumentException( temp.concat( iae.Message ),
                                               Reference< XInterface > (),
@@ -507,7 +507,7 @@ extern "C"
 
                 Reference< registry::XRegistryKey > xKey(
                     pKey->createKey(
- 
+
                     OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeManager")));
                     xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager") );
 
@@ -517,7 +517,7 @@ extern "C"
                     OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.storage.theScriptStorageManager"));
                  xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager") );
                 // Singleton entries are not handled by the setup process
-                // below is the only alternative at the momement which 
+                // below is the only alternative at the momement which
                 // is to programmatically do this.
 
                 // "Java" Runtime singleton entry
@@ -554,7 +554,7 @@ extern "C"
      * @param pServiceManager a service manager, need for component creation
      * @param pRegistryKey    the registry key for this component, need for persistent
      *                        data
-     * @return a component factory 
+     * @return a component factory
      */
     void * SAL_CALL component_getFactory( const sal_Char * pImplName,
         lang::XMultiServiceFactory * pServiceManager,

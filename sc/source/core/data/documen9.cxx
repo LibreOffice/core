@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@
 #include "rechead.hxx"
 #include "poolhelp.hxx"
 #include "docpool.hxx"
-#include "detfunc.hxx"		// for UpdateAllComments
+#include "detfunc.hxx"      // for UpdateAllComments
 #include "editutil.hxx"
 #include "postit.hxx"
 #include "charthelper.hxx"
@@ -128,8 +128,8 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
         }
     }
 
-    //	#71726# make sure the data references of charts are adapted
-    //	(this must be after InsertObject!)
+    //  #71726# make sure the data references of charts are adapted
+    //  (this must be after InsertObject!)
     ScChartHelper::AdjustRangesOfChartsOnDestinationPage( pSrcDoc, this, nSrcPos, nDestPos );
 }
 
@@ -138,30 +138,30 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
     if (pDocShell && !pShell)
         pShell = pDocShell;
 
-//	DBG_ASSERT(pShell,"InitDrawLayer ohne Shell");
+//  DBG_ASSERT(pShell,"InitDrawLayer ohne Shell");
 
     if (!pDrawLayer)
     {
         String aName;
-        if ( pShell && !pShell->IsLoading() )		// #88438# don't call GetTitle while loading
+        if ( pShell && !pShell->IsLoading() )       // #88438# don't call GetTitle while loading
             aName = pShell->GetTitle();
         pDrawLayer = new ScDrawLayer( this, aName );
         if (GetLinkManager())
             pDrawLayer->SetLinkManager( pLinkManager );
 
-        //	Drawing pages are accessed by table number, so they must also be present
-        //	for preceding table numbers, even if the tables aren't allocated
-        //	(important for clipboard documents).
+        //  Drawing pages are accessed by table number, so they must also be present
+        //  for preceding table numbers, even if the tables aren't allocated
+        //  (important for clipboard documents).
 
         SCTAB nDrawPages = 0;
         SCTAB nTab;
         for (nTab=0; nTab<=MAXTAB; nTab++)
             if (pTab[nTab])
-                nDrawPages = nTab + 1;			// needed number of pages
+                nDrawPages = nTab + 1;          // needed number of pages
 
         for (nTab=0; nTab<nDrawPages; nTab++)
         {
-            pDrawLayer->ScAddPage( nTab );		// always add page, with or without the table
+            pDrawLayer->ScAddPage( nTab );      // always add page, with or without the table
             if (pTab[nTab])
             {
                 String aTabName;
@@ -170,7 +170,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 
                 pTab[nTab]->SetDrawPageSize(false,false);     // #54782# set the right size immediately
 #if 0
-                ULONG nx = (ULONG) ((double) (MAXCOL+1) * STD_COL_WIDTH			  * HMM_PER_TWIPS );
+                ULONG nx = (ULONG) ((double) (MAXCOL+1) * STD_COL_WIDTH           * HMM_PER_TWIPS );
                 ULONG ny = (ULONG) ((double) (MAXROW+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );
                 pDrawLayer->SetPageSize( nTab, Size( nx, ny ) );
 #endif
@@ -220,8 +220,8 @@ void ScDocument::UpdateDrawPrinter()
         // use the printer even if IsValid is false
         // Application::GetDefaultDevice causes trouble with changing MapModes
 
-//		OutputDevice* pRefDev = GetPrinter();
-//		pRefDev->SetMapMode( MAP_100TH_MM );
+//      OutputDevice* pRefDev = GetPrinter();
+//      pRefDev->SetMapMode( MAP_100TH_MM );
         pDrawLayer->SetRefDevice(GetRefDevice());
     }
 }
@@ -292,7 +292,7 @@ void ScDocument::DeleteObjectsInSelection( const ScMarkData& rMark )
 
 BOOL ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* pTabMark )
 {
-    //	pTabMark is used only for selected tables. If pTabMark is 0, all tables of rRange are used.
+    //  pTabMark is used only for selected tables. If pTabMark is 0, all tables of rRange are used.
 
     if (!pDrawLayer)
         return FALSE;
@@ -414,10 +414,10 @@ void ScDocument::StartAnimations( SCTAB nTab, Window* pWin )
 
 BOOL ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect )
 {
-    //	Gibt es Objekte auf dem Hintergrund-Layer, die (teilweise) von rMMRect
-    //	betroffen sind?
-    //	(fuer Drawing-Optimierung, vor dem Hintergrund braucht dann nicht geloescht
-    //	 zu werden)
+    //  Gibt es Objekte auf dem Hintergrund-Layer, die (teilweise) von rMMRect
+    //  betroffen sind?
+    //  (fuer Drawing-Optimierung, vor dem Hintergrund braucht dann nicht geloescht
+    //   zu werden)
 
     if (!pDrawLayer)
         return FALSE;
@@ -442,9 +442,9 @@ BOOL ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect )
 
 BOOL ScDocument::HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect )
 {
-    //	Gibt es ueberhaupt Objekte, die (teilweise) von rMMRect
-    //	betroffen sind?
-    //	(um leere Seiten beim Drucken zu erkennen)
+    //  Gibt es ueberhaupt Objekte, die (teilweise) von rMMRect
+    //  betroffen sind?
+    //  (um leere Seiten beim Drucken zu erkennen)
 
     if (!pDrawLayer)
         return FALSE;
@@ -475,7 +475,7 @@ void ScDocument::EnsureGraphicNames()
 
 SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
 {
-    //	fuer Drag&Drop auf Zeichenobjekt
+    //  fuer Drag&Drop auf Zeichenobjekt
 
     SdrObject* pFound = NULL;
     if (pDrawLayer && pTab[nTab])
@@ -490,8 +490,8 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
             {
                 if ( pObject->GetCurrentBoundRect().IsInside(rPos) )
                 {
-                    //	Intern interessiert gar nicht
-                    //	Objekt vom Back-Layer nur, wenn kein Objekt von anderem Layer getroffen
+                    //  Intern interessiert gar nicht
+                    //  Objekt vom Back-Layer nur, wenn kein Objekt von anderem Layer getroffen
 
                     SdrLayerID nLayer = pObject->GetLayer();
                     if ( (nLayer != SC_LAYER_INTERN) && (nLayer != SC_LAYER_HIDDEN) )
@@ -503,7 +503,7 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
                         }
                     }
                 }
-                //	weitersuchen -> letztes (oberstes) getroffenes Objekt nehmen
+                //  weitersuchen -> letztes (oberstes) getroffenes Objekt nehmen
 
                 pObject = aIter.Next();
             }
@@ -519,13 +519,13 @@ BOOL ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     if (!IsBlockEmpty( nTab, nStartCol, nStartRow, nEndCol, nEndRow ))
         return FALSE;
 
-    ScDocument* pThis = (ScDocument*)this;	//! GetMMRect / HasAnyDraw etc. const !!!
+    ScDocument* pThis = (ScDocument*)this;  //! GetMMRect / HasAnyDraw etc. const !!!
 
     Rectangle aMMRect;
     if ( pLastRange && pLastMM && nTab == pLastRange->aStart.Tab() &&
             nStartRow == pLastRange->aStart.Row() && nEndRow == pLastRange->aEnd.Row() )
     {
-        //	keep vertical part of aMMRect, only update horizontal position
+        //  keep vertical part of aMMRect, only update horizontal position
         aMMRect = *pLastMM;
 
         long nLeft = 0;
@@ -553,17 +553,17 @@ BOOL ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 
     if ( nStartCol > 0 && !bLeftIsEmpty )
     {
-        //	aehnlich wie in ScPrintFunc::AdjustPrintArea
-        //!	ExtendPrintArea erst ab Start-Spalte des Druckbereichs
+        //  aehnlich wie in ScPrintFunc::AdjustPrintArea
+        //! ExtendPrintArea erst ab Start-Spalte des Druckbereichs
 
         SCCOL nExtendCol = nStartCol - 1;
         SCROW nTmpRow = nEndRow;
 
         pThis->ExtendMerge( 0,nStartRow, nExtendCol,nTmpRow, nTab,
-                            FALSE, TRUE );		// kein Refresh, incl. Attrs
+                            FALSE, TRUE );      // kein Refresh, incl. Attrs
 
         OutputDevice* pDev = pThis->GetPrinter();
-        pDev->SetMapMode( MAP_PIXEL );				// wichtig fuer GetNeededSize
+        pDev->SetMapMode( MAP_PIXEL );              // wichtig fuer GetNeededSize
         pThis->ExtendPrintArea( pDev, nTab, 0, nStartRow, nExtendCol, nEndRow );
         if ( nExtendCol >= nStartCol )
             return FALSE;
@@ -637,9 +637,9 @@ void ScDocument::InvalidateControls( Window* pWin, SCTAB nTab, const Rectangle& 
                     Rectangle aObjRect = pObject->GetLogicRect();
                     if ( aObjRect.IsOver( rMMRect ) )
                     {
-                        //	Uno-Controls zeichnen sich immer komplett, ohne Ruecksicht
-                        //	auf ClippingRegions. Darum muss das ganze Objekt neu gepainted
-                        //	werden, damit die Selektion auf der Tabelle nicht uebermalt wird.
+                        //  Uno-Controls zeichnen sich immer komplett, ohne Ruecksicht
+                        //  auf ClippingRegions. Darum muss das ganze Objekt neu gepainted
+                        //  werden, damit die Selektion auf der Tabelle nicht uebermalt wird.
 
                         //pWin->Invalidate( aObjRect.GetIntersection( rMMRect ) );
                         pWin->Invalidate( aObjRect );
@@ -654,8 +654,8 @@ void ScDocument::InvalidateControls( Window* pWin, SCTAB nTab, const Rectangle& 
 
 BOOL ScDocument::HasDetectiveObjects(SCTAB nTab) const
 {
-    //	looks for detective objects, annotations don't count
-    //	(used to adjust scale so detective objects hit their cells better)
+    //  looks for detective objects, annotations don't count
+    //  (used to adjust scale so detective objects hit their cells better)
 
     BOOL bFound = FALSE;
 
@@ -683,11 +683,11 @@ BOOL ScDocument::HasDetectiveObjects(SCTAB nTab) const
 
 void ScDocument::UpdateFontCharSet()
 {
-    //	In alten Versionen (bis incl. 4.0 ohne SP) wurden beim Austausch zwischen
-    //	Systemen die CharSets in den Font-Attributen nicht angepasst.
-    //	Das muss fuer Dokumente bis incl SP2 nun nachgeholt werden:
-    //	Alles, was nicht SYMBOL ist, wird auf den System-CharSet umgesetzt.
-    //	Bei neuen Dokumenten (Version SC_FONTCHARSET) sollte der CharSet stimmen.
+    //  In alten Versionen (bis incl. 4.0 ohne SP) wurden beim Austausch zwischen
+    //  Systemen die CharSets in den Font-Attributen nicht angepasst.
+    //  Das muss fuer Dokumente bis incl SP2 nun nachgeholt werden:
+    //  Alles, was nicht SYMBOL ist, wird auf den System-CharSet umgesetzt.
+    //  Bei neuen Dokumenten (Version SC_FONTCHARSET) sollte der CharSet stimmen.
 
     BOOL bUpdateOld = ( nSrcVer < SC_FONTCHARSET );
 

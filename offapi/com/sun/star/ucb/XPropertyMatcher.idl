@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ published interface XPropertyMatcher : com::sun::star::uno::XInterface
         A Command Processor through which the set of properties is accessible.
 
         @param Environment
-        The environment to use when accessing the property	set via the given
+        The environment to use when accessing the property  set via the given
          Command Processor.  It may be null.
 
         @returns

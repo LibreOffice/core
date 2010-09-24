@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -161,8 +161,8 @@ struct SvcInfo
 
     SvcInfo( const OUString &rSvcImplName,
              const uno::Sequence< INT16 >  &rSuppLanguages ) :
-        aSvcImplName	(rSvcImplName),
-        aSuppLanguages	(rSuppLanguages)
+        aSvcImplName    (rSvcImplName),
+        aSuppLanguages  (rSuppLanguages)
     {
     }
 
@@ -207,7 +207,7 @@ void LngSvcMgr::SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
         default :
             DBG_ASSERT( 0, "unexpected case" );
     }
-    String	aNode( String::CreateFromAscii( pEntryName ) );
+    String  aNode( String::CreateFromAscii( pEntryName ) );
     uno::Sequence < OUString > aNodeNames( /*aCfg.*/GetNodeNames( aNode ) );
 
 
@@ -287,21 +287,21 @@ class LngSvcMgrListenerHelper :
     LngSvcMgr  &rMyManager;
 //    Timer       aLaunchTimer;
 
-    //cppu::OMultiTypeInterfaceContainerHelper	aListeners;
-    ::cppu::OInterfaceContainerHelper			aLngSvcMgrListeners;
-    ::cppu::OInterfaceContainerHelper			aLngSvcEvtBroadcasters;
+    //cppu::OMultiTypeInterfaceContainerHelper  aListeners;
+    ::cppu::OInterfaceContainerHelper           aLngSvcMgrListeners;
+    ::cppu::OInterfaceContainerHelper           aLngSvcEvtBroadcasters;
     uno::Reference< linguistic2::XDictionaryList >               xDicList;
     uno::Reference< uno::XInterface >                        xMyEvtObj;
 
-    INT16	nCombinedLngSvcEvt;
+    INT16   nCombinedLngSvcEvt;
 
     // disallow copy-constructor and assignment-operator for now
     LngSvcMgrListenerHelper(const LngSvcMgrListenerHelper &);
     LngSvcMgrListenerHelper & operator = (const LngSvcMgrListenerHelper &);
 
-    void	LaunchEvent( INT16 nLngSvcEvtFlags );
+    void    LaunchEvent( INT16 nLngSvcEvtFlags );
 
-//	DECL_LINK( TimeOut, Timer* );
+//  DECL_LINK( TimeOut, Timer* );
     long Timeout();
 
 public:
@@ -325,14 +325,14 @@ public:
                 const linguistic2::DictionaryListEvent& rDicListEvent )
             throw(uno::RuntimeException);
 
-    inline	BOOL	AddLngSvcMgrListener(
+    inline  BOOL    AddLngSvcMgrListener(
                         const uno::Reference< lang::XEventListener >& rxListener );
-    inline	BOOL    RemoveLngSvcMgrListener(
+    inline  BOOL    RemoveLngSvcMgrListener(
                         const uno::Reference< lang::XEventListener >& rxListener );
     void    DisposeAndClear( const lang::EventObject &rEvtObj );
-    BOOL	AddLngSvcEvtBroadcaster(
+    BOOL    AddLngSvcEvtBroadcaster(
                         const uno::Reference< linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
-    BOOL	RemoveLngSvcEvtBroadcaster(
+    BOOL    RemoveLngSvcEvtBroadcaster(
                         const uno::Reference< linguistic2::XLinguServiceEventBroadcaster > &rxBroadcaster );
 
     void    AddLngSvcEvt( INT16 nLngSvcEvt );
@@ -344,10 +344,10 @@ LngSvcMgrListenerHelper::LngSvcMgrListenerHelper(
         const uno::Reference< uno::XInterface > &rxSource,
         const uno::Reference< linguistic2::XDictionaryList > &rxDicList  ) :
     rMyManager              ( rLngSvcMgr ),
-    aLngSvcMgrListeners		( GetLinguMutex() ),
-    aLngSvcEvtBroadcasters	( GetLinguMutex() ),
-    xDicList				( rxDicList ),
-    xMyEvtObj				( rxSource )
+    aLngSvcMgrListeners     ( GetLinguMutex() ),
+    aLngSvcEvtBroadcasters  ( GetLinguMutex() ),
+    xDicList                ( rxDicList ),
+    xMyEvtObj               ( rxSource )
 {
     if (xDicList.is())
     {
@@ -361,8 +361,8 @@ LngSvcMgrListenerHelper::LngSvcMgrListenerHelper(
     //! listeners, and each of them is launching an event of it's own!)
     //! Thus this behaviour is necessary to avoid unecessary actions of
     //! this objects listeners!
-//	aLaunchTimer.SetTimeout( 2000 );
-//	aLaunchTimer.SetTimeoutHdl( LINK( this, LngSvcMgrListenerHelper, TimeOut ) );
+//  aLaunchTimer.SetTimeout( 2000 );
+//  aLaunchTimer.SetTimeoutHdl( LINK( this, LngSvcMgrListenerHelper, TimeOut ) );
     nCombinedLngSvcEvt = 0;
 }
 
@@ -388,7 +388,7 @@ long LngSvcMgrListenerHelper::Timeout()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-//	if (&aLaunchTimer == pTimer)
+//  if (&aLaunchTimer == pTimer)
     {
         // change event source to LinguServiceManager since the listeners
         // probably do not know (and need not to know) about the specific
@@ -415,7 +415,7 @@ long LngSvcMgrListenerHelper::Timeout()
 void LngSvcMgrListenerHelper::AddLngSvcEvt( INT16 nLngSvcEvt )
 {
     nCombinedLngSvcEvt |= nLngSvcEvt;
-//	aLaunchTimer.Start();
+//  aLaunchTimer.Start();
     Timeout();
 }
 
@@ -576,18 +576,18 @@ BOOL LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
 
 LngSvcMgr::LngSvcMgr() :
     utl::ConfigItem( String::CreateFromAscii( "Office.Linguistic" ) ),
-    aEvtListeners	( GetLinguMutex() )
+    aEvtListeners   ( GetLinguMutex() )
 {
-    bHasAvailSpellLocales	=
+    bHasAvailSpellLocales   =
     bHasAvailGrammarLocales =
-    bHasAvailHyphLocales	=
-    bHasAvailThesLocales	=
+    bHasAvailHyphLocales    =
+    bHasAvailThesLocales    =
     bDisposing = FALSE;
 
-    pSpellDsp	= 0;
+    pSpellDsp   = 0;
     pGrammarDsp = 0;
-    pHyphDsp	= 0;
-    pThesDsp	= 0;
+    pHyphDsp    = 0;
+    pThesDsp    = 0;
 
     pAvailSpellSvcs     = 0;
     pAvailGrammarSvcs   = 0;
@@ -652,7 +652,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         if (0 == rName.compareTo( aSpellCheckerList, aSpellCheckerList.getLength() ))
         {
             // delete old cached data, needs to be acquired new on demand
-            delete pAvailSpellSvcs;		pAvailSpellSvcs = 0;
+            delete pAvailSpellSvcs;     pAvailSpellSvcs = 0;
 
             OUString aNode( aSpellCheckerList );
             if (lcl_SeqHasString( aSpellCheckerListEntries, aKeyText ))
@@ -705,7 +705,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         else if (0 == rName.compareTo( aHyphenatorList, aHyphenatorList.getLength() ))
         {
             // delete old cached data, needs to be acquired new on demand
-            delete pAvailHyphSvcs;		pAvailHyphSvcs = 0;
+            delete pAvailHyphSvcs;      pAvailHyphSvcs = 0;
 
             OUString aNode( aHyphenatorList );
             if (lcl_SeqHasString( aHyphenatorListEntries, aKeyText ))
@@ -730,7 +730,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         else if (0 == rName.compareTo( aThesaurusList, aThesaurusList.getLength() ))
         {
             // delete old cached data, needs to be acquired new on demand
-            delete pAvailThesSvcs;		pAvailThesSvcs = 0;
+            delete pAvailThesSvcs;      pAvailThesSvcs = 0;
 
             OUString aNode( aThesaurusList );
             if (lcl_SeqHasString( aThesaurusListEntries, aKeyText ))
@@ -783,8 +783,8 @@ void LngSvcMgr::GetSpellCheckerDsp_Impl( sal_Bool bSetSvcList )
 {
     if (!pSpellDsp)
     {
-        pSpellDsp	= new SpellCheckerDispatcher( *this );
-        xSpellDsp	= pSpellDsp;
+        pSpellDsp   = new SpellCheckerDispatcher( *this );
+        xSpellDsp   = pSpellDsp;
         if (bSetSvcList)
             SetCfgServiceLists( *pSpellDsp );
     }
@@ -826,8 +826,8 @@ void LngSvcMgr::GetHyphenatorDsp_Impl( sal_Bool bSetSvcList  )
 {
     if (!pHyphDsp)
     {
-        pHyphDsp	= new HyphenatorDispatcher( *this );
-        xHyphDsp	= pHyphDsp;
+        pHyphDsp    = new HyphenatorDispatcher( *this );
+        xHyphDsp    = pHyphDsp;
         if (bSetSvcList)
             SetCfgServiceLists( *pHyphDsp );
     }
@@ -838,8 +838,8 @@ void LngSvcMgr::GetThesaurusDsp_Impl( sal_Bool bSetSvcList  )
 {
     if (!pThesDsp)
     {
-        pThesDsp	= new ThesaurusDispatcher;
-        xThesDsp	= pThesDsp;
+        pThesDsp    = new ThesaurusDispatcher;
+        xThesDsp    = pThesDsp;
         if (bSetSvcList)
             SetCfgServiceLists( *pThesDsp );
     }
@@ -889,7 +889,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
 
                     if (xSvc.is())
                     {
-                        OUString 			aImplName;
+                        OUString            aImplName;
                         uno::Sequence< INT16 >    aLanguages;
                         uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                         if (xInfo.is())
@@ -1020,7 +1020,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
 
                     if (xSvc.is())
                     {
-                        OUString 			aImplName;
+                        OUString            aImplName;
                         uno::Sequence< INT16 >    aLanguages;
                         uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                         if (xInfo.is())
@@ -1087,7 +1087,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
 
                     if (xSvc.is())
                     {
-                        OUString 			aImplName;
+                        OUString            aImplName;
                         uno::Sequence< INT16 >    aLanguages;
                         uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                         if (xInfo.is())
@@ -1469,11 +1469,11 @@ uno::Sequence< lang::Locale > SAL_CALL
     uno::Sequence< lang::Locale > aRes;
 
     uno::Sequence< lang::Locale >  *pAvailLocales     = NULL;
-    BOOL				*pHasAvailLocales	= NULL;
+    BOOL                *pHasAvailLocales   = NULL;
     if (0 == rServiceName.compareToAscii( SN_SPELLCHECKER ))
     {
-        pAvailLocales		= &aAvailSpellLocales;
-        pHasAvailLocales	= &bHasAvailSpellLocales;
+        pAvailLocales       = &aAvailSpellLocales;
+        pHasAvailLocales    = &bHasAvailSpellLocales;
     }
     else if (0 == rServiceName.compareToAscii( SN_GRAMMARCHECKER ))
     {
@@ -1482,13 +1482,13 @@ uno::Sequence< lang::Locale > SAL_CALL
     }
     else if (0 == rServiceName.compareToAscii( SN_HYPHENATOR ))
     {
-        pAvailLocales		= &aAvailHyphLocales;
-        pHasAvailLocales	= &bHasAvailHyphLocales;
+        pAvailLocales       = &aAvailHyphLocales;
+        pHasAvailLocales    = &bHasAvailHyphLocales;
     }
     else if (0 == rServiceName.compareToAscii( SN_THESAURUS ))
     {
-        pAvailLocales		= &aAvailThesLocales;
-        pHasAvailLocales	= &bHasAvailThesLocales;
+        pAvailLocales       = &aAvailThesLocales;
+        pHasAvailLocales    = &bHasAvailThesLocales;
     }
 
     // about pHasAvailLocales: nowadays (with OOo lingu in SO) we want to know immediately about
@@ -1496,12 +1496,12 @@ uno::Sequence< lang::Locale > SAL_CALL
     // is used to activate them. Thus we can not rely anymore on buffered data.
     if (pAvailLocales  /*&&  pHasAvailLocales */)
     {
-//		if (!*pHasAvailLocales)
-//		{
+//      if (!*pHasAvailLocales)
+//      {
             *pAvailLocales = GetAvailLocales(
                     getAvailableServices( rServiceName, lang::Locale() ) );
-//			*pHasAvailLocales = TRUE;
-//		}
+//          *pHasAvailLocales = TRUE;
+//      }
         aRes = *pAvailLocales;
     }
 
@@ -1976,7 +1976,7 @@ uno::Sequence< OUString > LngSvcMgr::getSupportedServiceNames_Static()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    uno::Sequence< OUString > aSNS( 1 );	// auch mehr als 1 Service moeglich
+    uno::Sequence< OUString > aSNS( 1 );    // auch mehr als 1 Service moeglich
     aSNS.getArray()[0] = A2OU( SN_LINGU_SERVCICE_MANAGER );
     return aSNS;
 }

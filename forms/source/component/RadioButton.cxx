@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ InterfaceRef SAL_CALL ORadioButtonControl_CreateInstance(const Reference<XMultiS
 }
 
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL	ORadioButtonControl::getSupportedServiceNames() throw(RuntimeException)
+StringSequence SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -87,9 +87,9 @@ void SAL_CALL ORadioButtonControl::createPeer(const Reference<starawt::XToolkit>
 
     // switch off the auto-toggle, we do this ourself ....
     // (formerly this switch-off was done in the toolkit - but the correct place is here ...)
-//	Reference< XVclWindowPeer >  xVclWindowPeer( getPeer(), UNO_QUERY );
-//	if (xVclWindowPeer.is())
-//		xVclWindowPeer->setProperty(::rtl::OUString::createFromAscii("AutoToggle"), ::cppu::bool2any(sal_False));
+//  Reference< XVclWindowPeer >  xVclWindowPeer( getPeer(), UNO_QUERY );
+//  if (xVclWindowPeer.is())
+//      xVclWindowPeer->setProperty(::rtl::OUString::createFromAscii("AutoToggle"), ::cppu::bool2any(sal_False));
     // new order: do _not_ switch off the auto toggle because:
     // * today, it is not necessary anymore to handle the toggling ourself (everything works fine without it)
     // * without auto toggle, the AccessibleEvents as fired by the radio buttons are
@@ -140,7 +140,7 @@ IMPLEMENT_DEFAULT_CLONING( ORadioButtonModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL	ORadioButtonModel::getSupportedServiceNames() throw(RuntimeException)
+StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
@@ -174,14 +174,14 @@ void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, cons
     {
         Reference<XPropertySet> xMyProps;
         query_interface(static_cast<XWeak*>(this), xMyProps);
-        ::rtl::OUString	sCurrentName;
+        ::rtl::OUString sCurrentName;
         for (sal_Int32 i=0; i<xIndexAccess->getCount(); ++i)
         {
-            Reference<XPropertySet>	xSiblingProperties(*(InterfaceRef*)xIndexAccess->getByIndex(i).getValue(), UNO_QUERY);
+            Reference<XPropertySet> xSiblingProperties(*(InterfaceRef*)xIndexAccess->getByIndex(i).getValue(), UNO_QUERY);
             if (!xSiblingProperties.is())
                 continue;
             if (xMyProps == xSiblingProperties)
-                continue;	// mich selber nicht umsetzen
+                continue;   // mich selber nicht umsetzen
 
             // nur wenn es ein Radio-Button ist
             if (!hasProperty(PROPERTY_CLASSID, xSiblingProperties))
@@ -206,13 +206,13 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
 
     // if the label control changed ...
     if (nHandle == PROPERTY_ID_CONTROLLABEL)
-    {	// ... forward this to our siblings
+    {   // ... forward this to our siblings
         SetSiblingPropsTo(PROPERTY_CONTROLLABEL, rValue);
     }
 
     // wenn sich die ControlSource-Eigenschaft geaendert hat ...
     if (nHandle == PROPERTY_ID_CONTROLSOURCE)
-    {	// ... muss ich allen meinen Siblings, die in der selben RadioButton-Gruppe sind wie ich, auch die
+    {   // ... muss ich allen meinen Siblings, die in der selben RadioButton-Gruppe sind wie ich, auch die
         // neue ControlSource mitgeben
         SetSiblingPropsTo(PROPERTY_CONTROLSOURCE, rValue);
     }
@@ -224,14 +224,14 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
         Reference<XIndexAccess> xIndexAccess(getParent(), UNO_QUERY);
         if (xIndexAccess.is())
         {
-            ::rtl::OUString			sName;
-            ::rtl::OUString			sControlSource;
+            ::rtl::OUString         sName;
+            ::rtl::OUString         sControlSource;
 
             Reference<XPropertySet> xMyProps;
             query_interface(static_cast<XWeak*>(this), xMyProps);
             for (sal_Int32 i=0; i<xIndexAccess->getCount(); ++i)
             {
-                Reference<XPropertySet>	xSiblingProperties(*(InterfaceRef*)xIndexAccess->getByIndex(i).getValue(), UNO_QUERY);
+                Reference<XPropertySet> xSiblingProperties(*(InterfaceRef*)xIndexAccess->getByIndex(i).getValue(), UNO_QUERY);
                 if (!xSiblingProperties.is())
                     continue;
 
@@ -261,7 +261,7 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
         sal_Int16 nValue;
         rValue >>= nValue;
         if (1 == nValue)
-        {	// bei allen Radios der selben Gruppe das 'default checked' ruecksetzen, denn wie schon der highlander wusste :
+        {   // bei allen Radios der selben Gruppe das 'default checked' ruecksetzen, denn wie schon der highlander wusste :
             // es kann nur einen geben.
             Any aZero;
             nValue = 0;
@@ -275,14 +275,14 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
 void ORadioButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 1, OReferenceValueComponent )
-        DECL_PROP1(TABINDEX,			sal_Int16,					BOUND);
+        DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
     END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ORadioButtonModel::getServiceName() throw(RuntimeException)
 {
-    return FRM_COMPONENT_RADIOBUTTON;	// old (non-sun) name for compatibility !
+    return FRM_COMPONENT_RADIOBUTTON;   // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------

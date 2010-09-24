@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,24 +59,24 @@ import com.sun.star.uno.XComponentContext;
 
 import com.sun.star.script.framework.log.LogUtils;
 
-public class SecurityDialog extends WeakBase implements XComponent, XServiceInfo, XDialog, 
+public class SecurityDialog extends WeakBase implements XComponent, XServiceInfo, XDialog,
 XInitialization {
-    
+
     static final String __serviceName = "com.sun.star.script.framework.security.SecurityDialog";
 
     private static final String _label1Name = "Label1";
     private static final String _label1String = "This document contains macros. Do you want to allow these macros to be run?";
-    
+
     private static final String _label2Name = "Label2";
     private static final String _label2String = "This document contains macros. According to the security settings, the";
     private static final String _label3Name = "Label3";
     private static final String _label3String = "macros in this document should not be run. Do you want to run them";
-    private static final String _label4Name = "Label4"; 
+    private static final String _label4Name = "Label4";
     private static final String _label4String = "anyway?";
 
     private static final String _checkBoxName = "CheckBox";
     private static final String _checkBoxString = "Add this directory to the list of secure paths: ";
-    private static final String _label5Name = "Label5"; 
+    private static final String _label5Name = "Label5";
 
     private static final String _title = "Run Macro";
     private static final String _runMacro = "Run";
@@ -139,8 +139,8 @@ XInitialization {
 
     private XComponentContext _xComponentContext;
     private XDialog _xDialog;
-    
-    public SecurityDialog( XComponentContext xComponentContext ) 
+
+    public SecurityDialog( XComponentContext xComponentContext )
     {
         LogUtils.DEBUG( "SecurityDialog ctor" );
         _xComponentContext = xComponentContext;
@@ -155,7 +155,7 @@ XInitialization {
             //check args is a path
             // set checkBoxPath with the arg
             LogUtils.DEBUG( "checkbox" );
-            try 
+            try
             {
                 checkBoxPath = AnyConverter.toString( args[0] );
             }
@@ -172,11 +172,11 @@ XInitialization {
                 checkBoxPath2 = checkBoxPath.substring( lineWrapLength );
                 checkBoxPath = checkBoxPath.substring( 0, lineWrapLength );
             }
-            
+
         }
         else
         {
-            LogUtils.DEBUG( "no checkbox: # of args=" + 
+            LogUtils.DEBUG( "no checkbox: # of args=" +
                 args.length );
             cbIncrW = 0;
             cbIncrH = 0;
@@ -202,7 +202,7 @@ XInitialization {
         }
 
     }
-    
+
     // static component operations
     public static XSingleServiceFactory __getServiceFactory( String implName,
                                                              XMultiServiceFactory multiFactory,
@@ -211,7 +211,7 @@ XInitialization {
         if ( implName.equals( SecurityDialog.class.getName() ) ) {
             xSingleServiceFactory = FactoryHelper.getServiceFactory(
                 SecurityDialog.class, SecurityDialog.__serviceName, multiFactory, regKey );
-        }        
+        }
         return xSingleServiceFactory;
     }
 
@@ -219,7 +219,7 @@ XInitialization {
         return FactoryHelper.writeRegistryServiceInfo(
             SecurityDialog.class.getName(), SecurityDialog.__serviceName, regKey );
     }
-    
+
     // XServiceInfo
     public String getImplementationName(  ) {
         return getClass().getName();
@@ -227,11 +227,11 @@ XInitialization {
 
     // XServiceInfo
     public boolean supportsService( /*IN*/String serviceName ) {
-        if ( serviceName.equals( __serviceName))        
+        if ( serviceName.equals( __serviceName))
             return true;
         return false;
     }
-    
+
     // XServiceInfo
     public String[] getSupportedServiceNames(  ) {
         String[] retValue= new String[0];
@@ -246,12 +246,12 @@ XInitialization {
 
         // get the service manager from the component context
         XMultiComponentFactory xMultiComponentFactory = _xComponentContext.getServiceManager();
-        
+
         // create the dialog model and set the properties
         Object dialogModel = xMultiComponentFactory.createInstanceWithContext(
             "com.sun.star.awt.UnoControlDialogModel", _xComponentContext );
         XPropertySet xPSetDialog = ( XPropertySet )UnoRuntime.queryInterface(
-            XPropertySet.class, dialogModel );      
+            XPropertySet.class, dialogModel );
         xPSetDialog.setPropertyValue( "PositionX", new Integer( dialogX) );
         xPSetDialog.setPropertyValue( "PositionY", new Integer( dialogY));
         xPSetDialog.setPropertyValue( "Width", new Integer( dialogW+cbIncrW ));
@@ -261,7 +261,7 @@ XInitialization {
         // get the service manager from the dialog model
         XMultiServiceFactory xMultiServiceFactory = ( XMultiServiceFactory )UnoRuntime.queryInterface(
             XMultiServiceFactory.class, dialogModel );
-      
+
         // create the Run Macro button model and set the properties
         Object runButtonModel = xMultiServiceFactory.createInstance(
             "com.sun.star.awt.UnoControlButtonModel" );
@@ -276,7 +276,7 @@ XInitialization {
         xPSetButton.setPropertyValue( "Name", _runButtonName );
         xPSetButton.setPropertyValue( "TabIndex", new Short( (short)1 ) );
         xPSetButton.setPropertyValue( "Label", _runMacro );
-      
+
         // create the Dont Run Macro button model and set the properties
         Object doNotRunButtonModel = xMultiServiceFactory.createInstance(
             "com.sun.star.awt.UnoControlButtonModel" );
@@ -291,7 +291,7 @@ XInitialization {
         xPSetButton.setPropertyValue( "Name", _doNotRunButtonName );
         xPSetButton.setPropertyValue( "TabIndex", new Short( (short)0 ) );
         xPSetButton.setPropertyValue( "Label", _doNotRunMacro );
-      
+
         // insert the control models into the dialog model
         XNameContainer xNameCont = ( XNameContainer )UnoRuntime.queryInterface(
             XNameContainer.class, dialogModel );
@@ -395,19 +395,19 @@ XInitialization {
             // insert the control models into the dialog model
             xNameCont.insertByName( _label1Name, labelModel );
         }
-      
+
         // create the dialog control and set the model
         Object dialog = xMultiComponentFactory.createInstanceWithContext(
             "com.sun.star.awt.UnoControlDialog", _xComponentContext );
         XControl xControl = ( XControl )UnoRuntime.queryInterface(
             XControl.class, dialog );
         XControlModel xControlModel = ( XControlModel )UnoRuntime.queryInterface(
-            XControlModel.class, dialogModel );      
+            XControlModel.class, dialogModel );
         xControl.setModel( xControlModel );
-      
+
         // add an action listener to the button control
         XControlContainer xControlCont = ( XControlContainer )UnoRuntime.queryInterface(
-            XControlContainer.class, dialog );      
+            XControlContainer.class, dialog );
 
         // Add to yes button
         Object objectButton = xControlCont.getControl( _runButtonName );
@@ -420,7 +420,7 @@ XInitialization {
         xButton = ( XButton )UnoRuntime.queryInterface(
             XButton.class, objectButton );
         xButton.addActionListener( new ActionListenerImpl( xControlCont, _doNotRunButtonName ) );
-      
+
         if ( checkBoxDialog )
         {
             // add to checkbox
@@ -429,17 +429,17 @@ XInitialization {
                 XCheckBox.class, objectCheckBox );
             xCheckBox.addItemListener((XItemListener) new ItemListenerImpl( xControlCont ) );
         }
-      
+
         // create a peer
         Object toolkit = xMultiComponentFactory.createInstanceWithContext(
-            "com.sun.star.awt.ExtToolkit", _xComponentContext );      
+            "com.sun.star.awt.ExtToolkit", _xComponentContext );
         XToolkit xToolkit = ( XToolkit )UnoRuntime.queryInterface(
             XToolkit.class, toolkit );
         XWindow xWindow = ( XWindow )UnoRuntime.queryInterface(
             XWindow.class, xControl );
-        xWindow.setVisible( false );      
+        xWindow.setVisible( false );
         xControl.createPeer( xToolkit, null );
-      
+
         // return the dialog
         XDialog xDialog = ( XDialog )UnoRuntime.queryInterface(
             XDialog.class, dialog );
@@ -447,7 +447,7 @@ XInitialization {
     }
     public short execute()
     {
-        
+
         short result = 0;
         _pushed = _doNotRunButtonName;
         LogUtils.DEBUG("*DF* Before execute " );
@@ -457,7 +457,7 @@ XInitialization {
         if ( _pushed.equals( _runButtonName ) )
         {
             result += 1;
-        }        
+        }
         if ( _checkBoxState == 1 )
         {
             result +=2;
@@ -474,12 +474,12 @@ XInitialization {
    {
         return _xDialog.getTitle();
    }
- 
+
    public void setTitle( String Title )
    {
         _xDialog.setTitle( Title );
    }
-   
+
    public void dispose ()
    {
         XComponent xComponent = ( XComponent )UnoRuntime.queryInterface(
@@ -491,7 +491,7 @@ XInitialization {
    {
         XComponent xComponent = ( XComponent )UnoRuntime.queryInterface(
             XComponent.class, _xDialog );
-       xComponent.addEventListener( xListener ); 
+       xComponent.addEventListener( xListener );
    }
 
 
@@ -499,7 +499,7 @@ XInitialization {
    {
         XComponent xComponent = ( XComponent )UnoRuntime.queryInterface(
             XComponent.class, _xDialog );
-       xComponent.removeEventListener( aListener );    
+       xComponent.removeEventListener( aListener );
    }
 
     public class ActionListenerImpl implements com.sun.star.awt.XActionListener {
@@ -509,20 +509,20 @@ XInitialization {
             _xControlCont = xControlCont;
             _buttonName = buttonName;
         }
-        
+
         // XEventListener
         public void disposing( EventObject eventObject ) {
             _xControlCont = null;
         }
-        
+
         // XActionListener
         public void actionPerformed( ActionEvent actionEvent ) {
           _pushed = _buttonName;
           LogUtils.DEBUG("** Button pushed ->" + _pushed );
- 
+
           _xDialog.endExecute();
-        }    
-    }    
+        }
+    }
 
     public class ItemListenerImpl implements com.sun.star.awt.XItemListener {
         private XCheckBox _xCheckBox;
@@ -531,16 +531,16 @@ XInitialization {
             _xCheckBox = ( XCheckBox )UnoRuntime.queryInterface(
                 XCheckBox.class, objectCheckBox );
         }
-        
+
         // XEventListener
         public void disposing( EventObject eventObject ) {
             _xCheckBox = null;
         }
-        
+
         // XAdjustmentListener
         public void itemStateChanged( ItemEvent itemEvent ) {
           _checkBoxState = _xCheckBox.getState();
           LogUtils.DEBUG("** checkbox state ->" + _checkBoxState );
-        }    
-    }    
+        }
+    }
 }

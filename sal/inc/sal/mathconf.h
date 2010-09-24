@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,9 +61,9 @@ extern "C" {
 #if defined( WNT)
 #define SAL_MATH_FINITE(d) _finite(d)
 #elif defined OS2
-#define SAL_MATH_FINITE(x) 				\
-    ((sizeof (x) == sizeof (float)) ? __isfinitef(x)	\
-    : (sizeof (x) == sizeof (double)) ? __isfinite(x)	\
+#define SAL_MATH_FINITE(x)              \
+    ((sizeof (x) == sizeof (float)) ? __isfinitef(x)    \
+    : (sizeof (x) == sizeof (double)) ? __isfinite(x)   \
     : __isfinitel(x))
 #elif defined LINUX || defined UNX
 #define SAL_MATH_FINITE(d) finite(d)

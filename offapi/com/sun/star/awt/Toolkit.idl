@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,12 +24,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_Toolkit_idl__ 
-#define __com_sun_star_awt_Toolkit_idl__ 
- 
-#ifndef __com_sun_star_awt_XToolkit_idl__ 
-#include <com/sun/star/awt/XToolkit.idl> 
-#endif 
+#ifndef __com_sun_star_awt_Toolkit_idl__
+#define __com_sun_star_awt_Toolkit_idl__
+
+#ifndef __com_sun_star_awt_XToolkit_idl__
+#include <com/sun/star/awt/XToolkit.idl>
+#endif
 
 #ifndef __com_sun_star_awt_XDataTransferProviderAccess_idl__
 #include <com/sun/star/awt/XDataTransferProviderAccess.idl>
@@ -43,34 +43,34 @@
 #include <com/sun/star/awt/XMessageBoxFactory.idl>
 #endif
 
- 
-//============================================================================= 
- 
+
+//=============================================================================
+
 module com {  module sun {  module star {  module awt {
-    
-//============================================================================= 
- 
-/** describes a toolkit that creates windows on a screen. 
-        
-    <p>The design of the interfaces for the toolkit implementation 
+
+//=============================================================================
+
+/** describes a toolkit that creates windows on a screen.
+
+    <p>The design of the interfaces for the toolkit implementation
     should be remote. This means that the calls to the interfaces
     of the toolkit should be one-way. Too many synchronous calls kill the
     remote performance.</p>
  */
 published service Toolkit
-{ 
-    interface XToolkit; 
+{
+    interface XToolkit;
 
     [optional] interface com::sun::star::awt::XDataTransferProviderAccess;
 
     [optional] interface com::sun::star::awt::XSystemChildFactory;
 
     [optional] interface com::sun::star::awt::XMessageBoxFactory;
-    
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

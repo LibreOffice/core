@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class SwMailConfigPage : public SfxTabPage
     friend class SwTestAccountSettingsDialog;
 
     FixedLine       m_aIdentityFL;
-    
+
     FixedText       m_aDisplayNameFT;
     Edit            m_aDisplayNameED;
     FixedText       m_aAddressFT;
@@ -61,7 +61,7 @@ class SwMailConfigPage : public SfxTabPage
     CheckBox        m_aReplyToCB;
     FixedText       m_aReplyToFT;
     Edit            m_aReplyToED;
-    
+
     FixedLine       m_aSMTPFL;
 
     FixedText       m_aServerFT;
@@ -69,10 +69,10 @@ class SwMailConfigPage : public SfxTabPage
     FixedText       m_aPortFT;
     NumericField    m_aPortNF;
 
-    CheckBox		m_aSecureCB;
+    CheckBox        m_aSecureCB;
 
     PushButton      m_aServerAuthenticationPB;
-    
+
     FixedLine       m_aSeparatorFL;
     PushButton      m_aTestPB;
 

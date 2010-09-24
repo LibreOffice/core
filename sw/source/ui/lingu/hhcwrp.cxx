@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <txatritr.hxx>
-#include <mdiexp.hxx>		// Progress
+#include <mdiexp.hxx>       // Progress
 #include <edtwin.hxx>
 #include <crsskip.hxx>
 #include <index.hxx>
@@ -551,7 +551,7 @@ void SwHHCWrapper::ReplaceUnit(
             if (pNewUnitLanguage)
             {
                 //DBG_ASSERT(!IsSimilarChinese( *pNewUnitLanguage, nOldLang ),
-                //		"similar language should not be changed!");
+                //      "similar language should not be changed!");
                 aSet.Put( SvxLanguageItem( *pNewUnitLanguage, RES_CHRATR_CJK_LANGUAGE ) );
             }
 
@@ -602,7 +602,7 @@ void SwHHCWrapper::Convert()
                             pSttPos->nNode.GetNode().GetTxtNode(), pSttPos->nContent,
                             pEndPos->nNode.GetNode().GetTxtNode(), pEndPos->nContent );
         }
-        else	// we are not in the text (maybe a graphic or OLE object is selected) let's start from the top
+        else    // we are not in the text (maybe a graphic or OLE object is selected) let's start from the top
         {
             // get PaM that points to the start of the document
             SwNode& rNode = pView->GetDocShell()->GetDoc()->GetNodes().GetEndOfContent();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,20 +46,20 @@ namespace connectivity
         //**************************************************************
                 typedef ::cppu::WeakImplHelper1<        ::com::sun::star::sdbc::XResultSetMetaData>   ODatabaseMetaResultSetMetaData_BASE;
 
-        class ODatabaseMetaDataResultSetMetaData :	public 	ODatabaseMetaResultSetMetaData_BASE
+        class ODatabaseMetaDataResultSetMetaData :  public  ODatabaseMetaResultSetMetaData_BASE
         {
             friend class ODatabaseMetaDataResultSet;
 
             const ::std::vector<sal_Int32> &m_vMapping; // when not every column is needed
-            ::std::map<sal_Int32,connectivity::OColumn>	m_mColumns;
+            ::std::map<sal_Int32,connectivity::OColumn> m_mColumns;
             ::std::map<sal_Int32,connectivity::OColumn>::const_iterator m_mColumnsIter;
 
-            ADORecordset*	m_pRecordSet;
-            sal_Int32		m_nColCount;
+            ADORecordset*   m_pRecordSet;
+            sal_Int32       m_nColCount;
 
         private:
-            ODatabaseMetaDataResultSetMetaData( const ODatabaseMetaDataResultSetMetaData& );			// never implemented
-            ODatabaseMetaDataResultSetMetaData& operator=( const ODatabaseMetaDataResultSetMetaData& );	// never implemented
+            ODatabaseMetaDataResultSetMetaData( const ODatabaseMetaDataResultSetMetaData& );            // never implemented
+            ODatabaseMetaDataResultSetMetaData& operator=( const ODatabaseMetaDataResultSetMetaData& ); // never implemented
 
         protected:
             void setColumnPrivilegesMap();
@@ -75,7 +75,7 @@ namespace connectivity
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             ODatabaseMetaDataResultSetMetaData( ADORecordset* _pRecordSet ,ODatabaseMetaDataResultSet* _pRes)
-                    :	m_pRecordSet(_pRecordSet),m_vMapping(_pRes->getColumnMapping()),
+                    :   m_pRecordSet(_pRecordSet),m_vMapping(_pRes->getColumnMapping()),
                         m_nColCount(m_vMapping.size()-1)
             {
                 if(m_pRecordSet)

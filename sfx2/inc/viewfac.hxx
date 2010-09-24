@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,11 +50,11 @@ public:
     ~SfxViewFactory();
 
     SfxViewShell *CreateInstance(SfxViewFrame *pViewFrame, SfxViewShell *pOldSh);
-    void		  InitFactory();
+    void          InitFactory();
 
-    String		  GetDescription() const
+    String        GetDescription() const
                   { return String( aDescription ); }
-    USHORT		  GetOrdinal() const { return nOrd; }
+    USHORT        GetOrdinal() const { return nOrd; }
 
     /// returns an API-compatible view name. For the moment, this is "view" with an appended ordinal/ID
     String        GetViewName() const;
@@ -63,7 +63,7 @@ private:
     SfxViewCtor fnCreate;
     SfxViewInit fnInit;
     USHORT      nOrd;
-    ResId		aDescription;
+    ResId       aDescription;
 };
 
 #endif

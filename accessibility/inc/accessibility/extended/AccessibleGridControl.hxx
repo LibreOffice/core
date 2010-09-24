@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -164,7 +164,7 @@ protected:
 
     /** This method creates and returns an accessible table.
         @return  An AccessibleGridControlTable. */
-    virtual AccessibleGridControlTable*	createAccessibleTable();
+    virtual AccessibleGridControlTable* createAccessibleTable();
 
 private:
     // members ----------------------------------------------------------------
@@ -173,11 +173,11 @@ private:
 
 // ============================================================================
 /** the XAccessible which creates/returns an AccessibleGridControl
-    
+
     <p>The instance holds it's XAccessibleContext with a hard reference, while
     the contxt holds this instance weak.</p>
 */
-typedef ::cppu::WeakImplHelper1	< ::com::sun::star::accessibility::XAccessible > AccessibleGridControlAccess_Base;
+typedef ::cppu::WeakImplHelper1 < ::com::sun::star::accessibility::XAccessible > AccessibleGridControlAccess_Base;
 
 class AccessibleGridControlAccess :public AccessibleGridControlAccess_Base
     ,public ::svt::table::IAccessibleTableControl
@@ -251,9 +251,9 @@ protected:
     }
 
 private:
-    AccessibleGridControlAccess();												// never implemented
-    AccessibleGridControlAccess( const AccessibleGridControlAccess& );		// never implemented
-    AccessibleGridControlAccess& operator=( const AccessibleGridControlAccess& );	// never implemented
+    AccessibleGridControlAccess();                                              // never implemented
+    AccessibleGridControlAccess( const AccessibleGridControlAccess& );      // never implemented
+    AccessibleGridControlAccess& operator=( const AccessibleGridControlAccess& );   // never implemented
 };
 
 // ============================================================================

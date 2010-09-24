@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -140,7 +140,7 @@ SessionListener::SessionListener(const css::uno::Reference< css::lang::XMultiSer
         , m_bSessionStoreRequested( sal_False )
         , m_bAllowUserInteractionOnQuit( sal_False )
         , m_bTerminated( sal_False )
-{   
+{
 }
 
 SessionListener::~SessionListener()
@@ -154,8 +154,8 @@ SessionListener::~SessionListener()
 
 void SessionListener::StoreSession( sal_Bool bAsync )
 {
-    ResetableGuard aGuard(m_aLock);    
-    try 
+    ResetableGuard aGuard(m_aLock);
+    try
     {
         // xd create SERVICENAME_AUTORECOVERY -> XDispatch
         // xd->dispatch("vnd.sun.star.autorecovery:/doSessionSave, async=bAsync
@@ -187,8 +187,8 @@ void SessionListener::StoreSession( sal_Bool bAsync )
 
 void SessionListener::QuitSessionQuietly()
 {
-    ResetableGuard aGuard(m_aLock);    
-    try 
+    ResetableGuard aGuard(m_aLock);
+    try
     {
         // xd create SERVICENAME_AUTORECOVERY -> XDispatch
         // xd->dispatch("vnd.sun.star.autorecovery:/doSessionQuietQuit, async=false
@@ -311,7 +311,7 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
     throw (RuntimeException)
 {
     // do AutoSave as the first step
-    ResetableGuard aGuard(m_aLock);    
+    ResetableGuard aGuard(m_aLock);
 
     if ( bInteractionGranted )
     {

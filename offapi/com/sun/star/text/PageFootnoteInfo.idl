@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,83 +24,83 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_PageFootnoteInfo_idl__ 
-#define __com_sun_star_text_PageFootnoteInfo_idl__ 
- 
-#ifndef __com_sun_star_text_HorizontalAdjust_idl__ 
-#include <com/sun/star/text/HorizontalAdjust.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module text {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_text_PageFootnoteInfo_idl__
+#define __com_sun_star_text_PageFootnoteInfo_idl__
+
+#ifndef __com_sun_star_text_HorizontalAdjust_idl__
+#include <com/sun/star/text/HorizontalAdjust.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
 // DocMerge from xml: service com::sun::star::text::PageFootnoteInfo
 /** specifies the properties of the footnote area of a page or a
     page style.
  */
 published service PageFootnoteInfo
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteHeight
     /** contains the maximum height of the footnote section.
-        
-        
-        
+
+
+
         <p>If 0, the maximum is the height of the page.</p>
      */
-    [property] long FootnoteHeight; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] long FootnoteHeight;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteSeparatorLineWidth
     /** contains the relative width of the footnote separator line.
      */
-    [property] long FootnoteSeparatorLineWidth; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] long FootnoteSeparatorLineWidth;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteTopDistance
     /** contains the distance between the text and footnote section.
      */
-    [property] long FootnoteTopDistance; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] long FootnoteTopDistance;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteBottomDistance
     /** contains the distance between the separator line and the footnote section.
      */
-    [property] long FootnoteBottomDistance; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] long FootnoteBottomDistance;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteSeparatorLineWidthPercent
     /** contains the relative width of the footnote separator line.
      */
-    [property] short FootnoteSeparatorLineWidthPercent; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] short FootnoteSeparatorLineWidthPercent;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteSeparatorLineAdjust
     /** contains the adjustment of the footnote separator line.
      */
-    [property] com::sun::star::text::HorizontalAdjust FootnoteSeparatorLineAdjust; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] com::sun::star::text::HorizontalAdjust FootnoteSeparatorLineAdjust;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteSeparatorLinePenWidth
     /** contains the width of the pen for the footnote separator line.
      */
-    [property] short FootnoteSeparatorLinePenWidth; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [property] short FootnoteSeparatorLinePenWidth;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

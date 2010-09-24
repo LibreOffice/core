@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,12 +55,12 @@
 
 struct UnoControlComponentInfos
 {
-    sal_Bool	bVisible;
-    sal_Bool	bEnable;
-    long		nX, nY, nWidth, nHeight;
-    sal_uInt16	nFlags;
-    float		nZoomX, nZoomY;
-    
+    sal_Bool    bVisible;
+    sal_Bool    bEnable;
+    long        nX, nY, nWidth, nHeight;
+    sal_uInt16  nFlags;
+    float       nZoomX, nZoomY;
+
     UnoControlComponentInfos()
     {
         bVisible = sal_True;
@@ -72,72 +72,72 @@ struct UnoControlComponentInfos
 };
 
 struct UnoControl_Data;
-//	----------------------------------------------------
-//	class UnoControl
-//	----------------------------------------------------
-typedef ::cppu::WeakAggImplHelper9	<	::com::sun::star::awt::XControl
-                                    ,	::com::sun::star::awt::XWindow2
-                                    ,	::com::sun::star::awt::XView
-                                    ,	::com::sun::star::beans::XPropertiesChangeListener
-                                    ,	::com::sun::star::lang::XServiceInfo
-                                    ,	::com::sun::star::accessibility::XAccessible
-                                    ,	::com::sun::star::util::XModeChangeBroadcaster
-                                    ,	::com::sun::star::awt::XUnitConversion
+//  ----------------------------------------------------
+//  class UnoControl
+//  ----------------------------------------------------
+typedef ::cppu::WeakAggImplHelper9  <   ::com::sun::star::awt::XControl
+                                    ,   ::com::sun::star::awt::XWindow2
+                                    ,   ::com::sun::star::awt::XView
+                                    ,   ::com::sun::star::beans::XPropertiesChangeListener
+                                    ,   ::com::sun::star::lang::XServiceInfo
+                                    ,   ::com::sun::star::accessibility::XAccessible
+                                    ,   ::com::sun::star::util::XModeChangeBroadcaster
+                                    ,   ::com::sun::star::awt::XUnitConversion
                                     ,   ::com::sun::star::awt::XStyleSettingsSupplier
-                                    >	UnoControl_Base;
+                                    >   UnoControl_Base;
 
-class TOOLKIT_DLLPUBLIC UnoControl : 	public UnoControl_Base
+class TOOLKIT_DLLPUBLIC UnoControl :    public UnoControl_Base
 {
 private:
-    ::osl::Mutex	maMutex;
-    
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > 		mxPeer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer > 	mxVclWindowPeer; // just to avoid the query_interface thing
+    ::osl::Mutex    maMutex;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      mxPeer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >   mxVclWindowPeer; // just to avoid the query_interface thing
 
 protected:
-    EventListenerMultiplexer			maDisposeListeners;
-    WindowListenerMultiplexer			maWindowListeners;
-    FocusListenerMultiplexer			maFocusListeners;
-    KeyListenerMultiplexer				maKeyListeners;
-    MouseListenerMultiplexer			maMouseListeners;
-    MouseMotionListenerMultiplexer		maMouseMotionListeners;
-    PaintListenerMultiplexer			maPaintListeners;
-    ::cppu::OInterfaceContainerHelper	maModeChangeListeners;
-    
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > 		mxContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > 	mxModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > 		mxGraphics;
+    EventListenerMultiplexer            maDisposeListeners;
+    WindowListenerMultiplexer           maWindowListeners;
+    FocusListenerMultiplexer            maFocusListeners;
+    KeyListenerMultiplexer              maKeyListeners;
+    MouseListenerMultiplexer            maMouseListeners;
+    MouseMotionListenerMultiplexer      maMouseMotionListeners;
+    PaintListenerMultiplexer            maPaintListeners;
+    ::cppu::OInterfaceContainerHelper   maModeChangeListeners;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       mxContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >    mxModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >        mxGraphics;
 
     ::com::sun::star::uno::WeakReferenceHelper
-                                        maAccessibleContext;	/// our most recent XAccessibleContext instance
-    
-    sal_Bool							mbDisposePeer;
-    sal_Bool							mbRefeshingPeer;
-    sal_Bool							mbCreatingPeer;
-    sal_Bool							mbCreatingCompatiblePeer;
-    sal_Bool							mbDesignMode;
+                                        maAccessibleContext;    /// our most recent XAccessibleContext instance
 
-    UnoControlComponentInfos			maComponentInfos;
+    sal_Bool                            mbDisposePeer;
+    sal_Bool                            mbRefeshingPeer;
+    sal_Bool                            mbCreatingPeer;
+    sal_Bool                            mbCreatingCompatiblePeer;
+    sal_Bool                            mbDesignMode;
+
+    UnoControlComponentInfos            maComponentInfos;
     UnoControl_Data*                    mpData;
-    
-    ::osl::Mutex&																GetMutex() { return maMutex; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >			getParentPeer() const;
+    ::osl::Mutex&                                                               GetMutex() { return maMutex; }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          getParentPeer() const;
     virtual void                                                                updateFromModel();
     void                                                                        peerCreated();
     bool                                                                        ImplCheckLocalize( ::rtl::OUString& _rPossiblyLocalizable );
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  	ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer );
-    virtual void																ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
-    virtual void																PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc );
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer );
+    virtual void                                                                ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
+    virtual void                                                                PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc );
     virtual void                                                                ImplModelPropertiesChanged( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& rEvents );
 
     void                                                                        ImplLockPropertyChangeNotification( const ::rtl::OUString& rPropertyName, bool bLock );
     void                                                                        ImplLockPropertyChangeNotifications( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rPropertyNames, bool bLock );
 
-    void																		disposeAccessibleContext();
+    void                                                                        disposeAccessibleContext();
 
-    inline void setPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& _xPeer)	
-    { 
+    inline void setPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& _xPeer)
+    {
         mxPeer = _xPeer;
         mxVclWindowPeer = ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >(mxPeer,::com::sun::star::uno::UNO_QUERY); // just to avoid the query_interface thing
     }
@@ -148,13 +148,13 @@ public:
                 UnoControl();
                 ~UnoControl();
 
-                UnoControlComponentInfos&			GetComponentInfos() { return maComponentInfos; }
+                UnoControlComponentInfos&           GetComponentInfos() { return maComponentInfos; }
 
-    
-    virtual ::rtl::OUString	GetComponentServiceName();
+
+    virtual ::rtl::OUString GetComponentServiceName();
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -209,7 +209,7 @@ public:
     void SAL_CALL setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL isDesignMode(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
-    
+
     // ::com::sun::star::lang::XServiceInfo
     ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);

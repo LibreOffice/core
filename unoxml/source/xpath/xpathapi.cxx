@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -147,9 +147,9 @@ namespace XPath
         while (pNode != 0) {
             xmlNsPtr curDef = pNode->nsDef;
             while (curDef != 0) {
-                const xmlChar* xHref = curDef->href; 
+                const xmlChar* xHref = curDef->href;
                 OUString aURI((sal_Char*)xHref, strlen((char*)xHref), RTL_TEXTENCODING_UTF8);
-                const xmlChar* xPre = curDef->prefix; 
+                const xmlChar* xPre = curDef->prefix;
                 OUString aPrefix((sal_Char*)xPre, strlen((char*)xPre), RTL_TEXTENCODING_UTF8);
                 pAPI->registerNS(aPrefix, aURI);
                 curDef = curDef->next;
@@ -168,17 +168,17 @@ namespace XPath
         while (i != extensions.end())
         {
             Libxml2ExtensionHandle aHandle = (*i)->getLibxml2ExtensionHandle();
-            if ( aHandle.functionLookupFunction != 0 ) 
+            if ( aHandle.functionLookupFunction != 0 )
             {
-                xmlXPathRegisterFuncLookup(ctx, 
+                xmlXPathRegisterFuncLookup(ctx,
                     reinterpret_cast<xmlXPathFuncLookupFunc>(
                         sal::static_int_cast<sal_IntPtr>(aHandle.functionLookupFunction)),
                     reinterpret_cast<void*>(
                         sal::static_int_cast<sal_IntPtr>(aHandle.functionData)));
             }
-            if ( aHandle.variableLookupFunction != 0 ) 
+            if ( aHandle.variableLookupFunction != 0 )
             {
-                xmlXPathRegisterVariableLookup(ctx, 
+                xmlXPathRegisterVariableLookup(ctx,
                     reinterpret_cast<xmlXPathVariableLookupFunc>(
                         sal::static_int_cast<sal_IntPtr>(aHandle.variableLookupFunction)),
                     reinterpret_cast<void*>(
@@ -384,7 +384,7 @@ namespace XPath
     }
 
     /**
-     * registers the given extension instance to be used by XPath evaluations performed through this 
+     * registers the given extension instance to be used by XPath evaluations performed through this
      * XPathAPI instance
      */
     void SAL_CALL CXPathAPI::registerExtensionInstance(

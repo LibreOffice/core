@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -140,7 +140,7 @@ FmXModifyMultiplexer::FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl:
 }
 
 //------------------------------------------------------------------
-Any	SAL_CALL FmXModifyMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
+Any SAL_CALL FmXModifyMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn;
     aReturn = ::cppu::queryInterface(_rType,
@@ -178,7 +178,7 @@ FmXUpdateMultiplexer::FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl:
 }
 
 //------------------------------------------------------------------
-Any	SAL_CALL FmXUpdateMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
+Any SAL_CALL FmXUpdateMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn;
     aReturn = ::cppu::queryInterface(_rType,
@@ -234,7 +234,7 @@ FmXSelectionMultiplexer::FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, 
 }
 
 //------------------------------------------------------------------
-Any	SAL_CALL FmXSelectionMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
+Any SAL_CALL FmXSelectionMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn;
     aReturn = ::cppu::queryInterface(_rType,
@@ -272,7 +272,7 @@ FmXContainerMultiplexer::FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, 
 }
 
 //------------------------------------------------------------------
-Any	SAL_CALL FmXContainerMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
+Any SAL_CALL FmXContainerMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn;
     aReturn = ::cppu::queryInterface(_rType,
@@ -326,7 +326,7 @@ FmXGridControlMultiplexer::FmXGridControlMultiplexer( ::cppu::OWeakObject& rSour
 }
 
 //------------------------------------------------------------------
-Any	SAL_CALL FmXGridControlMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
+Any SAL_CALL FmXGridControlMultiplexer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn;
     aReturn = ::cppu::queryInterface( _rType,
@@ -383,7 +383,7 @@ FmXGridControl::~FmXGridControl()
 }
 
 //------------------------------------------------------------------
-Any	SAL_CALL FmXGridControl::queryAggregation(const Type& _rType) throw (RuntimeException)
+Any SAL_CALL FmXGridControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = FmXGridControl_BASE::queryInterface(_rType);
 
@@ -427,7 +427,7 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& Service
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString	SAL_CALL FmXGridControl::getImplementationName() throw()
+::rtl::OUString SAL_CALL FmXGridControl::getImplementationName() throw()
 {
     return ::rtl::OUString::createFromAscii("com.sun.star.form.FmXGridControl");
 }
@@ -456,7 +456,7 @@ void SAL_CALL FmXGridControl::dispose() throw( RuntimeException )
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString	FmXGridControl::GetComponentServiceName()
+::rtl::OUString FmXGridControl::GetComponentServiceName()
 {
     ::rtl::OUString aName = ::rtl::OUString::createFromAscii("DBGrid");
     return aName;
@@ -538,7 +538,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
         setPeer( pPeer );
 
         // lesen der properties aus dem model
-//		++m_nPeerCreationLevel;
+//      ++m_nPeerCreationLevel;
         updateFromModel();
 
         // folgendes unschoene Szenario : updateFromModel fuehrt zu einem propertiesChanged am Control,
@@ -550,7 +550,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
         // Deswegen also der Aufwand mit dem PeerCreationLevel, das stellt sicher, dass wir die in dem
         // tiefsten Level angelegte Peer wirklich verwenden, sie aber erst im top-level
         // initialisieren.
-//		if (--m_nPeerCreationLevel == 0)
+//      if (--m_nPeerCreationLevel == 0)
         {
             DBG_ASSERT(getPeer().is(), "FmXGridControl::createPeer : something went wrong ... no top level peer !");
             pPeer = FmXGridPeer::getImplementation(getPeer());
@@ -643,7 +643,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
             try
             {
                 if (aOldCursorBookmark.hasValue())
-                {	// we have a valid bookmark, so we have to restore the cursor's position
+                {   // we have a valid bookmark, so we have to restore the cursor's position
                     Reference< XFormComponent >  xComp(getModel(), UNO_QUERY);
                     Reference< ::com::sun::star::sdbcx::XRowLocate >  xLocate(xComp->getParent(), UNO_QUERY);
                     xLocate->moveToBookmark(aOldCursorBookmark);
@@ -1028,7 +1028,7 @@ sal_Bool SAL_CALL FmXGridControl::supportsMode(const ::rtl::OUString& Mode) thro
 class FmXGridPeer::GridListenerDelegator : public FmGridListener
 {
 protected:
-    FmXGridPeer*		m_pPeer;
+    FmXGridPeer*        m_pPeer;
 
 public:
     GridListenerDelegator( FmXGridPeer* _pPeer );
@@ -1089,7 +1089,7 @@ Sequence<sal_Int8> SAL_CALL FmXGridPeer::getImplementationId(  ) throw(RuntimeEx
 }
 
 //------------------------------------------------------------------
-Any	SAL_CALL FmXGridPeer::queryInterface(const Type& _rType) throw (RuntimeException)
+Any SAL_CALL FmXGridPeer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = FmXGridPeer_BASE::queryInterface(_rType);
 
@@ -1179,7 +1179,7 @@ FmXGridPeer::~FmXGridPeer()
 }
 
 //------------------------------------------------------------------------------
-const Sequence< sal_Int8 >&	FmXGridPeer::getUnoTunnelImplementationId() throw()
+const Sequence< sal_Int8 >& FmXGridPeer::getUnoTunnelImplementationId() throw()
 {
     static Sequence< sal_Int8 > * pSeq = 0;
     if( !pSeq )
@@ -1211,8 +1211,8 @@ sal_Int64 SAL_CALL FmXGridPeer::getSomething( const Sequence< sal_Int8 >& _rIden
 {
     sal_Int64 nReturn(0);
 
-    if	(	(_rIdentifier.getLength() == 16)
-        &&	(0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(), _rIdentifier.getConstArray(), 16 ))
+    if  (   (_rIdentifier.getLength() == 16)
+        &&  (0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(), _rIdentifier.getConstArray(), 16 ))
         )
     {
         nReturn = reinterpret_cast<sal_Int64>(this);
@@ -1279,45 +1279,45 @@ void FmXGridPeer::removeModifyListener(const Reference< ::com::sun::star::util::
 }
 
 //------------------------------------------------------------------------------
-#define LAST_KNOWN_TYPE		FormComponentType::PATTERNFIELD
+#define LAST_KNOWN_TYPE     FormComponentType::PATTERNFIELD
 Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType ) throw(RuntimeException)
 {
     // eine 'Konvertierungstabelle'
     static sal_Bool bCanConvert[LAST_KNOWN_TYPE][4] =
     {
-        { sal_False, sal_False, sal_False, sal_False },	//	FormComponentType::CONTROL
-        { sal_False, sal_False, sal_False, sal_False },	//	FormComponentType::COMMANDBUTTON
-        { sal_False, sal_False, sal_False, sal_False },	//	FormComponentType::RADIOBUTTON
-        { sal_False, sal_False, sal_False, sal_False },	//	FormComponentType::IMAGEBUTTON
-        { sal_False, sal_False, sal_False, sal_True  },	//	FormComponentType::CHECKBOX
-        { sal_False, sal_False, sal_False, sal_False },	//	FormComponentType::LISTBOX
-        { sal_False, sal_False, sal_False, sal_False },	//	FormComponentType::COMBOBOX
-        { sal_False, sal_False, sal_False, sal_False },	//	FormComponentType::GROUPBOX
-        { sal_True , sal_False, sal_False, sal_False },	//	FormComponentType::TEXTFIELD
-        { sal_False, sal_False, sal_False, sal_False },	//	FormComponentType::FIXEDTEXT
-        { sal_False, sal_False, sal_False, sal_False },	//	FormComponentType::GRIDCONTROL
-        { sal_False, sal_False, sal_False, sal_False },	//	FormComponentType::FILECONTROL
-        { sal_False, sal_False, sal_False, sal_False },	//	FormComponentType::HIDDENCONTROL
-        { sal_False, sal_False, sal_False, sal_False },	//	FormComponentType::IMAGECONTROL
-        { sal_True , sal_True , sal_True , sal_False },	//	FormComponentType::DATEFIELD
-        { sal_True , sal_True , sal_False, sal_False },	//	FormComponentType::TIMEFIELD
-        { sal_True , sal_True , sal_False, sal_False },	//	FormComponentType::NUMERICFIELD
-        { sal_True , sal_True , sal_False, sal_False },	//	FormComponentType::CURRENCYFIELD
-        { sal_True , sal_False, sal_False, sal_False } 	//	FormComponentType::PATTERNFIELD
+        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::CONTROL
+        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::COMMANDBUTTON
+        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::RADIOBUTTON
+        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::IMAGEBUTTON
+        { sal_False, sal_False, sal_False, sal_True  }, //  FormComponentType::CHECKBOX
+        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::LISTBOX
+        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::COMBOBOX
+        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::GROUPBOX
+        { sal_True , sal_False, sal_False, sal_False }, //  FormComponentType::TEXTFIELD
+        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::FIXEDTEXT
+        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::GRIDCONTROL
+        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::FILECONTROL
+        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::HIDDENCONTROL
+        { sal_False, sal_False, sal_False, sal_False }, //  FormComponentType::IMAGECONTROL
+        { sal_True , sal_True , sal_True , sal_False }, //  FormComponentType::DATEFIELD
+        { sal_True , sal_True , sal_False, sal_False }, //  FormComponentType::TIMEFIELD
+        { sal_True , sal_True , sal_False, sal_False }, //  FormComponentType::NUMERICFIELD
+        { sal_True , sal_True , sal_False, sal_False }, //  FormComponentType::CURRENCYFIELD
+        { sal_True , sal_False, sal_False, sal_False }  //  FormComponentType::PATTERNFIELD
     };
 
 
     sal_Int16 nMapColumn = -1;
     switch (xType.getTypeClass())
     {
-        case TypeClass_STRING			: nMapColumn = 0; break;
+        case TypeClass_STRING           : nMapColumn = 0; break;
         case TypeClass_FLOAT:
-        case TypeClass_DOUBLE			: nMapColumn = 1; break;
+        case TypeClass_DOUBLE           : nMapColumn = 1; break;
         case TypeClass_SHORT:
         case TypeClass_LONG:
         case TypeClass_UNSIGNED_LONG:
-        case TypeClass_UNSIGNED_SHORT	: nMapColumn = 2; break;
-        case TypeClass_BOOLEAN			: nMapColumn = 3; break;
+        case TypeClass_UNSIGNED_SHORT   : nMapColumn = 2; break;
+        case TypeClass_BOOLEAN          : nMapColumn = 3; break;
         default:
             break;
     }
@@ -1431,20 +1431,20 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
             switch (xType.getTypeClass())
             {
                 // Strings werden direkt ueber das GetFieldText abgehandelt
-                case TypeClass_STRING			:
+                case TypeClass_STRING           :
                 {
                     String sText = aColumns.GetObject(nModelPos)->GetCellText( xPaintRow, pGrid->getNumberFormatter() );
                     pReturnArray[i] <<= ::rtl::OUString(sText);
                 }
                 break;
                 // alles andere wird an der DatabaseVariant erfragt
-                case TypeClass_FLOAT			: pReturnArray[i] <<= xFieldContent->getFloat(); break;
-                case TypeClass_DOUBLE		    : pReturnArray[i] <<= xFieldContent->getDouble(); break;
-                case TypeClass_SHORT			: pReturnArray[i] <<= (sal_Int16)xFieldContent->getShort(); break;
-                case TypeClass_LONG			    : pReturnArray[i] <<= (sal_Int32)xFieldContent->getLong(); break;
+                case TypeClass_FLOAT            : pReturnArray[i] <<= xFieldContent->getFloat(); break;
+                case TypeClass_DOUBLE           : pReturnArray[i] <<= xFieldContent->getDouble(); break;
+                case TypeClass_SHORT            : pReturnArray[i] <<= (sal_Int16)xFieldContent->getShort(); break;
+                case TypeClass_LONG             : pReturnArray[i] <<= (sal_Int32)xFieldContent->getLong(); break;
                 case TypeClass_UNSIGNED_SHORT   : pReturnArray[i] <<= (sal_uInt16)xFieldContent->getShort(); break;
-                case TypeClass_UNSIGNED_LONG	: pReturnArray[i] <<= (sal_uInt32)xFieldContent->getLong(); break;
-                case TypeClass_BOOLEAN		    : ::comphelper::setBOOL(pReturnArray[i],xFieldContent->getBoolean()); break;
+                case TypeClass_UNSIGNED_LONG    : pReturnArray[i] <<= (sal_uInt32)xFieldContent->getLong(); break;
+                case TypeClass_BOOLEAN          : ::comphelper::setBOOL(pReturnArray[i],xFieldContent->getBoolean()); break;
                 default:
                 {
                     throw IllegalArgumentException();
@@ -1793,7 +1793,7 @@ void FmXGridPeer::setDesignMode(sal_Bool bOn) throw( RuntimeException )
     if (bOn)
         DisConnectFromDispatcher();
     else
-        UpdateDispatches();	// will connect if not already connected and just update else
+        UpdateDispatches(); // will connect if not already connected and just update else
 }
 
 //------------------------------------------------------------------------------
@@ -2011,7 +2011,7 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
             if (Value >>= aFont)
             {
                 Font aNewVclFont;
-                if (::comphelper::operator!=(aFont, ::comphelper::getDefaultFont()))	// ist das der Default
+                if (::comphelper::operator!=(aFont, ::comphelper::getDefaultFont()))    // ist das der Default
                     aNewVclFont = ImplCreateFont( aFont );
 
                 // need to add relief and emphasis (they're stored in a VCL-Font, but not in a FontDescriptor
@@ -2378,7 +2378,7 @@ void FmXGridPeer::selectionChanged(const EventObject& evt) throw( RuntimeExcepti
             // fuer das VCL-Control muessen die Columns 1-basiert sein
             // die Selektion an das VCL-Control weiterreichen, wenn noetig
             if ( i != pGrid->GetSelectedColumn() )
-            {	// (wenn das nicht greift, wurde das selectionChanged implizit von dem Control selber ausgeloest
+            {   // (wenn das nicht greift, wurde das selectionChanged implizit von dem Control selber ausgeloest
                 if ( i < nColCount )
                 {
                     pGrid->SelectColumnPos(pGrid->GetViewColumnPos(pGrid->GetColumnIdFromModelPos( (sal_uInt16)i )) + 1, sal_True);
@@ -2441,7 +2441,7 @@ Any FmXGridPeer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException,
     sal_uInt16 nPos = pGrid->GetModelColumnPos(nId);
 
     DbGridColumn* pCol = pGrid->GetColumns().GetObject(nPos);
-//	DBG_ASSERT(pCol && pCol->GetCell(), "FmXGridPeer::getByIndex(): Invalid cell");
+//  DBG_ASSERT(pCol && pCol->GetCell(), "FmXGridPeer::getByIndex(): Invalid cell");
     Reference< ::com::sun::star::awt::XControl >  xControl(pCol->GetCell());
     aElement <<= xControl;
 
@@ -2612,7 +2612,7 @@ void FmXGridPeer::releaseDispatchProviderInterceptor(const Reference< ::com::sun
     Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >  xChainWalk(m_xFirstDispatchInterceptor);
 
     if (m_xFirstDispatchInterceptor == _xInterceptor)
-    {	// our chain will have a new first element
+    {   // our chain will have a new first element
         Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >  xSlave(m_xFirstDispatchInterceptor->getSlaveDispatchProvider(), UNO_QUERY);
         m_xFirstDispatchInterceptor = xSlave;
     }
@@ -2733,7 +2733,7 @@ void SAL_CALL FmXGridPeer::removeSelectionChangeListener( const Reference< XSele
 void FmXGridPeer::resetted(const EventObject& rEvent) throw( RuntimeException )
 {
     if (m_xColumns == rEvent.Source)
-    {	// my model was reset -> refresh the grid content
+    {   // my model was reset -> refresh the grid content
         FmGridControl* pGrid = (FmGridControl*)GetWindow();
         if (!pGrid)
             return;
@@ -2813,7 +2813,7 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
 void FmXGridPeer::UpdateDispatches()
 {
     if (!m_pStateCache)
-    {	// we don't have any dispatchers yet -> do the initial connect
+    {   // we don't have any dispatchers yet -> do the initial connect
         ConnectToDispatcher();
         return;
     }
@@ -2851,7 +2851,7 @@ void FmXGridPeer::ConnectToDispatcher()
 {
     DBG_ASSERT((m_pStateCache != NULL) == (m_pDispatchers != NULL), "FmXGridPeer::ConnectToDispatcher : inconsistent !");
     if (m_pStateCache)
-    {	// already connected -> just do an update
+    {   // already connected -> just do an update
         UpdateDispatches();
         return;
     }
@@ -2909,7 +2909,7 @@ void FmXGridPeer::DisConnectFromDispatcher()
 IMPL_LINK(FmXGridPeer, OnQueryGridSlotState, void*, pSlot)
 {
     if (!m_pStateCache)
-        return -1;	// unspecified
+        return -1;  // unspecified
 
     sal_uInt16 nSlot = (sal_uInt16)(sal_uIntPtr)pSlot;
 
@@ -2921,7 +2921,7 @@ IMPL_LINK(FmXGridPeer, OnQueryGridSlotState, void*, pSlot)
         if (pSlots[i] == nSlot)
         {
             if (!m_pDispatchers[i].is())
-                return -1;	// nothing known about this slot
+                return -1;  // nothing known about this slot
             else
                 return m_pStateCache[i];
         }
@@ -2934,7 +2934,7 @@ IMPL_LINK(FmXGridPeer, OnQueryGridSlotState, void*, pSlot)
 IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, void*, pSlot)
 {
     if (!m_pDispatchers)
-        return 0;	// not handled
+        return 0;   // not handled
 
     Sequence< ::com::sun::star::util::URL>& aUrls = getSupportedURLs();
     const ::com::sun::star::util::URL* pUrls = aUrls.getConstArray();
@@ -2955,11 +2955,11 @@ IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, void*, pSlot)
                 if ( 0 == pUrls->Complete.compareTo( FMURL_RECORD_UNDO ) || commit() )
                     m_pDispatchers[i]->dispatch(*pUrls, Sequence< PropertyValue>());
 
-                return 1;	// handled
+                return 1;   // handled
             }
         }
     }
 
-    return 0;	// not handled
+    return 0;   // not handled
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,18 +72,18 @@ namespace accessibility {
 
     <p>This class implements three kinds of listeners:
     <ol><li>The property change listener is not used directly but exists as
-    convenience for derived classes.  May be moved to those classes 
+    convenience for derived classes.  May be moved to those classes
     instead.</li>
     <li>As window listener it waits for changes of the window geometry and
     forwards those as view forwarder changes.</li>
     <li>As focus listener it keeps track of the focus to give this class and
     derived classes the oportunity to set and remove the focus to/from
     shapes.</li>
-    </ol> 
+    </ol>
     </p>
 */
 class AccessibleDocumentViewBase
-    :	public AccessibleContextBase,
+    :   public AccessibleContextBase,
         public AccessibleComponentBase,
         public AccessibleSelectionBase,
         public IAccessibleViewForwarderListener,
@@ -114,7 +114,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rxParent);
 
-    virtual ~AccessibleDocumentViewBase	(void);
+    virtual ~AccessibleDocumentViewBase (void);
 
     /** Initialize a new object.  Call this method directly after creating a
         new object.  It finished the initialization begun in the constructor
@@ -134,7 +134,7 @@ public:
         windowResized... methods it will be sufficient in most cases just to
         overload this method.
      */
-    virtual void ViewForwarderChanged (ChangeType aChangeType, 
+    virtual void ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder);
 
     //=====  XAccessibleContext  ==============================================
@@ -163,42 +163,42 @@ public:
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual ::com::sun::star::uno::Reference< 
-        ::com::sun::star::accessibility::XAccessible > SAL_CALL 
-        getAccessibleAtPoint (const ::com::sun::star::awt::Point& aPoint) 
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getAccessibleAtPoint (const ::com::sun::star::awt::Point& aPoint)
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocation (void) 
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocation (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen (void) 
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize (void) 
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize (void)
         throw (::com::sun::star::uno::RuntimeException);
 
 
     //=====  XInterface  ======================================================
-    
+
     virtual com::sun::star::uno::Any SAL_CALL
         queryInterface (const com::sun::star::uno::Type & rType)
         throw (::com::sun::star::uno::RuntimeException);
-        
+
     virtual void SAL_CALL
-        acquire (void) 
+        acquire (void)
         throw ();
-        
+
     virtual void SAL_CALL
         release (void)
         throw ();
-        
-        
+
+
     //=====  XServiceInfo  ====================================================
-    
-    /**	Returns an identifier for the implementation of this object.
+
+    /** Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
@@ -210,7 +210,7 @@ public:
 
 
     //=====  XTypeProvider  ===================================================
-    
+
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
         getTypes (void)
         throw (::com::sun::star::uno::RuntimeException);
@@ -232,48 +232,48 @@ public:
 
     //=====  XWindowListener  =================================================
 
-    virtual void SAL_CALL 
-        windowResized (const ::com::sun::star::awt::WindowEvent& e) 
+    virtual void SAL_CALL
+        windowResized (const ::com::sun::star::awt::WindowEvent& e)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL 
-        windowMoved (const ::com::sun::star::awt::WindowEvent& e) 
+    virtual void SAL_CALL
+        windowMoved (const ::com::sun::star::awt::WindowEvent& e)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL 
-        windowShown (const ::com::sun::star::lang::EventObject& e) 
+    virtual void SAL_CALL
+        windowShown (const ::com::sun::star::lang::EventObject& e)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL 
-        windowHidden (const ::com::sun::star::lang::EventObject& e) 
+    virtual void SAL_CALL
+        windowHidden (const ::com::sun::star::lang::EventObject& e)
         throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XFocusListener  =================================================
 
     virtual void SAL_CALL focusGained (const ::com::sun::star::awt::FocusEvent& e)
-        throw (::com::sun::star::uno::RuntimeException); 
+        throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL focusLost (const ::com::sun::star::awt::FocusEvent& e)
-        throw (::com::sun::star::uno::RuntimeException); 
+        throw (::com::sun::star::uno::RuntimeException);
 
 private:
 
     // return the member maMutex;
-    virtual ::osl::Mutex& 
+    virtual ::osl::Mutex&
         implGetMutex();
-    
+
     // return ourself as context in default case
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > 
-        implGetAccessibleContext() 
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+        implGetAccessibleContext()
         throw ( ::com::sun::star::uno::RuntimeException );
 
     // return sal_False in default case
-    virtual sal_Bool 
-        implIsSelected( sal_Int32 nAccessibleChildIndex ) 
+    virtual sal_Bool
+        implIsSelected( sal_Int32 nAccessibleChildIndex )
         throw (::com::sun::star::uno::RuntimeException);
 
     // return nothing in default case
     virtual void
-        implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect ) 
+        implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
 protected:
@@ -289,7 +289,7 @@ protected:
          mxController;
 
     /// Model of the document.
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XModel> 
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XModel>
         mxModel;
 
     // Bundle of information that is passed down the shape tree.
@@ -302,7 +302,7 @@ protected:
         <member>SetAccessibleOLEObject</member> method.
     */
     ::com::sun::star::uno::Reference <
-        ::com::sun::star::accessibility::XAccessible> 
+        ::com::sun::star::accessibility::XAccessible>
         mxAccessibleOLEObject;
 
     Link maWindowLink;
@@ -311,7 +311,7 @@ protected:
     // disposing.
     virtual void SAL_CALL disposing (void);
 
-    /**	Create a name string.  The current name is not modified and,
+    /** Create a name string.  The current name is not modified and,
         therefore, no events are send.  This method is usually called once
         by the <member>getAccessibleName</member> method of the base class.
         @return
@@ -321,7 +321,7 @@ protected:
         CreateAccessibleName ()
         throw (::com::sun::star::uno::RuntimeException);
 
-    /**	Create a description string.  The current description is not
+    /** Create a description string.  The current description is not
         modified and, therefore, no events are send.  This method is usually
         called once by the <member>getAccessibleDescription</member> method
         of the base class.
@@ -336,7 +336,7 @@ protected:
         document has been activated.  Can be used to send FOCUSED state
         changes for the currently selected element.
 
-        Note: Currently used as a substitute for FocusGained.  Should be 
+        Note: Currently used as a substitute for FocusGained.  Should be
         renamed in the future.
     */
     virtual void Activated (void);
@@ -345,7 +345,7 @@ protected:
         this document has been deactivated.  Can be used to send FOCUSED
         state changes for the currently selected element.
 
-        Note: Currently used as a substitute for FocusLost.  Should be 
+        Note: Currently used as a substitute for FocusLost.  Should be
         renamed in the future.
     */
     virtual void Deactivated (void);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ XMLElementWrapper_XmlSecImpl::XMLElementWrapper_XmlSecImpl(const xmlNodePtr pNod
 
 
 /* XUnoTunnel */
-cssu::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId( void ) 
+cssu::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId( void )
     throw (cssu::RuntimeException)
 {
     static ::cppu::OImplementationId* pId = 0;
@@ -86,13 +86,13 @@ rtl::OUString XMLElementWrapper_XmlSecImpl_getImplementationName ()
     return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }
 
-sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl_supportsService( const rtl::OUString& ServiceName ) 
+sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl_supportsService( const rtl::OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ));
 }
 
-cssu::Sequence< rtl::OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  ) 
+cssu::Sequence< rtl::OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     cssu::Sequence < rtl::OUString > aRet(1);
@@ -111,17 +111,17 @@ cssu::Reference< cssu::XInterface > SAL_CALL
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL XMLElementWrapper_XmlSecImpl::getImplementationName(  ) 
+rtl::OUString SAL_CALL XMLElementWrapper_XmlSecImpl::getImplementationName(  )
     throw (cssu::RuntimeException)
 {
     return XMLElementWrapper_XmlSecImpl_getImplementationName();
 }
-sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const rtl::OUString& rServiceName ) 
+sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const rtl::OUString& rServiceName )
     throw (cssu::RuntimeException)
 {
     return XMLElementWrapper_XmlSecImpl_supportsService( rServiceName );
 }
-cssu::Sequence< rtl::OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedServiceNames(  ) 
+cssu::Sequence< rtl::OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     return XMLElementWrapper_XmlSecImpl_getSupportedServiceNames();
@@ -131,26 +131,26 @@ xmlNodePtr XMLElementWrapper_XmlSecImpl::getNativeElement(  ) const
 /****** XMLElementWrapper_XmlSecImpl/getNativeElement *************************
  *
  *   NAME
- *	getNativeElement -- Retrieves the libxml2 node wrapped by this object
+ *  getNativeElement -- Retrieves the libxml2 node wrapped by this object
  *
  *   SYNOPSIS
- *	pNode = getNativeElement();
+ *  pNode = getNativeElement();
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	pNode - the libxml2 node wrapped by this object
+ *  pNode - the libxml2 node wrapped by this object
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     return m_pElement;
@@ -160,26 +160,26 @@ void XMLElementWrapper_XmlSecImpl::setNativeElement(const xmlNodePtr pNode)
 /****** XMLElementWrapper_XmlSecImpl/setNativeElement *************************
  *
  *   NAME
- *	setNativeElement -- Configures the libxml2 node wrapped by this object
+ *  setNativeElement -- Configures the libxml2 node wrapped by this object
  *
  *   SYNOPSIS
- *	setNativeElement( pNode );
+ *  setNativeElement( pNode );
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	pNode -	the new libxml2 node to be wrapped by this object
+ *  pNode - the new libxml2 node to be wrapped by this object
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_pElement = pNode;

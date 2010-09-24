@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,18 +60,18 @@ class EDITENG_DLLPUBLIC TextRanger
     SvLongsPtr *pCache;
     PolyPolygon *mpPolyPolygon; // Flaechenpolygon
     PolyPolygon *mpLinePolyPolygon; // Linienpolygon
-    Rectangle *pBound;	// Umfassendes Rechteck
-    USHORT nCacheSize;	// Cache-Size
-    USHORT nCacheIdx;	// Cache-Index
-    USHORT nRight;		// Abstand Kontur-Text
-    USHORT nLeft;		// Abstand Text-Kontur
-    USHORT nUpper;		// Abstand Kontur-Text
-    USHORT nLower;		// Abstand Text-Kontur
+    Rectangle *pBound;  // Umfassendes Rechteck
+    USHORT nCacheSize;  // Cache-Size
+    USHORT nCacheIdx;   // Cache-Index
+    USHORT nRight;      // Abstand Kontur-Text
+    USHORT nLeft;       // Abstand Text-Kontur
+    USHORT nUpper;      // Abstand Kontur-Text
+    USHORT nLower;      // Abstand Text-Kontur
     sal_uInt32 nPointCount; // Anzahl der Polygonpunkte
-    BOOL bSimple : 1;	// Nur Aussenkante
-    BOOL bInner  : 1;	// TRUE: Objekt beschriften (EditEngine);
+    BOOL bSimple : 1;   // Nur Aussenkante
+    BOOL bInner  : 1;   // TRUE: Objekt beschriften (EditEngine);
                         // FALSE: Objekt umfliessen (StarWriter);
-    BOOL bVertical :1;	// for vertical writing mode
+    BOOL bVertical :1;  // for vertical writing mode
     BOOL bFlag3 :1;
     BOOL bFlag4 :1;
     BOOL bFlag5 :1;

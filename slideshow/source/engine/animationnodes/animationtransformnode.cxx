@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,59 +51,59 @@ void AnimationTransformNode::dispose()
 AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
 {
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
-    
+
     const sal_Int16 nTransformType( mxTransformNode->getTransformType() );
-    
+
     const AttributableShapeSharedPtr& rShape( getShape() );
-    
+
     switch( nTransformType )
     {
     default:
         ENSURE_OR_THROW(
             false, "AnimationTransformNode::createTransformActivity(): "
             "Unknown transform type" );
-        
+
     case animations::AnimationTransformType::TRANSLATE:
         // FALLTHROUGH intended
     case animations::AnimationTransformType::SCALE:
         return ActivitiesFactory::createAnimateActivity(
             aParms,
-            AnimationFactory::createPairPropertyAnimation( 
-                rShape, 
-                getContext().mpSubsettableShapeManager, 
+            AnimationFactory::createPairPropertyAnimation(
+                rShape,
+                getContext().mpSubsettableShapeManager,
                 getSlideSize(),
                 nTransformType ),
             getXAnimateNode() );
-        
+
     case animations::AnimationTransformType::ROTATE:
         return ActivitiesFactory::createAnimateActivity(
             aParms,
-            AnimationFactory::createNumberPropertyAnimation( 
-                ::rtl::OUString( 
+            AnimationFactory::createNumberPropertyAnimation(
+                ::rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("Rotate") ),
-                rShape, 
+                rShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize() ),
             getXAnimateNode() );
-        
+
     case animations::AnimationTransformType::SKEWX:
         return ActivitiesFactory::createAnimateActivity(
             aParms,
-            AnimationFactory::createNumberPropertyAnimation( 
-                ::rtl::OUString( 
+            AnimationFactory::createNumberPropertyAnimation(
+                ::rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("SkewX") ),
-                rShape, 
+                rShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize() ),
             getXAnimateNode() );
-        
+
     case animations::AnimationTransformType::SKEWY:
         return ActivitiesFactory::createAnimateActivity(
             aParms,
-            AnimationFactory::createNumberPropertyAnimation( 
-                ::rtl::OUString( 
+            AnimationFactory::createNumberPropertyAnimation(
+                ::rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("SkewY") ),
-                rShape, 
+                rShape,
                 getContext().mpSubsettableShapeManager,
                 getSlideSize() ),
             getXAnimateNode() );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ SAL_IMPLEMENT_MAIN()
 
     OUString dllName(
         RTL_CONSTASCII_USTRINGPARAM("bootstrap.uno" SAL_DLLEXTENSION) );
-    
+
     if (module.load(dllName))
     {
         // try to get provider from module

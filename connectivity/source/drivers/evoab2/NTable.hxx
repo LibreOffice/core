@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace connectivity
             OEvoabConnection* m_pConnection;
 
         public:
-            OEvoabTable(	sdbcx::OCollection* _pTables, 
+            OEvoabTable(    sdbcx::OCollection* _pTables,
                     OEvoabConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,

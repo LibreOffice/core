@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 /// Wrap OSL_TRACE with a verbosity switch
 #define VERBOSE_TRACE     OSL_TRACE
 #else
-#define VERBOSE_TRACE	  1 ? ((void)0) : OSL_TRACE
+#define VERBOSE_TRACE     1 ? ((void)0) : OSL_TRACE
 #endif
 
 #endif /* INCLUDED_CANVAS_VERBOSETRACE_HXX */

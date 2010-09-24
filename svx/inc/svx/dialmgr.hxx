@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@
 class ResMgr;
 struct SVX_DLLPUBLIC DialogsResMgr
 {
-    static ResMgr*		GetResMgr();
+    static ResMgr*      GetResMgr();
 };
 
-#define DIALOG_MGR()	(*DialogsResMgr::GetResMgr())
-#define SVX_RES(i)		ResId(i,DIALOG_MGR())
-#define SVX_RESSTR(i)	UniString(ResId(i,DIALOG_MGR()))
-#define SVX_RESSSTR(i)	String(ResId(i,DIALOG_MGR()))
+#define DIALOG_MGR()    (*DialogsResMgr::GetResMgr())
+#define SVX_RES(i)      ResId(i,DIALOG_MGR())
+#define SVX_RESSTR(i)   UniString(ResId(i,DIALOG_MGR()))
+#define SVX_RESSSTR(i)  String(ResId(i,DIALOG_MGR()))
 
 #endif
 

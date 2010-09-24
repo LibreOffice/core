@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -246,12 +246,12 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
         if ( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
         {
             if ( aSalShlData.maVersionInfo.dwMajorVersion <= 4 )
-                winVerOk = 0;	// NT
+                winVerOk = 0;   // NT
         }
         else if( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS )
         {
             if ( aSalShlData.maVersionInfo.dwMajorVersion == 4 && aSalShlData.maVersionInfo.dwMinorVersion == 0 )
-                winVerOk = 0;	// Win95
+                winVerOk = 0;   // Win95
         }
     }
 
@@ -377,7 +377,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         // this breaks SAL_FRAME_STYLE_SYSTEMCHILD handling, which is not
         // used currently. Probably SAL_FRAME_STYLE_SYSTEMCHILD should be
         // removed again.
-        
+
         // nSysStyle  |= WS_CLIPCHILDREN;
         if ( hWndParent )
         {
@@ -980,7 +980,7 @@ WinSalFrame::WinSalFrame()
     mpClipRgnData       = NULL;
     mbFirstClipRect     = TRUE;
     mpNextClipRect      = NULL;
-    mnDisplay			= 0;
+    mnDisplay           = 0;
 
     memset( &maState, 0, sizeof( SalFrameState ) );
     maSysData.nSize     = sizeof( SystemEnvData );
@@ -2156,7 +2156,7 @@ static void ImplSalToTop( HWND hWnd, USHORT nFlags )
     WinSalFrame* pToTopFrame = GetWindowPtr( hWnd );
     if( pToTopFrame && (pToTopFrame->mnStyle & SAL_FRAME_STYLE_SYSTEMCHILD) != 0 )
         BringWindowToTop( hWnd );
-    
+
     if ( nFlags & SAL_FRAME_TOTOP_FOREGROUNDTASK )
     {
         // This magic code is necessary to connect the input focus of the
@@ -2209,7 +2209,7 @@ static void ImplSalToTop( HWND hWnd, USHORT nFlags )
 
 void WinSalFrame::ToTop( USHORT nFlags )
 {
-    nFlags &= ~SAL_FRAME_TOTOP_GRABFOCUS;	// this flag is not needed on win32
+    nFlags &= ~SAL_FRAME_TOTOP_GRABFOCUS;   // this flag is not needed on win32
     // Post this Message to the window, because this only works
     // in the thread of the window, which has create this window.
     // We post this message to avoid deadlocks
@@ -3219,13 +3219,13 @@ void WinSalFrame::BeginSetClipRegion( ULONG nRects )
         delete [] (BYTE*)mpClipRgnData;
     ULONG nRectBufSize = sizeof(RECT)*nRects;
     mpClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+nRectBufSize];
-    mpClipRgnData->rdh.dwSize	  = sizeof( RGNDATAHEADER );
-    mpClipRgnData->rdh.iType	  = RDH_RECTANGLES;
-    mpClipRgnData->rdh.nCount	  = nRects;
+    mpClipRgnData->rdh.dwSize     = sizeof( RGNDATAHEADER );
+    mpClipRgnData->rdh.iType      = RDH_RECTANGLES;
+    mpClipRgnData->rdh.nCount     = nRects;
     mpClipRgnData->rdh.nRgnSize  = nRectBufSize;
     SetRectEmpty( &(mpClipRgnData->rdh.rcBound) );
-    mpNextClipRect 		  = (RECT*)(&(mpClipRgnData->Buffer));
-    mbFirstClipRect		  = TRUE;
+    mpNextClipRect        = (RECT*)(&(mpClipRgnData->Buffer));
+    mbFirstClipRect       = TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -3235,17 +3235,17 @@ void WinSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
     if( ! mpClipRgnData )
         return;
 
-    RECT*		pRect = mpNextClipRect;
-    RECT*		pBoundRect = &(mpClipRgnData->rdh.rcBound);
-    long		nRight = nX + nWidth;
-    long		nBottom = nY + nHeight;
+    RECT*       pRect = mpNextClipRect;
+    RECT*       pBoundRect = &(mpClipRgnData->rdh.rcBound);
+    long        nRight = nX + nWidth;
+    long        nBottom = nY + nHeight;
 
     if ( mbFirstClipRect )
     {
-        pBoundRect->left	= nX;
-        pBoundRect->top 	= nY;
-        pBoundRect->right	= nRight;
-        pBoundRect->bottom	= nBottom;
+        pBoundRect->left    = nX;
+        pBoundRect->top     = nY;
+        pBoundRect->right   = nRight;
+        pBoundRect->bottom  = nBottom;
         mbFirstClipRect = FALSE;
     }
     else
@@ -3263,10 +3263,10 @@ void WinSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
             pBoundRect->bottom = (int)nBottom;
     }
 
-    pRect->left 	= (int)nX;
-    pRect->top		= (int)nY;
-    pRect->right	= (int)nRight;
-    pRect->bottom	= (int)nBottom;
+    pRect->left     = (int)nX;
+    pRect->top      = (int)nY;
+    pRect->right    = (int)nRight;
+    pRect->bottom   = (int)nBottom;
     if( (mpNextClipRect  - (RECT*)(&mpClipRgnData->Buffer)) < (int)mpClipRgnData->rdh.nCount )
         mpNextClipRect++;
 }
@@ -3838,9 +3838,9 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         }
 
          SalKeyEvent aKeyEvt;
-         aKeyEvt.mnCode		= nModCode;	// Or should it be 0? - as this is always a character returned
-         aKeyEvt.mnTime		= GetMessageTime();
-         aKeyEvt.mnRepeat	= 0;
+         aKeyEvt.mnCode     = nModCode; // Or should it be 0? - as this is always a character returned
+         aKeyEvt.mnTime     = GetMessageTime();
+         aKeyEvt.mnRepeat   = 0;
 
         if( wParam >= Uni_SupplementaryPlanesStart )
         {
@@ -3853,7 +3853,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             wParam = (sal_Unicode) Uni_UTF32ToSurrogate2( wParam );
          }
 
-         aKeyEvt.mnCharCode	= (sal_Unicode) wParam;
+         aKeyEvt.mnCharCode = (sal_Unicode) wParam;
 
          nLastChar = 0;
          nLastVKChar = 0;
@@ -3977,14 +3977,14 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 aKeyEvt.mnTime      = GetMessageTime();
                 aKeyEvt.mnCode     |= nModCode;
                 aKeyEvt.mnRepeat    = nRepeat;
-                
+
                 if( (nModCode & (KEY_MOD1|KEY_MOD2)) == (KEY_MOD1|KEY_MOD2) &&
                     aKeyEvt.mnCharCode )
                 {
                      // this is actually AltGr and should not be handled as Alt
                      aKeyEvt.mnCode &= ~(KEY_MOD1|KEY_MOD2);
                 }
-                
+
                 bIgnoreCharMsg = bCharPeek ? TRUE : FALSE;
                 long nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
                 // independent part only reacts on keyup but Windows does not send
@@ -4952,9 +4952,9 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
         COLORREF clrPrevText, clrPrevBkgnd;
         HFONT hfntOld;
         HBRUSH hbrOld;
-        BOOL	fChecked = (pDI->itemState & ODS_CHECKED) ? TRUE : FALSE;
-        BOOL	fSelected = (pDI->itemState & ODS_SELECTED) ? TRUE : FALSE;
-        BOOL	fDisabled = (pDI->itemState & (ODS_DISABLED | ODS_GRAYED)) ? TRUE : FALSE;
+        BOOL    fChecked = (pDI->itemState & ODS_CHECKED) ? TRUE : FALSE;
+        BOOL    fSelected = (pDI->itemState & ODS_SELECTED) ? TRUE : FALSE;
+        BOOL    fDisabled = (pDI->itemState & (ODS_DISABLED | ODS_GRAYED)) ? TRUE : FALSE;
 
         // Set the appropriate foreground and background colors.
         RECT aRect = pDI->rcItem;
@@ -5019,9 +5019,9 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 
             if( hDrawDIB )
             {
-                PBITMAPINFO 		pBI = (PBITMAPINFO) GlobalLock( hDrawDIB );
-                PBITMAPINFOHEADER	pBIH = (PBITMAPINFOHEADER) pBI;
-                PBYTE				pBits = (PBYTE) pBI + *(DWORD*) pBI +
+                PBITMAPINFO         pBI = (PBITMAPINFO) GlobalLock( hDrawDIB );
+                PBITMAPINFOHEADER   pBIH = (PBITMAPINFOHEADER) pBI;
+                PBYTE               pBits = (PBYTE) pBI + *(DWORD*) pBI +
                                             pSalBmp->ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGBQUAD );
 
                 HBITMAP hBmp = CreateDIBitmap( pDI->hDC, pBIH, CBM_INIT, pBits, pBI, DIB_RGB_COLORS );
@@ -5622,23 +5622,23 @@ static boolean ImplHandleAppCommand( HWND hWnd, LPARAM lParam )
     sal_Int16 nCommand = 0;
     switch( GET_APPCOMMAND_LPARAM(lParam) )
     {
-    case APPCOMMAND_MEDIA_CHANNEL_DOWN:			nCommand = MEDIA_COMMAND_CHANNEL_DOWN; break;
-    case APPCOMMAND_MEDIA_CHANNEL_UP:			nCommand = MEDIA_COMMAND_CHANNEL_UP; break;
-    case APPCOMMAND_MEDIA_NEXTTRACK:			nCommand = MEDIA_COMMAND_NEXTTRACK; break;
-    case APPCOMMAND_MEDIA_PAUSE:				nCommand = MEDIA_COMMAND_PAUSE; break;
-    case APPCOMMAND_MEDIA_PLAY:					nCommand = MEDIA_COMMAND_PLAY; break;
-    case APPCOMMAND_MEDIA_PLAY_PAUSE:			nCommand = MEDIA_COMMAND_PLAY_PAUSE; break;
-    case APPCOMMAND_MEDIA_PREVIOUSTRACK:		nCommand = MEDIA_COMMAND_PREVIOUSTRACK; break;
-    case APPCOMMAND_MEDIA_RECORD:				nCommand = MEDIA_COMMAND_RECORD; break;
-    case APPCOMMAND_MEDIA_REWIND:				nCommand = MEDIA_COMMAND_REWIND; break;
-    case APPCOMMAND_MEDIA_STOP:					nCommand = MEDIA_COMMAND_STOP; break;
-    case APPCOMMAND_MIC_ON_OFF_TOGGLE:			nCommand = MEDIA_COMMAND_MIC_ON_OFF_TOGGLE; break;
-    case APPCOMMAND_MICROPHONE_VOLUME_DOWN:		nCommand = MEDIA_COMMAND_MICROPHONE_VOLUME_DOWN; break;
-    case APPCOMMAND_MICROPHONE_VOLUME_MUTE:		nCommand = MEDIA_COMMAND_MICROPHONE_VOLUME_MUTE; break;
-    case APPCOMMAND_MICROPHONE_VOLUME_UP:		nCommand = MEDIA_COMMAND_MICROPHONE_VOLUME_UP; break;
-    case APPCOMMAND_VOLUME_DOWN:				nCommand = MEDIA_COMMAND_VOLUME_DOWN; break;
-    case APPCOMMAND_VOLUME_MUTE:				nCommand = MEDIA_COMMAND_VOLUME_MUTE; break;
-    case APPCOMMAND_VOLUME_UP:					nCommand = MEDIA_COMMAND_VOLUME_UP; break;
+    case APPCOMMAND_MEDIA_CHANNEL_DOWN:         nCommand = MEDIA_COMMAND_CHANNEL_DOWN; break;
+    case APPCOMMAND_MEDIA_CHANNEL_UP:           nCommand = MEDIA_COMMAND_CHANNEL_UP; break;
+    case APPCOMMAND_MEDIA_NEXTTRACK:            nCommand = MEDIA_COMMAND_NEXTTRACK; break;
+    case APPCOMMAND_MEDIA_PAUSE:                nCommand = MEDIA_COMMAND_PAUSE; break;
+    case APPCOMMAND_MEDIA_PLAY:                 nCommand = MEDIA_COMMAND_PLAY; break;
+    case APPCOMMAND_MEDIA_PLAY_PAUSE:           nCommand = MEDIA_COMMAND_PLAY_PAUSE; break;
+    case APPCOMMAND_MEDIA_PREVIOUSTRACK:        nCommand = MEDIA_COMMAND_PREVIOUSTRACK; break;
+    case APPCOMMAND_MEDIA_RECORD:               nCommand = MEDIA_COMMAND_RECORD; break;
+    case APPCOMMAND_MEDIA_REWIND:               nCommand = MEDIA_COMMAND_REWIND; break;
+    case APPCOMMAND_MEDIA_STOP:                 nCommand = MEDIA_COMMAND_STOP; break;
+    case APPCOMMAND_MIC_ON_OFF_TOGGLE:          nCommand = MEDIA_COMMAND_MIC_ON_OFF_TOGGLE; break;
+    case APPCOMMAND_MICROPHONE_VOLUME_DOWN:     nCommand = MEDIA_COMMAND_MICROPHONE_VOLUME_DOWN; break;
+    case APPCOMMAND_MICROPHONE_VOLUME_MUTE:     nCommand = MEDIA_COMMAND_MICROPHONE_VOLUME_MUTE; break;
+    case APPCOMMAND_MICROPHONE_VOLUME_UP:       nCommand = MEDIA_COMMAND_MICROPHONE_VOLUME_UP; break;
+    case APPCOMMAND_VOLUME_DOWN:                nCommand = MEDIA_COMMAND_VOLUME_DOWN; break;
+    case APPCOMMAND_VOLUME_MUTE:                nCommand = MEDIA_COMMAND_VOLUME_MUTE; break;
+    case APPCOMMAND_VOLUME_UP:                  nCommand = MEDIA_COMMAND_VOLUME_UP; break;
         break;
     default:
         return false;
@@ -5740,10 +5740,10 @@ static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
     {
     // The first call for reconversion.
     pFrame->CallCallback( SALEVENT_STARTRECONVERSION, (void*)NULL );
-    
+
     // Retrieve the surrounding text from the focused control.
     pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTREQUEST, (void*)&aEvt );
-    
+
     if( aEvt.maText.Len() == 0 )
     {
         return 0;
@@ -5854,7 +5854,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 {
     LRESULT     nRet = 0;
     static int  bInWheelMsg = FALSE;
-    static int	bInQueryEnd = FALSE;
+    static int  bInQueryEnd = FALSE;
 
     // By WM_CRETAE we connect the frame with the window handle
     if ( nMsg == WM_CREATE )
@@ -6123,7 +6123,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 
                 if ( nRet )
                 {
-                    MSG	msg;
+                    MSG msg;
 
                     while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
                     {
@@ -6220,7 +6220,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
         case WM_APPCOMMAND:
             if( ImplHandleAppCommand( hWnd, lParam ) )
-            {                
+            {
                 rDef = false;
                 nRet = 1;
             }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,9 +31,9 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-//	----------------------------------------------------
-//	class VCLXAccessibleToolBox
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXAccessibleToolBox
+//  ----------------------------------------------------
 
 typedef ::cppu::ImplHelper1 < ::com::sun::star::accessibility::XAccessibleSelection > VCLXAccessibleToolBox_BASE;
 
@@ -47,26 +47,26 @@ class VCLXAccessibleToolBox : public VCLXAccessibleComponent, public VCLXAccessi
 private:
     ToolBoxItemsMap             m_aAccessibleChildren;
 
-    VCLXAccessibleToolBoxItem*	GetItem_Impl( sal_Int32 _nPos, bool _bMustHaveFocus );
+    VCLXAccessibleToolBoxItem*  GetItem_Impl( sal_Int32 _nPos, bool _bMustHaveFocus );
 
-    void						UpdateFocus_Impl();
-    void						ReleaseFocus_Impl( sal_Int32 _nPos );
-    void						UpdateChecked_Impl( sal_Int32 _nPos );
-    void						UpdateIndeterminate_Impl( sal_Int32 _nPos );
-    void						UpdateItem_Impl( sal_Int32 _nPos, sal_Bool _bItemAdded );
-    void						UpdateAllItems_Impl();
-    void						UpdateItemName_Impl( sal_Int32 _nPos );
-    void						UpdateItemEnabled_Impl( sal_Int32 _nPos );
-    void						UpdateCustomPopupItemp_Impl( Window* pWindow, bool bOpen );
+    void                        UpdateFocus_Impl();
+    void                        ReleaseFocus_Impl( sal_Int32 _nPos );
+    void                        UpdateChecked_Impl( sal_Int32 _nPos );
+    void                        UpdateIndeterminate_Impl( sal_Int32 _nPos );
+    void                        UpdateItem_Impl( sal_Int32 _nPos, sal_Bool _bItemAdded );
+    void                        UpdateAllItems_Impl();
+    void                        UpdateItemName_Impl( sal_Int32 _nPos );
+    void                        UpdateItemEnabled_Impl( sal_Int32 _nPos );
+    void                        UpdateCustomPopupItemp_Impl( Window* pWindow, bool bOpen );
     void                        HandleSubToolBarEvent( const VclWindowEvent& rVclWindowEvent, bool _bShow );
     void                        ReleaseSubToolBox( ToolBox* _pSubToolBox );
 
 protected:
-    virtual	~VCLXAccessibleToolBox();
+    virtual ~VCLXAccessibleToolBox();
 
-    virtual void	FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
-    virtual void	ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual void	ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void    ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& rVclWindowEvent );
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetItemWindowAccessible( const VclWindowEvent& rVclWindowEvent );

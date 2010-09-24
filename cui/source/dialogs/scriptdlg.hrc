@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,18 +29,18 @@
 
 #include <svl/solar.hrc>
 
-#define SCRIPTDLG_OFFSET		400
+#define SCRIPTDLG_OFFSET        400
 
 // ScriptOrgDialog
-#define SF_TXT_SCRIPTS				    1
-#define SF_CTRL_SCRIPTSBOX  			2
-#define SF_PB_RUN						3
-#define SF_PB_CLOSE					    4
-#define SF_PB_CREATE					5
-#define SF_PB_EDIT						6
-#define SF_PB_RENAME					7
-#define SF_PB_DEL						8
-#define SF_PB_HELP						9
+#define SF_TXT_SCRIPTS                  1
+#define SF_CTRL_SCRIPTSBOX              2
+#define SF_PB_RUN                       3
+#define SF_PB_CLOSE                     4
+#define SF_PB_CREATE                    5
+#define SF_PB_EDIT                      6
+#define SF_PB_RENAME                    7
+#define SF_PB_DEL                       8
+#define SF_PB_HELP                      9
 
 #define IMG_HARDDISK                    1
 #define IMG_HARDDISK_HC                 2
@@ -51,7 +51,7 @@
 #define IMG_DOCUMENT                    7
 #define IMG_DOCUMENT_HC                 8
 
-#define RID_IMGLST_OBJECTS				( RID_BASICIDE_START +  7 )
+#define RID_IMGLST_OBJECTS              ( RID_BASICIDE_START +  7 )
 #define RID_IMGLST_OBJECTS_HC (RID_BASICIDE_START + 13)
 
 // NewObjectDialog
@@ -67,9 +67,9 @@
 #define STR_RENAME                      19
 
 // Others
-/* 
+/*
 Please be aware that these strings are global resources, don't use self-defined values!
-You have to use the RID_SVXSTART macro do avoid ID clashes with other resource files. Sfx2 delivers 
+You have to use the RID_SVXSTART macro do avoid ID clashes with other resource files. Sfx2 delivers
 some of its own resource files to svx - where they are added to svx resource file!!
 */
 
@@ -77,4 +77,4 @@ some of its own resource files to svx - where they are added to svx resource fil
 #define STR_PRODMACROS                  33
 
 
-#endif	// _SCRIPTDLG_HRC
+#endif  // _SCRIPTDLG_HRC

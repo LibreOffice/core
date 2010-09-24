@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace drawinglayer
         /** SdrCubePrimitive3D class
 
             This 3D primitive expands the SdrPrimitive3D to a 3D cube definition.
-            The cube is implicitely in unit coordinates and the given transformation 
+            The cube is implicitely in unit coordinates and the given transformation
             defines it's geometry in space.
          */
         class SdrCubePrimitive3D : public SdrPrimitive3D
@@ -51,9 +51,9 @@ namespace drawinglayer
         public:
             /// constructor
             SdrCubePrimitive3D(
-                const basegfx::B3DHomMatrix& rTransform, 
+                const basegfx::B3DHomMatrix& rTransform,
                 const basegfx::B2DVector& rTextureSize,
-                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute, 
+                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
                 const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute);
 
             /// compare operator

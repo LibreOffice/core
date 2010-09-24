@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ namespace drawinglayer
                             // create bitmap primitive and add to result
                             const Primitive2DReference xRef(
                                 new BitmapPrimitive2D(getFillBitmap().getBitmapEx(), aNewMatrix));
-                            
+
                             aRetval[a] = xRef;
                         }
                     }
@@ -93,7 +93,7 @@ namespace drawinglayer
                         // create bitmap primitive and add exclusive to decomposition (hand over ownership)
                         const Primitive2DReference xRef(
                             new BitmapPrimitive2D(getFillBitmap().getBitmapEx(), aObjectTransform));
-                        
+
                         aRetval = Primitive2DSequence(&xRef, 1L);
                     }
                 }
@@ -103,9 +103,9 @@ namespace drawinglayer
         }
 
         FillBitmapPrimitive2D::FillBitmapPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransformation, 
+            const basegfx::B2DHomMatrix& rTransformation,
             const attribute::FillBitmapAttribute& rFillBitmap)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransformation(rTransformation),
             maFillBitmap(rFillBitmap)
         {

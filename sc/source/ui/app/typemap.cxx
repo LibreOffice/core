@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <editeng/memberids.hrc>
 
 
-#define	ITEMID_DBTYPE			0
+#define ITEMID_DBTYPE           0
 
 
 
@@ -128,7 +128,7 @@
 
 #define SvxDrawToolItem             SfxAllEnumItem
 #define SvxDrawAlignItem            SfxAllEnumItem
-#define SvxChooseControlItem		SfxEnumItem
+#define SvxChooseControlItem        SfxEnumItem
 #define avmedia_MediaItem           ::avmedia::MediaItem
 
 #define SFX_TYPEMAP

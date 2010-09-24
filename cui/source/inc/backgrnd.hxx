@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ public:
     void                ShowTblControl(); // fuer den Writer (Zellen/Zeilen/Tabelle)
     void                ShowParaControl(BOOL bCharOnly = FALSE); // fuer den Writer (Absatz/Zeichen)
     void                EnableTransparency(BOOL bColor, BOOL bGraphic);
-    virtual void		PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
@@ -85,7 +85,7 @@ private:
     ~SvxBackgroundTabPage();
 
     // Hintergrundfarbe ------------------------------------
-    Control					aBorderWin;
+    Control                 aBorderWin;
     ValueSet                aBackgroundColorSet;
     FixedLine               aBackgroundColorBox;
     BackgroundPreviewImpl*  pPreviewWin1;
@@ -118,14 +118,14 @@ private:
 
     FixedText               aTblDesc;
     ListBox                 aTblLBox;
-    ListBox					aParaLBox;
+    ListBox                 aParaLBox;
 
     //------------------------------------------------------
-    Color		aBgdColor;
-    USHORT		nHtmlMode;
-    BOOL        bAllowShowSelector	: 1;
-    BOOL        bIsGraphicValid		: 1;
-    BOOL		bLinkOnly			: 1;
+    Color       aBgdColor;
+    USHORT      nHtmlMode;
+    BOOL        bAllowShowSelector  : 1;
+    BOOL        bIsGraphicValid     : 1;
+    BOOL        bLinkOnly           : 1;
     BOOL        bResized            : 1;
     BOOL        bColTransparency    : 1;
     BOOL        bGraphTransparency  : 1;
@@ -137,9 +137,9 @@ private:
     SvxOpenGraphicDialog* pImportDlg;
 
     // Items fuer Sw-Tabelle muessen gesammelt werden
-    SvxBackgroundTable_Impl*	pTableBck_Impl;
+    SvxBackgroundTable_Impl*    pTableBck_Impl;
     // auch fuer die Absatzvorlage
-    SvxBackgroundPara_Impl*	pParaBck_Impl;
+    SvxBackgroundPara_Impl* pParaBck_Impl;
 
 #ifdef _SVX_BACKGRND_CXX
     void                FillColorValueSets_Impl();
@@ -149,10 +149,10 @@ private:
     void                RaiseLoadError_Impl();
     void                SetGraphicPosition_Impl( SvxGraphicPosition ePos );
     SvxGraphicPosition  GetGraphicPosition_Impl();
-    void				FillControls_Impl(const SvxBrushItem& rBgdAttr,
+    void                FillControls_Impl(const SvxBrushItem& rBgdAttr,
                                             const String& rUserData);
-    BOOL 				FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, USHORT nSlot);
-    void				ResetFromWallpaperItem( const SfxItemSet& rSet );
+    BOOL                FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, USHORT nSlot);
+    void                ResetFromWallpaperItem( const SfxItemSet& rSet );
 
     DECL_LINK( LoadTimerHdl_Impl, Timer* );
     DECL_LINK( SelectHdl_Impl, ListBox* );

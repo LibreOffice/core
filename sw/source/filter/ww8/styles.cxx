@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace
 
     const sal_Char **GetStiNames() throw()
     {
-        static const sal_Char *stiName[] = 
+        static const sal_Char *stiName[] =
         {
             "Normal",
             "Heading 1",
@@ -201,9 +201,9 @@ namespace ww
             return stiUser;
         else
         {
-            static sti aMapping[] = 
+            static sti aMapping[] =
             {
-                stiNil, stiAtnRef, stiAtnText, stiToc8, stiToc7, stiToc6, 
+                stiNil, stiAtnRef, stiAtnText, stiToc8, stiToc7, stiToc6,
                 stiToc5, stiToc4, stiToc3, stiToc2, stiToc1, stiIndex7,
                 stiIndex6, stiIndex5, stiIndex4, stiIndex3, stiIndex2,
                 stiIndex1, stiLnn, stiIndexHeading, stiFooter, stiHeader,

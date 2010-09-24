@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace dbp
     struct OGroupBoxSI
     {
     public:
-        ::rtl::OUString			getImplementationName() const;
+        ::rtl::OUString         getImplementationName() const;
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 getServiceNames() const;
     };
@@ -55,7 +55,7 @@ namespace dbp
     struct OListComboSI
     {
     public:
-        ::rtl::OUString			getImplementationName() const;
+        ::rtl::OUString         getImplementationName() const;
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 getServiceNames() const;
     };
@@ -67,13 +67,13 @@ namespace dbp
     struct OGridSI
     {
     public:
-        ::rtl::OUString			getImplementationName() const;
+        ::rtl::OUString         getImplementationName() const;
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 getServiceNames() const;
     };
 
 //.........................................................................
-}	// namespace dbp
+}   // namespace dbp
 //.........................................................................
 
 #endif // _EXTENSIONS_DBW_WIZARDSERVICES_HXX_

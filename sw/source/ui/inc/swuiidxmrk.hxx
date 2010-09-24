@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ class SwWrtShell;
 class SwTOXMgr;
 class SwTOXMark;
 /*--------------------------------------------------------------------
-     Beschreibung:	Markierung fuer Verzeichniseintrag einfuegen
+     Beschreibung:  Markierung fuer Verzeichniseintrag einfuegen
  --------------------------------------------------------------------*/
 class SwIndexMarkFloatDlg;
 class SwIndexMarkModalDlg;
@@ -71,66 +71,66 @@ class SwIndexMarkDlg : public Window
 {
     friend class SwIndexMarkFloatDlg;
     friend class SwIndexMarkModalDlg;
-    FixedText 		aTypeFT;
-    ListBox			aTypeDCB;
-    ImageButton 	aNewBT;
+    FixedText       aTypeFT;
+    ListBox         aTypeDCB;
+    ImageButton     aNewBT;
 
-    FixedText 		aEntryFT;
-    Edit 			aEntryED;
-    FixedText 		aPhoneticFT0;
-    Edit			aPhoneticED0;
+    FixedText       aEntryFT;
+    Edit            aEntryED;
+    FixedText       aPhoneticFT0;
+    Edit            aPhoneticED0;
 
-    FixedText 		aKeyFT;
-    ComboBox		aKeyDCB;
-    FixedText 		aPhoneticFT1;
-    Edit			aPhoneticED1;
+    FixedText       aKeyFT;
+    ComboBox        aKeyDCB;
+    FixedText       aPhoneticFT1;
+    Edit            aPhoneticED1;
 
-    FixedText 		aKey2FT;
-    ComboBox 		aKey2DCB;
-    FixedText 		aPhoneticFT2;
-    Edit			aPhoneticED2;
+    FixedText       aKey2FT;
+    ComboBox        aKey2DCB;
+    FixedText       aPhoneticFT2;
+    Edit            aPhoneticED2;
 
-    FixedText 		aLevelFT;
-    NumericField	aLevelED;
-     CheckBox		aMainEntryCB;
-     CheckBox		aApplyToAllCB;
-     CheckBox		aSearchCaseSensitiveCB;
-     CheckBox	   	aSearchCaseWordOnlyCB;
+    FixedText       aLevelFT;
+    NumericField    aLevelED;
+     CheckBox       aMainEntryCB;
+     CheckBox       aApplyToAllCB;
+     CheckBox       aSearchCaseSensitiveCB;
+     CheckBox       aSearchCaseWordOnlyCB;
 
     FixedLine       aIndexFL;
 
-    OKButton 		aOKBT;
-    CancelButton 	aCancelBT;
-    HelpButton 		aHelpBT;
-    PushButton		aDelBT;
-    //PushButton		aNewBT;
+    OKButton        aOKBT;
+    CancelButton    aCancelBT;
+    HelpButton      aHelpBT;
+    PushButton      aDelBT;
+    //PushButton        aNewBT;
 
-    ImageButton		aPrevSameBT;
-    ImageButton		aNextSameBT;
-    ImageButton		aPrevBT;
-    ImageButton		aNextBT;
+    ImageButton     aPrevSameBT;
+    ImageButton     aNextSameBT;
+    ImageButton     aPrevBT;
+    ImageButton     aNextBT;
 
-    String			aOrgStr;
-    sal_Int32		nOptionsId;
-    sal_Bool			bDel;
-    sal_Bool			bNewMark;
-    sal_Bool			bSelected;
+    String          aOrgStr;
+    sal_Int32       nOptionsId;
+    sal_Bool            bDel;
+    sal_Bool            bNewMark;
+    sal_Bool            bSelected;
 
-    BOOL			bPhoneticED0_ChangedByUser;
-    BOOL			bPhoneticED1_ChangedByUser;
-    BOOL			bPhoneticED2_ChangedByUser;
-    LanguageType	nLangForPhoneticReading; //Language of current text used for phonetic reading proposal
-    BOOL			bIsPhoneticReadingEnabled; //this value states wether phopentic reading is enabled in principle dependend of global cjk settings and language of current entry
+    BOOL            bPhoneticED0_ChangedByUser;
+    BOOL            bPhoneticED1_ChangedByUser;
+    BOOL            bPhoneticED2_ChangedByUser;
+    LanguageType    nLangForPhoneticReading; //Language of current text used for phonetic reading proposal
+    BOOL            bIsPhoneticReadingEnabled; //this value states wether phopentic reading is enabled in principle dependend of global cjk settings and language of current entry
     com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier >
                     xExtendedIndexEntrySupplier;
 
-    SwTOXMgr*	   	pTOXMgr;
-    SwWrtShell*	   	pSh;
+    SwTOXMgr*       pTOXMgr;
+    SwWrtShell*     pSh;
 
-    void			Apply();
-    void 			InitControls();
-    void			InsertMark();
-    void 			UpdateMark();
+    void            Apply();
+    void            InitControls();
+    void            InsertMark();
+    void            UpdateMark();
 
     DECL_LINK( InsertHdl, Button * );
     DECL_LINK( CloseHdl, Button * );
@@ -148,15 +148,15 @@ class SwIndexMarkDlg : public Window
     //this method updates the values from 'nLangForPhoneticReading' and 'bIsPhoneticReadingEnabled'
     //it needs to be called ones if this dialog is opened to create a new entry (in InitControls),
     //or otherwise it has to be called for each changed TOXMark (in UpdateDialog)
-    void			UpdateLanguageDependenciesForPhoneticReading();
-    String			GetDefaultPhoneticReading( const String& rText );
+    void            UpdateLanguageDependenciesForPhoneticReading();
+    String          GetDefaultPhoneticReading( const String& rText );
 
-    void 			UpdateKeyBoxes();
+    void            UpdateKeyBoxes();
 
-    void			UpdateDialog();
-    void			InsertUpdate();
+    void            UpdateDialog();
+    void            InsertUpdate();
 
-    virtual void	Activate();
+    virtual void    Activate();
 
 public:
 
@@ -170,7 +170,7 @@ public:
     ~SwIndexMarkDlg();
 
     void    ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark = 0);
-    sal_Bool	IsTOXType(const String& rName)
+    sal_Bool    IsTOXType(const String& rName)
                 {return LISTBOX_ENTRY_NOTFOUND != aTypeDCB.GetEntryPos(rName);}
 };
 /* -----------------06.10.99 10:11-------------------
@@ -178,27 +178,27 @@ public:
  --------------------------------------------------*/
 class SwIndexMarkFloatDlg : public SfxModelessDialog
 {
-    SwIndexMarkDlg		aDlg;
-    virtual void	Activate();
+    SwIndexMarkDlg      aDlg;
+    virtual void    Activate();
     public:
-        SwIndexMarkFloatDlg( 	SfxBindings* pBindings,
+        SwIndexMarkFloatDlg(    SfxBindings* pBindings,
                                    SfxChildWindow* pChild,
                                    Window *pParent,
                                 SfxChildWinInfo* pInfo,
                                    sal_Bool bNew=sal_True);
-    void	ReInitDlg(SwWrtShell& rWrtShell);
+    void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 /* -----------------06.10.99 10:33-------------------
 
  --------------------------------------------------*/
 class SwIndexMarkModalDlg : public SvxStandardDialog
 {
-    SwIndexMarkDlg		aDlg;
+    SwIndexMarkDlg      aDlg;
 public:
     SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark);
 
-    virtual void		Apply();
-    void	ReInitDlg(SwWrtShell& rWrtShell);
+    virtual void        Apply();
+    void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
 /* -----------------15.09.99 08:39-------------------
@@ -207,41 +207,41 @@ public:
 class SwAuthMarkModalDlg;
 class SwAuthMarkDlg : public Window
 {
-    static sal_Bool 	bIsFromComponent;
+    static sal_Bool     bIsFromComponent;
 
     friend class SwAuthMarkModalDlg;
     friend class SwAuthMarkFloatDlg;
 
     RadioButton     aFromComponentRB;
-    RadioButton		aFromDocContentRB;
-    FixedText		aAuthorFT;
-    FixedInfo		aAuthorFI;
-    FixedText		aTitleFT;
-    FixedInfo		aTitleFI;
-    FixedText		aEntryFT;
-    Edit			aEntryED;
-    ListBox 		aEntryLB;
+    RadioButton     aFromDocContentRB;
+    FixedText       aAuthorFT;
+    FixedInfo       aAuthorFI;
+    FixedText       aTitleFT;
+    FixedInfo       aTitleFI;
+    FixedText       aEntryFT;
+    Edit            aEntryED;
+    ListBox         aEntryLB;
 
     FixedLine       aEntryFL;
 
-    OKButton 		aOKBT;
-    CancelButton 	aCancelBT;
-    HelpButton 		aHelpBT;
-    PushButton 		aCreateEntryPB;
-    PushButton 		aEditEntryPB;
+    OKButton        aOKBT;
+    CancelButton    aCancelBT;
+    HelpButton      aHelpBT;
+    PushButton      aCreateEntryPB;
+    PushButton      aEditEntryPB;
 
-    String			sChangeST;
-    sal_Bool 			bNewEntry;
-    sal_Bool			bBibAccessInitialized;
+    String          sChangeST;
+    sal_Bool            bNewEntry;
+    sal_Bool            bBibAccessInitialized;
 
-    SwWrtShell*	   	pSh;
+    SwWrtShell*     pSh;
 
-    String			m_sColumnTitles[AUTH_FIELD_END];
-    String			m_sFields[AUTH_FIELD_END];
+    String          m_sColumnTitles[AUTH_FIELD_END];
+    String          m_sFields[AUTH_FIELD_END];
 
-    String 			m_sCreatedEntry[AUTH_FIELD_END];
+    String          m_sCreatedEntry[AUTH_FIELD_END];
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  	xBibAccess;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xBibAccess;
 
     DECL_LINK(InsertHdl, PushButton*);
     DECL_LINK(CloseHdl, PushButton*);
@@ -260,34 +260,34 @@ public:
                        sal_Bool bNew=sal_True);
     ~SwAuthMarkDlg();
 
-    void	ReInitDlg(SwWrtShell& rWrtShell);
+    void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 /* -----------------06.10.99 10:11-------------------
 
  --------------------------------------------------*/
 class SwAuthMarkFloatDlg : public SfxModelessDialog
 {
-    SwAuthMarkDlg		aDlg;
-    virtual void	Activate();
+    SwAuthMarkDlg       aDlg;
+    virtual void    Activate();
     public:
-        SwAuthMarkFloatDlg( 	SfxBindings* pBindings,
+        SwAuthMarkFloatDlg(     SfxBindings* pBindings,
                                    SfxChildWindow* pChild,
                                    Window *pParent,
                                 SfxChildWinInfo* pInfo,
                                    sal_Bool bNew=sal_True);
-    void	ReInitDlg(SwWrtShell& rWrtShell);
+    void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 /* -----------------06.10.99 10:33-------------------
 
  --------------------------------------------------*/
 class SwAuthMarkModalDlg : public SvxStandardDialog
 {
-    SwAuthMarkDlg		aDlg;
+    SwAuthMarkDlg       aDlg;
 public:
     SwAuthMarkModalDlg(Window *pParent, SwWrtShell& rSh);
 
-    virtual void		Apply();
-    void	ReInitDlg(SwWrtShell& rWrtShell);
+    virtual void        Apply();
+    void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
 

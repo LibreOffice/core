@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_unotools.hxx"
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include <unotools/cmdoptions.hxx>
@@ -48,33 +48,33 @@
 #include <hash_map>
 
 //_________________________________________________________________________________________________________________
-//	namespaces
+//  namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace ::std					;
-using namespace ::utl					;
-using namespace ::rtl					;
-using namespace ::osl					;
-using namespace ::com::sun::star::uno	;
-using namespace ::com::sun::star::beans	;
+using namespace ::std                   ;
+using namespace ::utl                   ;
+using namespace ::rtl                   ;
+using namespace ::osl                   ;
+using namespace ::com::sun::star::uno   ;
+using namespace ::com::sun::star::beans ;
 
 //_________________________________________________________________________________________________________________
-//	const
+//  const
 //_________________________________________________________________________________________________________________
 
-#define ROOTNODE_CMDOPTIONS								OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Commands/Execute"	))
-#define PATHDELIMITER                                   OUString(RTL_CONSTASCII_USTRINGPARAM("/"						))
+#define ROOTNODE_CMDOPTIONS                             OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Commands/Execute"  ))
+#define PATHDELIMITER                                   OUString(RTL_CONSTASCII_USTRINGPARAM("/"                        ))
 
-#define SETNODE_DISABLED                                OUString(RTL_CONSTASCII_USTRINGPARAM("Disabled"					))
+#define SETNODE_DISABLED                                OUString(RTL_CONSTASCII_USTRINGPARAM("Disabled"                 ))
 
-#define PROPERTYNAME_CMD                                OUString(RTL_CONSTASCII_USTRINGPARAM("Command"					))
+#define PROPERTYNAME_CMD                                OUString(RTL_CONSTASCII_USTRINGPARAM("Command"                  ))
 
 #define PROPERTYCOUNT                                   1
 
 #define OFFSET_CMD                                      0
 
 //_________________________________________________________________________________________________________________
-//	private declarations!
+//  private declarations!
 //_________________________________________________________________________________________________________________
 
 // Method to retrieve a hash code from a string. May be we have to change it to decrease collisions in the hash map
@@ -130,9 +130,9 @@ class SvtCmdOptions
         //           special strings "sEmpty" and "sSeperator" to perform too ...
         Sequence< OUString > GetList() const
         {
-            sal_Int32				nCount = (sal_Int32)m_aCommandHashMap.size();
-            sal_Int32				nIndex = 0;
-            Sequence< OUString >	aList( nCount );
+            sal_Int32               nCount = (sal_Int32)m_aCommandHashMap.size();
+            sal_Int32               nIndex = 0;
+            Sequence< OUString >    aList( nCount );
 
             CommandHashMap::const_iterator pEntry = m_aCommandHashMap.begin();
             while ( pEntry != m_aCommandHashMap.end() )
@@ -142,10 +142,10 @@ class SvtCmdOptions
         }
 
     private:
-        class CommandHashMap : public ::std::hash_map< ::rtl::OUString		,
-                                                        sal_Int32			,
-                                                        OUStringHashCode	,
-                                                        ::std::equal_to< ::rtl::OUString >	>
+        class CommandHashMap : public ::std::hash_map< ::rtl::OUString      ,
+                                                        sal_Int32           ,
+                                                        OUStringHashCode    ,
+                                                        ::std::equal_to< ::rtl::OUString >  >
         {
             public:
                 inline void free()
@@ -162,55 +162,55 @@ typedef ::std::vector< ::com::sun::star::uno::WeakReference< ::com::sun::star::f
 class SvtCommandOptions_Impl : public ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
          SvtCommandOptions_Impl();
         ~SvtCommandOptions_Impl();
 
         //---------------------------------------------------------------------------------------------------------
-        //	overloaded methods of baseclass
+        //  overloaded methods of baseclass
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		called for notify of configmanager
-            @descr		These method is called from the ConfigManager before application ends or from the
+            @short      called for notify of configmanager
+            @descr      These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
-            @seealso	baseclass ConfigItem
+            @seealso    baseclass ConfigItem
 
             @param      "lPropertyNames" is the list of properties which should be updated.
-            @return		-
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& lPropertyNames );
 
         /*-****************************************************************************************************//**
-            @short		write changes to configuration
-            @descr		These method writes the changed values into the sub tree
+            @short      write changes to configuration
+            @descr      These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
 
-            @seealso	baseclass ConfigItem
+            @seealso    baseclass ConfigItem
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         virtual void Commit();
 
         //---------------------------------------------------------------------------------------------------------
-        //	public interface
+        //  public interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
@@ -218,45 +218,45 @@ class SvtCommandOptions_Impl : public ConfigItem
             @descr      These class is used as static member of "SvtDynamicMenuOptions" ...
                         => The code exist only for one time and isn't duplicated for every instance!
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
-        void					Clear       (	SvtCommandOptions::CmdOption	eCmdOption	);
+        void                    Clear       (   SvtCommandOptions::CmdOption    eCmdOption  );
         sal_Bool                HasEntries  (   SvtCommandOptions::CmdOption    eOption     ) const;
-        sal_Bool				Lookup		(	SvtCommandOptions::CmdOption	eCmdOption,	const OUString& ) const;
-        Sequence< OUString >	GetList		(	SvtCommandOptions::CmdOption	eCmdOption	) const ;
-        void					AddCommand	(	SvtCommandOptions::CmdOption	eCmdOption,
-                                                const OUString& sURL		);
+        sal_Bool                Lookup      (   SvtCommandOptions::CmdOption    eCmdOption, const OUString& ) const;
+        Sequence< OUString >    GetList     (   SvtCommandOptions::CmdOption    eCmdOption  ) const ;
+        void                    AddCommand  (   SvtCommandOptions::CmdOption    eCmdOption,
+                                                const OUString& sURL        );
         void EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
             @short      return list of key names of our configuration management which represent oue module tree
-            @descr		These methods return the current list of key names! We need it to get needed values from our
+            @descr      These methods return the current list of key names! We need it to get needed values from our
                         configuration management and support dynamical menu item lists!
 
-            @seealso	-
+            @seealso    -
 
-            @param      "nDisabledCount"	,   returns count of menu entries for "new"
-            @return		A list of configuration key names is returned.
+            @param      "nDisabledCount"    ,   returns count of menu entries for "new"
+            @return     A list of configuration key names is returned.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         Sequence< OUString > impl_GetPropertyNames();
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private member
+    //  private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
@@ -265,11 +265,11 @@ class SvtCommandOptions_Impl : public ConfigItem
 };
 
 //_________________________________________________________________________________________________________________
-//	definitions
+//  definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
 SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     // Init baseclasses first
@@ -288,8 +288,8 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
 
     // Copy values from list in right order to ouer internal member.
     // Attention: List for names and values have an internal construction pattern!
-    sal_Int32	nItem     = 0 ;
-    OUString    sCmd		  ;
+    sal_Int32   nItem     = 0 ;
+    OUString    sCmd          ;
 
     // Set size of hash_map reach a used size of approx. 60%
     m_aDisabledCommands.SetContainerSize( lNames.getLength() * 10 / 6 );
@@ -311,7 +311,7 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//	destructor
+//  destructor
 //*****************************************************************************************************************
 SvtCommandOptions_Impl::~SvtCommandOptions_Impl()
 {
@@ -323,7 +323,7 @@ SvtCommandOptions_Impl::~SvtCommandOptions_Impl()
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
 {
@@ -339,8 +339,8 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
 
     // Copy values from list in right order to ouer internal member.
     // Attention: List for names and values have an internal construction pattern!
-    sal_Int32	nItem     = 0 ;
-    OUString    sCmd		  ;
+    sal_Int32   nItem     = 0 ;
+    OUString    sCmd          ;
 
     // Set size of hash_map reach a used size of approx. 60%
     m_aDisabledCommands.Clear();
@@ -367,7 +367,7 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtCommandOptions_Impl::Commit()
 {
@@ -375,7 +375,7 @@ void SvtCommandOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtCommandOptions_Impl::Clear( SvtCommandOptions::CmdOption eCmdOption )
 {
@@ -394,7 +394,7 @@ void SvtCommandOptions_Impl::Clear( SvtCommandOptions::CmdOption eCmdOption )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_Bool SvtCommandOptions_Impl::HasEntries( SvtCommandOptions::CmdOption eOption ) const
 {
@@ -405,7 +405,7 @@ sal_Bool SvtCommandOptions_Impl::HasEntries( SvtCommandOptions::CmdOption eOptio
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 Sequence< OUString > SvtCommandOptions_Impl::GetList( SvtCommandOptions::CmdOption eCmdOption ) const
 {
@@ -427,7 +427,7 @@ Sequence< OUString > SvtCommandOptions_Impl::GetList( SvtCommandOptions::CmdOpti
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_Bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption, const OUString& aCommand ) const
 {
@@ -445,7 +445,7 @@ sal_Bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtCommandOptions_Impl::AddCommand( SvtCommandOptions::CmdOption eCmdOption, const OUString& sCmd )
 {
@@ -478,7 +478,7 @@ void SvtCommandOptions_Impl::EstablisFrameCallback(const ::com::sun::star::uno::
 }
 
 //*****************************************************************************************************************
-//	private method
+//  private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
 {
@@ -506,15 +506,15 @@ Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
 }
 
 //*****************************************************************************************************************
-//	initialize static member
-//	DON'T DO IT IN YOUR HEADER!
-//	see definition for further informations
+//  initialize static member
+//  DON'T DO IT IN YOUR HEADER!
+//  see definition for further informations
 //*****************************************************************************************************************
 SvtCommandOptions_Impl*     SvtCommandOptions::m_pDataContainer = NULL  ;
 sal_Int32                   SvtCommandOptions::m_nRefCount      = 0     ;
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
 SvtCommandOptions::SvtCommandOptions()
 {
@@ -531,7 +531,7 @@ SvtCommandOptions::SvtCommandOptions()
 }
 
 //*****************************************************************************************************************
-//	destructor
+//  destructor
 //*****************************************************************************************************************
 SvtCommandOptions::~SvtCommandOptions()
 {
@@ -549,7 +549,7 @@ SvtCommandOptions::~SvtCommandOptions()
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtCommandOptions::Clear( CmdOption eCmdOption )
 {
@@ -558,7 +558,7 @@ void SvtCommandOptions::Clear( CmdOption eCmdOption )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_Bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
 {
@@ -567,7 +567,7 @@ sal_Bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_Bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aCommandURL ) const
 {
@@ -576,7 +576,7 @@ sal_Bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aComma
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 Sequence< OUString > SvtCommandOptions::GetList( CmdOption eCmdOption ) const
 {
@@ -585,7 +585,7 @@ Sequence< OUString > SvtCommandOptions::GetList( CmdOption eCmdOption ) const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtCommandOptions::AddCommand( CmdOption eCmdOption, const OUString& sURL )
 {
@@ -603,7 +603,7 @@ void SvtCommandOptions::EstablisFrameCallback(const ::com::sun::star::uno::Refer
 }
 
 //*****************************************************************************************************************
-//	private method
+//  private method
 //*****************************************************************************************************************
 Mutex& SvtCommandOptions::GetOwnStaticMutex()
 {

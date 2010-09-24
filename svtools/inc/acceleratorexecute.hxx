@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,14 +84,14 @@ namespace svt
 struct TMutexInit
 {
     ::osl::Mutex m_aLock;
-};    
-    
+};
+
 //===============================================
 /**
     @descr  implements a helper, which can be used to
             convert vcl key codes into awt key codes ...
             and reverse.
-            
+
             Further such key code can be triggered.
             Doing so different accelerator
             configurations are merged together; a suitable

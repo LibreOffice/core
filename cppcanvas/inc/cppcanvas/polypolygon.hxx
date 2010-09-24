@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ namespace basegfx
     class B2DPolyPolygon;
 }
 
-namespace com { namespace sun { namespace star { namespace rendering 
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XPolyPolygon2D;
 } } } }
@@ -69,21 +69,21 @@ namespace cppcanvas
 
         /** Set polygon fill color
          */
-        virtual void						setRGBAFillColor( Color::IntSRGBA ) = 0;
+        virtual void                        setRGBAFillColor( Color::IntSRGBA ) = 0;
         /** Set polygon line color
          */
-        virtual void						setRGBALineColor( Color::IntSRGBA ) = 0;
+        virtual void                        setRGBALineColor( Color::IntSRGBA ) = 0;
         /** Get polygon fill color
          */
-        virtual Color::IntSRGBA				getRGBAFillColor() const = 0;
+        virtual Color::IntSRGBA             getRGBAFillColor() const = 0;
         /** Get polygon line color
          */
-        virtual Color::IntSRGBA				getRGBALineColor() const = 0;
+        virtual Color::IntSRGBA             getRGBALineColor() const = 0;
 
-        virtual void 						setStrokeWidth( const double& rStrokeWidth ) = 0;
-        virtual double 						getStrokeWidth() const = 0;
+        virtual void                        setStrokeWidth( const double& rStrokeWidth ) = 0;
+        virtual double                      getStrokeWidth() const = 0;
 
-        virtual ::com::sun::star::uno::Reference< 
+        virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::rendering::XPolyPolygon2D > getUNOPolyPolygon() const = 0;
     };
 

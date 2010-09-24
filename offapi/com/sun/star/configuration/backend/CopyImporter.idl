@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,45 +29,45 @@
 
 #ifndef __com_sun_star_configuration_backend_Importer_idl__
 #include <com/sun/star/configuration/backend/Importer.idl>
-#endif 
+#endif
 
 #ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif 
+#endif
 
-//============================================================================= 
+//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//============================================================================= 
+//=============================================================================
 
-/** 
+/**
     imports data into a configuration layer by copying over existing data.
 
-  
+
     @since OOo 1.1.2
 */
 published service CopyImporter
 {
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** allows importing configuration data into a backend.
-        
-        <p> In this implementation, the changes are copied over any 
-            <type>XLayer</type> data that already exists in the <type>Backend</type>, 
+
+        <p> In this implementation, the changes are copied over any
+            <type>XLayer</type> data that already exists in the <type>Backend</type>,
             replacing it completely.
         </p>
       */
     service Importer ;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
-    /** allows initializing the implementation with settings that control 
+    /** allows initializing the implementation with settings that control
         its behavior .
 
-        <p> This interface, which is optional in <type>Importer</type> 
-            is mandatory in this service and supports the following arguments 
-            which must be provided as 
+        <p> This interface, which is optional in <type>Importer</type>
+            is mandatory in this service and supports the following arguments
+            which must be provided as
             <type scope="com::sun::star::beans">NamedValue</type>:
         <dl>
             <dt><code>Overwrite</code> : <atom>boolean</atom></dt>
@@ -75,15 +75,15 @@ published service CopyImporter
                 only if the existing layer is empty.
             </dd>
         </dl>
-        </p> 
+        </p>
       */
     interface com::sun::star::lang::XInitialization ;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 } ;
 
-//============================================================================= 
+//=============================================================================
 
-} ; } ; } ; } ; } ; 
+} ; } ; } ; } ; } ;
 
-#endif 
+#endif

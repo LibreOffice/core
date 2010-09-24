@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,32 +66,32 @@ public:
     SMART_UNO_DECLARATION(ImplIntrospection,UsrObject);
 
     // Methoden von XInterface
-    XInterface *	queryInterface( Uik aUik );
-    XIdlClassRef	getIdlClass();
+    XInterface *    queryInterface( Uik aUik );
+    XIdlClassRef    getIdlClass();
     */
 
     // Methoden von SvPropertyDataControl
-    virtual void					Modified(	const String& aName,
+    virtual void                    Modified(   const String& aName,
                                                 const String& aVal,
                                                 void* pData);
 
-    virtual void					Clicked(	const String& aName,
+    virtual void                    Clicked(    const String& aName,
                                                 const String& aVal,
                                                 void* pData);
 
-    virtual void					Commit(		const String& aName,
+    virtual void                    Commit(     const String& aName,
                                                 const String& aVal,
                                                 void* pData);
 
-    virtual void					Select(		const String& aName,
+    virtual void                    Select(     const String& aName,
                                                 void* pData);
 
-    virtual void					LinkClicked(const String& aName,
+    virtual void                    LinkClicked(const String& aName,
                                                 void* pData);
 
     // TODO: Das muss raus, sehr unglueckliche Schnittstelle
     // PropertyBox erzwingt Zustand des Controllers
-    virtual String					GetTheCorrectProperty() const;
+    virtual String                  GetTheCorrectProperty() const;
 };
 
 // Methoden von XPropertyEditor

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,10 +36,10 @@
 
 class Font;
 
-#define TEXTATTR_INVALID	0
-#define TEXTATTR_FONTCOLOR	1
-#define TEXTATTR_HYPERLINK	2
-#define TEXTATTR_FONTWEIGHT	3
+#define TEXTATTR_INVALID    0
+#define TEXTATTR_FONTCOLOR  1
+#define TEXTATTR_HYPERLINK  2
+#define TEXTATTR_FONTWEIGHT 3
 
 #define TEXTATTR_USER_START 1000 //start id for user defined text attributes
 #define TEXTATTR_PROTECTED  4
@@ -48,7 +48,7 @@ class Font;
 class SVT_DLLPUBLIC TextAttrib
 {
 private:
-    USHORT					mnWhich;
+    USHORT                  mnWhich;
 
 protected:
                             TextAttrib( USHORT nWhich ) { mnWhich = nWhich; }
@@ -56,14 +56,14 @@ protected:
 
 public:
 
-    virtual					~TextAttrib();
+    virtual                 ~TextAttrib();
 
-    USHORT					Which() const 	{ return mnWhich; }
+    USHORT                  Which() const   { return mnWhich; }
 
-    virtual void 			SetFont( Font& rFont ) const = 0;
-    virtual TextAttrib*		Clone() const = 0;
-    virtual int				operator==( const TextAttrib& rAttr ) const = 0;
-    int						operator!=( const TextAttrib& rAttr ) const
+    virtual void            SetFont( Font& rFont ) const = 0;
+    virtual TextAttrib*     Clone() const = 0;
+    virtual int             operator==( const TextAttrib& rAttr ) const = 0;
+    int                     operator!=( const TextAttrib& rAttr ) const
                                 { return !(*this == rAttr ); }
 };
 
@@ -72,34 +72,34 @@ public:
 class SVT_DLLPUBLIC TextAttribFontColor : public TextAttrib
 {
 private:
-    Color	maColor;
+    Color   maColor;
 
 public:
                             TextAttribFontColor( const Color& rColor );
                             TextAttribFontColor( const TextAttribFontColor& rAttr );
                             ~TextAttribFontColor();
-                            
+
     const Color&            GetColor() const { return maColor; }
-                            
-    virtual void 			SetFont( Font& rFont ) const;
-    virtual TextAttrib*		Clone() const;
-    virtual int				operator==( const TextAttrib& rAttr ) const;
+
+    virtual void            SetFont( Font& rFont ) const;
+    virtual TextAttrib*     Clone() const;
+    virtual int             operator==( const TextAttrib& rAttr ) const;
 
 };
 
 class SVT_DLLPUBLIC TextAttribFontWeight : public TextAttrib
 {
 private:
-    FontWeight	meWeight;
+    FontWeight  meWeight;
 
 public:
                             TextAttribFontWeight( FontWeight eWeight );
                             TextAttribFontWeight( const TextAttribFontWeight& rAttr );
                             ~TextAttribFontWeight();
 
-    virtual void 			SetFont( Font& rFont ) const;
-    virtual TextAttrib*		Clone() const;
-    virtual int				operator==( const TextAttrib& rAttr ) const;
+    virtual void            SetFont( Font& rFont ) const;
+    virtual TextAttrib*     Clone() const;
+    virtual int             operator==( const TextAttrib& rAttr ) const;
 
     inline FontWeight getFontWeight() const { return meWeight; }
 };
@@ -108,9 +108,9 @@ public:
 class TextAttribHyperLink : public TextAttrib
 {
 private:
-    XubString	maURL;
-    XubString	maDescription;
-    Color		maColor;
+    XubString   maURL;
+    XubString   maDescription;
+    Color       maColor;
 
 public:
                             TextAttribHyperLink( const XubString& rURL );
@@ -118,18 +118,18 @@ public:
                             TextAttribHyperLink( const TextAttribHyperLink& rAttr );
                             ~TextAttribHyperLink();
 
-    void					SetURL( const XubString& rURL )				{ maURL = rURL; }
-    const XubString&			GetURL() const 								{ return maURL; }
+    void                    SetURL( const XubString& rURL )             { maURL = rURL; }
+    const XubString&            GetURL() const                              { return maURL; }
 
-    void					SetDescription( const XubString& rDescr )	{ maDescription = rDescr; }
-    const XubString&			GetDescription() const						{ return maDescription; }
+    void                    SetDescription( const XubString& rDescr )   { maDescription = rDescr; }
+    const XubString&            GetDescription() const                      { return maDescription; }
 
-    void					SetColor( const Color& rColor ) 			{ maColor = rColor; }
-    const Color&			GetColor() const 							{ return maColor; }
+    void                    SetColor( const Color& rColor )             { maColor = rColor; }
+    const Color&            GetColor() const                            { return maColor; }
 
-    virtual void 			SetFont( Font& rFont ) const;
-    virtual TextAttrib*		Clone() const;
-    virtual int				operator==( const TextAttrib& rAttr ) const;
+    virtual void            SetFont( Font& rFont ) const;
+    virtual TextAttrib*     Clone() const;
+    virtual int             operator==( const TextAttrib& rAttr ) const;
 };
 
 class SVT_DLLPUBLIC TextAttribProtect : public TextAttrib
@@ -138,7 +138,7 @@ public:
                             TextAttribProtect();
                             TextAttribProtect( const TextAttribProtect& rAttr );
                             ~TextAttribProtect();
-                            
+
     virtual void            SetFont( Font& rFont ) const;
     virtual TextAttrib*     Clone() const;
     virtual int             operator==( const TextAttrib& rAttr ) const;
@@ -149,9 +149,9 @@ public:
 class TextCharAttrib
 {
 private:
-    TextAttrib*		mpAttr;
-    USHORT 			mnStart;
-    USHORT 			mnEnd;
+    TextAttrib*     mpAttr;
+    USHORT          mnStart;
+    USHORT          mnEnd;
 
 protected:
 
@@ -161,27 +161,27 @@ public:
                     TextCharAttrib( const TextCharAttrib& rTextCharAttrib );
                     ~TextCharAttrib();
 
-    const TextAttrib&	GetAttr() const 		{ return *mpAttr; }
+    const TextAttrib&   GetAttr() const         { return *mpAttr; }
 
-    USHORT			Which() const 				{ return mpAttr->Which(); }
+    USHORT          Which() const               { return mpAttr->Which(); }
 
-    USHORT			GetStart() const			{ return mnStart; }
-    USHORT&			GetStart()					{ return mnStart; }
+    USHORT          GetStart() const            { return mnStart; }
+    USHORT&         GetStart()                  { return mnStart; }
 
-    USHORT			GetEnd() const				{ return mnEnd; }
-    USHORT&			GetEnd()					{ return mnEnd; }
+    USHORT          GetEnd() const              { return mnEnd; }
+    USHORT&         GetEnd()                    { return mnEnd; }
 
-    inline USHORT	GetLen() const;
+    inline USHORT   GetLen() const;
 
-    inline void		MoveForward( USHORT nDiff );
-    inline void		MoveBackward( USHORT nDiff );
+    inline void     MoveForward( USHORT nDiff );
+    inline void     MoveBackward( USHORT nDiff );
 
-    inline void		Expand( USHORT nDiff );
-    inline void		Collaps( USHORT nDiff );
+    inline void     Expand( USHORT nDiff );
+    inline void     Collaps( USHORT nDiff );
 
-    inline BOOL		IsIn( USHORT nIndex );
-    inline BOOL		IsInside( USHORT nIndex );
-    inline BOOL		IsEmpty();
+    inline BOOL     IsIn( USHORT nIndex );
+    inline BOOL     IsInside( USHORT nIndex );
+    inline BOOL     IsEmpty();
 
 };
 
@@ -205,13 +205,13 @@ inline void TextCharAttrib::MoveBackward( USHORT nDiff )
     mnEnd = mnEnd - nDiff;
 }
 
-inline void	TextCharAttrib::Expand( USHORT nDiff )
+inline void TextCharAttrib::Expand( USHORT nDiff )
 {
     DBG_ASSERT( ( ((long)mnEnd + nDiff) <= (long)0xFFFF ), "TextCharAttrib: Expand?!" );
     mnEnd = mnEnd + nDiff;
 }
 
-inline void	TextCharAttrib::Collaps( USHORT nDiff )
+inline void TextCharAttrib::Collaps( USHORT nDiff )
 {
     DBG_ASSERT( (long)mnEnd - nDiff >= (long)mnStart, "TextCharAttrib: Collaps?!" );
     mnEnd = mnEnd - nDiff;

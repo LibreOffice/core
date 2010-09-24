@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ public:
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XDiagram > & xDiagram );
     static ::std::map< ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries >, sal_Int32 > 
+                ::com::sun::star::chart2::XDataSeries >, sal_Int32 >
             getDataSeriesIndexMapFromDiagram(
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XDiagram > & xDiagram );

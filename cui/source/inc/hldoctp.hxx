@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,45 +38,45 @@
 class SvxHyperlinkDocTp : public SvxHyperlinkTabPageBase
 {
 private:
-    FixedLine			maGrpDocument;
-    FixedText			maFtPath;
-    SvxHyperURLBox		maCbbPath;
-    ImageButton			maBtFileopen;
+    FixedLine           maGrpDocument;
+    FixedText           maFtPath;
+    SvxHyperURLBox      maCbbPath;
+    ImageButton         maBtFileopen;
 
-    FixedLine			maGrpTarget;
-    FixedText			maFtTarget;
-    Edit				maEdTarget;
-    FixedText			maFtURL;
-    FixedText			maFtFullURL;
-    ImageButton			maBtBrowse;
+    FixedLine           maGrpTarget;
+    FixedText           maFtTarget;
+    Edit                maEdTarget;
+    FixedText           maFtURL;
+    FixedText           maFtFullURL;
+    ImageButton         maBtBrowse;
 
-    String				maStrURL;
+    String              maStrURL;
 
-    BOOL				mbMarkWndOpen;
+    BOOL                mbMarkWndOpen;
 
-    DECL_LINK (ClickFileopenHdl_Impl  , void * );		// Button : Fileopen
-    DECL_LINK (ClickTargetHdl_Impl    , void * );		// Button : Target
+    DECL_LINK (ClickFileopenHdl_Impl  , void * );       // Button : Fileopen
+    DECL_LINK (ClickTargetHdl_Impl    , void * );       // Button : Target
 
-    DECL_LINK (ModifiedPathHdl_Impl	 , void * );		// Contens of combobox "Path" modified
-    DECL_LINK (ModifiedTargetHdl_Impl, void * );		// Contens of editfield "Target" modified
+    DECL_LINK (ModifiedPathHdl_Impl  , void * );        // Contens of combobox "Path" modified
+    DECL_LINK (ModifiedTargetHdl_Impl, void * );        // Contens of editfield "Target" modified
 
-    DECL_LINK (LostFocusPathHdl_Impl,  void * );		// Combobox "path" lost its focus
+    DECL_LINK (LostFocusPathHdl_Impl,  void * );        // Combobox "path" lost its focus
 
-    DECL_LINK (TimeoutHdl_Impl      ,  Timer * );		// Handler for timer -timeout
+    DECL_LINK (TimeoutHdl_Impl      ,  Timer * );       // Handler for timer -timeout
 
-    enum EPathType { Type_Unknown, Type_Invalid, 
-                     Type_ExistsFile, Type_File, 
+    enum EPathType { Type_Unknown, Type_Invalid,
+                     Type_ExistsFile, Type_File,
                      Type_ExistsDir, Type_Dir };
     EPathType GetPathType ( String& aStrPath );
 
 protected:
     void FillDlgFields     ( String& aStrURL );
-    void GetCurentItemData ( String& aStrURL, String& aStrName, 
-                             String& aStrIntName, String& aStrFrame, 
+    void GetCurentItemData ( String& aStrURL, String& aStrName,
+                             String& aStrIntName, String& aStrFrame,
                              SvxLinkInsertMode& eMode );
     virtual BOOL   ShouldOpenMarkWnd () {return mbMarkWndOpen;}
     virtual void   SetMarkWndShouldOpen (BOOL bOpen) {mbMarkWndOpen=bOpen;}
-    String GetCurrentURL 	();
+    String GetCurrentURL    ();
 
 public:
     SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemSet);
@@ -84,9 +84,9 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual void		SetMarkStr ( String& aStrMark );
+    virtual void        SetMarkStr ( String& aStrMark );
 
-    virtual void		SetInitFocus();
+    virtual void        SetInitFocus();
 };
 
 

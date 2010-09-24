@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ typedef ::std::hash_map < ::rtl::OUString, ProviderDetails , ::rtl::OUStringHash
             ::std::equal_to< ::rtl::OUString > > ProviderDetails_hash;
 
 
-class ProviderCache 
+class ProviderCache
 {
 
 public:
@@ -71,12 +71,12 @@ public:
         const css::uno::Sequence< ::rtl::OUString >& blackList )
         throw ( css::uno::RuntimeException );
     ~ProviderCache();
-     css::uno::Reference< css::script::provider::XScriptProvider > 
+     css::uno::Reference< css::script::provider::XScriptProvider >
          getProvider( const ::rtl::OUString& providerName );
      css::uno::Sequence < css::uno::Reference< css::script::provider::XScriptProvider > >
          getAllProviders() throw ( css::uno::RuntimeException );
 private:
-    void populateCache() 
+    void populateCache()
         throw ( css::uno::RuntimeException );
 
    css::uno::Reference< css::script::provider::XScriptProvider >
@@ -95,10 +95,10 @@ private:
         }
         return false;
     }
-    css::uno::Sequence< ::rtl::OUString >  m_sBlackList; 
+    css::uno::Sequence< ::rtl::OUString >  m_sBlackList;
     ProviderDetails_hash  m_hProviderDetailsCache;
     osl::Mutex m_mutex;
-    css::uno::Sequence< css::uno::Any >  m_Sctx; 
+    css::uno::Sequence< css::uno::Any >  m_Sctx;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
 

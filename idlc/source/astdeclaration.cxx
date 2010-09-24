@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ static OString convertName(const OString& name)
         }
     } while( nIndex != -1 );
     return nameBuffer.makeStringAndClear();
-}	
+}
 
 AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pScope)
     : m_localName(name)
@@ -68,7 +68,7 @@ AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pSc
             m_scopedName = pDecl->getScopedName();
             if (m_scopedName.getLength() > 0)
                 m_scopedName += sGlobal;
-            m_scopedName +=	m_localName;
+            m_scopedName += m_localName;
         }
     } else
     {
@@ -91,11 +91,11 @@ AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pSc
 
     m_bPublished = idlc()->isPublished();
 }
-    
+
 
 AstDeclaration::~AstDeclaration()
 {
-    
+
 }
 
 void AstDeclaration::setPredefined(bool bPredefined)
@@ -104,7 +104,7 @@ void AstDeclaration::setPredefined(bool bPredefined)
     if ( m_bPredefined )
     {
         m_fileName = OString();
-        m_bInMainFile = sal_False;    
+        m_bInMainFile = sal_False;
     }
 }
 
@@ -116,30 +116,30 @@ void AstDeclaration::setName(const ::rtl::OString& name)
 
 // Huh ? There is always at least one token
 
-// 	sal_Int32 count = name.getTokenCount(':');
+//  sal_Int32 count = name.getTokenCount(':');
 
-// 	if ( count > 0 )
-// 	{
-// 		m_localName = name.getToken(count-1, ':');
-// 		m_scopedName = name;
-// 	} else if ( m_pScope )
-// 	{
-// 		m_localName = name;
-// 		AstDeclaration* pDecl = scopeAsDecl(m_pScope);
-// 		if (pDecl)
-// 		{
-// 			m_scopedName = pDecl->getScopedName();
-// 			if (m_scopedName.getLength() > 0)
-// 				m_scopedName += sGlobal;
-// 			m_scopedName +=	m_localName;
-// 		}
-// 	} else
-// 	{
-// 		m_localName = name;
-// 		m_scopedName = name;
-// 	}
+//  if ( count > 0 )
+//  {
+//      m_localName = name.getToken(count-1, ':');
+//      m_scopedName = name;
+//  } else if ( m_pScope )
+//  {
+//      m_localName = name;
+//      AstDeclaration* pDecl = scopeAsDecl(m_pScope);
+//      if (pDecl)
+//      {
+//          m_scopedName = pDecl->getScopedName();
+//          if (m_scopedName.getLength() > 0)
+//              m_scopedName += sGlobal;
+//          m_scopedName += m_localName;
+//      }
+//  } else
+//  {
+//      m_localName = name;
+//      m_scopedName = name;
+//  }
     m_fullName = convertName(m_scopedName);
-}	
+}
 
 bool AstDeclaration::isType() const {
     switch (m_nodeType) {
@@ -167,12 +167,12 @@ sal_Bool AstDeclaration::hasAncestor(AstDeclaration* pDecl)
     if ( !m_pScope )
         return sal_False;
     return scopeAsDecl(m_pScope)->hasAncestor(pDecl);
-}	
+}
 
 sal_Bool AstDeclaration::dump(RegistryKey& rKey)
 {
     AstScope* pScope = declAsScope(this);
-    sal_Bool bRet = sal_True;	
+    sal_Bool bRet = sal_True;
 
     if ( pScope )
     {
@@ -200,12 +200,12 @@ sal_Bool AstDeclaration::dump(RegistryKey& rKey)
                         break;
                     default:
                         break;
-                }	
+                }
             }
-            
+
             ++iter;
-        }		
+        }
     }
     return bRet;
-}	
+}
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,41 +41,41 @@ class SVT_DLLPUBLIC SvtAccessibilityOptions:
 {
 private:
     static SvtAccessibilityOptions_Impl* volatile sm_pSingleImplConfig;
-    static sal_Int32					 volatile sm_nAccessibilityRefCount;
+    static sal_Int32                     volatile sm_nAccessibilityRefCount;
 
 public:
     SvtAccessibilityOptions();
     virtual ~SvtAccessibilityOptions();
 
     // get & set config entries
-    sal_Bool 	GetIsForDrawings() const;		// obsolete!
-    sal_Bool    GetIsForBorders() const;		// obsolete!
+    sal_Bool    GetIsForDrawings() const;       // obsolete!
+    sal_Bool    GetIsForBorders() const;        // obsolete!
     sal_Bool    GetIsForPagePreviews() const;
-    sal_Bool 	GetIsHelpTipsDisappear() const;
-    sal_Bool 	GetIsAllowAnimatedGraphics() const;
-    sal_Bool 	GetIsAllowAnimatedText() const;
-    sal_Bool 	GetIsAutomaticFontColor() const;
-    sal_Bool 	GetIsSystemFont() const;
-    sal_Int16	GetHelpTipSeconds() const;
+    sal_Bool    GetIsHelpTipsDisappear() const;
+    sal_Bool    GetIsAllowAnimatedGraphics() const;
+    sal_Bool    GetIsAllowAnimatedText() const;
+    sal_Bool    GetIsAutomaticFontColor() const;
+    sal_Bool    GetIsSystemFont() const;
+    sal_Int16   GetHelpTipSeconds() const;
     sal_Bool    IsSelectionInReadonly() const;
-    sal_Bool	GetAutoDetectSystemHC() const;
+    sal_Bool    GetAutoDetectSystemHC() const;
 
     void        SetIsForPagePreviews(sal_Bool bSet);
-    void 		SetIsHelpTipsDisappear(sal_Bool bSet);
-    void 		SetIsAllowAnimatedGraphics(sal_Bool bSet);
-    void 		SetIsAllowAnimatedText(sal_Bool bSet);
-    void 		SetIsAutomaticFontColor(sal_Bool bSet);
-    void 		SetIsSystemFont(sal_Bool bSet);
-    void		SetHelpTipSeconds(sal_Int16 nSet);
+    void        SetIsHelpTipsDisappear(sal_Bool bSet);
+    void        SetIsAllowAnimatedGraphics(sal_Bool bSet);
+    void        SetIsAllowAnimatedText(sal_Bool bSet);
+    void        SetIsAutomaticFontColor(sal_Bool bSet);
+    void        SetIsSystemFont(sal_Bool bSet);
+    void        SetHelpTipSeconds(sal_Int16 nSet);
     void        SetSelectionInReadonly(sal_Bool bSet);
     void        SetAutoDetectSystemHC(sal_Bool bSet);
 
     sal_Bool                IsModified() const;
-    void		            Commit();
+    void                    Commit();
 
     //SfxListener:
-    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    void 		SetVCLSettings();
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    void        SetVCLSettings();
 };
 
 #endif // #ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX

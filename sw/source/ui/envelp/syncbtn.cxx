@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
                             SfxChildWindow* pChild,
                             Window *pParent) :
     SfxFloatingWindow(_pBindings, pChild, pParent, SW_RES(DLG_SYNC_BTN)),
-    aSyncBtn    	(this, SW_RES(BTN_SYNC ))
+    aSyncBtn        (this, SW_RES(BTN_SYNC ))
 {
     FreeResource();
     aSyncBtn.SetClickHdl(LINK(this, SwSyncBtnDlg, BtnHdl));

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,52 +45,52 @@ public class CodePage implements BIFFRecord {
     private byte[] unknown1 = new byte[2];
     private byte[] unknown2 = new byte[2];
     private byte unknown3;
-    
+
     /**
-     * Constructs a pocket Excel Codepage 
+     * Constructs a pocket Excel Codepage
      */
     public CodePage() {
-        codepage	= new byte[] {(byte)0xE4, (byte)0x04};
-        unknown1	= new byte[] {(byte)0x8C, (byte)0x01};
-        unknown2	= new byte[] {(byte)0x00, (byte)0x01};
-        unknown3	= 0x00;
+        codepage    = new byte[] {(byte)0xE4, (byte)0x04};
+        unknown1    = new byte[] {(byte)0x8C, (byte)0x01};
+        unknown2    = new byte[] {(byte)0x00, (byte)0x01};
+        unknown3    = 0x00;
     }
 
     /**
-     * Constructs a pocket Excel Codepage from the<code>InputStream</code> 
+     * Constructs a pocket Excel Codepage from the<code>InputStream</code>
      *
-     * @param	is InputStream containing a Pocket Excel Data file.
+     * @param   is InputStream containing a Pocket Excel Data file.
      */
     public CodePage(InputStream is) throws IOException {
-        read(is);	
+        read(is);
     }
 
      /**
-     * Get the hex code for this particular <code>BIFFRecord</code> 
+     * Get the hex code for this particular <code>BIFFRecord</code>
      *
      * @return the hex code for <code>BoundSheet</code>
      */
     public short getBiffType() {
         return PocketExcelConstants.CODEPAGE;
     }
-    
+
     public int read(InputStream input) throws IOException {
 
-        int numOfBytesRead	= input.read(codepage);    
-        numOfBytesRead     	+= input.read(unknown1);
-        numOfBytesRead     	+= input.read(unknown2);
-        // numOfBytesRead     	+= input.read(unknown3);
-        unknown3			= (byte) input.read();
+        int numOfBytesRead  = input.read(codepage);
+        numOfBytesRead      += input.read(unknown1);
+        numOfBytesRead      += input.read(unknown2);
+        // numOfBytesRead       += input.read(unknown3);
+        unknown3            = (byte) input.read();
         numOfBytesRead++;
-        
-        Debug.log(Debug.TRACE,"\tcodepage : "+ EndianConverter.readShort(codepage) + 
-                            " unknown1 : " + EndianConverter.readShort(unknown1) +        
-                            " unknown2 : " + EndianConverter.readShort(unknown2) +          
-                            " unknown3 : " + unknown3);          
+
+        Debug.log(Debug.TRACE,"\tcodepage : "+ EndianConverter.readShort(codepage) +
+                            " unknown1 : " + EndianConverter.readShort(unknown1) +
+                            " unknown2 : " + EndianConverter.readShort(unknown2) +
+                            " unknown3 : " + unknown3);
 
         return numOfBytesRead;
     }
-    
+
     public void write(OutputStream output) throws IOException {
 
         output.write(getBiffType());
@@ -101,7 +101,7 @@ public class CodePage implements BIFFRecord {
 
         Debug.log(Debug.TRACE,"Writing CodePage record");
 
-    
+
     }
-    
+
 }

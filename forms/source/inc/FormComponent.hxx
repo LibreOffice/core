@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ namespace frm
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);   \
 
     // old macro for quickly implementing XServiceInfo::getImplementationName
-    #define IMPLEMENTATION_NAME(ImplName)										\
+    #define IMPLEMENTATION_NAME(ImplName)                                       \
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) \
         { return ::rtl::OUString::createFromAscii("com.sun.star.comp.forms.") + ::rtl::OUString::createFromAscii(#ImplName); }
 
@@ -167,17 +167,17 @@ namespace frm
 //= OControl
 //= base class for form layer controls
 //=========================================================================
-typedef ::cppu::ImplHelper3	<	::com::sun::star::awt::XControl
-                            ,	::com::sun::star::lang::XEventListener
-                            ,	::com::sun::star::lang::XServiceInfo
+typedef ::cppu::ImplHelper3 <   ::com::sun::star::awt::XControl
+                            ,   ::com::sun::star::lang::XEventListener
+                            ,   ::com::sun::star::lang::XServiceInfo
                             > OControl_BASE;
 
-class OControl	:public ::cppu::OComponentHelper
+class OControl  :public ::cppu::OComponentHelper
                 ,public OControl_BASE
 {
 protected:
     ::osl::Mutex                                m_aMutex;
-    OImplementationIdsRef						m_aHoldIdHelper;
+    OImplementationIdsRef                       m_aHoldIdHelper;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
                                                 m_xControl;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>
@@ -231,16 +231,16 @@ protected:
         if you passed <FALSE/> to the <arg>_bSetDelegator</arg> parameter of the
         <type>OControl</type> constructor.
     */
-    void	doSetDelegator();
-    void	doResetDelegator();
+    void    doSetDelegator();
+    void    doResetDelegator();
 
 // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
 
 // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence<sal_Int8>			SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
 
 // OComponentHelper
     virtual void SAL_CALL disposing();
@@ -257,27 +257,27 @@ protected:
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
 
 // XServiceInfo
-    virtual sal_Bool SAL_CALL			supportsService(const ::rtl::OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException);
-    virtual StringSequence SAL_CALL		getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL	getImplementationName() throw(::com::sun::star::uno::RuntimeException) = 0;
+    virtual sal_Bool SAL_CALL           supportsService(const ::rtl::OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException);
+    virtual StringSequence SAL_CALL     getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL    getImplementationName() throw(::com::sun::star::uno::RuntimeException) = 0;
 
 // XServiceInfo - static version
-    static  StringSequence SAL_CALL		getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
+    static  StringSequence SAL_CALL     getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
 
 // XControl
-    virtual void										SAL_CALL setContext(const InterfaceRef& Context) throw (::com::sun::star::uno::RuntimeException);
-    virtual InterfaceRef								SAL_CALL getContext() throw (::com::sun::star::uno::RuntimeException);
-    virtual void										SAL_CALL createPeer(const ::com::sun::star::uno::Reference<starawt::XToolkit>& Toolkit, const ::com::sun::star::uno::Reference<starawt::XWindowPeer>& Parent) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<starawt::XWindowPeer>	SAL_CALL getPeer() throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool									SAL_CALL setModel(const ::com::sun::star::uno::Reference<starawt::XControlModel>& Model) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<starawt::XControlModel>	SAL_CALL getModel() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<starawt::XView>			SAL_CALL getView() throw (::com::sun::star::uno::RuntimeException);
-    virtual void										SAL_CALL setDesignMode(sal_Bool bOn) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool									SAL_CALL isDesignMode() throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool									SAL_CALL isTransparent() throw (::com::sun::star::uno::RuntimeException);
+    virtual void                                        SAL_CALL setContext(const InterfaceRef& Context) throw (::com::sun::star::uno::RuntimeException);
+    virtual InterfaceRef                                SAL_CALL getContext() throw (::com::sun::star::uno::RuntimeException);
+    virtual void                                        SAL_CALL createPeer(const ::com::sun::star::uno::Reference<starawt::XToolkit>& Toolkit, const ::com::sun::star::uno::Reference<starawt::XWindowPeer>& Parent) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<starawt::XWindowPeer>  SAL_CALL getPeer() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool                                    SAL_CALL setModel(const ::com::sun::star::uno::Reference<starawt::XControlModel>& Model) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<starawt::XControlModel>    SAL_CALL getModel() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<starawt::XView>            SAL_CALL getView() throw (::com::sun::star::uno::RuntimeException);
+    virtual void                                        SAL_CALL setDesignMode(sal_Bool bOn) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool                                    SAL_CALL isDesignMode() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool                                    SAL_CALL isTransparent() throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>	_getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
         // overwrite this and call the base class if you have additional types
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getAggregateServiceNames();
@@ -292,11 +292,11 @@ private:
 //==================================================================
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::form::XBoundControl
                             >  OBoundControl_BASE;
-class OBoundControl	:public OControl
+class OBoundControl :public OControl
                     ,public OBoundControl_BASE
 {
 protected:
-    sal_Bool	m_bLocked : 1;
+    sal_Bool    m_bLocked : 1;
 
     ::rtl::OUString m_sOriginalHelpText;                // as long as the text/value is invalid, we change the help text of our peer
     ::com::sun::star::awt::FontDescriptor
@@ -316,8 +316,8 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
 
     // XBoundControl
-    virtual sal_Bool SAL_CALL	getLock() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL		setLock(sal_Bool _bLock) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL   getLock() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL       setLock(sal_Bool _bLock) throw(::com::sun::star::uno::RuntimeException);
         // default implementation just disables the controls, overwrite _setLock to change this behaviour
 
     // XControl
@@ -330,9 +330,9 @@ public:
     virtual void SAL_CALL disposing();
 
 protected:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>	_getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
     // implement the lock setting
-    virtual void		 _setLock(sal_Bool _bLock);
+    virtual void         _setLock(sal_Bool _bLock);
 };
 
 //==================================================================
@@ -340,16 +340,16 @@ protected:
 //= model of a form layer control
 //==================================================================
 
-typedef ::cppu::ImplHelper7	<	::com::sun::star::form::XFormComponent
-                            ,	::com::sun::star::io::XPersistObject
-                            ,	::com::sun::star::container::XNamed
-                            ,	::com::sun::star::lang::XServiceInfo
-                            ,	::com::sun::star::util::XCloneable
-                            ,	::com::sun::star::beans::XPropertyContainer
-                            ,	::com::sun::star::beans::XPropertyAccess
-                            >	OControlModel_BASE;
+typedef ::cppu::ImplHelper7 <   ::com::sun::star::form::XFormComponent
+                            ,   ::com::sun::star::io::XPersistObject
+                            ,   ::com::sun::star::container::XNamed
+                            ,   ::com::sun::star::lang::XServiceInfo
+                            ,   ::com::sun::star::util::XCloneable
+                            ,   ::com::sun::star::beans::XPropertyContainer
+                            ,   ::com::sun::star::beans::XPropertyAccess
+                            >   OControlModel_BASE;
 
-class OControlModel	:public ::cppu::OComponentHelper
+class OControlModel :public ::cppu::OComponentHelper
                     ,public OPropertySetAggregationHelper
                     ,public OControlModel_BASE
                     ,public OCloneableAggregation
@@ -362,39 +362,39 @@ protected:
     ::osl::Mutex                    m_aMutex;
     oslInterlockedCount             m_lockCount;
 
-    InterfaceRef					m_xParent;					// ParentComponent
-    OImplementationIdsRef			m_aHoldIdHelper;
+    InterfaceRef                    m_xParent;                  // ParentComponent
+    OImplementationIdsRef           m_aHoldIdHelper;
     PropertyBagHelper               m_aPropertyBagHelper;
 
     const ::comphelper::ComponentContext&
         getContext() const { return m_aContext; }
 
 // <properties>
-    ::rtl::OUString					m_aName;					// name of the control
-    ::rtl::OUString					m_aTag;						// tag for additional data
-    sal_Int16						m_nTabIndex;				// index within the taborder
-    sal_Int16						m_nClassId;					// type of the control
+    ::rtl::OUString                 m_aName;                    // name of the control
+    ::rtl::OUString                 m_aTag;                     // tag for additional data
+    sal_Int16                       m_nTabIndex;                // index within the taborder
+    sal_Int16                       m_nClassId;                 // type of the control
     sal_Bool                        m_bNativeLook;              // should the control use the native platform look?
 // </properties>
 
 
 protected:
     OControlModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,	// factory to create the aggregate with
-        const ::rtl::OUString& _rUnoControlModelTypeName,						// service name of te model to aggregate
-        const ::rtl::OUString& rDefault = ::rtl::OUString(),					// service name of the default control
-        const sal_Bool _bSetDelegator = sal_True								// set to FALSE if you want to call setDelegator later (after returning from this ctor)
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,   // factory to create the aggregate with
+        const ::rtl::OUString& _rUnoControlModelTypeName,                       // service name of te model to aggregate
+        const ::rtl::OUString& rDefault = ::rtl::OUString(),                    // service name of the default control
+        const sal_Bool _bSetDelegator = sal_True                                // set to FALSE if you want to call setDelegator later (after returning from this ctor)
     );
     OControlModel(
-        const OControlModel* _pOriginal,										// the original object to clone
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,	// factory to create the aggregate with
+        const OControlModel* _pOriginal,                                        // the original object to clone
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,   // factory to create the aggregate with
         const sal_Bool _bCloneAggregate = sal_True,                             // should the aggregate of the original be cloned, too?
-        const sal_Bool _bSetDelegator = sal_True								// set to FALSE if you want to call setDelegator later (after returning from this ctor)
+        const sal_Bool _bSetDelegator = sal_True                                // set to FALSE if you want to call setDelegator later (after returning from this ctor)
     );
     virtual ~OControlModel();
 
     /** to be called after a OBoundControlModel (a derivee, respectively) has been cloned
-    
+
         <p>This method contains late initializations which cannot be done in the
         constructor of this base class, since the virtual method of derived classes do
         not yet work there.</p>
@@ -403,13 +403,13 @@ protected:
 
     using OComponentHelper::rBHelper;
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>	_getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
 
-    void	readHelpTextCompatibly(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& _rxInStream);
-    void	writeHelpTextCompatibly(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& _rxOutStream);
+    void    readHelpTextCompatibly(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& _rxInStream);
+    void    writeHelpTextCompatibly(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& _rxOutStream);
 
-    void	doSetDelegator();
-    void	doResetDelegator();
+    void    doSetDelegator();
+    void    doResetDelegator();
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getAggregateServiceNames();
 
@@ -418,34 +418,34 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
 
 // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence<sal_Int8>			SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
 
 // OComponentHelper
     virtual void SAL_CALL disposing();
 
 // XNamed
-    virtual ::rtl::OUString SAL_CALL	getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL				setName(const ::rtl::OUString& aName) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL    getName() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL               setName(const ::rtl::OUString& aName) throw(::com::sun::star::uno::RuntimeException);
 
 // XServiceInfo
-    virtual sal_Bool SAL_CALL			supportsService(const ::rtl::OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException);
-    virtual StringSequence SAL_CALL		getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL	getImplementationName() throw(::com::sun::star::uno::RuntimeException) = 0;
+    virtual sal_Bool SAL_CALL           supportsService(const ::rtl::OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException);
+    virtual StringSequence SAL_CALL     getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL    getImplementationName() throw(::com::sun::star::uno::RuntimeException) = 0;
 
 // XSericeInfo - static version(s)
-    static  StringSequence SAL_CALL		getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
+    static  StringSequence SAL_CALL     getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
 
 // XPersistObject
-    virtual ::rtl::OUString SAL_CALL	getServiceName() throw(::com::sun::star::uno::RuntimeException) = 0;
+    virtual ::rtl::OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException) = 0;
     virtual void SAL_CALL
         write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
         read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 // XChild (base of XFormComponent)
-    virtual InterfaceRef SAL_CALL	getParent() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL			setParent(const InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+    virtual InterfaceRef SAL_CALL   getParent() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL           setParent(const InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
 // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
@@ -460,8 +460,8 @@ public:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
 // ::com::sun::star::beans::XPropertyState
-    virtual	::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
-    virtual	void setPropertyToDefaultByHandle(sal_Int32 nHandle);
+    virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
+    virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle);
     virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
 
 // XCloneable
@@ -537,18 +537,18 @@ public:
 
 //==================================================================
 // simple destructor
-#define DECLARE_DEFAULT_DTOR( classname )	\
+#define DECLARE_DEFAULT_DTOR( classname )   \
     ~classname() \
 
 // constructor for cloning a class
 #define DECLARE_DEFAULT_CLONE_CTOR( classname )  \
     classname( \
         const classname* _pOriginal, \
-        const	::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory \
+        const   ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory \
     ); \
 
 // all xtors for an inner class of the object hierarchy
-#define DECLARE_DEFAULT_XTOR( classname )	\
+#define DECLARE_DEFAULT_XTOR( classname )   \
     classname( \
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, \
         const ::rtl::OUString& _rUnoControlModelTypeName, \
@@ -558,7 +558,7 @@ public:
     DECLARE_DEFAULT_DTOR( classname )   \
 
 // all xtors for an inner class of the object hierarchy which is *bound*
-#define DECLARE_DEFAULT_BOUND_XTOR( classname )	\
+#define DECLARE_DEFAULT_BOUND_XTOR( classname ) \
     classname( \
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, \
         const ::rtl::OUString& _rUnoControlModelTypeName, \
@@ -570,7 +570,7 @@ public:
     DECLARE_DEFAULT_DTOR( classname )   \
 
 // all xtors for a leas class of the object hierarchy
-#define DECLARE_DEFAULT_LEAF_XTOR( classname )	\
+#define DECLARE_DEFAULT_LEAF_XTOR( classname )  \
     classname( \
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory \
     ); \
@@ -597,11 +597,11 @@ public:
 //= OBoundControlModel
 //= model of a form layer control which is bound to a data source field
 //==================================================================
-typedef ::cppu::ImplHelper4 <	::com::sun::star::form::XLoadListener
+typedef ::cppu::ImplHelper4 <   ::com::sun::star::form::XLoadListener
                             ,   ::com::sun::star::form::XReset
-                            ,	::com::sun::star::beans::XPropertyChangeListener
-                            ,	::com::sun::star::sdb::XRowSetChangeListener
-                            >	OBoundControlModel_BASE1;
+                            ,   ::com::sun::star::beans::XPropertyChangeListener
+                            ,   ::com::sun::star::sdb::XRowSetChangeListener
+                            >   OBoundControlModel_BASE1;
 
 // separated into an own base class since derivees can disable the support for this
 // interface, thus we want to easily exclude it in the queryInterface and getTypes
@@ -618,7 +618,7 @@ typedef ::cppu::ImplHelper2 <   ::com::sun::star::form::validation::XValidityCon
                             ,   ::com::sun::star::form::validation::XValidatableFormComponent
                             >   OBoundControlModel_VALIDATION;
 
-class OBoundControlModel	:public OControlModel
+class OBoundControlModel    :public OControlModel
                             ,public OBoundControlModel_BASE1
                             ,public OBoundControlModel_COMMITTING
                             ,public OBoundControlModel_BINDING
@@ -640,7 +640,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >
                                         m_xAmbientForm;
 
-    ::rtl::OUString					    m_sValuePropertyName;
+    ::rtl::OUString                     m_sValuePropertyName;
     sal_Int32                           m_nValuePropertyAggregateHandle;
     sal_Int32                           m_nFieldType;
     ::com::sun::star::uno::Type         m_aValuePropertyType;
@@ -657,9 +657,9 @@ private:
     ::com::sun::star::uno::Type         m_aExternalValueType;
 
 // <properties>
-    ::rtl::OUString						m_aControlSource;			// Datenquelle, Name des Feldes
+    ::rtl::OUString                     m_aControlSource;           // Datenquelle, Name des Feldes
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                                        m_xLabelControl;			// reference to a sibling control (model) which is our label
+                                        m_xLabelControl;            // reference to a sibling control (model) which is our label
     sal_Bool                            m_bInputRequired;
 // </properties>
 
@@ -667,13 +667,13 @@ private:
                                 m_pAggPropMultiplexer;
 
     bool                        m_bFormListening            : 1;    // are we currently a XLoadListener at our ambient form?
-    sal_Bool					m_bLoaded		            : 1;
-    sal_Bool					m_bRequired		            : 1;
-    const sal_Bool              m_bCommitable	            : 1;    // do we support XBoundComponent?
+    sal_Bool                    m_bLoaded                   : 1;
+    sal_Bool                    m_bRequired                 : 1;
+    const sal_Bool              m_bCommitable               : 1;    // do we support XBoundComponent?
     const sal_Bool              m_bSupportsExternalBinding  : 1;    // do we support XBindableValue?
-    const sal_Bool			    m_bSupportsValidation       : 1;    // do we support XValidatable?
-    sal_Bool					m_bForwardValueChanges      : 1;    // do we currently handle changes in the bound database field?
-    sal_Bool			        m_bTransferingValue         : 1;    // true if we're currently transfering our value to an external binding
+    const sal_Bool              m_bSupportsValidation       : 1;    // do we support XValidatable?
+    sal_Bool                    m_bForwardValueChanges      : 1;    // do we currently handle changes in the bound database field?
+    sal_Bool                    m_bTransferingValue         : 1;    // true if we're currently transfering our value to an external binding
     sal_Bool                    m_bIsCurrentValueValid      : 1;    // flag specifying whether our current value is valid, relative to our external validator
     sal_Bool                    m_bBindingControlsRO        : 1;    // is our ReadOnly property currently controlled by our external binding?
     sal_Bool                    m_bBindingControlsEnable    : 1;    // is our Enabled property currently controlled by our external binding?
@@ -681,7 +681,7 @@ private:
     ValueChangeInstigator       m_eControlValueChangeInstigator;
 
 protected:
-    ::rtl::OUString					    m_aLabelServiceName;
+    ::rtl::OUString                     m_aLabelServiceName;
         // when setting the label for our control (property FM_PROP_CONTROLLABEL, member m_xLabelControl),
         // we accept only objects supporting an XControlModel interface, an XServiceInfo interface and
         // support for a service (XServiceInfo::supportsService) determined by this string.
@@ -707,14 +707,14 @@ protected:
     OBoundControlModel(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,
                                                             // factory to create the aggregate with
-        const ::rtl::OUString& _rUnoControlModelTypeName,	// service name of te model to aggregate
-        const ::rtl::OUString& _rDefault,					// service name of the default control
-        const sal_Bool _bCommitable,						// is the control (model) commitable ?
+        const ::rtl::OUString& _rUnoControlModelTypeName,   // service name of te model to aggregate
+        const ::rtl::OUString& _rDefault,                   // service name of the default control
+        const sal_Bool _bCommitable,                        // is the control (model) commitable ?
         const sal_Bool _bSupportExternalBinding,            // set to TRUE if you want to support XBindableValue
         const sal_Bool _bSupportsValidation                 // set to TRUE if you want to support XValidatable
     );
     OBoundControlModel(
-        const OBoundControlModel* _pOriginal,				// the original object to clone
+        const OBoundControlModel* _pOriginal,               // the original object to clone
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory
                                                             // factory to create the aggregate with
     );
@@ -930,12 +930,12 @@ protected:
     */
     virtual void            onDisconnectedValidator( );
 
-    /**	nFieldType ist der Typ des Feldes, an das das Model gebunden werden soll.
+    /** nFieldType ist der Typ des Feldes, an das das Model gebunden werden soll.
         Das Binden erfolgt genau dann, wenn Rueckgabewert sal_True.
         Die Standard-Implementation erlaubt alles ausser den drei binary-Typen und
         FieldType_OTHER.
     */
-    virtual sal_Bool		approveDbColumnType(sal_Int32 _nColumnType);
+    virtual sal_Bool        approveDbColumnType(sal_Int32 _nColumnType);
 
     /** retrieves the current value of the control, in a shape which can be used with our
         external validator.
@@ -963,10 +963,10 @@ protected:
         (unfortunally). So derived classes may use the following to methods. They secure the written
         data with marks, so any new common properties in newer versions will be skipped by older ones.
     */
-    void	writeCommonProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
-    void	readCommonProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
+    void    writeCommonProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
+    void    readCommonProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
     // the next method may be used in derived classes's read when an unknown version is encountered
-    void	defaultCommonProperties();
+    void    defaultCommonProperties();
 
     /** called to reset the control to some kind of default.
 
@@ -981,7 +981,7 @@ protected:
     */
     virtual void            resetNoBroadcast();
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>	_getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
 
     /// sets m_xField to the given new value, without notifying our listeners
     void    impl_setField_noNotify(
@@ -1024,7 +1024,7 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo - static version
-    static  StringSequence SAL_CALL	getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
+    static  StringSequence SAL_CALL getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
 
     // XChild
     virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
@@ -1241,7 +1241,7 @@ private:
         @precond
             our mutex is currently locked exactly once
     */
-    void        connectValidator( 
+    void        connectValidator(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XValidator >& _rxValidator
                 );
 

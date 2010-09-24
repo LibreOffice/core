@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ namespace connectivity
         // these typedef's are only necessary for the compiler
         typedef ::cppu::ImplHelper2<  ::com::sun::star::sdbcx::XRowLocate,
                                       ::com::sun::star::sdbcx::XDeleteRows> ODbaseResultSet_BASE;
-        typedef file::OResultSet											ODbaseResultSet_BASE2;
-        typedef ::comphelper::OPropertyArrayUsageHelper<ODbaseResultSet>	ODbaseResultSet_BASE3;
+        typedef file::OResultSet                                            ODbaseResultSet_BASE2;
+        typedef ::comphelper::OPropertyArrayUsageHelper<ODbaseResultSet>    ODbaseResultSet_BASE3;
 
 
         class ODbaseResultSet : public ODbaseResultSet_BASE2,
@@ -59,7 +59,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            ODbaseResultSet( file::OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&	_aSQLIterator);
+            ODbaseResultSet( file::OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&  _aSQLIterator);
 
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

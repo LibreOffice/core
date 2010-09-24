@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,27 +50,27 @@ enum TestEnum
  */
 struct TestSimple
 {
-    boolean					   Bool;
-    char					   Char;
-    byte					   Byte;
-    short					   Short;
-    unsigned short			   UShort;
-    long					   Long;
-    unsigned long			   ULong;
-    hyper					   Hyper;
-    unsigned hyper			   UHyper;
-    float					   Float;
-    double					   Double;
-    test::TestEnum			   Enum;
+    boolean                    Bool;
+    char                       Char;
+    byte                       Byte;
+    short                      Short;
+    unsigned short             UShort;
+    long                       Long;
+    unsigned long              ULong;
+    hyper                      Hyper;
+    unsigned hyper             UHyper;
+    float                      Float;
+    double                     Double;
+    test::TestEnum             Enum;
 };
 /**
  * complex c++ types
  */
 struct TestElement : test::TestSimple
 {
-    string					   String;
+    string                     String;
     com::sun::star::uno::XInterface   Interface;
-    any						   Any;
+    any                        Any;
 };
 struct TestDataElements : test::TestElement
 {
@@ -78,8 +78,8 @@ struct TestDataElements : test::TestElement
 };
 
 typedef TestDataElements TestData;
- 
-/** 
+
+/**
  * Monster test interface to test language binding calls.
  *
  * @author Daniel Boelzle
@@ -110,7 +110,7 @@ interface XLBTestBase : com::sun::star::uno::XInterface
                                [inout] com::sun::star::uno::XInterface xInterface, [inout] any aAny,
                                [inout] sequence<test::TestElement > aSequence,
                                [inout] test::TestData aStruct );
-    
+
     /**
      * out parameter test
      */
@@ -123,28 +123,28 @@ interface XLBTestBase : com::sun::star::uno::XInterface
                               [out] com::sun::star::uno::XInterface xInterface, [out] any aAny,
                               [out] sequence<test::TestElement > aSequence,
                               [out] test::TestData aStruct );
-    
-    [attribute] boolean					 Bool;
-    [attribute] byte					 Byte;
-    [attribute] char					 Char;
-    [attribute] short					 Short;
-    [attribute] unsigned short			 UShort;
-    [attribute] long					 Long;
-    [attribute] unsigned long			 ULong;
-    [attribute] hyper					 Hyper;
-    [attribute] unsigned hyper			 UHyper;
-    [attribute] float					 Float;
-    [attribute] double					 Double;
-    [attribute] test::TestEnum			 Enum;
-    [attribute] string					 String;
+
+    [attribute] boolean                  Bool;
+    [attribute] byte                     Byte;
+    [attribute] char                     Char;
+    [attribute] short                    Short;
+    [attribute] unsigned short           UShort;
+    [attribute] long                     Long;
+    [attribute] unsigned long            ULong;
+    [attribute] hyper                    Hyper;
+    [attribute] unsigned hyper           UHyper;
+    [attribute] float                    Float;
+    [attribute] double                   Double;
+    [attribute] test::TestEnum           Enum;
+    [attribute] string                   String;
     [attribute] com::sun::star::uno::XInterface Interface;
-    [attribute] any						 Any;
+    [attribute] any                      Any;
     [attribute] sequence<test::TestElement > Sequence;
-    [attribute] test::TestData			 Struct;
+    [attribute] test::TestData           Struct;
 };
 
 
-/** 
+/**
  * Inherting from monster; adds raiseException().
  *
  * @author Daniel Boelzle
@@ -168,7 +168,7 @@ interface XLanguageBindingTest : test::XLBTestBase
     /**
      * raises runtime exception
      */
-    [attribute] long					 RuntimeException;
+    [attribute] long                     RuntimeException;
 };
 
 }; // test

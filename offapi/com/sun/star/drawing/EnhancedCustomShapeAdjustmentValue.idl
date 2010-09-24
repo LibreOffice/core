@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,28 +31,28 @@
 #include <com/sun/star/beans/PropertyState.idl>
 #endif
 
-//============================================================================= 
- 
+//=============================================================================
+
 module com {  module sun {  module star {  module drawing {
- 
-//============================================================================= 
- 
+
+//=============================================================================
+
 /** specifies a single AdjustmentValue
  */
 struct EnhancedCustomShapeAdjustmentValue
 {
     /** the any can be of type long or double
     */
-    any		Value;
+    any     Value;
 
     /**
     */
     ::com::sun::star::beans::PropertyState State;
-}; 
- 
-//============================================================================= 
- 
+};
+
+//=============================================================================
+
 }; }; }; };
- 
-#endif 
+
+#endif
 

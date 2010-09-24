@@ -62,9 +62,9 @@ public:
     virtual void SAL_CALL stopPropagation() throw (RuntimeException);
     virtual void SAL_CALL preventDefault() throw (RuntimeException);
     virtual void SAL_CALL initEvent(
-        const OUString& eventTypeArg, 
-        sal_Bool canBubbleArg, 
-        sal_Bool cancelableArg)  throw (RuntimeException);    
+        const OUString& eventTypeArg,
+        sal_Bool canBubbleArg,
+        sal_Bool cancelableArg)  throw (RuntimeException);
 };
 }}
 #endif

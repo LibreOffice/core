@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,11 +58,11 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice(DVTARGETDEVICE* ptdSrc);
 // some codepage helper functions
 
 //--------------------------------------------------
-// returns a windows codepage appropriate to the 
+// returns a windows codepage appropriate to the
 // given mime charset parameter value
 //--------------------------------------------------
 
-sal_uInt32 SAL_CALL getWinCPFromMimeCharset( 
+sal_uInt32 SAL_CALL getWinCPFromMimeCharset(
     const rtl::OUString& charset );
 
 //--------------------------------------------------
@@ -70,25 +70,25 @@ sal_uInt32 SAL_CALL getWinCPFromMimeCharset(
 // given locale and locale type
 //--------------------------------------------------
 
-rtl::OUString SAL_CALL getWinCPFromLocaleId( 
+rtl::OUString SAL_CALL getWinCPFromLocaleId(
     LCID lcid, LCTYPE lctype );
 
 //--------------------------------------------------
 // returns a mime charset parameter value appropriate
-// to the given codepage, optional a prefix can be 
+// to the given codepage, optional a prefix can be
 // given, e.g. "windows-" or "cp"
 //--------------------------------------------------
 
-rtl::OUString SAL_CALL getMimeCharsetFromWinCP( 
+rtl::OUString SAL_CALL getMimeCharsetFromWinCP(
     sal_uInt32 cp, const rtl::OUString& aPrefix );
 
 //--------------------------------------------------
-// returns a mime charset parameter value appropriate 
+// returns a mime charset parameter value appropriate
 // to the given locale id and locale type, optional a
 // prefix can be given, e.g. "windows-" or "cp"
 //--------------------------------------------------
 
-rtl::OUString SAL_CALL getMimeCharsetFromLocaleId( 
+rtl::OUString SAL_CALL getMimeCharsetFromLocaleId(
     LCID lcid, LCTYPE lctype, const rtl::OUString& aPrefix  );
 
 //-----------------------------------------------------

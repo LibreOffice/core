@@ -18,17 +18,17 @@
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.notched-right-arrow"/>
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.pentagon-right"/>
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.chevron"/>
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.right-arrow-callout"/> 
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.left-arrow-callout"/> 
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.up-arrow-callout"/> 
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.right-arrow-callout"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.left-arrow-callout"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.up-arrow-callout"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.down-arrow-callout"/> 
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.left-right-arrow-callout"/> 
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.up-down-arrow-callout"/> 
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.up-right-arrow-callout"/> 
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.quad-arrow-callout"/> 
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.circular-arrow"/> 
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.down-arrow-callout"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.left-right-arrow-callout"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.up-down-arrow-callout"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.up-right-arrow-callout"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.quad-arrow-callout"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.circular-arrow"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.split-round-arrow"/> 
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.s-sharped-arrow"/> 
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.split-round-arrow"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes.s-sharped-arrow"/>
 </toolbar:toolbar>

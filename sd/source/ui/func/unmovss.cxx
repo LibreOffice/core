@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ void SdMoveStyleSheetsUndoAction::Undo()
 
     if (mbMySheets)
     {
-        // the styles have to be inserted in the pool	
+        // the styles have to be inserted in the pool
 
         // first insert all styles to the pool
         for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); iter++ )

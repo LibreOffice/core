@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,11 @@
 
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif 
+#endif
 
 #ifndef __com_sun_star_configuration_backend_XLayer_idl__
 #include <com/sun/star/configuration/backend/XLayer.idl>
-#endif 
+#endif
 
 #ifndef __com_sun_star_configuration_backend_XUpdatableLayer_idl__
 #include <com/sun/star/configuration/backend/XUpdatableLayer.idl>
@@ -45,23 +45,23 @@
 
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif 
+#endif
 
 #ifndef __com_sun_star_lang_NoSupportException_idl__
 #include <com/sun/star/lang/NoSupportException.idl>
-#endif 
+#endif
 
-//============================================================================= 
+//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//============================================================================= 
+//=============================================================================
 
-/** 
-  Handles access to a stratum consisting of a single layer 
+/**
+  Handles access to a stratum consisting of a single layer
   in a configuration data repository
- 
-  <p> The interface provides timestamp-checking capabilities 
+
+  <p> The interface provides timestamp-checking capabilities
      for efficient caching.
   </p>
 
@@ -71,38 +71,38 @@ module com { module sun { module star { module configuration { module backend {
 
   @since OOo 1.1.2
 */
-published interface XSingleLayerStratum : ::com::sun::star::uno::XInterface 
+published interface XSingleLayerStratum : ::com::sun::star::uno::XInterface
 {
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
-    /** 
-        retrieves the layer data for a component, if newer than indicated. 
-      
-        <p> A timestamp can be provided, which is used to indicate 
-            a point in time. The layer should be returned only if is modified 
-            since that time. 
+    /**
+        retrieves the layer data for a component, if newer than indicated.
+
+        <p> A timestamp can be provided, which is used to indicate
+            a point in time. The layer should be returned only if is modified
+            since that time.
         </p>
 
-        @param aComponent 
+        @param aComponent
                 The name of the component to access.
 
-        @param aTimestamp    
+        @param aTimestamp
                 a timestamp for the layer.
-                
-                <p> An empty timestamp indicates, that the layer should be 
-                    retrieved irrespective of its modification time. 
+
+                <p> An empty timestamp indicates, that the layer should be
+                    retrieved irrespective of its modification time.
                 </p>
-                <p> The format and meaning of a timestamp depends on 
-                    the implementation. Timestamps can be obtained using 
+                <p> The format and meaning of a timestamp depends on
+                    the implementation. Timestamps can be obtained using
                     <member scope="com::sun::star::util">XTimeStamped::getTimestamp()</member>.
                 </p>
 
-      @returns   
-                a <type>Layer</type> object providing access to the layer data, 
-                <NULL/> if the layer is newer than indicated by the timestamp. 
+      @returns
+                a <type>Layer</type> object providing access to the layer data,
+                <NULL/> if the layer is newer than indicated by the timestamp.
 
       @throws   com::sun::star::lang::IllegalArgumentException
-                if the component identifier is invalid or 
+                if the component identifier is invalid or
                 if the timestamp is invalid.
 
       @throws   com::sun::star::configuration::backend::BackendAccessException
@@ -110,21 +110,21 @@ published interface XSingleLayerStratum : ::com::sun::star::uno::XInterface
 
       @see com::sun::star::util::XTimeStamped
     */
-    XLayer getLayer([in] string aComponent, 
+    XLayer getLayer([in] string aComponent,
                     [in] string aTimestamp)
         raises (BackendAccessException,
                 com::sun::star::lang::IllegalArgumentException) ;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /**
         retrieves a writable representation of the layer for a component.
 
-        @param aComponent 
+        @param aComponent
                 The name of the component to access.
-      
-        @return   
-                an <type>UpdatableLayer</type> object providing 
+
+        @return
+                an <type>UpdatableLayer</type> object providing
                 write access to the layer
 
         @throws   com::sun::star::lang::IllegalArgumentException
@@ -140,12 +140,12 @@ published interface XSingleLayerStratum : ::com::sun::star::uno::XInterface
         raises (BackendAccessException,
                 com::sun::star::lang::NoSupportException,
                 com::sun::star::lang::IllegalArgumentException) ;
-    
-    //------------------------------------------------------------------------- 
+
+    //-------------------------------------------------------------------------
 } ;
 
-//============================================================================= 
+//=============================================================================
 
 } ; } ; } ; } ; } ;
 
-#endif 
+#endif

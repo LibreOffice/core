@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,8 @@
 
 #include <tools/solar.h>
 
-#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx>	// helper for implementations
+#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase1.hxx> // helper for implementations
 
 
 namespace linguistic
@@ -46,13 +46,13 @@ class Meaning :
         ::com::sun::star::linguistic2::XMeaning
     >
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >	aSyn;	// list of synonyms, may be empty.
-    ::rtl::OUString			aTerm;
-    INT16				nLanguage;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aSyn;   // list of synonyms, may be empty.
+    ::rtl::OUString         aTerm;
+    INT16               nLanguage;
 
 #if 0
         // this is for future use by a German thesaurus
-        BOOL                            bIsGermanPreReform; 
+        BOOL                            bIsGermanPreReform;
 #endif
 
     // disallow copy-constructor and assignment-operator for now
@@ -78,7 +78,7 @@ public:
 
     // non-interface specific functions
         void    SetSynonyms(
-                    const ::com::sun::star::uno::Sequence< ::rtl::OUString > 
+                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >
                     &rSyn );
 
         void    SetMeaning(const ::rtl::OUString  &rTerm );
@@ -89,7 +89,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////
 
-}	// namespace linguistic
+}   // namespace linguistic
 
 #endif
 

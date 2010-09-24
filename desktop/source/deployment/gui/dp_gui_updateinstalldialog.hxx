@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,14 +108,14 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > getExtensionManager() const
             { return m_xExtensionManager; }
 
-    rtl::Reference< Thread > m_thread;    
+    rtl::Reference< Thread > m_thread;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xComponentContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
     //Signals that an error occurred during download and installation
     bool m_bError;
     bool m_bNoEntry;
     bool m_bActivated;
-    
+
     ::rtl::OUString m_sInstalling;
     ::rtl::OUString m_sFinished;
     ::rtl::OUString m_sNoErrors;
@@ -125,8 +125,8 @@ private:
     ::rtl::OUString m_sNoInstall;
     ::rtl::OUString m_sThisErrorOccurred;
 
-    FixedText m_ft_action;    
-    ProgressBar m_statusbar; 
+    FixedText m_ft_action;
+    ProgressBar m_statusbar;
     FixedText m_ft_extension_name;
     FixedText m_ft_results;
     AutoScrollEdit m_mle_info;

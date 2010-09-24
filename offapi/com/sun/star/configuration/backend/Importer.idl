@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,59 +29,59 @@
 
 #ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif 
+#endif
 
 #ifndef __com_sun_star_configuration_backend_XLayerImporter_idl__
 #include <com/sun/star/configuration/backend/XLayerImporter.idl>
-#endif 
+#endif
 
-//============================================================================= 
+//=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
 
-//============================================================================= 
+//=============================================================================
 
-/** 
+/**
     imports data into a configuration layer.
 
-    <p> The configuration changes are read from a <type>XLayer</type> 
+    <p> The configuration changes are read from a <type>XLayer</type>
         and stored into a <type>Backend</type>.
     </p>
-  
+
     @since OOo 1.1.2
 */
 published service Importer
 {
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
     /** allows importing configuration data into a backend.
       */
     interface XLayerImporter ;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 
-    /** allows initializing the implementation with settings that control 
+    /** allows initializing the implementation with settings that control
         its behavior .
 
-        <p> Arguments are provided as 
-            <type scope="com::sun::star::beans">NamedValue</type>. 
+        <p> Arguments are provided as
+            <type scope="com::sun::star::beans">NamedValue</type>.
             Implementations specify which arguments they support.
-       
+
         <dl>
             <dt><code>Notify</code> : <atom>boolean</atom></dt>
             <dd>If <TRUE/>, specifies that the backend should trigger
              notification to its listeners.
             </dd>
         </dl>
-        </p> 
+        </p>
     */
     [optional] interface com::sun::star::lang::XInitialization ;
 
-    //------------------------------------------------------------------------- 
+    //-------------------------------------------------------------------------
 } ;
 
-//============================================================================= 
+//=============================================================================
 
-} ; } ; } ; } ; } ; 
+} ; } ; } ; } ; } ;
 
-#endif 
+#endif

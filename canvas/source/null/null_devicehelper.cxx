@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,8 +58,8 @@ namespace nullcanvas
     {
     }
 
-    void DeviceHelper::init( SpriteCanvas&				rSpriteCanvas,
-                             const ::basegfx::B2ISize&	rSize,
+    void DeviceHelper::init( SpriteCanvas&              rSpriteCanvas,
+                             const ::basegfx::B2ISize&  rSize,
                              bool                       bFullscreen )
     {
         mpSpriteCanvas = &rSpriteCanvas;
@@ -83,35 +83,35 @@ namespace nullcanvas
         return geometry::RealSize2D( 210, 280 );
     }
 
-    uno::Reference< rendering::XLinePolyPolygon2D > DeviceHelper::createCompatibleLinePolyPolygon( 
-        const uno::Reference< rendering::XGraphicDevice >& 				/*rDevice*/,
-        const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >&	points )
+    uno::Reference< rendering::XLinePolyPolygon2D > DeviceHelper::createCompatibleLinePolyPolygon(
+        const uno::Reference< rendering::XGraphicDevice >&              /*rDevice*/,
+        const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >&  points )
     {
         // disposed?
         if( !mpSpriteCanvas )
             return uno::Reference< rendering::XLinePolyPolygon2D >(); // we're disposed
 
-        return uno::Reference< rendering::XLinePolyPolygon2D >( 
-            new ::basegfx::unotools::UnoPolyPolygon( 
+        return uno::Reference< rendering::XLinePolyPolygon2D >(
+            new ::basegfx::unotools::UnoPolyPolygon(
                 ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points )));
     }
 
-    uno::Reference< rendering::XBezierPolyPolygon2D > DeviceHelper::createCompatibleBezierPolyPolygon( 
-        const uno::Reference< rendering::XGraphicDevice >& 						/*rDevice*/,
-        const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >&	points )
+    uno::Reference< rendering::XBezierPolyPolygon2D > DeviceHelper::createCompatibleBezierPolyPolygon(
+        const uno::Reference< rendering::XGraphicDevice >&                      /*rDevice*/,
+        const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >&  points )
     {
         // disposed?
         if( !mpSpriteCanvas )
             return uno::Reference< rendering::XBezierPolyPolygon2D >(); // we're disposed
 
-        return uno::Reference< rendering::XBezierPolyPolygon2D >( 
-            new ::basegfx::unotools::UnoPolyPolygon( 
+        return uno::Reference< rendering::XBezierPolyPolygon2D >(
+            new ::basegfx::unotools::UnoPolyPolygon(
                 ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence( points ) ) );
     }
 
-    uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleBitmap( 
-        const uno::Reference< rendering::XGraphicDevice >& 	/*rDevice*/,
-        const geometry::IntegerSize2D& 						size )
+    uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleBitmap(
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
+        const geometry::IntegerSize2D&                      size )
     {
         // disposed?
         if( !mpSpriteCanvas )
@@ -121,19 +121,19 @@ namespace nullcanvas
             new CanvasBitmap(
                 ::basegfx::unotools::b2ISizeFromIntegerSize2D( size ),
                 mpSpriteCanvas,
-                false )); 
+                false ));
     }
 
-    uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileBitmap( 
-        const uno::Reference< rendering::XGraphicDevice >& 	/*rDevice*/,
-        const geometry::IntegerSize2D& 						/*size*/ )
+    uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileBitmap(
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
+        const geometry::IntegerSize2D&                      /*size*/ )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
-    uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap( 
-        const uno::Reference< rendering::XGraphicDevice >& 	/*rDevice*/,
-        const geometry::IntegerSize2D& 						size )
+    uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap(
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
+        const geometry::IntegerSize2D&                      size )
     {
         // disposed?
         if( !mpSpriteCanvas )
@@ -143,12 +143,12 @@ namespace nullcanvas
             new CanvasBitmap(
                 ::basegfx::unotools::b2ISizeFromIntegerSize2D( size ),
                 mpSpriteCanvas,
-                true )); 
+                true ));
     }
 
-    uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileAlphaBitmap( 
-        const uno::Reference< rendering::XGraphicDevice >& 	/*rDevice*/,
-        const geometry::IntegerSize2D& 						/*size*/ )
+    uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileAlphaBitmap(
+        const uno::Reference< rendering::XGraphicDevice >&  /*rDevice*/,
+        const geometry::IntegerSize2D&                      /*size*/ )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
@@ -164,7 +164,7 @@ namespace nullcanvas
         // TODO(F3): offer fullscreen mode the XCanvas way
         return false;
     }
-    
+
     ::sal_Int32 DeviceHelper::createBuffers( ::sal_Int32 /*nBuffers*/ )
     {
         // TODO(F3): implement XBufferStrategy interface. For now, we
@@ -207,19 +207,19 @@ namespace nullcanvas
     {
         return uno::Any();
     }
-    
-    namespace 
-    { 
+
+    namespace
+    {
         struct DeviceColorSpace: public rtl::StaticWithInit<uno::Reference<rendering::XColorSpace>,
-                                                            DeviceColorSpace> 
+                                                            DeviceColorSpace>
         {
             uno::Reference<rendering::XColorSpace> operator()()
             {
                 return vcl::unotools::createStandardColorSpace();
             }
-        }; 
+        };
     }
-    
+
     uno::Reference<rendering::XColorSpace> DeviceHelper::getColorSpace() const
     {
         // always the same

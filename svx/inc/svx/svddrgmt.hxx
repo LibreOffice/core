@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ class SdrDragEntry
 {
 private:
     // bitfield
-    unsigned					mbAddToTransparent : 1;
+    unsigned                    mbAddToTransparent : 1;
 
 protected:
     // access for derived classes
@@ -93,7 +93,7 @@ private:
     const SdrObject&                                maOriginal;
     SdrObject*                                      mpClone;
     sdr::contact::ObjectContact&                    mrObjectContact;
-    bool											mbModify;
+    bool                                            mbModify;
 
 public:
     SdrDragEntrySdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify);
@@ -139,12 +139,12 @@ class SVX_DLLPUBLIC SdrDragMethod
 {
 private:
     std::vector< SdrDragEntry* >            maSdrDragEntries;
-    sdr::overlay::OverlayObjectList	        maOverlayObjectList;
-    SdrDragView&				            mrSdrDragView;
+    sdr::overlay::OverlayObjectList         maOverlayObjectList;
+    SdrDragView&                            mrSdrDragView;
 
     // bitfield
-    unsigned						        mbMoveOnly : 1;
-    unsigned								mbSolidDraggingActive : 1;
+    unsigned                                mbMoveOnly : 1;
+    unsigned                                mbSolidDraggingActive : 1;
 
 protected:
     // access for derivated classes to maSdrDragEntries
@@ -243,10 +243,10 @@ inline const Rectangle& SdrDragMethod::GetMarkedRect() const
 class SVX_DLLPUBLIC SdrDragMove : public SdrDragMethod
 {
 private:
-    long						nBestXSnap;
-    long						nBestYSnap;
-    bool    					bXSnapped;
-    bool    					bYSnapped;
+    long                        nBestXSnap;
+    long                        nBestYSnap;
+    bool                        bXSnapped;
+    bool                        bYSnapped;
 
     void ImpCheckSnap(const Point& rPt);
 
@@ -273,8 +273,8 @@ public:
 class SVX_DLLPUBLIC SdrDragResize : public SdrDragMethod
 {
 protected:
-    Fraction					aXFact;
-    Fraction					aYFact;
+    Fraction                    aXFact;
+    Fraction                    aYFact;
 
 public:
     TYPEINFO();
@@ -285,7 +285,7 @@ public:
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
     virtual Pointer GetSdrDragPointer() const;
-    
+
     virtual basegfx::B2DHomMatrix getCurrentTransformation();
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
 };
@@ -297,10 +297,10 @@ class SVX_DLLPUBLIC SdrDragObjOwn : public SdrDragMethod
 {
 private:
     // SdrDragObjOwn always works on a clone since it has no transformation
-    // mechanism to modify wireframe visualisations, but uses the 
-    // SdrObject::applySpecialDrag() method to change a clone of the 
+    // mechanism to modify wireframe visualisations, but uses the
+    // SdrObject::applySpecialDrag() method to change a clone of the
     // SdrObject
-    SdrObject*					mpClone;
+    SdrObject*                  mpClone;
 
 protected:
     virtual void createSdrDragEntries();

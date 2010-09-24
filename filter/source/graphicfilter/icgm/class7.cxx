@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ void CGM::ImplDoClass7()
                     {
                         if ( mnMode & CGM_EXPORT_IMPRESS )
                         {
-                            if ( pAppData[ 16 ] == 0 )		// a blank template ?
+                            if ( pAppData[ 16 ] == 0 )      // a blank template ?
                             {
                                 if ( pAppData[ 2 ] == 46 )
                                 {

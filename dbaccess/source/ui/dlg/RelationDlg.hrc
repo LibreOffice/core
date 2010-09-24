@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,18 +34,18 @@
 #define FL_CASC_DEL                     3
 #define FL_CASC_UPD                     4
 
-#define RB_NO_CASC_DEL		1
-#define RB_NO_CASC_UPD		2
-#define RB_CASC_DEL			3
-#define RB_CASC_UPD			4
-#define RB_CASC_DEL_NULL	5
-#define RB_CASC_DEL_DEFAULT	6
-#define RB_CASC_UPD_NULL	7
+#define RB_NO_CASC_DEL      1
+#define RB_NO_CASC_UPD      2
+#define RB_CASC_DEL         3
+#define RB_CASC_UPD         4
+#define RB_CASC_DEL_NULL    5
+#define RB_CASC_DEL_DEFAULT 6
+#define RB_CASC_UPD_NULL    7
 #define RB_CASC_UPD_DEFAULT 8
 
-#define PB_OK		1
-#define PB_CANCEL	2
-#define PB_HELP		3
+#define PB_OK       1
+#define PB_CANCEL   2
+#define PB_HELP     3
 
 #define WND_CONTROL     1
 

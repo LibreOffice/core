@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,8 +65,8 @@ using namespace ::com::sun::star;
 void Ww1Sprm::Stop( Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if(IsUsed())
-//		for(USHORT i=0;i<Count();i++)
-        for(short i=Count()-1;i>=0;i--){	// rueckwaerts
+//      for(USHORT i=0;i<Count();i++)
+        for(short i=Count()-1;i>=0;i--){    // rueckwaerts
             BYTE nId;
             USHORT nSize;
             BYTE* pSprm;
@@ -102,7 +102,7 @@ void Ww1SingleSprm::Start(
 void Ww1SingleSprm::Stop(
     Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&)
 {
-//	ASSERT(FALSE, "Unknown Sprm");
+//  ASSERT(FALSE, "Unknown Sprm");
 }
 
 ////////////////////////////////////////////////////////////////// STOP
@@ -213,7 +213,7 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
         switch(pBrc->dxpLine1WidthGet())
         {
         default: ASSERT(FALSE, "unknown linewidth");
-        case 0: return 0;							// keine Linie
+        case 0: return 0;                           // keine Linie
         case 1: nCode = DEF_LINE_WIDTH_0; break;
         case 2: nCode = DEF_LINE_WIDTH_1; break;
         case 3: nCode = DEF_LINE_WIDTH_2; break;
@@ -297,7 +297,7 @@ void Ww1SingleSprmPBrc10::Start(
                      rOut.GetFlyFrmAttr(RES_BOX) :rOut.GetAttr(RES_BOX));
     const SvxBoxItem &rBoxItem = (const SvxBoxItem&)rItem;
     SvxBoxItem aBox( rBoxItem );
-//	rOut >> aBox;
+//  rOut >> aBox;
     SvxBorderLine aLine;
     aBox.SetLine(SetBorder(&aLine, pBrc), nBrcTrans[nLine] );
     Ww1SingleSprmPBrc::Start(rOut, nId, pBrc, nSize, rMan, aBox);
@@ -338,7 +338,7 @@ void Ww1SingleSprmPDyaLine::Start(
     SvxLineSpacingItem aLSpc( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
     if(TRUE)
     {// MultilineSpace(proportional)
-        long n = nSpace * 100 / 240;	// W1: 240 = 100%, SW: 100 = 100%
+        long n = nSpace * 100 / 240;    // W1: 240 = 100%, SW: 100 = 100%
         if(n>200)
             n = 200; // SW_UI-Maximum
         aLSpc.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
@@ -356,17 +356,17 @@ void Ww1SingleSprmPChgTabsPapx::Start(
     Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& /*rMan*/)
 {
 #if OSL_DEBUG_LEVEL > 1
-//	rOut << 'T';
+//  rOut << 'T';
 #endif
-    short nLeftPMgn = 0;	// Koordinaten etwa gleich ??
-//	( pAktColl ) ? pCollA[nAktColl].nLeftParaMgn
-//								   : nLeftParaMgn;		// Absatz L-Space
+    short nLeftPMgn = 0;    // Koordinaten etwa gleich ??
+//  ( pAktColl ) ? pCollA[nAktColl].nLeftParaMgn
+//                                 : nLeftParaMgn;      // Absatz L-Space
 
     short i;
     BYTE nDel = pSprm[1];
-    BYTE* pDel = pSprm + 2;						// Del - Array
+    BYTE* pDel = pSprm + 2;                     // Del - Array
     BYTE nIns = pSprm[nDel*2+2];
-    BYTE* pIns = pSprm + 2*nDel + 3;			// Ins - Array
+    BYTE* pIns = pSprm + 2*nDel + 3;            // Ins - Array
     W1_TBD* pTyp = (W1_TBD*)(pSprm + 2*nDel + 2*nIns + 3);// Typ - Array
 
     SvxTabStopItem aAttr( (SvxTabStopItem&)rOut.GetNodeOrStyAttr( RES_PARATR_TABSTOP ));
@@ -386,10 +386,10 @@ void Ww1SingleSprmPChgTabsPapx::Start(
         aTabStop.GetTabPos() = nPos;
         switch( pTyp[i].jcGet() ){
         case 0: aTabStop.GetAdjustment() = SVX_TAB_ADJUST_LEFT; break;
-        case 1:	aTabStop.GetAdjustment() = SVX_TAB_ADJUST_CENTER; break;
+        case 1: aTabStop.GetAdjustment() = SVX_TAB_ADJUST_CENTER; break;
         case 2: aTabStop.GetAdjustment() = SVX_TAB_ADJUST_RIGHT; break;
-        case 3:	aTabStop.GetAdjustment() = SVX_TAB_ADJUST_DECIMAL; break;
-        case 4: continue;					// ignoriere Bar
+        case 3: aTabStop.GetAdjustment() = SVX_TAB_ADJUST_DECIMAL; break;
+        case 4: continue;                   // ignoriere Bar
         }
 
         switch( pTyp[i].tlcGet() ){
@@ -402,7 +402,7 @@ void Ww1SingleSprmPChgTabsPapx::Start(
 
         USHORT nPos2 = aAttr.GetPos( nPos );
         if( nPos2 != SVX_TAB_NOTFOUND )
-            aAttr.Remove( nPos2, 1 );		// sonst weigert sich das Insert()
+            aAttr.Remove( nPos2, 1 );       // sonst weigert sich das Insert()
 
         aAttr.Insert( aTabStop );
     }
@@ -434,7 +434,7 @@ void Ww1SingleSprmSColumns::Start(
 void Ww1SingleSprmPTtp::Start(
     Ww1Shell& /*rOut*/, BYTE, BYTE*, USHORT, Ww1Manager& rMan)
 {
-    rMan.SetInTtp( TRUE );		// Besonderheit: wird bei InTable::Stop und
+    rMan.SetInTtp( TRUE );      // Besonderheit: wird bei InTable::Stop und
                                 // nicht bei InTtp::Stop zurueckgesetzt,
                                 // da Auswertung in InTable
 }
@@ -476,7 +476,7 @@ void Ww1SingleSprmTDefTable10::Start(
     Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT nSize, Ww1Manager& /*rMan*/)
 {
     USHORT i;
-    BYTE *p = pSprm + 2;	// LaengenWord ueberlesen
+    BYTE *p = pSprm + 2;    // LaengenWord ueberlesen
     BYTE nCount = *p;
     p++;
     nSize -= 3;
@@ -488,26 +488,26 @@ void Ww1SingleSprmTDefTable10::Start(
         return;
 
 // Erstmal die Zellenpositionen einlesen
-    short nPos = SVBT16ToShort( p );	// signed, kann auch neg. sein !!!
+    short nPos = SVBT16ToShort( p );    // signed, kann auch neg. sein !!!
 
-//	if( !rOut.IsTableWidthSet() ){		// Muss Tabellenbreite und -Ausrichtung
+//  if( !rOut.IsTableWidthSet() ){      // Muss Tabellenbreite und -Ausrichtung
                                         // noch gesetzt werden ?
     {
         short nWholeWidth = SVBT16ToShort( p + 2 * nCount ) - nPos;
-        rOut.SetTableWidth( (USHORT)nWholeWidth );	// Tabellenbreite setzen
+        rOut.SetTableWidth( (USHORT)nWholeWidth );  // Tabellenbreite setzen
 
 // Pos der Tabelle setzen
-        long nMidTab = nPos + nWholeWidth / 2;		// TabellenMitte
+        long nMidTab = nPos + nWholeWidth / 2;      // TabellenMitte
         const SwFrmFmt &rFmt = rOut.GetPageDesc().GetMaster();
         const SvxLRSpaceItem& rLR = rFmt.GetLRSpace();
         long nRight = rFmt.GetFrmSize().GetWidth()
                       - rLR.GetLeft() - rLR.GetRight();
 
         sal_Int16 eOri = text::HoriOrientation::LEFT;
-        if( nPos > MINLAY ){						// per Zuppeln positioniert
-            if ( nMidTab <= nRight / 3 )			// 1/3 der Seite
+        if( nPos > MINLAY ){                        // per Zuppeln positioniert
+            if ( nMidTab <= nRight / 3 )            // 1/3 der Seite
                 eOri = text::HoriOrientation::LEFT;
-            else if ( nMidTab <= 2 * nRight / 3 )	// 2/3 der Seite
+            else if ( nMidTab <= 2 * nRight / 3 )   // 2/3 der Seite
                 eOri = text::HoriOrientation::CENTER;
             else
                 eOri = text::HoriOrientation::RIGHT;
@@ -517,7 +517,7 @@ void Ww1SingleSprmTDefTable10::Start(
 
     BYTE* pEndPos = p+2;
     BYTE* pTc0 = ( nSize >= nCount * 10 ) ? pEndPos + 2 * nCount : 0;
-    USHORT nCellsDeleted = 0;		// fuer gemergte Zellen
+    USHORT nCellsDeleted = 0;       // fuer gemergte Zellen
 
     for( i = 0; i < nCount; i++ ){
 // Info sammeln
@@ -534,10 +534,10 @@ void Ww1SingleSprmTDefTable10::Start(
         pEndPos+=2;
         nPos = nPos1;
 
-        if( pTc0 ){						// gibts TCs ueberhaupt ?
+        if( pTc0 ){                     // gibts TCs ueberhaupt ?
             W1_TC* pTc2 = (W1_TC*)pTc0;
             BOOL bMerged2 = pTc2->fMergedGet();
-//			ASSERT( !bMerged2, "Gemergte Tabellenzellen noch nicht vollstaendig implementiert" );
+//          ASSERT( !bMerged2, "Gemergte Tabellenzellen noch nicht vollstaendig implementiert" );
             if( !bMerged2 ){
 // und nun die Umrandungen
                 SvxBoxItem aBox( (SvxBoxItem&)rOut.GetCellAttr( RES_BOX ));
@@ -554,7 +554,7 @@ void Ww1SingleSprmTDefTable10::Start(
                 rOut.DeleteCell( i - nCellsDeleted );
                 nCellsDeleted++;
             }
-            pTc0+=sizeof(W1_TC);	// 10
+            pTc0+=sizeof(W1_TC);    // 10
         }
     }
 }
@@ -574,41 +574,41 @@ void Ww1SingleSprmPpc::Start(
 {
     BYTE nPpc = SVBT8ToByte(pSprm);
 
-    if (rOut.IsInTable())						// Flys in Tabellen kann PMW
-        return;									// nicht
+    if (rOut.IsInTable())                       // Flys in Tabellen kann PMW
+        return;                                 // nicht
 
-    RndStdIds eAnchor;			// Bindung
+    RndStdIds eAnchor;          // Bindung
     sal_Int16 eHRel;        // Seite oder Seitenrand
     sal_Int16 eVRel;        // Seite oder Seitenrand
 
-    switch ( ( nPpc & 0x30 ) >> 4 ){		// Y - Bindung bestimmt Sw-Bindung
+    switch ( ( nPpc & 0x30 ) >> 4 ){        // Y - Bindung bestimmt Sw-Bindung
     case 0: eAnchor = FLY_AT_PARA;          // Vert Margin
             eVRel = text::RelOrientation::PRINT_AREA;
-//			if( nYPos < 0 )
-//				nYPos = 0;					// koennen wir nicht
+//          if( nYPos < 0 )
+//              nYPos = 0;                  // koennen wir nicht
             break;
-/*	case 1:*/								// Vert. Seite
+/*  case 1:*/                               // Vert. Seite
     default:eAnchor = FLY_AT_PAGE;          // Vert Page oder unknown
             eVRel = text::RelOrientation::FRAME;
-            break;							// 2=Vert. Paragraph, 3=Use Default
+            break;                          // 2=Vert. Paragraph, 3=Use Default
     }
 
     switch ( ( nPpc & 0xc0 ) >> 6 ){        // X - Bindung -> Koordinatentransformation
-    case 0: 								// Hor. Spalte
-    case 1: 								// Hor. Absatz
+    case 0:                                 // Hor. Spalte
+    case 1:                                 // Hor. Absatz
             eHRel = text::RelOrientation::PRINT_AREA;
-//			nXPos += nPgLeft;				// in Seiten-Koordinaten umrechnen
+//          nXPos += nPgLeft;               // in Seiten-Koordinaten umrechnen
             break;
-/*	case 2:*/								// Hor. Seite
+/*  case 2:*/                               // Hor. Seite
     default:
             eHRel = text::RelOrientation::FRAME;
             break;
     }
 
     if( !rOut.IsInFly() && rMan.IsInStyle() ){
-        rOut.BeginFly( eAnchor );			// Starte StyleFly
+        rOut.BeginFly( eAnchor );           // Starte StyleFly
     }else{
-        rOut.SetFlyAnchor( eAnchor );		// Setze Anker
+        rOut.SetFlyAnchor( eAnchor );       // Setze Anker
     }
 }
 
@@ -618,21 +618,21 @@ void Ww1SingleSprmPDxaAbs::Start(
     short nXPos = SVBT16ToShort(pSprm);
 
     if( rMan.IsInStyle() && !rOut.IsInFly() ){
-        rOut.BeginFly();					// Fly ohne PPc-Attribut
+        rOut.BeginFly();                    // Fly ohne PPc-Attribut
     }
 
     sal_Int16 eHRel = text::RelOrientation::FRAME;
     sal_Int16 eHAlign = text::HoriOrientation::NONE;
 
-    switch( nXPos ){						// besondere X-Positionen ?
+    switch( nXPos ){                        // besondere X-Positionen ?
     case 0:
     case -12: eHAlign = text::HoriOrientation::NONE; nXPos = 0; break;   // Mogel: innen -> links
                             // eigentich text::HoriOrientation::LEFT, aber dann verrueckt
                             // ein Abstand nach aussen den Fly
     case -4:  eHAlign = text::HoriOrientation::CENTER; nXPos = 0; break; // zentriert
-    case -8:                             			   // rechts
+    case -8:                                           // rechts
     case -16: eHAlign = text::HoriOrientation::RIGHT; nXPos = 0; break;  // Mogel: aussen -> rechts
-//	default:  nXPos += (short)nIniFlyDx; break;	// Korrekturen per Ini-Datei
+//  default:  nXPos += (short)nIniFlyDx; break; // Korrekturen per Ini-Datei
     }
     rOut.SetFlyXPos( nXPos, eHRel, eHAlign );
 }
@@ -644,11 +644,11 @@ void Ww1SingleSprmPDyaAbs::Start(
     sal_Int16 eVRel = text::RelOrientation::FRAME;
     sal_Int16 eVAlign = text::VertOrientation::NONE;
 
-    switch( nYPos ){							// besondere Y-Positionen ?
+    switch( nYPos ){                            // besondere Y-Positionen ?
     case -4:  eVAlign = text::VertOrientation::TOP; nYPos = 0; break; // oben
     case -8:  eVAlign = text::VertOrientation::CENTER; nYPos = 0; break;  // zentriert
     case -12: eVAlign = text::VertOrientation::BOTTOM; nYPos = 0; break;  // unten
-//	default:  nYPos += (short)nIniFlyDy; break;	// Korrekturen per Ini-Datei
+//  default:  nYPos += (short)nIniFlyDy; break; // Korrekturen per Ini-Datei
     }
     rOut.SetFlyYPos( nYPos, eVRel, eVAlign );
 }
@@ -663,7 +663,7 @@ void Ww1SingleSprmPDxaWidth::Start(
 void Ww1SingleSprmPFromText::Start(
     Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& /*rMan*/)
 {
-    if( rOut.IsInFly() ){	// Kommt auch ausserhalb eines Flys vor, hat
+    if( rOut.IsInFly() ){   // Kommt auch ausserhalb eines Flys vor, hat
                             // dann aber offensichtlich nichts zu bedeuten.
                             // Einen impliziten Fly-Anfang bedeutet es
                             // definitiv nicht

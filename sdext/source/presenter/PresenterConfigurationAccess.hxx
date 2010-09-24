@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,7 +142,7 @@ public:
         const ::rtl::OUString&,
         const ::css::uno::Reference<css::beans::XPropertySet>&) > PropertySetProcessor;
 
-    /** Execute a functor for all elements of the given container. 
+    /** Execute a functor for all elements of the given container.
         @param rxContainer
             The container is a XNameAccess to a list of the configuration.
             This can be a node returned by GetConfigurationNode().
@@ -186,7 +186,7 @@ public:
         const ::rtl::OUString& rsValue,
         const ::rtl::OUString& rsPropertyName,
         const css::uno::Reference<css::beans::XPropertySet>& rxNode);
-    
+
     /** This method wraps a call to getPropertyValue() and returns an empty
         Any instead of throwing an exception when the property does not
         exist.

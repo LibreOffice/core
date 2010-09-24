@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -186,15 +186,15 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL RecoveryUI::st_createInstan
 
 //===============================================
 
-static OUString GetCrashConfigDir() 
+static OUString GetCrashConfigDir()
 {
 
 #if defined(WNT) || defined(OS2)
-    OUString	ustrValue = OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+    OUString    ustrValue = OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
 #elif defined(MACOSX)
-    OUString	ustrValue = OUString::createFromAscii("~");
+    OUString    ustrValue = OUString::createFromAscii("~");
 #else
-    OUString	ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
+    OUString    ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
 #endif
     Bootstrap::expandMacros( ustrValue );
 
@@ -215,7 +215,7 @@ static OUString GetCrashConfigDir()
 
 static OUString GetUnsentURL()
 {
-    OUString	aURL = GetCrashConfigDir();
+    OUString    aURL = GetCrashConfigDir();
 
     aURL += OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
     aURL += OUString( RTL_CONSTASCII_USTRINGPARAM( LCKFILE ) );
@@ -227,8 +227,8 @@ static OUString GetUnsentURL()
 
 static bool new_crash_pending()
 {
-    OUString	aUnsentURL = GetUnsentURL();
-    File	aFile( aUnsentURL );
+    OUString    aUnsentURL = GetUnsentURL();
+    File    aFile( aUnsentURL );
 
     if ( FileBase::E_None == aFile.open( OpenFlag_Read ) )
     {
@@ -242,7 +242,7 @@ static bool new_crash_pending()
 
 static bool delete_pending_crash()
 {
-    OUString	aUnsentURL = GetUnsentURL();
+    OUString    aUnsentURL = GetUnsentURL();
     return ( FileBase::E_None == File::remove( aUnsentURL ) );
 }
 
@@ -276,13 +276,13 @@ sal_Bool RecoveryUI::impl_doEmergencySave()
     svxdr::TabDialog4Recovery* pWizard = new svxdr::TabDialog4Recovery(m_pParentWindow);
     svxdr::IExtendedTabPage*   pPage1  = new svxdr::SaveDialog        (pWizard, pCore );
     pWizard->addTabPage(pPage1);
-    
+
     // start the wizard
     short nRet = pWizard->Execute();
-    
+
     delete pPage1 ;
     delete pWizard;
-    
+
     return (nRet==DLG_RET_OK_AUTOLUNCH);
 }
 
@@ -294,7 +294,7 @@ void RecoveryUI::impl_doRecovery()
     ::rtl::OUString CFG_PACKAGE_RECOVERY( RTL_CONSTASCII_USTRINGPARAM  ( "org.openoffice.Office.Recovery/" ));
     ::rtl::OUString CFG_PATH_CRASHREPORTER( RTL_CONSTASCII_USTRINGPARAM( "CrashReporter"                 ));
     ::rtl::OUString CFG_ENTRY_ENABLED( RTL_CONSTASCII_USTRINGPARAM     ( "Enabled"                       ));
-    
+
     sal_Bool bCrashRepEnabled( sal_True );
     css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
                                 m_xSMGR,
@@ -304,7 +304,7 @@ void RecoveryUI::impl_doRecovery()
                                 ::comphelper::ConfigurationHelper::E_READONLY);
     aVal >>= bCrashRepEnabled;
     bRecoveryOnly = !bCrashRepEnabled;
-    
+
     // create core service, which implements the real "emergency save" algorithm.
     svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xSMGR, sal_False);
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
@@ -315,7 +315,7 @@ void RecoveryUI::impl_doRecovery()
     svxdr::IExtendedTabPage*   pPage1  = new svxdr::RecoveryDialog       (pWizard, pCore );
     svxdr::IExtendedTabPage*   pPage2  = 0;
     svxdr::IExtendedTabPage*   pPage3  = 0;
-    
+
     pWizard->addTabPage(pPage1);
     if ( !bRecoveryOnly && new_crash_pending() )
     {
@@ -323,13 +323,13 @@ void RecoveryUI::impl_doRecovery()
         pPage3 = new svxdr::ErrorRepSendDialog   (pWizard        );
         pWizard->addTabPage(pPage2);
         pWizard->addTabPage(pPage3);
-    }   
-    
+    }
+
     // start the wizard
     pWizard->Execute();
 
     impl_showAllRecoveredDocs();
-    
+
     delete pPage3 ;
     delete pPage2 ;
     delete pPage1 ;
@@ -349,10 +349,10 @@ void RecoveryUI::impl_doCrashReport()
         svxdr::IExtendedTabPage*   pPage2  = new svxdr::ErrorRepSendDialog   (pWizard           );
         pWizard->addTabPage(pPage1);
         pWizard->addTabPage(pPage2);
-        
+
         // start the wizard
         pWizard->Execute();
-        
+
         delete pPage2 ;
         delete pPage1 ;
         delete pWizard;
@@ -382,12 +382,12 @@ void RecoveryUI::impl_showAllRecoveredDocs()
             xTaskContainer->getByIndex(i) >>= xTask;
             if (!xTask.is())
                 continue;
-            
+
             css::uno::Reference< css::awt::XWindow > xWindow = xTask->getContainerWindow();
             if (!xWindow.is())
                 continue;
-            
-            xWindow->setVisible(sal_True);        
+
+            xWindow->setVisible(sal_True);
         }
         catch(const css::uno::RuntimeException& exRun)
             { throw exRun; }

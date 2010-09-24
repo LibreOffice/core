@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,8 +84,8 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
-#define ERROR_TAG	String( DEFINE_CONST_UNICODE("Error: ") )
-#define PATH_TAG	String( DEFINE_CONST_UNICODE("\nPath: ") )
+#define ERROR_TAG   String( DEFINE_CONST_UNICODE("Error: ") )
+#define PATH_TAG    String( DEFINE_CONST_UNICODE("\nPath: ") )
 
 // class NoHelpErrorBox --------------------------------------------------
 
@@ -242,7 +242,7 @@ static Sequence< ::rtl::OUString > GetPropertyNames()
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
     Sequence< ::rtl::OUString > aNames( nCount );
     ::rtl::OUString* pNames = aNames.getArray();
-    ::rtl::OUString* pEnd	= pNames + aNames.getLength();
+    ::rtl::OUString* pEnd   = pNames + aNames.getLength();
     int i = 0;
     for ( ; pNames != pEnd; ++pNames )
         *pNames = ::rtl::OUString::createFromAscii( aPropNames[i++] );
@@ -316,26 +316,26 @@ void SfxHelpOptions_Impl::Commit()
 class SfxHelp_Impl
 {
 private:
-    sal_Bool							m_bIsDebug;		// environment variable "help_debug=1"
-    SfxHelpOptions_Impl*				m_pOpt;			// the options
-    ::std::vector< ::rtl::OUString >	m_aModulesList;	// list of all installed modules
-    void					Load();
+    sal_Bool                            m_bIsDebug;     // environment variable "help_debug=1"
+    SfxHelpOptions_Impl*                m_pOpt;         // the options
+    ::std::vector< ::rtl::OUString >    m_aModulesList; // list of all installed modules
+    void                    Load();
 
 public:
     SfxHelp_Impl( sal_Bool bDebug );
     ~SfxHelp_Impl();
 
-    SfxHelpOptions_Impl*	GetOptions();
-    String					GetHelpText( ULONG nHelpId, const String& rModule );	// get "Active Help"
+    SfxHelpOptions_Impl*    GetOptions();
+    String                  GetHelpText( ULONG nHelpId, const String& rModule );    // get "Active Help"
     String                  GetHelpText( const rtl::OUString& aCommandURL, const String& rModule );
-    sal_Bool				HasModule( const ::rtl::OUString& rModule );			// module installed
-    sal_Bool				IsHelpInstalled();										// module list not empty
+    sal_Bool                HasModule( const ::rtl::OUString& rModule );            // module installed
+    sal_Bool                IsHelpInstalled();                                      // module list not empty
 };
 
 SfxHelp_Impl::SfxHelp_Impl( sal_Bool bDebug ) :
 
-    m_bIsDebug		( bDebug ),
-    m_pOpt      	( NULL )
+    m_bIsDebug      ( bDebug ),
+    m_pOpt          ( NULL )
 
 {
 }
@@ -358,7 +358,7 @@ void SfxHelp_Impl::Load()
     sal_Int32 nLen = aAllModulesList.getLength();
     m_aModulesList.reserve( nLen + 1 );
     const ::rtl::OUString* pBegin = aAllModulesList.getConstArray();
-    const ::rtl::OUString* pEnd	= pBegin + nLen;
+    const ::rtl::OUString* pEnd = pBegin + nLen;
     for ( ; pBegin != pEnd; ++pBegin )
     {
         // get one module string
@@ -417,7 +417,7 @@ sal_Bool SfxHelp_Impl::IsHelpInstalled()
 SfxHelp::SfxHelp() :
 
     bIsDebug( sal_False ),
-    pImp	( NULL )
+    pImp    ( NULL )
 
 {
     // read the environment variable "HELP_DEBUG"
@@ -651,7 +651,7 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
     return aHelpURL;
 }
 
-String	SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rModuleName )
+String  SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rModuleName )
 {
     // build up the help URL
     String aHelpURL;
@@ -966,9 +966,9 @@ void SfxHelp::OpenHelpAgent( ULONG nHelpId )
 {
     if ( SvtHelpOptions().IsHelpAgentAutoStartMode() )
     {
-//		SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
-//		if ( pHelp )
-//		{
+//      SfxHelp* pHelp = SAL_STATIC_CAST( SfxHelp*, Application::GetHelp() );
+//      if ( pHelp )
+//      {
             SfxHelpOptions_Impl *pOpt = pImp->GetOptions();
             if ( !pOpt->HasId( nHelpId ) )
                 return;
@@ -1002,7 +1002,7 @@ void SfxHelp::OpenHelpAgent( ULONG nHelpId )
             {
                 DBG_ERRORFILE( "OpenHelpAgent: caught an exception while executing the dispatch!" );
             }
-//		}
+//      }
     }
 }
 

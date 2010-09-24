@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ ImpSvGlobalName::ImpSvGlobalName( int )
 }
 
 /*************************************************************************
-|*	  ImpSvGlobalName::operator ==()
+|*    ImpSvGlobalName::operator ==()
 *************************************************************************/
 BOOL ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
 {
@@ -58,7 +58,7 @@ BOOL ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
 }
 
 /*************************************************************************
-|*	  SvGlobalName::SvGlobalName()
+|*    SvGlobalName::SvGlobalName()
 *************************************************************************/
 SvGlobalName::SvGlobalName()
 {
@@ -94,7 +94,7 @@ SvGlobalName::SvGlobalName( UINT32 n1, USHORT n2, USHORT n3,
     pImp = new ImpSvGlobalName();
     pImp->nRefCount++;
 
-    *(UINT32 *)pImp->szData 	  = n1;
+    *(UINT32 *)pImp->szData       = n1;
     *(USHORT *)&pImp->szData[ 4 ] = n2;
     *(USHORT *)&pImp->szData[ 6 ] = n3;
     pImp->szData[ 8  ] = b8;
@@ -108,7 +108,7 @@ SvGlobalName::SvGlobalName( UINT32 n1, USHORT n2, USHORT n3,
 }
 
 /*************************************************************************
-|*	  SvGlobalName::~SvGlobalName()
+|*    SvGlobalName::~SvGlobalName()
 *************************************************************************/
 SvGlobalName::~SvGlobalName()
 {
@@ -118,7 +118,7 @@ SvGlobalName::~SvGlobalName()
 }
 
 /*************************************************************************
-|*	  SvGlobalName::operator = ()
+|*    SvGlobalName::operator = ()
 *************************************************************************/
 SvGlobalName & SvGlobalName::operator = ( const SvGlobalName & rObj )
 {
@@ -131,7 +131,7 @@ SvGlobalName & SvGlobalName::operator = ( const SvGlobalName & rObj )
 }
 
 /*************************************************************************
-|*	  SvGlobalName::NewImp()
+|*    SvGlobalName::NewImp()
 *************************************************************************/
 void SvGlobalName::NewImp()
 {
@@ -144,8 +144,8 @@ void SvGlobalName::NewImp()
 }
 
 /*************************************************************************
-|*	  SvGlobalName::operator << ()
-|*	  SvGlobalName::operator >> ()
+|*    SvGlobalName::operator << ()
+|*    SvGlobalName::operator >> ()
 *************************************************************************/
 SvStream& operator << ( SvStream& rOStr, const SvGlobalName & rObj )
 {
@@ -168,7 +168,7 @@ SvStream& operator >> ( SvStream& rStr, SvGlobalName & rObj )
 
 
 /*************************************************************************
-|*	  SvGlobalName::operator < ()
+|*    SvGlobalName::operator < ()
 *************************************************************************/
 BOOL SvGlobalName::operator < ( const SvGlobalName & rObj ) const
 {
@@ -181,14 +181,14 @@ BOOL SvGlobalName::operator < ( const SvGlobalName & rObj ) const
     else if( *(USHORT *)&pImp->szData[ 4 ] < *(USHORT *)&rObj.pImp->szData[ 4 ] )
         return TRUE;
     else if( *(USHORT *)&pImp->szData[ 4 ] == *(USHORT *)&rObj.pImp->szData[ 4 ] )
-        return *(UINT32 *)pImp->szData	< *(UINT32 *)rObj.pImp->szData;
+        return *(UINT32 *)pImp->szData  < *(UINT32 *)rObj.pImp->szData;
     else
         return FALSE;
 
 }
 
 /*************************************************************************
-|*	  SvGlobalName::operator +=()
+|*    SvGlobalName::operator +=()
 *************************************************************************/
 SvGlobalName & SvGlobalName::operator += ( UINT32 n )
 {
@@ -202,7 +202,7 @@ SvGlobalName & SvGlobalName::operator += ( UINT32 n )
 }
 
 /*************************************************************************
-|*	  SvGlobalName::operator ==()
+|*    SvGlobalName::operator ==()
 *************************************************************************/
 BOOL SvGlobalName::operator == ( const SvGlobalName & rObj ) const
 {
@@ -216,11 +216,11 @@ void SvGlobalName::MakeFromMemory( void * pData )
 }
 
 /*************************************************************************
-|*	  SvGlobalName::MakeId()
+|*    SvGlobalName::MakeId()
 *************************************************************************/
 BOOL SvGlobalName::MakeId( const String & rIdStr )
 {
-    ByteString	aStr( rIdStr, RTL_TEXTENCODING_ASCII_US );
+    ByteString  aStr( rIdStr, RTL_TEXTENCODING_ASCII_US );
     sal_Char * pStr = (sal_Char *)aStr.GetBuffer();
     if( rIdStr.Len() == 36
       && '-' == pStr[ 8 ]  && '-' == pStr[ 13 ]
@@ -286,7 +286,7 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
         }
 
         NewImp();
-        *(UINT32 *)pImp->szData 	  = nFirst;
+        *(UINT32 *)pImp->szData       = nFirst;
         *(USHORT *)&pImp->szData[ 4 ] = nSec;
         *(USHORT *)&pImp->szData[ 6 ] = nThird;
         memcpy( &pImp->szData[ 8 ], szRemain, 8 );
@@ -296,7 +296,7 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
 }
 
 /*************************************************************************
-|*	  SvGlobalName::GetctorName()
+|*    SvGlobalName::GetctorName()
 *************************************************************************/
 String SvGlobalName::GetctorName() const
 {
@@ -322,7 +322,7 @@ String SvGlobalName::GetctorName() const
 }
 
 /*************************************************************************
-|*	  SvGlobalName::GetHexName()
+|*    SvGlobalName::GetHexName()
 *************************************************************************/
 String SvGlobalName::GetHexName() const
 {
@@ -356,7 +356,7 @@ String SvGlobalName::GetHexName() const
 /************** SvGlobalNameList ****************************************/
 /************************************************************************/
 /*************************************************************************
-|*	  SvGlobalNameList::SvGlobalNameList()
+|*    SvGlobalNameList::SvGlobalNameList()
 *************************************************************************/
 SvGlobalNameList::SvGlobalNameList()
     : aList( 1, 1 )
@@ -364,7 +364,7 @@ SvGlobalNameList::SvGlobalNameList()
 }
 
 /*************************************************************************
-|*	  SvGlobalNameList::~SvGlobalNameList()
+|*    SvGlobalNameList::~SvGlobalNameList()
 *************************************************************************/
 SvGlobalNameList::~SvGlobalNameList()
 {
@@ -378,7 +378,7 @@ SvGlobalNameList::~SvGlobalNameList()
 }
 
 /*************************************************************************
-|*	  SvGlobalNameList::Append()
+|*    SvGlobalNameList::Append()
 *************************************************************************/
 void SvGlobalNameList::Append( const SvGlobalName & rName )
 {
@@ -387,7 +387,7 @@ void SvGlobalNameList::Append( const SvGlobalName & rName )
 }
 
 /*************************************************************************
-|*	  SvGlobalNameList::GetObject()
+|*    SvGlobalNameList::GetObject()
 *************************************************************************/
 SvGlobalName SvGlobalNameList::GetObject( ULONG nPos )
 {
@@ -395,7 +395,7 @@ SvGlobalName SvGlobalNameList::GetObject( ULONG nPos )
 }
 
 /*************************************************************************
-|*	  SvGlobalNameList::IsEntry()
+|*    SvGlobalNameList::IsEntry()
 *************************************************************************/
 BOOL SvGlobalNameList::IsEntry( const SvGlobalName & rName )
 {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,65 +24,65 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_document_XActionLockable_idl__  
-#define __com_sun_star_document_XActionLockable_idl__  
-  
-#ifndef __com_sun_star_uno_XInterface_idl__  
-#include <com/sun/star/uno/XInterface.idl>  
-#endif  
-  
-  
-//=============================================================================  
-  
-module com {   module sun {   module star {   module document {   
-  
-//=============================================================================  
-  
+#ifndef __com_sun_star_document_XActionLockable_idl__
+#define __com_sun_star_document_XActionLockable_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+
+//=============================================================================
+
+module com {   module sun {   module star {   module document {
+
+//=============================================================================
+
 /** makes it possible to prevent object internal updates for a certain period
     to be able to quickly change multiple parts of the objects, where the
     updates would invalidate each other, anyway.
  */
 published interface XActionLockable: com::sun::star::uno::XInterface
-{  
-    //-------------------------------------------------------------------------  
+{
+    //-------------------------------------------------------------------------
     /** @returns
             <TRUE/> if at least one lock exists.
      */
-    boolean isActionLocked();  
-  
-    //-------------------------------------------------------------------------  
+    boolean isActionLocked();
+
+    //-------------------------------------------------------------------------
     /** increments the lock count of the object by one.
      */
-    void addActionLock();  
-  
-    //-------------------------------------------------------------------------  
+    void addActionLock();
+
+    //-------------------------------------------------------------------------
     /** decrements the lock count of the object by one.
      */
-    void removeActionLock();  
-  
-    //-------------------------------------------------------------------------  
+    void removeActionLock();
+
+    //-------------------------------------------------------------------------
     /** sets the locking level.
-        
+
         <p>This method is used for debugging purposes. The programming
         environment can restore the locking after a break of a debug
         session.</p>
      */
-    void setActionLocks( [in] short nLock );  
-  
-    //-------------------------------------------------------------------------  
+    void setActionLocks( [in] short nLock );
+
+    //-------------------------------------------------------------------------
     /** resets the locking level.
-        
+
         <p>This method is used for debugging purposes. The debugging
         environment of a programming language can reset the locks
         to allow refreshing of the view if a breakpoint is reached or
         step execution is used. </p>
      */
-    short resetActionLocks();  
-  
-};  
-  
-//=============================================================================  
-  
-}; }; }; };   
-  
-#endif  
+    short resetActionLocks();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

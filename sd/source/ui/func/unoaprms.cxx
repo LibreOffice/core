@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,26 +48,26 @@ void SdAnimationPrmsUndoAction::Undo()
     // keine neu Info erzeugt: Daten restaurieren
     if (!bInfoCreated)
     {
-        SdDrawDocument*	pDoc   = (SdDrawDocument*)pObject->GetModel();
+        SdDrawDocument* pDoc   = (SdDrawDocument*)pObject->GetModel();
         if( pDoc )
         {
             SdAnimationInfo* pInfo = pDoc->GetAnimationInfo( pObject );
             // So nicht...
             //SdAnimationInfo* pInfo = (SdAnimationInfo*)pObject->GetUserData(0);
-            pInfo->mbActive		= bOldActive;
+            pInfo->mbActive     = bOldActive;
             pInfo->meEffect      = eOldEffect;
             pInfo->meTextEffect  = eOldTextEffect;
-            pInfo->meSpeed		= eOldSpeed;
+            pInfo->meSpeed      = eOldSpeed;
             pInfo->mbDimPrevious = bOldDimPrevious;
             pInfo->maDimColor    = aOldDimColor;
             pInfo->mbDimHide     = bOldDimHide;
             pInfo->mbSoundOn     = bOldSoundOn;
             pInfo->maSoundFile   = aOldSoundFile;
             pInfo->mbPlayFull    = bOldPlayFull;
-//			pInfo->mSetPath(pOldPathObj);
+//          pInfo->mSetPath(pOldPathObj);
             pInfo->meClickAction = eOldClickAction;
             pInfo->SetBookmark( aOldBookmark );
-//			pInfo->mbInvisibleInPresentation = bOldInvisibleInPres;
+//          pInfo->mbInvisibleInPresentation = bOldInvisibleInPres;
             pInfo->mnVerb        = nOldVerb;
             pInfo->mnPresOrder   = nOldPresOrder;
 
@@ -110,10 +110,10 @@ void SdAnimationPrmsUndoAction::Redo()
     pInfo->mbSoundOn     = bNewSoundOn;
     pInfo->maSoundFile   = aNewSoundFile;
     pInfo->mbPlayFull    = bNewPlayFull;
-//	pInfo->mSetPath(pNewPathObj);
+//  pInfo->mSetPath(pNewPathObj);
     pInfo->meClickAction = eNewClickAction;
     pInfo->SetBookmark( aNewBookmark );
-//	pInfo->mbInvisibleInPresentation = bNewInvisibleInPres;
+//  pInfo->mbInvisibleInPresentation = bNewInvisibleInPres;
     pInfo->mnVerb        = nNewVerb;
     pInfo->mnPresOrder   = nNewPresOrder;
 

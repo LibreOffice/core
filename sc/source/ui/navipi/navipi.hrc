@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,38 +26,38 @@
  ************************************************************************/
 #include "sc.hrc"
 
-//#define RID_SCDLG_NAVIGATOR	256
+//#define RID_SCDLG_NAVIGATOR   256
 
-#define FT_ROW					1
-#define ED_ROW					2
-#define FT_COL					3
-#define ED_COL					4
-#define LB_DOCUMENTS			5
-#define LB_ENTRIES				6
-#define TBX_CMD					7
-#define STR_DRAGMODE			8
-#define STR_DISPLAY				9
-#define STR_ACTIVE				10
-#define STR_NOTACTIVE			11
-#define STR_HIDDEN				12
-#define STR_ACTIVEWIN			13
-//#define IMG_ENTRIES				14
-#define STR_QHLP_SCEN_LISTBOX	15
-#define STR_QHLP_SCEN_COMMENT	16
+#define FT_ROW                  1
+#define ED_ROW                  2
+#define FT_COL                  3
+#define ED_COL                  4
+#define LB_DOCUMENTS            5
+#define LB_ENTRIES              6
+#define TBX_CMD                 7
+#define STR_DRAGMODE            8
+#define STR_DISPLAY             9
+#define STR_ACTIVE              10
+#define STR_NOTACTIVE           11
+#define STR_HIDDEN              12
+#define STR_ACTIVEWIN           13
+//#define IMG_ENTRIES               14
+#define STR_QHLP_SCEN_LISTBOX   15
+#define STR_QHLP_SCEN_COMMENT   16
 #define IL_CMD                  17
 #define ILH_CMD                 18
 
 
 
-#define IID_AREAS		1
-#define IID_DBAREAS		2
-#define IID_DATA		3
-#define IID_DOCS		4
-#define IID_UP			5
-#define IID_DOWN		6
-#define IID_SCENARIOS	7
-#define IID_DROPMODE	9
-#define IID_CHANGEROOT	10
-#define IID_ZOOMOUT		11
+#define IID_AREAS       1
+#define IID_DBAREAS     2
+#define IID_DATA        3
+#define IID_DOCS        4
+#define IID_UP          5
+#define IID_DOWN        6
+#define IID_SCENARIOS   7
+#define IID_DROPMODE    9
+#define IID_CHANGEROOT  10
+#define IID_ZOOMOUT     11
 
 

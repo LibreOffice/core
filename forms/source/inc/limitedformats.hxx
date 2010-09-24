@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,14 +48,14 @@ namespace frm
     class OLimitedFormats
     {
     private:
-        static sal_Int32	s_nInstanceCount;
-        static ::osl::Mutex	s_aMutex;
+        static sal_Int32    s_nInstanceCount;
+        static ::osl::Mutex s_aMutex;
         static ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
                             s_xStandardFormats;
 
     protected:
-        sal_Int32			m_nFormatEnumPropertyHandle;
-        const sal_Int16		m_nTableId;
+        sal_Int32           m_nFormatEnumPropertyHandle;
+        const sal_Int16     m_nTableId;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet >
                             m_xAggregate;
 
@@ -77,19 +77,19 @@ namespace frm
         );
 
     protected:
-        void		getFormatKeyPropertyValue( ::com::sun::star::uno::Any& _rValue ) const;
-        sal_Bool	convertFormatKeyPropertyValue(
+        void        getFormatKeyPropertyValue( ::com::sun::star::uno::Any& _rValue ) const;
+        sal_Bool    convertFormatKeyPropertyValue(
                         ::com::sun::star::uno::Any& _rConvertedValue,
                         ::com::sun::star::uno::Any& _rOldValue,
-                const	::com::sun::star::uno::Any& _rNewValue
+                const   ::com::sun::star::uno::Any& _rNewValue
             );
-        void		setFormatKeyPropertyValue( const ::com::sun::star::uno::Any& _rNewValue );
+        void        setFormatKeyPropertyValue( const ::com::sun::star::uno::Any& _rNewValue );
         // setFormatKeyPropertyValue should only be called with a value got from convertFormatKeyPropertyValue!
 
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
                     getFormatsSupplier() const { return s_xStandardFormats; }
 
-    private:	
+    private:
         void acquireSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
         void releaseSupplier();
 
@@ -98,7 +98,7 @@ namespace frm
     };
 
 //.........................................................................
-}	// namespace frm
+}   // namespace frm
 //.........................................................................
 
 #endif // _FORMS_LIMITED_FORMATS_HXX_

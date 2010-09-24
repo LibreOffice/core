@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ public:
     virtual void Commit();
     void Load();
 
-    void SetInUnload( BOOL bFlag ) 	{ bInUnload = bFlag; }
+    void SetInUnload( BOOL bFlag )  { bInUnload = bFlag; }
     using SvPtrarr::Count;
 
     void InsertObj( SwOLEObj& rObj );
@@ -168,17 +168,17 @@ void SAL_CALL SwOLEListener_Impl::disposing( const lang::EventObject& ) throw (u
 
 class SwEmbedObjectLink : public sfx2::SvBaseLink
 {
-    SwOLENode*			pOleNode;
+    SwOLENode*          pOleNode;
 
 public:
                         SwEmbedObjectLink(SwOLENode* pNode);
-    virtual				~SwEmbedObjectLink();
+    virtual             ~SwEmbedObjectLink();
 
-    virtual void		Closed();
-    virtual void		DataChanged( const String& rMimeType,
+    virtual void        Closed();
+    virtual void        DataChanged( const String& rMimeType,
                                 const uno::Any & rValue );
 
-    sal_Bool			Connect() { return GetRealObject() != NULL; }
+    sal_Bool            Connect() { return GetRealObject() != NULL; }
 };
 
 // -----------------------------------------------------------------------------
@@ -515,7 +515,7 @@ BOOL SwOLENode::IsOLEObjectDeleted() const
     if( aOLEObj.xOLERef.is() )
     {
         SfxObjectShell* p = GetDoc()->GetPersist();
-        if( p )		// muss da sein
+        if( p )     // muss da sein
         {
             return !p->GetEmbeddedObjectContainer().HasEmbeddedObject( aOLEObj.aName );
             //SvInfoObjectRef aRef( p->Find( aOLEObj.aName ) );

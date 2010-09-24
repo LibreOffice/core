@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,22 +51,22 @@ class SwMailMergePrepareMergePage : public svt::OWizardPage
     PushButton      m_aNextPB;
     PushButton      m_aLastPB;
     CheckBox        m_ExcludeCB;
-                    
+
     FixedLine       m_aNoteHeaderFL;
     FixedInfo       m_aEditFI;
     PushButton      m_aEditPB;
-                    
+
 
     SwMailMergeWizard*  m_pWizard;
-    
+
     DECL_LINK(EditDocumentHdl_Impl, PushButton*);
     DECL_LINK(ExcludeHdl_Impl, CheckBox*);
     DECL_LINK(MoveHdl_Impl, void*);
-    
+
     virtual void        ActivatePage();
     virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
-public:     
+public:
         SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent);
         ~SwMailMergePrepareMergePage();
 

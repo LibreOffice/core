@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -156,7 +156,7 @@ void oldtestfile::test_file_002()
         }
         OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
         OString obase = OUStringToOString( base2 , RTL_TEXTENCODING_ASCII_US );
-//		fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource2[i], o.pData->buffer );
+//      fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource2[i], o.pData->buffer );
     }
 }
 
@@ -202,7 +202,7 @@ void oldtestfile::test_file_003()
                                                             int j;
                                                             for( j = dir.getLength() ;
                                      j < target.getLength() &&
-                                         aSource3[i+1][j-dir.getLength()] == target[j]	 ; j++ );
+                                         aSource3[i+1][j-dir.getLength()] == target[j]   ; j++ );
                                 CPPUNIT_ASSERT_MESSAGE("failure #5",  j == target.getLength() );
                             }
                         }
@@ -260,7 +260,7 @@ void oldtestfile::test_file_004()
     }
 
 
-//	fprintf( stderr, "test_file done\n" );
+//  fprintf( stderr, "test_file done\n" );
 }
 
 } // namespace osl_test_file

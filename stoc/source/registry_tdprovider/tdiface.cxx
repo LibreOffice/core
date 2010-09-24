@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,15 +54,15 @@ class InterfaceMethodImpl : public WeakImplHelper1< XInterfaceMethodTypeDescript
     stoc::registry_tdprovider::MethodDescription _desc;
 
     Reference< XHierarchicalNameAccess >  _xTDMgr;
-    
-    OUString							  _aTypeName;
-    
-    OUString							  _aReturnType;
-    Reference< XTypeDescription >		  _xReturnTD;
-    
-    sal_Bool							  _bIsOneWay;
-    sal_Int32							  _nPosition;
-    
+
+    OUString                              _aTypeName;
+
+    OUString                              _aReturnType;
+    Reference< XTypeDescription >         _xReturnTD;
+
+    sal_Bool                              _bIsOneWay;
+    sal_Int32                             _nPosition;
+
 public:
     InterfaceMethodImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
                          const OUString & rTypeName,
@@ -82,11 +82,11 @@ public:
             g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         }
     virtual ~InterfaceMethodImpl();
-    
+
     // XTypeDescription
     virtual TypeClass SAL_CALL getTypeClass() throw(::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    
+
     // XInterfaceMemberTypeDescription
     virtual OUString SAL_CALL getMemberName() throw(::com::sun::star::uno::RuntimeException)
     { return _desc.getName(); }
@@ -192,20 +192,20 @@ Sequence<Reference<XTypeDescription > > InterfaceMethodImpl::getExceptions()
 class InterfaceAttributeImpl : public WeakImplHelper1< XInterfaceAttributeTypeDescription2 >
 {
     Reference< XHierarchicalNameAccess >  _xTDMgr;
-    
-    OUString							  _aTypeName;
-    OUString							  _aMemberName;
-    
-    OUString							  _aMemberTypeName;
-    Reference< XTypeDescription >		  _xMemberTD;
-    
-    sal_Bool							  _bReadOnly;
-    sal_Bool							  _bBound;
-    sal_Int32							  _nPosition;
+
+    OUString                              _aTypeName;
+    OUString                              _aMemberName;
+
+    OUString                              _aMemberTypeName;
+    Reference< XTypeDescription >         _xMemberTD;
+
+    sal_Bool                              _bReadOnly;
+    sal_Bool                              _bBound;
+    sal_Int32                             _nPosition;
 
     std::auto_ptr< stoc::registry_tdprovider::FunctionDescription > _getter;
     std::auto_ptr< stoc::registry_tdprovider::FunctionDescription > _setter;
-    
+
 public:
     InterfaceAttributeImpl(
         const Reference< XHierarchicalNameAccess > & xTDMgr,
@@ -232,15 +232,15 @@ public:
             g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         }
     virtual ~InterfaceAttributeImpl();
-    
+
     // XTypeDescription
     virtual TypeClass SAL_CALL getTypeClass() throw(::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    
+
     // XInterfaceMemberTypeDescription
     virtual OUString SAL_CALL getMemberName() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getPosition() throw(::com::sun::star::uno::RuntimeException);
-    
+
     // XInterfaceAttributeTypeDescription2
     virtual sal_Bool SAL_CALL isReadOnly() throw(::com::sun::star::uno::RuntimeException);
     virtual Reference< XTypeDescription > SAL_CALL getType() throw(::com::sun::star::uno::RuntimeException);

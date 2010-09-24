@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,11 @@
 #ifndef _VOS_EXECABL_HXX_
 #define _VOS_EXECABL_HXX_
 
-#	include <vos/types.hxx>
-#	include <vos/refernce.hxx>
+#   include <vos/types.hxx>
+#   include <vos/refernce.hxx>
 
 namespace vos
-{     
+{
 
 
 /** IExecutable
@@ -50,7 +50,7 @@ namespace vos
     @version 0.1
 */
 
-class IExecutable : public NAMESPACE_VOS(IReference) 
+class IExecutable : public NAMESPACE_VOS(IReference)
 {
 public:
 
@@ -64,7 +64,7 @@ public:
         you should provide here a means to unblock cleanly.
         @Return False if you are not able to unblock the
         thread.
-        
+
     */
     virtual sal_Bool SAL_CALL unblock()= 0;
 
@@ -80,11 +80,11 @@ public:
 
 
 /** OExecutable
-    added default impl. of IReferenceCounter 
+    added default impl. of IReferenceCounter
 */
 class OExecutable : public NAMESPACE_VOS(IExecutable),
                     public NAMESPACE_VOS(OReference)
-                    
+
 {
 public:
 

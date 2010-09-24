@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,25 +68,25 @@ public:
 };
 
 class FindDialog : public ModalDialog {
-    FixedText		aFT1;
+    FixedText       aFT1;
     Edit            aFind;
-    OKButton 		aOk;
+    OKButton        aOk;
     CancelButton    aCancel;
-    String*		    pFind;
+    String*         pFind;
     DECL_LINK( ButtonClick, Button * );
 public:
     FindDialog (Window*, const ResId&, String&);
 };
 
 class ReplaceDialog : public ModalDialog {
-    FixedText		aFT1;
-    FixedText		aFT2;
+    FixedText       aFT1;
+    FixedText       aFT2;
     Edit            aFind;
     Edit            aReplace;
-    OKButton 		aOk;
+    OKButton        aOk;
     CancelButton    aCancel;
-    String*		    pFind;
-    String*		    pReplace;
+    String*         pFind;
+    String*         pReplace;
     DECL_LINK( ButtonClick, Button * );
 public:
     ReplaceDialog (Window*, const ResId&, String&, String&);
@@ -130,7 +130,7 @@ public:
 class OptionsDialog : public TabDialog
 {
 private:
-    TabControl		aTabCtrl;
+    TabControl      aTabCtrl;
 
     OKButton aOK;
     CancelButton aCancel;
@@ -141,7 +141,7 @@ private:
 public:
     OptionsDialog( Window* pParent, const ResId& );
     ~OptionsDialog();
-    virtual BOOL	Close();
+    virtual BOOL    Close();
 
 
     DECL_LINK( ActivatePageHdl, TabControl * );
@@ -252,10 +252,10 @@ public:
 
 
 DECLARE_LIST( StringList, String * )
-#define C_KEY_ALLE			CByteString("All")
-#define C_KEY_AKTUELL		CByteString("Current")
-#define C_KEY_TYPE			CByteString("Type")
-#define C_KEY_DELETE		CByteString("Deleted Groups")
+#define C_KEY_ALLE          CByteString("All")
+#define C_KEY_AKTUELL       CByteString("Current")
+#define C_KEY_TYPE          CByteString("Type")
+#define C_KEY_DELETE        CByteString("Deleted Groups")
 
 class GenericOptions : public TabPage
 {
@@ -360,8 +360,8 @@ protected:
 
     DECL_LINK( OKClick, Button * );
 
-//	BOOL bCompare = FALSE;
-//	String aCompareString;
+//  BOOL bCompare = FALSE;
+//  String aCompareString;
 
 public:
     VarEditDialog( Window * pParent, SbxVariable *pPVar );

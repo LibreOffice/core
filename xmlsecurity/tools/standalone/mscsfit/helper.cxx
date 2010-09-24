@@ -15,7 +15,7 @@ Reference< XInputStream > createStreamFromFile( const OUString sFile )
     if( pcFile != NULL ) {
         FILE *f = fopen( pcFile , "rb" );
         Reference<  XInputStream >  r;
-    
+
         if( f ) {
             fseek( f , 0 , SEEK_END );
             int nLength = ftell( f );
@@ -25,7 +25,7 @@ Reference< XInputStream > createStreamFromFile( const OUString sFile )
             fread( seqIn.getArray() , nLength , 1 , f );
 
             r = Reference< XInputStream > ( new OInputStream( seqIn ) );
-            fclose( f );				
+            fclose( f );
         }
         return r;
     } else {
@@ -70,7 +70,7 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
         "No rdb URI specified" ) ;
 
     if( sUnoUrl.equalsAscii( "local" ) ) {
-        Reference< XSimpleRegistry > xSimpleRegistry = createSimpleRegistry(); 
+        Reference< XSimpleRegistry > xSimpleRegistry = createSimpleRegistry();
         OSL_ENSURE( xSimpleRegistry.is() ,
             "serviceManager - "
             "Cannot create simple registry" ) ;

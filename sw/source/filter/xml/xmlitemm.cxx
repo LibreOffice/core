@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,13 +56,13 @@ SvXMLItemMapEntry aXMLTableItemMap[] =
     // RES_FILL_ORDER
     // not required
     // RES_FRM_SIZE
-    M_E_SE( STYLE,	WIDTH,			RES_FRM_SIZE,	MID_FRMSIZE_WIDTH ),
-    M_E_SE( STYLE,	REL_WIDTH,		RES_FRM_SIZE,	MID_FRMSIZE_REL_WIDTH ),
+    M_E_SE( STYLE,  WIDTH,          RES_FRM_SIZE,   MID_FRMSIZE_WIDTH ),
+    M_E_SE( STYLE,  REL_WIDTH,      RES_FRM_SIZE,   MID_FRMSIZE_REL_WIDTH ),
     // RES_PAPER_BIN
     // not required
     // TODO: RES_LR_SPACE
-    M_E_SE( FO,	MARGIN_LEFT,		RES_LR_SPACE,	MID_L_MARGIN ),
-    M_E_SE( FO,	MARGIN_RIGHT,		RES_LR_SPACE,	MID_R_MARGIN ),
+    M_E_SE( FO, MARGIN_LEFT,        RES_LR_SPACE,   MID_L_MARGIN ),
+    M_E_SE( FO, MARGIN_RIGHT,       RES_LR_SPACE,   MID_R_MARGIN ),
     // RES_UL_SPACE
     MAP_ENTRY( FO,   MARGIN_TOP,         RES_UL_SPACE,   MID_UP_MARGIN ),
     MAP_ENTRY( FO,   MARGIN_BOTTOM,      RES_UL_SPACE,   MID_LO_MARGIN ),
@@ -132,7 +132,7 @@ SvXMLItemMapEntry aXMLTableItemMap[] =
 
 SvXMLItemMapEntry aXMLTableColItemMap[] =
 {
-    M_E_SI( STYLE,	COLUMN_WIDTH,	  RES_FRM_SIZE,	MID_FRMSIZE_COL_WIDTH ),
+    M_E_SI( STYLE,  COLUMN_WIDTH,     RES_FRM_SIZE, MID_FRMSIZE_COL_WIDTH ),
     MAP_ENTRY( STYLE,        REL_COLUMN_WIDTH, RES_FRM_SIZE, MID_FRMSIZE_REL_COL_WIDTH ),
     M_END
 };

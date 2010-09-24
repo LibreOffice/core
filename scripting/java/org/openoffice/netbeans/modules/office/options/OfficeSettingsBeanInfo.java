@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ import org.openoffice.netbeans.modules.office.wizard.SelectPathPanel;
  * @author tomaso
  */
 public class OfficeSettingsBeanInfo extends SimpleBeanInfo {
-    
+
     public PropertyDescriptor[] getPropertyDescriptors() {
         try {
             PropertyDescriptor[] props = new PropertyDescriptor[] {
@@ -70,31 +70,31 @@ public class OfficeSettingsBeanInfo extends SimpleBeanInfo {
                                "get" + OfficeSettings.WARN_BEFORE_MOUNT,
                                "set" + OfficeSettings.WARN_BEFORE_MOUNT)
             };
-                                       
+
             props[0].setDisplayName(NbBundle.getMessage(
                 OfficeSettingsBeanInfo.class, "PROP_OfficeDirectory"));
             props[0].setShortDescription(NbBundle.getMessage(
                 OfficeSettingsBeanInfo.class, "HINT_OfficeDirectory"));
             props[0].setPropertyEditorClass(OfficeDirectoryEditor.class);
-                        
+
             props[1].setDisplayName(NbBundle.getMessage(
                 OfficeSettingsBeanInfo.class, "PROP_WarnBeforeDocDeploy"));
             props[1].setShortDescription(NbBundle.getMessage(
                 OfficeSettingsBeanInfo.class, "HINT_WarnBeforeDocDeploy"));
             props[1].setHidden(true);
-            
+
             props[2].setDisplayName(NbBundle.getMessage(
                 OfficeSettingsBeanInfo.class, "PROP_WarnAfterDirDeploy"));
             props[2].setShortDescription(NbBundle.getMessage(
                 OfficeSettingsBeanInfo.class, "HINT_WarnAfterDirDeploy"));
             props[2].setHidden(true);
-            
+
             props[3].setDisplayName(NbBundle.getMessage(
                 OfficeSettingsBeanInfo.class, "PROP_WarnBeforeMount"));
             props[3].setShortDescription(NbBundle.getMessage(
                 OfficeSettingsBeanInfo.class, "HINT_WarnBeforeMount"));
             props[3].setHidden(true);
-            
+
             return props;
         }
         catch (IntrospectionException ie) {
@@ -102,7 +102,7 @@ public class OfficeSettingsBeanInfo extends SimpleBeanInfo {
             return null;
         }
     }
-    
+
     public Image getIcon(int type) {
         if (type == BeanInfo.ICON_COLOR_16x16 || type == BeanInfo.ICON_MONO_16x16) {
             return Utilities.loadImage("/org/openoffice/netbeans/modules/office/options/OfficeSettingsIcon.gif");

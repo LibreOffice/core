@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,8 +73,8 @@ void GrfWindow::Paint( const Rectangle& )
 #endif
 
 static BYTE __FAR_DATA aPal1[ 2 * 4 ] = {
-        0x00, 0x00, 0x00, 0x00,				// Schwarz
-        0xFF, 0xFF, 0xFF, 0x00				// Weiss
+        0x00, 0x00, 0x00, 0x00,             // Schwarz
+        0xFF, 0xFF, 0xFF, 0x00              // Weiss
 };
 
 static BYTE __FAR_DATA aPal4[ 16 * 4 ] = {
@@ -216,22 +216,22 @@ static void WriteBMPHeader( SvStream& rStream,
     ULONG n4Height = rPicType.nHeight;
     USHORT n4ColBits = rPicType.nBitsPerPixel;
 
-    USHORT nColors = (1 << n4ColBits);	// Anzahl der Farben ( 1, 16, 256 )
+    USHORT nColors = (1 << n4ColBits);  // Anzahl der Farben ( 1, 16, 256 )
     USHORT nWdtOut = rPicType.nWidthBytes;
     if( !nWdtOut )
         nWdtOut = (USHORT)((( n4Width * n4ColBits + 31 ) / 32 ) * 4 );
 
-    long nOffset = 14 + 40; 	// BMP_FILE_HD_SIZ + sizeof(*pBmpInfo);
+    long nOffset = 14 + 40;     // BMP_FILE_HD_SIZ + sizeof(*pBmpInfo);
     if( 256 >= nColors )
         nOffset += nColors * 4;
     long nSize = nOffset + nWdtOut * n4Height;
-    rStream << "BM"						// = "BM"
+    rStream << "BM"                     // = "BM"
             << SwapLong(nSize)          // Filesize in Bytes
             << SwapShort(0)             // Reserviert
             << SwapShort(0)             // Reserviert
             << SwapLong(nOffset);       // Offset?
 
-    rStream	<< SwapLong(40)				// sizeof( BmpInfo )
+    rStream << SwapLong(40)             // sizeof( BmpInfo )
             << SwapLong(n4Width)
             << SwapLong(n4Height)
             << (USHORT)1
@@ -240,7 +240,7 @@ static void WriteBMPHeader( SvStream& rStream,
             << SwapLong(0)
             << SwapLong( rPicType.nGoalWidth
                         ? rPicType.nGoalWidth * 1000L / 254L
-                        : 0 )	      // DPI in Pixel per Meter
+                        : 0 )         // DPI in Pixel per Meter
             << SwapLong( rPicType.nGoalHeight
                         ? rPicType.nGoalHeight * 1000L / 254L      // dito
                         : 0 )
@@ -250,9 +250,9 @@ static void WriteBMPHeader( SvStream& rStream,
 
     switch( rPicType.nBitsPerPixel )
     {
-    case 1:		rStream.Write( aPal1, sizeof( aPal1 ));	break;
-    case 4:		rStream.Write( aPal4, sizeof( aPal4 ));	break;
-    case 8:		rStream.Write( aPal8, sizeof( aPal8 ));	break;
+    case 1:     rStream.Write( aPal1, sizeof( aPal1 )); break;
+    case 4:     rStream.Write( aPal4, sizeof( aPal4 )); break;
+    case 8:     rStream.Write( aPal8, sizeof( aPal8 )); break;
     }
 }
 
@@ -265,7 +265,7 @@ xub_StrLen SvxRTFParser::HexToBin( String& rToken )
 {
     // dann mache aus den Hex-Werten mal "Binare Daten"
     // (missbrauche den String als temp Buffer)
-    if( rToken.Len() & 1 )		// ungerade Anzahl, mit 0 auffuellen
+    if( rToken.Len() & 1 )      // ungerade Anzahl, mit 0 auffuellen
         rToken += '0';
 
     xub_StrLen n, nLen;
@@ -301,7 +301,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
 {
     // die alten Daten loeschen
     rGrf.Clear();
-//	ULONG nBmpSize = 0;
+//  ULONG nBmpSize = 0;
 
     rtl_TextEncoding eOldEnc = GetSrcEncoding();
     SetSrcEncoding( RTL_TEXTENCODING_MS_1252 );
@@ -309,9 +309,9 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
     const sal_Char* pFilterNm = 0;
     SvCacheStream* pTmpFile = 0;
 
-    int nToken = 0; 
+    int nToken = 0;
     bool bValidBmp = true, bFirstTextToken = true;
-    int _nOpenBrakets = 1,		// die erste wurde schon vorher erkannt !!
+    int _nOpenBrakets = 1,      // die erste wurde schon vorher erkannt !!
         nValidDataBraket = 1;
 
     if( RTF_SHPPICT == GetStackPtr(0)->nTokenId )
@@ -323,7 +323,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
         USHORT nVal = USHORT( nTokenValue );
         switch( nToken )
         {
-        case '}':		--_nOpenBrakets;	break;
+        case '}':       --_nOpenBrakets;    break;
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
@@ -398,13 +398,13 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
             }
             break;
 
-        case RTF_PICW:				rPicType.nWidth = nVal; break;
-        case RTF_PICH:				rPicType.nHeight = nVal; break;
-        case RTF_WBMBITSPIXEL:		rPicType.nBitsPerPixel = nVal; break;
-        case RTF_WBMPLANES: 		rPicType.nPlanes = nVal; break;
-        case RTF_WBMWIDTHBYTES:		rPicType.nWidthBytes = nVal; break;
-        case RTF_PICWGOAL:			rPicType.nGoalWidth = nVal; break;
-        case RTF_PICHGOAL:			rPicType.nGoalHeight = nVal; break;
+        case RTF_PICW:              rPicType.nWidth = nVal; break;
+        case RTF_PICH:              rPicType.nHeight = nVal; break;
+        case RTF_WBMBITSPIXEL:      rPicType.nBitsPerPixel = nVal; break;
+        case RTF_WBMPLANES:         rPicType.nPlanes = nVal; break;
+        case RTF_WBMWIDTHBYTES:     rPicType.nWidthBytes = nVal; break;
+        case RTF_PICWGOAL:          rPicType.nGoalWidth = nVal; break;
+        case RTF_PICHGOAL:          rPicType.nGoalHeight = nVal; break;
         case RTF_BIN:
             rPicType.nMode = SvxRTFPictureType::BINARY_MODE;
             rPicType.uPicLen = nTokenValue;
@@ -420,7 +420,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
                 {
                     if (rPicType.uPicLen < nSize)
                         nSize = rPicType.uPicLen;
-                    
+
                     rStrm.Read(aData, nSize);
                     pTmpFile->Write(aData, nSize);
                     rPicType.uPicLen -= nSize;
@@ -431,19 +431,19 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
                 nPos = nPos;
             }
             break;
-        case RTF_PICSCALEX:			rPicType.nScalX = nVal; break;
-        case RTF_PICSCALEY:			rPicType.nScalY = nVal; break;
-        case RTF_PICSCALED: 		break;
+        case RTF_PICSCALEX:         rPicType.nScalX = nVal; break;
+        case RTF_PICSCALEY:         rPicType.nScalY = nVal; break;
+        case RTF_PICSCALED:         break;
 
-        case RTF_PICCROPT:			rPicType.nCropT = (short)nTokenValue; break;
-        case RTF_PICCROPB:			rPicType.nCropB = (short)nTokenValue; break;
-        case RTF_PICCROPL:			rPicType.nCropL = (short)nTokenValue; break;
-        case RTF_PICCROPR:			rPicType.nCropR = (short)nTokenValue; break;
+        case RTF_PICCROPT:          rPicType.nCropT = (short)nTokenValue; break;
+        case RTF_PICCROPB:          rPicType.nCropB = (short)nTokenValue; break;
+        case RTF_PICCROPL:          rPicType.nCropL = (short)nTokenValue; break;
+        case RTF_PICCROPR:          rPicType.nCropR = (short)nTokenValue; break;
 
         case RTF_TEXTTOKEN:
             // JP 26.06.98: Bug #51719# - nur TextToken auf 1. Ebene
-            //				auswerten. Alle anderen sind irgendwelche
-            //				nicht auszuwertende Daten
+            //              auswerten. Alle anderen sind irgendwelche
+            //              nicht auszuwertende Daten
             if( nValidDataBraket != _nOpenBrakets )
                 break;
 
@@ -524,7 +524,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
     {
         switch( rPicType.eStyle )
         {
-//??		ENHANCED_MF,		// in den Pict.Daten steht ein Enhanced-Metafile
+//??        ENHANCED_MF,        // in den Pict.Daten steht ein Enhanced-Metafile
         case SvxRTFPictureType::RTF_PNG:
         case SvxRTFPictureType::RTF_JPG:
             {
@@ -551,7 +551,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
     }
     SetSrcEncoding( eOldEnc );
 
-    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
     return bValidBmp;
 }
 

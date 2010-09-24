@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ static rtl::OUString DISPLAYNAME( RTL_CONSTASCII_USTRINGPARAM("DisplayName") );
 
 
 
-uno::Reference< container::XNameAccess > 
+uno::Reference< container::XNameAccess >
 ScVbaStyle::getStylesNameContainer( const uno::Reference< frame::XModel >& xModel ) throw ( uno::RuntimeException )
 {
     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( xModel, uno::UNO_QUERY_THROW);
@@ -43,26 +43,26 @@ ScVbaStyle::getStylesNameContainer( const uno::Reference< frame::XModel >& xMode
     return xStylesAccess;
 }
 
-uno::Reference< beans::XPropertySet > 
+uno::Reference< beans::XPropertySet >
 lcl_getStyleProps( const rtl::OUString& sStyleName, const uno::Reference< frame::XModel >& xModel ) throw ( script::BasicErrorException, uno::RuntimeException )
 {
-    
-    uno::Reference< beans::XPropertySet > xStyleProps( ScVbaStyle::getStylesNameContainer( xModel )->getByName( sStyleName ), uno::UNO_QUERY_THROW );	
+
+    uno::Reference< beans::XPropertySet > xStyleProps( ScVbaStyle::getStylesNameContainer( xModel )->getByName( sStyleName ), uno::UNO_QUERY_THROW );
     return xStyleProps;
 }
 
 
 void ScVbaStyle::initialise() throw ( uno::RuntimeException )
 {
-    if (!mxModel.is() ) 
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XModel Interface could not be retrieved")) );                    
+    if (!mxModel.is() )
+        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XModel Interface could not be retrieved")) );
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxPropertySet, uno::UNO_QUERY_THROW );
     if ( !xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CellStyle" ) ) ) )
     {
             DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
     }
     mxStyle.set( mxPropertySet, uno::UNO_QUERY_THROW );
-    
+
     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( mxModel, uno::UNO_QUERY_THROW );
     mxStyleFamilyNameContainer.set(  ScVbaStyle::getStylesNameContainer( mxModel ), uno::UNO_QUERY_THROW );
 
@@ -93,25 +93,25 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent, const
 }
 
 
-::sal_Bool SAL_CALL 
+::sal_Bool SAL_CALL
 ScVbaStyle::BuiltIn() throw (script::BasicErrorException, uno::RuntimeException)
 {
     return !mxStyle->isUserDefined();
 
 }
-void SAL_CALL 
+void SAL_CALL
 ScVbaStyle::setName( const ::rtl::OUString& Name ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     mxStyle->setName(Name);
 }
 
-::rtl::OUString SAL_CALL 
+::rtl::OUString SAL_CALL
 ScVbaStyle::getName() throw (script::BasicErrorException, uno::RuntimeException)
 {
     return mxStyle->getName();
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaStyle::setNameLocal( const ::rtl::OUString& NameLocal ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     try
@@ -124,7 +124,7 @@ ScVbaStyle::setNameLocal( const ::rtl::OUString& NameLocal ) throw (script::Basi
     }
 }
 
-::rtl::OUString SAL_CALL 
+::rtl::OUString SAL_CALL
 ScVbaStyle::getNameLocal() throw (script::BasicErrorException, uno::RuntimeException)
 {
     rtl::OUString sName;
@@ -139,7 +139,7 @@ ScVbaStyle::getNameLocal() throw (script::BasicErrorException, uno::RuntimeExcep
     return sName;
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaStyle::Delete() throw (script::BasicErrorException, uno::RuntimeException)
 {
     try
@@ -152,13 +152,13 @@ ScVbaStyle::Delete() throw (script::BasicErrorException, uno::RuntimeException)
     }
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaStyle::setMergeCells( const uno::Any& /*MergeCells*/ ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     DebugHelper::exception(SbERR_NOT_IMPLEMENTED, rtl::OUString());
 }
 
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaStyle::getMergeCells(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     DebugHelper::exception(SbERR_NOT_IMPLEMENTED, rtl::OUString());

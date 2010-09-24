@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -151,20 +151,20 @@ namespace dbaui
 
         m_nAsyncDrop = 0;
         m_aAsyncDrop.aDroppedData.clear();
-        m_aAsyncDrop.nType			= E_TABLE;
-        m_aAsyncDrop.nAction		= _rEvt.mnAction;
-        m_aAsyncDrop.bError			= sal_False;
-        m_aAsyncDrop.bHtml			= sal_False;
-        m_aAsyncDrop.pDroppedAt		= NULL;
-        m_aAsyncDrop.aUrl			= ::rtl::OUString();
+        m_aAsyncDrop.nType          = E_TABLE;
+        m_aAsyncDrop.nAction        = _rEvt.mnAction;
+        m_aAsyncDrop.bError         = sal_False;
+        m_aAsyncDrop.bHtml          = sal_False;
+        m_aAsyncDrop.pDroppedAt     = NULL;
+        m_aAsyncDrop.aUrl           = ::rtl::OUString();
 
 
         // loop through the available formats and see what we can do ...
         // first we have to check if it is our own format, if not we have to copy the stream :-(
         if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(aDroppedData.GetDataFlavorExVector()) )
         {
-            m_aAsyncDrop.aDroppedData	= ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
-            m_aAsyncDrop.pDroppedAt		= pHitEntry;
+            m_aAsyncDrop.aDroppedData   = ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
+            m_aAsyncDrop.pDroppedAt     = pHitEntry;
 
             // asyncron because we some dialogs and we aren't allowed to show them while in D&D
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, SbaTableQueryBrowser, OnAsyncDrop));
@@ -178,7 +178,7 @@ namespace dbaui
                && m_aTableCopyHelper.copyTagTable( aDroppedData, m_aAsyncDrop, xDestConnection )
                )
             {
-                m_aAsyncDrop.pDroppedAt	= pHitEntry;
+                m_aAsyncDrop.pDroppedAt = pHitEntry;
 
                 // asyncron because we some dialogs and we aren't allowed to show them while in D&D
                 m_nAsyncDrop = Application::PostUserEvent(LINK(this, SbaTableQueryBrowser, OnAsyncDrop));
@@ -232,8 +232,8 @@ namespace dbaui
         TransferableHelper* pTransfer = NULL;
         Reference< XTransferable> aEnsureDelete;
         EntryType eType = getEntryType(_pEntry);
-        pTransfer		= implCopyObject( _pEntry, eType == etQuery ? CommandType::QUERY : CommandType::TABLE);
-        aEnsureDelete	= pTransfer;
+        pTransfer       = implCopyObject( _pEntry, eType == etQuery ? CommandType::QUERY : CommandType::TABLE);
+        aEnsureDelete   = pTransfer;
         if (pTransfer)
             pTransfer->CopyToClipboard(getView());
     }
@@ -290,6 +290,6 @@ namespace dbaui
         m_pCurrentlyDisplayed = NULL;
     }
 // .........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 // .........................................................................
 

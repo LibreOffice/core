@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,35 +36,35 @@
 // - Defines -
 // -----------
 
-#define IMPL_CASE_GET_FORMAT( Format )							\
-case( BMP_FORMAT##Format ):									\
-    pFncGetPixel = BitmapReadAccess::GetPixelFor##Format;		\
+#define IMPL_CASE_GET_FORMAT( Format )                          \
+case( BMP_FORMAT##Format ):                                 \
+    pFncGetPixel = BitmapReadAccess::GetPixelFor##Format;       \
 break
 
 // -----------------------------------------------------------------------------
 
-#define IMPL_CASE_SET_FORMAT( Format, BitCount )				\
-case( BMP_FORMAT##Format ):									\
-{																\
-    pFncSetPixel = BitmapReadAccess::SetPixelFor##Format;		\
-    pDstBuffer->mnBitCount = BitCount;							\
-}																\
+#define IMPL_CASE_SET_FORMAT( Format, BitCount )                \
+case( BMP_FORMAT##Format ):                                 \
+{                                                               \
+    pFncSetPixel = BitmapReadAccess::SetPixelFor##Format;       \
+    pDstBuffer->mnBitCount = BitCount;                          \
+}                                                               \
 break
 
 // -----------------------------------------------------------------------------
 
-#define DOUBLE_SCANLINES()														\
-while( ( nActY < nHeight1 ) && ( pMapY[ nActY + 1 ] == nMapY ) )				\
-{																				\
-    memcpy( pDstScanMap[ nActY + 1L ], pDstScan, rDstBuffer.mnScanlineSize );	\
-    nActY++;																	\
+#define DOUBLE_SCANLINES()                                                      \
+while( ( nActY < nHeight1 ) && ( pMapY[ nActY + 1 ] == nMapY ) )                \
+{                                                                               \
+    memcpy( pDstScanMap[ nActY + 1L ], pDstScan, rDstBuffer.mnScanlineSize );   \
+    nActY++;                                                                    \
 }
 
 // -----------
 // - Inlines -
 // -----------
 
-#define TC_TO_PAL_COLORS	4096
+#define TC_TO_PAL_COLORS    4096
 
 static long ImplIndexFromColor( const BitmapColor& rCol )
 {
@@ -84,22 +84,22 @@ static long ImplIndexFromColor( const BitmapColor& rCol )
 }
 
 
-#define COLOR_TO_INDEX( _def_rCol ) 
+#define COLOR_TO_INDEX( _def_rCol )
 
 // ------------------------
 // - conversion functions -
 // ------------------------
 
-static void	ImplPALToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
+static void ImplPALToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
                           FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
                           Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, long* pMapY )
 {
-    const long			nWidth = rDstBuffer.mnWidth, nHeight = rDstBuffer.mnHeight, nHeight1 = nHeight - 1;
-    const ColorMask&	rSrcMask = rSrcBuffer.maColorMask;
-    const ColorMask&	rDstMask = rDstBuffer.maColorMask;
-    BitmapPalette		aColMap( rSrcBuffer.maPalette.GetEntryCount() );
-    BitmapColor*		pColMapBuf = aColMap.ImplGetColorBuffer();
-    BitmapColor			aIndex( 0 );
+    const long          nWidth = rDstBuffer.mnWidth, nHeight = rDstBuffer.mnHeight, nHeight1 = nHeight - 1;
+    const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
+    const ColorMask&    rDstMask = rDstBuffer.maColorMask;
+    BitmapPalette       aColMap( rSrcBuffer.maPalette.GetEntryCount() );
+    BitmapColor*        pColMapBuf = aColMap.ImplGetColorBuffer();
+    BitmapColor         aIndex( 0 );
 
     for( USHORT i = 0, nSrcCount = aColMap.GetEntryCount(), nDstCount = rDstBuffer.maPalette.GetEntryCount(); i < nSrcCount; i++ )
     {
@@ -124,20 +124,20 @@ static void	ImplPALToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuff
 
 // -----------------------------------------------------------------------------
 
-static void	ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
+static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
                          FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
                          Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, long* pMapY )
 {
-    const long			nWidth = rDstBuffer.mnWidth, nHeight = rDstBuffer.mnHeight, nHeight1 = nHeight - 1;
-    const ColorMask&	rSrcMask = rSrcBuffer.maColorMask;
-    const ColorMask&	rDstMask = rDstBuffer.maColorMask;
-    const BitmapColor*	pColBuf = rSrcBuffer.maPalette.ImplGetColorBuffer();
+    const long          nWidth = rDstBuffer.mnWidth, nHeight = rDstBuffer.mnHeight, nHeight1 = nHeight - 1;
+    const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
+    const ColorMask&    rDstMask = rDstBuffer.maColorMask;
+    const BitmapColor*  pColBuf = rSrcBuffer.maPalette.ImplGetColorBuffer();
 
     if( BMP_SCANLINE_FORMAT( rSrcBuffer.mnFormat ) == BMP_FORMAT_1BIT_MSB_PAL )
     {
-        const BitmapColor	aCol0( pColBuf[ 0 ] );
-        const BitmapColor	aCol1( pColBuf[ 1 ] );
-        long				nMapX;
+        const BitmapColor   aCol0( pColBuf[ 0 ] );
+        const BitmapColor   aCol1( pColBuf[ 1 ] );
+        long                nMapX;
 
         for( long nActY = 0, nMapY; nActY < nHeight; nActY++ )
         {
@@ -146,7 +146,7 @@ static void	ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
             for( long nX = 0L; nX < nWidth; )
             {
                 nMapX = pMapX[ nX ];
-                pFncSetPixel( pDstScan, nX++, 
+                pFncSetPixel( pDstScan, nX++,
                               pSrcScan[ nMapX >> 3 ] & ( 1 << ( 7 - ( nMapX & 7 ) ) ) ? aCol1 : aCol0,
                               rDstMask );
             }
@@ -165,7 +165,7 @@ static void	ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
             for( long nX = 0L; nX < nWidth; )
             {
                 nMapX = pMapX[ nX ];
-                pFncSetPixel( pDstScan, nX++, 
+                pFncSetPixel( pDstScan, nX++,
                               pColBuf[ ( pSrcScan[ nMapX >> 1 ] >> ( nMapX & 1 ? 0 : 4 ) ) & 0x0f ],
                               rDstMask );
             }
@@ -201,18 +201,18 @@ static void	ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
 
 // -----------------------------------------------------------------------------
 
-static void	ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
+static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
                         FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
                         Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, long* pMapY )
 {
-    const long			nWidth = rDstBuffer.mnWidth, nHeight = rDstBuffer.mnHeight, nHeight1 = nHeight - 1;
-    const ColorMask&	rSrcMask = rSrcBuffer.maColorMask;
-    const ColorMask&	rDstMask = rDstBuffer.maColorMask;
+    const long          nWidth = rDstBuffer.mnWidth, nHeight = rDstBuffer.mnHeight, nHeight1 = nHeight - 1;
+    const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
+    const ColorMask&    rDstMask = rDstBuffer.maColorMask;
 
     if( BMP_SCANLINE_FORMAT( rSrcBuffer.mnFormat ) == BMP_FORMAT_24BIT_TC_BGR )
     {
         BitmapColor aCol;
-        BYTE*		pPixel;
+        BYTE*       pPixel;
 
         for( long nActY = 0, nMapY; nActY < nHeight; nActY++ )
         {
@@ -245,16 +245,16 @@ static void	ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer
 
 // -----------------------------------------------------------------------------
 
-static void	ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
+static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
                          FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
                          Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, long* pMapY )
 {
-    const long			nWidth = rDstBuffer.mnWidth, nHeight = rDstBuffer.mnHeight, nHeight1 = nHeight - 1;
-    const ColorMask&	rSrcMask = rSrcBuffer.maColorMask;
-    const ColorMask&	rDstMask = rDstBuffer.maColorMask;
-    BitmapPalette		aColMap( rSrcBuffer.maPalette.GetEntryCount() );
-    BYTE*				pColToPalMap = new BYTE[ TC_TO_PAL_COLORS ];
-    BitmapColor			aIndex( 0 );
+    const long          nWidth = rDstBuffer.mnWidth, nHeight = rDstBuffer.mnHeight, nHeight1 = nHeight - 1;
+    const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
+    const ColorMask&    rDstMask = rDstBuffer.maColorMask;
+    BitmapPalette       aColMap( rSrcBuffer.maPalette.GetEntryCount() );
+    BYTE*               pColToPalMap = new BYTE[ TC_TO_PAL_COLORS ];
+    BitmapColor         aIndex( 0 );
 
     for( long nR = 0; nR < 16; nR++ )
     {
@@ -292,12 +292,12 @@ static void	ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
 // - StretchAndConvert -
 // ---------------------
 
-BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect, 
+BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
                                  ULONG nDstBitmapFormat, BitmapPalette* pDstPal, ColorMask* pDstMask )
 {
-    FncGetPixel		pFncGetPixel;
-    FncSetPixel		pFncSetPixel;
-    BitmapBuffer*	pDstBuffer = new BitmapBuffer;
+    FncGetPixel     pFncGetPixel;
+    FncSetPixel     pFncSetPixel;
+    BitmapBuffer*   pDstBuffer = new BitmapBuffer;
     long            i;
 
     // set function for getting pixels
@@ -401,7 +401,7 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
     bool bFastConvert = ImplFastBitmapConversion( *pDstBuffer, rSrcBuffer, rTwoRect );
     if( bFastConvert )
         return pDstBuffer;
-    
+
     const long      nSrcX = rTwoRect.mnSrcX, nSrcY = rTwoRect.mnSrcY;
     const long      nSrcDX = rTwoRect.mnSrcWidth, nSrcDY = rTwoRect.mnSrcHeight;
     const long      nDstDX = rTwoRect.mnDestWidth, nDstDY = rTwoRect.mnDestHeight;
@@ -430,7 +430,7 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
         delete pDstBuffer;
         return NULL;
     }
-    
+
     // horizontal mapping table
     if( nDstDX != nSrcDX )
     {
@@ -487,7 +487,7 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
     // do buffer scaling and conversion
     if( rSrcBuffer.mnBitCount <= 8 && pDstBuffer->mnBitCount <= 8 )
     {
-        ImplPALToPAL( rSrcBuffer, *pDstBuffer, pFncGetPixel, pFncSetPixel, 
+        ImplPALToPAL( rSrcBuffer, *pDstBuffer, pFncGetPixel, pFncSetPixel,
                       pSrcScan, pDstScan, pMapX, pMapY );
     }
     else if( rSrcBuffer.mnBitCount <= 8 && pDstBuffer->mnBitCount > 8 )

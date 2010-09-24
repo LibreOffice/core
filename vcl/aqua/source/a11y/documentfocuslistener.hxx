@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 // - DocumentFocusListener -
 // -------------------------
 
-class DocumentFocusListener :  
+class DocumentFocusListener :
     public ::cppu::WeakImplHelper1< ::com::sun::star::accessibility::XAccessibleEventListener >
 {
 
@@ -85,16 +85,16 @@ public:
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) 
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
         throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) 
+    virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
         throw( ::com::sun::star::uno::RuntimeException );
 
 private:
     std::set< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > m_aRefList;
-    
+
     AquaA11yFocusTracker& m_aFocusTracker;
 };
 

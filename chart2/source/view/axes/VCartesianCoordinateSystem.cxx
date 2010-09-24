@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,7 +130,7 @@ void VCartesianCoordinateSystem::createVAxisList(
         return;
 
     sal_Int32 nDimensionIndex = 0;
-    
+
     for( nDimensionIndex = 0; nDimensionIndex < nDimensionCount; nDimensionIndex++ )
     {
         sal_Int32 nMaxAxisIndex = m_xCooSysModel->getMaximumAxisIndexByDimension(nDimensionIndex);
@@ -157,7 +157,7 @@ void VCartesianCoordinateSystem::createVAxisList(
                         || ( aAxisProperties.m_pExplicitCategoriesProvider && aAxisProperties.m_pExplicitCategoriesProvider->hasComplexCategories() );
                 }
             }
-        
+
             if( nDimensionIndex == 2 )
             {
                 aAxisProperties.m_xAxisTextProvider = new TextualDataProvider( m_aSeriesNamesForZAxis );

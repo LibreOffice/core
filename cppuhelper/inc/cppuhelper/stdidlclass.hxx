@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@ namespace cppu {
   @deprecated
 */
 ::com::sun::star::reflection::XIdlClass * SAL_CALL createStandardClassWithSequence(
-    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr , 
-    const ::rtl::OUString & sImplementationName , 
+    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr ,
+    const ::rtl::OUString & sImplementationName ,
     const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > & rSuperClass,
     const ::com::sun::star::uno::Sequence < ::rtl::OUString > &seq )
     SAL_THROW( () );
-                        
+
 
 
 /**
@@ -57,47 +57,47 @@ namespace cppu {
 
    @deprecated
  */
-template < class Interface1 > 
+template < class Interface1 >
 inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 //inline ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass >
-createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
+createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
                          const Interface1 *
                      )
     SAL_THROW( () )
-{ 
+{
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(1);
     seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
-    return createStandardClassWithSequence( 	
+    return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
                                             rSuperClass,
-                                            seqInterface 
+                                            seqInterface
                                           );
 }
 
 
 
-template < class Interface1, class Interface2 > 
+template < class Interface1, class Interface2 >
 inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 //inline ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass >
-createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
+createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
                          const Interface1 *,
                          const Interface2 *
                      )
     SAL_THROW( () )
-{ 
+{
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(2);
     seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
     seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
-    return createStandardClassWithSequence( 	
+    return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
                                             rSuperClass,
-                                            seqInterface 
+                                            seqInterface
                                           );
 }
 
@@ -105,10 +105,10 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
 
 
 
-template < class Interface1, class Interface2 , class Interface3 > 
+template < class Interface1, class Interface2 , class Interface3 >
 inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 //inline ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass >
-createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
+createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
                          const Interface1 *,
@@ -116,16 +116,16 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface3 *
                      )
     SAL_THROW( () )
-{ 
+{
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(3);
     seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
     seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
     seqInterface.getArray()[2] = Interface3::static_type().getTypeName();
-    return createStandardClassWithSequence( 	
+    return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
                                             rSuperClass,
-                                            seqInterface 
+                                            seqInterface
                                           );
 }
 
@@ -133,10 +133,10 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
 
 
 
-template < class Interface1, class Interface2 , class Interface3 , class Interface4 > 
+template < class Interface1, class Interface2 , class Interface3 , class Interface4 >
 inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 //inline ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass >
-createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
+createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
                          const Interface1 *,
@@ -145,17 +145,17 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface4 *
                      )
     SAL_THROW( () )
-{ 
+{
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(4);
     seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
     seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
     seqInterface.getArray()[2] = Interface3::static_type().getTypeName();
     seqInterface.getArray()[3] = Interface4::static_type().getTypeName();
-    return createStandardClassWithSequence( 	
+    return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
                                             rSuperClass,
-                                            seqInterface 
+                                            seqInterface
                                           );
 }
 
@@ -165,10 +165,10 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
 
 
 
-template < class Interface1, class Interface2 , class Interface3 , class Interface4 , class Interface5 > 
+template < class Interface1, class Interface2 , class Interface3 , class Interface4 , class Interface5 >
 inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 //inline ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass >
-createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
+createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
                          const Interface1 *,
@@ -178,29 +178,29 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface5 *
                      )
     SAL_THROW( () )
-{ 
+{
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(5);
     seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
     seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
     seqInterface.getArray()[2] = Interface3::static_type().getTypeName();
     seqInterface.getArray()[3] = Interface4::static_type().getTypeName();
     seqInterface.getArray()[4] = Interface5::static_type().getTypeName();
-    return createStandardClassWithSequence( 	
+    return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
                                             rSuperClass,
-                                            seqInterface 
+                                            seqInterface
                                           );
 }
 
 
 
 
-template < 	class Interface1, class Interface2 , class Interface3 , class Interface4 , class Interface5 ,
-            class Interface6 > 
+template <  class Interface1, class Interface2 , class Interface3 , class Interface4 , class Interface5 ,
+            class Interface6 >
 inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 //inline ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass >
-createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
+createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
                          const Interface1 *,
@@ -211,7 +211,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface6 *
                      )
     SAL_THROW( () )
-{ 
+{
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(6);
     seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
     seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
@@ -219,11 +219,11 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
     seqInterface.getArray()[3] = Interface4::static_type().getTypeName();
     seqInterface.getArray()[4] = Interface5::static_type().getTypeName();
     seqInterface.getArray()[5] = Interface6::static_type().getTypeName();
-    return createStandardClassWithSequence( 	
+    return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
                                             rSuperClass,
-                                            seqInterface 
+                                            seqInterface
                                           );
 }
 
@@ -231,11 +231,11 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
 
 
 
-template < 	class Interface1, class Interface2 , class Interface3 , class Interface4 , class Interface5 ,
-            class Interface6, class Interface7 > 
+template <  class Interface1, class Interface2 , class Interface3 , class Interface4 , class Interface5 ,
+            class Interface6, class Interface7 >
 inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 //inline ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass >
-createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
+createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
                          const Interface1 *,
@@ -244,10 +244,10 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface4 *,
                          const Interface5 *,
                          const Interface6 *,
-                         const Interface7 * 
+                         const Interface7 *
                      )
     SAL_THROW( () )
-{ 
+{
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(7);
     seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
     seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
@@ -256,11 +256,11 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
     seqInterface.getArray()[4] = Interface5::static_type().getTypeName();
     seqInterface.getArray()[5] = Interface6::static_type().getTypeName();
     seqInterface.getArray()[6] = Interface7::static_type().getTypeName();
-    return createStandardClassWithSequence( 	
+    return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
                                             rSuperClass,
-                                            seqInterface 
+                                            seqInterface
                                           );
 }
 
@@ -269,11 +269,11 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
 
 
 
-template < 	class Interface1, class Interface2, class Interface3 , class Interface4 , class Interface5 ,
-            class Interface6, class Interface7, class Interface8 > 
+template <  class Interface1, class Interface2, class Interface3 , class Interface4 , class Interface5 ,
+            class Interface6, class Interface7, class Interface8 >
 inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 //inline ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass >
-createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
+createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
                          const Interface1 *,
@@ -286,7 +286,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface8 *
                      )
     SAL_THROW( () )
-{ 
+{
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(8);
     seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
     seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
@@ -296,22 +296,22 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
     seqInterface.getArray()[5] = Interface6::static_type().getTypeName();
     seqInterface.getArray()[6] = Interface7::static_type().getTypeName();
     seqInterface.getArray()[7] = Interface8::static_type().getTypeName();
-    return createStandardClassWithSequence( 	
+    return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
                                             rSuperClass,
-                                            seqInterface 
+                                            seqInterface
                                           );
 }
 
 
 
 
-template < 	class Interface1, class Interface2, class Interface3 , class Interface4 , class Interface5 ,
-            class Interface6, class Interface7, class Interface8 , class Interface9 > 
+template <  class Interface1, class Interface2, class Interface3 , class Interface4 , class Interface5 ,
+            class Interface6, class Interface7, class Interface8 , class Interface9 >
 inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 //inline ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass >
-createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
+createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
                          const Interface1 *,
@@ -325,7 +325,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface9 *
                      )
     SAL_THROW( () )
-{ 
+{
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(9);
     seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
     seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
@@ -336,20 +336,20 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
     seqInterface.getArray()[6] = Interface7::static_type().getTypeName();
     seqInterface.getArray()[7] = Interface8::static_type().getTypeName();
     seqInterface.getArray()[8] = Interface9::static_type().getTypeName();
-    return createStandardClassWithSequence( 	
+    return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
                                             rSuperClass,
-                                            seqInterface 
+                                            seqInterface
                                           );
 }
 
 
-template < 	class Interface1, class Interface2, class Interface3 , class Interface4 , class Interface5 ,
-            class Interface6, class Interface7, class Interface8 , class Interface9 , class Interface10 > 
+template <  class Interface1, class Interface2, class Interface3 , class Interface4 , class Interface5 ,
+            class Interface6, class Interface7, class Interface8 , class Interface9 , class Interface10 >
 inline ::com::sun::star::reflection::XIdlClass * SAL_CALL
 //inline ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass >
-createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
+createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &rSMgr,
                          const ::rtl::OUString &sImplementationName  ,
                          const ::com::sun::star::uno::Reference < ::com::sun::star::reflection::XIdlClass > &rSuperClass ,
                          const Interface1 *,
@@ -364,7 +364,7 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
                          const Interface10 *
                      )
     SAL_THROW( () )
-{ 
+{
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(10);
     seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
     seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
@@ -376,11 +376,11 @@ createStandardClass(	const ::com::sun::star::uno::Reference < ::com::sun::star::
     seqInterface.getArray()[7] = Interface8::static_type().getTypeName();
     seqInterface.getArray()[8] = Interface9::static_type().getTypeName();
     seqInterface.getArray()[9] = Interface10::static_type().getTypeName();
-    return createStandardClassWithSequence( 	
+    return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
                                             rSuperClass,
-                                            seqInterface 
+                                            seqInterface
                                           );
 }
 

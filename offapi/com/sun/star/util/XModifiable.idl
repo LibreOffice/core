@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,51 +24,51 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_XModifiable_idl__ 
-#define __com_sun_star_util_XModifiable_idl__ 
- 
-#ifndef __com_sun_star_util_XModifyBroadcaster_idl__ 
-#include <com/sun/star/util/XModifyBroadcaster.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_PropertyVetoException_idl__ 
-#include <com/sun/star/beans/PropertyVetoException.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module util {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_util_XModifiable_idl__
+#define __com_sun_star_util_XModifiable_idl__
+
+#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyVetoException_idl__
+#include <com/sun/star/beans/PropertyVetoException.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
 /** makes the modify state of the object accessible.
-    
+
     <p>Additionally, it makes it possible to register listener objects, which
-    get notification whenever the status or content of the object changes.	</p>
+    get notification whenever the status or content of the object changes.  </p>
  */
 published interface XModifiable: com::sun::star::util::XModifyBroadcaster
-{ 
-    //------------------------------------------------------------------------- 
-    /** @returns 
-                <TRUE/> if the object is modified. 
-                 
-        <p>The modification is always in relation to a certain state  
+{
+    //-------------------------------------------------------------------------
+    /** @returns
+                <TRUE/> if the object is modified.
+
+        <p>The modification is always in relation to a certain state
         (i.e., the initial, loaded, or last stored version).
      */
-    boolean isModified(); 
- 
-    //------------------------------------------------------------------------- 
-    /** sets the status of the <em>modified</em>-flag from outside of the 
+    boolean isModified();
+
+    //-------------------------------------------------------------------------
+    /** sets the status of the <em>modified</em>-flag from outside of the
         object.
      */
-    void setModified( [in] boolean bModified ) 
-            raises( com::sun::star::beans::PropertyVetoException ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    void setModified( [in] boolean bModified )
+            raises( com::sun::star::beans::PropertyVetoException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -154,7 +154,7 @@ SwStdFontConfig::SwStdFontConfig() :
 /* -----------------------------08.09.00 15:58--------------------------------
 
  ---------------------------------------------------------------------------*/
-void	SwStdFontConfig::Commit()
+void    SwStdFontConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

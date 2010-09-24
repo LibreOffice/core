@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,17 +31,17 @@ import share.LogWriter;
 public class TestHelper {
     LogWriter m_aLogWriter;
     String m_sTestPrefix;
-    
+
     /** Creates a new instance of TestHelper */
     public TestHelper ( LogWriter aLogWriter, String sTestPrefix ) {
         m_aLogWriter = aLogWriter;
         m_sTestPrefix = sTestPrefix;
     }
-    
+
     public void Error ( String sError ) {
         m_aLogWriter.println ( m_sTestPrefix + "Error: " + sError );
     }
-    
+
     public void Message ( String sMessage ) {
         m_aLogWriter.println ( m_sTestPrefix + sMessage );
     }

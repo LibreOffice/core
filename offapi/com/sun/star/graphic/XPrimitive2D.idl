@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,8 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #endif
 #ifndef __com_sun_star_geometry_RealRectangle2D_idl__
-#include <com/sun/star/geometry/RealRectangle2D.idl> 
-#endif 
+#include <com/sun/star/geometry/RealRectangle2D.idl>
+#endif
 
 module com {  module sun {  module star {  module graphic {
 
@@ -52,7 +52,7 @@ interface XPrimitive2D : ::com::sun::star::uno::XInterface
         @param aViewParameters
         2D View-specific parameter set. The defined but not mandatory
         parameters include:
-        
+
         ::com::sun::star::geometry::AffineMatrix2D Transformation
 
         A transformation matrix which maps between world coordinates (which
@@ -78,7 +78,7 @@ interface XPrimitive2D : ::com::sun::star::uno::XInterface
     /** Retrieve bound rect of primitive
 
         This method calculates the actual bound rect of the area in
-        <em>world coordinates<em>. Note that for view-dependent primitives, 
+        <em>world coordinates<em>. Note that for view-dependent primitives,
         the necessary pixel adjustments are taken into account. For that reason
         the ViewParameters need to be given.
 

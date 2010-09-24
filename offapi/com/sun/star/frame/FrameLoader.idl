@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ published service FrameLoader
     interface XFrameLoader;
 
     //-------------------------------------------------------------------------
-    /**	support initialization of loader with its own configuration!
+    /** support initialization of loader with its own configuration!
 
         <p>
         Concrete implementations should use it to get her own configuration data
@@ -82,9 +82,9 @@ published service FrameLoader
         The internal name is a part of his configuration and will be passed by
         the <type>FrameLoaderFactory</type> after creation
         if optional interface <type scope="com::sun::star::lang">XInitialization</type>
-        is supported. Value of function <member scope="com::sun::star::container">XNamed::getName()</member> 
+        is supported. Value of function <member scope="com::sun::star::container">XNamed::getName()</member>
     can be used on service <type>FrameLoaderFactory</type> to get further informations about this loader.
-        Setting of this name by calling <member scope="com::sun::star::container">XNamed::setName()</member> 
+        Setting of this name by calling <member scope="com::sun::star::container">XNamed::setName()</member>
     must be forwarded to same factory service. He should decide, if it's allowed or not.
         The reason: prevent code against name ambigities.
         </p>

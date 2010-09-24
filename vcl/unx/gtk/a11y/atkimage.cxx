@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,10 +60,10 @@ static accessibility::XAccessibleImage*
             pWrap->mpImage = reinterpret_cast< accessibility::XAccessibleImage * > (any.pReserved);
             pWrap->mpImage->acquire();
         }
-        
+
         return pWrap->mpImage;
     }
-    
+
     return NULL;
 }
 
@@ -74,13 +74,13 @@ image_get_image_description( AtkImage *image )
 {
     try {
         accessibility::XAccessibleImage* pImage = getImage( image );
-        if( pImage )    
+        if( pImage )
             return getAsConst( pImage->getAccessibleImageDescription() );
     }
     catch(const uno::Exception& e) {
         g_warning( "Exception in getAccessibleImageDescription()" );
     }
-    
+
     return NULL;
 }
 

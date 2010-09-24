@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -344,7 +344,7 @@ MenuToolbarController::~MenuToolbarController()
         delete pMenu;
         pMenu = NULL;
     }
- 
+
 }
 
 class Toolbarmenu : public PopupMenu
@@ -369,10 +369,10 @@ void SAL_CALL MenuToolbarController::click() throw (RuntimeException)
     createPopupWindow();
 }
 
-Reference< XWindow > SAL_CALL 
+Reference< XWindow > SAL_CALL
 MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::RuntimeException)
 {
-    if ( !pMenu ) 
+    if ( !pMenu )
     {
         Reference< XDispatchProvider > xDispatch;
         Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
@@ -387,7 +387,7 @@ MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::Runtime
 
     ::Rectangle aRect( m_pToolbar->GetItemRect( m_nID ) );
     pMenu->Execute( m_pToolbar, aRect, POPUPMENU_EXECUTE_DOWN );
-    return NULL; 
+    return NULL;
 }
 } // namespace
 

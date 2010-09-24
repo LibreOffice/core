@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@ struct SvXMLEnumMapEntry;
 
 namespace xmloff
 {
-const sal_uInt16 Animations_EnumMap_Fill	= 0;
+const sal_uInt16 Animations_EnumMap_Fill    = 0;
 const sal_uInt16 Animations_EnumMap_FillDefault = 1;
 const sal_uInt16 Animations_EnumMap_Restart = 2;
 const sal_uInt16 Animations_EnumMap_RestartDefault = 3;
@@ -63,5 +63,5 @@ extern struct ImplAttributeNameConversion* getAnimationAttributeNamesConversionL
 
 }
 
-#endif	//  _XMLOFF_ANIMATIONS_HXX
+#endif  //  _XMLOFF_ANIMATIONS_HXX
 

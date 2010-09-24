@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,14 +55,14 @@ namespace dbaui
 */
 class OOdbcLibWrapper
 {
-    oslModule			m_pOdbcLib;		// the library handle
-    ::rtl::OUString		m_sLibPath;		// the path to the library
+    oslModule           m_pOdbcLib;     // the library handle
+    ::rtl::OUString     m_sLibPath;     // the path to the library
 
 public:
 #ifdef HAVE_ODBC_SUPPORT
-    sal_Bool	isLoaded() const { return NULL != m_pOdbcLib; }
+    sal_Bool    isLoaded() const { return NULL != m_pOdbcLib; }
 #else
-    sal_Bool	isLoaded() const { return sal_False; }
+    sal_Bool    isLoaded() const { return sal_False; }
 #endif
     ::rtl::OUString getLibraryName() const { return m_sLibPath; }
 
@@ -77,9 +77,9 @@ protected:
     oslGenericFunction  loadSymbol(const sal_Char* _pFunctionName);
 
     /// load the lib
-    sal_Bool	load(const sal_Char* _pLibPath);
+    sal_Bool    load(const sal_Char* _pLibPath);
     /// unload the lib
-    void		unload();
+    void        unload();
 };
 
 //=========================================================================
@@ -96,7 +96,7 @@ class OOdbcEnumeration : public OOdbcLibWrapper
     oslGenericFunction  m_pDataSources;
 
 #endif
-    OdbcTypesImpl*	m_pImpl;
+    OdbcTypesImpl*  m_pImpl;
         // needed because we can't have a member of type SQLHANDLE: this would require us to include the respective
         // ODBC file, which would lead to a lot of conflicts with other includes
 
@@ -104,13 +104,13 @@ public:
     OOdbcEnumeration();
     ~OOdbcEnumeration();
 
-    void		getDatasourceNames(StringBag& _rNames);
+    void        getDatasourceNames(StringBag& _rNames);
 
 protected:
     /// ensure that an ODBC environment is allocated
-    sal_Bool	allocEnv();
+    sal_Bool    allocEnv();
     /// free any allocated ODBC environment
-    void		freeEnv();
+    void        freeEnv();
 };
 
 //=========================================================================
@@ -133,7 +133,7 @@ public:
 #endif
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_ODBC_CONFIG_HXX_

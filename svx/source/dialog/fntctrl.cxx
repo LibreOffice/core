@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,8 +29,8 @@
 #include "precompiled_svx.hxx"
 
 // include ---------------------------------------------------------------
-#include <sfx2/viewsh.hxx>		// SfxViewShell
-#include <sfx2/printer.hxx>		// Printer
+#include <sfx2/viewsh.hxx>      // SfxViewShell
+#include <sfx2/printer.hxx>     // Printer
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <unicode/uchar.h>
@@ -53,7 +53,7 @@
 
 #include <svx/fntctrl.hxx>
 #include <svx/dialogs.hrc>
-#define TEXT_WIDTH	20
+#define TEXT_WIDTH  20
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -112,30 +112,30 @@ class FontPrevWin_Impl
 {
     friend class SvxFontPrevWindow;
 
-    SvxFont         				aFont;
-    Printer*        				pPrinter;
-    BOOL            				bDelPrinter;
+    SvxFont                         aFont;
+    Printer*                        pPrinter;
+    BOOL                            bDelPrinter;
 
-    Reference < XBreakIterator >	xBreak;
-    SvULongs						aTextWidth;
-    SvXub_StrLens					aScriptChg;
-    SvUShorts						aScriptType;
-    SvxFont							aCJKFont;
-    SvxFont							aCTLFont;
-    String							aText;
-    String							aScriptText;
-    Color*							pColor;
-    Color*							pBackColor;
-    long							nAscent;
-    sal_Unicode						cStartBracket;
-    sal_Unicode						cEndBracket;
+    Reference < XBreakIterator >    xBreak;
+    SvULongs                        aTextWidth;
+    SvXub_StrLens                   aScriptChg;
+    SvUShorts                       aScriptType;
+    SvxFont                         aCJKFont;
+    SvxFont                         aCTLFont;
+    String                          aText;
+    String                          aScriptText;
+    Color*                          pColor;
+    Color*                          pBackColor;
+    long                            nAscent;
+    sal_Unicode                     cStartBracket;
+    sal_Unicode                     cEndBracket;
 
-    long							n100PercentFontWidth;		// initial -1 -> not set yet
-    long							n100PercentFontWidthCJK;
-    long							n100PercentFontWidthCTL;
-    UINT16							nFontWidthScale;
+    long                            n100PercentFontWidth;       // initial -1 -> not set yet
+    long                            n100PercentFontWidthCJK;
+    long                            n100PercentFontWidthCTL;
+    UINT16                          nFontWidthScale;
 
-    BOOL							bSelection		: 1,
+    BOOL                            bSelection      : 1,
                                     bGetSelection   : 1,
                                     bUseResText     : 1,
                                     bTwoLines       : 1,
@@ -144,11 +144,11 @@ class FontPrevWin_Impl
                                     bUseFontNameAsText : 1,
                                     bTextInited     : 1;
 
-    void				_CheckScript();
+    void                _CheckScript();
 public:
     inline FontPrevWin_Impl() :
         pPrinter( NULL ), bDelPrinter( FALSE ),
-        pColor( NULL ), pBackColor( 0 ), 
+        pColor( NULL ), pBackColor( 0 ),
         cStartBracket( 0 ), cEndBracket( 0 ), nFontWidthScale( 100 ),
         bSelection( FALSE ), bGetSelection( FALSE ), bUseResText( FALSE ),
         bTwoLines( FALSE ),
@@ -166,14 +166,14 @@ public:
             delete pPrinter;
     }
 
-    void				CheckScript();
-    Size				CalcTextSize( OutputDevice* pWin, OutputDevice* pPrt, SvxFont &rFont );
-    void				DrawPrev( OutputDevice* pWin, Printer* pPrt, Point &rPt, SvxFont &rFont );
+    void                CheckScript();
+    Size                CalcTextSize( OutputDevice* pWin, OutputDevice* pPrt, SvxFont &rFont );
+    void                DrawPrev( OutputDevice* pWin, Printer* pPrt, Point &rPt, SvxFont &rFont );
 
-    BOOL				SetFontWidthScale( UINT16 nScaleInPercent );
-    inline void			Invalidate100PercentFontWidth();
-    inline BOOL			Is100PercentFontWidthValid() const;
-    void				ScaleFontWidth( const OutputDevice& rOutDev );
+    BOOL                SetFontWidthScale( UINT16 nScaleInPercent );
+    inline void         Invalidate100PercentFontWidth();
+    inline BOOL         Is100PercentFontWidthValid() const;
+    void                ScaleFontWidth( const OutputDevice& rOutDev );
                             // scales rNonCJKFont and aCJKFont depending on nFontWidthScale and
                             //  sets the 100%-Font-Widths
 };
@@ -191,7 +191,7 @@ inline void FontPrevWin_Impl::Invalidate100PercentFontWidth()
 
 inline BOOL FontPrevWin_Impl::Is100PercentFontWidthValid() const
 {
-    DBG_ASSERT(	( n100PercentFontWidth == -1 && n100PercentFontWidthCJK == -1 ) ||
+    DBG_ASSERT( ( n100PercentFontWidth == -1 && n100PercentFontWidthCJK == -1 ) ||
                 ( n100PercentFontWidth != -1 && n100PercentFontWidthCJK != -1 ) ||
                 ( n100PercentFontWidth == -1 && n100PercentFontWidthCTL == -1 ) ||
                 ( n100PercentFontWidth != -1 && n100PercentFontWidthCTL != -1 ),
@@ -547,7 +547,7 @@ void SvxFontPrevWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 SvxFont& SvxFontPrevWindow::GetFont()
 {
-    pImpl->Invalidate100PercentFontWidth();		// because the user might change the size
+    pImpl->Invalidate100PercentFontWidth();     // because the user might change the size
     return pImpl->aFont;
 }
 
@@ -838,7 +838,7 @@ void SvxFontPrevWindow::SetFontWidthScale( UINT16 n )
 
 void SvxFontPrevWindow::AutoCorrectFontColor( void )
 {
-    Color	aFontColor( GetTextColor() );
+    Color   aFontColor( GetTextColor() );
 
     if( COL_AUTO == pImpl->aFont.GetColor().GetColor() )
         pImpl->aFont.SetColor( aFontColor );

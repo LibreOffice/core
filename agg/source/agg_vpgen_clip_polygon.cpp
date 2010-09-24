@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -20,7 +20,7 @@ namespace agg
 {
 
     //------------------------------------------------------------------------
-    // Determine the clipping code of the vertex according to the 
+    // Determine the clipping code of the vertex according to the
     // Cyrus-Beck line clipping algorithm
     //
     //        |        |
@@ -36,17 +36,17 @@ namespace agg
     //        |        |
     //  clip_box.x1  clip_box.x2
     //
-    // 
+    //
     unsigned vpgen_clip_polygon::clipping_flags(double x, double y)
     {
-        if(x < m_clip_box.x1) 
+        if(x < m_clip_box.x1)
         {
             if(y > m_clip_box.y2) return 6;
             if(y < m_clip_box.y1) return 12;
             return 4;
         }
 
-        if(x > m_clip_box.x2) 
+        if(x > m_clip_box.x2)
         {
             if(y > m_clip_box.y2) return 3;
             if(y < m_clip_box.y1) return 9;
@@ -102,9 +102,9 @@ namespace agg
         }
         else
         {
-            m_num_vertices = clip_liang_barsky(m_x1, m_y1, 
-                                               x, y, 
-                                               m_clip_box, 
+            m_num_vertices = clip_liang_barsky(m_x1, m_y1,
+                                               x, y,
+                                               m_clip_box,
                                                m_x, m_y);
         }
 

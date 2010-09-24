@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,18 +74,18 @@ namespace drawinglayer
         {
         protected:
             // the destination OutDev
-            OutputDevice*											mpOutputDevice;
+            OutputDevice*                                           mpOutputDevice;
 
             // the modifiedColorPrimitive stack
-            basegfx::BColorModifierStack							maBColorModifierStack;
+            basegfx::BColorModifierStack                            maBColorModifierStack;
 
             // the current transformation. Since VCL pixel renderer transforms to pixels
             // and VCL MetaFile renderer to World (logic) coordinates, the local
             // ViewInformation2D cannot directly be used, but needs to be kept up to date
-            basegfx::B2DHomMatrix									maCurrentTransformation;
+            basegfx::B2DHomMatrix                                   maCurrentTransformation;
 
             // SvtOptionsDrawinglayer incarnation to react on diverse settings
-            const SvtOptionsDrawinglayer							maDrawinglayerOpt;
+            const SvtOptionsDrawinglayer                            maDrawinglayerOpt;
 
             // stack value (increment and decrement) to count how deep we are in
             // PolygonStrokePrimitive2D's decompositions (normally only one)
@@ -117,11 +117,11 @@ namespace drawinglayer
             // DrawMode adaption support
             void adaptLineToFillDrawMode() const;
             void adaptTextToFillDrawMode() const;
-            
+
         public:
             // constructor/destructor
             VclProcessor2D(
-                const geometry::ViewInformation2D& rViewInformation, 
+                const geometry::ViewInformation2D& rViewInformation,
                 OutputDevice& rOutDev);
             virtual ~VclProcessor2D();
 

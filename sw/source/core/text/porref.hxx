@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 class SwRefPortion : public SwTxtPortion
 {
 public:
-    inline	SwRefPortion(){	SetWhichPor( POR_REF ); }
+    inline  SwRefPortion(){ SetWhichPor( POR_REF ); }
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     OUTPUT_OPERATOR
 };
@@ -63,7 +63,7 @@ public:
 };
 
 /*************************************************************************
- *					inline - Implementations
+ *                  inline - Implementations
  *************************************************************************/
 
 CLASSIO( SwRefPortion )

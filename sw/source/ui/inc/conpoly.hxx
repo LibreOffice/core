@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,9 @@ public:
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate(const USHORT nSlotId);	// Function aktivieren
+    virtual void Activate(const USHORT nSlotId);    // Function aktivieren
 };
 
 
-#endif		// _CONPOLY_HXX
+#endif      // _CONPOLY_HXX
 

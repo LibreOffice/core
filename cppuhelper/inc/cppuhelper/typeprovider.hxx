@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace cppu
 class OTypeCollection
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > _aTypes;
-    
+
 public:
     // these are here to force memory de/allocation to sal lib.
     /** @internal */
@@ -193,7 +193,7 @@ class OImplementationId
     mutable ::com::sun::star::uno::Sequence< sal_Int8 > * _pSeq;
     /** @internal */
     sal_Bool _bUseEthernetAddress;
-    
+
 public:
     // these are here to force memory de/allocation to sal lib.
     /** @internal */
@@ -208,7 +208,7 @@ public:
     /** @internal */
     inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
         {}
-    
+
     /** @internal */
     ~OImplementationId() SAL_THROW( () );
     /** Constructor.
@@ -229,9 +229,9 @@ public:
     inline OImplementationId( const OImplementationId & rId ) SAL_THROW( () )
         : _pSeq( new ::com::sun::star::uno::Sequence< sal_Int8 >( rId.getImplementationId() ) )
         {}
-    
+
     /** Called upon XTypeProvider::getImplementationId().
-        
+
         @return implementation id
     */
     ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() const SAL_THROW( () );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ public class Dispatch extends TestCase {
         XInterface oObj = null;
         URL dispatchURL = null;
         try {
-      
+
             XMultiServiceFactory xMSF = tParam.getMSF();
             SOfficeFactory SOF = null;
             SOF = SOfficeFactory.getFactory( xMSF );
@@ -75,12 +75,12 @@ public class Dispatch extends TestCase {
             XModel model = ( XModel ) UnoRuntime.queryInterface( XModel.class,
                 doc );
             XFrame frame = model.getCurrentController().getFrame();
-            oObj = ( XInterface )xMSF.createInstanceWithArguments( "com.sun.star.comp.ScriptProtocolHandler", new Object[] { frame } ); 
-            
+            oObj = ( XInterface )xMSF.createInstanceWithArguments( "com.sun.star.comp.ScriptProtocolHandler", new Object[] { frame } );
+
             XURLTransformer xParser=(XURLTransformer)
                 UnoRuntime.queryInterface(XURLTransformer.class,
                     tParam.getMSF().createInstance
-                        ("com.sun.star.util.URLTransformer"));  
+                        ("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of
             // URL objects.
             URL[] aParseURL = new URL[1];

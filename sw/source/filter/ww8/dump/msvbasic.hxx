@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ public:
         //0 for failure, 1 for success
         BOOL Open( const String &rToplevel, const String &rSublevel);
         const String & Decompress( UINT16 nIndex, int *pOverflow=0);
-        UINT16 GetNoStreams() const 				{ return nOffsets; }
+        UINT16 GetNoStreams() const                 { return nOffsets; }
         const String &GetStreamName( UINT16 nIndex ) const
             {
                 DBG_ASSERT( nIndex < nOffsets, "Index out of range" );

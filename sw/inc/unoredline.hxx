@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ class SwXRedlineText :
 public:
     SwXRedlineText(SwDoc* pDoc, SwNodeIndex aNodeIndex);
 
-    virtual 	::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw(){OWeakObject::acquire();}
     virtual void SAL_CALL release(  ) throw(){OWeakObject::release();}
 
@@ -76,14 +76,14 @@ public:
  ---------------------------------------------------------------------------*/
 class SwXRedlinePortion : public SwXTextPortion
 {
-    const SwRedline*	pRedline;
+    const SwRedline*    pRedline;
 
     void Validate() throw( ::com::sun::star::uno::RuntimeException );
 
     using SwXTextPortion::GetPropertyValue;
 
 public:
-    SwXRedlinePortion(	const SwRedline* pRed,
+    SwXRedlinePortion(  const SwRedline* pRed,
                         const SwUnoCrsr* pPortionCrsr,
                         ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent,
                         BOOL bIsStart);
@@ -113,15 +113,15 @@ class SwXRedline :
         public SwXText,
         public SwClient
 {
-    SwDoc* 		pDoc;
-    SwRedline* 	pRedline;
+    SwDoc*      pDoc;
+    SwRedline*  pRedline;
 public:
     SwXRedline(SwRedline& rRedline, SwDoc& rDoc);
     ~SwXRedline();
 
     TYPEINFO();
 
-    virtual 	::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw(){OWeakObject::acquire();}
     virtual void SAL_CALL release(  ) throw(){OWeakObject::release();}
 
@@ -149,8 +149,8 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
     //SwClient
-    virtual void 		Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
-    const SwRedline* 	GetRedline() const {return pRedline;}
+    const SwRedline*    GetRedline() const {return pRedline;}
 };
 #endif

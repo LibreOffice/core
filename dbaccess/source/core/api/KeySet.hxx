@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace dbaccess
         sal_Int32       nScale;
         sal_Bool        bNullable;
 
-        
+
 
         SelectColumnDescription()
             :nPosition( 0 )
@@ -94,10 +94,10 @@ namespace dbaccess
     class OKeySet : public OCacheSet
     {
     protected:
-        OKeySetMatrix											m_aKeyMap;
-        OKeySetMatrix::iterator									m_aKeyIter;
-            
-        ::std::vector< ::rtl::OUString >						m_aAutoColumns;	 // contains all columns which are autoincrement ones
+        OKeySetMatrix                                           m_aKeyMap;
+        OKeySetMatrix::iterator                                 m_aKeyIter;
+
+        ::std::vector< ::rtl::OUString >                        m_aAutoColumns;  // contains all columns which are autoincrement ones
 
         OUpdatedParameter                                       m_aUpdatedParameter;    // contains all parameter which have been updated and are needed for refetching
         ORowSetValueVector                                      m_aParameterValueForCache;
@@ -105,22 +105,22 @@ namespace dbaccess
         ::std::auto_ptr<SelectColumnsMetaData>                  m_pColumnNames;         // contains all column names
         ::std::auto_ptr<SelectColumnsMetaData>                  m_pParameterNames;      // contains all parameter names
         ::std::auto_ptr<SelectColumnsMetaData>                  m_pForeignColumnNames;  // contains all column names of the rest
-        connectivity::OSQLTable									m_xTable; // reference to our table
+        connectivity::OSQLTable                                 m_xTable; // reference to our table
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>    m_xTableKeys;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement>	m_xStatement;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>			m_xSet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>					m_xRow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >	m_xComposer;
-        ::rtl::OUString																	m_sUpdateTableName;
-        ::std::vector< ::rtl::OUString >						m_aFilterColumns;
-        
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement>   m_xStatement;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xRow;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >   m_xComposer;
+        ::rtl::OUString                                                                 m_sUpdateTableName;
+        ::std::vector< ::rtl::OUString >                        m_aFilterColumns;
+
         sal_Bool m_bRowCountFinal;
 
         /**
             getComposedTableName return the composed table name for the query
-            @param _sCatalog	the catalogname may be empty
-            @param _sSchema		the schemaname may be empty
-            @param _sTable		the tablename
+            @param _sCatalog    the catalogname may be empty
+            @param _sSchema     the schemaname may be empty
+            @param _sTable      the tablename
 
             @return the composed name
         */
@@ -135,7 +135,7 @@ namespace dbaccess
         + \param i_nBookmark The bookmark is used to update the parameter
         */
         void copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sal_Int32 i_nBookmark);
-        
+
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getKeyColumns() const;
         void fillAllRows();
         sal_Bool fetchRow();
@@ -150,7 +150,7 @@ namespace dbaccess
         void executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const ::rtl::OUString& i_sSQL,const ::rtl::OUString& i_sTableName,const ::std::vector<sal_Int32>& _aIndexColumnPositions = ::std::vector<sal_Int32>());
         void executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString& i_sSQL,const ::rtl::OUString& i_sTableName = ::rtl::OUString(),bool bRefetch = false);
         void executeStatement(::rtl::OUStringBuffer& io_aFilter,const ::rtl::OUString& i_sRowSetFilter,::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& io_xAnalyzer);
-    
+
         virtual ~OKeySet();
     public:
         OKeySet(const connectivity::OSQLTable& _xTable,
@@ -158,7 +158,7 @@ namespace dbaccess
                 const ::rtl::OUString& _rUpdateTableName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                 const ORowSetValueVector& _aParameterValueForCache);
-        
+
         // late ctor which can throw exceptions
         virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter);
 

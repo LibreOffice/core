@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 package org.openoffice.setup.SetupData;
 
 import org.openoffice.setup.Util.Parser;
@@ -42,7 +42,7 @@ import javax.swing.tree.TreeNode;
  * @author Ingo Schmidt
  */
 public class PackageDescription implements TreeNode {
-    
+
     public final static int NOTA_UNIT= 0;
     public final static int RPM_UNIT = 1;
     public final static int PKG_UNIT = 2;
@@ -50,7 +50,7 @@ public class PackageDescription implements TreeNode {
      * public final static int TAR_UNIT = 4;
      * public final static int TGZ_UNIT = 5;
      */
-    
+
     public final static int DONT_INSTALL      = 0;
     public final static int INSTALL           = 1;
     public final static int INSTALL_SOME      = 2;
@@ -59,14 +59,14 @@ public class PackageDescription implements TreeNode {
     public final static int REMOVE_SOME       = 5;
     public final static int IGNORE            = 6;
     public final static int DONT_KNOW         = 7;
-    
+
     /* hierarchy information */
     private Vector children           = null;
     private PackageDescription parent = null;
-    
+
     /* did the user select this package */
     private int     usrSelectionState = DONT_KNOW;
-    
+
     /* display information */
     private String  dpyName            = "";
     private String  dpyDescription     = "";
@@ -80,7 +80,7 @@ public class PackageDescription implements TreeNode {
     private boolean isOptional  = true;
     private boolean dontUninstall = false;
     private boolean allChildrenHidden = false;
-            
+
     /* package information */
     private String  pkgMD5Sum   = "";
     private String  pkgFileName = "";
@@ -106,41 +106,41 @@ public class PackageDescription implements TreeNode {
     private boolean isNewInstalled = false;
     private boolean wasAlreadyInstalled = false;
     private boolean ignoreDependsForUninstall = false;
-    
+
     /* Saving the default selection state. This is necessary, if the user chooses
-     * the custom installation type, makes changes, and then changes into 
+     * the custom installation type, makes changes, and then changes into
      * the typical installation set. Then all user settings have to be removed again.
      * On the other hand, if the user then changes to the custom installation type
      * again, he probably wants to see the settings he has done before.
      */
-    
+
     private int     typicalSelectionState = DONT_KNOW;  // Saving settings for typical installation
     private int     customSelectionState = DONT_KNOW;   // Saving settings for custom installation
     private int     startSelectionState = DONT_KNOW;    // Saving settings at start of installation
 
     public PackageDescription() {}
-    
-    /** 
-     * construct only with package information to wrap 
+
+    /**
+     * construct only with package information to wrap
      */
     protected PackageDescription(XMLPackageDescription p) {
         this(p, (PackageDescription)null);
     }
-    
+
     private PackageDescription(XMLPackageDescription descriptionData, PackageDescription parent) {
-   
+
         this.parent = parent;
         children = new Vector();
         parse(descriptionData);
- 
+
         /* sort according to display sort key */
         Collections.sort(children, new PackageComparator());
      }
-    
+
     /**
      * retrieve information about the package properties
      */
-    
+
     public String getName() {
         return dpyName;
     }
@@ -148,7 +148,7 @@ public class PackageDescription implements TreeNode {
     public void setName(String name) {
         dpyName = name;
     }
-    
+
     public String getDescription() {
         return dpyDescription;
     }
@@ -156,11 +156,11 @@ public class PackageDescription implements TreeNode {
     public String getCheckSolaris() {
         return checkSolaris;
     }
-    
+
     public int getSize() {
         return pkgSize;
     }
-    
+
     public void setSize(int size) {
         pkgSize = size;
     }
@@ -180,7 +180,7 @@ public class PackageDescription implements TreeNode {
     //         // Should only be accumulated for selected modules
     //         PackageDescription data = (PackageDescription) e.nextElement();
     //         size += data.getSize();
-    //     }      
+    //     }
     //
     //     return size;
     // }
@@ -188,7 +188,7 @@ public class PackageDescription implements TreeNode {
     public boolean isOptional() {
         return isOptional;
     }
-    
+
     public boolean isHidden() {
         return isHidden;
     }
@@ -268,7 +268,7 @@ public class PackageDescription implements TreeNode {
     public boolean isDefault() {
         return isDefault;
     }
-    
+
     public String getMD5() {
         return pkgMD5Sum;
     }
@@ -280,7 +280,7 @@ public class PackageDescription implements TreeNode {
     public void setIsRelocatable(boolean relocatable) {
         isRelocatable = relocatable;
     }
-    
+
     public String getPackageName() {
         return pkgFileName;
     }
@@ -301,7 +301,7 @@ public class PackageDescription implements TreeNode {
     public int getSelectionState() {
         return usrSelectionState;
     }
-    
+
     public void setSelectionState(int state) {
         usrSelectionState = state;
     }
@@ -309,15 +309,15 @@ public class PackageDescription implements TreeNode {
     public int getCustomSelectionState() {
         return customSelectionState;
     }
-    
+
     public void setCustomSelectionState(int state) {
         customSelectionState = state;
     }
-    
+
      public int getTypicalSelectionState() {
         return typicalSelectionState;
     }
-    
+
     public void setTypicalSelectionState(int state) {
         typicalSelectionState = state;
     }
@@ -325,11 +325,11 @@ public class PackageDescription implements TreeNode {
     public int getStartSelectionState() {
         return startSelectionState;
     }
-    
+
     public void setStartSelectionState(int state) {
         startSelectionState = state;
     }
-    
+
     public boolean isAllChildrenHidden() {
         return allChildrenHidden;
     }
@@ -341,11 +341,11 @@ public class PackageDescription implements TreeNode {
     public void setIsHidden(boolean hidden) {
         isHidden = hidden;
     }
-    
+
     public boolean pkgExists() {
         return pkgExists;
     }
-    
+
     public void setPkgExists(boolean exists) {
         pkgExists = exists;
     }
@@ -395,11 +395,11 @@ public class PackageDescription implements TreeNode {
      */
     private String getLocalizedValue(XMLPackageDescription packageData, String section, Locale l) {
         String localizedValue = "";
-    
+
         String countryString  = l.getCountry();
         String languageString = l.getLanguage();
         String localeString   = languageString + "_" + countryString;
-        
+
         XMLPackageDescription subPackage = packageData.getElement(section, "lang", localeString);
         if (subPackage == null) {
             subPackage = packageData.getElement(section, "lang", languageString);
@@ -408,21 +408,21 @@ public class PackageDescription implements TreeNode {
             }
         }
         if (subPackage != null) {
-            localizedValue = subPackage.getValue();            
+            localizedValue = subPackage.getValue();
         }
-        
+
         return localizedValue;
     }
-    
+
     /**
      * parse the wrapped package description
      */
-    
+
     private void parse(XMLPackageDescription data) {
-        
+
         XMLPackageDescription section;
         XMLPackageDescription subSection;
-        
+
         /* information about how to display the node */
         section = data.getElement("display");
         if (section != null) {
@@ -436,7 +436,7 @@ public class PackageDescription implements TreeNode {
             Locale locale = Locale.getDefault();
             dpyName        = getLocalizedValue(section, "name",        locale);
             dpyDescription = getLocalizedValue(section, "description", locale);
-            
+
             subSection = section.getElement("sortkey");
             if (subSection != null) {
                 String sort = subSection.getValue();
@@ -520,7 +520,7 @@ public class PackageDescription implements TreeNode {
             }
 
         }
-        
+
         /* query information about the physical (rpm/pkg/msi...) package itself */
         section = data.getElement("installunit");
         if (section != null) {
@@ -532,7 +532,7 @@ public class PackageDescription implements TreeNode {
                     pkgType = PKG_UNIT;
                 }
             }
-            
+
             subSection = section.getElement("size");
             if (subSection != null) {
                 String sz = subSection.getValue();
@@ -548,7 +548,7 @@ public class PackageDescription implements TreeNode {
             }
             subSection = section.getElement("md5");
             if (subSection != null) {
-                pkgMD5Sum = subSection.getValue(); 
+                pkgMD5Sum = subSection.getValue();
             }
             subSection = section.getElement("name");
             if (subSection != null) {
@@ -578,7 +578,7 @@ public class PackageDescription implements TreeNode {
             }
 
         }
-        
+
         /* line up the subpackages */
         for (Enumeration enumPackages = data.elements(); enumPackages.hasMoreElements(); ) {
             XMLPackageDescription p = (XMLPackageDescription) enumPackages.nextElement();
@@ -586,44 +586,44 @@ public class PackageDescription implements TreeNode {
                 children.add(new PackageDescription(p, this));
             }
         }
-    }    
-    
+    }
+
     /**
      * sort according to the display sortkey
      */
-    
+
     private class PackageComparator implements Comparator {
         public int compare(Object w1, Object w2) {
             return ((PackageDescription) w1).dpySortKey - ((PackageDescription) w2).dpySortKey;
         }
     }
-    
+
     /**
      * implement a TreeNode interface for convenient travelling through the data
      */
-    
+
     private class PackageEnumeration implements Enumeration {
-    
+
         Enumeration e;
 
         protected PackageEnumeration() {
             e = children.elements();
-        }         
+        }
         public boolean hasMoreElements() {
             return e.hasMoreElements();
         }
         public Object nextElement() {
             return e.nextElement();
-        } 
+        }
     }
 
     /**
-     * TreeNode interface 
+     * TreeNode interface
      */
     public Enumeration children() {
         return new PackageEnumeration();
     }
-    
+
     public boolean getAllowsChildren() {
         return true;
     }
@@ -639,11 +639,11 @@ public class PackageDescription implements TreeNode {
     public int getChildCount() {
         return children.size();
     }
-    
+
     public int getIndex(TreeNode node) {
         return children.indexOf(node);
     }
-    
+
 //    public PackageDescription getParent() {
 //        return parent;
 //    }
@@ -655,5 +655,5 @@ public class PackageDescription implements TreeNode {
     public boolean isLeaf() {
         return children.size() == 0;
     }
-    
+
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace sdr
         class ViewContactOfPageSubObject : public ViewContact
         {
         protected:
-            ViewContactOfSdrPage&						mrParentViewContactOfSdrPage;
+            ViewContactOfSdrPage&                       mrParentViewContactOfSdrPage;
 
         public:
             ViewContactOfPageSubObject(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
@@ -206,7 +206,7 @@ namespace sdr
         {
         protected:
             // bitfield
-            unsigned									mbFront : 1;
+            unsigned                                    mbFront : 1;
 
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
@@ -230,7 +230,7 @@ namespace sdr
         {
         protected:
             // bitfield
-            unsigned									mbFront : 1;
+            unsigned                                    mbFront : 1;
 
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
@@ -255,20 +255,20 @@ namespace sdr
         protected:
             // the owner of this ViewContact. Set from constructor and not
             // to be changed in any way.
-            SdrPage&										mrPage;
+            SdrPage&                                        mrPage;
 
             // helper viewContacts to build a clear paint hierarchy
-            ViewContactOfPageBackground						maViewContactOfPageBackground;
-            ViewContactOfPageShadow							maViewContactOfPageShadow;
-            ViewContactOfPageFill							maViewContactOfPageFill;
-            ViewContactOfMasterPage							maViewContactOfMasterPage;
-            ViewContactOfOuterPageBorder					maViewContactOfOuterPageBorder;
-            ViewContactOfInnerPageBorder					maViewContactOfInnerPageBorder;
-            ViewContactOfGrid								maViewContactOfGridBack;
-            ViewContactOfHelplines							maViewContactOfHelplinesBack;
-            ViewContactOfPageHierarchy						maViewContactOfPageHierarchy;
-            ViewContactOfGrid								maViewContactOfGridFront;
-            ViewContactOfHelplines							maViewContactOfHelplinesFront;
+            ViewContactOfPageBackground                     maViewContactOfPageBackground;
+            ViewContactOfPageShadow                         maViewContactOfPageShadow;
+            ViewContactOfPageFill                           maViewContactOfPageFill;
+            ViewContactOfMasterPage                         maViewContactOfMasterPage;
+            ViewContactOfOuterPageBorder                    maViewContactOfOuterPageBorder;
+            ViewContactOfInnerPageBorder                    maViewContactOfInnerPageBorder;
+            ViewContactOfGrid                               maViewContactOfGridBack;
+            ViewContactOfHelplines                          maViewContactOfHelplinesBack;
+            ViewContactOfPageHierarchy                      maViewContactOfPageHierarchy;
+            ViewContactOfGrid                               maViewContactOfGridFront;
+            ViewContactOfHelplines                          maViewContactOfHelplinesFront;
 
             // Create a Object-Specific ViewObjectContact, set ViewContact and
             // ObjectContact. Always needs to return something. Default is to create

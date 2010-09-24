@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
     nTotalPages( 0 ),
     bLocInitialized( false )
 {
-    //	page count uses the stored cell widths for the printer anyway,
-    //	so ScPrintFunc with the document's printer can be used to count
+    //  page count uses the stored cell widths for the printer anyway,
+    //  so ScPrintFunc with the document's printer can be used to count
 
     SfxPrinter* pPrinter = pDocSh->GetPrinter();
 
@@ -74,7 +74,7 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
         {
             ScPrintFunc aFunc( pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange, &aSelection.GetOptions() );
             nThisTab = aFunc.GetTotalPages();
-            nFirstAttr[nTab] = aFunc.GetFirstPageNo();			// from page style or previous sheet
+            nFirstAttr[nTab] = aFunc.GetFirstPageNo();          // from page style or previous sheet
         }
         else
             nFirstAttr[nTab] = nAttrPage;
@@ -151,7 +151,7 @@ bool ScPrintFuncCache::FindLocation( const ScAddress& rCell, ScPrintPageLocation
             return true;
         }
     }
-    return false;   // not found    
+    return false;   // not found
 }
 
 BOOL ScPrintFuncCache::IsSameSelection( const ScPrintSelectionStatus& rStatus ) const
@@ -179,7 +179,7 @@ long ScPrintFuncCache::GetTabStart( SCTAB nTab ) const
 
 long ScPrintFuncCache::GetDisplayStart( SCTAB nTab ) const
 {
-    //!	merge with lcl_GetDisplayStart in preview?
+    //! merge with lcl_GetDisplayStart in preview?
 
     long nDisplayStart = 0;
     ScDocument* pDoc = pDocSh->GetDocument();

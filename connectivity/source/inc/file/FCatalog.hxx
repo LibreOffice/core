@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,14 +41,14 @@ namespace connectivity
             public connectivity::sdbcx::OCatalog
         {
         protected:
-            OConnection*										m_pConnection;
+            OConnection*                                        m_pConnection;
 
             /** builds the name which should be used to access the object later on in the collection.
                 Will only be called in fillNames.
-                @param	_xRow
+                @param  _xRow
                     The current row from the resultset given to fillNames.
             */
-            virtual ::rtl::OUString buildName(	const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow);
+            virtual ::rtl::OUString buildName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow);
 
         public:
             virtual void refreshTables();
@@ -58,7 +58,7 @@ namespace connectivity
 
         public:
             OFileCatalog(OConnection* _pCon);
-            OConnection*	getConnection() { return m_pConnection; }
+            OConnection*    getConnection() { return m_pConnection; }
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             // ::cppu::OComponentHelper

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,16 +50,16 @@ namespace rptxml
 
     class OControlStyleContext : public XMLPropStyleContext
     {
-        ::rtl::OUString				m_sDataStyleName;
-        ::rtl::OUString				sPageStyle;
-        const rtl::OUString			sNumberFormat;
-        SvXMLStylesContext*			pStyles;
-        //	std::vector<ScXMLMapContent>	aMaps;
-        com::sun::star::uno::Any	aConditionalFormat;
-        sal_Int32					m_nNumberFormat;
+        ::rtl::OUString             m_sDataStyleName;
+        ::rtl::OUString             sPageStyle;
+        const rtl::OUString         sNumberFormat;
+        SvXMLStylesContext*         pStyles;
+        //  std::vector<ScXMLMapContent>    aMaps;
+        com::sun::star::uno::Any    aConditionalFormat;
+        sal_Int32                   m_nNumberFormat;
         ORptFilter&                 m_rImport;
-        sal_Bool					bConditionalFormatCreated : 1;
-        sal_Bool					bParentSet : 1;
+        sal_Bool                    bConditionalFormatCreated : 1;
+        sal_Bool                    bParentSet : 1;
 
         ORptFilter& GetOwnImport() const;
 

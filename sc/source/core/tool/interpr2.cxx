@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ double ScInterpreter::GetDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, bool
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetDateSerial" );
     if ( nYear < 100 && !bStrict )
         nYear = pFormatter->ExpandTwoDigitYear( nYear );
-    // Do not use a default Date ctor here because it asks system time with a 
+    // Do not use a default Date ctor here because it asks system time with a
     // performance penalty.
     INT16 nY, nM, nD;
     if (bStrict)
@@ -1806,7 +1806,7 @@ void ScInterpreter::ScIntersect()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIntersect" );
     formula::FormulaTokenRef p2nd = PopToken();
     formula::FormulaTokenRef p1st = PopToken();
-    
+
     if (nGlobalError || !p2nd || !p1st)
     {
         PushIllegalArgument();
@@ -1954,7 +1954,7 @@ void ScInterpreter::ScRangeFunc()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRangeFunc" );
     formula::FormulaTokenRef x2 = PopToken();
     formula::FormulaTokenRef x1 = PopToken();
-    
+
     if (nGlobalError || !x2 || !x1)
     {
         PushIllegalArgument();
@@ -1973,7 +1973,7 @@ void ScInterpreter::ScUnionFunc()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScUnionFunc" );
     formula::FormulaTokenRef p2nd = PopToken();
     formula::FormulaTokenRef p1st = PopToken();
-    
+
     if (nGlobalError || !p2nd || !p1st)
     {
         PushIllegalArgument();
@@ -1992,7 +1992,7 @@ void ScInterpreter::ScUnionFunc()
     ScToken* x1 = static_cast<ScToken*>(p1st.get());
     ScToken* x2 = static_cast<ScToken*>(p2nd.get());
 
-    
+
     ScTokenRef xRes;
     // Append to an existing RefList if there is one.
     if (sv1 == svRefList)
@@ -2976,7 +2976,7 @@ void ScInterpreter::ScGetPivotData()
                 //! should allow numeric constraint values
                 aFilters[i].mbValIsStr = TRUE;
                 aFilters[i].maValStr = GetString();
-                
+
                 aFilters[i].maFieldName = GetString();
             }
         }

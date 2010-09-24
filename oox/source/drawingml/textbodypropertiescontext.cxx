@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,9 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include "oox/drawingml/textbodyproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -88,21 +89,21 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
     }
 
     // ST_TextAnchoringType
-    drawing::TextVerticalAdjust	eVA( drawing::TextVerticalAdjust_TOP );
+    drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
     switch( xAttributes->getOptionalValueToken( XML_anchor, XML_t ) )
     {
-        case XML_b :	eVA = drawing::TextVerticalAdjust_BOTTOM; break;
+        case XML_b :    eVA = drawing::TextVerticalAdjust_BOTTOM; break;
         case XML_dist :
         case XML_just :
-        case XML_ctr :	eVA = drawing::TextVerticalAdjust_CENTER; break;
+        case XML_ctr :  eVA = drawing::TextVerticalAdjust_CENTER; break;
         default:
-        case XML_t :	eVA = drawing::TextVerticalAdjust_TOP; break;
+        case XML_t :    eVA = drawing::TextVerticalAdjust_TOP; break;
     }
     mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= eVA;
 
     bool bAnchorCenter = aAttribs.getBool( XML_anchorCtr, false );
     if( bAnchorCenter )
-    mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<= 
+    mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
         TextHorizontalAdjust_CENTER;
 
 //   bool bCompatLineSpacing = aAttribs.getBool( XML_compatLnSpc, false );
@@ -135,7 +136,7 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
     <<= WritingMode_TB_RL;
       // workaround for TB_LR as using WritingMode2 doesn't work
         if( !bAnchorCenter )
-            mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<= 
+            mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
             TextHorizontalAdjust_LEFT;
     } else
       mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
@@ -156,27 +157,27 @@ Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildConte
     switch( aElementToken )
     {
             // Sequence
-            case NMSP_DRAWINGML|XML_prstTxWarp:		// CT_PresetTextShape
-            case NMSP_DRAWINGML|XML_prot:			// CT_TextProtectionProperty
+            case NMSP_DRAWINGML|XML_prstTxWarp:     // CT_PresetTextShape
+            case NMSP_DRAWINGML|XML_prot:           // CT_TextProtectionProperty
                 break;
 
             // EG_TextAutofit
             case NMSP_DRAWINGML|XML_noAutofit:
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;   // CT_TextNoAutofit
                 break;
-            case NMSP_DRAWINGML|XML_normAutofit:	// CT_TextNormalAutofit
-                mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= true;
+            case NMSP_DRAWINGML|XML_normAutofit:    // CT_TextNormalAutofit
+                mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= TextFitToSizeType_AUTOFIT;
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;
                 break;
             case NMSP_DRAWINGML|XML_spAutoFit:
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= true;
                 break;
 
-            case NMSP_DRAWINGML|XML_scene3d:		// CT_Scene3D
+            case NMSP_DRAWINGML|XML_scene3d:        // CT_Scene3D
 
             // EG_Text3D
-            case NMSP_DRAWINGML|XML_sp3d:			// CT_Shape3D
-            case NMSP_DRAWINGML|XML_flatTx:			// CT_FlatText
+            case NMSP_DRAWINGML|XML_sp3d:           // CT_Shape3D
+            case NMSP_DRAWINGML|XML_flatTx:         // CT_FlatText
 
                 break;
     }

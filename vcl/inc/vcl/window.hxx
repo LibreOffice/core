@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -326,7 +326,7 @@ typedef USHORT StateChangedType;
 #define DLGWINDOW_FIRST                 2
 //#endif
 
-enum WindowSizeType { 
+enum WindowSizeType {
     WINDOWSIZE_MINIMUM,
     WINDOWSIZE_PREFERRED,
     WINDOWSIZE_MAXIMUM
@@ -389,7 +389,7 @@ public:
     SAL_DLLPRIVATE WinBits             ImplInitRes( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplWindowRes( const ResId& rResId );
-    SAL_DLLPRIVATE void				   ImplSetFrameParent( const Window* pParent );
+    SAL_DLLPRIVATE void                ImplSetFrameParent( const Window* pParent );
     SAL_DLLPRIVATE void                ImplInsertWindow( Window* pParent );
     SAL_DLLPRIVATE void                ImplRemoveWindow( BOOL bRemoveFrameData );
     SAL_DLLPRIVATE Window*             ImplGetWindow();
@@ -489,7 +489,7 @@ public:
     <TRUE/> if the font can be used as UI font
     <FALSE/> if the font is unsuitable as UI font
      */
-    SAL_DLLPRIVATE bool		   ImplCheckUIFont( const Font& rFont );
+    SAL_DLLPRIVATE bool        ImplCheckUIFont( const Font& rFont );
     SAL_DLLPRIVATE void        ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl = TRUE );
     SAL_DLLPRIVATE void        ImplAlignChilds();
     SAL_DLLPRIVATE void        ImplPosSizeWindow( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
@@ -554,15 +554,15 @@ public:
 
     SAL_DLLPRIVATE Rectangle   ImplGetWindowExtentsRelative( Window *pRelativeWindow, BOOL bClientOnly ) const;
     SAL_DLLPRIVATE void        ImplNotifyIconifiedState( BOOL bIconified );
-    SAL_DLLPRIVATE bool		   ImplStopDnd();
-    SAL_DLLPRIVATE void		   ImplStartDnd();
+    SAL_DLLPRIVATE bool        ImplStopDnd();
+    SAL_DLLPRIVATE void        ImplStartDnd();
 
     SAL_DLLPRIVATE static void ImplInitAppFontData( Window* pWindow );
-    SAL_DLLPRIVATE void		   ImplPaintToDevice( OutputDevice* pTargetOutDev, const Point& rPos );
+    SAL_DLLPRIVATE void        ImplPaintToDevice( OutputDevice* pTargetOutDev, const Point& rPos );
 
     SAL_DLLPRIVATE BOOL        ImplIsInTaskPaneList();
     SAL_DLLPRIVATE void        ImplIsInTaskPaneList( BOOL mbIsInTaskList );
-    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas > 
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >
                                ImplGetCanvas( const Size& rFullscreenSize, bool bFullscreen, bool bSpriteCanvas ) const;
 
 private:
@@ -737,7 +737,7 @@ public:
     // while IsInPaint returns true ExpandPaintClipRegion adds the
     // submitted region to the paint clip region so you can
     // paint additional parts of your window if necessary
-    void				ExpandPaintClipRegion( const Region& rRegion );
+    void                ExpandPaintClipRegion( const Region& rRegion );
 
     void                SetParent( Window* pNewParent );
     Window*             GetParent() const;
@@ -759,16 +759,16 @@ public:
     void                EnableInput( BOOL bEnable, BOOL bChild, BOOL bSysWin,
                                      const Window* pExcludeWindow = NULL );
     BOOL                IsInputEnabled() const;
-    
+
     /** Override <code>EnableInput</code>. This can be necessary due to other people
         using EnableInput for whole window hierarchies.
-        
-        
+
+
         <code>AlwaysEnableInput</code> and <code>AlwaysDisableInput</code> are
         mutually exclusive; the last setter wins.
         @param bAlways
         sets always enabled flag
-        
+
         @param bChild
         if true children are recursively set to AlwaysEnableInput
     */
@@ -782,13 +782,13 @@ public:
         Windows with AlwaysDisableInput will not get key events even if enabled
         and input enabled.This can be necessary due to other people using EnableInput
         for whole window hierarchies.
-        
+
         <code>AlwaysEnableInput</code> and <code>AlwaysDisableInput</code> are
         mutually exclusive; the last setter wins.
-        
+
         @param bAlways
         sets always disable flag
-        
+
         @param bChild
         if true children are recursively set to AlwaysDisableInput
     */
@@ -804,25 +804,25 @@ public:
     not evaluate events but still react to those events externally. In these
     rare cases call SetCallHandlersOnInputDisabled( true ) to have your handler
     called anyway.
-    
+
     Currently only mouse events get this special treatment.
-    
+
     Use this sparingly, chances are if you want to use it you're wroking around
     the real problem.
-    
+
     @param bCall
     Enable/Disable calling event handlers for this disabled, modal or input disabled window.
     This call is implicity done recursively for possible child windows.
     */
     void                SetCallHandlersOnInputDisabled( bool bCall );
     /** get state of SetCallHandlersOnInputDisabled
-    
+
     @returns whether handlers are called regardless of input enabled state
     */
     bool                IsCallHandlersOnInputDisabled() const;
     /** A window is in modal mode if one of its children or subchildren
         is a running modal window (a modal dialog)
-        
+
         @returns TRUE if a child or subchild is a running modal window
     */
     BOOL                IsInModalMode() const;
@@ -896,10 +896,10 @@ public:
     BOOL                IsActive() const;
     BOOL                HasActiveChildFrame();
     USHORT              GetGetFocusFlags() const;
-    void				GrabFocusToDocument();
+    void                GrabFocusToDocument();
 
-    /** 
-     * Set this when you need to act as if the window has focus even if it 
+    /**
+     * Set this when you need to act as if the window has focus even if it
      * doesn't.  This is necessary for implementing tab stops inside floating
      * windows, but floating windows don't get focus from the system.
      */
@@ -937,11 +937,11 @@ public:
     long                CalcZoom( long n ) const;
 
     virtual void      SetText( const XubString& rStr );
-    virtual String   	GetText() const;
+    virtual String      GetText() const;
     // return the actual text displayed
     // this may have e.g. accellerators removed or portions
     // replaced by ellipsis
-    virtual String		GetDisplayText() const;
+    virtual String      GetDisplayText() const;
     // gets the visible background color. for transparent windows
     // this may be the parent's background color; for controls
     // this may be a child's background color (e.g. ListBox)
@@ -1044,19 +1044,19 @@ public:
     BOOL    IsAccessibilityEventsSuppressed( BOOL bTraverseParentPath = TRUE );
 
     /// request XCanvas render interface for this window
-    ::com::sun::star::uno::Reference< 
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::rendering::XCanvas > GetCanvas() const;
     /// request XSpriteCanvas render interface for this window
-    ::com::sun::star::uno::Reference< 
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::rendering::XSpriteCanvas > GetSpriteCanvas() const;
     /// request fullscreen XSpriteCanvas render interface for this window
-    ::com::sun::star::uno::Reference< 
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::rendering::XSpriteCanvas > GetFullscreenSpriteCanvas( const Size& rFullscreenSize ) const;
 
     /*  records all DrawText operations within the passed rectangle;
      *  a synchronous paint is sent to achieve this
      */
-    void				RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle& rRect );
+    void                RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle& rRect );
 
     // Setzen und Abfragen fuer das Toolkit
     VCLXWindow*             GetWindowPeer() const;
@@ -1066,11 +1066,11 @@ public:
     BOOL                    IsCreatedWithToolkit() const;
     void                    SetCreatedWithToolkit( BOOL b );
 
-    Window*				GetLabelFor() const;
-    Window*				GetLabeledBy() const;
-    virtual Window*	GetParentLabelFor( const Window* pLabel ) const;
-    virtual Window*	GetParentLabeledBy( const Window* pLabeled ) const;
-    KeyEvent			GetActivationKey() const;
+    Window*             GetLabelFor() const;
+    Window*             GetLabeledBy() const;
+    virtual Window* GetParentLabelFor( const Window* pLabel ) const;
+    virtual Window* GetParentLabeledBy( const Window* pLabeled ) const;
+    KeyEvent            GetActivationKey() const;
 
     // Drag and Drop interfaces
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > GetDropTarget();
@@ -1096,7 +1096,7 @@ public:
 
     // a helper method for a Control's Draw method
     void PaintToDevice( OutputDevice* pDevice, const Point& rPos, const Size& rSize );
-    
+
     /* mark Window for deletion in top of event queue
     */
     void doLazyDelete();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,19 +29,19 @@
 
 #include <svl/solar.hrc>
 
-#define RID_MACROOPTIONS		( RID_BASICIDE_START + 55 )
+#define RID_MACROOPTIONS        ( RID_BASICIDE_START + 55 )
 
-#define RID_FT_SBXNAME		2
-#define RID_PB_OK			3
-#define RID_PB_CANCEL		4
-#define RID_PB_HELP			5
-#define RID_FT_DESCR		6
-#define RID_ME_DESCR		7
-#define RID_FL_HELP			8
-#define RID_FT_HELPID		9
-#define RID_NF_HELPID		10
-#define RID_FT_HELPNAME		11
-#define RID_ED_HELPNAME		12
+#define RID_FT_SBXNAME      2
+#define RID_PB_OK           3
+#define RID_PB_CANCEL       4
+#define RID_PB_HELP         5
+#define RID_FT_DESCR        6
+#define RID_ME_DESCR        7
+#define RID_FL_HELP         8
+#define RID_FT_HELPID       9
+#define RID_NF_HELPID       10
+#define RID_FT_HELPNAME     11
+#define RID_ED_HELPNAME     12
 
 #endif // _MOPTIONS_HRC
 

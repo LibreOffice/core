@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ namespace framework
             rtl::OUString                                                             aTargetURL;
             com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >     aArgSeq;
         };
-        
+
         com::sun::star::uno::Reference<com::sun::star::frame::XDesktop>                  mxDesktop;
         com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
         com::sun::star::uno::Reference<com::sun::star::frame::XFrame>                    mxFrame;
@@ -129,7 +129,7 @@ namespace framework
         svt::AcceleratorExecute*        mpAccExec;
         long                            mnBtnPos;
         long                            mnBtnTop;
-        
+
         PopupMenu*                      mpRecentMenu;
         std::vector< LoadRecentFile >   maRecentFiles;
 

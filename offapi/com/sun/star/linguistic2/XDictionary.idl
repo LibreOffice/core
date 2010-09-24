@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ published interface XDictionary : com::sun::star::container::XNamed
     //-------------------------------------------------------------------------
     /** specifies whether the dictionary should be used or not .
 
-        @param	bAcvtivate
+        @param  bAcvtivate
             <TRUE/> if the dictionary should be used, <FALSE/> otherwise.
 
     */
@@ -131,7 +131,7 @@ published interface XDictionary : com::sun::star::container::XNamed
             the reference to the entry found. If no entry was found,
             it is NULL.
 
-        @param	aWord
+        @param  aWord
             the word to be looked for.
 
         @see    <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>
@@ -147,7 +147,7 @@ published interface XDictionary : com::sun::star::container::XNamed
         <P>In positive dictionaries only postive entries
         can be made, and in negative ones only negative entries.</P>
 
-        @param	xDicEntry
+        @param  xDicEntry
             the entry to be added.
 
         @returns
@@ -168,13 +168,13 @@ published interface XDictionary : com::sun::star::container::XNamed
         <P>In positive dictionaries only postive entries
         can be made, and in negative ones only negative entries.</P>
 
-        @param	aWord
+        @param  aWord
             the word to be added.
 
-        @param	bIsNegative
+        @param  bIsNegative
             specifies whether the entry will be a negative one or not.
 
-        @param	aRplcText
+        @param  aRplcText
             in the case of a negative entry, this is the replacement text to
             be used when replacing aWord. Otherwise, it is undefined.
 
@@ -191,7 +191,7 @@ published interface XDictionary : com::sun::star::container::XNamed
     //-------------------------------------------------------------------------
     /** removes an entry from the dictionary.
 
-        @param	aWord
+        @param  aWord
             the word matching the entry to be removed.
 
         @returns
@@ -210,9 +210,9 @@ published interface XDictionary : com::sun::star::container::XNamed
 
     //-------------------------------------------------------------------------
     /**
-        <p>This function should no longer be used since with the expansion of the 
+        <p>This function should no longer be used since with the expansion of the
         maximum number of allowed entries the result may become unreasonable large!</p>
-     
+
          @returns
              a sequence with all the entries of the dictionary.
 
@@ -235,12 +235,12 @@ published interface XDictionary : com::sun::star::container::XNamed
          be notified via a call to
         <member scope="com::sun::star::linguistic2">XDictionaryEventListener::processDictionaryEvent</member>.</P>
 
-        @param	xListener
+        @param  xListener
             the entry to be made, that is, the object that wants notifications.
 
         @returns
             <TRUE/> if the entry was successfully made, <FALSE/> otherwise.
-            If <member scope="com::sun::star::lang">XEventListener::disposing</member> was called before, 
+            If <member scope="com::sun::star::lang">XEventListener::disposing</member> was called before,
             it will always fail.
 
         @see    <member scope="com::sun::star::linguistic2">XDictionary::removeDictionaryEventListener</member>
@@ -252,7 +252,7 @@ published interface XDictionary : com::sun::star::container::XNamed
     //-------------------------------------------------------------------------
     /** removes an entry from the list of dictionary event listeners.
 
-        @param	xListener
+        @param  xListener
             the reference to the listening object to be removed.
 
         @returns

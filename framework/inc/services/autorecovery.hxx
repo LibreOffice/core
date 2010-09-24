@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,7 +153,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         /** These values are used as flags and represent the current state of a document.
             Every state of the life time of a document has to be recognized here.
-    
+
             @attention  Do not change (means reorganize) already used numbers.
                         There exists some code inside SVX, which uses the same numbers,
                         to analyze such document states.
@@ -175,7 +175,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             E_TRY_SAVE = 8,
             E_TRY_LOAD_BACKUP = 16,
             E_TRY_LOAD_ORIGINAL = 32,
-            
+
             /* FINAL STATES */
 
             /// the Auto/Emergency saved document isnt useable any longer
@@ -484,7 +484,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         // css.util.XChangesListener
         virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& aEvent)
             throw(css::uno::RuntimeException);
-            
+
         //---------------------------------------
         // css.util.XModifyListener
         virtual void SAL_CALL modified(const css::lang::EventObject& aEvent)
@@ -505,9 +505,9 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         // OPropertySetHelper
 
         virtual sal_Bool SAL_CALL convertFastPropertyValue(      css::uno::Any& aConvertedValue,
-                                                                 css::uno::Any&	aOldValue      ,
-                                                                 sal_Int32		nHandle        ,
-                                                           const css::uno::Any&	aValue         )
+                                                                 css::uno::Any& aOldValue      ,
+                                                                 sal_Int32      nHandle        ,
+                                                           const css::uno::Any& aValue         )
             throw(css::lang::IllegalArgumentException);
 
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(      sal_Int32      nHandle,
@@ -573,7 +573,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             @threadsafe
           */
         void implts_readAutoSaveConfig();
-        
+
         //---------------------------------------
         // TODO document me
         void implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rInfo                ,
@@ -667,7 +667,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         //---------------------------------------
         // TODO document me
         void implts_markDocumentModifiedAgainstLastBackup(const css::uno::Reference< css::frame::XModel >& xDocument);
-        
+
         //---------------------------------------
         // TODO document me
         void implts_updateModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument);
@@ -906,14 +906,14 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         //---------------------------------------
         /** try to make sure that all changed config items (not our used
             config access only) will be flushed back to disc.
-            
+
             E.g. our svtools::ConfigItems() has to be flushed explicitly .-(
-            
+
             Note: This method cant fail. Flushing of config entries is an
                   optional feature. Errors can be ignored.
          */
         void impl_flushALLConfigChanges();
-         
+
         //---------------------------------------
         // TODO document me
         AutoRecovery::EFailureSafeResult implts_copyFile(const ::rtl::OUString& sSource    ,
@@ -988,10 +988,10 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         void impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
                                        ::comphelper::MediaDescriptor&             rArgs    ,
                                  const css::uno::Reference< css::frame::XFrame >& xNewFrame);
-                                 
+
         //---------------------------------------
         /** try to remove the specified file from disc.
-        
+
             Every URL supported by our UCB component can be used here.
             Further it doesnt matter if the file realy exists or not.
             Because removing a non exsistent file will have the same
@@ -1001,16 +1001,16 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             feature. If we are not able doing so ... its not a real problem.
             Ok - users disc place will be samller then ... but we should produce
             a crash during crash save because we cant delete a temporary file only !
-            
+
             @param  sURL
                     the url of the file, which should be removed.
          */
         static void st_impl_removeFile(const ::rtl::OUString& sURL);
-        
+
         //---------------------------------------
         /** try to remove ".lock" file from disc if office will be terminated
             not using the offical way .-)
-            
+
             This method has to be handled "optional". So every error inside
             has to be ignored ! This method CANT FAIL ... it can forget something only .-)
          */

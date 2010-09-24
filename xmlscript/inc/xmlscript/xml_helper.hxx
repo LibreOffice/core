@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace xmlscript
 /*##################################################################################################
 
     EXPORTING
-    
+
 ##################################################################################################*/
 
 //==================================================================================================
@@ -53,24 +53,24 @@ public:
         SAL_THROW( () )
         : _name( name )
         {}
-    
+
     /** Adds a sub element of element.
-        
+
         @param xElem element reference
     */
     void SAL_CALL addSubElement(
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > const & xElem )
         SAL_THROW( () );
-    
+
     /** Gets sub element of given index.  The index follows order in which sub elements were added.
-        
+
         @param nIndex index of sub element
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > SAL_CALL getSubElement( sal_Int32 nIndex )
         SAL_THROW( () );
-    
+
     /** Adds an attribute to elements.
-        
+
         @param rAttrName qname of attribute
         @param rValue value string of element
     */
@@ -84,20 +84,20 @@ public:
     */
     inline ::rtl::OUString SAL_CALL getName() SAL_THROW( () )
         { return _name; }
-    
+
     /** Dumps out element (and all sub elements).
-        
+
         @param xOut document handler to be written to
     */
     void SAL_CALL dump(
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > const & xOut );
     /** Dumps out sub elements (and all further sub elements).
-        
+
         @param xOut document handler to be written to
     */
     void SAL_CALL dumpSubElements(
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > const & xOut );
-    
+
     // XAttributeList
     virtual sal_Int16 SAL_CALL getLength()
         throw (::com::sun::star::uno::RuntimeException);
@@ -111,13 +111,13 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getValueByName( ::rtl::OUString const & rName )
         throw (::com::sun::star::uno::RuntimeException);
-    
+
 protected:
     ::rtl::OUString _name;
-    
+
     ::std::vector< ::rtl::OUString > _attrNames;
     ::std::vector< ::rtl::OUString > _attrValues;
-    
+
     ::std::vector< ::com::sun::star::uno::Reference<
                    ::com::sun::star::xml::sax::XAttributeList > > _subElems;
 };
@@ -126,7 +126,7 @@ protected:
 /*##################################################################################################
 
     STREAMING
-    
+
 ##################################################################################################*/
 
 //==================================================================================================

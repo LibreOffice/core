@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,58 +24,58 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_SortDescriptor_idl__ 
-#define __com_sun_star_util_SortDescriptor_idl__ 
-  
-#ifndef __com_sun_star_beans_XPropertySet_idl__ 
-#include <com/sun/star/beans/XPropertySet.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_Locale_idl__ 
-#include <com/sun/star/lang/Locale.idl> 
-#endif 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module util {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_util_SortDescriptor_idl__
+#define __com_sun_star_util_SortDescriptor_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
 /** specifies the properties which can be used to describe
     a sort order applied to an XSortable.
-    
+
     @see XSortable
 
     @deprecated
  */
 published service SortDescriptor
-{ 
+{
      interface com::sun::star::beans::XPropertySet;
- 
-    //------------------------------------------------------------------------- 
+
+    //-------------------------------------------------------------------------
     /** specifies if the case of letters is important when comparing entries.
      */
-        [property] boolean IsCaseSensitive; 
+        [property] boolean IsCaseSensitive;
 
-     //------------------------------------------------------------------------- 
+     //-------------------------------------------------------------------------
     /** specifies the sorting order.
-            
+
             The sorting order may be defined for sepearte keys in specific
             implementations. For those this property may not need to be set.
-            
+
             @see <type scope"com::sun::star::text">TextSortDescriptor</type>
      */
-        [optional, property] boolean SortAscending; 
+        [optional, property] boolean SortAscending;
 
-     //------------------------------------------------------------------------- 
+     //-------------------------------------------------------------------------
     /** specifies if the columns are sorted.
-        
+
         <dl>
         <dt>
         <TRUE/>
         </dt>
         <dd>The columns are sorted.
-        
+
         </dd>
         <dt>
         <FALSE/>
@@ -84,28 +84,28 @@ published service SortDescriptor
         </dd>
         </dl>
      */
-    [property] boolean SortColumns; 
- 
-     //------------------------------------------------------------------------- 
+    [property] boolean SortColumns;
+
+     //-------------------------------------------------------------------------
     /** specifies the locale for the compare operator (collator).
      */
     [property] com::sun::star::lang::Locale CollatorLocale;
 
-     //------------------------------------------------------------------------- 
+     //-------------------------------------------------------------------------
     /** specifies the algorithm for the compare operator (collator).
 
             The collator algorithm may be defined for sepearte keys in specific
             implementations. For those this property may not need to be set.
-            
+
             @see <type scope"com::sun::star::text">TextSortDescriptor</type>
-         
+
             @see com::sun::star::i18n::XCollator
      */
         [optional, property] string CollatorAlgorithm;
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

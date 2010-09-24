@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ protected:
     // typedefs for a vector of SdPages
     typedef ::std::vector< SdPage* > SdPageVector;
 
-    const SdrModel&					mrModel;
+    const SdrModel&                 mrModel;
 
-    SdPageVector					maPageVectorStandard;
-    SdPageVector					maPageVectorNotes;
-    SdPage*							mpHandoutPage;
+    SdPageVector                    maPageVectorStandard;
+    SdPageVector                    maPageVectorNotes;
+    SdPage*                         mpHandoutPage;
 
-    sal_Bool						mbPageListValid;
+    sal_Bool                        mbPageListValid;
 
     void ImpRecreateSortedPageListOnDemand();
     virtual sal_uInt32 ImpGetPageCount() const = 0;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace slideshow
             /** Create a sound player object.
 
                 @param rSoundURL
-                URL to a sound file. 
+                URL to a sound file.
 
                 @param rComponentContext
                 Reference to a component context, used to create the
@@ -72,7 +72,7 @@ namespace slideshow
             static ::boost::shared_ptr<SoundPlayer> create(
                 EventMultiplexer & rEventMultiplexer,
                 const ::rtl::OUString& rSoundURL,
-                const ::com::sun::star::uno::Reference< 
+                const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext>& rComponentContext );
 
             virtual ~SoundPlayer();
@@ -101,7 +101,7 @@ namespace slideshow
             SoundPlayer(
                 EventMultiplexer & rEventMultiplexer,
                 const ::rtl::OUString& rSoundURL,
-                const ::com::sun::star::uno::Reference< 
+                const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext>& rComponentContext );
 
             EventMultiplexer & mrEventMultiplexer;
@@ -109,7 +109,7 @@ namespace slideshow
             //           is available
             ::boost::shared_ptr<SoundPlayer> mThis;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
-        };        
+        };
 
         typedef ::boost::shared_ptr< SoundPlayer > SoundPlayerSharedPtr;
     }

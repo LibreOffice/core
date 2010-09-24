@@ -7,7 +7,7 @@
 
 class CollatorRessourceData;
 
-class SVT_DLLPUBLIC CollatorRessource 
+class SVT_DLLPUBLIC CollatorRessource
 {
     private:
 
@@ -16,7 +16,7 @@ class SVT_DLLPUBLIC CollatorRessource
     public:
                                 CollatorRessource ();
                                 ~CollatorRessource ();
-        const String&			GetTranslation (const String& r_Algorithm);
+        const String&           GetTranslation (const String& r_Algorithm);
 };
 
 #endif /* SVTOOLS_COLLATORRESSOURCE_HXX */

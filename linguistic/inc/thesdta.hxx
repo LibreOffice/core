@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,8 +31,8 @@
 
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 
-#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx>	// helper for implementations
+#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase1.hxx> // helper for implementations
 
 
 namespace linguistic
@@ -71,8 +71,8 @@ public:
             throw(::com::sun::star::uno::RuntimeException) = 0;
 
     // non-interface specific functions
-    const ::rtl::OUString &	getLookUpText() const		{ return aLookUpText; }
-    short		 			getLookUpLanguage() const	{ return nLookUpLanguage; }
+    const ::rtl::OUString & getLookUpText() const       { return aLookUpText; }
+    short                   getLookUpLanguage() const   { return nLookUpLanguage; }
 };
 
 

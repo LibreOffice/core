@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,16 +105,16 @@ using namespace comphelper;
 
 class OPasswordDialog : public ModalDialog
 {
-    FixedLine		aFLUser;
-    FixedText		aFTOldPassword;
-    Edit			aEDOldPassword;
-    FixedText		aFTPassword;
-    Edit			aEDPassword;
-    FixedText		aFTPasswordRepeat;
-    Edit			aEDPasswordRepeat;
-    OKButton		aOKBtn;
-    CancelButton	aCancelBtn;
-    HelpButton		aHelpBtn;
+    FixedLine       aFLUser;
+    FixedText       aFTOldPassword;
+    Edit            aEDOldPassword;
+    FixedText       aFTPassword;
+    Edit            aEDPassword;
+    FixedText       aFTPasswordRepeat;
+    Edit            aEDPasswordRepeat;
+    OKButton        aOKBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
 
 
     DECL_LINK( OKHdl_Impl, OKButton * );
@@ -123,24 +123,24 @@ class OPasswordDialog : public ModalDialog
 public:
     OPasswordDialog( Window* pParent,const String& _sUserName);
 
-    String			GetOldPassword() const { return aEDOldPassword.GetText(); }
-    String			GetNewPassword() const { return aEDPassword.GetText(); }
+    String          GetOldPassword() const { return aEDOldPassword.GetText(); }
+    String          GetNewPassword() const { return aEDPassword.GetText(); }
 };
 
 OPasswordDialog::OPasswordDialog(Window* _pParent,const String& _sUserName) :
 
     ModalDialog( _pParent, ModuleRes( DLG_PASSWORD) ),
 
-    aFLUser				( this, ModuleRes( FL_USER ) ),
-    aFTOldPassword		( this, ModuleRes( FT_OLDPASSWORD ) ),
-    aEDOldPassword		( this, ModuleRes( ED_OLDPASSWORD ) ),
-    aFTPassword			( this, ModuleRes( FT_PASSWORD ) ),
-    aEDPassword			( this, ModuleRes( ED_PASSWORD ) ),
-    aFTPasswordRepeat	( this, ModuleRes( FT_PASSWORD_REPEAT ) ),
-    aEDPasswordRepeat	( this, ModuleRes( ED_PASSWORD_REPEAT ) ),
-    aOKBtn				( this, ModuleRes( BTN_PASSWORD_OK ) ),
-    aCancelBtn			( this, ModuleRes( BTN_PASSWORD_CANCEL ) ),
-    aHelpBtn			( this, ModuleRes( BTN_PASSWORD_HELP ) )
+    aFLUser             ( this, ModuleRes( FL_USER ) ),
+    aFTOldPassword      ( this, ModuleRes( FT_OLDPASSWORD ) ),
+    aEDOldPassword      ( this, ModuleRes( ED_OLDPASSWORD ) ),
+    aFTPassword         ( this, ModuleRes( FT_PASSWORD ) ),
+    aEDPassword         ( this, ModuleRes( ED_PASSWORD ) ),
+    aFTPasswordRepeat   ( this, ModuleRes( FT_PASSWORD_REPEAT ) ),
+    aEDPasswordRepeat   ( this, ModuleRes( ED_PASSWORD_REPEAT ) ),
+    aOKBtn              ( this, ModuleRes( BTN_PASSWORD_OK ) ),
+    aCancelBtn          ( this, ModuleRes( BTN_PASSWORD_CANCEL ) ),
+    aHelpBtn            ( this, ModuleRes( BTN_PASSWORD_HELP ) )
 {
     // hide until a help is avalable
     aHelpBtn.Hide();
@@ -183,14 +183,14 @@ DBG_NAME(OUserAdmin);
 //================================================================================
 OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
     : OGenericAdministrationPage( pParent, ModuleRes(TAB_PAGE_USERADMIN), _rAttrSet)
-    ,m_FL_USER(			this , ModuleRes(FL_USER))
-    ,m_FT_USER(			this , ModuleRes(FT_USER))
-    ,m_LB_USER(			this , ModuleRes(LB_USER))
-    ,m_PB_NEWUSER(		this , ModuleRes(PB_NEWUSER))
-    ,m_PB_CHANGEPWD(	this , ModuleRes(PB_CHANGEPWD))
-    ,m_PB_DELETEUSER(	this , ModuleRes(PB_DELETEUSER))
+    ,m_FL_USER(         this , ModuleRes(FL_USER))
+    ,m_FT_USER(         this , ModuleRes(FT_USER))
+    ,m_LB_USER(         this , ModuleRes(LB_USER))
+    ,m_PB_NEWUSER(      this , ModuleRes(PB_NEWUSER))
+    ,m_PB_CHANGEPWD(    this , ModuleRes(PB_CHANGEPWD))
+    ,m_PB_DELETEUSER(   this , ModuleRes(PB_DELETEUSER))
     ,m_FL_TABLE_GRANTS( this , ModuleRes(FL_TABLE_GRANTS))
-    ,m_TableCtrl(		this , ModuleRes(CTRL_TABLE_GRANTS))
+    ,m_TableCtrl(       this , ModuleRes(CTRL_TABLE_GRANTS))
 {
     DBG_CTOR(OUserAdmin,NULL);
     m_LB_USER.SetSelectHdl(LINK(this, OUserAdmin, ListDblClickHdl));
@@ -227,7 +227,7 @@ void OUserAdmin::FillUserNames()
 
                 m_aUserNames = m_xUsers->getElementNames();
                 const ::rtl::OUString* pBegin = m_aUserNames.getConstArray();
-                const ::rtl::OUString* pEnd	  = pBegin + m_aUserNames.getLength();
+                const ::rtl::OUString* pEnd   = pBegin + m_aUserNames.getLength();
                 ::rtl::OUString sUserName = m_UserName;
                 for(;pBegin != pEnd;++pBegin)
                     m_LB_USER.InsertEntry(*pBegin);
@@ -256,7 +256,7 @@ void OUserAdmin::FillUserNames()
 
 }
 // -----------------------------------------------------------------------
-SfxTabPage*	OUserAdmin::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+SfxTabPage* OUserAdmin::Create( Window* pParent, const SfxItemSet& _rAttrSet )
 {
     return ( new OUserAdmin( pParent, _rAttrSet ) );
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,18 +122,18 @@
 
 #define HTML_HEADSPACE (12*20)
 
-#define CSS1_BACKGROUND_ATTR	1
-#define CSS1_BACKGROUND_PAGE	2
-#define CSS1_BACKGROUND_TABLE	3
-#define CSS1_BACKGROUND_FLY		4
-#define CSS1_BACKGROUND_SECTION	5
+#define CSS1_BACKGROUND_ATTR    1
+#define CSS1_BACKGROUND_PAGE    2
+#define CSS1_BACKGROUND_TABLE   3
+#define CSS1_BACKGROUND_FLY     4
+#define CSS1_BACKGROUND_SECTION 5
 
-#define CSS1_FRMSIZE_WIDTH 		0x01
-#define CSS1_FRMSIZE_VARHEIGHT 	0x02
-#define CSS1_FRMSIZE_MINHEIGHT	0x04
-#define CSS1_FRMSIZE_FIXHEIGHT	0x08
-#define CSS1_FRMSIZE_ANYHEIGHT	0x0e
-#define CSS1_FRMSIZE_PIXEL		0x10
+#define CSS1_FRMSIZE_WIDTH      0x01
+#define CSS1_FRMSIZE_VARHEIGHT  0x02
+#define CSS1_FRMSIZE_MINHEIGHT  0x04
+#define CSS1_FRMSIZE_FIXHEIGHT  0x08
+#define CSS1_FRMSIZE_ANYHEIGHT  0x0e
+#define CSS1_FRMSIZE_PIXEL      0x10
 
 using namespace ::com::sun::star;
 
@@ -341,8 +341,8 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
         ASSERT( FUNIT_MM == eUnit, "Masseinheit wird nicht unterstuetzt" );
     case FUNIT_MM:
         // 0.01mm = 0.57twip
-        nMul = 25400;	// 25.4 * 1000
-        nDiv = 1440;	// 72 * 20;
+        nMul = 25400;   // 25.4 * 1000
+        nDiv = 1440;    // 72 * 20;
         nFac = 100;
         pUnit = sCSS1_UNIT_mm;
         break;
@@ -353,13 +353,13 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
     case FUNIT_CM:
 #ifdef EXACT_VALUES
         // 0.001cm = 0.57twip
-        nMul = 25400;	// 2.54 * 10000
-        nDiv = 1440;	// 72 * 20;
+        nMul = 25400;   // 2.54 * 10000
+        nDiv = 1440;    // 72 * 20;
         nFac = 1000;
 #else
         // 0.01cm = 5.7twip (ist zwar ungenau, aber die UI ist auch ungenau)
-        nMul = 2540;	// 2.54 * 1000
-        nDiv = 1440;	// 72 * 20;
+        nMul = 2540;    // 2.54 * 1000
+        nDiv = 1440;    // 72 * 20;
         nFac = 100;
 #endif
         pUnit = sCSS1_UNIT_cm;
@@ -391,7 +391,7 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
 #else
         // 0.01pc = 2.40twip (ist zwar ungenau, aber die UI ist auch ungenau)
         nMul = 1000;
-        nDiv = 240;		// 12 * 20;
+        nDiv = 240;     // 12 * 20;
         nFac = 100;
 #endif
         pUnit = sCSS1_UNIT_pc;
@@ -408,12 +408,12 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
 #ifdef EXACT_VALUES
         // 0.0001in = 0.144twip
         nMul = 100000;
-        nDiv = 1440;	// 72 * 20;
+        nDiv = 1440;    // 72 * 20;
         nFac = 10000;
 #else
         // 0.01in = 14.4twip (ist zwar ungenau, aber die UI ist auch ungenau)
         nMul = 1000;
-        nDiv = 1440;	// 72 * 20;
+        nDiv = 1440;    // 72 * 20;
         nFac = 100;
 #endif
         pUnit = sCSS1_UNIT_inch;
@@ -758,13 +758,13 @@ USHORT SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                         // OOO_STRING_SVTOOLS_HTML_insertedtext
                         // OOO_STRING_SVTOOLS_HTML_language
                         // OOO_STRING_SVTOOLS_HTML_person
-            case 'B':	if( !bChrFmt && rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_blockquote) )
+            case 'B':   if( !bChrFmt && rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_blockquote) )
                         {
                             rRefPoolId = RES_POOLCOLL_HTML_BLOCKQUOTE;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_blockquote );
                         }
                         break;
-            case 'C':	if( bChrFmt )
+            case 'C':   if( bChrFmt )
                         {
                             if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_citiation) )
                             {
@@ -778,7 +778,7 @@ USHORT SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                             }
                         }
                         break;
-            case 'D':	if( bChrFmt && rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_definstance) )
+            case 'D':   if( bChrFmt && rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_definstance) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_DEFINSTANCE;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_definstance);
@@ -809,23 +809,23 @@ USHORT SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                             }
                         }
                         break;
-            case 'E':	if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_emphasis ) )
+            case 'E':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_emphasis ) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_EMPHASIS;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_emphasis );
                         }
                         break;
-            case 'H':	if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_horzrule ) )
+            case 'H':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_horzrule ) )
                             // HR nicht ausgeben!
                             bStop = (nDeep==0);
                         break;
-            case 'K':	if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_keyboard ) )
+            case 'K':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_keyboard ) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_KEYBOARD;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_keyboard );
                         }
                         break;
-            case 'L':	if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_listing ) )
+            case 'L':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_listing ) )
                         {
                             // Listing als PRE exportieren bzw. von
                             // PRE abgeleitete Vorlage exportieren
@@ -834,13 +834,13 @@ USHORT SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                             nDeep = CSS1_FMT_CMPREF;
                         }
                         break;
-            case 'P':	if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_preformtxt ) )
+            case 'P':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_preformtxt ) )
                         {
                             rRefPoolId = RES_POOLCOLL_HTML_PRE;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_preformtxt );
                         }
                         break;
-            case 'S':	if( bChrFmt )
+            case 'S':   if( bChrFmt )
                         {
                             if( rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_sample ) )
                             {
@@ -854,19 +854,19 @@ USHORT SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                             }
                         }
                         break;
-            case 'T':	if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_teletype ) )
+            case 'T':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_teletype ) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_TELETYPE;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_teletype );
                         }
                         break;
-            case 'V':	if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_variable ) )
+            case 'V':   if( bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_variable ) )
                         {
                             rRefPoolId = RES_POOLCHR_HTML_VARIABLE;
                             rToken.Assign( OOO_STRING_SVTOOLS_HTML_variable );
                         }
                         break;
-            case 'X':	if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_xmp ) )
+            case 'X':   if( !bChrFmt && rNm.EqualsAscii( OOO_STRING_SVTOOLS_HTML_xmp ) )
                         {
                             // XMP als PRE exportieren (aber nicht die
                             // Vorlage als Style)
@@ -1139,7 +1139,7 @@ const SwFmt *SwHTMLWriter::GetParentFmt( const SwFmt& rFmt, USHORT nDeep )
 
 BOOL lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 )
 {
-    return 	((const SvxFontItem &)r1).GetFamilyName() ==
+    return  ((const SvxFontItem &)r1).GetFamilyName() ==
                     ((const SvxFontItem &)r2).GetFamilyName() &&
             ((const SvxFontItem &)r1).GetFamily() ==
                     ((const SvxFontItem &)r2).GetFamily();
@@ -1153,7 +1153,7 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
 {
     ASSERT( bSetDefaults || bClearSame,
             "SwHTMLWriter::SubtractItemSet: Bei diesen Flags passiert nix" );
-    SfxItemSet aRefItemSet( *rRefItemSet.GetPool(),	rRefItemSet.GetRanges() );
+    SfxItemSet aRefItemSet( *rRefItemSet.GetPool(), rRefItemSet.GetRanges() );
     aRefItemSet.Set( rRefItemSet );
 
     // und mit dem Attr-Set der Vorlage vergleichen
@@ -1288,11 +1288,11 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
         const sal_Char *pStr = 0;
         switch( rFontItem.GetFamily() )
         {
-        case FAMILY_ROMAN:		pStr = sCSS1_PV_serif;		break;
-        case FAMILY_SWISS:		pStr = sCSS1_PV_sans_serif;	break;
-        case FAMILY_SCRIPT:		pStr = sCSS1_PV_cursive;	break;
-        case FAMILY_DECORATIVE:	pStr = sCSS1_PV_fantasy;	break;
-        case FAMILY_MODERN:		pStr = sCSS1_PV_monospace;	break;
+        case FAMILY_ROMAN:      pStr = sCSS1_PV_serif;      break;
+        case FAMILY_SWISS:      pStr = sCSS1_PV_sans_serif; break;
+        case FAMILY_SCRIPT:     pStr = sCSS1_PV_cursive;    break;
+        case FAMILY_DECORATIVE: pStr = sCSS1_PV_fantasy;    break;
+        case FAMILY_MODERN:     pStr = sCSS1_PV_monospace;  break;
         default:
             ;
         }
@@ -1311,12 +1311,12 @@ sal_Bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
 {
     static sal_uInt16 aWhichIds[] =
     {
-        RES_CHRATR_FONT,		RES_CHRATR_CJK_FONT,		RES_CHRATR_CTL_FONT,
-        RES_CHRATR_FONTSIZE,	RES_CHRATR_CJK_FONTSIZE,	RES_CHRATR_CTL_FONTSIZE,
-        RES_CHRATR_LANGUAGE,	RES_CHRATR_CJK_LANGUAGE,	RES_CHRATR_CTL_LANGUAGE,
-        RES_CHRATR_POSTURE,		RES_CHRATR_CJK_POSTURE,		RES_CHRATR_CTL_POSTURE,
-        RES_CHRATR_WEIGHT,		RES_CHRATR_CJK_WEIGHT,		RES_CHRATR_CTL_WEIGHT,
-        0,						0,							0
+        RES_CHRATR_FONT,        RES_CHRATR_CJK_FONT,        RES_CHRATR_CTL_FONT,
+        RES_CHRATR_FONTSIZE,    RES_CHRATR_CJK_FONTSIZE,    RES_CHRATR_CTL_FONTSIZE,
+        RES_CHRATR_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE,
+        RES_CHRATR_POSTURE,     RES_CHRATR_CJK_POSTURE,     RES_CHRATR_CTL_POSTURE,
+        RES_CHRATR_WEIGHT,      RES_CHRATR_CJK_WEIGHT,      RES_CHRATR_CTL_WEIGHT,
+        0,                      0,                          0
     };
 
     for( sal_uInt16 i=0; aWhichIds[i]; i += 3 )
@@ -1379,13 +1379,13 @@ sal_Bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
         if( pDCCharFmt )
         {
             SfxItemSet aTstItemSet( *pDCCharFmt->GetAttrSet().GetPool(),
-                RES_CHRATR_FONT, 		RES_CHRATR_FONT,
-                RES_CHRATR_POSTURE,		RES_CHRATR_POSTURE,
-                RES_CHRATR_WEIGHT,		RES_CHRATR_WEIGHT,
-                RES_CHRATR_CJK_FONT,	RES_CHRATR_CJK_FONT,
-                RES_CHRATR_CJK_POSTURE,	RES_CHRATR_CJK_WEIGHT,
-                RES_CHRATR_CTL_FONT,	RES_CHRATR_CTL_FONT,
-                RES_CHRATR_CTL_POSTURE,	RES_CHRATR_CTL_WEIGHT,
+                RES_CHRATR_FONT,        RES_CHRATR_FONT,
+                RES_CHRATR_POSTURE,     RES_CHRATR_POSTURE,
+                RES_CHRATR_WEIGHT,      RES_CHRATR_WEIGHT,
+                RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_FONT,
+                RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT,
+                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_FONT,
+                RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
                 0 );
             aTstItemSet.Set( pDCCharFmt->GetAttrSet(), sal_True );
             return HasScriptDependentItems( aTstItemSet, sal_False );
@@ -1650,7 +1650,7 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     USHORT nRefPoolId = 0;
     USHORT nDeep = GetCSS1Selector( &rFmt, aSelector, nRefPoolId );
     if( !nDeep )
-        return rWrt;	// von keiner HTML-Vorlage abgeleitet
+        return rWrt;    // von keiner HTML-Vorlage abgeleitet
 
     USHORT nPoolFmtId = rFmt.GetPoolFmtId();
 
@@ -1727,16 +1727,16 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             const String& rNm = rFmt.GetName();
             switch( rNm.GetChar(0) )
             {
-            case 'D':	if( rNm.EqualsAscii("DD 1") || rNm.EqualsAscii("DT 1") )
+            case 'D':   if( rNm.EqualsAscii("DD 1") || rNm.EqualsAscii("DT 1") )
                             rHTMLWrt.nDfltBottomMargin = 0;
                         break;
-            case 'L':	if(rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_listing) )
+            case 'L':   if(rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_listing) )
                             rHTMLWrt.nDfltBottomMargin = 0;
                         break;
-            case 'P':	if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_preformtxt) )
+            case 'P':   if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_preformtxt) )
                             rHTMLWrt.nDfltBottomMargin = 0;
                         break;
-            case 'X':	if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_xmp) )
+            case 'X':   if( rNm.EqualsAscii(OOO_STRING_SVTOOLS_HTML_xmp) )
                             rHTMLWrt.nDfltBottomMargin = 0;
                         break;
             }
@@ -1834,9 +1834,9 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
         const sal_Char *pPseudo = 0;
         switch( rPageDesc.GetPoolFmtId() )
         {
-        case RES_POOLPAGE_FIRST:	pPseudo = sCSS1_first;	break;
-        case RES_POOLPAGE_LEFT:		pPseudo = sCSS1_left;	break;
-        case RES_POOLPAGE_RIGHT:	pPseudo = sCSS1_right;	break;
+        case RES_POOLPAGE_FIRST:    pPseudo = sCSS1_first;  break;
+        case RES_POOLPAGE_LEFT:     pPseudo = sCSS1_left;   break;
+        case RES_POOLPAGE_RIGHT:    pPseudo = sCSS1_right;  break;
         }
         if( pPseudo )
         {
@@ -2596,8 +2596,8 @@ static Writer& OutCSS1_SvxCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
     const sal_Char *pStr = 0;
     switch( ((const SvxCaseMapItem&)rHt).GetCaseMap() )
     {
-    case SVX_CASEMAP_NOT_MAPPED:	pStr = sCSS1_PV_normal;		break;
-    case SVX_CASEMAP_KAPITAELCHEN:	pStr = sCSS1_PV_small_caps;	break;
+    case SVX_CASEMAP_NOT_MAPPED:    pStr = sCSS1_PV_normal;     break;
+    case SVX_CASEMAP_KAPITAELCHEN:  pStr = sCSS1_PV_small_caps; break;
     default:
         ;
     }
@@ -2656,8 +2656,8 @@ static Writer& OutCSS1_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
     sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
     switch( rHt.Which() )
     {
-    case RES_CHRATR_CJK_FONT:	nScript = CSS1_OUTMODE_CJK;	break;
-    case RES_CHRATR_CTL_FONT:	nScript = CSS1_OUTMODE_CTL;	break;
+    case RES_CHRATR_CJK_FONT:   nScript = CSS1_OUTMODE_CJK; break;
+    case RES_CHRATR_CTL_FONT:   nScript = CSS1_OUTMODE_CTL; break;
     }
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
@@ -2690,8 +2690,8 @@ static Writer& OutCSS1_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
     sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
     switch( rHt.Which() )
     {
-    case RES_CHRATR_CJK_FONTSIZE:	nScript = CSS1_OUTMODE_CJK;	break;
-    case RES_CHRATR_CTL_FONTSIZE:	nScript = CSS1_OUTMODE_CTL;	break;
+    case RES_CHRATR_CJK_FONTSIZE:   nScript = CSS1_OUTMODE_CJK; break;
+    case RES_CHRATR_CTL_FONTSIZE:   nScript = CSS1_OUTMODE_CTL; break;
     }
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
@@ -2720,8 +2720,8 @@ static Writer& OutCSS1_SvxPosture( Writer& rWrt, const SfxPoolItem& rHt )
     sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
     switch( rHt.Which() )
     {
-    case RES_CHRATR_CJK_POSTURE:	nScript = CSS1_OUTMODE_CJK;	break;
-    case RES_CHRATR_CTL_POSTURE:	nScript = CSS1_OUTMODE_CTL;	break;
+    case RES_CHRATR_CJK_POSTURE:    nScript = CSS1_OUTMODE_CJK; break;
+    case RES_CHRATR_CTL_POSTURE:    nScript = CSS1_OUTMODE_CTL; break;
     }
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
@@ -2729,8 +2729,8 @@ static Writer& OutCSS1_SvxPosture( Writer& rWrt, const SfxPoolItem& rHt )
     const sal_Char *pStr = 0;
     switch( ((const SvxPostureItem&)rHt).GetPosture() )
     {
-    case ITALIC_NONE:		pStr = sCSS1_PV_normal;		break;
-    case ITALIC_OBLIQUE:	pStr = sCSS1_PV_oblique;	break;
+    case ITALIC_NONE:       pStr = sCSS1_PV_normal;     break;
+    case ITALIC_OBLIQUE:    pStr = sCSS1_PV_oblique;    break;
     case ITALIC_NORMAL:
         if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
         {
@@ -2770,7 +2770,7 @@ static Writer& OutCSS1_SvxKerning( Writer& rWrt, const SfxPoolItem& rHt )
         }
 
         // Breite als n.n pt
-        nValue = (nValue + 1) / 2; 	// 1/10pt
+        nValue = (nValue + 1) / 2;  // 1/10pt
         sOut.Append( ByteString::CreateFromInt32( (sal_Int32)(nValue  / 10) ) );
         sOut.Append( '.' );
         sOut.Append( ByteString::CreateFromInt32( (sal_Int32)(nValue % 10) ) );
@@ -2798,8 +2798,8 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
     switch( rHt.Which() )
     {
-    case RES_CHRATR_CJK_LANGUAGE:	nScript = CSS1_OUTMODE_CJK;	break;
-    case RES_CHRATR_CTL_LANGUAGE:	nScript = CSS1_OUTMODE_CTL;	break;
+    case RES_CHRATR_CJK_LANGUAGE:   nScript = CSS1_OUTMODE_CJK; break;
+    case RES_CHRATR_CTL_LANGUAGE:   nScript = CSS1_OUTMODE_CTL; break;
     }
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
@@ -2851,8 +2851,8 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
     sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
     switch( rHt.Which() )
     {
-    case RES_CHRATR_CJK_WEIGHT:	nScript = CSS1_OUTMODE_CJK;	break;
-    case RES_CHRATR_CTL_WEIGHT:	nScript = CSS1_OUTMODE_CTL;	break;
+    case RES_CHRATR_CJK_WEIGHT: nScript = CSS1_OUTMODE_CJK; break;
+    case RES_CHRATR_CTL_WEIGHT: nScript = CSS1_OUTMODE_CTL; break;
     }
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
@@ -2860,11 +2860,11 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
     const sal_Char *pStr = 0;
     switch( ((const SvxWeightItem&)rHt).GetWeight() )
     {
-    case WEIGHT_ULTRALIGHT:	pStr = sCSS1_PV_extra_light; 	break;
-    case WEIGHT_LIGHT:		pStr = sCSS1_PV_light; 			break;
-    case WEIGHT_SEMILIGHT:	pStr = sCSS1_PV_demi_light; 	break;
-    case WEIGHT_NORMAL:		pStr = sCSS1_PV_normal;			break;
-    case WEIGHT_SEMIBOLD:	pStr = sCSS1_PV_demi_bold; 		break;
+    case WEIGHT_ULTRALIGHT: pStr = sCSS1_PV_extra_light;    break;
+    case WEIGHT_LIGHT:      pStr = sCSS1_PV_light;          break;
+    case WEIGHT_SEMILIGHT:  pStr = sCSS1_PV_demi_light;     break;
+    case WEIGHT_NORMAL:     pStr = sCSS1_PV_normal;         break;
+    case WEIGHT_SEMIBOLD:   pStr = sCSS1_PV_demi_bold;      break;
     case WEIGHT_BOLD:
         if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
         {
@@ -2875,7 +2875,7 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
             pStr = sCSS1_PV_bold;
         }
         break;
-    case WEIGHT_ULTRABOLD:	pStr = sCSS1_PV_extra_bold;		break;
+    case WEIGHT_ULTRABOLD:  pStr = sCSS1_PV_extra_bold;     break;
     default:
         pStr = sCSS1_PV_normal;;
     }
@@ -2909,7 +2909,7 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.bOutTable && rHTMLWrt.bCfgNetscape4 )
         return rWrt;
 
-    const SvxLineSpacingItem& rLSItem =	(const SvxLineSpacingItem&)rHt;
+    const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&)rHt;
 
     USHORT nHeight = 0;
     USHORT nPrcHeight = 0;
@@ -2968,10 +2968,10 @@ static Writer& OutCSS1_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
     const sal_Char* pStr = 0;
     switch( ((const SvxAdjustItem&)rHt).GetAdjust() )
     {
-    case SVX_ADJUST_LEFT:	pStr = sCSS1_PV_left; 		break;
-    case SVX_ADJUST_RIGHT:	pStr = sCSS1_PV_right;		break;
-    case SVX_ADJUST_BLOCK:	pStr = sCSS1_PV_justify;	break;
-    case SVX_ADJUST_CENTER: pStr = sCSS1_PV_center; 	break;
+    case SVX_ADJUST_LEFT:   pStr = sCSS1_PV_left;       break;
+    case SVX_ADJUST_RIGHT:  pStr = sCSS1_PV_right;      break;
+    case SVX_ADJUST_BLOCK:  pStr = sCSS1_PV_justify;    break;
+    case SVX_ADJUST_CENTER: pStr = sCSS1_PV_center;     break;
     default:
         ;
     }
@@ -3259,7 +3259,7 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
 static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
                                         const SvxFmtBreakItem *pBreakItem,
                                         const SwFmtPageDesc *pPDescItem,
-                                        const SvxFmtKeepItem *pKeepItem	)
+                                        const SvxFmtKeepItem *pKeepItem )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -3302,9 +3302,9 @@ static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
         {
             switch( pPDesc->GetPoolFmtId() )
             {
-            case RES_POOLPAGE_LEFT:		pBreakBefore = sCSS1_PV_left;	break;
-            case RES_POOLPAGE_RIGHT:	pBreakBefore = sCSS1_PV_right;	break;
-            default:					pBreakBefore = sCSS1_PV_always;	break;
+            case RES_POOLPAGE_LEFT:     pBreakBefore = sCSS1_PV_left;   break;
+            case RES_POOLPAGE_RIGHT:    pBreakBefore = sCSS1_PV_right;  break;
+            default:                    pBreakBefore = sCSS1_PV_always; break;
             }
         }
         else if( !pBreakBefore )
@@ -3372,7 +3372,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
         return rWrt;
 
     // Erstmal ein par Werte holen
-//	const Brush &rBrush = ((const SvxBrushItem &)rHt).GetBrush();
+//  const Brush &rBrush = ((const SvxBrushItem &)rHt).GetBrush();
     const Color & rColor = ((const SvxBrushItem &)rHt).GetColor();
     const String *pLink = pGrfName ? pGrfName
                             : ((const SvxBrushItem &)rHt).GetGraphicLink();
@@ -3415,7 +3415,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
             USHORT nErr = XOutBitmap::WriteGraphic( *pGrf, sGrfNm,
                         String::CreateFromAscii("JPG"),
                         XOUTBMP_USE_NATIVE_IF_POSSIBLE );
-            if( !nErr )		// fehlerhaft, da ist nichts auszugeben
+            if( !nErr )     // fehlerhaft, da ist nichts auszugeben
             {
                 sGrfNm = URIHelper::SmartRel2Abs(
                     INetURLObject(rWrt.GetBaseURL()), sGrfNm,
@@ -3590,7 +3590,7 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     }
     else
     {
-        nWidth *= 5; 	// 1/100pt
+        nWidth *= 5;    // 1/100pt
 
         // Breite als n.nn pt
         sOut += ByteString::CreateFromInt32( nWidth / 100 );
@@ -3709,37 +3709,37 @@ static Writer& OutCSS1_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
 
 
 SwAttrFnTab aCSS1AttrFnTab = {
-/* RES_CHRATR_CASEMAP	*/          OutCSS1_SvxCaseMap,
-/* RES_CHRATR_CHARSETCOLOR	*/      0,
-/* RES_CHRATR_COLOR	*/              OutCSS1_SvxColor,
-/* RES_CHRATR_CONTOUR	*/          0,
-/* RES_CHRATR_CROSSEDOUT	*/      OutCSS1_SvxCrossedOut,
-/* RES_CHRATR_ESCAPEMENT	*/      0,
-/* RES_CHRATR_FONT	*/              OutCSS1_SvxFont,
-/* RES_CHRATR_FONTSIZE	*/          OutCSS1_SvxFontHeight,
-/* RES_CHRATR_KERNING	*/          OutCSS1_SvxKerning,
-/* RES_CHRATR_LANGUAGE	*/          OutCSS1_SvxLanguage,
-/* RES_CHRATR_POSTURE	*/          OutCSS1_SvxPosture,
+/* RES_CHRATR_CASEMAP   */          OutCSS1_SvxCaseMap,
+/* RES_CHRATR_CHARSETCOLOR  */      0,
+/* RES_CHRATR_COLOR */              OutCSS1_SvxColor,
+/* RES_CHRATR_CONTOUR   */          0,
+/* RES_CHRATR_CROSSEDOUT    */      OutCSS1_SvxCrossedOut,
+/* RES_CHRATR_ESCAPEMENT    */      0,
+/* RES_CHRATR_FONT  */              OutCSS1_SvxFont,
+/* RES_CHRATR_FONTSIZE  */          OutCSS1_SvxFontHeight,
+/* RES_CHRATR_KERNING   */          OutCSS1_SvxKerning,
+/* RES_CHRATR_LANGUAGE  */          OutCSS1_SvxLanguage,
+/* RES_CHRATR_POSTURE   */          OutCSS1_SvxPosture,
 /* RES_CHRATR_PROPORTIONALFONTSIZE*/0,
-/* RES_CHRATR_SHADOWED	*/          0,
-/* RES_CHRATR_UNDERLINE	*/          OutCSS1_SvxUnderline,
-/* RES_CHRATR_WEIGHT	*/          OutCSS1_SvxFontWeight,
-/* RES_CHRATR_WORDLINEMODE	*/      0,
-/* RES_CHRATR_AUTOKERN	*/          0,
-/* RES_CHRATR_BLINK	*/          	OutCSS1_SvxBlink,
-/* RES_CHRATR_NOHYPHEN	*/          0, // Neu: nicht trennen
+/* RES_CHRATR_SHADOWED  */          0,
+/* RES_CHRATR_UNDERLINE */          OutCSS1_SvxUnderline,
+/* RES_CHRATR_WEIGHT    */          OutCSS1_SvxFontWeight,
+/* RES_CHRATR_WORDLINEMODE  */      0,
+/* RES_CHRATR_AUTOKERN  */          0,
+/* RES_CHRATR_BLINK */              OutCSS1_SvxBlink,
+/* RES_CHRATR_NOHYPHEN  */          0, // Neu: nicht trennen
 /* RES_CHRATR_NOLINEBREAK */        0, // Neu: nicht umbrechen
-/* RES_CHRATR_BACKGROUND */        	OutCSS1_SvxBrush, // Neu: Zeichenhintergrund
-/* RES_CHRATR_CJK_FONT */			OutCSS1_SvxFont,
-/* RES_CHRATR_CJK_FONTSIZE */		OutCSS1_SvxFontHeight,
-/* RES_CHRATR_CJK_LANGUAGE */		OutCSS1_SvxLanguage,
-/* RES_CHRATR_CJK_POSTURE */		OutCSS1_SvxPosture,
-/* RES_CHRATR_CJK_WEIGHT */			OutCSS1_SvxFontWeight,
-/* RES_CHRATR_CTL_FONT */			OutCSS1_SvxFont,
-/* RES_CHRATR_CTL_FONTSIZE */		OutCSS1_SvxFontHeight,
-/* RES_CHRATR_CTL_LANGUAGE */		OutCSS1_SvxLanguage,
-/* RES_CHRATR_CTL_POSTURE */		OutCSS1_SvxPosture,
-/* RES_CHRATR_CTL_WEIGHT */			OutCSS1_SvxFontWeight,
+/* RES_CHRATR_BACKGROUND */         OutCSS1_SvxBrush, // Neu: Zeichenhintergrund
+/* RES_CHRATR_CJK_FONT */           OutCSS1_SvxFont,
+/* RES_CHRATR_CJK_FONTSIZE */       OutCSS1_SvxFontHeight,
+/* RES_CHRATR_CJK_LANGUAGE */       OutCSS1_SvxLanguage,
+/* RES_CHRATR_CJK_POSTURE */        OutCSS1_SvxPosture,
+/* RES_CHRATR_CJK_WEIGHT */         OutCSS1_SvxFontWeight,
+/* RES_CHRATR_CTL_FONT */           OutCSS1_SvxFont,
+/* RES_CHRATR_CTL_FONTSIZE */       OutCSS1_SvxFontHeight,
+/* RES_CHRATR_CTL_LANGUAGE */       OutCSS1_SvxLanguage,
+/* RES_CHRATR_CTL_POSTURE */        OutCSS1_SvxPosture,
+/* RES_CHRATR_CTL_WEIGHT */         OutCSS1_SvxFontWeight,
 /* RES_CHRATR_ROTATE */             0,
 /* RES_CHRATR_EMPHASIS_MARK */      0,
 /* RES_CHRATR_TWO_LINES */          0,
@@ -3761,26 +3761,26 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
 /* RES_TXTATR_DUMMY5 */             0,
 
-/* RES_TXTATR_FIELD	*/          	0,
-/* RES_TXTATR_FLYCNT */ 			0,
-/* RES_TXTATR_FTN */				0,
+/* RES_TXTATR_FIELD */              0,
+/* RES_TXTATR_FLYCNT */             0,
+/* RES_TXTATR_FTN */                0,
 /* RES_TXTATR_DUMMY4 */             0,
 /* RES_TXTATR_DUMMY3 */             0,
-/* RES_TXTATR_DUMMY1 */        	    0, // Dummy:
-/* RES_TXTATR_DUMMY2 */        	    0, // Dummy:
+/* RES_TXTATR_DUMMY1 */             0, // Dummy:
+/* RES_TXTATR_DUMMY2 */             0, // Dummy:
 
-/* RES_PARATR_LINESPACING	*/      OutCSS1_SvxLineSpacing,
-/* RES_PARATR_ADJUST	*/          OutCSS1_SvxAdjust,
-/* RES_PARATR_SPLIT	*/				OutCSS1_SvxFmtSplit,
-/* RES_PARATR_WIDOWS	*/          OutCSS1_SvxWidows,
-/* RES_PARATR_ORPHANS	*/          OutCSS1_SvxOrphans,
-/* RES_PARATR_TABSTOP	*/          0,
+/* RES_PARATR_LINESPACING   */      OutCSS1_SvxLineSpacing,
+/* RES_PARATR_ADJUST    */          OutCSS1_SvxAdjust,
+/* RES_PARATR_SPLIT */              OutCSS1_SvxFmtSplit,
+/* RES_PARATR_WIDOWS    */          OutCSS1_SvxWidows,
+/* RES_PARATR_ORPHANS   */          OutCSS1_SvxOrphans,
+/* RES_PARATR_TABSTOP   */          0,
 /* RES_PARATR_HYPHENZONE*/          0,
-/* RES_PARATR_DROP */				OutCSS1_SwFmtDrop,
-/* RES_PARATR_REGISTER */        	0, // neu:  Registerhaltigkeit
-/* RES_PARATR_NUMRULE */       	    0, // Dummy:
-/* RES_PARATR_SCRIPTSPACE */   	    0, // Dummy:
-/* RES_PARATR_HANGINGPUNCTUATION */	0, // Dummy:
+/* RES_PARATR_DROP */               OutCSS1_SwFmtDrop,
+/* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
+/* RES_PARATR_NUMRULE */            0, // Dummy:
+/* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
+/* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
 /* RES_PARATR_FORBIDDEN_RULES */    0, // new
 /* RES_PARATR_VERTALIGN */          0, // new
 /* RES_PARATR_SNAPTOGRID*/          0, // new
@@ -3793,41 +3793,41 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_PARATR_LIST_RESTARTVALUE */  0, // new
 /* RES_PARATR_LIST_ISCOUNTED */     0, // new
 
-/* RES_FILL_ORDER	*/				0,
-/* RES_FRM_SIZE	*/					0,
-/* RES_PAPER_BIN	*/              0,
-/* RES_LR_SPACE	*/                  OutCSS1_SvxLRSpace,
-/* RES_UL_SPACE	*/                  OutCSS1_SvxULSpace,
-/* RES_PAGEDESC */					0,
-/* RES_BREAK */						0,
-/* RES_CNTNT */						0,
-/* RES_HEADER */		   			0,
-/* RES_FOOTER */		   			0,
-/* RES_PRINT */						0,
-/* RES_OPAQUE */					0,
-/* RES_PROTECT */					0,
-/* RES_SURROUND */					0,
-/* RES_VERT_ORIENT */				0,
-/* RES_HORI_ORIENT */				0,
-/* RES_ANCHOR */					0,
-/* RES_BACKGROUND */				OutCSS1_SvxBrush,
-/* RES_BOX	*/                      OutCSS1_SvxBox,
-/* RES_SHADOW */					0,
-/* RES_FRMMACRO */					0,
-/* RES_COL */						0,
-/* RES_KEEP */						0,
-/* RES_URL */        	    		0,
-/* RES_EDIT_IN_READONLY */        	0,
-/* RES_LAYOUT_SPLIT */ 	    		0,
-/* RES_CHAIN */        	    		0,
-/* RES_TEXTGRID */        	    	0,
-/* RES_LINENUMBER */        	    0,
-/* RES_FTN_AT_TXTEND */        	    0,
-/* RES_END_AT_TXTEND */        	    0,
-/* RES_COLUMNBALANCE */        	    0,
-/* RES_FRAMEDIR */        	    	OutCSS1_SvxFrameDirection,
+/* RES_FILL_ORDER   */              0,
+/* RES_FRM_SIZE */                  0,
+/* RES_PAPER_BIN    */              0,
+/* RES_LR_SPACE */                  OutCSS1_SvxLRSpace,
+/* RES_UL_SPACE */                  OutCSS1_SvxULSpace,
+/* RES_PAGEDESC */                  0,
+/* RES_BREAK */                     0,
+/* RES_CNTNT */                     0,
+/* RES_HEADER */                    0,
+/* RES_FOOTER */                    0,
+/* RES_PRINT */                     0,
+/* RES_OPAQUE */                    0,
+/* RES_PROTECT */                   0,
+/* RES_SURROUND */                  0,
+/* RES_VERT_ORIENT */               0,
+/* RES_HORI_ORIENT */               0,
+/* RES_ANCHOR */                    0,
+/* RES_BACKGROUND */                OutCSS1_SvxBrush,
+/* RES_BOX  */                      OutCSS1_SvxBox,
+/* RES_SHADOW */                    0,
+/* RES_FRMMACRO */                  0,
+/* RES_COL */                       0,
+/* RES_KEEP */                      0,
+/* RES_URL */                       0,
+/* RES_EDIT_IN_READONLY */          0,
+/* RES_LAYOUT_SPLIT */              0,
+/* RES_CHAIN */                     0,
+/* RES_TEXTGRID */                  0,
+/* RES_LINENUMBER */                0,
+/* RES_FTN_AT_TXTEND */             0,
+/* RES_END_AT_TXTEND */             0,
+/* RES_COLUMNBALANCE */             0,
+/* RES_FRAMEDIR */                  OutCSS1_SvxFrameDirection,
 /* RES_HEADER_FOOTER_EAT_SPACING */ 0,
-/* RES_FRMATR_DUMMY9 */        	    0, // Dummy:
+/* RES_FRMATR_DUMMY9 */             0, // Dummy:
 /* RES_FOLLOW_TEXT_FLOW */          0,
 /* RES_WRAP_INFLUENCE_ON_OBJPOS */  0,
 /* RES_FRMATR_DUMMY2 */             0, // Dummy:
@@ -3836,24 +3836,24 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_FRMATR_DUMMY5 */             0, // Dummy:
 
 /* RES_GRFATR_MIRRORGRF */          0,
-/* RES_GRFATR_CROPGRF	*/			0,
-/* RES_GRFATR_ROTATION */			0,
-/* RES_GRFATR_LUMINANCE */			0,
-/* RES_GRFATR_CONTRAST */			0,
-/* RES_GRFATR_CHANNELR */			0,
-/* RES_GRFATR_CHANNELG */			0,
-/* RES_GRFATR_CHANNELB */			0,
-/* RES_GRFATR_GAMMA */				0,
-/* RES_GRFATR_INVERT */				0,
-/* RES_GRFATR_TRANSPARENCY */		0,
-/* RES_GRFATR_DRWAMODE */			0,
-/* RES_GRFATR_DUMMY1 */				0,
-/* RES_GRFATR_DUMMY2 */				0,
-/* RES_GRFATR_DUMMY3 */				0,
-/* RES_GRFATR_DUMMY4 */				0,
-/* RES_GRFATR_DUMMY5 */				0,
+/* RES_GRFATR_CROPGRF   */          0,
+/* RES_GRFATR_ROTATION */           0,
+/* RES_GRFATR_LUMINANCE */          0,
+/* RES_GRFATR_CONTRAST */           0,
+/* RES_GRFATR_CHANNELR */           0,
+/* RES_GRFATR_CHANNELG */           0,
+/* RES_GRFATR_CHANNELB */           0,
+/* RES_GRFATR_GAMMA */              0,
+/* RES_GRFATR_INVERT */             0,
+/* RES_GRFATR_TRANSPARENCY */       0,
+/* RES_GRFATR_DRWAMODE */           0,
+/* RES_GRFATR_DUMMY1 */             0,
+/* RES_GRFATR_DUMMY2 */             0,
+/* RES_GRFATR_DUMMY3 */             0,
+/* RES_GRFATR_DUMMY4 */             0,
+/* RES_GRFATR_DUMMY5 */             0,
 
-/* RES_BOXATR_FORMAT */				0,
-/* RES_BOXATR_FORMULA */			0,
-/* RES_BOXATR_VALUE */				0
+/* RES_BOXATR_FORMAT */             0,
+/* RES_BOXATR_FORMULA */            0,
+/* RES_BOXATR_VALUE */              0
 };

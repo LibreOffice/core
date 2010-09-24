@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -54,6 +54,11 @@ else
 fi
 sd_prog=`pwd`
 cd "$sd_cwd"
+
+# linked build needs additional settings
+if [ -e ooenv ] ; then
+    source ooenv
+fi
 
 sd_binary=`basename "$0"`.bin
 

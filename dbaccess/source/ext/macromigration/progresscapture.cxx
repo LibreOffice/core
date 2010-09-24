@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ namespace dbmm
         if ( !m_pData->bDisposed )
             m_pData->rMasterProgress.startObject( m_pData->sObjectName, _rText, _nRange );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::end(  ) throw (RuntimeException)
     {
@@ -107,7 +107,7 @@ namespace dbmm
         if ( !m_pData->bDisposed )
             m_pData->rMasterProgress.endObject();
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::setText( const ::rtl::OUString& _rText ) throw (RuntimeException)
     {
@@ -115,7 +115,7 @@ namespace dbmm
         if ( !m_pData->bDisposed )
             m_pData->rMasterProgress.setObjectProgressText( _rText );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::setValue( ::sal_Int32 _nValue ) throw (RuntimeException)
     {
@@ -123,7 +123,7 @@ namespace dbmm
         if ( !m_pData->bDisposed )
             m_pData->rMasterProgress.setObjectProgressValue( _nValue );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::reset(  ) throw (RuntimeException)
     {

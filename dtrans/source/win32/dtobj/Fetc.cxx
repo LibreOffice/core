@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include "..\misc\ImplHelper.hxx"
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 CFormatEtc::CFormatEtc(  )
@@ -58,7 +58,7 @@ CFormatEtc::CFormatEtc( const FORMATETC& aFormatEtc )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 CFormatEtc::~CFormatEtc( )
@@ -67,7 +67,7 @@ CFormatEtc::~CFormatEtc( )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 CFormatEtc::CFormatEtc( CLIPFORMAT cf, DWORD tymed, DVTARGETDEVICE* ptd, DWORD dwAspect, LONG lindex )
@@ -76,11 +76,11 @@ CFormatEtc::CFormatEtc( CLIPFORMAT cf, DWORD tymed, DVTARGETDEVICE* ptd, DWORD d
     m_FormatEtc.ptd      = CopyTargetDevice( ptd );
     m_FormatEtc.dwAspect = dwAspect;
     m_FormatEtc.lindex   = lindex;
-    m_FormatEtc.tymed    = tymed; 
+    m_FormatEtc.tymed    = tymed;
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 CFormatEtc::CFormatEtc( const CFormatEtc& theOther )
@@ -93,7 +93,7 @@ CFormatEtc::CFormatEtc( const CFormatEtc& theOther )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 CFormatEtc& CFormatEtc::operator=( const CFormatEtc& theOther )
@@ -113,7 +113,7 @@ CFormatEtc& CFormatEtc::operator=( const CFormatEtc& theOther )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 CFormatEtc::operator FORMATETC*( )
@@ -122,7 +122,7 @@ CFormatEtc::operator FORMATETC*( )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 CFormatEtc::operator FORMATETC( )
@@ -131,7 +131,7 @@ CFormatEtc::operator FORMATETC( )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void CFormatEtc::getFORMATETC( LPFORMATETC lpFormatEtc )
@@ -143,7 +143,7 @@ void CFormatEtc::getFORMATETC( LPFORMATETC lpFormatEtc )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 CLIPFORMAT CFormatEtc::getClipformat( ) const
@@ -152,7 +152,7 @@ CLIPFORMAT CFormatEtc::getClipformat( ) const
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 DWORD CFormatEtc::getTymed( ) const
@@ -161,7 +161,7 @@ DWORD CFormatEtc::getTymed( ) const
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void CFormatEtc::getTargetDevice( DVTARGETDEVICE** lpDvTargetDevice ) const
@@ -176,7 +176,7 @@ void CFormatEtc::getTargetDevice( DVTARGETDEVICE** lpDvTargetDevice ) const
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 DWORD CFormatEtc::getDvAspect( ) const
@@ -185,7 +185,7 @@ DWORD CFormatEtc::getDvAspect( ) const
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 LONG CFormatEtc::getLindex( ) const
@@ -194,7 +194,7 @@ LONG CFormatEtc::getLindex( ) const
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void CFormatEtc::setClipformat( CLIPFORMAT cf )
@@ -203,7 +203,7 @@ void CFormatEtc::setClipformat( CLIPFORMAT cf )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void CFormatEtc::setTymed( DWORD tymed )
@@ -222,7 +222,7 @@ void CFormatEtc::setTargetDevice( DVTARGETDEVICE* ptd )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void CFormatEtc::setDvAspect( DWORD dwAspect )
@@ -231,7 +231,7 @@ void CFormatEtc::setDvAspect( DWORD dwAspect )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 void CFormatEtc::setLindex( LONG lindex )
@@ -240,7 +240,7 @@ void CFormatEtc::setLindex( LONG lindex )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 sal_Int32 operator==( const CFormatEtc& lhs, const CFormatEtc& rhs )
@@ -249,7 +249,7 @@ sal_Int32 operator==( const CFormatEtc& lhs, const CFormatEtc& rhs )
 }
 
 //------------------------------------------------------------------------
-// 
+//
 //------------------------------------------------------------------------
 
 sal_Int32 operator!=( const CFormatEtc& lhs, const CFormatEtc& rhs )

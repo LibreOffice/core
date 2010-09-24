@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,60 +24,60 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_style_NumberingAlignment_idl__ 
-#define __com_sun_star_style_NumberingAlignment_idl__ 
- 
-#ifndef __com_sun_star_style_HorizontalAlignment_idl__ 
-#include <com/sun/star/style/HorizontalAlignment.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module style {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_style_NumberingAlignment_idl__
+#define __com_sun_star_style_NumberingAlignment_idl__
+
+#ifndef __com_sun_star_style_HorizontalAlignment_idl__
+#include <com/sun/star/style/HorizontalAlignment.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module style {
+
+//=============================================================================
+
 // DocMerge from xml: service com::sun::star::style::NumberingAlignment
 /** specify the alignment of a numbering level.
  */
 published service NumberingAlignment
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::style::NumberingAlignment::Alignment
     /** set the alignment from the numbering. Use the com::sun::star::style::HorizontalAlignment enum to change the alignment.
      */
-    [property] com::sun::star::style::HorizontalAlignment Alignment; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] com::sun::star::style::HorizontalAlignment Alignment;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::style::NumberingAlignment::TextMarginDistance
     /** the minimum distance between the numbering symbol and the following text.
      */
-    [property] short TextMarginDistance; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] short TextMarginDistance;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::style::NumberingAlignment::TextNumberingDistance
     /** the distance between left margin and the numbering symbol.
      */
-    [property] short TextNumberingDistance; 
- 
-    //------------------------------------------------------------------------- 
-     
+    [property] short TextNumberingDistance;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: property com::sun::star::style::NumberingAlignment::Insertion
     /** the distance between the numbering symbol and text.
      */
-    [property] short Insertion; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+    [property] short Insertion;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

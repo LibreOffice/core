@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@ struct FormulaEntry{
 };
 
 // empty square
-#define DEFAULT_VALUE 	0x25a1
-const struct FormulaEntry FormulaMapTab[] = { 
+#define DEFAULT_VALUE   0x25a1
+const struct FormulaEntry FormulaMapTab[] = {
 /* Capital Greek */
 {"Alpha", 0x0391},
 {"Beta", 0x0392},
@@ -111,7 +111,7 @@ const struct FormulaEntry FormulaMapTab[] = {
 {"varphi", 0x03c6},
 
 
-// Big Symbol 
+// Big Symbol
 {"sum", 0x2211},
 {"smallsum", 0x03a3},
 {"prod", 0x220f},
@@ -146,8 +146,8 @@ const struct FormulaEntry FormulaMapTab[] = {
 {"supseteq", 0x2287},
 {"in", 0x2208},
 {"ni", 0x220b},
-{"notin", 0x2209}, 
-{"notni", 0x220c}, 
+{"notin", 0x2209},
+{"notni", 0x220c},
 {"leq", 0x2264},
 {"geq", 0x2265},
 {"sqsubset", 0x228f},
@@ -162,7 +162,7 @@ const struct FormulaEntry FormulaMapTab[] = {
 {"succ", 0x227b},
 {"biguplus", 0x228e},
 
-// Binary Operator 
+// Binary Operator
 {"pm", 0x00b1},
 {"mp", 0x2213},
 {"times", 0x00d7},
@@ -194,7 +194,7 @@ const struct FormulaEntry FormulaMapTab[] = {
 {"diamond", 0x22c4},
 {"dsum", 0x2214}, // add
 {"forall", 0x2200},
-{"prime", DEFAULT_VALUE}, // ' 
+{"prime", DEFAULT_VALUE}, // '
 {"partial", 0x2202},
 {"infty", 0x221e},
 {"propto", 0x221d},
@@ -204,7 +204,7 @@ const struct FormulaEntry FormulaMapTab[] = {
 {"ddagger", 0x2021},
 {"LNOT", DEFAULT_VALUE},
 
-// Arrows 
+// Arrows
 {"leftarrow", 0x2190},
 {"uparrow", 0x2191},
 {"rightarrow", 0x2192},
@@ -295,7 +295,7 @@ const struct FormulaEntry FormulaMapTab[] = {
 {"not", DEFAULT_VALUE},
 {"mapsto", DEFAULT_VALUE},
 
-// Arrows 
+// Arrows
 {"to", DEFAULT_VALUE},
 
 {"leftharpoonup", DEFAULT_VALUE},
@@ -310,7 +310,7 @@ const struct FormulaEntry FormulaMapTab[] = {
 {"rightharpoonup", DEFAULT_VALUE},
 {"rightharpoondown", DEFAULT_VALUE},
 
-// Delimeter 
+// Delimeter
 {"(", DEFAULT_VALUE},
 {")", DEFAULT_VALUE},
 {"[", DEFAULT_VALUE},
@@ -325,7 +325,7 @@ const struct FormulaEntry FormulaMapTab[] = {
 {"rangle", DEFAULT_VALUE},
 {"mid", DEFAULT_VALUE},
 
-// Large Delimeter 
+// Large Delimeter
 {"rmoustache", DEFAULT_VALUE},
 {"lmoustache", DEFAULT_VALUE},
 {"rgroup", DEFAULT_VALUE},
@@ -335,28 +335,28 @@ const struct FormulaEntry FormulaMapTab[] = {
 {"bracevert", DEFAULT_VALUE},
 
 // Accent
-{"hat", DEFAULT_VALUE}, 
+{"hat", DEFAULT_VALUE},
 {"breve", DEFAULT_VALUE},
 {"grave", DEFAULT_VALUE},
 {"bar", DEFAULT_VALUE},
 {"ddot", DEFAULT_VALUE},
-{"check", DEFAULT_VALUE}, 
+{"check", DEFAULT_VALUE},
 {"acute", DEFAULT_VALUE},
 {"tilde", DEFAULT_VALUE},
 {"dot", DEFAULT_VALUE},
-{"vec", DEFAULT_VALUE},  
+{"vec", DEFAULT_VALUE},
 
-// Decoration 
-{"overline", DEFAULT_VALUE}, 
+// Decoration
+{"overline", DEFAULT_VALUE},
 {"underline", DEFAULT_VALUE},
 {"overbrace", DEFAULT_VALUE},
 {"underbrace", DEFAULT_VALUE},
-{"widehat", DEFAULT_VALUE}, 
+{"widehat", DEFAULT_VALUE},
 {"widetilde", DEFAULT_VALUE},
-{"overleftarrow", DEFAULT_VALUE}, 
+{"overleftarrow", DEFAULT_VALUE},
 {"overrightarrow", DEFAULT_VALUE},
 
-// Space Symbol 
+// Space Symbol
 {",", DEFAULT_VALUE},
 {":", DEFAULT_VALUE},
 {";", DEFAULT_VALUE},
@@ -371,7 +371,7 @@ hchar *getMathMLEntity(const char *tex, hchar *buf)
 {
      static int tabSize = sizeof( FormulaMapTab ) / sizeof( FormulaMapTab[0] );
      int i, len;
-     
+
      for( i = 0 ; i < tabSize ; i++ ){
           if( !strcmp(tex, FormulaMapTab[i].tex ) ) {
                 buf[0] = FormulaMapTab[i].ucs;

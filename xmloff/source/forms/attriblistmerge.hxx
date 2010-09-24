@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@ namespace xmloff
     //=====================================================================
     //= OAttribListMerger
     //=====================================================================
-    typedef ::cppu::WeakImplHelper1	<	::com::sun::star::xml::sax::XAttributeList
-                                    >	OAttribListMerger_Base;
+    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::xml::sax::XAttributeList
+                                    >   OAttribListMerger_Base;
     /** implements the XAttributeList list by merging different source attribute lists
 
         <p>Currently, the time behavious is O(n), though it would be possible to change it to O(log n).</p>
@@ -50,9 +50,9 @@ namespace xmloff
     class OAttribListMerger : public OAttribListMerger_Base
     {
     protected:
-        ::osl::Mutex		m_aMutex;
+        ::osl::Mutex        m_aMutex;
         DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >, AttributeListArray );
-        AttributeListArray	m_aLists;
+        AttributeListArray  m_aLists;
 
         ~OAttribListMerger() { }
 
@@ -78,7 +78,7 @@ namespace xmloff
 
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_ATTRIBLISTMERGE_HXX_

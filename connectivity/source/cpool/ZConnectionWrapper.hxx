@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace connectivity
     typedef ::cppu::WeakComponentImplHelper1<       ::com::sun::star::sdbc::XConnection
                                             > OConnectionWeakWrapper_BASE;
 
-    class OConnectionWeakWrapper :	 public ::comphelper::OBaseMutex
+    class OConnectionWeakWrapper :   public ::comphelper::OBaseMutex
                                 ,public OConnectionWeakWrapper_BASE
                                 , public OConnectionWrapper
     {
@@ -54,7 +54,7 @@ namespace connectivity
         virtual ~OConnectionWeakWrapper();
     public:
         OConnectionWeakWrapper(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _xConnection);
-        
+
         // XServiceInfo
         DECLARE_SERVICE_INFO();
         DECLARE_XTYPEPROVIDER()

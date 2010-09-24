@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,8 +32,8 @@
 
 /* disable some warnings for MS-C */
 #ifdef _MSC_VER
-#	pragma warning (disable : 4786) // 4786: truncated names (longer 255 chars)
-#	pragma warning (disable : 4355)	// 4355: this used in initializer-list
+#   pragma warning (disable : 4786) // 4786: truncated names (longer 255 chars)
+#   pragma warning (disable : 4355) // 4355: this used in initializer-list
 #endif
 
 #endif //_VOS_TYPES_HXX_

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@ class UNOTOOLS_DLLPUBLIC SvtFilterOptions : public utl::ConfigItem
     const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
 public:
                     SvtFilterOptions();
-    virtual 	   ~SvtFilterOptions();
+    virtual        ~SvtFilterOptions();
 
-    virtual void 			Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
-    virtual void			Commit();
-    void					Load();
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void            Commit();
+    void                    Load();
 
     void SetLoadWordBasicCode( sal_Bool bFlag );
     sal_Bool IsLoadWordBasicCode() const;

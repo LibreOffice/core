@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@ struct DownloadInteractionHandler : public rtl::IReference
 
     // called if the destination file already exists, but resume is false
     virtual bool downloadTargetExists(const rtl::OUString& rFileName) = 0;
-    
+
     // called when curl reports an error
     virtual void downloadStalled(const rtl::OUString& rErrorMessage) = 0;
-    
+
     // progress handler
     virtual void downloadProgressAt(sal_Int8 nPercent) = 0;
-    
+
     // called on first progress notification
     virtual void downloadStarted(const rtl::OUString& rFileName, sal_Int64 nFileSize) = 0;
 
@@ -62,19 +62,19 @@ public:
 
     // returns true when the content of rURL was successfully written to rLocalFile
     bool start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl::OUString& rDestinationDir);
-    
+
     // stops the download after the next write operation
     void stop();
-    
+
     // returns true if the stop condition is set
     bool isStopped() const
         { return sal_True == const_cast <Download *> (this)->m_aCondition.check(); };
-    
+
 protected:
 
     // Determines the appropriate proxy settings for the given URL. Returns true if a proxy should be used
     void getProxyForURL(const rtl::OUString& rURL, rtl::OString& rHost, sal_Int32& rPort) const;
-        
+
 private:
     osl::Condition m_aCondition;
     const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& m_xContext;

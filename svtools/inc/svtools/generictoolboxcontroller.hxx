@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __SVTOOLS_GENERICTOOLBOXCONTROLLER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include "svtools/svtdllapi.h"
@@ -43,7 +43,7 @@ struct ExecuteInfo;
 class SVT_DLLPUBLIC GenericToolboxController : public svt::ToolboxController
 {
     public:
-        GenericToolboxController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager, 
+        GenericToolboxController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox* pToolBox,
                                   USHORT   nID,
@@ -54,12 +54,12 @@ class SVT_DLLPUBLIC GenericToolboxController : public svt::ToolboxController
         virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
 
         // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException); 
+        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException);
 
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 
-         DECL_STATIC_LINK( GenericToolboxController, ExecuteHdl_Impl, ExecuteInfo* ); 
+         DECL_STATIC_LINK( GenericToolboxController, ExecuteHdl_Impl, ExecuteInfo* );
 
     private:
         ToolBox*    m_pToolbox;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_CLASSES_PROTOCOLHANDLERCACHE_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <general.h>
@@ -37,25 +37,25 @@
 #include <macros/debug.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/util/URL.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 
 #include <unotools/configitem.hxx>
 #include <rtl/ustring.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	exported const
+//  exported const
 //_________________________________________________________________________________________________________________
 
 #define PACKAGENAME_PROTOCOLHANDLER                 DECLARE_ASCII("Office.ProtocolHandler"                          )   /// name of our configuration package
@@ -126,7 +126,7 @@ typedef BaseHash< ProtocolHandler > HandlerHash;
                     Because to safe access on static member we must use a static global lock
                     here too.
 
-    @devstatus		ready to use
+    @devstatus      ready to use
     @threadsafe     yes
 
     @modified       30.04.2002 11:19, as96863
@@ -156,7 +156,7 @@ class HandlerCache
         sal_Bool search( const ::rtl::OUString& sURL, ProtocolHandler* pReturn ) const;
         sal_Bool search( const css::util::URL&  aURL, ProtocolHandler* pReturn ) const;
         sal_Bool exists( const ::rtl::OUString& sURL ) const;
-        
+
         void takeOver(HandlerHash* pHandler, PatternHash* pPattern);
 };
 
@@ -173,7 +173,7 @@ class HandlerCache
     @base           ::utl::ConfigItem
                     base mechanism for configuration access
 
-    @devstatus		ready to use
+    @devstatus      ready to use
     @threadsafe     no
 
     @modified       30.04.2002 09:58, as96863

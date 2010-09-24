@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,30 +24,30 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_XDataSource_idl__ 
-#define __com_sun_star_sdbc_XDataSource_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_sdbc_SQLException_idl__ 
-#include <com/sun/star/sdbc/SQLException.idl> 
-#endif 
- 
- module com {  module sun {  module star {  module sdbc { 
- 
- published interface XConnection; 
- 
- 
+#ifndef __com_sun_star_sdbc_XDataSource_idl__
+#define __com_sun_star_sdbc_XDataSource_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XConnection;
+
+
 /** is used for establishing connections via a factory which is identified
     by its name. A DataSource object is typically registered by a naming service
     provider.
  */
 published interface XDataSource: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-      
+{
+    //-------------------------------------------------------------------------
+
     /** attempts to establish a database connection.
         @param user
             the user name
@@ -55,17 +55,17 @@ published interface XDataSource: com::sun::star::uno::XInterface
             the password
         @returns
             the connection object
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XConnection getConnection([in]string user, [in]string password) 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XConnection getConnection([in]string user, [in]string password)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** sets the maximum time in seconds that this data source will wait
         while attempting to connect to a database.
-        
-        
+
+
         <p>
         A value of zero specifies that the timeout is the default system
         timeout if there is one; otherwise, it specifies that there is no timeout.
@@ -73,17 +73,17 @@ published interface XDataSource: com::sun::star::uno::XInterface
         </p>
         @param seconds
             the login time limit in seconds
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    void setLoginTimeout([in]long seconds) 
-         raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    void setLoginTimeout([in]long seconds)
+         raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the maximum time in seconds that this data source can wait
         while attempting to connect to a database.
-        
-        
+
+
         <p>
         A value of zero means that the timeout is the default system timeout
         if there is one; otherwise, it means that there is no timeout. When a
@@ -91,16 +91,16 @@ published interface XDataSource: com::sun::star::uno::XInterface
         </p>
         @returns
             the login time limit in seconds
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getLoginTimeout() raises (SQLException); 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    long getLoginTimeout() raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

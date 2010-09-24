@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class Content;
 
 class ResultSetDataSupplier : public ::ucbhelper::ResultSetDataSupplier
 {
-    DataSupplier_Impl*	m_pImpl;
+    DataSupplier_Impl*  m_pImpl;
 
 private:
     bool queryNamesOfChildren();

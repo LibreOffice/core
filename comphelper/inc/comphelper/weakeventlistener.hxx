@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,13 +82,13 @@ namespace comphelper
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XWeak >& _rxListener,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxBroadcaster
         )
-            :m_aListener	(  _rxListener )
-            ,m_xBroadcaster	( _rxBroadcaster )
+            :m_aListener    (  _rxListener )
+            ,m_xBroadcaster ( _rxBroadcaster )
         {
         }
 
     protected:
-        virtual	~OWeakListenerAdapterBase();
+        virtual ~OWeakListenerAdapterBase();
     };
 
 
@@ -119,9 +119,9 @@ namespace comphelper
         );
 
     protected:
-        inline	::com::sun::star::uno::Reference< LISTENER > getListener( ) const
+        inline  ::com::sun::star::uno::Reference< LISTENER > getListener( ) const
         {
-            return	::com::sun::star::uno::Reference< LISTENER >( OWeakListenerAdapterBase::getListener(), ::com::sun::star::uno::UNO_QUERY );
+            return  ::com::sun::star::uno::Reference< LISTENER >( OWeakListenerAdapterBase::getListener(), ::com::sun::star::uno::UNO_QUERY );
         }
 
         // XEventListener overridables
@@ -136,10 +136,10 @@ namespace comphelper
     //=====================================================================
     //= OWeakEventListenerAdapter
     //=====================================================================
-    typedef OWeakListenerAdapter	<	::com::sun::star::lang::XComponent
-                                    ,	::com::sun::star::lang::XEventListener
-                                    >	OWeakEventListenerAdapter_Base;
-    /**	the most simple listener adapter: for XEventListeners at XComponents
+    typedef OWeakListenerAdapter    <   ::com::sun::star::lang::XComponent
+                                    ,   ::com::sun::star::lang::XEventListener
+                                    >   OWeakEventListenerAdapter_Base;
+    /** the most simple listener adapter: for XEventListeners at XComponents
     */
     class COMPHELPER_DLLPUBLIC OWeakEventListenerAdapter : public OWeakEventListenerAdapter_Base
     {
@@ -181,7 +181,7 @@ namespace comphelper
     }
 
 //.........................................................................
-}	// namespace comphelper
+}   // namespace comphelper
 //.........................................................................
 
 #endif// COMPHELPER_WEAKEVENTLISTENER_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@
 
 // =======================================================================
 
-#define GROUP_BORDER			12
-#define GROUP_TEXT_BORDER		2
+#define GROUP_BORDER            12
+#define GROUP_TEXT_BORDER       2
 
-#define GROUP_VIEW_STYLE		(WB_3DLOOK | WB_NOLABEL)
+#define GROUP_VIEW_STYLE        (WB_3DLOOK | WB_NOLABEL)
 
 // =======================================================================
 
@@ -136,12 +136,12 @@ GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
 void GroupBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
 {
-    long					nTop;
-    long					nTextOff;
-    const StyleSettings&	rStyleSettings = GetSettings().GetStyleSettings();
-    XubString				aText( GetText() );
-    Rectangle				aRect( rPos, rSize );
-    USHORT					nTextStyle = TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_MNEMONIC;
+    long                    nTop;
+    long                    nTextOff;
+    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
+    XubString               aText( GetText() );
+    Rectangle               aRect( rPos, rSize );
+    USHORT                  nTextStyle = TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_MNEMONIC;
 
     if ( GetStyle() & WB_NOLABEL )
         nTextStyle &= ~TEXT_DRAW_MNEMONIC;
@@ -186,7 +186,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
             pDev->SetLineColor( Color( COL_BLACK ) );
         else
             pDev->SetLineColor( rStyleSettings.GetShadowColor() );
-        
+
         if ( !aText.Len() )
             pDev->DrawLine( Point( rPos.X(), nTop ), Point( rPos.X()+rSize.Width()-2, nTop ) );
         else
@@ -228,7 +228,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 void GroupBox::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    const_cast<GroupBox*>(this)->	ImplDraw( const_cast<GroupBox*>(this), 0, Point(), GetOutputSizePixel(), true );
+    const_cast<GroupBox*>(this)->   ImplDraw( const_cast<GroupBox*>(this), 0, Point(), GetOutputSizePixel(), true );
 }
 
 // -----------------------------------------------------------------------
@@ -243,9 +243,9 @@ void GroupBox::Paint( const Rectangle& )
 void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                      ULONG nFlags )
 {
-    Point		aPos  = pDev->LogicToPixel( rPos );
-    Size		aSize = pDev->LogicToPixel( rSize );
-    Font		aFont = GetDrawPixelFont( pDev );
+    Point       aPos  = pDev->LogicToPixel( rPos );
+    Size        aSize = pDev->LogicToPixel( rSize );
+    Font        aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -288,7 +288,7 @@ void GroupBox::StateChanged( StateChangedType nType )
              (GetStyle() & GROUP_VIEW_STYLE) )
             Invalidate();
     }
-    else if ( (nType == STATE_CHANGE_ZOOM)	||
+    else if ( (nType == STATE_CHANGE_ZOOM)  ||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
         ImplInitSettings( TRUE, FALSE, FALSE );

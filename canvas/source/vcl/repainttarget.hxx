@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class GraphicAttr;
 namespace vclcanvas
 {
     /* Definition of RepaintTarget interface */
-    
+
     /** Target interface for XCachedPrimitive implementations
 
         This interface must be implemented on all canvas
@@ -54,7 +54,7 @@ namespace vclcanvas
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
                               const ::com::sun::star::rendering::ViewState&   viewState,
                               const ::com::sun::star::rendering::RenderState& renderState,
-                              const ::Point&                                  rPt, 
+                              const ::Point&                                  rPt,
                               const ::Size&                                   rSz,
                               const GraphicAttr&                              rAttr ) const = 0;
     };

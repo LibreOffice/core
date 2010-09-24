@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,22 +42,22 @@ public:
                         ScFormEditData();
                         virtual ~ScFormEditData();
 
-    ScInputHandler*		GetInputHandler()	{ return pInputHandler;}
-    ScDocShell*			GetDocShell()		{ return pScDocShell;}
+    ScInputHandler*     GetInputHandler()   { return pInputHandler;}
+    ScDocShell*         GetDocShell()       { return pScDocShell;}
 
-    void				SetInputHandler(ScInputHandler* pHdl)	{ pInputHandler=pHdl;}
-    void				SetDocShell(ScDocShell* pSds)			{ pScDocShell=pSds;}
+    void                SetInputHandler(ScInputHandler* pHdl)   { pInputHandler=pHdl;}
+    void                SetDocShell(ScDocShell* pSds)           { pScDocShell=pSds;}
 
 
-    virtual void			SaveValues();
+    virtual void            SaveValues();
 
 private:
                         ScFormEditData( const ScFormEditData& );
-//	const ScFormEditData& operator=( const ScFormEditData& r );
+//  const ScFormEditData& operator=( const ScFormEditData& r );
 
 
-    ScInputHandler*		pInputHandler;
-    ScDocShell*			pScDocShell;
+    ScInputHandler*     pInputHandler;
+    ScDocShell*         pScDocShell;
 };
 
 

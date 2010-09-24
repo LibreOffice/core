@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,65 +153,65 @@ namespace comphelper
     {
         switch( eType )
         {
-            case CPPUTYPE_BOOLEAN:		pType = &::getBooleanCppuType();	break;
-            case CPPUTYPE_INT8:			pType = &::getCppuType( (sal_Int8*)0 );	break;
-            case CPPUTYPE_INT16:		pType = &::getCppuType( (sal_Int16*)0 );	break;
-            case CPPUTYPE_INT32:		pType = &::getCppuType( (sal_Int32*)0 );	break;
+            case CPPUTYPE_BOOLEAN:      pType = &::getBooleanCppuType();    break;
+            case CPPUTYPE_INT8:         pType = &::getCppuType( (sal_Int8*)0 ); break;
+            case CPPUTYPE_INT16:        pType = &::getCppuType( (sal_Int16*)0 );    break;
+            case CPPUTYPE_INT32:        pType = &::getCppuType( (sal_Int32*)0 );    break;
 
-            case CPPUTYPE_DOUBLE:		pType = &::getCppuType( (double*)0 ); break;
-            case CPPUTYPE_FLOAT:		pType = &::getCppuType( (float*)0 );	break;
-            case CPPUTYPE_OUSTRING:		pType = &::getCppuType( (OUString*)0 );	break;
-            case CPPUTYPE_FONTSLANT:	pType = &::getCppuType( (FontSlant*)0 );	break;
-            case CPPUTYPE_LOCALE:		pType = &::getCppuType( (Locale*)0 );	break;
-            case CPPUTYPE_PROPERTYVALUE:pType = &::getCppuType( (Sequence<PropertyValue>*)0 );	break;
-            case CPPUTYPE_PROPERTYVALUES:	pType = &::getCppuType( (Sequence<PropertyValues>*)0 );	break;
-            case CPPUTYPE_BORDERLINE:	pType = &::getCppuType( (table::BorderLine*)0 );	break;
-            case CPPUTYPE_BREAK:		pType = &::getCppuType( (style::BreakType*)0 );	break;
-            case CPPUTYPE_GRAPHICLOC:	pType = &::getCppuType( (style::GraphicLocation*)0 );	break;
-            case CPPUTYPE_DROPCAPFMT:	pType = &::getCppuType( (style::DropCapFormat*)0 );	break;
-            case CPPUTYPE_LINESPACE:	pType = &::getCppuType( (style::LineSpacing*)0 );	break;
+            case CPPUTYPE_DOUBLE:       pType = &::getCppuType( (double*)0 ); break;
+            case CPPUTYPE_FLOAT:        pType = &::getCppuType( (float*)0 );    break;
+            case CPPUTYPE_OUSTRING:     pType = &::getCppuType( (OUString*)0 ); break;
+            case CPPUTYPE_FONTSLANT:    pType = &::getCppuType( (FontSlant*)0 );    break;
+            case CPPUTYPE_LOCALE:       pType = &::getCppuType( (Locale*)0 );   break;
+            case CPPUTYPE_PROPERTYVALUE:pType = &::getCppuType( (Sequence<PropertyValue>*)0 );  break;
+            case CPPUTYPE_PROPERTYVALUES:   pType = &::getCppuType( (Sequence<PropertyValues>*)0 ); break;
+            case CPPUTYPE_BORDERLINE:   pType = &::getCppuType( (table::BorderLine*)0 );    break;
+            case CPPUTYPE_BREAK:        pType = &::getCppuType( (style::BreakType*)0 ); break;
+            case CPPUTYPE_GRAPHICLOC:   pType = &::getCppuType( (style::GraphicLocation*)0 );   break;
+            case CPPUTYPE_DROPCAPFMT:   pType = &::getCppuType( (style::DropCapFormat*)0 ); break;
+            case CPPUTYPE_LINESPACE:    pType = &::getCppuType( (style::LineSpacing*)0 );   break;
 
-            case CPPUTYPE_AWTSIZE:		pType = &::getCppuType( (awt::Size*)0 );	break;
-            case CPPUTYPE_SHADOWFMT:	pType = &::getCppuType( (table::ShadowFormat*)0 );	break;
-            case CPPUTYPE_TBLCOLSEP:	pType = &::getCppuType( (Sequence<text::TableColumnSeparator>*)0 );	break;
-            case CPPUTYPE_PNTSEQSEQ:	pType = &::getCppuType( (PointSequenceSequence*)0 );	break;
-            case CPPUTYPE_DOCIDXMRK:	pType = &::getCppuType( (Sequence< Reference< XDocumentIndexMark > >*)0 );	break;
-            case CPPUTYPE_SEQINT8:		pType = &::getCppuType( (Sequence<sal_Int8>*)0 );	break;
-            case CPPUTYPE_SEQTABSTOP:	pType = &::getCppuType( (Sequence<style::TabStop>*)0 ); break;
+            case CPPUTYPE_AWTSIZE:      pType = &::getCppuType( (awt::Size*)0 );    break;
+            case CPPUTYPE_SHADOWFMT:    pType = &::getCppuType( (table::ShadowFormat*)0 );  break;
+            case CPPUTYPE_TBLCOLSEP:    pType = &::getCppuType( (Sequence<text::TableColumnSeparator>*)0 ); break;
+            case CPPUTYPE_PNTSEQSEQ:    pType = &::getCppuType( (PointSequenceSequence*)0 );    break;
+            case CPPUTYPE_DOCIDXMRK:    pType = &::getCppuType( (Sequence< Reference< XDocumentIndexMark > >*)0 );  break;
+            case CPPUTYPE_SEQINT8:      pType = &::getCppuType( (Sequence<sal_Int8>*)0 );   break;
+            case CPPUTYPE_SEQTABSTOP:   pType = &::getCppuType( (Sequence<style::TabStop>*)0 ); break;
             case CPPUTYPE_SEQANCHORTYPE:pType = &::getCppuType( (Sequence<text::TextContentAnchorType>*)0 ); break;
-            case CPPUTYPE_SEQDEPTXTFLD:	pType = &::getCppuType( (Sequence<Reference<XDependentTextField> >*)0); break;
-            case CPPUTYPE_TXTCNTANCHOR:	pType = &::getCppuType( (text::TextContentAnchorType*)0 );	break;
-            case CPPUTYPE_WRAPTXTMODE:	pType = &::getCppuType( (text::WrapTextMode*)0 );	break;
+            case CPPUTYPE_SEQDEPTXTFLD: pType = &::getCppuType( (Sequence<Reference<XDependentTextField> >*)0); break;
+            case CPPUTYPE_TXTCNTANCHOR: pType = &::getCppuType( (text::TextContentAnchorType*)0 );  break;
+            case CPPUTYPE_WRAPTXTMODE:  pType = &::getCppuType( (text::WrapTextMode*)0 );   break;
 
-            case CPPUTYPE_COLORMODE:	pType = &::getCppuType( (drawing::ColorMode*)0 ); break;
-            case CPPUTYPE_PAGESTYLELAY:	pType = &::getCppuType( (style::PageStyleLayout*)0 ); break;
-            case CPPUTYPE_VERTALIGN:	pType = &::getCppuType( (style::VerticalAlignment*)0 ); break;
-            case CPPUTYPE_TABLEBORDER:	pType = &::getCppuType( (table::TableBorder*)0 ); break;
-            case CPPUTYPE_GRFCROP:		pType = &::getCppuType( (text::GraphicCrop*)0 ); break;
-            case CPPUTYPE_SECTFILELNK:	pType = &::getCppuType( (text::SectionFileLink*)0 ); break;
-            case CPPUTYPE_PAGENUMTYPE: 	pType = &::getCppuType( (text::PageNumberType*)0); break;
-            case CPPUTYPE_DATETIME:		pType = &::getCppuType( (util::DateTime*)0 ); break;
-            case CPPUTYPE_DATE:			pType = &::getCppuType( (util::Date*)0 ); break;
+            case CPPUTYPE_COLORMODE:    pType = &::getCppuType( (drawing::ColorMode*)0 ); break;
+            case CPPUTYPE_PAGESTYLELAY: pType = &::getCppuType( (style::PageStyleLayout*)0 ); break;
+            case CPPUTYPE_VERTALIGN:    pType = &::getCppuType( (style::VerticalAlignment*)0 ); break;
+            case CPPUTYPE_TABLEBORDER:  pType = &::getCppuType( (table::TableBorder*)0 ); break;
+            case CPPUTYPE_GRFCROP:      pType = &::getCppuType( (text::GraphicCrop*)0 ); break;
+            case CPPUTYPE_SECTFILELNK:  pType = &::getCppuType( (text::SectionFileLink*)0 ); break;
+            case CPPUTYPE_PAGENUMTYPE:  pType = &::getCppuType( (text::PageNumberType*)0); break;
+            case CPPUTYPE_DATETIME:     pType = &::getCppuType( (util::DateTime*)0 ); break;
+            case CPPUTYPE_DATE:         pType = &::getCppuType( (util::Date*)0 ); break;
 
-            case CPPUTYPE_REFINTERFACE:	pType = &::getCppuType( (Reference<XInterface>*)0 );	break;
-            case CPPUTYPE_REFIDXREPL:	pType = &::getCppuType( (Reference<container::XIndexReplace>*)0 );	break;
-            case CPPUTYPE_REFNAMECNT:	pType = &::getCppuType( (Reference<container::XNameContainer>*)0 );	break;
-            case CPPUTYPE_REFTEXTFRAME:	pType = &::getCppuType( (Reference<text::XTextFrame>*)0 );	break;
-            case CPPUTYPE_REFTEXTSECTION:	pType = &::getCppuType( (Reference<text::XTextSection>*)0 );	break;
-            case CPPUTYPE_REFFOOTNOTE:	pType = &::getCppuType( (Reference<text::XFootnote>*)0 );	break;
-            case CPPUTYPE_REFTEXT:		pType = &::getCppuType( (Reference<text::XText>*)0 );	break;
-            case CPPUTYPE_REFTEXTCOL:	pType = &::getCppuType( (Reference<text::XTextColumns>*)0 );	break;
-            case CPPUTYPE_REFFORBCHARS:	pType = &::getCppuType( (Reference<XForbiddenCharacters>*)0 ); break;
-            case CPPUTYPE_REFIDXCNTNR:	pType = &::getCppuType( (Reference<XIndexContainer>*)0 ); break;
-            case CPPUTYPE_REFTEXTCNTNT:	pType = &::getCppuType( (Reference<XTextContent>*)0 ); break;
-            case CPPUTYPE_REFBITMAP:	pType = &::getCppuType( (Reference<awt::XBitmap>*)0 ); break;
-            case CPPUTYPE_REFNMREPLACE:	pType = &::getCppuType( (Reference<container::XNameReplace>*)0 ); break;
-            case CPPUTYPE_REFCELL:		pType = &::getCppuType( (Reference<table::XCell>*)0 ); break;
-            case CPPUTYPE_REFDOCINDEX:	pType = &::getCppuType( (Reference<text::XDocumentIndex>*)0 ); break;
-            case CPPUTYPE_REFDOCIDXMRK:	pType = &::getCppuType( (Reference<text::XDocumentIndexMark>*)0 ); break;
-            case CPPUTYPE_REFTXTFIELD:	pType = &::getCppuType( (Reference<text::XTextField>*)0 ); break;
-            case CPPUTYPE_REFTXTRANGE:	pType = &::getCppuType( (Reference<text::XTextRange>*)0 ); break;
-            case CPPUTYPE_REFTXTTABLE:	pType = &::getCppuType( (Reference<text::XTextTable>*)0 ); break;
+            case CPPUTYPE_REFINTERFACE: pType = &::getCppuType( (Reference<XInterface>*)0 );    break;
+            case CPPUTYPE_REFIDXREPL:   pType = &::getCppuType( (Reference<container::XIndexReplace>*)0 );  break;
+            case CPPUTYPE_REFNAMECNT:   pType = &::getCppuType( (Reference<container::XNameContainer>*)0 ); break;
+            case CPPUTYPE_REFTEXTFRAME: pType = &::getCppuType( (Reference<text::XTextFrame>*)0 );  break;
+            case CPPUTYPE_REFTEXTSECTION:   pType = &::getCppuType( (Reference<text::XTextSection>*)0 );    break;
+            case CPPUTYPE_REFFOOTNOTE:  pType = &::getCppuType( (Reference<text::XFootnote>*)0 );   break;
+            case CPPUTYPE_REFTEXT:      pType = &::getCppuType( (Reference<text::XText>*)0 );   break;
+            case CPPUTYPE_REFTEXTCOL:   pType = &::getCppuType( (Reference<text::XTextColumns>*)0 );    break;
+            case CPPUTYPE_REFFORBCHARS: pType = &::getCppuType( (Reference<XForbiddenCharacters>*)0 ); break;
+            case CPPUTYPE_REFIDXCNTNR:  pType = &::getCppuType( (Reference<XIndexContainer>*)0 ); break;
+            case CPPUTYPE_REFTEXTCNTNT: pType = &::getCppuType( (Reference<XTextContent>*)0 ); break;
+            case CPPUTYPE_REFBITMAP:    pType = &::getCppuType( (Reference<awt::XBitmap>*)0 ); break;
+            case CPPUTYPE_REFNMREPLACE: pType = &::getCppuType( (Reference<container::XNameReplace>*)0 ); break;
+            case CPPUTYPE_REFCELL:      pType = &::getCppuType( (Reference<table::XCell>*)0 ); break;
+            case CPPUTYPE_REFDOCINDEX:  pType = &::getCppuType( (Reference<text::XDocumentIndex>*)0 ); break;
+            case CPPUTYPE_REFDOCIDXMRK: pType = &::getCppuType( (Reference<text::XDocumentIndexMark>*)0 ); break;
+            case CPPUTYPE_REFTXTFIELD:  pType = &::getCppuType( (Reference<text::XTextField>*)0 ); break;
+            case CPPUTYPE_REFTXTRANGE:  pType = &::getCppuType( (Reference<text::XTextRange>*)0 ); break;
+            case CPPUTYPE_REFTXTTABLE:  pType = &::getCppuType( (Reference<text::XTextTable>*)0 ); break;
             case CPPUTYPE_AWTPOINT:     pType = &::getCppuType( (awt::Point*)0 );    break;
             case CPPUTYPE_REFLIBCONTAINER:  pType = &::getCppuType( (Reference< script::XLibraryContainer >*)0);    break;
             case CPPUTYPE_OUSTRINGS:    pType = &::getCppuType( (Sequence< ::rtl::OUString >*)0);    break;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,8 +76,8 @@ SO2_DECL_REF(SvStorage)
 
 TYPEINIT1( FuPresentationLayout, FuPoor );
 
-#define POOL_BUFFER_SIZE		(USHORT)32768
-#define DOCUMENT_BUFFER_SIZE	(USHORT)32768
+#define POOL_BUFFER_SIZE        (USHORT)32768
+#define DOCUMENT_BUFFER_SIZE    (USHORT)32768
 #define DOCUMENT_TOKEN (sal_Unicode('#'))
 
 /*************************************************************************
@@ -147,9 +147,9 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     BOOL bCheckMasters = FALSE;
 
     // Dialog aufrufen
-    BOOL   bLoad = FALSE;			// tauchen neue Masterpages auf?
+    BOOL   bLoad = FALSE;           // tauchen neue Masterpages auf?
     String aFile;
-        
+
     SfxItemSet aSet(mpDoc->GetPool(), ATTR_PRESLAYOUT_START, ATTR_PRESLAYOUT_END);
 
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_LOAD, bLoad));
@@ -157,8 +157,8 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_CHECK_MASTERS, bCheckMasters ) );
     aSet.Put( SfxStringItem( ATTR_PRESLAYOUT_NAME, aOldLayoutName));
 
-    
-    
+
+
     const SfxItemSet *pArgs = rReq.GetArgs ();
 
     if (pArgs)
@@ -249,7 +249,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             {
                 if (mpViewShell->ISA(DrawViewShell))
                 {
-                    ::sd::View* pView = 
+                    ::sd::View* pView =
                           static_cast<DrawViewShell*>(mpViewShell)->GetView();
                     USHORT nPgNum = pSelectedPage->TRG_GetMasterPage().GetPageNum();
 
@@ -272,7 +272,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         // fake a mode change to repaint the page tab bar
         if( mpViewShell && mpViewShell->ISA( DrawViewShell ) )
         {
-            DrawViewShell* pDrawViewSh = 
+            DrawViewShell* pDrawViewSh =
                 static_cast<DrawViewShell*>(mpViewShell);
             EditMode eMode = pDrawViewSh->GetEditMode();
             BOOL bLayer = pDrawViewSh->IsLayerModeActive();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, BOOL bConst, co
                         (*pDoFunc)(rGP,pObj,p1,p2,p3,p4,p5);
                     }
                 }
-                if (!bConst) 
+                if (!bConst)
                 {
                     pObj->SetChanged();
                     pObj->BroadcastObjectChange();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -179,7 +179,7 @@ namespace logging
         MethodGuard aGuard( *this );
         return m_nThreshold;
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ConsoleHandler::setThreshold( ::sal_Int32 _threshold ) throw (RuntimeException)
     {
@@ -195,42 +195,42 @@ namespace logging
         OSL_VERIFY( m_aHandlerHelper.getEncoding( sEncoding ) );
         return sEncoding;
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ConsoleHandler::setEncoding( const ::rtl::OUString& _rEncoding ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         OSL_VERIFY( m_aHandlerHelper.setEncoding( _rEncoding ) );
     }
-    
+
     //--------------------------------------------------------------------
     Reference< XLogFormatter > SAL_CALL ConsoleHandler::getFormatter() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_aHandlerHelper.getFormatter();
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ConsoleHandler::setFormatter( const Reference< XLogFormatter >& _rxFormatter ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_aHandlerHelper.setFormatter( _rxFormatter );
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Int32 SAL_CALL ConsoleHandler::getLevel() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_aHandlerHelper.getLevel();
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ConsoleHandler::setLevel( ::sal_Int32 _nLevel ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_aHandlerHelper.setLevel( _nLevel );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL ConsoleHandler::flush(  ) throw (RuntimeException)
     {
@@ -238,7 +238,7 @@ namespace logging
         fflush( stdout );
         fflush( stderr );
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL ConsoleHandler::publish( const LogRecord& _rRecord ) throw (RuntimeException)
     {
@@ -291,7 +291,7 @@ namespace logging
     {
         return getImplementationName_static();
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL ConsoleHandler::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
     {
@@ -304,19 +304,19 @@ namespace logging
                 return sal_True;
         return sal_False;
     }
-    
+
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ConsoleHandler::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
-    
+
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ConsoleHandler::getImplementationName_static()
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.ConsoleHandler" ) );
     }
-    
+
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ConsoleHandler::getSupportedServiceNames_static()
     {

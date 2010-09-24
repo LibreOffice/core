@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,13 +46,13 @@ namespace ww
     inline bool IsSevenMinus(WordVersion eVer) { return eVer <= eWW7; }
     inline bool IsEightPlus(WordVersion eVer) { return eVer >= eWW8; }
 
-    /** For custom wrapping 
+    /** For custom wrapping
 
         When you edit the wrap points of a contour in word, word uses a relative
         scale of 0 to 21600 where 21600 is apparently 100% of the graphic width
     */
     const int nWrap100Percent = 21600;
 }
- 
+
 #endif
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

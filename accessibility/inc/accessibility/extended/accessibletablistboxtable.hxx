@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@ typedef ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleSelecti
 class AccessibleTabListBoxTable : public AccessibleBrowseBoxTable, public AccessibleTabListBoxTableImplHelper
 {
 private:
-    SvHeaderTabListBox*		m_pTabListBox;
+    SvHeaderTabListBox*     m_pTabListBox;
 
-    void					ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    DECL_LINK(      		WindowEventListener, VclSimpleEvent* );
+    void                    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    DECL_LINK(              WindowEventListener, VclSimpleEvent* );
 
     // helpers ----------------------------------------------------------------
 

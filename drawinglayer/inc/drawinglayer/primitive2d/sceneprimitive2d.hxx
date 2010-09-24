@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace drawinglayer
             The rendering is done using the default-3D renderer from basegfx which supports
             AntiAliasing.
 
-            The 2D primitive's geometric range is defined completely by the 
+            The 2D primitive's geometric range is defined completely by the
             ObjectTransformation combined with evtl. 2D shadows from the 3D objects. The
             shadows of 3D objects are 2D polygons, projected with the 3D transformation.
 
@@ -63,33 +63,33 @@ namespace drawinglayer
         {
         private:
             /// the 3D geometry definition
-            primitive3d::Primitive3DSequence					mxChildren3D;				
+            primitive3d::Primitive3DSequence                    mxChildren3D;
 
             /// 3D scene attribute set
-            attribute::SdrSceneAttribute						maSdrSceneAttribute;		
+            attribute::SdrSceneAttribute                        maSdrSceneAttribute;
 
             /// lighting attribute set
-            attribute::SdrLightingAttribute						maSdrLightingAttribute;	
+            attribute::SdrLightingAttribute                     maSdrLightingAttribute;
 
             /// object transformation for scene for 2D definition
-            basegfx::B2DHomMatrix								maObjectTransformation;		
+            basegfx::B2DHomMatrix                               maObjectTransformation;
 
             /// scene transformation set and object transformation
-            geometry::ViewInformation3D							maViewInformation3D;		
+            geometry::ViewInformation3D                         maViewInformation3D;
 
             /// the primitiveSequence for on-demand created shadow primitives (see mbShadow3DChecked)
-            Primitive2DSequence									maShadowPrimitives;
+            Primitive2DSequence                                 maShadowPrimitives;
 
             /// bitfield
             /** flag if given 3D geometry is already cheched for shadow definitions and 2d shadows
                 are created in maShadowPrimitives
              */
-            unsigned											mbShadow3DChecked : 1;
+            unsigned                                            mbShadow3DChecked : 1;
 
             /// the last used NewDiscreteSize and NewUnitVisiblePart definitions for decomposition
-            double												mfOldDiscreteSizeX;
-            double												mfOldDiscreteSizeY;
-            basegfx::B2DRange									maOldUnitVisiblePart;
+            double                                              mfOldDiscreteSizeX;
+            double                                              mfOldDiscreteSizeY;
+            basegfx::B2DRange                                   maOldUnitVisiblePart;
 
             /** the last created BitmapEx, e.g. for fast HitTest. This does not really need
                 memory since BitmapEx is internally RefCounted
@@ -118,11 +118,11 @@ namespace drawinglayer
             Primitive2DSequence getShadow2D(const geometry::ViewInformation2D& rViewInformation) const;
 
             /** Fast HitTest which uses the last buffered BitmapEx from the last
-                rendered area if available. The return value describes if the check 
+                rendered area if available. The return value describes if the check
                 could be done with the current information, so do NOT use o_rResult
                 when it returns false. o_rResult will be changed on return true and
-                then contains a definitive answer if content of this scene is hit or 
-                not. On return false, it is normally necessary to use the geometric 
+                then contains a definitive answer if content of this scene is hit or
+                not. On return false, it is normally necessary to use the geometric
                 HitTest (see CutFindProcessor usages). The given HitPoint
                 has to be in logic coordinates in scene's ObjectCoordinateSystem.
              */
@@ -130,9 +130,9 @@ namespace drawinglayer
 
             /// constructor
             ScenePrimitive2D(
-                const primitive3d::Primitive3DSequence& rxChildren3D, 
-                const attribute::SdrSceneAttribute& rSdrSceneAttribute, 
-                const attribute::SdrLightingAttribute& rSdrLightingAttribute, 
+                const primitive3d::Primitive3DSequence& rxChildren3D,
+                const attribute::SdrSceneAttribute& rSdrSceneAttribute,
+                const attribute::SdrLightingAttribute& rSdrLightingAttribute,
                 const basegfx::B2DHomMatrix& rObjectTransformation,
                 const geometry::ViewInformation3D& rViewInformation3D);
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,11 +49,11 @@ public:
                             ScRangeList& rScRanges, XclFormulaType eType,
                             const XclTokenArray& rXclTokArr, XclImpStream& rStrm );
 
-    /** 
-     * Creates a formula token array from the Excel token array.  Note that 
-     * the caller must create a copy of the token array instance returend by 
-     * this function if the caller needs to persistently store the array, 
-     * because the pointer points to an array instance on the stack. 
+    /**
+     * Creates a formula token array from the Excel token array.  Note that
+     * the caller must create a copy of the token array instance returend by
+     * this function if the caller needs to persistently store the array,
+     * because the pointer points to an array instance on the stack.
      */
     const ScTokenArray* CreateFormula( XclFormulaType eType, const XclTokenArray& rXclTokArr );
 

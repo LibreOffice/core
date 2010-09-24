@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -218,13 +218,13 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
     else if (STATE_CHANGE_ENABLE == nStateChange)
     {
         // do we have a handle column?
-        sal_Bool bHandleCol	= pCols->Count() && (0 == pCols->GetObject(0)->GetId());
+        sal_Bool bHandleCol = pCols->Count() && (0 == pCols->GetObject(0)->GetId());
         // do we have a header bar
         sal_Bool bHeaderBar = (NULL != static_cast<BrowserDataWin&>(GetDataWindow()).pHeaderBar);
 
-        if	(	nTitleLines
-            &&	(	!bHeaderBar
-                ||	bHandleCol
+        if  (   nTitleLines
+            &&  (   !bHeaderBar
+                ||  bHandleCol
                 )
             )
             // we draw the text in our header bar in a color dependent on the enabled state. So if this state changed
@@ -688,7 +688,7 @@ void BrowseBox::Paint( const Rectangle& rRect )
         return;
 
     BrowserColumn *pFirstCol = pCols->GetObject(0);
-    BOOL bHandleCol	= pFirstCol && pFirstCol->GetId() == 0;
+    BOOL bHandleCol = pFirstCol && pFirstCol->GetId() == 0;
     BOOL bHeaderBar = getDataWindow()->pHeaderBar != NULL;
 
     // draw delimitational lines
@@ -1008,7 +1008,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
                 nCol = nFirstCol;
                 pCol = pCols->GetObject(nCol);
                 if (!pCol)
-                {	// FS - 21.05.99 - 66325
+                {   // FS - 21.05.99 - 66325
                     // ist zwar eigentlich woanders (an der richtigen Stelle) gefixt, aber sicher ist sicher ...
                     DBG_ERROR("BrowseBox::PaintData : nFirstCol is probably invalid !");
                     break;
@@ -1016,9 +1016,9 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
             }
 
             // prepare Column-AutoHighlight
-            BOOL bColAutoHighlight	=	_bDrawSelections
-                                    &&	bColumnCursor
-                                    &&	IsColumnSelected( pCol->GetId() );
+            BOOL bColAutoHighlight  =   _bDrawSelections
+                                    &&  bColumnCursor
+                                    &&  IsColumnSelected( pCol->GetId() );
             if ( bColAutoHighlight )
             {
                 _rOut.SetClipRegion();
@@ -1039,7 +1039,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
             {
                 // clip the column's output to the field area
                 if (_bForeignDevice)
-                {	// (not neccessary if painting onto the data window)
+                {   // (not neccessary if painting onto the data window)
                     Size aFieldSize(pCol->Width(), nDataRowHeigt);
 
                     if (aPos.X() + aFieldSize.Width() > aOverallAreaBRPos.X())
@@ -1092,7 +1092,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
             _rOut.SetLineColor( aDelimiterLineColor );
             long nY = aPos.Y() + nDataRowHeigt - 1;
             if (nY <= aOverallAreaBRPos.Y())
-                _rOut.DrawLine(	Point( nHLineX, nY ),
+                _rOut.DrawLine( Point( nHLineX, nY ),
                                 Point( bVLines
                                         ? std::min(long(long(aPos.X()) - 1), aOverallAreaBRPos.X())
                                         : aOverallAreaBRPos.X(),
@@ -2024,7 +2024,7 @@ void BrowseBox::Dispatch( USHORT nId )
             {
                 USHORT nNewPos = GetColumnPos( GetCurColumnId() ) + 1;
                 USHORT nNewId = GetColumnId( nNewPos );
-                if (nNewId != 0)	// Am Zeilenende ?
+                if (nNewId != 0)    // Am Zeilenende ?
                     bDone = GoToColumnId( nNewId );
                 else
                 {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,12 +39,12 @@ namespace sdr
     namespace properties
     {
         E3dCompoundProperties::E3dCompoundProperties(SdrObject& rObj)
-        :	E3dProperties(rObj)
+        :   E3dProperties(rObj)
         {
         }
 
         E3dCompoundProperties::E3dCompoundProperties(const E3dCompoundProperties& rProps, SdrObject& rObj)
-        :	E3dProperties(rProps, rObj)
+        :   E3dProperties(rProps, rObj)
         {
         }
 

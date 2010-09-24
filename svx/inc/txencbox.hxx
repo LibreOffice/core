@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@ class SvxTextEncodingTable;
 class SVX_DLLPUBLIC SvxTextEncodingBox : public ListBox
 {
 private:
-    const SvxTextEncodingTable*		m_pEncTable;
+    const SvxTextEncodingTable*     m_pEncTable;
 
-    SVX_DLLPRIVATE USHORT				EncodingToPos_Impl( rtl_TextEncoding nEnc ) const;
+    SVX_DLLPRIVATE USHORT               EncodingToPos_Impl( rtl_TextEncoding nEnc ) const;
 
 public:
                         SvxTextEncodingBox( Window* pParent, const ResId& rResId );
@@ -50,12 +50,12 @@ public:
 
     /** Fill with all known encodings but exclude those matching one or more
         given flags as defined in rtl/tencinfo.h
-        
+
          <p> If nButIncludeInfoFlags is given, encodings are included even if they
          match nExcludeInfoFlags. Thus it is possible to exclude 16/32-bit
          Unicode with RTL_TEXTENCODING_INFO_UNICODE but to include UTF7 and UTF8
          with RTL_TEXTENCODING_INFO_MIME </p>
-        
+
         @param bExcludeImportSubsets
             If <TRUE/>, some specific encodings are not listed, as they are a
             subset of another encoding. This is the case for
@@ -63,7 +63,7 @@ public:
             RTL_TEXTENCODING_MS_936, which are covered by
             RTL_TEXTENCODING_GB_18030. Normally, this flag should be set to
             <TRUE/> whenever the box is used in import dialogs. */
-    void				FillFromTextEncodingTable(
+    void                FillFromTextEncodingTable(
                             sal_Bool bExcludeImportSubsets = FALSE,
                             sal_uInt32 nExcludeInfoFlags = 0,
                             sal_uInt32 nButIncludeInfoFlags = 0
@@ -71,12 +71,12 @@ public:
 
     /** Fill with all encodings known to the dbtools::OCharsetMap but exclude
         those matching one or more given flags as defined in rtl/tencinfo.h
-        
+
          <p> If nButIncludeInfoFlags is given, encodings are included even if they
          match nExcludeInfoFlags. Thus it is possible to exclude 16/32-bit
          Unicode with RTL_TEXTENCODING_INFO_UNICODE but to include UTF7 and UTF8
          with RTL_TEXTENCODING_INFO_MIME </p>
-        
+
         @param bExcludeImportSubsets
             If <TRUE/>, some specific encodings are not listed, as they are a
             subset of another encoding. This is the case for
@@ -93,28 +93,28 @@ public:
     /** Fill with all known MIME encodings and select the best according to
         <method>GetBestMimeEncoding</method>
      */
-    void				FillWithMimeAndSelectBest();
+    void                FillWithMimeAndSelectBest();
 
-    const SvxTextEncodingTable*		GetTextEncodingTable() const
+    const SvxTextEncodingTable*     GetTextEncodingTable() const
                             { return m_pEncTable; }
 
-    void				InsertTextEncoding( const rtl_TextEncoding nEnc,
+    void                InsertTextEncoding( const rtl_TextEncoding nEnc,
                             USHORT nPos = LISTBOX_APPEND );
 
-    void				InsertTextEncoding( const rtl_TextEncoding nEnc,
+    void                InsertTextEncoding( const rtl_TextEncoding nEnc,
                             const String& rEntry,
                             USHORT nPos = LISTBOX_APPEND );
 
-    void				RemoveTextEncoding( const rtl_TextEncoding nEnc );
+    void                RemoveTextEncoding( const rtl_TextEncoding nEnc );
 
-    void				SelectTextEncoding( const rtl_TextEncoding nEnc,
+    void                SelectTextEncoding( const rtl_TextEncoding nEnc,
                             BOOL bSelect = TRUE );
 
-    rtl_TextEncoding	GetSelectTextEncoding() const;
+    rtl_TextEncoding    GetSelectTextEncoding() const;
 
-    const String&		GetSelectTextString() const;
+    const String&       GetSelectTextString() const;
 
-    BOOL				IsTextEncodingSelected( const rtl_TextEncoding nEnc ) const;
+    BOOL                IsTextEncodingSelected( const rtl_TextEncoding nEnc ) const;
 };
 
 #endif

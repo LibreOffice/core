@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ namespace dbaui
     {
     protected:
         ::std::vector<OTableConnection*> m_vTableConnection;
-        OQueryTableWindow*				 m_pTabWin;
-        BOOL							 m_bOwnerOfObjects;
+        OQueryTableWindow*               m_pTabWin;
+        BOOL                             m_bOwnerOfObjects;
             // bin ich alleiniger Eigentuemer der verwalteten Objekte ? (aendert sich mit jedem Redo oder Undo)
 
     public:
@@ -68,18 +68,18 @@ namespace dbaui
             // anschliessend sollte das SetOwnership aufgerufen werden
 
         // Zugriff auf die verwalteten Connections
-        USHORT	ConnCount() { return (USHORT)m_vTableConnection.size(); }
+        USHORT  ConnCount() { return (USHORT)m_vTableConnection.size(); }
 
-        ::std::vector<OTableConnection*>*		GetTabConnList() { return &m_vTableConnection; }
+        ::std::vector<OTableConnection*>*       GetTabConnList() { return &m_vTableConnection; }
 
         void InsertConnection( OTableConnection* pConnection ) { m_vTableConnection.push_back(pConnection); }
-        void RemoveConnection( OTableConnection* pConnection ) 
-        { 
+        void RemoveConnection( OTableConnection* pConnection )
+        {
             m_vTableConnection.erase(::std::remove(m_vTableConnection.begin(),m_vTableConnection.end(),pConnection),m_vTableConnection.end());
         }
     };
 
-    
+
 }
 #endif // DBAUI_QUERYTABWINUNDOACT_HXX
 

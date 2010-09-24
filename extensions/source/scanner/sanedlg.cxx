@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,10 +120,10 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane ) :
         Bitmap( SaneResId( RID_SCAN_BITMAP_PLUS ) ),
         Bitmap( SaneResId( RID_SCAN_BITMAP_MINUS ) )
         );
-    maOptionBox.SetWindowBits( WB_HASLINES				|
-                               WB_HASBUTTONS			|
-                               WB_NOINITIALSELECTION	|
-                               WB_HASBUTTONSATROOT		|
+    maOptionBox.SetWindowBits( WB_HASLINES              |
+                               WB_HASBUTTONS            |
+                               WB_NOINITIALSELECTION    |
+                               WB_HASBUTTONSATROOT      |
                                WB_HASLINESATROOT
                                );
     FreeResource();
@@ -222,9 +222,9 @@ void SaneDlg::InitFields()
                     maReslBox.SetMax( (long)pDouble[1] );
                     maReslBox.InsertValue( (long)pDouble[0] );
                     // mh@openoffice.org: issue 68557: Can only select 75 and 2400 dpi in Scanner dialogue
-                    // scanner allows random setting of dpi resolution, a slider might be useful 
+                    // scanner allows random setting of dpi resolution, a slider might be useful
                     // support that
-                    // workaround: offer at least some more standard dpi resolution between 
+                    // workaround: offer at least some more standard dpi resolution between
                     // min and max value
                     int bGot300 = 0;
                     for ( int nRes = (long) pDouble[0] * 2; nRes < (long) pDouble[1]; nRes = nRes * 2 )
@@ -288,8 +288,8 @@ void SaneDlg::InitFields()
                 }
                 switch( i ) {
                     case 0: maTopLeft.X() = (int)fValue;break;
-                    case 1:	maTopLeft.Y() = (int)fValue;break;
-                    case 2:	maBottomRight.X() = (int)fValue;break;
+                    case 1: maTopLeft.Y() = (int)fValue;break;
+                    case 2: maBottomRight.X() = (int)fValue;break;
                     case 3: maBottomRight.Y() = (int)fValue;break;
                 }
             }
@@ -457,7 +457,7 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
                     aGrid.setBoundings( 0, mfMin, nElements, mfMax );
                     if( aGrid.Execute() && aGrid.getNewYValues() )
                         mrSane.SetOptionValue( mnCurrentOption, aGrid.getNewYValues() );
-                    
+
                     delete [] x;
                     delete [] y;
                 }
@@ -536,7 +536,7 @@ IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox )
             SANE_Constraint_Type nConstraint;
             switch( nType )
             {
-                case SANE_TYPE_BOOL:	EstablishBoolOption();break;
+                case SANE_TYPE_BOOL:    EstablishBoolOption();break;
                 case SANE_TYPE_STRING:
                     nConstraint = mrSane.GetOptionConstraintType( mnCurrentOption );
                     if( nConstraint == SANE_CONSTRAINT_STRING_LIST )
@@ -928,20 +928,20 @@ void SaneDlg::MouseMove( const MouseEvent& rMEvt )
         aMousePos = GetPixelPos( aLogicPos );
         switch( meDragDirection )
         {
-            case TopLeft:		maTopLeft = aMousePos; break;
-            case Top:			maTopLeft.Y() = aMousePos.Y(); break;
+            case TopLeft:       maTopLeft = aMousePos; break;
+            case Top:           maTopLeft.Y() = aMousePos.Y(); break;
             case TopRight:
                 maTopLeft.Y() = aMousePos.Y();
                 maBottomRight.X() = aMousePos.X();
                 break;
-            case Right:			maBottomRight.X() = aMousePos.X(); break;
-            case BottomRight:	maBottomRight = aMousePos; break;
-            case Bottom:		maBottomRight.Y() = aMousePos.Y(); break;
+            case Right:         maBottomRight.X() = aMousePos.X(); break;
+            case BottomRight:   maBottomRight = aMousePos; break;
+            case Bottom:        maBottomRight.Y() = aMousePos.Y(); break;
             case BottomLeft:
                 maTopLeft.X() = aMousePos.X();
                 maBottomRight.Y() = aMousePos.Y();
                 break;
-            case Left:			maTopLeft.X() = aMousePos.X(); break;
+            case Left:          maTopLeft.X() = aMousePos.X(); break;
             default: break;
         }
         int nSwap;

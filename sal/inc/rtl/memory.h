@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifndef _RTL_MEMORY_H_
 #define _RTL_MEMORY_H_
 
-#	include <sal/types.h>
+#   include <sal/types.h>
 
 #ifdef __cplusplus
 extern "C" {

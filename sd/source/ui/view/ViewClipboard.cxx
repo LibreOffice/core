@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
             const List* pBookmarks = &rTransferable.GetPageBookmarks();
             if (pBookmarks == NULL)
                 break;
-            
+
             DrawDocShell* pDocShell = rTransferable.GetPageDocShell();
             if (pDocShell == NULL)
                 break;
@@ -104,7 +104,7 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
             {
                 String sName (*(String*) pBookmarks->GetObject(nIndex));
                 BOOL bIsMasterPage;
-                
+
                 // SdPage* GetMasterSdPage(USHORT nPgNum, PageKind ePgKind);
                 // USHORT GetMasterSdPageCount(PageKind ePgKind) const;
 
@@ -177,7 +177,7 @@ void ViewClipboard::AssignMasterPage (
         if (String(sLayoutName, sLayoutName.Len()-nLength, nLength).Equals (
             sLayoutSuffix))
             sLayoutName = String(sLayoutName, 0, sLayoutName.Len()-nLength);
-            
+
         pDocument->SetMasterPage (
             pPage->GetPageNum() / 2,
             sLayoutName,
@@ -254,23 +254,23 @@ USHORT ViewClipboard::InsertSlides (
 
         if( bWait )
             pWin->LeaveWait();
-                
+
         pDoc->InsertBookmarkAsPage(
-            const_cast<List*>(pBookmarkList), 
-            NULL, 
-            FALSE, 
-            FALSE, 
+            const_cast<List*>(pBookmarkList),
+            NULL,
+            FALSE,
+            FALSE,
             nInsertPosition,
             (&rTransferable == SD_MOD()->pTransferDrag),
-            pDataDocSh, 
-            TRUE, 
-            bMergeMasterPages, 
+            pDataDocSh,
+            TRUE,
+            bMergeMasterPages,
             FALSE);
 
         if( bWait )
             pWin->EnterWait();
     }
-    
+
     return nInsertPgCnt;
 }
 

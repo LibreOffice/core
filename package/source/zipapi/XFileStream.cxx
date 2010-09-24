@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ using ::rtl::OUString;
 XFileStream::XFileStream( ZipEntry & rEntry,
                            com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
                            com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewTempStream,
-                           const vos::ORef < EncryptionData > &rData, 
+                           const vos::ORef < EncryptionData > &rData,
                            sal_Bool bNewRawStream,
                            sal_Bool bIsEncrypted )
 : maEntry ( rEntry )
@@ -85,8 +85,8 @@ XFileStream::XFileStream( ZipEntry & rEntry,
             else
             {
                 // Put in the EncryptedDataHeader
-                Sequence < sal_Int8 > aEncryptedDataHeader ( n_ConstHeaderSize + 
-                                                             rData->aInitVector.getLength() + 
+                Sequence < sal_Int8 > aEncryptedDataHeader ( n_ConstHeaderSize +
+                                                             rData->aInitVector.getLength() +
                                                              rData->aSalt.getLength() +
                                                              rData->aDigest.getLength() );
                 sal_Int8 * pHeader = aEncryptedDataHeader.getArray();
@@ -99,7 +99,7 @@ XFileStream::XFileStream( ZipEntry & rEntry,
     }
 }
 
-XFileStream::~XFileStream() 
+XFileStream::~XFileStream()
 {
     if ( maCipher )
         rtl_cipher_destroy ( maCipher );
@@ -123,7 +123,7 @@ void XFileStream::fill( sal_Int64 nUntil)
                     // some error handling ?
                     return;
                 }
-                
+
                 sal_Int64 nDiff = mnZipEnd - mnZipCurrent;
                 if ( nDiff > 0 )
                 {
@@ -166,7 +166,7 @@ void XFileStream::fill( sal_Int64 nUntil)
     mxTempSeek->seek ( nPosition );
 }
 
-sal_Int32 SAL_CALL XFileStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) 
+sal_Int32 SAL_CALL XFileStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     sal_Int64 nPosition = mxTempSeek->getPosition();
@@ -182,28 +182,28 @@ sal_Int32 SAL_CALL XFileStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int3
     return nRead;
 }
 
-sal_Int32 SAL_CALL XFileStream::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) 
+sal_Int32 SAL_CALL XFileStream::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
         throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     return readBytes ( aData, nMaxBytesToRead );
 }
-void SAL_CALL XFileStream::skipBytes( sal_Int32 nBytesToSkip ) 
+void SAL_CALL XFileStream::skipBytes( sal_Int32 nBytesToSkip )
         throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     seek ( mxTempSeek->getPosition() + nBytesToSkip );
 }
 
-sal_Int32 SAL_CALL XFileStream::available(  ) 
+sal_Int32 SAL_CALL XFileStream::available(  )
         throw( NotConnectedException, IOException, RuntimeException)
 {
     return static_cast < sal_Int32 > ( mnZipSize - mxTempSeek->getPosition() );
 }
 
-void SAL_CALL XFileStream::closeInput(  ) 
+void SAL_CALL XFileStream::closeInput(  )
         throw( NotConnectedException, IOException, RuntimeException)
 {
 }
-void SAL_CALL XFileStream::seek( sal_Int64 location ) 
+void SAL_CALL XFileStream::seek( sal_Int64 location )
         throw( IllegalArgumentException, IOException, RuntimeException)
 {
     if ( location > mnZipSize || location < 0 )
@@ -215,12 +215,12 @@ void SAL_CALL XFileStream::seek( sal_Int64 location )
     }
     mxTempSeek->seek ( location );
 }
-sal_Int64 SAL_CALL XFileStream::getPosition(  ) 
+sal_Int64 SAL_CALL XFileStream::getPosition(  )
         throw(IOException, RuntimeException)
 {
     return mxTempSeek->getPosition();
 }
-sal_Int64 SAL_CALL XFileStream::getLength(  ) 
+sal_Int64 SAL_CALL XFileStream::getLength(  )
         throw(IOException, RuntimeException)
 {
     return mnZipSize;

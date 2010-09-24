@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,29 +35,29 @@
 
 #include "bibmod.hxx"
 
-#define TOP_WINDOW							1
-#define BOTTOM_WINDOW						2
+#define TOP_WINDOW                          1
+#define BOTTOM_WINDOW                       2
 
 class BibDataManager;
 
-class BibWindowContainer : public BibWindow		//Window
+class BibWindowContainer : public BibWindow     //Window
 {
     private:
         // !BibShortCutHandler is also always a Window!
-        BibShortCutHandler*		pChild;
+        BibShortCutHandler*     pChild;
 
     protected:
-        virtual void			Resize();
+        virtual void            Resize();
 
     public:
         BibWindowContainer( Window* pParent, BibShortCutHandler* pChild, WinBits nStyle = WB_3DLOOK);
         ~BibWindowContainer();
 
-        inline Window*			GetChild();
+        inline Window*          GetChild();
 
-        virtual void			GetFocus();
+        virtual void            GetFocus();
 
-        virtual BOOL			HandleShortCutKey( const KeyEvent& rKeyEvent );	// returns true, if key was handled
+        virtual BOOL            HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
 
         using Window::GetChild;
 };
@@ -72,24 +72,24 @@ class BibBookContainer: public BibSplitWindow
 {
     private:
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > 			xTopFrameRef;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > 			xBottomFrameRef;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             xTopFrameRef;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             xBottomFrameRef;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > 				xTopPeerRef;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > 				xBottomPeerRef;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xTopPeerRef;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xBottomPeerRef;
 
-        BibDataManager*			pDatMan;
-        BibWindowContainer*		pTopWin;
-        BibWindowContainer*		pBottomWin;
-        sal_Bool					bFirstTime;
-        HdlBibModul				pBibMod;
-        Timer					aTimer;
+        BibDataManager*         pDatMan;
+        BibWindowContainer*     pTopWin;
+        BibWindowContainer*     pBottomWin;
+        sal_Bool                    bFirstTime;
+        HdlBibModul             pBibMod;
+        Timer                   aTimer;
 
         DECL_LINK( SplitHdl, Timer*);
 
     protected:
 
-        virtual void			Split();
+        virtual void            Split();
 
         virtual long            PreNotify( NotifyEvent& rNEvt );
 
@@ -98,17 +98,17 @@ class BibBookContainer: public BibSplitWindow
         BibBookContainer(Window* pParent,BibDataManager*, WinBits nStyle = WB_3DLOOK );
         ~BibBookContainer();
 
-        inline BibWindow*		GetTopWin() {return pTopWin;}
-        inline BibWindow*		GetBottomWin() {return pBottomWin;}
+        inline BibWindow*       GetTopWin() {return pTopWin;}
+        inline BibWindow*       GetBottomWin() {return pBottomWin;}
 
         // !BibShortCutHandler is also always a Window!
-        void					createTopFrame( BibShortCutHandler* pWin );
+        void                    createTopFrame( BibShortCutHandler* pWin );
 
-        void					createBottomFrame( BibShortCutHandler* pWin );
+        void                    createBottomFrame( BibShortCutHandler* pWin );
 
-        virtual void			GetFocus();
+        virtual void            GetFocus();
 
-        virtual sal_Bool		HandleShortCutKey( const KeyEvent& rKeyEvent );	// returns true, if key was handled
+        virtual sal_Bool        HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
 };
 
 #endif

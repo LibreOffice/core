@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,10 +68,10 @@ void SimpleReferenceComponent::release()
         {
             Dispose();
         }
-        catch (RuntimeException & 
+        catch (RuntimeException &
 #if OSL_DEBUG_LEVEL > 0
             exc
-#endif	
+#endif
             ) // don't break throw ()
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -107,7 +107,7 @@ void * SimpleReferenceComponent::operator new(std::size_t nSize,
                                            std::nothrow_t const &
 #ifndef WNT
                                            rNothrow
-#endif									   
+#endif
                                            )
     SAL_THROW(())
 {

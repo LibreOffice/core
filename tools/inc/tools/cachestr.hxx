@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ private:
     SvStream*       pCurrentStream;
     TempFile*       pTempFile;
 
-    Link    		aFilenameLinkHdl;
+    Link            aFilenameLinkHdl;
 
     TOOLS_DLLPRIVATE virtual ULONG   GetData( void* pData, ULONG nSize );
     TOOLS_DLLPRIVATE virtual ULONG   PutData( const void* pData, ULONG nSize );
@@ -64,19 +64,19 @@ public:
                                    ULONG nMaxMemSize = 0 );
                     ~SvCacheStream();
 
-    void			SetFilenameHdl( const Link& rLink);
+    void            SetFilenameHdl( const Link& rLink);
     const Link&     GetFilenameHdl() const;
-    void			SetFilename( const String& rFN )
+    void            SetFilename( const String& rFN )
                  { aFileName = rFN; } // darf nur vom FilenameHdl gerufen werden!
-    const String&   GetFilename() const { return aFileName;	}
+    const String&   GetFilename() const { return aFileName; }
 
     void            SwapOut();
     const void*     GetBuffer();
     ULONG           GetSize();
 
-    BOOL			IsPersistent() { return bPersistent != 0; }
-    void			SetPersistence( BOOL b = TRUE ) { bPersistent = b; }
-    void			SetSwapStream( SvStream *p )
+    BOOL            IsPersistent() { return bPersistent != 0; }
+    void            SetPersistence( BOOL b = TRUE ) { bPersistent = b; }
+    void            SetSwapStream( SvStream *p )
                  { pSwapStream = p; } // darf nur vom FilenameHdl gerufen werden!
 };
 

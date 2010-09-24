@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ TypedefTypeDescriptionImpl::~TypedefTypeDescriptionImpl()
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
-    
+
 // XTypeDescription
 //__________________________________________________________________________________________________
 TypeClass TypedefTypeDescriptionImpl::getTypeClass()

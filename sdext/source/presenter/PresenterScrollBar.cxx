@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -170,14 +170,14 @@ PresenterScrollBar::~PresenterScrollBar (void)
 void SAL_CALL PresenterScrollBar::disposing (void)
 {
     mpMousePressRepeater->Dispose();
-    
+
     if (mxWindow.is())
     {
         mxWindow->removeWindowListener(this);
         mxWindow->removePaintListener(this);
         mxWindow->removeMouseListener(this);
         mxWindow->removeMouseMotionListener(this);
-        
+
         Reference<lang::XComponent> xComponent (mxWindow, UNO_QUERY);
         mxWindow = NULL;
         if (xComponent.is())
@@ -322,7 +322,7 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
     {
         mxCanvas = rxCanvas;
         if (mxCanvas.is())
-        {            
+        {
             if (mpBitmaps.get()==NULL)
             {
                 if (mpSharedBitmaps.expired())
@@ -421,7 +421,7 @@ void PresenterScrollBar::Paint (
 
 
 //----- XWindowListener -------------------------------------------------------
-    
+
 void SAL_CALL PresenterScrollBar::windowResized (const css::awt::WindowEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
@@ -431,7 +431,7 @@ void SAL_CALL PresenterScrollBar::windowResized (const css::awt::WindowEvent& rE
 
 
 
-   
+
 void SAL_CALL PresenterScrollBar::windowMoved (const css::awt::WindowEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
@@ -480,7 +480,7 @@ void SAL_CALL PresenterScrollBar::windowPaint (const css::awt::PaintEvent& rEven
 
 
 
-    
+
 //----- XMouseListener --------------------------------------------------------
 
 void SAL_CALL PresenterScrollBar::mousePressed (const css::awt::MouseEvent& rEvent)
@@ -540,7 +540,7 @@ void SAL_CALL PresenterScrollBar::mouseExited (const css::awt::MouseEvent& rEven
 
 
 //----- XMouseMotionListener --------------------------------------------------
-    
+
 void SAL_CALL PresenterScrollBar::mouseMoved (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
@@ -567,7 +567,7 @@ void SAL_CALL PresenterScrollBar::mouseDragged (const css::awt::MouseEvent& rEve
         return;
 
     mpMousePressRepeater->Stop();
-    
+
     if (mxPresenterHelper.is())
         mxPresenterHelper->captureMouse(mxWindow);
 
@@ -652,7 +652,7 @@ void PresenterScrollBar::PaintBitmap(
     aBox.Y2 += aWindowBox.Y;
 
     Reference<rendering::XBitmap> xBitmap (GetBitmap(eArea,rpBitmaps));
-    
+
     if (xBitmap.is())
     {
         Reference<rendering::XPolyPolygon2D> xClipPolygon (
@@ -660,11 +660,11 @@ void PresenterScrollBar::PaintBitmap(
                 PresenterGeometryHelper::Intersection(rUpdateBox,
                     PresenterGeometryHelper::ConvertRectangle(aBox)),
                 mxCanvas->getDevice()));
-        
+
         const rendering::ViewState aViewState (
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
             xClipPolygon);
-        
+
         const geometry::IntegerSize2D aBitmapSize (xBitmap->getSize());
         rendering::RenderState aRenderState (
             geometry::AffineMatrix2D(
@@ -697,7 +697,7 @@ void PresenterScrollBar::NotifyThumbPositionChange (void)
         catch (Exception&)
         {
         }
-        
+
         mbIsNotificationActive = false;
     }
 }
@@ -708,7 +708,7 @@ void PresenterScrollBar::NotifyThumbPositionChange (void)
 PresenterScrollBar::Area PresenterScrollBar::GetArea (const double nX, const double nY) const
 {
     const geometry::RealPoint2D aPoint(nX, nY);
-    
+
     if (PresenterGeometryHelper::IsInside(GetRectangle(Pager), aPoint))
     {
         if (PresenterGeometryHelper::IsInside(GetRectangle(Thumb), aPoint))
@@ -882,7 +882,7 @@ void PresenterVerticalScrollBar::UpdateBorders (void)
 {
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
     double nBottom = aWindowBox.Height;
-    
+
     if (mpNextButtonDescriptor.get() != NULL)
     {
         Reference<rendering::XBitmap> xBitmap (mpNextButtonDescriptor->GetNormalBitmap());
@@ -911,7 +911,7 @@ void PresenterVerticalScrollBar::UpdateBorders (void)
     if (mnTotalSize < 1)
     {
         maBox[Thumb] = maBox[Pager];
-        
+
         // Set up the enabled/disabled states.
         maEnabledState[PrevButton] = false;
         maEnabledState[PagerUp] = false;
@@ -925,7 +925,7 @@ void PresenterVerticalScrollBar::UpdateBorders (void)
         const double nThumbPosition = ::std::min(::std::max(0.0,mnThumbPosition), mnTotalSize - nThumbSize);
         maBox[Thumb] = geometry::RealRectangle2D(
             0, nThumbPosition / mnTotalSize * nPagerHeight,
-            aWindowBox.Width, 
+            aWindowBox.Width,
                 (nThumbPosition+nThumbSize) / mnTotalSize * nPagerHeight);
 
         // Set up the enabled/disabled states.
@@ -1105,7 +1105,7 @@ void PresenterHorizontalScrollBar::UpdateBorders (void)
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
     double nRight = aWindowBox.Width;
     const double nGap (2);
-    
+
     if (mpNextButtonDescriptor.get() != NULL)
     {
         Reference<rendering::XBitmap> xBitmap (mpNextButtonDescriptor->GetNormalBitmap());
@@ -1128,14 +1128,14 @@ void PresenterHorizontalScrollBar::UpdateBorders (void)
             nRight -= aSize.Width + nGap;
         }
     }
-    
+
     const double nPagerWidth (nRight);
     maBox[Pager] = geometry::RealRectangle2D(
         0,0, nRight, aWindowBox.Height);
     if (mnTotalSize == 0)
     {
         maBox[Thumb] = maBox[Pager];
-        
+
         // Set up the enabled/disabled states.
         maEnabledState[PrevButton] = false;
         maEnabledState[PagerUp] = false;
@@ -1301,7 +1301,7 @@ void PresenterScrollBar::MousePressRepeater::SetMouseArea(const PresenterScrollB
 void PresenterScrollBar::MousePressRepeater::Callback (const TimeValue& rCurrentTime)
 {
     (void)rCurrentTime;
-    
+
     if (mpScrollBar.get() == NULL)
     {
         Stop();
@@ -1322,7 +1322,7 @@ void PresenterScrollBar::MousePressRepeater::Execute (void)
         case PrevButton:
             mpScrollBar->SetThumbPosition(nThumbPosition - mpScrollBar->GetLineHeight(), true);
             break;
-            
+
         case NextButton:
             mpScrollBar->SetThumbPosition(nThumbPosition + mpScrollBar->GetLineHeight(), true);
             break;

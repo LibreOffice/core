@@ -12,9 +12,9 @@ namespace chelp {
     class ResultSetFactory
     {
     public:
-        
+
         virtual ~ResultSetFactory() { };
-        
+
         virtual ResultSetBase* createResultSet() = 0;
     };
 

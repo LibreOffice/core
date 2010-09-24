@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ namespace rptui
     // {
     //     const StyleSettings& aStyleSettings = Application::GetSettings().GetStyleSettings();
     //     BOOL bHighContrast = aStyleSettings.GetHighContrastMode();
-    //     
+    //
     //     Color aGetFaceColor = aStyleSettings.GetFaceColor();
     //     Color aGetCheckedColor = aStyleSettings.GetCheckedColor();
     //     Color aGetLightColor = aStyleSettings.GetLightColor();
@@ -117,11 +117,11 @@ namespace rptui
     //     Color aGetHighlightLinkColor = aStyleSettings.GetHighlightLinkColor();
     //     Color aGetMonoColor = aStyleSettings.GetMonoColor();
     //     Color aGetActiveTabColor = aStyleSettings.GetActiveTabColor();
-    //     Color aGetInactiveTabColor = aStyleSettings.GetInactiveTabColor();            
-    // 
+    //     Color aGetInactiveTabColor = aStyleSettings.GetInactiveTabColor();
+    //
     //     Color aWindowColor = aStyleSettings.GetWindowColor();
     //     Color aLabelColor  = aStyleSettings.GetLabelTextColor();
-    //     
+    //
     //     // if (m_nTextColor == -1)
     //     // {
     //     //    svtools::ExtendedColorConfig aConfig;
@@ -129,14 +129,14 @@ namespace rptui
     //     // }
     //     return aLabelColor.GetColor();
     // }
-    
+
     //--------------------------------------------------------------------
     FixedTextColor::~FixedTextColor()
     {
         DBG_DTOR(rpt_FixedTextColor,NULL);
     }
     // -----------------------------------------------------------------------------
-    
+
     void FixedTextColor::notifyPropertyChange( const beans::PropertyChangeEvent& _rEvent )
     {
         // (void)_rEvent;
@@ -159,7 +159,7 @@ namespace rptui
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    
+
     // -----------------------------------------------------------------------------
     void FixedTextColor::setPropertyTextColor(const uno::Reference< awt::XVclWindowPeer >& _xVclWindowPeer, sal_Int32 _nTextColor)
     {
@@ -171,7 +171,7 @@ namespace rptui
     {
         handle(_rxElement);
     }
-    
+
 // -----------------------------------------------------------------------------
     void FixedTextColor::handle( const uno::Reference< uno::XInterface >& _rxElement )
     {
@@ -187,9 +187,9 @@ namespace rptui
             sal_Bool bIsDark = sal_False;
             const sal_Int32 nBackColor( xFixedText->getControlBackground() );
             if ((sal_uInt32)nBackColor == COL_TRANSPARENT)
-            {                
+            {
                 uno::Reference <report::XSection> xSection(xFixedText->getParent(), uno::UNO_QUERY_THROW);
-                
+
                 sal_Bool bSectionBackColorIsTransparent = xSection->getBackTransparent();
                 if (bSectionBackColorIsTransparent)
                 {
@@ -209,8 +209,8 @@ namespace rptui
             {
                 Color aLabelBackColor(nBackColor);
                 bIsDark = aLabelBackColor.IsDark();
-            }            
-            
+            }
+
             uno::Reference<awt::XVclWindowPeer> xVclWindowPeer = getVclWindowPeer(xFixedText);
             if (bIsDark)
             {
@@ -223,25 +223,25 @@ namespace rptui
                 util::Color aLabelColor = xFixedText->getCharColor();
                 setPropertyTextColor(xVclWindowPeer, aLabelColor);
             }
-            
+
         }
         catch( const uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    
+
 
 // -----------------------------------------------------------------------------
     // XPropertyChangeListener
     uno::Reference<awt::XControl> FixedTextColor::getXControl(const uno::Reference< report::XFixedText >& _xFixedText) throw(uno::RuntimeException)
     {
-            
+
         uno::Reference<awt::XControl> xControl;
         OReportController *pController = (OReportController *)&m_rReportController;
-            
+
         ::boost::shared_ptr<OReportModel> pModel = pController->getSdrModel();
-            
+
             uno::Reference<report::XSection> xSection(_xFixedText->getSection());
             if ( xSection.is() )
             {
@@ -265,7 +265,7 @@ namespace rptui
             }
         return xControl;
     }
-    
+
 // -----------------------------------------------------------------------------
     uno::Reference<awt::XVclWindowPeer> FixedTextColor::getVclWindowPeer(const uno::Reference< report::XFixedText >& _xComponent) throw(uno::RuntimeException)
     {
@@ -279,5 +279,5 @@ namespace rptui
 
 
 
-    
+
 }

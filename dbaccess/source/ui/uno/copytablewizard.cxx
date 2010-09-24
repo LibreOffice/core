@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -201,7 +201,7 @@ namespace dbaui
         ~CopyTableWizard();
 
         // OGenericUnoDialog overridables
-        virtual Dialog*	createDialog( Window* _pParent );
+        virtual Dialog* createDialog( Window* _pParent );
         virtual void executedDialog( sal_Int16 _nExecutionResult );
 
     private:
@@ -285,7 +285,7 @@ namespace dbaui
 
             All errors are handled with the InteractionHandler associated with the data source,
             if there is one. Else, they will be silenced (but asserted in non-product builds).
-        
+
             @param _rxDataSourceDescriptor
                 the data access descriptor describing the data source whose connection
                 should be obtained. Must not be <NULL/>.
@@ -1248,7 +1248,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                     // otherwise we don't get the correct value when only the 2nd source column was selected
                     continue;
                 }
-                
+
                 if ( bAutoIncrement && bInsertAutoIncrement )
                 {
                     xStatementParams->setInt( 1, nRowCount );
@@ -1278,7 +1278,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                     case DataType::DECIMAL:
                     case DataType::NUMERIC:
                         aTransfer.transferComplexValue( &XRow::getString, &XParameters::setString );
-                        break;                      
+                        break;
 
                     case DataType::BIGINT:
                         aTransfer.transferValue( &XRow::getLong, &XParameters::setLong );
@@ -1306,7 +1306,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                     case DataType::TIMESTAMP:
                         aTransfer.transferComplexValue( &XRow::getTimestamp, &XParameters::setTimestamp );
                         break;
-                    
+
                     case DataType::BOOLEAN:
                         aTransfer.transferValue( &XRow::getBoolean, &XParameters::setBoolean );
                         break;
@@ -1511,7 +1511,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
     sSql.appendAscii(" ) ( ");
     sSql.append( m_pSourceObject->getSelectStatement());
     sSql.appendAscii(" )");
-    
+
     return sSql.makeStringAndClear();
 }
 //-------------------------------------------------------------------------
@@ -1583,7 +1583,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
 }
 
 //------------------------------------------------------------------------------
-Dialog*	CopyTableWizard::createDialog( Window* _pParent )
+Dialog* CopyTableWizard::createDialog( Window* _pParent )
 {
     OSL_PRECOND( isInitialized(), "CopyTableWizard::createDialog: not initialized!" );
         // this should have been prevented in ::execute already

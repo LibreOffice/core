@@ -520,7 +520,7 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Preview</value>
                 </prop>
-            </node>			
+            </node>
         </node>
     </node>
 </oor:component-data>

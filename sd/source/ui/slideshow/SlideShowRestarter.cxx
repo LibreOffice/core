@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ IMPL_LINK(SlideShowRestarter, EndPresentation, void*, EMPTYARG)
             // console (which is displayed in the FullScreenPane).  But the
             // timing has to be right and I did not find a better place for
             // it.
-            
+
             // Wait for the full screen pane, which displays the presenter
             // console, to disappear.  Only when it is gone, call
             // InitiatePresenterStart(), in order to begin the asynchronous
@@ -142,7 +142,7 @@ IMPL_LINK(SlideShowRestarter, EndPresentation, void*, EMPTYARG)
                 {
                     ::sd::framework::ConfigurationController::Lock aLock (
                         pHelper->GetConfigurationController());
-                
+
                     pHelper->RunOnConfigurationEvent(
                         FrameworkHelper::msConfigurationUpdateEndEvent,
                         ::boost::bind(&SlideShowRestarter::StartPresentation, shared_from_this()));

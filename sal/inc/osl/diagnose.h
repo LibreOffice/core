@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@ extern "C" {
     Diagnostic support
 */
 
-void    	SAL_CALL osl_breakDebug(void);
-sal_Bool 	SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nLine, const sal_Char* pszMessage);
-void    	SAL_CALL osl_trace(const sal_Char* pszFormat, ...);
-sal_Int32	SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszErrorMessage);
+void        SAL_CALL osl_breakDebug(void);
+sal_Bool    SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nLine, const sal_Char* pszMessage);
+void        SAL_CALL osl_trace(const sal_Char* pszFormat, ...);
+sal_Int32   SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszErrorMessage);
 
 /*
     For message delivery
@@ -97,18 +97,18 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 /* the macro OSL_LOG_PREFIX is intended to be an office internal macro for now */
 #define OSL_LOG_PREFIX OSL_THIS_FILE ":" OSL_THIS_FUNC ":" OSL_MACRO_VALUE_TO_STRING( __LINE__ ) "; "
 
-#define OSL_DEBUG_ONLY(s)	_OSL_DEBUG_ONLY(s)
+#define OSL_DEBUG_ONLY(s)   _OSL_DEBUG_ONLY(s)
 #define OSL_TRACE           _OSL_TRACE
-#define OSL_ASSERT(c) 	    _OSL_ASSERT(c, OSL_THIS_FILE, __LINE__)
+#define OSL_ASSERT(c)       _OSL_ASSERT(c, OSL_THIS_FILE, __LINE__)
 #define OSL_ENSURE(c, m)   _OSL_ENSURE(c, OSL_THIS_FILE, __LINE__, m)
 
 #define OSL_VERIFY(c) do { if (!(c)) OSL_ASSERT(0); } while (0)
-#define OSL_PRECOND(c, m)  	OSL_ENSURE(c, m)
-#define OSL_POSTCOND(c, m) 	OSL_ENSURE(c, m)
+#define OSL_PRECOND(c, m)   OSL_ENSURE(c, m)
+#define OSL_POSTCOND(c, m)  OSL_ENSURE(c, m)
 
 
 #ifdef __cplusplus
-#define _OSL_GLOBAL	::
+#define _OSL_GLOBAL ::
 #else
 #define _OSL_GLOBAL
 #endif  /* __cplusplus */
@@ -124,7 +124,7 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 
 #if OSL_DEBUG_LEVEL > 0
 
-#define _OSL_DEBUG_ONLY(f)	(f)
+#define _OSL_DEBUG_ONLY(f)  (f)
 #define _OSL_ASSERT(c, f, l) \
     do \
     {  \
@@ -141,9 +141,9 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 
 #else
 
-#define _OSL_DEBUG_ONLY(f)			((void)0)
-#define _OSL_ASSERT(c, f, l)		((void)0)
-#define _OSL_ENSURE(c, f, l, m)	    ((void)0)
+#define _OSL_DEBUG_ONLY(f)          ((void)0)
+#define _OSL_ASSERT(c, f, l)        ((void)0)
+#define _OSL_ENSURE(c, f, l, m)     ((void)0)
 
 #endif /* OSL_DEBUG_LEVEL */
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -127,11 +127,11 @@ namespace connectivity
         /** WEEK(date)
             WEEK(date,first)
                 With a single argument, returns the week for date, in the range 0 to 53 (yes, there may be the beginnings of a week 53), for locations where Sunday is the first day of the week. The two-argument form of WEEK() allows you to specify whether the week starts on Sunday or Monday and whether the return value should be in the range 0-53 or 1-52. Here is a table for how the second argument works:
-                Value 	Meaning
-                0 	Week starts on Sunday and return value is in range 0-53
-                1 	Week starts on Monday and return value is in range 0-53
-                2 	Week starts on Sunday and return value is in range 1-53
-                3 	Week starts on Monday and return value is in range 1-53 (ISO 8601)
+                Value   Meaning
+                0   Week starts on Sunday and return value is in range 0-53
+                1   Week starts on Monday and return value is in range 0-53
+                2   Week starts on Sunday and return value is in range 1-53
+                3   Week starts on Monday and return value is in range 1-53 (ISO 8601)
 
             > SELECT WEEK('1998-02-20');
                     -> 7

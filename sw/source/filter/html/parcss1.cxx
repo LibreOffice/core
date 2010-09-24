@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,10 +54,10 @@
 #define LOOP_CHECK_RESTART \
     nOldInPos = STRING_MAXLEN;
 #define LOOP_CHECK_CHECK( where ) \
-    DBG_ASSERT( nOldInPos!=nInPos || cNextCh==(sal_Unicode)EOF, where );	\
-    if( nOldInPos==nInPos && cNextCh!=(sal_Unicode)EOF )					\
-        break;																\
-    else																	\
+    DBG_ASSERT( nOldInPos!=nInPos || cNextCh==(sal_Unicode)EOF, where );    \
+    if( nOldInPos==nInPos && cNextCh!=(sal_Unicode)EOF )                    \
+        break;                                                              \
+    else                                                                    \
         nOldInPos = nInPos;
 
 #else
@@ -661,8 +661,8 @@ CSS1Token CSS1Parser::GetNextToken()
                         sTmpBuffer2.append( cNextCh );
                         switch( cNextCh )
                         {
-                        case '(':	nNestCnt++;	break;
-                        case ')':	nNestCnt--;	break;
+                        case '(':   nNestCnt++; break;
+                        case ')':   nNestCnt--; break;
                         }
                         cNextCh = GetNextChar();
                     } while( (nNestCnt>1 || ')'!=cNextCh) && !IsEOF() );
@@ -728,7 +728,7 @@ void CSS1Parser::ParseStyleSheet()
             // url ueberspringen wir ungeprueft
             nToken = GetNextToken();
             break;
-        case CSS1_IDENT:			// Look-Aheads
+        case CSS1_IDENT:            // Look-Aheads
         case CSS1_DOT_W_WS:
         case CSS1_HASH:
 // /Feature: PrintExt
@@ -755,7 +755,7 @@ void CSS1Parser::ParseStyleSheet()
 
         switch( nToken )
         {
-        case CSS1_IDENT: 		// Look-Aheads
+        case CSS1_IDENT:        // Look-Aheads
         case CSS1_DOT_W_WS:
         case CSS1_HASH:
 // /Feature: PrintExt
@@ -1026,7 +1026,7 @@ CSS1Selector *CSS1Parser::ParseSelector()
 // term
 //  : unary_operator?
 //     [ NUMBER | STRING | PERCENTAGE | LENGTH | EMS | EXS | IDENT |
-//		 HEXCOLOR | URL | RGB ]
+//       HEXCOLOR | URL | RGB ]
 //
 // operator
 //  : '/' | ',' | /* empty */
@@ -1099,7 +1099,7 @@ CSS1Expression *CSS1Parser::ParseDeclaration( String& rProperty )
         case CSS1_RGB:
         case CSS1_HEXCOLOR:
             pNew = new CSS1Expression( nToken, aToken, nValue, cOp );
-            nValue = 0;	// sonst landet das auch im naechsten Ident
+            nValue = 0; // sonst landet das auch im naechsten Ident
             cSign = 0;
             cOp = 0;
             break;
@@ -1358,7 +1358,7 @@ BOOL CSS1Expression::GetColor( Color &rColor ) const
             rColor.SetGreen( aColors[1] );
             rColor.SetBlue( aColors[2] );
 
-            bRet = TRUE;	// etwas anderes als eine Farbe kann es nicht sein
+            bRet = TRUE;    // etwas anderes als eine Farbe kann es nicht sein
         }
         break;
 

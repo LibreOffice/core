@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
-namespace drawinglayer { namespace geometry	{
+namespace drawinglayer { namespace geometry {
     class ViewInformation3D;
 }}
 
@@ -48,33 +48,33 @@ namespace drawinglayer
         /** SliceType3D definition */
         enum SliceType3D
         {
-            SLICETYPE3D_REGULAR,		// normal geoemtry Slice3D
-            SLICETYPE3D_FRONTCAP,		// front cap
-            SLICETYPE3D_BACKCAP			// back cap
+            SLICETYPE3D_REGULAR,        // normal geoemtry Slice3D
+            SLICETYPE3D_FRONTCAP,       // front cap
+            SLICETYPE3D_BACKCAP         // back cap
         };
 
         /// class to hold one Slice3D
         class Slice3D
         {
         protected:
-            basegfx::B3DPolyPolygon					maPolyPolygon;
-            SliceType3D								maSliceType;
+            basegfx::B3DPolyPolygon                 maPolyPolygon;
+            SliceType3D                             maSliceType;
 
         public:
             Slice3D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon, 
-                const basegfx::B3DHomMatrix& aTransform, 
+                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                const basegfx::B3DHomMatrix& aTransform,
                 SliceType3D aSliceType = SLICETYPE3D_REGULAR)
-            :	maPolyPolygon(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPolygon)),
+            :   maPolyPolygon(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPolygon)),
                 maSliceType(aSliceType)
             {
                 maPolyPolygon.transform(aTransform);
             }
 
             Slice3D(
-                const basegfx::B3DPolyPolygon& rPolyPolygon, 
+                const basegfx::B3DPolyPolygon& rPolyPolygon,
                 SliceType3D aSliceType = SLICETYPE3D_REGULAR)
-            :	maPolyPolygon(rPolyPolygon),
+            :   maPolyPolygon(rPolyPolygon),
                 maSliceType(aSliceType)
             {
             }
@@ -89,24 +89,24 @@ namespace drawinglayer
 
         /// helpers for creation
         void createLatheSlices(
-            Slice3DVector& rSliceVector, 
-            const basegfx::B2DPolyPolygon& rSource, 
-            double fBackScale, 
-            double fDiagonal, 
-            double fRotation, 
-            sal_uInt32 nSteps, 
-            bool bCharacterMode, 
-            bool bCloseFront, 
+            Slice3DVector& rSliceVector,
+            const basegfx::B2DPolyPolygon& rSource,
+            double fBackScale,
+            double fDiagonal,
+            double fRotation,
+            sal_uInt32 nSteps,
+            bool bCharacterMode,
+            bool bCloseFront,
             bool bCloseBack);
-        
+
         void createExtrudeSlices(
-            Slice3DVector& rSliceVector, 
-            const basegfx::B2DPolyPolygon& rSource, 
-            double fBackScale, 
-            double fDiagonal, 
-            double fDepth, 
-            bool bCharacterMode, 
-            bool bCloseFront, 
+            Slice3DVector& rSliceVector,
+            const basegfx::B2DPolyPolygon& rSource,
+            double fBackScale,
+            double fDiagonal,
+            double fDepth,
+            bool bCharacterMode,
+            bool bCloseFront,
             bool bCloseBack);
 
         /// helpers for geometry extraction
@@ -114,23 +114,23 @@ namespace drawinglayer
         basegfx::B3DPolyPolygon extractVerticalLinesFromSlice(const Slice3DVector& rSliceVector);
 
         void extractPlanesFromSlice(
-            ::std::vector< basegfx::B3DPolyPolygon >& rFill, 
+            ::std::vector< basegfx::B3DPolyPolygon >& rFill,
             const Slice3DVector& rSliceVector,
-            bool bCreateNormals, 
-            bool bSmoothHorizontalNormals, 
-            bool bSmoothNormals, 
-            bool bSmoothLids, 
+            bool bCreateNormals,
+            bool bSmoothHorizontalNormals,
+            bool bSmoothNormals,
+            bool bSmoothLids,
             bool bClosed,
-            double fSmoothNormalsMix, 
-            double fSmoothLidsMix, 
-            bool bCreateTextureCoordinates, 
+            double fSmoothNormalsMix,
+            double fSmoothLidsMix,
+            bool bCreateTextureCoordinates,
             const basegfx::B2DHomMatrix& rTexTransform);
 
         void createReducedOutlines(
-            const geometry::ViewInformation3D& rViewInformation, 
+            const geometry::ViewInformation3D& rViewInformation,
             const basegfx::B3DHomMatrix& rObjectTransform,
-            const basegfx::B3DPolygon& rLoopA, 
-            const basegfx::B3DPolygon& rLoopB, 
+            const basegfx::B3DPolygon& rLoopA,
+            const basegfx::B3DPolygon& rLoopB,
             basegfx::B3DPolyPolygon& rTarget);
 
     } // end of namespace overlay

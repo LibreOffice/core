@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ class DefaultGridColumnModel : public ::cppu::WeakImplHelper2< XGridColumnModel,
 public:
     DefaultGridColumnModel(const Reference< XMultiServiceFactory >& xFactory);
     virtual ~DefaultGridColumnModel();
-    
+
     // XGridColumnModel
 
     //virtual ::sal_Bool SAL_CALL getColumnSelectionAllowed() throw (::com::sun::star::uno::RuntimeException);

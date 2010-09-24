@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,11 +113,11 @@ IMPL_LINK( ImpSWFDialog, OnToggleCheckbox, CheckBox*, pBox )
 {
     if (pBox == &maCheckExportAll)
     {
-        maCheckExportBackgrounds.Enable(!maCheckExportBackgrounds.IsEnabled()); 
+        maCheckExportBackgrounds.Enable(!maCheckExportBackgrounds.IsEnabled());
         maFiExportBackgroundsDescr.Enable(!maFiExportBackgroundsDescr.IsEnabled());
-        maCheckExportBackgroundObjects.Enable(!maCheckExportBackgroundObjects.IsEnabled()); 
+        maCheckExportBackgroundObjects.Enable(!maCheckExportBackgroundObjects.IsEnabled());
         maFiExportBackgroundObjectsDescr.Enable(!maFiExportBackgroundObjectsDescr.IsEnabled());
-        maCheckExportSlideContents.Enable(!maCheckExportSlideContents.IsEnabled()); 
+        maCheckExportSlideContents.Enable(!maCheckExportSlideContents.IsEnabled());
         maFiExportSlideContentsDescr.Enable(!maFiExportSlideContentsDescr.IsEnabled());
     }
 

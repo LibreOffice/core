@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@
  *        C3 - CRC-32 of the array of encoding numbers used to generate the subset
  *
  */
- 
+
 
 #ifndef __SUBFONT_H
 #define __SUBFONT_H
@@ -72,7 +72,7 @@
 
 namespace vcl
 {
-    
+
 /*@{*/
     typedef sal_Int16       F2Dot14;            /**< fixed: 2.14 */
     typedef sal_Int32       F16Dot16;           /**< fixed: 16.16 */
@@ -165,8 +165,8 @@ namespace vcl
     };
 #endif
 
-    
-    
+
+
 
 /** Structure used by GetTTSimpleGlyphMetrics() and GetTTSimpleCharMetrics() functions */
     typedef struct {
@@ -207,11 +207,11 @@ namespace vcl
 
     typedef struct {
         char *family;             /**< family name                                             */
-        sal_uInt16 *ufamily;		  /**< family name UCS2                                         */
+        sal_uInt16 *ufamily;          /**< family name UCS2                                         */
         char *subfamily;          /**< subfamily name                                          */
         sal_uInt16 *usubfamily;   /**< subfamily name UCS2 */
         char *psname;             /**< PostScript name                                         */
-        sal_uInt16 macStyle;	  /**< macstyle bits from 'HEAD' table */
+        sal_uInt16 macStyle;      /**< macstyle bits from 'HEAD' table */
         int   weight;             /**< value of WeightClass or 0 if can't be determined        */
         int   width;              /**< value of WidthClass or 0 if can't be determined         */
         int   pitch;              /**< 0: proportianal font, otherwise: monospaced             */
@@ -279,7 +279,7 @@ namespace vcl
 
 
 /**
- * TrueTypeFont constructor. 
+ * TrueTypeFont constructor.
  * The font file has to be provided as a memory buffer and length
  * @param  facenum - logical font number within a TTC file. This value is ignored
  *                   for TrueType fonts
@@ -289,7 +289,7 @@ namespace vcl
     int OpenTTFontBuffer(void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf); /*FOLD01*/
 #if !defined(WIN32) && !defined(OS2)
 /**
- * TrueTypeFont constructor. 
+ * TrueTypeFont constructor.
  * Reads the font file and allocates the memory for the structure.
  * on WIN32 the font has to be provided as a memory buffer and length
  * @param  facenum - logical font number within a TTC file. This value is ignored
@@ -560,23 +560,23 @@ namespace vcl
  * Returns nonzero if font is a symbol encoded font
  */
     int CheckSymbolEncoding(TrueTypeFont* ttf);
-    
+
 /**
  * returns the number of glyphs in a font
  */
  int GetTTGlyphCount( TrueTypeFont* ttf );
- 
+
 /**
  * provide access to the raw data of a SFNT-container's subtable
  */
  bool GetSfntTable( TrueTypeFont* ttf, int nSubtableIndex,
      const sal_uInt8** ppRawBytes, int* pRawLength );
-    
+
 /*- private definitions */ /*FOLD00*/
 
     struct _TrueTypeFont {
         sal_uInt32 tag;
-    
+
         char        *fname;
         sal_Int32   fsize;
         sal_uInt8   *ptr;

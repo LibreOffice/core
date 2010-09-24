@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,37 +41,37 @@ class ImplWallpaper;
 // - Wallpaper-Types -
 // -------------------
 
-#define	WALLPAPER_NULL 					WallpaperStyle_NULL
-#define	WALLPAPER_TILE					WallpaperStyle_TILE
-#define	WALLPAPER_CENTER				WallpaperStyle_CENTER
-#define	WALLPAPER_SCALE					WallpaperStyle_SCALE
-#define	WALLPAPER_TOPLEFT				WallpaperStyle_TOPLEFT
-#define	WALLPAPER_TOP					WallpaperStyle_TOP
-#define	WALLPAPER_TOPRIGHT				WallpaperStyle_TOPRIGHT
-#define	WALLPAPER_LEFT					WallpaperStyle_LEFT
-#define	WALLPAPER_RIGHT					WallpaperStyle_RIGHT
-#define	WALLPAPER_BOTTOMLEFT			WallpaperStyle_BOTTOMLEFT
-#define	WALLPAPER_BOTTOM				WallpaperStyle_BOTTOM
-#define	WALLPAPER_BOTTOMRIGHT			WallpaperStyle_BOTTOMRIGHT
-#define	WALLPAPER_APPLICATIONGRADIENT	WallpaperStyle_APPLICATIONGRADIENT
-#define	WALLPAPER_FORCE_EQUAL_SIZE		WallpaperStyle_FORCE_EQUAL_SIZE
+#define WALLPAPER_NULL                  WallpaperStyle_NULL
+#define WALLPAPER_TILE                  WallpaperStyle_TILE
+#define WALLPAPER_CENTER                WallpaperStyle_CENTER
+#define WALLPAPER_SCALE                 WallpaperStyle_SCALE
+#define WALLPAPER_TOPLEFT               WallpaperStyle_TOPLEFT
+#define WALLPAPER_TOP                   WallpaperStyle_TOP
+#define WALLPAPER_TOPRIGHT              WallpaperStyle_TOPRIGHT
+#define WALLPAPER_LEFT                  WallpaperStyle_LEFT
+#define WALLPAPER_RIGHT                 WallpaperStyle_RIGHT
+#define WALLPAPER_BOTTOMLEFT            WallpaperStyle_BOTTOMLEFT
+#define WALLPAPER_BOTTOM                WallpaperStyle_BOTTOM
+#define WALLPAPER_BOTTOMRIGHT           WallpaperStyle_BOTTOMRIGHT
+#define WALLPAPER_APPLICATIONGRADIENT   WallpaperStyle_APPLICATIONGRADIENT
+#define WALLPAPER_FORCE_EQUAL_SIZE      WallpaperStyle_FORCE_EQUAL_SIZE
 
 #ifndef ENUM_WALLPAPERSTYLE_DECLARED
 #define ENUM_WALLPAPERSTYLE_DECLARED
 
-enum WallpaperStyle 
+enum WallpaperStyle
 {
-    WALLPAPER_NULL, 
+    WALLPAPER_NULL,
     WALLPAPER_TILE,
     WALLPAPER_CENTER,
     WALLPAPER_SCALE,
-    WALLPAPER_TOPLEFT,		
-    WALLPAPER_TOP,		
+    WALLPAPER_TOPLEFT,
+    WALLPAPER_TOP,
     WALLPAPER_TOPRIGHT,
-    WALLPAPER_LEFT,								
+    WALLPAPER_LEFT,
     WALLPAPER_RIGHT,
-    WALLPAPER_BOTTOMLEFT,	
-    WALLPAPER_BOTTOM,	
+    WALLPAPER_BOTTOMLEFT,
+    WALLPAPER_BOTTOM,
     WALLPAPER_BOTTOMRIGHT,
     WALLPAPER_APPLICATIONGRADIENT,          // defines a gradient that internally covers the whole application
                                             // and uses a color derived from the face color
@@ -87,9 +87,9 @@ enum WallpaperStyle
 class VCL_DLLPUBLIC Wallpaper
 {
 private:
-    ImplWallpaper*	mpImplWallpaper;
+    ImplWallpaper*  mpImplWallpaper;
 
-    SAL_DLLPRIVATE void			  ImplMakeUnique( BOOL bReleaseCache = TRUE );
+    SAL_DLLPRIVATE void           ImplMakeUnique( BOOL bReleaseCache = TRUE );
     SAL_DLLPRIVATE Gradient       ImplGetApplicationGradient() const;
 
 //#if 0 // _SOLAR__PRIVATE
@@ -105,39 +105,39 @@ public:
                     Wallpaper( const Gradient& rGradient );
                     ~Wallpaper();
 
-    void			SetColor( const Color& rColor );
-    const Color&	GetColor() const;
+    void            SetColor( const Color& rColor );
+    const Color&    GetColor() const;
 
-    void			SetStyle( WallpaperStyle eStyle );
-    WallpaperStyle	GetStyle() const;
+    void            SetStyle( WallpaperStyle eStyle );
+    WallpaperStyle  GetStyle() const;
 
-    void			SetBitmap( const BitmapEx& rBitmap );
-    void			SetBitmap();
-    BitmapEx		GetBitmap() const;
-    BOOL			IsBitmap() const;
+    void            SetBitmap( const BitmapEx& rBitmap );
+    void            SetBitmap();
+    BitmapEx        GetBitmap() const;
+    BOOL            IsBitmap() const;
 
-    void			SetGradient( const Gradient& rGradient );
-    void			SetGradient();
-    Gradient		GetGradient() const;
-    BOOL			IsGradient() const;
+    void            SetGradient( const Gradient& rGradient );
+    void            SetGradient();
+    Gradient        GetGradient() const;
+    BOOL            IsGradient() const;
 
-    void			SetRect( const Rectangle& rRect );
-    void			SetRect();
-    Rectangle		GetRect() const;
-    BOOL			IsRect() const;
+    void            SetRect( const Rectangle& rRect );
+    void            SetRect();
+    Rectangle       GetRect() const;
+    BOOL            IsRect() const;
 
-    BOOL			IsFixed() const;
-    BOOL			IsScrollable() const;
+    BOOL            IsFixed() const;
+    BOOL            IsScrollable() const;
 
-    Wallpaper&		operator=( const Wallpaper& rWallpaper );
-    BOOL			operator==( const Wallpaper& rWallpaper ) const;
-    BOOL			operator!=( const Wallpaper& rWallpaper ) const
+    Wallpaper&      operator=( const Wallpaper& rWallpaper );
+    BOOL            operator==( const Wallpaper& rWallpaper ) const;
+    BOOL            operator!=( const Wallpaper& rWallpaper ) const
                         { return !(Wallpaper::operator==( rWallpaper )); }
-    BOOL			IsSameInstance( const Wallpaper& rWallpaper ) const
+    BOOL            IsSameInstance( const Wallpaper& rWallpaper ) const
                         { return (mpImplWallpaper == rWallpaper.mpImplWallpaper); }
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, Wallpaper& rWallpaper );
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const Wallpaper& rWallpaper );
 };
 
-#endif	// _SV_WALL_HXX
+#endif  // _SV_WALL_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,15 +43,15 @@ namespace pcr
     class OPropertyEditor;
 
     //========================================================================
-    //= 
+    //=
     //========================================================================
     class OPropertyBrowserView : public Window
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
 
-        OPropertyEditor*		m_pPropBox;
-        sal_uInt16				m_nActivePage;
-        Link					m_aPageActivationHandler;
+        OPropertyEditor*        m_pPropBox;
+        sal_uInt16              m_nActivePage;
+        Link                    m_aPageActivationHandler;
 
     protected:
         virtual void Resize();
@@ -59,7 +59,7 @@ namespace pcr
         virtual long Notify( NotifyEvent& _rNEvt );
 
     public:
-        OPropertyBrowserView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&	_xORB,
+        OPropertyBrowserView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
                         Window* pParent, WinBits nBits = 0);
 
         virtual ~OPropertyBrowserView();
@@ -67,15 +67,15 @@ namespace pcr
         OPropertyEditor&    getPropertyBox() { return *m_pPropBox; }
 
         // page handling
-        sal_uInt16	getActivaPage() const { return m_nActivePage; }
-        void		activatePage(sal_uInt16 _nPage);
+        sal_uInt16  getActivaPage() const { return m_nActivePage; }
+        void        activatePage(sal_uInt16 _nPage);
 
-        void	setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
-        Link	getPageActivationHandler() const { return m_aPageActivationHandler; }
+        void    setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
+        Link    getPageActivationHandler() const { return m_aPageActivationHandler; }
 
         // #95343# ------------------
         ::com::sun::star::awt::Size getMinimumSize();
-        
+
     protected:
         DECL_LINK(OnPageActivation, void*);
     };

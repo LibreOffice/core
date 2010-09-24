@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,15 +102,15 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     ,m_pTableMap(pParent->GetTabWinMap())
 
     ,aFL_CascUpd(           this, ModuleRes(FL_CASC_UPD) )
-    ,aRB_NoCascUpd(			this, ModuleRes(RB_NO_CASC_UPD) )
-    ,aRB_CascUpd(			this, ModuleRes(RB_CASC_UPD) )
-    ,aRB_CascUpdNull(		this, ModuleRes(RB_CASC_UPD_NULL) )
-    ,aRB_CascUpdDefault(	this, ModuleRes(RB_CASC_UPD_DEFAULT) )
+    ,aRB_NoCascUpd(         this, ModuleRes(RB_NO_CASC_UPD) )
+    ,aRB_CascUpd(           this, ModuleRes(RB_CASC_UPD) )
+    ,aRB_CascUpdNull(       this, ModuleRes(RB_CASC_UPD_NULL) )
+    ,aRB_CascUpdDefault(    this, ModuleRes(RB_CASC_UPD_DEFAULT) )
     ,aFL_CascDel(           this, ModuleRes(FL_CASC_DEL) )
-    ,aRB_NoCascDel(			this, ModuleRes(RB_NO_CASC_DEL) )
-    ,aRB_CascDel(			this, ModuleRes(RB_CASC_DEL) )
-    ,aRB_CascDelNull(		this, ModuleRes(RB_CASC_DEL_NULL) )
-    ,aRB_CascDelDefault(	this, ModuleRes(RB_CASC_DEL_DEFAULT) )
+    ,aRB_NoCascDel(         this, ModuleRes(RB_NO_CASC_DEL) )
+    ,aRB_CascDel(           this, ModuleRes(RB_CASC_DEL) )
+    ,aRB_CascDelNull(       this, ModuleRes(RB_CASC_DEL_NULL) )
+    ,aRB_CascDelDefault(    this, ModuleRes(RB_CASC_DEL_DEFAULT) )
 
     ,aPB_OK( this, ModuleRes( PB_OK ) )
     ,aPB_CANCEL( this, ModuleRes( PB_CANCEL ) )
@@ -252,7 +252,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
     }
     catch( const SQLException& )
     {
-        ::dbaui::showError(	SQLExceptionInfo( ::cppu::getCaughtException() ),
+        ::dbaui::showError( SQLExceptionInfo( ::cppu::getCaughtException() ),
                             this,
                             static_cast<OJoinTableView*>(GetParent())->getDesignView()->getController().getORB());
     }

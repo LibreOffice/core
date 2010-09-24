@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,7 +100,7 @@ public:
         WIN_ICONS,
         WIN_WORKSPACE_NAMES,
         WIN_CLIENT_LIST,
-        
+
         // atoms for general WM hints
         WM_STATE,
         MOTIF_WM_HINTS,
@@ -129,13 +129,13 @@ public:
     /*
      *  flags for frame decoration
      */
-    static const int decoration_Title			= 0x00000001;
-    static const int decoration_Border		= 0x00000002;
-    static const int decoration_Resize		= 0x00000004;
-    static const int decoration_MinimizeBtn	= 0x00000008;
-    static const int decoration_MaximizeBtn	= 0x00000010;
-    static const int decoration_CloseBtn		= 0x00000020;
-    static const int decoration_All			= 0x10000000;
+    static const int decoration_Title           = 0x00000001;
+    static const int decoration_Border      = 0x00000002;
+    static const int decoration_Resize      = 0x00000004;
+    static const int decoration_MinimizeBtn = 0x00000008;
+    static const int decoration_MaximizeBtn = 0x00000010;
+    static const int decoration_CloseBtn        = 0x00000020;
+    static const int decoration_All         = 0x10000000;
 
     /*
      *  window type
@@ -152,19 +152,19 @@ public:
     };
 
 protected:
-    SalDisplay*				m_pSalDisplay;		// Display to use
-    Display*				m_pDisplay;			// X Display of SalDisplay
-    String					m_aWMName;
-    Atom					m_aWMAtoms[ NetAtomMax];
-    int						m_nDesktops;
-    bool					m_bEqualWorkAreas;
+    SalDisplay*             m_pSalDisplay;      // Display to use
+    Display*                m_pDisplay;         // X Display of SalDisplay
+    String                  m_aWMName;
+    Atom                    m_aWMAtoms[ NetAtomMax];
+    int                     m_nDesktops;
+    bool                    m_bEqualWorkAreas;
     ::std::vector< Rectangle >
                             m_aWMWorkAreas;
-    bool					m_bTransientBehaviour;
-    bool					m_bEnableAlwaysOnTopWorks;
+    bool                    m_bTransientBehaviour;
+    bool                    m_bEnableAlwaysOnTopWorks;
     bool                    m_bLegacyPartialFullscreen;
-    int						m_nWinGravity;
-    int						m_nInitWinGravity;
+    int                     m_nWinGravity;
+    int                     m_nInitWinGravity;
 
     WMAdaptor( SalDisplay * )
 ;
@@ -211,17 +211,17 @@ public:
      */
     const Rectangle& getWorkArea( int n ) const
     { return m_aWMWorkAreas[n]; }
-    
+
     /*
      * attemp to switch the desktop to a certain workarea
      */
     void switchToWorkArea( int nWorkArea ) const;
-    
+
     /*
      *  sets window title
      */
     virtual void setWMName( X11SalFrame* pFrame, const String& rWMName ) const;
-    
+
     /*
      * set NET_WM_PID
      */
@@ -231,7 +231,7 @@ public:
      * set WM_CLIENT_MACHINE
      */
     virtual void setClientMachine( X11SalFrame* pFrame ) const;
-    
+
     virtual void answerPing( X11SalFrame*, XClientMessageEvent* ) const;
 
     /*
@@ -267,7 +267,7 @@ public:
      * set _NET_WM_USER_TIME property, if NetWM
      */
     virtual void setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const;
-    
+
     /*
      *  tells whether fullscreen mode is supported by WM
      */
@@ -303,12 +303,12 @@ public:
      *  tells whether enableAlwaysOnTop actually works with this WM
      */
     bool isAlwaysOnTopOK() const { return m_bEnableAlwaysOnTopWorks; }
-    
+
     /*
      *  handle WM messages (especially WM state changes)
      */
     virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const;
-    
+
     /*
      * called by SalFrame::Show: time to update state properties
      */
@@ -342,7 +342,7 @@ public:
      *  changes the transient hint of a window to reference frame
      *  if reference frame is NULL the root window is used instead
      */
-    void changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame* pReferenceFrame ) const;    
+    void changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame* pReferenceFrame ) const;
 };
 
 } // namespace

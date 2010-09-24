@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,16 +43,16 @@ oslSignalAction vos::signalHandlerFunction_impl(
 /////////////////////////////////////////////////////////////////////////////
 // Thread class
 
-VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OSignalHandler, vos), 
-                        VOS_NAMESPACE(OSignalHandler, vos), 
+VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OSignalHandler, vos),
+                        VOS_NAMESPACE(OSignalHandler, vos),
                         VOS_NAMESPACE(OObject, vos), 0);
 
-OSignalHandler::OSignalHandler() 
+OSignalHandler::OSignalHandler()
 {
     m_hHandler = osl_addSignalHandler(signalHandlerFunction_impl, this);
 }
 
-OSignalHandler::~OSignalHandler() 
+OSignalHandler::~OSignalHandler()
 {
     osl_removeSignalHandler(m_hHandler);
 }

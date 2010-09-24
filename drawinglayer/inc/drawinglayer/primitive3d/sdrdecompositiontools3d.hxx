@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ namespace drawinglayer
         void applyNormalsKindSphereTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill, const basegfx::B3DRange& rRange);
         void applyNormalsKindFlatTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill);
         void applyNormalsInvertTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill);
-        
+
         // #i98314#
         void applyTextureTo3DGeometry(
             ::com::sun::star::drawing::TextureProjectionMode eModeX,
@@ -71,7 +71,7 @@ namespace drawinglayer
             const basegfx::B2DVector& rTextureSize);
 
         Primitive3DSequence create3DPolyPolygonLinePrimitives(
-            const basegfx::B3DPolyPolygon& rUnitPolyPolygon, 
+            const basegfx::B3DPolyPolygon& rUnitPolyPolygon,
             const basegfx::B3DHomMatrix& rObjectTransform,
             const attribute::SdrLineAttribute& rLine);
 

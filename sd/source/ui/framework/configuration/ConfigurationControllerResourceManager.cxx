@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ void ConfigurationControllerResourceManager::DeactivateResources (
         rResources.rend(),
         ::boost::bind(&ConfigurationControllerResourceManager::DeactivateResource,
             this, _1, rxConfiguration));
-}    
+}
 
 
 
@@ -152,7 +152,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
 #endif
         return;
     }
-    
+
     try
     {
         // 2. Create the resource.
@@ -171,7 +171,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        
+
         if (xResource.is())
         {
 #if defined VERBOSE && VERBOSE>=1
@@ -224,10 +224,10 @@ void ConfigurationControllerResourceManager::DeactivateResource (
     {
         // 1. Remove resource from URL->Object map.
         ResourceDescriptor aDescriptor (RemoveResource(rxResourceId));
-        
+
         if (aDescriptor.mxResource.is() && aDescriptor.mxResourceFactory.is())
         {
-            // 2.  Notifiy listeners that the resource is being deactivated. 
+            // 2.  Notifiy listeners that the resource is being deactivated.
             mpBroadcaster->NotifyListeners(
                 FrameworkHelper::msResourceDeactivationEvent,
                 rxResourceId,
@@ -289,7 +289,7 @@ void ConfigurationControllerResourceManager::AddResource (
     aDescriptor.mxResource = rxResource;
     aDescriptor.mxResourceFactory = rxFactory;
     maResourceMap[rxResource->getResourceId()] = aDescriptor;
-    
+
 #if defined VERBOSE && VERBOSE>=2
     OSL_TRACE("ConfigurationControllerResourceManager::AddResource(): added %s -> %x\n",
         OUStringToOString(

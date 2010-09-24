@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,7 +149,7 @@ static oslFileError osl_psz_createDirectory(const sal_Char* pszPath);
 static oslFileError osl_psz_removeDirectory(const sal_Char* pszPath);
 
 /*******************************************************************
- *	osl_openDirectory
+ *  osl_openDirectory
  ******************************************************************/
 
 oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirectory* pDirectory)
@@ -171,9 +171,9 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
     osl_systemPathRemoveSeparator(ustrSystemPath);
 
     /* convert unicode path to text */
-    if ( UnicodeToText( path, PATH_MAX, ustrSystemPath->buffer, ustrSystemPath->length ) 
-#ifdef MACOSX 
-     && macxp_resolveAlias( path, PATH_MAX ) == 0 
+    if ( UnicodeToText( path, PATH_MAX, ustrSystemPath->buffer, ustrSystemPath->length )
+#ifdef MACOSX
+     && macxp_resolveAlias( path, PATH_MAX ) == 0
 #endif /* MACOSX */
      )
     {
@@ -213,7 +213,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 }
 
 /****************************************************************************/
-/*	osl_closeDirectory */
+/*  osl_closeDirectory */
 /****************************************************************************/
 
 oslFileError SAL_CALL osl_closeDirectory( oslDirectory Directory )
@@ -264,7 +264,7 @@ static struct dirent* osl_readdir_impl_(DIR* pdir, sal_Bool bFilterLocalAndParen
 }
 
 /****************************************************************************
- *	osl_getNextDirectoryItem
+ *  osl_getNextDirectoryItem
  ***************************************************************************/
 
 oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirectoryItem* pItem, sal_uInt32 /*uHint*/)
@@ -288,8 +288,8 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
 
 #if defined(MACOSX)
 
-    // convert decomposed filename to precomposed unicode 
-    char composed_name[BUFSIZ];  
+    // convert decomposed filename to precomposed unicode
+    char composed_name[BUFSIZ];
     CFMutableStringRef strRef = CFStringCreateMutable (NULL, 0 );
     CFStringAppendCString( strRef, pEntry->d_name, kCFStringEncodingUTF8 );  //UTF8 is default on Mac OSX
     CFStringNormalize( strRef, kCFStringNormalizationFormC );
@@ -326,7 +326,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
 }
 
 /****************************************************************************/
-/*	osl_getDirectoryItem */
+/*  osl_getDirectoryItem */
 /****************************************************************************/
 
 oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirectoryItem* pItem )
@@ -361,7 +361,7 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
 
 
 /****************************************************************************/
-/*	osl_acquireDirectoryItem */
+/*  osl_acquireDirectoryItem */
 /****************************************************************************/
 
 oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
@@ -375,7 +375,7 @@ oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
 }
 
 /****************************************************************************/
-/*	osl_releaseDirectoryItem */
+/*  osl_releaseDirectoryItem */
 /****************************************************************************/
 
 oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
@@ -389,7 +389,7 @@ oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
 }
 
 /****************************************************************************/
-/*	osl_createDirectory */
+/*  osl_createDirectory */
 /****************************************************************************/
 
 oslFileError SAL_CALL osl_createDirectory( rtl_uString* ustrDirectoryURL )
@@ -413,7 +413,7 @@ oslFileError SAL_CALL osl_createDirectory( rtl_uString* ustrDirectoryURL )
 }
 
 /****************************************************************************/
-/*	osl_removeDirectory */
+/*  osl_removeDirectory */
 /****************************************************************************/
 
 oslFileError SAL_CALL osl_removeDirectory( rtl_uString* ustrDirectoryURL )
@@ -476,13 +476,13 @@ static oslFileError osl_psz_removeDirectory( const sal_Char* pszPath )
 }
 
 /****************************************************************************/
-/*	osl_createDirectoryPath */
+/*  osl_createDirectoryPath */
 /****************************************************************************/
 
 static int path_make_parent(sal_Unicode* path)
 {
     int i = rtl_ustr_lastIndexOfChar(path, '/');
-    
+
     if (i > 0)
     {
         *(path + i) = 0;
@@ -494,19 +494,19 @@ static int path_make_parent(sal_Unicode* path)
 
 static int create_dir_with_callback(
     sal_Unicode* directory_path,
-    oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc, 
+    oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
     void* pData)
 {
     int mode = S_IRWXU | S_IRWXG | S_IRWXO;
-    
+
     if (osl::mkdir(directory_path, mode) == 0)
     {
         if (aDirectoryCreationCallbackFunc)
         {
-            rtl::OUString url;                
-            osl::FileBase::getFileURLFromSystemPath(directory_path, url);                                
+            rtl::OUString url;
+            osl::FileBase::getFileURLFromSystemPath(directory_path, url);
             aDirectoryCreationCallbackFunc(pData, url.pData);
-        }                
+        }
         return 0;
     }
     return errno;
@@ -514,58 +514,58 @@ static int create_dir_with_callback(
 
 static oslFileError create_dir_recursively_(
     sal_Unicode* dir_path,
-    oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc, 
+    oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
     void* pData)
-{   
+{
     OSL_PRECOND((rtl_ustr_getLength(dir_path) > 0) && ((dir_path + (rtl_ustr_getLength(dir_path) - 1)) != (dir_path + rtl_ustr_lastIndexOfChar(dir_path, '/'))), \
     "Path must not end with a slash");
-         
+
     int native_err = create_dir_with_callback(
         dir_path, aDirectoryCreationCallbackFunc, pData);
-        
-    if (native_err == 0)    
+
+    if (native_err == 0)
         return osl_File_E_None;
-                        
+
     if (native_err != ENOENT)
         return oslTranslateFileError(OSL_FET_ERROR, native_err);
-    
+
     // we step back until '/a_dir' at maximum because
     // we should get an error unequal ENOENT when
-    // we try to create 'a_dir' at '/' and would so 
-    // return before	    
+    // we try to create 'a_dir' at '/' and would so
+    // return before
     int pos = path_make_parent(dir_path);
-                    
+
     oslFileError osl_error = create_dir_recursively_(
         dir_path, aDirectoryCreationCallbackFunc, pData);
-                    
+
     if (osl_File_E_None != osl_error)
         return osl_error;
-                    
+
        dir_path[pos] = '/';
-                               
-    return create_dir_recursively_(dir_path, aDirectoryCreationCallbackFunc, pData);     
+
+    return create_dir_recursively_(dir_path, aDirectoryCreationCallbackFunc, pData);
 }
 
 oslFileError SAL_CALL osl_createDirectoryPath(
-    rtl_uString* aDirectoryUrl, 
+    rtl_uString* aDirectoryUrl,
     oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
     void* pData)
 {
     if (aDirectoryUrl == NULL)
         return osl_File_E_INVAL;
-    
-    rtl::OUString sys_path;         
+
+    rtl::OUString sys_path;
     oslFileError osl_error = osl_getSystemPathFromFileURL_Ex(
-        aDirectoryUrl, &sys_path.pData, sal_False);        
-    
+        aDirectoryUrl, &sys_path.pData, sal_False);
+
     if (osl_error != osl_File_E_None)
         return osl_error;
-                                                                
+
     osl::systemPathRemoveSeparator(sys_path);
-    
-    // const_cast because sys_path is a local copy which we want to modify inplace instead of 
+
+    // const_cast because sys_path is a local copy which we want to modify inplace instead of
     // coyp it into another buffer on the heap again
-    return create_dir_recursively_(sys_path.pData->buffer, aDirectoryCreationCallbackFunc, pData);			
+    return create_dir_recursively_(sys_path.pData->buffer, aDirectoryCreationCallbackFunc, pData);
 }
 
 /******************************************************************************
@@ -592,7 +592,7 @@ static int           oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_
 static oslFileError  oslDoMoveFile(const sal_Char* pszPath, const sal_Char* pszDestPath);
 
 /****************************************************************************/
-/*	osl_moveFile */
+/*  osl_moveFile */
 /****************************************************************************/
 
 oslFileError SAL_CALL osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrDestURL )
@@ -623,7 +623,7 @@ oslFileError SAL_CALL osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
 }
 
 /****************************************************************************/
-/*	osl_copyFile */
+/*  osl_copyFile */
 /****************************************************************************/
 
 oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrDestURL )
@@ -654,7 +654,7 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
 }
 
 /****************************************************************************/
-/*	osl_removeFile */
+/*  osl_removeFile */
 /****************************************************************************/
 
 oslFileError SAL_CALL osl_removeFile( rtl_uString* ustrFileURL )
@@ -865,7 +865,7 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
 
     /* Quick fix for #106048, the whole copy file function seems
        to be erroneous anyway and needs to be rewritten.
-       Besides osl_copyFile	is currently not used from OO/SO code.
+       Besides osl_copyFile is currently not used from OO/SO code.
     */
     memset(pszTmpDestFile, 0, size_tmp_dest_buff);
 
@@ -1001,20 +1001,20 @@ static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszD
  ****************************************/
 
 static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, size_t nSourceSize, mode_t mode)
-{    
+{
     int SourceFileFD=0;
     int DestFileFD=0;
     int nRet=0;
 
     SourceFileFD=open(pszSourceFileName,O_RDONLY);
     if ( SourceFileFD < 0 )
-    {		
+    {
         nRet=errno;
         return nRet;
     }
- 
+
     DestFileFD=open(pszDestFileName, O_WRONLY | O_CREAT, mode);
-        
+
     if ( DestFileFD < 0 )
     {
         nRet=errno;
@@ -1022,10 +1022,10 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
         return nRet;
     }
 
-    /* HACK: because memory mapping fails on various 
+    /* HACK: because memory mapping fails on various
        platforms if the size of the source file is  0 byte */
     if (0 == nSourceSize)
-    {						
+    {
         close(SourceFileFD);
         close(DestFileFD);
         return 0;
@@ -1046,7 +1046,7 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
 
     size_t nWritten = 0;
     size_t nRemains = nSourceSize;
-   
+
     /* mmap file -- open dest file -- write -- fsync it at the end */
     void* pSourceFile = mmap( 0, nSourceSize, PROT_READ, MAP_SHARED, SourceFileFD, 0 );
     if ( pSourceFile != MAP_FAILED )
@@ -1057,7 +1057,7 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
     }
 
     if ( nRemains )
-    {	
+    {
         /* mmap has problems, try the direct streaming */
         char pBuffer[32000];
         size_t nRead = 0;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
 
-#define DIALOG_WIDTH	310
-#define DIALOG_HEIGHT	210
-#define BUTTON_WIDTH	50
-#define BUTTON_HEIGHT	14
+#define DIALOG_WIDTH    310
+#define DIALOG_HEIGHT   210
+#define BUTTON_WIDTH    50
+#define BUTTON_HEIGHT   14
 
 // -------------------
 // - OPTIMIZERDIALOG -
@@ -61,12 +61,12 @@ public :
     AboutDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF, com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame );
     ~AboutDialog();
 
-    sal_Bool				execute();
+    sal_Bool                execute();
 
 private :
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >mxMSF;
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >			mxFrame;
-    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >	mxActionListener;
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >         mxFrame;
+    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListener;
 
     void InitDialog();
 
@@ -84,7 +84,7 @@ public:
     virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
 private:
-    
+
     AboutDialog& mrAboutDialog;
 };
 

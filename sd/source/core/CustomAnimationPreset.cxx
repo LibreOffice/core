@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -264,7 +264,7 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
     try
     {
         // create stream
-        SvStream*	pIStm = ::utl::UcbStreamHelper::CreateStream( rPath, STREAM_READ );
+        SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( rPath, STREAM_READ );
         Reference<XInputStream> xInputStream( new utl::OInputStreamWrapper( pIStm, sal_True ) );
 
         // prepare ParserInputSrouce
@@ -632,10 +632,10 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
     const PresetCategoryList* pCategoryList = 0;
     switch( nPresetClass )
     {
-    case EffectPresetClass::ENTRANCE:	pCategoryList = &maEntrancePresets; break;
-    case EffectPresetClass::EXIT:		pCategoryList = &maExitPresets; break;
-    case EffectPresetClass::EMPHASIS:	pCategoryList = &maEmphasisPresets; break;
-    case EffectPresetClass::MOTIONPATH:	pCategoryList = &maMotionPathsPresets; break;
+    case EffectPresetClass::ENTRANCE:   pCategoryList = &maEntrancePresets; break;
+    case EffectPresetClass::EXIT:       pCategoryList = &maExitPresets; break;
+    case EffectPresetClass::EMPHASIS:   pCategoryList = &maEmphasisPresets; break;
+    case EffectPresetClass::MOTIONPATH: pCategoryList = &maMotionPathsPresets; break;
     default:
         pCategoryList = 0;
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ using namespace ::com::sun::star;
 #ifdef DEBUG_DOMAINMAPPER
 extern TagLogger::Pointer_t dmapper_logger;
 #endif
-    
+
 class XInputStreamHelper : public cppu::WeakImplHelper1
 <    io::XInputStream   >
 {
@@ -315,13 +315,13 @@ public:
         ,bInShapeOptionMode(false)
         {}
 
-    void setXSize(sal_Int32 _nXSize) 
+    void setXSize(sal_Int32 _nXSize)
     {
         nXSize = _nXSize;
         bXSizeValid = true;
     }
-    
-    sal_uInt32 getXSize() const 
+
+    sal_uInt32 getXSize() const
     {
         return nXSize;
     }
@@ -337,7 +337,7 @@ public:
         bYSizeValid = true;
     }
 
-    sal_uInt32 getYSize() const 
+    sal_uInt32 getYSize() const
     {
         return nYSize;
     }
@@ -352,7 +352,7 @@ public:
   -----------------------------------------------------------------------*/
 GraphicImport::GraphicImport(uno::Reference < uno::XComponentContext >    xComponentContext,
                              uno::Reference< lang::XMultiServiceFactory > xTextFactory,
-                             DomainMapper& rDMapper, 
+                             DomainMapper& rDMapper,
                              GraphicImportType eImportType )
 : m_pImpl( new GraphicImport_Impl( eImportType, rDMapper ))
   ,m_xComponentContext( xComponentContext )
@@ -447,49 +447,49 @@ void GraphicImport::attribute(Id nName, Value & val)
         case NS_rtf::LN_DYAGOAL: //y-size in twip
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
-        case NS_rtf::LN_MX: 
+        case NS_rtf::LN_MX:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nHoriScaling = nIntValue; 
+            m_pImpl->nHoriScaling = nIntValue;
             break;// hori scaling in 0.001%
-        case NS_rtf::LN_MY: 
+        case NS_rtf::LN_MY:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nVertScaling = nIntValue; 
+            m_pImpl->nVertScaling = nIntValue;
             break;// vert scaling in 0.001%
-        case NS_rtf::LN_DXACROPLEFT:    
+        case NS_rtf::LN_DXACROPLEFT:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nLeftCrop  = ConversionHelper::convertTwipToMM100(nIntValue); 
+            m_pImpl->nLeftCrop  = ConversionHelper::convertTwipToMM100(nIntValue);
             break;// left crop in twips
-        case NS_rtf::LN_DYACROPTOP:     
+        case NS_rtf::LN_DYACROPTOP:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nTopCrop   = ConversionHelper::convertTwipToMM100(nIntValue); 
+            m_pImpl->nTopCrop   = ConversionHelper::convertTwipToMM100(nIntValue);
             break;// top crop in twips
-        case NS_rtf::LN_DXACROPRIGHT:   
+        case NS_rtf::LN_DXACROPRIGHT:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nRightCrop = ConversionHelper::convertTwipToMM100(nIntValue); 
+            m_pImpl->nRightCrop = ConversionHelper::convertTwipToMM100(nIntValue);
             break;// right crop in twips
-        case NS_rtf::LN_DYACROPBOTTOM:  
+        case NS_rtf::LN_DYACROPBOTTOM:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nBottomCrop = ConversionHelper::convertTwipToMM100(nIntValue); 
+            m_pImpl->nBottomCrop = ConversionHelper::convertTwipToMM100(nIntValue);
             break;// bottom crop in twips
-        case NS_rtf::LN_BRCL:           
+        case NS_rtf::LN_BRCL:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;//border type - legacy -
-        case NS_rtf::LN_FFRAMEEMPTY:    
+        case NS_rtf::LN_FFRAMEEMPTY:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// picture consists of a single frame
         case NS_rtf::LN_FBITMAP:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             m_pImpl->bIsBitmap = nIntValue > 0 ? true : false;
         break;//1 if it's a bitmap ???
-        case NS_rtf::LN_FDRAWHATCH:     
+        case NS_rtf::LN_FDRAWHATCH:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;//1 if it's an active OLE object
-        case NS_rtf::LN_FERROR:         
+        case NS_rtf::LN_FERROR:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// 1 if picture is an error message
-        case NS_rtf::LN_BPP: 
+        case NS_rtf::LN_BPP:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nBitsPerPixel = nIntValue; 
+            m_pImpl->nBitsPerPixel = nIntValue;
             break;//bits per pixel 0 - unknown, 1- mono, 4 - VGA
 
         case NS_rtf::LN_DXAORIGIN: //horizontal offset of hand annotation origin
@@ -506,11 +506,11 @@ void GraphicImport::attribute(Id nName, Value & val)
 //            m_pImpl->bIsTiff = 98 == nIntValue ? true : false;
 
         break; //mapmode
-        case NS_rtf::LN_XEXT: 
+        case NS_rtf::LN_XEXT:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->setXSize(nIntValue);
             break; // x-size
-        case NS_rtf::LN_YEXT: 
+        case NS_rtf::LN_YEXT:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->setYSize(nIntValue);
             break; // y-size
@@ -566,28 +566,28 @@ void GraphicImport::attribute(Id nName, Value & val)
         break;
 
         //sprm 0xf008
-        case NS_rtf::LN_shptype:        
+        case NS_rtf::LN_shptype:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
-        case NS_rtf::LN_shpid:          
+        case NS_rtf::LN_shpid:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpfGroup:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// This shape is a group shape
-        case NS_rtf::LN_shpfChild:      
+        case NS_rtf::LN_shpfChild:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// Not a top-level shape
-        case NS_rtf::LN_shpfPatriarch:  
+        case NS_rtf::LN_shpfPatriarch:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// This is the topmost group shape. Exactly one of these per drawing.
-        case NS_rtf::LN_shpfDeleted:    
+        case NS_rtf::LN_shpfDeleted:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// The shape has been deleted
-        case NS_rtf::LN_shpfOleShape:   
+        case NS_rtf::LN_shpfOleShape:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// The shape is an OLE object
-        case NS_rtf::LN_shpfHaveMaster: 
+        case NS_rtf::LN_shpfHaveMaster:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// Shape has a hspMaster property
         case NS_rtf::LN_shpfFlipH:       // Shape is flipped horizontally
@@ -598,26 +598,26 @@ void GraphicImport::attribute(Id nName, Value & val)
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->bVertFlip = nIntValue ? true : false;
         break;
-        case NS_rtf::LN_shpfConnector:   
+        case NS_rtf::LN_shpfConnector:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// Connector type of shape
-        case NS_rtf::LN_shpfHaveAnchor:  
+        case NS_rtf::LN_shpfHaveAnchor:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// Shape has an anchor of some kind
-        case NS_rtf::LN_shpfBackground:  
+        case NS_rtf::LN_shpfBackground:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// Background shape
-        case NS_rtf::LN_shpfHaveSpt:     
+        case NS_rtf::LN_shpfHaveSpt:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// Shape has a shape type property
-        case NS_rtf::LN_shptypename: 
+        case NS_rtf::LN_shptypename:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// shape type name
-        case NS_rtf::LN_shppid:     
+        case NS_rtf::LN_shppid:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nShapeOptionType = nIntValue; 
+            m_pImpl->nShapeOptionType = nIntValue;
             break; //type of shape option
-        case NS_rtf::LN_shpfBid:    
+        case NS_rtf::LN_shpfBid:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             break; //ignored
         case NS_rtf::LN_shpfComplex:
@@ -630,7 +630,7 @@ void GraphicImport::attribute(Id nName, Value & val)
                 ProcessShapeOptions( val );
         }
         break;
-        case NS_rtf::LN_shpname:    
+        case NS_rtf::LN_shpname:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpvalue:
@@ -642,42 +642,42 @@ void GraphicImport::attribute(Id nName, Value & val)
         break;
 
         //BLIP store entry
-        case NS_rtf::LN_shpbtWin32: 
+        case NS_rtf::LN_shpbtWin32:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
-        case NS_rtf::LN_shpbtMacOS: 
+        case NS_rtf::LN_shpbtMacOS:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
-        case NS_rtf::LN_shprgbUid:  
+        case NS_rtf::LN_shprgbUid:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
-        case NS_rtf::LN_shptag:     
+        case NS_rtf::LN_shptag:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
-        case NS_rtf::LN_shpsize:    
+        case NS_rtf::LN_shpsize:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
-        case NS_rtf::LN_shpcRef:    
+        case NS_rtf::LN_shpcRef:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
-        case NS_rtf::LN_shpfoDelay: 
+        case NS_rtf::LN_shpfoDelay:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
-        case NS_rtf::LN_shpusage:   
+        case NS_rtf::LN_shpusage:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
-        case NS_rtf::LN_shpcbName:  
+        case NS_rtf::LN_shpcbName:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
-        case NS_rtf::LN_shpunused2: 
+        case NS_rtf::LN_shpunused2:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
-        case NS_rtf::LN_shpunused3: 
+        case NS_rtf::LN_shpunused3:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
 
         //border properties
-        case NS_rtf::LN_shpblipbname : 
+        case NS_rtf::LN_shpblipbname :
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         break;
 
@@ -708,24 +708,24 @@ void GraphicImport::attribute(Id nName, Value & val)
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             break;
 
-        case NS_rtf::LN_SPID: 
+        case NS_rtf::LN_SPID:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
-        case NS_rtf::LN_XALEFT: 
+        case NS_rtf::LN_XALEFT:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue); 
+            m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue);
             break; //left position
-        case NS_rtf::LN_YATOP:  
+        case NS_rtf::LN_YATOP:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue); 
+            m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
             break; //top position
-        case NS_rtf::LN_XARIGHT:  
+        case NS_rtf::LN_XARIGHT:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nRightPosition = ConversionHelper::convertTwipToMM100(nIntValue); 
+            m_pImpl->nRightPosition = ConversionHelper::convertTwipToMM100(nIntValue);
             break; //right position
-        case NS_rtf::LN_YABOTTOM: 
+        case NS_rtf::LN_YABOTTOM:
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nBottomPosition = ConversionHelper::convertTwipToMM100(nIntValue); 
+            m_pImpl->nBottomPosition = ConversionHelper::convertTwipToMM100(nIntValue);
             break;//bottom position
         case NS_rtf::LN_FHDR:
         case NS_rtf::LN_XAlign:
@@ -916,7 +916,7 @@ void GraphicImport::attribute(Id nName, Value & val)
                 m_pImpl->setXSize(nDim);
             else
                 m_pImpl->setYSize(nDim);
-        }        
+        }
         break;
         case NS_ooxml::LN_CT_EffectExtent_l:// 90907;
         case NS_ooxml::LN_CT_EffectExtent_t:// 90908;
@@ -980,7 +980,7 @@ void GraphicImport::attribute(Id nName, Value & val)
                 default: ;
             }
             ProcessShapeOptions(val);
-        }        
+        }
         break;
         case NS_ooxml::LN_CT_Anchor_simplePos_attr: // 90987;
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
@@ -1010,12 +1010,12 @@ void GraphicImport::attribute(Id nName, Value & val)
             if( m_pImpl->bUseSimplePos )
             {
                 //todo: absolute positioning
-                NS_ooxml::LN_CT_Point2D_x == nName ? m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue) : 
+                NS_ooxml::LN_CT_Point2D_x == nName ? m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue) :
                                                         m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
-                
-            }    
+
+            }
         break;
-        case NS_ooxml::LN_CT_WrapTight_wrapText: // 90934;            
+        case NS_ooxml::LN_CT_WrapTight_wrapText: // 90934;
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->bContour = true;
             //no break;
@@ -1023,7 +1023,7 @@ void GraphicImport::attribute(Id nName, Value & val)
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             switch ( val.getInt() )
             {
-                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_bothSides: // 90920; 
+                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_bothSides: // 90920;
                     m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
                 break;
                 case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_left: // 90921;
@@ -1045,29 +1045,29 @@ void GraphicImport::attribute(Id nName, Value & val)
                 val.getAny( ) >>= xShape;
 
                 if ( xShape.is( ) )
-                {                
+                {
                     // Is it a graphic image
                     bool bUseShape = true;
                     try
                     {
                         uno::Reference< beans::XPropertySet > xShapeProps
                             ( xShape, uno::UNO_QUERY_THROW );
-    
+
                         rtl::OUString sUrl;
                         xShapeProps->getPropertyValue( rtl::OUString::createFromAscii( "GraphicURL" ) ) >>= sUrl;
-    
+
                         ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );
                         aMediaProperties[0].Name = rtl::OUString::createFromAscii( "URL" );
                         aMediaProperties[0].Value <<= sUrl;
-    
+
                         m_xGraphicObject = createGraphicObject( aMediaProperties );
-    
+
                         bUseShape = !m_xGraphicObject.is( );
 
                         if ( !bUseShape )
                         {
                             // Define the object size
-                            uno::Reference< beans::XPropertySet > xGraphProps( m_xGraphicObject, 
+                            uno::Reference< beans::XPropertySet > xGraphProps( m_xGraphicObject,
                                     uno::UNO_QUERY );
                             awt::Size aSize = xShape->getSize( );
                             xGraphProps->setPropertyValue( rtl::OUString::createFromAscii( "Height" ),
@@ -1080,18 +1080,18 @@ void GraphicImport::attribute(Id nName, Value & val)
                     {
                         // It isn't a graphic image
                     }
-    
+
                     if ( bUseShape )
                         m_xShape = xShape;
 
-                   
+
                     if ( m_xShape.is( ) )
-                    { 
+                    {
                         uno::Reference< beans::XPropertySet > xShapeProps
                             (m_xShape, uno::UNO_QUERY_THROW);
-                     
-    
-                        PropertyNameSupplier& rPropNameSupplier = 
+
+
+                        PropertyNameSupplier& rPropNameSupplier =
                             PropertyNameSupplier::GetPropertyNameSupplier();
                         xShapeProps->setPropertyValue
                             (rPropNameSupplier.GetName(PROP_ANCHOR_TYPE),
@@ -1101,17 +1101,17 @@ void GraphicImport::attribute(Id nName, Value & val)
                             (rPropNameSupplier.GetName(PROP_TEXT_RANGE),
                              uno::makeAny
                              (m_pImpl->rDomainMapper.GetCurrentTextRange()));
-    
+
                         awt::Point aPoint(m_xShape->getPosition());
                         awt::Size aSize(m_xShape->getSize());
-    
+
                         if (m_pImpl->isXSizeValid())
                             aSize.Width = m_pImpl->getXSize();
                         if (m_pImpl->isYSizeValis())
                             aSize.Height = m_pImpl->getYSize();
-    
+
                         m_xShape->setSize(aSize);
-    
+
                         m_pImpl->bIsGraphic = true;
                     }
                 }
@@ -1129,14 +1129,14 @@ void GraphicImport::attribute(Id nName, Value & val)
             val.getString();
             //TODO: does it need to be handled?
         break;
-        default: 
+        default:
 #if OSL_DEBUG_LEVEL > 0
             ::rtl::OString sMessage( "GraphicImport::attribute() - Id: ");
             sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 10 );
             sMessage += ::rtl::OString(" / 0x");
             sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 16 );
             OSL_ENSURE( false, sMessage.getStr())
-#endif               
+#endif
             ;
     }
 #ifdef DEBUG_DOMAINMAPPER
@@ -1168,26 +1168,26 @@ void GraphicImport::ProcessShapeOptions(Value& val)
     /* WRITERFILTERSTATUS: table: ShapeOptionsAttribute */
     switch( m_pImpl->nShapeOptionType )
     {
-        case NS_dff::LN_shpcropFromTop /*256*/ : 
+        case NS_dff::LN_shpcropFromTop /*256*/ :
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nTopCrop   = nTwipValue; 
+            m_pImpl->nTopCrop   = nTwipValue;
             break;// rtf:shpcropFromTop
-        case NS_dff::LN_shpcropFromBottom /*257*/ : 
+        case NS_dff::LN_shpcropFromBottom /*257*/ :
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nBottomCrop= nTwipValue; 
+            m_pImpl->nBottomCrop= nTwipValue;
             break;// rtf:shpcropFromBottom
         case NS_dff::LN_shpcropFromLeft   /*258*/ :
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-            m_pImpl->nLeftCrop  = nTwipValue; 
+            m_pImpl->nLeftCrop  = nTwipValue;
             break;// rtf:shpcropFromLeft
-        case NS_dff::LN_shpcropFromRight/*259*/ : 
+        case NS_dff::LN_shpcropFromRight/*259*/ :
             /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nRightCrop = nTwipValue;
             break;// rtf:shpcropFromRight
-        case NS_dff::LN_shppib/*260*/: 
+        case NS_dff::LN_shppib/*260*/:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppib
-        case NS_dff::LN_shppibName/*261*/:  
+        case NS_dff::LN_shppibName/*261*/:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppibName
         case NS_dff::LN_shppibFlags/*262*/:  // rtf:shppibFlags
@@ -1253,16 +1253,16 @@ void GraphicImport::ProcessShapeOptions(Value& val)
             //todo check gamma value with _real_ document
             m_pImpl->fGamma = double(nIntValue/655);
         break;
-        case NS_dff::LN_shppictureId        /*267*/:  
+        case NS_dff::LN_shppictureId        /*267*/:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppictureId
-        case NS_dff::LN_shppictureDblCrMod  /*268*/:  
+        case NS_dff::LN_shppictureDblCrMod  /*268*/:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppictureDblCrMod
-        case NS_dff::LN_shppictureFillCrMod /*269*/:  
+        case NS_dff::LN_shppictureFillCrMod /*269*/:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppictureFillCrMod
-        case NS_dff::LN_shppictureLineCrMod /*270*/:  
+        case NS_dff::LN_shppictureLineCrMod /*270*/:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppictureLineCrMod
 
@@ -1287,7 +1287,7 @@ void GraphicImport::ProcessShapeOptions(Value& val)
             m_pImpl->nFillColor = (nTrans << 0x18 ) + (m_pImpl->nFillColor & 0xffffff);
         }
         break;
-        case NS_dff::LN_shpfNoFillHitTest      /*447*/:  
+        case NS_dff::LN_shpfNoFillHitTest      /*447*/:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shpfNoFillHitTest
         case NS_dff::LN_shplineColor           /*448*/:
@@ -1316,7 +1316,7 @@ void GraphicImport::ProcessShapeOptions(Value& val)
                 msolineLongDashDotDotGEL   // long dash short dash short dash*/
             //m_pImpl->aBorders[nCurrentBorderLine].nLineType = nIntValue;
         break;
-        case NS_dff::LN_shpfNoLineDrawDash     /*511*/:  
+        case NS_dff::LN_shpfNoLineDrawDash     /*511*/:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         break;  // rtf:shpfNoLineDrawDash
         case NS_dff::LN_shpwzDescription /*897*/: //alternative text
@@ -1324,7 +1324,7 @@ void GraphicImport::ProcessShapeOptions(Value& val)
             m_pImpl->sAlternativeText = val.getString();
         break;
 //        case NS_dff::LN_shppihlShape /*898*/:
-        case NS_dff::LN_shppWrapPolygonVertices/*899*/:  
+        case NS_dff::LN_shppWrapPolygonVertices/*899*/:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppWrapPolygonVertices
         case NS_dff::LN_shpdxWrapDistLeft /*900*/: // contains a twip/635 value
@@ -1347,7 +1347,7 @@ void GraphicImport::ProcessShapeOptions(Value& val)
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustULWrapForWordMargins()
             m_pImpl->nBottomMargin = nIntValue / 360;
         break;
-        case NS_dff::LN_shpfPrint              /*959*/:  
+        case NS_dff::LN_shpfPrint              /*959*/:
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shpfPrint
         default:
@@ -1384,14 +1384,14 @@ void GraphicImport::sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Anchor_simplePos_elem: // 90975;
         case NS_ooxml::LN_CT_Anchor_extent: // 90978;
         case NS_ooxml::LN_CT_Anchor_effectExtent: // 90979;
-        case NS_ooxml::LN_EG_WrapType_wrapSquare: // 90945;                   
-        case NS_ooxml::LN_EG_WrapType_wrapTight: // 90946;                
+        case NS_ooxml::LN_EG_WrapType_wrapSquare: // 90945;
+        case NS_ooxml::LN_EG_WrapType_wrapTight: // 90946;
         case NS_ooxml::LN_CT_Anchor_docPr: // 90980;
         case NS_ooxml::LN_CT_Anchor_cNvGraphicFramePr: // 90981;
         case NS_ooxml::LN_CT_Anchor_a_graphic: // 90982;
         case NS_ooxml::LN_CT_WrapPath_start: // 90924;
         case NS_ooxml::LN_CT_WrapPath_lineTo: // 90925;
-        case NS_ooxml::LN_CT_WrapTight_wrapPolygon: // 90933; 
+        case NS_ooxml::LN_CT_WrapTight_wrapPolygon: // 90933;
         case NS_ooxml::LN_graphic_graphic:
         case NS_ooxml::LN_pic_pic:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
@@ -1449,11 +1449,11 @@ void GraphicImport::sprm(Sprm & rSprm)
             //depending on the behindDoc attribute text wraps through behind or in fron of the object
             m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
         break;
-        case NS_ooxml::LN_EG_WrapType_wrapTopAndBottom: // 90948;         
+        case NS_ooxml::LN_EG_WrapType_wrapTopAndBottom: // 90948;
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->nWrap = text::WrapTextMode_NONE;
         break;
-        case NS_ooxml::LN_EG_WrapType_wrapThrough: // 90947;              
+        case NS_ooxml::LN_EG_WrapType_wrapThrough: // 90947;
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
         break;
@@ -1482,7 +1482,7 @@ void GraphicImport::sprm(Sprm & rSprm)
             ;
     }
 
-    
+
 
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement("sprm");
@@ -1514,7 +1514,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")),
                                 m_xComponentContext),
                             uno::UNO_QUERY_THROW );
-        
+
         uno::Reference< graphic::XGraphic > xGraphic = xGraphicProvider->queryGraphic( aMediaProperties );
 
         if(xGraphic.is())
@@ -1556,12 +1556,12 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ),
                 uno::makeAny( m_pImpl->sAlternativeText ));
             if( m_pImpl->bPositionProtected )
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_POSITION_PROTECTED ), 
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_POSITION_PROTECTED ),
                     uno::makeAny(true));
             if( m_pImpl->bSizeProtected )
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SIZE_PROTECTED ),
                     uno::makeAny(true));
-            
+
             if( m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR )
             {
                 sal_Int32 nWidth = m_pImpl->nRightPosition - m_pImpl->nLeftPosition;
@@ -1701,7 +1701,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                         uno::makeAny(text::GraphicCrop(m_pImpl->nTopCrop, m_pImpl->nBottomCrop, m_pImpl->nLeftCrop, m_pImpl->nRightCrop)));
                 }
             }
-            
+
             if(m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
                 if( m_pImpl->getXSize() && m_pImpl->getYSize() )
@@ -1713,12 +1713,12 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     {
                         uno::Reference< container::XNamed > xNamed( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
                         xNamed->setName( m_pImpl->sName );
-                    }    
+                    }
                 }
                 catch( const uno::Exception& )
                 {
-                }    
-            }    
+                }
+            }
         }
     }
     catch( const uno::Exception& e )
@@ -1738,7 +1738,7 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Referen
 
         ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );
         aMediaProperties[0].Name = rPropNameSupplier.GetName(PROP_INPUT_STREAM);
-        
+
         uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len, m_pImpl->bIsBitmap );
         aMediaProperties[0].Value <<= xIStream;
 
@@ -1816,7 +1816,7 @@ void GraphicImport::substream(Id /*name*/, ::writerfilter::Reference<Stream>::Po
 void GraphicImport::info(const string & /*info*/)
 {
 }
-    
+
 void GraphicImport::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
 {
 }

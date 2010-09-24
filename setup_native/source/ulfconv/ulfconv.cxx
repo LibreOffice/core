@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ struct _pair {
 static int _pair_compare (const char *key, const _pair *pair);
 static const _pair* _pair_search (const char *key, const _pair *base, unsigned int member );
 
- 
+
 const _pair _ms_encoding_list[] = {
     { "0",       RTL_TEXTENCODING_UTF8        },
     { "1250",    RTL_TEXTENCODING_MS_1250     },
@@ -86,16 +86,16 @@ char * my_fgets(char *s, int n, FILE *fp)
 
         if( c == EOF )
             break;
-        
+
         s[i] = (char) c;
-        
+
         if( s[i] == '\n' )
         {
             i++;
             break;
         }
     }
-    
+
     if( i>0 )
     {
         s[i] = '\0';
@@ -108,7 +108,7 @@ char * my_fgets(char *s, int n, FILE *fp)
 }
 
 /*****************************************************************************
- * compare function for binary search   
+ * compare function for binary search
  *****************************************************************************/
 
 static int
@@ -156,7 +156,7 @@ _pair_search (const char *key, const _pair *base, unsigned int member )
  * read_encoding_table
  ************************************************************************/
 
-void read_encoding_table(char * file, EncodingMap& aEncodingMap) 
+void read_encoding_table(char * file, EncodingMap& aEncodingMap)
 {
     FILE * fp = fopen(file, "r");
     if ( ! fp  ) {
@@ -166,31 +166,31 @@ void read_encoding_table(char * file, EncodingMap& aEncodingMap)
 
     char buffer[512];
     while ( NULL != my_fgets(buffer, sizeof(buffer), fp) ) {
-            
+
         // strip comment lines
         if ( buffer[0] == '#' )
             continue;
-        
+
         // find end of language string
         char * cp;
         for ( cp = buffer; ! isspace(*cp); cp++ )
             ;
         *cp = '\0';
-            
+
         // find start of codepage string
         for ( ++cp; isspace(*cp); ++cp )
             ;
         char * codepage = cp;
-        
+
         // find end of codepage string
         for ( ++cp; ! isspace(*cp); ++cp )
             ;
         *cp = '\0';
-        
+
         // find the correct mapping for codepage
         const unsigned int members = sizeof( _ms_encoding_list ) / sizeof( _pair );
         const _pair *encoding = _pair_search( codepage, _ms_encoding_list, members );
-            
+
         if ( encoding != NULL ) {
             const std::string language(buffer);
             aEncodingMap.insert( EncodingMap::value_type(language, encoding->value) );
@@ -213,7 +213,7 @@ void print_legacy_mixed(
     EncodingMap::iterator iter = aEncodingMap.find(language);
 
     if ( iter != aEncodingMap.end() ) {
-        fputs(OUStringToOString(aString, iter->second).getStr(), ostream); 
+        fputs(OUStringToOString(aString, iter->second).getStr(), ostream);
     } else {
         fprintf(stderr, "ulfconv: WARNING: no legacy encoding found for %s\n", language.c_str());
     }
@@ -252,30 +252,30 @@ int main( int argc, char * const argv[] )
     int errflg = 0;
     int argi;
 
-    for( argi=1; argi < argc; argi++ ) 
+    for( argi=1; argi < argc; argi++ )
     {
         if( argv[argi][0] == '-' && argv[argi][2] == '\0' )
         {
             switch(argv[argi][1]) {
-            case 'o': 
+            case 'o':
                 if (argi+1 >= argc || argv[argi+1][0] == '-')
                 {
                     fprintf(stderr, "Option -%c requires an operand\n", argv[argi][1]);
                     errflg++;
                     break;
                 }
-                
+
                 ++argi;
                 outfile = argv[argi];
                 break;
-            case 't': 
+            case 't':
                 if (argi+1 >= argc || argv[argi+1][0] == '-')
                 {
                     fprintf(stderr, "Option -%c requires an operand\n", argv[argi][1]);
                     errflg++;
                     break;
                 }
-                
+
                 read_encoding_table(argv[++argi], aEncodingMap);
                 break;
             default:
@@ -288,15 +288,15 @@ int main( int argc, char * const argv[] )
             break;
         }
     }
-    
+
     if (errflg) {
       fprintf(stderr, "Usage: ulfconv [-o <output file>] [-t <encoding table>] [<ulf file>]\n");
       exit(2);
     }
 
     /* assign input file to stdin */
-    if ( argi < argc ) 
-    {    
+    if ( argi < argc )
+    {
         istream = fopen(argv[argi], "r");
         if ( istream  == NULL ) {
             fprintf(stderr, "ulfconv: %s : %s\n", argv[argi], strerror(errno));
@@ -318,35 +318,35 @@ int main( int argc, char * const argv[] )
     /* read line by line from stdin */
     char buffer[65536];
     while ( NULL != fgets(buffer, sizeof(buffer), istream) ) {
-    
+
         /* only handle lines containing " = " */
         char * cp = strstr(buffer, " = \"");
         if ( cp ) {
             rtl::OUString aString;
-            
+
             /* find end of lang string */
             int n;
             for ( n=0; ! isspace(buffer[n]); n++ )
                 ;
-            
+
             std::string line = buffer;
             std::string lang(line, 0, n);
 
             cp += 4;
-            rtl_string2UString( &aString.pData, cp, strrchr(cp, '\"') - cp, 
+            rtl_string2UString( &aString.pData, cp, strrchr(cp, '\"') - cp,
                 RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS );
-            
+
             fprintf(ostream, "%s = \"", lang.c_str());
-            
+
             if ( aEncodingMap.empty() ) {
                 print_java_style(ostream, aString);
             } else {
                 print_legacy_mixed(ostream, aString, lang, aEncodingMap);
             }
-                        
+
             fprintf(ostream, "\"\n");
 
-            
+
         } else {
             fputs(buffer, ostream);
         }

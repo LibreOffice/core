@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,10 +73,10 @@ namespace connectivity
     class IParseContext;
 
     typedef ::std::vector< OSQLParseNode* >                  OSQLParseNodes;
-    
-    enum SQLNodeType	{SQL_NODE_RULE, SQL_NODE_LISTRULE, SQL_NODE_COMMALISTRULE,
+
+    enum SQLNodeType    {SQL_NODE_RULE, SQL_NODE_LISTRULE, SQL_NODE_COMMALISTRULE,
                          SQL_NODE_KEYWORD, SQL_NODE_COMPARISON, SQL_NODE_NAME,
-                         SQL_NODE_STRING,	SQL_NODE_INTNUM, SQL_NODE_APPROXNUM,
+                         SQL_NODE_STRING,   SQL_NODE_INTNUM, SQL_NODE_APPROXNUM,
                          SQL_NODE_EQUAL,SQL_NODE_LESS,SQL_NODE_GREAT,SQL_NODE_LESSEQ,SQL_NODE_GREATEQ,SQL_NODE_NOTEQUAL,
                          SQL_NODE_PUNCTUATION, SQL_NODE_AMMSC, SQL_NODE_ACCESS_DATE,SQL_NODE_DATE,SQL_NODE_CONCAT};
 
@@ -86,7 +86,7 @@ namespace connectivity
     //==================================================================
     struct OOO_DLLPUBLIC_DBTOOLS SQLParseNodeParameter
     {
-        const ::com::sun::star::lang::Locale&	rLocale;
+        const ::com::sun::star::lang::Locale&   rLocale;
         ::dbtools::DatabaseMetaData             aMetaData;
         OSQLParser*                             pParser;
         ::boost::shared_ptr< QueryNameSet >     pSubQueryHistory;
@@ -94,7 +94,7 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       xField;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xQueries;  // see bParseToSDBCLevel
         const IParseContext& m_rContext;
-        sal_Char			cDecSep;
+        sal_Char            cDecSep;
         bool                bQuote                      : 1;    /// should we quote identifiers?
         bool                bInternational              : 1;    /// should we internationalize keywords and placeholders?
         bool                bPredicate                  : 1;    /// are we going to parse a mere predicate?
@@ -122,12 +122,12 @@ namespace connectivity
     {
         friend class OSQLParser;
 
-        OSQLParseNodes					m_aChildren;
-        OSQLParseNode*	 				m_pParent;		// pParent fuer Reuckverkettung im Baum
-        ::rtl::OUString 				m_aNodeValue;	// Token-Name oder leer bei Regeln oder ::rtl::OUString bei
+        OSQLParseNodes                  m_aChildren;
+        OSQLParseNode*                  m_pParent;      // pParent fuer Reuckverkettung im Baum
+        ::rtl::OUString                 m_aNodeValue;   // Token-Name oder leer bei Regeln oder ::rtl::OUString bei
                                                         // ::rtl::OUString, INT, usw. -Werten
-        SQLNodeType 					m_eNodeType;	// s. o.
-        sal_uInt32						m_nNodeID; 		// ::com::sun::star::chaos::Rule ID (bei IsRule()) oder Token ID (bei !IsRule())
+        SQLNodeType                     m_eNodeType;    // s. o.
+        sal_uInt32                      m_nNodeID;      // ::com::sun::star::chaos::Rule ID (bei IsRule()) oder Token ID (bei !IsRule())
                                             // ::com::sun::star::chaos::Rule IDs und Token IDs koennen nicht anhand des Wertes
                                             // unterschieden werden, dafuer ist IsRule() abzufragen!
     public:
@@ -381,7 +381,7 @@ namespace connectivity
         const ::rtl::OUString& getTokenValue() const {return m_aNodeValue;}
 
             // SetTokenValue setzt den NodeValue
-        void setTokenValue(const ::rtl::OUString& rString) {	if (isToken()) m_aNodeValue = rString;}
+        void setTokenValue(const ::rtl::OUString& rString) {    if (isToken()) m_aNodeValue = rString;}
 
             // IsLeaf testet ob ein Node ein Blatt ist
         sal_Bool isLeaf() const {return m_aChildren.empty();}
@@ -393,11 +393,11 @@ namespace connectivity
         // e.q. (a or b) and (c or d) <=> a and c or a and d or b and c or b and d
         static void disjunctiveNormalForm(OSQLParseNode*& pSearchCondition);
 
-        //	 Simplies logic expressions
-        // a * a		= a
-        // a + a		= a
+        //   Simplies logic expressions
+        // a * a        = a
+        // a + a        = a
         // a * ( a + b) = a
-        // a + a * b	= a
+        // a + a * b    = a
         static void absorptions(OSQLParseNode*& pSearchCondition);
 
         // erase not nessary braces
@@ -459,14 +459,14 @@ namespace connectivity
     {
         OSL_ENSURE(nPos < m_aChildren.size(), "Invalid Position");
 
-        //	return m_aChildren[nPos];
+        //  return m_aChildren[nPos];
         return m_aChildren.at(nPos);
     }
 
     // Utility-Methoden zum Abfragen auf bestimmte Rules, Token oder Punctuation:
-    #define SQL_ISRULE(pParseNode, eRule) 	((pParseNode)->isRule() && (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::eRule))
+    #define SQL_ISRULE(pParseNode, eRule)   ((pParseNode)->isRule() && (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::eRule))
     #define SQL_ISTOKEN(pParseNode, token) ((pParseNode)->isToken() && (pParseNode)->getTokenID() == SQL_TOKEN_##token)
     #define SQL_ISPUNCTUATION(pParseNode, aString) ((pParseNode)->getNodeType() == SQL_NODE_PUNCTUATION && !(pParseNode)->getTokenValue().compareToAscii(aString))
 }
 
-#endif	//_CONNECTIVITY_SQLNODE_HXX
+#endif  //_CONNECTIVITY_SQLNODE_HXX

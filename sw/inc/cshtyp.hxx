@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ typedef SwCntntFrm  * (*SwPosColumn)( const SwLayoutFrm * );
 extern SwWhichColumn fnColumnPrev, fnColumnCurr, fnColumnNext;
 extern SwPosColumn fnColumnStart, fnColumnEnd;
 
-// Richtungsparameter fuer MoveRegion	(Bereiche!)
+// Richtungsparameter fuer MoveRegion   (Bereiche!)
 typedef SwMoveFnCollection* SwPosRegion;
 typedef BOOL (*SwWhichRegion)( SwPaM&, SwPosRegion, BOOL bInReadOnly );
 extern SwWhichRegion fnRegionPrev, fnRegionCurr, fnRegionNext, fnRegionCurrAndSkip;
@@ -81,20 +81,20 @@ extern SwPosRegion fnRegionStart, fnRegionEnd;
 
 /*
  * folgende Kombinationen sind erlaubt:
- *  - suche einen im Body:					-> FND_IN_BODY
- *  - suche alle im Body: 					-> FND_IN_BODYONLY | FND_IN_SELALL
+ *  - suche einen im Body:                  -> FND_IN_BODY
+ *  - suche alle im Body:                   -> FND_IN_BODYONLY | FND_IN_SELALL
  *  - suche in Selectionen: einen / alle    -> FND_IN_SEL  [ | FND_IN_SELALL ]
  *  - suche im nicht Body: einen / alle     -> FND_IN_OTHER [ | FND_IN_SELALL ]
- *  - suche ueberall alle: 					-> FND_IN_SELALL
+ *  - suche ueberall alle:                  -> FND_IN_SELALL
  */
 enum FindRanges
 {
     FND_IN_BODY     = 0x00,     // suche "eins" mur im Body-Text
     FND_IN_OTHER    = 0x02,     // suche "alles" in Footer/Header/Fly...
     FND_IN_SEL      = 0x04,     // suche in Selectionen
-    FND_IN_BODYONLY	= 0x08,		// suche nur im Body - nur in Verbindung mit
+    FND_IN_BODYONLY = 0x08,     // suche nur im Body - nur in Verbindung mit
                                 // FND_IN_SELALL !!!
-    FND_IN_SELALL   = 0x01		// - alle ( nur im nicht Body und Selectionen)
+    FND_IN_SELALL   = 0x01      // - alle ( nur im nicht Body und Selectionen)
 };
 
 
@@ -116,4 +116,4 @@ SW_DLLPUBLIC SwWhichTable GetfnTableCurr();
 SW_DLLPUBLIC SwPosTable GetfnTableStart();
 SW_DLLPUBLIC SwPosTable GetfnTableEnd();
 
-#endif	// _CSHTYP_HXX
+#endif  // _CSHTYP_HXX

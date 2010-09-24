@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
                 bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_NO_NUMBERING);
                 nPos = 0;
              break;
-            case  style::NumberingType::CHAR_SPECIAL:	bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BULLET); break;
+            case  style::NumberingType::CHAR_SPECIAL:   bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BULLET); break;
             case  style::NumberingType::PAGE_DESCRIPTOR:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING); break;
             case  style::NumberingType::BITMAP:bInsert = 0 != (nTypeFlags&INSERT_NUM_TYPE_BITMAP ); break;
             default:
@@ -153,7 +153,7 @@ void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
 /* -----------------------------01.03.01 14:46--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Int16 	SwNumberingTypeListBox::GetSelectedNumberingType()
+sal_Int16   SwNumberingTypeListBox::GetSelectedNumberingType()
 {
     sal_Int16 nRet = 0;
     USHORT nSelPos = GetSelectEntryPos();
@@ -168,7 +168,7 @@ sal_Int16 	SwNumberingTypeListBox::GetSelectedNumberingType()
 /* -----------------------------01.03.01 14:46--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Bool 	SwNumberingTypeListBox::SelectNumberingType(sal_Int16 nType)
+sal_Bool    SwNumberingTypeListBox::SelectNumberingType(sal_Int16 nType)
 {
     USHORT nPos = GetEntryPos((void*)(ULONG)nType);
     SelectEntryPos( nPos );

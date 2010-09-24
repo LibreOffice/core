@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,19 +29,19 @@
 #define __FRAMEWORK_ARGUMENTS_H_
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include <macros/generic.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 /*-************************************************************************************************************//**
-    @short			These arguments are included in given parameter lists - e.g. at dispatch calls at Sequence< PropertyValue >.
+    @short          These arguments are included in given parameter lists - e.g. at dispatch calls at Sequence< PropertyValue >.
                     You can use class ArgumentAnalyzer to set/get it from a given list!
 *//*-*************************************************************************************************************/
 

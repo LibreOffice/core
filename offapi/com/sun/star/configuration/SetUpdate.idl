@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module configuration { 
+module com { module sun { module star { module configuration {
 
 //=============================================================================
 /** provides write access to a dynamic homogeneous set of values or nested
@@ -58,7 +58,7 @@ module com { module sun { module star { module configuration {
 */
 published service SetUpdate
 {
-/** is the basic service providing read access to a <em>set</em> within the 
+/** is the basic service providing read access to a <em>set</em> within the
  hierarchy.
 */
     service SetAccess;
@@ -100,6 +100,6 @@ published service SetUpdate
 
 //=============================================================================
 
-}; }; }; }; 
+}; }; }; };
 
 #endif

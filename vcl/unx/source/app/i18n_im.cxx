@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -186,14 +186,14 @@ SetSystemEnvironment( const char* p_locale )
 
     char *p_buffer;
 
-    if (p_locale != NULL) 
+    if (p_locale != NULL)
     {
         p_buffer = (char*)alloca(10 + strlen(p_locale));
         sprintf(p_buffer, lc_all, p_locale);
         putenv(strdup(p_buffer));
         sprintf(p_buffer, lang, p_locale);
         putenv(strdup(p_buffer));
-    }     
+    }
 }
 #endif
 
@@ -227,10 +227,10 @@ IsXWindowCompatibleLocale( const char* p_locale )
     return True;
 }
 
-// Set the operating system locale prior to trying to open an 
+// Set the operating system locale prior to trying to open an
 // XIM InputMethod.
 // Handle the cases where the current locale is either not supported by the
-// operating system (LANG=gaga) or by the XWindow system (LANG=aa_ER@saaho) 
+// operating system (LANG=gaga) or by the XWindow system (LANG=aa_ER@saaho)
 // by providing a fallback.
 // Upgrade "C" or "POSIX" to "en_US" locale to allow umlauts and accents
 // see i8988, i9188, i8930, i16318
@@ -261,7 +261,7 @@ SalI18N_InputMethod::SetLocale( const char* pLocale )
                     mbUseable = False;
             }
         }
-        
+
         // must not fail if mbUseable since XSupportsLocale() asserts success
         if ( mbUseable && XSetLocaleModifiers("") == NULL )
         {
@@ -327,15 +327,15 @@ GetMethodName( XIMStyle nStyle, char *pBuf, int nBufSize)
 
     StyleName *pDescPtr;
     static const StyleName pDescription[] = {
-        { XIMPreeditArea, 	   "PreeditArea ", 	   sizeof("PreeditArea ")	},
+        { XIMPreeditArea,      "PreeditArea ",     sizeof("PreeditArea ")   },
         { XIMPreeditCallbacks, "PreeditCallbacks ",sizeof("PreeditCallbacks ")},
         { XIMPreeditPosition,  "PreeditPosition ", sizeof("PreeditPosition ") },
         { XIMPreeditNothing,   "PreeditNothing ",  sizeof("PreeditNothing ")  },
-        { XIMPreeditNone, 	   "PreeditNone ",	   sizeof("PreeditNone ")	},
-        { XIMStatusArea, 	   "StatusArea ",      sizeof("StatusArea ")	},
+        { XIMPreeditNone,      "PreeditNone ",     sizeof("PreeditNone ")   },
+        { XIMStatusArea,       "StatusArea ",      sizeof("StatusArea ")    },
         { XIMStatusCallbacks,  "StatusCallbacks ", sizeof("StatusCallbacks ") },
-        { XIMStatusNothing,    "StatusNothing ",   sizeof("StatusNothing ")	},
-        { XIMStatusNone, 	   "StatusNone ",      sizeof("StatusNone ")	},
+        { XIMStatusNothing,    "StatusNothing ",   sizeof("StatusNothing ") },
+        { XIMStatusNone,       "StatusNone ",      sizeof("StatusNone ")    },
         { 0, "NULL", 0 }
     };
 
@@ -468,7 +468,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
         fprintf(stderr, "input method creation failed\n");
     #endif
 
-    maDestroyCallback.callback	  = (XIMProc)IM_IMDestroyCallback;
+    maDestroyCallback.callback    = (XIMProc)IM_IMDestroyCallback;
     maDestroyCallback.client_data = (XPointer)this;
     if (mbUseable && maMethod != NULL)
         XSetIMValues(maMethod, XNDestroyCallback, &maDestroyCallback, NULL);
@@ -481,7 +481,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 //
 
 Bool
-SalI18N_InputMethod::FilterEvent( XEvent *pEvent, XLIB_Window window	)
+SalI18N_InputMethod::FilterEvent( XEvent *pEvent, XLIB_Window window    )
 {
     if (!mbUseable)
         return False;
@@ -541,9 +541,9 @@ InputMethod_HasPendingEvent(int nFileDescriptor, void *pData)
 
     struct pollfd aFileDescriptor;
     #ifdef SOLARIS
-    nfds_t 		  nNumDescriptor = 1;
+    nfds_t        nNumDescriptor = 1;
     #else
-    unsigned int	  nNumDescriptor = 1;
+    unsigned int      nNumDescriptor = 1;
     #endif
     aFileDescriptor.fd      = nFileDescriptor;
     aFileDescriptor.events  = POLLRDNORM;

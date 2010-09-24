@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef GCC
-#	pragma hdrstop
+#   pragma hdrstop
 #endif
 
 #include <tools/ref.hxx>
@@ -48,7 +48,7 @@
 
 DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
                 ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_PIX, *rPara.pResMgr ) ),
-                rFltCallPara		( rPara ),
+                rFltCallPara        ( rPara ),
                 aBtnOK              ( this, ResId( BTN_OK_PIX, *rPara.pResMgr ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL_PIX, *rPara.pResMgr ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP_PIX, *rPara.pResMgr ) ),
@@ -64,15 +64,15 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
                 aMtfSizeY           ( this, ResId( MTF_SIZEY_PIX, *rPara.pResMgr ) ),
                 aGrpMode            ( this, ResId( GRP_MODE_PIX, *rPara.pResMgr ) ),
                 aCbbRes             ( this, ResId( CBB_RES_PIX, *rPara.pResMgr ) ),
-                pMgr				( rPara.pResMgr ),
-                aExt				( rPara.aFilterExt )
+                pMgr                ( rPara.pResMgr ),
+                aExt                ( rPara.aFilterExt )
 {
     aExt.ToUpperAscii();
-    String	aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/" ) );
+    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/" ) );
     aFilterConfigPath.Append( aExt );
     pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
-    String	aTitle( aExt );
+    String  aTitle( aExt );
     FreeResource();
 
     aBtnOK.SetClickHdl( LINK( this, DlgExportPix, OK ) );
@@ -111,13 +111,13 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
 
     switch ( rPara.eFieldUnit )
     {
-//		case FUNIT_NONE :
-//		case FUNIT_KM :
-//		case FUNIT_PERCENT :
-//		case FUNIT_CUSTOM :
-//		case FUNIT_MILE :
-//		case FUNIT_FOOT :
-//		case FUNIT_M :
+//      case FUNIT_NONE :
+//      case FUNIT_KM :
+//      case FUNIT_PERCENT :
+//      case FUNIT_CUSTOM :
+//      case FUNIT_MILE :
+//      case FUNIT_FOOT :
+//      case FUNIT_M :
         case FUNIT_MM :
         case FUNIT_CM :
         case FUNIT_TWIP :
@@ -132,7 +132,7 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
         break;
 
         default:
-        break;		// -Wall  multiple values not handled.
+        break;      // -Wall  multiple values not handled.
     }
 
     switch ( nMode )
@@ -175,7 +175,7 @@ IMPL_LINK( DlgExportPix, OK, void *, EMPTYARG )
 {
     // Config-Parameter schreiben
 
-    sal_Int32	nRes = Max( Min( aCbbRes.GetText().ToInt32(), sal_Int32( 600 ) ), sal_Int32( 75 ) );
+    sal_Int32   nRes = Max( Min( aCbbRes.GetText().ToInt32(), sal_Int32( 600 ) ), sal_Int32( 75 ) );
     ::com::sun::star::awt::Size aSize(
         static_cast<long>(MetricField::ConvertDoubleValue( static_cast<double>(aMtfSizeX.GetValue()), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM )),
             static_cast<long>(MetricField::ConvertDoubleValue( static_cast<double>(aMtfSizeY.GetValue()), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM )) );
@@ -286,7 +286,7 @@ IMPL_LINK( DlgExportPix, SelectLbColors, void*, EMPTYARG )
 
 DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
                 ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_VEC, *rPara.pResMgr ) ),
-                rFltCallPara		( rPara ),
+                rFltCallPara        ( rPara ),
                 aBtnOK              ( this, ResId( BTN_OK_VEC, *rPara.pResMgr ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL_VEC, *rPara.pResMgr ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP_VEC, *rPara.pResMgr ) ),
@@ -298,15 +298,15 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
                 aFtSizeY            ( this, ResId( FT_SIZEY_VEC, *rPara.pResMgr ) ),
                 aMtfSizeY           ( this, ResId( MTF_SIZEY_VEC, *rPara.pResMgr ) ),
                 aGrpSize            ( this, ResId( GRP_SIZE_VEC, *rPara.pResMgr ) ),
-                pMgr				( rPara.pResMgr ),
-                aExt				( rPara.aFilterExt )
+                pMgr                ( rPara.pResMgr ),
+                aExt                ( rPara.aFilterExt )
 {
     aExt.ToUpperAscii();
-    String	aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/" ) );
+    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/" ) );
     aFilterConfigPath.Append( aExt );
     pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
-    String	aTitle( aExt );
+    String  aTitle( aExt );
     FreeResource();
 
     aBtnOK.SetClickHdl( LINK( this, DlgExportVec, OK ) );
@@ -331,12 +331,12 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
 
     switch ( rPara.eFieldUnit )
     {
-//		case FUNIT_NONE :
-//		case FUNIT_KM :
-//		case FUNIT_PERCENT :
-//		case FUNIT_CUSTOM :
-//		case FUNIT_MILE :
-//		case FUNIT_FOOT :
+//      case FUNIT_NONE :
+//      case FUNIT_KM :
+//      case FUNIT_PERCENT :
+//      case FUNIT_CUSTOM :
+//      case FUNIT_MILE :
+//      case FUNIT_FOOT :
         case FUNIT_MM :
         case FUNIT_CM :
         case FUNIT_M :
@@ -351,7 +351,7 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
         }
         break;
         default:
-            break;	// -Wall Multiple values not handled.
+            break;  // -Wall Multiple values not handled.
     }
 
     switch ( nMode )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ SV_IMPL_VARARR( SwRects, SwRect );
 
 /*************************************************************************
 |*
-|*	SwRegionRects::SwRegionRects()
+|*  SwRegionRects::SwRegionRects()
 |*
-|*	Ersterstellung		MA 28. Oct. 92
-|*	Letzte Aenderung	MA 01. Feb. 93
+|*  Ersterstellung      MA 28. Oct. 92
+|*  Letzte Aenderung    MA 01. Feb. 93
 |*
 |*************************************************************************/
 
@@ -57,7 +57,7 @@ SwRegionRects::SwRegionRects( const SwRect &rStartRect, USHORT nInit,
 }
 
 /*************************************************************************
- *						inline InsertRect()
+ *                      inline InsertRect()
  *
  * InsertRect() wird nur von operator-=() gerufen.
  * Wenn bDel == TRUE ist, dann wird das Rect an der Position nPos mit
@@ -79,15 +79,15 @@ inline void SwRegionRects::InsertRect( const SwRect &rRect, const USHORT nPos,
 
 /*************************************************************************
 |*
-|*	SwRegionRects::operator-=()
+|*  SwRegionRects::operator-=()
 |*
-|*	Beschreibung		Alle Ueberschneidungen der Rechtecke, die sich
-|*		gerade im Array befinden, mit dem uebergebenen Rechteck werden
-|*		entfernt.
-|*		Dazu muessen die vorhandenen Rechtecke entweder aufgeteilt oder
-|*		geloescht werden.
-|*	Ersterstellung		MA 28. Oct. 92
-|*	Letzte Aenderung	MA 09. Sep. 93
+|*  Beschreibung        Alle Ueberschneidungen der Rechtecke, die sich
+|*      gerade im Array befinden, mit dem uebergebenen Rechteck werden
+|*      entfernt.
+|*      Dazu muessen die vorhandenen Rechtecke entweder aufgeteilt oder
+|*      geloescht werden.
+|*  Ersterstellung      MA 28. Oct. 92
+|*  Letzte Aenderung    MA 09. Sep. 93
 |*
 |*************************************************************************/
 
@@ -140,8 +140,8 @@ void SwRegionRects::operator-=( const SwRect &rRect )
             if( bDel )
             {
                 Remove( i );
-                --i;			  //Damit wir keinen uebergehen.
-                --nMax; 		  //Damit wir keinen zuviel verarbeiten.
+                --i;              //Damit wir keinen uebergehen.
+                --nMax;           //Damit wir keinen zuviel verarbeiten.
             }
         }
     }
@@ -149,7 +149,7 @@ void SwRegionRects::operator-=( const SwRect &rRect )
 }
 
 /*************************************************************************
- *						SwRegionRects::Invert()
+ *                      SwRegionRects::Invert()
  *
  * Bezugspunkt ist aOrigin, das Original-SRectangle.
  * Aus Loechern werden Flaechen, aus Flaechen werden Loecher.
@@ -192,11 +192,11 @@ void SwRegionRects::Invert()
 }
 /*************************************************************************
 |*
-|*	SwRegionRects::Compress()
+|*  SwRegionRects::Compress()
 |*
-|*	Beschreibung		Zusammenfassen von benachbarten Rechtecken.
-|*	Ersterstellung		MA 16. Apr. 93
-|*	Letzte Aenderung	MA 21. Apr. 93
+|*  Beschreibung        Zusammenfassen von benachbarten Rechtecken.
+|*  Ersterstellung      MA 16. Apr. 93
+|*  Letzte Aenderung    MA 21. Apr. 93
 |*
 |*************************************************************************/
 inline SwTwips CalcArea( const SwRect &rRect )
@@ -234,7 +234,7 @@ void SwRegionRects::Compress( BOOL bFuzzy )
                 //moeglichst wenig einzelne Paints zu haben darf die Flaeche
                 //der Union ruhig ein bischen groesser sein
                 //( 9622 * 141.5 = 1361513 ~= ein virtel Zentimeter ueber die
-                //						      Breite einer DINA4 Seite)
+                //                            Breite einer DINA4 Seite)
                 const long nFuzzy = bFuzzy ? 1361513 : 0;
                 SwRect aUnion( *(pData + i) );aUnion.Union( *(pData + j) );
                 SwRect aInter( *(pData + i) );aInter.Intersection( *(pData + j));

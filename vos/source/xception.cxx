@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,11 +30,11 @@
 using namespace vos;
 
 /*
- * OException, baseclass of all exceptions 
+ * OException, baseclass of all exceptions
  */
 
-VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OException, vos), 	\
-                        VOS_NAMESPACE(OException, vos), 	\
+VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OException, vos),     \
+                        VOS_NAMESPACE(OException, vos),     \
                         VOS_NAMESPACE(OObject, vos), 0);
 
 OException::~OException()

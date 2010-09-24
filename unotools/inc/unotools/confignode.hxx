@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,16 +57,16 @@ namespace utl
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >
-                    m_xHierarchyAccess;		/// accessing children grandchildren (mandatory interface of our UNO object)
+                    m_xHierarchyAccess;     /// accessing children grandchildren (mandatory interface of our UNO object)
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                    m_xDirectAccess;		/// accessing children  (mandatory interface of our UNO object)
+                    m_xDirectAccess;        /// accessing children  (mandatory interface of our UNO object)
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >
-                    m_xReplaceAccess;		/// replacing child values
+                    m_xReplaceAccess;       /// replacing child values
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                    m_xContainerAccess;		/// modifying set nodes  (optional interface of our UNO object)
+                    m_xContainerAccess;     /// modifying set nodes  (optional interface of our UNO object)
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                     m_xDummy;
-        sal_Bool	m_bEscapeNames;			/// escape names before accessing children ?
+        sal_Bool    m_bEscapeNames;         /// escape names before accessing children ?
 
         ::rtl::OUString
                     m_sCompletePath;
@@ -101,11 +101,11 @@ namespace utl
         ::rtl::OUString     getNodePath() const;
 
         /** open a sub node
-            @param		_rPath		access path of the to-be-opened sub node. May be a hierarchical path.
+            @param      _rPath      access path of the to-be-opened sub node. May be a hierarchical path.
         */
-        OConfigurationNode	openNode(const ::rtl::OUString& _rPath) const throw();
+        OConfigurationNode  openNode(const ::rtl::OUString& _rPath) const throw();
 
-        OConfigurationNode	openNode( const sal_Char* _pAsciiPath ) const
+        OConfigurationNode  openNode( const sal_Char* _pAsciiPath ) const
         {
             return openNode( ::rtl::OUString::createFromAscii( _pAsciiPath ) );
         }
@@ -116,11 +116,11 @@ namespace utl
             method will fail.<br/>
             Unless the respective operations on the pure configuration API, the to-be-created node immediately
             becomes a part of it's hierarchy, no explicit insertion is necessary.
-            @param		_rName		name for the new child. Must be level-1-depth.
+            @param      _rName      name for the new child. Must be level-1-depth.
         */
-        OConfigurationNode	createNode(const ::rtl::OUString& _rName) const throw();
+        OConfigurationNode  createNode(const ::rtl::OUString& _rName) const throw();
 
-        OConfigurationNode	createNode( const sal_Char* _pAsciiName ) const
+        OConfigurationNode  createNode( const sal_Char* _pAsciiName ) const
         {
             return createNode( ::rtl::OUString::createFromAscii( _pAsciiName ) );
         }
@@ -131,8 +131,8 @@ namespace utl
             method will fail.<br/>
             Unless the respective operations on the pure configuration API, the to-be-created node immediately
             becomes a part of it's hierarchy, no explicit insertion is necessary.
-            @param		_rName		name for the new child. Must be level-1-depth.
-            @param		_aNewNode	the node which should be appended
+            @param      _rName      name for the new child. Must be level-1-depth.
+            @param      _aNewNode   the node which should be appended
         */
         OConfigurationNode  appendNode(const ::rtl::OUString& _rName,const OConfigurationNode& _aNewNode) const throw();
 
@@ -146,9 +146,9 @@ namespace utl
             If the object represents a set node, this method may be used to delete an existent child. For non-set-nodes,
             the method will fail.
         */
-        sal_Bool			removeNode(const ::rtl::OUString& _rName) const throw();
+        sal_Bool            removeNode(const ::rtl::OUString& _rName) const throw();
 
-        sal_Bool			removeNode( const sal_Char* _pAsciiName ) const
+        sal_Bool            removeNode( const sal_Char* _pAsciiName ) const
         {
             return removeNode( ::rtl::OUString::createFromAscii( _pAsciiName ) );
         }
@@ -173,11 +173,11 @@ namespace utl
             The value given is written into the node specified by the given relative path.<br/>
             In opposite to <method>getNodeValue</method>, _rName must refer to a leaf in the configuration tree, not an inner
             node.
-            @return		sal_True if and only if the write was successfull.
+            @return     sal_True if and only if the write was successfull.
         */
-        sal_Bool			setNodeValue(const ::rtl::OUString& _rPath, const ::com::sun::star::uno::Any& _rValue) const throw();
+        sal_Bool            setNodeValue(const ::rtl::OUString& _rPath, const ::com::sun::star::uno::Any& _rValue) const throw();
 
-        sal_Bool			setNodeValue( const sal_Char* _pAsciiPath, const ::com::sun::star::uno::Any& _rValue ) const
+        sal_Bool            setNodeValue( const sal_Char* _pAsciiPath, const ::com::sun::star::uno::Any& _rValue ) const
         {
             return setNodeValue( ::rtl::OUString::createFromAscii( _pAsciiPath ), _rValue );
         }
@@ -192,11 +192,11 @@ namespace utl
             escaping for such names may not be supported by the underlying API objects.
             @see getEscape
         */
-        void		setEscape(sal_Bool _bEnable = sal_True);
+        void        setEscape(sal_Bool _bEnable = sal_True);
         /** get the flag specifying the current escape behaviour
             @see setEscape
         */
-        sal_Bool	getEscape() const { return m_bEscapeNames; }
+        sal_Bool    getEscape() const { return m_bEscapeNames; }
 
         /// invalidate the object
         virtual void clear() throw();
@@ -228,8 +228,8 @@ namespace utl
     protected:
         enum NAMEORIGIN
         {
-            NO_CONFIGURATION,		/// the name came from a configuration node
-            NO_CALLER				/// the name came from a client of this class
+            NO_CONFIGURATION,       /// the name came from a configuration node
+            NO_CALLER               /// the name came from a client of this class
         };
         ::rtl::OUString normalizeName(const ::rtl::OUString& _rName, NAMEORIGIN _eOrigin) const;
     };
@@ -303,12 +303,12 @@ namespace utl
             In opposite to <method>createWithServiceFactory</method>, createWithProvider expects a configuration provider
             to work with.
 
-            @param		_rxConfProvider	configuration provider to use when retrieving the node.
-            @param		_rPath			path to the node the object should represent
-            @param		_nDepth			depth for node retrieval
-            @param		_eMode			specifies which privileges should be applied when retrieving the node
+            @param      _rxConfProvider configuration provider to use when retrieving the node.
+            @param      _rPath          path to the node the object should represent
+            @param      _nDepth         depth for node retrieval
+            @param      _eMode          specifies which privileges should be applied when retrieving the node
 
-            @see	createWithServiceFactory
+            @see    createWithServiceFactory
         */
         static OConfigurationTreeRoot createWithProvider(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxConfProvider,
@@ -324,11 +324,11 @@ namespace utl
             or such).<br/>
             In opposite to <method>createWithProvider</method>, createWithProvider expects a service factory. This factory
             is used to create a configuration provider, and this provider is used to retrieve the node
-            @see	createWithProvider
-            @param		_rxORB			service factory to use to create the configuration provider.
-            @param		_rPath			path to the node the object should represent
-            @param		_nDepth			depth for node retrieval
-            @param		_eMode			specifies which privileges should be applied when retrieving the node
+            @see    createWithProvider
+            @param      _rxORB          service factory to use to create the configuration provider.
+            @param      _rPath          path to the node the object should represent
+            @param      _nDepth         depth for node retrieval
+            @param      _eMode          specifies which privileges should be applied when retrieving the node
         */
         static OConfigurationTreeRoot createWithServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::rtl::OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, sal_Bool _bLazyWrite = sal_True);
@@ -345,7 +345,7 @@ namespace utl
         /** commit all changes made on the subtree the object is the root for<p/>
             All changes made on any <type>OConfigurationNode</type> object retrieved (maybe indirect) from this root
             object are committed when calling this method.
-            @return		sal_True if and only if the commit was successfull
+            @return     sal_True if and only if the commit was successfull
         */
         sal_Bool commit() const throw();
 
@@ -354,7 +354,7 @@ namespace utl
     };
 
 //........................................................................
-}	// namespace utl
+}   // namespace utl
 //........................................................................
 
 #endif // _UNOTOOLS_CONFIGNODE_HXX_

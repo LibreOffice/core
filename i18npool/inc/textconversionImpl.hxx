@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,9 +34,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//	----------------------------------------------------
-//	class TextConversion
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class TextConversion
+//  ----------------------------------------------------
 class TextConversionImpl : public cppu::WeakImplHelper2
 <
     com::sun::star::i18n::XExtendedTextConversion,
@@ -47,42 +47,42 @@ public:
     TextConversionImpl( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF ) : xMSF(rxMSF) {};
 
         // Methods
-        com::sun::star::i18n::TextConversionResult SAL_CALL 
-        getConversions( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, 
-            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType, 
-            sal_Int32 nTextConversionOptions ) 
+        com::sun::star::i18n::TextConversionResult SAL_CALL
+        getConversions( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
+            sal_Int32 nTextConversionOptions )
             throw(  com::sun::star::uno::RuntimeException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::NoSupportException );
-        rtl::OUString SAL_CALL 
-        getConversion( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, 
-            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType, 
-            sal_Int32 nTextConversionOptions ) 
+        rtl::OUString SAL_CALL
+        getConversion( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
+            sal_Int32 nTextConversionOptions )
             throw(  com::sun::star::uno::RuntimeException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::NoSupportException );
-        rtl::OUString SAL_CALL 
-        getConversionWithOffset( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, 
-            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType, 
-            sal_Int32 nTextConversionOptions, com::sun::star::uno::Sequence< sal_Int32 >& offset ) 
+        rtl::OUString SAL_CALL
+        getConversionWithOffset( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
+            sal_Int32 nTextConversionOptions, com::sun::star::uno::Sequence< sal_Int32 >& offset )
             throw(  com::sun::star::uno::RuntimeException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::NoSupportException );
-        sal_Bool SAL_CALL 
+        sal_Bool SAL_CALL
         interactiveConversion( const ::com::sun::star::lang::Locale& aLocale,
-            sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions ) 
+            sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions )
             throw(  com::sun::star::uno::RuntimeException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::NoSupportException );
 
     //XServiceInfo
-    rtl::OUString SAL_CALL 
-        getImplementationName() 
+    rtl::OUString SAL_CALL
+        getImplementationName()
             throw( com::sun::star::uno::RuntimeException );
-    sal_Bool SAL_CALL 
-        supportsService(const rtl::OUString& ServiceName) 
+    sal_Bool SAL_CALL
+        supportsService(const rtl::OUString& ServiceName)
             throw( com::sun::star::uno::RuntimeException );
-    com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL 
+    com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
         getSupportedServiceNames()
             throw( com::sun::star::uno::RuntimeException );
 private :

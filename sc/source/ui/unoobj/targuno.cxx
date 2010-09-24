@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,17 +58,17 @@ using  namespace ::com::sun::star;
 
 sal_uInt16 nTypeResIds[SC_LINKTARGETTYPE_COUNT] =
 {
-    SCSTR_CONTENT_TABLE,		// SC_LINKTARGETTYPE_SHEET
-    SCSTR_CONTENT_RANGENAME,	// SC_LINKTARGETTYPE_RANGENAME
-    SCSTR_CONTENT_DBAREA		// SC_LINKTARGETTYPE_DBAREA
+    SCSTR_CONTENT_TABLE,        // SC_LINKTARGETTYPE_SHEET
+    SCSTR_CONTENT_RANGENAME,    // SC_LINKTARGETTYPE_RANGENAME
+    SCSTR_CONTENT_DBAREA        // SC_LINKTARGETTYPE_DBAREA
 };
 
 const SfxItemPropertyMapEntry* lcl_GetLinkTargetMap()
 {
     static SfxItemPropertyMapEntry aLinkTargetMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),	0,	&getCppuType((const uno::Reference<awt::XBitmap>*)0),	beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME),	0,	&getCppuType((const ::rtl::OUString*)0),				beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  0,  &getCppuType((const uno::Reference<awt::XBitmap>*)0),   beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((const ::rtl::OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
         {0,0,0,0,0,0}
     };
     return aLinkTargetMap_Impl;
@@ -77,7 +77,7 @@ const SfxItemPropertyMapEntry* lcl_GetLinkTargetMap()
 //------------------------------------------------------------------------
 
 // service for ScLinkTargetTypeObj is not defined
-//	must not support document::LinkTarget because the target type cannot be used as a target
+//  must not support document::LinkTarget because the target type cannot be used as a target
 
 SC_SIMPLE_SERVICE_INFO( ScLinkTargetTypesObj, "ScLinkTargetTypesObj", "com.sun.star.document.LinkTargets" )
 SC_SIMPLE_SERVICE_INFO( ScLinkTargetTypeObj,  "ScLinkTargetTypeObj",  "com.sun.star.document.LinkTargetSupplier" )
@@ -103,7 +103,7 @@ ScLinkTargetTypesObj::~ScLinkTargetTypesObj()
 void ScLinkTargetTypesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-        pDocShell = NULL;		// document gone
+        pDocShell = NULL;       // document gone
 }
 
 // container::XNameAccess
@@ -160,7 +160,7 @@ ScLinkTargetTypeObj::ScLinkTargetTypeObj(ScDocShell* pDocSh, sal_uInt16 nT) :
     nType( nT )
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
-    aName = String( ScResId( nTypeResIds[nType] ) );	//! on demand?
+    aName = String( ScResId( nTypeResIds[nType] ) );    //! on demand?
 }
 
 ScLinkTargetTypeObj::~ScLinkTargetTypeObj()
@@ -172,7 +172,7 @@ ScLinkTargetTypeObj::~ScLinkTargetTypeObj()
 void ScLinkTargetTypeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-        pDocShell = NULL;		// document gone
+        pDocShell = NULL;       // document gone
 }
 
 // document::XLinkTargetSupplier
@@ -199,8 +199,8 @@ uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks
         }
     }
 
-    //	wrap collection in ScLinkTargetsObj because service document::LinkTargets requires
-    //	beans::XPropertySet as ElementType in container::XNameAccess.
+    //  wrap collection in ScLinkTargetsObj because service document::LinkTargets requires
+    //  beans::XPropertySet as ElementType in container::XNameAccess.
     if ( xCollection.is() )
         return new ScLinkTargetsObj( xCollection );
     return NULL;
@@ -217,17 +217,17 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL  ScLinkTargetTypeObj::getProp
 
 void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const rtl::OUString& /* aPropertyName */,
             const uno::Any& /* aValue */)
-        throw(	beans::UnknownPropertyException,
+        throw(  beans::UnknownPropertyException,
                 beans::PropertyVetoException,
                 lang::IllegalArgumentException,
                 lang::WrappedTargetException,
                  uno::RuntimeException )
 {
-    //	everything is read-only
-    //!	exception?
+    //  everything is read-only
+    //! exception?
 }
 
-//	static
+//  static
 void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType )
 {
     sal_uInt16 nImgId = 0;

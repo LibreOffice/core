@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ public:
     SFX_DECL_INTERFACE(SW_TABSHELL)
     TYPEINFO();
 
-    void	Execute(SfxRequest &);
-    void	GetState(SfxItemSet &);
-    void	GetFrmBorderState(SfxItemSet &rSet);
-    void 	GetLineStyleState(SfxItemSet &rSet);
-    void	ExecTableStyle(SfxRequest& rReq);
+    void    Execute(SfxRequest &);
+    void    GetState(SfxItemSet &);
+    void    GetFrmBorderState(SfxItemSet &rSet);
+    void    GetLineStyleState(SfxItemSet &rSet);
+    void    ExecTableStyle(SfxRequest& rReq);
 
-    void	ExecNumberFormat(SfxRequest& rReq);
+    void    ExecNumberFormat(SfxRequest& rReq);
 
             SwTableShell(SwView &rView);
 };

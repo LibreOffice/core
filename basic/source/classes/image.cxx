@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,23 +31,23 @@
 #include <tools/tenccvt.hxx>
 #include <basic/sbx.hxx>
 #include "sb.hxx"
-#include <string.h>		// memset() etc
+#include <string.h>     // memset() etc
 #include "image.hxx"
 #include <codegen.hxx>
 SbiImage::SbiImage()
 {
     pStringOff = NULL;
     pStrings   = NULL;
-    pCode  	   = NULL;
-    pLegacyPCode  	   = NULL;
-    nFlags	   = 0;
+    pCode      = NULL;
+    pLegacyPCode       = NULL;
+    nFlags     = 0;
     nStrings   = 0;
     nStringSize= 0;
     nCodeSize  = 0;
     nLegacyCodeSize  =
     nDimBase   = 0;
-    bInit	   =
-    bError	   = FALSE;
+    bInit      =
+    bError     = FALSE;
     bFirstInit = TRUE;
     eCharSet   = gsl_getSystemTextEncoding();
 }
@@ -65,15 +65,15 @@ void SbiImage::Clear()
     ReleaseLegacyBuffer();
     pStringOff = NULL;
     pStrings   = NULL;
-    pCode  	   = NULL;
-    nFlags	   = 0;
+    pCode      = NULL;
+    nFlags     = 0;
     nStrings   = 0;
     nStringSize= 0;
     nLegacyCodeSize  = 0;
     nCodeSize  = 0;
     eCharSet   = gsl_getSystemTextEncoding();
     nDimBase   = 0;
-    bError	   = FALSE;
+    bError     = FALSE;
 }
 
 /**************************************************************************
@@ -204,7 +204,7 @@ BOOL SbiImage::Load( SvStream& r, UINT32& nVersion )
                     // nStart members. When that is done
                     // the module can release the buffer
                     // or it can wait until this routine
-                    // is called again or when this class						// destructs all of which will trigger
+                    // is called again or when this class                       // destructs all of which will trigger
                     // release of the buffer.
                 }
                 break;
@@ -266,7 +266,7 @@ BOOL SbiImage::Save( SvStream& r, UINT32 nVer )
     {
         SbiImage aEmptyImg;
         aEmptyImg.aName = aName;
-        aEmptyImg.Save( r, B_LEGACYVERSION );	      		
+        aEmptyImg.Save( r, B_LEGACYVERSION );
         return TRUE;
     }
     // First of all the header
@@ -324,7 +324,7 @@ BOOL SbiImage::Save( SvStream& r, UINT32 nVer )
             nPos = SbiOpenRecord( r, B_EXTSOURCE, nUnitCount );
             for( UINT16 i = 0 ; i < nUnitCount ; i++ )
             {
-                sal_Int32 nCopyLen = 
+                sal_Int32 nCopyLen =
                     (nRemainingLen > nMaxUnitSize) ? nMaxUnitSize : nRemainingLen;
                 String aTmp2 = aOUSource.copy( (i+1) * nMaxUnitSize, nCopyLen );
                 nRemainingLen -= nCopyLen;
@@ -356,7 +356,7 @@ BOOL SbiImage::Save( SvStream& r, UINT32 nVer )
     {
         nPos = SbiOpenRecord( r, B_STRINGPOOL, nStrings );
         // For every String:
-        //	UINT32 Offset of the Strings in the Stringblock
+        //  UINT32 Offset of the Strings in the Stringblock
         short i;
 
         for( i = 0; i < nStrings && SbiGood( r ); i++ )
@@ -420,7 +420,7 @@ void SbiImage::AddString( const String& r )
         xub_StrLen  len = r.Len() + 1;
         UINT32 needed = nStringOff + len;
         if( needed > 0xFFFFFF00L )
-            bError = TRUE;	// out of mem!
+            bError = TRUE;  // out of mem!
         else if( needed > nStringSize )
         {
             UINT32 nNewLen = needed + 1024;

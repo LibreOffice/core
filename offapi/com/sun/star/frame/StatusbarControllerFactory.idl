@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,18 +36,18 @@
 #include <com/sun/star/frame/XUIControllerRegistration.idl>
 #endif
 
-//============================================================================= 
+//=============================================================================
 
 module com { module sun { module star { module frame {
 
-//============================================================================= 
+//=============================================================================
 
-/** specifies a factory that creates instances of registered status bar 
+/** specifies a factory that creates instances of registered status bar
     controller.
 
     <p>
-    A status bar controller can be registered for a command URL and a model 
-    service name. A status bar will automatically create a status bar controller 
+    A status bar controller can be registered for a command URL and a model
+    service name. A status bar will automatically create a status bar controller
     if it contains a registered command URL.
     </p>
 
@@ -56,29 +56,29 @@ module com { module sun { module star { module frame {
 
 service StatusbarControllerFactory
 {
-    /** this interface provides functions to create new instances of a registered 
+    /** this interface provides functions to create new instances of a registered
         status bar controller.
-    
+
         <p>
-        Use <member scope="com.sun.star.lang">XMultiComponentFactory::createInstanceWithArguments()</member> 
-        to create a new status bar controller instance. Use the CommandURL as the 
+        Use <member scope="com.sun.star.lang">XMultiComponentFactory::createInstanceWithArguments()</member>
+        to create a new status bar controller instance. Use the CommandURL as the
         service specifier.
-        
-        This call supports the following arguments provided as 
+
+        This call supports the following arguments provided as
         <type scope="com::sun::star::beans">PropertyValue</type>:
         <ul>
-            <li><b>Frame</b><br>specifies the <type scope="com::sun::star::frame">XFrame</type> 
-                   instance to which the status bar controller belongs to. This 
-                   property must be provided to the status bar controller, otherwise it 
+            <li><b>Frame</b><br>specifies the <type scope="com::sun::star::frame">XFrame</type>
+                   instance to which the status bar controller belongs to. This
+                   property must be provided to the status bar controller, otherwise it
                    cannot dispatch its internal commands.</li>
-            <li><b>ModuleIdentifier</b><br>optional string that specifies in which module 
+            <li><b>ModuleIdentifier</b><br>optional string that specifies in which module
                    context the status bar controller should be created.</li>
         </ul>
         </p>
      */
     interface com::sun::star::lang::XMultiComponentFactory;
 
-    /** provides functions to query for, register and deregister a status bar 
+    /** provides functions to query for, register and deregister a status bar
         controller.
      */
     interface com::sun::star::frame::XUIControllerRegistration;
@@ -86,6 +86,6 @@ service StatusbarControllerFactory
 
 }; }; }; };
 
-//============================================================================= 
+//=============================================================================
 
 #endif

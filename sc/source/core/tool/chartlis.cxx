@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ using ::std::unary_function;
 using ::std::for_each;
 
 //2do: DocOption TimeOut?
-//#define SC_CHARTTIMEOUT 1000		// eine Sekunde keine Aenderung/KeyEvent
+//#define SC_CHARTTIMEOUT 1000      // eine Sekunde keine Aenderung/KeyEvent
 
 // Update chart listeners quickly, to get a similar behavior to loaded charts
 // which register UNO listeners.
@@ -57,8 +57,8 @@ using ::std::for_each;
 
 class ScChartUnoData
 {
-    uno::Reference< chart::XChartDataChangeEventListener >	xListener;
-    uno::Reference< chart::XChartData >						xSource;
+    uno::Reference< chart::XChartDataChangeEventListener >  xListener;
+    uno::Reference< chart::XChartData >                     xSource;
 
 public:
             ScChartUnoData( const uno::Reference< chart::XChartDataChangeEventListener >& rL,
@@ -66,8 +66,8 @@ public:
                     xListener( rL ), xSource( rS ) {}
             ~ScChartUnoData() {}
 
-    const uno::Reference< chart::XChartDataChangeEventListener >& GetListener() const	{ return xListener; }
-    const uno::Reference< chart::XChartData >& GetSource() const						{ return xSource; }
+    const uno::Reference< chart::XChartDataChangeEventListener >& GetListener() const   { return xListener; }
+    const uno::Reference< chart::XChartData >& GetSource() const                        { return xSource; }
 };
 
 
@@ -95,7 +95,7 @@ void ScChartListener::ExternalRefListener::notify(sal_uInt16 nFileId, ScExternal
         case ScExternalRefManager::LINK_MODIFIED:
         {
             if (maFileIds.count(nFileId))
-                // We are listening to this external document.  Send an update 
+                // We are listening to this external document.  Send an update
                 // requst to the chart.
                 mrParent.SetUpdateQueue();
         }
@@ -127,8 +127,8 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
         const ScRange& rRange ) :
     StrData( rName ),
     SvtListener(),
-    mpExtRefListener(NULL), 
-    mpTokens(new vector<ScSharedTokenRef>), 
+    mpExtRefListener(NULL),
+    mpTokens(new vector<ScSharedTokenRef>),
     pUnoData( NULL ),
     pDoc( pDocP ),
     bUsed( FALSE ),
@@ -142,8 +142,8 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
         const ScRangeListRef& rRangeList ) :
     StrData( rName ),
     SvtListener(),
-    mpExtRefListener(NULL), 
-    mpTokens(new vector<ScSharedTokenRef>), 
+    mpExtRefListener(NULL),
+    mpTokens(new vector<ScSharedTokenRef>),
     pUnoData( NULL ),
     pDoc( pDocP ),
     bUsed( FALSE ),
@@ -156,7 +156,7 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
 ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP, vector<ScSharedTokenRef>* pTokens ) :
     StrData( rName ),
     SvtListener(),
-    mpExtRefListener(NULL), 
+    mpExtRefListener(NULL),
     mpTokens(pTokens),
     pUnoData( NULL ),
     pDoc( pDocP ),
@@ -169,7 +169,7 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP, vector
 ScChartListener::ScChartListener( const ScChartListener& r ) :
     StrData( r ),
     SvtListener(),
-    mpExtRefListener(NULL), 
+    mpExtRefListener(NULL),
     mpTokens(new vector<ScSharedTokenRef>(*r.mpTokens)),
     pUnoData( NULL ),
     pDoc( r.pDoc ),
@@ -182,7 +182,7 @@ ScChartListener::ScChartListener( const ScChartListener& r ) :
 
     if (r.mpExtRefListener.get())
     {
-        // Re-register this new listener for the files that the old listener 
+        // Re-register this new listener for the files that the old listener
         // was listening to.
 
         ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
@@ -223,7 +223,7 @@ void ScChartListener::SetUno(
         const uno::Reference< chart::XChartDataChangeEventListener >& rListener,
         const uno::Reference< chart::XChartData >& rSource )
 {
-//	DBG_ASSERT( rListener.is() && rSource.is(), "Nullpointer bei SetUno" );
+//  DBG_ASSERT( rListener.is() && rSource.is(), "Nullpointer bei SetUno" );
     delete pUnoData;
     pUnoData = new ScChartUnoData( rListener, rSource );
 }
@@ -252,7 +252,7 @@ void ScChartListener::Notify( SvtBroadcaster&, const SfxHint& rHint )
 void ScChartListener::Update()
 {
     if ( pDoc->IsInInterpreter() )
-    {	// #73482# If interpreting do nothing and restart timer so we don't
+    {   // #73482# If interpreting do nothing and restart timer so we don't
         // interfere with interpreter and don't produce an Err522 or similar.
         // This may happen if we are rescheduled via Basic function.
         pDoc->GetChartListenerCollection()->StartTimer();
@@ -261,7 +261,7 @@ void ScChartListener::Update()
     if ( pUnoData )
     {
         bDirty = FALSE;
-        //!	irgendwann mal erkennen, was sich innerhalb des Charts geaendert hat
+        //! irgendwann mal erkennen, was sich innerhalb des Charts geaendert hat
         chart::ChartDataChangeEvent aEvent( pUnoData->GetSource(),
                                         chart::ChartDataChangeType_ALL,
                                         0, 0, 0, 0 );
@@ -440,7 +440,7 @@ BOOL ScChartListener::operator==( const ScChartListener& r )
     bool b1 = (mpTokens.get() && !mpTokens->empty());
     bool b2 = (r.mpTokens.get() && !r.mpTokens->empty());
 
-    if (pDoc != r.pDoc || bUsed != r.bUsed || bDirty != r.bDirty || 
+    if (pDoc != r.pDoc || bUsed != r.bUsed || bDirty != r.bDirty ||
         bSeriesRangesScheduled != r.bSeriesRangesScheduled ||
         GetString() != r.GetString() || b1 != b2)
         return false;
@@ -487,15 +487,15 @@ ScChartListenerCollection::ScChartListenerCollection(
 
 ScChartListenerCollection::~ScChartListenerCollection()
 {
-    //	#96783# remove ChartListener objects before aTimer dtor is called, because
-    //	ScChartListener::EndListeningTo may cause ScChartListenerCollection::StartTimer
-    //	to be called if an empty ScNoteCell is deleted
+    //  #96783# remove ChartListener objects before aTimer dtor is called, because
+    //  ScChartListener::EndListeningTo may cause ScChartListenerCollection::StartTimer
+    //  to be called if an empty ScNoteCell is deleted
 
     if (GetCount())
         FreeAll();
 }
 
-ScDataObject*	ScChartListenerCollection::Clone() const
+ScDataObject*   ScChartListenerCollection::Clone() const
 {
     return new ScChartListenerCollection( *this );
 }
@@ -536,8 +536,8 @@ void ScChartListenerCollection::FreeUnused()
     for ( USHORT nIndex = nCount; nIndex-- >0; )
     {
         ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
-        //	Uno-Charts nicht rauskicken
-        //	(werden per FreeUno von aussen geloescht)
+        //  Uno-Charts nicht rauskicken
+        //  (werden per FreeUno von aussen geloescht)
         if ( !pCL->IsUno() )
         {
             if ( pCL->IsUsed() )
@@ -561,7 +561,7 @@ void ScChartListenerCollection::FreeUno( const uno::Reference< chart::XChartData
         {
             Free( pCL );
         }
-        //!	sollte nur einmal vorkommen?
+        //! sollte nur einmal vorkommen?
     }
 }
 
@@ -590,7 +590,7 @@ void ScChartListenerCollection::UpdateDirtyCharts()
         if ( pCL->IsDirty() )
             pCL->Update();
         if ( aTimer.IsActive() && !pDoc->IsImportingXML())
-            break;						// da kam einer dazwischen
+            break;                      // da kam einer dazwischen
     }
 }
 
@@ -615,7 +615,7 @@ void ScChartListenerCollection::SetDiffDirty(
         ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
         USHORT nFound;
         BOOL bFound = rCmp.Search( pCL, nFound );
-        if ( !bFound ||	(*pCL != *((const ScChartListener*) rCmp.pItems[ nFound ])) )
+        if ( !bFound || (*pCL != *((const ScChartListener*) rCmp.pItems[ nFound ])) )
         {
             if ( bSetChartRangeLists )
             {

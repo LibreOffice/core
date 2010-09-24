@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,37 +24,37 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_XDatabaseMetaData_idl__ 
-#define __com_sun_star_sdbc_XDatabaseMetaData_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_sdbc_SQLException_idl__ 
-#include <com/sun/star/sdbc/SQLException.idl> 
-#endif 
- 
- 
- module com {  module sun {  module star {  module sdbc { 
- 
- published interface XResultSet; 
- published interface XConnection; 
- 
+#ifndef __com_sun_star_sdbc_XDatabaseMetaData_idl__
+#define __com_sun_star_sdbc_XDatabaseMetaData_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XResultSet;
+ published interface XConnection;
+
 /** provides comprehensive information about the database as a whole.
-    
-    
+
+
     <p>Many of the methods here return lists of information in
-    the form of 
+    the form of
     <type scope="com::sun::star::sdbc">XResultSet</type>
     objects.
     You can use the normal <type scope="com::sun::star::sdbc">XResultSet</type>
-    methods such as 
+    methods such as
     <member scope="com::sun::star::sdbc">XResultSet::getString()</member>
     and
     <member scope="com::sun::star::sdbc">XResultSet::getInt()</member>
     to retrieve the data from these XResultSets. If a given form of
-    metadata is not available, these methods should throw a 
+    metadata is not available, these methods should throw a
     <type scope="com::sun::star::sdbc">SQLException</type>
     .
     That a value of <type scope="com::sun::star::sdbc">XResultSet</type> is <NULL/>
@@ -69,7 +69,7 @@
     that argument's criteria will be dropped from the search.
     </p>
     <p>
-    A 
+    A
     <type scope="com::sun::star::sdbc">SQLException</type>
     will be thrown if a driver does not support
     a meta data method. In the case of methods that return an XResultSet,
@@ -77,282 +77,282 @@
     SQLException is thrown.</p>
  */
 published interface XDatabaseMetaData: com::sun::star::uno::XInterface
-{ 
-     
+{
+
     /** Can all the procedures returned by getProcedures be called by the
         current user?
 
-        @return 
-        <TRUE/> 
+        @return
+        <TRUE/>
         if the user is allowed to call all procedures returned by getProcedures
         otherwise
         <FALSE/>
         .
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean allProceduresAreCallable() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean allProceduresAreCallable() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can all the tables returned by getTable be SELECTed by the
         current user?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean allTablesAreSelectable() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean allTablesAreSelectable() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** returns the URL for the database connection
      */
-    string getURL() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getURL() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** returns the user name from this database connection.
      */
-    string getUserName() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getUserName() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** checks if the database in read-only mode.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean isReadOnly() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean isReadOnly() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Are NULL values sorted high?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
     */
-    boolean nullsAreSortedHigh() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean nullsAreSortedHigh() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Are NULL values sorted low?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
     */
-    boolean nullsAreSortedLow() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean nullsAreSortedLow() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Are NULL values sorted at the start regardless of sort order?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean nullsAreSortedAtStart() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
-    /**	 Are NULL values sorted at the end, regardless of sort order?
+    boolean nullsAreSortedAtStart() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /**  Are NULL values sorted at the end, regardless of sort order?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean nullsAreSortedAtEnd() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean nullsAreSortedAtEnd() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** returns the name of the database product.
      */
-    string getDatabaseProductName() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getDatabaseProductName() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** returns the version of the database product.
      */
-    string getDatabaseProductVersion() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getDatabaseProductVersion() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** returns the name of the SDBC driver.
      */
-    string getDriverName() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getDriverName() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** returns the version number of the SDBC driver.
      */
-    string getDriverVersion() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getDriverVersion() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** returns the SDBC driver major version number.
      */
-    long getDriverMajorVersion(); 
-    //------------------------------------------------------------------------- 
-     
+    long getDriverMajorVersion();
+    //-------------------------------------------------------------------------
+
     /** returns the SDBC driver minor version number.
      */
-    long getDriverMinorVersion(); 
-    //------------------------------------------------------------------------- 
-     
+    long getDriverMinorVersion();
+    //-------------------------------------------------------------------------
+
     /** use the database local files to save the tables.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean usesLocalFiles() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean usesLocalFiles() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** use the database one local file to save for each table.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean usesLocalFilePerTable() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean usesLocalFilePerTable() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** use the database 'mixed case unquoted SQL identifiers' case sensitive.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsMixedCaseIdentifiers() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsMixedCaseIdentifiers() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Does the database treat mixed case unquoted SQL identifiers as
         case insensitive and store them in upper case?
             @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean storesUpperCaseIdentifiers() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean storesUpperCaseIdentifiers() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Does the database treat mixed case unquoted SQL identifiers as
         case insensitive and store them in lower case?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean storesLowerCaseIdentifiers() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean storesLowerCaseIdentifiers() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Does the database treat mixed case unquoted SQL identifiers as
         case insensitive and store them in mixed case?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean storesMixedCaseIdentifiers() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean storesMixedCaseIdentifiers() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Does the database treat mixed case quoted SQL identifiers as
         case sensitive and as a result store them in mixed case?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsMixedCaseQuotedIdentifiers() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsMixedCaseQuotedIdentifiers() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Does the database treat mixed case quoted SQL identifiers as
         case insensitive and store them in upper case?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean storesUpperCaseQuotedIdentifiers() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean storesUpperCaseQuotedIdentifiers() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Does the database treat mixed case quoted SQL identifiers as
         case insensitive and store them in lower case?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean storesLowerCaseQuotedIdentifiers() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean storesLowerCaseQuotedIdentifiers() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Does the database treat mixed case quoted SQL identifiers as
         case insensitive and store them in mixed case?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean storesMixedCaseQuotedIdentifiers() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean storesMixedCaseQuotedIdentifiers() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** What's the string used to quote SQL identifiers?
         This returns a space " " if identifier quoting is not supported.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    string getIdentifierQuoteString() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getIdentifierQuoteString() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a comma-separated list of all a database's SQL keywords
         that are NOT also SQL92 keywords.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    string getSQLKeywords() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getSQLKeywords() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a comma-separated list of math functions. These are the
         X/Open CLI math function names used in the SDBC function escape
         clause.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    string getNumericFunctions() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getNumericFunctions() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a comma-separated list of string functions. These are the
         X/Open CLI string function names used in the SDBC function escape
         clause.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    string getStringFunctions() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getStringFunctions() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a comma-separated list of system functions. These are the
         X/Open CLI system function names used in the SDBC function escape
         clause.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    string getSystemFunctions() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getSystemFunctions() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a comma-separated list of time and date functions.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    string getTimeDateFunctions() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getTimeDateFunctions() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the string that can be used to escape wildcard characters.
         This is the string that can be used to escape '_' or '%' in
         the string pattern style catalog search parameters.
-        
-        
+
+
         <p>
         The '_' character represents any single character.
         </p>
@@ -362,766 +362,766 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    string getSearchStringEscape() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getSearchStringEscape() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets all the "extra" characters that can be used in unquoted
         identifier names (those beyond a-z, A-Z, 0-9 and _).
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    string getExtraNameCharacters() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getExtraNameCharacters() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** support the Database "ALTER TABLE" with add column?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsAlterTableWithAddColumn() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsAlterTableWithAddColumn() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** support the Database  "ALTER TABLE" with drop column?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsAlterTableWithDropColumn() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsAlterTableWithDropColumn() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** support the Database column aliasing?
-        
-        
+
+
         <p>
         The SQL AS clause can be used to provide names for
         computed columns or to provide alias names for columns as required.
         </p>
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsColumnAliasing() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsColumnAliasing() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** are concatenations between NULL and non-NULL values NULL?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean nullPlusNonNullIsNull() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean nullPlusNonNullIsNull() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** <TRUE/>
             , if the Database supports the CONVERT function between SQL types,
-            otherwise 
+            otherwise
             <FALSE/>
             .
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsTypeConversion() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
-    /** 	<TRUE/>
+    boolean supportsTypeConversion() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /**     <TRUE/>
             , if the Database supports the CONVERT between the given SQL types
-            otherwise 
+            otherwise
             <FALSE/>
             .
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsConvert([in]long fromType, [in]long toType) 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsConvert([in]long fromType, [in]long toType)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Are table correlation names supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsTableCorrelationNames() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsTableCorrelationNames() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** If table correlation names are supported, are they restricted
         to be different from the names of the tables?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsDifferentTableCorrelationNames() 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsDifferentTableCorrelationNames()
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Are expressions in "ORDER BY" lists supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsExpressionsInOrderBy() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsExpressionsInOrderBy() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can an "ORDER BY" clause use columns not in the SELECT statement?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsOrderByUnrelated() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsOrderByUnrelated() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Is some form of "GROUP BY" clause supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsGroupBy() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsGroupBy() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can a "GROUP BY" clause use columns not in the SELECT?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsGroupByUnrelated() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsGroupByUnrelated() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can a "GROUP BY" clause add columns not in the SELECT
         provided it specifies all the columns in the SELECT?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsGroupByBeyondSelect() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsGroupByBeyondSelect() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Is the escape character in "LIKE" clauses supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsLikeEscapeClause() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsLikeEscapeClause() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Are multiple XResultSets from a single execute supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsMultipleResultSets() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsMultipleResultSets() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can we have multiple transactions open at once (on different
         connections)?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsMultipleTransactions() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsMultipleTransactions() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can columns be defined as non-nullable?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsNonNullableColumns() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
-    /** 	<TRUE/>, if the database supports ODBC Minimum SQL grammar,
+    boolean supportsNonNullableColumns() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /**     <TRUE/>, if the database supports ODBC Minimum SQL grammar,
             otherwise <FALSE/>.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsMinimumSQLGrammar() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsMinimumSQLGrammar() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** <TRUE/>, if the database supports ODBC Core SQL grammar,
             otherwise <FALSE/>.
             @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsCoreSQLGrammar() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
-    /** 
+    boolean supportsCoreSQLGrammar() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /**
             <TRUE/>, if the database supports ODBC Extended SQL grammar,
             otherwise <FALSE/>.
             @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsExtendedSQLGrammar() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsExtendedSQLGrammar() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** @returns
             <TRUE/>, if the database supports ANSI92 entry level SQL grammar,
             otherwise <FALSE/>.
-            @throws SQLException 
+            @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsANSI92EntryLevelSQL() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsANSI92EntryLevelSQL() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** @returns
             <TRUE/>, if the database supports ANSI92 intermediate SQL grammar,
             otherwise <FALSE/>.
-            @throws SQLException 
+            @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsANSI92IntermediateSQL() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsANSI92IntermediateSQL() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** @returns
             <TRUE/>, if the database supports ANSI92 full SQL grammar,
             otherwise <FALSE/>.
-            @throws SQLException 
+            @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsANSI92FullSQL() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsANSI92FullSQL() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** returns
             <TRUE/>, if the Database supports SQL Integrity Enhancement Facility,
             otherwise <FALSE/>.
-            @throws SQLException 
+            @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsIntegrityEnhancementFacility() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsIntegrityEnhancementFacility() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** @returns
             <TRUE/>, if some form of outer join is supported,
             otherwise <FALSE/>.
-            @throws SQLException 
+            @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsOuterJoins() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
-    /** @returns 
+    boolean supportsOuterJoins() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** @returns
             <TRUE/>, if full nested outer joins are supported,
             otherwise <FALSE/>.
-            @throws SQLException 
+            @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsFullOuterJoins() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
-    /** @returns 
+    boolean supportsFullOuterJoins() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** @returns
             <TRUE/>, if there is limited support for outer joins.
             (This will be <TRUE/> if supportFullOuterJoins is <TRUE/>.)
             <FALSE/> is returned otherwise.
-            @throws SQLException 
+            @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsLimitedOuterJoins() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsLimitedOuterJoins() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the database vendor's preferred term for "schema"
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    string getSchemaTerm() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getSchemaTerm() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the database vendor's preferred term for "procedure"
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    string getProcedureTerm() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getProcedureTerm() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the database vendor's preferred term for "catalog"
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    string getCatalogTerm() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getCatalogTerm() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Does a catalog appear at the start of a qualified table name?
         (Otherwise it appears at the end)
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean isCatalogAtStart() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean isCatalogAtStart() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the separator between catalog and table name
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    string getCatalogSeparator() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    string getCatalogSeparator() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can a schema name be used in a data manipulation statement?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsSchemasInDataManipulation() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsSchemasInDataManipulation() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can a schema name be used in a procedure call statement?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsSchemasInProcedureCalls() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsSchemasInProcedureCalls() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can a schema name be used in a table definition statement?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsSchemasInTableDefinitions() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsSchemasInTableDefinitions() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can a schema name be used in an index definition statement?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsSchemasInIndexDefinitions() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsSchemasInIndexDefinitions() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can a schema name be used in a privilege definition statement?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsSchemasInPrivilegeDefinitions() 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsSchemasInPrivilegeDefinitions()
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can a catalog name be used in a data manipulation statement?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsCatalogsInDataManipulation() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsCatalogsInDataManipulation() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can a catalog name be used in a procedure call statement?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsCatalogsInProcedureCalls() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsCatalogsInProcedureCalls() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can a catalog name be used in a table definition statement?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsCatalogsInTableDefinitions() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsCatalogsInTableDefinitions() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can a catalog name be used in an index definition statement?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsCatalogsInIndexDefinitions() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsCatalogsInIndexDefinitions() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can a catalog name be used in a privilege definition statement?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsCatalogsInPrivilegeDefinitions() 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsCatalogsInPrivilegeDefinitions()
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Is positioned DELETE supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsPositionedDelete() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsPositionedDelete() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Is positioned UPDATE supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsPositionedUpdate() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsPositionedUpdate() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Is SELECT for UPDATE supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsSelectForUpdate() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsSelectForUpdate() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Are stored procedure calls using the stored procedure escape
         syntax supported?
             @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsStoredProcedures() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsStoredProcedures() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Are subqueries in comparison expressions supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsSubqueriesInComparisons() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsSubqueriesInComparisons() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Are subqueries in 'exists' expressions supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsSubqueriesInExists() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsSubqueriesInExists() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Are subqueries in 'in' statements supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsSubqueriesInIns() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsSubqueriesInIns() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Are subqueries in quantified expressions supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsSubqueriesInQuantifieds() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsSubqueriesInQuantifieds() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Are correlated subqueries supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsCorrelatedSubqueries() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsCorrelatedSubqueries() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Is SQL UNION supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsUnion() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsUnion() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Is SQL UNION ALL supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsUnionAll() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsUnionAll() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can cursors remain open across commits?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsOpenCursorsAcrossCommit() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsOpenCursorsAcrossCommit() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can cursors remain open across rollbacks?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsOpenCursorsAcrossRollback() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsOpenCursorsAcrossRollback() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can statements remain open across commits?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsOpenStatementsAcrossCommit() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsOpenStatementsAcrossCommit() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Can statements remain open across rollbacks?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsOpenStatementsAcrossRollback() 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsOpenStatementsAcrossRollback()
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximal number of hex characters in an inline binary literal
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxBinaryLiteralLength() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxBinaryLiteralLength() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the max length for a character literal
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxCharLiteralLength() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxCharLiteralLength() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the limit on column name length
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxColumnNameLength() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxColumnNameLength() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum number of columns in a "GROUP BY" clause
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxColumnsInGroupBy() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxColumnsInGroupBy() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum number of columns allowed in an index
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxColumnsInIndex() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxColumnsInIndex() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum number of columns in an "ORDER BY" clause
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxColumnsInOrderBy() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxColumnsInOrderBy() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum number of columns in a "SELECT" list
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxColumnsInSelect() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxColumnsInSelect() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum number of columns in a table
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxColumnsInTable() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxColumnsInTable() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the number of active connections at a time to this database.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxConnections() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxConnections() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum cursor name length
     @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxCursorNameLength() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxCursorNameLength() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum length of an index (in bytes)
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxIndexLength() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxIndexLength() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum length allowed for a schema name
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxSchemaNameLength() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxSchemaNameLength() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum length of a procedure name
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxProcedureNameLength() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxProcedureNameLength() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum length of a catalog name
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxCatalogNameLength() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxCatalogNameLength() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum length of a single row.
     @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxRowSize() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxRowSize() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Did getMaxRowSize() include LONGVARCHAR and LONGVARBINARY
         blobs?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean doesMaxRowSizeIncludeBlobs() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
-    /** return the maximum length of a SQL statement	
+    boolean doesMaxRowSizeIncludeBlobs() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** return the maximum length of a SQL statement
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxStatementLength() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxStatementLength() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximal number of open active statements at one time to this database
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxStatements() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxStatements() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum length of a table name
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxTableNameLength() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxTableNameLength() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum number of tables in a SELECT statement
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxTablesInSelect() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxTablesInSelect() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the maximum length of a user name
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    long getMaxUserNameLength() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getMaxUserNameLength() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** return the database default transaction isolation level.
-        The values are defined in 
+        The values are defined in
         <type scope="com::sun::star::sdbc">TransactionIsolation</type>.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
         @see com::sun::star::sdbc::XConnection
      */
-    long getDefaultTransactionIsolation() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    long getDefaultTransactionIsolation() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** support the Database transactions?
         If not, invoking the method
         <member scope="com::sun::star::sdbc">XConnection::commit()</member>
@@ -1129,77 +1129,77 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         isolation level is TransactionIsolation_NONE.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsTransactions() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsTransactions() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Does this database support the given transaction isolation level?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
  @see com::sun::star::sdbc::Connection
      */
-    boolean supportsTransactionIsolationLevel([in]long level) 
-                            raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsTransactionIsolationLevel([in]long level)
+                            raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** support the Database both data definition and data manipulation statements
         within a transaction?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
-<!-- JRH: Unclear on the intent of these many support questions. 
+<!-- JRH: Unclear on the intent of these many support questions.
         If asking, it should state, "Does the Database support both ....?
         If declaring, it should state something like the following:
 
-        metadata: 	supportsDataDefinitionAndDataManipulationTransactions 
+        metadata:   supportsDataDefinitionAndDataManipulationTransactions
 
     "provides support for both data definition and data manipulation statements within a transaction."
- -->	 */
-    boolean supportsDataDefinitionAndDataManipulationTransactions() 
-                             raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+ -->     */
+    boolean supportsDataDefinitionAndDataManipulationTransactions()
+                             raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** are only data manipulation statements within a transaction
         supported?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsDataManipulationTransactionsOnly() 
-                            raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsDataManipulationTransactionsOnly()
+                            raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** does a data definition statement within a transaction force the
         transaction to commit?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean dataDefinitionCausesTransactionCommit() 
-                            raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean dataDefinitionCausesTransactionCommit()
+                            raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** is a data definition statement within a transaction ignored?
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean dataDefinitionIgnoredInTransactions() 
-                            raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean dataDefinitionIgnoredInTransactions()
+                            raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Gets a description of the stored procedures available in a
         catalog.
-        
-        
+
+
         <p>
         Only procedure descriptions matching the schema and
         procedure name criteria are returned. They are ordered by
@@ -1247,17 +1247,17 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             a procedure name pattern
         @returns
             each row is a procedure description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getProcedures([in]any catalog, [in]string schemaPattern, 
-                    [in]string procedureNamePattern) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getProcedures([in]any catalog, [in]string schemaPattern,
+                    [in]string procedureNamePattern) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a description of a catalog's stored procedure parameters
         and result columns.
-        
-        
+
+
         <p>
         Only descriptions matching the schema, procedure and
         parameter name criteria are returned. They are ordered by
@@ -1347,18 +1347,18 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             a column name pattern
         @returns
             each row describes a stored procedure parameter or column
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getProcedureColumns([in]any catalog, [in]string schemaPattern, 
-                                   [in]string procedureNamePattern, 
-                                   [in]string columnNamePattern) 
-                        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getProcedureColumns([in]any catalog, [in]string schemaPattern,
+                                   [in]string procedureNamePattern,
+                                   [in]string columnNamePattern)
+                        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a description of tables available in a catalog.
-        
-        
+
+
         <p>Only table descriptions matching the catalog, schema, table
         name, and type criteria are returned. They are ordered by
         TABLE_TYPE, TABLE_SCHEM, and TABLE_NAME.
@@ -1377,7 +1377,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         <li>
         <b>TABLE_TYPE</b> string => table type. Typical types are "TABLE",
-        "VIEW",	"SYSTEM TABLE", "GLOBAL TEMPORARY",
+        "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY",
         "LOCAL TEMPORARY", "ALIAS", "SYNONYM".
         </li>
         <li>
@@ -1398,18 +1398,18 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             a list of table types to include
         @returns
             each row is a table description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getTables([in]any catalog, [in]string schemaPattern, 
-        [in]string tableNamePattern, [in]sequence<string> types) 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getTables([in]any catalog, [in]string schemaPattern,
+        [in]string tableNamePattern, [in]sequence<string> types)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Gets the schema names available in this database. The results
         are ordered by schema name.
-        
-        
+
+
         <p>The schema column is:
         </p>
         <ol>
@@ -1419,16 +1419,16 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ol>
         @returns
             each row has a single String column that is a schema name
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getSchemas() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getSchemas() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the catalog names available in this database. The results
         are ordered by catalog name.
-        
-        
+
+
         <p>The catalog column is:
         </p>
         <ol>
@@ -1438,37 +1438,37 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ol>
         @returns
             each row has a single String column that is a catalog name
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getCatalogs() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getCatalogs() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets the table types available in this database. The results
         are ordered by table type.
-        
-        
+
+
         <p>The table type is:
         </p>
         <ol>
         <li>
         <b>TABLE_TYPE</b> string => table type. Typical types are "TABLE",
-        "VIEW",	"SYSTEM TABLE", "GLOBAL TEMPORARY",
+        "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY",
         "LOCAL TEMPORARY", "ALIAS", "SYNONYM".
         </li>
         </ol>
         @returns
             each row has a single String column that is a table type
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getTableTypes() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getTableTypes() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a description of table columns available in
         the specified catalog.
-        
-        
+
+
         <p>Only column descriptions matching the catalog, schema, table
         and column name criteria are returned. They are ordered by
         TABLE_SCHEM, TABLE_NAME, and ORDINAL_POSITION.
@@ -1537,7 +1537,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         maximum number of bytes in the column
         </li>
         <li>
-        <b>ORDINAL_POSITION</b> int	=> index of column in table
+        <b>ORDINAL_POSITION</b> int => index of column in table
         (starting at 1)
         </li>
         <li>
@@ -1556,17 +1556,17 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             a column name pattern
         @returns
             each row is a column description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getColumns([in]any catalog, [in]string schemaPattern, 
-        [in]string tableNamePattern, [in]string columnNamePattern) 
-                    raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getColumns([in]any catalog, [in]string schemaPattern,
+        [in]string tableNamePattern, [in]string columnNamePattern)
+                    raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a description of the access rights for a table's columns.
-        
-        
+
+
         <p>
         Only privileges matching the column name criteria are
         returned. They are ordered by COLUMN_NAME and PRIVILEGE.
@@ -1606,25 +1606,25 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         @param schema
             a schema name ; "" retrieves those without a schema
         @param table
-            a table name 
+            a table name
         @param columnNamePattern
             a column name pattern
         @returns
             each row is a column privilege description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getColumnPrivileges([in]any catalog, [in]string schema, 
-        [in]string table, [in]string columnNamePattern) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getColumnPrivileges([in]any catalog, [in]string schema,
+        [in]string table, [in]string columnNamePattern) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a description of the access rights for each table available
         in a catalog. Note that a table privilege applies to one or
         more columns in the table. It would be wrong to assume that
         this priviledge applies to all columns (this may be <TRUE/> for
         some systems but is not <TRUE/> for all.)
-        
-        
+
+
         <p>Only privileges matching the schema and table name
         criteria are returned. They are ordered by TABLE_SCHEM,
         TABLE_NAME, and PRIVILEGE.
@@ -1664,17 +1664,17 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             a table name pattern
         @returns
             each row is a table privilege description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getTablePrivileges([in]any catalog, [in]string schemaPattern, 
-                [in]string tableNamePattern) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getTablePrivileges([in]any catalog, [in]string schemaPattern,
+                [in]string tableNamePattern) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a description of a table's optimal set of columns that
         uniquely identifies a row. They are ordered by SCOPE.
-        
-        
+
+
         <p>Each column description has the following columns:
         </p>
         <ol>
@@ -1706,7 +1706,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <b>BUFFER_LENGTH</b> long => not used
         </li>
         <li>
-        <b>DECIMAL_DIGITS</b> short	 => scale
+        <b>DECIMAL_DIGITS</b> short  => scale
         </li>
         <li>
         <b>PSEUDO_COLUMN</b> short => is this a pseudo column
@@ -1726,26 +1726,26 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
-            a table name 
+            a table name
         @param scope
             the scope of interest; use same values as SCOPE
         @param nullable
             include columns that are nullable?
         @returns
             each row is a column description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getBestRowIdentifier([in]any catalog, [in]string schema, 
-        [in]string table, [in]long scope, [in] boolean nullable) 
-        raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getBestRowIdentifier([in]any catalog, [in]string schema,
+        [in]string table, [in]long scope, [in] boolean nullable)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a description of a table's columns that are automatically
         updated when any value in a row is updated. They are
         unordered.
-        
-        
+
+
         <p>Each column description has the following columns:
         </p>
         <ol>
@@ -1768,7 +1768,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <b>BUFFER_LENGTH</b> long => length of column value in bytes
         </li>
         <li>
-        <b>DECIMAL_DIGITS</b> short	 => scale
+        <b>DECIMAL_DIGITS</b> short  => scale
         </li>
         <li>
         <b>PSEUDO_COLUMN</b> short => is this a pseudo column
@@ -1788,20 +1788,20 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
-            a table name 
+            a table name
         @returns
             each row is a column description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getVersionColumns([in]any catalog, [in]string schema, 
-                [in]string table) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getVersionColumns([in]any catalog, [in]string schema,
+                [in]string table) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a description of a table's primary key columns. They
         are ordered by COLUMN_NAME.
-        
-        
+
+
         <p>Each primary key column description has the following columns:
         </p>
         <ol>
@@ -1829,22 +1829,22 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
-            a table name 
+            a table name
         @returns
             each row is a primary key column description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getPrimaryKeys([in]any catalog, [in]string schema, 
-                [in]string table) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getPrimaryKeys([in]any catalog, [in]string schema,
+                [in]string table) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a description of the primary key columns that are
         referenced by a table's foreign key columns (the primary keys
         imported by a table). They are ordered by PKTABLE_CAT,
         PKTABLE_SCHEM, PKTABLE_NAME, and KEY_SEQ.
-        
-        
+
+
         <p>Each primary key column description has the following columns:
         </p>
         <ol>
@@ -1944,22 +1944,22 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
-            a table name 
+            a table name
         @returns
             each row is a primary key column description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getImportedKeys([in]any catalog, [in]string schema, 
-                [in]string table) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getImportedKeys([in]any catalog, [in]string schema,
+                [in]string table) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a description of the foreign key columns that reference a
         table's primary key columns (the foreign keys exported by a
         table). They are ordered by FKTABLE_CAT, FKTABLE_SCHEM,
         FKTABLE_NAME, and KEY_SEQ.
-        
-        
+
+
         <p>Each foreign key column description has the following columns:
         </p>
         <ol>
@@ -2059,16 +2059,16 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
-            a table name 
+            a table name
         @returns
             each row is a foreign key column description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getExportedKeys([in]any catalog, [in]string schema, 
-                [in]string table) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getExportedKeys([in]any catalog, [in]string schema,
+                [in]string table) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a description of the foreign key columns in the foreign key
         table that reference the primary key columns of the primary key
         table (describe how one table imports another's key.) This
@@ -2076,8 +2076,8 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         (most tables only import a foreign key from a table once.). They
         are ordered by FKTABLE_CAT, FKTABLE_SCHEM, FKTABLE_NAME, and
         KEY_SEQ.
-        
-        
+
+
         <p>Each foreign key column description has the following columns:
         </p>
         <ol>
@@ -2186,22 +2186,22 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             the table name that imports the key
         @returns
             each row is a foreign key column description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getCrossReference( 
-        [in]any primaryCatalog, [in]string primarySchema, 
-        [in]string primaryTable, 
-        [in]any foreignCatalog, [in]string foreignSchema, 
-        [in]string foreignTable) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getCrossReference(
+        [in]any primaryCatalog, [in]string primarySchema,
+        [in]string primaryTable,
+        [in]any foreignCatalog, [in]string foreignSchema,
+        [in]string foreignTable) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a description of all the standard SQL types supported by
         this database. They are ordered by DATA_TYPE and then by how
         closely the data type maps to the corresponding SDBC SQL type.
-        
-        
-        
+
+
+
         <p>Each type description has the following columns:
         </p>
         <ol>
@@ -2285,16 +2285,16 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ol>
         @returns
             each row is a SQL type description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getTypeInfo() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getTypeInfo() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** gets a description of a table's indices and statistics. They are
         ordered by NON_UNIQUE, TYPE, INDEX_NAME, and ORDINAL_POSITION.
-        
-        
+
+
         <p>Each index column description has the following columns:
         </p>
         <ol>
@@ -2373,174 +2373,174 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             when <TRUE/>, result is allowed to reflect approximate or out of data values; when <FALSE/>, results are requested to be accurate
         @returns
             each row is an index column description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getIndexInfo([in]any catalog, [in]string schema, [in]string table, 
-            [in]boolean unique, [in]boolean approximate) 
-                    raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getIndexInfo([in]any catalog, [in]string schema, [in]string table,
+            [in]boolean unique, [in]boolean approximate)
+                    raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Does the database support the given result set type?
         @param setType
-            defined in 
+            defined in
             <type scop="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsResultSetType([in]long setType) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
-    /** Does the database support the concurrency type in combination 
+    boolean supportsResultSetType([in]long setType) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** Does the database support the concurrency type in combination
         with the given result set type?
         @param setType
-            defined in 
+            defined in
             <type scop="com::sun::star::sdbc">ResultSetType</type>
         @param concurrency
-            defined in 
+            defined in
             <type scop="com::sun::star::sdbc">ResultSetConcurrency</type>
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsResultSetConcurrency([in]long setType, 
-                                                  [in]long concurrency) 
-      raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsResultSetConcurrency([in]long setType,
+                                                  [in]long concurrency)
+      raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** indicates whether a result set's own updates are visible.
         @param setType
-            defined in 
+            defined in
             <type scop="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean ownUpdatesAreVisible([in]long setType) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean ownUpdatesAreVisible([in]long setType) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** indicates whether a result set's own deletes are visible.
         @param setType
-            defined in 
+            defined in
             <type scop="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean ownDeletesAreVisible([in]long setType) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean ownDeletesAreVisible([in]long setType) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** indicates whether a result set's own inserts are visible.
         @param setType
-            defined in 
+            defined in
             <type scop="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean ownInsertsAreVisible([in]long setType) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean ownInsertsAreVisible([in]long setType) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** indicates whether updates made by others are visible.
         @param setType
-            defined in 
+            defined in
             <type scop="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean othersUpdatesAreVisible([in]long setType) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean othersUpdatesAreVisible([in]long setType) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** indicates whether deletes made by others are visible.
         @param setType
-            defined in 
+            defined in
             <type scop="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean othersDeletesAreVisible([in]long setType) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean othersDeletesAreVisible([in]long setType) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** indicates whether inserts made by others are visible.
         @param setType
-            defined in 
+            defined in
             <type scop="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean othersInsertsAreVisible([in]long setType) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean othersInsertsAreVisible([in]long setType) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** indicates whether or not a visible row update can be detected by
-        calling the method 
+        calling the method
         <code>XResultSet.rowUpdated</code>.
         @param setType
-            defined in 
+            defined in
             <type scop="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean updatesAreDetected([in]long setType) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean updatesAreDetected([in]long setType) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** indicates whether or not a visible row delete can be detected by
-        calling 
+        calling
         <member scope="com::sun::star::sdbc">XResultSet::rowDeleted()</member>
         . If deletesAreDetected()
         returns <FALSE/>, then deleted rows are removed from the result set.
         @param setType
-            defined in 
+            defined in
             <type scop="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean deletesAreDetected([in]long setType) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean deletesAreDetected([in]long setType) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** indicates whether or not a visible row insert can be detected
-        by calling 
+        by calling
         <member scope="com::sun::star::sdbc">XResultSet::rowInserted().</member>
         @param setType
-            defined in 
+            defined in
             <type scop="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean insertsAreDetected([in]long setType) raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean insertsAreDetected([in]long setType) raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** indicates whether the driver supports batch updates.
         @returns
             <TRUE/> if so
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    boolean supportsBatchUpdates() raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    boolean supportsBatchUpdates() raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** Gets a description of the user-defined types defined in a particular
         schema. Schema-specific UDTs may have type OBJECT, STRUCT,
         or DISTINCT.
-        
-        
+
+
         <p>Only types matching the catalog, schema, type name, and type
         criteria are returned. They are ordered by DATA_TYPE, TYPE_SCHEM,
         and TYPE_NAME. The type name parameter may be a fully-qualified
@@ -2584,27 +2584,27 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             a list of user-named types to include (OBJECT, STRUCT, or DISTINCT)
         @returns
             each row is a type description
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XResultSet getUDTs([in]any catalog, [in]string schemaPattern, 
-              [in]string typeNamePattern, [in]sequence<long> types) 
-      raises (SQLException); 
-    //------------------------------------------------------------------------- 
-     
+    XResultSet getUDTs([in]any catalog, [in]string schemaPattern,
+              [in]string typeNamePattern, [in]sequence<long> types)
+      raises (SQLException);
+    //-------------------------------------------------------------------------
+
     /** retrieves the connection that produced this metadata object.
         @returns
             the Connection object
-        @throws SQLException 
+        @throws SQLException
             if a database access error occurs.
      */
-    XConnection getConnection() raises (SQLException); 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    XConnection getConnection() raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

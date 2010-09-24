@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@
 #include "sax/dllapi.h"
 #include "sax/fshelper.hxx"
 
-#define SERIALIZER_IMPLEMENTATION_NAME	"com.sun.star.comp.extensions.xml.sax.FastSerializer"
-#define SERIALIZER_SERVICE_NAME		"com.sun.star.xml.sax.FastSerializer"
+#define SERIALIZER_IMPLEMENTATION_NAME  "com.sun.star.comp.extensions.xml.sax.FastSerializer"
+#define SERIALIZER_SERVICE_NAME     "com.sun.star.xml.sax.FastSerializer"
 
 namespace sax_fastparser {
 
@@ -53,8 +53,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > getOutputStream() {return mxOutputStream;}
 
     // The implementation details
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > 	getSupportedServiceNames_Static(void);
-    static ::rtl::OUString 				                        getImplementationName_Static();
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString >   getSupportedServiceNames_Static(void);
+    static ::rtl::OUString                                      getImplementationName_Static();
 
     // XFastSerializer
     virtual void SAL_CALL startDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -134,14 +134,21 @@ private:
         ForMerge() : maData(), maPostponed() {}
 
         Int8Sequence& getData();
+#if DEBUG
+        void print();
+#endif
 
         void prepend( const Int8Sequence &rWhat );
         void append( const Int8Sequence &rWhat );
         void postpone( const Int8Sequence &rWhat );
-        
+
     private:
         static void merge( Int8Sequence &rTop, const Int8Sequence &rMerge, bool bAppend );
     };
+
+#if DEBUG
+        void printMarkStack( );
+#endif
 
     ::std::stack< ForMerge > maMarkStack;
 

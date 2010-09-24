@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -292,7 +292,7 @@ BOOL OutputDevice::DrawNativeControl( ControlType nType,
     aTestRegion.Intersect( rControlRegion );
     if( aTestRegion == rControlRegion )
         nState |= CTRL_CACHING_ALLOWED;   // control is not clipped, caching allowed
-    
+
     BOOL bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
 
     return bRet;
@@ -332,7 +332,7 @@ BOOL OutputDevice::DrawNativeControlText(ControlType nType,
     Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
     BOOL bRet = mpGraphics->DrawNativeControlText(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
-    
+
     return bRet;
 }
 
@@ -365,7 +365,7 @@ BOOL OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 rNativeContentRegion, this );
     if( bRet )
     {
-        // transform back native regions    
+        // transform back native regions
         rNativeBoundingRegion = ImplDevicePixelToLogic( rNativeBoundingRegion );
         rNativeContentRegion = ImplDevicePixelToLogic( rNativeContentRegion );
     }

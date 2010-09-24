@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 #include <editeng/mutxhelp.hxx>
 #include "svx/svxdllapi.h"
 
-#include <cppuhelper/implbase5.hxx> 
+#include <cppuhelper/implbase5.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <svx/unoprov.hxx>
@@ -66,8 +66,8 @@ class SvxDrawPageList;
 /***********************************************************************
 * Macros fuer Umrechnung Twips<->100tel mm                             *
 ***********************************************************************/
-#define	TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
-#define	MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
+#define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
+#define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
 
 /***********************************************************************
 *                                                                      *
@@ -83,12 +83,12 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper5< ::com::sun:
  protected:
     cppu::OBroadcastHelper mrBHelper;
 
-    SdrPage*  		mpPage;
-    SdrModel* 		mpModel;
-    SdrView*		mpView;
+    SdrPage*        mpPage;
+    SdrModel*       mpModel;
+    SdrView*        mpView;
 
-    void	_SelectObjectsInView( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& aShapes, SdrPageView* 	pPageView ) throw ();
-    void	_SelectObjectInView( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, SdrPageView* 	pPageView ) throw();
+    void    _SelectObjectsInView( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& aShapes, SdrPageView*   pPageView ) throw ();
+    void    _SelectObjectInView( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, SdrPageView*  pPageView ) throw();
 
     virtual void disposing() throw();
 

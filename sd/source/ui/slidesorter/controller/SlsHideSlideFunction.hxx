@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,14 +39,14 @@ namespace sd { namespace slidesorter { namespace controller {
     hidden.  When all selected pages have the same state this state is
     toggled for all of them
 */
-class HideSlideFunction 
+class HideSlideFunction
     : public SlideFunction
 {
 public:
     TYPEINFO();
 
     virtual ~HideSlideFunction (void);
-    
+
     static FunctionReference Create( SlideSorter& rSlideSorter, SfxRequest& rRequest );
     virtual void DoExecute( SfxRequest& rReq );
 
@@ -58,7 +58,7 @@ public:
         excluded from the slide show.
     */
     static ExclusionState GetExclusionState (model::PageEnumeration& rPageSet);
-    
+
 protected:
     HideSlideFunction (
         SlideSorter& rSlideSorter,

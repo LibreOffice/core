@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,26 +59,26 @@ class ContentBroker_Impl;
   */
 class UCBHELPER_DLLPUBLIC ContentBroker
 {
-    ContentBroker_Impl* 	m_pImpl;
+    ContentBroker_Impl*     m_pImpl;
     // The "one and only" Broker.
-    static ContentBroker* 	m_pTheBroker;
+    static ContentBroker*   m_pTheBroker;
 
 private:
-    UCBHELPER_DLLPRIVATE ContentBroker( const ContentBroker& ); 				// n.i.
-    UCBHELPER_DLLPRIVATE ContentBroker& operator=( const ContentBroker& ); 	// n.i.
+    UCBHELPER_DLLPRIVATE ContentBroker( const ContentBroker& );                 // n.i.
+    UCBHELPER_DLLPRIVATE ContentBroker& operator=( const ContentBroker& );  // n.i.
 
     /** Constructor.
       *
       * @param rxSMgr is a Service Manager.
-      *	@param rArguments are the arguments to pass to the
-      *	       com.sun.star.ucb.UniversalContentBroker service when creating it.
-      *	       Currently, this must be a sequence containing exactly two
+      * @param rArguments are the arguments to pass to the
+      *        com.sun.star.ucb.UniversalContentBroker service when creating it.
+      *        Currently, this must be a sequence containing exactly two
       *        strings, a primary and a secondary configuration key.
       *        Refer to http://ucb.openoffice.org/docs/ucb-configuration.html
       *        for more information on UCB configuration.
       */
     UCBHELPER_DLLPRIVATE ContentBroker( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::lang::XMultiServiceFactory >&	rSMgr,
+                     ::com::sun::star::lang::XMultiServiceFactory >&    rSMgr,
                    const ::com::sun::star::uno::Sequence<
                     ::com::sun::star::uno::Any >& rArguments );
 
@@ -89,7 +89,7 @@ private:
       *        the new UCB.
       */
     UCBHELPER_DLLPRIVATE ContentBroker( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::lang::XMultiServiceFactory >&	rSMgr,
+                     ::com::sun::star::lang::XMultiServiceFactory >&    rSMgr,
                    const ContentProviderDataList & rData );
 
 protected:
@@ -100,20 +100,20 @@ protected:
 
 public:
     /** Initialize "the one and only" Broker.  This method must be called
-      *	exactly once, before the Broker is used in any way.
+      * exactly once, before the Broker is used in any way.
       *
-      *	@param rSMgr is a factory to create services needed in the Broker's
-      *	       implementation.
+      * @param rSMgr is a factory to create services needed in the Broker's
+      *        implementation.
       *
-      *	@param rArguments are the arguments to pass to the
-      *	       com.sun.star.ucb.UniversalContentBroker service when creating
+      * @param rArguments are the arguments to pass to the
+      *        com.sun.star.ucb.UniversalContentBroker service when creating
       *        it. Currently, this must be a sequence containing exactly two
       *        strings, a primary and a secondary configuration key.
       *        Refer to http://ucb.openoffice.org/docs/ucb-configuration.html
       *        for more information on UCB configuration.
       *
-      *	@return True if creation and possible configuration of the Broker
-      *	        was successful.
+      * @return True if creation and possible configuration of the Broker
+      *         was successful.
       */
     static sal_Bool
     initialize( const::com::sun::star::uno::Reference<
@@ -122,16 +122,16 @@ public:
                     ::com::sun::star::uno::Any >& rArguments );
 
     /** Initialize "the one and only" Broker.  This method must be called
-      *	exactly once, before the Broker is used in any way.
+      * exactly once, before the Broker is used in any way.
       *
-      *	@param rSMgr is a factory to create services needed in the Broker's
-      *	       implementation.
+      * @param rSMgr is a factory to create services needed in the Broker's
+      *        implementation.
       *
       * @param rData are the data for the for the content providers for
       *        the UCB to initialize.
       *
-      *	@return True if creation and possible configuration of the Broker
-      *	        was successful.
+      * @return True if creation and possible configuration of the Broker
+      *         was successful.
       */
     static sal_Bool
     initialize( const::com::sun::star::uno::Reference<
@@ -139,7 +139,7 @@ public:
                 const ContentProviderDataList & rData );
 
     /** Deinitialize "the one and only" Broker.  Once this method has been
-      *	called, the Broker must not be used any longer.
+      * called, the Broker must not be used any longer.
       */
     static void
     deinitialize();

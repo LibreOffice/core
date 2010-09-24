@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,28 +107,28 @@ using namespace svtools;
 
 extern ::rtl::OUString CreateExactSizeText_Impl( sal_Int64 nSize ); // fileview.cxx
 
-#define SPLITSET_ID			0
-#define COLSET_ID			1
-#define ICONWIN_ID			2
-#define FILEWIN_ID			3
-#define FRAMEWIN_ID			4
+#define SPLITSET_ID         0
+#define COLSET_ID           1
+#define ICONWIN_ID          2
+#define FILEWIN_ID          3
+#define FRAMEWIN_ID         4
 
-#define ICON_POS_NEWDOC		0
-#define ICON_POS_TEMPLATES	1
-#define ICON_POS_MYDOCS		2
-#define ICON_POS_SAMPLES	3
+#define ICON_POS_NEWDOC     0
+#define ICON_POS_TEMPLATES  1
+#define ICON_POS_MYDOCS     2
+#define ICON_POS_SAMPLES    3
 
-#define ASCII_STR(s)					::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
-#define VIEWSETTING_NEWFROMTEMPLATE		ASCII_STR("NewFromTemplate")
-#define VIEWSETTING_SELECTEDGROUP		ASCII_STR("SelectedGroup")
-#define VIEWSETTING_SELECTEDVIEW		ASCII_STR("SelectedView")
-#define VIEWSETTING_SPLITRATIO			ASCII_STR("SplitRatio")
-#define VIEWSETTING_LASTFOLDER			ASCII_STR("LastFolder")
+#define ASCII_STR(s)                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
+#define VIEWSETTING_NEWFROMTEMPLATE     ASCII_STR("NewFromTemplate")
+#define VIEWSETTING_SELECTEDGROUP       ASCII_STR("SelectedGroup")
+#define VIEWSETTING_SELECTEDVIEW        ASCII_STR("SelectedView")
+#define VIEWSETTING_SPLITRATIO          ASCII_STR("SplitRatio")
+#define VIEWSETTING_LASTFOLDER          ASCII_STR("LastFolder")
 
 struct FolderHistory
 {
-    String		m_sURL;
-    ULONG		m_nGroup;
+    String      m_sURL;
+    ULONG       m_nGroup;
 
     FolderHistory( const String& _rURL, sal_Int32 _nGroup ) :
         m_sURL( _rURL ), m_nGroup( _nGroup ) {}
@@ -311,7 +311,7 @@ void SvtDummyHeaderBar_Impl::UpdateBackgroundColor()
 
 SvtDummyHeaderBar_Impl::SvtDummyHeaderBar_Impl( Window* pPar ) : Window( pPar )
 {
-    SetSizePixel( HeaderBar( this, 0 ).CalcWindowSizePixel() );	// HeaderBar used only to calculate size
+    SetSizePixel( HeaderBar( this, 0 ).CalcWindowSizePixel() ); // HeaderBar used only to calculate size
 
     UpdateBackgroundColor();
 }
@@ -370,7 +370,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     Image aImage( SvtResId( bHiContrast ? IMG_SVT_NEWDOC_HC : IMG_SVT_NEWDOC ) );
     nMaxTextLength = aImage.GetSizePixel().Width();
     String aEntryStr = String( SvtResId( STR_SVT_NEWDOC ) );
-    SvxIconChoiceCtrlEntry*	pEntry =
+    SvxIconChoiceCtrlEntry* pEntry =
         aIconCtrl.InsertEntry( aEntryStr, aImage, ICON_POS_NEWDOC );
     pEntry->SetUserData( new String( aNewDocumentRootURL ) );
     pEntry->SetQuickHelpText( String( SvtResId( STR_SVT_NEWDOC_HELP ) ) );
@@ -427,7 +427,7 @@ SvtIconWindow_Impl::~SvtIconWindow_Impl()
     }
 }
 
-SvxIconChoiceCtrlEntry*	SvtIconWindow_Impl::GetEntry( const String& rURL ) const
+SvxIconChoiceCtrlEntry* SvtIconWindow_Impl::GetEntry( const String& rURL ) const
 {
     SvxIconChoiceCtrlEntry* pEntry = NULL;
     for ( ULONG i = 0; i < aIconCtrl.GetEntryCount(); ++i )
@@ -517,7 +517,7 @@ ULONG SvtIconWindow_Impl::GetSelectEntryPos() const
 
 void SvtIconWindow_Impl::SetCursorPos( ULONG nPos )
 {
-    SvxIconChoiceCtrlEntry*	pEntry = aIconCtrl.GetEntry( nPos );
+    SvxIconChoiceCtrlEntry* pEntry = aIconCtrl.GetEntry( nPos );
     aIconCtrl.SetCursor( pEntry );
     aIconCtrl.Invalidate();
     aIconCtrl.Update();
@@ -545,7 +545,7 @@ long SvtIconWindow_Impl::CalcHeight() const
 
 sal_Bool SvtIconWindow_Impl::IsRootURL( const String& rURL ) const
 {
-    return	rURL == aNewDocumentRootURL ||
+    return  rURL == aNewDocumentRootURL ||
             rURL == aTemplateRootURL ||
             rURL == aMyDocumentsRootURL ||
             rURL == aSamplesFolderRootURL;
@@ -603,9 +603,9 @@ SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( SvtTemplateWindow* pParent ) :
 
     Window( pParent, WB_DIALOGCONTROL | WB_TABSTOP | WB_BORDER | WB_3DLOOK ),
 
-    rParent				( *pParent ),
-    aFileView			( this, SvtResId( CTRL_FILEVIEW ), FILEVIEW_SHOW_TITLE ),
-    bIsTemplateFolder	( sal_False )
+    rParent             ( *pParent ),
+    aFileView           ( this, SvtResId( CTRL_FILEVIEW ), FILEVIEW_SHOW_TITLE ),
+    bIsTemplateFolder   ( sal_False )
 
 {
     aFileView.SetStyle( aFileView.GetStyle() | WB_DIALOGCONTROL | WB_TABSTOP );
@@ -708,8 +708,8 @@ void SvtFileViewWindow_Impl::Resize()
 {
     Size aWinSize = GetOutputSizePixel();
 
-    static int	x = 0;
-    static int	y = 0;
+    static int  x = 0;
+    static int  y = 0;
 
     aWinSize.nA += x;
     aWinSize.nB += y;
@@ -978,13 +978,13 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
                     pTextWin->EnableInput( FALSE, TRUE );
                     if ( pTextWin->IsReallyVisible() )
                     {
-                        sal_Bool	b = sal_True;
+                        sal_Bool    b = sal_True;
                         Sequence < PropertyValue > aArgs( 4 );
                         aArgs[0].Name = ASCII_STR("Preview");
                         aArgs[0].Value.setValue( &b, ::getBooleanCppuType() );
                         aArgs[1].Name = ASCII_STR("ReadOnly");
                         aArgs[1].Value.setValue( &b, ::getBooleanCppuType() );
-                        aArgs[2].Name = ASCII_STR("AsTemplate");	// prevents getting an empty URL with getURL()!
+                        aArgs[2].Name = ASCII_STR("AsTemplate");    // prevents getting an empty URL with getURL()!
 
                         uno::Reference < task::XInteractionHandler > xInteractionHandler( ::comphelper::getProcessServiceFactory()->createInstance(
                             ::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler") ), uno::UNO_QUERY );
@@ -995,11 +995,11 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
                         aArgs[2].Value.setValue( &b, ::getBooleanCppuType() );
                         xDisp->dispatch( aURL, aArgs );
 
-                        ::rtl::OUString											aDispURL;
-                        Reference< ::com::sun::star::frame::XController >		xCtrl = xFrame->getController();
+                        ::rtl::OUString                                         aDispURL;
+                        Reference< ::com::sun::star::frame::XController >       xCtrl = xFrame->getController();
                         if( xCtrl.is() )
                         {
-                            Reference< ::com::sun::star::frame::XModel >		xMdl = xCtrl->getModel();
+                            Reference< ::com::sun::star::frame::XModel >        xMdl = xCtrl->getModel();
                             if( xMdl.is() )
                                 aDispURL = xMdl->getURL();
                         }
@@ -1055,10 +1055,10 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
 
     Window( pParent, WB_DIALOGCONTROL ),
 
-    aFileViewTB				( this, SvtResId( TB_SVT_FILEVIEW ) ),
-    aFrameWinTB				( this, SvtResId( TB_SVT_FRAMEWIN ) ),
-    aSplitWin				( this, WB_DIALOGCONTROL | WB_NOSPLITDRAW ),
-    pHistoryList			( NULL )
+    aFileViewTB             ( this, SvtResId( TB_SVT_FILEVIEW ) ),
+    aFrameWinTB             ( this, SvtResId( TB_SVT_FRAMEWIN ) ),
+    aSplitWin               ( this, WB_DIALOGCONTROL | WB_NOSPLITDRAW ),
+    pHistoryList            ( NULL )
 
 {
     // create windows
@@ -1076,7 +1076,7 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
 
     // create the split items
     aSplitWin.SetAlign( WINDOWALIGN_LEFT );
-    long nWidth = pIconWin->GetMaxTextLength() * 8 / 7 + 1;	// extra space for border
+    long nWidth = pIconWin->GetMaxTextLength() * 8 / 7 + 1; // extra space for border
     aSplitWin.InsertItem( ICONWIN_ID, pIconWin, nWidth, SPLITWINDOW_APPEND, 0, SWIB_FIXED );
     aSplitWin.InsertItem( FILEWIN_ID, pFileWin, 50, SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE );
     aSplitWin.InsertItem( FRAMEWIN_ID, pFrameWin, 50, SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE );
@@ -1404,7 +1404,7 @@ void SvtTemplateWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-    if ( ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS )	||
+    if ( ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) ||
            ( rDCEvt.GetType() == DATACHANGED_DISPLAY ) ) &&
          ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
@@ -1551,9 +1551,9 @@ long SvtTemplateWindow::CalcHeight() const
 void SvtTemplateWindow::ReadViewSettings()
 {
     // defaults
-    sal_Int32 nSelectedGroup	=	ICON_POS_TEMPLATES;
-    sal_Int32 nSelectedView		=	TI_DOCTEMPLATE_DOCINFO;
-    double nSplitRatio			=	0.5;
+    sal_Int32 nSelectedGroup    =   ICON_POS_TEMPLATES;
+    sal_Int32 nSelectedView     =   TI_DOCTEMPLATE_DOCINFO;
+    double nSplitRatio          =   0.5;
     ::rtl::OUString sLastFolder;
 
     SvtViewOptions aViewSettings( E_DIALOG, VIEWSETTING_NEWFROMTEMPLATE );
@@ -1568,8 +1568,8 @@ void SvtTemplateWindow::ReadViewSettings()
         aViewSettings.GetUserItem( VIEWSETTING_LASTFOLDER ) >>= sLastFolder;
     }
     // normalize
-    if ( nSelectedGroup < ICON_POS_NEWDOC )		nSelectedGroup = ICON_POS_NEWDOC;
-    if ( nSelectedGroup > ICON_POS_SAMPLES )	nSelectedGroup = ICON_POS_SAMPLES;
+    if ( nSelectedGroup < ICON_POS_NEWDOC )     nSelectedGroup = ICON_POS_NEWDOC;
+    if ( nSelectedGroup > ICON_POS_SAMPLES )    nSelectedGroup = ICON_POS_SAMPLES;
 
     if ( ( TI_DOCTEMPLATE_DOCINFO != nSelectedView ) && ( TI_DOCTEMPLATE_PREVIEW != nSelectedView ) )
         nSelectedView = TI_DOCTEMPLATE_DOCINFO;
@@ -1609,23 +1609,23 @@ void SvtTemplateWindow::WriteViewSettings()
     Sequence< NamedValue > aSettings(4);
 
     // the selected group
-    aSettings[0].Name	=	VIEWSETTING_SELECTEDGROUP;
+    aSettings[0].Name   =   VIEWSETTING_SELECTEDGROUP;
     pIconWin->SetFocus();
-    aSettings[0].Value	<<=	(sal_Int32)pIconWin->GetCursorPos( );
+    aSettings[0].Value  <<= (sal_Int32)pIconWin->GetCursorPos( );
 
     // the selected view mode
-    aSettings[1].Name	=	VIEWSETTING_SELECTEDVIEW;
-    aSettings[1].Value	<<=	sal_Int32( aFrameWinTB.IsItemChecked( TI_DOCTEMPLATE_DOCINFO ) ? TI_DOCTEMPLATE_DOCINFO : TI_DOCTEMPLATE_PREVIEW );
+    aSettings[1].Name   =   VIEWSETTING_SELECTEDVIEW;
+    aSettings[1].Value  <<= sal_Int32( aFrameWinTB.IsItemChecked( TI_DOCTEMPLATE_DOCINFO ) ? TI_DOCTEMPLATE_DOCINFO : TI_DOCTEMPLATE_PREVIEW );
 
     // the split ratio
-    aSettings[2].Name	=	VIEWSETTING_SPLITRATIO;
+    aSettings[2].Name   =   VIEWSETTING_SPLITRATIO;
     sal_Int32 nSplitFileSize = aSplitWin.GetItemSize( FILEWIN_ID );
     sal_Int32 nSplitFileAndFrameSize = nSplitFileSize + aSplitWin.GetItemSize( FRAMEWIN_ID );
-    aSettings[2].Value	<<=	double( 1.0 * nSplitFileSize / nSplitFileAndFrameSize );
+    aSettings[2].Value  <<= double( 1.0 * nSplitFileSize / nSplitFileAndFrameSize );
 
     // last folder
-    aSettings[3].Name	=	VIEWSETTING_LASTFOLDER;
-    aSettings[3].Value	<<=	::rtl::OUString( pFileWin->GetFolderURL() );
+    aSettings[3].Name   =   VIEWSETTING_LASTFOLDER;
+    aSettings[3].Value  <<= ::rtl::OUString( pFileWin->GetFolderURL() );
 
     // write
     SvtViewOptions aViewSettings( E_DIALOG, VIEWSETTING_NEWFROMTEMPLATE );
@@ -1643,10 +1643,10 @@ void SvtTemplateWindow::SelectFolder(sal_Int32 nFolderPosition)
 
 struct SvtTmplDlg_Impl
 {
-    SvtTemplateWindow*	pWin;
-    String				aTitle;
-    Timer				aUpdateTimer;
-    sal_Bool			bSelectNoOpen;
+    SvtTemplateWindow*  pWin;
+    String              aTitle;
+    Timer               aUpdateTimer;
+    sal_Bool            bSelectNoOpen;
 
     uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 
@@ -1958,7 +1958,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
     if ( xTemplates.is() )
     {
         if ( _pEventSource )
-        {	// it was no direct call, which means it was triggered by the timer, which means we alread checked the necessity
+        {   // it was no direct call, which means it was triggered by the timer, which means we alread checked the necessity
             WaitObject aWaitCursor( this );
             xTemplates->update();
             if ( pImpl->pWin->IsTemplateFolderOpen() )
@@ -1972,7 +1972,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
             // check if we really need to do the update
             ::svt::TemplateFolderCache aCache;
             if ( aCache.needsUpdate() )
-            {	// yes -> do it asynchronous (it will take a noticeable time)
+            {   // yes -> do it asynchronous (it will take a noticeable time)
 
                 // (but first store the current state)
                 aCache.storeState();

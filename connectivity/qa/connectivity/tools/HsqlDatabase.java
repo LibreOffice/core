@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ public class HsqlDatabase extends AbstractDatabase
 
         final XStorable storable = (XStorable) UnoRuntime.queryInterface(XStorable.class, m_databaseDocument);
         storable.storeAsURL( m_databaseDocumentFile, new PropertyValue[]
-            {	new PropertyValue( "PickListEntry", 0, false, PropertyState.DIRECT_VALUE )
+            {   new PropertyValue( "PickListEntry", 0, false, PropertyState.DIRECT_VALUE )
             } );
     }
 

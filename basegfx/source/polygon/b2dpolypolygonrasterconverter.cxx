@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ namespace basegfx
 
             // current size of index list
             sal_uInt32 m_current_size;
-                            
+
             // last known size of index list
             sal_uInt32 m_previous_size;
 
@@ -81,7 +81,7 @@ namespace basegfx
     };
 
     inline radixSort::radixSort( void ) {
-        
+
         m_indices1 = NULL;
         m_indices2 = NULL;
         m_current_size = 0;
@@ -97,7 +97,7 @@ namespace basegfx
     }
 
     bool radixSort::resize( sal_uInt32 nNumElements ) {
-        
+
         if(nNumElements==m_previous_size)
             return true;
 
@@ -125,7 +125,7 @@ namespace basegfx
 
             m_current_size = nNumElements;
         }
-        
+
         m_previous_size = nNumElements;
 
         // initialize indices
@@ -144,7 +144,7 @@ namespace basegfx
 
         // clear counters
         sal_uInt32 *ptr = m_counter;
-        for(int i=0; i<64; ++i) 
+        for(int i=0; i<64; ++i)
         {
             *ptr++ = 0;
             *ptr++ = 0;
@@ -177,7 +177,7 @@ namespace basegfx
         bool bSorted = true;
         while(p!=pe) {
             float value = *(float *)(((sal_uInt8 *)pInput)+((*Indices++)*dwStride));
-            if(value<previous_value)	{
+            if(value<previous_value)    {
                 bSorted = false;
                 break;
             }
@@ -244,7 +244,7 @@ namespace basegfx
                         sal_uInt32 id = *Indices++;
                         m_indices2[m_offset[InputBytes[id*dwStride]]++] = id;
                     }
-                    sal_uInt32 *Tmp	= m_indices1;
+                    sal_uInt32 *Tmp = m_indices1;
                     m_indices1 = m_indices2;
                     m_indices2 = Tmp;
                 }
@@ -264,7 +264,7 @@ namespace basegfx
                         if(Radix<128) m_indices2[m_offset[Radix]++] = m_indices1[i];
                         else m_indices2[--m_offset[Radix]] = m_indices1[i];
                     }
-                    sal_uInt32 *Tmp	= m_indices1;
+                    sal_uInt32 *Tmp = m_indices1;
                     m_indices1 = m_indices2;
                     m_indices2 = Tmp;
                 }
@@ -272,7 +272,7 @@ namespace basegfx
                     if(unique_value>=128) {
                         for(i=0;i<nNumElements;i++)
                             m_indices2[i] = m_indices1[nNumElements-i-1];
-                        sal_uInt32 *Tmp	= m_indices1;
+                        sal_uInt32 *Tmp = m_indices1;
                         m_indices1 = m_indices2;
                         m_indices2 = Tmp;
                     }
@@ -286,7 +286,7 @@ namespace basegfx
     //************************************************************
     // Internal vertex storage of B2DPolyPolygonRasterConverter
     //************************************************************
-    
+
     inline B2DPolyPolygonRasterConverter::Vertex::Vertex() :
         aP1(),
         aP2(),
@@ -312,14 +312,14 @@ namespace basegfx
         class ImplLineNode
         {
         public:
-            sal_Int32	mnYCounter;
-            float		mfXPos;
-            float		mfXDelta;
-            bool		mbDownwards;
-        
+            sal_Int32   mnYCounter;
+            float       mfXPos;
+            float       mfXDelta;
+            bool        mbDownwards;
+
         public:
             /**rP1 and rP2 must not have equal y values, when rounded
-               to integer! 
+               to integer!
             */
             ImplLineNode(const B2DPoint& rP1, const B2DPoint& rP2, bool bDown) :
                 mnYCounter( fround(rP2.getY()) - fround(rP1.getY()) ),
@@ -330,11 +330,11 @@ namespace basegfx
             }
 
             /// get current x position
-            const float& getXPos() const 
-            { 
-                return mfXPos; 
+            const float& getXPos() const
+            {
+                return mfXPos;
             }
-        
+
             /// returns true, if line ends on this Y value
             float nextLine()
             {
@@ -379,19 +379,19 @@ namespace basegfx
             }
         };
     }
-    
+
     void B2DPolyPolygonRasterConverter::init()
     {
         if(!maPolyPolyRectangle.isEmpty())
         {
-            const sal_Int32	nMinY( fround(maPolyPolyRectangle.getMinY()) );
+            const sal_Int32 nMinY( fround(maPolyPolyRectangle.getMinY()) );
             const sal_Int32 nScanlines(fround(maPolyPolyRectangle.getMaxY()) - nMinY);
 
             maScanlines.resize( nScanlines+1 );
 
-            // add all polygons 
-            for( sal_uInt32 i(0), nCount(maPolyPolygon.count()); 
-                 i < nCount; 
+            // add all polygons
+            for( sal_uInt32 i(0), nCount(maPolyPolygon.count());
+                 i < nCount;
                  ++i )
             {
                 // add all vertices
@@ -464,7 +464,7 @@ namespace basegfx
     B2DPolyPolygonRasterConverter::B2DPolyPolygonRasterConverter( const B2DPolyPolygon& rPolyPolyRaster,
                                                                   const B2DRectangle&   rRasterArea ) :
         maPolyPolygon( rPolyPolyRaster ),
-        maPolyPolyRectangle( 
+        maPolyPolyRectangle(
             getCombinedBounds( rPolyPolyRaster,
                                rRasterArea ) ),
         maScanlines()
@@ -511,12 +511,12 @@ namespace basegfx
         if( maScanlines.empty() )
             return; // no scanlines at all -> bail out
 
-        const sal_Int32	nMinY( fround(maPolyPolyRectangle.getMinY()) );
+        const sal_Int32 nMinY( fround(maPolyPolyRectangle.getMinY()) );
         const sal_Int32 nScanlines(fround(maPolyPolyRectangle.getMaxY()) - nMinY);
 
         // Vector of currently active vertices. A vertex is active, if
         // it crosses or touches the current scanline.
-        VectorOfLineNodes	aActiveVertices;
+        VectorOfLineNodes   aActiveVertices;
 
         // mickey's optimized version...
         radixSort   rs;
@@ -540,7 +540,7 @@ namespace basegfx
             }
 
             // sort with increasing X
-            if(bSort) 
+            if(bSort)
             {
                 bSort = false;
 
@@ -565,7 +565,7 @@ namespace basegfx
             else
             {
                 const sal_Int32 nCurrY( nMinY + y );
-                
+
                 // scanline not empty - forward all scans to derived,
                 // according to selected fill rule
 
@@ -609,14 +609,14 @@ namespace basegfx
                                   i % 2 == 0 );
 
                             float delta = aActiveVertices[nIndex].nextLine();
-                            if(delta > 0.0f) 
+                            if(delta > 0.0f)
                             {
                                 if(aActiveVertices[nIndex].getXPos() > aActiveVertices[nNextIndex].getXPos())
                                     bSort = true;
                             }
-                            else if(delta < 0.0f) 
+                            else if(delta < 0.0f)
                             {
-                                if(i) 
+                                if(i)
                                 {
                                     sal_uInt32 nPrevIndex = sorted[i-1];
                                     if(aActiveVertices[nIndex].getXPos() < aActiveVertices[nPrevIndex].getXPos())
@@ -644,14 +644,14 @@ namespace basegfx
                                   nWindingNumber != 0 );
 
                             float delta = aActiveVertices[nIndex].nextLine();
-                            if(delta > 0.0f) 
+                            if(delta > 0.0f)
                             {
                                 if(aActiveVertices[nIndex].getXPos() > aActiveVertices[nNextIndex].getXPos())
                                     bSort = true;
                             }
-                            else if(delta < 0.0f) 
+                            else if(delta < 0.0f)
                             {
-                                if(i) 
+                                if(i)
                                 {
                                     sal_uInt32 nPrevIndex = sorted[i-1];
                                     if(aActiveVertices[nIndex].getXPos() < aActiveVertices[nPrevIndex].getXPos())
@@ -673,10 +673,10 @@ namespace basegfx
 
                 // also call nextLine on very last line node
                 sal_uInt32 nIndex = sorted[nb-1];
-                float delta = aActiveVertices[nIndex].nextLine();                
+                float delta = aActiveVertices[nIndex].nextLine();
                 if(delta < 0.0f)
                 {
-                    if(nb) 
+                    if(nb)
                     {
                         sal_uInt32 nPrevIndex = sorted[nb-2];
                         if(aActiveVertices[nIndex].getXPos() < aActiveVertices[nPrevIndex].getXPos())
@@ -691,7 +691,7 @@ namespace basegfx
                                                      ::boost::mem_fn( &ImplLineNode::isEnded ) ),
                                    aActiveVertices.end() );
             nb = aActiveVertices.size();
-            if(nb != nb_previous) 
+            if(nb != nb_previous)
             {
                 nb_previous = nb;
                 bSort = true;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ namespace basebmp
         const bool               bTopDown( rDevice->isTopDown() );
         const sal_Int32          nScanlineFormat( rDevice->getScanlineFormat() );
 
-        rOutputStream 
+        rOutputStream
             << "/* basebmp::BitmapDevice content dump */" << std::endl
             << "/* Width   = " << aSize.getX() << " */" << std::endl
             << "/* Height  = " << aSize.getY() << " */" << std::endl
@@ -98,7 +98,7 @@ namespace basebmp
         rOutputStream << std::hex;
         for( int y=0; y<aSize.getY(); ++y )
         {
-            for( int x=0; x<aSize.getX(); ++x ) 
+            for( int x=0; x<aSize.getX(); ++x )
                 rOutputStream << std::setw(8) << (sal_uInt32)rDevice->getPixel( basegfx::B2IPoint(x,y) ).toInt32() << " ";
             rOutputStream << std::endl;
         }

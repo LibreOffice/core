@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,27 +35,27 @@
 class Convert
 {
 public:
-    static void		Swap( long & nValue )
+    static void     Swap( long & nValue )
                     { nValue = SWAPLONG( nValue ); }
-    static void		Swap( ULONG & nValue )
+    static void     Swap( ULONG & nValue )
                     { nValue = SWAPLONG( nValue ); }
-    static void		Swap( short & nValue )
+    static void     Swap( short & nValue )
                     { nValue = SWAPSHORT( nValue ); }
-    static void		Swap( USHORT & nValue )
+    static void     Swap( USHORT & nValue )
                     { nValue = SWAPSHORT( nValue ); }
-    static void		Swap( Point & aPtr )
+    static void     Swap( Point & aPtr )
                     { Swap( aPtr.X() ); Swap( aPtr.Y() ); }
-    static void		Swap( Size & aSize )
+    static void     Swap( Size & aSize )
                     { Swap( aSize.Width() ); Swap( aSize.Height() ); }
-    static void		Swap( Rectangle & rRect )
+    static void     Swap( Rectangle & rRect )
                     { Swap( rRect.Top() ); Swap( rRect.Bottom() );
                       Swap( rRect.Left() ); Swap( rRect.Right() ); }
 /*
-    static USHORT	AnsiFloatSize() const { return 6; }
-    static float	AnsiToFloat( void * pAnsiFloat )
+    static USHORT   AnsiFloatSize() const { return 6; }
+    static float    AnsiToFloat( void * pAnsiFloat )
                     { return 0; }
-    static USHORT	AnsiDoubleSize() const { return 12; }
-    static double	AnsiToDouble( void * pAnsiDouble )
+    static USHORT   AnsiDoubleSize() const { return 12; }
+    static double   AnsiToDouble( void * pAnsiDouble )
                     { return 0; }
 */
 };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,7 +116,7 @@ public:
         ::com::sun::star::drawing::framework::XConfiguration> mxRequestedConfiguration;
 
     ViewShellBase* mpBase;
-    
+
     ::boost::shared_ptr<ResourceFactoryManager> mpResourceFactoryContainer;
 
     ::boost::shared_ptr<ConfigurationControllerResourceManager> mpResourceManager;
@@ -142,14 +142,14 @@ ConfigurationController::Lock::Lock (const Reference<XConfigurationController>& 
     : mxController(rxController)
 {
     OSL_ASSERT(mxController.is());
-    
+
     if (mxController.is())
         mxController->lock();
 }
 
- 
- 
-  
+
+
+
 ConfigurationController::Lock::~Lock (void)
 {
     if (mxController.is())
@@ -286,7 +286,7 @@ void SAL_CALL ConfigurationController::notifyEvent (
 
 
 //----- XConfigurationController ----------------------------------------------
-    
+
 void SAL_CALL ConfigurationController::lock (void)
     throw (RuntimeException)
 {
@@ -296,7 +296,7 @@ void SAL_CALL ConfigurationController::lock (void)
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-    
+
     ++mpImplementation->mnLockCount;
     if (mpImplementation->mpConfigurationUpdaterLock.get()==NULL)
         mpImplementation->mpConfigurationUpdaterLock
@@ -379,7 +379,7 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
                 requestResourceDeactivation(aResourceList[nIndex]);
             }
         }
-    
+
         Reference<XConfigurationChangeRequest> xRequest(
             new GenericConfigurationChangeRequest(
                 rxResourceId,
@@ -476,7 +476,7 @@ sal_Bool SAL_CALL ConfigurationController::hasPendingRequests (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
-    
+
     return ! mpImplementation->mpQueueProcessor->IsEmpty();
 }
 
@@ -595,7 +595,7 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
 
 
 //----- XResourceFactoryManager -----------------------------------------------
-    
+
 void SAL_CALL ConfigurationController::addResourceFactory(
     const OUString& sResourceURL,
     const Reference<XResourceFactory>& rxResourceFactory)
@@ -608,7 +608,7 @@ void SAL_CALL ConfigurationController::addResourceFactory(
 
 
 
-    
+
 void SAL_CALL ConfigurationController::removeResourceFactoryForURL(
     const OUString& sResourceURL)
     throw (RuntimeException)

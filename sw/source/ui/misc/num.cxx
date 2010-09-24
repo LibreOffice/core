@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -214,7 +214,7 @@ SwNumPositionTabPage::~SwNumPositionTabPage()
 --------------------------------------------------*/
 void SwNumPositionTabPage::InitControls()
 {
-    bInInintControl	= TRUE;
+    bInInintControl = TRUE;
     // --> OD 2008-02-01 #newlistlevelattrs#
     const bool bRelative = !bLabelAlignmentPosAndSpaceModeActive &&
                            aRelativeCB.IsEnabled() && aRelativeCB.IsChecked();
@@ -332,7 +332,7 @@ void SwNumPositionTabPage::InitControls()
         bSetDistEmpty = TRUE;
 
     if(bSameDist)
-        aDistNumMF	 .SetValue(aDistNumMF.Normalize(aNumFmtArr[nLvl]->GetCharTextDistance()), FUNIT_TWIP);
+        aDistNumMF   .SetValue(aDistNumMF.Normalize(aNumFmtArr[nLvl]->GetCharTextDistance()), FUNIT_TWIP);
     else
         aDistNumMF.SetText(aEmptyStr);
     if(bSameIndent)
@@ -425,7 +425,7 @@ void SwNumPositionTabPage::InitControls()
     if(TRUE == bSetDistEmpty)
         aDistBorderMF.SetText(aEmptyStr);
 
-    bInInintControl	= FALSE;
+    bInInintControl = FALSE;
 }
 
 /*-----------------03.12.97 10:02-------------------
@@ -603,7 +603,7 @@ void SwNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
 /*-----------------03.12.97 10:02-------------------
 
 --------------------------------------------------*/
-SfxTabPage*	SwNumPositionTabPage::Create( Window* pParent,
+SfxTabPage* SwNumPositionTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwNumPositionTabPage(pParent, rAttrSet);
@@ -644,8 +644,8 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
     if(eMetric == FUNIT_MM)
     {
         aDistBorderMF .SetDecimalDigits(1);
-        aDistNumMF	  .SetDecimalDigits(1);
-        aIndentMF	  .SetDecimalDigits(1);
+        aDistNumMF    .SetDecimalDigits(1);
+        aIndentMF     .SetDecimalDigits(1);
         // --> OD 2008-02-18 #newlistlevelattrs#
         aListtabMF.SetDecimalDigits(1);
         aAlignedAtMF.SetDecimalDigits(1);
@@ -653,8 +653,8 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
         // <--
     }
     aDistBorderMF .SetUnit( eMetric );
-    aDistNumMF	  .SetUnit( eMetric );
-    aIndentMF	  .SetUnit( eMetric );
+    aDistNumMF    .SetUnit( eMetric );
+    aIndentMF     .SetUnit( eMetric );
     // --> OD 2008-02-18 #newlistlevelattrs#
     aListtabMF.SetUnit( eMetric );
     aAlignedAtMF.SetUnit( eMetric );
@@ -839,7 +839,7 @@ IMPL_LINK( SwNumPositionTabPage, RelativeHdl, CheckBox *, pBox )
 
     }
     if(bSetValue)
-        aDistBorderMF.SetValue(aDistBorderMF.Normalize(nValue),	FUNIT_TWIP);
+        aDistBorderMF.SetValue(aDistBorderMF.Normalize(nValue), FUNIT_TWIP);
     else
         aDistBorderMF.SetText(aEmptyStr);
     aDistBorderMF.Enable(bOn || bSingleSelection||0 != pOutlineDlg);
@@ -1123,7 +1123,7 @@ void SwSvxNumBulletTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
             rCharFmtLB.Clear();
             rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
             SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
-            ::FillCharStyleListBox(rCharFmtLB,	pDocShell);
+            ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
             List aList;
             for(USHORT j = 0; j < rCharFmtLB.GetEntryCount(); j++)
             {
@@ -1147,7 +1147,7 @@ void SwSvxNumBulletTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
             SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
             aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< USHORT >(eMetric)) );
             rPage.PageCreated(aSet);
-// 			((SvxNumPositionTabPage&)rPage).SetWrtShell(&rWrtSh);
+//          ((SvxNumPositionTabPage&)rPage).SetWrtShell(&rWrtSh);
         }
         break;
     }

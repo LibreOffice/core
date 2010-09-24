@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace DOM
 
     public:
         /**
-        A NamedNodeMap containing the general entities, both external and 
+        A NamedNodeMap containing the general entities, both external and
         internal, declared in the DTD.
         */
         virtual Reference< XNamedNodeMap > SAL_CALL getEntities() throw (RuntimeException);
@@ -67,7 +67,7 @@ namespace DOM
         virtual OUString SAL_CALL getInternalSubset() throw (RuntimeException);
 
         /**
-        The name of DTD; i.e., the name immediately following the DOCTYPE 
+        The name of DTD; i.e., the name immediately following the DOCTYPE
         keyword.
         */
         virtual OUString SAL_CALL getName() throw (RuntimeException);

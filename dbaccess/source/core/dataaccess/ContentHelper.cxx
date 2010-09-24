@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,17 +95,17 @@ using namespace ::cppu;
 DBG_NAME(OContentHelper_Impl)
 OContentHelper_Impl::OContentHelper_Impl()
 {
-    DBG_CTOR(OContentHelper_Impl,NULL);	
+    DBG_CTOR(OContentHelper_Impl,NULL);
 }
 // -----------------------------------------------------------------------------
 OContentHelper_Impl::~OContentHelper_Impl()
 {
-    DBG_DTOR(OContentHelper_Impl,NULL);	
+    DBG_DTOR(OContentHelper_Impl,NULL);
 }
 // -----------------------------------------------------------------------------
 
 OContentHelper::OContentHelper(const Reference< XMultiServiceFactory >& _xORB
-                               ,const Reference< XInterface >&	_xParentContainer
+                               ,const Reference< XInterface >&  _xParentContainer
                                ,const TContentPtr& _pImpl)
     : OContentHelper_COMPBASE(m_aMutex)
     ,m_aContentListeners(m_aMutex)
@@ -269,7 +269,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         Reference<XPropertySet> xProp(*this,UNO_QUERY);
         if ( xProp.is() )
             aRet <<= xProp->getPropertySetInfo();
-        //	aRet <<= getPropertySetInfo(); // TODO
+        //  aRet <<= getPropertySetInfo(); // TODO
     }
     else
     {
@@ -342,7 +342,7 @@ void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< ::
 // -----------------------------------------------------------------------------
 
 // XPropertyContainer
-void SAL_CALL OContentHelper::addProperty( const ::rtl::OUString& /*Name*/, sal_Int16 /*Attributes*/, const Any& /*DefaultValue*/ ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException) 
+void SAL_CALL OContentHelper::addProperty( const ::rtl::OUString& /*Name*/, sal_Int16 /*Attributes*/, const Any& /*DefaultValue*/ ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
 {
     DBG_ERROR( "OContentHelper::addProperty: not implemented!" );
 }
@@ -386,7 +386,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
 
     PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
-    aEvent.Further 		  = sal_False;
+    aEvent.Further        = sal_False;
     aEvent.PropertyHandle = -1;
 
     const PropertyValue* pValues = rValues.getConstArray();
@@ -477,7 +477,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
     if ( nChanged > 0 )
     {
         // @@@ Save changes.
-//		storeData();
+//      storeData();
 
         notifyDataSourceModified();
         aGuard.clear();
@@ -595,7 +595,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         typedef Sequence< PropertyChangeEvent > PropertyEventSequence;
         typedef ::std::map< XPropertiesChangeListener*, PropertyEventSequence* > PropertiesEventListenerMap;
         PropertiesEventListenerMap aListeners;
-        
+
 
         const PropertyChangeEvent* propertyChangeEvent = evt.getConstArray();
 
@@ -696,14 +696,14 @@ void OContentHelper::impl_rename_throw(const ::rtl::OUString& _sNewName,bool _bN
         Sequence< PropertyChangeEvent > aChanges( 1 );
 
         aChanges[0].Source          = static_cast< cppu::OWeakObject * >( this );
-        aChanges[0].Further 	    = sal_False;
+        aChanges[0].Further         = sal_False;
         aChanges[0].PropertyName    = PROPERTY_NAME;
         aChanges[0].PropertyHandle  = PROPERTY_ID_NAME;
         aChanges[0].OldValue        <<= m_pImpl->m_aProps.aTitle;
         aChanges[0].NewValue        <<= _sNewName;
-        
+
         aGuard.clear();
-        
+
         m_pImpl->m_aProps.aTitle = _sNewName;
         if ( _bNotify )
             notifyPropertiesChange( aChanges );
@@ -717,39 +717,39 @@ void OContentHelper::impl_rename_throw(const ::rtl::OUString& _sNewName,bool _bN
 // -----------------------------------------------------------------------------
 void SAL_CALL OContentHelper::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
-    
+
     impl_rename_throw(newName);
     //Reference<XNameContainer> xNameCont(m_xParentContainer,UNO_QUERY);
     //if ( xNameCont.is() )
     //{
-    //	if ( xNameCont->hasByName(newName) )
-    //		throw ElementExistException(newName,*this);
+    //  if ( xNameCont->hasByName(newName) )
+    //      throw ElementExistException(newName,*this);
 
-    //	try
-    //	{
-    //		if ( xNameCont->hasByName(m_pImpl->m_aProps.aTitle) )
-    //			xNameCont->removeByName(m_pImpl->m_aProps.aTitle);
+    //  try
+    //  {
+    //      if ( xNameCont->hasByName(m_pImpl->m_aProps.aTitle) )
+    //          xNameCont->removeByName(m_pImpl->m_aProps.aTitle);
 
-    //		m_pImpl->m_aProps.aTitle = newName;
-    //		xNameCont->insertByName(m_pImpl->m_aProps.aTitle,makeAny(Reference<XContent>(*this,UNO_QUERY)));
-    //		notifyDataSourceModified();
-    //	}
-    //	catch(IllegalArgumentException)
-    //	{
-    //		throw SQLException();
-    //	}
-    //	catch(NoSuchElementException)
-    //	{
-    //		throw SQLException();
-    //	}
-    //	catch(WrappedTargetException)
-    //	{
-    //		throw SQLException();
-    //	}
+    //      m_pImpl->m_aProps.aTitle = newName;
+    //      xNameCont->insertByName(m_pImpl->m_aProps.aTitle,makeAny(Reference<XContent>(*this,UNO_QUERY)));
+    //      notifyDataSourceModified();
+    //  }
+    //  catch(IllegalArgumentException)
+    //  {
+    //      throw SQLException();
+    //  }
+    //  catch(NoSuchElementException)
+    //  {
+    //      throw SQLException();
+    //  }
+    //  catch(WrappedTargetException)
+    //  {
+    //      throw SQLException();
+    //  }
     //}
     //else
-    //	m_pImpl->m_aProps.aTitle = newName;
-    
+    //  m_pImpl->m_aProps.aTitle = newName;
+
 }
 // -----------------------------------------------------------------------------
 void OContentHelper::notifyDataSourceModified()
@@ -757,6 +757,6 @@ void OContentHelper::notifyDataSourceModified()
     ::dbaccess::notifyDataSourceModified(m_xParentContainer,sal_True);
 }
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 

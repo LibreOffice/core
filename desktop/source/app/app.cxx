@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -471,8 +471,8 @@ void ReplaceStringHookProc( UniString& rStr )
 
 static const char      pLastSyncFileName[]     = "lastsynchronized";
 static const sal_Int32 nStrLenLastSync         = 16;
-        
-static bool needsSynchronization( 
+
+static bool needsSynchronization(
     ::rtl::OUString const & baseSynchronizedURL, ::rtl::OUString const & userSynchronizedURL )
 {
     bool bNeedsSync( false );
@@ -491,21 +491,21 @@ static bool needsSynchronization(
         OSL_ENSURE(0, "Cannot access lastsynchronized in user layer");
         return true; //sync just in case
     }
-    
+
     //If last synchronized does not exist in base layer, then do nothing
     ::osl::DirectoryItem itemBaseFile;
     ::osl::File::RC err2 = ::osl::DirectoryItem::get(baseSynchronizedURL, itemBaseFile);
     if (err2 == ::osl::File::E_NOENT)
     {
         return true;
-        
+
     }
     else if (err2 != ::osl::File::E_None)
     {
         OSL_ENSURE(0, "Cannot access file lastsynchronized in base layer");
         return true; //sync just in case
     }
-    
+
     //compare the modification time of the extension folder and the last
     //modified file
     ::osl::FileStatus statUser(FileStatusMask_ModifyTime);
@@ -523,7 +523,7 @@ static bool needsSynchronization(
         else
         {
             OSL_ASSERT(0);
-            bNeedsSync = true; 
+            bNeedsSync = true;
         }
     }
     else
@@ -531,7 +531,7 @@ static bool needsSynchronization(
         OSL_ASSERT(0);
         bNeedsSync = true;
     }
-    
+
     return bNeedsSync;
 }
 
@@ -556,13 +556,13 @@ static ::rtl::OUString getLastSyncFileURLFromBrandInstallation()
 {
     ::rtl::OUString aURL = getBrandSharePreregBundledPathURL();
     ::sal_Int32    nLastIndex         = aURL.lastIndexOf('/');
-        
+
     ::rtl::OUStringBuffer aTmp( aURL );
 
     if ( nLastIndex != aURL.getLength()-1 )
         aTmp.appendAscii( "/" );
     aTmp.appendAscii( pLastSyncFileName );
-        
+
     return aTmp.makeStringAndClear();
 }
 
@@ -570,7 +570,7 @@ static ::rtl::OUString getLastSyncFileURLFromUserInstallation()
 {
     ::rtl::OUString aUserBundledPathURL = getUserBundledExtPathURL();
     ::sal_Int32    nLastIndex          = aUserBundledPathURL.lastIndexOf('/');
-    
+
     ::rtl::OUStringBuffer aTmp( aUserBundledPathURL );
 
     if ( nLastIndex != aUserBundledPathURL.getLength()-1 )
@@ -580,10 +580,10 @@ static ::rtl::OUString getLastSyncFileURLFromUserInstallation()
     return aTmp.makeStringAndClear();
 }
 
-static osl::FileBase::RC copy_bundled_recursive( 
+static osl::FileBase::RC copy_bundled_recursive(
     const rtl::OUString& srcUnqPath,
     const rtl::OUString& dstUnqPath,
-    sal_Int32            TypeToCopy ) 
+    sal_Int32            TypeToCopy )
 throw()
 {
     osl::FileBase::RC err = osl::FileBase::E_None;
@@ -599,7 +599,7 @@ throw()
 
         err = osl::Directory::create( dstUnqPath );
         osl::FileBase::RC next = err;
-        if( err == osl::FileBase::E_None || 
+        if( err == osl::FileBase::E_None ||
             err == osl::FileBase::E_EXIST )
         {
             err = osl::FileBase::E_None;
@@ -625,20 +625,20 @@ throw()
 
                 rtl::OUString newDstUnqPath = dstUnqPath;
                 rtl::OUString tit;
-                if( aFileStatus.isValid( FileStatusMask_FileName ) )              
+                if( aFileStatus.isValid( FileStatusMask_FileName ) )
                 {
                     ::rtl::OUString aFileName = aFileStatus.getFileName();
                     tit = rtl::Uri::encode( aFileName,
                                             rtl_UriCharClassPchar,
                                             rtl_UriEncodeIgnoreEscapes,
                                             RTL_TEXTENCODING_UTF8 );
-                    
+
                     // Special treatment for "lastsychronized" file. Must not be
                     // copied from the bundled folder!
                     if ( IsDoc && aFileName.equalsAscii( pLastSyncFileName ))
                         bFilter = true;
                 }
-                
+
                 if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
                     newDstUnqPath += rtl::OUString::createFromAscii( "/" );
 
@@ -684,14 +684,14 @@ void Desktop::Init()
         {
             rtl::OUString aUserPath = getUserBundledExtPathURL();
             rtl::OUString aPreregBundledPath = getBrandSharePreregBundledPathURL();
-            
+
             // copy bundled folder to the user directory
             osl::FileBase::RC rc = osl::Directory::createPath(aUserPath);
             (void) rc;
             copy_bundled_recursive( aPreregBundledPath, aUserPath, +1 );
         }
     }
-    
+
     // create service factory...
     Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
     if( rSMgr.is() )
@@ -1561,7 +1561,7 @@ void Desktop::Main()
     Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
     sal_Bool bRestartRequested( sal_False );
     sal_Bool bUseSystemFileDialog(sal_True);
-    int		 nAcquireCount( 0 );
+    int      nAcquireCount( 0 );
     Reference < css::document::XEventListener > xGlobalBroadcaster;
     try
     {
@@ -1930,7 +1930,7 @@ void Desktop::Main()
             FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
         }
     }
-    
+
     if ( bRestartRequested )
         SetRestartState();
 
@@ -2060,7 +2060,7 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
 
         // Try to instanciate quickstart service. This service is not mandatory, so
         // do nothing if service is not available
-        
+
         // #i105753# the following if was invented for performance
         // unfortunately this broke the QUARTZ behavior which is to always run
         // in quickstart mode since Mac applications do not usually quit

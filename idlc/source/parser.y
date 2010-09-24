@@ -103,16 +103,13 @@
 
 #include <algorithm>
 #include <vector>
-
-#include <parser.hxx>
     
 using namespace ::rtl;
 
 #define YYDEBUG 1
 #define YYERROR_VERBOSE 1
-#define YYLEX_PARAM &yylval, &yylloc
 
-extern int yylex (YYSTYPE * yylval_param,YYLTYPE * yylloc_param );
+extern int yylex(void);
 void yyerror(char const *);
 
 void checkIdentifier(::rtl::OString* id)
@@ -265,7 +262,6 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 #pragma warning(disable: 4273 4701 4706)
 #endif
 %}
-%locations
 /*
  * Declare the type of values in the grammar
  */
@@ -976,7 +972,6 @@ attribute_get_raises:
             rtl::OStringToOUString(
                 idlc()->getDocumentation(), RTL_TEXTENCODING_UTF8));
         $$.exceptions = $2;
-        int line = @2.first_line;
     }
     ;
 

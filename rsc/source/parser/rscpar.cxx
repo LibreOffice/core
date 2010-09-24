@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,11 +37,11 @@
 /****************** C O D E **********************************************/
 /*************************************************************************
 |*
-|*	  RscFileInst::Init()
+|*    RscFileInst::Init()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 05.11.91
-|*	  Letzte Aenderung	MM 17.02.93
+|*    Beschreibung
+|*    Ersterstellung    MM 05.11.91
+|*    Letzte Aenderung  MM 17.02.93
 |*
 *************************************************************************/
 void RscFileInst::Init()
@@ -57,11 +57,11 @@ void RscFileInst::Init()
 
 /*************************************************************************
 |*
-|*	  RscFileInst::RscFileInst()
+|*    RscFileInst::RscFileInst()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 06.06.91
-|*	  Letzte Aenderung	MM 06.06.91
+|*    Beschreibung
+|*    Ersterstellung    MM 06.06.91
+|*    Letzte Aenderung  MM 06.06.91
 |*
 *************************************************************************/
 RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
@@ -76,33 +76,33 @@ RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
 
     //Status: Zeiger am Ende des Lesepuffers
     nInputPos = nInputEndPos = nInputBufLen = READBUFFER_MAX;
-    pInput	  = (char *)rtl_allocateMemory( nInputBufLen );
+    pInput    = (char *)rtl_allocateMemory( nInputBufLen );
 }
 
 RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
                           ULONG lFIndex, const ByteString& rBuf )
 {
-    pTypCont	 = pTC;
+    pTypCont     = pTC;
     Init();
-    lFileIndex	 = lFIndex;
-    lSrcIndex	 = lIndexSrc;
-    fInputFile	 = NULL;
-    nInputPos	 = 0;
+    lFileIndex   = lFIndex;
+    lSrcIndex    = lIndexSrc;
+    fInputFile   = NULL;
+    nInputPos    = 0;
     nInputEndPos = rBuf.Len();
 
     // Muss groesser sein wegen Eingabeende bei nInputBufLen < nInputEndPos
     nInputBufLen = nInputEndPos +1;
-    pInput		 = (char *)rtl_allocateMemory( nInputBufLen +100 );
+    pInput       = (char *)rtl_allocateMemory( nInputBufLen +100 );
     memcpy( pInput, rBuf.GetBuffer(), nInputEndPos );
 }
 
 /*************************************************************************
 |*
-|*	  RscFileInst::~RscFileInst()
+|*    RscFileInst::~RscFileInst()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 06.06.91
-|*	  Letzte Aenderung	MM 06.06.91
+|*    Beschreibung
+|*    Ersterstellung    MM 06.06.91
+|*    Letzte Aenderung  MM 06.06.91
 |*
 *************************************************************************/
 RscFileInst::~RscFileInst(){
@@ -114,11 +114,11 @@ RscFileInst::~RscFileInst(){
 
 /*************************************************************************
 |*
-|*	  RscFileInst::GetChar()
+|*    RscFileInst::GetChar()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 01.06.91
-|*	  Letzte Aenderung	MM 09.08.91
+|*    Beschreibung
+|*    Ersterstellung    MM 01.06.91
+|*    Letzte Aenderung  MM 09.08.91
 |*
 *************************************************************************/
 int RscFileInst::GetChar()
@@ -140,11 +140,11 @@ int RscFileInst::GetChar()
 
 /*************************************************************************
 |*
-|*	  RscFileInst::GetNewLine()
+|*    RscFileInst::GetNewLine()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 06.06.91
-|*	  Letzte Aenderung	MM 06.06.91
+|*    Beschreibung
+|*    Ersterstellung    MM 06.06.91
+|*    Letzte Aenderung  MM 06.06.91
 |*
 *************************************************************************/
 void RscFileInst::GetNewLine()
@@ -221,11 +221,11 @@ END:
 
 /*************************************************************************
 |*
-|*	  RscFileInst::SetError()
+|*    RscFileInst::SetError()
 |*
-|*	  Beschreibung
-|*	  Ersterstellung	MM 05.11.91
-|*	  Letzte Aenderung	MM 05.11.91
+|*    Beschreibung
+|*    Ersterstellung    MM 05.11.91
+|*    Letzte Aenderung  MM 05.11.91
 |*
 *************************************************************************/
 void RscFileInst::SetError( ERRTYPE aError )
@@ -233,7 +233,7 @@ void RscFileInst::SetError( ERRTYPE aError )
     if( aError.IsOk() )
     {
         aFirstError = aError;
-        nErrorLine	= GetLineNo();
-        nErrorPos	= GetScanPos() -1;
+        nErrorLine  = GetLineNo();
+        nErrorPos   = GetScanPos() -1;
     };
 };

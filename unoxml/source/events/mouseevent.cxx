@@ -1,7 +1,7 @@
 #include "mouseevent.hxx"
 
 namespace DOM { namespace events
-{    
+{
 
     sal_Int32 SAL_CALL CMouseEvent::getScreenX() throw (RuntimeException)
     {
@@ -45,20 +45,20 @@ namespace DOM { namespace events
     }
 
     void SAL_CALL CMouseEvent::initMouseEvent(
-                        const OUString& typeArg, 
-                        sal_Bool canBubbleArg, 
-                        sal_Bool cancelableArg, 
-                        const Reference< XAbstractView >& viewArg, 
-                        sal_Int32 detailArg, 
-                        sal_Int32 screenXArg, 
-                        sal_Int32 screenYArg, 
-                        sal_Int32 clientXArg, 
-                        sal_Int32 clientYArg, 
-                        sal_Bool ctrlKeyArg, 
-                        sal_Bool altKeyArg, 
-                        sal_Bool shiftKeyArg, 
-                        sal_Bool metaKeyArg, 
-                        sal_Int16 buttonArg, 
+                        const OUString& typeArg,
+                        sal_Bool canBubbleArg,
+                        sal_Bool cancelableArg,
+                        const Reference< XAbstractView >& viewArg,
+                        sal_Int32 detailArg,
+                        sal_Int32 screenXArg,
+                        sal_Int32 screenYArg,
+                        sal_Int32 clientXArg,
+                        sal_Int32 clientYArg,
+                        sal_Bool ctrlKeyArg,
+                        sal_Bool altKeyArg,
+                        sal_Bool shiftKeyArg,
+                        sal_Bool metaKeyArg,
+                        sal_Int16 buttonArg,
                         const Reference< XEventTarget >& /*relatedTargetArg*/)
         throw(RuntimeException)
     {
@@ -85,10 +85,10 @@ namespace DOM { namespace events
         return CUIEvent::getDetail();
     }
 
-    void SAL_CALL CMouseEvent::initUIEvent(const OUString& typeArg, 
-                     sal_Bool canBubbleArg, 
-                     sal_Bool cancelableArg, 
-                     const Reference< XAbstractView >& viewArg, 
+    void SAL_CALL CMouseEvent::initUIEvent(const OUString& typeArg,
+                     sal_Bool canBubbleArg,
+                     sal_Bool cancelableArg,
+                     const Reference< XAbstractView >& viewArg,
                      sal_Int32 detailArg) throw(RuntimeException)
     {
         CUIEvent::initUIEvent(typeArg, canBubbleArg, cancelableArg, viewArg, detailArg);
@@ -139,7 +139,7 @@ namespace DOM { namespace events
         CUIEvent::preventDefault();
     }
 
-    void SAL_CALL CMouseEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg, 
+    void SAL_CALL CMouseEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
         sal_Bool cancelableArg) throw (RuntimeException)
     {
         // base initializer

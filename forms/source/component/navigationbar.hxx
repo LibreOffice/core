@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace frm
     //==================================================================
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XControlModel
                                 > ONavigationBarModel_BASE;
- 
+
     class ONavigationBarModel
                         :public OControlModel
                         ,public FontControlModel
@@ -80,9 +80,9 @@ namespace frm
         DECLARE_DEFAULT_LEAF_XTOR( ONavigationBarModel );
 
         // XServiceInfo - static version
-        static	::rtl::OUString	SAL_CALL getImplementationName_Static();
-        static	::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static();
-        static	::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
+        static  ::rtl::OUString SAL_CALL getImplementationName_Static();
+        static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static();
+        static  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
 
     protected:
         // UNO
@@ -90,7 +90,7 @@ namespace frm
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString	SAL_CALL getImplementationName()  throw(::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getImplementationName()  throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw(::com::sun::star::uno::RuntimeException);
 
         // XTypeProvider

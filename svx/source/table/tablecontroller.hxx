@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ public:
     SVX_DLLPRIVATE virtual bool SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr );
 
     SVX_DLLPRIVATE virtual bool TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& rFormatSet  );
-    SVX_DLLPRIVATE virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats );	
+    SVX_DLLPRIVATE virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats );
 
     // slots
     SVX_DLLPRIVATE void onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs = 0 );
@@ -153,7 +153,7 @@ private:
     bool mbCellSelectionMode;
     CellPos maMouseDownPos;
     bool mbLeftButtonDown;
-    ::sdr::overlay::OverlayObjectList*	mpSelectionOverlay;
+    ::sdr::overlay::OverlayObjectList*  mpSelectionOverlay;
 
     SdrView* mpView;
     SdrObjectWeakRef mxTableObj;

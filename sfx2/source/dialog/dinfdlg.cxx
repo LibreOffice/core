@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -766,15 +766,15 @@ namespace
     // copy from xmlsecurity/source/dialog/resourcemanager.cxx
     String GetContentPart( const String& _rRawString, const String& _rPartId )
     {
-        String		s;
+        String      s;
 
-        xub_StrLen	nContStart = _rRawString.Search( _rPartId );
+        xub_StrLen  nContStart = _rRawString.Search( _rPartId );
         if( nContStart != STRING_NOTFOUND )
         {
             nContStart = nContStart + _rPartId.Len();
-            ++nContStart;					// now it's start of content, directly after Id
+            ++nContStart;                   // now it's start of content, directly after Id
 
-            xub_StrLen	nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
+            xub_StrLen  nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
 
             s = String( _rRawString, nContStart, nContEnd - nContStart );
         }
@@ -821,11 +821,11 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
     aTemplFt        ( this, SfxResId( FT_TEMPL ) ),
     aTemplValFt     ( this, SfxResId( FT_TEMPL_VAL ) ),
 
-    aUnknownSize	( SfxResId( STR_UNKNOWNSIZE ) ),
-    aMultiSignedStr	( SfxResId( STR_MULTSIGNED ) ),
+    aUnknownSize    ( SfxResId( STR_UNKNOWNSIZE ) ),
+    aMultiSignedStr ( SfxResId( STR_MULTSIGNED ) ),
 
-    bEnableUseUserData	( FALSE ),
-    bHandleDelete		( FALSE )
+    bEnableUseUserData  ( FALSE ),
+    bHandleDelete       ( FALSE )
 
 {
     FreeResource();
@@ -897,7 +897,7 @@ IMPL_LINK( SfxDocumentPage, DeleteHdl, PushButton*, EMPTYARG )
 
 IMPL_LINK( SfxDocumentPage, SignatureHdl, PushButton*, EMPTYARG )
 {
-    SfxObjectShell*	pDoc = SfxObjectShell::Current();
+    SfxObjectShell* pDoc = SfxObjectShell::Current();
     if( pDoc )
     {
         pDoc->SignDocumentContent();
@@ -910,7 +910,7 @@ IMPL_LINK( SfxDocumentPage, SignatureHdl, PushButton*, EMPTYARG )
 
 void SfxDocumentPage::ImplUpdateSignatures()
 {
-    SfxObjectShell*	pDoc = SfxObjectShell::Current();
+    SfxObjectShell* pDoc = SfxObjectShell::Current();
     if( pDoc )
     {
         SfxMedium* pMedium = pDoc->GetMedium();
@@ -1126,12 +1126,12 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     aCreateValFt.SetText( ConvertDateTime_Impl( pInfoItem->getAuthor(),
         pInfoItem->getCreationDate(), aLocaleWrapper ) );
     util::DateTime aTime( pInfoItem->getModificationDate() );
-//	if ( aTime.IsValid() )
+//  if ( aTime.IsValid() )
     if ( aTime.Month > 0 )
         aChangeValFt.SetText( ConvertDateTime_Impl(
             pInfoItem->getModifiedBy(), aTime, aLocaleWrapper ) );
     aTime = pInfoItem->getPrintDate();
-//	if ( aTime.IsValid())
+//  if ( aTime.IsValid())
     if ( aTime.Month > 0 )
         aPrintValFt.SetText( ConvertDateTime_Impl( pInfoItem->getPrintedBy(),
             aTime, aLocaleWrapper ) );
@@ -1162,24 +1162,24 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
 
     SfxTabPage( pParent, SfxResId( TP_DOCINFORELOAD ), rItemSet ),
 
-    aRBNoAutoUpdate		( this, SfxResId( RB_NOAUTOUPDATE		) ),
+    aRBNoAutoUpdate     ( this, SfxResId( RB_NOAUTOUPDATE       ) ),
 
-    aRBReloadUpdate		( this, SfxResId( RB_RELOADUPDATE		) ),
+    aRBReloadUpdate     ( this, SfxResId( RB_RELOADUPDATE       ) ),
 
-    aRBForwardUpdate	( this, SfxResId( RB_FORWARDUPDATE		) ),
-    aFTEvery			( this, SfxResId( FT_EVERY				) ),
-    aNFReload			( this, SfxResId( ED_RELOAD			) ),
-    aFTReloadSeconds	( this, SfxResId( FT_RELOADSECS		) ),
-    aFTAfter			( this, SfxResId( FT_AFTER				) ),
-    aNFAfter			( this, SfxResId( ED_FORWARD			) ),
-    aFTAfterSeconds		( this, SfxResId( FT_FORWARDSECS		) ),
-    aFTURL				( this, SfxResId( FT_URL				) ),
-    aEDForwardURL		( this, SfxResId( ED_URL				) ),
-    aPBBrowseURL		( this, SfxResId( PB_BROWSEURL			) ),
-    aFTFrame			( this, SfxResId( FT_FRAME				) ),
-    aCBFrame			( this, SfxResId( CB_FRAME				) ),
+    aRBForwardUpdate    ( this, SfxResId( RB_FORWARDUPDATE      ) ),
+    aFTEvery            ( this, SfxResId( FT_EVERY              ) ),
+    aNFReload           ( this, SfxResId( ED_RELOAD         ) ),
+    aFTReloadSeconds    ( this, SfxResId( FT_RELOADSECS     ) ),
+    aFTAfter            ( this, SfxResId( FT_AFTER              ) ),
+    aNFAfter            ( this, SfxResId( ED_FORWARD            ) ),
+    aFTAfterSeconds     ( this, SfxResId( FT_FORWARDSECS        ) ),
+    aFTURL              ( this, SfxResId( FT_URL                ) ),
+    aEDForwardURL       ( this, SfxResId( ED_URL                ) ),
+    aPBBrowseURL        ( this, SfxResId( PB_BROWSEURL          ) ),
+    aFTFrame            ( this, SfxResId( FT_FRAME              ) ),
+    aCBFrame            ( this, SfxResId( CB_FRAME              ) ),
 
-    aForwardErrorMessg	(		SfxResId( STR_FORWARD_ERRMSSG	) ),
+    aForwardErrorMessg  (       SfxResId( STR_FORWARD_ERRMSSG   ) ),
     pInfoItem           ( NULL ),
     pFileDlg            ( NULL ),
     eState              ( S_Init )
@@ -1187,8 +1187,8 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
 {
     FreeResource();
     pInfoItem = &( SfxDocumentInfoItem& ) rItemSet.Get( SID_DOCINFO );
-    TargetList			aList;
-    SfxViewFrame*		pFrame = SfxViewFrame::Current();
+    TargetList          aList;
+    SfxViewFrame*       pFrame = SfxViewFrame::Current();
     if( pFrame )
     {
         pFrame = pFrame->GetTopViewFrame();
@@ -1196,7 +1196,7 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
         {
             pFrame->GetTargetList( aList );
 
-            String*			pObj;
+            String*         pObj;
             for( USHORT nPos = ( USHORT ) aList.Count() ; nPos ; )
             {
                 pObj = aList.GetObject( --nPos );
@@ -1359,10 +1359,10 @@ IMPL_LINK( SfxInternetPage, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG )
 
 BOOL SfxInternetPage::FillItemSet( SfxItemSet& rSet )
 {
-    const SfxPoolItem*			pItem = NULL;
-    SfxDocumentInfoItem*		pInfo = NULL;
-    SfxTabDialog*				pDlg = GetTabDialog();
-    const SfxItemSet*			pExSet = NULL;
+    const SfxPoolItem*          pItem = NULL;
+    SfxDocumentInfoItem*        pInfo = NULL;
+    SfxTabDialog*               pDlg = GetTabDialog();
+    const SfxItemSet*           pExSet = NULL;
 
     if( pDlg )
         pExSet = pDlg->GetExampleSet();
@@ -1380,10 +1380,10 @@ BOOL SfxInternetPage::FillItemSet( SfxItemSet& rSet )
 
     DBG_ASSERT( eState != S_Init, "*SfxInternetPage::FillItemSet(): state init is not acceptable at this point!" );
 
-    BOOL						bEnableReload = FALSE;
-    ::std::auto_ptr< String >	aURL( NULL );
-    ::std::auto_ptr< String >	aFrame( NULL );
-    ULONG						nDelay = 0;
+    BOOL                        bEnableReload = FALSE;
+    ::std::auto_ptr< String >   aURL( NULL );
+    ::std::auto_ptr< String >   aFrame( NULL );
+    ULONG                       nDelay = 0;
 
     switch( eState )
     {
@@ -1439,11 +1439,11 @@ void SfxInternetPage::Reset( const SfxItemSet& rSet )
     if ( pURLItem )
         aBaseURL = pURLItem->GetValue();
 
-    STATE				eNewState = S_NoUpdate;
+    STATE               eNewState = S_NoUpdate;
 
     if( pInfoItem->isAutoloadEnabled() )
     {
-        const String&	rURL = pInfoItem->getAutoloadURL();
+        const String&   rURL = pInfoItem->getAutoloadURL();
 
         if( rURL.Len() )
         {
@@ -1486,11 +1486,11 @@ void SfxInternetPage::Reset( const SfxItemSet& rSet )
 
 int SfxInternetPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 {
-    int				nRet = LEAVE_PAGE;
+    int             nRet = LEAVE_PAGE;
 
     if( eState == S_Forward && !aEDForwardURL.GetText().Len() )
     {
-        ErrorBox	aErrBox( this, WB_OK, aForwardErrorMessg );
+        ErrorBox    aErrBox( this, WB_OK, aForwardErrorMessg );
         aErrBox.Execute();
 
         nRet = KEEP_PAGE;
@@ -1624,7 +1624,7 @@ public:
     util::Duration  GetDuration() const;
 };
 /*-- 20.11.2009 15:40:46---------------------------------------------------
-    
+
   -----------------------------------------------------------------------*/
 DurationDialog_Impl::DurationDialog_Impl(
     Window* pParent, const util::Duration& rDuration)
@@ -1687,7 +1687,7 @@ util::Duration  DurationDialog_Impl::GetDuration() const
   -----------------------------------------------------------------------*/
 CustomPropertiesDurationField::CustomPropertiesDurationField( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
         Edit( pParent, rResId ), m_pLine( pLine )
-        
+
 {
     SetDuration( util::Duration(false, 0, 0, 0, 0, 0, 0, 0) );
 }
@@ -1716,8 +1716,8 @@ void CustomPropertiesDurationField::RequestHelp( const HelpEvent& rHEvt )
 /*-- 20.11.2009 15:30:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration ) 
-{ 
+void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration )
+{
     m_aDuration = rDuration;
     String sText(rDuration.Negative ? '-' : '+');
     sText += m_pLine->m_sDurationFormat;
@@ -1733,7 +1733,7 @@ void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration
 
   -----------------------------------------------------------------------*/
 CustomPropertiesEditButton::CustomPropertiesEditButton( Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
-        PushButton( pParent, rResId ), m_pLine( pLine ) 
+        PushButton( pParent, rResId ), m_pLine( pLine )
 {
     SetClickHdl( LINK( this, CustomPropertiesEditButton, ClickHdl ));
 }
@@ -1882,7 +1882,7 @@ IMPL_LINK( CustomPropertiesWindow, RemoveHdl, CustomPropertiesRemoveButton*, pBu
                 continue;
 
             Window* pWindows[] = {  &pLine->m_aNameBox, &pLine->m_aTypeBox, &pLine->m_aValueEdit,
-                                    &pLine->m_aDateField, &pLine->m_aTimeField, 
+                                    &pLine->m_aDateField, &pLine->m_aTimeField,
                                     &pLine->m_aDurationField, &pLine->m_aEditButton,
                                     &pLine->m_aYesNoButton, &pLine->m_aRemoveButton, NULL };
             Window** pCurrent = pWindows;
@@ -2040,8 +2040,8 @@ void CustomPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBa
             aSize.Width() = nWidth;
             aPos.X() = aRect.getX() + ( nOffset / 2 );
             m_aYesNoButton.SetPosSizePixel( aPos, aSize );
-            aSize.Width() /= 2; 
-            aSize.Width() -= 2; 
+            aSize.Width() /= 2;
+            aSize.Width() -= 2;
             m_aDateField.SetPosSizePixel( aPos, aSize );
             aPos.X() += aSize.Width() + 4;
             m_aTimeField.SetPosSizePixel( aPos, aSize );
@@ -2080,12 +2080,12 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
     long nPos = GetVisibleLineCount() * GetLineHeight();
     m_aCustomPropertiesLines.push_back( pNewLine );
     Window* pWindows[] = {  &m_aNameBox, &m_aTypeBox, &m_aValueEdit,
-                            &m_aDateField, &m_aTimeField, 
+                            &m_aDateField, &m_aTimeField,
                             &m_aDurationField, &m_aEditButton,
                             &m_aYesNoButton, &m_aRemoveButton, NULL };
     Window* pNewWindows[] =
         {   &pNewLine->m_aNameBox, &pNewLine->m_aTypeBox, &pNewLine->m_aValueEdit,
-            &pNewLine->m_aDateField, &pNewLine->m_aTimeField, 
+            &pNewLine->m_aDateField, &pNewLine->m_aTimeField,
             &pNewLine->m_aDurationField, &pNewLine->m_aEditButton,
             &pNewLine->m_aYesNoButton, &pNewLine->m_aRemoveButton, NULL };
     Window** pCurrent = pWindows;
@@ -2138,7 +2138,7 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
     else if ( rAny >>= aTmpDate )
     {
         nType = CUSTOM_TYPE_DATE;
-        pNewLine->m_aDateField.SetDate( Date( aTmpDate.Day, aTmpDate.Month, aTmpDate.Year ) ); 
+        pNewLine->m_aDateField.SetDate( Date( aTmpDate.Day, aTmpDate.Month, aTmpDate.Year ) );
 
     }
     else if ( rAny >>= aTmpDuration )
@@ -2281,14 +2281,14 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
             {
                 Date aTmpDate = pLine->m_aDateField.GetDate();
                 Time aTmpTime = pLine->m_aTimeField.GetTime();
-                util::DateTime aDateTime(aTmpTime.Get100Sec(), aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour(), 
+                util::DateTime aDateTime(aTmpTime.Get100Sec(), aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour(),
                         aTmpDate.GetDay(), aTmpDate.GetMonth(), aTmpDate.GetYear() );
                 aPropertiesSeq[i].Value <<= aDateTime;
-            }    
+            }
             else if ( CUSTOM_TYPE_DURATION == nType )
             {
                 aPropertiesSeq[i].Value <<= pLine->m_aDurationField.GetDuration();
-            }    
+            }
             else if ( CUSTOM_TYPE_DATE == nType )
             {
                 Date aTmpDate = pLine->m_aDateField.GetDate();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,14 +40,14 @@ class AtomContainer
     Atom m_nNextID;
     std::hash_map< rtl::OString, Atom, rtl::OStringHash > m_aStringToID;
     std::hash_map< Atom, rtl::OString > m_aIDToString;
-    
+
     public:
     AtomContainer();
     ~AtomContainer();
-    
+
     Atom getID( const rtl::OString& rStr, bool bOnlyIfExists = false );
-    const rtl::OString& getString( Atom nAtom ); 
-    
+    const rtl::OString& getString( Atom nAtom );
+
 };
 
 #endif // _RSCHASH_HXX

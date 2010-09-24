@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ void ODatabaseMetaData::fillLiterals()
         LiteralInfo aInfo;
         while(!aRecordset.IsAtEOF())
         {
-            WpOLEAppendCollection<ADOFields, ADOField, WpADOField>	aFields(aRecordset.GetFields());
+            WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
             WpADOField aField(aFields.GetItem(1));
             aInfo.pwszLiteralValue = aField.get_Value();
             aField = aFields.GetItem(5);
@@ -422,10 +422,10 @@ void OAdoIndex::fillPropertyValues()
 {
     if(m_aIndex.IsValid())
     {
-        m_Name				= m_aIndex.get_Name();
-        m_IsUnique			= m_aIndex.get_Unique();
+        m_Name              = m_aIndex.get_Name();
+        m_IsUnique          = m_aIndex.get_Unique();
         m_IsPrimaryKeyIndex = m_aIndex.get_PrimaryKey();
-        m_IsClustered		= m_aIndex.get_Clustered();
+        m_IsClustered       = m_aIndex.get_Clustered();
     }
 }
 // -----------------------------------------------------------------------------
@@ -451,11 +451,11 @@ void OAdoKey::fillPropertyValues()
 {
     if(m_aKey.IsValid())
     {
-        m_aProps->m_Type			= MapKeyRule(m_aKey.get_Type());
-        m_Name			            = m_aKey.get_Name();
-        m_aProps->m_ReferencedTable	= m_aKey.get_RelatedTable();
-        m_aProps->m_UpdateRule		= MapRule(m_aKey.get_UpdateRule());
-        m_aProps->m_DeleteRule		= MapRule(m_aKey.get_DeleteRule());
+        m_aProps->m_Type            = MapKeyRule(m_aKey.get_Type());
+        m_Name                      = m_aKey.get_Name();
+        m_aProps->m_ReferencedTable = m_aKey.get_RelatedTable();
+        m_aProps->m_UpdateRule      = MapRule(m_aKey.get_UpdateRule());
+        m_aProps->m_DeleteRule      = MapRule(m_aKey.get_DeleteRule());
     }
 }
 // -------------------------------------------------------------------------
@@ -571,8 +571,8 @@ void OAdoTable::fillPropertyValues()
 {
     if(m_aTable.IsValid())
     {
-        m_Name	= m_aTable.get_Name();
-        m_Type	= m_aTable.get_Type();
+        m_Name  = m_aTable.get_Name();
+        m_Type  = m_aTable.get_Type();
         {
             WpADOCatalog aCat(m_aTable.get_ParentCatalog());
             if(aCat.IsValid())

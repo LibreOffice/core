@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@
 #include "appdata.hxx"
 #include "workwin.hxx"
 #include <sfx2/macrconf.hxx>
-#include "helper.hxx"	// SfxContentHelper::...
+#include "helper.hxx"   // SfxContentHelper::...
 #include "app.hrc"
 #include "sfxresid.hxx"
 #include "shutdownicon.hxx"
@@ -110,7 +110,7 @@ class SfxEventAsyncer_Impl : public SfxListener
 
 public:
 
-    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     SfxEventAsyncer_Impl( const SfxEventHint& rHint );
     ~SfxEventAsyncer_Impl();
     DECL_LINK( TimerHdl, Timer*);
@@ -184,7 +184,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
     SvtUndoOptions aUndoOptions;
     SvtHelpOptions aHelpOptions;
     SvtInetOptions aInetOptions;
-    SvtSecurityOptions	aSecurityOptions;
+    SvtSecurityOptions  aSecurityOptions;
     SvtMiscOptions aMiscOptions;
 
     while ( *pRanges )
@@ -881,14 +881,14 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
                     }
 
-                    case SvtPathOptions::PATH_AUTOCORRECT:	aPathOptions.SetAutoCorrectPath( sValue );break;
-                    case SvtPathOptions::PATH_AUTOTEXT:		aPathOptions.SetAutoTextPath( sValue );break;
-                    case SvtPathOptions::PATH_BACKUP:		aPathOptions.SetBackupPath( sValue );break;
-                    case SvtPathOptions::PATH_BASIC:		aPathOptions.SetBasicPath( sValue );break;
-                    case SvtPathOptions::PATH_BITMAP:		aPathOptions.SetBitmapPath( sValue );break;
-                    case SvtPathOptions::PATH_CONFIG:		aPathOptions.SetConfigPath( sValue );break;
-                    case SvtPathOptions::PATH_DICTIONARY:	aPathOptions.SetDictionaryPath( sValue );break;
-                    case SvtPathOptions::PATH_FAVORITES:	aPathOptions.SetFavoritesPath( sValue );break;
+                    case SvtPathOptions::PATH_AUTOCORRECT:  aPathOptions.SetAutoCorrectPath( sValue );break;
+                    case SvtPathOptions::PATH_AUTOTEXT:     aPathOptions.SetAutoTextPath( sValue );break;
+                    case SvtPathOptions::PATH_BACKUP:       aPathOptions.SetBackupPath( sValue );break;
+                    case SvtPathOptions::PATH_BASIC:        aPathOptions.SetBasicPath( sValue );break;
+                    case SvtPathOptions::PATH_BITMAP:       aPathOptions.SetBitmapPath( sValue );break;
+                    case SvtPathOptions::PATH_CONFIG:       aPathOptions.SetConfigPath( sValue );break;
+                    case SvtPathOptions::PATH_DICTIONARY:   aPathOptions.SetDictionaryPath( sValue );break;
+                    case SvtPathOptions::PATH_FAVORITES:    aPathOptions.SetFavoritesPath( sValue );break;
                     case SvtPathOptions::PATH_FILTER:
                     {
                         String aTmp;
@@ -896,8 +896,8 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                             aPathOptions.SetFilterPath( aTmp );
                         break;
                     }
-                    case SvtPathOptions::PATH_GALLERY:		aPathOptions.SetGalleryPath( sValue );break;
-                    case SvtPathOptions::PATH_GRAPHIC:		aPathOptions.SetGraphicPath( sValue );break;
+                    case SvtPathOptions::PATH_GALLERY:      aPathOptions.SetGalleryPath( sValue );break;
+                    case SvtPathOptions::PATH_GRAPHIC:      aPathOptions.SetGraphicPath( sValue );break;
                     case SvtPathOptions::PATH_HELP:
                     {
                         String aTmp;
@@ -906,7 +906,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
                     }
 
-                    case SvtPathOptions::PATH_LINGUISTIC:	aPathOptions.SetLinguisticPath( sValue );break;
+                    case SvtPathOptions::PATH_LINGUISTIC:   aPathOptions.SetLinguisticPath( sValue );break;
                     case SvtPathOptions::PATH_MODULE:
                     {
                         String aTmp;
@@ -915,7 +915,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
                     }
 
-                    case SvtPathOptions::PATH_PALETTE:		aPathOptions.SetPalettePath( sValue );break;
+                    case SvtPathOptions::PATH_PALETTE:      aPathOptions.SetPalettePath( sValue );break;
                     case SvtPathOptions::PATH_PLUGIN:
                     {
                         String aTmp;
@@ -932,10 +932,10 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         break;
                     }
 
-                    case SvtPathOptions::PATH_TEMP:			aPathOptions.SetTempPath( sValue );break;
-                    case SvtPathOptions::PATH_TEMPLATE:		aPathOptions.SetTemplatePath( sValue );break;
-                    case SvtPathOptions::PATH_USERCONFIG:	aPathOptions.SetUserConfigPath( sValue );break;
-                    case SvtPathOptions::PATH_WORK:			aPathOptions.SetWorkPath( sValue );break;
+                    case SvtPathOptions::PATH_TEMP:         aPathOptions.SetTempPath( sValue );break;
+                    case SvtPathOptions::PATH_TEMPLATE:     aPathOptions.SetTemplatePath( sValue );break;
+                    case SvtPathOptions::PATH_USERCONFIG:   aPathOptions.SetUserConfigPath( sValue );break;
+                    case SvtPathOptions::PATH_WORK:         aPathOptions.SetWorkPath( sValue );break;
                     default: DBG_ERRORFILE("SfxApplication::SetOptions_Impl()\nInvalid path number found for set directories!");
                 }
             }

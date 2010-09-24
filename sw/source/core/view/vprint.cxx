@@ -1,7 +1,7 @@
-/************************************************************************** 
+/**************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,9 +78,9 @@
 #include <statstr.hrc>      //      -- " --
 #include <ptqueue.hxx>
 #include <tabfrm.hxx>
-#include <txtfrm.hxx>		// MinPrtLine
-#include <viscrs.hxx>		// SwShellCrsr
-#include <fmtpdsc.hxx>		// SwFmtPageDesc
+#include <txtfrm.hxx>       // MinPrtLine
+#include <viscrs.hxx>       // SwShellCrsr
+#include <fmtpdsc.hxx>      // SwFmtPageDesc
 #include <globals.hrc>
 
 
@@ -92,8 +92,8 @@ class SwQueuedPaint
 {
 public:
     SwQueuedPaint *pNext;
-    ViewShell	   *pSh;
-    SwRect			aRect;
+    ViewShell      *pSh;
+    SwRect          aRect;
 
     SwQueuedPaint( ViewShell *pNew, const SwRect &rRect ) :
         pNext( 0 ),
@@ -144,7 +144,7 @@ void SwPaintQueue::Repaint()
     {
         SwQueuedPaint *pPt = pQueue;
         do
-        {	ViewShell *pSh = pPt->pSh;
+        {   ViewShell *pSh = pPt->pSh;
             SET_CURR_SHELL( pSh );
             if ( pSh->IsPreView() )
             {
@@ -162,7 +162,7 @@ void SwPaintQueue::Repaint()
         } while ( pPt );
 
         do
-        {	pPt = pQueue;
+        {   pPt = pQueue;
             pQueue = pQueue->pNext;
             delete pPt;
         } while ( pQueue );
@@ -194,10 +194,10 @@ void SwPaintQueue::Remove( ViewShell *pSh )
 }
 
 /******************************************************************************
- *	Methode 	:	void SetSwVisArea( ViewShell *pSh, Point aPrtOffset, ...
- *	Beschreibung:
- *	Erstellt	:	OK 04.11.94 16:27
- *	Aenderung	:
+ *  Methode     :   void SetSwVisArea( ViewShell *pSh, Point aPrtOffset, ...
+ *  Beschreibung:
+ *  Erstellt    :   OK 04.11.94 16:27
+ *  Aenderung   :
  ******************************************************************************/
 
 void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL /*bPDFExport*/ )
@@ -248,9 +248,9 @@ void ViewShell::InitPrt( OutputDevice *pOutDev )
 }
 
 /******************************************************************************
- *	Methode 	:	void ViewShell::ChgAllPageOrientation
- *	Erstellt	:	MA 08. Aug. 95
- *	Aenderung	:
+ *  Methode     :   void ViewShell::ChgAllPageOrientation
+ *  Erstellt    :   MA 08. Aug. 95
+ *  Aenderung   :
  ******************************************************************************/
 
 
@@ -295,9 +295,9 @@ void ViewShell::ChgAllPageOrientation( USHORT eOri )
 }
 
 /******************************************************************************
- *	Methode 	:	void ViewShell::ChgAllPageOrientation
- *	Erstellt	:	MA 08. Aug. 95
- *	Aenderung	:
+ *  Methode     :   void ViewShell::ChgAllPageOrientation
+ *  Erstellt    :   MA 08. Aug. 95
+ *  Aenderung   :
  ******************************************************************************/
 
 
@@ -360,7 +360,7 @@ void ViewShell::CalcPagesForPrint( USHORT nMax )
 
         aAction.Action();
 
-        aVisArea = aOldVis; 			//Zuruecksetzen wg. der Paints!
+        aVisArea = aOldVis;             //Zuruecksetzen wg. der Paints!
         Imp()->SetFirstVisPageInvalid();
 //       SwPaintQueue::Repaint();
     }
@@ -400,7 +400,7 @@ SwDoc * ViewShell::CreatePrtDoc( SfxObjectShellRef &rDocShellRef)
     if( pFESh->IsTableMode() )
     {
         SwShellTableCrsr* pShellTblCrsr = pFESh->GetTableCrsr();
-        
+
         const SwCntntNode* pCntntNode = pShellTblCrsr->GetNode()->GetCntntNode();
         const SwCntntFrm *pCntntFrm = pCntntNode ? pCntntNode->GetFrm( 0, pShellTblCrsr->Start() ) : 0;
         if( pCntntFrm )
@@ -509,7 +509,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     if( pFESh->IsTableMode() )
     {
         SwShellTableCrsr* pShellTblCrsr = pFESh->GetTableCrsr();
-        
+
         const SwCntntNode* pCntntNode = pShellTblCrsr->GetNode()->GetCntntNode();
         const SwCntntFrm *pCntntFrm = pCntntNode ? pCntntNode->GetFrm( 0, pShellTblCrsr->Start() ) : 0;
         if( pCntntFrm )
@@ -580,7 +580,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 }
 
 
-sal_Bool ViewShell::PrintOrPDFExport( 
+sal_Bool ViewShell::PrintOrPDFExport(
     OutputDevice *pOutDev,
     const SwPrtOptions &rPrintData,
     sal_Int32 nRenderer     /* the index in the vector of pages to be printed */ )
@@ -633,7 +633,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
         pOutDevDoc = GetDoc();
         pShell = new ViewShell( *this, 0, pOutDev );
     }
-    
+
     SdrView *pDrawView = pShell->GetDrawView();
     if (pDrawView)
     {
@@ -641,7 +641,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
         pDrawView->SetBufferedOverlayAllowed( false );
     }
 
-    {	//Zusaetzlicher Scope, damit die CurrShell vor dem zerstoeren der
+    {   //Zusaetzlicher Scope, damit die CurrShell vor dem zerstoeren der
         //Shell zurueckgesetzt wird.
 
         SET_CURR_SHELL( pShell );
@@ -697,9 +697,9 @@ sal_Bool ViewShell::PrintOrPDFExport(
         pViewSh2 = nPage == 0 ? /* post-it page? */
                 rPrintData.GetRenderData().m_pPostItShell : pShell;
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
-                        
+
         pStPage->GetUpper()->Paint( pStPage->Frm(), &rPrintData );
-                        
+
         SwPaintQueue::Repaint();
     }  //Zus. Scope wg. CurShell!
 
@@ -719,10 +719,10 @@ sal_Bool ViewShell::PrintOrPDFExport(
 }
 
 /******************************************************************************
- *	Methode 	:	PrtOle2()
- *	Beschreibung:
- *	Erstellt	:	PK 07.12.94
- *	Aenderung	:	MA 16. Feb. 95
+ *  Methode     :   PrtOle2()
+ *  Beschreibung:
+ *  Erstellt    :   PK 07.12.94
+ *  Aenderung   :   MA 16. Feb. 95
  ******************************************************************************/
 
 
@@ -768,7 +768,7 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
         pOleOut->Push( PUSH_CLIPREGION );
         pOleOut->IntersectClipRegion( aSwRect.SVRect() );
         pSh->GetLayout()->Paint( aSwRect );
-//		SFX_APP()->SpoilDemoOutput( *pOleOut, rRect );
+//      SFX_APP()->SpoilDemoOutput( *pOleOut, rRect );
         pOleOut->Pop();
 
         // erst muss das CurrShell Object zerstoert werden!!
@@ -777,10 +777,10 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
 }
 
 /******************************************************************************
- *	Methode 	:	IsAnyFieldInDoc()
- *	Beschreibung:	Stellt fest, ob im DocNodesArray Felder verankert sind
- *	Erstellt	:	JP 27.07.95
- *	Aenderung	:	JP 10.12.97
+ *  Methode     :   IsAnyFieldInDoc()
+ *  Beschreibung:   Stellt fest, ob im DocNodesArray Felder verankert sind
+ *  Erstellt    :   JP 27.07.95
+ *  Aenderung   :   JP 10.12.97
  ******************************************************************************/
 
 
@@ -834,8 +834,8 @@ void ViewShell::PrepareForPrint( const SwPrintData &rOptions )
 {
     // Viewoptions fuer den Drucker setzen
     pOpt->SetGraphic ( TRUE == rOptions.bPrintGraphic );
-    pOpt->SetTable	 ( TRUE == rOptions.bPrintTable );
-    pOpt->SetDraw	 ( TRUE == rOptions.bPrintDraw  );
+    pOpt->SetTable   ( TRUE == rOptions.bPrintTable );
+    pOpt->SetDraw    ( TRUE == rOptions.bPrintDraw  );
     pOpt->SetControl ( TRUE == rOptions.bPrintControl );
     pOpt->SetPageBack( TRUE == rOptions.bPrintPageBackground );
     pOpt->SetBlackFont( TRUE == rOptions.bPrintBlackFont );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,34 +32,34 @@
 #include <tools/ref.hxx>
 #include <xmloff/xmltoken.hxx>
 
-namespace rtl { class OUString; } 
+namespace rtl { class OUString; }
 
-#define MID_SW_FLAG_MASK					0x0000ffff
+#define MID_SW_FLAG_MASK                    0x0000ffff
 
 // this flags are used in the item mapper for import and export
 
-#define MID_SW_FLAG_SPECIAL_ITEM_IMPORT	0x80000000
-#define MID_SW_FLAG_NO_ITEM_IMPORT			0x40000000
-#define MID_SW_FLAG_SPECIAL_ITEM_EXPORT	0x20000000
-#define MID_SW_FLAG_NO_ITEM_EXPORT			0x10000000
-#define MID_SW_FLAG_SPECIAL_ITEM			0xa0000000 // both import and export
-#define MID_SW_FLAG_NO_ITEM				0x50000000 // both import and export
-#define MID_SW_FLAG_ELEMENT_ITEM_IMPORT	0x08000000
-#define MID_SW_FLAG_ELEMENT_ITEM_EXPORT	0x04000000
-#define MID_SW_FLAG_ELEMENT_ITEM			0x0c000000  // both import and export 
+#define MID_SW_FLAG_SPECIAL_ITEM_IMPORT 0x80000000
+#define MID_SW_FLAG_NO_ITEM_IMPORT          0x40000000
+#define MID_SW_FLAG_SPECIAL_ITEM_EXPORT 0x20000000
+#define MID_SW_FLAG_NO_ITEM_EXPORT          0x10000000
+#define MID_SW_FLAG_SPECIAL_ITEM            0xa0000000 // both import and export
+#define MID_SW_FLAG_NO_ITEM             0x50000000 // both import and export
+#define MID_SW_FLAG_ELEMENT_ITEM_IMPORT 0x08000000
+#define MID_SW_FLAG_ELEMENT_ITEM_EXPORT 0x04000000
+#define MID_SW_FLAG_ELEMENT_ITEM            0x0c000000  // both import and export
 
 // ---
 
 struct SvXMLItemMapEntry
 {
-    sal_uInt16 nNameSpace;		// declares the Namespace in wich this item
+    sal_uInt16 nNameSpace;      // declares the Namespace in wich this item
                                 // exists
     enum ::xmloff::token::XMLTokenEnum eLocalName;
-                                // the local name for the item inside 
+                                // the local name for the item inside
                                 // the Namespace (as an XMLTokenEnum)
-    sal_uInt16 nWhichId;		// the WichId to identify the item
+    sal_uInt16 nWhichId;        // the WichId to identify the item
                                 // in the pool
-    sal_uInt32 nMemberId;		// the memberid specifies wich part
+    sal_uInt32 nMemberId;       // the memberid specifies wich part
                                 // of the item should be imported or
                                 // exported with this Namespace
                                 // and localName
@@ -93,4 +93,4 @@ SV_DECL_REF( SvXMLItemMapEntries )
 SV_IMPL_REF( SvXMLItemMapEntries )
 
 
-#endif	//  _XMLITMAP_HXX
+#endif  //  _XMLITMAP_HXX

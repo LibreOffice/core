@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,8 @@
 #define HTML_FONT_COUNT 7
 
 // !!!be aware!!!: the following defines are _not_ used as values in the configuration file
-//					this is because of compatibility reasons
-#define HTML_CFG_HTML32		0	// Html 3.2
+//                  this is because of compatibility reasons
+#define HTML_CFG_HTML32     0   // Html 3.2
 #define HTML_CFG_MSIE_40    1   // Internet Explorer 4.0
 #define HTML_CFG_MSIE       HTML_CFG_MSIE_40
 #define HTML_CFG_WRITER     2   // Writer
@@ -64,38 +64,38 @@ public:
     virtual void    Commit();
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 
-    USHORT 		GetFontSize(USHORT nPos) const;
-    void 		SetFontSize(USHORT nPos, USHORT nSize);
+    USHORT      GetFontSize(USHORT nPos) const;
+    void        SetFontSize(USHORT nPos, USHORT nSize);
 
-    BOOL		IsImportUnknown() const;
-    void 		SetImportUnknown(BOOL bSet);
+    BOOL        IsImportUnknown() const;
+    void        SetImportUnknown(BOOL bSet);
 
-    USHORT 		GetExportMode() const;
-    void		SetExportMode(USHORT nSet);
+    USHORT      GetExportMode() const;
+    void        SetExportMode(USHORT nSet);
 
-    BOOL 		IsStarBasic() const;
-    void		SetStarBasic(BOOL bSet);
+    BOOL        IsStarBasic() const;
+    void        SetStarBasic(BOOL bSet);
 
-    BOOL 		IsStarBasicWarning() const;
-    void		SetStarBasicWarning(BOOL bSet);
+    BOOL        IsStarBasicWarning() const;
+    void        SetStarBasicWarning(BOOL bSet);
 
-    BOOL 		IsSaveGraphicsLocal() const;
-    void		SetSaveGraphicsLocal(BOOL bSet);
+    BOOL        IsSaveGraphicsLocal() const;
+    void        SetSaveGraphicsLocal(BOOL bSet);
 
-    BOOL 		IsPrintLayoutExtension() const;
-    void		SetPrintLayoutExtension(BOOL bSet);
+    BOOL        IsPrintLayoutExtension() const;
+    void        SetPrintLayoutExtension(BOOL bSet);
 
-    BOOL		IsIgnoreFontFamily() const;
-    void		SetIgnoreFontFamily(BOOL bSet);
+    BOOL        IsIgnoreFontFamily() const;
+    void        SetIgnoreFontFamily(BOOL bSet);
 
     sal_Bool    IsDefaultTextEncoding() const;
     rtl_TextEncoding GetTextEncoding() const;
-    void 		SetTextEncoding( rtl_TextEncoding );
+    void        SetTextEncoding( rtl_TextEncoding );
     static SvxHtmlOptions* Get();
 
-    BOOL		IsNumbersEnglishUS() const;
-    void		SetNumbersEnglishUS(BOOL bSet);
-    
+    BOOL        IsNumbersEnglishUS() const;
+    void        SetNumbersEnglishUS(BOOL bSet);
+
     void AddListenerLink( const Link& rLink );
     void RemoveListenerLink( const Link& rLink );
 };

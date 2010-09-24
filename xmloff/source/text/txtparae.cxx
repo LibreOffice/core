@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -283,13 +283,13 @@ static int txtparae_bContainsIllegalCharacters = sal_False;
 
 // The following map shows which property values are required:
 //
-// property						auto style pass		export
+// property                     auto style pass     export
 // --------------------------------------------------------
-// ParaStyleName				if style exists		always
-// ParaConditionalStyleName		if style exists		always
-// NumberingRules				if style exists		always
-// TextSection					always				always
-// ParaChapterNumberingLevel	never				always
+// ParaStyleName                if style exists     always
+// ParaConditionalStyleName     if style exists     always
+// NumberingRules               if style exists     always
+// TextSection                  always              always
+// ParaChapterNumberingLevel    never               always
 // NumberingIsNumber            never               always
 
 // The conclusion is that for auto styles the first three properties
@@ -320,10 +320,10 @@ enum eParagraphPropertyNamesEnumAuto
 static const sal_Char* aParagraphPropertyNames[] =
 {
     "NumberingIsNumber",
-    "NumberingStyleName",			//#outline level,add by zhaojianwei
+    "NumberingStyleName",           //#outline level,add by zhaojianwei
 
-    //"ParaChapterNumberingLevel",	//#outline level,remove by zhaojianwei
-    "OutlineLevel",					//<-end,add by zhaojianwei
+    //"ParaChapterNumberingLevel",  //#outline level,remove by zhaojianwei
+    "OutlineLevel",                 //<-end,add by zhaojianwei
     "ParaConditionalStyleName",
     "ParaStyleName",
     "TextSection",
@@ -333,9 +333,9 @@ static const sal_Char* aParagraphPropertyNames[] =
 enum eParagraphPropertyNamesEnum
 {
     NUMBERING_IS_NUMBER = 0,
-    PARA_NUMBERING_STYLENAME = 1,		//#outline level,add by zhaojianwei
-    //PARA_CHAPTER_NUMERBING_LEVEL = 1,	//#outline level,remove by zhaojianwei
-    PARA_OUTLINE_LEVEL=2,				//<-end.add by zhaojianwei
+    PARA_NUMBERING_STYLENAME = 1,       //#outline level,add by zhaojianwei
+    //PARA_CHAPTER_NUMERBING_LEVEL = 1, //#outline level,remove by zhaojianwei
+    PARA_OUTLINE_LEVEL=2,               //<-end.add by zhaojianwei
     PARA_CONDITIONAL_STYLE_NAME = 3,
     PARA_STYLE_NAME = 4,
     TEXT_SECTION = 5
@@ -1723,7 +1723,7 @@ void XMLTextParagraphExport::exportText(
             if( !bAutoStyles )
             {
                 // fixme: move string to class member, couldn't do now because
-                //		  of no incompatible build
+                //        of no incompatible build
                 OUString sHasLevels( RTL_CONSTASCII_USTRINGPARAM("HasLevels") );
                 if (xInfo->hasPropertyByName( sHasLevels ) )
                 {
@@ -1965,10 +1965,10 @@ void XMLTextParagraphExport::exportParagraph(
     if( !rPropSetHelper.checkedProperties() )
         rPropSetHelper.hasProperties( xPropSet->getPropertySetInfo() );
 
-//	if( xMultiPropSet.is() )
-//		rPropSetHelper.getValues( xMultiPropSet );
-//	else
-//		rPropSetHelper.getValues( xPropSet );
+//  if( xMultiPropSet.is() )
+//      rPropSetHelper.getValues( xMultiPropSet );
+//  else
+//      rPropSetHelper.getValues( xPropSet );
 
     if( bExportParagraph )
     {
@@ -2038,24 +2038,24 @@ void XMLTextParagraphExport::exportParagraph(
                 }
             }
 
-            //if( rPropSetHelper.hasProperty( PARA_CHAPTER_NUMERBING_LEVEL ) )	//#outline level,zhaojianwei
-            if( rPropSetHelper.hasProperty( PARA_OUTLINE_LEVEL ) )				//<-end
+            //if( rPropSetHelper.hasProperty( PARA_CHAPTER_NUMERBING_LEVEL ) )  //#outline level,zhaojianwei
+            if( rPropSetHelper.hasProperty( PARA_OUTLINE_LEVEL ) )              //<-end
             {
                 if( xMultiPropSet.is() )
-                    //rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,	//#outline level,zhaojianwei
-                    rPropSetHelper.getValue( PARA_OUTLINE_LEVEL,				//<-end
+                    //rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,    //#outline level,zhaojianwei
+                    rPropSetHelper.getValue( PARA_OUTLINE_LEVEL,                //<-end
                                                      xMultiPropSet ) >>= nOutlineLevel;
                 else
-                    //rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,	//#outline level,zhaojianwei
-                    rPropSetHelper.getValue( PARA_OUTLINE_LEVEL,				//<-end
+                    //rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,    //#outline level,zhaojianwei
+                    rPropSetHelper.getValue( PARA_OUTLINE_LEVEL,                //<-end
                                                      xPropSet ) >>= nOutlineLevel;
 
-                //if( -1 != nOutlineLevel )	//#outline level,zhaojianwei
-                if( 0 < nOutlineLevel )	//<-end,zhaojianwei
+                //if( -1 != nOutlineLevel ) //#outline level,zhaojianwei
+                if( 0 < nOutlineLevel ) //<-end,zhaojianwei
                 {
                     OUStringBuffer sTmp;
-                    //sTmp.append( sal_Int32( nOutlineLevel + 1 ) );	//#outline level,zhaojianwei
-                    sTmp.append( sal_Int32( nOutlineLevel) );		//<-end,zhaojianwei
+                    //sTmp.append( sal_Int32( nOutlineLevel + 1 ) );    //#outline level,zhaojianwei
+                    sTmp.append( sal_Int32( nOutlineLevel) );       //<-end,zhaojianwei
                     GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                               XML_OUTLINE_LEVEL,
                                   sTmp.makeStringAndClear() );
@@ -2099,10 +2099,10 @@ void XMLTextParagraphExport::exportParagraph(
                                 }
                             }
 
-                        }	//<end,zhaojianwei
+                        }   //<end,zhaojianwei
 
-                        //if( ! bIsNumber )			//#outline level,removed by zhaojianwei
-                        if( ! bIsNumber && bAssignedtoOutlineStyle )	//#outline level,add by zhaojianwei
+                        //if( ! bIsNumber )         //#outline level,removed by zhaojianwei
+                        if( ! bIsNumber && bAssignedtoOutlineStyle )    //#outline level,add by zhaojianwei
                             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                                       XML_IS_LIST_HEADER,
                                                       XML_TRUE );
@@ -2211,8 +2211,8 @@ void XMLTextParagraphExport::exportParagraph(
     {
         sal_Bool bPrevCharIsSpace = sal_True;
         enum XMLTokenEnum eElem =
-            //-1 == nOutlineLevel ? XML_P : XML_H;	//#outline level,zhaojianwei
-            0 < nOutlineLevel ? XML_H : XML_P;	//<-end,zhaojianwei
+            //-1 == nOutlineLevel ? XML_P : XML_H;  //#outline level,zhaojianwei
+            0 < nOutlineLevel ? XML_H : XML_P;  //<-end,zhaojianwei
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, eElem,
                                   sal_True, sal_False );
         if( bHasContentEnum )
@@ -2267,7 +2267,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     exportTextContentEnumeration( xContentEnum,
                                                     bAutoStyles,
                                                     xSection, bIsProgress, sal_True,
-                                                     &xPropSet	);
+                                                     &xPropSet  );
 
                 bPrevCharIsSpace = sal_False;
             }
@@ -2294,7 +2294,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sDocumentIndexMark))
             {
-                pIndexMarkExport->ExportIndexMark(xPropSet,	bAutoStyles);
+                pIndexMarkExport->ExportIndexMark(xPropSet, bAutoStyles);
             }
             else if (sType.equals(sRedline))
             {
@@ -2354,7 +2354,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sSoftPageBreak))
             {
-                exportSoftPageBreak(xPropSet,	bAutoStyles);
+                exportSoftPageBreak(xPropSet,   bAutoStyles);
             }
             else {
                 DBG_ERROR("unknown text portion type");
@@ -2377,7 +2377,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
     }
 
 // now that there are nested enumerations for meta(-field), this may be valid!
-//	DBG_ASSERT( !bOpenRuby, "Red Alert: Ruby still open!" );
+//  DBG_ASSERT( !bOpenRuby, "Red Alert: Ruby still open!" );
 }
 
 void XMLTextParagraphExport::exportTable(
@@ -2442,10 +2442,10 @@ void XMLTextParagraphExport::exportTextMark(
     // mib said: "Hau wech!"
     //
     // (Originally, I'd export a span element in case the (book|reference)mark
-    //	was formatted. This actually makes a difference in case some pervert
-    //	sets a point reference mark in the document and, say, formats it bold.
+    //  was formatted. This actually makes a difference in case some pervert
+    //  sets a point reference mark in the document and, say, formats it bold.
     //  This basically meaningless formatting will now been thrown away
-    //	(aka cleaned up), since mib said: ...					dvo
+    //  (aka cleaned up), since mib said: ...                   dvo
 
      if (!bAutoStyles)
     {
@@ -3434,15 +3434,15 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
         sal_Bool bCurrCharIsSpace = sal_False;
         switch( cChar )
         {
-        case 0x0009:	// Tab
-        case 0x000A:	// LF
+        case 0x0009:    // Tab
+        case 0x000A:    // LF
             // These characters are exported as text.
             bExpCharAsElement = sal_True;
             bExpCharAsText = sal_False;
             break;
         case 0x000D:
-            break;	// legal character
-        case 0x0020:	// Blank
+            break;  // legal character
+        case 0x0020:    // Blank
             if( rPrevCharIsSpace )
             {
                 // If the previous character is a space character,
@@ -3502,14 +3502,14 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
         {
             switch( cChar )
             {
-            case 0x0009:	// Tab
+            case 0x0009:    // Tab
                 {
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
                                               XML_TAB, sal_False,
                                               sal_False );
                 }
                 break;
-            case 0x000A:	// LF
+            case 0x000A:    // LF
                 {
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
                                               XML_LINE_BREAK, sal_False,

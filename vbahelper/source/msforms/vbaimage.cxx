@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,14 +36,14 @@ ScVbaImage::ScVbaImage( const uno::Reference< XHelperInterface >& xParent, const
 {
 }
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaImage::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaImage") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 ScVbaImage::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

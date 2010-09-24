@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,50 +104,50 @@ class SdXMLExport : public SvXMLExport
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > mxDocStyleFamilies;
     com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocMasterPages;
     com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocDrawPages;
-    sal_Int32					mnDocMasterPageCount;
-    sal_Int32					mnDocDrawPageCount;
-    sal_uInt32					mnShapeStyleInfoIndex;
-    sal_uInt32					mnObjectCount;
+    sal_Int32                   mnDocMasterPageCount;
+    sal_Int32                   mnDocDrawPageCount;
+    sal_uInt32                  mnShapeStyleInfoIndex;
+    sal_uInt32                  mnObjectCount;
 
     // temporary infos
-    ImpXMLEXPPageMasterList*	mpPageMasterInfoList;
-    ImpXMLEXPPageMasterList*	mpPageMasterUsageList;
-    ImpXMLEXPPageMasterList*	mpNotesPageMasterUsageList;
-    ImpXMLEXPPageMasterInfo*	mpHandoutPageMaster;
-    ImpXMLAutoLayoutInfoList*	mpAutoLayoutInfoList;
+    ImpXMLEXPPageMasterList*    mpPageMasterInfoList;
+    ImpXMLEXPPageMasterList*    mpPageMasterUsageList;
+    ImpXMLEXPPageMasterList*    mpNotesPageMasterUsageList;
+    ImpXMLEXPPageMasterInfo*    mpHandoutPageMaster;
+    ImpXMLAutoLayoutInfoList*   mpAutoLayoutInfoList;
 
     com::sun::star::uno::Sequence< ::rtl::OUString > maDrawPagesAutoLayoutNames;
 
-    ::std::vector< ::rtl::OUString >		maDrawPagesStyleNames;
-    ::std::vector< ::rtl::OUString >		maDrawNotesPagesStyleNames;
-    ::std::vector< ::rtl::OUString >		maMasterPagesStyleNames;
-    ::rtl::OUString							maHandoutMasterStyleName;
-    ::std::vector< HeaderFooterPageSettingsImpl >	maDrawPagesHeaderFooterSettings;
-    ::std::vector< HeaderFooterPageSettingsImpl >	maDrawNotesPagesHeaderFooterSettings;
+    ::std::vector< ::rtl::OUString >        maDrawPagesStyleNames;
+    ::std::vector< ::rtl::OUString >        maDrawNotesPagesStyleNames;
+    ::std::vector< ::rtl::OUString >        maMasterPagesStyleNames;
+    ::rtl::OUString                         maHandoutMasterStyleName;
+    ::std::vector< HeaderFooterPageSettingsImpl >   maDrawPagesHeaderFooterSettings;
+    ::std::vector< HeaderFooterPageSettingsImpl >   maDrawNotesPagesHeaderFooterSettings;
 
-    ::std::vector< ::rtl::OUString >		maHeaderDeclsVector;
-    ::std::vector< ::rtl::OUString >		maFooterDeclsVector;
-    ::std::vector< DateTimeDeclImpl >		maDateTimeDeclsVector;
+    ::std::vector< ::rtl::OUString >        maHeaderDeclsVector;
+    ::std::vector< ::rtl::OUString >        maFooterDeclsVector;
+    ::std::vector< DateTimeDeclImpl >       maDateTimeDeclsVector;
 
-    HeaderFooterPageSettingsImpl			maHandoutPageHeaderFooterSettings;
+    HeaderFooterPageSettingsImpl            maHandoutPageHeaderFooterSettings;
 
-    XMLSdPropHdlFactory*				mpSdPropHdlFactory;
-    XMLShapeExportPropertyMapper*		mpPropertySetMapper;
-    XMLPageExportPropertyMapper*		mpPresPagePropsMapper;
+    XMLSdPropHdlFactory*                mpSdPropHdlFactory;
+    XMLShapeExportPropertyMapper*       mpPropertySetMapper;
+    XMLPageExportPropertyMapper*        mpPresPagePropsMapper;
 
-    SdXMLFormatMap	maUsedDateStyles;			// this is a vector with the used formatings for date fields
-    SdXMLFormatMap	maUsedTimeStyles;			// this is a vector with the used formatings for time fields
+    SdXMLFormatMap  maUsedDateStyles;           // this is a vector with the used formatings for date fields
+    SdXMLFormatMap  maUsedTimeStyles;           // this is a vector with the used formatings for time fields
 
-    sal_Bool					mbIsDraw;
-    sal_Bool					mbFamilyGraphicUsed;
-    sal_Bool					mbFamilyPresentationUsed;
+    sal_Bool                    mbIsDraw;
+    sal_Bool                    mbFamilyGraphicUsed;
+    sal_Bool                    mbFamilyPresentationUsed;
 
-    const rtl::OUString			msZIndex;
-    const rtl::OUString			msEmptyPres;
-    const rtl::OUString			msModel;
-    const rtl::OUString			msStartShape;
-    const rtl::OUString			msEndShape;
-    const rtl::OUString			msPageLayoutNames;
+    const rtl::OUString         msZIndex;
+    const rtl::OUString         msEmptyPres;
+    const rtl::OUString         msModel;
+    const rtl::OUString         msStartShape;
+    const rtl::OUString         msEndShape;
+    const rtl::OUString         msPageLayoutNames;
 
     virtual void _ExportStyles(BOOL bUsed);
     virtual void _ExportAutoStyles();
@@ -192,7 +192,7 @@ protected:
 
 public:
     // #110680#
-    SdXMLExport( 
+    SdXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_Bool bIsDraw, sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SdXMLExport();
@@ -224,5 +224,5 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 };
 
-#endif	//  _SDXMLEXP_HXX
+#endif  //  _SDXMLEXP_HXX
 

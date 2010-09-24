@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,14 +50,14 @@ void SAL_CALL SwVbaReplacement::setText( const ::rtl::OUString& _text ) throw (u
     mxPropertyReplace->setReplaceString( _text );
 }
 
-rtl::OUString& 
+rtl::OUString&
 SwVbaReplacement::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaReplacement") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 SwVbaReplacement::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

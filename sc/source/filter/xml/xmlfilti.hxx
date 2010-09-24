@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,16 +49,16 @@ class ScXMLFilterContext : public SvXMLImportContext
     com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2> aFilterFields;
     com::sun::star::table::CellAddress aOutputPosition;
     com::sun::star::table::CellRangeAddress aConditionSourceRangeAddress;
-    sal_Int16	nUserListIndex;
-    sal_Bool	bSkipDuplicates;
-    sal_Bool	bCopyOutputData;
-    sal_Bool	bUseRegularExpressions;
-    sal_Bool	bIsCaseSensitive;
-    sal_Bool	bEnabledUserList;
-    sal_Bool	bConnectionOr;
-    sal_Bool	bNextConnectionOr;
-    sal_Bool	bConditionSourceRange;
-    Stack		aConnectionOrStack;
+    sal_Int16   nUserListIndex;
+    sal_Bool    bSkipDuplicates;
+    sal_Bool    bCopyOutputData;
+    sal_Bool    bUseRegularExpressions;
+    sal_Bool    bIsCaseSensitive;
+    sal_Bool    bEnabledUserList;
+    sal_Bool    bConnectionOr;
+    sal_Bool    bNextConnectionOr;
+    sal_Bool    bConditionSourceRange;
+    Stack       aConnectionOrStack;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -148,8 +148,8 @@ class ScXMLConditionContext : public SvXMLImportContext
     rtl::OUString sDataType;
     rtl::OUString sConditionValue;
     rtl::OUString sOperator;
-    sal_Int32	nField;
-    sal_Bool	bIsCaseSensitive;
+    sal_Int32   nField;
+    sal_Bool    bIsCaseSensitive;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -177,22 +177,22 @@ public:
 
 class ScXMLDPFilterContext : public SvXMLImportContext
 {
-    ScXMLDataPilotTableContext*	pDataPilotTable;
+    ScXMLDataPilotTableContext* pDataPilotTable;
 
-    ScQueryParam	aFilterFields;
-    ScAddress		aOutputPosition;
-    ScRange			aConditionSourceRangeAddress;
-    sal_uInt8	nFilterFieldCount;
-    sal_Int16	nUserListIndex;
-    sal_Bool	bSkipDuplicates;
-    sal_Bool	bCopyOutputData;
-    sal_Bool	bUseRegularExpressions;
-    sal_Bool	bIsCaseSensitive;
-    sal_Bool	bEnabledUserList;
-    sal_Bool	bConnectionOr;
-    sal_Bool	bNextConnectionOr;
-    sal_Bool	bConditionSourceRange;
-    Stack		aConnectionOrStack;
+    ScQueryParam    aFilterFields;
+    ScAddress       aOutputPosition;
+    ScRange         aConditionSourceRangeAddress;
+    sal_uInt8   nFilterFieldCount;
+    sal_Int16   nUserListIndex;
+    sal_Bool    bSkipDuplicates;
+    sal_Bool    bCopyOutputData;
+    sal_Bool    bUseRegularExpressions;
+    sal_Bool    bIsCaseSensitive;
+    sal_Bool    bEnabledUserList;
+    sal_Bool    bConnectionOr;
+    sal_Bool    bNextConnectionOr;
+    sal_Bool    bConditionSourceRange;
+    Stack       aConnectionOrStack;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -281,8 +281,8 @@ class ScXMLDPConditionContext : public SvXMLImportContext
     rtl::OUString sDataType;
     rtl::OUString sConditionValue;
     rtl::OUString sOperator;
-    sal_Int32	nField;
-    sal_Bool	bIsCaseSensitive;
+    sal_Int32   nField;
+    sal_Bool    bIsCaseSensitive;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

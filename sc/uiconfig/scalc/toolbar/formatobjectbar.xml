@@ -33,7 +33,7 @@
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent" toolbar:helpid="helpid:26046"  />
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate" toolbar:helpid="helpid:26053"  toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatScientific" toolbar:helpid="helpid:26055"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:helpid="helpid:26052"  />
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:helpid="helpid:26052"  toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatIncDecimals" toolbar:helpid="helpid:26057"  />
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecDecimals" toolbar:helpid="helpid:26058"  />
  <toolbar:toolbarseparator/>
@@ -50,4 +50,6 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertColumns" toolbar:helpid="helpid:26268"  toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:DeleteRows" toolbar:helpid="helpid:26236"  toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:DeleteColumns" toolbar:helpid="helpid:26237"  toolbar:visible="false" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleSheetGrid" toolbar:helpid="helpid:26238"  toolbar:visible="true" />
 </toolbar:toolbar>

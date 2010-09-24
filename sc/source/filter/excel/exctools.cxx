@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -143,11 +143,11 @@ void XclImpOutlineBuffer::MakeScOutline( void )
     if( !pOutlineArray || !HasOutline() )
         return;
 
-    const UINT16	nNumLev			= 8;
-    BOOL			bPreOutedLevel	= FALSE;
-    BYTE			nCurrLevel		= 0;
-    BOOL			bMakeHidden[ nNumLev ];
-    BOOL			bMakeVisible[ nNumLev + 1 ];
+    const UINT16    nNumLev         = 8;
+    BOOL            bPreOutedLevel  = FALSE;
+    BYTE            nCurrLevel      = 0;
+    BOOL            bMakeHidden[ nNumLev ];
+    BOOL            bMakeVisible[ nNumLev + 1 ];
 
     sal_uInt16 nLevel;
     for( nLevel = 0; nLevel < nNumLev; ++nLevel )
@@ -162,9 +162,9 @@ void XclImpOutlineBuffer::MakeScOutline( void )
     {
         for( BYTE nWorkLevel = 1; nWorkLevel <= nMaxLevel; nWorkLevel++ )
         {
-            UINT16	nStartPos       = 0;
+            UINT16  nStartPos       = 0;
             BYTE    nCurrLevel2 = 0;
-            BYTE	nPrevLevel	= 0;
+            BYTE    nPrevLevel  = 0;
 
             for( SCSIZE nC = 0 ; nC <= nLast ; nC++ )
             {
@@ -190,20 +190,20 @@ void XclImpOutlineBuffer::MakeScOutline( void )
         bPreOutedLevel = pHidden[ 0 ];
 
     // generate SC outlines
-    UINT16	nPrevC;
-    UINT16	nStart[ nNumLev ];
-    BOOL	bDummy;
-    BOOL	bPrevOuted	= bPreOutedLevel;
-    BOOL	bCurrHidden = FALSE;
-    BOOL	bPrevHidden = FALSE;
+    UINT16  nPrevC;
+    UINT16  nStart[ nNumLev ];
+    BOOL    bDummy;
+    BOOL    bPrevOuted  = bPreOutedLevel;
+    BOOL    bCurrHidden = FALSE;
+    BOOL    bPrevHidden = FALSE;
 
     for( SCSIZE nC = 0; nC <= nLast; nC++ )
     {
         BYTE nWorkLevel = pLevel[ nC ];
 
         nPrevC      = static_cast< sal_uInt16 >( nC ? nC - 1 : 0 );
-        bPrevHidden	= bCurrHidden;
-        bCurrHidden	= pHidden[ nC ];
+        bPrevHidden = bCurrHidden;
+        bCurrHidden = pHidden[ nC ];
 
         // open new levels
         while( nWorkLevel > nCurrLevel )
@@ -217,9 +217,9 @@ void XclImpOutlineBuffer::MakeScOutline( void )
         // close levels
         while( nWorkLevel < nCurrLevel )
         {
-            BOOL bLastLevel		= (nWorkLevel == (nCurrLevel - 1));
-            BOOL bRealHidden	= (bMakeHidden[ nCurrLevel ] && bPrevHidden );
-            BOOL bRealVisible	= (bMakeVisible[ nCurrLevel ] ||
+            BOOL bLastLevel     = (nWorkLevel == (nCurrLevel - 1));
+            BOOL bRealHidden    = (bMakeHidden[ nCurrLevel ] && bPrevHidden );
+            BOOL bRealVisible   = (bMakeVisible[ nCurrLevel ] ||
                                     (!bCurrHidden && bLastLevel));
 
             pOutlineArray->Insert( nStart[ nCurrLevel ], nPrevC , bDummy,
@@ -242,10 +242,10 @@ void XclImpOutlineBuffer::SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
         if( nL > nLast )
             nLast = nL;
 
-        BYTE*	pLevelCount;
-        BYTE*	pLast;
-        BOOL*	pOutedCount;
-        BOOL*	pHiddenCount;
+        BYTE*   pLevelCount;
+        BYTE*   pLast;
+        BOOL*   pOutedCount;
+        BOOL*   pHiddenCount;
 
         pLevelCount = &pLevel[ nF ];
         pLast = &pLevel[ nL ];
@@ -293,15 +293,15 @@ void ExcScenarioCell::SetValue( const String& r )
 
 
 
-#define	EXCSCAPPEND(EXCSCCELL)	(List::Insert(EXCSCCELL,LIST_APPEND))
-#define	EXCSCFIRST()			((ExcScenarioCell*)List::First())
-#define	EXCSCNEXT()				((ExcScenarioCell*)List::Next())
+#define EXCSCAPPEND(EXCSCCELL)  (List::Insert(EXCSCCELL,LIST_APPEND))
+#define EXCSCFIRST()            ((ExcScenarioCell*)List::First())
+#define EXCSCNEXT()             ((ExcScenarioCell*)List::Next())
 
 
 ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR->GetCurrScTab() )
 {
-    UINT16			nCref;
-    UINT8			nName, nComment;
+    UINT16          nCref;
+    UINT8           nName, nComment;
 
     rIn >> nCref;
     rIn >> nProtected;
@@ -324,8 +324,8 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR
     else
         pComment = new String;
 
-    UINT16			n = nCref;
-    UINT16			nC, nR;
+    UINT16          n = nCref;
+    UINT16          nC, nR;
     while( n )
     {
         rIn >> nR >> nC;
@@ -336,7 +336,7 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR
     }
 
     n = nCref;
-    ExcScenarioCell*	p = EXCSCFIRST();
+    ExcScenarioCell*    p = EXCSCFIRST();
     while( p )
     {
         p->SetValue( rIn.ReadUniString() );
@@ -348,7 +348,7 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR
 
 ExcScenario::~ExcScenario()
 {
-    ExcScenarioCell*	p = EXCSCFIRST();
+    ExcScenarioCell*    p = EXCSCFIRST();
 
     while( p )
     {
@@ -368,9 +368,9 @@ ExcScenario::~ExcScenario()
 void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
 {
     ScDocument&         r = rRoot.GetDoc();
-    ExcScenarioCell*	p = EXCSCFIRST();
-    String				aSzenName( *pName );
-    UINT16				nNewTab = nTab + 1;
+    ExcScenarioCell*    p = EXCSCFIRST();
+    String              aSzenName( *pName );
+    UINT16              nNewTab = nTab + 1;
 
     if( !r.InsertTab( nNewTab, aSzenName ) )
         return;
@@ -381,9 +381,9 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
 
     while( p )
     {
-        UINT16			nCol = p->nCol;
-        UINT16			nRow = p->nRow;
-        String			aVal = p->GetValue();
+        UINT16          nCol = p->nCol;
+        UINT16          nRow = p->nRow;
+        String          aVal = p->GetValue();
 
         r.ApplyFlagsTab( nCol, nRow, nCol, nRow, nNewTab, SC_MF_SCENARIO );
 
@@ -408,7 +408,7 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
 
 ExcScenarioList::~ExcScenarioList()
 {
-    ExcScenario*	p = _First();
+    ExcScenario*    p = _First();
 
     while( p )
     {
@@ -420,8 +420,8 @@ ExcScenarioList::~ExcScenarioList()
 
 void ExcScenarioList::Apply( const XclImpRoot& rRoot )
 {
-    ExcScenario*	p = _Last();
-    UINT16			n = ( UINT16 ) Count();
+    ExcScenario*    p = _Last();
+    UINT16          n = ( UINT16 ) Count();
 
     while( p )
     {

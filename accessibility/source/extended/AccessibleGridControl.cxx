@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,17 +60,17 @@ public:
     /** The data table child. */
     Reference<
         ::com::sun::star::accessibility::XAccessible >          m_xTable;
-    AccessibleGridControlTable*				m_pTable;
+    AccessibleGridControlTable*             m_pTable;
 
     /** The header bar for rows. */
     Reference<
-        ::com::sun::star::accessibility::XAccessible >	        m_xRowHeaderBar;
-    AccessibleGridControlHeader*				m_pRowHeaderBar;
+        ::com::sun::star::accessibility::XAccessible >          m_xRowHeaderBar;
+    AccessibleGridControlHeader*                m_pRowHeaderBar;
 
     /** The header bar for columns (first row of the table). */
     Reference<
-        ::com::sun::star::accessibility::XAccessible >	        m_xColumnHeaderBar;
-    AccessibleGridControlHeader*				m_pColumnHeaderBar;
+        ::com::sun::star::accessibility::XAccessible >          m_xColumnHeaderBar;
+    AccessibleGridControlHeader*                m_pColumnHeaderBar;
 };
 
 DBG_NAME( AccessibleGridControl )
@@ -94,9 +94,9 @@ void SAL_CALL AccessibleGridControl::disposing()
 {
     ::osl::MutexGuard aGuard( getOslMutex() );
 
-    m_pImpl->m_pTable		= NULL;
-    m_pImpl->m_pColumnHeaderBar	= NULL;
-    m_pImpl->m_pRowHeaderBar	= NULL;
+    m_pImpl->m_pTable       = NULL;
+    m_pImpl->m_pColumnHeaderBar = NULL;
+    m_pImpl->m_pRowHeaderBar    = NULL;
     m_pImpl->m_aCreator         = Reference< XAccessible >();
 
     Reference< XAccessible >  xTable = m_pImpl->m_xTable;
@@ -282,7 +282,7 @@ AccessibleGridControl::implGetHeaderBar( AccessibleTableControlObjType eObjType 
             if ( TCTYPE_COLUMNHEADERBAR == eObjType)
                 m_pImpl->m_pColumnHeaderBar = pHeaderBar;
             else
-                m_pImpl->m_pRowHeaderBar	= pHeaderBar;
+                m_pImpl->m_pRowHeaderBar    = pHeaderBar;
 
             *pxMember = pHeaderBar;
         }

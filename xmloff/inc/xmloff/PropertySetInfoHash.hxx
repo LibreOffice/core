@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ inline size_t PropertySetInfoHash::operator()(
 {
     const sal_Int32* pBytesAsInt32Array =
         (const sal_Int32*)r.aImplementationId.getConstArray();
-    sal_Int32 nId32 =	pBytesAsInt32Array[0] ^
+    sal_Int32 nId32 =   pBytesAsInt32Array[0] ^
                         pBytesAsInt32Array[1] ^
                         pBytesAsInt32Array[2] ^
                         pBytesAsInt32Array[3];

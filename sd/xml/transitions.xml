@@ -121,20 +121,20 @@
   <anim:transitionFilter smil:type="slideWipe" smil:subtype="fromLeft"/>
  </anim:par>
  <anim:par pres:preset-id="cover-up">
-  <anim:transitionFilter smil:type="slideWipe" smil:subtype="fromBottom"/> 
+  <anim:transitionFilter smil:type="slideWipe" smil:subtype="fromBottom"/>
  </anim:par>
  <anim:par pres:preset-id="cover-left-down">
-  <anim:transitionFilter smil:type="slideWipe" smil:subtype="fromTopRight"/> 
+  <anim:transitionFilter smil:type="slideWipe" smil:subtype="fromTopRight"/>
  </anim:par>
  <anim:par pres:preset-id="cover-left-up">
-  <anim:transitionFilter smil:type="slideWipe" smil:subtype="fromBottomRight"/> 
+  <anim:transitionFilter smil:type="slideWipe" smil:subtype="fromBottomRight"/>
  </anim:par>
  <anim:par pres:preset-id="cover-right-down">
-  <anim:transitionFilter smil:type="slideWipe" smil:subtype="fromTopLeft"/> 
+  <anim:transitionFilter smil:type="slideWipe" smil:subtype="fromTopLeft"/>
  </anim:par>
  <anim:par pres:preset-id="cover-right-up">
-  <anim:transitionFilter smil:type="slideWipe" smil:subtype="fromBottomLeft"/> 
- </anim:par> 
+  <anim:transitionFilter smil:type="slideWipe" smil:subtype="fromBottomLeft"/>
+ </anim:par>
  <anim:par pres:preset-id="dissolve">
   <anim:transitionFilter smil:type="dissolve" smil:subtype="default"/>
  </anim:par>

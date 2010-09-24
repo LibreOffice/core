@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,13 +35,13 @@
 #include "cppu/unotype.hxx"
 
 namespace com
-{     
+{
 namespace sun
-{     
+{
 namespace star
-{     
+{
 namespace uno
-{     
+{
 
 //__________________________________________________________________________________________________
 inline Any::Any() SAL_THROW( () )
@@ -182,7 +182,7 @@ inline sal_Bool Any::operator != ( const Any & rAny ) const SAL_THROW( () )
 //__________________________________________________________________________________________________
 template< class C >
 inline Any SAL_CALL makeAny( const C & value ) SAL_THROW( () )
-{ 
+{
     return Any( &value, ::cppu::getTypeFavourUnsigned(&value) );
 }
 
@@ -198,7 +198,7 @@ inline Any SAL_CALL makeAny( bool const & value ) SAL_THROW( () )
 //__________________________________________________________________________________________________
 template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW( () )
-{ 
+{
     const Type & rType = ::cppu::getTypeFavourUnsigned(&value);
     ::uno_type_any_assign(
         &rAny, const_cast< C * >( &value ), rType.getTypeLibType(),

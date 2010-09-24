@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ static void RunSVMain(void *pData)
     // running
     while (!CFRunLoopIsWaiting(*tcx->pRunLoopRef))
         usleep(100);
-        
+
     *tcx->pRet = ImplSVMain();
 
     // Force exit since some JVMs won't shutdown when only exit() is invoked

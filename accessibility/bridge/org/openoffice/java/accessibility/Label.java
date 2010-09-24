@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,10 +64,10 @@ public class Label extends Component implements javax.accessibility.Accessible {
 
         /** Gets the AccessibleText associated with this object presenting text on the display */
         public javax.accessibility.AccessibleText getAccessibleText() {
-            
+
             if (disposed)
                 return null;
-            
+
             try {
                 XAccessibleText unoAccessibleText = (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class,
                         unoAccessibleContext);

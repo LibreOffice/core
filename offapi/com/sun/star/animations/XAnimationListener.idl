@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_animations_XAnimationListener_idl__ 
-#define __com_sun_star_animations_XAnimationListener_idl__ 
+#ifndef __com_sun_star_animations_XAnimationListener_idl__
+#define __com_sun_star_animations_XAnimationListener_idl__
 
 #ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
@@ -34,11 +34,11 @@
 #include <com/sun/star/animations/XAnimationNode.idl>
 #endif
 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module animations {  
- 
-//============================================================================= 
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
 
 /** makes it possible to register listeners, which are called whenever
     an animation event occurs.
@@ -53,7 +53,7 @@ interface XAnimationListener : ::com::sun::star::lang::XEventListener
         case that the element was begun with an interface method.</p>
 
         @param Node
-            The node that begins to play.			
+            The node that begins to play.
     */
     void beginEvent( [in] XAnimationNode Node );
 
@@ -71,7 +71,7 @@ interface XAnimationListener : ::com::sun::star::lang::XEventListener
         <p>It will be raised each time the element repeats, after the first iteration.</p>
         <p>Associated with the repeat event is an integer that indicates which repeat iteration is
         beginning.
-        
+
         @param Node
             The node that repeats.
 
@@ -81,8 +81,8 @@ interface XAnimationListener : ::com::sun::star::lang::XEventListener
     void repeat( [in] XAnimationNode Node, [in] long Repeat );
 };
 
-//============================================================================= 
- 
-}; }; }; };  
+//=============================================================================
+
+}; }; }; };
 
 #endif

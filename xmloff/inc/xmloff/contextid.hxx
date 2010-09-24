@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,24 +31,24 @@
     used in the SvXMLAutoStylePoolP.
  */
 
-#define XML_SC_CTF_START	0x00001000
-#define XML_SD_CTF_START	0x00002000
-#define XML_TEXT_CTF_START	0x00003000
-#define XML_SCH_CTF_START	0x00004000
-#define XML_PM_CTF_START	0x00005000		// page master
-#define XML_FORM_CTF_START	0x00006000
-#define XML_DB_CTF_START	0x00007000
+#define XML_SC_CTF_START    0x00001000
+#define XML_SD_CTF_START    0x00002000
+#define XML_TEXT_CTF_START  0x00003000
+#define XML_SCH_CTF_START   0x00004000
+#define XML_PM_CTF_START    0x00005000      // page master
+#define XML_FORM_CTF_START  0x00006000
+#define XML_DB_CTF_START    0x00007000
 
 
-#define CTF_SD_CONTROL_SHAPE_DATA_STYLE		( XML_SD_CTF_START +  1 )
-#define CTF_SD_NUMBERINGRULES_NAME			( XML_SD_CTF_START +  2 )
-#define CTF_SD_SHAPE_PARA_ADJUST			( XML_SD_CTF_START +  3 )
+#define CTF_SD_CONTROL_SHAPE_DATA_STYLE     ( XML_SD_CTF_START +  1 )
+#define CTF_SD_NUMBERINGRULES_NAME          ( XML_SD_CTF_START +  2 )
+#define CTF_SD_SHAPE_PARA_ADJUST            ( XML_SD_CTF_START +  3 )
 
-#define CTF_FORMS_DATA_STYLE				( XML_FORM_CTF_START +  0 )
+#define CTF_FORMS_DATA_STYLE                ( XML_FORM_CTF_START +  0 )
 
 /** use together with MID_FLAG_NO_PROPERTY to import the specified
     attribute into the alien attribute container */
 
-#define CTF_ALIEN_ATTRIBUTE_IMPORT	0x00007fff
+#define CTF_ALIEN_ATTRIBUTE_IMPORT  0x00007fff
 
-#endif	// _XMLOFF_CONTEXTID_HXX_
+#endif  // _XMLOFF_CONTEXTID_HXX_

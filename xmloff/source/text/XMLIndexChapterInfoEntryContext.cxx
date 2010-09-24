@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,15 +80,15 @@ XMLIndexChapterInfoEntryContext::~XMLIndexChapterInfoEntryContext()
 
 static const SvXMLEnumMapEntry aChapterDisplayMap[] =
 {
-    { XML_NAME,				    	ChapterFormat::NAME },
-    { XML_NUMBER,					ChapterFormat::NUMBER },
-    { XML_NUMBER_AND_NAME,			ChapterFormat::NAME_NUMBER },
+    { XML_NAME,                     ChapterFormat::NAME },
+    { XML_NUMBER,                   ChapterFormat::NUMBER },
+    { XML_NUMBER_AND_NAME,          ChapterFormat::NAME_NUMBER },
     //---> i89791
     // enabled for ODF 1.2, full index support in 3.0
     { XML_PLAIN_NUMBER_AND_NAME,    ChapterFormat::NO_PREFIX_SUFFIX },
     //<---
-    { XML_PLAIN_NUMBER,	    		ChapterFormat::DIGIT },
-    { XML_TOKEN_INVALID,			0 }
+    { XML_PLAIN_NUMBER,             ChapterFormat::DIGIT },
+    { XML_TOKEN_INVALID,            0 }
 };
 
 void XMLIndexChapterInfoEntryContext::StartElement(

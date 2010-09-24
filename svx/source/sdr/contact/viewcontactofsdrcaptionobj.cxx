@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace sdr
     namespace contact
     {
         ViewContactOfSdrCaptionObj::ViewContactOfSdrCaptionObj(SdrCaptionObj& rCaptionObj)
-        :	ViewContactOfSdrRectObj(rCaptionObj)
+        :   ViewContactOfSdrRectObj(rCaptionObj)
         {
         }
 
@@ -67,16 +67,16 @@ namespace sdr
             const SfxItemSet& rItemSet = rCaptionObj.GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
-                    rItemSet, 
+                    rItemSet,
                     rCaptionObj.getText(0)));
 
             // take unrotated snap rect (direct model data) for position and size
             const Rectangle& rRectangle = rCaptionObj.GetGeoRect();
             const ::basegfx::B2DRange aObjectRange(
-                rRectangle.Left(), rRectangle.Top(), 
+                rRectangle.Left(), rRectangle.Top(),
                 rRectangle.Right(), rRectangle.Bottom());
             const GeoStat& rGeoStat(rCaptionObj.GetGeoStat());
-            
+
             // fill object matrix
             basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
                 aObjectRange.getWidth(), aObjectRange.getHeight(),
@@ -94,10 +94,10 @@ namespace sdr
             // of SdrCaptionPrimitive2D create needed invisible elements for HitTest and BoundRect
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrCaptionPrimitive2D(
-                    aObjectMatrix, 
-                    aAttribute, 
-                    rCaptionObj.getTailPolygon(), 
-                    fCornerRadiusX, 
+                    aObjectMatrix,
+                    aAttribute,
+                    rCaptionObj.getTailPolygon(),
+                    fCornerRadiusX,
                     fCornerRadiusY));
 
             xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
@@ -146,15 +146,15 @@ namespace sdr
                     const sal_uInt32 nXDist(((SdrShadowXDistItem&)(rItemSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
                     const sal_uInt32 nYDist(((SdrShadowYDistItem&)(rItemSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
                     aObjectMatrix.translate(nXDist, nYDist);
-                    
+
                     // create unit outline polygon as geometry (see SdrCaptionPrimitive2D::create2DDecomposition)
                     basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(
                         basegfx::B2DRange(0.0, 0.0, 1.0, 1.0), fCornerRadiusX, fCornerRadiusY));
 
                     // create the specialized shadow primitive
                     xSpecialShadow = drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aUnitOutline), 
-                        aObjectMatrix, 
+                        basegfx::B2DPolyPolygon(aUnitOutline),
+                        aObjectMatrix,
                         aFill,
                         drawinglayer::attribute::FillGradientAttribute());
                 }
@@ -164,7 +164,7 @@ namespace sdr
                     // if we really got a special shadow, create a two-element retval with the shadow
                     // behind the standard object's geometry
                     xRetval.realloc(2);
-                    
+
                     xRetval[0] = xSpecialShadow;
                     xRetval[1] = xReference;
                 }

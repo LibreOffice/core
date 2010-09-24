@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public:
 };
 
 class OOXMLPropertySet : public writerfilter::Reference<Properties>
-{    
+{
 public:
     typedef boost::shared_ptr<OOXMLPropertySet> Pointer_t;
 
@@ -65,7 +65,7 @@ public:
     virtual void add(OOXMLPropertySet::Pointer_t pPropertySet) = 0;
     virtual OOXMLPropertySet * clone() const = 0;
     virtual void setType(const string & rsType) = 0;
-    
+
     virtual string toString() = 0;
 };
 

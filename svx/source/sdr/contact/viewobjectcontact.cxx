@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace 
+namespace
 {
     // animated extractor
 
@@ -65,14 +65,14 @@ namespace
     {
     protected:
         // the found animated primitives
-        drawinglayer::primitive2d::Primitive2DSequence	maPrimitive2DSequence;
+        drawinglayer::primitive2d::Primitive2DSequence  maPrimitive2DSequence;
 
         // bitfield
         // text animation allowed?
-        unsigned										mbTextAnimationAllowed : 1;
+        unsigned                                        mbTextAnimationAllowed : 1;
 
         // graphic animation allowed?
-        unsigned										mbGraphicAnimationAllowed : 1;
+        unsigned                                        mbGraphicAnimationAllowed : 1;
 
         // as tooling, the process() implementation takes over API handling and calls this
         // virtual render method when the primitive implementation is BasePrimitive2D-based.
@@ -81,7 +81,7 @@ namespace
     public:
         AnimatedExtractingProcessor2D(
             const drawinglayer::geometry::ViewInformation2D& rViewInformation,
-            bool bTextAnimationAllowed, 
+            bool bTextAnimationAllowed,
             bool bGraphicAnimationAllowed);
         virtual ~AnimatedExtractingProcessor2D();
 
@@ -93,9 +93,9 @@ namespace
 
     AnimatedExtractingProcessor2D::AnimatedExtractingProcessor2D(
         const drawinglayer::geometry::ViewInformation2D& rViewInformation,
-        bool bTextAnimationAllowed, 
+        bool bTextAnimationAllowed,
         bool bGraphicAnimationAllowed)
-    :	drawinglayer::processor2d::BaseProcessor2D(rViewInformation),
+    :   drawinglayer::processor2d::BaseProcessor2D(rViewInformation),
         maPrimitive2DSequence(),
         mbTextAnimationAllowed(bTextAnimationAllowed),
         mbGraphicAnimationAllowed(bGraphicAnimationAllowed)
@@ -126,7 +126,7 @@ namespace
                 }
                 break;
             }
-            
+
             // decompose animated gifs where SdrGrafPrimitive2D produces a GraphicPrimitive2D
             // which then produces the animation infos (all when used/needed)
             case PRIMITIVE2D_ID_SDRGRAFPRIMITIVE2D :
@@ -150,7 +150,7 @@ namespace
                 process(rCandidate.get2DDecomposition(getViewInformation2D()));
                 break;
             }
-            
+
             default :
             {
                 // nothing to do for the rest
@@ -167,7 +167,7 @@ namespace sdr
     namespace contact
     {
         ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :	mrObjectContact(rObjectContact),
+        :   mrObjectContact(rObjectContact),
             mrViewContact(rViewContact),
             maObjectRange(),
             mxPrimitive2DSequence(),
@@ -203,13 +203,13 @@ namespace sdr
             // which IS the OC of this object. Eventually StopGettingViewed() needs
             // to get asynchron later
             GetObjectContact().RemoveViewObjectContact(*this);
-            
+
             // take care of remebered ViewContact
             GetViewContact().RemoveViewObjectContact(*this);
         }
 
-        const basegfx::B2DRange& ViewObjectContact::getObjectRange() const 
-        { 
+        const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
+        {
             if(maObjectRange.isEmpty())
             {
                 // if range is not computed (new or LazyInvalidate objects), force it
@@ -219,12 +219,12 @@ namespace sdr
                 if(xSequence.hasElements())
                 {
                     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-                    const_cast< ViewObjectContact* >(this)->maObjectRange = 
+                    const_cast< ViewObjectContact* >(this)->maObjectRange =
                         drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xSequence, rViewInformation2D);
                 }
             }
 
-            return maObjectRange; 
+            return maObjectRange;
         }
 
         void ViewObjectContact::ActionChanged()
@@ -257,7 +257,7 @@ namespace sdr
             {
                 // reset flag
                 mbLazyInvalidate = false;
-                
+
                 // force ObjectRange
                 getObjectRange();
 
@@ -298,7 +298,7 @@ namespace sdr
 
                 if(bTextAnimationAllowed || bGraphicAnimationAllowed)
                 {
-                    AnimatedExtractingProcessor2D aAnimatedExtractor(GetObjectContact().getViewInformation2D(), 
+                    AnimatedExtractingProcessor2D aAnimatedExtractor(GetObjectContact().getViewInformation2D(),
                         bTextAnimationAllowed, bGraphicAnimationAllowed);
                     aAnimatedExtractor.process(mxPrimitive2DSequence);
 
@@ -363,13 +363,13 @@ namespace sdr
             {
                 // has changed, copy content
                 const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = xNewPrimitiveSequence;
-                
+
                 // check for animated stuff
                 const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations();
 
                 // always update object range when PrimitiveSequence changes
                 const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-                const_cast< ViewObjectContact* >(this)->maObjectRange = 
+                const_cast< ViewObjectContact* >(this)->maObjectRange =
                     drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(mxPrimitive2DSequence, rViewInformation2D);
             }
 

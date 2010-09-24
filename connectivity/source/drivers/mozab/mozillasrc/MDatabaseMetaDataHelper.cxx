@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 #include "MNSMozabProxy.hxx"
 #include <MNSDeclares.hxx>
 
-static ::osl::Mutex	m_aMetaMutex;
+static ::osl::Mutex m_aMetaMutex;
 
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -204,10 +204,10 @@ static nsresult insertPABDescription()
 #define NS_ABDIRECTORYDATASOURCE_CONTRACTID \
   NS_RDF_DATASOURCE_CONTRACTID_PREFIX "addressdirectory"
 #define database_uri "@mozilla.org/rdf/datasource;1?name=addressdirectory"
-#define NS_ABDIRECTORYDATASOURCE_CID			\
-{ /* 0A79186D-F754-11d2-A2DA-001083003D0C */		\
-    0xa79186d, 0xf754, 0x11d2,				\
-    {0xa2, 0xda, 0x0, 0x10, 0x83, 0x0, 0x3d, 0xc}	\
+#define NS_ABDIRECTORYDATASOURCE_CID            \
+{ /* 0A79186D-F754-11d2-A2DA-001083003D0C */        \
+    0xa79186d, 0xf754, 0x11d2,              \
+    {0xa2, 0xda, 0x0, 0x10, 0x83, 0x0, 0x3d, 0xc}   \
 }
 
 // -------------------------------------------------------------------------
@@ -265,7 +265,7 @@ static nsresult enumSubs(nsISimpleEnumerator * subDirs,nsISupportsArray * array)
 {
     PRBool hasMore = PR_TRUE ;
     nsresult rv = NS_OK ;
-    while (NS_SUCCEEDED(subDirs->HasMoreElements(&hasMore)) && hasMore)	{
+    while (NS_SUCCEEDED(subDirs->HasMoreElements(&hasMore)) && hasMore) {
         nsCOMPtr<nsISupports> newDirSupports ;
 
         rv = subDirs->GetNext(getter_AddRefs(newDirSupports)) ;
@@ -485,9 +485,9 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
                                                    ::std::vector< ::rtl::OUString >&   _rStrings,
                                                    ::std::vector< ::rtl::OUString >&   _rTypes)
 {
-    sal_Bool									bGivenURI;
-    ::rtl::OUString								sAbURI;
-    ::rtl::OString										sAbURIString;
+    sal_Bool                                    bGivenURI;
+    ::rtl::OUString                             sAbURI;
+    ::rtl::OString                                      sAbURIString;
 
     OSL_TRACE( "IN MDatabaseMetaDataHelper::getTableStrings( 0x%08X, %s)\n", _pCon, _pCon->getForceLoadTables()?"True":"False" );
 
@@ -604,7 +604,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     args.arg4 = (void*)&m_aTableNames;
     args.arg5 = (void*)&m_aTableTypes;
     args.arg6 = (void*)&nErrorResourceId;
-    rv = xMProxy.StartProxy(&args,m_ProductType,m_ProfileName);	
+    rv = xMProxy.StartProxy(&args,m_ProductType,m_ProfileName);
     m_aError.setResId( static_cast<sal_uInt16>(nErrorResourceId) );
 
     if (NS_FAILED(rv))
@@ -723,7 +723,7 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
     {
         args.funcIndex = ProxiedFunc::FUNC_TESTLDAP_IS_LDAP_CONNECTED;
         TimeValue               timeValue = { 1, 0 };  // 1 * 30 Seconds timeout
-        sal_Int32				times=0;
+        sal_Int32               times=0;
         while ( times++ < 30 )
         {
             rv = xMProxy.StartProxy( &args, m_ProductType, ::rtl::OUString() );
@@ -745,7 +745,7 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
 
 sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl::OUString & aTableName)
 {
-    sal_Bool									bIsMozillaAB;
+    sal_Bool                                    bIsMozillaAB;
 
     bIsMozillaAB = !_pCon->usesFactory() && ! _pCon->isLDAP();
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
-#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx>	// helper for implementations
-#include <cppuhelper/implbase5.hxx>	// helper for implementations
+#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase5.hxx> // helper for implementations
 #include <cppuhelper/interfacecontainer.h>
 
 #include <vos/mutex.hxx>
@@ -67,7 +67,7 @@ class ThesaurusDispatcher :
     ThesSvcByLangMap_t      aSvcMap;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >		xPropSet;
+        ::com::sun::star::beans::XPropertySet >     xPropSet;
 
     // disallow copy-constructor and assignment-operator for now
     ThesaurusDispatcher(const ThesaurusDispatcher &);
@@ -77,7 +77,7 @@ class ThesaurusDispatcher :
         ::com::sun::star::beans::XPropertySet >
             GetPropSet();
 
-    void 	ClearSvcList();
+    void    ClearSvcList();
 
 public:
     ThesaurusDispatcher();
@@ -118,7 +118,7 @@ inline ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >
         ThesaurusDispatcher::GetPropSet()
 {
-    return xPropSet.is() ? 
+    return xPropSet.is() ?
         xPropSet : xPropSet = linguistic::GetLinguProperties();
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,13 +25,13 @@
  *
  ************************************************************************/
 //____________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //____________________________________________________________________________________________________________
 
 #include "progressbar.hxx"
 
 //____________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //____________________________________________________________________________________________________________
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/RasterOperation.hpp>
@@ -44,36 +44,36 @@
 #include <limits.h>
 
 //____________________________________________________________________________________________________________
-//	includes of my project
+//  includes of my project
 //____________________________________________________________________________________________________________
 
 //____________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //____________________________________________________________________________________________________________
 
-using namespace	::cppu					;
-using namespace	::osl					;
-using namespace	::rtl					;
-using namespace	::com::sun::star::uno	;
-using namespace	::com::sun::star::lang	;
-using namespace	::com::sun::star::awt	;
+using namespace ::cppu                  ;
+using namespace ::osl                   ;
+using namespace ::rtl                   ;
+using namespace ::com::sun::star::uno   ;
+using namespace ::com::sun::star::lang  ;
+using namespace ::com::sun::star::awt   ;
 
 namespace unocontrols{
 
 //____________________________________________________________________________________________________________
-//	construct/destruct
+//  construct/destruct
 //____________________________________________________________________________________________________________
 
 ProgressBar::ProgressBar( const Reference< XMultiServiceFactory >& xFactory )
-    : BaseControl		 	(	 xFactory					)
-    , m_bHorizontal			(	 DEFAULT_HORIZONTAL			)
-    , m_aBlockSize			(	 DEFAULT_BLOCKDIMENSION		)
-    , m_nForegroundColor	(	 DEFAULT_FOREGROUNDCOLOR	)
-    , m_nBackgroundColor	(	 DEFAULT_BACKGROUNDCOLOR	)
-    , m_nMinRange		 	(	 DEFAULT_MINRANGE			)
-    , m_nMaxRange		 	(	 DEFAULT_MAXRANGE			)
-    , m_nBlockValue		 	(	 DEFAULT_BLOCKVALUE			)
-    , m_nValue		 	 	(	 DEFAULT_VALUE				)
+    : BaseControl           (    xFactory                   )
+    , m_bHorizontal         (    DEFAULT_HORIZONTAL         )
+    , m_aBlockSize          (    DEFAULT_BLOCKDIMENSION     )
+    , m_nForegroundColor    (    DEFAULT_FOREGROUNDCOLOR    )
+    , m_nBackgroundColor    (    DEFAULT_BACKGROUNDCOLOR    )
+    , m_nMinRange           (    DEFAULT_MINRANGE           )
+    , m_nMaxRange           (    DEFAULT_MAXRANGE           )
+    , m_nBlockValue         (    DEFAULT_BLOCKVALUE         )
+    , m_nValue              (    DEFAULT_VALUE              )
 {
 }
 
@@ -82,13 +82,13 @@ ProgressBar::~ProgressBar()
 }
 
 //____________________________________________________________________________________________________________
-//	XInterface
+//  XInterface
 //____________________________________________________________________________________________________________
 
 Any SAL_CALL ProgressBar::queryInterface( const Type& rType ) throw( RuntimeException )
 {
     // Attention:
-    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
     Any aReturn ;
     Reference< XInterface > xDel = BaseControl::impl_getDelegator();
     if ( xDel.is() )
@@ -107,33 +107,33 @@ Any SAL_CALL ProgressBar::queryInterface( const Type& rType ) throw( RuntimeExce
 }
 
 //____________________________________________________________________________________________________________
-//	XInterface
+//  XInterface
 //____________________________________________________________________________________________________________
 
 void SAL_CALL ProgressBar::acquire() throw()
 {
     // Attention:
-    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
     BaseControl::acquire();
 }
 
 //____________________________________________________________________________________________________________
-//	XInterface
+//  XInterface
 //____________________________________________________________________________________________________________
 
 void SAL_CALL ProgressBar::release() throw()
 {
     // Attention:
-    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
     BaseControl::release();
 }
 
 //____________________________________________________________________________________________________________
-//	XTypeProvider
+//  XTypeProvider
 //____________________________________________________________________________________________________________
 
 Sequence< Type > SAL_CALL ProgressBar::getTypes() throw( RuntimeException )
@@ -152,8 +152,8 @@ Sequence< Type > SAL_CALL ProgressBar::getTypes() throw( RuntimeException )
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection	(	::getCppuType(( const Reference< XControlModel	>*)NULL )	,
-                                                          ::getCppuType(( const Reference< XProgressBar	>*)NULL )	,
+            static OTypeCollection aTypeCollection  (   ::getCppuType(( const Reference< XControlModel  >*)NULL )   ,
+                                                          ::getCppuType(( const Reference< XProgressBar >*)NULL )   ,
                                                         BaseControl::getTypes()
                                                     );
             // ... and set his address to static pointer!
@@ -165,16 +165,16 @@ Sequence< Type > SAL_CALL ProgressBar::getTypes() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//	XAggregation
+//  XAggregation
 //____________________________________________________________________________________________________________
 
 Any SAL_CALL ProgressBar::queryAggregation( const Type& aType ) throw( RuntimeException )
 {
     // Ask for my own supported interfaces ...
     // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
-    Any aReturn	( ::cppu::queryInterface(	aType					   				,
-                                               static_cast< XControlModel*	> ( this )	,
-                                               static_cast< XProgressBar*	> ( this )
+    Any aReturn ( ::cppu::queryInterface(   aType                                   ,
+                                               static_cast< XControlModel*  > ( this )  ,
+                                               static_cast< XProgressBar*   > ( this )
                                         )
                 );
 
@@ -189,13 +189,13 @@ Any SAL_CALL ProgressBar::queryAggregation( const Type& aType ) throw( RuntimeEx
 }
 
 //____________________________________________________________________________________________________________
-//	XProgressBar
+//  XProgressBar
 //____________________________________________________________________________________________________________
 
 void SAL_CALL ProgressBar::setForegroundColor( sal_Int32 nColor ) throw( RuntimeException )
 {
     // Ready for multithreading
-    MutexGuard	aGuard (m_aMutex) ;
+    MutexGuard  aGuard (m_aMutex) ;
 
     // Safe color for later use.
     m_nForegroundColor = nColor ;
@@ -205,13 +205,13 @@ void SAL_CALL ProgressBar::setForegroundColor( sal_Int32 nColor ) throw( Runtime
 }
 
 //____________________________________________________________________________________________________________
-//	XProgressBar
+//  XProgressBar
 //____________________________________________________________________________________________________________
 
 void SAL_CALL ProgressBar::setBackgroundColor ( sal_Int32 nColor ) throw( RuntimeException )
 {
     // Ready for multithreading
-    MutexGuard	aGuard (m_aMutex) ;
+    MutexGuard  aGuard (m_aMutex) ;
 
     // Safe color for later use.
     m_nBackgroundColor = nColor ;
@@ -221,14 +221,14 @@ void SAL_CALL ProgressBar::setBackgroundColor ( sal_Int32 nColor ) throw( Runtim
 }
 
 //____________________________________________________________________________________________________________
-//	XProgressBar
+//  XProgressBar
 //____________________________________________________________________________________________________________
 
 void SAL_CALL ProgressBar::setValue ( sal_Int32 nValue ) throw( RuntimeException )
 {
     // This method is defined for follow things:
-    //		1) Values >= _nMinRange
-    //		2) Values <= _nMaxRange
+    //      1) Values >= _nMinRange
+    //      2) Values <= _nMaxRange
 
     // Ready for multithreading
     MutexGuard aGuard (m_aMutex) ;
@@ -252,15 +252,15 @@ void SAL_CALL ProgressBar::setValue ( sal_Int32 nValue ) throw( RuntimeException
 }
 
 //____________________________________________________________________________________________________________
-//	XProgressBar
+//  XProgressBar
 //____________________________________________________________________________________________________________
 
 void SAL_CALL ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw( RuntimeException )
 {
     // This method is defined for follow things:
-    //		1) All values of sal_Int32
-    //		2) Min < Max
-    //		3) Min > Max
+    //      1) All values of sal_Int32
+    //      2) Min < Max
+    //      3) Min > Max
 
     // save impossible cases
     // This method is only defined for valid values
@@ -268,26 +268,26 @@ void SAL_CALL ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw( Ru
     DBG_ASSERT ( ( nMin != nMax ) , "ProgressBar::setRange()\nValues for MIN and MAX are the same. This is not allowed!\n" ) ;
 
     // Ready for multithreading
-    MutexGuard	aGuard (m_aMutex) ;
+    MutexGuard  aGuard (m_aMutex) ;
 
     // control the values for min and max
     if ( nMin < nMax )
     {
         // Take correct Min and Max
-        m_nMinRange = nMin	;
-        m_nMaxRange = nMax	;
+        m_nMinRange = nMin  ;
+        m_nMaxRange = nMax  ;
     }
     else
     {
         // Change Min and Max automaticly
-        m_nMinRange = nMax	;
-        m_nMaxRange = nMin	;
+        m_nMinRange = nMax  ;
+        m_nMaxRange = nMin  ;
     }
 
     // assure that m_nValue is within the range
     if (!(m_nMinRange < m_nValue  &&  m_nValue < m_nMaxRange))
         m_nValue = m_nMinRange;
-    
+
     impl_recalcRange () ;
 
     // Do not repaint the control at this place!!!
@@ -296,7 +296,7 @@ void SAL_CALL ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw( Ru
 }
 
 //____________________________________________________________________________________________________________
-//	XProgressBar
+//  XProgressBar
 //____________________________________________________________________________________________________________
 
 sal_Int32 SAL_CALL ProgressBar::getValue () throw( RuntimeException )
@@ -308,7 +308,7 @@ sal_Int32 SAL_CALL ProgressBar::getValue () throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//	XWindow
+//  XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL ProgressBar::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nFlags ) throw( RuntimeException )
@@ -320,17 +320,17 @@ void SAL_CALL ProgressBar::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int32 nW
 
     // Do only, if size has changed.
     if (
-        ( nWidth  != aBasePosSize.Width		) ||
-        ( nHeight != aBasePosSize.Height	)
+        ( nWidth  != aBasePosSize.Width     ) ||
+        ( nHeight != aBasePosSize.Height    )
        )
     {
-        impl_recalcRange	(							) ;
-        impl_paint 			( 0, 0, impl_getGraphicsPeer ()	) ;
+        impl_recalcRange    (                           ) ;
+        impl_paint          ( 0, 0, impl_getGraphicsPeer () ) ;
     }
 }
 
 //____________________________________________________________________________________________________________
-//	XControl
+//  XControl
 //____________________________________________________________________________________________________________
 
 sal_Bool SAL_CALL ProgressBar::setModel( const Reference< XControlModel >& /*xModel*/ ) throw( RuntimeException )
@@ -340,7 +340,7 @@ sal_Bool SAL_CALL ProgressBar::setModel( const Reference< XControlModel >& /*xMo
 }
 
 //____________________________________________________________________________________________________________
-//	XControl
+//  XControl
 //____________________________________________________________________________________________________________
 
 Reference< XControlModel > SAL_CALL ProgressBar::getModel() throw( RuntimeException )
@@ -350,7 +350,7 @@ Reference< XControlModel > SAL_CALL ProgressBar::getModel() throw( RuntimeExcept
 }
 
 //____________________________________________________________________________________________________________
-//	impl but public method to register service
+//  impl but public method to register service
 //____________________________________________________________________________________________________________
 
 const Sequence< OUString > ProgressBar::impl_getStaticSupportedServiceNames()
@@ -362,7 +362,7 @@ const Sequence< OUString > ProgressBar::impl_getStaticSupportedServiceNames()
 }
 
 //____________________________________________________________________________________________________________
-//	impl but public method to register service
+//  impl but public method to register service
 //____________________________________________________________________________________________________________
 
 const OUString ProgressBar::impl_getStaticImplementationName()
@@ -371,7 +371,7 @@ const OUString ProgressBar::impl_getStaticImplementationName()
 }
 
 //____________________________________________________________________________________________________________
-//	protected method
+//  protected method
 //____________________________________________________________________________________________________________
 
 void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGraphics > & rGraphics )
@@ -383,13 +383,13 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
     // Every request paint the completely control. ( but only, if peer exist )
      if ( rGraphics.is () )
     {
-        MutexGuard	aGuard (m_aMutex) ;
+        MutexGuard  aGuard (m_aMutex) ;
 
         // Clear background
         // (same color for line and fill)
-        rGraphics->setFillColor ( m_nBackgroundColor						) ;
-        rGraphics->setLineColor ( m_nBackgroundColor						) ;
-        rGraphics->drawRect		( nX, nY, impl_getWidth(), impl_getHeight()	) ;
+        rGraphics->setFillColor ( m_nBackgroundColor                        ) ;
+        rGraphics->setLineColor ( m_nBackgroundColor                        ) ;
+        rGraphics->drawRect     ( nX, nY, impl_getWidth(), impl_getHeight() ) ;
 
         // same color for line and fill for blocks
         rGraphics->setFillColor ( m_nForegroundColor ) ;
@@ -403,16 +403,16 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
         if (m_bHorizontal)
         {
             // Step to left side of window
-            nBlockStart	= nX ;
+            nBlockStart = nX ;
 
             for ( sal_Int16 i=1; i<=nBlockCount; ++i )
             {
                 // step free field
-                nBlockStart	+=	FREESPACE	;
+                nBlockStart +=  FREESPACE   ;
                 // paint block
                 rGraphics->drawRect (nBlockStart, nY+FREESPACE, m_aBlockSize.Width, m_aBlockSize.Height) ;
                 // step next free field
-                nBlockStart	+=	m_aBlockSize.Width ;
+                nBlockStart +=  m_aBlockSize.Width ;
             }
         }
         // draw vertikal progressbar
@@ -420,38 +420,38 @@ void ProgressBar::impl_paint ( sal_Int32 nX, sal_Int32 nY, const Reference< XGra
         else
         {
             // step to bottom side of window
-            nBlockStart	 =	nY+impl_getHeight() ;
-            nBlockStart	-=	m_aBlockSize.Height ;
+            nBlockStart  =  nY+impl_getHeight() ;
+            nBlockStart -=  m_aBlockSize.Height ;
 
             for ( sal_Int16 i=1; i<=nBlockCount; ++i )
             {
                 // step free field
-                nBlockStart	-=	FREESPACE	;
+                nBlockStart -=  FREESPACE   ;
                 // paint block
                 rGraphics->drawRect (nX+FREESPACE, nBlockStart, m_aBlockSize.Width, m_aBlockSize.Height) ;
                 // step next free field
-                nBlockStart	-=	m_aBlockSize.Height;
+                nBlockStart -=  m_aBlockSize.Height;
             }
         }
 
         // Paint shadow border around the progressbar
-        rGraphics->setLineColor ( LINECOLOR_SHADOW  						) ;
-        rGraphics->drawLine		( nX, nY, impl_getWidth(), nY 				) ;
-        rGraphics->drawLine		( nX, nY, nX		  	 , impl_getHeight() ) ;
+        rGraphics->setLineColor ( LINECOLOR_SHADOW                          ) ;
+        rGraphics->drawLine     ( nX, nY, impl_getWidth(), nY               ) ;
+        rGraphics->drawLine     ( nX, nY, nX             , impl_getHeight() ) ;
 
-        rGraphics->setLineColor ( LINECOLOR_BRIGHT  															) ;
-        rGraphics->drawLine		( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY 					) ;
-        rGraphics->drawLine		( impl_getWidth()-1, impl_getHeight()-1, nX		   		  , impl_getHeight()-1	) ;
+        rGraphics->setLineColor ( LINECOLOR_BRIGHT                                                              ) ;
+        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, impl_getWidth()-1, nY                  ) ;
+        rGraphics->drawLine     ( impl_getWidth()-1, impl_getHeight()-1, nX               , impl_getHeight()-1  ) ;
     }
 }
 
 //____________________________________________________________________________________________________________
-//	protected method
+//  protected method
 //____________________________________________________________________________________________________________
 
 void ProgressBar::impl_recalcRange ()
 {
-    MutexGuard	aGuard (m_aMutex) ;
+    MutexGuard  aGuard (m_aMutex) ;
 
     sal_Int32 nWindowWidth  = impl_getWidth()  ;
     sal_Int32 nWindowHeight = impl_getHeight() ;
@@ -488,8 +488,8 @@ void ProgressBar::impl_recalcRange ()
             nHeight = 1 ;
         }
 
-        nMaxBlock	 =	nWidth / nHeight	;
-        nMaxBlock	*=	2					;
+        nMaxBlock    =  nWidth / nHeight    ;
+        nMaxBlock   *=  2                   ;
 
         // prevent error "division by zero"
         if ( nMaxBlock == 0 )
@@ -499,15 +499,15 @@ void ProgressBar::impl_recalcRange ()
 
         // Calculate new value and new size for ONE block.
 
-        // Do not a calculation like this: "m_nBlockValue=(m_nMaxRange-m_nMinRange)/nMaxBlock"	!
+        // Do not a calculation like this: "m_nBlockValue=(m_nMaxRange-m_nMinRange)/nMaxBlock"  !
         // If difference between m_nMaxRange and m_nMinRange to large, it give an overflow and a
         // following error "division by zero" in method "paint() ... nBlockCount=nDifference/m_nBlockValue ..."
 
         // Overflow ? => example: _I32_MAX - _I32_MIN = -1 and not _UI32_MAX !!!
 
-        m_nBlockValue		=	( m_nMaxRange / nMaxBlock ) - ( m_nMinRange / nMaxBlock ) ;
-        m_aBlockSize.Height	=	( nHeight - ( FREESPACE * 2 )							) ;
-        m_aBlockSize.Width	=	( ( nWidth / nMaxBlock ) - FREESPACE					) ;
+        m_nBlockValue       =   ( m_nMaxRange / nMaxBlock ) - ( m_nMinRange / nMaxBlock ) ;
+        m_aBlockSize.Height =   ( nHeight - ( FREESPACE * 2 )                           ) ;
+        m_aBlockSize.Width  =   ( ( nWidth / nMaxBlock ) - FREESPACE                    ) ;
     }
     else
     {
@@ -530,8 +530,8 @@ void ProgressBar::impl_recalcRange ()
             nWidth = 1 ;
         }
 
-        nMaxBlock	 =	nHeight / nWidth	;
-        nMaxBlock	*=	2					;
+        nMaxBlock    =  nHeight / nWidth    ;
+        nMaxBlock   *=  2                   ;
 
         // prevent error "division by zero"
         if ( nMaxBlock == 0 )
@@ -541,18 +541,18 @@ void ProgressBar::impl_recalcRange ()
 
         // Calculate new value and new size for ONE block.
 
-        // Do not a calculation like this: "m_nBlockValue=(m_nMaxRange-m_nMinRange)/nMaxBlock"	!
+        // Do not a calculation like this: "m_nBlockValue=(m_nMaxRange-m_nMinRange)/nMaxBlock"  !
         // If difference between m_nMaxRange and m_nMinRange to large, it give an overflow and a
         // following error "division by zero" in method "paint() ... nBlockCount=nDifference/m_nBlockValue ..."
 
         // Overflow ? => example: _I32_MAX - _I32_MIN = -1 and not _UI32_MAX !!!
 
-        m_nBlockValue		=	( m_nMaxRange / nMaxBlock ) - ( m_nMinRange / nMaxBlock ) ;
-        m_aBlockSize.Height	=	( ( nHeight / nMaxBlock ) - FREESPACE					) ;
-        m_aBlockSize.Width	=	( nWidth - ( FREESPACE * 2 )							) ;
+        m_nBlockValue       =   ( m_nMaxRange / nMaxBlock ) - ( m_nMinRange / nMaxBlock ) ;
+        m_aBlockSize.Height =   ( ( nHeight / nMaxBlock ) - FREESPACE                   ) ;
+        m_aBlockSize.Width  =   ( nWidth - ( FREESPACE * 2 )                            ) ;
 
     }
 */
 }
 
-}	// namespace unocontrols
+}   // namespace unocontrols

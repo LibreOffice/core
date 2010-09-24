@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ VbaFontBase::setSuperscript( const uno::Any& aValue ) throw ( uno::RuntimeExcept
     // not supported in form controls
     if( mbFormControl )
         return;
-    
+
     sal_Bool bValue = sal_False;
     aValue >>= bValue;
     sal_Int16 nValue = NORMAL;

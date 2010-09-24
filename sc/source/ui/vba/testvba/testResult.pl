@@ -11,13 +11,13 @@ my $timestampclean= "perl $binDir/timestampsClean.pl";
 sub testLog
 {
    # 2 No Log to compare against
-   # 1 Log passed 
+   # 1 Log passed
    # 0 Log failed
    my $result = 0;
    my $testfile = shift;
    my $dirtocheck = shift;
    my $filename = basename($testfile);
-   $filename = "$logdir/$filename"; 
+   $filename = "$logdir/$filename";
    print "processing $testfile $filename\n";
    if ( -f $filename )  {
       my $tmpFile;
@@ -29,9 +29,9 @@ sub testLog
       my $info = stat($tmpFile) or die "no $tmpFile: $!";
       if ( ($status >>=8) == 0 &&  ( $info->size == 0)  ) {
          #print "diff worked size is 0\n";
-         $result = 1; 
+         $result = 1;
       }
-      elsif ( ($status >>=8) == 0 &&  ( $info->size > 0)  ) 
+      elsif ( ($status >>=8) == 0 &&  ( $info->size > 0)  )
       {
          #print "diff worked size > 0\n";
          $result = 0;
@@ -106,9 +106,9 @@ sub slurp_dir($)
     while ($fname = readdir ($dirhandle)) {
     $fname = filter_crud($fname);
     defined $fname || next;
-#	if (-d "$dir/$fname") {
-#	    push @files, slurp_dir("$dir/$fname");
-#	} else 
+#   if (-d "$dir/$fname") {
+#       push @files, slurp_dir("$dir/$fname");
+#   } else
         {
         push @files, "$dir/$fname";
     }
@@ -136,9 +136,9 @@ print "$testfilepath\n";
 for $a (@files) {
    $filename = $a;
    if ( "$testfilepath" eq "$filename" )
-   { 
+   {
    $processed++;
-   my $testcase = $a;  
+   my $testcase = $a;
    $testcase =~ s/\.log/\.xls/;
    my $result = testLog( $a, $logdir );
    if ( $result == 0 ) {
@@ -148,13 +148,13 @@ for $a (@files) {
    elsif ( $result == 2 ) {
       #print "skipped $a\n";
       push @skippedTests, $testcase;
-   } 
+   }
    else {
       $passed++;
       push @passedTests, $testcase;
-      #print "Test document for $a \t \t passed. \n"; 
+      #print "Test document for $a \t \t passed. \n";
    }
-   } 
+   }
 }
 my $compared=@passedTests+@failedTests;
 my $skip = @skippedTests;
@@ -163,7 +163,7 @@ print "compared $compared test-case documents\n";
 print "\t \t $passed tests $@passedTests\n";
 if ( @failedTests > 0 ) {
    print "the following test-case documents failed, please examine the logs manually\n";
-   
+
    for $a (@failedTests) {
       print "\t$a\n";
    }

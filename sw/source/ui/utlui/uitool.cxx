@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,7 +125,7 @@ void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Boxinfo-Attribut setzen
+    Beschreibung:   Boxinfo-Attribut setzen
  --------------------------------------------------------------------*/
 
 
@@ -138,7 +138,7 @@ void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
         aBoxInfo = *(SvxBoxInfoItem*)pBoxInfo;
 
         // Tabellenvariante, wenn mehrere Tabellenzellen selektiert
-    rSh.GetCrsr();					//Damit GetCrsrCnt() auch das Richtige liefert
+    rSh.GetCrsr();                  //Damit GetCrsrCnt() auch das Richtige liefert
     aBoxInfo.SetTable          (rSh.IsTableMode() && rSh.GetCrsrCnt() > 1);
         // Abstandsfeld immer anzeigen
     aBoxInfo.SetDist           ((BOOL) TRUE);
@@ -153,7 +153,7 @@ void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Header Footer fuellen
+    Beschreibung:   Header Footer fuellen
  --------------------------------------------------------------------*/
 
 
@@ -175,7 +175,7 @@ void FillHdFt(SwFrmFmt* pFmt, const  SfxItemSet& rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	PageDesc <-> in Sets wandeln und zurueck
+    Beschreibung:   PageDesc <-> in Sets wandeln und zurueck
  --------------------------------------------------------------------*/
 
 
@@ -239,7 +239,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
                         rHeaderSet.Get(SID_ATTR_PAGE_SHARED)).GetValue());
         }
         else
-        {	// Header ausschalten
+        {   // Header ausschalten
             //
             if(rMaster.GetHeader().IsActive())
             {
@@ -275,7 +275,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
                         rFooterSet.Get(SID_ATTR_PAGE_SHARED)).GetValue());
         }
         else
-        {	// Footer ausschalten
+        {   // Footer ausschalten
             //
             if(rMaster.GetFooter().IsActive())
             {
@@ -331,7 +331,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
  --------------------------------------------------------------------*/
 
 
-void PageDescToItemSet(	const SwPageDesc& rPageDesc, SfxItemSet& rSet)
+void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
 {
     const SwFrmFmt& rMaster = rPageDesc.GetMaster();
 
@@ -390,10 +390,10 @@ void PageDescToItemSet(	const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         // HeaderInfo, Raender, Hintergrund, Umrandung
         //
         SfxItemSet aHeaderSet( *rSet.GetPool(),
-                    SID_ATTR_PAGE_ON, 		SID_ATTR_PAGE_SHARED,
-                    SID_ATTR_PAGE_SIZE, 	SID_ATTR_PAGE_SIZE,
-                    SID_ATTR_BORDER_INNER,	SID_ATTR_BORDER_INNER,
-                    RES_FRMATR_BEGIN,		RES_FRMATR_END-1,
+                    SID_ATTR_PAGE_ON,       SID_ATTR_PAGE_SHARED,
+                    SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
+                    SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
+                    RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
                     0);
 
         // dynamische oder feste Hoehe
@@ -436,10 +436,10 @@ void PageDescToItemSet(	const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         // FooterInfo, Raender, Hintergrund, Umrandung
         //
         SfxItemSet aFooterSet( *rSet.GetPool(),
-                    SID_ATTR_PAGE_ON, 		SID_ATTR_PAGE_SHARED,
-                    SID_ATTR_PAGE_SIZE, 	SID_ATTR_PAGE_SIZE,
-                    SID_ATTR_BORDER_INNER,	SID_ATTR_BORDER_INNER,
-                    RES_FRMATR_BEGIN, 		RES_FRMATR_END-1,
+                    SID_ATTR_PAGE_ON,       SID_ATTR_PAGE_SHARED,
+                    SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
+                    SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
+                    RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
                     0);
 
         // dynamische oder feste Hoehe
@@ -491,7 +491,7 @@ void PageDescToItemSet(	const SwPageDesc& rPageDesc, SfxItemSet& rSet)
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:	DefaultTabs setzen
+    Beschreibung:   DefaultTabs setzen
  --------------------------------------------------------------------*/
 
 
@@ -506,7 +506,7 @@ void MakeDefTabs(SwTwips nDefDist, SvxTabStopItem& rTabs)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Abstand zwischen zwei Tabs
+    Beschreibung:   Abstand zwischen zwei Tabs
  --------------------------------------------------------------------*/
 
 
@@ -537,7 +537,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_PARA_MODEL, FALSE, &pItem ))
     {
         const String& rDescName = ((SvxPageModelItem*)pItem)->GetValue();
-        if( rDescName.Len() )	// kein Name -> PageDesc ausschalten!
+        if( rDescName.Len() )   // kein Name -> PageDesc ausschalten!
         {
             // nur loeschen, wenn PageDesc eingschaltet wird!
             rSet.ClearItem( RES_BREAK );
@@ -603,21 +603,21 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Metric ermitteln
+    Beschreibung:   Metric ermitteln
  --------------------------------------------------------------------*/
 
 
-FieldUnit	GetDfltMetric(BOOL bWeb)
+FieldUnit   GetDfltMetric(BOOL bWeb)
 {
     return SW_MOD()->GetUsrPref(bWeb)->GetMetric();
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:	Metric ermitteln
+    Beschreibung:   Metric ermitteln
  --------------------------------------------------------------------*/
 
 
-void	SetDfltMetric( FieldUnit eMetric, BOOL bWeb )
+void    SetDfltMetric( FieldUnit eMetric, BOOL bWeb )
 {
     SW_MOD()->ApplyUserMetric(eMetric, bWeb);
 }

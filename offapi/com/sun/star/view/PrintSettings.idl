@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,88 +24,88 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_view_PrintSettings_idl__ 
-#define __com_sun_star_view_PrintSettings_idl__ 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module view {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_view_PrintSettings_idl__
+#define __com_sun_star_view_PrintSettings_idl__
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module view {
+
+//=============================================================================
+
 /** provides access to the settings for printing documents.
 
     <p>These settings are printer independet but affect the rendering of
     the document.
  */
 published service PrintSettings
-{ 
-    //------------------------------------------------------------------------- 
+{
+    //-------------------------------------------------------------------------
     /** If <TRUE/>, all characters are printed in black.
-        
+
         <p>It is useful for printing colored text on a b/w printer.</p>
      */
-    [property] boolean PrintBlackFonts; 
- 
-    //------------------------------------------------------------------------- 
+    [property] boolean PrintBlackFonts;
+
+    //-------------------------------------------------------------------------
     /** If <TRUE/>, control shapes are included in printing.
      */
-    [property] boolean PrintControls; 
- 
-    //------------------------------------------------------------------------- 
+    [property] boolean PrintControls;
+
+    //-------------------------------------------------------------------------
     /** If <TRUE/>, drawing objects (shapes)  are included in printing.
      */
-    [property] boolean PrintDrawings; 
- 
-    //------------------------------------------------------------------------- 
+    [property] boolean PrintDrawings;
+
+    //-------------------------------------------------------------------------
     /** If <TRUE/>, graphic objects are included in printing.
      */
-    [property] boolean PrintGraphics; 
- 
-    //------------------------------------------------------------------------- 
+    [property] boolean PrintGraphics;
+
+    //-------------------------------------------------------------------------
     /** If <TRUE/>, left pages are included in printing.
      */
-    [property] boolean PrintLeftPages; 
- 
-    //------------------------------------------------------------------------- 
+    [property] boolean PrintLeftPages;
+
+    //-------------------------------------------------------------------------
     /** If <TRUE/>, right pages are included in printing.
      */
-    [property] boolean PrintRightPages; 
- 
-    //------------------------------------------------------------------------- 
+    [property] boolean PrintRightPages;
+
+    //-------------------------------------------------------------------------
     /** If <TRUE/>, tables are included in printing.
      */
-    [property] boolean PrintTables; 
- 
-    //------------------------------------------------------------------------- 
-    /** If <TRUE/>, the pages are printed in reverse order. 
-        
+    [property] boolean PrintTables;
+
+    //-------------------------------------------------------------------------
+    /** If <TRUE/>, the pages are printed in reverse order.
+
         <p>The last page is printed first.</p>
      */
-    [property] boolean PrintReversed; 
- 
-    //------------------------------------------------------------------------- 
+    [property] boolean PrintReversed;
+
+    //-------------------------------------------------------------------------
     /** If <TRUE/>, the pages are printed in the order of prospects.
      */
-    [property] boolean PrintProspect; 
- 
-    //------------------------------------------------------------------------- 
+    [property] boolean PrintProspect;
+
+    //-------------------------------------------------------------------------
     /** If <TRUE/>, the background of the page is printed.
      */
-    [property] boolean PrintPageBackground; 
- 
-    //------------------------------------------------------------------------- 
+    [property] boolean PrintPageBackground;
+
+    //-------------------------------------------------------------------------
     /** determines how annotations are printed.
 
         @see NotePrintMode
      */
-    [property] short PrintAnnotationMode; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [property] short PrintAnnotationMode;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

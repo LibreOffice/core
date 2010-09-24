@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,11 +53,11 @@
 class SvxNameDialog : public ModalDialog
 {
 private:
-    FixedText		aFtDescription;
-    Edit			aEdtName;
-    OKButton		aBtnOK;
-    CancelButton	aBtnCancel;
-    HelpButton		aBtnHelp;
+    FixedText       aFtDescription;
+    Edit            aEdtName;
+    OKButton        aBtnOK;
+    CancelButton    aBtnCancel;
+    HelpButton      aBtnHelp;
 
     Link            aCheckNameHdl;
 #if _SOLAR__PRIVATE
@@ -103,16 +103,16 @@ class SvxObjectNameDialog : public ModalDialog
 {
 private:
     // name
-    FixedText		aFtName;
-    Edit			aEdtName;
+    FixedText       aFtName;
+    Edit            aEdtName;
 
     // separator
-    FixedLine		aFlSeparator;
+    FixedLine       aFlSeparator;
 
     // buttons
-    HelpButton		aBtnHelp;
-    OKButton		aBtnOK;
-    CancelButton	aBtnCancel;
+    HelpButton      aBtnHelp;
+    OKButton        aBtnOK;
+    CancelButton    aBtnCancel;
 
     // callback link for name uniqueness
     Link            aCheckNameHdl;
@@ -147,20 +147,20 @@ class SvxObjectTitleDescDialog : public ModalDialog
 {
 private:
     // title
-    FixedText		aFtTitle;
-    Edit			aEdtTitle;
+    FixedText       aFtTitle;
+    Edit            aEdtTitle;
 
     // description
-    FixedText		aFtDescription;
-    MultiLineEdit	aEdtDescription;
+    FixedText       aFtDescription;
+    MultiLineEdit   aEdtDescription;
 
     // separator
-    FixedLine		aFlSeparator;
+    FixedLine       aFlSeparator;
 
     // buttons
-    HelpButton		aBtnHelp;
-    OKButton		aBtnOK;
-    CancelButton	aBtnCancel;
+    HelpButton      aBtnHelp;
+    OKButton        aBtnOK;
+    CancelButton    aBtnCancel;
 
 public:
     // constructor
@@ -181,12 +181,12 @@ public:
 class SvxMessDialog : public ModalDialog
 {
 private:
-    FixedText		aFtDescription;
-    PushButton		aBtn1;
-    PushButton		aBtn2;
-    CancelButton	aBtnCancel;
-    FixedImage		aFtImage;
-    Image*			pImage;
+    FixedText       aFtDescription;
+    PushButton      aBtn1;
+    PushButton      aBtn2;
+    CancelButton    aBtnCancel;
+    FixedImage      aFtImage;
+    Image*          pImage;
 #if _SOLAR__PRIVATE
     DECL_LINK( Button1Hdl, Button * );
     DECL_LINK( Button2Hdl, Button * );
@@ -195,7 +195,7 @@ public:
     SvxMessDialog( Window* pWindow, const String& rText, const String& rDesc, Image* pImg = NULL );
     ~SvxMessDialog();
 
-    void	SetButtonText( USHORT nBtnId, const String& rNewTxt );
+    void    SetButtonText( USHORT nBtnId, const String& rNewTxt );
 };
 
 

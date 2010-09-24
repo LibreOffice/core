@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,19 +45,19 @@ namespace connectivity
     //**************************************************************
     typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>   ODatabaseMetaResultSetMetaData_BASE;
 
-    class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataResultSetMetaData :	public 	ODatabaseMetaResultSetMetaData_BASE
+    class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataResultSetMetaData :    public  ODatabaseMetaResultSetMetaData_BASE
     {
-        TIntVector									m_vMapping; // when not every column is needed
-        ::std::map<sal_Int32,connectivity::OColumn>	m_mColumns;
+        TIntVector                                  m_vMapping; // when not every column is needed
+        ::std::map<sal_Int32,connectivity::OColumn> m_mColumns;
         ::std::map<sal_Int32,connectivity::OColumn>::const_iterator m_mColumnsIter;
 
-        sal_Int32									m_nColCount;
+        sal_Int32                                   m_nColCount;
     protected:
         virtual ~ODatabaseMetaDataResultSetMetaData();
     public:
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         ODatabaseMetaDataResultSetMetaData( )
-                :	m_nColCount(0)
+                :   m_nColCount(0)
         {
         }
         /// Avoid ambigous cast error from the compiler.

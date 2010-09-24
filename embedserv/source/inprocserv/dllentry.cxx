@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,10 +68,10 @@ namespace {
 
     int GetStringFromClassID( const GUID& guid, char* pBuf, int nLen )
     {
-        // is not allowed to insert 
+        // is not allowed to insert
         if ( nLen < 38 )
             return 0;
-        
+
         pBuf[0] = '{';
         FillCharFromInt( guid.Data1, &pBuf[1], 8 );
         pBuf[9] = '-';
@@ -156,7 +156,7 @@ public:
 protected:
 
     ULONG               m_refCount;
-    GUID				m_guid;
+    GUID                m_guid;
 };
 }; // namespace inprocserv
 
@@ -330,7 +330,7 @@ STDMETHODIMP InprocEmbedProvider_Impl::CreateInstance(IUnknown FAR* punkOuter,
 
     if ( !SUCCEEDED( hr ) )
         *ppv = NULL;
-    
+
     return hr;
 }
 

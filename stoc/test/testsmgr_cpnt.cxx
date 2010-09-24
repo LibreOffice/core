@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,13 +110,13 @@ public:
     ~Test_Manager_Impl();
 
     // XServiceInfo
-    OUString 					SAL_CALL getImplementationName() throw();
-    sal_Bool 					SAL_CALL supportsService(const OUString& ServiceName) throw();
-    Sequence< OUString > 		SAL_CALL getSupportedServiceNames(void) throw();
-    static Sequence< OUString >	SAL_CALL getSupportedServiceNames_Static(void) throw();
+    OUString                    SAL_CALL getImplementationName() throw();
+    sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw();
+    Sequence< OUString >        SAL_CALL getSupportedServiceNames(void) throw();
+    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(void) throw();
 
 private:
-//	static XIdlClassRef		getStaticIdlClass();
+//  static XIdlClassRef     getStaticIdlClass();
 };
 
 Test_Manager_Impl::~Test_Manager_Impl()
@@ -206,7 +206,7 @@ extern "C" void SAL_CALL test_ServiceManager()
      OUString atUModule2 = OUString(
         RTL_CONSTASCII_USTRINGPARAM(
             SAL_DLLPREFIX "testsmgr_component" SAL_DLLEXTENSION ) );
-    
+
     // expand shared library name
     OString  atModule2( OUStringToOString(atUModule2, RTL_TEXTENCODING_ASCII_US) );
 
@@ -252,7 +252,7 @@ extern "C" void SAL_CALL test_ServiceManager()
             xInst( xSMgr->createInstance(OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration")), UNO_QUERY );
         TEST_ENSHURE( xInst.is(), "no ImplementationRegistration" );
 
-        try	{
+        try {
             // register the services via writeComponentRegInfo (see at end of this file)
             xInst->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), atUModule2, Reference< XSimpleRegistry >() );
         }
@@ -272,48 +272,48 @@ extern "C" void SAL_CALL test_ServiceManager()
         TEST_ENSHURE( xIFace.is(), "loadable service not found" );
 
         // remove the service
-        TEST_ENSHURE( 	xInst->revokeImplementation(atUModule2, Reference< XSimpleRegistry > ()),
+        TEST_ENSHURE(   xInst->revokeImplementation(atUModule2, Reference< XSimpleRegistry > ()),
                         "revoke implementation failed" );
     }
 
 
-//	Reference < XSimpleRegistry > xSReg(  xSMgr->createInstance(OUString::createFromAscii("com::sun::star.uno.repos.SimpleRegistry")), UNO_QUERY );
-//	TEST_ENSHURE( xSReg.is() , "Simple registry couldn't be instantiated" );
+//  Reference < XSimpleRegistry > xSReg(  xSMgr->createInstance(OUString::createFromAscii("com::sun::star.uno.repos.SimpleRegistry")), UNO_QUERY );
+//  TEST_ENSHURE( xSReg.is() , "Simple registry couldn't be instantiated" );
 
-//	xSReg->open(OUString::createFromAscii("dummy.reg"), sal_False, sal_True);
-//	xSReg->close();
+//  xSReg->open(OUString::createFromAscii("dummy.reg"), sal_False, sal_True);
+//  xSReg->close();
 
     // laut dbo : C-API muss nicht mehr unterstuezt werden
     //TEST_ENSHURE( registerExternService(atModule, "dummy.reg"), "install failed" );
     //TEST_ENSHURE( deregisterExternService(atModule, "dummy.reg"), "deinstall failed" );
 
 
-//	UNO_INTERFACE(XMultiServiceFactory) xUnoSMgr = {0,0};
-//	smart2uno(xSMgr, xUnoSMgr);
+//  UNO_INTERFACE(XMultiServiceFactory) xUnoSMgr = {0,0};
+//  smart2uno(xSMgr, xUnoSMgr);
 
-//	TEST_ENSHURE(registerExternImplementation(xUnoSMgr, "com::sun::star.loader.SharedLibrary", atModule2, "dummy.reg"), "install failed" );
-//	TEST_ENSHURE(revokeExternImplementation(xUnoSMgr, atModule2, "dummy.reg"), "deinstall failed" );
+//  TEST_ENSHURE(registerExternImplementation(xUnoSMgr, "com::sun::star.loader.SharedLibrary", atModule2, "dummy.reg"), "install failed" );
+//  TEST_ENSHURE(revokeExternImplementation(xUnoSMgr, atModule2, "dummy.reg"), "deinstall failed" );
 
-//	TEST_ENSHURE(registerExternImplementation(xUnoSMgr, "com::sun::star.loader.SharedLibrary", atModule2, "dummy2.reg"), "install failed" );
+//  TEST_ENSHURE(registerExternImplementation(xUnoSMgr, "com::sun::star.loader.SharedLibrary", atModule2, "dummy2.reg"), "install failed" );
 
 //TODO : Java loader test
-//	String testUrl(getTestJarUrl());
-//	TEST_ENSHURE(registerExternImplementation(xUnoSMgr, "com::sun::star.loader.Java", testUrl, "dummy.reg"), "install failed" );
-//	TEST_ENSHURE(revokeExternImplementation(xUnoSMgr, testUrl, "dummy.reg"), "deinstall failed" );
+//  String testUrl(getTestJarUrl());
+//  TEST_ENSHURE(registerExternImplementation(xUnoSMgr, "com::sun::star.loader.Java", testUrl, "dummy.reg"), "install failed" );
+//  TEST_ENSHURE(revokeExternImplementation(xUnoSMgr, testUrl, "dummy.reg"), "deinstall failed" );
 
-//	if (!UNO_isNull((UNO_Ifc*)&xUnoSMgr))
-//		xUnoSMgr.m_pVmt->release(xUnoSMgr.m_pCtx);
+//  if (!UNO_isNull((UNO_Ifc*)&xUnoSMgr))
+//      xUnoSMgr.m_pVmt->release(xUnoSMgr.m_pCtx);
 
-//	xSReg->open(OUString::createFromAscii("dummy.reg"), sal_True, sal_False);
-//	TEST_ENSHURE(!xSReg->getRootKey()->openKey(OUString::createFromAscii("/SERVICES/com::sun::star/ts/TestManagerImpl/URL")).is(),
-//				"deinstall failed" );
+//  xSReg->open(OUString::createFromAscii("dummy.reg"), sal_True, sal_False);
+//  TEST_ENSHURE(!xSReg->getRootKey()->openKey(OUString::createFromAscii("/SERVICES/com::sun::star/ts/TestManagerImpl/URL")).is(),
+//              "deinstall failed" );
 
-//	xSReg->close();
+//  xSReg->close();
 
-//	xSReg->open(OUString::createFromAscii("dummy.reg"), sal_False, sal_False);
-//	xSReg->destroy();
-//	xSReg->open(OUString::createFromAscii("dummy2.reg"), sal_False, sal_False);
-//	xSReg->destroy();
+//  xSReg->open(OUString::createFromAscii("dummy.reg"), sal_False, sal_False);
+//  xSReg->destroy();
+//  xSReg->open(OUString::createFromAscii("dummy2.reg"), sal_False, sal_False);
+//  xSReg->destroy();
 
 
     // Test initialisieren

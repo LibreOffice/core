@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -275,7 +275,7 @@ void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source
         throw ( uno::RuntimeException )
 {
     uno::Sequence< embed::XStorage > aStoragesToCommit;
-    
+
     try
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );

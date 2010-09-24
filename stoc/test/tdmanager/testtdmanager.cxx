@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,7 +153,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
                         arguments[argPos].pData, &url.pData ) );
         bool supposedToBeCompatible = ! url.endsWithIgnoreAsciiCaseAsciiL(
             RTL_CONSTASCII_STRINGPARAM("_incomp.rdb") );
-        
+
         css::uno::Reference<css::registry::XSimpleRegistry> xReg(
             m_context->getServiceManager()->createInstanceWithContext(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -182,9 +182,9 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
             assertFalse(supposedToBeCompatible);
         }
     }
-    
+
     ///////
-    
+
     css::uno::Reference< css::reflection::XIndirectTypeDescription > sequence(
         manager->getByHierarchicalName(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[][]boolean"))),

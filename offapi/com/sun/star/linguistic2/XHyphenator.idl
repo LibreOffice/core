@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ published interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
 
         @param aProperties
             provides property values to be used for this function call only.
-            It is usually empty in order to use the default values supplied 
+            It is usually empty in order to use the default values supplied
             with the property set.
 
         @see    <type scope="com::sun::star::linguistic2">XHyphenatedWord</type>

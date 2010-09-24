@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -304,7 +304,7 @@ EmbeddedObjectRef::EmbeddedObjectRef( const EmbeddedObjectRef& rObj )
 EmbeddedObjectRef::~EmbeddedObjectRef()
 {
     delete mpImp->pGraphic;
-    if ( mpImp->pHCGraphic ) 
+    if ( mpImp->pHCGraphic )
         DELETEZ( mpImp->pHCGraphic );
     Clear();
 }
@@ -456,7 +456,7 @@ void EmbeddedObjectRef::GetReplacement( BOOL bUpdate )
         DELETEZ( mpImp->pGraphic );
         mpImp->aMediaType = ::rtl::OUString();
         mpImp->pGraphic = new Graphic;
-        if ( mpImp->pHCGraphic ) 
+        if ( mpImp->pHCGraphic )
             DELETEZ( mpImp->pHCGraphic );
         mpImp->mnGraphicVersion++;
     }
@@ -602,7 +602,7 @@ Graphic* EmbeddedObjectRef::GetHCGraphic() const
                 if ( !pStream->GetError() )
                 {
                     GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-                    Graphic* pGraphic = new Graphic(); 
+                    Graphic* pGraphic = new Graphic();
                     if ( pGF->ImportGraphic( *pGraphic, String(), *pStream, GRFILTER_FORMAT_DONTKNOW ) == 0 )
                         mpImp->pHCGraphic = pGraphic;
                     else
@@ -625,7 +625,7 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
         delete mpImp->pGraphic;
     mpImp->pGraphic = new Graphic();
     mpImp->aMediaType = rMediaType;
-    if ( mpImp->pHCGraphic ) 
+    if ( mpImp->pHCGraphic )
         DELETEZ( mpImp->pHCGraphic );
     mpImp->mnGraphicVersion++;
 
@@ -636,7 +636,7 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
         GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
         pGF->ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
         mpImp->mnGraphicVersion++;
-    
+
         if ( mpImp->pContainer )
         {
             pGraphicStream->Seek( 0 );
@@ -658,7 +658,7 @@ void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const ::rtl::OUStri
         delete mpImp->pGraphic;
     mpImp->pGraphic = new Graphic( rGraphic );
     mpImp->aMediaType = rMediaType;
-    if ( mpImp->pHCGraphic ) 
+    if ( mpImp->pHCGraphic )
         DELETEZ( mpImp->pHCGraphic );
     mpImp->mnGraphicVersion++;
 
@@ -758,8 +758,8 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const Stri
     if( nHeight > 0 )
     {
         aPt.Y() = nHeight;
-        Point	aP = rRect.TopLeft();
-        Size	aBmpSize = aBmp.GetSizePixel();
+        Point   aP = rRect.TopLeft();
+        Size    aBmpSize = aBmp.GetSizePixel();
         // Bitmap einpassen
         if( nHeight * 10 / nWidth
           > aBmpSize.Height() * 10 / aBmpSize.Width() )
@@ -895,7 +895,7 @@ void EmbeddedObjectRef::UpdateReplacementOnDemand()
 {
     DELETEZ( mpImp->pGraphic );
     mpImp->bNeedUpdate = sal_True;
-    if ( mpImp->pHCGraphic ) 
+    if ( mpImp->pHCGraphic )
         DELETEZ( mpImp->pHCGraphic );
     mpImp->mnGraphicVersion++;
 

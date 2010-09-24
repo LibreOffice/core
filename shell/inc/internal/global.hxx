@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #ifndef GLOBAL_HXX_INCLUDED
 #define GLOBAL_HXX_INCLUDED
 
@@ -36,9 +36,9 @@
 #endif
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif 
+#endif
 #include "internal/dbgmacros.hxx"
 
 extern long g_DllRefCnt;
 
-#endif 
+#endif

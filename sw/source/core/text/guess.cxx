@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ using namespace ::com::sun::star::linguistic2;
 #define CH_FULL_BLANK 0x3000
 
 /*************************************************************************
- *						SwTxtGuess::Guess
+ *                      SwTxtGuess::Guess
  *
  * provides information for line break calculation
  * returns true if no line break has to be performed
@@ -518,7 +518,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 }
 
 /*************************************************************************
- *						SwTxtGuess::AlternativeSpelling
+ *                      SwTxtGuess::AlternativeSpelling
  *************************************************************************/
 
 // returns true if word at position nPos has a diffenrent spelling
@@ -546,7 +546,7 @@ sal_Bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
     Reference< XHyphenator >  xHyph( ::GetHyphenator() );
     ASSERT( xHyph.is(), "Hyphenator is missing");
     //! subtract 1 since the UNO-interface is 0 based
-    xHyphWord =	xHyph->queryAlternativeSpelling( OUString(aTxt),
+    xHyphWord = xHyph->queryAlternativeSpelling( OUString(aTxt),
                         pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
                         nPos - nBreakStart, rInf.GetHyphValues() );
     return xHyphWord.is() && xHyphWord->isAlternativeSpelling();

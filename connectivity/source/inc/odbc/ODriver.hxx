@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,17 +45,17 @@ namespace connectivity
         class OOO_DLLPUBLIC_ODBCBASE SAL_NO_VTABLE ODBCDriver : public ODriver_BASE
         {
         protected:
-            ::osl::Mutex							m_aMutex;
+            ::osl::Mutex                            m_aMutex;
 
-            connectivity::OWeakRefArray				m_xConnections;	//	vector containing a list
+            connectivity::OWeakRefArray             m_xConnections; //  vector containing a list
                                                         //  of all the Connection objects
                                                         //  for this Driver
 
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
-            SQLHANDLE	m_pDriverHandle;
+            SQLHANDLE   m_pDriverHandle;
 
-            virtual SQLHANDLE	EnvironmentHandle(::rtl::OUString &_rPath) = 0;
-            
+            virtual SQLHANDLE   EnvironmentHandle(::rtl::OUString &_rPath) = 0;
+
         public:
 
             ODBCDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);

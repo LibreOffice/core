@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ Image IconCache::Implementation::GetIcon (USHORT nResourceId)
 
 //===== IconCache =============================================================
 
-//static 
+//static
 IconCache& IconCache::Instance (void)
 {
     if (Implementation::mpInstance == NULL)
@@ -101,7 +101,7 @@ IconCache& IconCache::Instance (void)
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
 
-    DBG_ASSERT(Implementation::mpInstance!=NULL, 
+    DBG_ASSERT(Implementation::mpInstance!=NULL,
         "IconCache::Instance(): instance is NULL");
     return *Implementation::mpInstance;
 }

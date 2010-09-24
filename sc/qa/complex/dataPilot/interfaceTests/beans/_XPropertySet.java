@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ public class _XPropertySet {
      * The object that is testsed.
      */
     private XPropertySet oObj = null;
-    
+
     /**
      * The test parameters
      */
@@ -79,7 +79,7 @@ public class _XPropertySet {
     */
     boolean propertyChanged = false;
 
-    
+
     /**
      * The own property change listener
      */
@@ -149,7 +149,7 @@ public class _XPropertySet {
         this.log = log;
         this.param = param;
     }
-    
+
     /**
     * Tests method <code>getPropertySetInfo</code>. After test completed
     * call {@link #getPropsToTest} method to retrieve different kinds
@@ -250,7 +250,7 @@ public class _XPropertySet {
 
         vetoableChanged = false;
         boolean result = true;
-        
+
         if ( PTT.constrained.equals("none") ) {
             log.println("*** No constrained properties found ***");
         } else {
@@ -306,7 +306,7 @@ public class _XPropertySet {
 
         Object gValue = null;
         Object sValue = null;
-        
+
         boolean result = true;
 
         if ( PTT.normal.equals("none") ) {
@@ -400,7 +400,7 @@ public class _XPropertySet {
 
         propertyChanged = false;
         boolean result = true;
-        
+
         if ( PTT.bound.equals("none") ) {
             log.println("*** No bound properties found ***");
         } else {

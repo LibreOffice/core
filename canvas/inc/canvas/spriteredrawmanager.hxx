@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ namespace canvas
         events are later grouped by connected areas (i.e. all sprites
         that somehow overlap over a rectangular area are grouped
         together); the forEachSpriteArea() method calls the passed
-        functor for each of those connected areas. 
+        functor for each of those connected areas.
 
         Note that, although this class generally works with IEEE
         doubles, the calculation of connected areas happens in the
@@ -64,7 +64,7 @@ namespace canvas
         artifacts. Therefore, sprites that touch the same pixel (but
         don't necessarily have the same floating point coordinates
         there) will reside in a common sprite area and handled
-        together in the forEachSpriteArea functor call. 
+        together in the forEachSpriteArea functor call.
      */
     class SpriteRedrawManager : private ::boost::noncopyable
     {
@@ -91,9 +91,9 @@ namespace canvas
 
                 @internal
              */
-            SpriteInfo( const Sprite::Reference& 	rRef,
-                        const ::basegfx::B2DRange&	rTrueUpdateArea,
-                        bool 					 	bNeedsUpdate ) :
+            SpriteInfo( const Sprite::Reference&    rRef,
+                        const ::basegfx::B2DRange&  rTrueUpdateArea,
+                        bool                        bNeedsUpdate ) :
                 mpSprite( rRef ),
                 maTrueUpdateArea( rTrueUpdateArea ),
                 mbNeedsUpdate( bNeedsUpdate ),
@@ -120,10 +120,10 @@ namespace canvas
 
                 @internal
              */
-            SpriteInfo( const Sprite::Reference& 	rRef,
-                        const ::basegfx::B2DRange&	rTrueUpdateArea,
-                        bool 					 	bNeedsUpdate,
-                        bool 					 	bIsPureMove ) :
+            SpriteInfo( const Sprite::Reference&    rRef,
+                        const ::basegfx::B2DRange&  rTrueUpdateArea,
+                        bool                        bNeedsUpdate,
+                        bool                        bIsPureMove ) :
                 mpSprite( rRef ),
                 maTrueUpdateArea( rTrueUpdateArea ),
                 mbNeedsUpdate( bNeedsUpdate ),
@@ -131,18 +131,18 @@ namespace canvas
             {
             }
 
-            const Sprite::Reference&	getSprite() const { return mpSprite; }
+            const Sprite::Reference&    getSprite() const { return mpSprite; }
 
             // #i61843# need to return by value here, to be used safely from bind
             ::basegfx::B2DRange         getUpdateArea() const { return maTrueUpdateArea; }
-            bool						needsUpdate() const { return mbNeedsUpdate; }
-            bool						isPureMove() const { return mbIsPureMove; }
+            bool                        needsUpdate() const { return mbNeedsUpdate; }
+            bool                        isPureMove() const { return mbIsPureMove; }
 
         private:
-            Sprite::Reference 		mpSprite;
-            ::basegfx::B2DRange		maTrueUpdateArea;
-            bool					mbNeedsUpdate;
-            bool 					mbIsPureMove;
+            Sprite::Reference       mpSprite;
+            ::basegfx::B2DRange     maTrueUpdateArea;
+            bool                    mbNeedsUpdate;
+            bool                    mbIsPureMove;
         };
 
 
@@ -163,10 +163,10 @@ namespace canvas
             {
             }
 
-            SpriteChangeRecord( const Sprite::Reference&	rSprite, 
-                                const ::basegfx::B2DPoint& 	rOldPos,
-                                const ::basegfx::B2DPoint& 	rNewPos,
-                                const ::basegfx::B2DVector&	rSpriteSize ) :
+            SpriteChangeRecord( const Sprite::Reference&    rSprite,
+                                const ::basegfx::B2DPoint&  rOldPos,
+                                const ::basegfx::B2DPoint&  rNewPos,
+                                const ::basegfx::B2DVector& rSpriteSize ) :
                 meChangeType( move ),
                 mpAffectedSprite( rSprite ),
                 maOldPos( rOldPos ),
@@ -177,9 +177,9 @@ namespace canvas
             {
             }
 
-            SpriteChangeRecord( const Sprite::Reference&	rSprite, 
-                                const ::basegfx::B2DPoint& 	rPos,
-                                const ::basegfx::B2DRange& 	rUpdateArea ) :
+            SpriteChangeRecord( const Sprite::Reference&    rSprite,
+                                const ::basegfx::B2DPoint&  rPos,
+                                const ::basegfx::B2DRange&  rUpdateArea ) :
                 meChangeType( update ),
                 mpAffectedSprite( rSprite ),
                 maOldPos( rPos ),
@@ -189,17 +189,17 @@ namespace canvas
 
             Sprite::Reference getSprite() const { return mpAffectedSprite; }
 
-            ChangeType			meChangeType;
-            Sprite::Reference	mpAffectedSprite;
-            ::basegfx::B2DPoint	maOldPos;
-            ::basegfx::B2DRange	maUpdateArea;
+            ChangeType          meChangeType;
+            Sprite::Reference   mpAffectedSprite;
+            ::basegfx::B2DPoint maOldPos;
+            ::basegfx::B2DRange maUpdateArea;
         };
 
-        typedef ::std::vector< SpriteChangeRecord > 			VectorOfChangeRecords;
-        typedef ::std::list< Sprite::Reference > 				ListOfSprites;
-        typedef ::basegfx::B2DConnectedRanges< SpriteInfo >		SpriteConnectedRanges;
-        typedef SpriteConnectedRanges::ComponentType			AreaComponent;
-        typedef SpriteConnectedRanges::ConnectedComponents		UpdateArea;
+        typedef ::std::vector< SpriteChangeRecord >             VectorOfChangeRecords;
+        typedef ::std::list< Sprite::Reference >                ListOfSprites;
+        typedef ::basegfx::B2DConnectedRanges< SpriteInfo >     SpriteConnectedRanges;
+        typedef SpriteConnectedRanges::ComponentType            AreaComponent;
+        typedef SpriteConnectedRanges::ConnectedComponents      UpdateArea;
         typedef ::std::vector< Sprite::Reference >              VectorOfSprites;
 
         SpriteRedrawManager();
@@ -213,8 +213,8 @@ namespace canvas
          */
         template< typename Functor > struct AreaUpdateCaller
         {
-            AreaUpdateCaller( Functor& 						rFunc,
-                              const SpriteRedrawManager&	rManager ) :
+            AreaUpdateCaller( Functor&                      rFunc,
+                              const SpriteRedrawManager&    rManager ) :
                 mrFunc( rFunc ),
                 mrManager( rManager )
             {
@@ -225,8 +225,8 @@ namespace canvas
                 mrManager.handleArea( mrFunc, rUpdateArea );
             }
 
-            Functor& 					mrFunc;
-            const SpriteRedrawManager&	mrManager;
+            Functor&                    mrFunc;
+            const SpriteRedrawManager&  mrManager;
         };
 
         /** Call given functor for each sprite area that needs an
@@ -241,7 +241,7 @@ namespace canvas
             void backgroundPaint( ::basegfx::B2DRange aUpdateRect );
             void scrollUpdate( ::basegfx::B2DRange& o_rMoveStart,
                                ::basegfx::B2DRange& o_rMoveEnd,
-                               UpdateArea 		  	aUpdateArea );
+                               UpdateArea           aUpdateArea );
             void opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
                                const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
             void genericUpdate( const ::basegfx::B2DRange&                          rTotalArea,
@@ -262,7 +262,7 @@ namespace canvas
 
             setupUpdateAreas( aUpdateAreas );
 
-            aUpdateAreas.forEachAggregate( 
+            aUpdateAreas.forEachAggregate(
                 AreaUpdateCaller< Functor >( rFunc, *this ) );
         }
 
@@ -288,13 +288,13 @@ namespace canvas
         // SpriteSurface interface, is delegated to e.g. from SpriteCanvas
         void showSprite( const Sprite::Reference& rSprite );
         void hideSprite( const Sprite::Reference& rSprite );
-        void moveSprite( const Sprite::Reference&		rSprite, 
-                         const ::basegfx::B2DPoint& 	rOldPos,
-                         const ::basegfx::B2DPoint&		rNewPos,
-                         const ::basegfx::B2DVector& 	rSpriteSize );
-        void updateSprite( const Sprite::Reference& 	rSprite, 
-                           const ::basegfx::B2DPoint& 	rPos,
-                           const ::basegfx::B2DRange&	rUpdateArea );
+        void moveSprite( const Sprite::Reference&       rSprite,
+                         const ::basegfx::B2DPoint&     rOldPos,
+                         const ::basegfx::B2DPoint&     rNewPos,
+                         const ::basegfx::B2DVector&    rSpriteSize );
+        void updateSprite( const Sprite::Reference&     rSprite,
+                           const ::basegfx::B2DPoint&   rPos,
+                           const ::basegfx::B2DRange&   rUpdateArea );
 
         /** Internal, handles each distinct component for forEachAggregate()
 
@@ -303,8 +303,8 @@ namespace canvas
 
             @internal
          */
-        template< typename Functor > void handleArea( Functor& 			rFunc,
-                                                      const UpdateArea&	rUpdateArea ) const
+        template< typename Functor > void handleArea( Functor&          rFunc,
+                                                      const UpdateArea& rUpdateArea ) const
         {
             // check whether this area contains changed sprites at all
             // (if not, just ignore it)
@@ -326,7 +326,7 @@ namespace canvas
                     // cache number of sprites in this area (it's a
                     // list, and both isAreaUpdateScroll() and
                     // isAreaUpdateOpaque() need it).
-                    const ::std::size_t nNumSprites( 
+                    const ::std::size_t nNumSprites(
                         rUpdateArea.maComponentList.size() );
 
                     if( isAreaUpdateScroll( aMoveStart,
@@ -334,15 +334,15 @@ namespace canvas
                                             rUpdateArea,
                                             nNumSprites ) )
                     {
-                        rFunc.scrollUpdate( aMoveStart, 
+                        rFunc.scrollUpdate( aMoveStart,
                                             aMoveEnd,
                                             rUpdateArea );
                     }
-                    else 
+                    else
                     {
-                        // potentially, more than a single sprite   
-                        // involved. Have to sort component lists for   
-                        // sprite prio. 
+                        // potentially, more than a single sprite
+                        // involved. Have to sort component lists for
+                        // sprite prio.
                         VectorOfSprites aSortedUpdateSprites;
                         SpriteConnectedRanges::ComponentListType::const_iterator aCurr(
                             rUpdateArea.maComponentList.begin() );
@@ -360,12 +360,12 @@ namespace canvas
                         ::std::sort( aSortedUpdateSprites.begin(),
                                      aSortedUpdateSprites.end(),
                                      SpriteComparator() );
-                        
+
                         if( isAreaUpdateOpaque( rUpdateArea,
                                                 nNumSprites ) )
                         {
                             rFunc.opaqueUpdate( rUpdateArea.maTotalBounds,
-                                                aSortedUpdateSprites );                    
+                                                aSortedUpdateSprites );
                         }
                         else
                         {
@@ -385,11 +385,11 @@ namespace canvas
 
         bool areSpritesChanged( const UpdateArea& rUpdateArea ) const;
 
-        bool isAreaUpdateNotOpaque( const ::basegfx::B2DRange&	rUpdateRect, 
-                                    const AreaComponent&		rComponent ) const;
+        bool isAreaUpdateNotOpaque( const ::basegfx::B2DRange&  rUpdateRect,
+                                    const AreaComponent&        rComponent ) const;
 
-        bool isAreaUpdateOpaque( const UpdateArea&	rUpdateArea,
-                                 ::std::size_t		nNumSprites ) const;
+        bool isAreaUpdateOpaque( const UpdateArea&  rUpdateArea,
+                                 ::std::size_t      nNumSprites ) const;
 
         /** Check whether given update area can be handled by a simple
             scroll
@@ -404,13 +404,13 @@ namespace canvas
             @param rUpdateArea
             Area to check for scroll update optimization
          */
-        bool isAreaUpdateScroll( ::basegfx::B2DRange& 	o_rMoveStart,
-                                 ::basegfx::B2DRange& 	o_rMoveEnd,
-                                 const UpdateArea& 		rUpdateArea,
-                                 ::std::size_t			nNumSprites ) const;
+        bool isAreaUpdateScroll( ::basegfx::B2DRange&   o_rMoveStart,
+                                 ::basegfx::B2DRange&   o_rMoveEnd,
+                                 const UpdateArea&      rUpdateArea,
+                                 ::std::size_t          nNumSprites ) const;
 
 
-        ListOfSprites					maSprites; // list of active
+        ListOfSprites                   maSprites; // list of active
                                                    // sprite
                                                    // objects. this
                                                    // list is only
@@ -422,7 +422,7 @@ namespace canvas
                                                    // itself to notify
                                                    // us.
 
-        VectorOfChangeRecords			maChangeRecords; // vector of
+        VectorOfChangeRecords           maChangeRecords; // vector of
                                                          // sprites
                                                          // changes
                                                          // since last

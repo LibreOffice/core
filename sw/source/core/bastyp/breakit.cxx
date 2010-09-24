@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,8 +74,8 @@ SwBreakIt::SwBreakIt(
     //if ( m_xMSF.is() )
     //{
  //       xBreak = uno::Reference< i18n::XBreakIterator >(
-    //		m_xMSF->createInstance(
-    //			rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
+    //      m_xMSF->createInstance(
+    //          rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
  //           uno::UNO_QUERY);
 
  //       xCTLDetect = uno::Reference< i18n::XScriptTypeDetector >(

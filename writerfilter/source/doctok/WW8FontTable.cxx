@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ void WW8FontTable::initPayload()
         entryOffsets.push_back(nOffset);
 
         sal_uInt32 nFFNSize = getU8(nOffset) + 1;
-        
+
         if (nFFNSize > 1)
             nCount--;
 
@@ -66,14 +66,14 @@ WW8FontTable::getEntry(sal_uInt32 nIndex)
 
     if (nCount > 1)
     {
-        WW8Font * pFont = new WW8Font(this, 
+        WW8Font * pFont = new WW8Font(this,
                                       entryOffsets[nIndex], nCount);
 
         pFont->setIndex(nIndex);
 
         pResult = writerfilter::Reference<Properties>::Pointer_t(pFont);
     }
-    
+
     return pResult;
 }
 
@@ -82,8 +82,8 @@ sal_uInt32 WW8Font::get_f()
     return mnIndex;
 }
 
-rtl::OUString WW8Font::get_xszFfn() 
-{    
+rtl::OUString WW8Font::get_xszFfn()
+{
     sal_uInt32 nOffset = 0x28;
     sal_uInt32 nCount = get_cbFfnM1() - nOffset;
 
@@ -96,7 +96,7 @@ rtl::OUString WW8Font::get_xszFfn()
     return rtl::OUString(pNew);
 }
 
-rtl::OUString WW8Font::get_altName() 
+rtl::OUString WW8Font::get_altName()
 {
     sal_uInt32 nOffset = 0x28 + get_ixchSzAlt();
     sal_uInt32 nCount = get_cbFfnM1() - nOffset;

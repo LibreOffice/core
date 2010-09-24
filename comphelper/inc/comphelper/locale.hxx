@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,17 +56,17 @@ class COMPHELPER_DLLPUBLIC Locale
     // const
 
     public:
-    
+
         /** @short seperates LANGUAGE and COUNTRY part of an ISO formated Locale. */
         static const sal_Unicode SEPERATOR_LC;
-        
+
         /** @short seperates COUNTRY and VARIANT part of an ISO formated Locale. */
         static const sal_Unicode SEPERATOR_CV;
-        
+
         /** @short seperates COUNTRY and VARIANT part of an ISO formated Locale.
             @descr Its true for some linux derivates only :-( */
         static const sal_Unicode SEPERATOR_CV_LINUX;
-        
+
         /** @short some predefined Locale objects. */
         static const Locale EN_US();
         static const Locale EN();
@@ -103,50 +103,50 @@ class COMPHELPER_DLLPUBLIC Locale
         static const Locale X_NOTRANSLATE();
         static const Locale ZH_CN();
         static const Locale ZH_TW();
-                            
+
     //-------------------------------------------
     // types
-    
+
     public:
-    
+
         /** @short will be throw during convertion, if a Locale cant be interpreted. */
         struct MalFormedLocaleException
         {
             public:
                 ::rtl::OUString Message;
-                
+
                 MalFormedLocaleException()
                 {}
-            
+
                 MalFormedLocaleException(const ::rtl::OUString& sMessage)
                     : Message(sMessage)
                 {}
         };
-    
+
     //-------------------------------------------
     // member
 
     private :
 
         //---------------------------------------
-        /** @short  must be a valid ISO	Language Code.
-        
+        /** @short  must be a valid ISO Language Code.
+
             @descr  These codes are the lower-case two-letter codes as defined by ISO-639.
                     You can find a full list of these codes at a number of sites, such as:
                     <BR><a href ="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt">
                     http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</a>
          */
         ::rtl::OUString m_sLanguage;
-        
+
         //---------------------------------------
-        /** @short  must be a valid ISO Country	Code.
-            @descr  These codes are the upper-case two-letter codes	as defined by ISO-3166.
+        /** @short  must be a valid ISO Country Code.
+            @descr  These codes are the upper-case two-letter codes as defined by ISO-3166.
                     You can find a full list of these codes at a number of sites, such as:
                     <BR><a href="http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html">
                     http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html</a>
          */
         ::rtl::OUString m_sCountry;
-        
+
         //---------------------------------------
         /** @short  Variant codes are vendor and browser-specific.
             @descr  For example, use WIN for Windows, MAC for Macintosh, and POSIX for POSIX.
@@ -163,40 +163,40 @@ class COMPHELPER_DLLPUBLIC Locale
 
         //---------------------------------------
         /** @short  needed by outside users!
-        
+
             @descr  Otherwise it wouldnt be possible to use
                     any instance of such Locale static ...
          */
         Locale();
-        
+
         //---------------------------------------
         /** @short      construct a Locale from an ISO formated string value.
-        
+
             @seealso    fromISO()
-            
+
             @param      sISO
                         an ISO formated string value, which can be parsed and
                         tokenized into a Lamnguage, Country and Variant part.
-                        
+
             @throw      MalFormedLocaleException
                         if conversion failed.
           */
         Locale(const ::rtl::OUString& sISO)
             throw(MalFormedLocaleException);
-        
+
         //---------------------------------------
         /** @short      construct a Locale from language, country and variant.
-        
+
             @seealso    setLanguage()
             @seealso    setCountry()
             @seealso    setVariant()
-            
+
             @param      sLanguage
                         lowercase two-letter ISO-639 code.
-                        
+
             @param      sCountry
                         uppercase two-letter ISO-3166 code.
-                        
+
             @param      sVariant
                         vendor and browser specific code.
           */
@@ -206,18 +206,18 @@ class COMPHELPER_DLLPUBLIC Locale
 
         //---------------------------------------
         /** @short  copy constructor.
-        
+
             @param  aCopy
                     the copy object.
          */
         Locale(const Locale& aCopy);
-               
+
         //---------------------------------------
         /** @short  returns the language code for this locale.
-        
+
             @descr  That will either be the empty string or
                     a lowercase ISO 639 code.
-        
+
             @return [string]
                     the language code.
          */
@@ -225,18 +225,18 @@ class COMPHELPER_DLLPUBLIC Locale
 
         //---------------------------------------
         /** @short  returns the country/region code for this locale.
-        
+
             @descr  That will either be the empty string or an
                     upercase ISO 3166 2-letter code.
-        
+
             @return [string]
                     the country code.
          */
         ::rtl::OUString getCountry() const;
-        
+
         //---------------------------------------
         /** @short  returns the variant code for this locale.
-        
+
             @return [string]
                     the variant code.
          */
@@ -244,10 +244,10 @@ class COMPHELPER_DLLPUBLIC Locale
 
         //---------------------------------------
         /** @short  set the new language code for this locale.
-        
+
             @descr  That will either be the empty string or
                     a lowercase ISO 639 code.
-        
+
             @param  sLanguage
                     the language code.
          */
@@ -255,45 +255,45 @@ class COMPHELPER_DLLPUBLIC Locale
 
         //---------------------------------------
         /** @short  set the new country/region code for this locale.
-        
+
             @descr  That will either be the empty string or an
                     upercase ISO 3166 2-letter code.
-        
+
             @param  sCountry
                     the country code.
          */
         void setCountry(const ::rtl::OUString& sCountry);
-        
+
         //---------------------------------------
         /** @short  set the new variant code for this locale.
-        
+
             @param  sVariant
                     the variant code.
          */
         void setVariant(const ::rtl::OUString& sVariant);
-        
+
         //---------------------------------------
         /** @short      take over new Locale informations.
-        
+
             @seealso    Locale(const ::rtl::OUString& sISO)
-            
+
             @param      sISO
                         an ISO formated string value, which can be parsed and
                         tokenized into a Lamnguage, Country and Variant part.
                         e.g. "en-US" or "en-US_WIN"
-                        
+
             @throw      MalFormedLocaleException
                         if conversion failed.
           */
         void fromISO(const ::rtl::OUString& sISO)
             throw(MalFormedLocaleException);
-        
+
         //---------------------------------------
         /** @short  converts this Locale to an ISO formated string value.
-        
+
             @descr  The different parts of this Locale will be assempled
                     e.g. to "en-US" or "en-US_WIN"
-                    
+
             @return [string]
                     the ISO formated string.
           */
@@ -301,13 +301,13 @@ class COMPHELPER_DLLPUBLIC Locale
 
         //---------------------------------------
         /** @short  check, if two Locale objects are equals.
-        
+
             @descr  All parts of a Locale (means Language, Country and Variant)
                     will be checked.
-                    
+
             @param  aComparable
                     the Locale object for compare.
-                    
+
             @return [boolean]
                     TRUE if both objects uses the same values for
                     Language, Country and Variant.
@@ -317,10 +317,10 @@ class COMPHELPER_DLLPUBLIC Locale
         //---------------------------------------
         /** @short  check, if two Locale objects
                     uses the same language.
-        
+
             @descr  The Country and Variant parts of a Locale
                     wont be checked here.
-                    
+
             @return [boolean]
                     TRUE if both objects uses the same
                     Language value.
@@ -330,47 +330,47 @@ class COMPHELPER_DLLPUBLIC Locale
         //---------------------------------------
         /** @short      search for an equal or at least for a similar
                         Locale in a list of possible ones.
-                        
+
             @descr      First it searches for a Locale, which is equals
                         to the reference Locale.
                         (means: same Language, Country, Variant)
-                        
+
                         If the reference Locale couldnt be located, it will
                         tried again - but we are checking for "similar" Locales then.
                         (means: same Language)
-                        
+
                         If no similar Locale could be located, we search
                         for a Locale "en-US" inside the given Locale list.
-                        
+
                         If "en-US" could not be located, we search for
                         a Locale "en" inside the given list.
-                        
+
                         If no "same" nor any "similar" locale could be found,
                         we try "x-default" and "x-notranslate" explicitly.
                         Sometimes localized variables are optimized and doesnt use
                         localzation realy. E.g. in case the localized value is a fix
                         product name.
-                        
+
                         If no locale match till now, we use any other existing
                         locale, which exists inside the set of given ones!
-                        
-            @seealso    equals()                    
+
+            @seealso    equals()
             @seealso    similar()
-            
+
             @param      lISOList
                         the list of possible Locales
                         (as formated ISO strings).
-                        
+
             @param      sReferenceISO
                         the reference Locale, which should be searched
                         if its equals or similar to any Locale inside
                         the provided Locale list.
-                        
+
             @return     An iterator, which points to the found element
                         inside the given Locale list.
                         If no matching Locale could be found, it points
-                        to the end of the list.                        
-                        
+                        to the end of the list.
+
             @throw      [MalFormedLocaleException]
                         if at least one ISO formated string couldnt
                         be converted to a valid Locale Object.
@@ -378,19 +378,19 @@ class COMPHELPER_DLLPUBLIC Locale
         static ::std::vector< ::rtl::OUString >::const_iterator getFallback(const ::std::vector< ::rtl::OUString >& lISOList     ,
                                                                             const ::rtl::OUString&                  sReferenceISO)
             throw(MalFormedLocaleException);
-            
+
         //---------------------------------------
         /** @short      search for the next possible fallback locale.
-        
+
             @descr      Instead of getFallback(vector<>, string) this method
                         uses the given locale and decide by using an algorithm
                         which locale can be the next possible one.
-                        
+
                         Algorithm:
                         - if locale has country return language only
                         - if locale different "en-US" return "en-US"
                         - if locale "en-US" return "en"
-                        
+
             @param      aLocale [in/out]!
                         the incoming value will be used to start
                         search for a possible fallback ...
@@ -398,39 +398,39 @@ class COMPHELPER_DLLPUBLIC Locale
                         will be used for return too.
 
             @return     TRUE if the parameter aLocale contains a new fallback value;
-                        FALSE otherwise.                        
+                        FALSE otherwise.
          */
-        static sal_Bool getFallback(Locale& aLocale);            
+        static sal_Bool getFallback(Locale& aLocale);
 
         //---------------------------------------
         /** @short      assign elements of another locale
                         to this instance.
-                        
+
             @param      rCopy
                         another locale object.
          */
         void operator=(const Locale& rCopy);
-        
+
         //---------------------------------------
         /** @short      check if two Locale objects are equals.
-        
+
             @seealso    equals()
-            
+
             @param      aComparable
                         the Locale object for compare.
-                        
+
             @return     [boolean]
                         TRUE if both objects uses the same values for
                         Language, Country and Variant.
          */
         sal_Bool operator==(const Locale& aComparable) const;
-        
+
         //---------------------------------------
         /** @short  check if two Locale objects are different.
-        
+
             @param  aComparable
                     the Locale object for compare.
-                    
+
             @return [boolean]
                     TRUE if at least one part of such Locale
                     isnt the same.

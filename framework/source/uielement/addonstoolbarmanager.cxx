@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <uielement/toolbarmerger.hxx>
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 
@@ -66,7 +66,7 @@
 #include <uielement/toolbarmerger.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
@@ -82,7 +82,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -97,7 +97,7 @@
 #include <vcl/taskpanelist.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespaces
+//  namespaces
 //_________________________________________________________________________________________________________________
 
 using namespace ::com::sun::star;
@@ -278,13 +278,13 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
     for ( sal_uInt32 n = 0; n < (sal_uInt32)rAddonToolbar.getLength(); n++ )
     {
-        rtl::OUString	aValueName;
+        rtl::OUString   aValueName;
 
-        rtl::OUString	aURL;
-        rtl::OUString	aTitle;
-        rtl::OUString	aImageId;
-        rtl::OUString	aContext;
-        rtl::OUString	aTarget;
+        rtl::OUString   aURL;
+        rtl::OUString   aTitle;
+        rtl::OUString   aImageId;
+        rtl::OUString   aContext;
+        rtl::OUString   aTarget;
         rtl::OUString   aControlType;
         sal_uInt16      nWidth( 0 );
 
@@ -321,8 +321,8 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
                 // Create TbRuntimeItemData to hold additional information we will need in the future
                 AddonsParams* pRuntimeItemData = new AddonsParams;
-                pRuntimeItemData->aImageId	= aImageId;
-                pRuntimeItemData->aTarget	= aTarget;
+                pRuntimeItemData->aImageId  = aImageId;
+                pRuntimeItemData->aTarget   = aTarget;
                 m_pToolBar->SetItemData( nId, pRuntimeItemData );
                 m_pToolBar->SetItemCommand( nId, aURL );
 
@@ -533,9 +533,9 @@ IMPL_LINK( AddonsToolBarManager, StateChanged, StateChangedType*, pStateChangedT
 
 IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
 {
-    if ((( pDataChangedEvent->GetType() == DATACHANGED_SETTINGS	)	||
-        (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY	))	&&
-        ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE		))
+    if ((( pDataChangedEvent->GetType() == DATACHANGED_SETTINGS )   ||
+        (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY  ))  &&
+        ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE        ))
     {
         // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();

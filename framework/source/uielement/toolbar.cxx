@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <uielement/toolbar.hxx>
 #include <uielement/toolbarmanager.hxx>
@@ -47,7 +47,7 @@ ToolBar::ToolBar( Window* pParent, WinBits nWinBits ) :
 ToolBar::~ToolBar()
 {
 }
-        
+
 void ToolBar::SetToolBarManager( ToolBarManager* pTbMgr )
 {
     m_pToolBarManager = pTbMgr;

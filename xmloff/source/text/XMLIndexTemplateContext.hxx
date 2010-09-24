@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
 } } }
-namespace rtl {	class OUString; }
+namespace rtl { class OUString; }
 struct SvXMLEnumMapEntry;
 
 
@@ -64,7 +64,7 @@ extern const sal_Char* aLevelStylePropNameBibliographyMap[];
 extern const sal_Bool aAllowedTokenTypesBibliography[];
 
 // table, illustration and object tables:
-extern const SvXMLEnumMapEntry* aLevelNameTableMap;	// NULL: no outline-level
+extern const SvXMLEnumMapEntry* aLevelNameTableMap; // NULL: no outline-level
 extern const sal_Char* aLevelStylePropNameTableMap[];
 extern const sal_Bool aAllowedTokenTypesTable[];
 
@@ -90,9 +90,9 @@ class XMLIndexTemplateContext : public SvXMLImportContext
     sal_Bool bTOC;
 
     // PropertySet of current index
-    ::com::sun::star::uno::Reference< 
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & rPropertySet;
-    
+
 public:
 
     // constants made available to other contexts (template entry
@@ -124,8 +124,8 @@ public:
     TYPEINFO();
 
     XMLIndexTemplateContext(
-        SvXMLImport& rImport, 
-        ::com::sun::star::uno::Reference< 
+        SvXMLImport& rImport,
+        ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName,
@@ -144,15 +144,15 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
     virtual void EndElement();
 
-    virtual SvXMLImportContext *CreateChildContext( 
+    virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };
 

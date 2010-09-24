@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,31 +33,31 @@
 #endif
 
 using namespace connectivity::adabas;
-namespace starbeans		= ::com::sun::star::beans;
+namespace starbeans     = ::com::sun::star::beans;
 // -------------------------------------------------------------------------
 OKeyColumn::OKeyColumn() : OColumn()
 {
     construct();
 }
 // -------------------------------------------------------------------------
-OKeyColumn::OKeyColumn(		const ::rtl::OUString& _ReferencedColumn,
-                            const ::rtl::OUString& _Name,			
+OKeyColumn::OKeyColumn(     const ::rtl::OUString& _ReferencedColumn,
+                            const ::rtl::OUString& _Name,
                             const ::rtl::OUString& _TypeName,
                             const ::rtl::OUString& _DefaultValue,
-                            sal_Int32		_IsNullable,
-                            sal_Int32		_Precision,
-                            sal_Int32		_Scale,
-                            sal_Int32		_Type,
-                            sal_Bool		_IsAutoIncrement
-                        ) : OColumn(_Name,	
-                            _TypeName,      
+                            sal_Int32       _IsNullable,
+                            sal_Int32       _Precision,
+                            sal_Int32       _Scale,
+                            sal_Int32       _Type,
+                            sal_Bool        _IsAutoIncrement
+                        ) : OColumn(_Name,
+                            _TypeName,
                             _DefaultValue,
                             _IsNullable,
                             _Precision,
                             _Scale,
                             _Type,
                             _IsAutoIncrement)
-                        ,	m_ReferencedColumn(_ReferencedColumn)
+                        ,   m_ReferencedColumn(_ReferencedColumn)
 {
     construct();
 }
@@ -66,6 +66,6 @@ OKeyColumn::OKeyColumn(		const ::rtl::OUString& _ReferencedColumn,
 void OKeyColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : starbeans::PropertyAttribute::READONLY;
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN),	PROPERTY_ID_RELATEDCOLUMN,	nAttrib,&m_ReferencedColumn,	::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN),   PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 

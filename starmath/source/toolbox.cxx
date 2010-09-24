@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -144,7 +144,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
     nActiveCategoryRID = sal::static_int_cast< USHORT >(-1);
-    
+
     aToolBoxCat.SetClickHdl(LINK(this, SmToolBoxWindow, CategoryClickHdl));
 
     USHORT i;
@@ -197,7 +197,7 @@ const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, BOOL bHighContra
     // list for later use in the respective array.
 
     const ImageList *pIL = 0;
-    
+
     // get index to use
     USHORT nCategoryRID = GetCategoryRID( nResId );
     sal_Int16 nIndex = GetToolBoxCategoriesIndex( nCategoryRID );
@@ -220,13 +220,13 @@ const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, BOOL bHighContra
 void SmToolBoxWindow::ApplyImageLists( USHORT nCategoryRID )
 {
     BOOL bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-        
+
     // set image list for toolbox 'catalog'
     const ImageList *pImageList = GetImageList( bHighContrast ? RID_ILH_CATALOG : RID_IL_CATALOG, bHighContrast );
     DBG_ASSERT( pImageList, "image list missing" );
     if (pImageList)
         aToolBoxCat.SetImageList( *pImageList );
-        
+
     // set image list for active (visible) category of 'catalog'
     sal_Int16 nIdx = GetToolBoxCategoriesIndex( nCategoryRID );
     USHORT nResId = GetImageListRID( nCategoryRID, bHighContrast );

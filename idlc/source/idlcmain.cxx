@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,14 +36,14 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     Options options;
 
-    try 
+    try
     {
         if (!options.initOptions(argc, argv))
            exit(1);
     }
     catch( IllegalArgument& e)
     {
-        fprintf(stderr, "Illegal argument: %s\n%s", 
+        fprintf(stderr, "Illegal argument: %s\n%s",
             e.m_message.getStr(),
             options.prepareVersion().getStr());
         exit(99);
@@ -113,21 +113,21 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             OString strippedFileName(sysFileName.copy(sysFileName.lastIndexOf(SEPARATOR) + 1));
             outputFileUrl = convertToFileUrl(options.getOption("-O"));
             sal_Char c = outputFileUrl.getStr()[outputFileUrl.getLength()-1];
-            
+
             if ( c != '/' )
                 outputFileUrl += OString::valueOf('/');
-            
+
             outputFileUrl += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
         } else
         {
             outputFileUrl = convertToFileUrl(sysFileName.replaceAt(sysFileName.getLength() -3 , 3, "urd"));
         }
-        
+
         if ( nErrors )
             removeIfExists(outputFileUrl);
         else
             nErrors = produceFile(outputFileUrl);
-        
+
         idlc()->reset();
     }
 
@@ -135,7 +135,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     {
         fprintf(stderr, "%s: detected %ld errors%s",
             options.getProgramName().getStr(),
-            sal::static_int_cast< long >(nErrors), 
+            sal::static_int_cast< long >(nErrors),
             options.prepareVersion().getStr());
     } else
     {

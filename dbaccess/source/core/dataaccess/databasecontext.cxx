@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -304,7 +304,7 @@ void ODatabaseContext::disposing()
 
     // dispose the data sources
     ObjectCache::iterator aEnd = m_aDatabaseObjects.end();
-    for	(	ObjectCache::iterator	aIter = m_aDatabaseObjects.begin();
+    for (   ObjectCache::iterator   aIter = m_aDatabaseObjects.begin();
             aIter != aEnd;
             ++aIter
         )
@@ -489,8 +489,8 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
             const Property* pProperties = aProperties.getConstArray();
             for ( sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties )
             {
-                if	(	( ( pProperties->Attributes & PropertyAttribute::TRANSIENT) != 0 )
-                    &&	( ( pProperties->Attributes & PropertyAttribute::READONLY) == 0 )
+                if  (   ( ( pProperties->Attributes & PropertyAttribute::TRANSIENT) != 0 )
+                    &&  ( ( pProperties->Attributes & PropertyAttribute::READONLY) == 0 )
                     )
                 {
                     // found such a property
@@ -677,19 +677,19 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
         return makeAny( xExistent );
     }
     catch (NoSuchElementException&)
-    {	// let these exceptions through
+    {   // let these exceptions through
         throw;
     }
     catch (WrappedTargetException&)
-    {	// let these exceptions through
+    {   // let these exceptions through
         throw;
     }
     catch (RuntimeException&)
-    {	// let these exceptions through
+    {   // let these exceptions through
         throw;
     }
     catch (Exception& e)
-    {	// exceptions other than the speciafied ones -> wrap
+    {   // exceptions other than the speciafied ones -> wrap
         Any aError = ::cppu::getCaughtException();
         throw WrappedTargetException(_rName, *this, aError );
     }
@@ -805,5 +805,5 @@ void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForD
 }
 
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................

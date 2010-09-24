@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,11 +50,11 @@ public class InstallationImminentCtrl extends PanelController {
         super("InstallationImminent", new InstallationImminent());
         helpFile = "String_Helpfile_InstallationImminent";
     }
-    
+
     public String getNext() {
         return new String("InstallationOngoing");
     }
-    
+
     public String getPrevious() {
 
         InstallData data = InstallData.getInstance();
@@ -62,7 +62,7 @@ public class InstallationImminentCtrl extends PanelController {
         if ( data.isRootInstallation() ) {
             if ( data.olderVersionExists() ) {
                 if ( data.hideEula() ) {
-                    return new String("Prologue");            
+                    return new String("Prologue");
                 } else {
                     return new String("AcceptLicense");
                 }
@@ -72,10 +72,10 @@ public class InstallationImminentCtrl extends PanelController {
                 if ( data.getInstallationType().equals(data.getCustomActionCommand()) ) {
                     return new String("ChooseComponents");
                 } else if ( data.getInstallationType().equals(data.getTypicalActionCommand()) ) {
-                    return new String("ChooseInstallationType");            
+                    return new String("ChooseInstallationType");
                 } else {
-                    System.err.println("Error: Unknown installation type!" );            
-                    return new String("Error");            
+                    System.err.println("Error: Unknown installation type!" );
+                    return new String("Error");
                 }
             }
         } else {
@@ -87,14 +87,14 @@ public class InstallationImminentCtrl extends PanelController {
                 if ( data.getInstallationType().equals(data.getCustomActionCommand()) ) {
                     return new String("ChooseComponents");
                 } else if ( data.getInstallationType().equals(data.getTypicalActionCommand()) ) {
-                    return new String("ChooseInstallationType");            
+                    return new String("ChooseInstallationType");
                 } else {
-                    System.err.println("Error: Unknown installation type!" );            
-                    return new String("Error");            
+                    System.err.println("Error: Unknown installation type!" );
+                    return new String("Error");
                 }
             }
         }
-    }  
+    }
 
     public final String getHelpFileName () {
         return this.helpFile;
@@ -103,7 +103,7 @@ public class InstallationImminentCtrl extends PanelController {
     public void beforeShow() {
         String StringInstall = ResourceManager.getString("String_Install");
         getSetupFrame().setButtonText(StringInstall, getSetupFrame().BUTTON_NEXT);
-        
+
         ProductDescription productData = SetupDataProvider.getProductDescription();
         PackageDescription packageData = SetupDataProvider.getPackageDescription();
         // Dumper.dumpPackageSettings(packageData);
@@ -115,7 +115,7 @@ public class InstallationImminentCtrl extends PanelController {
         InstallationImminent panel = (InstallationImminent)getPanel();
         panel.setInfoText(htmlInfoText);
         panel.setCaretPosition();
-        
+
         // Update mode
         InstallData data = InstallData.getInstance();
         if ( data.olderVersionExists() ) {
@@ -149,7 +149,7 @@ public class InstallationImminentCtrl extends PanelController {
                 repeatDialog = true;
             }
         }
-        
+
         return repeatDialog;
     }
 }

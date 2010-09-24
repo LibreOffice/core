@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
 #include <doc.hxx>
-#include <swundo.hxx>			// fuer die UndoIds
+#include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>
@@ -79,8 +79,8 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
     else
     {
         bHiddenRedlines = HasHiddenRedlines( *pRedlSaveData );
-        if( bHiddenRedlines ) 			// dann muessen die NodeIndizies
-        {   							// vom SwUndRng korrigiert werden
+        if( bHiddenRedlines )           // dann muessen die NodeIndizies
+        {                               // vom SwUndRng korrigiert werden
             nEndExtra -= rDoc.GetNodes().GetEndOfExtras().GetIndex();
             nSttNode -= nEndExtra;
             nEndNode -= nEndExtra;
@@ -302,7 +302,7 @@ void SwUndoRedlineSort::_Redo( SwUndoIter& rIter )
 
     SwNodeIndex aPrevIdx( pStart->nNode, -1 );
     ULONG nOffsetTemp = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
-    xub_StrLen nCntStt	= pStart->nContent.GetIndex();
+    xub_StrLen nCntStt  = pStart->nContent.GetIndex();
 
     rIter.GetDoc().SortText( rPam, *pOpt );
 
@@ -516,8 +516,8 @@ void SwUndoCompDoc::Redo( SwUndoIter& rIter )
     }
     else
     {
-//		SwRedlineMode eOld = pDoc->GetRedlineMode();
-//		pDoc->SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
+//      SwRedlineMode eOld = pDoc->GetRedlineMode();
+//      pDoc->SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
 
         if( pUnDel2 )
         {
@@ -534,7 +534,7 @@ void SwUndoCompDoc::Redo( SwUndoIter& rIter )
         if (pTmp) // #i19649#
             pTmp->InvalidateRange();
 
-//		pDoc->SetRedlineMode_intern( eOld );
+//      pDoc->SetRedlineMode_intern( eOld );
     }
 
     SetPaM( rIter, TRUE );

@@ -31,12 +31,7 @@ $main::OFFICE_HOME = "";
 
 $main::OFFICE_BASE_HOME = substr($main::sdkpath, 0, rindex($main::sdkpath, "/sdk"));
 
-if ( $main::operatingSystem =~ m/darwin/ )
-{
-#   $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
-} else {
-    $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../../ure && pwd`;
-}
+$main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
 chomp($main::OO_SDK_URE_HOME);
 
 $main::OO_SDK_MAKE_HOME = "";

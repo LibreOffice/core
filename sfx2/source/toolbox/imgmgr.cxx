@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ class SfxImageManager_Impl
 {
 public:
     sal_Int16                       m_nSymbolsSize;
-    SvtMiscOptions		            m_aOpt;
+    SvtMiscOptions                  m_aOpt;
     std::vector< ToolBoxInf_Impl* > m_aToolBoxes;
     ImageList*                      m_pImageList[IMAGELIST_COUNT];
     SfxModule*                      m_pModule;
@@ -73,11 +73,11 @@ public:
     ImageList*              GetImageList( BOOL bBig, BOOL bHiContrast );
     Image                   GetImage( USHORT nId, BOOL bBig, BOOL bHiContrast );
     void                    SetSymbolsSize_Impl( sal_Int16 );
-    
+
     DECL_LINK( OptionsChanged_Impl, void* );
     DECL_LINK( SettingsChanged_Impl, void* );
 
-    
+
     SfxImageManager_Impl( SfxModule* pModule );
     ~SfxImageManager_Impl();
 };
@@ -112,9 +112,9 @@ static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
         else
         {
             pImpl = new SfxImageManager_Impl( pModule );
-            m_ImageManager_ImplMap.insert( 
-                SfxImageManagerMap::value_type( 
-                    sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )), 
+            m_ImageManager_ImplMap.insert(
+                SfxImageManagerMap::value_type(
+                    sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )),
                     sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pImpl )) ));
         }
         return pImpl;
@@ -125,7 +125,7 @@ static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
 static ImageList* GetImageList( BOOL bBig, BOOL bHiContrast )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    
+
     // Has to be changed if we know how the IDs are named!!!
     ImageList*& rpList = bBig ? ( bHiContrast ? pImageListHiBig : pImageListBig ) :
                                 ( bHiContrast ? pImageListHiSmall : pImageListSmall );
@@ -167,7 +167,7 @@ SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule ) :
 {
     for ( sal_uInt32 i = 0; i < IMAGELIST_COUNT; i++ )
         m_pImageList[i] = 0;
-    
+
     m_aOpt.AddListenerLink( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
     Application::AddEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
 }
@@ -177,7 +177,7 @@ SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule ) :
 SfxImageManager_Impl::~SfxImageManager_Impl()
 {
     m_aOpt.RemoveListenerLink( LINK( this, SfxImageManager_Impl, OptionsChanged_Impl ) );
-    Application::RemoveEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) ); 
+    Application::RemoveEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
 
     for ( sal_uInt32 i = 0; i < m_aToolBoxes.size(); i++ )
         delete m_aToolBoxes[i];
@@ -195,7 +195,7 @@ ImageList* SfxImageManager_Impl::GetImageList( BOOL bBig, BOOL bHiContrast )
         else
             m_pImageList[nIndex] = m_pModule->GetImageList_Impl( bBig, bHiContrast );
     }
-    
+
     return m_pImageList[nIndex];
 }
 
@@ -214,7 +214,7 @@ Image SfxImageManager_Impl::GetImage( USHORT nId, BOOL bBig, BOOL bHiContrast )
 void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    
+
     if ( nNewSymbolsSize != m_nSymbolsSize )
     {
         m_nSymbolsSize = nNewSymbolsSize;
@@ -250,8 +250,8 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
                         aSize.Height() = aActSize.Height();
 
                     pBox->SetSizePixel( aSize );
-                }                
-            }            
+                }
+            }
         }
     }
 }
@@ -295,16 +295,16 @@ SfxImageManager::~SfxImageManager()
 SfxImageManager* SfxImageManager::GetImageManager( SfxModule* pModule )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    
-    SfxImageManagerMap::const_iterator pIter = 
+
+    SfxImageManagerMap::const_iterator pIter =
         m_ImageManagerMap.find( sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )));
     if ( pIter != m_ImageManagerMap.end() )
         return reinterpret_cast< SfxImageManager* >( sal::static_int_cast< sal_IntPtr >( pIter->second ));
     else
     {
         SfxImageManager* pSfxImageManager = new SfxImageManager( pModule );
-        m_ImageManagerMap.insert( SfxImageManagerMap::value_type( 
-            sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )), 
+        m_ImageManagerMap.insert( SfxImageManagerMap::value_type(
+            sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pModule )),
             sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( pSfxImageManager )) ));
         return pSfxImageManager;
     }
@@ -358,7 +358,7 @@ Image SfxImageManager::SeekImage( USHORT nId, BOOL bHiContrast ) const
 void SfxImageManager::RegisterToolBox( ToolBox *pBox, USHORT nFlags )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    
+
     ToolBoxInf_Impl* pInf = new ToolBoxInf_Impl;
     pInf->pToolBox = pBox;
     pInf->nFlags   = nFlags;
@@ -370,7 +370,7 @@ void SfxImageManager::RegisterToolBox( ToolBox *pBox, USHORT nFlags )
 void SfxImageManager::ReleaseToolBox( ToolBox *pBox )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    
+
     for ( sal_uInt32 n=0; n < pImp->m_aToolBoxes.size(); n++ )
     {
         if ((pImp->m_aToolBoxes[n])->pToolBox == pBox )
@@ -394,7 +394,7 @@ void SfxImageManager::SetImages( ToolBox& rToolBox, BOOL bHiContrast, BOOL bLarg
 void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, BOOL bHiContrast, BOOL bLarge )
 {
     ImageList* pImageList = pImp->GetImageList( bLarge, bHiContrast );
-    
+
     USHORT nCount = rToolBox.GetItemCount();
     for (USHORT n=0; n<nCount; n++)
     {

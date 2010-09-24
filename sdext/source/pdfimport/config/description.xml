@@ -10,12 +10,6 @@
         <OpenOffice.org-minimal-version value="3.0" dep:name="OpenOffice.org 3.0"/>
     </dependencies>
 
-    <registration>
-        <simple-license accept-by="admin" default-license-id="lic-en-US" suppress-if-required="true" >
-        <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
-        </simple-license>
-    </registration>
-
     <version value="1.0.3" />
 
     <platform value="UPDATED_SUPPORTED_PLATFORM" />
@@ -27,7 +21,7 @@
     <display-name>
         <name lang="en-US">PDF Import</name>
     </display-name>
-    
+
     <icon>
       <default xlink:href="images/extension_32.png" />
       <high-contrast xlink:href="images/extension_32_h.png" />

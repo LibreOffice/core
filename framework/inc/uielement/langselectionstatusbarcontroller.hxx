@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,43 +62,43 @@ class LangSelectionStatusbarController : public svt::StatusbarController
 
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-            
+
         // XComponent
         virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
 
         // XEventListener
         virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
-        
+
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
-        
+
         // XStatusbarController
         virtual ::sal_Bool SAL_CALL mouseButtonDown( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL mouseMove( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL mouseButtonUp( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL command( const ::com::sun::star::awt::Point& aPos, 
-                                       ::sal_Int32 nCommand, 
-                                       ::sal_Bool bMouseEvent, 
+        virtual void SAL_CALL command( const ::com::sun::star::awt::Point& aPos,
+                                       ::sal_Int32 nCommand,
+                                       ::sal_Bool bMouseEvent,
                                        const ::com::sun::star::uno::Any& aData ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL paint( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics, 
-                                     const ::com::sun::star::awt::Rectangle& rOutputRectangle, 
+        virtual void SAL_CALL paint( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics,
+                                     const ::com::sun::star::awt::Rectangle& rOutputRectangle,
                                      ::sal_Int32 nItemId, ::sal_Int32 nStyle ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL click() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException);
-    
+
     private:
         virtual ~LangSelectionStatusbarController() {}
         LangSelectionStatusbarController(LangSelectionStatusbarController &); // not defined
         void operator =(LangSelectionStatusbarController &); // not defined
 
-    
+
         sal_Bool            m_bShowMenu;        // if the menu is to be displayed or not (depending on the selected object/text)
         sal_Int16           m_nScriptType;      // the flags for the different script types available in the selection, LATIN = 0x0001, ASIAN = 0x0002, COMPLEX = 0x0004
         ::rtl::OUString     m_aCurLang;         // the language of the current selection, "*" if there are more than one languages
         ::rtl::OUString     m_aKeyboardLang;    // the keyboard language
         ::rtl::OUString     m_aGuessedTextLang;     // the 'guessed' language for the selection, "" if none could be guessed
         LanguageGuessingHelper      m_aLangGuessHelper;
-        
+
         void LangMenu() throw (::com::sun::star::uno::RuntimeException);
 };
 

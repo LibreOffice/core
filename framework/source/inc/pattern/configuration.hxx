@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,40 +69,40 @@ class ConfigurationHelper
     //-------------------------------------------
     // const
     public:
-    
+
         //---------------------------------------
         /** @short  allow opening of a configuration access
                     in different working modes.
-                    
+
             @descr  All enum values must be useable as flags
                     mapped into a int32 value!
          */
         enum EOpenMode
         {
-            /// open it readonly (default=readwrite!) 
+            /// open it readonly (default=readwrite!)
             E_READONLY = 1,
             /// disable fallback handling for localized cfg nodes
             E_ALL_LOCALES = 2
         };
-    
+
     //-------------------------------------------
     // interface
     public:
-    
+
         //---------------------------------------
         /**
             @short  opens a configuration access.
-            
+
             @descr  TODO
-        
+
             @param  xSMGR
                     this method need an uno service manager for internal work.
-            
+
             @param  sPackage
                     name the configuration file.
                     e.g. "/.org.openoffice.Setup"
                     Note: It must start with "/" but end without(!) "/"!
-                    
+
             @param  sRelPath
                     describe the relativ path of the requested key inside
                     the specified package.
@@ -110,7 +110,7 @@ class ConfigurationHelper
                     Note: Its not allowed to start or end with a "/"!
                     Further you must use encoded path elements if
                     e.g. set nodes are involved.
-                    
+
             @param  nOpenFlags
                     force opening of the configuration access in special mode.
                     see enum EOpenMode for further informations.
@@ -121,50 +121,50 @@ class ConfigurationHelper
                                                                             sal_Int32                                               nOpenFlags)
         {
             static ::rtl::OUString PATH_SEPERATOR = ::rtl::OUString::createFromAscii("/");
-            
+
             css::uno::Reference< css::uno::XInterface > xCFG;
-            
+
             try
             {
                 css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
                     xSMGR->createInstance(SERVICENAME_CFGPROVIDER), css::uno::UNO_QUERY_THROW);
-        
+
                 ::rtl::OUStringBuffer sPath(1024);
                 sPath.append(sPackage      );
                 sPath.append(PATH_SEPERATOR);
                 sPath.append(sRelPath      );
 
-                sal_Bool bReadOnly   = ((nOpenFlags & ConfigurationHelper::E_READONLY   ) == ConfigurationHelper::E_READONLY   ); 
-                sal_Bool bAllLocales = ((nOpenFlags & ConfigurationHelper::E_ALL_LOCALES) == ConfigurationHelper::E_ALL_LOCALES); 
-                
+                sal_Bool bReadOnly   = ((nOpenFlags & ConfigurationHelper::E_READONLY   ) == ConfigurationHelper::E_READONLY   );
+                sal_Bool bAllLocales = ((nOpenFlags & ConfigurationHelper::E_ALL_LOCALES) == ConfigurationHelper::E_ALL_LOCALES);
+
                 sal_Int32 c = 1;
                 if (bAllLocales)
                     c = 2;
-                
+
                 css::uno::Sequence< css::uno::Any > lParams(c);
                 css::beans::PropertyValue           aParam;
-                
+
                 aParam.Name    = ::rtl::OUString::createFromAscii("nodepath");
                 aParam.Value <<= sPath.makeStringAndClear();
                 lParams[0]   <<= aParam;
-                
+
                 if (bAllLocales)
                 {
                     aParam.Name    = ::rtl::OUString::createFromAscii("*");
                     aParam.Value <<= sal_True;
                     lParams[1]   <<= aParam;
                 }
-        
+
                 if (bReadOnly)
                     xCFG = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS, lParams);
-                else        
+                else
                     xCFG = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGUPDATEACCESS, lParams);
             }
             catch(const css::uno::RuntimeException& exRun)
                 { throw exRun; }
             catch(const css::uno::Exception&)
                 { xCFG.clear(); }
-        
+
             return xCFG;
         }
 };

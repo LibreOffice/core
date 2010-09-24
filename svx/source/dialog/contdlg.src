@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #include "helpid.hrc"
 #include "contdlg.hrc"
 
-#define MASKCOLOR	MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
 
  // RID_SVXDLG_CONTOUR ----------------------------------------------------
 FloatingWindow RID_SVXDLG_CONTOUR
@@ -200,19 +200,19 @@ FloatingWindow RID_SVXDLG_CONTOUR
 #define CONTOURDLG_IDLIST \
         IdList =            \
         {                   \
-            TBI_APPLY ;	\
-            TBI_WORKPLACE ;	\
-            TBI_SELECT ;	\
-            TBI_RECT ;	\
-            TBI_CIRCLE ;	\
-            TBI_POLY ;	\
-            TBI_POLYEDIT ;	\
-            TBI_POLYMOVE ;	\
+            TBI_APPLY ; \
+            TBI_WORKPLACE ; \
+            TBI_SELECT ;    \
+            TBI_RECT ;  \
+            TBI_CIRCLE ;    \
+            TBI_POLY ;  \
+            TBI_POLYEDIT ;  \
+            TBI_POLYMOVE ;  \
             TBI_POLYINSERT ; \
-            TBI_POLYDELETE ;	\
-            TBI_AUTOCONTOUR ;	\
-            TBI_UNDO ;	\
-            TBI_REDO ;	\
+            TBI_POLYDELETE ;    \
+            TBI_AUTOCONTOUR ;   \
+            TBI_UNDO ;  \
+            TBI_REDO ;  \
             TBI_PIPETTE ; \
         }; \
         IdCount = { 14 ; };

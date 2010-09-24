@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ static typelib_TypeClass cpp2uno_call(
         void ** gpreg, void ** fpreg, void ** ovrflw,
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
-       
+
         // gpreg:  [ret *], this, [gpr params]
         // fpreg:  [fpr params]
         // ovrflw: [gpr or fpr params (space for entire parameter list in structure format properly aligned)]
@@ -62,10 +62,10 @@ static typelib_TypeClass cpp2uno_call(
     typelib_TypeDescription * pReturnTypeDescr = 0;
     if (pReturnTypeRef)
         TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    
+
     void * pUnoReturn = 0;
     void * pCppReturn = 0; // complex return ptr: if != 0 && != pUnoReturn, reconversion need
-    
+
     sal_Int32 ngpreg = 0;
     sal_Int32 nfpreg = 0;
 
@@ -79,7 +79,7 @@ static typelib_TypeClass cpp2uno_call(
             pCppReturn = *gpreg;
             ngpreg++;
             ++ovrflw;
-            
+
             pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
                           ? alloca( pReturnTypeDescr->nSize )
                           : pCppReturn); // direct way
@@ -91,7 +91,7 @@ static typelib_TypeClass cpp2uno_call(
 
         // after handling optional return pointer and "this"
         // make use of the space that is allocated to store all parameters in the callers stack
-        // by comying the proper registers filled with parameters to that space 
+        // by comying the proper registers filled with parameters to that space
     char * pCppStack = (char *)ovrflw;
 
 
@@ -119,7 +119,7 @@ static typelib_TypeClass cpp2uno_call(
             }
             pCppStack += sizeof (float);
             ngpreg += 1;
-            break;	
+            break;
         case typelib_TypeClass_DOUBLE:
             if (nfpreg < 13)
             {
@@ -127,7 +127,7 @@ static typelib_TypeClass cpp2uno_call(
             }
             pCppStack += sizeof (double);
             ngpreg += 2;
-            break;	
+            break;
         case typelib_TypeClass_UNSIGNED_HYPER:
         case typelib_TypeClass_HYPER:
             if (ngpreg < 8)
@@ -162,16 +162,16 @@ static typelib_TypeClass cpp2uno_call(
 
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
-    
+
     sal_Int32 nTempIndizes   = 0;
-    
+
     for ( nPos = 0; nPos < nParams; ++nPos )
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
         typelib_TypeDescription * pParamTypeDescr = 0;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
-        if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr )) 
+        if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
                 // value
         {
             switch (pParamTypeDescr->eTypeClass)
@@ -232,16 +232,16 @@ static typelib_TypeClass cpp2uno_call(
         }
         pCppStack += sizeof(sal_Int32); // standard parameter length
     }
-    
-    
+
+
     // ExceptionHolder
     uno_Any aUnoExc; // Any will be constructed by callee
     uno_Any * pUnoExc = &aUnoExc;
 
     // invoke uno dispatch call
-    (*pThis->getUnoI()->pDispatcher)( 
+    (*pThis->getUnoI()->pDispatcher)(
          pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
-    
+
     // in case an exception occured...
     if (pUnoExc)
     {
@@ -249,16 +249,16 @@ static typelib_TypeClass cpp2uno_call(
         for ( ; nTempIndizes--; )
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
-            
+
             if (pParams[nIndex].bIn) // is in/inout => was constructed
                 uno_destructData( pUnoArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], 0 );
             TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
         }
         if (pReturnTypeDescr)
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
-        
-        CPPU_CURRENT_NAMESPACE::raiseException( 
-                    &aUnoExc, pThis->getBridge()->getUno2Cpp() ); 
+
+        CPPU_CURRENT_NAMESPACE::raiseException(
+                    &aUnoExc, pThis->getBridge()->getUno2Cpp() );
                 // has to destruct the any
         // is here for dummy
         return typelib_TypeClass_VOID;
@@ -270,7 +270,7 @@ static typelib_TypeClass cpp2uno_call(
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
             typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
-            
+
             if (pParams[nIndex].bOut) // inout/out
             {
                 // convert and assign
@@ -280,7 +280,7 @@ static typelib_TypeClass cpp2uno_call(
             }
             // destroy temp uno param
             uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 );
-            
+
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
         // return
@@ -316,7 +316,7 @@ static typelib_TypeClass cpp_mediate(
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
     OSL_ENSURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
-    
+
     // gpreg:  [ret *], this, [other gpr params]
     // fpreg:  [fpr params]
     // ovrflw: [gpr or fpr params (in space allocated for all params properly aligned)]
@@ -331,14 +331,14 @@ static typelib_TypeClass cpp_mediate(
         {
         pThis = gpreg[0];
         }
-    
+
         pThis = static_cast< char * >(pThis) - nVtableOffset;
-        bridges::cpp_uno::shared::CppInterfaceProxy * pCppI 
+        bridges::cpp_uno::shared::CppInterfaceProxy * pCppI
     = bridges::cpp_uno::shared::CppInterfaceProxy::castInterfaceToProxy(pThis);
 
-    
+
     typelib_InterfaceTypeDescription * pTypeDescr = pCppI->getTypeDescr();
-    
+
     OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
@@ -346,13 +346,13 @@ static typelib_TypeClass cpp_mediate(
             rtl::OUString::createFromAscii("illegal vtable index!"),
             (XInterface *)pThis );
     }
-    
+
     // determine called method
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
     OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!" );
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
-    
+
     typelib_TypeClass eRet;
     switch (aMemberDescr.get()->eTypeClass)
     {
@@ -373,9 +373,9 @@ static typelib_TypeClass cpp_mediate(
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
                 ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
-            aParam.bIn		= sal_True;
-            aParam.bOut		= sal_False;
-            
+            aParam.bIn      = sal_True;
+            aParam.bOut     = sal_False;
+
             eRet = cpp2uno_call(
                 pCppI, aMemberDescr.get(),
                 0, // indicates void return
@@ -407,7 +407,7 @@ static typelib_TypeClass cpp_mediate(
                 (*pCppI->getBridge()->getCppEnv()->getRegisteredInterface)(
                     pCppI->getBridge()->getCppEnv(),
                     (void **)&pInterface, pCppI->getOid().pData, (typelib_InterfaceTypeDescription *)pTD );
-            
+
                 if (pInterface)
                 {
                     ::uno_any_construct(
@@ -454,7 +454,7 @@ static void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** gpreg
 {
         sal_Int32     gpreg[8];
         double        fpreg[13];
-       
+
         // FIXME: why are we restoring the volatile ctr register here
     sal_Int32   ctrsave = ((sal_Int32*)gpregptr)[-1];
 
@@ -465,9 +465,9 @@ static void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** gpreg
 
         // sal_Bool bComplex = nFunctionIndex & 0x80000000 ? sal_True : sal_False;
 
-    typelib_TypeClass aType = 
+    typelib_TypeClass aType =
              cpp_mediate( nFunctionIndex, nVtableOffset, (void**)gpreg, (void**)fpreg, ovrflw, (sal_Int64*)nRegReturn );
-    
+
         // FIXME: why are we restoring the volatile ctr register here
         // FIXME: and why are we putting back the values for r4, r5, and r6 as well
         // FIXME: this makes no sense to me, all of these registers are volatile!
@@ -489,7 +489,7 @@ static void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** gpreg
                   __asm__( "lbz r3,%0\n\t" : :
                "m"(nRegReturn[0]) );
                   break;
- 
+
                 case typelib_TypeClass_CHAR:
                 case typelib_TypeClass_SHORT:
                 case typelib_TypeClass_UNSIGNED_SHORT:
@@ -522,7 +522,7 @@ static void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** gpreg
 
 int const codeSnippetSize = 136;
 
-unsigned char * codeSnippet( unsigned char * code, sal_Int32 functionIndex, 
+unsigned char * codeSnippet( unsigned char * code, sal_Int32 functionIndex,
                   sal_Int32 vtableOffset, bool simpleRetType )
 {
     if (! simpleRetType )
@@ -534,17 +534,17 @@ unsigned char * codeSnippet( unsigned char * code, sal_Int32 functionIndex,
     // FIXME: is this to allow room for signal handling frames?
     // FIXME: seems like overkill here but this is what was done for Mac OSX for gcc2
     // FIXME: also why no saving of the non-volatile CR pieces here, to be safe
-    // FIXME: we probably should 
+    // FIXME: we probably should
 
     /* generate this code */
 
     // # so first save gpr 3 to gpr 10 (aligned to 4)
     //  stw   r3, -8000(r1)
     //  stw   r4, -7996(r1)
-    //  stw   r5, -7992(r1) 
+    //  stw   r5, -7992(r1)
     //  stw   r6, -7988(r1)
     //  stw   r7, -7984(r1)
-    //  stw   r8, -7980(r1) 
+    //  stw   r8, -7980(r1)
     //  stw   r9, -7976(r1)
     //  stw   r10,-7972(r1)
 
@@ -579,18 +579,18 @@ unsigned char * codeSnippet( unsigned char * code, sal_Int32 functionIndex,
     // # now load up the vtableOffset
     // lis r4, 0xdead
     // ori r4,r4,0xbeef
-    
+
     // #now load up the pointer to the saved gpr registers
     // addi r5,r1,-8000
 
     // #now load up the pointer to the saved fpr registers
     // addi r6,r1,-7968
-    
+
     // #now load up the pointer to the overflow call stack
-    // addi r7,r1,24 # frame pointer plus 24	
+    // addi r7,r1,24 # frame pointer plus 24
 
     // bctr
-    
+
     unsigned long * p = (unsigned long *) code;
 
     * p++ = 0x9061e0c0;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,16 +65,16 @@ namespace dbaccess
 //==========================================================================
 //= OQuery - an object implementing the sdb.Query service
 //==========================================================================
-typedef	::cppu::ImplHelper3	<	::com::sun::star::sdbcx::XDataDescriptorFactory,
+typedef ::cppu::ImplHelper3 <   ::com::sun::star::sdbcx::XDataDescriptorFactory,
                                 ::com::sun::star::beans::XPropertyChangeListener,
                                 ::com::sun::star::sdbcx::XRename
-                            >	OQuery_Base;
+                            >   OQuery_Base;
 class OQuery;
 class OColumn;
-typedef ::comphelper::OPropertyArrayUsageHelper< OQuery >	OQuery_ArrayHelperBase;
+typedef ::comphelper::OPropertyArrayUsageHelper< OQuery >   OQuery_ArrayHelperBase;
 
 
-class OQuery	:public OContentHelper
+class OQuery    :public OContentHelper
                 ,public OQueryDescriptor_Base
                 ,public OQuery_Base
                 ,public OQuery_ArrayHelperBase
@@ -83,29 +83,29 @@ class OQuery	:public OContentHelper
     friend struct TRelease;
 
 public:
-    typedef ::std::map< ::rtl::OUString,OColumn*,::comphelper::UStringMixLess> TNameColumnMap;	
+    typedef ::std::map< ::rtl::OUString,OColumn*,::comphelper::UStringMixLess> TNameColumnMap;
 
 protected:
-//	TNameColumnMap		m_aColumnMap; // contains all columnnames to columns
+//  TNameColumnMap      m_aColumnMap; // contains all columnnames to columns
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xCommandDefinition;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >       m_xCommandPropInfo;
     ::rtl::Reference< OContainerMediator >                                              m_pColumnMediator;
     ::dbtools::IWarningsContainer*                                                      m_pWarnings;
-    sal_Bool			                                                                m_bCaseSensitiv : 1;		// assume case sensitivity of the column names ?
+    sal_Bool                                                                            m_bCaseSensitiv : 1;        // assume case sensitivity of the column names ?
 
     // possible actions on our "aggregate"
     enum AGGREGATE_ACTION { NONE, SETTING_PROPERTIES, FLUSHING };
-    AGGREGATE_ACTION	m_eDoingCurrently;
+    AGGREGATE_ACTION    m_eDoingCurrently;
 
     // ------------------------------------------------------------------------
     /** a class which automatically resets m_eDoingCurrently in it's destructor
     */
-    class OAutoActionReset;	// just for the following friend declaration
+    class OAutoActionReset; // just for the following friend declaration
     friend class OAutoActionReset;
     class OAutoActionReset
     {
-        OQuery*				m_pActor;
+        OQuery*             m_pActor;
     public:
         OAutoActionReset(OQuery* _pActor) : m_pActor(_pActor) { }
         ~OAutoActionReset() { m_pActor->m_eDoingCurrently = NONE; }
@@ -116,7 +116,7 @@ protected:
 
 // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-    ::cppu::IPropertyArrayHelper*	getArrayHelper() { return OQuery_ArrayHelperBase::getArrayHelper(); }
+    ::cppu::IPropertyArrayHelper*   getArrayHelper() { return OQuery_ArrayHelperBase::getArrayHelper(); }
 
 public:
     OQuery(
@@ -157,8 +157,8 @@ public:
 
 public:
     // the caller is responsible for the lifetime!
-    void				            setWarningsContainer( ::dbtools::IWarningsContainer* _pWarnings )	{ m_pWarnings = _pWarnings; }
-    ::dbtools::IWarningsContainer*  getWarningsContainer( )	const                                       { return m_pWarnings; }
+    void                            setWarningsContainer( ::dbtools::IWarningsContainer* _pWarnings )   { m_pWarnings = _pWarnings; }
+    ::dbtools::IWarningsContainer*  getWarningsContainer( ) const                                       { return m_pWarnings; }
 
     // XRename
     virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
@@ -178,7 +178,7 @@ private:
 };
 
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 
 #endif // _DBA_COREAPI_QUERY_HXX_

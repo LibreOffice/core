@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,10 +70,10 @@
 
 
 // bestimme, ob es sich um ein IMPORT/TOC - Feld handelt.
-// return:	0 - weder noch,
-//			1 - TOC
-//			2 - IMPORT
-//			3 - INDEX
+// return:  0 - weder noch,
+//          1 - TOC
+//          2 - IMPORT
+//          3 - INDEX
 enum RTF_FLD_TYPES {
     RTFFLD_UNKNOWN = 0,
     RTFFLD_TOC,
@@ -97,21 +97,21 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
 {
     // Strings sind PascalStrings; Laenge steht an 1. Stellen, dadurch wird
     // sich der Aufruf von strlen erspart!!!
-    sal_Char __READONLY_DATA sTOC[]=		"\x03""toc";
-    sal_Char __READONLY_DATA sIMPORT[]= 	"\x06""import";
-    sal_Char __READONLY_DATA sINDEX[]=		"\x05""index";
-    sal_Char __READONLY_DATA sSYMBOL[]= 	"\x06""symbol";
-    sal_Char __READONLY_DATA sPAGE[]=		"\x04""page";
+    sal_Char __READONLY_DATA sTOC[]=        "\x03""toc";
+    sal_Char __READONLY_DATA sIMPORT[]=     "\x06""import";
+    sal_Char __READONLY_DATA sINDEX[]=      "\x05""index";
+    sal_Char __READONLY_DATA sSYMBOL[]=     "\x06""symbol";
+    sal_Char __READONLY_DATA sPAGE[]=       "\x04""page";
     sal_Char __READONLY_DATA sNUMPAGES[]=   "\x08""numpages";
-    sal_Char __READONLY_DATA sDATE[]=		"\x04""date";
-    sal_Char __READONLY_DATA sTIME[]=		"\x04""time";
-    sal_Char __READONLY_DATA sDATA[]=		"\x04""data";
-    sal_Char __READONLY_DATA sMERGEFLD[]=	"\x0A""mergefield";
-    sal_Char __READONLY_DATA sIMPORT2[]=	"\x0E""includepicture";
-    sal_Char __READONLY_DATA sHYPERLINK[]=	"\x09""hyperlink";
-    sal_Char __READONLY_DATA sREF[]=		"\x03""ref";
-    sal_Char __READONLY_DATA sPAGEREF[]=	"\x07""pageref";
-    sal_Char __READONLY_DATA sEQ[]=			"\x02""eq";
+    sal_Char __READONLY_DATA sDATE[]=       "\x04""date";
+    sal_Char __READONLY_DATA sTIME[]=       "\x04""time";
+    sal_Char __READONLY_DATA sDATA[]=       "\x04""data";
+    sal_Char __READONLY_DATA sMERGEFLD[]=   "\x0A""mergefield";
+    sal_Char __READONLY_DATA sIMPORT2[]=    "\x0E""includepicture";
+    sal_Char __READONLY_DATA sHYPERLINK[]=  "\x09""hyperlink";
+    sal_Char __READONLY_DATA sREF[]=        "\x03""ref";
+    sal_Char __READONLY_DATA sPAGEREF[]=    "\x07""pageref";
+    sal_Char __READONLY_DATA sEQ[]=         "\x02""eq";
     sal_Char __READONLY_DATA sINCLUDETEXT[]="\x0B""includetext";
 
     struct _Dummy_RTF_FLD_TYPES
@@ -131,10 +131,10 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
             {RTFFLD_DATA,        sDATA},
             {RTFFLD_MERGEFLD,    sMERGEFLD},
             {RTFFLD_IMPORT,      sIMPORT2},
-            {RTFFLD_HYPERLINK, 	 sHYPERLINK},
-            {RTFFLD_REF, 		 sREF},
-            {RTFFLD_PAGEREF,	 sPAGEREF},
-            {RTFFLD_EQ, 		 sEQ},
+            {RTFFLD_HYPERLINK,   sHYPERLINK},
+            {RTFFLD_REF,         sREF},
+            {RTFFLD_PAGEREF,     sPAGEREF},
+            {RTFFLD_EQ,          sEQ},
             {RTFFLD_INCLUDETEXT, sINCLUDETEXT}
     };
 
@@ -160,7 +160,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
             ( !nFndPos || !isalpha(sNm.GetChar( static_cast< xub_StrLen >(nFndPos-1) )) ) &&
             ( nFndPos+nLen == sNm.Len() || !isalpha(sNm.GetChar( static_cast< xub_StrLen >(nFndPos+nLen) ) ) ) )
         {
-//			rName = sNm.Copy( nFndPos, nLen );
+//          rName = sNm.Copy( nFndPos, nLen );
             rName = rName.Copy( nFndPos, static_cast< xub_StrLen >(nLen) );
             nFndPos += nTokenStt + static_cast< xub_StrLen >(nLen);
             while( rNext.GetChar( nFndPos ) == ' ' )    ++nFndPos;
@@ -169,7 +169,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
             return aFldNmArr[n].eFldType;
         }
     }
-    return RTFFLD_UNKNOWN;		// nichts gefunden.
+    return RTFFLD_UNKNOWN;      // nichts gefunden.
 }
 
 static USHORT CheckNumberFmtStr( const String& rNStr )
@@ -196,7 +196,7 @@ static USHORT CheckNumberFmtStr( const String& rNStr )
         if( rNStr.EqualsAscii( pCmp, 0, static_cast< xub_StrLen >(nLen) ))
             return static_cast< USHORT >(2 <= n ? n : (n + SVX_NUM_CHARS_UPPER_LETTER_N));
     }
-    return SVX_NUM_PAGEDESC;		// default-Wert
+    return SVX_NUM_PAGEDESC;        // default-Wert
 }
 
 class RtfFieldSwitch
@@ -207,11 +207,11 @@ public:
     RtfFieldSwitch( const String& rParam );
     sal_Unicode GetSwitch( String& rParam );
 
-    BOOL IsAtEnd() const 				{ return nCurPos >= sParam.Len(); }
-    xub_StrLen GetCurPos() const 		{ return nCurPos; }
-    void Erase( xub_StrLen nEndPos ) 	{ sParam.Erase( 0, nEndPos ); }
-    void Insert( const String& rIns ) 	{ sParam.Insert( rIns, 0 ); }
-    const String& GetStr() const		{ return sParam; }
+    BOOL IsAtEnd() const                { return nCurPos >= sParam.Len(); }
+    xub_StrLen GetCurPos() const        { return nCurPos; }
+    void Erase( xub_StrLen nEndPos )    { sParam.Erase( 0, nEndPos ); }
+    void Insert( const String& rIns )   { sParam.Insert( rIns, 0 ); }
+    const String& GetStr() const        { return sParam; }
 };
 
 RtfFieldSwitch::RtfFieldSwitch( const String& rParam )
@@ -302,9 +302,9 @@ void lcl_ScanEquationField( const String& rStr, RTF_EquationData& rData,
         case 0:
             switch( nSttKey )
             {
-            case 'u':	rData.sUp += sParam;	break;
-            case 'd':	rData.sDown += sParam;	break;
-            default:	rData.sText += sParam;	break;
+            case 'u':   rData.sUp += sParam;    break;
+            case 'd':   rData.sDown += sParam;  break;
+            default:    rData.sText += sParam;  break;
             }
             break;
 
@@ -413,8 +413,8 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
     case RTFFLD_IMPORT:
         {
 //JP 11.03.96: vertraegt sich nicht so ganz mit Internet!
-//			  if( STRING_NOTFOUND != ( nPos = aSaveStr.Search( '.' )))
-//				  aSaveStr.Erase( nPos+4 );
+//            if( STRING_NOTFOUND != ( nPos = aSaveStr.Search( '.' )))
+//                aSaveStr.Erase( nPos+4 );
 
             aSaveStr.EraseLeadingAndTrailingChars();
             if( aSaveStr.Len() )
@@ -430,7 +430,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     INetURLObject(GetBaseURL()), aSaveStr,
                     URIHelper::GetMaybeFileHdl() );
             }
-//			SkipGroup();		// ueberlese den Rest
+//          SkipGroup();        // ueberlese den Rest
         }
         break;
 
@@ -467,7 +467,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 aPF.ChangeFormat( CheckNumberFmtStr( aSaveStr ));
             }
             pDoc->InsertPoolItem( *pPam, SwFmtFld( aPF ), 0 );
-            SkipGroup();		// ueberlese den Rest
+            SkipGroup();        // ueberlese den Rest
         }
         break;
     case RTFFLD_DATE:
@@ -525,7 +525,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     delete pFld;
                 }
             }
-            SkipGroup();		// ueberlese den Rest
+            SkipGroup();        // ueberlese den Rest
         }
         break;
 
@@ -538,8 +538,8 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             // im SWG geben die DATA Felder den Namen der Datenbank
             // an. Dieser kann als Field oder als DBInfo interpretiert
             // werden:
-            //	\\data -> Datenbank-Name als Field
-            //	DATA -> Datenbank-Info
+            //  \\data -> Datenbank-Name als Field
+            //  DATA -> Datenbank-Info
             BOOL bField = rFieldStr.GetChar( 0 ) != 'D';
 
             // nur der Name interressiert
@@ -554,20 +554,20 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     static_cast<SwDBNameFieldType*>(pFldType), SwDBData())), 0);
             }
             else
-                pDoc->ChgDBData( aData );		// MS: Keine DBInfo verwenden
-            SkipGroup();		// ueberlese den Rest
+                pDoc->ChgDBData( aData );       // MS: Keine DBInfo verwenden
+            SkipGroup();        // ueberlese den Rest
         }
         break;
     case RTFFLD_MERGEFLD:
         {
             // ein Datenbank - Feld: nur der Name interressiert
             // bis zum Ende vom String ist das der Feldname
-            SwDBFieldType aTmp( pDoc, aSaveStr, SwDBData() );	//
+            SwDBFieldType aTmp( pDoc, aSaveStr, SwDBData() );   //
             SwDBField aDBFld( (SwDBFieldType*)pDoc->InsertFldType( aTmp ));
 
             aDBFld.ChangeFormat( UF_STRING );
             pDoc->InsertPoolItem(*pPam, SwFmtFld( aDBFld ), 0);
-            SkipGroup();		// ueberlese den Rest
+            SkipGroup();        // ueberlese den Rest
         }
         break;
 
@@ -637,7 +637,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             if( !IsNewGroup() ) AttrGroupEnd();
             SetNewGroup( FALSE );
 
-            SkipGroup();		// ueberlese den Rest
+            SkipGroup();        // ueberlese den Rest
         }
         break;
 
@@ -662,8 +662,8 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                                 URIHelper::GetMaybeFileHdl() );
                         break;
 
-                    case 'l':	case 'L':	sMark = sParam;		break;
-                    case 't':	case 'T':	sFrame = sParam;	break;
+                    case 'l':   case 'L':   sMark = sParam;     break;
+                    case 't':   case 'T':   sFrame = sParam;    break;
                     }
             }
 
@@ -688,12 +688,12 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 //Translate and apply
                 switch( aData.nJustificationCode )
                 {
-                case 0:		aData.nJustificationCode = 1; 	break;
-                case 1:		aData.nJustificationCode = 3;	break;
-                case 2:		aData.nJustificationCode = 4;	break;
-                case 4:		aData.nJustificationCode = 2;	break;
-//				case 3:
-                default:	aData.nJustificationCode = 0;	break;
+                case 0:     aData.nJustificationCode = 1;   break;
+                case 1:     aData.nJustificationCode = 3;   break;
+                case 2:     aData.nJustificationCode = 4;   break;
+                case 4:     aData.nJustificationCode = 2;   break;
+//              case 3:
+                default:    aData.nJustificationCode = 0;   break;
                 }
 
                 SwFmtRuby aRuby( aData.sUp );
@@ -779,7 +779,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 pDoc->InsertPoolItem( *pPam, SwFmtFld( aFld ), 0);
 
             }
-            SkipGroup();		// ueberlese den Rest
+            SkipGroup();        // ueberlese den Rest
         }
         break;
 
@@ -958,16 +958,16 @@ void SwRTFParser::ReadXEField()
             }
             break;
 
-        case RTF_LINE:			cCh = '\n';	goto INSINGLECHAR;
-        case RTF_TAB:			cCh = '\t';	goto INSINGLECHAR;
-        case RTF_SUBENTRYINDEX:	cCh = ':';	goto INSINGLECHAR;
-        case RTF_EMDASH:		cCh = 151;	goto INSINGLECHAR;
-        case RTF_ENDASH:		cCh = 150;	goto INSINGLECHAR;
-        case RTF_BULLET:		cCh = 149;	goto INSINGLECHAR;
-        case RTF_LQUOTE:		cCh = 145;	goto INSINGLECHAR;
-        case RTF_RQUOTE:		cCh = 146;	goto INSINGLECHAR;
-        case RTF_LDBLQUOTE:		cCh = 147;	goto INSINGLECHAR;
-        case RTF_RDBLQUOTE:		cCh = 148;	goto INSINGLECHAR;
+        case RTF_LINE:          cCh = '\n'; goto INSINGLECHAR;
+        case RTF_TAB:           cCh = '\t'; goto INSINGLECHAR;
+        case RTF_SUBENTRYINDEX: cCh = ':';  goto INSINGLECHAR;
+        case RTF_EMDASH:        cCh = 151;  goto INSINGLECHAR;
+        case RTF_ENDASH:        cCh = 150;  goto INSINGLECHAR;
+        case RTF_BULLET:        cCh = 149;  goto INSINGLECHAR;
+        case RTF_LQUOTE:        cCh = 145;  goto INSINGLECHAR;
+        case RTF_RQUOTE:        cCh = 146;  goto INSINGLECHAR;
+        case RTF_LDBLQUOTE:     cCh = 147;  goto INSINGLECHAR;
+        case RTF_RDBLQUOTE:     cCh = 148;  goto INSINGLECHAR;
 INSINGLECHAR:
             sFieldStr += ByteString::ConvertToUnicode( cCh,
                                                RTL_TEXTENCODING_MS_1252 );
@@ -995,7 +995,7 @@ INSINGLECHAR:
         }
     }
 
-    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
 }
 
 
@@ -1003,7 +1003,7 @@ void SwRTFParser::ReadField()
 {
     bReadSwFly = false; //#it may be that any uses of this need to be removed and replaced
     int nRet = 0;
-    int nNumOpenBrakets = 1;		// die erste wurde schon vorher erkannt !!
+    int nNumOpenBrakets = 1;        // die erste wurde schon vorher erkannt !!
     int bFldInst = FALSE, bFldRslt = FALSE;
     String sFieldStr, sFieldNm;
     BYTE cCh;
@@ -1154,16 +1154,16 @@ void SwRTFParser::ReadField()
             }
             break;
 
-        case RTF_LINE:			cCh = '\n';	goto INSINGLECHAR;
-        case RTF_TAB:			cCh = '\t';	goto INSINGLECHAR;
-        case RTF_SUBENTRYINDEX:	cCh = ':';	goto INSINGLECHAR;
-        case RTF_EMDASH:		cCh = 151;	goto INSINGLECHAR;
-        case RTF_ENDASH:		cCh = 150;	goto INSINGLECHAR;
-        case RTF_BULLET:		cCh = 149;	goto INSINGLECHAR;
-        case RTF_LQUOTE:		cCh = 145;	goto INSINGLECHAR;
-        case RTF_RQUOTE:		cCh = 146;	goto INSINGLECHAR;
-        case RTF_LDBLQUOTE:		cCh = 147;	goto INSINGLECHAR;
-        case RTF_RDBLQUOTE:		cCh = 148;	goto INSINGLECHAR;
+        case RTF_LINE:          cCh = '\n'; goto INSINGLECHAR;
+        case RTF_TAB:           cCh = '\t'; goto INSINGLECHAR;
+        case RTF_SUBENTRYINDEX: cCh = ':';  goto INSINGLECHAR;
+        case RTF_EMDASH:        cCh = 151;  goto INSINGLECHAR;
+        case RTF_ENDASH:        cCh = 150;  goto INSINGLECHAR;
+        case RTF_BULLET:        cCh = 149;  goto INSINGLECHAR;
+        case RTF_LQUOTE:        cCh = 145;  goto INSINGLECHAR;
+        case RTF_RQUOTE:        cCh = 146;  goto INSINGLECHAR;
+        case RTF_LDBLQUOTE:     cCh = 147;  goto INSINGLECHAR;
+        case RTF_RDBLQUOTE:     cCh = 148;  goto INSINGLECHAR;
 INSINGLECHAR:
             sFieldStr += ByteString::ConvertToUnicode( cCh,
                                                RTL_TEXTENCODING_MS_1252 );
@@ -1174,7 +1174,7 @@ INSINGLECHAR:
             sFieldStr += aToken;
             break;
 
-        case RTF_PICT:		// Pic-Daten einlesen!
+        case RTF_PICT:      // Pic-Daten einlesen!
             if( RTFFLD_IMPORT == nRet )
             {
                 Graphic aGrf;
@@ -1225,7 +1225,7 @@ INSINGLECHAR:
     if (RTFFLD_IMPORT == nRet && sFieldNm.Len())
         InsPicture( sFieldNm );
 
-    SkipToken( -1 );		// die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,20 +75,20 @@ class OListBoxModel :public OBoundControlModel
     ::connectivity::ORowSetValue                m_aSaveValue;
 
     // <properties>
-    ::com::sun::star::form::ListSourceType		m_eListSourceType;		// type der list source
-    ::com::sun::star::uno::Any					m_aBoundColumn;
+    ::com::sun::star::form::ListSourceType      m_eListSourceType;      // type der list source
+    ::com::sun::star::uno::Any                  m_aBoundColumn;
     ValueList                                   m_aListSourceValues;
     ValueList                                   m_aBoundValues;
-    ::com::sun::star::uno::Sequence<sal_Int16>	m_aDefaultSelectSeq;	// DefaultSelected
+    ::com::sun::star::uno::Sequence<sal_Int16>  m_aDefaultSelectSeq;    // DefaultSelected
     // </properties>
 
-    sal_Int16				                    m_nNULLPos;             // position of the NULL value in our list
+    sal_Int16                                   m_nNULLPos;             // position of the NULL value in our list
     sal_Int32                                   m_nBoundColumnType;
 
 private:
     ::connectivity::ORowSetValue getFirstSelectedValue() const;
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>	_getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OListBoxModel );
@@ -117,7 +117,7 @@ protected:
     virtual void SAL_CALL   setPropertyValues(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XPersistObject
-    virtual ::rtl::OUString SAL_CALL	getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
         write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
@@ -153,8 +153,8 @@ protected:
                             translateControlValueToExternalValue( ) const;
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
 
-    virtual void		    onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
-    virtual void		    onDisconnectedDbColumn();
+    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
+    virtual void            onDisconnectedDbColumn();
 
     virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;
@@ -196,7 +196,7 @@ typedef ::cppu::ImplHelper4 <   ::com::sun::star::awt::XFocusListener
 
 class ChangeListeners;
 
-class OListBoxControl	:public OBoundControl
+class OListBoxControl   :public OBoundControl
                         ,public OListBoxControl_BASE
                         ,public IEventProcessor
 {
@@ -204,8 +204,8 @@ private:
     ::cppu::OInterfaceContainerHelper       m_aChangeListeners;
     ::cppu::OInterfaceContainerHelper       m_aItemListeners;
 
-    ::com::sun::star::uno::Any				m_aCurrentSelection;
-    Timer									m_aChangeTimer;
+    ::com::sun::star::uno::Any              m_aCurrentSelection;
+    Timer                                   m_aChangeTimer;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >
                                             m_xAggregateListBox;
@@ -215,7 +215,7 @@ private:
 
 protected:
     // UNO Anbindung
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>	_getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
 
 public:
     OListBoxControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);

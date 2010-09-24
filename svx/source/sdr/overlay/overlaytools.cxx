@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,8 +66,8 @@ namespace drawinglayer
             {
                 // calculate back from internal bitmap's extreme coordinates (the edges)
                 // to logical coordinates. Only use a unified scaling value (getDiscreteUnit(),
-                // the prepared one which expresses how many logic units form a discrete unit) 
-                // for this step. This primitive is to be displayed always unscaled (in it's pixel size) 
+                // the prepared one which expresses how many logic units form a discrete unit)
+                // for this step. This primitive is to be displayed always unscaled (in it's pixel size)
                 // and unrotated, more like a marker
                 const double fLeft(((0.0 - getCenterX()) * getDiscreteUnit()) + getBasePosition().getX());
                 const double fTop(((0.0 - getCenterY()) * getDiscreteUnit()) + getBasePosition().getY());
@@ -85,7 +85,7 @@ namespace drawinglayer
                 const Primitive2DReference aPrimitive(new BitmapPrimitive2D(getBitmapEx(), aTransform));
                 aRetval = Primitive2DSequence(&aPrimitive, 1);
             }
-            
+
             return aRetval;
         }
 
@@ -136,10 +136,10 @@ namespace drawinglayer
             {
                 aRetval.realloc(2);
                 basegfx::B2DPolygon aPolygon;
-                
+
                 aPolygon.append(basegfx::B2DPoint(getViewport().getMinX(), getBasePosition().getY()));
                 aPolygon.append(basegfx::B2DPoint(getViewport().getMaxX(), getBasePosition().getY()));
-                
+
                 aRetval[0] = Primitive2DReference(
                     new PolygonMarkerPrimitive2D(
                         aPolygon,
@@ -150,7 +150,7 @@ namespace drawinglayer
                 aPolygon.clear();
                 aPolygon.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMinY()));
                 aPolygon.append(basegfx::B2DPoint(getBasePosition().getX(), getViewport().getMaxY()));
-                
+
                 aRetval[1] = Primitive2DReference(
                     new PolygonMarkerPrimitive2D(
                         aPolygon,
@@ -209,7 +209,7 @@ namespace drawinglayer
         Primitive2DSequence OverlayHatchRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
-            
+
             if(basegfx::fTools::more(getDiscreteUnit(), 0.0))
             {
                 basegfx::B2DRange aInnerRange(getObjectRange());
@@ -225,7 +225,7 @@ namespace drawinglayer
                 {
                     aHatchPolyPolygon.append(basegfx::tools::createPolygonFromRect(aInnerRange));
                 }
-                
+
                 if(!basegfx::fTools::equalZero(getRotation()))
                 {
                     const basegfx::B2DHomMatrix aTransform(basegfx::tools::createRotateAroundPoint(
@@ -329,7 +329,7 @@ namespace drawinglayer
 
                         aLine.append(basegfx::B2DPoint(getViewport().getMinX(), getBasePosition().getY()));
                         aLine.append(basegfx::B2DPoint(getViewport().getMaxX(), getBasePosition().getY()));
-                        
+
                         aRetval[0] = Primitive2DReference(
                             new PolygonMarkerPrimitive2D(
                                 aLine,
@@ -344,10 +344,10 @@ namespace drawinglayer
                         const double fDiscreteUnit((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
                         aRetval.realloc(2);
                         basegfx::B2DPolygon aLineA, aLineB;
-                        
+
                         aLineA.append(basegfx::B2DPoint(getBasePosition().getX(), getBasePosition().getY() - fDiscreteUnit));
                         aLineA.append(basegfx::B2DPoint(getBasePosition().getX(), getBasePosition().getY() + fDiscreteUnit));
-                        
+
                         aRetval[0] = Primitive2DReference(
                             new PolygonMarkerPrimitive2D(
                                 aLineA,
@@ -357,7 +357,7 @@ namespace drawinglayer
 
                         aLineB.append(basegfx::B2DPoint(getBasePosition().getX() - fDiscreteUnit, getBasePosition().getY()));
                         aLineB.append(basegfx::B2DPoint(getBasePosition().getX() + fDiscreteUnit, getBasePosition().getY()));
-                        
+
                         aRetval[1] = Primitive2DReference(
                             new PolygonMarkerPrimitive2D(
                                 aLineB,
@@ -426,29 +426,29 @@ namespace drawinglayer
                 aLine.append(basegfx::B2DPoint(getViewport().getMinX(), getRollingRectangle().getMinY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getRollingRectangle().getMinY()));
                 aRetval[0] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
-                
+
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getViewport().getMinX(), getRollingRectangle().getMaxY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getRollingRectangle().getMaxY()));
                 aRetval[1] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
-                
+
                 // Right lines
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getRollingRectangle().getMinY()));
                 aLine.append(basegfx::B2DPoint(getViewport().getMaxX(), getRollingRectangle().getMinY()));
                 aRetval[2] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
-                
+
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getRollingRectangle().getMaxY()));
                 aLine.append(basegfx::B2DPoint(getViewport().getMaxX(), getRollingRectangle().getMaxY()));
                 aRetval[3] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
-                
+
                 // Top lines
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getViewport().getMinY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getRollingRectangle().getMinY()));
                 aRetval[4] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
-                
+
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getViewport().getMinY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getRollingRectangle().getMinY()));
@@ -459,7 +459,7 @@ namespace drawinglayer
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getRollingRectangle().getMaxY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMinX(), getViewport().getMaxY()));
                 aRetval[6] = Primitive2DReference(new PolygonMarkerPrimitive2D(aLine, getRGBColorA(), getRGBColorB(), getDiscreteDashLength()));
-                
+
                 aLine.clear();
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getRollingRectangle().getMaxY()));
                 aLine.append(basegfx::B2DPoint(getRollingRectangle().getMaxX(), getViewport().getMaxY()));

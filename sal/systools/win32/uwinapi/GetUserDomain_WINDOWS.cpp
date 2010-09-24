@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,32 +26,32 @@
  ************************************************************************/
 
 {
-    HKEY	hkeyLogon;
-    HKEY	hkeyWorkgroup;
-    DWORD	dwResult = 0;
+    HKEY    hkeyLogon;
+    HKEY    hkeyWorkgroup;
+    DWORD   dwResult = 0;
 
 
-    if ( ERROR_SUCCESS  == RegOpenKeyEx( 
-        HKEY_LOCAL_MACHINE, 
-        TEXT("Network\\Logon"), 
-        0, KEY_READ, &hkeyLogon ) ) 
+    if ( ERROR_SUCCESS  == RegOpenKeyEx(
+        HKEY_LOCAL_MACHINE,
+        TEXT("Network\\Logon"),
+        0, KEY_READ, &hkeyLogon ) )
     {
-        DWORD	dwLogon = 0;
-        DWORD	dwLogonSize = sizeof(dwLogon);
+        DWORD   dwLogon = 0;
+        DWORD   dwLogonSize = sizeof(dwLogon);
         RegQueryValueEx( hkeyLogon, TEXT("LMLogon"), 0, NULL, (LPBYTE)&dwLogon, &dwLogonSize );
         RegCloseKey( hkeyLogon );
 
         if ( dwLogon )
         {
-            HKEY	hkeyNetworkProvider;
+            HKEY    hkeyNetworkProvider;
 
-            if ( ERROR_SUCCESS  == RegOpenKeyEx( 
-                HKEY_LOCAL_MACHINE, 
-                TEXT("SYSTEM\\CurrentControlSet\\Services\\MSNP32\\NetworkProvider"), 
+            if ( ERROR_SUCCESS  == RegOpenKeyEx(
+                HKEY_LOCAL_MACHINE,
+                TEXT("SYSTEM\\CurrentControlSet\\Services\\MSNP32\\NetworkProvider"),
                 0, KEY_READ, &hkeyNetworkProvider ) )
             {
-                DWORD	dwBufferSize = nSize;
-                LONG	lResult = RegQueryValueEx( hkeyNetworkProvider, TEXT("AuthenticatingAgent"), 0, NULL, (LPBYTE)lpBuffer, &dwBufferSize );
+                DWORD   dwBufferSize = nSize;
+                LONG    lResult = RegQueryValueEx( hkeyNetworkProvider, TEXT("AuthenticatingAgent"), 0, NULL, (LPBYTE)lpBuffer, &dwBufferSize );
 
                 if ( ERROR_SUCCESS == lResult || ERROR_MORE_DATA == lResult )
                     dwResult = dwBufferSize / sizeof(TCHAR);
@@ -65,8 +65,8 @@
         TEXT("SYSTEM\\CurrentControlSet\\Services\\VxD\\VNETSUP"),
         0, KEY_READ, &hkeyWorkgroup ) )
     {
-        DWORD	dwBufferSize = nSize;
-        LONG	lResult = RegQueryValueEx( hkeyWorkgroup, TEXT("Workgroup"), 0, NULL, (LPBYTE)lpBuffer, &dwBufferSize );
+        DWORD   dwBufferSize = nSize;
+        LONG    lResult = RegQueryValueEx( hkeyWorkgroup, TEXT("Workgroup"), 0, NULL, (LPBYTE)lpBuffer, &dwBufferSize );
 
         if ( ERROR_SUCCESS == lResult || ERROR_MORE_DATA == lResult )
             dwResult = dwBufferSize / sizeof(TCHAR);

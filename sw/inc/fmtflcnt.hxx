@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@ class SwTxtFlyCnt;
 class SwFmtFlyCnt : public SfxPoolItem
 {
     friend class SwTxtFlyCnt;
-    SwTxtFlyCnt* pTxtAttr;		// mein TextAttribut
-    SwFrmFmt* pFmt;				// mein Fly/DrawFrame-Format
+    SwTxtFlyCnt* pTxtAttr;      // mein TextAttribut
+    SwFrmFmt* pFmt;             // mein Fly/DrawFrame-Format
     // geschuetzter CopyCtor
     SwFmtFlyCnt& operator=(const SwFmtFlyCnt& rFlyCnt);
 
@@ -46,15 +46,15 @@ public:
     SwFmtFlyCnt( SwFrmFmt *pFrmFmt );
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
     inline SwFrmFmt *GetFrmFmt() const { return pFmt; }
     // fuer Undo: loesche "logisch" das FlyFrmFormat, wird sich im
     //          Undo-Object gemerkt.
     inline void SetFlyFmt( SwFrmFmt* pNew = 0 )   { pFmt = pNew; }
 
-    const SwTxtFlyCnt *GetTxtFlyCnt() const	{ return pTxtAttr; }
-          SwTxtFlyCnt *GetTxtFlyCnt()	  	{ return pTxtAttr; }
+    const SwTxtFlyCnt *GetTxtFlyCnt() const { return pTxtAttr; }
+          SwTxtFlyCnt *GetTxtFlyCnt()       { return pTxtAttr; }
 
     // OD 27.06.2003 #108784#
     bool Sw3ioExportAllowed() const;

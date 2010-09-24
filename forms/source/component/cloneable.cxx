@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ namespace frm
     //------------------------------------------------------------------
     Reference< XAggregation > OCloneableAggregation::createAggregateClone( const OCloneableAggregation* _pOriginal )
     {
-        Reference< XCloneable > xAggregateCloneable;	// will be the aggregate's XCloneable
-        Reference< XAggregation > xAggregateClone;		// will be the aggregate's clone
+        Reference< XCloneable > xAggregateCloneable;    // will be the aggregate's XCloneable
+        Reference< XAggregation > xAggregateClone;      // will be the aggregate's clone
 
         if ( query_aggregation( _pOriginal->m_xAggregate, xAggregateCloneable ) )
         {
@@ -63,6 +63,6 @@ namespace frm
     }
 
 //.........................................................................
-}	// namespace frm
+}   // namespace frm
 //.........................................................................
 

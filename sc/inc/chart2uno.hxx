@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -431,13 +431,13 @@ public:
 
     // XUnoTunnel ------------------------------------------------------------
 
-// 	virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
-// 									sal_Int8 >& aIdentifier )
-// 								throw(::com::sun::star::uno::RuntimeException);
+//  virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
+//                                  sal_Int8 >& aIdentifier )
+//                              throw(::com::sun::star::uno::RuntimeException);
 
-// 	static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-// 	static ScChart2DataSequence* getImplementation( const com::sun::star::uno::Reference<
-// 									com::sun::star::uno::XInterface> xObj );
+//  static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+//  static ScChart2DataSequence* getImplementation( const com::sun::star::uno::Reference<
+//                                  com::sun::star::uno::XInterface> xObj );
 
 private:
     void setDataChangedHint(bool b);
@@ -455,7 +455,7 @@ private:
     {
     public:
         ExternalRefListener(ScChart2DataSequence& rParent, ScDocument* pDoc);
-        virtual ~ExternalRefListener(); 
+        virtual ~ExternalRefListener();
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType);
         void addFileId(sal_uInt16 nFileId);
         void removeFileId(sal_uInt16 nFileId);
@@ -470,9 +470,9 @@ private:
         ScDocument*                 mpDoc;
     };
 
-    /** 
-     * Build an internal data array to cache the data ranges, and other 
-     * information such as hidden values. 
+    /**
+     * Build an internal data array to cache the data ranges, and other
+     * information such as hidden values.
      */
     void BuildDataCache();
 
@@ -513,11 +513,11 @@ private:
 
     ::std::list<Item>           m_aDataArray;
 
-    /** 
-     * Cached data for getData.  We may also need to cache data for the 
-     * numerical and textural data series if they turn out to be bottlenecks 
+    /**
+     * Cached data for getData.  We may also need to cache data for the
+     * numerical and textural data series if they turn out to be bottlenecks
      * under certain scenarios.
-     */ 
+     */
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > m_aMixedDataCache;
 
     ::com::sun::star::uno::Sequence<sal_Int32>  m_aHiddenValues;
@@ -537,7 +537,7 @@ private:
     RangeIndexMapPtr            m_pRangeIndices;
     ExtRefListenerPtr           m_pExtRefListener;
     com::sun::star::uno::Reference < com::sun::star::chart2::data::XDataProvider > m_xDataProvider;
-    SfxItemPropertySet		    m_aPropSet;
+    SfxItemPropertySet          m_aPropSet;
 
     ::std::auto_ptr<HiddenRangeListener> m_pHiddenListener;
     ScLinkListener*             m_pValueListener;
@@ -668,13 +668,13 @@ public:
 
     // XUnoTunnel ------------------------------------------------------------
 
-// 	virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
-// 									sal_Int8 >& aIdentifier )
-// 								throw(::com::sun::star::uno::RuntimeException);
+//  virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
+//                                  sal_Int8 >& aIdentifier )
+//                              throw(::com::sun::star::uno::RuntimeException);
 
-// 	static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-// 	static ScChart2DataSequence* getImplementation( const com::sun::star::uno::Reference<
-// 									com::sun::star::uno::XInterface> xObj );
+//  static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+//  static ScChart2DataSequence* getImplementation( const com::sun::star::uno::Reference<
+//                                  com::sun::star::uno::XInterface> xObj );
 
     // Implementation --------------------------------------------------------
 
@@ -689,7 +689,7 @@ private:
     ScRangeListRef              m_xRanges;
     ScDocument*                 m_pDocument;
     com::sun::star::uno::Reference < com::sun::star::chart2::data::XDataProvider > m_xDataProvider;
-    SfxItemPropertySet		    m_aPropSet;
+    SfxItemPropertySet          m_aPropSet;
     sal_Bool                    m_bColumn; // defines the orientation to create the right labels
 
 };

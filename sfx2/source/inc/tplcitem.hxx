@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class SfxTemplateControllerItem: public SfxControllerItem {
                                 SfxTemplateControllerItem*);
 
 protected:
-    virtual void	StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
+    virtual void    StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
 
 public:
     SfxTemplateControllerItem( USHORT nId, SfxCommonTemplateDialog_Impl &rDlg, SfxBindings &);

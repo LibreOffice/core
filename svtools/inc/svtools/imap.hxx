@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ class IMapObject;
 
 class SVT_DLLPUBLIC ImageMap
 {
-    List				maList;
-    String				aName;
+    List                maList;
+    String              aName;
 
 protected:
 
@@ -62,15 +62,15 @@ protected:
     ULONG               ImpReadNCSA( SvStream& rOStm, const String& rBaseURL );
 
     void                ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL );
-    Point				ImpReadCERNCoords( const char** ppStr );
-    long				ImpReadCERNRadius( const char** ppStr );
+    Point               ImpReadCERNCoords( const char** ppStr );
+    long                ImpReadCERNRadius( const char** ppStr );
     String              ImpReadCERNURL( const char** ppStr, const String& rBaseURL );
 
     void                ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL );
     String              ImpReadNCSAURL( const char** ppStr, const String& rBaseURL );
-    Point				ImpReadNCSACoords( const char** ppStr );
+    Point               ImpReadNCSACoords( const char** ppStr );
 
-    ULONG				ImpDetectFormat( SvStream& rIStm );
+    ULONG               ImpDetectFormat( SvStream& rIStm );
 
 public:
 
@@ -83,25 +83,25 @@ public:
                         // Der Dtor gibt den intern belegten
                         // Speicher wieder frei;
                         //  alle IMapObjekte werden im Dtor zerstoert;
-    virtual				~ImageMap();
+    virtual             ~ImageMap();
 
     // Zuweisungsoperator
-    ImageMap&			operator=( const ImageMap& rImageMap );
+    ImageMap&           operator=( const ImageMap& rImageMap );
 
     // Vergleichsoperator (es wird alles auf Gleichheit geprueft)
-    BOOL				operator==( const ImageMap& rImageMap );
-    BOOL				operator!=( const ImageMap& rImageMap );
+    BOOL                operator==( const ImageMap& rImageMap );
+    BOOL                operator!=( const ImageMap& rImageMap );
 
     // In die Map wird ein neues IMap-Obkekt ans Ende eingefuegt
-    void				InsertIMapObject( const IMapObject& rIMapObject );
+    void                InsertIMapObject( const IMapObject& rIMapObject );
 
     // Zugriff auf einzelne IMapObjekte; die Objekte
     // duerfen von aussen _nicht_ zerstoert werden
-    IMapObject*			GetFirstIMapObject() { return (IMapObject*) maList.First(); }
-    IMapObject*			GetNextIMapObject() { return (IMapObject*) maList.Next(); }
-    IMapObject*			GetLastIMapObject() { return (IMapObject*) maList.Last(); }
-    IMapObject*			GetPrevIMapObject() { return (IMapObject*) maList.Prev(); }
-    IMapObject*			GetIMapObject( USHORT nPos ) const { return (IMapObject*) maList.GetObject( nPos ); }
+    IMapObject*         GetFirstIMapObject() { return (IMapObject*) maList.First(); }
+    IMapObject*         GetNextIMapObject() { return (IMapObject*) maList.Next(); }
+    IMapObject*         GetLastIMapObject() { return (IMapObject*) maList.Last(); }
+    IMapObject*         GetPrevIMapObject() { return (IMapObject*) maList.Prev(); }
+    IMapObject*         GetIMapObject( USHORT nPos ) const { return (IMapObject*) maList.GetObject( nPos ); }
 
     // Gibt das Objekt zurueck, das zuerst getroffen wurde oder NULL;
     // Groessen- und Positionsangaben sind in 1/100mm;
@@ -109,29 +109,29 @@ public:
     // rDisplaySize die aktuelle Darstellungsgroesse;
     // rRelPoint bezieht sich auf die Darstellungsgroesse
     // und die linke oebere Ecke des Bildes
-    IMapObject*			GetHitIMapObject( const Size& rOriginalSize,
+    IMapObject*         GetHitIMapObject( const Size& rOriginalSize,
                                           const Size& rDisplaySize,
                                           const Point& rRelHitPoint,
                                           ULONG nFlags = 0 );
 
     // Gibt die Gesamtanzahl der IMap-Objekte zurueck
-    UINT16				GetIMapObjectCount() const { return (UINT16) maList.Count(); }
+    UINT16              GetIMapObjectCount() const { return (UINT16) maList.Count(); }
 
     // Loescht alle internen Objekte
-    void				ClearImageMap();
+    void                ClearImageMap();
 
     // liefert die aktuelle Versionsnummer
-    UINT16				GetVersion() const;
+    UINT16              GetVersion() const;
 
     // liefert / setzt den Namen der ImageMap
-    const String&		GetName() const { return aName; }
-    void				SetName( const String& rName ) { aName = rName; }
+    const String&       GetName() const { return aName; }
+    void                SetName( const String& rName ) { aName = rName; }
 
     // gibt das BoundRect aller IMap-Objekte in 1/100mm zurueck
-    Rectangle			GetBoundRect() const;
+    Rectangle           GetBoundRect() const;
 
     // skaliert alle Objekte der ImageMap entpr. dem uebergebenen Faktor
-    void				Scale( const Fraction& rFractX, const Fraction& rFracY );
+    void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     // Im-/Export
     void                Write ( SvStream& rOStm, const String& rBaseURL ) const;
@@ -151,15 +151,15 @@ public:
 
 class IMapCompat
 {
-    SvStream*		pRWStm;
-    ULONG			nCompatPos;
-    ULONG			nTotalSize;
-    USHORT			nStmMode;
+    SvStream*       pRWStm;
+    ULONG           nCompatPos;
+    ULONG           nTotalSize;
+    USHORT          nStmMode;
 
                     IMapCompat() {}
                     IMapCompat( const IMapCompat& ) {}
-    IMapCompat&		operator=( const IMapCompat& ) { return *this; }
-    BOOL			operator==( const IMapCompat& ) { return FALSE; }
+    IMapCompat&     operator=( const IMapCompat& ) { return *this; }
+    BOOL            operator==( const IMapCompat& ) { return FALSE; }
 
 public:
 

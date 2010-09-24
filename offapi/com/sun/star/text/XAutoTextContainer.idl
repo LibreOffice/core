@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,84 +24,84 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_XAutoTextContainer_idl__ 
-#define __com_sun_star_text_XAutoTextContainer_idl__ 
- 
-#ifndef __com_sun_star_container_XNameAccess_idl__ 
-#include <com/sun/star/container/XNameAccess.idl> 
-#endif 
- 
-#ifndef __com_sun_star_text_XAutoTextGroup_idl__ 
-#include <com/sun/star/text/XAutoTextGroup.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
-#include <com/sun/star/lang/IllegalArgumentException.idl> 
-#endif 
- 
-#ifndef __com_sun_star_container_ElementExistException_idl__ 
-#include <com/sun/star/container/ElementExistException.idl> 
-#endif 
- 
-#ifndef __com_sun_star_container_NoSuchElementException_idl__ 
-#include <com/sun/star/container/NoSuchElementException.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module text {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_text_XAutoTextContainer_idl__
+#define __com_sun_star_text_XAutoTextContainer_idl__
+
+#ifndef __com_sun_star_container_XNameAccess_idl__
+#include <com/sun/star/container/XNameAccess.idl>
+#endif
+
+#ifndef __com_sun_star_text_XAutoTextGroup_idl__
+#include <com/sun/star/text/XAutoTextGroup.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_container_ElementExistException_idl__
+#include <com/sun/star/container/ElementExistException.idl>
+#endif
+
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
 // DocMerge from xml: interface com::sun::star::text::XAutoTextContainer
-/** handles blocks of <type>AutoTextEntry</type>. 
-    
-    
-    
-    
-    
-    
-    
+/** handles blocks of <type>AutoTextEntry</type>.
+
+
+
+
+
+
+
     @example <pre>
     AutoTextPath=d:\office\autotext;f:\user\autotext
-    
-    groupname:	"standard*0" 
+
+    groupname:  "standard*0"
     -&amp;amp;gt; the group file is located n the path d:\office\autotext
-    groupname:	"all*1" 
-    -&amp;amp;gt; the group file is located in the path f:\user\autotext\    
+    groupname:  "all*1"
+    -&amp;amp;gt; the group file is located in the path f:\user\autotext\
     </pre>
-    
-    <p>If the path extension is not specified, then the first directory 
+
+    <p>If the path extension is not specified, then the first directory
     is used.  For automatic text expansion, the name of an actual group is
     set to search first in this group.
-    
+
     </p>@see AutoTextContainer
  */
 published interface XAutoTextContainer: com::sun::star::container::XNameAccess
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::text::XAutoTextContainer::insertNewByName
     /** creates a new AutoText group.
      */
-    com::sun::star::text::XAutoTextGroup insertNewByName( [in] string aGroupName ) 
-            raises( com::sun::star::lang::IllegalArgumentException, 
-                    com::sun::star::container::ElementExistException ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    com::sun::star::text::XAutoTextGroup insertNewByName( [in] string aGroupName )
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::container::ElementExistException );
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::text::XAutoTextContainer::removeByName
     /** deletes the specified AutoText group.
      */
-    void removeByName( [in] string aGroupName ) 
-            raises( com::sun::star::container::NoSuchElementException ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
- 
-#endif 
+    void removeByName( [in] string aGroupName )
+            raises( com::sun::star::container::NoSuchElementException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+
+#endif

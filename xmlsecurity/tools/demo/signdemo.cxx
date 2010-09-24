@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 
 int SAL_CALL main( int argc, char **argv )
 {
-    if( argc < 4 ) 
+    if( argc < 4 )
     {
         fprintf( stderr, "Usage: %s <signature file> <xml stream file> <binary stream file> [<cryptoken>]\n" , argv[0] ) ;
         return -1 ;
@@ -55,14 +55,14 @@ int SAL_CALL main( int argc, char **argv )
     rtl::OUString aCryptoToken;
     if ( argc >= 5 )
         aCryptoToken = rtl::OUString::createFromAscii(argv[4]);
-    
+
     uno::Reference< lang::XMultiServiceFactory > xMSF = CreateDemoServiceFactory();
-    
+
     /*
      * creates a signature helper
      */
     XMLSignatureHelper aSignatureHelper( xMSF );
-    
+
     /*
      * creates a security context.
      */
@@ -72,30 +72,30 @@ int SAL_CALL main( int argc, char **argv )
         fprintf( stderr, "Error initializing security context!\n" );
         return -1;
     }
-    
+
     aSignatureHelper.StartMission();
-    
+
     /*
      * select a private key certificate
      */
     sal_Int32 i;
     sal_Int32 nEnvCount = aSignatureHelper.GetSecurityEnvironmentNumber();
-    if( nEnvCount == 0 ) 
+    if( nEnvCount == 0 )
     {
         fprintf( stdout, "\nNo SecurityEnvironment found!\n" ) ;
         return -1;
     }
-    
+
     uno::Sequence< uno::Reference< xml::crypto::XSecurityEnvironment > > xSecurityEnvironments(nEnvCount) ;
     for( i=0; i < nEnvCount; i++ )
         xSecurityEnvironments[i] = aSignatureHelper.GetSecurityEnvironmentByIndex(i);
 
     fprintf( stdout, "\nSelect a SecurityEnvironment:\n" ) ;
-    for( i = 0; i < nEnvCount; i ++ ) 
+    for( i = 0; i < nEnvCount; i ++ )
         fprintf( stdout, "\n[%d] %s", i+1, rtl::OUStringToOString( xSecurityEnvironments[i]->getSecurityEnvironmentInformation() ,RTL_TEXTENCODING_ASCII_US ).getStr());
 
     sal_Int32 nEnvIndex = QuerySelectNumber( 1, nEnvCount ) -1;
-    
+
     uno::Reference< ::com::sun::star::security::XCertificate > xPersonalCert = getCertificateFromEnvironment(xSecurityEnvironments[nEnvIndex], true);
 
     if ( !xPersonalCert.is() )
@@ -108,7 +108,7 @@ int SAL_CALL main( int argc, char **argv )
      * creates a new signature id
      */
     sal_Int32 nSecurityId = aSignatureHelper.GetNewSecurityId();
-    
+
     /*
      * configures the X509 certificate
      */
@@ -122,23 +122,23 @@ int SAL_CALL main( int argc, char **argv )
      * configures date/time
      */
     aSignatureHelper.SetDateTime( nSecurityId, Date(), Time());
-    
+
     /*
      * signs the xml stream
      */
     aSignatureHelper.AddForSigning( nSecurityId, aXMLFileName, aXMLFileName, sal_False );
-    
+
     /*
      * signs the binary stream
      */
     aSignatureHelper.AddForSigning( nSecurityId, aBINFileName, aBINFileName, sal_True );
-    
+
     /*
      * creates signature
      */
     uno::Reference< io::XOutputStream > xOutputStream = OpenOutputStream( aSIGFileName );
     bool bDone = aSignatureHelper.CreateAndWriteSignature( xOutputStream );
-    
+
     if ( !bDone )
     {
         fprintf( stderr, "\nSTATUS: Error creating Signature!\n" );

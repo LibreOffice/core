@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,43 +24,43 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_registry_RegistryKeyType_idl__ 
-#define __com_sun_star_registry_RegistryKeyType_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module registry {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_registry_RegistryKeyType_idl__
+#define __com_sun_star_registry_RegistryKeyType_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module registry {
+
+//=============================================================================
+
 // DocMerge from xml: enum com::sun::star::registry::RegistryKeyType
 /** represents all possible types of a key.
-    
+
     <p>A key can be a normal key with a value and subkeys, or it can be a
     link which references another key.</p>
  */
 published enum RegistryKeyType
-{ 
-    //------------------------------------------------------------------------- 
-    // DOCUMENTATION OMITTED FOR RegistryKeyType::	KEY, 
-    
+{
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR RegistryKeyType::  KEY,
+
     // DocMerge: empty anyway
-    KEY, 
- 
-    //------------------------------------------------------------------------- 
-    // DOCUMENTATION OMITTED FOR RegistryKeyType::	LINK 
-    
+    KEY,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR RegistryKeyType::  LINK
+
     // DocMerge: empty anyway
-    LINK 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+    LINK
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class Timer;
 
 namespace sd { namespace notes {
 
-class EditWindow 
+class EditWindow
     : public Window,
       public DropTargetHelper
 {
@@ -85,11 +85,11 @@ private:
     DECL_LINK(EditStatusHdl ,EditStatus *);
     DECL_LINK(ScrollHdl, ScrollBar *);
 
-    void 		CreateEditView();
+    void        CreateEditView();
 
-    Rectangle 	AdjustScrollBars();
-    void 		SetScrollBarRanges();
-    void 		InitScrollBars();
+    Rectangle   AdjustScrollBars();
+    void        SetScrollBarRanges();
+    void        InitScrollBars();
 
     //    SmDocShell *    GetDoc();
     //    SmViewShell *   GetView();
@@ -98,26 +98,26 @@ private:
     EditEngine* CreateEditEngine (void);
 
     // Window
-    virtual void		SetText(const XubString &rText);
-    virtual XubString	GetText();
-    virtual void		GetFocus();
-    virtual void		LoseFocus();
+    virtual void        SetText(const XubString &rText);
+    virtual XubString   GetText();
+    virtual void        GetFocus();
+    virtual void        LoseFocus();
 
-    ESelection			GetSelection() const;
-    void				SetSelection(const ESelection &rSel);
+    ESelection          GetSelection() const;
+    void                SetSelection(const ESelection &rSel);
 
-    BOOL 				IsEmpty() const;
-    BOOL 				IsSelected() const;
-    BOOL 				IsAllSelected() const;
-    void 				Cut();
-    void 				Copy();
-    void 				Paste();
-    void 				Delete();
-    void 				SelectAll();
-    void 				MarkError(const Point &rPos);
-    void 				SelNextMark();
-    void 				SelPrevMark();
-    BOOL 				HasMark(const String &rText) const;
+    BOOL                IsEmpty() const;
+    BOOL                IsSelected() const;
+    BOOL                IsAllSelected() const;
+    void                Cut();
+    void                Copy();
+    void                Paste();
+    void                Delete();
+    void                SelectAll();
+    void                MarkError(const Point &rPos);
+    void                SelNextMark();
+    void                SelPrevMark();
+    BOOL                HasMark(const String &rText) const;
 
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 };

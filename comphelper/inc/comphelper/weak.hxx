@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <cppuhelper/weak.hxx>
 
 namespace comphelper
-{    
+{
 /** Base class to implement an UNO object supporting types and weak references, i.e. the object can be held
     weakly (by a ::com::sun::star::uno::WeakReference).
     This implementation copes with reference counting.  Upon last release(), the virtual dtor
@@ -48,9 +48,9 @@ public:
     OWeakTypeObject();
     virtual ~OWeakTypeObject();
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & rType )	throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire()	throw ();
-    virtual void SAL_CALL release()	throw ();
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & rType )  throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire() throw ();
+    virtual void SAL_CALL release() throw ();
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,9 +87,9 @@ SV_IMPL_OP_PTRARR_SORT( _SetGetExpFlds, _SetGetExpFldPtr )
     Beschreibung: Feldtypen einfuegen
  --------------------------------------------------------------------*/
 /*
- *	Implementierung der Feldfunktionen am Doc
- *	Return immer einen gueltigen Pointer auf den Typ. Wenn er also neu
- *	zugefuegt oder schon vorhanden ist.
+ *  Implementierung der Feldfunktionen am Doc
+ *  Return immer einen gueltigen Pointer auf den Typ. Wenn er also neu
+ *  zugefuegt oder schon vorhanden ist.
  */
 
 SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
@@ -103,7 +103,7 @@ SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
     {
     case RES_SETEXPFLD:
             //JP 29.01.96: SequenceFelder beginnen aber bei INIT_FLDTYPES - 3!!
-            //			   Sonst gibt es doppelte Nummernkreise!!
+            //             Sonst gibt es doppelte Nummernkreise!!
             //MIB 14.03.95: Ab sofort verlaesst sich auch der SW3-Reader
             //beim Aufbau der String-Pools und beim Einlesen von SetExp-Feldern
             //hierauf
@@ -172,7 +172,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
     // Array entfernt. Nun muss man nach diesem wieder suchen.
     // - Ist der nicht vorhanden, dann kann er eingefuegt werden.
     // - Wird genau der gleiche Typ gefunden, dann muss der geloeschte
-    //	 einen anderen Namen erhalten.
+    //   einen anderen Namen erhalten.
 
     USHORT nSize = pFldTypes->Count(), nFldWhich = rFldTyp.Which();
     USHORT i = INIT_FLDTYPES;
@@ -199,10 +199,10 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
                         rSCmp.isEqual( sSrch, pFnd->GetName() ) )
                         break;
 
-                if( i >= nSize )		// nicht gefunden
+                if( i >= nSize )        // nicht gefunden
                 {
                     ((String&)rFldNm) = sSrch;
-                    break;		// raus aus der While-Schleife
+                    break;      // raus aus der While-Schleife
                 }
                 ++nNum;
             } while( TRUE );
@@ -231,7 +231,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
 
 void SwDoc::RemoveFldType(USHORT nFld)
 {
-    ASSERT( INIT_FLDTYPES <= nFld,	"keine InitFields loeschen" );
+    ASSERT( INIT_FLDTYPES <= nFld,  "keine InitFields loeschen" );
     /*
      * Abheangige Felder vorhanden -> ErrRaise
      */
@@ -295,7 +295,7 @@ SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName,
     {
     case RES_SETEXPFLD:
             //JP 29.01.96: SequenceFelder beginnen aber bei INIT_FLDTYPES - 3!!
-            //			   Sonst gibt es doppelte Nummernkreise!!
+            //             Sonst gibt es doppelte Nummernkreise!!
             //MIB 14.03.95: Ab sofort verlaesst sich auch der SW3-Reader
             //beim Aufbau der String-Pools und beim Einlesen von SetExp-Feldern
             //hierauf
@@ -316,7 +316,7 @@ SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName,
         SwFieldType* pFldType = (*pFldTypes)[i];
 
         String aFldName( pFldType->GetName() );
-        if (bDbFieldMatching && nResId == RES_DBFLD)	// #i51815#
+        if (bDbFieldMatching && nResId == RES_DBFLD)    // #i51815#
             aFldName.SearchAndReplaceAll(DB_DELIM, '.');
 
         if( nResId == pFldType->Which() &&
@@ -331,11 +331,11 @@ SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName,
 
 
 /*************************************************************************
-|*				  SwDoc::UpdateFlds()
-|*	  Beschreibung		Felder updaten
+|*                SwDoc::UpdateFlds()
+|*    Beschreibung      Felder updaten
 *************************************************************************/
 /*
- *	  Alle sollen neu evaluiert werden.
+ *    Alle sollen neu evaluiert werden.
  */
 
 void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
@@ -353,7 +353,7 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
         case RES_TABLEFLD:
         case RES_DBFLD:
         case RES_JUMPEDITFLD:
-        case RES_REFPAGESETFLD: 	// werden nie expandiert!
+        case RES_REFPAGESETFLD:     // werden nie expandiert!
             break;
 
         case RES_DDEFLD:
@@ -380,7 +380,7 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
     }
 
     if( !IsExpFldsLocked() )
-        UpdateExpFlds( 0, FALSE );		// Expression-Felder Updaten
+        UpdateExpFlds( 0, FALSE );      // Expression-Felder Updaten
 
     // Tabellen
     UpdateTblFlds(pNewHt);
@@ -396,7 +396,7 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
 }
 
 /******************************************************************************
- *						void SwDoc::UpdateUsrFlds()
+ *                      void SwDoc::UpdateUsrFlds()
  ******************************************************************************/
 
 void SwDoc::UpdateUsrFlds()
@@ -467,7 +467,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                         case TBL_CALC:
                             // setze das Value-Flag zurueck
                             // JP 17.06.96: interne Darstellung auf alle Formeln
-                            //				(Referenzen auf andere Tabellen!!!)
+                            //              (Referenzen auf andere Tabellen!!!)
                             if( nsSwExtendedSubType::SUB_CMD & pFld->GetSubType() )
                                 pFld->PtrToBoxNm( pUpdtFld->pTbl );
                             else
@@ -482,7 +482,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                         case TBL_BOXPTR:
                             // zur internen Darstellung
                             // JP 17.06.96: interne Darstellung auf alle Formeln
-                            //				(Referenzen auf andere Tabellen!!!)
+                            //              (Referenzen auf andere Tabellen!!!)
                             pFld->BoxNmToPtr( pUpdtFld->pTbl );
                             break;
                         case TBL_RELBOXNAME:
@@ -529,9 +529,9 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
         SwClientIter aIter( *pFldType );
         // dann rechne mal schoen
         // JP 27.03.97: Beim Berechnen am Ende anfangen - weil neue
-        // 				Felder immer am Anfang der Modifykette eingefuegt
-        //				werden. Beim Import haben wir damit eine bessere/
-        //				schnellere Berechnung bei "Kettenformeln"
+        //              Felder immer am Anfang der Modifykette eingefuegt
+        //              werden. Beim Import haben wir damit eine bessere/
+        //              schnellere Berechnung bei "Kettenformeln"
         if( 0 != ( pLast = aIter.GoEnd() ))
             do {
                 SwFmtFld* pFmtFld = (SwFmtFld*)pLast;
@@ -566,7 +566,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     if( pTblNd->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() )
                     {
                         // steht im Sonderbereich, wird teuer !!
-                        Point aPt;		// den im Layout 1. Frame returnen - Tab.Kopfzeile !!
+                        Point aPt;      // den im Layout 1. Frame returnen - Tab.Kopfzeile !!
                         pFrm = rTxtNd.GetFrm( &aPt );
                         if( pFrm )
                         {
@@ -632,7 +632,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     if( pTblNd->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() )
                     {
                         // steht im Sonderbereich, wird teuer !!
-                        Point aPt;		// den im Layout 1. Frame returnen - Tab.Kopfzeile !!
+                        Point aPt;      // den im Layout 1. Frame returnen - Tab.Kopfzeile !!
                         SwNodeIndex aCNdIdx( *pTblNd, +2 );
                         SwCntntNode* pCNd = aCNdIdx.GetNode().GetCntntNode();
                         if( !pCNd )
@@ -785,8 +785,8 @@ _SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx,
 }
 
     //Erweiterung fuer Sections:
-    //	diese haben immer als Content-Position 0xffff !!
-    //	Auf dieser steht nie ein Feld, maximal bis STRING_MAXLEN moeglich
+    //  diese haben immer als Content-Position 0xffff !!
+    //  Auf dieser steht nie ein Feld, maximal bis STRING_MAXLEN moeglich
 _SetGetExpFld::_SetGetExpFld( const SwSectionNode& rSectNd,
                                 const SwPosition* pPos )
 {
@@ -1344,7 +1344,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         {
             //!SECTION
 
-//			if( pGFld->IsInBodyTxt() )
+//          if( pGFld->IsInBodyTxt() )
             SwSbxValue aValue = aCalc.Calculate(
                                         pSect->GetCondition() );
             if(!aValue.IsVoidValue())
@@ -1410,9 +1410,9 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
             // Wert fuer den Calculator setzen
 //JP 10.02.96: GetValue macht hier doch keinen Sinn
-//			((SwDBField*)pFld)->GetValue();
+//          ((SwDBField*)pFld)->GetValue();
 
-//!OK			aCalc.VarChange(aName, ((SwDBField*)pFld)->GetValue(aCalc));
+//!OK           aCalc.VarChange(aName, ((SwDBField*)pFld)->GetValue(aCalc));
 
             // Eintrag in den HashTable eintragen
             // Eintrag vorhanden ?
@@ -1435,7 +1435,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         case RES_GETEXPFLD:
         case RES_SETEXPFLD:
         {
-            if( nsSwGetSetExpType::GSE_STRING & pFld->GetSubType() )		// String Ersetzung
+            if( nsSwGetSetExpType::GSE_STRING & pFld->GetSubType() )        // String Ersetzung
             {
                 if( RES_GETEXPFLD == nWhich )
                 {
@@ -1456,8 +1456,8 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                     LookString( pHashStrTbl, nStrFmtCnt,
                                 pSFld->GetFormula(), aNew );
 
-                    if( !aNew.Len() )				// nichts gefunden, dann ist die
-                        aNew = pSFld->GetFormula();		// Formel der neue Wert
+                    if( !aNew.Len() )               // nichts gefunden, dann ist die
+                        aNew = pSFld->GetFormula();     // Formel der neue Wert
 
                     // nur ein spezielles FeldUpdaten ?
                     if( !pUpdtFld || pUpdtFld == pTxtFld )
@@ -1483,7 +1483,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                     aCalc.VarChange( aNew, aValue );
                 }
             }
-            else			// Formel neu berechnen
+            else            // Formel neu berechnen
             {
                 if( RES_GETEXPFLD == nWhich )
                 {
@@ -1542,15 +1542,15 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         }
         } // switch
 
-        pFmtFld->Modify( 0, 0 );		// Formatierung anstossen
+        pFmtFld->Modify( 0, 0 );        // Formatierung anstossen
 
-        if( pUpdtFld == pTxtFld )		// sollte nur dieses geupdatet werden
+        if( pUpdtFld == pTxtFld )       // sollte nur dieses geupdatet werden
         {
-            if( RES_GETEXPFLD == nWhich ||		// nur GetFeld oder
-                RES_HIDDENTXTFLD == nWhich ||	// HiddenTxt?
-                RES_HIDDENPARAFLD == nWhich)	// HiddenParaFld?
-                break;							// beenden
-            pUpdtFld = 0;						// ab jetzt alle Updaten
+            if( RES_GETEXPFLD == nWhich ||      // nur GetFeld oder
+                RES_HIDDENTXTFLD == nWhich ||   // HiddenTxt?
+                RES_HIDDENPARAFLD == nWhich)    // HiddenParaFld?
+                break;                          // beenden
+            pUpdtFld = 0;                       // ab jetzt alle Updaten
         }
     }
 
@@ -1607,7 +1607,7 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwDoc::_InitFieldTypes()		// wird vom CTOR gerufen!!
+void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
 {
     // Feldtypen
     USHORT nFldType = 0;
@@ -1643,7 +1643,7 @@ void SwDoc::_InitFieldTypes()		// wird vom CTOR gerufen!!
     // Types muessen am Ende stehen !!
     // Im InsertFldType wird davon ausgegangen !!!!
     // MIB 14.04.95: Im Sw3StringPool::Setup (sw3imp.cxx) und
-    //				 lcl_sw3io_InSetExpField (sw3field.cxx) jetzt auch
+    //               lcl_sw3io_InSetExpField (sw3field.cxx) jetzt auch
     pFldTypes->Insert( new SwSetExpFieldType(this,
                 SW_RESSTR(STR_POOLCOLL_LABEL_ABB), nsSwGetSetExpType::GSE_SEQ), nFldType++);
     pFldTypes->Insert( new SwSetExpFieldType(this,
@@ -1819,7 +1819,7 @@ void SwDoc::GetAllDBNames( SvStringsDtor& rAllDBNames )
     {
         SwDSParam* pParam = rArr[i];
         String* pStr = new String( pParam->sDataSource );
-        (*pStr)	+= DB_DELIM;
+        (*pStr) += DB_DELIM;
         (*pStr) += (String)pParam->sCommand;
         rAllDBNames.Insert( pStr, rAllDBNames.Count() );
     }
@@ -1834,7 +1834,7 @@ SvStringsDtor& SwDoc::FindUsedDBs( const SvStringsDtor& rAllDBNames,
                                     SvStringsDtor& rUsedDBNames )
 {
     const CharClass& rCC = GetAppCharClass();
-    String 	sFormel( rFormel);
+    String  sFormel( rFormel);
 #ifndef UNX
     rCC.toUpper( sFormel );
 #endif
@@ -1957,7 +1957,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
                     SwDBFieldType* pTyp = (SwDBFieldType*)InsertFldType(
                             SwDBFieldType(this, pOldTyp->GetColumnName(), aNewDBData));
 
-                    pTyp->Add(pFmtFld);	// Feld auf neuen Typ umhaengen
+                    pTyp->Add(pFmtFld); // Feld auf neuen Typ umhaengen
                     pFld->ChgTyp(pTyp);
 
                     ((SwDBField*)pFld)->ClearInitialized();
@@ -2018,8 +2018,8 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
                             const String& rNewName, String& rFormel )
 {
     const CharClass& rCC = GetAppCharClass();
-    String 	sFormel(rFormel);
-    String	sNewName( rNewName );
+    String  sFormel(rFormel);
+    String  sNewName( rNewName );
     sNewName.SearchAndReplace( DB_DELIM, '.');
     //the command type is not part of the condition
     sNewName = sNewName.GetToken(0, DB_DELIM);
@@ -2028,7 +2028,7 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
 
     for( USHORT i = 0; i < rUsedDBNames.Count(); ++i )
     {
-        String	sDBName( *rUsedDBNames.GetObject( i ) );
+        String  sDBName( *rUsedDBNames.GetObject( i ) );
 
         sDBName.SearchAndReplace( DB_DELIM, '.');
         //cut off command type
@@ -2091,11 +2091,11 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
     }
 
     USHORT aTypes[5] = {
-        /*0*/	RES_DOCINFOFLD,
-        /*1*/	RES_AUTHORFLD,
-        /*2*/	RES_EXTUSERFLD,
-        /*3*/	RES_FILENAMEFLD,
-        /*4*/	RES_DATETIMEFLD };	// MUSS am Ende stehen!!
+        /*0*/   RES_DOCINFOFLD,
+        /*1*/   RES_AUTHORFLD,
+        /*2*/   RES_EXTUSERFLD,
+        /*3*/   RES_FILENAMEFLD,
+        /*4*/   RES_DATETIMEFLD };  // MUSS am Ende stehen!!
 
     USHORT nStt = bOnlyTimeDate ? 4 : 0;
 
@@ -2201,8 +2201,8 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, ULONG nLen )
             const SwTxtNode* pTNd = rNds[ nStt++ ]->GetTxtNode();
             if( pTNd )
             {
-                if( //pTNd->GetFmtColl() &&		//#outline level,zhaojianwei
-                //	MAXLEVEL > pTNd->GetTxtColl()->GetOutlineLevel() )
+                if( //pTNd->GetFmtColl() &&     //#outline level,zhaojianwei
+                //  MAXLEVEL > pTNd->GetTxtColl()->GetOutlineLevel() )
                     pTNd->GetAttrOutlineLevel() != 0 )//<-end,zhaojianwei
                     // Kapitelfelder aktualisieren
                     b = TRUE;
@@ -2263,7 +2263,7 @@ void SwDocUpdtFld::InsDelFldInFldLst( BOOL bIns, const SwTxtFld& rFld )
     case RES_DBNEXTSETFLD:
     case RES_DBSETNUMBERFLD:
     case RES_GETEXPFLD:
-        break;			// diese muessen ein-/ausgetragen werden!
+        break;          // diese muessen ein-/ausgetragen werden!
 
     default:
         return;
@@ -2272,12 +2272,12 @@ void SwDocUpdtFld::InsDelFldInFldLst( BOOL bIns, const SwTxtFld& rFld )
     SetFieldsDirty( TRUE );
     if( !pFldSortLst )
     {
-        if( !bIns ) 			// keine Liste vorhanden und loeschen
-            return; 			// dann nichts tun
+        if( !bIns )             // keine Liste vorhanden und loeschen
+            return;             // dann nichts tun
         pFldSortLst = new _SetGetExpFlds( 64, 16 );
     }
 
-    if( bIns )		// neu einfuegen:
+    if( bIns )      // neu einfuegen:
         GetBodyNode( rFld, nWhich );
     else
     {
@@ -2585,7 +2585,7 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
 
     if( rSectNd.GetIndex() < rDoc.GetNodes().GetEndOfExtras().GetIndex() )
     {
-        do {			// middle check loop
+        do {            // middle check loop
 
             // dann muessen wir uns mal den Anker besorgen!
             // einen Index fuers bestimmen vom TextNode anlegen

@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace connectivity
     {
         class EvoContacts;
 
-        
+
         //**************************************************************
         //************ Class: OEvoabDatabaseMetaData
         //**************************************************************
@@ -72,15 +72,15 @@ namespace connectivity
         rtl::OUString         getFieldTypeName(guint nCol) ;
         rtl::OUString         getFieldName(guint nCol) ;
         guint                 findEvoabField(const rtl::OUString& aColName);
-        
+
         void free_column_resources();
 
         class OEvoabDatabaseMetaData : public ODatabaseMetaDataBase
         {
-            OEvoabConnection*	                   m_pConnection;
-            
+            OEvoabConnection*                      m_pConnection;
+
             ODatabaseMetaDataResultSet::ORows& getColumnRows( const ::rtl::OUString& columnNamePattern );
-            
+
         protected:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw();
             // cached database information
@@ -99,11 +99,11 @@ namespace connectivity
             virtual sal_Bool        impl_storesMixedCaseQuotedIdentifiers_throw(  );
 
             virtual ~OEvoabDatabaseMetaData();
-        public:			
+        public:
             inline OEvoabConnection* getOwnConnection() const { return m_pConnection; }
-            
+
             OEvoabDatabaseMetaData(OEvoabConnection* _pCon);
-            
+
             // as I mentioned before this interface is really BIG
             // XDatabaseMetaData
             virtual sal_Bool SAL_CALL allProceduresAreCallable(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -127,10 +127,10 @@ namespace connectivity
             virtual sal_Bool SAL_CALL storesUpperCaseIdentifiers(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL storesLowerCaseIdentifiers(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL storesMixedCaseIdentifiers(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            
+
             virtual sal_Bool SAL_CALL storesUpperCaseQuotedIdentifiers(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL storesLowerCaseQuotedIdentifiers(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            
+
             virtual ::rtl::OUString SAL_CALL getSQLKeywords(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::rtl::OUString SAL_CALL getNumericFunctions(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::rtl::OUString SAL_CALL getStringFunctions(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #ifndef _XML_PARSER_HXX_
 #define _XML_PARSER_HXX_
 
@@ -32,15 +32,15 @@
 #include <stdexcept>
 
 //-----------------------------------------------------
-class xml_parser_exception : public std::runtime_error  
+class xml_parser_exception : public std::runtime_error
 {
 public:
 
     xml_parser_exception(
-        const std::string& error_msg, 
-        int error_code, 
-        int line_number, 
-        int column_number, 
+        const std::string& error_msg,
+        int error_code,
+        int line_number,
+        int column_number,
         long byte_index) :
         std::runtime_error(error_msg),
         error_code_(error_code),
@@ -57,12 +57,12 @@ public:
 
 
 //-----------------------------------------------------
-//	Simple wrapper around expat, the xml parser library
-//	created by James Clark
+//  Simple wrapper around expat, the xml parser library
+//  created by James Clark
 //-----------------------------------------------------
 class i_xml_parser_event_handler;
 
-class xml_parser  
+class xml_parser
 {
 public:
     //########################################################
@@ -73,30 +73,30 @@ public:
 
     //########################################################
     /** Parse a XML data stream
-        
-        @param		pXmlData
+
+        @param      pXmlData
                     Pointer to a buffer containing the xml data
 
-        @param		Length
+        @param      Length
                     Length of the buffer containing the xml data
 
-        @param		IsFinal
+        @param      IsFinal
                     Indicates whether these are the last xml data
-                    of an xml document to parse. For very large 
-                    xml documents it may be usefull to read and 
+                    of an xml document to parse. For very large
+                    xml documents it may be usefull to read and
                     parse the document partially.
 
-        @precond	XmlData must not be null
-        
-        @throws		SaxException
-                    If the used Sax parser returns an error. The SaxException
-                    contains detailed information about the error.	*/
-    void parse(const char* XmlData, size_t Length, bool IsFinal = true);
-    
-    //########################################################
-    /**	Set a document handler
+        @precond    XmlData must not be null
 
-        @descr		A document handler implements the interface i_xml_parser_event_handler.
+        @throws     SaxException
+                    If the used Sax parser returns an error. The SaxException
+                    contains detailed information about the error.  */
+    void parse(const char* XmlData, size_t Length, bool IsFinal = true);
+
+    //########################################################
+    /** Set a document handler
+
+        @descr      A document handler implements the interface i_xml_parser_event_handler.
                     The document handler receive notifications of various events
                     from the sax parser for instance "start_document".
 
@@ -105,30 +105,30 @@ public:
                     instance must exist until a new one was set or until the parser
                     no longer exist.
 
-        @param		SaxDocumentHandler
+        @param      SaxDocumentHandler
                     The new document handler, may be null if not interessted in
                     sax parser events.
 
-        @postcond	currently used document handler == pSaxDocumentHandler	*/
+        @postcond   currently used document handler == pSaxDocumentHandler  */
     void set_document_handler(i_xml_parser_event_handler* event_handler);
 
     //########################################################
-    /**	Returns the currently used document handler or null if 
-        no document handler was set before.	*/
+    /** Returns the currently used document handler or null if
+        no document handler was set before. */
     i_xml_parser_event_handler* get_document_handler() const;
 private:
-    
+
     void init();
 
 private:
-    i_xml_parser_event_handler*	document_handler_;	
+    i_xml_parser_event_handler* document_handler_;
     XML_Parser xml_parser_;
 
 // prevent copy and assignment
 private:
     xml_parser(const xml_parser&);
-    xml_parser& operator=(const xml_parser&);	
+    xml_parser& operator=(const xml_parser&);
 };
 
-#endif 
+#endif
 

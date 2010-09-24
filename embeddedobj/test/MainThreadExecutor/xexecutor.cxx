@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::Na
 
     // it is not a main thread, so it can be blocked
     // while( !pExecutor->isExecuted() )
-    //	::osl::Thread::yield();
+    //  ::osl::Thread::yield();
 
     // TODO: implement transfering of the return values and exceptions
 

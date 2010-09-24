@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace DOM
         virtual sal_Int32 SAL_CALL getLength() throw (RuntimeException);
 
         /**
-        Retrieves a node specified by local name     	
+        Retrieves a node specified by local name
         */
         virtual Reference< XNode > SAL_CALL getNamedItem(const OUString& name) throw (RuntimeException);
 

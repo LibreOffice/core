@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@
 #include <svtools/htmlkywd.hxx>
 #include <tools/tenccvt.hxx>
 
-#define ACTION_INSERTTEXT		  1
-#define ACTION_INSERTPARABRK	  2
+#define ACTION_INSERTTEXT         1
+#define ACTION_INSERTPARABRK      2
 
-#define STYLE_PRE		  		101
+#define STYLE_PRE               101
 
 EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs )
     : HTMLParser( rIn, true )
@@ -227,7 +227,7 @@ void EditHTMLParser::NextToken( int nToken )
     break;
 
     case HTML_CENTER_ON:
-    case HTML_CENTER_OFF:	// if ( bInPara )
+    case HTML_CENTER_OFF:   // if ( bInPara )
                             {
                                 USHORT nNode = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
                                 SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
@@ -238,9 +238,9 @@ void EditHTMLParser::NextToken( int nToken )
                             }
                             break;
 
-    case HTML_ANCHOR_ON:	AnchorStart();
+    case HTML_ANCHOR_ON:    AnchorStart();
                             break;
-    case HTML_ANCHOR_OFF:	AnchorEnd();
+    case HTML_ANCHOR_OFF:   AnchorEnd();
                             break;
 
     case HTML_PARABREAK_ON:
@@ -298,9 +298,9 @@ void EditHTMLParser::NextToken( int nToken )
     }
     break;
 
-    case HTML_TABLE_ON:		nInTable++;
+    case HTML_TABLE_ON:     nInTable++;
                             break;
-    case HTML_TABLE_OFF:	DBG_ASSERT( nInTable, "Nicht in Table, aber TABLE_OFF?" );
+    case HTML_TABLE_OFF:    DBG_ASSERT( nInTable, "Nicht in Table, aber TABLE_OFF?" );
                             nInTable--;
                             break;
 
@@ -338,19 +338,19 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_DD_OFF:
     case HTML_DT_OFF:
     case HTML_ORDERLIST_OFF:
-    case HTML_UNORDERLIST_OFF:	EndPara( FALSE );
+    case HTML_UNORDERLIST_OFF:  EndPara( FALSE );
                                 break;
 
     case HTML_TABLEROW_ON:
-    case HTML_TABLEROW_OFF:	// Nur nach einem CELL ein RETURN, fuer Calc
+    case HTML_TABLEROW_OFF: // Nur nach einem CELL ein RETURN, fuer Calc
 
     case HTML_COL_ON:
     case HTML_COLGROUP_ON:
     case HTML_COLGROUP_OFF: break;
 
-    case HTML_FONT_ON:		// ...
+    case HTML_FONT_ON:      // ...
                             break;
-    case HTML_FONT_OFF:		// ...
+    case HTML_FONT_OFF:     // ...
                             break;
 
 
@@ -382,16 +382,16 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_BANNER_OFF:
     case HTML_DIVISION_ON:
     case HTML_DIVISION_OFF:
-//	case HTML_LISTHEADER_ON:		//! special handling
-//	case HTML_LISTHEADER_OFF:
+//  case HTML_LISTHEADER_ON:        //! special handling
+//  case HTML_LISTHEADER_OFF:
     case HTML_NOTE_ON:
     case HTML_NOTE_OFF:
     // inline elements, logical markup
     // HTML 2.0
     case HTML_ADDRESS_ON:
     case HTML_ADDRESS_OFF:
-//	case HTML_BLOCKQUOTE_ON:		//! extra Behandlung
-//	case HTML_BLOCKQUOTE_OFF:
+//  case HTML_BLOCKQUOTE_ON:        //! extra Behandlung
+//  case HTML_BLOCKQUOTE_OFF:
     case HTML_CITIATION_ON:
     case HTML_CITIATION_OFF:
     case HTML_CODE_ON:
@@ -417,8 +417,8 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_ACRONYM_OFF:
     case HTML_AUTHOR_ON:
     case HTML_AUTHOR_OFF:
-//	case HTML_BLOCKQUOTE30_ON:		//! extra Behandlung
-//	case HTML_BLOCKQUOTE30_OFF:
+//  case HTML_BLOCKQUOTE30_ON:      //! extra Behandlung
+//  case HTML_BLOCKQUOTE30_OFF:
     case HTML_DELETEDTEXT_ON:
     case HTML_DELETEDTEXT_OFF:
     case HTML_INSERTEDTEXT_ON:
@@ -460,21 +460,21 @@ void EditHTMLParser::NextToken( int nToken )
     // misc
     case HTML_DIRLIST_ON:
     case HTML_DIRLIST_OFF:
-    case HTML_FOOTNOTE_ON:			//! landen so im Text
+    case HTML_FOOTNOTE_ON:          //! landen so im Text
     case HTML_FOOTNOTE_OFF:
     case HTML_MENULIST_ON:
     case HTML_MENULIST_OFF:
-//	case HTML_PLAINTEXT_ON:			//! extra Behandlung
-//	case HTML_PLAINTEXT_OFF:
-//	case HTML_PREFORMTXT_ON:		//! extra Behandlung
-//	case HTML_PREFORMTXT_OFF:
+//  case HTML_PLAINTEXT_ON:         //! extra Behandlung
+//  case HTML_PLAINTEXT_OFF:
+//  case HTML_PREFORMTXT_ON:        //! extra Behandlung
+//  case HTML_PREFORMTXT_OFF:
     case HTML_SPAN_ON:
     case HTML_SPAN_OFF:
     // obsolete
-//	case HTML_XMP_ON:				//! extra Behandlung
-//	case HTML_XMP_OFF:
-//	case HTML_LISTING_ON:			//! extra Behandlung
-//	case HTML_LISTING_OFF:
+//  case HTML_XMP_ON:               //! extra Behandlung
+//  case HTML_XMP_OFF:
+//  case HTML_LISTING_ON:           //! extra Behandlung
+//  case HTML_LISTING_OFF:
     // Netscape
     case HTML_BLINK_ON:
     case HTML_BLINK_OFF:
@@ -487,8 +487,8 @@ void EditHTMLParser::NextToken( int nToken )
     // Internet Explorer
     case HTML_MARQUEE_ON:
     case HTML_MARQUEE_OFF:
-//	case HTML_PLAINTEXT2_ON:		//! extra Behandlung
-//	case HTML_PLAINTEXT2_OFF:
+//  case HTML_PLAINTEXT2_ON:        //! extra Behandlung
+//  case HTML_PLAINTEXT2_OFF:
     break;
 
     default:
@@ -506,7 +506,7 @@ void EditHTMLParser::NextToken( int nToken )
             }
         }
     }
-    }	// SWITCH
+    }   // SWITCH
 
     if ( pImpEditEngine->aImportHdl.IsSet() )
     {
@@ -609,19 +609,19 @@ void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSe
 void EditHTMLParser::ImpSetStyleSheet( USHORT nHLevel )
 {
     /*
-        nHLevel:	0: 			Ausschalten
-                    1-6: 		Heading
-                    STYLE_PRE: 	Preformatted
+        nHLevel:    0:          Ausschalten
+                    1-6:        Heading
+                    STYLE_PRE:  Preformatted
     */
 
-//		if ( pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
-//		{
-//			SvxRTFStyleType* pS = GetStyleTbl().Get( rSet.StyleNo() );
-//			DBG_ASSERT( pS, "Vorlage in RTF nicht definiert!" );
-//			if ( pS )
-//				pImpEditEngine->SetStyleSheet( EditSelection( aStartPaM, aEndPaM ), pS->sName, SFX_STYLE_FAMILY_ALL );
-//		}
-//		else
+//      if ( pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
+//      {
+//          SvxRTFStyleType* pS = GetStyleTbl().Get( rSet.StyleNo() );
+//          DBG_ASSERT( pS, "Vorlage in RTF nicht definiert!" );
+//          if ( pS )
+//              pImpEditEngine->SetStyleSheet( EditSelection( aStartPaM, aEndPaM ), pS->sName, SFX_STYLE_FAMILY_ALL );
+//      }
+//      else
         {
             // Harte Attribute erzeugen...
             // Reicht fuer Calc, bei StyleSheets muesste noch geklaert werden,
@@ -629,7 +629,7 @@ void EditHTMLParser::ImpSetStyleSheet( USHORT nHLevel )
             // fuettern in eine andere Engine auch noch da sind...
 
             USHORT nNode = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
-//			SfxItemSet aItems( pImpEditEngine->GetEmptyItemSet() );
+//          SfxItemSet aItems( pImpEditEngine->GetEmptyItemSet() );
             SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
 
             aItems.ClearItem( EE_PARA_ULSPACE );
@@ -764,8 +764,8 @@ void EditHTMLParser::EndPara( BOOL )
         if ( bHasText )
             ImpInsertParaBreak();
         // Nur, wenn ohne Absatzabstaende gearbeitet wird...
-//		if ( !nInTable && bReal && (nNumberingLevel<=1) && (nBulletLevel<=1) )
-//			ImpInsertParaBreak();
+//      if ( !nInTable && bReal && (nNumberingLevel<=1) && (nBulletLevel<=1) )
+//          ImpInsertParaBreak();
     }
     bInPara = FALSE;
 }

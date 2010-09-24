@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ void lcl_FillCombo( ComboBox& rCombo, const String& rList, sal_Unicode cSelect )
             if ( (sal_Unicode)rList.GetToken(i+1,'\t').ToInt32() == cSelect )
                 aStr = rList.GetToken(i,'\t');
         if (!aStr.Len())
-            aStr = cSelect;			// Ascii
+            aStr = cSelect;         // Ascii
 
         rCombo.SetText(aStr);
     }
@@ -117,8 +117,8 @@ sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
     return c;
 }
 
-static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparators, 
-                             bool &bMergeDelimiters, bool& bQuotedAsText, bool& bDetectSpecialNum, 
+static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparators,
+                             bool &bMergeDelimiters, bool& bQuotedAsText, bool& bDetectSpecialNum,
                              bool &bFixedWidth, sal_Int32 &nFromRow, sal_Int32 &nCharSet,
                              sal_Int32& nLanguage )
 {
@@ -156,7 +156,7 @@ static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparato
 
     if( pProperties[5].hasValue() )
         pProperties[5] >>= nCharSet;
- 
+
     if ( pProperties[6].hasValue() )
         pProperties[6] >>= bQuotedAsText;
 
@@ -167,7 +167,7 @@ static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparato
         pProperties[8] >>= nLanguage;
 }
 
-static void save_Separators( 
+static void save_Separators(
     String maSeparators, String maTxtSep, bool bMergeDelimiters, bool bQuotedAsText,
     bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow, sal_Int32 nCharSet, sal_Int32 nLanguage )
 {
@@ -207,7 +207,7 @@ static void save_Separators(
 
 ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
                                     SvStream* pInStream, sal_Unicode /*cSep*/ ) :
-        ModalDialog	( pParent, ScResId( RID_SCDLG_ASCII ) ),
+        ModalDialog ( pParent, ScResId( RID_SCDLG_ASCII ) ),
         mpDatStream  ( pInStream ),
         mnStreamPos( pInStream ? pInStream->Tell() : 0 ),
 
@@ -215,46 +215,46 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         mnRowPosCount(0),
 
         aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
-        aFtCharSet	( this, ScResId( FT_CHARSET ) ),
-        aLbCharSet	( this, ScResId( LB_CHARSET ) ),
+        aFtCharSet  ( this, ScResId( FT_CHARSET ) ),
+        aLbCharSet  ( this, ScResId( LB_CHARSET ) ),
         aFtCustomLang( this, ScResId( FT_CUSTOMLANG ) ),
-        aLbCustomLang( this, ScResId( LB_CUSTOMLANG ) ), 
+        aLbCustomLang( this, ScResId( LB_CUSTOMLANG ) ),
 
-        aFtRow		( this, ScResId( FT_AT_ROW	) ),
-        aNfRow		( this,	ScResId( NF_AT_ROW	) ),
+        aFtRow      ( this, ScResId( FT_AT_ROW  ) ),
+        aNfRow      ( this, ScResId( NF_AT_ROW  ) ),
 
         aFlSepOpt   ( this, ScResId( FL_SEPOPT ) ),
-        aRbFixed	( this, ScResId( RB_FIXED ) ),
+        aRbFixed    ( this, ScResId( RB_FIXED ) ),
         aRbSeparated( this, ScResId( RB_SEPARATED ) ),
 
-        aCkbTab		( this, ScResId( CKB_TAB ) ),
+        aCkbTab     ( this, ScResId( CKB_TAB ) ),
         aCkbSemicolon(this, ScResId( CKB_SEMICOLON ) ),
-        aCkbComma	( this, ScResId( CKB_COMMA	) ),
-        aCkbSpace	( this,	ScResId( CKB_SPACE	 ) ),
-        aCkbOther	( this, ScResId( CKB_OTHER ) ),
-        aEdOther	( this, ScResId( ED_OTHER ) ),
-        aCkbAsOnce	( this, ScResId( CB_ASONCE) ),
-        aFlOtherOpt ( this, ScResId( FL_OTHER_OPTIONS ) ), 
+        aCkbComma   ( this, ScResId( CKB_COMMA  ) ),
+        aCkbSpace   ( this, ScResId( CKB_SPACE   ) ),
+        aCkbOther   ( this, ScResId( CKB_OTHER ) ),
+        aEdOther    ( this, ScResId( ED_OTHER ) ),
+        aCkbAsOnce  ( this, ScResId( CB_ASONCE) ),
+        aFlOtherOpt ( this, ScResId( FL_OTHER_OPTIONS ) ),
 
-        aFtTextSep	( this, ScResId( FT_TEXTSEP ) ),
-        aCbTextSep	( this, ScResId( CB_TEXTSEP ) ),
+        aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
+        aCbTextSep  ( this, ScResId( CB_TEXTSEP ) ),
 
         aCkbQuotedAsText( this, ScResId(CB_QUOTED_AS_TEXT) ),
         aCkbDetectNumber( this, ScResId(CB_DETECT_SPECIAL_NUMBER) ),
 
         aFlWidth    ( this, ScResId( FL_WIDTH ) ),
-        aFtType		( this, ScResId( FT_TYPE ) ),
-        aLbType		( this, ScResId( LB_TYPE1 ) ),
+        aFtType     ( this, ScResId( FT_TYPE ) ),
+        aLbType     ( this, ScResId( LB_TYPE1 ) ),
 
         maTableBox  ( this, ScResId( CTR_TABLEBOX ) ),
 
-        aBtnOk		( this, ScResId( BTN_OK ) ),
-        aBtnCancel	( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp	( this, ScResId( BTN_HELP ) ),
+        aBtnOk      ( this, ScResId( BTN_OK ) ),
+        aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp    ( this, ScResId( BTN_HELP ) ),
 
         aCharSetUser( ScResId( SCSTR_CHARSET_USER ) ),
-        aColumnUser	( ScResId( SCSTR_COLUMN_USER ) ),
-        aFldSepList	( ScResId( SCSTR_FIELDSEP ) ),
+        aColumnUser ( ScResId( SCSTR_COLUMN_USER ) ),
+        aFldSepList ( ScResId( SCSTR_FIELDSEP ) ),
         aTextSepList( ScResId( SCSTR_TEXTSEP ) ),
         mcTextSep   ( ScAsciiOptions::cDefaultTextSep ),
         maStrTextToColumns( ScResId( STR_TEXTTOCOLUMNS ) ),
@@ -285,7 +285,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     sal_Int32 nLanguage = 0;
     if (mbFileImport)
         // load separators only when importing csv files.
-        load_Separators (sFieldSeparators, sTextSeparators, bMergeDelimiters, 
+        load_Separators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
                          bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow, nCharSet, nLanguage);
     maFieldSeparators = String(sFieldSeparators);
 
@@ -316,7 +316,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
                 aEdOther.SetText( aEdOther.GetText() + OUString( aSep[i] ) );
         }
     }
-    
+
     // Get Separators from the dialog
     maFieldSeparators = GetSeparators();
 
@@ -329,7 +329,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         mpDatStream->StartReadingUnicodeText();
         ULONG nUniPos = mpDatStream->Tell();
         if ( nUniPos > 0 )
-            bPreselectUnicode = TRUE;	// read 0xfeff/0xfffe
+            bPreselectUnicode = TRUE;   // read 0xfeff/0xfffe
         else
         {
             UINT16 n;
@@ -483,10 +483,10 @@ bool ScImportAsciiDlg::GetLine( ULONG nLine, String &rText )
         mnStreamPos = mpDatStream->Tell();
     }
 
-    //	#107455# If the file content isn't unicode, ReadUniStringLine
-    //	may try to seek beyond the file's end and cause a CANTSEEK error
-    //	(depending on the stream type). The error code has to be cleared,
-    //	or further read operations (including non-unicode) will fail.
+    //  #107455# If the file content isn't unicode, ReadUniStringLine
+    //  may try to seek beyond the file's end and cause a CANTSEEK error
+    //  (depending on the stream type). The error code has to be cleared,
+    //  or further read operations (including non-unicode) will fail.
     if ( mpDatStream->GetError() == ERRCODE_IO_CANTSEEK )
         mpDatStream->ResetError();
 
@@ -539,10 +539,10 @@ void ScImportAsciiDlg::SaveParameters()
         // We save parameters only for file import.
         return;
 
-    save_Separators( maFieldSeparators, aCbTextSep.GetText(), aCkbAsOnce.IsChecked(), 
-                     aCkbQuotedAsText.IsChecked(), aCkbDetectNumber.IsChecked(), 
-                     aRbFixed.IsChecked(), 
-                     static_cast<sal_Int32>(aNfRow.GetValue()), 
+    save_Separators( maFieldSeparators, aCbTextSep.GetText(), aCkbAsOnce.IsChecked(),
+                     aCkbQuotedAsText.IsChecked(), aCkbDetectNumber.IsChecked(),
+                     aRbFixed.IsChecked(),
+                     static_cast<sal_Int32>(aNfRow.GetValue()),
                      static_cast<sal_Int32>(aLbCharSet.GetSelectEntryPos()),
                      static_cast<sal_Int32>(aLbCustomLang.GetSelectLanguage()) );
 }

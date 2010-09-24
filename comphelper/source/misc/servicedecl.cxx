@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ class ServiceDecl::Factory :
 public:
     explicit Factory( ServiceDecl const& rServiceDecl )
         : m_rServiceDecl(rServiceDecl) {}
-    
+
     // XServiceInfo:
     virtual rtl::OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException);
@@ -67,7 +67,7 @@ public:
     uno::Sequence<uno::Any> const& args,
     uno::Reference<uno::XComponentContext> const& xContext )
         throw (uno::Exception);
-    
+
 private:
     virtual ~Factory();
 
@@ -127,7 +127,7 @@ bool ServiceDecl::writeInfo( registry::XRegistryKey * xKey ) const
         try {
             uno::Reference<registry::XRegistryKey> const xNewKey(
                 xKey->createKey( buf.makeStringAndClear() ) );
-            
+
             rtl::OString const str(m_pServiceNames);
             sal_Int32 nIndex = 0;
             do {
@@ -137,7 +137,7 @@ bool ServiceDecl::writeInfo( registry::XRegistryKey * xKey ) const
                                    RTL_TEXTENCODING_ASCII_US ) );
             }
             while (nIndex >= 0);
-            
+
             bRet = true;
         }
         catch (registry::InvalidRegistryException const&) {
@@ -160,8 +160,8 @@ void * ServiceDecl::getFactory( sal_Char const* pImplName ) const
 uno::Sequence<rtl::OUString> ServiceDecl::getSupportedServiceNames() const
 {
     std::vector<rtl::OUString> vec;
-    
-    rtl::OString const str(m_pServiceNames);    
+
+    rtl::OString const str(m_pServiceNames);
     sal_Int32 nIndex = 0;
     do {
         rtl::OString const token( str.getToken( 0, m_cDelim, nIndex ) );
@@ -169,7 +169,7 @@ uno::Sequence<rtl::OUString> ServiceDecl::getSupportedServiceNames() const
                                       RTL_TEXTENCODING_ASCII_US ) );
     }
     while (nIndex >= 0);
-    
+
     return comphelper::containerToSequence(vec);
 }
 

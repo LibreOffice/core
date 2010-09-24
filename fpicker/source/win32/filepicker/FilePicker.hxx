@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define _FILEPICKER_HXX_
 
 //_______________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_______________________________________________________________________________________________________________________
 
 
@@ -60,17 +60,17 @@
 class CWinFileOpenImpl;
 
 //----------------------------------------------------------
-// class declaration		
+// class declaration
 //----------------------------------------------------------
 
 class CFilePickerDummy
 {
 protected:
-    osl::Mutex	m_aMutex;
-    osl::Mutex	m_rbHelperMtx;
+    osl::Mutex  m_aMutex;
+    osl::Mutex  m_rbHelperMtx;
 };
 
-class CFilePicker : 
+class CFilePicker :
     public CFilePickerDummy,
     public cppu::WeakComponentImplHelper10<
         ::com::sun::star::ui::dialogs::XFilterManager,
@@ -82,7 +82,7 @@ class CFilePicker :
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::util::XCancellable,
         ::com::sun::star::lang::XEventListener,
-        ::com::sun::star::lang::XServiceInfo >		
+        ::com::sun::star::lang::XServiceInfo >
 {
 public:
 
@@ -93,38 +93,38 @@ public:
     // XFilePickerNotifier
     //------------------------------------------------------------------------------------
 
-    virtual void SAL_CALL addFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener ) 
+    virtual void SAL_CALL addFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener )
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL removeFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener ) 
+    virtual void SAL_CALL removeFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener )
         throw( ::com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------------------------------------------
     // XExecutableDialog functions
     //------------------------------------------------------------------------------------
-    
-    virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle ) 
+
+    virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle )
         throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual sal_Int16 SAL_CALL execute(  ) 
+    virtual sal_Int16 SAL_CALL execute(  )
         throw( ::com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------------------------------------------
     // XFilePicker functions
     //------------------------------------------------------------------------------------
 
-    virtual void SAL_CALL setMultiSelectionMode( sal_Bool bMode ) 
+    virtual void SAL_CALL setMultiSelectionMode( sal_Bool bMode )
         throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL setDefaultName( const ::rtl::OUString& aName ) 
+    virtual void SAL_CALL setDefaultName( const ::rtl::OUString& aName )
         throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL setDisplayDirectory( const ::rtl::OUString& aDirectory ) 
+    virtual void SAL_CALL setDisplayDirectory( const ::rtl::OUString& aDirectory )
         throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-    virtual ::rtl::OUString SAL_CALL getDisplayDirectory(  ) 
+    virtual ::rtl::OUString SAL_CALL getDisplayDirectory(  )
         throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getFiles(  ) 
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getFiles(  )
         throw( ::com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------------------------------------------
@@ -132,7 +132,7 @@ public:
     //------------------------------------------------------------------------------------
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSelectedFiles(  )
         throw (::com::sun::star::uno::RuntimeException);
-    
+
     //------------------------------------------------------------------------------------
     // XFilterManager functions
     //------------------------------------------------------------------------------------
@@ -140,36 +140,36 @@ public:
     virtual void SAL_CALL appendFilter( const ::rtl::OUString& aTitle, const ::rtl::OUString& aFilter )
         throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL setCurrentFilter( const ::rtl::OUString& aTitle ) 
+    virtual void SAL_CALL setCurrentFilter( const ::rtl::OUString& aTitle )
         throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-    virtual ::rtl::OUString SAL_CALL getCurrentFilter(  ) 
+    virtual ::rtl::OUString SAL_CALL getCurrentFilter(  )
         throw( ::com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------------------------------------------
     // XFilterGroupManager functions
     //------------------------------------------------------------------------------------
 
-    virtual void SAL_CALL appendFilterGroup( const ::rtl::OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters ) 
+    virtual void SAL_CALL appendFilterGroup( const ::rtl::OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------------------------------------------
     // XFilePickerControlAccess functions
     //------------------------------------------------------------------------------------
 
-    virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const ::com::sun::star::uno::Any& aValue ) 
+    virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const ::com::sun::star::uno::Any& aValue )
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction ) 
+    virtual ::com::sun::star::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable ) 
+    virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable )
         throw(::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel ) 
+    virtual void SAL_CALL setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel )
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getLabel( sal_Int16 aControlId ) 
+    virtual ::rtl::OUString SAL_CALL getLabel( sal_Int16 aControlId )
         throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
@@ -208,26 +208,26 @@ public:
     // XEventListener
     //------------------------------------------------
 
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) 
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
         throw(::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     // XServiceInfo
-    //------------------------------------------------ 
+    //------------------------------------------------
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(	 )
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
         throw(::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------------------------------------------
     // FilePicker Event functions
     //------------------------------------------------------------------------------------
-    
+
     void SAL_CALL fileSelectionChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
     void SAL_CALL directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
     rtl::OUString SAL_CALL helpRequested( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
@@ -238,18 +238,18 @@ public:
     void shutdownEventNotification();
     void suspendEventNotification();
     void resumeEventNotification();
-    
+
 private:
     // prevent copy and assignment
-    CFilePicker( const CFilePicker& );           
+    CFilePicker( const CFilePicker& );
     CFilePicker& operator=( const CFilePicker& );
 
     using WeakComponentImplHelperBase::disposing;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;   // to instanciate own services		
-    CAsyncEventNotifier				                                               m_aAsyncEventNotifier;
-    std::auto_ptr<CWinFileOpenImpl>	    										   m_pImpl;	
-}; 
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;   // to instanciate own services
+    CAsyncEventNotifier                                                            m_aAsyncEventNotifier;
+    std::auto_ptr<CWinFileOpenImpl>                                                m_pImpl;
+};
 
-#endif 
+#endif

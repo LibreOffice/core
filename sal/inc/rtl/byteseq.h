@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ extern "C"
 
 /** Assures that the reference count of the given byte sequence is one. Otherwise a new copy
     of the sequence is created with a reference count of one.
-    
+
     @param ppSequence sequence
 */
 void SAL_CALL rtl_byte_sequence_reference2One(
@@ -45,7 +45,7 @@ void SAL_CALL rtl_byte_sequence_reference2One(
     SAL_THROW_EXTERN_C();
 
 /** Reallocates length of byte sequence.
-    
+
     @param ppSequence sequence
     @param nSize new size of sequence
 */
@@ -54,15 +54,15 @@ void SAL_CALL rtl_byte_sequence_realloc(
     SAL_THROW_EXTERN_C();
 
 /** Acquires the byte sequence
-    
+
     @param pSequence sequence, that is to be acquired
 */
 void SAL_CALL rtl_byte_sequence_acquire(
     sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C();
-    
+
 /** Releases the byte sequence. If the refcount drops to zero, the sequence is freed.
-    
+
     @param pSequence sequence, that is to be released; invalid after call
 */
 void SAL_CALL rtl_byte_sequence_release(
@@ -70,7 +70,7 @@ void SAL_CALL rtl_byte_sequence_release(
     SAL_THROW_EXTERN_C();
 
 /** Constructs a bytes sequence with length nLength. All bytes are set to zero.
-    
+
     @param ppSequence inout sequence; on entry *ppSequence may be null, otherwise it is released;
                       after the call, *ppSequence contains the newly constructed sequence
     @param nLength    length of new sequence
@@ -80,7 +80,7 @@ void SAL_CALL rtl_byte_sequence_construct(
     SAL_THROW_EXTERN_C();
 
 /** Constructs a bytes sequence with length nLength. The data is not initialized.
-    
+
     @param ppSequence inout sequence; on entry *ppSequence may be null, otherwise it is released;
                       after the call, *ppSequence contains the newly constructed sequence
     @param nLength    length of new sequence
@@ -101,17 +101,17 @@ void SAL_CALL rtl_byte_sequence_constructFromArray(
     SAL_THROW_EXTERN_C();
 
 /** Assigns the byte sequence pSequence to *ppSequence.
-    
+
     @param ppSequence inout sequence; on entry *ppSequence may be null, otherwise it is released;
                       after the call, *ppSequence references pSequence
-    @param pSequence  the source sequence 
+    @param pSequence  the source sequence
 */
 void SAL_CALL rtl_byte_sequence_assign(
     sal_Sequence **ppSequence , sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C();
 
 /** Compares two byte sequences.
-    
+
     @return true, if the data within the sequences are identical; false otherwise
 */
 sal_Bool SAL_CALL rtl_byte_sequence_equals(
@@ -119,7 +119,7 @@ sal_Bool SAL_CALL rtl_byte_sequence_equals(
     SAL_THROW_EXTERN_C();
 
 /** Returns the data array pointer of the sequence.
-    
+
     @return read-pointer to the data array of the sequence. If rtl_byte_sequence_reference2One()
             has been called before, the pointer may be casted to a non const pointer and
             the sequence may be modified
@@ -129,7 +129,7 @@ const sal_Int8 *SAL_CALL rtl_byte_sequence_getConstArray(
     SAL_THROW_EXTERN_C();
 
 /** Returns the length of the sequence
-    
+
     @param pSequence sequence handle
     @return length of the sequence
 */
@@ -168,7 +168,7 @@ class ByteSequence
         @internal
     */
     sal_Sequence * _pSequence;
-    
+
 public:
     // these are here to force memory de/allocation to sal lib.
     /** @internal */
@@ -183,34 +183,34 @@ public:
     /** @internal */
     inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
-    
+
     /** Default constructor: Creates an empty sequence.
     */
     inline ByteSequence() SAL_THROW( () );
     /** Copy constructor: Creates a copy of given sequence.
-        
+
         @param rSeq another byte sequence
     */
     inline ByteSequence( const ByteSequence & rSeq ) SAL_THROW( () );
     /** Copy constructor Creates a copy from the C-Handle.
-        
+
         @param pSequence another byte sequence handle
     */
     inline ByteSequence( sal_Sequence *pSequence ) SAL_THROW( () );
     /** Constructor: Creates a copy of given data bytes.
-        
+
         @param pElements an array of bytes
         @param len number of bytes
     */
     inline ByteSequence( const sal_Int8 * pElements, sal_Int32 len );
     /** Constructor: Creates sequence of given length and initializes all bytes to 0.
-        
+
         @param len initial sequence length
     */
     inline ByteSequence( sal_Int32 len );
     /** Constructor: Creates sequence of given length and does NOT initialize data.
                      Use this ctor for performance optimization only.
-                     
+
         @param len initial sequence length
         @param nodefault dummy parameter forcing explicit BYTESEQ_NODEFAULT
     */
@@ -220,7 +220,7 @@ public:
         over owenership. Eitherway the handle is release by the destructor.
         This ctor is useful, when working with a c-interface (it safes a pair of
         acquire and release call and is thus a performance optimization only).
-                     
+
         @param pSequence sequence handle to be taken over
         @param noacquire dummy parameter forcing explicit BYTESEQ_NOACQUIRE
     */
@@ -228,24 +228,24 @@ public:
     /** Destructor: Releases sequence handle. Last handle will free memory.
     */
     inline ~ByteSequence() SAL_THROW( () );
-    
+
     /** Assignment operator: Acquires given sequence handle and releases a previously set handle.
-        
+
         @param rSeq another byte sequence
         @return this sequence
     */
     inline ByteSequence & SAL_CALL operator = ( const ByteSequence & rSeq ) SAL_THROW( () );
-    
+
     /** Gets the length of sequence.
-        
+
         @return length of sequence
     */
     inline sal_Int32 SAL_CALL getLength() const SAL_THROW( () )
         { return _pSequence->nElements; }
-    
+
     /** Gets a pointer to byte array for READING. If the sequence has a length of 0, then the
         returned pointer is undefined.
-        
+
         @return pointer to byte array
     */
     inline const sal_Int8 * SAL_CALL getConstArray() const SAL_THROW( () )
@@ -254,20 +254,20 @@ public:
         has a handle acquired by other sequences (reference count > 1), then a new sequence is
         created copying all bytes to keep value semantics!
         If the sequence has a length of 0, then the returned pointer is undefined.
-        
+
         @return pointer to elements array
     */
     inline sal_Int8 * SAL_CALL getArray();
-    
+
     /** Non-const index operator:
         Obtains a reference to byte indexed at given position.
         In general if the sequence has a handle acquired by other
         sequences (reference count > 1), then a new sequence is created
         copying all bytes to keep value semantics!
-        
+
         @attention
         The implementation does NOT check for array bounds!
-        
+
         @param nIndex index
         @return non-const C++ reference to element at index nIndex
     */
@@ -275,34 +275,34 @@ public:
 
     /** Const index operator: Obtains a reference to byte indexed at given position.
                               The implementation does NOT check for array bounds!
-                              
+
         @param nIndex index
         @return const C++ reference to byte at element of indenx nIndex
     */
     inline const sal_Int8 & SAL_CALL operator [] ( sal_Int32 nIndex ) const SAL_THROW( () )
         { return getConstArray()[ nIndex ]; }
-    
+
     /** Equality operator: Compares two sequences.
-        
+
         @param rSeq another byte sequence (right side)
         @return true if both sequences are equal, false otherwise
     */
     inline sal_Bool SAL_CALL operator == ( const ByteSequence & rSeq ) const SAL_THROW( () );
     /** Unequality operator: Compares two sequences.
-        
+
         @param rSeq another byte sequence (right side)
         @return false if both sequences are equal, true otherwise
     */
     inline sal_Bool SAL_CALL operator != ( const ByteSequence & rSeq ) const SAL_THROW( () );
-    
+
     /** Reallocates sequence to new length. If the sequence has a handle acquired by other sequences
         (reference count > 1), then the remaining elements are copied to a new sequence handle to
         keep value semantics!
-        
+
         @param nSize new size of sequence
     */
     inline void SAL_CALL realloc( sal_Int32 nSize );
-    
+
     /** Returns the UNnacquired C handle of the sequence
 
         @return UNacquired handle of the sequence
@@ -310,7 +310,7 @@ public:
     inline sal_Sequence * SAL_CALL getHandle() const SAL_THROW( () )
         { return _pSequence; }
     /** Returns the UNnacquired C handle of the sequence (for compatibility reasons)
-        
+
         @return UNacquired handle of the sequence
     */
     inline sal_Sequence * SAL_CALL get() const SAL_THROW( () )

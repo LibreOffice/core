@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public final class PositionBaseRowMerge implements NodeMergeAlgorithm {
 
     /**
      *  Constructor.
-     * 
+     *
      *  @param  cc  The <code>ConverterCapabilities</code>.
      */
     public PositionBaseRowMerge(ConverterCapabilities cc) {
@@ -219,7 +219,7 @@ public final class PositionBaseRowMerge implements NodeMergeAlgorithm {
         if (attrNodes != null) {
 
             // copy the first text:p node. As it's not necessary only string
-            // type cell can have a text:p section. 
+            // type cell can have a text:p section.
             NodeList paraNodes =
                 modCell.getElementsByTagName(OfficeConstants.TAG_PARAGRAPH);
 

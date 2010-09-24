@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -208,7 +208,7 @@ public:
         This is done by adding the border used by the ViewShellBase itself
         with the border used by the main view shell.
 
-        @param bForce	if true the borders are also updated if old border
+        @param bForce   if true the borders are also updated if old border
                         and new border are same.
     */
     void UpdateBorder ( bool bForce = false );
@@ -249,7 +249,7 @@ public:
         of that window remains with the called ViewShellBase object.
     */
     ::Window* GetViewWindow (void);
-    
+
     /** returns the ui descriptive name for the given uno slot. The result is taken from the configuration
         and not cached, so do not use it excessive (f.e. in status updates) */
     ::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const;

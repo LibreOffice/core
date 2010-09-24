@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,16 +39,16 @@ public:
     SwRubyListEntry() : aRubyAttr( aEmptyStr ) {}
     ~SwRubyListEntry();
 
-    const String& GetText() const 				{ return sText; }
-    void SetText( const String& rStr ) 			{ sText = rStr; }
+    const String& GetText() const               { return sText; }
+    void SetText( const String& rStr )          { sText = rStr; }
 
-    const SwFmtRuby& GetRubyAttr() const		{ return aRubyAttr; }
-          SwFmtRuby& GetRubyAttr() 				{ return aRubyAttr; }
-    void SetRubyAttr( const SwFmtRuby& rAttr )	{ aRubyAttr = rAttr; }
+    const SwFmtRuby& GetRubyAttr() const        { return aRubyAttr; }
+          SwFmtRuby& GetRubyAttr()              { return aRubyAttr; }
+    void SetRubyAttr( const SwFmtRuby& rAttr )  { aRubyAttr = rAttr; }
 };
 
 typedef SwRubyListEntry* SwRubyListEntryPtr;
 SV_DECL_PTRARR_DEL( SwRubyList, SwRubyListEntryPtr, 0, 32 )
 
 
-#endif	//_RUBYLIST_HXX
+#endif  //_RUBYLIST_HXX

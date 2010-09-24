@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@
 #endif
 //=============================================================================
 
-module ooo {  module vba {  module excel { 
+module ooo {  module vba {  module excel {
 
 interface XFont;
 interface XRows;
@@ -77,7 +77,7 @@ interface XRange
     interface ::ooo::vba::excel::XFormat;
     //interface ::ooo::vba::XHelperInterface;
 
-    [attribute] any Value; 
+    [attribute] any Value;
     [attribute] any Formula;
     [attribute] any FormulaArray;
     [attribute] any FormulaR1C1;
@@ -103,7 +103,7 @@ interface XRange
     [attribute] any AddIndent;
     [attribute] any ShowDetail;
 
-    XComment AddComment( [in] any Text ); 
+    XComment AddComment( [in] any Text );
     void Clear();
     void ClearComments();
     void ClearContents();
@@ -116,9 +116,9 @@ interface XRange
     XRange Item([in] any row, [in] any column) raises(com::sun::star::script::BasicErrorException);
     XRange Offset([in] any RowOffset, [in] any ColumnOffset);
     XRange CurrentRegion();
-    XRange CurrentArray(); 
+    XRange CurrentArray();
     string Characters([in] any Start, [in] any Length);
-    string Address( [in] any RowAbsolute, [in] any ColumnAbsolute, [in] any ReferenceStyle, [in] any External, [in] any RelativeTo );	
+    string Address( [in] any RowAbsolute, [in] any ColumnAbsolute, [in] any ReferenceStyle, [in] any External, [in] any RelativeTo );
     XRange Cells([in] any RowIndex, [in] any ColumnIndex);
     void Select();
     void AutoOutline() raises(com::sun::star::script::BasicErrorException);
@@ -134,10 +134,10 @@ interface XRange
     void PasteSpecial([in] any Paste, [in] any Operation,[in] any SkipBlanks, [in] any Transpose);
     boolean  Replace( [in] string What, [in] string Replacement, [in] any LookAt, [in] any SearchOrder, [in] any MatchCase, [in] any MatchByte, [in] any SearchFormat, [in] any ReplaceFormat );
     XRange Find( [in] any What, [in] any After, [in] any LookIn, [in] any LookAt, [in] any SearchOrder, [in] any SearchDirection, [in] any MatchCase, [in] any MatchByte, [in] any SearchFormat );
-    
+
     void Sort( [in] any Key1, [in] any Order1, [in] any Key2, [in] any Type,
         [in] any Order2, [in] any Key3, [in] any Order3,
-        [in] any Header, [in] any OrderCustom, [in] any MatchCase, 
+        [in] any Header, [in] any OrderCustom, [in] any MatchCase,
         [in] any Orientation, [in] any SortMethod, [in] any DataOption1,
         [in] any DataOption2, [in] any DataOption3 );
     XRange End( [in] long Direction );
@@ -145,7 +145,7 @@ interface XRange
     // idl complains
     XCharacters characters([in] any Start, [in] any Length);
     void Delete( [in] any Shift );
-        
+
     any Areas( [in] any item );
     any BorderAround( [in] any LineStyle, [in] any Weight, [in] any ColorIndex, [in] any Color );
         void AutoFilter([in ] any Field, [in] any Criteria1, [in] any Operator, [in] any Criteria2, [in] any VisibleDropDown);
@@ -163,7 +163,7 @@ interface XRange
     XRange Previous( ) raises ( com::sun::star::script::BasicErrorException );
      XRange SpecialCells( [in] any Type, [in]  /*Optional*/ any Value ) raises ( com::sun::star::script::BasicErrorException );
     void RemoveSubtotal() raises ( com::sun::star::script::BasicErrorException );
-    void	Subtotal( [in] long GroupBy, [in] long Function, [in]  /*Optional*/ sequence<long> TotalList, [in]  /*Optional*/ any Replace, [in]  /*Optional*/ any PageBreaks, [in] any SummaryBelowData ) raises ( com::sun::star::script::BasicErrorException );
+    void    Subtotal( [in] long GroupBy, [in] long Function, [in]  /*Optional*/ sequence<long> TotalList, [in]  /*Optional*/ any Replace, [in]  /*Optional*/ any PageBreaks, [in] any SummaryBelowData ) raises ( com::sun::star::script::BasicErrorException );
     XRange MergeArea( ) raises ( com::sun::star::script::BasicErrorException );
     any Hyperlinks( [in] any aIndex );
 };

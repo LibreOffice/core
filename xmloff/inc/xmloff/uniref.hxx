@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <osl/interlck.h>
 
 /**
- * An instance of this class holds a pointer to an object. The lifetime of 
+ * An instance of this class holds a pointer to an object. The lifetime of
  * the object is controled by the instance. The constructor calls
  * acquire() and the destructor calls release().
  * You could delive your class from the baseclass UniRefBase wich implements
@@ -43,7 +43,7 @@
 template< class T > class UniReference
 {
 private:
-    T*	mpElement;
+    T*  mpElement;
 
 public:
     /** Create an empty reference.*/
@@ -56,8 +56,8 @@ public:
 
     /** Create a new reference with the same element as in rRef and acquire this one.*/
     inline UniReference( const UniReference< T > & rRef );
-    
-    /** 
+
+    /**
      * Create a new reference with the given element pElement and acquire this one.
      */
     inline UniReference( T * pElement );
@@ -71,7 +71,7 @@ public:
      * Release the reference and set the new one from rObj.
      */
     inline UniReference< T > & operator = ( const UniReference< T > & rRef );
-    
+
     /**
      * Return the pointer to the element, may be null.
      */
@@ -106,7 +106,7 @@ private:
     /**
      * The reference counter.
      */
-    oslInterlockedCount			m_refCount;
+    oslInterlockedCount         m_refCount;
 
 public:
     UniRefBase() : m_refCount( 0 )
@@ -138,7 +138,7 @@ inline UniReference< T >::~UniReference()
         mpElement->release();
 }
 
-/** 
+/**
  * Create a new reference with the given element pElement and acquire this one.
  * @param pInterface the interface, pointer may be null.
  */
@@ -181,18 +181,18 @@ inline UniReference< T > & UniReference< T >::operator = ( const UniReference< T
  * Return the pointer to the interface, may be null.
  */
 template< class T >
-inline T* UniReference< T >::operator -> () const 
-{ 
-    return get(); 
+inline T* UniReference< T >::operator -> () const
+{
+    return get();
 }
 
 /**
  * Return the pointer to the interface, may be null.
  */
 template< class T >
-inline T* UniReference< T >::get () const 
-{ 
-    return static_cast< T * >( mpElement ); 
+inline T* UniReference< T >::get () const
+{
+    return static_cast< T * >( mpElement );
 }
 
 /**
@@ -200,14 +200,14 @@ inline T* UniReference< T >::get () const
  */
 template< class T >
 inline sal_Bool UniReference< T >::is() const
-{ 
-    return (mpElement != 0); 
+{
+    return (mpElement != 0);
 }
 /**
  * Return true if both interfaces refer to the same object. The operation can be
  * much more expensive than a pointer comparision.<BR>
  *
- * @param rRef		another interface reference
+ * @param rRef      another interface reference
  */
 template< class T >
 inline sal_Bool UniReference< T >::operator == ( const UniReference & rRef ) const
@@ -218,12 +218,12 @@ inline sal_Bool UniReference< T >::operator == ( const UniReference & rRef ) con
  * Return true if both interfaces does not refer to the same object. The operation can be
  * much more expensive than a pointer comparision.<BR>
  *
- * @param rRef		another interface reference
+ * @param rRef      another interface reference
  */
 template< class T >
 inline sal_Bool UniReference< T >::operator != ( const UniReference & rRef ) const
-{ 
-    return ( ! operator == ( rRef ) ); 
+{
+    return ( ! operator == ( rRef ) );
 }
 
-#endif	// _UNIVERSALL_REFERENCE_HXX
+#endif  // _UNIVERSALL_REFERENCE_HXX

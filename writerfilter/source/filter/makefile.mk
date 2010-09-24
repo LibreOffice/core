@@ -40,7 +40,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=           $(SLO)$/WriterFilter.obj \
                     $(SLO)$/WriterFilterDetection.obj \
-                    $(SLO)$/ImportFilter.obj
+                    $(SLO)$/ImportFilter.obj \
+                    $(SLO)$/RtfFilter.obj
 
 
 # --- Targets ----------------------------------

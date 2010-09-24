@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,16 +78,16 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
 
-#define WID_STYLE_DISPNAME	7998
-#define WID_STYLE_FAMILY	7999
+#define WID_STYLE_DISPNAME  7998
+#define WID_STYLE_FAMILY    7999
 
 static SvxItemPropertySet& GetStylePropertySet()
 {
     static const SfxItemPropertyMapEntry aFullPropertyMap_Impl[] =
     {
-        { RTL_CONSTASCII_STRINGPARAM("Family"),					WID_STYLE_FAMILY,		&::getCppuType((const OUString*)0),	PropertyAttribute::READONLY,	0},
-        { RTL_CONSTASCII_STRINGPARAM("UserDefinedAttributes"),	SDRATTR_XMLATTRIBUTES,	&XNameContainer::static_type(), 0,     0},
-        { RTL_CONSTASCII_STRINGPARAM("DisplayName"),			WID_STYLE_DISPNAME,		&::getCppuType((const OUString*)0),	PropertyAttribute::READONLY,	0},
+        { RTL_CONSTASCII_STRINGPARAM("Family"),                 WID_STYLE_FAMILY,       &::getCppuType((const OUString*)0), PropertyAttribute::READONLY,    0},
+        { RTL_CONSTASCII_STRINGPARAM("UserDefinedAttributes"),  SDRATTR_XMLATTRIBUTES,  &XNameContainer::static_type(), 0,     0},
+        { RTL_CONSTASCII_STRINGPARAM("DisplayName"),            WID_STYLE_DISPNAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY,    0},
 
         SVX_UNOEDIT_NUMBERING_PROPERTIE,
         SHADOW_PROPERTIES
@@ -153,7 +153,7 @@ SdStyleSheet::SdStyleSheet( const SdStyleSheet & r )
 SdStyleSheet::~SdStyleSheet()
 {
     delete pSet;
-    pSet = NULL;	// damit nachfolgende Destruktoren eine Chance haben
+    pSet = NULL;    // damit nachfolgende Destruktoren eine Chance haben
 }
 
 void SdStyleSheet::SetApiName( const OUString& rApiName )
@@ -248,20 +248,20 @@ SfxItemSet& SdStyleSheet::GetItemSet()
         // ggfs. das ItemSet 'on demand' anlegen
         if (!pSet)
         {
-            USHORT nWhichPairTable[] = { XATTR_LINE_FIRST, 				XATTR_LINE_LAST,
-                                         XATTR_FILL_FIRST, 				XATTR_FILL_LAST,
+            USHORT nWhichPairTable[] = { XATTR_LINE_FIRST,              XATTR_LINE_LAST,
+                                         XATTR_FILL_FIRST,              XATTR_FILL_LAST,
 
-                                        SDRATTR_SHADOW_FIRST, 			SDRATTR_SHADOW_LAST,
-                                        SDRATTR_TEXT_MINFRAMEHEIGHT,	SDRATTR_TEXT_CONTOURFRAME,
+                                        SDRATTR_SHADOW_FIRST,           SDRATTR_SHADOW_LAST,
+                                        SDRATTR_TEXT_MINFRAMEHEIGHT,    SDRATTR_TEXT_CONTOURFRAME,
 
-                                        SDRATTR_TEXT_WORDWRAP,			SDRATTR_TEXT_AUTOGROWSIZE,
+                                        SDRATTR_TEXT_WORDWRAP,          SDRATTR_TEXT_AUTOGROWSIZE,
 
-                                        SDRATTR_EDGE_FIRST,				SDRATTR_EDGE_LAST,
-                                        SDRATTR_MEASURE_FIRST, 			SDRATTR_MEASURE_LAST,
+                                        SDRATTR_EDGE_FIRST,             SDRATTR_EDGE_LAST,
+                                        SDRATTR_MEASURE_FIRST,          SDRATTR_MEASURE_LAST,
 
-                                        EE_PARA_START, 					EE_CHAR_END,
+                                        EE_PARA_START,                  EE_CHAR_END,
 
-                                        SDRATTR_XMLATTRIBUTES,			SDRATTR_TEXT_USEFIXEDCELLHEIGHT,
+                                        SDRATTR_XMLATTRIBUTES,          SDRATTR_TEXT_USEFIXEDCELLHEIGHT,
 
                                         SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
                                         0, 0 };
@@ -276,18 +276,18 @@ SfxItemSet& SdStyleSheet::GetItemSet()
     {
         if (!pSet)
         {
-            USHORT nWhichPairTable[] = { XATTR_LINE_FIRST, 				XATTR_LINE_LAST,
-                                         XATTR_FILL_FIRST, 				XATTR_FILL_LAST,
+            USHORT nWhichPairTable[] = { XATTR_LINE_FIRST,              XATTR_LINE_LAST,
+                                         XATTR_FILL_FIRST,              XATTR_FILL_LAST,
 
-                                        SDRATTR_SHADOW_FIRST, 			SDRATTR_SHADOW_LAST,
-                                        SDRATTR_TEXT_MINFRAMEHEIGHT,	SDRATTR_TEXT_CONTOURFRAME,
+                                        SDRATTR_SHADOW_FIRST,           SDRATTR_SHADOW_LAST,
+                                        SDRATTR_TEXT_MINFRAMEHEIGHT,    SDRATTR_TEXT_CONTOURFRAME,
 
-                                        SDRATTR_TEXT_WORDWRAP,			SDRATTR_TEXT_AUTOGROWSIZE,
+                                        SDRATTR_TEXT_WORDWRAP,          SDRATTR_TEXT_AUTOGROWSIZE,
 
-                                        EE_PARA_START, 					EE_CHAR_END,
+                                        EE_PARA_START,                  EE_CHAR_END,
 
-                                        SDRATTR_TABLE_FIRST,			SDRATTR_TABLE_LAST,
-                                        SDRATTR_XMLATTRIBUTES,			SDRATTR_XMLATTRIBUTES,
+                                        SDRATTR_TABLE_FIRST,            SDRATTR_TABLE_LAST,
+                                        SDRATTR_XMLATTRIBUTES,          SDRATTR_XMLATTRIBUTES,
 
                                         0, 0 };
 
@@ -319,14 +319,14 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                                              SDRATTR_SHADOW_FIRST,          SDRATTR_SHADOW_LAST,
                                              SDRATTR_TEXT_MINFRAMEHEIGHT,   SDRATTR_TEXT_CONTOURFRAME,
 
-                                             SDRATTR_TEXT_WORDWRAP,			SDRATTR_TEXT_AUTOGROWSIZE,
+                                             SDRATTR_TEXT_WORDWRAP,         SDRATTR_TEXT_AUTOGROWSIZE,
 
                                              SDRATTR_EDGE_FIRST,            SDRATTR_EDGE_LAST,
                                              SDRATTR_MEASURE_FIRST,         SDRATTR_MEASURE_LAST,
 
                                              EE_PARA_START,                 EE_CHAR_END,
 
-                                            SDRATTR_XMLATTRIBUTES,			SDRATTR_TEXT_USEFIXEDCELLHEIGHT,
+                                            SDRATTR_XMLATTRIBUTES,          SDRATTR_TEXT_USEFIXEDCELLHEIGHT,
 
                                             SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
                                              0, 0 };
@@ -342,7 +342,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
 /*************************************************************************
 |*
 |* IsUsed(), eine Vorlage gilt als benutzt, wenn sie von eingefuegten Objekten
-|*			 oder von benutzten Vorlagen referenziert wird
+|*           oder von benutzten Vorlagen referenziert wird
 |*
 \************************************************************************/
 
@@ -409,7 +409,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
 
     ::sd::DrawViewShell* pDrawViewShell = 0;
 
-    ::sd::ViewShellBase* pBase = dynamic_cast< ::sd::ViewShellBase* >( SfxViewShell::Current() );    
+    ::sd::ViewShellBase* pBase = dynamic_cast< ::sd::ViewShellBase* >( SfxViewShell::Current() );
     if( pBase )
         pDrawViewShell = dynamic_cast< ::sd::DrawViewShell* >( pBase->GetMainViewShell().get() );
 
@@ -682,31 +682,31 @@ void SdStyleSheet::SetHelpId( const String& r, ULONG nId )
         static struct ApiNameMap
         {
             const sal_Char* mpApiName;
-            sal_uInt32		mnApiNameLength;
-            sal_uInt32		mnHelpId;
+            sal_uInt32      mnApiNameLength;
+            sal_uInt32      mnHelpId;
         }
         pApiNameMap[] =
         {
-            { RTL_CONSTASCII_STRINGPARAM( "title" ),			HID_PSEUDOSHEET_TITLE },
-            { RTL_CONSTASCII_STRINGPARAM( "subtitle" ),			HID_PSEUDOSHEET_SUBTITLE },
-            { RTL_CONSTASCII_STRINGPARAM( "background" ),		HID_PSEUDOSHEET_BACKGROUND },
+            { RTL_CONSTASCII_STRINGPARAM( "title" ),            HID_PSEUDOSHEET_TITLE },
+            { RTL_CONSTASCII_STRINGPARAM( "subtitle" ),         HID_PSEUDOSHEET_SUBTITLE },
+            { RTL_CONSTASCII_STRINGPARAM( "background" ),       HID_PSEUDOSHEET_BACKGROUND },
             { RTL_CONSTASCII_STRINGPARAM( "backgroundobjects" ),HID_PSEUDOSHEET_BACKGROUNDOBJECTS },
-            { RTL_CONSTASCII_STRINGPARAM( "notes" ),			HID_PSEUDOSHEET_NOTES },
-            { RTL_CONSTASCII_STRINGPARAM( "standard" ),			HID_STANDARD_STYLESHEET_NAME },
-            { RTL_CONSTASCII_STRINGPARAM( "objectwitharrow" ),	HID_POOLSHEET_OBJWITHARROW },
-            { RTL_CONSTASCII_STRINGPARAM( "objectwithshadow" ),	HID_POOLSHEET_OBJWITHSHADOW },
+            { RTL_CONSTASCII_STRINGPARAM( "notes" ),            HID_PSEUDOSHEET_NOTES },
+            { RTL_CONSTASCII_STRINGPARAM( "standard" ),         HID_STANDARD_STYLESHEET_NAME },
+            { RTL_CONSTASCII_STRINGPARAM( "objectwitharrow" ),  HID_POOLSHEET_OBJWITHARROW },
+            { RTL_CONSTASCII_STRINGPARAM( "objectwithshadow" ), HID_POOLSHEET_OBJWITHSHADOW },
             { RTL_CONSTASCII_STRINGPARAM( "objectwithoutfill" ),HID_POOLSHEET_OBJWITHOUTFILL },
-            { RTL_CONSTASCII_STRINGPARAM( "text" ),				HID_POOLSHEET_TEXT },
-            { RTL_CONSTASCII_STRINGPARAM( "textbody" ),			HID_POOLSHEET_TEXTBODY },
-            { RTL_CONSTASCII_STRINGPARAM( "textbodyjustfied" ),	HID_POOLSHEET_TEXTBODY_JUSTIFY },
-            { RTL_CONSTASCII_STRINGPARAM( "textbodyindent" ),	HID_POOLSHEET_TEXTBODY_INDENT },
-            { RTL_CONSTASCII_STRINGPARAM( "title" ),			HID_POOLSHEET_TITLE },
-            { RTL_CONSTASCII_STRINGPARAM( "title1" ),			HID_POOLSHEET_TITLE1 },
-            { RTL_CONSTASCII_STRINGPARAM( "title2" ),			HID_POOLSHEET_TITLE2 },
-            { RTL_CONSTASCII_STRINGPARAM( "headline" ),			HID_POOLSHEET_HEADLINE },
-            { RTL_CONSTASCII_STRINGPARAM( "headline1" ),		HID_POOLSHEET_HEADLINE1 },
-            { RTL_CONSTASCII_STRINGPARAM( "headline2" ),		HID_POOLSHEET_HEADLINE2 },
-            { RTL_CONSTASCII_STRINGPARAM( "measure" ),			HID_POOLSHEET_MEASURE },
+            { RTL_CONSTASCII_STRINGPARAM( "text" ),             HID_POOLSHEET_TEXT },
+            { RTL_CONSTASCII_STRINGPARAM( "textbody" ),         HID_POOLSHEET_TEXTBODY },
+            { RTL_CONSTASCII_STRINGPARAM( "textbodyjustfied" ), HID_POOLSHEET_TEXTBODY_JUSTIFY },
+            { RTL_CONSTASCII_STRINGPARAM( "textbodyindent" ),   HID_POOLSHEET_TEXTBODY_INDENT },
+            { RTL_CONSTASCII_STRINGPARAM( "title" ),            HID_POOLSHEET_TITLE },
+            { RTL_CONSTASCII_STRINGPARAM( "title1" ),           HID_POOLSHEET_TITLE1 },
+            { RTL_CONSTASCII_STRINGPARAM( "title2" ),           HID_POOLSHEET_TITLE2 },
+            { RTL_CONSTASCII_STRINGPARAM( "headline" ),         HID_POOLSHEET_HEADLINE },
+            { RTL_CONSTASCII_STRINGPARAM( "headline1" ),        HID_POOLSHEET_HEADLINE1 },
+            { RTL_CONSTASCII_STRINGPARAM( "headline2" ),        HID_POOLSHEET_HEADLINE2 },
+            { RTL_CONSTASCII_STRINGPARAM( "measure" ),          HID_POOLSHEET_MEASURE },
             { 0, 0, 0 }
         };
 
@@ -1113,7 +1113,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
 
         if( pEntry->nWID == WID_STYLE_FAMILY )
             throw PropertyVetoException();
-    
+
         if( (pEntry->nWID == EE_PARA_NUMBULLET) && (GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) )
         {
             String aStr;
@@ -1136,8 +1136,8 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
             }
             throw IllegalArgumentException();
         }
-        
-        SfxItemSet aSet( GetPool().GetPool(),	pEntry->nWID, pEntry->nWID);
+
+        SfxItemSet aSet( GetPool().GetPool(),   pEntry->nWID, pEntry->nWID);
         aSet.Put( rStyleSet );
 
         if( !aSet.Count() )
@@ -1231,12 +1231,12 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
         }
         else
         {
-            SfxItemSet aSet( GetPool().GetPool(),	pEntry->nWID, pEntry->nWID);
+            SfxItemSet aSet( GetPool().GetPool(),   pEntry->nWID, pEntry->nWID);
 
             const SfxPoolItem* pItem;
             SfxItemSet& rStyleSet = GetItemSet();
 
-            if( rStyleSet.GetItemState(	pEntry->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+            if( rStyleSet.GetItemState( pEntry->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
                 aSet.Put(  *pItem );
 
             if( !aSet.Count() )
@@ -1246,7 +1246,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
                 return aAny;
 
             // Hole Wert aus ItemSet
-            aAny = SvxItemPropertySet_getPropertyValue( GetStylePropertySet(),pEntry, aSet );	
+            aAny = SvxItemPropertySet_getPropertyValue( GetStylePropertySet(),pEntry, aSet );
         }
 
         if( *pEntry->pType != aAny.getValueType() )
@@ -1327,13 +1327,13 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
         case SFX_ITEM_DEFAULT:
             eState = PropertyState_DEFAULT_VALUE;
             break;
-//		case SFX_ITEM_DONTCARE:
-//		case SFX_ITEM_DISABLED:
+//      case SFX_ITEM_DONTCARE:
+//      case SFX_ITEM_DISABLED:
         default:
             eState = PropertyState_AMBIGUOUS_VALUE;
             break;
         }
-        
+
         // if a item is set, this doesn't mean we want it :)
         if( ( PropertyState_DIRECT_VALUE == eState ) )
         {
@@ -1351,7 +1351,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
                     if( ( pItem == NULL ) || ( pItem->GetName().Len() == 0) )
                         eState = PropertyState_DEFAULT_VALUE;
                 }
-            }	
+            }
         }
 
         return eState;
@@ -1415,7 +1415,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) t
     const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
     if( pEntry == NULL )
         throw UnknownPropertyException();
-    Any aRet; 
+    Any aRet;
     if( pEntry->nWID == WID_STYLE_FAMILY )
     {
         aRet <<= GetFamilyString(nFamily);
@@ -1431,7 +1431,7 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) t
     else
     {
         SfxItemPool& rMyPool = GetPool().GetPool();
-        SfxItemSet aSet( rMyPool,	pEntry->nWID, pEntry->nWID);
+        SfxItemSet aSet( rMyPool,   pEntry->nWID, pEntry->nWID);
         aSet.Put( rMyPool.GetDefaultItem( pEntry->nWID ) );
         aRet = SvxItemPropertySet_getPropertyValue( GetStylePropertySet(), pEntry, aSet );
     }

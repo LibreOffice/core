@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,16 +68,16 @@ namespace cppcanvas
     BaseGfxFactory::BaseGfxFactory()
     {
     }
-    
+
     BaseGfxFactory::~BaseGfxFactory()
     {
     }
 
-    PolyPolygonSharedPtr BaseGfxFactory::createPolyPolygon( const CanvasSharedPtr& 			rCanvas, 
-                                                            const ::basegfx::B2DPolygon& 	rPoly ) const
+    PolyPolygonSharedPtr BaseGfxFactory::createPolyPolygon( const CanvasSharedPtr&          rCanvas,
+                                                            const ::basegfx::B2DPolygon&    rPoly ) const
     {
         OSL_ENSURE( rCanvas.get() != NULL &&
-                    rCanvas->getUNOCanvas().is(), 
+                    rCanvas->getUNOCanvas().is(),
                     "BaseGfxFactory::createPolyPolygon(): Invalid canvas" );
 
         if( rCanvas.get() == NULL )
@@ -87,18 +87,18 @@ namespace cppcanvas
         if( !xCanvas.is() )
             return PolyPolygonSharedPtr();
 
-        return PolyPolygonSharedPtr( 
-            new internal::ImplPolyPolygon( rCanvas, 
+        return PolyPolygonSharedPtr(
+            new internal::ImplPolyPolygon( rCanvas,
                                            ::basegfx::unotools::xPolyPolygonFromB2DPolygon(
                                                xCanvas->getDevice(),
                                                rPoly) ) );
     }
-    
-    PolyPolygonSharedPtr BaseGfxFactory::createPolyPolygon( const CanvasSharedPtr& 				rCanvas, 
-                                                            const ::basegfx::B2DPolyPolygon& 	rPolyPoly ) const
+
+    PolyPolygonSharedPtr BaseGfxFactory::createPolyPolygon( const CanvasSharedPtr&              rCanvas,
+                                                            const ::basegfx::B2DPolyPolygon&    rPolyPoly ) const
     {
         OSL_ENSURE( rCanvas.get() != NULL &&
-                    rCanvas->getUNOCanvas().is(), 
+                    rCanvas->getUNOCanvas().is(),
                     "BaseGfxFactory::createPolyPolygon(): Invalid canvas" );
 
         if( rCanvas.get() == NULL )
@@ -108,20 +108,20 @@ namespace cppcanvas
         if( !xCanvas.is() )
             return PolyPolygonSharedPtr();
 
-        return PolyPolygonSharedPtr( 
-            new internal::ImplPolyPolygon( rCanvas, 
+        return PolyPolygonSharedPtr(
+            new internal::ImplPolyPolygon( rCanvas,
                                            ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                                                xCanvas->getDevice(),
                                                rPolyPoly) ) );
     }
 
-    BitmapSharedPtr BaseGfxFactory::createBitmap( const CanvasSharedPtr&	rCanvas, 
+    BitmapSharedPtr BaseGfxFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
                                                   const ::basegfx::B2ISize& rSize ) const
     {
         OSL_ENSURE( rCanvas.get() != NULL &&
-                    rCanvas->getUNOCanvas().is(), 
+                    rCanvas->getUNOCanvas().is(),
                     "BaseGfxFactory::createBitmap(): Invalid canvas" );
-        
+
         if( rCanvas.get() == NULL )
             return BitmapSharedPtr();
 
@@ -129,19 +129,19 @@ namespace cppcanvas
         if( !xCanvas.is() )
             return BitmapSharedPtr();
 
-        return BitmapSharedPtr( 
-            new internal::ImplBitmap( rCanvas, 
-                                      xCanvas->getDevice()->createCompatibleBitmap( 
+        return BitmapSharedPtr(
+            new internal::ImplBitmap( rCanvas,
+                                      xCanvas->getDevice()->createCompatibleBitmap(
                                           ::basegfx::unotools::integerSize2DFromB2ISize(rSize) ) ) );
     }
 
-    BitmapSharedPtr BaseGfxFactory::createAlphaBitmap( const CanvasSharedPtr&	rCanvas, 
+    BitmapSharedPtr BaseGfxFactory::createAlphaBitmap( const CanvasSharedPtr&   rCanvas,
                                                        const ::basegfx::B2ISize& rSize ) const
     {
         OSL_ENSURE( rCanvas.get() != NULL &&
-                    rCanvas->getUNOCanvas().is(), 
+                    rCanvas->getUNOCanvas().is(),
                     "BaseGfxFactory::createBitmap(): Invalid canvas" );
-        
+
         if( rCanvas.get() == NULL )
             return BitmapSharedPtr();
 
@@ -149,15 +149,15 @@ namespace cppcanvas
         if( !xCanvas.is() )
             return BitmapSharedPtr();
 
-        return BitmapSharedPtr( 
-            new internal::ImplBitmap( rCanvas, 
-                                      xCanvas->getDevice()->createCompatibleAlphaBitmap( 
+        return BitmapSharedPtr(
+            new internal::ImplBitmap( rCanvas,
+                                      xCanvas->getDevice()->createCompatibleAlphaBitmap(
                                           ::basegfx::unotools::integerSize2DFromB2ISize(rSize) ) ) );
     }
 
     TextSharedPtr BaseGfxFactory::createText( const CanvasSharedPtr& rCanvas, const ::rtl::OUString& rText ) const
     {
-        return TextSharedPtr( new internal::ImplText( rCanvas, 
+        return TextSharedPtr( new internal::ImplText( rCanvas,
                                                       rText ) );
     }
 

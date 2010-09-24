@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,11 +34,11 @@
 #include "document.hxx"
 #include "cell.hxx"
 #include <tools/string.hxx>
-                                                                                                                             
+
 #include <tools/color.hxx>
 #include "flttypes.hxx"
 #include "ftools.hxx"
-                                                                                                                  
+
 // Stream wrapper class
 class ScBiffReader
 {
@@ -48,17 +48,17 @@ class ScBiffReader
     sal_uInt32 mnOffset;
     SvStream *mpStream;
     bool mbEndOfFile;
-                                                                                                                  
+
     public:
     ScBiffReader( SfxMedium& rMedium );
     ~ScBiffReader();
     bool recordsLeft() { return mpStream && !mpStream->IsEof(); }
     bool IsEndOfFile() { return mbEndOfFile; }
-    void SetEof( bool bValue ){ mbEndOfFile = bValue; } 
+    void SetEof( bool bValue ){ mbEndOfFile = bValue; }
     bool nextRecord();
     sal_uInt16 getId() { return mnId; }
     sal_uInt16 getLength() { return mnLength; }
-    SvStream& getStream() { return *mpStream; }    
+    SvStream& getStream() { return *mpStream; }
 };
 #endif
 

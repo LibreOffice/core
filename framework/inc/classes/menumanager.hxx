@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <vector>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -43,7 +43,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <vcl/menu.hxx>
@@ -55,15 +55,15 @@
 // #110897#
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#define	REFERENCE										::com::sun::star::uno::Reference
-#define	XFRAME											::com::sun::star::frame::XFrame
-#define XDISPATCH										::com::sun::star::frame::XDispatch
-#define XDISPATCHPROVIDER								::com::sun::star::frame::XDispatchProvider
-#define XSTATUSLISTENER									::com::sun::star::frame::XStatusListener
-#define XEVENTLISTENER									::com::sun::star::lang::XEventListener
-#define FEATURSTATEEVENT								::com::sun::star::frame::FeatureStateEvent
-#define RUNTIMEEXCEPTION								::com::sun::star::uno::RuntimeException
-#define EVENTOBJECT										::com::sun::star::lang::EventObject
+#define REFERENCE                                       ::com::sun::star::uno::Reference
+#define XFRAME                                          ::com::sun::star::frame::XFrame
+#define XDISPATCH                                       ::com::sun::star::frame::XDispatch
+#define XDISPATCHPROVIDER                               ::com::sun::star::frame::XDispatchProvider
+#define XSTATUSLISTENER                                 ::com::sun::star::frame::XStatusListener
+#define XEVENTLISTENER                                  ::com::sun::star::lang::XEventListener
+#define FEATURSTATEEVENT                                ::com::sun::star::frame::FeatureStateEvent
+#define RUNTIMEEXCEPTION                                ::com::sun::star::uno::RuntimeException
+#define EVENTOBJECT                                     ::com::sun::star::lang::EventObject
 
 namespace framework
 {
@@ -71,24 +71,24 @@ namespace framework
 class BmkMenu;
 class AddonMenu;
 class AddonPopupMenu;
-class MenuManager : public ThreadHelpBase			,
+class MenuManager : public ThreadHelpBase           ,
                     public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XStatusListener >
 {
     public:
         // #110897#
-        MenuManager( 
+        MenuManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             REFERENCE< XFRAME >& rFrame,
             Menu* pMenu,
             sal_Bool bDelete,
             sal_Bool bDeleteChildren );
 #if 0
-        MenuManager( 
+        MenuManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             REFERENCE< XFRAME >& rFrame,
-            AddonMenu*			pAddonMenu,
-            sal_Bool			bDelete,
-            sal_Bool			bDeleteChildren );
+            AddonMenu*          pAddonMenu,
+            sal_Bool            bDelete,
+            sal_Bool            bDeleteChildren );
 #endif
 
         virtual ~MenuManager();
@@ -101,9 +101,9 @@ class MenuManager : public ThreadHelpBase			,
 
         DECL_LINK( Select, Menu * );
 
-        Menu*	GetMenu() const { return m_pVCLMenu; }
+        Menu*   GetMenu() const { return m_pVCLMenu; }
 
-        void	RemoveListener();
+        void    RemoveListener();
 
         // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
@@ -130,33 +130,33 @@ class MenuManager : public ThreadHelpBase			,
             MenuItemHandler( USHORT aItemId, MenuManager* pManager, REFERENCE< XDISPATCH >& rDispatch ) :
                 nItemId( aItemId ), pSubMenuManager( pManager ), xMenuItemDispatch( rDispatch ) {}
 
-            USHORT					nItemId;
-            ::rtl::OUString			aTargetFrame;
-            ::rtl::OUString			aMenuItemURL;
-            ::rtl::OUString			aFilter;
-            ::rtl::OUString			aPassword;
-            ::rtl::OUString			aTitle;
-            MenuManager*			pSubMenuManager;
-            REFERENCE< XDISPATCH >	xMenuItemDispatch;
+            USHORT                  nItemId;
+            ::rtl::OUString         aTargetFrame;
+            ::rtl::OUString         aMenuItemURL;
+            ::rtl::OUString         aFilter;
+            ::rtl::OUString         aPassword;
+            ::rtl::OUString         aTitle;
+            MenuManager*            pSubMenuManager;
+            REFERENCE< XDISPATCH >  xMenuItemDispatch;
         };
 
-        void			 CreatePicklistArguments(
+        void             CreatePicklistArguments(
                             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsList,
                             const MenuItemHandler* );
 
         MenuItemHandler* GetMenuItemHandler( USHORT nItemId );
 
-        sal_Bool							m_bInitialized;
-        sal_Bool							m_bDeleteMenu;
-        sal_Bool							m_bDeleteChildren;
-        sal_Bool							m_bActive;
-        sal_Bool							m_bIsBookmarkMenu;
-        sal_Bool							m_bWasHiContrast;
-        sal_Bool							m_bShowMenuImages;
-        ::rtl::OUString						m_aMenuItemCommand;
-        Menu*								m_pVCLMenu;
-        REFERENCE< XFRAME >					m_xFrame;
-        ::std::vector< MenuItemHandler* >	m_aMenuItemHandlerVector;
+        sal_Bool                            m_bInitialized;
+        sal_Bool                            m_bDeleteMenu;
+        sal_Bool                            m_bDeleteChildren;
+        sal_Bool                            m_bActive;
+        sal_Bool                            m_bIsBookmarkMenu;
+        sal_Bool                            m_bWasHiContrast;
+        sal_Bool                            m_bShowMenuImages;
+        ::rtl::OUString                     m_aMenuItemCommand;
+        Menu*                               m_pVCLMenu;
+        REFERENCE< XFRAME >                 m_xFrame;
+        ::std::vector< MenuItemHandler* >   m_aMenuItemHandlerVector;
 
         // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;

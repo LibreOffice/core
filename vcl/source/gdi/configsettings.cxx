@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ using namespace com::sun::star::container;
 #define SETTINGS_CONFIGNODE "VCL/Settings"
 
 /*
- *	SettingsConfigItem::get
+ *  SettingsConfigItem::get
  */
 
 SettingsConfigItem* SettingsConfigItem::get()
@@ -103,10 +103,10 @@ void SettingsConfigItem::Commit()
             String aName( aKeyName );
             aName.Append( '/' );
             aName.Append( String( it->first ) );
-            pValues[nIndex].Name	= aName;
-            pValues[nIndex].Handle	= 0;
+            pValues[nIndex].Name    = aName;
+            pValues[nIndex].Handle  = 0;
             pValues[nIndex].Value <<= it->second;
-            pValues[nIndex].State	= PropertyState_DIRECT_VALUE;
+            pValues[nIndex].State   = PropertyState_DIRECT_VALUE;
             nIndex++;
         }
         ReplaceSetProperties( aKeyName, aValues );

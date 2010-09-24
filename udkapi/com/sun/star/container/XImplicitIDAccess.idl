@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,45 +24,45 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_container_XImplicitIDAccess_idl__ 
-#define __com_sun_star_container_XImplicitIDAccess_idl__ 
- 
-#ifndef __com_sun_star_container_XElementAccess_idl__ 
-#include <com/sun/star/container/XElementAccess.idl> 
-#endif 
- 
-#ifndef __com_sun_star_container_NoSuchElementException_idl__ 
-#include <com/sun/star/container/NoSuchElementException.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__ 
-#include <com/sun/star/lang/WrappedTargetException.idl> 
-#endif 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module container {  
- 
+#ifndef __com_sun_star_container_XImplicitIDAccess_idl__
+#define __com_sun_star_container_XImplicitIDAccess_idl__
+
+#ifndef __com_sun_star_container_XElementAccess_idl__
+#include <com/sun/star/container/XElementAccess.idl>
+#endif
+
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module container {
+
 /** makes it possible to access contents through an implicit (unique) ID.
  */
 published interface XImplicitIDAccess: com::sun::star::container::XElementAccess
-{  
-    /** @returns 
+{
+    /** @returns
             the element with the specified implicit ID.
      */
-    any getByImplicitID( [in] string ID ) raises( com::sun::star::container::NoSuchElementException ); 
-    
+    any getByImplicitID( [in] string ID ) raises( com::sun::star::container::NoSuchElementException );
+
     /** @returns
             a sequence with all existing implicit IDs.
      */
     sequence<string> getImplicitIDs();
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

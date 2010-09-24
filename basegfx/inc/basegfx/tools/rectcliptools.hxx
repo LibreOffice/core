@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ namespace basegfx
 {
     namespace tools
     {
-        namespace RectClipFlags 
+        namespace RectClipFlags
         {
             static const sal_uInt32 LEFT   = (sal_Int32)0x01;
             static const sal_uInt32 RIGHT  = (sal_Int32)0x02;
@@ -52,9 +52,9 @@ namespace basegfx
             outside one or more of the four half planes defining the
             rectangle (see RectClipFlags for possible values)
          */
-        template< class Point, class Rect > inline 
+        template< class Point, class Rect > inline
            sal_uInt32 getCohenSutherlandClipFlags( const Point& rP,
-                                                   const Rect&  rR ) 
+                                                   const Rect&  rR )
         {
             // maxY | minY | maxX | minX
             sal_uInt32 clip  = (rP.getX() < rR.getMinX()) << 0;

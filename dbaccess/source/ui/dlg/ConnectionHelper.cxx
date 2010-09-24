@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -390,28 +390,28 @@ DBG_NAME(OConnectionHelper)
                 sal_Bool bOldFashion = sAdabasConfigDir.getLength() && sAdabasWorkDir.getLength();
 
                 if(!bOldFashion) // we have a normal adabas installation
-                {	 // so we check the local database names in $DBROOT/config
-                    sAdabasConfigDir	= sRootDir;
-                    sAdabasWorkDir		= sRootDir;
+                {    // so we check the local database names in $DBROOT/config
+                    sAdabasConfigDir    = sRootDir;
+                    sAdabasWorkDir      = sRootDir;
                 }
 
                 if(sAdabasConfigDir.getLength() && sAdabasWorkDir.getLength() && sRootDir.getLength())
                 {
 
-                    aInstalledDBs	= getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
+                    aInstalledDBs   = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
 
                     if(!aInstalledDBs.size() && bOldFashion)
                     {
-                        sAdabasConfigDir	= sRootDir;
-                        sAdabasWorkDir		= sRootDir;
-                        aInstalledDBs		= getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
+                        sAdabasConfigDir    = sRootDir;
+                        sAdabasWorkDir      = sRootDir;
+                        aInstalledDBs       = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
                     }
 
                     ODatasourceSelectDialog aSelector(GetParent(), aInstalledDBs, true,m_pItemSetHelper->getWriteOutputSet());
                     if (RET_OK == aSelector.Execute())
                     {
                         setURLNoPrefix(aSelector.GetSelected());
-                        //	checkCreateDatabase( ::dbaccess::DST_ADABAS);
+                        //  checkCreateDatabase( ::dbaccess::DST_ADABAS);
                         SetRoadmapStateValue(sal_True);
                         callModifiedHdl();
                     }
@@ -643,7 +643,7 @@ DBG_NAME(OConnectionHelper)
                     do
                     {
                         if ( !createDirectoryDeep(_rURL) )
-                        {	// could not create the directory
+                        {   // could not create the directory
                             sQuery = String(ModuleRes(STR_COULD_NOT_CREATE_DIRECTORY));
                             sQuery.SearchAndReplaceAscii("$name$", aTransformer.get(OFileNotation::N_SYSTEM));
 
@@ -717,7 +717,7 @@ DBG_NAME(OConnectionHelper)
         {
         }
         if (bIsFolder && aAdabasConfigDir.get().is())
-        {	// we have a content for the directory, loop through all entries
+        {   // we have a content for the directory, loop through all entries
             Sequence< ::rtl::OUString > aProperties(1);
             aProperties[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
 
@@ -761,8 +761,8 @@ DBG_NAME(OConnectionHelper)
         StringBag aInstalledDBs;
         // collect the names of the installed databases
         StringBag aConfigDBs,aWrkDBs;
-        aConfigDBs	= getInstalledAdabasDBDirs(sAdabasConfigDir,::ucbhelper::INCLUDE_DOCUMENTS_ONLY);
-        aWrkDBs		= getInstalledAdabasDBDirs(sAdabasWorkDir,::ucbhelper::INCLUDE_FOLDERS_ONLY);
+        aConfigDBs  = getInstalledAdabasDBDirs(sAdabasConfigDir,::ucbhelper::INCLUDE_DOCUMENTS_ONLY);
+        aWrkDBs     = getInstalledAdabasDBDirs(sAdabasWorkDir,::ucbhelper::INCLUDE_FOLDERS_ONLY);
         ConstStringBagIterator aOuter = aConfigDBs.begin();
         ConstStringBagIterator aOuterEnd = aConfigDBs.end();
         for(;aOuter != aOuterEnd;++aOuter)
@@ -813,16 +813,16 @@ DBG_NAME(OConnectionHelper)
             {
                 case EVENT_GETFOCUS:
                     if (m_aConnectionURL.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
-                    {	// a descendant of the URL edit field got the focus
+                    {   // a descendant of the URL edit field got the focus
                         m_aConnectionURL.SaveValueNoPrefix();
                     }
                     break;
 
                 case EVENT_LOSEFOCUS:
                     if (m_aConnectionURL.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
-                    {	// a descendant of the URL edit field lost the focus
+                    {   // a descendant of the URL edit field lost the focus
                         if (!commitURL())
-                            return 1L;	// handled
+                            return 1L;  // handled
                     }
                     break;
             } // switch (_rNEvt.GetType())
@@ -843,15 +843,15 @@ DBG_NAME(OConnectionHelper)
 
         INetProtocol eProtocol = aParser.GetProtocol();
 
-        ::std::vector< ::rtl::OUString > aToBeCreated;	// the to-be-created levels
+        ::std::vector< ::rtl::OUString > aToBeCreated;  // the to-be-created levels
 
         // search a level which exists
         // #106016# ---------------------
         IS_PATH_EXIST eParentExists = PATH_NOT_EXIST;
         while ( eParentExists == PATH_NOT_EXIST && aParser.getSegmentCount())
         {
-            aToBeCreated.push_back(aParser.getName());	// remember the local name for creation
-            aParser.removeSegment();					// cut the local name
+            aToBeCreated.push_back(aParser.getName());  // remember the local name for creation
+            aParser.removeSegment();                    // cut the local name
             eParentExists = pathExists(aParser.GetMainURL(INetURLObject::NO_DECODE), sal_False);
         }
 
@@ -885,7 +885,7 @@ DBG_NAME(OConnectionHelper)
             Sequence< Any > aNewDirectoryAttributes(1);
 
             // loop
-            for (	::std::vector< ::rtl::OUString >::reverse_iterator aLocalName = aToBeCreated.rbegin();
+            for (   ::std::vector< ::rtl::OUString >::reverse_iterator aLocalName = aToBeCreated.rbegin();
                     aLocalName != aToBeCreated.rend();
                     ++aLocalName
                 )
@@ -930,7 +930,7 @@ DBG_NAME(OConnectionHelper)
         if ( m_pCollection->isFileSystemBased(m_eType) )
         {
             if ( ( sURL != sOldPath ) && ( 0 != sURL.Len() ) )
-            {	// the text changed since entering the control
+            {   // the text changed since entering the control
 
                 // the path may be in system notation ....
                 OFileNotation aTransformer(sURL);
@@ -990,5 +990,5 @@ DBG_NAME(OConnectionHelper)
     }
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................

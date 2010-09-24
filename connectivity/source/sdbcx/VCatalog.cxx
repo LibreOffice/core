@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,7 +105,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
-        
+
     try
     {
         if(!m_pTables)
@@ -129,7 +129,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getViews(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
-     
+
     try
     {
         if(!m_pViews)
@@ -153,7 +153,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
-     
+
     try
     {
         if(!m_pUsers)
@@ -177,7 +177,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
-        
+
     try
     {
         if(!m_pGroups)
@@ -204,7 +204,7 @@ Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException
     ::rtl::OUString sSchema  = _xRow->getString(2);
     if ( _xRow->wasNull() )
         sSchema = ::rtl::OUString();
-    ::rtl::OUString sTable	 = _xRow->getString(3);
+    ::rtl::OUString sTable   = _xRow->getString(3);
     if ( _xRow->wasNull() )
         sTable = ::rtl::OUString();
 

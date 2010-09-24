@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,8 +28,8 @@
 #ifndef __com_sun_star_xml_dom_XCharacterData_idl__
 #define __com_sun_star_xml_dom_XCharacterData_idl__
 
-#ifndef __com_sun_star_xml_dom_XNode_idl__ 
-#include <com/sun/star/xml/dom/XNode.idl> 
+#ifndef __com_sun_star_xml_dom_XNode_idl__
+#include <com/sun/star/xml/dom/XNode.idl>
 #endif
 
 module com { module sun { module star { module xml { module dom {
@@ -42,11 +42,11 @@ interface XCharacterData: XNode
         DOMException - NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
     */
     void appendData([in] string arg) raises (DOMException);
-    
+
     /**
     Remove a range of 16-bit units from the node.
     Throws:
-        DOMException - INDEX_SIZE_ERR: Raised if the specified offset is negative or greater 
+        DOMException - INDEX_SIZE_ERR: Raised if the specified offset is negative or greater
             than the number of 16-bit units in data, or if the specified count is negative.
         NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
     */
@@ -55,8 +55,8 @@ interface XCharacterData: XNode
     /**
     Return the character data of the node that implements this interface.
     Throws:
-        DOMException - NO_MODIFICATION_ALLOWED_ERR: Raised when the node is readonly. 
-        DOMException - DOMSTRING_SIZE_ERR: Raised when it would return more characters 
+        DOMException - NO_MODIFICATION_ALLOWED_ERR: Raised when the node is readonly.
+        DOMException - DOMSTRING_SIZE_ERR: Raised when it would return more characters
             than fit in a DOMString variable on the implementation platform.
 
 
@@ -72,17 +72,17 @@ interface XCharacterData: XNode
     /**
     Insert a string at the specified 16-bit unit offset.
     Throws:
-    DOMException - INDEX_SIZE_ERR: Raised if the specified offset is negative or greater than 
+    DOMException - INDEX_SIZE_ERR: Raised if the specified offset is negative or greater than
                                    the number of 16-bit units in data.
                    NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
     */
     void insertData([in] long offset, [in] string arg) raises (DOMException);
 
     /**
-    Replace the characters starting at the specified 16-bit unit offset 
+    Replace the characters starting at the specified 16-bit unit offset
     with the specified string.
     Throws;
-    DOMException - INDEX_SIZE_ERR: Raised if the specified offset is negative or greater than 
+    DOMException - INDEX_SIZE_ERR: Raised if the specified offset is negative or greater than
                       the number of 16-bit units in data, or if the specified count is negative.
                    NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
     */
@@ -91,8 +91,8 @@ interface XCharacterData: XNode
     /**
     Set the character data of the node that implements this interface.
     Throws:
-        DOMException - NO_MODIFICATION_ALLOWED_ERR: Raised when the node is readonly. 
-        DOMException - DOMSTRING_SIZE_ERR: Raised when it would return more characters than 
+        DOMException - NO_MODIFICATION_ALLOWED_ERR: Raised when the node is readonly.
+        DOMException - DOMSTRING_SIZE_ERR: Raised when it would return more characters than
             fit in a DOMString variable on the implementation platform.
     */
     void setData([in] string data) raises (DOMException);
@@ -100,7 +100,7 @@ interface XCharacterData: XNode
     /**
     Extracts a range of data from the node.
     Throws:
-        DOMException - INDEX_SIZE_ERR: Raised if the specified offset is negative or greater 
+        DOMException - INDEX_SIZE_ERR: Raised if the specified offset is negative or greater
             than the number of 16-bit units in data, or if the specified count is negative.
         DOMSTRING_SIZE_ERR: Raised if the specified range of text does not fit into a DOMString.
     */

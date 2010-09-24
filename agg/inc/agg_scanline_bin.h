@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -25,16 +25,16 @@ namespace agg
 {
 
     //=============================================================scanline_bin
-    // 
-    // This is binary scaline container which supports the interface 
-    // used in the rasterizer::render(). See description of agg_scanline_u8 
+    //
+    // This is binary scaline container which supports the interface
+    // used in the rasterizer::render(). See description of agg_scanline_u8
     // for details.
-    // 
+    //
     // Rendering:
     //-------------------------------------------------------------------------
-    //  
+    //
     //  int y = sl.y();
-    //  
+    //
     // ************************************
     // ...Perform vertical clipping here...
     // ************************************
@@ -46,16 +46,16 @@ namespace agg
     //  {
     //      x = cur_span->x;
     //      len = cur_span->len;
-    // 
+    //
     //      **************************************
     //      ...Perform horizontal clipping here...
     //      **************************************
-    //      
+    //
     //      hor_line(x, y, len)
     //      ++cur_span;
     //  }
     //  while(--num_spans);
-    // 
+    //
     //------------------------------------------------------------------------
     class scanline_bin
     {

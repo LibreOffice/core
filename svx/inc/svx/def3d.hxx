@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,13 +42,13 @@ const double EPSILON = 1e-06;
 //+++ 3D-Hilfsfunktionen +++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-enum E3dDragConstraint { E3DDRAG_CONSTR_X	= 0x0001,
-                         E3DDRAG_CONSTR_Y	= 0x0002,
-                         E3DDRAG_CONSTR_Z	= 0x0004,
-                         E3DDRAG_CONSTR_XY	= 0x0003,
-                         E3DDRAG_CONSTR_XZ	= 0x0005,
-                         E3DDRAG_CONSTR_YZ	= 0x0006,
-                         E3DDRAG_CONSTR_XYZ	= 0x0007
+enum E3dDragConstraint { E3DDRAG_CONSTR_X   = 0x0001,
+                         E3DDRAG_CONSTR_Y   = 0x0002,
+                         E3DDRAG_CONSTR_Z   = 0x0004,
+                         E3DDRAG_CONSTR_XY  = 0x0003,
+                         E3DDRAG_CONSTR_XZ  = 0x0005,
+                         E3DDRAG_CONSTR_YZ  = 0x0006,
+                         E3DDRAG_CONSTR_XYZ = 0x0007
 };
 
 #endif

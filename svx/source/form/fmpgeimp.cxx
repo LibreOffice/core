@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -584,15 +584,15 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         const ::rtl::OUString& _rCursorSource, sal_Int32 nCommandType)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::findFormForDataSource" );
-    Reference< XForm >			xResultForm;
-    Reference< XRowSet >		xDBForm(rForm, UNO_QUERY);
-    Reference< XPropertySet >	xFormProps(rForm, UNO_QUERY);
+    Reference< XForm >          xResultForm;
+    Reference< XRowSet >        xDBForm(rForm, UNO_QUERY);
+    Reference< XPropertySet >   xFormProps(rForm, UNO_QUERY);
     if (!xDBForm.is() || !xFormProps.is())
         return xResultForm;
 
     OSL_ENSURE(_rxDatabase.is(), "FmFormPageImpl::findFormForDataSource: invalid data source!");
-    ::rtl::OUString sLookupName;			// the name of the data source we're looking for
-    ::rtl::OUString sFormDataSourceName;	// the name of the data source the current connection in the form is based on
+    ::rtl::OUString sLookupName;            // the name of the data source we're looking for
+    ::rtl::OUString sFormDataSourceName;    // the name of the data source the current connection in the form is based on
     try
     {
         Reference< XPropertySet > xDSProps(_rxDatabase, UNO_QUERY);

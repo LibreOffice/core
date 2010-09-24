@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,23 +35,23 @@
 #include <fmtftn.hxx>
 #include <fmtclbl.hxx>
 #include "sectfrm.hxx"
-#include "section.hxx"		// SwSection
-#include "frmtool.hxx"		// StackHack
-#include "doc.hxx"			// SwDoc
-#include "cntfrm.hxx"		// SwCntntFrm
-#include "rootfrm.hxx"		// SwRootFrm
-#include "pagefrm.hxx"		// SwPageFrm
-#include "fmtpdsc.hxx"		// SwFmtPageDesc
-#include "fmtcntnt.hxx"		// SwFmtCntnt
-#include "ndindex.hxx"		// SwNodeIndex
+#include "section.hxx"      // SwSection
+#include "frmtool.hxx"      // StackHack
+#include "doc.hxx"          // SwDoc
+#include "cntfrm.hxx"       // SwCntntFrm
+#include "rootfrm.hxx"      // SwRootFrm
+#include "pagefrm.hxx"      // SwPageFrm
+#include "fmtpdsc.hxx"      // SwFmtPageDesc
+#include "fmtcntnt.hxx"     // SwFmtCntnt
+#include "ndindex.hxx"      // SwNodeIndex
 #include "ftnidx.hxx"
-#include "txtfrm.hxx"		// SwTxtFrm
-#include "fmtclds.hxx"		// SwFmtCol
-#include "colfrm.hxx"		// SwColumnFrm
-#include "tabfrm.hxx"		// SwTabFrm
-#include "flyfrm.hxx"		// SwFlyFrm
-#include "ftnfrm.hxx"		// SwFtnFrm
-#include "layouter.hxx"		// SwLayouter
+#include "txtfrm.hxx"       // SwTxtFrm
+#include "fmtclds.hxx"      // SwFmtCol
+#include "colfrm.hxx"       // SwColumnFrm
+#include "tabfrm.hxx"       // SwTabFrm
+#include "flyfrm.hxx"       // SwFlyFrm
+#include "ftnfrm.hxx"       // SwFtnFrm
+#include "layouter.hxx"     // SwLayouter
 #include "dbg_lay.hxx"
 #include "viewsh.hxx"
 #include "viewimp.hxx"
@@ -68,10 +68,10 @@ SV_IMPL_PTRARR_SORT( SwDestroyList, SwSectionFrmPtr )
 
 /*************************************************************************
 |*
-|*	SwSectionFrm::SwSectionFrm(), ~SwSectionFrm()
+|*  SwSectionFrm::SwSectionFrm(), ~SwSectionFrm()
 |*
-|*	Ersterstellung		AMA 26. Nov. 97
-|*	Letzte Aenderung	AMA 26. Nov. 97
+|*  Ersterstellung      AMA 26. Nov. 97
+|*  Letzte Aenderung    AMA 26. Nov. 97
 |*
 |*************************************************************************/
 SwSectionFrm::SwSectionFrm( SwSection &rSect ) :
@@ -180,10 +180,10 @@ SwSectionFrm::~SwSectionFrm()
 
 /*************************************************************************
 |*
-|*	SwSectionFrm::DelEmpty()
+|*  SwSectionFrm::DelEmpty()
 |*
-|*	Ersterstellung		AMA 17. Dec. 97
-|*	Letzte Aenderung	AMA 17. Dec. 97
+|*  Ersterstellung      AMA 17. Dec. 97
+|*  Letzte Aenderung    AMA 17. Dec. 97
 |*
 |*************************************************************************/
 void SwSectionFrm::DelEmpty( BOOL bRemove )
@@ -248,10 +248,10 @@ void SwSectionFrm::DelEmpty( BOOL bRemove )
 
 /*************************************************************************
 |*
-|*	SwSectionFrm::Cut()
+|*  SwSectionFrm::Cut()
 |*
-|*	Ersterstellung		AMA 02. Dec. 97
-|*	Letzte Aenderung	AMA 02. Dec. 97
+|*  Ersterstellung      AMA 02. Dec. 97
+|*  Letzte Aenderung    AMA 02. Dec. 97
 |*
 |*************************************************************************/
 void SwSectionFrm::Cut()
@@ -272,7 +272,7 @@ void SwSectionFrm::_Cut( BOOL bRemove )
     while( pFrm && pFrm->IsSctFrm() && !((SwSectionFrm*)pFrm)->GetSection() )
         pFrm = pFrm->GetNext();
     if( pFrm )
-    {	//Der alte Nachfolger hat evtl. einen Abstand zum Vorgaenger
+    {   //Der alte Nachfolger hat evtl. einen Abstand zum Vorgaenger
         //berechnet der ist jetzt wo er der erste wird obsolete
         pFrm->_InvalidatePrt();
         pFrm->_InvalidatePos();
@@ -290,7 +290,7 @@ void SwSectionFrm::_Cut( BOOL bRemove )
         InvalidateNextPos();
         //Einer muss die Retusche uebernehmen: Vorgaenger oder Upper
         if ( 0 != (pFrm = GetPrev()) )
-        {	pFrm->SetRetouche();
+        {   pFrm->SetRetouche();
             pFrm->Prepare( PREP_WIDOWS_ORPHANS );
             if ( pFrm->IsCntntFrm() )
                 pFrm->InvalidatePage( pPage );
@@ -299,7 +299,7 @@ void SwSectionFrm::_Cut( BOOL bRemove )
         //er die Retouche uebernehmen.
         //Ausserdem kann eine Leerseite entstanden sein.
         else
-        {	SwRootFrm *pRoot = (SwRootFrm*)pPage->GetUpper();
+        {   SwRootFrm *pRoot = (SwRootFrm*)pPage->GetUpper();
             pRoot->SetSuperfluous();
             GetUpper()->SetCompletePaint();
         }
@@ -337,10 +337,10 @@ void SwSectionFrm::_Cut( BOOL bRemove )
 
 /*************************************************************************
 |*
-|*	SwSectionFrm::Paste()
+|*  SwSectionFrm::Paste()
 |*
-|*	Ersterstellung		AMA 04. Dec. 97
-|*	Letzte Aenderung	AMA 04. Dec. 97
+|*  Ersterstellung      AMA 04. Dec. 97
+|*  Letzte Aenderung    AMA 04. Dec. 97
 |*
 |*************************************************************************/
 
@@ -448,15 +448,15 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 
 /*************************************************************************
 |*
-|*	SwSectionFrm::HasToBreak()
+|*  SwSectionFrm::HasToBreak()
 |*
 |*  Hier wird entschieden, ob der this-SectionFrm den uebergebenen
 |*  (Section)Frm aufbrechen soll oder nicht.
 |*  Zunaechst werden uebergeordnete Bereiche immer aufgebrochen,
 |*  spaeter koennte man es einstellbar machen.
 |*
-|*	Ersterstellung		AMA 12. Dec. 97
-|*	Letzte Aenderung	AMA 12. Dec. 97
+|*  Ersterstellung      AMA 12. Dec. 97
+|*  Letzte Aenderung    AMA 12. Dec. 97
 |*
 |*************************************************************************/
 
@@ -466,8 +466,8 @@ BOOL SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
         return FALSE;
 
     SwSectionFmt *pTmp = (SwSectionFmt*)GetFmt();
-//	if( !pTmp->GetSect().GetValue() )
-//		return FALSE;
+//  if( !pTmp->GetSect().GetValue() )
+//      return FALSE;
 
     const SwFrmFmt *pOtherFmt = ((SwSectionFrm*)pFrm)->GetFmt();
     do
@@ -477,15 +477,15 @@ BOOL SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
             return FALSE;
         if( pTmp == pOtherFmt )
             return TRUE;
-    } while( TRUE ); //	( pTmp->GetSect().GetValue() );
+    } while( TRUE ); // ( pTmp->GetSect().GetValue() );
 }
 
 /*************************************************************************
 |*
-|*	SwSectionFrm::MergeNext()
+|*  SwSectionFrm::MergeNext()
 |*
-|*	Ersterstellung		AMA 04. Dec. 97
-|*	Letzte Aenderung	AMA 04. Dec. 97
+|*  Ersterstellung      AMA 04. Dec. 97
+|*  Letzte Aenderung    AMA 04. Dec. 97
 |*
 |*  Verschmilzt zwei SectionFrms, falls es sich um den
 |*  gleichen Bereich handelt.
@@ -531,10 +531,10 @@ void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
 
 /*************************************************************************
 |*
-|*	SwSectionFrm::SplitSect()
+|*  SwSectionFrm::SplitSect()
 |*
-|*	Ersterstellung		AMA 29. Apr. 99
-|*	Letzte Aenderung	AMA 29. Apr. 99
+|*  Ersterstellung      AMA 29. Apr. 99
+|*  Letzte Aenderung    AMA 29. Apr. 99
 |*
 |*  Zerteilt einen SectionFrm in zwei Teile, der zweite Teil beginnt mit dem
 |*  uebergebenen Frame.
@@ -557,7 +557,7 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
     SwFrm* pSav = ::SaveCntnt( this, bApres ? pOther : pFrm );
     ASSERT( pSav, "SplitSect: What's on?" );
     if( pSav ) // Robust
-    {	// Einen neuen SctFrm anlegen, nicht als Follow/Master
+    {   // Einen neuen SctFrm anlegen, nicht als Follow/Master
         SwSectionFrm* pNew = new SwSectionFrm( *pSect->GetSection() );
         pNew->InsertBehind( pSect->GetUpper(), pSect );
         pNew->Init();
@@ -587,10 +587,10 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
 
 /*************************************************************************
 |*
-|*	SwSectionFrm::MoveCntntAndDelete()
+|*  SwSectionFrm::MoveCntntAndDelete()
 |*
-|*	Ersterstellung		AMA 29. Jan 99
-|*	Letzte Aenderung	AMA 29. Jan 99
+|*  Ersterstellung      AMA 29. Jan 99
+|*  Letzte Aenderung    AMA 29. Jan 99
 |*
 |*  MoveCntnt wird zur Zerstoerung eines SectionFrms wg. Aufhebung oder
 |*  Verstecken des Bereichs gerufen, um den Inhalt umzuhaengen.
@@ -722,7 +722,7 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
     pDel->DelEmpty( TRUE );
     delete pDel;
     if( pParent )
-    {	// Hier wird die geeignete Einfuegeposition gesucht
+    {   // Hier wird die geeignete Einfuegeposition gesucht
         if( pNxtSct && pNxtSct->GetFmt() == pParent )
         {   // Hier koennen wir uns am Anfang einfuegen
             pUp = FIRSTLEAF( pNxtSct );
@@ -746,7 +746,7 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
         else
         {
             if( pSave )
-            {	// Folgende Situationen: Vor und hinter dem zu loeschenden Bereich
+            {   // Folgende Situationen: Vor und hinter dem zu loeschenden Bereich
                 // ist entweder die Bereichsgrenze des umfassenden Bereichs oder
                 // es schliesst ein anderer (Geschwister-)Bereich direkt an, der
                 // vom gleichen Parent abgeleitet ist.
@@ -798,7 +798,7 @@ void SwSectionFrm::MakeAll()
         bValidSize = bValidPos = bValidPrtArea = TRUE;
         return;
     }
-    LockJoin();	//Ich lass mich nicht unterwegs vernichten.
+    LockJoin(); //Ich lass mich nicht unterwegs vernichten.
 
     while( GetNext() && GetNext() == GetFollow() )
     {
@@ -937,10 +937,10 @@ BOOL SwSectionFrm::CalcMinDiff( SwTwips& rMinDiff ) const
 
 /*************************************************************************
  *
- * 	SwSectionFrm::CollectEndnotes(  )
+ *  SwSectionFrm::CollectEndnotes(  )
  *
- *	Ersterstellung		AMA 03. Nov 99
- *	Letzte Aenderung	AMA 03. Nov 99
+ *  Ersterstellung      AMA 03. Nov 99
+ *  Letzte Aenderung    AMA 03. Nov 99
  *
  *  CollectEndnotes looks for endnotes in the sectionfrm and his follows,
  *  the endnotes will cut off the layout and put into the array.
@@ -1006,7 +1006,7 @@ void lcl_ColumnRefresh( SwSectionFrm* pSect, BOOL bFollow )
         {
             SwColumnFrm *pCol = (SwColumnFrm*)pSect->Lower();
             do
-            {	pCol->_InvalidateSize();
+            {   pCol->_InvalidateSize();
                 pCol->_InvalidatePos();
                 ((SwLayoutFrm*)pCol)->Lower()->_InvalidateSize();
                 pCol->Calc();   // calculation of column and
@@ -1043,13 +1043,13 @@ void SwSectionFrm::CollectEndnotes( SwLayouter* pLayouter )
 
 /*************************************************************************
 |*
-|*	SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
+|*  SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
 |*
-|*	Beschreibung:		Passt die Groesse an die Umgebung an.
-|*  	Wer einen Follow oder Fussnoten besitzt, soll bis zur Unterkante
+|*  Beschreibung:       Passt die Groesse an die Umgebung an.
+|*      Wer einen Follow oder Fussnoten besitzt, soll bis zur Unterkante
 |*      des Uppers gehen (bMaximize).
-|*		Niemand darf ueber den Upper hinausgehen, ggf. darf man versuchen (bGrow)
-|*		seinen Upper zu growen.
+|*      Niemand darf ueber den Upper hinausgehen, ggf. darf man versuchen (bGrow)
+|*      seinen Upper zu growen.
 |*      Wenn die Groesse veraendert werden musste, wird der Inhalt kalkuliert.
 |*
 |*************************************************************************/
@@ -1320,11 +1320,11 @@ class ExtraFormatToPositionObjs
 
 /*************************************************************************
 |*
-|*	SwSectionFrm::Format()
+|*  SwSectionFrm::Format()
 |*
-|*	Beschreibung:		"Formatiert" den Frame; Frm und PrtArea.
-|*	Ersterstellung		AMA 03. Dec. 97
-|* 	Letzte Aenderung	MA 09. Oct. 98
+|*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea.
+|*  Ersterstellung      AMA 03. Dec. 97
+|*  Letzte Aenderung    MA 09. Oct. 98
 |*
 |*************************************************************************/
 
@@ -1549,13 +1549,13 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 
 /*************************************************************************
 |*
-|*	SwFrm::GetNextSctLeaf()
+|*  SwFrm::GetNextSctLeaf()
 |*
-|*	Beschreibung		Liefert das naechste Layoutblatt in das der	Frame
-|* 		gemoved werden kann.
-|* 		Neue Seiten werden nur dann erzeugt, wenn der Parameter TRUE ist.
-|*	Ersterstellung		AMA 07. Jan. 98
-|*	Letzte Aenderung	AMA 07. Jan. 98
+|*  Beschreibung        Liefert das naechste Layoutblatt in das der Frame
+|*      gemoved werden kann.
+|*      Neue Seiten werden nur dann erzeugt, wenn der Parameter TRUE ist.
+|*  Ersterstellung      AMA 07. Jan. 98
+|*  Letzte Aenderung    AMA 07. Jan. 98
 |*
 |*************************************************************************/
 
@@ -1580,7 +1580,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
 //MA 03. Feb. 99: Warum GetUpper()? Das knallt mit Buch.sgl weil im
 //FlyAtCnt::MakeFlyPos ein Orient der SectionFrm ist und auf diesen ein
 //GetLeaf gerufen wird.
-//	SwSectionFrm *pSect = GetUpper()->FindSctFrm();
+//  SwSectionFrm *pSect = GetUpper()->FindSctFrm();
     SwSectionFrm *pSect = FindSctFrm();
     BOOL bWrongPage = FALSE;
     ASSERT( pSect, "GetNextSctLeaf: Missing SectionFrm" );
@@ -1654,7 +1654,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
         }
     }
 
-    SwLayoutFrm *pOldLayLeaf = 0;			//Damit bei neu erzeugten Seiten
+    SwLayoutFrm *pOldLayLeaf = 0;           //Damit bei neu erzeugten Seiten
                                             //nicht wieder vom Anfang gesucht
                                             //wird.
 
@@ -1667,7 +1667,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
             // oder ob wir weitersuchen muessen.
             SwPageFrm* pNxtPg = pLayLeaf->FindPageFrm();
             if ( !bFtnPage && pNxtPg->IsFtnPage() )
-            {	//Wenn ich bei den Endnotenseiten angelangt bin hat sichs.
+            {   //Wenn ich bei den Endnotenseiten angelangt bin hat sichs.
                 pLayLeaf = 0;
                 continue;
             }
@@ -1721,7 +1721,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
         // Auch hier muessen zum Loeschen angemeldete SectionFrms ignoriert werden
         while( pFirst && pFirst->IsSctFrm() && !((SwSectionFrm*)pFirst)->GetSection() )
             pFirst = pFirst->GetNext();
-        if( pFirst && pFirst->IsSctFrm() &&	pSect->GetFollow() == pFirst )
+        if( pFirst && pFirst->IsSctFrm() && pSect->GetFollow() == pFirst )
             pNew = pSect->GetFollow();
         else if( MAKEPAGE_NOSECTION == eMakePage )
             return pLayLeaf;
@@ -1787,12 +1787,12 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
 
 /*************************************************************************
 |*
-|*	SwFrm::GetPrevSctLeaf()
+|*  SwFrm::GetPrevSctLeaf()
 |*
-|*	Beschreibung		Liefert das vorhergehende LayoutBlatt in das der
-|* 		Frame gemoved werden kann.
-|*	Ersterstellung		AMA 07. Jan. 98
-|*	Letzte Aenderung	AMA 07. Jan. 98
+|*  Beschreibung        Liefert das vorhergehende LayoutBlatt in das der
+|*      Frame gemoved werden kann.
+|*  Ersterstellung      AMA 07. Jan. 98
+|*  Letzte Aenderung    AMA 07. Jan. 98
 |*
 |*************************************************************************/
 
@@ -1820,7 +1820,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
                 // Gibt es dort Inhalt?
                 if( ((SwLayoutFrm*)pCol->Lower())->Lower() )
                 {
-                    if( bJump )		// Haben wir eine leere Spalte uebersprungen?
+                    if( bJump )     // Haben wir eine leere Spalte uebersprungen?
                         SwFlowFrm::SetMoveBwdJump( TRUE );
                     return (SwLayoutFrm*)pCol->Lower();  // Der Spaltenbody
                 }
@@ -1835,7 +1835,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
             pCol = NULL;
     }
 
-    if( bJump )		// Haben wir eine leere Spalte uebersprungen?
+    if( bJump )     // Haben wir eine leere Spalte uebersprungen?
         SwFlowFrm::SetMoveBwdJump( TRUE );
 
     // Innerhalb von Bereichen in Tabellen oder Bereichen in Kopf/Fusszeilen kann
@@ -1917,7 +1917,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
                 SwFlowFrm::SetMoveBwdJump( TRUE );
         }
         else if ( bFly )
-            break;	//Cntnts in Flys sollte jedes Layout-Blatt recht sein. Warum?
+            break;  //Cntnts in Flys sollte jedes Layout-Blatt recht sein. Warum?
         else
             pLayLeaf = pLayLeaf->GetPrevLayoutLeaf();
     }
@@ -2020,10 +2020,10 @@ BOOL SwSectionFrm::Growable() const
 
 /*************************************************************************
 |*
-|*	SwSectionFrm::_Grow(), _Shrink()
+|*  SwSectionFrm::_Grow(), _Shrink()
 |*
-|*	Ersterstellung		AMA 14. Jan. 98
-|*	Letzte Aenderung	AMA 14. Jan. 98
+|*  Ersterstellung      AMA 14. Jan. 98
+|*  Letzte Aenderung    AMA 14. Jan. 98
 |*
 |*************************************************************************/
 
@@ -2159,7 +2159,7 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, BOOL bTst )
 
             if ( Lower()->IsColumnFrm() && Lower()->GetNext() && // FtnAtEnd
                  !GetSection()->GetFmt()->GetBalancedColumns().GetValue() )
-            {	//Bei Spaltigkeit ubernimmt das Format die Kontrolle ueber
+            {   //Bei Spaltigkeit ubernimmt das Format die Kontrolle ueber
                 //das Wachstum (wg. des Ausgleichs).
                 if ( !bTst )
                     InvalidateSize();
@@ -2226,22 +2226,22 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, BOOL bTst )
 
 /*************************************************************************
 |*
-|*	SwSectionFrm::MoveAllowed()
+|*  SwSectionFrm::MoveAllowed()
 |*
-|*	Ersterstellung		MA 08. Oct. 98
-|*	Letzte Aenderung	MA 08. Oct. 98
+|*  Ersterstellung      MA 08. Oct. 98
+|*  Letzte Aenderung    MA 08. Oct. 98
 |*
-|*	Wann sind Frms innerhalb eines SectionFrms moveable?
+|*  Wann sind Frms innerhalb eines SectionFrms moveable?
 |*  Wenn sie noch nicht in der letzten Spalte des SectionFrms sind,
-|* 	wenn es einen Follow gibt,
+|*  wenn es einen Follow gibt,
 |*  wenn der SectionFrm nicht mehr wachsen kann, wird es komplizierter,
 |*  dann kommt es darauf an, ob der SectionFrm ein naechstes Layoutblatt
 |*  finden kann. In (spaltigen/verketteten) Flys wird dies via GetNextLayout
-|* 	geprueft, in Tabellen und in Kopf/Fusszeilen gibt es keins, im DocBody
+|*  geprueft, in Tabellen und in Kopf/Fusszeilen gibt es keins, im DocBody
 |*  und auch im Fussnoten dagegen immer.
 |*
 |*  Benutzt wird diese Routine im TxtFormatter, um zu entscheiden, ob ein
-|* 	(Absatz-)Follow erzeugt werden darf oder ob der Absatz zusammenhalten muss.
+|*  (Absatz-)Follow erzeugt werden darf oder ob der Absatz zusammenhalten muss.
 |*
 |*************************************************************************/
 
@@ -2287,7 +2287,7 @@ BOOL SwSectionFrm::MoveAllowed( const SwFrm* pFrm) const
         }
     }
     // Oder kann der Bereich noch wachsen?
-    if(	!IsColLocked() && Growable() )
+    if( !IsColLocked() && Growable() )
         return FALSE;
     // Jetzt muss untersucht werden, ob es ein Layoutblatt gibt, in dem
     // ein Bereichsfollow erzeugt werden kann.
@@ -2352,7 +2352,7 @@ SwFrm* SwFrm::_GetIndNext()
     if( pSct->IsSctFrm() )
         return pSct->GetIndNext();
     if( pSct->IsColBodyFrm() && (pSct = pSct->GetUpper()->GetUpper())->IsSctFrm() )
-    {	// Wir duerfen nur den Nachfolger des SectionFrms zurueckliefern,
+    {   // Wir duerfen nur den Nachfolger des SectionFrms zurueckliefern,
         // wenn in keiner folgenden Spalte mehr Inhalt ist
         SwFrm* pCol = GetUpper()->GetUpper()->GetNext();
         while( pCol )
@@ -2428,10 +2428,10 @@ void SwSectionFrm::CalcEndAtEndFlag()
 
 /*************************************************************************
 |*
-|*	SwSectionFrm::Modify()
+|*  SwSectionFrm::Modify()
 |*
-|*	Ersterstellung		MA 08. Oct. 98
-|*	Letzte Aenderung	MA 08. Oct. 98
+|*  Ersterstellung      MA 08. Oct. 98
+|*  Letzte Aenderung    MA 08. Oct. 98
 |*
 |*************************************************************************/
 
@@ -2493,7 +2493,7 @@ void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                     USHORT nCol = 0;
                     SwFrm *pTmp = Lower();
                     do
-                    {	++nCol;
+                    {   ++nCol;
                         pTmp = pTmp->GetNext();
                     } while ( pTmp );
                     aCol.Init( nCol, 0, 1000 );

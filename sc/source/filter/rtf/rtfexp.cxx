@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,8 +87,8 @@ ULONG ScRTFExport::Write()
 #if 0
 // das ist noch nicht ausgegoren
 /*
-    SfxStyleSheetBasePool*	pStylePool	= pDoc->GetStyleSheetPool();
-    SfxStyleSheetBase*		pStyleSheet = NULL;
+    SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
+    SfxStyleSheetBase*      pStyleSheet = NULL;
     DBG_ASSERT( pStylePool, "StylePool not found! :-(" );
     pStylePool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
     pStyleSheet = pStylePool->Find( STRING_STANDARD, SFX_STYLE_FAMILY_PARA );
@@ -160,7 +160,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
     for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
     {
         const ScPatternAttr* pAttr = pDoc->GetPattern( nCol, nRow, nTab );
-        const ScMergeAttr& 		rMergeAttr		= (const ScMergeAttr&)		pAttr->GetItem( ATTR_MERGE );
+        const ScMergeAttr&      rMergeAttr      = (const ScMergeAttr&)      pAttr->GetItem( ATTR_MERGE );
         const SvxVerJustifyItem& rVerJustifyItem= (const SvxVerJustifyItem&)pAttr->GetItem( ATTR_VER_JUSTIFY );
 
         const sal_Char* pChar;
@@ -176,18 +176,18 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
 
         switch( rVerJustifyItem.GetValue() )
         {
-            case SVX_VER_JUSTIFY_TOP:		pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALT;	break;
-            case SVX_VER_JUSTIFY_CENTER:	pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALC;	break;
-            case SVX_VER_JUSTIFY_BOTTOM:	pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;	break;
-            case SVX_VER_JUSTIFY_STANDARD:	pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;	break;	//! Bottom
-            default:						pChar = NULL;			break;
+            case SVX_VER_JUSTIFY_TOP:       pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALT;   break;
+            case SVX_VER_JUSTIFY_CENTER:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALC;   break;
+            case SVX_VER_JUSTIFY_BOTTOM:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;
+            case SVX_VER_JUSTIFY_STANDARD:  pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;  //! Bottom
+            default:                        pChar = NULL;           break;
         }
         if ( pChar )
             rStrm << pChar;
 
         rStrm << OOO_STRING_SVTOOLS_RTF_CELLX << ByteString::CreateFromInt32( pCellX[nCol+1] ).GetBuffer();
         if ( (nCol & 0x0F) == 0x0F )
-            rStrm << sNewLine;		// Zeilen nicht zu lang werden lassen
+            rStrm << sNewLine;      // Zeilen nicht zu lang werden lassen
     }
     rStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << OOO_STRING_SVTOOLS_RTF_INTBL << sNewLine;
 
@@ -196,7 +196,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
     {
         WriteCell( nTab, nRow, nCol );
         if ( rStrm.Tell() - nStrmPos > 255 )
-        {	// Zeilen nicht zu lang werden lassen
+        {   // Zeilen nicht zu lang werden lassen
             rStrm << sNewLine;
             nStrmPos = rStrm.Tell();
         }
@@ -226,7 +226,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         {
             case CELLTYPE_NOTE :
                 bValueData = FALSE;
-            break;		// nix
+            break;      // nix
             case CELLTYPE_EDIT :
             {
                 bValueData = FALSE;
@@ -236,7 +236,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
                 if ( pObj )
                 {
                     rEngine.SetText( *pObj );
-                    aContent = rEngine.GetText( LINEEND_LF );	// LineFeed zwischen Absaetzen!
+                    aContent = rEngine.GetText( LINEEND_LF );   // LineFeed zwischen Absaetzen!
                 }
             }
             break;
@@ -255,10 +255,10 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     BOOL bResetPar, bResetAttr;
     bResetPar = bResetAttr = FALSE;
 
-    const SvxHorJustifyItem&	rHorJustifyItem	= (const SvxHorJustifyItem&)pAttr->GetItem( ATTR_HOR_JUSTIFY );
-    const SvxWeightItem&		rWeightItem		= (const SvxWeightItem&)    pAttr->GetItem( ATTR_FONT_WEIGHT );
-    const SvxPostureItem&		rPostureItem	= (const SvxPostureItem&)   pAttr->GetItem( ATTR_FONT_POSTURE );
-    const SvxUnderlineItem&		rUnderlineItem	= (const SvxUnderlineItem&)	pAttr->GetItem( ATTR_FONT_UNDERLINE );
+    const SvxHorJustifyItem&    rHorJustifyItem = (const SvxHorJustifyItem&)pAttr->GetItem( ATTR_HOR_JUSTIFY );
+    const SvxWeightItem&        rWeightItem     = (const SvxWeightItem&)    pAttr->GetItem( ATTR_FONT_WEIGHT );
+    const SvxPostureItem&       rPostureItem    = (const SvxPostureItem&)   pAttr->GetItem( ATTR_FONT_POSTURE );
+    const SvxUnderlineItem&     rUnderlineItem  = (const SvxUnderlineItem&) pAttr->GetItem( ATTR_FONT_UNDERLINE );
 
     const sal_Char* pChar;
 
@@ -267,27 +267,27 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         case SVX_HOR_JUSTIFY_STANDARD:
             pChar = (bValueData ? OOO_STRING_SVTOOLS_RTF_QR : OOO_STRING_SVTOOLS_RTF_QL);
             break;
-        case SVX_HOR_JUSTIFY_CENTER:	pChar = OOO_STRING_SVTOOLS_RTF_QC;	break;
-        case SVX_HOR_JUSTIFY_BLOCK:		pChar = OOO_STRING_SVTOOLS_RTF_QJ;	break;
-        case SVX_HOR_JUSTIFY_RIGHT:		pChar = OOO_STRING_SVTOOLS_RTF_QR;	break;
+        case SVX_HOR_JUSTIFY_CENTER:    pChar = OOO_STRING_SVTOOLS_RTF_QC;  break;
+        case SVX_HOR_JUSTIFY_BLOCK:     pChar = OOO_STRING_SVTOOLS_RTF_QJ;  break;
+        case SVX_HOR_JUSTIFY_RIGHT:     pChar = OOO_STRING_SVTOOLS_RTF_QR;  break;
         case SVX_HOR_JUSTIFY_LEFT:
         case SVX_HOR_JUSTIFY_REPEAT:
-        default:						pChar = OOO_STRING_SVTOOLS_RTF_QL;	break;
+        default:                        pChar = OOO_STRING_SVTOOLS_RTF_QL;  break;
     }
     rStrm << pChar;
 
     if ( rWeightItem.GetWeight() >= WEIGHT_BOLD )
-    {	// bold
+    {   // bold
         bResetAttr = TRUE;
         rStrm << OOO_STRING_SVTOOLS_RTF_B;
     }
     if ( rPostureItem.GetPosture() != ITALIC_NONE )
-    {	// italic
+    {   // italic
         bResetAttr = TRUE;
         rStrm << OOO_STRING_SVTOOLS_RTF_I;
     }
     if ( rUnderlineItem.GetLineStyle() != UNDERLINE_NONE )
-    {	// underline
+    {   // underline
         bResetAttr = TRUE;
         rStrm << OOO_STRING_SVTOOLS_RTF_UL;
     }

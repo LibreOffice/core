@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ protected:
     virtual ~SwXRedlines();
 public:
     SwXRedlines(SwDoc* pDoc);
-    
+
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -70,7 +70,7 @@ public:
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    static ::com::sun::star::beans::XPropertySet* 			GetObject( SwRedline& rRedline, SwDoc& rDoc );
+    static ::com::sun::star::beans::XPropertySet*           GetObject( SwRedline& rRedline, SwDoc& rDoc );
 };
 /* -----------------------------12.01.01 14:58--------------------------------
 
@@ -85,7 +85,7 @@ protected:
     virtual ~SwXRedlineEnumeration();
 public:
     SwXRedlineEnumeration(SwDoc& rDoc);
-    
+
 
     //XEnumeration
     virtual BOOL SAL_CALL hasMoreElements(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -97,7 +97,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
-    virtual void 			Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void            Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ public:
     void AddMapperEntry( const UniReference < XMLPropertySetMapper >& rMapper );
 
     /** Return number of entries in input-array */
-    sal_Int32	GetEntryCount() const { return aMapEntries.size(); }
+    sal_Int32   GetEntryCount() const { return aMapEntries.size(); }
 
     /** Returns the flags of an entry */
     sal_uInt32 GetEntryFlags( sal_Int32 nIndex ) const

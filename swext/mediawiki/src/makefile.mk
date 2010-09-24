@@ -38,27 +38,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 DESCRIPTION:=$(MISC)$/$(TARGET)$/description.xml
 
-# .IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
-# PACKLICS:=$(foreach,i,$(alllangiso) $(MISC)$/$(TARGET)$/license$/license_$i)
-# .ELSE
-PACKLICS:=$(foreach,i,$(alllangiso) $(MISC)$/$(TARGET)$/license$/LICENSE_$i)
-# .ENDIF
-
 common_build_zip=
 
 .INCLUDE : target.mk
 
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
-$(PACKLICS) : $(SOLARBINDIR)$/osl$/license$$(@:b:s/_/./:e:s/./_/)$$(@:e).txt
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-.ELSE
-$(PACKLICS) : $(SOLARBINDIR)$/osl$/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-.ENDIF
-
-ALLTAR: $(PACKLICS) $(DESCRIPTION)
+ALLTAR: $(DESCRIPTION)
 
 .INCLUDE .IGNORE : $(MISC)$/$(TARGET)_lang_track.mk
 .IF "$(LAST_WITH_LANG)"!="$(WITH_LANG)"

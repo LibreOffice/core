@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
 XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier,
             SvXMLExport& rTempExport )
-:	xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
+:   xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
     pExport(&rTempExport),
     sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT)),
     sType(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE)),
@@ -129,7 +129,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
                 rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT);
                 bWasSetTypeAttribute = sal_True;
             }
-        }		// No Break
+        }       // No Break
     case util::NumberFormat::PERCENT:
         {
             if (!bWasSetTypeAttribute)
@@ -137,7 +137,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
                 rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_PERCENTAGE);
                 bWasSetTypeAttribute = sal_True;
             }
-        }		// No Break
+        }       // No Break
     case util::NumberFormat::CURRENCY:
         {
             if (!bWasSetTypeAttribute)
@@ -412,7 +412,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
                 pExport->AddAttribute(sAttrValueType, XML_FLOAT);
                 bWasSetTypeAttribute = sal_True;
             }
-        }		// No Break
+        }       // No Break
     case util::NumberFormat::PERCENT:
         {
             if (!bWasSetTypeAttribute)
@@ -420,7 +420,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
                 pExport->AddAttribute(sAttrValueType, XML_PERCENTAGE);
                 bWasSetTypeAttribute = sal_True;
             }
-        }		// No Break
+        }       // No Break
     case util::NumberFormat::CURRENCY:
         {
             if (!bWasSetTypeAttribute)

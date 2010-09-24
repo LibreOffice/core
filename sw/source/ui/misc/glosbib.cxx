@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,9 +65,9 @@
 
 
 #define PATH_CASE_SENSITIVE 0x01
-#define PATH_READONLY 		0x02
+#define PATH_READONLY       0x02
 
-#define RENAME_TOKEN_DELIM		(sal_Unicode)1
+#define RENAME_TOKEN_DELIM      (sal_Unicode)1
 
 /*-----------------09.06.97 13:05-------------------
 
@@ -77,8 +77,8 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
                         SwGlossaryHdl *pHdl) :
     SvxStandardDialog(pParent, SW_RES(DLG_BIB_BASE)),
 
-    aNameED( 	this, SW_RES(ED_NAME)),
-    aPathLB(	this, SW_RES(LB_PATH)),
+    aNameED(    this, SW_RES(ED_NAME)),
+    aPathLB(    this, SW_RES(LB_PATH)),
     aGroupTLB(  this, SW_RES(TLB_GROUPS)),
 
     aOkPB(      this, SW_RES(BT_OK)),
@@ -101,7 +101,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     FreeResource();
 
     long nTabs[] =
-    {	2, // Number of Tabs
+    {   2, // Number of Tabs
         0, 160
     };
 
@@ -287,7 +287,7 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
 IMPL_LINK( SwGlossaryGroupDlg, NewHdl, Button*, EMPTYARG )
 {
     String sGroup(aNameED.GetText());
-//	sGroup.ToLower();
+//  sGroup.ToLower();
     sGroup += GLOS_DELIM;
     sGroup += String::CreateFromInt32(aPathLB.GetSelectEntryPos());
     DBG_ASSERT(!pGlosHdl->FindGroupName(sGroup), "Gruppe bereits vorhanden!");
@@ -295,7 +295,7 @@ IMPL_LINK( SwGlossaryGroupDlg, NewHdl, Button*, EMPTYARG )
         pInsertedArr = new SvStrings;
     pInsertedArr->Insert(new String(sGroup), pInsertedArr->Count());
     String sTemp(aNameED.GetText());
-//	sTemp.ToLower();
+//  sTemp.ToLower();
     sTemp += '\t';
     sTemp += aPathLB.GetSelectEntry();
     SvLBoxEntry* pEntry = aGroupTLB.InsertEntry(sTemp);
@@ -426,7 +426,7 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
     delete (GlosBibUserData*)pEntry->GetUserData();
     aGroupTLB.GetModel()->Remove(pEntry);
     String sTemp(aNameED.GetText());
-//	sTemp.ToLower();
+//  sTemp.ToLower();
     sTemp += '\t';
     sTemp += aPathLB.GetSelectEntry();
     pEntry = aGroupTLB.InsertEntry(sTemp);
@@ -446,7 +446,7 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
 IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
 {
     String sEntry(aNameED.GetText());
-//	sEntry.ToLower();
+//  sEntry.ToLower();
     BOOL bEnableNew = TRUE;
     BOOL bEnableDel = FALSE;
     ULONG nCaseReadonly =
@@ -492,10 +492,10 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
         GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
         bEnableDel = IsDeleteAllowed(pUserData->sGroupName);
 
-//		String sGroup = aGroupTLB.GetEntryText(pEntry, 0);
-//		sGroup += GLOS_DELIM;
-//		sGroup += String::CreateFromInt32(aPathLB.GetEntryPos(aGroupTLB.GetEntryText(pEntry, 1)));
-//		bEnableDel = IsDeleteAllowed(sGroup);
+//      String sGroup = aGroupTLB.GetEntryText(pEntry, 0);
+//      sGroup += GLOS_DELIM;
+//      sGroup += String::CreateFromInt32(aPathLB.GetEntryPos(aGroupTLB.GetEntryText(pEntry, 1)));
+//      bEnableDel = IsDeleteAllowed(sGroup);
     }
 
     aDelPB.Enable(bEnableDel);
@@ -548,7 +548,7 @@ void FEdit::KeyInput( const KeyEvent& rKEvent )
 /* -----------------------------08.02.00 15:07--------------------------------
 
  ---------------------------------------------------------------------------*/
-void 	SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
+void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
 {
     Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
     SvLBoxEntry* pEntry = GetEntry( aPos );

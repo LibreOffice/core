@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 
     Not all uno_Contexts need to be refcounted, in case they are,
     they should be 'derived' from this struct.
-    This is used as a base class for the remote_Context. 
+    This is used as a base class for the remote_Context.
     @see uno_Environment
     @see uno_getEnvironment()
     @see remote_Context
@@ -52,7 +52,7 @@ struct uno_Context
     void (SAL_CALL * acquire)( uno_Context *pContext );
 
     /** decrements the recount of the context. In case the recount drops to zero,
-        the context gets destroye. 
+        the context gets destroye.
     */
     void (SAL_CALL * release)( uno_Context *pContext);
 
@@ -69,7 +69,7 @@ struct remote_Interface;
 
 
 /** performs a query-interface for a certain interface via the remote connection !
- 
+
   @param pEnvRemote The environment, that shall perform the call.
   @param ppRemoteI  in/out parameter contains the interface returned by queryInterface
   @param pOid       the oid of the 'ghost' object on which the call must be done.
@@ -98,7 +98,7 @@ struct remote_InstanceProvider
 
 /** refcounted C-interface, which allows to register a listener to an
     remote bridge to be informed when the bridge gets disposed.
-    
+
    @see remote_Context
  */
 struct remote_DisposingListener
@@ -114,8 +114,8 @@ struct remote_DisposingListener
   Try to get an existing context characterized by the pIdString. Each ID-String must
   uniquely charcterize a certain connection. The context can't be retrieved via this
   function anymore, after it got disposed.
-  
-  @return 0 when such a context does not exist, otherwise 
+
+  @return 0 when such a context does not exist, otherwise
           a pointer to an acquired remote_Context.
  **/
 extern "C" remote_Context * SAL_CALL
@@ -124,19 +124,19 @@ remote_getContext( rtl_uString *pIdString );
 /**
   Create an acquired remote context. The Context is weakly held by the context administration
   and can be accessed later through remote_getContext() (using the same id-string).
- 
+
   @param pIdString A string, that uniquely describes the connection. For e.g. a socket connection,
                    host and port of the local and remote host should be in the string.
-                   
+
   @param pDescription
                    Description of the connection, that may brought up to the user.
- 
+
   @param pProtocol
                    The protocol, that the environment uses for
                    communicating with the remote process.
                    The format of the protocol string is : "protocolname,para1=para1value,..."
   @return 0, when a context with this name already exists.
-  
+
   @see remote_getContext()
   @see remote_Context
  */
@@ -171,10 +171,10 @@ extern "C" void SAL_CALL
 remote_removeContextListener( remote_contextListenerFunc listener , void *pObject );
 
 /** Allows to retrieve all existing context strings.
-    
+
    @param pnStringCount out parameter. Contains the number of rtl_uStrings in the array
    @param memAlloc      a memory allocation function for the array of  pointers to rtl_uStrings
- 
+
    @return array of rtl strings. The caller must call release on all rtl_uString s and must free
            the pointer array.
  */
@@ -203,9 +203,9 @@ struct remote_Context
                                                   remote_DisposingListener * );
     /**
        will be called by the environment when it gets disposed
-     */	
+     */
     void ( SAL_CALL * dispose ) ( remote_Context * );
-    
+
     /** The method is set by the remote-environment during environment initialization.
       @see remote_getInstanceFunc
      */
@@ -217,7 +217,7 @@ struct remote_Context
       The parameters are protocol dependend
      */
     rtl_uString *m_pProtocol;
-    
+
     /**
        It may be the same as m_pName.
        Livetime is handled by the context administration.
@@ -230,7 +230,7 @@ struct remote_Context
       Livetime is handled by the context administration.
      */
     rtl_uString *m_pName;
-    
+
     /** The instance-provider, which is used to look up unknown object identifiers.
       Is usually called on server side,  when the first client request comes in.
       Maybe 0. Livetime is handled by the context administration.

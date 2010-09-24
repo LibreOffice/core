@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1777,7 +1777,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
         else
             pWindow->Show(sal_True, (bForceFrontAndFocus || bForceToFront) ? SHOW_FOREGROUNDTASK : 0 );
     }
-    
+
 /* #i19976#
     We tried to prevent a toFront() call in case the user putted the
     loading document into the background ..

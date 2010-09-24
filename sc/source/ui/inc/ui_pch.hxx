@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-//	ItemID-Defines etc. muessen immer ganz vorne stehen
+//  ItemID-Defines etc. muessen immer ganz vorne stehen
 
 #include "scitems.hxx"
 
@@ -34,9 +34,9 @@
 #define _PRINTFUN_CXX
 #define _INPUTHDL_CXX
 
-//	ab hier automatisch per makepch generiert
-//	folgende duerfen nicht aufgenommen werden:
-//		scslots.hxx
+//  ab hier automatisch per makepch generiert
+//  folgende duerfen nicht aufgenommen werden:
+//      scslots.hxx
 
 #include <tools/solar.h>
 #include <tools/string.hxx>
@@ -184,7 +184,7 @@
 #include <scresid.hxx>
 #include <sfx2/ipfrm.hxx>
 #include <docsh.hxx>
-//REMOVE	#include <sfx2/interno.hxx>
+//REMOVE    #include <sfx2/interno.hxx>
 #include <vcl/wintypes.hxx>
 #include <sfx2/docfac.hxx>
 #include <scitems.hxx>

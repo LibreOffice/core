@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #include <vcl/fixed.hxx>
 #include <svtools/svtreebx.hxx>
-#ifndef _SV_BUTTON_HXX 
+#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
 #include <vcl/image.hxx>
@@ -52,23 +52,23 @@ namespace pcr
             :public ModalDialog
             ,public PcrClient
     {
-        FixedText		m_aMainDesc;
-        SvTreeListBox	m_aControlTree;
-        CheckBox		m_aNoAssignment;
-        FixedLine		m_aSeparator;
-        OKButton		m_aOk;
-        CancelButton	m_aCancel;
+        FixedText       m_aMainDesc;
+        SvTreeListBox   m_aControlTree;
+        CheckBox        m_aNoAssignment;
+        FixedLine       m_aSeparator;
+        OKButton        m_aOk;
+        CancelButton    m_aCancel;
 
-        ImageList		m_aModelImages;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > 	m_xControlModel;
-        ::rtl::OUString	m_sRequiredService;
-        Image			m_aRequiredControlImage;
-        SvLBoxEntry*	m_pInitialSelection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > 	m_xInitialLabelControl;
+        ImageList       m_aModelImages;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xControlModel;
+        ::rtl::OUString m_sRequiredService;
+        Image           m_aRequiredControlImage;
+        SvLBoxEntry*    m_pInitialSelection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xInitialLabelControl;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > 	m_xSelectedControl;
-        SvLBoxEntry*	m_pLastSelected;
-        sal_Bool		m_bHaveAssignableControl;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xSelectedControl;
+        SvLBoxEntry*    m_pLastSelected;
+        sal_Bool        m_bHaveAssignableControl;
 
     public:
         OSelectLabelDialog(Window* pParent, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xControlModel);
@@ -84,7 +84,7 @@ namespace pcr
     };
 
 //............................................................................
-}	// namespace pcr
+}   // namespace pcr
 //............................................................................
 
 #endif // _EXTENSIONS_PROPCTRLR_SELECTLABELDIALOG_HXX_

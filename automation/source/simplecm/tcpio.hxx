@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ public:
     TCPIO( NAMESPACE_VOS(OStreamSocket) *pSocket ):pStreamSocket( pSocket ){}
     virtual ~TCPIO(){}
 
-    
+
     /// implement ITransmiter
     virtual comm_USHORT TransferBytes( const void* pBuffer, comm_UINT32 nLen );
 

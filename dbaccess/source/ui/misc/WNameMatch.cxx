@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,17 +64,17 @@ using namespace ::dbaui;
 DBG_NAME(OWizNameMatching)
 //========================================================================
 OWizNameMatching::OWizNameMatching( Window* pParent)
-        :OWizardPage( pParent, ModuleRes( TAB_WIZ_NAME_MATCHING		) )
-        ,m_FT_TABLE_LEFT(		this, ModuleRes( FT_TABLE_LEFT			) )
-        ,m_FT_TABLE_RIGHT(		this, ModuleRes( FT_TABLE_RIGHT			) )
-        ,m_CTRL_LEFT(			this, ModuleRes( CTRL_LEFT				) )
-        ,m_CTRL_RIGHT(			this, ModuleRes( CTRL_RIGHT				) )
+        :OWizardPage( pParent, ModuleRes( TAB_WIZ_NAME_MATCHING     ) )
+        ,m_FT_TABLE_LEFT(       this, ModuleRes( FT_TABLE_LEFT          ) )
+        ,m_FT_TABLE_RIGHT(      this, ModuleRes( FT_TABLE_RIGHT         ) )
+        ,m_CTRL_LEFT(           this, ModuleRes( CTRL_LEFT              ) )
+        ,m_CTRL_RIGHT(          this, ModuleRes( CTRL_RIGHT             ) )
         ,m_ibColumn_up(         this, ModuleRes( IB_COLUMN_UP           ) )
         ,m_ibColumn_down(       this, ModuleRes( IB_COLUMN_DOWN         ) )
         ,m_ibColumn_up_right(   this, ModuleRes( IB_COLUMN_UP_RIGHT     ) )
         ,m_ibColumn_down_right( this, ModuleRes( IB_COLUMN_DOWN_RIGHT   ) )
-        ,m_pbAll(				this, ModuleRes( PB_ALL					) )
-        ,m_pbNone(				this, ModuleRes( PB_NONE					) )
+        ,m_pbAll(               this, ModuleRes( PB_ALL                 ) )
+        ,m_pbNone(              this, ModuleRes( PB_NONE                    ) )
 
 {
     DBG_CTOR(OWizNameMatching,NULL);
@@ -95,9 +95,9 @@ OWizNameMatching::OWizNameMatching( Window* pParent)
     m_CTRL_LEFT.SetWindowBits( WB_FORCE_MAKEVISIBLE );
     m_CTRL_RIGHT.SetWindowBits( WB_FORCE_MAKEVISIBLE );
 
-    m_sSourceText	= m_FT_TABLE_LEFT.GetText();
+    m_sSourceText   = m_FT_TABLE_LEFT.GetText();
     m_sSourceText.AppendAscii("\n");
-    m_sDestText		= m_FT_TABLE_RIGHT.GetText();
+    m_sDestText     = m_FT_TABLE_RIGHT.GetText();
     m_sDestText.AppendAscii("\n");
 
     // set hiContrast
@@ -126,11 +126,11 @@ void OWizNameMatching::Reset()
         m_CTRL_RIGHT.SetEntryHeight(m_CTRL_LEFT.GetEntryHeight());
         m_CTRL_RIGHT.SetIndent(m_CTRL_LEFT.GetIndent());
         m_CTRL_RIGHT.SetSpaceBetweenEntries(m_CTRL_LEFT.GetSpaceBetweenEntries());
-        
+
         m_bFirstTime = sal_False;
     }
-    
-    //	m_CTRL_LEFT.Clear();
+
+    //  m_CTRL_LEFT.Clear();
 }
 // -----------------------------------------------------------------------
 void OWizNameMatching::ActivatePage( )
@@ -140,7 +140,7 @@ void OWizNameMatching::ActivatePage( )
     // set source table name
     String aName = m_sSourceText;
     aName += String(m_pParent->m_sSourceName);
-    
+
     m_FT_TABLE_LEFT.SetText(aName);
 
     // set dest table name
@@ -148,7 +148,7 @@ void OWizNameMatching::ActivatePage( )
     aName += String(m_pParent->m_sName);
     m_FT_TABLE_RIGHT.SetText(aName);
 
-    
+
     m_CTRL_LEFT.FillListBox(*m_pParent->getSrcVector());
     m_CTRL_RIGHT.FillListBox(*m_pParent->getDestVector());
 
@@ -157,7 +157,7 @@ void OWizNameMatching::ActivatePage( )
 
     m_ibColumn_up_right.Enable( m_CTRL_RIGHT.GetEntryCount() > 1 );
     m_ibColumn_down_right.Enable( m_CTRL_RIGHT.GetEntryCount() > 1 );
-        
+
 
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_False);
     m_CTRL_LEFT.GrabFocus();
@@ -168,13 +168,13 @@ sal_Bool OWizNameMatching::LeavePage()
     DBG_CHKTHIS(OWizNameMatching,NULL);
 
     const ODatabaseExport::TColumnVector* pSrcColumns = m_pParent->getSrcVector();
-    
+
     m_pParent->m_vColumnPos.clear();
     m_pParent->m_vColumnTypes.clear();
     m_pParent->m_vColumnPos.resize( pSrcColumns->size(), ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
     m_pParent->m_vColumnTypes.resize( pSrcColumns->size(), COLUMN_POSITION_NOT_FOUND );
 
-    
+
     sal_Int32 nParamPos = 0;
     SvLBoxEntry* pLeftEntry = m_CTRL_LEFT.GetModel()->First();
     SvLBoxEntry* pRightEntry = m_CTRL_RIGHT.GetModel()->First();
@@ -183,26 +183,26 @@ sal_Bool OWizNameMatching::LeavePage()
         OFieldDescription* pSrcField = static_cast<OFieldDescription*>(pLeftEntry->GetUserData());
         DBG_ASSERT(pSrcField,"OWizNameMatching: OColumn can not be null!");
 
-        ODatabaseExport::TColumnVector::const_iterator aSrcIter	= pSrcColumns->begin();
-        ODatabaseExport::TColumnVector::const_iterator aSrcEnd	= pSrcColumns->end();
+        ODatabaseExport::TColumnVector::const_iterator aSrcIter = pSrcColumns->begin();
+        ODatabaseExport::TColumnVector::const_iterator aSrcEnd  = pSrcColumns->end();
         for(;aSrcIter != aSrcEnd && (*aSrcIter)->second != pSrcField;++aSrcIter)
             ;
         const sal_Int32 nPos = ::std::distance(pSrcColumns->begin(),aSrcIter);
 
-        //	sal_Int32 nPos = m_CTRL_LEFT.GetModel()->GetAbsPos(pLeftEntry);
+        //  sal_Int32 nPos = m_CTRL_LEFT.GetModel()->GetAbsPos(pLeftEntry);
         if(m_CTRL_LEFT.GetCheckButtonState(pLeftEntry) == SV_BUTTON_CHECKED)
         {
             OFieldDescription* pDestField = static_cast<OFieldDescription*>(pRightEntry->GetUserData());
             DBG_ASSERT(pDestField,"OWizNameMatching: OColumn can not be null!");
-            const ODatabaseExport::TColumnVector* pDestColumns			= m_pParent->getDestVector();
-            ODatabaseExport::TColumnVector::const_iterator aDestIter	= pDestColumns->begin();
-            ODatabaseExport::TColumnVector::const_iterator aDestEnd	= pDestColumns->end();
+            const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
+            ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
+            ODatabaseExport::TColumnVector::const_iterator aDestEnd = pDestColumns->end();
 
             for(;aDestIter != aDestEnd && (*aDestIter)->second != pDestField;++aDestIter)
                 ;
 
             OSL_ENSURE((nPos) < static_cast<sal_Int32>(m_pParent->m_vColumnPos.size()),"m_pParent->m_vColumnPos: Illegal index for vector");
-            m_pParent->m_vColumnPos[nPos].first	= ++nParamPos;
+            m_pParent->m_vColumnPos[nPos].first = ++nParamPos;
             m_pParent->m_vColumnPos[nPos].second = ::std::distance(pDestColumns->begin(),aDestIter) + 1;
             sal_Bool bNotConvert = sal_True;
             TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getSpecialTypeInfo(),bNotConvert);
@@ -231,7 +231,7 @@ IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
     SvLBoxEntry* pEntry = m_CTRL_LEFT.FirstSelected();
     if ( pEntry )
     {
-        sal_Int32 nPos		= m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
+        sal_Int32 nPos      = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
         if(pButton == &m_ibColumn_up && nPos)
             --nPos;
         else if(pButton == &m_ibColumn_down)
@@ -241,13 +241,13 @@ IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
         m_CTRL_LEFT.GetModel()->Move(pEntry,NULL,nPos);
         m_CTRL_LEFT.ModelHasMoved(pEntry);
 
-        long nThumbPos		= m_CTRL_LEFT.GetVScroll()->GetThumbPos();
-        long nVisibleSize	= m_CTRL_LEFT.GetVScroll()->GetVisibleSize();
+        long nThumbPos      = m_CTRL_LEFT.GetVScroll()->GetThumbPos();
+        long nVisibleSize   = m_CTRL_LEFT.GetVScroll()->GetVisibleSize();
 
         if(pButton == &m_ibColumn_down && (nThumbPos+nVisibleSize+1) < nPos)
         {
             m_CTRL_LEFT.GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
-            //	m_CTRL_LEFT.MakeVisible(pEntry,sal_True);
+            //  m_CTRL_LEFT.MakeVisible(pEntry,sal_True);
         }
 
         TableListClickHdl(&m_CTRL_LEFT);
@@ -262,7 +262,7 @@ IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
     SvLBoxEntry* pEntry = m_CTRL_RIGHT.FirstSelected();
     if ( pEntry )
     {
-        sal_Int32 nPos		= m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
+        sal_Int32 nPos      = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
         if(pButton == &m_ibColumn_up_right && nPos)
             --nPos;
         else if(pButton == &m_ibColumn_down_right)
@@ -271,8 +271,8 @@ IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
         m_CTRL_RIGHT.ModelIsMoving(pEntry,NULL,nPos);
         m_CTRL_RIGHT.GetModel()->Move(pEntry,NULL,nPos);
         m_CTRL_RIGHT.ModelHasMoved(pEntry);
-        long nThumbPos		= m_CTRL_RIGHT.GetVScroll()->GetThumbPos();
-        long nVisibleSize	= m_CTRL_RIGHT.GetVScroll()->GetVisibleSize();
+        long nThumbPos      = m_CTRL_RIGHT.GetVScroll()->GetThumbPos();
+        long nVisibleSize   = m_CTRL_RIGHT.GetVScroll()->GetVisibleSize();
 
         if(pButton == &m_ibColumn_down_right && (nThumbPos+nVisibleSize+1) < nPos)
             m_CTRL_RIGHT.GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
@@ -286,7 +286,7 @@ IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
     SvLBoxEntry* pEntry = m_CTRL_LEFT.FirstSelected();
     if(pEntry)
     {
-        ULONG nPos			= m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
+        ULONG nPos          = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
         SvLBoxEntry* pOldEntry = m_CTRL_RIGHT.FirstSelected();
         if(pOldEntry && nPos != m_CTRL_RIGHT.GetModel()->GetAbsPos(pOldEntry))
         {
@@ -320,7 +320,7 @@ IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/
     SvLBoxEntry* pEntry = m_CTRL_RIGHT.FirstSelected();
     if(pEntry)
     {
-        ULONG nPos			= m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
+        ULONG nPos          = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
         SvLBoxEntry* pOldEntry = m_CTRL_LEFT.FirstSelected();
         if(pOldEntry && nPos != m_CTRL_LEFT.GetModel()->GetAbsPos(pOldEntry))
         {

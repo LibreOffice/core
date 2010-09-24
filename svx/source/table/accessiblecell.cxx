@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ using ::rtl::OUString;
 using namespace ::sdr::table;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace	::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
@@ -215,7 +215,7 @@ Reference<XAccessible> SAL_CALL AccessibleCell::getAccessibleChild (sal_Int32 nI
 
 // --------------------------------------------------------------------
 
-/**	Return a copy of the state set.
+/** Return a copy of the state set.
     Possible states are:
         ENABLED
         SHOWING
@@ -239,7 +239,7 @@ Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet (v
         if(pStateSet)
         {
             // Merge current FOCUSED state from edit engine.
-            if (mpText != NULL) 
+            if (mpText != NULL)
             {
                 if (mpText->HaveFocus())
                     pStateSet->AddState (AccessibleStateType::FOCUSED);
@@ -337,7 +337,7 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const :
             awt::Size aParentSize (xParentComponent->getSize());
             ::Rectangle aParentBBox (0,0, aParentSize.Width, aParentSize.Height);
             aBBox = aBBox.GetIntersection (aParentBBox);
-            aBoundingBox = awt::Rectangle (	aBBox.getX(), aBBox.getY(), aBBox.getWidth(), aBBox.getHeight());
+            aBoundingBox = awt::Rectangle ( aBBox.getX(), aBBox.getY(), aBBox.getWidth(), aBBox.getHeight());
         }
         else
         {
@@ -379,7 +379,7 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const :
     {
         OSL_TRACE ("getLocation: parent does not support XAccessibleComponent");
     }
-    
+
     return aLocation;
 }
 

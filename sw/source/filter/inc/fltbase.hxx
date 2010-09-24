@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,15 +33,15 @@
 class SwFilterBase
 {
 protected:
-    SvStream	*pIn;
-    sal_Char	*pReadBuff;	//		Groessenangabe
-    INT32		nBytesLeft;	// noch zu lesende Bytes des aktuelle Records
+    SvStream    *pIn;
+    sal_Char    *pReadBuff; //      Groessenangabe
+    INT32       nBytesLeft; // noch zu lesende Bytes des aktuelle Records
 
-    CharSet		eQuellChar;	// Quell-Zeichensatz (interner Zeichensatz)
-//	CharSet		eZielChar;	// Ziel-Zeichensatz
+    CharSet     eQuellChar; // Quell-Zeichensatz (interner Zeichensatz)
+//  CharSet     eZielChar;  // Ziel-Zeichensatz
 
-    USHORT		nTab;		// z.Zt. bearbeitete Tabelle
-    USHORT		nReadBuffSize;// temporaerer Lesepuffer mit
+    USHORT      nTab;       // z.Zt. bearbeitete Tabelle
+    USHORT      nReadBuffSize;// temporaerer Lesepuffer mit
 
     // ----------------------------------------------------------
     inline void ReadChar( char &rC );
@@ -53,7 +53,7 @@ protected:
     inline void Read( USHORT &rN1, USHORT &rN2 );
     inline void Read( USHORT &rN1, USHORT &rN2, USHORT &rN3, USHORT &rN4 );
     inline void Read( double &rF );
-            void Read( String &rS );		// liest 0-terminierten C-String!
+            void Read( String &rS );        // liest 0-terminierten C-String!
     inline void ClearBytesLeft( void );
 };
 

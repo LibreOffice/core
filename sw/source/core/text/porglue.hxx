@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ class SwRect;
 class SwLineLayout;
 
 /*************************************************************************
- *						class SwGluePortion
+ *                      class SwGluePortion
  *************************************************************************/
 
 class SwGluePortion : public SwLinePortion
@@ -63,12 +63,12 @@ public:
 };
 
 /*************************************************************************
- *						class SwFixPortion
+ *                      class SwFixPortion
  *************************************************************************/
 
 class SwFixPortion : public SwGluePortion
 {
-    KSHORT nFix;		// der Width-Offset in der Zeile
+    KSHORT nFix;        // der Width-Offset in der Zeile
 public:
         SwFixPortion( const SwRect &rFlyRect );
         SwFixPortion( const KSHORT nFixWidth, const KSHORT nFixPos );
@@ -78,7 +78,7 @@ public:
 };
 
 /*************************************************************************
- *				  class SwMarginPortion
+ *                class SwMarginPortion
  *************************************************************************/
 
 class SwMarginPortion : public SwGluePortion
@@ -90,14 +90,14 @@ public:
 };
 
 /*************************************************************************
- *				  inline SwGluePortion::GetPrtGlue()
+ *                inline SwGluePortion::GetPrtGlue()
  *************************************************************************/
 
 inline short SwGluePortion::GetPrtGlue() const
 { return Width() - nFixWidth; }
 
 /*************************************************************************
- *				inline SwGluePortion::AdjFixWidth()
+ *              inline SwGluePortion::AdjFixWidth()
  * Die FixWidth darf niemals groesser sein als die Gesamtbreite !
  *************************************************************************/
 
@@ -108,7 +108,7 @@ inline void SwGluePortion::AdjFixWidth()
 }
 
 /*************************************************************************
- *				   inline SwGluePortion::MoveGlue()
+ *                 inline SwGluePortion::MoveGlue()
  *************************************************************************/
 
 inline void SwGluePortion::MoveAllGlue( SwGluePortion *pTarget )
@@ -117,7 +117,7 @@ inline void SwGluePortion::MoveAllGlue( SwGluePortion *pTarget )
 }
 
 /*************************************************************************
- *				  inline SwGluePortion::MoveHalfGlue()
+ *                inline SwGluePortion::MoveHalfGlue()
  *************************************************************************/
 
 inline void SwGluePortion::MoveHalfGlue( SwGluePortion *pTarget )

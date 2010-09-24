@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 #ifndef _IDROPTARGET_HXX_
-#define _IDROPTARGET_HXX_ 
+#define _IDROPTARGET_HXX_
 
 #include "target.hxx"
 
@@ -35,35 +35,35 @@ class IDropTargetImpl: public IDropTarget
     // Calls to IDropTarget functions are delegated to a DropTarget.
     DropTarget& m_rDropTarget;
 
-    virtual ~IDropTargetImpl(); // delete is only called by IUnknown::Release 
+    virtual ~IDropTargetImpl(); // delete is only called by IUnknown::Release
     IDropTargetImpl( const IDropTargetImpl& );
     IDropTargetImpl& operator=( const IDropTargetImpl& );
 public:
     IDropTargetImpl( DropTarget& pTarget);
 
        // IDropTarget
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             /* [in] */ REFIID riid,
             /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
+
     virtual ULONG STDMETHODCALLTYPE AddRef( );
-        
+
     virtual ULONG STDMETHODCALLTYPE Release( );
 
-    virtual HRESULT STDMETHODCALLTYPE DragEnter( 
+    virtual HRESULT STDMETHODCALLTYPE DragEnter(
             /* [unique][in] */ IDataObject __RPC_FAR *pDataObj,
             /* [in] */ DWORD grfKeyState,
             /* [in] */ POINTL pt,
             /* [out][in] */ DWORD __RPC_FAR *pdwEffect);
-        
-    virtual HRESULT STDMETHODCALLTYPE DragOver( 
+
+    virtual HRESULT STDMETHODCALLTYPE DragOver(
             /* [in] */ DWORD grfKeyState,
             /* [in] */ POINTL pt,
             /* [out][in] */ DWORD __RPC_FAR *pdwEffect);
-        
+
     virtual HRESULT STDMETHODCALLTYPE DragLeave( ) ;
-        
-    virtual HRESULT STDMETHODCALLTYPE Drop( 
+
+    virtual HRESULT STDMETHODCALLTYPE Drop(
             /* [unique][in] */ IDataObject __RPC_FAR *pDataObj,
             /* [in] */ DWORD grfKeyState,
             /* [in] */ POINTL pt,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,11 +70,11 @@ struct ScSubTotalRule
 
 class ScXMLDatabaseRangeContext : public SvXMLImportContext
 {
-    rtl::OUString 	sDatabaseRangeName;
+    rtl::OUString   sDatabaseRangeName;
     rtl::OUString   sConnectionRessource;
-    rtl::OUString	sRangeAddress;
-    rtl::OUString	sDatabaseName;
-    rtl::OUString	sSourceObject;
+    rtl::OUString   sRangeAddress;
+    rtl::OUString   sDatabaseName;
+    rtl::OUString   sSourceObject;
     com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aSortSequence;
     com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2> aFilterFields;
     std::vector < ScSubTotalRule > aSubTotalRules;
@@ -82,29 +82,29 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     com::sun::star::table::CellRangeAddress aFilterConditionSourceRangeAddress;
     com::sun::star::sheet::DataImportMode nSourceType;
     com::sun::star::table::TableOrientation eOrientation;
-    sal_Int32		nRefresh;
-    sal_Int16		nSubTotalsUserListIndex;
-    sal_Int16		nSubTotalRuleGroupFieldNumber;
-    sal_Bool		bContainsSort;
-    sal_Bool		bContainsSubTotal;
-    sal_Bool 		bNative;
-    sal_Bool		bIsSelection;
-    sal_Bool		bKeepFormats;
-    sal_Bool		bMoveCells;
-    sal_Bool		bStripData;
-    sal_Bool		bContainsHeader;
-    sal_Bool		bAutoFilter;
-    sal_Bool		bSubTotalsBindFormatsToContent;
-    sal_Bool		bSubTotalsIsCaseSensitive;
-    sal_Bool		bSubTotalsInsertPageBreaks;
-    sal_Bool		bSubTotalsSortGroups;
-    sal_Bool		bSubTotalsEnabledUserList;
-    sal_Bool		bSubTotalsAscending;
-    sal_Bool		bFilterCopyOutputData;
-    sal_Bool		bFilterIsCaseSensitive;
-    sal_Bool		bFilterSkipDuplicates;
-    sal_Bool		bFilterUseRegularExpressions;
-    sal_Bool		bFilterConditionSourceRange;
+    sal_Int32       nRefresh;
+    sal_Int16       nSubTotalsUserListIndex;
+    sal_Int16       nSubTotalRuleGroupFieldNumber;
+    sal_Bool        bContainsSort;
+    sal_Bool        bContainsSubTotal;
+    sal_Bool        bNative;
+    sal_Bool        bIsSelection;
+    sal_Bool        bKeepFormats;
+    sal_Bool        bMoveCells;
+    sal_Bool        bStripData;
+    sal_Bool        bContainsHeader;
+    sal_Bool        bAutoFilter;
+    sal_Bool        bSubTotalsBindFormatsToContent;
+    sal_Bool        bSubTotalsIsCaseSensitive;
+    sal_Bool        bSubTotalsInsertPageBreaks;
+    sal_Bool        bSubTotalsSortGroups;
+    sal_Bool        bSubTotalsEnabledUserList;
+    sal_Bool        bSubTotalsAscending;
+    sal_Bool        bFilterCopyOutputData;
+    sal_Bool        bFilterIsCaseSensitive;
+    sal_Bool        bFilterSkipDuplicates;
+    sal_Bool        bFilterUseRegularExpressions;
+    sal_Bool        bFilterConditionSourceRange;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

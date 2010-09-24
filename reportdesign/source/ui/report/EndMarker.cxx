@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,16 +34,16 @@
 #include <vcl/lineinfo.hxx>
 
 
-#define CORNER_SPACE	5
+#define CORNER_SPACE    5
 //=====================================================================
 namespace rptui
 {
 //=====================================================================
     DBG_NAME( rpt_OEndMarker )
-OEndMarker::OEndMarker(Window* _pParent	,const ::rtl::OUString& _sColorEntry)
+OEndMarker::OEndMarker(Window* _pParent ,const ::rtl::OUString& _sColorEntry)
 : OColorListener(_pParent,_sColorEntry)
 {
-    DBG_CTOR( rpt_OEndMarker,NULL);	
+    DBG_CTOR( rpt_OEndMarker,NULL);
     SetUniqueId(HID_RPT_ENDMARKER);
     ImplInitSettings();
     SetPaintTransparent(TRUE);

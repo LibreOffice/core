@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,18 +71,18 @@ StyleMap* StyleMap::getImplementation( Reference< XInterface > xInt ) throw()
 {
     Reference< XUnoTunnel > xUT( xInt, UNO_QUERY );
     if( xUT.is() )
-        return reinterpret_cast<StyleMap *>( 
+        return reinterpret_cast<StyleMap *>(
                 xUT->getSomething( StyleMap::getUnoTunnelId() ) );
     else
         return 0;
 }
 
 // XUnoTunnel
-sal_Int64 SAL_CALL StyleMap::getSomething( 
+sal_Int64 SAL_CALL StyleMap::getSomething(
         const Sequence< sal_Int8 >& rId )
     throw( RuntimeException )
 {
-    if( rId.getLength() == 16 && 
+    if( rId.getLength() == 16 &&
         0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                              rId.getConstArray(), 16 ) )
     {

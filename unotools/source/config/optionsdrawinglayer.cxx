@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #endif
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include <unotools/optionsdrawinglayer.hxx>
@@ -42,188 +42,188 @@
 #include <vcl/outdev.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespaces
+//  namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace ::utl					;
-using namespace ::rtl					;
-using namespace ::osl					;
-using namespace ::com::sun::star::uno	;
+using namespace ::utl                   ;
+using namespace ::rtl                   ;
+using namespace ::osl                   ;
+using namespace ::com::sun::star::uno   ;
 
 //_________________________________________________________________________________________________________________
-//	const
+//  const
 //_________________________________________________________________________________________________________________
 
-#define	ROOTNODE_START			   		OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Drawinglayer"	))
-#define	DEFAULT_OVERLAYBUFFER			sal_True
-#define	DEFAULT_PAINTBUFFER				sal_True
-#define	DEFAULT_STRIPE_COLOR_A			0
-#define	DEFAULT_STRIPE_COLOR_B			16581375
-#define	DEFAULT_STRIPE_LENGTH			4
+#define ROOTNODE_START                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Drawinglayer"   ))
+#define DEFAULT_OVERLAYBUFFER           sal_True
+#define DEFAULT_PAINTBUFFER             sal_True
+#define DEFAULT_STRIPE_COLOR_A          0
+#define DEFAULT_STRIPE_COLOR_B          16581375
+#define DEFAULT_STRIPE_LENGTH           4
 
 // #i73602#
 // #i74769#, #i75172# : Change default for Calc and Writer to True
-#define	DEFAULT_OVERLAYBUFFER_CALC			sal_True
-#define	DEFAULT_OVERLAYBUFFER_WRITER		sal_True
-#define	DEFAULT_OVERLAYBUFFER_DRAWIMPRESS	sal_True
+#define DEFAULT_OVERLAYBUFFER_CALC          sal_True
+#define DEFAULT_OVERLAYBUFFER_WRITER        sal_True
+#define DEFAULT_OVERLAYBUFFER_DRAWIMPRESS   sal_True
 
 // #i74769#, #i75172#
-#define	DEFAULT_PAINTBUFFER_CALC			sal_True
-#define	DEFAULT_PAINTBUFFER_WRITER			sal_True
-#define	DEFAULT_PAINTBUFFER_DRAWIMPRESS		sal_True
+#define DEFAULT_PAINTBUFFER_CALC            sal_True
+#define DEFAULT_PAINTBUFFER_WRITER          sal_True
+#define DEFAULT_PAINTBUFFER_DRAWIMPRESS     sal_True
 
 // #i4219#
-#define	DEFAULT_MAXIMUMPAPERWIDTH			300
-#define	DEFAULT_MAXIMUMPAPERHEIGHT			300
-#define	DEFAULT_MAXIMUMPAPERLEFTMARGIN		9999
-#define	DEFAULT_MAXIMUMPAPERRIGHTMARGIN		9999
-#define	DEFAULT_MAXIMUMPAPERTOPMARGIN		9999
-#define	DEFAULT_MAXIMUMPAPERBOTTOMMARGIN	9999
+#define DEFAULT_MAXIMUMPAPERWIDTH           300
+#define DEFAULT_MAXIMUMPAPERHEIGHT          300
+#define DEFAULT_MAXIMUMPAPERLEFTMARGIN      9999
+#define DEFAULT_MAXIMUMPAPERRIGHTMARGIN     9999
+#define DEFAULT_MAXIMUMPAPERTOPMARGIN       9999
+#define DEFAULT_MAXIMUMPAPERBOTTOMMARGIN    9999
 
 // primitives
-#define	DEFAULT_ANTIALIASING                        sal_True
-#define	DEFAULT_SNAPHORVERLINESTODISCRETE			sal_True
-#define	DEFAULT_SOLIDDRAGCREATE                     sal_True
-#define	DEFAULT_RENDERDECORATEDTEXTDIRECT           sal_True
-#define	DEFAULT_RENDERSIMPLETEXTDIRECT              sal_True
-#define	DEFAULT_QUADRATIC3DRENDERLIMIT              1000000
-#define	DEFAULT_QUADRATICFORMCONTROLRENDERLIMIT     45000
+#define DEFAULT_ANTIALIASING                        sal_True
+#define DEFAULT_SNAPHORVERLINESTODISCRETE           sal_True
+#define DEFAULT_SOLIDDRAGCREATE                     sal_True
+#define DEFAULT_RENDERDECORATEDTEXTDIRECT           sal_True
+#define DEFAULT_RENDERSIMPLETEXTDIRECT              sal_True
+#define DEFAULT_QUADRATIC3DRENDERLIMIT              1000000
+#define DEFAULT_QUADRATICFORMCONTROLRENDERLIMIT     45000
 
 // #i97672# selection settings
-#define	DEFAULT_TRANSPARENTSELECTION                sal_True
-#define DEFAULT_TRANSPARENTSELECTIONPERCENT			75
+#define DEFAULT_TRANSPARENTSELECTION                sal_True
+#define DEFAULT_TRANSPARENTSELECTIONPERCENT         75
 #define DEFAULT_SELECTIONMAXIMUMLUMINANCEPERCENT    70
 
-#define	PROPERTYNAME_OVERLAYBUFFER		OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer"	))
-#define	PROPERTYNAME_PAINTBUFFER		OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer"		))
-#define	PROPERTYNAME_STRIPE_COLOR_A		OUString(RTL_CONSTASCII_USTRINGPARAM("StripeColorA"		))
-#define	PROPERTYNAME_STRIPE_COLOR_B		OUString(RTL_CONSTASCII_USTRINGPARAM("StripeColorB"		))
-#define	PROPERTYNAME_STRIPE_LENGTH		OUString(RTL_CONSTASCII_USTRINGPARAM("StripeLength"		))
+#define PROPERTYNAME_OVERLAYBUFFER      OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer"    ))
+#define PROPERTYNAME_PAINTBUFFER        OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer"      ))
+#define PROPERTYNAME_STRIPE_COLOR_A     OUString(RTL_CONSTASCII_USTRINGPARAM("StripeColorA"     ))
+#define PROPERTYNAME_STRIPE_COLOR_B     OUString(RTL_CONSTASCII_USTRINGPARAM("StripeColorB"     ))
+#define PROPERTYNAME_STRIPE_LENGTH      OUString(RTL_CONSTASCII_USTRINGPARAM("StripeLength"     ))
 
 // #i73602#
-#define	PROPERTYNAME_OVERLAYBUFFER_CALC			OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer_Calc"))
-#define	PROPERTYNAME_OVERLAYBUFFER_WRITER		OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer_Writer"))
-#define	PROPERTYNAME_OVERLAYBUFFER_DRAWIMPRESS	OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer_DrawImpress"))
+#define PROPERTYNAME_OVERLAYBUFFER_CALC         OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer_Calc"))
+#define PROPERTYNAME_OVERLAYBUFFER_WRITER       OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer_Writer"))
+#define PROPERTYNAME_OVERLAYBUFFER_DRAWIMPRESS  OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer_DrawImpress"))
 
 // #i74769#, #i75172#
-#define	PROPERTYNAME_PAINTBUFFER_CALC			OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer_Calc"))
-#define	PROPERTYNAME_PAINTBUFFER_WRITER			OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer_Writer"))
-#define	PROPERTYNAME_PAINTBUFFER_DRAWIMPRESS	OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer_DrawImpress"))
+#define PROPERTYNAME_PAINTBUFFER_CALC           OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer_Calc"))
+#define PROPERTYNAME_PAINTBUFFER_WRITER         OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer_Writer"))
+#define PROPERTYNAME_PAINTBUFFER_DRAWIMPRESS    OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer_DrawImpress"))
 
 // #i4219#
-#define	PROPERTYNAME_MAXIMUMPAPERWIDTH OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperWidth"))
-#define	PROPERTYNAME_MAXIMUMPAPERHEIGHT OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperHeight"))
-#define	PROPERTYNAME_MAXIMUMPAPERLEFTMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperLeftMargin"))
-#define	PROPERTYNAME_MAXIMUMPAPERRIGHTMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperRightMargin"))
-#define	PROPERTYNAME_MAXIMUMPAPERTOPMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperTopMargin"))
-#define	PROPERTYNAME_MAXIMUMPAPERBOTTOMMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperBottomMargin"))
+#define PROPERTYNAME_MAXIMUMPAPERWIDTH OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperWidth"))
+#define PROPERTYNAME_MAXIMUMPAPERHEIGHT OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperHeight"))
+#define PROPERTYNAME_MAXIMUMPAPERLEFTMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperLeftMargin"))
+#define PROPERTYNAME_MAXIMUMPAPERRIGHTMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperRightMargin"))
+#define PROPERTYNAME_MAXIMUMPAPERTOPMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperTopMargin"))
+#define PROPERTYNAME_MAXIMUMPAPERBOTTOMMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperBottomMargin"))
 
 // primitives
-#define	PROPERTYNAME_ANTIALIASING OUString(RTL_CONSTASCII_USTRINGPARAM("AntiAliasing"))
-#define	PROPERTYNAME_SNAPHORVERLINESTODISCRETE OUString(RTL_CONSTASCII_USTRINGPARAM("SnapHorVerLinesToDiscrete"))
-#define	PROPERTYNAME_SOLIDDRAGCREATE OUString(RTL_CONSTASCII_USTRINGPARAM("SolidDragCreate"))
-#define	PROPERTYNAME_RENDERDECORATEDTEXTDIRECT OUString(RTL_CONSTASCII_USTRINGPARAM("RenderDecoratedTextDirect"))
-#define	PROPERTYNAME_RENDERSIMPLETEXTDIRECT OUString(RTL_CONSTASCII_USTRINGPARAM("RenderSimpleTextDirect"))
-#define	PROPERTYNAME_QUADRATIC3DRENDERLIMIT OUString(RTL_CONSTASCII_USTRINGPARAM("Quadratic3DRenderLimit"))
-#define	PROPERTYNAME_QUADRATICFORMCONTROLRENDERLIMIT OUString(RTL_CONSTASCII_USTRINGPARAM("QuadraticFormControlRenderLimit"))
+#define PROPERTYNAME_ANTIALIASING OUString(RTL_CONSTASCII_USTRINGPARAM("AntiAliasing"))
+#define PROPERTYNAME_SNAPHORVERLINESTODISCRETE OUString(RTL_CONSTASCII_USTRINGPARAM("SnapHorVerLinesToDiscrete"))
+#define PROPERTYNAME_SOLIDDRAGCREATE OUString(RTL_CONSTASCII_USTRINGPARAM("SolidDragCreate"))
+#define PROPERTYNAME_RENDERDECORATEDTEXTDIRECT OUString(RTL_CONSTASCII_USTRINGPARAM("RenderDecoratedTextDirect"))
+#define PROPERTYNAME_RENDERSIMPLETEXTDIRECT OUString(RTL_CONSTASCII_USTRINGPARAM("RenderSimpleTextDirect"))
+#define PROPERTYNAME_QUADRATIC3DRENDERLIMIT OUString(RTL_CONSTASCII_USTRINGPARAM("Quadratic3DRenderLimit"))
+#define PROPERTYNAME_QUADRATICFORMCONTROLRENDERLIMIT OUString(RTL_CONSTASCII_USTRINGPARAM("QuadraticFormControlRenderLimit"))
 
 // #i97672# selection settings
-#define	PROPERTYNAME_TRANSPARENTSELECTION OUString(RTL_CONSTASCII_USTRINGPARAM("TransparentSelection"))
-#define	PROPERTYNAME_TRANSPARENTSELECTIONPERCENT OUString(RTL_CONSTASCII_USTRINGPARAM("TransparentSelectionPercent"))
-#define	PROPERTYNAME_SELECTIONMAXIMUMLUMINANCEPERCENT OUString(RTL_CONSTASCII_USTRINGPARAM("SelectionMaximumLuminancePercent"))
+#define PROPERTYNAME_TRANSPARENTSELECTION OUString(RTL_CONSTASCII_USTRINGPARAM("TransparentSelection"))
+#define PROPERTYNAME_TRANSPARENTSELECTIONPERCENT OUString(RTL_CONSTASCII_USTRINGPARAM("TransparentSelectionPercent"))
+#define PROPERTYNAME_SELECTIONMAXIMUMLUMINANCEPERCENT OUString(RTL_CONSTASCII_USTRINGPARAM("SelectionMaximumLuminancePercent"))
 
-#define	PROPERTYHANDLE_OVERLAYBUFFER				0
-#define	PROPERTYHANDLE_PAINTBUFFER					1
-#define	PROPERTYHANDLE_STRIPE_COLOR_A				2
-#define	PROPERTYHANDLE_STRIPE_COLOR_B				3
-#define	PROPERTYHANDLE_STRIPE_LENGTH				4
+#define PROPERTYHANDLE_OVERLAYBUFFER                0
+#define PROPERTYHANDLE_PAINTBUFFER                  1
+#define PROPERTYHANDLE_STRIPE_COLOR_A               2
+#define PROPERTYHANDLE_STRIPE_COLOR_B               3
+#define PROPERTYHANDLE_STRIPE_LENGTH                4
 
 // #i73602#
-#define	PROPERTYHANDLE_OVERLAYBUFFER_CALC			5
-#define	PROPERTYHANDLE_OVERLAYBUFFER_WRITER			6
-#define	PROPERTYHANDLE_OVERLAYBUFFER_DRAWIMPRESS	7
+#define PROPERTYHANDLE_OVERLAYBUFFER_CALC           5
+#define PROPERTYHANDLE_OVERLAYBUFFER_WRITER         6
+#define PROPERTYHANDLE_OVERLAYBUFFER_DRAWIMPRESS    7
 
 // #i74769#, #i75172#
-#define	PROPERTYHANDLE_PAINTBUFFER_CALC				8
-#define	PROPERTYHANDLE_PAINTBUFFER_WRITER			9
-#define	PROPERTYHANDLE_PAINTBUFFER_DRAWIMPRESS		10
+#define PROPERTYHANDLE_PAINTBUFFER_CALC             8
+#define PROPERTYHANDLE_PAINTBUFFER_WRITER           9
+#define PROPERTYHANDLE_PAINTBUFFER_DRAWIMPRESS      10
 
 // #i4219#
-#define	PROPERTYHANDLE_MAXIMUMPAPERWIDTH			11
-#define	PROPERTYHANDLE_MAXIMUMPAPERHEIGHT			12
-#define	PROPERTYHANDLE_MAXIMUMPAPERLEFTMARGIN		13
-#define	PROPERTYHANDLE_MAXIMUMPAPERRIGHTMARGIN		14
-#define	PROPERTYHANDLE_MAXIMUMPAPERTOPMARGIN		15
-#define	PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN		16
+#define PROPERTYHANDLE_MAXIMUMPAPERWIDTH            11
+#define PROPERTYHANDLE_MAXIMUMPAPERHEIGHT           12
+#define PROPERTYHANDLE_MAXIMUMPAPERLEFTMARGIN       13
+#define PROPERTYHANDLE_MAXIMUMPAPERRIGHTMARGIN      14
+#define PROPERTYHANDLE_MAXIMUMPAPERTOPMARGIN        15
+#define PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN     16
 
 // primitives
-#define	PROPERTYHANDLE_ANTIALIASING                     17
-#define	PROPERTYHANDLE_SNAPHORVERLINESTODISCRETE        18
-#define	PROPERTYHANDLE_SOLIDDRAGCREATE					19
-#define	PROPERTYHANDLE_RENDERDECORATEDTEXTDIRECT        20
-#define	PROPERTYHANDLE_RENDERSIMPLETEXTDIRECT           21
-#define	PROPERTYHANDLE_QUADRATIC3DRENDERLIMIT           22
-#define	PROPERTYHANDLE_QUADRATICFORMCONTROLRENDERLIMIT  23
+#define PROPERTYHANDLE_ANTIALIASING                     17
+#define PROPERTYHANDLE_SNAPHORVERLINESTODISCRETE        18
+#define PROPERTYHANDLE_SOLIDDRAGCREATE                  19
+#define PROPERTYHANDLE_RENDERDECORATEDTEXTDIRECT        20
+#define PROPERTYHANDLE_RENDERSIMPLETEXTDIRECT           21
+#define PROPERTYHANDLE_QUADRATIC3DRENDERLIMIT           22
+#define PROPERTYHANDLE_QUADRATICFORMCONTROLRENDERLIMIT  23
 
 // #i97672# selection settings
-#define	PROPERTYHANDLE_TRANSPARENTSELECTION             24
-#define	PROPERTYHANDLE_TRANSPARENTSELECTIONPERCENT      25
-#define	PROPERTYHANDLE_SELECTIONMAXIMUMLUMINANCEPERCENT 26
+#define PROPERTYHANDLE_TRANSPARENTSELECTION             24
+#define PROPERTYHANDLE_TRANSPARENTSELECTIONPERCENT      25
+#define PROPERTYHANDLE_SELECTIONMAXIMUMLUMINANCEPERCENT 26
 
-#define	PROPERTYCOUNT								27
+#define PROPERTYCOUNT                               27
 
 class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
 public:
 
 //---------------------------------------------------------------------------------------------------------
-//	constructor / destructor
+//  constructor / destructor
 //---------------------------------------------------------------------------------------------------------
 
      SvtOptionsDrawinglayer_Impl();
     ~SvtOptionsDrawinglayer_Impl();
 
 //---------------------------------------------------------------------------------------------------------
-//	overloaded methods of baseclass
+//  overloaded methods of baseclass
 //---------------------------------------------------------------------------------------------------------
 
     virtual void Commit();
 
 //---------------------------------------------------------------------------------------------------------
-//	public interface
+//  public interface
 //---------------------------------------------------------------------------------------------------------
 
-    sal_Bool	IsOverlayBuffer() const;
-    sal_Bool	IsPaintBuffer() const;
-    Color		GetStripeColorA() const;
-    Color		GetStripeColorB() const;
-    sal_uInt16	GetStripeLength() const;
+    sal_Bool    IsOverlayBuffer() const;
+    sal_Bool    IsPaintBuffer() const;
+    Color       GetStripeColorA() const;
+    Color       GetStripeColorB() const;
+    sal_uInt16  GetStripeLength() const;
 
     // #i73602#
-    sal_Bool	IsOverlayBuffer_Calc() const;
-    sal_Bool	IsOverlayBuffer_Writer() const;
-    sal_Bool	IsOverlayBuffer_DrawImpress() const;
+    sal_Bool    IsOverlayBuffer_Calc() const;
+    sal_Bool    IsOverlayBuffer_Writer() const;
+    sal_Bool    IsOverlayBuffer_DrawImpress() const;
 
     // #i74769#, #i75172#
-    sal_Bool	IsPaintBuffer_Calc() const;
-    sal_Bool	IsPaintBuffer_Writer() const;
-    sal_Bool	IsPaintBuffer_DrawImpress() const;
+    sal_Bool    IsPaintBuffer_Calc() const;
+    sal_Bool    IsPaintBuffer_Writer() const;
+    sal_Bool    IsPaintBuffer_DrawImpress() const;
 
-    void		SetOverlayBuffer( sal_Bool bState );
-    void		SetPaintBuffer( sal_Bool bState );
-    void		SetStripeColorA( Color aColor );
-    void		SetStripeColorB( Color aColor );
-    void		SetStripeLength( sal_uInt16 nLength );
+    void        SetOverlayBuffer( sal_Bool bState );
+    void        SetPaintBuffer( sal_Bool bState );
+    void        SetStripeColorA( Color aColor );
+    void        SetStripeColorB( Color aColor );
+    void        SetStripeLength( sal_uInt16 nLength );
 
     // #i73602#
-    void		SetOverlayBuffer_Calc( sal_Bool bState );
-    void		SetOverlayBuffer_Writer( sal_Bool bState );
-    void		SetOverlayBuffer_DrawImpress( sal_Bool bState );
+    void        SetOverlayBuffer_Calc( sal_Bool bState );
+    void        SetOverlayBuffer_Writer( sal_Bool bState );
+    void        SetOverlayBuffer_DrawImpress( sal_Bool bState );
 
     // #i74769#, #i75172#
-    void		SetPaintBuffer_Calc( sal_Bool bState );
-    void		SetPaintBuffer_Writer( sal_Bool bState );
-    void		SetPaintBuffer_DrawImpress( sal_Bool bState );
+    void        SetPaintBuffer_Calc( sal_Bool bState );
+    void        SetPaintBuffer_Writer( sal_Bool bState );
+    void        SetPaintBuffer_DrawImpress( sal_Bool bState );
 
     // #i4219#
     sal_uInt32 GetMaximumPaperWidth() const;
@@ -244,33 +244,33 @@ public:
     sal_Bool IsAAPossibleOnThisSystem() const;
 
     // primitives
-    sal_Bool	IsAntiAliasing() const;
-    sal_Bool	IsSnapHorVerLinesToDiscrete() const;
-    sal_Bool	IsSolidDragCreate() const;
-    sal_Bool	IsRenderDecoratedTextDirect() const;
-    sal_Bool	IsRenderSimpleTextDirect() const;
+    sal_Bool    IsAntiAliasing() const;
+    sal_Bool    IsSnapHorVerLinesToDiscrete() const;
+    sal_Bool    IsSolidDragCreate() const;
+    sal_Bool    IsRenderDecoratedTextDirect() const;
+    sal_Bool    IsRenderSimpleTextDirect() const;
     sal_uInt32  GetQuadratic3DRenderLimit() const;
     sal_uInt32  GetQuadraticFormControlRenderLimit() const;
 
-    void		SetAntiAliasing( sal_Bool bState );
-    void		SetSnapHorVerLinesToDiscrete( sal_Bool bState );
-    void		SetSolidDragCreate( sal_Bool bState );
-    void		SetRenderDecoratedTextDirect( sal_Bool bState );
-    void		SetRenderSimpleTextDirect( sal_Bool bState );
+    void        SetAntiAliasing( sal_Bool bState );
+    void        SetSnapHorVerLinesToDiscrete( sal_Bool bState );
+    void        SetSolidDragCreate( sal_Bool bState );
+    void        SetRenderDecoratedTextDirect( sal_Bool bState );
+    void        SetRenderSimpleTextDirect( sal_Bool bState );
     void        SetQuadratic3DRenderLimit(sal_uInt32 nNew);
     void        SetQuadraticFormControlRenderLimit(sal_uInt32 nNew);
 
     // #i97672# selection settings
-    sal_Bool	IsTransparentSelection() const;
-    sal_uInt16	GetTransparentSelectionPercent() const;
-    sal_uInt16	GetSelectionMaximumLuminancePercent() const;
+    sal_Bool    IsTransparentSelection() const;
+    sal_uInt16  GetTransparentSelectionPercent() const;
+    sal_uInt16  GetSelectionMaximumLuminancePercent() const;
 
-    void		SetTransparentSelection( sal_Bool bState );
-    void		SetTransparentSelectionPercent( sal_uInt16 nPercent );
-    void		SetSelectionMaximumLuminancePercent( sal_uInt16 nPercent );
+    void        SetTransparentSelection( sal_Bool bState );
+    void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
+    void        SetSelectionMaximumLuminancePercent( sal_uInt16 nPercent );
 
 //-------------------------------------------------------------------------------------------------------------
-//	private methods
+//  private methods
 //-------------------------------------------------------------------------------------------------------------
 
 private:
@@ -278,48 +278,48 @@ private:
     static Sequence< OUString > impl_GetPropertyNames();
 
 //-------------------------------------------------------------------------------------------------------------
-//	private member
+//  private member
 //-------------------------------------------------------------------------------------------------------------
 
 private:
 
-        sal_Bool	m_bOverlayBuffer;
-        sal_Bool	m_bPaintBuffer;
-        Color		m_bStripeColorA;
-        Color		m_bStripeColorB;
-        sal_uInt16	m_nStripeLength;
+        sal_Bool    m_bOverlayBuffer;
+        sal_Bool    m_bPaintBuffer;
+        Color       m_bStripeColorA;
+        Color       m_bStripeColorB;
+        sal_uInt16  m_nStripeLength;
 
         // #i73602#
-        sal_Bool	m_bOverlayBuffer_Calc;
-        sal_Bool	m_bOverlayBuffer_Writer;
-        sal_Bool	m_bOverlayBuffer_DrawImpress;
+        sal_Bool    m_bOverlayBuffer_Calc;
+        sal_Bool    m_bOverlayBuffer_Writer;
+        sal_Bool    m_bOverlayBuffer_DrawImpress;
 
         // #i74769#, #i75172#
-        sal_Bool	m_bPaintBuffer_Calc;
-        sal_Bool	m_bPaintBuffer_Writer;
-        sal_Bool	m_bPaintBuffer_DrawImpress;
+        sal_Bool    m_bPaintBuffer_Calc;
+        sal_Bool    m_bPaintBuffer_Writer;
+        sal_Bool    m_bPaintBuffer_DrawImpress;
 
         // #i4219#
-        sal_uInt32	m_nMaximumPaperWidth;
-        sal_uInt32	m_nMaximumPaperHeight;
-        sal_uInt32	m_nMaximumPaperLeftMargin;
-        sal_uInt32	m_nMaximumPaperRightMargin;
-        sal_uInt32	m_nMaximumPaperTopMargin;
-        sal_uInt32	m_nMaximumPaperBottomMargin;
+        sal_uInt32  m_nMaximumPaperWidth;
+        sal_uInt32  m_nMaximumPaperHeight;
+        sal_uInt32  m_nMaximumPaperLeftMargin;
+        sal_uInt32  m_nMaximumPaperRightMargin;
+        sal_uInt32  m_nMaximumPaperTopMargin;
+        sal_uInt32  m_nMaximumPaperBottomMargin;
 
         // primitives
-        sal_Bool	m_bAntiAliasing;
-        sal_Bool	m_bSnapHorVerLinesToDiscrete;
-        sal_Bool	m_bSolidDragCreate;
-        sal_Bool	m_bRenderDecoratedTextDirect;
-        sal_Bool	m_bRenderSimpleTextDirect;
-        sal_uInt32	m_nQuadratic3DRenderLimit;
-        sal_uInt32	m_nQuadraticFormControlRenderLimit;
+        sal_Bool    m_bAntiAliasing;
+        sal_Bool    m_bSnapHorVerLinesToDiscrete;
+        sal_Bool    m_bSolidDragCreate;
+        sal_Bool    m_bRenderDecoratedTextDirect;
+        sal_Bool    m_bRenderSimpleTextDirect;
+        sal_uInt32  m_nQuadratic3DRenderLimit;
+        sal_uInt32  m_nQuadraticFormControlRenderLimit;
 
         // #i97672# selection settings
-        sal_uInt16	m_nTransparentSelectionPercent;
-        sal_uInt16	m_nSelectionMaximumLuminancePercent;
-        sal_Bool	m_bTransparentSelection;
+        sal_uInt16  m_nTransparentSelectionPercent;
+        sal_uInt16  m_nSelectionMaximumLuminancePercent;
+        sal_Bool    m_bTransparentSelection;
 
         // local values
         bool        m_bAllowAA : 1;
@@ -327,14 +327,14 @@ private:
 };
 
 //_________________________________________________________________________________________________________________
-//	definitions
+//  definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
 SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
-    ConfigItem( ROOTNODE_START	),
+    ConfigItem( ROOTNODE_START  ),
     m_bOverlayBuffer( DEFAULT_OVERLAYBUFFER ),
     m_bPaintBuffer( DEFAULT_PAINTBUFFER ),
     m_bStripeColorA(Color(DEFAULT_STRIPE_COLOR_A)),
@@ -377,14 +377,14 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     m_bAllowAA(true),
     m_bAllowAAChecked(false)
 {
-    Sequence< OUString >	seqNames( impl_GetPropertyNames() );
-    Sequence< Any >			seqValues	= GetProperties( seqNames )	;
+    Sequence< OUString >    seqNames( impl_GetPropertyNames() );
+    Sequence< Any >         seqValues   = GetProperties( seqNames ) ;
 
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nI miss some values of configuration keys!\n" );
 
     // Copy values from list in right order to ouer internal member.
     sal_Int32 nPropertyCount = seqValues.getLength();
-    sal_Int32 nProperty	= 0;
+    sal_Int32 nProperty = 0;
 
     for( nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
@@ -594,7 +594,7 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
 }
 
 //*****************************************************************************************************************
-//	destructor
+//  destructor
 //*****************************************************************************************************************
 SvtOptionsDrawinglayer_Impl::~SvtOptionsDrawinglayer_Impl()
 {
@@ -603,12 +603,12 @@ SvtOptionsDrawinglayer_Impl::~SvtOptionsDrawinglayer_Impl()
 }
 
 //*****************************************************************************************************************
-//	Commit
+//  Commit
 //*****************************************************************************************************************
 void SvtOptionsDrawinglayer_Impl::Commit()
 {
-    Sequence< OUString >	aSeqNames( impl_GetPropertyNames() );
-    Sequence< Any >			aSeqValues( aSeqNames.getLength() );
+    Sequence< OUString >    aSeqNames( impl_GetPropertyNames() );
+    Sequence< Any >         aSeqValues( aSeqNames.getLength() );
 
     for( sal_Int32 nProperty = 0, nCount = aSeqNames.getLength(); nProperty < nCount; ++nProperty )
     {
@@ -733,7 +733,7 @@ void SvtOptionsDrawinglayer_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_Bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer() const
 {
@@ -741,7 +741,7 @@ sal_Bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_Bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer() const
 {
@@ -749,7 +749,7 @@ sal_Bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 Color SvtOptionsDrawinglayer_Impl::GetStripeColorA() const
 {
@@ -757,7 +757,7 @@ Color SvtOptionsDrawinglayer_Impl::GetStripeColorA() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 Color SvtOptionsDrawinglayer_Impl::GetStripeColorB() const
 {
@@ -765,7 +765,7 @@ Color SvtOptionsDrawinglayer_Impl::GetStripeColorB() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_uInt16 SvtOptionsDrawinglayer_Impl::GetStripeLength() const
 {
@@ -836,7 +836,7 @@ sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperBottomMargin() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtOptionsDrawinglayer_Impl::SetOverlayBuffer( sal_Bool bState )
 {
@@ -848,7 +848,7 @@ void SvtOptionsDrawinglayer_Impl::SetOverlayBuffer( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtOptionsDrawinglayer_Impl::SetPaintBuffer( sal_Bool bState )
 {
@@ -860,7 +860,7 @@ void SvtOptionsDrawinglayer_Impl::SetPaintBuffer( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtOptionsDrawinglayer_Impl::SetStripeColorA( Color aColor )
 {
@@ -872,7 +872,7 @@ void SvtOptionsDrawinglayer_Impl::SetStripeColorA( Color aColor )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtOptionsDrawinglayer_Impl::SetStripeColorB( Color aColor )
 {
@@ -884,7 +884,7 @@ void SvtOptionsDrawinglayer_Impl::SetStripeColorB( Color aColor )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtOptionsDrawinglayer_Impl::SetStripeLength( sal_uInt16 nLength )
 {
@@ -1174,18 +1174,18 @@ sal_uInt16 SvtOptionsDrawinglayer_Impl::GetSelectionMaximumLuminancePercent() co
 }
 
 //*****************************************************************************************************************
-//	private method
+//  private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
 {
     // Build static list of configuration key names.
     static const OUString pProperties[] =
     {
-        PROPERTYNAME_OVERLAYBUFFER		,
-        PROPERTYNAME_PAINTBUFFER		,
-        PROPERTYNAME_STRIPE_COLOR_A		,
-        PROPERTYNAME_STRIPE_COLOR_B		,
-        PROPERTYNAME_STRIPE_LENGTH		,
+        PROPERTYNAME_OVERLAYBUFFER      ,
+        PROPERTYNAME_PAINTBUFFER        ,
+        PROPERTYNAME_STRIPE_COLOR_A     ,
+        PROPERTYNAME_STRIPE_COLOR_B     ,
+        PROPERTYNAME_STRIPE_LENGTH      ,
 
         // #i73602#
         PROPERTYNAME_OVERLAYBUFFER_CALC,
@@ -1227,15 +1227,15 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
 }
 
 //*****************************************************************************************************************
-//	initialize static member
-//	DON'T DO IT IN YOUR HEADER!
-//	see definition for further informations
+//  initialize static member
+//  DON'T DO IT IN YOUR HEADER!
+//  see definition for further informations
 //*****************************************************************************************************************
 SvtOptionsDrawinglayer_Impl* SvtOptionsDrawinglayer::m_pDataContainer = NULL;
 sal_Int32 SvtOptionsDrawinglayer::m_nRefCount = 0;
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
 SvtOptionsDrawinglayer::SvtOptionsDrawinglayer()
 {
@@ -1251,7 +1251,7 @@ SvtOptionsDrawinglayer::SvtOptionsDrawinglayer()
 }
 
 //*****************************************************************************************************************
-//	destructor
+//  destructor
 //*****************************************************************************************************************
 SvtOptionsDrawinglayer::~SvtOptionsDrawinglayer()
 {
@@ -1269,7 +1269,7 @@ SvtOptionsDrawinglayer::~SvtOptionsDrawinglayer()
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_Bool SvtOptionsDrawinglayer::IsOverlayBuffer() const
 {
@@ -1278,7 +1278,7 @@ sal_Bool SvtOptionsDrawinglayer::IsOverlayBuffer() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_Bool SvtOptionsDrawinglayer::IsPaintBuffer() const
 {
@@ -1287,7 +1287,7 @@ sal_Bool SvtOptionsDrawinglayer::IsPaintBuffer() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 Color SvtOptionsDrawinglayer::GetStripeColorA() const
 {
@@ -1296,7 +1296,7 @@ Color SvtOptionsDrawinglayer::GetStripeColorA() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 Color SvtOptionsDrawinglayer::GetStripeColorB() const
 {
@@ -1305,7 +1305,7 @@ Color SvtOptionsDrawinglayer::GetStripeColorB() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 sal_uInt16 SvtOptionsDrawinglayer::GetStripeLength() const
 {
@@ -1389,7 +1389,7 @@ sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperBottomMargin() const
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtOptionsDrawinglayer::SetOverlayBuffer( sal_Bool bState )
 {
@@ -1398,7 +1398,7 @@ void SvtOptionsDrawinglayer::SetOverlayBuffer( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtOptionsDrawinglayer::SetPaintBuffer( sal_Bool bState )
 {
@@ -1407,7 +1407,7 @@ void SvtOptionsDrawinglayer::SetPaintBuffer( sal_Bool bState )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtOptionsDrawinglayer::SetStripeColorA( Color aColor )
 {
@@ -1416,7 +1416,7 @@ void SvtOptionsDrawinglayer::SetStripeColorA( Color aColor )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtOptionsDrawinglayer::SetStripeColorB( Color aColor )
 {
@@ -1425,7 +1425,7 @@ void SvtOptionsDrawinglayer::SetStripeColorB( Color aColor )
 }
 
 //*****************************************************************************************************************
-//	public method
+//  public method
 //*****************************************************************************************************************
 void SvtOptionsDrawinglayer::SetStripeLength( sal_uInt16 nLength )
 {
@@ -1677,7 +1677,7 @@ void SvtOptionsDrawinglayer::SetSelectionMaximumLuminancePercent( sal_uInt16 nPe
 }
 
 //*****************************************************************************************************************
-//	private method
+//  private method
 //*****************************************************************************************************************
 Mutex& SvtOptionsDrawinglayer::GetOwnStaticMutex()
 {

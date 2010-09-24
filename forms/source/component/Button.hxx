@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,7 +122,7 @@ typedef ::cppu::ImplHelper3 <   ::com::sun::star::awt::XButton
                             ,   ::com::sun::star::beans::XPropertyChangeListener
                             >   OButtonControl_BASE;
 
-class OButtonControl	:public OButtonControl_BASE
+class OButtonControl    :public OButtonControl_BASE
                         ,public OClickableImageBaseControl
                         ,public OFormNavigationHelper
 {
@@ -203,7 +203,7 @@ private:
 };
 
 //.........................................................................
-}	// namespace frm
+}   // namespace frm
 //.........................................................................
 
 #endif // _FRM_BUTTON_HXX_

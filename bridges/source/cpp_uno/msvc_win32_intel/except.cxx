@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,8 +101,8 @@ typedef hash_map< OUString, void *, OUStringHash, equal_to< OUString > > t_strin
 //==================================================================================================
 class RTTInfos
 {
-    Mutex				_aMutex;
-    t_string2PtrMap		_allRTTI;
+    Mutex               _aMutex;
+    t_string2PtrMap     _allRTTI;
 
     static OUString toRawName( OUString const & rUNOname ) throw ();
 public:
@@ -198,12 +198,12 @@ struct ObjectFunction
 
     inline static void * operator new ( size_t nSize );
     inline static void operator delete ( void * pMem );
-    
+
     ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpFunc ) throw ();
     ~ObjectFunction() throw ();
 };
 
-inline void * ObjectFunction::operator new ( size_t nSize ) 
+inline void * ObjectFunction::operator new ( size_t nSize )
 {
     void * pMem = rtl_allocateMemory( nSize );
     if (pMem != 0)
@@ -271,7 +271,7 @@ static __declspec(naked) void copyConstruct() throw ()
     {
         // ObjectFunction this already on stack
         push [esp+8]  // source exc object this
-        push ecx	  // exc object
+        push ecx      // exc object
         call __copyConstruct
         add  esp, 12  // + ObjectFunction this
         ret  4
@@ -283,7 +283,7 @@ static __declspec(naked) void destruct() throw ()
     __asm
     {
         // ObjectFunction this already on stack
-        push ecx	// exc object
+        push ecx    // exc object
         call __destruct
         add  esp, 8 // + ObjectFunction this
         ret
@@ -293,11 +293,11 @@ static __declspec(naked) void destruct() throw ()
 //==================================================================================================
 struct ExceptionType
 {
-    sal_Int32			_n0;
-    type_info *			_pTypeInfo;
-    sal_Int32			_n1, _n2, _n3, _n4;
-    ObjectFunction *	_pCopyCtor;
-    sal_Int32			_n5;
+    sal_Int32           _n0;
+    type_info *         _pTypeInfo;
+    sal_Int32           _n1, _n2, _n3, _n4;
+    ObjectFunction *    _pCopyCtor;
+    sal_Int32           _n5;
 
     inline ExceptionType( typelib_TypeDescription * pTypeDescr ) throw ()
         : _n0( 0 )
@@ -314,11 +314,11 @@ struct ExceptionType
 //==================================================================================================
 struct RaiseInfo
 {
-    sal_Int32			_n0;
-    ObjectFunction *	_pDtor;
-    sal_Int32			_n2;
-    void *				_types;
-    sal_Int32			_n3, _n4;
+    sal_Int32           _n0;
+    ObjectFunction *    _pDtor;
+    sal_Int32           _n2;
+    void *              _types;
+    sal_Int32           _n3, _n4;
 
     RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ();
     ~RaiseInfo() throw ();
@@ -373,8 +373,8 @@ RaiseInfo::~RaiseInfo() throw ()
 //==================================================================================================
 class ExceptionInfos
 {
-    Mutex			_aMutex;
-    t_string2PtrMap	_allRaiseInfos;
+    Mutex           _aMutex;
+    t_string2PtrMap _allRaiseInfos;
 
 public:
     static void * getRaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ();
@@ -392,7 +392,7 @@ ExceptionInfos::~ExceptionInfos() throw ()
 #if OSL_DEBUG_LEVEL > 1
     OSL_TRACE( "> freeing exception infos... <\n" );
 #endif
-    
+
     MutexGuard aGuard( _aMutex );
     for ( t_string2PtrMap::const_iterator iPos( _allRaiseInfos.begin() );
           iPos != _allRaiseInfos.end(); ++iPos )
@@ -512,7 +512,7 @@ int msci_filterCppException(
     // handle only C++ exceptions:
     if (pRecord == 0 || pRecord->ExceptionCode != MSVC_ExceptionCode)
         return EXCEPTION_CONTINUE_SEARCH;
-    
+
 #if _MSC_VER < 1300 // MSVC -6
     bool rethrow = (pRecord->NumberParameters < 3 ||
                     pRecord->ExceptionInformation[ 2 ] == 0);
@@ -545,9 +545,9 @@ int msci_filterCppException(
     // rethrow: handle only C++ exceptions:
     if (pRecord == 0 || pRecord->ExceptionCode != MSVC_ExceptionCode)
         return EXCEPTION_CONTINUE_SEARCH;
-    
+
     if (pRecord->NumberParameters == 3 &&
-//  		pRecord->ExceptionInformation[ 0 ] == MSVC_magic_number &&
+//          pRecord->ExceptionInformation[ 0 ] == MSVC_magic_number &&
         pRecord->ExceptionInformation[ 1 ] != 0 &&
         pRecord->ExceptionInformation[ 2 ] != 0)
     {
@@ -565,7 +565,7 @@ int msci_filterCppException(
                             pType->_pTypeInfo )->_m_d_name,
                         RTL_TEXTENCODING_ASCII_US ) );
                 OUString aUNOname( toUNOname( aRTTIname ) );
-                
+
                 typelib_TypeDescription * pExcTypeDescr = 0;
                 typelib_typedescription_getByName(
                     &pExcTypeDescr, aUNOname.pData );
@@ -609,7 +609,7 @@ int msci_filterCppException(
 #endif
                     typelib_typedescription_release( pExcTypeDescr );
                 }
-                
+
                 return EXCEPTION_EXECUTE_HANDLER;
             }
         }

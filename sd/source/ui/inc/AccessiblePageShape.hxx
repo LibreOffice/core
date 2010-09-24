@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ namespace accessibility {
 /** A page shape represents the actual page as seen on the screen.
 */
 class AccessiblePageShape
-    :	public AccessibleShape
+    :   public AccessibleShape
 {
 public:
     //=====  internal  ========================================================
@@ -85,12 +85,12 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    ///	Returns always 0 because there can be no children.
+    /// Returns always 0 because there can be no children.
     virtual sal_Int32 SAL_CALL
         getAccessibleChildCount (void)
         throw ();
-        
-    /**	Return the specified child.
+
+    /** Return the specified child.
         @param nIndex
             Index of the requested child.
         @return
@@ -100,31 +100,31 @@ public:
             Throws always an exception because there are no children.
     */
     virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible> SAL_CALL 
+            ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException);
 
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void) 
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getForeground (void) 
+    virtual sal_Int32 SAL_CALL getForeground (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getBackground (void) 
+    virtual sal_Int32 SAL_CALL getBackground (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XComponent  ======================================================
 
-    virtual void SAL_CALL 
-        dispose (void) 
+    virtual void SAL_CALL
+        dispose (void)
         throw (::com::sun::star::uno::RuntimeException);
 
 
     //=====  XServiceInfo  ====================================================
-    
+
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
@@ -136,15 +136,15 @@ public:
 
     //=====  lang::XEventListener  ============================================
 
-    virtual void SAL_CALL 
-        disposing (const ::com::sun::star::lang::EventObject& Source) 
+    virtual void SAL_CALL
+        disposing (const ::com::sun::star::lang::EventObject& Source)
         throw (::com::sun::star::uno::RuntimeException);
 
 
     using AccessibleShape::disposing;
 
 protected:
-    /**	Create a base name string that contains the accessible name.
+    /** Create a base name string that contains the accessible name.
     */
     virtual ::rtl::OUString
         CreateAccessibleBaseName (void)
@@ -154,7 +154,7 @@ protected:
         CreateAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    ///	Create a description string that contains the accessible description.
+    /// Create a description string that contains the accessible description.
     virtual ::rtl::OUString
         CreateAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
@@ -162,8 +162,8 @@ protected:
 private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XDrawPage> mxPage;
-    
-    /** Don't use the default constructor.  Use the public constructor that 
+
+    /** Don't use the default constructor.  Use the public constructor that
         takes the original shape and the parent as arguments instead.
     */
     explicit AccessiblePageShape (void);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         "ParaLeftMargin", "ParaLineSpacing", "ParaTopMargin", "ParaBottomMargin",
         "CharStrikeout", "CharEscapement", "ParaTabStops", "CharUnderline"
     };
-    
+
     final static String[] localeAttributeList = {
         "CharLocale", "CharLocaleAsian", "CharLocaleComplex"
     };
@@ -65,7 +65,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
 
     /** Creates new GenericAccessibleEditableText object */
     public AccessibleTextImpl(XAccessibleText xAccessibleText) {
-        
+
         if (Build.PRODUCT) {
             unoObject = xAccessibleText;
         } else {
@@ -77,13 +77,13 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
             }
         }
     }
-    
+
     public AccessibleTextImpl() {
     }
-    
+
     public static javax.accessibility.AccessibleText get(com.sun.star.uno.XInterface unoObject) {
         try {
-            XAccessibleText unoAccessibleText = (XAccessibleText) 
+            XAccessibleText unoAccessibleText = (XAccessibleText)
                 UnoRuntime.queryInterface(XAccessibleText.class, unoObject);
             if (unoAccessibleText != null) {
                 return new AccessibleTextImpl(unoAccessibleText);
@@ -96,7 +96,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
     protected static Object convertTextSegment(Object any) {
         try {
             if (AnyConverter.isObject(any)) {
-                TextSegment ts = (TextSegment) 
+                TextSegment ts = (TextSegment)
                     AnyConverter.toObject(TextSegmentType, any);
                 if (ts != null) {
                     // Since there is nothing like a "range" object in the JAA yet,
@@ -108,7 +108,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
             }
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
-        
+
         return null;
     }
 
@@ -126,9 +126,9 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
 
     protected java.util.Locale getLocale(int index) {
         try {
-            com.sun.star.beans.PropertyValue[] propertyValues = 
+            com.sun.star.beans.PropertyValue[] propertyValues =
                 unoObject.getCharacterAttributes(index, localeAttributeList);
-                
+
             if (null != propertyValues) {
                 for (int i = 0; i < propertyValues.length; i++) {
                     com.sun.star.lang.Locale unoLocale = (com.sun.star.lang.Locale)
@@ -146,11 +146,11 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
             return java.util.Locale.getDefault();
         }
     }
-    
 
-    /** Returns the string after a given index 
+
+    /** Returns the string after a given index
      *
-     *  The Java word iterator has a different understanding of what 
+     *  The Java word iterator has a different understanding of what
      *  a word is than the word iterator used by OOo, so we use the
      *  Java iterators to ensure maximal compatibility with Java.
      */
@@ -185,7 +185,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         case AccessibleText.SENTENCE:
             try {
                 String s = unoObject.getText();
-                BreakIterator sentence = 
+                BreakIterator sentence =
                     BreakIterator.getSentenceInstance(getLocale(index));
                 sentence.setText(s);
                 int start = sentence.following(index);
@@ -366,7 +366,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
                         (float) (toPointFactor * ls.Height));
                 }
             }
-            // FIXME: Java 1.4 NameAttribute, Orientation, ResolveAttribute 
+            // FIXME: Java 1.4 NameAttribute, Orientation, ResolveAttribute
             // Set space above attribute
             else if (property.Name.equals("ParaTopMargin")) {
                 StyleConstants.setSpaceAbove(as,
@@ -497,7 +497,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
 
     /** Returns the string before a given index
      *
-     *  The Java word iterator has a different understanding of what 
+     *  The Java word iterator has a different understanding of what
      *  a word is than the word iterator used by OOo, so we use the
      *  Java iterators to ensure maximal compatibility with Java.
      */
@@ -530,7 +530,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         case AccessibleText.SENTENCE:
             try {
                 String s = unoObject.getText();
-                BreakIterator sentence = 
+                BreakIterator sentence =
                     BreakIterator.getSentenceInstance(getLocale(index));
                 sentence.setText(s);
                 int end = sentence.following(index);
@@ -575,7 +575,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
 
     /** Returns the string at a given index
      *
-     *  The Java word iterator has a different understanding of what 
+     *  The Java word iterator has a different understanding of what
      *  a word is than the word iterator used by OOo, so we use the
      *  Java iterators to ensure maximal compatibility with Java.
      */
@@ -603,7 +603,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         case AccessibleText.SENTENCE:
             try {
                 String s = unoObject.getText();
-                BreakIterator sentence = 
+                BreakIterator sentence =
                     BreakIterator.getSentenceInstance(getLocale(index));
                 sentence.setText(s);
                 int end = sentence.following(index);
@@ -635,7 +635,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
             } catch (com.sun.star.lang.IllegalArgumentException e) {
                 return null;
             }
-        
+
         default:
             return null;
         }

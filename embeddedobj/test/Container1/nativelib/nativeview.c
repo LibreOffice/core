@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,10 +77,10 @@ JNIEXPORT jlong JNICALL Java_embeddedobj_test_NativeView_getNativeWindow
     JAWT_DrawingSurface*          ds      ;
     JAWT_DrawingSurfaceInfo*      dsi     ;
     JAWT_Win32DrawingSurfaceInfo* dsi_win ;
-    jlong						  drawable;
+    jlong                         drawable;
 
 #if 0
-    LONG						  hFuncPtr;
+    LONG                          hFuncPtr;
 #endif
 
     /* Get the AWT */
@@ -122,7 +122,7 @@ JNIEXPORT jlong JNICALL Java_embeddedobj_test_NativeView_getNativeWindow
        and calls on such construct produce
        a stack overflow.
      */
-    
+
     if (GetProp( (HWND)drawable, OLD_PROC_KEY )==0)
     {
         hFuncPtr = SetWindowLong( (HWND)drawable, GWL_WNDPROC, (DWORD)NativeViewWndProc );

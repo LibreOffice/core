@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 #define CB_COMPLETE     29
 #define FL_NUMBER       30
 
-#define LB_ALIGN       	31
+#define LB_ALIGN        31
 #define FL_ALIGN        33
 
 #define FT_START        40
@@ -71,7 +71,7 @@
 #define FT_ALL_LEVEL    108
 #define NF_ALL_LEVEL    109
 
-#define MN_FORM		110
+#define MN_FORM     110
 #define MN_FORM1        111
 #define MN_FORMBASE     MN_FORM1
 #define MN_FORM2        112
@@ -85,14 +85,14 @@
 #define MN_SAVE         120
 
 #define FL_LEVEL                130
-#define LB_LEVEL	    131
+#define LB_LEVEL        131
 #define WIN_PREVIEW     132
-#define FT_SUFFIX	    134
-#define ED_SUFFIX	    135
-#define FT_PREFIX	    136
-#define ED_PREFIX	    137
-#define ST_NO_COLL 		138
+#define FT_SUFFIX       134
+#define ED_SUFFIX       135
+#define FT_PREFIX       136
+#define ED_PREFIX       137
+#define ST_NO_COLL      138
 
-#define ST_FORM			140
-#define FT_CHARFMT		141
+#define ST_FORM         140
+#define FT_CHARFMT      141
 #define LB_CHARFMT      141

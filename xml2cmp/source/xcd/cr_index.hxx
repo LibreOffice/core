@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,47 +41,47 @@ class Index
 {
   public:
                         Index(
-                            const char	*		i_sOutputDirectory,
-                            const char *		i_sIdlRootPath,
+                            const char  *       i_sOutputDirectory,
+                            const char *        i_sIdlRootPath,
                             const List<Simstr> &
                                                 i_rTagList );
                         ~Index();
 
-    void				GatherData(
+    void                GatherData(
                             const List<Simstr> &
                                                 i_rInputFileList );
-    void				WriteOutput(
-                            const char *      	i_sOuputFile );
+    void                WriteOutput(
+                            const char *        i_sOuputFile );
 
-    void				InsertSupportedService(
-                            const Simstr &		i_sService );
+    void                InsertSupportedService(
+                            const Simstr &      i_sService );
   private:
-    void				ReadFile(
-                            const char *      	i_sFilename );
+    void                ReadFile(
+                            const char *        i_sFilename );
     void                CreateHtmlFileName(
-                            char *				o_sOutputHtml,
-                            const ModuleDescription	&
+                            char *              o_sOutputHtml,
+                            const ModuleDescription &
                                                 i_rModule );
-    void				WriteTableFromHeap(
-                            std::ostream &		o_rOut,
-                            Heap &		        i_rHeap,
+    void                WriteTableFromHeap(
+                            std::ostream &      o_rOut,
+                            Heap &              i_rHeap,
                             const char *        i_sIndexKey,
                             const char *        i_sIndexReference,
-                            E_LinkType			i_eLinkType );
-    void				WriteHeap(
-                            std::ostream &  	o_rOut,
-                            Heap &		        i_rHeap,
-                            E_LinkType			i_eLinkType );
+                            E_LinkType          i_eLinkType );
+    void                WriteHeap(
+                            std::ostream &      o_rOut,
+                            Heap &              i_rHeap,
+                            E_LinkType          i_eLinkType );
 
     // DATA
-    Heap				aService2Module;
-    Heap				aModule2Service;
+    Heap                aService2Module;
+    Heap                aModule2Service;
 
-    Simstr				sOutputDirectory;
-    Simstr			    sIdlRootPath;
+    Simstr              sOutputDirectory;
+    Simstr              sIdlRootPath;
 
     // Temporary Data
-    Simstr				sCurModule;
+    Simstr              sCurModule;
 };
 
 

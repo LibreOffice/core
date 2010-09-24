@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,7 +137,7 @@ namespace pcr
         }
         return ::com::sun::star::awt::Size( aSize.Width(), aSize.Height() );
     }
-    
+
 //............................................................................
 } // namespace pcr
 //............................................................................

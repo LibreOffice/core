@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,14 +98,14 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
         if( bCreateDefaultModel && xXForms.is() )
         {
             OUString sName(RTL_CONSTASCII_USTRINGPARAM("Model 1"));
-            Reference<XModel> xModel( 
+            Reference<XModel> xModel(
                 lcl_createInstance( "com.sun.star.xforms.Model" ),
                 UNO_QUERY );
             DBG_ASSERT( xModel.is(), "no model?" );
             if( xModel.is() )
             {
                 xModel->setID( sName );
-                Reference<XFormsUIHelper1>( xModel, UNO_QUERY )->newInstance( 
+                Reference<XFormsUIHelper1>( xModel, UNO_QUERY )->newInstance(
                     OUString(RTL_CONSTASCII_USTRINGPARAM("Instance 1")),
                     OUString(), sal_True );
                 xModel->initialize();

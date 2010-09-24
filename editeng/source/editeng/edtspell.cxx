@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ void __EXPORT EditSpellWrapper::SpellStart( SvxSpellArea eArea )
     }
     else if ( eArea == SVX_SPELL_BODY )
     {
-        ;	// Wird ueber SpellNextDocument von App gehandelt
+        ;   // Wird ueber SpellNextDocument von App gehandelt
 
         // pSpellInfo->bSpellToEnd = sal_True;
         // pSpellInfo->aSpellTo = pImpEE->CreateEPaM( pImpEE->GetEditDoc().GetEndPaM() );
@@ -278,7 +278,7 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsS
                     WrongRange aNewWrong( rWrong.nStart, nPos );
                     rWrong.nStart = nPos+1;
                     Insert( aNewWrong, n );
-                    bRefIsValid = sal_False;	// Referenz nach Insert nicht mehr gueltig, der andere wurde davor an dessen Position eingefuegt
+                    bRefIsValid = sal_False;    // Referenz nach Insert nicht mehr gueltig, der andere wurde davor an dessen Position eingefuegt
                     n++; // Diesen nicht nochmal...
                 }
             }
@@ -339,7 +339,7 @@ void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nDeleted )
             // 2. Wrong beginnt davor, endet drinnen oder dahinter...
             else if ( ( rWrong.nStart <= nPos ) && ( rWrong.nEnd > nPos ) )
             {
-                if ( rWrong.nEnd <= nEndChanges )	// endet drinnen
+                if ( rWrong.nEnd <= nEndChanges )   // endet drinnen
                     rWrong.nEnd = nPos;
                 else
                     rWrong.nEnd = rWrong.nEnd - nDeleted; // endet dahinter
@@ -417,7 +417,7 @@ void WrongList::ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd,
         WrongRange& rWrong = GetObject( n );
         if ( ( rWrong.nEnd > nStart ) && ( rWrong.nStart < nEnd ) )
         {
-            if ( rWrong.nEnd > nEnd )	// // Laeuft raus
+            if ( rWrong.nEnd > nEnd )   // // Laeuft raus
             {
                 rWrong.nStart = nEnd;
                 // Blanks?
@@ -475,7 +475,7 @@ void WrongList::MarkWrongsInvalid()
         MarkInvalid( GetObject( 0 ).nStart, GetObject( Count()-1 ).nEnd );
 }
 
-WrongList*	WrongList::Clone() const
+WrongList*  WrongList::Clone() const
 {
     WrongList* pNew = new WrongList;
     for ( sal_uInt16 n = 0; n < Count(); n++ )
@@ -491,7 +491,7 @@ WrongList*	WrongList::Clone() const
 bool WrongList::operator==(const WrongList& rCompare) const
 {
     // cleck direct members
-    if(GetInvalidStart() != rCompare.GetInvalidStart() 
+    if(GetInvalidStart() != rCompare.GetInvalidStart()
         || GetInvalidEnd() != rCompare.GetInvalidEnd()
         || Count() != rCompare.Count())
     {
@@ -622,7 +622,7 @@ sal_Bool EdtAutoCorrDoc::SetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
         aSet.Put( rItem );
 
         EditSelection aSel( EditPaM( pCurNode, nStt ), EditPaM( pCurNode, nEnd ) );
-        aSel.Max().SetIndex( nEnd );	// ???
+        aSel.Max().SetIndex( nEnd );    // ???
         pImpEE->SetAttribs( aSel, aSet, ATTRSPECIAL_EDGE );
         bAllowUndoAction = sal_False;
     }
@@ -676,7 +676,7 @@ const String* EdtAutoCorrDoc::GetPrevPara( sal_Bool )
     // Vorherigen Absatz zurueck geben, damit ermittel werden kann,
     // ob es sich beim aktuellen Wort um einen Satzanfang handelt.
 
-    bAllowUndoAction = sal_False;	// Jetzt nicht mehr...
+    bAllowUndoAction = sal_False;   // Jetzt nicht mehr...
 
     ContentList& rNodes = pImpEE->GetEditDoc();
     sal_uInt16 nPos = rNodes.GetPos( pCurNode );
@@ -708,14 +708,14 @@ const String* EdtAutoCorrDoc::GetPrevPara( sal_Bool )
 }
 
 sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
-            sal_uInt16 nEndPos, SvxAutoCorrect& rACorrect, 
+            sal_uInt16 nEndPos, SvxAutoCorrect& rACorrect,
             const String** ppPara )
 {
     // Absatz-Anfang oder ein Blank gefunden, suche nach dem Wort
     // Kuerzel im Auto
-    
-    bAllowUndoAction = sal_False;	// Jetzt nicht mehr...
-    
+
+    bAllowUndoAction = sal_False;   // Jetzt nicht mehr...
+
     String aShort( pCurNode->Copy( rSttPos, nEndPos - rSttPos ) );
     sal_Bool bRet = sal_False;
 
@@ -727,7 +727,7 @@ sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
     if( pFnd && pFnd->IsTextOnly() )
     {
         // dann mal ersetzen
-        EditSelection aSel( EditPaM( pCurNode, rSttPos ), 
+        EditSelection aSel( EditPaM( pCurNode, rSttPos ),
                             EditPaM( pCurNode, nEndPos ) );
         aSel = pImpEE->ImpDeleteSelection( aSel );
         DBG_ASSERT( nCursor >= nEndPos, "Cursor mitten im Geschehen ?!" );

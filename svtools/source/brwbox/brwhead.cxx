@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ void BrowserHeader::EndDrag()
             USHORT nOldPos = _pBrowseBox->GetColumnPos(nId),
                 nNewPos = GetItemPos( nId );
 
-            if (!_pBrowseBox->GetColumnId(0))	// Handle
+            if (!_pBrowseBox->GetColumnId(0))   // Handle
                 nNewPos++;
 
             if (nOldPos != nNewPos)

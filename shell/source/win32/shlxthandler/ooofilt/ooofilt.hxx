@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ GUID const guidStorage = PSGUID_STORAGE;      // GUID for storage property set
 //
 //--------------------------------------------------------------------------
 
-// OooFilter Class ID 
+// OooFilter Class ID
 // {7BC0E710-5703-45be-A29D-5D46D8B39262}
 GUID const CLSID_COooFilter =
 {
@@ -73,19 +73,19 @@ GUID const CLSID_COooFilter =
     { 0xa2, 0x9d, 0x5d, 0x46, 0xd8, 0xb3, 0x92, 0x62 }
 };
 
-// OpenOffice.org Persistent Handler Class ID 
+// OpenOffice.org Persistent Handler Class ID
 // {7BC0E713-5703-45be-A29D-5D46D8B39262}
-const CLSID CLSID_PERSISTENT_HANDLER = 
+const CLSID CLSID_PERSISTENT_HANDLER =
 {0x7bc0e713, 0x5703, 0x45be, {0xa2, 0x9d, 0x5d, 0x46, 0xd8, 0xb3, 0x92, 0x62}};
 
-// OpenOffice.org Persistent Handler Addin Registered Class ID 
+// OpenOffice.org Persistent Handler Addin Registered Class ID
 // {89BCB740-6119-101A-BCB7-00DD010655AF}
-const CLSID CLSID_PERSISTENT_HANDLER_ADDIN = 
+const CLSID CLSID_PERSISTENT_HANDLER_ADDIN =
 {0x89bcb740, 0x6119, 0x101a, {0xbc, 0xb7, 0x00, 0xdd, 0x01, 0x06, 0x55, 0xaf}};
 
-// OpenOffice.org Filter Handler Class ID 
+// OpenOffice.org Filter Handler Class ID
 // {7BC0E710-5703-45be-A29D-5D46D8B39262}
-const CLSID CLSID_FILTER_HANDLER = 
+const CLSID CLSID_FILTER_HANDLER =
 {0x7bc0e710, 0x5703, 0x45be, {0xa2, 0x9d, 0x5d, 0x46, 0xd8, 0xb3, 0x92, 0x62}};
 
 enum FilterState
@@ -157,11 +157,11 @@ private:
 
     COooFilter();
     virtual ~COooFilter();
-    
+
     long                      m_lRefs;                  // Reference count
     CContentReader *          m_pContentReader;         // A content reader that retrive document content.
     CMetaInfoReader *         m_pMetaInfoReader;        // A metainfo reader that retrive document metainfo.
-    FilterState               m_eState;                 // State of filtering    
+    FilterState               m_eState;                 // State of filtering
     ::std::wstring            m_pwszFileName;           // Name of input file to filter
     ULONG                     m_ulUnicodeBufferLen;     // UNICODE Characters read from file to chunk buffer
     ULONG                     m_ulUnicodeCharsRead;     // UNICODE Characters read from chunk buffer
@@ -171,7 +171,7 @@ private:
     BOOL                      m_fContents;              // TRUE if contents requested
     BOOL                      m_fEof;                   // TRUE if end of file reached
     ::std::wstring            m_pwsBuffer;              // Buffer to save UNICODE content from ChunkBuffer.
-    ULONG			          m_ChunkPosition;          // Chunk pointer to specify the current Chunk;
+    ULONG                     m_ChunkPosition;          // Chunk pointer to specify the current Chunk;
     ULONG                     m_cAttributes;            // Count of attributes
     CFullPropSpec *           m_pAttributes;            // Attributes to filter
     IStream *                 m_pStream;
@@ -213,6 +213,6 @@ private:
 
     COooFilterCF();
     virtual  ~COooFilterCF();
-    
+
     long m_lRefs;           // Reference count
 };

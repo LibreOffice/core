@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         SAL_THROW((css::uno::Exception));
 
-    
+
     // XPane
 
     css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow (void)
@@ -76,9 +76,9 @@ public:
     css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas (void)
         throw (css::uno::RuntimeException);
 
-    
+
     // XWindowListener
-    
+
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -97,7 +97,7 @@ public:
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-        
+
 private:
     /** Store the bounding box so that when the window is resized or moved
         we still know the old position and size.

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,14 +35,14 @@
 // ====================================================================
 
 FontSubsetInfo::FontSubsetInfo()
-:	m_nAscent( 0)
-,	m_nDescent( 0)
-,	m_nCapHeight( 0)
-,	m_nFontType( FontSubsetInfo::NO_FONT)
-,	mpInFontBytes( NULL)
-,	mnInByteLength( 0)
-,	meInFontType( FontSubsetInfo::NO_FONT)
-,	mpSftTTFont( NULL)
+:   m_nAscent( 0)
+,   m_nDescent( 0)
+,   m_nCapHeight( 0)
+,   m_nFontType( FontSubsetInfo::NO_FONT)
+,   mpInFontBytes( NULL)
+,   mnInByteLength( 0)
+,   meInFontType( FontSubsetInfo::NO_FONT)
+,   mpSftTTFont( NULL)
 {}
 
 // --------------------------------------------------------------------
@@ -85,15 +85,15 @@ bool FontSubsetInfo::CreateFontSubset(
 {
     // prepare request details needed by all underlying subsetters
     mnReqFontTypeMask = nReqFontTypeMask;
-    mpOutFile		= pOutFile;
-    mpReqFontName	= pReqFontName;
-    mpReqGlyphIds	= pReqGlyphIds;
-    mpReqEncodedIds	= pReqEncodedIds;
-    mnReqGlyphCount	= nReqGlyphCount;
+    mpOutFile       = pOutFile;
+    mpReqFontName   = pReqFontName;
+    mpReqGlyphIds   = pReqGlyphIds;
+    mpReqEncodedIds = pReqEncodedIds;
+    mnReqGlyphCount = nReqGlyphCount;
 
     // TODO: move the glyphid/encid/notdef reshuffling from the callers to here
 
-    // dispatch to underlying subsetters 
+    // dispatch to underlying subsetters
     bool bOK = false;
 
     // TODO: better match available input-type to possible subset-types

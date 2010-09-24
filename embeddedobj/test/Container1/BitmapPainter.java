@@ -37,7 +37,7 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
 {
     private XWindow m_xWindow;
     private XBitmap m_xBitmap;
-    
+
     private com.sun.star.awt.Rectangle m_aDrawRect;
 
     private Object m_oImageLock;
@@ -73,7 +73,7 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
 
         m_xWindow = xWindow;
         m_xBitmap = xBitmap;
-        
+
         m_aDrawRect = aDrawRect;
 
         m_oImageLock = new Object();
@@ -166,7 +166,7 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
                 // m_bFree = false;
             // }
         }
-        
+
         m_aPaintThread.setPaintRequest( xBitmap, aRect, e.UpdateRect );
         // if ( bFree )
         // {
@@ -186,7 +186,7 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
     public void mousePressed( MouseEvent e )
     {
     }
-    
+
     //------------------------------------------------------
     public void mouseReleased( MouseEvent e )
     {
@@ -209,11 +209,11 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
         // TODO: react to resizing of object bitmap
         // if the object is inplace active the object must control resizing
     }
-    
+
     //------------------------------------------------------
     public void mouseMoved( MouseEvent e )
     {
-    
+
     }
 
     // XEventListener
@@ -251,24 +251,24 @@ class BitmapPainter implements XPaintListener, XMouseListener, XMouseMotionListe
                 {
                     System.out.println( "Step2" );
                     XDisplayBitmap xDisplayBitmap = xDevice.createDisplayBitmap( xBitmap );
-        
+
                     com.sun.star.awt.Size aSize = xBitmap.getSize();
                     xGraphics.draw( xDisplayBitmap, 0, 0, aSize.Width, aSize.Height,
                                                 aRect.X, aRect.Y, aRect.Width, aRect.Height );
                 }
-    
+
                 System.out.println( "Step3" );
                 xGraphics.drawRect( aRect.X - 1, aRect.Y - 1, aRect.Width + 2, aRect.Height + 2 );
-    
+
                 // draw resize squares
                 System.out.println( "Step4" );
                 xGraphics.drawRect( aRect.X - 2, aRect.Y - 2, 4, 4 );
                 xGraphics.drawRect( aRect.X + aRect.Width - 2, aRect.Y - 2, 4, 4 );
                 xGraphics.drawRect( aRect.X - 2, aRect.Y + aRect.Height - 2, 4, 4 );
                 xGraphics.drawRect( aRect.X + aRect.Width - 2, aRect.Y + aRect.Height - 2, 4, 4 );
-    
+
                 System.out.println( "Step5" );
-    
+
                 System.out.println( "The bitmap is painted by BitmapPainter!" );
             }
         }

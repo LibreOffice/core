@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,13 @@
 #define __FRAMEWORK_DISPATCHCOMMANDS_H_
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include <macros/generic.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
@@ -47,6 +47,6 @@ static ::rtl::OUString CMD_UNO_CLOSEDOC        = ::rtl::OUString::createFromAsci
 static ::rtl::OUString CMD_UNO_CLOSEWIN        = ::rtl::OUString::createFromAscii(".uno:CloseWin"       );
 static ::rtl::OUString CMD_UNO_CLOSEFRAME      = ::rtl::OUString::createFromAscii(".uno:CloseFrame"     );
 
-}		//	namespace framework
+}       //  namespace framework
 
-#endif	//	#ifndef __FRAMEWORK_DISPATCHCOMMANDS_H_
+#endif  //  #ifndef __FRAMEWORK_DISPATCHCOMMANDS_H_

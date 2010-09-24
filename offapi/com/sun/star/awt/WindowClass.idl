@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,49 +24,49 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_WindowClass_idl__ 
-#define __com_sun_star_awt_WindowClass_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_WindowClass_idl__
+#define __com_sun_star_awt_WindowClass_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
 /** specifies the class of a window.
  */
 published enum WindowClass
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** specifies a top level window on the desktop. It is also a container.
      */
-    TOP, 
- 
-    //------------------------------------------------------------------------- 
-     
+    TOP,
+
+    //-------------------------------------------------------------------------
+
     /** is a modal top level window on the desktop. It is also a container.
      */
-    MODALTOP, 
- 
-    //------------------------------------------------------------------------- 
-     
+    MODALTOP,
+
+    //-------------------------------------------------------------------------
+
     /** is a container that may contain other components.
         It is not a top window.
      */
-    CONTAINER, 
- 
-    //------------------------------------------------------------------------- 
-     
+    CONTAINER,
+
+    //-------------------------------------------------------------------------
+
     /** is the simplest window. It can be a container.
      */
-    SIMPLE 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    SIMPLE
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

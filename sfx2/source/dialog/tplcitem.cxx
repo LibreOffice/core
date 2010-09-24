@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@
 // Konstruktor
 
 SfxTemplateControllerItem::SfxTemplateControllerItem(
-        USHORT nSlotId,					// ID
-        SfxCommonTemplateDialog_Impl &rDlg,	// Controller-Instanz, dem dieses Item zugeordnet ist.
+        USHORT nSlotId,                 // ID
+        SfxCommonTemplateDialog_Impl &rDlg, // Controller-Instanz, dem dieses Item zugeordnet ist.
         SfxBindings &rBindings):
     SfxControllerItem(nSlotId, rBindings),
     rTemplateDlg(rDlg),
@@ -143,7 +143,7 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
             rTemplateDlg.EnableExample_Impl(
                 GetId(), eState != SFX_ITEM_DISABLED );
             // Das Select Disabled dann, falls enabled und Style Readonly
-/*			String aStr = rTemplateDlg.GetSelectedEntry();
+/*          String aStr = rTemplateDlg.GetSelectedEntry();
             if( aStr.Len() ) rTemplateDlg.SelectStyle( aStr ); */
             break;
         }

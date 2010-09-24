@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@ namespace dbaui
         OQueryView(Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~OQueryView();
 
-        virtual sal_Bool isCutAllowed()		= 0;
-        virtual sal_Bool isPasteAllowed()	= 0;
-        virtual sal_Bool isCopyAllowed()	= 0;
-        virtual void copy()		= 0;
-        virtual void cut()		= 0;
-        virtual void paste()	= 0;
+        virtual sal_Bool isCutAllowed()     = 0;
+        virtual sal_Bool isPasteAllowed()   = 0;
+        virtual sal_Bool isCopyAllowed()    = 0;
+        virtual void copy()     = 0;
+        virtual void cut()      = 0;
+        virtual void paste()    = 0;
         // clears the whole query
         virtual void clear() = 0;
         // set the view readonly or not

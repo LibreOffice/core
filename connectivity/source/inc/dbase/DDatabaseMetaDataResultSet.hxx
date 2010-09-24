@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,29 +65,29 @@ namespace connectivity
         DECLARE_STL_VECTOR(::com::sun::star::uno::Any,ORow);
         DECLARE_STL_VECTOR(ORow, ORows);
 
-        class ODatabaseMetaDataResultSet :	public comphelper::OBaseMutex,
-                                            public	ODatabaseMetaDataResultSet_BASE,
-                                            public	::comphelper::OPropertyContainer,
-                                            public	::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
+        class ODatabaseMetaDataResultSet :  public comphelper::OBaseMutex,
+                                            public  ODatabaseMetaDataResultSet_BASE,
+                                            public  ::comphelper::OPropertyContainer,
+                                            public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
         {
 
 
-            ORows							m_aRows;
-            ORowsIterator					m_aRowsIter;
-            ::com::sun::star::uno::WeakReferenceHelper	
+            ORows                           m_aRows;
+            ORowsIterator                   m_aRowsIter;
+            ::com::sun::star::uno::WeakReferenceHelper
                                             m_aStatement;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>  
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>
                                             m_xMetaData;
-            sal_Int32						m_nRowPos;
-            sal_Int32						m_nColPos;
+            sal_Int32                       m_nRowPos;
+            sal_Int32                       m_nColPos;
 
-            sal_Int32						m_nFetchSize;
-            sal_Int32						m_nResultSetType;
-            sal_Int32						m_nFetchDirection;
-            sal_Int32						m_nResultSetConcurrency;
+            sal_Int32                       m_nFetchSize;
+            sal_Int32                       m_nResultSetType;
+            sal_Int32                       m_nFetchDirection;
+            sal_Int32                       m_nResultSetConcurrency;
 
-            sal_Bool						m_bWasNull;
-            sal_Bool						m_bBOF;
+            sal_Bool                        m_bWasNull;
+            sal_Bool                        m_bBOF;
 
             void construct();
 
@@ -103,7 +103,7 @@ namespace connectivity
             DECLARE_CTY_DEFAULTS(ODatabaseMetaDataResultSet_BASE);
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             ODatabaseMetaDataResultSet( );
-            
+
 
             void setRows(const ORows& _rRows) { m_aRows = _rRows; }
 

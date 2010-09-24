@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@
 #include "dx_impltools.hxx"
 #include <malloc.h>
 
-#if defined(DX_DEBUG_IMAGES) 
+#if defined(DX_DEBUG_IMAGES)
 # if OSL_DEBUG_LEVEL > 0
 #  include <imdebug.h>
 #  undef min
@@ -452,8 +452,8 @@ namespace dxcanvas
             return pDirectDraw2;
         }
 
-        HRESULT WINAPI EnumTextureFormatsCallback( LPDDSURFACEDESC 	pSurfaceDesc,
-                                                   LPVOID			pContext		)
+        HRESULT WINAPI EnumTextureFormatsCallback( LPDDSURFACEDESC  pSurfaceDesc,
+                                                   LPVOID           pContext        )
         {
             // dirty cast of given context back to result ModeSelectContext
             DDPIXELFORMAT* pResult = (DDPIXELFORMAT*)pContext;
@@ -586,7 +586,7 @@ namespace dxcanvas
             struct ModeSelectContext
             {
                 DDSURFACEDESC selectedDesc;
-                ::basegfx::B2ISize	 requestedSize;
+                ::basegfx::B2ISize   requestedSize;
             };
 
             /** Query actual size of the device
@@ -606,7 +606,7 @@ namespace dxcanvas
 
                 @return the amount of free surface mem
             */
-            std::size_t	  getAvailableSurfaceMem( bool bWithAGPMem=true ) const;
+            std::size_t   getAvailableSurfaceMem( bool bWithAGPMem=true ) const;
 
             /** Query the amount of memory available for new textures
 
@@ -642,15 +642,15 @@ namespace dxcanvas
                 to serialize access to DirectX's global state, a global
                 mutex is required.
             */
-            static ::osl::Mutex						maMutex;
+            static ::osl::Mutex                     maMutex;
 
             HWND                                    mhWnd;
-            ::boost::scoped_ptr<SystemChildWindow>	mpWindow;
-            ::basegfx::B2IVector					maSize;
-                
-            ModeSelectContext						maSelectedFullscreenMode;
+            ::boost::scoped_ptr<SystemChildWindow>  mpWindow;
+            ::basegfx::B2IVector                    maSize;
+
+            ModeSelectContext                       maSelectedFullscreenMode;
             DDPIXELFORMAT                           maTextureFormat;
-        
+
             MONITORINFO                             maMonitorInfo; // monitor info for mpDirectDraw's monitor
             COMReference<IDirectDraw2>              mpDirectDraw;
             COMReference<IDirectDrawSurface>        mpPrimarySurface;
@@ -659,23 +659,23 @@ namespace dxcanvas
             COMReference< IDirect3D2 >              mpDirect3D;
             COMReference< IDirect3DDevice2 >        mpDirect3DDevice;
 
-            mutable ::canvas::tools::ElapsedTime	maLastUpdate;	// for the frame counter
+            mutable ::canvas::tools::ElapsedTime    maLastUpdate;   // for the frame counter
 
             D3DDEVICEDESC                           maDeviceDesc;
 
-            typedef std::vector<canvas::Vertex>	    vertexCache_t;
-            vertexCache_t							maVertexCache;
-            std::size_t								mnCount;
+            typedef std::vector<canvas::Vertex>     vertexCache_t;
+            vertexCache_t                           maVertexCache;
+            std::size_t                             mnCount;
 
             int                                     mnBeginSceneCount;
-                
-            const bool								mbPageFlipping;
-            bool 									mbHasNoTearingBlt;
-            bool									mbError;
-            PrimitiveType							meType;
 
-            ::canvas::ISurfaceSharedPtr				mpTexture;
-            ::basegfx::B2IVector					maPageSize;
+            const bool                              mbPageFlipping;
+            bool                                    mbHasNoTearingBlt;
+            bool                                    mbError;
+            PrimitiveType                           meType;
+
+            ::canvas::ISurfaceSharedPtr             mpTexture;
+            ::basegfx::B2IVector                    maPageSize;
         };
 
         ::osl::Mutex DXRenderModule::maMutex;
@@ -684,7 +684,7 @@ namespace dxcanvas
         // DXSurface::ImplRenderModuleGuard
         //////////////////////////////////////////////////////////////////////////////////
 
-        inline DXSurface::ImplRenderModuleGuard::ImplRenderModuleGuard( 
+        inline DXSurface::ImplRenderModuleGuard::ImplRenderModuleGuard(
             DXRenderModule& rRenderModule ) :
             mrRenderModule( rRenderModule )
         {
@@ -725,7 +725,7 @@ namespace dxcanvas
         //////////////////////////////////////////////////////////////////////////////////
 
         DXSurface::DXSurface( DXRenderModule&           rRenderModule,
-                              const ::basegfx::B2ISize& rSize ) : 
+                              const ::basegfx::B2ISize& rSize ) :
             mrRenderModule(rRenderModule),
             mpTexture(NULL),
             mpSurface(NULL),
@@ -746,7 +746,7 @@ namespace dxcanvas
                 return;
 #endif
 
-            ENSURE_ARG_OR_THROW(rSize.getX() > 0 && rSize.getY() > 0, 
+            ENSURE_ARG_OR_THROW(rSize.getX() > 0 && rSize.getY() > 0,
                             "DXSurface::DXSurface(): request for zero-sized surface");
 
             const D3DDEVICEDESC &deviceDesc = rRenderModule.getDeviceDesc();
@@ -838,7 +838,7 @@ namespace dxcanvas
                 return false;
             }
 
-#if defined(DX_DEBUG_IMAGES) 
+#if defined(DX_DEBUG_IMAGES)
 # if OSL_DEBUG_LEVEL > 0
             if( mpSurface.is() )
             {
@@ -846,14 +846,14 @@ namespace dxcanvas
                 rtl_fillMemory( &aSurfaceDesc,sizeof(DDSURFACEDESC),0 );
                 aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
 
-                if( SUCCEEDED(mpSurface->Lock( NULL, 
-                                               &aSurfaceDesc, 
+                if( SUCCEEDED(mpSurface->Lock( NULL,
+                                               &aSurfaceDesc,
                                                DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY,
                                                NULL)) )
                 {
-                    imdebug( "rgba w=%d h=%d %p", 
-                             aSurfaceDesc.dwWidth, 
-                             aSurfaceDesc.dwHeight, 
+                    imdebug( "rgba w=%d h=%d %p",
+                             aSurfaceDesc.dwWidth,
+                             aSurfaceDesc.dwHeight,
                              aSurfaceDesc.lpSurface );
 
                     mpSurface->Unlock(NULL);
@@ -876,7 +876,7 @@ namespace dxcanvas
             if(!(mpSurface.is()))
                 return false;
 
-            if(mpSurface->IsLost() == DDERR_SURFACELOST) 
+            if(mpSurface->IsLost() == DDERR_SURFACELOST)
             {
                 mpSurface->Restore();
                 return false;
@@ -905,8 +905,8 @@ namespace dxcanvas
             aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
 
             // TODO(P2): only lock the region we want to update
-            if( FAILED(mpSurface->Lock( NULL, 
-                                        &aSurfaceDesc, 
+            if( FAILED(mpSurface->Lock( NULL,
+                                        &aSurfaceDesc,
                                         DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_WRITEONLY,
                                         NULL)) )
                 return false;
@@ -924,7 +924,7 @@ namespace dxcanvas
 
                         // calculate the destination memory address
                         sal_uInt8 *pDst = ((sal_uInt8*)aSurfaceDesc.lpSurface+
-                                           (rDestPos.getY()*aSurfaceDesc.lPitch) + 
+                                           (rDestPos.getY()*aSurfaceDesc.lPitch) +
                                            (4*rDestPos.getX()));
 
                         const sal_uInt32 nNumBytesToCopy(
@@ -952,7 +952,7 @@ namespace dxcanvas
 
                         // calculate the destination memory address
                         sal_uInt8 *pDst = ((sal_uInt8*)aSurfaceDesc.lpSurface+
-                                           (rDestPos.getY()*aSurfaceDesc.lPitch) + 
+                                           (rDestPos.getY()*aSurfaceDesc.lPitch) +
                                            (4*rDestPos.getX()));
 
                         const sal_uInt64 nNumColumns(rSourceRect.getWidth());
@@ -986,7 +986,7 @@ namespace dxcanvas
 
                         // calculate the destination memory address
                         sal_uInt8 *pDst = ((sal_uInt8*)aSurfaceDesc.lpSurface+
-                                           (rDestPos.getY()*aSurfaceDesc.lPitch) + 
+                                           (rDestPos.getY()*aSurfaceDesc.lPitch) +
                                            (4*rDestPos.getX()));
 
                         const sal_uInt64 nNumLines(rSourceRect.getHeight());
@@ -1005,7 +1005,7 @@ namespace dxcanvas
                     break;
 
                     default:
-                        ENSURE_OR_RETURN_FALSE(false, 
+                        ENSURE_OR_RETURN_FALSE(false,
                                           "DXSurface::update(): Unknown/unimplemented buffer format" );
                         break;
                 }
@@ -1019,7 +1019,7 @@ namespace dxcanvas
         //////////////////////////////////////////////////////////////////////////////////
         // DXSurface::getSize
         //////////////////////////////////////////////////////////////////////////////////
-        
+
         ::basegfx::B2IVector DXSurface::getSize()
         {
             return maSize;
@@ -1103,19 +1103,19 @@ namespace dxcanvas
 
             maVertexCache.reserve(1024);
 
-            mpWindow.reset( 
+            mpWindow.reset(
                 new SystemChildWindow(
                 const_cast<Window *>(&rWindow), 0) );
 
             // system child window must not receive mouse events
             mpWindow->SetMouseTransparent( TRUE );
-            
+
             // parent should receive paint messages as well
             // [PARENTCLIPMODE_NOCLIP], the argument is here
             // passed as plain numeric value since the stupid
             // define utilizes a USHORT cast.
             mpWindow->SetParentClipMode(0x0002);
-            
+
             // the system child window must not clear its background
             mpWindow->EnableEraseBackground( FALSE );
 
@@ -1143,7 +1143,7 @@ namespace dxcanvas
 
             MonitorList aMonitorList;
             fillMonitorList( aMonitorList );
-            
+
              mpDirectDraw = COMReference<IDirectDraw2>(
                 createDirectDraw(aMonitorList, maMonitorInfo, mhWnd));
 
@@ -1191,8 +1191,8 @@ namespace dxcanvas
 
             // check for supported primary surface formats...
             unsigned int nDisplayFormat = getDisplayFormat() & 0x00000FFF;
-            if(nDisplayFormat != 0x888 && nDisplayFormat != 0x565) 
-            {    
+            if(nDisplayFormat != 0x888 && nDisplayFormat != 0x565)
+            {
                 // go defunct, and exit
                 VERBOSE_TRACE( "Device::Device(): Unsupported DisplayFormat" );
                 mpDirectDraw.reset();
@@ -1200,7 +1200,7 @@ namespace dxcanvas
             }
 
             // create primary surface reference
-            DDSURFACEDESC 		aSurfaceDesc;
+            DDSURFACEDESC       aSurfaceDesc;
             IDirectDrawSurface* pPrimarySurface;
 
             rtl_fillMemory( &aSurfaceDesc,
@@ -1348,7 +1348,7 @@ namespace dxcanvas
         {
             // create and setup 3D device
             // ==========================
-            LPDIRECT3D2	pDirect3D;
+            LPDIRECT3D2 pDirect3D;
             if( FAILED( mpDirectDraw->QueryInterface( IID_IDirect3D2, (LPVOID*)&pDirect3D ) ) )
             {
                 // go defunct, and exit
@@ -1360,8 +1360,8 @@ namespace dxcanvas
 
             LPDIRECT3DDEVICE2 pDirect3DDevice;
             // try HW-accelerated device first
-            if( FAILED(mpDirect3D->CreateDevice( IID_IDirect3DHALDevice, 
-                                                 mpBackBufferSurface.get(), 
+            if( FAILED(mpDirect3D->CreateDevice( IID_IDirect3DHALDevice,
+                                                 mpBackBufferSurface.get(),
                                                  &pDirect3DDevice )) )
             {
                 // no HW 3D support - go defunct, and exit
@@ -1375,7 +1375,7 @@ namespace dxcanvas
             rtl_fillMemory(&aHELDeviceDesc,sizeof(aHELDeviceDesc),0);
             maDeviceDesc.dwSize = sizeof(maDeviceDesc);
             aHELDeviceDesc.dwSize = sizeof(aHELDeviceDesc);
-            if(FAILED(pDirect3DDevice->GetCaps(&maDeviceDesc,&aHELDeviceDesc))) 
+            if(FAILED(pDirect3DDevice->GetCaps(&maDeviceDesc,&aHELDeviceDesc)))
             {
                 // go defunct, and exit
                 VERBOSE_TRACE( "Device::setup3DDevice(): GetCaps() for Direct3DDevice failed" );
@@ -1403,7 +1403,7 @@ namespace dxcanvas
                 else if(maTextureFormat.dwBBitMask != 0x000000FF)
                     bSupportedFormat = false;
 
-                if(bSupportedFormat) 
+                if(bSupportedFormat)
                 {
                     VERBOSE_TRACE( "Device::setup3DDevice(): chose texture format dwRGBBitCount %d, dwRBitMask %x, "
                                    "dwGBitMask %x, dwBBitMask %x and dwRGBAlphaBitMask %x. The texture uses %s alpha.",
@@ -1413,11 +1413,11 @@ namespace dxcanvas
                                    maTextureFormat.dwBBitMask,
                                    maTextureFormat.dwRGBAlphaBitMask,
                                    maTextureFormat.dwFlags & DDPF_ALPHAPREMULT ? "premultiplied" : "non-premultiplied" );
-                    
+
                     // setup the device (with as much as we can possibly do here)
                     // ==========================================================
 
-                    LPDIRECT3DVIEWPORT2	pViewport;
+                    LPDIRECT3DVIEWPORT2 pViewport;
 
                     if( SUCCEEDED(mpDirect3D->CreateViewport( &pViewport, NULL )) )
                     {
@@ -1499,8 +1499,8 @@ namespace dxcanvas
 
         bool DXRenderModule::queryCaps()
         {
-            DDCAPS	aHWCaps;
-            DDCAPS	aHELCaps;
+            DDCAPS  aHWCaps;
+            DDCAPS  aHELCaps;
 
             rtl_fillMemory( &aHWCaps,
                             sizeof(aHWCaps), 0 );
@@ -1518,12 +1518,12 @@ namespace dxcanvas
             mbHasNoTearingBlt = aHWCaps.dwFXCaps & DDBLTFX_NOTEARING;
 
             VERBOSE_TRACE( "dxcanvas initialization: %d bytes VRAM free for surfaces (%d with AGP mem), "
-                           "%d bytes VRAM free for textures (%d with AGP mem)", 
+                           "%d bytes VRAM free for textures (%d with AGP mem)",
                            getAvailableSurfaceMem( false ),
                            getAvailableSurfaceMem( true ),
                            getAvailableTextureMem( false ),
                            getAvailableTextureMem( true ) );
-            
+
             return true;
         }
 
@@ -1559,7 +1559,7 @@ namespace dxcanvas
         // DXRenderModule::getDisplayFormat
         //////////////////////////////////////////////////////////////////////////////////
 
-        unsigned int DXRenderModule::getDisplayFormat() const 
+        unsigned int DXRenderModule::getDisplayFormat() const
         {
             unsigned int nFormat;
             nFormat  = ::canvas::tools::bitcount32(maSelectedFullscreenMode.selectedDesc.ddpfPixelFormat.dwRGBAlphaBitMask)<<12;
@@ -1581,7 +1581,7 @@ namespace dxcanvas
             std::size_t nRes( 0 );
 
             DDSCAPS aSurfaceCaps;
-            DWORD	nTotal, nFree;
+            DWORD   nTotal, nFree;
 
             // real VRAM (const_cast, since GetAvailableVidMem is non-const)
             aSurfaceCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_VIDEOMEMORY | DDSCAPS_LOCALVIDMEM;
@@ -1596,7 +1596,7 @@ namespace dxcanvas
                 aSurfaceCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_VIDEOMEMORY | DDSCAPS_NONLOCALVIDMEM;
                 if( FAILED(const_cast<IDirectDraw2&>(*mpDirectDraw).GetAvailableVidMem( &aSurfaceCaps, &nTotal, &nFree )) )
                     return 0;
-                
+
                 nRes += nFree;
             }
 
@@ -1615,7 +1615,7 @@ namespace dxcanvas
             std::size_t nRes( 0 );
 
             DDSCAPS aSurfaceCaps;
-            DWORD	nTotal, nFree;
+            DWORD   nTotal, nFree;
 
             // TODO(F1): Check if flags are applicable
 
@@ -1632,7 +1632,7 @@ namespace dxcanvas
                 aSurfaceCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_VIDEOMEMORY | DDSCAPS_NONLOCALVIDMEM;
                 if( FAILED(const_cast<IDirectDraw2&>(*mpDirectDraw).GetAvailableVidMem( &aSurfaceCaps, &nTotal, &nFree )) )
                     return 0;
-                
+
                 nRes += nFree;
             }
 
@@ -1650,13 +1650,13 @@ namespace dxcanvas
         {
             POINT aPoint = { 0, 0 };
             ClientToScreen( mhWnd, &aPoint );
- 
+
             // i52230 make sure given screen coordinate is relative to
             // this monitor's area (the device rendering is always
             // contained to a single monitor)
             aPoint.x -= maMonitorInfo.rcMonitor.left;
             aPoint.y -= maMonitorInfo.rcMonitor.top;
- 
+
             io_rDestPos.setX( io_rDestPos.getX() + aPoint.x );
             io_rDestPos.setY( io_rDestPos.getY() + aPoint.y );
 
@@ -1684,7 +1684,7 @@ namespace dxcanvas
 
         COMReference<IDirectDrawSurface> DXRenderModule::createSystemMemorySurface( const ::basegfx::B2IVector& rSize )
         {
-            DDSURFACEDESC 		aSurfaceDesc;
+            DDSURFACEDESC       aSurfaceDesc;
             IDirectDrawSurface* pSurface;
 
             aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
@@ -1695,7 +1695,7 @@ namespace dxcanvas
             rtl_copyMemory( &aSurfaceDesc.ddpfPixelFormat, &maTextureFormat, sizeof(DDPIXELFORMAT) );
 
             aSurfaceDesc.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_SYSTEMMEMORY;
-     
+
             HRESULT nRes = mpDirectDraw->CreateSurface(&aSurfaceDesc, &pSurface, NULL);
             if(FAILED(nRes))
                 return COMReference<IDirectDrawSurface>(NULL);
@@ -1739,7 +1739,7 @@ namespace dxcanvas
                     renderMemAvailable();
 #endif
                     VERBOSE_TRACE( "Device::flip(): Using true page flipping" );
-                    
+
                     // use true page flipping. Hopefully, the 3D hardware
                     // is flushed on this flip call (rumours have it that
                     // way), otherwise, perform the Lock hack as for the
@@ -1774,7 +1774,7 @@ namespace dxcanvas
                     // target (the backbuffer in this case). OTOH, I've
                     // found that this tends to degrade performance
                     // significantly on complying cards...
-                    
+
                     // TODO(P1): Up until rev. 1.3, this method contained
                     // code to make sure the blit will start _immediately_
                     // after the Blt call. If this is not warranted, wait
@@ -1798,14 +1798,14 @@ namespace dxcanvas
                     DDBLTFX* pBltFX = NULL;
                     if( mbHasNoTearingBlt )
                     {
-                        // Blt can internally schedule for no-tearing   
-                        // ===========================================  
-                        
+                        // Blt can internally schedule for no-tearing
+                        // ===========================================
+
                         rtl_fillMemory( &aBltFx,
                                         sizeof(aBltFx), 0 );
                         aBltFx.dwSize = sizeof(aBltFx);
                         aBltFx.dwDDFX = DDBLTFX_NOTEARING;
-                        
+
                         pBltFX = &aBltFx;
                     }
 
@@ -1863,7 +1863,7 @@ namespace dxcanvas
         // DXRenderModule::validateMainSurfaces
         //////////////////////////////////////////////////////////////////////////////////
 
-        bool DXRenderModule::validateMainSurfaces() 
+        bool DXRenderModule::validateMainSurfaces()
         {
             if(mpPrimarySurface.get()) {
                 if(mpPrimarySurface->IsLost() == DDERR_SURFACELOST) {
@@ -1873,20 +1873,20 @@ namespace dxcanvas
             }
 
             if(mpBackBufferSurface.get()) {
-                if(mpBackBufferSurface->IsLost() == DDERR_SURFACELOST) 
-                {	
+                if(mpBackBufferSurface->IsLost() == DDERR_SURFACELOST)
+                {
                     // TODO(F1): simply restoring the backbuffer does not
                     // work as expected, we need to re-create everything
                     // from scratch. find out why...
                     //if(SUCCEEDED(mpBackBufferSurface->Restore()))
-                    //	return setup3DDevice();
+                    //  return setup3DDevice();
 
                     mpBackBufferSurface.reset();
 
                     // get us a backbuffer for simulated flipping
                     IDirectDrawSurface* pSurface;
 
-                    // TODO(P2): Strictly speaking, we don't need a full screen worth of 
+                    // TODO(P2): Strictly speaking, we don't need a full screen worth of
                     // backbuffer here. We could also scale dynamically with the current
                     // window size, but this will make it necessary to temporarily have two
                     // buffers while copying from the old to the new one. YMMV.
@@ -1949,16 +1949,16 @@ namespace dxcanvas
 
             if( mbPageFlipping )
             {
-                // render on top of backbuffer. We have 
+                // render on top of backbuffer. We have
                 // page flipping, anyway, thus this will
                 // cost us nothing.
                 pGraphics = createSurfaceGraphics( mpBackBufferSurface );
             }
             else
             {
-                // render FPS directly to front buffer. 
+                // render FPS directly to front buffer.
                 // That saves us another explicit blit,
-                // and for me, the FPS counter can blink, 
+                // and for me, the FPS counter can blink,
                 // if it likes to...
                 pGraphics = createSurfaceGraphics( mpPrimarySurface );
             }
@@ -1968,16 +1968,16 @@ namespace dxcanvas
                 // clear background. We might be doing optimized redraws,
                 // and the background under the FPS count will then not be
                 // cleared.
-                Gdiplus::SolidBrush aBrush( 
+                Gdiplus::SolidBrush aBrush(
                     Gdiplus::Color( 255, 255, 255 ) );
 
                 pGraphics->FillRectangle( &aBrush,
                                           rPos.X, rPos.Y, 80.0, 20.0 );
             }
 
-            Gdiplus::SolidBrush aBrush( 
+            Gdiplus::SolidBrush aBrush(
                 Gdiplus::Color( 255, 0, 255 ) );
-            Gdiplus::Font aFont( NULL, 
+            Gdiplus::Font aFont( NULL,
                                  16,
                                  Gdiplus::FontStyleRegular,
                                  Gdiplus::UnitWorld,
@@ -1999,7 +1999,7 @@ namespace dxcanvas
                               "DXRenderModule::renderMemAvailable(): within 3D scene" );
 
             const double nSurfaceMem( getAvailableSurfaceMem()/1024 );
-                            
+
             ::rtl::OUString text( ::rtl::math::doubleToUString( nSurfaceMem,
                                                                 rtl_math_StringFormat_F,
                                                                 2,'.',NULL,' ') );
@@ -2028,7 +2028,7 @@ namespace dxcanvas
             renderInfoText( text,
                             Gdiplus::PointF( 0.0, 40) );
 
-            VERBOSE_TRACE( "dxcanvas: %f free surface mem, %f free texture mem", 
+            VERBOSE_TRACE( "dxcanvas: %f free surface mem, %f free texture mem",
                            nSurfaceMem, nTexMem );
         }
 
@@ -2043,7 +2043,7 @@ namespace dxcanvas
 
             const double denominator( maLastUpdate.getElapsedTime() );
             maLastUpdate.reset();
-                            
+
             ::rtl::OUString text( ::rtl::math::doubleToUString( denominator == 0.0 ? 100.0 : 1.0/denominator,
                                                                 rtl_math_StringFormat_F,
                                                                 2,'.',NULL,' ') );
@@ -2055,9 +2055,9 @@ namespace dxcanvas
             text += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM (" fps"));
 
             renderInfoText( text,
-                            Gdiplus::PointF() ); 
+                            Gdiplus::PointF() );
 
-            VERBOSE_TRACE( "dxcanvas: %f FPS", 
+            VERBOSE_TRACE( "dxcanvas: %f FPS",
                            denominator == 0.0 ? 100.0 : 1.0/denominator );
         }
 
@@ -2111,7 +2111,7 @@ namespace dxcanvas
             if(mpTexture.use_count() == 1)
                 return mpTexture;
 
-            return ::canvas::ISurfaceSharedPtr( 
+            return ::canvas::ISurfaceSharedPtr(
                 new DXSurface(*this,
                               aSize) );
         }
@@ -2264,7 +2264,7 @@ namespace dxcanvas
 
             maVertexCache.clear();
 
-            mbError |= FAILED(mpDirect3DDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 
+            mbError |= FAILED(mpDirect3DDevice->DrawPrimitive(D3DPT_TRIANGLELIST,
                                                               D3DVT_TLVERTEX,
                                                               (LPVOID)vertices,
                                                               size,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,22 +49,22 @@ namespace cppu {
 
 //-----------------------------------------------------------------------------
 
-#define NUMBERED_SORTINGINFO		com::sun::star::ucb::NumberedSortingInfo
-#define RUNTIMEEXCEPTION			com::sun::star::uno::RuntimeException
-#define REFERENCE					com::sun::star::uno::Reference
-#define SEQUENCE					com::sun::star::uno::Sequence
-#define	EVENTOBJECT					com::sun::star::lang::EventObject
-#define XEVENTLISTENER				com::sun::star::lang::XEventListener
-#define XMULTISERVICEFACTORY		com::sun::star::lang::XMultiServiceFactory
-#define XRESULTSET					com::sun::star::sdbc::XResultSet
-#define SQLEXCEPTION				com::sun::star::sdbc::SQLException
-#define XANYCOMPAREFACTORY			com::sun::star::ucb::XAnyCompareFactory
-#define XDYNAMICRESULTSET			com::sun::star::ucb::XDynamicResultSet
-#define XDYNAMICRESULTSETLISTENER	com::sun::star::ucb::XDynamicResultSetListener
-#define LISTENERALREADYSETEXCEPTION	com::sun::star::ucb::ListenerAlreadySetException
+#define NUMBERED_SORTINGINFO        com::sun::star::ucb::NumberedSortingInfo
+#define RUNTIMEEXCEPTION            com::sun::star::uno::RuntimeException
+#define REFERENCE                   com::sun::star::uno::Reference
+#define SEQUENCE                    com::sun::star::uno::Sequence
+#define EVENTOBJECT                 com::sun::star::lang::EventObject
+#define XEVENTLISTENER              com::sun::star::lang::XEventListener
+#define XMULTISERVICEFACTORY        com::sun::star::lang::XMultiServiceFactory
+#define XRESULTSET                  com::sun::star::sdbc::XResultSet
+#define SQLEXCEPTION                com::sun::star::sdbc::SQLException
+#define XANYCOMPAREFACTORY          com::sun::star::ucb::XAnyCompareFactory
+#define XDYNAMICRESULTSET           com::sun::star::ucb::XDynamicResultSet
+#define XDYNAMICRESULTSETLISTENER   com::sun::star::ucb::XDynamicResultSetListener
+#define LISTENERALREADYSETEXCEPTION com::sun::star::ucb::ListenerAlreadySetException
 
-#define DYNAMIC_RESULTSET_SERVICE_NAME 	"com.sun.star.ucb.SortedDynamicResultSet"
-#define DYNAMIC_RESULTSET_FACTORY_NAME 	"com.sun.star.ucb.SortedDynamicResultSetFactory"
+#define DYNAMIC_RESULTSET_SERVICE_NAME  "com.sun.star.ucb.SortedDynamicResultSet"
+#define DYNAMIC_RESULTSET_FACTORY_NAME  "com.sun.star.ucb.SortedDynamicResultSetFactory"
 
 //-----------------------------------------------------------------------------
 class SortedDynamicResultSetListener;
@@ -75,36 +75,36 @@ class SortedDynamicResultSet:
                 public com::sun::star::lang::XServiceInfo,
                 public com::sun::star::ucb::XDynamicResultSet
 {
-    cppu::OInterfaceContainerHelper	*mpDisposeEventListeners;
+    cppu::OInterfaceContainerHelper *mpDisposeEventListeners;
 
-    REFERENCE < XDYNAMICRESULTSETLISTENER >	mxListener;
+    REFERENCE < XDYNAMICRESULTSETLISTENER > mxListener;
     REFERENCE < XDYNAMICRESULTSETLISTENER > mxOwnListener;
 
-    REFERENCE < XRESULTSET >			mxOne;
-    REFERENCE < XRESULTSET >			mxTwo;
-    REFERENCE < XDYNAMICRESULTSET >		mxOriginal;
-    SEQUENCE  < NUMBERED_SORTINGINFO >	maOptions;
-    REFERENCE < XANYCOMPAREFACTORY >	mxCompFac;
-    REFERENCE < XMULTISERVICEFACTORY >	mxSMgr;
+    REFERENCE < XRESULTSET >            mxOne;
+    REFERENCE < XRESULTSET >            mxTwo;
+    REFERENCE < XDYNAMICRESULTSET >     mxOriginal;
+    SEQUENCE  < NUMBERED_SORTINGINFO >  maOptions;
+    REFERENCE < XANYCOMPAREFACTORY >    mxCompFac;
+    REFERENCE < XMULTISERVICEFACTORY >  mxSMgr;
 
-    SortedResultSet*					mpOne;
-    SortedResultSet*					mpTwo;
-    SortedDynamicResultSetListener*		mpOwnListener;
+    SortedResultSet*                    mpOne;
+    SortedResultSet*                    mpTwo;
+    SortedDynamicResultSetListener*     mpOwnListener;
 
-    EventList							maActions;
-    osl::Mutex							maMutex;
-    sal_Bool							mbGotWelcome	:1;
-    sal_Bool							mbUseOne		:1;
-    sal_Bool							mbStatic		:1;
+    EventList                           maActions;
+    osl::Mutex                          maMutex;
+    sal_Bool                            mbGotWelcome    :1;
+    sal_Bool                            mbUseOne        :1;
+    sal_Bool                            mbStatic        :1;
 
 private:
 
-    void				SendNotify();
+    void                SendNotify();
 
 public:
-    SortedDynamicResultSet( const REFERENCE < XDYNAMICRESULTSET >	 &xOriginal,
+    SortedDynamicResultSet( const REFERENCE < XDYNAMICRESULTSET >    &xOriginal,
                             const SEQUENCE  < NUMBERED_SORTINGINFO > &aOptions,
-                            const REFERENCE < XANYCOMPAREFACTORY >	 &xCompFac,
+                            const REFERENCE < XANYCOMPAREFACTORY >   &xCompFac,
                             const REFERENCE < XMULTISERVICEFACTORY > &xSMgr );
 
     ~SortedDynamicResultSet();
@@ -178,8 +178,8 @@ class SortedDynamicResultSetListener:
                 public cppu::OWeakObject,
                 public com::sun::star::ucb::XDynamicResultSetListener
 {
-    SortedDynamicResultSet	*mpOwner;
-    osl::Mutex			 	maMutex;
+    SortedDynamicResultSet  *mpOwner;
+    osl::Mutex              maMutex;
 
 public:
      SortedDynamicResultSetListener( SortedDynamicResultSet *mOwner );
@@ -219,7 +219,7 @@ class SortedDynamicResultSetFactory:
                 public com::sun::star::ucb::XSortedDynamicResultSetFactory
 {
 
-    REFERENCE< XMULTISERVICEFACTORY >	mxSMgr;
+    REFERENCE< XMULTISERVICEFACTORY >   mxSMgr;
 
 public:
 

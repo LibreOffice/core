@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ namespace basprov
             sal_Int32 nParamsCount = aParams.getLength();
             SbxInfo* pInfo = m_xMethod->GetInfo();
             if ( pInfo )
-            {       
+            {
                 sal_Int32 nSbxOptional = 0;
                 USHORT n = 1;
                 for ( const SbxParamInfo* pParamInfo = pInfo->GetParam( n ); pParamInfo; pParamInfo = pInfo->GetParam( ++n ) )
@@ -126,12 +126,12 @@ namespace basprov
                 if ( nParamsCount < nSbxCount - nSbxOptional )
                 {
                     throw provider::ScriptFrameworkErrorException(
-                        ::rtl::OUString( 
-                            RTL_CONSTASCII_USTRINGPARAM( 
+                        ::rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
                                 "wrong number of parameters!" ) ),
-                         Reference< XInterface >(), 
+                         Reference< XInterface >(),
                          m_funcName,
-                         ::rtl::OUString( 
+                         ::rtl::OUString(
                              RTL_CONSTASCII_USTRINGPARAM( "Basic" ) ),
                         provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT  );
                 }
@@ -181,8 +181,8 @@ namespace basprov
             {
                 SbxInfo* pInfo_ = m_xMethod->GetInfo();
                 if ( pInfo_ )
-                {                  
-                    OutParamMap aOutParamMap;                    
+                {
+                    OutParamMap aOutParamMap;
                     for ( USHORT n = 1, nCount = xSbxParams->Count(); n < nCount; ++n )
                     {
                         const SbxParamInfo* pParamInfo = pInfo_->GetParam( n );
@@ -216,11 +216,11 @@ namespace basprov
             m_xMethod->SetParameters( NULL );
         }
 
-        return aReturn;        
+        return aReturn;
     }
 
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}	// namespace basprov
+}   // namespace basprov
 //.........................................................................

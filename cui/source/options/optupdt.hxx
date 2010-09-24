@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,17 +54,17 @@ private:
     FixedText           m_aLastChecked;
     rtl::OUString       m_aNeverChecked;
     rtl::OUString       m_aLastCheckedTemplate;
-    
+
     DECL_LINK(  FileDialogHdl_Impl, PushButton* ) ;
     DECL_LINK(  CheckNowHdl_Impl, PushButton* ) ;
     DECL_LINK(  AutoCheckHdl_Impl, CheckBox* ) ;
-    
+
     void        CalcButtonWidth();
-    
+
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xUpdateAccess;
 
-    void                    UpdateLastCheckedText(); 
-    
+    void                    UpdateLastCheckedText();
+
 public:
     SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSet& rSet );
     ~SvxOnlineUpdateTabPage();

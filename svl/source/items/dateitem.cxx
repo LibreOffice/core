@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,12 +142,12 @@ SfxPoolItem* SfxDateTimeItem::Clone( SfxItemPool* ) const
 
 SfxItemPresentation SfxDateTimeItem::GetPresentation
 (
-    SfxItemPresentation 	/*ePresentation*/,
-    SfxMapUnit				/*eCoreMetric*/,
-    SfxMapUnit				/*ePresentationMetric*/,
-    XubString& 				rText,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
+    XubString&              rText,
     const IntlWrapper *   pIntlWrapper
-)	const
+)   const
 {
     DBG_CHKTHIS(SfxDateTimeItem, 0);
     if (aDateTime.IsValid())
@@ -238,12 +238,12 @@ SfxPoolItem* SfxColumnDateTimeItem::Clone( SfxItemPool* ) const
 
 SfxItemPresentation SfxColumnDateTimeItem::GetPresentation
 (
-    SfxItemPresentation 	/*ePresentation*/,
-    SfxMapUnit				/*eCoreMetric*/,
-    SfxMapUnit				/*ePresentationMetric*/,
-    XubString& 				rText,
+    SfxItemPresentation     /*ePresentation*/,
+    SfxMapUnit              /*eCoreMetric*/,
+    SfxMapUnit              /*ePresentationMetric*/,
+    XubString&              rText,
     const IntlWrapper *   pIntlWrapper
-)	const
+)   const
 {
     DBG_ASSERT(pIntlWrapper,
                "SfxColumnDateTimeItem::GetPresentation():"

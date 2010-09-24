@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,13 +38,13 @@ class ChApi;
 class AgentItem
 {
 public:
-    virtual const String&			GetChAgentName() const = 0;
-    virtual const INetURLObject&	GetLocation() const = 0;
-    virtual AgentApi*				GetApi() const = 0;
-    virtual ChApi*					GetChApi() const = 0;
+    virtual const String&           GetChAgentName() const = 0;
+    virtual const INetURLObject&    GetLocation() const = 0;
+    virtual AgentApi*               GetApi() const = 0;
+    virtual ChApi*                  GetChApi() const = 0;
 
-    virtual void   					SetIsActive(BOOL bNew) = 0;
-    virtual BOOL   					IsActive() const = 0;
+    virtual void                    SetIsActive(BOOL bNew) = 0;
+    virtual BOOL                    IsActive() const = 0;
 };
 
 #endif //_AGITEM_HXX

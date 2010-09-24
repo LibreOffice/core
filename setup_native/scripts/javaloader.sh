@@ -41,7 +41,7 @@ start_java()
     if [ "x" != "x$jrefile" ]; then
         jrecopy=-DJRE_FILE=$jrefile
     fi
-    
+
     # run the installer class file
     echo $java_runtime $home $log_module_states $getuid_path $jrecopy -jar $jarfilename
     $java_runtime $home $log_module_states $getuid_path $jrecopy -jar $jarfilename
@@ -61,7 +61,7 @@ do_exit()
         exitstring="$exitstring (exit code $errorcode)"
     fi
 
-    # simply echo the exitstring or open a xterm 
+    # simply echo the exitstring or open a xterm
     # -> dependent from tty
 
     if tty ; then
@@ -82,27 +82,27 @@ EOF
 
         # searching for xterm in path
         xtermname="xterm"
-        xtermfound="no"; 
+        xtermfound="no";
         for i in `echo $PATH | sed -e 's/^:/.:/g' -e 's/:$/:./g' -e 's/::/:.:/g' -e 's/:/ /g'`; do
             if [ -x "$i/$xtermname" -a ! -d "$i/$xtermname" ]; then
                 xtermname="$i/$xtermname"
-                xtermfound="yes" 
+                xtermfound="yes"
                 break
             fi
-        done    
-    
+        done
+
         if [ $xtermfound = "no" -a "`uname -s`" = "SunOS" ]; then
             if [ -x /usr/openwin/bin/xterm ]; then
                 xtermname=/usr/openwin/bin/xterm
                 xtermfound="yes"
-            fi   
+            fi
         fi
-        
+
         if [ $xtermfound = "yes" ]; then
             $xtermname -e $errorfile
         fi
     fi
-    
+
     cleanup
 
     exit $errorcode
@@ -123,7 +123,7 @@ set_jre_for_uninstall()
         if [ ! -f $packagepath/$jrefile ]; then
             errortext="Error: Java Runtime Environment (JRE) not found in directory: $packagepath"
             errorcode="4"
-            do_exit    
+            do_exit
         fi
     fi
 }
@@ -131,10 +131,10 @@ set_jre_for_uninstall()
 install_linux_rpm()
 {
     # Linux requires usage of rpm2cpio to install JRE with user privileges
-    # 1. --relocate /usr/java=/var/tmp does not work, because not all files are 
+    # 1. --relocate /usr/java=/var/tmp does not work, because not all files are
     #    relocatable. Some are always installed into /etc
     # 2. --root only works with root privileges. With user privileges only the
-    #    database is shifted, but not the files.   
+    #    database is shifted, but not the files.
 
     # On Linux currently rpm2cpio is required (and rpm anyhow)
 
@@ -147,7 +147,7 @@ install_linux_rpm()
     fi
 
     find_rpm()
-    
+
     if [ ! "$rpm_found" = "yes" ]; then
         errortext="Error: Did not find rpm. rpm is currently required for installations on Linux."
         errorcode="12"
@@ -174,7 +174,7 @@ install_linux_rpm()
     if [ ! -f $packagepath/$jrefile ]; then
         errortext="Error: Java Runtime Environment (JRE) not found in directory: $packagepath"
         errorcode="4"
-        do_exit    
+        do_exit
     fi
 
     PACKED_JARS="lib/rt.jar lib/jsse.jar lib/charsets.jar  lib/ext/localedata.jar lib/plugin.jar lib/javaws.jar lib/deploy.jar"
@@ -185,7 +185,7 @@ install_linux_rpm()
 
     tempjrefile=$tempdir/$jrefile
     cp $packagepath/$jrefile $tempjrefile
-        
+
     if [ ! -f "$tempjrefile" ]; then
         errortext="Error: Failed to copy Java Runtime Environment (JRE) temporarily."
         errorcode="5"
@@ -226,7 +226,7 @@ install_linux_rpm()
                     ;;
             esac
         done
-    
+
         # echo "Checksum 1: A1: $sumA1 B1: $sumB1"
         # echo "Checksum 2: A2: $sumA2 B2: $sumB2"
 
@@ -238,7 +238,7 @@ install_linux_rpm()
     else
         echo "Can't find /usr/bin/sum to do checksum. Continuing anyway."
     fi
-        
+
     # start to install jre
     echo "Extracting ..."
     olddir=`pwd`
@@ -263,7 +263,7 @@ install_linux_rpm()
 
     UNPACK_EXE=$javahome/bin/unpack200
     if [ -f $UNPACK_EXE ]; then
-        chmod +x $UNPACK_EXE 
+        chmod +x $UNPACK_EXE
         packerror=""
         for i in $PACKED_JARS; do
             if [ -f $javahome/`dirname $i`/`basename $i .jar`.pack ]; then
@@ -281,7 +281,7 @@ install_linux_rpm()
                 rm -f $javahome/`dirname $i`/`basename $i .jar`.pack
             fi
         done
-        if [  "$packerror" = "1" ]; then 
+        if [  "$packerror" = "1" ]; then
             if [ -d $javahome ]; then
                 /bin/rm -rf $javahome
             fi
@@ -309,7 +309,7 @@ install_linux_rpm()
     if [ x$ARCH = "x32" ] && [ -f "$javahome/bin/java" ]; then
         "$javahome/bin/java" -client -Xshare:dump > /dev/null 2>&1
     fi
-        
+
     java_runtime=$tempdir/$javahome/bin/java
 
     # Make symbolic links to all TrueType font files installed in the system
@@ -341,7 +341,7 @@ find_rpm2cpio()
             rpm2cpio_found="yes"
             break
         fi
-    done    
+    done
 }
 
 find_rpm()
@@ -352,7 +352,7 @@ find_rpm()
             rpm_found="yes"
             break
         fi
-    done    
+    done
 }
 
 check_architecture()
@@ -360,22 +360,22 @@ check_architecture()
     # Check, if system and installation set fit together (x86 and sparc).
     # If not, throw a warning.
     # Architecture of the installation set is saved in file "installdata/xpd/setup.xpd"
-    # <architecture>sparc</architecture> or <architecture>i386</architecture> 
+    # <architecture>sparc</architecture> or <architecture>i386</architecture>
     # Architecture of system is determined with "uname -p"
-    
+
     setupxpdfile="installdata/xpd/setup.xpd"
 
     if [ -f $setupxpdfile ]; then
-        platform=`uname -p`	# valid values are "sparc" or "i386"
+        platform=`uname -p` # valid values are "sparc" or "i386"
         searchstring="<architecture>$platform</architecture>"
         match=`cat $setupxpdfile | grep $searchstring`
 
         if [ -z "$match" ]; then
             # architecture does not fit, warning required
             if [ "$platform" = "sparc" ]; then
-                echo "Warning: This is an attempt to install Solaris x86 packages on Solaris Sparc."    
+                echo "Warning: This is an attempt to install Solaris x86 packages on Solaris Sparc."
             else
-                echo "Warning: This is an attempt to install Solaris Sparc packages on Solaris x86."                
+                echo "Warning: This is an attempt to install Solaris Sparc packages on Solaris x86."
             fi
         fi
     fi
@@ -390,7 +390,7 @@ find_solaris_jre()
             java_runtime_found="yes"
             break
         fi
-    done    
+    done
 }
 
 check_jre_version()
@@ -430,15 +430,15 @@ while getopts hj: opt; do
             java_runtime="${OPTARG}"
             if [ ! -f "$java_runtime" ]; then
                 errortext="Error: Invalid java runtime $java_runtime, file does not exist."
-                errorcode="2" 
+                errorcode="2"
                 do_exit
-            fi 
+            fi
             if [ ! -x "$java_runtime" ]; then
                 errortext="Error: Invalid java runtime $java_runtime, not an executable file."
-                errorcode="3" 
+                errorcode="3"
                 do_exit
-            fi 
-            java_runtime_found="yes"; 
+            fi
+            java_runtime_found="yes";
             ;;
         h)  echo ${USAGE}
             errortext=""

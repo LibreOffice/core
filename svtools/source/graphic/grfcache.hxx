@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,66 +43,66 @@ class GraphicCache
 {
 private:
 
-    GraphicManager&				mrMgr;
+    GraphicManager&             mrMgr;
     Timer                       maReleaseTimer;
-    List						maGraphicCache;
-    List						maDisplayCache;
+    List                        maGraphicCache;
+    List                        maDisplayCache;
     ULONG                       mnReleaseTimeoutSeconds;
-    ULONG						mnMaxDisplaySize;
-    ULONG						mnMaxObjDisplaySize;
-    ULONG						mnUsedDisplaySize;
+    ULONG                       mnMaxDisplaySize;
+    ULONG                       mnMaxObjDisplaySize;
+    ULONG                       mnUsedDisplaySize;
 
-    BOOL						ImplFreeDisplayCacheSpace( ULONG nSizeToFree );
-    GraphicCacheEntry*			ImplGetCacheEntry( const GraphicObject& rObj );
+    BOOL                        ImplFreeDisplayCacheSpace( ULONG nSizeToFree );
+    GraphicCacheEntry*          ImplGetCacheEntry( const GraphicObject& rObj );
 
 
                                 DECL_LINK( ReleaseTimeoutHdl, Timer* pTimer );
-                    
-public:				
-                    
+
+public:
+
                                 GraphicCache( GraphicManager& rMgr,
-                                              ULONG nDisplayCacheSize = 10000000UL, 
+                                              ULONG nDisplayCacheSize = 10000000UL,
                                               ULONG nMaxObjDisplayCacheSize = 2400000UL );
                                 ~GraphicCache();
-                                
-public:							
-                                
-    void						AddGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute, 
+
+public:
+
+    void                        AddGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute,
                                                   const ByteString* pID, const GraphicObject* pCopyObj );
-    void						ReleaseGraphicObject( const GraphicObject& rObj );
+    void                        ReleaseGraphicObject( const GraphicObject& rObj );
 
-    void						GraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    BOOL						FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
-    void						GraphicObjectWasSwappedIn( const GraphicObject& rObj );
+    void                        GraphicObjectWasSwappedOut( const GraphicObject& rObj );
+    BOOL                        FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
+    void                        GraphicObjectWasSwappedIn( const GraphicObject& rObj );
 
-    ByteString					GetUniqueID( const GraphicObject& rObj ) const;
-                                
-public:							
-                                
-    void						SetMaxDisplayCacheSize( ULONG nNewCacheSize );
-    ULONG						GetMaxDisplayCacheSize() const { return mnMaxDisplaySize; };
-                                
-    void						SetMaxObjDisplayCacheSize( ULONG nNewMaxObjSize, BOOL bDestroyGreaterCached = FALSE );
-    ULONG						GetMaxObjDisplayCacheSize() const { return mnMaxObjDisplaySize; }
-                                
-    ULONG						GetUsedDisplayCacheSize() const { return mnUsedDisplaySize; }
-    ULONG						GetFreeDisplayCacheSize() const { return( mnMaxDisplaySize - mnUsedDisplaySize ); }
+    ByteString                  GetUniqueID( const GraphicObject& rObj ) const;
+
+public:
+
+    void                        SetMaxDisplayCacheSize( ULONG nNewCacheSize );
+    ULONG                       GetMaxDisplayCacheSize() const { return mnMaxDisplaySize; };
+
+    void                        SetMaxObjDisplayCacheSize( ULONG nNewMaxObjSize, BOOL bDestroyGreaterCached = FALSE );
+    ULONG                       GetMaxObjDisplayCacheSize() const { return mnMaxObjDisplaySize; }
+
+    ULONG                       GetUsedDisplayCacheSize() const { return mnUsedDisplaySize; }
+    ULONG                       GetFreeDisplayCacheSize() const { return( mnMaxDisplaySize - mnUsedDisplaySize ); }
 
     void                        SetCacheTimeout( ULONG nTimeoutSeconds );
     ULONG                       GetCacheTimeout() const { return mnReleaseTimeoutSeconds; }
-                                
-    void						ClearDisplayCache();
-    BOOL						IsDisplayCacheable( OutputDevice* pOut, const Point& rPt, const Size& rSz, 
+
+    void                        ClearDisplayCache();
+    BOOL                        IsDisplayCacheable( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                                     const GraphicObject& rObj, const GraphicAttr& rAttr ) const;
-    BOOL						IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const Size& rSz, 
+    BOOL                        IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                                   const GraphicObject& rObj, const GraphicAttr& rAttr ) const;
-    BOOL						CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz, 
+    BOOL                        CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                                        const GraphicObject& rObj, const GraphicAttr& rAttr,
                                                        const BitmapEx& rBmpEx );
-    BOOL						CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz, 
+    BOOL                        CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                                        const GraphicObject& rObj, const GraphicAttr& rAttr,
                                                        const GDIMetaFile& rMtf );
-    BOOL						DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz, 
+    BOOL                        DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                                      const GraphicObject& rObj, const GraphicAttr& rAttr );
 };
 

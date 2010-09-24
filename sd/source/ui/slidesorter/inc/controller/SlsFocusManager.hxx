@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace sd { namespace slidesorter { namespace controller {
     focused state of the focus page can be toggled with the ToggleFocus()
     method.
 */
-class FocusManager 
+class FocusManager
 {
 public:
     /** Create a new focus manager that operates on the pages of the model
@@ -173,7 +173,7 @@ public:
         typically the tool bar with the close button.
     */
     void SetFocusToToolBox (void);
-    
+
     /** Create an instance of this class to temporarily hide the focus
         indicator.  It is restored to its former visibility state when the
         FocusHider is destroyed.
@@ -202,7 +202,7 @@ private:
     bool mbPageIsFocused;
 
     ::std::vector<Link> maFocusChangeListeners;
-    
+
     /** Reset the focus state of the given descriptor and request a repaint
         so that the focus indicator is hidden.
         @param pDescriptor

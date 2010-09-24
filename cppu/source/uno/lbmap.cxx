@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,10 +113,10 @@ inline Mapping & Mapping::operator = ( uno_Mapping * pMapping ) SAL_THROW( () )
 //==================================================================================================
 struct MappingEntry
 {
-    sal_Int32			nRef;
-    uno_Mapping *		pMapping;
-    uno_freeMappingFunc	freeMapping;
-    OUString			aMappingName;
+    sal_Int32           nRef;
+    uno_Mapping *       pMapping;
+    uno_freeMappingFunc freeMapping;
+    OUString            aMappingName;
 
     MappingEntry(
         uno_Mapping * pMapping_, uno_freeMappingFunc freeMapping_,
@@ -152,15 +152,15 @@ typedef set< OUString > t_OUStringSet;
 //==================================================================================================
 struct MappingsData
 {
-    Mutex				aMappingsMutex;
-    t_OUString2Entry	aName2Entry;
-    t_Mapping2Entry		aMapping2Entry;
+    Mutex               aMappingsMutex;
+    t_OUString2Entry    aName2Entry;
+    t_Mapping2Entry     aMapping2Entry;
 
-    Mutex				aCallbacksMutex;
-    t_CallbackSet		aCallbacks;
+    Mutex               aCallbacksMutex;
+    t_CallbackSet       aCallbacks;
 
-    Mutex				aNegativeLibsMutex;
-    t_OUStringSet		aNegativeLibs;
+    Mutex               aNegativeLibsMutex;
+    t_OUStringSet       aNegativeLibs;
 };
 //--------------------------------------------------------------------------------------------------
 static MappingsData & getMappingsData() SAL_THROW( () )
@@ -185,15 +185,15 @@ static MappingsData & getMappingsData() SAL_THROW( () )
  */
 struct uno_Mediate_Mapping : public uno_Mapping
 {
-    sal_Int32	nRef;
+    sal_Int32   nRef;
 
     Environment aFrom;
     Environment aTo;
 
-    Mapping		aFrom2Uno;
-    Mapping		aUno2To;
+    Mapping     aFrom2Uno;
+    Mapping     aUno2To;
 
-    OUString	aAddPurpose;
+    OUString    aAddPurpose;
 
     uno_Mediate_Mapping(
         const Environment & rFrom_, const Environment & rTo_,
@@ -282,9 +282,9 @@ uno_Mediate_Mapping::uno_Mediate_Mapping(
     , aUno2To( rUno2To_ )
     , aAddPurpose( rAddPurpose_ )
 {
-    uno_Mapping::acquire		= mediate_acquire;
-    uno_Mapping::release		= mediate_release;
-    uno_Mapping::mapInterface	= mediate_mapInterface;
+    uno_Mapping::acquire        = mediate_acquire;
+    uno_Mapping::release        = mediate_release;
+    uno_Mapping::mapInterface   = mediate_mapInterface;
 }
 
 //==================================================================================================
@@ -539,9 +539,9 @@ void SAL_CALL uno_getMapping(
     }
 
     // See if an identity mapping does fit.
-    if (!aRet.is() && pFrom == pTo && !aAddPurpose.getLength()) 
+    if (!aRet.is() && pFrom == pTo && !aAddPurpose.getLength())
         aRet = createIdentityMapping(pFrom);
-        
+
     if (!aRet.is())
     {
         getCascadeMapping(ppMapping, pFrom, pTo, pAddPurpose);

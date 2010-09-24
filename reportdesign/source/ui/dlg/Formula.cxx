@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,9 +51,9 @@ namespace rptui
     using namespace formula;
     using namespace ::com::sun::star;
 
-//	--------------------------------------------------------------------------
-//		Initialisierung / gemeinsame Funktionen  fuer Dialog
-//	--------------------------------------------------------------------------
+//  --------------------------------------------------------------------------
+//      Initialisierung / gemeinsame Funktionen  fuer Dialog
+//  --------------------------------------------------------------------------
 
 FormulaDialog::FormulaDialog(Window* pParent
                              , const uno::Reference<lang::XMultiServiceFactory>& _xServiceFactory
@@ -107,9 +107,9 @@ FormulaDialog::~FormulaDialog()
     }
 }
 
-//	--------------------------------------------------------------------------
-//							Funktionen fuer rechte Seite
-//	--------------------------------------------------------------------------
+//  --------------------------------------------------------------------------
+//                          Funktionen fuer rechte Seite
+//  --------------------------------------------------------------------------
 bool FormulaDialog::calculateValue( const String& rStrExp, String& rStrResult )
 {
     rStrResult = rStrExp;
@@ -119,7 +119,7 @@ void FormulaDialog::doClose(BOOL _bOk)
 {
     EndDialog(_bOk ? RET_OK : RET_CANCEL);
 }
-void FormulaDialog::insertEntryToLRUList(const IFunctionDescription*	/*_pDesc*/)
+void FormulaDialog::insertEntryToLRUList(const IFunctionDescription*    /*_pDesc*/)
 {
 }
 void FormulaDialog::showReference(const String& /*_sFormula*/)

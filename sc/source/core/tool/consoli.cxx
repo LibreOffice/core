@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,13 @@
 #include <math.h>
 #include <string.h>
 
-#define SC_CONS_NOTFOUND	-1
+#define SC_CONS_NOTFOUND    -1
 
 // STATIC DATA -----------------------------------------------------------
 
-/*	Strings bei Gelegenheit ganz raus...
-static USHORT nFuncRes[] = {				//	Reihenfolge wie bei enum ScSubTotalFunc
-        0,									//	none
+/*  Strings bei Gelegenheit ganz raus...
+static USHORT nFuncRes[] = {                //  Reihenfolge wie bei enum ScSubTotalFunc
+        0,                                  //  none
         STR_PIVOTFUNC_AVG,
         STR_PIVOTFUNC_COUNT,
         STR_PIVOTFUNC_COUNT2,
@@ -65,8 +65,8 @@ static USHORT nFuncRes[] = {				//	Reihenfolge wie bei enum ScSubTotalFunc
         STR_PIVOTFUNC_VAR2 };
 */
 
-static OpCode eOpCodeTable[] = {			//	Reihenfolge wie bei enum ScSubTotalFunc
-        ocBad,								//	none
+static OpCode eOpCodeTable[] = {            //  Reihenfolge wie bei enum ScSubTotalFunc
+        ocBad,                              //  none
         ocAverage,
         ocCount,
         ocCount2,
@@ -149,24 +149,24 @@ ScConsData::~ScConsData()
 }
 
 
-#define DELETEARR(ppArray,nCount)	\
-{									\
-    ULONG i; 						\
-    if (ppArray) 					\
-        for(i=0; i<nCount; i++)		\
-            delete[] ppArray[i];	\
-    delete[] ppArray;				\
-    ppArray = NULL;					\
+#define DELETEARR(ppArray,nCount)   \
+{                                   \
+    ULONG i;                        \
+    if (ppArray)                    \
+        for(i=0; i<nCount; i++)     \
+            delete[] ppArray[i];    \
+    delete[] ppArray;               \
+    ppArray = NULL;                 \
 }
 
-#define DELETESTR(ppArray,nCount)	\
-{									\
-    ULONG i; 						\
-    if (ppArray) 					\
-        for(i=0; i<nCount; i++)		\
-            delete ppArray[i];		\
-    delete[] ppArray;				\
-    ppArray = NULL;					\
+#define DELETESTR(ppArray,nCount)   \
+{                                   \
+    ULONG i;                        \
+    if (ppArray)                    \
+        for(i=0; i<nCount; i++)     \
+            delete ppArray[i];      \
+    delete[] ppArray;               \
+    ppArray = NULL;                 \
 }
 
 void ScConsData::DeleteData()
@@ -184,12 +184,12 @@ void ScConsData::DeleteData()
         ppRefs = NULL;
     }
 
-//	DELETEARR( ppData1, nColCount );
-//	DELETEARR( ppData2, nColCount );
+//  DELETEARR( ppData1, nColCount );
+//  DELETEARR( ppData2, nColCount );
     DELETEARR( ppCount, nColCount );
     DELETEARR( ppSum,   nColCount );
     DELETEARR( ppSumSqr,nColCount );
-    DELETEARR( ppUsed,  nColCount );				// erst nach ppRefs !!!
+    DELETEARR( ppUsed,  nColCount );                // erst nach ppRefs !!!
     DELETEARR( ppTitlePos, nRowCount );
     DELETESTR( ppColHeaders, nColCount );
     DELETESTR( ppRowHeaders, nRowCount );
@@ -197,7 +197,7 @@ void ScConsData::DeleteData()
     nTitleCount = 0;
     nDataCount = 0;
 
-    if (bColByName) nColCount = 0;					// sonst stimmt ppColHeaders nicht
+    if (bColByName) nColCount = 0;                  // sonst stimmt ppColHeaders nicht
     if (bRowByName) nRowCount = 0;
 
     bCornerUsed = FALSE;
@@ -247,11 +247,11 @@ void ScConsData::InitData( BOOL bDelete )
         for (SCSIZE i=0; i<nRowCount; i++)
         {
             ppTitlePos[i] = new SCSIZE[nDataCount];
-            memset( ppTitlePos[i], 0, nDataCount * sizeof(SCSIZE) );	//! unnoetig ?
+            memset( ppTitlePos[i], 0, nDataCount * sizeof(SCSIZE) );    //! unnoetig ?
         }
     }
 
-    //	CornerText: einzelner String
+    //  CornerText: einzelner String
 }
 
 void ScConsData::DoneFields()
@@ -292,8 +292,8 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
 
     SCCOL nStartCol = nCol1;
     SCROW nStartRow = nRow1;
-    if (bColByName)	++nStartRow;
-    if (bRowByName)	++nStartCol;
+    if (bColByName) ++nStartRow;
+    if (bRowByName) ++nStartCol;
 
     if (bColByName)
     {
@@ -341,7 +341,7 @@ void ScConsData::AddName( const String& rName )
 
         for (nArrY=0; nArrY<nRowCount; nArrY++)
         {
-            //	Daten auf gleiche Laenge bringen
+            //  Daten auf gleiche Laenge bringen
 
             SCSIZE nMax = 0;
             for (nArrX=0; nArrX<nColCount; nArrX++)
@@ -358,7 +358,7 @@ void ScConsData::AddName( const String& rName )
                 ppRefs[nArrX][nArrY].SetFullSize(nMax);
             }
 
-            //	Positionen eintragen
+            //  Positionen eintragen
 
             if (ppTitlePos)
                 if (nTitleCount < nDataCount)
@@ -539,7 +539,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     SCCOL nCol;
     SCROW nRow;
 
-    //		Ecke links oben
+    //      Ecke links oben
 
     if ( bColByName && bRowByName )
     {
@@ -557,15 +557,15 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
         }
     }
 
-    //		Titel suchen
+    //      Titel suchen
 
     SCCOL nStartCol = nCol1;
     SCROW nStartRow = nRow1;
-    if (bColByName)	++nStartRow;
-    if (bRowByName)	++nStartCol;
+    if (bColByName) ++nStartRow;
+    if (bRowByName) ++nStartCol;
     String aTitle;
-    SCCOL*	pDestCols = NULL;
-    SCROW*	pDestRows = NULL;
+    SCCOL*  pDestCols = NULL;
+    SCROW*  pDestRows = NULL;
     if (bColByName)
     {
         pDestCols = new SCCOL[nCol2-nStartCol+1];
@@ -611,19 +611,19 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     nCol1 = nStartCol;
     nRow1 = nStartRow;
 
-    //		Daten
+    //      Daten
 
     BOOL bAnyCell = ( eFunction == SUBTOTAL_FUNC_CNT2 );
     for (nCol=nCol1; nCol<=nCol2; nCol++)
     {
         SCCOL nArrX = nCol-nCol1;
-        if (bColByName)	nArrX = pDestCols[nArrX];
+        if (bColByName) nArrX = pDestCols[nArrX];
         if (nArrX != SC_CONS_NOTFOUND)
         {
             for (nRow=nRow1; nRow<=nRow2; nRow++)
             {
                 SCROW nArrY = nRow-nRow1;
-                if (bRowByName)	nArrY = pDestRows[nArrY];
+                if (bRowByName) nArrY = pDestRows[nArrY];
                 if ( nArrY != SC_CONS_NOTFOUND && (
                         bAnyCell ? pSrcDoc->HasData( nCol, nRow, nTab )
                                  : pSrcDoc->HasValueData( nCol, nRow, nTab ) ) )
@@ -664,7 +664,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     delete[] pDestRows;
 }
 
-//	vorher testen, wieviele Zeilen eingefuegt werden (fuer Undo)
+//  vorher testen, wieviele Zeilen eingefuegt werden (fuer Undo)
 
 SCROW ScConsData::GetInsertCount() const
 {
@@ -686,8 +686,8 @@ SCROW ScConsData::GetInsertCount() const
     return nInsert;
 }
 
-//	fertige Daten ins Dokument schreiben
-//!	optimieren nach Spalten?
+//  fertige Daten ins Dokument schreiben
+//! optimieren nach Spalten?
 
 void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
@@ -696,17 +696,17 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
     SCSIZE nArrX;
     SCSIZE nArrY;
 
-    //	Ecke links oben
+    //  Ecke links oben
 
     if ( bColByName && bRowByName && aCornerText.Len() )
         pDestDoc->SetString( nCol, nRow, nTab, aCornerText );
 
-    //	Titel
+    //  Titel
 
     SCCOL nStartCol = nCol;
     SCROW nStartRow = nRow;
-    if (bColByName)	++nStartRow;
-    if (bRowByName)	++nStartCol;
+    if (bColByName) ++nStartRow;
+    if (bRowByName) ++nStartCol;
 
     if (bColByName)
         for (SCSIZE i=0; i<nColCount; i++)
@@ -718,9 +718,9 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
     nCol = nStartCol;
     nRow = nStartRow;
 
-    //	Daten
+    //  Daten
 
-    if ( ppCount && ppUsed )							// Werte direkt einfuegen
+    if ( ppCount && ppUsed )                            // Werte direkt einfuegen
     {
         for (nArrX=0; nArrX<nColCount; nArrX++)
             for (nArrY=0; nArrY<nRowCount; nArrY++)
@@ -738,16 +738,16 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                 }
     }
 
-    if ( ppRefs && ppUsed )								// Referenzen einfuegen
+    if ( ppRefs && ppUsed )                             // Referenzen einfuegen
     {
                                 //! unterscheiden, ob nach Kategorien aufgeteilt
         String aString;
 
-        ScSingleRefData aSRef;		// Daten fuer Referenz-Formelzellen
+        ScSingleRefData aSRef;      // Daten fuer Referenz-Formelzellen
         aSRef.InitFlags();
         aSRef.SetFlag3D(TRUE);
 
-        ScComplexRefData aCRef;			// Daten fuer Summen-Zellen
+        ScComplexRefData aCRef;         // Daten fuer Summen-Zellen
         aCRef.InitFlags();
         aCRef.Ref1.SetColRel(TRUE); aCRef.Ref1.SetRowRel(TRUE); aCRef.Ref1.SetTabRel(TRUE);
         aCRef.Ref2.SetColRel(TRUE); aCRef.Ref2.SetRowRel(TRUE); aCRef.Ref2.SetTabRel(TRUE);
@@ -775,7 +775,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                 ScReferenceEntry aRef = rList.GetEntry(nPos);
                                 if (aRef.nTab != SC_CONS_NOTFOUND)
                                 {
-                                    //	Referenz einfuegen (absolut, 3d)
+                                    //  Referenz einfuegen (absolut, 3d)
 
                                     aSRef.nCol = aRef.nCol;
                                     aSRef.nRow = aRef.nRow;
@@ -791,7 +791,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                 }
                             }
 
-                            //	Summe einfuegen (relativ, nicht 3d)
+                            //  Summe einfuegen (relativ, nicht 3d)
 
                             ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
                                              sal::static_int_cast<SCROW>(nRow+nArrY+nNeeded), nTab );
@@ -803,7 +803,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                             aCRef.CalcRelFromAbs( aDest );
 
                             ScTokenArray aArr;
-                            aArr.AddOpCode(eOpCode);			// ausgewaehlte Funktion
+                            aArr.AddOpCode(eOpCode);            // ausgewaehlte Funktion
                             aArr.AddOpCode(ocOpen);
                             aArr.AddDoubleReference(aCRef);
                             aArr.AddOpCode(ocClose);
@@ -813,7 +813,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                         }
                     }
 
-                //	Gliederung einfuegen
+                //  Gliederung einfuegen
 
                 ScOutlineArray* pOutArr = pDestDoc->GetOutlineTable( nTab, TRUE )->GetRowArray();
                 SCROW nOutStart = nRow+nArrY;
@@ -824,7 +824,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                     pDestDoc->ShowRow( nOutRow, nTab, FALSE );
                 pDestDoc->UpdateOutlineRow( nOutStart, nOutEnd, nTab, FALSE );
 
-                //	Zwischentitel
+                //  Zwischentitel
 
                 if (ppTitlePos && ppTitles && ppRowHeaders)
                 {
@@ -835,7 +835,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                         BOOL bDo = TRUE;
                         if (nPos+1<nDataCount)
                             if (ppTitlePos[nArrY][nPos+1] == nTPos)
-                                bDo = FALSE;									// leer
+                                bDo = FALSE;                                    // leer
                         if ( bDo && nTPos < nNeeded )
                         {
                             aString =  *ppRowHeaders[nArrY];

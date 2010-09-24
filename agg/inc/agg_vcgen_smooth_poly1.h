@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -25,7 +25,7 @@ namespace agg
 
     //======================================================vcgen_smooth_poly1
     //
-    // See Implementation agg_vcgen_smooth_poly1.cpp 
+    // See Implementation agg_vcgen_smooth_poly1.cpp
     // Smooth polygon generator
     //
     //------------------------------------------------------------------------
@@ -64,8 +64,8 @@ namespace agg
         vcgen_smooth_poly1(const vcgen_smooth_poly1&);
         const vcgen_smooth_poly1& operator = (const vcgen_smooth_poly1&);
 
-        void calculate(const vertex_dist& v0, 
-                       const vertex_dist& v1, 
+        void calculate(const vertex_dist& v0,
+                       const vertex_dist& v1,
                        const vertex_dist& v2,
                        const vertex_dist& v3);
 

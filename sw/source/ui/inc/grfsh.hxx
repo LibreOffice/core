@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,9 +34,9 @@ class SwGrfShell: public SwBaseShell
 public:
     SFX_DECL_INTERFACE(SW_GRFSHELL)
 
-    void	Execute(SfxRequest &);
-    void	ExecAttr(SfxRequest &);
-    void	GetAttrState(SfxItemSet &);
+    void    Execute(SfxRequest &);
+    void    ExecAttr(SfxRequest &);
+    void    GetAttrState(SfxItemSet &);
 
             SwGrfShell(SwView &rView);
 };

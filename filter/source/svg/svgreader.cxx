@@ -2545,13 +2545,13 @@ struct ShapeRenderingVisitor
             {
                 ::Gradient aTransparencyGradient=aGradient;
 
-                const BYTE	cTransStart( 255-
+                const BYTE  cTransStart( 255-
                     basegfx::fround(mrGradientStopVector[
                                         aState.maFillGradient.maStops[1]].maStopColor.a*
                                     aState.mnFillOpacity*maCurrState.mnOpacity*255.0));
                 const Color aTransStart( cTransStart, cTransStart, cTransStart );
 
-                const BYTE	cTransEnd( 255-
+                const BYTE  cTransEnd( 255-
                     basegfx::fround(mrGradientStopVector[
                                         aState.maFillGradient.maStops[0]].maStopColor.a*
                                     aState.mnFillOpacity*maCurrState.mnOpacity*255.0));
@@ -2561,8 +2561,8 @@ struct ShapeRenderingVisitor
                 aTransparencyGradient.SetStartColor(aTransStart);
                 aTransparencyGradient.SetEndColor(aTransEnd);
 
-                VirtualDevice	aVDev;
-                GDIMetaFile		aMtf;
+                VirtualDevice   aVDev;
+                GDIMetaFile     aMtf;
 
                 aVDev.EnableOutput( FALSE );
                 aVDev.SetMapMode( mrOutDev.GetMapMode() );
@@ -2722,8 +2722,8 @@ bool importSvg(SvStream & rStream, Graphic & rGraphic )
     uno::Reference<xml::dom::XElement> xDocElem( xDom->getDocumentElement(),
                                                  uno::UNO_QUERY_THROW );
 
-    VirtualDevice	aVDev;
-    GDIMetaFile		aMtf;
+    VirtualDevice   aVDev;
+    GDIMetaFile     aMtf;
 
     aVDev.EnableOutput( FALSE );
     aMtf.Record( &aVDev );

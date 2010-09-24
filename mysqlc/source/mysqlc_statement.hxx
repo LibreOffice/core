@@ -29,7 +29,7 @@ namespace connectivity
         using ::com::sun::star::uno::RuntimeException;
         using ::rtl::OUString;
 
-        typedef ::cppu::WeakComponentImplHelper5<	::com::sun::star::sdbc::XStatement,
+        typedef ::cppu::WeakComponentImplHelper5<   ::com::sun::star::sdbc::XStatement,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
                                                     ::com::sun::star::util::XCancellable,
                                                     ::com::sun::star::sdbc::XCloseable,
@@ -55,11 +55,11 @@ namespace connectivity
             SQLWarning m_aLastWarning;
 
         protected:
-            ::std::list< OUString>	m_aBatchList;
+            ::std::list< OUString>  m_aBatchList;
 
-            OConnection*			m_pConnection;	// The owning Connection object
+            OConnection*            m_pConnection;  // The owning Connection object
 
-            sql::Statement			*cppStatement;
+            sql::Statement          *cppStatement;
 
         protected:
             void disposeResultSet();
@@ -90,9 +90,9 @@ namespace connectivity
             void SAL_CALL disposing(void);
 
             // XInterface
-            void SAL_CALL release() 			throw();
+            void SAL_CALL release()             throw();
 
-            void SAL_CALL acquire() 			throw();
+            void SAL_CALL acquire()             throw();
 
             // XInterface
             Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & rType)
@@ -120,15 +120,15 @@ namespace connectivity
                                                 throw(SQLException, RuntimeException);
 
             // XWarningsSupplier
-            Any SAL_CALL getWarnings() 		throw(SQLException, RuntimeException);
+            Any SAL_CALL getWarnings()      throw(SQLException, RuntimeException);
 
-            void SAL_CALL clearWarnings() 		throw(SQLException, RuntimeException);
+            void SAL_CALL clearWarnings()       throw(SQLException, RuntimeException);
 
             // XCancellable
-            void SAL_CALL cancel() 				throw(RuntimeException);
+            void SAL_CALL cancel()              throw(RuntimeException);
 
             // XCloseable
-            void SAL_CALL close() 				throw(SQLException, RuntimeException);
+            void SAL_CALL close()               throw(SQLException, RuntimeException);
 
             // XMultipleResults
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getResultSet()
@@ -136,7 +136,7 @@ namespace connectivity
 
             sal_Int32 SAL_CALL getUpdateCount() throw(SQLException, RuntimeException);
 
-            sal_Bool SAL_CALL getMoreResults()	throw(SQLException, RuntimeException);
+            sal_Bool SAL_CALL getMoreResults()  throw(SQLException, RuntimeException);
 
             // other methods
             OConnection* getOwnConnection() const { return m_pConnection;}
@@ -146,7 +146,7 @@ namespace connectivity
         };
 
 
-        class OStatement :	public OCommonStatement,
+        class OStatement :  public OCommonStatement,
                             public ::com::sun::star::sdbc::XBatchExecution,
                             public ::com::sun::star::lang::XServiceInfo
 
@@ -162,14 +162,14 @@ namespace connectivity
             Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
                                                 throw(RuntimeException);
 
-            void SAL_CALL acquire() 			throw();
-            void SAL_CALL release() 			throw();
+            void SAL_CALL acquire()             throw();
+            void SAL_CALL release()             throw();
 
             // XBatchExecution
             void SAL_CALL addBatch(const OUString& sql)
                                                 throw(SQLException, RuntimeException);
 
-            void SAL_CALL clearBatch()			throw(SQLException, RuntimeException);
+            void SAL_CALL clearBatch()          throw(SQLException, RuntimeException);
 
             ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch()
                                                 throw(SQLException, RuntimeException);

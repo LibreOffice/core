@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,13 +67,13 @@ OAdabasCreateDialog::OAdabasCreateDialog(const Reference< XMultiServiceFactory >
     :OAdabasCreateDialogBase(_rxORB)
     ,m_pDialog(NULL)
 {
-    registerProperty(PROPERTY_CREATECATALOG,	PROPERTY_ID_CREATECATALOG,		PropertyAttribute::TRANSIENT,&m_xCreateCatalog,		::getCppuType(&m_xCreateCatalog));
-    registerProperty(PROPERTY_DATABASENAME,		PROPERTY_ID_DATABASENAME,		PropertyAttribute::TRANSIENT,&m_sDatabaseName,		::getCppuType(&m_sDatabaseName));
-    registerProperty(PROPERTY_CONTROL_USER,		PROPERTY_ID_CONTROL_USER,		PropertyAttribute::TRANSIENT,&m_sControlUser,		::getCppuType(&m_sControlUser));
-    registerProperty(PROPERTY_CONTROL_PASSWORD, PROPERTY_ID_CONTROL_PASSWORD,	PropertyAttribute::TRANSIENT,&m_sControlPassword,	::getCppuType(&m_sControlPassword));
-    registerProperty(PROPERTY_USER,				PROPERTY_ID_USER,				PropertyAttribute::TRANSIENT,&m_sUser,				::getCppuType(&m_sUser));
-    registerProperty(PROPERTY_PASSWORD,			PROPERTY_ID_PASSWORD,			PropertyAttribute::TRANSIENT,&m_sUserPassword,		::getCppuType(&m_sUserPassword));
-    registerProperty(PROPERTY_CACHESIZE,		PROPERTY_ID_CACHESIZE,			PropertyAttribute::TRANSIENT,&m_nCacheSize,			::getCppuType(&m_nCacheSize));
+    registerProperty(PROPERTY_CREATECATALOG,    PROPERTY_ID_CREATECATALOG,      PropertyAttribute::TRANSIENT,&m_xCreateCatalog,     ::getCppuType(&m_xCreateCatalog));
+    registerProperty(PROPERTY_DATABASENAME,     PROPERTY_ID_DATABASENAME,       PropertyAttribute::TRANSIENT,&m_sDatabaseName,      ::getCppuType(&m_sDatabaseName));
+    registerProperty(PROPERTY_CONTROL_USER,     PROPERTY_ID_CONTROL_USER,       PropertyAttribute::TRANSIENT,&m_sControlUser,       ::getCppuType(&m_sControlUser));
+    registerProperty(PROPERTY_CONTROL_PASSWORD, PROPERTY_ID_CONTROL_PASSWORD,   PropertyAttribute::TRANSIENT,&m_sControlPassword,   ::getCppuType(&m_sControlPassword));
+    registerProperty(PROPERTY_USER,             PROPERTY_ID_USER,               PropertyAttribute::TRANSIENT,&m_sUser,              ::getCppuType(&m_sUser));
+    registerProperty(PROPERTY_PASSWORD,         PROPERTY_ID_PASSWORD,           PropertyAttribute::TRANSIENT,&m_sUserPassword,      ::getCppuType(&m_sUserPassword));
+    registerProperty(PROPERTY_CACHESIZE,        PROPERTY_ID_CACHESIZE,          PropertyAttribute::TRANSIENT,&m_nCacheSize,         ::getCppuType(&m_nCacheSize));
 }
 
 //-------------------------------------------------------------------------
@@ -137,7 +137,7 @@ Reference<XPropertySetInfo>  SAL_CALL OAdabasCreateDialog::getPropertySetInfo() 
 }
 
 //------------------------------------------------------------------------------
-Dialog*	OAdabasCreateDialog::createDialog(Window* _pParent)
+Dialog* OAdabasCreateDialog::createDialog(Window* _pParent)
 {
     if(!m_xCreateCatalog.is())
         throw SQLException();
@@ -149,12 +149,12 @@ void OAdabasCreateDialog::executedDialog(sal_Int16 _nExecutionResult)
 {
     if(m_pDialog && _nExecutionResult == RET_OK)
     { // fill the variables
-        m_sDatabaseName		= m_pDialog->GetDatabaseName();
-        m_sControlUser		= m_pDialog->GetControlUser();
-        m_sControlPassword	= m_pDialog->GetControlPassword();
-        m_sUser				= m_pDialog->GetUser();
-        m_sUserPassword		= m_pDialog->GetUserPassword();
-        m_nCacheSize		= m_pDialog->GetCacheSize();
+        m_sDatabaseName     = m_pDialog->GetDatabaseName();
+        m_sControlUser      = m_pDialog->GetControlUser();
+        m_sControlPassword  = m_pDialog->GetControlPassword();
+        m_sUser             = m_pDialog->GetUser();
+        m_sUserPassword     = m_pDialog->GetUserPassword();
+        m_nCacheSize        = m_pDialog->GetCacheSize();
     }
 }
 // -----------------------------------------------------------------------------

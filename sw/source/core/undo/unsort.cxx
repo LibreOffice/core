@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <doc.hxx>
-#include <swundo.hxx>			// fuer die UndoIds
+#include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
@@ -96,7 +96,7 @@ SwUndoSort::~SwUndoSort()
 
 void SwUndoSort::Undo( SwUndoIter& rIter)
 {
-    SwDoc& 	rDoc = rIter.GetDoc();
+    SwDoc&  rDoc = rIter.GetDoc();
     if(pSortOpt->bTable)
     {
         // Undo Tabelle
@@ -145,7 +145,7 @@ void SwUndoSort::Undo( SwUndoIter& rIter)
 
         // fuer die sorted Positions einen Index anlegen.
         // JP 25.11.97: Die IndexList muss aber nach SourcePosition
-        //				aufsteigend sortiert aufgebaut werden
+        //              aufsteigend sortiert aufgebaut werden
         SwUndoSortList aIdxList( (BYTE)aSortList.Count() );
         USHORT i;
 
@@ -226,7 +226,7 @@ void SwUndoSort::Redo( SwUndoIter& rIter)
         USHORT i;
 
         for( i = 0; i < aSortList.Count(); ++i)
-        {	// aktuelle Pos ist die Ausgangslage
+        {   // aktuelle Pos ist die Ausgangslage
             SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
                     aSortList[i]->SORT_TXT_TBL.TXT.nSource);
             aIdxList.C40_INSERT( SwNodeIndex, pIdx, i );

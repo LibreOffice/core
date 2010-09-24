@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,73 +47,73 @@ namespace basegfx
     */
     class B2DVector : public ::basegfx::B2DTuple
     {
-    public:					
-        /**	Create a 2D Vector
+    public:
+        /** Create a 2D Vector
 
             The vector is initialized to (0.0, 0.0)
         */
-        B2DVector() 
-        :	B2DTuple()
+        B2DVector()
+        :   B2DTuple()
         {}
 
-        /**	Create a 2D Vector
+        /** Create a 2D Vector
 
             @param fX
             This parameter is used to initialize the X-coordinate
             of the 2D Vector.
-            
+
             @param fY
             This parameter is used to initialize the Y-coordinate
             of the 2D Vector.
         */
-        B2DVector(double fX, double fY) 
-        :	B2DTuple(fX, fY)
+        B2DVector(double fX, double fY)
+        :   B2DTuple(fX, fY)
         {}
 
-        /**	Create a copy of a 2D Vector
+        /** Create a copy of a 2D Vector
 
             @param rVec
             The 2D Vector which will be copied.
         */
-        B2DVector(const B2DVector& rVec) 
-        :	B2DTuple(rVec)
+        B2DVector(const B2DVector& rVec)
+        :   B2DTuple(rVec)
         {}
 
-        /**	Create a copy of a 2D Vector
+        /** Create a copy of a 2D Vector
 
             @param rVec
             The 2D Vector which will be copied.
         */
-        B2DVector(const ::basegfx::B2IVector& rVec) 
-        :	B2DTuple(rVec)
+        B2DVector(const ::basegfx::B2IVector& rVec)
+        :   B2DTuple(rVec)
         {}
 
         /** constructor with tuple to allow copy-constructing
             from B2DTuple-based classes
         */
-        B2DVector(const ::basegfx::B2DTuple& rTuple) 
-        :	B2DTuple(rTuple)
+        B2DVector(const ::basegfx::B2DTuple& rTuple)
+        :   B2DTuple(rTuple)
         {}
 
-        ~B2DVector() 
+        ~B2DVector()
         {}
 
         /** *=operator to allow usage from B2DVector, too
         */
-        B2DVector& operator*=( const B2DVector& rPnt ) 
-        { 
+        B2DVector& operator*=( const B2DVector& rPnt )
+        {
             mfX *= rPnt.mfX;
-            mfY *= rPnt.mfY; 
-            return *this; 
+            mfY *= rPnt.mfY;
+            return *this;
         }
 
         /** *=operator to allow usage from B2DVector, too
         */
-        B2DVector& operator*=(double t) 
-        { 
-            mfX *= t; 
-            mfY *= t; 
-            return *this; 
+        B2DVector& operator*=(double t)
+        {
+            mfX *= t;
+            mfY *= t;
+            return *this;
         }
 
         /** assignment operator to allow assigning the results
@@ -194,7 +194,7 @@ namespace basegfx
 
         static const B2DVector& getEmptyVector();
     };
-    
+
     // external operators
     //////////////////////////////////////////////////////////////////////////
 
@@ -249,14 +249,14 @@ namespace basegfx
     bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB );
 
     /** Transform vector by given transformation matrix.
-        
+
         Since this is a vector, translational components of the
         matrix are disregarded.
     */
     B2DVector operator*( const B2DHomMatrix& rMat, const B2DVector& rVec );
 
     /** Test continuity between given vectors.
-        
+
         The two given vectors are assumed to describe control points on a
         common point. Calculate if there is a continuity between them.
     */

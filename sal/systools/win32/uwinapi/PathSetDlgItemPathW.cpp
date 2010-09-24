@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define _SHLWAPI_
 #include <shlwapi.h>
 
-IMPLEMENT_THUNK( shlwapi, WINDOWS, void, WINAPI, PathSetDlgItemPathW, 
+IMPLEMENT_THUNK( shlwapi, WINDOWS, void, WINAPI, PathSetDlgItemPathW,
 (
     HWND hDlg,
     int id,
@@ -38,5 +38,5 @@ IMPLEMENT_THUNK( shlwapi, WINDOWS, void, WINAPI, PathSetDlgItemPathW,
 ))
 {
     AUTO_WSTR2STR(lpPath);
-    PathSetDlgItemPathA(hDlg, id, lpPathA);    
+    PathSetDlgItemPathA(hDlg, id, lpPathA);
 }

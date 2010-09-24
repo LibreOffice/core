@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,24 +75,24 @@ Inflater::~Inflater()
     end();
 }
 
-void SAL_CALL Inflater::setInput( const Sequence< sal_Int8 >& rBuffer ) 
+void SAL_CALL Inflater::setInput( const Sequence< sal_Int8 >& rBuffer )
 {
     sInBuffer = rBuffer;
     nOffset = 0;
     nLength = rBuffer.getLength();
 }
 
-sal_Bool SAL_CALL Inflater::needsDictionary(  ) 
+sal_Bool SAL_CALL Inflater::needsDictionary(  )
 {
     return bNeedDict;
 }
 
-sal_Bool SAL_CALL Inflater::finished(  ) 
+sal_Bool SAL_CALL Inflater::finished(  )
 {
     return bFinished;
 }
 
-sal_Int32 SAL_CALL Inflater::doInflateSegment( Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength ) 
+sal_Int32 SAL_CALL Inflater::doInflateSegment( Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
 {
     if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
     {
@@ -101,7 +101,7 @@ sal_Int32 SAL_CALL Inflater::doInflateSegment( Sequence< sal_Int8 >& rBuffer, sa
     return doInflateBytes(rBuffer, nNewOffset, nNewLength);
 }
 
-void SAL_CALL Inflater::end(  ) 
+void SAL_CALL Inflater::end(  )
 {
     if (pStream != NULL)
     {

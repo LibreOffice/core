@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -146,24 +146,24 @@ Calendar_gregorian::init(Era *_eraArray)
 {
         cCalendar = "com.sun.star.i18n.Calendar_gregorian";
 
-        // #i102356# With icu::Calendar::createInstance(UErrorCode) in a Thai 
-        // th_TH system locale we accidentally used a Buddhist calendar. Though 
-        // the ICU documentation says that should be the case only for 
-        // th_TH_TRADITIONAL (and ja_JP_TRADITIONAL Gengou), a plain th_TH 
-        // already triggers that behavior, ja_JP does not. Strange enough, 
-        // passing a th_TH locale to the calendar creation doesn't trigger 
+        // #i102356# With icu::Calendar::createInstance(UErrorCode) in a Thai
+        // th_TH system locale we accidentally used a Buddhist calendar. Though
+        // the ICU documentation says that should be the case only for
+        // th_TH_TRADITIONAL (and ja_JP_TRADITIONAL Gengou), a plain th_TH
+        // already triggers that behavior, ja_JP does not. Strange enough,
+        // passing a th_TH locale to the calendar creation doesn't trigger
         // this.
         // See also http://userguide.icu-project.org/datetime/calendar
 
-        // Whatever ICU offers as the default calendar for a locale, ensure we 
+        // Whatever ICU offers as the default calendar for a locale, ensure we
         // have a Gregorian calendar as requested.
 
-        /* XXX: with the current implementation the aLocale member variable is 
+        /* XXX: with the current implementation the aLocale member variable is
          * not set prior to loading a calendar from locale data. This
-         * creates an empty (root) locale for ICU, but at least the correct 
-         * calendar is used. The language part must not be NULL (respectively 
-         * not all, language and country and variant), otherwise the current 
-         * default locale would be used again and the calendar keyword ignored. 
+         * creates an empty (root) locale for ICU, but at least the correct
+         * calendar is used. The language part must not be NULL (respectively
+         * not all, language and country and variant), otherwise the current
+         * default locale would be used again and the calendar keyword ignored.
          * */
         icu::Locale aIcuLocale( "", NULL, NULL, "calendar=gregorian");
 
@@ -212,7 +212,7 @@ Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16
 void SAL_CALL
 Calendar_hanja::loadCalendar( const OUString& /*uniqueID*/, const com::sun::star::lang::Locale& rLocale ) throw(RuntimeException)
 {
-        // Since this class could be called by service name 'hanja_yoil', we have to 
+        // Since this class could be called by service name 'hanja_yoil', we have to
         // rename uniqueID to get right calendar defined in locale data.
         Calendar_gregorian::loadCalendar(OUString::createFromAscii("hanja"), rLocale);
 }
@@ -429,7 +429,7 @@ bool Calendar_gregorian::getDSTOffset( sal_Int32 & o_nOffset ) const
 void Calendar_gregorian::submitFields() throw(com::sun::star::uno::RuntimeException)
 {
     for (sal_Int16 fieldIndex = 0; fieldIndex < FIELD_INDEX_COUNT; fieldIndex++)
-    { 
+    {
         if (fieldSet & (1 << fieldIndex))
         {
             switch (fieldIndex)
@@ -602,7 +602,7 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
                 nDST1 = 0;
         }
 
-        // The original submission, may lead to a different zone/DST and 
+        // The original submission, may lead to a different zone/DST and
         // different date.
         submitFields();
         DUMP_ICU_CAL_MSG(("%s\n","setValue() after original submission"));
@@ -625,11 +625,11 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
                 // is not what we want.
                 // Resubmit all values, this time including DST => date 01:00
                 // Similar for zone differences.
-                // If already the first full submission with nZone0 and nDST0 
-                // lead to date-1 23:00, the original submission was based on 
-                // that date if it wasn't a full date (nDST0 set, nDST1 not 
-                // set, nDST2==nDST1). If it was January 1st without year we're 
-                // even off by one year now. Resubmit all values including new 
+                // If already the first full submission with nZone0 and nDST0
+                // lead to date-1 23:00, the original submission was based on
+                // that date if it wasn't a full date (nDST0 set, nDST1 not
+                // set, nDST2==nDST1). If it was January 1st without year we're
+                // even off by one year now. Resubmit all values including new
                 // DST => date 00:00.
 
                 // Set field values accordingly in case they were used.
@@ -798,7 +798,7 @@ Calendar_gregorian::isValid() throw(RuntimeException)
 // NatNum3              NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3
 // NatNum4                                                              NatNum9/9/11/11
 
-static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& aLocale, 
+static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& aLocale,
         sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, sal_Int16 value )
 {
     sal_Bool isShort = ((nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
@@ -811,7 +811,7 @@ static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& 
 
     if (isChinese || isJapanese || isKorean) {
         switch (nNativeNumberMode) {
-            case NativeNumberMode::NATNUM1: 
+            case NativeNumberMode::NATNUM1:
                 if (!isShort)
                     nNativeNumberMode = isJapanese ? NativeNumberMode::NATNUM4 : NativeNumberMode::NATNUM7;
                 break;
@@ -834,27 +834,27 @@ static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& 
 static sal_Int32 SAL_CALL DisplayCode2FieldIndex(sal_Int32 nCalendarDisplayCode)
 {
     switch( nCalendarDisplayCode ) {
-        case CalendarDisplayCode::SHORT_DAY: 
-        case CalendarDisplayCode::LONG_DAY: 
+        case CalendarDisplayCode::SHORT_DAY:
+        case CalendarDisplayCode::LONG_DAY:
             return CalendarFieldIndex::DAY_OF_MONTH;
-        case CalendarDisplayCode::SHORT_DAY_NAME: 
-        case CalendarDisplayCode::LONG_DAY_NAME: 
+        case CalendarDisplayCode::SHORT_DAY_NAME:
+        case CalendarDisplayCode::LONG_DAY_NAME:
             return CalendarFieldIndex::DAY_OF_WEEK;
-        case CalendarDisplayCode::SHORT_QUARTER: 
-        case CalendarDisplayCode::LONG_QUARTER: 
-        case CalendarDisplayCode::SHORT_MONTH: 
-        case CalendarDisplayCode::LONG_MONTH: 
-        case CalendarDisplayCode::SHORT_MONTH_NAME: 
-        case CalendarDisplayCode::LONG_MONTH_NAME: 
+        case CalendarDisplayCode::SHORT_QUARTER:
+        case CalendarDisplayCode::LONG_QUARTER:
+        case CalendarDisplayCode::SHORT_MONTH:
+        case CalendarDisplayCode::LONG_MONTH:
+        case CalendarDisplayCode::SHORT_MONTH_NAME:
+        case CalendarDisplayCode::LONG_MONTH_NAME:
             return CalendarFieldIndex::MONTH;
-        case CalendarDisplayCode::SHORT_YEAR: 
-        case CalendarDisplayCode::LONG_YEAR: 
+        case CalendarDisplayCode::SHORT_YEAR:
+        case CalendarDisplayCode::LONG_YEAR:
             return CalendarFieldIndex::YEAR;
-        case CalendarDisplayCode::SHORT_ERA: 
-        case CalendarDisplayCode::LONG_ERA: 
+        case CalendarDisplayCode::SHORT_ERA:
+        case CalendarDisplayCode::LONG_ERA:
             return CalendarFieldIndex::ERA;
-        case CalendarDisplayCode::SHORT_YEAR_AND_ERA: 
-        case CalendarDisplayCode::LONG_YEAR_AND_ERA: 
+        case CalendarDisplayCode::SHORT_YEAR_AND_ERA:
+        case CalendarDisplayCode::LONG_YEAR_AND_ERA:
             return CalendarFieldIndex::YEAR;
         default:
             return 0;
@@ -957,7 +957,7 @@ Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_I
 }
 
 // Methods in XExtendedCalendar
-OUString SAL_CALL 
+OUString SAL_CALL
 Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
         throw (RuntimeException)
 {
@@ -975,7 +975,7 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
         // number of months, divide by 4 and then use that result to divide the
         // actual month value.
         if ( quarter > 3 )
-            quarter = 3;    
+            quarter = 3;
         quarter = sal::static_int_cast<sal_Int16>( quarter +
             ((nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER) ?
             reservedWords::QUARTER1_ABBREVIATION : reservedWords::QUARTER1_WORD) );
@@ -986,23 +986,23 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
         // having that comment triggers alarm ;-)
         sal_Char aStr[10];
         switch( nCalendarDisplayCode ) {
-            case CalendarDisplayCode::SHORT_MONTH: 
+            case CalendarDisplayCode::SHORT_MONTH:
                 value += 1;     // month is zero based
                 // fall thru
-            case CalendarDisplayCode::SHORT_DAY: 
+            case CalendarDisplayCode::SHORT_DAY:
                 sprintf(aStr, "%d", value);     // #100211# - checked
                 break;
-            case CalendarDisplayCode::LONG_YEAR: 
+            case CalendarDisplayCode::LONG_YEAR:
                 if (aCalendar.Name.equalsAscii("gengou"))
                     sprintf(aStr, "%02d", value);     // #100211# - checked
                 else
                     sprintf(aStr, "%d", value);     // #100211# - checked
                 break;
-            case CalendarDisplayCode::LONG_MONTH: 
+            case CalendarDisplayCode::LONG_MONTH:
                 value += 1;     // month is zero based
                 sprintf(aStr, "%02d", value);   // #100211# - checked
                 break;
-            case CalendarDisplayCode::SHORT_YEAR: 
+            case CalendarDisplayCode::SHORT_YEAR:
                 // Take last 2 digits, or only one if vallue<10, for example,
                 // in case of the Gengou calendar.
                 if (value < 100)
@@ -1010,28 +1010,28 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
                 else
                     sprintf(aStr, "%02d", value % 100); // #100211# - checked
                 break;
-            case CalendarDisplayCode::LONG_DAY: 
+            case CalendarDisplayCode::LONG_DAY:
                 sprintf(aStr, "%02d", value);   // #100211# - checked
                 break;
 
-            case CalendarDisplayCode::SHORT_DAY_NAME: 
+            case CalendarDisplayCode::SHORT_DAY_NAME:
                 return getDisplayName(CalendarDisplayIndex::DAY, value, 0);
-            case CalendarDisplayCode::LONG_DAY_NAME: 
+            case CalendarDisplayCode::LONG_DAY_NAME:
                 return getDisplayName(CalendarDisplayIndex::DAY, value, 1);
-            case CalendarDisplayCode::SHORT_MONTH_NAME: 
+            case CalendarDisplayCode::SHORT_MONTH_NAME:
                 return getDisplayName(CalendarDisplayIndex::MONTH, value, 0);
-            case CalendarDisplayCode::LONG_MONTH_NAME: 
+            case CalendarDisplayCode::LONG_MONTH_NAME:
                 return getDisplayName(CalendarDisplayIndex::MONTH, value, 1);
-            case CalendarDisplayCode::SHORT_ERA: 
+            case CalendarDisplayCode::SHORT_ERA:
                 return getDisplayName(CalendarDisplayIndex::ERA, value, 0);
-            case CalendarDisplayCode::LONG_ERA: 
+            case CalendarDisplayCode::LONG_ERA:
                 return getDisplayName(CalendarDisplayIndex::ERA, value, 1);
 
-            case CalendarDisplayCode::SHORT_YEAR_AND_ERA: 
+            case CalendarDisplayCode::SHORT_YEAR_AND_ERA:
                 return  getDisplayString( CalendarDisplayCode::SHORT_ERA, nNativeNumberMode ) +
                     getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNativeNumberMode );
 
-            case CalendarDisplayCode::LONG_YEAR_AND_ERA: 
+            case CalendarDisplayCode::LONG_YEAR_AND_ERA:
                 return  getDisplayString( CalendarDisplayCode::LONG_ERA, nNativeNumberMode ) +
                     getDisplayString( CalendarDisplayCode::LONG_YEAR, nNativeNumberMode );
 
@@ -1058,12 +1058,12 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
 }
 
 // Methods in XExtendedCalendar
-OUString SAL_CALL 
+OUString SAL_CALL
 Calendar_buddhist::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
         throw (RuntimeException)
 {
     // make year and era in different order for year before and after 0.
-    if ((nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR_AND_ERA || 
+    if ((nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR_AND_ERA ||
                 nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR_AND_ERA) &&
             getValue(CalendarFieldIndex::ERA) == 0) {
         if (nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR_AND_ERA)

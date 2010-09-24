@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ using namespace rtl;
 
 namespace
 {
-    struct private_aImplSVData : 
+    struct private_aImplSVData :
         public rtl::Static<ImplSVData, private_aImplSVData> {};
 }
 
@@ -182,7 +182,7 @@ Window* ImplGetDefaultWindow()
 
     // First test if we already have a default window.
     // Don't only place a single if..else inside solar mutex lockframe
-    // because then we might have to wait for the solar mutex what is not neccessary 
+    // because then we might have to wait for the solar mutex what is not neccessary
     // if we already have a default window.
 
     if ( !pSVData->mpDefaultWin )
@@ -215,7 +215,7 @@ ResMgr* ImplGetResMgr()
     {
         ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
         pSVData->mpResMgr = ResMgr::SearchCreateResMgr( VCL_CREATERESMGR_NAME( vcl ), aLocale );
-        
+
         static bool bMessageOnce = false;
         if( !pSVData->mpResMgr && ! bMessageOnce )
         {
@@ -236,7 +236,7 @@ ResId VclResId( sal_Int32 nId )
     ResMgr* pMgr = ImplGetResMgr();
     if( ! pMgr )
         throw std::bad_alloc();
-    
+
     return ResId( nId, *pMgr );
 }
 
@@ -255,7 +255,7 @@ public:
     AccessBridgeCurrentContext(
         const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > &context ) :
         m_prevContext( context ) {}
-    
+
     // XCurrentContext
     virtual com::sun::star::uno::Any SAL_CALL getValueByName( const rtl::OUString& Name )
         throw (com::sun::star::uno::RuntimeException);
@@ -311,7 +311,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
             if( xFactory.is() )
             {
-                Reference< XExtendedToolkit > xToolkit = 
+                Reference< XExtendedToolkit > xToolkit =
                     Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
 
                 Sequence< Any > arguments(1);
@@ -321,7 +321,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
                 // for a disabled user. Use native message boxes which are accessible without java support.
                 // No need to do this when activated by Tools-Options dialog ..
                 if( bAllowCancel )
-                { 
+                {
                     // customize the java-not-available-interaction-handler entry within the
                     // current context when called at startup.
                     com::sun::star::uno::ContextLayer layer(
@@ -329,22 +329,22 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
                     pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
                             OUString::createFromAscii( "com.sun.star.accessibility.AccessBridge" ),
-                            arguments 
+                            arguments
                         );
                 }
                 else
                 {
                     pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
                             OUString::createFromAscii( "com.sun.star.accessibility.AccessBridge" ),
-                            arguments 
+                            arguments
                         );
                 }
-                    
+
                 if( !pSVData->mxAccessBridge.is() )
                     bSuccess = false;
             }
         }
-        
+
         return bSuccess;
     }
 
@@ -369,7 +369,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
                 rCancelled = TRUE;
         }
-        
+
         return false;
     }
 
@@ -394,7 +394,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
                 rCancelled = TRUE;
         }
-        
+
         return false;
     }
 
@@ -419,7 +419,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
                 rCancelled = TRUE;
         }
-        
+
         return false;
     }
 
@@ -444,7 +444,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
                 rCancelled = TRUE;
         }
-        
+
         return false;
     }
 
@@ -477,8 +477,8 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
                     aMessage += String(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr));
 
                     int ret = ImplGetSalSystem()->ShowNativeMessageBox(
-                        aTitle, 
-                        ReplaceJavaErrorMessages(aMessage), 
+                        aTitle,
+                        ReplaceJavaErrorMessages(aMessage),
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
 
@@ -491,14 +491,14 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
                     // The user tried to activate accessibility support using Tools-Options dialog,
                     // so we don't offer to terminate here !
                     ImplGetSalSystem()->ShowNativeMessageBox(
-                        aTitle, 
-                        ReplaceJavaErrorMessages(aMessage), 
+                        aTitle,
+                        ReplaceJavaErrorMessages(aMessage),
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK,
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK);
                 }
             }
         }
-        
+
         return false;
     }
 

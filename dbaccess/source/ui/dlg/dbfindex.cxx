@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,16 +84,16 @@ DBG_NAME(ODbaseIndexDialog)
 //-------------------------------------------------------------------------
 ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     : ModalDialog( pParent, ModuleRes(DLG_DBASE_INDEXES) ),
-    aPB_OK(				this, ModuleRes( PB_OK ) ),
-    aPB_CANCEL(			this, ModuleRes( PB_CANCEL ) ),
-    aPB_HELP(			this, ModuleRes( PB_HELP ) ),
-    m_FT_Tables(		this, ModuleRes( FT_TABLES ) ),
-    aCB_Tables(			this, ModuleRes( CB_TABLES ) ),
+    aPB_OK(             this, ModuleRes( PB_OK ) ),
+    aPB_CANCEL(         this, ModuleRes( PB_CANCEL ) ),
+    aPB_HELP(           this, ModuleRes( PB_HELP ) ),
+    m_FT_Tables(        this, ModuleRes( FT_TABLES ) ),
+    aCB_Tables(         this, ModuleRes( CB_TABLES ) ),
     m_FL_Indexes(       this, ModuleRes( FL_INDEXES ) ),
-    m_FT_TableIndexes(	this, ModuleRes( FT_TABLEINDEXES ) ),
-    aLB_TableIndexes(	this, ModuleRes( LB_TABLEINDEXES ) ),
-    m_FT_AllIndexes(	this, ModuleRes( FT_ALLINDEXES ) ),
-    aLB_FreeIndexes(	this, ModuleRes( LB_FREEINDEXES ) ),
+    m_FT_TableIndexes(  this, ModuleRes( FT_TABLEINDEXES ) ),
+    aLB_TableIndexes(   this, ModuleRes( LB_TABLEINDEXES ) ),
+    m_FT_AllIndexes(    this, ModuleRes( FT_ALLINDEXES ) ),
+    aLB_FreeIndexes(    this, ModuleRes( LB_FREEINDEXES ) ),
     aIB_Add(            this, ModuleRes( IB_ADD ) ),
     aIB_Remove(         this, ModuleRes( IB_REMOVE ) ),
     aIB_AddAll(         this, ModuleRes( IB_ADDALL ) ),
@@ -119,10 +119,10 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     FreeResource();
 
     // set Hi contrast bitmaps
-    aIB_Add.SetModeImage(		ModuleRes(IMG_ONE_LEFT_H),BMP_COLOR_HIGHCONTRAST);
-    aIB_AddAll.SetModeImage(	ModuleRes(IMG_ALL_LEFT_H),BMP_COLOR_HIGHCONTRAST);
-    aIB_Remove.SetModeImage(	ModuleRes(IMG_ONE_RIGHT_H),BMP_COLOR_HIGHCONTRAST);
-    aIB_RemoveAll.SetModeImage(	ModuleRes(IMG_ALL_RIGHT_H),BMP_COLOR_HIGHCONTRAST);
+    aIB_Add.SetModeImage(       ModuleRes(IMG_ONE_LEFT_H),BMP_COLOR_HIGHCONTRAST);
+    aIB_AddAll.SetModeImage(    ModuleRes(IMG_ALL_LEFT_H),BMP_COLOR_HIGHCONTRAST);
+    aIB_Remove.SetModeImage(    ModuleRes(IMG_ONE_RIGHT_H),BMP_COLOR_HIGHCONTRAST);
+    aIB_RemoveAll.SetModeImage( ModuleRes(IMG_ALL_RIGHT_H),BMP_COLOR_HIGHCONTRAST);
 }
 
 //-------------------------------------------------------------------------
@@ -135,7 +135,7 @@ ODbaseIndexDialog::~ODbaseIndexDialog()
 //-------------------------------------------------------------------------
 sal_Bool ODbaseIndexDialog::GetTable(const String& _rName, TableInfoListIterator& _rPosition)
 {
-    for (	_rPosition = m_aTableInfoList.begin();
+    for (   _rPosition = m_aTableInfoList.begin();
             _rPosition != m_aTableInfoList.end();
             ++_rPosition
         )
@@ -172,7 +172,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexL
     sal_Int32 nPos = 0;
 
     TableIndexListIterator aSearch;
-    for (	aSearch = _rList.begin();
+    for (   aSearch = _rList.begin();
             aSearch != _rList.end();
             ++aSearch, ++nPos
         )
@@ -235,7 +235,7 @@ IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, /*pButton*/ )
 {
     // let all tables write their INF file
 
-    for	(	ConstTableInfoListIterator aLoop = m_aTableInfoList.begin();
+    for (   ConstTableInfoListIterator aLoop = m_aTableInfoList.begin();
             aLoop != m_aTableInfoList.end();
             ++aLoop
         )
@@ -314,7 +314,7 @@ IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox*, pComboBox )
 
     // fill the listbox for the indexes
     aLB_TableIndexes.Clear();
-    for (	ConstTableIndexListIterator aLoop = aTablePos->aIndexList.begin();
+    for (   ConstTableIndexListIterator aLoop = aTablePos->aIndexList.begin();
             aLoop != aTablePos->aIndexList.end();
             ++aLoop
         )
@@ -358,7 +358,7 @@ void ODbaseIndexDialog::Init()
     aURL.SetSmartURL(m_aDSN);
 
 
-    //	String aFileName = aURL.PathToFileName();
+    //  String aFileName = aURL.PathToFileName();
     m_aDSN = aURL.GetMainURL(INetURLObject::NO_DECODE);
     ::ucbhelper::Content aFile;
     sal_Bool bFolder=sal_True;
@@ -436,7 +436,7 @@ void ODbaseIndexDialog::Init()
         }
     }
 
-    for	(	::std::vector< String >::const_iterator aUsedIndex = aUsedIndexes.begin();
+    for (   ::std::vector< String >::const_iterator aUsedIndex = aUsedIndexes.begin();
             aUsedIndex != aUsedIndexes.end();
             ++aUsedIndex
         )
@@ -459,7 +459,7 @@ void ODbaseIndexDialog::Init()
 void ODbaseIndexDialog::SetCtrls()
 {
     // ComboBox Tabellen
-    for	(	ConstTableInfoListIterator aLoop = m_aTableInfoList.begin();
+    for (   ConstTableInfoListIterator aLoop = m_aTableInfoList.begin();
             aLoop != m_aTableInfoList.end();
             ++aLoop
         )
@@ -472,7 +472,7 @@ void ODbaseIndexDialog::SetCtrls()
         aCB_Tables.SetText( rTabInfo.aTableName );
 
         // ListBox der Tabellenindizes aufbauen
-        for	(	ConstTableIndexListIterator aIndex = rTabInfo.aIndexList.begin();
+        for (   ConstTableIndexListIterator aIndex = rTabInfo.aIndexList.begin();
                 aIndex != rTabInfo.aIndexList.end();
                 ++aIndex
             )
@@ -484,7 +484,7 @@ void ODbaseIndexDialog::SetCtrls()
     }
 
     // ListBox freie Indizes
-    for	(	ConstTableIndexListIterator aFree = m_aFreeIndexList.begin();
+    for (   ConstTableIndexListIterator aFree = m_aFreeIndexList.begin();
             aFree != m_aFreeIndexList.end();
             ++aFree
         )
@@ -545,13 +545,13 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 
     // Jetzt alle gespeicherten Indizes hinzufuegen
     sal_uInt16 nPos = 0;
-    for	(	ConstTableIndexListIterator aIndex = aIndexList.begin();
+    for (   ConstTableIndexListIterator aIndex = aIndexList.begin();
             aIndex != aIndexList.end();
             ++aIndex, ++nPos
         )
     {
         aKeyName = "NDX";
-        if( nPos > 0 )	// Erster Index erhaelt keine Ziffer
+        if( nPos > 0 )  // Erster Index erhaelt keine Ziffer
             aKeyName += ByteString::CreateFromInt32( nPos );
         aInfFile.WriteKey( aKeyName, ByteString(aIndex->GetIndexFileName(), gsl_getSystemTextEncoding()) );
     }
@@ -578,6 +578,6 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 }
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 

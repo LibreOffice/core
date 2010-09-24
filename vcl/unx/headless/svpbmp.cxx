@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ SvpSalBitmap::~SvpSalBitmap()
 {
 }
 
-bool SvpSalBitmap::Create( const Size& rSize, 
-                           USHORT nBitCount, 
+bool SvpSalBitmap::Create( const Size& rSize,
+                           USHORT nBitCount,
                            const BitmapPalette& rPalette )
 {
     sal_uInt32 nFormat = SVP_DEFAULT_BITMAP_FORMAT;
@@ -116,6 +116,11 @@ bool SvpSalBitmap::Create( const SalBitmap& /*rSalBmp*/,
     return false;
 }
 
+bool SvpSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
+{
+    return false;
+}
+
 void SvpSalBitmap::Destroy()
 {
     m_aBitmap.reset();
@@ -129,7 +134,7 @@ Size SvpSalBitmap::GetSize() const
         B2IVector aVec( m_aBitmap->getSize() );
         aSize = Size( aVec.getX(), aVec.getY() );
     }
-    
+
     return aSize;
 }
 
@@ -140,7 +145,7 @@ USHORT SvpSalBitmap::GetBitCount() const
         nDepth = getBitCountFromScanlineFormat( m_aBitmap->getScanlineFormat() );
     return nDepth;
 }
-                        
+
 BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
 {
     BitmapBuffer* pBuf = NULL;
@@ -293,7 +298,7 @@ void SvpSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
             sal_uInt32 nEntries = 1U << nBitCount;
 
             boost::shared_ptr< std::vector<basebmp::Color> > pPal(
-                new std::vector<basebmp::Color>( nEntries, 
+                new std::vector<basebmp::Color>( nEntries,
                                                  basebmp::Color(COL_WHITE)));
             const sal_uInt32 nColors = std::min(
                 (sal_uInt32)pBuffer->maPalette.GetEntryCount(),
@@ -303,9 +308,9 @@ void SvpSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
                 const BitmapColor& rCol = pBuffer->maPalette[i];
                 (*pPal)[i] = basebmp::Color( rCol.GetRed(), rCol.GetGreen(), rCol.GetBlue() );
             }
-            
-            m_aBitmap = basebmp::createBitmapDevice( m_aBitmap->getSize(), 
-                                                     m_aBitmap->isTopDown(), 
+
+            m_aBitmap = basebmp::createBitmapDevice( m_aBitmap->getSize(),
+                                                     m_aBitmap->isTopDown(),
                                                      m_aBitmap->getScanlineFormat(),
                                                      m_aBitmap->getBuffer(),
                                                      pPal );

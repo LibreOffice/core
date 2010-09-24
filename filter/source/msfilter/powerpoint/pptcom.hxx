@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,22 +54,22 @@
 
 // -----------------------------------------------------------------------------
 
-#define NMSP_CPPU		cppu
-#define NMSP_RTL		rtl
-#define NMSP_UTL		utl
+#define NMSP_CPPU       cppu
+#define NMSP_RTL        rtl
+#define NMSP_UTL        utl
 #define NMSP_COMPHELPER comphelper
-#define NMSP_UNO		com::sun::star::uno
+#define NMSP_UNO        com::sun::star::uno
 #define NMSP_BEANS      com::sun::star::beans
-#define NMSP_LANG		com::sun::star::lang
+#define NMSP_LANG       com::sun::star::lang
 #define NMSP_IO         com::sun::star::io
-#define NMSP_SAX		com::sun::star::xml::sax
+#define NMSP_SAX        com::sun::star::xml::sax
 #define NMSP_PRES       com::sun::star::presentation
 #define NMSP_REGISTRY   com::sun::star::registry
 #define NMSP_DOCUMENT   com::sun::star::document
 
 
 #define REF( _def_Obj )         NMSP_UNO::Reference< _def_Obj >
-#define SEQ( _def_Obj )         NMSP_UNO::Sequence< _def_Obj > 
+#define SEQ( _def_Obj )         NMSP_UNO::Sequence< _def_Obj >
 #define ANY                     NMSP_UNO::Any
 #define B2UCONST( _def_pChar )  (NMSP_RTL::OUString(RTL_CONSTASCII_USTRINGPARAM(_def_pChar )))
 #define PPT_DTD_STRING          B2UCONST( "<!DOCTYPE office:document-styles PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"office.dtd\">"

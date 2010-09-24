@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,8 +68,8 @@ namespace slideshow
                 Manager object, where subsets are
                 registered/unregistered
              */
-            ShapeSubset( const AttributableShapeSharedPtr&	     rOriginalShape,
-                         const DocTreeNode&					     rTreeNode,
+            ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
+                         const DocTreeNode&                      rTreeNode,
                          const SubsettableShapeManagerSharedPtr& rSubsetManager );
 
             /** Create a subset from another subset.
@@ -85,8 +85,8 @@ namespace slideshow
                 @param rTreeNode
                 Subset of the original subset
              */
-            ShapeSubset( const ShapeSubsetSharedPtr&		rOriginalSubset,
-                         const DocTreeNode&					rTreeNode );
+            ShapeSubset( const ShapeSubsetSharedPtr&        rOriginalSubset,
+                         const DocTreeNode&                 rTreeNode );
 
             /** Create full set for the given shape.
 
@@ -94,7 +94,7 @@ namespace slideshow
                 Original shape, which will be represented as a whole
                 by this object
              */
-            ShapeSubset( const AttributableShapeSharedPtr&	     rOriginalShape,
+            ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
                          const SubsettableShapeManagerSharedPtr& rShapeManager );
 
             ~ShapeSubset();
@@ -104,7 +104,7 @@ namespace slideshow
                 If the subset is currently revoked, this method
                 returns the original shape.
              */
-            AttributableShapeSharedPtr 	getSubsetShape() const;
+            AttributableShapeSharedPtr  getSubsetShape() const;
 
             /** Enable the subset shape.
 
@@ -115,7 +115,7 @@ namespace slideshow
 
                 @return true, if subsetting was successfully enabled.
              */
-            bool			enableSubsetShape();
+            bool            enableSubsetShape();
 
             /** Disable the subset shape.
 
@@ -123,7 +123,7 @@ namespace slideshow
                 shape. That means, the original shape will again show
                 the hidden range.
              */
-            void			disableSubsetShape();
+            void            disableSubsetShape();
 
             /** Query whether this subset actually is none, but
                 contains the whole original shape's content
@@ -139,7 +139,7 @@ namespace slideshow
             //ShapeSubset(const ShapeSubset&);
             //ShapeSubset& operator=( const ShapeSubset& );
 
-            AttributableShapeSharedPtr	     mpOriginalShape;
+            AttributableShapeSharedPtr       mpOriginalShape;
             AttributableShapeSharedPtr       mpSubsetShape;
             DocTreeNode                      maTreeNode;
             SubsettableShapeManagerSharedPtr mpShapeManager;

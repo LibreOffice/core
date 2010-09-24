@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,20 +33,20 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#include "scui_def.hxx" //CHINA001 
+#include "scui_def.hxx" //CHINA001
 //------------------------------------------------------------------------
 
-//CHINA001 #define SCRET_REMOVE	0x42
+//CHINA001 #define SCRET_REMOVE 0x42
 
 //==================================================================
 
 class ScSubTotalDlg : public SfxTabDialog
 {
 public:
-                ScSubTotalDlg( Window*				pParent,
-                                const SfxItemSet*	pArgSet );
+                ScSubTotalDlg( Window*              pParent,
+                                const SfxItemSet*   pArgSet );
 private:
-    PushButton	aBtnRemove;
+    PushButton  aBtnRemove;
     DECL_LINK( RemoveHdl, PushButton * );
 };
 

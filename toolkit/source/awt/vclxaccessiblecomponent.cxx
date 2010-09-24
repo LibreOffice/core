@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,9 +58,9 @@ using namespace ::comphelper;
 DBG_NAME(VCLXAccessibleComponent)
 
 
-//	----------------------------------------------------
-//	class VCLXAccessibleComponent
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXAccessibleComponent
+//  ----------------------------------------------------
 VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXindow )
     : AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
     , OAccessibleImplementationAccess( )
@@ -292,9 +292,9 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             // avoid notification if a child frame is already active
             // only one frame may be active at a given time
-            if ( !pAccWindow->HasActiveChildFrame() && 
-                 ( getAccessibleRole() == accessibility::AccessibleRole::FRAME || 
-                   getAccessibleRole() == accessibility::AccessibleRole::ALERT || 
+            if ( !pAccWindow->HasActiveChildFrame() &&
+                 ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
+                   getAccessibleRole() == accessibility::AccessibleRole::ALERT ||
                    getAccessibleRole() == accessibility::AccessibleRole::DIALOG ) )  // #i18891#
             {
                 aNewValue <<= accessibility::AccessibleStateType::ACTIVE;
@@ -304,8 +304,8 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         break;
         case VCLEVENT_WINDOW_DEACTIVATE:
         {
-            if ( getAccessibleRole() == accessibility::AccessibleRole::FRAME || 
-                 getAccessibleRole() == accessibility::AccessibleRole::ALERT || 
+            if ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
+                 getAccessibleRole() == accessibility::AccessibleRole::ALERT ||
                  getAccessibleRole() == accessibility::AccessibleRole::DIALOG )  // #i18891#
             {
                 aOldValue <<= accessibility::AccessibleStateType::ACTIVE;
@@ -485,13 +485,13 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
         }
 
         if ( pWindow->HasChildPathFocus() &&
-             ( getAccessibleRole() == accessibility::AccessibleRole::FRAME || 
-               getAccessibleRole() == accessibility::AccessibleRole::ALERT || 
+             ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
+               getAccessibleRole() == accessibility::AccessibleRole::ALERT ||
                getAccessibleRole() == accessibility::AccessibleRole::DIALOG ) )  // #i18891#
             rStateSet.AddState( accessibility::AccessibleStateType::ACTIVE );
 
         // #104290# MT: This way, a ComboBox doesn't get state FOCUSED.
-        // I also don't understand 
+        // I also don't understand
         // a) why WINDOW_FIRSTCHILD is used here (which btw is a border window in the case of a combo box)
         // b) why HasFocus() is nout "enough" for a compound control
         /*
@@ -588,7 +588,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getVclPare
     return xAcc;
 }
 
-uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleParent(	) throw (uno::RuntimeException)
+uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleParent(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -600,7 +600,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
     return xAcc;
 }
 
-sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(	) throw (uno::RuntimeException)
+sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -608,7 +608,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(	) throw (uno::Run
 
     uno::Reference< accessibility::XAccessible > xAcc( implGetForeignControlledParent() );
     if ( xAcc.is() )
-    {	// we _do_ have a foreign-controlled parent -> use the base class' implementation,
+    {   // we _do_ have a foreign-controlled parent -> use the base class' implementation,
         // which goes the UNO way
         nIndex = AccessibleExtendedComponentHelper_BASE::getAccessibleIndexInParent( );
     }
@@ -630,7 +630,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(	) throw (uno::Run
                     }
                 }
                 */
-                //	Iterate over all the parent's children and search for this object.
+                //  Iterate over all the parent's children and search for this object.
                 // this should be compatible with the code in SVX
                 uno::Reference< accessibility::XAccessible > xParentAcc( pParent->GetAccessible() );
                 if ( xParentAcc.is() )
@@ -672,7 +672,7 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeExce
     return nRole;
 }
 
-::rtl::OUString VCLXAccessibleComponent::getAccessibleDescription(	) throw (uno::RuntimeException)
+::rtl::OUString VCLXAccessibleComponent::getAccessibleDescription(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -701,7 +701,7 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeExce
     return aName;
 }
 
-uno::Reference< accessibility::XAccessibleRelationSet > VCLXAccessibleComponent::getAccessibleRelationSet(	) throw (uno::RuntimeException)
+uno::Reference< accessibility::XAccessibleRelationSet > VCLXAccessibleComponent::getAccessibleRelationSet(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -737,8 +737,8 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
     {
         uno::Reference< accessibility::XAccessible > xAcc = getAccessibleChild( i );
         if ( xAcc.is() )
-        {			
-            uno::Reference< accessibility::XAccessibleComponent > xComp( xAcc->getAccessibleContext(), uno::UNO_QUERY );				
+        {
+            uno::Reference< accessibility::XAccessibleComponent > xComp( xAcc->getAccessibleContext(), uno::UNO_QUERY );
             if ( xComp.is() )
             {
                 Rectangle aRect = VCLRectangle( xComp->getBounds() );
@@ -777,7 +777,7 @@ awt::Rectangle VCLXAccessibleComponent::implGetBounds() throw (uno::RuntimeExcep
 
     uno::Reference< accessibility::XAccessible > xParent( implGetForeignControlledParent() );
     if ( xParent.is() )
-    {	// hmm, we can't rely on our VCL coordinates, as in the Accessibility Hierarchy, somebody gave
+    {   // hmm, we can't rely on our VCL coordinates, as in the Accessibility Hierarchy, somebody gave
         // us a parent which is different from our VCL parent
         // (actually, we did not check if it's really different ...)
 
@@ -832,7 +832,7 @@ void VCLXAccessibleComponent::grabFocus(  ) throw (uno::RuntimeException)
         mxWindow->setFocus();
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(	) throw (uno::RuntimeException)
+sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -856,7 +856,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(	) throw (uno::Runtime
     return nColor;
 }
 
-sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(	) throw (uno::RuntimeException)
+sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -900,7 +900,7 @@ uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  ) throw
     return xFont;
 }
 
-::rtl::OUString SAL_CALL VCLXAccessibleComponent::getTitledBorderText(	) throw (uno::RuntimeException)
+::rtl::OUString SAL_CALL VCLXAccessibleComponent::getTitledBorderText(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 

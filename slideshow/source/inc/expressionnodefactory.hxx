@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,30 +51,30 @@ namespace slideshow
         public:
             static ExpressionNodeSharedPtr createConstantValueExpression( double rConstantValue );
 
-            static ExpressionNodeSharedPtr createValueTExpression	 ();
+            static ExpressionNodeSharedPtr createValueTExpression    ();
 
-            static ExpressionNodeSharedPtr createPlusExpression		 ( const ExpressionNodeSharedPtr&	rLHS,
-                                                                       const ExpressionNodeSharedPtr&	rRHS );
-            static ExpressionNodeSharedPtr createMinusExpression	 ( const ExpressionNodeSharedPtr&	rLHS,
-                                                                       const ExpressionNodeSharedPtr&	rRHS );
-            static ExpressionNodeSharedPtr createMultipliesExpression( const ExpressionNodeSharedPtr&	rLHS,
-                                                                       const ExpressionNodeSharedPtr&	rRHS );
-            static ExpressionNodeSharedPtr createDividesExpression	 ( const ExpressionNodeSharedPtr&	rLHS,
-                                                                       const ExpressionNodeSharedPtr&	rRHS );
+            static ExpressionNodeSharedPtr createPlusExpression      ( const ExpressionNodeSharedPtr&   rLHS,
+                                                                       const ExpressionNodeSharedPtr&   rRHS );
+            static ExpressionNodeSharedPtr createMinusExpression     ( const ExpressionNodeSharedPtr&   rLHS,
+                                                                       const ExpressionNodeSharedPtr&   rRHS );
+            static ExpressionNodeSharedPtr createMultipliesExpression( const ExpressionNodeSharedPtr&   rLHS,
+                                                                       const ExpressionNodeSharedPtr&   rRHS );
+            static ExpressionNodeSharedPtr createDividesExpression   ( const ExpressionNodeSharedPtr&   rLHS,
+                                                                       const ExpressionNodeSharedPtr&   rRHS );
 
             /** Composes two ExpressionNode function.
 
                 The resulting expression will calculate
                 rOuterFunction( rInnerFunction(t) ).
              */
-            static ExpressionNodeSharedPtr createComposedExpression	 ( const ExpressionNodeSharedPtr&	rOuterFunction,
-                                                                       const ExpressionNodeSharedPtr&	rInnerFunction );
+            static ExpressionNodeSharedPtr createComposedExpression  ( const ExpressionNodeSharedPtr&   rOuterFunction,
+                                                                       const ExpressionNodeSharedPtr&   rInnerFunction );
 
-            static ExpressionNodeSharedPtr createMinExpression	 	( const ExpressionNodeSharedPtr&	rOuterFunction,
-                                                                      const ExpressionNodeSharedPtr&	rInnerFunction );
+            static ExpressionNodeSharedPtr createMinExpression      ( const ExpressionNodeSharedPtr&    rOuterFunction,
+                                                                      const ExpressionNodeSharedPtr&    rInnerFunction );
 
-            static ExpressionNodeSharedPtr createMaxExpression	 	( const ExpressionNodeSharedPtr&	rOuterFunction,
-                                                                      const ExpressionNodeSharedPtr&	rInnerFunction );
+            static ExpressionNodeSharedPtr createMaxExpression      ( const ExpressionNodeSharedPtr&    rOuterFunction,
+                                                                      const ExpressionNodeSharedPtr&    rInnerFunction );
         };
     }
 }

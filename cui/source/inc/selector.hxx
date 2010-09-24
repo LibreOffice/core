@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_STRINGSDTOR
-#include <svl/svstdarr.hxx>		// SvUShorts
+#include <svl/svstdarr.hxx>     // SvUShorts
 #include <sfx2/minarray.hxx>
 
 #define SVX_CFGGROUP_FUNCTION 1
@@ -50,13 +50,13 @@
 
 struct SvxGroupInfo_Impl
 {
-    USHORT 		    nKind;
-    USHORT 		    nOrd;
+    USHORT          nKind;
+    USHORT          nOrd;
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
                     xBrowseNode;
     ::rtl::OUString sURL;
     ::rtl::OUString sHelpText;
-    BOOL		    bWasOpened;
+    BOOL            bWasOpened;
 
     SvxGroupInfo_Impl( USHORT n, USHORT nr )
         :nKind( n )
@@ -103,44 +103,44 @@ public:
 class SvxConfigFunctionListBox_Impl : public SvTreeListBox
 {
 friend class SvxConfigGroupListBox_Impl;
-    Timer							aTimer;
-    SvLBoxEntry*					pCurEntry;
-    SvxGroupInfoArr_Impl			aArr;
-    SvLBoxEntry*					m_pDraggingEntry;
+    Timer                           aTimer;
+    SvLBoxEntry*                    pCurEntry;
+    SvxGroupInfoArr_Impl            aArr;
+    SvLBoxEntry*                    m_pDraggingEntry;
 
-    DECL_LINK(						TimerHdl, Timer* );
-    virtual void 					MouseMove( const MouseEvent& rMEvt );
+    DECL_LINK(                      TimerHdl, Timer* );
+    virtual void                    MouseMove( const MouseEvent& rMEvt );
 
 public:
                                     SvxConfigFunctionListBox_Impl( Window*, const ResId& );
                                     ~SvxConfigFunctionListBox_Impl();
-    void							ClearAll();
-    SvLBoxEntry*					GetEntry_Impl( USHORT nId );
-    SvLBoxEntry*					GetEntry_Impl( const String& );
-    USHORT							GetId( SvLBoxEntry *pEntry );
-    String							GetHelpText( SvLBoxEntry *pEntry );
+    void                            ClearAll();
+    SvLBoxEntry*                    GetEntry_Impl( USHORT nId );
+    SvLBoxEntry*                    GetEntry_Impl( const String& );
+    USHORT                          GetId( SvLBoxEntry *pEntry );
+    String                          GetHelpText( SvLBoxEntry *pEntry );
     using Window::GetHelpText;
-    USHORT							GetCurId()
+    USHORT                          GetCurId()
                                     { return GetId( FirstSelected() ); }
-    SvLBoxEntry*					GetLastSelectedEntry();
-    void							FunctionSelected();
+    SvLBoxEntry*                    GetLastSelectedEntry();
+    void                            FunctionSelected();
 
     // drag n drop methods
-    virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
 
-    virtual DragDropMode	NotifyStartDrag(
+    virtual DragDropMode    NotifyStartDrag(
         TransferDataContainer&, SvLBoxEntry* );
 
-    virtual void		DragFinished( sal_Int8 );
+    virtual void        DragFinished( sal_Int8 );
 };
 
 class SvxConfigGroupListBox_Impl : public SvTreeListBox
 {
-    SvxGroupInfoArr_Impl			aArr;
+    SvxGroupInfoArr_Impl            aArr;
     bool                            m_bShowSlots;
 
-    SvxConfigFunctionListBox_Impl*	pFunctionListBox;
-    ImageProvider*					m_pImageProvider;
+    SvxConfigFunctionListBox_Impl*  pFunctionListBox;
+    ImageProvider*                  m_pImageProvider;
 
     ::com::sun::star::uno::Reference
         < ::com::sun::star::frame::XFrame > m_xFrame;
@@ -169,8 +169,8 @@ private:
     );
 
 protected:
-    virtual void	RequestingChilds( SvLBoxEntry *pEntry);
-    virtual BOOL	Expand( SvLBoxEntry* pParent );
+    virtual void    RequestingChilds( SvLBoxEntry *pEntry);
+    virtual BOOL    Expand( SvLBoxEntry* pParent );
     using SvListView::Expand;
 
 public:
@@ -183,40 +183,40 @@ public:
 
             ~SvxConfigGroupListBox_Impl();
 
-    void	Init();
-    void	Open( SvLBoxEntry*, BOOL );
-    void	ClearAll();
-    void	GroupSelected();
+    void    Init();
+    void    Open( SvLBoxEntry*, BOOL );
+    void    ClearAll();
+    void    GroupSelected();
 
-    void 	SetFunctionListBox( SvxConfigFunctionListBox_Impl *pBox )
+    void    SetFunctionListBox( SvxConfigFunctionListBox_Impl *pBox )
         { pFunctionListBox = pBox; }
 
-    void	SetImageProvider( ImageProvider* provider )
+    void    SetImageProvider( ImageProvider* provider )
         { m_pImageProvider = provider; }
 };
 
 class SvxScriptSelectorDialog : public ModelessDialog
 {
-    FixedText						aDialogDescription;
-    FixedText						aGroupText;
-    SvxConfigGroupListBox_Impl 		aCategories;
-    FixedText						aFunctionText;
-    SvxConfigFunctionListBox_Impl	aCommands;
-    OKButton						aOKButton;
-    CancelButton					aCancelButton;
-    HelpButton						aHelpButton;
-    FixedLine						aDescription;
-    FixedText						aDescriptionText;
+    FixedText                       aDialogDescription;
+    FixedText                       aGroupText;
+    SvxConfigGroupListBox_Impl      aCategories;
+    FixedText                       aFunctionText;
+    SvxConfigFunctionListBox_Impl   aCommands;
+    OKButton                        aOKButton;
+    CancelButton                    aCancelButton;
+    HelpButton                      aHelpButton;
+    FixedLine                       aDescription;
+    FixedText                       aDescriptionText;
 
-    BOOL							m_bShowSlots;
-    Link							m_aAddHdl;
+    BOOL                            m_bShowSlots;
+    Link                            m_aAddHdl;
 
     DECL_LINK( ClickHdl, Button * );
     DECL_LINK( SelectHdl, Control* );
     DECL_LINK( FunctionDoubleClickHdl, Control* );
 
-    void								UpdateUI();
-    void								ResizeControls();
+    void                                UpdateUI();
+    void                                ResizeControls();
 
 public:
 
@@ -229,18 +229,18 @@ public:
 
     ~SvxScriptSelectorDialog ( );
 
-    void		SetAddHdl( const Link& rLink ) { m_aAddHdl = rLink; }
-    const Link&	GetAddHdl() const { return m_aAddHdl; }
+    void        SetAddHdl( const Link& rLink ) { m_aAddHdl = rLink; }
+    const Link& GetAddHdl() const { return m_aAddHdl; }
 
-    void		SetImageProvider( ImageProvider* provider )
+    void        SetImageProvider( ImageProvider* provider )
         { aCategories.SetImageProvider( provider ); }
 
-    USHORT		GetSelectedId();
-    String		GetScriptURL() const;
-    String		GetSelectedDisplayName();
-    String		GetSelectedHelpText();
-    void		SetRunLabel();
-    void		SetDialogDescription(const String& rDescription);
+    USHORT      GetSelectedId();
+    String      GetScriptURL() const;
+    String      GetSelectedDisplayName();
+    String      GetSelectedHelpText();
+    void        SetRunLabel();
+    void        SetDialogDescription(const String& rDescription);
 };
 
 #endif

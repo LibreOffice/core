@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@
 #include <com/sun/star/awt/ImagePosition.hpp>
 /** === end UNO includes === **/
 
-#include <tools/wintypes.hxx>		// for check states
+#include <tools/wintypes.hxx>       // for check states
 #include <xmloff/txtprmap.hxx>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
@@ -189,8 +189,8 @@ namespace xmloff
         // So we translate the old persistence service name into new ones, if possible
 
         ::rtl::OUString sToWriteServiceName = sServiceName;
-#define CHECK_N_TRANSLATE( name )	\
-        else if (0 == sServiceName.compareToAscii(SERVICE_PERSISTENT_COMPONENT_##name))	\
+#define CHECK_N_TRANSLATE( name )   \
+        else if (0 == sServiceName.compareToAscii(SERVICE_PERSISTENT_COMPONENT_##name)) \
             sToWriteServiceName = SERVICE_##name
 
         if (sal_False)
@@ -216,7 +216,7 @@ namespace xmloff
         CHECK_N_TRANSLATE( IMAGECONTROL );
         CHECK_N_TRANSLATE( FORMATTEDFIELD );
         else if (0 == sServiceName.compareToAscii(SERVICE_PERSISTENT_COMPONENT_EDIT))
-        {	// special handling for the edit field: we have two controls using this as persistence service name
+        {   // special handling for the edit field: we have two controls using this as persistence service name
             sToWriteServiceName = SERVICE_EDIT;
             Reference< XServiceInfo > xSI(m_xProps, UNO_QUERY);
             if (xSI.is() && xSI->supportsService(SERVICE_FORMATTEDFIELD))
@@ -417,7 +417,7 @@ namespace xmloff
                     exportListSourceAsElements();
                 break;
             case GRID:
-            {	// a grid control requires us to store all columns as sub elements
+            {   // a grid control requires us to store all columns as sub elements
                 Reference< XIndexAccess > xColumnContainer(m_xProps, UNO_QUERY);
                 OSL_ENSURE(xColumnContainer.is(), "OControlExport::exportSubTags: a grid control which is no IndexAccess?!!");
                 if (xColumnContainer.is())
@@ -425,7 +425,7 @@ namespace xmloff
             }
             break;
             case COMBOBOX:
-            {	// a combox box description has sub elements: the items
+            {   // a combox box description has sub elements: the items
                 DBG_CHECK_PROPERTY( PROPERTY_STRING_ITEM_LIST, Sequence< ::rtl::OUString > );
 
                 // don't export the list entries if the are not provided by the user, but obtained implicitly
@@ -499,7 +499,7 @@ namespace xmloff
             {
                 PROPERTY_LABEL, PROPERTY_TITLE
             };
-            OSL_ENSURE(	sizeof(aStringPropertyNames)/sizeof(aStringPropertyNames[0]) ==
+            OSL_ENSURE( sizeof(aStringPropertyNames)/sizeof(aStringPropertyNames[0]) ==
                         sizeof(nStringPropertyAttributeIds)/sizeof(nStringPropertyAttributeIds[0]),
                         "OControlExport::exportCommonControlAttributes: somebody tampered with the maps (1)!");
 
@@ -522,15 +522,15 @@ namespace xmloff
         // some boolean properties
         {
             static sal_Int32 nBooleanPropertyAttributeIds[] =
-            {	// attribute flags
+            {   // attribute flags
                 CCA_CURRENT_SELECTED, CCA_DISABLED, CCA_DROPDOWN, CCA_PRINTABLE, CCA_READONLY, CCA_SELECTED, CCA_TAB_STOP, CCA_ENABLEVISIBLE
             };
             static const ::rtl::OUString* pBooleanPropertyNames[] =
-            {	// property names
+            {   // property names
                 &PROPERTY_STATE, &PROPERTY_ENABLED, &PROPERTY_DROPDOWN, &PROPERTY_PRINTABLE, &PROPERTY_READONLY, &PROPERTY_DEFAULT_STATE, &PROPERTY_TABSTOP, &PROPERTY_ENABLEVISIBLE
             };
             static sal_Bool nBooleanPropertyAttrFlags[] =
-            {	// attribute defaults
+            {   // attribute defaults
                 BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE | BOOLATTR_INVERSE_SEMANTICS, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_VOID, BOOLATTR_DEFAULT_FALSE
             };
         #if OSL_DEBUG_LEVEL > 0
@@ -561,15 +561,15 @@ namespace xmloff
         {
             // now the common handling
             static sal_Int32 nIntegerPropertyAttributeIds[] =
-            {	// attribute flags
+            {   // attribute flags
                 CCA_SIZE, CCA_TAB_INDEX
             };
             static const ::rtl::OUString* pIntegerPropertyNames[] =
-            {	// property names
+            {   // property names
                 &PROPERTY_LINECOUNT, &PROPERTY_TABINDEX
             };
             static const sal_Int16 nIntegerPropertyAttrDefaults[] =
-            {	// attribute defaults
+            {   // attribute defaults
                 5, 0
             };
 
@@ -713,7 +713,7 @@ namespace xmloff
         if (m_nIncludeCommon & CCA_FOR)
         {
             if (m_sReferringControls.getLength())
-            {	// there is at least one control referring to the one we're handling currently
+            {   // there is at least one control referring to the one we're handling currently
                 AddAttribute(
                     OAttributeMetaData::getCommonControlAttributeNamespace(CCA_FOR),
                     OAttributeMetaData::getCommonControlAttributeName(CCA_FOR),
@@ -923,12 +923,12 @@ namespace xmloff
         // the boolean properties
         {
             static const sal_Int32 nBooleanPropertyAttributeIds[] =
-            {	// attribute flags
+            {   // attribute flags
                 SCA_VALIDATION, SCA_MULTI_LINE, SCA_AUTOMATIC_COMPLETION, SCA_MULTIPLE, SCA_DEFAULT_BUTTON, SCA_IS_TRISTATE,
                 SCA_TOGGLE, SCA_FOCUS_ON_CLICK
             };
             static const ::rtl::OUString* pBooleanPropertyNames[] =
-            {	// property names
+            {   // property names
                 &PROPERTY_STRICTFORMAT, &PROPERTY_MULTILINE, &PROPERTY_AUTOCOMPLETE, &PROPERTY_MULTISELECTION, &PROPERTY_DEFAULTBUTTON, &PROPERTY_TRISTATE,
                 &PROPERTY_TOGGLE, &PROPERTY_FOCUS_ON_CLICK
             };
@@ -962,15 +962,15 @@ namespace xmloff
         // the integer properties
         {
             static sal_Int32 nIntegerPropertyAttributeIds[] =
-            {	// attribute flags
+            {   // attribute flags
                 SCA_PAGE_STEP_SIZE
             };
             static const ::rtl::OUString* pIntegerPropertyNames[] =
-            {	// property names
+            {   // property names
                 &PROPERTY_BLOCK_INCREMENT
             };
             static const sal_Int32 nIntegerPropertyAttrDefaults[] =
-            {	// attribute defaults (XML defaults, not runtime defaults!)
+            {   // attribute defaults (XML defaults, not runtime defaults!)
                 10
             };
 
@@ -1180,7 +1180,7 @@ namespace xmloff
 
         ::rtl::OUString sListSource = getScalarListSourceValue();
         if ( sListSource.getLength() )
-        {	// the ListSource property needs to be exported as attribute, and it is not empty
+        {   // the ListSource property needs to be exported as attribute, and it is not empty
             AddAttribute(
                 OAttributeMetaData::getDatabaseAttributeNamespace(DA_LIST_SOURCE),
                 OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE),
@@ -1235,7 +1235,7 @@ namespace xmloff
 
         sal_Int16 nMaxLen = (sal_Int16)std::max(nItems, nValues);
 
-        for	(sal_Int16 i=0; i<nMaxLen; ++i )
+        for (sal_Int16 i=0; i<nMaxLen; ++i )
         {
             m_rContext.getGlobalContext().ClearAttrList();
             if (i < nItems)
@@ -1259,7 +1259,7 @@ namespace xmloff
 
             Int16SetIterator aSelectedPos = aSelection.find(i);
             if (aSelection.end() != aSelectedPos)
-            {	// the item at this position is selected
+            {   // the item at this position is selected
                 AddAttribute(
                     OAttributeMetaData::getCommonControlAttributeNamespace(CCA_CURRENT_SELECTED),
                     OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED),
@@ -1270,7 +1270,7 @@ namespace xmloff
 
             Int16SetIterator aDefaultSelectedPos = aDefaultSelection.find(i);
             if (aDefaultSelection.end() != aDefaultSelectedPos)
-            {	// the item at this position is selected as default
+            {   // the item at this position is selected as default
                 AddAttribute(
                     OAttributeMetaData::getCommonControlAttributeNamespace(CCA_SELECTED),
                     OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED),
@@ -1305,7 +1305,7 @@ namespace xmloff
             for (sal_Int16 i=nMaxLen; i<=nLastReferredEntry; ++i)
             {
                 if (aSelection.end() != aSelection.find(i))
-                {	// the (not existent) item at this position is selected
+                {   // the (not existent) item at this position is selected
                     AddAttribute(
                         OAttributeMetaData::getCommonControlAttributeNamespace(CCA_CURRENT_SELECTED),
                         OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED),
@@ -1314,7 +1314,7 @@ namespace xmloff
                 }
 
                 if (aDefaultSelection.end() != aDefaultSelection.find(i))
-                {	// the (not existent) item at this position is selected as default
+                {   // the (not existent) item at this position is selected as default
                     AddAttribute(
                         OAttributeMetaData::getCommonControlAttributeNamespace(CCA_SELECTED),
                         OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED),
@@ -1390,10 +1390,10 @@ namespace xmloff
                 m_eType = FORMATTED_TEXT;
                 // NO BREAK
             case FormComponentType::TEXTFIELD:
-            {	// it's some kind of edit. To know which type we need further investigation
+            {   // it's some kind of edit. To know which type we need further investigation
 
                 if (FORMATTED_TEXT != m_eType)
-                {	// not coming from the previous cases which had a class id .ne. TEXTFIELD
+                {   // not coming from the previous cases which had a class id .ne. TEXTFIELD
 
                     // check if it's a formatted field
                     if (m_xPropertyInfo->hasPropertyByName(PROPERTY_FORMATKEY))
@@ -1460,7 +1460,7 @@ namespace xmloff
 
                 // max and min values and validation:
                 if (FORMATTED_TEXT == m_eType)
-                {	// in general all controls represented as formatted-text have these props
+                {   // in general all controls represented as formatted-text have these props
                     if (FormComponentType::PATTERNFIELD != m_nClassId)
                         // but the PatternField does not have value limits
                         m_nIncludeSpecial |= SCA_MAX_VALUE | SCA_MIN_VALUE;
@@ -1546,7 +1546,7 @@ namespace xmloff
                     CCA_NAME | CCA_SERVICE_NAME | CCA_BUTTON_TYPE | CCA_DISABLED |
                     CCA_IMAGE_DATA | CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TARGET_FRAME |
                     CCA_TARGET_LOCATION | CCA_TITLE;
-                m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CLICK	| EA_ON_DBLCLICK;
+                m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CLICK  | EA_ON_DBLCLICK;
                 break;
 
             case FormComponentType::CHECKBOX:
@@ -1558,7 +1558,7 @@ namespace xmloff
                     CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED | CCA_LABEL | CCA_PRINTABLE |
                     CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE | CCA_VALUE | CCA_VISUAL_EFFECT;
                 if (CHECKBOX != m_eType)
-                {	// not coming from the previous case
+                {   // not coming from the previous case
                     m_eType = RADIO;
                     m_nIncludeCommon |= CCA_CURRENT_SELECTED | CCA_SELECTED;
                 }
@@ -2035,7 +2035,7 @@ namespace xmloff
                     aStringPropertyNames[i]);
 
             // #i112082# xlink:type is added as part of exportTargetLocationAttribute
-            
+
             // now export the data source name or databaselocation or connection resource
             ::rtl::OUString sPropValue;
             m_xProps->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sPropValue;
@@ -2149,5 +2149,5 @@ namespace xmloff
             PROPERTY_DETAILFIELDS);
     }
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@ public:
                            ::rtl::OUStringBuffer& rOut,
                            MapUnit eOutUnit );
     static void AddPercentage( sal_Int32 nVal, ::rtl::OUStringBuffer& rOut );
-    static double GetConversionFactor(::rtl::OUStringBuffer& rUnit, 
+    static double GetConversionFactor(::rtl::OUStringBuffer& rUnit,
         const MapUnit eCoreUnit, const MapUnit eDestUnit);
-    static MapUnit GetUnitFromString(const ::rtl::OUString& rString, 
+    static MapUnit GetUnitFromString(const ::rtl::OUString& rString,
         MapUnit eDefaultUnit);
 };
 
 
 
-#endif	//  _XMLOFF_XMLEHELP_HXX
+#endif  //  _XMLOFF_XMLEHELP_HXX
 

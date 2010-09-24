@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@ const long HIT_SENSITIVE_RADIUS = 5;
 namespace
 {
     /** calcRect creates a new rectangle with the given points
-            @param	_rBase		the base point
-            @param	_aVector	the vector which will be added
+            @param  _rBase      the base point
+            @param  _aVector    the vector which will be added
     */
     inline Rectangle calcRect(const Point& _rBase,const Point& _aVector)
     {
@@ -70,9 +70,9 @@ namespace
     }
     // -----------------------------------------------------------------------------
     /** GetTextPos calculate the rectangle for the connection to be drawn
-            @param	_pWin			the table window where to draw it
-            @param	_aConnPos		the connection point
-            @param	_aDescrLinePos	the description line pos
+            @param  _pWin           the table window where to draw it
+            @param  _aConnPos       the connection point
+            @param  _aDescrLinePos  the description line pos
     */
     Rectangle GetTextPos(const OTableWindow* _pWin, const Point& _aConnPos,const Point& _aDescrLinePos)
     {
@@ -101,10 +101,10 @@ namespace
     }
     // -----------------------------------------------------------------------------
     /** calcPointsYValue calculate the points Y value in relation to the listbox entry
-            @param	_pWin			the corresponding window
-            @param	_pEntry			the source or dest entry
-            @param	_rNewConPos		(in/out) the connection pos
-            @param	_rNewDescrPos	(in/out) the description pos
+            @param  _pWin           the corresponding window
+            @param  _pEntry         the source or dest entry
+            @param  _rNewConPos     (in/out) the connection pos
+            @param  _rNewDescrPos   (in/out) the description pos
     */
     void calcPointsYValue(const OTableWindow* _pWin,SvLBoxEntry* _pEntry,Point& _rNewConPos,Point& _rNewDescrPos)
     {
@@ -267,20 +267,20 @@ BOOL OConnectionLine::RecalcLine()
     aSourceCenter.X() = pSourceWin->GetPosPixel().X() + (long)( 0.5*pSourceWin->GetSizePixel().Width() );
     aDestCenter.X() = pDestWin->GetPosPixel().X() + (long)( 0.5*pDestWin->GetSizePixel().Width() );
 
-    const OTableWindow* pFirstWin	= pDestWin;
-    const OTableWindow* pSecondWin	= pSourceWin;
-    Point* pFirstConPos				= &m_aDestConnPos;
-    Point* pFirstDescrPos			= &m_aDestDescrLinePos;
-    Point* pSecondConPos			= &m_aSourceConnPos;
-    Point* pSecondDescrPos			= &m_aSourceDescrLinePos;
+    const OTableWindow* pFirstWin   = pDestWin;
+    const OTableWindow* pSecondWin  = pSourceWin;
+    Point* pFirstConPos             = &m_aDestConnPos;
+    Point* pFirstDescrPos           = &m_aDestDescrLinePos;
+    Point* pSecondConPos            = &m_aSourceConnPos;
+    Point* pSecondDescrPos          = &m_aSourceDescrLinePos;
     if( aDestCenter.X() > aSourceCenter.X() )
     {
-        pFirstWin		= pSourceWin;
-        pSecondWin		= pDestWin;
-        pFirstConPos	= &m_aSourceConnPos;
-        pFirstDescrPos	= &m_aSourceDescrLinePos;
-        pSecondConPos	= &m_aDestConnPos;
-        pSecondDescrPos	= &m_aDestDescrLinePos;
+        pFirstWin       = pSourceWin;
+        pSecondWin      = pDestWin;
+        pFirstConPos    = &m_aSourceConnPos;
+        pFirstDescrPos  = &m_aSourceDescrLinePos;
+        pSecondConPos   = &m_aDestConnPos;
+        pSecondDescrPos = &m_aDestDescrLinePos;
     }
 
     if ( pFirstWin == pSecondWin && pSourceEntry != pDestEntry )
@@ -292,7 +292,7 @@ BOOL OConnectionLine::RecalcLine()
     //////////////////////////////////////////////////////////////////////
     // aSourceConnPosY bestimmen
     calcPointsYValue(pSourceWin,pSourceEntry,m_aSourceConnPos,m_aSourceDescrLinePos);
-    
+
     //////////////////////////////////////////////////////////////////////
     // aDestConnPosY bestimmen
     calcPointsYValue(pDestWin,pDestEntry,m_aDestConnPos,m_aDestDescrLinePos);
@@ -350,7 +350,7 @@ double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
     double l = (v.X() * w.Y() - v.Y() * w.X()) / a;
     double a2 = w.X()*v.X()+w.Y()*v.Y();
     a = a2 / (a * a);
-    q.X() = long(p1.X() + a * v.X()); 
+    q.X() = long(p1.X() + a * v.X());
     q.Y() = long(p1.Y() + a * v.Y());
     return l;
 }
@@ -374,14 +374,14 @@ bool OConnectionLine::CheckHit( const Point& rMousePos ) const
     return false;
 }
 // -----------------------------------------------------------------------------
-Rectangle OConnectionLine::GetSourceTextPos() const 
-{ 
-    return GetTextPos(m_pTabConn->GetSourceWin(),m_aSourceConnPos,m_aSourceDescrLinePos); 
+Rectangle OConnectionLine::GetSourceTextPos() const
+{
+    return GetTextPos(m_pTabConn->GetSourceWin(),m_aSourceConnPos,m_aSourceDescrLinePos);
 }
 // -----------------------------------------------------------------------------
-Rectangle OConnectionLine::GetDestTextPos() const 
-{ 
-    return GetTextPos(m_pTabConn->GetDestWin(),m_aDestConnPos,m_aDestDescrLinePos); 
+Rectangle OConnectionLine::GetDestTextPos() const
+{
+    return GetTextPos(m_pTabConn->GetDestWin(),m_aDestConnPos,m_aDestDescrLinePos);
 }
 // -----------------------------------------------------------------------------
 Point OConnectionLine::getMidPoint() const

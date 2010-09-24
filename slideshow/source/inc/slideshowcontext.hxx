@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,16 +62,16 @@ namespace slideshow
 
                 @param rShapeManager
                 ShapeManager, which handles all shapes
-                
+
                 @param rEventQueue
                 Event queue, where time-based events are to be
                 scheduled. A node must not schedule events there
                 before it's not resolved.
-                
+
                 @param rEventMultiplexer
                 Event multiplexer. Clients can register there for
                 about any event that happens in the slideshow
-                
+
                 @param rScreenUpdater
                 Screen updater. Gets notified of necessary screen
                 updates.
@@ -79,9 +79,9 @@ namespace slideshow
                 @param rActivitiesQueue
                 Activities queue, where repeating activities are
                 to be scheduled.
-                
+
                 @param rUserEventQueue
-                User event queue                
+                User event queue
 
                 @param rViewContainer
                 Holds all views added to slideshow
@@ -97,20 +97,20 @@ namespace slideshow
                               UserEventQueue&                                   rUserEventQueue,
                               CursorManager&                                    rCursorManager,
                               const UnoViewContainer&                           rViewContainer,
-                              const ::com::sun::star::uno::Reference< 
+                              const ::com::sun::star::uno::Reference<
                                   ::com::sun::star::uno::XComponentContext>&    rComponentContext );
             void dispose();
 
             boost::shared_ptr<SubsettableShapeManager>&     mpSubsettableShapeManager;
-            EventQueue&										mrEventQueue;
-            EventMultiplexer&								mrEventMultiplexer;
+            EventQueue&                                     mrEventQueue;
+            EventMultiplexer&                               mrEventMultiplexer;
             ScreenUpdater&                                  mrScreenUpdater;
-            ActivitiesQueue&								mrActivitiesQueue;
-            UserEventQueue&									mrUserEventQueue;
+            ActivitiesQueue&                                mrActivitiesQueue;
+            UserEventQueue&                                 mrUserEventQueue;
             CursorManager&                                  mrCursorManager;
             const UnoViewContainer&                         mrViewContainer;
-            ::com::sun::star::uno::Reference< 
-                ::com::sun::star::uno::XComponentContext>	mxComponentContext;
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XComponentContext>   mxComponentContext;
         };
     }
 }

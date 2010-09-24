@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 /*
  * Exception for errors in
- * SDFLines 
+ * SDFLines
  */
 package com.sun.star.tooling.converter;
 
@@ -34,7 +34,7 @@ package com.sun.star.tooling.converter;
 /**
  * This Exeption is thrown if a DataReader finds an error in a read Line
  * f. e. wrong column number
- * 
+ *
  * @author Christian Schmidt 2005
  *
  */
@@ -42,11 +42,11 @@ public class LineErrorException extends Exception {
 
      public int tokenCount;
     /**
-     *  
+     *
      */
     public LineErrorException() {
         super();
-        
+
     }
 
     /**
@@ -54,7 +54,7 @@ public class LineErrorException extends Exception {
      */
     public LineErrorException(String arg0) {
         super(arg0);
-       
+
     }
 
     /**
@@ -62,7 +62,7 @@ public class LineErrorException extends Exception {
      */
     public LineErrorException(Throwable arg0) {
         super(arg0);
-      
+
     }
 
     /**
@@ -71,8 +71,8 @@ public class LineErrorException extends Exception {
      */
     public LineErrorException(String arg0, Throwable arg1) {
         super(arg0, arg1);
-        
+
     }
-    
+
 
 }

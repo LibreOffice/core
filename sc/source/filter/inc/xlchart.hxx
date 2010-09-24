@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1474,7 +1474,7 @@ struct XclChRootData
                             const Rectangle& rChartRect );
     /** Finishes the API chart document conversion. Must be called once before any API access. */
     void                FinishConversion();
-    
+
     /** Returns the drawing shape interface of the specified title object. */
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         GetTitleShape( const XclChTextKey& rTitleKey ) const;

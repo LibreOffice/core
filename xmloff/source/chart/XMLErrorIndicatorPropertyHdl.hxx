@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@ public:
     XMLErrorIndicatorPropertyHdl( sal_Bool bUpper ) : mbUpperIndicator( bUpper )
         {}
     virtual ~XMLErrorIndicatorPropertyHdl();
-    
+
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif	// _XMLERRORINDICATORPROPERTYHDL_HXX_
+#endif  // _XMLERRORINDICATORPROPERTYHDL_HXX_

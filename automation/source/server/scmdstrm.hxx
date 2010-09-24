@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ public:
     using CmdBaseStream::Read;
     void Read ( comm_USHORT &nNr ){CmdBaseStream::Read ( nNr );}
     void Read ( comm_ULONG &nNr ){CmdBaseStream::Read ( nNr );}
-//	void Read ( comm_UniChar* &aString, comm_USHORT &nLenInChars ){CmdBaseStream::Read ( aString, nLenInChars );}
+//  void Read ( comm_UniChar* &aString, comm_USHORT &nLenInChars ){CmdBaseStream::Read ( aString, nLenInChars );}
     void Read ( comm_BOOL &bBool ){CmdBaseStream::Read ( bBool );}
 //  new
     void Read ( String &aString );

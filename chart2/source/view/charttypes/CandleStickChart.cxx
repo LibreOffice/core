@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -269,7 +269,7 @@ void CandleStickChart::createShapes()
                     drawing::Position3D aPosMiddleLast( pPosHelper->transformLogicToScene( fLogicX, fY_Last  ,0 ,true ) );
                     drawing::Position3D aPosMiddleMinimum( pPosHelper->transformLogicToScene( fLogicX, fY_Min ,0 ,true ) );
                     drawing::Position3D aPosMiddleMaximum( pPosHelper->transformLogicToScene( fLogicX, fY_Max ,0 ,true ) );
-                    
+
                     uno::Reference< drawing::XShapes > xLossGainTarget( xGainTarget );
                     if(bBlack)
                         xLossGainTarget = xLossTarget;
@@ -327,7 +327,7 @@ void CandleStickChart::createShapes()
                     else
                     {
                         drawing::PolyPolygonShape3D aPoly;
-                        
+
                         sal_Int32 nLineIndex = 0;
                         if( bShowFirst &&  pPosHelper->isLogicVisible( fLogicX, fY_First ,0 )
                             && isValidPosition(aPosLeftFirst) && isValidPosition(aPosMiddleFirst) )
@@ -335,7 +335,7 @@ void CandleStickChart::createShapes()
                             AddPointToPoly( aPoly, aPosLeftFirst, nLineIndex );
                             AddPointToPoly( aPoly, aPosMiddleFirst, nLineIndex++ );
                         }
-                        if( pPosHelper->isLogicVisible( fLogicX, fY_Last ,0 ) 
+                        if( pPosHelper->isLogicVisible( fLogicX, fY_Last ,0 )
                             && isValidPosition(aPosMiddleLast) && isValidPosition(aPosRightLast) )
                         {
                             AddPointToPoly( aPoly, aPosMiddleLast, nLineIndex );
@@ -355,7 +355,7 @@ void CandleStickChart::createShapes()
                             }
                         }
                     }
-                    
+
                     //create data point label
                     if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
                     {

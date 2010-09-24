@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,42 +24,42 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_Text_idl__ 
-#define __com_sun_star_drawing_Text_idl__ 
- 
-#ifndef __com_sun_star_text_XText_idl__ 
-#include <com/sun/star/text/XText.idl> 
-#endif 
-  
-#ifndef __com_sun_star_drawing_TextProperties_idl__ 
+#ifndef __com_sun_star_drawing_Text_idl__
+#define __com_sun_star_drawing_Text_idl__
+
+#ifndef __com_sun_star_text_XText_idl__
+#include <com/sun/star/text/XText.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_TextProperties_idl__
 #include <com/sun/star/drawing/TextProperties.idl>
 #endif
 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module drawing {  
- 
-//============================================================================= 
- 
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
 /** This abstract service specifies the general characteristics of an optional
     text inside a <type>Shape</type>.
  */
 published service Text
-{ 
-    /** With this interface you can modify the text of this 
+{
+    /** With this interface you can modify the text of this
                 <type>Shape<type>.
      */
-    interface com::sun::star::text::XText; 
- 
+    interface com::sun::star::text::XText;
+
     /** The properties in this service describe the style for rendering
         a shapes text area.
      */
-    service com::sun::star::drawing::TextProperties;	 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    service com::sun::star::drawing::TextProperties;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
 

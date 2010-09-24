@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ void OTableWindowData::_disposing( const ::com::sun::star::lang::EventObject& /*
     // it doesn't matter which one was disposed
     m_xColumns.clear();
     m_xKeys.clear();
-    m_xTable.clear();    
+    m_xTable.clear();
 }
 // -----------------------------------------------------------------------------
 bool OTableWindowData::init(const Reference< XConnection  >& _xConnection,bool _bAllowQueries)

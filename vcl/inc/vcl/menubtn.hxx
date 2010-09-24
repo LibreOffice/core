@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ class PopupMenu;
 // - MenuButton-Types -
 // --------------------
 
-#define MENUBUTTON_MENUMODE_TIMED		((USHORT)0x0001)
+#define MENUBUTTON_MENUMODE_TIMED       ((USHORT)0x0001)
 
 // --------------
 // - MenuButton -
@@ -48,14 +48,14 @@ class PopupMenu;
 class VCL_DLLPUBLIC MenuButton : public PushButton
 {
 private:
-    Rectangle		maFocusRect;
-    Timer*			mpMenuTimer;
-    PopupMenu*		mpOwnMenu;
-    PopupMenu*		mpMenu;
-    USHORT			mnCurItemId;
-    USHORT			mnMenuMode;
-    Link			maActivateHdl;
-    Link			maSelectHdl;
+    Rectangle       maFocusRect;
+    Timer*          mpMenuTimer;
+    PopupMenu*      mpOwnMenu;
+    PopupMenu*      mpMenu;
+    USHORT          mnCurItemId;
+    USHORT          mnMenuMode;
+    Link            maActivateHdl;
+    Link            maSelectHdl;
 
     SAL_DLLPRIVATE void    ImplInitMenuButtonData();
     SAL_DLLPRIVATE void    ImplExecuteMenu();
@@ -75,24 +75,24 @@ public:
                     MenuButton( Window* pParent, const ResId& rResId );
                     ~MenuButton();
 
-    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void	KeyInput( const KeyEvent& rKEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void    KeyInput( const KeyEvent& rKEvt );
 
-    virtual void	Activate();
-    virtual void	Select();
+    virtual void    Activate();
+    virtual void    Select();
 
-    void			SetMenuMode( USHORT nMode );
-    USHORT			GetMenuMode() const { return mnMenuMode; }
+    void            SetMenuMode( USHORT nMode );
+    USHORT          GetMenuMode() const { return mnMenuMode; }
 
-    void			SetPopupMenu( PopupMenu* pNewMenu );
-    PopupMenu*		GetPopupMenu() const { return mpMenu; }
+    void            SetPopupMenu( PopupMenu* pNewMenu );
+    PopupMenu*      GetPopupMenu() const { return mpMenu; }
 
-    USHORT			GetCurItemId() const { return mnCurItemId; }
+    USHORT          GetCurItemId() const { return mnCurItemId; }
 
-    void			SetActivateHdl( const Link& rLink ) { maActivateHdl = rLink; }
-    const Link& 	GetActivateHdl() const				{ return maActivateHdl; }
-    void			SetSelectHdl( const Link& rLink )	{ maSelectHdl = rLink; }
-    const Link& 	GetSelectHdl() const				{ return maSelectHdl; }
+    void            SetActivateHdl( const Link& rLink ) { maActivateHdl = rLink; }
+    const Link&     GetActivateHdl() const              { return maActivateHdl; }
+    void            SetSelectHdl( const Link& rLink )   { maSelectHdl = rLink; }
+    const Link&     GetSelectHdl() const                { return maSelectHdl; }
 };
 
-#endif	// _SV_MENUBTN_HXX
+#endif  // _SV_MENUBTN_HXX

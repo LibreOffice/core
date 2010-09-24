@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,10 +35,10 @@ typedef USHORT SwGetPoolIdFromName;
 namespace nsSwGetPoolIdFromName
 {
     const SwGetPoolIdFromName GET_POOLID_TXTCOLL  = 0x01;
-    const SwGetPoolIdFromName GET_POOLID_CHRFMT	  = 0x02;
-    const SwGetPoolIdFromName GET_POOLID_FRMFMT	  = 0x04;
+    const SwGetPoolIdFromName GET_POOLID_CHRFMT   = 0x02;
+    const SwGetPoolIdFromName GET_POOLID_FRMFMT   = 0x04;
     const SwGetPoolIdFromName GET_POOLID_PAGEDESC = 0x08;
     const SwGetPoolIdFromName GET_POOLID_NUMRULE  = 0x10;
 }
 
-#endif 
+#endif

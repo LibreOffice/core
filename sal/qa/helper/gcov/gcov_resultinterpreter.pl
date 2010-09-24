@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
-# 
+#
 # $Id: gcov_resultinterpreter.pl,v 1.3 2005-11-02 17:24:12 kz Exp $
 #
 
 # GCOV_RESULTINTERPRETER
-# 
+#
 # Helper, to interpret the result
 #
 # Q: Why perl?
@@ -127,10 +127,10 @@ sub read_gcov_function_file($)
     my $file = $_[0];
     my %list;
     my $line = "";
-    
+
     open(INPUT_HANDLE, $file)
         or die("ERROR: cannot open $file!\n");
-    
+
     while ($line = <INPUT_HANDLE>)
     {
         chomp($line);
@@ -140,7 +140,7 @@ sub read_gcov_function_file($)
         {
             my $percent = $1;
             my $value = $2;
-            
+
             $list{$value} = $percent;
         }
     }
@@ -163,7 +163,7 @@ Usage: $tool_name [OPTIONS] INPUTFILE
     -p, --percent           show all functions, which have a value > percent
     -c, --complete          show all functions, which have a value == 100
     -i, --incomplete        show all functions, which have a value > 0 && < 100
-                            
+
     -h, --help              Print this help, then exit
     -v, --version           Print version number, then exit
 

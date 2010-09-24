@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ GrammarChecker::GrammarChecker( /*uno::Reference< uno::XComponentContext > const
 
 GrammarChecker::~GrammarChecker()
 {
-}    
+}
 
 
 sal_Bool SAL_CALL GrammarChecker::isSpellChecker() throw (uno::RuntimeException)
@@ -90,49 +90,49 @@ uno::Sequence< lang::Locale > SAL_CALL GrammarChecker::getLocales(  ) throw (uno
 }
 
 
-void SAL_CALL GrammarChecker::startDocument(sal_Int32 nDocId) 
+void SAL_CALL GrammarChecker::startDocument(sal_Int32 nDocId)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     osl::Guard< osl::Mutex > aGuard(GetMutex());
     (void) nDocId;
 }
 
-void SAL_CALL GrammarChecker::startParagraph(sal_Int32 nDocId) 
+void SAL_CALL GrammarChecker::startParagraph(sal_Int32 nDocId)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     osl::Guard< osl::Mutex > aGuard(GetMutex());
     (void) nDocId;
 }
 
-void SAL_CALL GrammarChecker::endParagraph( sal_Int32 nDocId ) 
+void SAL_CALL GrammarChecker::endParagraph( sal_Int32 nDocId )
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     osl::Guard< osl::Mutex > aGuard(GetMutex());
     (void) nDocId;
 }
 
-void SAL_CALL GrammarChecker::endDocument(sal_Int32 nDocId) 
+void SAL_CALL GrammarChecker::endDocument(sal_Int32 nDocId)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     osl::Guard< osl::Mutex > aGuard(GetMutex());
     (void) nDocId;
 }
 
-linguistic2::GrammarCheckingResult SAL_CALL GrammarChecker::doGrammarChecking( 
-        sal_Int32 nDocId, 
-        const rtl::OUString& rText, 
-        const lang::Locale& rLocale, 
-        sal_Int32 nStartOfSentencePos, 
+linguistic2::GrammarCheckingResult SAL_CALL GrammarChecker::doGrammarChecking(
+        sal_Int32 nDocId,
+        const rtl::OUString& rText,
+        const lang::Locale& rLocale,
+        sal_Int32 nStartOfSentencePos,
         sal_Int32 nSuggestedSentenceEndPos,
-        const uno::Sequence< ::sal_Int32 >& rLanguagePortions, 
-        const uno::Sequence< lang::Locale >& rLanguagePortionsLocales ) 
+        const uno::Sequence< ::sal_Int32 >& rLanguagePortions,
+        const uno::Sequence< lang::Locale >& rLanguagePortionsLocales )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     osl::Guard< osl::Mutex > aGuard(GetMutex());
 
     (void) rLanguagePortions;
     (void) rLanguagePortionsLocales;
-    
+
     linguistic2::GrammarCheckingResult  aRes;
     aRes.nDocumentId                = nDocId;
     aRes.aText                      = rText;
@@ -140,15 +140,15 @@ linguistic2::GrammarCheckingResult SAL_CALL GrammarChecker::doGrammarChecking(
     aRes.nEndOfSentencePos          = nSuggestedSentenceEndPos;
     aRes.xGrammarChecker            = this;
     aRes.aGrammarErrors             = GrammarCheckingInDummy( nDocId, rText, rLocale, nStartOfSentencePos, nSuggestedSentenceEndPos );;
-    
+
     return aRes;
 }
 
 uno::Sequence< linguistic2::SingleGrammarError > GrammarChecker::GrammarCheckingInDummy(
-    sal_Int32 nDocId, 
-    const OUString & rFlatParaText, 
-    const lang::Locale & rLocale, 
-    sal_Int32 nStartOfSentencePos, 
+    sal_Int32 nDocId,
+    const OUString & rFlatParaText,
+    const lang::Locale & rLocale,
+    sal_Int32 nStartOfSentencePos,
     sal_Int32 nSuggestedSentenceEndPos )
 {
     (void) nDocId;
@@ -156,7 +156,7 @@ uno::Sequence< linguistic2::SingleGrammarError > GrammarChecker::GrammarChecking
     (void) rLocale;
     (void) nStartOfSentencePos;
     (void) nSuggestedSentenceEndPos;
-    
+
 
     typedef std::map< OUString, uno::Sequence<OUString> > Error_t;
     Error_t aError;
@@ -169,7 +169,7 @@ uno::Sequence< linguistic2::SingleGrammarError > GrammarChecker::GrammarChecking
 
     typedef std::vector< linguistic2::SingleGrammarError> ErrorVector_t;
     ErrorVector_t aErrorVector;
-    
+
     OUString aText = rFlatParaText.copy( nStartOfSentencePos, nSuggestedSentenceEndPos - nStartOfSentencePos );
     sal_Int32 nIndexOf = 0;
     for(Error_t::const_iterator it = aError.begin(); it != aError.end(); ++it)
@@ -191,7 +191,7 @@ uno::Sequence< linguistic2::SingleGrammarError > GrammarChecker::GrammarChecking
                 aErr.aFullComment       = OUString();
                 aErr.aNewLocale         = rLocale;
                 aErr.aSuggestions       = it->second;
-                
+
                 aErrorVector.push_back( aErr );
             }
         }
@@ -218,7 +218,7 @@ sal_Bool SAL_CALL GrammarChecker::hasOptionsDialog(  ) throw (uno::RuntimeExcept
     return sal_False;
 }
 
-void SAL_CALL GrammarChecker::runOptionsDialog() 
+void SAL_CALL GrammarChecker::runOptionsDialog()
     throw (uno::RuntimeException)
 {
     osl::Guard< osl::Mutex > aGuard(GetMutex());
@@ -229,14 +229,14 @@ void SAL_CALL GrammarChecker::dispose(  ) throw (uno::RuntimeException)
     osl::Guard< osl::Mutex > aGuard(GetMutex());
 }
 
-void SAL_CALL GrammarChecker::addEventListener( const uno::Reference< lang::XEventListener >& xListener ) 
+void SAL_CALL GrammarChecker::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {
     osl::Guard< osl::Mutex > aGuard(GetMutex());
     (void) xListener;
 }
 
-void SAL_CALL GrammarChecker::removeEventListener( const uno::Reference< lang::XEventListener >& xListener ) 
+void SAL_CALL GrammarChecker::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {
     osl::Guard< osl::Mutex > aGuard(GetMutex());
@@ -259,7 +259,7 @@ uno::Sequence< OUString > GrammarChecker::getSupportedServiceNames_Static(  ) th
 {
     //osl::Guard< osl::Mutex > aGuard(GetMutex());
 
-    uno::Sequence< OUString > aSNS( 1 );	// auch mehr als 1 Service moeglich
+    uno::Sequence< OUString > aSNS( 1 );    // auch mehr als 1 Service moeglich
     aSNS.getArray()[0] = A2OU( "com.sun.star.linguistic2.GrammarChecker" );//SN_LINGU_SERVCICE_MANAGER
     return aSNS;
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,7 +126,7 @@ void PADialog::Init()
     // #i79787# initially ensure printer discovery has ended
     m_rPIManager.checkPrintersChanged( true );
     m_aCUPSCB.Check( m_rPIManager.isCUPSDisabled() );
-    
+
     UpdateDevice();
     UpdateText();
 
@@ -371,7 +371,7 @@ public:
     {}
     virtual ~SpaPrinterController()
     {}
-    
+
     virtual int getPageCount() const { return 1; }
     virtual Sequence< PropertyValue > getPageParameters( int i_nPage ) const;
     virtual void printPage( int i_nPage ) const;
@@ -381,22 +381,22 @@ public:
 Sequence< PropertyValue > SpaPrinterController::getPageParameters( int ) const
 {
     Sequence< PropertyValue > aRet( 1 );
-    
+
     Size aPageSize( getPrinter()->GetPaperSizePixel() );
     aPageSize = getPrinter()->PixelToLogic( aPageSize, MapMode( MAP_100TH_MM ) );
-    
+
     awt::Size aSize;
     aSize.Width = aPageSize.Width();
     aSize.Height = aPageSize.Height();
     aRet[0].Value = makeAny(aSize);
-    
+
     return aRet;
 }
 
 void SpaPrinterController::printPage( int ) const
 {
     const double DELTA = 5.0;
-    
+
     boost::shared_ptr<Printer> pPrinter( getPrinter() );
 
     PrinterInfo aInfo( psp::PrinterInfoManager::get().getPrinterInfo( pPrinter->GetName() ) );
@@ -706,7 +706,7 @@ void PADialog::RenameDevice()
 void PADialog::UpdateDevice()
 {
     m_aDevicesLB.Clear();
-    
+
     m_rPIManager.listPrinters( m_aPrinters );
     ::std::list< OUString >::iterator it;
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )

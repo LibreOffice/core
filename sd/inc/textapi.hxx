@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,13 +48,13 @@ class TextApiObject : public SvxUnoText
 public:
     static rtl::Reference< TextApiObject > create( SdDrawDocument* pDoc );
 
-    virtual				~TextApiObject() throw();
-    
+    virtual             ~TextApiObject() throw();
+
     virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-    
+
     OutlinerParaObject* CreateText();
-    void				SetText( OutlinerParaObject& rText );
-    String				GetText();
+    void                SetText( OutlinerParaObject& rText );
+    String              GetText();
 
     static TextApiObject* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& );
 

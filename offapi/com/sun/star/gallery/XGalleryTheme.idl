@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 
 #ifndef __com_sun_star_gallery_XGalleryTheme_idl__
 #define __com_sun_star_gallery_XGalleryTheme_idl__
-    
+
 #ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
 #endif
@@ -71,23 +71,23 @@ interface XGalleryTheme : com::sun::star::container::XIndexAccess
             The name of the Gallery theme
      */
     string getName();
-    
+
     /** updates the theme
-        
+
         <p>This method iterates over each item of the Gallery theme
         and updates it accordingly. Main purpose is to automatically
         regenerate the thumbnails and to remove invalid items, that is items
-        who have got an URL that has become invalid. This method also 
+        who have got an URL that has become invalid. This method also
         optimizes underlying data structures.</p>
      */
     void update();
-    
-    /** inserts an item 
+
+    /** inserts an item
 
         @param URL
             The URL of a graphic or media object, that should
             be added to the collection
-            
+
         @param Index
             The zero based index of the position where to insert
             the new object inside the collection. If the index is larger than
@@ -95,22 +95,22 @@ interface XGalleryTheme : com::sun::star::container::XIndexAccess
             item is inserted at the end of the collection. If the index
             is smaller than 0, the item is inserted at the beginning of
             the collection.
-            
-        @returns 
+
+        @returns
             The zero based position at which the object was inserted.
             If the object could not be inserted, -1 is returned.
-         
+
         @see XGalleryItem
         @see com::sun::star::lang::WrappedTargetException
     */
     long insertURLByIndex( [in] string URL, [in] long Index )
         raises ( com::sun::star::lang::WrappedTargetException );
-    /** inserts an item 
+    /** inserts an item
 
         @param Graphic
             The <type scope="com::sun::star::graphic">XGraphic</type> object
             that should be added to the collection
-            
+
         @param Index
             The zero based index of the position where to insert
             the new object inside the collection. If the index is larger than
@@ -118,23 +118,23 @@ interface XGalleryTheme : com::sun::star::container::XIndexAccess
             item is inserted at the end of the collection. If the index
             is smaller than 0, the item is inserted at the beginning of
             the collection.
-            
-        @returns 
+
+        @returns
             The zero based position at which the object was inserted.
             If the object could not be inserted, -1 is returned.
-         
+
         @see com::sun::star::graphic::XGraphic
         @see XGalleryItem
         @see com::sun::star::lang::WrappedTargetException
     */
     long insertGraphicByIndex( [in] com::sun::star::graphic::XGraphic Graphic, [in] long Index )
         raises ( com::sun::star::lang::WrappedTargetException );
-    
-    /** inserts an item 
+
+    /** inserts an item
 
         @param Drawing
             A drawing model that should be added to the collection
-            
+
         @param Index
             The zero based index of the position where to insert
             the new object inside the collection. If the index is larger than
@@ -142,23 +142,23 @@ interface XGalleryTheme : com::sun::star::container::XIndexAccess
             item is inserted at the end of the collection. If the index
             is smaller than 0, the item is inserted at the beginning of
             the collection.
-            
-        @returns 
+
+        @returns
             The zero based position at which the object was inserted.
             If the object could not be inserted, -1 is returned.
-         
+
         @see XGalleryItem
         @see com::sun::star::lang::WrappedTargetException
     */
     long insertDrawingByIndex( [in] com::sun::star::lang::XComponent Drawing, [in] long Index )
         raises ( com::sun::star::lang::WrappedTargetException );
-    
-    /** deletes an item from the collection 
+
+    /** deletes an item from the collection
 
         @param Index
-            The position of the item to be removed. The 
+            The position of the item to be removed. The
             position is zero based.
-         
+
         @see com::sun::star::container::NoSuchElementException
     */
     void removeByIndex( [in] long Index )

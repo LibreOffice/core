@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace sdr
     namespace contact
     {
         ViewContactOfE3dPolygon::ViewContactOfE3dPolygon(E3dPolygonObj& rPolygon)
-        :	ViewContactOfE3d(rPolygon)
+        :   ViewContactOfE3d(rPolygon)
         {
         }
 
@@ -73,14 +73,14 @@ namespace sdr
                     basegfx::B3DPolygon aCandidate3D(aPolyPolygon3D.getB3DPolygon(a));
                     basegfx::B3DPolygon aNormals3D;
                     basegfx::B2DPolygon aTexture2D;
-                        
+
                     if(bNormals)
-                    {	
+                    {
                         aNormals3D = aPolyNormals3D.getB3DPolygon(a);
                     }
-                    
+
                     if(bTexture)
-                    {	
+                    {
                         aTexture2D = aPolyTexture2D.getB2DPolygon(a);
                     }
 
@@ -119,7 +119,7 @@ namespace sdr
                 // #i98314#
                 // create texture size from object's size
                 const basegfx::B3DRange aObjectRange(basegfx::tools::getRange(aPolyPolygon3D));
-                
+
                 double fWidth(0.0);
                 double fHeight(0.0);
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ rtl::OUString certificateValidityToOUString( ::sal_Int32 certValidity ) {
     } else if( ( certValidity & CertificateValidity::TIME_INVALID ) == CertificateValidity::TIME_INVALID ) {
          aValidity = OUString::createFromAscii( ( const char* )TIME_INVALID_STR ) ;
     } else if( ( certValidity & CertificateValidity::NOT_TIME_NESTED ) == CertificateValidity::NOT_TIME_NESTED ) {
-         aValidity = OUString::createFromAscii( ( const char* )NOT_NESTED_TIME_STR ) ;         
+         aValidity = OUString::createFromAscii( ( const char* )NOT_NESTED_TIME_STR ) ;
     } else if( ( certValidity & CertificateValidity::REVOKED ) == CertificateValidity::REVOKED ) {
          aValidity = OUString::createFromAscii( ( const char* )REVOKED_STR ) ;
     } else if( ( certValidity &  CertificateValidity::UNKNOWN_REVOKATION ) == CertificateValidity::UNKNOWN_REVOKATION ) {

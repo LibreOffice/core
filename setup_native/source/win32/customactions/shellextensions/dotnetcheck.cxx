@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 
 using namespace std;
 
-namespace 
+namespace
 {
     string GetMsiProperty(MSIHANDLE handle, const string& sProperty)
     {
@@ -120,7 +120,7 @@ Order compareVersions(string const & version1, string const & version2) {
 
         if (e1.size() < e2.size()) {
             return ORDER_LESS;
-        } else if (e1.size() > e2.size()) {            
+        } else if (e1.size() > e2.size()) {
             return ORDER_GREATER;
         } else if (e1 < e2) {
             return ORDER_LESS;
@@ -131,7 +131,7 @@ Order compareVersions(string const & version1, string const & version2) {
     return ORDER_EQUAL;
 }
 
-} // namespace 
+} // namespace
 
 extern "C" UINT __stdcall DotNetCheck(MSIHANDLE handle) {
     string present(GetMsiProperty(handle, TEXT("MsiNetAssemblySupport")));
@@ -150,32 +150,32 @@ extern "C" UINT __stdcall DotNetCheck(MSIHANDLE handle) {
     // string result(GetMsiProperty(handle, TEXT("DOTNET_SUFFICIENT")));
     // string myText3 = TEXT("DOTNET_SUFFICIENT: ") + result;
     // MessageBox(NULL, myText3.c_str(), "DEBUG", MB_OK);
-    
 
-    return ERROR_SUCCESS;    
+
+    return ERROR_SUCCESS;
 }
 
 extern "C" UINT __stdcall ShowProperties(MSIHANDLE handle)
 {
-    string property = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));                
+    string property = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
     string myText = TEXT("INSTALLLOCATION: ") + property;
     MessageBox(NULL, myText.c_str(), "INSTALLLOCATION", MB_OK);
 
-    property = GetMsiProperty(handle, TEXT("Installed"));                
+    property = GetMsiProperty(handle, TEXT("Installed"));
     myText = TEXT("Installed: ") + property;
     MessageBox(NULL, myText.c_str(), "Installed", MB_OK);
 
-    property = GetMsiProperty(handle, TEXT("PATCH"));                
+    property = GetMsiProperty(handle, TEXT("PATCH"));
     myText = TEXT("PATCH: ") + property;
     MessageBox(NULL, myText.c_str(), "PATCH", MB_OK);
 
-    property = GetMsiProperty(handle, TEXT("REMOVE"));                
+    property = GetMsiProperty(handle, TEXT("REMOVE"));
     myText = TEXT("REMOVE: ") + property;
     MessageBox(NULL, myText.c_str(), "REMOVE", MB_OK);
 
-    property = GetMsiProperty(handle, TEXT("ALLUSERS"));                
+    property = GetMsiProperty(handle, TEXT("ALLUSERS"));
     myText = TEXT("ALLUSERS: ") + property;
     MessageBox(NULL, myText.c_str(), "ALLUSERS", MB_OK);
-    
-    return ERROR_SUCCESS;     
+
+    return ERROR_SUCCESS;
 }

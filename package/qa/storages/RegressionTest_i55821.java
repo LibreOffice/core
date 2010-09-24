@@ -40,7 +40,7 @@ public class RegressionTest_i55821 implements StorageTest {
             XStream xTempFileStream = m_aTestHelper.CreateTempFileStream( m_xMSF );
             if ( xTempFileStream == null )
                 return false;
-        
+
             // create storage based on the temporary stream
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) xTempFileStream;
@@ -61,7 +61,7 @@ public class RegressionTest_i55821 implements StorageTest {
             // the stream will not be encrypted
             if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream1", "MediaType1", false, pBytes, sPass ) )
                 return false;
-    
+
             if ( !m_aTestHelper.commitStorage( xTempStorage ) )
                 return false;
 
@@ -106,6 +106,6 @@ public class RegressionTest_i55821 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 }
 

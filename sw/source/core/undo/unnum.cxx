@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <hintids.hxx>
 #include <editeng/lrspitem.hxx>
 #include <doc.hxx>
-#include <swundo.hxx>			// fuer die UndoIds
+#include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>
@@ -274,8 +274,8 @@ SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, long nOff, BOOL bIsOutlMv )
     SwUndRng( rPam ),
     nNewStt( 0 ), nOffset( nOff )
 {
-    // nOffset: nach unten 	=>  1
-    //			nach oben	=> -1
+    // nOffset: nach unten  =>  1
+    //          nach oben   => -1
 }
 
 
@@ -283,9 +283,9 @@ void SwUndoMoveNum::Undo( SwUndoIter& rUndoIter )
 {
     ULONG nTmpStt = nSttNode, nTmpEnd = nEndNode;
 
-    if( nEndNode || USHRT_MAX != nEndCntnt )		// Bereich ?
+    if( nEndNode || USHRT_MAX != nEndCntnt )        // Bereich ?
     {
-        if( nNewStt < nSttNode )		// nach vorne verschoben
+        if( nNewStt < nSttNode )        // nach vorne verschoben
             nEndNode = nEndNode - ( nSttNode - nNewStt );
         else
             nEndNode = nEndNode + ( nNewStt - nSttNode );
@@ -293,8 +293,8 @@ void SwUndoMoveNum::Undo( SwUndoIter& rUndoIter )
     nSttNode = nNewStt;
 
 //JP 22.06.95: wird wollen die Bookmarks/Verzeichnisse behalten, oder?
-//	SetPaM( rUndoIter );
-//	RemoveIdxFromRange( *rUndoIter.pAktPam, TRUE );
+//  SetPaM( rUndoIter );
+//  RemoveIdxFromRange( *rUndoIter.pAktPam, TRUE );
 
     SetPaM( rUndoIter );
     rUndoIter.GetDoc().MoveParagraph( *rUndoIter.pAktPam, -nOffset,
@@ -307,8 +307,8 @@ void SwUndoMoveNum::Undo( SwUndoIter& rUndoIter )
 void SwUndoMoveNum::Redo( SwUndoIter& rUndoIter )
 {
 //JP 22.06.95: wird wollen die Bookmarks/Verzeichnisse behalten, oder?
-//	SetPaM( rUndoIter );
-//	RemoveIdxFromRange( *rUndoIter.pAktPam, TRUE );
+//  SetPaM( rUndoIter );
+//  RemoveIdxFromRange( *rUndoIter.pAktPam, TRUE );
 
     SetPaM( rUndoIter );
     rUndoIter.GetDoc().MoveParagraph( *rUndoIter.pAktPam, nOffset,
@@ -332,8 +332,8 @@ SwUndoNumUpDown::SwUndoNumUpDown( const SwPaM& rPam, short nOff )
     : SwUndo( nOff > 0 ? UNDO_NUMUP : UNDO_NUMDOWN ), SwUndRng( rPam ),
       nOffset( nOff )
 {
-    // nOffset: Down 	=>  1
-    //			Up 		=> -1
+    // nOffset: Down    =>  1
+    //          Up      => -1
 }
 
 

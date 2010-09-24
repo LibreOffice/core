@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,16 +27,16 @@
 
 package com.sun.star.uno;
 
-/** 
+/**
  * The Ascii class represents the IDL build in type <code>ascii</code>.
  * <p>
- * @version 	$Revision: 1.5 $ $ $Date: 2008-04-11 11:27:21 $
- * @author 	    Markus Meyer
- * @deprecated do not use 
+ * @version     $Revision: 1.5 $ $ $Date: 2008-04-11 11:27:21 $
+ * @author      Markus Meyer
+ * @deprecated do not use
  */
 public final class Ascii {
     public final char ascii;
-                        
+
     /**
      * Constructs a new <code>Ascii</code>.
      * <p>

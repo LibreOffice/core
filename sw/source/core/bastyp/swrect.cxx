@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@
 
 /*************************************************************************
 |*
-|*	SwRect::SwRect()
+|*  SwRect::SwRect()
 |*
-|*	Ersterstellung		MA 02. Feb. 93
-|*	Letzte Aenderung	MA 05. Sep. 93
+|*  Ersterstellung      MA 02. Feb. 93
+|*  Letzte Aenderung    MA 05. Sep. 93
 |*
 |*************************************************************************/
 
@@ -60,10 +60,10 @@ SwRect::SwRect( const Rectangle &rRect ) :
 
 /*************************************************************************
 |*
-|*	SwRect::Center()
+|*  SwRect::Center()
 |*
-|*	Ersterstellung		MA 27. Jan. 93
-|*	Letzte Aenderung	MA 27. Jan. 93
+|*  Ersterstellung      MA 27. Jan. 93
+|*  Letzte Aenderung    MA 27. Jan. 93
 |*
 |*************************************************************************/
 Point SwRect::Center() const
@@ -81,10 +81,10 @@ Point SwRect::Center() const
 
 /*************************************************************************
 |*
-|*	SwRect::Union()
+|*  SwRect::Union()
 |*
-|*	Ersterstellung		MA 27. Jan. 93
-|*	Letzte Aenderung	MA 27. Jan. 93
+|*  Ersterstellung      MA 27. Jan. 93
+|*  Letzte Aenderung    MA 27. Jan. 93
 |*
 |*************************************************************************/
 
@@ -106,10 +106,10 @@ SwRect& SwRect::Union( const SwRect& rRect )
 }
 /*************************************************************************
 |*
-|*	SwRect::Intersection(), _Intersection()
+|*  SwRect::Intersection(), _Intersection()
 |*
-|*	Ersterstellung		MA 27. Jan. 93
-|*	Letzte Aenderung	MA 05. Sep. 93
+|*  Ersterstellung      MA 27. Jan. 93
+|*  Letzte Aenderung    MA 05. Sep. 93
 |*
 |*************************************************************************/
 
@@ -161,10 +161,10 @@ SwRect& SwRect::_Intersection( const SwRect& rRect )
 }
 /*************************************************************************
 |*
-|*	SwRect::IsInside()
+|*  SwRect::IsInside()
 |*
-|*	Ersterstellung		MA 27. Jan. 93
-|*	Letzte Aenderung	MA 27. Jan. 93
+|*  Ersterstellung      MA 27. Jan. 93
+|*  Letzte Aenderung    MA 27. Jan. 93
 |*
 |*************************************************************************/
 
@@ -177,9 +177,9 @@ BOOL SwRect::IsInside( const SwRect& rRect ) const
     const long nrRight = rRect.Right();
     const long nrBottom= rRect.Bottom();
     return (Left() <= rRect.Left()) && (rRect.Left()<= nRight)  &&
-           (Left() <= nrRight)		&& (nrRight		<= nRight)  &&
-           (Top()  <= rRect.Top())	&& (rRect.Top() <= nBottom) &&
-           (Top()  <= nrBottom)		&& (nrBottom	<= nBottom);
+           (Left() <= nrRight)      && (nrRight     <= nRight)  &&
+           (Top()  <= rRect.Top())  && (rRect.Top() <= nBottom) &&
+           (Top()  <= nrBottom)     && (nrBottom    <= nBottom);
 }
 
 
@@ -205,10 +205,10 @@ BOOL SwRect::IsNear( const Point& rPoint, long nTolerance ) const
 
 /*************************************************************************
 |*
-|*	SwRect::IsOver()
+|*  SwRect::IsOver()
 |*
-|*	Ersterstellung		MA 25. Feb. 94
-|*	Letzte Aenderung	MA 27. Jun. 96
+|*  Ersterstellung      MA 25. Feb. 94
+|*  Letzte Aenderung    MA 27. Jun. 96
 |*
 |*************************************************************************/
 
@@ -216,7 +216,7 @@ BOOL SwRect::IsNear( const Point& rPoint, long nTolerance ) const
 
 BOOL SwRect::IsOver( const SwRect& rRect ) const
 {
-    return	  (Top()   <= rRect.Bottom())
+    return    (Top()   <= rRect.Bottom())
            && (Left()  <= rRect.Right())
            && (Right() >= rRect.Left())
            && (Bottom()>= rRect.Top()) ? TRUE : FALSE;
@@ -224,10 +224,10 @@ BOOL SwRect::IsOver( const SwRect& rRect ) const
 
 /*************************************************************************
 |*
-|*	SwRect::Justify()
+|*  SwRect::Justify()
 |*
-|*	Ersterstellung		MA 10. Oct. 94
-|*	Letzte Aenderung	MA 23. Oct. 96
+|*  Ersterstellung      MA 10. Oct. 94
+|*  Letzte Aenderung    MA 23. Oct. 96
 |*
 |*************************************************************************/
 
@@ -320,7 +320,7 @@ void SwRect::SetLowerLeftCorner(  const Point& rNew )
 
 #ifdef DBG_UTIL
 /*************************************************************************
- *					operator<<( ostream&, SwRect&)
+ *                  operator<<( ostream&, SwRect&)
  *************************************************************************/
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,9 +67,9 @@ namespace
     }
 }
 
-//	----------------------------------------------------
-//	help function for the toolkit...
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  help function for the toolkit...
+//  ----------------------------------------------------
 
 extern "C" {
 
@@ -167,7 +167,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
     else if ( aServiceName.EqualsIgnoreCaseAscii( "Grid" ) )
     {
         if ( pParent )
-        {	
+        {
             pWindow = new ::svt::table::TableControl(pParent, nWinBits);
             *ppNewComp = new SVTXGridControl;
         }
@@ -180,11 +180,11 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
     return pWindow;
 }
 
-}	// extern "C"
+}   // extern "C"
 
-//	----------------------------------------------------
-//	class VCLXMultiLineEdit
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXMultiLineEdit
+//  ----------------------------------------------------
 VCLXMultiLineEdit::VCLXMultiLineEdit()
     :maTextListeners( *this )
     ,meLineEndType( LINEEND_LF )    // default behavior before introducing this property: LF (unix-like)
@@ -545,9 +545,9 @@ void VCLXMultiLineEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     VCLXWindow::ImplGetPropertyIds( rIds, true );
 
 }
-//	----------------------------------------------------
-//	class VCLXFileControl
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXFileControl
+//  ----------------------------------------------------
 VCLXFileControl::VCLXFileControl() : maTextListeners( *this )
 {
 }
@@ -814,9 +814,9 @@ void VCLXFileControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 
-//	----------------------------------------------------
-//	class SVTXFormattedField
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class SVTXFormattedField
+//  ----------------------------------------------------
 // --------------------------------------------------------------------------------------
 SVTXFormattedField::SVTXFormattedField()
     :m_pCurrentSupplier(NULL)
@@ -914,7 +914,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
                     if (rTC != ::com::sun::star::uno::TypeClass_DOUBLE)
                         // no double
                         if (Value.hasValue())
-                        {	// but a value
+                        {   // but a value
                             // try if it is something converitble
                             sal_Int32 nValue = 0;
                             if (!(Value >>= nValue))
@@ -959,7 +959,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
         }
 
         if (BASEPROPERTY_TEXTCOLOR == nPropType)
-        {	// after setting a new text color, think again about the AutoColor flag of the control
+        {   // after setting a new text color, think again about the AutoColor flag of the control
             // 17.05.2001 - 86859 - frank.schoenheit@germany.sun.com
             pField->SetAutoColor(!Value.hasValue());
         }
@@ -1015,7 +1015,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
             case BASEPROPERTY_FORMATSSUPPLIER:
             {
                 if (!bIsStandardSupplier)
-                {	// ansonsten void
+                {   // ansonsten void
                     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = getFormatsSupplier();
                     aReturn <<= xSupplier;
                 }
@@ -1259,7 +1259,7 @@ void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
     }
     else
     {
-        if (pField->GetText().Len())	// empty wird erst mal standardmaessig als void nach draussen gereicht
+        if (pField->GetText().Len())    // empty wird erst mal standardmaessig als void nach draussen gereicht
             aReturn <<= pField->GetValue();
     }
 
@@ -1298,7 +1298,7 @@ void SVTXFormattedField::SetValue(const ::com::sun::star::uno::Any& rValue)
                 pField->SetTextValue(aStr);
         }
     }
-//	NotifyTextListeners();
+//  NotifyTextListeners();
 }
 
 // --------------------------------------------------------------------------------------
@@ -1328,7 +1328,7 @@ void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Referen
     }
 
     if (!pNew)
-        return;		// TODO : wie das behandeln ?
+        return;     // TODO : wie das behandeln ?
 
     if (m_pCurrentSupplier)
         m_pCurrentSupplier->release();
@@ -1365,7 +1365,7 @@ void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
         if (pField->GetFormatter())
             pField->SetFormatKey(nKey);
         else
-        {	// Wahrscheinlich bin ich gerade in einem Block, in dem erst der Key und dann der Formatter gesetzt
+        {   // Wahrscheinlich bin ich gerade in einem Block, in dem erst der Key und dann der Formatter gesetzt
             // wird, das passiert initial mit ziemlicher Sicherheit, da die Properties in alphabetischer Reihenfolge
             // gesetzt werden, und der FormatsSupplier nun mal vor dem FormatKey kommt
             nKeyToSetDelayed = nKey;
@@ -1410,9 +1410,9 @@ void SVTXFormattedField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 
-//	----------------------------------------------------
-//	class SVTXRoadmap
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class SVTXRoadmap
+//  ----------------------------------------------------
 
 using namespace svt;
 
@@ -1667,9 +1667,9 @@ void SVTXRoadmap::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     VCLXGraphicControl::ImplGetPropertyIds( rIds );
 }
 
-//	----------------------------------------------------
-//	class SVTXNumericField
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class SVTXNumericField
+//  ----------------------------------------------------
 SVTXNumericField::SVTXNumericField()
 {
 }
@@ -1834,9 +1834,9 @@ void SVTXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     SVTXFormattedField::ImplGetPropertyIds( rIds );
 }
 
-//	----------------------------------------------------
-//	class SVTXCurrencyField
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class SVTXCurrencyField
+//  ----------------------------------------------------
 SVTXCurrencyField::SVTXCurrencyField()
 {
 }
@@ -2074,9 +2074,9 @@ void SVTXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 
-//	----------------------------------------------------
-//	class VCLXProgressBar
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXProgressBar
+//  ----------------------------------------------------
 
 VCLXProgressBar::VCLXProgressBar()
             :m_nValue(0)
@@ -2322,9 +2322,9 @@ void VCLXProgressBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 
-//	----------------------------------------------------
-//	class SVTXDateField
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class SVTXDateField
+//  ----------------------------------------------------
 SVTXDateField::SVTXDateField()
     :VCLXDateField()
 {

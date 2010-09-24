@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ public class JPropEx
     private boolean isQuiet             = false;
     private final String resourceType   = "javaproperties";
     private final String sourceLanguage = "en-US";
-    
+
     static final int JAVA_TYPE      = 0;
     static final int JAVA_ENUS_TYPE = 1;
     static final int EXTENSION_TYPE = 2;
@@ -52,23 +52,23 @@ public class JPropEx
     {
         //data = new SdfData();
     }
-    
+
     public JPropEx( String args[] )
     {
         super();
         parseArguments( args );
         testCL();
         //testArguments();
-        if( inputSdfFileArg != null && inputSdfFileArg.length() > 0 ) 
-            merge(); 
+        if( inputSdfFileArg != null && inputSdfFileArg.length() > 0 )
+            merge();
         else
             extract();
-    } 
+    }
 
     private String getSimpleArg( String[] args , int x )
     {
         if( x < args.length ) x++;
-        else 
+        else
         {
             System.err.println("ERROR: Missing arg for "+args[ x ]+"\n");
             help();
@@ -91,7 +91,7 @@ public class JPropEx
     private void testCL()
     {
         if( inputFileArg.length()>0 && ( ( pathPrefixArg.length()>0 && pathPostfixArg.length()>0 ) || outputFileArg.length()>0 ) && projectArg.length()>0 && rootArg.length()>0 && langsArg.size()>0 )
-            if( ( inputSdfFileArg.length()>0 && ( outputFileArg.length()>0 ||  ( pathPrefixArg.length()>0 && pathPostfixArg.length()>0 ) ) ) ||  ( inputFileArg.length()>0 && outputFileArg.length()>0 ) )  
+            if( ( inputSdfFileArg.length()>0 && ( outputFileArg.length()>0 ||  ( pathPrefixArg.length()>0 && pathPostfixArg.length()>0 ) ) ) ||  ( inputFileArg.length()>0 && outputFileArg.length()>0 ) )
                     return;
         System.out.println("ERROR: Strange parameters!");
         help();
@@ -105,7 +105,7 @@ public class JPropEx
         System.out.println("Extract:\njpropex -p reportbuilder -r ../../../../../../.. -i Title-Function.properties -o new.sdf -l en-US");
         System.out.println("Merge: use either ( -x path -y more_path ) or ( -o ) and ( -i filename ) or ( -i @filename ). @filename contains a list with files");
         System.out.println("jpropex -p reportbuilder -r ../../../../../../.. -x ../../../../../../../unxlngx6.pro/class/com/sun/star/report/function/metadata -y ivo -i @abc -l all -lf en-US,de,fr,pt -m ../../../../../../../common.pro/misc/reportbuilder/java/com/sun/star/report/function/metadata/localize.sdf");
-        System.out.println("jpropex -p reportbuilder -r ../../../../../../.. -x ../../../../../../../unxlngx6.pro/class/com/sun/star/report/function/metadata -y ivo -i @abc -l all -lf en-US,de,fr,pt -m ../../../../../../../common.pro/misc/reportbuilder/java/com/sun/star/report/function/metadata/localize.sdf");        
+        System.out.println("jpropex -p reportbuilder -r ../../../../../../.. -x ../../../../../../../unxlngx6.pro/class/com/sun/star/report/function/metadata -y ivo -i @abc -l all -lf en-US,de,fr,pt -m ../../../../../../../common.pro/misc/reportbuilder/java/com/sun/star/report/function/metadata/localize.sdf");
         System.out.println("jpropex -p reportbuilder -r ../../../../../../.. -o ../../../../../../../unxlngx6.pro/class/com/sun/star/report/function/metadata/ -i Title-Function.properties -l all -lf en-US,de,fr,pt -m ../../../../../../../common.pro/misc/reportbuilder/java/com/sun/star/report/function/metadata/localize.sdf");
         System.out.println("jpropex -p reportbuilder -r ../../../../../../.. -x ../../../../../../../unxlngx6.pro/class/com/sun/star/report/function/metadata -y ivooo -i Title-Function.properties -l all -lf en-US,de,fr,pt -m ../../../../../../../common.pro/misc/reportbuilder/java/com/sun/star/report/function/metadata/localize.sdf");
         System.exit( -1 );
@@ -115,7 +115,7 @@ public class JPropEx
     {
         SdfData data = new SdfData();
         java.util.Properties prop = loadProp( inputFileArg );
-       
+
         // Get a prototype that already contains the most common settings
         SdfEntity dolly = prepareSdfObj( inputFileArg );
         String key;
@@ -128,17 +128,17 @@ public class JPropEx
             currentStr  = (SdfEntity)   dolly.clone();
             // Set the new LID and the string text
             currentStr.setLid( key );
-            value            = prop.getProperty( key , "" ); 
+            value            = prop.getProperty( key , "" );
             //if( value.equals("") )  System.err.println("Warning: in file "+inputFileArg+" the string with the key "+key+" has a empty string!");
             str = (prop.getProperty( key )).replaceAll("\t" , " " );    // remove tab
             str = str.replaceAll("\n"," ");                             // remove return
-            currentStr.setText( str );     
+            currentStr.setText( str );
             if( str.length() > 0 )
                 data.add( currentStr );
         }
         data.write( outputFileArg );
     }
-    
+
     private SdfEntity prepareSdfObj( String filename )
     {
         String path = makeAbs( filename );
@@ -148,10 +148,10 @@ public class JPropEx
         // TODO: Make this static
         java.text.SimpleDateFormat dateformat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = dateformat.format( new Date() );
-        return new SdfEntity( projectArg , path , "0" /* dummy1 */ , resourceType , "", "" , "" , "" , "0" /* dummy2 */ , 
+        return new SdfEntity( projectArg , path , "0" /* dummy1 */ , resourceType , "", "" , "" , "" , "0" /* dummy2 */ ,
                               sourceLanguage , "",  "" , ""  , "" , date );
     }
-    
+
     private void merge()
     {
         SdfData data = getSdfData();
@@ -168,7 +168,7 @@ public class JPropEx
             mergeFile( inputFileArg , data , true );
         }
     }
-    
+
     private Vector readFileList( String filename )
     {
         Vector lines = new Vector();
@@ -183,9 +183,9 @@ public class JPropEx
             System.out.println("ERROR: Can't open file '"+filename.substring( 1 )+"'");
             System.exit( -1 );
         }
-        return lines; 
+        return lines;
     }
-   
+
     private void mergeFile( String filename , SdfData data , boolean isSingleFile )
     {
         int type = detectFormat( filename );
@@ -198,7 +198,7 @@ public class JPropEx
             props.put( (String)e.nextElement() , new java.util.Properties() );
         }
         // Get a prototype that already contains the most common settings
-        
+
         SdfEntity dolly = prepareSdfObj( filename );
         String key;
         String sourceString;
@@ -217,7 +217,7 @@ public class JPropEx
                 curEntity   = (SdfEntity) curStr.clone();
                 curLang     = (String)    lang.nextElement();
                 curEntity.setLangid( curLang );
-                mergedEntity = data.get( curEntity ); 
+                mergedEntity = data.get( curEntity );
                 if( mergedEntity == null )
                 {
                     // in case there is no translation then fallback to the en-US source string
@@ -249,7 +249,7 @@ public class JPropEx
         // use of -x <path> -y <more_path>
         // -> <path>/<lang>/<more_path>
         if( pathPrefixArg != null && pathPrefixArg.length()>0 && pathPostfixArg != null && pathPostfixArg.length()>0 )
-        {    
+        {
             path = new StringBuffer().append( pathPrefixArg ).append( "/" ).append( lcLang ).append( "/" ).append( pathPostfixArg ).append( "/" ).toString();
             name += formatFilename( filename , filenameIdx , lang , type );
         }
@@ -305,7 +305,7 @@ public class JPropEx
             System.exit( -1 );
         }
     }
-    
+
     // we have different types of properties in the source code
     // each needs a different file nameing scheme
     private int detectFormat( String filename )
@@ -316,16 +316,16 @@ public class JPropEx
            return JAVA_ENUS_TYPE;
        else if( filename.endsWith( ".properties" ) )
            return JAVA_TYPE;
-       
+
        // Can not detect, exit
        System.err.println("ERROR: Invalid file name. Only allowed (case sensitive!)  *_en_US.properties , *_en_us.properties or *.properties\n");
        System.exit(-1);
        return JAVA_TYPE;    // dummy
     }
-    
+
     private String formatFilename( String filename , int filenameIdx , String lang , int type )
     {
-       
+
         if( !lang.equals( "en-US" ) )
         {
             // Parse iso code
@@ -345,8 +345,8 @@ public class JPropEx
             switch( type )
             {
                 // -> de_DE
-                case EXTENSION_TYPE: 
-                    lang  =  langpart1.toLowerCase(); 
+                case EXTENSION_TYPE:
+                    lang  =  langpart1.toLowerCase();
                     if( langpart2.length() > 0 )                    // -> en_US
                         lang += "_" + langpart2.toUpperCase();
                     else                                            // -> de_DE
@@ -385,16 +385,16 @@ public class JPropEx
     {
         Vector langs = new Vector();
 
-        if( ((String)langsArg.get( 0 )).equalsIgnoreCase( "all" ) ) // for "-l all" use all languages found in the -m sdf file 
+        if( ((String)langsArg.get( 0 )).equalsIgnoreCase( "all" ) ) // for "-l all" use all languages found in the -m sdf file
             langs.addAll( data.getLanguages() );
         else
             langs.addAll( langsArg );              // use the langs giving by -l
 
-        if( forcedLangsArg != null ) 
+        if( forcedLangsArg != null )
             langs.addAll( forcedLangsArg );
-        
+
         return removeDupes( langs );
-    } 
+    }
     private Vector removeDupes( Vector vec )
     {
         Collection coll = new LinkedHashSet( vec );
@@ -415,7 +415,7 @@ public class JPropEx
     }
     private void parseArguments( String[] args )
     {
-        
+
         if( args.length == 0 )
         {
             System.out.println("ERROR: No args???");
@@ -424,7 +424,7 @@ public class JPropEx
         }
         for( int x = 0; x < args.length ; x++ )
         {
-            if( args[ x ].equalsIgnoreCase("-i") ) 
+            if( args[ x ].equalsIgnoreCase("-i") )
             {
                 // Input resource file
                 inputFileArg = getSimpleArg( args , x );
@@ -472,7 +472,7 @@ public class JPropEx
             }
             else if( args[ x ].equalsIgnoreCase("-qq") )
             {
-                isQuiet = true; 
+                isQuiet = true;
             }
         }
     }
@@ -480,7 +480,7 @@ public class JPropEx
     {
         File file;
         try
-        {    
+        {
             file = new File( path );
             return file.getCanonicalPath();
         }catch( IOException e )
@@ -492,12 +492,12 @@ public class JPropEx
     }
 /*    private boolean testArguments()
     {
-        // nice merge 
-        if( inputSdfFileArg != null && inputSdfFileArg.length()>0 ) 
+        // nice merge
+        if( inputSdfFileArg != null && inputSdfFileArg.length()>0 )
             // nice merge
             return  projectArg != null  && rootArg != null && inputFileArg != null && pathPrefixArg != null && pathPostfixArg != null && langsArg != null &&
                     projectArg.length()>0 && rootArg.length()>0 && inputFileArg.length()>0 && pathPrefixArg.length()>0 && pathPostfixArg.length()>0 && langsArg.size()>0 ;
-        else 
+        else
             // nice extract
             return  projectArg != null && rootArg != null && inputFileArg != null && outputFileArg != null && langsArg != null &&
                     projectArg.length()>0 && rootArg.length()>0 && inputFileArg.length()>0 && outputFileArg.length()>0 && langsArg.size()>0;

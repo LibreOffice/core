@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ OWeakTypeObject::~OWeakTypeObject()
 {
 }
 
-Any SAL_CALL OWeakTypeObject::queryInterface(const Type & rType )	throw (RuntimeException)
+Any SAL_CALL OWeakTypeObject::queryInterface(const Type & rType )   throw (RuntimeException)
 {
     if( rType == XTypeProvider::static_type() )
         return Any( Reference< XTypeProvider >(this) );
@@ -52,12 +52,12 @@ Any SAL_CALL OWeakTypeObject::queryInterface(const Type & rType )	throw (Runtime
         return ::cppu::OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL OWeakTypeObject::acquire()	throw ()
+void SAL_CALL OWeakTypeObject::acquire()    throw ()
 {
     ::cppu::OWeakObject::acquire();
 }
 
-void SAL_CALL OWeakTypeObject::release()	throw ()
+void SAL_CALL OWeakTypeObject::release()    throw ()
 {
     ::cppu::OWeakObject::release();
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,10 +61,10 @@ static typelib_TypeClass cpp2uno_call(
     typelib_TypeDescription * pReturnTypeDescr = 0;
     if (pReturnTypeRef)
         TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    
+
     void * pUnoReturn = 0;
     void * pCppReturn = 0; // complex return ptr: if != 0 && != pUnoReturn, reconversion need
-    
+
     if (pReturnTypeDescr)
     {
         if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
@@ -75,7 +75,7 @@ static typelib_TypeClass cpp2uno_call(
         {
             pCppReturn = *(void **)pCppStack;
             pCppStack += sizeof(void *);
-            
+
             pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType(
                               pReturnTypeDescr )
                           ? alloca( pReturnTypeDescr->nSize )
@@ -94,9 +94,9 @@ static typelib_TypeClass cpp2uno_call(
     sal_Int32 * pTempIndizes = (sal_Int32 *)(pUnoArgs + (2 * nParams));
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
-    
+
     sal_Int32 nTempIndizes   = 0;
-    
+
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
@@ -151,7 +151,7 @@ static typelib_TypeClass cpp2uno_call(
         }
         pCppStack += sizeof(sal_Int32); // standard parameter length
     }
-    
+
     // ExceptionHolder
     uno_Any aUnoExc = {0}; // Any will be constructed by callee
     uno_Any * pUnoExc = &aUnoExc;
@@ -171,14 +171,14 @@ static typelib_TypeClass cpp2uno_call(
         for ( ; nTempIndizes--; )
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
-            
+
             if (pParams[nIndex].bIn) // is in/inout => was constructed
                 uno_destructData( pUnoArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], 0 );
             TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
         }
         if (pReturnTypeDescr)
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
-        
+
         CPPU_CURRENT_NAMESPACE::raiseException(
             &aUnoExc, pThis->getBridge()->getUno2Cpp() );
             // has to destruct the any
@@ -192,7 +192,7 @@ static typelib_TypeClass cpp2uno_call(
         {
             sal_Int32 nIndex = pTempIndizes[nTempIndizes];
             typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
-            
+
             if (pParams[nIndex].bOut) // inout/out
             {
                 // convert and assign
@@ -202,7 +202,7 @@ static typelib_TypeClass cpp2uno_call(
             }
             // destroy temp uno param
             uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 );
-            
+
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
         // return
@@ -238,7 +238,7 @@ static typelib_TypeClass cpp_mediate(
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
     OSL_ENSURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
-    
+
     // pCallStack: ret adr, [ret *], this, params
     void * pThis;
     if( nFunctionIndex & 0x80000000 )
@@ -254,9 +254,9 @@ static typelib_TypeClass cpp_mediate(
     bridges::cpp_uno::shared::CppInterfaceProxy * pCppI
         = bridges::cpp_uno::shared::CppInterfaceProxy::castInterfaceToProxy(
             pThis);
-    
+
     typelib_InterfaceTypeDescription * pTypeDescr = pCppI->getTypeDescr();
-    
+
     OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
@@ -264,13 +264,13 @@ static typelib_TypeClass cpp_mediate(
             rtl::OUString::createFromAscii("illegal vtable index!"),
             (XInterface *)pThis );
     }
-    
+
     // determine called method
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
     OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!" );
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
-    
+
     typelib_TypeClass eRet;
     switch (aMemberDescr.get()->eTypeClass)
     {
@@ -291,9 +291,9 @@ static typelib_TypeClass cpp_mediate(
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
                 ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
-            aParam.bIn		= sal_True;
-            aParam.bOut		= sal_False;
-            
+            aParam.bIn      = sal_True;
+            aParam.bOut     = sal_False;
+
             eRet = cpp2uno_call(
                 pCppI, aMemberDescr.get(),
                 0, // indicates void return
@@ -326,7 +326,7 @@ static typelib_TypeClass cpp_mediate(
                     pCppI->getBridge()->getCppEnv(),
                     (void **)&pInterface, pCppI->getOid().pData,
                     (typelib_InterfaceTypeDescription *)pTD );
-            
+
                 if (pInterface)
                 {
                     ::uno_any_construct(
@@ -378,7 +378,7 @@ void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** pCallStack )
     volatile long nRegReturn[2];
     typelib_TypeClass aType = cpp_mediate(
         nFunctionIndex, nVtableOffset, pCallStack, (sal_Int64*)nRegReturn );
-    
+
     switch( aType )
     {
         case typelib_TypeClass_HYPER:
@@ -399,11 +399,11 @@ void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** pCallStack )
                      "fldl %0\n"
                      : : "m"(*(double *)nRegReturn) );
             break;
-// 		case typelib_TypeClass_UNSIGNED_SHORT:
-// 		case typelib_TypeClass_SHORT:
-// 			__asm__( "movswl %0, %%eax\n"
-// 					 : : "m"(nRegReturn) );
-// 		break;
+//      case typelib_TypeClass_UNSIGNED_SHORT:
+//      case typelib_TypeClass_SHORT:
+//          __asm__( "movswl %0, %%eax\n"
+//                   : : "m"(nRegReturn) );
+//      break;
         default:
             __asm__( "movl %0, %%eax\n"
                      : : "m"(nRegReturn[0]) );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,14 +56,14 @@ using namespace ::com::sun::star;
 
 struct OleObjectDescriptor
 {
-    sal_uInt32	cbSize;
-    ClsId		clsid;
-    sal_uInt32	dwDrawAspect;
-    Size		sizel;
-    Point		pointl;
-    sal_uInt32	dwStatus;
-    sal_uInt32	dwFullUserTypeName;
-    sal_uInt32	dwSrcOfCopy;
+    sal_uInt32  cbSize;
+    ClsId       clsid;
+    sal_uInt32  dwDrawAspect;
+    Size        sizel;
+    Point       pointl;
+    sal_uInt32  dwStatus;
+    sal_uInt32  dwFullUserTypeName;
+    sal_uInt32  dwSrcOfCopy;
 };
 
 /********************** SvObjectServerList ********************************

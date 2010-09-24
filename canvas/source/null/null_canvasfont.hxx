@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,18 +54,18 @@ namespace nullcanvas
     typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XCanvasFont,
                                                ::com::sun::star::lang::XServiceInfo > CanvasFont_Base;
 
-    class CanvasFont : public ::comphelper::OBaseMutex, 
+    class CanvasFont : public ::comphelper::OBaseMutex,
                        public CanvasFont_Base,
                        private UsageCounter< CanvasFont >,
                        private ::boost::noncopyable
     {
     public:
-        typedef ::comphelper::ImplementationReference< 
-            CanvasFont, 
+        typedef ::comphelper::ImplementationReference<
+            CanvasFont,
             ::com::sun::star::rendering::XCanvasFont > ImplRef;
 
         CanvasFont( const ::com::sun::star::rendering::FontRequest&                                     fontRequest,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& 	extraFontProperties, 
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    extraFontProperties,
                     const ::com::sun::star::geometry::Matrix2D&                                         fontMatrix );
 
         /// Dispose all internal references
@@ -86,8 +86,8 @@ namespace nullcanvas
         const ::com::sun::star::geometry::Matrix2D& getFontMatrix() const;
 
     private:
-        ::com::sun::star::rendering::FontRequest	maFontRequest;
-        ::com::sun::star::geometry::Matrix2D		maFontMatrix;
+        ::com::sun::star::rendering::FontRequest    maFontRequest;
+        ::com::sun::star::geometry::Matrix2D        maFontMatrix;
     };
 
 }

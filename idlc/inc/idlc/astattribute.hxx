@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -109,7 +109,7 @@ private:
         DeclList const & exceptions, RTMethodMode flags,
         sal_uInt16 * methodIndex);
 
-    const sal_uInt32 	m_flags;
+    const sal_uInt32    m_flags;
     AstType const * m_pType;
     rtl::OUString m_getDocumentation;
     DeclList m_getExceptions;

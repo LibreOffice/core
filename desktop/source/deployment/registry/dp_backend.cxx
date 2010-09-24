@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
- 
+
 #include "dp_backend.h"
 #include "dp_ucb.h"
 #include "rtl/uri.hxx"
@@ -90,7 +90,7 @@ PackageRegistryBackend::PackageRegistryBackend(
         m_cachePath = *cachePath;
     if (readOnly)
         m_readOnly = *readOnly;
-    
+
     if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("user") ))
         m_eContext = CONTEXT_USER;
     else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") ))
@@ -122,7 +122,7 @@ void PackageRegistryBackend::disposing()
 {
     try {
         m_xComponentContext.clear();
-        WeakComponentImplHelperBase::disposing();    
+        WeakComponentImplHelperBase::disposing();
     }
     catch (RuntimeException &) {
         throw;
@@ -149,10 +149,10 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     check();
 
     t_string2ref::const_iterator const iFind( m_bound.find( url ) );
-    if (iFind != m_bound.end())     
+    if (iFind != m_bound.end())
     {
         Reference<deployment::XPackage> xPackage( iFind->second );
-        if (xPackage.is())        
+        if (xPackage.is())
         {
             if (mediaType.getLength() &&
                 mediaType != xPackage->getPackageType()->getMediaType())
@@ -163,15 +163,15 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
                 throw deployment::InvalidRemovedParameterException(
                     OUSTR("XPackageRegistry::bindPackage: bRemoved parameter does not match"),
                     static_cast<OWeakObject*>(this), xPackage->isRemoved(), xPackage);
-            return xPackage;  
+            return xPackage;
         }
     }
 
     guard.clear();
-    
+
     Reference<deployment::XPackage> xNewPackage;
     try {
-        xNewPackage = bindPackage_( url, mediaType, bRemoved, 
+        xNewPackage = bindPackage_( url, mediaType, bRemoved,
             identifier, xCmdEnv );
     }
     catch (RuntimeException &) {
@@ -192,7 +192,7 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
             OUSTR("Error binding package: ") + url,
             static_cast<OWeakObject *>(this), exc );
     }
-    
+
     guard.reset();
 
     ::std::pair< t_string2ref::iterator, bool > insertion(
@@ -223,7 +223,7 @@ OUString PackageRegistryBackend::createFolder(
     //make sure the folder exist
     ucbhelper::Content dataContent;
     ::dp_misc::create_folder(&dataContent, sDataFolder, xCmdEnv);
-    
+
     OUString sDataFolderURL = dp_misc::expandUnoRcUrl(sDataFolder);
 
     OUString tempEntry;
@@ -262,7 +262,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
     try
     {
         const OUString sDataFolder = makeURL(getCachePath(), relUrl);
-        ::ucbhelper::Content tempFolder( 
+        ::ucbhelper::Content tempFolder(
             sDataFolder, Reference<ucb::XCommandEnvironment>());
         Reference<sdbc::XResultSet> xResultSet(
             tempFolder.createCursor(
@@ -431,14 +431,14 @@ sal_Bool Package::isBundle() throw (RuntimeException)
 }
 
 //______________________________________________________________________________
-::sal_Int32 Package::checkPrerequisites( 
-        const css::uno::Reference< css::task::XAbortChannel >&, 
+::sal_Int32 Package::checkPrerequisites(
+        const css::uno::Reference< css::task::XAbortChannel >&,
         const css::uno::Reference< css::ucb::XCommandEnvironment >&,
-        sal_Bool) 
+        sal_Bool)
         throw (css::deployment::DeploymentException,
                css::deployment::ExtensionRemovedException,
-               css::ucb::CommandFailedException, 
-               css::ucb::CommandAbortedException, 
+               css::ucb::CommandFailedException,
+               css::ucb::CommandAbortedException,
                css::uno::RuntimeException)
 {
     if (m_bRemoved)
@@ -447,11 +447,11 @@ sal_Bool Package::isBundle() throw (RuntimeException)
 }
 
 //______________________________________________________________________________
-::sal_Bool Package::checkDependencies( 
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& ) 
+::sal_Bool Package::checkDependencies(
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& )
         throw (css::deployment::DeploymentException,
                css::deployment::ExtensionRemovedException,
-               css::ucb::CommandFailedException, 
+               css::ucb::CommandFailedException,
                css::uno::RuntimeException)
 {
     if (m_bRemoved)
@@ -481,7 +481,7 @@ beans::Optional<OUString> Package::getIdentifier() throw (RuntimeException)
 {
     if (m_bRemoved)
         return beans::Optional<OUString>(true, m_identifier);
-    
+
     return beans::Optional<OUString>();
 }
 
@@ -524,7 +524,7 @@ Sequence<OUString> Package::getUpdateInformationURLs() throw (
     deployment::ExtensionRemovedException, RuntimeException)
 {
     if (m_bRemoved)
-        throw deployment::ExtensionRemovedException();    
+        throw deployment::ExtensionRemovedException();
     return Sequence<OUString>();
 }
 
@@ -533,7 +533,7 @@ css::beans::StringPair Package::getPublisherInfo() throw (
     deployment::ExtensionRemovedException, RuntimeException)
 {
     if (m_bRemoved)
-        throw deployment::ExtensionRemovedException();    
+        throw deployment::ExtensionRemovedException();
     css::beans::StringPair aEmptyPair;
     return aEmptyPair;
 }
@@ -543,7 +543,7 @@ uno::Reference< css::graphic::XGraphic > Package::getIcon( sal_Bool /*bHighContr
     throw (deployment::ExtensionRemovedException, RuntimeException )
 {
     if (m_bRemoved)
-        throw deployment::ExtensionRemovedException();    
+        throw deployment::ExtensionRemovedException();
 
     uno::Reference< css::graphic::XGraphic > aEmpty;
     return aEmpty;
@@ -564,7 +564,7 @@ void Package::exportTo(
            CommandFailedException, CommandAbortedException, RuntimeException)
 {
     if (m_bRemoved)
-        throw deployment::ExtensionRemovedException();    
+        throw deployment::ExtensionRemovedException();
 
     ::ucbhelper::Content destFolder( destFolderURL, xCmdEnv );
     ::ucbhelper::Content sourceContent( getURL(), xCmdEnv );
@@ -637,7 +637,7 @@ void Package::processPackage_impl(
 {
     check();
     bool action = false;
-    
+
     try {
         try {
             ::osl::ResettableMutexGuard guard( getMutex() );
@@ -697,7 +697,7 @@ void Package::processPackage_impl(
 
 //______________________________________________________________________________
 void Package::registerPackage(
-    sal_Bool startup,                              
+    sal_Bool startup,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
     throw (deployment::DeploymentException,
@@ -726,12 +726,12 @@ PackageRegistryBackend * Package::getMyBackend() const
 {
     PackageRegistryBackend * pBackend = m_myBackend.get();
     if (NULL == pBackend)
-    {    
+    {
         //May throw a DisposedException
         check();
         //We should never get here...
         throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"), 
+            OUSTR("Failed to get the BackendImpl"),
             static_cast<OWeakObject*>(const_cast<Package *>(this)));
     }
     return pBackend;
@@ -749,7 +749,7 @@ beans::Optional< OUString > Package::getRegistrationDataURL()
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
-    return beans::Optional<OUString>();    
+    return beans::Optional<OUString>();
 }
 
 sal_Bool Package::isRemoved()

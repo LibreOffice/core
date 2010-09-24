@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ public:
     */
     void SetFactory (
         const ::css::uno::Reference<css::rendering::XSpriteCanvas>& rxSpriteFactory);
-    
+
     ::css::uno::Reference<css::rendering::XCanvas> GetCanvas (void);
 
     void Show (void);
@@ -65,19 +65,19 @@ public:
 
     void SetPriority (const double nPriority);
     double GetPriority (void) const;
-    
+
     void Resize (const css::geometry::RealSize2D& rSize);
     css::geometry::RealSize2D GetSize (void) const;
-    
+
     void MoveTo (const css::geometry::RealPoint2D& rLocation);
     css::geometry::RealPoint2D GetLocation (void) const;
-    
+
     void Transform (const css::geometry::AffineMatrix2D& rTransform);
     css::geometry::AffineMatrix2D GetTransform (void) const;
 
     void SetAlpha (const double nAlpha);
     double GetAlpha (void) const;
-    
+
     void Update (void);
 
 private:

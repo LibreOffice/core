@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,8 +50,8 @@ SvxXMeasurePreview::SvxXMeasurePreview
     const SfxItemSet& rInAttrs
 ) :
 
-    Control	( pParent, rResId ),
-    rAttrs	( rInAttrs )
+    Control ( pParent, rResId ),
+    rAttrs  ( rInAttrs )
 
 {
     SetMapMode( MAP_100TH_MM );
@@ -135,7 +135,7 @@ void SvxXMeasurePreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     BOOL bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
     BOOL bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
-    BOOL bCtrl	  = rMEvt.IsMod1();
+    BOOL bCtrl    = rMEvt.IsMod1();
 
     if( bZoomIn || bZoomOut )
     {

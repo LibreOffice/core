@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -173,7 +173,7 @@ void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rTex
     // inside of ImpEditEngine::Paint which calls pOwner->PaintBullet with the correct
     // values for hor and ver. No change for not-layouting (painting).
     // changed, bullet rendering now using PaintBullet via
-/*	if ( nIndex == 0 )
+/*  if ( nIndex == 0 )
     {
         // Dann das Bullet 'malen', dort wird bStrippingPortions ausgewertet
         // und Outliner::DrawingText gerufen
@@ -215,7 +215,7 @@ void OutlinerEditEng::DrawingTab( const Point& rStartPos, long nWidth, const Str
 
 void OutlinerEditEng::FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
 {
-    EditEngine::FieldClicked( rField, nPara, nPos );	// Falls URL
+    EditEngine::FieldClicked( rField, nPara, nPos );    // Falls URL
     pOwner->FieldClicked( rField, nPara, nPos );
 }
 

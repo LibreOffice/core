@@ -18,7 +18,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.brace-pair" toolbar:helpid="helpid:11003" />
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.left-brace" toolbar:helpid="helpid:11003" />
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.right-brace" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.quad-bevel" toolbar:helpid="helpid:11003" /> 
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.octagon-bevel" toolbar:helpid="helpid:11003" /> 
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.diamond-bevel" toolbar:helpid="helpid:11003" /> 
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.quad-bevel" toolbar:helpid="helpid:11003" />
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.octagon-bevel" toolbar:helpid="helpid:11003" />
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.diamond-bevel" toolbar:helpid="helpid:11003" />
 </toolbar:toolbar>

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,8 +128,8 @@ OQueryContainer::OQueryContainer(
     {
         m_pCommandsListener = new OContainerListener( *this, m_aMutex );
         m_pCommandsListener->acquire();
-        
-        Reference< XContainer >	xContainer( m_xCommandDefinitions, UNO_QUERY_THROW );
+
+        Reference< XContainer > xContainer( m_xCommandDefinitions, UNO_QUERY_THROW );
         xContainer->addContainerListener( m_pCommandsListener );
 
         Reference< XContainerApproveBroadcaster > xContainerApprove( m_xCommandDefinitions, UNO_QUERY_THROW );
@@ -155,8 +155,8 @@ OQueryContainer::OQueryContainer(
 OQueryContainer::~OQueryContainer()
 {
     DBG_DTOR(OQueryContainer, NULL);
-    //	dispose();
-        //	maybe we're already disposed, but this should be uncritical
+    //  dispose();
+        //  maybe we're already disposed, but this should be uncritical
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2( OQueryContainer,ODefinitionContainer,OQueryContainer_Base)
@@ -175,7 +175,7 @@ void OQueryContainer::disposing()
 
     if ( m_pCommandsListener )
     {
-        Reference< XContainer >	xContainer( m_xCommandDefinitions, UNO_QUERY );
+        Reference< XContainer > xContainer( m_xCommandDefinitions, UNO_QUERY );
         xContainer->removeContainerListener( m_pCommandsListener );
         Reference< XContainerApproveBroadcaster > xContainerApprove( m_xCommandDefinitions, UNO_QUERY );
         xContainerApprove->removeContainerApproveListener( m_pCommandsListener );
@@ -185,8 +185,8 @@ void OQueryContainer::disposing()
         m_pCommandsListener = NULL;
     }
 
-    m_xCommandDefinitions	= NULL;
-    m_xConnection			= NULL;
+    m_xCommandDefinitions   = NULL;
+    m_xConnection           = NULL;
 }
 
 // XServiceInfo
@@ -232,7 +232,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
 
     // insert the basic object into the definition container
     {
-        m_eDoingCurrently =	INSERTING;
+        m_eDoingCurrently = INSERTING;
         OAutoActionReset aAutoReset(this);
         m_xCommandDefinitions->insertByName(sNewObjectName, makeAny(xCommandDefinitionPart));
     }
@@ -325,7 +325,7 @@ void SAL_CALL OQueryContainer::elementReplaced( const ::com::sun::star::containe
         DBG_ASSERT(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementReplaced         : oops .... we're inconsistent with our master container !");
         if (!sAccessor.getLength() || !hasByName(sAccessor))
             return;
-        
+
         xNewElement = implCreateWrapper(sAccessor);
     }
 
@@ -367,17 +367,17 @@ Reference< XVeto > SAL_CALL OQueryContainer::approveRemoveElement( const Contain
 void SAL_CALL OQueryContainer::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw(::com::sun::star::uno::RuntimeException)
 {
     if (_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinitions, UNO_QUERY).get())
-    {	// our "master container" (with the command definitions) is beeing disposed
+    {   // our "master container" (with the command definitions) is beeing disposed
         DBG_ERROR("OQueryContainer::disposing : nobody should dispose the CommandDefinition container before disposing my connection !");
         dispose();
     }
-    else 
+    else
     {
         Reference< XContent > xSource(_rSource.Source, UNO_QUERY);
         // it's one of our documents ....
         Documents::iterator aIter = m_aDocumentMap.begin();
         Documents::iterator aEnd = m_aDocumentMap.end();
-        for	(;aIter != aEnd;++aIter )
+        for (;aIter != aEnd;++aIter )
         {
             if ( xSource == aIter->second.get() )
             {
@@ -417,7 +417,7 @@ Reference< XContent > OQueryContainer::implCreateWrapper(const Reference< XConte
         xReturn = pNewObject;
 
         pNewObject->setWarningsContainer( m_pWarnings );
-//		pNewObject->getColumns();
+//      pNewObject->getColumns();
         // Why? This is expensive. If you comment this in 'cause you really need it, be sure to run the
         // QueryInQuery test in dbaccess/qa/complex/dbaccess ...
     }
@@ -470,6 +470,6 @@ Sequence< ::rtl::OUString > SAL_CALL OQueryContainer::getElementNames(  ) throw(
 }
 
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 

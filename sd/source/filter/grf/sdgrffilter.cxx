@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,7 +120,7 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper1< com::sun:
 
     USHORT GetErrorCode() const { return nFilterError; };
 
-    virtual void SAL_CALL	handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& )
+    virtual void SAL_CALL   handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& )
                                 throw( com::sun::star::uno::RuntimeException );
 };
 
@@ -209,13 +209,13 @@ sal_Bool SdGRFFilter::Import()
     const String    aFileName( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
     GraphicFilter*  pGraphicFilter = GraphicFilter::GetGraphicFilter();
     const USHORT    nFilter = pGraphicFilter->GetImportFormatNumberForTypeName( mrMedium.GetFilter()->GetTypeName() );
-    sal_Bool		bRet = sal_False;
+    sal_Bool        bRet = sal_False;
 
     // ggf. Filterdialog ausfuehren
     if ( !pGraphicFilter->HasImportDialog( nFilter ) || pGraphicFilter->DoImportDialog( NULL, nFilter ) )
     {
-        SvStream*		pIStm = mrMedium.GetInStream();
-        USHORT			nReturn = pIStm ? pGraphicFilter->ImportGraphic( aGraphic, aFileName, *pIStm, nFilter ) : 1;
+        SvStream*       pIStm = mrMedium.GetInStream();
+        USHORT          nReturn = pIStm ? pGraphicFilter->ImportGraphic( aGraphic, aFileName, *pIStm, nFilter ) : 1;
 
         if( nReturn )
             HandleGraphicFilterError( nReturn, pGraphicFilter->GetLastError().nStreamError );
@@ -224,10 +224,10 @@ sal_Bool SdGRFFilter::Import()
             if( mrDocument.GetPageCount() == 0L )
                 mrDocument.CreateFirstPages();
 
-            SdPage*		pPage = mrDocument.GetSdPage( 0, PK_STANDARD );
-            Point		aPos;
-            Size		aPagSize( pPage->GetSize() );
-            Size		aGrfSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
+            SdPage*     pPage = mrDocument.GetSdPage( 0, PK_STANDARD );
+            Point       aPos;
+            Size        aPagSize( pPage->GetSize() );
+            Size        aGrfSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
                                   aGraphic.GetPrefMapMode(), MAP_100TH_MM ) );
 
             aPagSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
@@ -237,8 +237,8 @@ sal_Bool SdGRFFilter::Import()
             if ( ( ( aGrfSize.Height() > aPagSize.Height() ) || ( aGrfSize.Width() > aPagSize.Width() ) ) &&
                  aGrfSize.Height() && aPagSize.Height() )
             {
-                double fGrfWH =	(double) aGrfSize.Width() / aGrfSize.Height();
-                double fWinWH =	(double) aPagSize.Width() / aPagSize.Height();
+                double fGrfWH = (double) aGrfSize.Width() / aGrfSize.Height();
+                double fWinWH = (double) aPagSize.Width() / aPagSize.Height();
 
                 // Grafik an Pagesize anpassen (skaliert)
                 if( fGrfWH < fWinWH )
@@ -285,8 +285,8 @@ sal_Bool SdGRFFilter::Export()
             ( xComponent, uno::UNO_QUERY );
         if ( xExporter.is() && xFilter.is() )
         {
-            SdPage*	pPage = NULL;
-            sd::DrawViewShell*	pDrawViewShell = static_cast< ::sd::DrawViewShell* >
+            SdPage* pPage = NULL;
+            sd::DrawViewShell*  pDrawViewShell = static_cast< ::sd::DrawViewShell* >
                 ( ( ( mrDocShell.GetViewShell() && mrDocShell.GetViewShell()->ISA(::sd::DrawViewShell ) ) ? mrDocShell.GetViewShell() : NULL ) );
 
             PageKind ePageKind = PK_STANDARD;
@@ -325,8 +325,8 @@ sal_Bool SdGRFFilter::Export()
                             rtl::OUString sFilterName( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
                             rtl::OUString sShortName( pGraphicFilter->GetExportFormatShortName( nFilter ) );
 
-                            sal_Bool	bFilterNameFound = sal_False;
-                            sal_Int32	i, nCount;
+                            sal_Bool    bFilterNameFound = sal_False;
+                            sal_Int32   i, nCount;
                             for ( i = 0, nCount = aArgs.getLength(); i < nCount; i++ )
                             {
                                 rtl::OUString& rStr = aArgs[ i ].Name;
@@ -454,7 +454,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
                     }
                 }
                 // Fallthrough!
-//			case ::com::sun::star::graphic::GraphicType::EMPTY:
+//          case ::com::sun::star::graphic::GraphicType::EMPTY:
             default:
                 aMimeType = OUString::createFromAscii( "image/png" );
                 break;

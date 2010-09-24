@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@ namespace XPath
         {
             m_pNodeSet = rxpathObj->nodesetval;
             m_pXPathObj = rxpathObj;
-        }            
+        }
     }
-    
+
     /**
     The number of nodes in the list.
     */
@@ -50,7 +50,7 @@ namespace XPath
             value = xmlXPathNodeSetGetLength(m_pNodeSet);
         return value;
     }
-   
+
     /**
     Returns the indexth item in the collection.
     */

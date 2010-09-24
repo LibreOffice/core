@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,7 +145,7 @@ static String _getTabString()
 //--------------------------------------------------------------------
 String SfxViewFrame::UpdateTitle()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit dieser Methode kann der SfxViewFrame gezwungen werden, sich sofort
     den neuen Titel vom der <SfxObjectShell> zu besorgen.
@@ -248,7 +248,7 @@ String SfxViewFrame::UpdateTitle()
     ::rtl::OUString aDocServiceName( GetObjectShell()->GetFactory().GetDocumentServiceName() );
     aTitle += String( GetModuleName_Impl( aDocServiceName ) );
 #ifdef DBG_UTIL
-    ::rtl::OUString	aDefault;
+    ::rtl::OUString aDefault;
     aTitle += DEFINE_CONST_UNICODE(" [");
     String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
     aTitle += aVerId;

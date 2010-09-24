@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,20 +36,20 @@
 
 #if defined ( WIN ) || defined ( WNT )
 
-#define RGBQUAD	RGBQUADWIN
+#define RGBQUAD RGBQUADWIN
 
 typedef struct RGBQUAD
 {
-    BYTE	rgbBlue;
-    BYTE	rgbGreen;
-    BYTE	rgbRed;
-    BYTE	rgbReserved;
+    BYTE    rgbBlue;
+    BYTE    rgbGreen;
+    BYTE    rgbRed;
+    BYTE    rgbReserved;
 
             RGBQUAD( const BYTE cRed = 0, const BYTE cGreen = 0, const BYTE cBlue = 0 ) :
-                rgbBlue		( cBlue ),
-                rgbGreen	( cGreen ),
-                rgbRed		( cRed ),
-                rgbReserved	( 0 ) {};
+                rgbBlue     ( cBlue ),
+                rgbGreen    ( cGreen ),
+                rgbRed      ( cRed ),
+                rgbReserved ( 0 ) {};
 } RGBQUAD;
 
 
@@ -59,11 +59,11 @@ typedef BYTE huge* PDIBBYTE;
 #define GLOBALALLOC(nSize) ((PDIBBYTE)GlobalLock(GlobalAlloc(GHND,(nSize))))
 #define GLOBALHANDLE(pPointer) ((HGLOBAL)GlobalHandle((*((size_t*)&(pPointer)+1))))
 #define GLOBALFREE(pPointer) (GlobalUnlock(GLOBALHANDLE((pPointer))))
-#define MEMSET( pDst, cByte, nCount )	\
-{										\
-    PDIBBYTE pTmp = (PDIBBYTE) pDst;	\
+#define MEMSET( pDst, cByte, nCount )   \
+{                                       \
+    PDIBBYTE pTmp = (PDIBBYTE) pDst;    \
     for ( ULONG i = 0; i < nCount; i++ )\
-        *pTmp++ = cByte;				\
+        *pTmp++ = cByte;                \
 }
 
 #else
@@ -92,59 +92,59 @@ void ReadBitmap( SvStream& rIStream, Bitmap& rBmp, USHORT nDefaultHeight = 0, UL
 void ReplaceInfoHeader( SvStream& rStm, BYTE* pBuffer );
 
 #ifdef OS2
-#define RGBQUAD				RGBQUADOS2
-#define BITMAPFILEHEADER	BITMAPFILEHEADEROS2
-#define PBITMAPFILEHEADER	PBITMAPFILEHEADEROS2
-#define BITMAPINFOHEADER	BITMAPINFOHEADEROS2
-#define PBITMAPINFOHEADER	PBITMAPINFOHEADEROS2
-#define BITMAPINFO			BITMAPINFOOS2
-#define PBITMAPINFO			PBITMAPINFOOS2
+#define RGBQUAD             RGBQUADOS2
+#define BITMAPFILEHEADER    BITMAPFILEHEADEROS2
+#define PBITMAPFILEHEADER   PBITMAPFILEHEADEROS2
+#define BITMAPINFOHEADER    BITMAPINFOHEADEROS2
+#define PBITMAPINFOHEADER   PBITMAPINFOHEADEROS2
+#define BITMAPINFO          BITMAPINFOOS2
+#define PBITMAPINFO         PBITMAPINFOOS2
 #endif
 
 typedef struct RGBQUAD
 {
-    BYTE	rgbBlue;
-    BYTE	rgbGreen;
-    BYTE	rgbRed;
-    BYTE	rgbReserved;
+    BYTE    rgbBlue;
+    BYTE    rgbGreen;
+    BYTE    rgbRed;
+    BYTE    rgbReserved;
 
             RGBQUAD( const BYTE cRed = 0, const BYTE cGreen = 0, const BYTE cBlue = 0 ) :
-                rgbBlue		( cBlue ),
-                rgbGreen	( cGreen ),
-                rgbRed		( cRed ),
-                rgbReserved	( 0 ) {};
+                rgbBlue     ( cBlue ),
+                rgbGreen    ( cGreen ),
+                rgbRed      ( cRed ),
+                rgbReserved ( 0 ) {};
 } RGBQUAD;
 
 typedef struct BITMAPFILEHEADER
 {
-    UINT16	bfType;
-    UINT32	bfSize;
-    UINT16	bfReserved1;
-    UINT16	bfReserved2;
-    UINT32	bfOffBits;
+    UINT16  bfType;
+    UINT32  bfSize;
+    UINT16  bfReserved1;
+    UINT16  bfReserved2;
+    UINT32  bfOffBits;
 } BITMAPFILEHEADER;
 typedef BITMAPFILEHEADER* PBITMAPFILEHEADER;
 
 typedef struct BITMAPINFOHEADER
 {
-    UINT32	biSize;
-    UINT32	biWidth;
-    UINT32	biHeight;
-    UINT16	biPlanes;
-    UINT16	biBitCount;
-    UINT32	biCompression;
-    UINT32	biSizeImage;
-    UINT32	biXPelsPerMeter;
-    UINT32	biYPelsPerMeter;
-    UINT32	biClrUsed;
-    UINT32	biClrImportant;
+    UINT32  biSize;
+    UINT32  biWidth;
+    UINT32  biHeight;
+    UINT16  biPlanes;
+    UINT16  biBitCount;
+    UINT32  biCompression;
+    UINT32  biSizeImage;
+    UINT32  biXPelsPerMeter;
+    UINT32  biYPelsPerMeter;
+    UINT32  biClrUsed;
+    UINT32  biClrImportant;
 } BITMAPINFOHEADER;
 typedef BITMAPINFOHEADER* PBITMAPINFOHEADER;
 
 typedef struct BITMAPINFO
 {
-    BITMAPINFOHEADER	bmiHeader;
-    RGBQUAD				bmiColors[1];
+    BITMAPINFOHEADER    bmiHeader;
+    RGBQUAD             bmiColors[1];
 } BITMAPINFO;
 typedef BITMAPINFO* PBITMAPINFO;
 

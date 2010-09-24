@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -732,7 +732,7 @@ void ChartTypeTemplate::adaptAxes(
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys )
 {
     //adapt properties of exsisting axes and remove superfluous axes
-    
+
     if( rCoordSys.getLength() > 0 )
     {
         for( sal_Int32 nCooSysIdx=0; nCooSysIdx < rCoordSys.getLength(); ++nCooSysIdx )

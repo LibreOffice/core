@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -205,7 +205,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         bTableFound = sal_False;
 
         const ::rtl::OUString* pBegin = types.getConstArray();
-        const ::rtl::OUString* pEnd	= pBegin + nLength;
+        const ::rtl::OUString* pEnd = pBegin + nLength;
         for(;pBegin != pEnd;++pBegin)
         {
             if(*pBegin == aTable)
@@ -399,7 +399,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength(  ) throw(SQLExcepti
     return 0;
 }
 // -------------------------------------------------------------------------
-sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  ) 
+sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::impl_getMaxTablesInSelect_throw" );
     return 1;
@@ -417,10 +417,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
 
     Reference< XTablesSupplier > xTabSup = m_pConnection->createCatalog();
-    if(	xTabSup.is())
+    if( xTabSup.is())
     {
-        Reference< XNameAccess> xNames		= xTabSup->getTables();
-        Sequence< ::rtl::OUString > aNames	= xNames->getElementNames();
+        Reference< XNameAccess> xNames      = xTabSup->getTables();
+        Sequence< ::rtl::OUString > aNames  = xNames->getElementNames();
         const ::rtl::OUString* pBegin = aNames.getConstArray();
         const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
         for(;pBegin != pEnd;++pBegin)
@@ -493,7 +493,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLExc
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  ) 
+sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw" );
     return sal_False;
@@ -566,7 +566,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) 
     return sal_True;
 }
 // -------------------------------------------------------------------------
-sal_Bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  ) 
+sal_Bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::impl_isCatalogAtStart_throw" );
     return sal_True;

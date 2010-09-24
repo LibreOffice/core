@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,10 +73,10 @@ public:
         a default value will be taken.
         The values are in pixel.
     */
-    CHelpPopupWindow(         
+    CHelpPopupWindow(
         HINSTANCE hInstance,
         HWND hwndParent );
-    
+
     /*
         dtor
     */
@@ -114,26 +114,26 @@ private:
 
     static LRESULT CALLBACK WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
-private:        
+private:
     sal_Int32       m_hMargins;
     sal_Int32       m_vMargins;
     sal_Int32       m_avCharWidth;
     sal_Int32       m_avCharHeight;
-    HWND		    m_hwnd;	
+    HWND            m_hwnd;
     HWND            m_hwndParent;
-    HINSTANCE	    m_hInstance; 
+    HINSTANCE       m_hInstance;
     sal_Bool        m_bWndClassRegistered;
     ::rtl::OUString m_HelpText;
     HBITMAP         m_hBitmapShadow;
     HBRUSH          m_hBrushShadow;
-    
+
     // the window class has to be registered only
     // once per process, so multiple instance of this class
     // share the registered window class
     static ATOM       s_ClassAtom;
     static osl::Mutex s_Mutex;
     static sal_Int32  s_RegisterWndClassCount;
-    
+
 // prevent copy and assignment
 private:
     CHelpPopupWindow( const CHelpPopupWindow& );

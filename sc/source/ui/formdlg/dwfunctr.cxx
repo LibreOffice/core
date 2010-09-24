@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include <sfx2/viewsh.hxx>
 
 #include "sc.hrc"
-#include "global.hxx"		// ScAddress
+#include "global.hxx"       // ScAddress
 #include "scresid.hxx"
 #include "reffact.hxx"
 #include "document.hxx"
@@ -59,18 +59,18 @@
 SFX_IMPL_DOCKINGWINDOW( ScFunctionChildWindow, FID_FUNCTION_BOX )
 
 /*************************************************************************
-#*	Member:		ScFunctionChildWindow						Datum:06.10.97
+#*  Member:     ScFunctionChildWindow                       Datum:06.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionChildWindow
+#*  Klasse:     ScFunctionChildWindow
 #*
-#*  Funktion:	Konstruktor der Klasse ScFunctionChildWindow
-#*				Ableitung vom SfxChildWindow als "Behaelter" fuer
-#*				Funktions- Fenster in Clac
+#*  Funktion:   Konstruktor der Klasse ScFunctionChildWindow
+#*              Ableitung vom SfxChildWindow als "Behaelter" fuer
+#*              Funktions- Fenster in Clac
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -90,16 +90,16 @@ __EXPORT ScFunctionChildWindow::ScFunctionChildWindow( Window* pParentP,
 }
 
 /*************************************************************************
-#*	Member:		ScFunctionDockWin							Datum:06.10.97
+#*  Member:     ScFunctionDockWin                           Datum:06.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Konstruktor der Klasse ScFunctionDockWin
+#*  Funktion:   Konstruktor der Klasse ScFunctionDockWin
 #*
-#*  Input:		Sfx- Verknuepfungen, Fenster, Resource
+#*  Input:      Sfx- Verknuepfungen, Fenster, Resource
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -107,13 +107,13 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
                 SfxChildWindow *pCW, Window* pParent, const ResId& rResId ) :
 
     SfxDockingWindow( pBindingsP, pCW, pParent, rResId ),
-    aPrivatSplit	( this, ResId( FT_SPLIT, *rResId.GetResMgr()  ),SC_SPLIT_VERT),
-    aCatBox			( this, ResId( CB_CAT, *rResId.GetResMgr()  ) ),
-    aFuncList		( this, ResId( LB_FUNC, *rResId.GetResMgr()  ) ),
-    aDDFuncList		( this, ResId( DDLB_FUNC, *rResId.GetResMgr()  ) ),
-    aInsertButton	( this, ResId( IMB_INSERT, *rResId.GetResMgr()  ) ),
-    aFiFuncDesc		( this, ResId( FI_FUNCDESC, *rResId.GetResMgr()  ) ),
-    aOldSize		(0,0)
+    aPrivatSplit    ( this, ResId( FT_SPLIT, *rResId.GetResMgr()  ),SC_SPLIT_VERT),
+    aCatBox         ( this, ResId( CB_CAT, *rResId.GetResMgr()  ) ),
+    aFuncList       ( this, ResId( LB_FUNC, *rResId.GetResMgr()  ) ),
+    aDDFuncList     ( this, ResId( DDLB_FUNC, *rResId.GetResMgr()  ) ),
+    aInsertButton   ( this, ResId( IMB_INSERT, *rResId.GetResMgr()  ) ),
+    aFiFuncDesc     ( this, ResId( FI_FUNCDESC, *rResId.GetResMgr()  ) ),
+    aOldSize        (0,0)
 {
     FreeResource();
     InitLRUList();
@@ -135,8 +135,8 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     Font aFont=aFiFuncDesc.GetFont();
     aFont.SetColor(Color(COL_BLACK));
     aFiFuncDesc.SetFont(aFont);
-    aFiFuncDesc.SetBackground( GetBackground() );		//! never transparent?
-//?	SetBackground();
+    aFiFuncDesc.SetBackground( GetBackground() );       //! never transparent?
+//? SetBackground();
 
     Link aLink=LINK( this, ScFunctionDockWin, SelHdl);
     aCatBox.SetSelectHdl(aLink);
@@ -169,16 +169,16 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
 }
 
 /*************************************************************************
-#*	Member:		ScFunctionDockWin							Datum:06.10.97
+#*  Member:     ScFunctionDockWin                           Datum:06.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Destruktor der Klasse ScFunctionDockWin
+#*  Funktion:   Destruktor der Klasse ScFunctionDockWin
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -188,17 +188,17 @@ __EXPORT ScFunctionDockWin::~ScFunctionDockWin()
 }
 
 /*************************************************************************
-#*	Member:		UpdateFunctionList							Datum:06.10.97
+#*  Member:     UpdateFunctionList                          Datum:06.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Aktualisiert die Liste der Funktionen ab-
-#*				haengig von der eingestellten Kategorie.
+#*  Funktion:   Aktualisiert die Liste der Funktionen ab-
+#*              haengig von der eingestellten Kategorie.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -206,7 +206,7 @@ void ScFunctionDockWin::InitLRUList()
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
     USHORT nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (USHORT)LRU_MAX );
-    USHORT*	pLRUListIds = rAppOpt.GetLRUFuncList();
+    USHORT* pLRUListIds = rAppOpt.GetLRUFuncList();
 
     USHORT i;
     for ( i=0; i<LRU_MAX; i++ )
@@ -219,23 +219,23 @@ void ScFunctionDockWin::InitLRUList()
             aLRUList[i] = pFuncMgr->Get( pLRUListIds[i] );
     }
 
-    USHORT	nSelPos	  = aCatBox.GetSelectEntryPos();
+    USHORT  nSelPos   = aCatBox.GetSelectEntryPos();
 
     if(nSelPos == 0)
         UpdateFunctionList();
 }
 
 /*************************************************************************
-#*	Member:		UpdateFunctionList							Datum:10.12.99
+#*  Member:     UpdateFunctionList                          Datum:10.12.99
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Aktualisiert die Liste der zuletzt verwendeten Funktionen.
+#*  Funktion:   Aktualisiert die Liste der zuletzt verwendeten Funktionen.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -250,16 +250,16 @@ void ScFunctionDockWin::UpdateLRUList()
 
 
 /*************************************************************************
-#*	Member:		SetSize										Datum:06.10.97
+#*  Member:     SetSize                                     Datum:06.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Groesse fuer die einzelnen Controls einzustellen.
+#*  Funktion:   Groesse fuer die einzelnen Controls einzustellen.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -298,7 +298,7 @@ void ScFunctionDockWin::SetSize()
                         }
                         break;
 
-        default:		nNewDockMode=0;
+        default:        nNewDockMode=0;
                         if(nDockMode!=nNewDockMode)
                         {
                             nDockMode=nNewDockMode;
@@ -327,17 +327,17 @@ void ScFunctionDockWin::SetSize()
     }
 }
 /*************************************************************************
-#*	Member:		SetLeftRightSize							Datum:15.10.97
+#*  Member:     SetLeftRightSize                            Datum:15.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Groesse fuer die einzelnen Controls einstellen,
-#*				wenn Links oder Rechts angedockt wird.
+#*  Funktion:   Groesse fuer die einzelnen Controls einstellen,
+#*              wenn Links oder Rechts angedockt wird.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -379,17 +379,17 @@ void ScFunctionDockWin::SetLeftRightSize()
 
 }
 /*************************************************************************
-#*	Member:		SetTopBottonSize							Datum:15.10.97
+#*  Member:     SetTopBottonSize                            Datum:15.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Groesse fuer die einzelnen Controls einzustellen.
-#*				wenn oben oder unten angedockt wird.
+#*  Funktion:   Groesse fuer die einzelnen Controls einzustellen.
+#*              wenn oben oder unten angedockt wird.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -415,23 +415,23 @@ void ScFunctionDockWin::SetTopBottonSize()
 }
 
 /*************************************************************************
-#*	Member:		SetMyWidthLeRi								Datum:15.10.97
+#*  Member:     SetMyWidthLeRi                              Datum:15.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Breite fuer die einzelnen Controls und
-#*				das Fenster einstellen,wenn Li oder Re
+#*  Funktion:   Breite fuer die einzelnen Controls und
+#*              das Fenster einstellen,wenn Li oder Re
 #*
-#*  Input:		neue Fenstergroesse
+#*  Input:      neue Fenstergroesse
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
 void ScFunctionDockWin::SetMyWidthLeRi(Size &aNewSize)
 {
-    if((ULONG)aNewSize.Width()<nMinWidth)	aNewSize.Width()=nMinWidth;
+    if((ULONG)aNewSize.Width()<nMinWidth)   aNewSize.Width()=nMinWidth;
 
     Size aCDSize=aCatBox.GetSizePixel();
     Size aFLSize=aFuncList.GetSizePixel();
@@ -455,17 +455,17 @@ void ScFunctionDockWin::SetMyWidthLeRi(Size &aNewSize)
 }
 
 /*************************************************************************
-#*	Member:		SetHeight									Datum:06.10.97
+#*  Member:     SetHeight                                   Datum:06.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Hoehe fuer die einzelnen Controls und
-#*				das Fenster einstellen bei Li oder Re
+#*  Funktion:   Hoehe fuer die einzelnen Controls und
+#*              das Fenster einstellen bei Li oder Re
 #*
-#*  Input:		neue Fenstergroesse
+#*  Input:      neue Fenstergroesse
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -503,24 +503,24 @@ void ScFunctionDockWin::SetMyHeightLeRi(Size &aNewSize)
 }
 
 /*************************************************************************
-#*	Member:		SetMyWidthToBo								Datum:16.10.97
+#*  Member:     SetMyWidthToBo                              Datum:16.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Breite fuer die einzelnen Controls und
-#*				das Fenster einstellen, wenn oben oder
-#*				unten angedockt werden soll.
+#*  Funktion:   Breite fuer die einzelnen Controls und
+#*              das Fenster einstellen, wenn oben oder
+#*              unten angedockt werden soll.
 #*
-#*  Input:		neue Fenstergroesse
+#*  Input:      neue Fenstergroesse
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
 void ScFunctionDockWin::SetMyWidthToBo(Size &aNewSize)
 {
-    if((ULONG)aNewSize.Width()<nMinWidth)	aNewSize.Width()=nMinWidth;
+    if((ULONG)aNewSize.Width()<nMinWidth)   aNewSize.Width()=nMinWidth;
 
     Size aCDSize=aCatBox.GetSizePixel();
     Size aDdFLSize=aDDFuncList.GetSizePixel();
@@ -544,18 +544,18 @@ void ScFunctionDockWin::SetMyWidthToBo(Size &aNewSize)
 }
 
 /*************************************************************************
-#*	Member:		SetHeight									Datum:16.10.97
+#*  Member:     SetHeight                                   Datum:16.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Hoehe fuer die einzelnen Controls und
-#*				das Fenster einstellen, wenn oben oder
-#*				unten angedockt werden soll.
+#*  Funktion:   Hoehe fuer die einzelnen Controls und
+#*              das Fenster einstellen, wenn oben oder
+#*              unten angedockt werden soll.
 #*
-#*  Input:		neue Fenstergroesse
+#*  Input:      neue Fenstergroesse
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -573,16 +573,16 @@ void ScFunctionDockWin::SetMyHeightToBo(Size &aNewSize)
 }
 
 /*************************************************************************
-#*	Member:		SetDescription								Datum:13.10.97
+#*  Member:     SetDescription                              Datum:13.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Erklaerungstext fuer die Funktion einstellen.
+#*  Funktion:   Erklaerungstext fuer die Funktion einstellen.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -596,7 +596,7 @@ void ScFunctionDockWin::SetDescription()
     {
         pDesc->initArgumentInfo();      // full argument info is needed
 
-        String	aString=pAllFuncList->GetSelectEntry();
+        String  aString=pAllFuncList->GetSelectEntry();
         if(nDockMode==0)
         {
             aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":\n\n" ));
@@ -628,17 +628,17 @@ void ScFunctionDockWin::SetDescription()
  }
 
 /*************************************************************************
-#*	Member:		Resizing									Datum:06.10.97
+#*  Member:     Resizing                                    Datum:06.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Ueberladene Funktion um die Groesse der
-#*				einzelnen Controls einzustellen.
+#*  Funktion:   Ueberladene Funktion um die Groesse der
+#*              einzelnen Controls einzustellen.
 #*
-#*  Input:		neue Groesse
+#*  Input:      neue Groesse
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -650,16 +650,16 @@ void __EXPORT ScFunctionDockWin::Resizing( Size& rNewSize )
 }
 
 /*************************************************************************
-#*	Member:		Close										Datum:07.10.97
+#*  Member:     Close                                       Datum:07.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Schliessen des Fensters
+#*  Funktion:   Schliessen des Fensters
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		TRUE
+#*  Output:     TRUE
 #*
 #************************************************************************/
 
@@ -678,17 +678,17 @@ BOOL __EXPORT ScFunctionDockWin::Close()
 
 
 /*************************************************************************
-#*	Member:		CheckAlignment								Datum:16.10.97
+#*  Member:     CheckAlignment                              Datum:16.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Ueberprueft den Andockmodus und stellt die
-#*				Groessen dementsprechend ein.
+#*  Funktion:   Ueberprueft den Andockmodus und stellt die
+#*              Groessen dementsprechend ein.
 #*
-#*  Input:		Das neue Alignment
+#*  Input:      Das neue Alignment
 #*
-#*	Output:		Das uebergebene Alignment
+#*  Output:     Das uebergebene Alignment
 #*
 #************************************************************************/
 SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */,
@@ -732,7 +732,7 @@ SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment /
                         aTxtSize = Size( aFiFuncDesc.GetTextWidth(aString),
                                             aFiFuncDesc.GetTextHeight() );
 
-        default:		Point aTopLeft=aCatBox.GetPosPixel();
+        default:        Point aTopLeft=aCatBox.GetPosPixel();
                         nMinWidth=aTxtSize.Width()+aTopLeft.X()
                                 +2*aFuncList.GetPosPixel().X();
                         nMinHeight=19*aTxtSize.Height();
@@ -744,16 +744,16 @@ SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment /
     return aChildAlign;
 }
 /*************************************************************************
-#*	Member:		Close										Datum:07.10.97
+#*  Member:     Close                                       Datum:07.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Aenderungen erkennen
+#*  Funktion:   Aenderungen erkennen
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		TRUE
+#*  Output:     TRUE
 #*
 #************************************************************************/
 void ScFunctionDockWin::Notify( SfxBroadcaster&, const SfxHint& /* rHint */ )
@@ -772,17 +772,17 @@ void ScFunctionDockWin::Notify( SfxBroadcaster&, const SfxHint& /* rHint */ )
 
 
 /*************************************************************************
-#*	Member:		Resize									Datum:06.10.97
+#*  Member:     Resize                                  Datum:06.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Ueberladene Funktion um die Groesse der
-#*				einzelnen Controls einzustellen.
+#*  Funktion:   Ueberladene Funktion um die Groesse der
+#*              einzelnen Controls einzustellen.
 #*
-#*  Input:		neue Groesse
+#*  Input:      neue Groesse
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -799,24 +799,24 @@ void __EXPORT ScFunctionDockWin::Resize()
 }
 
 /*************************************************************************
-#*	Member:		UpdateFunctionList							Datum:06.10.97
+#*  Member:     UpdateFunctionList                          Datum:06.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Aktualisiert die Liste der Funktionen ab-
-#*				haengig von der eingestellten Kategorie.
+#*  Funktion:   Aktualisiert die Liste der Funktionen ab-
+#*              haengig von der eingestellten Kategorie.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
 void ScFunctionDockWin::UpdateFunctionList()
 {
-    USHORT	nSelPos	  = aCatBox.GetSelectEntryPos();
-    USHORT	nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
+    USHORT  nSelPos   = aCatBox.GetSelectEntryPos();
+    USHORT  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
                             ? (nSelPos-1) : 0;
 
     pAllFuncList->Clear();
@@ -862,18 +862,18 @@ void ScFunctionDockWin::UpdateFunctionList()
 }
 
 /*************************************************************************
-#*	Member:		DoEnter										Datum:06.10.97
+#*  Member:     DoEnter                                     Datum:06.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Eingabe ins Dokument uebernehmen. Wird aufgerufen
-#*				nach betaetigen der Uebernehmen- Schaltflaeche
-#*				oder einem Doppelklick in die Funktionsliste.
+#*  Funktion:   Eingabe ins Dokument uebernehmen. Wird aufgerufen
+#*              nach betaetigen der Uebernehmen- Schaltflaeche
+#*              oder einem Doppelklick in die Funktionsliste.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -917,7 +917,7 @@ void ScFunctionDockWin::DoEnter(BOOL /* bOk */) //@@ ???
                 aFirstArgStr.SearchAndReplaceAll(' ', '_');
                 aArgStr = aFirstArgStr;
                 if ( nArgs != VAR_ARGS )
-                {	// no VarArgs or Fix plus VarArgs, but not VarArgs only
+                {   // no VarArgs or Fix plus VarArgs, but not VarArgs only
                     String aArgSep = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
                     USHORT nFix = ( nArgs < VAR_ARGS ? nArgs : nArgs - VAR_ARGS + 1 );
                     for ( USHORT nArg = 1;
@@ -949,7 +949,7 @@ void ScFunctionDockWin::DoEnter(BOOL /* bOk */) //@@ ???
                 {
                     pHdl->InsertFunction(aString);
                     pEdView->InsertText(aArgStr,TRUE);
-                    ESelection	aESel=pEdView->GetSelection();
+                    ESelection  aESel=pEdView->GetSelection();
                     aESel.nEndPos=aESel.nStartPos+aFirstArgStr.Len();
                     pEdView->SetSelection(aESel);
                     pHdl->DataChanged();
@@ -978,17 +978,17 @@ void ScFunctionDockWin::DoEnter(BOOL /* bOk */) //@@ ???
 
 
 /*************************************************************************
-#*	Handle:		SelHdl										Datum:06.10.97
+#*  Handle:     SelHdl                                      Datum:06.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Bei einer Aenderung der Kategorie wird die
-#*				die Liste der Funktionen aktualisiert.
+#*  Funktion:   Bei einer Aenderung der Kategorie wird die
+#*              die Liste der Funktionen aktualisiert.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -1011,17 +1011,17 @@ IMPL_LINK( ScFunctionDockWin, SelHdl, ListBox*, pLb )
 }
 
 /*************************************************************************
-#*	Handle:		SelHdl										Datum:06.10.97
+#*  Handle:     SelHdl                                      Datum:06.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Bei einer Aenderung der Kategorie wird die
-#*				die Liste der Funktionen aktualisiert.
+#*  Funktion:   Bei einer Aenderung der Kategorie wird die
+#*              die Liste der Funktionen aktualisiert.
 #*
-#*  Input:		---
+#*  Input:      ---
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -1030,7 +1030,7 @@ IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
     if ((ImageButton *)pCtrl == &aInsertButton ||
         (ListBox *)pCtrl == &aFuncList)
     {
-        DoEnter(TRUE);			// Uebernimmt die Eingabe
+        DoEnter(TRUE);          // Uebernimmt die Eingabe
     }
     //...
 
@@ -1038,17 +1038,17 @@ IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
 }
 
 /*************************************************************************
-#*	Handle:		SetSplitHdl									Datum:13.10.97
+#*  Handle:     SetSplitHdl                                 Datum:13.10.97
 #*------------------------------------------------------------------------
 #*
-#*  Klasse:		ScFunctionDockWin
+#*  Klasse:     ScFunctionDockWin
 #*
-#*  Funktion:	Bei einer Aenderung des Split- Controls werden die
-#*				einzelnen Controls an die neue Groesse angepasst.
+#*  Funktion:   Bei einer Aenderung des Split- Controls werden die
+#*              einzelnen Controls an die neue Groesse angepasst.
 #*
-#*  Input:		Zeiger auf Control
+#*  Input:      Zeiger auf Control
 #*
-#*	Output:		---
+#*  Output:     ---
 #*
 #************************************************************************/
 
@@ -1140,8 +1140,8 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
         aCatBox.SelectEntryPos(nSelPos);
         SelHdl(&aCatBox);
 
-        //	if the window has already been shown (from SfxDockingWindow::Initialize if docked),
-        //	set the splitter position now, otherwise it is set in StateChanged with type INITSHOW
+        //  if the window has already been shown (from SfxDockingWindow::Initialize if docked),
+        //  set the splitter position now, otherwise it is set in StateChanged with type INITSHOW
 
         UseSplitterInitPos();
     }
@@ -1165,7 +1165,7 @@ void ScFunctionDockWin::UseSplitterInitPos()
     if ( IsVisible() && aPrivatSplit.IsEnabled() && aSplitterInitPos != Point() )
     {
         aPrivatSplit.MoveSplitTo(aSplitterInitPos);
-        aSplitterInitPos = Point();		// use only once
+        aSplitterInitPos = Point();     // use only once
     }
 }
 
@@ -1175,7 +1175,7 @@ void ScFunctionDockWin::StateChanged( StateChangedType nStateChange )
 
     if (nStateChange == STATE_CHANGE_INITSHOW)
     {
-        UseSplitterInitPos();			//	set initial splitter position if necessary
+        UseSplitterInitPos();           //  set initial splitter position if necessary
     }
 }
 

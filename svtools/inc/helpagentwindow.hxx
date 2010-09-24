@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,10 +53,10 @@ namespace svt
     class SVT_DLLPUBLIC HelpAgentWindow : public FloatingWindow
     {
     protected:
-        Window*					m_pCloser;
-        IHelpAgentCallback*		m_pCallback;
-        Size					m_aPreferredSize;
-        Image					m_aPicture;
+        Window*                 m_pCloser;
+        IHelpAgentCallback*     m_pCallback;
+        Size                    m_aPreferredSize;
+        Image                   m_aPicture;
 
     public:
         HelpAgentWindow( Window* _pParent );
@@ -66,8 +66,8 @@ namespace svt
         const Size& getPreferredSizePixel() const { return m_aPreferredSize; }
 
         // callback handler maintainance
-        void				setCallback(IHelpAgentCallback* _pCB) { m_pCallback = _pCB; }
-        IHelpAgentCallback*	getCallback() const { return m_pCallback; }
+        void                setCallback(IHelpAgentCallback* _pCB) { m_pCallback = _pCB; }
+        IHelpAgentCallback* getCallback() const { return m_pCallback; }
 
     protected:
         virtual void Resize();
@@ -77,12 +77,12 @@ namespace svt
         DECL_LINK( OnButtonClicked, Window* );
 
     private:
-        SVT_DLLPRIVATE Size	implOptimalButtonSize( const Image& _rButtonImage );
+        SVT_DLLPRIVATE Size implOptimalButtonSize( const Image& _rButtonImage );
     };
 
 //........................................................................
-}	// namespace svt
+}   // namespace svt
 //........................................................................
 
-#endif	// _SVTOOLS_HELPAGENTWIDNOW_HXX_
+#endif  // _SVTOOLS_HELPAGENTWIDNOW_HXX_
 

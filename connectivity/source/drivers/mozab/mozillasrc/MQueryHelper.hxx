@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace connectivity
             mutable ::osl::Mutex    m_aMutex;
             FieldMap                m_Fields;
             nsCOMPtr<nsIAbCard>     m_Card;
-            sal_Int32	            m_RowStates;
+            sal_Int32               m_RowStates;
 
         public:
             MQueryHelperResultEntry();
@@ -128,13 +128,13 @@ namespace connectivity
             sal_Int32                  getResultCount() const;
 
             sal_uInt32                 getRealCount() const;
-            sal_Int32				   createNewCard(); //return Row count number
-            sal_Bool 				   resyncRow(sal_Int32 rowIndex);
+            sal_Int32                  createNewCard(); //return Row count number
+            sal_Bool                   resyncRow(sal_Int32 rowIndex);
 
             void                       notifyQueryError() ;
-            sal_Bool		           setCardValues(const sal_Int32 rowIndex);
-            sal_Int32		           commitCard(const sal_Int32 rowIndex, nsIAbDirectory * directory);
-            sal_Int32		           deleteCard(const sal_Int32 rowIndex, nsIAbDirectory * directory);
+            sal_Bool                   setCardValues(const sal_Int32 rowIndex);
+            sal_Int32                  commitCard(const sal_Int32 rowIndex, nsIAbDirectory * directory);
+            sal_Int32                  deleteCard(const sal_Int32 rowIndex, nsIAbDirectory * directory);
         };
     }
 }

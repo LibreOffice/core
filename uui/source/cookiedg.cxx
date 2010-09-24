@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,17 +53,17 @@ CookiesDialog::CookiesDialog( Window* pParent,
 
     ModalDialog( pParent, ResId( DLG_COOKIES, *pResMgr ) ),
 
-    maCookieFB				( this, ResId( FB_COOKIES, *pResMgr ) ),
-    maCookieFT				( this, ResId( FT_COOKIES, *pResMgr ) ),
-    maInFutureLine			( this, ResId( FL_COOKIES, *pResMgr ) ),
-    maInFutureSendBtn		( this, ResId( RB_INFUTURE_SEND, *pResMgr ) ),
-    maInFutureIgnoreBtn		( this, ResId( RB_INFUTURE_IGNORE, *pResMgr ) ),
+    maCookieFB              ( this, ResId( FB_COOKIES, *pResMgr ) ),
+    maCookieFT              ( this, ResId( FT_COOKIES, *pResMgr ) ),
+    maInFutureLine          ( this, ResId( FL_COOKIES, *pResMgr ) ),
+    maInFutureSendBtn       ( this, ResId( RB_INFUTURE_SEND, *pResMgr ) ),
+    maInFutureIgnoreBtn     ( this, ResId( RB_INFUTURE_IGNORE, *pResMgr ) ),
     maInFutureInteractiveBtn( this, ResId( RB_INFUTURE_INTERACTIVE, *pResMgr ) ),
-    maInFutureGB			( this, ResId( GB_INFUTURE, *pResMgr ) ),
-    maIgnoreBtn				( this, ResId( BTN_COOKIES_CANCEL, *pResMgr ) ),
-    maSendBtn				( this, ResId( BTN_COOKIES_OK, *pResMgr ) ),
+    maInFutureGB            ( this, ResId( GB_INFUTURE, *pResMgr ) ),
+    maIgnoreBtn             ( this, ResId( BTN_COOKIES_CANCEL, *pResMgr ) ),
+    maSendBtn               ( this, ResId( BTN_COOKIES_OK, *pResMgr ) ),
 
-    mpCookieRequest			( pRequest )
+    mpCookieRequest         ( pRequest )
 
 {
     FreeResource();

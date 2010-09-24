@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,13 @@ namespace drawinglayer
         {
         private:
             Primitive2DSequence                         maOLEContent;
-            basegfx::B2DHomMatrix						maTransform;
-            attribute::SdrLineFillShadowTextAttribute	maSdrLFSTAttribute;
+            basegfx::B2DHomMatrix                       maTransform;
+            attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
 
         public:
             SdrOle2Primitive2D(
                 const Primitive2DSequence& rOLEContent,
-                const basegfx::B2DHomMatrix& rTransform, 
+                const basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute);
 
             // data access

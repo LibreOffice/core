@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,10 +93,10 @@ public:
     virtual void startElement(QName_t name, QName_t attrName[], const xxml::Value *attrValue[], int attrs)
     {
         events++;
-//		printf("<{%s}:%s>\n", QName::serializer().getNamespaceUri(name), QName::serializer().getLocalName(name));
+//      printf("<{%s}:%s>\n", QName::serializer().getNamespaceUri(name), QName::serializer().getLocalName(name));
         for(int i=0;i<attrs;i++)
         {
-//			printf("@{%s}:%s=\"%s\"\n", QName::serializer().getNamespaceUri(attrName[i]), QName::serializer().getLocalName(attrName[i]), attrValue[i]->getOString().getStr());
+//          printf("@{%s}:%s=\"%s\"\n", QName::serializer().getNamespaceUri(attrName[i]), QName::serializer().getLocalName(attrName[i]), attrValue[i]->getOString().getStr());
             events++;
         }
 
@@ -163,8 +163,8 @@ public:
         std::auto_ptr<xxml::XXmlReader> reader=xxml::XXmlReader::createXXmlReader(handler);
         TimeValue t1; osl_getSystemTime(&t1);
 
-//		reader->read("test.xml");
-//		reader->read("C:\\Documents and Settings\\fr156068\\My Documents\\odt\\testfile.xml");
+//      reader->read("test.xml");
+//      reader->read("C:\\Documents and Settings\\fr156068\\My Documents\\odt\\testfile.xml");
         reader->read("C:\\Documents and Settings\\fr156068\\My Documents\\odt\\testfile\\content.xml");
         TimeValue t2; osl_getSystemTime(&t2);
         printf("Events=%i time=%is time/event=%0.10fs\n", handler.events, t2.Seconds-t1.Seconds, (double)(t2.Seconds-t1.Seconds)/(double)handler.events);

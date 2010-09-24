@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,12 +75,12 @@ SV_DECL_REF(SfxObjectShell)
 DBG_NAMEEX(SfxViewFrame)
 class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
 {
-    struct SfxViewFrame_Impl*	pImp;
+    struct SfxViewFrame_Impl*   pImp;
 
-    SfxObjectShellRef			xObjSh;
-    SfxDispatcher*				pDispatcher;
-    SfxBindings*				pBindings;
-    USHORT						nAdjustPosPixelLock;
+    SfxObjectShellRef           xObjSh;
+    SfxDispatcher*              pDispatcher;
+    SfxBindings*                pBindings;
+    USHORT                      nAdjustPosPixelLock;
 
 private:
 #ifndef _SFX_HXX
@@ -111,7 +111,7 @@ public:
     static SfxViewFrame*    DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest, const USHORT i_nViewId = 0 );
 
     static SfxViewFrame*    Current();
-    static SfxViewFrame*	GetFirst( const SfxObjectShell* pDoc = 0, BOOL bOnlyVisible = TRUE );
+    static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = 0, BOOL bOnlyVisible = TRUE );
     static SfxViewFrame*    GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = 0, BOOL bOnlyVisible = TRUE );
     static USHORT           Count();
 
@@ -120,13 +120,13 @@ public:
             void            DoActivate(BOOL bMDI, SfxViewFrame *pOld=NULL);
             void            DoDeactivate(BOOL bMDI, SfxViewFrame *pOld=NULL);
 
-    SfxViewFrame*			GetParentViewFrame() const;
+    SfxViewFrame*           GetParentViewFrame() const;
 
     using SfxShell::GetDispatcher;
         SfxDispatcher*          GetDispatcher() { return pDispatcher; }
     SfxBindings&            GetBindings() { return *pBindings; }
     const SfxBindings&      GetBindings() const  { return *pBindings; }
-    Window&         		GetWindow() const;
+    Window&                 GetWindow() const;
     virtual void            SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
 
     SfxProgress*            GetProgress() const;
@@ -134,10 +134,10 @@ public:
     SfxIniManager*          GetIniManager() const;
 #endif
 
-    SfxObjectShell* 		GetObjectShell() const
+    SfxObjectShell*         GetObjectShell() const
                             { return xObjSh; }
 
-    void					DoAdjustPosSize( SfxViewShell *pSh,
+    void                    DoAdjustPosSize( SfxViewShell *pSh,
                                         const Point rPos, const Size &rSize );
     void                    LockAdjustPosSizePixel()
                             { nAdjustPosPixelLock++; }
@@ -145,29 +145,29 @@ public:
                             { nAdjustPosPixelLock--; }
     void                    DoAdjustPosSizePixel( SfxViewShell * pSh,
                                         const Point &rPos, const Size &rSize );
-    void					Hide();
-    void					Show();
+    void                    Hide();
+    void                    Show();
     BOOL                    IsVisible() const;
-    void					ToTop();
-    void					Enable( BOOL bEnable );
+    void                    ToTop();
+    void                    Enable( BOOL bEnable );
     virtual BOOL            Close();
     virtual void            Activate( BOOL bUI );
     virtual void            Deactivate( BOOL bUI );
 
     // DDE-Interface
-    virtual long			DdeExecute( const String& rCmd );
-    virtual long			DdeGetData( const String& rItem,
+    virtual long            DdeExecute( const String& rCmd );
+    virtual long            DdeGetData( const String& rItem,
                                         const String& rMimeType,
                                         ::com::sun::star::uno::Any & rValue );
-    virtual long			DdeSetData( const String& rItem,
+    virtual long            DdeSetData( const String& rItem,
                                         const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
-    virtual ::sfx2::SvLinkSource* 	DdeCreateLinkSource( const String& rItem );
+    virtual ::sfx2::SvLinkSource*   DdeCreateLinkSource( const String& rItem );
 
     void                    ShowStatusText( const String& rText );
     void                    HideStatusText();
 
-    String			        UpdateTitle();
+    String                  UpdateTitle();
 
     static void ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL );
 
@@ -176,22 +176,22 @@ public:
     SAL_DLLPRIVATE virtual const SvBorder& GetBorderPixelImpl( const SfxViewShell *pSh ) const;
     SAL_DLLPRIVATE virtual void InvalidateBorderImpl( const SfxViewShell *pSh );
 
-    virtual SfxObjectShell*	GetObjectShell();
-    USHORT					GetCurViewId() const;
-    SfxFrame&				GetFrame() const;
-    SfxViewFrame*			GetTopViewFrame() const;
+    virtual SfxObjectShell* GetObjectShell();
+    USHORT                  GetCurViewId() const;
+    SfxFrame&               GetFrame() const;
+    SfxViewFrame*           GetTopViewFrame() const;
 
-    BOOL					DoClose();
-    ULONG					GetFrameType() const
+    BOOL                    DoClose();
+    ULONG                   GetFrameType() const
                             { return GetFrame().GetFrameType(); }
-    SfxFrame&				GetTopFrame() const
+    SfxFrame&               GetTopFrame() const
                             { return GetFrame().GetTopFrame(); }
-    void					GetTargetList( TargetList& rList ) const
+    void                    GetTargetList( TargetList& rList ) const
                             { GetFrame().GetTargetList( rList ); }
-    void                	CancelTransfers()
+    void                    CancelTransfers()
                             { GetFrame().CancelTransfers(); }
 
-    void					SetModalMode( BOOL );
+    void                    SetModalMode( BOOL );
     BOOL                    IsInModalMode() const;
     void                    Resize(BOOL bForce=FALSE);
 
@@ -306,7 +306,7 @@ private:
 
 class SFX2_DLLPUBLIC SfxViewFrameItem: public SfxPoolItem
 {
-    SfxViewFrame*			pFrame;
+    SfxViewFrame*           pFrame;
 
 public:
                             TYPEINFO();
@@ -319,11 +319,11 @@ public:
                                 pFrame( pViewFrame)
                             {}
 
-    virtual int 			operator==( const SfxPoolItem& ) const;
-    virtual String			GetValueText() const;
-    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual String          GetValueText() const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    SfxViewFrame*			GetFrame() const
+    SfxViewFrame*           GetFrame() const
                             { return pFrame; }
 };
 
@@ -339,10 +339,10 @@ public:
 
                             SfxVerbListItem( USHORT nWhichId, const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& );
 
-    virtual int 			operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    virtual	sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& GetVerbList() const { return aVerbs; }
 };
 

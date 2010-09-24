@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,13 +59,13 @@ public:
     virtual ::rtl::OUString SAL_CALL getMediaSubtype(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getFullMediaType(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getParameters(  ) 
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getParameters(  )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL hasParameter( const ::rtl::OUString& aName ) 
+    virtual sal_Bool SAL_CALL hasParameter( const ::rtl::OUString& aName )
         throw(::com::sun::star::uno::RuntimeException);
-    
-    virtual ::rtl::OUString SAL_CALL getParameterValue( const ::rtl::OUString& aName ) 
+
+    virtual ::rtl::OUString SAL_CALL getParameterValue( const ::rtl::OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
 private:
@@ -82,15 +82,15 @@ private:
     rtl::OUString SAL_CALL nonquotedPValue( );
     void SAL_CALL comment( void );
     sal_Bool SAL_CALL isInRange( const rtl::OUString& aChr, const rtl::OUString& aRange );
-    
+
 private:
-    ::osl::Mutex							 m_aMutex;
-    rtl::OUString							 m_MediaType;
-    rtl::OUString							 m_MediaSubtype;
-    rtl::OUString							 m_ContentType;
+    ::osl::Mutex                             m_aMutex;
+    rtl::OUString                            m_MediaType;
+    rtl::OUString                            m_MediaSubtype;
+    rtl::OUString                            m_ContentType;
     std::map< rtl::OUString, rtl::OUString > m_ParameterMap;
-    sal_Int32								 m_nPos;
-    rtl::OUString							 m_nxtSym;
+    sal_Int32                                m_nPos;
+    rtl::OUString                            m_nxtSym;
 };
 
 #endif

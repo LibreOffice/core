@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,25 +39,25 @@ import org.openoffice.netbeans.modules.office.actions.*;
  * @author tomaso
  */
 public class ParcelDescriptorDataNode extends DataNode {
-    
+
     public ParcelDescriptorDataNode(ParcelDescriptorDataObject obj) {
         this(obj, Children.LEAF);
     }
-    
+
     public ParcelDescriptorDataNode(ParcelDescriptorDataObject obj, Children ch) {
         super(obj, ch);
         setHidden(true);
         setIconBase("/org/openoffice/netbeans/modules/office/resources/OfficeIcon");
     }
-    
+
     protected ParcelDescriptorDataObject getParcelDescriptorDataObject() {
         return (ParcelDescriptorDataObject)getDataObject();
     }
-    
+
     public boolean canRename() {
         return false;
     }
-    
+
     /* Example of adding Executor / Debugger / Arguments to node:
     protected Sheet createSheet() {
         Sheet sheet = super.createSheet();
@@ -75,7 +75,7 @@ public class ParcelDescriptorDataNode extends DataNode {
         return sheet;
     }
      */
-    
+
     // Don't use getDefaultAction(); just make that first in the data loader's getActions list
-    
+
 }

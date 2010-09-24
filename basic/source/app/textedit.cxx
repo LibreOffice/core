@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,8 +67,8 @@ TextEditImp::TextEditImp( AppEdit* pParent, const WinBits& aBits )
 
     StartListening( *pTextEngine );
 
-    HideTipTimer.SetTimeout( 5000 );	// 5 seconds
-    ShowTipTimer.SetTimeout( 500 );		// 1/2 seconds
+    HideTipTimer.SetTimeout( 5000 );    // 5 seconds
+    ShowTipTimer.SetTimeout( 500 );     // 1/2 seconds
     HideTipTimer.SetTimeoutHdl( LINK( this, TextEditImp, HideVarContents ) );
     ShowTipTimer.SetTimeoutHdl( LINK( this, TextEditImp, ShowVarContents ) );
 }
@@ -89,7 +89,7 @@ BOOL TextEditImp::ViewMoved()
 
 void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    (void) rBC; /* avoid warning about unused parameter */ 
+    (void) rBC; /* avoid warning about unused parameter */
     if ( rHint.ISA( TextHint ) )
     {
         const TextHint& rTextHint = (const TextHint&)rHint;
@@ -120,7 +120,7 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
                 pAppEdit->nCurTextWidth = nWidth;
                 if ( pAppEdit->pHScroll )
-                {	// Initialization finished?
+                {   // Initialization finished?
                     pAppEdit->pHScroll->SetRange( Range( 0, (long)nWidth) );
                     pAppEdit->pHScroll->SetThumbPos( pTextView->GetStartDocPos().X() );
                 }
@@ -149,20 +149,20 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
-#define TEXTATTR_SPECHIAL	55
+#define TEXTATTR_SPECHIAL   55
 class TextAttribSpechial : public TextAttrib
 {
 private:
-    FontWeight	maFontWeight;
+    FontWeight  maFontWeight;
 
 public:
     TextAttribSpechial( const FontWeight& rFontWeight );
     TextAttribSpechial( const TextAttribSpechial& rAttr );
     ~TextAttribSpechial() {;}
 
-    virtual void 			SetFont( Font& rFont ) const;
-    virtual TextAttrib*		Clone() const;
-    virtual int				operator==( const TextAttrib& rAttr ) const;
+    virtual void            SetFont( Font& rFont ) const;
+    virtual TextAttrib*     Clone() const;
+    virtual int             operator==( const TextAttrib& rAttr ) const;
 };
 
 TextAttribSpechial::TextAttribSpechial( const FontWeight& rFontWeight )
@@ -199,7 +199,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
         return;
 
     SbTextPortion& rLast = aPortionList[nCount-1];
-    if ( rLast.nStart > rLast.nEnd ) 	// Nur bis Bug von MD behoben
+    if ( rLast.nStart > rLast.nEnd )    // Nur bis Bug von MD behoben
     {
 #if OSL_DEBUG_LEVEL > 1
         DBG_ERROR( "MD-Bug nicht beseitigt!" );
@@ -216,8 +216,8 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
     for ( i = 0; i < aPortionList.Count(); i++ )
     {
         SbTextPortion& r = aPortionList[i];
-//		DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
-        if ( r.nStart > r.nEnd ) 	// Nur bis Bug von MD behoben
+//      DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
+        if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoben
             continue;
 
         SbTextType eType = r.eType;
@@ -259,7 +259,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
             SbTextPortion& r = aPortionList[i];
             DBG_ASSERT( r.nLine == nLine1, "doch mehrere Zeilen ?" );
             DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
-            if ( r.nStart > r.nEnd ) 	// Nur bis Bug von MD behoben
+            if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoben
                 continue;
 
             if ( r.nStart > nLastEnd )
@@ -277,8 +277,8 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
     for ( i = 0; i < aPortionList.Count(); i++ )
     {
         SbTextPortion& r = aPortionList[i];
-//		DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
-        if ( r.nStart > r.nEnd ) 	// Nur bis Bug von MD behoben
+//      DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
+        if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoben
             continue;
 
         SbTextType eCol = r.eType;
@@ -338,13 +338,13 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
 
 void TextEditImp::DoSyntaxHighlight( ULONG nPara )
 {
-    // Due to delayed syntax highlight it can happend that the 
+    // Due to delayed syntax highlight it can happend that the
         // paragraph does no longer exist
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
         // leider weis ich nicht, ob genau diese Zeile Modified() ...
-//		if ( pProgress )
-//			pProgress->StepProgress();
+//      if ( pProgress )
+//          pProgress->StepProgress();
         pTextEngine->RemoveAttribs( nPara );
         String aSource( pTextEngine->GetText( nPara ) );
         ImpDoHighlight( aSource, nPara );
@@ -355,8 +355,8 @@ void TextEditImp::DoDelayedSyntaxHighlight( xub_StrLen nPara )
 {
     // Paragraph is added to 'List', processed in TimerHdl.
     // => Do not manipulate paragraphs while EditEngine is formatting
-//	if ( pProgress )
-//		pProgress->StepProgress();
+//  if ( pProgress )
+//      pProgress->StepProgress();
 
     if ( !bHighlightning && bDoSyntaxHighlight )
     {
@@ -382,9 +382,9 @@ IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
         nLine = (USHORT)aSyntaxLineTable.GetCurKey();
         DoSyntaxHighlight( nLine );
         aSyntaxLineTable.Remove( nLine );
-/*		if ( Application::AnyInput() )
+/*      if ( Application::AnyInput() )
         {
-            aSyntaxIdleTimer.Start();		// Starten, falls wir in einem Dialog landen
+            aSyntaxIdleTimer.Start();       // Starten, falls wir in einem Dialog landen
             pTextView->ShowCursor( TRUE, TRUE );
             pTextEngine->SetUpdateMode( TRUE );
             bHighlightning = FALSE;
@@ -395,31 +395,31 @@ IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
     }
 
     BOOL bWasModified = pTextEngine->IsModified();
-    if ( aSyntaxLineTable.Count() > 3 ) 				// Without VDev
+    if ( aSyntaxLineTable.Count() > 3 )                 // Without VDev
     {
         pTextEngine->SetUpdateMode( TRUE );
         pTextView->ShowCursor( TRUE, TRUE );
     }
     else
-        pTextEngine->SetUpdateMode( TRUE );				// ! With VDev
-//	pTextView->ForceUpdate();
+        pTextEngine->SetUpdateMode( TRUE );             // ! With VDev
+//  pTextView->ForceUpdate();
 
     // SetUpdateMode( TRUE ) soll kein Modify setzen
     pTextEngine->SetModified( bWasModified );
 
     // SyntaxTimerHdl wird gerufen, wenn Text-Aenderung
     // => gute Gelegenheit, Textbreite zu ermitteln!
-//	long nPrevTextWidth = nCurTextWidth;
-//	nCurTextWidth = pTextEngine->CalcTextWidth();
-//	if ( nCurTextWidth != nPrevTextWidth )
-//		SetScrollBarRanges();
+//  long nPrevTextWidth = nCurTextWidth;
+//  nCurTextWidth = pTextEngine->CalcTextWidth();
+//  if ( nCurTextWidth != nPrevTextWidth )
+//      SetScrollBarRanges();
     bHighlightning = FALSE;
 
     if ( aSyntaxLineTable.First() )
         aImplSyntaxIdleTimer.Start();
 
-//	while ( Application::AnyInput() )
-//		Application::Reschedule();	// Reschedule, da der UserEvent keine Paints etc. durchlässt
+//  while ( Application::AnyInput() )
+//      Application::Reschedule();  // Reschedule, da der UserEvent keine Paints etc. durchlässt
 
     return 0;
 }
@@ -451,7 +451,7 @@ void TextEditImp::SyntaxHighlight( BOOL bNew )
         for ( ULONG i = 0; i < pTextEngine->GetParagraphCount(); i++ )
             pTextEngine->RemoveAttribs( i );
 
-//		pTextEngine->QuickFormatDoc();
+//      pTextEngine->QuickFormatDoc();
         pTextEngine->SetUpdateMode( TRUE );
         pTextView->ShowCursor(TRUE, TRUE );
     }
@@ -644,16 +644,16 @@ Variant(Empty)
             switch ( eType )
             {
                 case SbxBOOL:
-//				case SbxCURRENCY:
-//				case SbxDATE:
+//              case SbxCURRENCY:
+//              case SbxDATE:
                 case SbxDOUBLE:
                 case SbxINTEGER:
                 case SbxLONG:
-//				case SbxOBJECT:		// cannot be edited
+//              case SbxOBJECT:     // cannot be edited
                 case SbxSINGLE:
                 case SbxSTRING:
 
-                case SbxVARIANT:	// does not occure, instead SbxEMPTY
+                case SbxVARIANT:    // does not occure, instead SbxEMPTY
                 case SbxEMPTY:
                     {
                         pAppEdit->GetBasicFrame()->SetEditVar( pVar );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,10 +92,10 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
         {
             sal_Int32 nOldCaretPosition = m_nCaretPosition;
             sal_Int32 nOldSelectionStart = m_nSelectionStart;
-            
+
             m_nCaretPosition = getCaretPosition();
             m_nSelectionStart = getSelectionStart();
-            
+
             Window* pWindow = GetWindow();
             if ( pWindow && pWindow->HasChildPathFocus() )
             {
@@ -106,7 +106,7 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                     aNewValue <<= (sal_Int32) m_nCaretPosition;
                     NotifyAccessibleEvent( AccessibleEventId::CARET_CHANGED, aOldValue, aNewValue );
                 }
-                
+
                 // #i104470# VCL only has SELECTION_CHANGED, but UAA distinguishes between SELECTION_CHANGED and CARET_CHANGED
                 sal_Bool bHasSelection = ( m_nSelectionStart != m_nCaretPosition );
                 sal_Bool bHadSelection = ( nOldSelectionStart != nOldCaretPosition );
@@ -114,7 +114,7 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                 {
                     NotifyAccessibleEvent( AccessibleEventId::TEXT_SELECTION_CHANGED, Any(), Any() );
                 }
-            
+
             }
         }
         break;
@@ -602,7 +602,7 @@ sal_Bool VCLXAccessibleEdit::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEn
     if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;	// attributes cannot be set for an edit
+    return sal_False;   // attributes cannot be set for an edit
 }
 
 // -----------------------------------------------------------------------------

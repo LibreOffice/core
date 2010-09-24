@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@ class DialogHelper;
 class TheExtensionManager;
 
 /**
-   Manages installing of extensions in the GUI mode. Requests for installing 
-   Extensions can be asynchronous. For example, the Extension Manager is running 
-   in an office process and someone uses the system integration to install an Extension. 
-   That is, the user double clicks an extension symbol in a file browser, which then 
+   Manages installing of extensions in the GUI mode. Requests for installing
+   Extensions can be asynchronous. For example, the Extension Manager is running
+   in an office process and someone uses the system integration to install an Extension.
+   That is, the user double clicks an extension symbol in a file browser, which then
    causes an invocation of "unopkg gui ext". When at that time the Extension Manager
    already performs a task, triggered by the user (for example, add, update, disable,
-   enable) then adding of the extension will be postponed until the user has finished 
+   enable) then adding of the extension will be postponed until the user has finished
    the task.
 
    This class also ensures that the extensions are not installed in the main thread.
@@ -75,7 +75,7 @@ public:
 
     ~ExtensionCmdQueue();
 
-    /** 
+    /**
     */
     void addExtension( const ::rtl::OUString &rExtensionURL,
                        const ::rtl::OUString &rRepository,
@@ -89,7 +89,7 @@ public:
     static void syncRepositories( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & xContext );
     /**
        This call does not block. It signals the internal thread
-       that it should install the remaining extensions and then terminate. 
+       that it should install the remaining extensions and then terminate.
     */
     void stop();
 

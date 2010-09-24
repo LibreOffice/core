@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,25 +40,25 @@ import org.openoffice.java.accessibility.logging.XAccessibleEventLog;
 public class AccessibleObjectFactory {
     // This type is needed for conversions from/to uno Any
     public static final Type XAccessibleType = new Type(XAccessible.class);
-    
+
     private static java.util.Hashtable objectList = new java.util.Hashtable();
     private static java.awt.FocusTraversalPolicy focusTraversalPolicy = new FocusTraversalPolicy();
-    
+
     private static java.awt.EventQueue theEventQueue = java.awt.Toolkit.getDefaultToolkit().
                                                                         getSystemEventQueue();
-    
+
     public static java.awt.EventQueue getEventQueue() {
         return theEventQueue;
     }
-    
+
     public static void postFocusGained(java.awt.Component c) {
         getEventQueue().postEvent(new java.awt.event.FocusEvent(c, java.awt.event.FocusEvent.FOCUS_GAINED));
     }
-    
+
     public static void postWindowGainedFocus(java.awt.Window w) {
         postWindowEvent(w, java.awt.event.WindowEvent.WINDOW_GAINED_FOCUS);
     }
-    
+
     public static void postWindowLostFocus(java.awt.Window w) {
         postWindowEvent(w, java.awt.event.WindowEvent.WINDOW_LOST_FOCUS);
     }
@@ -70,15 +70,15 @@ public class AccessibleObjectFactory {
     public static void postWindowDeactivated(java.awt.Window w) {
         postWindowEvent(w, java.awt.event.WindowEvent.WINDOW_DEACTIVATED);
     }
-    
+
     public static void postWindowOpened(java.awt.Window w) {
         postWindowEvent(w, java.awt.event.WindowEvent.WINDOW_OPENED);
     }
-    
+
     public static void postWindowClosed(java.awt.Window w) {
         postWindowEvent(w, java.awt.event.WindowEvent.WINDOW_CLOSED);
     }
-    
+
     public static void invokeAndWait() {
         try {
             theEventQueue.invokeAndWait( new java.lang.Runnable () {
@@ -89,17 +89,17 @@ public class AccessibleObjectFactory {
         } catch (java.lang.InterruptedException e) {
         }
     }
-    
+
     private static void postWindowEvent(java.awt.Window w, int i) {
         theEventQueue.postEvent(new java.awt.event.WindowEvent(w, i));
     }
-    
+
     public static java.awt.Component getAccessibleComponent(XAccessible xAccessible) {
         java.awt.Component c = null;
         if (xAccessible != null) {
             // Retrieve unique id for the original UNO object to be used as a hash key
             String oid = UnoRuntime.generateOid(xAccessible);
-            
+
             // Check if we already have a wrapper object for this context
             synchronized (objectList) {
                 WeakReference r = (WeakReference) objectList.get(oid);
@@ -118,7 +118,7 @@ public class AccessibleObjectFactory {
             System.err.println(e.getClass().getName() + " caught: " + e.getMessage());
         }
     }
-    
+
     public static void addChild(java.awt.Container parent, XAccessible child) {
         try {
             if (child != null) {
@@ -127,19 +127,19 @@ public class AccessibleObjectFactory {
                     XAccessibleStateSet stateSet = childAC.getAccessibleStateSet();
                     if (stateSet != null) {
                         java.awt.Component c = getAccessibleComponent(child);
-                        
+
                         // Re-use existing wrapper if possible, create a new one otherwise
                         if (c != null) {
                             // Seems to be already in child list
                             if (parent.equals(c.getParent()))
                                 return;
-                            // Update general component states 
+                            // Update general component states
                             c.setEnabled(stateSet.contains(AccessibleStateType.ENABLED));
                             c.setVisible(stateSet.contains(AccessibleStateType.VISIBLE));
                         } else {
                             c = createAccessibleComponentImpl(child, childAC, stateSet);
                         }
-                        
+
                         if (c != null) {
                             if (c instanceof java.awt.Container) {
                                 populateContainer((java.awt.Container) c, childAC);
@@ -163,7 +163,7 @@ public class AccessibleObjectFactory {
         try {
             XAccessible xAccessible = (XAccessible) AnyConverter.toObject(XAccessibleType, any);
             java.awt.Component c = getAccessibleComponent(xAccessible);
-            
+
             if (c != null) {
                     parent.remove(c);
 
@@ -176,8 +176,8 @@ public class AccessibleObjectFactory {
         }
     }
 
-    
-    /** 
+
+    /**
     * Removes all children from the container parent
     */
 
@@ -189,11 +189,11 @@ public class AccessibleObjectFactory {
             if (c instanceof java.awt.Container) {
                 clearContainer((java.awt.Container) c);
             }
-        }      
-        parent.removeAll();    
+        }
+        parent.removeAll();
     }
-    
-    
+
+
     /**
     * Populates the given Container parent with wrapper objects for all children of parentAC. This method is
     * intended to be called when a container is added using a CHILDREN_CHANGED event.
@@ -212,7 +212,7 @@ public class AccessibleObjectFactory {
             }
         }
     }
-    
+
     /**
     * Populates the given Container parent with wrapper objects for all children of parentAC. This method is
     * intended to be called when a new window has been opened.
@@ -237,17 +237,17 @@ public class AccessibleObjectFactory {
                     }
                 }
             }
-                
+
             catch (java.lang.Exception e) {
                 System.err.println(e.getClass().getName() + " caught: " + e.getMessage());
                 e.printStackTrace();
             }
         }
     }
-    
+
     protected static java.awt.Component createAccessibleComponent(XAccessible xAccessible) {
         try {
-            XAccessibleContext xAccessibleContext = xAccessible.getAccessibleContext(); 
+            XAccessibleContext xAccessibleContext = xAccessible.getAccessibleContext();
             if (xAccessibleContext != null) {
                 return createAccessibleComponentImpl(xAccessible, xAccessibleContext, xAccessibleContext.getAccessibleStateSet());
             }
@@ -257,8 +257,8 @@ public class AccessibleObjectFactory {
         }
         return null;
     }
-    
-    protected static java.awt.Component createAccessibleComponent(XAccessible xAccessible, XAccessibleContext xAccessibleContext, 
+
+    protected static java.awt.Component createAccessibleComponent(XAccessible xAccessible, XAccessibleContext xAccessibleContext,
         java.awt.Window frame) {
         if (xAccessibleContext != null) {
             try {
@@ -269,7 +269,7 @@ public class AccessibleObjectFactory {
                     if (xAccessibleStateSet.contains(AccessibleStateType.FOCUSED)) {
                         if (frame instanceof NativeFrame) {
                             ((NativeFrame) frame).setInitialComponent(c);
-                        } 
+                        }
                     }
                     return c;
                 }
@@ -280,8 +280,8 @@ public class AccessibleObjectFactory {
         }
         return null;
     }
-    
-    protected static java.awt.Component createAccessibleComponentImpl(XAccessible xAccessible, XAccessibleContext xAccessibleContext, 
+
+    protected static java.awt.Component createAccessibleComponentImpl(XAccessible xAccessible, XAccessibleContext xAccessibleContext,
         XAccessibleStateSet xAccessibleStateSet) {
         java.awt.Component c = null;
         short role = xAccessibleContext.getAccessibleRole();
@@ -411,7 +411,7 @@ public class AccessibleObjectFactory {
             case AccessibleRole.COLUMN_HEADER:
             case AccessibleRole.TABLE:
                 if (xAccessibleStateSet.contains(AccessibleStateType.MANAGES_DESCENDANTS)) {
-                    c = new Table(xAccessible, xAccessibleContext, 
+                    c = new Table(xAccessible, xAccessibleContext,
                         xAccessibleStateSet.contains(AccessibleStateType.MULTI_SELECTABLE));
                 } else {
                     c = new Container(javax.accessibility.AccessibleRole.TABLE,
@@ -464,20 +464,20 @@ public class AccessibleObjectFactory {
 //                  System.out.println("Object cache now contains " + objectList.size() + " objects.");
                 }
             }
-        
+
             AccessibleStateAdapter.setComponentState(c, xAccessibleStateSet);
-                        
+
             if (! Build.PRODUCT) {
                 String property = System.getProperty("AccessBridgeLogging");
                 if ((property != null) && (property.indexOf("event") != -1)) {
                     XAccessibleEventLog.addEventListener(xAccessibleContext, c);
-                } 
+                }
             }
         }
-                            
+
         return c;
     }
-    
+
     protected static void disposing(java.awt.Component c) {
         if (c != null) {
             synchronized (objectList) {
@@ -488,29 +488,29 @@ public class AccessibleObjectFactory {
 
     public static java.awt.Window getTopWindow(XAccessible xAccessible) {
         XAccessibleContext xAccessibleContext = xAccessible.getAccessibleContext();
-        
+
         if (xAccessibleContext != null) {
             short role = xAccessibleContext.getAccessibleRole();
             XAccessibleStateSet xAccessibleStateSet = xAccessibleContext.getAccessibleStateSet();
-            XAccessibleComponent xAccessibleComponent = (XAccessibleComponent) 
+            XAccessibleComponent xAccessibleComponent = (XAccessibleComponent)
                 UnoRuntime.queryInterface(XAccessibleComponent.class, xAccessibleContext);
 
             java.awt.Window w;
             if (role == AccessibleRole.DIALOG) {
-                w = new Dialog(new Application(), 
-                    xAccessibleContext.getAccessibleName(), 
+                w = new Dialog(new Application(),
+                    xAccessibleContext.getAccessibleName(),
                     xAccessibleStateSet.contains(AccessibleStateType.MODAL),
                     xAccessibleComponent);
             } else if (role == AccessibleRole.ALERT) {
-                w = new Alert(new Application(), 
-                    xAccessibleContext.getAccessibleName(), 
+                w = new Alert(new Application(),
+                    xAccessibleContext.getAccessibleName(),
                     xAccessibleStateSet.contains(AccessibleStateType.MODAL),
                     xAccessibleComponent);
             } else if (role == AccessibleRole.FRAME) {
-                w = new Frame(xAccessibleContext.getAccessibleName(), 
+                w = new Frame(xAccessibleContext.getAccessibleName(),
                     xAccessibleComponent);
             } else if (role == AccessibleRole.WINDOW) {
-                java.awt.Window activeWindow = 
+                java.awt.Window activeWindow =
                     java.awt.KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
                 if (activeWindow != null) {
                     w = new Window(activeWindow, xAccessibleComponent);
@@ -529,7 +529,7 @@ public class AccessibleObjectFactory {
             populateContainer(w, xAccessibleContext, w);
             w.setFocusTraversalPolicy(focusTraversalPolicy);
             w.setVisible(true);
-            
+
             // Make the new window the focused one if it has an initialy focused object set.
             java.awt.Component c = ((NativeFrame) w).getInitialComponent();
             if (c != null) {
@@ -537,7 +537,7 @@ public class AccessibleObjectFactory {
             }
             return w;
         }
-        
+
         return null;
     }
 }

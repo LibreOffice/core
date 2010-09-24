@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,11 +54,11 @@ using ::rtl::OUString ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 
-XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl( const Reference< XMultiServiceFactory >& aFactory ) 
+XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl( const Reference< XMultiServiceFactory >& aFactory )
     ://i39448 : m_pKeysMngr( NULL ) ,
     m_xServiceManager( aFactory ) ,
     m_nDefaultEnvIndex(-1)
-    //m_xSecurityEnvironment( NULL ) 
+    //m_xSecurityEnvironment( NULL )
 {
     //Init xmlsec library
     if( xmlSecInit() < 0 ) {
@@ -112,25 +112,25 @@ sal_Int32 SAL_CALL XMLSecurityContext_NssImpl::getSecurityEnvironmentNumber(  )
 {
     return m_vSecurityEnvironments.size();
 }
-    
+
 ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
     XMLSecurityContext_NssImpl::getSecurityEnvironmentByIndex( sal_Int32 index )
     throw (::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecurityEnvironment;
-    
+
     if (index >= 0 && index < ( sal_Int32 )m_vSecurityEnvironments.size())
     {
         xSecurityEnvironment = m_vSecurityEnvironments[index];
     }
     else
         throw RuntimeException() ;
-        
+
     return xSecurityEnvironment;
 }
-    
-::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL 
-    XMLSecurityContext_NssImpl::getSecurityEnvironment(  ) 
+
+::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
+    XMLSecurityContext_NssImpl::getSecurityEnvironment(  )
     throw (::com::sun::star::uno::RuntimeException)
 {
     if (m_nDefaultEnvIndex >= 0 && m_nDefaultEnvIndex < ( sal_Int32 )m_vSecurityEnvironments.size())
@@ -185,7 +185,7 @@ void SAL_CALL XMLSecurityContext_NssImpl :: setSecurityEnvironment( const Refere
         throw RuntimeException() ;
 
     //todo
-//	slot = pSecEnv->getCryptoSlot() ;
+//  slot = pSecEnv->getCryptoSlot() ;
     handler = pSecEnv->getCertDb() ;
 
     /*-
@@ -225,10 +225,10 @@ void SAL_CALL XMLSecurityContext_NssImpl :: setSecurityEnvironment( const Refere
 }
 
 /* XXMLSecurityContext */
-Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContext_NssImpl :: getSecurityEnvironment() 
+Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContext_NssImpl :: getSecurityEnvironment()
     throw (RuntimeException)
 {
-    return	m_xSecurityEnvironment ;
+    return  m_xSecurityEnvironment ;
 }
 #endif
 
@@ -285,10 +285,10 @@ Reference< XSingleServiceFactory > XMLSecurityContext_NssImpl :: impl_createFact
 
 #if 0 //not useful any longer
 /* XUnoTunnel */
-sal_Int64 SAL_CALL XMLSecurityContext_NssImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier ) 
+sal_Int64 SAL_CALL XMLSecurityContext_NssImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier )
 throw (RuntimeException)
 {
-    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) { 
+    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
         return ( sal_Int64 )this ;
     }
     return 0 ;

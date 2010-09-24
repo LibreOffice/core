@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,6 +34,7 @@
 #include <svx/svdmark.hxx>
 #include <tools/link.hxx>
 #include "formatsh.hxx"
+#include "address.hxx"
 
 class SvxClipboardFmtItem;
 class TransferableDataHelper;
@@ -59,7 +60,7 @@ private:
     CellShell_Impl* pImpl;
     BOOL            bPastePossible;
 
-    void		GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats );
+    void        GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats );
     void        ExecuteExternalSource(
                     const String& _rFile, const String& _rFilter, const String& _rOptions,
                     const String& _rSource, ULONG _nRefresh, SfxRequest& _rRequest );
@@ -73,32 +74,32 @@ public:
     SFX_DECL_INTERFACE(SCID_CELL_SHELL)
 
                 ScCellShell(ScViewData* pData);
-    virtual		~ScCellShell();
+    virtual     ~ScCellShell();
 
-    void		Execute(SfxRequest &);
-    void		GetState(SfxItemSet &);
+    void        Execute(SfxRequest &);
+    void        GetState(SfxItemSet &);
 
-    void		ExecuteEdit( SfxRequest& rReq );
-    void		ExecuteTrans( SfxRequest& rReq );
+    void        ExecuteEdit( SfxRequest& rReq );
+    void        ExecuteTrans( SfxRequest& rReq );
 
-    void		GetBlockState( SfxItemSet& rSet );
-    void		GetCellState( SfxItemSet& rSet );
+    void        GetBlockState( SfxItemSet& rSet );
+    void        GetCellState( SfxItemSet& rSet );
 
-    void		ExecuteDB( SfxRequest& rReq );
-    void		GetDBState( SfxItemSet& rSet );
+    void        ExecuteDB( SfxRequest& rReq );
+    void        GetDBState( SfxItemSet& rSet );
 
-    void		ExecImageMap(SfxRequest& rReq);		// ImageMap
-    void		GetImageMapState(SfxItemSet& rSet);
+    void        ExecImageMap(SfxRequest& rReq);     // ImageMap
+    void        GetImageMapState(SfxItemSet& rSet);
 
-    void		GetClipState( SfxItemSet& rSet );
-    void		GetHLinkState( SfxItemSet& rSet );
+    void        GetClipState( SfxItemSet& rSet );
+    void        GetHLinkState( SfxItemSet& rSet );
 
-    void		ExecuteCursor( SfxRequest& rReq );
-    void		ExecuteCursorSel( SfxRequest& rReq );
-    void		ExecutePage( SfxRequest& rReq );
-    void		ExecutePageSel( SfxRequest& rReq );
-    void		ExecuteMove( SfxRequest& rReq );
-    void		GetStateCursor( SfxItemSet& rSet );
+    void        ExecuteCursor( SfxRequest& rReq );
+    void        ExecuteCursorSel( SfxRequest& rReq );
+    void        ExecutePage( SfxRequest& rReq );
+    void        ExecutePageSel( SfxRequest& rReq );
+    void        ExecuteMove( SfxRequest& rReq );
+    void        GetStateCursor( SfxItemSet& rSet );
 
     static void PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog );
 };

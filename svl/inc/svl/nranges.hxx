@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@
 
 #ifndef NUMTYPE
 
-#define NUMTYPE	USHORT
+#define NUMTYPE USHORT
 #define SfxNumRanges SfxUShortRanges
 #include <svl/nranges.hxx>
 
 #undef NUMTYPE
-#define NUMTYPE	ULONG
+#define NUMTYPE ULONG
 #define SfxNumRanges SfxULongRanges
 #include <svl/nranges.hxx>
 
@@ -51,11 +51,11 @@
 
 //========================================================================
 
-#define NUMTYPE_ARG	int
+#define NUMTYPE_ARG int
 
 class SfxNumRanges
 {
-    NUMTYPE*                 	_pRanges; // 0-terminated array of NUMTYPE-pairs
+    NUMTYPE*                    _pRanges; // 0-terminated array of NUMTYPE-pairs
 
 public:
                                 SfxNumRanges() : _pRanges( 0 ) {}
@@ -66,21 +66,21 @@ public:
                                 ~SfxNumRanges()
                                 { delete [] _pRanges; }
 
-    BOOL						operator == ( const SfxNumRanges & ) const;
-    BOOL						operator != ( const SfxNumRanges & rRanges ) const
+    BOOL                        operator == ( const SfxNumRanges & ) const;
+    BOOL                        operator != ( const SfxNumRanges & rRanges ) const
                                 { return !( *this == rRanges ); }
 
-    SfxNumRanges&				operator = ( const SfxNumRanges & );
+    SfxNumRanges&               operator = ( const SfxNumRanges & );
 
-    SfxNumRanges&				operator += ( const SfxNumRanges & );
-    SfxNumRanges&				operator -= ( const SfxNumRanges & );
-    SfxNumRanges&				operator /= ( const SfxNumRanges & );
+    SfxNumRanges&               operator += ( const SfxNumRanges & );
+    SfxNumRanges&               operator -= ( const SfxNumRanges & );
+    SfxNumRanges&               operator /= ( const SfxNumRanges & );
 
-    NUMTYPE 					Count() const;
-    BOOL						IsEmpty() const
+    NUMTYPE                     Count() const;
+    BOOL                        IsEmpty() const
                                 { return !_pRanges || 0 == *_pRanges; }
-    BOOL						Contains( NUMTYPE n ) const;
-    BOOL						Intersects( const SfxNumRanges & ) const;
+    BOOL                        Contains( NUMTYPE n ) const;
+    BOOL                        Intersects( const SfxNumRanges & ) const;
 
                                 operator const NUMTYPE* () const
                                 { return _pRanges; }

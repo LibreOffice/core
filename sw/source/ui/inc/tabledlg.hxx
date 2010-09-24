@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@ struct TColumn;
 class SwTableTabDlg : public SfxTabDialog
 {
     SwWrtShell* pShell;
-    USHORT 		nHtmlMode;
+    USHORT      nHtmlMode;
 
-    virtual void  		PageCreated(USHORT nId, SfxTabPage& rPage);
+    virtual void        PageCreated(USHORT nId, SfxTabPage& rPage);
 public:
      SwTableTabDlg( Window* pParent, SfxItemPool& Pool,
                     const SfxItemSet* pItemSet, SwWrtShell* pSh );

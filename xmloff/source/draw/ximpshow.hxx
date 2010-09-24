@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,14 +38,14 @@ class ShowsImpImpl;
 
 class SdXMLShowsContext : public SvXMLImportContext
 {
-    ShowsImpImpl*	mpImpl;	
+    ShowsImpImpl*   mpImpl;
 
 public:
     TYPEINFO();
 
-    SdXMLShowsContext( SdXMLImport& rImport, 
+    SdXMLShowsContext( SdXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName, 
+        const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
     virtual ~SdXMLShowsContext();
 
@@ -53,5 +53,5 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
 
-#endif	//  _XMLOFF_XIMPSHOW_HXX
+#endif  //  _XMLOFF_XIMPSHOW_HXX
 

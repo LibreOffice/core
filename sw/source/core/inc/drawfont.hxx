@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef	_DRAWFONT_HXX
-#define	_DRAWFONT_HXX
+#ifndef _DRAWFONT_HXX
+#define _DRAWFONT_HXX
 
 #include <tools/solar.h>
 #include <tools/string.hxx>
@@ -78,9 +78,9 @@ class SwDrawTextInfo
     xub_StrLen nNumberOfBlanks;
     BYTE nCursorBidiLevel;
     BOOL bBullet : 1;
-    BOOL bUpper : 1;		// Fuer Kapitaelchen: Grossbuchstaben-Flag
-    BOOL bDrawSpace : 1;	// Fuer Kapitaelchen: Unter/Durchstreichung
-    BOOL bGreyWave	: 1;	// Graue Wellenlinie beim extended TextInput
+    BOOL bUpper : 1;        // Fuer Kapitaelchen: Grossbuchstaben-Flag
+    BOOL bDrawSpace : 1;    // Fuer Kapitaelchen: Unter/Durchstreichung
+    BOOL bGreyWave  : 1;    // Graue Wellenlinie beim extended TextInput
     BOOL bSpaceStop : 1;    // For underlining we need to know, if a portion
                             // is right in front of a hole portion or a
                             // fix margin portion.

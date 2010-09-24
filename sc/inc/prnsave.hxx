@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,23 +56,23 @@ public:
     const ScRange*      GetRepeatCol() const    { return mpRepeatCol; }
     const ScRange*      GetRepeatRow() const    { return mpRepeatRow; }
 
-    BOOL	operator==( const ScPrintSaverTab& rCmp ) const;
+    BOOL    operator==( const ScPrintSaverTab& rCmp ) const;
 };
 
 class ScPrintRangeSaver
 {
-    SCTAB				nTabCount;
-    ScPrintSaverTab*	pData;		// Array
+    SCTAB               nTabCount;
+    ScPrintSaverTab*    pData;      // Array
 
 public:
             ScPrintRangeSaver( SCTAB nCount );
             ~ScPrintRangeSaver();
 
-    SCTAB					GetTabCount() const		{ return nTabCount; }
-    ScPrintSaverTab&		GetTabData(SCTAB nTab);
-    const ScPrintSaverTab&	GetTabData(SCTAB nTab) const;
+    SCTAB                   GetTabCount() const     { return nTabCount; }
+    ScPrintSaverTab&        GetTabData(SCTAB nTab);
+    const ScPrintSaverTab&  GetTabData(SCTAB nTab) const;
 
-    BOOL	operator==( const ScPrintRangeSaver& rCmp ) const;
+    BOOL    operator==( const ScPrintRangeSaver& rCmp ) const;
 };
 
 

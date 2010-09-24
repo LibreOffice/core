@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ namespace pcr
     class SAL_NO_VTABLE IPropertyInfoService
     {
     public:
-        virtual sal_Int32				            getPropertyId(const String& _rName) const = 0;
-        virtual String					            getPropertyTranslation(sal_Int32 _nId) const = 0;
-        virtual sal_Int32				            getPropertyHelpId(sal_Int32 _nId) const = 0;
-        virtual sal_Int16				            getPropertyPos(sal_Int32 _nId) const = 0;
+        virtual sal_Int32                           getPropertyId(const String& _rName) const = 0;
+        virtual String                              getPropertyTranslation(sal_Int32 _nId) const = 0;
+        virtual sal_Int32                           getPropertyHelpId(sal_Int32 _nId) const = 0;
+        virtual sal_Int16                           getPropertyPos(sal_Int32 _nId) const = 0;
         virtual sal_uInt32                          getPropertyUIFlags(sal_Int32 _nId) const = 0;
         virtual ::std::vector< ::rtl::OUString >    getPropertyEnumRepresentations(sal_Int32 _nId) const = 0;
 

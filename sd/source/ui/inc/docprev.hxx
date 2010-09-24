@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,16 +49,16 @@ class SD_DLLPUBLIC SdDocPreviewWin : public Control, public SfxListener
 {
 protected:
     GDIMetaFile*    pMetaFile;
-    BOOL			bInEffect;
-    Link			aClickHdl;
+    BOOL            bInEffect;
+    Link            aClickHdl;
     SfxObjectShell* mpObj;
-    sal_uInt16		mnShowPage;
-    Color			maDocumentColor;
+    sal_uInt16      mnShowPage;
+    Color           maDocumentColor;
     rtl::Reference< sd::SlideShow > mxSlideShow;
 
-    virtual void	Paint( const Rectangle& rRect );
-    static void		CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint );
-    void			ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev );
+    virtual void    Paint( const Rectangle& rRect );
+    static void     CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint );
+    void            ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev );
 
     static const int FRAME;
 
@@ -73,12 +73,12 @@ public:
                     ~SdDocPreviewWin();
     void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
     virtual void    Resize();
-    void			startPreview();
+    void            startPreview();
 
-    virtual	long	Notify( NotifyEvent& rNEvt );
+    virtual long    Notify( NotifyEvent& rNEvt );
 
-    void			SetClickHdl( const Link& rLink ) { aClickHdl = rLink; }
-    const Link& 	GetClickHdl() const { return aClickHdl; }
+    void            SetClickHdl( const Link& rLink ) { aClickHdl = rLink; }
+    const Link&     GetClickHdl() const { return aClickHdl; }
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 

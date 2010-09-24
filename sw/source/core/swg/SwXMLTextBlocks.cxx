@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,11 +81,11 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
     pDoc = pDocSh->GetDoc();
     xDocShellRef = pDocSh;
     pDoc->SetOle2Link( Link() );
-    pDoc->DoUndo( FALSE );		// always FALSE
+    pDoc->DoUndo( FALSE );      // always FALSE
     pDoc->acquire();
     uno::Reference< embed::XStorage > refStg;
     if( !aDateModified.GetDate() || !aTimeModified.GetTime() )
-        Touch();		// falls neu angelegt -> neuen ZeitStempel besorgen
+        Touch();        // falls neu angelegt -> neuen ZeitStempel besorgen
     try
     {
         refStg  = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READWRITE );
@@ -185,7 +185,7 @@ ULONG SwXMLTextBlocks::Delete( USHORT n )
 {
     String aPckName (aNames[ n ]->aPackageName);
     uno::Reference < container::XNameAccess > xAccess( xBlkRoot, uno::UNO_QUERY );
-    if ( xAccess.is() && 
+    if ( xAccess.is() &&
             xAccess->hasByName( aPckName ) && xBlkRoot->isStreamElement( aPckName ) )
     {
         try
@@ -376,7 +376,7 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& , const String& )
     sal_Bool bHasChildren = pDocSh && pDocSh->GetEmbeddedObjectContainer().HasEmbeddedObjects();
     if( !nRes && bHasChildren )
     {
-        // we have to write to the temporary storage first, since the used below functions are optimized 
+        // we have to write to the temporary storage first, since the used below functions are optimized
         // TODO/LATER: it is only a temporary solution, that should be changed soon, the used methods should be
         // called without optimization
 
@@ -387,7 +387,7 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& , const String& )
             SfxMedium* pTmpMedium = NULL;
             try
             {
-                uno::Reference< embed::XStorage > xTempStorage = 
+                uno::Reference< embed::XStorage > xTempStorage =
                     ::comphelper::OStorageHelper::GetTemporaryStorage();
 
                 xRoot->copyToStorage( xTempStorage );

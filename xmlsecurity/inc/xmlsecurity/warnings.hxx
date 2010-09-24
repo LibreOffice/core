@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,27 +57,27 @@ private:
     // XSecurityEnvironment is needed for building the certification path
     cssu::Reference< dcss::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
 
-//	cssu::Sequence< cssu::Reference< dcss::security::XCertificate > > maCerts;
+//  cssu::Sequence< cssu::Reference< dcss::security::XCertificate > > maCerts;
     cssu::Reference< dcss::security::XCertificate > mxCert;
 
-//	FixedImage			maQuestionMarkFI;
-    FixedInfo			maDocNameFI;
-    FixedInfo			maDescr1aFI;
-    FixedInfo			maDescr1bFI;
-    FixedInfo			maSignsFI;
-    PushButton			maViewSignsBtn;
-    FixedInfo			maDescr2FI;
-    CheckBox			maAlwaysTrustCB;
-    FixedLine			maBottomSepFL;
-    PushButton			maEnableBtn;
-    CancelButton		maDisableBtn;
-    HelpButton			maHelpBtn;
+//  FixedImage          maQuestionMarkFI;
+    FixedInfo           maDocNameFI;
+    FixedInfo           maDescr1aFI;
+    FixedInfo           maDescr1bFI;
+    FixedInfo           maSignsFI;
+    PushButton          maViewSignsBtn;
+    FixedInfo           maDescr2FI;
+    CheckBox            maAlwaysTrustCB;
+    FixedLine           maBottomSepFL;
+    PushButton          maEnableBtn;
+    CancelButton        maDisableBtn;
+    HelpButton          maHelpBtn;
 
-    const bool			mbSignedMode;			// modus of dialog (signed / unsigned macros)
+    const bool          mbSignedMode;           // modus of dialog (signed / unsigned macros)
 
-    DECL_LINK(			ViewSignsBtnHdl, void* );
-    DECL_LINK(			EnableBtnHdl, void* );
-//	DECL_LINK(			DisableBtnHdl, void* );
+    DECL_LINK(          ViewSignsBtnHdl, void* );
+    DECL_LINK(          EnableBtnHdl, void* );
+//  DECL_LINK(          DisableBtnHdl, void* );
 
 public:
     MacroWarning( Window* pParent, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, cssu::Reference< dcss::security::XCertificate >& _rxCert );

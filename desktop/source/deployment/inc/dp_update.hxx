@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 
 namespace dp_misc {
 
-/** returns the default update URL (for the update information) which 
+/** returns the default update URL (for the update information) which
     is used when an extension does not provide its own URL.
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
@@ -102,7 +102,7 @@ struct UpdateInfo
     UpdateInfo( ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> const & ext);
     ::com::sun::star::uno::Reference<
         ::com::sun::star::deployment::XPackage> extension;
-//version of the update 
+//version of the update
     ::rtl::OUString version;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > info;
 };
@@ -126,7 +126,7 @@ typedef std::map< ::rtl::OUString, UpdateInfo > UpdateInfoMap;
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 UpdateInfoMap getOnlineUpdateInfos(
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const &xContext, 
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const &xContext,
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager> const & xExtMgr,
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XUpdateInformationProvider > const & updateInformation,
     std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > > const * extensionList,

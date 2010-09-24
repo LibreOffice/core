@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppcanvas/color.hxx>
 
-namespace com { namespace sun { namespace star { namespace rendering 
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XGraphicDevice;
 } } } }
@@ -42,14 +42,14 @@ namespace cppcanvas
 {
     namespace tools
     {
-        ::com::sun::star::uno::Sequence< double > 
-            intSRGBAToDoubleSequence( const ::com::sun::star::uno::Reference< 
-                                              ::com::sun::star::rendering::XGraphicDevice >&, 
+        ::com::sun::star::uno::Sequence< double >
+            intSRGBAToDoubleSequence( const ::com::sun::star::uno::Reference<
+                                              ::com::sun::star::rendering::XGraphicDevice >&,
                                       Color::IntSRGBA );
 
-        Color::IntSRGBA doubleSequenceToIntSRGBA( const ::com::sun::star::uno::Reference< 
-                                                          ::com::sun::star::rendering::XGraphicDevice >& 	rDevice, 
-                                                  const ::com::sun::star::uno::Sequence< double >&				rColor 	);
+        Color::IntSRGBA doubleSequenceToIntSRGBA( const ::com::sun::star::uno::Reference<
+                                                          ::com::sun::star::rendering::XGraphicDevice >&    rDevice,
+                                                  const ::com::sun::star::uno::Sequence< double >&              rColor  );
     }
 }
 

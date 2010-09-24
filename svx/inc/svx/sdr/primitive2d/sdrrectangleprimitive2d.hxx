@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,10 +45,10 @@ namespace drawinglayer
         class SdrRectanglePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            basegfx::B2DHomMatrix						maTransform;
-            attribute::SdrLineFillShadowTextAttribute	maSdrLFSTAttribute;
-            double										mfCornerRadiusX;	// [0.0..1.0] relative to 1/2 width
-            double										mfCornerRadiusY;	// [0.0..1.0] relative to 1/2 height
+            basegfx::B2DHomMatrix                       maTransform;
+            attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
+            double                                      mfCornerRadiusX;    // [0.0..1.0] relative to 1/2 width
+            double                                      mfCornerRadiusY;    // [0.0..1.0] relative to 1/2 height
 
             // bitfield
             // flag which decides if the HitArea should be the filled geometry
@@ -60,9 +60,9 @@ namespace drawinglayer
 
         public:
             SdrRectanglePrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform, 
+                const basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-                double fCornerRadiusX, 
+                double fCornerRadiusX,
                 double fCornerRadiusY,
                 bool bForceFillForHitTest);
 

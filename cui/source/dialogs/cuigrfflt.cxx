@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,15 +46,15 @@
 /*
 ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject )
 {
-    const Graphic&	rGraphic = rFilterObject.GetGraphic();
-    ULONG			nRet;
+    const Graphic&  rGraphic = rFilterObject.GetGraphic();
+    ULONG           nRet;
 
     if( rGraphic.GetType() == GRAPHIC_BITMAP )
     {
-        SfxViewFrame*	pViewFrame = SfxViewFrame::Current();
-        SfxObjectShell*	pShell = pViewFrame ? pViewFrame->GetObjectShell() : NULL;
-        Window*			pWindow = ( pViewFrame && pViewFrame->GetViewShell() ) ? pViewFrame->GetViewShell()->GetWindow() : NULL;
-        Graphic			aGraphic;
+        SfxViewFrame*   pViewFrame = SfxViewFrame::Current();
+        SfxObjectShell* pShell = pViewFrame ? pViewFrame->GetObjectShell() : NULL;
+        Window*         pWindow = ( pViewFrame && pViewFrame->GetViewShell() ) ? pViewFrame->GetViewShell()->GetWindow() : NULL;
+        Graphic         aGraphic;
 
         switch( rReq.GetSlot() )
         {
@@ -192,7 +192,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
             }
             break;
 
-            case( SID_GRFFILTER_EMBOSS	):
+            case( SID_GRFFILTER_EMBOSS  ):
             {
                 GraphicFilterEmboss aDlg( pWindow, rGraphic, RP_MM );
 
@@ -201,7 +201,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
             }
             break;
 
-            case( SID_GRFFILTER_POSTER	):
+            case( SID_GRFFILTER_POSTER  ):
             {
                 GraphicFilterPoster aDlg( pWindow, rGraphic, 16 );
 
@@ -210,7 +210,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
             }
             break;
 
-            case( SID_GRFFILTER_POPART	):
+            case( SID_GRFFILTER_POPART  ):
             {
                 if( pShell )
                     pShell->SetWaitCursor( TRUE );
@@ -269,7 +269,7 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
     }
     else
         nRet = SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE;
-    
+
     return nRet;
 }
 
@@ -335,9 +335,9 @@ void GraphicFilterDialog::PreviewWindow::Paint( const Rectangle& rRect )
 {
     Control::Paint( rRect );
 
-    const Size	aGrfSize( LogicToPixel( maGraphic.GetPrefSize(), maGraphic.GetPrefMapMode() ) );
-    const Size	aOutSize( GetOutputSizePixel() );
-    const Point aGrfPos( ( aOutSize.Width() - aGrfSize.Width() ) >> 1, 
+    const Size  aGrfSize( LogicToPixel( maGraphic.GetPrefSize(), maGraphic.GetPrefMapMode() ) );
+    const Size  aOutSize( GetOutputSizePixel() );
+    const Point aGrfPos( ( aOutSize.Width() - aGrfSize.Width() ) >> 1,
                          ( aOutSize.Height() - aGrfSize.Height() ) >> 1 );
 
     if( maGraphic.IsAnimated() )
@@ -363,22 +363,22 @@ void GraphicFilterDialog::PreviewWindow::SetGraphic( const Graphic& rGraphic )
 // -----------------------
 
 GraphicFilterDialog::GraphicFilterDialog( Window* pParent, const ResId& rResId, const Graphic& rGraphic ) :
-    ModalDialog		( pParent, rResId ),
+    ModalDialog     ( pParent, rResId ),
     maModifyHdl     ( LINK( this, GraphicFilterDialog, ImplModifyHdl ) ),
     mfScaleX        ( 0.0 ),
-    mfScaleY		( 0.0 ),
-    maSizePixel		( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) ),
+    mfScaleY        ( 0.0 ),
+    maSizePixel     ( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) ),
     maPreview       ( this, CUI_RES( CTL_PREVIEW ) ),
-    maFlParameter	( this, CUI_RES( FL_PARAMETER ) ),
-    maBtnOK			( this, CUI_RES( BTN_OK ) ),
-    maBtnCancel		( this, CUI_RES( BTN_CANCEL ) ),
-    maBtnHelp		( this, CUI_RES( BTN_HELP ) )
+    maFlParameter   ( this, CUI_RES( FL_PARAMETER ) ),
+    maBtnOK         ( this, CUI_RES( BTN_OK ) ),
+    maBtnCancel     ( this, CUI_RES( BTN_CANCEL ) ),
+    maBtnHelp       ( this, CUI_RES( BTN_HELP ) )
 {
-    const Size	aPreviewSize( maPreview.GetOutputSizePixel() );
-    Size		aGrfSize( maSizePixel );
+    const Size  aPreviewSize( maPreview.GetOutputSizePixel() );
+    Size        aGrfSize( maSizePixel );
 
     if( rGraphic.GetType() == GRAPHIC_BITMAP &&
-        aPreviewSize.Width() && aPreviewSize.Height() && 
+        aPreviewSize.Width() && aPreviewSize.Height() &&
         aGrfSize.Width() && aGrfSize.Height() )
     {
         const double fGrfWH = (double) aGrfSize.Width() / aGrfSize.Height();
@@ -448,11 +448,11 @@ IMPL_LINK( GraphicFilterDialog, ImplModifyHdl, void*, EMPTYARG )
 GraphicFilterMosaic::GraphicFilterMosaic( Window* pParent, const Graphic& rGraphic,
                                           USHORT nTileWidth, USHORT nTileHeight, BOOL bEnhanceEdges ) :
     GraphicFilterDialog( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_MOSAIC ), rGraphic ),
-    maFtWidth	( this, CUI_RES( DLG_FILTERMOSAIC_FT_WIDTH ) ),
-    maMtrWidth	( this, CUI_RES( DLG_FILTERMOSAIC_MTR_WIDTH ) ),
-    maFtHeight	( this, CUI_RES( DLG_FILTERMOSAIC_FT_HEIGHT ) ),
+    maFtWidth   ( this, CUI_RES( DLG_FILTERMOSAIC_FT_WIDTH ) ),
+    maMtrWidth  ( this, CUI_RES( DLG_FILTERMOSAIC_MTR_WIDTH ) ),
+    maFtHeight  ( this, CUI_RES( DLG_FILTERMOSAIC_FT_HEIGHT ) ),
     maMtrHeight ( this, CUI_RES( DLG_FILTERMOSAIC_MTR_HEIGHT ) ),
-    maCbxEdges	( this, CUI_RES( DLG_FILTERMOSAIC_CBX_EDGES ) )
+    maCbxEdges  ( this, CUI_RES( DLG_FILTERMOSAIC_CBX_EDGES ) )
 {
     FreeResource();
 
@@ -478,13 +478,13 @@ GraphicFilterMosaic::~GraphicFilterMosaic()
 
 // -----------------------------------------------------------------------------
 
-Graphic	GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic, 
+Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double fScaleX, double fScaleY )
 {
-    Graphic			aRet;
-    const Size		aSize( Max( FRound( GetTileWidth() * fScaleX ), 1L ), 
+    Graphic         aRet;
+    const Size      aSize( Max( FRound( GetTileWidth() * fScaleX ), 1L ),
                            Max( FRound( GetTileHeight() * fScaleY ), 1L ) );
-    BmpFilterParam	aParam( aSize );
+    BmpFilterParam  aParam( aSize );
 
     if( rGraphic.IsAnimated() )
     {
@@ -520,10 +520,10 @@ Graphic	GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
 
 GraphicFilterSolarize::GraphicFilterSolarize( Window* pParent, const Graphic& rGraphic,
                                               BYTE cGreyThreshold, BOOL bInvert ) :
-    GraphicFilterDialog	( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SOLARIZE ), rGraphic ),
-    maFtThreshold	( this, CUI_RES( DLG_FILTERSOLARIZE_FT_THRESHOLD ) ),
-    maMtrThreshold	( this, CUI_RES( DLG_FILTERSOLARIZE_MTR_THRESHOLD ) ),
-    maCbxInvert		( this, CUI_RES( DLG_FILTERSOLARIZE_CBX_INVERT ) )
+    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SOLARIZE ), rGraphic ),
+    maFtThreshold   ( this, CUI_RES( DLG_FILTERSOLARIZE_FT_THRESHOLD ) ),
+    maMtrThreshold  ( this, CUI_RES( DLG_FILTERSOLARIZE_MTR_THRESHOLD ) ),
+    maCbxInvert     ( this, CUI_RES( DLG_FILTERSOLARIZE_CBX_INVERT ) )
 {
     FreeResource();
 
@@ -544,11 +544,11 @@ GraphicFilterSolarize::~GraphicFilterSolarize()
 
 // -----------------------------------------------------------------------------
 
-Graphic	GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, 
+Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
                                                    double /*fScaleX*/, double /*fScaleY*/ )
 {
-    Graphic			aRet;
-    BmpFilterParam	aParam( GetGreyThreshold() );
+    Graphic         aRet;
+    BmpFilterParam  aParam( GetGreyThreshold() );
 
     if( rGraphic.IsAnimated() )
     {
@@ -584,9 +584,9 @@ Graphic	GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic,
 
 GraphicFilterSepia::GraphicFilterSepia( Window* pParent, const Graphic& rGraphic,
                                         USHORT nSepiaPercent ) :
-    GraphicFilterDialog	( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SEPIA ), rGraphic ),
-    maFtSepia		( this, CUI_RES( DLG_FILTERSEPIA_FT_SEPIA ) ),
-    maMtrSepia		( this, CUI_RES( DLG_FILTERSEPIA_MTR_SEPIA ) )
+    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SEPIA ), rGraphic ),
+    maFtSepia       ( this, CUI_RES( DLG_FILTERSEPIA_FT_SEPIA ) ),
+    maMtrSepia      ( this, CUI_RES( DLG_FILTERSEPIA_MTR_SEPIA ) )
 {
     FreeResource();
 
@@ -604,11 +604,11 @@ GraphicFilterSepia::~GraphicFilterSepia()
 
 // -----------------------------------------------------------------------------
 
-Graphic	GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic, 
+Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
                                                 double /*fScaleX*/, double /*fScaleY*/ )
 {
-    Graphic			aRet;
-    BmpFilterParam	aParam( GetSepiaPercent() );
+    Graphic         aRet;
+    BmpFilterParam  aParam( GetSepiaPercent() );
 
     if( rGraphic.IsAnimated() )
     {
@@ -634,9 +634,9 @@ Graphic	GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic,
 
 GraphicFilterPoster::GraphicFilterPoster( Window* pParent, const Graphic& rGraphic,
                                           USHORT nPosterCount ) :
-    GraphicFilterDialog	( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_POSTER ), rGraphic ),
-    maFtPoster		( this, CUI_RES( DLG_FILTERPOSTER_FT_POSTER ) ),
-    maNumPoster		( this, CUI_RES( DLG_FILTERPOSTER_NUM_POSTER ) )
+    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_POSTER ), rGraphic ),
+    maFtPoster      ( this, CUI_RES( DLG_FILTERPOSTER_FT_POSTER ) ),
+    maNumPoster     ( this, CUI_RES( DLG_FILTERPOSTER_NUM_POSTER ) )
 {
     FreeResource();
 
@@ -655,11 +655,11 @@ GraphicFilterPoster::~GraphicFilterPoster()
 
 // -----------------------------------------------------------------------------
 
-Graphic	GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, 
+Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double /*fScaleX*/, double /*fScaleY*/ )
 {
-    Graphic			aRet;
-    const USHORT	nPosterCount = GetPosterColorCount();
+    Graphic         aRet;
+    const USHORT    nPosterCount = GetPosterColorCount();
 
     if( rGraphic.IsAnimated() )
     {
@@ -697,9 +697,9 @@ void GraphicFilterEmboss::EmbossControl::MouseButtonDown( const MouseEvent& rEvt
 
 GraphicFilterEmboss::GraphicFilterEmboss( Window* pParent, const Graphic& rGraphic,
                                           RECT_POINT eLightSource ) :
-    GraphicFilterDialog	( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_EMBOSS ), rGraphic ),
-    maFtLight		( this, CUI_RES( DLG_FILTEREMBOSS_FT_LIGHT ) ),
-    maCtlLight		( this, CUI_RES( DLG_FILTEREMBOSS_CTL_LIGHT ), eLightSource )
+    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_EMBOSS ), rGraphic ),
+    maFtLight       ( this, CUI_RES( DLG_FILTEREMBOSS_FT_LIGHT ) ),
+    maCtlLight      ( this, CUI_RES( DLG_FILTEREMBOSS_CTL_LIGHT ), eLightSource )
 {
     FreeResource();
 
@@ -715,24 +715,24 @@ GraphicFilterEmboss::~GraphicFilterEmboss()
 
 // -----------------------------------------------------------------------------
 
-Graphic	GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic, 
+Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double /*fScaleX*/, double /*fScaleY*/ )
 {
-    Graphic	aRet;
-    USHORT	nAzim, nElev;
+    Graphic aRet;
+    USHORT  nAzim, nElev;
 
     switch( maCtlLight.GetActualRP() )
     {
-        default:	   DBG_ERROR("svx::GraphicFilterEmboss::GetFilteredGraphic(), unknown Reference Point!" );
-        case( RP_LT ): nAzim = 4500,	nElev = 4500; break;
-        case( RP_MT ): nAzim = 9000,	nElev = 4500; break;
-        case( RP_RT ): nAzim = 13500,	nElev = 4500; break;
-        case( RP_LM ): nAzim = 0,		nElev = 4500; break;
-        case( RP_MM ): nAzim = 0,		nElev = 9000; break;
-        case( RP_RM ): nAzim = 18000,	nElev = 4500; break;
-        case( RP_LB ): nAzim = 31500,	nElev = 4500; break;
-        case( RP_MB ): nAzim = 27000,	nElev = 4500; break;
-        case( RP_RB ): nAzim = 22500,	nElev = 4500; break;
+        default:       DBG_ERROR("svx::GraphicFilterEmboss::GetFilteredGraphic(), unknown Reference Point!" );
+        case( RP_LT ): nAzim = 4500,    nElev = 4500; break;
+        case( RP_MT ): nAzim = 9000,    nElev = 4500; break;
+        case( RP_RT ): nAzim = 13500,   nElev = 4500; break;
+        case( RP_LM ): nAzim = 0,       nElev = 4500; break;
+        case( RP_MM ): nAzim = 0,       nElev = 9000; break;
+        case( RP_RM ): nAzim = 18000,   nElev = 4500; break;
+        case( RP_LB ): nAzim = 31500,   nElev = 4500; break;
+        case( RP_MB ): nAzim = 27000,   nElev = 4500; break;
+        case( RP_RB ): nAzim = 22500,   nElev = 4500; break;
     }
 
     BmpFilterParam aParam( nAzim, nElev );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ sal_Int32 ModuleInfoHelper::getModuleType(  const uno::Reference< container::XNa
         script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );
         nType = aModuleInfo.ModuleType;
     }
-    return nType;    
+    return nType;
 }
 
 BasicEntry::~BasicEntry()
@@ -196,7 +196,7 @@ BasicTreeListBox::BasicTreeListBox( Window* pParent, const ResId& rRes ) :
 {
     SetNodeDefaultImages();
     SetSelectionMode( SINGLE_SELECTION );
-    nMode = 0xFF;	// Alles
+    nMode = 0xFF;   // Alles
 }
 
 
@@ -263,13 +263,13 @@ void BasicTreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, con
             BOOL bModLibLoaded = FALSE;
             ::rtl::OUString aOULibName( aLibName );
             Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
-            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLoaded( aOULibName ) ) 
+            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLoaded( aOULibName ) )
                 bModLibLoaded = TRUE;
 
             // check, if the dialog library is loaded
             BOOL bDlgLibLoaded = FALSE;
             Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
-            if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLoaded( aOULibName ) ) 
+            if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLoaded( aOULibName ) )
                 bDlgLibLoaded = TRUE;
 
             BOOL bLoaded = bModLibLoaded || bDlgLibLoaded;
@@ -306,8 +306,8 @@ void BasicTreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, con
             else
             {
                 pLibRootEntry = AddEntry(
-                    aLibName,                  
-                    Image( IDEResId( nId ) ), 
+                    aLibName,
+                    Image( IDEResId( nId ) ),
                     Image( IDEResId( nIdHC ) ),
                     pDocumentRootEntry, true,
                     std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_LIBRARY ) ) );
@@ -356,7 +356,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
                             Sequence< ::rtl::OUString > aNames = BasicIDE::GetMethodNames( rDocument, rLibName, aModName );
                             sal_Int32 nCount = aNames.getLength();
                             const ::rtl::OUString* pNames = aNames.getConstArray();
-    
+
                             for ( sal_Int32 j = 0 ; j < nCount ; j++ )
                             {
                                 String aName = pNames[ j ];
@@ -377,7 +377,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
-        }   
+        }
     }
 
     // dialogs
@@ -417,7 +417,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
 
 void BasicTreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName )
 {
-    
+
     ::std::vector< std::pair< BasicEntryType, ::rtl::OUString > > aEntries;
     aEntries.push_back( ::std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) );
     aEntries.push_back( ::std::make_pair( OBJ_TYPE_USERFORMS,  String( IDEResId( RID_STR_USERFORMS ) ) ) );
@@ -541,7 +541,7 @@ SvLBoxEntry* BasicTreeListBox::ImpFindEntry( SvLBoxEntry* pParent, const String&
     SvLBoxEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
     while ( pEntry )
     {
-        if (  GetEntryText( pEntry ) == rText ) 
+        if (  GetEntryText( pEntry ) == rText )
             return pEntry;
 
         pEntry = pParent ? NextSibling( pEntry ) : GetEntry( ++nRootPos );
@@ -671,7 +671,7 @@ long BasicTreeListBox::ExpandingHdl()
                 ::rtl::OUString aOULibName( aLibName );
                 Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
-                {                
+                {
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                     {
@@ -698,7 +698,7 @@ BOOL BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
             ::rtl::OUString aOULibName( aDesc.GetLibName() );
             Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
-            {                
+            {
                 Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                 {
@@ -710,7 +710,7 @@ BOOL BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
     return bProtected;
 }
 
-SvLBoxEntry* BasicTreeListBox::AddEntry( 
+SvLBoxEntry* BasicTreeListBox::AddEntry(
     const String& rText, const Image& rImage, const Image& rImageHC,
     SvLBoxEntry* pParent, bool bChildrenOnDemand, std::auto_ptr< BasicEntry > aUserData )
 {
@@ -765,12 +765,12 @@ void BasicTreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Ima
                 if ( xModuleConfig.is() )
                 {
                     Sequence< beans::PropertyValue > aModuleDescr;
-                    xModuleConfig->getByName( sModule ) >>= aModuleDescr;                
+                    xModuleConfig->getByName( sModule ) >>= aModuleDescr;
                     sal_Int32 nCount = aModuleDescr.getLength();
                     const beans::PropertyValue* pModuleDescr = aModuleDescr.getConstArray();
                     for ( sal_Int32 i = 0; i < nCount; ++i )
                     {
-                        if ( pModuleDescr[ i ].Name.equalsAsciiL( 
+                        if ( pModuleDescr[ i ].Name.equalsAsciiL(
                             RTL_CONSTASCII_STRINGPARAM( "ooSetupFactoryEmptyDocumentURL" ) ) )
                         {
                             pModuleDescr[ i ].Value >>= sFactoryURL;
@@ -787,12 +787,12 @@ void BasicTreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Ima
 
         if ( sFactoryURL.getLength() )
         {
-            rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ), 
-                FALSE /* small */, 
+            rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ),
+                FALSE /* small */,
                 FALSE /* normal */ );
 
-            rImageHC = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ), 
-                FALSE /* small */, 
+            rImageHC = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ),
+                FALSE /* small */,
                 TRUE /* high contrast */ );
         }
         else
@@ -817,7 +817,7 @@ void BasicTreeListBox::SetCurrentEntry( BasicEntryDescriptor& rDesc )
     {
         aDesc = BasicEntryDescriptor(
             ScriptDocument::getApplicationScriptDocument(),
-            LIBRARY_LOCATION_USER, String::CreateFromAscii( "Standard" ), 
+            LIBRARY_LOCATION_USER, String::CreateFromAscii( "Standard" ),
             String(), String::CreateFromAscii( "." ), OBJ_TYPE_UNKNOWN );
     }
     ScriptDocument aDocument( aDesc.GetDocument() );

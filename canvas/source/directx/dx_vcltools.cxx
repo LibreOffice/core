@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,30 +69,30 @@ namespace dxcanvas
                             return 1L << rBIH.biBitCount;
                     }
                 }
-                else 
+                else
                 {
                     BITMAPCOREHEADER* pCoreHeader = (BITMAPCOREHEADER*)&rBIH;
 
                     if( pCoreHeader->bcBitCount <= 8 )
                         return 1L << pCoreHeader->bcBitCount;
                 }
-                
+
                 return 0; // nothing known
             }
 
             /// Draw DI bits to given Graphics
-            bool drawDIBits( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics, 
-                             const void* 									 hDIB )
+            bool drawDIBits( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                             const void*                                     hDIB )
             {
-                bool 			bRet( false );
+                bool            bRet( false );
                 BitmapSharedPtr pBitmap;
 
                 const BITMAPINFO* pBI = (BITMAPINFO*)GlobalLock( (HGLOBAL)hDIB );
 
                 if( pBI )
                 {
-                    const BITMAPINFOHEADER*	pBIH = (BITMAPINFOHEADER*)pBI;
-                    const BYTE*				pBits = (BYTE*) pBI + *(DWORD*)pBI +
+                    const BITMAPINFOHEADER* pBIH = (BITMAPINFOHEADER*)pBI;
+                    const BYTE*             pBits = (BYTE*) pBI + *(DWORD*)pBI +
                         calcDIBColorCount( *pBIH ) * sizeof( RGBQUAD );
 
                     // forward to outsourced GDI+ rendering method
@@ -111,8 +111,8 @@ namespace dxcanvas
                 Reference to bitmap. Might get modified, in such a way
                 that it will hold a DIB after a successful function call.
              */
-            bool drawVCLBitmap( const ::boost::shared_ptr< Gdiplus::Graphics >&	rGraphics, 
-                                ::Bitmap& 										rBmp )
+            bool drawVCLBitmap( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                                ::Bitmap&                                       rBmp )
             {
                 BitmapSystemData aBmpSysData;
 
@@ -171,15 +171,15 @@ namespace dxcanvas
                 const ::Size aBmpSize( rBmpEx.GetSizePixel() );
 
                 RawRGBABitmap aBmpData;
-                aBmpData.mnWidth	 = aBmpSize.Width();
-                aBmpData.mnHeight	 = aBmpSize.Height();
+                aBmpData.mnWidth     = aBmpSize.Width();
+                aBmpData.mnHeight    = aBmpSize.Height();
                 aBmpData.mpBitmapData.reset( new sal_uInt8[ 4*aBmpData.mnWidth*aBmpData.mnHeight ] );
 
                 Bitmap aBitmap( rBmpEx.GetBitmap() );
 
                 ScopedBitmapReadAccess pReadAccess( aBitmap.AcquireReadAccess(),
                                                     aBitmap );
-                    
+
                 const sal_Int32 nWidth( aBmpSize.Width() );
                 const sal_Int32 nHeight( aBmpSize.Height() );
 
@@ -196,14 +196,14 @@ namespace dxcanvas
 
                     // By convention, the access buffer always has
                     // one of the following formats:
-                    // 
+                    //
                     //    BMP_FORMAT_1BIT_MSB_PAL
-                    //	  BMP_FORMAT_4BIT_MSN_PAL
-                    //	  BMP_FORMAT_8BIT_PAL
-                    //	  BMP_FORMAT_16BIT_TC_LSB_MASK
-                    //	  BMP_FORMAT_24BIT_TC_BGR
-                    //	  BMP_FORMAT_32BIT_TC_MASK
-                    // 
+                    //    BMP_FORMAT_4BIT_MSN_PAL
+                    //    BMP_FORMAT_8BIT_PAL
+                    //    BMP_FORMAT_16BIT_TC_LSB_MASK
+                    //    BMP_FORMAT_24BIT_TC_BGR
+                    //    BMP_FORMAT_32BIT_TC_MASK
+                    //
                     // and is always BMP_FORMAT_BOTTOM_UP
                     //
                     // This is the way
@@ -219,11 +219,11 @@ namespace dxcanvas
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                       "Unsupported alpha scanline format" );
 
-                    BitmapColor		aCol;
+                    BitmapColor     aCol;
                     const sal_Int32 nWidth( aBmpSize.Width() );
                     const sal_Int32 nHeight( aBmpSize.Height() );
-                    sal_uInt8* 		pCurrOutput( aBmpData.mpBitmapData.get() );
-                    int 			x, y;
+                    sal_uInt8*      pCurrOutput( aBmpData.mpBitmapData.get() );
+                    int             x, y;
 
                     for( y=0; y<nHeight; ++y )
                     {
@@ -339,14 +339,14 @@ namespace dxcanvas
 
                     // By convention, the access buffer always has
                     // one of the following formats:
-                    // 
+                    //
                     //    BMP_FORMAT_1BIT_MSB_PAL
-                    //	  BMP_FORMAT_4BIT_MSN_PAL
-                    //	  BMP_FORMAT_8BIT_PAL
-                    //	  BMP_FORMAT_16BIT_TC_LSB_MASK
-                    //	  BMP_FORMAT_24BIT_TC_BGR
-                    //	  BMP_FORMAT_32BIT_TC_MASK
-                    // 
+                    //    BMP_FORMAT_4BIT_MSN_PAL
+                    //    BMP_FORMAT_8BIT_PAL
+                    //    BMP_FORMAT_16BIT_TC_LSB_MASK
+                    //    BMP_FORMAT_24BIT_TC_BGR
+                    //    BMP_FORMAT_32BIT_TC_MASK
+                    //
                     // and is always BMP_FORMAT_BOTTOM_UP
                     //
                     // This is the way
@@ -361,12 +361,12 @@ namespace dxcanvas
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                       "Unsupported mask scanline format" );
 
-                    BitmapColor		aCol;
-                    int 			nCurrBit;
-                    const int		nMask( 1L );
-                    const int 		nInitialBit(7);
-                    sal_uInt8* 		pCurrOutput( aBmpData.mpBitmapData.get() );
-                    int 			x, y;
+                    BitmapColor     aCol;
+                    int             nCurrBit;
+                    const int       nMask( 1L );
+                    const int       nInitialBit(7);
+                    sal_uInt8*      pCurrOutput( aBmpData.mpBitmapData.get() );
+                    int             x, y;
 
                     // mapping table, to get from mask index color to
                     // alpha value (which depends on the mask's palette)
@@ -442,7 +442,7 @@ namespace dxcanvas
                                 for( x=0, nCurrBit=nInitialBit; x<nWidth; ++x )
                                 {
                                     // yes. x and y are swapped on Get/SetPixel
-                                    aCol = pReadAccess->GetColor(y,x);                            
+                                    aCol = pReadAccess->GetColor(y,x);
 
                                     // store as RGBA
                                     *pCurrOutput++ = aCol.GetBlue();
@@ -487,10 +487,10 @@ namespace dxcanvas
                 return aBmpData;
             }
 
-            bool drawVCLBitmapEx( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics, 
-                                  const ::BitmapEx& 							  rBmpEx )
+            bool drawVCLBitmapEx( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                                  const ::BitmapEx&                               rBmpEx )
             {
-                if( !rBmpEx.IsTransparent() ) 
+                if( !rBmpEx.IsTransparent() )
                 {
                     Bitmap aBmp( rBmpEx.GetBitmap() );
                     return drawVCLBitmap( rGraphics, aBmp );
@@ -503,11 +503,11 @@ namespace dxcanvas
             }
         }
 
-        bool drawVCLBitmapFromXBitmap( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics, 
-                                       const uno::Reference< rendering::XBitmap >&	   xBitmap )
+        bool drawVCLBitmapFromXBitmap( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                                       const uno::Reference< rendering::XBitmap >&     xBitmap )
         {
             // TODO(F2): add support for floating point bitmap formats
-            uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntBmp( 
+            uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntBmp(
                 xBitmap, uno::UNO_QUERY );
 
             if( !xIntBmp.is() )

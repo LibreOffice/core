@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@
 #include <tools/debug.hxx>
 
 
-//	----------------------------------------------------
-//	class VCLXGraphics
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXGraphics
+//  ----------------------------------------------------
 
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXGraphics::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
@@ -79,24 +79,24 @@ VCLXGraphics::~VCLXGraphics()
     delete mpClipRegion;
 }
 
-void VCLXGraphics::SetOutputDevice( OutputDevice* pOutDev ) 
-{ 
-    mpOutputDevice = pOutDev; 
+void VCLXGraphics::SetOutputDevice( OutputDevice* pOutDev )
+{
+    mpOutputDevice = pOutDev;
     mxDevice = NULL;
 }
 
 void VCLXGraphics::Init( OutputDevice* pOutDev )
 {
     DBG_ASSERT( !mpOutputDevice, "VCLXGraphics::Init allready has pOutDev !" );
-    mpOutputDevice 	= pOutDev;
+    mpOutputDevice  = pOutDev;
 
-    maFont 			= mpOutputDevice->GetFont();
-    maTextColor 	= COL_BLACK;
+    maFont          = mpOutputDevice->GetFont();
+    maTextColor     = COL_BLACK;
     maTextFillColor = COL_TRANSPARENT;
-    maLineColor 	= COL_BLACK;
-    maFillColor 	= COL_WHITE;
-    meRasterOp 		= ROP_OVERPAINT;
-    mpClipRegion 	= NULL;
+    maLineColor     = COL_BLACK;
+    maFillColor     = COL_WHITE;
+    meRasterOp      = ROP_OVERPAINT;
+    mpClipRegion    = NULL;
 
     // Register at OutputDevice
     List* pLst = mpOutputDevice->GetUnoGraphicsList();
@@ -107,7 +107,7 @@ void VCLXGraphics::Init( OutputDevice* pOutDev )
 
 void VCLXGraphics::InitOutputDevice( sal_uInt16 nFlags )
 {
-    if(mpOutputDevice) 
+    if(mpOutputDevice)
     {
         NAMESPACE_VOS(OGuard) aVclGuard( Application::GetSolarMutex()  );
 
@@ -157,7 +157,7 @@ void VCLXGraphics::InitOutputDevice( sal_uInt16 nFlags )
     ::vos::OGuard aGuard( GetMutex() );
 
     ::com::sun::star::awt::SimpleFontMetric aM;
-    if( mpOutputDevice ) 
+    if( mpOutputDevice )
     {
         mpOutputDevice->SetFont( maFont );
         aM = VCLUnoHelper::CreateFontMetric( mpOutputDevice->GetFontMetric() );
@@ -261,14 +261,14 @@ void VCLXGraphics::copy( const ::com::sun::star::uno::Reference< ::com::sun::sta
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    if ( mpOutputDevice ) 
+    if ( mpOutputDevice )
     {
         VCLXDevice* pFromDev = VCLXDevice::GetImplementation( rxSource );
         DBG_ASSERT( pFromDev, "VCLXGraphics::copy - invalid device" );
         if ( pFromDev )
         {
             InitOutputDevice( INITOUTDEV_CLIPREGION|INITOUTDEV_RASTEROP );
-            mpOutputDevice->DrawOutDev( Point( nDestX, nDestY ), Size( nDestWidth, nDestHeight ), 
+            mpOutputDevice->DrawOutDev( Point( nDestX, nDestY ), Size( nDestWidth, nDestHeight ),
                                     Point( nSourceX, nSourceY ), Size( nSourceWidth, nSourceHeight ), *pFromDev->GetOutputDevice() );
         }
     }
@@ -283,23 +283,23 @@ void VCLXGraphics::draw( const ::com::sun::star::uno::Reference< ::com::sun::sta
         InitOutputDevice( INITOUTDEV_CLIPREGION|INITOUTDEV_RASTEROP);
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBitmap( rxBitmapHandle, ::com::sun::star::uno::UNO_QUERY );
         BitmapEx aBmpEx = VCLUnoHelper::GetBitmap( xBitmap );
-        
+
         Point aPos(nDestX - nSourceX, nDestY - nSourceY);
           Size aSz = aBmpEx.GetSizePixel();
 
-        if(nDestWidth != nSourceWidth) 
+        if(nDestWidth != nSourceWidth)
         {
             float zoomX = (float)nDestWidth / (float)nSourceWidth;
-            aSz.Width() = (long) ((float)aSz.Width() * zoomX); 
+            aSz.Width() = (long) ((float)aSz.Width() * zoomX);
         }
 
-        if(nDestHeight != nSourceHeight) 
+        if(nDestHeight != nSourceHeight)
         {
             float zoomY = (float)nDestHeight / (float)nSourceHeight;
             aSz.Height() = (long) ((float)aSz.Height() * zoomY);
         }
 
-        if(nSourceX || nSourceY || aSz.Width() != nSourceWidth || aSz.Height() != nSourceHeight) 
+        if(nSourceX || nSourceY || aSz.Width() != nSourceWidth || aSz.Height() != nSourceHeight)
             mpOutputDevice->IntersectClipRegion(Region(Rectangle(nDestX, nDestY, nDestX + nDestWidth - 1, nDestY + nDestHeight - 1)));
 
         mpOutputDevice->DrawBitmapEx( aPos, aSz, aBmpEx );

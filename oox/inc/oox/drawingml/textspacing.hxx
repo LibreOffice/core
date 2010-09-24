@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace oox { namespace drawingml {
                 ::com::sun::star::style::LineSpacing aSpacing;
                 aSpacing.Mode = ( nUnit == PERCENT
                                                     ? ::com::sun::star::style::LineSpacingMode::PROP
-                                                    :	::com::sun::star::style::LineSpacingMode::MINIMUM );
+                                                    :   ::com::sun::star::style::LineSpacingMode::MINIMUM );
                 aSpacing.Height = static_cast< sal_Int16 >( nUnit == PERCENT ? nValue / 1000 :  nValue );
                 return aSpacing;
             }

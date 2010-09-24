@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -256,11 +256,11 @@ Validator::Validator( StgIo &rIoP )
 {
     ULONG nErr = nError = FAT_OK;
 
-    if(	( nErr = ValidateMasterFATs() ) != FAT_OK )
+    if( ( nErr = ValidateMasterFATs() ) != FAT_OK )
         nError = nErr;
-    else if(	( nErr = ValidateDirectoryEntries() ) != FAT_OK )
+    else if(    ( nErr = ValidateDirectoryEntries() ) != FAT_OK )
         nError = nErr;
-    else if(	( nErr = FindUnrefedChains()) != FAT_OK )
+    else if(    ( nErr = FindUnrefedChains()) != FAT_OK )
         nError = nErr;
 }
 
@@ -324,7 +324,7 @@ ULONG Validator::ValidateDirectoryEntries()
         return nErr;
     // TOC
     nErr = aFat.Mark(
-        rIo.aHdr.GetTOCStart(),	-1, -2 );
+        rIo.aHdr.GetTOCStart(), -1, -2 );
     return nErr;
 }
 
@@ -379,10 +379,10 @@ ULONG StgIo::ValidateFATs()
             ErrorLink::get().Call( &aArg );
             bCopied = TRUE;
         }
-//		DBG_ASSERT( nErr == FAT_OK ,"Storage kaputt");
+//      DBG_ASSERT( nErr == FAT_OK ,"Storage kaputt");
         return nErr;
     }
-//	DBG_ERROR("Validiere nicht (kein FileStorage)");
+//  DBG_ERROR("Validiere nicht (kein FileStorage)");
     return FAT_OK;
 }
 

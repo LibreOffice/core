@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -168,7 +168,7 @@ XEditAttribute::XEditAttribute( const SfxPoolItem& rAttr, USHORT nS, USHORT nE )
 XEditAttribute::~XEditAttribute()
 {
     DBG_DTOR( XEditAttribute, 0 );
-    pItem = 0;	// Gehoert dem Pool.
+    pItem = 0;  // Gehoert dem Pool.
 }
 
 XEditAttribute* XEditAttributeList::FindAttrib( USHORT _nWhich, USHORT nChar ) const
@@ -241,14 +241,14 @@ ContentInfo::~ContentInfo()
 /* cl removed because not needed anymore since binfilter
 void ContentInfo::CreateLoadStoreTempInfos()
 {
-    delete pTempLoadStoreInfos; 
+    delete pTempLoadStoreInfos;
     pTempLoadStoreInfos = new LoadStoreTempInfos;
 }
 
 void ContentInfo::DestroyLoadStoreTempInfos()
 {
-    delete pTempLoadStoreInfos; 
-    pTempLoadStoreInfos = NULL; 
+    delete pTempLoadStoreInfos;
+    pTempLoadStoreInfos = NULL;
 }
 */
 
@@ -266,7 +266,7 @@ bool ContentInfo::isWrongListEqual(const ContentInfo& rCompare) const
 
 bool ContentInfo::operator==( const ContentInfo& rCompare ) const
 {
-    if( (aText == rCompare.aText) && 
+    if( (aText == rCompare.aText) &&
             (aStyle == rCompare.aStyle ) &&
             (aAttribs.Count() == rCompare.aAttribs.Count() ) &&
             (eFamily == rCompare.eFamily ) &&
@@ -504,7 +504,7 @@ BOOL EditTextObject::Store( SvStream& rOStream ) const
     return rOStream.GetError() ? FALSE : TRUE;
 }
 
-EditTextObject*	EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobalTextObjectPool )
+EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobalTextObjectPool )
 {
     ULONG nStartPos = rIStream.Tell();
 
@@ -523,10 +523,10 @@ EditTextObject*	EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
     EditTextObject* pTxtObj = NULL;
     switch ( nWhich )
     {
-        case 0x22 /*BIN300*/:		pTxtObj = new BinTextObject( 0 );
+        case 0x22 /*BIN300*/:       pTxtObj = new BinTextObject( 0 );
                                     ((BinTextObject*)pTxtObj)->CreateData300( rIStream );
                                     break;
-        case EE_FORMAT_BIN:			pTxtObj = new BinTextObject( pGlobalTextObjectPool );
+        case EE_FORMAT_BIN:         pTxtObj = new BinTextObject( pGlobalTextObjectPool );
                                     pTxtObj->CreateData( rIStream );
                                     break;
         default:
@@ -609,7 +609,7 @@ void BinTextObject::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
             aContents.Replace(pNew, n);
             delete pOrg;
         }
-        
+
         // set local variables
         pPool = pNewPool;
         bOwnerOfPool = TRUE;
@@ -642,23 +642,23 @@ BinTextObject::BinTextObject( SfxItemPool* pP ) :
     nUserType = 0;
     nObjSettings = 0;
     pPortionInfo = 0;
-    
+
     // #i101239# ensure target is a EditEngineItemPool, else
     // fallback to pool ownership. This is needed to ensure that at
     // pool destruction time of an alien pool, the pool is still alive.
     // When registering would happen at an alien pool which just uses an
     // EditEngineItemPool as some sub-pool, that pool could already
     // be decoupled and deleted whcih would lead to crashes.
-    pPool =	getEditEngineItemPool(pP);
-    
+    pPool = getEditEngineItemPool(pP);
+
     if ( pPool )
     {
         bOwnerOfPool = FALSE;
     }
     else
     {
-        pPool =	EditEngine::CreatePool();
-        bOwnerOfPool =	TRUE;
+        pPool = EditEngine::CreatePool();
+        bOwnerOfPool =  TRUE;
     }
 
     if(!bOwnerOfPool && pPool)
@@ -682,7 +682,7 @@ BinTextObject::BinTextObject( const BinTextObject& r ) :
     nObjSettings = r.nObjSettings;
     bVertical = r.bVertical;
     nScriptType = r.nScriptType;
-    pPortionInfo = NULL;	// PortionInfo nicht kopieren
+    pPortionInfo = NULL;    // PortionInfo nicht kopieren
     bStoreUnicodeStrings = FALSE;
 
     if ( !r.bOwnerOfPool )
@@ -690,13 +690,13 @@ BinTextObject::BinTextObject( const BinTextObject& r ) :
         // reuse alien pool; this must be a EditEngineItemPool
         // since there is no other way to construct a BinTextObject
         // than it's regular constructor where that is ensured
-        pPool =	r.pPool;
+        pPool = r.pPool;
         bOwnerOfPool = FALSE;
     }
     else
     {
-        pPool =	EditEngine::CreatePool();
-        bOwnerOfPool =	TRUE;
+        pPool = EditEngine::CreatePool();
+        bOwnerOfPool =  TRUE;
 
     }
 
@@ -731,7 +731,7 @@ __EXPORT BinTextObject::~BinTextObject()
     {
         // Nicht mehr, wegen 1xDefItems.
         // siehe auch ~EditDoc().
-//		pPool->ReleaseDefaults( TRUE /* bDelete */ );
+//      pPool->ReleaseDefaults( TRUE /* bDelete */ );
         SfxItemPool::Free(pPool);
     }
 }
@@ -792,7 +792,7 @@ void BinTextObject::DeleteContents()
     aContents.Remove( 0, aContents.Count() );
 }
 
-EditTextObject*	__EXPORT BinTextObject::Clone() const
+EditTextObject* __EXPORT BinTextObject::Clone() const
 {
     return new BinTextObject( *this );
 }
@@ -1362,7 +1362,7 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
     {
         // Es soll ein globaler Pool verwendet werden, aber dieses
         // Textobject hat einen eigenen.
-        pPool =	EditEngine::CreatePool();
+        pPool = EditEngine::CreatePool();
     }
 
     if ( bOwnerOfPool )
@@ -1658,7 +1658,7 @@ bool BinTextObject::isWrongListEqual(const BinTextObject& rCompare) const
     return true;
 }
 
-#define CHARSETMARKER	0x9999
+#define CHARSETMARKER   0x9999
 
 void __EXPORT BinTextObject::CreateData300( SvStream& rIStream )
 {

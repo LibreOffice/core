@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 #ifdef WNT
 # include <tools/prewin.h>
-# include <windows.h> 
+# include <windows.h>
 # include <tools/postwin.h>
 #endif
 
@@ -38,7 +38,7 @@
 
 namespace cairo {
 
-    class Win32Surface : public Surface 
+    class Win32Surface : public Surface
     {
         CairoSurfaceSharedPtr mpSurface;
 

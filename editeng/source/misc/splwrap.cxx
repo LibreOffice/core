@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 
 #include <editeng/svxenum.hxx>
 #include <editeng/splwrap.hxx>      // Der Wrapper
-#include <editeng/edtdlg.hxx>      
+#include <editeng/edtdlg.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/editids.hrc>
@@ -75,7 +75,7 @@ void SvxPrepareAutoCorrect( String &rOldText, String &rNewText )
     // rOldText: text to be replaced
     // rNewText: replacement text
 
-    xub_StrLen	nOldLen = rOldText.Len(),
+    xub_StrLen  nOldLen = rOldText.Len(),
                 nNewLen = rNewText.Len();
     if (nOldLen && nNewLen)
     {
@@ -89,10 +89,10 @@ void SvxPrepareAutoCorrect( String &rOldText, String &rNewText )
 
 // -----------------------------------------------------------------------
 
-#define SVX_LANG_NEED_CHECK			0
-#define SVX_LANG_OK					1
-#define SVX_LANG_MISSING			2
-#define SVX_LANG_MISSING_DO_WARN	3
+#define SVX_LANG_NEED_CHECK         0
+#define SVX_LANG_OK                 1
+#define SVX_LANG_MISSING            2
+#define SVX_LANG_MISSING_DO_WARN    3
 
 #define SVX_FLAGS_NEW
 
@@ -152,12 +152,12 @@ SvxSpellWrapper::~SvxSpellWrapper()
 }
 
 /*--------------------------------------------------------------------
- *	Beschreibung: Ctor, die Pruefreihenfolge wird festgelegt
+ *  Beschreibung: Ctor, die Pruefreihenfolge wird festgelegt
  *
- *  !bStart && !bOtherCntnt:	BODY_END,	BODY_START,	OTHER
- *  !bStart && bOtherCntnt:		OTHER,		BODY
- *  bStart && !bOtherCntnt:		BODY_END,	OTHER
- *  bStart && bOtherCntnt:		OTHER
+ *  !bStart && !bOtherCntnt:    BODY_END,   BODY_START, OTHER
+ *  !bStart && bOtherCntnt:     OTHER,      BODY
+ *  bStart && !bOtherCntnt:     BODY_END,   OTHER
+ *  bStart && bOtherCntnt:      OTHER
  *
  --------------------------------------------------------------------*/
 
@@ -166,13 +166,13 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
     const sal_Bool bStart, const sal_Bool bIsAllRight,
     const sal_Bool bOther, const sal_Bool bRevAllow ) :
 
-    pWin		( pWn ),
-    xSpell		( xSpellChecker ),
-    bOtherCntnt	( bOther ),
-    bDialog		( sal_False ),
-    bHyphen		( sal_False ),
-    bAuto		( sal_False ),
-    bStartChk	( bOther ),
+    pWin        ( pWn ),
+    xSpell      ( xSpellChecker ),
+    bOtherCntnt ( bOther ),
+    bDialog     ( sal_False ),
+    bHyphen     ( sal_False ),
+    bAuto       ( sal_False ),
+    bStartChk   ( bOther ),
     bRevAllowed ( bRevAllow ),
     bAllRight   ( bIsAllRight )
 {
@@ -191,16 +191,16 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
 SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
         Reference< XHyphenator >  &xHyphenator,
         const sal_Bool bStart, const sal_Bool bOther ) :
-    pWin		( pWn ),
-    xHyph		( xHyphenator ),
-    bOtherCntnt	( bOther ),
-    bDialog		( sal_False ),
-    bHyphen		( sal_False ),
-    bAuto		( sal_False ),
-    bReverse	( sal_False ),
-    bStartDone	( bOther || ( !bReverse && bStart ) ),
-    bEndDone	( bReverse && bStart && !bOther ),
-    bStartChk	( bOther ),
+    pWin        ( pWn ),
+    xHyph       ( xHyphenator ),
+    bOtherCntnt ( bOther ),
+    bDialog     ( sal_False ),
+    bHyphen     ( sal_False ),
+    bAuto       ( sal_False ),
+    bReverse    ( sal_False ),
+    bStartDone  ( bOther || ( !bReverse && bStart ) ),
+    bEndDone    ( bReverse && bStart && !bOther ),
+    bStartChk   ( bOther ),
     bRevAllowed ( sal_False ),
     bAllRight   ( sal_True )
 {
@@ -262,8 +262,8 @@ sal_Int16 SvxSpellWrapper::CheckHyphLang(
 
 
 void SvxSpellWrapper::SpellStart( SvxSpellArea /*eSpell*/ )
-{	// Hier muessen die notwendigen Vorbereitungen fuer SpellContinue
-}	// im uebergebenen Bereich getroffen werden.
+{   // Hier muessen die notwendigen Vorbereitungen fuer SpellContinue
+}   // im uebergebenen Bereich getroffen werden.
 
 // -----------------------------------------------------------------------
 
@@ -285,7 +285,7 @@ sal_Bool SvxSpellWrapper::SpellMore()
 
 
 void SvxSpellWrapper::SpellEnd()
-{	// Bereich ist abgeschlossen, ggf. Aufraeumen
+{   // Bereich ist abgeschlossen, ggf. Aufraeumen
 
     // display error for last language not found
     ShowLanguageErrors();
@@ -309,14 +309,14 @@ void SvxSpellWrapper::AutoCorrect( const String&, const String& )
 
 
 void SvxSpellWrapper::ScrollArea()
-{	// Scrollarea einstellen
+{   // Scrollarea einstellen
 }
 
 // -----------------------------------------------------------------------
 
 
 void SvxSpellWrapper::ChangeWord( const String&, const sal_uInt16 )
-{	// Wort ersetzen
+{   // Wort ersetzen
 }
 
 // -----------------------------------------------------------------------
@@ -347,7 +347,7 @@ void SvxSpellWrapper::StartThesaurus( const String &rWord, sal_uInt16 nLanguage 
         return;
     }
 
-    WAIT_ON();	// while looking up for initial word
+    WAIT_ON();  // while looking up for initial word
     EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
     AbstractThesaurusDialog* pDlg = pFact->CreateThesaurusDialog( pWin, xThes, rWord, nLanguage );
     WAIT_OFF();
@@ -361,21 +361,21 @@ void SvxSpellWrapper::StartThesaurus( const String &rWord, sal_uInt16 nLanguage 
 // -----------------------------------------------------------------------
 
 void SvxSpellWrapper::ReplaceAll( const String &, sal_Int16 )
-{	// Wort aus der Replace-Liste ersetzen
+{   // Wort aus der Replace-Liste ersetzen
 }
 
 // -----------------------------------------------------------------------
 
 
 void SvxSpellWrapper::SetLanguage( const sal_uInt16 )
-{	// Sprache aendern
+{   // Sprache aendern
 }
 
 // -----------------------------------------------------------------------
 
 
 void SvxSpellWrapper::InsertHyphen( const sal_uInt16 )
-{	// Hyphen einfuegen bzw. loeschen
+{   // Hyphen einfuegen bzw. loeschen
 }
 
 // -----------------------------------------------------------------------
@@ -397,15 +397,15 @@ void SvxSpellWrapper::SpellDocument( )
 
     if ( FindSpellError() )
     {
-        Reference< XSpellAlternatives >  	xAlt( GetLast(), UNO_QUERY );
-        Reference< XHyphenatedWord > 		xHyphWord( GetLast(), UNO_QUERY );
+        Reference< XSpellAlternatives >     xAlt( GetLast(), UNO_QUERY );
+        Reference< XHyphenatedWord >        xHyphWord( GetLast(), UNO_QUERY );
 
         Window *pOld = pWin;
         bDialog = sal_True;
         if (xHyphWord.is())
         {
             EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
-            AbstractHyphenWordDialog* pDlg = pFact->CreateHyphenWordDialog( pWin, 
+            AbstractHyphenWordDialog* pDlg = pFact->CreateHyphenWordDialog( pWin,
                             xHyphWord->getWord(),
                             SvxLocaleToLanguage( xHyphWord->getLocale() ),
                             xHyph, this );
@@ -433,17 +433,17 @@ sal_Bool SvxSpellWrapper::SpellNext( )
 
     // bActRev ist die Richtung nach dem Spellen, bReverse die am Anfang.
     if( bActRev == bReverse )
-    {   						// Keine Richtungsaenderung, also ist
+    {                           // Keine Richtungsaenderung, also ist
         if( bStartChk )         // der gewuenschte Bereich ( bStartChk )
             bStartDone = sal_True;  // vollstaendig abgearbeitet.
         else
             bEndDone = sal_True;
     }
     else if( bReverse == bStartChk ) // Bei einer Richtungsaenderung kann
-    { 						   // u.U. auch ein Bereich abgearbeitet sein.
+    {                          // u.U. auch ein Bereich abgearbeitet sein.
         if( bStartChk )        // Sollte der vordere Teil rueckwaerts gespellt
             bEndDone = sal_True;   // werden und wir kehren unterwegs um, so ist
-        else				   // der hintere Teil abgearbeitet (und umgekehrt).
+        else                   // der hintere Teil abgearbeitet (und umgekehrt).
             bStartDone = sal_True;
     }
 
@@ -575,7 +575,7 @@ sal_Bool SvxSpellWrapper::FindSpellError()
 {
     ShowLanguageErrors();
 
-     Reference< XInterface > 	xRef;
+     Reference< XInterface >    xRef;
 
     WAIT_ON();
     sal_Bool bSpell = sal_True;
@@ -588,8 +588,8 @@ sal_Bool SvxSpellWrapper::FindSpellError()
     {
         SpellContinue();
 
-        Reference< XSpellAlternatives >  	xAlt( GetLast(), UNO_QUERY );
-        Reference< XHyphenatedWord > 		xHyphWord( GetLast(), UNO_QUERY );
+        Reference< XSpellAlternatives >     xAlt( GetLast(), UNO_QUERY );
+        Reference< XHyphenatedWord >        xHyphWord( GetLast(), UNO_QUERY );
 
         if (xAlt.is())
         {
@@ -602,7 +602,7 @@ sal_Bool SvxSpellWrapper::FindSpellError()
                 // look up in ChangeAllList for misspelled word
                 Reference< XDictionary >    xChangeAllList(
                         SvxGetChangeAllList(), UNO_QUERY );
-                Reference< XDictionaryEntry > 	xEntry;
+                Reference< XDictionaryEntry >   xEntry;
                 if (xChangeAllList.is())
                     xEntry = xChangeAllList->getEntry( xAlt->getWord() );
 

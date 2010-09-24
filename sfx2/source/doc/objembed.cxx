@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -232,9 +232,9 @@ void SfxObjectShell::DoDraw( OutputDevice* pDev,
         Fraction aXF( rSize.Width(), aSize.Width() );
         Fraction aYF( rSize.Height(), aSize.Height() );
 
-//REMOVE			Point aOrg = rObjPos;
-//REMOVE			aMod.SetMapUnit( MAP_100TH_MM );
-//REMOVE			aSize = pDev->LogicToLogic( GetVisArea( nAspect ).GetSize(), &aMod, &aWilliMode );
+//REMOVE            Point aOrg = rObjPos;
+//REMOVE            aMod.SetMapUnit( MAP_100TH_MM );
+//REMOVE            aSize = pDev->LogicToLogic( GetVisArea( nAspect ).GetSize(), &aMod, &aWilliMode );
         DoDraw_Impl( pDev, rObjPos, aXF, aYF, rSetup, nAspect );
     }
 }
@@ -254,7 +254,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     aMapMode.SetScaleY( rScaleY );
 
     // Ziel in Pixel
-    Point aOrg	 = pDev->LogicToLogic( rViewPos, NULL, &aMapMode );
+    Point aOrg   = pDev->LogicToLogic( rViewPos, NULL, &aMapMode );
     Point aDelta = aOrg - aVisArea.TopLeft();
 
     // Origin entsprechend zum sichtbaren Bereich verschieben
@@ -290,12 +290,12 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     if( pMtf )
         pMtf->Record( pDev );
 
-//REMOVE		SvOutPlaceObjectRef xOutRef( this );
-//REMOVE		if ( xOutRef.Is() )
-//REMOVE			xOutRef->DrawObject( pDev, rSetup, rSize, nAspect );
-//REMOVE		else
+//REMOVE        SvOutPlaceObjectRef xOutRef( this );
+//REMOVE        if ( xOutRef.Is() )
+//REMOVE            xOutRef->DrawObject( pDev, rSetup, rSize, nAspect );
+//REMOVE        else
         Draw( pDev, rSetup, nAspect );
-//REMOVE		DrawHatch( pDev, aVisArea.TopLeft(), aVisArea.GetSize() );
+//REMOVE        DrawHatch( pDev, aVisArea.TopLeft(), aVisArea.GetSize() );
 
     // Deviceeinstellungen wieder herstellen
     pDev->Pop();

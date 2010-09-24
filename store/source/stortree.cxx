@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -511,7 +511,7 @@ storeError OStoreBTreeRootObject::find_insert (
         PageHolder tmp (m_xPage);
         tmp.swap (rNode.get());
     }
-    
+
     // Setup BTree entry.
     T const entry (rKey);
 

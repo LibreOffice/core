@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -174,7 +174,7 @@ void SAL_CALL LayoutRoot::initialize( const uno::Sequence< uno::Any >& aArgument
 
     if (! xDocHandler.is() )
         error( OUString::createFromAscii( "cannot find SAx handler for document type of:") + aXMLName );
-        
+
     xParser->setDocumentHandler( xDocHandler );
 
     xml::sax::InputSource source;

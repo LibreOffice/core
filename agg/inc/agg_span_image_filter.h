@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -29,7 +29,7 @@ namespace agg
 {
 
     //--------------------------------------------------span_image_filter
-    template<class ColorT, class Interpolator, class Allocator> 
+    template<class ColorT, class Interpolator, class Allocator>
     class span_image_filter : public span_generator<ColorT, Allocator>
     {
     public:
@@ -39,16 +39,16 @@ namespace agg
         typedef span_generator<color_type, alloc_type> base_type;
 
         //----------------------------------------------------------------
-        span_image_filter(alloc_type& alloc) : 
-            span_generator<color_type, alloc_type>(alloc) 
+        span_image_filter(alloc_type& alloc) :
+            span_generator<color_type, alloc_type>(alloc)
         {}
 
         //----------------------------------------------------------------
         span_image_filter(alloc_type& alloc,
-                          const rendering_buffer& src, 
+                          const rendering_buffer& src,
                           const color_type& back_color,
                           interpolator_type& interpolator_,
-                          const image_filter_lut* filter_) : 
+                          const image_filter_lut* filter_) :
             span_generator<color_type, alloc_type>(alloc),
             m_src(&src),
             m_back_color(back_color),
@@ -87,7 +87,7 @@ namespace agg
         interpolator_type& interpolator() { return *m_interpolator; }
 
         //--------------------------------------------------------------------
-        void prepare(unsigned max_span_len) 
+        void prepare(unsigned max_span_len)
         {
             base_type::prepare(max_span_len);
         }

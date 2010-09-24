@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ class OFileControlModel
                 :public OControlModel
                 ,public ::com::sun::star::form::XReset
 {
-    ::cppu::OInterfaceContainerHelper		m_aResetListeners;
-    ::rtl::OUString							m_sDefaultValue;
+    ::cppu::OInterfaceContainerHelper       m_aResetListeners;
+    ::rtl::OUString                         m_sDefaultValue;
 
 protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
@@ -96,7 +96,7 @@ protected:
 };
 
 //.........................................................................
-}	// namespace frm
+}   // namespace frm
 //.........................................................................
 
 #endif // _FORMS_FILE_HXX_

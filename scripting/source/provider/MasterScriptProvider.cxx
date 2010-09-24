@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -920,7 +920,7 @@ Reference< XInterface > SAL_CALL urihelper_create(
 Sequence< ::rtl::OUString > urihelper_getSupportedServiceNames( )
     SAL_THROW( () )
 {
-    ::rtl::OUString serviceNameList[] = { 
+    ::rtl::OUString serviceNameList[] = {
         ::rtl::OUString::createFromAscii(
             "com.sun.star.script.provider.ScriptURIHelper" ) };
 

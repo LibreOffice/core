@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ public class QueryWizard extends DatabaseObjectWizard
                 PropertyValue[] curproperties = new PropertyValue[1];
                 curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///G:/temp/abc.odb");
 //              curproperties[0] = Properties.createProperty("DataSourceName", "TESTDB");
- 
+
                 QueryWizard CurQueryWizard = new QueryWizard(xLocMSF);
                 CurQueryWizard.startQueryWizard(xLocMSF, curproperties);
             }
@@ -284,8 +284,8 @@ public class QueryWizard extends DatabaseObjectWizard
     public boolean finishWizard()
     {
         int ncurStep = getCurrentStep();
-        if	(	( ncurStep == SOSUMMARY_PAGE )
-            ||	( switchToStep( ncurStep, SOSUMMARY_PAGE ) )
+        if  (   ( ncurStep == SOSUMMARY_PAGE )
+            ||  ( switchToStep( ncurStep, SOSUMMARY_PAGE ) )
             )
         {
             m_createdQuery = CurFinalizer.finish();

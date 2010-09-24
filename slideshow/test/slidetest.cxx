@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -195,34 +195,34 @@ public:
                                 mpLayerManager->isUpdatePending() );
         CPPUNIT_ASSERT_MESSAGE( "Update failed on LayerManager #2",
                                 mpLayerManager->update() );
-        CPPUNIT_ASSERT_MESSAGE( "Shape 1 must be on background layer", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 1 must be on background layer",
                                 mpTestShape->getViewLayers().at(0).first == mpTestView );
-        CPPUNIT_ASSERT_MESSAGE( "Shape 2 must be on background layer", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 2 must be on background layer",
                                 pShape2->getViewLayers().at(0).first == mpTestView );
-        CPPUNIT_ASSERT_MESSAGE( "Shape 3 must have one layer", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 3 must have one layer",
                                 pShape3->getViewLayers().size() == 1 );
-        CPPUNIT_ASSERT_MESSAGE( "Shape 3 must be on background layer", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 3 must be on background layer",
                                 pShape3->getViewLayers().at(0).first == mpTestView );
-        CPPUNIT_ASSERT_MESSAGE( "Shape 4 must be on background layer", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 4 must be on background layer",
                                 pShape4->getViewLayers().at(0).first == mpTestView );
 
         // checking deactivation (all layers except background layer
         // must vanish)
         mpLayerManager->enterAnimationMode(pShape3);
-        CPPUNIT_ASSERT_MESSAGE( "No update pending on LayerManager", 
+        CPPUNIT_ASSERT_MESSAGE( "No update pending on LayerManager",
                                 mpLayerManager->isUpdatePending() );
-        CPPUNIT_ASSERT_MESSAGE( "Update failed on LayerManager", 
+        CPPUNIT_ASSERT_MESSAGE( "Update failed on LayerManager",
                                 mpLayerManager->update() );
-        CPPUNIT_ASSERT_MESSAGE( "Shape 4 must not be on background layer", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 4 must not be on background layer",
                                 pShape4->getViewLayers().at(0).first != mpTestView );
         mpLayerManager->leaveAnimationMode(pShape3);
-        CPPUNIT_ASSERT_MESSAGE( "Update failed on LayerManager", 
+        CPPUNIT_ASSERT_MESSAGE( "Update failed on LayerManager",
                                 mpLayerManager->update() );
-        CPPUNIT_ASSERT_MESSAGE( "Shape 4 must be on background layer", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 4 must be on background layer",
                                 pShape4->getViewLayers().at(0).first == mpTestView );
 
         mpLayerManager->deactivate();
-        CPPUNIT_ASSERT_MESSAGE( "Update pending on deactivated LayerManager", 
+        CPPUNIT_ASSERT_MESSAGE( "Update pending on deactivated LayerManager",
                                 !mpLayerManager->isUpdatePending() );
     }
 
@@ -251,45 +251,45 @@ public:
         mpLayerManager->activate( false );
         mpLayerManager->update();
 
-        CPPUNIT_ASSERT_MESSAGE( "First shape not rendered", 
+        CPPUNIT_ASSERT_MESSAGE( "First shape not rendered",
                                 mpTestShape->getNumRenders() == 1 );
-        CPPUNIT_ASSERT_MESSAGE( "Second shape not rendered", 
+        CPPUNIT_ASSERT_MESSAGE( "Second shape not rendered",
                                 pShape2->getNumRenders() == 1 );
-        CPPUNIT_ASSERT_MESSAGE( "Third shape not rendered", 
+        CPPUNIT_ASSERT_MESSAGE( "Third shape not rendered",
                                 pShape3->getNumRenders() == 1 );
-        CPPUNIT_ASSERT_MESSAGE( "Fourth shape not rendered", 
+        CPPUNIT_ASSERT_MESSAGE( "Fourth shape not rendered",
                                 pShape4->getNumRenders() == 1 );
-        CPPUNIT_ASSERT_MESSAGE( "Fifth shape not rendered", 
+        CPPUNIT_ASSERT_MESSAGE( "Fifth shape not rendered",
                                 pShape5->getNumRenders() == 1 );
-        
+
         mpLayerManager->enterAnimationMode(pShape4);
         mpLayerManager->update();
 
-        CPPUNIT_ASSERT_MESSAGE( "First shape not rendered", 
+        CPPUNIT_ASSERT_MESSAGE( "First shape not rendered",
                                 mpTestShape->getNumRenders() == 1 );
-        CPPUNIT_ASSERT_MESSAGE( "Second shape not rendered", 
+        CPPUNIT_ASSERT_MESSAGE( "Second shape not rendered",
                                 pShape2->getNumRenders() == 1 );
-        CPPUNIT_ASSERT_MESSAGE( "Third shape not rendered", 
+        CPPUNIT_ASSERT_MESSAGE( "Third shape not rendered",
                                 pShape3->getNumRenders() == 2 );
-        CPPUNIT_ASSERT_MESSAGE( "Fourth shape not rendered", 
+        CPPUNIT_ASSERT_MESSAGE( "Fourth shape not rendered",
                                 pShape4->getNumRenders() == 2 );
-        CPPUNIT_ASSERT_MESSAGE( "Fifth shape not rendered", 
+        CPPUNIT_ASSERT_MESSAGE( "Fifth shape not rendered",
                                 pShape5->getNumRenders() == 2 );
 
         mpLayerManager->leaveAnimationMode(pShape2);
         mpLayerManager->leaveAnimationMode(pShape4);
         mpLayerManager->update();
 
-        CPPUNIT_ASSERT_MESSAGE( "First shape not rendered #2", 
+        CPPUNIT_ASSERT_MESSAGE( "First shape not rendered #2",
                                 mpTestShape->getNumRenders() == 2 );
-        CPPUNIT_ASSERT_MESSAGE( "Second shape not rendered #2", 
+        CPPUNIT_ASSERT_MESSAGE( "Second shape not rendered #2",
                                 pShape2->getNumRenders() == 2 );
-        CPPUNIT_ASSERT_MESSAGE( "Third shape not rendered #2", 
+        CPPUNIT_ASSERT_MESSAGE( "Third shape not rendered #2",
                                 pShape3->getNumRenders() == 3 );
-        CPPUNIT_ASSERT_MESSAGE( "Fourth shape not rendered #2", 
-                                pShape4->getNumRenders() == 3 );        
-        CPPUNIT_ASSERT_MESSAGE( "Fifth shape not rendered #2", 
-                                pShape5->getNumRenders() == 3 );        
+        CPPUNIT_ASSERT_MESSAGE( "Fourth shape not rendered #2",
+                                pShape4->getNumRenders() == 3 );
+        CPPUNIT_ASSERT_MESSAGE( "Fifth shape not rendered #2",
+                                pShape5->getNumRenders() == 3 );
     }
 
     void testRefCounting()
@@ -314,13 +314,13 @@ public:
         mpLayerManager->removeShape(pShape3);
         mpLayerManager->removeShape(pShape4);
 
-        CPPUNIT_ASSERT_MESSAGE( "Shape 1 must have refcount of 1", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 1 must have refcount of 1",
                                 mpTestShape.use_count() == 1 );
-        CPPUNIT_ASSERT_MESSAGE( "Shape 2 must have refcount of ", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 2 must have refcount of ",
                                 pShape2.use_count() == 1 );
-        CPPUNIT_ASSERT_MESSAGE( "Shape 3 must have refcount of 1", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 3 must have refcount of 1",
                                 pShape3.use_count() == 1 );
-        CPPUNIT_ASSERT_MESSAGE( "Shape 4 must have refcount of", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 4 must have refcount of",
                                 pShape4.use_count() == 1 );
 
 
@@ -337,18 +337,18 @@ public:
         mpLayerManager->removeShape(pShape3);
         mpLayerManager->removeShape(pShape4);
 
-        CPPUNIT_ASSERT_MESSAGE( "Shape 1 must have refcount of 1", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 1 must have refcount of 1",
                                 mpTestShape.use_count() == 1 );
-        CPPUNIT_ASSERT_MESSAGE( "Shape 2 must have refcount of ", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 2 must have refcount of ",
                                 pShape2.use_count() == 1 );
-        CPPUNIT_ASSERT_MESSAGE( "Shape 3 must have refcount of 1", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 3 must have refcount of 1",
                                 pShape3.use_count() == 1 );
-        CPPUNIT_ASSERT_MESSAGE( "Shape 4 must have refcount of 1", 
+        CPPUNIT_ASSERT_MESSAGE( "Shape 4 must have refcount of 1",
                                 pShape4.use_count() == 1 );
 
         maViews.removeView(mpTestView);
         mpLayerManager->viewRemoved(mpTestView);
-        CPPUNIT_ASSERT_MESSAGE( "View must have refcount of 1", 
+        CPPUNIT_ASSERT_MESSAGE( "View must have refcount of 1",
                                 mpTestView.use_count() == 1 );
     }
 

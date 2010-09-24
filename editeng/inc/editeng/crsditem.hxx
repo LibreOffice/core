@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,19 +62,19 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&		Store(SvStream &, USHORT nItemVersion) const;
-    virtual String			GetValueTextByPos( USHORT nPos ) const;
+    virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
+    virtual String          GetValueTextByPos( USHORT nPos ) const;
     virtual USHORT          GetValueCount() const;
-    virtual	sal_Bool        	 QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual	sal_Bool			 PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     // MS VC4.0 kommt durcheinander
-    void			 		SetValue( USHORT nNewVal )
+    void                    SetValue( USHORT nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
 
-    virtual int 			HasBoolValue() const;
-    virtual BOOL			GetBoolValue() const;
-    virtual void			SetBoolValue( BOOL bVal );
+    virtual int             HasBoolValue() const;
+    virtual BOOL            GetBoolValue() const;
+    virtual void            SetBoolValue( BOOL bVal );
 
     inline SvxCrossedOutItem& operator=(const SvxCrossedOutItem& rCross)
         {
@@ -83,9 +83,9 @@ public:
         }
 
     // enum cast
-    FontStrikeout 			GetStrikeout() const
+    FontStrikeout           GetStrikeout() const
                                 { return (FontStrikeout)GetValue(); }
-    void 					SetStrikeout( FontStrikeout eNew )
+    void                    SetStrikeout( FontStrikeout eNew )
                                 { SetValue( (USHORT)eNew ); }
 };
 

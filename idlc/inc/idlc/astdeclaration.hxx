@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,39 +33,39 @@
 class AstScope;
 
 // Enum defining the different kinds of Ast nodes
-enum NodeType 
+enum NodeType
 {
-    NT_object,				// Denotes an object
-    NT_service,				// Denotes an servcie
-    NT_interface_member,	// Denotes an interface which is exported from object
-    NT_service_member,		// Denotes an service which is exported from object
-    NT_observes,			// Denotes an observed interface 
-    NT_needs,				// Denotes an needed service
-    NT_module,				// Denotes a module
-    NT_root,				// Denotes the root of AST
-    NT_interface,			// Denotes an interface
-    NT_constants,		 	// Denotes a constant group
-    NT_const,				// Denotes a constant
-    NT_exception,			// Denotes an exception
-    NT_attribute,			// Denotes an attribute
-    NT_property,			// Denotes an property
-    NT_operation,			// Denotes an operation
-    NT_parameter,			// Denotes an op. parameter
-    NT_union,				// Denotes a union
-    NT_union_branch,		// Denotes a union branch
+    NT_object,              // Denotes an object
+    NT_service,             // Denotes an servcie
+    NT_interface_member,    // Denotes an interface which is exported from object
+    NT_service_member,      // Denotes an service which is exported from object
+    NT_observes,            // Denotes an observed interface
+    NT_needs,               // Denotes an needed service
+    NT_module,              // Denotes a module
+    NT_root,                // Denotes the root of AST
+    NT_interface,           // Denotes an interface
+    NT_constants,           // Denotes a constant group
+    NT_const,               // Denotes a constant
+    NT_exception,           // Denotes an exception
+    NT_attribute,           // Denotes an attribute
+    NT_property,            // Denotes an property
+    NT_operation,           // Denotes an operation
+    NT_parameter,           // Denotes an op. parameter
+    NT_union,               // Denotes a union
+    NT_union_branch,        // Denotes a union branch
     NT_struct,              // Denotes either a plain struct type, or a
                             // polymorphic struct type template
     NT_type_parameter,      // Denotes a type parameter of a polymorphic struct
                             // type template
     NT_instantiated_struct, // Denotes an instantiated polymorphic struct type
-    NT_member,				// Denotes a member in structure, exception
-    NT_enum,				// Denotes an enumeration
-    NT_enum_val,			// Denotes an enum. value
-    NT_array,				// Denotes an IDL array
-    NT_sequence,			// Denotes an IDL sequence
-    NT_typedef,				// Denotes a typedef
-    NT_predefined,			// Denotes a predefined type
-    NT_singleton			// Denotes a singleton
+    NT_member,              // Denotes a member in structure, exception
+    NT_enum,                // Denotes an enumeration
+    NT_enum_val,            // Denotes an enum. value
+    NT_array,               // Denotes an IDL array
+    NT_sequence,            // Denotes an IDL sequence
+    NT_typedef,             // Denotes a typedef
+    NT_predefined,          // Denotes a predefined type
+    NT_singleton            // Denotes a singleton
 };
 
 class AstDeclaration
@@ -79,11 +79,11 @@ public:
     void setName(const ::rtl::OString& name);
     const ::rtl::OString& getLocalName() const
         { return m_localName; }
-    const ::rtl::OString&	getScopedName() const
+    const ::rtl::OString&   getScopedName() const
         { return m_scopedName; }
-    const ::rtl::OString&	getFullName()
+    const ::rtl::OString&   getFullName()
         { return m_fullName; }
-    virtual const sal_Char*	getRelativName() const
+    virtual const sal_Char* getRelativName() const
         { return m_fullName.getStr()+1; }
     AstScope* getScope()
         { return m_pScope; }
@@ -127,21 +127,21 @@ public:
 
     bool isPredefined() { return m_bPredefined; }
     void setPredefined(bool bPredefined);
-    
+
 protected:
-    ::rtl::OString		m_localName; 
-    ::rtl::OString		m_scopedName; 		// full qualified name
-    ::rtl::OString		m_fullName;			// full qualified name with '/' as seperator
-    AstScope*			m_pScope;
+    ::rtl::OString      m_localName;
+    ::rtl::OString      m_scopedName;       // full qualified name
+    ::rtl::OString      m_fullName;         // full qualified name with '/' as seperator
+    AstScope*           m_pScope;
     NodeType            m_nodeType;
-    sal_Bool			m_bImported;		// imported ?
-    sal_Bool			m_bIsAdded;			// mark declaration as added in scope
-    sal_Bool			m_bInMainFile;		// defined in main file
+    sal_Bool            m_bImported;        // imported ?
+    sal_Bool            m_bIsAdded;         // mark declaration as added in scope
+    sal_Bool            m_bInMainFile;      // defined in main file
     bool                m_bPublished;
     bool                m_bPredefined;
-    sal_Int32			m_lineNumber;		// line number defined in	
-    ::rtl::OString		m_fileName;			// fileName	defined in
-    ::rtl::OUString		m_documentation; 	// fileName	defined in
+    sal_Int32           m_lineNumber;       // line number defined in
+    ::rtl::OString      m_fileName;         // fileName defined in
+    ::rtl::OUString     m_documentation;    // fileName defined in
 };
 
 #endif // _IDLC_ASTDECLARATION_HXX_

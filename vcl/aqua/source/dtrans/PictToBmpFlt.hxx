@@ -9,10 +9,10 @@
 
 /* Transform PICT into the a Window BMP.
 
-   Returns true if the conversion was successful false 
+   Returns true if the conversion was successful false
    otherwise.
  */
-bool PICTtoBMP(com::sun::star::uno::Sequence<sal_Int8>& aPict, 
+bool PICTtoBMP(com::sun::star::uno::Sequence<sal_Int8>& aPict,
                com::sun::star::uno::Sequence<sal_Int8>& aBmp);
 
 /* Transform a Windows BMP to a PICT.
@@ -20,16 +20,16 @@ bool PICTtoBMP(com::sun::star::uno::Sequence<sal_Int8>& aPict,
    Returns true if the conversion was successful false
    otherwise.
  */
-bool BMPtoPICT(com::sun::star::uno::Sequence<sal_Int8>& aBmp, 
+bool BMPtoPICT(com::sun::star::uno::Sequence<sal_Int8>& aBmp,
                com::sun::star::uno::Sequence<sal_Int8>& aPict);
 
 #define PICTImageFileType ((NSBitmapImageFileType)~0)
 
-bool ImageToBMP( com::sun::star::uno::Sequence<sal_Int8>& aPict, 
+bool ImageToBMP( com::sun::star::uno::Sequence<sal_Int8>& aPict,
                  com::sun::star::uno::Sequence<sal_Int8>& aBmp,
                  NSBitmapImageFileType eInFormat);
 
-bool BMPToImage( com::sun::star::uno::Sequence<sal_Int8>& aBmp, 
+bool BMPToImage( com::sun::star::uno::Sequence<sal_Int8>& aBmp,
                  com::sun::star::uno::Sequence<sal_Int8>& aPict,
                  NSBitmapImageFileType eOutFormat
                 );

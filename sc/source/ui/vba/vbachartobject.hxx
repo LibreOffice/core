@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 typedef InheritedHelperInterfaceImpl1<ov::excel::XChartObject > ChartObjectImpl_BASE;
 
 class ScVbaChartObject : public ChartObjectImpl_BASE
-{		
+{
 
     css::uno::Reference< css::table::XTableChart  > xTableChart;
     css::uno::Reference< css::document::XEmbeddedObjectSupplier > xEmbeddedObjectSupplier;
@@ -58,8 +58,8 @@ public:
     virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setName( const ::rtl::OUString& sName ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XChart > SAL_CALL getChart() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Delete() throw ( css::script::BasicErrorException );	
-    virtual void Activate() throw ( css::script::BasicErrorException );	
+    virtual void SAL_CALL Delete() throw ( css::script::BasicErrorException );
+    virtual void Activate() throw ( css::script::BasicErrorException );
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

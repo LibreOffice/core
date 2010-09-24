@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,10 +25,10 @@
  *
  ************************************************************************/
 /*
- * creates new files 
+ * creates new files
  * checks if they exist or
  * can be overwritten
- * 
+ *
  */
 package com.sun.star.tooling.converter;
 
@@ -37,17 +37,17 @@ import java.io.IOException;
 
 /**
  * Creates new files only if the file  does not yet exist
- * or overwriting is allowed 
- * 
+ * or overwriting is allowed
+ *
  * @author Christian Schmidt 2005
- *  
+ *
  */
 public final class FileMaker {
 
     /**
      * Create a new file if overwriting is not alowed
      * ask if existing files should be overwritten
-     * 
+     *
      * @param fileName the files name to overwrite
      * @param overwrite indicates wether the file can be overwritten
      * @return the File created from the fileName

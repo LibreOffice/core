@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ TYPEINIT1_FACTORY(SvxRotateModeItem, SfxEnumItem, new SvxRotateModeItem(SVX_ROTA
 
 
 //-----------------------------------------------------------------------
-//	SvxRotateModeItem - Ausrichtung bei gedrehtem Text
+//  SvxRotateModeItem - Ausrichtung bei gedrehtem Text
 //-----------------------------------------------------------------------
 
 SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, USHORT _nWhich )
@@ -89,7 +89,7 @@ SfxItemPresentation __EXPORT SvxRotateModeItem::GetPresentation(
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText.AppendAscii("...");
             rText.AppendAscii(": ");
-//			break; // DURCHFALLEN!!!
+//          break; // DURCHFALLEN!!!
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += UniString::CreateFromInt32( GetValue() );
@@ -121,7 +121,7 @@ String __EXPORT SvxRotateModeItem::GetValueText( USHORT nVal ) const
 
 USHORT __EXPORT SvxRotateModeItem::GetValueCount() const
 {
-    return 4;		// STANDARD, TOP, CENTER, BOTTOM
+    return 4;       // STANDARD, TOP, CENTER, BOTTOM
 }
 
 SfxPoolItem* __EXPORT SvxRotateModeItem::Clone( SfxItemPool* ) const
@@ -134,7 +134,7 @@ USHORT __EXPORT SvxRotateModeItem::GetVersion( USHORT /*nFileVersion*/ ) const
     return 0;
 }
 
-//	QueryValue/PutValue: Der ::com::sun::star::table::CellVertJustify enum wird mitbenutzt...
+//  QueryValue/PutValue: Der ::com::sun::star::table::CellVertJustify enum wird mitbenutzt...
 
 sal_Bool SvxRotateModeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
@@ -142,9 +142,9 @@ sal_Bool SvxRotateModeItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) con
     switch ( (SvxRotateMode)GetValue() )
     {
         case SVX_ROTATE_MODE_STANDARD: eUno = table::CellVertJustify_STANDARD; break;
-        case SVX_ROTATE_MODE_TOP:	   eUno = table::CellVertJustify_TOP;	  	break;
-        case SVX_ROTATE_MODE_CENTER:   eUno = table::CellVertJustify_CENTER;	break;
-        case SVX_ROTATE_MODE_BOTTOM:   eUno = table::CellVertJustify_BOTTOM;	break;
+        case SVX_ROTATE_MODE_TOP:      eUno = table::CellVertJustify_TOP;       break;
+        case SVX_ROTATE_MODE_CENTER:   eUno = table::CellVertJustify_CENTER;    break;
+        case SVX_ROTATE_MODE_BOTTOM:   eUno = table::CellVertJustify_BOTTOM;    break;
     }
     rVal <<= eUno;
     return sal_True;
@@ -165,9 +165,9 @@ sal_Bool SvxRotateModeItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
     switch (eUno)
     {
         case table::CellVertJustify_STANDARD: eSvx = SVX_ROTATE_MODE_STANDARD; break;
-        case table::CellVertJustify_TOP:	   eSvx = SVX_ROTATE_MODE_TOP;	  	break;
-        case table::CellVertJustify_CENTER:   eSvx = SVX_ROTATE_MODE_CENTER;	break;
-        case table::CellVertJustify_BOTTOM:   eSvx = SVX_ROTATE_MODE_BOTTOM;	break;
+        case table::CellVertJustify_TOP:       eSvx = SVX_ROTATE_MODE_TOP;      break;
+        case table::CellVertJustify_CENTER:   eSvx = SVX_ROTATE_MODE_CENTER;    break;
+        case table::CellVertJustify_BOTTOM:   eSvx = SVX_ROTATE_MODE_BOTTOM;    break;
         default: ;//prevent warning
     }
     SetValue( (USHORT)eSvx );

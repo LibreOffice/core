@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <tools/debug.hxx>
 #endif
 
-#define LISTBOX_SCROLLING_AREA	12
+#define LISTBOX_SCROLLING_AREA  12
 namespace dbaui
 {
 DBG_NAME(OScrollHelper)
@@ -50,7 +50,7 @@ DBG_NAME(OScrollHelper)
     // -----------------------------------------------------------------------------
     OScrollHelper::~OScrollHelper()
     {
-    
+
         DBG_DTOR(OScrollHelper,NULL);
     }
     // -----------------------------------------------------------------------------

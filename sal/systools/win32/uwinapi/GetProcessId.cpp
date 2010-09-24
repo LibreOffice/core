@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include <tlhelp32.h>
 static FARPROC WINAPI GetRealProcAddress( HMODULE hModule, LPCSTR lpProcName )
 {
-    FARPROC	lpfn = GetProcAddress( hModule, lpProcName );
+    FARPROC lpfn = GetProcAddress( hModule, lpProcName );
 
     if ( lpfn )
     {
@@ -61,7 +61,7 @@ static FARPROC WINAPI GetRealProcAddress( HMODULE hModule, LPCSTR lpProcName )
             BFF956C6 58                   pop         eax
             BFF956C7 9D                   popfd
             BFF956C8 C3                   ret
-            */		
+            */
         }
     }
 
@@ -82,15 +82,15 @@ static DWORD WINAPI Obfuscate( DWORD dwPTID )
 
         if ( lpCode )
         {
-            /* 
+            /*
             GetCurrentThreadId:
-            lpCode + 00 BFF84936 A1 DC 9C FC BF       mov         eax,[BFFC9CDC]	; This is the real thread id
+            lpCode + 00 BFF84936 A1 DC 9C FC BF       mov         eax,[BFFC9CDC]    ; This is the real thread id
             lpcode + 05 BFF8493B FF 30                push        dword ptr [eax]
-            lpCode + 07 BFF8493D E8 17 C5 FF FF       call        BFF80E59			; call Obfuscate function
+            lpCode + 07 BFF8493D E8 17 C5 FF FF       call        BFF80E59          ; call Obfuscate function
             lpcode + 0C BFF84942 C3                   ret
             */
 
-            DWORD	dwOffset = *(LPDWORD)(lpCode + 0x08);
+            DWORD   dwOffset = *(LPDWORD)(lpCode + 0x08);
 
             lpfnObfuscate = (LPOBFUSCATE)(lpCode + 0x0C + dwOffset);
             /*
@@ -104,7 +104,7 @@ static DWORD WINAPI Obfuscate( DWORD dwPTID )
             BFF80E6A C2 04 00             ret         4
             */
         }
-        
+
     }
 
     return lpfnObfuscate ? lpfnObfuscate( dwPTID ) : 0;
@@ -116,25 +116,25 @@ EXTERN_C DWORD WINAPI GetProcessId_WINDOWS( HANDLE hProcess )
     if ( GetCurrentProcess() == hProcess )
         return GetCurrentProcessId();
 
-    DWORD	dwProcessId = 0;
-    PPROCESS_DATABASE	pPDB = (PPROCESS_DATABASE)Obfuscate( GetCurrentProcessId() );
+    DWORD   dwProcessId = 0;
+    PPROCESS_DATABASE   pPDB = (PPROCESS_DATABASE)Obfuscate( GetCurrentProcessId() );
 
     if ( pPDB && K32OBJ_PROCESS == pPDB->Type )
     {
-        DWORD	dwHandleNumber = (DWORD)hProcess >> 2;
+        DWORD   dwHandleNumber = (DWORD)hProcess >> 2;
 
         if ( 0 == ((DWORD)hProcess & 0x03) && dwHandleNumber < pPDB->pHandleTable->cEntries )
         {
-            if ( 
-                pPDB->pHandleTable->array[dwHandleNumber].pObject && 
-                K32OBJ_PROCESS == pPDB->pHandleTable->array[dwHandleNumber].pObject->Type 
+            if (
+                pPDB->pHandleTable->array[dwHandleNumber].pObject &&
+                K32OBJ_PROCESS == pPDB->pHandleTable->array[dwHandleNumber].pObject->Type
                 )
             dwProcessId = Obfuscate( (DWORD)pPDB->pHandleTable->array[dwHandleNumber].pObject );
         }
 
         SetLastError( ERROR_INVALID_HANDLE );
     }
-    
+
     return dwProcessId;
 }
 
@@ -152,7 +152,7 @@ EXTERN_C void WINAPI ResolveThunk_GetProcessId( FARPROC *lppfn, LPCSTR lpLibFile
         *lppfn = (FARPROC)GetProcessId_WINDOWS;
     else
     {
-        FARPROC	lpfnResult = GetProcAddress( LoadLibraryA( lpLibFileName ), lpFuncName );
+        FARPROC lpfnResult = GetProcAddress( LoadLibraryA( lpLibFileName ), lpFuncName );
         if ( !lpfnResult )
             lpfnResult = (FARPROC)GetProcessId_NT;
 

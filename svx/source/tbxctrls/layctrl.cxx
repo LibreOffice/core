@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,10 +70,10 @@ class TableWindow : public SfxPopupWindow
 {
 private:
     PushButton          aTableButton;
-    ::Color			    aLineColor;
-    ::Color			    aFillColor;
-    ::Color			    aHighlightFillColor;
-    ::Color			    aBackgroundColor;
+    ::Color             aLineColor;
+    ::Color             aFillColor;
+    ::Color             aHighlightFillColor;
+    ::Color             aBackgroundColor;
     long                nCol;
     long                nLine;
     BOOL                bInitialKeyInput;
@@ -94,15 +94,15 @@ public:
 
     void                    KeyInput( const KeyEvent& rKEvt );
     virtual void            MouseMove( const MouseEvent& rMEvt );
-    virtual void			MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    		Paint( const Rectangle& );
-    virtual void    		PopupModeEnd();
-    virtual SfxPopupWindow*	Clone() const;
+    virtual void            MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void            Paint( const Rectangle& );
+    virtual void            PopupModeEnd();
+    virtual SfxPopupWindow* Clone() const;
 
 private:
-    void    				Update( long nNewCol, long nNewLine );
-    void    				TableDialog( const Sequence< PropertyValue >& rArgs );
-    void    				CloseAndShowTableDialog();
+    void                    Update( long nNewCol, long nNewLine );
+    void                    TableDialog( const Sequence< PropertyValue >& rArgs );
+    void                    CloseAndShowTableDialog();
 };
 
 // -----------------------------------------------------------------------
@@ -408,11 +408,11 @@ void TableWindow::CloseAndShowTableDialog()
 class ColumnsWindow : public SfxPopupWindow
 {
 private:
-    ::Color			    aLineColor;
-    ::Color			    aHighlightLineColor;
-    ::Color			    aFillColor;
-    ::Color			    aHighlightFillColor;
-    ::Color			    aFaceColor;
+    ::Color             aLineColor;
+    ::Color             aHighlightLineColor;
+    ::Color             aFillColor;
+    ::Color             aHighlightFillColor;
+    ::Color             aFaceColor;
     long                nCol;
     long                nWidth;
     long                nMX;
@@ -429,13 +429,13 @@ public:
 
     void                    KeyInput( const KeyEvent& rKEvt );
     virtual void            MouseMove( const MouseEvent& rMEvt );
-    virtual void			MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void			MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    		Paint( const Rectangle& );
-    virtual void    		PopupModeEnd();
-    virtual SfxPopupWindow*	Clone() const;
+    virtual void            MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void            MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void            Paint( const Rectangle& );
+    virtual void            PopupModeEnd();
+    virtual SfxPopupWindow* Clone() const;
 
-    USHORT          		GetColCount() const { return (USHORT)nCol; }
+    USHORT                  GetColCount() const { return (USHORT)nCol; }
 };
 
 // -----------------------------------------------------------------------
@@ -784,7 +784,7 @@ void SvxTableToolBoxControl::StateChanged( USHORT, SfxItemState eState, const Sf
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
     rTbx.SetItemState( nId,
-        ( SFX_ITEM_DONTCARE == eState )	? STATE_DONTKNOW : STATE_NOCHECK );
+        ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
 }
 
 // class SvxColumnsToolBoxControl ------------------------------------------
@@ -843,5 +843,5 @@ void SvxColumnsToolBoxControl::StateChanged( USHORT nSID,
                                               const SfxPoolItem* pState )
 {
     bEnabled = SFX_ITEM_DISABLED != eState;
-    SfxToolBoxControl::StateChanged(nSID,	eState, pState );
+    SfxToolBoxControl::StateChanged(nSID,   eState, pState );
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 using rtl::OUString;
 using namespace ::com::sun::star;
 
-#define DDE_TXT_ENCODING 	gsl_getSystemTextEncoding()
+#define DDE_TXT_ENCODING    gsl_getSystemTextEncoding()
 
 /*--------------------------------------------------------------------
     Beschreibung: Globale Variablen
@@ -84,7 +84,7 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
             uno::Sequence< sal_Int8 > aSeq;
             rValue >>= aSeq;
             String sStr( (sal_Char*)aSeq.getConstArray(), static_cast<xub_StrLen>(aSeq.getLength()),
-                               DDE_TXT_ENCODING	 );
+                               DDE_TXT_ENCODING  );
 
             // CR-LF am Ende entfernen, ist ueberfluessig!
             xub_StrLen n = sStr.Len();
@@ -126,7 +126,7 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
 
         SwClientIter aIter( rFldType );
         SwClient * pLast = aIter.GoStart();
-        if( pLast ) 	// konnte zum Anfang gesprungen werden ??
+        if( pLast )     // konnte zum Anfang gesprungen werden ??
             do {
                 // eine DDE-Tabelle oder ein DDE-FeldAttribut im Text
                 if( !pLast->IsA( TYPE( SwFmtFld ) ) ||
@@ -188,7 +188,7 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
     const SwNode* pNd = 0;
     SwClientIter aIter( rFldType );
     SwClient * pLast = aIter.GoStart();
-    if( pLast ) 	// konnte zum Anfang gesprungen werden ??
+    if( pLast )     // konnte zum Anfang gesprungen werden ??
         do {
             // eine DDE-Tabelle oder ein DDE-FeldAttribut im Text
             if( !pLast->IsA( TYPE( SwFmtFld ) ))
@@ -215,7 +215,7 @@ BOOL SwIntrnlRefLink::IsInRange( ULONG nSttNd, ULONG nEndNd,
     SwNodes* pNds = &rFldType.GetDoc()->GetNodes();
     SwClientIter aIter( rFldType );
     SwClient * pLast = aIter.GoStart();
-    if( pLast ) 	// konnte zum Anfang gesprungen werden ??
+    if( pLast )     // konnte zum Anfang gesprungen werden ??
         do {
             // eine DDE-Tabelle oder ein DDE-FeldAttribut im Text
             if( !pLast->IsA( TYPE( SwFmtFld ) ))
@@ -401,8 +401,8 @@ SwDDEField::SwDDEField( SwDDEFieldType* pInitType )
 
 SwDDEField::~SwDDEField()
 {
-    if( GetTyp()->IsLastDepend() )  					// der Letzte mach das
-        ((SwDDEFieldType*)GetTyp())->Disconnect();		// Licht aus
+    if( GetTyp()->IsLastDepend() )                      // der Letzte mach das
+        ((SwDDEFieldType*)GetTyp())->Disconnect();      // Licht aus
 }
 
 String SwDDEField::Expand() const

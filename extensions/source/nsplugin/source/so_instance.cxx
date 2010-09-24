@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,15 +35,15 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp> 
-#include <com/sun/star/presentation/XPresentation.hpp> 
-#include <com/sun/star/presentation/XPresentationSupplier.hpp> 
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/presentation/XPresentation.hpp>
+#include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
 #include <vcl/window.hxx>
 #include <rtl/textenc.h>
 #include <rtl/locale.h>
-#include <osl/nlsupport.h> 
+#include <osl/nlsupport.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -83,12 +83,12 @@ SoPluginInstance::SoPluginInstance(long pParent, Reference< XMultiServiceFactory
     m_nHeight = 0;
     m_nX = 0;
     m_nY = 0;
-    m_nFlag = 15; 
+    m_nFlag = 15;
     m_bInit = sal_False;
     m_sURL = rtl::OUString::createFromAscii("");
     m_hParent = 0;
     m_pParent = pParent;
-    m_dParentStyl = 0;  
+    m_dParentStyl = 0;
     mxRemoteMSF = xMSF;
 }
 
@@ -101,8 +101,8 @@ sal_Bool SoPluginInstance::SetURL(char* aURL)
     debug_fprintf(NSP_LOG_APPEND, "SoPluginInstance::SetURL %s\n", aURL);
     sal_uInt16 encoding = 11;
 
-    rtl_Locale* pLocale = NULL; 
-    osl_getProcessLocale(&pLocale); 
+    rtl_Locale* pLocale = NULL;
+    osl_getProcessLocale(&pLocale);
     encoding = osl_getTextEncodingFromLocale(pLocale);
 
     m_sURL = ::rtl::OUString(aURL, strlen(aURL), encoding);
@@ -119,7 +119,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
     {
         debug_fprintf(NSP_LOG_APPEND, "only reset windows size\n");
         m_xUnoWin->setPosSize( m_nX, m_nY, m_nWidth, m_nHeight, m_nFlag );
-        debug_fprintf(NSP_LOG_APPEND, "set windows to x:%d y:%d w:%d h%d falg:%d\n", 
+        debug_fprintf(NSP_LOG_APPEND, "set windows to x:%d y:%d w:%d h%d falg:%d\n",
             m_nX, m_nY, m_nWidth, m_nHeight, m_nFlag);
         return sal_True;
     }
@@ -134,7 +134,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
     try
     {
         // try to create netscape plugin window
-        Reference< awt::XToolkit > xToolkit( 
+        Reference< awt::XToolkit > xToolkit(
             mxRemoteMSF->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.awt.Toolkit") ),
             uno::UNO_QUERY );
         if( !xToolkit.is() )
@@ -142,7 +142,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             debug_fprintf(NSP_LOG_APPEND, "Can not create Toolkit!\n");
             return sal_False;
         }
-    
+
         // prepare parameters for plugin window
         css::uno::Any hwndParent = css::uno::makeAny((sal_Int32)hParent);
 #ifdef UNIX
@@ -151,10 +151,10 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 #ifdef WNT
         sal_Int16 nWindowType = css::lang::SystemDependent::SYSTEM_WIN32;
 #endif //end of WNT
-        
+
         Reference< awt::XSystemChildFactory > xToolkitSystemChildFactory(xToolkit, uno::UNO_QUERY);
         if (!xToolkitSystemChildFactory.is())
-        {        
+        {
             debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, get xToolkitSystemChildFactory failure.\n");
             return sal_False;
         }
@@ -162,8 +162,8 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  try to create plugin container window HWIN:%ld.\n", hParent);
 
         // create the plugin window
-        Reference< awt::XWindowPeer > xNewWinPeer = 
-            xToolkitSystemChildFactory->createSystemChild( hwndParent, 
+        Reference< awt::XWindowPeer > xNewWinPeer =
+            xToolkitSystemChildFactory->createSystemChild( hwndParent,
                 css::uno::Sequence<sal_Int8>(), nWindowType );
         if ( !xNewWinPeer.is() )
         {
@@ -183,7 +183,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         xNewWinPeer->setBackground( COL_GRAY );
         m_xUnoWin->setVisible( sal_True );
         m_xUnoWin->setPosSize( m_nX, m_nY, m_nWidth, m_nHeight, m_nFlag );
-        debug_fprintf(NSP_LOG_APPEND, "set windows to x:%d y:%d w:%d h%d falg:%d\n", 
+        debug_fprintf(NSP_LOG_APPEND, "set windows to x:%d y:%d w:%d h%d falg:%d\n",
             m_nX, m_nY, m_nWidth, m_nHeight, m_nFlag);
 
         // create frame
@@ -198,7 +198,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
         // initialize frame
         m_xFrame->initialize( m_xUnoWin );
- 
+
         try
         {
             // currently ignore errors in this code
@@ -210,9 +210,9 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         }
         catch( uno::Exception& )
         {}
- 
+
         // get frames supplier
-        Reference< frame::XFramesSupplier > m_xFramesSupplier( 
+        Reference< frame::XFramesSupplier > m_xFramesSupplier(
             mxRemoteMSF->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop") ),
             uno::UNO_QUERY );
         if ( !m_xFramesSupplier.is() )
@@ -220,7 +220,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             debug_fprintf(NSP_LOG_APPEND, "can not get desktop\n");
             return sal_False;
         }
-        
+
         // get frames
         m_xFrames = m_xFramesSupplier->getFrames();
         if ( !m_xFrames.is() )
@@ -228,10 +228,10 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             debug_fprintf(NSP_LOG_APPEND, "can not get frames from FramesSupplier\n");
             return sal_False;
         }
-        
+
         // append m_xFrame to m_xFrames
         m_xFrames->append( m_xFrame );
-    
+
         // create XComponentLoader
         Reference< frame::XComponentLoader > xLoader( m_xFrame, uno::UNO_QUERY );
         if ( !xLoader.is() )
@@ -239,7 +239,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             debug_fprintf(NSP_LOG_APPEND, "can not get ComponentLoader to load URL\n");
             return sal_False;
         }
-        
+
         //create stream for the document
         Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
             mxRemoteMSF->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
@@ -247,14 +247,14 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if(!xSimpleFileAccess.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "can not create SimpleFileAccess to load URL\n");
-            return sal_False;      
+            return sal_False;
         }
-        Reference<io::XInputStream> xInputStream = xSimpleFileAccess->openFileRead( m_sURL );    
-        
+        Reference<io::XInputStream> xInputStream = xSimpleFileAccess->openFileRead( m_sURL );
+
         if(!xInputStream.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "can not create XInputStream for URL\n");
-            return sal_False;   
+            return sal_False;
         }
 
         // prepare to load document
@@ -270,35 +270,35 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         setPropValues[ 3 ].Name = "FilterName";
         setPropValues[ 3 ].Value =  "Flat XML File";*/
 
-        debug_fprintf(NSP_LOG_APPEND, "try to load copy of URL from local file %s:%d\n", 
-            ::rtl::OUStringToOString( m_sURL, RTL_TEXTENCODING_ASCII_US ).getStr( ), 
+        debug_fprintf(NSP_LOG_APPEND, "try to load copy of URL from local file %s:%d\n",
+            ::rtl::OUStringToOString( m_sURL, RTL_TEXTENCODING_ASCII_US ).getStr( ),
             m_sURL.getLength() );
-               
+
 
         // load document
-/*        
+/*
         m_xComponent = xLoader->loadComponentFromURL(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("private:stream")), //m_sURL, 
+            OUString(RTL_CONSTASCII_USTRINGPARAM("private:stream")), //m_sURL,
             m_xFrame->getName(), 0, setPropValues );
-  */      
+  */
 
          Sequence< ::com::sun::star::beans::PropertyValue > setPropValues2(3);
         setPropValues2[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ViewOnly") );
         setPropValues2[0].Value <<= sal_True;
         setPropValues2[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") );
-        setPropValues2[1].Value <<= sal_True;   
+        setPropValues2[1].Value <<= sal_True;
         setPropValues2[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("AsTemplate") );
-        setPropValues2[2].Value <<= sal_False;  
+        setPropValues2[2].Value <<= sal_False;
         m_xComponent = xLoader->loadComponentFromURL(
-            m_sURL, 
-            m_xFrame->getName(), 0, setPropValues2 ); 
-        
+            m_sURL,
+            m_xFrame->getName(), 0, setPropValues2 );
+
         if ( !m_xComponent.is() )
         {
             debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, Load Componment error\n");
             return sal_False;
-        }    
- 
+        }
+
          // register the closelistener that will prevent closing of the component
         Reference< util::XCloseable > xCloseable( m_xFrame, uno::UNO_QUERY );
         if ( xCloseable.is() )
@@ -314,7 +314,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         debug_fprintf(NSP_LOG_APPEND, "load document success\n");
 
         // create frame::XDispatchHelper and frame::XDispatchProvider
-        m_xDispatcher = Reference< frame::XDispatchHelper > ( 
+        m_xDispatcher = Reference< frame::XDispatchHelper > (
             mxRemoteMSF->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")),
             uno::UNO_QUERY );
         if(!m_xDispatcher.is())
@@ -326,23 +326,23 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         if(!m_xDispatchProvider.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "m_xDispatchProvider can not be getten\n");
-            return sal_False;  
+            return sal_False;
         }
 
         //try to enable toolbar and tool windows
         Sequence< ::com::sun::star::beans::PropertyValue > propertyValue(1);
         propertyValue[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FunctionBarVisible") );
         propertyValue[0].Value <<= sal_True;
-        m_xDispatcher->executeDispatch(m_xDispatchProvider, 
-                ::rtl::OUString::createFromAscii(".uno:FunctionBarVisible"), 
+        m_xDispatcher->executeDispatch(m_xDispatchProvider,
+                ::rtl::OUString::createFromAscii(".uno:FunctionBarVisible"),
                 m_xFrame->getName(), 0,
-                propertyValue ); 
-                
+                propertyValue );
+
         // reset window style of parent window
 #ifdef WNT
-        m_dParentStyl = ::NSP_ResetWinStyl (m_hParent);        
+        m_dParentStyl = ::NSP_ResetWinStyl (m_hParent);
 #endif
-        m_bInit = sal_True; 
+        m_bInit = sal_True;
 
         try
         {
@@ -381,10 +381,10 @@ sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int 
     {
         m_hParent = hParent;
 
-        debug_fprintf(NSP_LOG_APPEND, "SoPluginInstance::SetWindow %s : %d\n", 
-            ::rtl::OUStringToOString(m_sURL, RTL_TEXTENCODING_ASCII_US).getStr(), 
+        debug_fprintf(NSP_LOG_APPEND, "SoPluginInstance::SetWindow %s : %d\n",
+            ::rtl::OUStringToOString(m_sURL, RTL_TEXTENCODING_ASCII_US).getStr(),
             m_sURL.getLength() );
-        m_nWidth = w; 
+        m_nWidth = w;
         m_nHeight =h;
         m_nX = x;
         m_nY = y;
@@ -405,7 +405,7 @@ sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int 
             mxRemoteMSF = Reference< XMultiServiceFactory >();
             m_bInit = sal_False;
             bRetval = LoadDocument(hParent);
-            debug_fprintf(NSP_LOG_APPEND, "load document again, return %d\n", bRetval);        
+            debug_fprintf(NSP_LOG_APPEND, "load document again, return %d\n", bRetval);
         }
     }
 
@@ -414,16 +414,16 @@ sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int 
 
 sal_Bool SoPluginInstance::Destroy(void)
 {
-#ifdef WNT   
+#ifdef WNT
     if(m_dParentStyl != 0)
         NSP_RestoreWinStyl(m_hParent, m_dParentStyl);
 #endif
-//	if(m_xDispatcher.is()){
-//	 m_xDispatcher->executeDispatch(m_xDispatchProvider, 
-//                ::rtl::OUString::createFromAscii(".uno:CloseFrame"), 
+//  if(m_xDispatcher.is()){
+//   m_xDispatcher->executeDispatch(m_xDispatchProvider,
+//                ::rtl::OUString::createFromAscii(".uno:CloseFrame"),
 //                ::rtl::OUString::createFromAscii("_top"), 0,
 //                Sequence< ::com::sun::star::beans::PropertyValue >() );
-//	}
+//  }
 
     uno::Reference< util::XCloseable > xCloseable( m_xFrame, uno::UNO_QUERY );
 
@@ -450,7 +450,7 @@ sal_Bool SoPluginInstance::Destroy(void)
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.DocumentCloser" ) ),
                 aArgs ),
             uno::UNO_QUERY_THROW );
-    
+
         xDocumentCloser->dispose(); // this call should close the document
     }
     catch( uno::Exception& )
@@ -478,18 +478,18 @@ sal_Bool SoPluginInstance::Destroy(void)
     m_xFrames = Reference< frame::XFrames >();
     m_xDispatcher = Reference< frame::XDispatchHelper >();
     m_xDispatchProvider = Reference< frame::XDispatchProvider >();
-    return sal_True; 
-} 
+    return sal_True;
+}
 
 sal_Bool SoPluginInstance::Print(void)
 {
     if(!m_xDispatcher.is())
         return sal_False;
-        
+
     Sequence< ::com::sun::star::beans::PropertyValue > propertyValue(1);
-    m_xDispatcher->executeDispatch(m_xDispatchProvider, 
-        ::rtl::OUString::createFromAscii(".uno:PrintDefault"), 
+    m_xDispatcher->executeDispatch(m_xDispatchProvider,
+        ::rtl::OUString::createFromAscii(".uno:PrintDefault"),
         m_xFrame->getName(), 0,
-        propertyValue );             
+        propertyValue );
     return sal_True;
 }

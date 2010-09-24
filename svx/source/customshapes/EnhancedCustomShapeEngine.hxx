@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase3.hxx>
 #ifndef __com_sun_star_awt_Rectangle_hpp_
-#include <com/sun/star/awt/Rectangle.hpp> 
-#endif 
+#include <com/sun/star/awt/Rectangle.hpp>
+#endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -50,17 +50,17 @@
 
 // -----------------------------------------------------------------------------
 
-#define NMSP_IO			com::sun::star::io
-#define NMSP_UNO		com::sun::star::uno
+#define NMSP_IO         com::sun::star::io
+#define NMSP_UNO        com::sun::star::uno
 #define NMSP_BEANS      com::sun::star::beans
-#define NMSP_LANG		com::sun::star::lang
-#define NMSP_UTIL		com::sun::star::util
-#define NMSP_SAX		com::sun::star::xml::sax
-#define NMSP_LOGGING	NMSP_UTIL::logging
+#define NMSP_LANG       com::sun::star::lang
+#define NMSP_UTIL       com::sun::star::util
+#define NMSP_SAX        com::sun::star::xml::sax
+#define NMSP_LOGGING    NMSP_UTIL::logging
 
 
 #define REF( _def_Obj )         NMSP_UNO::Reference< _def_Obj >
-#define SEQ( _def_Obj )         NMSP_UNO::Sequence< _def_Obj > 
+#define SEQ( _def_Obj )         NMSP_UNO::Sequence< _def_Obj >
 #define B2UCONST( _def_pChar )  (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(_def_pChar )))
 
 // ---------------------------
@@ -71,36 +71,36 @@
 class SdrObject;
 class SdrObjCustomShape;
 class EnhancedCustomShapeEngine : public cppu::WeakImplHelper3
-< 
+<
     com::sun::star::lang::XInitialization,
     com::sun::star::lang::XServiceInfo,
     com::sun::star::drawing::XCustomShapeEngine
 >
 {
-    REF( NMSP_LANG::XMultiServiceFactory )		mxFact;
-    REF( com::sun::star::drawing::XShape )		mxShape;
-    sal_Bool									mbForceGroupWithText;
+    REF( NMSP_LANG::XMultiServiceFactory )      mxFact;
+    REF( com::sun::star::drawing::XShape )      mxShape;
+    sal_Bool                                    mbForceGroupWithText;
 
     SdrObject* ImplForceGroupWithText( const SdrObjCustomShape* pCustoObj, SdrObject* pRenderedShape );
 
 public:
                             EnhancedCustomShapeEngine( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr );
-    virtual 				~EnhancedCustomShapeEngine();
-                                            
-    // XInterface							
-    virtual void SAL_CALL	acquire() throw();
-    virtual void SAL_CALL	release() throw();
+    virtual                 ~EnhancedCustomShapeEngine();
+
+    // XInterface
+    virtual void SAL_CALL   acquire() throw();
+    virtual void SAL_CALL   release() throw();
 
     // XInitialization
-    virtual void SAL_CALL initialize( const SEQ( NMSP_UNO::Any )& aArguments ) 
+    virtual void SAL_CALL initialize( const SEQ( NMSP_UNO::Any )& aArguments )
         throw ( NMSP_UNO::Exception, NMSP_UNO::RuntimeException );
 
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName() 
+    virtual rtl::OUString SAL_CALL getImplementationName()
         throw ( NMSP_UNO::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& rServiceName ) 
+    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& rServiceName )
         throw ( NMSP_UNO::RuntimeException );
-    virtual SEQ( rtl::OUString ) SAL_CALL getSupportedServiceNames() 
+    virtual SEQ( rtl::OUString ) SAL_CALL getSupportedServiceNames()
         throw ( NMSP_UNO::RuntimeException );
 
     // XCustomShapeEngine
@@ -118,7 +118,7 @@ rtl::OUString EnhancedCustomShapeEngine_getImplementationName()
     throw ( NMSP_UNO::RuntimeException );
 sal_Bool SAL_CALL EnhancedCustomShapeEngine_supportsService( const rtl::OUString& rServiceName )
     throw( NMSP_UNO::RuntimeException );
-SEQ( rtl::OUString ) SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames() 
+SEQ( rtl::OUString ) SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames()
     throw( NMSP_UNO::RuntimeException );
 
 #endif

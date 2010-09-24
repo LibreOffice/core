@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,23 +36,23 @@ class Heap
 {
   public:
                         Heap(
-                            unsigned			i_nWidth );
+                            unsigned            i_nWidth );
                         ~Heap();
 
-    void				InsertValue(
-                            const char *		i_sKey,
-                            const char *	   	i_sValue );
-    HeapItem *		    ReleaseTop();   		/// @return must be deleted by caller of method.
+    void                InsertValue(
+                            const char *        i_sKey,
+                            const char *        i_sValue );
+    HeapItem *          ReleaseTop();           /// @return must be deleted by caller of method.
 
   private:
     typedef HeapItem * Column;
 
-    void				IncColumn();
-    Column &			ActiveColumn()			{ return dpColumnsArray[nActiveColumn]; }
+    void                IncColumn();
+    Column &            ActiveColumn()          { return dpColumnsArray[nActiveColumn]; }
 
-    Column *			dpColumnsArray;
-    unsigned			nColumnsArraySize;
-    unsigned			nActiveColumn;
+    Column *            dpColumnsArray;
+    unsigned            nColumnsArraySize;
+    unsigned            nActiveColumn;
 };
 
 
@@ -60,25 +60,25 @@ class HeapItem
 {
   public:
                         HeapItem(
-                            const char *		i_sKey,
-                            const char *	   	i_sValue );
+                            const char *        i_sKey,
+                            const char *        i_sValue );
                         ~HeapItem(  );
 
-    bool				operator<(
-                            const HeapItem &  	i_rOther ) const;
-    bool				operator<=(
-                            const HeapItem &  	i_rOther ) const
+    bool                operator<(
+                            const HeapItem &    i_rOther ) const;
+    bool                operator<=(
+                            const HeapItem &    i_rOther ) const
                                                 { return ! (i_rOther < *this); }
-    const Simstr &		Value() const;
-    const Simstr &		Key() const;
-    HeapItem * 		    Next() const;
+    const Simstr &      Value() const;
+    const Simstr &      Key() const;
+    HeapItem *          Next() const;
 
-    void        		SetNext(
-                            HeapItem *			i_pNext );
+    void                SetNext(
+                            HeapItem *          i_pNext );
   private:
-    Simstr				sValue;
+    Simstr              sValue;
     Simstr              sKey;
-    HeapItem *			pNext;
+    HeapItem *          pNext;
 };
 
 

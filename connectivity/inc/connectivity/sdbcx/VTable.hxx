@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,18 +53,18 @@ namespace connectivity
         class OTable;
         class OCollection;
 
-        typedef ::cppu::WeakComponentImplHelper4<	::com::sun::star::sdbcx::XColumnsSupplier,
+        typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbcx::XColumnsSupplier,
                                                     ::com::sun::star::sdbcx::XKeysSupplier,
                                                     ::com::sun::star::container::XNamed,
                                                     ::com::sun::star::lang::XServiceInfo> OTableDescriptor_BASE;
 
-        typedef ::cppu::ImplHelper4<				::com::sun::star::sdbcx::XDataDescriptorFactory,
+        typedef ::cppu::ImplHelper4<                ::com::sun::star::sdbcx::XDataDescriptorFactory,
                                                     ::com::sun::star::sdbcx::XIndexesSupplier,
                                                     ::com::sun::star::sdbcx::XRename,
                                                     ::com::sun::star::sdbcx::XAlterTable > OTable_BASE;
 
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OTable> OTable_PROP;
-        
+
 
         class OOO_DLLPUBLIC_DBTOOLS OTable :
                                  public comphelper::OBaseMutex,
@@ -80,10 +80,10 @@ namespace connectivity
             ::rtl::OUString m_Description;
             ::rtl::OUString m_Type;
 
-            OCollection*	m_pKeys;
-            OCollection*	m_pColumns;
-            OCollection*	m_pIndexes;
-            OCollection*	m_pTables;	// must hold his own container to notify him when renaming
+            OCollection*    m_pKeys;
+            OCollection*    m_pColumns;
+            OCollection*    m_pIndexes;
+            OCollection*    m_pTables;  // must hold his own container to notify him when renaming
 
             using OTableDescriptor_BASE::rBHelper;
 
@@ -92,9 +92,9 @@ namespace connectivity
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         public:
-            OTable(	OCollection*	_pTables,
+            OTable( OCollection*    _pTables,
                     sal_Bool _bCase);
-            OTable( OCollection*	_pTables,
+            OTable( OCollection*    _pTables,
                     sal_Bool _bCase,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
@@ -106,8 +106,8 @@ namespace connectivity
 
             DECLARE_SERVICE_INFO();
             //XInterface
-            virtual void	SAL_CALL acquire() throw();
-            virtual void	SAL_CALL release() throw();
+            virtual void    SAL_CALL acquire() throw();
+            virtual void    SAL_CALL release() throw();
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);

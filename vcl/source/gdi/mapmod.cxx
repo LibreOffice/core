@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,8 +64,8 @@ ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
 
 SvStream& operator>>( SvStream& rIStm, ImplMapMode& rImplMapMode )
 {
-    VersionCompat	aCompat( rIStm, STREAM_READ );
-    UINT16			nTmp16;
+    VersionCompat   aCompat( rIStm, STREAM_READ );
+    UINT16          nTmp16;
 
     rIStm >> nTmp16; rImplMapMode.meUnit = (MapUnit) nTmp16;
     rIStm >> rImplMapMode.maOrigin >> rImplMapMode.maScaleX >>

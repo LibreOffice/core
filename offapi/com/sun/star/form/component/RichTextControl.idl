@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,9 +32,9 @@
 #include <com/sun/star/awt/UnoControlEditModel.idl>
 #endif
 
-#ifndef __com_sun_star_form_FormControlModel_idl__ 
-#include <com/sun/star/form/FormControlModel.idl> 
-#endif 
+#ifndef __com_sun_star_form_FormControlModel_idl__
+#include <com/sun/star/form/FormControlModel.idl>
+#endif
 
 #ifndef __com_sun_star_text_TextRange_idl__
 #include <com/sun/star/text/TextRange.idl>
@@ -53,7 +53,7 @@ published service RichTextControl
 {
     service com::sun::star::awt::UnoControlEditModel;
 
-    service com::sun::star::form::FormControlModel; 
+    service com::sun::star::form::FormControlModel;
 
     /** specifies capabilities to provide rich text, as opposed to the simple text provided by the
         <type scope="com::sun::star::awt">UnoControlEditModel</type>

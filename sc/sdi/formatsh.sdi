@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,16 +31,16 @@ interface TableFont
     uuid ( "2E4AC1C0-137C-11D3-B25B-006097DA68F3" )
 ]
 {
-    SID_ATTR_CHAR_FONT			[ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
-    SID_ATTR_CHAR_FONTHEIGHT	[ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
-    SID_ATTR_CHAR_COLOR			[ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
-    SID_ATTR_CHAR_WEIGHT	[ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
-    SID_ATTR_CHAR_POSTURE	[ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
-    SID_ATTR_CHAR_UNDERLINE	[ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
-    SID_ULINE_VAL_NONE		[ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
-    SID_ULINE_VAL_SINGLE	[ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
-    SID_ULINE_VAL_DOUBLE	[ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
-    SID_ULINE_VAL_DOTTED	[ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ATTR_CHAR_FONT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_FONTHEIGHT    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_COLOR         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_WEIGHT    [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ATTR_CHAR_POSTURE   [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ATTR_CHAR_UNDERLINE [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ULINE_VAL_NONE      [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ULINE_VAL_SINGLE    [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ULINE_VAL_DOUBLE    [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ULINE_VAL_DOTTED    [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
 }
 
  // ===========================================================================
@@ -58,15 +58,15 @@ interface FormatForSelection
     ]
 
     // Slot's die in der DrawShell disabled werden. {
-    SID_STYLE_FAMILY2			[ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_APPLY				[ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_WATERCAN			[ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_NEW_BY_EXAMPLE	[ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_UPDATE_BY_EXAMPLE	[ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_NEW				[ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_FAMILY4			[ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_EDIT				[ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-    SID_STYLE_DELETE			[ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_FAMILY2           [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_APPLY             [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_WATERCAN          [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_NEW_BY_EXAMPLE    [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_UPDATE_BY_EXAMPLE [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_NEW               [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_FAMILY4           [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_EDIT              [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_DELETE            [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
     // } Slot's die in der DrawShell disabled werden.
 
     SID_ATTR_ALIGN_HOR_JUSTIFY    [ ExecMethod = ExecuteAlignment; StateMethod = GetAttrState; ]
@@ -79,33 +79,33 @@ interface FormatForSelection
 
     // pseudo slots from Format menu
     SID_ALIGN_ANY_LEFT      [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
-    SID_ALIGN_ANY_HCENTER	[ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
-    SID_ALIGN_ANY_RIGHT		[ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_HCENTER   [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_RIGHT     [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
     SID_ALIGN_ANY_JUSTIFIED [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
-    SID_ALIGN_ANY_TOP		[ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_TOP       [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
     SID_ALIGN_ANY_VCENTER   [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
     SID_ALIGN_ANY_BOTTOM    [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
-    SID_ALIGN_ANY_HDEFAULT	[ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
-    SID_ALIGN_ANY_VDEFAULT	[ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_HDEFAULT  [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_ALIGN_ANY_VDEFAULT  [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
 
     SID_SCATTR_PROTECTION [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_BACKGROUND_COLOR    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_BRUSH      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
-    SID_ATTR_CHAR_OVERLINE	[ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_OVERLINE  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_STRIKEOUT [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_CONTOUR [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_SHADOWED [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
     SID_ATTR_CHAR_RELIEF [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
-    SID_ALIGNLEFT		[ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
-    SID_ALIGNRIGHT		[ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
-    SID_ALIGNTOP		[ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
-    SID_ALIGNBOTTOM		[ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
-    SID_ALIGNCENTERVER	[ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
-    SID_ALIGNBLOCK		[ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
-    SID_ALIGNCENTERHOR	[ ExecMethod = ExecuteTextAttr;	StateMethod = GetTextAttrState;	]
+    SID_ALIGNLEFT       [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ALIGNRIGHT      [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ALIGNTOP        [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ALIGNBOTTOM     [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ALIGNCENTERVER  [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ALIGNBLOCK      [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ALIGNCENTERHOR  [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
 
-    SID_V_ALIGNCELL			[ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
-    SID_H_ALIGNCELL			[ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_V_ALIGNCELL         [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_H_ALIGNCELL         [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
 
     SID_TEXTDIRECTION_LEFT_TO_RIGHT [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
     SID_TEXTDIRECTION_TOP_TO_BOTTOM [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
@@ -116,23 +116,23 @@ interface FormatForSelection
 
     SID_ATTR_NUMBERFORMAT_VALUE       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState;]
     SID_NUMBER_FORMAT       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState;]
-    SID_NUMBER_TWODEC		[ ExecMethod = ExecuteNumFormat;]
-    SID_NUMBER_SCIENTIFIC	[ ExecMethod = ExecuteNumFormat;]
-    SID_NUMBER_DATE			[ ExecMethod = ExecuteNumFormat;]
-    SID_NUMBER_CURRENCY		[ ExecMethod = ExecuteNumFormat;]
-    SID_NUMBER_PERCENT		[ ExecMethod = ExecuteNumFormat;]
-    SID_NUMBER_TIME			[ ExecMethod = ExecuteNumFormat;]
-    SID_NUMBER_STANDARD		[ ExecMethod = ExecuteNumFormat;]
-    SID_NUMBER_INCDEC		[ ExecMethod = ExecuteNumFormat;]
-    SID_NUMBER_DECDEC		[ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_TWODEC       [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_SCIENTIFIC   [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
+    SID_NUMBER_DATE         [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
+    SID_NUMBER_CURRENCY     [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
+    SID_NUMBER_PERCENT      [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
+    SID_NUMBER_TIME         [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
+    SID_NUMBER_STANDARD     [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_INCDEC       [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_DECDEC       [ ExecMethod = ExecuteNumFormat;]
 
-    SID_ATTR_BORDER				[ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ] 	//XXX
-    SID_ATTR_BORDER_INNER		[                           StateMethod = GetBorderState; ] // status()
+    SID_ATTR_BORDER             [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]   //XXX
+    SID_ATTR_BORDER_INNER       [                           StateMethod = GetBorderState; ] // status()
     SID_ATTR_BORDER_OUTER       [ ExecMethod = ExecuteAttr; StateMethod = GetBorderState; ]
     SID_ATTR_BORDER_SHADOW      [ ExecMethod = ExecuteAttr; StateMethod = GetBorderState; ]
-    SID_ATTR_ALIGN_LINEBREAK	[ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
-    SID_FRAME_LINESTYLE			[ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
-    SID_FRAME_LINECOLOR			[ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_ALIGN_LINEBREAK    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_FRAME_LINESTYLE         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_FRAME_LINECOLOR         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
 
     SID_FORMATPAINTBRUSH    [ ExecMethod = ExecFormatPaintbrush; StateMethod = StateFormatPaintbrush; ]
 }
@@ -142,7 +142,7 @@ interface FormatForSelection
 shell ScFormatShell
 {
     import FormatForSelection[Automation];
-//	import Interior ".Interior";
+//  import Interior ".Interior";
     import TableFont ".Font";
 }
 

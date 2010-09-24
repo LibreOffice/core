@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -230,7 +230,7 @@ static void ImplUpdateSeparators( const String& rOldDecSep, const String& rNewDe
 {
     bool bChangeDec = (rOldDecSep != rNewDecSep);
     bool bChangeTh = (rOldThSep != rNewThSep );
-    
+
     if( bChangeDec || bChangeTh )
     {
         BOOL bUpdateMode = pEdit->IsUpdateMode();
@@ -241,7 +241,7 @@ static void ImplUpdateSeparators( const String& rOldDecSep, const String& rNewDe
         if( bChangeTh )
             aText.SearchAndReplaceAll( rNewThSep, rOldThSep );
         pEdit->SetText( aText );
-        
+
         ComboBox* pCombo = dynamic_cast<ComboBox*>(pEdit);
         if( pCombo )
         {
@@ -478,19 +478,19 @@ void NumericFormatter::ImplLoadRes( const ResId& rResId )
     if( pMgr )
     {
         ULONG nMask = pMgr->ReadLong();
-    
+
         if ( NUMERICFORMATTER_MIN & nMask )
             mnMin = pMgr->ReadLong();
-    
+
         if ( NUMERICFORMATTER_MAX & nMask )
             mnMax = pMgr->ReadLong();
-    
+
         if ( NUMERICFORMATTER_STRICTFORMAT & nMask )
             SetStrictFormat( (BOOL)pMgr->ReadShort() );
-    
+
         if ( NUMERICFORMATTER_DECIMALDIGITS & nMask )
             SetDecimalDigits( pMgr->ReadShort() );
-    
+
         if ( NUMERICFORMATTER_VALUE & nMask )
         {
             mnFieldValue = pMgr->ReadLong();
@@ -1073,7 +1073,7 @@ static XubString ImplMetricGetUnitText( const XubString& rStr )
         }
     }
     return aStr;
-    
+
 /*
     // MT: #90545# Preparation for translated strings...
     String aMetricText;
@@ -1092,7 +1092,7 @@ static XubString ImplMetricGetUnitText( const XubString& rStr )
                 break;
         }
     }
-*/    
+*/
 }
 
 // -----------------------------------------------------------------------
@@ -1497,10 +1497,10 @@ void MetricFormatter::ImplLoadRes( const ResId& rResId )
     if( pMgr )
     {
         ULONG       nMask = pMgr->ReadLong();
-    
+
         if ( METRICFORMATTER_UNIT & nMask )
             meUnit = (FieldUnit)pMgr->ReadLong();
-    
+
         if ( METRICFORMATTER_CUSTOMUNITTEXT & nMask )
             maCustomUnitText = pMgr->ReadString();
     }

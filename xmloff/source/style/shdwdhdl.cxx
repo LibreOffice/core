@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,18 +51,18 @@ XMLShadowedPropHdl::~XMLShadowedPropHdl()
 }
 
 sal_Bool XMLShadowedPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_Bool bRet = sal_False;
 
     sal_Bool bValue = ! IsXMLToken( rStrImpValue, XML_NONE );
     rValue <<= sal_Bool(bValue);
     bRet = sal_True;
 
-    return bRet; 
+    return bRet;
 }
 
 sal_Bool XMLShadowedPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
-{ 
+{
     sal_Bool bRet = sal_False;
     sal_Bool bValue = sal_Bool();
 

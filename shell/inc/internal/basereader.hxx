@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #ifndef BASEREADER_HXX_INCLUDED
 #define BASEREADER_HXX_INCLUDED
 
@@ -50,12 +50,12 @@ protected: // protected because its only an implementation relevant class
     CBaseReader( void* stream, zlib_filefunc_def* fa );
 
     virtual void start_document();
-    
+
     virtual void end_document();
 
     virtual void start_element(
-        const std::wstring& raw_name, 
-        const std::wstring& local_name, 
+        const std::wstring& raw_name,
+        const std::wstring& local_name,
         const XmlTagAttributes_t& attributes) = 0;
 
     virtual void end_element(
@@ -75,6 +75,6 @@ protected: // protected because its only an implementation relevant class
 private:
     ZipFile        m_ZipFile;
     ZipFile::ZipContentBuffer_t m_ZipContent;
-}; 
+};
 
 #endif

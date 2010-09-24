@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
 char const* const* OtherInfo::getLibraryPaths(int* size)
 {
 
-#ifdef UNX        
+#ifdef UNX
     static char const * ar[] = {
 #ifdef MACOSX
         "/../Libraries",
@@ -121,7 +121,7 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
 
 int OtherInfo::compareVersions(const rtl::OUString& /*sSecond*/) const
 {
-    //Need to provide an own algorithm for comparing version. 
+    //Need to provide an own algorithm for comparing version.
     //Because this function returns always 0, which means the version of
     //this JRE and the provided version "sSecond" are equal, one cannot put
     //any excludeVersion entries in the javavendors.xml file.

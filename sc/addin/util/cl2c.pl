@@ -3,7 +3,7 @@
 ##########################################################################
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ sub makeneutral {
     print COUT "\n";
     print COUT "\t/* ignore LANGUAGE_USER* */\n";
     print COUT "\tif ( (nLang & 0x03FF) >= 0x0200 )\n";
-    print COUT "\t	return nLang;\n";
+    print COUT "\t  return nLang;\n";
     print COUT "\n";
     print COUT "\tnLang &= 0x03FF;\n";
     print COUT "\n";

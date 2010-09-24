@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,10 +62,10 @@ TYPEINIT1( FuLine, FuPoor );
 \************************************************************************/
 
 FuLine::FuLine (
-    ViewShell* pViewSh, 
-    ::sd::Window* pWin, 
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc, 
+    SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
@@ -80,7 +80,7 @@ FunctionReference FuLine::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::
 
 void FuLine::DoExecute( SfxRequest& rReq )
 {
-    BOOL		bHasMarked = mpView->AreObjectsMarked();
+    BOOL        bHasMarked = mpView->AreObjectsMarked();
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 

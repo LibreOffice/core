@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ struct StringHash
 {
     size_t operator() ( const String *rString) const
     {
-        sal_Int32 h, nLen; 
+        sal_Int32 h, nLen;
         h = nLen = rString->Len();
         const sal_Unicode *pStr = rString->GetBuffer();
 
@@ -94,11 +94,11 @@ struct StringHash
 
 struct StringHashRef
 {
-    size_t operator () (const String &rStr) const 
-    { 
+    size_t operator () (const String &rStr) const
+    {
         StringHash aStrHash;
 
-        return aStrHash(&rStr); 
+        return aStrHash(&rStr);
     }
 };
 #endif // _STRINGHASH_HXX

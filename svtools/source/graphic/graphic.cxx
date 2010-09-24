@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ Graphic::~Graphic()
 
 void Graphic::init( const ::Graphic& rGraphic )
     throw()
-{	
+{
     delete mpGraphic;
     mpGraphic = new ::Graphic( rGraphic );
     ::unographic::GraphicDescriptor::init( *mpGraphic );
@@ -81,7 +81,7 @@ uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
         aAny <<= uno::Reference< lang::XUnoTunnel >(this);
     else
         aAny <<= ::unographic::GraphicDescriptor::queryAggregation( rType );
-        
+
     return aAny ;
 }
 
@@ -98,7 +98,7 @@ uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Graphic::acquire() 
+void SAL_CALL Graphic::acquire()
     throw()
 {
     ::unographic::GraphicDescriptor::acquire();
@@ -112,24 +112,24 @@ void SAL_CALL Graphic::release() throw()
 }
 
 // ------------------------------------------------------------------------------
-    
-uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId_Static() 
+
+uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId_Static()
     throw(uno::RuntimeException)
 {
-    vos::OGuard 						aGuard( Application::GetSolarMutex() );
-    static uno::Sequence< sal_Int8 >	aId;
-    
+    vos::OGuard                         aGuard( Application::GetSolarMutex() );
+    static uno::Sequence< sal_Int8 >    aId;
+
     if( aId.getLength() == 0 )
     {
         aId.realloc( 16 );
         rtl_createUuid( reinterpret_cast< sal_uInt8* >( aId.getArray() ), 0, sal_True );
     }
-    
+
     return aId;
 }
 
 // ------------------------------------------------------------------------------
-    
+
 ::rtl::OUString Graphic::getImplementationName_Static()
     throw()
 {
@@ -142,14 +142,14 @@ uno::Sequence< ::rtl::OUString > Graphic::getSupportedServiceNames_Static()
     throw()
 {
     uno::Sequence< ::rtl::OUString > aSeq( 1 );
-    
+
     aSeq.getArray()[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.Graphic" ) );
-    
+
     return aSeq;
 }
 
 // ------------------------------------------------------------------------------
-    
+
 ::rtl::OUString SAL_CALL Graphic::getImplementationName()
     throw( uno::RuntimeException )
 {
@@ -158,35 +158,35 @@ uno::Sequence< ::rtl::OUString > Graphic::getSupportedServiceNames_Static()
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL Graphic::supportsService( const ::rtl::OUString& rServiceName ) 
+sal_Bool SAL_CALL Graphic::supportsService( const ::rtl::OUString& rServiceName )
     throw( uno::RuntimeException )
 {
     if( ::unographic::GraphicDescriptor::supportsService( rServiceName ) )
         return true;
     else
     {
-        uno::Sequence< ::rtl::OUString >	aSNL( getSupportedServiceNames() );
-        const ::rtl::OUString*				pArray = aSNL.getConstArray();
-    
+        uno::Sequence< ::rtl::OUString >    aSNL( getSupportedServiceNames() );
+        const ::rtl::OUString*              pArray = aSNL.getConstArray();
+
         for( int i = 0; i < aSNL.getLength(); i++ )
             if( pArray[i] == rServiceName )
                 return true;
-    
+
         return false;
     }
 }
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL Graphic::getSupportedServiceNames() 
+uno::Sequence< ::rtl::OUString > SAL_CALL Graphic::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > 	aRet( ::unographic::GraphicDescriptor::getSupportedServiceNames() );
-    uno::Sequence< ::rtl::OUString > 	aNew( getSupportedServiceNames_Static() );
-    sal_Int32							nOldCount = aRet.getLength();
-    
+    uno::Sequence< ::rtl::OUString >    aRet( ::unographic::GraphicDescriptor::getSupportedServiceNames() );
+    uno::Sequence< ::rtl::OUString >    aNew( getSupportedServiceNames_Static() );
+    sal_Int32                           nOldCount = aRet.getLength();
+
     aRet.realloc( nOldCount + aNew.getLength() );
-    
+
     for( sal_Int32 i = 0; i < aNew.getLength(); ++i )
         aRet[ nOldCount++ ] = aNew[ i ];
 
@@ -195,22 +195,22 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Graphic::getSupportedServiceNames()
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes() 
+uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
     throw(uno::RuntimeException)
 {
-    uno::Sequence< uno::Type >	aRet( ::unographic::GraphicDescriptor::getTypes() );
-    sal_Int32 					nOldCount = aRet.getLength();
+    uno::Sequence< uno::Type >  aRet( ::unographic::GraphicDescriptor::getTypes() );
+    sal_Int32                   nOldCount = aRet.getLength();
 
     aRet.realloc( nOldCount + 2 );
     aRet[ nOldCount ] = ::getCppuType((const uno::Reference< graphic::XGraphic>*)0);
     aRet[ nOldCount+1 ] = ::getCppuType((const uno::Reference< awt::XBitmap>*)0);
-    
+
     return aRet;
 }
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId() 
+uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
     throw(uno::RuntimeException)
 {
     return getImplementationId_Static();
@@ -225,7 +225,7 @@ uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
 
     if( mpGraphic && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
         cRet = ( ( mpGraphic->GetType() == GRAPHIC_BITMAP ) ? graphic::GraphicType::PIXEL : graphic::GraphicType::VECTOR );
-    
+
     return cRet;
 }
 
@@ -293,7 +293,7 @@ sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw( uno::RuntimeException )
 {
     return( ( rId.getLength() == 16 && 0 == rtl_compareMemory( getImplementationId().getConstArray(), rId.getConstArray(), 16 ) ) ?
-            reinterpret_cast< sal_Int64 >( mpGraphic ) : 
+            reinterpret_cast< sal_Int64 >( mpGraphic ) :
             0 );
 }
 

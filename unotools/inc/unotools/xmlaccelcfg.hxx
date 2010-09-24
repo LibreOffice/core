@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,10 +79,10 @@ class OReadAccelatorDocumentHandler : public ::com::sun::star::xml::sax::XDocume
     private:
         ::rtl::OUString getErrorLineString();
 
-        int						m_nElementDepth;
-        sal_Bool				m_bAcceleratorMode;
-        sal_Bool				m_bItemCloseExpected;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >	m_xLocator;
+        int                     m_nElementDepth;
+        sal_Bool                m_bAcceleratorMode;
+        sal_Bool                m_bItemCloseExpected;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
         SvtAcceleratorItemList& m_aReadAcceleratorList;
 };
 
@@ -102,8 +102,8 @@ class OWriteAccelatorDocumentHandler
 
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > m_xEmptyList;
-        ::rtl::OUString											m_aAttributeType;
-        const SvtAcceleratorItemList&							m_aWriteAcceleratorList;
+        ::rtl::OUString                                         m_aAttributeType;
+        const SvtAcceleratorItemList&                           m_aWriteAcceleratorList;
 };
 
 #endif // INCLUDED_unotools_XMLACCELCFG_HXX

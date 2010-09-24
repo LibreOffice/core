@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@
 int main(int argc, const char *argv[])
 {
     int ret = 0;
-    
+
     if( argc != 2 )
     {
         fprintf(stderr, "Usage: urltest <urllist>\n");
         return -1;
     }
-           
+
     FILE * fp = fopen( argv[1], "r" );
     if( NULL == fp )
     {
@@ -59,28 +59,28 @@ int main(int argc, const char *argv[])
     strcpy( line, argv[0] );
     strcpy( line + len, ".sh " );
     len += 4;
-    
+
     unsigned int errors = 0;
-    
+
     // read url(s) to test from file
     char url[512];
     while( NULL != fgets(url, sizeof(url), fp))
     {
         // remove trailing line break
         strtok( url, "\r\n" );
-        
+
         printf( "Passing URL: %s\n", url );
-        
+
         // test the encoding functionality from shellexec.cxx
         rtl::OString aURL( url );
         rtl::OStringBuffer aBuffer;
         escapeForShell(aBuffer, aURL);
-        
+
         // append encoded URL as (only) parameter to the script
         strcpy( line + len, aBuffer.getStr() );
-        
+
         printf( "Command line: %s\n", line );
-        
+
         FILE * pipe = popen( line, "r" );
         if( NULL != pipe )
         {
@@ -97,10 +97,10 @@ int main(int argc, const char *argv[])
                 ++errors;
                 continue;
             }
-            
+
             // remove trailing line break again
             strtok( buffer, "\r\n" );
-            
+
             int n = pclose(pipe);
             if( 0 != n )
             {
@@ -108,7 +108,7 @@ int main(int argc, const char *argv[])
                 ++errors;
                 continue;
             }
-            
+
             if( 0 == strcmp( url, buffer ) )
             {
                 // strings are identical: good !
@@ -120,7 +120,7 @@ int main(int argc, const char *argv[])
                 printf( "FAILED: returned string is %s\n\n", buffer);
                 ++errors;
             }
-            
+
         }
         else
         {
@@ -129,15 +129,15 @@ int main(int argc, const char *argv[])
             break;
         }
     }
-    
+
     if( ferror( fp ) )
     {
         perror( argv[1] );
         ret = -1;
     }
-    
+
     fclose( fp );
-    
+
     if( errors )
     {
         printf( "Number of tests failing: %d\n", errors);
@@ -145,7 +145,7 @@ int main(int argc, const char *argv[])
     }
     else
         printf( "All tests passed OK.\n" );
-        
-    
+
+
     return ret;
 }

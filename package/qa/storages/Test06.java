@@ -73,7 +73,7 @@ public class Test06 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-    
+
             // in case stream is open for reading it must exist
             try
             {
@@ -273,7 +273,7 @@ public class Test06 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 
 }
 

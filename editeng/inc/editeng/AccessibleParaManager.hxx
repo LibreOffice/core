@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,10 +84,10 @@ namespace accessibility
     private:
 
         // the interface, hard reference to prevent object from vanishing
-        ::com::sun::star::uno::Reference< UnoInterfaceType > 	mxRef;
+        ::com::sun::star::uno::Reference< UnoInterfaceType >    mxRef;
 
         // the c++ object, for our internal stuff
-        InterfaceType* 											mpImpl;
+        InterfaceType*                                          mpImpl;
 
     };
 
@@ -130,10 +130,10 @@ namespace accessibility
     private:
 
         // the interface, hold weakly
-        ::com::sun::star::uno::WeakReference< UnoInterfaceType >	maWeakRef;
+        ::com::sun::star::uno::WeakReference< UnoInterfaceType >    maWeakRef;
 
         // hard ref to c++ class, _only_ valid if maWeakRef.is() is true
-        InterfaceType*												maUnsafeRef;
+        InterfaceType*                                              maUnsafeRef;
     };
 
 
@@ -198,10 +198,10 @@ namespace accessibility
         sal_Bool IsReferencable( sal_uInt32 nChild ) const;
         static void ShutdownPara( const WeakChild& rChild );
 
-        Child CreateChild( sal_Int32 																						nChild,
+        Child CreateChild( sal_Int32                                                                                        nChild,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xFrontEnd,
-                           SvxEditSourceAdapter& 																			rEditSource,
-                           sal_uInt32 																						nParagraphIndex );
+                           SvxEditSourceAdapter&                                                                            rEditSource,
+                           sal_uInt32                                                                                       nParagraphIndex );
 
         WeakChild GetChild( sal_uInt32 nParagraphIndex ) const;
 
@@ -213,11 +213,11 @@ namespace accessibility
         /// Unset state of all children
         void UnSetState( const sal_Int16 nStateId );
         /// Set offset to edit engine for all children
-        void SetEEOffset		( const Point& rOffset );
+        void SetEEOffset        ( const Point& rOffset );
         /// Change edit source on all living children
-        void SetEditSource		( SvxEditSourceAdapter* pEditSource );
+        void SetEditSource      ( SvxEditSourceAdapter* pEditSource );
         /// Dispose all living children
-        void Dispose			();
+        void Dispose            ();
 
         // forwarder to given paragraphs
         //------------------------------------------------------------------------
@@ -320,10 +320,10 @@ namespace accessibility
         /// Unset state on given child
         void UnSetState( sal_Int32 nChild, const sal_Int16 nStateId );
         /// Init child with default state (as stored in previous SetFocus and SetActive calls)
-        void InitChild( AccessibleEditableTextPara& 	rChild,
-                        SvxEditSourceAdapter& 			rEditSource,
-                        sal_Int32 						nChild,
-                        sal_uInt32 						nParagraphIndex ) const;
+        void InitChild( AccessibleEditableTextPara&     rChild,
+                        SvxEditSourceAdapter&           rEditSource,
+                        sal_Int32                       nChild,
+                        sal_uInt32                      nParagraphIndex ) const;
 
         // vector the size of the paragraph number of the underlying EditEngine
         VectorOfChildren maChildren;

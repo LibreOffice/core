@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,26 +76,26 @@ class OPumpTest : public WeakImplHelper1 < XSimpleTest >
 public:
     OPumpTest( const Reference< XMultiServiceFactory >  & rFactory );
     ~OPumpTest();
-    
-public: // implementation names
-    static Sequence< OUString > 	getSupportedServiceNames_Static(void) throw();
-    static OUString 				getImplementationName_Static() throw();	
 
-public:	
-    virtual void SAL_CALL testInvariant(const OUString& TestName, const Reference < XInterface >& TestObject) 
+public: // implementation names
+    static Sequence< OUString >     getSupportedServiceNames_Static(void) throw();
+    static OUString                 getImplementationName_Static() throw();
+
+public:
+    virtual void SAL_CALL testInvariant(const OUString& TestName, const Reference < XInterface >& TestObject)
         throw  ( IllegalArgumentException, RuntimeException) ;
 
-    virtual sal_Int32 SAL_CALL test(	const OUString& TestName, 
-                                        const Reference < XInterface >& TestObject, 
+    virtual sal_Int32 SAL_CALL test(    const OUString& TestName,
+                                        const Reference < XInterface >& TestObject,
                                         sal_Int32 hTestHandle)
-        throw  (	IllegalArgumentException, 
+        throw  (    IllegalArgumentException,
                     RuntimeException);
 
-    virtual sal_Bool SAL_CALL testPassed(void) 								throw  (	RuntimeException) ;
-    virtual Sequence< OUString > SAL_CALL getErrors(void) 				throw  (RuntimeException) ;
-    virtual Sequence< Any > SAL_CALL getErrorExceptions(void) 		throw  (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings(void) 				throw  (RuntimeException);	
-    
+    virtual sal_Bool SAL_CALL testPassed(void)                              throw  (    RuntimeException) ;
+    virtual Sequence< OUString > SAL_CALL getErrors(void)               throw  (RuntimeException) ;
+    virtual Sequence< Any > SAL_CALL getErrorExceptions(void)       throw  (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getWarnings(void)                 throw  (RuntimeException);
+
 private:
     void testSimple( const Reference < XInterface > & );
     void testWrongUsage( const Reference < XInterface > & );
@@ -107,25 +107,25 @@ private:
     Sequence<OUString> m_seqErrors;
     Sequence<OUString> m_seqWarnings;
     Reference< XMultiServiceFactory > m_rSmgr;
-        
+
 };
 
 OPumpTest::OPumpTest( const Reference< XMultiServiceFactory > &rFactory ) :
     m_rSmgr( rFactory )
 {
-    
+
 }
 
 OPumpTest::~OPumpTest()
 {
-    
+
 }
 
 
 
-void OPumpTest::testInvariant( const OUString& TestName, const Reference < XInterface >& TestObject ) 
-    throw  (	IllegalArgumentException, 
-                RuntimeException) 
+void OPumpTest::testInvariant( const OUString& TestName, const Reference < XInterface >& TestObject )
+    throw  (    IllegalArgumentException,
+                RuntimeException)
 {
     Reference< XServiceInfo > info( TestObject, UNO_QUERY );
       ERROR_ASSERT( info.is() , "XServiceInfo not supported !" );
@@ -143,14 +143,14 @@ void OPumpTest::testInvariant( const OUString& TestName, const Reference < XInte
 
     ERROR_ASSERT( xActiveDataSource.is() && xActiveDataSink.is() && xActiveDataControl.is () &&
                   xConnectable.is(), "specified interface not supported" );
-}    																		
+}
 
 
 sal_Int32 OPumpTest::test(
-    const OUString& TestName, 
-    const Reference < XInterface >& TestObject, 
+    const OUString& TestName,
+    const Reference < XInterface >& TestObject,
     sal_Int32 hTestHandle)
-    throw  (	IllegalArgumentException, RuntimeException)
+    throw  (    IllegalArgumentException, RuntimeException)
 {
     if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pump") ) == TestName )  {
         try
@@ -184,9 +184,9 @@ sal_Int32 OPumpTest::test(
         {
             BUILD_ERROR( 0 , "unknown exception (Exception is  not base class)" );
         }
-        
+
         hTestHandle ++;
-        
+
         if( 5 == hTestHandle )
         {
             // all tests finished.
@@ -197,29 +197,29 @@ sal_Int32 OPumpTest::test(
         throw IllegalArgumentException();
     }
     return hTestHandle;
-}													
-
-
-
-sal_Bool OPumpTest::testPassed(void) 		throw  (RuntimeException) 
-{
-    return m_seqErrors.getLength() == 0;	
 }
 
 
-Sequence< OUString > OPumpTest::getErrors(void)		throw  (RuntimeException) 
+
+sal_Bool OPumpTest::testPassed(void)        throw  (RuntimeException)
+{
+    return m_seqErrors.getLength() == 0;
+}
+
+
+Sequence< OUString > OPumpTest::getErrors(void)     throw  (RuntimeException)
 {
     return m_seqErrors;
 }
 
 
-Sequence< Any > OPumpTest::getErrorExceptions(void) 					throw  (RuntimeException) 
+Sequence< Any > OPumpTest::getErrorExceptions(void)                     throw  (RuntimeException)
 {
     return m_seqExceptions;
 }
 
 
-Sequence< OUString > OPumpTest::getWarnings(void) 						throw  (RuntimeException)
+Sequence< OUString > OPumpTest::getWarnings(void)                       throw  (RuntimeException)
 {
     return m_seqWarnings;
 }
@@ -234,7 +234,7 @@ Sequence< OUString > OPumpTest::getWarnings(void) 						throw  (RuntimeException
 void OPumpTest::testSimple( const Reference < XInterface > &r )
 {
     // jbu todo: add sensible test
-    
+
 }
 
 class TestListener: public WeakImplHelper1< XStreamListener >
@@ -290,7 +290,7 @@ public:
               const Reference< XInterface > &r ) : m_rSmgr( rSMgr ), m_pTestListener( 0 )
     {
         m_rControl = Reference<XActiveDataControl>( r, UNO_QUERY );
-        
+
         Reference< XActiveDataSource > rSource ( r, UNO_QUERY );
         Reference< XActiveDataSink > rSink( r , UNO_QUERY );
 
@@ -311,7 +311,7 @@ public:
         if( m_pTestListener )
             m_pTestListener->release();
     }
-    
+
     TestListener *m_pTestListener;
     Reference< XActiveDataControl > m_rControl;
     Reference< XOutputStream > m_rOutSource;
@@ -327,12 +327,12 @@ private:
     }
 };
 
- 
+
 
 void OPumpTest::testClose( const Reference< XInterface > &r )
 {
     TestCase t( m_rSmgr, r );
-    
+
     ERROR_ASSERT( ! t.m_pTestListener->m_bStarted , "started too early" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "terminiation unexpected" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
@@ -340,7 +340,7 @@ void OPumpTest::testClose( const Reference< XInterface > &r )
 
     t.m_rControl->start();
     mywait();
-    
+
     ERROR_ASSERT( t.m_pTestListener->m_bStarted , "should have been started already" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "terminiation unexpected" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
@@ -369,7 +369,7 @@ void OPumpTest::testTerminate( const Reference< XInterface > &r )
 
     t.m_rControl->start();
     mywait();
- 
+
     ERROR_ASSERT( t.m_pTestListener->m_bStarted , "should have been started already" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "terminiation unexpected" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
@@ -390,7 +390,7 @@ void OPumpTest::testTerminate( const Reference< XInterface > &r )
 void OPumpTest::testFunction( const Reference< XInterface > &r )
 {
     TestCase t( m_rSmgr, r );
-    
+
     t.m_rControl->start();
 
     t.m_rOutSource->writeBytes( Sequence< sal_Int8 > ( 5 ) );
@@ -400,7 +400,7 @@ void OPumpTest::testFunction( const Reference< XInterface > &r )
 
     t.m_rOutSource->closeOutput();
     mywait();
-    
+
     ERROR_ASSERT( t.m_pTestListener->m_bStarted , "should have been started already" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "should be terminiated already" );
     ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
@@ -430,7 +430,7 @@ Reference< XInterface > SAL_CALL OPumpTest_CreateInstance( const Reference< XMul
 {
     return *new OPumpTest( rSMgr );
 }
-    
+
 Sequence<OUString> OPumpTest_getSupportedServiceNames(void) throw()
 {
     OUString s = OPumpTest_getServiceName();
@@ -443,7 +443,7 @@ OUString     OPumpTest_getServiceName() throw()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "test.com.sun.star.io.Pump" ) );
 }
 
-OUString 	OPumpTest_getImplementationName() throw()
+OUString    OPumpTest_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "test.com.sun.star.comp.io.Pump") );
 }

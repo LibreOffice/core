@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,36 +40,36 @@
 // - Defines -
 // -----------
 
-#define RGB15( _def_cR, _def_cG, _def_cB )	(((ULONG)(_def_cR)<<10UL)|((ULONG)(_def_cG)<<5UL)|(ULONG)(_def_cB))
-#define GAMMA( _def_cVal, _def_InvGamma )	((BYTE)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0L,255L))
+#define RGB15( _def_cR, _def_cG, _def_cB )  (((ULONG)(_def_cR)<<10UL)|((ULONG)(_def_cG)<<5UL)|(ULONG)(_def_cB))
+#define GAMMA( _def_cVal, _def_InvGamma )   ((BYTE)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0L,255L))
 
-#define CALC_ERRORS																\
-                        nTemp   = p1T[nX++] >> 12;								\
-                        nBErr = MinMax( nTemp, 0, 255 );						\
-                        nBErr = nBErr - FloydIndexMap[ nBC = FloydMap[nBErr] ];	\
-                        nTemp   = p1T[nX++] >> 12;								\
-                        nGErr = MinMax( nTemp, 0, 255 );						\
-                        nGErr = nGErr - FloydIndexMap[ nGC = FloydMap[nGErr] ];	\
-                        nTemp   = p1T[nX] >> 12;								\
-                        nRErr = MinMax( nTemp, 0, 255 );						\
+#define CALC_ERRORS                                                             \
+                        nTemp   = p1T[nX++] >> 12;                              \
+                        nBErr = MinMax( nTemp, 0, 255 );                        \
+                        nBErr = nBErr - FloydIndexMap[ nBC = FloydMap[nBErr] ]; \
+                        nTemp   = p1T[nX++] >> 12;                              \
+                        nGErr = MinMax( nTemp, 0, 255 );                        \
+                        nGErr = nGErr - FloydIndexMap[ nGC = FloydMap[nGErr] ]; \
+                        nTemp   = p1T[nX] >> 12;                                \
+                        nRErr = MinMax( nTemp, 0, 255 );                        \
                         nRErr = nRErr - FloydIndexMap[ nRC = FloydMap[nRErr] ];
 
-#define CALC_TABLES3										\
-                        p2T[nX++] += FloydError3[nBErr];	\
-                        p2T[nX++] += FloydError3[nGErr];	\
+#define CALC_TABLES3                                        \
+                        p2T[nX++] += FloydError3[nBErr];    \
+                        p2T[nX++] += FloydError3[nGErr];    \
                         p2T[nX++] += FloydError3[nRErr];
 
-#define CALC_TABLES5										\
-                        p2T[nX++] += FloydError5[nBErr];	\
-                        p2T[nX++] += FloydError5[nGErr];	\
+#define CALC_TABLES5                                        \
+                        p2T[nX++] += FloydError5[nBErr];    \
+                        p2T[nX++] += FloydError5[nGErr];    \
                         p2T[nX++] += FloydError5[nRErr];
 
-#define CALC_TABLES7										\
-                        p1T[++nX] += FloydError7[nBErr];	\
-                        p2T[nX++] += FloydError1[nBErr];	\
-                        p1T[nX] += FloydError7[nGErr];		\
-                        p2T[nX++] += FloydError1[nGErr];	\
-                        p1T[nX] += FloydError7[nRErr];		\
+#define CALC_TABLES7                                        \
+                        p1T[++nX] += FloydError7[nBErr];    \
+                        p2T[nX++] += FloydError1[nBErr];    \
+                        p1T[nX] += FloydError7[nGErr];      \
+                        p2T[nX++] += FloydError1[nGErr];    \
+                        p1T[nX] += FloydError7[nRErr];      \
                         p2T[nX] += FloydError1[nRErr];
 
 // -----------
@@ -244,12 +244,12 @@ long FloydIndexMap[6] =
 
 void ImplCreateDitherMatrix( BYTE (*pDitherMatrix)[16][16] )
 {
-    double			fVal = 3.125;
-    const double	fVal16 = fVal / 16.;
-    long			i, j, k, l;
-    USHORT			pMtx[ 16 ][ 16 ];
-    USHORT			nMax = 0;
-    static BYTE 	pMagic[4][4] = { { 0, 14,  3, 13, },
+    double          fVal = 3.125;
+    const double    fVal16 = fVal / 16.;
+    long            i, j, k, l;
+    USHORT          pMtx[ 16 ][ 16 ];
+    USHORT          nMax = 0;
+    static BYTE     pMagic[4][4] = { { 0, 14,  3, 13, },
                                      {11,  5,  8,  6, },
                                      {12,  2, 15,  1, },
                                      {7,   9,  4, 10 } };
@@ -274,8 +274,8 @@ void ImplCreateDitherMatrix( BYTE (*pDitherMatrix)[16][16] )
 
 BOOL Bitmap::Convert( BmpConversion eConversion )
 {
-    const USHORT	nBitCount = GetBitCount();
-    BOOL			bRet = FALSE;
+    const USHORT    nBitCount = GetBitCount();
+    BOOL            bRet = FALSE;
 
     switch( eConversion )
     {
@@ -364,20 +364,20 @@ BOOL Bitmap::Convert( BmpConversion eConversion )
 
 BOOL Bitmap::ImplMakeMono( BYTE cThreshold )
 {
-    BitmapReadAccess*	pReadAcc = AcquireReadAccess();
-    BOOL				bRet = FALSE;
+    BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+    BOOL                bRet = FALSE;
 
     if( pReadAcc )
     {
-        Bitmap				aNewBmp( GetSizePixel(), 1 );
-        BitmapWriteAccess*	pWriteAcc = aNewBmp.AcquireWriteAccess();
+        Bitmap              aNewBmp( GetSizePixel(), 1 );
+        BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
 
         if( pWriteAcc )
         {
-            const BitmapColor	aBlack( pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
-            const BitmapColor	aWhite( pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
-            const long			nWidth = pWriteAcc->Width();
-            const long			nHeight = pWriteAcc->Height();
+            const BitmapColor   aBlack( pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
+            const BitmapColor   aWhite( pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
+            const long          nWidth = pWriteAcc->Width();
+            const long          nHeight = pWriteAcc->Height();
 
             if( pReadAcc->HasPalette() )
             {
@@ -420,8 +420,8 @@ BOOL Bitmap::ImplMakeMono( BYTE cThreshold )
 
         if( bRet )
         {
-            const MapMode	aMap( maPrefMapMode );
-            const Size		aSize( maPrefSize );
+            const MapMode   aMap( maPrefMapMode );
+            const Size      aSize( maPrefSize );
 
             *this = aNewBmp;
 
@@ -437,21 +437,21 @@ BOOL Bitmap::ImplMakeMono( BYTE cThreshold )
 
 BOOL Bitmap::ImplMakeMonoDither()
 {
-    BitmapReadAccess*	pReadAcc = AcquireReadAccess();
-    BOOL				bRet = FALSE;
+    BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+    BOOL                bRet = FALSE;
 
     if( pReadAcc )
     {
-        Bitmap				aNewBmp( GetSizePixel(), 1 );
-        BitmapWriteAccess*	pWriteAcc = aNewBmp.AcquireWriteAccess();
+        Bitmap              aNewBmp( GetSizePixel(), 1 );
+        BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
 
         if( pWriteAcc )
         {
-            const BitmapColor	aBlack( pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
-            const BitmapColor	aWhite( pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
-            const long			nWidth = pWriteAcc->Width();
-            const long			nHeight = pWriteAcc->Height();
-            BYTE				pDitherMatrix[ 16 ][ 16 ];
+            const BitmapColor   aBlack( pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
+            const BitmapColor   aWhite( pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
+            const long          nWidth = pWriteAcc->Width();
+            const long          nHeight = pWriteAcc->Height();
+            BYTE                pDitherMatrix[ 16 ][ 16 ];
 
             ImplCreateDitherMatrix( &pDitherMatrix );
 
@@ -496,8 +496,8 @@ BOOL Bitmap::ImplMakeMonoDither()
 
         if( bRet )
         {
-            const MapMode	aMap( maPrefMapMode );
-            const Size		aSize( maPrefSize );
+            const MapMode   aMap( maPrefMapMode );
+            const Size      aSize( maPrefSize );
 
             *this = aNewBmp;
 
@@ -515,27 +515,27 @@ BOOL Bitmap::ImplMakeGreyscales( USHORT nGreys )
 {
     DBG_ASSERT( nGreys == 16 || nGreys == 256, "Only 16 or 256 greyscales are supported!" );
 
-    BitmapReadAccess*	pReadAcc = AcquireReadAccess();
-    BOOL				bRet = FALSE;
+    BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+    BOOL                bRet = FALSE;
 
     if( pReadAcc )
     {
-        const BitmapPalette&	rPal = GetGreyPalette( nGreys );
-        ULONG 					nShift = ( ( nGreys == 16 ) ? 4UL : 0UL );
-        BOOL					bPalDiffers = !pReadAcc->HasPalette() || ( rPal.GetEntryCount() != pReadAcc->GetPaletteEntryCount() );
+        const BitmapPalette&    rPal = GetGreyPalette( nGreys );
+        ULONG                   nShift = ( ( nGreys == 16 ) ? 4UL : 0UL );
+        BOOL                    bPalDiffers = !pReadAcc->HasPalette() || ( rPal.GetEntryCount() != pReadAcc->GetPaletteEntryCount() );
 
         if( !bPalDiffers )
             bPalDiffers = ( (BitmapPalette&) rPal != pReadAcc->GetPalette() );
 
         if( bPalDiffers )
         {
-            Bitmap				aNewBmp( GetSizePixel(), ( nGreys == 16 ) ? 4 : 8, &rPal );
-            BitmapWriteAccess*	pWriteAcc = aNewBmp.AcquireWriteAccess();
+            Bitmap              aNewBmp( GetSizePixel(), ( nGreys == 16 ) ? 4 : 8, &rPal );
+            BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
 
             if( pWriteAcc )
             {
-                const long	nWidth = pWriteAcc->Width();
-                const long	nHeight = pWriteAcc->Height();
+                const long  nWidth = pWriteAcc->Width();
+                const long  nHeight = pWriteAcc->Height();
 
                 if( pReadAcc->HasPalette() )
                 {
@@ -564,7 +564,7 @@ BOOL Bitmap::ImplMakeGreyscales( USHORT nGreys )
                             const ULONG nB = *pReadScan++;
                             const ULONG nG = *pReadScan++;
                             const ULONG nR = *pReadScan++;
-                            
+
                             *pWriteScan++ = (BYTE) ( ( nB * 28UL + nG * 151UL + nR * 77UL ) >> nShift );
                         }
                     }
@@ -584,7 +584,7 @@ BOOL Bitmap::ImplMakeGreyscales( USHORT nGreys )
                             const ULONG nR = *pReadScan++;
                             const ULONG nG = *pReadScan++;
                             const ULONG nB = *pReadScan++;
-                            
+
                             *pWriteScan++ = (BYTE) ( ( nB * 28UL + nG * 151UL + nR * 77UL ) >> nShift );
                         }
                     }
@@ -604,8 +604,8 @@ BOOL Bitmap::ImplMakeGreyscales( USHORT nGreys )
 
             if( bRet )
             {
-                const MapMode	aMap( maPrefMapMode );
-                const Size		aSize( maPrefSize );
+                const MapMode   aMap( maPrefMapMode );
+                const Size      aSize( maPrefSize );
 
                 *this = aNewBmp;
 
@@ -629,24 +629,24 @@ BOOL Bitmap::ImplConvertUp( USHORT nBitCount, Color* pExtColor )
 {
     DBG_ASSERT( nBitCount > GetBitCount(), "New BitCount must be greater!" );
 
-    BitmapReadAccess*	pReadAcc = AcquireReadAccess();
-    BOOL				bRet = FALSE;
+    BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+    BOOL                bRet = FALSE;
 
     if( pReadAcc )
     {
-        BitmapPalette		aPal;
-        Bitmap				aNewBmp( GetSizePixel(), nBitCount, pReadAcc->HasPalette() ? &pReadAcc->GetPalette() : &aPal );
-        BitmapWriteAccess*	pWriteAcc = aNewBmp.AcquireWriteAccess();
+        BitmapPalette       aPal;
+        Bitmap              aNewBmp( GetSizePixel(), nBitCount, pReadAcc->HasPalette() ? &pReadAcc->GetPalette() : &aPal );
+        BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
 
         if( pWriteAcc )
         {
-            const long	nWidth = pWriteAcc->Width();
-            const long	nHeight = pWriteAcc->Height();
+            const long  nWidth = pWriteAcc->Width();
+            const long  nHeight = pWriteAcc->Height();
 
             if( pWriteAcc->HasPalette() )
             {
-                const USHORT			nOldCount = 1 << GetBitCount();
-                const BitmapPalette&	rOldPal = pReadAcc->GetPalette();
+                const USHORT            nOldCount = 1 << GetBitCount();
+                const BitmapPalette&    rOldPal = pReadAcc->GetPalette();
 
                 aPal.SetEntryCount( 1 << nBitCount );
 
@@ -686,8 +686,8 @@ BOOL Bitmap::ImplConvertUp( USHORT nBitCount, Color* pExtColor )
 
         if( bRet )
         {
-            const MapMode	aMap( maPrefMapMode );
-            const Size		aSize( maPrefSize );
+            const MapMode   aMap( maPrefMapMode );
+            const Size      aSize( maPrefSize );
 
             *this = aNewBmp;
 
@@ -705,33 +705,33 @@ BOOL Bitmap::ImplConvertDown( USHORT nBitCount, Color* pExtColor )
 {
     DBG_ASSERT( nBitCount <= GetBitCount(), "New BitCount must be lower ( or equal when pExtColor is set )!" );
 
-    BitmapReadAccess*	pReadAcc = AcquireReadAccess();
-    BOOL				bRet = FALSE;
+    BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+    BOOL                bRet = FALSE;
 
     if( pReadAcc )
     {
-        BitmapPalette		aPal;
-        Bitmap				aNewBmp( GetSizePixel(), nBitCount, &aPal );
-        BitmapWriteAccess*	pWriteAcc = aNewBmp.AcquireWriteAccess();
+        BitmapPalette       aPal;
+        Bitmap              aNewBmp( GetSizePixel(), nBitCount, &aPal );
+        BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
 
         if( pWriteAcc )
         {
-            const USHORT	nCount = 1 << nBitCount;
-            const long		nWidth = pWriteAcc->Width();
-            const long		nWidth1 = nWidth - 1L;
-            const long		nHeight = pWriteAcc->Height();
-            Octree			aOctree( *pReadAcc, pExtColor ? ( nCount - 1 ) : nCount );
+            const USHORT    nCount = 1 << nBitCount;
+            const long      nWidth = pWriteAcc->Width();
+            const long      nWidth1 = nWidth - 1L;
+            const long      nHeight = pWriteAcc->Height();
+            Octree          aOctree( *pReadAcc, pExtColor ? ( nCount - 1 ) : nCount );
             InverseColorMap aColorMap( aPal = aOctree.GetPalette() );
-            BitmapColor 	aColor;
-            ImpErrorQuad	aErrQuad;
-            ImpErrorQuad*	pErrQuad1 = new ImpErrorQuad[ nWidth ];
-            ImpErrorQuad*	pErrQuad2 = new ImpErrorQuad[ nWidth ];
-            ImpErrorQuad*	pQLine1 = pErrQuad1;
-            ImpErrorQuad*	pQLine2 = 0;
-            long			nX, nY;
-            long			nYTmp = 0L;
-            BYTE			cIndex;
-            BOOL			bQ1 = TRUE;
+            BitmapColor     aColor;
+            ImpErrorQuad    aErrQuad;
+            ImpErrorQuad*   pErrQuad1 = new ImpErrorQuad[ nWidth ];
+            ImpErrorQuad*   pErrQuad2 = new ImpErrorQuad[ nWidth ];
+            ImpErrorQuad*   pQLine1 = pErrQuad1;
+            ImpErrorQuad*   pQLine2 = 0;
+            long            nX, nY;
+            long            nYTmp = 0L;
+            BYTE            cIndex;
+            BOOL            bQ1 = TRUE;
 
             if( pExtColor )
             {
@@ -812,8 +812,8 @@ BOOL Bitmap::ImplConvertDown( USHORT nBitCount, Color* pExtColor )
 
         if( bRet )
         {
-            const MapMode	aMap( maPrefMapMode );
-            const Size		aSize( maPrefSize );
+            const MapMode   aMap( maPrefMapMode );
+            const Size      aSize( maPrefSize );
 
             *this = aNewBmp;
 
@@ -829,9 +829,9 @@ BOOL Bitmap::ImplConvertDown( USHORT nBitCount, Color* pExtColor )
 
 BOOL Bitmap::ImplConvertGhosted()
 {
-    Bitmap				aNewBmp;
-    BitmapReadAccess*	pR = AcquireReadAccess();
-    BOOL				bRet = FALSE;
+    Bitmap              aNewBmp;
+    BitmapReadAccess*   pR = AcquireReadAccess();
+    BOOL                bRet = FALSE;
 
     if( pR )
     {
@@ -872,7 +872,7 @@ BOOL Bitmap::ImplConvertGhosted()
                     for( long nX = 0; nX < nWidth; nX++ )
                     {
                         const BitmapColor aOld( pR->GetPixel( nY, nX ) );
-                        pW->SetPixel( nY, nX, BitmapColor( ( aOld.GetRed() >> 1 ) | 0x80, 
+                        pW->SetPixel( nY, nX, BitmapColor( ( aOld.GetRed() >> 1 ) | 0x80,
                                                            ( aOld.GetGreen() >> 1 ) | 0x80,
                                                            ( aOld.GetBlue() >> 1 ) | 0x80 ) );
 
@@ -889,8 +889,8 @@ BOOL Bitmap::ImplConvertGhosted()
 
     if( bRet )
     {
-        const MapMode	aMap( maPrefMapMode );
-        const Size		aSize( maPrefSize );
+        const MapMode   aMap( maPrefMapMode );
+        const Size      aSize( maPrefSize );
 
         *this = aNewBmp;
 
@@ -926,8 +926,8 @@ BOOL Bitmap::Scale( const double& rScaleX, const double& rScaleY, ULONG nScaleFl
 
 BOOL Bitmap::Scale( const Size& rNewSize, ULONG nScaleFlag )
 {
-    const Size	aSize( GetSizePixel() );
-    BOOL		bRet;
+    const Size  aSize( GetSizePixel() );
+    BOOL        bRet;
 
     if( aSize.Width() && aSize.Height() )
     {
@@ -945,27 +945,27 @@ BOOL Bitmap::Scale( const Size& rNewSize, ULONG nScaleFlag )
 
 BOOL Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
 {
-    const Size	aSizePix( GetSizePixel() );
-    const long	nNewWidth = FRound( aSizePix.Width() * rScaleX );
-    const long	nNewHeight = FRound( aSizePix.Height() * rScaleY );
-    BOOL		bRet = FALSE;
+    const Size  aSizePix( GetSizePixel() );
+    const long  nNewWidth = FRound( aSizePix.Width() * rScaleX );
+    const long  nNewHeight = FRound( aSizePix.Height() * rScaleY );
+    BOOL        bRet = FALSE;
 
     if( nNewWidth && nNewHeight )
     {
-        BitmapReadAccess*	pReadAcc = AcquireReadAccess();
-        Bitmap				aNewBmp( Size( nNewWidth, nNewHeight ), GetBitCount(), &pReadAcc->GetPalette() );
-        BitmapWriteAccess*	pWriteAcc = aNewBmp.AcquireWriteAccess();
+        BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+        Bitmap              aNewBmp( Size( nNewWidth, nNewHeight ), GetBitCount(), &pReadAcc->GetPalette() );
+        BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
 
         if( pReadAcc && pWriteAcc )
         {
-            const long	nScanlineSize = pWriteAcc->GetScanlineSize();
-            const long	nNewWidth1 = nNewWidth - 1L;
-            const long	nNewHeight1 = nNewHeight - 1L;
-            const long	nWidth1 = pReadAcc->Width() - 1L;
-            const long	nHeight1 = pReadAcc->Height() - 1L;
-            long*		pLutX = new long[ nNewWidth ];
-            long*		pLutY = new long[ nNewHeight ];
-            long		nX, nY, nMapY, nActY = 0L;
+            const long  nScanlineSize = pWriteAcc->GetScanlineSize();
+            const long  nNewWidth1 = nNewWidth - 1L;
+            const long  nNewHeight1 = nNewHeight - 1L;
+            const long  nWidth1 = pReadAcc->Width() - 1L;
+            const long  nHeight1 = pReadAcc->Height() - 1L;
+            long*       pLutX = new long[ nNewWidth ];
+            long*       pLutY = new long[ nNewHeight ];
+            long        nX, nY, nMapY, nActY = 0L;
 
             if( nNewWidth1 && nNewHeight1 )
             {
@@ -1013,32 +1013,32 @@ BOOL Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
 
 BOOL Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY )
 {
-    const Size	aSizePix( GetSizePixel() );
-    const long	nNewWidth = FRound( aSizePix.Width() * rScaleX );
-    const long	nNewHeight = FRound( aSizePix.Height() * rScaleY );
-    BOOL		bRet = FALSE;
+    const Size  aSizePix( GetSizePixel() );
+    const long  nNewWidth = FRound( aSizePix.Width() * rScaleX );
+    const long  nNewHeight = FRound( aSizePix.Height() * rScaleY );
+    BOOL        bRet = FALSE;
 
     if( ( nNewWidth > 1L ) && ( nNewHeight > 1L ) )
     {
-        BitmapColor 		aCol0;
-        BitmapColor 		aCol1;
-        BitmapReadAccess*	pReadAcc = AcquireReadAccess();
-        long				nWidth = pReadAcc->Width();
-        long				nHeight = pReadAcc->Height();
-        Bitmap				aNewBmp( Size( nNewWidth, nHeight ), 24 );
-        BitmapWriteAccess*	pWriteAcc = aNewBmp.AcquireWriteAccess();
-        long*				pLutInt;
-        long*				pLutFrac;
-        long				nX, nY;
-        long				lXB0, lXB1, lXG0, lXG1, lXR0, lXR1;
-        double				fTemp;
-        long				nTemp;
+        BitmapColor         aCol0;
+        BitmapColor         aCol1;
+        BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+        long                nWidth = pReadAcc->Width();
+        long                nHeight = pReadAcc->Height();
+        Bitmap              aNewBmp( Size( nNewWidth, nHeight ), 24 );
+        BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
+        long*               pLutInt;
+        long*               pLutFrac;
+        long                nX, nY;
+        long                lXB0, lXB1, lXG0, lXG1, lXR0, lXR1;
+        double              fTemp;
+        long                nTemp;
 
         if( pReadAcc && pWriteAcc )
         {
-            const long		nNewWidth1 = nNewWidth - 1L;
-            const long		nWidth1 = pReadAcc->Width() - 1L;
-            const double	fRevScaleX = (double) nWidth1 / nNewWidth1;
+            const long      nNewWidth1 = nNewWidth - 1L;
+            const long      nWidth1 = pReadAcc->Width() - 1L;
+            const double    fRevScaleX = (double) nWidth1 / nNewWidth1;
 
             pLutInt = new long[ nNewWidth ];
             pLutFrac = new long[ nNewWidth ];
@@ -1140,9 +1140,9 @@ BOOL Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
 
             if( pReadAcc && pWriteAcc )
             {
-                const long		nNewHeight1 = nNewHeight - 1L;
-                const long		nHeight1 = pReadAcc->Height() - 1L;
-                const double	fRevScaleY = (double) nHeight1 / nNewHeight1;
+                const long      nNewHeight1 = nNewHeight - 1L;
+                const long      nHeight1 = pReadAcc->Height() - 1L;
+                const double    fRevScaleY = (double) nHeight1 / nNewHeight1;
 
                 pLutInt = new long[ nNewHeight ];
                 pLutFrac = new long[ nNewHeight ];
@@ -1269,16 +1269,16 @@ BOOL Bitmap::Dither( ULONG nDitherFlags )
 
 BOOL Bitmap::ImplDitherMatrix()
 {
-    BitmapReadAccess*	pReadAcc = AcquireReadAccess();
-    Bitmap				aNewBmp( GetSizePixel(), 8 );
-    BitmapWriteAccess*	pWriteAcc = aNewBmp.AcquireWriteAccess();
-    BOOL				bRet = FALSE;
+    BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+    Bitmap              aNewBmp( GetSizePixel(), 8 );
+    BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
+    BOOL                bRet = FALSE;
 
     if( pReadAcc && pWriteAcc )
     {
-        const ULONG	nWidth = pReadAcc->Width();
-        const ULONG	nHeight = pReadAcc->Height();
-        BitmapColor	aIndex( (BYTE) 0 );
+        const ULONG nWidth = pReadAcc->Width();
+        const ULONG nHeight = pReadAcc->Height();
+        BitmapColor aIndex( (BYTE) 0 );
 
         if( pReadAcc->HasPalette() )
         {
@@ -1286,11 +1286,11 @@ BOOL Bitmap::ImplDitherMatrix()
             {
                 for( ULONG nX = 0UL, nModY = ( nY & 0x0FUL ) << 4UL; nX < nWidth; nX++ )
                 {
-                    const BitmapColor	aCol( pReadAcc->GetPaletteColor( pReadAcc->GetPixel( nY, nX ) ) );
-                    const ULONG			nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
-                    const ULONG			nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16UL;
-                    const ULONG			nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16UL;
-                    const ULONG			nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16UL;
+                    const BitmapColor   aCol( pReadAcc->GetPaletteColor( pReadAcc->GetPixel( nY, nX ) ) );
+                    const ULONG         nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
+                    const ULONG         nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16UL;
+                    const ULONG         nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16UL;
+                    const ULONG         nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16UL;
 
                     aIndex.SetIndex( (BYTE) ( nVCLRLut[ nR ] + nVCLGLut[ nG ] + nVCLBLut[ nB ] ) );
                     pWriteAcc->SetPixel( nY, nX, aIndex );
@@ -1303,11 +1303,11 @@ BOOL Bitmap::ImplDitherMatrix()
             {
                 for( ULONG nX = 0UL, nModY = ( nY & 0x0FUL ) << 4UL; nX < nWidth; nX++ )
                 {
-                    const BitmapColor	aCol( pReadAcc->GetPixel( nY, nX ) );
-                    const ULONG			nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
-                    const ULONG			nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16UL;
-                    const ULONG			nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16UL;
-                    const ULONG			nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16UL;
+                    const BitmapColor   aCol( pReadAcc->GetPixel( nY, nX ) );
+                    const ULONG         nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
+                    const ULONG         nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16UL;
+                    const ULONG         nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16UL;
+                    const ULONG         nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16UL;
 
                     aIndex.SetIndex( (BYTE) ( nVCLRLut[ nR ] + nVCLGLut[ nG ] + nVCLBLut[ nB ] ) );
                     pWriteAcc->SetPixel( nY, nX, aIndex );
@@ -1323,8 +1323,8 @@ BOOL Bitmap::ImplDitherMatrix()
 
     if( bRet )
     {
-        const MapMode	aMap( maPrefMapMode );
-        const Size		aSize( maPrefSize );
+        const MapMode   aMap( maPrefMapMode );
+        const Size      aSize( maPrefSize );
 
         *this = aNewBmp;
 
@@ -1339,34 +1339,34 @@ BOOL Bitmap::ImplDitherMatrix()
 
 BOOL Bitmap::ImplDitherFloyd()
 {
-    const Size	aSize( GetSizePixel() );
-    BOOL		bRet = FALSE;
+    const Size  aSize( GetSizePixel() );
+    BOOL        bRet = FALSE;
 
     if( ( aSize.Width() > 3 ) && ( aSize.Height() > 2 ) )
     {
-        BitmapReadAccess*	pReadAcc = AcquireReadAccess();
-        Bitmap				aNewBmp( GetSizePixel(), 8 );
-        BitmapWriteAccess*	pWriteAcc = aNewBmp.AcquireWriteAccess();
+        BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+        Bitmap              aNewBmp( GetSizePixel(), 8 );
+        BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
 
         if( pReadAcc && pWriteAcc )
         {
-            BitmapColor	aColor;
-            long		nWidth = pReadAcc->Width();
-            long		nWidth1 = nWidth - 1L;
-            long		nHeight = pReadAcc->Height();
-            long		nX;
-            long		nW = nWidth * 3L;
-            long		nW2 = nW - 3L;
-            long		nRErr, nGErr, nBErr;
-            long		nRC, nGC, nBC;
-            long		nTemp;
-            long		nZ;
-            long*		p1 = new long[ nW ];
-            long*		p2 = new long[ nW ];
-            long*		p1T = p1;
-            long*		p2T = p2;
-            long*		pTmp;
-            BOOL		bPal = pReadAcc->HasPalette();
+            BitmapColor aColor;
+            long        nWidth = pReadAcc->Width();
+            long        nWidth1 = nWidth - 1L;
+            long        nHeight = pReadAcc->Height();
+            long        nX;
+            long        nW = nWidth * 3L;
+            long        nW2 = nW - 3L;
+            long        nRErr, nGErr, nBErr;
+            long        nRC, nGC, nBC;
+            long        nTemp;
+            long        nZ;
+            long*       p1 = new long[ nW ];
+            long*       p2 = new long[ nW ];
+            long*       p1T = p1;
+            long*       p2T = p2;
+            long*       pTmp;
+            BOOL        bPal = pReadAcc->HasPalette();
 
             pTmp = p2T;
 
@@ -1463,8 +1463,8 @@ BOOL Bitmap::ImplDitherFloyd()
 
         if( bRet )
         {
-            const MapMode	aMap( maPrefMapMode );
-            const Size		aPrefSize( maPrefSize );
+            const MapMode   aMap( maPrefMapMode );
+            const Size      aPrefSize( maPrefSize );
 
             *this = aNewBmp;
 
@@ -1480,26 +1480,26 @@ BOOL Bitmap::ImplDitherFloyd()
 
 BOOL Bitmap::ImplDitherFloyd16()
 {
-    BitmapReadAccess*	pReadAcc = AcquireReadAccess();
-    Bitmap				aNewBmp( GetSizePixel(), 24 );
-    BitmapWriteAccess*	pWriteAcc = aNewBmp.AcquireWriteAccess();
-    BOOL				bRet = FALSE;
+    BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+    Bitmap              aNewBmp( GetSizePixel(), 24 );
+    BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
+    BOOL                bRet = FALSE;
 
     if( pReadAcc && pWriteAcc )
     {
-        const long		nWidth = pWriteAcc->Width();
-        const long		nWidth1 = nWidth - 1L;
-        const long		nHeight = pWriteAcc->Height();
-        BitmapColor 	aColor;
-        BitmapColor		aBestCol;
-        ImpErrorQuad	aErrQuad;
-        ImpErrorQuad*	pErrQuad1 = new ImpErrorQuad[ nWidth ];
-        ImpErrorQuad*	pErrQuad2 = new ImpErrorQuad[ nWidth ];
-        ImpErrorQuad*	pQLine1 = pErrQuad1;
-        ImpErrorQuad*	pQLine2 = 0;
-        long			nX, nY;
-        long			nYTmp = 0L;
-        BOOL			bQ1 = TRUE;
+        const long      nWidth = pWriteAcc->Width();
+        const long      nWidth1 = nWidth - 1L;
+        const long      nHeight = pWriteAcc->Height();
+        BitmapColor     aColor;
+        BitmapColor     aBestCol;
+        ImpErrorQuad    aErrQuad;
+        ImpErrorQuad*   pErrQuad1 = new ImpErrorQuad[ nWidth ];
+        ImpErrorQuad*   pErrQuad2 = new ImpErrorQuad[ nWidth ];
+        ImpErrorQuad*   pQLine1 = pErrQuad1;
+        ImpErrorQuad*   pQLine2 = 0;
+        long            nX, nY;
+        long            nYTmp = 0L;
+        BOOL            bQ1 = TRUE;
 
         for( nY = 0L; nY < Min( nHeight, 2L ); nY++, nYTmp++ )
             for( nX = 0L, pQLine2 = !nY ? pErrQuad1 : pErrQuad2; nX < nWidth; nX++ )
@@ -1555,8 +1555,8 @@ BOOL Bitmap::ImplDitherFloyd16()
 
     if( bRet )
     {
-        const MapMode	aMap( maPrefMapMode );
-        const Size		aSize( maPrefSize );
+        const MapMode   aMap( maPrefMapMode );
+        const Size      aSize( maPrefSize );
 
         *this = aNewBmp;
 
@@ -1594,11 +1594,11 @@ BOOL Bitmap::ReduceColors( USHORT nColorCount, BmpReduce eReduce )
 
 BOOL Bitmap::ImplReduceSimple( USHORT nColorCount )
 {
-    Bitmap				aNewBmp;
-    BitmapReadAccess*	pRAcc = AcquireReadAccess();
-    const USHORT		nColCount = Min( nColorCount, (USHORT) 256 );
-    USHORT				nBitCount;
-    BOOL				bRet = FALSE;
+    Bitmap              aNewBmp;
+    BitmapReadAccess*   pRAcc = AcquireReadAccess();
+    const USHORT        nColCount = Min( nColorCount, (USHORT) 256 );
+    USHORT              nBitCount;
+    BOOL                bRet = FALSE;
 
     if( nColCount <= 2 )
         nBitCount = 1;
@@ -1609,9 +1609,9 @@ BOOL Bitmap::ImplReduceSimple( USHORT nColorCount )
 
     if( pRAcc )
     {
-        Octree					aOct( *pRAcc, nColCount );
-        const BitmapPalette&	rPal = aOct.GetPalette();
-        BitmapWriteAccess*		pWAcc;
+        Octree                  aOct( *pRAcc, nColCount );
+        const BitmapPalette&    rPal = aOct.GetPalette();
+        BitmapWriteAccess*      pWAcc;
 
         aNewBmp = Bitmap( GetSizePixel(), nBitCount, &rPal );
         pWAcc = aNewBmp.AcquireWriteAccess();
@@ -1643,8 +1643,8 @@ BOOL Bitmap::ImplReduceSimple( USHORT nColorCount )
 
     if( bRet )
     {
-        const MapMode	aMap( maPrefMapMode );
-        const Size		aSize( maPrefSize );
+        const MapMode   aMap( maPrefMapMode );
+        const Size      aSize( maPrefSize );
 
         *this = aNewBmp;
         maPrefMapMode = aMap;
@@ -1658,8 +1658,8 @@ BOOL Bitmap::ImplReduceSimple( USHORT nColorCount )
 
 struct PopularColorCount
 {
-    sal_uInt32	mnIndex;
-    sal_uInt32	mnCount;
+    sal_uInt32  mnIndex;
+    sal_uInt32  mnCount;
 };
 
 // ------------------------------------------------------------------------
@@ -1670,11 +1670,11 @@ extern "C" int __LOADONCALLAPI ImplPopularCmpFnc( const void* p1, const void* p2
 
     if( ( (PopularColorCount*) p1 )->mnCount < ( (PopularColorCount*) p2 )->mnCount )
         nRet = 1;
-    else if( ( (PopularColorCount*) p1 )->mnCount == ( (PopularColorCount*) p2 )->mnCount ) 
+    else if( ( (PopularColorCount*) p1 )->mnCount == ( (PopularColorCount*) p2 )->mnCount )
         nRet = 0;
     else
         nRet = -1;
-    
+
     return nRet;
 }
 
@@ -1682,9 +1682,9 @@ extern "C" int __LOADONCALLAPI ImplPopularCmpFnc( const void* p1, const void* p2
 
 BOOL Bitmap::ImplReducePopular( USHORT nColCount )
 {
-    BitmapReadAccess*	pRAcc = AcquireReadAccess();
-    USHORT				nBitCount;
-    BOOL				bRet = FALSE;
+    BitmapReadAccess*   pRAcc = AcquireReadAccess();
+    USHORT              nBitCount;
+    BOOL                bRet = FALSE;
 
     if( nColCount > 256 )
         nColCount = 256;
@@ -1696,17 +1696,17 @@ BOOL Bitmap::ImplReducePopular( USHORT nColCount )
 
     if( pRAcc )
     {
-        const sal_uInt32	nValidBits = 4;
-        const sal_uInt32	nRightShiftBits = 8 - nValidBits;
-        const sal_uInt32	nLeftShiftBits1 = nValidBits;
-        const sal_uInt32	nLeftShiftBits2 = nValidBits << 1;
-        const sal_uInt32	nColorsPerComponent = 1 << nValidBits;
-        const sal_uInt32	nColorOffset = 256 / nColorsPerComponent;
-        const sal_uInt32	nTotalColors = nColorsPerComponent * nColorsPerComponent * nColorsPerComponent;
-        const long			nWidth = pRAcc->Width();
-        const long			nHeight = pRAcc->Height();
-        PopularColorCount*	pCountTable = new PopularColorCount[ nTotalColors ];
-        long				nX, nY, nR, nG, nB, nIndex;
+        const sal_uInt32    nValidBits = 4;
+        const sal_uInt32    nRightShiftBits = 8 - nValidBits;
+        const sal_uInt32    nLeftShiftBits1 = nValidBits;
+        const sal_uInt32    nLeftShiftBits2 = nValidBits << 1;
+        const sal_uInt32    nColorsPerComponent = 1 << nValidBits;
+        const sal_uInt32    nColorOffset = 256 / nColorsPerComponent;
+        const sal_uInt32    nTotalColors = nColorsPerComponent * nColorsPerComponent * nColorsPerComponent;
+        const long          nWidth = pRAcc->Width();
+        const long          nHeight = pRAcc->Height();
+        PopularColorCount*  pCountTable = new PopularColorCount[ nTotalColors ];
+        long                nX, nY, nR, nG, nB, nIndex;
 
         rtl_zeroMemory( pCountTable, nTotalColors * sizeof( PopularColorCount ) );
 
@@ -1730,7 +1730,7 @@ BOOL Bitmap::ImplReducePopular( USHORT nColCount )
                 {
                     const BitmapColor& rCol = pRAcc->GetPaletteColor( pRAcc->GetPixel( nY, nX ) );
                     pCountTable[ ( ( ( (sal_uInt32) rCol.GetRed() ) >> nRightShiftBits ) << nLeftShiftBits2 ) |
-                                 ( ( ( (sal_uInt32) rCol.GetGreen() ) >> nRightShiftBits ) << nLeftShiftBits1 ) | 
+                                 ( ( ( (sal_uInt32) rCol.GetGreen() ) >> nRightShiftBits ) << nLeftShiftBits1 ) |
                                  ( ( (sal_uInt32) rCol.GetBlue() ) >> nRightShiftBits ) ].mnCount++;
                 }
             }
@@ -1743,8 +1743,8 @@ BOOL Bitmap::ImplReducePopular( USHORT nColCount )
                 {
                     const BitmapColor aCol( pRAcc->GetPixel( nY, nX ) );
                     pCountTable[ ( ( ( (sal_uInt32) aCol.GetRed() ) >> nRightShiftBits ) << nLeftShiftBits2 ) |
-                                 ( ( ( (sal_uInt32) aCol.GetGreen() ) >> nRightShiftBits ) << nLeftShiftBits1 ) | 
-                                 ( ( (sal_uInt32) aCol.GetBlue() ) >> nRightShiftBits ) ].mnCount++;				
+                                 ( ( ( (sal_uInt32) aCol.GetGreen() ) >> nRightShiftBits ) << nLeftShiftBits1 ) |
+                                 ( ( (sal_uInt32) aCol.GetBlue() ) >> nRightShiftBits ) ].mnCount++;
                 }
             }
         }
@@ -1752,22 +1752,22 @@ BOOL Bitmap::ImplReducePopular( USHORT nColCount )
         BitmapPalette aNewPal( nColCount );
 
         qsort( pCountTable, nTotalColors, sizeof( PopularColorCount ), ImplPopularCmpFnc );
-        
+
         for( USHORT n = 0; n < nColCount; n++ )
         {
             const PopularColorCount& rPop = pCountTable[ n ];
-            aNewPal[ n ] = BitmapColor( (BYTE) ( ( rPop.mnIndex >> nLeftShiftBits2 ) << nRightShiftBits ), 
+            aNewPal[ n ] = BitmapColor( (BYTE) ( ( rPop.mnIndex >> nLeftShiftBits2 ) << nRightShiftBits ),
                                         (BYTE) ( ( ( rPop.mnIndex >> nLeftShiftBits1 ) & ( nColorsPerComponent - 1 ) ) << nRightShiftBits ),
                                         (BYTE) ( ( rPop.mnIndex & ( nColorsPerComponent - 1 ) ) << nRightShiftBits ) );
         }
 
-        Bitmap				aNewBmp( GetSizePixel(), nBitCount, &aNewPal );
-        BitmapWriteAccess*	pWAcc = aNewBmp.AcquireWriteAccess();
+        Bitmap              aNewBmp( GetSizePixel(), nBitCount, &aNewPal );
+        BitmapWriteAccess*  pWAcc = aNewBmp.AcquireWriteAccess();
 
         if( pWAcc )
         {
-            BitmapColor	aDstCol( (BYTE) 0 );
-            BYTE*		pIndexMap = new BYTE[ nTotalColors ];
+            BitmapColor aDstCol( (BYTE) 0 );
+            BYTE*       pIndexMap = new BYTE[ nTotalColors ];
 
             for( nR = 0, nIndex = 0; nR < 256; nR += nColorOffset )
                 for( nG = 0; nG < 256; nG += nColorOffset )
@@ -1782,7 +1782,7 @@ BOOL Bitmap::ImplReducePopular( USHORT nColCount )
                     {
                         const BitmapColor& rCol = pRAcc->GetPaletteColor( pRAcc->GetPixel( nY, nX ) );
                         aDstCol.SetIndex( pIndexMap[ ( ( ( (sal_uInt32) rCol.GetRed() ) >> nRightShiftBits ) << nLeftShiftBits2 ) |
-                                                     ( ( ( (sal_uInt32) rCol.GetGreen() ) >> nRightShiftBits ) << nLeftShiftBits1 ) | 
+                                                     ( ( ( (sal_uInt32) rCol.GetGreen() ) >> nRightShiftBits ) << nLeftShiftBits1 ) |
                                                      ( ( (sal_uInt32) rCol.GetBlue() ) >> nRightShiftBits ) ] );
                         pWAcc->SetPixel( nY, nX, aDstCol );
                     }
@@ -1796,7 +1796,7 @@ BOOL Bitmap::ImplReducePopular( USHORT nColCount )
                     {
                         const BitmapColor aCol( pRAcc->GetPixel( nY, nX ) );
                         aDstCol.SetIndex( pIndexMap[ ( ( ( (sal_uInt32) aCol.GetRed() ) >> nRightShiftBits ) << nLeftShiftBits2 ) |
-                                                     ( ( ( (sal_uInt32) aCol.GetGreen() ) >> nRightShiftBits ) << nLeftShiftBits1 ) | 
+                                                     ( ( ( (sal_uInt32) aCol.GetGreen() ) >> nRightShiftBits ) << nLeftShiftBits1 ) |
                                                      ( ( (sal_uInt32) aCol.GetBlue() ) >> nRightShiftBits ) ] );
                         pWAcc->SetPixel( nY, nX, aDstCol );
                     }
@@ -1813,8 +1813,8 @@ BOOL Bitmap::ImplReducePopular( USHORT nColCount )
 
         if( bRet )
         {
-            const MapMode	aMap( maPrefMapMode );
-            const Size		aSize( maPrefSize );
+            const MapMode   aMap( maPrefMapMode );
+            const Size      aSize( maPrefSize );
 
             *this = aNewBmp;
             maPrefMapMode = aMap;
@@ -1829,9 +1829,9 @@ BOOL Bitmap::ImplReducePopular( USHORT nColCount )
 
 BOOL Bitmap::ImplReduceMedian( USHORT nColCount )
 {
-    BitmapReadAccess*	pRAcc = AcquireReadAccess();
-    USHORT				nBitCount;
-    BOOL				bRet = FALSE;
+    BitmapReadAccess*   pRAcc = AcquireReadAccess();
+    USHORT              nBitCount;
+    BOOL                bRet = FALSE;
 
     if( nColCount < 17 )
         nBitCount = 4;
@@ -1846,16 +1846,16 @@ BOOL Bitmap::ImplReduceMedian( USHORT nColCount )
 
     if( pRAcc )
     {
-        Bitmap				aNewBmp( GetSizePixel(), nBitCount );
-        BitmapWriteAccess*	pWAcc = aNewBmp.AcquireWriteAccess();
+        Bitmap              aNewBmp( GetSizePixel(), nBitCount );
+        BitmapWriteAccess*  pWAcc = aNewBmp.AcquireWriteAccess();
 
         if( pWAcc )
         {
-            const ULONG	nSize = 32768UL * sizeof( ULONG );
-            ULONG*		pColBuf = (ULONG*) rtl_allocateMemory( nSize );
-            const long	nWidth = pWAcc->Width();
-            const long	nHeight = pWAcc->Height();
-            long		nIndex = 0L;
+            const ULONG nSize = 32768UL * sizeof( ULONG );
+            ULONG*      pColBuf = (ULONG*) rtl_allocateMemory( nSize );
+            const long  nWidth = pWAcc->Width();
+            const long  nHeight = pWAcc->Height();
+            long        nIndex = 0L;
 
             memset( (HPBYTE) pColBuf, 0, nSize );
 
@@ -1885,7 +1885,7 @@ BOOL Bitmap::ImplReduceMedian( USHORT nColCount )
 
             // create palette via median cut
             BitmapPalette aPal( pWAcc->GetPaletteEntryCount() );
-            ImplMedianCut( pColBuf, aPal, 0, 31, 0, 31, 0, 31, 
+            ImplMedianCut( pColBuf, aPal, 0, 31, 0, 31, 0, 31,
                            nColCount, nWidth * nHeight, nIndex );
 
             // do mapping of colors to palette
@@ -1904,8 +1904,8 @@ BOOL Bitmap::ImplReduceMedian( USHORT nColCount )
 
         if( bRet )
         {
-            const MapMode	aMap( maPrefMapMode );
-            const Size		aSize( maPrefSize );
+            const MapMode   aMap( maPrefMapMode );
+            const Size      aSize( maPrefSize );
 
             *this = aNewBmp;
             maPrefMapMode = aMap;
@@ -1918,19 +1918,19 @@ BOOL Bitmap::ImplReduceMedian( USHORT nColCount )
 
 // ------------------------------------------------------------------------
 
-void Bitmap::ImplMedianCut( ULONG* pColBuf, BitmapPalette& rPal, 
+void Bitmap::ImplMedianCut( ULONG* pColBuf, BitmapPalette& rPal,
                             long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
                             long nColors, long nPixels, long& rIndex )
 {
     if( !nPixels )
         return;
 
-    BitmapColor	aCol;
-    const long	nRLen = nR2 - nR1;
-    const long	nGLen = nG2 - nG1; 
-    const long	nBLen = nB2 - nB1;
-    long 		nR, nG, nB;
-    ULONG*		pBuf = pColBuf;
+    BitmapColor aCol;
+    const long  nRLen = nR2 - nR1;
+    const long  nGLen = nG2 - nG1;
+    const long  nBLen = nB2 - nB1;
+    long        nR, nG, nB;
+    ULONG*      pBuf = pColBuf;
 
     if( !nRLen && !nGLen && !nBLen )
     {
@@ -1973,9 +1973,9 @@ void Bitmap::ImplMedianCut( ULONG* pColBuf, BitmapPalette& rPal,
         }
         else
         {
-            const long	nTest = ( nPixels >> 1 );
-            long		nPixOld = 0;
-            long		nPixNew = 0;
+            const long  nTest = ( nPixels >> 1 );
+            long        nPixOld = 0;
+            long        nPixNew = 0;
 
             if( nBLen > nGLen && nBLen > nRLen )
             {
@@ -2073,7 +2073,7 @@ BOOL Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
     BOOL bRet = FALSE;
 
     // nothing to do => return quickly
-    if( !nLuminancePercent && !nContrastPercent && 
+    if( !nLuminancePercent && !nContrastPercent &&
         !nChannelRPercent && !nChannelGPercent && !nChannelBPercent &&
         ( fGamma == 1.0 ) && !bInvert )
     {
@@ -2085,15 +2085,15 @@ BOOL Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
 
         if( pAcc )
         {
-            BitmapColor		aCol;
-            const long		nW = pAcc->Width();
-            const long		nH = pAcc->Height();
-            BYTE*			cMapR = new BYTE[ 256 ];
-            BYTE*			cMapG = new BYTE[ 256 ];
-            BYTE*			cMapB = new BYTE[ 256 ];
-            long			nX, nY;
-            double			fM, fROff, fGOff, fBOff, fOff;
-            
+            BitmapColor     aCol;
+            const long      nW = pAcc->Width();
+            const long      nH = pAcc->Height();
+            BYTE*           cMapR = new BYTE[ 256 ];
+            BYTE*           cMapG = new BYTE[ 256 ];
+            BYTE*           cMapB = new BYTE[ 256 ];
+            long            nX, nY;
+            double          fM, fROff, fGOff, fBOff, fOff;
+
             // calculate slope
             if( nContrastPercent >= 0 )
                 fM = 128.0 / ( 128.0 - 1.27 * MinMax( nContrastPercent, 0L, 100L ) );
@@ -2141,7 +2141,7 @@ BOOL Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
 
                 for( USHORT i = 0, nCount = pAcc->GetPaletteEntryCount(); i < nCount; i++ )
                 {
-                    const BitmapColor& rCol = pAcc->GetPaletteColor( i ); 
+                    const BitmapColor& rCol = pAcc->GetPaletteColor( i );
                     aNewCol.SetRed( cMapR[ rCol.GetRed() ] );
                     aNewCol.SetGreen( cMapG[ rCol.GetGreen() ] );
                     aNewCol.SetBlue( cMapB[ rCol.GetBlue() ] );

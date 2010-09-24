@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ namespace rptui
     //====================================================================
     //= DefaultComponentInspectorModel
     //====================================================================
-    DBG_NAME(DefaultComponentInspectorModel)    
+    DBG_NAME(DefaultComponentInspectorModel)
     //--------------------------------------------------------------------
     DefaultComponentInspectorModel::DefaultComponentInspectorModel( const Reference< XComponentContext >& _rxContext)
         :m_xContext( _rxContext )
@@ -75,13 +75,13 @@ namespace rptui
         ,m_nMaxHelpTextLines( 8 )
         ,m_pInfoService(new OPropertyInfoService())
     {
-        DBG_CTOR(DefaultComponentInspectorModel,NULL);        
+        DBG_CTOR(DefaultComponentInspectorModel,NULL);
     }
 
     //------------------------------------------------------------------------
     DefaultComponentInspectorModel::~DefaultComponentInspectorModel()
     {
-        DBG_DTOR(DefaultComponentInspectorModel,NULL);        
+        DBG_DTOR(DefaultComponentInspectorModel,NULL);
     }
 
     //------------------------------------------------------------------------
@@ -127,7 +127,7 @@ namespace rptui
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        
+
         // service names for all our handlers
         const struct
         {
@@ -138,9 +138,9 @@ namespace rptui
             { "com.sun.star.form.inspection.EditPropertyHandler"},
             { "com.sun.star.report.inspection.DataProviderHandler"},
             { "com.sun.star.report.inspection.GeometryHandler"}
-            
+
             // generic virtual edit properties
-            
+
         };
 
         const size_t nFactories = sizeof( aFactories ) / sizeof( aFactories[ 0 ] );
@@ -159,7 +159,7 @@ namespace rptui
         ::osl::MutexGuard aGuard(m_aMutex);
         return m_bHasHelpSection;
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Int32 SAL_CALL DefaultComponentInspectorModel::getMinHelpTextLines() throw (RuntimeException)
     {
@@ -178,7 +178,7 @@ namespace rptui
         ::osl::MutexGuard aGuard(m_aMutex);
         m_bIsReadOnly = _isreadonly;
     }
-    
+
     //--------------------------------------------------------------------
     ::sal_Int32 SAL_CALL DefaultComponentInspectorModel::getMaxHelpTextLines() throw (RuntimeException)
     {

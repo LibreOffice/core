@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,23 +35,23 @@ class TabControl;
 class TabPage;
 
 
-//	----------------------------------------------------
-//	class VCLXAccessibleTabPageWindow
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXAccessibleTabPageWindow
+//  ----------------------------------------------------
 
-class VCLXAccessibleTabPageWindow :	public VCLXAccessibleComponent
+class VCLXAccessibleTabPageWindow : public VCLXAccessibleComponent
 {
 private:
-    TabControl*				m_pTabControl;
+    TabControl*             m_pTabControl;
     TabPage*                m_pTabPage;
     sal_uInt16              m_nPageId;
 
 protected:
-    // OCommonAccessibleComponent 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL	implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    // OCommonAccessibleComponent
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL   implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XComponent
-    virtual void SAL_CALL	disposing();
+    virtual void SAL_CALL   disposing();
 
 public:
     VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindow );

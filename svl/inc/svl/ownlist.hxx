@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star {
 
 //=========================================================================
 class SvCommand
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Enth"alt einen String, welcher das Kommando angibt und eine weiteren
     String, der das Argument des Kommandos bildet. W"urde solch ein
@@ -49,8 +49,8 @@ class SvCommand
     aus: Kommando = Argument.
 */
 {
-    String	aCommand;
-    String	aArgument;
+    String  aCommand;
+    String  aArgument;
 public:
                     SvCommand() {}
                     SvCommand( const String & rCommand, const String & rArg )
@@ -77,7 +77,7 @@ public:
 
 //=========================================================================
 class SVL_DLLPUBLIC SvCommandList
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Die Liste enth"alt Objekte vom Typ SvCommand. Wird ein Objekt
     eingef"ugt, dann wird es kopiert und das neue Objekt wird
@@ -85,9 +85,9 @@ class SVL_DLLPUBLIC SvCommandList
 */
 {
                     PRV_SV_DECL_OWNER_LIST(SvCommandList,SvCommand);
-    SvCommand &		Append( const String & rCommand, const String & rArg );
-    BOOL			AppendCommands( const String & rCmd, USHORT * pEaten );
-    String  		GetCommands() const;
+    SvCommand &     Append( const String & rCommand, const String & rArg );
+    BOOL            AppendCommands( const String & rCmd, USHORT * pEaten );
+    String          GetCommands() const;
 
     BOOL FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
     void FillSequence( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );

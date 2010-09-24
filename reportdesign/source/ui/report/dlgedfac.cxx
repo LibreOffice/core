@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,24 +65,24 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
         {
             case OBJ_DLG_FIXEDTEXT:
                     pObjFactory->pNewObj = new OUnoObject( SERVICE_FIXEDTEXT
-                                                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText")) 
+                                                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText"))
                                                         ,OBJ_DLG_FIXEDTEXT);
                     break;
             case OBJ_DLG_IMAGECONTROL:
                     pObjFactory->pNewObj = new OUnoObject( SERVICE_IMAGECONTROL
-                                                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.DatabaseImageControl")) 
+                                                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.DatabaseImageControl"))
                                                         ,OBJ_DLG_IMAGECONTROL);
                     break;
             case OBJ_DLG_FORMATTEDFIELD:
                     pObjFactory->pNewObj = new OUnoObject( SERVICE_FORMATTEDFIELD
-                                                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FormattedField")) 
+                                                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FormattedField"))
                                                         ,OBJ_DLG_FORMATTEDFIELD);
                     break;
             case OBJ_DLG_VFIXEDLINE:
             case OBJ_DLG_HFIXEDLINE:
                 {
                     OUnoObject* pObj = new OUnoObject( SERVICE_FIXEDLINE
-                                                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel")) 
+                                                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel"))
                                                         ,pObjFactory->nIdentifier);
                     pObjFactory->pNewObj = pObj;
                     if ( pObjFactory->nIdentifier == OBJ_DLG_HFIXEDLINE )

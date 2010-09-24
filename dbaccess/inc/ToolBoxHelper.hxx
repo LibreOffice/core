@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,13 +28,13 @@
 #ifndef DBAUI_TOOLBOXHELPER_HXX
 #define DBAUI_TOOLBOXHELPER_HXX
 
-#ifndef _SAL_TYPES_H_ 
+#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-#ifndef _LINK_HXX 
+#ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
-#ifndef _SV_GEN_HXX 
+#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
 #endif
 #ifndef _SV_IMAGE_HXX
@@ -50,41 +50,41 @@ namespace dbaui
 {
     class DBACCESS_DLLPUBLIC OToolBoxHelper
     {
-        sal_Bool		m_bIsHiContrast;// true when the toolbox is in hi contrast mode
-        sal_Int16		m_nSymbolsSize;	// shows the toolbox large or small bitmaps
-        ToolBox*		m_pToolBox;		// our toolbox (may be NULL)
+        sal_Bool        m_bIsHiContrast;// true when the toolbox is in hi contrast mode
+        sal_Int16       m_nSymbolsSize; // shows the toolbox large or small bitmaps
+        ToolBox*        m_pToolBox;     // our toolbox (may be NULL)
     public:
         OToolBoxHelper();
         virtual ~OToolBoxHelper();
 
         /** will be called when the controls need to be resized.
-            @param	_rDiff
+            @param  _rDiff
                 Contains the difference of the old and new toolbox size.
         */
         virtual void resizeControls(const Size& _rDiff) = 0;
 
         /** will be called when the image list is needed.
-            @param	_eSymbolsSize
+            @param  _eSymbolsSize
                 <svtools/imgdef.hxx>
-            @param	_bHiContast
+            @param  _bHiContast
                 <TRUE/> when in high contrast mode.
         */
         virtual ImageList getImageList(sal_Int16 _eSymbolsSize,sal_Bool _bHiContast) const = 0;
 
         /** only the member will be set, derived classes can overload this function and do what need to be done.
-            @param	_pTB
+            @param  _pTB
                 The new ToolBox.
             @attention
                 Must be called after a FreeResource() call.
         */
-        virtual void	setToolBox(ToolBox* _pTB);
+        virtual void    setToolBox(ToolBox* _pTB);
 
-        inline ToolBox* getToolBox() const			{ return m_pToolBox; }
+        inline ToolBox* getToolBox() const          { return m_pToolBox; }
 
         /** checks if the toolbox needs a new imagelist.
         */
         void checkImageList();
-        
+
         inline sal_Bool isToolBoxHiContrast() const { return m_bIsHiContrast; }
     protected:
         DECL_LINK(ConfigOptionsChanged, SvtMiscOptions*);

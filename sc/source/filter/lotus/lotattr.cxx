@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,7 +114,7 @@ LotAttrCache::LotAttrCache( void )
 
 LotAttrCache::~LotAttrCache()
 {
-    ENTRY*	pAkt = ( ENTRY* ) List::First();
+    ENTRY*  pAkt = ( ENTRY* ) List::First();
 
     while( pAkt )
     {
@@ -134,8 +134,8 @@ LotAttrCache::~LotAttrCache()
 
 const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 {
-    UINT32	nRefHash;
-    ENTRY*	pAkt = ( ENTRY* ) List::First();
+    UINT32  nRefHash;
+    ENTRY*  pAkt = ( ENTRY* ) List::First();
 
     MakeHash( rAttr, nRefHash );
 
@@ -148,8 +148,8 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     }
 
     // neues PatternAttribute erzeugen
-    ScPatternAttr*	pNewPatt = new ScPatternAttr( pDocPool );
-    SfxItemSet&		rItemSet = pNewPatt->GetItemSet();
+    ScPatternAttr*  pNewPatt = new ScPatternAttr( pDocPool );
+    SfxItemSet&     rItemSet = pNewPatt->GetItemSet();
     pAkt = new ENTRY( pNewPatt );
 
     pAkt->nHash0 = nRefHash;
@@ -159,8 +159,8 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     UINT8 nLine = rAttr.nLineStyle;
     if( nLine )
     {
-        SvxBoxItem		aBox( ATTR_BORDER );
-        SvxBorderLine	aTop, aLeft, aBottom, aRight;
+        SvxBoxItem      aBox( ATTR_BORDER );
+        SvxBorderLine   aTop, aLeft, aBottom, aRight;
 
         LotusToScBorderLine( nLine, aLeft );
         nLine >>= 2;
@@ -178,7 +178,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
         rItemSet.Put( aBox );
     }
 
-    UINT8				nFontCol = rAttr.nFontCol & 0x07;
+    UINT8               nFontCol = rAttr.nFontCol & 0x07;
     if( nFontCol )
     {
         // nFontCol > 0
@@ -214,7 +214,7 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
 {
     DBG_ASSERT( ValidRow(nRow), "*LotAttrCol::SetAttr(): ... und rums?!" );
 
-    ENTRY*		pAkt = ( ENTRY* ) List::Last();
+    ENTRY*      pAkt = ( ENTRY* ) List::Last();
 
     if( pAkt )
     {
@@ -230,7 +230,7 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
         }
     }
     else
-    {	// erster Eintrag
+    {   // erster Eintrag
         pAkt = new ENTRY;
         pAkt->pPattAttr = &rAttr;
         pAkt->nFirstRow = pAkt->nLastRow = nRow;
@@ -241,8 +241,8 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
 
 void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum, const BOOL /*bClear*/ )
 {
-    ScDocument*		pDoc = pLotusRoot->pDoc;
-    ENTRY*			pAkt = ( ENTRY* ) List::First();
+    ScDocument*     pDoc = pLotusRoot->pDoc;
+    ENTRY*          pAkt = ( ENTRY* ) List::First();
 
     while( pAkt )
     {
@@ -256,7 +256,7 @@ void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum, const BOOL /*b
 
 void LotAttrCol::Clear( void )
 {
-    ENTRY*			pAkt = ( ENTRY* ) List::First();
+    ENTRY*          pAkt = ( ENTRY* ) List::First();
 
     while( pAkt )
     {
@@ -279,8 +279,8 @@ LotAttrTable::~LotAttrTable()
 void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow,
                             const LotAttrWK3& rAttr )
 {
-    const ScPatternAttr&	rPattAttr = aAttrCache.GetPattAttr( rAttr );
-    SCCOL					nColCnt;
+    const ScPatternAttr&    rPattAttr = aAttrCache.GetPattAttr( rAttr );
+    SCCOL                   nColCnt;
 
     for( nColCnt = nColFirst ; nColCnt <= nColLast ; nColCnt++ )
         pCols[ nColCnt ].SetAttr( nRow, rPattAttr );
@@ -289,9 +289,9 @@ void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const S
 
 void LotAttrTable::Apply( const SCTAB nTabNum )
 {
-    SCCOL					nColCnt;
+    SCCOL                   nColCnt;
     for( nColCnt = 0 ; nColCnt <= MAXCOL ; nColCnt++ )
-        pCols[ nColCnt ].Apply( nColCnt, nTabNum );		// macht auch gleich ein Clear() am Ende
+        pCols[ nColCnt ].Apply( nColCnt, nTabNum );     // macht auch gleich ein Clear() am Ende
 }
 
 

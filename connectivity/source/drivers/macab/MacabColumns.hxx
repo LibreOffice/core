@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,13 +38,13 @@ namespace connectivity
         class MacabColumns : public sdbcx::OCollection
         {
         protected:
-            MacabTable*	m_pTable;
+            MacabTable* m_pTable;
 
             virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
 
         public:
-            MacabColumns(	MacabTable* _pTable,
+            MacabColumns(   MacabTable* _pTable,
                         ::osl::Mutex& _rMutex,
                         const TStringVector &_rVector);
         };

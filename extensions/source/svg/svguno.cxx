@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,8 +97,8 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
 extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     REF( NMSP_LANG::XSingleServiceFactory ) xFactory;
-    void*									pRet = 0;
-    
+    void*                                   pRet = 0;
+
     if( rtl_str_compare( pImplName, "com.sun.star.comp.extensions.SVGWriter" ) == 0 )
     {
         const NMSP_RTL::OUString aServiceName( B2UCONST( "com.sun.star.svg.SVGWriter" ) );
@@ -123,6 +123,6 @@ extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void*
         xFactory->acquire();
         pRet = xFactory.get();
     }
-    
+
     return pRet;
 }

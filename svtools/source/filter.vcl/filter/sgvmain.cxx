@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -812,12 +812,12 @@ void CircType::Draw(OutputDevice& rOut)
 void BmapType::Draw(OutputDevice& rOut)
 {
     //ifstream aInp;
-    unsigned char	nSgfTyp;
-    USHORT			nVersion;
-    String			aStr(
+    unsigned char   nSgfTyp;
+    USHORT          nVersion;
+    String          aStr(
         reinterpret_cast< char const * >(&Filename[ 1 ]),
         (xub_StrLen)Filename[ 0 ], RTL_TEXTENCODING_UTF8 );
-    INetURLObject	aFNam( aStr );
+    INetURLObject   aFNam( aStr );
 
     SvStream* pInp = ::utl::UcbStreamHelper::CreateStream( aFNam.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
     if ( pInp )
@@ -1068,7 +1068,7 @@ BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
     BOOL      bRet=FALSE;            // Returncode
 
     aIniPath.Append( String::CreateFromAscii( "sgf.ini", 7 ) );
-//	aIniPath.ToAbs();
+//  aIniPath.ToAbs();
 
     pSgfFonts = new SgfFontLst;
 

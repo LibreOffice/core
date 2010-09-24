@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,11 @@
 #define __FRAMEWORK_DISPATCH_INTERACTION_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/task/XInteractionRequest.hpp>
@@ -48,7 +48,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -56,21 +56,21 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	non exported const
+//  non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	non exported definitions
+//  non exported definitions
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
@@ -82,13 +82,13 @@ namespace framework{
                     Superclasses can add additional interfaces or methods to support additional features ...
                     but selection of it is supported here!
 
-    @implements		XInterface
+    @implements     XInterface
                     XTypeProvider (supported by WeakImplHelper!)
                     XInteractionContinuation
 
     @base           WeakImplHelper1
 
-    @devstatus		ready to use
+    @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
 template< class TContinuationType >
@@ -149,7 +149,7 @@ class ContinuationBase : public ::cppu::WeakImplHelper1< TContinuationType >
 
     @base           ContinuationBase
 
-    @devstatus		ready to use
+    @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
 typedef ContinuationBase< ::com::sun::star::task::XInteractionAbort > ContinuationAbort;
@@ -174,7 +174,7 @@ typedef ContinuationBase< ::com::sun::star::task::XInteractionRetry > Continuati
     @base           ImplInheritanceHelper1
                     ContinuationBase
 
-    @devstatus		ready to use
+    @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
 class ContinuationFilterSelect : public ContinuationBase< ::com::sun::star::document::XInteractionFilterSelect >
@@ -213,7 +213,7 @@ class ContinuationFilterSelect : public ContinuationBase< ::com::sun::star::docu
 
     @base           WeakImplHelper1
 
-    @devstatus		ready to use
+    @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
 class RequestFilterSelect : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
@@ -248,7 +248,7 @@ class RequestFilterSelect : public ::cppu::WeakImplHelper1< ::com::sun::star::ta
 
     @base           WeakImplHelper1
 
-    @devstatus		ready to use
+    @devstatus      ready to use
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
 class RequestAmbigousFilter : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >

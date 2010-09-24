@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace connectivity
     {
 
         /*
-        **	java_sql_ResultSet
+        **  java_sql_ResultSet
         */
         typedef ::cppu::WeakComponentImplHelper12<      ::com::sun::star::sdbc::XResultSet,
                                                         ::com::sun::star::sdbc::XRow,
@@ -71,21 +71,21 @@ namespace connectivity
 
 
         typedef sal_Int64 TVoidPtr;
-        typedef ::std::allocator< TVoidPtr >	TVoidAlloc;
-        typedef ::std::vector<TVoidPtr>			TVoidVector;
+        typedef ::std::allocator< TVoidPtr >    TVoidAlloc;
+        typedef ::std::vector<TVoidPtr>         TVoidVector;
 
-        class OResultSet :	public	comphelper::OBaseMutex,
-                            public	OResultSet_BASE,
-                            public	::cppu::OPropertySetHelper,
-                            public	::comphelper::OPropertyArrayUsageHelper<OResultSet>
+        class OResultSet :  public  comphelper::OBaseMutex,
+                            public  OResultSet_BASE,
+                            public  ::cppu::OPropertySetHelper,
+                            public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
-            OCommonStatement*							m_pStatement;
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>			m_xStatement;
+            OCommonStatement*                           m_pStatement;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>            m_xStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
-            sal_uInt32									m_nRowPos;
-            sal_uInt32									m_nOldRowPos;
-            sal_Bool									m_bWasNull;
+            sal_uInt32                                  m_nRowPos;
+            sal_uInt32                                  m_nOldRowPos;
+            sal_Bool                                    m_bWasNull;
             sal_Int32                                   m_nFetchSize;
             sal_Int32                                   m_nResultSetType;
             sal_Int32                                   m_nFetchDirection;
@@ -122,9 +122,9 @@ namespace connectivity
             virtual ~OResultSet();
         public:
             DECLARE_SERVICE_INFO();
-            
+
             OResultSet(OCommonStatement* pStmt, const ::boost::shared_ptr< ::connectivity::OSQLParseTreeIterator >& _pSQLIterator );
-            
+
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
             {
@@ -231,8 +231,8 @@ namespace connectivity
 protected:
             MQuery                   m_aQuery;
             OTable*                  m_pTable;
-            sal_Int32					m_CurrentRowCount;
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > 
+            sal_Int32                   m_CurrentRowCount;
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                                      m_xTableColumns;
 
             ::std::vector<sal_Int32> m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
@@ -243,22 +243,22 @@ protected:
             OValueRow                m_aParameterRow;
             ::std::vector< ::rtl::OUString> m_aAttributeStrings;
             sal_Int32                m_nParamIndex;
-            sal_Bool 				 m_bIsAlwaysFalseQuery;
+            sal_Bool                 m_bIsAlwaysFalseQuery;
             ::vos::ORef<OKeySet>     m_pKeySet;
             OSortIndex*              m_pSortIndex;
-            sal_Int32 				  m_nNewRow;		//inserted row
-            sal_Int32					  m_nUpdatedRow;	//updated row
-            sal_Int32				  m_RowStates;
-            sal_Int32			          m_bIsReadOnly;
+            sal_Int32                 m_nNewRow;        //inserted row
+            sal_Int32                     m_nUpdatedRow;    //updated row
+            sal_Int32                 m_RowStates;
+            sal_Int32                     m_bIsReadOnly;
             inline void resetParameters() { m_nParamIndex = 0; }
 
             ::vos::ORef<connectivity::OSQLColumns>  m_xColumns; // this are the select columns
             ::vos::ORef<connectivity::OSQLColumns>  m_xParamColumns;
-            
+
             void parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMatchString );
             void fillRowData() throw( ::com::sun::star::sdbc::SQLException );
             void initializeRow(OValueRow& _rRow,sal_Int32 _nColumnCount);
-            void analyseWhereClause( const OSQLParseNode*                 parseTree, 
+            void analyseWhereClause( const OSQLParseNode*                 parseTree,
                                      MQueryExpression                    &queryExpression);
 
             sal_Bool isCount() const;
@@ -266,7 +266,7 @@ protected:
             // XXX sal_Bool IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] != STRING_NOTFOUND ;}
             sal_Bool IsSorted() const { return !m_aOrderbyColumnNumber.empty(); }
 
-            enum eRowPosition { 
+            enum eRowPosition {
                 NEXT_POS, PRIOR_POS, FIRST_POS, LAST_POS, ABSOLUTE_POS, RELATIVE_POS
             };
 
@@ -281,7 +281,7 @@ protected:
             sal_Bool validRow( sal_uInt32 nRow );
             sal_Bool seekRow( eRowPosition pos, sal_Int32 nOffset = 0 );
             sal_Int32 deletedCount();
-            sal_Bool fillKeySet(sal_Int32 nMaxCardNumber);	//When we get new rows, fill the m_pKeySet items for them
+            sal_Bool fillKeySet(sal_Int32 nMaxCardNumber);  //When we get new rows, fill the m_pKeySet items for them
             sal_Int32 getRowForCardNumber(sal_Int32 nCardNum);
             const ORowSetValue& getValue(sal_Int32 rowIndex, sal_Int32 columnIndex)
                 throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -295,16 +295,16 @@ public:
             // MozAddressbook Specific methods
             void SAL_CALL executeQuery() throw( ::com::sun::star::sdbc::SQLException,
                                                 ::com::sun::star::uno::RuntimeException);
-        
+
             void setTable(OTable* _rTable);
 
-            void setParameterRow(const OValueRow& _rParaRow) 
+            void setParameterRow(const OValueRow& _rParaRow)
                       { m_aParameterRow = _rParaRow; }
 
-            void setParameterColumns(const ::vos::ORef<connectivity::OSQLColumns>& _xParamColumns) 
+            void setParameterColumns(const ::vos::ORef<connectivity::OSQLColumns>& _xParamColumns)
                       { m_xParamColumns = _xParamColumns; }
 
-            void setBindingRow(const OValueRow& _aRow) 
+            void setBindingRow(const OValueRow& _aRow)
                       { m_aRow = _aRow; }
 
             void setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping);
@@ -318,11 +318,11 @@ public:
             void checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
 
             static void setBoundedColumns(
-                const OValueRow& _rRow, 
-                const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns, 
-                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xNames, 
-                sal_Bool _bSetColumnMapping, 
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData, 
+                const OValueRow& _rRow,
+                const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xNames,
+                sal_Bool _bSetColumnMapping,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
                 ::std::vector<sal_Int32>& _rColMapping);
 
             ::osl::Mutex&   getMutex() { return m_aMutex; }

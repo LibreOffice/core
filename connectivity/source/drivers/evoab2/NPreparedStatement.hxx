@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace connectivity
     {
 
         class OBoundParam;
-        typedef ::cppu::ImplHelper5<	::com::sun::star::sdbc::XPreparedStatement,
+        typedef ::cppu::ImplHelper5<    ::com::sun::star::sdbc::XPreparedStatement,
                         ::com::sun::star::sdbc::XParameters,
                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                         ::com::sun::star::sdbc::XMultipleResults,
@@ -56,27 +56,27 @@ namespace connectivity
         protected:
             struct Parameter
             {
-                ::com::sun::star::uno::Any	aValue;
-                sal_Int32					nDataType;
+                ::com::sun::star::uno::Any  aValue;
+                sal_Int32                   nDataType;
 
-                Parameter(const ::com::sun::star::uno::Any&	rValue,
-                      sal_Int32							rDataType) : aValue(rValue),nDataType(rDataType)
+                Parameter(const ::com::sun::star::uno::Any& rValue,
+                      sal_Int32                         rDataType) : aValue(rValue),nDataType(rDataType)
                 {
                 }
 
             };
 
-            ::std::vector< Parameter>		m_aParameters;
+            ::std::vector< Parameter>       m_aParameters;
             //====================================================================
             // Data attributes
             //====================================================================
 
             // our SQL statement
-            ::rtl::OUString				                                                    m_sSqlStatement;
+            ::rtl::OUString                                                                 m_sSqlStatement;
             // the EBookQuery we're working with
             QueryData                                                                       m_aQueryData;
             // our meta data
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >	m_xMetaData;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
 
         protected:
             virtual ~OEvoabPreparedStatement();

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@
 
 PluginConnector* pConnector = NULL;
 
-int			nAppArguments = 0;
-char**		pAppArguments = NULL;
-Display*	pAppDisplay = NULL;
+int         nAppArguments = 0;
+char**      pAppArguments = NULL;
+Display*    pAppDisplay = NULL;
 Display*    pXtAppDisplay = NULL;
 
 extern oslModule pPluginLib;
@@ -59,7 +59,7 @@ static bool bPluginAppQuit = false;
 static long GlobalConnectionLostHdl( void* /*pInst*/, void* /*pArg*/ )
 {
     medDebug( 1, "pluginapp exiting due to connection lost\n" );
-    
+
     write( wakeup_fd[1], "xxxx", 4 );
     return 0;
 }
@@ -70,14 +70,14 @@ extern "C"
     {
         return 0;
     }
-    
+
     #ifndef ENABLE_GTK
     static void ThreadEventHandler( XtPointer /*client_data*/, int* /*source*/, XtInputId* id )
     {
         char buf[256];
         // clear pipe
         int len, nLast = -1;
-        
+
         while( (len = read( wakeup_fd[0], buf, sizeof( buf ) ) ) > 0 )
             nLast = len-1;
         if( ! bPluginAppQuit )
@@ -108,7 +108,7 @@ IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
     medDebug( 1, "new message handler\n" );
     write( wakeup_fd[1], "cccc", 4 );
     return 0;
-    
+
 }
 
 Widget createSubWidget( char* /*pPluginText*/, Widget shell, XLIB_Window aParentWindow )
@@ -139,7 +139,7 @@ Widget createSubWidget( char* /*pPluginText*/, Widget shell, XLIB_Window aParent
                      0, 0 );
     XtMapWidget( shell );
     XtMapWidget( newWidget );
-    XRaiseWindow( pXtAppDisplay, XtWindow( shell ) ); 
+    XRaiseWindow( pXtAppDisplay, XtWindow( shell ) );
     XSync( pXtAppDisplay, False );
 
     return newWidget;
@@ -186,7 +186,7 @@ static oslModule LoadModule( const char* pPath )
 static void CheckPlugin( const char* pPath )
 {
     oslModule pLib = LoadModule( pPath );
-    
+
     char*(*pNP_GetMIMEDescription)() = (char*(*)())
         osl_getAsciiFunctionSymbol( pLib, "NP_GetMIMEDescription" );
     if( pNP_GetMIMEDescription )
@@ -273,7 +273,7 @@ static gboolean pollXtTimerCallback(gpointer)
 static gboolean prepareWakeupEvent( GSource*, gint* )
 {
     struct pollfd aPoll = { wakeup_fd[0], POLLIN, 0 };
-    poll( &aPoll, 1, 0 );    
+    poll( &aPoll, 1, 0 );
     return (aPoll.revents & POLLIN ) != 0;
 }
 
@@ -288,7 +288,7 @@ static gboolean dispatchWakeupEvent( GSource*, GSourceFunc, gpointer )
     char buf[256];
     // clear pipe
     int len, nLast = -1;
-    
+
     while( (len = read( wakeup_fd[0], buf, sizeof( buf ) ) ) > 0 )
         nLast = len-1;
     if( ( nLast == -1  || buf[nLast] != 'x' ) && pConnector )
@@ -301,7 +301,7 @@ static gboolean dispatchWakeupEvent( GSource*, GSourceFunc, gpointer )
         delete pConnector;
         pConnector = NULL;
     }
-    
+
     return TRUE;
 }
 
@@ -353,7 +353,7 @@ int main( int argc, char **argv)
     }
     // initialize 'wakeup' pipe.
     int flags;
-    
+
     // set close-on-exec descriptor flag.
     if ((flags = fcntl (wakeup_fd[0], F_GETFD)) != -1)
     {
@@ -365,7 +365,7 @@ int main( int argc, char **argv)
         flags |= FD_CLOEXEC;
         fcntl (wakeup_fd[1], F_SETFD, flags);
     }
-    
+
     // set non-blocking I/O flag.
     if ((flags = fcntl (wakeup_fd[0], F_GETFL)) != -1)
     {
@@ -384,7 +384,7 @@ int main( int argc, char **argv)
         exit(255);
     }
     int nSocket = atol( argv[1] );
-    
+
     #ifdef ENABLE_GTK
     g_thread_init(NULL);
     gtk_init(&argc, &argv);
@@ -410,7 +410,7 @@ int main( int argc, char **argv)
         medDebug( 1, "could not get Xt GSource" );
         return 1;
     }
-    
+
     g_source_set_priority( pXTSource, GDK_PRIORITY_EVENTS );
     g_source_set_can_recurse( pXTSource, TRUE );
     g_source_attach( pXTSource, NULL );
@@ -418,7 +418,7 @@ int main( int argc, char **argv)
     aXtPollDesc.events = G_IO_IN;
     aXtPollDesc.revents = 0;
     g_source_add_poll( pXTSource, &aXtPollDesc );
-    
+
     gint xt_polling_timer_id = g_timeout_add( 25, pollXtTimerCallback, NULL);
     // Initialize wakeup events listener
     GSource *pWakeupSource = g_source_new( &aWakeupEventFuncs, sizeof(GSource) );
@@ -485,7 +485,7 @@ int main( int argc, char **argv)
     #ifdef ENABLE_GTK
     g_source_remove(xt_polling_timer_id);
     #endif
-    
+
     pNP_Shutdown();
     medDebug( 1, "NP_Shutdown done\n" );
     osl_unloadModule( pPluginLib );

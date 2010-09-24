@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 #include <docsh.hxx>
 #include <globdoc.hxx>
 #include <shellio.hxx>
-#include <swundo.hxx>		// fuer die UndoIds
+#include <swundo.hxx>       // fuer die UndoIds
 #include <section.hxx>
 #include <doctxm.hxx>
 #include <poolfmt.hxx>
@@ -170,7 +170,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
         break;
 
     default:
-//	case SPLITDOC_TO_GLOBALDOC:
+//  case SPLITDOC_TO_GLOBALDOC:
         pFilter = SwIoSystem::GetFilterOfFormat(
                                     String::CreateFromAscii( FILTER_XML ));
         eDocType = SPLITDOC_TO_GLOBALDOC;
@@ -230,17 +230,17 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                 pNd = pOutlNds->GetObject( nOutl );
                 SwTxtFmtColl* pTColl = pNd->GetTxtNode()->GetTxtColl();
 
-                //if( ( pTColl == pSplitColl ||		//#outline level,zhaojianwei
-                //	(   NO_NUMBERING != pSplitColl->GetOutlineLevel() &&
-                //		pTColl->GetOutlineLevel() <
-                //		pSplitColl->GetOutlineLevel() )) &&
-                //	!pNd->FindTableNode() )
+                //if( ( pTColl == pSplitColl ||     //#outline level,zhaojianwei
+                //  (   NO_NUMBERING != pSplitColl->GetOutlineLevel() &&
+                //      pTColl->GetOutlineLevel() <
+                //      pSplitColl->GetOutlineLevel() )) &&
+                //  !pNd->FindTableNode() )
                 if( ( pTColl == pSplitColl ||
                     (   pSplitColl->GetAttrOutlineLevel() > 0 &&
-                        pTColl->GetAttrOutlineLevel() > 0	  &&	
+                        pTColl->GetAttrOutlineLevel() > 0     &&
                         pTColl->GetAttrOutlineLevel() <
                         pSplitColl->GetAttrOutlineLevel() )) &&
-                    !pNd->FindTableNode() )			//<-end,zhaojianwei
+                    !pNd->FindTableNode() )         //<-end,zhaojianwei
                 {
                     pEndNd = pNd;
 
@@ -274,8 +274,8 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                     xDocProps->setTemplateDate(uDT);
                     xDocProps->setTemplateURL(rPath);
                     //JP 14.06.99: Set the text of the "split para" as title
-                    //				from the new doc. Is the current doc has
-                    //				a title, insert it at begin.
+                    //              from the new doc. Is the current doc has
+                    //              a title, insert it at begin.
                     String sTitle( xDocProps->getTitle() );
                     if( sTitle.Len() )
                         sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ));
@@ -406,7 +406,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         aSectData.SetLinkFileName(sFileName);
                         aSectData.SetProtectFlag(true);
 
-                        aEndIdx--;	// im InsertSection ist Ende inclusive
+                        aEndIdx--;  // im InsertSection ist Ende inclusive
                         while( aEndIdx.GetNode().IsStartNode() )
                             aEndIdx--;
 
@@ -475,7 +475,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
         }
     } while( pSttNd );
 
-//	if( pOutlNds != (SwOutlineNodes*)&GetNodes().GetOutLineNds();
+//  if( pOutlNds != (SwOutlineNodes*)&GetNodes().GetOutLineNds();
     if( pOutlNds != &GetNodes().GetOutLineNds() )
         delete pOutlNds;
 
@@ -493,14 +493,14 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
         }
         break;
 
-//	case SPLITDOC_TO_GLOBALDOC:
+//  case SPLITDOC_TO_GLOBALDOC:
     default:
         // dann das Globaldoc speichern
         set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
         set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, false);
     }
 
-    //				Medium istn't locked after reopen the document. Bug 91462
+    //              Medium istn't locked after reopen the document. Bug 91462
     SfxRequest aReq( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, GetAttrPool() );
     aReq.AppendItem( SfxStringItem( SID_FILE_NAME, rPath ) );
     aReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
@@ -531,7 +531,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
         break;
 
     default:
-//	case SPLITDOC_TO_GLOBALDOC:
+//  case SPLITDOC_TO_GLOBALDOC:
         pFilter = SwIoSystem::GetFilterOfFormat(
                                     String::CreateFromAscii( FILTER_XML ));
         eDocType = SPLITDOC_TO_GLOBALDOC;
@@ -590,7 +590,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                 pNd = pOutlNds->GetObject( nOutl );
 
                 const int nLevel = pNd->GetTxtNode()->GetAttrOutlineLevel();
-                
+
                 if( ( 0 < nLevel && nLevel <= nOutlineLevel ) &&
                     !pNd->FindTableNode() )
                 {
@@ -625,8 +625,8 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                     xDocProps->setTemplateDate(uDT);
                     xDocProps->setTemplateURL(rPath);
                     //JP 14.06.99: Set the text of the "split para" as title
-                    //				from the new doc. Is the current doc has
-                    //				a title, insert it at begin.
+                    //              from the new doc. Is the current doc has
+                    //              a title, insert it at begin.
                     String sTitle( xDocProps->getTitle() );
                     if( sTitle.Len() )
                         sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ));
@@ -757,7 +757,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                         aSectData.SetLinkFileName(sFileName);
                         aSectData.SetProtectFlag(true);
 
-                        aEndIdx--;	// im InsertSection ist Ende inclusive
+                        aEndIdx--;  // im InsertSection ist Ende inclusive
                         while( aEndIdx.GetNode().IsStartNode() )
                             aEndIdx--;
 
@@ -837,7 +837,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
         }
         break;
 
-//	case SPLITDOC_TO_GLOBALDOC:
+//  case SPLITDOC_TO_GLOBALDOC:
     default:
         set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
         set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, false);

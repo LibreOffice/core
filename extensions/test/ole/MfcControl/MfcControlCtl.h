@@ -34,7 +34,7 @@ protected:
     DECLARE_OLECREATE_EX(CMfcControlCtrl)    // Class factory and guid
     DECLARE_OLETYPELIB(CMfcControlCtrl)      // GetTypeInfo
     DECLARE_PROPPAGEIDS(CMfcControlCtrl)     // Property page IDs
-    DECLARE_OLECTLTYPE(CMfcControlCtrl)		// Type name and misc status
+    DECLARE_OLECTLTYPE(CMfcControlCtrl)     // Type name and misc status
 
 // Message maps
     //{{AFX_MSG(CMfcControlCtrl)

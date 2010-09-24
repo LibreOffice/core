@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ namespace oox { namespace ppt {
         { "slide(fromTop)", ::com::sun::star::animations::TransitionType::SLIDEWIPE, ::com::sun::star::animations::TransitionSubType::FROMTOP, sal_True },
         { "slide(fromRight)", ::com::sun::star::animations::TransitionType::SLIDEWIPE, ::com::sun::star::animations::TransitionSubType::FROMRIGHT, sal_True },
         { "slide(fromLeft)", ::com::sun::star::animations::TransitionType::SLIDEWIPE, ::com::sun::star::animations::TransitionSubType::FROMLEFT, sal_True },
-        { "slide(fromBottom)", ::com::sun::star::animations::TransitionType::SLIDEWIPE, ::com::sun::star::animations::TransitionSubType::FROMBOTTOM, sal_True }, 
+        { "slide(fromBottom)", ::com::sun::star::animations::TransitionType::SLIDEWIPE, ::com::sun::star::animations::TransitionSubType::FROMBOTTOM, sal_True },
         { "dissolve", ::com::sun::star::animations::TransitionType::DISSOLVE, ::com::sun::star::animations::TransitionSubType::DEFAULT, sal_True },
         { "image", ::com::sun::star::animations::TransitionType::DISSOLVE, ::com::sun::star::animations::TransitionSubType::DEFAULT, sal_True }, // TODO
         { NULL, 0, 0, sal_False }
@@ -88,15 +88,15 @@ namespace oox { namespace ppt {
     const transition* transition::find( const OUString& rName )
     {
         const transition* p = gTransitions;
-        
+
         while( p->mpName )
         {
             if( rName.compareToAscii( p->mpName ) == 0 )
                 return p;
-            
+
             p++;
         }
-        
+
         return NULL;
     }
 
@@ -104,14 +104,14 @@ namespace oox { namespace ppt {
     bool convertMeasure( OUString& rString )
     {
         bool bRet = false;
-        
+
         const sal_Char* pSource[] = { "ppt_x", "ppt_y", "ppt_w", "ppt_h", NULL };
         const sal_Char* pDest[] = { "x", "y", "width", "height", NULL };
         sal_Int32 nIndex = 0;
-        
+
         const sal_Char** ps = pSource;
         const sal_Char** pd = pDest;
-        
+
         while( *ps )
         {
             const OUString aSearch( OUString::createFromAscii( *ps ) );
@@ -123,7 +123,7 @@ namespace oox { namespace ppt {
                     nIndex--;
                     nLength++;
                 }
-                
+
                 const OUString aNew( OUString::createFromAscii( *pd ) );
                 rString = rString.replaceAt( nIndex, nLength, aNew );
                 nIndex += aNew.getLength();
@@ -132,9 +132,9 @@ namespace oox { namespace ppt {
             ps++;
             pd++;
         }
-        
+
         return bRet;
     }
 
-    
+
 } }

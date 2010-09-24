@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "drwtrans.hxx"
-#include "transobj.hxx"		// SetDrawClipDoc
+#include "transobj.hxx"     // SetDrawClipDoc
 #include "drawutil.hxx"
 #include "scmod.hxx"
 #include "globstr.hrc"
@@ -63,7 +63,7 @@ Point aDragStartDiff;
 
 // -----------------------------------------------------------------------
 
-//!	welche Funktionen aus drawview/drawvie4 muessen wirklich ohne Optimierung sein?
+//! welche Funktionen aus drawview/drawvie4 muessen wirklich ohne Optimierung sein?
 
 #ifdef _MSC_VER
 #pragma optimize ( "", off )
@@ -123,7 +123,7 @@ void lcl_RefreshChartData( SdrModel* pModel, ScDocument* pSourceDoc )
                     SchMemChart* pOldData = SchDLL::GetChartData(aIPObj);
                     if ( pOldData )
                     {
-                        //	create data from source document
+                        //  create data from source document
                         ScChartArray aArray( pSourceDoc, *pOldData );
                         if ( aArray.IsValid() )
                         {
@@ -162,17 +162,17 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
         ScDocShellRef aDragShellRef;
         if (bAnyOle)
         {
-            aDragShellRef = new ScDocShell;		// DocShell needs a Ref immediately
+            aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
             aDragShellRef->DoInitNew(NULL);
         }
         ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
         SdrModel* pModel = GetAllMarkedModel();
         ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-        //	Charts now always copy their data in addition to the source reference, so
-        //	there's no need to call SchDLL::Update for the charts in the clipboard doc.
-        //	Update with the data (including NumberFormatter) from the live document would
-        //	also store the NumberFormatter in the clipboard chart (#88749#)
+        //  Charts now always copy their data in addition to the source reference, so
+        //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
+        //  Update with the data (including NumberFormatter) from the live document would
+        //  also store the NumberFormatter in the clipboard chart (#88749#)
         // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
 
         ScDocShell* pDocSh = pViewData->GetDocShell();
@@ -186,9 +186,9 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
         uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
         pTransferObj->SetDrawPersist( &aDragShellRef );    // keep persist for ole objects alive
-        pTransferObj->SetDragSource( this );			// copies selection
+        pTransferObj->SetDragSource( this );            // copies selection
 
-        SC_MOD()->SetDragObject( NULL, pTransferObj );		// for internal D&D
+        SC_MOD()->SetDragObject( NULL, pTransferObj );      // for internal D&D
         pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
     }
 
@@ -206,10 +206,10 @@ void ScDrawView::DoCopy()
     SdrModel* pModel = GetAllMarkedModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-    //	Charts now always copy their data in addition to the source reference, so
-    //	there's no need to call SchDLL::Update for the charts in the clipboard doc.
-    //	Update with the data (including NumberFormatter) from the live document would
-    //	also store the NumberFormatter in the clipboard chart (#88749#)
+    //  Charts now always copy their data in addition to the source reference, so
+    //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
+    //  Update with the data (including NumberFormatter) from the live document would
+    //  also store the NumberFormatter in the clipboard chart (#88749#)
     // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
 
     ScDocShell* pDocSh = pViewData->GetDocShell();
@@ -227,8 +227,8 @@ void ScDrawView::DoCopy()
         pTransferObj->SetDrawPersist( &(*ScGlobal::pDrawClipDocShellRef) );    // keep persist for ole objects alive
     }
 
-    pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );		// system clipboard
-    SC_MOD()->SetClipObject( NULL, pTransferObj );					// internal clipboard
+    pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
+    SC_MOD()->SetClipObject( NULL, pTransferObj );                  // internal clipboard
 }
 
 uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
@@ -242,10 +242,10 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     SdrModel* pModel = GetAllMarkedModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-    //	Charts now always copy their data in addition to the source reference, so
-    //	there's no need to call SchDLL::Update for the charts in the clipboard doc.
-    //	Update with the data (including NumberFormatter) from the live document would
-    //	also store the NumberFormatter in the clipboard chart (#88749#)
+    //  Charts now always copy their data in addition to the source reference, so
+    //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
+    //  Update with the data (including NumberFormatter) from the live document would
+    //  also store the NumberFormatter in the clipboard chart (#88749#)
     // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
 
     ScDocShell* pDocSh = pViewData->GetDocShell();
@@ -266,7 +266,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     return xTransferable;
 }
 
-//	Korrektur fuer 100% berechnen, unabhaengig von momentanen Einstellungen
+//  Korrektur fuer 100% berechnen, unabhaengig von momentanen Einstellungen
 
 void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
 {
@@ -343,7 +343,7 @@ void ScDrawView::SetMarkedOriginalSize()
             MapMode aDestMap( MAP_100TH_MM );
             if (aSourceMap.GetMapUnit() == MAP_PIXEL)
             {
-                //	Pixel-Korrektur beruecksichtigen, damit Bitmap auf dem Bildschirm stimmt
+                //  Pixel-Korrektur beruecksichtigen, damit Bitmap auf dem Bildschirm stimmt
 
                 Fraction aNormScaleX, aNormScaleY;
                 CalcNormScale( aNormScaleX, aNormScaleY );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -182,10 +182,10 @@
   actual mouse event initiating this drag operation.
   Mouse events can only be received by subclassing
   NSView and overriding methods like 'mouseDown' etc.
-  hence we implement a event hook here so that the 
-  D&D service can register as listener for mouse 
-  messages and use the last 'mouseDown' or 
-  'mouseDragged' message to initiate the drag 
+  hence we implement a event hook here so that the
+  D&D service can register as listener for mouse
+  messages and use the last 'mouseDown' or
+  'mouseDragged' message to initiate the drag
   operation.
 */
 -(void)registerMouseEventListener: (id)theListener;

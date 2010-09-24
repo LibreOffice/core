@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 #include "boost/scoped_array.hpp"
 #include "boost/shared_ptr.hpp"
 #include <comphelper/processfactory.hxx>
- 
+
 #ifdef WNT
 //#include "tools/prewin.h"
 #define UNICODE
@@ -100,29 +100,29 @@ const OUString OfficePipeId::operator () ()
     OUString userPath;
     ::utl::Bootstrap::PathStatus aLocateResult =
     ::utl::Bootstrap::locateUserInstallation( userPath );
-    if (!(aLocateResult == ::utl::Bootstrap::PATH_EXISTS || 
+    if (!(aLocateResult == ::utl::Bootstrap::PATH_EXISTS ||
         aLocateResult == ::utl::Bootstrap::PATH_VALID))
     {
         throw Exception(OUSTR("Extension Manager: Could not obtain path for UserInstallation."), 0);
     }
-    
+
     rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
     if (digest <= 0) {
         throw RuntimeException(
             OUSTR("cannot get digest rtl_Digest_AlgorithmMD5!"), 0 );
     }
-    
+
     sal_uInt8 const * data =
         reinterpret_cast<sal_uInt8 const *>(userPath.getStr());
     sal_Size size = (userPath.getLength() * sizeof (sal_Unicode));
     sal_uInt32 md5_key_len = rtl_digest_queryLength( digest );
     ::boost::scoped_array<sal_uInt8> md5_buf( new sal_uInt8 [ md5_key_len ] );
-    
+
     rtl_digest_init( digest, data, static_cast<sal_uInt32>(size) );
     rtl_digest_update( digest, data, static_cast<sal_uInt32>(size) );
     rtl_digest_get( digest, md5_buf.get(), md5_key_len );
     rtl_digest_destroy( digest );
-    
+
     // create hex-value string from the MD5 value to keep
     // the string size minimal
     ::rtl::OUStringBuffer buf;
@@ -171,14 +171,14 @@ bool compareExtensionFolderWithLastSynchronizedFile(
     if (err2 == ::osl::File::E_NOENT)
     {
         return true;
-        
+
     }
     else if (err2 != ::osl::File::E_None)
     {
         OSL_ENSURE(0, "Cannot access file lastsynchronized");
         return true; //sync just in case
     }
-    
+
     //compare the modification time of the extension folder and the last
     //modified file
     ::osl::FileStatus statFolder(FileStatusMask_ModifyTime);
@@ -196,7 +196,7 @@ bool compareExtensionFolderWithLastSynchronizedFile(
         else
         {
             OSL_ASSERT(0);
-            bNeedsSync = true; 
+            bNeedsSync = true;
         }
     }
     else
@@ -204,7 +204,7 @@ bool compareExtensionFolderWithLastSynchronizedFile(
         OSL_ASSERT(0);
         bNeedsSync = true;
     }
-    return bNeedsSync;    
+    return bNeedsSync;
 }
 
 bool needToSyncRepostitory(OUString const & name)
@@ -232,7 +232,7 @@ bool needToSyncRepostitory(OUString const & name)
     {
         OSL_ASSERT(0);
         return true;
-    }    
+    }
     ::rtl::Bootstrap::expandMacros(folder);
     ::rtl::Bootstrap::expandMacros(file);
     return compareExtensionFolderWithLastSynchronizedFile(
@@ -286,7 +286,7 @@ OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
             // encode for macro expansion: relPath is supposed to have no
             // macros, so encode $, {} \ (bootstrap mimic)
             relPath = encodeForRcFile(relPath);
-            
+
             // encode once more for vnd.sun.star.expand schema:
             // vnd.sun.star.expand:$UNO_...
             // will expand to file-url
@@ -303,7 +303,7 @@ OUString makeURLAppendSysPathSegment( OUString const & baseURL, OUString const &
 {
     OUString segment = relPath_;
     OSL_ASSERT(segment.indexOf(static_cast<sal_Unicode>('/')) == -1);
-    
+
     ::rtl::Uri::encode(
         segment, rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes,
         RTL_TEXTENCODING_UTF8);
@@ -366,7 +366,7 @@ bool office_is_running()
     {
         sFile = sFile.copy(sFile.lastIndexOf('/') + 1);
         if (
-#if defined UNIX            
+#if defined UNIX
             sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SOFFICE2)))
 #elif defined WNT || defined OS2
             //osl_getExecutableFile should deliver "soffice.bin" on windows
@@ -381,8 +381,8 @@ bool office_is_running()
             || sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SWRITER)))
 #else
 #error "Unsupported platform"
-#endif            
-            
+#endif
+
             )
             ret = true;
         else
@@ -392,7 +392,7 @@ bool office_is_running()
     {
         OSL_ENSURE(0, "NOT osl_Process_E_None ");
         //if osl_getExecutable file than we take the risk of creating a pipe
-        ret =  existsOfficePipe();  
+        ret =  existsOfficePipe();
     }
     return ret;
 }
@@ -413,7 +413,7 @@ oslProcess raiseProcess(
         0, // => current working dir
         0, 0, // => no env vars
         &hProcess );
-    
+
     switch (rc) {
     case osl_Process_E_None:
         break;
@@ -429,7 +429,7 @@ oslProcess raiseProcess(
     default:
         throw RuntimeException( OUSTR("unmapped error!"), 0 );
     }
-    
+
     return hProcess;
 }
 
@@ -460,7 +460,7 @@ Reference<XInterface> resolveUnoURL(
 {
     Reference<bridge::XUnoUrlResolver> xUnoUrlResolver(
         bridge::UnoUrlResolver::create( xLocalContext ) );
-    
+
     for (;;)
     {
         if (abortChannel != 0 && abortChannel->isAborted()) {
@@ -481,7 +481,7 @@ Reference<XInterface> resolveUnoURL(
 void writeConsoleWithStream(::rtl::OUString const & sText, HANDLE stream)
 {
     DWORD nWrittenChars = 0;
-    WriteFile(stream, sText.getStr(), 
+    WriteFile(stream, sText.getStr(),
         sText.getLength() * 2, &nWrittenChars, NULL);
 }
 #else
@@ -550,7 +550,7 @@ OUString readConsole()
 {
 #ifdef WNT
     sal_Unicode aBuffer[1024];
-    DWORD	dwRead = 0;
+    DWORD   dwRead = 0;
     //unopkg.com feeds unopkg.exe with wchar_t|s
     if (ReadFile( GetStdHandle(STD_INPUT_HANDLE), &aBuffer, sizeof(aBuffer), &dwRead, NULL ) )
     {
@@ -601,7 +601,7 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
     if (needToSyncRepostitory(OUString(RTL_CONSTASCII_USTRINGPARAM("shared")))
         || needToSyncRepostitory(OUString(RTL_CONSTASCII_USTRINGPARAM("bundled"))))
     {
-        xExtensionManager =          
+        xExtensionManager =
             deployment::ExtensionManager::get(
                 comphelper_getProcessComponentContext());
 

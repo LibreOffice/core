@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,19 +56,19 @@ namespace rptui
     //========================================================================
     struct OPropertyInfoImpl
     {
-        String			sName;
-        String			sTranslation;
+        String          sName;
+        String          sTranslation;
         sal_uInt32      nHelpId;
         sal_Int32       nId;
         sal_uInt16      nPos;
         sal_uInt32      nUIFlags;
 
         OPropertyInfoImpl(
-                        const ::rtl::OUString&		rName,
-                        sal_Int32					_nId,
-                        const String&				aTranslation,
-                        sal_uInt16					nPosId,
-                        sal_uInt32					nHelpId,
+                        const ::rtl::OUString&      rName,
+                        sal_Int32                   _nId,
+                        const String&               aTranslation,
+                        sal_uInt16                  nPosId,
+                        sal_uInt32                  nHelpId,
                         sal_uInt32                  _nUIFlags);
     };
 
@@ -116,8 +116,8 @@ namespace rptui
 #define DEF_INFO_5( ident, uinameres, helpid, flag1, flag2, flag3, flag4, flag5 ) \
     DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 | PROP_FLAG_##flag2 | PROP_FLAG_##flag3 | PROP_FLAG_##flag4 | PROP_FLAG_##flag5 )
 
-    sal_uInt16				OPropertyInfoService::s_nCount = 0;
-    OPropertyInfoImpl*		OPropertyInfoService::s_pPropertyInfos = NULL;
+    sal_uInt16              OPropertyInfoService::s_nCount = 0;
+    OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = NULL;
     //------------------------------------------------------------------------
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo()
     {
@@ -160,7 +160,7 @@ namespace rptui
             ,DEF_INFO_2( TYPE,                          TYPE,                       TYPE,                       COMPOSEABLE,DATA_PROPERTY )
             ,DEF_INFO_2( DATAFIELD,                     DATAFIELD,                  DATAFIELD,                  COMPOSEABLE,DATA_PROPERTY )
             ,DEF_INFO_2( FORMULALIST,                   FORMULALIST,                FORMULALIST,                COMPOSEABLE,DATA_PROPERTY )
-            ,DEF_INFO_2( SCOPE,                         SCOPE,                      SCOPE,                      COMPOSEABLE,DATA_PROPERTY )            
+            ,DEF_INFO_2( SCOPE,                         SCOPE,                      SCOPE,                      COMPOSEABLE,DATA_PROPERTY )
             ,DEF_INFO_1( PRESERVEIRI,                   PRESERVEIRI,                PRESERVEIRI,                COMPOSEABLE )
             ,DEF_INFO_1( BACKCOLOR,                     BACKCOLOR,                  BACKCOLOR,                  COMPOSEABLE )
             ,DEF_INFO_1( CONTROLBACKGROUND,             BACKCOLOR,                  BACKCOLOR,                  COMPOSEABLE )

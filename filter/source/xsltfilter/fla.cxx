@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_filter.hxx"
 
 /*
-This file include an implementation of FLA - a simple Funtional Language for Attributes. 
+This file include an implementation of FLA - a simple Funtional Language for Attributes.
 The language is LISP-like and has the following grammar:
 FLA_Expression ::= '(' FLA_Operation FLA_Attribute+ ')'
 FLA_Attribtute ::= FLA_Constant | FLA_Expression
@@ -108,7 +108,7 @@ sal_Int32 Evaluator::evalFunc(const sal_Unicode*op, sal_Int32 opLen, sal_Int32 a
             result[0]=L't';
             return 1;
         }
-        else 
+        else
         {
             return 0;
         }
@@ -122,7 +122,7 @@ sal_Int32 Evaluator::evalFunc(const sal_Unicode*op, sal_Int32 opLen, sal_Int32 a
             result[0]=L't';
             return 1;
         }
-        else 
+        else
         {
             return 0;
         }
@@ -136,7 +136,7 @@ sal_Int32 Evaluator::evalFunc(const sal_Unicode*op, sal_Int32 opLen, sal_Int32 a
             result[0]=L't';
             return 1;
         }
-        else 
+        else
         {
             return 0;
         }
@@ -150,21 +150,21 @@ sal_Int32 Evaluator::evalFunc(const sal_Unicode*op, sal_Int32 opLen, sal_Int32 a
             result[0]=L't';
             return 1;
         }
-        else 
+        else
         {
             return 0;
         }
     }
     else if (opLen>1 && op[0]==L'$' && args==0)
     {
-        sal_Int32 reg=rtl_ustr_toInt32(op+1, 10);	
+        sal_Int32 reg=rtl_ustr_toInt32(op+1, 10);
         int i=0; while(i<99 && environment[reg][i]!=L'\0') { result[i]=environment[reg][i]; i++; }
         result[i]=0;
         return i;
     }
     else if (opLen>1 && op[0]==L'$' && args==1)
     {
-        sal_Int32 reg=rtl_ustr_toInt32(op+1, 10);	
+        sal_Int32 reg=rtl_ustr_toInt32(op+1, 10);
         int i=0; while(i<99 && argv[0]!=NULL) { result[i]=argv[0][i]; environment[reg][i]=argv[0][i]; i++; }
         environment[reg][i]=0; result[i]=0;
         return i;
@@ -195,7 +195,7 @@ sal_Int32 Evaluator::evalFunc(const sal_Unicode*op, sal_Int32 opLen, sal_Int32 a
             result[len]=0;
             return len;
         }
-        else 
+        else
         {
             result[0]=0;
             return 0;
@@ -233,8 +233,8 @@ sal_Int32 Evaluator::evalFunc(const sal_Unicode*op, sal_Int32 opLen, sal_Int32 a
         source=argv[args-1]; int len=0; while (*source!=L'\0') result[len++]=*source++;
         result[len]=0;
         return len;
-//		double v=rtl_ustr_toDouble(argv[0]);
-//		return rtl_ustr_valueOfDouble(result, (v/567.0L));
+//      double v=rtl_ustr_toDouble(argv[0]);
+//      return rtl_ustr_valueOfDouble(result, (v/567.0L));
     }
     else
     {

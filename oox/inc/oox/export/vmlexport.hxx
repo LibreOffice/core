@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 
 #include <oox/dllapi.h>
 #include <sax/fshelper.hxx>
-#include <svx/escherex.hxx>
+#include <filter/msfilter/escherex.hxx>
 
 namespace rtl {
     class OString;
@@ -48,7 +48,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
 
     /// Remember the shape type.
     sal_uInt32 m_nShapeType;
-    
+
     /// Remember the shape flags.
     sal_uInt32 m_nShapeFlags;
 

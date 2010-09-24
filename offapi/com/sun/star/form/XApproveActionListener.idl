@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,26 +24,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_XApproveActionListener_idl__ 
-#define __com_sun_star_form_XApproveActionListener_idl__ 
- 
-#ifndef __com_sun_star_lang_XEventListener_idl__ 
-#include <com/sun/star/lang/XEventListener.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_EventObject_idl__ 
-#include <com/sun/star/lang/EventObject.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module form {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_form_XApproveActionListener_idl__
+#define __com_sun_star_form_XApproveActionListener_idl__
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+
+#ifndef __com_sun_star_lang_EventObject_idl__
+#include <com/sun/star/lang/EventObject.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
 /** can be implemented to listen and probably veto actions to be performed on components.
-    
+
     <p>An example for an action would be the click of a
         CommandButton.</p>
 
@@ -52,9 +52,9 @@
     @see com::sun::star::form::control::CommandButton
  */
 published interface XApproveActionListener: com::sun::star::lang::XEventListener
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** is invoked when an action is performed.
 
         @param aEvent
@@ -63,15 +63,15 @@ published interface XApproveActionListener: com::sun::star::lang::XEventListener
         @returns
             <TRUE/> when the action is permitted, otherwise <FALSE/>.
      */
-    boolean approveAction( [in] com::sun::star::lang::EventObject aEvent ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+    boolean approveAction( [in] com::sun::star::lang::EventObject aEvent );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,10 +46,10 @@ class TreeControlPeer;
 class UnoTreeListBoxImpl;
 class TreeNodeMap;
 
-//	----------------------------------------------------
-//	class TreeControlPeer
-//	----------------------------------------------------
-class TreeControlPeer :	public ::cppu::ImplInheritanceHelper2< VCLXWindow, ::com::sun::star::awt::tree::XTreeControl, ::com::sun::star::awt::tree::XTreeDataModelListener >
+//  ----------------------------------------------------
+//  class TreeControlPeer
+//  ----------------------------------------------------
+class TreeControlPeer : public ::cppu::ImplInheritanceHelper2< VCLXWindow, ::com::sun::star::awt::tree::XTreeControl, ::com::sun::star::awt::tree::XTreeDataModelListener >
 {
     friend class UnoTreeListBoxImpl;
     friend class UnoTreeListEntry;

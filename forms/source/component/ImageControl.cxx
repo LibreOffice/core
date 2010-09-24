@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,8 +66,8 @@
 
 #include <memory>
 
-#define ID_OPEN_GRAPHICS			1
-#define	ID_CLEAR_GRAPHICS			2
+#define ID_OPEN_GRAPHICS            1
+#define ID_CLEAR_GRAPHICS           2
 
 //.........................................................................
 namespace frm
@@ -211,7 +211,7 @@ IMPLEMENT_DEFAULT_CLONING( OImageControlModel )
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence	OImageControlModel::getSupportedServiceNames() throw()
+StringSequence  OImageControlModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -316,7 +316,7 @@ void OImageControlModel::describeFixedProperties( Sequence< Property >& _rProps 
 //------------------------------------------------------------------------------
 ::rtl::OUString OImageControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_IMAGECONTROL;	// old (non-sun) name for compatibility !
+    return FRM_COMPONENT_IMAGECONTROL;  // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -362,8 +362,8 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
     }
     // Nach dem Lesen die Defaultwerte anzeigen
     if ( getControlSource().getLength() )
-    {	// (not if we don't have a control source - the "State" property acts like it is persistent, then
-        ::osl::MutexGuard aGuard(m_aMutex);	// resetNoBroadcast expects this mutex guarding
+    {   // (not if we don't have a control source - the "State" property acts like it is persistent, then
+        ::osl::MutexGuard aGuard(m_aMutex); // resetNoBroadcast expects this mutex guarding
         resetNoBroadcast();
     }
 }
@@ -556,7 +556,7 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
         GetImageProducer()->setImage( xInStream );
         bStartProduction = true;
     }
-    break; 
+    break;
 
     case ImageStoreLink:
     {
@@ -692,7 +692,7 @@ Any SAL_CALL OImageControlControl::queryAggregation(const Type& _rType) throw (R
 }
 
 //------------------------------------------------------------------------------
-StringSequence	OImageControlControl::getSupportedServiceNames() throw()
+StringSequence  OImageControlControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -798,7 +798,7 @@ bool OImageControlControl::implInsertGraphics()
             {
                 Graphic aGraphic;
                 aDialog.GetGraphic( aGraphic );
-                                
+
                 Reference< graphic::XGraphicObject > xGrfObj = graphic::GraphicObject::create( m_aContext.getUNOContext() );
                 xGrfObj->setGraphic( aGraphic.GetXGraphic() );
                 rtl::OUString sObjectID( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
@@ -868,7 +868,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
 
             awt::Rectangle aRect( e.X, e.Y, 0, 0 );
             if ( ( e.X < 0 ) || ( e.Y < 0 ) )
-            {	// context menu triggered by keyboard
+            {   // context menu triggered by keyboard
                 // position it in the center of the control
                 // 102205 - 16.08.2002 - fs@openoffice.org
                 Reference< XWindow > xWindow( static_cast< ::cppu::OWeakObject* >( this ), UNO_QUERY );
@@ -955,6 +955,6 @@ void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/) th
 }
 
 //.........................................................................
-}	// namespace frm
+}   // namespace frm
 //.........................................................................
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
     if you are not including ws2_32.lib in makefile.mk,  the including format will be like this:
 
     .IF "$(GUI)" == "WNT"
-    SHL1STDLIBS +=	$(SOLARLIBDIR)$/cppunit.lib
+    SHL1STDLIBS +=  $(SOLARLIBDIR)$/cppunit.lib
     SHL1STDLIBS +=  ws2_32.lib
     .ENDIF
 
@@ -109,8 +109,8 @@ namespace osl_DatagramSocket
 
     /** testing the methods:
         inline DatagramSocket(oslAddrFamily Family= osl_Socket_FamilyInet,
-                              oslProtocol	Protocol= osl_Socket_ProtocolIp,
-                              oslSocketType	Type= osl_Socket_TypeDgram);
+                              oslProtocol   Protocol= osl_Socket_ProtocolIp,
+                              oslSocketType Type= osl_Socket_TypeDgram);
     */
 
     class ctors : public CppUnit::TestFixture

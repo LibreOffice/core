@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -386,7 +386,7 @@ ModalDialog DLG_PUBLISHING
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "~PNG";
     };
-    
+
     RadioButton PAGE3_GIF
     {
         Pos = MAP_APPFONT( 12, 63 );

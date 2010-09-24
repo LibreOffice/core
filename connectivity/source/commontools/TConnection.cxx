@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,8 +41,8 @@ using namespace com::sun::star::beans;
 using namespace ::osl;
 
 //------------------------------------------------------------------------------
-OMetaConnection::OMetaConnection() 
-    : OMetaConnection_BASE(m_aMutex) 
+OMetaConnection::OMetaConnection()
+    : OMetaConnection_BASE(m_aMutex)
     , m_nTextEncoding(RTL_TEXTENCODING_MS_1252)
 {
 }
@@ -53,7 +53,7 @@ void OMetaConnection::disposing()
     m_xMetaData = WeakReference< XDatabaseMetaData>();
     for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
     {
-        try 
+        try
         {
             Reference< XInterface > xStatement( i->get() );
             ::comphelper::disposeComponent( xStatement );

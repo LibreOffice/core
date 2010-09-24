@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,14 +41,14 @@ protected:
     ~SwCfgDesc();
 
 public:
-    void SetEvent(USHORT nE);				// inline
-    void SetFuncText(const String &rStr);	// inline
+    void SetEvent(USHORT nE);               // inline
+    void SetFuncText(const String &rStr);   // inline
     void SetMacro(const String &rLib, const String &rMac);
     BOOL IsMacro() const;
-    USHORT GetEvent() const;			 	// inline
-    String GetFuncText() const;			 	// inline
-    String GetMacro() const;			 	// inline
-    String GetLib() const;			 	// inline
+    USHORT GetEvent() const;                // inline
+    String GetFuncText() const;             // inline
+    String GetMacro() const;                // inline
+    String GetLib() const;              // inline
 };
 
 // INLINE METHODE --------------------------------------------------------
@@ -60,10 +60,10 @@ inline void SwCfgDesc::SetFuncText(const String &rStr) {
     aFuncText = rStr;
 }
 
-inline 	USHORT SwCfgDesc::GetEvent() const { return nEvent; }
-inline 	String SwCfgDesc::GetFuncText() const { return aFuncText; }
-inline 	String SwCfgDesc::GetMacro() const { return aFuncText; }
-inline 	String SwCfgDesc::GetLib() const { return aLibName; }
+inline  USHORT SwCfgDesc::GetEvent() const { return nEvent; }
+inline  String SwCfgDesc::GetFuncText() const { return aFuncText; }
+inline  String SwCfgDesc::GetMacro() const { return aFuncText; }
+inline  String SwCfgDesc::GetLib() const { return aLibName; }
 
 
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -208,7 +208,7 @@ namespace calc
 
         return aTypes;
     }
-        
+
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL OCellValueBinding::supportsType( const Type& aType ) throw (RuntimeException)
     {
@@ -226,7 +226,7 @@ namespace calc
 
         return sal_False;
     }
-        
+
     //--------------------------------------------------------------------
     Any SAL_CALL OCellValueBinding::getValue( const Type& aType ) throw (IncompatibleTypesException, RuntimeException)
     {
@@ -313,7 +313,7 @@ namespace calc
         }
         return aReturn;
     }
-        
+
     //--------------------------------------------------------------------
     void SAL_CALL OCellValueBinding::setValue( const Any& aValue ) throw (IncompatibleTypesException, NoSupportException, RuntimeException)
     {
@@ -484,7 +484,7 @@ namespace calc
 
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sheet.OCellValueBinding" ) );
     }
-        
+
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL OCellValueBinding::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
     {
@@ -499,7 +499,7 @@ namespace calc
 
         return sal_False;
     }
-        
+
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL OCellValueBinding::getSupportedServiceNames(  ) throw (RuntimeException)
     {
@@ -519,7 +519,7 @@ namespace calc
        if ( _rxListener.is() )
            m_aModifyListeners.addInterface( _rxListener );
     }
-    
+
     //--------------------------------------------------------------------
     void SAL_CALL OCellValueBinding::removeModifyListener( const Reference< XModifyListener >& _rxListener ) throw (RuntimeException)
     {

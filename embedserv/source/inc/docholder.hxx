@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ class DocumentHolder :
                         ::com::sun::star::ui::XDockingAreaAcceptor>
 {
 private:
-    ::osl::Mutex				m_aMutex;
+    ::osl::Mutex                m_aMutex;
 
     BOOL                        m_bAllowInPlace;
     LPOLEINPLACESITE            m_pIOleIPSite;
@@ -106,14 +106,14 @@ private:
 
     sal_Bool m_bLink;
 
-    
+
     ::com::sun::star::uno::Reference<
     ::com::sun::star::frame::XFrame > DocumentFrame();
 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >
         CreateNewInterceptor();
-    
+
     void ClearInterceptorInternally();
 
     void LoadDocInFrame( sal_Bool bPluginMode );

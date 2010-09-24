@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,10 +76,10 @@ sal_Int16 lcl_SubTypeToAPI(USHORT nSubType)
         sal_Int16 nRet = 0;
         switch(nSubType)
         {
-            case nsSwGetSetExpType::GSE_EXPR	:  	nRet = SetVariableType::VAR /*0*/; break;
-            case nsSwGetSetExpType::GSE_SEQ	    :	nRet = SetVariableType::SEQUENCE /*1*/; break;
-            case nsSwGetSetExpType::GSE_FORMULA :	nRet = SetVariableType::FORMULA /*2*/; break;
-            case nsSwGetSetExpType::GSE_STRING  : 	nRet = SetVariableType::STRING /*3*/; break;
+            case nsSwGetSetExpType::GSE_EXPR    :   nRet = SetVariableType::VAR /*0*/; break;
+            case nsSwGetSetExpType::GSE_SEQ     :   nRet = SetVariableType::SEQUENCE /*1*/; break;
+            case nsSwGetSetExpType::GSE_FORMULA :   nRet = SetVariableType::FORMULA /*2*/; break;
+            case nsSwGetSetExpType::GSE_STRING  :   nRet = SetVariableType::STRING /*3*/; break;
         }
         return nRet;
 }
@@ -91,10 +91,10 @@ sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
         sal_Int32 nSet = 0;
         switch(nVal)
         {
-            case SetVariableType::VAR:		nSet = nsSwGetSetExpType::GSE_EXPR;  break;
+            case SetVariableType::VAR:      nSet = nsSwGetSetExpType::GSE_EXPR;  break;
             case SetVariableType::SEQUENCE: nSet = nsSwGetSetExpType::GSE_SEQ;  break;
             case SetVariableType::FORMULA:  nSet = nsSwGetSetExpType::GSE_FORMULA; break;
-            case SetVariableType::STRING:	nSet = nsSwGetSetExpType::GSE_STRING;	break;
+            case SetVariableType::STRING:   nSet = nsSwGetSetExpType::GSE_STRING;   break;
             default:
                 DBG_ERROR("wrong value");
                 nSet = -1;
@@ -194,7 +194,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
                     const_cast<SwTxtNode*>(pTxtNode)->MakeStartIndex(
                             &rPos.nContent );
 // oder doch besser das Ende vom (Anker-)TextNode nehmen ??
-//					((SwTxtNode*)pTxtNode)->MakeEndIndex( &rPos.nContent );
+//                  ((SwTxtNode*)pTxtNode)->MakeEndIndex( &rPos.nContent );
                 }
 
                 // noch nicht abbrechen, kann ja auch noch im
@@ -247,7 +247,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
             else
             {
                 Point aPt( pLayout->Frm().Pos() );
-                aPt.Y()++;		// aus dem Header raus
+                aPt.Y()++;      // aus dem Header raus
                 pCntFrm = pPgFrm->GetCntntPos( aPt, FALSE, TRUE, FALSE );
                 pTxtNode = GetFirstTxtNode( rDoc, rPos, pCntFrm, aPt );
             }
@@ -257,7 +257,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
             pLayout = pLayout->GetUpper();
             continue;
         }
-        break;		// gefunden und beende die Schleife
+        break;      // gefunden und beende die Schleife
     }
     return pTxtNode;
 }
@@ -325,8 +325,8 @@ SwField* SwGetExpField::Copy() const
                                             GetFormula(), nSubType, GetFormat());
     pTmp->SetLanguage(GetLanguage());
     pTmp->SwValueField::SetValue(GetValue());
-    pTmp->sExpand 		= sExpand;
-    pTmp->bIsInBodyTxt 	= bIsInBodyTxt;
+    pTmp->sExpand       = sExpand;
+    pTmp->bIsInBodyTxt  = bIsInBodyTxt;
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
     if( bLateInitialization )
         pTmp->SetLateInitialization();
@@ -336,7 +336,7 @@ SwField* SwGetExpField::Copy() const
 
 void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
 {
-    if( bIsInBodyTxt )		// nur Felder in Footer, Header, FootNote, Flys
+    if( bIsInBodyTxt )      // nur Felder in Footer, Header, FootNote, Flys
         return;
 
     ASSERT( !rFrm.IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
@@ -355,7 +355,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
     //
     if(!pTxtNode)
         return;
-    // #i82544# 
+    // #i82544#
     if( bLateInitialization )
     {
         SwFieldType* pSetExpFld = rDoc.GetFldType(RES_SETEXPFLD, GetFormula(), sal_False);
@@ -367,7 +367,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
             SetSubType( nsSwGetSetExpType::GSE_STRING );
         }
     }
-    
+
     _SetGetExpFld aEndFld( aPos.nNode, &rFld, &aPos.nContent );
     if(GetSubType() & nsSwGetSetExpType::GSE_STRING)
     {
@@ -375,7 +375,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
         USHORT nSize;
         rDoc.FldsToExpand( ppHashTbl, nSize, aEndFld );
         LookString( ppHashTbl, nSize, GetFormula(), sExpand );
-        ::DeleteHashTable( ppHashTbl, nSize );		// HashTabelle loeschen
+        ::DeleteHashTable( ppHashTbl, nSize );      // HashTabelle loeschen
     }
     else
     {
@@ -515,7 +515,7 @@ SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const String& rName, USHORT nT
     bDeleted( FALSE )
 {
     if( ( nsSwGetSetExpType::GSE_SEQ | nsSwGetSetExpType::GSE_STRING ) & nType )
-        EnableFormat(FALSE);	// Numberformatter nicht einsetzen
+        EnableFormat(FALSE);    // Numberformatter nicht einsetzen
 }
 
 SwFieldType* SwSetExpFieldType::Copy() const
@@ -535,7 +535,7 @@ const String& SwSetExpFieldType::GetName() const
 
 void SwSetExpFieldType::Modify( SfxPoolItem*, SfxPoolItem* )
 {
-    return;		// nicht weiter expandieren
+    return;     // nicht weiter expandieren
 }
 
 void SwSetExpFieldType::SetSeqFormat(ULONG nFmt)
@@ -583,12 +583,12 @@ extern void InsertSort( SvUShorts& rArr, USHORT nIdx, USHORT* pInsPos = 0 );
     {
         for( n = 0; n < aArr.Count(); ++n )
             if( aArr[ n ] > nNum )
-                return nNum;			// nicht vorhanden -> also benutzen
+                return nNum;            // nicht vorhanden -> also benutzen
             else if( aArr[ n ] == nNum )
-                break;					// schon vorhanden -> neue erzeugen
+                break;                  // schon vorhanden -> neue erzeugen
 
         if( n == aArr.Count() )
-            return nNum;			// nicht vorhanden -> also benutzen
+            return nNum;            // nicht vorhanden -> also benutzen
     }
 
     // alle Nummern entsprechend geflag, also bestimme die richtige Nummer
@@ -695,7 +695,7 @@ BOOL SwSetExpFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
         {
             String sTmp;
             if( ::GetString( rAny, sTmp ).Len() )
-//				SetDelimiter( sTmp.GetChar( 0 ));
+//              SetDelimiter( sTmp.GetChar( 0 ));
                 SetDelimiter( sTmp );
             else
                 SetDelimiter(String::CreateFromAscii( " "));
@@ -821,7 +821,7 @@ String SwSetExpField::Expand() const
 {
     String aStr;
     if (nSubType & nsSwExtendedSubType::SUB_CMD)
-    {	// Der CommandString ist gefragt
+    {   // Der CommandString ist gefragt
         aStr = GetTyp()->GetName();
         aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ));
         aStr += GetFormula();
@@ -870,12 +870,12 @@ SwField* SwSetExpField::Copy() const
     SwSetExpField *pTmp = new SwSetExpField((SwSetExpFieldType*)GetTyp(),
                                             GetFormula(), GetFormat());
     pTmp->SwValueField::SetValue(GetValue());
-    pTmp->sExpand   	= sExpand;
+    pTmp->sExpand       = sExpand;
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
     pTmp->SetLanguage(GetLanguage());
-    pTmp->aPText		= aPText;
-    pTmp->bInput		= bInput;
-    pTmp->nSeqNo		= nSeqNo;
+    pTmp->aPText        = aPText;
+    pTmp->bInput        = bInput;
+    pTmp->nSeqNo        = nSeqNo;
     pTmp->SetSubType(GetSubType());
 
     return pTmp;

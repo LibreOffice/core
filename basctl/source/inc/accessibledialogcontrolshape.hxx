@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,53 +47,53 @@ class AccessibleStateSetHelper;
 }
 
 
-//	----------------------------------------------------
-//	class AccessibleDialogControlShape
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class AccessibleDialogControlShape
+//  ----------------------------------------------------
 
-typedef ::comphelper::OAccessibleExtendedComponentHelper	AccessibleExtendedComponentHelper_BASE;
+typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
 
 typedef ::cppu::ImplHelper3<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::beans::XPropertyChangeListener > AccessibleDialogControlShape_BASE;
 
-class AccessibleDialogControlShape :	public AccessibleExtendedComponentHelper_BASE,
+class AccessibleDialogControlShape :    public AccessibleExtendedComponentHelper_BASE,
                                         public AccessibleDialogControlShape_BASE
 {
     friend class AccessibleDialogWindow;
 
 private:
-    VCLExternalSolarLock*	m_pExternalLock;
-    DialogWindow*			m_pDialogWindow;
-    DlgEdObj*				m_pDlgEdObj;
-    sal_Bool				m_bFocused;
-    sal_Bool				m_bSelected;
+    VCLExternalSolarLock*   m_pExternalLock;
+    DialogWindow*           m_pDialogWindow;
+    DlgEdObj*               m_pDlgEdObj;
+    sal_Bool                m_bFocused;
+    sal_Bool                m_bSelected;
 
-    ::com::sun::star::awt::Rectangle											m_aBounds;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >	m_xControlModel;
+    ::com::sun::star::awt::Rectangle                                            m_aBounds;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xControlModel;
 
 protected:
-    sal_Bool				IsFocused();
-    sal_Bool				IsSelected();
+    sal_Bool                IsFocused();
+    sal_Bool                IsSelected();
 
-    void					SetFocused( sal_Bool bFocused );
-    void					SetSelected( sal_Bool bSelected );
+    void                    SetFocused( sal_Bool bFocused );
+    void                    SetSelected( sal_Bool bSelected );
 
     ::com::sun::star::awt::Rectangle GetBounds();
-    void					SetBounds( const ::com::sun::star::awt::Rectangle& aBounds ); 
+    void                    SetBounds( const ::com::sun::star::awt::Rectangle& aBounds );
 
-    Window*					GetWindow() const;
+    Window*                 GetWindow() const;
 
-    ::rtl::OUString			GetModelStringProperty( const sal_Char* pPropertyName );
+    ::rtl::OUString         GetModelStringProperty( const sal_Char* pPropertyName );
 
-    virtual void			FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
-    // OCommonAccessibleComponent 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL	implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    // OCommonAccessibleComponent
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL   implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XComponent
-    virtual void SAL_CALL	disposing();
+    virtual void SAL_CALL   disposing();
 
 public:
     AccessibleDialogControlShape( DialogWindow* pDialogWindow, DlgEdObj* pDlgEdObj );
@@ -138,7 +138,7 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleExtendedComponent
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(	) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
 };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@ namespace xmloff
 {
 //.........................................................................
 
-#define BOOLATTR_DEFAULT_FALSE			0x00
-#define BOOLATTR_DEFAULT_TRUE			0x01
-#define BOOLATTR_DEFAULT_VOID			0x02
-#define BOOLATTR_DEFAULT_MASK			0x03
+#define BOOLATTR_DEFAULT_FALSE          0x00
+#define BOOLATTR_DEFAULT_TRUE           0x01
+#define BOOLATTR_DEFAULT_VOID           0x02
+#define BOOLATTR_DEFAULT_MASK           0x03
 
-#define BOOLATTR_INVERSE_SEMANTICS		0x04
+#define BOOLATTR_INVERSE_SEMANTICS      0x04
     // if sal_True, indicates that the semantic of the property refered by <arg>_pPropertyName</arg>
     // is inverse to the semantic of the XML attribute.<br/>
     // I.e. if the property value is <TRUE/>, <FALSE/> has to be written and vice versa.
@@ -66,13 +66,13 @@ namespace xmloff
     {
     private:
         DECLARE_STL_STDKEY_SET(::rtl::OUString, StringSet);
-        StringSet		m_aRemainingProps;
+        StringSet       m_aRemainingProps;
             // see examinePersistence
 
         void exportRelativeTargetLocation(const ConstAsciiString& _sPropertyName,sal_Int32 _nProperty,bool _bAddType);
 
     protected:
-        IFormsExportContext&	m_rContext;
+        IFormsExportContext&    m_rContext;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         m_xProps;
@@ -80,14 +80,14 @@ namespace xmloff
                         m_xPropertyInfo;
 
         // caching
-        ::rtl::OUString		m_sValueTrue;
-        ::rtl::OUString		m_sValueFalse;
+        ::rtl::OUString     m_sValueTrue;
+        ::rtl::OUString     m_sValueFalse;
 
     public:
         /** constructs an object capable of handling attributes for export
-            @param	_rContext
+            @param  _rContext
                 the export context to which's attribute list the property translation should be added
-            @param	m_xControl
+            @param  m_xControl
                 the property set to be exported
         */
         OPropertyExport(IFormsExportContext& _rContext,
@@ -313,7 +313,7 @@ namespace xmloff
             <p>If the type contained in the Any is not supported, the returned string will be empty. In the
             debug version, an additional assertion occurs.</p>
 
-            @param	_rValue
+            @param  _rValue
                 the value to convert
         */
         ::rtl::OUString implConvertAny(
@@ -343,11 +343,11 @@ namespace xmloff
                 void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, ::xmloff::token::XMLTokenEnum _eValue );
 #else
         //  in the product version, inline this, so it does not cost us extra time calling into our method
-        inline	void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue)
+        inline  void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue)
             { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _pName, _rValue); }
         inline void AddAttribute( sal_uInt16 _nPrefix, const ::rtl::OUString& _rName, const ::rtl::OUString& _rValue )
             { m_rContext.getGlobalContext().AddAttribute( _nPrefix, _rName, _rValue ); }
-        inline	void AddAttributeASCII( sal_uInt16 _nPrefix, const sal_Char* _pName, const sal_Char *pValue )
+        inline  void AddAttributeASCII( sal_uInt16 _nPrefix, const sal_Char* _pName, const sal_Char *pValue )
             { m_rContext.getGlobalContext().AddAttributeASCII(_nPrefix, _pName, pValue); }
         inline void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const ::rtl::OUString& _rValue)
             { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _eName, _rValue); }
@@ -371,12 +371,12 @@ namespace xmloff
             const ::rtl::OUString& _rPropertyName,
             const ::com::sun::star::uno::Type* _pType);
 
-//		void dbg_implCheckProperty(
-//			const sal_Char* _rPropertyName,
-//			const ::com::sun::star::uno::Type* _pType)
-//		{
-//			dbg_implCheckProperty(::rtl::OUString::createFromAscii(_rPropertyName), _pType);
-//		}
+//      void dbg_implCheckProperty(
+//          const sal_Char* _rPropertyName,
+//          const ::com::sun::star::uno::Type* _pType)
+//      {
+//          dbg_implCheckProperty(::rtl::OUString::createFromAscii(_rPropertyName), _pType);
+//      }
 #endif
     };
 
@@ -384,10 +384,10 @@ namespace xmloff
     //= helper
     //=====================================================================
 #ifdef DBG_UTIL
-    #define DBG_CHECK_PROPERTY(name, type)	\
+    #define DBG_CHECK_PROPERTY(name, type)  \
         dbg_implCheckProperty(name, &::getCppuType(static_cast< type* >(NULL)))
 
-    #define DBG_CHECK_PROPERTY_NO_TYPE(name)	\
+    #define DBG_CHECK_PROPERTY_NO_TYPE(name)    \
         dbg_implCheckProperty(name, NULL)
 
     #define DBG_CHECK_PROPERTY_ASCII( name, type ) \
@@ -402,7 +402,7 @@ namespace xmloff
 #endif
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_PROPERTYEXPORT_HXX_

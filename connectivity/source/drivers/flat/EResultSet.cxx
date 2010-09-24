@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
-//	using namespace com::sun::star::container;
-//	using namespace com::sun::star::util;
+//  using namespace com::sun::star::container;
+//  using namespace com::sun::star::util;
 //------------------------------------------------------------------------------
-OFlatResultSet::OFlatResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&	_aSQLIterator)
+OFlatResultSet::OFlatResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator& _aSQLIterator)
                 : file::OResultSet(pStmt,_aSQLIterator)
                 ,m_bBookmarkable(sal_True)
 {
@@ -92,7 +92,7 @@ Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  ) throw( RuntimeException)
 {
     Sequence< Type > aTypes = OResultSet::getTypes();
     ::std::vector<Type> aOwnTypes;
-    aOwnTypes.reserve(aTypes.getLength());	
+    aOwnTypes.reserve(aTypes.getLength());
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
     for(;pBegin != pEnd;++pBegin)
@@ -123,7 +123,7 @@ sal_Bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark ) throw( 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-        
+
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 
@@ -134,7 +134,7 @@ sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-        
+
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 

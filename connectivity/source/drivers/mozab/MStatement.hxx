@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace connectivity
     {
         class OResultSet;
 
-        typedef ::cppu::WeakComponentImplHelper3<	::com::sun::star::sdbc::XStatement,
+        typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XStatement,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
                                                     ::com::sun::star::sdbc::XCloseable> OCommonStatement_IBASE;
 
@@ -71,9 +71,9 @@ namespace connectivity
         typedef ::connectivity::OSubComponent< OCommonStatement, OCommonStatement_IBASE >  OCommonStatement_SBASE;
 
         class OCommonStatement  :public comphelper::OBaseMutex
-                                ,public	OCommonStatement_IBASE
-                                ,public	::cppu::OPropertySetHelper
-                                ,public	::comphelper::OPropertyArrayUsageHelper< OCommonStatement >
+                                ,public OCommonStatement_IBASE
+                                ,public ::cppu::OPropertySetHelper
+                                ,public ::comphelper::OPropertyArrayUsageHelper< OCommonStatement >
                                 ,public OCommonStatement_SBASE
         {
             friend class ::connectivity::OSubComponent< OCommonStatement, OCommonStatement_IBASE >;
@@ -88,11 +88,11 @@ namespace connectivity
 
             //  for this Statement
 
-            ::std::list< ::rtl::OUString>				m_aBatchList;
+            ::std::list< ::rtl::OUString>               m_aBatchList;
 
-            OTable*								        m_pTable;
-            OConnection*								m_pConnection;	// The owning Connection object
-            
+            OTable*                                     m_pTable;
+            OConnection*                                m_pConnection;  // The owning Connection object
+
             OValueRow                                   m_aRow;
 
             connectivity::OSQLParser                    m_aParser;
@@ -101,7 +101,7 @@ namespace connectivity
 
             connectivity::OSQLParseNode*                m_pParseTree;
 
-            ::std::vector<sal_Int32>                    m_aColMapping; 
+            ::std::vector<sal_Int32>                    m_aColMapping;
             ::std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
             ::std::vector<TAscendingOrder>              m_aOrderbyAscending;
 
@@ -121,7 +121,7 @@ namespace connectivity
                                                             throw (::com::sun::star::lang::IllegalArgumentException);
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                                                 sal_Int32 nHandle,
-                                                                const ::com::sun::star::uno::Any& rValue)	throw (::com::sun::star::uno::Exception);
+                                                                const ::com::sun::star::uno::Any& rValue)   throw (::com::sun::star::uno::Exception);
             virtual void SAL_CALL getFastPropertyValue(
                                                                 ::com::sun::star::uno::Any& rValue,
                                                                 sal_Int32 nHandle) const;
@@ -156,7 +156,7 @@ namespace connectivity
             void         analyseSQL();
             void         setOrderbyColumn( connectivity::OSQLParseNode* pColumnRef,
                                            connectivity::OSQLParseNode* pAscendingDescending);
-            virtual void createTable(  ) throw ( 
+            virtual void createTable(  ) throw (
                         ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
 
         public:
@@ -194,7 +194,7 @@ namespace connectivity
             using OPropertySetHelper::getFastPropertyValue;
         };
 
-        class OStatement :	public OCommonStatement,
+        class OStatement :  public OCommonStatement,
                             public ::com::sun::star::lang::XServiceInfo
         {
         protected:

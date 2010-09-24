@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, BOOL bExtra );
-    void			WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
+    void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 };
 
@@ -109,7 +109,7 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, BOOL bExtra );
-    void			WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
+    void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 
 };
@@ -164,7 +164,7 @@ public:
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, BOOL bExtra );
     BOOL            IsConsistent( const RSCINST & rInst, RscInconsList * pList );
-    void			WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
+    void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 
 };
@@ -190,7 +190,7 @@ public:
                     };
     void            WriteSrc( const RSCINST &, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
-    void			WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
+    void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 
 };

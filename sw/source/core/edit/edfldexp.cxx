@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <ndtxt.hxx>		// GetCurFld
+#include <ndtxt.hxx>        // GetCurFld
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <edimp.hxx>

@@ -2,23 +2,23 @@
 <!--***********************************************************************
  *
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-  
+
   Copyright 2000, 2010 Oracle and/or its affiliates.
- 
+
   OpenOffice.org - a multi-platform office productivity suite
- 
+
   This file is part of OpenOffice.org.
- 
+
   OpenOffice.org is free software: you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License version 3
   only, as published by the Free Software Foundation.
- 
+
   OpenOffice.org is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU Lesser General Public License version 3 for more details
   (a copy is included in the LICENSE file that accompanied this code).
- 
+
   You should have received a copy of the GNU Lesser General Public License
   version 3 along with OpenOffice.org.  If not, see
   <http://www.openoffice.org/license.html>
@@ -148,7 +148,6 @@
             <zipfileset dir="${solar.bin}/xslt/export/xsltml" casesensitive="yes" prefix="filter/math"/>
             <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
-            <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>
             <zipfileset dir="src" includes="THIRDPARTYLICENSEREADME.html" casesensitive="yes" prefix="license"/>
         </zip>
     </target>
@@ -171,7 +170,6 @@
             <zipfileset dir="${out}/misc/${target}/help" includes="**/*.xhp,component.txt" casesensitive="yes" prefix="help"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
             <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>
-            <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>
             <zipfileset dir="src" includes="THIRDPARTYLICENSEREADME.html" casesensitive="yes" prefix="license"/>
         </zip>
     </target>

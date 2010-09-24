@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@
 
 //==================================================================
 
-ScColOrRowDlg::ScColOrRowDlg( Window*		pParent,
-                              const String&	rStrTitle,
-                              const String&	rStrLabel,
-                              BOOL			bColDefault )
+ScColOrRowDlg::ScColOrRowDlg( Window*       pParent,
+                              const String& rStrTitle,
+                              const String& rStrLabel,
+                              BOOL          bColDefault )
 
-    :	ModalDialog     ( pParent, ScResId( RID_SCDLG_COLORROW ) ),
+    :   ModalDialog     ( pParent, ScResId( RID_SCDLG_COLORROW ) ),
         //
         aFlFrame        ( this, ScResId( FL_FRAME ) ),
         aBtnRows        ( this, ScResId( BTN_GROUP_ROWS ) ),

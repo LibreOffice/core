@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,10 +47,10 @@ private:
      sal_Bool m_bEnableEvents;
 
     rtl::OUString getOfficePath( const rtl::OUString& sPath ) throw ( css::uno::RuntimeException );
-    
+
 protected:
     virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException);
-    
+
 public:
     ScVbaApplication( const css::uno::Reference< css::uno::XComponentContext >& m_xContext );
     virtual ~ScVbaApplication();
@@ -74,7 +74,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getDefaultFilePath(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL LibraryPath(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL TemplatesPath(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    
+
     virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getDisplayAlerts() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setDisplayAlerts( sal_Bool displayAlerts ) throw (css::uno::RuntimeException);
@@ -93,7 +93,7 @@ public:
     virtual css::uno::Any SAL_CALL Workbooks( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Worksheets( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL WorksheetFunction( ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL Evaluate( const ::rtl::OUString& Name ) throw (css::uno::RuntimeException); 
+    virtual css::uno::Any SAL_CALL Evaluate( const ::rtl::OUString& Name ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Dialogs( const css::uno::Any& DialogIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getCutCopyMode() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCutCopyMode( const css::uno::Any& _cutcopymode ) throw (css::uno::RuntimeException);

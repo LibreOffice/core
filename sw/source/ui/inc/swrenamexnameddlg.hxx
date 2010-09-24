@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,16 +50,16 @@
  * --------------------------------------------------*/
 class SwRenameXNamedDlg : public ModalDialog
 {
-    FixedText		aNewNameFT;
-    NoSpaceEdit 	aNewNameED;
+    FixedText       aNewNameFT;
+    NoSpaceEdit     aNewNameED;
     FixedLine       aNameFL;
-    OKButton 		aOk;
-    CancelButton 	aCancel;
-    HelpButton		aHelp;
+    OKButton        aOk;
+    CancelButton    aCancel;
+    HelpButton      aHelp;
 
-    String 			sRemoveWarning;
+    String          sRemoveWarning;
 
-    STAR_REFERENCE( container::XNamed ) & 	xNamed;
+    STAR_REFERENCE( container::XNamed ) &   xNamed;
     STAR_REFERENCE( container::XNameAccess ) & xNameAccess;
     STAR_REFERENCE( container::XNameAccess )   xSecondAccess;
     STAR_REFERENCE( container::XNameAccess )   xThirdAccess;
@@ -72,7 +72,7 @@ public:
                     STAR_REFERENCE( container::XNamed ) & xNamed,
                     STAR_REFERENCE( container::XNameAccess ) & xNameAccess );
 
-    void	SetForbiddenChars( const String& rSet )
+    void    SetForbiddenChars( const String& rSet )
         { aNewNameED.SetForbiddenChars( rSet ); }
 
     void SetAlternativeAccess(

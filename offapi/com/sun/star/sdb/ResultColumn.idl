@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,100 +24,100 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_ResultColumn_idl__ 
-#define __com_sun_star_sdb_ResultColumn_idl__ 
- 
-#ifndef __com_sun_star_sdbcx_Column_idl__ 
-#include <com/sun/star/sdbcx/Column.idl> 
-#endif 
- 
-#ifndef __com_sun_star_sdb_ColumnSettings_idl__ 
-#include <com/sun/star/sdb/ColumnSettings.idl> 
-#endif 
- 
- module com {  module sun {  module star {  module sdb { 
- 
- 
+#ifndef __com_sun_star_sdb_ResultColumn_idl__
+#define __com_sun_star_sdb_ResultColumn_idl__
+
+#ifndef __com_sun_star_sdbcx_Column_idl__
+#include <com/sun/star/sdbcx/Column.idl>
+#endif
+
+#ifndef __com_sun_star_sdb_ColumnSettings_idl__
+#include <com/sun/star/sdb/ColumnSettings.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdb {
+
+
 /** describes a column of a result set.
  */
 published service ResultColumn
-{ 
-    service com::sun::star::sdbcx::Column;	 
- 
-     
+{
+    service com::sun::star::sdbcx::Column;
+
+
     /** [optional], access to layout settings for a column.
      */
-    service com::sun::star::sdb::ColumnSettings; 
- 
-     
+    service com::sun::star::sdb::ColumnSettings;
+
+
     /** indicates whether the column can be used in a Where clause.
      */
-    [readonly, property] boolean IsSearchable; 
- 
-     
+    [readonly, property] boolean IsSearchable;
+
+
     /** indicates whether values in the column are signed numbers.
      */
-    [readonly, property] boolean IsSigned; 
- 
-     
+    [readonly, property] boolean IsSigned;
+
+
     /** indicates that a column is case sensitive.
      */
-    [readonly, property] boolean IsCaseSensitive; 
- 
-     
+    [readonly, property] boolean IsCaseSensitive;
+
+
     /** indicates the column's normal max width in chars..
      */
-    [readonly, property] long DisplaySize; 
- 
-     
+    [readonly, property] long DisplaySize;
+
+
     /** gets the suggested column title for use in printouts and
         displays.
      */
-    [readonly, property] string Label; 
- 
-     
+    [readonly, property] string Label;
+
+
     /** indicates whether a column is definitely, not writable.
      */
-    [readonly, property] boolean IsReadOnly; 
- 
-     
+    [readonly, property] boolean IsReadOnly;
+
+
     /** indicates whether it is possible for a write on the column to succeed.
      */
-    [readonly, property] boolean IsWritable; 
- 
-     
+    [readonly, property] boolean IsWritable;
+
+
     /** indicates whether a write on the column will definitely succeed.
      */
-    [readonly, property] boolean IsDefinitelyWritable; 
- 
-     
+    [readonly, property] boolean IsDefinitelyWritable;
+
+
     /** returns the fully-qualified name of the service whose instances
-        are manufactured if the method 
+        are manufactured if the method
         <method scope="com::sun::star::sdbc">XRow::getObject)=</method>
         is called to retrieve a value from the column.
      */
-    [readonly, property] string ServiceName;	 
- 
-     
+    [readonly, property] string ServiceName;
+
+
     /** gets a column's table name.
      */
-    [readonly, property] string TableName; 
- 
-     
+    [readonly, property] string TableName;
+
+
     /** gets a column's schema name.
      */
-    [readonly, property] string SchemaName; 
- 
-     
+    [readonly, property] string SchemaName;
+
+
     /** gets a column's table's catalog name.
      */
-    [readonly, property] string CatalogName;	 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    [readonly, property] string CatalogName;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

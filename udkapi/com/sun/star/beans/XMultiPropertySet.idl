@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,63 +24,63 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_beans_XMultiPropertySet_idl__ 
-#define __com_sun_star_beans_XMultiPropertySet_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_XPropertySetInfo_idl__ 
-#include <com/sun/star/beans/XPropertySetInfo.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_PropertyVetoException_idl__ 
-#include <com/sun/star/beans/PropertyVetoException.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
-#include <com/sun/star/lang/IllegalArgumentException.idl> 
-#endif 
- 
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__ 
-#include <com/sun/star/lang/WrappedTargetException.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_XPropertiesChangeListener_idl__ 
-#include <com/sun/star/beans/XPropertiesChangeListener.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module beans {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_beans_XMultiPropertySet_idl__
+#define __com_sun_star_beans_XMultiPropertySet_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySetInfo_idl__
+#include <com/sun/star/beans/XPropertySetInfo.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyVetoException_idl__
+#include <com/sun/star/beans/PropertyVetoException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertiesChangeListener_idl__
+#include <com/sun/star/beans/XPropertiesChangeListener.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
 /** provides access to multiple properties with a single call.
  */
 published interface XMultiPropertySet: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
-    /** @returns 
-            the <type>XPropertySetInfo</type> interface, which describes  
-            all properties of the object to which this interface belongs.  
-            <const>NULL</const> is returned if the object cannot or will 
-            not provide information about the properties. 
-                 
+{
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the <type>XPropertySetInfo</type> interface, which describes
+            all properties of the object to which this interface belongs.
+            <const>NULL</const> is returned if the object cannot or will
+            not provide information about the properties.
+
         @see XPropertySet::getPropertySetInfo
      */
-    com::sun::star::beans::XPropertySetInfo getPropertySetInfo(); 
- 
-    //------------------------------------------------------------------------- 
-     
+    com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
+
+    //-------------------------------------------------------------------------
+
     /** sets the values to the properties with the specified names.
-        
-        <p>The values of the properties must change before the bound 
-        events are fired. The values of the constrained properties 
-        should change after the vetoable events are fired and only if no 
+
+        <p>The values of the properties must change before the bound
+        events are fired. The values of the constrained properties
+        should change after the vetoable events are fired and only if no
         exception occured. Unknown properties are ignored.  </p>
 
         @param aPropertyNames
@@ -99,31 +99,31 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
             if the implementation has an internal reason for the exception.
             In this case the original exception is wrapped.
      */
-    void setPropertyValues( [in] sequence<string> aPropertyNames, 
-             [in] sequence<any> aValues ) 
-            raises( com::sun::star::beans::PropertyVetoException, 
-                    com::sun::star::lang::IllegalArgumentException, 
-                    com::sun::star::lang::WrappedTargetException ); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** @returns 
-            a sequence of all values of the properties which are specified by their names. 
-         
-        <p>The order of the values in the returned sequence will be the same  
+    void setPropertyValues( [in] sequence<string> aPropertyNames,
+             [in] sequence<any> aValues )
+            raises( com::sun::star::beans::PropertyVetoException,
+                    com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            a sequence of all values of the properties which are specified by their names.
+
+        <p>The order of the values in the returned sequence will be the same
         as the order of the names in the argument. </p>
 
         @param aPropertyNames
-            specifies the names of the properties. 
+            specifies the names of the properties.
             This sequence must be alphabetically sorted.
      */
-    sequence<any> getPropertyValues( [in] sequence<string> aPropertyNames ); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** adds an <type>XPropertiesChangeListener</type> to the 
+    sequence<any> getPropertyValues( [in] sequence<string> aPropertyNames );
+
+    //-------------------------------------------------------------------------
+
+    /** adds an <type>XPropertiesChangeListener</type> to the
         specified property with the specified names.
-        
+
         <p>The implementation can ignore the names of the properties
         and fire the event on all properties. </p>
 
@@ -136,15 +136,15 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
         @param xListener
             contains the listener for the property change events.
 
-        @see removePropertiesChangeListener 
+        @see removePropertiesChangeListener
      */
-    [oneway] void addPropertiesChangeListener( [in] sequence<string> aPropertyNames, 
-             [in] com::sun::star::beans::XPropertiesChangeListener xListener ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    [oneway] void addPropertiesChangeListener( [in] sequence<string> aPropertyNames,
+             [in] com::sun::star::beans::XPropertiesChangeListener xListener );
+
+    //-------------------------------------------------------------------------
+
     /** removes an <type>XPropertiesChangeListener</type> from the listener list.
-        
+
         <p>It is a "noop" if the listener is not registered.  </p>
 
         <p>It is suggested to allow multiple registration of the same listener,
@@ -155,11 +155,11 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
 
         @see addPropertiesChangeListener
      */
-    [oneway] void removePropertiesChangeListener( [in] com::sun::star::beans::XPropertiesChangeListener xListener ); 
- 
-    //------------------------------------------------------------------------- 
-     
-    /** fires a sequence of <type>PropertyChangeEvent</type>s to the specified 
+    [oneway] void removePropertiesChangeListener( [in] com::sun::star::beans::XPropertiesChangeListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    /** fires a sequence of <type>PropertyChangeEvent</type>s to the specified
         listener.
 
         @param aPropertynames
@@ -168,13 +168,13 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
         @param xListener
             contains the listener for the property change events.
      */
-    [oneway] void firePropertiesChangeEvent( [in] sequence<string> aPropertyNames, 
-             [in] com::sun::star::beans::XPropertiesChangeListener xListener ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    [oneway] void firePropertiesChangeEvent( [in] sequence<string> aPropertyNames,
+             [in] com::sun::star::beans::XPropertiesChangeListener xListener );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
 <module-description xmlns:xlink="http://www.w3.org/1999/xlink">
-    <module-name>	placeware	</module-name>
+    <module-name>   placeware   </module-name>
     <component-description>
         <author> Christian Lippka </author>
-        <name>	com.sun.star.comp.Impress.PlaceWareExportFilter	</name>
+        <name>  com.sun.star.comp.Impress.PlaceWareExportFilter </name>
         <description>
             This service implements a filter to export com.sun.star.presentation.PresentationDocument into the
             PlaceWare slide set format.
         </description>
-        <loader-name>	com.sun.star.loader.SharedLibrary	</loader-name>
-        <language>	C++	</language>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  C++ </language>
         <status value="beta"/>
-        <supported-service>	com.sun.star.document.ExportFilter	</supported-service>
+        <supported-service> com.sun.star.document.ExportFilter  </supported-service>
         <service-dependency> ... </service-dependency>
         <type> com.sun.star.document.XFilter </type>
         <type> com.sun.star.document.XExporter </type>
@@ -36,10 +36,10 @@
         <type> com.sun.star.uno.XComponentContext </type>
         <type> com.sun.star.uno.TypeClass </type>
     </component-description>
-    <project-build-dependency>	cppuhelper	</project-build-dependency>
-    <project-build-dependency>	cppu		</project-build-dependency>
-    <project-build-dependency>	sal			</project-build-dependency>
-    <runtime-module-dependency>	cppuhelper2$(COM)	</runtime-module-dependency>
-    <runtime-module-dependency>	cppu2		</runtime-module-dependency>
-    <runtime-module-dependency>	sal2		</runtime-module-dependency>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper2$(COM)   </runtime-module-dependency>
+    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
 </module-description>

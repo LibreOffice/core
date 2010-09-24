@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,7 +69,7 @@
 #include <glossary.hxx>
 #include <gloshdl.hxx>
 #include <glosbib.hxx>
-#include <initui.hxx>					// fuer ::GetGlossaries()
+#include <initui.hxx>                   // fuer ::GetGlossaries()
 #include <glosdoc.hxx>
 #include <macassgn.hxx>
 #include <swevent.hxx>
@@ -132,31 +132,31 @@ String lcl_GetValidShortCut( const String& rName )
  ---------------------------------------------------------------------------*/
 struct GroupUserData
 {
-    String 		sGroupName;
-    sal_uInt16 	nPathIdx;
-    BOOL 		bReadonly;
+    String      sGroupName;
+    sal_uInt16  nPathIdx;
+    BOOL        bReadonly;
 
     GroupUserData()
         : nPathIdx(0),
-          bReadonly(FALSE)	{}
+          bReadonly(FALSE)  {}
 };
 
 /*------------------------------------------------------------------------
- Beschreibung:	Dialog fuer neuen Bausteinnamen
+ Beschreibung:  Dialog fuer neuen Bausteinnamen
 ------------------------------------------------------------------------*/
 class SwNewGlosNameDlg : public ModalDialog
 {
-    FixedText		aNNFT;
-    Edit			aNewName;
-    FixedText		aNSFT;
-    NoSpaceEdit		aNewShort;
-    OKButton		aOk;
-    CancelButton	aCancel;
+    FixedText       aNNFT;
+    Edit            aNewName;
+    FixedText       aNSFT;
+    NoSpaceEdit     aNewShort;
+    OKButton        aOk;
+    CancelButton    aCancel;
     FixedLine       aFL;
-    FixedText		aONFT;
-    Edit			aOldName;
-    FixedText 		aOSFT;
-    Edit			aOldShort;
+    FixedText       aONFT;
+    Edit            aOldName;
+    FixedText       aOSFT;
+    Edit            aOldShort;
 
 protected:
     DECL_LINK( Modify, Edit * );
@@ -179,12 +179,12 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
     aNewName(this, SW_RES( ED_NN    )),
     aNSFT   (this, SW_RES( FT_NS    )),
     aNewShort(this,SW_RES( ED_NS    )),
-    aOk		(this, SW_RES( BT_OKNEW)),
-    aCancel	(this, SW_RES( BT_CANCEL)),
+    aOk     (this, SW_RES( BT_OKNEW)),
+    aCancel (this, SW_RES( BT_CANCEL)),
     aFL    (this, SW_RES( FL_NN    )),
-    aONFT	(this, SW_RES( FT_ON	)),
+    aONFT   (this, SW_RES( FT_ON    )),
     aOldName(this, SW_RES( ED_ON    )),
-    aOSFT	(this, SW_RES( FT_OS	)),
+    aOSFT   (this, SW_RES( FT_OS    )),
     aOldShort(this,SW_RES( ED_OS    ))
 {
     FreeResource();
@@ -199,7 +199,7 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	aktuell eingestellte Gruppe erfragen / setzen
+ Beschreibung:  aktuell eingestellte Gruppe erfragen / setzen
 ------------------------------------------------------------------------*/
 
 String SwGlossaryDlg::GetCurrGroup()
@@ -226,7 +226,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     SvxStandardDialog(&pViewFrame->GetWindow(), SW_RES(DLG_GLOSSARY)),
 
     aInsertTipCB  (this, SW_RES(CB_INSERT_TIP)),
-    aNameLbl	  (this, SW_RES(FT_NAME)),
+    aNameLbl      (this, SW_RES(FT_NAME)),
     aNameED       (this, SW_RES(ED_NAME)),
     aShortNameLbl (this, SW_RES(FT_SHORTNAME)),
     aShortNameEdit(this, SW_RES(ED_SHORTNAME)),
@@ -241,8 +241,8 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aCloseBtn     (this, SW_RES(PB_CLOSE)),
     aHelpBtn      (this, SW_RES(PB_HELP)),
     aEditBtn      (this, SW_RES(PB_EDIT)),
-    aBibBtn		  (this, SW_RES(PB_BIB)),
-    aPathBtn	  (this, SW_RES(PB_PATH)),
+    aBibBtn       (this, SW_RES(PB_BIB)),
+    aPathBtn      (this, SW_RES(PB_PATH)),
 
     sReadonlyPath (SW_RES(ST_READONLY_PATH)),
     pExampleFrame(0),
@@ -296,7 +296,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aCategoryBox.SetHelpId(HID_MD_GLOS_CATEGORY);
     aCategoryBox.SetWindowBits(WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL|WB_VSCROLL|WB_CLIPCHILDREN|WB_SORT);
     aCategoryBox.GetModel()->SetSortMode(SortAscending);
-    aCategoryBox.SetHighlightRange();	// ueber volle Breite selektieren
+    aCategoryBox.SetHighlightRange();   // ueber volle Breite selektieren
     aCategoryBox.SetNodeDefaultImages( );
 
     Init();
@@ -317,7 +317,7 @@ SwGlossaryDlg::~SwGlossaryDlg()
     delete pExampleFrame;
 }
 /*------------------------------------------------------------------------
- Beschreibung:	Auswahl neue Gruppe
+ Beschreibung:  Auswahl neue Gruppe
 ------------------------------------------------------------------------*/
 
 
@@ -371,7 +371,7 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
 void SwGlossaryDlg::Apply()
 {
     const String aGlosName(aShortNameEdit.GetText());
-    if(aGlosName.Len())	pGlossaryHdl->InsertGlossary(aGlosName);
+    if(aGlosName.Len()) pGlossaryHdl->InsertGlossary(aGlosName);
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
@@ -521,7 +521,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     {
         case FN_GL_REPLACE:
         case FN_GL_REPLACE_TEXT:
-            pGlossaryHdl->NewGlossary(	aNameED.GetText(),
+            pGlossaryHdl->NewGlossary(  aNameED.GetText(),
                                         aShortNameEdit.GetText(),
                                         sal_False,
                                         pMn->GetCurItemId() == FN_GL_REPLACE_TEXT);
@@ -550,7 +550,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 pChild->SetUserData(new String(aShortName));
                 aNameED.SetText(aStr);
                 aShortNameEdit.SetText(aShortName);
-                NameModify(&aNameED);		// fuer Schalten der Buttons
+                NameModify(&aNameED);       // fuer Schalten der Buttons
 
                 if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
                 {
@@ -696,7 +696,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     return 1;
 }
 /*--------------------------------------------------------------------
-     Beschreibung:	Dialog Verwaltung Bereiche
+     Beschreibung:  Dialog Verwaltung Bereiche
  --------------------------------------------------------------------*/
 
 
@@ -775,7 +775,7 @@ IMPL_LINK( SwGlossaryDlg, BibHdl, Button *, EMPTYARG )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:	Initialisierung; aus Ctor und nach Bearbeiten Bereiche
+ Beschreibung:  Initialisierung; aus Ctor und nach Bearbeiten Bereiche
 ------------------------------------------------------------------------*/
 
 
@@ -850,9 +850,9 @@ void SwGlossaryDlg::Init()
         GrpSelect(&aCategoryBox);
     }
     //JP 16.11.99: the SvxTreeListBox has a Bug. The Box dont recalc the
-    //		outputsize, when all entries are insertet. The result is, that
-    //		the Focus/Highlight rectangle is to large and paintet over the
-    //		HScrollbar. -> Fix: call the resize
+    //      outputsize, when all entries are insertet. The result is, that
+    //      the Focus/Highlight rectangle is to large and paintet over the
+    //      HScrollbar. -> Fix: call the resize
     aCategoryBox.Resize();
 
     aCategoryBox.GetModel()->Resort();
@@ -888,7 +888,7 @@ IMPL_LINK_INLINE_START( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
 
 /*------------------------------------------------------------------------
- Beschreibung:	KeyInput fuer ShortName - Edits ohne Spaces
+ Beschreibung:  KeyInput fuer ShortName - Edits ohne Spaces
 ------------------------------------------------------------------------*/
 
 IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
@@ -947,7 +947,7 @@ IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
  * --------------------------------------------------*/
 SwGlTreeListBox::SwGlTreeListBox(Window* pParent, const ResId& rResId) :
     SvTreeListBox(pParent, rResId),
-    sReadonly	  (SW_RES(ST_READONLY)),
+    sReadonly     (SW_RES(ST_READONLY)),
     pDragEntry(0)
 {
     FreeResource();
@@ -1265,7 +1265,7 @@ void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
 /* -----------------------------21.12.00 11:33--------------------------------
 
  ---------------------------------------------------------------------------*/
-void	SwGlossaryDlg::ResumeShowAutoText()
+void    SwGlossaryDlg::ResumeShowAutoText()
 {
     String sGroup, sShortName;
     if(GetResumeData(sGroup, sShortName) && aExampleWIN.IsVisible())

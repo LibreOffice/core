@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,9 +44,9 @@ namespace desktop {
 
 CConfigFilter::CConfigFilter(const strings_v* include,  const strings_v* exclude)
     : m_pvInclude(include)
-    , m_pvExclude(exclude)    
+    , m_pvExclude(exclude)
 {
-}   
+}
 
 void SAL_CALL CConfigFilter::initialize(const Sequence< Any >& seqArgs)
         throw (Exception)
@@ -64,7 +64,7 @@ void SAL_CALL CConfigFilter::initialize(const Sequence< Any >& seqArgs)
     }
     if (m_aCurrentComponent.getLength() == 0)
         m_aCurrentComponent = OUString::createFromAscii("unknown.component");
-    
+
     if (!m_xSourceLayer.is()) {
         throw Exception();
     }
@@ -78,7 +78,7 @@ void CConfigFilter::pushElement(rtl::OUString aName, sal_Bool bUse)
     if (!m_elementStack.empty()) {
         aPath = m_elementStack.top().path; // or use base path
         aPath += OUString::createFromAscii("/");
-    } 
+    }
     aPath += aName;
 
     // create element
@@ -105,19 +105,19 @@ sal_Bool CConfigFilter::checkElement(rtl::OUString aName)
         aFullPath = m_elementStack.top().path + OUString::createFromAscii("/");
 
     aFullPath += aName;
-   
+
     // check whether any include patterns patch this path
     for (strings_v::const_iterator i_in = m_pvInclude->begin();
         i_in != m_pvInclude->end(); i_in++)
     {
         // pattern is beginning of path
         // or path is a begiing for pattern
-        if (i_in->match(aFullPath.copy(0, i_in->getLength()>aFullPath.getLength() 
-            ? aFullPath.getLength() : i_in->getLength()), 0)) 
+        if (i_in->match(aFullPath.copy(0, i_in->getLength()>aFullPath.getLength()
+            ? aFullPath.getLength() : i_in->getLength()), 0))
         {
             bResult = sal_True;
             break; // one match is enough
-        }        
+        }
     }
     // if match is found, check for exclusion
     if (bResult)
@@ -141,13 +141,13 @@ void CConfigFilter::popElement()
 }
 
 
-void SAL_CALL CConfigFilter::readData( 	 
+void SAL_CALL CConfigFilter::readData(
         const Reference< configuration::backend::XLayerHandler >& layerHandler)
     throw (
         com::sun::star::lang::NullPointerException, lang::WrappedTargetException,
         com::sun::star::configuration::backend::MalformedDataException)
 {
-    // when readData is called, the submitted handler will be stored 
+    // when readData is called, the submitted handler will be stored
     // in m_xLayerHandler. we will then submit ourself as a handler to
     // the SourceLayer in m_xSourceLayer.
     // when the source calls our handler functions we will use the patterns that
@@ -164,23 +164,23 @@ void SAL_CALL CConfigFilter::readData(
 }
 
 // XLayerHandler
-void SAL_CALL CConfigFilter::startLayer() 	 
+void SAL_CALL CConfigFilter::startLayer()
     throw(::com::sun::star::lang::WrappedTargetException)
 {
     m_xLayerHandler->startLayer();
 }
 
-void SAL_CALL CConfigFilter::endLayer() 	 
-    throw(	 
+void SAL_CALL CConfigFilter::endLayer()
+    throw(
         ::com::sun::star::configuration::backend::MalformedDataException,
         ::com::sun::star::lang::WrappedTargetException )
 {
     m_xLayerHandler->endLayer();
 }
 
-void SAL_CALL CConfigFilter::overrideNode( 
-        const OUString& aName, 
-        sal_Int16 aAttributes, 
+void SAL_CALL CConfigFilter::overrideNode(
+        const OUString& aName,
+        sal_Int16 aAttributes,
         sal_Bool bClear)
     throw(
         ::com::sun::star::configuration::backend::MalformedDataException,
@@ -190,15 +190,15 @@ void SAL_CALL CConfigFilter::overrideNode(
     {
         m_xLayerHandler->overrideNode(aName, aAttributes, bClear);
         pushElement(aName);
-    } 
+    }
     else
         pushElement(aName, sal_False);
 }
 
 void SAL_CALL CConfigFilter::addOrReplaceNode(
-        const OUString& aName, 
-        sal_Int16 aAttributes) 
-    throw(	
+        const OUString& aName,
+        sal_Int16 aAttributes)
+    throw(
         ::com::sun::star::configuration::backend::MalformedDataException,
         ::com::sun::star::lang::WrappedTargetException )
 {
@@ -211,10 +211,10 @@ void SAL_CALL CConfigFilter::addOrReplaceNode(
         pushElement(aName, sal_False);
 }
 
-void SAL_CALL  CConfigFilter::addOrReplaceNodeFromTemplate( 	 
+void SAL_CALL  CConfigFilter::addOrReplaceNodeFromTemplate(
         const OUString& aName,
         const com::sun::star::configuration::backend::TemplateIdentifier& aTemplate,
-        sal_Int16 aAttributes ) 
+        sal_Int16 aAttributes )
     throw(
         ::com::sun::star::configuration::backend::MalformedDataException,
         ::com::sun::star::lang::WrappedTargetException )
@@ -228,21 +228,21 @@ void SAL_CALL  CConfigFilter::addOrReplaceNodeFromTemplate(
         pushElement(aName, sal_False);
 }
 
-void SAL_CALL  CConfigFilter::endNode() 	 
-    throw(	 
+void SAL_CALL  CConfigFilter::endNode()
+    throw(
         ::com::sun::star::configuration::backend::MalformedDataException,
         ::com::sun::star::lang::WrappedTargetException )
 {
     if (checkCurrentElement())
     {
-        m_xLayerHandler->endNode();        
+        m_xLayerHandler->endNode();
     }
     popElement();
 }
 
-void SAL_CALL  CConfigFilter::dropNode( 	 
-        const OUString& aName ) 
-    throw( 
+void SAL_CALL  CConfigFilter::dropNode(
+        const OUString& aName )
+    throw(
         ::com::sun::star::configuration::backend::MalformedDataException,
         ::com::sun::star::lang::WrappedTargetException )
 {
@@ -253,12 +253,12 @@ void SAL_CALL  CConfigFilter::dropNode(
     }
 }
 
-void SAL_CALL  CConfigFilter::overrideProperty( 	 
+void SAL_CALL  CConfigFilter::overrideProperty(
         const OUString& aName,
         sal_Int16 aAttributes,
         const Type& aType,
-        sal_Bool bClear ) 
-    throw(	 
+        sal_Bool bClear )
+    throw(
         ::com::sun::star::configuration::backend::MalformedDataException,
         ::com::sun::star::lang::WrappedTargetException )
 {
@@ -270,9 +270,9 @@ void SAL_CALL  CConfigFilter::overrideProperty(
         pushElement(aName, sal_False);
 }
 
-void SAL_CALL  CConfigFilter::setPropertyValue( 	 
-        const Any& aValue ) 
-    throw( 
+void SAL_CALL  CConfigFilter::setPropertyValue(
+        const Any& aValue )
+    throw(
         ::com::sun::star::configuration::backend::MalformedDataException,
         ::com::sun::star::lang::WrappedTargetException )
 {
@@ -280,10 +280,10 @@ void SAL_CALL  CConfigFilter::setPropertyValue(
         m_xLayerHandler->setPropertyValue(aValue);
 }
 
-void SAL_CALL CConfigFilter::setPropertyValueForLocale( 	 
+void SAL_CALL CConfigFilter::setPropertyValueForLocale(
         const Any& aValue,
-        const OUString& aLocale ) 
-    throw(	 
+        const OUString& aLocale )
+    throw(
         ::com::sun::star::configuration::backend::MalformedDataException,
         ::com::sun::star::lang::WrappedTargetException )
 {
@@ -291,8 +291,8 @@ void SAL_CALL CConfigFilter::setPropertyValueForLocale(
         m_xLayerHandler->setPropertyValueForLocale(aValue, aLocale);
 }
 
-void SAL_CALL  CConfigFilter::endProperty() 	 
-    throw(	 
+void SAL_CALL  CConfigFilter::endProperty()
+    throw(
         ::com::sun::star::configuration::backend::MalformedDataException,
         ::com::sun::star::lang::WrappedTargetException )
 {
@@ -304,30 +304,30 @@ void SAL_CALL  CConfigFilter::endProperty()
 
 }
 
-void SAL_CALL  CConfigFilter::addProperty( 	 
+void SAL_CALL  CConfigFilter::addProperty(
         const rtl::OUString& aName,
         sal_Int16 aAttributes,
         const Type& aType )
-    throw(	 
+    throw(
         ::com::sun::star::configuration::backend::MalformedDataException,
         ::com::sun::star::lang::WrappedTargetException )
 {
-    if (checkElement(aName)) 
+    if (checkElement(aName))
         m_xLayerHandler->addProperty(aName, aAttributes, aType);
 }
 
-void SAL_CALL  CConfigFilter::addPropertyWithValue( 	 
+void SAL_CALL  CConfigFilter::addPropertyWithValue(
         const rtl::OUString& aName,
         sal_Int16 aAttributes,
-        const Any& aValue ) 
-    throw(	 
+        const Any& aValue )
+    throw(
         ::com::sun::star::configuration::backend::MalformedDataException,
         ::com::sun::star::lang::WrappedTargetException )
 {
     // add property with value doesn't push the property
-    if (checkElement(aName)) 
+    if (checkElement(aName))
         m_xLayerHandler->addPropertyWithValue(aName, aAttributes, aValue);
-        
+
 }
 
 } // namespace desktop

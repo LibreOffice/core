@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,16 +44,16 @@ private:
     FixedLine       aFlPosition;
     RadioButton     aRbBefore;
     RadioButton     aRbAfter;
-    OKButton		aBtnOK;
-    CancelButton	aBtnCancel;
-    HelpButton		aBtnHelp;
+    OKButton        aBtnOK;
+    CancelButton    aBtnCancel;
+    HelpButton      aBtnHelp;
 
 public:
 
                     SdInsertPasteDlg( Window* pWindow );
                     ~SdInsertPasteDlg();
 
-    BOOL			IsInsertBefore() const;
+    BOOL            IsInsertBefore() const;
 };
 
 #endif // _SD_INS_PASTE_HXX_

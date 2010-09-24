@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ using namespace ::com::sun::star::lang;
 
 struct SdrModelImpl
 {
-    SfxUndoManager*	mpUndoManager;
+    SfxUndoManager* mpUndoManager;
     SdrUndoFactory* mpUndoFactory;
     bool mbAllowShapePropertyChangeListener;
 };
@@ -1028,7 +1028,7 @@ void SdrModel::SetDefaultTabulator(USHORT nVal)
 
 void SdrModel::ImpSetUIUnit()
 {
-    if(0 == aUIScale.GetNumerator() || 0 == aUIScale.GetDenominator()) 
+    if(0 == aUIScale.GetNumerator() || 0 == aUIScale.GetDenominator())
     {
         aUIScale = Fraction(1,1);
     }
@@ -1039,7 +1039,7 @@ void SdrModel::ImpSetUIUnit()
     sal_Int64 nDiv(1);
 
     // normalize on meters resp. inch
-    switch (eObjUnit) 
+    switch (eObjUnit)
     {
         case MAP_100TH_MM   : nUIUnitKomma+=5; break;
         case MAP_10TH_MM    : nUIUnitKomma+=4; break;
@@ -1064,7 +1064,7 @@ void SdrModel::ImpSetUIUnit()
     // 1 pole    =  5 1/2 yd  =    198" =     5.029,2mm
     // 1 yd      =  3 ft      =     36" =       914,4mm
     // 1 ft      = 12 "       =      1" =       304,8mm
-    switch (eUIUnit) 
+    switch (eUIUnit)
     {
         case FUNIT_NONE   : break;
         // Metrisch
@@ -1089,17 +1089,17 @@ void SdrModel::ImpSetUIUnit()
     const bool bMapInch(IsInch(eObjUnit));
     const bool bUIMetr(IsMetric(eUIUnit));
 
-    if (bMapInch && bUIMetr) 
+    if (bMapInch && bUIMetr)
     {
         nUIUnitKomma += 4;
         nMul *= 254;
     }
-    
+
     // check if mapping is from inch to metric and adapt
     const bool bMapMetr(IsMetric(eObjUnit));
     const bool bUIInch(IsInch(eUIUnit));
 
-    if (bMapMetr && bUIInch) 
+    if (bMapMetr && bUIInch)
     {
         nUIUnitKomma -= 4;
         nDiv *= 254;
@@ -1130,7 +1130,7 @@ void SdrModel::ImpSetUIUnit()
     }
 
     // shorten trailing zeroes for divisor
-    while(0 == (nDiv % 10)) 
+    while(0 == (nDiv % 10))
     {
         nUIUnitKomma++;
         nDiv /= 10;
@@ -1626,7 +1626,7 @@ void SdrModel::CopyPages(USHORT nFirstPageNum, USHORT nLastPageNum,
 
     USHORT nPageAnz=GetPageCount();
     USHORT nMaxPage=nPageAnz;
-    
+
     if (nMaxPage!=0)
         nMaxPage--;
     if (nFirstPageNum>nMaxPage)
@@ -1899,8 +1899,8 @@ void SdrModel::setLock( BOOL bLock )
         if( sal_False == bLock )
         {
             // ReformatAllTextObjects(); #103122# due to a typo in the above if, this code was never
-            //							 executed, so I remove it until we discover that we need it here
-            ImpReformatAllEdgeObjects();	// #103122#
+            //                           executed, so I remove it until we discover that we need it here
+            ImpReformatAllEdgeObjects();    // #103122#
         }
         mbModelLocked = bLock;
     }
@@ -2024,8 +2024,8 @@ void SdrModel::ReformatAllTextObjects()
 
 FASTBOOL SdrModel::HasTransparentObjects( BOOL bCheckForAlphaChannel ) const
 {
-    FASTBOOL	bRet = FALSE;
-    USHORT		n, nCount;
+    FASTBOOL    bRet = FALSE;
+    USHORT      n, nCount;
 
     for( n = 0, nCount = GetMasterPageCount(); ( n < nCount ) && !bRet; n++ )
         if( GetMasterPage( n )->HasTransparentObjects( bCheckForAlphaChannel ) )
@@ -2165,7 +2165,7 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImpleme
 TYPEINIT1(SdrHint,SfxHint);
 
 SdrHint::SdrHint()
-:	mpPage(0L),
+:   mpPage(0L),
     mpObj(0L),
     mpObjList(0L),
     meHint(HINT_UNKNOWN)
@@ -2173,7 +2173,7 @@ SdrHint::SdrHint()
 }
 
 SdrHint::SdrHint(SdrHintKind eNewHint)
-:	mpPage(0L),
+:   mpPage(0L),
     mpObj(0L),
     mpObjList(0L),
     meHint(eNewHint)
@@ -2181,7 +2181,7 @@ SdrHint::SdrHint(SdrHintKind eNewHint)
 }
 
 SdrHint::SdrHint(const SdrObject& rNewObj)
-:	mpPage(rNewObj.GetPage()),
+:   mpPage(rNewObj.GetPage()),
     mpObj(&rNewObj),
     mpObjList(rNewObj.GetObjList()),
     meHint(HINT_OBJCHG)
@@ -2190,7 +2190,7 @@ SdrHint::SdrHint(const SdrObject& rNewObj)
 }
 
 SdrHint::SdrHint(const SdrObject& rNewObj, const Rectangle& rRect)
-:	mpPage(rNewObj.GetPage()),
+:   mpPage(rNewObj.GetPage()),
     mpObj(&rNewObj),
     mpObjList(rNewObj.GetObjList()),
     meHint(HINT_OBJCHG)

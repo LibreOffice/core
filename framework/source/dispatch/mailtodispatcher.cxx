@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <dispatch/mailtodispatcher.hxx>
 #include <threadhelp/readguard.hxx>
@@ -37,37 +37,37 @@
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	non exported const
+//  non exported const
 //_________________________________________________________________________________________________________________
 
 #define PROTOCOL_VALUE      "mailto:"
 #define PROTOCOL_LENGTH     7
 
 //_________________________________________________________________________________________________________________
-//	non exported definitions
+//  non exported definitions
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
@@ -115,7 +115,7 @@ DEFINE_INIT_SERVICE(MailToDispatcher,
     @modified   30.04.2002 14:10, as96863
 */
 MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        //	Init baseclasses first
+        //  Init baseclasses first
         : ThreadHelpBase( &Application::GetSolarMutex() )
         , OWeakObject   (                               )
         // Init member

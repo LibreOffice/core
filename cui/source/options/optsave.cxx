@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,7 +120,7 @@ class SvxAlienFilterWarningConfig_Impl : public utl::ConfigItem
         SvxAlienFilterWarningConfig_Impl();
         ~SvxAlienFilterWarningConfig_Impl();
 
-    virtual void			Commit();
+    virtual void            Commit();
 
     void                    ResetWarning()
                             {
@@ -205,7 +205,7 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     aBackupFI           ( this, CUI_RES( FI_BACKUP ) ),
     aBackupCB           ( this, CUI_RES( BTN_BACKUP ) ),
     aAutoSaveCB         ( this, CUI_RES( BTN_AUTOSAVE ) ),
-    aAutoSaveEdit		( this,	CUI_RES( ED_AUTOSAVE ) ),
+    aAutoSaveEdit       ( this, CUI_RES( ED_AUTOSAVE ) ),
     aMinuteFT           ( this, CUI_RES( FT_MINUTE ) ),
     aRelativeFsysCB     ( this, CUI_RES( BTN_RELATIVE_FSYS ) ),
     aRelativeInetCB     ( this, CUI_RES( BTN_RELATIVE_INET ) ),
@@ -318,7 +318,7 @@ SfxSaveTabPage::~SfxSaveTabPage()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage*	SfxSaveTabPage::Create( Window* pParent,
+SfxTabPage* SfxSaveTabPage::Create( Window* pParent,
                                     const SfxItemSet& rAttrSet )
 {
     return ( new SfxSaveTabPage( pParent, rAttrSet ) );
@@ -583,13 +583,13 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                     String sReplace;
                     switch(nData)
                     {
-                        case  APP_WRITER     	: sReplace = C2U("com.sun.star.text.TextDocument");  break;
-                        case  APP_WRITER_WEB 	: sReplace = C2U("com.sun.star.text.WebDocument");   break;
+                        case  APP_WRITER        : sReplace = C2U("com.sun.star.text.TextDocument");  break;
+                        case  APP_WRITER_WEB    : sReplace = C2U("com.sun.star.text.WebDocument");   break;
                         case  APP_WRITER_GLOBAL : sReplace = C2U("com.sun.star.text.GlobalDocument");   break;
-                        case  APP_CALC       	: sReplace = C2U("com.sun.star.sheet.SpreadsheetDocument");break;
-                        case  APP_IMPRESS    	: sReplace = C2U("com.sun.star.presentation.PresentationDocument");break;
-                        case  APP_DRAW       	: sReplace = C2U("com.sun.star.drawing.DrawingDocument");break;
-                        case  APP_MATH       	: sReplace = C2U("com.sun.star.formula.FormulaProperties");break;
+                        case  APP_CALC          : sReplace = C2U("com.sun.star.sheet.SpreadsheetDocument");break;
+                        case  APP_IMPRESS       : sReplace = C2U("com.sun.star.presentation.PresentationDocument");break;
+                        case  APP_DRAW          : sReplace = C2U("com.sun.star.drawing.DrawingDocument");break;
+                        case  APP_MATH          : sReplace = C2U("com.sun.star.formula.FormulaProperties");break;
                         default: DBG_ERROR("illegal user data");
                     }
                     String sTmp(sCommand);
@@ -675,7 +675,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aSizeOptimizationCB.SaveValue();
     aAutoSaveCB.SaveValue();
     aAutoSaveEdit.SaveValue();
-//	aAutoSavePromptBtn.SaveValue();
+//  aAutoSavePromptBtn.SaveValue();
 
     aRelativeFsysCB.SaveValue();
     aRelativeInetCB.SaveValue();
@@ -692,14 +692,14 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
         {
             aAutoSaveEdit.Enable();
             aMinuteFT.Enable();
-//			aAutoSavePromptBtn.Enable();
+//          aAutoSavePromptBtn.Enable();
             aAutoSaveEdit.GrabFocus();
         }
         else
         {
             aAutoSaveEdit.Disable();
             aMinuteFT.Disable();
-//			aAutoSavePromptBtn.Disable();
+//          aAutoSavePromptBtn.Disable();
         }
     }
     return 0;

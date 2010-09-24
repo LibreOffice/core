@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,14 +24,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
  #ifndef IDOCUMENTTIMERACCESS_HXX_INCLUDED
  #define IDOCUMENTTIMERACCESS_HXX_INCLUDED
- 
+
  /** Get information about the current document state
  */
  class IDocumentTimerAccess
- { 
+ {
  public:
     /**
     Set modus to start, i.e. start timer if block count == 0
@@ -56,5 +56,5 @@
  protected:
     virtual ~IDocumentTimerAccess() {};
  };
-  
+
  #endif // IDOCUMENTTIMERACCESS_HXX_INCLUDED

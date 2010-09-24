@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,21 +29,21 @@
 #ifndef _OSL_NLSUPPORT_H_
 #define _OSL_NLSUPPORT_H_
 
-#	include <rtl/locale.h>
-#	include <rtl/textenc.h>
+#   include <rtl/locale.h>
+#   include <rtl/textenc.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/** 
+/**
     Determines the text encoding used by the underlying platform for the
     specified locale.
 
-    @param pLocale 
+    @param pLocale
     the locale to return the text encoding for. If this parameter is NULL,
     the default locale of the current process is used.
-    
+
     @returns the rtl_TextEncoding that matches the platform specific encoding
     description or RTL_TEXTENCODING_DONTKNOW if no mapping is available.
 */
@@ -55,6 +55,6 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale );
 }
 #endif
 
-#endif	/* _OSL_NLSUPPORT_H_ */
+#endif  /* _OSL_NLSUPPORT_H_ */
 
 

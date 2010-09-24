@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,13 +24,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define S_INVALID_KEYCODE		257
-#define S_MANDATORY_FILE		258
-#define S_READING_LONGNAMES		259
-#define S_READING_SLOT_IDS		260
-#define S_READING_CONTROLS		261
-#define S_READING_BASIC_MODULE	262
-#define S_STARTING_APPLICATION	263
+#define S_INVALID_KEYCODE       257
+#define S_MANDATORY_FILE        258
+#define S_READING_LONGNAMES     259
+#define S_READING_SLOT_IDS      260
+#define S_READING_CONTROLS      261
+#define S_READING_BASIC_MODULE  262
+#define S_STARTING_APPLICATION  263
 
 
 

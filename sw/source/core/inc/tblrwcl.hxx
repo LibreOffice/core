@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ public:
     const SwTableBox* GetBoxOfPos( const SwTableBox& rBox );
     void AddToUndoHistory( const SwCntntNode& rNd );
 
-    USHORT Count() const				{ return aBoxes.Count(); }
+    USHORT Count() const                { return aBoxes.Count(); }
     const SwTableBox& GetBox( USHORT nPos, USHORT* pWidth = 0 ) const
         {
             // hier wird die EndPos der Spalte benoetigt!
@@ -114,11 +114,11 @@ public:
             return *aBoxes[ nPos ];
         }
 
-    BOOL IsGetFromTop() const 			{ return bGetFromTop; }
-    BOOL IsGetValues() const			{ return bGetValues; }
+    BOOL IsGetFromTop() const           { return bGetFromTop; }
+    BOOL IsGetValues() const            { return bGetValues; }
 
-    USHORT GetMode() const				{ return nMode; }
-    void SetValues( BOOL bFlag )		{ bGetValues = FALSE; nWidth = 0;
+    USHORT GetMode() const              { return nMode; }
+    void SetValues( BOOL bFlag )        { bGetValues = FALSE; nWidth = 0;
                                           bGetFromTop = bFlag; }
     BOOL Resize( USHORT nOffset, USHORT nWidth );
 };

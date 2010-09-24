@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ static void implThrowIllegalArgumentException() throw( IllegalArgumentException 
     throw IllegalArgumentException();
 }
 
-class MutableTreeDataModel : public ::cppu::WeakAggImplHelper2<	XMutableTreeDataModel, XServiceInfo >,
+class MutableTreeDataModel : public ::cppu::WeakAggImplHelper2< XMutableTreeDataModel, XServiceInfo >,
                              public MutexAndBroadcastHelper
 {
 public:
@@ -140,7 +140,7 @@ public:
     }
 
 private:
-    TreeNodeVector	maChilds;
+    TreeNodeVector  maChilds;
     Any maDisplayValue;
     Any maDataValue;
     sal_Bool mbHasChildsOnDemand;
@@ -185,10 +185,10 @@ void MutableTreeDataModel::broadcast( broadcast_type eType, const Reference< XTr
             XTreeDataModelListener* pListener = static_cast<XTreeDataModelListener*>(aListIter.next());
             switch( eType )
             {
-            case nodes_changed:		pListener->treeNodesChanged(aEvent); break;
-            case nodes_inserted:	pListener->treeNodesInserted(aEvent); break;
-            case nodes_removed:		pListener->treeNodesRemoved(aEvent); break;
-            case structure_changed:	pListener->treeStructureChanged(aEvent); break;
+            case nodes_changed:     pListener->treeNodesChanged(aEvent); break;
+            case nodes_inserted:    pListener->treeNodesInserted(aEvent); break;
+            case nodes_removed:     pListener->treeNodesRemoved(aEvent); break;
+            case structure_changed: pListener->treeStructureChanged(aEvent); break;
             }
         }
     }
@@ -223,7 +223,7 @@ void SAL_CALL MutableTreeDataModel::setRoot( const Reference< XMutableTreeNode >
         MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
         if( !xImpl.is() || xImpl->mbIsInserted )
             throw IllegalArgumentException();
-        
+
         xImpl->mbIsInserted = true;
         mxRootNode.set(xImpl.get());
 
@@ -446,7 +446,7 @@ void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const 
 void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
-    
+
     MutableTreeNodeRef xImpl;
 
     if( (nChildIndex >= 0) && (nChildIndex < (sal_Int32)maChilds.size()) )

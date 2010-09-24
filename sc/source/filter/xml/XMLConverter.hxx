@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,11 +49,11 @@ class SvXMLUnitConverter;
 class ScXMLConverter
 {
 public:
-    inline				ScXMLConverter()	{}
-    inline				~ScXMLConverter()	{}
+    inline              ScXMLConverter()    {}
+    inline              ~ScXMLConverter()   {}
 
 // helper methods
-    static ScDocument*	GetScDocument(
+    static ScDocument*  GetScDocument(
                             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel );
 
 // IMPORT: GeneralFunction / ScSubTotalFunc
@@ -64,11 +64,11 @@ public:
                             const ::rtl::OUString& rString );
 
 // EXPORT: GeneralFunction / ScSubTotalFunc
-    static void			GetStringFromFunction(
+    static void         GetStringFromFunction(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::sheet::GeneralFunction eFunction,
                             sal_Bool bAppendStr = sal_False );
-    static void			GetStringFromFunction(
+    static void         GetStringFromFunction(
                             ::rtl::OUString& rString,
                             const ScSubTotalFunc eFunction,
                             sal_Bool bAppendStr = sal_False );
@@ -79,7 +79,7 @@ public:
                             const ::rtl::OUString& rString );
 
 // EXPORT: DataPilotFieldOrientation
-    static void			GetStringFromOrientation(
+    static void         GetStringFromOrientation(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::sheet::DataPilotFieldOrientation eOrientation,
                             sal_Bool bAppendStr = sal_False );
@@ -88,30 +88,30 @@ public:
     static ScDetectiveObjType
                         GetDetObjTypeFromString(
                             const ::rtl::OUString& rString );
-    static sal_Bool		GetDetOpTypeFromString(
+    static sal_Bool     GetDetOpTypeFromString(
                             ScDetOpType& rDetOpType,
                             const ::rtl::OUString& rString );
 
 // EXPORT: Detective
-    static void			GetStringFromDetObjType(
+    static void         GetStringFromDetObjType(
                             ::rtl::OUString& rString,
                             const ScDetectiveObjType eObjType,
                             sal_Bool bAppendStr = sal_False );
-    static void			GetStringFromDetOpType(
+    static void         GetStringFromDetOpType(
                             ::rtl::OUString& rString,
                             const ScDetOpType eOpType,
                             sal_Bool bAppendStr = sal_False );
 
 // IMPORT: Formulas
-    static void			ParseFormula(
+    static void         ParseFormula(
                             ::rtl::OUString& sFormula,
                             const sal_Bool bIsFormula = sal_True);
 // EXPORT: Core Date Time
-    static void			ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUStringBuffer& sDate);
+    static void         ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUStringBuffer& sDate);
 //UNUSED2008-05  // IMPORT: Core Date Time
 //UNUSED2008-05      static void         ConvertStringToDateTime(const rtl::OUString& sDate, DateTime& aDateTime, SvXMLUnitConverter* pUnitConverter);
 
-    static void			ConvertCoreToAPIDateTime(const DateTime& aDateTime, com::sun::star::util::DateTime& rDateTime);
+    static void         ConvertCoreToAPIDateTime(const DateTime& aDateTime, com::sun::star::util::DateTime& rDateTime);
 
     static void         ConvertAPIToCoreDateTime(const com::sun::star::util::DateTime& aDateTime, DateTime& rDateTime);
 };

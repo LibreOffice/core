@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -184,7 +184,7 @@ void SfxUndoManager::SetMaxUndoActionCount( USHORT nMaxUndoActionCount )
     // the number of entries due to a lower nMaxUndoActionCount.
     // Both redo and undo action entries will be removed until we reached the
     // new nMaxUndoActionCount.
-    
+
     long nNumToDelete = pActUndoArray->aUndoActions.Count() - nMaxUndoActionCount;
     if ( nNumToDelete > 0 )
     {
@@ -211,7 +211,7 @@ void SfxUndoManager::SetMaxUndoActionCount( USHORT nMaxUndoActionCount )
                     --nNumToDelete;
                 }
             }
-            
+
             if ( nPos == pActUndoArray->aUndoActions.Count() )
                 break; // Cannot delete more entries
         }
@@ -377,9 +377,9 @@ void SfxUndoManager::RemoveLastUndoAction()
 
 BOOL SfxUndoManager::Undo( USHORT )
 {
-    bool bUndoWasEnabled = 	mbUndoEnabled;
+    bool bUndoWasEnabled =  mbUndoEnabled;
     mbUndoEnabled = false;
-    
+
     BOOL bRet = FALSE;
 
     try
@@ -404,7 +404,7 @@ BOOL SfxUndoManager::Undo( USHORT )
 
 void SfxUndoManager::Undo( SfxUndoAction &rAction )
 {
-    bool bUndoWasEnabled = 	mbUndoEnabled;
+    bool bUndoWasEnabled =  mbUndoEnabled;
     mbUndoEnabled = false;
     try
     {
@@ -444,9 +444,9 @@ USHORT SfxUndoManager::GetRedoActionId( USHORT nNo ) const
 
 BOOL SfxUndoManager::Redo( USHORT )
 {
-    bool bUndoWasEnabled = 	mbUndoEnabled;
+    bool bUndoWasEnabled =  mbUndoEnabled;
     mbUndoEnabled = false;
-    
+
     BOOL bRet = FALSE;
 
     try
@@ -471,7 +471,7 @@ BOOL SfxUndoManager::Redo( USHORT )
 
 void SfxUndoManager::Redo( SfxUndoAction &rAction )
 {
-    bool bUndoWasEnabled = 	mbUndoEnabled;
+    bool bUndoWasEnabled =  mbUndoEnabled;
     mbUndoEnabled = false;
 
     try
@@ -548,7 +548,7 @@ BOOL SfxUndoManager::CanRepeat( SfxRepeatTarget &rTarget, USHORT nNo ) const
 void SfxUndoManager::EnterListAction(
     const XubString& rComment, const XubString &rRepeatComment, USHORT nId )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Fuegt eine ListUndoAction ein und setzt dessen UndoArray als aktuelles.
 */
@@ -571,7 +571,7 @@ void SfxUndoManager::EnterListAction(
 
 void SfxUndoManager::LeaveListAction()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Verlaesst die aktuelle ListAction und geht eine Ebene nach oben.
 */
@@ -657,7 +657,7 @@ SfxListUndoAction::SfxListUndoAction
     USHORT Id,
     SfxUndoArray *pFather
 )
-: nId(Id), aComment(rComment), aRepeatComment(rRepeatComment) 
+: nId(Id), aComment(rComment), aRepeatComment(rRepeatComment)
 {
     pFatherUndoArray = pFather;
     nMaxUndoActions = USHRT_MAX;
@@ -709,7 +709,7 @@ BOOL SfxListUndoAction::Merge( SfxUndoAction *pNextAction )
 //------------------------------------------------------------------------
 
 SfxLinkUndoAction::SfxLinkUndoAction(SfxUndoManager *pManager)
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Richtet eine LinkAction ein, die auf einen weiteren UndoManager zeigt.
     Holt sich als zugehoerige Action des weiteren UndoManagers dessen

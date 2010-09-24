@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@ namespace xmlscript
 /*##############################################################################
 
     IMPORTING
-    
+
 ##############################################################################*/
-    
+
 /** Creates a document handler to be used for SAX1 parser that can handle
     namespaces.  Namespace URI are mapped to integer ids for performance.
     Implementing the XImporter interface, you will get a startRootElement()

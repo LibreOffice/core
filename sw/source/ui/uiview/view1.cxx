@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ void SwView::Activate(BOOL bMDIActivate)
 
     if ( bMDIActivate )
     {
-        pWrtShell->ShGetFcs(FALSE);		// Selektionen sichtbar
+        pWrtShell->ShGetFcs(FALSE);     // Selektionen sichtbar
 
         if( sSwViewData.Len() )
         {
@@ -153,7 +153,7 @@ void SwView::Deactivate(BOOL bMDIActivate)
 
     if( bMDIActivate )
     {
-        pWrtShell->ShLooseFcs();	// Selektionen unsichtbar
+        pWrtShell->ShLooseFcs();    // Selektionen unsichtbar
 
         pHRuler->SetActive( FALSE );
         pVRuler->SetActive( FALSE );

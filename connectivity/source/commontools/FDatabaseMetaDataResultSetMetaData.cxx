@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -182,8 +182,8 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isSearchable( sal_Int32 co
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isReadOnly( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
-//	if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
-//		return (*m_mColumnsIter).second.isReadOnly();
+//  if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+//      return (*m_mColumnsIter).second.isReadOnly();
 
     return sal_True;
 }
@@ -191,8 +191,8 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isReadOnly( sal_Int32 /*co
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isDefinitelyWritable( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
-//	if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
-//		return (*m_mColumnsIter).second.isDefinitelyWritable();
+//  if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+//      return (*m_mColumnsIter).second.isDefinitelyWritable();
 
     return sal_False;
 ;
@@ -200,8 +200,8 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isDefinitelyWritable( sal_
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-//	if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
-//		return (*m_mColumnsIter).second.isWritable();
+//  if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
+//      return (*m_mColumnsIter).second.isWritable();
     return isDefinitelyWritable(column);
 }
 // -------------------------------------------------------------------------
@@ -254,7 +254,7 @@ void ODatabaseMetaDataResultSetMetaData::setColumnMap()
 void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
 {
     setColumnMap();
-    
+
     m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("DATA_TYPE"),
                 ColumnValue::NO_NULLS,
         0,0,0,

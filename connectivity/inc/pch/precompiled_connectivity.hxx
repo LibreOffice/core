@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -326,7 +326,7 @@
 #include "vos/mutex.hxx"
 #include "vos/process.hxx"
 #include "vos/ref.hxx"
-#include "vos/ref.hxx"		
+#include "vos/ref.hxx"
 #include "vos/refernce.hxx"
 #include "vos/timer.hxx"
 //---MARKER---

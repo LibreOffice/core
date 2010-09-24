@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <svx/scene3d.hxx>
 
 SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, BOOL bReverse)
-:	maObjList(1024, 64, 64),
+:   maObjList(1024, 64, 64),
     mnIndex(0L),
     mbReverse(bReverse)
 {
@@ -46,7 +46,7 @@ SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, BO
 }
 
 SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, BOOL bUseZOrder, SdrIterMode eMode, BOOL bReverse)
-:	maObjList(1024, 64, 64),
+:   maObjList(1024, 64, 64),
     mnIndex(0L),
     mbReverse(bReverse)
 {
@@ -55,7 +55,7 @@ SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, BOOL bUseZOrder, SdrI
 }
 
 SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode, BOOL bReverse )
-:	maObjList(1024, 64, 64),
+:   maObjList(1024, 64, 64),
     mnIndex(0L),
     mbReverse(bReverse)
 {
@@ -67,7 +67,7 @@ SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode, BOOL b
 }
 
 SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode, BOOL bReverse )
-:	maObjList(1024, 64, 64),
+:   maObjList(1024, 64, 64),
     mnIndex(0L),
     mbReverse(bReverse)
 {

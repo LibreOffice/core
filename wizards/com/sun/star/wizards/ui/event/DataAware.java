@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ import java.util.Iterator;
  * in child classes, the updateData() will be binded to UI event calls.
  * <br><br>
  * This class holds references to a Data Object and a Value object.
- * The Value object "knows" how to get and set a value from the 
+ * The Value object "knows" how to get and set a value from the
  * Data Object.
  */
 public abstract class DataAware {
@@ -60,7 +60,7 @@ public abstract class DataAware {
      * from/to the data object.
      */
     protected Value value;
-    
+
     /**
      * creates a DataAware object for the given data object and Value object.
      * @param dataObject_
@@ -89,7 +89,7 @@ public abstract class DataAware {
      */
     public void setDataObject(Object obj, boolean updateUI) {
 
-        if (obj != null && !value.isAssignable(obj.getClass())) 
+        if (obj != null && !value.isAssignable(obj.getClass()))
             throw new ClassCastException("can not cast new DataObject to original Class");
 
         dataObject = obj;
@@ -112,14 +112,14 @@ public abstract class DataAware {
 
     /**
      * gets the current value from the data obejct.
-     * this method delegates the job to 
+     * this method delegates the job to
      * the value object.
      * @return the current value of the data object.
      */
     protected Object getFromData() {
         return value.get(getDataObject());
     }
-    
+
     /**
      * sets the given value to the UI control
      * @param newValue the value to set to the ui control.
@@ -221,10 +221,10 @@ public abstract class DataAware {
         for (Iterator i = dataAwares.iterator(); i.hasNext();)
              ((DataAware) i.next()).setDataObject(dataObject, updateUI);
     }
-    
+
     /**
      * Value objects read and write a value from and
-     * to an object. Typically using reflection and JavaBeans properties 
+     * to an object. Typically using reflection and JavaBeans properties
      * or directly using memeber reflection API.
      * DataAware delegates the handling of the DataObject
      * to a Value object.
@@ -254,7 +254,7 @@ public abstract class DataAware {
          */
         public boolean isAssignable(Class type);
     }
-    
+
     /**
      * implementation of Value, handling JavaBeans properties through
      * reflection.
@@ -282,7 +282,7 @@ public abstract class DataAware {
             getMethod = createGetMethod(propertyName, propertyOwner);
             setMethod = createSetMethod(propertyName, propertyOwner, getMethod.getReturnType());
         }
-        
+
         /**
          * called from the constructor, and creates a get method reflection object
          * for the given property and object.
@@ -306,7 +306,7 @@ public abstract class DataAware {
             }
             return m;
         }
-        
+
         /* (non-Javadoc)
          * @see com.sun.star.wizards.ui.event.DataAware.Value#get(java.lang.Object)
          */
@@ -328,7 +328,7 @@ public abstract class DataAware {
                     return new short[0];
             }
             return null;
-        
+
         }
 
         protected Method createSetMethod(String propName, Object obj, Class paramClass) {

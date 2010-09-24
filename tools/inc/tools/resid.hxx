@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,8 +33,8 @@
 
 struct RSHEADER_TYPE;
 typedef sal_uInt32 RESOURCE_TYPE;
-#define RSC_NOTYPE				0x100
-#define RSC_DONTRELEASE 		(sal_uInt32(1 << 31))
+#define RSC_NOTYPE              0x100
+#define RSC_DONTRELEASE         (sal_uInt32(1 << 31))
 
 class ResMgr;
 
@@ -52,14 +52,14 @@ class ResId
     In this case the highest bit if set decides whether to
     not to release the Resource context after loading this id
     */
-    RSHEADER_TYPE*	        m_pResource;
-    
-    mutable sal_uInt32      m_nResId; 	   // Resource Identifier
-    mutable RESOURCE_TYPE	m_nRT;		   // type for loading (mutable to be set later)
-    mutable ResMgr *		m_pResMgr;	   // load from this ResMgr (mutable for setting on demand)
-    mutable RESOURCE_TYPE	m_nRT2;		   // type for loading (supercedes m_nRT)
+    RSHEADER_TYPE*          m_pResource;
+
+    mutable sal_uInt32      m_nResId;      // Resource Identifier
+    mutable RESOURCE_TYPE   m_nRT;         // type for loading (mutable to be set later)
+    mutable ResMgr *        m_pResMgr;     // load from this ResMgr (mutable for setting on demand)
+    mutable RESOURCE_TYPE   m_nRT2;        // type for loading (supercedes m_nRT)
     mutable sal_uInt32      m_nWinBits;    // container for original style bits on a window in a resource
-    
+
     void ImplInit( sal_uInt32 nId, ResMgr& rMgr, RSHEADER_TYPE* pRes )
     {
         m_pResource = pRes; m_nResId = nId; m_nRT = RSC_NOTYPE; m_pResMgr = &rMgr; m_nRT2 = RSC_NOTYPE; m_nWinBits = 0;
@@ -87,24 +87,24 @@ class ResId
     {
         ImplInit( sal_uInt32(nId), rMgr, NULL );
     }
-    
+
     sal_uInt32 GetWinBits() const
     { return m_nWinBits; }
     void SetWinBits( sal_uInt32 nBits ) const
     { m_nWinBits = nBits; }
-    
-    RESOURCE_TYPE	GetRT() const { return( m_nRT ); }
-    const ResId &	SetRT( RESOURCE_TYPE nType ) const
+
+    RESOURCE_TYPE   GetRT() const { return( m_nRT ); }
+    const ResId &   SetRT( RESOURCE_TYPE nType ) const
     /*
     Set the type if not already set. Ask for tye with GetRT()
-    
+
     [Example]
     ResId aId( 1000 );
-    aId.SetRT( RSC_WINDOW );	// settype window Window
-    aId.SetRT( RSC_BUTTON );	// will not set type Button
+    aId.SetRT( RSC_WINDOW );    // settype window Window
+    aId.SetRT( RSC_BUTTON );    // will not set type Button
     //aId.GetRT() == RSC_WINDOW is true
-    
-    @see    
+
+    @see
     ResId::GetRT2(), ResId::GetRT()
     */
     {
@@ -112,7 +112,7 @@ class ResId
             m_nRT = nType;
         return *this;
     }
-    RESOURCE_TYPE	GetRT2() const
+    RESOURCE_TYPE   GetRT2() const
     /*
     Get the effective type (m_nRT2 or m_nRT1)
 
@@ -122,10 +122,10 @@ class ResId
     {
         return (RSC_NOTYPE == m_nRT2) ? m_nRT : m_nRT2;
     }
-    const ResId &	SetRT2( RESOURCE_TYPE nTyp ) const
+    const ResId &   SetRT2( RESOURCE_TYPE nTyp ) const
     /*
     Set the superceding type. Ask spcifically for it with GetRT2()
-    
+
     SetRT2() may only be called if no derived class calls SetRT in its
     Resource constructor.
     */
@@ -134,15 +134,15 @@ class ResId
             m_nRT2 = nTyp;
         return *this;
     }
-    
-    ResMgr *		GetResMgr() const { return m_pResMgr; }
-    const ResId &	SetResMgr( ResMgr * pMgr ) const
+
+    ResMgr *        GetResMgr() const { return m_pResMgr; }
+    const ResId &   SetResMgr( ResMgr * pMgr ) const
     {
         m_pResMgr = pMgr;
         OSL_ENSURE( m_pResMgr != NULL, "invalid ResMgr set on ResId" );
         return *this;
     }
-    
+
     const ResId &  SetAutoRelease(BOOL bRelease) const
     {
         if( bRelease )
@@ -151,12 +151,12 @@ class ResId
             m_nResId |= RSC_DONTRELEASE;
         return *this;
     }
-    
-    BOOL		   IsAutoRelease()	const
+
+    BOOL           IsAutoRelease()  const
     { return !(m_nResId & RSC_DONTRELEASE); }
-    
-    sal_uInt32	   GetId()			const { return m_nResId & ~RSC_DONTRELEASE; }
-    RSHEADER_TYPE* GetpResource()	const { return m_pResource; }
+
+    sal_uInt32     GetId()          const { return m_nResId & ~RSC_DONTRELEASE; }
+    RSHEADER_TYPE* GetpResource()   const { return m_pResource; }
 };
 
 #endif // _RESID_HXX

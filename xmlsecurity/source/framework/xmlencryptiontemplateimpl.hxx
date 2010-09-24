@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ class XMLEncryptionTemplateImpl : public ::cppu::WeakImplHelper3<
         //Methods from XXMLEncryptionTemplate
         virtual void SAL_CALL setTemplate(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper >& aXmlElement
-            ) 
+            )
             throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException);
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > SAL_CALL getTemplate(
@@ -77,7 +77,7 @@ class XMLEncryptionTemplateImpl : public ::cppu::WeakImplHelper3<
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > SAL_CALL getTarget(
         ) throw (com::sun::star::uno::RuntimeException) ;
-        
+
         virtual void SAL_CALL setStatus(
             ::com::sun::star::xml::crypto::SecurityOperationStatus status )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -110,4 +110,4 @@ class XMLEncryptionTemplateImpl : public ::cppu::WeakImplHelper3<
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
 } ;
 
-#endif	// _XMLENCRYPTIONTEMPLATE_XMLSECIMPL_HXX_
+#endif  // _XMLENCRYPTIONTEMPLATE_XMLSECIMPL_HXX_

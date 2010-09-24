@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -171,7 +171,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------------
-    Dialog*	OAddConditionDialog::createDialog(Window* _pParent)
+    Dialog* OAddConditionDialog::createDialog(Window* _pParent)
     {
         if ( !m_xBinding.is() || !m_sFacetName.getLength() )
             throw RuntimeException( ::rtl::OUString(), *this );

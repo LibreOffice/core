@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@ namespace abp
     //=====================================================================
     AdminDialogInvokationPage::AdminDialogInvokationPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_ADMININVOKATION))
-        ,m_aExplanation			(this, ModuleRes(FT_ADMINEXPLANATION))
-        ,m_aInvokeAdminDialog	(this, ModuleRes(PB_INVOKE_ADMIN_DIALOG))
-        ,m_aErrorMessage		(this, ModuleRes(FT_ERROR))
+        ,m_aExplanation         (this, ModuleRes(FT_ADMINEXPLANATION))
+        ,m_aInvokeAdminDialog   (this, ModuleRes(PB_INVOKE_ADMIN_DIALOG))
+        ,m_aErrorMessage        (this, ModuleRes(FT_ERROR))
         ,m_bSuccessfullyExecutedDialog(sal_False)
     {
         FreeResource();
@@ -109,6 +109,6 @@ namespace abp
     }
 
 //.........................................................................
-}	// namespace abp
+}   // namespace abp
 //.........................................................................
 

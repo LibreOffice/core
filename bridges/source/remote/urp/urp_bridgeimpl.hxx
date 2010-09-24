@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace bridges_urp
 {
 
 class PropertyObject;
-    
+
 struct equalOUString
 {
     sal_Int32 operator() ( const ::rtl::OUString &s1, const ::rtl::OUString &s2 ) const
@@ -61,8 +61,8 @@ struct equalOUString
             return s1 == s2;
         }
 };
-    
-struct equalType 
+
+struct equalType
 {
     sal_Int32 operator() ( const ::com::sun::star::uno::Type &t1,
                            const ::com::sun::star::uno::Type &t2 ) const
@@ -73,13 +73,13 @@ struct equalType
 
 class OWriterThread;
 class OReaderThread;
-    
+
 struct urp_BridgeImpl :
     public remote_BridgeImpl
 {
     urp_BridgeImpl( sal_Int32 nCacheSize , sal_uInt32 nInitialMarshalerSize );
     ~urp_BridgeImpl();
-    
+
     void applyProtocolChanges( const Properties & );
 
     void startBlockBridge();
@@ -94,7 +94,7 @@ struct urp_BridgeImpl :
     ::osl::Mutex m_errorListMutex;
     Marshal m_blockMarshaler;
     sal_Int32 m_nMarshaledMessages;
-    
+
       // Caches for vars, that go from local process to the remote process
       Cache < ::rtl::OUString , equalOUString >             m_oidCacheOut;
        Cache < ::rtl::ByteSequence , EqualThreadId >         m_tidCacheOut;
@@ -112,9 +112,9 @@ struct urp_BridgeImpl :
     ::com::sun::star::uno::Type m_lastInType;
     ::rtl::ByteSequence m_lastInTid;
     ::rtl::OUString m_lastInOid;
-    
+
     urp_ClientJobContainer m_clientJobContainer;
-    
+
     OWriterThread *m_pWriter;
     OReaderThread *m_pReader;
     ::rtl::OString m_sLogFileName;

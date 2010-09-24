@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,11 +58,11 @@ namespace dxcanvas
     typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::rendering::XBitmapCanvas,
                                               ::com::sun::star::rendering::XIntegerBitmap,
                                                ::com::sun::star::lang::XServiceInfo,
-                                               ::com::sun::star::beans::XFastPropertySet >  	CanvasBitmapBase_Base;
+                                               ::com::sun::star::beans::XFastPropertySet >      CanvasBitmapBase_Base;
     typedef ::canvas::IntegerBitmapBase< ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
                                          BitmapCanvasHelper,
                                          ::osl::MutexGuard,
-                                         ::cppu::OWeakObject >							CanvasBitmap_Base;
+                                         ::cppu::OWeakObject >                          CanvasBitmap_Base;
 
     class CanvasBitmap : public CanvasBitmap_Base, public BitmapProvider
     {

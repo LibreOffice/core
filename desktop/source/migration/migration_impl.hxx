@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,8 +89,8 @@ typedef std::auto_ptr< migrations_v > migrations_vr;
 typedef std::vector< supported_migration > migrations_available;
 
 //__________________________________________
-/**  
-    define the item, e.g.:menuitem, toolbaritem, to be migrated. we keep the information 
+/**
+    define the item, e.g.:menuitem, toolbaritem, to be migrated. we keep the information
     of the command URL, the previous sibling node and the parent node of a item
 */
 struct MigrationItem
@@ -105,21 +105,21 @@ struct MigrationItem
     {
     }
 
-    MigrationItem(const ::rtl::OUString& sParentNodeName, 
-        const ::rtl::OUString& sPrevSibling, 
-        const ::rtl::OUString& sCommandURL, 
+    MigrationItem(const ::rtl::OUString& sParentNodeName,
+        const ::rtl::OUString& sPrevSibling,
+        const ::rtl::OUString& sCommandURL,
         const NS_UNO::Reference< NS_CSS::container::XIndexContainer > xPopupMenu)
     {
         m_sParentNodeName = sParentNodeName;
-        m_sPrevSibling	  = sPrevSibling;
-        m_sCommandURL	  = sCommandURL;
-        m_xPopupMenu	  = xPopupMenu;
+        m_sPrevSibling    = sPrevSibling;
+        m_sCommandURL     = sCommandURL;
+        m_xPopupMenu      = xPopupMenu;
     }
 
     MigrationItem& operator=(const MigrationItem& aMigrationItem)
     {
         m_sParentNodeName = aMigrationItem.m_sParentNodeName;
-        m_sPrevSibling	  = aMigrationItem.m_sPrevSibling;
+        m_sPrevSibling    = aMigrationItem.m_sPrevSibling;
         m_sCommandURL     = aMigrationItem.m_sCommandURL;
         m_xPopupMenu      = aMigrationItem.m_xPopupMenu;
 
@@ -129,17 +129,17 @@ struct MigrationItem
     sal_Bool operator==(const MigrationItem& aMigrationItem)
     {
         return ( aMigrationItem.m_sParentNodeName == m_sParentNodeName &&
-            aMigrationItem.m_sPrevSibling    == m_sPrevSibling	   &&
-            aMigrationItem.m_sCommandURL     == m_sCommandURL	   &&
+            aMigrationItem.m_sPrevSibling    == m_sPrevSibling     &&
+            aMigrationItem.m_sCommandURL     == m_sCommandURL      &&
             aMigrationItem.m_xPopupMenu.is() == m_xPopupMenu.is()    );
     }
 
     ::rtl::OUString GetPrevSibling() const { return m_sPrevSibling; }
 };
 
-typedef ::std::hash_map< ::rtl::OUString, 
-                         ::std::vector< MigrationItem >, 
-                         ::rtl::OUStringHash, 
+typedef ::std::hash_map< ::rtl::OUString,
+                         ::std::vector< MigrationItem >,
+                         ::rtl::OUStringHash,
                          ::std::equal_to< ::rtl::OUString > > MigrationHashMap;
 
 struct MigrationItemInfo
@@ -163,7 +163,7 @@ struct MigrationItemInfo
 struct MigrationModuleInfo
 {
     ::rtl::OUString sModuleShortName;
-    sal_Bool		bHasMenubar;
+    sal_Bool        bHasMenubar;
     ::std::vector< ::rtl::OUString > m_vToolbars;
 
     MigrationModuleInfo():bHasMenubar(sal_False){};
@@ -171,7 +171,7 @@ struct MigrationModuleInfo
 
 //__________________________________________
 /**
-    get the information before copying the ui configuration files of old version to new version 
+    get the information before copying the ui configuration files of old version to new version
 */
 class NewVersionUIInfo
 {
@@ -195,7 +195,7 @@ class MigrationImpl
 private:
     strings_vr m_vrVersions;
     NS_UNO::Reference< NS_CSS::lang::XMultiServiceFactory > m_xFactory;
-    
+
     migrations_available m_vMigrationsAvailable; // list of all available migrations
     migrations_vr        m_vrMigrations;         // list of all migration specs from config
     install_info         m_aInfo;                // info about the version being migrated
@@ -219,10 +219,10 @@ private:
 
     ::std::vector< MigrationModuleInfo > dectectUIChangesForAllModules() const;
     void compareOldAndNewConfig(const ::rtl::OUString& sParentNodeName,
-        const NS_UNO::Reference< NS_CSS::container::XIndexContainer >& xOldIndexContainer, 
+        const NS_UNO::Reference< NS_CSS::container::XIndexContainer >& xOldIndexContainer,
         const NS_UNO::Reference< NS_CSS::container::XIndexContainer >& xNewIndexContainer,
         const ::rtl::OUString& sToolbarName);
-    void mergeOldToNewVersion(const NS_UNO::Reference< NS_CSS::ui::XUIConfigurationManager >& xCfgManager, 
+    void mergeOldToNewVersion(const NS_UNO::Reference< NS_CSS::ui::XUIConfigurationManager >& xCfgManager,
         const NS_UNO::Reference< NS_CSS::container::XIndexContainer>& xIndexContainer,
         const ::rtl::OUString& sModuleIdentifier,
         const ::rtl::OUString& sResourceURL);
@@ -235,7 +235,7 @@ private:
 
     void setMigrationCompleted();
     sal_Bool checkMigrationCompleted();
-    
+
 public:
     MigrationImpl(const NS_UNO::Reference< NS_CSS::lang::XMultiServiceFactory >&);
     ~MigrationImpl();
@@ -243,7 +243,7 @@ public:
     sal_Bool checkMigration();
     rtl::OUString getOldVersionName();
 
-    
+
 };
 }
 #undef NS_CSS

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ private:
 
 public:
 
-    SchXMLBodyContext_Impl( SchXMLImportHelper& rImpHelper, 
+    SchXMLBodyContext_Impl( SchXMLImportHelper& rImpHelper,
                 SvXMLImport& rImport, sal_uInt16 nPrfx,
                 const ::rtl::OUString& rLName );
     virtual ~SchXMLBodyContext_Impl();
@@ -60,7 +60,7 @@ public:
                 const uno::Reference< xml::sax::XAttributeList > & xAttrList );
 };
 
-SchXMLBodyContext_Impl::SchXMLBodyContext_Impl( 
+SchXMLBodyContext_Impl::SchXMLBodyContext_Impl(
         SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
         sal_uInt16 nPrfx, const ::rtl::OUString& rLName ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -77,7 +77,7 @@ SvXMLImportContext *SchXMLBodyContext_Impl::CreateChildContext(
         const ::rtl::OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & )
 {
-    return new SchXMLBodyContext( mrImportHelper, GetImport(), nPrefix, 
+    return new SchXMLBodyContext( mrImportHelper, GetImport(), nPrefix,
                                   rLocalName );
 }
 
@@ -227,7 +227,7 @@ SvXMLImportContext* SchXMLBodyContext::CreateChildContext(
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
     }
 
-    return pContext;	
+    return pContext;
 }
 
 

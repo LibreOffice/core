@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ struct SysdepStaticData
 
 void TTProfiler::InitSysdepProfiler()
 {
-    if ( !pSysDepStatic )	// Sollte immer so sein!!
+    if ( !pSysDepStatic )   // Sollte immer so sein!!
         pSysDepStatic = new SysdepStaticData;
     // Hier initialisieren
 
@@ -55,7 +55,7 @@ void TTProfiler::InitSysdepProfiler()
 
 void TTProfiler::DeinitSysdepProfiler()
 {
-    if ( pSysDepStatic )	// Sollte immer so sein!!
+    if ( pSysDepStatic )    // Sollte immer so sein!!
     {
         // Hier aufräumen und eventuell Speicher freigeben
 

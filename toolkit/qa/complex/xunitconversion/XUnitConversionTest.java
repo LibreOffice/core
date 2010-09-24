@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,10 +41,10 @@ import util.DesktopTools;
  * These are converter methods to get the size of a well known awt component
  * in a com.sun.star.util.MeasureUnit you want.
  * You don't need to know the factors to calculate by hand.
- * 
+ *
  * @author ll93751
  */
-public class XUnitConversionTest extends ComplexTestCase 
+public class XUnitConversionTest extends ComplexTestCase
 {
     public String[] getTestMethodNames()
         {
@@ -87,7 +87,7 @@ public class XUnitConversionTest extends ComplexTestCase
             log.println("Caught IllegalArgumentException in convertSizeToLogic with '" + _sEinheit + "' " + e.getMessage());
         }
     }
-    
+
 /**
  * The real test function
  * 1. try to get the XMultiServiceFactory of an already running office. Therefore make sure an (open|star)office is running with
@@ -96,10 +96,10 @@ public class XUnitConversionTest extends ComplexTestCase
  * 3. try to convert the WindowPeer to an XWindow
  * 4. try to resize and move the window to an other position, so we get a well knowing position and size.
  * 5. run some more tests
- * 
+ *
  * If no test fails, the test is well done and returns with 'PASSED, OK'
- * 
- */    public void testXUnitConversion() 
+ *
+ */    public void testXUnitConversion()
         {
             XMultiServiceFactory xMSF = (XMultiServiceFactory) param.getMSF();
             assure("failed: There is no office.", xMSF != null);
@@ -218,5 +218,5 @@ public class XUnitConversionTest extends ComplexTestCase
             // close the window.
             // IMHO a little bit stupid, but the XWindow doesn't support a XCloseable interface
             xWindow.dispose();
-    } 
+    }
 }

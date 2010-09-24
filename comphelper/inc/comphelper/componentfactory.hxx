@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@
 
 #ifdef UNX
 // "libNAMExy.so" (__DLLEXTENSION == "xy.so")
-#define LLCF_LIBNAME( name )	"lib" name __DLLEXTENSION
+#define LLCF_LIBNAME( name )    "lib" name __DLLEXTENSION
 #else
 // "NAMExy.dll" (__DLLEXTENSION == "xy")
-#define LLCF_LIBNAME( name )	name __DLLEXTENSION ".dll"
+#define LLCF_LIBNAME( name )    name __DLLEXTENSION ".dll"
 #endif
 
 
@@ -113,6 +113,6 @@ COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XI
         );
 
 
-}	// namespace comphelper
+}   // namespace comphelper
 
 #endif // _COMPHELPER_COMPONENTFACTORY_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_UIELEMENT_ADDONSTOOLBARMANAGER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #ifndef __FRAMEWORK_UILEMENT_TOOLBARMANAGER_HXX_
@@ -41,7 +41,7 @@
 #include <macros/xtypeprovider.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -52,7 +52,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
@@ -68,15 +68,15 @@ class ToolBar;
 class AddonsToolBarManager : public ToolBarManager
 {
     public:
-        AddonsToolBarManager( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServicveManager, 
-                              const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, 
+        AddonsToolBarManager( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServicveManager,
+                              const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                               const rtl::OUString& rResourceName,
                               ToolBar* pToolBar );
         virtual ~AddonsToolBarManager();
 
         // XComponent
         void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
-        
+
         virtual void RefreshImages();
         using ToolBarManager::FillToolbar;
         void FillToolbar( const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& rAddonToolbar );
@@ -94,7 +94,7 @@ class AddonsToolBarManager : public ToolBarManager
 
         virtual bool MenuItemAllowed( sal_uInt16 ) const;
 };
-    
+
 }
 
 #endif // __FRAMEWORK_UIELEMENT_ADDONSTOOLBARMANAGER_HXX_

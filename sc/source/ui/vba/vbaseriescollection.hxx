@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 typedef CollTestImplHelper< ov::excel::XSeriesCollection > SeriesCollection_BASE;
 
 class ScVbaSeriesCollection : public SeriesCollection_BASE
-{		
+{
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 public:
@@ -46,7 +46,7 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
 
     // SeriesCollection_BASE
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ); 
+    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };

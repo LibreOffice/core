@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ SvXMLAttributeList::SvXMLAttributeList( const SvXMLAttributeList &r ) :
 {
 }
 
-SvXMLAttributeList::SvXMLAttributeList( const uno::Reference< 
+SvXMLAttributeList::SvXMLAttributeList( const uno::Reference<
         xml::sax::XAttributeList> & rAttrList )
     : sType( GetXMLToken(XML_CDATA) )
 {
@@ -163,7 +163,7 @@ SvXMLAttributeList::~SvXMLAttributeList()
 }
 
 
-void SvXMLAttributeList::AddAttribute( 	const OUString &sName ,
+void SvXMLAttributeList::AddAttribute(  const OUString &sName ,
                                         const OUString &sValue )
 {
     m_pImpl->vecAttribute.push_back( SvXMLTagAttribute_Impl( sName , sValue ) );
@@ -200,7 +200,7 @@ void SvXMLAttributeList::AppendAttributeList( const uno::Reference< ::com::sun::
     OSL_ASSERT( r.is() );
 
     sal_Int16 nMax = r->getLength();
-    SvXMLAttributeList_Impl::size_type nTotalSize = 
+    SvXMLAttributeList_Impl::size_type nTotalSize =
         m_pImpl->vecAttribute.size() + nMax;
     m_pImpl->vecAttribute.reserve( nTotalSize );
 
@@ -213,10 +213,10 @@ void SvXMLAttributeList::AppendAttributeList( const uno::Reference< ::com::sun::
     OSL_ASSERT( nTotalSize == (SvXMLAttributeList_Impl::size_type)getLength());
 }
 
-void SvXMLAttributeList::SetValueByIndex( sal_Int16 i, 
+void SvXMLAttributeList::SetValueByIndex( sal_Int16 i,
         const ::rtl::OUString& rValue )
 {
-    if( static_cast< SvXMLAttributeList_Impl::size_type >( i ) 
+    if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
             < m_pImpl->vecAttribute.size() )
     {
         m_pImpl->vecAttribute[i].sValue = rValue;
@@ -225,15 +225,15 @@ void SvXMLAttributeList::SetValueByIndex( sal_Int16 i,
 
 void SvXMLAttributeList::RemoveAttributeByIndex( sal_Int16 i )
 {
-    if( static_cast< SvXMLAttributeList_Impl::size_type >( i ) 
+    if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
             < m_pImpl->vecAttribute.size() )
         m_pImpl->vecAttribute.erase( m_pImpl->vecAttribute.begin() + i );
 }
 
-void SvXMLAttributeList::RenameAttributeByIndex( sal_Int16 i, 
+void SvXMLAttributeList::RenameAttributeByIndex( sal_Int16 i,
                                                  const OUString& rNewName )
 {
-    if( static_cast< SvXMLAttributeList_Impl::size_type >( i ) 
+    if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
             < m_pImpl->vecAttribute.size() )
     {
         m_pImpl->vecAttribute[i].sName = rNewName;
@@ -242,10 +242,10 @@ void SvXMLAttributeList::RenameAttributeByIndex( sal_Int16 i,
 
 sal_Int16 SvXMLAttributeList::GetIndexByName( const OUString& rName ) const
 {
-    ::std::vector<struct SvXMLTagAttribute_Impl>::iterator ii = 
+    ::std::vector<struct SvXMLTagAttribute_Impl>::iterator ii =
         m_pImpl->vecAttribute.begin();
-    
-    for( sal_Int16 nIndex=0; ii!=m_pImpl->vecAttribute.end(); ++ii, ++nIndex ) 
+
+    for( sal_Int16 nIndex=0; ii!=m_pImpl->vecAttribute.end(); ++ii, ++nIndex )
     {
         if( (*ii).sName == rName )
         {
@@ -277,7 +277,7 @@ SvXMLAttributeList* SvXMLAttributeList::getImplementation( uno::Reference< uno::
     uno::Reference< lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
     if( xUT.is() )
     {
-        return 
+        return
             reinterpret_cast<SvXMLAttributeList*>(
                 sal::static_int_cast<sal_IntPtr>(
                     xUT->getSomething( SvXMLAttributeList::getUnoTunnelId())));

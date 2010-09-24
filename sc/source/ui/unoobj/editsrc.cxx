@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,9 +69,9 @@ ScHeaderFooterChangedHint::~ScHeaderFooterChangedHint()
 ScSharedHeaderFooterEditSource::ScSharedHeaderFooterEditSource( ScHeaderFooterTextData* pData ) :
     pTextData( pData )
 {
-    //	pTextData is held by the ScHeaderFooterTextObj.
-    //	Text range and cursor keep a reference to their parent text, so the text object is
-    //	always alive and the TextData is valid as long as there are children.
+    //  pTextData is held by the ScHeaderFooterTextObj.
+    //  Text range and cursor keep a reference to their parent text, so the text object is
+    //  always alive and the TextData is valid as long as there are children.
 }
 
 ScSharedHeaderFooterEditSource::~ScSharedHeaderFooterEditSource()
@@ -100,7 +100,7 @@ ScEditEngineDefaulter* ScSharedHeaderFooterEditSource::GetEditEngine()
 
 //------------------------------------------------------------------------
 
-//	each ScHeaderFooterEditSource object has its own ScHeaderFooterTextData
+//  each ScHeaderFooterEditSource object has its own ScHeaderFooterTextData
 
 ScHeaderFooterEditSource::ScHeaderFooterEditSource( ScHeaderFooterContentObj* pContent,
                                                     USHORT nP ) :
@@ -116,7 +116,7 @@ ScHeaderFooterEditSource::ScHeaderFooterEditSource( ScHeaderFooterContentObj& rC
 
 ScHeaderFooterEditSource::~ScHeaderFooterEditSource()
 {
-    delete GetTextData();	// not accessed in ScSharedHeaderFooterEditSource dtor
+    delete GetTextData();   // not accessed in ScSharedHeaderFooterEditSource dtor
 }
 
 SvxEditSource* ScHeaderFooterEditSource::Clone() const
@@ -130,9 +130,9 @@ SvxEditSource* ScHeaderFooterEditSource::Clone() const
 ScSharedCellEditSource::ScSharedCellEditSource( ScCellTextData* pData ) :
     pCellTextData( pData )
 {
-    //	pCellTextData is part of the ScCellTextObj.
-    //	Text range and cursor keep a reference to their parent text, so the text object is
-    //	always alive and the CellTextData is valid as long as there are children.
+    //  pCellTextData is part of the ScCellTextObj.
+    //  Text range and cursor keep a reference to their parent text, so the text object is
+    //  always alive and the CellTextData is valid as long as there are children.
 }
 
 ScSharedCellEditSource::~ScSharedCellEditSource()
@@ -171,7 +171,7 @@ ScEditEngineDefaulter* ScSharedCellEditSource::GetEditEngine()
 
 //------------------------------------------------------------------------
 
-//	each ScCellEditSource object has its own ScCellTextData
+//  each ScCellEditSource object has its own ScCellTextData
 
 ScCellEditSource::ScCellEditSource( ScDocShell* pDocSh, const ScAddress& rP ) :
     ScSharedCellEditSource( new ScCellTextData( pDocSh, rP ) )
@@ -180,7 +180,7 @@ ScCellEditSource::ScCellEditSource( ScDocShell* pDocSh, const ScAddress& rP ) :
 
 ScCellEditSource::~ScCellEditSource()
 {
-    delete GetCellTextData();	// not accessed in ScSharedCellEditSource dtor
+    delete GetCellTextData();   // not accessed in ScSharedCellEditSource dtor
 }
 
 SvxEditSource* ScCellEditSource::Clone() const
@@ -204,7 +204,7 @@ ScAnnotationEditSource::ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddre
 
 ScAnnotationEditSource::~ScAnnotationEditSource()
 {
-    ScUnoGuard aGuard;		//	needed for EditEngine dtor
+    ScUnoGuard aGuard;      //  needed for EditEngine dtor
 
     if (pDocShell)
         pDocShell->GetDocument()->RemoveUnoObject(*this);
@@ -248,7 +248,7 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
     if ( pDocShell )
         if ( ScPostIt* pNote = pDocShell->GetDocument()->GetNote( aCellPos ) )
             if ( const EditTextObject* pEditObj = pNote->GetEditTextObject() )
-                pEditEngine->SetText( *pEditObj );		// incl. Umbrueche
+                pEditEngine->SetText( *pEditObj );      // incl. Umbrueche
 
     bDataValid = TRUE;
     return pForwarder;
@@ -270,7 +270,7 @@ void ScAnnotationEditSource::UpdateData()
             pObj->ActionChanged();
         }
 
-        //!	Undo !!!
+        //! Undo !!!
 
         aModificator.SetDocumentModified();
 
@@ -284,20 +284,20 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
 //        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
-        //!	Ref-Update
+        //! Ref-Update
     }
     else if ( rHint.ISA( SfxSimpleHint ) )
     {
         ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
-            pDocShell = NULL;						// ungueltig geworden
+            pDocShell = NULL;                       // ungueltig geworden
 
             DELETEZ( pForwarder );
-            DELETEZ( pEditEngine );		// EditEngine uses document's pool
+            DELETEZ( pEditEngine );     // EditEngine uses document's pool
         }
         else if ( nId == SFX_HINT_DATACHANGED )
-            bDataValid = FALSE;						// Text muss neu geholt werden
+            bDataValid = FALSE;                     // Text muss neu geholt werden
     }
 }
 
@@ -306,9 +306,9 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
 ScSimpleEditSource::ScSimpleEditSource( SvxTextForwarder* pForw ) :
     pForwarder( pForw )
 {
-    //	The same forwarder (and EditEngine) is shared by all children of the same Text object.
-    //	Text range and cursor keep a reference to their parent text, so the text object is
-    //	always alive and the forwarder is valid as long as there are children.
+    //  The same forwarder (and EditEngine) is shared by all children of the same Text object.
+    //  Text range and cursor keep a reference to their parent text, so the text object is
+    //  always alive and the forwarder is valid as long as there are children.
 }
 
 ScSimpleEditSource::~ScSimpleEditSource()
@@ -327,7 +327,7 @@ SvxTextForwarder* ScSimpleEditSource::GetTextForwarder()
 
 void ScSimpleEditSource::UpdateData()
 {
-    //	nothing
+    //  nothing
 }
 
 //------------------------------------------------------------------------

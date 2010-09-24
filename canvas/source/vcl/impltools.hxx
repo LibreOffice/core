@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ class OutputDevice;
 class Point;
 class Size;
 
-namespace basegfx 
+namespace basegfx
 {
     namespace matrix
     {
@@ -63,26 +63,26 @@ namespace basegfx
     }
 }
 
-namespace com { namespace sun { namespace star { namespace awt 
+namespace com { namespace sun { namespace star { namespace awt
 {
     struct Point;
     struct Size;
     struct Rectangle;
 } } } }
 
-namespace com { namespace sun { namespace star { namespace drawing 
+namespace com { namespace sun { namespace star { namespace drawing
 {
     struct HomogenMatrix3;
 } } } }
 
-namespace com { namespace sun { namespace star { namespace geometry 
+namespace com { namespace sun { namespace star { namespace geometry
 {
     struct RealPoint2D;
     struct RealSize2D;
     struct RealRectangle2D;
 } } } }
 
-namespace com { namespace sun { namespace star { namespace rendering 
+namespace com { namespace sun { namespace star { namespace rendering
 {
     struct RenderState;
     struct ViewState;
@@ -97,18 +97,18 @@ namespace vclcanvas
     namespace tools
     {
         ::BitmapEx
-        bitmapExFromXBitmap( const ::com::sun::star::uno::Reference< 
+        bitmapExFromXBitmap( const ::com::sun::star::uno::Reference<
                              ::com::sun::star::rendering::XBitmap >& );
 
         /** Setup VCL font and output position
 
             @returns false, if no text output should happen
          */
-        bool setupFontTransform( ::Point&													o_rPoint,
-                                 ::Font& 													io_rVCLFont, 
-                                 const ::com::sun::star::rendering::ViewState& 		viewState,
-                                 const ::com::sun::star::rendering::RenderState& 	renderState,
-                                 ::OutputDevice&											rOutDev );
+        bool setupFontTransform( ::Point&                                                   o_rPoint,
+                                 ::Font&                                                    io_rVCLFont,
+                                 const ::com::sun::star::rendering::ViewState&      viewState,
+                                 const ::com::sun::star::rendering::RenderState&    renderState,
+                                 ::OutputDevice&                                            rOutDev );
 
         /** Predicate, to determine whether polygon is actually an axis-aligned rectangle
 
@@ -121,19 +121,19 @@ namespace vclcanvas
         class LocalGuard
         {
         public:
-            LocalGuard() : 
+            LocalGuard() :
                 aGuard( Application::GetSolarMutex() )
             {
             }
 
             /// To be compatible with CanvasBase mutex concept
-            LocalGuard( const ::osl::Mutex& ) : 
+            LocalGuard( const ::osl::Mutex& ) :
                 aGuard( Application::GetSolarMutex() )
             {
             }
 
         private:
-            ::vos::OGuard aGuard;        
+            ::vos::OGuard aGuard;
         };
 
         class OutDevStateKeeper
@@ -152,7 +152,7 @@ namespace vclcanvas
             {
                 init();
             }
- 
+
             ~OutDevStateKeeper()
             {
                 if( mpOutDev )
@@ -172,17 +172,17 @@ namespace vclcanvas
                 }
             }
 
-            OutputDevice*	mpOutDev;
-            const bool		mbMappingWasEnabled;
+            OutputDevice*   mpOutDev;
+            const bool      mbMappingWasEnabled;
         };
 
-        ::Point mapRealPoint2D( const ::com::sun::star::geometry::RealPoint2D& 	rPoint,
-                                const ::com::sun::star::rendering::ViewState& 	rViewState,
-                                const ::com::sun::star::rendering::RenderState&	rRenderState );
+        ::Point mapRealPoint2D( const ::com::sun::star::geometry::RealPoint2D&  rPoint,
+                                const ::com::sun::star::rendering::ViewState&   rViewState,
+                                const ::com::sun::star::rendering::RenderState& rRenderState );
 
-        ::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon& 							rPoly,
-                                      const ::com::sun::star::rendering::ViewState& 	rViewState,
-                                      const ::com::sun::star::rendering::RenderState&	rRenderState );
+        ::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&                          rPoly,
+                                      const ::com::sun::star::rendering::ViewState&     rViewState,
+                                      const ::com::sun::star::rendering::RenderState&   rRenderState );
 
         enum ModulationMode
         {
@@ -190,10 +190,10 @@ namespace vclcanvas
             MODULATE_WITH_DEVICECOLOR
         };
 
-        ::BitmapEx transformBitmap( const BitmapEx& 									rBitmap,
-                                    const ::basegfx::B2DHomMatrix& 						rTransform,
-                                    const ::com::sun::star::uno::Sequence< double >&	rDeviceColor,
-                                    ModulationMode										eModulationMode );
+        ::BitmapEx transformBitmap( const BitmapEx&                                     rBitmap,
+                                    const ::basegfx::B2DHomMatrix&                      rTransform,
+                                    const ::com::sun::star::uno::Sequence< double >&    rDeviceColor,
+                                    ModulationMode                                      eModulationMode );
 
     }
 }

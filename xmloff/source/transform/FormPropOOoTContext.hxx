@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,9 +33,9 @@
 
 class XMLFormPropValueTContext_Impl;
 
-class XMLFormPropOOoTransformerContext : public XMLTransformerContext 
+class XMLFormPropOOoTransformerContext : public XMLTransformerContext
 {
-    ::com::sun::star::uno::Reference< 
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
 
     ::rtl::Reference< XMLFormPropValueTContext_Impl > m_xValueContext;
@@ -52,7 +52,7 @@ class XMLFormPropOOoTransformerContext : public XMLTransformerContext
 public:
     TYPEINFO();
 
-    XMLFormPropOOoTransformerContext( XMLTransformerBase& rTransformer, 
+    XMLFormPropOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName );
 
     virtual ~XMLFormPropOOoTransformerContext();
@@ -66,5 +66,5 @@ public:
     virtual void EndElement();
 };
 
-#endif	//  _XMLOFF_FORMPROPOOOTCONTEXT_HXX
+#endif  //  _XMLOFF_FORMPROPOOOTCONTEXT_HXX
 

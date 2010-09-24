@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,10 +40,10 @@
 #include <tools/list.hxx>
 #include <tools/string.hxx>
 
-#define CTRLS_OFFSET		3
-#define BUTTON_DISTANCE		8
-#define RET_USER 		100
-#define RET_USER_CANCEL	101
+#define CTRLS_OFFSET        3
+#define BUTTON_DISTANCE     8
+#define RET_USER        100
+#define RET_USER_CANCEL 101
 
 // forward-declarations
 struct IconChoicePageData;
@@ -52,7 +52,7 @@ class IconChoicePage;
 
 // Create-Function
 typedef IconChoicePage* (*CreatePage)(Window *pParent, const SfxItemSet &rAttrSet);
-typedef USHORT*		    (*GetPageRanges)(); // liefert internationale Which-Wert
+typedef USHORT*         (*GetPageRanges)(); // liefert internationale Which-Wert
 
 // page-list
 DECLARE_LIST( IconChoicePageList, IconChoicePageData * )
@@ -68,21 +68,21 @@ enum EIconChoicePos { PosLeft, PosRight, PosTop, PosBottom };
 
 struct IconChoicePageData
 {
-    USHORT nId;					 // Die ID
-    CreatePage fnCreatePage;	 // Pointer auf die Factory
+    USHORT nId;                  // Die ID
+    CreatePage fnCreatePage;     // Pointer auf die Factory
     GetPageRanges fnGetRanges;// Pointer auf die Ranges-Funktion
-    IconChoicePage* pPage;		 // die TabPage selber
-    BOOL bOnDemand;				 // Flag: ItemSet onDemand
-    BOOL bRefresh; 				 // Flag: Seite mu\s neu initialisiert werden
+    IconChoicePage* pPage;       // die TabPage selber
+    BOOL bOnDemand;              // Flag: ItemSet onDemand
+    BOOL bRefresh;               // Flag: Seite mu\s neu initialisiert werden
 
     // Konstruktor
     IconChoicePageData( USHORT Id, CreatePage fnPage, GetPageRanges fnRanges, BOOL bDemand )
-        : nId			( Id ),
-          fnCreatePage	( fnPage ),
-          fnGetRanges	( fnRanges ),
-          pPage			( NULL ),
-          bOnDemand		( bDemand ),
-          bRefresh		( FALSE )
+        : nId           ( Id ),
+          fnCreatePage  ( fnPage ),
+          fnGetRanges   ( fnRanges ),
+          pPage         ( NULL ),
+          bOnDemand     ( bDemand ),
+          bRefresh      ( FALSE )
     {}
 };
 
@@ -98,40 +98,40 @@ class IconChoicePage : public TabPage
     using TabPage::DeactivatePage;
 
 private :
-    const SfxItemSet*	pSet;
-    String				aUserString;
-    BOOL				bHasExchangeSupport;
-    IconChoiceDialog*	pDialog;
-    BOOL				bStandard;
+    const SfxItemSet*   pSet;
+    String              aUserString;
+    BOOL                bHasExchangeSupport;
+    IconChoiceDialog*   pDialog;
+    BOOL                bStandard;
 
-    void				SetDialog( IconChoiceDialog* pNew ) { pDialog = pNew; }
-    IconChoiceDialog*	GetDialog() const { return pDialog; }
+    void                SetDialog( IconChoiceDialog* pNew ) { pDialog = pNew; }
+    IconChoiceDialog*   GetDialog() const { return pDialog; }
 
-    void				SetInputSet( const SfxItemSet* pNew ) { pSet = pNew; }
+    void                SetInputSet( const SfxItemSet* pNew ) { pSet = pNew; }
 
-    void				ImplInitSettings();
+    void                ImplInitSettings();
 
 protected :
     IconChoicePage( Window *pParent, const ResId &, const SfxItemSet &rAttrSet );
 
-    USHORT				GetSlot( USHORT nWhich ) const	{ return pSet->GetPool()->GetSlotId( nWhich ); }
-    USHORT				GetWhich( USHORT nSlot ) const	{ return pSet->GetPool()->GetWhich( nSlot ); }
-    const SfxPoolItem* 	GetOldItem( const SfxItemSet& rSet, USHORT nSlot );
-    const SfxPoolItem* 	GetExchangeItem( const SfxItemSet& rSet, USHORT nSlot );
+    USHORT              GetSlot( USHORT nWhich ) const  { return pSet->GetPool()->GetSlotId( nWhich ); }
+    USHORT              GetWhich( USHORT nSlot ) const  { return pSet->GetPool()->GetWhich( nSlot ); }
+    const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, USHORT nSlot );
+    const SfxPoolItem*  GetExchangeItem( const SfxItemSet& rSet, USHORT nSlot );
 
 public :
     virtual             ~IconChoicePage();
 
-    const SfxItemSet&	GetItemSet() const { return *pSet; }
+    const SfxItemSet&   GetItemSet() const { return *pSet; }
 
-    virtual BOOL		FillItemSet( SfxItemSet& ) = 0;
-    virtual void		Reset( const SfxItemSet& ) = 0;
+    virtual BOOL        FillItemSet( SfxItemSet& ) = 0;
+    virtual void        Reset( const SfxItemSet& ) = 0;
 
-    BOOL				HasExchangeSupport() const				{ return bHasExchangeSupport; }
-    void				SetExchangeSupport( BOOL bNew = TRUE )	{ bHasExchangeSupport = bNew; }
+    BOOL                HasExchangeSupport() const              { return bHasExchangeSupport; }
+    void                SetExchangeSupport( BOOL bNew = TRUE )  { bHasExchangeSupport = bNew; }
 
     enum {
-        KEEP_PAGE = 0x0000,		// Fehlerbehandlung; Seite nicht wechseln
+        KEEP_PAGE = 0x0000,     // Fehlerbehandlung; Seite nicht wechseln
             // 2. F"ullen eines ItemSets f"ur die Aktualilsierung
             // "ubergeordneter Beispiele; dieser Pointer kann immer
             // NULL sein!!
@@ -140,18 +140,18 @@ public :
         REFRESH_SET = 0x0002
     };
 
-    virtual void		ActivatePage( const SfxItemSet& );
-    virtual int			DeactivatePage( SfxItemSet* pSet = 0 );
-    void				SetUserData(const String& rString)	{ aUserString = rString; }
-    String				GetUserData() { return aUserString; }
-    virtual void		FillUserData();
-    virtual BOOL		IsReadOnly() const;
+    virtual void        ActivatePage( const SfxItemSet& );
+    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
+    void                SetUserData(const String& rString)  { aUserString = rString; }
+    String              GetUserData() { return aUserString; }
+    virtual void        FillUserData();
+    virtual BOOL        IsReadOnly() const;
     virtual sal_Bool    QueryClose();
 
     static const SfxPoolItem* GetItem( const SfxItemSet& rSet, USHORT nSlot );
 
-    void				StateChanged( StateChangedType nType );
-    void				DataChanged( const DataChangedEvent& rDCEvt );
+    void                StateChanged( StateChangedType nType );
+    void                DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 /**********************************************************************
@@ -165,63 +165,63 @@ class IconChoiceDialog : public ModalDialog
 private :
     friend class IconChoicePage;
 
-    EIconChoicePos			meChoicePos;    // Position des IconChoiceCtrl's
-    IconChoicePageList		maPageList;		// Liste von PageData-Pointer
+    EIconChoicePos          meChoicePos;    // Position des IconChoiceCtrl's
+    IconChoicePageList      maPageList;     // Liste von PageData-Pointer
 
-    SvtIconChoiceCtrl		maIconCtrl;		// DAS IconChoice-Control
+    SvtIconChoiceCtrl       maIconCtrl;     // DAS IconChoice-Control
 
-    USHORT					mnCurrentPageId;	// Id der aktuell sichtbaren Page
+    USHORT                  mnCurrentPageId;    // Id der aktuell sichtbaren Page
 
     // Buttons
-    OKButton				aOKBtn;
-    CancelButton			aCancelBtn;
-    HelpButton				aHelpBtn;
-    PushButton				aResetBtn;
+    OKButton                aOKBtn;
+    CancelButton            aCancelBtn;
+    HelpButton              aHelpBtn;
+    PushButton              aResetBtn;
 
-    const SfxItemSet*		pSet;
-    SfxItemSet*				pOutSet;
-    SfxItemSet*				pExampleSet;
-    USHORT*					pRanges;
+    const SfxItemSet*       pSet;
+    SfxItemSet*             pOutSet;
+    SfxItemSet*             pExampleSet;
+    USHORT*                 pRanges;
 
-    sal_uInt32				nResId;
+    sal_uInt32              nResId;
 
-    BOOL					bHideResetBtn;
-    BOOL					bModal;
-    BOOL					bInOK;
-    BOOL					bModified;
-    BOOL					bItemsReset;
+    BOOL                    bHideResetBtn;
+    BOOL                    bModal;
+    BOOL                    bInOK;
+    BOOL                    bModified;
+    BOOL                    bItemsReset;
 
     DECL_LINK ( ChosePageHdl_Impl, void * );
-    DECL_LINK ( OkHdl,			   Button * );
+    DECL_LINK ( OkHdl,             Button * );
     DECL_LINK ( ResetHdl,          Button * );
-    DECL_LINK ( CancelHdl,		   Button * );
+    DECL_LINK ( CancelHdl,         Button * );
 
-    IconChoicePageData*		GetPageData ( USHORT nId );
-    void					Start_Impl();
-    BOOL					OK_Impl();
+    IconChoicePageData*     GetPageData ( USHORT nId );
+    void                    Start_Impl();
+    BOOL                    OK_Impl();
 
-    void					SetPosSizeCtrls ( BOOL bInit = FALSE );
-    void					SetPosSizePages ( USHORT nId );
+    void                    SetPosSizeCtrls ( BOOL bInit = FALSE );
+    void                    SetPosSizePages ( USHORT nId );
 
-    void					FocusOnIcon ( USHORT nId );
+    void                    FocusOnIcon ( USHORT nId );
 
 protected :
-    void					ShowPageImpl ( IconChoicePageData* pData );
-    void					HidePageImpl ( IconChoicePageData* pData );
+    void                    ShowPageImpl ( IconChoicePageData* pData );
+    void                    HidePageImpl ( IconChoicePageData* pData );
 
     virtual void            PageCreated( USHORT nId, IconChoicePage& rPage );
-    virtual SfxItemSet*		CreateInputItemSet( USHORT nId );
-    inline SfxItemSet*		GetInputSetImpl() { return (SfxItemSet*)pSet; }
-    inline IconChoicePage*	GetTabPage( USHORT nPageId )
+    virtual SfxItemSet*     CreateInputItemSet( USHORT nId );
+    inline SfxItemSet*      GetInputSetImpl() { return (SfxItemSet*)pSet; }
+    inline IconChoicePage*  GetTabPage( USHORT nPageId )
                                 { return ( GetPageData (nPageId)->pPage?GetPageData (nPageId)->pPage:NULL); }
-    const SfxItemSet*		GetRefreshedSet();
+    const SfxItemSet*       GetRefreshedSet();
 
-    void					ActivatePageImpl ();
-    BOOL					DeActivatePageImpl ();
-    void					ResetPageImpl ();
+    void                    ActivatePageImpl ();
+    BOOL                    DeActivatePageImpl ();
+    void                    ResetPageImpl ();
 
-    short					Ok();
-    BOOL					IsInOK() const;
+    short                   Ok();
+    BOOL                    IsInOK() const;
 
 public :
 
@@ -234,55 +234,55 @@ public :
     ///////////////////////////////////////////////////////////////////////////////////
     // virtuelle Methoden
     //
-    virtual void		Paint( const Rectangle& rRect );
-    virtual void		Resize();
+    virtual void        Paint( const Rectangle& rRect );
+    virtual void        Resize();
 
     ///////////////////////////////////////////////////////////////////////////////////
     // Schnittstelle
     //
 
-    SvxIconChoiceCtrlEntry*	AddTabPage(
+    SvxIconChoiceCtrlEntry* AddTabPage(
         USHORT nId, const String& rIconText, const Image& rChoiceIcon,
         CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
         BOOL bItemsOnDemand = FALSE, ULONG nPos = LIST_APPEND );
 
-    SvxIconChoiceCtrlEntry*	AddTabPage(
+    SvxIconChoiceCtrlEntry* AddTabPage(
         USHORT nId, const String& rIconText, const Image& rChoiceIcon, const Image& rChoiceIconHC,
         CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
         BOOL bItemsOnDemand = FALSE, ULONG nPos = LIST_APPEND );
 
-    void				RemoveTabPage( USHORT nId );
+    void                RemoveTabPage( USHORT nId );
 
-    void				SetCurPageId( USHORT nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
-    USHORT				GetCurPageId() const       { return mnCurrentPageId; }
-    void				ShowPage( USHORT nId );
+    void                SetCurPageId( USHORT nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
+    USHORT              GetCurPageId() const       { return mnCurrentPageId; }
+    void                ShowPage( USHORT nId );
 
                         // liefert ggf. per Map konvertierte lokale Slots
-    const USHORT*		GetInputRanges( const SfxItemPool& );
-    void				SetInputSet( const SfxItemSet* pInSet );
-    const SfxItemSet*	GetOutputItemSet() const { return pOutSet; }
-    const SfxItemSet*	GetOutputItemSet( USHORT nId );
-    int					FillOutputItemSet();
+    const USHORT*       GetInputRanges( const SfxItemPool& );
+    void                SetInputSet( const SfxItemSet* pInSet );
+    const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
+    const SfxItemSet*   GetOutputItemSet( USHORT nId );
+    int                 FillOutputItemSet();
 
-    const OKButton& 	GetOKButton() const { return aOKBtn; }
-    OKButton&			GetOKButton() { return aOKBtn; }
+    const OKButton&     GetOKButton() const { return aOKBtn; }
+    OKButton&           GetOKButton() { return aOKBtn; }
     const CancelButton& GetCancelButton() const { return aCancelBtn; }
-    CancelButton&		GetCancelButton() { return aCancelBtn; }
-    const HelpButton&	GetHelpButton() const { return aHelpBtn; }
-    HelpButton&			GetHelpButton() { return aHelpBtn; }
+    CancelButton&       GetCancelButton() { return aCancelBtn; }
+    const HelpButton&   GetHelpButton() const { return aHelpBtn; }
+    HelpButton&         GetHelpButton() { return aHelpBtn; }
 
-    void				RemoveResetButton();
+    void                RemoveResetButton();
 
-    short				Execute();
-    void				Start( BOOL bShow = TRUE );
+    short               Execute();
+    void                Start( BOOL bShow = TRUE );
     sal_Bool            QueryClose();
 
-    const SfxItemSet*	GetExampleSet() const { return pExampleSet; }
+    const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
 
-    void				SetCtrlColor ( const Color& rColor );
-    EIconChoicePos		SetCtrlPos   ( const EIconChoicePos& rPos );
+    void                SetCtrlColor ( const Color& rColor );
+    EIconChoicePos      SetCtrlPos   ( const EIconChoicePos& rPos );
 
-    void				CreateIconTextAutoMnemonics( void );
+    void                CreateIconTextAutoMnemonics( void );
 };
 
 #endif //_ICCDLG_HXX

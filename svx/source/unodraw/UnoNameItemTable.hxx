@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ class SvxUnoNameItemTable : public cppu::WeakImplHelper2< com::sun::star::contai
                             public SfxListener
 {
 private:
-    SdrModel*		mpModel;
-    SfxItemPool*	mpModelPool;
-    USHORT			mnWhich;
-    BYTE			mnMemberId;
+    SdrModel*       mpModel;
+    SfxItemPool*    mpModelPool;
+    USHORT          mnWhich;
+    BYTE            mnMemberId;
 
     ItemPoolVector maItemSetVector;
 
@@ -59,7 +59,7 @@ private:
 
 public:
     SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich, BYTE nMemberId ) throw();
-    virtual	~SvxUnoNameItemTable() throw();
+    virtual ~SvxUnoNameItemTable() throw();
 
     virtual NameOrIndex* createItem() const throw() = 0;
     virtual bool isValid( const NameOrIndex* pItem ) const;

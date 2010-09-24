@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,8 +93,8 @@ namespace rptui
 
         ::svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterFontColor; // updates the color below the toolbar icon
         ::svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterBackgroundColor;
-        
-        
+
+
         size_t                          m_nCondIndex;
         long                            m_nLastKnownWindowWidth;
         bool                            m_bInDestruction;

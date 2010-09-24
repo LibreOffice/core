@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-SchXMLCalculationSettingsContext::SchXMLCalculationSettingsContext( SvXMLImport& rImport, 
+SchXMLCalculationSettingsContext::SchXMLCalculationSettingsContext( SvXMLImport& rImport,
                                     sal_uInt16 p_nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<

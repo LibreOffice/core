@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,10 +68,10 @@ enum ScVObjType
     VOBJ_TYPE_DRAW
 };
 
-#define MAX_OPT				(USHORT)VOPT_BIGHANDLES+1
-#define MAX_TYPE			(USHORT)VOBJ_TYPE_DRAW+1
+#define MAX_OPT             (USHORT)VOPT_BIGHANDLES+1
+#define MAX_TYPE            (USHORT)VOBJ_TYPE_DRAW+1
 
-#define SC_STD_GRIDCOLOR	COL_LIGHTGRAY
+#define SC_STD_GRIDCOLOR    COL_LIGHTGRAY
 
 //==================================================================
 // SvxGrid-Optionen mit Standard-Operatoren
@@ -83,10 +83,10 @@ public:
                 ScGridOptions() : SvxOptionsGrid() {}
                 ScGridOptions( const SvxOptionsGrid& rOpt ) : SvxOptionsGrid( rOpt ) {}
 
-    void					SetDefaults();
-    const ScGridOptions&	operator=  ( const ScGridOptions& rCpy );
-    int						operator== ( const ScGridOptions& rOpt ) const;
-    int						operator!= ( const ScGridOptions& rOpt ) const { return !(operator==(rOpt)); }
+    void                    SetDefaults();
+    const ScGridOptions&    operator=  ( const ScGridOptions& rCpy );
+    int                     operator== ( const ScGridOptions& rOpt ) const;
+    int                     operator!= ( const ScGridOptions& rOpt ) const { return !(operator==(rOpt)); }
 };
 
 //==================================================================
@@ -100,31 +100,31 @@ public:
                 ScViewOptions( const ScViewOptions& rCpy );
                 ~ScViewOptions();
 
-    void					SetDefaults();
+    void                    SetDefaults();
 
-    void					SetOption( ScViewOption eOpt, BOOL bNew = TRUE )	{ aOptArr[eOpt] = bNew; }
-    BOOL					GetOption( ScViewOption eOpt ) const 				{ return aOptArr[eOpt]; }
+    void                    SetOption( ScViewOption eOpt, BOOL bNew = TRUE )    { aOptArr[eOpt] = bNew; }
+    BOOL                    GetOption( ScViewOption eOpt ) const                { return aOptArr[eOpt]; }
 
-    void					SetObjMode( ScVObjType eObj, ScVObjMode eMode )	{ aModeArr[eObj] = eMode; }
-    ScVObjMode				GetObjMode( ScVObjType eObj ) const				{ return aModeArr[eObj]; }
+    void                    SetObjMode( ScVObjType eObj, ScVObjMode eMode ) { aModeArr[eObj] = eMode; }
+    ScVObjMode              GetObjMode( ScVObjType eObj ) const             { return aModeArr[eObj]; }
 
-    void					SetGridColor( const Color& rCol, const String& rName ) { aGridCol = rCol; aGridColName = rName;}
-    Color					GetGridColor( String* pStrName = NULL ) const;
+    void                    SetGridColor( const Color& rCol, const String& rName ) { aGridCol = rCol; aGridColName = rName;}
+    Color                   GetGridColor( String* pStrName = NULL ) const;
 
-    const ScGridOptions&	GetGridOptions() const 						{ return aGridOpt; }
-    void					SetGridOptions( const ScGridOptions& rNew ) { aGridOpt = rNew; }
-    SvxGridItem*			CreateGridItem( USHORT nId = SID_ATTR_GRID_OPTIONS ) const;
+    const ScGridOptions&    GetGridOptions() const                      { return aGridOpt; }
+    void                    SetGridOptions( const ScGridOptions& rNew ) { aGridOpt = rNew; }
+    SvxGridItem*            CreateGridItem( USHORT nId = SID_ATTR_GRID_OPTIONS ) const;
 
-    const ScViewOptions&	operator=  ( const ScViewOptions& rCpy );
-    int						operator== ( const ScViewOptions& rOpt ) const;
-    int						operator!= ( const ScViewOptions& rOpt ) const { return !(operator==(rOpt)); }
+    const ScViewOptions&    operator=  ( const ScViewOptions& rCpy );
+    int                     operator== ( const ScViewOptions& rOpt ) const;
+    int                     operator!= ( const ScViewOptions& rOpt ) const { return !(operator==(rOpt)); }
 
 private:
-    BOOL			aOptArr		[MAX_OPT];
-    ScVObjMode		aModeArr	[MAX_TYPE];
-    Color			aGridCol;
-    String			aGridColName;
-    ScGridOptions	aGridOpt;
+    BOOL            aOptArr     [MAX_OPT];
+    ScVObjMode      aModeArr    [MAX_TYPE];
+    Color           aGridCol;
+    String          aGridColName;
+    ScGridOptions   aGridOpt;
 };
 
 //==================================================================
@@ -144,10 +144,10 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    const ScViewOptions&	GetViewOptions() const { return theOptions; }
+    const ScViewOptions&    GetViewOptions() const { return theOptions; }
 
 private:
-    ScViewOptions	theOptions;
+    ScViewOptions   theOptions;
 };
 
 
@@ -157,9 +157,9 @@ private:
 
 class ScViewCfg : public ScViewOptions
 {
-    ScLinkConfigItem	aLayoutItem;
-    ScLinkConfigItem	aDisplayItem;
-    ScLinkConfigItem	aGridItem;
+    ScLinkConfigItem    aLayoutItem;
+    ScLinkConfigItem    aDisplayItem;
+    ScLinkConfigItem    aGridItem;
 
     DECL_LINK( LayoutCommitHdl, void* );
     DECL_LINK( DisplayCommitHdl, void* );
@@ -172,7 +172,7 @@ class ScViewCfg : public ScViewOptions
 public:
             ScViewCfg();
 
-    void			SetOptions( const ScViewOptions& rNew );
+    void            SetOptions( const ScViewOptions& rNew );
 };
 
 

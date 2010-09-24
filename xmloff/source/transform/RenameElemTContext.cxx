@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,19 +41,19 @@ using namespace ::com::sun::star::xml::sax;
 
 TYPEINIT1( XMLRenameElemTransformerContext, XMLTransformerContext );
 
-XMLRenameElemTransformerContext::XMLRenameElemTransformerContext( 
-        XMLTransformerBase& rImp, 
+XMLRenameElemTransformerContext::XMLRenameElemTransformerContext(
+        XMLTransformerBase& rImp,
         const OUString& rQName,
         sal_uInt16 nPrefix,
         ::xmloff::token::XMLTokenEnum eToken ) :
     XMLTransformerContext( rImp, rQName ),
-    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix, 
+    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix,
                             ::xmloff::token::GetXMLToken( eToken ) ) )
 {
 }
 
-XMLRenameElemTransformerContext::XMLRenameElemTransformerContext( 
-        XMLTransformerBase& rImp, 
+XMLRenameElemTransformerContext::XMLRenameElemTransformerContext(
+        XMLTransformerBase& rImp,
         const OUString& rQName,
         sal_uInt16 nPrefix,
         ::xmloff::token::XMLTokenEnum eToken,
@@ -61,9 +61,9 @@ XMLRenameElemTransformerContext::XMLRenameElemTransformerContext(
         ::xmloff::token::XMLTokenEnum eAToken,
         ::xmloff::token::XMLTokenEnum eVToken ) :
     XMLTransformerContext( rImp, rQName ),
-    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix, 
+    m_aElemQName( rImp.GetNamespaceMap().GetQNameByKey( nPrefix,
                             ::xmloff::token::GetXMLToken( eToken ) ) ),
-    m_aAttrQName( rImp.GetNamespaceMap().GetQNameByKey( nAPrefix, 
+    m_aAttrQName( rImp.GetNamespaceMap().GetQNameByKey( nAPrefix,
                                     ::xmloff::token::GetXMLToken( eAToken ) ) ),
     m_aAttrValue( ::xmloff::token::GetXMLToken( eVToken ) )
 {
@@ -73,13 +73,13 @@ XMLRenameElemTransformerContext::~XMLRenameElemTransformerContext()
 {
 }
 
-void XMLRenameElemTransformerContext::StartElement( 
+void XMLRenameElemTransformerContext::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
     Reference< XAttributeList > xAttrList( rAttrList );
     if( m_aAttrQName.getLength() )
     {
-        XMLMutableAttributeList *pMutableAttrList = 
+        XMLMutableAttributeList *pMutableAttrList =
             new XMLMutableAttributeList( xAttrList );
         xAttrList = pMutableAttrList;
         pMutableAttrList->AddAttribute( m_aAttrQName, m_aAttrValue );

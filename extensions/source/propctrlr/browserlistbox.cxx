@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -196,7 +196,7 @@ namespace pcr
     private:
         /** processes the given event, i.e. notifies it to our IControlContext
             @param  _rEvent
-                the event no notify 
+                the event no notify
             @precond
                 our mutex (well, the SolarMutex) is locked
         */
@@ -1034,8 +1034,8 @@ namespace pcr
             ++nLine;
         }
 
-        if	(	( (size_t)nLine >= m_aOrderedLines.size() )
-            &&	( m_aOrderedLines.size() > 0 )
+        if  (   ( (size_t)nLine >= m_aOrderedLines.size() )
+            &&  ( m_aOrderedLines.size() > 0 )
             )
             // wrap around
             m_aOrderedLines[0]->second.pLine->GrabFocus();
@@ -1066,7 +1066,7 @@ namespace pcr
     //------------------------------------------------------------------
     void OBrowserListBox::Clear()
     {
-        for (	ListBoxLines::iterator loop = m_aLines.begin();
+        for (   ListBoxLines::iterator loop = m_aLines.begin();
                 loop != m_aLines.end();
                 ++loop
             )
@@ -1118,7 +1118,7 @@ namespace pcr
 
         if ( nPos < m_aOrderedLines.size() )
         {
-            Window*	pRefWindow = NULL;
+            Window* pRefWindow = NULL;
             if ( nPos > 0 )
                 pRefWindow = m_aOrderedLines[nPos-1]->second.pLine->GetRefWindow();
 
@@ -1203,7 +1203,7 @@ namespace pcr
             if ( _rPropertyData.bReadOnly )
             {
                 rLine.pLine->SetReadOnly( true );
-            
+
                 // user controls (i.e. the ones not provided by the usual
                 // XPropertyControlFactory) have no chance to know that they should be read-only,
                 // since XPropertyHandler::describePropertyLine does not transport this
@@ -1270,7 +1270,7 @@ namespace pcr
                 }
             }
 
-            return 1L; 
+            return 1L;
             // handled this. In particular, we also consume PageUp/Down events if we do not use them for scrolling,
             // otherwise they would be used to scroll the document view, which does not sound like it is desired by
             // the user.
@@ -1287,9 +1287,9 @@ namespace pcr
         case EVENT_COMMAND:
         {
             const CommandEvent* pCommand = _rNEvt.GetCommandEvent();
-            if	(   ( COMMAND_WHEEL == pCommand->GetCommand() )
-                ||	( COMMAND_STARTAUTOSCROLL == pCommand->GetCommand() )
-                ||	( COMMAND_AUTOSCROLL == pCommand->GetCommand() )
+            if  (   ( COMMAND_WHEEL == pCommand->GetCommand() )
+                ||  ( COMMAND_STARTAUTOSCROLL == pCommand->GetCommand() )
+                ||  ( COMMAND_AUTOSCROLL == pCommand->GetCommand() )
                 )
             {
                 // interested in scroll events if we have a scrollbar

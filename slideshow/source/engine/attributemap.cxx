@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,19 +105,19 @@ namespace slideshow
                                              false );
 
             AttributeType eAttributeType = ATTRIBUTE_INVALID;
-            
-            // determine the type from the attribute name 
+
+            // determine the type from the attribute name
             if( !aMap.lookup( rAttrName,
                               eAttributeType ) )
             {
                 OSL_TRACE( "mapAttributeName(): attribute name %s not found in map.",
-                           ::rtl::OUStringToOString( rAttrName, 
+                           ::rtl::OUStringToOString( rAttrName,
                                                      RTL_TEXTENCODING_ASCII_US ).getStr() );
                 return ATTRIBUTE_INVALID;
             }
-                
+
             return eAttributeType;
         }
-            
+
     }
 }

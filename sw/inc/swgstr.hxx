@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,10 +29,10 @@
 
 #include <tools/stream.hxx>
 
-typedef long long3;						// Zur Dokumentation: 3-byte-Longs
+typedef long long3;                     // Zur Dokumentation: 3-byte-Longs
 
-#define MAX_BEGIN 64					// Maximale Blockschachtelung
-#define PASSWDLEN 16					// Maximale Passwortlaenge
+#define MAX_BEGIN 64                    // Maximale Blockschachtelung
+#define PASSWDLEN 16                    // Maximale Passwortlaenge
 
 // Neue Version mit SvStreams
 
@@ -40,13 +40,13 @@ typedef long long3;						// Zur Dokumentation: 3-byte-Longs
 
 class swcrypter {
 protected:
-    sal_Char   cPasswd[ PASSWDLEN ];	// Passwort-Puffer
-    BOOL   bPasswd;						// TRUE wenn mit Passwort
-    void   encode( sal_Char*, USHORT );	// Puffer codieren/decodieren
+    sal_Char   cPasswd[ PASSWDLEN ];    // Passwort-Puffer
+    BOOL   bPasswd;                     // TRUE wenn mit Passwort
+    void   encode( sal_Char*, USHORT ); // Puffer codieren/decodieren
 public:
     swcrypter();
-    BOOL setpasswd( const String& );	// Passwort setzen
-    void copypasswd( const sal_Char* );	// Passwort direkt setzen
+    BOOL setpasswd( const String& );    // Passwort setzen
+    void copypasswd( const sal_Char* ); // Passwort direkt setzen
     const sal_Char* getpasswd() { return cPasswd; }
 };
 
@@ -55,12 +55,12 @@ public:
 
 class swstreambase : public swcrypter {
 protected:
-    SvStream* pStrm;					// eigentlicher Stream
-    sal_Char*  pBuf; 						// Zwischenpuffer
-    USHORT nBuflen;						// Laenge des Zwischenpuffers
-    short  nLong;						// Long-Laenge (3 oder 4)
-    BOOL   bTempStrm;					// TRUE: Stream loeschen
-    void   checkbuf( USHORT );			// Testen der Pufferlaenge
+    SvStream* pStrm;                    // eigentlicher Stream
+    sal_Char*  pBuf;                        // Zwischenpuffer
+    USHORT nBuflen;                     // Laenge des Zwischenpuffers
+    short  nLong;                       // Long-Laenge (3 oder 4)
+    BOOL   bTempStrm;                   // TRUE: Stream loeschen
+    void   checkbuf( USHORT );          // Testen der Pufferlaenge
 
     swstreambase( SvStream& );
 
@@ -68,19 +68,19 @@ protected:
     int operator=( const swstreambase& );
 public:
     ~swstreambase();
-    SvStream& Strm()					{ return *pStrm; }
-    void clear();						// Puffer loeschen
+    SvStream& Strm()                    { return *pStrm; }
+    void clear();                       // Puffer loeschen
 
     // Zusatzfunktionen zur I/O von LONGs als 3-Byte-Zahlen
 
-    void long3() 						{ nLong = 3; }
-    void long4() 						{ nLong = 4; }
+    void long3()                        { nLong = 3; }
+    void long4()                        { nLong = 4; }
 
     // Alias- und Hilfsfunktionen
 
-    void seek( long nPos )				{ pStrm->Seek( nPos );  }
-    long tell()							{ return pStrm->Tell(); }
-    long filesize(); 					// Dateigroesse
+    void seek( long nPos )              { pStrm->Seek( nPos );  }
+    long tell()                         { return pStrm->Tell(); }
+    long filesize();                    // Dateigroesse
 
     void setbad();
     int good()                          { return ( pStrm->GetError() == SVSTREAM_OK ); }
@@ -88,7 +88,7 @@ public:
     int eof()                           { return pStrm->IsEof(); }
 
     BYTE get();
-    void get( void* p, USHORT n )		{ pStrm->Read( (sal_Char*) p, n ); }
+    void get( void* p, USHORT n )       { pStrm->Read( (sal_Char*) p, n ); }
 
     inline swstreambase& operator>>( sal_Char& );
     inline swstreambase& operator>>( BYTE& );
@@ -124,20 +124,20 @@ inline swstreambase& swstreambase::operator>>( ULONG& c )
 }
 
 class swistream : public swstreambase {
-    BYTE   cType;						// Record-Typ
-    ULONG  nOffset;						// Record-Offset-Portion
+    BYTE   cType;                       // Record-Typ
+    ULONG  nOffset;                     // Record-Offset-Portion
 public:
     swistream( SvStream& );
 
-    BYTE peek();						// 1 Byte testen
-    BYTE next();						// Blockstart
-    BYTE cur() { return cType; }		// aktueller Block
-    BYTE skipnext();					// Record ueberspringen
-    void undonext();					// next() rueckgaengig machen
-    long getskip()						{ return nOffset; }
-    void skip( long = -1L );			// Block ueberspringen
-    sal_Char* text();					// Textstring lesen (nach BEGIN)
-    long size();						// aktuelle Record-Laenge
+    BYTE peek();                        // 1 Byte testen
+    BYTE next();                        // Blockstart
+    BYTE cur() { return cType; }        // aktueller Block
+    BYTE skipnext();                    // Record ueberspringen
+    void undonext();                    // next() rueckgaengig machen
+    long getskip()                      { return nOffset; }
+    void skip( long = -1L );            // Block ueberspringen
+    sal_Char* text();                   // Textstring lesen (nach BEGIN)
+    long size();                        // aktuelle Record-Laenge
 
 private:
     swistream( const swistream& );

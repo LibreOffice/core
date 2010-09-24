@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,8 +58,8 @@ namespace accessibility
         ,m_nPageId( nPageId )
         ,m_xParent( rxParent )
     {
-        m_bEnabled	= IsEnabled();
-        m_bShowing	= IsShowing();
+        m_bEnabled  = IsEnabled();
+        m_bShowing  = IsShowing();
         m_bSelected = IsSelected();
 
         if ( m_pTabBar )
@@ -81,7 +81,7 @@ namespace accessibility
         sal_Bool bEnabled = sal_False;
         if ( m_pTabBar )
             bEnabled = m_pTabBar->IsPageEnabled( m_nPageId );
-        
+
         return bEnabled;
     }
 
@@ -201,12 +201,12 @@ namespace accessibility
     }
 
     // -----------------------------------------------------------------------------
-    // OCommonAccessibleComponent 
+    // OCommonAccessibleComponent
     // -----------------------------------------------------------------------------
 
     awt::Rectangle AccessibleTabBarPage::implGetBounds() throw (RuntimeException)
     {
-        awt::Rectangle aBounds;	
+        awt::Rectangle aBounds;
         if ( m_pTabBar )
         {
             // get bounding rectangle relative to the AccessibleTabBar
@@ -216,7 +216,7 @@ namespace accessibility
             Reference< XAccessible > xParent = getAccessibleParent();
             if ( xParent.is() )
             {
-                Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), UNO_QUERY );				
+                Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), UNO_QUERY );
                 if ( xParentComponent.is() )
                 {
                     awt::Point aParentLoc = xParentComponent->getLocation();
@@ -351,7 +351,7 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString AccessibleTabBarPage::getAccessibleDescription(	) throw (RuntimeException)
+    ::rtl::OUString AccessibleTabBarPage::getAccessibleDescription( ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -368,7 +368,7 @@ namespace accessibility
     {
         OExternalLockGuard aGuard( this );
 
-        return m_sPageText;		
+        return m_sPageText;
     }
 
     // -----------------------------------------------------------------------------
@@ -432,7 +432,7 @@ namespace accessibility
 
     // -----------------------------------------------------------------------------
 
-    sal_Int32 AccessibleTabBarPage::getForeground(	) throw (RuntimeException)
+    sal_Int32 AccessibleTabBarPage::getForeground(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -442,7 +442,7 @@ namespace accessibility
         {
             Reference< XAccessibleComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
             if ( xParentComp.is() )
-                nColor = xParentComp->getForeground();	
+                nColor = xParentComp->getForeground();
         }
 
         return nColor;
@@ -460,7 +460,7 @@ namespace accessibility
         {
             Reference< XAccessibleComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
             if ( xParentComp.is() )
-                nColor = xParentComp->getBackground();	
+                nColor = xParentComp->getBackground();
         }
 
         return nColor;
@@ -480,7 +480,7 @@ namespace accessibility
         {
             Reference< XAccessibleExtendedComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
             if ( xParentComp.is() )
-                xFont = xParentComp->getFont();	
+                xFont = xParentComp->getFont();
         }
 
         return xFont;
@@ -492,7 +492,7 @@ namespace accessibility
     {
         OExternalLockGuard aGuard( this );
 
-        return m_sPageText;		
+        return m_sPageText;
     }
 
     // -----------------------------------------------------------------------------
@@ -507,5 +507,5 @@ namespace accessibility
     // -----------------------------------------------------------------------------
 
 //.........................................................................
-}	// namespace accessibility
+}   // namespace accessibility
 //.........................................................................

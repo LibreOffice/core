@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ void KeyEvent::InitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent ) const
 }
 
 KeyEvent KeyEvent::LogicalTextDirectionality (TextDirectionality eMode) const
-{ 
+{
     KeyEvent aClone(*this);
 
     USHORT nCode = maKeyCode.GetCode();
@@ -91,11 +91,11 @@ KeyEvent KeyEvent::LogicalTextDirectionality (TextDirectionality eMode) const
             switch (nCode)
             {
                 case KEY_DOWN:  aClone.maKeyCode = KeyCode(KEY_RIGHT, nMod); break;
-                case KEY_UP:    aClone.maKeyCode = KeyCode(KEY_LEFT,  nMod); break; 
-                case KEY_LEFT:  aClone.maKeyCode = KeyCode(KEY_DOWN,  nMod); break; 
+                case KEY_UP:    aClone.maKeyCode = KeyCode(KEY_LEFT,  nMod); break;
+                case KEY_LEFT:  aClone.maKeyCode = KeyCode(KEY_DOWN,  nMod); break;
                 case KEY_RIGHT: aClone.maKeyCode = KeyCode(KEY_UP,    nMod); break;
             }
-            break; 
+            break;
 
         case TextDirectionality_LeftToRight_TopToBottom:
             /* do nothing */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,22 +24,22 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_NavigationBarMode_idl__ 
-#define __com_sun_star_form_NavigationBarMode_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module form {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_form_NavigationBarMode_idl__
+#define __com_sun_star_form_NavigationBarMode_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
 /** describes in which way the navigation of the records of a database form is performed.
  */
 published enum NavigationBarMode
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** no navigation bar is provided and navigation on the current
         form is only possible with the keyboard (TAB/SHIFT TAB).
 
@@ -49,18 +49,18 @@ published enum NavigationBarMode
 
         @see TabulatorCycle
      */
-    NONE, 
- 
-    //------------------------------------------------------------------------- 
-     
+    NONE,
+
+    //-------------------------------------------------------------------------
+
     /** a navigation bar is provided and navigation will be performed
         on the current/active form.
         <p>This is the default and most often encountered mode.</p>
      */
-    CURRENT, 
- 
-    //------------------------------------------------------------------------- 
-     
+    CURRENT,
+
+    //-------------------------------------------------------------------------
+
     /** a navigation bar is provided and navigation will be performed
         on the parent of the current/active form.
 
@@ -69,15 +69,15 @@ published enum NavigationBarMode
         no need to use the navigation bar for the form, but rather for it's parent.
         </p>
      */
-    PARENT 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+    PARENT
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,23 +34,23 @@
 
 class SessionManagerClient
 {
-    static SmcConn			aSmcConnection;
-    static ByteString		aClientID;
-    static bool			bDocSaveDone;
+    static SmcConn          aSmcConnection;
+    static ByteString       aClientID;
+    static bool         bDocSaveDone;
 
-    static void SaveYourselfProc(		SmcConn connection,
+    static void SaveYourselfProc(       SmcConn connection,
                                         SmPointer client_data,
                                         int save_type,
                                         Bool shutdown,
                                         int interact_style,
                                         Bool fast );
-    static void DieProc(				SmcConn connection,
+    static void DieProc(                SmcConn connection,
                                         SmPointer client_data );
-    static void SaveCompleteProc(		SmcConn connection,
+    static void SaveCompleteProc(       SmcConn connection,
                                         SmPointer client_data );
-    static void ShutdownCanceledProc(	SmcConn connection,
+    static void ShutdownCanceledProc(   SmcConn connection,
                                         SmPointer client_data );
-    static void InteractProc(			SmcConn connection,
+    static void InteractProc(           SmcConn connection,
                                         SmPointer clientData );
 
     static const ByteString& getPreviousSessionID();
@@ -79,7 +79,7 @@ class IceSalSession : public SalSession
 public:
     IceSalSession();
     virtual ~IceSalSession();
-    
+
     virtual void queryInteraction();
     virtual void interactionDone();
     virtual void saveDone();

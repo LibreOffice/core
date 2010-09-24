@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,9 +25,9 @@
  *
  ************************************************************************/
 
-#define BT_OK			100
-#define BT_CANCEL		101
-#define LB_COL			1
-#define FL_COL			2
-#define MSG_OVERWRITE	3
+#define BT_OK           100
+#define BT_CANCEL       101
+#define LB_COL          1
+#define FL_COL          2
+#define MSG_OVERWRITE   3
 

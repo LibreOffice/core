@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-//	ItemID-Defines etc. muessen immer ganz vorne stehen
+//  ItemID-Defines etc. muessen immer ganz vorne stehen
 
 #include "scitems.hxx"
 
@@ -34,9 +34,9 @@
 
 #define SC_PROGRESS_CXX
 
-//	ab hier automatisch per makepch generiert
-//	folgende duerfen nicht aufgenommen werden:
-//		setjmp.h
+//  ab hier automatisch per makepch generiert
+//  folgende duerfen nicht aufgenommen werden:
+//      setjmp.h
 
 #include <tools/solar.h>
 #include <string.h>

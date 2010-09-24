@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@ class SfxSetItem;
 
 class SVL_DLLPUBLIC SfxItemPoolCache
 {
-    SfxItemPool 			*pPool;
-    SfxItemModifyArr_Impl	*pCache;
-    const SfxItemSet		*pSetToPut;
-    const SfxPoolItem		*pItemToPut;
+    SfxItemPool             *pPool;
+    SfxItemModifyArr_Impl   *pCache;
+    const SfxItemSet        *pSetToPut;
+    const SfxPoolItem       *pItemToPut;
 
 public:
                             SfxItemPoolCache( SfxItemPool *pPool,
@@ -50,7 +50,7 @@ public:
                                               const SfxItemSet *pPutSet );
                             ~SfxItemPoolCache();
 
-    const SfxSetItem&		ApplyTo( const SfxSetItem& rSetItem, BOOL bNew = FALSE );
+    const SfxSetItem&       ApplyTo( const SfxSetItem& rSetItem, BOOL bNew = FALSE );
 };
 
 

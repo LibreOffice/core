@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <calbck.hxx>	// SwClientIter
+#include <calbck.hxx>   // SwClientIter
 #include <node.hxx>
 #include <ndindex.hxx>
 #include <swtable.hxx>
@@ -52,8 +52,8 @@ class SwNode2LayImpl
     SwClientIter *pIter; // Der eigentliche Iterator
     SvPtrarr *pUpperFrms;// Zum Einsammeln der Upper
     ULONG nIndex;        // Der Index des einzufuegenden Nodes
-    BOOL bMaster	: 1; // TRUE => nur Master , FALSE => nur Frames ohne Follow
-    BOOL bInit		: 1; // Ist am SwClient bereits ein First()-Aufruf erfolgt?
+    BOOL bMaster    : 1; // TRUE => nur Master , FALSE => nur Frames ohne Follow
+    BOOL bInit      : 1; // Ist am SwClient bereits ein First()-Aufruf erfolgt?
 public:
     SwNode2LayImpl( const SwNode& rNode, ULONG nIdx, BOOL bSearch );
     ~SwNode2LayImpl() { delete pIter; delete pUpperFrms; }

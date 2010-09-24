@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,10 +67,10 @@ using namespace ::com::sun::star;
 *************************************************************************/
 
 XOBitmap::XOBitmap() :
-    eType			( XBITMAP_NONE ),
-    eStyle			( XBITMAP_STRETCH ),
-    pPixelArray		( NULL ),
-    bGraphicDirty	( FALSE )
+    eType           ( XBITMAP_NONE ),
+    eStyle          ( XBITMAP_STRETCH ),
+    pPixelArray     ( NULL ),
+    bGraphicDirty   ( FALSE )
 {
 }
 
@@ -85,11 +85,11 @@ XOBitmap::XOBitmap() :
 *************************************************************************/
 
 XOBitmap::XOBitmap( const Bitmap& rBmp, XBitmapStyle eInStyle ) :
-    eType			( XBITMAP_IMPORT ),
-    eStyle			( eInStyle ),
-    aGraphicObject	( rBmp ),
-    pPixelArray		( NULL ),
-    bGraphicDirty	( FALSE )
+    eType           ( XBITMAP_IMPORT ),
+    eStyle          ( eInStyle ),
+    aGraphicObject  ( rBmp ),
+    pPixelArray     ( NULL ),
+    bGraphicDirty   ( FALSE )
 {
 }
 
@@ -104,11 +104,11 @@ XOBitmap::XOBitmap( const Bitmap& rBmp, XBitmapStyle eInStyle ) :
 *************************************************************************/
 
 XOBitmap::XOBitmap( const GraphicObject& rGraphicObject, XBitmapStyle eInStyle ) :
-    eType			( XBITMAP_IMPORT ),
-    eStyle			( eInStyle ),
-    aGraphicObject	( rGraphicObject ),
-    pPixelArray		( NULL ),
-    bGraphicDirty	( FALSE )
+    eType           ( XBITMAP_IMPORT ),
+    eStyle          ( eInStyle ),
+    aGraphicObject  ( rGraphicObject ),
+    pPixelArray     ( NULL ),
+    bGraphicDirty   ( FALSE )
 {
 }
 
@@ -127,12 +127,12 @@ XOBitmap::XOBitmap( const GraphicObject& rGraphicObject, XBitmapStyle eInStyle )
 XOBitmap::XOBitmap( const USHORT* pArray, const Color& rPixelColor,
             const Color& rBckgrColor, const Size& rSize,
             XBitmapStyle eInStyle ) :
-    eStyle			( eInStyle ),
-    pPixelArray		( NULL ),
-    aArraySize		( rSize ),
-    aPixelColor		( rPixelColor ),
-    aBckgrColor		( rBckgrColor ),
-    bGraphicDirty	( TRUE )
+    eStyle          ( eInStyle ),
+    pPixelArray     ( NULL ),
+    aArraySize      ( rSize ),
+    aPixelColor     ( rPixelColor ),
+    aBckgrColor     ( rBckgrColor ),
+    bGraphicDirty   ( TRUE )
 
 {
     if( aArraySize.Width() == 8 && aArraySize.Height() == 8 )
@@ -344,8 +344,8 @@ void XOBitmap::Bitmap2Array()
 {
     VirtualDevice   aVD;
     BOOL            bPixelColor = FALSE;
-    const Bitmap	aBitmap( GetBitmap() );
-    const USHORT	nLines = 8; // von Type abhaengig
+    const Bitmap    aBitmap( GetBitmap() );
+    const USHORT    nLines = 8; // von Type abhaengig
 
     if( !pPixelArray )
         pPixelArray = new USHORT[ nLines * nLines ];
@@ -546,7 +546,7 @@ XFillBitmapItem::XFillBitmapItem( SvStream& rIn, USHORT nVer ) :
 //*************************************************************************
 
 XFillBitmapItem::XFillBitmapItem( SfxItemPool* /*pPool*/, const XOBitmap& rTheBitmap )
-: 	NameOrIndex( XATTR_FILLBITMAP, -1 ),
+:   NameOrIndex( XATTR_FILLBITMAP, -1 ),
     aXOBitmap( rTheBitmap )
 {
 }
@@ -875,7 +875,7 @@ XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        const String aUniqueName = NameOrIndex::CheckNamedItem(	this,
+        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
                                                                 XATTR_FILLBITMAP,
                                                                 &pModel->GetItemPool(),
                                                                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,

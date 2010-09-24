@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
- 
+
 /**
  * This function creates an implementation section in the registry and another subkey
  * for each supported service.
@@ -100,21 +100,21 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
 {
     return pRegistryKey &&
-    writeInfo (pRegistryKey, 
+    writeInfo (pRegistryKey,
                ManifestReader::static_getImplementationName(),
                ManifestReader::static_getSupportedServiceNames() ) &&
-    writeInfo (pRegistryKey, 
+    writeInfo (pRegistryKey,
                ManifestWriter::static_getImplementationName(),
                ManifestWriter::static_getSupportedServiceNames() ) &&
-    writeInfo (pRegistryKey, 
+    writeInfo (pRegistryKey,
                ZipPackage::static_getImplementationName(),
                ZipPackage::static_getSupportedServiceNames() ) &&
 
-    writeInfo (pRegistryKey, 
+    writeInfo (pRegistryKey,
                OZipFileAccess::impl_staticGetImplementationName(),
-               OZipFileAccess::impl_staticGetSupportedServiceNames() ); 
+               OZipFileAccess::impl_staticGetSupportedServiceNames() );
 
-} 
+}
 
 
 /**

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,10 +62,10 @@ namespace myucp
 
 struct ContentProperties
 {
-    ::rtl::OUString aTitle;    		// Title
-    ::rtl::OUString aContentType;	// ContentType
+    ::rtl::OUString aTitle;         // Title
+    ::rtl::OUString aContentType;   // ContentType
     sal_Bool        bIsDocument;    // IsDocument
-    sal_Bool        bIsFolder;    	// IsFolder
+    sal_Bool        bIsFolder;      // IsFolder
 
     // @@@ Add other properties supported by your content.
 

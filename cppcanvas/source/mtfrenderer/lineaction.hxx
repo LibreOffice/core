@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@ namespace basegfx {
 
 /* Definition of internal::LineActionFactory class */
 
-namespace cppcanvas 
-{ 
+namespace cppcanvas
+{
     namespace internal
     {
-        struct OutDevState; 
- 
+        struct OutDevState;
+
         /** Creates encapsulated converters between GDIMetaFile and
             XCanvas. The Canvas argument is deliberately placed at the
             constructor, to force reconstruction of this object for a
@@ -56,9 +56,9 @@ namespace cppcanvas
         public:
             /// Plain hair line from point 1 to point 2
             static ActionSharedPtr createLineAction( const ::basegfx::B2DPoint&,
-                                                     const ::basegfx::B2DPoint&,  
-                                                     const CanvasSharedPtr&, 
-                                                     const OutDevState& ); 
+                                                     const ::basegfx::B2DPoint&,
+                                                     const CanvasSharedPtr&,
+                                                     const OutDevState& );
 
         private:
             // static factory, disable big four
@@ -67,7 +67,7 @@ namespace cppcanvas
             LineActionFactory(const LineActionFactory&);
             LineActionFactory& operator=( const LineActionFactory& );
         };
-    } 
+    }
 }
 
 #endif /* _CPPCANVAS_LINEACTION_HXX */

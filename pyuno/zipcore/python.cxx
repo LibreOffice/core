@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -203,7 +203,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         MultiByteToWideChar(CP_ACP, 0, argv[i], -1, buff, nNeededWStrBuffSize);
         buff[nNeededWStrBuffSize] = 0;
         cp = encode(cp, buff);
-        delete [] buff;        
+        delete [] buff;
 #else
         cp = encode(cp, argv[i]);
 #endif

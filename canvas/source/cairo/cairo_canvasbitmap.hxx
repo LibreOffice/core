@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,18 +55,18 @@ namespace cairocanvas
     typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::rendering::XBitmapCanvas,
                                               ::com::sun::star::rendering::XIntegerBitmap,
                                               ::com::sun::star::lang::XServiceInfo,
-                                              ::com::sun::star::beans::XFastPropertySet >  	CanvasBitmapBase_Base;
-    class CanvasBitmapSpriteSurface_Base : 
+                                              ::com::sun::star::beans::XFastPropertySet >   CanvasBitmapBase_Base;
+    class CanvasBitmapSpriteSurface_Base :
         public ::canvas::BaseMutexHelper<CanvasBitmapBase_Base>,
         public SurfaceProvider
     {
     };
 
-    typedef ::canvas::IntegerBitmapBase< 
+    typedef ::canvas::IntegerBitmapBase<
           CanvasBitmapSpriteSurface_Base,
-          CanvasHelper, 
+          CanvasHelper,
           ::osl::MutexGuard,
-          ::cppu::OWeakObject >							CanvasBitmap_Base;
+          ::cppu::OWeakObject >                         CanvasBitmap_Base;
 
     class CanvasBitmap : public CanvasBitmap_Base,
                          public RepaintTarget
@@ -76,7 +76,7 @@ namespace cairocanvas
 
             @param rSize
             Size of the bitmap
-        
+
             @param rDevice
             Reference device, with which bitmap should be compatible
         */
@@ -93,7 +93,7 @@ namespace cairocanvas
         //                                    Classname     Base doing refcounting        Base implementing the XComponent interface
         //                                       |                 |                            |
         //                                       V                 V                            V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasBitmap, CanvasBitmapBase_Base, ::cppu::WeakComponentImplHelperBase ); 
+        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasBitmap, CanvasBitmapBase_Base, ::cppu::WeakComponentImplHelperBase );
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -109,7 +109,7 @@ namespace cairocanvas
 
         // RepaintTarget
         virtual bool repaint( const SurfaceSharedPtr&                         pSurface,
-                              const ::com::sun::star::rendering::ViewState&	  viewState,
+                              const ::com::sun::star::rendering::ViewState&   viewState,
                               const ::com::sun::star::rendering::RenderState& renderState );
 
         // XFastPropertySet

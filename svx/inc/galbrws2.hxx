@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,35 +107,35 @@ class GalleryBrowser2 : public Control, public SfxListener
 
 private:
 
-    SvtMiscOptions		maMiscOptions;
-    Gallery*			mpGallery;
-    GalleryTheme*		mpCurTheme;
-    GalleryIconView*	mpIconView;
-    GalleryListView*	mpListView;
-    GalleryPreview*		mpPreview;
+    SvtMiscOptions      maMiscOptions;
+    Gallery*            mpGallery;
+    GalleryTheme*       mpCurTheme;
+    GalleryIconView*    mpIconView;
+    GalleryListView*    mpListView;
+    GalleryPreview*     mpPreview;
     GalleryToolBox      maViewBox;
     FixedLine           maSeparator;
-    FixedText			maInfoBar;
-    Point				maDragStartPos;
-    ULONG				mnCurActionPos;
+    FixedText           maInfoBar;
+    Point               maDragStartPos;
+    ULONG               mnCurActionPos;
     GalleryBrowserMode  meMode;
     GalleryBrowserMode  meLastMode;
-    BOOL				mbCurActionIsLinkage;
+    BOOL                mbCurActionIsLinkage;
 
     void                InitSettings();
 
-    void				ImplUpdateViews( USHORT nSelectionId );
-    void				ImplUpdateInfoBar();
+    void                ImplUpdateViews( USHORT nSelectionId );
+    void                ImplUpdateInfoBar();
     ULONG               ImplGetSelectedItemId( const Point* pSelPosPixel, Point& rSelPos );
     void                ImplSelectItemId( ULONG nItemId );
     void                ImplExecute( USHORT nId );
 
     // Control
-    virtual void		Resize();
+    virtual void        Resize();
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
     // SfxListener
-    virtual void		Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                         DECL_LINK( MenuSelectHdl, Menu* pMenu );
                         DECL_LINK( SelectObjectHdl, void* );
@@ -148,15 +148,15 @@ private:
 
 public:
 
-    static String		GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, ULONG nItemTextFlags );
+    static String       GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, ULONG nItemTextFlags );
 
 public:
 
                         GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, Gallery* pGallery );
                         ~GalleryBrowser2();
 
-    void				SelectTheme( const String& rThemeName );
-    
+    void                SelectTheme( const String& rThemeName );
+
     GalleryBrowserMode  GetMode() const { return meMode; }
     void                SetMode( GalleryBrowserMode eMode );
 
@@ -164,14 +164,14 @@ public:
 
     void                Travel( GalleryBrowserTravel eTravel );
 
-    INetURLObject		GetURL() const;
-    String				GetFilterName() const;
-    Graphic				GetGraphic() const;
-    BOOL				GetVCDrawModel( FmFormModel& rModel ) const;
-    BOOL				IsLinkage() const;
+    INetURLObject       GetURL() const;
+    String              GetFilterName() const;
+    Graphic             GetGraphic() const;
+    BOOL                GetVCDrawModel( FmFormModel& rModel ) const;
+    BOOL                IsLinkage() const;
 
-    sal_Int8			AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& rEvt );
-    sal_Int8			ExecuteDrop( DropTargetHelper& rTarget, const ExecuteDropEvent& rEvt );
+    sal_Int8            AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& rEvt );
+    sal_Int8            ExecuteDrop( DropTargetHelper& rTarget, const ExecuteDropEvent& rEvt );
     void                StartDrag( Window* pWindow, const Point* pDragPoint = NULL );
     void                TogglePreview( Window* pWindow, const Point* pPreviewPoint = NULL );
     void                ShowContextMenu( Window* pWindow, const Point* pContextPoint = NULL );

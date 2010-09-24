@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,11 +75,11 @@ protected:
         XclEscherEx&        mrEscherEx;
         XclExpMsoDrawing*   pMsodrawing;
         XclExpMsoDrawing*   pClientTextbox;
-        XclTxo*				pTxo;
+        XclTxo*             pTxo;
         sal_uInt16          mnObjType;
-        UINT16				nObjId;
-        UINT16				nGrbit;
-        BOOL				bFirstOnSheet;
+        UINT16              nObjId;
+        UINT16              nGrbit;
+        BOOL                bFirstOnSheet;
 
         bool                    mbOwnEscher;    /// true = Escher part created on the fly.
 
@@ -92,26 +92,26 @@ protected:
                                 // overwritten for writing MSODRAWING record
     virtual void                WriteBody( XclExpStream& rStrm );
     virtual void                WriteSubRecs( XclExpStream& rStrm );
-            void				SaveTextRecs( XclExpStream& rStrm );
+            void                SaveTextRecs( XclExpStream& rStrm );
 
 public:
-    virtual						~XclObj();
+    virtual                     ~XclObj();
 
     inline sal_uInt16           GetObjType() const { return mnObjType; }
 
-    inline	void				SetId( UINT16 nId )	{ nObjId = nId; }
+    inline  void                SetId( UINT16 nId ) { nObjId = nId; }
 
-    inline	void				SetLocked( BOOL b )
+    inline  void                SetLocked( BOOL b )
                                     { b ? nGrbit |= 0x0001 : nGrbit &= ~0x0001; }
-    inline	void				SetPrintable( BOOL b )
+    inline  void                SetPrintable( BOOL b )
                                     { b ? nGrbit |= 0x0010 : nGrbit &= ~0x0010; }
-    inline	void				SetAutoFill( BOOL b )
+    inline  void                SetAutoFill( BOOL b )
                                     { b ? nGrbit |= 0x2000 : nGrbit &= ~0x2000; }
-    inline	void				SetAutoLine( BOOL b )
+    inline  void                SetAutoLine( BOOL b )
                                     { b ? nGrbit |= 0x4000 : nGrbit &= ~0x4000; }
 
                                 // set corresponding Excel object type in OBJ/ftCmo
-            void				SetEscherShapeType( UINT16 nType );
+            void                SetEscherShapeType( UINT16 nType );
     inline  void                SetEscherShapeTypeGroup() { mnObjType = EXC_OBJTYPE_GROUP; }
 
     /** If set to true, this object has created its own escher data.
@@ -129,7 +129,7 @@ public:
                                 //! actually writes ESCHER_ClientTextbox
             void                SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj );
 
-    virtual void				Save( XclExpStream& rStrm );
+    virtual void                Save( XclExpStream& rStrm );
 };
 
 // --- class XclObjComment -------------------------------------------
@@ -139,7 +139,7 @@ class XclObjComment : public XclObj
 public:
                                 XclObjComment( XclExpObjectManager& rObjMgr,
                                     const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible );
-    virtual						~XclObjComment();
+    virtual                     ~XclObjComment();
 
     /** c'tor process for formatted text objects above .
        @descr used to construct the MSODRAWING Escher object properties. */
@@ -147,7 +147,7 @@ public:
                                     const Rectangle& rRect, SdrObject* pCaption, bool bVisible );
 
 
-    virtual	void				Save( XclExpStream& rStrm );
+    virtual void                Save( XclExpStream& rStrm );
 };
 
 
@@ -156,14 +156,14 @@ public:
 class XclObjDropDown : public XclObj
 {
 private:
-    BOOL						bIsFiltered;
+    BOOL                        bIsFiltered;
 
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 protected:
 public:
                                 XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, BOOL bFilt );
-    virtual						~XclObjDropDown();
+    virtual                     ~XclObjDropDown();
 };
 
 
@@ -181,9 +181,9 @@ public:
     inline void                 SetHorAlign( sal_uInt8 nHorAlign ) { mnHorAlign = nHorAlign; }
     inline void                 SetVerAlign( sal_uInt8 nVerAlign ) { mnVerAlign = nVerAlign; }
 
-    virtual	void				Save( XclExpStream& rStrm );
+    virtual void                Save( XclExpStream& rStrm );
 
-    virtual	UINT16				GetNum() const;
+    virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
 
 private:
@@ -203,16 +203,16 @@ class XclObjOle : public XclObj
 {
 private:
 
-        const SdrObject&	rOleObj;
+        const SdrObject&    rOleObj;
         SotStorage*         pRootStorage;
 
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 public:
                                 XclObjOle( XclExpObjectManager& rObjMgr, const SdrObject& rObj );
-    virtual						~XclObjOle();
+    virtual                     ~XclObjOle();
 
-    virtual	void				Save( XclExpStream& rStrm );
+    virtual void                Save( XclExpStream& rStrm );
 };
 
 
@@ -225,9 +225,9 @@ private:
 
 public:
                                 XclObjAny( XclExpObjectManager& rObjMgr );
-    virtual						~XclObjAny();
+    virtual                     ~XclObjAny();
 
-    virtual	void				Save( XclExpStream& rStrm );
+    virtual void                Save( XclExpStream& rStrm );
 };
 
 
@@ -236,15 +236,15 @@ public:
 class ExcBof8_Base : public ExcBof_Base
 {
 protected:
-        UINT32				nFileHistory;		// bfh
-        UINT32				nLowestBiffVer;		// sfo
+        UINT32              nFileHistory;       // bfh
+        UINT32              nLowestBiffVer;     // sfo
 
-    virtual	void				SaveCont( XclExpStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 ExcBof8_Base();
 
-    virtual	UINT16				GetNum() const;
+    virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -277,7 +277,7 @@ private:
     String                      sUnicodeName;
     XclExpString                GetName() const;
 
-    virtual	void				SaveCont( XclExpStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 ExcBundlesheet8( RootData& rRootData, SCTAB nTab );
@@ -294,7 +294,7 @@ public:
 class XclObproj : public ExcRecord
 {
 public:
-    virtual	UINT16				GetNum() const;
+    virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -305,25 +305,25 @@ class XclCodename : public ExcRecord
 {
 private:
     XclExpString                aName;
-    virtual	void				SaveCont( XclExpStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 public:
                                 XclCodename( const String& );
 
-    virtual	UINT16				GetNum() const;
+    virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
 
 // ---- Scenarios ----------------------------------------------------
-// - ExcEScenarioCell			a cell of a scenario range
-// - ExcEScenario				all ranges of a scenario table
-// - ExcEScenarioManager		list of scenario tables
+// - ExcEScenarioCell           a cell of a scenario range
+// - ExcEScenario               all ranges of a scenario table
+// - ExcEScenarioManager        list of scenario tables
 
 class ExcEScenarioCell
 {
 private:
-    UINT16						nCol;
-    UINT16						nRow;
+    UINT16                      nCol;
+    UINT16                      nRow;
     XclExpString                sText;
 
 protected:
@@ -333,8 +333,8 @@ public:
     inline sal_Size             GetStringBytes()
                                     { return sText.GetSize(); }
 
-    void						WriteAddress( XclExpStream& rStrm );
-    void						WriteText( XclExpStream& rStrm );
+    void                        WriteAddress( XclExpStream& rStrm );
+    void                        WriteText( XclExpStream& rStrm );
 
     void                        SaveXml( XclExpXmlStream& rStrm );
 };
@@ -350,19 +350,19 @@ private:
     XclExpString                sUserName;
     UINT8                       nProtected;
 
-    inline ExcEScenarioCell*	_First()	{ return (ExcEScenarioCell*) List::First(); }
-    inline ExcEScenarioCell*	_Next()		{ return (ExcEScenarioCell*) List::Next(); }
+    inline ExcEScenarioCell*    _First()    { return (ExcEScenarioCell*) List::First(); }
+    inline ExcEScenarioCell*    _Next()     { return (ExcEScenarioCell*) List::Next(); }
 
-    BOOL						Append( UINT16 nCol, UINT16 nRow, const String& rTxt );
+    BOOL                        Append( UINT16 nCol, UINT16 nRow, const String& rTxt );
 
-    virtual void				SaveCont( XclExpStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 protected:
 public:
                                 ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab );
-    virtual						~ExcEScenario();
+    virtual                     ~ExcEScenario();
 
-    virtual UINT16				GetNum() const;
+    virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
@@ -373,25 +373,25 @@ public:
 class ExcEScenarioManager : public ExcRecord, private List
 {
 private:
-    UINT16						nActive;
+    UINT16                      nActive;
 
-    inline ExcEScenario*		_First()	{ return (ExcEScenario*) List::First(); }
-    inline ExcEScenario*		_Next()		{ return (ExcEScenario*) List::Next(); }
+    inline ExcEScenario*        _First()    { return (ExcEScenario*) List::First(); }
+    inline ExcEScenario*        _Next()     { return (ExcEScenario*) List::Next(); }
 
-    inline void					Append( ExcEScenario* pScen )
+    inline void                 Append( ExcEScenario* pScen )
                                     { List::Insert( pScen, LIST_APPEND ); }
 
-    virtual void				SaveCont( XclExpStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 protected:
 public:
                                 ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab );
-    virtual						~ExcEScenarioManager();
+    virtual                     ~ExcEScenarioManager();
 
-    virtual void				Save( XclExpStream& rStrm );
+    virtual void                Save( XclExpStream& rStrm );
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 
-    virtual UINT16				GetNum() const;
+    virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -417,13 +417,13 @@ private:
 class XclCalccount : public ExcRecord
 {
 private:
-    UINT16						nCount;
+    UINT16                      nCount;
 protected:
-    virtual void				SaveCont( XclExpStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 public:
                                 XclCalccount( const ScDocument& );
 
-    virtual	UINT16				GetNum() const;
+    virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
@@ -435,13 +435,13 @@ public:
 class XclIteration : public ExcRecord
 {
 private:
-    UINT16						nIter;
+    UINT16                      nIter;
 protected:
-    virtual void				SaveCont( XclExpStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 public:
                                 XclIteration( const ScDocument& );
 
-    virtual	UINT16				GetNum() const;
+    virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
@@ -453,13 +453,13 @@ public:
 class XclDelta : public ExcRecord
 {
 private:
-    double						fDelta;
+    double                      fDelta;
 protected:
-    virtual void				SaveCont( XclExpStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 public:
                                 XclDelta( const ScDocument& );
 
-    virtual	UINT16				GetNum() const;
+    virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );

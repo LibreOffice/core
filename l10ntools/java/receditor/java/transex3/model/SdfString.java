@@ -2,26 +2,26 @@ package transex3.model;
 import java.util.*;
 import java.io.*;
 public class SdfString {
-    private SdfEntity sourceString					= null;
-    //private java.util.HashMap languageStrings		= new HashMap();
-    private Vector languageList						= new Vector();
-    private String id								= null;
-    private String fileid							= null;
-    private String filename							= null;
-    private String modulename						= null;
-    private String filepath							= null;
-    
+    private SdfEntity sourceString                  = null;
+    //private java.util.HashMap languageStrings     = new HashMap();
+    private Vector languageList                     = new Vector();
+    private String id                               = null;
+    private String fileid                           = null;
+    private String filename                         = null;
+    private String modulename                       = null;
+    private String filepath                         = null;
+
     /*public HashMap getLanguageStrings() {
         return languageStrings;
     }*/
     public Vector getLanguageStrings() {
         return languageList;
     }
-    
+
     public void setLanguageStrings(Vector languageStrings) {
         this.languageList = languageStrings;
     }
-    
+
     public void addSourceString( SdfEntity aSdfEntity )
     {
         if( id == null )
@@ -84,7 +84,7 @@ public class SdfString {
 
     public String getFileName() {
         return filename;
-    } 
+    }
 
     public void setFileName(String filename) {
         this.filename = filename;
@@ -125,36 +125,36 @@ public class SdfString {
                 Iterator aIter = languageList.iterator();
                 while( aIter.hasNext() ){
                     SdfEntity aEntity = (SdfEntity)aIter.next();
-                    aBW.write( sourceString.getProject()+"\t" 	);
-                    aBW.write( sourceString.getSource_file()+"\t"	);
-                    aBW.write( sourceString.getDummy1()+"\t"  	);
+                    aBW.write( sourceString.getProject()+"\t"   );
+                    aBW.write( sourceString.getSource_file()+"\t"   );
+                    aBW.write( sourceString.getDummy1()+"\t"    );
                     aBW.write( sourceString.getResource_type()+"\t" );
-                    aBW.write( sourceString.getGid()+"\t"  		);
-                    aBW.write( sourceString.getLid()+"\t"  		);
-                    aBW.write( sourceString.getHelpid()+"\t"  	);
+                    aBW.write( sourceString.getGid()+"\t"       );
+                    aBW.write( sourceString.getLid()+"\t"       );
+                    aBW.write( sourceString.getHelpid()+"\t"    );
                     aBW.write( sourceString.getPlatform()+"\t"  );
-                    aBW.write( sourceString.getDummy2()+"\t"  	);
-                    if( aEntity.getLangid() == null ) 
+                    aBW.write( sourceString.getDummy2()+"\t"    );
+                    if( aEntity.getLangid() == null )
                         aBW.write( "\t"  );
                     else
                         aBW.write( aEntity.getLangid()+"\t"    );
                     if( aEntity.getText() == null )
                         aBW.write( "\t"  );
                     else
-                        aBW.write( aEntity.getText()+"\t"   		);
+                        aBW.write( aEntity.getText()+"\t"           );
                     if( aEntity.getHelptext() == null )
                         aBW.write( "\t"  );
                     else
-                        aBW.write( aEntity.getHelptext()+"\t"  		);
+                        aBW.write( aEntity.getHelptext()+"\t"       );
                     if( aEntity.getQuickhelptext() == null )
                         aBW.write( "\t"  );
                     else
-                        aBW.write( aEntity.getQuickhelptext()+"\t" 	);
+                        aBW.write( aEntity.getQuickhelptext()+"\t"  );
                     if( aEntity.getTitle() == null )
                         aBW.write( "\t"  );
-                    else						
-                        aBW.write( aEntity.getTitle()+"\t"   		);
-                    aBW.write( "2002-02-02 02:02:02\n"   		);
+                    else
+                        aBW.write( aEntity.getTitle()+"\t"          );
+                    aBW.write( "2002-02-02 02:02:02\n"          );
                 }
                 aBW.close();
             }

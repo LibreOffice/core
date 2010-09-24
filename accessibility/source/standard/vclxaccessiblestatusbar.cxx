@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-//	----------------------------------------------------
-//	class VCLXAccessibleStatusBar
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXAccessibleStatusBar
+//  ----------------------------------------------------
 
 VCLXAccessibleStatusBar::VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow )
     :VCLXAccessibleComponent( pVCLXWindow )
@@ -167,7 +167,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_STATUSBAR_ITEMADDED:
-        {	
+        {
             if ( m_pStatusBar )
             {
                 sal_uInt16 nItemId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
@@ -205,7 +205,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
         break;
         case VCLEVENT_STATUSBAR_SHOWITEM:
         case VCLEVENT_STATUSBAR_HIDEITEM:
-        {	
+        {
             if ( m_pStatusBar )
             {
                 sal_uInt16 nItemId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
@@ -216,28 +216,28 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
         break;
         case VCLEVENT_STATUSBAR_SHOWALLITEMS:
         case VCLEVENT_STATUSBAR_HIDEALLITEMS:
-        {	
+        {
             for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
                 UpdateShowing( i, rVclWindowEvent.GetId() == VCLEVENT_STATUSBAR_SHOWALLITEMS );
         }
         break;
         case VCLEVENT_STATUSBAR_NAMECHANGED:
-        {	
+        {
             if ( m_pStatusBar )
             {
                 sal_uInt16 nItemId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
                 sal_uInt16 nItemPos = m_pStatusBar->GetItemPos( nItemId );
-                UpdateItemName( nItemPos );			
+                UpdateItemName( nItemPos );
             }
         }
         break;
         case VCLEVENT_STATUSBAR_DRAWITEM:
-        {	
+        {
             if ( m_pStatusBar )
             {
                 sal_uInt16 nItemId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
                 sal_uInt16 nItemPos = m_pStatusBar->GetItemPos( nItemId );
-                UpdateItemText( nItemPos );			
+                UpdateItemText( nItemPos );
             }
         }
         break;
@@ -254,7 +254,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
                     if ( xComponent.is() )
                         xComponent->dispose();
                 }
-                m_aAccessibleChildren.clear();		
+                m_aAccessibleChildren.clear();
             }
 
             VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
@@ -284,7 +284,7 @@ void VCLXAccessibleStatusBar::disposing()
             if ( xComponent.is() )
                 xComponent->dispose();
         }
-        m_aAccessibleChildren.clear();		
+        m_aAccessibleChildren.clear();
     }
 }
 
@@ -314,7 +314,7 @@ sal_Int32 VCLXAccessibleStatusBar::getAccessibleChildCount() throw (RuntimeExcep
 {
     OExternalLockGuard aGuard( this );
 
-    return m_aAccessibleChildren.size(); 
+    return m_aAccessibleChildren.size();
 }
 
 // -----------------------------------------------------------------------------

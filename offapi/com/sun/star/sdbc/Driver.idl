@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,52 +24,52 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_Driver_idl__ 
-#define __com_sun_star_sdbc_Driver_idl__ 
- 
- module com {  module sun {  module star {  module sdbc { 
- 
- published interface XDriver; 
- 
- 
+#ifndef __com_sun_star_sdbc_Driver_idl__
+#define __com_sun_star_sdbc_Driver_idl__
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XDriver;
+
+
 /** is the service that every driver class must implement.
-    
+
     <p>
     Each driver should supply a service that implements
     the Driver interface.
-    
+
     </p>
     <p>
     The DriverManager will try to load as many drivers as it can
     find and then for any given connection request, it will ask each
     driver in turn to try to connect to the target URL.
-    
+
     </p>
     <p>
     It is strongly recommended that each Driver object should be
     small and standalone so that the Driver object can be loaded and
     queried without bringing in vast quantities of supporting code.
-    
+
     </p>
     <p>
     Each driver should be a one instance service.
 
     </p>
-    @see com::sun::star::sdbc::XDriverManager 
+    @see com::sun::star::sdbc::XDriverManager
     @see com::sun::star::sdbc::XConnection
  */
 published service Driver
-{ 
-     
+{
+
     /** is the main interface to access a database driver.
      */
-    interface XDriver; 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    interface XDriver;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

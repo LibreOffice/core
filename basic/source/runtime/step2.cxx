@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ SbxVariable* SbiRuntime::FindElement
         if( bLocal )
         {
             if ( bStatic )
-            {	
+            {
                 if ( pMeth )
                     pElem = pMeth->GetStatics()->Find( aName, SbxCLASS_DONTCARE );
             }
@@ -114,13 +114,13 @@ SbxVariable* SbiRuntime::FindElement
             pElem = pObj->Find( aName, SbxCLASS_DONTCARE );
 
             // #110004, #112015: Make private really private
-            if( bLocal && pElem )	// Local as flag for global search
+            if( bLocal && pElem )   // Local as flag for global search
             {
                 if( pElem->IsSet( SBX_PRIVATE ) )
                 {
                     SbiInstance* pInst_ = pINST;
                     if( pInst_ && pInst_->IsCompatibility() && pObj != pElem->GetParent() )
-                        pElem = NULL;	// Found but in wrong module!
+                        pElem = NULL;   // Found but in wrong module!
 
                     // Interfaces: Use SBX_EXTFOUND
                 }
@@ -261,10 +261,10 @@ SbxVariable* SbiRuntime::FindElement
             if( bSet )
                 pElem->SetType( t2 );
             pElem = pNew;
-        } 
+        }
         // Index-Access bei UnoObjekten beruecksichtigen
-        // definitely we want this for VBA where properties are often 
-        // collections ( which need index access ), but lets only do 
+        // definitely we want this for VBA where properties are often
+        // collections ( which need index access ), but lets only do
         // this if we actually have params following
         else if( bVBAEnabled && pElem->ISA(SbUnoProperty) && pElem->GetParameters() )
         {
@@ -387,7 +387,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, UINT32 nOp1 )
                         Any aUnoAny = pParentUnoObj->getUnoAny();
                         Reference< XInvocation > xInvocation;
                         aUnoAny >>= xInvocation;
-                        if( xInvocation.is() )	// TODO: if( xOLEAutomation.is() )
+                        if( xInvocation.is() )  // TODO: if( xOLEAutomation.is() )
                         {
                             bError_ = false;
 
@@ -681,7 +681,7 @@ void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
             p = new SbxVariable();
 
             if( SbiRuntime::isVBAEnabled() &&
-                (t == SbxOBJECT || t == SbxSTRING) ) 
+                (t == SbxOBJECT || t == SbxSTRING) )
             {
                 if( t == SbxOBJECT )
                     p->PutObject( NULL );
@@ -689,7 +689,7 @@ void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
                     p->PutString( String() );
             }
             else
-                p->PutErr( 448 );		// Wie in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
+                p->PutErr( 448 );       // Wie in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
 
             refParams->Put( p, iLoop );
             iLoop--;
@@ -882,7 +882,7 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
         pInst->CalcBreakCallLevel( nNewFlags );
         //16.10.96, ALT:
         //if( nNewFlags != SbDEBUG_CONTINUE )
-        //	nFlags = nNewFlags;
+        //  nFlags = nNewFlags;
     }
 }
 
@@ -1069,7 +1069,7 @@ void SbiRuntime::StepDCREATE_IMPL( UINT32 nOp1, UINT32 nOp2 )
 
 // Objekt aus User-Type kreieren  (+StringID+StringID)
 
-SbxObject* createUserTypeImpl( const String& rClassName );	// sb.cxx
+SbxObject* createUserTypeImpl( const String& rClassName );  // sb.cxx
 
 void SbiRuntime::StepTCREATE( UINT32 nOp1, UINT32 nOp2 )
 {
@@ -1087,7 +1087,7 @@ void SbiRuntime::StepTCREATE( UINT32 nOp1, UINT32 nOp2 )
 
 void SbiRuntime::implCreateFixedString( SbxVariable* pStrVar, UINT32 nOp2 )
 {
-    USHORT nCount = static_cast<USHORT>( nOp2 >> 17 );		// len = all bits above 0x10000
+    USHORT nCount = static_cast<USHORT>( nOp2 >> 17 );      // len = all bits above 0x10000
     String aStr;
     aStr.Fill( nCount, 0 );
     pStrVar->PutString( aStr );
@@ -1172,11 +1172,11 @@ void SbiRuntime::StepGLOBAL( UINT32 nOp1, UINT32 nOp2 )
     String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
     SbxDataType t = (SbxDataType)(nOp2 & 0xffff);
 
-    // Store module scope variables at module scope 
+    // Store module scope variables at module scope
     // in non vba mode these are stored at the library level :/
     // not sure if this really should not be enabled for ALL basic
     SbxObject* pStorage = &rBasic;
-    if ( SbiRuntime::isVBAEnabled() ) 
+    if ( SbiRuntime::isVBAEnabled() )
     {
         pStorage = pMod;
         pMod->AddVarName( aName );

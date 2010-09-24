@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,19 +67,19 @@ namespace canvas
         @see CanvasBase for further contractual requirements towards
         the CanvasHelper type, and some examples.
      */
-    template< class Base, 
-              class CanvasHelper, 
-              class Mutex=::osl::MutexGuard, 
-              class UnambiguousBase=::com::sun::star::uno::XInterface > class DoubleBitmapBase : 
+    template< class Base,
+              class CanvasHelper,
+              class Mutex=::osl::MutexGuard,
+              class UnambiguousBase=::com::sun::star::uno::XInterface > class DoubleBitmapBase :
         public BitmapCanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >
     {
     public:
-        typedef BitmapCanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >	BaseType;
+        typedef BitmapCanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >  BaseType;
 
         // XIeeeDoubleBitmap
-        virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getData( ::com::sun::star::rendering::FloatingPointBitmapLayout&	bitmapLayout, 
-                                                                            const ::com::sun::star::geometry::IntegerRectangle2D& 	rect ) throw (::com::sun::star::lang::IndexOutOfBoundsException, 
-                                                                                                                                                  ::com::sun::star::rendering::VolatileContentDestroyedException, 
+        virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getData( ::com::sun::star::rendering::FloatingPointBitmapLayout& bitmapLayout,
+                                                                            const ::com::sun::star::geometry::IntegerRectangle2D&   rect ) throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                                                                                                                                                  ::com::sun::star::rendering::VolatileContentDestroyedException,
                                                                                                                                                   ::com::sun::star::uno::RuntimeException)
         {
             verifyInput(rect, this);
@@ -91,9 +91,9 @@ namespace canvas
                                                      rect );
         }
 
-        virtual void SAL_CALL setData( const ::com::sun::star::uno::Sequence< double >& 			 data, 
-                                       const ::com::sun::star::rendering::FloatingPointBitmapLayout& bitmapLayout, 
-                                       const ::com::sun::star::geometry::IntegerRectangle2D& 		 rect ) throw (::com::sun::star::lang::IllegalArgumentException, 
+        virtual void SAL_CALL setData( const ::com::sun::star::uno::Sequence< double >&              data,
+                                       const ::com::sun::star::rendering::FloatingPointBitmapLayout& bitmapLayout,
+                                       const ::com::sun::star::geometry::IntegerRectangle2D&         rect ) throw (::com::sun::star::lang::IllegalArgumentException,
                                                                                                                    ::com::sun::star::lang::IndexOutOfBoundsException,
                                                                                                                    ::com::sun::star::uno::RuntimeException)
         {
@@ -108,10 +108,10 @@ namespace canvas
             BaseType::maCanvasHelper.setData( data, bitmapLayout, rect );
         }
 
-        virtual void SAL_CALL setPixel( const ::com::sun::star::uno::Sequence< double >& 				color, 
-                                        const ::com::sun::star::rendering::FloatingPointBitmapLayout&	bitmapLayout, 
-                                        const ::com::sun::star::geometry::IntegerPoint2D& 				pos ) throw (::com::sun::star::lang::IllegalArgumentException, 
-                                                                                                                     ::com::sun::star::lang::IndexOutOfBoundsException, 
+        virtual void SAL_CALL setPixel( const ::com::sun::star::uno::Sequence< double >&                color,
+                                        const ::com::sun::star::rendering::FloatingPointBitmapLayout&   bitmapLayout,
+                                        const ::com::sun::star::geometry::IntegerPoint2D&               pos ) throw (::com::sun::star::lang::IllegalArgumentException,
+                                                                                                                     ::com::sun::star::lang::IndexOutOfBoundsException,
                                                                                                                      ::com::sun::star::uno::RuntimeException)
         {
             verifyInput(bitmapLayout, pos, this);
@@ -125,9 +125,9 @@ namespace canvas
             BaseType::maCanvasHelper.setPixel( color, bitmapLayout, pos );
         }
 
-        virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getPixel( ::com::sun::star::rendering::FloatingPointBitmapLayout&	bitmapLayout, 
-                                                                             const ::com::sun::star::geometry::IntegerPoint2D& 			pos ) throw (::com::sun::star::lang::IndexOutOfBoundsException, 
-                                                                                                                                                     ::com::sun::star::rendering::VolatileContentDestroyedException, 
+        virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getPixel( ::com::sun::star::rendering::FloatingPointBitmapLayout&    bitmapLayout,
+                                                                             const ::com::sun::star::geometry::IntegerPoint2D&          pos ) throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                                                                                                                                                     ::com::sun::star::rendering::VolatileContentDestroyedException,
                                                                                                                                                      ::com::sun::star::uno::RuntimeException)
         {
             verifyInput(pos, this);

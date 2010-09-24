@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 
 /**
- * Thread to crash the office. This thread dies after the office process 
+ * Thread to crash the office. This thread dies after the office process
  * is nopt longer available.
  */
 public class CrashThread extends Thread {
@@ -56,10 +56,10 @@ public class CrashThread extends Thread {
 
             XController xController = xModel.getCurrentController();
             XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
-                                                  XDispatchProvider.class, 
+                                                  XDispatchProvider.class,
                                                   xController);
             XURLTransformer xParser = (XURLTransformer) UnoRuntime.queryInterface(
-                                              XURLTransformer.class, 
+                                              XURLTransformer.class,
                                               msf.createInstance(
                                                       "com.sun.star.util.URLTransformer"));
 

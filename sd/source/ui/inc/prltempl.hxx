@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,29 +56,29 @@ class SfxStyleSheetBasePool;
 class SdPresLayoutTemplateDlg : public SfxTabDialog
 {
 private:
-    const SfxObjectShell*	mpDocShell;
+    const SfxObjectShell*   mpDocShell;
 
-    XColorTable*		pColorTab;
-    XGradientList*		pGradientList;
-    XHatchList*			pHatchingList;
-    XBitmapList*		pBitmapList;
-    XDashList*			pDashList;
-    XLineEndList*		pLineEndList;
+    XColorTable*        pColorTab;
+    XGradientList*      pGradientList;
+    XHatchList*         pHatchingList;
+    XBitmapList*        pBitmapList;
+    XDashList*          pDashList;
+    XLineEndList*       pLineEndList;
 
-    USHORT				nPageType;
-    USHORT				nDlgType;
-    USHORT				nPos;
+    USHORT              nPageType;
+    USHORT              nDlgType;
+    USHORT              nPos;
 
-    ChangeType			nColorTableState;
-    ChangeType			nBitmapListState;
-    ChangeType			nGradientListState;
-    ChangeType			nHatchingListState;
-    ChangeType			nLineEndListState;
-    ChangeType			nDashListState;
+    ChangeType          nColorTableState;
+    ChangeType          nBitmapListState;
+    ChangeType          nGradientListState;
+    ChangeType          nHatchingListState;
+    ChangeType          nLineEndListState;
+    ChangeType          nDashListState;
 
-    PresentationObjects	ePO;
+    PresentationObjects ePO;
 
-    virtual void		PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
 
     // fuers Maping mit dem neuen SvxNumBulletItem
     SfxItemSet aInputSet;

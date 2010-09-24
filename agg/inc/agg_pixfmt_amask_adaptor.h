@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -92,8 +92,8 @@ namespace agg
         }
 
         //--------------------------------------------------------------------
-        void copy_hline(int x, int y, 
-                        unsigned len, 
+        void copy_hline(int x, int y,
+                        unsigned len,
                         const color_type& c)
         {
             realloc_span(len);
@@ -103,7 +103,7 @@ namespace agg
 
         //--------------------------------------------------------------------
         void blend_hline(int x, int y,
-                         unsigned len, 
+                         unsigned len,
                          const color_type& c,
                          cover_type cover)
         {
@@ -114,7 +114,7 @@ namespace agg
 
         //--------------------------------------------------------------------
         void copy_vline(int x, int y,
-                        unsigned len, 
+                        unsigned len,
                         const color_type& c)
         {
             realloc_span(len);
@@ -124,7 +124,7 @@ namespace agg
 
         //--------------------------------------------------------------------
         void blend_vline(int x, int y,
-                         unsigned len, 
+                         unsigned len,
                          const color_type& c,
                          cover_type cover)
         {
@@ -134,7 +134,7 @@ namespace agg
         }
 
         //--------------------------------------------------------------------
-        void copy_from(const rendering_buffer& from, 
+        void copy_from(const rendering_buffer& from,
                        int xdst, int ydst,
                        int xsrc, int ysrc,
                        unsigned len)
@@ -145,7 +145,7 @@ namespace agg
 
         //--------------------------------------------------------------------
         void blend_solid_hspan(int x, int y,
-                               unsigned len, 
+                               unsigned len,
                                const color_type& c,
                                const cover_type* covers)
         {
@@ -157,7 +157,7 @@ namespace agg
 
         //--------------------------------------------------------------------
         void blend_solid_vspan(int x, int y,
-                               unsigned len, 
+                               unsigned len,
                                const color_type& c,
                                const cover_type* covers)
         {
@@ -169,12 +169,12 @@ namespace agg
 
         //--------------------------------------------------------------------
         void blend_color_hspan(int x, int y,
-                               unsigned len, 
+                               unsigned len,
                                const color_type* colors,
                                const cover_type* covers,
                                cover_type cover = cover_full)
         {
-            if(covers) 
+            if(covers)
             {
                 init_span(len, covers);
                 m_mask->combine_hspan(x, y, m_span, len);
@@ -190,12 +190,12 @@ namespace agg
 
         //--------------------------------------------------------------------
         void blend_color_vspan(int x, int y,
-                               unsigned len, 
+                               unsigned len,
                                const color_type* colors,
                                const cover_type* covers,
                                cover_type cover = cover_full)
         {
-            if(covers) 
+            if(covers)
             {
                 init_span(len, covers);
                 m_mask->combine_vspan(x, y, m_span, len);
@@ -211,12 +211,12 @@ namespace agg
 
         //--------------------------------------------------------------------
         void blend_opaque_color_hspan(int x, int y,
-                                      unsigned len, 
+                                      unsigned len,
                                       const color_type* colors,
                                       const cover_type* covers,
                                       cover_type cover = cover_full)
         {
-            if(covers) 
+            if(covers)
             {
                 init_span(len, covers);
                 m_mask->combine_hspan(x, y, m_span, len);
@@ -232,12 +232,12 @@ namespace agg
 
         //--------------------------------------------------------------------
         void blend_opaque_color_vspan(int x, int y,
-                                      unsigned len, 
+                                      unsigned len,
                                       const color_type* colors,
                                       const cover_type* covers,
                                       cover_type cover = cover_full)
         {
-            if(covers) 
+            if(covers)
             {
                 init_span(len, covers);
                 m_mask->combine_vspan(x, y, m_span, len);

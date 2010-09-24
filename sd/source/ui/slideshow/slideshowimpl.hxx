@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -361,54 +361,54 @@ private:
 
     SfxItemSet*     mpNewAttr;
     ::Window*       mpParentWindow;
-    ShowWindow*		mpShowWindow;
-    PushButton* 	mpTimeButton;
+    ShowWindow*     mpShowWindow;
+    PushButton*     mpTimeButton;
 
     boost::shared_ptr< AnimationSlideController > mpSlideController;
 
-    long			mnRestoreSlide;
-    Point			maSlideOrigin;
-    Point			maPopupMousePos;
-    Size			maSlideSize;
-    Size			maPresSize;
+    long            mnRestoreSlide;
+    Point           maSlideOrigin;
+    Point           maPopupMousePos;
+    Size            maSlideSize;
+    Size            maPresSize;
     AnimationMode   meAnimationMode;
-    String			maCharBuffer;
-    Pointer 		maOldPointer;
-    Pointer 		maPencil;
+    String          maCharBuffer;
+    Pointer         maOldPointer;
+    Pointer         maPencil;
     std::vector< ::sd::Window* > maDrawModeWindows;
-    ::sd::Window*	mpOldActiveWindow;
-    Link			maStarBASICGlobalErrorHdl;
-    unsigned long	mnChildMask;
-    bool			mbGridVisible;
+    ::sd::Window*   mpOldActiveWindow;
+    Link            maStarBASICGlobalErrorHdl;
+    unsigned long   mnChildMask;
+    bool            mbGridVisible;
     bool            mbBordVisible;
     bool            mbSlideBorderVisible;
     bool            mbSetOnlineSpelling;
-    bool			mbDisposed;
-    bool			mbMouseIsDrawing;
-    bool			mbAutoSaveWasOn;
-    bool			mbRehearseTimings;
-    bool			mbDesignMode;
-    bool			mbIsPaused;
-    bool			mbWasPaused;		// used to cache pause state during context menu
-    bool			mbInputFreeze;
-    sal_Bool		mbActive;
+    bool            mbDisposed;
+    bool            mbMouseIsDrawing;
+    bool            mbAutoSaveWasOn;
+    bool            mbRehearseTimings;
+    bool            mbDesignMode;
+    bool            mbIsPaused;
+    bool            mbWasPaused;        // used to cache pause state during context menu
+    bool            mbInputFreeze;
+    sal_Bool        mbActive;
 
     PresentationSettings maPresSettings;
-    sal_Int32		mnUserPaintColor;
+    sal_Int32       mnUserPaintColor;
 
 #ifdef ENABLE_PRESENTER_EXTRA_UI
-    bool			mbSwitchPenMode;
-    bool			mbSwitchEraserMode;
-    double			mdUserPaintStrokeWidth;
-    bool			mbEraseAllInk;
-//    bool			mbEraseInk;
-    sal_Int32		mnEraseInkSize;
+    bool            mbSwitchPenMode;
+    bool            mbSwitchEraserMode;
+    double          mdUserPaintStrokeWidth;
+    bool            mbEraseAllInk;
+//    bool          mbEraseInk;
+    sal_Int32       mnEraseInkSize;
 #endif
     /// used in updateHdl to prevent recursive calls
-    sal_Int32		mnEntryCounter;
+    sal_Int32       mnEntryCounter;
 
-    sal_Int32		mnLastSlideNumber;
-    WrappedShapeEventImplMap	maShapeEventMap;
+    sal_Int32       mnLastSlideNumber;
+    WrappedShapeEventImplMap    maShapeEventMap;
 
     ::rtl::OUString msOnClick;
     ::rtl::OUString msBookmark;
@@ -421,8 +421,8 @@ private:
 
     ::std::auto_ptr<PaneHider> mpPaneHider;
 
-    ULONG	mnEndShowEvent;
-    ULONG	mnContextMenuEvent;
+    ULONG   mnEndShowEvent;
+    ULONG   mnContextMenuEvent;
     sal_Int32 mnUpdateEvent;
 
     css::uno::Reference< css::presentation::XPresentation2 > mxPresentation;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,12 +88,12 @@ protected:
         getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
 
-// 	virtual sal_Bool SAL_CALL convertFastPropertyValue
+//  virtual sal_Bool SAL_CALL convertFastPropertyValue
 //         ( ::com::sun::star::uno::Any & rConvertedValue,
 //           ::com::sun::star::uno::Any & rOldValue,
 //           sal_Int32 nHandle,
 //           const ::com::sun::star::uno::Any& rValue )
-// 		throw (::com::sun::star::lang::IllegalArgumentException);
+//      throw (::com::sun::star::lang::IllegalArgumentException);
 
     // ____ XTitle ____
     virtual ::com::sun::star::uno::Sequence<

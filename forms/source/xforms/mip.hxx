@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,8 +105,8 @@ public:
     rtl::OUString getConstraintExplanation() const;
 
     // - calculate (computed XPath; default: has none (false))
-    //   (for calculate, we only store whether a calculate MIP is present; 
-    //    the actual calculate value is handled my changing the instance 
+    //   (for calculate, we only store whether a calculate MIP is present;
+    //    the actual calculate value is handled my changing the instance
     //    directly)
     bool hasCalculate() const;
     void setHasCalculate( bool );

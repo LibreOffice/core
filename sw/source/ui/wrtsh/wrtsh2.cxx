@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <hintids.hxx>		// define ITEMIDs
+#include <hintids.hxx>      // define ITEMIDs
 #include <svl/macitem.hxx>
 #include <sfx2/frame.hxx>
 #include <vcl/msgbox.hxx>
@@ -41,7 +41,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <fmtinfmt.hxx>
 #include <frmatr.hxx>
-#include <swtypes.hxx>  	// SET_CURR_SHELL
+#include <swtypes.hxx>      // SET_CURR_SHELL
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <fldbas.hxx>       // Felder
@@ -51,7 +51,7 @@
 #include <reffld.hxx>
 #include <swundo.hxx>
 #include <doc.hxx>
-#include <viewopt.hxx>  	// SwViewOptions
+#include <viewopt.hxx>      // SwViewOptions
 #include <frmfmt.hxx>       // fuer UpdateTable
 #include <swtable.hxx>      // fuer UpdateTable
 #include <mdiexp.hxx>
@@ -154,8 +154,8 @@ BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton,
                                     Window* pParentWin, ByteString* pWindowState )
 {
 //JP 14.08.96: Bug 30332 - nach Umbau der modularietaet im SFX, muss jetzt
-//				das TopWindow der Application benutzt werden.
-//	SwFldInputDlg* pDlg = new SwFldInputDlg( GetWin(), *this, pFld );
+//              das TopWindow der Application benutzt werden.
+//  SwFldInputDlg* pDlg = new SwFldInputDlg( GetWin(), *this, pFld );
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");
@@ -268,18 +268,18 @@ void SwWrtShell::ClickToField( const SwField& rFld )
                 nSlotId = FN_INSERT_FRAME;
                 break;
 
-            case JE_FMT_GRAPHIC:	nSlotId = SID_INSERT_GRAPHIC;		break;
-            case JE_FMT_OLE:        nSlotId = SID_INSERT_OBJECT;		break;
+            case JE_FMT_GRAPHIC:    nSlotId = SID_INSERT_GRAPHIC;       break;
+            case JE_FMT_OLE:        nSlotId = SID_INSERT_OBJECT;        break;
 
-//			case JE_FMT_TEXT:
+//          case JE_FMT_TEXT:
             }
 
-            Right( CRSR_SKIP_CHARS, TRUE, 1, FALSE );		// Feld selektieren
+            Right( CRSR_SKIP_CHARS, TRUE, 1, FALSE );       // Feld selektieren
 
             if( nSlotId )
             {
                 StartUndo( UNDO_START );
-                //#97295# immediately select the right shell 
+                //#97295# immediately select the right shell
                 GetView().StopShellTimer();
                 GetView().GetViewFrame()->GetDispatcher()->Execute( nSlotId,
                             SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
@@ -428,7 +428,7 @@ void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
 
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, FALSE );
     //#39076# Silent kann lt. SFX entfernt werden.
-//	SfxBoolItem aSilent( SID_SILENT, TRUE );
+//  SfxBoolItem aSilent( SID_SILENT, TRUE );
     SfxBoolItem aBrowse( SID_BROWSE, TRUE );
 
     if( nFilter & URLLOAD_NEWVIEW )

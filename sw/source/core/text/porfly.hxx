@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,14 +37,14 @@ class SwTxtFrm;
 struct SwCrsrMoveState;
 
 /*************************************************************************
- *				  class SwFlyPortion
+ *                class SwFlyPortion
  *************************************************************************/
 
 class SwFlyPortion : public SwFixPortion
 {
     KSHORT nBlankWidth;
 public:
-    inline	SwFlyPortion( const SwRect &rFlyRect )
+    inline  SwFlyPortion( const SwRect &rFlyRect )
         : SwFixPortion(rFlyRect), nBlankWidth( 0 ) { SetWhichPor( POR_FLY ); }
     inline KSHORT GetBlankWidth( ) const { return nBlankWidth; }
     inline void SetBlankWidth( const KSHORT nNew ) { nBlankWidth = nNew; }
@@ -54,13 +54,13 @@ public:
 };
 
 /*************************************************************************
- *				  class SwFlyCntPortion
+ *                class SwFlyCntPortion
  *************************************************************************/
 
 class SwFlyCntPortion : public SwLinePortion
 {
     void *pContact; // bDraw ? DrawContact : FlyInCntFrm
-    Point aRef;	 	// Relativ zu diesem Point wird die AbsPos berechnet.
+    Point aRef;     // Relativ zu diesem Point wird die AbsPos berechnet.
     sal_Bool bDraw : 1;  // DrawContact?
     sal_Bool bMax : 1;   // Zeilenausrichtung und Hoehe == Zeilenhoehe
     sal_uInt8 nAlign : 3; // Zeilenausrichtung? Nein, oben, mitte, unten

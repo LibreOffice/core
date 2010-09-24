@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -303,7 +303,7 @@ namespace slideshow
                                                           // layer is the
                                                           // special
                                                           // background layer
-            bool                       mbClipSet; // true, if beginUpdate set a clip                   
+            bool                       mbClipSet; // true, if beginUpdate set a clip
         };
 
         typedef ::boost::shared_ptr< Layer >    LayerSharedPtr;

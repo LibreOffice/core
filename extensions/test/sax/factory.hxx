@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,6 @@
  ************************************************************************/
 XInterfaceRef OSaxWriterTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception));
 UString     OSaxWriterTest_getServiceName( ) THROWS( () );
-UString 	OSaxWriterTest_getImplementationName( ) THROWS( () );
+UString     OSaxWriterTest_getImplementationName( ) THROWS( () );
 Sequence<UString> OSaxWriterTest_getSupportedServiceNames( ) THROWS( () );
 

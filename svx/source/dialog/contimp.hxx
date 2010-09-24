@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,35 +46,35 @@ class SvxSuperContourDlg : public SvxContourDlg
 {
     using SvxContourDlg::GetPolyPolygon;
 
-    Graphic				aGraphic;
-    Graphic				aUndoGraphic;
-    Graphic				aRedoGraphic;
-    Graphic				aUpdateGraphic;
-    PolyPolygon			aUpdatePolyPoly;
-    Timer				aUpdateTimer;
-    Timer				aCreateTimer;
-    Size				aLastSize;
-    void*				pUpdateEditingObject;
-    void*				pCheckObj;
-    SvxContourDlgItem	aContourItem;
-    ToolBox				aTbx1;
-    MetricField			aMtfTolerance;
-    ContourWindow		aContourWnd;
-    StatusBar			aStbStatus;
-    ULONG				nGrfChanged;
-    BOOL				bExecState;
-    BOOL				bPipetteMode;
-    BOOL				bWorkplaceMode;
-    BOOL				bUpdateGraphicLinked;
-    BOOL				bGraphicLinked;
-    ImageList			maImageList;
-    ImageList			maImageListH;
+    Graphic             aGraphic;
+    Graphic             aUndoGraphic;
+    Graphic             aRedoGraphic;
+    Graphic             aUpdateGraphic;
+    PolyPolygon         aUpdatePolyPoly;
+    Timer               aUpdateTimer;
+    Timer               aCreateTimer;
+    Size                aLastSize;
+    void*               pUpdateEditingObject;
+    void*               pCheckObj;
+    SvxContourDlgItem   aContourItem;
+    ToolBox             aTbx1;
+    MetricField         aMtfTolerance;
+    ContourWindow       aContourWnd;
+    StatusBar           aStbStatus;
+    ULONG               nGrfChanged;
+    BOOL                bExecState;
+    BOOL                bPipetteMode;
+    BOOL                bWorkplaceMode;
+    BOOL                bUpdateGraphicLinked;
+    BOOL                bGraphicLinked;
+    ImageList           maImageList;
+    ImageList           maImageListH;
 
-    virtual	void		Resize();
-    virtual BOOL 		Close();
+    virtual void        Resize();
+    virtual BOOL        Close();
 
-    void				DoAutoCreate();
-    void				ReducePoints( const long nTol = 8 );
+    void                DoAutoCreate();
+    void                ReducePoints( const long nTol = 8 );
 
                         DECL_LINK( Tbx1ClickHdl, ToolBox* );
                         DECL_LINK( MousePosHdl, ContourWindow* );
@@ -93,32 +93,32 @@ public:
                                             Window* pParent, const ResId& rResId );
                         ~SvxSuperContourDlg();
 
-    void				SetExecState( BOOL bEnable );
+    void                SetExecState( BOOL bEnable );
 
-    void				SetGraphic( const Graphic& rGraphic );
-    void				SetGraphicLinked( BOOL bLinked ) { bGraphicLinked = bLinked; }
-    const Graphic&		GetGraphic() const { return aGraphic; }
-    BOOL				IsGraphicChanged() const { return nGrfChanged > 0UL; }
+    void                SetGraphic( const Graphic& rGraphic );
+    void                SetGraphicLinked( BOOL bLinked ) { bGraphicLinked = bLinked; }
+    const Graphic&      GetGraphic() const { return aGraphic; }
+    BOOL                IsGraphicChanged() const { return nGrfChanged > 0UL; }
 
-    void				SetPolyPolygon( const PolyPolygon& rPolyPoly );
-    PolyPolygon			GetPolyPolygon( BOOL bRescaleToGraphic = TRUE );
+    void                SetPolyPolygon( const PolyPolygon& rPolyPoly );
+    PolyPolygon         GetPolyPolygon( BOOL bRescaleToGraphic = TRUE );
 
-    void				SetEditingObject( void* pObj ) { pCheckObj = pObj; }
-    const void*			GetEditingObject() const { return pCheckObj; }
+    void                SetEditingObject( void* pObj ) { pCheckObj = pObj; }
+    const void*         GetEditingObject() const { return pCheckObj; }
 
-    BOOL				IsUndoPossible() const;
-    BOOL				IsRedoPossible() const;
+    BOOL                IsUndoPossible() const;
+    BOOL                IsRedoPossible() const;
 
-    void				UpdateGraphic( const Graphic& rGraphic, BOOL bGraphicLinked,
+    void                UpdateGraphic( const Graphic& rGraphic, BOOL bGraphicLinked,
                                 const PolyPolygon* pPolyPoly = NULL,
                                 void* pEditingObj = NULL );
 
     /** switches the toolbox images depending on the actuall high contrast display mode state */
-    void				ApplyImageList();
+    void                ApplyImageList();
 
     /** virtual method from Window is used to detect change in high contrast display mode
         to switch the toolbox images */
-    virtual void		DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
 };
 

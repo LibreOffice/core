@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,20 +39,20 @@ class GlobalEditData
 private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLanguageGuessing >  xLanguageGuesser;
-    SfxPoolItem** 	ppDefItems;
-    OutputDevice*	pStdRefDevice;
+    SfxPoolItem**   ppDefItems;
+    OutputDevice*   pStdRefDevice;
 
-    vos::ORef<SvxForbiddenCharactersTable>	xForbiddenCharsTable;
+    vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
 
 public:
                     GlobalEditData();
                     ~GlobalEditData();
 
-    SfxPoolItem**	GetDefItems();
-    OutputDevice*	GetStdRefDevice();
+    SfxPoolItem**   GetDefItems();
+    OutputDevice*   GetStdRefDevice();
 
-    vos::ORef<SvxForbiddenCharactersTable>	GetForbiddenCharsTable();
-    void			SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
+    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable();
+    void            SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing > GetLanguageGuesser();
 };
 

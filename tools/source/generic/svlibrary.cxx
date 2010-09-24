@@ -96,7 +96,7 @@ static uno::Sequence< rtl::OUString > GetMultiPaths_Impl()
 
 bool SvLibrary::LoadModule( osl::Module& rModule, const rtl::OUString& rLibName, ::oslGenericFunction baseModule, ::sal_Int32 mode )
 {
-    static uno::Sequence < rtl::OUString > aPaths = GetMultiPaths_Impl();	
+    static uno::Sequence < rtl::OUString > aPaths = GetMultiPaths_Impl();   
     bool bLoaded = false;
 
     for (sal_Int32 n=0; n<aPaths.getLength(); n++)

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class CWinClipboard;
 class CXNotifyingDataObject;
 
 //---------------------------------------------------
-// impl class to avoid deadlocks between XTDataObject 
+// impl class to avoid deadlocks between XTDataObject
 // and the clipboard implementation
 //---------------------------------------------------
 
@@ -62,28 +62,28 @@ public:
     ~CWinClipbImpl( );
 
 protected:
-    CWinClipbImpl( const ::rtl::OUString& aClipboardName, CWinClipboard* theWinClipboard );	
+    CWinClipbImpl( const ::rtl::OUString& aClipboardName, CWinClipboard* theWinClipboard );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents(  ) 
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents(  )
         throw( ::com::sun::star::uno::RuntimeException );
-    
-    void SAL_CALL setContents( 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable, 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) 
+
+    void SAL_CALL setContents(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
         throw( ::com::sun::star::uno::RuntimeException );
 
     ::rtl::OUString SAL_CALL getName(  ) throw( ::com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------
-    // XClipboardEx 
+    // XClipboardEx
     //------------------------------------------------
-    
+
     sal_Int8 SAL_CALL getRenderingCapabilities(  ) throw( ::com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------
     // XFlushableClipboard
     //------------------------------------------------
-    
+
     void SAL_CALL flushClipboard( ) throw( com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------
@@ -93,9 +93,9 @@ protected:
     void SAL_CALL dispose( ) throw( ::com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------
-    // member functions 
+    // member functions
     //------------------------------------------------
-    
+
     void SAL_CALL registerClipboardViewer( );
     void SAL_CALL unregisterClipboardViewer( );
 
@@ -105,20 +105,20 @@ private:
     void SAL_CALL onReleaseDataObject( CXNotifyingDataObject* theCaller );
 
 private:
-    ::rtl::OUString			m_itsName;
-    CMtaOleClipboard		m_MtaOleClipboard;	
-    CWinClipboard*			m_pWinClipboard;
-    CXNotifyingDataObject*	m_pCurrentClipContent;
+    ::rtl::OUString         m_itsName;
+    CMtaOleClipboard        m_MtaOleClipboard;
+    CWinClipboard*          m_pWinClipboard;
+    CXNotifyingDataObject*  m_pCurrentClipContent;
     osl::Mutex              m_ClipContentMutex;
 
-    static osl::Mutex		s_aMutex;
-    static CWinClipbImpl*	s_pCWinClipbImpl;
+    static osl::Mutex       s_aMutex;
+    static CWinClipbImpl*   s_pCWinClipbImpl;
 
 private:
     CWinClipbImpl( const CWinClipbImpl& );
     CWinClipbImpl& operator=( const CWinClipbImpl& );
 
-    friend class CWinClipboard;	
+    friend class CWinClipboard;
     friend class CXNotifyingDataObject;
 };
 

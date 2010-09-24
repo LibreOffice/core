@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@ class ScHeaderSelectionEngine;
 
 class ScColBar : public ScHeaderControl
 {
-    ScViewData*				 pViewData;
-    ScHSplitPos				 eWhich;
-    ScHeaderFunctionSet*	 pFuncSet;
+    ScViewData*              pViewData;
+    ScHSplitPos              eWhich;
+    ScHeaderFunctionSet*     pFuncSet;
     ScHeaderSelectionEngine* pSelEngine;
 
 public:
@@ -49,33 +49,33 @@ public:
                             ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng );
                 ~ScColBar();
 
-    virtual SCCOLROW	GetPos();
-    virtual USHORT		GetEntrySize( SCCOLROW nEntryNo );
-    virtual String 		GetEntryText( SCCOLROW nEntryNo );
+    virtual SCCOLROW    GetPos();
+    virtual USHORT      GetEntrySize( SCCOLROW nEntryNo );
+    virtual String      GetEntryText( SCCOLROW nEntryNo );
 
-    virtual BOOL		IsLayoutRTL();						// only for columns
+    virtual BOOL        IsLayoutRTL();                      // only for columns
 
-    virtual void		SetEntrySize( SCCOLROW nPos, USHORT nNewSize );
-    virtual void		HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
+    virtual void        SetEntrySize( SCCOLROW nPos, USHORT nNewSize );
+    virtual void        HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
 
-    virtual void		SetMarking( BOOL bSet );
-    virtual void		SelectWindow();
-    virtual BOOL		IsDisabled();
-    virtual BOOL		ResizeAllowed();
+    virtual void        SetMarking( BOOL bSet );
+    virtual void        SelectWindow();
+    virtual BOOL        IsDisabled();
+    virtual BOOL        ResizeAllowed();
 
-    virtual void		DrawInvert( long nDragPos );
+    virtual void        DrawInvert( long nDragPos );
 
-    virtual String		GetDragHelp( long nVal );
+    virtual String      GetDragHelp( long nVal );
 
-            BOOL		UseNumericHeader() const;
+            BOOL        UseNumericHeader() const;
 };
 
 
 class ScRowBar : public ScHeaderControl
 {
-    ScViewData*				 pViewData;
-    ScVSplitPos				 eWhich;
-    ScHeaderFunctionSet*	 pFuncSet;
+    ScViewData*              pViewData;
+    ScVSplitPos              eWhich;
+    ScHeaderFunctionSet*     pFuncSet;
     ScHeaderSelectionEngine* pSelEngine;
 
 public:
@@ -83,24 +83,24 @@ public:
                             ScHeaderFunctionSet* pFunc, ScHeaderSelectionEngine* pEng );
                 ~ScRowBar();
 
-    virtual SCCOLROW	GetPos();
-    virtual USHORT		GetEntrySize( SCCOLROW nEntryNo );
-    virtual String 		GetEntryText( SCCOLROW nEntryNo );
+    virtual SCCOLROW    GetPos();
+    virtual USHORT      GetEntrySize( SCCOLROW nEntryNo );
+    virtual String      GetEntryText( SCCOLROW nEntryNo );
 
-    virtual BOOL		IsMirrored();						// only for columns
-    virtual SCROW		GetHiddenCount( SCROW nEntryNo );	// only for columns
+    virtual BOOL        IsMirrored();                       // only for columns
+    virtual SCROW       GetHiddenCount( SCROW nEntryNo );   // only for columns
 
-    virtual void		SetEntrySize( SCCOLROW nPos, USHORT nNewSize );
-    virtual void		HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
+    virtual void        SetEntrySize( SCCOLROW nPos, USHORT nNewSize );
+    virtual void        HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
 
-    virtual void		SetMarking( BOOL bSet );
-    virtual void		SelectWindow();
-    virtual BOOL		IsDisabled();
-    virtual BOOL		ResizeAllowed();
+    virtual void        SetMarking( BOOL bSet );
+    virtual void        SelectWindow();
+    virtual BOOL        IsDisabled();
+    virtual BOOL        ResizeAllowed();
 
-    virtual void		DrawInvert( long nDragPos );
+    virtual void        DrawInvert( long nDragPos );
 
-    virtual String		GetDragHelp( long nVal );
+    virtual String      GetDragHelp( long nVal );
 };
 
 

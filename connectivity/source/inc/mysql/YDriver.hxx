@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,29 +62,29 @@ namespace connectivity
             D_JDBC,
             D_NATIVE
         } T_DRIVERTYPE;
-        
+
 
         /** delegates all calls to the orignal driver and extend the existing one with the SDBCX layer.
-        
+
         */
         class ODriverDelegator : public ::comphelper::OBaseMutex
                                 ,public ODriverDelegator_BASE
         {
-            TJDBCDrivers														m_aJdbcDrivers; // all jdbc drivers
-            TWeakPairVector														m_aConnections;	//	vector containing a list
+            TJDBCDrivers                                                        m_aJdbcDrivers; // all jdbc drivers
+            TWeakPairVector                                                     m_aConnections; //  vector containing a list
                                                                                                 //  of all the Connection objects
                                                                                                 //  for this Driver
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >					m_xODBCDriver;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >					m_xNativeDriver;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_xFactory;
-            ::rtl::OUString		m_sOldDriverClass;
-            T_DRIVERTYPE		m_eDriverType;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xODBCDriver;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xNativeDriver;
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xFactory;
+            ::rtl::OUString     m_sOldDriverClass;
+            T_DRIVERTYPE        m_eDriverType;
 
             /** load the driver we want to delegate.
                 The <member>m_xODBCDriver</member> or <member>m_xDBCDriver</member> may be <NULL/> if the driver could not be loaded.
-                @param	url
+                @param  url
                     The URL.
-                @param	info
+                @param  info
                     The property info contains which driver we have to delegate.
                 @return
                     The driver which was currently selected.
@@ -120,7 +120,7 @@ namespace connectivity
     }
 
 //........................................................................
-}	// namespace connectivity
+}   // namespace connectivity
 //........................................................................
 #endif // CONNECTIVITY_MYSQL_DRIVER_HXX
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ namespace frm
     typedef ::cppu::ImplHelper3 <      ::com::sun::star::form::binding::XListEntrySink
                                 ,   ::com::sun::star::form::binding::XListEntryListener
                                 ,   ::com::sun::star::util::XRefreshable
-                                >	OEntryListHelper_BASE;
+                                >   OEntryListHelper_BASE;
 
     class OEntryListHelper : public OEntryListHelper_BASE
     {

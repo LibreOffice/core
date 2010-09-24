@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
 #endif
 
     // For Win98/WinME the values should be written to the local machine
-    OSVERSIONINFO		aVerInfo;
+    OSVERSIONINFO       aVerInfo;
     aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
     if ( GetVersionEx( &aVerInfo ) && aVerInfo.dwPlatformId != VER_PLATFORM_WIN32_NT )
         InstallForAllUser = TRUE;
@@ -131,7 +131,7 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
 void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
     // For Win98/WinME the values should be written to the local machine
-    OSVERSIONINFO		aVerInfo;
+    OSVERSIONINFO       aVerInfo;
     aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
     if ( GetVersionEx( &aVerInfo ) && aVerInfo.dwPlatformId != VER_PLATFORM_WIN32_NT )
         InstallForAllUser = TRUE;

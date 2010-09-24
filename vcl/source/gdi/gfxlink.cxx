@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@
 // -----------
 
 GfxLink::GfxLink() :
-    meType		( GFX_LINK_TYPE_NONE ),
-    mpBuf		( NULL ),
-    mpSwap		( NULL ),
-    mnBufSize	( 0 ),
-    mnUserId	( 0UL ),
+    meType      ( GFX_LINK_TYPE_NONE ),
+    mpBuf       ( NULL ),
+    mpSwap      ( NULL ),
+    mnBufSize   ( 0 ),
+    mnUserId    ( 0UL ),
     mpImpData   ( new ImpGfxLink )
 {
 }
@@ -82,7 +82,7 @@ GfxLink::GfxLink( BYTE* pBuf, sal_uInt32 nSize, GfxLinkType nType, BOOL bOwns ) 
         mpBuf = new ImpBuffer( nSize );
         memcpy( mpBuf->mpBuffer, pBuf, nSize );
     }
-    else														
+    else
         mpBuf = NULL;
 }
 
@@ -131,7 +131,7 @@ sal_Bool GfxLink::IsEqual( const GfxLink& rGfxLink ) const
         sal_uInt32 nDestSize = rGfxLink.GetDataSize();
         if ( pSource && pDest && ( nSourceSize == nDestSize ) )
         {
-            bIsEqual = memcmp( pSource, pDest, nSourceSize ) == 0;		
+            bIsEqual = memcmp( pSource, pDest, nSourceSize ) == 0;
         }
         else if ( ( pSource == 0 ) && ( pDest == 0 ) )
             bIsEqual = sal_True;
@@ -190,7 +190,7 @@ const BYTE* GfxLink::GetData() const
 
 // ------------------------------------------------------------------------
 
-const Size&	GfxLink::GetPrefSize() const
+const Size& GfxLink::GetPrefSize() const
 {
     return mpImpData->maPrefSize;
 }
@@ -244,8 +244,8 @@ BOOL GfxLink::LoadNative( Graphic& rGraphic )
 
         if( pData )
         {
-            SvMemoryStream	aMemStm;
-            ULONG			nCvtType;
+            SvMemoryStream  aMemStm;
+            ULONG           nCvtType;
 
             aMemStm.SetBuffer( (char*) pData, mnBufSize, FALSE, mnBufSize );
 
@@ -258,7 +258,7 @@ BOOL GfxLink::LoadNative( Graphic& rGraphic )
                 case( GFX_LINK_TYPE_NATIVE_WMF ): nCvtType = CVT_WMF; break;
                 case( GFX_LINK_TYPE_NATIVE_MET ): nCvtType = CVT_MET; break;
                 case( GFX_LINK_TYPE_NATIVE_PCT ): nCvtType = CVT_PCT; break;
-                
+
                 default: nCvtType = CVT_UNKNOWN; break;
             }
 
@@ -300,7 +300,7 @@ void GfxLink::SwapIn()
     if( IsSwappedOut() )
     {
         mpBuf = new ImpBuffer( mpSwap->GetData() );
-    
+
         if( !( --mpSwap->mnRefCount ) )
             delete mpSwap;
 
@@ -328,15 +328,15 @@ BOOL GfxLink::ExportNative( SvStream& rOStream ) const
 SvStream& operator<<( SvStream& rOStream, const GfxLink& rGfxLink )
 {
     VersionCompat* pCompat = new VersionCompat( rOStream, STREAM_WRITE, 2 );
-    
+
     // Version 1
     rOStream << (UINT16) rGfxLink.GetType() << rGfxLink.GetDataSize() << rGfxLink.GetUserId();
-    
+
     // Version 2
-    rOStream << rGfxLink.GetPrefSize() << rGfxLink.GetPrefMapMode(); 
-    
+    rOStream << rGfxLink.GetPrefSize() << rGfxLink.GetPrefMapMode();
+
     delete pCompat;
-    
+
     if( rGfxLink.GetDataSize() )
     {
         if( rGfxLink.IsSwappedOut() )
@@ -354,12 +354,12 @@ SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
 {
     Size            aSize;
     MapMode         aMapMode;
-    sal_uInt32		nSize;
-    sal_uInt32		nUserId;
-    UINT16			nType;
-    BYTE*			pBuf;	
-    bool			bMapAndSizeValid( false );
-    VersionCompat*	pCompat = new VersionCompat( rIStream, STREAM_READ );
+    sal_uInt32      nSize;
+    sal_uInt32      nUserId;
+    UINT16          nType;
+    BYTE*           pBuf;
+    bool            bMapAndSizeValid( false );
+    VersionCompat*  pCompat = new VersionCompat( rIStream, STREAM_READ );
 
     // Version 1
     rIStream >> nType >> nSize >> nUserId;
@@ -369,12 +369,12 @@ SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
         rIStream >> aSize >> aMapMode;
         bMapAndSizeValid = true;
     }
-    
+
     delete pCompat;
 
     pBuf = new BYTE[ nSize ];
     rIStream.Read( pBuf, nSize );
-    
+
     rGfxLink = GfxLink( pBuf, nSize, (GfxLinkType) nType, TRUE );
     rGfxLink.SetUserId( nUserId );
 

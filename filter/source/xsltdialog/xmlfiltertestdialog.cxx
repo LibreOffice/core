@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -332,7 +332,7 @@ void XMLFilterTestDialog::onExportBrowse()
            ::sfx2::FileDialogHelper aDlg(
             com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             0 );
-        
+
         Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString::createFromAscii("com.sun.star.document.FilterFactory" ) ), UNO_QUERY );
         Reference< XNameAccess > xTypeDetection( mxMSF->createInstance( OUString::createFromAscii("com.sun.star.document.TypeDetection" ) ), UNO_QUERY );
         if( xFilterContainer.is() && xTypeDetection.is() )
@@ -485,7 +485,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
 
                 // create xslt exporter
                 Reference< XOutputStream > xIS( new comphelper::OSLOutputStreamWrapper( aOutputFile ) );
-                
+
                 int bUseDTD = (mpFilterInfo->maDTD.getLength() != 0) ? 1 : 0 ;
                 int bUseDocType = (mpFilterInfo->maDocType.getLength() != 0 ) ? 1 : 0;
                 Sequence< PropertyValue > aSourceData( 2 + bUseDTD + bUseDocType );
@@ -519,7 +519,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                     Reference< XMultiServiceFactory > xDocFac( xComp, UNO_QUERY );
 
                     Reference< XEmbeddedObjectResolver > xObjectResolver;
-                    Reference< XGraphicObjectResolver >	xGrfResolver;
+                    Reference< XGraphicObjectResolver > xGrfResolver;
 
                     if( xDocFac.is() )
                     {
@@ -535,10 +535,10 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
 
                     Sequence< Any > aArgs( 1 + ( xGrfResolver.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
                     Any* pArgs = aArgs.getArray();
-                    if( xGrfResolver.is() ) 		*pArgs++ <<= xGrfResolver;
-                    if( xObjectResolver.is() )		*pArgs++ <<= xObjectResolver;
+                    if( xGrfResolver.is() )         *pArgs++ <<= xGrfResolver;
+                    if( xObjectResolver.is() )      *pArgs++ <<= xObjectResolver;
 
-    //				*pArgs++ <<= xInfoSet;
+    //              *pArgs++ <<= xInfoSet;
                     *pArgs   <<= xHandler;
 
                     Reference< XFilter > xFilter( mxMSF->createInstanceWithArguments( pAppInfo->maXMLExporter, aArgs ), UNO_QUERY );
@@ -548,10 +548,10 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                         if( xExporter2.is() )
                         {
                             xExporter2->setSourceDocument( xComp );
-                        
+
                             Sequence< PropertyValue > aDescriptor( 1 );
                             aDescriptor[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) );
-                            aDescriptor[0].Value <<= aTempFileURL;	
+                            aDescriptor[0].Value <<= aTempFileURL;
 
                             if( xFilter->filter( aDescriptor ) )
                                 displayXMLFile( aTempFileURL );
@@ -596,7 +596,7 @@ void XMLFilterTestDialog::onImportBrowse()
 
         if( nLastIndex == -1 )
         {
-            
+
             aExtensions += String( mpFilterInfo->maExtension.copy( nCurrentIndex ) );
         }
         else
@@ -659,7 +659,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
                 osl::File::RC rc = aInputFile.open( OpenFlag_Read );
 
                 Reference< XInputStream > xIS( new comphelper::OSLInputStreamWrapper( aInputFile ) );
-                
+
                 Sequence< PropertyValue > aSourceData( 5 );
                 int i = 0;
 
@@ -679,7 +679,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
                 aSourceData[i++].Value <<= sDTDPath;
 
                 Reference< XDocumentHandler > xWriter( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), UNO_QUERY );
-                
+
                 File aOutputFile( aTempFileURL );
                 rc = aOutputFile.open( OpenFlag_Write );
 
@@ -693,7 +693,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 
             displayXMLFile( aTempFileURL );
         }
-    }				
+    }
     catch(Exception&)
     {
         DBG_ERROR("XMLFilterTestDialog::import catched an exception" );
@@ -741,7 +741,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
             {
                 xRet = xTest;
             }
-            else 
+            else
             {
                 xTest = (Reference< XComponent >)xDesktop->getCurrentComponent();
 

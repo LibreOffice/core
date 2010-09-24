@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ DBG_NAME(SfxItemPool);
 
 void SfxItemPool::SetStoringPool( const SfxItemPool *pStoringPool )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode setzt den <SfxItemPool>, der gerade gespeichert wird.
     Sie sollte nur in Notf"allen verwendet werden, um z.B. File-Format-
@@ -71,7 +71,7 @@ void SfxItemPool::SetStoringPool( const SfxItemPool *pStoringPool )
 
 const SfxItemPool* SfxItemPool::GetStoringPool()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode liefert den <SfxItemPool>, der gerade gespeichert wird.
     Sie sollte nur in Notf"allen verwendet werden, um z.B. File-Format-
@@ -88,7 +88,7 @@ const SfxItemPool* SfxItemPool::GetStoringPool()
 
 SvStream &SfxItemPool::Store(SvStream &rStream) const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Der SfxItemPool wird inklusive aller seiner Sekund"arpools mit
     Pool-Defaults und gepoolten Items in dem angegebenen Stream gespeichert.
@@ -98,45 +98,45 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     [Fileformat]
 
     ;zun"achst ein Kompatiblit"ats-Header-Block
-    Start:		0x1111	SFX_ITEMPOOL_TAG_STARTPOOLS(_4/_5)
-                BYTE	MAJOR_VER					;SfxItemPool-Version
-                BYTE	MINOR_VER					;"
-                0xFFFF	SFX_ITEMPOOL_TAG_TRICK4OLD  ;ex. GetVersion()
-                USHORT	0x0000						;Pseudo-StyleSheetPool
-                USHORT	0x0000						;Pseudo-StyleSheetPool
+    Start:      0x1111  SFX_ITEMPOOL_TAG_STARTPOOLS(_4/_5)
+                BYTE    MAJOR_VER                   ;SfxItemPool-Version
+                BYTE    MINOR_VER                   ;"
+                0xFFFF  SFX_ITEMPOOL_TAG_TRICK4OLD  ;ex. GetVersion()
+                USHORT  0x0000                      ;Pseudo-StyleSheetPool
+                USHORT  0x0000                      ;Pseudo-StyleSheetPool
 
     ;den ganzen Pool in einen Record
-                record	SfxMiniRecod(SFX_ITEMPOOL_REC)
+                record  SfxMiniRecod(SFX_ITEMPOOL_REC)
 
     ;je ein Header vorweg
-    Header:		record  	SfxMiniRecord(SFX_ITEMPOOL_REC_HEADER)
-                USHORT			GetVersion()			;Which-Ranges etc.
-                String			GetName()				;Pool-Name
+    Header:     record      SfxMiniRecord(SFX_ITEMPOOL_REC_HEADER)
+                USHORT          GetVersion()            ;Which-Ranges etc.
+                String          GetName()               ;Pool-Name
 
     ;die Versions-Map, um WhichIds neuer File-Versionen mappen zu k"onnen
-    Versions:	record	    SfxMultiRecord(SFX_ITEMPOOL_REC_VERSIONS, 0)
-                USHORT			OldVersion
-                USHORT			OldStartWhich
-                USHORT			OldEndWhich
+    Versions:   record      SfxMultiRecord(SFX_ITEMPOOL_REC_VERSIONS, 0)
+                USHORT          OldVersion
+                USHORT          OldStartWhich
+                USHORT          OldEndWhich
                 USHORT[]        NewWhich (OldEndWhich-OldStartWhich+1)
 
     ;jetzt die gepoolten Items (zuerst nicht-SfxSetItems)
-    Items:  	record      SfxMultiRecord(SFX_ITEMPOOL_REC_WHICHIDS, 0)
-                content 		SlotId, 0
-                USHORT			WhichId
-                USHORT			pItem->GetVersion()
-                USHORT			Array-Size
-                record			SfxMultiRecord(SFX_, 0)
-                content				Surrogate
-                USHORT				RefCount
-                unknown 			pItem->Store()
+    Items:      record      SfxMultiRecord(SFX_ITEMPOOL_REC_WHICHIDS, 0)
+                content         SlotId, 0
+                USHORT          WhichId
+                USHORT          pItem->GetVersion()
+                USHORT          Array-Size
+                record          SfxMultiRecord(SFX_, 0)
+                content             Surrogate
+                USHORT              RefCount
+                unknown             pItem->Store()
 
     ;jetzt die gesetzten Pool-Defaults
-    Defaults:	record	    SfxMultiRecord(SFX_ITEMPOOL_REC_DEFAULTS, 0)
-                content			SlotId, 0
-                USHORT			WhichId
-                USHORT			pPoolDef->GetVersion()
-                unknown			pPoolDef->Store();
+    Defaults:   record      SfxMultiRecord(SFX_ITEMPOOL_REC_DEFAULTS, 0)
+                content         SlotId, 0
+                USHORT          WhichId
+                USHORT          pPoolDef->GetVersion()
+                unknown         pPoolDef->Store();
 
     ;dahinter folgt ggf. der Secondary ohne Kompatiblit"ats-Header-Block
 */
@@ -319,7 +319,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
 
 void SfxItemPool::LoadCompleted()
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Wurde der SfxItemPool mit 'bRefCounts' == FALSE geladen, mu\s das
     Laden der Dokumentinhalte mit einem Aufruf dieser Methode beendet
@@ -646,9 +646,9 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
             rStream >> nVersion;
             rStream >> nCount;
             //!SFX_ASSERTWARNING( !nSlotId || !HasMap() ||
-            //!			( nSlotId == GetSlotId( nWhich, FALSE ) ) ||
-            //!			!GetSlotId( nWhich, FALSE ),
-            //!			nWhich, "Slot/Which mismatch" );
+            //!         ( nSlotId == GetSlotId( nWhich, FALSE ) ) ||
+            //!         !GetSlotId( nWhich, FALSE ),
+            //!         nWhich, "Slot/Which mismatch" );
 
             USHORT nIndex = GetIndex_Impl(nWhich);
             SfxPoolItemArray_Impl **ppArr = pImp->ppPoolItems + nIndex;
@@ -698,7 +698,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
             rStream >> nVersion;
             //!SFX_ASSERTWARNING( !HasMap() || ( nSlotId == GetSlotId( nWhich, FALSE ) ),
-            //!			nWhich, "Slot/Which mismatch" );
+            //!         nWhich, "Slot/Which mismatch" );
 
             // Pool-Default-Item selbst laden
             SfxPoolItem *pItem =
@@ -843,9 +843,9 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
                 nWhich = nMappedWhich;
 
             //!SFX_ASSERTWARNING( !nSlot || !HasMap() ||
-            //!			( nSlot == GetSlotId( nWhich, FALSE ) ) ||
-            //!			!GetSlotId( nWhich, FALSE ),
-            //!			nWhich, "Slot/Which mismatch" );
+            //!         ( nSlot == GetSlotId( nWhich, FALSE ) ) ||
+            //!         !GetSlotId( nWhich, FALSE ),
+            //!         nWhich, "Slot/Which mismatch" );
 
             USHORT nIndex = GetIndex_Impl(nWhich);
             ppArr = pImp->ppPoolItems + nIndex;
@@ -1028,13 +1028,13 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
 
 const SfxPoolItem* SfxItemPool::LoadSurrogate
 (
-    SvStream&			rStream,	// vor einem Surrogat positionierter Stream
-    USHORT& 			rWhich, 	// Which-Id des zu ladenden <SfxPoolItem>s
-    USHORT				nSlotId,	// Slot-Id des zu ladenden <SfxPoolItem>s
-    const SfxItemPool*	pRefPool	// <SfxItemPool> in dem das Surrogat gilt
+    SvStream&           rStream,    // vor einem Surrogat positionierter Stream
+    USHORT&             rWhich,     // Which-Id des zu ladenden <SfxPoolItem>s
+    USHORT              nSlotId,    // Slot-Id des zu ladenden <SfxPoolItem>s
+    const SfxItemPool*  pRefPool    // <SfxItemPool> in dem das Surrogat gilt
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     L"adt Surrogat aus 'rStream' und liefert das dadurch in 'rRefPool'
     repr"asentierte SfxPoolItem zu"ruck. Ist das im Stream befindliche
@@ -1051,14 +1051,14 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
     nicht in eine Which-Id dieses Pools gemappt werden, wird ebenfalls 0
     zur"uckgeliefert.
 
-    Preconditions:	- Pool mu\s geladen sein
+    Preconditions:  - Pool mu\s geladen sein
                     - LoadCompleted darf noch nicht gerufen worden sein
                     - 'rStream' steht genau an der Position, an der ein
                       Surrogat f"ur ein Item mit der SlotId 'nSlotId' und
                       der WhichId 'rWhichId' mit StoreSurrogate gepeichert
                       wurde
 
-    Postconditions:	- 'rStream' ist so positioniert, wie auch StoreSurrogate
+    Postconditions: - 'rStream' ist so positioniert, wie auch StoreSurrogate
                       sein speichern beendet hatte
                     - konnte ein Item geladen werden, befindet es sich
                       in diesem SfxItemPool
@@ -1155,18 +1155,18 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
 
 FASTBOOL SfxItemPool::StoreSurrogate
 (
-    SvStream&			rStream,
-    const SfxPoolItem* 	pItem
-)	const
+    SvStream&           rStream,
+    const SfxPoolItem*  pItem
+)   const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Speichert ein Surrogat f"ur '*pItem' in 'rStream'.
 
 
     [R"uckgabewert]
 
-    FASTBOOL				TRUE
+    FASTBOOL                TRUE
                             es wurde ein echtes Surrogat gespeichert, auch
                             SFX_ITEMS_NULL bei 'pItem==0',
                             SFX_ITEMS_STATICDEFAULT und SFX_ITEMS_POOLDEFAULT
@@ -1237,7 +1237,7 @@ FASTBOOL SfxItemPool::IsInStoringRange( USHORT nWhich ) const
 
 void SfxItemPool::SetStoringRange( USHORT nFrom, USHORT nTo )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit dieser Methode kann der Which-Bereich eingeengt werden, der
     von ItemSets dieses Pool (und dem Pool selbst) gespeichert wird.
@@ -1262,15 +1262,15 @@ void SfxItemPool::SetStoringRange( USHORT nFrom, USHORT nTo )
 
 void SfxItemPool::SetVersionMap
 (
-    USHORT 	nVer, 				/* 	neue Versionsnummer */
+    USHORT  nVer,               /*  neue Versionsnummer */
     USHORT  nOldStart,          /*  alte erste Which-Id */
     USHORT  nOldEnd,            /*  alte letzte Which-Id */
-    USHORT*	pOldWhichIdTab		/* 	Array mit genau dem Aufbau der Which-Ids
+    USHORT* pOldWhichIdTab      /*  Array mit genau dem Aufbau der Which-Ids
                                     der vorhergehenden Version, in denen
                                     die jeweils neue Which-Id steht. */
 )
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit dieser Methode k"onnen neue, inkompatible Which-Id-Folgen oder
     Verteilungen realisiert werden. Pools, die noch mit alten Versionen
@@ -1279,8 +1279,8 @@ void SfxItemPool::SetVersionMap
     unter Verlust neuer Attribute geladen werden, da die Map mit dem Pool
     gespeichert wird.
 
-    Precondition:	Pool darf noch nicht geladen sein
-    Postcondition:	Which-Ids aus fr"uheren Versionen k"onnen bei Laden auf
+    Precondition:   Pool darf noch nicht geladen sein
+    Postcondition:  Which-Ids aus fr"uheren Versionen k"onnen bei Laden auf
                     Version 'nVer' gemappt werden
     Laufzeit:       1.5 * new + 10
 
@@ -1353,10 +1353,10 @@ void SfxItemPool::SetVersionMap
 
 USHORT SfxItemPool::GetNewWhich
 (
-    USHORT	nFileWhich		// die aus dem Stream geladene Which-Id
-)	const
+    USHORT  nFileWhich      // die aus dem Stream geladene Which-Id
+)   const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methoden rechnet Which-Ids aus einem File-Format in die der
     aktuellen Pool-Version um. Ist das File-Format "alter, werden die vom
@@ -1368,9 +1368,9 @@ USHORT SfxItemPool::GetNewWhich
     Die Berechnung ist nur f"ur Which-Ids definiert, die in der betreffenden
     File-Version unterst"utzt wurden. Dies ist per Assertion abgesichert.
 
-    Precondition:	Pool mu\s geladen sein
-    Postcondition:	unver"andert
-    Laufzeit:		linear(Anzahl der Sekund"arpools) +
+    Precondition:   Pool mu\s geladen sein
+    Postcondition:  unver"andert
+    Laufzeit:       linear(Anzahl der Sekund"arpools) +
                     linear(Differenz zwischen alter und neuer Version)
 
 
@@ -1402,7 +1402,7 @@ USHORT SfxItemPool::GetNewWhich
         {
             SfxPoolVersion_Impl *pVerInfo = pImp->aVersions[nMap-1];
             if ( pVerInfo->_nVer > pImp->nVersion )
-            {	USHORT nOfs;
+            {   USHORT nOfs;
                 USHORT nCount = pVerInfo->_nEnd - pVerInfo->_nStart + 1;
                 for ( nOfs = 0;
                       nOfs <= nCount &&
@@ -1453,14 +1453,14 @@ FASTBOOL SfxItemPool::IsInVersionsRange( USHORT nWhich ) const
 
 FASTBOOL SfxItemPool::IsCurrentVersionLoading() const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Mit dieser Methode kann festgestellt werden, ob die geladene Pool-Version
     dem aktuellen Pool-Aufbau entspricht.
 
-    Precondition:	Pool mu\s geladen sein
-    Postcondition:	unver"andert
-    Laufzeit:		linear(Anzahl der Sekund"arpools)
+    Precondition:   Pool mu\s geladen sein
+    Postcondition:  unver"andert
+    Laufzeit:       linear(Anzahl der Sekund"arpools)
 
 
     [Querverweise]
@@ -1480,13 +1480,13 @@ FASTBOOL SfxItemPool::IsCurrentVersionLoading() const
 
 USHORT SfxItemPool::GetVersion() const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode liefert die aktuelle Versionsnummer des SfxItemPool-Aufbaus
     (also des Which-Bereichs).
 
-    Precondition:	keine
-    Postcondition:	unver"andert
+    Precondition:   keine
+    Postcondition:  unver"andert
     Laufzeit:       2
 
 
@@ -1512,13 +1512,13 @@ USHORT SfxItemPool::GetVersion() const
 
 USHORT SfxItemPool::GetLoadingVersion() const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Diese Methode liefert die Versionsnummer des SfxItemPool-Aufbaus
     (also des Which-Bereichs), die bei Laden vorgefunden wurde.
 
-    Precondition:	Pool mu\s geladen sein
-    Postcondition:	unver"andert
+    Precondition:   Pool mu\s geladen sein
+    Postcondition:  unver"andert
     Laufzeit:       2
 
 
@@ -1553,7 +1553,7 @@ FASTBOOL SfxItemPool::IsVer2_Impl() const
 FASTBOOL SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
                                  FASTBOOL bDirect ) const
 
-/*	[Beschreibung]
+/*  [Beschreibung]
 
     Speichert das <SfxPoolItem> 'rItem' in den <SvStream> 'rStream'
     entweder als Surrogat ('bDirect == FALSE') oder direkt mit 'rItem.Store()'.
@@ -1563,14 +1563,14 @@ FASTBOOL SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
 
     Das Item wird im Stream wie folgt abgelegt:
 
-    USHORT	rItem.Which()
-    USHORT	GetSlotId( rItem.Which() ) bzw. 0 falls nicht verf"urbar
-    USHORT	GetSurrogate( &rItem ) bzw. SFX_ITEM_DIRECT bei '!SFX_ITEM_POOLBLE'
+    USHORT  rItem.Which()
+    USHORT  GetSlotId( rItem.Which() ) bzw. 0 falls nicht verf"urbar
+    USHORT  GetSurrogate( &rItem ) bzw. SFX_ITEM_DIRECT bei '!SFX_ITEM_POOLBLE'
 
     optional (falls 'bDirect == TRUE' oder '!rItem.IsPoolable()':
 
     USHORT  rItem.GetVersion()
-    ULONG 	Size
+    ULONG   Size
     Size    rItem.Store()
 
 
@@ -1601,7 +1601,7 @@ FASTBOOL SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
     if ( bDirect || !pPool->StoreSurrogate( rStream, &rItem ) )
     {
         rStream << nItemVersion;
-        rStream << (UINT32) 0L; 		  // Platz fuer Laenge in Bytes
+        rStream << (UINT32) 0L;           // Platz fuer Laenge in Bytes
         ULONG nIStart = rStream.Tell();
         rItem.Store(rStream, nItemVersion);
         ULONG nIEnd = rStream.Tell();

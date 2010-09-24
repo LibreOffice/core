@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleChildCount(void) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL getAccessibleChild(sal_Int32 nIndex) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL getAccessibleStateSet(void) throw(::com::sun::star::uno::RuntimeException);
-    virtual	sal_Int32 SAL_CALL getAccessibleIndexInParent(void) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(void) throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleComponent
@@ -102,7 +102,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont (void) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitledBorderText (void) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getToolTipText (void) throw (::com::sun::star::uno::RuntimeException);
-    
+
     // XAccessibleEventBroadcaster
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener) throw(::com::sun::star::uno::RuntimeException);
@@ -119,7 +119,7 @@ public:
 
     // Misc
 
-    /** set the index _nIndex at the accessible cell param	_nIndex The new index in parent.
+    /** set the index _nIndex at the accessible cell param  _nIndex The new index in parent.
     */
     inline void setIndexInParent(sal_Int32 _nIndex) { mnIndexInParent = _nIndex; }
 
@@ -139,8 +139,8 @@ protected:
     virtual void SAL_CALL disposing (void);
 
 private:
-    explicit AccessibleCell(void);	// not implemented
-    explicit AccessibleCell(const AccessibleCell&); // not implemented 
+    explicit AccessibleCell(void);  // not implemented
+    explicit AccessibleCell(const AccessibleCell&); // not implemented
     AccessibleCell& operator=(const AccessibleCell&); // not implemented
 };
 

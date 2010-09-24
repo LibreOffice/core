@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,7 +148,7 @@ private:
     ScFormulaCell* pMyFormulaCell;      // the cell of this formula expression
     SvNumberFormatter* pFormatter;
 
-    const formula::FormulaToken* 
+    const formula::FormulaToken*
                 pCur;                // current token
     String      aTempStr;               // for GetString()
     ScTokenStack* pStackObj;            // contains the stacks
@@ -537,10 +537,10 @@ void ScTTT();
 
 /** Obtain the date serial number for a given date.
     @param bStrict
-        If FALSE, nYear < 100 takes the two-digit year setting into account, 
-        and rollover of invalid calendar dates takes place, e.g. 1999-02-31 => 
+        If FALSE, nYear < 100 takes the two-digit year setting into account,
+        and rollover of invalid calendar dates takes place, e.g. 1999-02-31 =>
         1999-03-03.
-        If TRUE, the date passed must be a valid Gregorian calendar date. No 
+        If TRUE, the date passed must be a valid Gregorian calendar date. No
         two-digit expanding or rollover is done.
  */
 double GetDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, bool bStrict );
@@ -803,7 +803,7 @@ public:
     formula::StackVar  GetResultType()              const   { return xResult->GetType(); }
     const String&   GetStringResult()               const   { return xResult->GetString(); }
     double          GetNumResult()                  const   { return xResult->GetDouble(); }
-    formula::FormulaTokenRef 
+    formula::FormulaTokenRef
                     GetResultToken()                const   { return xResult; }
     short           GetRetFormatType()              const   { return nRetFmtType; }
     ULONG           GetRetFormatIndex()             const   { return nRetFmtIndex; }

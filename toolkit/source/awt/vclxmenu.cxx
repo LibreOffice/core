@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,9 +76,9 @@
 #endif
 
 
-//	----------------------------------------------------
-//	class VCLXMenu
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXMenu
+//  ----------------------------------------------------
 
 DBG_NAME(VCLXMenu)
 
@@ -1073,9 +1073,9 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 }
 
 
-//	----------------------------------------------------
-//	class VCLXMenuBar
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXMenuBar
+//  ----------------------------------------------------
 
 DBG_NAME(VCLXMenuBar);
 
@@ -1090,9 +1090,9 @@ VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( (Menu *)pMenuBar )
     DBG_CTOR( VCLXMenuBar, 0 );
 }
 
-//	----------------------------------------------------
-//	class VCLXPopupMenu
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXPopupMenu
+//  ----------------------------------------------------
 
 DBG_NAME(VCLXPopupMenu);
 

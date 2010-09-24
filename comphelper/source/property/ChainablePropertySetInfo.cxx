@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,28 +44,28 @@ using ::com::sun::star::beans::Property;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::beans::UnknownPropertyException;
 
-ChainablePropertySetInfo::ChainablePropertySetInfo() 
+ChainablePropertySetInfo::ChainablePropertySetInfo()
     throw()
 {
 }
 
-ChainablePropertySetInfo::ChainablePropertySetInfo( PropertyInfo* pMap ) 
+ChainablePropertySetInfo::ChainablePropertySetInfo( PropertyInfo* pMap )
     throw()
 {
     add ( pMap );
 }
 
-ChainablePropertySetInfo::~ChainablePropertySetInfo() 
+ChainablePropertySetInfo::~ChainablePropertySetInfo()
     throw()
 {
 }
 
-void ChainablePropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount ) 
+void ChainablePropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount )
     throw()
 {
-    // nCount < 0	=> add all
-    // nCount == 0	=> add nothing
-    // nCount > 0	=> add at most nCount entries
+    // nCount < 0   => add all
+    // nCount == 0  => add nothing
+    // nCount > 0   => add at most nCount entries
     if( maProperties.getLength() )
         maProperties.realloc( 0 );
 
@@ -82,7 +82,7 @@ void ChainablePropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount )
     }
 }
 
-void ChainablePropertySetInfo::remove( const rtl::OUString& aName ) 
+void ChainablePropertySetInfo::remove( const rtl::OUString& aName )
     throw()
 {
     maMap.erase ( aName );
@@ -90,7 +90,7 @@ void ChainablePropertySetInfo::remove( const rtl::OUString& aName )
          maProperties.realloc( 0 );
 }
 
-Sequence< ::Property > SAL_CALL ChainablePropertySetInfo::getProperties() 
+Sequence< ::Property > SAL_CALL ChainablePropertySetInfo::getProperties()
     throw(::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 nSize = maMap.size();
@@ -116,7 +116,7 @@ Sequence< ::Property > SAL_CALL ChainablePropertySetInfo::getProperties()
     return maProperties;
 }
 
-Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const ::rtl::OUString& rName ) 
+Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const ::rtl::OUString& rName )
     throw(::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     PropertyInfoHash::iterator aIter = maMap.find( rName );
@@ -135,7 +135,7 @@ Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const ::rtl::OUSt
     return aProperty;
 }
 
-sal_Bool SAL_CALL ChainablePropertySetInfo::hasPropertyByName( const ::rtl::OUString& rName ) 
+sal_Bool SAL_CALL ChainablePropertySetInfo::hasPropertyByName( const ::rtl::OUString& rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return static_cast < sal_Bool > ( maMap.find ( rName ) != maMap.end() );

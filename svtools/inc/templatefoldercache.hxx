@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace svt
     class SVT_DLLPUBLIC TemplateFolderCache
     {
     private:
-        TemplateFolderCacheImpl*		m_pImpl;
+        TemplateFolderCacheImpl*        m_pImpl;
 
     public:
         /** ctor.
@@ -90,7 +90,7 @@ namespace svt
         @return
             <TRUE/> if the template configuration needs to be updated
         */
-        sal_Bool	needsUpdate( sal_Bool _bForceCheck = sal_False );
+        sal_Bool    needsUpdate( sal_Bool _bForceCheck = sal_False );
 
         /** stores the current state of the template folders in the cache
         @param _bForceRetrieval
@@ -98,11 +98,11 @@ namespace svt
             Usually, you set this to <FALSE/>: After calling <method>needsUpdate</method>, the state is know and does not
             need to be read again.
         */
-        void		storeState( sal_Bool _bForceRetrieval = sal_False );
+        void        storeState( sal_Bool _bForceRetrieval = sal_False );
     };
 
 //.........................................................................
-}	// namespace svt
+}   // namespace svt
 //.........................................................................
 
 #endif // SFX2_TEMPLATEFOLDERCACHE_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,11 +82,11 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
     uno::Any aReturn;
 
     aReturn <<= ::cppu::queryInterface
-                (	rType
-                    ,	static_cast<lang::XTypeProvider*> ( this )
-                    ,	static_cast<io::XStream*> ( this )
-                    ,	static_cast<embed::XExtendedStorageStream*> ( this )
-                    ,	static_cast<lang::XComponent*> ( this ) );
+                (   rType
+                    ,   static_cast<lang::XTypeProvider*> ( this )
+                    ,   static_cast<io::XStream*> ( this )
+                    ,   static_cast<embed::XExtendedStorageStream*> ( this )
+                    ,   static_cast<lang::XComponent*> ( this ) );
 
     if ( aReturn.hasValue() == sal_True )
         return aReturn ;
@@ -94,8 +94,8 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
     if ( m_xSeekable.is() )
     {
         aReturn <<= ::cppu::queryInterface
-                (	rType
-                    ,	static_cast<io::XSeekable*> ( this ) );
+                (   rType
+                    ,   static_cast<io::XSeekable*> ( this ) );
 
         if ( aReturn.hasValue() == sal_True )
             return aReturn ;
@@ -104,8 +104,8 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
     if ( m_xInputStream.is() )
     {
         aReturn <<= ::cppu::queryInterface
-                (	rType
-                    ,	static_cast<io::XInputStream*> ( this ) );
+                (   rType
+                    ,   static_cast<io::XInputStream*> ( this ) );
 
         if ( aReturn.hasValue() == sal_True )
             return aReturn ;
@@ -113,8 +113,8 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
     if ( m_xOutputStream.is() )
     {
         aReturn <<= ::cppu::queryInterface
-                (	rType
-                    ,	static_cast<io::XOutputStream*> ( this ) );
+                (   rType
+                    ,   static_cast<io::XOutputStream*> ( this ) );
 
         if ( aReturn.hasValue() == sal_True )
             return aReturn ;
@@ -122,8 +122,8 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
     if ( m_xTruncate.is() )
     {
         aReturn <<= ::cppu::queryInterface
-                (	rType
-                    ,	static_cast<io::XTruncate*> ( this ) );
+                (   rType
+                    ,   static_cast<io::XTruncate*> ( this ) );
 
         if ( aReturn.hasValue() == sal_True )
             return aReturn ;
@@ -131,8 +131,8 @@ uno::Any SAL_CALL OFSStreamContainer::queryInterface( const uno::Type& rType )
     if ( m_xAsyncOutputMonitor.is() )
     {
         aReturn <<= ::cppu::queryInterface
-                (	rType
-                    ,	static_cast<io::XAsyncOutputMonitor*> ( this ) );
+                (   rType
+                    ,   static_cast<io::XAsyncOutputMonitor*> ( this ) );
 
         if ( aReturn.hasValue() == sal_True )
             return aReturn ;
@@ -155,7 +155,7 @@ void SAL_CALL OFSStreamContainer::release()
     OWeakObject::release();
 }
 
-//	XTypeProvider
+//  XTypeProvider
 //-----------------------------------------------
 uno::Sequence< uno::Type > SAL_CALL OFSStreamContainer::getTypes()
         throw( uno::RuntimeException )
@@ -167,29 +167,29 @@ uno::Sequence< uno::Type > SAL_CALL OFSStreamContainer::getTypes()
         if ( m_pTypeCollection == NULL )
         {
             ::cppu::OTypeCollection aTypeCollection
-                                    (	::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
-                                    ,	::getCppuType( ( const uno::Reference< embed::XExtendedStorageStream >* )NULL ) );
+                                    (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XExtendedStorageStream >* )NULL ) );
 
             if ( m_xSeekable.is() )
                 aTypeCollection = ::cppu::OTypeCollection
-                                    (	::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL ),
+                                    (   ::getCppuType( ( const uno::Reference< io::XSeekable >* )NULL ),
                                         aTypeCollection.getTypes() );
             if ( m_xInputStream.is() )
                 aTypeCollection = ::cppu::OTypeCollection
-                                    (	::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL ),
+                                    (   ::getCppuType( ( const uno::Reference< io::XInputStream >* )NULL ),
                                         aTypeCollection.getTypes() );
 
             if ( m_xOutputStream.is() )
                 aTypeCollection = ::cppu::OTypeCollection
-                                    (	::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL ),
+                                    (   ::getCppuType( ( const uno::Reference< io::XOutputStream >* )NULL ),
                                         aTypeCollection.getTypes() );
             if ( m_xTruncate.is() )
                 aTypeCollection = ::cppu::OTypeCollection
-                                    (	::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL ),
+                                    (   ::getCppuType( ( const uno::Reference< io::XTruncate >* )NULL ),
                                         aTypeCollection.getTypes() );
             if ( m_xAsyncOutputMonitor.is() )
                 aTypeCollection = ::cppu::OTypeCollection
-                                    (	::getCppuType( ( const uno::Reference< io::XAsyncOutputMonitor >* )NULL ),
+                                    (   ::getCppuType( ( const uno::Reference< io::XAsyncOutputMonitor >* )NULL ),
                                         aTypeCollection.getTypes() );
 
             m_pTypeCollection = new ::cppu::OTypeCollection( aTypeCollection );

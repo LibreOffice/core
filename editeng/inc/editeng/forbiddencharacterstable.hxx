@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,16 +54,16 @@ DECLARE_TABLE( SvxForbiddenCharactersTableImpl, ForbiddenCharactersInfo* )
 
 class EDITENG_DLLPUBLIC SvxForbiddenCharactersTable : public SvxForbiddenCharactersTableImpl, public vos::OReference
 {
-private:	
+private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
-    
+
 public:
             SvxForbiddenCharactersTable( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF, USHORT nISize = 4, USHORT nGrow = 4 );
             ~SvxForbiddenCharactersTable();
 
     const com::sun::star::i18n::ForbiddenCharacters* GetForbiddenCharacters( USHORT nLanuage, BOOL bGetDefault ) const;
-    void 	SetForbiddenCharacters(  USHORT nLanuage , const com::sun::star::i18n::ForbiddenCharacters& );
-    void 	ClearForbiddenCharacters( USHORT nLanuage );
+    void    SetForbiddenCharacters(  USHORT nLanuage , const com::sun::star::i18n::ForbiddenCharacters& );
+    void    ClearForbiddenCharacters( USHORT nLanuage );
 };
 
 #endif // _FORBIDDENCHARACTERSTABLE_HXX

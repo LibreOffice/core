@@ -53,14 +53,14 @@ class SidebarTxtControl : public Control
         bool mbMouseOver;
 
     protected:
-        virtual void	Paint( const Rectangle& rRect);
+        virtual void    Paint( const Rectangle& rRect);
         virtual void    KeyInput( const KeyEvent& rKeyEvt );
-        virtual void	MouseMove( const MouseEvent& rMEvt );
-        virtual void	MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void	MouseButtonUp( const MouseEvent& rMEvt );
-        virtual void	Command( const CommandEvent& rCEvt );
-        virtual void 	LoseFocus();
-        virtual void	RequestHelp(const HelpEvent &rEvt);
+        virtual void    MouseMove( const MouseEvent& rMEvt );
+        virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+        virtual void    MouseButtonUp( const MouseEvent& rMEvt );
+        virtual void    Command( const CommandEvent& rCEvt );
+        virtual void    LoseFocus();
+        virtual void    RequestHelp(const HelpEvent &rEvt);
         virtual XubString GetSurroundingText() const;
         virtual Selection GetSurroundingTextSelection() const;
 

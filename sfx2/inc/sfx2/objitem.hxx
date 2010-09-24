@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,14 +37,14 @@
 
 class SFX2_DLLPUBLIC SfxObjectItem: public SfxPoolItem
 {
-    SfxShell*       		 _pSh;
+    SfxShell*                _pSh;
 
 public:
                              TYPEINFO();
                              SfxObjectItem( USHORT nWhich=0, SfxShell *pSh=0 );
 
-    virtual int 			 operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
     SfxShell*                GetShell() const
                              { return _pSh; }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,9 +59,9 @@ namespace xmlscript
 
     class BasicElementBase : public BasicElementBase_BASE
     {
-    protected:  
+    protected:
         BasicImport* m_pImport;
-        BasicElementBase* m_pParent;        
+        BasicElementBase* m_pParent;
         ::rtl::OUString m_aLocalName;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes > m_xAttributes;
 
@@ -74,7 +74,7 @@ namespace xmlscript
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes,
             BasicElementBase* pParent, BasicImport* pImport );
         virtual ~BasicElementBase();
-        
+
         // XElement
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XElement > SAL_CALL getParent()
             throw (::com::sun::star::uno::RuntimeException);
@@ -275,7 +275,7 @@ namespace xmlscript
         virtual ~XMLBasicImporterBase();
 
         // XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
+        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
             throw (::com::sun::star::uno::RuntimeException);
 
         // XImporter
@@ -315,9 +315,9 @@ namespace xmlscript
         virtual ~XMLBasicImporter();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) 
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
             throw (::com::sun::star::uno::RuntimeException);
     };
 
@@ -334,14 +334,14 @@ namespace xmlscript
         virtual ~XMLOasisBasicImporter();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) 
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
             throw (::com::sun::star::uno::RuntimeException);
     };
 
 //.........................................................................
-}	// namespace xmlscript
+}   // namespace xmlscript
 //.........................................................................
 
 #endif // XMLSCRIPT_XMLBAS_IMPORT_HXX

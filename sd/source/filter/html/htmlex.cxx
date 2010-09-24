@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,7 +105,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 
-#define KEY_QUALITY		"JPG-EXPORT-QUALITY"
+#define KEY_QUALITY     "JPG-EXPORT-QUALITY"
 
 // Parameter aus Itemset abfragen
 
@@ -129,21 +129,21 @@ const char *pButtonNames[NUM_BUTTONS] =
     "collapse.png",
 };
 
-#define BTN_FIRST_0	0
-#define BTN_FIRST_1	1
-#define BTN_PREV_0	2
-#define BTN_PREV_1	3
-#define BTN_NEXT_0	4
-#define BTN_NEXT_1	5
-#define BTN_LAST_0	6
-#define BTN_LAST_1	7
-#define BTN_INDEX	8
-#define BTN_TEXT	9
-#define BTN_MORE	10
-#define BTN_LESS	11
+#define BTN_FIRST_0 0
+#define BTN_FIRST_1 1
+#define BTN_PREV_0  2
+#define BTN_PREV_1  3
+#define BTN_NEXT_0  4
+#define BTN_NEXT_1  5
+#define BTN_LAST_0  6
+#define BTN_LAST_1  7
+#define BTN_INDEX   8
+#define BTN_TEXT    9
+#define BTN_MORE    10
+#define BTN_LESS    11
 
 // Fuer Detectfilter
-#define CALC_OPTIONS		"9,34,SYSTEM"
+#define CALC_OPTIONS        "9,34,SYSTEM"
 
 // *********************************************************************
 // Hilfsklasse fuer das simple erzeugen von Dateien lokal/remote
@@ -151,9 +151,9 @@ const char *pButtonNames[NUM_BUTTONS] =
 class EasyFile
 {
 private:
-    SvStream*	pOStm;
-    SfxMedium*	pMedium;
-    bool		bOpen;
+    SvStream*   pOStm;
+    SfxMedium*  pMedium;
+    bool        bOpen;
 
 public:
 
@@ -381,7 +381,7 @@ HtmlExport::HtmlExport(
     const Sequence< PropertyValue >& rParams,
     SdDrawDocument* pExpDoc,
     ::sd::DrawDocShell* pDocShell )
-    :	maPath( aPath ),
+    :   maPath( aPath ),
         mpDoc(pExpDoc),
         mpDocSh( pDocShell ),
         meEC(NULL),
@@ -678,7 +678,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     INetURLObject aINetURLObj( maPath );
     DBG_ASSERT( aINetURLObj.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    maExportPath = aINetURLObj.GetPartBeforeLastName();	// with trailing '/'
+    maExportPath = aINetURLObj.GetPartBeforeLastName(); // with trailing '/'
     maIndex = aINetURLObj.GetLastName();
 
     mnSdPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
@@ -1061,9 +1061,9 @@ bool HtmlExport::CreateImagesForPresPages()
 // =====================================================================
 SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage* pPage)
 {
-    ULONG			nObjectCount = pPage->GetObjCount();
-    SdrObject*		pObject 	 = NULL;
-    SdrTextObj* 	pResult 	 = NULL;
+    ULONG           nObjectCount = pPage->GetObjCount();
+    SdrObject*      pObject      = NULL;
+    SdrTextObj*     pResult      = NULL;
 
     for (ULONG nObject = 0; nObject < nObjectCount; nObject++)
     {
@@ -1108,7 +1108,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         if( mbDocColors )
         {
             SetDocColors( pPage );
-//			maBackColor = pPage->GetPageBackgroundColor();
+//          maBackColor = pPage->GetPageBackgroundColor();
         }
 
 // HTML Kopf
@@ -1641,12 +1641,12 @@ bool HtmlExport::CreateHtmlForPresPages()
             for (ULONG nObject = 0; nObject < nClickableObjectCount; nObject++)
             {
                 SdrObject* pObject = (SdrObject*)aClickableObjects.GetObject(nObject);
-                SdAnimationInfo* pInfo	   = mpDoc->GetAnimationInfo(pObject);
-                SdIMapInfo* 	 pIMapInfo = mpDoc->GetIMapInfo(pObject);
+                SdAnimationInfo* pInfo     = mpDoc->GetAnimationInfo(pObject);
+                SdIMapInfo*      pIMapInfo = mpDoc->GetIMapInfo(pObject);
 
                 Rectangle aRect(pObject->GetCurrentBoundRect());
-                Point	  aLogPos(aRect.TopLeft());
-                bool	  bIsSquare = aRect.GetWidth() == aRect.GetHeight();
+                Point     aLogPos(aRect.TopLeft());
+                bool      bIsSquare = aRect.GetWidth() == aRect.GetHeight();
 
                 ULONG nPageWidth = pPage->GetSize().Width() - pPage->GetLftBorder() -
                                    pPage->GetRgtBorder();
@@ -1692,7 +1692,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                         }
                         if (nPgNum != SDRPAGE_NOTFOUND)
                         {
-                            nPgNum = (nPgNum - 1) / 2;	// SdrPageNum --> SdPageNum
+                            nPgNum = (nPgNum - 1) / 2;  // SdrPageNum --> SdPageNum
                             aURL = CreatePageURL(nPgNum);
                         }
 
@@ -1757,14 +1757,14 @@ bool HtmlExport::CreateHtmlForPresPages()
                 \************************************************************/
                 if( pInfo )
                 {
-                    String		aHRef;
+                    String      aHRef;
                     presentation::ClickAction eClickAction = pInfo->meClickAction;
 
                     switch( eClickAction )
                     {
                         case presentation::ClickAction_BOOKMARK:
                         {
-                            BOOL		bIsMasterPage;
+                            BOOL        bIsMasterPage;
                             USHORT      nPgNum = mpDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage );
                             SdrObject*  pObj = NULL;
 
@@ -2107,7 +2107,7 @@ void HtmlExport::CreateFileNames()
     mpPageNames = new String*[mnSdPageCount];
     mpTextFiles = new String*[mnSdPageCount];
 
-    mbHeader = false;	// Ueberschrift auf Uebersichtsseite?
+    mbHeader = false;   // Ueberschrift auf Uebersichtsseite?
 
     for (USHORT nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
     {
@@ -2502,7 +2502,7 @@ bool HtmlExport::CreateNavBarFrames()
             if(mnButtonThema != -1)
                 aButton = CreateImage(GetButtonName(BTN_TEXT), aButton);
 
-            String	aText0( RTL_CONSTASCII_USTRINGPARAM("text0"));
+            String  aText0( RTL_CONSTASCII_USTRINGPARAM("text0"));
             aText0 += maHTMLExtension;
             aStr += CreateLink( aText0, aButton, String(RTL_CONSTASCII_USTRINGPARAM("_top")));
             aStr.AppendAscii( "\r\n" );
@@ -2635,7 +2635,7 @@ String HtmlExport::CreateNavBar( USHORT nSdPage, bool bIsText ) const
     // to Previous page
     if(nSdPage > 0)
         aStr += CreateLink( bIsText?*mpTextFiles[nSdPage-1]:
-                                    *mpHTMLFiles[nSdPage-1],	aStrNavPrev);
+                                    *mpHTMLFiles[nSdPage-1],    aStrNavPrev);
     else
         aStr += aStrNavPrev;
     aStr.Append(sal_Unicode(' '));
@@ -2836,7 +2836,7 @@ String HtmlExport::CreateHTMLCircleArea( ULONG nRadius,
 String HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPolygon,
     Size aShift, double fFactor, const String& rHRef ) const
 {
-    String			aStr;
+    String          aStr;
     const sal_uInt32 nNoOfPolygons(rPolyPolygon.count());
 
     for ( sal_uInt32 nXPoly = 0L; nXPoly < nNoOfPolygons; nXPoly++ )
@@ -2924,16 +2924,16 @@ String HtmlExport::CreatePageURL( USHORT nPgNum )
 
 bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const String& rDest, bool bUnix /* = false */ )
 {
-    INetURLObject	aURL( SvtPathOptions().GetConfigPath() );
-    String		aScript;
+    INetURLObject   aURL( SvtPathOptions().GetConfigPath() );
+    String      aScript;
 
     aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM("webcast") ) );
     aURL.Append( rSource );
 
     meEC.SetContext( STR_HTMLEXP_ERROR_OPEN_FILE, rSource );
 
-    ULONG		nErr = 0;
-    SvStream*	pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+    ULONG       nErr = 0;
+    SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
     if( pIStm )
     {
@@ -3099,8 +3099,8 @@ String HtmlExport::InsertSound( const String& rSoundFile )
     if( rSoundFile.Len() == 0 )
         return rSoundFile;
 
-    String		aStr( RTL_CONSTASCII_USTRINGPARAM("<embed src=\"") );
-    INetURLObject	aURL( rSoundFile );
+    String      aStr( RTL_CONSTASCII_USTRINGPARAM("<embed src=\"") );
+    INetURLObject   aURL( rSoundFile );
 
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 

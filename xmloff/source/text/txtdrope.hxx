@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 
 class SvXMLExport;
 namespace com { namespace sun { namespace star { namespace uno {
-    class Any; } } } } 
+    class Any; } } } }
 namespace rtl { class OUString; }
 
 class XMLTextDropCapExport
@@ -41,9 +41,9 @@ public:
 
     XMLTextDropCapExport( SvXMLExport& rExport );
     ~XMLTextDropCapExport();
-    
+
     void exportXML( const ::com::sun::star::uno::Any& rAny,
-                    sal_Bool bWholeWord, 
+                    sal_Bool bWholeWord,
                     const ::rtl::OUString& rStyleName );
 };
 

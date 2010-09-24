@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,12 +66,12 @@ public:
         @param eType
             Type of the title bar.  This specifies how the title bar
             will be formated.  For more information see TitleBar.
-            
+
     */
     ControlContainerDescriptor (
         ControlContainer& rContainer,
         ::Window* pParent,
-        ::std::auto_ptr<ILayoutableWindow> pControl, 
+        ::std::auto_ptr<ILayoutableWindow> pControl,
         const String& rTitle,
         TitleBar::TitleBarType eType);
 

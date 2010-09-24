@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -155,16 +155,16 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
     pThreadImpl->m_hmq = 0;
 
     if ( nFlags == sal_True )
-    {    
+    {
         DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
     }
-    
+
     pThreadImpl->m_ThreadId = (TID) _beginthread( oslWorkerWrapperFunction,    /* worker-function */
                                                   NULL,                        /* unused parameter */
                                                   1024*1024,                   /* max. Stacksize */
                                                   pThreadImpl );
     if ( nFlags == sal_True )
-    {    
+    {
         if( pThreadImpl->m_ThreadId != -1 )
             DosSuspendThread( pThreadImpl->m_ThreadId );
         DosReleaseMutexSem( MutexLock);
@@ -551,12 +551,12 @@ void SAL_CALL osl_yieldThread()
 
 typedef struct _TLS
 {
-    PULONG							pulPtr;
-    oslThreadKeyCallbackFunction	pfnCallback;
-    struct _TLS						*pNext, *pPrev;
+    PULONG                          pulPtr;
+    oslThreadKeyCallbackFunction    pfnCallback;
+    struct _TLS                     *pNext, *pPrev;
 } TLS, *PTLS;
 
-static	PTLS		g_pThreadKeyList = NULL;
+static  PTLS        g_pThreadKeyList = NULL;
 
 static void AddKeyToList( PTLS pTls )
 {
@@ -566,7 +566,7 @@ static void AddKeyToList( PTLS pTls )
 
         pTls->pNext = g_pThreadKeyList;
         pTls->pPrev = 0;
-        
+
         if ( g_pThreadKeyList )
             g_pThreadKeyList->pPrev = pTls;
 
@@ -597,15 +597,15 @@ static void RemoveKeyFromList( PTLS pTls )
 
 void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach(void)
 {
-    PTLS	pTls;
-    
+    PTLS    pTls;
+
     DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
     pTls = g_pThreadKeyList;
     while ( pTls )
     {
         if ( pTls->pfnCallback )
         {
-            void	*pValue	= (void*)*pTls->pulPtr;
+            void    *pValue = (void*)*pTls->pulPtr;
 
             if ( pValue )
                 pTls->pfnCallback( pValue );
@@ -621,7 +621,7 @@ void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach(void)
 /*****************************************************************************/
 oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback)
 {
-    PTLS	pTls = (PTLS)rtl_allocateMemory( sizeof(TLS) );
+    PTLS    pTls = (PTLS)rtl_allocateMemory( sizeof(TLS) );
 
     if ( pTls )
     {
@@ -631,7 +631,7 @@ oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback
             rtl_freeMemory( pTls );
             pTls = 0;
         }
-        else 
+        else
         {
             *pTls->pulPtr = 0;
             AddKeyToList( pTls );
@@ -648,10 +648,10 @@ void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
 {
     if (Key != 0)
     {
-        PTLS	pTls = (PTLS)Key;
+        PTLS    pTls = (PTLS)Key;
 
         RemoveKeyFromList( pTls );
-        DosFreeThreadLocalMemory(pTls->pulPtr);     
+        DosFreeThreadLocalMemory(pTls->pulPtr);
         rtl_freeMemory( pTls );
     }
 }
@@ -663,7 +663,7 @@ void * SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
 {
     if (Key != 0)
     {
-        PTLS	pTls = (PTLS)Key;
+        PTLS    pTls = (PTLS)Key;
 
         return ((void *) *pTls->pulPtr);
     }
@@ -678,9 +678,9 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 {
     if (Key != 0)
     {
-        PTLS	pTls = (PTLS)Key;
-        void*	pOldData = NULL;
-        BOOL	fSuccess = TRUE; //YD cannot fail
+        PTLS    pTls = (PTLS)Key;
+        void*   pOldData = NULL;
+        BOOL    fSuccess = TRUE; //YD cannot fail
 
         if ( pTls->pfnCallback )
             pOldData = (void*)*pTls->pulPtr;
@@ -702,39 +702,39 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 /* osl_getThreadTextEncoding */
 /*****************************************************************************/
 
-ULONG	g_dwTLSTextEncodingIndex = (ULONG)-1;
+ULONG   g_dwTLSTextEncodingIndex = (ULONG)-1;
 
 sal_uInt32 SAL_CALL _GetACP( void)
 {
-    APIRET	rc;
-    ULONG  	aulCpList[8]  = {0};
-    ULONG	ulListSize;
-    
-    rc = DosQueryCp( sizeof( aulCpList), aulCpList, &ulListSize);	
+    APIRET  rc;
+    ULONG   aulCpList[8]  = {0};
+    ULONG   ulListSize;
+
+    rc = DosQueryCp( sizeof( aulCpList), aulCpList, &ulListSize);
     if (rc)
-        return 437;	// in case of error, return codepage EN_US
+        return 437; // in case of error, return codepage EN_US
     // current codepage is first of list, others are the prepared codepages.
     return aulCpList[0];
 }
 
 rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void)
 {
-    rtl_TextEncoding	_encoding;
+    rtl_TextEncoding    _encoding;
 
     if ( (ULONG)-1 == g_dwTLSTextEncodingIndex ) {
         rtl_TextEncoding defaultEncoding;
         const char *     pszEncoding;
-    
+
         /* create thread specific data key */
         g_dwTLSTextEncodingIndex = osl_createThreadKey( NULL);
-    
+
         /* determine default text encoding */
         pszEncoding = getenv ("SOLAR_USER_RTL_TEXTENCODING");
         if (pszEncoding)
             defaultEncoding = atoi(pszEncoding);
         else
             defaultEncoding = rtl_getTextEncodingFromWindowsCodePage( _GetACP());
-    
+
         //OSL_ASSERT(defaultEncoding != RTL_TEXTENCODING_DONTKNOW);
         //g_thread.m_textencoding.m_default = defaultEncoding;
         osl_setThreadKeyData( g_dwTLSTextEncodingIndex, (void*)defaultEncoding);

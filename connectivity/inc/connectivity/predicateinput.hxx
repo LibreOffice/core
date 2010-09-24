@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ namespace dbtools
             If not <NULL/>, and a parsing error occurs, the error message will be copied to the string the argument
             points to.
         */
-        sal_Bool		normalizePredicateString(
+        sal_Bool        normalizePredicateString(
             ::rtl::OUString& _rPredicateValue,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
             ::rtl::OUString* _pErrorMessage = NULL
@@ -97,7 +97,7 @@ namespace dbtools
             points to.
         @see normalizePredicateString
         */
-        ::rtl::OUString	getPredicateValue(
+        ::rtl::OUString getPredicateValue(
             const ::rtl::OUString& _rPredicateValue,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _rxField,
             sal_Bool _bForStatementUse,
@@ -119,7 +119,7 @@ namespace dbtools
     };
 
 //.........................................................................
-}	// namespace dbtools
+}   // namespace dbtools
 //.........................................................................
 
 #endif // CONNECTIVITY_PREDICATEINPUT_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,13 +34,13 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_ 
+#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_ 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_ 
+#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
@@ -59,8 +59,8 @@ namespace dbaui
     //= ODirectSQLDialog
     //=====================================================================
     class ODirectSQLDialog;
-    typedef ::svt::OGenericUnoDialog										ODirectSQLDialog_BASE;
-    typedef ::comphelper::OPropertyArrayUsageHelper< ODirectSQLDialog >		ODirectSQLDialog_PBASE;
+    typedef ::svt::OGenericUnoDialog                                        ODirectSQLDialog_BASE;
+    typedef ::comphelper::OPropertyArrayUsageHelper< ODirectSQLDialog >     ODirectSQLDialog_PBASE;
 
     class ODirectSQLDialog
             :public ODirectSQLDialog_BASE
@@ -82,12 +82,12 @@ namespace dbaui
 
     protected:
         // OGenericUnoDialog overridables
-        virtual Dialog*	createDialog(Window* _pParent);
+        virtual Dialog* createDialog(Window* _pParent);
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
     };
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // DBAUI_UNODIRECTSQL_HXX

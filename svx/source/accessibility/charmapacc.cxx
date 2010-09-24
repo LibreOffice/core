@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -249,7 +249,7 @@ void SAL_CALL SvxShowCharSetVirtualAcc::disposing()
 // - SvxShowCharSetItem -
 // ----------------
 
-SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*	_pParent,USHORT _nPos ) :
+SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,USHORT _nPos ) :
     mrParent( rParent )
     ,mnId( _nPos )
     ,m_pItem(NULL)
@@ -589,7 +589,7 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleCellAt( sal_In
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    ::svx::SvxShowCharSetItem* pItem = m_pParent->getCharSetControl()->ImplGetItem( 
+    ::svx::SvxShowCharSetItem* pItem = m_pParent->getCharSetControl()->ImplGetItem(
         sal::static_int_cast<USHORT>(getAccessibleIndex(nRow,nColumn) ));
     if ( !pItem  )
         throw IndexOutOfBoundsException();

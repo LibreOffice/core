@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,17 +63,17 @@ namespace linguistic2{
 class SvxNewDictionaryDialog : public ModalDialog
 {
 private:
-    FixedText			aNameText;
-    Edit				aNameEdit;
-    FixedText			aLanguageText;
-    SvxLanguageBox		aLanguageLB;
-    CheckBox			aExceptBtn;
+    FixedText           aNameText;
+    Edit                aNameEdit;
+    FixedText           aLanguageText;
+    SvxLanguageBox      aLanguageLB;
+    CheckBox            aExceptBtn;
     FixedLine            aNewDictBox;
-    OKButton			aOKBtn;
-    CancelButton		aCancelBtn;
-    HelpButton			aHelpBtn;
+    OKButton            aOKBtn;
+    CancelButton        aCancelBtn;
+    HelpButton          aHelpBtn;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 > 	xSpell;
+        ::com::sun::star::linguistic2::XSpellChecker1 >     xSpell;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >    xNewDic;
 
@@ -96,20 +96,20 @@ public:
 
 class SvxDictEdit : public Edit
 {
-    Link 	aActionLink;
-    sal_Bool 	bSpaces;
+    Link    aActionLink;
+    sal_Bool    bSpaces;
 
     public:
                     SvxDictEdit(Window* pParent, const ResId& rResId) :
                         Edit(pParent, rResId), bSpaces(sal_False){}
 
-    void 			SetActionHdl( const Link& rLink )
+    void            SetActionHdl( const Link& rLink )
                                 { aActionLink = rLink;}
 
-    void 			SetSpaces(sal_Bool bSet)
+    void            SetSpaces(sal_Bool bSet)
                                 {bSpaces = bSet;}
 
-    virtual void	KeyInput( const KeyEvent& rKEvent );
+    virtual void    KeyInput( const KeyEvent& rKEvent );
 };
 
 // class SvxEditDictionaryDialog -----------------------------------------
@@ -118,37 +118,37 @@ class SvxEditDictionaryDialog : public ModalDialog
 {
 private:
 
-    FixedText				aBookFT;
-    ListBox					aAllDictsLB;
-    FixedText				aLangFT;
-    SvxLanguageBox			aLangLB;
+    FixedText               aBookFT;
+    ListBox                 aAllDictsLB;
+    FixedText               aLangFT;
+    SvxLanguageBox          aLangLB;
 
-    FixedText				aWordFT;
-    SvxDictEdit				aWordED;
-    FixedText				aReplaceFT;
-    SvxDictEdit				aReplaceED;
-    SvTabListBox 			aWordsLB;
-    PushButton 				aNewReplacePB;
-    PushButton 				aDeletePB;
+    FixedText               aWordFT;
+    SvxDictEdit             aWordED;
+    FixedText               aReplaceFT;
+    SvxDictEdit             aReplaceED;
+    SvTabListBox            aWordsLB;
+    PushButton              aNewReplacePB;
+    PushButton              aDeletePB;
     FixedLine                aEditDictsBox;
 
-    CancelButton			aCloseBtn;
-    HelpButton				aHelpBtn;
-    String					sModify;
-    String					sNew;
-    DecorationView			aDecoView;
+    CancelButton            aCloseBtn;
+    HelpButton              aHelpBtn;
+    String                  sModify;
+    String                  sNew;
+    DecorationView          aDecoView;
 
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::linguistic2::XDictionary >  >	aDics;	//! snapshot copy to work on
+            ::com::sun::star::linguistic2::XDictionary >  > aDics;  //! snapshot copy to work on
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 >		xSpell;
+        ::com::sun::star::linguistic2::XSpellChecker1 >     xSpell;
 
-    short				nOld;
-    long				nWidth;
-    sal_Bool			bFirstSelect;
-    sal_Bool			bDoNothing;
-    BOOL				bDicIsReadonly;
+    short               nOld;
+    long                nWidth;
+    sal_Bool            bFirstSelect;
+    sal_Bool            bDoNothing;
+    BOOL                bDicIsReadonly;
 
 #ifdef _SVX_OPTDICT_CXX
     DECL_LINK( SelectBookHdl_Impl, ListBox * );
@@ -158,20 +158,20 @@ private:
     DECL_LINK(ModifyHdl, Edit*);
 
 
-    void			ShowWords_Impl( sal_uInt16 nId );
-    void			SetLanguage_Impl( ::com::sun::star::util::Language nLanguage );
-    sal_Bool			IsDicReadonly_Impl() const { return bDicIsReadonly; }
-    void			SetDicReadonly_Impl( ::com::sun::star::uno::Reference<
+    void            ShowWords_Impl( sal_uInt16 nId );
+    void            SetLanguage_Impl( ::com::sun::star::util::Language nLanguage );
+    sal_Bool            IsDicReadonly_Impl() const { return bDicIsReadonly; }
+    void            SetDicReadonly_Impl( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XDictionary >  &xDic );
 
-    void			RemoveDictEntry(SvLBoxEntry* pEntry);
-    USHORT			GetLBInsertPos(const String &rDicWord);
+    void            RemoveDictEntry(SvLBoxEntry* pEntry);
+    USHORT          GetLBInsertPos(const String &rDicWord);
 
 #endif
 
 protected:
 
-    virtual void	Paint( const Rectangle& rRect );
+    virtual void    Paint( const Rectangle& rRect );
 
 public:
     SvxEditDictionaryDialog( Window* pParent,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.beans.NamedValue;
 
 /**
- * This class represents a local office window. 
+ * This class represents a local office window.
  *
  * @since OOo 2.0.0
  */
@@ -57,20 +57,20 @@ public class LocalOfficeWindow
     extends java.awt.Canvas
     implements OfficeWindow, XEventListener
 {
-    private transient OfficeConnection	mConnection;
-    private transient XWindowPeer		mParentProxy;
-    private transient XWindowPeer		mWindow;
-    private boolean 			bPeer = false;
+    private transient OfficeConnection  mConnection;
+    private transient XWindowPeer       mParentProxy;
+    private transient XWindowPeer       mWindow;
+    private boolean             bPeer = false;
 
     /**
      * Construnctor.
      *
-     * @param connection The office connection object the window 
-     *	belongs to.
+     * @param connection The office connection object the window
+     *  belongs to.
      */
     protected LocalOfficeWindow(OfficeConnection connection)
     {
-        mConnection	= connection;
+        mConnection = connection;
         mConnection.addEventListener((XEventListener)this);
     }
 
@@ -106,14 +106,14 @@ public class LocalOfficeWindow
     {
         // the window will be disposed by the framework
         mWindow = null;
-        mConnection	= null;
+        mConnection = null;
     }
 
     /**
     * Returns an AWT toolkit.
         */
        private XToolkit queryAWTToolkit()
-               throws com.sun.star.uno.Exception 
+               throws com.sun.star.uno.Exception
        {
             // Create a UNO toolkit.
             XMultiComponentFactory  compfactory;
@@ -130,7 +130,7 @@ public class LocalOfficeWindow
             else
                 return null;
        }
- 
+
            /// called when system parent is available, reparents the bean window
     private synchronized void aquireSystemWindow()
     {
@@ -177,14 +177,14 @@ public class LocalOfficeWindow
             aquireSystemWindow();
         else
             releaseSystemWindow();
-    }	
-     
+    }
+
        /** Factory method for a UNO AWT toolkit window as a child of this Java window.
     *
     */
        private synchronized XWindowPeer createUNOWindowPeer()
        {
-        try 
+        try
         {
             // get this windows native window type
             int type = getNativeWindowSystemType();
@@ -212,15 +212,15 @@ public class LocalOfficeWindow
             desc.Parent = parentPeer;
             desc.Bounds = aRect;
             desc.WindowServiceName = "workwindow";
-            desc.WindowAttributes = (type == SystemDependent.SYSTEM_WIN32)	
+            desc.WindowAttributes = (type == SystemDependent.SYSTEM_WIN32)
                 ? WindowAttribute.SHOW : 0;
-            mWindow	= queryAWTToolkit().createWindow(desc);
+            mWindow = queryAWTToolkit().createWindow(desc);
 
 
             // set initial visibility
             XWindow aWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, mWindow);
             aWindow.setVisible( bPeer );
-        } 
+        }
         catch (com.sun.star.uno.Exception exp) {
         }
 
@@ -228,7 +228,7 @@ public class LocalOfficeWindow
     }
     /** We make sure that the office window is notified that the parent
      *  will be removed.
-     */   
+     */
     public void removeNotify()
     {
         try {
@@ -263,7 +263,7 @@ public class LocalOfficeWindow
     */
     protected Any getWrappedWindowHandle()
     {
-                
+
         NamedValue window = new NamedValue(
             "WINDOW", new Any(new Type(Long.class), new Long(getNativeWindow())));
         NamedValue xembed = new NamedValue(

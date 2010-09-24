@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,51 +57,51 @@ public:
                                  ScAddress aCursorPos );
                     ~ScSolverDlg();
 
-    virtual void	SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
     virtual BOOL    IsRefInputMode() const;
-    virtual void	SetActive();
-    virtual BOOL	Close();
+    virtual void    SetActive();
+    virtual BOOL    Close();
 
 private:
     FixedLine       aFlVariables;
-    FixedText		aFtFormulaCell;
-    formula::RefEdit		aEdFormulaCell;
-    formula::RefButton		aRBFormulaCell;
+    FixedText       aFtFormulaCell;
+    formula::RefEdit        aEdFormulaCell;
+    formula::RefButton      aRBFormulaCell;
 
-    FixedText		aFtTargetVal;
-    Edit			aEdTargetVal;
+    FixedText       aFtTargetVal;
+    Edit            aEdTargetVal;
 
-    FixedText		aFtVariableCell;
-    formula::RefEdit		aEdVariableCell;
-    formula::RefButton		aRBVariableCell;
+    FixedText       aFtVariableCell;
+    formula::RefEdit        aEdVariableCell;
+    formula::RefButton      aRBVariableCell;
 
-    OKButton		aBtnOk;
-    CancelButton	aBtnCancel;
-    HelpButton		aBtnHelp;
+    OKButton        aBtnOk;
+    CancelButton    aBtnCancel;
+    HelpButton      aBtnHelp;
 
-    ScAddress		theFormulaCell;
-    ScAddress		theVariableCell;
-    String			theTargetValStr;
+    ScAddress       theFormulaCell;
+    ScAddress       theVariableCell;
+    String          theTargetValStr;
 
-    ScDocument*		pDoc;
-    const SCTAB	    nCurTab;
-    formula::RefEdit*		pEdActive;
-    BOOL			bDlgLostFocus;
-    const String	errMsgInvalidVar;
-    const String	errMsgInvalidForm;
-    const String	errMsgNoFormula;
-    const String	errMsgInvalidVal;
+    ScDocument*     pDoc;
+    const SCTAB     nCurTab;
+    formula::RefEdit*       pEdActive;
+    BOOL            bDlgLostFocus;
+    const String    errMsgInvalidVar;
+    const String    errMsgInvalidForm;
+    const String    errMsgNoFormula;
+    const String    errMsgInvalidVal;
 
 
 #ifdef _SOLVRDLG_CXX
-    void	Init();
-    BOOL	CheckTargetValue( String& rStrVal );
-    void	RaiseError( ScSolverErr eError );
+    void    Init();
+    BOOL    CheckTargetValue( String& rStrVal );
+    void    RaiseError( ScSolverErr eError );
 
     DECL_LINK( BtnHdl, PushButton* );
     DECL_LINK( GetFocusHdl, Control* );
     DECL_LINK( LoseFocusHdl, Control* );
-#endif	// _SOLVERDLG_CXX
+#endif  // _SOLVERDLG_CXX
 };
 
 #endif // SC_SOLVRDLG_HXX

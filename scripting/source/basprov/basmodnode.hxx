@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,15 +41,15 @@ namespace basprov
 {
 //.........................................................................
 
-    //	----------------------------------------------------
-    //	class BasicModuleNodeImpl
-    //	----------------------------------------------------
+    //  ----------------------------------------------------
+    //  class BasicModuleNodeImpl
+    //  ----------------------------------------------------
 
-    typedef ::cppu::WeakImplHelper1<    
+    typedef ::cppu::WeakImplHelper1<
         ::com::sun::star::script::browse::XBrowseNode > BasicModuleNodeImpl_BASE;
 
 
-    class BasicModuleNodeImpl : public BasicModuleNodeImpl_BASE 
+    class BasicModuleNodeImpl : public BasicModuleNodeImpl_BASE
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
@@ -64,18 +64,18 @@ namespace basprov
         virtual ~BasicModuleNodeImpl();
 
         // XBrowseNode
-        virtual ::rtl::OUString SAL_CALL getName(  ) 
+        virtual ::rtl::OUString SAL_CALL getName(  )
             throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasChildNodes(  ) 
+        virtual sal_Bool SAL_CALL hasChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Int16 SAL_CALL getType(  ) 
+        virtual sal_Int16 SAL_CALL getType(  )
             throw (::com::sun::star::uno::RuntimeException);
     };
 
 //.........................................................................
-}	// namespace basprov
+}   // namespace basprov
 //.........................................................................
 
 #endif // SCRIPTING_BASMODNODE_HXX

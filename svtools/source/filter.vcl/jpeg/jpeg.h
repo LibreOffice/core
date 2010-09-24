@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,29 +44,29 @@ struct JPEGCreateBitmapParam
     unsigned long X_density;
     unsigned long Y_density;
     long     bGray;
-    
+
     long     nAlignedWidth;  // these members will be filled by the
     long     bTopDown;      // CreateBitmap method in svtools
 };
 
-typedef struct my_error_mgr*	my_error_ptr;
-typedef unsigned char			BYTE;
+typedef struct my_error_mgr*    my_error_ptr;
+typedef unsigned char           BYTE;
 #ifdef WIN
-typedef unsigned char _huge*	HPBYTE;
+typedef unsigned char _huge*    HPBYTE;
 #else
-typedef unsigned char*			HPBYTE;
+typedef unsigned char*          HPBYTE;
 #endif
 
-void*	JPEGMalloc( size_t size );
-void	JPEGFree( void *ptr );
-long	JPEGCallback( void* pCallbackData, long nPercent );
+void*   JPEGMalloc( size_t size );
+void    JPEGFree( void *ptr );
+long    JPEGCallback( void* pCallbackData, long nPercent );
 
-long	WriteJPEG( void* pJPEGWriter, void* pOStm, long nWidth, long nHeight, long bGreyScale,
+long    WriteJPEG( void* pJPEGWriter, void* pOStm, long nWidth, long nHeight, long bGreyScale,
                    long nQualityPercent, void* pCallbackData );
-void*	GetScanline( void* pJPEGWriter, long nY );
+void*   GetScanline( void* pJPEGWriter, long nY );
 
-void	ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines );
-void*	CreateBitmap( void* pJPEGReader, void* pJPEGCreateBitmapParam );
+void    ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines );
+void*   CreateBitmap( void* pJPEGReader, void* pJPEGCreateBitmapParam );
 
 /* TODO: when incompatible changes are possible again
    the preview size hint should be redone */

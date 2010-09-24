@@ -12,7 +12,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -30,7 +30,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -48,7 +48,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -66,7 +66,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -84,7 +84,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -102,7 +102,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -120,7 +120,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -138,7 +138,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -156,7 +156,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -174,7 +174,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -192,7 +192,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -210,7 +210,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -228,7 +228,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -246,7 +246,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -264,7 +264,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -282,7 +282,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -300,7 +300,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -318,7 +318,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -336,7 +336,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -354,7 +354,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -372,7 +372,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -390,7 +390,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -408,7 +408,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -426,7 +426,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -444,7 +444,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />
@@ -462,7 +462,7 @@
     <language>c++</language>
     <status value="beta"/>
     <supported-service>com.sun.star.xml.XMLImportFilter</supported-service>
-    <reference-docu xlink:href="http://xml.openoffice.org/" 
+    <reference-docu xlink:href="http://xml.openoffice.org/"
         xlink:title="general OpenOffice.org xml information" />
     <reference-docu xlink:title="XML File Format Specification (draft)"
         xlink:href="http://xml.openoffice.org/xml_specification_draft.pdf" />

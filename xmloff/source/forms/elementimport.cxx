@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,10 +80,10 @@ namespace xmloff
     using namespace ::com::sun::star::text;
     using namespace ::comphelper;
 
-#define PROPID_VALUE			1
-#define PROPID_CURRENT_VALUE	2
-#define PROPID_MIN_VALUE		3
-#define PROPID_MAX_VALUE		4
+#define PROPID_VALUE            1
+#define PROPID_CURRENT_VALUE    2
+#define PROPID_MIN_VALUE        3
+#define PROPID_MAX_VALUE        4
 
     //=====================================================================
     struct PropertyValueLess
@@ -120,7 +120,7 @@ namespace xmloff
     //= OElementNameMap
     //=====================================================================
     //---------------------------------------------------------------------
-    OElementNameMap::MapString2Element	OElementNameMap::s_sElementTranslations;
+    OElementNameMap::MapString2Element  OElementNameMap::s_sElementTranslations;
 
     //---------------------------------------------------------------------
     const OControlElement::ElementType& operator ++(OControlElement::ElementType& _e)
@@ -135,7 +135,7 @@ namespace xmloff
     OControlElement::ElementType OElementNameMap::getElementType(const ::rtl::OUString& _rName)
     {
         if ( s_sElementTranslations.empty() )
-        {	// initialize
+        {   // initialize
             for (ElementType eType=(ElementType)0; eType<UNKNOWN; ++eType)
                 s_sElementTranslations[::rtl::OUString::createFromAscii(getElementName(eType))] = eType;
         }
@@ -204,15 +204,15 @@ namespace xmloff
         if ( m_xInfo.is() )
         {
             PropertyValueArray::iterator aEnd = m_aValues.end();
-            for (	PropertyValueArray::iterator aCheck = m_aValues.begin();
+            for (   PropertyValueArray::iterator aCheck = m_aValues.begin();
                     aCheck != aEnd;
                     ++aCheck
                 )
             {
                 OSL_ENSURE(m_xInfo->hasPropertyByName(aCheck->Name),
                         ::rtl::OString("OElementImport::EndElement: read a property (")
-                    +=	::rtl::OString(aCheck->Name.getStr(), aCheck->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=	::rtl::OString(") which does not exist on the element!"));
+                    +=  ::rtl::OString(aCheck->Name.getStr(), aCheck->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
+                    +=  ::rtl::OString(") which does not exist on the element!"));
             }
         }
 #endif
@@ -237,7 +237,7 @@ namespace xmloff
             // copy
 
             PropertyValueArray::iterator aEnd = m_aValues.end();
-            for	(	PropertyValueArray::iterator aPropValues = m_aValues.begin();
+            for (   PropertyValueArray::iterator aPropValues = m_aValues.begin();
                     aPropValues != aEnd;
                     ++aPropValues, ++pNames, ++pValues
                 )
@@ -258,9 +258,9 @@ namespace xmloff
         }
 
         if (!bSuccess)
-        {	// no XMultiPropertySet or setting all properties at once failed
+        {   // no XMultiPropertySet or setting all properties at once failed
             PropertyValueArray::iterator aEnd = m_aValues.end();
-            for	(	PropertyValueArray::iterator aPropValues = m_aValues.begin();
+            for (   PropertyValueArray::iterator aPropValues = m_aValues.begin();
                     aPropValues != aEnd;
                     ++aPropValues
                 )
@@ -275,8 +275,8 @@ namespace xmloff
                 {
                     OSL_ENSURE(sal_False,
                             ::rtl::OString("OElementImport::EndElement: could not set the property \"")
-                        +=	::rtl::OString(aPropValues->Name.getStr(), aPropValues->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
-                        +=	::rtl::OString("\"!"));
+                        +=  ::rtl::OString(aPropValues->Name.getStr(), aPropValues->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
+                        +=  ::rtl::OString("\"!"));
                 }
             }
         }
@@ -444,8 +444,8 @@ namespace xmloff
             {
                 OSL_ENSURE(sal_False,
                         ::rtl::OString("OElementImport::EndElement: could not set the property \"")
-                    +=	::rtl::OString(aPropValues->Name.getStr(), aPropValues->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=	::rtl::OString("\"!"));
+                    +=  ::rtl::OString(aPropValues->Name.getStr(), aPropValues->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
+                    +=  ::rtl::OString("\"!"));
             }
         }
     }
@@ -461,7 +461,7 @@ namespace xmloff
         ::rtl::OUString sReturn;
         const ::rtl::OUString* pNames = NULL;
         const ::rtl::OUString* pNamesEnd = aNames.getConstArray() + aNames.getLength();
-        for (sal_Int32 i=0; i<32768; ++i)	// the limit is nearly arbitrary ...
+        for (sal_Int32 i=0; i<32768; ++i)   // the limit is nearly arbitrary ...
         {
             // assemble the new name (suggestion)
             sReturn = sUnnamedName;
@@ -488,7 +488,7 @@ namespace xmloff
     {
         if (!m_sServiceName.getLength() &&
             token::IsXMLToken( _rLocalName, token::XML_CONTROL_IMPLEMENTATION))
-        {	// it's the service name
+        {   // it's the service name
 
             ::rtl::OUString sImplName;
             const sal_uInt16 nImplPrefix =
@@ -527,8 +527,8 @@ namespace xmloff
             Reference< XInterface > xPure = m_rFormImport.getGlobalContext().getServiceFactory()->createInstance(m_sServiceName);
             OSL_ENSURE(xPure.is(),
                         ::rtl::OString("OElementImport::createElement: service factory gave me no object (service name: ")
-                    +=	::rtl::OString(m_sServiceName.getStr(), m_sServiceName.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=	::rtl::OString(")!"));
+                    +=  ::rtl::OString(m_sServiceName.getStr(), m_sServiceName.getLength(), RTL_TEXTENCODING_ASCII_US)
+                    +=  ::rtl::OString(")!"));
             xReturn = Reference< XPropertySet >(xPure, UNO_QUERY);
         }
         else
@@ -708,7 +708,7 @@ namespace xmloff
 
             // translate the value properties we collected in handleAttributes
             PropertyValueArray::iterator aEnd = m_aValueProperties.end();
-            for	(	PropertyValueArray::iterator aValueProps = m_aValueProperties.begin();
+            for (   PropertyValueArray::iterator aValueProps = m_aValueProperties.begin();
                     aValueProps != aEnd;
                     ++aValueProps
                 )
@@ -789,7 +789,7 @@ namespace xmloff
             // we have exactly 2 properties where this type class is allowed:
             OSL_ENSURE(
                     (0 == _rPropValue.Name.compareToAscii(PROPERTY_EFFECTIVE_VALUE))
-                ||	(0 == _rPropValue.Name.compareToAscii(PROPERTY_EFFECTIVE_DEFAULT)),
+                ||  (0 == _rPropValue.Name.compareToAscii(PROPERTY_EFFECTIVE_DEFAULT)),
                 "OControlImport::implTranslateValueProperty: invalid property type/name combination!");
 
             // Both properties are allowed to have a double or a string value,
@@ -849,7 +849,7 @@ namespace xmloff
 
             // look up this property in our sequence
             PropertyValueArray::iterator aEnd = m_aValues.end();
-            for (	PropertyValueArray::iterator aCheck = m_aValues.begin();
+            for (   PropertyValueArray::iterator aCheck = m_aValues.begin();
                     ( aCheck != aEnd );
                     ++aCheck
                 )
@@ -1140,17 +1140,17 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OURLReferenceImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
-        static const sal_Char* s_pTargetLocationAttributeName	= OAttributeMetaData::getCommonControlAttributeName( CCA_TARGET_LOCATION );
-        static const sal_Char* s_pImageDataAttributeName		= OAttributeMetaData::getCommonControlAttributeName( CCA_IMAGE_DATA );
+        static const sal_Char* s_pTargetLocationAttributeName   = OAttributeMetaData::getCommonControlAttributeName( CCA_TARGET_LOCATION );
+        static const sal_Char* s_pImageDataAttributeName        = OAttributeMetaData::getCommonControlAttributeName( CCA_IMAGE_DATA );
 
         // need to make the URL absolute if
         // * it's the image-data attribute
         // * it's the target-location attribute, and we're dealign with an object which has the respective property
         sal_Bool bMakeAbsolute =
                 ( 0 == _rLocalName.compareToAscii( s_pImageDataAttributeName ) )
-            ||	(	( 0 == _rLocalName.compareToAscii( s_pTargetLocationAttributeName ) )
-                &&	(	( OControlElement::BUTTON == m_eElementType )
-                    ||	( OControlElement::IMAGE == m_eElementType )
+            ||  (   ( 0 == _rLocalName.compareToAscii( s_pTargetLocationAttributeName ) )
+                &&  (   ( OControlElement::BUTTON == m_eElementType )
+                    ||  ( OControlElement::IMAGE == m_eElementType )
                     )
                 );
 
@@ -1201,7 +1201,7 @@ namespace xmloff
         :OControlImport( _rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType )
         ,m_nStepSizeValue( 1 )
     {
-        
+
     }
 
     //---------------------------------------------------------------------
@@ -1771,12 +1771,12 @@ namespace xmloff
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
             OControlElement::ElementType _eType)
     {
-        OSL_ENSURE(	(OControlElement::TEXT == _eType)
-                ||	(OControlElement::TEXT_AREA == _eType)
-                ||	(OControlElement::FORMATTED_TEXT == _eType)
-                ||	(OControlElement::CHECKBOX == _eType)
-                ||	(OControlElement::LISTBOX == _eType)
-                ||	(OControlElement::COMBOBOX == _eType),
+        OSL_ENSURE( (OControlElement::TEXT == _eType)
+                ||  (OControlElement::TEXT_AREA == _eType)
+                ||  (OControlElement::FORMATTED_TEXT == _eType)
+                ||  (OControlElement::CHECKBOX == _eType)
+                ||  (OControlElement::LISTBOX == _eType)
+                ||  (OControlElement::COMBOBOX == _eType),
                 "OColumnWrapperImport::implCreateChildContext: invalid or unrecognized sub element!");
 
         switch (_eType)
@@ -1811,7 +1811,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    SvXMLImportContext*	OGridImport::implCreateControlWrapper(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName)
+    SvXMLImportContext* OGridImport::implCreateControlWrapper(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName)
     {
         return new OColumnWrapperImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer);
     }
@@ -1864,7 +1864,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    SvXMLImportContext*	OFormImport::implCreateControlWrapper(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName)
+    SvXMLImportContext* OFormImport::implCreateControlWrapper(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName)
     {
         OSL_ENSURE( !this, "illegal call to OFormImport::implCreateControlWrapper" );
         return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName );
@@ -1925,9 +1925,9 @@ namespace xmloff
 
                 nElementLength = sElement.getLength();
                 // when writing the sequence, we quoted the single elements with " characters
-                OSL_ENSURE(	(nElementLength >= 2)
-                        &&	(sElement.getStr()[0] == '"')
-                        &&	(sElement.getStr()[nElementLength - 1] == '"'),
+                OSL_ENSURE( (nElementLength >= 2)
+                        &&  (sElement.getStr()[0] == '"')
+                        &&  (sElement.getStr()[nElementLength - 1] == '"'),
                         "OFormImport::implTranslateStringListProperty: invalid quoted element name.");
                 sElement = sElement.copy(1, nElementLength - 2);
 
@@ -2033,6 +2033,6 @@ namespace xmloff
     }
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,24 +56,24 @@ class SwXMLExport : public SvXMLExport
     friend class SwXMLExpContext;
 
 #ifdef XML_CORE_API
-    SwPaM						*pCurPaM;		// the current PaM
-    SwPaM						*pOrigPaM;		// the original PaM
+    SwPaM                       *pCurPaM;       // the current PaM
+    SwPaM                       *pOrigPaM;      // the original PaM
 #endif
 
-    SvXMLUnitConverter			*pTwipUnitConv;
+    SvXMLUnitConverter          *pTwipUnitConv;
 
-    SvXMLExportItemMapper		*pTableItemMapper;
-    SwXMLTableLinesCache_Impl	*pTableLines;
+    SvXMLExportItemMapper       *pTableItemMapper;
+    SwXMLTableLinesCache_Impl   *pTableLines;
 
-    SvXMLItemMapEntriesRef 		xTableItemMap;
-    SvXMLItemMapEntriesRef 		xTableRowItemMap;
-    SvXMLItemMapEntriesRef 		xTableCellItemMap;
+    SvXMLItemMapEntriesRef      xTableItemMap;
+    SvXMLItemMapEntriesRef      xTableRowItemMap;
+    SvXMLItemMapEntriesRef      xTableCellItemMap;
     UniReference < XMLPropertySetMapper > xParaPropMapper;
 
-    sal_Bool					bExportWholeDoc : 1;// export whole document?
-    sal_Bool					bBlock : 1;			// export text block?
-    sal_Bool					bExportFirstTableOnly : 1;
-    sal_Bool					bShowProgress : 1;
+    sal_Bool                    bExportWholeDoc : 1;// export whole document?
+    sal_Bool                    bBlock : 1;         // export text block?
+    sal_Bool                    bExportFirstTableOnly : 1;
+    sal_Bool                    bShowProgress : 1;
     sal_Bool                    bSavedShowChanges : 1;
 
     void _InitItemExport();
@@ -186,5 +186,5 @@ inline const SvXMLUnitConverter& SwXMLExport::GetTwipUnitConverter() const
 }
 
 
-#endif	//  _XMLEXP_HXX
+#endif  //  _XMLEXP_HXX
 

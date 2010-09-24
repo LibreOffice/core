@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -207,7 +207,7 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     // read the formula, 3D tab refs from extended data
     const ScTokenArray* pArray = NULL;
     aFmlConv.Reset( rPosition );
-    BOOL bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize, false, FT_CellFormula) == ConvOK);	// JEG : Check This
+    BOOL bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize, false, FT_CellFormula) == ConvOK);   // JEG : Check This
     rpTokenArray = (bOK && pArray) ? new ScTokenArray( *pArray ) : NULL;
     pStrm->Ignore( 1 );
 }
@@ -347,10 +347,10 @@ void XclImpChangeTrack::ReadChTrCellContent()
         pStrm->Ignore( 4 );
         switch( nValueType & EXC_CHTR_TYPE_FORMATMASK )
         {
-            case 0x0000:							break;
+            case 0x0000:                            break;
             case 0x1100:    pStrm->Ignore( 16 );    break;
             case 0x1300:    pStrm->Ignore( 8 );     break;
-            default:		DBG_ERROR( "XclImpChangeTrack::ReadChTrCellContent - unknown format info" );
+            default:        DBG_ERROR( "XclImpChangeTrack::ReadChTrCellContent - unknown format info" );
         }
 
         ScBaseCell* pOldCell;
@@ -455,17 +455,17 @@ void XclImpChangeTrack::ReadRecords()
     {
         switch( pStrm->GetRecId() )
         {
-            case 0x000A:	bGlobExit = sal_True;			break;
-            case 0x0137:	ReadChTrInsert();				break;
-            case 0x0138:	ReadChTrInfo();					break;
-            case 0x013B:	ReadChTrCellContent();			break;
-            case 0x013D:	ReadChTrTabId();				break;
-            case 0x0140:	ReadChTrMoveRange();			break;
-            case 0x014D:	ReadChTrInsertTab();			break;
+            case 0x000A:    bGlobExit = sal_True;           break;
+            case 0x0137:    ReadChTrInsert();               break;
+            case 0x0138:    ReadChTrInfo();                 break;
+            case 0x013B:    ReadChTrCellContent();          break;
+            case 0x013D:    ReadChTrTabId();                break;
+            case 0x0140:    ReadChTrMoveRange();            break;
+            case 0x014D:    ReadChTrInsertTab();            break;
             case 0x014E:
-            case 0x0150:	InitNestedMode();				break;
+            case 0x0150:    InitNestedMode();               break;
             case 0x014F:
-            case 0x0151:	bExitLoop = EndNestedMode();	break;
+            case 0x0151:    bExitLoop = EndNestedMode();    break;
         }
     }
 }
@@ -494,7 +494,7 @@ XclImpChTrFmlConverter::~XclImpChTrFmlConverter()
 }
 
 // virtual, called from ExcToSc8::Convert()
-bool XclImpChTrFmlConverter::Read3DTabReference( UINT16 /*nIxti*/, SCTAB& rFirstTab, SCTAB& rLastTab, 
+bool XclImpChTrFmlConverter::Read3DTabReference( UINT16 /*nIxti*/, SCTAB& rFirstTab, SCTAB& rLastTab,
                                                  ExternalTabInfo& rExtInfo )
 {
     return rChangeTrack.Read3DTabRefInfo( rFirstTab, rLastTab, rExtInfo );

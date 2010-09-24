@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,20 +91,20 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
         }
         if ( _xColumn.is() )
         {
-            sal_Int32 nType			= 0;
-            sal_Int32 nScale		= 0;
-            sal_Int32 nPrecision	= 0;
+            sal_Int32 nType         = 0;
+            sal_Int32 nScale        = 0;
+            sal_Int32 nPrecision    = 0;
             sal_Bool bAutoIncrement = sal_False;
             ::rtl::OUString sTypeName;
 
             try
             {
                 // get the properties from the column
-                _xColumn->getPropertyValue(PROPERTY_TYPENAME)		>>= sTypeName;
-                _xColumn->getPropertyValue(PROPERTY_TYPE)			>>= nType;
-                _xColumn->getPropertyValue(PROPERTY_SCALE)			>>= nScale;
-                _xColumn->getPropertyValue(PROPERTY_PRECISION)		>>= nPrecision;
-                _xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT)	>>= bAutoIncrement;
+                _xColumn->getPropertyValue(PROPERTY_TYPENAME)       >>= sTypeName;
+                _xColumn->getPropertyValue(PROPERTY_TYPE)           >>= nType;
+                _xColumn->getPropertyValue(PROPERTY_SCALE)          >>= nScale;
+                _xColumn->getPropertyValue(PROPERTY_PRECISION)      >>= nPrecision;
+                _xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT)    >>= bAutoIncrement;
             }
             catch(Exception)
             {
@@ -168,5 +168,5 @@ Any OColumnPeer::getProperty( const ::rtl::OUString& _rPropertyName ) throw( Run
     return aProp;
 }
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................

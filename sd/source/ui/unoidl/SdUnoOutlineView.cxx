@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ SdUnoOutlineView::SdUnoOutlineView(
     DrawController& rController,
     OutlineViewShell& rViewShell,
     View& rView) throw()
-    :	DrawSubControllerInterfaceBase(m_aMutex),
+    :   DrawSubControllerInterfaceBase(m_aMutex),
         mrController(rController),
         mrOutlineViewShell(rViewShell),
         mrView(rView)
@@ -106,7 +106,7 @@ void SAL_CALL SdUnoOutlineView::addSelectionChangeListener (
 {
     (void)rxListener;
 }
-    
+
 
 
 
@@ -154,9 +154,9 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage (void)
 /*
 // Return sal_True, value change
 sal_Bool SdUnoOutlineView::convertFastPropertyValue (
-    Any & rConvertedValue, 
-    Any & rOldValue, 
-    sal_Int32 nHandle, 
+    Any & rConvertedValue,
+    Any & rOldValue,
+    sal_Int32 nHandle,
     const Any& rValue)
     throw ( com::sun::star::lang::IllegalArgumentException)
 {
@@ -188,7 +188,7 @@ sal_Bool SdUnoOutlineView::convertFastPropertyValue (
 
 
 void SdUnoOutlineView::setFastPropertyValue (
-    sal_Int32 nHandle, 
+    sal_Int32 nHandle,
         const Any& rValue)
     throw(css::beans::UnknownPropertyException,
         css::beans::PropertyVetoException,
@@ -205,7 +205,7 @@ void SdUnoOutlineView::setFastPropertyValue (
             setCurrentPage( xPage );
         }
         break;
-        
+
         default:
             throw beans::UnknownPropertyException();
     }
@@ -229,7 +229,7 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
         css::uno::RuntimeException)
 {
     Any aValue;
-    
+
     switch( nHandle )
     {
         case DrawController::PROPERTY_CURRENTPAGE:

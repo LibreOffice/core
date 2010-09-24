@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <tools/link.hxx>
-#include <tools/gen.hxx> 
+#include <tools/gen.hxx>
 #include <vcl/timer.hxx>
 #include <svl/hint.hxx>
 #include <svl/brdcst.hxx>
@@ -72,30 +72,30 @@ namespace rptui
     private:
         SplitWindow                         m_aSplitWin;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>		m_xReportComponent;
-        OReportController&					m_rReportController;        
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>        m_xReportComponent;
+        OReportController&                  m_rReportController;
         OScrollWindowHelper                 m_aScrollWindow;
-        Window*								m_pTaskPane;
-        PropBrw*							m_pPropWin;
-        OAddFieldWindow*					m_pAddField;
-        OSectionView*						m_pCurrentView;
+        Window*                             m_pTaskPane;
+        PropBrw*                            m_pPropWin;
+        OAddFieldWindow*                    m_pAddField;
+        OSectionView*                       m_pCurrentView;
         ONavigator*                         m_pReportExplorer;
-        Timer								m_aMarkTimer;
-        Point								m_aScrollOffset;
-        DlgEdMode							m_eMode;
-        USHORT								m_nCurrentPosition;
-        USHORT								m_eActObj;
-        BOOL								m_bFirstDraw;
+        Timer                               m_aMarkTimer;
+        Point                               m_aScrollOffset;
+        DlgEdMode                           m_eMode;
+        USHORT                              m_nCurrentPosition;
+        USHORT                              m_eActObj;
+        BOOL                                m_bFirstDraw;
         Size                                m_aGridSizeCoarse;
         Size                                m_aGridSizeFine;
-        BOOL								m_bGridVisible;
-        BOOL								m_bGridSnap;
-        BOOL								m_bDeleted;
-        
+        BOOL                                m_bGridVisible;
+        BOOL                                m_bGridSnap;
+        BOOL                                m_bDeleted;
+
 
         DECL_LINK( MarkTimeout, Timer * );
         DECL_LINK( SplitHdl, void* );
-        
+
         void ImplInitSettings();
 
         ODesignView(ODesignView&);
@@ -107,7 +107,7 @@ namespace rptui
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
     public:
-        ODesignView(Window* pParent, 
+        ODesignView(Window* pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
                     OReportController& _rController);
         virtual ~ODesignView();
@@ -122,13 +122,13 @@ namespace rptui
 
         virtual void initialize();
 
-        inline OReportController&	getController() const { return m_rReportController; }
+        inline OReportController&   getController() const { return m_rReportController; }
 
-        void 			SetMode( DlgEdMode m_eMode );
-        void			SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
-        USHORT    		GetInsertObj() const;
+        void            SetMode( DlgEdMode m_eMode );
+        void            SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
+        USHORT          GetInsertObj() const;
         rtl::OUString   GetInsertObjString() const;
-        DlgEdMode   	GetMode() const { return m_eMode; }
+        DlgEdMode       GetMode() const { return m_eMode; }
 
         /** cuts the current selection in this section
         */
@@ -138,7 +138,7 @@ namespace rptui
         */
         void Copy();
 
-        /**	returns if paste is allowed
+        /** returns if paste is allowed
         *
         * \return <TRUE/> if paste is allowed
         */
@@ -168,59 +168,59 @@ namespace rptui
         void            SelectAll(const sal_uInt16 _nObjectType);
 
         /// checks if a selection exists
-        BOOL			HasSelection() const;
+        BOOL            HasSelection() const;
 
         void            UpdatePropertyBrowserDelayed(OSectionView& _rView);
 
-        USHORT			getSectionCount() const;
+        USHORT          getSectionCount() const;
 
         /** removes the section at the given position.
         *
         * \param _nPosition Zero based.
         */
-        void			removeSection(USHORT _nPosition);
+        void            removeSection(USHORT _nPosition);
 
         /** adds a new section at position _nPosition.
             If the section is <NULL/> nothing happens.
             If the position is grater than the current elements, the section will be appended.
         */
-        void			addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
+        void            addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
                                     ,const ::rtl::OUString& _sColorEntry
                                     ,USHORT _nPosition = USHRT_MAX);
 
         inline Size     getGridSizeCoarse() const { return m_aGridSizeCoarse; }
         inline Size     getGridSizeFine() const { return m_aGridSizeFine; }
-        inline BOOL		isGridSnap() const { return m_bGridSnap; }
+        inline BOOL     isGridSnap() const { return m_bGridSnap; }
         void            setGridSnap(BOOL bOn);
         void            setDragStripes(BOOL bOn);
         /** turns the grid on or off
         *
         * \param _bGridVisible
         */
-        void			toggleGrid(sal_Bool _bGridVisible);
+        void            toggleGrid(sal_Bool _bGridVisible);
 
-        void			togglePropertyBrowser(sal_Bool _bToogleOn);
+        void            togglePropertyBrowser(sal_Bool _bToogleOn);
 
-        BOOL			isAddFieldVisible() const;
-        void			toggleAddField();
+        BOOL            isAddFieldVisible() const;
+        void            toggleAddField();
 
-        BOOL			isReportExplorerVisible() const;
-        void			toggleReportExplorer();
+        BOOL            isReportExplorerVisible() const;
+        void            toggleReportExplorer();
 
         /** shows or hides the ruler.
         */
-        void			showRuler(sal_Bool _bShow);
+        void            showRuler(sal_Bool _bShow);
 
         /** unmark all objects on the views without the given one.
         *
         * @param _pSectionView The view where the objects should not be unmarked.
         */
-        void			unmarkAllObjects(OSectionView* _pSectionView);
+        void            unmarkAllObjects(OSectionView* _pSectionView);
 
         /** triggers the property browser with the section
-            @param	_xReportComponent the report component
+            @param  _xReportComponent the report component
         */
-        void			showProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);
+        void            showProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);
         ::com::sun::star::uno::Any getCurrentlyShownProperty() const;
 
         /** returns the current section or the detail section if no section was selected previously
@@ -252,17 +252,17 @@ namespace rptui
         void             setCurrentPage(const ::rtl::OUString& _sLastActivePage);
 
         /** checks if the keycode is known by the child windows
-            @param	_rCode	the keycode
+            @param  _rCode  the keycode
             @return <TRUE/> if the keycode is handled otherwise <FALSE/>
         */
-        sal_Bool		 handleKeyEvent(const KeyEvent& _rEvent);
-        
+        sal_Bool         handleKeyEvent(const KeyEvent& _rEvent);
+
         /** set the section as marked or not marked
-            @param	_pSectionView	the section where to set the marked flag
-            @param	_bMark	the marked flag
+            @param  _pSectionView   the section where to set the marked flag
+            @param  _bMark  the marked flag
         */
-        void			setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,sal_Bool _bMark);
-        void			setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
+        void            setMarked(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,sal_Bool _bMark);
+        void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape,sal_Bool _bMark);
 
         /** returns if the view handles the event by itself
         *
@@ -292,7 +292,7 @@ namespace rptui
         sal_uInt16 getZoomFactor(SvxZoomType _eType) const;
     };
 //==================================================================
-}	//rptui
+}   //rptui
 //==================================================================
 #endif // RPTUI_DESIGNVIEW_HXX
 

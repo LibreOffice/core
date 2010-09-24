@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
             rBindings.Invalidate( SID_FILL_ADD_SUCC );
             rBindings.Invalidate( SID_FILL_DEL_SUCC );
             break;
-        case SID_CANCEL:		// Escape
+        case SID_CANCEL:        // Escape
         case SID_FILL_NONE:
             pViewData->GetViewShell()->SetAuditShell( FALSE );
             break;
@@ -149,7 +149,7 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
 
 void ScAuditingShell::GetState( SfxItemSet& rSet )
 {
-    rSet.Put( SfxBoolItem( nFunction, TRUE ) );			// aktive Funktion markieren
+    rSet.Put( SfxBoolItem( nFunction, TRUE ) );         // aktive Funktion markieren
 }
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,15 +116,15 @@ SfxPrinter* DrawDocShell::GetPrinter(BOOL bCreate)
     {
         // ItemSet mit speziellem Poolbereich anlegen
         SfxItemSet* pSet = new SfxItemSet( GetPool(),
-                            SID_PRINTER_NOTFOUND_WARN,	SID_PRINTER_NOTFOUND_WARN,
-                            SID_PRINTER_CHANGESTODOC,	SID_PRINTER_CHANGESTODOC,
-                            ATTR_OPTIONS_PRINT, 		ATTR_OPTIONS_PRINT,
+                            SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
+                            SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
+                            ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
                             0 );
         // PrintOptionsSet setzen
         SdOptionsPrintItem aPrintItem( ATTR_OPTIONS_PRINT,
                             SD_MOD()->GetSdOptions(mpDoc->GetDocumentType()));
         SfxFlagItem aFlagItem( SID_PRINTER_CHANGESTODOC );
-        USHORT		nFlags = 0;
+        USHORT      nFlags = 0;
 
         nFlags =  (aPrintItem.GetOptionsPrint().IsWarningSize() ? SFX_PRINTER_CHG_SIZE : 0) |
                 (aPrintItem.GetOptionsPrint().IsWarningOrientation() ? SFX_PRINTER_CHG_ORIENTATION : 0);
@@ -227,7 +227,7 @@ void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
             return;
     }
 
-    //	if (mpPrinter->IsA(SfxPrinter))
+    //  if (mpPrinter->IsA(SfxPrinter))
     {
         // Da kein RTTI verfuegbar, wird hart gecasted (...)
         SetPrinter((SfxPrinter*) pNewPrinter);
@@ -316,8 +316,8 @@ BOOL DrawDocShell::Load( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
 
-    BOOL	bRet = FALSE;
-    bool	bStartPresentation = false;
+    BOOL    bRet = FALSE;
+    bool    bStartPresentation = false;
     ErrCode nError = ERRCODE_NONE;
 
     SfxItemSet* pSet = rMedium.GetItemSet();
@@ -462,9 +462,9 @@ BOOL DrawDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
 
-    const String	aFilterName( rMedium.GetFilter()->GetFilterName() );
-    BOOL			bRet = FALSE;
-    bool	bStartPresentation = false;
+    const String    aFilterName( rMedium.GetFilter()->GetFilterName() );
+    BOOL            bRet = FALSE;
+    bool    bStartPresentation = false;
 
     SetWaitCursor( TRUE );
 
@@ -584,7 +584,7 @@ BOOL DrawDocShell::SaveAs( SfxMedium& rMedium )
     if( GetCreateMode() == SFX_CREATE_MODE_STANDARD )
         SfxObjectShell::SetVisArea( Rectangle() );
 
-    UINT32	nVBWarning = ERRCODE_NONE;
+    UINT32  nVBWarning = ERRCODE_NONE;
     BOOL    bRet = SfxObjectShell::SaveAs( rMedium );
 
     if( bRet )
@@ -612,9 +612,9 @@ BOOL DrawDocShell::ConvertTo( SfxMedium& rMedium )
 
     if( mpDoc->GetPageCount() )
     {
-        const SfxFilter*	pMediumFilter = rMedium.GetFilter();
-        const String		aTypeName( pMediumFilter->GetTypeName() );
-        SdFilter*			pFilter = NULL;
+        const SfxFilter*    pMediumFilter = rMedium.GetFilter();
+        const String        aTypeName( pMediumFilter->GetTypeName() );
+        SdFilter*           pFilter = NULL;
 
         if( aTypeName.SearchAscii( "graphic_HTML" ) != STRING_NOTFOUND )
         {
@@ -648,7 +648,7 @@ BOOL DrawDocShell::ConvertTo( SfxMedium& rMedium )
 
         if( pFilter )
         {
-            const ULONG	nOldSwapMode = mpDoc->GetSwapGraphicsMode();
+            const ULONG nOldSwapMode = mpDoc->GetSwapGraphicsMode();
 
             mpDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
 
@@ -666,7 +666,7 @@ BOOL DrawDocShell::ConvertTo( SfxMedium& rMedium )
 /*************************************************************************
 |*
 |* SaveCompleted: die eigenen Streams wieder oeffnen, damit kein anderer
-|*								  sie "besetzt"
+|*                                sie "besetzt"
 |*
 \************************************************************************/
 
@@ -992,7 +992,7 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
         {
                 *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
                 *pFormat = bTemplate ? SOT_FORMATSTR_ID_STARDRAW_8_TEMPLATE : SOT_FORMATSTR_ID_STARDRAW_8;
-                *pFullTypeName = String(RTL_CONSTASCII_USTRINGPARAM("Draw 8"));	// HACK: method will be removed with new storage API
+                *pFullTypeName = String(RTL_CONSTASCII_USTRINGPARAM("Draw 8")); // HACK: method will be removed with new storage API
         }
         else
         {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,35 +24,35 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_XChangeBroadcaster_idl__ 
-#define __com_sun_star_form_XChangeBroadcaster_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_form_XChangeListener_idl__ 
-#include <com/sun/star/form/XChangeListener.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module form {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_form_XChangeBroadcaster_idl__
+#define __com_sun_star_form_XChangeBroadcaster_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_form_XChangeListener_idl__
+#include <com/sun/star/form/XChangeListener.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
 /** provides functionality to notify listeners of data changes.
 
     <p>The concrete semantics of a change (i.e. the conditions for when a change event
     is fired) must be specified in the service description of the providing service.</p>
-    
+
     @see XChangeListener
  */
 published interface XChangeBroadcaster: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** adds the specified listener to receive the "changed" event.
 
         @param aListener
@@ -60,10 +60,10 @@ published interface XChangeBroadcaster: com::sun::star::uno::XInterface
 
         @see com::sun::star::form::XChangeListener
      */
-    [oneway] void addChangeListener( [in] com::sun::star::form::XChangeListener aListener ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    [oneway] void addChangeListener( [in] com::sun::star::form::XChangeListener aListener );
+
+    //-------------------------------------------------------------------------
+
     /** removes the specified listener.
 
         @param aListener
@@ -71,15 +71,15 @@ published interface XChangeBroadcaster: com::sun::star::uno::XInterface
 
         @see com::sun::star::form::XChangeListener
      */
-    [oneway] void removeChangeListener( [in] com::sun::star::form::XChangeListener aListener ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+    [oneway] void removeChangeListener( [in] com::sun::star::form::XChangeListener aListener );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

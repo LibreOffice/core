@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -30,7 +30,7 @@ namespace agg
 
     //---------------------------------------------------------------gsv_text
     //
-    // See Implementation agg_gsv_text.cpp 
+    // See Implementation agg_gsv_text.cpp
     //
     class gsv_text
     {
@@ -119,19 +119,19 @@ namespace agg
         {
         }
 
-        void width(double w) 
-        { 
-            m_polyline.width(w); 
+        void width(double w)
+        {
+            m_polyline.width(w);
         }
 
-        void transformer(const Transformer* trans) 
+        void transformer(const Transformer* trans)
         {
             m_trans->transformer(trans);
         }
 
-        void rewind(unsigned id) 
-        { 
-            m_trans.rewind(id); 
+        void rewind(unsigned id)
+        {
+            m_trans.rewind(id);
             m_polyline.line_join(round_join);
             m_polyline.line_cap(round_cap);
         }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,6 +30,7 @@
 #endif
 #include <WriterFilter.hxx>
 #include <WriterFilterDetection.hxx>
+#include <RtfFilter.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -56,6 +57,7 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
 {
     { WriterFilter_createInstance, WriterFilter_getImplementationName, WriterFilter_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0 },
     { WriterFilterDetection_createInstance, WriterFilterDetection_getImplementationName, WriterFilterDetection_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0} ,
+    { RtfFilter_createInstance, RtfFilter_getImplementationName, RtfFilter_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 } // terminate with NULL
 };
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@
 
 class SdrText;
 
-namespace drawinglayer { namespace animation { 
-    class AnimationEntryList; 
+namespace drawinglayer { namespace animation {
+    class AnimationEntryList;
 }}
 
-namespace drawinglayer { namespace attribute { 
-    class SdrFormTextAttribute; 
+namespace drawinglayer { namespace attribute {
+    class SdrFormTextAttribute;
 }}
 
 namespace drawinglayer { namespace attribute {
@@ -59,24 +59,25 @@ namespace drawinglayer
         class SdrTextAttribute
         {
         private:
-            ImpSdrTextAttribute*		mpSdrTextAttribute;
+            ImpSdrTextAttribute*        mpSdrTextAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
             SdrTextAttribute(
-                const SdrText& rSdrText, 
+                const SdrText& rSdrText,
                 const OutlinerParaObject& rOutlinerParaObject,
-                XFormTextStyle eFormTextStyle, 
-                sal_Int32 aTextLeftDistance, 
+                XFormTextStyle eFormTextStyle,
+                sal_Int32 aTextLeftDistance,
                 sal_Int32 aTextUpperDistance,
-                sal_Int32 aTextRightDistance, 
-                sal_Int32 aTextLowerDistance, 
+                sal_Int32 aTextRightDistance,
+                sal_Int32 aTextLowerDistance,
                 SdrTextHorzAdjust aSdrTextHorzAdjust,
                 SdrTextVertAdjust aSdrTextVertAdjust,
-                bool bContour, 
-                bool bFitToSize, 
-                bool bHideContour, 
-                bool bBlink, 
+                bool bContour,
+                bool bFitToSize,
+                bool bAutoFit,
+                bool bHideContour,
+                bool bBlink,
                 bool bScroll,
                 bool bInEditMode,
                 bool bFixedCellHeight,
@@ -97,6 +98,7 @@ namespace drawinglayer
             const OutlinerParaObject& getOutlinerParaObject() const;
             bool isContour() const;
             bool isFitToSize() const;
+            bool isAutoFit() const;
             bool isHideContour() const;
             bool isBlink() const;
             bool isScroll() const;
@@ -116,8 +118,8 @@ namespace drawinglayer
             void getBlinkTextTiming(
                 drawinglayer::animation::AnimationEntryList& rAnimList) const;
             void getScrollTextTiming(
-                drawinglayer::animation::AnimationEntryList& rAnimList, 
-                double fFrameLength, 
+                drawinglayer::animation::AnimationEntryList& rAnimList,
+                double fFrameLength,
                 double fTextLength) const;
         };
     } // end of namespace attribute

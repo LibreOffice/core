@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_HANDLER_SOUNDHANDLER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -46,7 +46,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 
@@ -58,17 +58,17 @@
 namespace css = ::com::sun::star;
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace avmedia{
 
 //_________________________________________________________________________________________________________________
-//	exported const
+//  exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	exported definitions
+//  exported definitions
 //_________________________________________________________________________________________________________________
 
 struct ThreadHelpBase
@@ -99,12 +99,12 @@ class SoundHandler  :   // interfaces
                     ,   public  ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
                  SoundHandler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
         virtual ~SoundHandler(                                                                        );
@@ -118,19 +118,19 @@ class SoundHandler  :   // interfaces
         virtual css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes () throw( css::uno::RuntimeException );
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw( css::uno::RuntimeException );
 
-                                                                                                             
-    /* interface XServiceInfo */                                                                                                                                                                                                        
-       virtual ::rtl::OUString                                        SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException );   
-       virtual sal_Bool                                               SAL_CALL supportsService                    ( const ::rtl::OUString&                                        sServiceName    ) throw( css::uno::RuntimeException );   
-       virtual css::uno::Sequence< ::rtl::OUString >                  SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException );   
-    /* Helper for XServiceInfo */                                                                                                                                                                                                       
-       static css::uno::Sequence< ::rtl::OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                                                               );                                       
-       static ::rtl::OUString                                         SAL_CALL impl_getStaticImplementationName   (                                                                               );                                       
-    /* Helper for registry */                                                                                                                                                                                                           
-       static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );          
-       static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );                                       
-    /* Helper for initialization of service by using own reference! */                                                                                                                                                                  
-       virtual void                                                   SAL_CALL impl_initService                   (                                                                               );                                       
+
+    /* interface XServiceInfo */
+       virtual ::rtl::OUString                                        SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException );
+       virtual sal_Bool                                               SAL_CALL supportsService                    ( const ::rtl::OUString&                                        sServiceName    ) throw( css::uno::RuntimeException );
+       virtual css::uno::Sequence< ::rtl::OUString >                  SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException );
+    /* Helper for XServiceInfo */
+       static css::uno::Sequence< ::rtl::OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                                                               );
+       static ::rtl::OUString                                         SAL_CALL impl_getStaticImplementationName   (                                                                               );
+    /* Helper for registry */
+       static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
+       static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
+    /* Helper for initialization of service by using own reference! */
+       virtual void                                                   SAL_CALL impl_initService                   (                                                                               );
 
         //---------------------------------------------------------------------------------------------------------
         //  XNotifyingDispatch
@@ -140,7 +140,7 @@ class SoundHandler  :   // interfaces
                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw(css::uno::RuntimeException);
 
         //---------------------------------------------------------------------------------------------------------
-        //	XDispatch
+        //  XDispatch
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL dispatch              (   const   css::util::URL&                                     aURL        ,
                                                         const   css::uno::Sequence< css::beans::PropertyValue >&    lArguments  ) throw( css::uno::RuntimeException );
@@ -156,32 +156,32 @@ class SoundHandler  :   // interfaces
         virtual ::rtl::OUString SAL_CALL detect     (           css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
-    //	protected methods
+    //  protected methods
     //-------------------------------------------------------------------------------------------------------------
     protected:
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
         DECL_LINK( implts_PlayerNotify, void* );
 
     //-------------------------------------------------------------------------------------------------------------
-    //	variables
-    //	(should be private everyway!)
+    //  variables
+    //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
     private:
 
         bool m_bError;
         css::uno::Reference< css::lang::XMultiServiceFactory >     m_xFactory          ;   /// global uno service factory to create new services
         css::uno::Reference< css::uno::XInterface >                m_xSelfHold         ;   /// we must protect us against dieing during async(!) dispatch() call!
-        css::uno::Reference< css::media::XPlayer >                 m_xPlayer           ;   /// uses avmedia player to play sounds ... 
+        css::uno::Reference< css::media::XPlayer >                 m_xPlayer           ;   /// uses avmedia player to play sounds ...
 
         css::uno::Reference< css::frame::XDispatchResultListener > m_xListener         ;
         Timer m_aUpdateTimer;
 
 };      //  class SoundHandler
 
-}		//	namespace avmedia
+}       //  namespace avmedia
 
 #endif  //  #ifndef __FRAMEWORK_HANDLER_SOUNDHANDLER_HXX_

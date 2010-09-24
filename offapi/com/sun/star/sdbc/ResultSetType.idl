@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,44 +24,44 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_ResultSetType_idl__ 
-#define __com_sun_star_sdbc_ResultSetType_idl__ 
- 
- module com {  module sun {  module star {  module sdbc { 
- 
- 
+#ifndef __com_sun_star_sdbc_ResultSetType_idl__
+#define __com_sun_star_sdbc_ResultSetType_idl__
+
+ module com {  module sun {  module star {  module sdbc {
+
+
 /** describes the different scroll capabilities of a result set.
  */
 published constants ResultSetType
-{ 
-     
-    /** is the type for a 
+{
+
+    /** is the type for a
             <type scope="com::sun::star::sdb">ResultSet</type>
             object whose cursor may move only forward.
      */
-    const long FORWARD_ONLY 		= 1003; 
- 
-     
-    /** is the type for a 
-            <type scope="com::sun::star::sdb">ResultSet</type>
-            object that is scrollable 
-             but generally not sensitive to changes made by others.
-     */
-    const long SCROLL_INSENSITIVE 	= 1004; 
- 
-     
+    const long FORWARD_ONLY         = 1003;
+
+
     /** is the type for a
             <type scope="com::sun::star::sdb">ResultSet</type>
-            object that is scrollable 
+            object that is scrollable
+             but generally not sensitive to changes made by others.
+     */
+    const long SCROLL_INSENSITIVE   = 1004;
+
+
+    /** is the type for a
+            <type scope="com::sun::star::sdb">ResultSet</type>
+            object that is scrollable
              and generally sensitive to changes made by others.
      */
-    const long SCROLL_SENSITIVE 	= 1005; 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    const long SCROLL_SENSITIVE     = 1005;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,26 +24,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_reflection_XTypeDescription_idl__ 
-#define __com_sun_star_reflection_XTypeDescription_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_uno_TypeClass_idl__ 
-#include <com/sun/star/uno/TypeClass.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module reflection {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_reflection_XTypeDescription_idl__
+#define __com_sun_star_reflection_XTypeDescription_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_uno_TypeClass_idl__
+#include <com/sun/star/uno/TypeClass.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
 /** Reflects a UNOIDL entity.
-    
+
     @see XPublished
     @see XIndirectTypeDescription
     @see XEnumTypeDescription
@@ -59,27 +59,27 @@
     @see XSingletonTypeDescription2
 */
 published interface XTypeDescription : com::sun::star::uno::XInterface
-{ 
+{
     /** Returns the type class of the reflected UNOIDL entity.
 
         @return
                 type class of the entity
     */
-    com::sun::star::uno::TypeClass getTypeClass(); 
-    
+    com::sun::star::uno::TypeClass getTypeClass();
+
     /** Returns the fully qualified name of the UNOIDL entity.
-        
+
         @return
                 fully qualified name of the entity
     */
     string getName();
 };
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

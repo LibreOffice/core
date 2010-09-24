@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -179,7 +179,7 @@ public:
     {
         ScAddress aPos = pCell->aPos;
 
-        // We don't check for empty cells because empty external cells are 
+        // We don't check for empty cells because empty external cells are
         // treated as having a value of 0.
 
         if (pCell->IsValue())
@@ -587,7 +587,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
             static_cast<SCSIZE>(nDataCol2-nDataCol1+1), static_cast<SCSIZE>(nDataRow2-nDataRow1+1));
 
 #if 0
-        // TODO: Switch to this code block once we have support for sparsely-filled 
+        // TODO: Switch to this code block once we have support for sparsely-filled
         // matrices in ScMatrix.
 
         // Only fill non-empty cells, for better performance.
@@ -1613,7 +1613,7 @@ bool ScExternalRefManager::markUsedExternalRefCells()
         RefCellSet::iterator itrCell = itr->second.begin(), itrCellEnd = itr->second.end();
         for (; itrCell != itrCellEnd; ++itrCell)
         {
-            ScFormulaCell* pCell = *itrCell;    
+            ScFormulaCell* pCell = *itrCell;
             bool bUsed = pCell->MarkUsedExternalReferences();
             if (bUsed)
                 // Return true when at least one cell references external docs.
@@ -1714,7 +1714,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
         // requested cell is outside the data area.  Don't even bother caching
         // this data, but add it to the cached range to prevent accessing the
         // source document time and time again.
-        ScExternalRefCache::TableTypeRef pCacheTab = 
+        ScExternalRefCache::TableTypeRef pCacheTab =
             maRefCache.getCacheTable(nFileId, rTabName, true, NULL);
         if (pCacheTab)
             pCacheTab->setCachedCell(rCell.Col(), rCell.Row());
@@ -1761,7 +1761,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     maybeLinkExternalFile(nFileId);
 
     // Check if the given table name and the cell position is cached.
-    ScExternalRefCache::TokenArrayRef pArray = 
+    ScExternalRefCache::TokenArrayRef pArray =
         maRefCache.getCellRangeData(nFileId, rTabName, rRange);
     if (pArray)
         // Cache hit !
@@ -1813,13 +1813,13 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
         // Cache these values.
         maRefCache.setCellRangeData(nFileId, aRange, aCacheData, pArray);
     else
-    {    
+    {
         // Array is empty.  Fill it with an empty matrix of the required size.
         pArray.reset(lcl_fillEmptyMatrix(rRange));
 
-        // Make sure to set this range 'cached', to prevent unnecessarily 
+        // Make sure to set this range 'cached', to prevent unnecessarily
         // accessing the src document time and time again.
-        ScExternalRefCache::TableTypeRef pCacheTab = 
+        ScExternalRefCache::TableTypeRef pCacheTab =
             maRefCache.getCacheTable(nFileId, rTabName, true, NULL);
         if (pCacheTab)
             pCacheTab->setCachedCellRange(

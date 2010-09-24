@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@ module com { module sun { module star { module ucb {
 /** This exception is thrown to propagate exceptions thrown by operations
     on <type>ContentResultSet</type>s.
 
-    @version	1.0
-    @author 	Kai Sommerfeld
+    @version    1.0
+    @author     Kai Sommerfeld
 */
 published exception ResultSetException: com::sun::star::sdbc::SQLException
 {

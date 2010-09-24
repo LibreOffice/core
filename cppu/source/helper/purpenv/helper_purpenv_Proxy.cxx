@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,12 +50,12 @@
 using namespace com::sun::star;
 
 
-static bool relatesToInterface(typelib_TypeDescription * pTypeDescr) 
+static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
     SAL_THROW( () )
 {
     switch (pTypeDescr->eTypeClass)
     {
-//  	case typelib_TypeClass_TYPEDEF:
+//      case typelib_TypeClass_TYPEDEF:
     case typelib_TypeClass_SEQUENCE:
     {
         switch (((typelib_IndirectTypeDescription *)pTypeDescr)->pType->eTypeClass)
@@ -93,7 +93,7 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
             case typelib_TypeClass_UNION: // might relate to interface
             case typelib_TypeClass_ANY: // might relate to interface
                 return true;
-//  			case typelib_TypeClass_TYPEDEF:
+//              case typelib_TypeClass_TYPEDEF:
             case typelib_TypeClass_SEQUENCE:
             case typelib_TypeClass_STRUCT:
             case typelib_TypeClass_EXCEPTION:
@@ -129,7 +129,7 @@ extern "C" { static void SAL_CALL s_Proxy_dispatch(
     typelib_TypeDescription const * pMemberType,
     void                          * pReturn,
     void                          * pArgs[],
-    uno_Any                      ** ppException) 
+    uno_Any                      ** ppException)
     SAL_THROW_EXTERN_C()
 {
     Proxy * pThis = static_cast<Proxy *>(pUnoI);
@@ -203,7 +203,7 @@ static void SAL_CALL s_Proxy_release(uno_Interface * pUnoI) SAL_THROW_EXTERN_C()
     pProxy->release();
 }
 
-static void s_acquireAndRegister_v(va_list * pParam) 
+static void s_acquireAndRegister_v(va_list * pParam)
 {
     uno_Interface                    * pUnoI      = va_arg(*pParam, uno_Interface *);
     rtl_uString                      * pOid       = va_arg(*pParam, rtl_uString *);
@@ -223,7 +223,7 @@ Proxy::Proxy(uno::Mapping                  const & to_from,
              rtl::OUString                 const & rOId,
              cppu::helper::purpenv::ProbeFun     * probeFun,
              void                                * pProbeContext
-) 
+)
     SAL_THROW(())
         : m_nRef         (1),
           m_from         (pFrom),
@@ -252,7 +252,7 @@ Proxy::Proxy(uno::Mapping                  const & to_from,
     uno_Interface::pDispatcher = s_Proxy_dispatch;
 }
 
-extern "C" { static void s_releaseAndRevoke_v(va_list * pParam) 
+extern "C" { static void s_releaseAndRevoke_v(va_list * pParam)
 {
     uno_ExtEnvironment * pEnv  = va_arg(*pParam, uno_ExtEnvironment *);
     uno_Interface      * pUnoI = va_arg(*pParam, uno_Interface *);
@@ -270,7 +270,7 @@ Proxy::~Proxy()
     typelib_typedescription_release((typelib_TypeDescription *)m_pTypeDescr);
 }
 
-static uno::TypeDescription getAcquireMethod(void) 
+static uno::TypeDescription getAcquireMethod(void)
 {
     typelib_TypeDescriptionReference * type_XInterface =
         * typelib_static_type_getByTypeClass(typelib_TypeClass_INTERFACE);
@@ -285,7 +285,7 @@ static uno::TypeDescription getAcquireMethod(void)
     return acquire;
 }
 
-static uno::TypeDescription getReleaseMethod(void) 
+static uno::TypeDescription getReleaseMethod(void)
 {
     typelib_TypeDescriptionReference * type_XInterface =
         * typelib_static_type_getByTypeClass(typelib_TypeClass_INTERFACE);
@@ -308,7 +308,7 @@ void Proxy::acquire(void)
     if (m_probeFun)
         m_probeFun(true,
                    this,
-                   m_pProbeContext, 
+                   m_pProbeContext,
                    *typelib_static_type_getByTypeClass(typelib_TypeClass_VOID),
                    NULL,
                    0,
@@ -332,7 +332,7 @@ void Proxy::acquire(void)
     if (m_probeFun)
         m_probeFun(false,
                    this,
-                   m_pProbeContext, 
+                   m_pProbeContext,
                    *typelib_static_type_getByTypeClass(typelib_TypeClass_VOID),
                    NULL,
                    0,
@@ -343,7 +343,7 @@ void Proxy::acquire(void)
 
 }
 
-void Proxy::release(void) 
+void Proxy::release(void)
 {
     cppu::helper::purpenv::ProbeFun * probeFun = m_probeFun;
     void                            * pProbeContext = m_pProbeContext;
@@ -351,7 +351,7 @@ void Proxy::release(void)
     if (m_probeFun)
         m_probeFun(true,
                    this,
-                   m_pProbeContext, 
+                   m_pProbeContext,
                    *typelib_static_type_getByTypeClass(typelib_TypeClass_VOID),
                    NULL,
                    0,
@@ -366,7 +366,7 @@ void Proxy::release(void)
     if (probeFun)
         probeFun(false,
                  this,
-                 pProbeContext, 
+                 pProbeContext,
                  *typelib_static_type_getByTypeClass(typelib_TypeClass_VOID),
                  NULL,
                  0,
@@ -410,7 +410,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
     if (m_probeFun)
         m_probeFun(true,
                    this,
-                   m_pProbeContext, 
+                   m_pProbeContext,
                    pReturnTypeRef,
                    pParams,
                    nParams,
@@ -423,7 +423,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
 
     typelib_TypeDescription * return_td = 0;
     void * ret = pReturn;
-    if (pReturnTypeRef) 
+    if (pReturnTypeRef)
     {
         TYPELIB_DANGER_GET(&return_td, pReturnTypeRef);
 
@@ -482,9 +482,9 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
         }
         if (ret != pReturn)
         {
-            uno_type_copyAndConvertData(pReturn, 
-                                        ret, 
-                                        pReturnTypeRef, 
+            uno_type_copyAndConvertData(pReturn,
+                                        ret,
+                                        pReturnTypeRef,
                                         m_to_from.get());
 
             uno_Environment_invoke(m_to.get(), s_type_destructData_v, ret, pReturnTypeRef, 0);
@@ -506,9 +506,9 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
             }
         }
 
-        uno_type_any_constructAndConvert(*ppException, 
-                                         exc->pData, 
-                                         exc->pType, 
+        uno_type_any_constructAndConvert(*ppException,
+                                         exc->pData,
+                                         exc->pType,
                                          m_to_from.get());
 
         // FIXME: need to destruct in m_to
@@ -518,7 +518,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
     if (m_probeFun)
         m_probeFun(false,
                    this,
-                   m_pProbeContext, 
+                   m_pProbeContext,
                    pReturnTypeRef,
                    pParams,
                    nParams,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@ AutoOGuardArray::AutoOGuardArray( sal_Int32 nNumElements )
 AutoOGuardArray::~AutoOGuardArray()
 {
     //!! release auto_ptr's and thus the mutexes locks
-    delete [] pGuardArray; 
-    
+    delete [] pGuardArray;
+
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ SlaveData::SlaveData ( ChainablePropertySet *pSlave)
 {
 }
 
-MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, IMutex *pMutex ) 
+MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, IMutex *pMutex )
     throw()
 : mpInfo ( pInfo )
 , mpMutex ( pMutex )
@@ -102,7 +102,7 @@ void MasterPropertySet::unlockMutex()
         mpMutex->release();
 }
 
-MasterPropertySet::~MasterPropertySet() 
+MasterPropertySet::~MasterPropertySet()
     throw()
 {
     SlaveMap::iterator aEnd = maSlaveMap.end(), aIter = maSlaveMap.begin();
@@ -114,7 +114,7 @@ MasterPropertySet::~MasterPropertySet()
 }
 
 // XPropertySet
-Reference< XPropertySetInfo > SAL_CALL MasterPropertySet::getPropertySetInfo(  ) 
+Reference< XPropertySetInfo > SAL_CALL MasterPropertySet::getPropertySetInfo(  )
     throw(RuntimeException)
 {
     return mxInfo;
@@ -127,7 +127,7 @@ void MasterPropertySet::registerSlave ( ChainablePropertySet *pNewSet )
     mpInfo->add ( pNewSet->mpInfo->maMap, mnLastId );
 }
 
-void SAL_CALL MasterPropertySet::setPropertyValue( const ::rtl::OUString& rPropertyName, const Any& rValue ) 
+void SAL_CALL MasterPropertySet::setPropertyValue( const ::rtl::OUString& rPropertyName, const Any& rValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
@@ -149,7 +149,7 @@ void SAL_CALL MasterPropertySet::setPropertyValue( const ::rtl::OUString& rPrope
     else
     {
         ChainablePropertySet * pSlave = maSlaveMap [ (*aIter).second->mnMapId ]->mpSlave;
-        
+
         // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
         std::auto_ptr< vos::OGuard > pMutexGuard2;
         if (pSlave->mpMutex)
@@ -161,7 +161,7 @@ void SAL_CALL MasterPropertySet::setPropertyValue( const ::rtl::OUString& rPrope
     }
 }
 
-Any SAL_CALL MasterPropertySet::getPropertyValue( const ::rtl::OUString& rPropertyName ) 
+Any SAL_CALL MasterPropertySet::getPropertyValue( const ::rtl::OUString& rPropertyName )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
@@ -189,7 +189,7 @@ Any SAL_CALL MasterPropertySet::getPropertyValue( const ::rtl::OUString& rProper
         std::auto_ptr< vos::OGuard > pMutexGuard2;
         if (pSlave->mpMutex)
             pMutexGuard2.reset( new vos::OGuard(pSlave->mpMutex) );
-        
+
         pSlave->_preGetValues();
         pSlave->_getSingleValue( *((*aIter).second->mpInfo), aAny );
         pSlave->_postGetValues();
@@ -197,32 +197,32 @@ Any SAL_CALL MasterPropertySet::getPropertyValue( const ::rtl::OUString& rProper
     return aAny;
 }
 
-void SAL_CALL MasterPropertySet::addPropertyChangeListener( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& ) 
+void SAL_CALL MasterPropertySet::addPropertyChangeListener( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // todo
 }
 
-void SAL_CALL MasterPropertySet::removePropertyChangeListener( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& ) 
+void SAL_CALL MasterPropertySet::removePropertyChangeListener( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // todo
 }
 
-void SAL_CALL MasterPropertySet::addVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& ) 
+void SAL_CALL MasterPropertySet::addVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // todo
 }
 
-void SAL_CALL MasterPropertySet::removeVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& ) 
+void SAL_CALL MasterPropertySet::removeVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // todo
 }
 
 // XMultiPropertySet
-void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< ::rtl::OUString >& aPropertyNames, const Sequence< Any >& aValues ) 
+void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< ::rtl::OUString >& aPropertyNames, const Sequence< Any >& aValues )
     throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
@@ -245,7 +245,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< ::rtl::OUStr
 
         //!! have an auto_ptr to an array of OGuards in order to have the
         //!! allocated memory properly freed (exception safe!).
-        //!! Since the array itself has auto_ptrs as members we have to use a 
+        //!! Since the array itself has auto_ptrs as members we have to use a
         //!! helper class 'AutoOGuardArray' in order to have
         //!! the acquired locks properly released.
         AutoOGuardArray aOGuardArray( nCount );
@@ -266,7 +266,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< ::rtl::OUStr
                     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
                     if (pSlave->mpSlave->mpMutex)
                         aOGuardArray[i].reset( new vos::OGuard(pSlave->mpSlave->mpMutex) );
-                    
+
                     pSlave->mpSlave->_preSetValues();
                     pSlave->SetInit ( sal_True );
                 }
@@ -288,7 +288,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< ::rtl::OUStr
     }
 }
 
-Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< ::rtl::OUString >& aPropertyNames ) 
+Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< ::rtl::OUString >& aPropertyNames )
     throw(RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
@@ -310,7 +310,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< :
 
         //!! have an auto_ptr to an array of OGuards in order to have the
         //!! allocated memory properly freed (exception safe!).
-        //!! Since the array itself has auto_ptrs as members we have to use a 
+        //!! Since the array itself has auto_ptrs as members we have to use a
         //!! helper class 'AutoOGuardArray' in order to have
         //!! the acquired locks properly released.
         AutoOGuardArray aOGuardArray( nCount );
@@ -354,26 +354,26 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< :
     return aValues;
 }
 
-void SAL_CALL MasterPropertySet::addPropertiesChangeListener( const Sequence< ::rtl::OUString >&, const Reference< XPropertiesChangeListener >& ) 
+void SAL_CALL MasterPropertySet::addPropertiesChangeListener( const Sequence< ::rtl::OUString >&, const Reference< XPropertiesChangeListener >& )
     throw(RuntimeException)
 {
     // todo
 }
 
-void SAL_CALL MasterPropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& ) 
+void SAL_CALL MasterPropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
     throw(RuntimeException)
 {
     // todo
 }
 
-void SAL_CALL MasterPropertySet::firePropertiesChangeEvent( const Sequence< ::rtl::OUString >&, const Reference< XPropertiesChangeListener >& ) 
+void SAL_CALL MasterPropertySet::firePropertiesChangeEvent( const Sequence< ::rtl::OUString >&, const Reference< XPropertiesChangeListener >& )
     throw(RuntimeException)
 {
     // todo
 }
 
 // XPropertyState
-PropertyState SAL_CALL MasterPropertySet::getPropertyState( const ::rtl::OUString& PropertyName ) 
+PropertyState SAL_CALL MasterPropertySet::getPropertyState( const ::rtl::OUString& PropertyName )
     throw(UnknownPropertyException, RuntimeException)
 {
     PropertyDataHash::const_iterator aIter =  mpInfo->maMap.find( PropertyName );
@@ -405,7 +405,7 @@ PropertyState SAL_CALL MasterPropertySet::getPropertyState( const ::rtl::OUStrin
     return aState;
 }
 
-Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const Sequence< ::rtl::OUString >& rPropertyNames ) 
+Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const Sequence< ::rtl::OUString >& rPropertyNames )
     throw(UnknownPropertyException, RuntimeException)
 {
     const sal_Int32 nCount = rPropertyNames.getLength();
@@ -452,7 +452,7 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
     return aStates;
 }
 
-void SAL_CALL MasterPropertySet::setPropertyToDefault( const ::rtl::OUString& rPropertyName ) 
+void SAL_CALL MasterPropertySet::setPropertyToDefault( const ::rtl::OUString& rPropertyName )
     throw(UnknownPropertyException, RuntimeException)
 {
     PropertyDataHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
@@ -462,7 +462,7 @@ void SAL_CALL MasterPropertySet::setPropertyToDefault( const ::rtl::OUString& rP
     _setPropertyToDefault( *((*aIter).second->mpInfo) );
 }
 
-Any SAL_CALL MasterPropertySet::getPropertyDefault( const ::rtl::OUString& rPropertyName ) 
+Any SAL_CALL MasterPropertySet::getPropertyDefault( const ::rtl::OUString& rPropertyName )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     PropertyDataHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
@@ -478,7 +478,7 @@ void MasterPropertySet::_preGetPropertyState ()
     OSL_ENSURE( sal_False, "you have to implement this yourself!");
 }
 
-void MasterPropertySet::_getPropertyState( const comphelper::PropertyInfo&, PropertyState& ) 
+void MasterPropertySet::_getPropertyState( const comphelper::PropertyInfo&, PropertyState& )
     throw(UnknownPropertyException )
 {
     OSL_ENSURE( sal_False, "you have to implement this yourself!");
@@ -490,13 +490,13 @@ void MasterPropertySet::_postGetPropertyState ()
     OSL_ENSURE( sal_False, "you have to implement this yourself!");
 }
 
-void MasterPropertySet::_setPropertyToDefault( const comphelper::PropertyInfo& )  
+void MasterPropertySet::_setPropertyToDefault( const comphelper::PropertyInfo& )
     throw(UnknownPropertyException )
 {
     OSL_ENSURE( sal_False, "you have to implement this yourself!");
 }
 
-Any MasterPropertySet::_getPropertyDefault( const comphelper::PropertyInfo& ) 
+Any MasterPropertySet::_getPropertyDefault( const comphelper::PropertyInfo& )
     throw(UnknownPropertyException, WrappedTargetException )
 {
     OSL_ENSURE( sal_False, "you have to implement this yourself!");

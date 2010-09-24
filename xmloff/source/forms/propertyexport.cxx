@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ namespace xmloff
             ::rtl::OUString sValue;
 
             // loop through all the properties which are yet to be exported
-            for	(	ConstStringSetIterator	aProperty = m_aRemainingProps.begin();
+            for (   ConstStringSetIterator  aProperty = m_aRemainingProps.begin();
                     aProperty != m_aRemainingProps.end();
                     ++aProperty
                 )
@@ -167,7 +167,7 @@ namespace xmloff
                 }
 
                 if( !bIsSequence && !bIsEmptyValue )
-                {	// the simple case
+                {   // the simple case
                     //add by BerryJia for Bug102407
                     sValue = implConvertAny(aValue);
                     AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );
@@ -175,8 +175,8 @@ namespace xmloff
 
 
                 // start the property tag
-                SvXMLElementExport aValueTag1(m_rContext.getGlobalContext(), 
-                        XML_NAMESPACE_FORM, 
+                SvXMLElementExport aValueTag1(m_rContext.getGlobalContext(),
+                        XML_NAMESPACE_FORM,
                         bIsSequence ? token::XML_LIST_PROPERTY
                                     : token::XML_PROPERTY, sal_True, sal_True);
 
@@ -217,12 +217,12 @@ namespace xmloff
                 {
                     while (pSequenceIterator->hasMoreElements())
                     {
-                        sValue = 
+                        sValue =
                             implConvertAny(pSequenceIterator->nextElement());
                         AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );
                         SvXMLElementExport aValueTag(
-                                m_rContext.getGlobalContext(), 
-                                XML_NAMESPACE_FORM, token::XML_LIST_VALUE, 
+                                m_rContext.getGlobalContext(),
+                                XML_NAMESPACE_FORM, token::XML_LIST_VALUE,
                                 sal_True, sal_False);
                     }
                 }
@@ -379,12 +379,12 @@ namespace xmloff
         Any aValue = m_xProps->getPropertyValue(sPropertyName);
 
         if (aValue.hasValue())
-        {	// we have a non-void current value
+        {   // we have a non-void current value
             ::cppu::enum2int(nCurrentValue, aValue);
 
             // add the attribute
             if ((_nDefault != nCurrentValue) || _bVoidDefault)
-            {	// the default does not equal the value, or the default is void and the value isn't
+            {   // the default does not equal the value, or the default is void and the value isn't
 
                 // let the formatter of the export context build a string
                 ::rtl::OUStringBuffer sBuffer;
@@ -410,12 +410,12 @@ namespace xmloff
 
         ::rtl::OUString sTargetFrame = comphelper::getString(m_xProps->getPropertyValue(PROPERTY_TARGETFRAME));
         if (0 != sTargetFrame.compareToAscii("_blank"))
-        {	// an empty string and "_blank" have the same meaning and don't have to be written
+        {   // an empty string and "_blank" have the same meaning and don't have to be written
             AddAttribute(OAttributeMetaData::getCommonControlAttributeNamespace(CCA_TARGET_FRAME)
                         ,OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_FRAME)
                         ,sTargetFrame);
         }
-            
+
         exportedProperty(PROPERTY_TARGETFRAME);
     }
 
@@ -423,7 +423,7 @@ namespace xmloff
     void OPropertyExport::exportRelativeTargetLocation(const ConstAsciiString& _sPropertyName,sal_Int32 _nProperty,bool _bAddType)
     {
         DBG_CHECK_PROPERTY( _sPropertyName, ::rtl::OUString );
-            
+
         ::rtl::OUString sTargetLocation = comphelper::getString(m_xProps->getPropertyValue(_sPropertyName));
         if ( sTargetLocation.getLength() )
                     // If this isn't a GraphicObject then GetRelativeReference
@@ -515,7 +515,7 @@ namespace xmloff
         const ::rtl::OUString* pItems = aItems.getConstArray();
         const ::rtl::OUString* pEnd = pItems + aItems.getLength();
         const ::rtl::OUString* pLastElement = pEnd - 1;
-        for	(	;
+        for (   ;
                 pItems != pEnd;
                 ++pItems
             )
@@ -548,7 +548,7 @@ namespace xmloff
         switch (_rValue.getValueTypeClass())
         {
             case TypeClass_STRING:
-            {	// extract the string
+            {   // extract the string
                 ::rtl::OUString sCurrentValue;
                 _rValue >>= sCurrentValue;
                 aBuffer.append(sCurrentValue);
@@ -580,7 +580,7 @@ namespace xmloff
             }
             break;
             default:
-            {	// hmmm .... what else do we know?
+            {   // hmmm .... what else do we know?
                 double fValue = 0;
                 ::com::sun::star::util::Date aDate;
                 ::com::sun::star::util::Time aTime;
@@ -723,7 +723,7 @@ namespace xmloff
 #endif // DBG_UTIL - dbg_implCheckProperty
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace canvas
                 ::rtl::OUString::createFromAscii("PropertySetHelper: property ") +
                 aPropertyName +
                 ::rtl::OUString::createFromAscii(" not found."),
-                uno::Reference< uno::XInterface >() 
+                uno::Reference< uno::XInterface >()
                 );
         }
 
@@ -65,7 +65,7 @@ namespace canvas
             }
         };
     }
-    
+
     PropertySetHelper::PropertySetHelper() :
         mpMap(),
         maMapEntries()
@@ -113,14 +113,14 @@ namespace canvas
         return mpMap->lookup( aPropertyName,
                               aDummy );
     }
-                   
+
     uno::Reference< beans::XPropertySetInfo > PropertySetHelper::getPropertySetInfo() const
     {
         // we're a stealth property set
         return uno::Reference< beans::XPropertySetInfo >();
     }
 
-    void PropertySetHelper::setPropertyValue( const ::rtl::OUString& aPropertyName, 
+    void PropertySetHelper::setPropertyValue( const ::rtl::OUString& aPropertyName,
                                               const uno::Any&        aValue )
     {
         Callbacks aCallbacks;
@@ -155,7 +155,7 @@ namespace canvas
         return uno::Any();
     }
 
-    void PropertySetHelper::addPropertyChangeListener( const ::rtl::OUString&                                  aPropertyName, 
+    void PropertySetHelper::addPropertyChangeListener( const ::rtl::OUString&                                  aPropertyName,
                                                        const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     {
         // check validity of property, but otherwise ignore the
@@ -164,13 +164,13 @@ namespace canvas
             throwUnknown( aPropertyName );
     }
 
-    void PropertySetHelper::removePropertyChangeListener( const ::rtl::OUString&                                  /*aPropertyName*/, 
+    void PropertySetHelper::removePropertyChangeListener( const ::rtl::OUString&                                  /*aPropertyName*/,
                                                           const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     {
         // ignore request, no listener added in the first place
     }
-    
-    void PropertySetHelper::addVetoableChangeListener( const ::rtl::OUString&                                  aPropertyName, 
+
+    void PropertySetHelper::addVetoableChangeListener( const ::rtl::OUString&                                  aPropertyName,
                                                        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     {
         // check validity of property, but otherwise ignore the
@@ -179,7 +179,7 @@ namespace canvas
             throwUnknown( aPropertyName );
     }
 
-    void PropertySetHelper::removeVetoableChangeListener( const ::rtl::OUString&                                  /*aPropertyName*/, 
+    void PropertySetHelper::removeVetoableChangeListener( const ::rtl::OUString&                                  /*aPropertyName*/,
                                                           const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     {
         // ignore request, no listener added in the first place

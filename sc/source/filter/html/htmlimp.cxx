@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,7 +135,7 @@ void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const String& rName, const
         delete pRangeData;
 }
 
-void ScHTMLImport::WriteToDocument( 
+void ScHTMLImport::WriteToDocument(
     BOOL bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
 {
     ScEEImport::WriteToDocument( bSizeColsRows, nOutputFactor, pFormatter, bConvertDate );
@@ -232,7 +232,7 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
     {
         String aToken( rOrigName.GetToken( 0, ';', nStringIx ) );
         if( pRangeNames && ScfTools::IsHTMLTablesName( aToken ) )
-        {	// build list with all HTML tables
+        {   // build list with all HTML tables
             ULONG nIndex = 1;
             USHORT nPos;
             BOOL bLoop = TRUE;

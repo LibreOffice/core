@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -196,8 +196,8 @@ void Client::ViewChanged()
                                                 static_cast< long >( GetScaleHeight() * Fraction( aVisArea.GetHeight() ) ) );
 
             // react to the change if the difference is bigger than one pixel
-            Size aPixelDiff = 
-                Application::GetDefaultDevice()->LogicToPixel( 
+            Size aPixelDiff =
+                Application::GetDefaultDevice()->LogicToPixel(
                     Size( aLogicRect.GetWidth() - aScaledSize.Width(),
                           aLogicRect.GetHeight() - aScaledSize.Height() ),
                     aMap100 );

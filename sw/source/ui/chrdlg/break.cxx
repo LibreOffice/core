@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ IMPL_LINK_INLINE_START( SwBreakDlg, ClickHdl, void *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwBreakDlg, ClickHdl, void *, EMPTYARG )
 
 /*------------------------------------------------------------------------
- Beschreibung:	Handler fuer Aendern Seitenummer
+ Beschreibung:  Handler fuer Aendern Seitenummer
 ------------------------------------------------------------------------*/
 
 IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
@@ -104,7 +104,7 @@ IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 IMPL_LINK_INLINE_END( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 
 /*------------------------------------------------------------------------
- Beschreibung:	Durch Aendern der Seitennummer wird die Checkbox gecheckt.
+ Beschreibung:  Durch Aendern der Seitennummer wird die Checkbox gecheckt.
 ------------------------------------------------------------------------*/
 
 IMPL_LINK_INLINE_START( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
@@ -115,7 +115,7 @@ IMPL_LINK_INLINE_START( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
 
 /*------------------------------------------------------------------------
- Beschreibung:	Ok-Handler;
+ Beschreibung:  Ok-Handler;
                 prueft, ob die Seitenummer nPage eine legale Seitennummer
                 ist (linke Seiten mit geraden Nummern etc. bei einer Seitenvorlage
                 mit wechselnden Seiten)
@@ -219,7 +219,7 @@ void SwBreakDlg::CheckEnable()
     BOOL bEnable = TRUE;
     if ( bHtmlMode )
     {
-        aColumnBtn	.Enable(FALSE);
+        aColumnBtn  .Enable(FALSE);
         aPageCollBox.Enable(FALSE);
         bEnable = FALSE;
     }
@@ -243,7 +243,7 @@ void SwBreakDlg::CheckEnable()
         if ( 0 == nPos || LISTBOX_ENTRY_NOTFOUND == nPos )
             bEnable = FALSE;
     }
-    aPageNumBox	.Enable(bEnable);
+    aPageNumBox .Enable(bEnable);
     aPageNumEdit.Enable(bEnable);
 }
 

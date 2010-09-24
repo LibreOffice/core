@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,21 +80,21 @@ namespace dxcanvas
 
         void setupGraphics( Gdiplus::Graphics& rGraphics );
 
-        void gdiPlusMatrixFromB2DHomMatrix( Gdiplus::Matrix& 		rGdiplusMatrix,
-                                            const ::basegfx::B2DHomMatrix&	rMatrix );
-        void gdiPlusMatrixFromAffineMatrix2D( Gdiplus::Matrix& 							rGdiplusMatrix,
+        void gdiPlusMatrixFromB2DHomMatrix( Gdiplus::Matrix&        rGdiplusMatrix,
+                                            const ::basegfx::B2DHomMatrix&  rMatrix );
+        void gdiPlusMatrixFromAffineMatrix2D( Gdiplus::Matrix&                          rGdiplusMatrix,
                                               const ::com::sun::star::geometry::AffineMatrix2D& rMatrix );
 
         Gdiplus::PointF gdiPlusPointFFromRealPoint2D( const ::com::sun::star::geometry::RealPoint2D& );
-        Gdiplus::RectF 	gdiPlusRectFFromRectangle2D( const ::com::sun::star::geometry::RealRectangle2D& );
-        Gdiplus::Rect 	gdiPlusRectFromIntegerRectangle2D( const ::com::sun::star::geometry::IntegerRectangle2D& );
-        RECT 			gdiRectFromB2IRect( const ::basegfx::B2IRange& );
+        Gdiplus::RectF  gdiPlusRectFFromRectangle2D( const ::com::sun::star::geometry::RealRectangle2D& );
+        Gdiplus::Rect   gdiPlusRectFromIntegerRectangle2D( const ::com::sun::star::geometry::IntegerRectangle2D& );
+        RECT            gdiRectFromB2IRect( const ::basegfx::B2IRange& );
 
-        ::com::sun::star::geometry::RealPoint2D		realPoint2DFromGdiPlusPointF( const Gdiplus::PointF& );
-        ::com::sun::star::geometry::RealRectangle2D	realRectangle2DFromGdiPlusRectF( const Gdiplus::RectF& );
+        ::com::sun::star::geometry::RealPoint2D     realPoint2DFromGdiPlusPointF( const Gdiplus::PointF& );
+        ::com::sun::star::geometry::RealRectangle2D realRectangle2DFromGdiPlusRectF( const Gdiplus::RectF& );
 
-        ::basegfx::B2DPoint	b2dPointFromGdiPlusPointF( const Gdiplus::PointF& );
-        ::basegfx::B2DRange	b2dRangeFromGdiPlusRectF( const Gdiplus::RectF& );
+        ::basegfx::B2DPoint b2dPointFromGdiPlusPointF( const Gdiplus::PointF& );
+        ::basegfx::B2DRange b2dRangeFromGdiPlusRectF( const Gdiplus::RectF& );
 
         ::com::sun::star::uno::Sequence< double > argbToDoubleSequence( const Gdiplus::ARGB& rColor );
         ::com::sun::star::uno::Sequence< sal_Int8 > argbToIntSequence( const Gdiplus::ARGB& rColor );
@@ -113,22 +113,22 @@ namespace dxcanvas
             bool bNoLineJoin = false);
 
         GraphicsPathSharedPtr graphicsPathFromXPolyPolygon2D(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >&, 
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >&,
             bool bNoLineJoin = false );
 
         bool drawGdiPlusBitmap( const GraphicsSharedPtr& rGraphics,
-                                const BitmapSharedPtr&	 rBitmap );
+                                const BitmapSharedPtr&   rBitmap );
         bool drawDIBits( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
                          const BITMAPINFO&                               rBI,
                          const void*                                     pBits );
 
         bool drawRGBABits( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
-                           const RawRGBABitmap&							   rRawRGBAData );
+                           const RawRGBABitmap&                            rRawRGBAData );
 
         BitmapSharedPtr bitmapFromXBitmap( const ::com::sun::star::uno::Reference<
-                                                   ::com::sun::star::rendering::XBitmap >&	xBitmap );
+                                                   ::com::sun::star::rendering::XBitmap >&  xBitmap );
 
-        CanvasFont::ImplRef	canvasFontFromXFont( const ::com::sun::star::uno::Reference<
+        CanvasFont::ImplRef canvasFontFromXFont( const ::com::sun::star::uno::Reference<
                                                      ::com::sun::star::rendering::XCanvasFont >& xFont );
 
         void setModulateImageAttributes( Gdiplus::ImageAttributes& o_rAttr,

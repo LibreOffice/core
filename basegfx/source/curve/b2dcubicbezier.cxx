@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,8 @@
 
 #include <limits>
 
-// #i37443# 
-#define FACTOR_FOR_UNSHARPEN	(1.6)
+// #i37443#
+#define FACTOR_FOR_UNSHARPEN    (1.6)
 #ifdef DBG_UTIL
 static double fMultFactUnsharpen = FACTOR_FOR_UNSHARPEN;
 #endif
@@ -47,21 +47,21 @@ namespace basegfx
     namespace
     {
         void ImpSubDivAngle(
-            const B2DPoint& rfPA,			// start point
-            const B2DPoint& rfEA,			// edge on A
-            const B2DPoint& rfEB,			// edge on B
-            const B2DPoint& rfPB,			// end point
-            B2DPolygon& rTarget,			// target polygon
-            double fAngleBound,				// angle bound in [0.0 .. 2PI]
-            bool bAllowUnsharpen,			// #i37443# allow the criteria to get unsharp in recursions
-            sal_uInt16 nMaxRecursionDepth)	// endless loop protection
+            const B2DPoint& rfPA,           // start point
+            const B2DPoint& rfEA,           // edge on A
+            const B2DPoint& rfEB,           // edge on B
+            const B2DPoint& rfPB,           // end point
+            B2DPolygon& rTarget,            // target polygon
+            double fAngleBound,             // angle bound in [0.0 .. 2PI]
+            bool bAllowUnsharpen,           // #i37443# allow the criteria to get unsharp in recursions
+            sal_uInt16 nMaxRecursionDepth)  // endless loop protection
         {
             if(nMaxRecursionDepth)
             {
                 // do angle test
                 B2DVector aLeft(rfEA - rfPA);
                 B2DVector aRight(rfEB - rfPB);
-                
+
                 // #i72104#
                 if(aLeft.equalZero())
                 {
@@ -117,13 +117,13 @@ namespace basegfx
         }
 
         void ImpSubDivAngleStart(
-            const B2DPoint& rfPA,			// start point
-            const B2DPoint& rfEA,			// edge on A
-            const B2DPoint& rfEB,			// edge on B
-            const B2DPoint& rfPB,			// end point
-            B2DPolygon& rTarget,			// target polygon
-            const double& rfAngleBound,		// angle bound in [0.0 .. 2PI]
-            bool bAllowUnsharpen)			// #i37443# allow the criteria to get unsharp in recursions
+            const B2DPoint& rfPA,           // start point
+            const B2DPoint& rfEA,           // edge on A
+            const B2DPoint& rfEB,           // edge on B
+            const B2DPoint& rfPB,           // end point
+            B2DPolygon& rTarget,            // target polygon
+            const double& rfAngleBound,     // angle bound in [0.0 .. 2PI]
+            bool bAllowUnsharpen)           // #i37443# allow the criteria to get unsharp in recursions
         {
             sal_uInt16 nMaxRecursionDepth(8);
             const B2DVector aLeft(rfEA - rfPA);
@@ -153,7 +153,7 @@ namespace basegfx
                         if(!bLeftEqualZero)
                         {
                             double fFactor;
-                            
+
                             if(fabs(aBase.getX()) > fabs(aBase.getY()))
                             {
                                 fFactor = aLeft.getX() / aBase.getX();
@@ -172,7 +172,7 @@ namespace basegfx
                         if(!bRightEqualZero)
                         {
                             double fFactor;
-                            
+
                             if(fabs(aBase.getX()) > fabs(aBase.getY()))
                             {
                                 fFactor = aRight.getX() / -aBase.getX();
@@ -262,14 +262,14 @@ namespace basegfx
         }
 
         void ImpSubDivDistance(
-            const B2DPoint& rfPA,			// start point
-            const B2DPoint& rfEA,			// edge on A
-            const B2DPoint& rfEB,			// edge on B
-            const B2DPoint& rfPB,			// end point
-            B2DPolygon& rTarget,			// target polygon
-            double fDistanceBound2,			// quadratic distance criteria
-            double fLastDistanceError2,		// the last quadratic distance error
-            sal_uInt16 nMaxRecursionDepth)	// endless loop protection
+            const B2DPoint& rfPA,           // start point
+            const B2DPoint& rfEA,           // edge on A
+            const B2DPoint& rfEB,           // edge on B
+            const B2DPoint& rfPB,           // end point
+            B2DPolygon& rTarget,            // target polygon
+            double fDistanceBound2,         // quadratic distance criteria
+            double fLastDistanceError2,     // the last quadratic distance error
+            sal_uInt16 nMaxRecursionDepth)  // endless loop protection
         {
             if(nMaxRecursionDepth)
             {
@@ -338,19 +338,19 @@ namespace basegfx
 namespace basegfx
 {
     B2DCubicBezier::B2DCubicBezier(const B2DCubicBezier& rBezier)
-    :	maStartPoint(rBezier.maStartPoint),
+    :   maStartPoint(rBezier.maStartPoint),
         maEndPoint(rBezier.maEndPoint),
         maControlPointA(rBezier.maControlPointA),
         maControlPointB(rBezier.maControlPointB)
     {
     }
-    
+
     B2DCubicBezier::B2DCubicBezier()
     {
     }
-    
+
     B2DCubicBezier::B2DCubicBezier(const B2DPoint& rStart, const B2DPoint& rEnd)
-    :	maStartPoint(rStart),
+    :   maStartPoint(rStart),
         maEndPoint(rEnd),
         maControlPointA(rStart),
         maControlPointB(rEnd)
@@ -358,7 +358,7 @@ namespace basegfx
     }
 
     B2DCubicBezier::B2DCubicBezier(const B2DPoint& rStart, const B2DPoint& rControlPointA, const B2DPoint& rControlPointB, const B2DPoint& rEnd)
-    :	maStartPoint(rStart),
+    :   maStartPoint(rStart),
         maEndPoint(rEnd),
         maControlPointA(rControlPointA),
         maControlPointB(rControlPointB)
@@ -376,7 +376,7 @@ namespace basegfx
         maEndPoint = rBezier.maEndPoint;
         maControlPointA = rBezier.maControlPointA;
         maControlPointB = rBezier.maControlPointB;
-        
+
         return *this;
     }
 
@@ -427,8 +427,8 @@ namespace basegfx
         if(maControlPointA != maStartPoint || maControlPointB != maEndPoint)
         {
             const B2DVector aEdge(maEndPoint - maStartPoint);
-            
-            // controls parallel to edge can be trivial. No edge -> not parallel -> control can 
+
+            // controls parallel to edge can be trivial. No edge -> not parallel -> control can
             // still not be trivial (e.g. ballon loop)
             if(!aEdge.equalZero())
             {
@@ -447,8 +447,8 @@ namespace basegfx
                 // vector would need to be used too, but to be trivial it is assumed to
                 // be of roughly equal length to the edge, so edge length can be used
                 // for both. Only needed when one of both is not trivial per se.
-                const double fInverseEdgeLength(bAIsTrivial && bBIsTrivial 
-                    ? 1.0 
+                const double fInverseEdgeLength(bAIsTrivial && bBIsTrivial
+                    ? 1.0
                     : 1.0 / aEdge.getLength());
 
                 // if A is not zero, check if it could be
@@ -461,8 +461,8 @@ namespace basegfx
                     if(fTools::equalZero(fCross))
                     {
                         // get scale to edge. Use bigger distance for numeric quality
-                        const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY()) 
-                            ? aVecA.getX() / aEdge.getX() 
+                        const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY())
+                            ? aVecA.getX() / aEdge.getX()
                             : aVecA.getY() / aEdge.getY());
 
                         // relative end point of vector in edge range?
@@ -479,12 +479,12 @@ namespace basegfx
                 {
                     // parallel to edge? Check aVecB, aEdge
                     const double fCross(aVecB.cross(aEdge) * fInverseEdgeLength);
-                    
+
                     if(fTools::equalZero(fCross))
                     {
                         // get scale to edge. Use bigger distance for numeric quality
-                        const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY()) 
-                            ? aVecB.getX() / aEdge.getX() 
+                        const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY())
+                            ? aVecB.getX() / aEdge.getX()
                             : aVecB.getY() / aEdge.getY());
 
                         // end point of vector in edge range? Caution: controlB is directed AGAINST edge
@@ -658,7 +658,7 @@ namespace basegfx
     {
         if(isBezier())
         {
-            ImpSubDivDistance(maStartPoint, maControlPointA, maControlPointB, maEndPoint, rTarget, 
+            ImpSubDivDistance(maStartPoint, maControlPointA, maControlPointB, maEndPoint, rTarget,
                 fDistanceBound * fDistanceBound, ::std::numeric_limits<double>::max(), 30);
         }
         else
@@ -678,7 +678,7 @@ namespace basegfx
             const B2DPoint aS1R(interpolate(maControlPointB, maEndPoint, t));
             const B2DPoint aS2L(interpolate(aS1L, aS1C, t));
             const B2DPoint aS2R(interpolate(aS1C, aS1R, t));
-    
+
             return interpolate(aS2L, aS2R, t);
         }
         else
@@ -850,7 +850,7 @@ namespace basegfx
     B2DCubicBezier B2DCubicBezier::snippet(double fStart, double fEnd) const
     {
         B2DCubicBezier aRetval;
-        
+
         if(fTools::more(fStart, 1.0))
         {
             fStart = 1.0;
@@ -1076,7 +1076,7 @@ namespace basegfx
         // derivative is polynomial of order 2
         // check if the polynomial has non-imaginary roots
         const double fD = fB*fB - fA*fC;
-        if( fD >= 0.0 )	// TODO: is this test needed? geometrically not IMHO
+        if( fD >= 0.0 ) // TODO: is this test needed? geometrically not IMHO
         {
             // calculate the first root
             const double fS = sqrt(fD);

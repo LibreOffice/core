@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,11 +100,11 @@ void testidlclass( const Reference < XMultiServiceFactory > &rSMgr)
     //TODO !
     // one idl class for one interface
     // this test fails, if core reflection fails !
-//	OSL_ASSERT( 1 == seqIdlClass.getLength() );
-//	Reference < XIdlClass > rIdlInterface = seqIdlClass.getArray()[0];
+//  OSL_ASSERT( 1 == seqIdlClass.getLength() );
+//  Reference < XIdlClass > rIdlInterface = seqIdlClass.getArray()[0];
 
     // check for IdlClass interface returned by Core Reflection
-//	OSL_ASSERT( rIdlInterface.is() );
+//  OSL_ASSERT( rIdlInterface.is() );
 
 
 

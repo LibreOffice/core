@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ static USHORT __FAR_DATA aPageRg[] = {
 
 // Achtung im Code wird dieses Array direkt (0, 1, ...) indiziert
 static long nTabs[] =
-    {	2, // Number of Tabs
+    {   2, // Number of Tabs
         0, 100
     };
 
@@ -80,16 +80,16 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, SW_RES(TP_CONDCOLL), rSet),
     aConditionFL( this, SW_RES( FL_CONDITION )),
     aConditionCB( this, SW_RES( CB_CONDITION ) ),
-    aContextFT  ( this, SW_RES( FT_CONTEXT 	) ),
-    aUsedFT     ( this, SW_RES( FT_USED 		) ),
-    aTbLinks( 	  this, SW_RES( TB_CONDCOLLS ) ),
-    aStyleFT    ( this, SW_RES( FT_STYLE 	) ),
-    aStyleLB    ( this, SW_RES( LB_STYLE 	) ),
-    aFilterLB   ( this, SW_RES( LB_FILTER 	) ),
-    aRemovePB   ( this, SW_RES( PB_REMOVE 	) ),
-    aAssignPB   ( this, SW_RES( PB_ASSIGN 	) ),
-    sNoTmpl		(		SW_RES( STR_NOTEMPL  ) ),
-    aStrArr 	( 		SW_RES( STR_REGIONS  ) ),
+    aContextFT  ( this, SW_RES( FT_CONTEXT  ) ),
+    aUsedFT     ( this, SW_RES( FT_USED         ) ),
+    aTbLinks(     this, SW_RES( TB_CONDCOLLS ) ),
+    aStyleFT    ( this, SW_RES( FT_STYLE    ) ),
+    aStyleLB    ( this, SW_RES( LB_STYLE    ) ),
+    aFilterLB   ( this, SW_RES( LB_FILTER   ) ),
+    aRemovePB   ( this, SW_RES( PB_REMOVE   ) ),
+    aAssignPB   ( this, SW_RES( PB_ASSIGN   ) ),
+    sNoTmpl     (       SW_RES( STR_NOTEMPL  ) ),
+    aStrArr     (       SW_RES( STR_REGIONS  ) ),
     rSh(::GetActiveView()->GetWrtShell()),
     pCmds( SwCondCollItem::GetCmds() ),
     pFmt(0),
@@ -100,19 +100,19 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     SetExchangeSupport();
 
     // Handler installieren
-    aConditionCB.SetClickHdl(	LINK(this, SwCondCollPage, OnOffHdl));
+    aConditionCB.SetClickHdl(   LINK(this, SwCondCollPage, OnOffHdl));
     aTbLinks.SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
     aStyleLB.SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
-    aRemovePB.SetClickHdl(		LINK(this, SwCondCollPage, AssignRemoveHdl ));
-    aAssignPB.SetClickHdl(		LINK(this, SwCondCollPage, AssignRemoveHdl ));
-    aTbLinks.SetSelectHdl(		LINK(this, SwCondCollPage, SelectHdl));
-    aStyleLB.SetSelectHdl(		LINK(this, SwCondCollPage, SelectHdl));
-    aFilterLB.SetSelectHdl(		LINK(this, SwCondCollPage, SelectHdl));
+    aRemovePB.SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveHdl ));
+    aAssignPB.SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveHdl ));
+    aTbLinks.SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
+    aStyleLB.SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
+    aFilterLB.SetSelectHdl(     LINK(this, SwCondCollPage, SelectHdl));
 
     aTbLinks.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN);
     aTbLinks.SetSelectionMode( SINGLE_SELECTION );
     aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
-    aTbLinks.Resize();	// OS: Hack fuer richtige Selektion
+    aTbLinks.Resize();  // OS: Hack fuer richtige Selektion
     aTbLinks.SetSpaceBetweenEntries( 0 );
     aTbLinks.SetHelpId(HID_COND_COLL_TABLIST);
 

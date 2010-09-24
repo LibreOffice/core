@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,37 +49,37 @@ namespace cppcanvas
 
         virtual ~Color() {}
 
-        virtual IntSRGBA 									getIntSRGBA( ::com::sun::star::uno::Sequence< double >& rDeviceColor ) const = 0;
-        virtual ::com::sun::star::uno::Sequence< double > 	getDeviceColor( IntSRGBA aSRGBA ) const = 0;
+        virtual IntSRGBA                                    getIntSRGBA( ::com::sun::star::uno::Sequence< double >& rDeviceColor ) const = 0;
+        virtual ::com::sun::star::uno::Sequence< double >   getDeviceColor( IntSRGBA aSRGBA ) const = 0;
     };
 
     typedef ::boost::shared_ptr< ::cppcanvas::Color > ColorSharedPtr;
 
-    inline sal_uInt8 getRed( Color::IntSRGBA nCol ) 
-    { 
-        return static_cast<sal_uInt8>( (nCol&0xFF000000U) >> 24U ); 
+    inline sal_uInt8 getRed( Color::IntSRGBA nCol )
+    {
+        return static_cast<sal_uInt8>( (nCol&0xFF000000U) >> 24U );
     }
 
-    inline sal_uInt8 getGreen( Color::IntSRGBA nCol ) 
-    { 
-        return static_cast<sal_uInt8>( (nCol&0x00FF0000U) >> 16U ); 
+    inline sal_uInt8 getGreen( Color::IntSRGBA nCol )
+    {
+        return static_cast<sal_uInt8>( (nCol&0x00FF0000U) >> 16U );
     }
 
-    inline sal_uInt8 getBlue( Color::IntSRGBA nCol ) 
-    { 
-        return static_cast<sal_uInt8>( (nCol&0x0000FF00U) >> 8U ); 
+    inline sal_uInt8 getBlue( Color::IntSRGBA nCol )
+    {
+        return static_cast<sal_uInt8>( (nCol&0x0000FF00U) >> 8U );
     }
 
-    inline sal_uInt8 getAlpha( Color::IntSRGBA nCol ) 
-    { 
-        return static_cast<sal_uInt8>( nCol&0x000000FFU ); 
+    inline sal_uInt8 getAlpha( Color::IntSRGBA nCol )
+    {
+        return static_cast<sal_uInt8>( nCol&0x000000FFU );
     }
 
-    inline Color::IntSRGBA makeColor( sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue, sal_uInt8 nAlpha ) 
-    { 
+    inline Color::IntSRGBA makeColor( sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue, sal_uInt8 nAlpha )
+    {
         return (nRed << 24U)|(nGreen << 16U)|(nBlue << 8U)|(nAlpha);
     }
-    
+
     inline sal_Int32 unMakeColor( sal_uInt8 nAlpha, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
     {
         return (nAlpha << 24U)|(nRed << 16U)|(nGreen << 8U)|(nBlue);

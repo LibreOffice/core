@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,9 +34,9 @@
 
 struct ScMyColumnRowGroup
 {
-    sal_Int32	nField;
-    sal_Int16	nLevel;
-    sal_Bool	bDisplay;
+    sal_Int32   nField;
+    sal_Int16   nLevel;
+    sal_Bool    bDisplay;
 
     ScMyColumnRowGroup();
     sal_Bool operator< (const ScMyColumnRowGroup& rGroup) const;
@@ -48,10 +48,10 @@ typedef std::list <sal_Int32> ScMyFieldGroupVec;
 class ScXMLExport;
 class ScMyOpenCloseColumnRowGroup
 {
-    ScXMLExport&				rExport;
-    const rtl::OUString			rName;
-    ScMyColumnRowGroupVec		aTableStart;
-    ScMyFieldGroupVec			aTableEnd;
+    ScXMLExport&                rExport;
+    const rtl::OUString         rName;
+    ScMyColumnRowGroupVec       aTableStart;
+    ScMyFieldGroupVec           aTableEnd;
 
     void OpenGroup(const ScMyColumnRowGroup& rGroup);
     void CloseGroup();

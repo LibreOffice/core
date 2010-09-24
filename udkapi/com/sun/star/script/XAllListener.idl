@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,52 +24,52 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_XAllListener_idl__ 
-#define __com_sun_star_script_XAllListener_idl__ 
- 
-#ifndef __com_sun_star_lang_XEventListener_idl__ 
-#include <com/sun/star/lang/XEventListener.idl> 
-#endif 
- 
-#ifndef __com_sun_star_script_AllEventObject_idl__ 
-#include <com/sun/star/script/AllEventObject.idl> 
-#endif 
- 
-#ifndef __com_sun_star_reflection_InvocationTargetException_idl__ 
-#include <com/sun/star/reflection/InvocationTargetException.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module script {  
- 
-//============================================================================= 
-/** specifies a listener combining all methods 
+#ifndef __com_sun_star_script_XAllListener_idl__
+#define __com_sun_star_script_XAllListener_idl__
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+
+#ifndef __com_sun_star_script_AllEventObject_idl__
+#include <com/sun/star/script/AllEventObject.idl>
+#endif
+
+#ifndef __com_sun_star_reflection_InvocationTargetException_idl__
+#include <com/sun/star/reflection/InvocationTargetException.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module script {
+
+//=============================================================================
+/** specifies a listener combining all methods
     of a listener interface in a single generic call.
-    
+
     <p>Without any output parameters, it is possible to adapt any interface
     if the <type>XAllListenerAdapterService</type> can generate an adapter.</p>
  */
 published interface XAllListener: com::sun::star::lang::XEventListener
-{ 
-    //------------------------------------------------------------------------- 
+{
+    //-------------------------------------------------------------------------
     /** gets called when an event occurs at the object.
      */
-    [oneway] void firing( [in] com::sun::star::script::AllEventObject iaEvent ); 
- 
-    //------------------------------------------------------------------------- 
+    [oneway] void firing( [in] com::sun::star::script::AllEventObject iaEvent );
+
+    //-------------------------------------------------------------------------
     /** gets called when a "vetoable event" occurs at the object.
-        
-        <p>That happens when the listener method raises an exception, 
+
+        <p>That happens when the listener method raises an exception,
         has a return value declared, or is not "oneway".</p>
      */
-    any approveFiring( [in] com::sun::star::script::AllEventObject aEvent ) 
-            raises( com::sun::star::reflection::InvocationTargetException ); 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    any approveFiring( [in] com::sun::star::script::AllEventObject aEvent )
+            raises( com::sun::star::reflection::InvocationTargetException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

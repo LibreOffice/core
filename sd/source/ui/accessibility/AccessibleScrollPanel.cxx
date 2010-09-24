@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,11 +99,11 @@ Reference<XAccessible> SAL_CALL
     const vos::OGuard aSolarGuard (Application::GetSolarMutex());
 
     Reference<XAccessible> xChild;
-    
+
     ScrollPanel& rPanel (GetScrollPanel());
 
     sal_uInt32 nControlCount (mrTreeNode.GetControlContainer().GetControlCount());
-    
+
     // The children of this accessible object include the tree node children
     // and the two scroll bars (when they are visible).
     if (nIndex < 0)
@@ -124,7 +124,7 @@ Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException();
-    
+
     return xChild;
 }
 

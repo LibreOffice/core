@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include <svl/intitem.hxx>
 
 #include <vcl/toolbox.hxx>
-#include <sfx2/app.hxx> 
+#include <sfx2/app.hxx>
 #include <svx/subtoolboxcontrol.hxx>
 #include <svx/svxids.hrc>
 
@@ -68,7 +68,7 @@ SfxPopupWindow* SvxSubToolBoxControl::CreatePopupWindow()
         pResource = "private:resource/toolbar/optimizetablebar";
         break;
     }
-    
+
     if( pResource )
         createAndPositionSubToolBar( rtl::OUString::createFromAscii( pResource ) );
     return NULL;
@@ -78,7 +78,7 @@ SfxPopupWindow* SvxSubToolBoxControl::CreatePopupWindow()
 
 **********************************************************************/
 
-SfxPopupWindowType	SvxSubToolBoxControl::GetPopupWindowType() const
+SfxPopupWindowType  SvxSubToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }

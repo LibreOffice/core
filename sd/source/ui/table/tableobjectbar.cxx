@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,9 +95,9 @@ SFX_IMPL_INTERFACE( TableObjectBar, SfxShell, SdResId( STR_TABLEOBJECTBARSHELL )
 // -----------------------------------------------------------------------------
 
 TableObjectBar::TableObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView )
-:	SfxShell( pSdViewShell->GetViewShell() )
-,	mpView( pSdView )
-,	mpViewSh( pSdViewShell )
+:   SfxShell( pSdViewShell->GetViewShell() )
+,   mpView( pSdView )
+,   mpViewSh( pSdViewShell )
 {
     DrawDocShell* pDocShell = mpViewSh->GetDocSh();
     if( pDocShell )
@@ -177,7 +177,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
 
                     rReq.AppendItem( SfxInt16Item( (USHORT)nSlotId, (sal_uInt16)pDlg->getInsertCount() ) );
                     rReq.AppendItem( SfxBoolItem( SID_TABLE_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() ) );
-                    
+
                      rReq.SetSlot( (USHORT)nSlotId );
                 }
             }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace comphelper
 
 //------------------------------------------------------------------
 
-//	SvNumberFormatterServiceObj must be registered as service somewhere
+//  SvNumberFormatterServiceObj must be registered as service somewhere
 
 com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL
     SvNumberFormatterServiceObj_NewInstance(
@@ -51,28 +51,28 @@ com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL
 
 //------------------------------------------------------------------
 
-//	SvNumberFormatsSupplierObj: aggregate to document,
-//	construct with SvNumberFormatter
+//  SvNumberFormatsSupplierObj: aggregate to document,
+//  construct with SvNumberFormatter
 
 class SVL_DLLPUBLIC SvNumberFormatsSupplierObj : public cppu::WeakAggImplHelper2<
                                     com::sun::star::util::XNumberFormatsSupplier,
                                     com::sun::star::lang::XUnoTunnel>
 {
 private:
-    SvNumFmtSuppl_Impl*	pImpl;
+    SvNumFmtSuppl_Impl* pImpl;
 
 public:
                                 SvNumberFormatsSupplierObj();
                                 SvNumberFormatsSupplierObj(SvNumberFormatter* pForm);
-    virtual						~SvNumberFormatsSupplierObj();
+    virtual                     ~SvNumberFormatsSupplierObj();
 
-    void						SetNumberFormatter(SvNumberFormatter* pNew);
-    SvNumberFormatter*			GetNumberFormatter() const;
+    void                        SetNumberFormatter(SvNumberFormatter* pNew);
+    SvNumberFormatter*          GetNumberFormatter() const;
 
                                 // ueberladen, um Attribute im Dokument anzupassen
-    virtual void				NumberFormatDeleted(sal_uInt32 nKey);
+    virtual void                NumberFormatDeleted(sal_uInt32 nKey);
                                 // ueberladen, um evtl. neu zu formatieren
-    virtual void				SettingsChanged();
+    virtual void                SettingsChanged();
 
                                 // XNumberFormatsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
@@ -83,7 +83,7 @@ public:
                                     throw(::com::sun::star::uno::RuntimeException);
 
                                 // XUnoTunnel
-    virtual sal_Int64 SAL_CALL	getSomething( const ::com::sun::star::uno::Sequence<
+    virtual sal_Int64 SAL_CALL  getSomething( const ::com::sun::star::uno::Sequence<
                                     sal_Int8 >& aIdentifier )
                                         throw(::com::sun::star::uno::RuntimeException);
 

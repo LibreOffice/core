@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -637,7 +637,7 @@ TransferableHelper* OApplicationController::copyObject()
                 ::rtl::OUString sName = getContainer()->getQualifiedName( NULL );
                 if ( sName.getLength() )
                 {
-                    ::rtl::OUString sDataSource	= getDatabaseName();
+                    ::rtl::OUString sDataSource = getDatabaseName();
 
                     if ( eType == E_TABLE )
                     {
@@ -689,22 +689,22 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
         {
             sal_Int32 nCommandType = CommandType::TABLE;
             if ( _rPasteData.has(daCommandType) )
-                _rPasteData[daCommandType]		>>= nCommandType;
+                _rPasteData[daCommandType]      >>= nCommandType;
 
             if ( CommandType::QUERY == nCommandType || CommandType::COMMAND == nCommandType )
             {
                 // read all nescessary data
 
-                ::rtl::OUString	sCommand;
+                ::rtl::OUString sCommand;
                 sal_Bool bEscapeProcessing = sal_True;
 
                 _rPasteData[daCommand] >>= sCommand;
                 if ( _rPasteData.has(daEscapeProcessing) )
-                    _rPasteData[daEscapeProcessing]	>>= bEscapeProcessing;
+                    _rPasteData[daEscapeProcessing] >>= bEscapeProcessing;
 
                 // plausibility check
                 sal_Bool bValidDescriptor = sal_False;
-                ::rtl::OUString	sDataSourceName = _rPasteData.getDataSource();
+                ::rtl::OUString sDataSourceName = _rPasteData.getDataSource();
                 if (CommandType::QUERY == nCommandType)
                     bValidDescriptor = sDataSourceName.getLength() && sCommand.getLength();
                 else if (CommandType::COMMAND == nCommandType)
@@ -754,7 +754,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                             bSuccess = true;
                         }
                     }
-                    catch(SQLException&) { throw; }	// caught and handled by the outer catch
+                    catch(SQLException&) { throw; } // caught and handled by the outer catch
                     catch( const Exception& )
                     {
                         DBG_UNHANDLED_EXCEPTION();
@@ -790,7 +790,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                                                 has a /table/ with that name) */
                 if ( bNeedAskForName )
                 {
-                    OSaveAsDlg aAskForName(	getView(),
+                    OSaveAsDlg aAskForName( getView(),
                                             CommandType::QUERY,
                                             getORB(),
                                             getConnection(),
@@ -835,7 +835,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                                 Sequence< ::rtl::OUString> aSeq = xSrcNameAccess->getElementNames();
                                 const ::rtl::OUString* pIter = aSeq.getConstArray();
-                                const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
+                                const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
                                 for( ; pIter != pEnd ; ++pIter)
                                 {
                                     Reference<XPropertySet> xSrcProp(xSrcNameAccess->getByName(*pIter),UNO_QUERY);
@@ -936,7 +936,7 @@ IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
     return 0L;
 }
 //........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //........................................................................
 
 

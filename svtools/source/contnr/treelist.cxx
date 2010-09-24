@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,15 +81,15 @@ void SvListEntry::Clone( SvListEntry* pSource)
     DBG_CHKTHIS(SvListEntry,0);
     nListPos &= 0x80000000;
     nListPos |= ( pSource->nListPos & 0x7fffffff);
-    nAbsPos		= pSource->nAbsPos;
+    nAbsPos     = pSource->nAbsPos;
 }
 
 void SvListEntry::SetListPositions()
 {
     if( pChilds )
     {
-        SvListEntry	*pEntry = (SvListEntry*)pChilds->First();
-        ULONG		nCur = 0;
+        SvListEntry *pEntry = (SvListEntry*)pChilds->First();
+        ULONG       nCur = 0;
         while ( pEntry )
         {
             pEntry->nListPos &= 0x80000000;
@@ -114,9 +114,9 @@ SvViewData::SvViewData()
 SvViewData::SvViewData( const SvViewData& rData )
 {
     DBG_CTOR(SvViewData,0);
-    nFlags	= rData.nFlags;
+    nFlags  = rData.nFlags;
     nFlags &= ~( SVLISTENTRYFLAG_SELECTED | SVLISTENTRYFLAG_FOCUSED );
-    nVisPos	= rData.nVisPos;
+    nVisPos = rData.nVisPos;
 }
 
 SvViewData::~SvViewData()
@@ -397,7 +397,7 @@ ULONG SvTreeList::Copy(SvListEntry* pSrcEntry,SvListEntry* pTargetParent,ULONG n
     nEntryCount += nCloneCount;
 
     SvTreeEntryList* pDstList = pTargetParent->pChilds;
-    pClonedEntry->pParent = pTargetParent;		// Parent umsetzen
+    pClonedEntry->pParent = pTargetParent;      // Parent umsetzen
     pDstList->Insert( pClonedEntry, nListPos ); // Einfuegen
     SetListPositions( pDstList ); // Listenpositionen in Zielliste korrigieren
 
@@ -670,7 +670,7 @@ ULONG SvTreeList::GetChildSelectionCount(const SvListView* pView,SvListEntry* pP
         if( pParent && pView->IsSelected( pParent ) && nRefDepth < nActDepth)
             nCount++;
     } while( pParent && nRefDepth < nActDepth );
-//	nCount--;
+//  nCount--;
     return nCount;
 }
 
@@ -822,15 +822,15 @@ SvListEntry* SvTreeList::Prev( SvListEntry* pActEntry, USHORT* pDepth ) const
 SvListEntry* SvTreeList::Last( USHORT* /* nDepth */ ) const
 {
     SvTreeEntryList* pActList = pRootItem->pChilds;
-//	if ( pActList->Count() == 0 )
-//		return 0;
+//  if ( pActList->Count() == 0 )
+//      return 0;
     SvListEntry* pEntry = 0;
     while( pActList )
     {
         pEntry = (SvListEntry*)(pActList->Last());
         pActList = pEntry->pChilds;
-//		if ( pActList->Count() == 0 )
-//			pActList = 0;
+//      if ( pActList->Count() == 0 )
+//          pActList = 0;
     }
     return pEntry;
 }
@@ -1148,7 +1148,7 @@ SvListEntry* SvTreeList::NextSibling( SvListEntry* pEntry ) const
     if( !pEntry )
         return 0;
     SvTreeEntryList* pList = pEntry->pParent->pChilds;
-//	ULONG nPos = pList->GetPos( pEntry );
+//  ULONG nPos = pList->GetPos( pEntry );
     ULONG nPos = pEntry->GetChildListPos();
     nPos++;
     pEntry = (SvListEntry*)(pList->GetObject( nPos ));
@@ -1481,9 +1481,9 @@ BOOL SvTreeList::Remove( SvListEntry* pEntry )
         pList->Remove( (void*) pEntry );
     }
 
-    
+
     // moved to end of method because it is used later with Broadcast
-    // delete pEntry; // loescht auch alle Childs 
+    // delete pEntry; // loescht auch alle Childs
 
     if ( pList->Count() == 0 )
     {
@@ -1501,7 +1501,7 @@ BOOL SvTreeList::Remove( SvListEntry* pEntry )
 CheckIntegrity();
 #endif
     Broadcast( LISTACTION_REMOVED, pEntry );
-    
+
     delete pEntry; // loescht auch alle Childs
     return TRUE;
 }
@@ -1817,7 +1817,7 @@ void SvListView::ModelHasInsertedTree( SvListEntry* )
 }
 
 void SvListView::ModelIsMoving( SvListEntry* /*  pSource */ ,
-    SvListEntry* /* pTargetParent */ ,	ULONG /* nPos */	)
+    SvListEntry* /* pTargetParent */ ,  ULONG /* nPos */    )
 {
     DBG_CHKTHIS(SvListView,0);
 }

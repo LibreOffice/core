@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -237,7 +237,7 @@ bool FtFontFile::Map()
         mpFileMap = (const unsigned char*)
             mmap( NULL, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 );
         if( mpFileMap == MAP_FAILED )
-            mpFileMap = NULL;		
+            mpFileMap = NULL;
         close( nFile );
 #elif defined(WNT)
         void* pFileDesc = ::CreateFile( pFileName, GENERIC_READ, FILE_SHARE_READ,
@@ -520,7 +520,7 @@ void* FreetypeServerFont::GetFtFace() const
 
 FreetypeManager::~FreetypeManager()
 {
-// This crashes on Solaris 10 
+// This crashes on Solaris 10
 // TODO: check which versions have this problem
 //
 // FT_Error rcFT = FT_Done_FreeType( aLibFT );
@@ -1307,7 +1307,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     int nLoadFlags = mnLoadFlags;
 
 //  if( mbArtItalic )
-//      nLoadFlags |= FT_LOAD_NO_BITMAP;    
+//      nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
 #if (FTVERSION <= 2008)
@@ -1449,7 +1449,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     //  becomes an expensive nop when a glyph covers no pixels.
     FT_BBox cbox;
     FT_Glyph_Get_CBox(pGlyphFT, ft_glyph_bbox_unscaled, &cbox);
-  
+
     if( (cbox.xMax - cbox.xMin) == 0 || (cbox.yMax - cbox.yMin == 0) )
     {
         nAngle = 0;
@@ -1457,7 +1457,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         FT_Done_Glyph( pGlyphFT );
         return true;
     }
-    
+
     if( pGlyphFT->format != FT_GLYPH_FORMAT_BITMAP )
     {
         if( pGlyphFT->format == FT_GLYPH_FORMAT_OUTLINE )
@@ -1561,7 +1561,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     FT_Int nLoadFlags = mnLoadFlags;
 
     if( mbArtItalic )
-        nLoadFlags |= FT_LOAD_NO_BITMAP;    
+        nLoadFlags |= FT_LOAD_NO_BITMAP;
 
 #if (FTVERSION <= 2004) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     // autohinting in FT<=2.0.4 makes antialiased glyphs look worse
@@ -1735,7 +1735,7 @@ bool FreetypeServerFont::GetFontCodeRanges( CmapResult& rResult ) const
 {
     rResult.mbSymbolic = mpFontInfo->IsSymbolFont();
 
-    // TODO: is the full CmapResult needed on platforms calling this? 
+    // TODO: is the full CmapResult needed on platforms calling this?
     if( FT_IS_SFNT( maFaceFT ) )
     {
         ULONG nLength = 0;
@@ -1754,11 +1754,11 @@ bool FreetypeServerFont::GetFontCodeRanges( CmapResult& rResult ) const
     for( sal_uInt32 cCode = FT_Get_First_Char( maFaceFT, &nGlyphIndex );; )
     {
         if( !nGlyphIndex )
-            break;	
-        aCodes.push_back( cCode );	// first code inside range
+            break;
+        aCodes.push_back( cCode );  // first code inside range
         sal_uInt32 cNext = cCode;
         do cNext = FT_Get_Next_Char( maFaceFT, cCode, &nGlyphIndex ); while( cNext == ++cCode );
-        aCodes.push_back( cCode );	// first code outside range
+        aCodes.push_back( cCode );  // first code outside range
         cCode = cNext;
     }
 
@@ -1964,10 +1964,10 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
                 }
                 break;
 
-                case 2:	// version 0, kerning format 2
+                case 2: // version 0, kerning format 2
                 {
                     const FT_Byte* pSubTable = pBuffer;
-                    /*USHORT nRowWidth	=*/ NEXT_U16( pBuffer );
+                    /*USHORT nRowWidth  =*/ NEXT_U16( pBuffer );
                     USHORT nOfsLeft     = NEXT_U16( pBuffer );
                     USHORT nOfsRight    = NEXT_U16( pBuffer );
                     USHORT nOfsArray    = NEXT_U16( pBuffer );
@@ -2160,7 +2160,7 @@ void PolyArgs::ClosePolygon()
     const sal_uInt16 nPolySize(aPoly.GetSize());
     if(nPolySize)
     {
-        if((aPoly.HasFlags() && POLY_CONTROL == aPoly.GetFlags(nPolySize - 1)) 
+        if((aPoly.HasFlags() && POLY_CONTROL == aPoly.GetFlags(nPolySize - 1))
             || (aPoly.GetPoint(nPolySize - 1) != aPoly.GetPoint(0)))
         {
             aPoly.SetSize(nPolySize + 1);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,18 +41,18 @@
 
 class SVT_DLLPUBLIC FilterConfigItem
 {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface	> xUpdatableView;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xUpdatableView;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet;
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFilterData;
 
-        sal_Bool	bModified;
+        sal_Bool    bModified;
 
-        SVT_DLLPRIVATE sal_Bool	ImplGetPropertyValue( ::com::sun::star::uno::Any& rAny,
+        SVT_DLLPRIVATE sal_Bool ImplGetPropertyValue( ::com::sun::star::uno::Any& rAny,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet,
                             const ::rtl::OUString& rPropName,
                                 sal_Bool bTestPropertyAvailability );
 
-        SVT_DLLPRIVATE void		ImpInitTree( const String& rTree );
+        SVT_DLLPRIVATE void     ImpInitTree( const String& rTree );
 
 
         SVT_DLLPRIVATE static ::com::sun::star::beans::PropertyValue* GetPropertyValue(
@@ -73,9 +73,9 @@ class SVT_DLLPUBLIC FilterConfigItem
         // 1. FilterData PropertySequence
         // 2. configuration
         // 3. given default
-        sal_Bool	ReadBool( const ::rtl::OUString& rKey, sal_Bool bDefault );
-        sal_Int32	ReadInt32( const ::rtl::OUString& rKey, sal_Int32 nDefault );
-        ::com::sun::star::awt::Size	
+        sal_Bool    ReadBool( const ::rtl::OUString& rKey, sal_Bool bDefault );
+        sal_Int32   ReadInt32( const ::rtl::OUString& rKey, sal_Int32 nDefault );
+        ::com::sun::star::awt::Size
                     ReadSize( const ::rtl::OUString& rKey, const ::com::sun::star::awt::Size& rDefault );
         ::rtl::OUString
                     ReadString( const ::rtl::OUString& rKey, const ::rtl::OUString& rDefault );
@@ -84,11 +84,11 @@ class SVT_DLLPUBLIC FilterConfigItem
 
         // try to store to configuration
         // and always stores into the FilterData sequence
-        void		WriteBool( const ::rtl::OUString& rKey, sal_Bool bValue );
-        void		WriteInt32( const ::rtl::OUString& rKey, sal_Int32 nValue );
-        void		WriteSize( const ::rtl::OUString& rKey, const ::com::sun::star::awt::Size& rSize );
-        void		WriteString( const ::rtl::OUString& rKey, const ::rtl::OUString& rString );
-        void		WriteAny( const rtl::OUString& rKey, const ::com::sun::star::uno::Any& rAny );
+        void        WriteBool( const ::rtl::OUString& rKey, sal_Bool bValue );
+        void        WriteInt32( const ::rtl::OUString& rKey, sal_Int32 nValue );
+        void        WriteSize( const ::rtl::OUString& rKey, const ::com::sun::star::awt::Size& rSize );
+        void        WriteString( const ::rtl::OUString& rKey, const ::rtl::OUString& rString );
+        void        WriteAny( const rtl::OUString& rKey, const ::com::sun::star::uno::Any& rAny );
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetFilterData() const;
 
@@ -96,5 +96,5 @@ class SVT_DLLPUBLIC FilterConfigItem
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > GetStatusIndicator() const;
 };
 
-#endif	// _FILTER_CONFIG_ITEM_HXX_
+#endif  // _FILTER_CONFIG_ITEM_HXX_
 

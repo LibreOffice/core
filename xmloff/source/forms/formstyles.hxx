@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace xmloff
     class OControlStyleContext : public XMLPropStyleContext
     {
     protected:
-        ::rtl::OUString		m_sNumberStyleName;
+        ::rtl::OUString     m_sNumberStyleName;
 
     public:
         OControlStyleContext(
@@ -65,7 +65,7 @@ namespace xmloff
     };
 
 //.........................................................................
-}	// namespace xmloff
+}   // namespace xmloff
 //.........................................................................
 
 #endif // XMLOFF_FORMSTYLES_HXX

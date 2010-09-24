@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 #include "MtaFop.hxx"
 
 //------------------------------------------------------------------------
-// forward 
+// forward
 //------------------------------------------------------------------------
 
 class CFolderPicker;
@@ -51,16 +51,16 @@ class CWinFolderPickerImpl : public CMtaFolderPicker
 {
 public:
     CWinFolderPickerImpl( CFolderPicker* aFolderPicker );
-        
+
     //-----------------------------------------------------------------------------------------
     // XExecutableDialog
     //-----------------------------------------------------------------------------------------
-    
-    virtual sal_Int16 SAL_CALL execute(  ) 
+
+    virtual sal_Int16 SAL_CALL execute(  )
         throw( com::sun::star::uno::RuntimeException );
 
     //-----------------------------------------------------
-    // XFolderPicker 
+    // XFolderPicker
     //-----------------------------------------------------
 
     virtual void SAL_CALL setDisplayDirectory( const rtl::OUString& aDirectory )
@@ -74,10 +74,10 @@ public:
 
 protected:
     virtual void SAL_CALL onSelChanged( const rtl::OUString& aNewPath );
-    
+
 private:
-    CFolderPicker*	m_pFolderPicker;	
-    sal_Int16		m_nLastDlgResult;	
+    CFolderPicker*  m_pFolderPicker;
+    sal_Int16       m_nLastDlgResult;
 };
 
 #endif

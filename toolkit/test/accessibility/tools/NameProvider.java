@@ -98,7 +98,7 @@ public class NameProvider
         maStateMap.put (new Integer (AccessibleStateType.OPAQUE), "OPAQUE");
         maStateMap.put (new Integer (AccessibleStateType.PRESSED), "PRESSED");
         maStateMap.put (new Integer (AccessibleStateType.RESIZABLE), "RESIZABLE");
-        maStateMap.put (new Integer (AccessibleStateType.SELECTABLE), "SELECTABLE");           
+        maStateMap.put (new Integer (AccessibleStateType.SELECTABLE), "SELECTABLE");
         maStateMap.put (new Integer (AccessibleStateType.SELECTED), "SELECTED");
         maStateMap.put (new Integer (AccessibleStateType.SENSITIVE), "SENSITIVE");
         maStateMap.put (new Integer (AccessibleStateType.SHOWING), "SHOWING");

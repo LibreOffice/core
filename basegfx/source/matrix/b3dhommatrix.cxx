@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@ namespace basegfx
     class Impl3DHomMatrix : public ::basegfx::internal::ImplHomMatrixTemplate< 4 >
     {
     };
-    
-    namespace { struct IdentityMatrix : public rtl::Static< B3DHomMatrix::ImplType, 
+
+    namespace { struct IdentityMatrix : public rtl::Static< B3DHomMatrix::ImplType,
                                                             IdentityMatrix > {}; }
 
     B3DHomMatrix::B3DHomMatrix() :
@@ -228,7 +228,7 @@ namespace basegfx
 
                 mpImpl->doMulMatrix(aRotMatY);
             }
-            
+
             if(!fTools::equalZero(fAngleZ))
             {
                 Impl3DHomMatrix aRotMatZ;
@@ -250,7 +250,7 @@ namespace basegfx
         if(!fTools::equalZero(fX) || !fTools::equalZero(fY) || !fTools::equalZero(fZ))
         {
             Impl3DHomMatrix aTransMat;
-            
+
             aTransMat.set(0, 3, fX);
             aTransMat.set(1, 3, fY);
             aTransMat.set(2, 3, fZ);
@@ -266,7 +266,7 @@ namespace basegfx
         if(!fTools::equal(fOne, fX) || !fTools::equal(fOne, fY) ||!fTools::equal(fOne, fZ))
         {
             Impl3DHomMatrix aScaleMat;
-            
+
             aScaleMat.set(0, 0, fX);
             aScaleMat.set(1, 1, fY);
             aScaleMat.set(2, 2, fZ);
@@ -281,7 +281,7 @@ namespace basegfx
         if(!fTools::equalZero(fSx) || !fTools::equalZero(fSy))
         {
             Impl3DHomMatrix aShearXYMat;
-            
+
             aShearXYMat.set(0, 2, fSx);
             aShearXYMat.set(1, 2, fSy);
 
@@ -295,7 +295,7 @@ namespace basegfx
         if(!fTools::equalZero(fSy) || !fTools::equalZero(fSz))
         {
             Impl3DHomMatrix aShearYZMat;
-            
+
             aShearYZMat.set(1, 0, fSy);
             aShearYZMat.set(2, 0, fSz);
 
@@ -309,7 +309,7 @@ namespace basegfx
         if(!fTools::equalZero(fSx) || !fTools::equalZero(fSz))
         {
             Impl3DHomMatrix aShearXZMat;
-            
+
             aShearXZMat.set(0, 1, fSx);
             aShearXZMat.set(2, 1, fSz);
 
@@ -350,7 +350,7 @@ namespace basegfx
         }
 
         Impl3DHomMatrix aFrustumMat;
-        
+
         aFrustumMat.set(0, 0, 2.0 * fNear / (fRight - fLeft));
         aFrustumMat.set(1, 1, 2.0 * fNear / (fTop - fBottom));
         aFrustumMat.set(0, 2, (fRight + fLeft) / (fRight - fLeft));
@@ -362,7 +362,7 @@ namespace basegfx
 
         mpImpl->doMulMatrix(aFrustumMat);
     }
-    
+
     void B3DHomMatrix::ortho(double fLeft, double fRight, double fBottom, double fTop, double fNear, double fFar)
     {
         if(fTools::equal(fNear, fFar))
@@ -383,14 +383,14 @@ namespace basegfx
         }
 
         Impl3DHomMatrix aOrthoMat;
-        
+
         aOrthoMat.set(0, 0, 2.0 / (fRight - fLeft));
         aOrthoMat.set(1, 1, 2.0 / (fTop - fBottom));
         aOrthoMat.set(2, 2, -1.0 * (2.0 / (fFar - fNear)));
         aOrthoMat.set(0, 3, -1.0 * ((fRight + fLeft) / (fRight - fLeft)));
         aOrthoMat.set(1, 3, -1.0 * ((fTop + fBottom) / (fTop - fBottom)));
         aOrthoMat.set(2, 3, -1.0 * ((fFar + fNear) / (fFar - fNear)));
-        
+
         mpImpl->doMulMatrix(aOrthoMat);
     }
 
@@ -501,7 +501,7 @@ namespace basegfx
 
         // get ShearYZ
         rShear.setZ(aCol1.scalar(aCol2));
-        
+
         if(fTools::equalZero(rShear.getZ()))
         {
             rShear.setZ(0.0);
@@ -551,7 +551,7 @@ namespace basegfx
         {
             double fy=0;
             double cy=0;
-            
+
             if( ::basegfx::fTools::equal( aCol0.getZ(), 1.0 )
                 || aCol0.getZ() > 1.0 )
             {

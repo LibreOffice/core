@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace stoc_corefl
 static const sal_Int32 CACHE_SIZE = 256;
 
 #define SERVICENAME "com.sun.star.reflection.CoreReflection"
-#define IMPLNAME	"com.sun.star.comp.stoc.CoreReflection"
+#define IMPLNAME    "com.sun.star.comp.stoc.CoreReflection"
 
 // can be static, as every client of the core reflection keeps a reference to the
 // core reflection, so refcounting can be done here.

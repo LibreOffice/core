@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,8 +38,8 @@
 class PopupWindowTbx : public SfxPopupWindow
 {
 private:
-    SfxToolBoxManager	aTbx;
-    Link				aSelectLink;
+    SfxToolBoxManager   aTbx;
+    Link                aSelectLink;
 
     DECL_LINK( SelectHdl, void* );
 
@@ -48,12 +48,12 @@ public:
                     ResId aRIdWin, ResId aRIdTbx, SfxBindings& rBind );
     ~PopupWindowTbx();
 
-    void		 			StartSelection()
+    void                    StartSelection()
                                 { aTbx.GetToolBox().StartSelection(); }
-    void		 			Update();
+    void                    Update();
 
-    virtual SfxPopupWindow*	Clone() const;
-    virtual void			PopupModeEnd();
+    virtual SfxPopupWindow* Clone() const;
+    virtual void            PopupModeEnd();
 };
 #endif
 */
@@ -70,10 +70,10 @@ private:
         bool bDisabled;
     };
 
-    USHORT					nLastSlot;
+    USHORT                  nLastSlot;
 
 protected:
-    virtual void			StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void            StateChanged( USHORT nSID, SfxItemState eState,
                                           const SfxPoolItem* pState );
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -81,11 +81,11 @@ public:
     TbxControls(USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~TbxControls() {}
 
-    virtual SfxPopupWindowType	GetPopupWindowType() const;
-    virtual SfxPopupWindow*		CreatePopupWindow();
+    virtual SfxPopupWindowType  GetPopupWindowType() const;
+    virtual SfxPopupWindow*     CreatePopupWindow();
 
-    using						SfxToolBoxControl::Select;
-    void						Select( USHORT nModifier );
+    using                       SfxToolBoxControl::Select;
+    void                        Select( USHORT nModifier );
 };
 
 

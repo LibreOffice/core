@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,15 +27,15 @@
 
 #ifndef INCLUDED_SOTDLLAPI_H
 #define INCLUDED_SOTDLLAPI_H
-                                                                                                                             
+
 #include "sal/types.h"
-                                                                                                                             
+
 #if defined(SOT_DLLIMPLEMENTATION)
 #define SOT_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
 #else
 #define SOT_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 #define SOT_DLLPRIVATE SAL_DLLPRIVATE
-                                                                                                                             
+
 #endif /* INCLUDED_SOTDLLAPI_H */
 

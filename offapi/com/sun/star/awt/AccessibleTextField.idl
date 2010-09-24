@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,19 +53,19 @@ module com { module sun { module star { module awt {
     @see com::sun::star::accessibility::XAccessibleText
 
     @since OOo 1.1.2
-*/    
+*/
 published service AccessibleTextField
 {
     /** This interface gives access to the structural information of a text filed:
 
        <ul>
-       <li>Role: The role of a text filed is <const 
+       <li>Role: The role of a text filed is <const
            scope="com::sun::star::accessibility"
            >AccessibleRole::TEXT</const>.</li>
        <li>Name: The name of a text filed is its localized label.</li>
        <li>Description: The description of a text filed is its localized
            help text.</li>
-       <li>Children: There exists no children.</li>            
+       <li>Children: There exists no children.</li>
        <li>Parent: The parent is the window that contains the text filed.</li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
@@ -73,7 +73,7 @@ published service AccessibleTextField
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::DEFUNC</const>
                is set if the object has already been disposed
-               and subsequent calls to this object result in				
+               and subsequent calls to this object result in
                <type scope="com::sun::star::lang">DisposedException</type>
                exceptions.</li>
            <li><const scope="com::sun::star::accessibility"
@@ -110,7 +110,7 @@ published service AccessibleTextField
     interface com::sun::star::accessibility::XAccessibleExtendedComponent;
 
 };
-          
+
 }; }; }; };
 
 #endif

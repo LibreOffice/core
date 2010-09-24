@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,7 +83,7 @@ ScHideTextCursor::~ScHideTextCursor()
     Window* pWin = pViewData->GetView()->GetWindowByPos( eWhich );
     if (pWin)
     {
-        //	restore text cursor
+        //  restore text cursor
         if ( pViewData->HasEditView(eWhich) && pWin->HasFocus() )
             pViewData->GetEditView(eWhich)->ShowCursor( FALSE, TRUE );
     }
@@ -96,13 +96,13 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
     BOOL bDone = FALSE;
 
     ScDocument* pDoc = pViewData->GetDocument();
-    SCTAB		nTab = pViewData->GetTabNo();
-    ScAddress	aCellPos( nPosX, nPosY, nTab );
+    SCTAB       nTab = pViewData->GetTabNo();
+    ScAddress   aCellPos( nPosX, nPosY, nTab );
 
     String aTrackText;
     BOOL bLeftEdge = FALSE;
 
-    //	Change-Tracking
+    //  Change-Tracking
 
     ScChangeTrack* pTrack = pDoc->GetChangeTrack();
     ScChangeViewSettings* pSettings = pDoc->GetChangeViewSettings();
@@ -131,7 +131,7 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
 
                     if ( aRange.In( aCellPos ) )
                     {
-                        pFound = pAction;		// der letzte gewinnt
+                        pFound = pAction;       // der letzte gewinnt
                         switch ( eType )
                         {
                             case SC_CAT_CONTENT :
@@ -166,13 +166,13 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
         if ( pFound )
         {
             if ( pFoundContent && pFound->GetType() != SC_CAT_CONTENT )
-                pFound = pFoundContent;		// Content gewinnt
+                pFound = pFoundContent;     // Content gewinnt
             if ( pFoundMove && pFound->GetType() != SC_CAT_MOVE &&
                     pFoundMove->GetActionNumber() >
                     pFound->GetActionNumber() )
-                pFound = pFoundMove;		// Move gewinnt
+                pFound = pFoundMove;        // Move gewinnt
 
-            //	bei geloeschten Spalten: Pfeil auf die linke Seite der Zelle
+            //  bei geloeschten Spalten: Pfeil auf die linke Seite der Zelle
             if ( pFound->GetType() == SC_CAT_DELETE_COLS )
                 bLeftEdge = TRUE;
 
@@ -197,27 +197,27 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
         }
     }
 
-    //	Notiz nur, wenn sie nicht schon auf dem Drawing-Layer angezeigt wird:
+    //  Notiz nur, wenn sie nicht schon auf dem Drawing-Layer angezeigt wird:
     const ScPostIt* pNote = pDoc->GetNote( aCellPos );
     if ( (aTrackText.Len() > 0) || (pNote && !pNote->IsCaptionShown()) )
     {
         BOOL bNew = TRUE;
         BOOL bFast = FALSE;
-        if ( pNoteMarker )			// schon eine Notiz angezeigt
+        if ( pNoteMarker )          // schon eine Notiz angezeigt
         {
-            if ( pNoteMarker->GetDocPos() == aCellPos )	// dieselbe
-                bNew = FALSE;							// dann stehenlassen
+            if ( pNoteMarker->GetDocPos() == aCellPos ) // dieselbe
+                bNew = FALSE;                           // dann stehenlassen
             else
-                bFast = TRUE;							// sonst sofort
+                bFast = TRUE;                           // sonst sofort
 
-            //	marker which was shown for ctrl-F1 isn't removed by mouse events
+            //  marker which was shown for ctrl-F1 isn't removed by mouse events
             if ( pNoteMarker->IsByKeyboard() && !bKeyboard )
                 bNew = FALSE;
         }
         if ( bNew )
         {
             if ( bKeyboard )
-                bFast = TRUE;			// keyboard also shows the marker immediately
+                bFast = TRUE;           // keyboard also shows the marker immediately
 
             delete pNoteMarker;
 
@@ -246,7 +246,7 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
                                             aMapMode, bLeftEdge, bFast, bKeyboard );
         }
 
-        bDone = TRUE;		// something is shown (old or new)
+        bDone = TRUE;       // something is shown (old or new)
     }
 
     return bDone;
@@ -264,18 +264,18 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     if (pDrView)
         bDrawTextEdit = pDrView->IsTextEdit();
 
-    //	notes or change tracking
+    //  notes or change tracking
 
     if ( bHelpEnabled && !bDrawTextEdit )
     {
-        Point		aPosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
+        Point       aPosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
         SCsCOL nPosX;
         SCsROW nPosY;
         pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
 
         if ( ShowNoteMarker( nPosX, nPosY, FALSE ) )
         {
-            Window::RequestHelp( rHEvt );	// alte Tip/Balloon ausschalten
+            Window::RequestHelp( rHEvt );   // alte Tip/Balloon ausschalten
             bDone = TRUE;
         }
     }
@@ -284,21 +284,21 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     {
         if ( pNoteMarker->IsByKeyboard() )
         {
-            //	marker which was shown for ctrl-F1 isn't removed by mouse events
+            //  marker which was shown for ctrl-F1 isn't removed by mouse events
         }
         else
             DELETEZ(pNoteMarker);
     }
 
-    //	Image-Map / Text-URL
+    //  Image-Map / Text-URL
 
-    if ( bHelpEnabled && !bDone && !nButtonDown )		// nur ohne gedrueckten Button
+    if ( bHelpEnabled && !bDone && !nButtonDown )       // nur ohne gedrueckten Button
     {
         String aHelpText;
         Rectangle aPixRect;
         Point aPosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
 
-        if ( pDrView )										// URL / Image-Map
+        if ( pDrView )                                      // URL / Image-Map
         {
             SdrViewEvent aVEvt;
             MouseEvent aMEvt( aPosPixel, 1, 0, MOUSE_LEFT );
@@ -315,7 +315,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 
                     if ( pIMapObj )
                     {
-                        //	#44990# Bei ImageMaps die Description anzeigen, wenn vorhanden
+                        //  #44990# Bei ImageMaps die Description anzeigen, wenn vorhanden
                         aHelpText = pIMapObj->GetAltText();
                         if (!aHelpText.Len())
                             aHelpText = pIMapObj->GetURL();
@@ -357,7 +357,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             }
         }
 
-        if ( !aHelpText.Len() )									// Text-URL
+        if ( !aHelpText.Len() )                                 // Text-URL
         {
             String aUrl;
             if ( GetEditUrl( aPosPixel, NULL, &aUrl, NULL ) )
@@ -368,11 +368,11 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                 ScDocument* pDoc = pViewData->GetDocument();
                 SCsCOL nPosX;
                 SCsROW nPosY;
-                SCTAB		nTab = pViewData->GetTabNo();
+                SCTAB       nTab = pViewData->GetTabNo();
                 pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
                 const ScPatternAttr* pPattern = pDoc->GetPattern( nPosX, nPosY, nTab );
 
-                ScHideTextCursor aHideCursor( pViewData, eWhich );		// MapMode is changed in GetEditArea
+                ScHideTextCursor aHideCursor( pViewData, eWhich );      // MapMode is changed in GetEditArea
 
                 // bForceToTop = FALSE, use the cell's real position
                 aPixRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, FALSE );
@@ -393,7 +393,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         }
     }
 
-    //	Basic-Controls
+    //  Basic-Controls
 
     if ( pDrView && bHelpEnabled && !bDone )
     {
@@ -403,7 +403,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             bDone = ((ScDrawPage*)pPV->GetPage())->RequestHelp( this, pDrView, rHEvt );
     }
 
-    //	Wenn QuickHelp fuer AutoFill angezeigt wird, nicht wieder wegnehmen lassen
+    //  Wenn QuickHelp fuer AutoFill angezeigt wird, nicht wieder wegnehmen lassen
 
     if ( nMouseStatus == SC_GM_TABDOWN && pViewData->GetRefType() == SC_REFTYPE_FILL &&
             Help::IsQuickHelpEnabled() )

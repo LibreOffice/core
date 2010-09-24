@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -287,7 +287,7 @@ namespace fileaccess {
                      Deleted = 4,
                      FullFeatured = 8,
                      Connected = 16 };
-        sal_Bool 																	m_bFolder;
+        sal_Bool                                                                    m_bFolder;
         sal_uInt16                                                                  m_nState;
 
         osl::Mutex                         m_aMutex;

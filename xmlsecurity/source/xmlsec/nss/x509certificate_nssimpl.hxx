@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,16 +79,16 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getSubjectPublicKeyValue()
             throw ( ::com::sun::star::uno::RuntimeException) ;
-            
+
         virtual ::rtl::OUString SAL_CALL getSignatureAlgorithm()
             throw ( ::com::sun::star::uno::RuntimeException) ;
-            
+
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getSHA1Thumbprint()
             throw ( ::com::sun::star::uno::RuntimeException) ;
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getMD5Thumbprint()
             throw ( ::com::sun::star::uno::RuntimeException) ;
-            
+
         virtual sal_Int32 SAL_CALL getCertificateUsage( ) throw ( ::com::sun::star::uno::RuntimeException) ;
         // MM : end
 
@@ -104,5 +104,5 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
         void setRawCert( ::com::sun::star::uno::Sequence< sal_Int8 > rawCert ) throw ( ::com::sun::star::uno::RuntimeException) ;
 } ;
 
-#endif	// _X509CERTIFICATE_NSSIMPL_HXX_
+#endif  // _X509CERTIFICATE_NSSIMPL_HXX_
 

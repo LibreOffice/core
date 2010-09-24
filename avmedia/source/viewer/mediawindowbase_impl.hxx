@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace avmedia
             UPDATEMODE_SYNC_PLAYER = 1,
             UPDATEMODE_SYNC_NONE = 2
         };
-            
+
         // -----------------------
         // - MediaWindowBaseImpl -
         // -----------------------
@@ -56,20 +56,20 @@ namespace avmedia
         public:
 
                             MediaWindowBaseImpl( MediaWindow* pMediaWindow );
-            virtual 		~MediaWindowBaseImpl();
-            
-            virtual void 	cleanUp();
-            virtual void	onURLChanged();
-            
+            virtual         ~MediaWindowBaseImpl();
+
+            virtual void    cleanUp();
+            virtual void    onURLChanged();
+
             static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const ::rtl::OUString& rURL );
-        
+
         public:
 
-            void 	setURL( const ::rtl::OUString& rURL );
-            const ::rtl::OUString&	getURL() const;
-            
-            bool	isValid() const;
-        
+            void    setURL( const ::rtl::OUString& rURL );
+            const ::rtl::OUString&  getURL() const;
+
+            bool    isValid() const;
+
             bool    hasPreferredSize() const;
             Size    getPreferredSize() const;
 
@@ -104,25 +104,25 @@ namespace avmedia
             void    setVolumeDB( sal_Int16 nVolumeDB );
             sal_Int16 getVolumeDB() const;
 
-            void	updateMediaItem( MediaItem& rItem ) const;
-            void	executeMediaItem( const MediaItem& rItem );
-                    
+            void    updateMediaItem( MediaItem& rItem ) const;
+            void    executeMediaItem( const MediaItem& rItem );
+
         protected:
 
-            void	stopPlayingInternal( bool );
+            void    stopPlayingInternal( bool );
 
             MediaWindow* getMediaWindow() const;
 
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > getPlayer() const;
 
-            void setPlayerWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >& rxPlayerWindow ); 
+            void setPlayerWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >& rxPlayerWindow );
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow > getPlayerWindow() const;
 
         private:
 
-            ::rtl::OUString	 						                                   	maFileURL;
-            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > 		mxPlayer;
-            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >	mxPlayerWindow;
+            ::rtl::OUString                                                             maFileURL;
+            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >        mxPlayer;
+            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >  mxPlayerWindow;
             MediaWindow*                                                                mpMediaWindow;
         };
     }

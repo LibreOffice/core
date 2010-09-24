@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -348,7 +348,7 @@ void ContentProvider::init()
         setupextension );
 
     uno::Sequence< rtl::OUString > aImagesZipPaths( 2 );
-    xHierAccess = getHierAccess( sProvider,	 "org.openoffice.Office.Common" );
+    xHierAccess = getHierAccess( sProvider,  "org.openoffice.Office.Common" );
 
     rtl::OUString aPath( getKey( xHierAccess, "Path/Current/UserConfig" ) );
     subst( aPath );

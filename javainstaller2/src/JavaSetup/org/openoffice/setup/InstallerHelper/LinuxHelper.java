@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ import java.io.File;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Vector;public class LinuxHelper {
-    
+
     public LinuxHelper() {
         super();
     }
@@ -110,21 +110,21 @@ import java.util.Vector;public class LinuxHelper {
     }
 
     private HashMap analyzeVersionString(String versionString) {
-        
+
         boolean errorOccured = false;
-        
+
         Integer micro = null;
         Integer minor = null;
         Integer major = null;
         Integer release = null;
-        
+
         String microString = null;
         String minorString = null;
         String majorString = null;
         String releaseString = null;
-        
+
         int pos = versionString.lastIndexOf("_");  // this is a jre RPM (1.5.0_06)
-        
+
         if ( pos > -1 ) {
             try {
                 releaseString = versionString.substring(pos+1, versionString.length());
@@ -137,7 +137,7 @@ import java.util.Vector;public class LinuxHelper {
                 int releaseInt = Integer.parseInt(releaseString);
                 release = new Integer(releaseInt);
             } catch (NumberFormatException ex) {
-                System.err.println("Error: Could not convert " + releaseString + " to integer");                            
+                System.err.println("Error: Could not convert " + releaseString + " to integer");
                 errorOccured = true;
             }
         }
@@ -150,23 +150,23 @@ import java.util.Vector;public class LinuxHelper {
             pos = substring.lastIndexOf(".");  // returns "-1", if not found
             if ( pos == -1 ) {
                 versionString = versionString + ".0";
-                // System.err.println("Warning: Changing from " + compareString + " to " + versionString);            
+                // System.err.println("Warning: Changing from " + compareString + " to " + versionString);
             }
         } else {
-            versionString = versionString + ".0.0";            
+            versionString = versionString + ".0.0";
         }
-                    
+
         // the standard analyzing mechanism
         pos = versionString.lastIndexOf(".");  // returns "-1", if not found
-        
+
         if ( pos > -1 )
         {
             try {
                 microString = versionString.substring(pos+1, versionString.length());
                 versionString = versionString.substring(0, pos);
             } catch (IndexOutOfBoundsException ex) {
-                System.err.println("Error: Could not get substring from " + versionString);            
-                errorOccured = true;                
+                System.err.println("Error: Could not get substring from " + versionString);
+                errorOccured = true;
             }
 
             pos = versionString.lastIndexOf(".");
@@ -175,7 +175,7 @@ import java.util.Vector;public class LinuxHelper {
                     minorString = versionString.substring(pos+1, versionString.length());
                     majorString = versionString.substring(0, pos);
                 } catch (IndexOutOfBoundsException ex) {
-                    System.err.println("Error: Could not get substring from " + versionString);            
+                    System.err.println("Error: Could not get substring from " + versionString);
                     errorOccured = true;
                 }
                 try {
@@ -186,36 +186,36 @@ import java.util.Vector;public class LinuxHelper {
                     minor = new Integer(minorInt);
                     major = new Integer(majorInt);
                 } catch (NumberFormatException ex) {
-                    System.err.println("Error: Could not convert " + microString + "," + 
-                                       minorString + " or " + majorString + " to integer");                            
+                    System.err.println("Error: Could not convert " + microString + "," +
+                                       minorString + " or " + majorString + " to integer");
                     errorOccured = true;
                 }
             }
         }
-          
+
         // if ( microString == null ) { microString = ""; }
         // if ( majorString == null ) { majorString = ""; }
         // if ( releaseString == null ) { releaseString = ""; }
         // if ( minorString == null ) { minorString = ""; }
         // System.err.println("Major " + majorString + " Minor: " + minorString + " Micro: " + microString + " Release: " + releaseString);
-        
+
         if ( errorOccured ) {
             micro = null;
             minor = null;
             major = null;
             release = null;
         }
-        
+
         HashMap hashRpm = new HashMap();
-        
+
         hashRpm.put("micro", micro);
         hashRpm.put("minor", minor);
         hashRpm.put("major", major);
         hashRpm.put("release", release);
-        
+
         // If one of this values is "null", procedure "compareTwoRpms" always delivers false.
         // This means, that the installed package is not older.
-        
+
         // System.err.println("Analyzed: " + "micro: " + hashRpm.get("micro").toString() + " minor: " + hashRpm.get("minor").toString() + " major: " + hashRpm.get("major").toString());
 
         return hashRpm;
@@ -223,7 +223,7 @@ import java.util.Vector;public class LinuxHelper {
 
     private HashMap analyzeReleaseString(HashMap hashRpm, String releaseString) {
         int release;
-        
+
         try {
             release = Integer.parseInt(releaseString);
             Integer releaseObj = new Integer(release);
@@ -233,13 +233,13 @@ import java.util.Vector;public class LinuxHelper {
             // JRE often contain a string like "FCS"
             // System.err.println("Error: Could not convert " + releaseString + " to integer");
             hashRpm.put("release", null);
-        } 
+        }
 
         return hashRpm;
     }
 
     public int getInstalledMinor(String version) {
-    
+
         int minor = 0;
         int pos = version.indexOf(".");
         if ( pos > -1 ) {
@@ -250,14 +250,14 @@ import java.util.Vector;public class LinuxHelper {
                 reduced = reduced.substring(0, pos);
                 minor = Integer.parseInt(reduced);
             }
-        }    	
+        }
 
         return minor;
     }
-    
+
     private boolean compareTwoRpms(HashMap hash1, HashMap hash2) {
         boolean hash1IsOlder = false;
-        
+
         if (( hash1.get("major") != null ) && ( hash2.get("major") != null )) {
             if ( ((Integer)hash1.get("major")).intValue() < ((Integer)hash2.get("major")).intValue() ) {
                 hash1IsOlder = true;
@@ -284,19 +284,19 @@ import java.util.Vector;public class LinuxHelper {
 
         return hash1IsOlder;
     }
-    
+
     public boolean compareVersionAndRelease(String versionString, String releaseString, PackageDescription packageData, boolean checkIfInstalledIsOlder) {
         // version and release are gotten from the rpm database. packageData contains
         // the information about the rpm, that shall be installed. It has to be installed,
         // if the installed product defined by version and release is older.
-        // version is something like "2.0.3", release something like "164". 
+        // version is something like "2.0.3", release something like "164".
         // An exception is the jre package, where version is "1.5.0_06" and release "fcs".
 
         HashMap installedRpm = analyzeVersionString(versionString);
         if ( installedRpm.get("release") == null ) {
             installedRpm = analyzeReleaseString(installedRpm, releaseString);
         }
-        
+
         // System.err.println("Package: " + packageData.getPackageName());
         // String outputString = "Installed RPM: ";
         // if ( installedRpm.get("major") != null ) { outputString = outputString + " major: " + installedRpm.get("major").toString(); }
@@ -326,15 +326,15 @@ import java.util.Vector;public class LinuxHelper {
         // System.err.println(outputString);
 
         boolean firstIsOlder = false;
-        
+
         if ( checkIfInstalledIsOlder ) {
             firstIsOlder = compareTwoRpms(installedRpm, notInstalledRpm);
             // System.err.println("Result: Installed RPM is older: " + firstIsOlder);
         } else {
-            firstIsOlder = compareTwoRpms(notInstalledRpm, installedRpm);        
+            firstIsOlder = compareTwoRpms(notInstalledRpm, installedRpm);
             // System.err.println("Result: Not installed RPM is older: " + firstIsOlder);
         }
-        
+
         return firstIsOlder;
     }
 
@@ -361,7 +361,7 @@ import java.util.Vector;public class LinuxHelper {
             } else {
                 packageData.setPkgExists(false);
             }
-            
+
         }
 
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
@@ -377,12 +377,12 @@ import java.util.Vector;public class LinuxHelper {
         // String databaseDir = SystemManager.getParentDirectory(installDir);
         String linuxDatabaseName = ".RPM_OFFICE_DATABASE";
         File databaseFile = new File(databaseDir, linuxDatabaseName);
-        databasePath = databaseFile.getPath();        
+        databasePath = databaseFile.getPath();
         return databasePath;
     }
-  
+
     public void investigateDebian(InstallData data) {
-        
+
         // String rpmQuery = "rpm --help;
         String[] rpmQueryArray = new String[2];
         rpmQueryArray[0] = "rpm";
@@ -391,17 +391,17 @@ import java.util.Vector;public class LinuxHelper {
         Vector returnVector = new Vector();
         Vector returnErrorVector = new Vector();
         int returnValue = ExecuteProcess.executeProcessReturnVector(rpmQueryArray, returnVector, returnErrorVector);
-        
+
         // Checking if the return vector contains the string "force-debian"
-       
+
         for (int i = 0; i < returnVector.size(); i++) {
             String line = (String) returnVector.get(i);
             if ( line.indexOf("force-debian") > -1 ) {
                 data.setIsDebianSystem(true);
             }
         }
-    } 
-    
+    }
+
     public void getLinuxFileInfo(PackageDescription packageData) {
         // analyzing a string like "openoffice-core01-2.0.3-159" as "name-version-release"
         InstallData data = InstallData.getInstance();
@@ -429,7 +429,7 @@ import java.util.Vector;public class LinuxHelper {
             PackageDescription child = (PackageDescription) e.nextElement();
             getLinuxFileInfo(child);
         }
-        
+
     }
 
     public void setFullPackageNameAtUninstall(PackageDescription packageData, HashMap packageNames) {
@@ -454,7 +454,7 @@ import java.util.Vector;public class LinuxHelper {
 
     public String getRelocationString(PackageDescription packageData, String packageName) {
         String relocationString = null;
-        
+
         if ( packageData.isRelocatable() ) {
             // String rpmQuery = "rpm -qp --qf %{PREFIXES}" + " " + packageName;
             String[] rpmQueryArray = new String[5];
@@ -463,32 +463,32 @@ import java.util.Vector;public class LinuxHelper {
             rpmQueryArray[2] = "--qf";
             rpmQueryArray[3] = "%{PREFIXES}";
             rpmQueryArray[4] = packageName;
-            
+
             Vector returnVector = new Vector();
             Vector returnErrorVector = new Vector();
             int returnValue = ExecuteProcess.executeProcessReturnVector(rpmQueryArray, returnVector, returnErrorVector);
             relocationString = (String) returnVector.get(0);
         }
-        
+
         return relocationString;
     }
 
     public void createPackageNameFileAtPostinstall(InstallData data, PackageDescription packageData) {
- 
+
         // The file "packageNames" must not be an own database! It must be possible to install
         // and deinstall RPMs without this GUI installer. Therefore the file packageNames is
         // not always up to date. Nevertheless it makes the deinstallation faster, because of
         // all packages, whose "real" package name is not defined in xpd files (for example
-        // "openoffice-core01-2.0.3-159.rpm" hat the "real" name "openoffice-core01" that is 
-        // used for deinstallation) this can be read in this file. Otherwise it would be 
+        // "openoffice-core01-2.0.3-159.rpm" hat the "real" name "openoffice-core01" that is
+        // used for deinstallation) this can be read in this file. Otherwise it would be
         // neccessary to determine the "real" name with a database question.
-        // The version and release that are also stored in file "packageNames" must not be 
+        // The version and release that are also stored in file "packageNames" must not be
         // used for deinstallation because they are probably not up to date.
-        
-        File destDir = new File(data.getInstallDefaultDir(), data.getProductDir());      
+
+        File destDir = new File(data.getInstallDefaultDir(), data.getProductDir());
         File uninstallDir = new File(destDir, data.getUninstallDirName());
-        String fileName = "packageNames";        
-        File packageNamesFile = new File(uninstallDir, fileName);        
+        String fileName = "packageNames";
+        File packageNamesFile = new File(uninstallDir, fileName);
         Vector packageNames = new Vector();
         getPackageNamesContent(packageData, packageNames);
         SystemManager.saveCharFileVector(packageNamesFile.getPath(), packageNames);
@@ -504,15 +504,15 @@ import java.util.Vector;public class LinuxHelper {
         HashMap map = Converter.convertVectorToHashmap(fileContent);
         return map;
     }
-    
+
     public void saveModulesLogFile(InstallData data) {
         if ( data.logModuleStates() ) {
             Vector logContent = LogManager.getModulesLogFile();
-            File destDir = new File(data.getInstallDefaultDir(), data.getProductDir());      
+            File destDir = new File(data.getInstallDefaultDir(), data.getProductDir());
             File uninstallDir = new File(destDir, data.getUninstallDirName());
-            File modulesLogFile = new File(uninstallDir, "moduleSettingsLog.txt");        
-            SystemManager.saveCharFileVector(modulesLogFile.getPath(), logContent);    
-        }    
+            File modulesLogFile = new File(uninstallDir, "moduleSettingsLog.txt");
+            SystemManager.saveCharFileVector(modulesLogFile.getPath(), logContent);
+        }
     }
 
     public String fixInstallationDirectory(String installDir) {

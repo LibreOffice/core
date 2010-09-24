@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -133,10 +133,10 @@ enum CntHTTPCookieRequestType
 
 struct CntHTTPCookieRequest
 {
-    const String& 			 m_rURL;
-    List&         			 m_rCookieList;
+    const String&            m_rURL;
+    List&                    m_rCookieList;
     CntHTTPCookieRequestType m_eType;
-    USHORT					 m_nRet;
+    USHORT                   m_nRet;
 
     CntHTTPCookieRequest (
         const String& rURL,

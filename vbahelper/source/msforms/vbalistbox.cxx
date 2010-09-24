@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,16 +45,16 @@ ScVbaListBox::ScVbaListBox( const uno::Reference< XHelperInterface >& xParent, c
 }
 
 // Attributes
-void SAL_CALL 
+void SAL_CALL
 ScVbaListBox::setListIndex( const uno::Any& _value ) throw (uno::RuntimeException)
 {
     sal_Int32 nIndex = 0;
     _value >>= nIndex;
     uno::Reference< XPropValue > xPropVal( Selected( nIndex ), uno::UNO_QUERY_THROW );
-    xPropVal->setValue( uno::makeAny( sal_True ) ); 
+    xPropVal->setValue( uno::makeAny( sal_True ) );
 }
 
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaListBox::getListIndex() throw (uno::RuntimeException)
 {
     uno::Sequence< sal_Int16 > sSelection;
@@ -64,7 +64,7 @@ ScVbaListBox::getListIndex() throw (uno::RuntimeException)
     return uno::Any( sSelection[ 0 ] );
 }
 
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaListBox::getValue() throw (uno::RuntimeException)
 {
     uno::Sequence< sal_Int16 > sSelection;
@@ -76,15 +76,15 @@ ScVbaListBox::getValue() throw (uno::RuntimeException)
                     "Attribute use invalid." ), uno::Reference< uno::XInterface >() );
     uno::Any aRet;
     if ( sSelection.getLength() )
-        aRet = uno::makeAny( sItems[ sSelection[ 0 ] ] ); 
+        aRet = uno::makeAny( sItems[ sSelection[ 0 ] ] );
     return aRet;
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
     if( getMultiSelect() )
-    {	
+    {
         throw uno::RuntimeException( rtl::OUString::createFromAscii(
                     "Attribute use invalid." ), uno::Reference< uno::XInterface >() );
     }
@@ -99,7 +99,7 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
     {
         if( sList[i].equals( sValue ) )
         {
-            nValue = i; 
+            nValue = i;
             break;
         }
     }
@@ -109,11 +109,11 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 
     uno::Sequence< sal_Int16 > nSelectedIndices(1);
     nSelectedIndices[ 0 ] = nValue;
-    m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( nSelectedIndices ) ); 
-    m_xProps->setPropertyValue( TEXT, uno::makeAny( sValue ) ); 
+    m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( nSelectedIndices ) );
+    m_xProps->setPropertyValue( TEXT, uno::makeAny( sValue ) );
 }
 
-::rtl::OUString SAL_CALL 
+::rtl::OUString SAL_CALL
 ScVbaListBox::getText() throw (uno::RuntimeException)
 {
     rtl::OUString result;
@@ -121,13 +121,13 @@ ScVbaListBox::getText() throw (uno::RuntimeException)
     return result;
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaListBox::setText( const ::rtl::OUString& _text ) throw (uno::RuntimeException)
 {
     setValue( uno::makeAny( _text ) ); // seems the same
 }
 
-sal_Bool SAL_CALL 
+sal_Bool SAL_CALL
 ScVbaListBox::getMultiSelect() throw (css::uno::RuntimeException)
 {
     sal_Bool bMultiSelect = sal_False;
@@ -135,20 +135,20 @@ ScVbaListBox::getMultiSelect() throw (css::uno::RuntimeException)
     return bMultiSelect;
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaListBox::setMultiSelect( sal_Bool _multiselect ) throw (css::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiSelection" ) ), uno::makeAny( _multiselect ) );
 }
 
-css::uno::Any SAL_CALL 
+css::uno::Any SAL_CALL
 ScVbaListBox::Selected( sal_Int32 index ) throw (css::uno::RuntimeException)
 {
     uno::Sequence< rtl::OUString > sList;
     m_xProps->getPropertyValue( ITEMS ) >>= sList;
     sal_Int16 nLength = static_cast< sal_Int16 >( sList.getLength() );
     // no choice but to do a horror cast as internally
-    // the indices are but sal_Int16 
+    // the indices are but sal_Int16
     sal_Int16 nIndex = static_cast< sal_Int16 >( index );
     if( nIndex < 0 || nIndex >= nLength )
         throw uno::RuntimeException( rtl::OUString::createFromAscii(
@@ -158,19 +158,19 @@ ScVbaListBox::Selected( sal_Int32 index ) throw (css::uno::RuntimeException)
 }
 
 // Methods
-void SAL_CALL 
+void SAL_CALL
 ScVbaListBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex ) throw (uno::RuntimeException)
 {
     mpListHelper->AddItem( pvargItem, pvargIndex );
         }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaListBox::removeItem( const uno::Any& index ) throw (uno::RuntimeException)
 {
     mpListHelper->removeItem( index );
 }
 
-void SAL_CALL 
+void SAL_CALL
 ScVbaListBox::Clear(  ) throw (uno::RuntimeException)
 {
     mpListHelper->Clear();
@@ -180,7 +180,7 @@ ScVbaListBox::Clear(  ) throw (uno::RuntimeException)
 // to set the selected state of particular entries in the Listbox
 // ListBox1.Selected( 3 ) = false
 //PropListener
-void 
+void
 ScVbaListBox::setValueEvent( const uno::Any& value )
 {
     sal_Bool bValue = sal_False;
@@ -231,14 +231,14 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
 // to determine the selected state of particular entries in the Listbox
 // msgbox ListBox1.Selected( 3 )
 
-css::uno::Any 
+css::uno::Any
 ScVbaListBox::getValueEvent()
 {
     uno::Sequence< sal_Int16 > nList;
     m_xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectedItems" ) ) ) >>= nList;
     sal_Int32 nLength = nList.getLength();
     sal_Int32 nIndex = m_nIndex;
-    
+
     for( sal_Int32 i = 0; i < nLength; i++ )
     {
         if( nList[i] == nIndex )
@@ -261,20 +261,20 @@ ScVbaListBox::getListCount() throw (uno::RuntimeException)
     return mpListHelper->getListCount();
 }
 
-uno::Any SAL_CALL 
+uno::Any SAL_CALL
 ScVbaListBox::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn ) throw (uno::RuntimeException)
 {
     return mpListHelper->List( pvargIndex, pvarColumn );
 }
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaListBox::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaListBox") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString > 
+uno::Sequence< rtl::OUString >
 ScVbaListBox::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

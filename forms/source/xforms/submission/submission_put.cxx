@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,12 +49,12 @@ using namespace std;
 
 
 CSubmissionPut::CSubmissionPut(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
-    : CSubmission(aURL, aFragment) 
+    : CSubmission(aURL, aFragment)
 {
 }
 
 CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler)
-{    
+{
     CSS::uno::Reference< XCommandEnvironment > aEnvironment;
     auto_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
 
@@ -65,7 +65,7 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< 
         CSS::uno::Reference< XInputStream > aInStream = apSerialization->getInputStream();
         aContent.writeStream(aInStream, sal_True);
         //aContent.closeStream();
-        
+
         // no content as a result of put...
 
     } catch (Exception&)
@@ -74,7 +74,7 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< 
         OSL_ENSURE(sal_False, "Exception during UCB operatration.");
         return UNKNOWN_ERROR;
     }
-    
+
 
     return SUCCESS;
 }

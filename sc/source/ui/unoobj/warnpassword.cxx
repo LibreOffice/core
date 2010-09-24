@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,10 +61,10 @@ bool ScWarnPassword::WarningOnPassword( SfxMedium& rMedium )
     {
 
         OUString empty;
-        Any xException( makeAny(InteractiveAppException(empty, 
-                Reference <XInterface> (), 
-                InteractionClassification_QUERY, 
-                 ERRCODE_SVX_EXPORT_FILTER_CRYPT)));      
+        Any xException( makeAny(InteractiveAppException(empty,
+                Reference <XInterface> (),
+                InteractionClassification_QUERY,
+                 ERRCODE_SVX_EXPORT_FILTER_CRYPT)));
 
         Reference< ucbhelper::SimpleInteractionRequest > xRequest
                     = new ucbhelper::SimpleInteractionRequest(
@@ -82,7 +82,7 @@ bool ScWarnPassword::WarningOnPassword( SfxMedium& rMedium )
                 break;
 
         case ucbhelper::CONTINUATION_APPROVE:
-                // Continue 
+                // Continue
                 break;
 
         case ucbhelper::CONTINUATION_DISAPPROVE:

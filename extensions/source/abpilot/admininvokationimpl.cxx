@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <vcl/stdtext.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_ 
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
 #ifndef EXTENSIONS_ABPRESID_HRC
@@ -42,7 +42,7 @@
 #include "componentmodule.hxx"
 #include <vcl/waitobj.hxx>
 
- 
+
 //.........................................................................
 namespace abp
 {
@@ -117,7 +117,7 @@ namespace abp
             }
 
             if (xDialog.is())
-            {	// execute it
+            {   // execute it
                 if (xDialog->execute())
                     return sal_True;
             }
@@ -132,6 +132,6 @@ namespace abp
     }
 
 //.........................................................................
-}	// namespace abp
+}   // namespace abp
 //.........................................................................
 

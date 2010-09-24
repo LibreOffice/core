@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,49 +55,49 @@
 #include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <com/sun/star/awt/grid/XGridSelectionListener.hpp>
-//	----------------------------------------------------
-//	class ListenerMultiplexerBase
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class ListenerMultiplexerBase
+//  ----------------------------------------------------
 
 class TOOLKIT_DLLPUBLIC ListenerMultiplexerBase : public MutexHelper,
                                 public ::cppu::OInterfaceContainerHelper,
                                 public ::com::sun::star::uno::XInterface
 {
 private:
-    ::cppu::OWeakObject&	mrContext;
+    ::cppu::OWeakObject&    mrContext;
 
 protected:
-    ::cppu::OWeakObject&	GetContext() { return mrContext; }
+    ::cppu::OWeakObject&    GetContext() { return mrContext; }
 
 public:
     ListenerMultiplexerBase( ::cppu::OWeakObject& rSource );
     virtual ~ListenerMultiplexerBase();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any	SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void						SAL_CALL acquire() throw()	{ mrContext.acquire(); }
-    void						SAL_CALL release() throw()	{ mrContext.release(); }
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                        SAL_CALL acquire() throw()  { mrContext.acquire(); }
+    void                        SAL_CALL release() throw()  { mrContext.release(); }
 };
 
 
-//	----------------------------------------------------
-//	class EventListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class EventListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START( EventListenerMultiplexer, ::com::sun::star::lang::XEventListener )
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class FocusListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class FocusListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START( FocusListenerMultiplexer, ::com::sun::star::awt::XFocusListener )
     void SAL_CALL focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
 
-//	----------------------------------------------------
-//	class WindowListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class WindowListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START( WindowListenerMultiplexer, ::com::sun::star::awt::XWindowListener )
     void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& e ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL windowMoved( const ::com::sun::star::awt::WindowEvent& e ) throw(::com::sun::star::uno::RuntimeException);
@@ -107,25 +107,25 @@ DECL_LISTENERMULTIPLEXER_END
 
 
 
-//	----------------------------------------------------
-//	class VclContainerListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VclContainerListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START( VclContainerListenerMultiplexer, ::com::sun::star::awt::XVclContainerListener )
     void SAL_CALL windowAdded( const ::com::sun::star::awt::VclContainerEvent& e ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL windowRemoved( const ::com::sun::star::awt::VclContainerEvent& e ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class KeyListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class KeyListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START( KeyListenerMultiplexer, ::com::sun::star::awt::XKeyListener )
     void SAL_CALL keyPressed( const ::com::sun::star::awt::KeyEvent& e ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL keyReleased( const ::com::sun::star::awt::KeyEvent& e ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class MouseListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class MouseListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START_DLLPUB( MouseListenerMultiplexer, ::com::sun::star::awt::XMouseListener )
     void SAL_CALL mousePressed( const ::com::sun::star::awt::MouseEvent& e ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL mouseReleased( const ::com::sun::star::awt::MouseEvent& e ) throw(::com::sun::star::uno::RuntimeException);
@@ -133,24 +133,24 @@ DECL_LISTENERMULTIPLEXER_START_DLLPUB( MouseListenerMultiplexer, ::com::sun::sta
     void SAL_CALL mouseExited( const ::com::sun::star::awt::MouseEvent& e ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class MouseMotionListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class MouseMotionListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START( MouseMotionListenerMultiplexer, ::com::sun::star::awt::XMouseMotionListener )
     void SAL_CALL mouseDragged( const ::com::sun::star::awt::MouseEvent& e ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL mouseMoved( const ::com::sun::star::awt::MouseEvent& e ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class PaintListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class PaintListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START( PaintListenerMultiplexer, ::com::sun::star::awt::XPaintListener )
     void SAL_CALL windowPaint( const ::com::sun::star::awt::PaintEvent& e ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class TopWindowListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class TopWindowListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START( TopWindowListenerMultiplexer, ::com::sun::star::awt::XTopWindowListener )
     void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& e ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL windowClosing( const ::com::sun::star::lang::EventObject& e ) throw(::com::sun::star::uno::RuntimeException);
@@ -161,39 +161,39 @@ DECL_LISTENERMULTIPLEXER_START( TopWindowListenerMultiplexer, ::com::sun::star::
     void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& e ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class TextListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class TextListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START_DLLPUB( TextListenerMultiplexer, ::com::sun::star::awt::XTextListener )
     void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class ActionListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class ActionListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START_DLLPUB( ActionListenerMultiplexer, ::com::sun::star::awt::XActionListener )
     void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class ItemListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class ItemListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START_DLLPUB( ItemListenerMultiplexer, ::com::sun::star::awt::XItemListener )
     void SAL_CALL itemStateChanged( const ::com::sun::star::awt::ItemEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class ContainerListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class ContainerListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START( ContainerListenerMultiplexer, ::com::sun::star::container::XContainerListener )
     void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class SpinListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class SpinListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START_DLLPUB( SpinListenerMultiplexer, ::com::sun::star::awt::XSpinListener )
     void SAL_CALL up( const ::com::sun::star::awt::SpinEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL down( const ::com::sun::star::awt::SpinEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
@@ -201,16 +201,16 @@ DECL_LISTENERMULTIPLEXER_START_DLLPUB( SpinListenerMultiplexer, ::com::sun::star
     void SAL_CALL last( const ::com::sun::star::awt::SpinEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class AdjustmentListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class AdjustmentListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START( AdjustmentListenerMultiplexer, ::com::sun::star::awt::XAdjustmentListener )
     void SAL_CALL adjustmentValueChanged( const ::com::sun::star::awt::AdjustmentEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class MenuListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class MenuListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener )
     void SAL_CALL highlight( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL select( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
@@ -218,16 +218,16 @@ DECL_LISTENERMULTIPLEXER_START( MenuListenerMultiplexer, ::com::sun::star::awt::
     void SAL_CALL deactivate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class TreeSelectionListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class TreeSelectionListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START_DLLPUB( TreeSelectionListenerMultiplexer, ::com::sun::star::view::XSelectionChangeListener )
     virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class TreeExpansionListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class TreeExpansionListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START_DLLPUB( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener )
     virtual void SAL_CALL requestChildNodes( const ::com::sun::star::awt::tree::TreeExpansionEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL treeExpanding( const ::com::sun::star::awt::tree::TreeExpansionEvent& aEvent ) throw (::com::sun::star::awt::tree::ExpandVetoException, ::com::sun::star::uno::RuntimeException);
@@ -236,17 +236,17 @@ DECL_LISTENERMULTIPLEXER_START_DLLPUB( TreeExpansionListenerMultiplexer, ::com::
     virtual void SAL_CALL treeCollapsed( const ::com::sun::star::awt::tree::TreeExpansionEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class TreeEditListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class TreeEditListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START_DLLPUB( TreeEditListenerMultiplexer, ::com::sun::star::awt::tree::XTreeEditListener )
     virtual void SAL_CALL nodeEditing( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::uno::RuntimeException,::com::sun::star::util::VetoException);
     virtual void SAL_CALL nodeEdited( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node, const ::rtl::OUString& NewText ) throw (::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
-//	----------------------------------------------------
-//	class SelectionListenerMultiplexer
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class SelectionListenerMultiplexer
+//  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START_DLLPUB( SelectionListenerMultiplexer, ::com::sun::star::awt::grid::XGridSelectionListener )
     void SAL_CALL selectionChanged( const ::com::sun::star::awt::grid::GridSelectionEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END

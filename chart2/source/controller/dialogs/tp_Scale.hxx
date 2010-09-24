@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,46 +62,46 @@ public:
     virtual void StateChanged( StateChangedType nType );
 
 private:
-    FixedLine			aFlScale;
+    FixedLine           aFlScale;
 
-    FixedText			aTxtMin;
-    FormattedField		aFmtFldMin;
-    CheckBox			aCbxAutoMin;
+    FixedText           aTxtMin;
+    FormattedField      aFmtFldMin;
+    CheckBox            aCbxAutoMin;
 
-    FixedText			aTxtMax;
-    FormattedField		aFmtFldMax;
-    CheckBox			aCbxAutoMax;
+    FixedText           aTxtMax;
+    FormattedField      aFmtFldMax;
+    CheckBox            aCbxAutoMax;
 
     FixedText           aTxtMain;
-    FormattedField		aFmtFldStepMain;
-    CheckBox			aCbxAutoStepMain;
+    FormattedField      aFmtFldStepMain;
+    CheckBox            aCbxAutoStepMain;
 
     FixedText           aTxtHelp;
     MetricField         aMtStepHelp;
-    CheckBox			aCbxAutoStepHelp;
+    CheckBox            aCbxAutoStepHelp;
 
     FixedText           aTxtOrigin;
-    FormattedField		aFmtFldOrigin;
-    CheckBox			aCbxAutoOrigin;
-    
-    CheckBox			aCbxLogarithm;
+    FormattedField      aFmtFldOrigin;
+    CheckBox            aCbxAutoOrigin;
+
+    CheckBox            aCbxLogarithm;
     CheckBox            aCbxReverse;
-    
-    double				fMin;
-    double				fMax;
-    double				fStepMain;
+
+    double              fMin;
+    double              fMax;
+    double              fStepMain;
     sal_Int32           nStepHelp;
-    double				fOrigin;
+    double              fOrigin;
     int                 nAxisType;
-    SvNumberFormatter*	pNumFormatter;
+    SvNumberFormatter*  pNumFormatter;
 
     bool                m_bShowAxisOrigin;
-    
+
     void AdjustControlPositions();
     void EnableControls();
-    
+
     DECL_LINK( EnableValueHdl, CheckBox* );
-    
+
     /** shows a warning window due to an invalid input.
 
         @param nResIdMessage

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -396,7 +396,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     };
     static std::set< LanguageType > aBrokenSystemFontSizeLanguagesSet(
         eBrokenSystemFontSizeLanguages,
-        eBrokenSystemFontSizeLanguages + 
+        eBrokenSystemFontSizeLanguages +
         (sizeof(eBrokenSystemFontSizeLanguages)/sizeof(eBrokenSystemFontSizeLanguages[0]))
         );
     LanguageType aLang = Application::GetSettings().GetUILanguage();
@@ -501,7 +501,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
             }
         }
     }
-    
+
     static const char* pEnvHC = getenv( "SAL_FORCE_HC" );
     if( pEnvHC && *pEnvHC )
     {
@@ -637,10 +637,10 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbDockWin           = FALSE;        // TRUE: DockingWindow is the base class
     mpWindowImpl->mbFloatWin          = FALSE;        // TRUE: FloatingWindow is the base class
     mpWindowImpl->mbPushButton        = FALSE;        // TRUE: PushButton is the base class
-    mpWindowImpl->mbToolBox			= FALSE;		// TRUE: ToolBox is the base class
-    mpWindowImpl->mbMenuFloatingWindow= FALSE;		// TRUE: MenuFloatingWindow is the base class
-    mpWindowImpl->mbToolbarFloatingWindow= FALSE;		// TRUE: ImplPopupFloatWin is the base class, used for subtoolbars
-    mpWindowImpl->mbSplitter			= FALSE;		// TRUE: Splitter is the base class
+    mpWindowImpl->mbToolBox         = FALSE;        // TRUE: ToolBox is the base class
+    mpWindowImpl->mbMenuFloatingWindow= FALSE;      // TRUE: MenuFloatingWindow is the base class
+    mpWindowImpl->mbToolbarFloatingWindow= FALSE;       // TRUE: ImplPopupFloatWin is the base class, used for subtoolbars
+    mpWindowImpl->mbSplitter            = FALSE;        // TRUE: Splitter is the base class
     mpWindowImpl->mbVisible           = FALSE;        // TRUE: Show( TRUE ) called
     mpWindowImpl->mbOverlapVisible    = FALSE;        // TRUE: Hide called for visible window from ImplHideAllOverlapWindow()
     mpWindowImpl->mbDisabled          = FALSE;        // TRUE: Enable( FALSE ) called
@@ -723,7 +723,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
 
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pRealParent = pParent;
-    
+
     // 3D-Look vererben
     if ( !mpWindowImpl->mbOverlapWin && pParent && (pParent->GetStyle() & WB_3DLOOK) )
         nStyle |= WB_3DLOOK;
@@ -1319,7 +1319,7 @@ ImplWinData* Window::ImplGetWinData() const
         mpWindowImpl->mpWinData->mpFocusRect      = NULL;
         mpWindowImpl->mpWinData->mpTrackRect      = NULL;
         mpWindowImpl->mpWinData->mnTrackFlags     = 0;
-        mpWindowImpl->mpWinData->mnIsTopWindow	= (USHORT) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
+        mpWindowImpl->mpWinData->mnIsTopWindow  = (USHORT) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
         mpWindowImpl->mpWinData->mbMouseOver      = FALSE;
         mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? FALSE : TRUE; // TRUE: try to draw this control with native theme API
         mpWindowImpl->mpWinData->mpSmartHelpId    = NULL;
@@ -2341,7 +2341,7 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
     // call PrePaint. PrePaint may add to the invalidate region as well as
     // other parameters used below.
     PrePaint();
-    
+
     mpWindowImpl->mbPaintFrame = FALSE;
 
     if ( nPaintFlags & IMPL_PAINT_PAINTALLCHILDS )
@@ -3282,7 +3282,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
             }
         }
-        
+
         // check maPos as well, as it could have been changed for client windows (ImplCallMove())
         if ( mpWindowImpl->mnAbsScreenX != aPtDev.X() || nX != mpWindowImpl->mnX || nOrgX != mpWindowImpl->maPos.X() )
         {
@@ -3295,7 +3295,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             }
             mpWindowImpl->mnX = nX;
             mpWindowImpl->maPos.X() = nOrgX;
-            mpWindowImpl->mnAbsScreenX = aPtDev.X();	// --- RTL --- (store real screen pos)
+            mpWindowImpl->mnAbsScreenX = aPtDev.X();    // --- RTL --- (store real screen pos)
             bNewPos = TRUE;
         }
     }
@@ -8711,8 +8711,8 @@ Reference< XClipboard > Window::GetPrimarySelection()
 
                     mpWindowImpl->mpFrameData->mxSelection = Reference< XClipboard >( xFactory->createInstanceWithArguments(
                     OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ), aArgumentList ), UNO_QUERY );
-#	else
-                    static Reference< XClipboard >	s_xSelection;
+#   else
+                    static Reference< XClipboard >  s_xSelection;
 
                     if ( !s_xSelection.is() )
                          s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboardExt" ) ), UNO_QUERY );
@@ -8721,7 +8721,7 @@ Reference< XClipboard > Window::GetPrimarySelection()
                          s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );
 
                     mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
-#	endif
+#   endif
                 }
             }
 
@@ -9344,7 +9344,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
 {
     if( rRect.IsEmpty() )
         return;
-    
+
     bool bRoundEdges = nCornerRadius > 0;
 
     const StyleSettings& rStyles = GetSettings().GetStyleSettings();
@@ -9823,7 +9823,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     // preserve graphicsstate
     Push();
     Region aClipRegion( GetClipRegion() );
-    SetClipRegion();    
+    SetClipRegion();
 
     GDIMetaFile* pOldMtf = GetConnectMetaFile();
     GDIMetaFile aMtf;
@@ -9885,7 +9885,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     SetConnectMetaFile( pOldMtf );
     EnableOutput( bOutput );
     mpWindowImpl->mbReallyVisible = bRVisible;
-    
+
     // paint metafile to VDev
     VirtualDevice* pMaskedDevice = new VirtualDevice( *i_pTargetOutDev, 0, 0 );
     pMaskedDevice->SetOutputSizePixel( GetOutputSizePixel() );
@@ -9907,7 +9907,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
                 nDeltaX = mnOutWidth - nDeltaX - pChild->mnOutWidth;
             long nDeltaY = pChild->GetOutOffYPixel() - GetOutOffYPixel();
             Point aPos( i_rPos );
-            Point aDelta( nDeltaX, nDeltaY );                
+            Point aDelta( nDeltaX, nDeltaY );
             aPos += aDelta;
             pChild->ImplPaintToDevice( i_pTargetOutDev, aPos );
         }
@@ -9926,11 +9926,11 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
 void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /*rSize*/ )
 {
     // FIXME: scaling: currently this is for pixel copying only
-    
+
     DBG_ASSERT( ! pDev->ImplHasMirroredGraphics(), "PaintToDevice to mirroring graphics" );
     DBG_ASSERT( ! pDev->IsRTLEnabled(), "PaintToDevice to mirroring device" );
-    
-    
+
+
     Point       aPos  = pDev->LogicToPixel( rPos );
 
     Window* pRealParent = NULL;
@@ -9948,7 +9948,7 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
 
     BOOL bVisible = mpWindowImpl->mbVisible;
     mpWindowImpl->mbVisible = TRUE;
-    
+
     if( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->ImplPaintToDevice( pDev, rPos );
     else

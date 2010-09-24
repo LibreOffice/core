@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,13 +29,13 @@
 
 /*
 #define RID_SCDLG_OPTIONS       256
-#define RID_SCPAGE_VIEW			256
+#define RID_SCPAGE_VIEW         256
 #define RID_SCPAGE_USERLISTS    257
-#define RID_SCPAGE_CALC 		258
-#define RID_SCPAGE_PRINT 		259
+#define RID_SCPAGE_CALC         258
+#define RID_SCPAGE_PRINT        259
 */
 
-#define TP_GENERAL			1
+#define TP_GENERAL          1
 #define TP_SAVE             2
 #define TP_PATH             3
 #define TP_SPELL            4
@@ -48,67 +48,68 @@
 #define TP_CONTENT          11
 #define TP_LAYOUT           12
 #define TP_INPUT            13
-#define TP_CHANGES			14
+#define TP_CHANGES          14
+#define TP_FORMULA          15
 
 // TP_CALC:
-#define BTN_ITERATE			1
-#define FT_STEPS			2
-#define FT_EPS				3
-#define ED_STEPS			4
-#define ED_EPS				5
-#define GB_ZREFS			6
-#define ED_PREC				7
-#define FT_PREC				8
-#define BTN_DATESTD			9
-#define BTN_DATESC10		10
-#define BTN_DATE1904		11
-#define FT_VALUE			13
-#define GB_DATE				14
+#define BTN_ITERATE         1
+#define FT_STEPS            2
+#define FT_EPS              3
+#define ED_STEPS            4
+#define ED_EPS              5
+#define GB_ZREFS            6
+#define ED_PREC             7
+#define FT_PREC             8
+#define BTN_DATESTD         9
+#define BTN_DATESC10        10
+#define BTN_DATE1904        11
+#define FT_VALUE            13
+#define GB_DATE             14
 #define BTN_CASE            15
 #define FT_CASE             16
-#define BTN_CALC			17
-#define BTN_MATCH			18
-#define BTN_LOOKUP			19
+#define BTN_CALC            17
+#define BTN_MATCH           18
+#define BTN_LOOKUP          19
 #define BTN_REGEX           20
 #define BTN_GENERAL_PREC    21
 
 // TP_VIEW:
-#define BTN_VSCROLL			1
-#define BTN_HSCROLL			2
-#define BTN_REGISTER		3
-#define BTN_OUTLINER		4
-#define BTN_HEADERFOOTER	5
-#define BTN_GRID			6
+#define BTN_VSCROLL         1
+#define BTN_HSCROLL         2
+#define BTN_REGISTER        3
+#define BTN_OUTLINER        4
+#define BTN_HEADERFOOTER    5
+#define BTN_GRID            6
 #define BTN_SYNTAX          7
-#define LB_GRIDCOLOR		9
-#define GB_ELEMENTS			10
+#define LB_GRIDCOLOR        9
+#define GB_ELEMENTS         10
 #define BTN_HELPLINES       11
 
 #define BTN_FORMULAS        20
 #define BTN_NULLVALS        21
 #define BTN_NOTES           22
-#define GB_CONTENTS			23
+#define GB_CONTENTS         23
 
-//#define FT_OLE			31
-//#define FT_CHARTS			32
-//#define FT_DRAWINGS		33
-//#define LB_OLE			34
-//#define LB_CHARTS			35
-//#define LB_DRAWINGS		36
-//#define GB_OBJECTS		37
+//#define FT_OLE            31
+//#define FT_CHARTS         32
+//#define FT_DRAWINGS       33
+//#define LB_OLE            34
+//#define LB_CHARTS         35
+//#define LB_DRAWINGS       36
+//#define GB_OBJECTS        37
 
 
 // TP_USERLISTS:
-#define FT_LISTS			1
-#define LB_LISTS			1
-#define FT_ENTRIES			2
-#define ED_ENTRIES			2
-#define FT_COPYFROM			3
-#define ED_COPYFROM			3
-#define BTN_NEW				1
-#define BTN_ADD				2
-#define BTN_REMOVE			3
-#define BTN_COPY			4
+#define FT_LISTS            1
+#define LB_LISTS            1
+#define FT_ENTRIES          2
+#define ED_ENTRIES          2
+#define FT_COPYFROM         3
+#define ED_COPYFROM         3
+#define BTN_NEW             1
+#define BTN_ADD             2
+#define BTN_REMOVE          3
+#define BTN_COPY            4
 #define STR_QUERYREMOVE     5
 #define STR_DISMISS         6
 #define STR_COPYLIST        7
@@ -116,61 +117,61 @@
 #define STR_COPYERR         9
 
 // TP_PRINT:
-#define FL_PAGES			1
-#define BTN_SKIPEMPTYPAGES	2
-#define FL_SHEETS			2
-#define BTN_SELECTEDSHEETS	4
+#define FL_PAGES            1
+#define BTN_SKIPEMPTYPAGES  2
+#define FL_SHEETS           2
+#define BTN_SELECTEDSHEETS  4
 
 // TP_LCONTENT
 
-#define GB_DISPLAY		20
+#define GB_DISPLAY      20
 #define CB_FORMULA              21
-#define CB_NIL	                22
-#define CB_ANNOT	        23
-#define CB_VALUE	        24
-#define CB_ANCHOR	        25
-#define GB_OBJECT	        26
-#define FT_OBJGRF	        27
-#define LB_OBJGRF	        28
+#define CB_NIL                  22
+#define CB_ANNOT            23
+#define CB_VALUE            24
+#define CB_ANCHOR           25
+#define GB_OBJECT           26
+#define FT_OBJGRF           27
+#define LB_OBJGRF           28
 #define FT_DIAGRAM              29
 #define LB_DIAGRAM              30
-#define FT_DRAW	                31
-#define LB_DRAW	                32
-#define CB_CLIP		        33
+#define FT_DRAW                 31
+#define LB_DRAW                 32
+#define CB_CLIP             33
 #define GB_ZOOM             34
 #define CB_SYNCZOOM         35
 
 // TP_LAYOUT
 #define GB_LINK                 1
-#define RB_ALWAYS				2
-#define RB_REQUEST          	3
-#define RB_NEVER            	4
-#define CB_DOCONLY				5
-#define CB_MERGE_PARA_DIST		6
-#define GB_COMPAT           	7
-#define CB_AUTO_UPDATE_FIELDS 	8
-#define CB_AUTO_UPDATE_CHARTS 	9
-#define FT_UPDATE_LINKS			10
+#define RB_ALWAYS               2
+#define RB_REQUEST              3
+#define RB_NEVER                4
+#define CB_DOCONLY              5
+#define CB_MERGE_PARA_DIST      6
+#define GB_COMPAT               7
+#define CB_AUTO_UPDATE_FIELDS   8
+#define CB_AUTO_UPDATE_CHARTS   9
+#define FT_UPDATE_LINKS         10
 
 #define GB_WINDOW       50
-#define CB_ROWCOLHEADER	51
-#define CB_HSCROLL		52
-#define CB_VSCROLL		53
-#define CB_TBLREG		54
-#define CB_OUTLINE		55
-#define GB_LINES		56
-#define CB_GRID			57
-#define FT_COLOR		58
-#define LB_COLOR		59
-#define CB_GUIDELINE	60
-#define GB_UNIT			61
-#define LB_UNIT			62
-#define ST_UNIT			63
-#define GB_TAB			64
-#define MF_TAB			65
-#define CB_PAGEBREAKS	66
-#define CB_HANDLES		67
-#define CB_BIGHANDLES	68
+#define CB_ROWCOLHEADER 51
+#define CB_HSCROLL      52
+#define CB_VSCROLL      53
+#define CB_TBLREG       54
+#define CB_OUTLINE      55
+#define GB_LINES        56
+#define CB_GRID         57
+#define FT_COLOR        58
+#define LB_COLOR        59
+#define CB_GUIDELINE    60
+#define GB_UNIT         61
+#define LB_UNIT         62
+#define ST_UNIT         63
+#define GB_TAB          64
+#define MF_TAB          65
+#define CB_PAGEBREAKS   66
+#define CB_HANDLES      67
+#define CB_BIGHANDLES   68
 #define FT_TAB          69
 #define FT_UNIT         70
 #define FL_SEPARATOR1   71
@@ -179,14 +180,27 @@
 #define FL_H_SEPARATOR  74
 // TP_INPUT
 
-#define GB_OPTIONS		70
-#define CB_ALIGN		71
-#define LB_ALIGN		72
-#define CB_EDITMODE		73
-#define CB_FORMAT		74
-#define CB_RFIND		75
-#define CB_EXPREF		76
-#define CB_MARKHDR		77
-#define CB_TEXTFMT		78
+#define GB_OPTIONS      70
+#define CB_ALIGN        71
+#define LB_ALIGN        72
+#define CB_EDITMODE     73
+#define CB_FORMAT       74
+#define CB_RFIND        75
+#define CB_EXPREF       76
+#define CB_MARKHDR      77
+#define CB_TEXTFMT      78
 #define CB_REPLWARN     79
 
+
+// TP_FORMULA
+#define FL_FORMULA_OPTIONS        80
+#define FT_FORMULA_SYNTAX         81
+#define LB_FORMULA_SYNTAX         82
+#define FL_FORMULA_SEPS           83
+#define FT_FORMULA_SEP_ARG        84
+#define ED_FORMULA_SEP_ARG        85
+#define FT_FORMULA_SEP_ARRAY_R    86
+#define ED_FORMULA_SEP_ARRAY_R    87
+#define FT_FORMULA_SEP_ARRAY_C    88
+#define ED_FORMULA_SEP_ARRAY_C    89
+#define BTN_FORMULA_SEP_RESET     90

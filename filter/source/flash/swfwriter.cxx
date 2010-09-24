@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ static sal_Int32 map100thmm( sal_Int32 n100thMM )
 // -----------------------------------------------------------------------------
 
 Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int32 nDocWidthInput, sal_Int32 nDocHeightInput, sal_Int32 nJPEGcompressMode )
-:	mpClipPolyPolygon( NULL ),
+:   mpClipPolyPolygon( NULL ),
     mpTag( NULL ),
     mpSprite( NULL ),
     mnNextId( 1 ),
@@ -86,25 +86,25 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
     ::basegfx::B2DHomMatrix m; // #i73264#
     mnPageButtonId = createID();
     startTag( TAG_DEFINEBUTTON );
-    mpTag->addUI16( mnPageButtonId );			// character id for button
+    mpTag->addUI16( mnPageButtonId );           // character id for button
 
     // button records
-    mpTag->addUI8( 0x08 );						// only hit state
+    mpTag->addUI8( 0x08 );                      // only hit state
     mpTag->addUI16( mnWhiteBackgroundShapeId ); // shape id of background rectangle
-    mpTag->addUI16( 0 );						// depth for button DANGER!
-    mpTag->addMatrix( m );						// identity matrix
-    mpTag->addUI8( 0 );							// empty color transform
+    mpTag->addUI16( 0 );                        // depth for button DANGER!
+    mpTag->addMatrix( m );                      // identity matrix
+    mpTag->addUI8( 0 );                         // empty color transform
 
-//	mpTag->addUI8( 0 );							// end of button records
+//  mpTag->addUI8( 0 );                         // end of button records
 
     // action records
-    mpTag->addUI8( 0x06 );						// ActionPlay
-    mpTag->addUI8( 0 );							// end of action records
+    mpTag->addUI8( 0x06 );                      // ActionPlay
+    mpTag->addUI8( 0 );                         // end of action records
 
     endTag();
 
     // place a shape that clips shapes depth 2-3 to document boundaries
-//	placeShape( mnWhiteBackgroundShapeId, 1, 0, 0, 4 );
+//  placeShape( mnWhiteBackgroundShapeId, 1, 0, 0, 4 );
 #endif
 }
 
@@ -122,7 +122,7 @@ Writer::~Writer()
 void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > &xOut )
 {
     sal_uInt32 nBufferSize = 64*1024;
-    
+
     rIn.Seek( STREAM_SEEK_TO_END );
     sal_uInt32 nSize = rIn.Tell();
     rIn.Seek( STREAM_SEEK_TO_BEGIN );
@@ -233,24 +233,24 @@ void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int
 
     BitStream aBits;
 
-    aBits.writeUB( nClip != 0, 1 );		// Has Clip Actions?
-    aBits.writeUB( 0, 1 );				// reserved
-    aBits.writeUB( pName != NULL, 1 );	// has a name
-    aBits.writeUB( 0, 1 );				// no ratio
-    aBits.writeUB( 0, 1 );				// no color transform
-    aBits.writeUB( 1, 1 );				// has a matrix
-    aBits.writeUB( 1, 1 );				// places a character
-    aBits.writeUB( 0, 1 );				// does not define a character to be moved
+    aBits.writeUB( nClip != 0, 1 );     // Has Clip Actions?
+    aBits.writeUB( 0, 1 );              // reserved
+    aBits.writeUB( pName != NULL, 1 );  // has a name
+    aBits.writeUB( 0, 1 );              // no ratio
+    aBits.writeUB( 0, 1 );              // no color transform
+    aBits.writeUB( 1, 1 );              // has a matrix
+    aBits.writeUB( 1, 1 );              // places a character
+    aBits.writeUB( 0, 1 );              // does not define a character to be moved
 
     mpTag->addBits( aBits );
-    mpTag->addUI16( nDepth );		// depth
-    mpTag->addUI16( nID );			// character Id
+    mpTag->addUI16( nDepth );       // depth
+    mpTag->addUI16( nID );          // character Id
 
     // #i73264#
     const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
-        _Int16(static_cast<long>(map100thmm(x)*mnDocXScale)), 
+        _Int16(static_cast<long>(map100thmm(x)*mnDocXScale)),
         _Int16(static_cast<long>(map100thmm(y)*mnDocYScale))));
-    mpTag->addMatrix( aMatrix );		// transformation matrix
+    mpTag->addMatrix( aMatrix );        // transformation matrix
 
     if( pName )
         mpTag->addString( pName );
@@ -269,23 +269,23 @@ void Writer::moveShape( sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y )
     startTag( TAG_PLACEOBJECT2 );
 
     BitStream aBits;
-    aBits.writeUB( 0, 1 );				// Has no Clip Actions
-    aBits.writeUB( 0, 1 );				// reserved
-    aBits.writeUB( 0, 1 );				// has no name
-    aBits.writeUB( 0, 1 );				// no ratio
-    aBits.writeUB( 0, 1 );				// no color transform
-    aBits.writeUB( 1, 1 );				// has a matrix
-    aBits.writeUB( 0, 1 );				// places a character
-    aBits.writeUB( 1, 1 );				// defines a character to be moved
+    aBits.writeUB( 0, 1 );              // Has no Clip Actions
+    aBits.writeUB( 0, 1 );              // reserved
+    aBits.writeUB( 0, 1 );              // has no name
+    aBits.writeUB( 0, 1 );              // no ratio
+    aBits.writeUB( 0, 1 );              // no color transform
+    aBits.writeUB( 1, 1 );              // has a matrix
+    aBits.writeUB( 0, 1 );              // places a character
+    aBits.writeUB( 1, 1 );              // defines a character to be moved
 
     mpTag->addBits( aBits );
-    mpTag->addUI16( nDepth );			// depth
+    mpTag->addUI16( nDepth );           // depth
 
     // #i73264#
     const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
-        _Int16(static_cast<long>(map100thmm(x)*mnDocXScale)), 
+        _Int16(static_cast<long>(map100thmm(x)*mnDocXScale)),
         _Int16(static_cast<long>(map100thmm(y)*mnDocYScale))));
-    mpTag->addMatrix( aMatrix );		// transformation matrix
+    mpTag->addMatrix( aMatrix );        // transformation matrix
 
     endTag();
 }
@@ -296,7 +296,7 @@ void Writer::moveShape( sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y )
 void Writer::removeShape( sal_uInt16 nDepth )
 {
     startTag( TAG_REMOVEOBJECT2 );
-    mpTag->addUI16( nDepth );			// depth
+    mpTag->addUI16( nDepth );           // depth
     endTag();
 }
 
@@ -352,7 +352,7 @@ sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf, sal_Int16 x, sal_Int16 
 {
     mpVDev->SetMapMode( rMtf.GetPrefMapMode() );
     Impl_writeActions( rMtf );
-    
+
     sal_uInt16 nId = 0;
     sal_uInt16 iDepth = 1;
     {
@@ -402,13 +402,13 @@ sal_uInt16 Writer::defineShape( const PolyPolygon& rPolyPoly, const FillStyle& r
 
 
     // FILLSTYLEARRAY
-    mpTag->addUI8( 1 );			// FillStyleCount
+    mpTag->addUI8( 1 );         // FillStyleCount
 
     // FILLSTYLE
     rFillStyle.addTo( mpTag );
 
     // LINESTYLEARRAY
-    mpTag->addUI8( 0 );			// LineStyleCount
+    mpTag->addUI8( 0 );         // LineStyleCount
 
     // Number of fill and line index bits to 1
     mpTag->addUI8( 0x11 );
@@ -423,7 +423,7 @@ sal_uInt16 Writer::defineShape( const PolyPolygon& rPolyPoly, const FillStyle& r
         if( rPoly.GetSize() )
             Impl_addPolygon( aBits, rPoly, true );
     }
-    
+
     Impl_addEndShapeRecord( aBits );
 
     mpTag->addBits( aBits );
@@ -446,14 +446,14 @@ sal_uInt16 Writer::defineShape( const PolyPolygon& rPolyPoly, sal_uInt16 nLineWi
 
 
     // FILLSTYLEARRAY
-    mpTag->addUI8( 0 );			// FillStyleCount
+    mpTag->addUI8( 0 );         // FillStyleCount
 
     // LINESTYLEARRAY
-    mpTag->addUI8( 1 );			// LineStyleCount
+    mpTag->addUI8( 1 );         // LineStyleCount
 
     // LINESTYLE
-    mpTag->addUI16( nLineWidth );	// Width of line in twips
-    mpTag->addRGBA( rLineColor );	// Color
+    mpTag->addUI16( nLineWidth );   // Width of line in twips
+    mpTag->addRGBA( rLineColor );   // Color
 
     // Number of fill and line index bits to 1
     mpTag->addUI8( 0x11 );
@@ -468,7 +468,7 @@ sal_uInt16 Writer::defineShape( const PolyPolygon& rPolyPoly, sal_uInt16 nLineWi
         if( rPoly.GetSize() )
             Impl_addPolygon( aBits, rPoly, false );
     }
-    
+
     Impl_addEndShapeRecord( aBits );
 
     mpTag->addBits( aBits );
@@ -518,7 +518,7 @@ sal_Bool Writer::streamSound( const char * filename )
         int samples_per_frame = 22050 / 12; // AS: (samples/sec) / (frames/sec) = samples/frame
         int mp3buffer_size = static_cast<int>(samples_per_frame*1.25 + 7200 + 7200);
 
-        
+
         startTag(TAG_SOUNDSTREAMHEAD2);
 
         mpTag->addUI8(2<<2 | 1<<1 | 0<<0);  // Preferred mixer format ??
@@ -547,7 +547,7 @@ sal_Bool Writer::streamSound( const char * filename )
 // mp3buffer_size (in bytes) = 1.25*num_samples + 7200.
 // num_samples = the number of PCM samples in each channel.  It is
 // not the sum of the number of samples in the L and R channels.
-// 
+//
 // The return code = number of bytes output in mp3buffer.  This can be 0.
 // If it is <0, an error occured.
 
@@ -560,7 +560,7 @@ sal_Bool Writer::streamSound( const char * filename )
 
             // AS: Since we're mono, left and right sample buffs are the same
             //  ie, samplebuff (which is why we pass it twice).
-            int ret = lame_encode_buffer(m_lame_flags, sample_buff + samples_written, 
+            int ret = lame_encode_buffer(m_lame_flags, sample_buff + samples_written,
                                             sample_buff + samples_written,
                                             samples_to_write, mp3buffer, mp3buffer_size);
 

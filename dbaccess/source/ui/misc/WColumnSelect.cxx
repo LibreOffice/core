@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -186,7 +186,7 @@ sal_Bool OWizColumnSelect::LeavePage()
 {
     DBG_CHKTHIS(OWizColumnSelect,NULL);
 
-    //	m_pParent->getColumns()->clear();
+    //  m_pParent->getColumns()->clear();
     m_pParent->clearDestColumns();
 
     for(sal_uInt16 i=0 ; i< m_lbNewColumnNames.GetEntryCount();++i)
@@ -239,7 +239,7 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
 
     Reference< XDatabaseMetaData > xMetaData( m_pParent->m_xDestConnection->getMetaData() );
     ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
-    sal_Int32 nMaxNameLen		= m_pParent->getMaxColumnNameLength();
+    sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
 
     ::comphelper::TStringMixEqualFunctor aCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
     ::std::vector< ::rtl::OUString> aRightColumns;
@@ -289,7 +289,7 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
     // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
     Reference< XDatabaseMetaData >  xMetaData( m_pParent->m_xDestConnection->getMetaData() );
     ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
-    sal_Int32 nMaxNameLen		= m_pParent->getMaxColumnNameLength();
+    sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
 
     ::comphelper::TStringMixEqualFunctor aCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
     ::std::vector< ::rtl::OUString> aRightColumns;
@@ -320,12 +320,12 @@ void OWizColumnSelect::fillColumns(ListBox* pRight,::std::vector< ::rtl::OUStrin
         _rRightColumns.push_back(pRight->GetEntry(i));
 }
 // -----------------------------------------------------------------------------
-void OWizColumnSelect::createNewColumn(	ListBox* _pListbox,
+void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
                                         OFieldDescription* _pSrcField,
                                         ::std::vector< ::rtl::OUString>& _rRightColumns,
-                                        const ::rtl::OUString&	_sColumnName,
-                                        const ::rtl::OUString&	_sExtraChars,
-                                        sal_Int32				_nMaxNameLen,
+                                        const ::rtl::OUString&  _sColumnName,
+                                        const ::rtl::OUString&  _sExtraChars,
+                                        sal_Int32               _nMaxNameLen,
                                         const ::comphelper::TStringMixEqualFunctor& _aCase)
 {
     ::rtl::OUString sConvertedName = m_pParent->convertColumnName(TMultiListBoxEntryFindFunctor(&_rRightColumns,_aCase),
@@ -346,12 +346,12 @@ void OWizColumnSelect::createNewColumn(	ListBox* _pListbox,
         m_pParent->showColumnTypeNotSupported(sConvertedName);
 }
 // -----------------------------------------------------------------------------
-void OWizColumnSelect::moveColumn(	ListBox* _pRight,
+void OWizColumnSelect::moveColumn(  ListBox* _pRight,
                                     ListBox* _pLeft,
                                     ::std::vector< ::rtl::OUString>& _rRightColumns,
-                                    const ::rtl::OUString&	_sColumnName,
-                                    const ::rtl::OUString&	_sExtraChars,
-                                    sal_Int32				_nMaxNameLen,
+                                    const ::rtl::OUString&  _sColumnName,
+                                    const ::rtl::OUString&  _sExtraChars,
+                                    sal_Int32               _nMaxNameLen,
                                     const ::comphelper::TStringMixEqualFunctor& _aCase)
 {
     if(_pRight == &m_lbNewColumnNames)
@@ -391,10 +391,10 @@ void OWizColumnSelect::moveColumn(	ListBox* _pRight,
 // -----------------------------------------------------------------------------
 // Simply returning fields back to their original position is
 // not enough. We need to take into acccount what fields have
-// been removed earlier and adjust accordingly. Based on the 
+// been removed earlier and adjust accordingly. Based on the
 // algorithm employed in moveColumn().
 USHORT OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
-                                               const ::rtl::OUString&	_sColumnName,
+                                               const ::rtl::OUString&   _sColumnName,
                                                ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                                const ::comphelper::TStringMixEqualFunctor& _aCase)
 {

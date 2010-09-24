@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,10 +77,10 @@ namespace slideshow
                 Vector of timeout values, to wait before the next
                 frame is shown.
              */
-            IntrinsicAnimationActivity( const SlideShowContext& 		rContext,
-                                        const DrawShapeSharedPtr&		rDrawShape,
-                                        const WakeupEventSharedPtr&		rWakeupEvent,
-                                        const ::std::vector<double>&	rTimeouts,
+            IntrinsicAnimationActivity( const SlideShowContext&         rContext,
+                                        const DrawShapeSharedPtr&       rDrawShape,
+                                        const WakeupEventSharedPtr&     rWakeupEvent,
+                                        const ::std::vector<double>&    rTimeouts,
                                         ::std::size_t                   nNumLoops,
                                         CycleMode                       eCycleMode );
 
@@ -126,10 +126,10 @@ namespace slideshow
 
         //////////////////////////////////////////////////////////////////////
 
-        IntrinsicAnimationActivity::IntrinsicAnimationActivity( const SlideShowContext& 		rContext,
-                                                                const DrawShapeSharedPtr&		rDrawShape,
-                                                                const WakeupEventSharedPtr&		rWakeupEvent,
-                                                                const ::std::vector<double>&	rTimeouts,
+        IntrinsicAnimationActivity::IntrinsicAnimationActivity( const SlideShowContext&         rContext,
+                                                                const DrawShapeSharedPtr&       rDrawShape,
+                                                                const WakeupEventSharedPtr&     rWakeupEvent,
+                                                                const ::std::vector<double>&    rTimeouts,
                                                                 ::std::size_t                   nNumLoops,
                                                                 CycleMode                       eCycleMode ) :
             maContext( rContext ),
@@ -142,7 +142,7 @@ namespace slideshow
             mnNumLoops(nNumLoops),
             mnLoopCount(0),
             mbIsActive(false)
-        { 
+        {
             ENSURE_OR_THROW( rContext.mpSubsettableShapeManager,
                               "IntrinsicAnimationActivity::IntrinsicAnimationActivity(): Invalid shape manager" );
             ENSURE_OR_THROW( rDrawShape,
@@ -152,7 +152,7 @@ namespace slideshow
             ENSURE_OR_THROW( !rTimeouts.empty(),
                               "IntrinsicAnimationActivity::IntrinsicAnimationActivity(): Empty timeout vector" );
 
-            maContext.mpSubsettableShapeManager->addIntrinsicAnimationHandler( 
+            maContext.mpSubsettableShapeManager->addIntrinsicAnimationHandler(
                 mpListener );
         }
 
@@ -169,7 +169,7 @@ namespace slideshow
             maTimeouts.clear();
             mnCurrIndex = 0;
 
-            maContext.mpSubsettableShapeManager->removeIntrinsicAnimationHandler( 
+            maContext.mpSubsettableShapeManager->removeIntrinsicAnimationHandler(
                 mpListener );
         }
 
@@ -230,13 +230,13 @@ namespace slideshow
 
                     mpWakeupEvent->start();
                     mpWakeupEvent->setNextTimeout( maTimeouts[nTrueIndex] );
-                
+
                     mnLoopCount += (mnCurrIndex + 1) / (2*nNumFrames);
                     nNewIndex = (mnCurrIndex + 1) % 2*nNumFrames;
                     break;
                 }
             }
-            
+
             maContext.mrEventQueue.addEvent( mpWakeupEvent );
             maContext.mpSubsettableShapeManager->notifyShapeUpdate( pDrawShape );
             mnCurrIndex = nNewIndex;
@@ -271,14 +271,14 @@ namespace slideshow
         //////////////////////////////////////////////////////////////////////
 
         ActivitySharedPtr createIntrinsicAnimationActivity(
-            const SlideShowContext& 		rContext,
-            const DrawShapeSharedPtr&		rDrawShape,
-            const WakeupEventSharedPtr&		rWakeupEvent,
-            const ::std::vector<double>&	rTimeouts,
+            const SlideShowContext&         rContext,
+            const DrawShapeSharedPtr&       rDrawShape,
+            const WakeupEventSharedPtr&     rWakeupEvent,
+            const ::std::vector<double>&    rTimeouts,
             ::std::size_t                   nNumLoops,
             CycleMode                       eCycleMode )
         {
-            return ActivitySharedPtr( 
+            return ActivitySharedPtr(
                 new IntrinsicAnimationActivity(rContext,
                                                rDrawShape,
                                                rWakeupEvent,

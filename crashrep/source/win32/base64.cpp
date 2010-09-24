@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
+
 #include <stdio.h>
 #include <string.h>
 #include "base64.h"
@@ -49,7 +49,7 @@ extern "C" size_t base64_encode( FILE *fin, FILE *fout )
 
         if ( nBytes )
         {
-            unsigned long value = 
+            unsigned long value =
                 ((unsigned long)in_buffer[0]) << 16 |
                 ((unsigned long)in_buffer[1]) << 8 |
                 ((unsigned long)in_buffer[2]) << 0;

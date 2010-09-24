@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,11 +52,11 @@ using namespace ::dbtools;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
-//	using namespace ::com::sun::star::sdb;
+//  using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-//	using namespace ::cppu;
+//  using namespace ::cppu;
 using namespace ::osl;
 
 void OBookmarkSet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter)
@@ -142,7 +142,7 @@ void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const conne
 void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::updateRow" );
-    //	OCacheSet::updateRow( _rInsertRow,_rOrginalRow,_xTable);
+    //  OCacheSet::updateRow( _rInsertRow,_rOrginalRow,_xTable);
     Reference<XRowUpdate> xUpdRow(m_xRowLocate,UNO_QUERY);
     if(!xUpdRow.is())
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_XROWUPDATE ), SQL_GENERAL_ERROR, *this );

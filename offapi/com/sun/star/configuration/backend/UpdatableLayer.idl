@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,19 +52,19 @@ module com { module sun { module star { module configuration { module backend {
   <p>An updatable layer can be read or replaced with another layer.
   </p>
 
-  @since OOo 1.1.2  
+  @since OOo 1.1.2
   */
 published service UpdatableLayer
 {
     //--------------------------------------------------------------------------
 
     /**
-        handles read access to the contents of the layer. 
+        handles read access to the contents of the layer.
 
-        <p> If the implementation supports 
+        <p> If the implementation supports
          <type scope="com::sun::star::util">XTimeStamped</type>,
          then after executing <member>XUpdatableLayer::replaceWith()</member>
-         the timestamp will be the one for the replaced contents and 
+         the timestamp will be the one for the replaced contents and
          if reading after updates is supported the next read will reproduce the
          replaced data.
         </p>
@@ -74,19 +74,19 @@ published service UpdatableLayer
     //--------------------------------------------------------------------------
 
     /**
-      provides write access to the contents of the layer. 
-      
-       <p> Depending of the actual type (simple, i.e pure <type>XLayer</type> or 
-       composite, i.e <type>XCompositeLayer</type>) of the current layer and 
-       the provided replacement layer, the operation performed 
+      provides write access to the contents of the layer.
+
+       <p> Depending of the actual type (simple, i.e pure <type>XLayer</type> or
+       composite, i.e <type>XCompositeLayer</type>) of the current layer and
+       the provided replacement layer, the operation performed
        by <member>XUpdatableLayer::replaceWith()</member>, will vary.
        </p>
        <p> For the different current/replacement layer combinations, we have:
        <dl>
-           <dt>Simple/Simple<dt> 
+           <dt>Simple/Simple<dt>
            <dd>the provided layer's contents replace the current one's.</dd>
 
-           <dt>Composite/Composite<dt> 
+           <dt>Composite/Composite<dt>
            <dd>all layers (main and sub) present in the
                provided layer are used to replace the corresponding current
                layer contents. Sublayers present in the current layer but
@@ -95,12 +95,12 @@ published service UpdatableLayer
                the current layer.
             </dd>
 
-           <dt>Simple/Composite<dt> 
-           <dd>the main layer and sublayers of the provided layer 
-               are merged into one whose contents replace the current layer. 
+           <dt>Simple/Composite<dt>
+           <dd>the main layer and sublayers of the provided layer
+               are merged into one whose contents replace the current layer.
            </dd>
 
-           <dt>Composite/Simple<dt> 
+           <dt>Composite/Simple<dt>
            <dd>the provided layer is split into a composite one whose contents
                are then used to replace the current layer as described above.
            </dd>
@@ -110,7 +110,7 @@ published service UpdatableLayer
             support conversions of the replacement layer.
             In such a case the sublayers of the provided layer may be ignored
             or all simple data be merged into the main layer.
-       </em> 
+       </em>
        </p>
       */
     interface XUpdatableLayer ;

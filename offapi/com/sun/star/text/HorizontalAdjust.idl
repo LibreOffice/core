@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,46 +24,46 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_HorizontalAdjust_idl__ 
-#define __com_sun_star_text_HorizontalAdjust_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module text { 
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_text_HorizontalAdjust_idl__
+#define __com_sun_star_text_HorizontalAdjust_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
 // DocMerge from xml: enum com::sun::star::text::HorizontalAdjust
 /** enumeration values define the horizontal adjustments of objects.
  */
 published enum HorizontalAdjust
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::text::HorizontalAdjust::LEFT
     /** the object is left adjusted.
      */
-    LEFT, 
- 
-    //------------------------------------------------------------------------- 
-     
+    LEFT,
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::text::HorizontalAdjust::CENTER
     /** the object is adjusted to the center.
      */
-    CENTER, 
- 
-    //------------------------------------------------------------------------- 
-     
+    CENTER,
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: value com::sun::star::text::HorizontalAdjust::RIGHT
     /** the object is right adjusted.
      */
-    RIGHT 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-#endif 
+    RIGHT
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

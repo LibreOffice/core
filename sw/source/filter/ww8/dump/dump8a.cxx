@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,9 +29,9 @@
 #include "precompiled_sw.hxx"
 
 
-//#include <stdio.h>		// SEEK_SET
-#include <string.h> 	// memset(), ...
-#include <io.h> 		// access()
+//#include <stdio.h>        // SEEK_SET
+#include <string.h>     // memset(), ...
+#include <io.h>         // access()
 
 
 //#include "defs.hxx"
@@ -50,12 +50,12 @@
 WW8ScannerBase* pSBase = 0;
 //WW8PLCFMan* pPLCFMan = 0;
 
-WW8Fib* 		   pWwFib = 0;
-SvStorageRef*	   pxStor;
+WW8Fib*            pWwFib = 0;
+SvStorageRef*      pxStor;
 SvStorageStreamRef xStrm;
-SvStorageStreamRef xTableStream;	// ist bei Ver6-7 mit xStrm identisch,
+SvStorageStreamRef xTableStream;    // ist bei Ver6-7 mit xStrm identisch,
                                     // ansonsten entweder 0TABLE oder 1TABLE
-SvStorageStreamRef xDataStream; 	// ist bei Ver6-7 mit xStrm identisch,
+SvStorageStreamRef xDataStream;     // ist bei Ver6-7 mit xStrm identisch,
                                     // ansonsten DATA
 
 typedef void (*FNDumpData)( void* );
@@ -238,7 +238,7 @@ static void DumpNumList()
             for( USHORT nLevel = 0; nLevel < nWW8MaxListLevel; nLevel++ )
                 *xTableStream >> aStyleIdArr[ nLevel ];
             *xTableStream >> nByte;
-            xTableStream->SeekRel( 1 );		// Dummy ueberlesen
+            xTableStream->SeekRel( 1 );     // Dummy ueberlesen
 
             *pOut << "ListId: " << nLstId
                 << " TemplateId " << nTplId << endl1
@@ -337,7 +337,7 @@ static void DumpBookLow()
     *pOut << endl1;
 
     WW8PLCFspecial aStarts( &xStrm, pWwFib->fcPlcfbkf, pWwFib->lcbPlcfbkf, 4 );
-    WW8PLCFspecial aEnds(	&xStrm, pWwFib->fcPlcfbkl, pWwFib->lcbPlcfbkl, 0, -1, TRUE );
+    WW8PLCFspecial aEnds(   &xStrm, pWwFib->fcPlcfbkl, pWwFib->lcbPlcfbkl, 0, -1, TRUE );
 
     USHORT i = 0;
     while( 1 ){
@@ -384,7 +384,7 @@ static void DumpBookHigh()
         *pOut << indent2 << i << ". Cp:" << hex6 << nPos << dec;
         *pOut << ( ( aBook.GetIsEnd() ) ? " Ende  " : " Anfang" );
         *pOut << " Handle: " << aBook.GetHandle();
-//		*pOut << " Len: " << hex4 << aBook.GetLen() << dec;
+//      *pOut << " Len: " << hex4 << aBook.GetLen() << dec;
         ByteString sName( *aBook.GetName(), RTL_TEXTENCODING_MS_1252 );
         if( sName.Len() )
             *pOut << " Name: " << sName.GetBuffer() << endl1;
@@ -425,51 +425,51 @@ static BOOL DumpField2( WW8PLCFspecial& rPlc )
 {
     WW8_CP nSCode, nECode, nSRes, nERes;
     void* pData;
-    if( !rPlc.Get( nSCode, pData ) )				// Ende des Plc1 ?
+    if( !rPlc.Get( nSCode, pData ) )                // Ende des Plc1 ?
         return FALSE;
     rPlc++;
 
     if( ((BYTE*)pData)[0] != 19 ){
         *pOut << "Field Error, " << (USHORT)((BYTE*)pData)[0] << endl1;
-        return TRUE;	// nicht abbrechen
+        return TRUE;    // nicht abbrechen
     }
 
     *pOut << "       " << indent1 << begin1 << "Field" << " Cp: " << hex
           << nSCode << " Typ: " << dec << (USHORT)((BYTE*)pData)[1] << endl1;
 
-    if( !rPlc.Get( nECode, pData ) )			// Ende des Plc1 ?
+    if( !rPlc.Get( nECode, pData ) )            // Ende des Plc1 ?
         return FALSE;
 
     DumpShortPlainText( nSCode, nECode - nSCode, "Code" );  // Code, bei nested abgeschnitten
-    nSRes = nECode; 							// Default
+    nSRes = nECode;                             // Default
 
 
-    while( ((BYTE*)pData)[0] == 19 ){			// immer noch neue (nested) Anfaenge ?
-        DumpField2( rPlc ); 					// nested Field im Beschreibungsteil
-        if( !rPlc.Get( nSRes, pData ) ) 		// Ende des Plc1 ?
+    while( ((BYTE*)pData)[0] == 19 ){           // immer noch neue (nested) Anfaenge ?
+        DumpField2( rPlc );                     // nested Field im Beschreibungsteil
+        if( !rPlc.Get( nSRes, pData ) )         // Ende des Plc1 ?
             return FALSE;
     }
 
-    if( ((BYTE*)pData)[0] == 20 ){				// Field Separator ?
+    if( ((BYTE*)pData)[0] == 20 ){              // Field Separator ?
         rPlc++;
         *pOut << "       " << indent1 << "Field Seperator" << " Cp: " << hex << nSRes
               << ", Flags = 0x" << hex << (USHORT)((BYTE*)pData)[1] << dec << endl1;
-        if( !rPlc.Get( nERes, pData ) ) 		// Ende des Plc1 ?
+        if( !rPlc.Get( nERes, pData ) )         // Ende des Plc1 ?
             return FALSE;
 
-        while( ((BYTE*)pData)[0] == 19 ){		// immer noch neue (nested) Anfaenge ?
-            DumpField2( rPlc ); 				// nested Field im Resultatteil
-            if( !rPlc.Get( nERes, pData ) ) 	// Ende des Plc1 ?
+        while( ((BYTE*)pData)[0] == 19 ){       // immer noch neue (nested) Anfaenge ?
+            DumpField2( rPlc );                 // nested Field im Resultatteil
+            if( !rPlc.Get( nERes, pData ) )     // Ende des Plc1 ?
                 return FALSE;
         }
         DumpShortPlainText( nSRes, nERes - nSRes, "Result" );   // Result, bei nested incl. nested Field
 
     }else{
-        nERes = nSRes;							// Kein Result vorhanden
+        nERes = nSRes;                          // Kein Result vorhanden
     }
 
     rPlc++;
-    if( ((BYTE*)pData)[0] == 21 ){				// Field Ende ?
+    if( ((BYTE*)pData)[0] == 21 ){              // Field Ende ?
         *pOut << "       " << end1 << " Field " << " Cp: " << hex << nERes
               << ", Flags = 0x" << hex << (USHORT)((BYTE*)pData)[1] << dec << endl1;
     }else{
@@ -499,7 +499,7 @@ static void DumpField1( WW8_FC nPos, long nLen, char* pName )
 
             << endl1;
 
-//	while( DumpField2( aPlc ) ){}
+//  while( DumpField2( aPlc ) ){}
     while( (long)aPlc.GetIdx() < aPlc.GetIMax() )
     {
         DumpField3( aPlc );
@@ -528,7 +528,7 @@ static void DumpFonts()
 
         sOut = ByteString( p->sFontname, RTL_TEXTENCODING_MS_1252 );
         *pOut << "Id:" << i << " Name:\"" << sOut.GetBuffer() << '"';    // Name
-        if( p->ibszAlt )					// gibt es einen alternativen Font ?
+        if( p->ibszAlt )                    // gibt es einen alternativen Font ?
         {
             sOut = ByteString( p->sFontname.Copy( p->ibszAlt ),
                                 RTL_TEXTENCODING_MS_1252 );
@@ -545,7 +545,7 @@ static void DumpFonts()
 
 
 //-----------------------------------------
-//			class DFib
+//          class DFib
 //-----------------------------------------
 
 class DFib: public WW8Fib
@@ -758,7 +758,7 @@ void DFib::Dump()
 }
 
 //-----------------------------------------
-//			class DStyle
+//          class DStyle
 //-----------------------------------------
 
 class DStyle: public WW8Style
@@ -772,7 +772,7 @@ public:
 };
 
 //-----------------------------------------
-//		universelle Hilfsroutinen
+//      universelle Hilfsroutinen
 //-----------------------------------------
 
 static void DumpIt( SvStream& rSt, short nLen )
@@ -822,7 +822,7 @@ static short DumpSprm( BYTE nVersion, SvStream& rSt, short nSprmsLen )
     indent( *pOut, rSt );
 
     BYTE x[512];
-    rSt.Read( x, 512 ); 				// Token und folgende lesen
+    rSt.Read( x, 512 );                 // Token und folgende lesen
 
     USHORT nId = WW8GetSprmId( nVersion, x, &nDelta );
 
@@ -849,9 +849,9 @@ static short DumpSprm( BYTE nVersion, SvStream& rSt, short nSprmsLen )
     rSt.Seek( nSprmPos + 1 + nDelta + WW8SprmDataOfs( nId ) );// gehe zum eigentlichen
                                                      // Inhalt
     if( rSprm.pOutFnc )
-        rSprm.pOutFnc( rSt, nSprmNL );		// Rufe Ausgabefunktion
+        rSprm.pOutFnc( rSt, nSprmNL );      // Rufe Ausgabefunktion
     else
-        DumpItSmall( rSt, nSprmNL );		// oder Dumper
+        DumpItSmall( rSt, nSprmNL );        // oder Dumper
     *pOut << endl1;
 
     return nSprmsLen;
@@ -876,7 +876,7 @@ static void DumpMemSprm( BYTE nVersion, INT16* pSprm )
     BYTE* p = (BYTE*)pSprm;
     USHORT nId = WW8GetSprmId( nVersion, p, 0 );
 
-    *pOut << (USHORT)p[0];						// Ausgabe: Token in Dez
+    *pOut << (USHORT)p[0];                      // Ausgabe: Token in Dez
     *pOut << '/' << WW8GetSprmSizeBrutto( nVersion, p, &nId );   // Laenge incl. alles in Dez
     *pOut << '/' << WW8GetSprmSizeNetto(  nVersion, p, &nId );    // Laenge excl Token in Dez
 
@@ -887,7 +887,7 @@ static void DumpMemSprm( BYTE nVersion, INT16* pSprm )
 
 
 //-----------------------------------------
-//			Hilfsroutinen: SEPX
+//          Hilfsroutinen: SEPX
 //-----------------------------------------
 void DumpSepx( BYTE nVersion, long nPos )
 {
@@ -904,7 +904,7 @@ void DumpSepx( BYTE nVersion, long nPos )
 
 
 //-----------------------------------------
-//	Hilfsroutinen: FKP.CHPX, FKP.PAPX
+//  Hilfsroutinen: FKP.CHPX, FKP.PAPX
 //-----------------------------------------
 static void DumpPhe( WW8_PHE_Base& rPhe )
 {
@@ -960,7 +960,7 @@ void DumpFkp( BYTE nVersion, long nPos, short nItemSize, ePLCFT ePlc )
     int i;
     WW8_FC aF[2];
     BYTE c;
-    long nStartOfs = nPos + ( nElem + 1 ) * 4;	// bei dieser Pos faengt Offset-Array an
+    long nStartOfs = nPos + ( nElem + 1 ) * 4;  // bei dieser Pos faengt Offset-Array an
     short nOfs;
     WW8_PHE_Base aPhe;
 
@@ -968,14 +968,14 @@ void DumpFkp( BYTE nVersion, long nPos, short nItemSize, ePLCFT ePlc )
     {
         xStrm->Seek( nPos + i * 4 );
         indent( *pOut, *xStrm );
-        xStrm->Read( aF, sizeof( aF ) );			// lese 2 FCs
+        xStrm->Read( aF, sizeof( aF ) );            // lese 2 FCs
 
         xStrm->Seek( nStartOfs + i * nItemSize );
-        xStrm->Read( &c, 1 );		// lese Word Offset ( evtl. Teil von BX )
+        xStrm->Read( &c, 1 );       // lese Word Offset ( evtl. Teil von BX )
         if( ePlc == PAP )
             xStrm->Read( &aPhe, sizeof( aPhe ) );
 
-        nOfs= c * 2;							// -> Byte Offset
+        nOfs= c * 2;                            // -> Byte Offset
         xStrm->Seek( nPos + nOfs );
         xStrm->Read( &c, 1 );
 
@@ -996,7 +996,7 @@ void DumpFkp( BYTE nVersion, long nPos, short nItemSize, ePLCFT ePlc )
                 break;
 
             case PAP:
-                short nLen = c * 2; 	// So weit bis zum naechsten !
+                short nLen = c * 2;     // So weit bis zum naechsten !
 
                 short nIStd;
 
@@ -1018,18 +1018,18 @@ void DumpFkp( BYTE nVersion, long nPos, short nItemSize, ePLCFT ePlc )
 }
 
 //-----------------------------------------
-//		WW8_DOP ( Document Properties )
+//      WW8_DOP ( Document Properties )
 //-----------------------------------------
 
 //!!! WW8LoadDop gibt's jetzt auch in WW8scan.cxx
 void DumpDop( WW8Fib& rFib )
 {
     // nicht loeschen!
-    xTableStream->Seek( rFib.fcDop );	// diese Aktion dient lediglich dazu, die
+    xTableStream->Seek( rFib.fcDop );   // diese Aktion dient lediglich dazu, die
                         // Positions-Ausgabe  der folgenden Anweisung
                         // mit dem alten Dumper uebereinstimmen zu lassen.
 
-//	*pOut << begin( *pOut, *xTableStream ) << "Dop, Size " << rFib.lcbDop << ", DefaultSize 84" << endl1;
+//  *pOut << begin( *pOut, *xTableStream ) << "Dop, Size " << rFib.lcbDop << ", DefaultSize 84" << endl1;
     begin( *pOut, *xTableStream ) << "Dop, Size " << rFib.lcbDop << ", DefaultSize 84" << endl1;
 
     WW8Dop* pD = new WW8Dop( *xTableStream, rFib.nFib, rFib.fcDop, rFib.lcbDop );
@@ -1156,7 +1156,7 @@ void DumpDop( WW8Fib& rFib )
 }
 
 //-----------------------------------------
-//	  PLCF.PCD ( Piece Table )
+//    PLCF.PCD ( Piece Table )
 //-----------------------------------------
 
 #ifdef __WW8_NEEDS_PACK
@@ -1167,13 +1167,13 @@ struct WW8_PCD1
 {
     BYTE aBits1;
     BYTE aBits2;
-//	INT16 fNoParaLast : 1;	// when 1, means that piece contains no end of parag
-//	BYTE fPaphNil : 1;		// used internally by Word
-//	BYTE fCopied : 1;		// used internally by Word
-    //			*	int :5
-//	BYTE aBits2;			// fn int:8, used internally by Word
-    INT32 fc;				// file offset of beginning of piece. The size of th
-    INT16 prm;				// PRM contains either a single sprm or else an inde
+//  INT16 fNoParaLast : 1;  // when 1, means that piece contains no end of parag
+//  BYTE fPaphNil : 1;      // used internally by Word
+//  BYTE fCopied : 1;       // used internally by Word
+    //          *   int :5
+//  BYTE aBits2;            // fn int:8, used internally by Word
+    INT32 fc;               // file offset of beginning of piece. The size of th
+    INT16 prm;              // PRM contains either a single sprm or else an inde
 };
 
 #ifdef __WW8_NEEDS_PACK
@@ -1251,12 +1251,12 @@ static void DumpPcd( BYTE nVersion, long nPos, long nLen )
         indent( *pOut, *xTableStream ) << "grpprl No. " << i << ", Len: " << cb << endl1;
 
         long nPos = xTableStream->Tell();
-        DumpSprms( nVersion, *xTableStream, cb );					// Dumpe Sprms
-        xTableStream->Seek( nPos + cb );			// gehe hinter grpprl
+        DumpSprms( nVersion, *xTableStream, cb );                   // Dumpe Sprms
+        xTableStream->Seek( nPos + cb );            // gehe hinter grpprl
         nLen1 -= cb;
         i++;
-//		*pOut << "       " << indent1 << "grpprl: " << cb << "Bytes ueberlesen";
-//		*pOut << endl1;
+//      *pOut << "       " << indent1 << "grpprl: " << cb << "Bytes ueberlesen";
+//      *pOut << endl1;
     }
     INT32 nLen2;
     xTableStream->Read( &nLen2, 4 );
@@ -1271,7 +1271,7 @@ static void DumpPcd( BYTE nVersion, long nPos, long nLen )
 }
 
 //-----------------------------------------
-//	  PLCF.CHPX, PLCF.PAPX, PLCF.SEPX
+//    PLCF.CHPX, PLCF.PAPX, PLCF.SEPX
 //-----------------------------------------
 
 static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
@@ -1307,7 +1307,7 @@ static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
                     return;
     }
 
-//	SvStream* pSt = (SEP == ePlc) ? &xTableStream : &xStrm;
+//  SvStream* pSt = (SEP == ePlc) ? &xTableStream : &xStrm;
     SvStream* pSt = &xTableStream;
 
     WW8PLCF aPlc( pSt, nPos, nLen, pPlcSizeTab[ ePlc ] );
@@ -1414,7 +1414,7 @@ static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
 }
 
 //-----------------------------------------
-//				Text ohne Attribute
+//              Text ohne Attribute
 //-----------------------------------------
 
 static void DumpPlainText1( WW8_CP nStartCp, long nTextLen )
@@ -1433,7 +1433,7 @@ static void DumpPlainText1( WW8_CP nStartCp, long nTextLen )
             *pOut << endl1;
             indent( *pOut, *xStrm );
         }
-//		DumpChar( c );
+//      DumpChar( c );
     }
 }
 
@@ -1459,7 +1459,7 @@ void DumpPlainText( WW8_CP nStartCp, long nTextLen, char* pName )
 }
 
 //-----------------------------------------
-//				Text mit Attributen
+//              Text mit Attributen
 //-----------------------------------------
 
 BOOL DumpChar( BYTE c )
@@ -1469,7 +1469,7 @@ BOOL DumpChar( BYTE c )
         return FALSE;
     }else{
         switch (c){
-        case 0xe4:							// dt. Umlaute
+        case 0xe4:                          // dt. Umlaute
         case 0xf6:
         case 0xfc:
         case 0xdf:
@@ -1489,7 +1489,7 @@ BOOL DumpChar( BYTE c )
 }
 
 //-----------------------------------------
-//		Header / Footer
+//      Header / Footer
 //-----------------------------------------
 
 static void DumpPlcText( WW8_FC nPos, long nLen, long nOfs,
@@ -1598,7 +1598,7 @@ void DumpTxtStoryEntry( void* pData )
         short* ps = (short*)p;
         *pOut << " fReusable: 0x" << *ps++ << endl1;
         p = (long*)ps;
-        ++p;		// reserved
+        ++p;        // reserved
         *pOut << "       " << indent1 << "lid: 0x" << *p++;
         *pOut << " txidUndo: 0x" << *p++ << dec << endl1;
 
@@ -1763,27 +1763,27 @@ BOOL ReadEsherRec( SvStream& rStrm, UINT8& rVer, UINT16& rInst,
 const char* _GetShapeTypeNm( UINT16 nId )
 {
     const char* aNmArr[ 202 + 2 + 1 ] = {
-/*   0*/	"NotPrimitive","Rectangle","RoundRectangle","Ellipse","Diamond","IsocelesTriangle","RightTriangle","Parallelogram","Trapezoid","Hexagon",
-/*  10*/	"Octagon","Plus","Star","Arrow","ThickArrow","HomePlate","Cube","Balloon","Seal","Arc",
-/*  20*/	"Line","Plaque","Can","Donut","TextSimple","TextOctagon","TextHexagon","TextCurve","TextWave","TextRing",
-/*  30*/	"TextOnCurve","TextOnRing","StraightConnector1","BentConnector2","BentConnector3","BentConnector4","BentConnector5","CurvedConnector2","CurvedConnector3","CurvedConnector4",
-/*  40*/	"CurvedConnector5","Callout1","Callout2","Callout3","AccentCallout1","AccentCallout2","AccentCallout3","BorderCallout1","BorderCallout2","BorderCallout3",
-/*  50*/	"AccentBorderCallout1","AccentBorderCallout2","AccentBorderCallout3","Ribbon","Ribbon2","Chevron","Pentagon","NoSmoking","Seal8","Seal16",
-/*  60*/	"Seal32","WedgeRectCallout","WedgeRRectCallout","WedgeEllipseCallout","Wave","FoldedCorner","LeftArrow","DownArrow","UpArrow","LeftRightArrow",
-/*  70*/	"UpDownArrow","IrregularSeal1","IrregularSeal2","LightningBolt","Heart","PictureFrame","QuadArrow","LeftArrowCallout","RightArrowCallout","UpArrowCallout",
-/*  80*/	"DownArrowCallout","LeftRightArrowCallout","UpDownArrowCallout","QuadArrowCallout","Bevel","LeftBracket","RightBracket","LeftBrace","RightBrace","LeftUpArrow",
-/*  90*/	"BentUpArrow","BentArrow","Seal24","StripedRightArrow","NotchedRightArrow","BlockArc","SmileyFace","VerticalScroll","HorizontalScroll","CircularArrow",
-/* 100*/	"NotchedCircularArrow","UturnArrow","CurvedRightArrow","CurvedLeftArrow","CurvedUpArrow","CurvedDownArrow","CloudCallout","EllipseRibbon","EllipseRibbon2","FlowChartProcess",
-/* 110*/	"FlowChartDecision","FlowChartInputOutput","FlowChartPredefinedProcess","FlowChartInternalStorage","FlowChartDocument","FlowChartMultidocument","FlowChartTerminator","FlowChartPreparation","FlowChartManualInput","FlowChartManualOperation",
-/* 120*/	"FlowChartConnector","FlowChartPunchedCard","FlowChartPunchedTape","FlowChartSummingJunction","FlowChartOr","FlowChartCollate","FlowChartSort","FlowChartExtract","FlowChartMerge","FlowChartOfflineStorage",
-/* 130*/	"FlowChartOnlineStorage","FlowChartMagneticTape","FlowChartMagneticDisk","FlowChartMagneticDrum","FlowChartDisplay","FlowChartDelay","TextPlainText","TextStop","TextTriangle","TextTriangleInverted",
-/* 140*/	"TextChevron","TextChevronInverted","TextRingInside","TextRingOutside","TextArchUpCurve","TextArchDownCurve","TextCircleCurve","TextButtonCurve","TextArchUpPour","TextArchDownPour",
-/* 150*/	"TextCirclePour","TextButtonPour","TextCurveUp","TextCurveDown","TextCascadeUp","TextCascadeDown","TextWave1","TextWave2","TextWave3","TextWave4",
-/* 160*/	"TextInflate","TextDeflate","TextInflateBottom","TextDeflateBottom","TextInflateTop","TextDeflateTop","TextDeflateInflate","TextDeflateInflateDeflate","TextFadeRight","TextFadeLeft",
-/* 170*/	"TextFadeUp","TextFadeDown","TextSlantUp","TextSlantDown","TextCanUp","TextCanDown","FlowChartAlternateProcess","FlowChartOffpageConnector","Callout90","AccentCallout90",
-/* 180*/	"BorderCallout90","AccentBorderCallout90","LeftRightUpArrow","Sun","Moon","BracketPair","BracePair","Seal4","DoubleWave","ActionButtonBlank",
-/* 190*/	"ActionButtonHome","ActionButtonHelp","ActionButtonInformation","ActionButtonForwardNext","ActionButtonBackPrevious","ActionButtonEnd","ActionButtonBeginning","ActionButtonReturn","ActionButtonDocument","ActionButtonSound",
-/* 200*/	"ActionButtonMovie","HostControl","TextBox","Nil", "???"
+/*   0*/    "NotPrimitive","Rectangle","RoundRectangle","Ellipse","Diamond","IsocelesTriangle","RightTriangle","Parallelogram","Trapezoid","Hexagon",
+/*  10*/    "Octagon","Plus","Star","Arrow","ThickArrow","HomePlate","Cube","Balloon","Seal","Arc",
+/*  20*/    "Line","Plaque","Can","Donut","TextSimple","TextOctagon","TextHexagon","TextCurve","TextWave","TextRing",
+/*  30*/    "TextOnCurve","TextOnRing","StraightConnector1","BentConnector2","BentConnector3","BentConnector4","BentConnector5","CurvedConnector2","CurvedConnector3","CurvedConnector4",
+/*  40*/    "CurvedConnector5","Callout1","Callout2","Callout3","AccentCallout1","AccentCallout2","AccentCallout3","BorderCallout1","BorderCallout2","BorderCallout3",
+/*  50*/    "AccentBorderCallout1","AccentBorderCallout2","AccentBorderCallout3","Ribbon","Ribbon2","Chevron","Pentagon","NoSmoking","Seal8","Seal16",
+/*  60*/    "Seal32","WedgeRectCallout","WedgeRRectCallout","WedgeEllipseCallout","Wave","FoldedCorner","LeftArrow","DownArrow","UpArrow","LeftRightArrow",
+/*  70*/    "UpDownArrow","IrregularSeal1","IrregularSeal2","LightningBolt","Heart","PictureFrame","QuadArrow","LeftArrowCallout","RightArrowCallout","UpArrowCallout",
+/*  80*/    "DownArrowCallout","LeftRightArrowCallout","UpDownArrowCallout","QuadArrowCallout","Bevel","LeftBracket","RightBracket","LeftBrace","RightBrace","LeftUpArrow",
+/*  90*/    "BentUpArrow","BentArrow","Seal24","StripedRightArrow","NotchedRightArrow","BlockArc","SmileyFace","VerticalScroll","HorizontalScroll","CircularArrow",
+/* 100*/    "NotchedCircularArrow","UturnArrow","CurvedRightArrow","CurvedLeftArrow","CurvedUpArrow","CurvedDownArrow","CloudCallout","EllipseRibbon","EllipseRibbon2","FlowChartProcess",
+/* 110*/    "FlowChartDecision","FlowChartInputOutput","FlowChartPredefinedProcess","FlowChartInternalStorage","FlowChartDocument","FlowChartMultidocument","FlowChartTerminator","FlowChartPreparation","FlowChartManualInput","FlowChartManualOperation",
+/* 120*/    "FlowChartConnector","FlowChartPunchedCard","FlowChartPunchedTape","FlowChartSummingJunction","FlowChartOr","FlowChartCollate","FlowChartSort","FlowChartExtract","FlowChartMerge","FlowChartOfflineStorage",
+/* 130*/    "FlowChartOnlineStorage","FlowChartMagneticTape","FlowChartMagneticDisk","FlowChartMagneticDrum","FlowChartDisplay","FlowChartDelay","TextPlainText","TextStop","TextTriangle","TextTriangleInverted",
+/* 140*/    "TextChevron","TextChevronInverted","TextRingInside","TextRingOutside","TextArchUpCurve","TextArchDownCurve","TextCircleCurve","TextButtonCurve","TextArchUpPour","TextArchDownPour",
+/* 150*/    "TextCirclePour","TextButtonPour","TextCurveUp","TextCurveDown","TextCascadeUp","TextCascadeDown","TextWave1","TextWave2","TextWave3","TextWave4",
+/* 160*/    "TextInflate","TextDeflate","TextInflateBottom","TextDeflateBottom","TextInflateTop","TextDeflateTop","TextDeflateInflate","TextDeflateInflateDeflate","TextFadeRight","TextFadeLeft",
+/* 170*/    "TextFadeUp","TextFadeDown","TextSlantUp","TextSlantDown","TextCanUp","TextCanDown","FlowChartAlternateProcess","FlowChartOffpageConnector","Callout90","AccentCallout90",
+/* 180*/    "BorderCallout90","AccentBorderCallout90","LeftRightUpArrow","Sun","Moon","BracketPair","BracePair","Seal4","DoubleWave","ActionButtonBlank",
+/* 190*/    "ActionButtonHome","ActionButtonHelp","ActionButtonInformation","ActionButtonForwardNext","ActionButtonBackPrevious","ActionButtonEnd","ActionButtonBeginning","ActionButtonReturn","ActionButtonDocument","ActionButtonSound",
+/* 200*/    "ActionButtonMovie","HostControl","TextBox","Nil", "???"
     };
     if( 203 < nId )
         nId = 204;
@@ -1796,296 +1796,296 @@ void DumpEscherProp( UINT16 nId, BOOL bBid, BOOL bComplex, UINT32 nOp,
     const char* pRecNm = 0;
     switch( nId )
     {
-    case 4:		pRecNm = "DFF_Prop_Rotation"; break;
+    case 4:     pRecNm = "DFF_Prop_Rotation"; break;
 // Protection
-    case 119:	pRecNm = "DFF_Prop_LockRotation"; break;
-    case 120:	pRecNm = "DFF_Prop_LockAspectRatio"; break;
-    case 121:	pRecNm = "DFF_Prop_LockPosition"; break;
-    case 122:	pRecNm = "DFF_Prop_LockAgainstSelect"; break;
-    case 123:	pRecNm = "DFF_Prop_LockCropping"; break;
-    case 124:	pRecNm = "DFF_Prop_LockVertices"; break;
-    case 125:	pRecNm = "DFF_Prop_LockText"; break;
-    case 126:	pRecNm = "DFF_Prop_LockAdjustHandles"; break;
-    case 127:	pRecNm = "DFF_Prop_LockAgainstGrouping"; break;
+    case 119:   pRecNm = "DFF_Prop_LockRotation"; break;
+    case 120:   pRecNm = "DFF_Prop_LockAspectRatio"; break;
+    case 121:   pRecNm = "DFF_Prop_LockPosition"; break;
+    case 122:   pRecNm = "DFF_Prop_LockAgainstSelect"; break;
+    case 123:   pRecNm = "DFF_Prop_LockCropping"; break;
+    case 124:   pRecNm = "DFF_Prop_LockVertices"; break;
+    case 125:   pRecNm = "DFF_Prop_LockText"; break;
+    case 126:   pRecNm = "DFF_Prop_LockAdjustHandles"; break;
+    case 127:   pRecNm = "DFF_Prop_LockAgainstGrouping"; break;
 // Text
-    case 128:	pRecNm = "DFF_Prop_lTxid"; break;
-    case 129:	pRecNm = "DFF_Prop_dxTextLeft"; break;
-    case 130:	pRecNm = "DFF_Prop_dyTextTop"; break;
-    case 131:	pRecNm = "DFF_Prop_dxTextRight"; break;
-    case 132:	pRecNm = "DFF_Prop_dyTextBottom"; break;
-    case 133:	pRecNm = "DFF_Prop_WrapText"; break;
-    case 134:	pRecNm = "DFF_Prop_scaleText"; break;
-    case 135:	pRecNm = "DFF_Prop_anchorText"; break;
-    case 136:	pRecNm = "DFF_Prop_txflTextFlow"; break;
-    case 137:	pRecNm = "DFF_Prop_cdirFont"; break;
-    case 138:	pRecNm = "DFF_Prop_hspNext"; break;
-    case 139:	pRecNm = "DFF_Prop_txdir"; break;
-    case 187:	pRecNm = "DFF_Prop_SelectText"; break;
-    case 188:	pRecNm = "DFF_Prop_AutoTextMargin"; break;
-    case 189:	pRecNm = "DFF_Prop_RotateText"; break;
-    case 190:	pRecNm = "DFF_Prop_FitShapeToText"; break;
-    case 191:	pRecNm = "DFF_Prop_FitTextToShape"; break;
+    case 128:   pRecNm = "DFF_Prop_lTxid"; break;
+    case 129:   pRecNm = "DFF_Prop_dxTextLeft"; break;
+    case 130:   pRecNm = "DFF_Prop_dyTextTop"; break;
+    case 131:   pRecNm = "DFF_Prop_dxTextRight"; break;
+    case 132:   pRecNm = "DFF_Prop_dyTextBottom"; break;
+    case 133:   pRecNm = "DFF_Prop_WrapText"; break;
+    case 134:   pRecNm = "DFF_Prop_scaleText"; break;
+    case 135:   pRecNm = "DFF_Prop_anchorText"; break;
+    case 136:   pRecNm = "DFF_Prop_txflTextFlow"; break;
+    case 137:   pRecNm = "DFF_Prop_cdirFont"; break;
+    case 138:   pRecNm = "DFF_Prop_hspNext"; break;
+    case 139:   pRecNm = "DFF_Prop_txdir"; break;
+    case 187:   pRecNm = "DFF_Prop_SelectText"; break;
+    case 188:   pRecNm = "DFF_Prop_AutoTextMargin"; break;
+    case 189:   pRecNm = "DFF_Prop_RotateText"; break;
+    case 190:   pRecNm = "DFF_Prop_FitShapeToText"; break;
+    case 191:   pRecNm = "DFF_Prop_FitTextToShape"; break;
 // GeoText
-    case 192:	pRecNm = "DFF_Prop_gtextUNICODE"; break;
-    case 193:	pRecNm = "DFF_Prop_gtextRTF"; break;
-    case 194:	pRecNm = "DFF_Prop_gtextAlign"; break;
-    case 195:	pRecNm = "DFF_Prop_gtextSize"; break;
-    case 196:	pRecNm = "DFF_Prop_gtextSpacing"; break;
-    case 197:	pRecNm = "DFF_Prop_gtextFont"; break;
-    case 240:	pRecNm = "DFF_Prop_gtextFReverseRows"; break;
-    case 241:	pRecNm = "DFF_Prop_fGtext"; break;
-    case 242:	pRecNm = "DFF_Prop_gtextFVertical"; break;
-    case 243:	pRecNm = "DFF_Prop_gtextFKern"; break;
-    case 244:	pRecNm = "DFF_Prop_gtextFTight"; break;
-    case 245:	pRecNm = "DFF_Prop_gtextFStretch"; break;
-    case 246:	pRecNm = "DFF_Prop_gtextFShrinkFit"; break;
-    case 247:	pRecNm = "DFF_Prop_gtextFBestFit"; break;
-    case 248:	pRecNm = "DFF_Prop_gtextFNormalize"; break;
-    case 249:	pRecNm = "DFF_Prop_gtextFDxMeasure"; break;
-    case 250:	pRecNm = "DFF_Prop_gtextFBold"; break;
-    case 251:	pRecNm = "DFF_Prop_gtextFItalic"; break;
-    case 252:	pRecNm = "DFF_Prop_gtextFUnderline"; break;
-    case 253:	pRecNm = "DFF_Prop_gtextFShadow"; break;
-    case 254:	pRecNm = "DFF_Prop_gtextFSmallcaps"; break;
-    case 255:	pRecNm = "DFF_Prop_gtextFStrikethrough"; break;
+    case 192:   pRecNm = "DFF_Prop_gtextUNICODE"; break;
+    case 193:   pRecNm = "DFF_Prop_gtextRTF"; break;
+    case 194:   pRecNm = "DFF_Prop_gtextAlign"; break;
+    case 195:   pRecNm = "DFF_Prop_gtextSize"; break;
+    case 196:   pRecNm = "DFF_Prop_gtextSpacing"; break;
+    case 197:   pRecNm = "DFF_Prop_gtextFont"; break;
+    case 240:   pRecNm = "DFF_Prop_gtextFReverseRows"; break;
+    case 241:   pRecNm = "DFF_Prop_fGtext"; break;
+    case 242:   pRecNm = "DFF_Prop_gtextFVertical"; break;
+    case 243:   pRecNm = "DFF_Prop_gtextFKern"; break;
+    case 244:   pRecNm = "DFF_Prop_gtextFTight"; break;
+    case 245:   pRecNm = "DFF_Prop_gtextFStretch"; break;
+    case 246:   pRecNm = "DFF_Prop_gtextFShrinkFit"; break;
+    case 247:   pRecNm = "DFF_Prop_gtextFBestFit"; break;
+    case 248:   pRecNm = "DFF_Prop_gtextFNormalize"; break;
+    case 249:   pRecNm = "DFF_Prop_gtextFDxMeasure"; break;
+    case 250:   pRecNm = "DFF_Prop_gtextFBold"; break;
+    case 251:   pRecNm = "DFF_Prop_gtextFItalic"; break;
+    case 252:   pRecNm = "DFF_Prop_gtextFUnderline"; break;
+    case 253:   pRecNm = "DFF_Prop_gtextFShadow"; break;
+    case 254:   pRecNm = "DFF_Prop_gtextFSmallcaps"; break;
+    case 255:   pRecNm = "DFF_Prop_gtextFStrikethrough"; break;
 // Blip
-    case 256:	pRecNm = "DFF_Prop_cropFromTop"; break;
-    case 257:	pRecNm = "DFF_Prop_cropFromBottom"; break;
-    case 258:	pRecNm = "DFF_Prop_cropFromLeft"; break;
-    case 259:	pRecNm = "DFF_Prop_cropFromRight"; break;
-    case 260:	pRecNm = "DFF_Prop_pib"; break;
-    case 261:	pRecNm = "DFF_Prop_pibName"; break;
-    case 262:	pRecNm = "DFF_Prop_pibFlags"; break;
-    case 263:	pRecNm = "DFF_Prop_pictureTransparent"; break;
-    case 264:	pRecNm = "DFF_Prop_pictureContrast"; break;
-    case 265:	pRecNm = "DFF_Prop_pictureBrightness"; break;
-    case 266:	pRecNm = "DFF_Prop_pictureGamma"; break;
-    case 267:	pRecNm = "DFF_Prop_pictureId"; break;
-    case 268:	pRecNm = "DFF_Prop_pictureDblCrMod"; break;
-    case 269:	pRecNm = "DFF_Prop_pictureFillCrMod"; break;
-    case 270:	pRecNm = "DFF_Prop_pictureLineCrMod"; break;
-    case 271:	pRecNm = "DFF_Prop_pibPrint"; break;
-    case 272:	pRecNm = "DFF_Prop_pibPrintName"; break;
-    case 273:	pRecNm = "DFF_Prop_pibPrintFlags"; break;
-    case 316:	pRecNm = "DFF_Prop_fNoHitTestPicture"; break;
-    case 317:	pRecNm = "DFF_Prop_pictureGray"; break;
-    case 318:	pRecNm = "DFF_Prop_pictureBiLevel"; break;
-    case 319:	pRecNm = "DFF_Prop_pictureActive"; break;
+    case 256:   pRecNm = "DFF_Prop_cropFromTop"; break;
+    case 257:   pRecNm = "DFF_Prop_cropFromBottom"; break;
+    case 258:   pRecNm = "DFF_Prop_cropFromLeft"; break;
+    case 259:   pRecNm = "DFF_Prop_cropFromRight"; break;
+    case 260:   pRecNm = "DFF_Prop_pib"; break;
+    case 261:   pRecNm = "DFF_Prop_pibName"; break;
+    case 262:   pRecNm = "DFF_Prop_pibFlags"; break;
+    case 263:   pRecNm = "DFF_Prop_pictureTransparent"; break;
+    case 264:   pRecNm = "DFF_Prop_pictureContrast"; break;
+    case 265:   pRecNm = "DFF_Prop_pictureBrightness"; break;
+    case 266:   pRecNm = "DFF_Prop_pictureGamma"; break;
+    case 267:   pRecNm = "DFF_Prop_pictureId"; break;
+    case 268:   pRecNm = "DFF_Prop_pictureDblCrMod"; break;
+    case 269:   pRecNm = "DFF_Prop_pictureFillCrMod"; break;
+    case 270:   pRecNm = "DFF_Prop_pictureLineCrMod"; break;
+    case 271:   pRecNm = "DFF_Prop_pibPrint"; break;
+    case 272:   pRecNm = "DFF_Prop_pibPrintName"; break;
+    case 273:   pRecNm = "DFF_Prop_pibPrintFlags"; break;
+    case 316:   pRecNm = "DFF_Prop_fNoHitTestPicture"; break;
+    case 317:   pRecNm = "DFF_Prop_pictureGray"; break;
+    case 318:   pRecNm = "DFF_Prop_pictureBiLevel"; break;
+    case 319:   pRecNm = "DFF_Prop_pictureActive"; break;
 // Geometry
-    case 320:	pRecNm = "DFF_Prop_geoLeft"; break;
-    case 321:	pRecNm = "DFF_Prop_geoTop"; break;
-    case 322:	pRecNm = "DFF_Prop_geoRight"; break;
-    case 323:	pRecNm = "DFF_Prop_geoBottom"; break;
-    case 324:	pRecNm = "DFF_Prop_shapePath"; break;
-    case 325:	pRecNm = "DFF_Prop_pVertices"; break;
-    case 326:	pRecNm = "DFF_Prop_pSegmentInfo"; break;
-    case 327:	pRecNm = "DFF_Prop_adjustValue"; break;
-    case 328:	pRecNm = "DFF_Prop_adjust2Value"; break;
-    case 329:	pRecNm = "DFF_Prop_adjust3Value"; break;
-    case 330:	pRecNm = "DFF_Prop_adjust4Value"; break;
-    case 331:	pRecNm = "DFF_Prop_adjust5Value"; break;
-    case 332:	pRecNm = "DFF_Prop_adjust6Value"; break;
-    case 333:	pRecNm = "DFF_Prop_adjust7Value"; break;
-    case 334:	pRecNm = "DFF_Prop_adjust8Value"; break;
-    case 335:	pRecNm = "DFF_Prop_adjust9Value"; break;
-    case 336:	pRecNm = "DFF_Prop_adjust10Value"; break;
-    case 378:	pRecNm = "DFF_Prop_fShadowOK"; break;
-    case 379:	pRecNm = "DFF_Prop_f3DOK"; break;
-    case 380:	pRecNm = "DFF_Prop_fLineOK"; break;
-    case 381:	pRecNm = "DFF_Prop_fGtextOK"; break;
-    case 382:	pRecNm = "DFF_Prop_fFillShadeShapeOK"; break;
-    case 383:	pRecNm = "DFF_Prop_fFillOK"; break;
+    case 320:   pRecNm = "DFF_Prop_geoLeft"; break;
+    case 321:   pRecNm = "DFF_Prop_geoTop"; break;
+    case 322:   pRecNm = "DFF_Prop_geoRight"; break;
+    case 323:   pRecNm = "DFF_Prop_geoBottom"; break;
+    case 324:   pRecNm = "DFF_Prop_shapePath"; break;
+    case 325:   pRecNm = "DFF_Prop_pVertices"; break;
+    case 326:   pRecNm = "DFF_Prop_pSegmentInfo"; break;
+    case 327:   pRecNm = "DFF_Prop_adjustValue"; break;
+    case 328:   pRecNm = "DFF_Prop_adjust2Value"; break;
+    case 329:   pRecNm = "DFF_Prop_adjust3Value"; break;
+    case 330:   pRecNm = "DFF_Prop_adjust4Value"; break;
+    case 331:   pRecNm = "DFF_Prop_adjust5Value"; break;
+    case 332:   pRecNm = "DFF_Prop_adjust6Value"; break;
+    case 333:   pRecNm = "DFF_Prop_adjust7Value"; break;
+    case 334:   pRecNm = "DFF_Prop_adjust8Value"; break;
+    case 335:   pRecNm = "DFF_Prop_adjust9Value"; break;
+    case 336:   pRecNm = "DFF_Prop_adjust10Value"; break;
+    case 378:   pRecNm = "DFF_Prop_fShadowOK"; break;
+    case 379:   pRecNm = "DFF_Prop_f3DOK"; break;
+    case 380:   pRecNm = "DFF_Prop_fLineOK"; break;
+    case 381:   pRecNm = "DFF_Prop_fGtextOK"; break;
+    case 382:   pRecNm = "DFF_Prop_fFillShadeShapeOK"; break;
+    case 383:   pRecNm = "DFF_Prop_fFillOK"; break;
 // FillStyle
-    case 384:	pRecNm = "DFF_Prop_fillType"; break;
-    case 385:	pRecNm = "DFF_Prop_fillColor"; break;
-    case 386:	pRecNm = "DFF_Prop_fillOpacity"; break;
-    case 387:	pRecNm = "DFF_Prop_fillBackColor"; break;
-    case 388:	pRecNm = "DFF_Prop_fillBackOpacity"; break;
-    case 389:	pRecNm = "DFF_Prop_fillCrMod"; break;
-    case 390:	pRecNm = "DFF_Prop_fillBlip"; break;
-    case 391:	pRecNm = "DFF_Prop_fillBlipName"; break;
-    case 392:	pRecNm = "DFF_Prop_fillBlipFlags"; break;
-    case 393:	pRecNm = "DFF_Prop_fillWidth"; break;
-    case 394:	pRecNm = "DFF_Prop_fillHeight"; break;
-    case 395:	pRecNm = "DFF_Prop_fillAngle"; break;
-    case 396:	pRecNm = "DFF_Prop_fillFocus"; break;
-    case 397:	pRecNm = "DFF_Prop_fillToLeft"; break;
-    case 398:	pRecNm = "DFF_Prop_fillToTop"; break;
-    case 399:	pRecNm = "DFF_Prop_fillToRight"; break;
-    case 400:	pRecNm = "DFF_Prop_fillToBottom"; break;
-    case 401:	pRecNm = "DFF_Prop_fillRectLeft"; break;
-    case 402:	pRecNm = "DFF_Prop_fillRectTop"; break;
-    case 403:	pRecNm = "DFF_Prop_fillRectRight"; break;
-    case 404:	pRecNm = "DFF_Prop_fillRectBottom"; break;
-    case 405:	pRecNm = "DFF_Prop_fillDztype"; break;
-    case 406:	pRecNm = "DFF_Prop_fillShadePreset"; break;
-    case 407:	pRecNm = "DFF_Prop_fillShadeColors"; break;
-    case 408:	pRecNm = "DFF_Prop_fillOriginX"; break;
-    case 409:	pRecNm = "DFF_Prop_fillOriginY"; break;
-    case 410:	pRecNm = "DFF_Prop_fillShapeOriginX"; break;
-    case 411:	pRecNm = "DFF_Prop_fillShapeOriginY"; break;
-    case 412:	pRecNm = "DFF_Prop_fillShadeType"; break;
-    case 443:	pRecNm = "DFF_Prop_fFilled"; break;
-    case 444:	pRecNm = "DFF_Prop_fHitTestFill"; break;
-    case 445:	pRecNm = "DFF_Prop_fillShape"; break;
-    case 446:	pRecNm = "DFF_Prop_fillUseRect"; break;
-    case 447:	pRecNm = "DFF_Prop_fNoFillHitTest"; break;
+    case 384:   pRecNm = "DFF_Prop_fillType"; break;
+    case 385:   pRecNm = "DFF_Prop_fillColor"; break;
+    case 386:   pRecNm = "DFF_Prop_fillOpacity"; break;
+    case 387:   pRecNm = "DFF_Prop_fillBackColor"; break;
+    case 388:   pRecNm = "DFF_Prop_fillBackOpacity"; break;
+    case 389:   pRecNm = "DFF_Prop_fillCrMod"; break;
+    case 390:   pRecNm = "DFF_Prop_fillBlip"; break;
+    case 391:   pRecNm = "DFF_Prop_fillBlipName"; break;
+    case 392:   pRecNm = "DFF_Prop_fillBlipFlags"; break;
+    case 393:   pRecNm = "DFF_Prop_fillWidth"; break;
+    case 394:   pRecNm = "DFF_Prop_fillHeight"; break;
+    case 395:   pRecNm = "DFF_Prop_fillAngle"; break;
+    case 396:   pRecNm = "DFF_Prop_fillFocus"; break;
+    case 397:   pRecNm = "DFF_Prop_fillToLeft"; break;
+    case 398:   pRecNm = "DFF_Prop_fillToTop"; break;
+    case 399:   pRecNm = "DFF_Prop_fillToRight"; break;
+    case 400:   pRecNm = "DFF_Prop_fillToBottom"; break;
+    case 401:   pRecNm = "DFF_Prop_fillRectLeft"; break;
+    case 402:   pRecNm = "DFF_Prop_fillRectTop"; break;
+    case 403:   pRecNm = "DFF_Prop_fillRectRight"; break;
+    case 404:   pRecNm = "DFF_Prop_fillRectBottom"; break;
+    case 405:   pRecNm = "DFF_Prop_fillDztype"; break;
+    case 406:   pRecNm = "DFF_Prop_fillShadePreset"; break;
+    case 407:   pRecNm = "DFF_Prop_fillShadeColors"; break;
+    case 408:   pRecNm = "DFF_Prop_fillOriginX"; break;
+    case 409:   pRecNm = "DFF_Prop_fillOriginY"; break;
+    case 410:   pRecNm = "DFF_Prop_fillShapeOriginX"; break;
+    case 411:   pRecNm = "DFF_Prop_fillShapeOriginY"; break;
+    case 412:   pRecNm = "DFF_Prop_fillShadeType"; break;
+    case 443:   pRecNm = "DFF_Prop_fFilled"; break;
+    case 444:   pRecNm = "DFF_Prop_fHitTestFill"; break;
+    case 445:   pRecNm = "DFF_Prop_fillShape"; break;
+    case 446:   pRecNm = "DFF_Prop_fillUseRect"; break;
+    case 447:   pRecNm = "DFF_Prop_fNoFillHitTest"; break;
 // LineStyle
-    case 448:	pRecNm = "DFF_Prop_lineColor"; break;
-    case 449:	pRecNm = "DFF_Prop_lineOpacity"; break;
-    case 450:	pRecNm = "DFF_Prop_lineBackColor"; break;
-    case 451:	pRecNm = "DFF_Prop_lineCrMod"; break;
-    case 452:	pRecNm = "DFF_Prop_lineType"; break;
-    case 453:	pRecNm = "DFF_Prop_lineFillBlip"; break;
-    case 454:	pRecNm = "DFF_Prop_lineFillBlipName"; break;
-    case 455:	pRecNm = "DFF_Prop_lineFillBlipFlags"; break;
-    case 456:	pRecNm = "DFF_Prop_lineFillWidth"; break;
-    case 457:	pRecNm = "DFF_Prop_lineFillHeight"; break;
-    case 458:	pRecNm = "DFF_Prop_lineFillDztype"; break;
-    case 459:	pRecNm = "DFF_Prop_lineWidth"; break;
-    case 460:	pRecNm = "DFF_Prop_lineMiterLimit"; break;
-    case 461:	pRecNm = "DFF_Prop_lineStyle"; break;
-    case 462:	pRecNm = "DFF_Prop_lineDashing"; break;
-    case 463:	pRecNm = "DFF_Prop_lineDashStyle"; break;
-    case 464:	pRecNm = "DFF_Prop_lineStartArrowhead"; break;
-    case 465:	pRecNm = "DFF_Prop_lineEndArrowhead"; break;
-    case 466:	pRecNm = "DFF_Prop_lineStartArrowWidth"; break;
-    case 467:	pRecNm = "DFF_Prop_lineStartArrowLength"; break;
-    case 468:	pRecNm = "DFF_Prop_lineEndArrowWidth"; break;
-    case 469:	pRecNm = "DFF_Prop_lineEndArrowLength"; break;
-    case 470:	pRecNm = "DFF_Prop_lineJoinStyle"; break;
-    case 471:	pRecNm = "DFF_Prop_lineEndCapStyle"; break;
-    case 507:	pRecNm = "DFF_Prop_fArrowheadsOK"; break;
-    case 508:	pRecNm = "DFF_Prop_fLine"; break;
-    case 509:	pRecNm = "DFF_Prop_fHitTestLine"; break;
-    case 510:	pRecNm = "DFF_Prop_lineFillShape"; break;
-    case 511:	pRecNm = "DFF_Prop_fNoLineDrawDash"; break;
+    case 448:   pRecNm = "DFF_Prop_lineColor"; break;
+    case 449:   pRecNm = "DFF_Prop_lineOpacity"; break;
+    case 450:   pRecNm = "DFF_Prop_lineBackColor"; break;
+    case 451:   pRecNm = "DFF_Prop_lineCrMod"; break;
+    case 452:   pRecNm = "DFF_Prop_lineType"; break;
+    case 453:   pRecNm = "DFF_Prop_lineFillBlip"; break;
+    case 454:   pRecNm = "DFF_Prop_lineFillBlipName"; break;
+    case 455:   pRecNm = "DFF_Prop_lineFillBlipFlags"; break;
+    case 456:   pRecNm = "DFF_Prop_lineFillWidth"; break;
+    case 457:   pRecNm = "DFF_Prop_lineFillHeight"; break;
+    case 458:   pRecNm = "DFF_Prop_lineFillDztype"; break;
+    case 459:   pRecNm = "DFF_Prop_lineWidth"; break;
+    case 460:   pRecNm = "DFF_Prop_lineMiterLimit"; break;
+    case 461:   pRecNm = "DFF_Prop_lineStyle"; break;
+    case 462:   pRecNm = "DFF_Prop_lineDashing"; break;
+    case 463:   pRecNm = "DFF_Prop_lineDashStyle"; break;
+    case 464:   pRecNm = "DFF_Prop_lineStartArrowhead"; break;
+    case 465:   pRecNm = "DFF_Prop_lineEndArrowhead"; break;
+    case 466:   pRecNm = "DFF_Prop_lineStartArrowWidth"; break;
+    case 467:   pRecNm = "DFF_Prop_lineStartArrowLength"; break;
+    case 468:   pRecNm = "DFF_Prop_lineEndArrowWidth"; break;
+    case 469:   pRecNm = "DFF_Prop_lineEndArrowLength"; break;
+    case 470:   pRecNm = "DFF_Prop_lineJoinStyle"; break;
+    case 471:   pRecNm = "DFF_Prop_lineEndCapStyle"; break;
+    case 507:   pRecNm = "DFF_Prop_fArrowheadsOK"; break;
+    case 508:   pRecNm = "DFF_Prop_fLine"; break;
+    case 509:   pRecNm = "DFF_Prop_fHitTestLine"; break;
+    case 510:   pRecNm = "DFF_Prop_lineFillShape"; break;
+    case 511:   pRecNm = "DFF_Prop_fNoLineDrawDash"; break;
 // ShadowStyle
-    case 512:	pRecNm = "DFF_Prop_shadowType"; break;
-    case 513:	pRecNm = "DFF_Prop_shadowColor"; break;
-    case 514:	pRecNm = "DFF_Prop_shadowHighlight"; break;
-    case 515:	pRecNm = "DFF_Prop_shadowCrMod"; break;
-    case 516:	pRecNm = "DFF_Prop_shadowOpacity"; break;
-    case 517:	pRecNm = "DFF_Prop_shadowOffsetX"; break;
-    case 518:	pRecNm = "DFF_Prop_shadowOffsetY"; break;
-    case 519:	pRecNm = "DFF_Prop_shadowSecondOffsetX"; break;
-    case 520:	pRecNm = "DFF_Prop_shadowSecondOffsetY"; break;
-    case 521:	pRecNm = "DFF_Prop_shadowScaleXToX"; break;
-    case 522:	pRecNm = "DFF_Prop_shadowScaleYToX"; break;
-    case 523:	pRecNm = "DFF_Prop_shadowScaleXToY"; break;
-    case 524:	pRecNm = "DFF_Prop_shadowScaleYToY"; break;
-    case 525:	pRecNm = "DFF_Prop_shadowPerspectiveX"; break;
-    case 526:	pRecNm = "DFF_Prop_shadowPerspectiveY"; break;
-    case 527:	pRecNm = "DFF_Prop_shadowWeight"; break;
-    case 528:	pRecNm = "DFF_Prop_shadowOriginX"; break;
-    case 529:	pRecNm = "DFF_Prop_shadowOriginY"; break;
-    case 574:	pRecNm = "DFF_Prop_fShadow"; break;
-    case 575:	pRecNm = "DFF_Prop_fshadowObscured"; break;
+    case 512:   pRecNm = "DFF_Prop_shadowType"; break;
+    case 513:   pRecNm = "DFF_Prop_shadowColor"; break;
+    case 514:   pRecNm = "DFF_Prop_shadowHighlight"; break;
+    case 515:   pRecNm = "DFF_Prop_shadowCrMod"; break;
+    case 516:   pRecNm = "DFF_Prop_shadowOpacity"; break;
+    case 517:   pRecNm = "DFF_Prop_shadowOffsetX"; break;
+    case 518:   pRecNm = "DFF_Prop_shadowOffsetY"; break;
+    case 519:   pRecNm = "DFF_Prop_shadowSecondOffsetX"; break;
+    case 520:   pRecNm = "DFF_Prop_shadowSecondOffsetY"; break;
+    case 521:   pRecNm = "DFF_Prop_shadowScaleXToX"; break;
+    case 522:   pRecNm = "DFF_Prop_shadowScaleYToX"; break;
+    case 523:   pRecNm = "DFF_Prop_shadowScaleXToY"; break;
+    case 524:   pRecNm = "DFF_Prop_shadowScaleYToY"; break;
+    case 525:   pRecNm = "DFF_Prop_shadowPerspectiveX"; break;
+    case 526:   pRecNm = "DFF_Prop_shadowPerspectiveY"; break;
+    case 527:   pRecNm = "DFF_Prop_shadowWeight"; break;
+    case 528:   pRecNm = "DFF_Prop_shadowOriginX"; break;
+    case 529:   pRecNm = "DFF_Prop_shadowOriginY"; break;
+    case 574:   pRecNm = "DFF_Prop_fShadow"; break;
+    case 575:   pRecNm = "DFF_Prop_fshadowObscured"; break;
 // PerspectiveStyle
-    case 576:	pRecNm = "DFF_Prop_perspectiveType"; break;
-    case 577:	pRecNm = "DFF_Prop_perspectiveOffsetX"; break;
-    case 578:	pRecNm = "DFF_Prop_perspectiveOffsetY"; break;
-    case 579:	pRecNm = "DFF_Prop_perspectiveScaleXToX"; break;
-    case 580:	pRecNm = "DFF_Prop_perspectiveScaleYToX"; break;
-    case 581:	pRecNm = "DFF_Prop_perspectiveScaleXToY"; break;
-    case 582:	pRecNm = "DFF_Prop_perspectiveScaleYToY"; break;
-    case 583:	pRecNm = "DFF_Prop_perspectivePerspectiveX"; break;
-    case 584:	pRecNm = "DFF_Prop_perspectivePerspectiveY"; break;
-    case 585:	pRecNm = "DFF_Prop_perspectiveWeight"; break;
-    case 586:	pRecNm = "DFF_Prop_perspectiveOriginX"; break;
-    case 587:	pRecNm = "DFF_Prop_perspectiveOriginY"; break;
-    case 639:	pRecNm = "DFF_Prop_fPerspective"; break;
+    case 576:   pRecNm = "DFF_Prop_perspectiveType"; break;
+    case 577:   pRecNm = "DFF_Prop_perspectiveOffsetX"; break;
+    case 578:   pRecNm = "DFF_Prop_perspectiveOffsetY"; break;
+    case 579:   pRecNm = "DFF_Prop_perspectiveScaleXToX"; break;
+    case 580:   pRecNm = "DFF_Prop_perspectiveScaleYToX"; break;
+    case 581:   pRecNm = "DFF_Prop_perspectiveScaleXToY"; break;
+    case 582:   pRecNm = "DFF_Prop_perspectiveScaleYToY"; break;
+    case 583:   pRecNm = "DFF_Prop_perspectivePerspectiveX"; break;
+    case 584:   pRecNm = "DFF_Prop_perspectivePerspectiveY"; break;
+    case 585:   pRecNm = "DFF_Prop_perspectiveWeight"; break;
+    case 586:   pRecNm = "DFF_Prop_perspectiveOriginX"; break;
+    case 587:   pRecNm = "DFF_Prop_perspectiveOriginY"; break;
+    case 639:   pRecNm = "DFF_Prop_fPerspective"; break;
 // 3D Object
-    case 640:	pRecNm = "DFF_Prop_c3DSpecularAmt"; break;
-    case 641:	pRecNm = "DFF_Prop_c3DDiffuseAmt"; break;
-    case 642:	pRecNm = "DFF_Prop_c3DShininess"; break;
-    case 643:	pRecNm = "DFF_Prop_c3DEdgeThickness"; break;
-    case 644:	pRecNm = "DFF_Prop_c3DExtrudeForward"; break;
-    case 645:	pRecNm = "DFF_Prop_c3DExtrudeBackward"; break;
-    case 646:	pRecNm = "DFF_Prop_c3DExtrudePlane"; break;
-    case 647:	pRecNm = "DFF_Prop_c3DExtrusionColor"; break;
-    case 648:	pRecNm = "DFF_Prop_c3DCrMod"; break;
-    case 700:	pRecNm = "DFF_Prop_f3D"; break;
-    case 701:	pRecNm = "DFF_Prop_fc3DMetallic"; break;
-    case 702:	pRecNm = "DFF_Prop_fc3DUseExtrusionColor"; break;
-    case 703:	pRecNm = "DFF_Prop_fc3DLightFace"; break;
+    case 640:   pRecNm = "DFF_Prop_c3DSpecularAmt"; break;
+    case 641:   pRecNm = "DFF_Prop_c3DDiffuseAmt"; break;
+    case 642:   pRecNm = "DFF_Prop_c3DShininess"; break;
+    case 643:   pRecNm = "DFF_Prop_c3DEdgeThickness"; break;
+    case 644:   pRecNm = "DFF_Prop_c3DExtrudeForward"; break;
+    case 645:   pRecNm = "DFF_Prop_c3DExtrudeBackward"; break;
+    case 646:   pRecNm = "DFF_Prop_c3DExtrudePlane"; break;
+    case 647:   pRecNm = "DFF_Prop_c3DExtrusionColor"; break;
+    case 648:   pRecNm = "DFF_Prop_c3DCrMod"; break;
+    case 700:   pRecNm = "DFF_Prop_f3D"; break;
+    case 701:   pRecNm = "DFF_Prop_fc3DMetallic"; break;
+    case 702:   pRecNm = "DFF_Prop_fc3DUseExtrusionColor"; break;
+    case 703:   pRecNm = "DFF_Prop_fc3DLightFace"; break;
 // 3D Style
-    case 704:	pRecNm = "DFF_Prop_c3DYRotationAngle"; break;
-    case 705:	pRecNm = "DFF_Prop_c3DXRotationAngle"; break;
-    case 706:	pRecNm = "DFF_Prop_c3DRotationAxisX"; break;
-    case 707:	pRecNm = "DFF_Prop_c3DRotationAxisY"; break;
-    case 708:	pRecNm = "DFF_Prop_c3DRotationAxisZ"; break;
-    case 709:	pRecNm = "DFF_Prop_c3DRotationAngle"; break;
-    case 710:	pRecNm = "DFF_Prop_c3DRotationCenterX"; break;
-    case 711:	pRecNm = "DFF_Prop_c3DRotationCenterY"; break;
-    case 712:	pRecNm = "DFF_Prop_c3DRotationCenterZ"; break;
-    case 713:	pRecNm = "DFF_Prop_c3DRenderMode"; break;
-    case 714:	pRecNm = "DFF_Prop_c3DTolerance"; break;
-    case 715:	pRecNm = "DFF_Prop_c3DXViewpoint"; break;
-    case 716:	pRecNm = "DFF_Prop_c3DYViewpoint"; break;
-    case 717:	pRecNm = "DFF_Prop_c3DZViewpoint"; break;
-    case 718:	pRecNm = "DFF_Prop_c3DOriginX"; break;
-    case 719:	pRecNm = "DFF_Prop_c3DOriginY"; break;
-    case 720:	pRecNm = "DFF_Prop_c3DSkewAngle"; break;
-    case 721:	pRecNm = "DFF_Prop_c3DSkewAmount"; break;
-    case 722:	pRecNm = "DFF_Prop_c3DAmbientIntensity"; break;
-    case 723:	pRecNm = "DFF_Prop_c3DKeyX"; break;
-    case 724:	pRecNm = "DFF_Prop_c3DKeyY"; break;
-    case 725:	pRecNm = "DFF_Prop_c3DKeyZ"; break;
-    case 726:	pRecNm = "DFF_Prop_c3DKeyIntensity"; break;
-    case 727:	pRecNm = "DFF_Prop_c3DFillX"; break;
-    case 728:	pRecNm = "DFF_Prop_c3DFillY"; break;
-    case 729:	pRecNm = "DFF_Prop_c3DFillZ"; break;
-    case 730:	pRecNm = "DFF_Prop_c3DFillIntensity"; break;
-    case 763:	pRecNm = "DFF_Prop_fc3DConstrainRotation"; break;
-    case 764:	pRecNm = "DFF_Prop_fc3DRotationCenterAuto"; break;
-    case 765:	pRecNm = "DFF_Prop_fc3DParallel"; break;
-    case 766:	pRecNm = "DFF_Prop_fc3DKeyHarsh"; break;
-    case 767:	pRecNm = "DFF_Prop_fc3DFillHarsh"; break;
+    case 704:   pRecNm = "DFF_Prop_c3DYRotationAngle"; break;
+    case 705:   pRecNm = "DFF_Prop_c3DXRotationAngle"; break;
+    case 706:   pRecNm = "DFF_Prop_c3DRotationAxisX"; break;
+    case 707:   pRecNm = "DFF_Prop_c3DRotationAxisY"; break;
+    case 708:   pRecNm = "DFF_Prop_c3DRotationAxisZ"; break;
+    case 709:   pRecNm = "DFF_Prop_c3DRotationAngle"; break;
+    case 710:   pRecNm = "DFF_Prop_c3DRotationCenterX"; break;
+    case 711:   pRecNm = "DFF_Prop_c3DRotationCenterY"; break;
+    case 712:   pRecNm = "DFF_Prop_c3DRotationCenterZ"; break;
+    case 713:   pRecNm = "DFF_Prop_c3DRenderMode"; break;
+    case 714:   pRecNm = "DFF_Prop_c3DTolerance"; break;
+    case 715:   pRecNm = "DFF_Prop_c3DXViewpoint"; break;
+    case 716:   pRecNm = "DFF_Prop_c3DYViewpoint"; break;
+    case 717:   pRecNm = "DFF_Prop_c3DZViewpoint"; break;
+    case 718:   pRecNm = "DFF_Prop_c3DOriginX"; break;
+    case 719:   pRecNm = "DFF_Prop_c3DOriginY"; break;
+    case 720:   pRecNm = "DFF_Prop_c3DSkewAngle"; break;
+    case 721:   pRecNm = "DFF_Prop_c3DSkewAmount"; break;
+    case 722:   pRecNm = "DFF_Prop_c3DAmbientIntensity"; break;
+    case 723:   pRecNm = "DFF_Prop_c3DKeyX"; break;
+    case 724:   pRecNm = "DFF_Prop_c3DKeyY"; break;
+    case 725:   pRecNm = "DFF_Prop_c3DKeyZ"; break;
+    case 726:   pRecNm = "DFF_Prop_c3DKeyIntensity"; break;
+    case 727:   pRecNm = "DFF_Prop_c3DFillX"; break;
+    case 728:   pRecNm = "DFF_Prop_c3DFillY"; break;
+    case 729:   pRecNm = "DFF_Prop_c3DFillZ"; break;
+    case 730:   pRecNm = "DFF_Prop_c3DFillIntensity"; break;
+    case 763:   pRecNm = "DFF_Prop_fc3DConstrainRotation"; break;
+    case 764:   pRecNm = "DFF_Prop_fc3DRotationCenterAuto"; break;
+    case 765:   pRecNm = "DFF_Prop_fc3DParallel"; break;
+    case 766:   pRecNm = "DFF_Prop_fc3DKeyHarsh"; break;
+    case 767:   pRecNm = "DFF_Prop_fc3DFillHarsh"; break;
 // Shape
-    case 769:	pRecNm = "DFF_Prop_hspMaster"; break;
-    case 771:	pRecNm = "DFF_Prop_cxstyle"; break;
-    case 772:	pRecNm = "DFF_Prop_bWMode"; break;
-    case 773:	pRecNm = "DFF_Prop_bWModePureBW"; break;
-    case 774:	pRecNm = "DFF_Prop_bWModeBW"; break;
-    case 826:	pRecNm = "DFF_Prop_fOleIcon"; break;
-    case 827:	pRecNm = "DFF_Prop_fPreferRelativeResize"; break;
-    case 828:	pRecNm = "DFF_Prop_fLockShapeType"; break;
-    case 830:	pRecNm = "DFF_Prop_fDeleteAttachedObject"; break;
-    case 831:	pRecNm = "DFF_Prop_fBackground"; break;
+    case 769:   pRecNm = "DFF_Prop_hspMaster"; break;
+    case 771:   pRecNm = "DFF_Prop_cxstyle"; break;
+    case 772:   pRecNm = "DFF_Prop_bWMode"; break;
+    case 773:   pRecNm = "DFF_Prop_bWModePureBW"; break;
+    case 774:   pRecNm = "DFF_Prop_bWModeBW"; break;
+    case 826:   pRecNm = "DFF_Prop_fOleIcon"; break;
+    case 827:   pRecNm = "DFF_Prop_fPreferRelativeResize"; break;
+    case 828:   pRecNm = "DFF_Prop_fLockShapeType"; break;
+    case 830:   pRecNm = "DFF_Prop_fDeleteAttachedObject"; break;
+    case 831:   pRecNm = "DFF_Prop_fBackground"; break;
 
 // Callout
-    case 832:	pRecNm = "DFF_Prop_spcot"; break;
-    case 833:	pRecNm = "DFF_Prop_dxyCalloutGap"; break;
-    case 834:	pRecNm = "DFF_Prop_spcoa"; break;
-    case 835:	pRecNm = "DFF_Prop_spcod"; break;
-    case 836:	pRecNm = "DFF_Prop_dxyCalloutDropSpecified"; break;
-    case 837:	pRecNm = "DFF_Prop_dxyCalloutLengthSpecified"; break;
-    case 889:	pRecNm = "DFF_Prop_fCallout"; break;
-    case 890:	pRecNm = "DFF_Prop_fCalloutAccentBar"; break;
-    case 891:	pRecNm = "DFF_Prop_fCalloutTextBorder"; break;
-    case 892:	pRecNm = "DFF_Prop_fCalloutMinusX"; break;
-    case 893:	pRecNm = "DFF_Prop_fCalloutMinusY"; break;
-    case 894:	pRecNm = "DFF_Prop_fCalloutDropAuto"; break;
-    case 895:	pRecNm = "DFF_Prop_fCalloutLengthSpecified"; break;
+    case 832:   pRecNm = "DFF_Prop_spcot"; break;
+    case 833:   pRecNm = "DFF_Prop_dxyCalloutGap"; break;
+    case 834:   pRecNm = "DFF_Prop_spcoa"; break;
+    case 835:   pRecNm = "DFF_Prop_spcod"; break;
+    case 836:   pRecNm = "DFF_Prop_dxyCalloutDropSpecified"; break;
+    case 837:   pRecNm = "DFF_Prop_dxyCalloutLengthSpecified"; break;
+    case 889:   pRecNm = "DFF_Prop_fCallout"; break;
+    case 890:   pRecNm = "DFF_Prop_fCalloutAccentBar"; break;
+    case 891:   pRecNm = "DFF_Prop_fCalloutTextBorder"; break;
+    case 892:   pRecNm = "DFF_Prop_fCalloutMinusX"; break;
+    case 893:   pRecNm = "DFF_Prop_fCalloutMinusY"; break;
+    case 894:   pRecNm = "DFF_Prop_fCalloutDropAuto"; break;
+    case 895:   pRecNm = "DFF_Prop_fCalloutLengthSpecified"; break;
 
 // GroupShape
-    case 896:	pRecNm = "DFF_Prop_wzName"; break;
-    case 897:	pRecNm = "DFF_Prop_wzDescription"; break;
-    case 898:	pRecNm = "DFF_Prop_pihlShape"; break;
-    case 899:	pRecNm = "DFF_Prop_pWrapPolygonVertices"; break;
-    case 900:	pRecNm = "DFF_Prop_dxWrapDistLeft"; break;
-    case 901:	pRecNm = "DFF_Prop_dyWrapDistTop"; break;
-    case 902:	pRecNm = "DFF_Prop_dxWrapDistRight"; break;
-    case 903:	pRecNm = "DFF_Prop_dyWrapDistBottom"; break;
-    case 904:	pRecNm = "DFF_Prop_lidRegroup"; break;
-    case 953:	pRecNm = "DFF_Prop_fEditedWrap"; break;
-    case 954:	pRecNm = "DFF_Prop_fBehindDocument"; break;
-    case 955:	pRecNm = "DFF_Prop_fOnDblClickNotify"; break;
-    case 956:	pRecNm = "DFF_Prop_fIsButton"; break;
-    case 957:	pRecNm = "DFF_Prop_fOneD"; break;
-    case 958:	pRecNm = "DFF_Prop_fHidden"; break;
-    case 959:	pRecNm = "DFF_Prop_fPrint"; break;
+    case 896:   pRecNm = "DFF_Prop_wzName"; break;
+    case 897:   pRecNm = "DFF_Prop_wzDescription"; break;
+    case 898:   pRecNm = "DFF_Prop_pihlShape"; break;
+    case 899:   pRecNm = "DFF_Prop_pWrapPolygonVertices"; break;
+    case 900:   pRecNm = "DFF_Prop_dxWrapDistLeft"; break;
+    case 901:   pRecNm = "DFF_Prop_dyWrapDistTop"; break;
+    case 902:   pRecNm = "DFF_Prop_dxWrapDistRight"; break;
+    case 903:   pRecNm = "DFF_Prop_dyWrapDistBottom"; break;
+    case 904:   pRecNm = "DFF_Prop_lidRegroup"; break;
+    case 953:   pRecNm = "DFF_Prop_fEditedWrap"; break;
+    case 954:   pRecNm = "DFF_Prop_fBehindDocument"; break;
+    case 955:   pRecNm = "DFF_Prop_fOnDblClickNotify"; break;
+    case 956:   pRecNm = "DFF_Prop_fIsButton"; break;
+    case 957:   pRecNm = "DFF_Prop_fOneD"; break;
+    case 958:   pRecNm = "DFF_Prop_fHidden"; break;
+    case 959:   pRecNm = "DFF_Prop_fPrint"; break;
     }
 
     *pOut << "      " << indent1 << ' ';
@@ -2094,7 +2094,7 @@ void DumpEscherProp( UINT16 nId, BOOL bBid, BOOL bComplex, UINT32 nOp,
     else
         *pOut << "Prop" ;
 
-    *pOut 	<< " Id: " << dec << nId << " (=0x" << hex << nId << ')';
+    *pOut   << " Id: " << dec << nId << " (=0x" << hex << nId << ')';
     if( bBid )
         *pOut << " Bid: 0x" << (UINT16)bBid;
 
@@ -2104,7 +2104,7 @@ void DumpEscherProp( UINT16 nId, BOOL bBid, BOOL bComplex, UINT32 nOp,
         // ....
         rStreamOffset += nOp;
     }
-//	else
+//  else
         *pOut << " op: 0x" << nOp;
 
     *pOut << dec << endl1;
@@ -2116,39 +2116,39 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
     const char* pRecNm = 0;
     switch( nFbt )
     {
-    case 0xF000:	pRecNm = "DFF_msofbtDggContainer"; break;
-    case 0xF006:	pRecNm = "DFF_msofbtDgg"; break;
-    case 0xF016:	pRecNm = "DFF_msofbtCLSID"; break;
-    case 0xF00B:	pRecNm = "DFF_msofbtOPT"; break;
-    case 0xF11A:	pRecNm = "DFF_msofbtColorMRU"; break;
-    case 0xF11E:	pRecNm = "DFF_msofbtSplitMenuColors"; break;
-    case 0xF001:	pRecNm = "DFF_msofbtBstoreContainer"; break;
-    case 0xF007:	pRecNm = "DFF_msofbtBSE"; break;
-    case 0xF018:	pRecNm = "DFF_msofbtBlipFirst"; break;
-    case 0xF117:	pRecNm = "DFF_msofbtBlipLast"; break;
-    case 0xF002:	pRecNm = "DFF_msofbtDgContainer"; break;
-    case 0xF008:	pRecNm = "DFF_msofbtDg"; break;
-    case 0xF118:	pRecNm = "DFF_msofbtRegroupItems"; break;
-    case 0xF120:	pRecNm = "DFF_msofbtColorScheme"; break;
-    case 0xF003:	pRecNm = "DFF_msofbtSpgrContainer"; break;
-    case 0xF004:	pRecNm = "DFF_msofbtSpContainer"; break;
-    case 0xF009:	pRecNm = "DFF_msofbtSpgr"; break;
-    case 0xF00A:	pRecNm = "DFF_msofbtSp"; break;
-    case 0xF00C:	pRecNm = "DFF_msofbtTextbox"; break;
-    case 0xF00D:	pRecNm = "DFF_msofbtClientTextbox"; break;
-    case 0xF00E:	pRecNm = "DFF_msofbtAnchor"; break;
-    case 0xF00F:	pRecNm = "DFF_msofbtChildAnchor"; break;
-    case 0xF010:	pRecNm = "DFF_msofbtClientAnchor"; break;
-    case 0xF011:	pRecNm = "DFF_msofbtClientData"; break;
-    case 0xF11F:	pRecNm = "DFF_msofbtOleObject"; break;
-    case 0xF11D:	pRecNm = "DFF_msofbtDeletedPspl"; break;
-    case 0xF005:	pRecNm = "DFF_msofbtSolverContainer"; break;
-    case 0xF012:	pRecNm = "DFF_msofbtConnectorRule"; break;
-    case 0xF013:	pRecNm = "DFF_msofbtAlignRule"; break;
-    case 0xF014:	pRecNm = "DFF_msofbtArcRule"; break;
-    case 0xF015:	pRecNm = "DFF_msofbtClientRule"; break;
-    case 0xF017:	pRecNm = "DFF_msofbtCalloutRule"; break;
-    case 0xF122:	pRecNm = "DFF_msofbtUDefProp"; break;
+    case 0xF000:    pRecNm = "DFF_msofbtDggContainer"; break;
+    case 0xF006:    pRecNm = "DFF_msofbtDgg"; break;
+    case 0xF016:    pRecNm = "DFF_msofbtCLSID"; break;
+    case 0xF00B:    pRecNm = "DFF_msofbtOPT"; break;
+    case 0xF11A:    pRecNm = "DFF_msofbtColorMRU"; break;
+    case 0xF11E:    pRecNm = "DFF_msofbtSplitMenuColors"; break;
+    case 0xF001:    pRecNm = "DFF_msofbtBstoreContainer"; break;
+    case 0xF007:    pRecNm = "DFF_msofbtBSE"; break;
+    case 0xF018:    pRecNm = "DFF_msofbtBlipFirst"; break;
+    case 0xF117:    pRecNm = "DFF_msofbtBlipLast"; break;
+    case 0xF002:    pRecNm = "DFF_msofbtDgContainer"; break;
+    case 0xF008:    pRecNm = "DFF_msofbtDg"; break;
+    case 0xF118:    pRecNm = "DFF_msofbtRegroupItems"; break;
+    case 0xF120:    pRecNm = "DFF_msofbtColorScheme"; break;
+    case 0xF003:    pRecNm = "DFF_msofbtSpgrContainer"; break;
+    case 0xF004:    pRecNm = "DFF_msofbtSpContainer"; break;
+    case 0xF009:    pRecNm = "DFF_msofbtSpgr"; break;
+    case 0xF00A:    pRecNm = "DFF_msofbtSp"; break;
+    case 0xF00C:    pRecNm = "DFF_msofbtTextbox"; break;
+    case 0xF00D:    pRecNm = "DFF_msofbtClientTextbox"; break;
+    case 0xF00E:    pRecNm = "DFF_msofbtAnchor"; break;
+    case 0xF00F:    pRecNm = "DFF_msofbtChildAnchor"; break;
+    case 0xF010:    pRecNm = "DFF_msofbtClientAnchor"; break;
+    case 0xF011:    pRecNm = "DFF_msofbtClientData"; break;
+    case 0xF11F:    pRecNm = "DFF_msofbtOleObject"; break;
+    case 0xF11D:    pRecNm = "DFF_msofbtDeletedPspl"; break;
+    case 0xF005:    pRecNm = "DFF_msofbtSolverContainer"; break;
+    case 0xF012:    pRecNm = "DFF_msofbtConnectorRule"; break;
+    case 0xF013:    pRecNm = "DFF_msofbtAlignRule"; break;
+    case 0xF014:    pRecNm = "DFF_msofbtArcRule"; break;
+    case 0xF015:    pRecNm = "DFF_msofbtClientRule"; break;
+    case 0xF017:    pRecNm = "DFF_msofbtCalloutRule"; break;
+    case 0xF122:    pRecNm = "DFF_msofbtUDefProp"; break;
     }
 
     *pOut << hex6 << nPos << indent1;
@@ -2162,7 +2162,7 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
 
     switch( nFbt )
     {
-    case 0xf00b:		// DFF_msofbtOPT
+    case 0xf00b:        // DFF_msofbtOPT
         {
             UINT16 nId; UINT32 nOp, nStreamOffset = nInst * 6;
             BOOL bBid, bComplex;
@@ -2180,9 +2180,9 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
         }
         break;
 
-    case 0xF00d:		// DFF_msofbtClientTextbox
-    case 0xF010:		// DFF_msofbtClientAnchor
-    case 0xF011:		// DFF_msofbtClientData
+    case 0xF00d:        // DFF_msofbtClientTextbox
+    case 0xF010:        // DFF_msofbtClientAnchor
+    case 0xF011:        // DFF_msofbtClientData
         {
             UINT32 nData;
             if( 4 == nLength && WW8ReadUINT32( *xTableStream, nData ))
@@ -2191,7 +2191,7 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
         }
         break;
 
-    case 0xf00a:		// DFF_msofbtSp
+    case 0xf00a:        // DFF_msofbtSp
         {
             UINT32 nId, nData;
             if( WW8ReadUINT32( *xTableStream, nId ) &&
@@ -2205,8 +2205,8 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
         }
         break;
 
-    case 0xf009: 		// DFF_msofbtSpgr
-    case 0xf00f: 		// DFF_msofbtChildAnchor
+    case 0xf009:        // DFF_msofbtSpgr
+    case 0xf00f:        // DFF_msofbtChildAnchor
         {
             UINT32 nL, nT, nR, nB;
             if( WW8ReadUINT32( *xTableStream, nL ) &&
@@ -2222,12 +2222,12 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
 
     case 0xf006:    //ESCHER_Dgg
         {
-            UINT32 spidMax, 	// The current maximum shape ID
-                   cidcl,		// The number of ID clusters (FIDCLs)
-                   cspSaved,	// The total number of shapes saved
+            UINT32 spidMax,     // The current maximum shape ID
+                   cidcl,       // The number of ID clusters (FIDCLs)
+                   cspSaved,    // The total number of shapes saved
                                  // (including deleted shapes, if undo
                                  // information was saved)
-                   cdgSaved;	// The total number of drawings saved
+                   cdgSaved;    // The total number of drawings saved
 
             if( WW8ReadUINT32( *xTableStream, spidMax ) &&
                 WW8ReadUINT32( *xTableStream, cidcl ) &&
@@ -2279,26 +2279,26 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
         }
         break;
 
-    case 0xF016:	//ESCHER_CLSID
-    case 0xF11A:	//ESCHER_ColorMRU
-    case 0xF11E:	//ESCHER_SplitMenuColors
-//	case 0xF001:	//ESCHER_BstoreContainer
-    case 0xF007:	//ESCHER_BSE
-    case 0xF018:	//ESCHER_BlipFirst
-    case 0xF117:	//ESCHER_BlipLast
-    case 0xF118:	//ESCHER_RegroupItems
-    case 0xF120:	//ESCHER_ColorScheme
-    case 0xF00C:	//ESCHER_Textbox
-    case 0xF00E:	//ESCHER_Anchor
-    case 0xF11F:	//ESCHER_OleObject
-    case 0xF11D:	//ESCHER_DeletedPspl
-    case 0xF005:	//ESCHER_SolverContainer
-    case 0xF012:	//ESCHER_ConnectorRule
-    case 0xF013:	//ESCHER_AlignRule
-    case 0xF014:	//ESCHER_ArcRule
-    case 0xF015:	//ESCHER_ClientRule
-    case 0xF017:	//ESCHER_CalloutRule
-    case 0xF119:	//ESCHER_Selection
+    case 0xF016:    //ESCHER_CLSID
+    case 0xF11A:    //ESCHER_ColorMRU
+    case 0xF11E:    //ESCHER_SplitMenuColors
+//  case 0xF001:    //ESCHER_BstoreContainer
+    case 0xF007:    //ESCHER_BSE
+    case 0xF018:    //ESCHER_BlipFirst
+    case 0xF117:    //ESCHER_BlipLast
+    case 0xF118:    //ESCHER_RegroupItems
+    case 0xF120:    //ESCHER_ColorScheme
+    case 0xF00C:    //ESCHER_Textbox
+    case 0xF00E:    //ESCHER_Anchor
+    case 0xF11F:    //ESCHER_OleObject
+    case 0xF11D:    //ESCHER_DeletedPspl
+    case 0xF005:    //ESCHER_SolverContainer
+    case 0xF012:    //ESCHER_ConnectorRule
+    case 0xF013:    //ESCHER_AlignRule
+    case 0xF014:    //ESCHER_ArcRule
+    case 0xF015:    //ESCHER_ClientRule
+    case 0xF017:    //ESCHER_CalloutRule
+    case 0xF119:    //ESCHER_Selection
     case 0xf008:    //ESCHER_Dg
         {
             int nCnt = 128;
@@ -2366,7 +2366,7 @@ void DumpEscherRecs( ULONG nPos, UINT32 nLength )
         switch( nFbt )
         {
         case 0xF000:
-        case 0xF001:	//ESCHER_BstoreContainer
+        case 0xF001:    //ESCHER_BstoreContainer
         case 0xF002:
         case 0xF003:
         case 0xF004:
@@ -2402,7 +2402,7 @@ void DumpDrawing()
 
 
 //-----------------------------------------
-//		Hilfroutinen fuer Styles
+//      Hilfroutinen fuer Styles
 //-----------------------------------------
 
 static short DumpStyleUPX( BYTE nVersion, short nLen, BOOL bPAP )
@@ -2422,7 +2422,7 @@ static short DumpStyleUPX( BYTE nVersion, short nLen, BOOL bPAP )
     indent( *pOut, *xTableStream );
 
     xTableStream->Read( &cbUPX, 2 );
-    nLen-=	2;
+    nLen-=  2;
 
     if ( cbUPX > nLen )
     {
@@ -2446,13 +2446,13 @@ static short DumpStyleUPX( BYTE nVersion, short nLen, BOOL bPAP )
 
         xTableStream->Read( &id, 2 );
         cbUPX-=  2;
-        nLen-=	2;
+        nLen-=  2;
         *pOut << "ID:" << id;
     }
 
     *pOut << endl1;
 
-    ULONG nPos = xTableStream->Tell();				// falls etwas falsch interpretiert
+    ULONG nPos = xTableStream->Tell();              // falls etwas falsch interpretiert
                                         // wird, gehts danach wieder richtig
     DumpSprms( nVersion, *xTableStream, cbUPX );
 
@@ -2478,8 +2478,8 @@ static void DumpStyleGrupx( BYTE nVersion, short nLen, BOOL bPara )
 
     begin( *pOut, *xTableStream ) << "Grupx, Len:" << nLen << endl1;
 
-    if( bPara ) nLen = DumpStyleUPX( nVersion, nLen, TRUE );	// Grupx.Papx
-    DumpStyleUPX( nVersion, nLen, FALSE );										// Grupx.Chpx
+    if( bPara ) nLen = DumpStyleUPX( nVersion, nLen, TRUE );    // Grupx.Papx
+    DumpStyleUPX( nVersion, nLen, FALSE );                                      // Grupx.Chpx
 
     end( *pOut, *xTableStream ) << "Grupx" << endl1;
 }
@@ -2489,12 +2489,12 @@ static void PrintStyleId( USHORT nId )
     switch ( nId ){
     case 0xffe: *pOut << "User "; break;
     case 0xfff: *pOut << "Nil "; break;
-    default:	*pOut <<  nId << ' '; break;
+    default:    *pOut <<  nId << ' '; break;
     }
 }
 
 //-----------------------------------------
-//				Styles
+//              Styles
 //-----------------------------------------
 
 void DStyle::Dump1Style( USHORT nNr )
@@ -2506,7 +2506,7 @@ void DStyle::Dump1Style( USHORT nNr )
 
     WW8_STD* pStd = Read1Style( nSkip, &aStr, &cbStd ); // lese Style
 
-    if ( aStr.Len() )										// echter Style
+    if ( aStr.Len() )                                       // echter Style
     {
         *pOut << begin1;
         switch ( pStd->sgc ){
@@ -2524,17 +2524,17 @@ void DStyle::Dump1Style( USHORT nNr )
         *pOut << "No of Upx & Upe:" << pStd->cupx << ' ';
         *pOut << "bchUpe:" << pStd->bchUpe << ' ';
         *pOut << "nSkip:" << nSkip << endl1;
-    }else{									// leerer Slot
+    }else{                                  // leerer Slot
         *pOut << "empty Slot Nr:" << nNr << endl1;
     }
 
-    long nPos = xTableStream->Tell();				// falls etwas falsch interpretiert
+    long nPos = xTableStream->Tell();               // falls etwas falsch interpretiert
                                         // wird, gehts danach wieder richtig
 
     if( pStd && ( pStd->sgc == 1 || pStd->sgc == 2 ) )
         DumpStyleGrupx( nVersion, nSkip, pStd->sgc == 1 );
 
-    if ( aStr.Len() ) 								// echter Style
+    if ( aStr.Len() )                               // echter Style
         end( *pOut, *xTableStream ) << c << "-Style" << endl1;
 
     xTableStream->Seek( nPos+nSkip );
@@ -2546,7 +2546,7 @@ void DStyle::Dump()
 {
     *pOut << hex6 << nStyleStart << ' ' << dec2 << indent1;
 
-    *pOut << begin1 	  << cstd << " Styles, ";
+    *pOut << begin1       << cstd << " Styles, ";
     *pOut << "Base:"      << cbSTDBaseInFile;
     *pOut << ", Written:" << (fStdStylenamesWritten) ? 'T' : 'F';
     *pOut << ", MaxSti:"  << stiMaxWhenSaved;
@@ -2562,7 +2562,7 @@ void DStyle::Dump()
 }
 
 //-----------------------------------------
-//				Main
+//              Main
 //-----------------------------------------
 
 //char cName [266];
@@ -2632,7 +2632,7 @@ int DoConvert( const String& rName, BYTE nVersion )
     // welcher Table-Stream gueltig ist.
     // Diesen oeffnen wir nun.
 
-    switch( pWwFib->nVersion )	// 6 steht fuer "6 ODER 7",  7 steht fuer "NUR 7"
+    switch( pWwFib->nVersion )  // 6 steht fuer "6 ODER 7",  7 steht fuer "NUR 7"
     {
     case 6:
     case 7:
@@ -2667,10 +2667,10 @@ int DoConvert( const String& rName, BYTE nVersion )
 
     // erstmal die Lowlevel-Funktionen
 
-    ((DFib*)pWwFib)->Dump();														// FIB
-    DumpDop(  *pWwFib );																					// WW8_DOP
+    ((DFib*)pWwFib)->Dump();                                                        // FIB
+    DumpDop(  *pWwFib );                                                                                    // WW8_DOP
 
-    if(	( 8 > pWwFib->nVersion && pWwFib->fComplex ) ||
+    if( ( 8 > pWwFib->nVersion && pWwFib->fComplex ) ||
         pWwFib->lcbClx )
         DumpPcd( pWwFib->nVersion, pWwFib->fcClx, pWwFib->lcbClx );
 
@@ -2679,18 +2679,18 @@ int DoConvert( const String& rName, BYTE nVersion )
     DumpBookHigh();
 
 
-    DumpPLCF( pWwFib->fcPlcfsed, pWwFib->lcbPlcfsed, SEP ); 			// SEPX
+    DumpPLCF( pWwFib->fcPlcfsed, pWwFib->lcbPlcfsed, SEP );             // SEPX
 
     DumpPLCF( pWwFib->fcPlcfbteChpx, pWwFib->lcbPlcfbteChpx, CHP ); // CHPX
 
     DumpPLCF( pWwFib->fcPlcfbtePapx, pWwFib->lcbPlcfbtePapx, PAP ); // PAPX
 
     {
-        DStyle aStyle( *xTableStream, *pWwFib );										// Styles
+        DStyle aStyle( *xTableStream, *pWwFib );                                        // Styles
         aStyle.Dump();
     }
 
-    DumpFonts();														// WW8_FFN
+    DumpFonts();                                                        // WW8_FFN
 
   // ... und jetzt die High-Level-Funktionen
 
@@ -2701,7 +2701,7 @@ int DoConvert( const String& rName, BYTE nVersion )
     DumpField1( pWwFib->fcPlcffldMom, pWwFib->lcbPlcffldMom,
                 "MainText Fields" );
 
-    DumpHeader( pSBase );											// Header / Footer
+    DumpHeader( pSBase );                                           // Header / Footer
     DumpField1( pWwFib->fcPlcffldHdr, pWwFib->lcbPlcffldHdr,
                 "Header/Footer Fields" );
 
@@ -2737,7 +2737,7 @@ int DoConvert( const String& rName, BYTE nVersion )
 
 void DeInit()
 {
-//	DELETEZ( aWwStor );
+//  DELETEZ( aWwStor );
     xStrm.Clear();
     DELETEZ( pxStor );
     DELETEZ( pOut );

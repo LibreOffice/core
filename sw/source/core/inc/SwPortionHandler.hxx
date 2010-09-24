@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ class String;
  * held by the corresponding SwTxtNode.
  *
  * The SwPortionHandler can be used with the
- * SwTextFrame::VisitPortions(...) method.  
+ * SwTextFrame::VisitPortions(...) method.
  */
 class SwPortionHandler
 {
@@ -93,7 +93,7 @@ public:
         ) = 0;
 
     /** end of paragraph. This method is to be called when all the
-     * paragraph's portions have been processed. 
+     * paragraph's portions have been processed.
      */
     virtual void Finish() = 0;
 };

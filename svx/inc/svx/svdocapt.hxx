@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,11 +37,11 @@
 
 class ImpCaptParams;
 
-namespace sdr {	namespace properties {
+namespace sdr { namespace properties {
     class CaptionProperties;
 }}
 
-#define SDRSETITEM_CAPTION_ATTR		SDRSETITEM_ATTR_COUNT
+#define SDRSETITEM_CAPTION_ATTR     SDRSETITEM_ATTR_COUNT
 
 //************************************************************
 //   Hilfsklasse SdrCaptObjGeoData
@@ -51,7 +51,7 @@ namespace sdr {	namespace properties {
 class SdrCaptObjGeoData : public SdrTextObjGeoData
 {
 public:
-    Polygon						aTailPoly;
+    Polygon                     aTailPoly;
 };
 
 //************************************************************
@@ -63,17 +63,17 @@ class SVX_DLLPUBLIC SdrCaptionObj : public SdrRectObj
 private:
     // to allow sdr::properties::CaptionProperties access to ImpRecalcTail()
     friend class sdr::properties::CaptionProperties;
-    friend class				SdrTextObj; // fuer ImpRecalcTail() bei AutoGrow
+    friend class                SdrTextObj; // fuer ImpRecalcTail() bei AutoGrow
 
 protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
 private:
-    Polygon						aTailPoly;  // das ganze Polygon des Schwanzes
-    sal_Bool					mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
-    sal_Bool					mbFixedTail; // for calc note box fixed tail, default FALSE
-    Point					    maFixedTailPos; // for calc note box fixed tail position.
+    Polygon                     aTailPoly;  // das ganze Polygon des Schwanzes
+    sal_Bool                    mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
+    sal_Bool                    mbFixedTail; // for calc note box fixed tail, default FALSE
+    Point                       maFixedTailPos; // for calc note box fixed tail position.
 
 private:
     SVX_DLLPRIVATE void ImpGetCaptParams(ImpCaptParams& rPara) const;
@@ -99,7 +99,7 @@ public:
     void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = TRUE; }
     sal_Bool GetSpecialTextBoxShadow() const { return mbSpecialTextBoxShadow; }
 
-    // for calc: fixed note tail position. 
+    // for calc: fixed note tail position.
     void SetFixedTail() { mbFixedTail = TRUE; }
 
     virtual void TakeObjNameSingul(String& rName) const;
@@ -111,7 +111,7 @@ public:
 
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-    
+
     // special drag methods
     virtual bool hasSpecialDrag() const;
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
@@ -159,7 +159,7 @@ public:
     // Add own implementation for TRSetBaseGeometry to handle TailPos over changes
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
-    inline const Point& GetFixedTailPos() const  {return maFixedTailPos;} 
+    inline const Point& GetFixedTailPos() const  {return maFixedTailPos;}
 
     // geometry access
     ::basegfx::B2DPolygon getTailPolygon() const;

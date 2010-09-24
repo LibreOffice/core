@@ -1,6 +1,6 @@
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,7 +139,7 @@ namespace svt
         if ( m_pData->aActivePanel == i_nPosition )
         {
             const ::boost::optional< size_t > aOldActive( m_pData->aActivePanel );
-            
+
             if ( i_nPosition + 1 < GetPanelCount() )
             {
                 ++*m_pData->aActivePanel;

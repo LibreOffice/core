@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <vcl/salbtype.hxx>		// FRound
+#include <vcl/salbtype.hxx>     // FRound
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -80,7 +80,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
             {
                 const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
                 const basegfx::B2DHomMatrix aTransformation(basegfx::tools::createRotateAroundPoint(aCenter, -fAngle));
-                
+
                 aStartPos *= aTransformation;
                 aEndPos *= aTransformation;
             }
@@ -98,12 +98,12 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
                 aFullVec.normalize();
                 aEndPos = aStartPos + (aFullVec * fLen);
             }
-            
+
             if(rG.aGradient.GetAngle())
             {
                 const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
                 const basegfx::B2DHomMatrix aTransformation(basegfx::tools::createRotateAroundPoint(aCenter, -fAngle));
-                
+
                 aStartPos *= aTransformation;
                 aEndPos *= aTransformation;
             }
@@ -122,7 +122,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
                 aFullVec.normalize();
                 aStartPos = aEndPos + (aFullVec * fLen);
             }
-            
+
             if(rG.aGradient.GetAngle())
             {
                 const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
@@ -131,7 +131,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
                 aStartPos *= aTransformation;
                 aEndPos *= aTransformation;
             }
-            
+
             if(rG.aGradient.GetXOffset() || rG.aGradient.GetYOffset())
             {
                 basegfx::B2DPoint aOffset(
@@ -157,7 +157,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
                 aFullVec.normalize();
                 aStartPos = aEndPos + (aFullVec * fLen);
             }
-            
+
             if(rG.aGradient.GetAngle())
             {
                 const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
@@ -166,7 +166,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
                 aStartPos *= aTransformation;
                 aEndPos *= aTransformation;
             }
-            
+
             if(rG.aGradient.GetXOffset() || rG.aGradient.GetYOffset())
             {
                 basegfx::B2DPoint aOffset(
@@ -188,7 +188,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
 
 //////////////////////////////////////////////////////////////////////////////
 
-void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, GradTransGradient& rGOld, const SdrObject* pObj, 
+void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, GradTransGradient& rGOld, const SdrObject* pObj,
     sal_Bool bMoveSingle, sal_Bool bMoveFirst)
 {
     // fill old gradient to new gradient to have a base
@@ -225,9 +225,9 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 {
                     aFullVec = aEndPos - aCenter;
                 }
-            
+
                 aFullVec.normalize();
-                
+
                 double fNewFullAngle(atan2(aFullVec.getY(), aFullVec.getX()));
                 fNewFullAngle /= F_PI180;
                 fNewFullAngle *= -10.0;
@@ -311,7 +311,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 {
                     rG.aGradient.SetBorder((sal_uInt16)nNewBorder);
                 }
-                
+
                 aFullVec.normalize();
                 double fNewFullAngle(atan2(aFullVec.getY(), aFullVec.getX()));
                 fNewFullAngle /= F_PI180;

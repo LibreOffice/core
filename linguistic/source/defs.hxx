@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class SvStream;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define A2OU(x)	::rtl::OUString::createFromAscii( x )
+#define A2OU(x) ::rtl::OUString::createFromAscii( x )
 
 typedef boost::shared_ptr< SvStream > SvStreamPtr;
 
@@ -57,15 +57,15 @@ struct LangSvcEntries
     bool        bDoWarnAgain;
 
     LangSvcEntries() : nLastTriedSvcIndex(-1), bAlreadyWarned(false), bDoWarnAgain(false) {}
-    
+
     inline LangSvcEntries( const css::uno::Sequence< ::rtl::OUString > &rSvcImplNames ) :
         aSvcImplNames(rSvcImplNames),
-        nLastTriedSvcIndex(-1), bAlreadyWarned(false), bDoWarnAgain(false) 
+        nLastTriedSvcIndex(-1), bAlreadyWarned(false), bDoWarnAgain(false)
     {
     }
 
-    inline LangSvcEntries( const ::rtl::OUString &rSvcImplName ) : 
-        nLastTriedSvcIndex(-1), bAlreadyWarned(false), bDoWarnAgain(false) 
+    inline LangSvcEntries( const ::rtl::OUString &rSvcImplName ) :
+        nLastTriedSvcIndex(-1), bAlreadyWarned(false), bDoWarnAgain(false)
     {
         aSvcImplNames.realloc(1);
         aSvcImplNames[0] = rSvcImplName;
@@ -75,7 +75,7 @@ struct LangSvcEntries
     void    SetAlreadyWarned( bool bVal )   { bAlreadyWarned = 0 != bVal; }
     bool    IsDoWarnAgain() const           { return bDoWarnAgain != 0; }
     void    SetDoWarnAgain( bool bVal )     { bDoWarnAgain = 0 != bVal; }
-    
+
     inline void Clear()
     {
         aSvcImplNames.realloc(0);
@@ -99,7 +99,7 @@ struct LangSvcEntries_Grammar : public LangSvcEntries
 
     LangSvcEntries_Grammar() : LangSvcEntries() {}
     LangSvcEntries_Grammar( const ::rtl::OUString &rSvcImplName ) : LangSvcEntries( rSvcImplName ) {}
-};    
+};
 
 struct LangSvcEntries_Hyph : public LangSvcEntries
 {
@@ -107,7 +107,7 @@ struct LangSvcEntries_Hyph : public LangSvcEntries
 
     LangSvcEntries_Hyph() : LangSvcEntries() {}
     LangSvcEntries_Hyph( const ::rtl::OUString &rSvcImplName ) : LangSvcEntries( rSvcImplName ) {}
-};    
+};
 
 struct LangSvcEntries_Thes : public LangSvcEntries
 {
@@ -115,7 +115,7 @@ struct LangSvcEntries_Thes : public LangSvcEntries
 
     LangSvcEntries_Thes() : LangSvcEntries() {}
     LangSvcEntries_Thes( const css::uno::Sequence< ::rtl::OUString > &rSvcImplNames ) : LangSvcEntries( rSvcImplNames ) {}
-};    
+};
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -123,8 +123,8 @@ struct LangSvcEntries_Thes : public LangSvcEntries
 class LinguDispatcher
 {
 public:
-    enum DspType    { DSP_SPELL, DSP_HYPH, DSP_THES, DSP_GRAMMAR };     
-    
+    enum DspType    { DSP_SPELL, DSP_HYPH, DSP_THES, DSP_GRAMMAR };
+
     virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< rtl::OUString > &rSvcImplNames ) = 0;
     virtual css::uno::Sequence< rtl::OUString > GetServiceList( const css::lang::Locale &rLocale ) const = 0;
     virtual DspType GetDspType() const = 0;

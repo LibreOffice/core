@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,46 +98,46 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001 // class ScHFEditPage
 //CHINA001 //
 //CHINA001
-//CHINA001 ScHFEditPage::ScHFEditPage( Window*			pParent,
-//CHINA001 USHORT				nResId,
-//CHINA001 const SfxItemSet&	rCoreAttrs,
-//CHINA001 USHORT				nWhichId )
+//CHINA001 ScHFEditPage::ScHFEditPage( Window*          pParent,
+//CHINA001 USHORT               nResId,
+//CHINA001 const SfxItemSet&    rCoreAttrs,
+//CHINA001 USHORT               nWhichId )
 //CHINA001
-//CHINA001 :	SfxTabPage		( pParent, ScResId( nResId ), rCoreAttrs ),
+//CHINA001 :    SfxTabPage      ( pParent, ScResId( nResId ), rCoreAttrs ),
 //CHINA001
-//CHINA001 aWndLeft		( this, ScResId( WND_LEFT ), Left ),
-//CHINA001 aWndCenter		( this, ScResId( WND_CENTER ), Center ),
-//CHINA001 aWndRight		( this, ScResId( WND_RIGHT ), Right ),
-//CHINA001 aFtLeft		( this, ScResId( FT_LEFT ) ),
-//CHINA001 aFtCenter		( this, ScResId( FT_CENTER ) ),
-//CHINA001 aFtRight		( this, ScResId( FT_RIGHT ) ),
-//CHINA001 aFlInfo		( this, ScResId( FL_INFO ) ),
-//CHINA001 aFtInfo		( this, ScResId( FT_INFO ) ),
-//CHINA001 aBtnText		( this, ScResId( BTN_TEXT ) ),
-//CHINA001 aBtnPage		( this, ScResId( BTN_PAGE ) ),
-//CHINA001 aBtnLastPage	( this, ScResId( BTN_PAGES ) ),
-//CHINA001 aBtnDate		( this, ScResId( BTN_DATE ) ),
-//CHINA001 aBtnTime		( this, ScResId( BTN_TIME ) ),
-//CHINA001 aBtnFile		( this, ScResId( BTN_FILE ) ),
-//CHINA001 aBtnTable		( this, ScResId( BTN_TABLE ) ),
-//CHINA001 aPopUpFile		( ScResId( RID_POPUP_FCOMMAND) ),
-//CHINA001 nWhich			( nWhichId )
+//CHINA001 aWndLeft     ( this, ScResId( WND_LEFT ), Left ),
+//CHINA001 aWndCenter       ( this, ScResId( WND_CENTER ), Center ),
+//CHINA001 aWndRight        ( this, ScResId( WND_RIGHT ), Right ),
+//CHINA001 aFtLeft      ( this, ScResId( FT_LEFT ) ),
+//CHINA001 aFtCenter        ( this, ScResId( FT_CENTER ) ),
+//CHINA001 aFtRight     ( this, ScResId( FT_RIGHT ) ),
+//CHINA001 aFlInfo      ( this, ScResId( FL_INFO ) ),
+//CHINA001 aFtInfo      ( this, ScResId( FT_INFO ) ),
+//CHINA001 aBtnText     ( this, ScResId( BTN_TEXT ) ),
+//CHINA001 aBtnPage     ( this, ScResId( BTN_PAGE ) ),
+//CHINA001 aBtnLastPage ( this, ScResId( BTN_PAGES ) ),
+//CHINA001 aBtnDate     ( this, ScResId( BTN_DATE ) ),
+//CHINA001 aBtnTime     ( this, ScResId( BTN_TIME ) ),
+//CHINA001 aBtnFile     ( this, ScResId( BTN_FILE ) ),
+//CHINA001 aBtnTable        ( this, ScResId( BTN_TABLE ) ),
+//CHINA001 aPopUpFile       ( ScResId( RID_POPUP_FCOMMAND) ),
+//CHINA001 nWhich           ( nWhichId )
 //CHINA001 {
-//CHINA001 //!	use default style from current document?
-//CHINA001 //!	if font color is used, header/footer background color must be set
+//CHINA001 //!  use default style from current document?
+//CHINA001 //!  if font color is used, header/footer background color must be set
 //CHINA001
-//CHINA001 ScPatternAttr	aPatAttr( rCoreAttrs.GetPool() );
+//CHINA001 ScPatternAttr    aPatAttr( rCoreAttrs.GetPool() );
 //CHINA001
 //CHINA001 aBtnFile.SetPopupMenu(&aPopUpFile);
 //CHINA001
 //CHINA001 aBtnFile.SetMenuHdl( LINK( this, ScHFEditPage, MenuHdl ) );
-//CHINA001 aBtnText	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-//CHINA001 aBtnPage	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+//CHINA001 aBtnText .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+//CHINA001 aBtnPage .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
 //CHINA001 aBtnLastPage.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-//CHINA001 aBtnDate	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-//CHINA001 aBtnTime	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-//CHINA001 aBtnFile	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
-//CHINA001 aBtnTable	.SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+//CHINA001 aBtnDate .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+//CHINA001 aBtnTime .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+//CHINA001 aBtnFile .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
+//CHINA001 aBtnTable    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
 //CHINA001
 //CHINA001 aBtnText    .SetModeImage( Image( ScResId( IMG_TEXT_H  ) ), BMP_COLOR_HIGHCONTRAST );
 //CHINA001 aBtnFile    .SetModeImage( Image( ScResId( IMG_FILE_H  ) ), BMP_COLOR_HIGHCONTRAST );
@@ -147,9 +147,9 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001 aBtnDate    .SetModeImage( Image( ScResId( IMG_DATE_H  ) ), BMP_COLOR_HIGHCONTRAST );
 //CHINA001 aBtnTime    .SetModeImage( Image( ScResId( IMG_TIME_H  ) ), BMP_COLOR_HIGHCONTRAST );
 //CHINA001
-//CHINA001 aWndLeft.	SetFont( aPatAttr );
+//CHINA001 aWndLeft.    SetFont( aPatAttr );
 //CHINA001 aWndCenter. SetFont( aPatAttr );
-//CHINA001 aWndRight.	SetFont( aPatAttr );
+//CHINA001 aWndRight.   SetFont( aPatAttr );
 //CHINA001
 //CHINA001 FillCmdArr();
 //CHINA001
@@ -178,7 +178,7 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001 void __EXPORT ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
 //CHINA001 {
 //CHINA001 if ( IS_AVAILABLE( nWhich ) )
-//CHINA001	{
+//CHINA001  {
 //CHINA001 const ScPageHFItem& rItem = (const ScPageHFItem&)(rCoreSet.Get( nWhich ));
 //CHINA001
 //CHINA001 const EditTextObject* pLeft   = rItem.GetLeftArea();
@@ -186,12 +186,12 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001 const EditTextObject* pRight  = rItem.GetRightArea();
 //CHINA001
 //CHINA001 if ( pLeft && pCenter && pRight )
-//CHINA001		{
-//CHINA001 aWndLeft	.SetText( *pLeft );
-//CHINA001 aWndCenter	.SetText( *pCenter );
-//CHINA001 aWndRight	.SetText( *pRight );
-//CHINA001		}
-//CHINA001	}
+//CHINA001      {
+//CHINA001 aWndLeft .SetText( *pLeft );
+//CHINA001 aWndCenter   .SetText( *pCenter );
+//CHINA001 aWndRight    .SetText( *pRight );
+//CHINA001      }
+//CHINA001  }
 //CHINA001 }
 //CHINA001
 //CHINA001 #undef IS_AVAILABLE
@@ -200,10 +200,10 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001
 //CHINA001 BOOL __EXPORT ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
 //CHINA001 {
-//CHINA001 ScPageHFItem	aItem( nWhich );
-//CHINA001 EditTextObject* pLeft	= aWndLeft	.CreateTextObject();
+//CHINA001 ScPageHFItem aItem( nWhich );
+//CHINA001 EditTextObject* pLeft    = aWndLeft  .CreateTextObject();
 //CHINA001 EditTextObject* pCenter = aWndCenter.CreateTextObject();
-//CHINA001 EditTextObject* pRight	= aWndRight .CreateTextObject();
+//CHINA001 EditTextObject* pRight   = aWndRight .CreateTextObject();
 //CHINA001
 //CHINA001 aItem.SetLeftArea  ( *pLeft );
 //CHINA001 aItem.SetCenterArea( *pCenter );
@@ -218,11 +218,11 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001 }
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
-//CHINA001 
+//CHINA001
 //CHINA001 #define SET_CMD(i,id) x
-//CHINA001 aCmd  = aDel;							x
-//CHINA001 aCmd += ScGlobal::GetRscString( id );	x
-//CHINA001 aCmd += aDel;							x
+//CHINA001 aCmd  = aDel;                            x
+//CHINA001 aCmd += ScGlobal::GetRscString( id );    x
+//CHINA001 aCmd += aDel;                            x
 //CHINA001 aCmdArr[i] = aCmd;
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
@@ -252,26 +252,26 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001 return 0;
 //CHINA001
 //CHINA001 if ( pBtn == &aBtnText )
-//CHINA001	{
+//CHINA001  {
 //CHINA001 pActiveEdWnd->SetCharAttriutes();
-//CHINA001	}
-//CHINA001	else
-//CHINA001	{
+//CHINA001  }
+//CHINA001  else
+//CHINA001  {
 //CHINA001 if ( pBtn == &aBtnPage )
 //CHINA001 pActiveEdWnd->InsertField( SvxFieldItem(SvxPageField()) );
-//CHINA001		else if ( pBtn == &aBtnLastPage )
+//CHINA001      else if ( pBtn == &aBtnLastPage )
 //CHINA001 pActiveEdWnd->InsertField( SvxFieldItem(SvxPagesField()) );
-//CHINA001		else if ( pBtn == &aBtnDate )
+//CHINA001      else if ( pBtn == &aBtnDate )
 //CHINA001 pActiveEdWnd->InsertField( SvxFieldItem(SvxDateField(Date(),SVXDATETYPE_VAR)) );
-//CHINA001		else if ( pBtn == &aBtnTime )
+//CHINA001      else if ( pBtn == &aBtnTime )
 //CHINA001 pActiveEdWnd->InsertField( SvxFieldItem(SvxTimeField()) );
-//CHINA001		else if ( pBtn == &aBtnFile )
-//CHINA001		{
+//CHINA001      else if ( pBtn == &aBtnFile )
+//CHINA001      {
 //CHINA001 pActiveEdWnd->InsertField( SvxFieldItem( SvxFileField() ) );
-//CHINA001		}
-//CHINA001		else if ( pBtn == &aBtnTable )
+//CHINA001      }
+//CHINA001      else if ( pBtn == &aBtnTable )
 //CHINA001 pActiveEdWnd->InsertField( SvxFieldItem(SvxTableField()) );
-//CHINA001	}
+//CHINA001  }
 //CHINA001 pActiveEdWnd->GrabFocus();
 //CHINA001
 //CHINA001 return 0;
@@ -283,22 +283,22 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001 return 0;
 //CHINA001
 //CHINA001 if(pBtn!=NULL)
-//CHINA001	{
+//CHINA001  {
 //CHINA001 switch(pBtn->GetSelected())
-//CHINA001		{
-//CHINA001			case FILE_COMMAND_TITEL:
+//CHINA001      {
+//CHINA001          case FILE_COMMAND_TITEL:
 //CHINA001 pActiveEdWnd->InsertField( SvxFieldItem( SvxFileField() ) );
 //CHINA001 break;
-//CHINA001			case FILE_COMMAND_FILENAME:
+//CHINA001          case FILE_COMMAND_FILENAME:
 //CHINA001 pActiveEdWnd->InsertField( SvxFieldItem( SvxExtFileField(
 //CHINA001 EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ) ) );
 //CHINA001 break;
-//CHINA001			case FILE_COMMAND_PATH:
+//CHINA001          case FILE_COMMAND_PATH:
 //CHINA001 pActiveEdWnd->InsertField( SvxFieldItem( SvxExtFileField(
 //CHINA001 EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ) ) );
 //CHINA001 break;
-//CHINA001		}
-//CHINA001	}
+//CHINA001      }
+//CHINA001  }
 //CHINA001 return 0;
 //CHINA001 }
 //CHINA001
@@ -309,17 +309,17 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001 ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
 //CHINA001 : ScHFEditPage( pParent, RID_SCPAGE_HFED_HR, rCoreSet,
 //CHINA001 rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERRIGHT) )
-//CHINA001	{}
+//CHINA001  {}
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
 //CHINA001 USHORT* __EXPORT ScRightHeaderEditPage::GetRanges()
-//CHINA001	{ return pPageRightHeaderRanges; }
+//CHINA001  { return pPageRightHeaderRanges; }
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
 //CHINA001 SfxTabPage* __EXPORT ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
-//CHINA001	{ return ( new ScRightHeaderEditPage( pParent, rCoreSet ) ); };
+//CHINA001  { return ( new ScRightHeaderEditPage( pParent, rCoreSet ) ); };
 //CHINA001
 //CHINA001
 //CHINA001 //========================================================================
@@ -329,17 +329,17 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001 ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
 //CHINA001 : ScHFEditPage( pParent, RID_SCPAGE_HFED_HL, rCoreSet,
 //CHINA001 rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_HEADERLEFT) )
-//CHINA001	{}
+//CHINA001  {}
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
 //CHINA001 USHORT* __EXPORT ScLeftHeaderEditPage::GetRanges()
-//CHINA001	{ return pPageLeftHeaderRanges; }
+//CHINA001  { return pPageLeftHeaderRanges; }
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
 //CHINA001 SfxTabPage* __EXPORT ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
-//CHINA001	{ return ( new ScLeftHeaderEditPage( pParent, rCoreSet ) ); };
+//CHINA001  { return ( new ScLeftHeaderEditPage( pParent, rCoreSet ) ); };
 //CHINA001
 //CHINA001 //========================================================================
 //CHINA001 // class ScRightFooterEditPage
@@ -348,17 +348,17 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001 ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
 //CHINA001 : ScHFEditPage( pParent, RID_SCPAGE_HFED_FR, rCoreSet,
 //CHINA001 rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERRIGHT) )
-//CHINA001	{}
+//CHINA001  {}
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
 //CHINA001 USHORT* __EXPORT ScRightFooterEditPage::GetRanges()
-//CHINA001	{ return pPageRightFooterRanges; }
+//CHINA001  { return pPageRightFooterRanges; }
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
 //CHINA001 SfxTabPage* __EXPORT ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
-//CHINA001	{ return ( new ScRightFooterEditPage( pParent, rCoreSet ) ); };
+//CHINA001  { return ( new ScRightFooterEditPage( pParent, rCoreSet ) ); };
 //CHINA001
 //CHINA001 //========================================================================
 //CHINA001 // class ScLeftFooterEditPage
@@ -367,17 +367,17 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001 ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
 //CHINA001 : ScHFEditPage( pParent, RID_SCPAGE_HFED_FL, rCoreSet,
 //CHINA001 rCoreSet.GetPool()->GetWhich(SID_SCATTR_PAGE_FOOTERLEFT) )
-//CHINA001	{}
+//CHINA001  {}
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
 //CHINA001 USHORT* __EXPORT ScLeftFooterEditPage::GetRanges()
-//CHINA001	{ return pPageLeftFooterRanges; }
+//CHINA001  { return pPageLeftFooterRanges; }
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
 //CHINA001 SfxTabPage* __EXPORT ScLeftFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
-//CHINA001	{ return ( new ScLeftFooterEditPage( pParent, rCoreSet ) ); };
+//CHINA001  { return ( new ScLeftFooterEditPage( pParent, rCoreSet ) ); };
 
 //========================================================================
 
@@ -398,7 +398,7 @@ void lcl_GetFieldData( ScHeaderFieldData& rData )
 //========================================================================
 
 ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLocation eLoc )
-    :	Control( pParent, rResId ),
+    :   Control( pParent, rResId ),
     eLocation(eLoc),
     pAcc(NULL)
 {
@@ -421,10 +421,10 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLo
     ScHeaderFieldData aData;
     lcl_GetFieldData( aData );
 
-        //	Feldbefehle:
+        //  Feldbefehle:
     pEdEngine->SetData( aData );
     pEdEngine->SetControlWord( pEdEngine->GetControlWord() | EE_CNTRL_MARKFIELDS );
-    mbRTL = ScGlobal::IsSystemRTL(); 
+    mbRTL = ScGlobal::IsSystemRTL();
     if (mbRTL)
         pEdEngine->SetDefaultHorizontalTextDirection(EE_HTEXTDIR_R2L);
 
@@ -462,8 +462,8 @@ void ScEditWindow::SetNumType(SvxNumType eNumType)
 
 EditTextObject* __EXPORT ScEditWindow::CreateTextObject()
 {
-    //	wegen #38841# die Absatzattribute zuruecksetzen
-    //	(GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
+    //  wegen #38841# die Absatzattribute zuruecksetzen
+    //  (GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
 
     const SfxItemSet& rEmpty = pEdEngine->GetEmptyItemSet();
     USHORT nParCnt = pEdEngine->GetParagraphCount();
@@ -477,15 +477,15 @@ EditTextObject* __EXPORT ScEditWindow::CreateTextObject()
 
 void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
 {
-    SfxItemSet*	pSet = new SfxItemSet( pEdEngine->GetEmptyItemSet() );
+    SfxItemSet* pSet = new SfxItemSet( pEdEngine->GetEmptyItemSet() );
     rPattern.FillEditItemSet( pSet );
-    //	FillEditItemSet adjusts font height to 1/100th mm,
-    //	but for header/footer twips is needed, as in the PatternAttr:
+    //  FillEditItemSet adjusts font height to 1/100th mm,
+    //  but for header/footer twips is needed, as in the PatternAttr:
     pSet->Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
     pSet->Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
     pSet->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
     if (mbRTL)
-        pSet->Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );	
+        pSet->Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
     pEdEngine->SetDefaults( pSet );
 }
 
@@ -507,11 +507,11 @@ void ScEditWindow::InsertField( const SvxFieldItem& rFld )
 
 void ScEditWindow::SetCharAttriutes()
 {
-    SfxObjectShell*	pDocSh	= SfxObjectShell::Current();
+    SfxObjectShell* pDocSh  = SfxObjectShell::Current();
 
-    SfxViewShell*		pViewSh = SfxViewShell::Current();
+    SfxViewShell*       pViewSh = SfxViewShell::Current();
 
-    ScTabViewShell*	pTabViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    ScTabViewShell* pTabViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
 
 
     DBG_ASSERT( pDocSh,  "Current DocShell not found" );
@@ -554,7 +554,7 @@ void __EXPORT ScEditWindow::Paint( const Rectangle& rRec )
 
     SetBackground( aBgColor );
 
-    Control::Paint(	rRec );
+    Control::Paint( rRec );
 
     pEdView->Paint( rRec );
 }
@@ -672,27 +672,27 @@ class ScExtIButton : public ImageButton
 {
 private:
 
-    Timer			aTimer;
-    ScPopupMenu*	pPopupMenu;
+    Timer           aTimer;
+    ScPopupMenu*    pPopupMenu;
 
     DECL_LINK( TimerHdl, Timer*);
 
-    void			DrawArrow();
+    void            DrawArrow();
 
 protected:
 
-    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void	MouseButtonUp( const MouseEvent& rMEvt);
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt);
 
-    virtual void	StartPopup();
+    virtual void    StartPopup();
 
 public:
 
     ScExtIButton(Window* pParent, const ResId& rResId );
 
-    void			SetPopupMenu(ScPopupMenu* pPopUp);
+    void            SetPopupMenu(ScPopupMenu* pPopUp);
 
-    USHORT			GetSelected();
+    USHORT          GetSelected();
 
     void            SetMenuHdl( const Link& rLink ) { aFxLink = rLink; }
     const Link&     GetMenuHdl() const { return aFxLink; }
@@ -700,14 +700,14 @@ public:
 }
 */
 ScExtIButton::ScExtIButton(Window* pParent, const ResId& rResId )
-:	ImageButton(pParent,rResId),
+:   ImageButton(pParent,rResId),
     pPopupMenu(NULL)
 {
     nSelected=0;
     aTimer.SetTimeout(600);
     SetDropDown( TRUE);
 
-//	DrawArrow();
+//  DrawArrow();
 }
 
 void ScExtIButton::SetPopupMenu(ScPopupMenu* pPopUp)
@@ -786,8 +786,8 @@ IMPL_LINK( ScExtIButton, TimerHdl, Timer*, EMPTYARG )
 static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack,
                                BOOL bLeft = FALSE, BOOL bTop = FALSE )
 {
-    Color			aOldFillColor = pBox->GetFillColor();
-    WindowAlign 	eAlign = pBox->meAlign;
+    Color           aOldFillColor = pBox->GetFillColor();
+    WindowAlign     eAlign = pBox->meAlign;
     if ( bLeft )
         eAlign = WINDOWALIGN_RIGHT;
     else if ( bTop )

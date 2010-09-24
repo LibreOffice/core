@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,32 +52,32 @@ namespace drawinglayer
             if(getSdrLSTAttribute().getLine().isDefault())
             {
                 // create invisible line for HitTest/BoundRect
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createHiddenGeometryPrimitives2D(
                         false,
                         basegfx::B2DPolyPolygon(getUnitPolygon())));
             }
             else
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolygonLinePrimitive(
-                        getUnitPolygon(), 
-                        basegfx::B2DHomMatrix(), 
-                        getSdrLSTAttribute().getLine(), 
+                        getUnitPolygon(),
+                        basegfx::B2DHomMatrix(),
+                        getSdrLSTAttribute().getLine(),
                         getSdrLSTAttribute().getLineStartEnd()));
             }
 
             // add text
             if(!getSdrLSTAttribute().getText().isDefault())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, 
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createTextPrimitive(
-                        basegfx::B2DPolyPolygon(getUnitPolygon()), 
-                        basegfx::B2DHomMatrix(), 
-                        getSdrLSTAttribute().getText(), 
-                        getSdrLSTAttribute().getLine(), 
-                        false, 
-                        false, 
+                        basegfx::B2DPolyPolygon(getUnitPolygon()),
+                        basegfx::B2DHomMatrix(),
+                        getSdrLSTAttribute().getText(),
+                        getSdrLSTAttribute().getLine(),
+                        false,
+                        false,
                         false));
             }
 
@@ -95,7 +95,7 @@ namespace drawinglayer
         SdrConnectorPrimitive2D::SdrConnectorPrimitive2D(
             const attribute::SdrLineShadowTextAttribute& rSdrLSTAttribute,
             const ::basegfx::B2DPolygon& rUnitPolygon)
-        :	BufferedDecompositionPrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maSdrLSTAttribute(rSdrLSTAttribute),
             maUnitPolygon(rUnitPolygon)
         {
@@ -106,7 +106,7 @@ namespace drawinglayer
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrConnectorPrimitive2D& rCompare = (SdrConnectorPrimitive2D&)rPrimitive;
-                
+
                 return (getUnitPolygon() == rCompare.getUnitPolygon()
                     && getSdrLSTAttribute() == rCompare.getSdrLSTAttribute());
             }

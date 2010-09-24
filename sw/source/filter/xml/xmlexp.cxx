@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
 SwXMLExport::SwXMLExport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nExportFlags)
-:	SvXMLExport( xServiceFactory, MAP_INCH, XML_TEXT, nExportFlags ),
+:   SvXMLExport( xServiceFactory, MAP_INCH, XML_TEXT, nExportFlags ),
 #ifdef XML_CORE_API
     pCurPaM( 0 ),
     pOrigPaM( &rPaM ),
@@ -159,7 +159,7 @@ SwXMLExport::SwXMLExport(
     const Reference< XGraphicObjectResolver > & rEmbeddedGrfObjs,
     sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
     sal_Bool bShowProg )
-:	SvXMLExport( xServiceFactory, rFileName, rHandler, rModel, rEmbeddedGrfObjs,
+:   SvXMLExport( xServiceFactory, rFileName, rHandler, rModel, rEmbeddedGrfObjs,
                  SW_MOD()->GetMetric( rPaM.GetDoc()->get(IDocumentSettingAccess::HTML_MODE) ) ),
     pCurPaM( 0 ),
     pOrigPaM( &rPaM ),
@@ -291,7 +291,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
         SfxObjectShell* pObjSh = pDoc->GetDocShell();
         if( pObjSh )
-            pObjSh->UpdateDocInfoForSave();		// update information
+            pObjSh->UpdateDocInfoForSave();     // update information
     }
     if( bShowProgress )
     {
@@ -320,7 +320,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             nRef += pDoc->GetCharFmts()->Count() - 1;
             nRef += pDoc->GetFrmFmts()->Count() - 1;
             nRef += pDoc->GetTxtFmtColls()->Count() - 1;
-//			nRef += pDoc->GetPageDescCnt();
+//          nRef += pDoc->GetPageDescCnt();
             nRef *= 2; // for the above styles, xmloff will increment by 2!
             // #i93174#: count all paragraphs for the progress bar
             nRef += aDocStat.nAllPara; // 1: only content, no autostyle
@@ -443,7 +443,7 @@ __EXPORT SwXMLExport::~SwXMLExport()
 
 void SwXMLExport::_ExportFontDecls()
 {
-    GetFontAutoStylePool();	// make sure the pool is created
+    GetFontAutoStylePool(); // make sure the pool is created
     SvXMLExport::_ExportFontDecls();
 }
 
@@ -813,8 +813,8 @@ Reference< XInterface > SAL_CALL SwXMLExportStyles_createInstance(
 {
     // #110680#
     //return (cppu::OWeakObject*)new SwXMLExport(
-    //	EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
-    //	EXPORT_FONTDECLS );
+    //  EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
+    //  EXPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLExport( rSMgr,
         EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
         EXPORT_FONTDECLS|EXPORT_OASIS );
@@ -840,8 +840,8 @@ Reference< XInterface > SAL_CALL SwXMLExportContent_createInstance(
 {
     // #110680#
     //return (cppu::OWeakObject*)new SwXMLExport(
-    //	EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
-    //	EXPORT_FONTDECLS );
+    //  EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
+    //  EXPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLExport(
         rSMgr,
         EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
@@ -977,7 +977,7 @@ void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
         else if( pNd == &pDoc->GetNodes().GetEndOfContent() )
             break;
 
-        pCurPaM->GetPoint()->nNode++; 	// next node
+        pCurPaM->GetPoint()->nNode++;   // next node
 
         sal_uInt32 nPos = pCurPaM->GetPoint()->nNode.GetIndex();
 

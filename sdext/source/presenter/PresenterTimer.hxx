@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ public:
     typedef ::boost::function<void(const TimeValue&)> Task;
 
     static const sal_Int32 NotAValidTaskId = 0;
-    
+
     static sal_Int32 ScheduleSingleTaskRelative (
         const Task& rTask,
         const sal_Int64 nDelay);
@@ -81,7 +81,7 @@ public:
 
 
 
-typedef cppu::WeakComponentImplHelper1< 
+typedef cppu::WeakComponentImplHelper1<
     css::awt::XCallback
     > PresenterClockTimerInterfaceBase;
 
@@ -97,7 +97,7 @@ public:
         virtual void TimeHasChanged (const oslDateTime& rCurrentTime) = 0;
     };
     typedef ::boost::shared_ptr<Listener> SharedListener;
-    
+
     static ::rtl::Reference<PresenterClockTimer> Instance (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
@@ -105,7 +105,7 @@ public:
     void RemoveListener (const SharedListener& rListener);
 
     static oslDateTime GetCurrentTime (void);
-    
+
     /** Return the difference between the two different times in
         nanoseconds.
     */
@@ -130,7 +130,7 @@ private:
     PresenterClockTimer (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     ~PresenterClockTimer (void);
-    
+
     void CheckCurrentTime (const TimeValue& rCurrentTime);
 };
 

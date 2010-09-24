@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,16 +29,16 @@ package org.openoffice.java.accessibility;
 
 import com.sun.star.accessibility.XAccessibleImage;
 
-/** 
+/**
  */
 public class AccessibleIconImpl implements javax.accessibility.AccessibleIcon {
-    
+
     XAccessibleImage unoAccessibleImage;
-    
+
     public AccessibleIconImpl(XAccessibleImage xImage) {
         unoAccessibleImage = xImage;
     }
-    
+
     /** Gets the description of the icon */
     public String getAccessibleIconDescription() {
         try {
@@ -47,7 +47,7 @@ public class AccessibleIconImpl implements javax.accessibility.AccessibleIcon {
             return null;
         }
     }
-    
+
     /** Gets the height of the icon */
     public int getAccessibleIconHeight() {
         try {
@@ -56,7 +56,7 @@ public class AccessibleIconImpl implements javax.accessibility.AccessibleIcon {
             return 0;
         }
     }
-    
+
     /** Gets the width of the icon */
     public int getAccessibleIconWidth() {
         try {
@@ -65,7 +65,7 @@ public class AccessibleIconImpl implements javax.accessibility.AccessibleIcon {
             return 0;
         }
     }
-    
+
     /** Sets the description of the icon */
     public void setAccessibleIconDescription(String s) {
         // Not supported

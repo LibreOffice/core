@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,13 +61,13 @@ class ODatabaseAdministrationDialog
 {
     OModuleClient    m_aModuleClient;
 protected:
-    SfxItemSet*				m_pDatasourceItems;		// item set for the dialog
-    SfxItemPool*			m_pItemPool;			// item pool for the item set for the dialog
-    SfxPoolItem**			m_pItemPoolDefaults;	// pool defaults
-    ::dbaccess::ODsnTypeCollection*		
-                            m_pCollection;			// datasource type collection
+    SfxItemSet*             m_pDatasourceItems;     // item set for the dialog
+    SfxItemPool*            m_pItemPool;            // item pool for the item set for the dialog
+    SfxPoolItem**           m_pItemPoolDefaults;    // pool defaults
+    ::dbaccess::ODsnTypeCollection*
+                            m_pCollection;          // datasource type collection
 
-    ::com::sun::star::uno::Any			m_aInitialSelection;
+    ::com::sun::star::uno::Any          m_aInitialSelection;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xActiveConnection;
 
 protected:
@@ -80,7 +80,7 @@ protected:
 };
 
 //.........................................................................
-}	// namespace dbaui
+}   // namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_UNOADMIN_

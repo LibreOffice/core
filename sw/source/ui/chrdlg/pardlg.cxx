@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,18 +100,18 @@ SwParaDlg::SwParaDlg(Window *pParent,
 
     DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
     DBG_ASSERT(pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageRangesFunc fail!");
-    AddTabPage( TP_PARA_STD,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH) );
+    AddTabPage( TP_PARA_STD,    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH) );
 
     DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageCreatorFunc fail!");
     DBG_ASSERT(pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageRangesFunc fail!");
-    AddTabPage( TP_PARA_ALIGN,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH) );
+    AddTabPage( TP_PARA_ALIGN,  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),      pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH) );
 
     SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
     if (!bDrawParaDlg && (!bHtmlMode || pHtmlOpt->IsPrintLayoutExtension()))
     {
         DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageCreatorFunc fail!");
         DBG_ASSERT(pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageRangesFunc fail!");
-        AddTabPage( TP_PARA_EXT,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
+        AddTabPage( TP_PARA_EXT,    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
 
     }
     else
@@ -122,7 +122,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
     {
         DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
         DBG_ASSERT(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageRangesFunc fail!");
-        AddTabPage( TP_PARA_ASIAN,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
+        AddTabPage( TP_PARA_ASIAN,  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
     }
     else
         RemoveTabPage(TP_PARA_ASIAN);
@@ -135,7 +135,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
     {
         DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), "GetTabPageCreatorFunc fail!");
         DBG_ASSERT(pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR), "GetTabPageRangesFunc fail!");
-        AddTabPage( TP_TABULATOR,	pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),		pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
+        AddTabPage( TP_TABULATOR,   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
 
     }
     if (!bDrawParaDlg)
@@ -146,7 +146,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
             RemoveTabPage(TP_NUMPARA);
         if(!bHtmlMode || (nHtmlMode & HTMLMODE_FULL_STYLES))
         {
-            AddTabPage(TP_DROPCAPS,  SwDropCapsPage::Create, 		SwDropCapsPage::GetRanges);
+            AddTabPage(TP_DROPCAPS,  SwDropCapsPage::Create,        SwDropCapsPage::GetRanges);
         }
         else
         {

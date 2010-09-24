@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ ULONG FileList::GetFormat()
 
 /******************************************************************************
 |*
-|*	virtuelle SvData-Methoden
+|*  virtuelle SvData-Methoden
 |*
 \******************************************************************************/
 
@@ -122,7 +122,7 @@ void FileList::Assign( const SvDataCopyStream& rCopyStream )
 
 /******************************************************************************
 |*
-|*	Stream-Operatoren
+|*  Stream-Operatoren
 |*
 \******************************************************************************/
 
@@ -133,24 +133,24 @@ void FileList::Assign( const SvDataCopyStream& rCopyStream )
 
 SvStream& operator<<( SvStream& rOStm, const FileList& /*rFileList*/ )
 {
-    OSL_ENSURE(false, "Not implemented!");    	    
+    OSL_ENSURE(false, "Not implemented!");
     return rOStm;
 }
 
-/* #i28176# 
+/* #i28176#
    The Windows clipboard bridge now provides a double '\0'
-   terminated list of file names for format SOT_FORMAT_FILE_LIST 
+   terminated list of file names for format SOT_FORMAT_FILE_LIST
    instead of the original Windows Sv_DROPFILES structure. All strings
-   in this list are UTF16 strings. Shell link files will be already 
+   in this list are UTF16 strings. Shell link files will be already
    resolved by the Windows clipboard bridge.*/
 SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
 {
     rFileList.ClearAll();
     rFileList.pStrList = new FileStringList();
-    
+
     String aStr;
     sal_uInt16 c;
-    
+
     while (!rIStm.IsEof())
     {
         aStr.Erase();
@@ -169,13 +169,13 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
 
         // append the filepath
         rFileList.AppendFile(aStr);
-    }    						
+    }
     return rIStm;
 }
 
 /******************************************************************************
 |*
-|*	Liste fuellen/abfragen
+|*  Liste fuellen/abfragen
 |*
 \******************************************************************************/
 

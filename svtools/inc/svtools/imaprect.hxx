@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,15 +41,15 @@ class Fraction;
 
 class SVT_DLLPUBLIC IMapRectangleObject : public IMapObject
 {
-    Rectangle			aRect;
+    Rectangle           aRect;
 
-    SVT_DLLPRIVATE void				ImpConstruct( const Rectangle& rRect, BOOL bPixel );
+    SVT_DLLPRIVATE void             ImpConstruct( const Rectangle& rRect, BOOL bPixel );
 
 protected:
 
     // Binaer-Im-/Export
-    virtual void		WriteIMapObject( SvStream& rOStm ) const;
-    virtual void		ReadIMapObject(  SvStream& rIStm );
+    virtual void        WriteIMapObject( SvStream& rOStm ) const;
+    virtual void        ReadIMapObject(  SvStream& rIStm );
 
 public:
 
@@ -62,20 +62,20 @@ public:
                                              const String& rName,
                                              BOOL bActive = TRUE,
                                              BOOL bPixelCoords = TRUE );
-    virtual				~IMapRectangleObject() {};
+    virtual             ~IMapRectangleObject() {};
 
-    virtual UINT16		GetType() const;
-    virtual BOOL		IsHit( const Point& rPoint ) const;
+    virtual UINT16      GetType() const;
+    virtual BOOL        IsHit( const Point& rPoint ) const;
 
-    Rectangle			GetRectangle( BOOL bPixelCoords = TRUE ) const;
+    Rectangle           GetRectangle( BOOL bPixelCoords = TRUE ) const;
 
     // liefert das BoundRect des Rechteck-Objektes in 1/100mm
-    virtual Rectangle	GetBoundRect() const { return aRect; }
+    virtual Rectangle   GetBoundRect() const { return aRect; }
 
-    void				Scale( const Fraction& rFractX, const Fraction& rFracY );
+    void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     using IMapObject::IsEqual;
-    BOOL				IsEqual( const IMapRectangleObject& rEqObj );
+    BOOL                IsEqual( const IMapRectangleObject& rEqObj );
 
     // Im-/Export
     void                WriteCERN( SvStream& rOStm, const String& rBaseURL  ) const;

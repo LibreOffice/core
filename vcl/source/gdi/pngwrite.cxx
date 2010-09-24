@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,68 +77,68 @@ public:
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData = NULL );
                 ~PNGWriterImpl();
 
-    sal_Bool	Write( SvStream& rOStm );
+    sal_Bool    Write( SvStream& rOStm );
 
-    std::vector< vcl::PNGWriter::ChunkData >&	GetChunks();
+    std::vector< vcl::PNGWriter::ChunkData >&   GetChunks();
 
 private:
 
-    std::vector< vcl::PNGWriter::ChunkData >	maChunkSeq;
+    std::vector< vcl::PNGWriter::ChunkData >    maChunkSeq;
 
-    sal_Int32			mnCompLevel;
-    sal_Int32			mnInterlaced;
-    sal_uInt32			mnMaxChunkSize;
-    BOOL				mbStatus;
+    sal_Int32           mnCompLevel;
+    sal_Int32           mnInterlaced;
+    sal_uInt32          mnMaxChunkSize;
+    BOOL                mbStatus;
 
-    BitmapReadAccess*	mpAccess;
-    BitmapReadAccess*	mpMaskAccess;
-    ZCodec*				mpZCodec;
+    BitmapReadAccess*   mpAccess;
+    BitmapReadAccess*   mpMaskAccess;
+    ZCodec*             mpZCodec;
 
-    BYTE*				mpDeflateInBuf;			// as big as the size of a scanline + alphachannel + 1
-    BYTE*				mpPreviousScan;			// as big as mpDeflateInBuf
-    BYTE*				mpCurrentScan;
-    ULONG				mnDeflateInSize;
+    BYTE*               mpDeflateInBuf;         // as big as the size of a scanline + alphachannel + 1
+    BYTE*               mpPreviousScan;         // as big as mpDeflateInBuf
+    BYTE*               mpCurrentScan;
+    ULONG               mnDeflateInSize;
 
-    ULONG				mnWidth, mnHeight;
-    BYTE				mnBitsPerPixel;
-    BYTE				mnFilterType;			// 0 oder 4;
-    ULONG				mnBBP;					// bytes per pixel ( needed for filtering )
-    BOOL				mbTrueAlpha;
-    ULONG				mnCRC;
-    long				mnChunkDatSize;
-    ULONG				mnLastPercent;
+    ULONG               mnWidth, mnHeight;
+    BYTE                mnBitsPerPixel;
+    BYTE                mnFilterType;           // 0 oder 4;
+    ULONG               mnBBP;                  // bytes per pixel ( needed for filtering )
+    BOOL                mbTrueAlpha;
+    ULONG               mnCRC;
+    long                mnChunkDatSize;
+    ULONG               mnLastPercent;
 
-    void				ImplWritepHYs( const BitmapEx& rBitmapEx );
-    void				ImplWriteIDAT();
-    ULONG				ImplGetFilter( ULONG nY, ULONG nXStart=0, ULONG nXAdd=1 );
-    void				ImplClearFirstScanline();
-    void				ImplWriteTransparent();
-    BOOL				ImplWriteHeader();
-    void				ImplWritePalette();
-    void				ImplOpenChunk( ULONG nChunkType );
-    void				ImplWriteChunk( BYTE nNumb );
-    void				ImplWriteChunk( sal_uInt32 nNumb );
-    void				ImplWriteChunk( unsigned char* pSource, sal_uInt32 nDatSize );
-    void				ImplCloseChunk( void );
+    void                ImplWritepHYs( const BitmapEx& rBitmapEx );
+    void                ImplWriteIDAT();
+    ULONG               ImplGetFilter( ULONG nY, ULONG nXStart=0, ULONG nXAdd=1 );
+    void                ImplClearFirstScanline();
+    void                ImplWriteTransparent();
+    BOOL                ImplWriteHeader();
+    void                ImplWritePalette();
+    void                ImplOpenChunk( ULONG nChunkType );
+    void                ImplWriteChunk( BYTE nNumb );
+    void                ImplWriteChunk( sal_uInt32 nNumb );
+    void                ImplWriteChunk( unsigned char* pSource, sal_uInt32 nDatSize );
+    void                ImplCloseChunk( void );
 };
 
 // ------------------------------------------------------------------------
 
 PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData ) :
-        mnCompLevel		( PNG_DEF_COMPRESSION ),
-        mbStatus		( TRUE ),
-        mpAccess		( NULL ),
-        mpMaskAccess	( NULL ),
-        mpZCodec		( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) ),
+        mnCompLevel     ( PNG_DEF_COMPRESSION ),
+        mbStatus        ( TRUE ),
+        mpAccess        ( NULL ),
+        mpMaskAccess    ( NULL ),
+        mpZCodec        ( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) ),
         mnCRC(0UL),
-        mnLastPercent	( 0UL )
+        mnLastPercent   ( 0UL )
 {
     if ( !rBmpEx.IsEmpty() )
     {
         Bitmap aBmp( rBmpEx.GetBitmap() );
-        
-        mnInterlaced = 0;	// ( aBmp.GetSizePixel().Width() > 128 ) || ( aBmp.GetSizePixel().Height() > 128 ) ? 1 : 0; #i67236#
+
+        mnInterlaced = 0;   // ( aBmp.GetSizePixel().Width() > 128 ) || ( aBmp.GetSizePixel().Height() > 128 ) ? 1 : 0; #i67236#
 
         // #i67234# defaulting max chunk size to 256kb when using interlace mode
         mnMaxChunkSize = mnInterlaced == 0 ? std::numeric_limits< sal_uInt32 >::max() : 0x40000;
@@ -161,7 +161,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
             }
         }
         mnBitsPerPixel = (BYTE)aBmp.GetBitCount();
-        
+
         if( rBmpEx.IsTransparent() )
         {
             if ( mnBitsPerPixel <= 8 && rBmpEx.IsAlpha() )
@@ -169,8 +169,8 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                 aBmp.Convert( BMP_CONVERSION_24BIT );
                 mnBitsPerPixel = 24;
             }
-            
-            if ( mnBitsPerPixel <= 8 )					// transparent palette
+
+            if ( mnBitsPerPixel <= 8 )                  // transparent palette
             {
                 aBmp.Convert( BMP_CONVERSION_8BIT_TRANS );
                 aBmp.Replace( rBmpEx.GetMask(), BMP_COL_TRANS );
@@ -192,7 +192,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
             }
             else
             {
-                mpAccess = aBmp.AcquireReadAccess();	// TRUE RGB with alphachannel
+                mpAccess = aBmp.AcquireReadAccess();    // TRUE RGB with alphachannel
                 if( mpAccess )
                 {
                     if ( ( mbTrueAlpha = rBmpEx.IsAlpha() ) != FALSE )
@@ -235,7 +235,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
         }
         else
         {
-            mpAccess = aBmp.AcquireReadAccess();		// palette + RGB without alphachannel
+            mpAccess = aBmp.AcquireReadAccess();        // palette + RGB without alphachannel
             if( mpAccess )
             {
                 if ( ImplWriteHeader() )
@@ -253,7 +253,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
         }
         if ( mbStatus )
         {
-            ImplOpenChunk( PNGCHUNK_IEND );		// create an IEND chunk
+            ImplOpenChunk( PNGCHUNK_IEND );     // create an IEND chunk
             ImplCloseChunk();
         }
     }
@@ -322,10 +322,10 @@ BOOL PNGWriterImpl::ImplWriteHeader()
         else
             mnFilterType = 4;
 
-        BYTE nColorType = 2;					// colortype:
+        BYTE nColorType = 2;                    // colortype:
                                                 // bit 0 -> palette is used
-        if ( mpAccess->HasPalette() )			// bit 1 -> color is used
-            nColorType |= 1;					// bit 2 -> alpha channel is used
+        if ( mpAccess->HasPalette() )           // bit 1 -> color is used
+            nColorType |= 1;                    // bit 2 -> alpha channel is used
         else
             nBitDepth /= 3;
 
@@ -333,10 +333,10 @@ BOOL PNGWriterImpl::ImplWriteHeader()
             nColorType |= 4;
 
         ImplWriteChunk( nBitDepth );
-        ImplWriteChunk( nColorType );			// colortype
-        ImplWriteChunk((BYTE) 0 );				// compression type
-        ImplWriteChunk((BYTE) 0 );				// filter type - is not supported in this version
-        ImplWriteChunk((BYTE) mnInterlaced );	// interlace type
+        ImplWriteChunk( nColorType );           // colortype
+        ImplWriteChunk((BYTE) 0 );              // compression type
+        ImplWriteChunk((BYTE) 0 );              // filter type - is not supported in this version
+        ImplWriteChunk((BYTE) mnInterlaced );   // interlace type
         ImplCloseChunk();
     }
     else
@@ -348,9 +348,9 @@ BOOL PNGWriterImpl::ImplWriteHeader()
 
 void PNGWriterImpl::ImplWritePalette()
 {
-    const ULONG	nCount = mpAccess->GetPaletteEntryCount();
-    BYTE*		pTempBuf = new BYTE[ nCount*3 ];
-    BYTE*		pTmp = pTempBuf;
+    const ULONG nCount = mpAccess->GetPaletteEntryCount();
+    BYTE*       pTempBuf = new BYTE[ nCount*3 ];
+    BYTE*       pTmp = pTempBuf;
 
     ImplOpenChunk( PNGCHUNK_PLTE );
 
@@ -416,7 +416,7 @@ void PNGWriterImpl::ImplWriteIDAT ()
 
     mpDeflateInBuf = new BYTE[ mnDeflateInSize ];
 
-    if ( mnFilterType )			// using filter type 4 we need memory for the scanline 3 times
+    if ( mnFilterType )         // using filter type 4 we need memory for the scanline 3 times
     {
         mpPreviousScan = new BYTE[ mnDeflateInSize ];
         mpCurrentScan = new BYTE[ mnDeflateInSize ];
@@ -434,37 +434,37 @@ void PNGWriterImpl::ImplWriteIDAT ()
     {
         // interlace mode
         ULONG nY;
-        for ( nY = 0; nY < mnHeight; nY+=8 )												// pass 1
+        for ( nY = 0; nY < mnHeight; nY+=8 )                                                // pass 1
             mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 8 ) );
         ImplClearFirstScanline();
 
-        for ( nY = 0; nY < mnHeight; nY+=8 )												// pass 2
+        for ( nY = 0; nY < mnHeight; nY+=8 )                                                // pass 2
             mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 4, 8 ) );
         ImplClearFirstScanline();
 
-        if ( mnHeight >= 5 )																// pass 3
+        if ( mnHeight >= 5 )                                                                // pass 3
         {
             for ( nY = 4; nY < mnHeight; nY+=8 )
                 mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 4 ) );
             ImplClearFirstScanline();
         }
 
-        for ( nY = 0; nY < mnHeight; nY+=4 )												// pass 4
+        for ( nY = 0; nY < mnHeight; nY+=4 )                                                // pass 4
             mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 2, 4 ) );
         ImplClearFirstScanline();
 
-        if ( mnHeight >= 3 )																// pass 5
+        if ( mnHeight >= 3 )                                                                // pass 5
         {
             for ( nY = 2; nY < mnHeight; nY+=4 )
                 mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 2 ) );
             ImplClearFirstScanline();
         }
 
-        for ( nY = 0; nY < mnHeight; nY+=2 )												// pass 6
+        for ( nY = 0; nY < mnHeight; nY+=2 )                                                // pass 6
             mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 1, 2 ) );
         ImplClearFirstScanline();
 
-        if ( mnHeight >= 2 )																// pass 7
+        if ( mnHeight >= 2 )                                                                // pass 7
         {
             for ( nY = 1; nY < mnHeight; nY+=2 )
                 mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 1 ) );
@@ -473,7 +473,7 @@ void PNGWriterImpl::ImplWriteIDAT ()
     mpZCodec->EndCompression();
     mnCRC = mpZCodec->GetCRC();
 
-    if ( mnFilterType )			// using filter type 4 we need memory for the scanline 3 times
+    if ( mnFilterType )         // using filter type 4 we need memory for the scanline 3 times
     {
         delete[] mpCurrentScan;
         delete[] mpPreviousScan;
@@ -508,9 +508,9 @@ ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
 
     if ( nXStart < mnWidth )
     {
-        *pDest++ = mnFilterType;		// in this version the filter type is either 0 or 4
+        *pDest++ = mnFilterType;        // in this version the filter type is either 0 or 4
 
-        if ( mpAccess->HasPalette() )	// alphachannel is not allowed by pictures including palette entries
+        if ( mpAccess->HasPalette() )   // alphachannel is not allowed by pictures including palette entries
         {
             switch ( mnBitsPerPixel )
             {
@@ -527,8 +527,8 @@ ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
                         else
                             *pDest |= (BYTE) mpAccess->GetPixel( nY, nX ) << nShift;
                     }
-                    if ( ( nXIndex & 7 ) != 0 ) pDest++;	// byte is not completely used, so the
-                }											// bufferpointer is to correct
+                    if ( ( nXIndex & 7 ) != 0 ) pDest++;    // byte is not completely used, so the
+                }                                           // bufferpointer is to correct
                 break;
 
                 case( 4 ):
@@ -559,7 +559,7 @@ ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
         }
         else
         {
-            if ( mpMaskAccess )				// mpMaskAccess != NULL -> alphachannel is to create
+            if ( mpMaskAccess )             // mpMaskAccess != NULL -> alphachannel is to create
             {
                 if ( mbTrueAlpha )
                 {
@@ -607,15 +607,15 @@ ULONG PNGWriterImpl::ImplGetFilter ( ULONG nY, ULONG nXStart, ULONG nXAdd )
     {
         mnDeflateInSize = pDest - mpCurrentScan;
         pDest = mpDeflateInBuf;
-        *pDest++ = 4;									// filter type
+        *pDest++ = 4;                                   // filter type
 
         ULONG na, nb, nc;
         long  np, npa, npb, npc;
 
-        BYTE* p1 = mpCurrentScan + 1;					// Current Pixel
-        BYTE* p2 = p1 - mnBBP;							// left pixel
-        BYTE* p3 = mpPreviousScan;						// upper pixel
-        BYTE* p4 = p3 - mnBBP;							// upperleft Pixel;
+        BYTE* p1 = mpCurrentScan + 1;                   // Current Pixel
+        BYTE* p2 = p1 - mnBBP;                          // left pixel
+        BYTE* p3 = mpPreviousScan;                      // upper pixel
+        BYTE* p4 = p3 - mnBBP;                          // upperleft Pixel;
 
         while ( pDest < mpDeflateInBuf + mnDeflateInSize )
         {

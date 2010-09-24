@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -24,7 +24,7 @@ namespace agg
 {
 
     //================================================span_interpolator_linear
-    template<class Transformer = trans_affine, unsigned SubpixelShift = 8> 
+    template<class Transformer = trans_affine, unsigned SubpixelShift = 8>
     class span_interpolator_linear
     {
     public:
@@ -79,7 +79,7 @@ namespace agg
             m_li_x = dda2_line_interpolator(m_li_x.y(), int(xe * subpixel_size), len);
             m_li_y = dda2_line_interpolator(m_li_y.y(), int(ye * subpixel_size), len);
         }
-    
+
         //----------------------------------------------------------------
         void operator++()
         {
@@ -106,7 +106,7 @@ namespace agg
 
 
     //=====================================span_interpolator_linear_subdiv
-    template<class Transformer = trans_affine, unsigned SubpixelShift = 8> 
+    template<class Transformer = trans_affine, unsigned SubpixelShift = 8>
     class span_interpolator_linear_subdiv
     {
     public:
@@ -125,8 +125,8 @@ namespace agg
             m_subdiv_size(1 << m_subdiv_shift),
             m_subdiv_mask(m_subdiv_size - 1) {}
 
-        span_interpolator_linear_subdiv(const trans_type& trans, 
-                                        unsigned subdiv_shift = 4) : 
+        span_interpolator_linear_subdiv(const trans_type& trans,
+                                        unsigned subdiv_shift = 4) :
             m_subdiv_shift(subdiv_shift),
             m_subdiv_size(1 << m_subdiv_shift),
             m_subdiv_mask(m_subdiv_size - 1),
@@ -149,7 +149,7 @@ namespace agg
 
         //----------------------------------------------------------------
         unsigned subdiv_shift() const { return m_subdiv_shift; }
-        void subdiv_shift(unsigned shift) 
+        void subdiv_shift(unsigned shift)
         {
             m_subdiv_shift = shift;
             m_subdiv_size = 1 << m_subdiv_shift;

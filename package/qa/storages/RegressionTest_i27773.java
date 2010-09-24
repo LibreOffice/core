@@ -286,7 +286,7 @@ public class RegressionTest_i27773 implements StorageTest {
 
             // the root storage is based on the temporary stream so it can be left undisposed, since it does not lock
             // any resource, later the garbage collector will release the object and it must die by refcount
-    
+
             return true;
         }
         catch( Exception e )
@@ -294,6 +294,6 @@ public class RegressionTest_i27773 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    } 
+    }
 }
 

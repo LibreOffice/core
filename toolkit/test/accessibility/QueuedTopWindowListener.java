@@ -17,7 +17,7 @@ class QueuedTopWindowListener
                 {
                     QueuedTopWindowListener.this.maListener.windowOpened (aEvent);
                 }
-            } 
+            }
             );
     }
 
@@ -40,32 +40,32 @@ class QueuedTopWindowListener
                 {
                     QueuedTopWindowListener.this.maListener.windowClosed (aEvent);
                 }
-            } 
+            }
             );
     }
 
 
 
 
-    public void windowMinimized (final com.sun.star.lang.EventObject aEvent) 
+    public void windowMinimized (final com.sun.star.lang.EventObject aEvent)
         throws RuntimeException
     {
         System.out.println ("QueuedTopWindowListener: Top window minimized: " + aEvent);
     }
 
-    public void windowNormalized (final com.sun.star.lang.EventObject aEvent) 
+    public void windowNormalized (final com.sun.star.lang.EventObject aEvent)
         throws RuntimeException
     {
         System.out.println ("QueuedTopWindowListener: Top window normalized: " + aEvent);
     }
 
-    public void windowActivated (final com.sun.star.lang.EventObject aEvent) 
+    public void windowActivated (final com.sun.star.lang.EventObject aEvent)
         throws RuntimeException
     {
         System.out.println ("QueuedTopWindowListener: Top window actived: " + aEvent);
     }
 
-    public void windowDeactivated (final com.sun.star.lang.EventObject aEvent) 
+    public void windowDeactivated (final com.sun.star.lang.EventObject aEvent)
         throws RuntimeException
     {
         System.out.println ("QueuedTopWindowListener: Top window deactived: " + aEvent);
@@ -73,14 +73,14 @@ class QueuedTopWindowListener
 
     public void disposing( final EventObject aEvent)
     {
-        EventQueue.Instance().addDisposingEvent (new Runnable() 
+        EventQueue.Instance().addDisposingEvent (new Runnable()
             {
-                public void run() 
+                public void run()
                 {
                     if (QueuedTopWindowListener.this.maListener != null)
                         QueuedTopWindowListener.this.maListener.disposing (aEvent);
                 }
-            } 
+            }
             );
     }
 

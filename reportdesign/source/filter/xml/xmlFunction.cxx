@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,8 +47,8 @@ DBG_NAME( rpt_OXMLFunction )
 OXMLFunction::OXMLFunction( ORptFilter& _rImport
                 ,sal_uInt16 nPrfx
                 ,const ::rtl::OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList 
-                ,const Reference< XFunctionsSupplier >&	_xFunctions
+                ,const Reference< XAttributeList > & _xAttrList
+                ,const Reference< XFunctionsSupplier >& _xFunctions
                 ,bool _bAddToReport
                 ) :
     SvXMLImportContext( _rImport, nPrfx, _sLocalName )
@@ -59,7 +59,7 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
 
     OSL_ENSURE(m_xFunctions.is(),"Functions is NULL!");
     m_xFunction = m_xFunctions->createFunction();
-    
+
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
 
     const SvXMLNamespaceMap& rMap = _rImport.GetNamespaceMap();
@@ -81,7 +81,7 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
                 case XML_TOK_FUNCTION_NAME:
                     m_xFunction->setName(sValue);
                     break;
-                case XML_TOK_FUNCTION_FORMULA: 
+                case XML_TOK_FUNCTION_FORMULA:
                     m_xFunction->setFormula(ORptFilter::convertFormula(sValue));
                     break;
                 case XML_TOK_PRE_EVALUATED:

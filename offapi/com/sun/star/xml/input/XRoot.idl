@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,13 +38,13 @@ module com { module sun { module star { module xml { module input {
 
 /** Root interface being passed to SaxDocumentHandler service upon
     instantiation.
-    
+
     @internal
 */
 interface XRoot : com::sun::star::uno::XInterface
 {
     /** Receives notification of the beginning of a document.
-         
+
          @param xMapping
                 mapping to obtain ids out of XML namespace URIs
                 and vice versa
@@ -52,12 +52,12 @@ interface XRoot : com::sun::star::uno::XInterface
     void startDocument(
         [in] XNamespaceMapping xMapping )
         raises (com::sun::star::xml::sax::SAXException);
-    
+
     /** Receives notification of the end of a document.
      */
     void endDocument()
         raises (com::sun::star::xml::sax::SAXException);
-    
+
     /** Receives notification of a processing instruction.
 
         @param target
@@ -68,7 +68,7 @@ interface XRoot : com::sun::star::uno::XInterface
     void processingInstruction(
         [in] string target, [in] string data )
         raises (com::sun::star::xml::sax::SAXException);
-    
+
     /** Receives an object for locating the origin of SAX document events.
 
         @param locator

@@ -31,7 +31,7 @@ class NodeMap
     public boolean InsertNode (XAccessibleContext xContext, AccessibleTreeNode aNode)
     {
         AccessibleTreeNode aPreviousNode = (AccessibleTreeNode)maXAccessibleToNode.put (
-            xContext, 
+            xContext,
             aNode);
         return aPreviousNode != aNode;
     }
@@ -47,7 +47,7 @@ class NodeMap
         }
         catch (Exception e)
         {
-            System.out.println ("caught exception while removing node " 
+            System.out.println ("caught exception while removing node "
                 + aNode + " : " + e);
             e.printStackTrace();
         }
@@ -67,7 +67,7 @@ class NodeMap
                 }
                 catch (Exception e)
                 {
-                    System.out.println ("caught exception applying functor to " 
+                    System.out.println ("caught exception applying functor to "
                         + i + "th node " + aNodes[i] + " : " + e);
                     e.printStackTrace();
                 }
@@ -84,7 +84,7 @@ class NodeMap
     {
         if (aObject instanceof XAccessibleContext)
             return GetNode ((XAccessibleContext)aObject);
-        else 
+        else
             return null;
     }
 
@@ -92,7 +92,7 @@ class NodeMap
     {
         if ((aNode != null) && (aNode instanceof AccTreeNode))
             return ((AccTreeNode)aNode).getContext();
-        else 
+        else
             return null;
     }
 

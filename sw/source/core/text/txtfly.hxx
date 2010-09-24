@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,12 +56,12 @@ typedef std::vector< SwAnchoredObject* > SwAnchoredObjList;
 // <--
 
 /*************************************************************************
- *						class SwFlyIter
+ *                      class SwFlyIter
  *************************************************************************/
 enum PAGESIDE { LEFT_SIDE, RIGHT_SIDE, DONTKNOW_SIDE };
 
 /*************************************************************************
- *						class SwContourCache
+ *                      class SwContourCache
  *************************************************************************/
 
 class SwDrawTextInfo;
@@ -106,19 +106,19 @@ public:
 };
 
 /*************************************************************************
- *						class SwTxtFly
+ *                      class SwTxtFly
  *************************************************************************/
 
 class SwTxtFly
 {
-    const SwPageFrm		*pPage;
+    const SwPageFrm     *pPage;
     // --> OD 2006-08-15 #i68520#
     const SwAnchoredObject* mpCurrAnchoredObj;
     // <--
 
     const SwTxtFrm      *pCurrFrm;
 
-    const SwCntntFrm	*pMaster;
+    const SwCntntFrm    *pMaster;
     // --> OD 2006-08-15 #i68520#
     SwAnchoredObjList* mpAnchoredObjList;
     // <--
@@ -201,7 +201,7 @@ public:
     inline long GetNextTop() const { return nNextTop; }
     // Diese temporaere Variable darf auch in const-Methoden manipuliert werden
     inline void SetNextTop( long nNew ) const
-        { ((SwTxtFly*)this)->nNextTop = nNew;	}
+        { ((SwTxtFly*)this)->nNextTop = nNew;   }
 
     // --> OD 2006-08-15 #i68520#
     // determines the demanded rectangle for an anchored object,

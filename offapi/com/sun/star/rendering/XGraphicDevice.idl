@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,12 +27,12 @@
 #ifndef __com_sun_star_rendering_XGraphicDevice_idl__
 #define __com_sun_star_rendering_XGraphicDevice_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif 
+#endif
 #ifndef __com_sun_star_geometry_IntegerSize2D_idl__
 #include <com/sun/star/geometry/IntegerSize2D.idl>
 #endif
@@ -81,37 +81,37 @@ interface XBufferController;
 interface XGraphicDevice : ::com::sun::star::uno::XInterface
 {
     /** Query the controller for multi buffering functionality on this
-        graphic device. 
+        graphic device.
 
         If there is no such functionality available, the NULL
         reference is returned.
      */
-    XBufferController 							getBufferController();
+    XBufferController                           getBufferController();
 
     //-------------------------------------------------------------------------
 
-    /** Query the color space interface for this graphic device. 
+    /** Query the color space interface for this graphic device.
 
         This is to be used when interpreting or setting device color
         values.
      */
-    XColorSpace		 							getDeviceColorSpace();
+    XColorSpace                                 getDeviceColorSpace();
 
     //-------------------------------------------------------------------------
 
     /** Query the physical resolution of the device in pixel per
-        millimeter. 
+        millimeter.
 
         A special floating point value of +infinity here indicates
         'unknown', i.e. at the time of rendering undetermined or
         possibly infinite resolution along the corresponding
         direction.
      */
-    ::com::sun::star::geometry::RealSize2D	getPhysicalResolution();
+    ::com::sun::star::geometry::RealSize2D  getPhysicalResolution();
 
     //-------------------------------------------------------------------------
 
-    /** Query the physical dimensions of the device in millimeter. 
+    /** Query the physical dimensions of the device in millimeter.
 
         A special floating point value of +infinity here indicates
         'unknown', i.e. at the time of rendering undetermined or
@@ -120,7 +120,7 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
 
         @see XBitmap::getSize()
      */
-    ::com::sun::star::geometry::RealSize2D	getPhysicalSize();
+    ::com::sun::star::geometry::RealSize2D  getPhysicalSize();
 
     //-------------------------------------------------------------------------
 
@@ -130,7 +130,7 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         @param points
         The points of the poly-polygon, in a separate array for every polygon.
      */
-    XLinePolyPolygon2D 				createCompatibleLinePolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points );
+    XLinePolyPolygon2D              createCompatibleLinePolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points );
 
     //-------------------------------------------------------------------------
 
@@ -140,7 +140,7 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         @param points
         The points of the poly-polygon, in a separate array for every polygon.
      */
-    XBezierPolyPolygon2D 			createCompatibleBezierPolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealBezierSegment2D > > points );
+    XBezierPolyPolygon2D            createCompatibleBezierPolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealBezierSegment2D > > points );
 
     //-------------------------------------------------------------------------
 
@@ -151,8 +151,8 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         Size of the requested bitmap in pixel. Both components of the
         size must be greater than 0
      */
-    XBitmap			 				createCompatibleBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
-        raises (com::sun::star::lang::IllegalArgumentException); 
+    XBitmap                         createCompatibleBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     //-------------------------------------------------------------------------
 
@@ -171,8 +171,8 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         Size of the requested bitmap in pixel. Both components of the
         size must be greater than 0
      */
-    XVolatileBitmap	 				createVolatileBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
-        raises (com::sun::star::lang::IllegalArgumentException); 
+    XVolatileBitmap                 createVolatileBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     //-------------------------------------------------------------------------
 
@@ -183,8 +183,8 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         Size of the requested bitmap in pixel. Both components of the
         size must be greater than 0
      */
-    XBitmap			 				createCompatibleAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
-        raises (com::sun::star::lang::IllegalArgumentException); 
+    XBitmap                         createCompatibleAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     //-------------------------------------------------------------------------
 
@@ -204,8 +204,8 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         Size of the requested bitmap in pixel. Both components of the
         size must be greater than 0
      */
-    XVolatileBitmap	 				createVolatileAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
-        raises (com::sun::star::lang::IllegalArgumentException); 
+    XVolatileBitmap                 createVolatileAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
+        raises (com::sun::star::lang::IllegalArgumentException);
 
     //-------------------------------------------------------------------------
 
@@ -275,7 +275,7 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
           * "FourCrossingLinesHatch" - this hatching consists of
             vertical and horizontal lines plus diagonal lines in both
             directions.
-        </pre>     
+        </pre>
      */
     com::sun::star::lang::XMultiServiceFactory getParametricPolyPolygonFactory();
 
@@ -284,7 +284,7 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
     /** Tells whether this graphic device has a full screen mode,
         i.e. whether a window can cover the whole screen exclusively.
      */
-    boolean			 				hasFullScreenMode();
+    boolean                         hasFullScreenMode();
 
     //-------------------------------------------------------------------------
 
@@ -295,7 +295,7 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         fullscreen mode can be left without a enterFullScreenMode(
         false ) call.
      */
-    boolean							enterFullScreenMode( [in] boolean bEnter );
+    boolean                         enterFullScreenMode( [in] boolean bEnter );
 };
 
 }; }; }; };

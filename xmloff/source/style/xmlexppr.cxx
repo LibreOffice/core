@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,9 +113,9 @@ typedef std::list<XMLPropertyState> XMLPropertyStateList_Impl;
 
 class XMLPropertyStates_Impl
 {
-    XMLPropertyStateList_Impl			aPropStates;
-    XMLPropertyStateList_Impl::iterator	aLastItr;
-    sal_uInt32							nCount;
+    XMLPropertyStateList_Impl           aPropStates;
+    XMLPropertyStateList_Impl::iterator aLastItr;
+    sal_uInt32                          nCount;
 public:
     XMLPropertyStates_Impl();
     void AddPropertyState(const XMLPropertyState& rPropState);
@@ -170,9 +170,9 @@ void XMLPropertyStates_Impl::FillPropertyStateVector(
 
 class FilterPropertyInfo_Impl
 {
-    const rtl::OUString		sApiName;
-    std::list<sal_uInt32>	aIndexes;
-    sal_uInt32				nCount;
+    const rtl::OUString     sApiName;
+    std::list<sal_uInt32>   aIndexes;
+    sal_uInt32              nCount;
 
 public:
 
@@ -211,11 +211,11 @@ typedef std::list<FilterPropertyInfo_Impl> FilterPropertyInfoList_Impl;
 
 class FilterPropertiesInfo_Impl
 {
-    sal_uInt32								nCount;
-    FilterPropertyInfoList_Impl				aPropInfos;
-    FilterPropertyInfoList_Impl::iterator	aLastItr;
+    sal_uInt32                              nCount;
+    FilterPropertyInfoList_Impl             aPropInfos;
+    FilterPropertyInfoList_Impl::iterator   aLastItr;
 
-    Sequence <OUString> 					*pApiNames;
+    Sequence <OUString>                     *pApiNames;
 
 public:
     FilterPropertiesInfo_Impl();
@@ -753,9 +753,9 @@ void SvXMLExportPropertyMapper::ContextFilter(
 ///////////////////////////////////////////////////////////////////////////
 //
 // Compares two Sequences of XMLPropertyState:
-//	1.Number of elements equal ?
-//	2.Index of each element equal ? (So I know whether the propertynames are the same)
-//	3.Value of each element equal ?
+//  1.Number of elements equal ?
+//  2.Index of each element equal ? (So I know whether the propertynames are the same)
+//  3.Value of each element equal ?
 //
 sal_Bool SvXMLExportPropertyMapper::Equals(
         const vector< XMLPropertyState >& aProperties1,
@@ -1005,7 +1005,7 @@ void SvXMLExportPropertyMapper::_exportXML(
 
                 // extract namespace prefix from attribute name if it exists
                 OUString sPrefix;
-                const sal_Int32 nColonPos = 
+                const sal_Int32 nColonPos =
                     pAttribName->indexOf( sal_Unicode(':') );
                 if( nColonPos != -1 )
                     sPrefix = pAttribName->copy( 0, nColonPos );
@@ -1026,7 +1026,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                             // to add it to the namespace map.
                             bAddNamespace = sal_True;
                         }
-                        else 
+                        else
                         {
                             // check if there is a prefix registered for the
                             // namepsace URI

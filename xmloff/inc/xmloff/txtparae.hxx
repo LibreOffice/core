@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ namespace xmloff
 class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 {
 
-//	SvXMLExport& rExport;
+//  SvXMLExport& rExport;
     SvXMLAutoStylePoolP& rAutoStylePool;
     UniReference < SvXMLExportPropertyMapper > xParaPropMapper;
     UniReference < SvXMLExportPropertyMapper > xTextPropMapper;
@@ -89,27 +89,27 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     UniReference < SvXMLExportPropertyMapper > xRubyPropMapper;
 
     const ::std::auto_ptr< ::xmloff::BoundFrameSets > pBoundFrameSets;
-    XMLTextFieldExport			*pFieldExport;
-    OUStrings_Impl				*pListElements;
+    XMLTextFieldExport          *pFieldExport;
+    OUStrings_Impl              *pListElements;
     // --> OD 2008-05-07 #refactorlists# - no longer needed
 //    OUStringsSort_Impl          *pExportedLists;
     // <--
-    XMLTextListAutoStylePool	*pListAutoPool;
-    XMLSectionExport			*pSectionExport;
-    XMLIndexMarkExport			*pIndexMarkExport;
+    XMLTextListAutoStylePool    *pListAutoPool;
+    XMLSectionExport            *pSectionExport;
+    XMLIndexMarkExport          *pIndexMarkExport;
 
     /// may be NULL (if no redlines should be exported; e.g. in block mode)
-    XMLRedlineExport			*pRedlineExport;
-    XMLStringVector				*pHeadingStyles;
+    XMLRedlineExport            *pRedlineExport;
+    XMLStringVector             *pHeadingStyles;
 
-    sal_Bool					bProgress;
+    sal_Bool                    bProgress;
 
-    sal_Bool					bBlock;
+    sal_Bool                    bBlock;
 
     // keep track of open rubies
-    ::rtl::OUString				sOpenRubyText;
-    ::rtl::OUString				sOpenRubyCharStyle;
-    sal_Bool					bOpenRuby;
+    ::rtl::OUString             sOpenRubyText;
+    ::rtl::OUString             sOpenRubyCharStyle;
+    sal_Bool                    bOpenRuby;
 
     // --> OD 2008-05-07 #refactorlists#
     XMLTextListsHelper* mpTextListsHelper;
@@ -210,8 +210,8 @@ protected:
 
     SinglePropertySetInfoCache aCharStyleNamesPropInfoCache;
 
-//	SvXMLExport& GetExport() { return rExport; }
-//	const SvXMLExport& GetExport() const  { return rExport; }
+//  SvXMLExport& GetExport() { return rExport; }
+//  const SvXMLExport& GetExport() const  { return rExport; }
 
     UniReference < SvXMLExportPropertyMapper > GetParaPropMapper() const
     {
@@ -442,7 +442,7 @@ protected:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextRange > & rTextRange,
         sal_Bool bAutoStyles,
-        sal_Bool& rPrevCharWasSpace	);
+        sal_Bool& rPrevCharWasSpace );
 
     void exportListChange( const XMLTextNumRuleInfo& rPrvInfo,
                            const XMLTextNumRuleInfo& rNextInfo );

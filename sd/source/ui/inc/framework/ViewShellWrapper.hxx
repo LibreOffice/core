@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ public:
             ::com::sun::star::drawing::framework::XResourceId>& rxViewId,
         const ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow>& rxWindow);
     virtual ~ViewShellWrapper (void);
-    
+
     virtual void SAL_CALL disposing (void);
 
     static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId (void);
@@ -103,7 +103,7 @@ public:
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException);
 
-    
+
     // XRelocatableResource
 
     virtual sal_Bool SAL_CALL relocateToAnchor (
@@ -117,15 +117,15 @@ public:
     virtual void SAL_CALL windowResized(
         const ::com::sun::star::awt::WindowEvent& rEvent)
         throw (::com::sun::star::uno::RuntimeException);
-    
+
     virtual void SAL_CALL windowMoved(
         const ::com::sun::star::awt::WindowEvent& rEvent)
         throw (::com::sun::star::uno::RuntimeException);
-    
+
     virtual void SAL_CALL windowShown(
         const ::com::sun::star::lang::EventObject& rEvent)
         throw (::com::sun::star::uno::RuntimeException);
-    
+
     virtual void SAL_CALL windowHidden(
         const ::com::sun::star::lang::EventObject& rEvent)
         throw (::com::sun::star::uno::RuntimeException);

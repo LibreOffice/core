@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -439,7 +439,7 @@ Window* WidgetFactory::sfx2CreateWindow (VCLXWindow** component, Window* parent,
 Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *parent, OUString const& name, long& attributes)
 {
     Window* window = 0;
-    
+
     if (0)
     {
         ;

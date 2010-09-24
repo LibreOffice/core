@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ namespace dbaxml
         virtual void EndElement();
 
         /** pushes a new TableFilterPattern to the list of patterns
-            @param	_sTableFilterPattern
+            @param  _sTableFilterPattern
                 The new filter pattern.
         */
         inline void pushTableFilterPattern(const ::rtl::OUString& _sTableFilterPattern)
@@ -64,7 +64,7 @@ namespace dbaxml
         }
 
         /** pushes a new TableTypeFilter to the list of patterns
-            @param	_sTypeFilter
+            @param  _sTypeFilter
                 The new type filter.
         */
         inline void pushTableTypeFilter(const ::rtl::OUString& _sTypeFilter)

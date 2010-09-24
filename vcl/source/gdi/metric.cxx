@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -236,12 +236,12 @@ BOOL FontMetric::operator==( const FontMetric& rMetric ) const
 CmapResult::CmapResult( bool bSymbolic,
     const sal_uInt32* pRangeCodes, int nRangeCount,
     const int* pStartGlyphs, const USHORT* pExtraGlyphIds )
-:	mpRangeCodes( pRangeCodes)
-,	mpStartGlyphs( pStartGlyphs)
-,	mpGlyphIds( pExtraGlyphIds)
-,	mnRangeCount( nRangeCount)
-,	mbSymbolic( bSymbolic)
-,	mbRecoded( false)
+:   mpRangeCodes( pRangeCodes)
+,   mpStartGlyphs( pStartGlyphs)
+,   mpGlyphIds( pExtraGlyphIds)
+,   mnRangeCount( nRangeCount)
+,   mbSymbolic( bSymbolic)
+,   mbRecoded( false)
 {}
 
 // =======================================================================
@@ -298,8 +298,8 @@ ImplFontCharMap* ImplFontCharMap::GetDefaultMap( bool bSymbols)
         int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);
         if( bSymbols )
         {
-            pRangeCodes	= aDefaultSymbolRanges;
-            nCodesCount	= sizeof(aDefaultSymbolRanges) / sizeof(*pRangeCodes);
+            pRangeCodes = aDefaultSymbolRanges;
+            nCodesCount = sizeof(aDefaultSymbolRanges) / sizeof(*pRangeCodes);
         }
 
         CmapResult aDefaultCR( bSymbols, pRangeCodes, nCodesCount/2 );
@@ -377,7 +377,7 @@ int ImplFontCharMap::GetGlyphIndex( sal_uInt32 cChar ) const
     // return -1 if the object doesn't know the glyph ids
     if( !mpStartGlyphs )
         return -1;
-    
+
     // return 0 if the unicode doesn't have a matching glyph
     int nRange = ImplFindRangeIndex( cChar );
     // check that we are inside any range
@@ -393,7 +393,7 @@ int ImplFontCharMap::GetGlyphIndex( sal_uInt32 cChar ) const
     // check that we are inside a range
     if( (nRange & 1) != 0 )
         return 0;
-    
+
     // get glyph index directly or indirectly
     int nGlyphIndex = cChar - mpRangeCodes[ nRange ];
     const int nStartIndex = mpStartGlyphs[ nRange/2 ];
@@ -533,7 +533,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 {
     rResult.mpRangeCodes = NULL;
     rResult.mpStartGlyphs= NULL;
-    rResult.mpGlyphIds	 = NULL;
+    rResult.mpGlyphIds   = NULL;
     rResult.mnRangeCount = 0;
     rResult.mbRecoded    = false;
     rResult.mbSymbolic   = false;
@@ -803,7 +803,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             *(pOut++) = *(it++);
     }
 
-    // update the result struct    
+    // update the result struct
     rResult.mpRangeCodes = pCodePairs;
     rResult.mpStartGlyphs = pStartGlyphs;
     rResult.mnRangeCount = nRangeCount;

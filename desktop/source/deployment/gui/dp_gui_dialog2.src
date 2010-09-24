@@ -1,7 +1,7 @@
 ﻿/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -203,9 +203,9 @@ QueryBox RID_QUERYBOX_INSTALL_FOR_ALL
 
 // Dialog layout
 // ---------------------------------------------------
-//	row 1 | multi line edit
+//  row 1 | multi line edit
 // ---------------------------------------------------
-//  row 2 | fixed text 
+//  row 2 | fixed text
 // ---------------------------------------------------
 //  row 3 | img   | fixed text   | fixed text | button
 // ----------------------------------------------------
@@ -213,7 +213,7 @@ QueryBox RID_QUERYBOX_INSTALL_FOR_ALL
 // ---------------------------------------------------
 //  row 5 |fixed line
 // ---------------------------------------------------
-//  row 6 |       |       |button  | button 
+//  row 6 |       |       |button  | button
 // ---------------------------------------------------
 //        | col 1 | col 2 | col3   | col4      | col5
 

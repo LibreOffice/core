@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 #include <services/license.hxx>
 #include <threadhelp/resetableguard.hxx>
@@ -41,7 +41,7 @@
 #include "classes/resource.hrc"
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -54,7 +54,7 @@
 
 
 //_________________________________________________________________________________________________________________
-//	includes of other projects
+//  includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <rtl/ustrbuf.hxx>
@@ -73,21 +73,21 @@
 #include <osl/time.h>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 using namespace utl;
-using namespace ::osl							;
-using namespace ::cppu							;
-using namespace ::com::sun::star::uno			;
-using namespace ::com::sun::star::beans			;
-using namespace ::com::sun::star::lang			;
-using namespace ::com::sun::star::util			;
-using namespace ::com::sun::star::frame 		;
+using namespace ::osl                           ;
+using namespace ::cppu                          ;
+using namespace ::com::sun::star::uno           ;
+using namespace ::com::sun::star::beans         ;
+using namespace ::com::sun::star::lang          ;
+using namespace ::com::sun::star::util          ;
+using namespace ::com::sun::star::frame         ;
 
 //_________________________________________________________________________________________________________________
-//	non exported const
+//  non exported const
 //_________________________________________________________________________________________________________________
 
 // license file name
@@ -101,23 +101,23 @@ static const char *szWNTLicenseExt = ".txt";
 #endif
 
 //_________________________________________________________________________________________________________________
-//	non exported definitions
+//  non exported definitions
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//	constructor
+//  constructor
 //*****************************************************************************************************************
 License::License( const Reference< XMultiServiceFactory >& xFactory )
-        //	Init baseclasses first
-        //	Attention:
-        //		Don't change order of initialization!
+        //  Init baseclasses first
+        //  Attention:
+        //      Don't change order of initialization!
         //      ThreadHelpBase is a struct with a mutex as member. We can't use a mutex as member, while
-        //		we must garant right initialization and a valid value of this! First initialize
-        //		baseclasses and then members. And we need the mutex for other baseclasses !!!
+        //      we must garant right initialization and a valid value of this! First initialize
+        //      baseclasses and then members. And we need the mutex for other baseclasses !!!
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
         ,   OWeakObject     (                               )
         // Init member
@@ -127,34 +127,34 @@ License::License( const Reference< XMultiServiceFactory >& xFactory )
 }
 
 //*****************************************************************************************************************
-//	destructor
+//  destructor
 //*****************************************************************************************************************
 License::~License()
 {
 }
 
 //*****************************************************************************************************************
-//	XInterface, XTypeProvider, XServiceInfo
+//  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 
-DEFINE_XINTERFACE_4					(	License						   ,
-                                        OWeakObject					   ,
+DEFINE_XINTERFACE_4                 (   License                        ,
+                                        OWeakObject                    ,
                                         DIRECT_INTERFACE(XTypeProvider ),
                                         DIRECT_INTERFACE(XServiceInfo  ),
-                                        DIRECT_INTERFACE(XJob	       ),
+                                        DIRECT_INTERFACE(XJob          ),
                                         DIRECT_INTERFACE(XCloseable    )
                                     )
 
-DEFINE_XTYPEPROVIDER_4				(	License	,
-                                        XTypeProvider	,
-                                        XServiceInfo	,
+DEFINE_XTYPEPROVIDER_4              (   License ,
+                                        XTypeProvider   ,
+                                        XServiceInfo    ,
                                         XJob            ,
                                         XCloseable
                                     )
 
-DEFINE_XSERVICEINFO_MULTISERVICE	(	License,
+DEFINE_XSERVICEINFO_MULTISERVICE    (   License,
                                         OWeakObject                 ,
-                                        SERVICENAME_LICENSE			,
+                                        SERVICENAME_LICENSE         ,
                                         IMPLEMENTATIONNAME_LICENSE
                                     )
 
@@ -627,5 +627,5 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-}		//	namespace framework
+}       //  namespace framework
 

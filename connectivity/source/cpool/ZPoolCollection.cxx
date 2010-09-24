@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ static const ::rtl::OUString& getEnableNodeName()
 }
 
 //--------------------------------------------------------------------
-OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&	_rxFactory)
+OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxFactory)
     :m_xServiceFactory(_rxFactory)
 {
     // bootstrap all objects supporting the .sdb.Driver service
@@ -204,7 +204,7 @@ Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const ::rtl::OUSt
     {
         Reference< XDriver > xExistentProxy;
         // look if we already have a proxy for this driver
-        for	(	ConstMapDriver2DriverRefIterator aLookup = m_aDriverProxies.begin();
+        for (   ConstMapDriver2DriverRefIterator aLookup = m_aDriverProxies.begin();
                 aLookup != m_aDriverProxies.end();
                 ++aLookup
             )
@@ -221,7 +221,7 @@ Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const ::rtl::OUSt
             xDriver = xExistentProxy;
         }
         else
-        {	// create a new proxy for the driver
+        {   // create a new proxy for the driver
             // this allows us to control the connections created by it
             if (m_xProxyFactory.is())
             {
@@ -442,8 +442,8 @@ Reference<XInterface> OPoolCollection::openNode(const ::rtl::OUString& _rPath,co
     {
         OSL_ENSURE(sal_False,
                     ::rtl::OString("::openNode: there is no element named ")
-                +=	::rtl::OString(_rPath.getStr(), _rPath.getLength(), RTL_TEXTENCODING_ASCII_US)
-                +=	::rtl::OString("!"));
+                +=  ::rtl::OString(_rPath.getStr(), _rPath.getLength(), RTL_TEXTENCODING_ASCII_US)
+                +=  ::rtl::OString("!"));
     }
     catch(Exception&)
     {
@@ -473,8 +473,8 @@ Any OPoolCollection::getNodeValue(const ::rtl::OUString& _rPath,const Reference<
         OSL_UNUSED( e );    // make compiler happy
         OSL_ENSURE(sal_False,
             ::rtl::OString("::getNodeValue: caught a NoSuchElementException while trying to open ")
-        +=	::rtl::OString(e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US)
-        +=	::rtl::OString("!"));
+        +=  ::rtl::OString(e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US)
+        +=  ::rtl::OString("!"));
     }
     return aReturn;
 }
@@ -534,7 +534,7 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
                 aIter->second->release();
             }
             m_aPools.clear();
-            m_aPools		 = OConnectionPools();
+            m_aPools         = OConnectionPools();
         }
     }
     else if(evt.Source.is())
@@ -548,7 +548,7 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
             // 1nd relase the driver
             // look if we already have a proxy for this driver
             MapDriver2DriverRefIterator aLookup = m_aDriverProxies.begin();
-            while(	aLookup != m_aDriverProxies.end())
+            while(  aLookup != m_aDriverProxies.end())
             {
                 MapDriver2DriverRefIterator aFind = aLookup;
                 Reference<XServiceInfo> xInfo(aLookup->first,UNO_QUERY);

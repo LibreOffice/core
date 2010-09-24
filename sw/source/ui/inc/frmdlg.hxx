@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 class SwWrtShell;
 
 /*--------------------------------------------------------------------
-   Beschreibung:	Rahmendialog
+   Beschreibung:    Rahmendialog
  --------------------------------------------------------------------*/
 
 class SwFrmDlg : public SfxTabDialog
@@ -49,13 +49,13 @@ class SwFrmDlg : public SfxTabDialog
     virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
 
 public:
-    SwFrmDlg(	SfxViewFrame *pFrame, Window *pParent,
+    SwFrmDlg(   SfxViewFrame *pFrame, Window *pParent,
                 const SfxItemSet& rCoreSet,
-                BOOL			bNewFrm  = TRUE,
-                USHORT			nResType = DLG_FRM_STD,
-                BOOL			bFmt 	 = FALSE,
-                UINT16			nDefPage = 0,
-                const String* 	pFmtStr  = 0);
+                BOOL            bNewFrm  = TRUE,
+                USHORT          nResType = DLG_FRM_STD,
+                BOOL            bFmt     = FALSE,
+                UINT16          nDefPage = 0,
+                const String*   pFmtStr  = 0);
 
     ~SwFrmDlg();
 

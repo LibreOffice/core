@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ public:
 
     void AddEventListener (const Link& rEventListener);
     void RemoveEventListener (const Link& rEventListener);
-    
+
     int GetMasterPageCount (void) const;
     MasterPageContainer::Token GetTokenForIndex (sal_uInt32 nIndex) const;
 
@@ -76,7 +76,7 @@ private:
     ::std::auto_ptr<MasterPageList> mpMasterPages;
     unsigned long int mnMaxListSize;
     ::boost::shared_ptr<MasterPageContainer> mpContainer;
-    
+
     RecentlyUsedMasterPages (void);
     virtual ~RecentlyUsedMasterPages (void);
 

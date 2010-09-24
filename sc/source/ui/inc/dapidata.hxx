@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,17 +45,17 @@ class ScDataPilotDatabaseDlg : public ModalDialog
 {
 private:
     FixedLine       aFlFrame;
-    FixedText		aFtDatabase;
-    ListBox			aLbDatabase;
-    FixedText		aFtObject;
-    ComboBox		aCbObject;
-    FixedText		aFtType;
-    ListBox			aLbType;
-    OKButton		aBtnOk;
-    CancelButton	aBtnCancel;
-    HelpButton		aBtnHelp;
+    FixedText       aFtDatabase;
+    ListBox         aLbDatabase;
+    FixedText       aFtObject;
+    ComboBox        aCbObject;
+    FixedText       aFtType;
+    ListBox         aLbType;
+    OKButton        aBtnOk;
+    CancelButton    aBtnCancel;
+    HelpButton      aBtnHelp;
 
-    void	FillObjects();
+    void    FillObjects();
 
     DECL_LINK( SelectHdl, ListBox* );
 
@@ -63,7 +63,7 @@ public:
             ScDataPilotDatabaseDlg( Window* pParent );
             ~ScDataPilotDatabaseDlg();
 
-    void	GetValues( ScImportSourceDesc& rDesc );
+    void    GetValues( ScImportSourceDesc& rDesc );
 };
 
 

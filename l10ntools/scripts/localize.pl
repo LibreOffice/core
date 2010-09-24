@@ -2,11 +2,11 @@
 eval 'exec perl -wS $0 ${1+"$@"}'
     if 0;
 
-    
+
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-   
+
 use strict;
 use Getopt::Long;
 use IO::Handle;
@@ -43,7 +43,7 @@ use Cwd;
 my $CVS_BINARY = "/usr/bin/cvs";
 # ver 1.1
 #
-#### module lookup 
+#### module lookup
 #use lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
 
 #### module lookup
@@ -77,7 +77,7 @@ my $force_ooo_module = '0';
 my %is_ooo_module;
 my %is_so_module;
 
-         #         (                           leftpart                                                     )            (           rightpart                    )    
+         #         (                           leftpart                                                     )            (           rightpart                    )
          #            prj      file      dummy     type       gid       lid      helpid    pform     width      lang       text    helptext  qhelptext   title    timestamp
 my $sdf_regex  = "((([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*))\t([^\t]*)\t(([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t)([^\t]*))";
 my $file_types = "(src|hrc|xcs|xcu|lng|ulf|xrm|xhp|xcd|xgf|xxl|xrb)";
@@ -102,20 +102,20 @@ else
 #%sl_modules = fetch_sourcelanguage_dirlist();
 
 
-if   ( $mode eq "merge"    )    {   
+if   ( $mode eq "merge"    )    {
     if ( ! $no_gsicheck ){
         merge_gsicheck();
     }
-    splitfile( $sdffile );      
+    splitfile( $sdffile );
     if ( ! $no_gsicheck ){
         unlink $sdffile;             # remove temp file!
     }
 }
-elsif( $mode eq "extract"  )    {   
+elsif( $mode eq "extract"  )    {
     collectfiles( $outputfile );
 }
-else                            {  
-    usage();                    
+else                            {
+    usage();
 }
 
 exit(0);
@@ -138,13 +138,13 @@ sub splitfile{
     #print STDOUT "Open File $sdffile\n";
     open MYFILE , "< $sdffile"
     or die "Can't open '$sdffile'\n";
-    
+
 #    my %lang_hash;
     my %string_hash_ooo;
     my %string_hash_so;
     my %so_modules;
     $so_modules{ "extras_full" } = "TRUE";
-    
+
     while( <MYFILE>){
          if( /$sdf_regex/ ){
             my $line           = defined $_ ? $_ : '';
@@ -155,17 +155,17 @@ sub splitfile{
             my $lid            = defined $8 ? $8 : '';
             my $lang           = defined $12 ? $12 : '';
             my $plattform      = defined $10 ? $10 : '';
-            my $helpid         = defined $9 ? $9 : ''; 
+            my $helpid         = defined $9 ? $9 : '';
             next if( $prj eq "binfilter" );     # Don't merge strings into binfilter module
             chomp( $line );
-           
+
             if( is_openoffice_module( $prj ) )
             {
-                $string_hash_ooo { $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = $line; 
+                $string_hash_ooo { $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = $line;
             }
             else
             {
-                $string_hash_so{ $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = $line; 
+                $string_hash_so{ $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = $line;
             }
         }
     }
@@ -181,10 +181,10 @@ sub splitfile{
 
     #print "$so_l10n_path\n";
     #print "$ooo_l10n_path\n";
-    
+
     write_sdf( \%string_hash_so , $so_l10n_path );
     write_sdf( \%string_hash_ooo , $ooo_l10n_path );
-   
+
 }
 sub check_modules_scm
 {
@@ -194,7 +194,7 @@ sub check_modules_scm
     my $last_dir        = getcwd();
     chdir $src_path ;
     my @modules         = <*/.svn/entries>;
-    
+
     foreach my $module ( @modules )
     {
         #print "$module \n";
@@ -202,9 +202,9 @@ sub check_modules_scm
         {
             while( <FILE> )
             {
-                
+
                 my @path = split ( "/" , $module ) ;
-                
+
                 if( /svn.services.openoffice.org/ )
                 {
                     my $mod = $path[ 0 ];
@@ -219,7 +219,7 @@ sub check_modules_scm
                     # print "$module -> so ";
                     #$so_lookup_hash{ $mod } = "true";
                 }
-                #else 
+                #else
                 #{
                 #    print "ERROR: Is $module a SO or OOo module? Can not parese the $module/.svn/entries file ... please check mwsfinnish/merge/splitsdf.pl line 280\n";
                 # exit -1;
@@ -241,7 +241,7 @@ sub check_modules_scm
 #    my $output  = `$command`;
 #    my $rc = $? << 8;
 #    if ( $output eq "" || $rc < 0 ){
-#        print STDERR "ERROR: Can not fetch cvs alias list, please login to the cvs server and press at the password prompt just return\ncvs -d:pserver:anoncvs\@anoncvs.services.openoffice.org:/cvs login\n"; 
+#        print STDERR "ERROR: Can not fetch cvs alias list, please login to the cvs server and press at the password prompt just return\ncvs -d:pserver:anoncvs\@anoncvs.services.openoffice.org:/cvs login\n";
 #        exit ( -1 );
 #    }
 #    my @list = split /\n/ , $output ;
@@ -267,13 +267,13 @@ sub is_openoffice_module
 sub write_sdf
 {
     my $string_hash         = shift;
-    my $l10n_file           = shift; 
-    
+    my $l10n_file           = shift;
+
     foreach my $lang( keys( %{ $string_hash } ) )
     {
         my @sdf_file;
-        next , if( $lang eq "en-US" ); 
-        
+        next , if( $lang eq "en-US" );
+
         mkdir $l10n_file."/$lang";
         # mkdir!!!!
         my $current_l10n_file = $l10n_file."/$lang/localize.sdf";
@@ -289,10 +289,10 @@ sub write_sdf
                     my $gid            = defined $7 ? $7 : '';
                     my $lid            = defined $8 ? $8 : '';
                     my $lang           = defined $12 ? $12 : '';
-                    my $plattform      = defined $10 ? $10 : ''; 
+                    my $plattform      = defined $10 ? $10 : '';
                     my $helpid         = defined $9 ? $9 : '';
-            
-                    chomp( $line );    
+
+                    chomp( $line );
                     if ( defined $string_hash->{ $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } )
                     {
                         # Changed String!
@@ -309,13 +309,13 @@ sub write_sdf
         }
         close( DESTFILE );
         #Now just append the enw strings
-        #FIXME!!! Implement insertion in the correct order 
+        #FIXME!!! Implement insertion in the correct order
         foreach my $key ( keys ( %{ $string_hash->{ $lang } } ) )
         {
             push @sdf_file , $string_hash->{ $lang }{ $key } , if ( defined $string_hash->{ $lang }{ $key } );
             #print "WARNING: Not defined = ".$string_hash->{ $lang }{ $key }."\n", if( ! defined  $string_hash->{ $lang }{ $key } );
         }
-        
+
         # Write the new file
         my ( $TMPFILE , $tmpfile ) = File::Temp::tempfile();
         if( open DESTFILE , "+> $tmpfile " ){
@@ -325,12 +325,12 @@ sub write_sdf
             }
             close ( DESTFILE );
             if( move( $current_l10n_file , $current_l10n_file.".backup" ) ){
-                if( copy( $tmpfile , $current_l10n_file ) ){ 
-                    unlink $l10n_file.".backup";  
+                if( copy( $tmpfile , $current_l10n_file ) ){
+                    unlink $l10n_file.".backup";
                  } else { print STDERR "Can't open/create '$l10n_file', original file is renamed to $l10n_file.backup\n"; }
             } else { print STDERR "Can't open/create '$l10n_file'\n"; }
          }else{
-            print STDERR "WARNING: Can't open/create '$l10n_file'\n";  
+            print STDERR "WARNING: Can't open/create '$l10n_file'\n";
          }
          unlink $tmpfile;
      }
@@ -339,7 +339,7 @@ sub write_sdf
 #########################################################
 
 sub get_license_header{
-    return 
+    return
 "#\n".
 "#    ####    ###     #   #   ###   #####    #####  ####   #####  #####  \n".
 "#    #   #  #   #    ##  #  #   #    #      #      #   #    #      #    \n".
@@ -381,7 +381,7 @@ sub merge_gsicheck{
     my $command = '';
     my ( $TMPHANDLE , $tmpfile ) = File::Temp::tempfile();
     close ( $TMPHANDLE );
-    
+
     $command = "$ENV{WRAPCMD} " if( $ENV{WRAPCMD} );
     $command .= "$ENV{SOLARVER}/$ENV{INPATH}/bin/gsicheck";
 
@@ -395,7 +395,7 @@ sub merge_gsicheck{
         print STDOUT "### The file $errfile have been written containing the errors in your sdf file. Those lines will not be merged: ###\n\n";
         print STDOUT "$output\n";
         print STDOUT "################\n";
-       
+
     }else{
         # Remove the 0 Byte file
         unlink $errfile;
@@ -405,10 +405,10 @@ sub merge_gsicheck{
 #########################################################
 # find search function
 sub wanted
-{ 
+{
     my $file = $File::Find::name;
     if( -f $file && $file =~ /.*localize.sdf$/ && !( $file =~ /.*\.svn.*/ ) ) {
-        push   @sdfparticles , $file; 
+        push   @sdfparticles , $file;
         if( $bVerbose eq "1" ) { print STDOUT "$file\n"; }
         else { print ".";  }
     }
@@ -443,46 +443,46 @@ sub add_paths
             {
                 push @sdfparticles , "$ooo_l10n_dir/$lang/localize.sdf";
             }
-            else { #print "WARNING: $loc_file not found ....\n"; 
+            else { #print "WARNING: $loc_file not found ....\n";
             }
         }
-   
+
     }
 }
 sub collectfiles{
-    print STDOUT "### Localize\n"; 
-    my $localizehash_ref;  
+    print STDOUT "### Localize\n";
+    my $localizehash_ref;
     my ( $bAll , $bUseLocalize, $langhash_ref , $bHasSourceLanguage , $bFakeEnglish ) = parseLanguages();
-    
+
     # Enable autoflush on STDOUT
-    # $| = 1; 
+    # $| = 1;
     STDOUT->autoflush( 1 );
 
     ### Search sdf particles
     #print STDOUT "### Searching sdf particles\n";
     my $working_path = getcwd();
     chdir $ENV{SOURCE_ROOT_DIR}, if defined $ENV{SOURCE_ROOT_DIR};
-    #chdir $srcpath;         
+    #chdir $srcpath;
     #find ( { wanted => \&wanted , follow => 1 }, getcwd() );
     #chdir $working_path;
     add_paths( $langhash_ref );
-    #my $nFound  = $#sdfparticles +1; 
+    #my $nFound  = $#sdfparticles +1;
     #print "\n    $nFound files found !\n";
 
     my ( $LOCALIZEPARTICLE , $localizeSDF ) = File::Temp::tempfile();
-    close( $LOCALIZEPARTICLE ); 
+    close( $LOCALIZEPARTICLE );
 
     my ( $ALLPARTICLES_MERGED , $particleSDF_merged )     = File::Temp::tempfile();
-    close( $ALLPARTICLES_MERGED ); 
+    close( $ALLPARTICLES_MERGED );
     my ( $LOCALIZE_LOG , $my_localize_log ) = File::Temp::tempfile();
     close( $LOCALIZE_LOG );
-    
+
     ## Get the localize en-US extract
     if( $bAll || $bUseLocalize ){
         print "### Fetching source language strings\n";
         my $command = "";
         my $args    = "";
-        
+
         if( $ENV{WRAPCMD} ){
             $command = $ENV{WRAPCMD}.$binpath."localize_sl";
         }else{
@@ -502,36 +502,36 @@ sub collectfiles{
                 push @list , $isokey;
                 if( $langhash_ref->{ $isokey } ne "" ){
                     push @list , $langhash_ref->{ $isokey };
-                } 
+                }
               }
               remove_duplicates( \@list );
               foreach my $isokey ( @list ){
                 switch :{
-                       ( $isokey=~ /^en-US$/i  ) 
-                        && do{  
+                       ( $isokey=~ /^en-US$/i  )
+                        && do{
                                 if( $bFlag eq "TRUE" ){ $args .= ",en-US"; }
-                                else {     
-                                    $args .= "en-US";  $bFlag = "TRUE"; 
+                                else {
+                                    $args .= "en-US";  $bFlag = "TRUE";
                                  }
                               };
-                                        
+
                     } #switch
                 } #foreach
-              } # if 
+              } # if
         } # if
         if ( $bVerbose ) { print STDOUT $command.$args."\n"; }
-        
+
         my $rc = system( $command.$args );
 
         if( $rc < 0 ){    print STDERR "ERROR: localize rc = $rc\n"; exit( -1 ); }
         ( $localizehash_ref )  = read_file( $localizeSDF , $langhash_ref );
-     
+
     }
     ## Get sdf particles
 #*****************
-    open ALLPARTICLES_MERGED , "+>> $particleSDF_merged" 
-    or die "Can't open $particleSDF_merged"; 
-    
+    open ALLPARTICLES_MERGED , "+>> $particleSDF_merged"
+    or die "Can't open $particleSDF_merged";
+
     ## Fill fackback hash
     my( $fallbackhashhash_ref ) = fetch_fallback( \@sdfparticles , $localizeSDF ,  $langhash_ref );
     my %block;
@@ -556,9 +556,9 @@ sub collectfiles{
                             my $gid            = defined $7 ? $7 : '';
                             my $lid            = defined $8 ? $8 : '';
                             my $lang           = defined $12 ? $12 : '';
-                            my $plattform      = defined $10 ? $10 : ''; 
+                            my $plattform      = defined $10 ? $10 : '';
                             my $helpid         = defined $9 ? $9 : '';
-                            
+
                             chomp( $line );
 
                             if ( $lang eq $cur_lang ){
@@ -574,12 +574,12 @@ sub collectfiles{
             }
 
             foreach my $line ( keys( %{$fallbackhashhash_ref->{ $cur_lang } } )) {
-                if( #$cur_lang ne "de" && 
+                if( #$cur_lang ne "de" &&
                     $cur_lang ne "en-US" ){
                     print ALLPARTICLES_MERGED ( $fallbackhashhash_ref->{ $cur_lang }{ $line }, "\n" );
                 }
              }
-        } 
+        }
     } else {
         foreach my $currentfile ( @sdfparticles ){
             if ( open MYFILE , "< $currentfile" ) {
@@ -591,18 +591,18 @@ sub collectfiles{
         }
     }
     close ALLPARTICLES_MERGED;
-#***************    
-    
+#***************
+
     # Hash of array
     my %output;
     my @order;
-    
+
     ## Join both
     if( $outputfile ){
         if( open DESTFILE , "+> $outputfile" ){
-            if( !open LOCALIZEPARTICLE ,  "< $localizeSDF" ) { print STDERR "ERROR: Can't open file $localizeSDF\n"; } 
+            if( !open LOCALIZEPARTICLE ,  "< $localizeSDF" ) { print STDERR "ERROR: Can't open file $localizeSDF\n"; }
             if( !open ALLPARTICLES_MERGED , "< $particleSDF_merged" ) { print STDERR "ERROR: Can't open file $particleSDF_merged\n"; }
-                
+
             # Insert localize
             my $extract_date="";
             while ( <LOCALIZEPARTICLE> ){
@@ -618,16 +618,16 @@ sub collectfiles{
                     my $gid            = defined $7 ? $7 : '';
                     my $lid            = defined $8 ? $8 : '';
                     #my $lang           = defined $12 ? $12 : '';
-                    my $plattform      = defined $10 ? $10 : ''; 
+                    my $plattform      = defined $10 ? $10 : '';
                     my $helpid         = defined $9 ? $9 : '';
- 
-                    
+
+
                     if( $use_default_date )
                     {
-                        $extract_date = "$default_date\n" ; 
+                        $extract_date = "$default_date\n" ;
                     }
-                    elsif( $extract_date eq "" ) {  
-                        $extract_date = $timestamp ; 
+                    elsif( $extract_date eq "" ) {
+                        $extract_date = $timestamp ;
                         $extract_date =~ tr/\r\n//d;
                         $extract_date .= "\n";
                     }
@@ -635,18 +635,18 @@ sub collectfiles{
                     if( $bAll ){ print DESTFILE $leftpart."\t".$lang."\t".$rightpart.$extract_date ; }
                     else {
                         foreach my $sLang ( keys( %{ $langhash_ref } ) ){
-                            if( $sLang=~ /all/i )                       {  
+                            if( $sLang=~ /all/i )                       {
                                 push @{ $output{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } } ,  $leftpart."\t".$lang."\t".$rightpart.$extract_date ;
-                                #print DESTFILE $leftpart."\t".$lang."\t".$rightpart.$extract_date;  
+                                #print DESTFILE $leftpart."\t".$lang."\t".$rightpart.$extract_date;
                             }
-                            #if( $sLang eq "de" && $lang eq "de" )       {  
+                            #if( $sLang eq "de" && $lang eq "de" )       {
                             #    push @{ $output{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } } ,  $leftpart."\t".$lang."\t".$rightpart.$extract_date ;
-                                #print DESTFILE $leftpart."\t".$lang."\t".$rightpart.$extract_date;  
+                                #print DESTFILE $leftpart."\t".$lang."\t".$rightpart.$extract_date;
                                 #}
-                            if( $sLang eq "en-US" && $lang eq "en-US" ) {  
+                            if( $sLang eq "en-US" && $lang eq "en-US" ) {
                                 push @order , $prj.$gid.$lid.$file.$type.$plattform.$helpid;
                                 if( !$bFakeEnglish ){ push @{ $output{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } } ,  $leftpart."\t".$lang."\t".$rightpart.$extract_date ; }
-                                #print DESTFILE $leftpart."\t".$lang."\t".$rightpart.$extract_date;  
+                                #print DESTFILE $leftpart."\t".$lang."\t".$rightpart.$extract_date;
                             }
 
                         }
@@ -668,22 +668,22 @@ sub collectfiles{
                     my $gid            = defined $7 ? $7 : '';
                     my $lid            = defined $8 ? $8 : '';
                     #my $lang           = defined $12 ? $12 : '';
-                    my $plattform      = defined $10 ? $10 : ''; 
+                    my $plattform      = defined $10 ? $10 : '';
                     my $helpid         = defined $9 ? $9 : '';
- 
-                    
+
+
                     if( $use_default_date )
                     {
-                        $extract_date = "$default_date\n" ; 
+                        $extract_date = "$default_date\n" ;
                     }
-                    elsif( $extract_date eq "" ) 
-                    { 
-                        $extract_date = $timestamp; 
+                    elsif( $extract_date eq "" )
+                    {
+                        $extract_date = $timestamp;
                     }
 
-                    if( ! ( $prj =~ /binfilter/i ) ) { 
-                        push @{ $output{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } } , $leftpart."\t".$lang."\t".$rightpart.$extract_date ; 
-                        #print DESTFILE $leftpart."\t".$lang."\t".$rightpart.$extract_date ; 
+                    if( ! ( $prj =~ /binfilter/i ) ) {
+                        push @{ $output{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } } , $leftpart."\t".$lang."\t".$rightpart.$extract_date ;
+                        #print DESTFILE $leftpart."\t".$lang."\t".$rightpart.$extract_date ;
                     }
                  }
             }
@@ -695,8 +695,8 @@ sub collectfiles{
                         print DESTFILE $line;
                     }
                 }
-            } 
-        
+            }
+
         }else { print STDERR "Can't open $outputfile";}
     }
     close DESTFILE;
@@ -704,9 +704,9 @@ sub collectfiles{
     close ALLPARTICLES_MERGED;
     chdir $working_path;
 
-    #print STDOUT "DBG: \$localizeSDF $localizeSDF \$particleSDF_merged $particleSDF_merged\n";    
+    #print STDOUT "DBG: \$localizeSDF $localizeSDF \$particleSDF_merged $particleSDF_merged\n";
     unlink $localizeSDF , $particleSDF_merged ,  $my_localize_log;
-    
+
     #sort_outfile( $outputfile );
     #remove_obsolete( $outputfile ) , if $bHasSourceLanguage ne "";
     }
@@ -717,7 +717,7 @@ sub remove_obsolete{
     my @lines;
     my $enusleftpart;
     my @good_lines;
-    
+
     print STDOUT "### Removing obsolete strings\n";
 
     # Kick out all strings without en-US reference
@@ -731,11 +731,11 @@ sub remove_obsolete{
                 my $type           = defined $6 ? $6 : '';
                 my $gid            = defined $7 ? $7 : '';
                 my $lid            = defined $8 ? $8 : '';
-                my $plattform      = defined $10 ? $10 : ''; 
+                my $plattform      = defined $10 ? $10 : '';
                 my $helpid         = defined $9 ? $9 : '';
-                
+
                 my $leftpart = $prj.$gid.$lid.$file.$type.$plattform.$helpid;
-                
+
                 if( $language eq "en-US" ){                 # source string found, 1. entry
                     $enusleftpart = $leftpart;
                     push @good_lines , $line;
@@ -751,12 +751,12 @@ sub remove_obsolete{
                     #else{
                     #    print STDERR "OUT:  \$enusleftpart=$enusleftpart \$leftpart=$leftpart \$line=$line\n";
                     #}
-                }            
+                }
             }
-        }    
+        }
         close SORTEDFILE;
     } else { print STDERR "ERROR: Can't open file $outfile\n";}
-    
+
     # Write file
     if ( open ( SORTEDFILE , "> $outfile" ) ){
         foreach my $newline ( @good_lines ) {
@@ -772,24 +772,24 @@ sub sort_outfile{
         print STDOUT "### Sorting ... $outfile ...";
         my @lines;
         my @sorted_lines;
-        
-        
+
+
         #if ( open ( SORTEDFILE , "< $outputfile" ) ){
         if ( open ( SORTEDFILE , "< $outfile" ) ){
             my $line;
             while ( <SORTEDFILE> ){
                 $line = $_;
-                if( $line =~ /^[^\#]/ ){ 
-                    push @lines , $line; 
+                if( $line =~ /^[^\#]/ ){
+                    push @lines , $line;
                 }
             }
             close SORTEDFILE;
             @sorted_lines = sort {
-                my $xa_lang          = "";      
+                my $xa_lang          = "";
                 my $xa_left_part    = "";
                 my $xa_right_part    = "";
                 my $xa_timestamp     = "";
-                my $xb_lang          = "";      
+                my $xb_lang          = "";
                 my $xb_left_part    = "";
                 my $xb_right_part    = "";
                 my $xb_timestamp     = "";
@@ -797,7 +797,7 @@ sub sort_outfile{
                 my $xb               = "";
                 my @alist;
                 my @blist;
-                
+
                 if( $a=~ /$sdf_regex/ ){
                     $xa_left_part       = defined $2 ? $2 : '';
                     $xa_lang           = defined $12 ? $12 : '';
@@ -812,7 +812,7 @@ sub sort_outfile{
                     $xb_left_part = remove_last_column( $xb_left_part );
 
 
-                } 
+                }
                 if( (  $xa_left_part cmp $xb_left_part ) == 0 ){         # Left part equal
                      if( ( $xa_lang cmp $xb_lang ) == 0 ){               # Lang equal
                          return ( $xa_right_part cmp $xb_right_part );   # Right part compare
@@ -821,18 +821,18 @@ sub sort_outfile{
                     elsif( $xb_lang eq "en-US" ) { return 1;  }        # en-US wins
                     else { return $xa_lang cmp $xb_lang; }             # lang compare
                 }
-                else { 
+                else {
                     return $xa_left_part cmp $xb_left_part;        # Left part compare
                 }
             } @lines;
-            
+
             if ( open ( SORTEDFILE , "> $outfile" ) ){
                 print SORTEDFILE get_license_header();
                 foreach my $newline ( @sorted_lines ) {
                     print SORTEDFILE $newline;
                     #print STDOUT $newline;
-                }            
-            } 
+                }
+            }
             close SORTEDFILE;
         } else { print STDERR "WARNING: Can't open file $outfile\n";}
     print "done\n";
@@ -848,18 +848,18 @@ sub remove_last_column{
 
 #########################################################
 sub rename_language{
-    my $fallbackhashhash_ref    = shift; 
+    my $fallbackhashhash_ref    = shift;
     my $cur_fallback            = shift;
     my $cur_lang                = shift;
     my $line;
-      
+
     foreach my $key( keys ( %{ $fallbackhashhash_ref->{ $cur_fallback } } ) ){
         $line = $fallbackhashhash_ref->{ $cur_fallback }{ $key };
         if( $line =~ /$sdf_regex/ ){
             my $leftpart       = defined $2 ? $2 : '';
             my $lang           = defined $12 ? $12 : '';
             my $rightpart      = defined $13 ? $13 : '';
-                
+
             $fallbackhashhash_ref->{ $cur_lang }{ $key } = $leftpart."\t".$cur_lang."\t".$rightpart;
         }
     }
@@ -877,35 +877,35 @@ sub remove_duplicates{
 sub fetch_fallback{
     my $sdfparticleslist_ref   = shift;
     my $localizeSDF            = shift;
-    my $langhash_ref           = shift; 
+    my $langhash_ref           = shift;
     my %fallbackhashhash;
     my $cur_lang;
     my @langlist;
-    
+
     foreach my $key ( keys ( %{ $langhash_ref } ) ){
         $cur_lang = $langhash_ref->{ $key };
         if ( $cur_lang ne "" ) {
             push @langlist , $cur_lang;
         }
     }
-    remove_duplicates( \@langlist ); 
-    foreach  $cur_lang ( @langlist ){ 
+    remove_duplicates( \@langlist );
+    foreach  $cur_lang ( @langlist ){
         if( $cur_lang eq "en-US" ){
             read_fallbacks_from_source( $localizeSDF , $cur_lang , \%fallbackhashhash );
         }
     }
-    
+
     # remove de / en-US
     my @tmplist;
     foreach $cur_lang( @langlist ){
         if(  $cur_lang ne "en-US" ){
            push @tmplist , $cur_lang;
- 
+
         }
     }
     @langlist = @tmplist;
-    if ( $#langlist +1 ){ 
-        read_fallbacks_from_particles( $sdfparticleslist_ref , \@langlist , \%fallbackhashhash ); 
+    if ( $#langlist +1 ){
+        read_fallbacks_from_particles( $sdfparticleslist_ref , \@langlist , \%fallbackhashhash );
 
     }
     return (\%fallbackhashhash);
@@ -913,27 +913,27 @@ sub fetch_fallback{
 
 #########################################################
 sub write_file{
-  
+
     my $localizeFile = shift;
     my $index_ref    = shift;
-    
+
     if( open DESTFILE , "+> $localizeFile" ){
         foreach my $key( %{ $index_ref } ){
             print DESTFILE ($index_ref->{ $key }, "\n" );
         }
         close DESTFILE;
     }else {
-      print STDERR "Can't open/create '$localizeFile'";  
+      print STDERR "Can't open/create '$localizeFile'";
     }
 }
 
 #########################################################
 sub read_file{
-    
+
     my $sdffile         = shift;
     my $langhash_ref    = shift;
     my %block           = ();
-    
+
     open MYFILE , "< $sdffile"
         or die "Can't open '$sdffile'\n";
         while( <MYFILE>){
@@ -947,7 +947,7 @@ sub read_file{
             my $plattform      = defined $10 ? $10 : '';
             my $lang           = defined $12 ? $12 : '';
             my $helpid         = defined $9 ? $9 : '';
-            
+
             foreach my $isolang ( keys ( %{ $langhash_ref } ) ){
                 if( $isolang=~ /$lang/i || $isolang=~ /all/i ) { $block{$prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ; }
             }
@@ -958,7 +958,7 @@ sub read_file{
 
 #########################################################
 sub read_fallbacks_from_particles{
-    
+
     my $sdfparticleslist_ref    = shift;
     my $isolanglist_ref         = shift;
     my $fallbackhashhash_ref    = shift;
@@ -974,14 +974,14 @@ sub read_fallbacks_from_particles{
                     my $gid            = defined $7 ? $7 : '';
                     my $lid            = defined $8 ? $8 : '';
                     my $lang           = defined $12 ? $12 : '';
-                    my $plattform      = defined $10 ? $10 : ''; 
+                    my $plattform      = defined $10 ? $10 : '';
                     my $helpid         = defined $9 ? $9 : '';
-                          
+
                     chomp( $line );
-             
+
                     foreach my $isolang ( @{$isolanglist_ref}  ){
-                        if( $isolang=~ /$lang/i ) { 
-                            $fallbackhashhash_ref->{ $isolang }{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ; 
+                        if( $isolang=~ /$lang/i ) {
+                            $fallbackhashhash_ref->{ $isolang }{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
                         }
                     }
                 }
@@ -992,15 +992,15 @@ sub read_fallbacks_from_particles{
 
 #########################################################
 sub read_fallbacks_from_source{
-    
+
     my $sdffile                 = shift;
     my $isolang                 = shift;
     my $fallbackhashhash_ref    = shift;
     my $block_ref;
-    # read fallback for single file 
+    # read fallback for single file
     open MYFILE , "< $sdffile"
         or die "Can't open '$sdffile'\n";
-    
+
     while( <MYFILE>){
           if( /$sdf_regex/ ){
             my $line           = defined $_ ? $_ : '';
@@ -1012,9 +1012,9 @@ sub read_fallbacks_from_source{
             my $helpid         = defined $9 ? $9 : '';
             my $lang           = defined $12 ? $12 : '';
             my $plattform      = defined $10 ? $10 : '';
-            
-            chomp( $line ); 
-            if( $isolang=~ /$lang/i ) { $fallbackhashhash_ref->{ $isolang }{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ; 
+
+            chomp( $line );
+            if( $isolang=~ /$lang/i ) { $fallbackhashhash_ref->{ $isolang }{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
             }
         }
     }
@@ -1030,7 +1030,7 @@ sub parseLanguages{
     my %langhash;
     my $iso="";
     my $fallback="";
-  
+
     #### -l all
     if(   $languages=~ /all/ ){
         $bAll = "TRUE";
@@ -1043,13 +1043,13 @@ sub parseLanguages{
             if( $lang=~ /([a-zA-Z]{2,3}(-[a-zA-Z\-]*)*)(=([a-zA-Z]{2,3}(-[a-zA-Z\-]*)*))?/ ){
                 $iso        = $1;
                 $fallback   = $4;
-                
+
                 if( ( $iso && $iso=~ /(en-US)/i )  || ( $fallback && $fallback=~ /(en-US)/i ) ) {
                     $bUseLocalize = "TRUE";
                 }
                 if( ( $iso && $iso=~ /(en-US)/i ) ) {
                     $bHasSourceLanguage = "TRUE";
-                } 
+                }
              if( $fallback ) { $langhash{ $iso } = $fallback;   }
              else            { $langhash{ $iso } = "";          }
             }
@@ -1067,11 +1067,11 @@ sub parseLanguages{
             }
             if( ( $iso && $iso=~ /(en-US)/i )  ) {
                 $bHasSourceLanguage = "TRUE";
-            } 
+            }
 
              if( $fallback ) { $langhash{ $iso } = $fallback;   }
              else            { $langhash{ $iso } = "";          }
-        }    
+        }
     }
     # HACK en-US always needed!
     if( !$bHasSourceLanguage ){
@@ -1085,15 +1085,15 @@ sub parseLanguages{
 
 #########################################################
 sub parse_options{
- 
+
     my $help;
     my $merge;
     my $extract;
-    my $success = GetOptions('f=s' => \$sdffile , 'l=s' => \$languages , 's=s' => \$srcpath ,  'h' => \$help , 'v' => \$bVerbose , 
+    my $success = GetOptions('f=s' => \$sdffile , 'l=s' => \$languages , 's=s' => \$srcpath ,  'h' => \$help , 'v' => \$bVerbose ,
                              'm' => \$merge , 'e' => \$extract , 'x' => \$no_sort , 'd' => \$use_default_date , 'c' => \$create_dirs ,
                              'n' => \$no_gsicheck , 'o' => \$force_ooo_module );
     $outputfile = $sdffile;
-    
+
     #print STDOUT "DBG: lang = $languages\n";
     if( !$srcpath ){
         $srcpath = "$ENV{SRC_ROOT}";
@@ -1113,7 +1113,7 @@ sub parse_options{
     }
     if( $merge && $sdffile && ! ( -r $sdffile)){
         print STDERR "Can't open file '$sdffile'\n";
-        exit(1);    
+        exit(1);
     }
     if( !( $languages=~ /[a-zA-Z]{2,3}(-[a-zA-Z\-]*)*(=[a-zA-Z]{2,3}(-[a-zA-Z\-]*)*)?(,[a-zA-Z]{2,3}(-[a-zA-Z\-]*)*(=[a-zA-Z]{2,3}(-[a-zA-Z\-]*)*)?)*/ ) ){
         print STDERR "Please check the -l iso code\n";
@@ -1137,7 +1137,7 @@ sub usage{
     print STDERR "Options:\n";
     print STDERR "    -h              help\n";
     print STDERR "    -m              Merge mode\n";
-    print STDERR "    -e              Extract mode\n"; 
+    print STDERR "    -e              Extract mode\n";
     print STDERR "    -f <sdffile>    To split a big SDF file into particles\n";
     print STDERR "       <outputfile> To collect and join all particles to one big file\n";
     print STDERR "    -s <sourceroot> Path to the modules, if no \$SRC_ROOT is set\n";
@@ -1146,7 +1146,7 @@ sub usage{
     print STDERR "    -c              Create needed directories\n";
     print STDERR "    -g              Sort sdf file before mergeing\n";
     print STDERR "    -h              File with localize.sdf's\n!";
-    print STDERR "    -n              No gsicheck\n"; 
+    print STDERR "    -n              No gsicheck\n";
     print STDERR "    -i              Module to merge\n";
     print STDERR "    -o              force using ooo localization from the l10n module instead of l10n_so; \n";
     print STDERR "                    useful if the type can't be detected by the .svn tags; \n";
@@ -1174,4 +1174,4 @@ sub usage{
 #            my $quickhelptext  = defined $16 ? $16 : '';
 #            my $title          = defined $17 ? $17 : '';
 #            my $timestamp      = defined $18 ? $18 : '';
- 
+

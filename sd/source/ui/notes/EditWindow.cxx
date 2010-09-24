@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/editstat.hxx>
 
-#define SCROLL_LINE 		24
+#define SCROLL_LINE         24
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
@@ -121,11 +121,11 @@ void SmGetLeftSelectionPart(const ESelection aSel,
         (aSel.nStartPara <  aSel.nEndPara) ||
         (aSel.nStartPara == aSel.nEndPara && aSel.nStartPos < aSel.nEndPos)
        )
-    {	nPara = aSel.nStartPara;
+    {   nPara = aSel.nStartPara;
         nPos  = aSel.nStartPos;
     }
     else
-    {	nPara = aSel.nEndPara;
+    {   nPara = aSel.nEndPara;
         nPos  = aSel.nEndPos;
     }
 }
@@ -249,7 +249,7 @@ void EditWindow::DataChanged (const DataChangedEvent&)
         //! see also SmDocShell::GetEditEngine() !
         //!
 
-        //		pEditEngine->SetDefTab( USHORT( GetTextWidth( C2S("XXXX") ) ) );
+        //      pEditEngine->SetDefTab( USHORT( GetTextWidth( C2S("XXXX") ) ) );
 
         USHORT aFntInfoId[3] = {
                 EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CTL };
@@ -280,7 +280,7 @@ void EditWindow::DataChanged (const DataChangedEvent&)
         // unfortunately this resets the whole edit engine
         // thus we need to save at least the text
         String aTxt( pEditEngine->GetText( LINEEND_LF ) );
-        pEditEngine->Clear();	//#77957 incorrect font size
+        pEditEngine->Clear();   //#77957 incorrect font size
         pEditEngine->SetText( aTxt );
     }
 
@@ -332,7 +332,7 @@ void EditWindow::MouseButtonUp(const MouseEvent &rEvt)
         Window::MouseButtonUp (rEvt);
 
     // ggf FormulaCursor neu positionieren
-    //	CursorMoveTimerHdl(&aCursorMoveTimer);
+    //  CursorMoveTimerHdl(&aCursorMoveTimer);
 }
 
 
@@ -353,7 +353,7 @@ void EditWindow::MouseButtonDown(const MouseEvent &rEvt)
 
 void EditWindow::Command(const CommandEvent& rCEvt)
 {
-    /*	if (rCEvt.GetCommand() == COMMAND_CONTEXTMENU)
+    /*  if (rCEvt.GetCommand() == COMMAND_CONTEXTMENU)
     {
         GetParent()->ToTop();
 
@@ -400,7 +400,7 @@ IMPL_LINK_INLINE_END( EditWindow, MenuSelectHdl, Menu *, EMPTYARG )
 
 void EditWindow::KeyInput(const KeyEvent& )
 {
-    /*	if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
+    /*  if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
     {
         BOOL bCallBase = TRUE;
         SfxViewShell* pViewShell = SfxViewShell::Current();

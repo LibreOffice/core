@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ sal_Bool XMLWordWrapPropertyHdl::importXML( const OUString& rStrImpValue, Any& r
             if( nUPD == 300 )
             {
                 if( ( nBuildId > 0 ) && (nBuildId < 9316 ) )
-                    bValue = bValue ? sal_False : sal_True;		// treat OOo 3.0 beta1 as OOo 2.x
+                    bValue = bValue ? sal_False : sal_True;     // treat OOo 3.0 beta1 as OOo 2.x
             }
             else if( ( nUPD == 680 ) || ( nUPD >= 640 && nUPD <= 645 ) )
                 bValue = bValue ? sal_False : sal_True;

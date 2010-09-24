@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,11 +38,11 @@
 
 //=============================================================================
 
-module com { module sun { module star { module ucb { 
+module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** A factory for content identifiers.
-    
+
     @version  1.0
     @author   Kai Sommerfeld
     @see      XContentIdentifier
@@ -50,11 +50,11 @@ module com { module sun { module star { module ucb {
 published interface XContentIdentifierFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /**	 creates an identifier.
-        
+    /**  creates an identifier.
+
         @param ContentId
         the content identifier string.
-        
+
         @returns
         the identifier.
     */
@@ -64,6 +64,6 @@ published interface XContentIdentifierFactory: com::sun::star::uno::XInterface
 
 //=============================================================================
 
-}; }; }; }; 
+}; }; }; };
 
 #endif

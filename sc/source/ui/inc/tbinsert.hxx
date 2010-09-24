@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,10 +36,10 @@
 
 class ScTbxInsertCtrl : public SfxToolBoxControl
 {
-    USHORT 					nLastSlotId;
+    USHORT                  nLastSlotId;
 
     using SfxToolBoxControl::Select;
-    virtual void			Select( BOOL bMod1 = FALSE );
+    virtual void            Select( BOOL bMod1 = FALSE );
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -47,9 +47,9 @@ public:
     ScTbxInsertCtrl( USHORT nSlotId, USHORT nId, ToolBox& rBox );
     ~ScTbxInsertCtrl();
 
-    virtual SfxPopupWindowType	GetPopupWindowType() const;
-    virtual SfxPopupWindow* 	CreatePopupWindow();
-    virtual void				StateChanged( USHORT nSID,
+    virtual SfxPopupWindowType  GetPopupWindowType() const;
+    virtual SfxPopupWindow*     CreatePopupWindow();
+    virtual void                StateChanged( USHORT nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 };
@@ -60,17 +60,17 @@ public:
 /*
 class ScTbxInsertPopup : public SfxPopupWindow
 {
-    SfxToolBoxManager	aTbx;
-    ResId 				aRIdWinTemp;
-    ResId				aRIdTbxTemp;
+    SfxToolBoxManager   aTbx;
+    ResId               aRIdWinTemp;
+    ResId               aRIdTbxTemp;
 
-    Link				aTbxClickHdl;
+    Link                aTbxClickHdl;
 
     DECL_LINK( TbxSelectHdl, ToolBox* );
     DECL_LINK( TbxClickHdl, ToolBox* );
 
 protected:
-    virtual void		PopupModeEnd();
+    virtual void        PopupModeEnd();
 
 public:
     ScTbxInsertPopup( USHORT nId, WindowAlign eAlign,

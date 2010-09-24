@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,19 +44,19 @@ class Printer;
 
 class SwLabDlg : public SfxTabDialog
 {
-    SwLabelConfig	aLabelsCfg;
-    SwNewDBMgr*   	pNewDBMgr;
-    SwLabPrtPage* 	pPrtPage;
+    SwLabelConfig   aLabelsCfg;
+    SwNewDBMgr*     pNewDBMgr;
+    SwLabPrtPage*   pPrtPage;
 
-    SvUShorts	  	aTypeIds;
-    SvStringsDtor 	aMakes;
+    SvUShorts       aTypeIds;
+    SvStringsDtor   aMakes;
 
-    SwLabRecs*		pRecs;
-    String 		  	aLstGroup;
-    String 			sBusinessCardDlg;
-    String 			sFormat;
-    String 			sMedium;
-    BOOL			m_bLabel;
+    SwLabRecs*      pRecs;
+    String          aLstGroup;
+    String          sBusinessCardDlg;
+    String          sFormat;
+    String          sMedium;
+    BOOL            m_bLabel;
     void          _ReplaceGroup( const String &rMake );
 
     virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
@@ -66,17 +66,17 @@ public:
                  SwNewDBMgr* pNewDBMgr, BOOL bLabel);
     ~SwLabDlg();
 
-    SwLabRec*	GetRecord(const String &rRecName, BOOL bCont);
-    void		GetLabItem(SwLabItem &rItem);
+    SwLabRec*   GetRecord(const String &rRecName, BOOL bCont);
+    void        GetLabItem(SwLabItem &rItem);
 
-          SwLabRecs &Recs() 	  	  { return *pRecs;	 }
-    const SwLabRecs &Recs()		const { return *pRecs;	 }
+          SwLabRecs &Recs()           { return *pRecs;   }
+    const SwLabRecs &Recs()     const { return *pRecs;   }
 
-          SvUShorts  &TypeIds() 	  { return aTypeIds; }
+          SvUShorts  &TypeIds()       { return aTypeIds; }
     const SvUShorts  &TypeIds() const { return aTypeIds; }
 
-          SvStringsDtor  &Makes()		  { return aMakes;	 }
-    const SvStringsDtor  &Makes()	const { return aMakes;	 }
+          SvStringsDtor  &Makes()         { return aMakes;   }
+    const SvStringsDtor  &Makes()   const { return aMakes;   }
 
     Printer *GetPrt();
     inline void ReplaceGroup( const String &rMake );

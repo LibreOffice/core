@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-namespace desktop 
+namespace desktop
 {
 
 class UserInstall
@@ -46,7 +46,7 @@ public:
         E_NoWriteAccess,        // no write access
         E_Unknown               // unknown error
     };
-    
+
     static UserInstallError finalize();
 };
 }

@@ -70,7 +70,7 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
     aEdInput.SetText( rDefault );
     aEdInput.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
 
-    //	HelpId for Edit different for different uses
+    //  HelpId for Edit different for different uses
 
     if ( nHelpId == FID_TAB_APPEND )
         aEdInput.SetHelpId( HID_SC_APPEND_NAME );

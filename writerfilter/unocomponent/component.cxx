@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ void * SAL_CALL component_getFactory(sal_Char const * implName, ::com::sun::star
     fprintf(stderr, "Loading service: %s: ", implName);
 
     void * pResult = ::cppu::component_getFactoryHelper(implName, xMgr, xRegistry, s_component_entries );
-    
+
     fprintf(stderr, "%p\n", pResult);
 
     return pResult;

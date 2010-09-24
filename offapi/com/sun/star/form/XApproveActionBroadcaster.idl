@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,58 +24,58 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_XApproveActionBroadcaster_idl__ 
-#define __com_sun_star_form_XApproveActionBroadcaster_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_form_XApproveActionListener_idl__ 
-#include <com/sun/star/form/XApproveActionListener.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module form {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_form_XApproveActionBroadcaster_idl__
+#define __com_sun_star_form_XApproveActionBroadcaster_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_form_XApproveActionListener_idl__
+#include <com/sun/star/form/XApproveActionListener.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
 /** allows to probably veto actions to be performed on components.
 
-    <p> Usually, a component which supports the 
-    <type>XApproveActionBroadcaster</type> interface implements 
+    <p> Usually, a component which supports the
+    <type>XApproveActionBroadcaster</type> interface implements
     <type scope="com::sun::star::awt">XActionListener</type> as well.</p>
  */
 published interface XApproveActionBroadcaster: com::sun::star::uno::XInterface
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     /** adds the specified listener to receive the <member>XApproveActionListener::approveAction</member>
         event.
 
         @param aListener
              the listener to be added
      */
-    [oneway] void addApproveActionListener( [in] com::sun::star::form::XApproveActionListener aListener ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    [oneway] void addApproveActionListener( [in] com::sun::star::form::XApproveActionListener aListener );
+
+    //-------------------------------------------------------------------------
+
     /** removes the specified listener
 
         @param aListener
              the listener to be removed
      */
-    [oneway] void removeApproveActionListener( [in] com::sun::star::form::XApproveActionListener aListener ); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+    [oneway] void removeApproveActionListener( [in] com::sun::star::form::XApproveActionListener aListener );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

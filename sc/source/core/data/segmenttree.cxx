@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,7 +136,7 @@ typename ScFlatSegmentsImpl<_ValueType, _ExtValueType>::ValueType ScFlatSegments
 }
 
 template<typename _ValueType, typename _ExtValueType>
-typename ScFlatSegmentsImpl<_ValueType, _ExtValueType>::ExtValueType 
+typename ScFlatSegmentsImpl<_ValueType, _ExtValueType>::ExtValueType
 ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getSumValue(SCCOLROW nPos1, SCCOLROW nPos2)
 {
     RangeData aData;
@@ -208,7 +208,7 @@ SCCOLROW ScFlatSegmentsImpl<_ValueType, _ExtValueType>::findLastNotOf(ValueType 
 {
     SCCOLROW nPos = numeric_limits<SCCOLROW>::max(); // position not found.
     typename fst_type::const_reverse_iterator itr = maSegments.rbegin(), itrEnd = maSegments.rend();
-    // Note that when searching in reverse direction, we need to skip the first 
+    // Note that when searching in reverse direction, we need to skip the first
     // node, since the right-most leaf node does not store a valid value.
     for (++itr; itr != itrEnd; ++itr)
     {
@@ -300,7 +300,7 @@ bool ScFlatBoolRowSegments::ForwardIterator::getValue(SCROW nPos, bool& rVal)
         ScFlatBoolRowSegments::RangeData aData;
         if (!mrSegs.getRangeData(mnCurPos, aData))
             return false;
-    
+
         mbCurValue = aData.mbValue;
         mnLastPos = aData.mnRow2;
     }
@@ -498,7 +498,7 @@ bool ScFlatUInt16RowSegments::ForwardIterator::getValue(SCROW nPos, sal_uInt16& 
         ScFlatUInt16RowSegments::RangeData aData;
         if (!mrSegs.getRangeData(mnCurPos, aData))
             return false;
-    
+
         mnCurValue = aData.mnValue;
         mnLastPos = aData.mnRow2;
     }

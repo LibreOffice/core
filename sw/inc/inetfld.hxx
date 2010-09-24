@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,9 +51,9 @@ public:
 
     virtual SwFieldType*    Copy() const;
 
-    SwCharFmt* 				GetCharFmt( const SwINetField& rFld );
+    SwCharFmt*              GetCharFmt( const SwINetField& rFld );
 
-    SwDoc* GetDoc() const	{ return pDoc; }
+    SwDoc* GetDoc() const   { return pDoc; }
 };
 
 /*--------------------------------------------------------------------
@@ -64,7 +64,7 @@ class SwINetField : public SwField
 {
     friend class SwINetFieldType;
 
-    String	sTargetFrameName;	// in diesen Frame soll die URL
+    String  sTargetFrameName;   // in diesen Frame soll die URL
     String  sURL;
     String  sText;
     SvxMacroTableDtor* pMacroTbl;
@@ -73,31 +73,31 @@ public:
     // Direkte Eingabe alten Wert loeschen
     SwINetField( SwINetFieldType* pTyp, USHORT nFmt,
                   const String& rURL, const String& rText );
-    virtual	~SwINetField();
+    virtual ~SwINetField();
 
-    virtual	String	 GetCntnt(BOOL bName = FALSE) const;
-    virtual String	 Expand() const;
+    virtual String   GetCntnt(BOOL bName = FALSE) const;
+    virtual String   Expand() const;
     virtual SwField* Copy() const;
 
     // URL
     virtual const String& GetPar1() const;
-    virtual void	SetPar1(const String& rStr);
+    virtual void    SetPar1(const String& rStr);
 
     // HinweisText
-    virtual String	GetPar2() const;
-    virtual void	SetPar2(const String& rStr);
+    virtual String  GetPar2() const;
+    virtual void    SetPar2(const String& rStr);
 
     // das ist das akt. Zeichenformat
           SwCharFmt* GetCharFmt();
     const SwCharFmt* GetCharFmt() const
             { return ((SwINetField*)this)->GetCharFmt(); }
 
-    const String& GetTargetFrameName() const 		{ return sTargetFrameName; }
-    void SetTargetFrameName( const String& rNm )	{ sTargetFrameName = rNm; }
+    const String& GetTargetFrameName() const        { return sTargetFrameName; }
+    void SetTargetFrameName( const String& rNm )    { sTargetFrameName = rNm; }
 
     // setze eine neue oder loesche die akt. MakroTabelle
     void SetMacroTbl( const SvxMacroTableDtor* pTbl = 0 );
-    const SvxMacroTableDtor* GetMacroTbl() const	{ return pMacroTbl; }
+    const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTbl; }
 
     // setze / erfrage ein Makro
     void SetMacro( USHORT nEvent, const SvxMacro& rMacro );

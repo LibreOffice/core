@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,14 +142,14 @@ ScriptElement::ScriptElement( ScriptData & sII ) :
 
        strpairvec_map::const_iterator sm_it = fm_it->second.second.begin();
        strpairvec_map::const_iterator sm_itend = fm_it->second.second.end();
-       
+
        if( sm_it != sm_itend )
        {
            // was there a purpose for contstructing this
            // XMLElement* subxel = new XMLElement( OUSTR( "file" ) );
            xel->addAttribute( OUSTR( "name" ), sm_it->first );
 
-       } 
+       }
     }
 }
 

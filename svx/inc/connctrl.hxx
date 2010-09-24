@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,12 +49,12 @@ class SVX_DLLPUBLIC SvxXConnectionPreview : public Control
  friend class SvxConnectionPage;
 
 private:
-    const SfxItemSet&	rAttrs;
-    SdrEdgeObj*			pEdgeObj;
-    SdrObjList*			pObjList;
-    const SdrView*		pView;
+    const SfxItemSet&   rAttrs;
+    SdrEdgeObj*         pEdgeObj;
+    SdrObjList*         pObjList;
+    const SdrView*      pView;
 
-    SVX_DLLPRIVATE void	SetStyles();
+    SVX_DLLPRIVATE void SetStyles();
 public:
             SvxXConnectionPreview( Window* pParent, const ResId& rResId,
                                 const SfxItemSet& rInAttrs );
@@ -63,11 +63,11 @@ public:
     virtual void Paint( const Rectangle& rRect );
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
-    void		 SetAttributes( const SfxItemSet& rInAttrs );
-    USHORT		 GetLineDeltaAnz();
+    void         SetAttributes( const SfxItemSet& rInAttrs );
+    USHORT       GetLineDeltaAnz();
 
-    void 		 Construct();
-    void		 SetView( const SdrView* pSdrView ) { pView = pSdrView; }
+    void         Construct();
+    void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };

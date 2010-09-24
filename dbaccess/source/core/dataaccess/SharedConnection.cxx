@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,20 +41,20 @@ namespace dbaccess
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
-//	using namespace ::com::sun::star::reflection;
+//  using namespace ::com::sun::star::reflection;
 using namespace connectivity;
 
 DBG_NAME(OSharedConnection)
 OSharedConnection::OSharedConnection(Reference< XAggregation >& _rxProxyConnection)
             : OSharedConnection_BASE(m_aMutex)
 {
-    DBG_CTOR(OSharedConnection,NULL);	
+    DBG_CTOR(OSharedConnection,NULL);
     setDelegation(_rxProxyConnection,m_refCount);
 }
 // -----------------------------------------------------------------------------
 OSharedConnection::~OSharedConnection()
 {
-    DBG_DTOR(OSharedConnection,NULL);	
+    DBG_DTOR(OSharedConnection,NULL);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OSharedConnection::disposing(void)
@@ -67,7 +67,7 @@ Reference< XStatement > SAL_CALL OSharedConnection::createStatement(  ) throw(SQ
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
-        
+
 
     return m_xConnection->createStatement();
 }
@@ -76,7 +76,7 @@ Reference< XPreparedStatement > SAL_CALL OSharedConnection::prepareStatement( co
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
-        
+
 
     return m_xConnection->prepareStatement(sql);
 }
@@ -85,7 +85,7 @@ Reference< XPreparedStatement > SAL_CALL OSharedConnection::prepareCall( const :
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
-        
+
 
     return m_xConnection->prepareCall(sql);
 }
@@ -94,7 +94,7 @@ Reference< XPreparedStatement > SAL_CALL OSharedConnection::prepareCall( const :
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
-        
+
 
     return m_xConnection->nativeSQL(sql);
 }
@@ -103,7 +103,7 @@ sal_Bool SAL_CALL OSharedConnection::getAutoCommit(  ) throw(SQLException, Runti
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
-        
+
 
     return m_xConnection->getAutoCommit();
 }
@@ -112,7 +112,7 @@ void SAL_CALL OSharedConnection::commit(  ) throw(SQLException, RuntimeException
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
-        
+
 
     m_xConnection->commit();
 }
@@ -121,7 +121,7 @@ void SAL_CALL OSharedConnection::rollback(  ) throw(SQLException, RuntimeExcepti
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
-        
+
 
     m_xConnection->rollback();
 }
@@ -129,7 +129,7 @@ void SAL_CALL OSharedConnection::rollback(  ) throw(SQLException, RuntimeExcepti
 sal_Bool SAL_CALL OSharedConnection::isClosed(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    
+
     return m_xConnection->isClosed();
 }
 // --------------------------------------------------------------------------------
@@ -137,16 +137,16 @@ Reference< XDatabaseMetaData > SAL_CALL OSharedConnection::getMetaData(  ) throw
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
-        
+
 
     return m_xConnection->getMetaData();
 }
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL OSharedConnection::isReadOnly(  ) throw(SQLException, RuntimeException)
-{	
+{
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
-        
+
 
     return m_xConnection->isReadOnly();
 }
@@ -155,7 +155,7 @@ sal_Bool SAL_CALL OSharedConnection::isReadOnly(  ) throw(SQLException, RuntimeE
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
-        
+
 
     return m_xConnection->getCatalog();
 }
@@ -164,7 +164,7 @@ sal_Int32 SAL_CALL OSharedConnection::getTransactionIsolation(  ) throw(SQLExcep
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
-        
+
 
     return m_xConnection->getTransactionIsolation();
 }
@@ -173,14 +173,14 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OSharedConnection
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
-        
+
 
     return m_xConnection->getTypeMap();
 }
 // -----------------------------------------------------------------------------
 
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 
 

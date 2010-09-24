@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -154,10 +154,10 @@ void lcl_AddPropertiesToVector_PointProperties(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
- 
+
 void lcl_AddPropertiesToVector_SeriesOnly(
     ::std::vector< Property > & rOutProperties )
-{    
+{
     rOutProperties.push_back(
         Property( C2U( "Axis" ),
                   PROP_SERIES_ATTACHED_AXIS,
@@ -195,7 +195,7 @@ const uno::Sequence< Property > & lcl_GetPropertySequence( DataSeriesPointWrappe
         }
         WrappedSymbolProperties::addProperties( aProperties ); //for series and  points
         WrappedDataCaptionProperties::addProperties( aProperties ); //for series and  points
-                
+
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
@@ -489,11 +489,11 @@ void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any 
         if( aArguments.getLength() >= 2 )
             aArguments[1] >>= m_nPointIndex;
     }
-        
+
     if( !m_xDataSeries.is() )
         throw uno::Exception(
             C2U( "DataSeries index invalid" ), static_cast< ::cppu::OWeakObject * >( this ));
-    
+
     //todo: check upper border of point index
 
     if( m_nPointIndex >= 0 )
@@ -660,7 +660,7 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const ::
 void SAL_CALL DataSeriesPointWrapper::setPropertyToDefault( const ::rtl::OUString& rPropertyName )
                                     throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    if( m_eType == DATA_SERIES ) 
+    if( m_eType == DATA_SERIES )
         WrappedPropertySet::setPropertyToDefault( rPropertyName );
     else
     {
@@ -728,7 +728,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     WrappedSymbolProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
     WrappedDataCaptionProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
     WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
-    
+
     //add unnamed fill properties (different inner names here)
 //     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillGradient" ), C2U( "GradientName" ) ) );
 //     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillHatch" ), C2U( "HatchName" ) ) );
@@ -736,7 +736,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
 
     //add unnamed line properties (different inner names here)
 //     aWrappedProperties.push_back( new WrappedUnnamedProperty( C2U( "LineDash" ), C2U( "LineDashName" ) ) );
-        
+
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillColor" ), C2U( "Color" ) ) );
     aWrappedProperties.push_back( new WrappedLineStyleProperty( this ) );
     aWrappedProperties.push_back( new WrappedLineColorProperty( this ) );
@@ -745,7 +745,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     aWrappedProperties.push_back( new WrappedSeriesAreaOrLineProperty( C2U( "LineWidth" ), C2U( "BorderWidth" ), C2U( "LineWidth" ), this ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillStyle" ), C2U( "FillStyle" ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillTransparence" ), C2U( "Transparency" ) ) );
-    
+
     aWrappedProperties.push_back( new WrappedIgnoreProperty( C2U( "LineJoint" ), uno::makeAny( drawing::LineJoint_ROUND ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillTransparenceGradientName" ), C2U( "TransparencyGradientName" ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillGradientName" ), C2U( "GradientName" ) ) );
@@ -782,7 +782,7 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const ::rtl::OUString& r
         if( ! (rValue >>= m_bLinesAllowed) )
             throw lang::IllegalArgumentException( C2U("Property Lines requires value of type sal_Bool"), 0, 0 );
     }
-    
+
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     static const sal_Int32 nErrorCategoryHandle = getInfoHelper().getHandleByName( C2U("ErrorCategory") );
     if( nErrorCategoryHandle == nHandle )

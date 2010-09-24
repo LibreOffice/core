@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ using namespace vcl;
 
 void Control::ImplInitControlData()
 {
-    mbHasFocus	    = FALSE;
+    mbHasFocus      = FALSE;
     mpControlData   = new ImplControlData;
 }
 
@@ -216,7 +216,7 @@ long Control::GetLineCount() const
 Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
 {
     Pair aPair( -1, -1 );
-    
+
     int nDisplayLines = m_aLineIndices.size();
     if( nLine >= 0 && nLine < nDisplayLines )
     {
@@ -333,11 +333,11 @@ long Control::Notify( NotifyEvent& rNEvt )
 
 void Control::StateChanged( StateChangedType nStateChange )
 {
-    if( nStateChange == STATE_CHANGE_INITSHOW	||
-        nStateChange == STATE_CHANGE_VISIBLE	||
-        nStateChange == STATE_CHANGE_FORMAT		||
-        nStateChange == STATE_CHANGE_ZOOM		||
-        nStateChange == STATE_CHANGE_BORDER		||
+    if( nStateChange == STATE_CHANGE_INITSHOW   ||
+        nStateChange == STATE_CHANGE_VISIBLE    ||
+        nStateChange == STATE_CHANGE_FORMAT     ||
+        nStateChange == STATE_CHANGE_ZOOM       ||
+        nStateChange == STATE_CHANGE_BORDER     ||
         nStateChange == STATE_CHANGE_CONTROLFONT
         )
     {
@@ -443,7 +443,7 @@ void Control::DataChanged( const DataChangedEvent& rDCEvt)
 {
     // we don't want to loose some style settings for controls created with the
     // toolkit
-    if ( IsCreatedWithToolkit() && 
+    if ( IsCreatedWithToolkit() &&
          (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {

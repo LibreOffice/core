@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,14 +128,14 @@ namespace basegfx
     };
 
     // Addition, Subtraktion
-    inline B2DHomMatrix	operator+(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
+    inline B2DHomMatrix operator+(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
     {
         B2DHomMatrix aSum(rMatA);
         aSum += rMatB;
         return aSum;
     }
 
-    inline B2DHomMatrix	operator-(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
+    inline B2DHomMatrix operator-(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
     {
         B2DHomMatrix aDiv(rMatA);
         aDiv -= rMatB;
@@ -143,21 +143,21 @@ namespace basegfx
     }
 
     // Multiplikation, Division mit Konstante
-    inline B2DHomMatrix	operator*(const B2DHomMatrix& rMat, double fValue)
+    inline B2DHomMatrix operator*(const B2DHomMatrix& rMat, double fValue)
     {
-        B2DHomMatrix aNew(rMat); 
-        aNew *= fValue; 
-        return aNew; 
+        B2DHomMatrix aNew(rMat);
+        aNew *= fValue;
+        return aNew;
     }
 
-    inline B2DHomMatrix	operator/(const B2DHomMatrix& rMat, double fValue)
+    inline B2DHomMatrix operator/(const B2DHomMatrix& rMat, double fValue)
     {
-        B2DHomMatrix aNew(rMat); 
+        B2DHomMatrix aNew(rMat);
         aNew *= 1.0 / fValue;
-        return aNew; 
+        return aNew;
     }
 
-    inline B2DHomMatrix	operator*(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
+    inline B2DHomMatrix operator*(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
     {
         B2DHomMatrix aMul(rMatB);
         aMul *= rMatA;

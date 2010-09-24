@@ -1058,7 +1058,7 @@
             </node>
             <node oor:name=".uno:ToggleMergeCells" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">M~erge Cells</value>
+                    <value xml:lang="en-US">M~erge and Center Cells</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1493,6 +1493,14 @@
                     <value xml:lang="en-US">S~hare Document...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ToggleSheetGrid" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Toggle Grid Lines for Current Sheet</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:AuditMenu" oor:op="replace">
@@ -1502,7 +1510,7 @@
             </node>
             <node oor:name=".uno:InsertBreakMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Manual Break</value>
+                    <value xml:lang="en-US">Page ~Break</value>
                 </prop>
             </node>
             <node oor:name=".uno:DataMenu" oor:op="replace">
@@ -1512,7 +1520,7 @@
             </node>
             <node oor:name=".uno:DelBreakMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Delete Manual ~Break</value>
+                    <value xml:lang="en-US">Delete Page ~Break</value>
                 </prop>
             </node>
             <node oor:name=".uno:FillCellsMenu" oor:op="replace">
@@ -1598,6 +1606,16 @@
             <node oor:name=".uno:AssignMacro" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Assign Macro...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MarkPrecedents" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Mark Precedents</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MarkDependents" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Mark Dependents</value>
                 </prop>
             </node>
         </node>

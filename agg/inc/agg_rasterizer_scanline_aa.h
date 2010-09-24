@@ -2,13 +2,13 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
-// The author gratefully acknowleges the support of David Turner, 
-// Robert Wilhelm, and Werner Lemberg - the authors of the FreeType 
+// The author gratefully acknowleges the support of David Turner,
+// Robert Wilhelm, and Werner Lemberg - the authors of the FreeType
 // libray - in producing this work. See http://www.freetype.org for details.
 //
 //----------------------------------------------------------------------------
@@ -18,7 +18,7 @@
 //----------------------------------------------------------------------------
 //
 // Class rasterizer_scanline_aa
-//         
+//
 //
 //----------------------------------------------------------------------------
 #ifndef AGG_RASTERIZER_SCANLINE_AA_INCLUDED
@@ -37,18 +37,18 @@ namespace agg
 {
 
     //------------------------------------------------------------------------
-    // These constants determine the subpixel accuracy, to be more precise, 
-    // the number of bits of the fractional part of the coordinates. 
+    // These constants determine the subpixel accuracy, to be more precise,
+    // the number of bits of the fractional part of the coordinates.
     // The possible coordinate capacity in bits can be calculated by formula:
     // sizeof(int) * 8 - poly_base_shift * 2, i.e, for 32-bit integers and
     // 8-bits fractional part the capacity is 16 bits or [-32768...32767].
     enum
     {
         poly_base_shift = 8,                       //----poly_base_shift
-        poly_base_size  = 1 << poly_base_shift,    //----poly_base_size 
-        poly_base_mask  = poly_base_size - 1       //----poly_base_mask 
+        poly_base_size  = 1 << poly_base_shift,    //----poly_base_size
+        poly_base_mask  = poly_base_size - 1       //----poly_base_mask
     };
-    
+
     //--------------------------------------------------------------poly_coord
     inline int poly_coord(double c)
     {
@@ -56,8 +56,8 @@ namespace agg
     }
 
     //-----------------------------------------------------------------cell_aa
-    // A pixel cell. There're no constructors defined and it was done 
-    // intentionally in order to avoid extra overhead when allocating an 
+    // A pixel cell. There're no constructors defined and it was done
+    // intentionally in order to avoid extra overhead when allocating an
     // array of cells.
     struct cell_aa
     {
@@ -117,7 +117,7 @@ namespace agg
         void render_hline(int ey, int x1, int y1, int x2, int y2);
         void render_line(int x1, int y1, int x2, int y2);
         void allocate_block();
-        
+
         static void qsort_cells(cell_aa** start, unsigned num);
 
     private:
@@ -149,10 +149,10 @@ namespace agg
 
 
     //==================================================rasterizer_scanline_aa
-    // Polygon rasterizer that is used to render filled polygons with 
-    // high-quality Anti-Aliasing. Internally, by default, the class uses 
-    // integer coordinates in format 24.8, i.e. 24 bits for integer part 
-    // and 8 bits for fractional - see poly_base_shift. This class can be 
+    // Polygon rasterizer that is used to render filled polygons with
+    // high-quality Anti-Aliasing. Internally, by default, the class uses
+    // integer coordinates in format 24.8, i.e. 24 bits for integer part
+    // and 8 bits for fractional - see poly_base_shift. This class can be
     // used in the following  way:
     //
     // 1. filling_rule(filling_rule_e ft) - optional.
@@ -161,20 +161,20 @@ namespace agg
     //
     // 3. reset()
     //
-    // 4. move_to(x, y) / line_to(x, y) - make the polygon. One can create 
+    // 4. move_to(x, y) / line_to(x, y) - make the polygon. One can create
     //    more than one contour, but each contour must consist of at least 3
     //    vertices, i.e. move_to(x1, y1); line_to(x2, y2); line_to(x3, y3);
     //    is the absolute minimum of vertices that define a triangle.
     //    The algorithm does not check either the number of vertices nor
-    //    coincidence of their coordinates, but in the worst case it just 
+    //    coincidence of their coordinates, but in the worst case it just
     //    won't draw anything.
-    //    The orger of the vertices (clockwise or counterclockwise) 
+    //    The orger of the vertices (clockwise or counterclockwise)
     //    is important when using the non-zero filling rule (fill_non_zero).
     //    In this case the vertex order of all the contours must be the same
     //    if you want your intersecting polygons to be without "holes".
-    //    You actually can use different vertices order. If the contours do not 
-    //    intersect each other the order is not important anyway. If they do, 
-    //    contours with the same vertex order will be rendered without "holes" 
+    //    You actually can use different vertices order. If the contours do not
+    //    intersect each other the order is not important anyway. If they do,
+    //    contours with the same vertex order will be rendered without "holes"
     //    while the intersecting contours with different orders will have "holes".
     //
     // filling_rule() and gamma() can be called anytime before "sweeping".
@@ -206,7 +206,7 @@ namespace agg
         };
 
         //--------------------------------------------------------------------
-        rasterizer_scanline_aa() : 
+        rasterizer_scanline_aa() :
             m_filling_rule(fill_non_zero),
             m_clipped_start_x(0),
             m_clipped_start_y(0),
@@ -223,8 +223,8 @@ namespace agg
         }
 
         //--------------------------------------------------------------------
-        template<class GammaF> 
-        rasterizer_scanline_aa(const GammaF& gamma_function) : 
+        template<class GammaF>
+        rasterizer_scanline_aa(const GammaF& gamma_function) :
             m_filling_rule(fill_non_zero),
             m_clipped_start_x(0),
             m_clipped_start_y(0),
@@ -240,14 +240,14 @@ namespace agg
         }
 
         //--------------------------------------------------------------------
-        void reset(); 
+        void reset();
         void filling_rule(filling_rule_e filling_rule);
         void clip_box(double x1, double y1, double x2, double y2);
         void reset_clipping();
 
         //--------------------------------------------------------------------
         template<class GammaF> void gamma(const GammaF& gamma_function)
-        { 
+        {
             int i;
             for(i = 0; i < aa_num; i++)
             {
@@ -256,9 +256,9 @@ namespace agg
         }
 
         //--------------------------------------------------------------------
-        unsigned apply_gamma(unsigned cover) const 
-        { 
-            return m_gamma[cover]; 
+        unsigned apply_gamma(unsigned cover) const
+        {
+            return m_gamma[cover];
         }
 
         //--------------------------------------------------------------------
@@ -268,7 +268,7 @@ namespace agg
         void close_polygon();
         void move_to_d(double x, double y);
         void line_to_d(double x, double y);
-        
+
         //--------------------------------------------------------------------
         int min_x() const { return m_outline.min_x(); }
         int min_y() const { return m_outline.min_y(); }
@@ -305,7 +305,7 @@ namespace agg
         {
             close_polygon();
             m_iterator.cells = m_outline.cells();
-            if(m_outline.num_cells() == 0) 
+            if(m_outline.num_cells() == 0)
             {
                 return false;
             }
@@ -329,7 +329,7 @@ namespace agg
                 for(;;)
                 {
                     int coord  = cur_cell->packed_coord;
-                    int area   = cur_cell->area; 
+                    int area   = cur_cell->area;
                     int last_x = cur_cell->x;
 
                     m_iterator.cover += cur_cell->cover;
@@ -379,7 +379,7 @@ namespace agg
                         }
                     }
                 }
-                if(sl.num_spans()) 
+                if(sl.num_spans())
                 {
                     sl.finalize(m_iterator.last_y);
                     break;
@@ -428,7 +428,7 @@ namespace agg
         //--------------------------------------------------------------------
         // Disable copying
         rasterizer_scanline_aa(const rasterizer_scanline_aa<XScale, AA_Shift>&);
-        const rasterizer_scanline_aa<XScale, AA_Shift>& 
+        const rasterizer_scanline_aa<XScale, AA_Shift>&
             operator = (const rasterizer_scanline_aa<XScale, AA_Shift>&);
 
         //--------------------------------------------------------------------
@@ -464,22 +464,22 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
-    void rasterizer_scanline_aa<XScale, AA_Shift>::reset() 
-    { 
-        m_outline.reset(); 
+    template<unsigned XScale, unsigned AA_Shift>
+    void rasterizer_scanline_aa<XScale, AA_Shift>::reset()
+    {
+        m_outline.reset();
         m_status = status_initial;
     }
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
-    void rasterizer_scanline_aa<XScale, AA_Shift>::filling_rule(filling_rule_e _filling_rule) 
-    { 
-        m_filling_rule = _filling_rule; 
+    template<unsigned XScale, unsigned AA_Shift>
+    void rasterizer_scanline_aa<XScale, AA_Shift>::filling_rule(filling_rule_e _filling_rule)
+    {
+        m_filling_rule = _filling_rule;
     }
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
+    template<unsigned XScale, unsigned AA_Shift>
     void rasterizer_scanline_aa<XScale, AA_Shift>::clip_box(double x1, double y1, double x2, double y2)
     {
         reset();
@@ -490,7 +490,7 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
+    template<unsigned XScale, unsigned AA_Shift>
     void rasterizer_scanline_aa<XScale, AA_Shift>::reset_clipping()
     {
         reset();
@@ -500,14 +500,14 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
+    template<unsigned XScale, unsigned AA_Shift>
     void rasterizer_scanline_aa<XScale, AA_Shift>::move_to_no_clip(int x, int y)
     {
         if(m_status == status_line_to)
         {
             close_polygon_no_clip();
         }
-        m_outline.move_to(x * XScale, y); 
+        m_outline.move_to(x * XScale, y);
         m_clipped_start_x = x;
         m_clipped_start_y = y;
         m_status = status_line_to;
@@ -515,19 +515,19 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
+    template<unsigned XScale, unsigned AA_Shift>
     void rasterizer_scanline_aa<XScale, AA_Shift>::line_to_no_clip(int x, int y)
     {
         if(m_status != status_initial)
         {
-            m_outline.line_to(x * XScale, y); 
+            m_outline.line_to(x * XScale, y);
             m_status = status_line_to;
         }
     }
 
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
+    template<unsigned XScale, unsigned AA_Shift>
     void rasterizer_scanline_aa<XScale, AA_Shift>::close_polygon_no_clip()
     {
         if(m_status == status_line_to)
@@ -539,8 +539,8 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
-    void rasterizer_scanline_aa<XScale, AA_Shift>::clip_segment(int x, int y) 
+    template<unsigned XScale, unsigned AA_Shift>
+    void rasterizer_scanline_aa<XScale, AA_Shift>::clip_segment(int x, int y)
     {
         unsigned flags = clipping_flags(x, y, m_clip_box);
         if(m_prev_flags == flags)
@@ -561,9 +561,9 @@ namespace agg
         {
             int cx[4];
             int cy[4];
-            unsigned n = clip_liang_barsky(m_prev_x, m_prev_y, 
-                                           x, y, 
-                                           m_clip_box, 
+            unsigned n = clip_liang_barsky(m_prev_x, m_prev_y,
+                                           x, y,
+                                           m_clip_box,
                                            cx, cy);
             const int* px = cx;
             const int* py = cy;
@@ -587,7 +587,7 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
+    template<unsigned XScale, unsigned AA_Shift>
     void rasterizer_scanline_aa<XScale, AA_Shift>::add_vertex(double x, double y, unsigned cmd)
     {
         if(is_close(cmd))
@@ -596,11 +596,11 @@ namespace agg
         }
         else
         {
-            if(is_move_to(cmd)) 
+            if(is_move_to(cmd))
             {
                 move_to(poly_coord(x), poly_coord(y));
             }
-            else 
+            else
             {
                 if(is_vertex(cmd))
                 {
@@ -613,12 +613,12 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
-    void rasterizer_scanline_aa<XScale, AA_Shift>::move_to(int x, int y) 
-    { 
+    template<unsigned XScale, unsigned AA_Shift>
+    void rasterizer_scanline_aa<XScale, AA_Shift>::move_to(int x, int y)
+    {
         if(m_clipping)
         {
-            if(m_outline.sorted()) 
+            if(m_outline.sorted())
             {
                 reset();
             }
@@ -642,9 +642,9 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
-    void rasterizer_scanline_aa<XScale, AA_Shift>::line_to(int x, int y) 
-    { 
+    template<unsigned XScale, unsigned AA_Shift>
+    void rasterizer_scanline_aa<XScale, AA_Shift>::line_to(int x, int y)
+    {
         if(m_clipping)
         {
             clip_segment(x, y);
@@ -656,9 +656,9 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
-    void rasterizer_scanline_aa<XScale, AA_Shift>::close_polygon() 
-    { 
+    template<unsigned XScale, unsigned AA_Shift>
+    void rasterizer_scanline_aa<XScale, AA_Shift>::close_polygon()
+    {
         if(m_clipping)
         {
             clip_segment(m_start_x, m_start_y);
@@ -667,22 +667,22 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
-    void rasterizer_scanline_aa<XScale, AA_Shift>::move_to_d(double x, double y) 
-    { 
-        move_to(poly_coord(x), poly_coord(y)); 
+    template<unsigned XScale, unsigned AA_Shift>
+    void rasterizer_scanline_aa<XScale, AA_Shift>::move_to_d(double x, double y)
+    {
+        move_to(poly_coord(x), poly_coord(y));
     }
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
-    void rasterizer_scanline_aa<XScale, AA_Shift>::line_to_d(double x, double y) 
-    { 
-        line_to(poly_coord(x), poly_coord(y)); 
+    template<unsigned XScale, unsigned AA_Shift>
+    void rasterizer_scanline_aa<XScale, AA_Shift>::line_to_d(double x, double y)
+    {
+        line_to(poly_coord(x), poly_coord(y));
     }
 
 
     //------------------------------------------------------------------------
-    template<unsigned XScale, unsigned AA_Shift> 
+    template<unsigned XScale, unsigned AA_Shift>
     bool rasterizer_scanline_aa<XScale, AA_Shift>::hit_test(int tx, int ty)
     {
         close_polygon();

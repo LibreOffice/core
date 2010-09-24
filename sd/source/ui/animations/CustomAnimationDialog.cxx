@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -404,7 +404,7 @@ private:
 // --------------------------------------------------------------------
 
 DropdownMenuBox::DropdownMenuBox( Window* pParent, Edit* pSubControl, PopupMenu* pMenu )
-:	Edit( pParent, WB_BORDER|WB_TABSTOP| WB_DIALOGCONTROL ),
+:   Edit( pParent, WB_BORDER|WB_TABSTOP| WB_DIALOGCONTROL ),
     mpSubControl(pSubControl),mpDropdownButton(0),mpMenu(pMenu)
 {
     mpDropdownButton = new MenuButton( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
@@ -1160,38 +1160,38 @@ private:
     sal_Bool mbHasText;
     const STLPropertySet* mpSet;
 
-    FixedLine*		mpFLSettings;
-    FixedText*		mpFTProperty1;
+    FixedLine*      mpFLSettings;
+    FixedText*      mpFTProperty1;
     PropertyControl* mpLBProperty1;
-    FixedText*		mpFTProperty2;
+    FixedText*      mpFTProperty2;
     PropertyControl* mpLBProperty2;
-    CheckBox*		mpCBSmoothStart;
-    CheckBox*		mpCBSmoothEnd;
-    CheckBox*		mpCBAutoRestart;
+    CheckBox*       mpCBSmoothStart;
+    CheckBox*       mpCBSmoothEnd;
+    CheckBox*       mpCBAutoRestart;
 
-    FixedLine*		mpFLPlay;
-    RadioButton*	mpRBFromStart;
-    RadioButton*	mpRBFromLast;
-    RadioButton*	mpRBFromTime;
-    MetricField*	mpMFStartTime;
-    FixedLine*		mpFLStop;
-    RadioButton*	mpRBStopOnClick;
-    RadioButton*	mpRBStopOnNextSlide;
-    RadioButton*	mpRBStopAfterSlides;
-    MetricField*	mpMFStopAfterSlides;
+    FixedLine*      mpFLPlay;
+    RadioButton*    mpRBFromStart;
+    RadioButton*    mpRBFromLast;
+    RadioButton*    mpRBFromTime;
+    MetricField*    mpMFStartTime;
+    FixedLine*      mpFLStop;
+    RadioButton*    mpRBStopOnClick;
+    RadioButton*    mpRBStopOnNextSlide;
+    RadioButton*    mpRBStopAfterSlides;
+    MetricField*    mpMFStopAfterSlides;
 
-    FixedLine*		mpFLEnhancements;
-    FixedText*		mpFTSound;
-    ListBox*		mpLBSound;
-    PushButton*		mpPBSoundPreview;
-    FixedText*		mpFTAfterEffect;
-    ListBox*		mpLBAfterEffect;
-    FixedText*		mpFTDimColor;
-    ColorListBox*	mpCLBDimColor;
-    FixedText*		mpFTTextAnim;
-    ListBox*		mpLBTextAnim;
-    MetricField*	mpMFTextDelay;
-    FixedText*		mpFTTextDelay;
+    FixedLine*      mpFLEnhancements;
+    FixedText*      mpFTSound;
+    ListBox*        mpLBSound;
+    PushButton*     mpPBSoundPreview;
+    FixedText*      mpFTAfterEffect;
+    ListBox*        mpLBAfterEffect;
+    FixedText*      mpFTDimColor;
+    ColorListBox*   mpCLBDimColor;
+    FixedText*      mpFTTextAnim;
+    ListBox*        mpLBTextAnim;
+    MetricField*    mpMFTextDelay;
+    FixedText*      mpFTTextDelay;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
 };
@@ -1445,9 +1445,9 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
             pSet->getPropertyValue( nHandleIterateType ) >>= nIterateType;
             switch( nIterateType )
             {
-            case TextAnimationType::BY_PARAGRAPH:	nPos = 0; break;
-            case TextAnimationType::BY_WORD:		nPos = 1; break;
-            case TextAnimationType::BY_LETTER:		nPos = 2; break;
+            case TextAnimationType::BY_PARAGRAPH:   nPos = 0; break;
+            case TextAnimationType::BY_WORD:        nPos = 1; break;
+            case TextAnimationType::BY_LETTER:      nPos = 2; break;
             }
 
             mpLBTextAnim->SelectEntryPos( nPos );
@@ -1800,7 +1800,7 @@ sal_Int32 CustomAnimationEffectTabPage::getSoundObject( const String& rStr )
 
 void CustomAnimationEffectTabPage::openSoundFileDialog()
 {
-    SdOpenSoundFileDialog	aFileDialog;
+    SdOpenSoundFileDialog   aFileDialog;
 
     String aFile( SvtPathOptions().GetGraphicPath() );
     aFileDialog.SetPath( aFile );
@@ -1931,8 +1931,8 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
         USHORT nPos = 0;
         switch( nStart )
         {
-            case EffectNodeType::WITH_PREVIOUS:		nPos = 1; break;
-            case EffectNodeType::AFTER_PREVIOUS:	nPos = 2; break;
+            case EffectNodeType::WITH_PREVIOUS:     nPos = 1; break;
+            case EffectNodeType::AFTER_PREVIOUS:    nPos = 2; break;
         }
         mpLBStart->SelectEntryPos( nPos );
     }
@@ -2260,12 +2260,12 @@ public:
     DECL_LINK( implSelectHdl, Control* );
 
 private:
-    FixedText	maFTGroupText;
-    ListBox		maLBGroupText;
-    CheckBox	maCBXGroupAuto;
-    MetricField	maMFGroupAuto;
-    CheckBox	maCBXAnimateForm;
-    CheckBox	maCBXReverse;
+    FixedText   maFTGroupText;
+    ListBox     maLBGroupText;
+    CheckBox    maCBXGroupAuto;
+    MetricField maMFGroupAuto;
+    CheckBox    maCBXAnimateForm;
+    CheckBox    maCBXReverse;
 
     const STLPropertySet* mpSet;
 
@@ -2273,7 +2273,7 @@ private:
 };
 
 CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, const ResId& rResId, const STLPropertySet* pSet)
-:	TabPage( pParent, rResId ),
+:   TabPage( pParent, rResId ),
     maFTGroupText( this, SdResId( FT_GROUP_TEXT ) ),
     maLBGroupText( this, SdResId( LB_GROUP_TEXT ) ),
     maCBXGroupAuto( this, SdResId( CBX_GROUP_AUTO ) ),

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,7 +124,7 @@ sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(con
 Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > SAL_CALL
 IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, const OUString& rSortAlgorithm) throw (RuntimeException)
 {
-        if (xIES.is() && rSortAlgorithm == aSortAlgorithm && rLocale.Language == aLocale.Language && 
+        if (xIES.is() && rSortAlgorithm == aSortAlgorithm && rLocale.Language == aLocale.Language &&
                 rLocale.Country == aLocale.Country && rLocale.Variant == aLocale.Variant)
             return xIES;
         else if (xMSF.is()) {
@@ -180,7 +180,7 @@ OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( sal_Bool bMorePage
         Sequence< OUString > aFollowPageWords = LocaleData().getFollowPageWords(rLocale);
 
         return (bMorePages && aFollowPageWords.getLength() > 1) ?
-            aFollowPageWords[1] : (aFollowPageWords.getLength() > 0 ? 
+            aFollowPageWords[1] : (aFollowPageWords.getLength() > 0 ?
             aFollowPageWords[0] : OUString());
 }
 

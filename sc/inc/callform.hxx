@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,20 +31,20 @@
 #include "collect.hxx"
 
 //------------------------------------------------------------------------
-#define MAXFUNCPARAM	16
-#define MAXARRSIZE		0xfffe
+#define MAXFUNCPARAM    16
+#define MAXARRSIZE      0xfffe
 
 //------------------------------------------------------------------------
 #ifndef WIN
 #ifndef WNT
 #define CALLTYPE
 #else
-#define CALLTYPE			__cdecl
+#define CALLTYPE            __cdecl
 #endif
 #else
-#define PASCAL				_pascal
-#define FAR					_far
-#define CALLTYPE			FAR PASCAL
+#define PASCAL              _pascal
+#define FAR                 _far
+#define CALLTYPE            FAR PASCAL
 #endif
 
 extern "C" {
@@ -68,12 +68,12 @@ class FuncData : public ScDataObject
 {
 friend class FuncCollection;
     const ModuleData* pModuleData;
-    String		aInternalName;
-    String		aFuncName;
+    String      aInternalName;
+    String      aFuncName;
     USHORT      nNumber;
-    USHORT		nParamCount;
-    ParamType	eAsyncType;
-    ParamType	eParamType[MAXFUNCPARAM];
+    USHORT      nParamCount;
+    ParamType   eAsyncType;
+    ParamType   eParamType[MAXFUNCPARAM];
 private:
     FuncData(const String& rIName);
 public:
@@ -85,22 +85,22 @@ public:
              const ParamType* peType,
                    ParamType  eType);
     FuncData(const FuncData& rData);
-    virtual	ScDataObject*	Clone() const { return new FuncData(*this); }
+    virtual ScDataObject*   Clone() const { return new FuncData(*this); }
 
-    const	String&		GetModuleName() const;
-    const	String&		GetInternalName() const { return aInternalName; }
-    const	String&		GetFuncName() const { return aFuncName; }
-            USHORT		GetParamCount() const { return nParamCount; }
-            ParamType	GetParamType(USHORT nIndex) const { return eParamType[nIndex]; }
-            ParamType	GetReturnType() const { return eParamType[0]; }
-            ParamType	GetAsyncType() const { return eAsyncType; }
+    const   String&     GetModuleName() const;
+    const   String&     GetInternalName() const { return aInternalName; }
+    const   String&     GetFuncName() const { return aFuncName; }
+            USHORT      GetParamCount() const { return nParamCount; }
+            ParamType   GetParamType(USHORT nIndex) const { return eParamType[nIndex]; }
+            ParamType   GetReturnType() const { return eParamType[0]; }
+            ParamType   GetAsyncType() const { return eAsyncType; }
             BOOL        Call(void** ppParam);
-            BOOL 		Unadvice(double nHandle);
+            BOOL        Unadvice(double nHandle);
 
                         // Name und Beschreibung des Parameters nParam.
                         // nParam==0 => Desc := Funktions-Beschreibung,
                         // Name := n/a
-            BOOL		GetParamDesc( String& aName, String& aDesc, USHORT nParam );
+            BOOL        GetParamDesc( String& aName, String& aDesc, USHORT nParam );
 };
 
 
@@ -111,10 +111,10 @@ public:
     FuncCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) : ScSortedCollection ( nLim, nDel, bDup ) {}
     FuncCollection(const FuncCollection& rFuncCollection) : ScSortedCollection ( rFuncCollection ) {}
 
-    virtual	ScDataObject*	Clone() const { return new FuncCollection(*this); }
-            FuncData*	operator[]( const USHORT nIndex) const {return (FuncData*)At(nIndex);}
-    virtual	short		Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-            BOOL 		SearchFunc( const String& rName, USHORT& rIndex ) const;
+    virtual ScDataObject*   Clone() const { return new FuncCollection(*this); }
+            FuncData*   operator[]( const USHORT nIndex) const {return (FuncData*)At(nIndex);}
+    virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
+            BOOL        SearchFunc( const String& rName, USHORT& rIndex ) const;
 };
 
 

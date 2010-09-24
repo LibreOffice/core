@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,40 +47,40 @@ struct SalObjectData
 class AquaSalObject : public SalObject
 {
 public:
-    AquaSalFrame*				mpFrame;				// parent frame
+    AquaSalFrame*               mpFrame;                // parent frame
     NSClipView*                 mpClipView;
     SystemEnvData               maSysData;
-    
+
     long                        mnClipX;
     long                        mnClipY;
     long                        mnClipWidth;
     long                        mnClipHeight;
     bool                        mbClip;
-    
+
     long                        mnX;
     long                        mnY;
     long                        mnWidth;
     long                        mnHeight;
-    
-    
+
+
     void setClippedPosSize();
 
-    
+
     AquaSalObject( AquaSalFrame* pFrame );
     virtual ~AquaSalObject();
-    
-    virtual void					ResetClipRegion();
-    virtual USHORT					GetClipRegionType();
-    virtual void					BeginSetClipRegion( ULONG nRects );
-    virtual void					UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual void					EndSetClipRegion();
-    virtual void					SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void					Show( BOOL bVisible );
-    virtual void					Enable( BOOL nEnable );
-    virtual void					GrabFocus();
-    virtual void					SetBackground();
-    virtual void					SetBackground( SalColor nSalColor );
-    virtual const SystemEnvData*	GetSystemData() const;
+
+    virtual void                    ResetClipRegion();
+    virtual USHORT                  GetClipRegionType();
+    virtual void                    BeginSetClipRegion( ULONG nRects );
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void                    EndSetClipRegion();
+    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
+    virtual void                    Show( BOOL bVisible );
+    virtual void                    Enable( BOOL nEnable );
+    virtual void                    GrabFocus();
+    virtual void                    SetBackground();
+    virtual void                    SetBackground( SalColor nSalColor );
+    virtual const SystemEnvData*    GetSystemData() const;
 };
 
 #endif // _SV_SALOBJ_H

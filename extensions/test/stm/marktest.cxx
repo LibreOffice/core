@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,29 +66,29 @@ public:
     ~OMarkableOutputStreamTest();
 
 public: // refcounting
-    BOOL						queryInterface( Uik aUik, XInterfaceRef & rOut );
-    void 						acquire() 						 { OWeakObject::acquire(); }
-    void 						release() 						 { OWeakObject::release(); }
-    void* 						getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
+    BOOL                        queryInterface( Uik aUik, XInterfaceRef & rOut );
+    void                        acquire()                        { OWeakObject::acquire(); }
+    void                        release()                        { OWeakObject::release(); }
+    void*                       getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 public: // implementation names
-    static Sequence< UString > 	getSupportedServiceNames_Static(void) THROWS( () );
-    static UString 				getImplementationName_Static() THROWS( () );
+    static Sequence< UString >  getSupportedServiceNames_Static(void) THROWS( () );
+    static UString              getImplementationName_Static() THROWS( () );
 
 public:
     virtual void testInvariant(const UString& TestName, const XInterfaceRef& TestObject)
-                                                                THROWS( (	IllegalArgumentException,
+                                                                THROWS( (   IllegalArgumentException,
                                                                             UsrSystemException) );
 
-    virtual INT32 test(	const UString& TestName,
+    virtual INT32 test( const UString& TestName,
                         const XInterfaceRef& TestObject,
-                        INT32 hTestHandle) 						THROWS( (	IllegalArgumentException,
+                        INT32 hTestHandle)                      THROWS( (   IllegalArgumentException,
                                                                             UsrSystemException) );
 
-    virtual BOOL testPassed(void) 								THROWS( (	UsrSystemException) );
-    virtual Sequence< UString > getErrors(void) 				THROWS( (UsrSystemException) );
-    virtual Sequence< UsrAny > getErrorExceptions(void) 		THROWS( (UsrSystemException) );
-    virtual Sequence< UString > getWarnings(void) 				THROWS( (UsrSystemException) );
+    virtual BOOL testPassed(void)                               THROWS( (   UsrSystemException) );
+    virtual Sequence< UString > getErrors(void)                 THROWS( (UsrSystemException) );
+    virtual Sequence< UsrAny > getErrorExceptions(void)         THROWS( (UsrSystemException) );
+    virtual Sequence< UString > getWarnings(void)               THROWS( (UsrSystemException) );
 
 private:
     void testSimple( const XOutputStreamRef &r, const XInputStreamRef &rInput );
@@ -126,7 +126,7 @@ BOOL OMarkableOutputStreamTest::queryInterface( Uik uik , XInterfaceRef &rOut )
 
 
 void OMarkableOutputStreamTest::testInvariant( const UString& TestName, const XInterfaceRef& TestObject )
-                                                                THROWS( (	IllegalArgumentException,
+                                                                THROWS( (   IllegalArgumentException,
                                                                             UsrSystemException) )
 {
     XServiceInfoRef info( TestObject, USR_QUERY );
@@ -139,9 +139,9 @@ void OMarkableOutputStreamTest::testInvariant( const UString& TestName, const XI
 }
 
 
-INT32 OMarkableOutputStreamTest::test(	const UString& TestName,
+INT32 OMarkableOutputStreamTest::test(  const UString& TestName,
                         const XInterfaceRef& TestObject,
-                        INT32 hTestHandle) 						THROWS( (	IllegalArgumentException,
+                        INT32 hTestHandle)                      THROWS( (   IllegalArgumentException,
                                                                             UsrSystemException) )
 {
     if( L"com.sun.star.io.MarkableOutputStream" == TestName )  {
@@ -190,13 +190,13 @@ INT32 OMarkableOutputStreamTest::test(	const UString& TestName,
 
 
 
-BOOL OMarkableOutputStreamTest::testPassed(void) 						THROWS( (UsrSystemException) )
+BOOL OMarkableOutputStreamTest::testPassed(void)                        THROWS( (UsrSystemException) )
 {
     return m_seqErrors.getLen() == 0;
 }
 
 
-Sequence< UString > OMarkableOutputStreamTest::getErrors(void) 		THROWS( (UsrSystemException) )
+Sequence< UString > OMarkableOutputStreamTest::getErrors(void)      THROWS( (UsrSystemException) )
 {
     return m_seqErrors;
 }
@@ -208,13 +208,13 @@ Sequence< UsrAny > OMarkableOutputStreamTest::getErrorExceptions(void) THROWS( (
 }
 
 
-Sequence< UString > OMarkableOutputStreamTest::getWarnings(void) 		THROWS( (UsrSystemException) )
+Sequence< UString > OMarkableOutputStreamTest::getWarnings(void)        THROWS( (UsrSystemException) )
 {
     return m_seqWarnings;
 }
 
 
-void OMarkableOutputStreamTest::testSimple(  	const XOutputStreamRef &rOutput ,
+void OMarkableOutputStreamTest::testSimple(     const XOutputStreamRef &rOutput ,
                                                 const XInputStreamRef &rInput )
 {
     XMarkableStreamRef rMarkable( rOutput , USR_QUERY );
@@ -404,7 +404,7 @@ UString     OMarkableOutputStreamTest_getServiceName() THROWS( () )
     return L"test.com.sun.star.io.MarkableOutputStream";
 }
 
-UString 	OMarkableOutputStreamTest_getImplementationName() THROWS( () )
+UString     OMarkableOutputStreamTest_getImplementationName() THROWS( () )
 {
     return L"test.com.sun.starextensions.stm.MarkableOutputStream";
 }
@@ -428,29 +428,29 @@ public:
     ~OMarkableInputStreamTest();
 
 public: // refcounting
-    BOOL						queryInterface( Uik aUik, XInterfaceRef & rOut );
-    void 						acquire() 						 { OWeakObject::acquire(); }
-    void 						release() 						 { OWeakObject::release(); }
-    void* 						getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
+    BOOL                        queryInterface( Uik aUik, XInterfaceRef & rOut );
+    void                        acquire()                        { OWeakObject::acquire(); }
+    void                        release()                        { OWeakObject::release(); }
+    void*                       getImplementation(Reflection *p) { return OWeakObject::getImplementation(p); }
 
 public: // implementation names
-    static Sequence< UString > 	getSupportedServiceNames_Static(void) THROWS( () );
-    static UString 				getImplementationName_Static() THROWS( () );
+    static Sequence< UString >  getSupportedServiceNames_Static(void) THROWS( () );
+    static UString              getImplementationName_Static() THROWS( () );
 
 public:
     virtual void testInvariant(const UString& TestName, const XInterfaceRef& TestObject)
-                                                                THROWS( (	IllegalArgumentException,
+                                                                THROWS( (   IllegalArgumentException,
                                                                             UsrSystemException) );
 
-    virtual INT32 test(	const UString& TestName,
+    virtual INT32 test( const UString& TestName,
                         const XInterfaceRef& TestObject,
-                        INT32 hTestHandle) 						THROWS( (	IllegalArgumentException,
+                        INT32 hTestHandle)                      THROWS( (   IllegalArgumentException,
                                                                             UsrSystemException) );
 
-    virtual BOOL testPassed(void) 								THROWS( (	UsrSystemException) );
-    virtual Sequence< UString > getErrors(void) 				THROWS( (UsrSystemException) );
-    virtual Sequence< UsrAny > getErrorExceptions(void) 		THROWS( (UsrSystemException) );
-    virtual Sequence< UString > getWarnings(void) 				THROWS( (UsrSystemException) );
+    virtual BOOL testPassed(void)                               THROWS( (   UsrSystemException) );
+    virtual Sequence< UString > getErrors(void)                 THROWS( (UsrSystemException) );
+    virtual Sequence< UsrAny > getErrorExceptions(void)         THROWS( (UsrSystemException) );
+    virtual Sequence< UString > getWarnings(void)               THROWS( (UsrSystemException) );
 
 private:
     void testSimple( const XOutputStreamRef &r, const XInputStreamRef &rInput );
@@ -488,7 +488,7 @@ BOOL OMarkableInputStreamTest::queryInterface( Uik uik , XInterfaceRef &rOut )
 
 
 void OMarkableInputStreamTest::testInvariant( const UString& TestName, const XInterfaceRef& TestObject )
-                                                                THROWS( (	IllegalArgumentException,
+                                                                THROWS( (   IllegalArgumentException,
                                                                             UsrSystemException) )
 {
     if( L"com.sun.star.io.MarkableInputStream" == TestName )  {
@@ -506,9 +506,9 @@ void OMarkableInputStreamTest::testInvariant( const UString& TestName, const XIn
 }
 
 
-INT32 OMarkableInputStreamTest::test(	const UString& TestName,
+INT32 OMarkableInputStreamTest::test(   const UString& TestName,
                         const XInterfaceRef& TestObject,
-                        INT32 hTestHandle) 						THROWS( (	IllegalArgumentException,
+                        INT32 hTestHandle)                      THROWS( (   IllegalArgumentException,
                                                                             UsrSystemException) )
 {
     if( L"com.sun.star.io.MarkableInputStream" == TestName )  {
@@ -557,31 +557,31 @@ INT32 OMarkableInputStreamTest::test(	const UString& TestName,
 
 
 
-BOOL OMarkableInputStreamTest::testPassed(void) 										THROWS( (UsrSystemException) )
+BOOL OMarkableInputStreamTest::testPassed(void)                                         THROWS( (UsrSystemException) )
 {
     return m_seqErrors.getLen() == 0;
 }
 
 
-Sequence< UString > OMarkableInputStreamTest::getErrors(void) 							THROWS( (UsrSystemException) )
+Sequence< UString > OMarkableInputStreamTest::getErrors(void)                           THROWS( (UsrSystemException) )
 {
     return m_seqErrors;
 }
 
 
-Sequence< UsrAny > OMarkableInputStreamTest::getErrorExceptions(void) 					THROWS( (UsrSystemException) )
+Sequence< UsrAny > OMarkableInputStreamTest::getErrorExceptions(void)                   THROWS( (UsrSystemException) )
 {
     return m_seqExceptions;
 }
 
 
-Sequence< UString > OMarkableInputStreamTest::getWarnings(void) 						THROWS( (UsrSystemException) )
+Sequence< UString > OMarkableInputStreamTest::getWarnings(void)                         THROWS( (UsrSystemException) )
 {
     return m_seqWarnings;
 }
 
 
-void OMarkableInputStreamTest::testSimple(  	const XOutputStreamRef &rOutput ,
+void OMarkableInputStreamTest::testSimple(      const XOutputStreamRef &rOutput ,
                                                 const XInputStreamRef &rInput )
 {
     XMarkableStreamRef rMarkable( rInput , USR_QUERY );
@@ -635,7 +635,7 @@ void OMarkableInputStreamTest::testSimple(  	const XOutputStreamRef &rOutput ,
     ERROR_ASSERT( 256-10-50 == rInput->available() , "marking error" );
 
 
-    ERROR_ASSERT( 100 == rInput->readSomeBytes( seqRead , 100	) , "wrong results using readSomeBytes" );
+    ERROR_ASSERT( 100 == rInput->readSomeBytes( seqRead , 100   ) , "wrong results using readSomeBytes" );
     ERROR_ASSERT( 96 == rInput->readSomeBytes( seqRead , 1000) , "wrong results using readSomeBytes" );
     rOutput->closeOutput();
     rInput->closeInput();
@@ -668,7 +668,7 @@ Sequence<UString> OMarkableInputStreamTest_getSupportedServiceNames(void) THROWS
 {
     Sequence<UString> aRet(1);
     aRet.getArray()[0] = OMarkableInputStreamTest_getImplementationName();
-    
+
     return aRet;
 }
 
@@ -677,7 +677,7 @@ UString     OMarkableInputStreamTest_getServiceName() THROWS( () )
     return L"test.com.sun.star.io.MarkableInputStream";
 }
 
-UString 	OMarkableInputStreamTest_getImplementationName() THROWS( () )
+UString     OMarkableInputStreamTest_getImplementationName() THROWS( () )
 {
     return L"test.com.sun.star.extensions.stm.MarkableInputStream";
 }

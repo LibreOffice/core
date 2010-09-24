@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,51 +24,51 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_reflection_XIdlClass_idl__ 
-#define __com_sun_star_reflection_XIdlClass_idl__ 
- 
-#ifndef __com_sun_star_uno_XInterface_idl__ 
-#include <com/sun/star/uno/XInterface.idl> 
-#endif 
- 
-#ifndef __com_sun_star_uno_TypeClass_idl__ 
-#include <com/sun/star/uno/TypeClass.idl> 
-#endif 
- 
-#ifndef __com_sun_star_uno_Uik_idl__ 
-#include <com/sun/star/uno/Uik.idl> 
-#endif 
- 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module reflection {  
- 
- published interface XIdlField; 
- published interface XIdlMethod; 
- published interface XIdlArray; 
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_reflection_XIdlClass_idl__
+#define __com_sun_star_reflection_XIdlClass_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_uno_TypeClass_idl__
+#include <com/sun/star/uno/TypeClass.idl>
+#endif
+
+#ifndef __com_sun_star_uno_Uik_idl__
+#include <com/sun/star/uno/Uik.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module reflection {
+
+ published interface XIdlField;
+ published interface XIdlMethod;
+ published interface XIdlArray;
+
+//=============================================================================
+
 /** Provides information reflecting an UNO type.
 */
 published interface XIdlClass: com::sun::star::uno::XInterface
-{ 
+{
     /** Deprecated.  Do not call.
         @deprecated
     */
-    sequence<XIdlClass> getClasses(); 
+    sequence<XIdlClass> getClasses();
     /** Deprecated.  Do not call.
         @deprecated
     */
-    XIdlClass getClass( [in] string aName ); 
-    
+    XIdlClass getClass( [in] string aName );
+
     /** Tests whether two reflecting objects reflect the same type.
 
         @returns
                 true, if the objects reflect the same type, false otherwise.
     */
-    boolean equals( [in] XIdlClass Type ); 
- 
+    boolean equals( [in] XIdlClass Type );
+
     /** Tests whether values of this reflected type are assignable from values
         of a second one (<code>xType</code>).
 
@@ -78,55 +78,55 @@ published interface XIdlClass: com::sun::star::uno::XInterface
                 true, if values of this reflected type are assignable
                 from values of <code>xType</code>.
     */
-    boolean isAssignableFrom( [in] XIdlClass xType ); 
- 
+    boolean isAssignableFrom( [in] XIdlClass xType );
+
     /** Returns the <type scope="com::sun::star::uno">TypeClass</type>
         of the reflected type.
-        
-        @returns  
+
+        @returns
                   type class of the reflected type.
     */
-    com::sun::star::uno::TypeClass getTypeClass(); 
- 
+    com::sun::star::uno::TypeClass getTypeClass();
+
     /** Returns the fully-qualified name of the reflected type.
-        
-        @returns  
+
+        @returns
                   the fully-qualified name of the type
     */
-    string getName(); 
- 
+    string getName();
+
     /** Deprecated.  Do not call.
 
         @deprecated
     */
-    com::sun::star::uno::Uik getUik(); 
- 
+    com::sun::star::uno::Uik getUik();
+
     /** If the reflected type is an interface, then the returned
         sequence of <type>XIdlClass</type> reflect the base interfaces.
         <br>
         If the reflected type is not an interface or an interface that is
         not derived from another, then an empty sequence is returned.
-        
+
         @return
                 all base interfaces of an interface type or an empty sequence.
     */
-    sequence<XIdlClass> getSuperclasses(); 
-    
+    sequence<XIdlClass> getSuperclasses();
+
     /** Deprecated.  Do not call.
         @deprecated
     */
-    sequence<XIdlClass> getInterfaces(); 
- 
+    sequence<XIdlClass> getInterfaces();
+
     /** If the reflected type is an array or sequence, then this method
         returns a <type>XIdlClass</type> interface reflecting
         the element.
-        
+
         @return
                 reflection interface of the element type of an array or
                 sequence type (null-reference otherwise).
     */
-    XIdlClass getComponentType(); 
-    
+    XIdlClass getComponentType();
+
     /** If the reflected type is an interface, struct or union, then you
         get a <type>XIdlField</type> interface reflecting the demanded
         field (/interface attribute) by name.
@@ -134,14 +134,14 @@ published interface XIdlClass: com::sun::star::uno::XInterface
         If the reflected type is not an interface, struct or union or the
         interace, struct or union does not have a field (/interface attribute)
         with the demanded name, then a null-reference is returned.
-        
+
         @param aName
                name of the demanded field reflection
         @return
                 demanded field (/interface attribute) reflection (or null-reference)
     */
-    XIdlField getField( [in] string aName ); 
- 
+    XIdlField getField( [in] string aName );
+
     /** If the reflected type is an interface, struct or union, then you
         get a sequence of <type>XIdlField</type> interfaces reflecting all fields
         (/interface attributes).  This also includes all inherited
@@ -150,48 +150,48 @@ published interface XIdlClass: com::sun::star::uno::XInterface
         If the reflected type is not an interface, struct or union or the
         interface, struct or union does not have any field (/interface attribute),
         then an empty sequence is returned.
-        
+
         @return
                 all field (/interface attribute) reflections (or empty sequence)
     */
-    sequence<XIdlField> getFields(); 
- 
+    sequence<XIdlField> getFields();
+
     /** If the reflected type is an interface, then you get
         a <type>XIdlMethod</type> interface reflecting the demanded method by name.
         <br>
         If the reflected type is not an interface or the interface does not have
         a method with the demanded name (including inherited methods),
         then a null-reference is returned.
-        
-        @param aName 
+
+        @param aName
                name of demanded method reflection
         @return
                 demanded method reflection (or null-reference)
     */
-    XIdlMethod getMethod( [in] string aName ); 
- 
+    XIdlMethod getMethod( [in] string aName );
+
     /** If the reflected type is an interface, then you get
         a sequence of <type>XIdlMethod</type> interfaces reflecting all methods
         of the interface.  This also includes the inherited methods of the interface.
         <br>
         If the reflected type is not an interface or the interface
         does not have any methods, then a null-reference is returned.
-        
+
         @return
                 all method reflections (or empty sequence)
     */
-    sequence<XIdlMethod> getMethods(); 
- 
+    sequence<XIdlMethod> getMethods();
+
     /** If the reflected type is an array, then you get
         a <type>XIdlArray</type> interface to modify instances of the array type.
         <br>
         If the reflected type is not an array, then a null-reference is returned.
-        
+
         @return
                 inteface to modify array instances (or null-reference)
     */
-    XIdlArray getArray(); 
-    
+    XIdlArray getArray();
+
     /** This method creates instances of the reflected type.
 
         @attention
@@ -203,13 +203,13 @@ published interface XIdlClass: com::sun::star::uno::XInterface
                pure out parameter to pass the created instance
     */
     void createObject( [out] any obj );
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-/*============================================================================= 
- 
-=============================================================================*/ 
-#endif 
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

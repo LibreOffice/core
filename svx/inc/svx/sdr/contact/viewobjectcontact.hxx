@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,8 +62,8 @@ namespace sdr
         {
         private:
             // must-exist and constant contacts
-            ObjectContact&									mrObjectContact;
-            ViewContact&									mrViewContact;
+            ObjectContact&                                  mrObjectContact;
+            ViewContact&                                    mrViewContact;
 
             // This range defines the object's BoundRect
             basegfx::B2DRange                               maObjectRange;
@@ -71,15 +71,15 @@ namespace sdr
             // PrimitiveSequence of the ViewContact. This contains all necessary information
             // for the graphical visualisation and needs to be supported by all VCs which
             // can be visualized.
-            drawinglayer::primitive2d::Primitive2DSequence	mxPrimitive2DSequence;
+            drawinglayer::primitive2d::Primitive2DSequence  mxPrimitive2DSequence;
 
             // the PrimitiveAnimation if Primitive2DSequence contains animations
-            sdr::animation::PrimitiveAnimation*				mpPrimitiveAnimation;
+            sdr::animation::PrimitiveAnimation*             mpPrimitiveAnimation;
 
             // bitfield
             // This bool gets set when the object gets invalidated by ActionChanged() and
             // can be used from the OC to late-invalidates
-            unsigned										mbLazyInvalidate : 1;
+            unsigned                                        mbLazyInvalidate : 1;
 
         protected:
             // make redirector a protected friend, it needs to call createPrimitives as default action
@@ -140,7 +140,7 @@ namespace sdr
             // test this VOC for ghosted mode
             virtual bool isPrimitiveGhosted(const DisplayInfo& rDisplayInfo) const;
 
-            // process this primitive: Eventually also recursively travel an existing hierarchy, 
+            // process this primitive: Eventually also recursively travel an existing hierarchy,
             // e.g. for group objects, scenes or pages. This method will test geometrical visibility.
             virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const;
 

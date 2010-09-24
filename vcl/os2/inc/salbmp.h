@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ class Os2SalBitmap : public SalBitmap
 private:
 
     Size                maSize;
-    HANDLE				mhDIB;
-    HANDLE				mhDIB1Subst;
+    HANDLE              mhDIB;
+    HANDLE              mhDIB1Subst;
     HBITMAP             mhDDB;
     USHORT              mnBitCount;
 
@@ -58,19 +58,19 @@ public:
 
     HANDLE              ImplGethDIB() const { return mhDIB; }
     HBITMAP             ImplGethDDB() const { return mhDDB; }
-    HANDLE				ImplGethDIB1Subst() const { return mhDIB1Subst; }
+    HANDLE              ImplGethDIB1Subst() const { return mhDIB1Subst; }
 
-    void				ImplReplacehDIB1Subst( HANDLE hDIB1Subst );
+    void                ImplReplacehDIB1Subst( HANDLE hDIB1Subst );
 
     static HANDLE       ImplCreateDIB( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal );
-    static HANDLE		ImplCreateDIB4FromDIB1( HANDLE hDIB1 );
+    static HANDLE       ImplCreateDIB4FromDIB1( HANDLE hDIB1 );
     static HANDLE       ImplCopyDIBOrDDB( HANDLE hHdl, BOOL bDIB );
     static USHORT       ImplGetDIBColorCount( HANDLE hDIB );
     static void         ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
                                              const Size& rSizePixel, BOOL bRLE4 );
 
     //BOOL                Create( HANDLE hBitmap, BOOL bDIB, BOOL bCopyHandle );
-    
+
 public:
 
                         Os2SalBitmap();
@@ -88,8 +88,8 @@ public:
     //Size                GetSize() const { return maSize; }
     //USHORT              GetBitCount() const { return mnBitCount; }
 
-    //BitmapBuffer*		AcquireBuffer( bool bReadOnly );
-    //void				ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
+    //BitmapBuffer*     AcquireBuffer( bool bReadOnly );
+    //void              ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
     bool                        Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle );
     virtual bool                Create( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal );
     virtual bool                Create( const SalBitmap& rSalBmpImpl );
@@ -101,7 +101,7 @@ public:
     virtual Size                GetSize() const { return maSize; }
     virtual USHORT              GetBitCount() const { return mnBitCount; }
 
-    virtual BitmapBuffer*		AcquireBuffer( bool bReadOnly );
+    virtual BitmapBuffer*       AcquireBuffer( bool bReadOnly );
     virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
     virtual bool                GetSystemData( BitmapSystemData& rData );
 };

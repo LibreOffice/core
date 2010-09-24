@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #include "precompiled_linguistic.hxx"
 
 
-#include <cppuhelper/factory.hxx>	// helper for factories
+#include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
@@ -60,7 +60,7 @@ using namespace linguistic;
 ///////////////////////////////////////////////////////////////////////////
 
 HyphenatorDispatcher::HyphenatorDispatcher( LngSvcMgr &rLngSvcMgr ) :
-    rMgr	(rLngSvcMgr)
+    rMgr    (rLngSvcMgr)
 {
 }
 
@@ -79,12 +79,12 @@ void HyphenatorDispatcher::ClearSvcList()
 }
 
 
-Reference<XHyphenatedWord>	HyphenatorDispatcher::buildHyphWord(
+Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
             const OUString rOrigWord,
             const Reference<XDictionaryEntry> &xEntry,
             INT16 nLang, INT16 nMaxLeading )
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     Reference< XHyphenatedWord > xRes;
 
@@ -119,7 +119,7 @@ Reference<XHyphenatedWord>	HyphenatorDispatcher::buildHyphWord(
                         if (nLeading <= nMaxLeading)
                             nHyphenationPos = (INT16) nHyphIdx;
                     }
-                    bSkip = TRUE;	//! multiple '=' should count as one only
+                    bSkip = TRUE;   //! multiple '=' should count as one only
                 }
             }
 
@@ -171,7 +171,7 @@ Reference<XHyphenatedWord>	HyphenatorDispatcher::buildHyphWord(
 Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
             const Reference< XDictionaryEntry > &xEntry, INT16 nLanguage )
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     Reference<XPossibleHyphens> xRes;
 
@@ -205,7 +205,7 @@ Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
                 {
                     if (!bSkip  &&  nHyphIdx >= 0)
                         pPos[ nHyphCount++ ] = (INT16) nHyphIdx;
-                    bSkip = TRUE;	//! multiple '=' should count as one only
+                    bSkip = TRUE;   //! multiple '=' should count as one only
                 }
             }
 
@@ -232,7 +232,7 @@ Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
 Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     Sequence< Locale > aLocales( static_cast< sal_Int32 >(aSvcMap.size()) );
     Locale *pLocales = aLocales.getArray();
@@ -240,7 +240,7 @@ Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
     for (aIt = aSvcMap.begin();  aIt != aSvcMap.end();  ++aIt)
     {
         *pLocales++ = CreateLocale( aIt->first );
-    }    
+    }
     return aLocales;
 }
 
@@ -248,7 +248,7 @@ Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
 BOOL SAL_CALL HyphenatorDispatcher::hasLocale(const Locale& rLocale)
         throw(RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
     HyphSvcByLangMap_t::const_iterator aIt( aSvcMap.find( LocaleToLanguage( rLocale ) ) );
     return aIt != aSvcMap.end();
 }
@@ -260,9 +260,9 @@ Reference< XHyphenatedWord > SAL_CALL
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
-    Reference< XHyphenatedWord >	xRes;
+    Reference< XHyphenatedWord >    xRes;
 
     INT32 nWordLen = rWord.getLength();
     INT16 nLanguage = LocaleToLanguage( rLocale );
@@ -382,7 +382,7 @@ Reference< XHyphenatedWord > SAL_CALL
                         aSvcMap.erase( nLanguage );
                 }
             }
-        }	// if (xEntry.is())
+        }   // if (xEntry.is())
     }
 
     if (bWordModified  &&  xRes.is())
@@ -405,9 +405,9 @@ Reference< XHyphenatedWord > SAL_CALL
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
-    Reference< XHyphenatedWord >	xRes;
+    Reference< XHyphenatedWord >    xRes;
 
     INT32 nWordLen = rWord.getLength();
     INT16 nLanguage = LocaleToLanguage( rLocale );
@@ -521,7 +521,7 @@ Reference< XHyphenatedWord > SAL_CALL
                         aSvcMap.erase( nLanguage );
                 }
             }
-        }	// if (xEntry.is())
+        }   // if (xEntry.is())
     }
 
     if (bWordModified  &&  xRes.is())
@@ -544,9 +544,9 @@ Reference< XPossibleHyphens > SAL_CALL
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
-    Reference< XPossibleHyphens >	xRes;
+    Reference< XPossibleHyphens >   xRes;
 
     INT16 nLanguage = LocaleToLanguage( rLocale );
     if (nLanguage == LANGUAGE_NONE  || !rWord.getLength())
@@ -655,7 +655,7 @@ Reference< XPossibleHyphens > SAL_CALL
                         aSvcMap.erase( nLanguage );
                 }
             }
-        }	// if (xEntry.is())
+        }   // if (xEntry.is())
     }
 
     if (xRes.is()  &&  xRes->getWord() != rWord)
@@ -672,7 +672,7 @@ Reference< XPossibleHyphens > SAL_CALL
 void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
         const Sequence< OUString > &rSvcImplNames )
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     INT16 nLanguage = LocaleToLanguage( rLocale );
 
@@ -706,7 +706,7 @@ void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
 Sequence< OUString >
     HyphenatorDispatcher::GetServiceList( const Locale &rLocale ) const
 {
-    MutexGuard	aGuard( GetLinguMutex() );
+    MutexGuard  aGuard( GetLinguMutex() );
 
     Sequence< OUString > aRes;
 

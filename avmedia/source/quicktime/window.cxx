@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,13 +72,13 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& i_rxMgr, Pla
     mpParentView( i_pParentView ),
     mpMovieView( nil )
 {
-    
+
     ::osl::MutexGuard aGuard( ImplGetOwnStaticMutex() );
 
 
     if( mpParentView ) // sanity check
     {
-       
+
         NSRect aViewRect = [mpParentView frame];
         aViewRect.origin.x = aViewRect.origin.y = 0;
         mpMovieView = [[QTMovieView alloc] initWithFrame: aViewRect];
@@ -103,7 +103,7 @@ Window::~Window()
         [mpMovieView setMovie:nil];
         [mpMovieView release];
         mpMovieView = nil;
-    }	
+    }
 }
 
 bool Window::create( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
@@ -138,7 +138,7 @@ media::ZoomLevel SAL_CALL Window::getZoomLevel(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setPointerType( sal_Int32 nPointerType ) 
+void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
     throw (uno::RuntimeException)
 {
     mnPointerType = nPointerType;
@@ -181,7 +181,7 @@ void SAL_CALL Window::setVisible( sal_Bool bVisible )
     throw (uno::RuntimeException)
 {
     OSL_TRACE ("Window::setVisible");
-    
+
 }
 
 // ------------------------------------------------------------------------------

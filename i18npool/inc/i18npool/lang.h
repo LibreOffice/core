@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@
    Language Identifier Constants and Strings
    http://msdn2.microsoft.com/en-us/library/ms776294.aspx
 
-   Hey, yet another list, maybe this one will not move around? It seems to be 
+   Hey, yet another list, maybe this one will not move around? It seems to be
    quite complete..
    Language Identifier Constants and Strings (Windows)
    http://msdn.microsoft.com/en-us/library/dd318693(VS.85).aspx

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,8 +61,8 @@ namespace DOM
         xmlChar *xURI;
         sal_Bool m_bRebuild;
         nodevector m_nodevector;
-        
-        
+
+
         void buildlist(xmlNodePtr pNode, sal_Bool start=sal_True);
         void registerListener(const CElement* pElement);
 

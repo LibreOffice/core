@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -25,8 +25,8 @@ namespace agg
     const double intersection_epsilon = 1.0e-8;
 
     //------------------------------------------------------calc_point_location
-    AGG_INLINE double calc_point_location(double x1, double y1, 
-                                          double x2, double y2, 
+    AGG_INLINE double calc_point_location(double x1, double y1,
+                                          double x2, double y2,
                                           double x,  double y)
     {
         return (x - x2) * (y2 - y1) - (y - y2) * (x2 - x1);
@@ -34,9 +34,9 @@ namespace agg
 
 
     //--------------------------------------------------------point_in_triangle
-    AGG_INLINE bool point_in_triangle(double x1, double y1, 
-                                      double x2, double y2, 
-                                      double x3, double y3, 
+    AGG_INLINE bool point_in_triangle(double x1, double y1,
+                                      double x2, double y2,
+                                      double x3, double y3,
                                       double x,  double y)
     {
         bool cp1 = calc_point_location(x1, y1, x2, y2, x, y) < 0.0;
@@ -56,8 +56,8 @@ namespace agg
 
 
     //------------------------------------------------calc_point_line_distance
-    AGG_INLINE double calc_point_line_distance(double x1, double y1, 
-                                               double x2, double y2, 
+    AGG_INLINE double calc_point_line_distance(double x1, double y1,
+                                               double x2, double y2,
                                                double x,  double y)
     {
         double dx = x2-x1;
@@ -89,7 +89,7 @@ namespace agg
     {
         double dx = x2 - x1;
         double dy = y2 - y1;
-        double d = sqrt(dx*dx + dy*dy); 
+        double d = sqrt(dx*dx + dy*dy);
         *x = thickness * dy / d;
         *y = thickness * dx / d;
     }
@@ -103,15 +103,15 @@ namespace agg
                                     double d)
     {
         double dx1=0.0;
-        double dy1=0.0; 
+        double dy1=0.0;
         double dx2=0.0;
-        double dy2=0.0; 
+        double dy2=0.0;
         double dx3=0.0;
-        double dy3=0.0; 
+        double dy3=0.0;
         double loc = calc_point_location(x1, y1, x2, y2, x3, y3);
         if(fabs(loc) > intersection_epsilon)
         {
-            if(calc_point_location(x1, y1, x2, y2, x3, y3) > 0.0) 
+            if(calc_point_location(x1, y1, x2, y2, x3, y3) > 0.0)
             {
                 d = -d;
             }
@@ -162,8 +162,8 @@ namespace agg
     AGG_INLINE unsigned fast_sqrt(unsigned val)
     {
     #if defined(_M_IX86) && defined(_MSC_VER) && !defined(AGG_NO_ASM)
-        //For Ix86 family processors this assembler code is used. 
-        //The key command here is bsr - determination the number of the most 
+        //For Ix86 family processors this assembler code is used.
+        //The key command here is bsr - determination the number of the most
         //significant bit of the value. For other processors
         //(and maybe compilers) the pure C "#else" section is used.
         __asm
@@ -186,15 +186,15 @@ namespace agg
         }
     #else
 
-        //This code is actually pure C and portable to most 
-        //arcitectures including 64bit ones. 
+        //This code is actually pure C and portable to most
+        //arcitectures including 64bit ones.
         unsigned t = val;
         int bit=0;
         unsigned shift = 11;
 
         //The following piece of code is just an emulation of the
         //Ix86 assembler command "bsr" (see above). However on old
-        //Intels (like Intel MMX 233MHz) this code is about twice 
+        //Intels (like Intel MMX 233MHz) this code is about twice
         //faster (sic!) then just one "bsr". On PIII and PIV the
         //bsr is optimized quite well.
         bit = t >> 24;

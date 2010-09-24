@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -142,13 +142,13 @@ class JobData : private ThreadHelpBase
             /// this job is used by the global event broadcaster
             E_DOCUMENTEVENT
         };
-        
+
         /** Some jobs can be registered to "logical events", which are generated on demand if another document event
             occures. E.g. "onDocumentOpened" in case "OnNew" or "OnLoad" was notified to the JobExecutor instance.
             And normaly the original event is transported as parameter set to the executed job. But then such job
             cant differ between e.g. "OnNew" and "onDocumentOpened".
             That's why we must know, for which type of event the job was realy triggered .-)
-        
+
             The information "sDocEvent" from this struct must be set on the member JobData::m_sEvent from outside
             user of such Jobdata structure.
         */
@@ -156,7 +156,7 @@ class JobData : private ThreadHelpBase
         {
             ::rtl::OUString m_sJobName;
             ::rtl::OUString m_sDocEvent;
-            
+
             TJob2DocEventBinding(const ::rtl::OUString& sJobName ,
                                  const ::rtl::OUString& sDocEvent)
                 : m_sJobName (sJobName )

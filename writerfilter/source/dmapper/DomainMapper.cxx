@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -204,9 +204,9 @@ void DomainMapper::attribute(Id nName, Value & val)
     static ::rtl::OUString sLocalBookmarkName;
     sal_Int32 nIntValue = val.getInt();
     rtl::OUString sStringValue = val.getString();
-    
+
     SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
-    
+
     // printf ( "DomainMapper::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nName, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( nName, nIntValue );
@@ -2152,7 +2152,7 @@ void DomainMapper::attribute(Id nName, Value & val)
                     pSectionContext->SetGridLinePitch( ConversionHelper::convertTwipToMM100( nIntValue ) );
                 }
             }
-        break;  
+        break;
             case NS_ooxml::LN_CT_DocGrid_charSpace:
                 /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
             {
@@ -2160,8 +2160,8 @@ void DomainMapper::attribute(Id nName, Value & val)
                 if(pSectionContext)
                 {
                     pSectionContext->SetDxtCharSpace( nIntValue );
-                }                
-            }    
+                }
+            }
             break;
             case NS_ooxml::LN_CT_DocGrid_type:
                 /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
@@ -2663,7 +2663,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         break;  // sprmPPropRMark
     case NS_sprm::LN_POutLvl:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        { 
+        {
             if( m_pImpl->IsStyleSheetImport() )
             {
                 sal_Int16 nLvl = static_cast< sal_Int16 >( nIntValue );
@@ -3638,15 +3638,15 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
             break;
             default:;
         }
-        
+
         PropertyMap * pTargetContext = rContext.get();
-        
-        if (pSectionContext != NULL && 
+
+        if (pSectionContext != NULL &&
             nSprmId == NS_ooxml::LN_EG_SectPrContents_textDirection)
         {
             pTargetContext = pSectionContext;
         }
-        
+
         pTargetContext->Insert(PROP_WRITING_MODE, false, uno::makeAny( nDirection ) );
     }
     break;  // sprmSTextFlow
@@ -3996,11 +3996,11 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         //apply numbering to paragraph if it was set at the style
         OSL_ENSURE( pEntry.get(), "no style sheet found" );
         const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : 0);
-        
+
         if( pStyleSheetProperties && pStyleSheetProperties->GetListId() >= 0 )
-            rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny( 
+            rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny(
                         ListDef::GetStyleName( pStyleSheetProperties->GetListId( ) ) ), false);
-        
+
         if( pStyleSheetProperties && pStyleSheetProperties->GetListLevel() >= 0 )
             rContext->Insert( PROP_NUMBERING_LEVEL, true, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
     }
@@ -4088,7 +4088,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
                 m_pImpl->ResetGraphicImport();
                 // todo: It's a shape, now start shape import
             }
-        } 
+        }
     }
     break;
     case NS_ooxml::LN_EG_RPrBase_vertAlign:
@@ -4196,7 +4196,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
                 {
                     m_pImpl->appendOLE( sStreamName, pOLEHandler );
                 }
-            } 
+            }
         }
     }
     break;
@@ -4246,7 +4246,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 #endif
         }
     }
-    
+
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->addTag(rContext->toTag());
     dmapper_logger->endElement("DomainMapper.sprm");
@@ -4263,7 +4263,7 @@ void DomainMapper::entry(int /*pos*/,
 #endif
 
     ref->resolve(*this);
-    
+
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement("DomainMapper.entry");
 #endif
@@ -4349,17 +4349,17 @@ void DomainMapper::startShape( uno::Reference< drawing::XShape > xShape )
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("shape");
-#endif    
-    m_pImpl->PushShapeContext( xShape );        
+#endif
+    m_pImpl->PushShapeContext( xShape );
 }
 
-void DomainMapper::endShape( ) 
+void DomainMapper::endShape( )
 {
     m_pImpl->PopShapeContext( );
-    
+
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement("shape");
-#endif    
+#endif
 }
 
 /*-- 13.06.2007 16:15:55---------------------------------------------------
@@ -4503,7 +4503,7 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
 
             if (pContext == NULL)
                 pContext.reset(new PropertyMap());
-            
+
             m_pImpl->appendTextPortion( sText, pContext );
         }
     }
@@ -4572,7 +4572,7 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
             {
                 if (pContext == NULL)
                     pContext.reset(new PropertyMap());
-                
+
                 m_pImpl->appendTextPortion( sText, pContext );
             }
 

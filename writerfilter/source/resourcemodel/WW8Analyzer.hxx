@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ struct eqSalUInt32
     bool operator () (sal_uInt32 n1, sal_uInt32 n2) const;
 };
 
-class WW8Analyzer : public Properties, public Table, 
+class WW8Analyzer : public Properties, public Table,
                     public BinaryObj, public Stream
 {
     typedef map<sal_uInt32, sal_uInt32> SprmMap;
@@ -69,7 +69,7 @@ public:
     virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
     // BinaryObj
-    
+
     virtual void data(const sal_uInt8* buf, size_t len,
                       writerfilter::Reference<Properties>::Pointer_t ref);
 
@@ -84,9 +84,9 @@ public:
     virtual void text(const sal_uInt8 * data, size_t len);
     virtual void utext(const sal_uInt8 * data, size_t len);
     virtual void props(writerfilter::Reference<Properties>::Pointer_t ref);
-    virtual void table(Id name, 
+    virtual void table(Id name,
                        writerfilter::Reference<Table>::Pointer_t ref);
-    virtual void substream(Id name, 
+    virtual void substream(Id name,
                            writerfilter::Reference<Stream>::Pointer_t ref);
     virtual void info(const string & info);
     virtual void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );

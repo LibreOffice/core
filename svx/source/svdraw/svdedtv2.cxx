@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -183,7 +183,7 @@ void SdrEditView::MovMarkedToTop()
 void SdrEditView::MovMarkedToBtm()
 {
     ULONG nAnz=GetMarkedObjectCount();
-    if (nAnz!=0) 
+    if (nAnz!=0)
     {
         const bool bUndo = IsUndoEnabled();
 
@@ -591,9 +591,9 @@ void SdrEditView::ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) 
     if(pSource && pDest)
     {
         SfxItemSet aSet(pMod->GetItemPool(),
-            SDRATTR_START,				SDRATTR_NOTPERSIST_FIRST-1,
-            SDRATTR_NOTPERSIST_LAST+1,	SDRATTR_END,
-            EE_ITEMS_START,				EE_ITEMS_END,
+            SDRATTR_START,              SDRATTR_NOTPERSIST_FIRST-1,
+            SDRATTR_NOTPERSIST_LAST+1,  SDRATTR_END,
+            EE_ITEMS_START,             EE_ITEMS_END,
             0, 0); // #52757#, #52762#
 
         aSet.Put(pSource->GetMergedItemSet());
@@ -628,24 +628,24 @@ sal_Bool SdrEditView::ImpCanConvertForCombine(const SdrObject* pObj) const
 {
     SdrObjList* pOL = pObj->GetSubList();
 
-    if(pOL && !pObj->Is3DObj()) 
+    if(pOL && !pObj->Is3DObj())
     {
         SdrObjListIter aIter(*pOL, IM_DEEPNOGROUPS);
 
-        while(aIter.IsMore()) 
+        while(aIter.IsMore())
         {
             SdrObject* pObj1 = aIter.Next();
 
             // Es muessen alle Member einer Gruppe konvertierbar sein
-            if(!ImpCanConvertForCombine1(pObj1)) 
+            if(!ImpCanConvertForCombine1(pObj1))
             {
                 return sal_False;
             }
         }
-    } 
-    else 
+    }
+    else
     {
-        if(!ImpCanConvertForCombine1(pObj)) 
+        if(!ImpCanConvertForCombine1(pObj))
         {
             return sal_False;
         }
@@ -659,38 +659,38 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, s
     basegfx::B2DPolyPolygon aRetval;
     SdrPathObj* pPath = PTR_CAST(SdrPathObj, pObj);
 
-    if(bCombine && pPath && !pObj->GetOutlinerParaObject()) 
+    if(bCombine && pPath && !pObj->GetOutlinerParaObject())
     {
         aRetval = pPath->GetPathPoly();
-    } 
-    else 
+    }
+    else
     {
         SdrObject* pConvObj = pObj->ConvertToPolyObj(bCombine, sal_False);
 
-        if(pConvObj) 
+        if(pConvObj)
         {
             SdrObjList* pOL = pConvObj->GetSubList();
-            
-            if(pOL) 
+
+            if(pOL)
             {
                 SdrObjListIter aIter(*pOL, IM_DEEPNOGROUPS);
 
-                while(aIter.IsMore()) 
+                while(aIter.IsMore())
                 {
                     SdrObject* pObj1 = aIter.Next();
                     pPath = PTR_CAST(SdrPathObj, pObj1);
 
-                    if(pPath) 
+                    if(pPath)
                     {
                         aRetval.append(pPath->GetPathPoly());
                     }
                 }
-            } 
-            else 
+            }
+            else
             {
                 pPath = PTR_CAST(SdrPathObj, pConvObj);
 
-                if(pPath) 
+                if(pPath)
                 {
                     aRetval = pPath->GetPathPoly();
                 }
@@ -707,20 +707,20 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon(const SdrObject* pObj, sa
 {
     SdrObjList* pOL = pObj->GetSubList();
 
-    if(pOL && !pObj->Is3DObj()) 
+    if(pOL && !pObj->Is3DObj())
     {
         basegfx::B2DPolyPolygon aRetval;
         SdrObjListIter aIter(*pOL, IM_DEEPNOGROUPS);
 
-        while(aIter.IsMore()) 
+        while(aIter.IsMore())
         {
             SdrObject* pObj1 = aIter.Next();
             aRetval.append(ImpGetPolyPolygon1(pObj1, bCombine));
         }
 
         return aRetval;
-    } 
-    else 
+    }
+    else
     {
         return ImpGetPolyPolygon1(pObj, bCombine);
     }
@@ -754,12 +754,12 @@ basegfx::B2DPolygon SdrEditView::ImpCombineToSinglePolygon(const basegfx::B2DPol
                     const basegfx::B2DPoint aCB(aCandidate.getB2DPoint(aCandidate.count() - 1L));
                     const basegfx::B2DPoint aRA(aRetval.getB2DPoint(0L));
                     const basegfx::B2DPoint aRB(aRetval.getB2DPoint(aRetval.count() - 1L));
-                    
+
                     const double fRACA(basegfx::B2DVector(aCA - aRA).getLength());
                     const double fRACB(basegfx::B2DVector(aCB - aRA).getLength());
                     const double fRBCA(basegfx::B2DVector(aCA - aRB).getLength());
                     const double fRBCB(basegfx::B2DVector(aCB - aRB).getLength());
-                    
+
                     const double fSmallestRA(fRACA < fRACB ? fRACA : fRACB);
                     const double fSmallestRB(fRBCA < fRBCB ? fRBCA : fRBCB);
 
@@ -795,9 +795,9 @@ basegfx::B2DPolygon SdrEditView::ImpCombineToSinglePolygon(const basegfx::B2DPol
 // for distribution dialog function
 struct ImpDistributeEntry
 {
-    SdrObject*					mpObj;
-    INT32						mnPos;
-    INT32						mnLength;
+    SdrObject*                  mpObj;
+    INT32                       mnPos;
+    INT32                       mnLength;
 };
 
 DECLARE_LIST(ImpDistributeEntryList, ImpDistributeEntry*)
@@ -1253,19 +1253,19 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
     const sal_uInt32 nAnz(GetMarkedObjectCount());
     const SdrObject* pAttrObj = 0L;
 
-    for(sal_uInt32 a(nAnz); a > 0L; ) 
+    for(sal_uInt32 a(nAnz); a > 0L; )
     {
         a--;
         SdrMark* pM = GetSdrMarkByIndex(a);
         SdrObject* pObj = pM->GetMarkedSdrObj();
         SdrObjList* pThisOL = pObj->GetObjList();
 
-        if(pAktOL != pThisOL) 
+        if(pAktOL != pThisOL)
         {
             pAktOL = pThisOL;
         }
 
-        if(ImpCanConvertForCombine(pObj)) 
+        if(ImpCanConvertForCombine(pObj))
         {
             // Obj merken fuer Attribute kopieren
             pAttrObj = pObj;
@@ -1276,7 +1276,7 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
             basegfx::B2DPolyPolygon aTmpPoly(basegfx::tools::simplifyCurveSegments(ImpGetPolyPolygon(pObj, sal_True)));
             aPolyPolygon.insert(0L, aTmpPoly);
 
-            if(!pInsOL) 
+            if(!pInsOL)
             {
                 nInsPos = pObj->GetOrdNum() + 1L;
                 pInsPV = pM->GetPageView();
@@ -1287,7 +1287,7 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
         }
     }
 
-    if(bNoPolyPoly) 
+    if(bNoPolyPoly)
     {
         basegfx::B2DPolygon aCombinedPolygon(ImpCombineToSinglePolygon(aPolyPolygon));
         aPolyPolygon.clear();
@@ -1296,25 +1296,25 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
 
     const sal_uInt32 nPolyCount(aPolyPolygon.count());
 
-    if(nPolyCount) 
+    if(nPolyCount)
     {
         SdrObjKind eKind = OBJ_PATHFILL;
 
-        if(nPolyCount > 1L) 
+        if(nPolyCount > 1L)
         {
             aPolyPolygon.setClosed(true);
-        } 
-        else 
-        { 
+        }
+        else
+        {
             // auf Polyline Checken
             const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0L));
             const sal_uInt32 nPointCount(aPolygon.count());
-            
-            if(nPointCount <= 2L) 
+
+            if(nPointCount <= 2L)
             {
                 eKind = OBJ_PATHLINE;
             }
-            else 
+            else
             {
                 if(!aPolygon.isClosed())
                 {
@@ -1395,17 +1395,17 @@ sal_Bool SdrEditView::ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPolyg
     sal_Bool bCan(sal_False);
     const sal_uInt32 nPolygonCount(rPpolyPolygon.count());
 
-    if(nPolygonCount >= 2L) 
+    if(nPolygonCount >= 2L)
     {
         // #i69172# dismantle makes sense with 2 or more polygons in a polyPolygon
         bCan = sal_True;
     }
-    else if(bMakeLines && 1L == nPolygonCount) 
-    { 
+    else if(bMakeLines && 1L == nPolygonCount)
+    {
         // #i69172# ..or with at least 2 edges (curves or lines)
         const basegfx::B2DPolygon aPolygon(rPpolyPolygon.getB2DPolygon(0L));
         const sal_uInt32 nPointCount(aPolygon.count());
-        
+
         if(nPointCount > 2L)
         {
             bCan = sal_True;
@@ -1421,20 +1421,20 @@ sal_Bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, sal_Bool bMakeLines
     sal_Bool bMin1PolyPoly(sal_False); // TRUE=mind. 1 PolyPolygon mit mehr als ein Polygon vorhanden
     SdrObjList* pOL = pObj->GetSubList();
 
-    if(pOL) 
+    if(pOL)
     {
         // Aha, Gruppenobjekt. Also alle Member ansehen.
         // Alle muessen PathObjs sein !
         SdrObjListIter aIter(*pOL, IM_DEEPNOGROUPS);
 
-        while(aIter.IsMore() && !bOtherObjs) 
+        while(aIter.IsMore() && !bOtherObjs)
         {
             const SdrObject* pObj1 = aIter.Next();
             const SdrPathObj* pPath = PTR_CAST(SdrPathObj, pObj1);
 
-            if(pPath) 
+            if(pPath)
             {
-                if(ImpCanDismantle(pPath->GetPathPoly(), bMakeLines)) 
+                if(ImpCanDismantle(pPath->GetPathPoly(), bMakeLines))
                 {
                     bMin1PolyPoly = sal_True;
                 }
@@ -1442,13 +1442,13 @@ sal_Bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, sal_Bool bMakeLines
                 SdrObjTransformInfoRec aInfo;
                 pObj1->TakeObjInfo(aInfo);
 
-                if(!aInfo.bCanConvToPath) 
+                if(!aInfo.bCanConvToPath)
                 {
                     // Passiert z.B. im Falle Fontwork (Joe, 28-11-95)
-                    bOtherObjs = sal_True; 
+                    bOtherObjs = sal_True;
                 }
-            } 
-            else 
+            }
+            else
             {
                 bOtherObjs = sal_True;
             }
@@ -1462,7 +1462,7 @@ sal_Bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, sal_Bool bMakeLines
         // #i37011#
         if(pPath)
         {
-            if(ImpCanDismantle(pPath->GetPathPoly(),bMakeLines)) 
+            if(ImpCanDismantle(pPath->GetPathPoly(),bMakeLines))
             {
                 bMin1PolyPoly = sal_True;
             }
@@ -1471,12 +1471,12 @@ sal_Bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, sal_Bool bMakeLines
             pObj->TakeObjInfo(aInfo);
 
             // #69711 : new condition IsLine() to be able to break simple Lines
-            if(!(aInfo.bCanConvToPath || aInfo.bCanConvToPoly) && !pPath->IsLine()) 
+            if(!(aInfo.bCanConvToPath || aInfo.bCanConvToPoly) && !pPath->IsLine())
             {
                 // Passiert z.B. im Falle Fontwork (Joe, 28-11-95)
-                bOtherObjs = sal_True; 
+                bOtherObjs = sal_True;
             }
-        } 
+        }
         else if(pCustomShape)
         {
             if(bMakeLines)
@@ -1507,7 +1507,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
         const basegfx::B2DPolyPolygon& rPolyPolygon(pSrcPath->GetPathPoly());
         const sal_uInt32 nPolyCount(rPolyPolygon.count());
 
-        for(sal_uInt32 a(0); a < nPolyCount; a++) 
+        for(sal_uInt32 a(0); a < nPolyCount; a++)
         {
             const basegfx::B2DPolygon& rCandidate(rPolyPolygon.getB2DPolygon(a));
             const sal_uInt32 nPointCount(rCandidate.count());

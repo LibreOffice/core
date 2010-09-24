@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,13 +51,13 @@ public:
     OInterfaceTest() {}
     ~OInterfaceTest() {}
 
-public:	
+public:
     // XInterface
-    Any	SAL_CALL queryInterface( const com::sun::star::uno::Type & aType) throw ( ::com::sun::star::uno::RuntimeException );
-    void 		SAL_CALL acquire() throw() 						 { OWeakObject::acquire(); }
-    void 		SAL_CALL release() throw()						 { OWeakObject::release(); }
+    Any SAL_CALL queryInterface( const com::sun::star::uno::Type & aType) throw ( ::com::sun::star::uno::RuntimeException );
+    void        SAL_CALL acquire() throw()                       { OWeakObject::acquire(); }
+    void        SAL_CALL release() throw()                       { OWeakObject::release(); }
 
-public:	
+public:
     virtual void SAL_CALL setIn( const ::com::sun::star::uno::Reference< ::test::XCallMe >& callback ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setInOut( ::com::sun::star::uno::Reference< ::test::XCallMe >& callback ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL getOut( ::com::sun::star::uno::Reference< ::test::XCallMe >& callback ) throw(::com::sun::star::uno::RuntimeException);
@@ -78,11 +78,11 @@ public:
     OCallMe() : m_nLastToDos(-1) {}
     ~OCallMe() {}
 
-public:	
+public:
     // XInterface
-    Any	SAL_CALL queryInterface( const com::sun::star::uno::Type & aType) throw ( ::com::sun::star::uno::RuntimeException );
-    void 		SAL_CALL acquire()throw() 						 { OWeakObject::acquire(); }
-    void 		SAL_CALL release()throw() 						 { OWeakObject::release(); }
+    Any SAL_CALL queryInterface( const com::sun::star::uno::Type & aType) throw ( ::com::sun::star::uno::RuntimeException );
+    void        SAL_CALL acquire()throw()                        { OWeakObject::acquire(); }
+    void        SAL_CALL release()throw()                        { OWeakObject::release(); }
 public:
     // XCallMe
     virtual void SAL_CALL call( const ::rtl::OUString& s, sal_Int32 nToDo )
@@ -114,11 +114,11 @@ public:
     OTestFactory() {}
     ~OTestFactory() {}
 
-public:	
+public:
     // XInterface
-    Any	        SAL_CALL queryInterface( const  com::sun::star::uno::Type & aType ) throw ( ::com::sun::star::uno::RuntimeException );
-    void 		SAL_CALL acquire() throw() 						 { OWeakObject::acquire(); }
-    void 		SAL_CALL release() throw()						 { OWeakObject::release(); }
+    Any         SAL_CALL queryInterface( const  com::sun::star::uno::Type & aType ) throw ( ::com::sun::star::uno::RuntimeException );
+    void        SAL_CALL acquire() throw()                       { OWeakObject::acquire(); }
+    void        SAL_CALL release() throw()                       { OWeakObject::release(); }
 public:
     virtual ::com::sun::star::uno::Reference< ::test::XCallMe > SAL_CALL createCallMe(  )
         throw(::com::sun::star::uno::RuntimeException);
@@ -138,12 +138,12 @@ public:
         m_rSMgr( r )
         {}
     ~OInstanceProvider(){ printf( "instance provider dies\n" );}
-public:	
+public:
     // XInterface
-    Any	        SAL_CALL queryInterface( const Type & aType)throw ( ::com::sun::star::uno::RuntimeException );
-    void 		SAL_CALL acquire()throw() 						 { OWeakObject::acquire(); }
-    void 		SAL_CALL release() throw()						 { OWeakObject::release(); }
-    
+    Any         SAL_CALL queryInterface( const Type & aType)throw ( ::com::sun::star::uno::RuntimeException );
+    void        SAL_CALL acquire()throw()                        { OWeakObject::acquire(); }
+    void        SAL_CALL release() throw()                       { OWeakObject::release(); }
+
 public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
            getInstance( const ::rtl::OUString& sObjectName )

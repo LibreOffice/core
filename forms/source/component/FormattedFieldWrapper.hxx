@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,21 +41,21 @@ class OEditModel;
 //==================================================================
 //= OFormattedFieldWrapper
 //==================================================================
-typedef ::cppu::WeakAggImplHelper3	<	::com::sun::star::io::XPersistObject
-                                    ,	::com::sun::star::lang::XServiceInfo
-                                    ,	::com::sun::star::util::XCloneable
-                                    >	OFormattedFieldWrapper_Base;
+typedef ::cppu::WeakAggImplHelper3  <   ::com::sun::star::io::XPersistObject
+                                    ,   ::com::sun::star::lang::XServiceInfo
+                                    ,   ::com::sun::star::util::XCloneable
+                                    >   OFormattedFieldWrapper_Base;
 
 class OFormattedFieldWrapper : public OFormattedFieldWrapper_Base
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>	m_xServiceFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xServiceFactory;
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation> 		m_xAggregate;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
 
-    OEditModel*		m_pEditPart;
+    OEditModel*     m_pEditPart;
         // if we act as formatted this is used to write the EditModel part
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject> 	m_xFormattedPart;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>     m_xFormattedPart;
         // if we act as formatted, this is the PersistObject interface of our aggregate, used
         // to read and write the FormattedModel part
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ namespace accessibility
     class AccessibleBrowseBoxCell : public AccessibleBrowseBoxBase
     {
     private:
-        sal_Int32				m_nRowPos;		// the row number of the table cell
-        sal_uInt16				m_nColPos;		// the column id of the table cell
+        sal_Int32               m_nRowPos;      // the row number of the table cell
+        sal_uInt16              m_nColPos;      // the column id of the table cell
 
     protected:
         // attribute access
-        inline sal_Int32	getRowPos( ) const { return m_nRowPos; }
-        inline sal_Int32	getColumnPos( ) const { return m_nColPos; }
+        inline sal_Int32    getRowPos( ) const { return m_nRowPos; }
+        inline sal_Int32    getColumnPos( ) const { return m_nColPos; }
 
     protected:
         // AccessibleBrowseBoxBase overridables
@@ -73,13 +73,13 @@ namespace accessibility
         virtual ~AccessibleBrowseBoxCell();
 
     private:
-        AccessibleBrowseBoxCell();													// never implemented
-        AccessibleBrowseBoxCell( const AccessibleBrowseBoxCell& );				// never implemented
-        AccessibleBrowseBoxCell& operator=( const AccessibleBrowseBoxCell& );	// never implemented
+        AccessibleBrowseBoxCell();                                                  // never implemented
+        AccessibleBrowseBoxCell( const AccessibleBrowseBoxCell& );              // never implemented
+        AccessibleBrowseBoxCell& operator=( const AccessibleBrowseBoxCell& );   // never implemented
     };
 
 // .................................................................................
-}	// namespace accessibility
+}   // namespace accessibility
 // .................................................................................
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <calbck.hxx>
-#include <errhdl.hxx> 		// Fuer die inline-ASSERTs
-#include <error.h>			// Fuer die inline-ASSERTs
+#include <errhdl.hxx>       // Fuer die inline-ASSERTs
+#include <error.h>          // Fuer die inline-ASSERTs
 #include <hints.hxx>
 #include <hash_map>
 #include <stringhash.hxx>
@@ -60,7 +60,7 @@ class SwDoc;
 class SwFmtVertOrient;
 class SwTxtNode;
 
-const sal_Unicode cBulletChar	= 0x2022;	// Charakter fuer Aufzaehlungen
+const sal_Unicode cBulletChar   = 0x2022;   // Charakter fuer Aufzaehlungen
 
 class SW_DLLPUBLIC SwNumFmt : public SvxNumberFormat, public SwClient
 {
@@ -88,8 +88,8 @@ public:
     void SetCharFmt( SwCharFmt* );
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
-    virtual void			SetCharFmtName(const String& rSet);
-    virtual const String&	GetCharFmtName()const;
+    virtual void            SetCharFmtName(const String& rSet);
+    virtual const String&   GetCharFmtName()const;
 
     virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0);
 
@@ -151,13 +151,13 @@ private:
 
     String sName;
     SwNumRuleType eRuleType;
-    USHORT nPoolFmtId;		// Id-fuer "automatich" erzeugte NumRules
-    USHORT nPoolHelpId;		// HelpId fuer diese Pool-Vorlage
-    BYTE nPoolHlpFileId; 	// FilePos ans Doc auf die Vorlagen-Hilfen
+    USHORT nPoolFmtId;      // Id-fuer "automatich" erzeugte NumRules
+    USHORT nPoolHelpId;     // HelpId fuer diese Pool-Vorlage
+    BYTE nPoolHlpFileId;    // FilePos ans Doc auf die Vorlagen-Hilfen
     BOOL bAutoRuleFlag : 1;
     BOOL bInvalidRuleFlag : 1;
-    BOOL bContinusNum : 1;	// Fortlaufende Numerierung - ohne Ebenen
-    BOOL bAbsSpaces : 1;	// die Ebenen repraesentieren absol. Einzuege
+    BOOL bContinusNum : 1;  // Fortlaufende Numerierung - ohne Ebenen
+    BOOL bAbsSpaces : 1;    // die Ebenen repraesentieren absol. Einzuege
     bool mbCountPhantoms;
 
     // --> OD 2008-02-11 #newlistlevelattrs#
@@ -252,8 +252,8 @@ public:
     static USHORT GetNumIndent( BYTE nLvl );
     static USHORT GetBullIndent( BYTE nLvl );
 
-    SwNumRuleType GetRuleType() const 			{ return eRuleType; }
-    void SetRuleType( SwNumRuleType eNew ) 		{ eRuleType = eNew;
+    SwNumRuleType GetRuleType() const           { return eRuleType; }
+    void SetRuleType( SwNumRuleType eNew )      { eRuleType = eNew;
                                                   bInvalidRuleFlag = TRUE; }
 
     // eine Art Copy-Constructor, damit die Num-Formate auch an den
@@ -271,17 +271,17 @@ public:
                   IDocumentListsAccess& rDocListAccess ); // #i36749#
     // <--
 
-    BOOL IsAutoRule() const 			{ return bAutoRuleFlag; }
-    void SetAutoRule( BOOL bFlag )		{ bAutoRuleFlag = bFlag; }
+    BOOL IsAutoRule() const             { return bAutoRuleFlag; }
+    void SetAutoRule( BOOL bFlag )      { bAutoRuleFlag = bFlag; }
 
-    BOOL IsInvalidRule() const 			{ return bInvalidRuleFlag; }
+    BOOL IsInvalidRule() const          { return bInvalidRuleFlag; }
     void SetInvalidRule( BOOL bFlag );
 
-    BOOL IsContinusNum() const 			{ return bContinusNum; }
-    void SetContinusNum( BOOL bFlag )	{ bContinusNum = bFlag; }
+    BOOL IsContinusNum() const          { return bContinusNum; }
+    void SetContinusNum( BOOL bFlag )   { bContinusNum = bFlag; }
 
-    BOOL IsAbsSpaces() const 			{ return bAbsSpaces; }
-    void SetAbsSpaces( BOOL bFlag )		{ bAbsSpaces = bFlag; }
+    BOOL IsAbsSpaces() const            { return bAbsSpaces; }
+    void SetAbsSpaces( BOOL bFlag )     { bAbsSpaces = bFlag; }
 
     // #115901#
     BOOL IsOutlineRule() const { return eRuleType == OUTLINE_RULE; }
@@ -290,17 +290,17 @@ public:
     void SetCountPhantoms(bool bCountPhantoms);
 
     // erfragen und setzen der Poolvorlagen-Id's
-    USHORT GetPoolFmtId() const			{ return nPoolFmtId; }
-    void SetPoolFmtId( USHORT nId ) 	{ nPoolFmtId = nId; }
+    USHORT GetPoolFmtId() const         { return nPoolFmtId; }
+    void SetPoolFmtId( USHORT nId )     { nPoolFmtId = nId; }
 
     // erfragen und setzen der Hilfe-Id's fuer die Document-Vorlagen
-    USHORT GetPoolHelpId() const 		{ return nPoolHelpId; }
-    void SetPoolHelpId( USHORT nId ) 	{ nPoolHelpId = nId; }
-    BYTE GetPoolHlpFileId() const 		{ return nPoolHlpFileId; }
-    void SetPoolHlpFileId( BYTE nId ) 	{ nPoolHlpFileId = nId; }
+    USHORT GetPoolHelpId() const        { return nPoolHelpId; }
+    void SetPoolHelpId( USHORT nId )    { nPoolHelpId = nId; }
+    BYTE GetPoolHlpFileId() const       { return nPoolHlpFileId; }
+    void SetPoolHlpFileId( BYTE nId )   { nPoolHlpFileId = nId; }
 
-    void		SetSvxRule(const SvxNumRule&, SwDoc* pDoc);
-    SvxNumRule	MakeSvxNumRule() const;
+    void        SetSvxRule(const SvxNumRule&, SwDoc* pDoc);
+    SvxNumRule  MakeSvxNumRule() const;
 
     // #i23726#, #i23725#
     // --> OD 2008-06-09 #i90078#
@@ -371,4 +371,4 @@ namespace numfunc
     SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode();
 }
 
-#endif	// _NUMRULE_HXX
+#endif  // _NUMRULE_HXX

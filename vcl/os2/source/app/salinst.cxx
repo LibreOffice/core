@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,9 +88,9 @@ MRESULT EXPENTRY SalComWndProc( HWND hWnd, ULONG nMsg, MPARAM nMP1, MPARAM nMP2 
 class SalYieldMutex : public vos::OMutex
 {
 public:
-    Os2SalInstance*			mpInstData;
-    ULONG					mnCount;
-    ULONG					mnThreadId;
+    Os2SalInstance*         mpInstData;
+    ULONG                   mnCount;
+    ULONG                   mnThreadId;
 
 public:
                             SalYieldMutex( Os2SalInstance* pInstData );
@@ -99,16 +99,16 @@ public:
     virtual void SAL_CALL       release();
     virtual sal_Bool SAL_CALL   tryToAcquire();
 
-    ULONG					GetAcquireCount( ULONG nThreadId );
+    ULONG                   GetAcquireCount( ULONG nThreadId );
 };
 
 // -----------------------------------------------------------------------
 
 SalYieldMutex::SalYieldMutex( Os2SalInstance* pInstData )
 {
-    mpInstData	= pInstData;
-    mnCount 	= 0;
-    mnThreadId	= 0;
+    mpInstData  = pInstData;
+    mnCount     = 0;
+    mnThreadId  = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -302,8 +302,8 @@ void ImplSalAcquireYieldMutex( ULONG nCount )
 
 void ImplDbgTestSolarMutex()
 {
-    SalData*	pSalData = GetSalData();
-    ULONG		nCurThreadId = GetCurrentThreadId();
+    SalData*    pSalData = GetSalData();
+    ULONG       nCurThreadId = GetCurrentThreadId();
     if ( pSalData->mnAppThreadId != nCurThreadId )
     {
         if ( pSalData->mpFirstInstance )
@@ -407,7 +407,7 @@ printf("DeInitSalMain\n");
 
 SalInstance* CreateSalInstance()
 {
-    SalData*		pSalData = GetSalData();
+    SalData*        pSalData = GetSalData();
 
     // determine the os2 version
     ULONG nMayor;
@@ -452,12 +452,12 @@ SalInstance* CreateSalInstance()
     Os2SalInstance* pInst = new Os2SalInstance;
 
     // init instance (only one instance in this version !!!)
-    pSalData->mpFirstInstance	= pInst;
-    pInst->mhAB		= pSalData->mhAB;
-    pInst->mhMQ		= pSalData->mhMQ;
-    pInst->mnArgc	= pSalData->mnArgc;
-    pInst->mpArgv	= pSalData->mpArgv;
-    pInst->mhComWnd	= hComWnd;
+    pSalData->mpFirstInstance   = pInst;
+    pInst->mhAB     = pSalData->mhAB;
+    pInst->mhMQ     = pSalData->mhMQ;
+    pInst->mnArgc   = pSalData->mnArgc;
+    pInst->mpArgv   = pSalData->mpArgv;
+    pInst->mhComWnd = hComWnd;
 
     // AppIcon ermitteln
     ImplLoadSalIcon( SAL_RESID_ICON_DEFAULT, pInst->mhAppIcon);
@@ -474,7 +474,7 @@ void DestroySalInstance( SalInstance* pInst )
 {
     SalData* pSalData = GetSalData();
 
-    //	(only one instance in this version !!!)
+    //  (only one instance in this version !!!)
     ImplFreeSalGDI();
 
 #ifdef ENABLE_IME
@@ -494,9 +494,9 @@ void DestroySalInstance( SalInstance* pInst )
 
 Os2SalInstance::Os2SalInstance()
 {
-    mhComWnd				= 0;
-    mpSalYieldMutex			= new SalYieldMutex( this );
-    mpSalWaitMutex			= new vos::OMutex;
+    mhComWnd                = 0;
+    mpSalYieldMutex         = new SalYieldMutex( this );
+    mpSalWaitMutex          = new vos::OMutex;
     mnYieldWaitCount         = 0;
     mpSalYieldMutex->acquire();
     ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
@@ -537,7 +537,7 @@ void Os2SalInstance::AcquireYieldMutex( ULONG nCount )
 
 static void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
 {
-    QMSG			aMsg;
+    QMSG            aMsg;
     bool bWasMsg = false, bOneEvent = false;
     bool bQuit = false;
 
@@ -563,7 +563,7 @@ static void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
         else
             bQuit = true;
     }
-    
+
     if (bQuit)
     {
         ImplSalYieldMutexAcquireWithWait();
@@ -582,11 +582,11 @@ static void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
 
 void Os2SalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
-    SalYieldMutex*	pYieldMutex = mpSalYieldMutex;
-    SalData*		pSalData = GetSalData();
-    ULONG			nCurThreadId = GetCurrentThreadId();
-    ULONG			nCount = pYieldMutex->GetAcquireCount( nCurThreadId );
-    ULONG			n = nCount;
+    SalYieldMutex*  pYieldMutex = mpSalYieldMutex;
+    SalData*        pSalData = GetSalData();
+    ULONG           nCurThreadId = GetCurrentThreadId();
+    ULONG           nCount = pYieldMutex->GetAcquireCount( nCurThreadId );
+    ULONG           n = nCount;
     while ( n )
     {
         pYieldMutex->release();
@@ -594,7 +594,7 @@ void Os2SalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
     if ( pSalData->mnAppThreadId != nCurThreadId )
     {
-        // #97739# A SendMessage call blocks until the called thread (here: the main thread) 
+        // #97739# A SendMessage call blocks until the called thread (here: the main thread)
         // returns. During a yield however, messages are processed in the main thread that might
         // result in a new message loop due to opening a dialog. Thus, SendMessage would not
         // return which will block this thread!
@@ -664,7 +664,7 @@ MRESULT EXPENTRY SalComWndProc( HWND hWnd, ULONG nMsg,
             return 0;
         case SAL_MSG_DESTROYHWND:
             //We only destroy the native window here. We do NOT destroy the SalFrame contained
-            //in the structure (GetWindowPtr()). 
+            //in the structure (GetWindowPtr()).
             if (WinDestroyWindow((HWND)nMP2) == 0)
             {
                 OSL_ENSURE(0, "DestroyWindow failed!");
@@ -700,7 +700,7 @@ MRESULT EXPENTRY SalComWndProc( HWND hWnd, ULONG nMsg,
 bool Os2SalInstance::AnyInput( USHORT nType )
 {
     SalData* pSalData = GetSalData();
-    QMSG	aQMSG;
+    QMSG    aQMSG;
 
     if ( (nType & (INPUT_ANY)) == INPUT_ANY )
     {
@@ -788,7 +788,7 @@ void Os2SalInstance::DestroyFrame( SalFrame* pFrame )
 
 SalObject* Os2SalInstance::CreateObject( SalFrame* pParent,
                                          SystemWindowData* /*pWindowData*/, // SystemWindowData meaningless on Windows
-                                         BOOL /*bShow*/ ) 
+                                         BOOL /*bShow*/ )
 {
     // Um auf Main-Thread umzuschalten
     return (SalObject*)WinSendMsg( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (MPARAM)pParent );
@@ -806,8 +806,8 @@ void Os2SalInstance::DestroyObject( SalObject* pObject )
 
 void* Os2SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
 {
-    rReturnedBytes	= 1;
-    rReturnedType	= AsciiCString;
+    rReturnedBytes  = 1;
+    rReturnedType   = AsciiCString;
     return (void*) "";
 }
 
@@ -836,7 +836,7 @@ class Os2ImeStatus : public SalI18NImeStatus
   public:
     Os2ImeStatus() {}
     virtual ~Os2ImeStatus() {}
-    
+
     // asks whether there is a status window available
     // to toggle into menubar
     virtual bool canToggle() { return false; }

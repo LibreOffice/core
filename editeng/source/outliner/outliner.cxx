@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,13 +65,13 @@
 // #101498# calculate if it's RTL or not
 #include <unicode/ubidi.h>
 
-#define DEFAULT_SCALE	75
+#define DEFAULT_SCALE   75
 
-static const USHORT nDefStyles = 3;	// Sonderbehandlung fuer die ersten 3 Ebenen
+static const USHORT nDefStyles = 3; // Sonderbehandlung fuer die ersten 3 Ebenen
 static const USHORT nDefBulletIndent = 800;
 static const USHORT nDefBulletWidth = 700;
-static const USHORT	pDefBulletIndents[nDefStyles]= 	{ 1400, 800, 800 };
-static const USHORT	pDefBulletWidths[nDefStyles] = 	{ 1000, 850, 700 };
+static const USHORT pDefBulletIndents[nDefStyles]=  { 1400, 800, 800 };
+static const USHORT pDefBulletWidths[nDefStyles] =  { 1000, 850, 700 };
 
 USHORT lcl_ImplGetDefBulletWidth( sal_Int16 nDepth )
 {
@@ -502,8 +502,8 @@ bool Outliner::ImpConvertEdtToOut( sal_uInt32 nPara,EditView* pView)
     USHORT nTabs = 0;
     ESelection aDelSel;
 
-//	const SfxItemSet& rAttrs = pEditEngine->GetParaAttribs( (sal_uInt16)nPara );
-//	bool bAlreadyOutliner = rAttrs.GetItemState( EE_PARA_OUTLLRSPACE ) == SFX_ITEM_ON ? true : false;
+//  const SfxItemSet& rAttrs = pEditEngine->GetParaAttribs( (sal_uInt16)nPara );
+//  bool bAlreadyOutliner = rAttrs.GetItemState( EE_PARA_OUTLLRSPACE ) == SFX_ITEM_ON ? true : false;
 
     XubString aName;
     XubString aHeading_US( RTL_CONSTASCII_USTRINGPARAM( "heading" ) );
@@ -862,7 +862,7 @@ BOOL Outliner::Expand( Paragraph* pPara )
 BOOL Outliner::Collapse( Paragraph* pPara )
 {
     DBG_CHKTHIS(Outliner,0);
-    if ( pParaList->HasVisibleChilds( pPara ) )	// expandiert
+    if ( pParaList->HasVisibleChilds( pPara ) ) // expandiert
     {
         OLUndoExpand* pUndo = 0;
         BOOL bUndo = FALSE;
@@ -925,7 +925,10 @@ Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
     }
 
     // #107508# Use original scale...
-    USHORT nScale = /* pEditEngine->IsFlatMode() ? DEFAULT_SCALE : */ pFmt->GetBulletRelSize();
+    USHORT nStretchX, nStretchY;
+    const_cast<Outliner*>(this)->GetGlobalCharStretching(nStretchX, nStretchY);
+
+    USHORT nScale = pFmt->GetBulletRelSize() * nStretchY / 100;
     ULONG nScaledLineHeight = aStdFont.GetSize().Height();
     nScaledLineHeight *= nScale*10;
     nScaledLineHeight /= 1000;
@@ -968,6 +971,12 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
         BOOL bRightToLeftPara = pEditEngine->IsRightToLeft( nPara );
 
         Rectangle aBulletArea( ImpCalcBulletArea( nPara, TRUE, FALSE ) );
+        USHORT nStretchX, nStretchY;
+        GetGlobalCharStretching(nStretchX, nStretchY);
+        aBulletArea = Rectangle( Point(aBulletArea.Left()*nStretchX/100,
+                                       aBulletArea.Top()),
+                                 Size(aBulletArea.GetWidth()*nStretchX/100,
+                                      aBulletArea.GetHeight()) );
 
         Paragraph* pPara = pParaList->GetParagraph( nPara );
         const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
@@ -982,11 +991,11 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                 Font aOldFont = pOutDev->GetFont();
                 pOutDev->SetFont( aBulletFont );
 
-                ParagraphInfos 	aParaInfos = pEditEngine->GetParagraphInfos( nPara );
+                ParagraphInfos  aParaInfos = pEditEngine->GetParagraphInfos( nPara );
                 Point aTextPos;
                 if ( !bVertical )
                 {
-//					aTextPos.Y() = rStartPos.Y() + aBulletArea.Bottom();
+//                  aTextPos.Y() = rStartPos.Y() + aBulletArea.Bottom();
                     aTextPos.Y() = rStartPos.Y() + ( bSymbol ? aBulletArea.Bottom() : aParaInfos.nFirstLineMaxAscent );
                     if ( !bRightToLeftPara )
                         aTextPos.X() = rStartPos.X() + aBulletArea.Left();
@@ -995,7 +1004,7 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                 }
                 else
                 {
-//					aTextPos.X() = rStartPos.X() - aBulletArea.Bottom();
+//                  aTextPos.X() = rStartPos.X() - aBulletArea.Bottom();
                     aTextPos.X() = rStartPos.X() - ( bSymbol ? aBulletArea.Bottom() : aParaInfos.nFirstLineMaxAscent );
                     aTextPos.Y() = rStartPos.Y() + aBulletArea.Left();
                 }
@@ -1227,7 +1236,7 @@ void Outliner::ImpFilterIndents( ULONG nFirstPara, ULONG nLastPara )
     pEditEngine->SetUpdateMode( bUpdate );
 }
 
-SfxUndoManager&	Outliner::GetUndoManager()
+SfxUndoManager& Outliner::GetUndoManager()
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetUndoManager();
@@ -1243,7 +1252,7 @@ void Outliner::ImpTextPasted( ULONG nStartPara, USHORT nCount )
     const ULONG nStart = nStartPara;
 
     Paragraph* pPara = pParaList->GetParagraph( nStartPara );
-//	Paragraph* pLastConverted = NULL;
+//  Paragraph* pLastConverted = NULL;
 //    bool bFirst = true;
 
     while( nCount && pPara )
@@ -1305,10 +1314,10 @@ BOOL Outliner::ImpCanIndentSelectedPages( OutlinerView* pCurView )
     // eingerueckt werden, evtl folgen aber weitere auf Ebene 0.
     if ( ( mnFirstSelPage == 0 ) && ( ImplGetOutlinerMode() != OUTLINERMODE_TEXTOBJECT ) )
     {
-        if ( nDepthChangedHdlPrevDepth == 1 )	// ist die einzige Seite
+        if ( nDepthChangedHdlPrevDepth == 1 )   // ist die einzige Seite
             return FALSE;
         else
-            pCurView->ImpCalcSelectedPages( FALSE );	// ohne die erste
+            pCurView->ImpCalcSelectedPages( FALSE );    // ohne die erste
     }
     return (BOOL)IndentingPagesHdl( pCurView );
 }
@@ -1327,13 +1336,13 @@ Outliner::Outliner( SfxItemPool* pPool, USHORT nMode )
 {
     DBG_CTOR( Outliner, 0 );
 
-    bStrippingPortions 	= FALSE;
-    bPasting			= FALSE;
+    bStrippingPortions  = FALSE;
+    bPasting            = FALSE;
 
-    nFirstPage			= 1;
-    bBlockInsCallback	= FALSE;
+    nFirstPage          = 1;
+    bBlockInsCallback   = FALSE;
 
-    nMaxDepth			= 9;
+    nMaxDepth           = 9;
 
     pParaList = new ParagraphList;
     pParaList->SetVisibleStateChangedHdl( LINK( this, Outliner, ParaVisibleStateChangedHdl ) );
@@ -1379,7 +1388,7 @@ OutlinerView* Outliner::RemoveView( OutlinerView* pView )
         pEditEngine->RemoveView(  pView->pEditView );
         aViewList.Remove( nPos );
     }
-    return NULL;	// MT: return ueberfluessig
+    return NULL;    // MT: return ueberfluessig
 }
 
 OutlinerView* Outliner::RemoveView( ULONG nIndex )
@@ -1391,7 +1400,7 @@ OutlinerView* Outliner::RemoveView( ULONG nIndex )
 
     pEditEngine->RemoveView( (USHORT)nIndex );
     aViewList.Remove( nIndex );
-    return NULL;	// MT: return ueberfluessig
+    return NULL;    // MT: return ueberfluessig
 }
 
 
@@ -1612,7 +1621,7 @@ Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust, BOOL bReturnP
         aTopLeft.X() = rLR.GetTxtLeft() + rLR.GetTxtFirstLineOfst() + nSpaceBefore;
 
         long nBulletWidth = Max( (long) -rLR.GetTxtFirstLineOfst(), (long) ((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()) );
-        if ( nBulletWidth < aBulletSize.Width() ) 	// Bullet macht sich Platz
+        if ( nBulletWidth < aBulletSize.Width() )   // Bullet macht sich Platz
             nBulletWidth = aBulletSize.Width();
 
         if ( bAdjust && !bOutlineMode )
@@ -1662,7 +1671,7 @@ Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust, BOOL bReturnP
             aTopLeft.X() += ( nBulletWidth - aBulletSize.Width() ) / 2;
         }
 
-        if ( aTopLeft.X() < 0 ) 	// dann draengeln
+        if ( aTopLeft.X() < 0 )     // dann draengeln
             aTopLeft.X() = 0;
 
         aBulletArea = Rectangle( aTopLeft, aBulletSize );
@@ -1887,13 +1896,13 @@ static bool isSameNumbering( const SvxNumberFormat& rN1, const SvxNumberFormat& 
 {
     if( rN1.GetNumberingType() != rN2.GetNumberingType() )
         return false;
-        
+
     if( rN1.GetNumStr(1) != rN2.GetNumStr(1) )
         return false;
-        
+
     if( (rN1.GetPrefix() != rN2.GetPrefix()) || (rN1.GetSuffix() != rN2.GetSuffix()) )
         return false;
-        
+
     return true;
 }
 
@@ -1918,10 +1927,10 @@ sal_uInt16 Outliner::ImplGetNumbering( USHORT nPara, const SvxNumberFormat* pPar
             break;
 
         const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
-        
+
         if( pFmt == 0 )
             continue; // ignore paragraphs without bullets
-            
+
         // check if numbering is the same
         if( !isSameNumbering( *pFmt, *pParaFmt ) )
             break;
@@ -2039,7 +2048,7 @@ String Outliner::ImplGetBulletText( USHORT nPara )
         if (pPara)
         {
     // MT: Optimierung mal wieder aktivieren...
-//	if( pPara->nFlags & PARAFLAG_SETBULLETTEXT )
+//  if( pPara->nFlags & PARAFLAG_SETBULLETTEXT )
         ImplCalcBulletText( nPara, FALSE, FALSE );
                 aRes = pPara->GetText();
         }
@@ -2171,7 +2180,7 @@ sal_Bool DrawPortionInfo::IsRTL() const
         // I do not have this info here. Is it necessary? I'll have to ask MT.
         const BYTE nDefaultDir = UBIDI_LTR; //IsRightToLeft( nPara ) ? UBIDI_RTL : UBIDI_LTR;
 
-        ubidi_setPara(pBidi, reinterpret_cast<const UChar *>(mrText.GetBuffer()), mrText.Len(), nDefaultDir, NULL, &nError);	// UChar != sal_Unicode in MinGW
+        ubidi_setPara(pBidi, reinterpret_cast<const UChar *>(mrText.GetBuffer()), mrText.Len(), nDefaultDir, NULL, &nError);    // UChar != sal_Unicode in MinGW
         nError = U_ZERO_ERROR;
 
 //        sal_Int32 nCount(ubidi_countRuns(pBidi, &nError));

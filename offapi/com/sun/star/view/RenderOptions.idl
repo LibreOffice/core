@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,89 +24,89 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_view_RenderOptions_idl__ 
-#define __com_sun_star_view_RenderOptions_idl__ 
- 
-#ifndef __com_sun_star_awt_XDevice_idl__ 
-#include <com/sun/star/awt/XDevice.idl> 
-#endif 
+#ifndef __com_sun_star_view_RenderOptions_idl__
+#define __com_sun_star_view_RenderOptions_idl__
 
-//============================================================================= 
- 
-module com {  module sun {  module star {  module view {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_XDevice_idl__
+#include <com/sun/star/awt/XDevice.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module view {
+
+//=============================================================================
+
 /** describes the options for Render jobs.
 
     @since OOo 1.1.2
  */
 published service RenderOptions
-{ 
-    //------------------------------------------------------------------------- 
-        
+{
+    //-------------------------------------------------------------------------
+
     /** specifies the device the page should be rendered to
      */
     [property] com::sun::star::awt::XDevice RenderDevice;
 
-    //------------------------------------------------------------------------- 
-        
+    //-------------------------------------------------------------------------
+
     /** indicates that the current page is the first page to be exported.
-            
-        <p>Hyperlinks, notes, and outlines cannot be exported on a per 
-        page base. They have to be exported once *before* the first page 
-        is exported. Therefore the IsFirstPage property has been introduced. 
-        It is evaluated in the ::render function and indicates that the 
+
+        <p>Hyperlinks, notes, and outlines cannot be exported on a per
+        page base. They have to be exported once *before* the first page
+        is exported. Therefore the IsFirstPage property has been introduced.
+        It is evaluated in the ::render function and indicates that the
         current page is the first page to be exported.
         </p>
 
         @see XRenderable
      */
     [optional, property] boolean IsFirstPage;
-    //------------------------------------------------------------------------- 
-        
+    //-------------------------------------------------------------------------
+
     /** indicates that the current page is the last page to be exported.
 
-        <p>Hyperlinks from the EditEngine have to be exported once *after* 
-        the last page has been processed. Therefore the IsLastPage property 
-        has been introduced. It is evaluated in the ::render function and 
+        <p>Hyperlinks from the EditEngine have to be exported once *after*
+        the last page has been processed. Therefore the IsLastPage property
+        has been introduced. It is evaluated in the ::render function and
         indicates that the current page is the last page to be exported.
         </p>
 
         @see XRenderable
      */
     [optional, property] boolean IsLastPage;
-    //------------------------------------------------------------------------- 
-        
+    //-------------------------------------------------------------------------
+
     /** specifies if empty pages should be skipped.
 
-        <p>Tells the pdf export to skip empty pages. This flag also has 
-        to be passed to the ::render function, in order to calculate to 
-        correct page numbers during the export of hyperlinks, notes, and 
+        <p>Tells the pdf export to skip empty pages. This flag also has
+        to be passed to the ::render function, in order to calculate to
+        correct page numbers during the export of hyperlinks, notes, and
         outlines.
         </p>
 
         @see XRenderable
      */
     [optional, property] boolean IsSkipEmptyPages;
-    //------------------------------------------------------------------------- 
-        
+    //-------------------------------------------------------------------------
+
     /** specifies the page ranges to be rendered.
 
-        <p>Tells the pdf export to skip empty pages. This flag also has 
-        to be passed to the ::render function, in order to calculate to 
-        correct page numbers during the export of hyperlinks, notes, 
+        <p>Tells the pdf export to skip empty pages. This flag also has
+        to be passed to the ::render function, in order to calculate to
+        correct page numbers during the export of hyperlinks, notes,
         and outlines.
         </p>
 
         @see XRenderable
      */
     [optional, property] string PageRange;
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
+};
 
-#endif 
+//=============================================================================
+
+}; }; }; };
+
+
+#endif

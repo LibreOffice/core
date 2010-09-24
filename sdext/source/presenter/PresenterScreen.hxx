@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,13 +85,13 @@ public:
     virtual void SAL_CALL disposing (void);
 
     // XJob
-    
+
     virtual css::uno::Any SAL_CALL execute(
         const css::uno::Sequence<css::beans::NamedValue >& Arguments)
         throw (css::lang::IllegalArgumentException,
             css::uno::Exception,
             css::uno::RuntimeException);
-    
+
 private:
     PresenterScreenJob (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PresenterScreenJob (void);
@@ -138,9 +138,9 @@ public:
 
 
     // XEventListener
-    
+
     virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) throw (css::uno::RuntimeException);
-    
+
 private:
     css::uno::Reference<css::frame::XModel2 > mxModel;
     css::uno::Reference<css::frame::XController> mxController;
@@ -209,7 +209,7 @@ private:
     */
     void ProcessViewDescriptions (
         PresenterConfigurationAccess& rConfiguration);
-        
+
     /** Called by ProcessViewDescriptions for a single entry.
     */
     void ProcessViewDescription (

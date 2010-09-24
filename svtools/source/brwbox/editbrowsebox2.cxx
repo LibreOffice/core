@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace svt
     using namespace com::sun::star::accessibility;
     using namespace com::sun::star::uno;
     using namespace ::com::sun::star::accessibility::AccessibleEventId;
-    
+
 // -----------------------------------------------------------------------------
 Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(long _nRow, USHORT _nColumnPos,const TriState& eState,sal_Bool _bEnabled)
 {
@@ -88,10 +88,10 @@ void EditBrowseBox::implCreateActiveAccessible( )
          if ( xMy.is() && xCont.is() )
           {
              m_aImpl->m_xActiveCell = getAccessibleFactory().createEditBrowseBoxTableCellAccess(
-                 xMy,														// parent accessible
-                 xCont,														// control accessible
-                 VCLUnoHelper::GetInterface( &aController->GetWindow() ),	// focus window (for notifications)
-                 *this,														// the browse box
+                 xMy,                                                       // parent accessible
+                 xCont,                                                     // control accessible
+                 VCLUnoHelper::GetInterface( &aController->GetWindow() ),   // focus window (for notifications)
+                 *this,                                                     // the browse box
                  GetCurRow(),
                  GetColumnPos( GetCurColumnId() )
              );
@@ -158,8 +158,8 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
 
         if ( GetBrowserFlags( ) & EBBF_SMART_TAB_TRAVEL )
         {
-            if	(	bHasFocus							// we got the focus
-                &&	( _nGetFocusFlags & GETFOCUS_TAB )	// using the TAB key
+            if  (   bHasFocus                           // we got the focus
+                &&  ( _nGetFocusFlags & GETFOCUS_TAB )  // using the TAB key
                 )
             {
                 long nRows = GetRowCount();
@@ -174,7 +174,7 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
                             GoToRowColumnId( 0, GetColumnId( 0 ) );
                         }
                         else
-                        {	// the first column is the handle column -> not focussable
+                        {   // the first column is the handle column -> not focussable
                             if ( nCols > 1 )
                                 GoToRowColumnId( 0, GetColumnId( 1 ) );
                         }

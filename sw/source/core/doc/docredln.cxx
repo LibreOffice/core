@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -282,24 +282,24 @@ bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
 Text heisst, nicht von Redline "verseuchter" Text.
 
 Verhalten von Insert-Redline:
-    - im Text							- Redline Object einfuegen
-    - im InsertRedline (eigenes)		- ignorieren, bestehendes wird
+    - im Text                           - Redline Object einfuegen
+    - im InsertRedline (eigenes)        - ignorieren, bestehendes wird
                                           aufgespannt
-    - im InsertRedline (andere)			- Insert Redline aufsplitten
+    - im InsertRedline (andere)         - Insert Redline aufsplitten
                                           Redline Object einfuegen
-    - in DeleteRedline					- Delete Redline aufsplitten oder
+    - in DeleteRedline                  - Delete Redline aufsplitten oder
                                           am Ende/Anfang verschieben
 
 Verhalten von Delete-Redline:
-    - im Text							- Redline Object einfuegen
-    - im DeleteRedline (eigenes/andere)	- ignorieren
-    - im InsertRedline (eigenes)		- ignorieren, Zeichen aber loeschen
-    - im InsertRedline (andere)			- Insert Redline aufsplitten
+    - im Text                           - Redline Object einfuegen
+    - im DeleteRedline (eigenes/andere) - ignorieren
+    - im InsertRedline (eigenes)        - ignorieren, Zeichen aber loeschen
+    - im InsertRedline (andere)         - Insert Redline aufsplitten
                                           Redline Object einfuegen
-    - Ueberlappung von Text und 		- Text in eigenen Insert loeschen,
-      eigenem Insert					  im andereren Text aufspannen (bis
+    - Ueberlappung von Text und         - Text in eigenen Insert loeschen,
+      eigenem Insert                      im andereren Text aufspannen (bis
                                           zum Insert!
-    - Ueberlappung von Text und 		- Redline Object einfuegen, der
+    - Ueberlappung von Text und         - Redline Object einfuegen, der
       anderem Insert                      andere Insert wird vom Delete
                                           ueberlappt
 */
@@ -307,7 +307,7 @@ Verhalten von Delete-Redline:
 bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 {
 #if 0
-// #i93179# disabled: ASSERT in ~SwIndexReg     #ifdef DBG_UTIL 
+// #i93179# disabled: ASSERT in ~SwIndexReg     #ifdef DBG_UTIL
     SwRedline aCopy( *pNewRedl );
 #endif
     bool bError = true;
@@ -638,7 +638,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                 if( *pStt == *pRStt && pRedl->GetContentIdx() == NULL )
                                     pRedlineTbl->DeleteAndDestroy( n );
                                 AppendRedline( pNew, bCallDelete );
-                                n = 0;		// neu Aufsetzen
+                                n = 0;      // neu Aufsetzen
                                 bDec = true;
                             }
                         }
@@ -670,7 +670,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                 pNew->SetStart( *pREnd );
                                 pNewRedl->SetEnd( *pRStt, pEnd );
                                 AppendRedline( pNew, bCallDelete );
-                                n = 0;		// neu Aufsetzen
+                                n = 0;      // neu Aufsetzen
                                 bDec = true;
                             }
                             else
@@ -687,7 +687,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                     case POS_OVERLAP_BEFORE:
                     case POS_OVERLAP_BEHIND:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
-//							1 == pRedl->GetStackCount() &&
+//                          1 == pRedl->GetStackCount() &&
                             pRedl->CanCombine( *pNewRedl ))
                         {
                             // dann kann das zusammengefasst werden, sprich
@@ -708,7 +708,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                     case POS_COLLIDE_START:
                     case POS_COLLIDE_END:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
-//							1 == pRedl->GetStackCount() &&
+//                          1 == pRedl->GetStackCount() &&
                             pRedl->CanCombine( *pNewRedl ) )
                         {
                             if( IsHideChanges( eRedlineMode ))
@@ -852,7 +852,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                         pRedlineTbl->Remove( nFnd );
                                     else
                                         pNewRedl = 0;
-                                    n = 0;		// neu Aufsetzen
+                                    n = 0;      // neu Aufsetzen
                                 }
                                 bDec = true;
                             }
@@ -881,7 +881,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                         pRedlineTbl->Remove( nFnd );
                                     else
                                         pNewRedl = 0;
-                                    n = 0;		// neu Aufsetzen
+                                    n = 0;      // neu Aufsetzen
                                     bDec = true;
                                 }
                             }
@@ -1083,7 +1083,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                     ( pRedl->GetContentIdx() == NULL ) )
                                     pRedlineTbl->DeleteAndDestroy( n );
                                 AppendRedline( pNew, bCallDelete );
-                                n = 0;		// neu Aufsetzen
+                                n = 0;      // neu Aufsetzen
                                 bDec = true;
                             }
                         }
@@ -1130,7 +1130,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                 pNew->SetStart( *pREnd );
                                 pNewRedl->SetEnd( *pRStt, pEnd );
                                 AppendRedline( pNew, bCallDelete );
-                                n = 0;		// neu Aufsetzen
+                                n = 0;      // neu Aufsetzen
                                 bDec = true;
                             }
                         }
@@ -1180,7 +1180,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                             pNew->SetStart( *pEnd );
                             pRedl->SetEnd( *pStt, pREnd );
                             AppendRedline( pNew, bCallDelete );
-                            n = 0;		// neu Aufsetzen
+                            n = 0;      // neu Aufsetzen
                             bDec = true;
                         }
                         break;
@@ -2027,7 +2027,7 @@ int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
                     * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
                                                      : rPam.GetPoint();
     const SwRedline* pFnd = lcl_FindCurrRedline( *pStt, n, TRUE );
-    if( pFnd &&		// neu ein Teil davon?
+    if( pFnd &&     // neu ein Teil davon?
         ( *pFnd->Start() != *pStt || *pFnd->End() > *pEnd ))
     {
         // dann nur die TeilSelektion aufheben
@@ -2084,7 +2084,7 @@ void lcl_AdjustRedlineRange( SwPaM& rPam )
     }
     if( pEnd->nNode.GetNode().IsCntntNode() &&
         !pDoc->GetNodes()[ pEnd->nNode.GetIndex() + 1 ]->IsCntntNode() &&
-        pEnd->nContent.GetIndex() == pEnd->nNode.GetNode().GetCntntNode()->Len()	)
+        pEnd->nContent.GetIndex() == pEnd->nNode.GetNode().GetCntntNode()->Len()    )
     {
         const SwRedline* pRedl = pDoc->GetRedline( *pEnd, 0 );
         if( pRedl )
@@ -3174,18 +3174,18 @@ void SwRedline::Show( USHORT nLoop )
 
         switch( GetType() )
         {
-        case nsRedlineType_t::REDLINE_INSERT: 			// Inhalt wurde eingefuegt
+        case nsRedlineType_t::REDLINE_INSERT:           // Inhalt wurde eingefuegt
             bIsVisible = TRUE;
             MoveFromSection();
             break;
 
-        case nsRedlineType_t::REDLINE_DELETE: 			// Inhalt wurde geloescht
+        case nsRedlineType_t::REDLINE_DELETE:           // Inhalt wurde geloescht
             bIsVisible = TRUE;
             MoveFromSection();
             break;
 
-        case nsRedlineType_t::REDLINE_FORMAT:			// Attributierung wurde angewendet
-        case nsRedlineType_t::REDLINE_TABLE:				// TabellenStruktur wurde veraendert
+        case nsRedlineType_t::REDLINE_FORMAT:           // Attributierung wurde angewendet
+        case nsRedlineType_t::REDLINE_TABLE:                // TabellenStruktur wurde veraendert
             InvalidateRange();
             break;
         default:
@@ -3206,24 +3206,24 @@ void SwRedline::Hide( USHORT nLoop )
 
     switch( GetType() )
     {
-    case nsRedlineType_t::REDLINE_INSERT: 			// Inhalt wurde eingefuegt
+    case nsRedlineType_t::REDLINE_INSERT:           // Inhalt wurde eingefuegt
         bIsVisible = TRUE;
         if( 1 <= nLoop )
             MoveFromSection();
         break;
 
-    case nsRedlineType_t::REDLINE_DELETE: 			// Inhalt wurde geloescht
+    case nsRedlineType_t::REDLINE_DELETE:           // Inhalt wurde geloescht
         bIsVisible = FALSE;
         switch( nLoop )
         {
-        case 0:	MoveToSection();	break;
-        case 1:	CopyToSection();	break;
-        case 2:	DelCopyOfSection();	break;
+        case 0: MoveToSection();    break;
+        case 1: CopyToSection();    break;
+        case 2: DelCopyOfSection(); break;
         }
         break;
 
-    case nsRedlineType_t::REDLINE_FORMAT:			// Attributierung wurde angewendet
-    case nsRedlineType_t::REDLINE_TABLE:				// TabellenStruktur wurde veraendert
+    case nsRedlineType_t::REDLINE_FORMAT:           // Attributierung wurde angewendet
+    case nsRedlineType_t::REDLINE_TABLE:                // TabellenStruktur wurde veraendert
         if( 1 <= nLoop )
             InvalidateRange();
         break;
@@ -3250,24 +3250,24 @@ void SwRedline::ShowOriginal( USHORT nLoop )
 
     switch( pCur->eType )
     {
-    case nsRedlineType_t::REDLINE_INSERT: 			// Inhalt wurde eingefuegt
+    case nsRedlineType_t::REDLINE_INSERT:           // Inhalt wurde eingefuegt
         bIsVisible = FALSE;
         switch( nLoop )
         {
-        case 0:	MoveToSection();	break;
-        case 1:	CopyToSection();	break;
-        case 2:	DelCopyOfSection();	break;
+        case 0: MoveToSection();    break;
+        case 1: CopyToSection();    break;
+        case 2: DelCopyOfSection(); break;
         }
         break;
 
-    case nsRedlineType_t::REDLINE_DELETE: 			// Inhalt wurde geloescht
+    case nsRedlineType_t::REDLINE_DELETE:           // Inhalt wurde geloescht
         bIsVisible = TRUE;
         if( 1 <= nLoop )
             MoveFromSection();
         break;
 
-    case nsRedlineType_t::REDLINE_FORMAT:			// Attributierung wurde angewendet
-    case nsRedlineType_t::REDLINE_TABLE:				// TabellenStruktur wurde veraendert
+    case nsRedlineType_t::REDLINE_FORMAT:           // Attributierung wurde angewendet
+    case nsRedlineType_t::REDLINE_TABLE:                // TabellenStruktur wurde veraendert
         if( 1 <= nLoop )
             InvalidateRange();
         break;
@@ -3279,7 +3279,7 @@ void SwRedline::ShowOriginal( USHORT nLoop )
 }
 
 
-void SwRedline::InvalidateRange()		// das Layout anstossen
+void SwRedline::InvalidateRange()       // das Layout anstossen
 {
     ULONG nSttNd = GetMark()->nNode.GetIndex(),
             nEndNd = GetPoint()->nNode.GetIndex();
@@ -3317,14 +3317,14 @@ void SwRedline::CalcStartEnd( ULONG nNdIdx, USHORT& nStart, USHORT& nEnd ) const
     {
         if( pREnd->nNode > nNdIdx )
         {
-            nStart = 0;				// Absatz ist komplett enthalten
+            nStart = 0;             // Absatz ist komplett enthalten
             nEnd = STRING_LEN;
         }
         else
         {
             ASSERT( pREnd->nNode == nNdIdx,
                 "SwRedlineItr::Seek: GetRedlinePos Error" );
-            nStart = 0;				// Absatz wird vorne ueberlappt
+            nStart = 0;             // Absatz wird vorne ueberlappt
             nEnd = pREnd->nContent.GetIndex();
         }
     }
@@ -3334,7 +3334,7 @@ void SwRedline::CalcStartEnd( ULONG nNdIdx, USHORT& nStart, USHORT& nEnd ) const
         if( pREnd->nNode == nNdIdx )
             nEnd = pREnd->nContent.GetIndex(); // Innerhalb des Absatzes
         else
-            nEnd = STRING_LEN;		// Absatz wird hinten ueberlappt
+            nEnd = STRING_LEN;      // Absatz wird hinten ueberlappt
     }
     else
     {
@@ -3458,7 +3458,7 @@ void SwRedline::CopyToSection()
             pDoc->CopyRange( *this, aPos, false );
 
             // JP 08.10.98: die Vorlage vom EndNode ggfs. mit uebernehmen
-            //				- ist im Doc::Copy nicht erwuenscht
+            //              - ist im Doc::Copy nicht erwuenscht
             if( pCEndNd && pCEndNd != pCSttNd )
             {
                 SwCntntNode* pDestNd = aPos.nNode.GetNode().GetCntntNode();
@@ -3730,14 +3730,14 @@ void SwRedline::SetContentIdx( const SwNodeIndex* pIdx )
 
 BOOL SwRedline::CanCombine( const SwRedline& rRedl ) const
 {
-    return	IsVisible() && rRedl.IsVisible() &&
+    return  IsVisible() && rRedl.IsVisible() &&
             pRedlineData->CanCombine( *rRedl.pRedlineData );
 }
 
 void SwRedline::PushData( const SwRedline& rRedl, BOOL bOwnAsNext )
 {
-//	SwRedlineData* pNew = new SwRedlineData( rRedl.GetType(),
-//											 rRedl.GetAuthor() );
+//  SwRedlineData* pNew = new SwRedlineData( rRedl.GetType(),
+//                                           rRedl.GetAuthor() );
     SwRedlineData* pNew = new SwRedlineData( *rRedl.pRedlineData, FALSE );
     if( bOwnAsNext )
     {

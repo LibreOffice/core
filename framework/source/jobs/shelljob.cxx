@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,7 +91,7 @@ DEFINE_INIT_SERVICE(ShellJob,
                         */
                     }
                    )
-                    
+
 //-----------------------------------------------
 ShellJob::ShellJob(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : ThreadHelpBase(     )
@@ -120,7 +120,7 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
 
     // replace all might existing place holder.
     ::rtl::OUString sRealCommand = impl_substituteCommandVariables(sCommand);
-        
+
     // Command is required as minimum.
     // If it does not exists ... we cant do our job.
     // Deactivate such miss configured job silently .-)
@@ -131,12 +131,12 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
     ::sal_Bool bDone = impl_execute(sRealCommand, lCommandArguments, bCheckExitCode);
     if (! bDone)
         return css::uno::Any();
-        
+
     // Job was done ... user configured deactivation of this job
     // in such case.
     if (bDeactivateJobIfDone)
         return ShellJob::impl_generateAnswer4Deactivation();
-    
+
     // There was no decision about deactivation of this job.
     // So we have to return nothing here !
     return css::uno::Any();
@@ -164,9 +164,9 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
     try
     {
               css::uno::Reference< css::util::XStringSubstitution > xSubst           (  xSMGR->createInstance(SERVICENAME_SUBSTITUTEPATHVARIABLES), css::uno::UNO_QUERY_THROW);
-        const ::sal_Bool											bSubstRequired   = sal_True;
-        const ::rtl::OUString										sCompleteCommand = xSubst->substituteVariables(sCommand, bSubstRequired);
-    
+        const ::sal_Bool                                            bSubstRequired   = sal_True;
+        const ::rtl::OUString                                       sCompleteCommand = xSubst->substituteVariables(sCommand, bSubstRequired);
+
         return sCompleteCommand;
     }
     catch(const css::uno::Exception&)
@@ -187,7 +187,7 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 
     if (nArgs > 0)
         pArgs = reinterpret_cast< ::rtl_uString** >(const_cast< ::rtl::OUString* >(lArguments.getConstArray()));
-    
+
     oslProcessError eError = osl_executeProcess(sCommand.pData, pArgs, nArgs, nOptions, NULL, NULL, NULL, 0, &hProcess);
 
     // executable not found or couldnt be started

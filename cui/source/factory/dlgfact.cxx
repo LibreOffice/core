@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,10 +55,10 @@
 #include "hangulhanjadlg.hxx" //add for HangulHanjaConversionDialog
 #include "showcols.hxx" //add for FmShowColsDialog
 #include "zoom.hxx" //add for SvxZoomDialog
-#include "cuigaldlg.hxx"		//add for Gallery 6 Dialogs and 1 TabPage
-#include "cuiimapwnd.hxx"		//add for URLDlg
-#include "hlmarkwn.hxx"		//add for SvxHlinkDlgMarkWnd
-#include "srchxtra.hxx"		//add for SvxSearchFormatDialog
+#include "cuigaldlg.hxx"        //add for Gallery 6 Dialogs and 1 TabPage
+#include "cuiimapwnd.hxx"       //add for URLDlg
+#include "hlmarkwn.hxx"     //add for SvxHlinkDlgMarkWnd
+#include "srchxtra.hxx"     //add for SvxSearchFormatDialog
 #include "transfrm.hxx" //add for SvxTransformTabDialog
 #include "bbdlg.hxx" //add for SvxBorderBackgroundDlg
 #include "cuisrchdlg.hxx" //add for SvxJSearchOptionsDialog
@@ -69,13 +69,13 @@
 #include "multifil.hxx" //add for SvxMultiFileDialog
 #include "cuihyperdlg.hxx" //add for SvxHpLinkDlg
 #include "cuifmsearch.hxx" //add  for FmSearchDialog
-#include "cuigrfflt.hxx"	//add for GraphicFilterDialog
+#include "cuigrfflt.hxx"    //add for GraphicFilterDialog
 #include "cuitabarea.hxx" //add for SvxAreaTabDialog
 #include "cuitabline.hxx" //add for SvxLineTabDialog
 #include "measure.hxx" //add for SvxMeasureDialog
 #include "connect.hxx" //add for SvxConnectionDialog
 #include "dbregister.hxx" // add for DatabaseRegistrationDialog
-#include "cuioptgenrl.hxx"	//add for SvxGeneralTabPage
+#include "cuioptgenrl.hxx"  //add for SvxGeneralTabPage
 #include "optasian.hxx"
 #include "insdlg.hxx"
 #include "pastedlg.hxx"
@@ -122,7 +122,7 @@ IMPL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractHyphenWordDialog_Impl)
 IMPL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl)
 
-AbstractSvxZoomDialog_Impl::~AbstractSvxZoomDialog_Impl()                    					\
+AbstractSvxZoomDialog_Impl::~AbstractSvxZoomDialog_Impl()                                       \
 {
     delete pDlg;
 }
@@ -340,11 +340,11 @@ void AbstractHangulHanjaConversionDialog_Impl::SetCurrentString(
 {
      pDlg->SetCurrentString(_rNewString,_rSuggestions,_bOriginatesFromDocument);
 }
-String	 AbstractHangulHanjaConversionDialog_Impl::GetCurrentString( ) const
+String   AbstractHangulHanjaConversionDialog_Impl::GetCurrentString( ) const
 {
     return pDlg->GetCurrentString();
 }
-editeng::HangulHanjaConversion::ConversionFormat	 AbstractHangulHanjaConversionDialog_Impl::GetConversionFormat( ) const
+editeng::HangulHanjaConversion::ConversionFormat     AbstractHangulHanjaConversionDialog_Impl::GetConversionFormat( ) const
 {
     return pDlg->GetConversionFormat();
 }
@@ -354,7 +354,7 @@ void AbstractHangulHanjaConversionDialog_Impl::FocusSuggestion( )
     pDlg->FocusSuggestion();
 }
 
-String	AbstractHangulHanjaConversionDialog_Impl::GetCurrentSuggestion( ) const
+String  AbstractHangulHanjaConversionDialog_Impl::GetCurrentSuggestion( ) const
 {
     return pDlg->GetCurrentSuggestion();
 }
@@ -369,7 +369,7 @@ sal_uInt16 AbstractThesaurusDialog_Impl::GetLanguage() const
     return pDlg->GetLanguage();
 };
 
-Window*	AbstractThesaurusDialog_Impl::GetWindow()
+Window* AbstractThesaurusDialog_Impl::GetWindow()
 {
     return pDlg;
 }
@@ -384,7 +384,7 @@ void AbstractHyphenWordDialog_Impl::SelRight()
     pDlg->SelRight();
 }
 
-Window*	AbstractHyphenWordDialog_Impl::GetWindow()
+Window* AbstractHyphenWordDialog_Impl::GetWindow()
 {
     return pDlg;
 }
@@ -485,7 +485,7 @@ void AbstractSearchProgress_Impl::SetDirectory( const INetURLObject& rURL )
 {
      pDlg->SetDirectory( rURL );
 }
-PLinkStub	AbstractSearchProgress_Impl::GetLinkStubCleanUpHdl()
+PLinkStub   AbstractSearchProgress_Impl::GetLinkStubCleanUpHdl()
 {
     return SearchProgress::LinkStubCleanUpHdl;
 }
@@ -505,7 +505,7 @@ void AbstractTakeProgress_Impl::SetFile( const INetURLObject& rURL )
      pDlg->SetFile( rURL );
 }
 
-PLinkStub	AbstractTakeProgress_Impl::GetLinkStubCleanUpHdl()
+PLinkStub   AbstractTakeProgress_Impl::GetLinkStubCleanUpHdl()
 {
     return TakeProgress::LinkStubCleanUpHdl;
 }
@@ -988,7 +988,7 @@ Window * AbstractSvxPostItDialog_Impl::GetWindow()
 String AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToOpen() const
 {
     return pDlg->GetPasswordToOpen();
-}    
+}
 String AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToModify() const
 {
     return pDlg->GetPasswordToModify();
@@ -1137,7 +1137,7 @@ AbstractSvxCaptionDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog(
     return new AbstractSvxCaptionDialog_Impl( pDlg );
 }
 
-AbstractSvxDistributeDialog* 	AbstractDialogFactory_Impl::CreateSvxDistributeDialog(Window* pParent,
+AbstractSvxDistributeDialog*    AbstractDialogFactory_Impl::CreateSvxDistributeDialog(Window* pParent,
                                             const SfxItemSet& rAttr,
                                             SvxDistributeHorizontal eHor ,
                                             SvxDistributeVertical eVer)
@@ -1153,7 +1153,7 @@ AbstractHangulHanjaConversionDialog* AbstractDialogFactory_Impl::CreateHangulHan
     return new AbstractHangulHanjaConversionDialog_Impl( pDlg );
 }
 
-AbstractThesaurusDialog* AbstractDialogFactory_Impl::CreateThesaurusDialog( Window* pParent, 
+AbstractThesaurusDialog* AbstractDialogFactory_Impl::CreateThesaurusDialog( Window* pParent,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
                                 const String &rWord, sal_Int16 nLanguage )
 {
@@ -1345,7 +1345,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabItemDialog( Window* p
     return 0;
 }
 
-VclAbstractDialog* 		AbstractDialogFactory_Impl::CreateSvxSearchAttributeDialog( Window* pParent,
+VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxSearchAttributeDialog( Window* pParent,
                                             SearchAttrItemList& rLst,
                                             const USHORT* pWhRanges )
 {
@@ -1447,7 +1447,7 @@ AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDiction
     return 0;
 }
 
-VclAbstractDialog* 		AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialog( Window* pParent,
+VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialog( Window* pParent,
                                             const String& rName,
                                             ::Reference< ::com::sun::star::linguistic2::XSpellChecker1> &xSpl,
                                             sal_uInt32 nResId )
@@ -1811,17 +1811,17 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
     return 0;
 }
 
-CreateSvxDistributePage	AbstractDialogFactory_Impl::GetSvxDistributePageCreatorFunc()
+CreateSvxDistributePage AbstractDialogFactory_Impl::GetSvxDistributePageCreatorFunc()
 {
     return SvxDistributePage::Create;
 }
 
-DialogGetRanges	AbstractDialogFactory_Impl::GetDialogGetRangesFunc( USHORT nId )
+DialogGetRanges AbstractDialogFactory_Impl::GetDialogGetRangesFunc( USHORT nId )
 {
         switch ( nId )
     {
         case RID_SVXDLG_POSTIT:
-            return SvxPostItDialog::GetRanges;	//add for SvxPostItDialog
+            return SvxPostItDialog::GetRanges;  //add for SvxPostItDialog
         default:
             break;
     }
@@ -1952,7 +1952,7 @@ SvxAbstractSplittTableDialog* AbstractDialogFactory_Impl::CreateSvxSplittTableDi
     return new SvxSplitTableDlg( pParent, bIsTableVertical, nMaxVertical, nMaxHorizontal );
 }
 
-SvxAbstractNewTableDialog* AbstractDialogFactory_Impl::CreateSvxNewTableDialog( Window* pParent ) 
+SvxAbstractNewTableDialog* AbstractDialogFactory_Impl::CreateSvxNewTableDialog( Window* pParent )
 {
     return new SvxNewTableDialog( pParent );
 }
@@ -1968,12 +1968,12 @@ SvxAbstractInsRowColDlg* AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( Wind
     return new SvxInsRowColDlg( pParent, bCol, nHelpId );
 }
 
-AbstractPasswordToOpenModifyDialog * AbstractDialogFactory_Impl::CreatePasswordToOpenModifyDialog( 
+AbstractPasswordToOpenModifyDialog * AbstractDialogFactory_Impl::CreatePasswordToOpenModifyDialog(
     Window * pParent,
     sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify )
 {
     PasswordToOpenModifyDialog * pDlg = new PasswordToOpenModifyDialog( pParent, nMinPasswdLen, nMaxPasswdLen, bIsPasswordToModify );
     return new AbstractPasswordToOpenModifyDialog_Impl( pDlg );
-}    
+}
 
 

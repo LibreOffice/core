@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ class TabelDesignsImporter : public SvXMLImport
     TabelDesignsImporter( const Reference< XMultiServiceFactory > & rSMgr );
     ~TabelDesignsImporter() throw ();
 
-    SvXMLImportContext* CreateContext(USHORT nPrefix, const OUString& rLocalName,	const Reference<XAttributeList>& xAttrList);
+    SvXMLImportContext* CreateContext(USHORT nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList);
 }
 
 // --------------------------------------------------------------------
@@ -84,7 +84,7 @@ TabelDesignsImporter::TabelDesignsImporter( const Reference< XMultiServiceFactor
     // add namespaces
     GetNamespaceMap().Add(
         GetXMLToken(XML_NP_PRESENTATION),
-        GetXMLToken(XML_N_PRESENTATION), 
+        GetXMLToken(XML_N_PRESENTATION),
         XML_NAMESPACE_PRESENTATION);
 }
 
@@ -96,7 +96,7 @@ TabelDesignsImporter::~TabelDesignsImporter()
 
 // --------------------------------------------------------------------
 
-SvXMLImportContext* TabelDesignsImporter::CreateContext(USHORT nPrefix, const OUString& rLocalName,	const Reference<XAttributeList>& xAttrList)
+SvXMLImportContext* TabelDesignsImporter::CreateContext(USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList)
 {
 }
 

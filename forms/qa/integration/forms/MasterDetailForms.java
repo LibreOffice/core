@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
     public MasterDetailForms()
     {
     }
-    
+
     /* ------------------------------------------------------------------ */
     public String[] getTestMethodNames()
     {
@@ -96,7 +96,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
 
     /* ------------------------------------------------------------------ */
     /** creates the table structure needed for the test
-     */ 
+     */
     private void impl_createTableStructure( final HsqlDatabase _databaseDocument ) throws SQLException
     {
         HsqlColumnDescriptor[] masterColumns = {
@@ -383,7 +383,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
             m_loaded = false;
         }
     }
- 
+
     /** assures that the (integer) values in the given columns of our master and detail forms are identical
      */
     private void verifyColumnValueIdentity( final String masterColName, final String detailColName ) throws SQLException
@@ -394,7 +394,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
         int masterValue = m_masterResult.getInt( locateMasterCols.findColumn( masterColName ) );
         int detailValue = m_detailResult.getInt( locateDetailCols.findColumn( detailColName ) );
 
-        assure( "values in linked column pair " + detailColName + "->" + masterColName + " (" + 
+        assure( "values in linked column pair " + detailColName + "->" + masterColName + " (" +
             detailValue + "->" + masterValue + ") do not match (master position: " + m_masterResult.getRow()  + ")!",
             masterValue == detailValue );
     }

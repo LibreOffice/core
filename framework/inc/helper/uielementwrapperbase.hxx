@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_HELPER_UIELEMENTWRAPPERBASE_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -38,7 +38,7 @@
 #include <macros/xtypeprovider.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -47,7 +47,7 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -68,14 +68,14 @@ class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       
                              public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
         UIElementWrapperBase( sal_Int16 nType );
         virtual ~UIElementWrapperBase();
-    
+
         //---------------------------------------------------------------------------------------------------------
-        //	XInterface, XTypeProvider
+        //  XInterface, XTypeProvider
         //---------------------------------------------------------------------------------------------------------
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
@@ -84,10 +84,10 @@ class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException) = 0;
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-        
+
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-        
+
         // XUpdatable
         virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
 
@@ -98,11 +98,11 @@ class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException) = 0;
 
     //-------------------------------------------------------------------------------------------------------------
-    //	protected methods
+    //  protected methods
     //-------------------------------------------------------------------------------------------------------------
     protected:
 
-        //	OPropertySetHelper
+        //  OPropertySetHelper
         virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        ( com::sun::star::uno::Any&        aConvertedValue ,
                                                                                                                com::sun::star::uno::Any&        aOldValue       ,
                                                                                                                sal_Int32                        nHandle         ,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,25 +37,25 @@ class AnimationPathMotionNode : public AnimationBaseNode
 {
 public:
     AnimationPathMotionNode(
-        const ::com::sun::star::uno::Reference< 
-        ::com::sun::star::animations::XAnimationNode >& xNode, 
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode >& xNode,
         const BaseContainerNodeSharedPtr&               rParent,
         const NodeContext&                              rContext )
         : AnimationBaseNode( xNode, rParent, rContext ),
           mxPathMotionNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW ) {}
-    
+
 #if defined(VERBOSE) && defined(DBG_UTIL)
     virtual const char* getDescription() const
         { return "AnimationPathMotionNode"; }
 #endif
-    
+
 protected:
     virtual void dispose();
-    
+
 private:
     virtual AnimationActivitySharedPtr createActivity() const;
-    
-    ::com::sun::star::uno::Reference< 
+
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XAnimateMotion >  mxPathMotionNode;
 };
 

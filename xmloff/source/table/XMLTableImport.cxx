@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -161,9 +161,9 @@ public:
     sal_Int32 getRowSpan() const { return mnRowSpan; }
     sal_Int32 getRepeated() const { return mnRepeated; }
 
-    Reference< XMergeableCell >	mxCell;
-    Reference< XTextCursor >	mxCursor;
-    Reference< XTextCursor >	mxOldCursor;
+    Reference< XMergeableCell > mxCell;
+    Reference< XTextCursor >    mxCursor;
+    Reference< XTextCursor >    mxOldCursor;
     bool                        mbListContextPushed;
 
     sal_Int32 mnColSpan, mnRowSpan, mnRepeated;
@@ -314,7 +314,7 @@ void XMLTableImport::finishStyles()
 // --------------------------------------------------------------------
 
 
-XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImport >& xImporter, USHORT nPrfx, const OUString& rLName,	Reference< XColumnRowRange >& xColumnRowRange )
+XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImport >& xImporter, USHORT nPrfx, const OUString& rLName,  Reference< XColumnRowRange >& xColumnRowRange )
 : SvXMLImportContext( xImporter->mrImport, nPrfx, rLName )
 , mxTableImporter( xImporter )
 , mxTable( xColumnRowRange, UNO_QUERY )
@@ -414,7 +414,7 @@ void XMLTableImportContext::InitColumns()
             if( pAutoStyles && xInfo->msStyleName.getLength() )
             {
                 const XMLPropStyleContext* pStyle =
-                    dynamic_cast< const XMLPropStyleContext* >( 
+                    dynamic_cast< const XMLPropStyleContext* >(
                         pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_COLUMN, xInfo->msStyleName) );
 
                 if( pStyle )
@@ -440,7 +440,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( USHORT nPrefix, const OUS
     {
         mnCurrentRow++;
         if( mnCurrentRow == 0 )
-            InitColumns();		// first init columns
+            InitColumns();      // first init columns
 
         mnCurrentColumn = -1;
 
@@ -499,7 +499,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( USHORT nPrefix, const OUS
             if( pAutoStyles )
             {
                 const XMLPropStyleContext* pStyle =
-                    dynamic_cast< const XMLPropStyleContext* >( 
+                    dynamic_cast< const XMLPropStyleContext* >(
                         pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_ROW, sStyleName) );
 
                 if( pStyle )
@@ -676,7 +676,7 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Referenc
         if( pAutoStyles )
         {
             const XMLPropStyleContext* pStyle =
-                dynamic_cast< const XMLPropStyleContext* >( 
+                dynamic_cast< const XMLPropStyleContext* >(
                     pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL, sStyleName) );
 
             if( pStyle )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,16 +36,16 @@ class ScDocShell;
 class ScDrawDefaultsObj : public SvxUnoDrawPool, public SfxListener
 {
 private:
-    ScDocShell*				pDocShell;
+    ScDocShell*             pDocShell;
 
 public:
                             ScDrawDefaultsObj(ScDocShell* pDocSh);
-    virtual					~ScDrawDefaultsObj() throw ();
+    virtual                 ~ScDrawDefaultsObj() throw ();
 
-    virtual void			Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // from SvxUnoDrawPool
-    virtual SfxItemPool*	getModelPool( sal_Bool bReadOnly ) throw();
+    virtual SfxItemPool*    getModelPool( sal_Bool bReadOnly ) throw();
 };
 
 #endif

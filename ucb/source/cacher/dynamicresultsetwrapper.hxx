@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,9 +57,9 @@ class DynamicResultSetWrapper
 {
 private:
     //management of listeners
-    sal_Bool				m_bDisposed; ///Dispose call ready.
-    sal_Bool				m_bInDispose;///In dispose call
-    osl::Mutex				m_aContainerMutex;
+    sal_Bool                m_bDisposed; ///Dispose call ready.
+    sal_Bool                m_bInDispose;///In dispose call
+    osl::Mutex              m_aContainerMutex;
     cppu::OInterfaceContainerHelper*
                             m_pDisposeEventListeners;
 protected:
@@ -71,9 +71,9 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
                             m_xSMgr;
 
-    osl::Mutex				m_aMutex;
-    sal_Bool				m_bStatic;
-    sal_Bool				m_bGotWelcome;
+    osl::Mutex              m_aMutex;
+    sal_Bool                m_bStatic;
+    sal_Bool                m_bGotWelcome;
 
     //different Interfaces from Origin:
     com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSet >
@@ -83,8 +83,8 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >
                             m_xSourceResultTwo;
     //com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >
-    //						m_xSourceResultCurrent;
-    //sal_Bool				m_bUseOne;
+    //                      m_xSourceResultCurrent;
+    //sal_Bool              m_bUseOne;
     //
     com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >
                             m_xMyResultOne;
@@ -94,8 +94,8 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSetListener >
                             m_xListener;
 
-    osl::Condition			m_aSourceSet;
-    osl::Condition			m_aListenerSet;
+    osl::Condition          m_aSourceSet;
+    osl::Condition          m_aListenerSet;
 
 protected:
     void SAL_CALL impl_init();
@@ -171,7 +171,7 @@ public:
     // XSourceInitialization
 
     virtual void SAL_CALL
-    setSource(	const com::sun::star::uno::Reference<
+    setSource(  const com::sun::star::uno::Reference<
         com::sun::star::uno::XInterface > & Source )
          throw( com::sun::star::ucb::AlreadyInitializedException
                 , com::sun::star::uno::RuntimeException );
@@ -194,8 +194,8 @@ class DynamicResultSetWrapperListener
                 , public com::sun::star::ucb::XDynamicResultSetListener
 {
 protected:
-    DynamicResultSetWrapper*	m_pOwner;
-    osl::Mutex					m_aMutex;
+    DynamicResultSetWrapper*    m_pOwner;
+    osl::Mutex                  m_aMutex;
 
 public:
     DynamicResultSetWrapperListener( DynamicResultSetWrapper* pOwner );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,16 +63,16 @@
 #include <wrtrtf.hxx>
 #include <flypos.hxx>
 #include <IMark.hxx>
-#include <pagedesc.hxx>		// fuer SwPageDesc...
+#include <pagedesc.hxx>     // fuer SwPageDesc...
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <section.hxx>
-#include <swtable.hxx>		// fuer SwPageDesc ...
+#include <swtable.hxx>      // fuer SwPageDesc ...
 #include <swmodule.hxx>
 #include <swerror.h>
-#include <mdiexp.hxx>		// ...Percent()
-#include <statstr.hrc>		// ResId fuer Statusleiste
+#include <mdiexp.hxx>       // ...Percent()
+#include <statstr.hrc>      // ResId fuer Statusleiste
 #include <docsh.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -117,7 +117,7 @@ ULONG SwRTFWriter::WriteStream()
     bAutoAttrSet = bOutListNumTxt = bOutLeftHeadFoot = bIgnoreNextPgBreak =
         bTxtAttr = bAssociated = FALSE;
 
-    nCurScript = 1;		                // latin - ask the doc??
+    nCurScript = 1;                     // latin - ask the doc??
 
     nCurRedline = USHRT_MAX;
     if(pDoc->GetRedlineTbl().Count())
@@ -128,7 +128,7 @@ ULONG SwRTFWriter::WriteStream()
     nBkmkTabPos = -1;
     pAktPageDesc = 0;
     pAttrSet = 0;
-    pFlyFmt = 0;		// kein FlyFrmFormat gesetzt
+    pFlyFmt = 0;        // kein FlyFrmFormat gesetzt
 
     pColTbl = new RTFColorTbl;
     pNumRuleTbl = 0;
@@ -252,7 +252,7 @@ ULONG SwRTFWriter::WriteStream()
 
 void SwRTFWriter::Out_SwDoc( SwPaM* pPam )
 {
-    BOOL bSaveWriteAll = bWriteAll;		// sichern
+    BOOL bSaveWriteAll = bWriteAll;     // sichern
     // suche die naechste Bookmark-Position aus der Bookmark-Tabelle
     nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
 
@@ -284,9 +284,9 @@ void SwRTFWriter::Out_SwDoc( SwPaM* pPam )
                     pCurPam->GetPoint()->nContent.Assign( &rCNd, 0 );
 
                 if( !bOutOutlineOnly ||
-                    //( rCNd.IsTxtNode() && NO_NUMBERING !=		//#outline level,removed by zhaojianwei
+                    //( rCNd.IsTxtNode() && NO_NUMBERING !=     //#outline level,removed by zhaojianwei
                     //((SwTxtNode&)rCNd).GetTxtColl()->GetOutlineLevel() ))
-                    ( rCNd.IsTxtNode() &&						//->add by zhaojianwei
+                    ( rCNd.IsTxtNode() &&                       //->add by zhaojianwei
                         ((SwTxtNode&)rCNd).GetTxtColl()->IsAssignedToListLevelOfOutlineStyle()))//<-end,zhaojianwei
                     Out( aRTFNodeFnTab, rCNd, *this );
 
@@ -317,7 +317,7 @@ void SwRTFWriter::Out_SwDoc( SwPaM* pPam )
                     CheckEndNodeForSection( rNd );
             }
 
-            ULONG nPos = pCurPam->GetPoint()->nNode++; 	// Bewegen
+            ULONG nPos = pCurPam->GetPoint()->nNode++;  // Bewegen
 
             if( bShowProgress )
                 ::SetProgressState( nPos, pDoc->GetDocShell() );   // Wie weit ?
@@ -331,9 +331,9 @@ void SwRTFWriter::Out_SwDoc( SwPaM* pPam )
                     pCurPam->GetPoint()->nNode != pCurPam->GetMark()->nNode;
             bFirstLine = FALSE;
         }
-    } while( CopyNextPam( &pPam ) );		// bis alle PaM's bearbeitet
+    } while( CopyNextPam( &pPam ) );        // bis alle PaM's bearbeitet
 
-    bWriteAll = bSaveWriteAll;			// wieder auf alten Wert zurueck
+    bWriteAll = bSaveWriteAll;          // wieder auf alten Wert zurueck
 }
 
 
@@ -352,7 +352,7 @@ void SwRTFWriter::MakeHeader()
                         RES_CHRATR_FONT ) ));
     }
     // JP 13.02.2001 - if this not exist, MS don't understand our ansi
-    //					characters (0x80-0xff).
+    //                  characters (0x80-0xff).
     Strm() << "\\adeflang1025";
 
     OutRTFFontTab();
@@ -361,7 +361,7 @@ void SwRTFWriter::MakeHeader()
     OutRTFListTab();
     OutRTFRevTab();
 
-    Strm() << SwRTFWriter::sNewLine;		// ein Trenner
+    Strm() << SwRTFWriter::sNewLine;        // ein Trenner
 
     // wenn teilweise ausgegeben wird, die globalen Daten nicht speichern
     if( !bWriteAll )
@@ -371,7 +371,7 @@ void SwRTFWriter::MakeHeader()
     OutDocInfoStat();
 
     // einige globale Daten Schreiben
-    {	// Default-TabSize
+    {   // Default-TabSize
         const SvxTabStopItem& rTabs = (const SvxTabStopItem&)
                     pDoc->GetAttrPool().GetDefaultItem( RES_PARATR_TABSTOP );
         Strm() << OOO_STRING_SVTOOLS_RTF_DEFTAB;
@@ -387,7 +387,7 @@ void SwRTFWriter::MakeHeader()
     if( pDoc->GetPageDescCnt() )
     {
         //JP 06.04.99: Bug 64361 - suche den ersten SwFmtPageDesc. Ist
-        //				keiner gesetzt, so ist der Standard gueltig
+        //              keiner gesetzt, so ist der Standard gueltig
         const SwFmtPageDesc* pSttPgDsc = 0;
         {
             const SwNode& rSttNd = *pDoc->GetNodes()[
@@ -459,7 +459,7 @@ void SwRTFWriter::MakeHeader()
         }
 
         Strm() << OOO_STRING_SVTOOLS_RTF_SECTD << OOO_STRING_SVTOOLS_RTF_SBKNONE;
-        OutRTFPageDescription( rPageDesc, FALSE, TRUE );	// Changed bCheckForFirstPage to TRUE so headers
+        OutRTFPageDescription( rPageDesc, FALSE, TRUE );    // Changed bCheckForFirstPage to TRUE so headers
                                                             // following title page are correctly added - i13107
         if( pSttPgDsc )
         {
@@ -481,24 +481,24 @@ void SwRTFWriter::MakeHeader()
 
         switch( rFtnInfo.eNum )
         {
-        case FTNNUM_PAGE:		pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTPG;	break;
-        case FTNNUM_DOC:		pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTCONT;	break;
-//		case FTNNUM_CHAPTER:
-        default:				pOut = OOO_STRING_SVTOOLS_RTF_FTNRESTART;	break;
+        case FTNNUM_PAGE:       pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTPG; break;
+        case FTNNUM_DOC:        pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTCONT;   break;
+//      case FTNNUM_CHAPTER:
+        default:                pOut = OOO_STRING_SVTOOLS_RTF_FTNRESTART;   break;
         }
         Strm() << pOut;
 
         switch( rFtnInfo.aFmt.GetNumberingType() )
         {
         case SVX_NUM_CHARS_LOWER_LETTER:
-        case SVX_NUM_CHARS_LOWER_LETTER_N:	pOut = OOO_STRING_SVTOOLS_RTF_FTNNALC; 	break;
+        case SVX_NUM_CHARS_LOWER_LETTER_N:  pOut = OOO_STRING_SVTOOLS_RTF_FTNNALC;  break;
         case SVX_NUM_CHARS_UPPER_LETTER:
-        case SVX_NUM_CHARS_UPPER_LETTER_N:	pOut = OOO_STRING_SVTOOLS_RTF_FTNNAUC; 	break;
-        case SVX_NUM_ROMAN_LOWER:			pOut = OOO_STRING_SVTOOLS_RTF_FTNNRLC; 	break;
-        case SVX_NUM_ROMAN_UPPER:			pOut = OOO_STRING_SVTOOLS_RTF_FTNNRUC; 	break;
-        case SVX_NUM_CHAR_SPECIAL:			pOut = OOO_STRING_SVTOOLS_RTF_FTNNCHI;	break;
-//		case SVX_NUM_ARABIC:
-        default:					pOut = OOO_STRING_SVTOOLS_RTF_FTNNAR;		break;
+        case SVX_NUM_CHARS_UPPER_LETTER_N:  pOut = OOO_STRING_SVTOOLS_RTF_FTNNAUC;  break;
+        case SVX_NUM_ROMAN_LOWER:           pOut = OOO_STRING_SVTOOLS_RTF_FTNNRLC;  break;
+        case SVX_NUM_ROMAN_UPPER:           pOut = OOO_STRING_SVTOOLS_RTF_FTNNRUC;  break;
+        case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_FTNNCHI;  break;
+//      case SVX_NUM_ARABIC:
+        default:                    pOut = OOO_STRING_SVTOOLS_RTF_FTNNAR;       break;
         }
         Strm() << pOut;
 
@@ -512,14 +512,14 @@ void SwRTFWriter::MakeHeader()
         switch( rEndNoteInfo.aFmt.GetNumberingType() )
         {
         case SVX_NUM_CHARS_LOWER_LETTER:
-        case SVX_NUM_CHARS_LOWER_LETTER_N:	pOut = OOO_STRING_SVTOOLS_RTF_AFTNNALC;	break;
+        case SVX_NUM_CHARS_LOWER_LETTER_N:  pOut = OOO_STRING_SVTOOLS_RTF_AFTNNALC; break;
         case SVX_NUM_CHARS_UPPER_LETTER:
-        case SVX_NUM_CHARS_UPPER_LETTER_N:	pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAUC;	break;
-        case SVX_NUM_ROMAN_LOWER:			pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRLC;	break;
-        case SVX_NUM_ROMAN_UPPER:			pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRUC;	break;
-        case SVX_NUM_CHAR_SPECIAL:			pOut = OOO_STRING_SVTOOLS_RTF_AFTNNCHI;	break;
-//		case SVX_NUM_ARABIC:
-        default:					pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAR;	break;
+        case SVX_NUM_CHARS_UPPER_LETTER_N:  pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAUC; break;
+        case SVX_NUM_ROMAN_LOWER:           pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRLC; break;
+        case SVX_NUM_ROMAN_UPPER:           pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRUC; break;
+        case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_AFTNNCHI; break;
+//      case SVX_NUM_ARABIC:
+        default:                    pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAR;  break;
         }
         Strm() << pOut;
     }
@@ -547,7 +547,7 @@ void SwRTFWriter::MakeHeader()
 
     pAttrSet = 0;
 
-    Strm() << SwRTFWriter::sNewLine;		// ein Trenner
+    Strm() << SwRTFWriter::sNewLine;        // ein Trenner
 }
 
 void SwRTFWriter::OutInfoDateTime( const sal_Char* i_pStr,
@@ -641,7 +641,7 @@ static void InsColor( RTFColorTbl& rTbl, const Color& rCol )
     USHORT n;
     for( n = 0; n < rTbl.Count(); ++n )
         if( rTbl[n] == rCol )
-            return;			// schon vorhanden, zurueck
+            return;         // schon vorhanden, zurueck
 
     n = COL_AUTO == rCol.GetColor() ? 0 : rTbl.Count();
     rTbl.Insert( rCol, n );
@@ -906,7 +906,7 @@ void RTF_WrtRedlineAuthor::Write(Writer &rWrt)
     {
         rRTFWrt.Strm() << '{';
         // rWrt.bWriteHelpFmt
-        RTFOutFuncs::Out_String( rRTFWrt.Strm(), *aIter, rRTFWrt.eDefaultEncoding,	rRTFWrt.bWriteHelpFmt  ) << ";}";
+        RTFOutFuncs::Out_String( rRTFWrt.Strm(), *aIter, rRTFWrt.eDefaultEncoding,  rRTFWrt.bWriteHelpFmt  ) << ";}";
     }
     rRTFWrt.Strm() << '}' << SwRTFWriter::sNewLine;
 }
@@ -987,12 +987,12 @@ const rtl::OUString SwRTFWriter::XlateFmtName( const rtl::OUString &rName, SwGet
         "toc 7", "toc 8", "toc 9",
         "Normal Indent", "footnote text",
 
-        "annotation text", "header", "footer",	"index heading",
+        "annotation text", "header", "footer",  "index heading",
         "caption", "table of figures", "envelope address", "envelope return",
-        "footnote reference",	"annotation reference",
+        "footnote reference",   "annotation reference",
 
-        "line number", "page number", "endnote reference",	"endnote text",	"table of authorities",	"macro", "toa heading",
-        "List",	"List Bullet", "List Number",
+        "line number", "page number", "endnote reference",  "endnote text", "table of authorities", "macro", "toa heading",
+        "List", "List Bullet", "List Number",
 
         "List 2", "List 3", "List 4", "List 5",
         "List Bullet 2", "List Bullet 3", "List Bullet 4", "List Bullet 5",
@@ -1001,7 +1001,7 @@ const rtl::OUString SwRTFWriter::XlateFmtName( const rtl::OUString &rName, SwGet
         "Title", "Closing", "Signature", "Default Paragraph Font",
         "Body Text", "Body Text Indent", "List Continue",
 
-        "List Continue 2",	"List Continue 3", "List Continue 4", "List Continue 5", "Message Header", "Subtitle"};
+        "List Continue 2",  "List Continue 3", "List Continue 4", "List Continue 5", "Message Header", "Subtitle"};
 
     ASSERT( ( sizeof( aArr ) / sizeof( RES_POOL_COLLFMT_TYPE ) == 75 ),
             "Style-UEbersetzungstabelle hat falsche Groesse" );
@@ -1134,7 +1134,7 @@ void SwRTFWriter::OutRTFFlyFrms(const SwFlyFrmFmt& rFlyFrmFmt)
     ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
     ULONG nEnd = pDoc->GetNodes()[ nStt - 1 ]->EndOfSectionIndex();
 
-    if( nStt >= nEnd )  	// kein Bereich, also kein gueltiger Node
+    if( nStt >= nEnd )      // kein Bereich, also kein gueltiger Node
         return;
 
     if (!ExportAsInline(rFlyFrmFmt))
@@ -1297,14 +1297,14 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos)
             Strm() << '}';
         }
         OutComment( *this, OOO_STRING_SVTOOLS_RTF_BKMKEND ) << ' ';
-        
+
         {
             ::rtl::OUString aEmpty;
             ::rtl::OUString & rBookmarkName = aEmpty;
-            
+
             if (pAsBookmark)
                 rBookmarkName = pAsBookmark->GetName();
-            
+
             RTFOutFuncs::Out_String( Strm(), rBookmarkName,
                                 eDefaultEncoding, bWriteHelpFmt ) << '}';
         }
@@ -1421,7 +1421,7 @@ void SwRTFWriter::OutPageDesc()
     if( !nSize )
         return;
 
-    Strm() << SwRTFWriter::sNewLine;		// ein Trenner
+    Strm() << SwRTFWriter::sNewLine;        // ein Trenner
     bOutPageDesc = bOutPageDescTbl = TRUE;
     OutComment( *this, OOO_STRING_SVTOOLS_RTF_PGDSCTBL );
     for( USHORT n = 0; n < nSize; ++n )
@@ -1460,9 +1460,9 @@ void SwRTFWriter::OutRTFBorder(const SvxBorderLine* aLine, const USHORT nSpace )
     int nInWidth = aLine->GetInWidth();
     int nWidth = aLine->GetOutWidth();
 
-    if(nDistance == 0)	// Single Line
+    if(nDistance == 0)  // Single Line
         Strm() << OOO_STRING_SVTOOLS_RTF_BRDRS;
-    else				// Double Line
+    else                // Double Line
     {
         if(nOutWidth == nInWidth)
             Strm() << OOO_STRING_SVTOOLS_RTF_BRDRDB;
@@ -1548,7 +1548,7 @@ void SwRTFWriter::OutRTFPageDescription( const SwPageDesc& rPgDsc,
     // falls es gesharte Heaer/Footer gibt, so gebe diese auch noch aus
     if (
         (nsUseOnPage::PD_MIRROR & pAktPageDesc->GetUseOn()) &&
-        (!pAktPageDesc->IsFooterShared() || !pAktPageDesc->IsHeaderShared()) 
+        (!pAktPageDesc->IsFooterShared() || !pAktPageDesc->IsHeaderShared())
        )
     {
         bOutLeftHeadFoot = TRUE;
@@ -1675,8 +1675,8 @@ void SwRTFWriter::CheckEndNodeForSection( const SwNode& rNd )
             // wer bestimmt denn nun den neuen Abschnitt?
             // PageDesc oder eine uebergeordnete Section?
             SwSection* pParent = pSectFmt->GetParentSection();
-//			while( pParent /*&& CONTENT_SECTION != pParent->GetType()*/ )
-//				pParent = pParent->GetParent();
+//          while( pParent /*&& CONTENT_SECTION != pParent->GetType()*/ )
+//              pParent = pParent->GetParent();
 
             if( pParent /*&& CONTENT_SECTION == pParent->GetType()*/ )
                 OutRTF_SwSectionNode( *this, *pParent->
@@ -1734,7 +1734,7 @@ RTFSaveData::RTFSaveData( SwRTFWriter& rWriter, ULONG nStt, ULONG nEnd )
 
 RTFSaveData::~RTFSaveData()
 {
-    delete rWrt.pCurPam;					// Pam wieder loeschen
+    delete rWrt.pCurPam;                    // Pam wieder loeschen
 
     rWrt.pCurPam = pOldPam;
     rWrt.SetEndPaM( pOldEnd );

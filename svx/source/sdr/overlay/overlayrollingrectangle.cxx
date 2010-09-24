@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace sdr
                 const basegfx::BColor aRGBColorB(getOverlayManager()->getStripeColorB().getBColor());
                 const double fStripeLengthPixel(getOverlayManager()->getStripeLengthPixel());
                 const basegfx::B2DRange aRollingRectangle(getBasePosition(), getSecondPosition());
-                
+
                 if(getShowBounds())
                 {
                     // view-independent part, create directly
@@ -97,13 +97,13 @@ namespace sdr
             const basegfx::B2DPoint& rSecondPos,
             bool bExtendedLines,
             bool bShowBounds)
-        :	OverlayObjectWithBasePosition(rBasePos, Color(COL_BLACK)),
+        :   OverlayObjectWithBasePosition(rBasePos, Color(COL_BLACK)),
             maSecondPosition(rSecondPos),
             mbExtendedLines(bExtendedLines),
             mbShowBounds(bShowBounds)
         {
         }
-        
+
         OverlayRollingRectangleStriped::~OverlayRollingRectangleStriped()
         {
         }

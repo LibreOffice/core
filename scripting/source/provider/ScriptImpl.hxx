@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,19 +75,19 @@ public:
       @param aOutParamIndex out indices
       @param aOutParam out parameters
 
-      @returns 
+      @returns
             the value returned from the function being invoked
 
-      @throws IllegalArgumentException 
+      @throws IllegalArgumentException
             if there is no matching script name
 
-      @throws CannotConvertException 
-            if args do not match or cannot be converted the those 
+      @throws CannotConvertException
+            if args do not match or cannot be converted the those
             of the invokee
-            
-      @throws InvocationTargetException 
+
+      @throws InvocationTargetException
             if the running script throws an exception this information is captured and
-            rethrown as this exception type.  
+            rethrown as this exception type.
 
     */
     virtual css::uno::Any SAL_CALL invoke(

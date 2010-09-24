@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -30,14 +30,14 @@ namespace agg
     // anti-aliasing information, but only X and Length. The function
     // is compatible with any type of scanlines.
     //----------------
-    template<class Scanline1, 
-             class Scanline2, 
-             class Scanline> 
+    template<class Scanline1,
+             class Scanline2,
+             class Scanline>
     struct sbool_combine_spans_bin
     {
-        void operator () (const typename Scanline1::const_iterator&, 
-                          const typename Scanline2::const_iterator&, 
-                          int x, unsigned len, 
+        void operator () (const typename Scanline1::const_iterator&,
+                          const typename Scanline2::const_iterator&,
+                          int x, unsigned len,
                           Scanline& sl) const
         {
             sl.add_span(x, len, cover_full);
@@ -51,14 +51,14 @@ namespace agg
     // Combine two spans as empty ones. The functor does nothing
     // and is used to XOR binary spans.
     //----------------
-    template<class Scanline1, 
-             class Scanline2, 
-             class Scanline> 
+    template<class Scanline1,
+             class Scanline2,
+             class Scanline>
     struct sbool_combine_spans_empty
     {
-        void operator () (const typename Scanline1::const_iterator&, 
-                          const typename Scanline2::const_iterator&, 
-                          int, unsigned, 
+        void operator () (const typename Scanline1::const_iterator&,
+                          const typename Scanline2::const_iterator&,
+                          int, unsigned,
                           Scanline&) const
         {}
     };
@@ -69,12 +69,12 @@ namespace agg
     // Functor.
     // Add nothing. Used in conbine_shapes_sub
     //----------------
-    template<class Scanline1, 
-             class Scanline> 
+    template<class Scanline1,
+             class Scanline>
     struct sbool_add_span_empty
     {
-        void operator () (const typename Scanline1::const_iterator&, 
-                          int, unsigned, 
+        void operator () (const typename Scanline1::const_iterator&,
+                          int, unsigned,
                           Scanline&) const
         {}
     };
@@ -84,19 +84,19 @@ namespace agg
     // Functor.
     // Add a binary span
     //----------------
-    template<class Scanline1, 
-             class Scanline> 
+    template<class Scanline1,
+             class Scanline>
     struct sbool_add_span_bin
     {
-        void operator () (const typename Scanline1::const_iterator&, 
-                          int x, unsigned len, 
+        void operator () (const typename Scanline1::const_iterator&,
+                          int x, unsigned len,
                           Scanline& sl) const
         {
             sl.add_span(x, len, cover_full);
         }
     };
 
-    
+
 
 
     //-----------------------------------------------------sbool_add_span_aa
@@ -105,12 +105,12 @@ namespace agg
     // anti-aliasing information, but only X and Length. The function
     // is compatible with any type of scanlines.
     //----------------
-    template<class Scanline1, 
-             class Scanline> 
+    template<class Scanline1,
+             class Scanline>
     struct sbool_add_span_aa
     {
-        void operator () (const typename Scanline1::const_iterator& span, 
-                          int x, unsigned len, 
+        void operator () (const typename Scanline1::const_iterator& span,
+                          int x, unsigned len,
                           Scanline& sl) const
         {
             if(span->len < 0)
@@ -135,10 +135,10 @@ namespace agg
     // Intersect two spans preserving the anti-aliasing information.
     // The result is added to the "sl" scanline.
     //------------------
-    template<class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
-             unsigned CoverShift = cover_shift> 
+    template<class Scanline1,
+             class Scanline2,
+             class Scanline,
+             unsigned CoverShift = cover_shift>
     struct sbool_intersect_spans_aa
     {
         enum
@@ -148,18 +148,18 @@ namespace agg
             cover_mask  = cover_size - 1,
             cover_full  = cover_mask
         };
-        
 
-        void operator () (const typename Scanline1::const_iterator& span1, 
-                          const typename Scanline2::const_iterator& span2, 
-                          int x, unsigned len, 
+
+        void operator () (const typename Scanline1::const_iterator& span1,
+                          const typename Scanline2::const_iterator& span2,
+                          int x, unsigned len,
                           Scanline& sl) const
         {
             unsigned cover;
             const typename Scanline1::cover_type* covers1;
             const typename Scanline2::cover_type* covers2;
 
-            // Calculate the operation code and choose the 
+            // Calculate the operation code and choose the
             // proper combination algorithm.
             // 0 = Both spans are of AA type
             // 1 = span1 is solid, span2 is AA
@@ -176,9 +176,9 @@ namespace agg
                 do
                 {
                     cover = *covers1++ * *covers2++;
-                    sl.add_cell(x++, 
+                    sl.add_cell(x++,
                                 (cover == cover_full * cover_full) ?
-                                cover_full : 
+                                cover_full :
                                 (cover >> cover_shift));
                 }
                 while(--len);
@@ -196,9 +196,9 @@ namespace agg
                     do
                     {
                         cover = *(span1->covers) * *covers2++;
-                        sl.add_cell(x++, 
+                        sl.add_cell(x++,
                                     (cover == cover_full * cover_full) ?
-                                    cover_full : 
+                                    cover_full :
                                     (cover >> cover_shift));
                     }
                     while(--len);
@@ -217,9 +217,9 @@ namespace agg
                     do
                     {
                         cover = *covers1++ * *(span2->covers);
-                        sl.add_cell(x++, 
+                        sl.add_cell(x++,
                                     (cover == cover_full * cover_full) ?
-                                    cover_full : 
+                                    cover_full :
                                     (cover >> cover_shift));
                     }
                     while(--len);
@@ -228,9 +228,9 @@ namespace agg
 
             case 3:      // Both are solid spans
                 cover = *(span1->covers) * *(span2->covers);
-                sl.add_span(x, len, 
+                sl.add_span(x, len,
                             (cover == cover_full * cover_full) ?
-                            cover_full : 
+                            cover_full :
                             (cover >> cover_shift));
                 break;
             }
@@ -247,10 +247,10 @@ namespace agg
     // Unite two spans preserving the anti-aliasing information.
     // The result is added to the "sl" scanline.
     //------------------
-    template<class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
-             unsigned CoverShift = cover_shift> 
+    template<class Scanline1,
+             class Scanline2,
+             class Scanline,
+             unsigned CoverShift = cover_shift>
     struct sbool_unite_spans_aa
     {
         enum
@@ -260,18 +260,18 @@ namespace agg
             cover_mask  = cover_size - 1,
             cover_full  = cover_mask
         };
-        
 
-        void operator () (const typename Scanline1::const_iterator& span1, 
-                          const typename Scanline2::const_iterator& span2, 
-                          int x, unsigned len, 
+
+        void operator () (const typename Scanline1::const_iterator& span1,
+                          const typename Scanline2::const_iterator& span2,
+                          int x, unsigned len,
                           Scanline& sl) const
         {
             unsigned cover;
             const typename Scanline1::cover_type* covers1;
             const typename Scanline2::cover_type* covers2;
 
-            // Calculate the operation code and choose the 
+            // Calculate the operation code and choose the
             // proper combination algorithm.
             // 0 = Both spans are of AA type
             // 1 = span1 is solid, span2 is AA
@@ -287,12 +287,12 @@ namespace agg
                 if(span2->x < x) covers2 += x - span2->x;
                 do
                 {
-                    cover = cover_mask * cover_mask - 
-                                (cover_mask - *covers1++) * 
+                    cover = cover_mask * cover_mask -
+                                (cover_mask - *covers1++) *
                                 (cover_mask - *covers2++);
-                    sl.add_cell(x++, 
+                    sl.add_cell(x++,
                                 (cover == cover_full * cover_full) ?
-                                cover_full : 
+                                cover_full :
                                 (cover >> cover_shift));
                 }
                 while(--len);
@@ -309,12 +309,12 @@ namespace agg
                 {
                     do
                     {
-                        cover = cover_mask * cover_mask - 
-                                    (cover_mask - *(span1->covers)) * 
+                        cover = cover_mask * cover_mask -
+                                    (cover_mask - *(span1->covers)) *
                                     (cover_mask - *covers2++);
-                        sl.add_cell(x++, 
+                        sl.add_cell(x++,
                                     (cover == cover_full * cover_full) ?
-                                    cover_full : 
+                                    cover_full :
                                     (cover >> cover_shift));
                     }
                     while(--len);
@@ -332,12 +332,12 @@ namespace agg
                 {
                     do
                     {
-                        cover = cover_mask * cover_mask - 
-                                    (cover_mask - *covers1++) * 
+                        cover = cover_mask * cover_mask -
+                                    (cover_mask - *covers1++) *
                                     (cover_mask - *(span2->covers));
-                        sl.add_cell(x++, 
+                        sl.add_cell(x++,
                                     (cover == cover_full * cover_full) ?
-                                    cover_full : 
+                                    cover_full :
                                     (cover >> cover_shift));
                     }
                     while(--len);
@@ -345,12 +345,12 @@ namespace agg
                 break;
 
             case 3:      // Both are solid spans
-                cover = cover_mask * cover_mask - 
-                            (cover_mask - *(span1->covers)) * 
+                cover = cover_mask * cover_mask -
+                            (cover_mask - *(span1->covers)) *
                             (cover_mask - *(span2->covers));
-                sl.add_span(x, len, 
+                sl.add_span(x, len,
                             (cover == cover_full * cover_full) ?
-                            cover_full : 
+                            cover_full :
                             (cover >> cover_shift));
                 break;
             }
@@ -359,7 +359,7 @@ namespace agg
 
 
     //---------------------------------------------sbool_xor_formula_linear
-    template<unsigned CoverShift = cover_shift> 
+    template<unsigned CoverShift = cover_shift>
     struct sbool_xor_formula_linear
     {
         enum
@@ -379,7 +379,7 @@ namespace agg
 
 
     //---------------------------------------------sbool_xor_formula_saddle
-    template<unsigned CoverShift = cover_shift> 
+    template<unsigned CoverShift = cover_shift>
     struct sbool_xor_formula_saddle
     {
         enum
@@ -417,11 +417,11 @@ namespace agg
     // XOR two spans preserving the anti-aliasing information.
     // The result is added to the "sl" scanline.
     //------------------
-    template<class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class Scanline1,
+             class Scanline2,
+             class Scanline,
              class XorFormula,
-             unsigned CoverShift = cover_shift> 
+             unsigned CoverShift = cover_shift>
     struct sbool_xor_spans_aa
     {
         enum
@@ -431,18 +431,18 @@ namespace agg
             cover_mask  = cover_size - 1,
             cover_full  = cover_mask
         };
-        
 
-        void operator () (const typename Scanline1::const_iterator& span1, 
-                          const typename Scanline2::const_iterator& span2, 
-                          int x, unsigned len, 
+
+        void operator () (const typename Scanline1::const_iterator& span1,
+                          const typename Scanline2::const_iterator& span2,
+                          int x, unsigned len,
                           Scanline& sl) const
         {
             unsigned cover;
             const typename Scanline1::cover_type* covers1;
             const typename Scanline2::cover_type* covers2;
 
-            // Calculate the operation code and choose the 
+            // Calculate the operation code and choose the
             // proper combination algorithm.
             // 0 = Both spans are of AA type
             // 1 = span1 is solid, span2 is AA
@@ -507,10 +507,10 @@ namespace agg
     // Unite two spans preserving the anti-aliasing information.
     // The result is added to the "sl" scanline.
     //------------------
-    template<class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
-             unsigned CoverShift = cover_shift> 
+    template<class Scanline1,
+             class Scanline2,
+             class Scanline,
+             unsigned CoverShift = cover_shift>
     struct sbool_subtract_spans_aa
     {
         enum
@@ -520,18 +520,18 @@ namespace agg
             cover_mask  = cover_size - 1,
             cover_full  = cover_mask
         };
-        
 
-        void operator () (const typename Scanline1::const_iterator& span1, 
-                          const typename Scanline2::const_iterator& span2, 
-                          int x, unsigned len, 
+
+        void operator () (const typename Scanline1::const_iterator& span1,
+                          const typename Scanline2::const_iterator& span2,
+                          int x, unsigned len,
                           Scanline& sl) const
         {
             unsigned cover;
             const typename Scanline1::cover_type* covers1;
             const typename Scanline2::cover_type* covers2;
 
-            // Calculate the operation code and choose the 
+            // Calculate the operation code and choose the
             // proper combination algorithm.
             // 0 = Both spans are of AA type
             // 1 = span1 is solid, span2 is AA
@@ -550,9 +550,9 @@ namespace agg
                     cover = *covers1++ * (cover_mask - *covers2++);
                     if(cover)
                     {
-                        sl.add_cell(x, 
+                        sl.add_cell(x,
                                     (cover == cover_full * cover_full) ?
-                                    cover_full : 
+                                    cover_full :
                                     (cover >> cover_shift));
                     }
                     ++x;
@@ -568,9 +568,9 @@ namespace agg
                     cover = *(span1->covers) * (cover_mask - *covers2++);
                     if(cover)
                     {
-                        sl.add_cell(x, 
+                        sl.add_cell(x,
                                     (cover == cover_full * cover_full) ?
-                                    cover_full : 
+                                    cover_full :
                                     (cover >> cover_shift));
                     }
                     ++x;
@@ -588,9 +588,9 @@ namespace agg
                         cover = *covers1++ * (cover_mask - *(span2->covers));
                         if(cover)
                         {
-                            sl.add_cell(x, 
+                            sl.add_cell(x,
                                         (cover == cover_full * cover_full) ?
-                                        cover_full : 
+                                        cover_full :
                                         (cover >> cover_shift));
                         }
                         ++x;
@@ -603,9 +603,9 @@ namespace agg
                 cover = *(span1->covers) * (cover_mask - *(span2->covers));
                 if(cover)
                 {
-                    sl.add_span(x, len, 
+                    sl.add_span(x, len,
                                 (cover == cover_full * cover_full) ?
-                                cover_full : 
+                                cover_full :
                                 (cover >> cover_shift));
                 }
                 break;
@@ -619,13 +619,13 @@ namespace agg
 
 
     //--------------------------------------------sbool_add_spans_and_render
-    template<class Scanline1, 
-             class Scanline, 
-             class Renderer, 
+    template<class Scanline1,
+             class Scanline,
+             class Renderer,
              class AddSpanFunctor>
-    void sbool_add_spans_and_render(const Scanline1& sl1, 
-                                    Scanline& sl, 
-                                    Renderer& ren, 
+    void sbool_add_spans_and_render(const Scanline1& sl1,
+                                    Scanline& sl,
+                                    Renderer& ren,
                                     AddSpanFunctor add_span)
     {
         sl.reset_spans();
@@ -654,13 +654,13 @@ namespace agg
     // two spans without Anti-Aliasing, the second preserves the AA
     // information, but works slower
     //
-    template<class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class Scanline1,
+             class Scanline2,
+             class Scanline,
              class CombineSpansFunctor>
-    void sbool_intersect_scanlines(const Scanline1& sl1, 
-                                   const Scanline2& sl2, 
-                                   Scanline& sl, 
+    void sbool_intersect_scanlines(const Scanline1& sl1,
+                                   const Scanline2& sl2,
+                                   Scanline& sl,
                                    CombineSpansFunctor combine_spans)
     {
         sl.reset_spans();
@@ -683,7 +683,7 @@ namespace agg
 
             // Determine what spans we should advance in the next step
             // The span with the least ending X should be advanced
-            // advance_both is just an optimization when we ending 
+            // advance_both is just an optimization when we ending
             // coordinates are the same and we can advance both
             //--------------
             bool advance_span1 = xe1 <  xe2;
@@ -732,8 +732,8 @@ namespace agg
 
 
     //------------------------------------------------sbool_intersect_shapes
-    // Intersect the scanline shapes. Here the "Scanline Generator" 
-    // abstraction is used. ScanlineGen1 and ScanlineGen2 are 
+    // Intersect the scanline shapes. Here the "Scanline Generator"
+    // abstraction is used. ScanlineGen1 and ScanlineGen2 are
     // the generators, and can be of type rasterizer_scanline_aa<>.
     // There function requires three scanline containers that can be of
     // different types.
@@ -741,23 +741,23 @@ namespace agg
     // "sl" is ised as the resulting scanline to render it.
     // The external "sl1" and "sl2" are used only for the sake of
     // optimization and reusing of the scanline objects.
-    // the function calls sbool_intersect_scanlines with CombineSpansFunctor 
+    // the function calls sbool_intersect_scanlines with CombineSpansFunctor
     // as the last argument. See sbool_intersect_scanlines for details.
     //----------
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer,
              class CombineSpansFunctor>
     void sbool_intersect_shapes(ScanlineGen1& sg1, ScanlineGen2& sg2,
                                 Scanline1& sl1, Scanline2& sl2,
-                                Scanline& sl, Renderer& ren, 
+                                Scanline& sl, Renderer& ren,
                                 CombineSpansFunctor combine_spans)
     {
         // Prepare the scanline generators.
-        // If anyone of them doesn't contain 
+        // If anyone of them doesn't contain
         // any scanlines, then return.
         //-----------------
         if(!sg1.rewind_scanlines()) return;
@@ -768,7 +768,7 @@ namespace agg
         rect r1(sg1.min_x(), sg1.min_y(), sg1.max_x(), sg1.max_y());
         rect r2(sg2.min_x(), sg2.min_y(), sg2.max_x(), sg2.max_y());
 
-        // Calculate the intersection of the bounding 
+        // Calculate the intersection of the bounding
         // boxes and return if they don't intersect.
         //-----------------
         rect ir = intersect_rectangles(r1, r2);
@@ -785,9 +785,9 @@ namespace agg
         ren.prepare(unsigned(ir.x2 - ir.x1 + 2));
 
         // The main loop
-        // Here we synchronize the scanlines with 
+        // Here we synchronize the scanlines with
         // the same Y coordinate, ignoring all other ones.
-        // Only scanlines having the same Y-coordinate 
+        // Only scanlines having the same Y-coordinate
         // are to be combined.
         //-----------------
         for(;;)
@@ -832,15 +832,15 @@ namespace agg
     // two spans without Anti-Aliasing, the second preserves the AA
     // information, but works slower
     //
-    template<class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class Scanline1,
+             class Scanline2,
+             class Scanline,
              class AddSpanFunctor1,
              class AddSpanFunctor2,
              class CombineSpansFunctor>
-    void sbool_unite_scanlines(const Scanline1& sl1, 
-                               const Scanline2& sl2, 
-                               Scanline& sl, 
+    void sbool_unite_scanlines(const Scanline1& sl1,
+                               const Scanline2& sl2,
+                               Scanline& sl,
                                AddSpanFunctor1 add_span1,
                                AddSpanFunctor2 add_span2,
                                CombineSpansFunctor combine_spans)
@@ -887,7 +887,7 @@ namespace agg
         {
             // Retrieve a new span1 if it's invalid
             //----------------
-            if(num1 && xb1 > xe1) 
+            if(num1 && xb1 > xe1)
             {
                 --num1;
                 ++span1;
@@ -897,7 +897,7 @@ namespace agg
 
             // Retrieve a new span2 if it's invalid
             //----------------
-            if(num2 && xb2 > xe2) 
+            if(num2 && xb2 > xe2)
             {
                 --num2;
                 ++span2;
@@ -943,7 +943,7 @@ namespace agg
                     // Invalidate span1 and eat
                     // the processed part of span2
                     //--------------
-                    xb1 = invalid_b;    
+                    xb1 = invalid_b;
                     xe1 = invalid_e;
                     xb2 += len;
                 }
@@ -953,7 +953,7 @@ namespace agg
                     // Invalidate span2 and eat
                     // the processed part of span1
                     //--------------
-                    xb2 = invalid_b;  
+                    xb2 = invalid_b;
                     xe2 = invalid_e;
                     xb1 += len;
                 }
@@ -969,7 +969,7 @@ namespace agg
             {
                 // The spans do not intersect
                 //--------------
-                if(xb1 < xb2) 
+                if(xb1 < xb2)
                 {
                     // Advance span1
                     //---------------
@@ -999,36 +999,36 @@ namespace agg
 
 
     //----------------------------------------------------sbool_unite_shapes
-    // Unite the scanline shapes. Here the "Scanline Generator" 
-    // abstraction is used. ScanlineGen1 and ScanlineGen2 are 
+    // Unite the scanline shapes. Here the "Scanline Generator"
+    // abstraction is used. ScanlineGen1 and ScanlineGen2 are
     // the generators, and can be of type rasterizer_scanline_aa<>.
-    // There function requires three scanline containers that can be 
+    // There function requires three scanline containers that can be
     // of different type.
     // "sl1" and "sl2" are used to retrieve scanlines from the generators,
     // "sl" is ised as the resulting scanline to render it.
     // The external "sl1" and "sl2" are used only for the sake of
     // optimization and reusing of the scanline objects.
-    // the function calls sbool_unite_scanlines with CombineSpansFunctor 
+    // the function calls sbool_unite_scanlines with CombineSpansFunctor
     // as the last argument. See sbool_unite_scanlines for details.
     //----------
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer,
              class AddSpanFunctor1,
              class AddSpanFunctor2,
              class CombineSpansFunctor>
     void sbool_unite_shapes(ScanlineGen1& sg1, ScanlineGen2& sg2,
                             Scanline1& sl1, Scanline2& sl2,
-                            Scanline& sl, Renderer& ren, 
+                            Scanline& sl, Renderer& ren,
                             AddSpanFunctor1 add_span1,
                             AddSpanFunctor2 add_span2,
                             CombineSpansFunctor combine_spans)
     {
         // Prepare the scanline generators.
-        // If anyone of them doesn't contain 
+        // If anyone of them doesn't contain
         // any scanlines, then return.
         //-----------------
         bool flag1 = sg1.rewind_scanlines();
@@ -1050,20 +1050,20 @@ namespace agg
         // Reset the scanlines and get two first ones
         //-----------------
         sl.reset(ur.x1, ur.x2);
-        if(flag1) 
+        if(flag1)
         {
             sl1.reset(sg1.min_x(), sg1.max_x());
             flag1 = sg1.sweep_scanline(sl1);
         }
 
-        if(flag2) 
+        if(flag2)
         {
             sl2.reset(sg2.min_x(), sg2.max_x());
             flag2 = sg2.sweep_scanline(sl2);
         }
 
         // The main loop
-        // Here we synchronize the scanlines with 
+        // Here we synchronize the scanlines with
         // the same Y coordinate.
         //-----------------
         while(flag1 || flag2)
@@ -1076,7 +1076,7 @@ namespace agg
                     // Combine the scanlines, render if they contain any spans,
                     // and advance both generators to the next scanlines
                     //----------------------
-                    sbool_unite_scanlines(sl1, sl2, sl, 
+                    sbool_unite_scanlines(sl1, sl2, sl,
                                           add_span1, add_span2, combine_spans);
                     if(sl.num_spans())
                     {
@@ -1124,8 +1124,8 @@ namespace agg
 
 
     //-------------------------------------------------sbool_subtract_shapes
-    // Subtract the scanline shapes, "sg1-sg2". Here the "Scanline Generator" 
-    // abstraction is used. ScanlineGen1 and ScanlineGen2 are 
+    // Subtract the scanline shapes, "sg1-sg2". Here the "Scanline Generator"
+    // abstraction is used. ScanlineGen1 and ScanlineGen2 are
     // the generators, and can be of type rasterizer_scanline_aa<>.
     // There function requires three scanline containers that can be of
     // different types.
@@ -1133,20 +1133,20 @@ namespace agg
     // "sl" is ised as the resulting scanline to render it.
     // The external "sl1" and "sl2" are used only for the sake of
     // optimization and reusing of the scanline objects.
-    // the function calls sbool_intersect_scanlines with CombineSpansFunctor 
+    // the function calls sbool_intersect_scanlines with CombineSpansFunctor
     // as the last argument. See combine_scanlines_sub for details.
     //----------
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer,
              class AddSpanFunctor1,
              class CombineSpansFunctor>
     void sbool_subtract_shapes(ScanlineGen1& sg1, ScanlineGen2& sg2,
                                Scanline1& sl1, Scanline2& sl2,
-                               Scanline& sl, Renderer& ren, 
+                               Scanline& sl, Renderer& ren,
                                AddSpanFunctor1 add_span1,
                                CombineSpansFunctor combine_spans)
     {
@@ -1175,9 +1175,9 @@ namespace agg
         sbool_add_span_empty<Scanline1, Scanline> add_span2;
 
         // The main loop
-        // Here we synchronize the scanlines with 
+        // Here we synchronize the scanlines with
         // the same Y coordinate, ignoring all other ones.
-        // Only scanlines having the same Y-coordinate 
+        // Only scanlines having the same Y-coordinate
         // are to be combined.
         //-----------------
         bool flag1 = true;
@@ -1221,21 +1221,21 @@ namespace agg
 
 
     //---------------------------------------------sbool_intersect_shapes_aa
-    // Intersect two anti-aliased scanline shapes. 
-    // Here the "Scanline Generator" abstraction is used. 
-    // ScanlineGen1 and ScanlineGen2 are the generators, and can be of 
-    // type rasterizer_scanline_aa<>. There function requires three 
+    // Intersect two anti-aliased scanline shapes.
+    // Here the "Scanline Generator" abstraction is used.
+    // ScanlineGen1 and ScanlineGen2 are the generators, and can be of
+    // type rasterizer_scanline_aa<>. There function requires three
     // scanline containers that can be of different types.
     // "sl1" and "sl2" are used to retrieve scanlines from the generators,
     // "sl" is ised as the resulting scanline to render it.
     // The external "sl1" and "sl2" are used only for the sake of
     // optimization and reusing of the scanline objects.
     //----------
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer>
     void sbool_intersect_shapes_aa(ScanlineGen1& sg1, ScanlineGen2& sg2,
                                    Scanline1& sl1, Scanline2& sl2,
@@ -1250,14 +1250,14 @@ namespace agg
 
 
     //--------------------------------------------sbool_intersect_shapes_bin
-    // Intersect two binary scanline shapes (without anti-aliasing). 
+    // Intersect two binary scanline shapes (without anti-aliasing).
     // See intersect_shapes_aa for more comments
     //----------
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer>
     void sbool_intersect_shapes_bin(ScanlineGen1& sg1, ScanlineGen2& sg2,
                                     Scanline1& sl1, Scanline2& sl2,
@@ -1272,14 +1272,14 @@ namespace agg
 
 
     //-------------------------------------------------sbool_unite_shapes_aa
-    // Unite two anti-aliased scanline shapes 
+    // Unite two anti-aliased scanline shapes
     // See intersect_shapes_aa for more comments
     //----------
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer>
     void sbool_unite_shapes_aa(ScanlineGen1& sg1, ScanlineGen2& sg2,
                                Scanline1& sl1, Scanline2& sl2,
@@ -1288,7 +1288,7 @@ namespace agg
         sbool_add_span_aa<Scanline1, Scanline> add_functor1;
         sbool_add_span_aa<Scanline2, Scanline> add_functor2;
         sbool_unite_spans_aa<Scanline1, Scanline2, Scanline> combine_functor;
-        sbool_unite_shapes(sg1, sg2, sl1, sl2, sl, ren, 
+        sbool_unite_shapes(sg1, sg2, sl1, sl2, sl, ren,
                            add_functor1, add_functor2, combine_functor);
     }
 
@@ -1297,14 +1297,14 @@ namespace agg
 
 
     //------------------------------------------------sbool_unite_shapes_bin
-    // Unite two binary scanline shapes (without anti-aliasing). 
+    // Unite two binary scanline shapes (without anti-aliasing).
     // See intersect_shapes_aa for more comments
     //----------
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer>
     void sbool_unite_shapes_bin(ScanlineGen1& sg1, ScanlineGen2& sg2,
                                 Scanline1& sl1, Scanline2& sl2,
@@ -1313,7 +1313,7 @@ namespace agg
         sbool_add_span_bin<Scanline1, Scanline> add_functor1;
         sbool_add_span_bin<Scanline2, Scanline> add_functor2;
         sbool_combine_spans_bin<Scanline1, Scanline2, Scanline> combine_functor;
-        sbool_unite_shapes(sg1, sg2, sl1, sl2, sl, ren, 
+        sbool_unite_shapes(sg1, sg2, sl1, sl2, sl, ren,
                            add_functor1, add_functor2, combine_functor);
     }
 
@@ -1326,17 +1326,17 @@ namespace agg
 
 
     //---------------------------------------------------sbool_xor_shapes_aa
-    // Apply eXclusive OR to two anti-aliased scanline shapes. There's 
+    // Apply eXclusive OR to two anti-aliased scanline shapes. There's
     // a modified "Linear" XOR used instead of classical "Saddle" one.
     // The reason is to have the result absolutely conststent with what
     // the scanline rasterizer produces.
     // See intersect_shapes_aa for more comments
     //----------
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer>
     void sbool_xor_shapes_aa(ScanlineGen1& sg1, ScanlineGen2& sg2,
                              Scanline1& sl1, Scanline2& sl2,
@@ -1344,26 +1344,26 @@ namespace agg
     {
         sbool_add_span_aa<Scanline1, Scanline> add_functor1;
         sbool_add_span_aa<Scanline2, Scanline> add_functor2;
-        sbool_xor_spans_aa<Scanline1, Scanline2, Scanline, 
+        sbool_xor_spans_aa<Scanline1, Scanline2, Scanline,
                            sbool_xor_formula_linear<> > combine_functor;
-        sbool_unite_shapes(sg1, sg2, sl1, sl2, sl, ren, 
+        sbool_unite_shapes(sg1, sg2, sl1, sl2, sl, ren,
                            add_functor1, add_functor2, combine_functor);
     }
 
 
 
     //------------------------------------------sbool_xor_shapes_saddle_aa
-    // Apply eXclusive OR to two anti-aliased scanline shapes. 
-    // There's the classical "Saddle" used to calculate the 
+    // Apply eXclusive OR to two anti-aliased scanline shapes.
+    // There's the classical "Saddle" used to calculate the
     // Anti-Aliasing values, that is:
     // a XOR b : 1-((1-a+a*b)*(1-b+a*b))
     // See intersect_shapes_aa for more comments
     //----------
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer>
     void sbool_xor_shapes_saddle_aa(ScanlineGen1& sg1, ScanlineGen2& sg2,
                                     Scanline1& sl1, Scanline2& sl2,
@@ -1371,27 +1371,27 @@ namespace agg
     {
         sbool_add_span_aa<Scanline1, Scanline> add_functor1;
         sbool_add_span_aa<Scanline2, Scanline> add_functor2;
-        sbool_xor_spans_aa<Scanline1, 
-                           Scanline2, 
-                           Scanline, 
+        sbool_xor_spans_aa<Scanline1,
+                           Scanline2,
+                           Scanline,
                            sbool_xor_formula_saddle<> > combine_functor;
-        sbool_unite_shapes(sg1, sg2, sl1, sl2, sl, ren, 
+        sbool_unite_shapes(sg1, sg2, sl1, sl2, sl, ren,
                            add_functor1, add_functor2, combine_functor);
     }
 
 
     //--------------------------------------sbool_xor_shapes_abs_diff_aa
-    // Apply eXclusive OR to two anti-aliased scanline shapes. 
-    // There's the absolute difference used to calculate 
+    // Apply eXclusive OR to two anti-aliased scanline shapes.
+    // There's the absolute difference used to calculate
     // Anti-Aliasing values, that is:
     // a XOR b : abs(a-b)
     // See intersect_shapes_aa for more comments
     //----------
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer>
     void sbool_xor_shapes_abs_diff_aa(ScanlineGen1& sg1, ScanlineGen2& sg2,
                                       Scanline1& sl1, Scanline2& sl2,
@@ -1399,25 +1399,25 @@ namespace agg
     {
         sbool_add_span_aa<Scanline1, Scanline> add_functor1;
         sbool_add_span_aa<Scanline2, Scanline> add_functor2;
-        sbool_xor_spans_aa<Scanline1, 
-                           Scanline2, 
-                           Scanline, 
+        sbool_xor_spans_aa<Scanline1,
+                           Scanline2,
+                           Scanline,
                            sbool_xor_formula_abs_diff> combine_functor;
-        sbool_unite_shapes(sg1, sg2, sl1, sl2, sl, ren, 
+        sbool_unite_shapes(sg1, sg2, sl1, sl2, sl, ren,
                            add_functor1, add_functor2, combine_functor);
     }
 
 
 
     //--------------------------------------------------sbool_xor_shapes_bin
-    // Apply eXclusive OR to two binary scanline shapes (without anti-aliasing). 
+    // Apply eXclusive OR to two binary scanline shapes (without anti-aliasing).
     // See intersect_shapes_aa for more comments
     //----------
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer>
     void sbool_xor_shapes_bin(ScanlineGen1& sg1, ScanlineGen2& sg2,
                               Scanline1& sl1, Scanline2& sl2,
@@ -1426,7 +1426,7 @@ namespace agg
         sbool_add_span_bin<Scanline1, Scanline> add_functor1;
         sbool_add_span_bin<Scanline2, Scanline> add_functor2;
         sbool_combine_spans_empty<Scanline1, Scanline2, Scanline> combine_functor;
-        sbool_unite_shapes(sg1, sg2, sl1, sl2, sl, ren, 
+        sbool_unite_shapes(sg1, sg2, sl1, sl2, sl, ren,
                            add_functor1, add_functor2, combine_functor);
     }
 
@@ -1439,11 +1439,11 @@ namespace agg
     // Subtract shapes "sg1-sg2" with anti-aliasing
     // See intersect_shapes_aa for more comments
     //----------
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer>
     void sbool_subtract_shapes_aa(ScanlineGen1& sg1, ScanlineGen2& sg2,
                                   Scanline1& sl1, Scanline2& sl2,
@@ -1451,7 +1451,7 @@ namespace agg
     {
         sbool_add_span_aa<Scanline1, Scanline> add_functor;
         sbool_subtract_spans_aa<Scanline1, Scanline2, Scanline> combine_functor;
-        sbool_subtract_shapes(sg1, sg2, sl1, sl2, sl, ren, 
+        sbool_subtract_shapes(sg1, sg2, sl1, sl2, sl, ren,
                               add_functor, combine_functor);
     }
 
@@ -1463,11 +1463,11 @@ namespace agg
     // Subtract binary shapes "sg1-sg2" without anti-aliasing
     // See intersect_shapes_aa for more comments
     //----------
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer>
     void sbool_subtract_shapes_bin(ScanlineGen1& sg1, ScanlineGen2& sg2,
                                    Scanline1& sl1, Scanline2& sl2,
@@ -1475,7 +1475,7 @@ namespace agg
     {
         sbool_add_span_bin<Scanline1, Scanline> add_functor;
         sbool_combine_spans_empty<Scanline1, Scanline2, Scanline> combine_functor;
-        sbool_subtract_shapes(sg1, sg2, sl1, sl2, sl, ren, 
+        sbool_subtract_shapes(sg1, sg2, sl1, sl2, sl, ren,
                               add_functor, combine_functor);
     }
 
@@ -1502,11 +1502,11 @@ namespace agg
 
 
     //----------------------------------------------sbool_combine_shapes_bin
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer>
     void sbool_combine_shapes_bin(sbool_op_e op,
                                   ScanlineGen1& sg1, ScanlineGen2& sg2,
@@ -1518,7 +1518,7 @@ namespace agg
         case sbool_or          : sbool_unite_shapes_bin    (sg1, sg2, sl1, sl2, sl, ren); break;
         case sbool_and         : sbool_intersect_shapes_bin(sg1, sg2, sl1, sl2, sl, ren); break;
         case sbool_xor         :
-        case sbool_xor_saddle  : 
+        case sbool_xor_saddle  :
         case sbool_xor_abs_diff: sbool_xor_shapes_bin      (sg1, sg2, sl1, sl2, sl, ren); break;
         case sbool_a_minus_b   : sbool_subtract_shapes_bin (sg1, sg2, sl1, sl2, sl, ren); break;
         case sbool_b_minus_a   : sbool_subtract_shapes_bin (sg2, sg1, sl2, sl1, sl, ren); break;
@@ -1529,11 +1529,11 @@ namespace agg
 
 
     //-----------------------------------------------sbool_combine_shapes_aa
-    template<class ScanlineGen1, 
-             class ScanlineGen2, 
-             class Scanline1, 
-             class Scanline2, 
-             class Scanline, 
+    template<class ScanlineGen1,
+             class ScanlineGen2,
+             class Scanline1,
+             class Scanline2,
+             class Scanline,
              class Renderer>
     void sbool_combine_shapes_aa(sbool_op_e op,
                                  ScanlineGen1& sg1, ScanlineGen2& sg2,

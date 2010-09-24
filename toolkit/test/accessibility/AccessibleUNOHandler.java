@@ -12,14 +12,14 @@ import com.sun.star.uno.Type;
 /** This handler displays lower level UNO information.  These are the
     supported services, interfaces, and the implementation name.
 */
-class AccessibleUNOHandler 
+class AccessibleUNOHandler
     extends NodeHandler
 {
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
         if (xContext == null)
             return null;
-        else 
+        else
             return new AccessibleUNOHandler (xContext);
     }
 
@@ -49,7 +49,7 @@ class AccessibleUNOHandler
         return xTypeProvider;
     }
 
-    public AccessibleTreeNode createChild (AccessibleTreeNode aParent, 
+    public AccessibleTreeNode createChild (AccessibleTreeNode aParent,
                                            int nIndex)
     {
         AccessibleTreeNode aChild = null;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,12 +57,12 @@ class XclExpRoot;
 
 // ---------------------------------------------------------- Excel Imp~/Exp~ -
 
-struct RootData		// -> Inkarnation jeweils im ImportExcel-Objekt!
+struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 {
-    BiffTyp				eDateiTyp;				// feine Differenzierung
-    ExtSheetBuffer*		pExtSheetBuff;
-    ShrfmlaBuffer*		pShrfmlaBuff;
-    ExtNameBuff*		pExtNameBuff;
+    BiffTyp             eDateiTyp;              // feine Differenzierung
+    ExtSheetBuffer*     pExtSheetBuff;
+    ShrfmlaBuffer*      pShrfmlaBuff;
+    ExtNameBuff*        pExtNameBuff;
     ExcelToSc*          pFmlaConverter;
     XclImpColRowSettings* pColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
 
@@ -78,14 +78,14 @@ struct RootData		// -> Inkarnation jeweils im ImportExcel-Objekt!
     XclImpRoot*         pIR;
     XclExpRoot*         pER;
 
-                        RootData( void );		// -> exctools.cxx
-                        ~RootData();			// -> exctools.cxx
+                        RootData( void );       // -> exctools.cxx
+                        ~RootData();            // -> exctools.cxx
 };
 
 class ExcRoot
 {
 protected:
-    RootData*		pExcRoot;
+    RootData*       pExcRoot;
     inline          ExcRoot( RootData* pNexExcRoot ) : pExcRoot( pNexExcRoot ) {}
     inline          ExcRoot( const ExcRoot& rCopy ) : pExcRoot( rCopy.pExcRoot ) {}
 };
@@ -99,19 +99,19 @@ class LotAttrTable;
 
 struct LOTUS_ROOT
 {
-    ScDocument*			pDoc;
-    LotusRangeList*		pRangeNames;
-    ScRangeName*		pScRangeName;
-    CharSet				eCharsetQ;
-    Lotus123Typ			eFirstType;
-    Lotus123Typ			eActType;
-    ScRange				aActRange;
-    RangeNameBufferWK3*	pRngNmBffWK3;
-    LotusFontBuffer*	pFontBuff;
-    LotAttrTable*		pAttrTable;
+    ScDocument*         pDoc;
+    LotusRangeList*     pRangeNames;
+    ScRangeName*        pScRangeName;
+    CharSet             eCharsetQ;
+    Lotus123Typ         eFirstType;
+    Lotus123Typ         eActType;
+    ScRange             aActRange;
+    RangeNameBufferWK3* pRngNmBffWK3;
+    LotusFontBuffer*    pFontBuff;
+    LotAttrTable*       pAttrTable;
 };
 
-extern LOTUS_ROOT*		pLotusRoot;	// -> Inkarn. in filter.cxx
+extern LOTUS_ROOT*      pLotusRoot; // -> Inkarn. in filter.cxx
 
 // ----------------------------------------------------------------------------
 

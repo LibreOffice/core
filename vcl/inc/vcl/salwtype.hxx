@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,7 +135,7 @@ struct SalMenuEvent
 {
     USHORT          mnId;           // Menu item ID
     void*           mpMenu;         // pointer to VCL menu (class Menu)
-    
+
     SalMenuEvent() : mnId( 0 ), mpMenu( NULL ) {}
     SalMenuEvent( USHORT i_nId, void* i_pMenu )
     : mnId( i_nId ), mpMenu( i_pMenu ) {}
@@ -157,7 +157,7 @@ struct SalPaintEvent
     long            mnBoundWidth;       // BoundRect - Width
     long            mnBoundHeight;      // BoundRect - Height
     bool            mbImmediateUpdate;  // set to true to force an immediate update
-    
+
     SalPaintEvent( long x, long y, long w, long h, bool bImmediate = false ) :
         mnBoundX( x ), mnBoundY( y ),
         mnBoundWidth( w ), mnBoundHeight( h ),
@@ -181,7 +181,7 @@ struct SalWheelMouseEvent
     USHORT          mnCode;         // SV-ModifierCode (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)
     BOOL            mbHorz;         // Horizontal
     BOOL            mbDeltaIsPixel; // delta value is a pixel value (on mac)
-    
+
     SalWheelMouseEvent()
     : mnTime( 0 ), mnX( 0 ), mnY( 0 ), mnDelta( 0 ), mnNotchDelta( 0 ), mnScrollLines( 0 ), mnCode( 0 ), mbHorz( FALSE ), mbDeltaIsPixel( FALSE )
     {}

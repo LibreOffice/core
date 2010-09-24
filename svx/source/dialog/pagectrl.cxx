@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@
 
 struct PageWindow_Impl
 {
-    SvxBoxItem*		pBorder;
-    Bitmap			aBitmap;
-    FASTBOOL		bBitmap;
+    SvxBoxItem*     pBorder;
+    Bitmap          aBitmap;
+    FASTBOOL        bBitmap;
     sal_Bool        bResetBackground;
     sal_Bool        bFrameDirection;
     sal_Int32       nFrameDirection;
@@ -65,8 +65,8 @@ struct PageWindow_Impl
 
 // STATIC DATA -----------------------------------------------------------
 
-#define CELL_WIDTH		1600L
-#define CELL_HEIGHT		 800L
+#define CELL_WIDTH      1600L
+#define CELL_HEIGHT      800L
 
 // class SvxPageWindow ---------------------------------------------------
 
@@ -74,29 +74,29 @@ SvxPageWindow::SvxPageWindow( Window* pParent, const ResId& rId ) :
 
     Window( pParent, rId ),
 
-    nTop		( 0 ),
-    nBottom		( 0 ),
-    nLeft		( 0 ),
-    nRight		( 0 ),
+    nTop        ( 0 ),
+    nBottom     ( 0 ),
+    nLeft       ( 0 ),
+    nRight      ( 0 ),
     aColor      ( COL_TRANSPARENT ),
-    nHdLeft		( 0 ),
-    nHdRight	( 0 ),
-    nHdDist		( 0 ),
-    nHdHeight	( 0 ),
+    nHdLeft     ( 0 ),
+    nHdRight    ( 0 ),
+    nHdDist     ( 0 ),
+    nHdHeight   ( 0 ),
     aHdColor    ( COL_TRANSPARENT ),
-    pHdBorder	( 0 ),
-    nFtLeft		( 0 ),
-    nFtRight	( 0 ),
-    nFtDist		( 0 ),
-    nFtHeight	( 0 ),
+    pHdBorder   ( 0 ),
+    nFtLeft     ( 0 ),
+    nFtRight    ( 0 ),
+    nFtDist     ( 0 ),
+    nFtHeight   ( 0 ),
     aFtColor    ( COL_TRANSPARENT ),
-    pFtBorder 	( 0 ),
-    bFooter		( FALSE ),
-    bHeader		( FALSE ),
-    bTable		( FALSE ),
-    bHorz		( FALSE ),
-    bVert		( FALSE ),
-    eUsage		( SVX_PAGE_ALL )
+    pFtBorder   ( 0 ),
+    bFooter     ( FALSE ),
+    bHeader     ( FALSE ),
+    bTable      ( FALSE ),
+    bHorz       ( FALSE ),
+    bVert       ( FALSE ),
+    eUsage      ( SVX_PAGE_ALL )
 
 {
     pImpl = new PageWindow_Impl;
@@ -225,7 +225,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const BOOL bSecond, const BOOL 
 
     aRect.Left()  = rOrg.X() + nL;
     aRect.Right() = rOrg.X() + aTempSize.Width() - nR;
-    aRect.Top()	  = rOrg.Y() + nTop;
+    aRect.Top()   = rOrg.Y() + nTop;
     aRect.Bottom()= rOrg.Y() + aTempSize.Height() - nBottom;
 
     Rectangle aHdRect( aRect );

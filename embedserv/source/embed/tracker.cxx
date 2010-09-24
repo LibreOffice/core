@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -143,7 +143,7 @@ void DrawDragRect(
         SetRectRgn(rgnInside,rect.left,rect.top,rect.right,rect.bottom);
         CombineRgn(rgnLast,rgnOutside,rgnInside, RGN_XOR);
 
-// 		// only diff them if brushes are the same
+//      // only diff them if brushes are the same
         if (hBrush == hBrushLast)
         {
             rgnUpdate = CreateRectRgn(0, 0, 0, 0);
@@ -198,7 +198,7 @@ void NormalizeRect(LPRECT rp)
         rp->left = rp->right;
         rp->right = tmp;
     }
-    
+
     if(rp->top > rp->bottom) {
         UINT tmp = rp->top;
         rp->top = rp->bottom;
@@ -244,36 +244,36 @@ void Tracker::Construct()
                 wPattern <<= 1;
             }
             HBITMAP hatchBitmap = CreateBitmap(8, 8, 1, 1,&hatchPattern);
-            
+
             // create black hatched brush
             _afxHatchBrush = CreatePatternBrush(hatchBitmap);
             DeleteObject(hatchBitmap);
         }
-        
+
         if (_afxBlackDottedPen == NULL)
         {
             // create black dotted pen
             _afxBlackDottedPen = CreatePen(PS_DOT, 0, RGB(0, 0, 0));
         }
-        
+
         // get default handle size from Windows profile setting
         static const TCHAR szWindows[] = TEXT("windows");
         static const TCHAR szInplaceBorderWidth[] =
             TEXT("oleinplaceborderwidth");
         _afxHandleSize = GetProfileInt(szWindows, szInplaceBorderWidth, 4);
         bInitialized = TRUE;
-        
+
         _afxCursors[0] = _afxCursors[2] = LoadCursor(0,IDC_SIZENWSE);
         _afxCursors[4] = _afxCursors[6] = LoadCursor(0,IDC_SIZENS);
         _afxCursors[1] = _afxCursors[3] = LoadCursor(0,IDC_SIZENESW);
         _afxCursors[5] = _afxCursors[7] = LoadCursor(0,IDC_SIZEWE);
         _afxCursors[8] = LoadCursor(0,IDC_SIZEALL);
     }
-    
+
     m_nStyle = 0;
     m_nHandleSize = _afxHandleSize;
     m_sizeMin.cy = m_sizeMin.cx = m_nHandleSize*2;
-    
+
     SetRectEmpty(&m_rectLast);
     m_sizeLast.cx = m_sizeLast.cy = 0;
     m_bErase = FALSE;
@@ -288,7 +288,7 @@ Tracker::~Tracker()
 int Tracker::HitTest(POINT point) const
 {
     TrackerHit hitResult = hitNothing;
-    
+
     RECT rectTrue;
     GetTrueRect(&rectTrue);
     NormalizeRect(&rectTrue);
@@ -308,20 +308,20 @@ BOOL Tracker::SetCursor(HWND pWnd, UINT nHitTest) const
     // trackers should only be in client area
     if (nHitTest != HTCLIENT)
         return FALSE;
-    
+
     // convert cursor position to client co-ordinates
     POINT point;
     GetCursorPos(&point);
     ScreenToClient(pWnd,&point);
-    
+
     // do hittest and normalize hit
     int nHandle = HitTestHandles(point);
     if (nHandle < 0)
         return FALSE;
-    
+
     // need to normalize the hittest such that we get proper cursors
     nHandle = NormalizeHit(nHandle);
-    
+
     // handle special case of hitting area between handles
     //  (logically the same -- handled as a move -- but different cursor)
     if (nHandle == hitMiddle && !PtInRect(&m_rect,point))
@@ -330,8 +330,8 @@ BOOL Tracker::SetCursor(HWND pWnd, UINT nHitTest) const
         if (m_nStyle & hatchedBorder)
             nHandle = (TrackerHit)9;
     }
-    
-    ::SetCursor(_afxCursors[nHandle]);	
+
+    ::SetCursor(_afxCursors[nHandle]);
     return TRUE;
 }
 
@@ -347,7 +347,7 @@ BOOL Tracker::Track(HWND hWnd,POINT point,BOOL bAllowInvert,
         // didn't hit a handle, so just return FALSE
         return FALSE;
     }
-    
+
     // otherwise, call helper function to do the tracking
     m_bAllowInvert = bAllowInvert;
     SetCursor(hWnd,nHandle);
@@ -360,25 +360,25 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
     // don't handle if capture already set
     if (GetCapture() != NULL)
         return FALSE;
-    
+
     // save original width & height in pixels
     int nWidth = m_rect.right - m_rect.left;
     int nHeight = m_rect.bottom - m_rect.top;
-    
+
     // set capture to the window which received this message
     SetCapture(hWnd);
     UpdateWindow(hWnd);
     if (hWndClipTo != NULL)
         UpdateWindow(hWndClipTo);
     RECT rectSave = m_rect;
-    
+
     // find out what x/y coords we are supposed to modify
     int *px, *py;
     int xDiff, yDiff;
     GetModifyPointers(nHandle, &px, &py, &xDiff, &yDiff);
     xDiff = point.x - xDiff;
     yDiff = point.y - yDiff;
-    
+
     // get DC for drawing
     HDC hDrawDC;
     if (hWndClipTo != NULL)
@@ -391,19 +391,19 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
         // otherwise, just use normal DC
         hDrawDC = GetDC(hWnd);
     }
-    
+
     RECT rectOld;
     BOOL bMoved = FALSE;
-    
+
     // get messages until capture lost or cancelled/accepted
     for (;;)
     {
         MSG msg;
         GetMessage(&msg, NULL, 0, 0);
-        
+
         if (GetCapture() != hWnd)
             break;
-        
+
         switch (msg.message)
         {
             // handle movement/accept messages
@@ -415,7 +415,7 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
                 *px = (int)(short)LOWORD(msg.lParam) - xDiff;
             if (py != NULL)
                 *py = (int)(short)HIWORD(msg.lParam) - yDiff;
-            
+
             // handle move case
             if (nHandle == hitMiddle)
             {
@@ -424,7 +424,7 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
             }
             // allow caller to adjust the rectangle if necessary
             AdjustRect(nHandle,&m_rect);
-            
+
             // only redraw and callback if the rect actually changed!
             m_bFinalErase = (msg.message == WM_LBUTTONUP);
             if (!EqualRect(&rectOld,&m_rect) || m_bFinalErase)
@@ -440,14 +440,14 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
             }
             if (m_bFinalErase)
                 goto ExitLoop;
-            
+
             if (!EqualRect(&rectOld,&m_rect))
             {
                 m_bErase = FALSE;
                 DrawTrackerRect(&m_rect,hWndClipTo,hDrawDC,hWnd);
             }
             break;
-            
+
             // handle cancel messages
         case WM_KEYDOWN:
             if (msg.wParam != VK_ESCAPE)
@@ -460,34 +460,34 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
             }
             m_rect = rectSave;
             goto ExitLoop;
-            
+
             // just dispatch rest of the messages
         default:
             DispatchMessage(&msg);
             break;
         }
     }
-    
+
   ExitLoop:
     if (hWndClipTo != NULL)
         ReleaseDC(hWndClipTo,hDrawDC);
     else
         ReleaseDC(hWnd,hDrawDC);
     ReleaseCapture();
-    
+
     // restore rect in case bMoved is still FALSE
     if (!bMoved)
         m_rect = rectSave;
     m_bFinalErase = FALSE;
     m_bErase = FALSE;
-    
+
     // return TRUE only if rect has changed
     return !EqualRect(&rectSave,&m_rect);
 }
 
 
 void Tracker::OnChangedRect(const RECT& /*rectOld*/)
-{    
+{
 }
 
 
@@ -495,11 +495,11 @@ void Tracker::AdjustRect(int nHandle, LPRECT)
 {
     if(nHandle == hitMiddle)
         return;
-    
+
     // convert the handle into locations within m_rect
     int *px, *py;
     GetModifyPointers(nHandle, &px, &py, NULL, NULL);
-    
+
     // enforce minimum width
     int nNewWidth = m_rect.right - m_rect.left;
     int nAbsWidth = m_bAllowInvert ? abs(nNewWidth) : nNewWidth;
@@ -511,7 +511,7 @@ void Tracker::AdjustRect(int nHandle, LPRECT)
         *px = *(int*)((BYTE*)&m_rect + pRectInfo->nOffsetAcross) +
             nNewWidth * m_sizeMin.cx * -pRectInfo->nSignAcross;
     }
-    
+
     // enforce minimum height
     int nNewHeight = m_rect.bottom - m_rect.top;
     int nAbsHeight = m_bAllowInvert ? abs(nNewHeight) : nNewHeight;
@@ -532,11 +532,11 @@ void Tracker::DrawTrackerRect(
     // first, normalize the rectangle for drawing
     RECT rect = *lpRect;
     NormalizeRect(&rect);
-    
+
     // convert to client coordinates
     if (pWndClipTo != NULL)
         TransformRect(&rect,pWnd,pWndClipTo);
-    
+
     SIZE size;
     size.cx = 0; size.cy = 0;
     if (!m_bFinalErase)
@@ -553,11 +553,11 @@ void Tracker::DrawTrackerRect(
             size.cy = 1; // CY_BORDER;
         }
     }
-    
+
     // and draw it
-    if (m_bFinalErase || !m_bErase)        
+    if (m_bFinalErase || !m_bErase)
         DrawDragRect(pDC,&rect,size,&m_rectLast,m_sizeLast);
-    
+
     // remember last rectangles
     m_rectLast = rect;
     m_sizeLast = size;
@@ -570,16 +570,16 @@ void Tracker::Draw(HDC hDC) const
     SetMapMode(hDC,MM_TEXT);
     SetViewportOrgEx(hDC,0, 0,NULL);
     SetWindowOrgEx(hDC,0, 0,NULL);
-    
+
     // get normalized rectangle
     RECT rect = m_rect;
     NormalizeRect(&rect);
-    
+
     HPEN pOldPen = NULL;
     HBRUSH pOldBrush = NULL;
     HGDIOBJ pTemp;
     int nOldROP;
-    
+
     // draw lines
     if ((m_nStyle & (dottedLine|solidLine)) != 0)
     {
@@ -593,11 +593,11 @@ void Tracker::Draw(HDC hDC) const
         Rectangle(hDC,rect.left, rect.top, rect.right, rect.bottom);
         SetROP2(hDC,nOldROP);
     }
-    
+
     // if hatchBrush is going to be used, need to unrealize it
     if ((m_nStyle & (hatchInside|hatchedBorder)) != 0)
         UnrealizeObject((HGDIOBJ)_afxHatchBrush);
-    
+
     // hatch inside
     if ((m_nStyle & hatchInside) != 0)
     {
@@ -612,7 +612,7 @@ void Tracker::Draw(HDC hDC) const
         Rectangle(hDC,rect.left+1, rect.top+1, rect.right, rect.bottom);
         SetROP2(hDC,nOldROP);
     }
-    
+
     // draw hatched border
     if ((m_nStyle & hatchedBorder) != 0)
     {
@@ -632,7 +632,7 @@ void Tracker::Draw(HDC hDC) const
         PatBlt(hDC,rect.right, rect.top, rectTrue.right-rect.right,
                rect.bottom-rect.top, 0x000F0001 /* Pn */);
     }
-    
+
     // draw resize handles
     if ((m_nStyle & (resizeInside|resizeOutside)) != 0)
     {
@@ -649,7 +649,7 @@ void Tracker::Draw(HDC hDC) const
         }
         DeleteObject(hbrush);
     }
-    
+
     // cleanup pDC state
     if (pOldPen != NULL)
         SelectObject(hDC,pOldPen);
@@ -666,16 +666,16 @@ void Tracker::GetHandleRect(int nHandle,RECT* pHandleRect) const
     NormalizeRect(&rectT);
     if ((m_nStyle & (solidLine|dottedLine)) != 0)
         InflateRect(&rectT,+1, +1);
-    
+
     // since the rectangle itself was normalized, we also have to invert the
     //  resize handles.
     nHandle = NormalizeHit(nHandle);
-    
+
     // handle case of resize handles outside the tracker
     int size = GetHandleSize();
     if (m_nStyle & resizeOutside)
         InflateRect(&rectT,size-1, size-1);
-    
+
     // calculate position of the resize handle
     int nWidth = rectT.right - rectT.left;
     int nHeight = rectT.bottom - rectT.top;
@@ -689,7 +689,7 @@ void Tracker::GetHandleRect(int nHandle,RECT* pHandleRect) const
     rect.top += pHandleInfo->nCenterY * (nHeight - size) / 2;
     rect.right = rect.left + size;
     rect.bottom = rect.top + size;
-    
+
     *pHandleRect = rect;
 }
 
@@ -698,7 +698,7 @@ int Tracker::GetHandleSize(LPRECT lpRect) const
 {
     if (lpRect == NULL)
         lpRect = (LPRECT)&m_rect;
-    
+
     int size = m_nHandleSize;
     if (!(m_nStyle & resizeOutside))
     {
@@ -758,12 +758,12 @@ int Tracker::HitTestHandles(POINT point) const
 {
     RECT rect;
     UINT mask = GetHandleMask();
-    
+
     // see if hit anywhere inside the tracker
     GetTrueRect(&rect);
     if (!PtInRect(&rect,point))
         return hitNothing;  // totally missed
-    
+
     // see if we hit a handle
     for (int i = 0; i < 8; ++i)
     {
@@ -774,7 +774,7 @@ int Tracker::HitTestHandles(POINT point) const
                 return (TrackerHit)i;
         }
     }
-    
+
     // last of all, check for non-hit outside of object, between resize handles
     if ((m_nStyle & hatchedBorder) == 0)
     {
@@ -795,14 +795,14 @@ void Tracker::GetModifyPointers(
 {
     if (nHandle == hitMiddle)
         nHandle = hitTopLeft;   // same as hitting top-left
-    
+
     *ppx = NULL;
     *ppy = NULL;
-    
+
     // fill in the part of the rect that this handle modifies
     //  (Note: handles that map to themselves along a given axis when that
     //   axis is inverted don't modify the value on that axis)
-    
+
     const AFX_HANDLEINFO* pHandleInfo = &_afxHandleInfo[nHandle];
     if (pHandleInfo->nInvertX != nHandle)
     {
@@ -830,7 +830,7 @@ void Tracker::GetModifyPointers(
     }
 }
 
-// Fix strange warnings about some 
+// Fix strange warnings about some
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed
 #if defined(_MSC_VER)

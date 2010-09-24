@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ import org.openoffice.xmerge.util.XmlUtil;
 
 /**
  * This is a class representing the different attributes for a worksheet
- * contained in settings.xml.  
+ * contained in settings.xml.
  *
  * @author Martin Maher
  */
@@ -48,16 +48,16 @@ public class BookSettings implements OfficeConstants {
 
     /**  A w3c <code>Document</code>. */
     private org.w3c.dom.Document settings = null;
-    
+
     private boolean hasColumnRowHeaders = true;
-    private String 	activeSheet			= new String();
-    private Vector	worksheetSettings	= new Vector();
-    
+    private String  activeSheet         = new String();
+    private Vector  worksheetSettings   = new Vector();
+
     /**
      * Default Constructor for a <code>BookSettings</code>
      *
-     * @param dimension if it's a row the height, a column the width 
-     * @param repeated 
+     * @param dimension if it's a row the height, a column the width
+     * @param repeated
      */
     public BookSettings(Node root) {
         readNode(root);
@@ -66,7 +66,7 @@ public class BookSettings implements OfficeConstants {
     /**
      * Default Constructor for a <code>BookSettings</code>
      *
-     * @param worksheetSettings if it's a row the height, a column the width 
+     * @param worksheetSettings if it's a row the height, a column the width
      */
     public BookSettings(Vector worksheetSettings) {
         this.worksheetSettings = worksheetSettings;
@@ -78,7 +78,7 @@ public class BookSettings implements OfficeConstants {
     public void setColumnRowHeaders(boolean hasColumnRowHeaders) {
         this.hasColumnRowHeaders = hasColumnRowHeaders;
     }
-    
+
     /**
      *
      */
@@ -96,25 +96,25 @@ public class BookSettings implements OfficeConstants {
     }
 
     /**
-     * Gets the active sheet name  
+     * Gets the active sheet name
      *
-     * @return the active sheet name 
+     * @return the active sheet name
      */
     public String getActiveSheet() {
 
         return activeSheet;
     }
-    
+
     /**
-     * Sets the active sheet name 
+     * Sets the active sheet name
      *
-     * @param activeSheet the active sheet name 
+     * @param activeSheet the active sheet name
      */
     public void setActiveSheet(String activeSheet) {
 
         this.activeSheet = activeSheet;
     }
-    
+
 
     /**
      * Adds an XML entry for a particular setting
@@ -129,22 +129,22 @@ public class BookSettings implements OfficeConstants {
         Element configItem = settings.createElement(TAG_CONFIG_ITEM);
         configItem.setAttribute(ATTRIBUTE_CONFIG_NAME, attribute);
         configItem.setAttribute(ATTRIBUTE_CONFIG_TYPE, type);
-                
+
         configItem.appendChild(settings.createTextNode(value));
 
         root.appendChild(configItem);
     }
 
     /**
-     * Writes out a settings.xml entry for this BookSettings object 
+     * Writes out a settings.xml entry for this BookSettings object
      *
-     * @param settings a <code>Document</code> object representing the settings.xml 
+     * @param settings a <code>Document</code> object representing the settings.xml
      * @param root the root xml node to add to
      */
     public void writeNode(org.w3c.dom.Document settings, Node root) {
-    
+
         this.settings = settings;
-        Element configItemMapNamed		= (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_NAMED);
+        Element configItemMapNamed      = (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_NAMED);
         configItemMapNamed.setAttribute(ATTRIBUTE_CONFIG_NAME, "Tables");
         for(Enumeration e = worksheetSettings.elements();e.hasMoreElements();) {
             SheetSettings s = (SheetSettings) e.nextElement();
@@ -157,10 +157,10 @@ public class BookSettings implements OfficeConstants {
     }
 
     /**
-     * Sets a variable based on a String value read from XML 
+     * Sets a variable based on a String value read from XML
      *
-     * @param name xml name of the attribute to set 
-     * @param value String value fo the attribute 
+     * @param name xml name of the attribute to set
+     * @param value String value fo the attribute
      */
     public void addAttribute(String name, String value) {
 
@@ -175,12 +175,12 @@ public class BookSettings implements OfficeConstants {
     /**
      * Reads document settings from xml and inits SheetSettings variables
      *
-     * @param root XML Node to read from 
+     * @param root XML Node to read from
      */
     public void readNode(Node root) {
 
         if (root.hasChildNodes()) {
-        
+
             NodeList nodeList = root.getChildNodes();
             int len = nodeList.getLength();
             for (int i = 0; i < len; i++) {
@@ -195,11 +195,11 @@ public class BookSettings implements OfficeConstants {
 
                         Node configNameNode =
                             cellAtt.getNamedItem(ATTRIBUTE_CONFIG_NAME);
-                    
+
                         String name = configNameNode.getNodeValue();
                         NodeList nodeList2 = child.getChildNodes();
                         int len2 = nodeList2.getLength();
-                        String s = "";	
+                        String s = "";
                         for (int j = 0; j < len2; j++) {
                             Node child2 = nodeList2.item(j);
                             if (child2.getNodeType() == Node.TEXT_NODE) {
@@ -207,11 +207,11 @@ public class BookSettings implements OfficeConstants {
                             }
                         }
                         addAttribute(name, s);
-                       
+
                      } else if (nodeName.equals(TAG_CONFIG_ITEM_MAP_NAMED)) {
 
                         readNode(child);
-                    
+
                      } else if (nodeName.equals(TAG_CONFIG_ITEM_MAP_ENTRY)) {
 
                         SheetSettings s = new SheetSettings(child);
@@ -222,7 +222,7 @@ public class BookSettings implements OfficeConstants {
                         Debug.log(Debug.TRACE, "<OTHERS " + XmlUtil.getNodeInfo(child) + " />");
                     }
                 }
-            }		
+            }
         }
     }
 }

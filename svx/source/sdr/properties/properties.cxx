@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,12 +40,12 @@ namespace sdr
     namespace properties
     {
         BaseProperties::BaseProperties(SdrObject& rObj)
-        :	mrObject(rObj)
+        :   mrObject(rObj)
         {
         }
 
         BaseProperties::BaseProperties(const BaseProperties& /*rProps*/, SdrObject& rObj)
-        :	mrObject(rObj)
+        :   mrObject(rObj)
         {
         }
 
@@ -110,27 +110,27 @@ namespace sdr
 
         //void BaseProperties::SetItemAndBroadcast(const SfxPoolItem& rItem)
         //{
-        //	ItemChangeBroadcaster aC(GetSdrObject());
-        //	SetObjectItem(rItem);
-        //	BroadcastItemChange(aC);
+        //  ItemChangeBroadcaster aC(GetSdrObject());
+        //  SetObjectItem(rItem);
+        //  BroadcastItemChange(aC);
         //}
 
         //void BaseProperties::ClearItemAndBroadcast(const sal_uInt16 nWhich)
         //{
-        //	ItemChangeBroadcaster aC(GetSdrObject());
-        //	ClearObjectItem(nWhich);
-        //	BroadcastItemChange(aC);
+        //  ItemChangeBroadcaster aC(GetSdrObject());
+        //  ClearObjectItem(nWhich);
+        //  BroadcastItemChange(aC);
         //}
 
         void BaseProperties::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems)
         {
             ItemChangeBroadcaster aC(GetSdrObject());
-        
+
             if(bClearAllItems)
             {
                 ClearObjectItem();
             }
-        
+
             SetMergedItemSet(rSet);
             BroadcastItemChange(aC);
         }
@@ -148,7 +148,7 @@ namespace sdr
             //// invalidate all remembered rectangles
             //for(sal_uInt32 a(0); a < nCount; a++)
             //{
-            //	GetSdrObject().BroadcastObjectChange(rChange.GetRectangle(a));
+            //  GetSdrObject().BroadcastObjectChange(rChange.GetRectangle(a));
             //}
 
             // invalidate all new rectangles

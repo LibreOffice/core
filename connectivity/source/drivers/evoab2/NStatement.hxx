@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -159,20 +159,20 @@ namespace connectivity
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             OEvoabResultSet                      *m_pResultSet;
             OEvoabConnection                     *m_pConnection;
-            connectivity::OSQLParser			  m_aParser;
+            connectivity::OSQLParser              m_aParser;
             connectivity::OSQLParseTreeIterator   m_aSQLIterator;
             connectivity::OSQLParseNode          *m_pParseTree;
 
             // <properties>
-            ::rtl::OUString								m_aCursorName;
-            sal_Int32									m_nMaxFieldSize;
-            sal_Int32									m_nMaxRows;
-            sal_Int32									m_nQueryTimeOut;
-            sal_Int32									m_nFetchSize;
-            sal_Int32									m_nResultSetType;
-            sal_Int32									m_nFetchDirection;
-            sal_Int32									m_nResultSetConcurrency;
-            sal_Bool									m_bEscapeProcessing;
+            ::rtl::OUString                             m_aCursorName;
+            sal_Int32                                   m_nMaxFieldSize;
+            sal_Int32                                   m_nMaxRows;
+            sal_Int32                                   m_nQueryTimeOut;
+            sal_Int32                                   m_nFetchSize;
+            sal_Int32                                   m_nResultSetType;
+            sal_Int32                                   m_nFetchDirection;
+            sal_Int32                                   m_nResultSetConcurrency;
+            sal_Bool                                    m_bEscapeProcessing;
             // </properties>
 
             ::cppu::OBroadcastHelper& rBHelper;

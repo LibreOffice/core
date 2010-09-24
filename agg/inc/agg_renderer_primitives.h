@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -45,9 +45,9 @@ namespace agg
         }
 
         //--------------------------------------------------------------------
-        static int coord(double c) 
-        { 
-            return int(c * line_bresenham_interpolator::subpixel_size); 
+        static int coord(double c)
+        {
+            return int(c * line_bresenham_interpolator::subpixel_size);
         }
 
         //--------------------------------------------------------------------
@@ -72,7 +72,7 @@ namespace agg
         }
 
         //--------------------------------------------------------------------
-        void outlined_rectangle(int x1, int y1, int x2, int y2) 
+        void outlined_rectangle(int x1, int y1, int x2, int y2)
         {
             rectangle(x1, y1, x2, y2);
             m_ren->blend_bar(x1+1, y1+1, x2-1, y2-1, m_fill_color, cover_full);
@@ -204,8 +204,8 @@ namespace agg
         }
 
         //--------------------------------------------------------------------
-        const base_ren_type& ren() const { return *m_ren; }        
-        base_ren_type& ren() { return *m_ren; }        
+        const base_ren_type& ren() const { return *m_ren; }
+        base_ren_type& ren() { return *m_ren; }
 
         //--------------------------------------------------------------------
         const rendering_buffer& rbuf() const { return m_ren->rbuf(); }

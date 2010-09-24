@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class PropertySetHelperImpl
 {
 public:
     PropertyMapEntry* find( const OUString& aName ) const throw();
-    
+
     PropertySetInfo* mpInfo;
 };
 }
@@ -169,7 +169,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< ::rtl::OUStr
     if( nCount )
     {
         PropertyMapEntry** pEntries = new PropertyMapEntry*[nCount+1];
-        pEntries[nCount] = NULL;	
+        pEntries[nCount] = NULL;
         const OUString* pNames = aPropertyNames.getConstArray();
 
         sal_Bool bUnknown = sal_False;

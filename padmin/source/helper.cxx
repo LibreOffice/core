@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ using namespace com::sun::star::ui::dialogs;
 #define MAX_PATH 1024
 
 /*
- *	PaResId
+ *  PaResId
  */
 
 ResId padmin::PaResId( sal_uInt32 nId )
@@ -66,8 +66,8 @@ ResId padmin::PaResId( sal_uInt32 nId )
     if( ! pPaResMgr )
     {
         ::com::sun::star::lang::Locale aLocale;
-//		LanguageType nLang = LANGUAGE_SYSTEM;
-       
+//      LanguageType nLang = LANGUAGE_SYSTEM;
+
         utl::OConfigurationNode aNode =
             utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
                     vcl::unohelper::GetMultiServiceFactory(),
@@ -97,7 +97,7 @@ ResId padmin::PaResId( sal_uInt32 nId )
 }
 
 /*
- *	FindFiles
+ *  FindFiles
  */
 
 void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult, const String& rSuffixes, bool bRecursive )
@@ -112,7 +112,7 @@ void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult
     DirectoryItem aItem;
     while( aDir.getNextItem( aItem ) == FileBase::E_None )
     {
-        FileStatus aStatus( FileStatusMask_FileName			|
+        FileStatus aStatus( FileStatusMask_FileName         |
                             FileStatusMask_Type
                             );
         if( aItem.getFileStatus( aStatus ) == FileBase::E_None )
@@ -150,7 +150,7 @@ void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult
                     aSubFile.appendAscii( "/", 1 );
                     aSubFile.append( *it );
                     rResult.push_back( aSubFile.makeStringAndClear() );
-                }   
+                }
             }
         }
     }
@@ -158,7 +158,7 @@ void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult
 }
 
 /*
- *	DelMultiListBox
+ *  DelMultiListBox
  */
 
 long DelMultiListBox::Notify( NotifyEvent& rEvent )
@@ -178,7 +178,7 @@ long DelMultiListBox::Notify( NotifyEvent& rEvent )
 }
 
 /*
- *	DelListBox
+ *  DelListBox
  */
 
 long DelListBox::Notify( NotifyEvent& rEvent )
@@ -198,7 +198,7 @@ long DelListBox::Notify( NotifyEvent& rEvent )
 }
 
 /*
- *	QueryString
+ *  QueryString
  */
 
 QueryString::QueryString( Window* pParent, String& rQuery, String& rRet, const ::std::list< String >& rChoices ) :
@@ -248,7 +248,7 @@ IMPL_LINK( QueryString, ClickBtnHdl, Button*, pButton )
 }
 
 /*
- *	AreYouSure
+ *  AreYouSure
  */
 
 BOOL padmin::AreYouSure( Window* pParent, int nRid )
@@ -261,7 +261,7 @@ BOOL padmin::AreYouSure( Window* pParent, int nRid )
 }
 
 /*
- *	getPadminRC
+ *  getPadminRC
  */
 
 static Config* pRC = NULL;

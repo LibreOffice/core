@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,15 +139,15 @@ private:
     ::osl::Mutex                        maListenerContainerMutex;
     ::cppu::OInterfaceContainerHelper   maWindow2Listeners;
     ::cppu::OInterfaceContainerHelper   maDockableWindowListeners;
-    EventListenerMultiplexer		    maEventListeners;
-    FocusListenerMultiplexer		    maFocusListeners;
-    WindowListenerMultiplexer		    maWindowListeners;
-    KeyListenerMultiplexer			    maKeyListeners;
-    MouseListenerMultiplexer		    maMouseListeners;
-    MouseMotionListenerMultiplexer	    maMouseMotionListeners;
-    PaintListenerMultiplexer		    maPaintListeners;
-    VclContainerListenerMultiplexer	    maContainerListeners;
-    TopWindowListenerMultiplexer	    maTopWindowListeners;
+    EventListenerMultiplexer            maEventListeners;
+    FocusListenerMultiplexer            maFocusListeners;
+    WindowListenerMultiplexer           maWindowListeners;
+    KeyListenerMultiplexer              maKeyListeners;
+    MouseListenerMultiplexer            maMouseListeners;
+    MouseMotionListenerMultiplexer      maMouseMotionListeners;
+    PaintListenerMultiplexer            maPaintListeners;
+    VclContainerListenerMultiplexer     maContainerListeners;
+    TopWindowListenerMultiplexer        maTopWindowListeners;
 
     CallbackArray                       maCallbackEvents;
     ULONG                               mnCallbackEventId;
@@ -216,11 +216,11 @@ public:
     inline FocusListenerMultiplexer&            getFocusListeners()         { return maFocusListeners; }
     inline WindowListenerMultiplexer&           getWindowListeners()        { return maWindowListeners; }
     inline KeyListenerMultiplexer&              getKeyListeners()           { return maKeyListeners; }
-    inline MouseListenerMultiplexer&            getMouseListeners() 	    { return maMouseListeners; }
+    inline MouseListenerMultiplexer&            getMouseListeners()         { return maMouseListeners; }
     inline MouseMotionListenerMultiplexer&      getMouseMotionListeners()   { return maMouseMotionListeners; }
-    inline PaintListenerMultiplexer&            getPaintListeners() 	    { return maPaintListeners; }
+    inline PaintListenerMultiplexer&            getPaintListeners()         { return maPaintListeners; }
     inline VclContainerListenerMultiplexer&     getContainerListeners()     { return maContainerListeners; }
-    inline TopWindowListenerMultiplexer&        getTopWindowListeners()	    { return maTopWindowListeners; }
+    inline TopWindowListenerMultiplexer&        getTopWindowListeners()     { return maTopWindowListeners; }
 
     virtual ~VCLXWindowImpl();
 
@@ -394,9 +394,9 @@ void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, Window* pW
     pWindow->GetBorder( rEvent.LeftInset, rEvent.TopInset, rEvent.RightInset, rEvent.BottomInset );
 }
 
-//	----------------------------------------------------
-//	class VCLXWindow
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXWindow
+//  ----------------------------------------------------
 
 DBG_NAME(VCLXWindow);
 
@@ -450,7 +450,7 @@ void VCLXWindow::SetWindow( Window* pWindow )
         sal_Bool bDirectVisible = pWindow ? pWindow->IsVisible() : false;
         mpImpl->setDirectVisible( bDirectVisible );
     }
-    
+
 }
 
 void VCLXWindow::suspendVclEventListening( )
@@ -640,11 +640,11 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_CONTROL_GETFOCUS:
         case VCLEVENT_WINDOW_GETFOCUS:
         {
-            if	(	(	rVclWindowEvent.GetWindow()->IsCompoundControl()
-                    &&	rVclWindowEvent.GetId() == VCLEVENT_CONTROL_GETFOCUS
+            if  (   (   rVclWindowEvent.GetWindow()->IsCompoundControl()
+                    &&  rVclWindowEvent.GetId() == VCLEVENT_CONTROL_GETFOCUS
                     )
-                ||	(	!rVclWindowEvent.GetWindow()->IsCompoundControl()
-                    &&	rVclWindowEvent.GetId() == VCLEVENT_WINDOW_GETFOCUS
+                ||  (   !rVclWindowEvent.GetWindow()->IsCompoundControl()
+                    &&  rVclWindowEvent.GetId() == VCLEVENT_WINDOW_GETFOCUS
                     )
                 )
             {
@@ -662,11 +662,11 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         case VCLEVENT_CONTROL_LOSEFOCUS:
         case VCLEVENT_WINDOW_LOSEFOCUS:
         {
-            if	(	(	rVclWindowEvent.GetWindow()->IsCompoundControl()
-                    &&	rVclWindowEvent.GetId() == VCLEVENT_CONTROL_LOSEFOCUS
+            if  (   (   rVclWindowEvent.GetWindow()->IsCompoundControl()
+                    &&  rVclWindowEvent.GetId() == VCLEVENT_CONTROL_LOSEFOCUS
                     )
-                ||	(	!rVclWindowEvent.GetWindow()->IsCompoundControl()
-                    &&	rVclWindowEvent.GetId() == VCLEVENT_WINDOW_LOSEFOCUS
+                ||  (   !rVclWindowEvent.GetWindow()->IsCompoundControl()
+                    &&  rVclWindowEvent.GetId() == VCLEVENT_WINDOW_LOSEFOCUS
                     )
                 )
             {
@@ -745,7 +745,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 // COMMAND_CONTEXTMENU als mousePressed mit PopupTrigger = sal_True versenden...
                 Point aWhere = static_cast< CommandEvent* >( rVclWindowEvent.GetData() )->GetMousePosPixel();
                 if ( !pCmdEvt->IsMouseEvent() )
-                {	// for keyboard events, we set the coordinates to -1,-1. This is a slight HACK, but the current API
+                {   // for keyboard events, we set the coordinates to -1,-1. This is a slight HACK, but the current API
                     // handles a context menu command as special case of a mouse event, which is simply wrong.
                     // Without extending the API, we would not have another chance to notify listeners of a
                     // keyboard-triggered context menu request
@@ -993,7 +993,7 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
         if ( GetWindow() )
         {
             OutputDevice* pOutDev = GetOutputDevice();
-            SetWindow( NULL );	// Damit ggf. Handler abgemeldet werden (virtuell).
+            SetWindow( NULL );  // Damit ggf. Handler abgemeldet werden (virtuell).
             SetOutputDevice( pOutDev );
             DestroyOutputDevice();
         }
@@ -1399,7 +1399,7 @@ void VCLXWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds, bool bWithDe
             // some properties are not included in the FontDescriptor, but everytime
             // when we have a FontDescriptor we want to have these properties too.
             // => Easier to register the here, istead everywhere where I register the FontDescriptor...
-            
+
             rIds.push_back( BASEPROPERTY_TEXTCOLOR );
             rIds.push_back( BASEPROPERTY_TEXTLINECOLOR );
             rIds.push_back( BASEPROPERTY_FONTRELIEF );
@@ -1579,7 +1579,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                         if (aText.getLength())
                             pWindow->SetText( aText );
                         break;
-                    
+
                     default:
                         pWindow->SetText( aText );
                         break;
@@ -1618,7 +1618,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             ::rtl::OUString aHelpText;
             if ( Value >>= aHelpText )
             {
-                pWindow->SetQuickHelpText( aHelpText );	
+                pWindow->SetQuickHelpText( aHelpText );
             }
         }
         break;
@@ -1688,9 +1688,9 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                         pWindow->SetPaintTransparent( TRUE );
                         break;
                     }
-                    
+
                     default:
-                    {    
+                    {
                         // default code which enables transparency for
                         // compound controls. It's not real transparency
                         // as most of these controls repaint their client
@@ -1721,7 +1721,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                             pWindow->SetPaintTransparent( FALSE );
                         default: ;
                     }
-                    pWindow->Invalidate();	// Falls das Control nicht drauf reagiert
+                    pWindow->Invalidate();  // Falls das Control nicht drauf reagiert
                 }
             }
         break;
@@ -2331,7 +2331,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
     Window* pWindow = GetWindow();
     if ( !pWindow )
         return;
-    
+
     if ( isDesignMode() || mpImpl->isEnableVisible() )
     {
         TabPage* pTabPage = dynamic_cast< TabPage* >( pWindow );
@@ -2445,7 +2445,7 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     uno::Reference< uno::XInterface > xSource( _rSource.Source, uno::UNO_QUERY );
 
     if ( aAC.get() == xSource.get() )
-    {	// yep, it does
+    {   // yep, it does
         mpImpl->mxAccessibleContext = uno::Reference< accessibility::XAccessibleContext >();
     }
 }
@@ -2456,7 +2456,7 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     using namespace ::com::sun::star;
 
     ::vos::OGuard aGuard( GetMutex() );
-    
+
     // already disposed
     if( ! mpImpl )
         return uno::Reference< accessibility::XAccessibleContext >();

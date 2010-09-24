@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ struct SysdepStaticData
 
 void TTProfiler::InitSysdepProfiler()
 {
-    if ( !pSysDepStatic )	// Sollte immer so sein!!
+    if ( !pSysDepStatic )   // Sollte immer so sein!!
         pSysDepStatic = new SysdepStaticData;
     // Hier initialisieren
 
@@ -58,7 +58,7 @@ void TTProfiler::InitSysdepProfiler()
 
 void TTProfiler::DeinitSysdepProfiler()
 {
-    if ( pSysDepStatic )	// Sollte immer so sein!!
+    if ( pSysDepStatic )    // Sollte immer so sein!!
     {
         // Hier aufräumen und eventuell Speicher freigeben
 
@@ -87,19 +87,19 @@ String TTProfiler::GetSysdepProfileHeader()
 // Zustand merken
 void TTProfiler::GetSysdepProfileSnapshot( SysdepProfileSnapshot *pSysdepProfileSnapshot, USHORT )
 {
-    SvFileStream aStream( String::CreateFromAscii("/proc/self/psinfo"), STREAM_READ );		// Das ist ein expliziter Pfad für UNXSOL!
+    SvFileStream aStream( String::CreateFromAscii("/proc/self/psinfo"), STREAM_READ );      // Das ist ein expliziter Pfad für UNXSOL!
     if ( aStream.IsOpen() )
     {
         aStream.Read( &(pSysdepProfileSnapshot->mpsinfo), sizeof( psinfo ) );
         aStream.Close();
     }
-    SvFileStream anotherStream( String::CreateFromAscii("/proc/self/status"), STREAM_READ );		// Das ist ein expliziter Pfad für UNXSOL!
+    SvFileStream anotherStream( String::CreateFromAscii("/proc/self/status"), STREAM_READ );        // Das ist ein expliziter Pfad für UNXSOL!
     if ( anotherStream.IsOpen() )
     {
         anotherStream.Read( &(pSysdepProfileSnapshot->mpstatus), sizeof( pstatus ) );
         anotherStream.Close();
     }
-    SvFileStream YetAnotherStream( String::CreateFromAscii("/proc/self/usage"), STREAM_READ );		// Das ist ein expliziter Pfad für UNXSOL!
+    SvFileStream YetAnotherStream( String::CreateFromAscii("/proc/self/usage"), STREAM_READ );      // Das ist ein expliziter Pfad für UNXSOL!
     if ( YetAnotherStream.IsOpen() )
     {
         YetAnotherStream.Read( &(pSysdepProfileSnapshot->mprusage), sizeof( prusage ) );
@@ -121,10 +121,10 @@ String TTProfiler::GetSysdepProfileLine( SysdepProfileSnapshot *pStart, SysdepPr
 
     aProfile += Pad( String::CreateFromInt64(DIFF_MS( pStart, pStop, mprusage.pr_rtime ) / AVER( pStart, pStop, mprusage.pr_count )), 7 );
 
-    
+
     ULONG d_utime = DIFF_MS( pStart, pStop, mpstatus.pr_utime ) + DIFF_MS( pStart, pStop, mpstatus.pr_cutime );
     ULONG d_stime = DIFF_MS( pStart, pStop, mpstatus.pr_stime ) + DIFF_MS( pStart, pStop, mpstatus.pr_cstime );
-    
+
     aProfile += Pad( String::CreateFromInt64(d_utime), 7 );
     aProfile += Pad( String::CreateFromInt64(d_stime), 7 );
     aProfile += Pad( String::CreateFromInt64(d_utime + d_stime), 7 );

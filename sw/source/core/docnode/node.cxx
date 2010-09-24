@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -272,25 +272,25 @@ USHORT ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 
 /*******************************************************************
 |*
-|*	SwNode::GetSectionLevel
+|*  SwNode::GetSectionLevel
 |*
-|*	Beschreibung
-|*		Die Funktion liefert den Sectionlevel an der durch
-|*		aIndex bezeichneten Position.
+|*  Beschreibung
+|*      Die Funktion liefert den Sectionlevel an der durch
+|*      aIndex bezeichneten Position.
 |*
-|*		Die Logik ist wie folgt:   ( S -> Start, E -> End, C -> CntntNode)
-|*			Level 	0		E
-|*					1 	S  E
-|*					2  	 SC
+|*      Die Logik ist wie folgt:   ( S -> Start, E -> End, C -> CntntNode)
+|*          Level   0       E
+|*                  1   S  E
+|*                  2    SC
 |*
-|*		alle EndNodes der GrundSection haben den Level 0
-|*		alle StartNodes der GrundSection haben den Level 1
+|*      alle EndNodes der GrundSection haben den Level 0
+|*      alle StartNodes der GrundSection haben den Level 1
 |*
-|*	Ersterstellung
-|*		VER0100 vb 901214
+|*  Ersterstellung
+|*      VER0100 vb 901214
 |*
-|*	Aenderung:	JP	11.08.93
-|*		keine Rekursion mehr !!
+|*  Aenderung:  JP  11.08.93
+|*      keine Rekursion mehr !!
 |*
 *******************************************************************/
 
@@ -310,29 +310,29 @@ USHORT SwNode::GetSectionLevel() const
 
 /*******************************************************************
 |*
-|*	SwNode::SwNode
+|*  SwNode::SwNode
 |*
-|*	Beschreibung
-|*		Konstruktor; dieser fuegt einen Node in das Array rNodes
-|*		an der Position rWhere ein. Dieser bekommt als
-|*		theEndOfSection den EndOfSection-Index des Nodes
-|*		unmittelbar vor ihm. Falls er sich an der Position 0
-|*		innerhalb des variablen Arrays befindet, wird
-|*		theEndOfSection 0 (der neue selbst).
+|*  Beschreibung
+|*      Konstruktor; dieser fuegt einen Node in das Array rNodes
+|*      an der Position rWhere ein. Dieser bekommt als
+|*      theEndOfSection den EndOfSection-Index des Nodes
+|*      unmittelbar vor ihm. Falls er sich an der Position 0
+|*      innerhalb des variablen Arrays befindet, wird
+|*      theEndOfSection 0 (der neue selbst).
 |*
-|*	Parameter
-|*		IN
-|*		rNodes bezeichnet das variable Array, in das der Node
-|*		eingefuegt werden soll
-|*		IN
-|*		rWhere bezeichnet die Position innerhalb dieses Arrays,
-|*		an der der Node eingefuegt werden soll
+|*  Parameter
+|*      IN
+|*      rNodes bezeichnet das variable Array, in das der Node
+|*      eingefuegt werden soll
+|*      IN
+|*      rWhere bezeichnet die Position innerhalb dieses Arrays,
+|*      an der der Node eingefuegt werden soll
 |*
-|*	Ersterstellung
-|*		VER0100 vb 901214
+|*  Ersterstellung
+|*      VER0100 vb 901214
 |*
-|*	Stand
-|*		VER0100 vb 901214
+|*  Stand
+|*      VER0100 vb 901214
 |*
 *******************************************************************/
 
@@ -347,7 +347,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
     nAFmtNumLvl = 0;
 
     SwNodes& rNodes = (SwNodes&)rWhere.GetNodes();
-    SwNode* pInsNd = this; 		// der MAC kann this nicht einfuegen !!
+    SwNode* pInsNd = this;      // der MAC kann this nicht einfuegen !!
     if( rWhere.GetIndex() )
     {
         SwNode* pNd = rNodes[ rWhere.GetIndex() -1 ];
@@ -355,7 +355,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
         if( 0 == ( pStartOfSection = pNd->GetStartNode()) )
         {
             pStartOfSection = pNd->pStartOfSection;
-            if( pNd->GetEndNode() )		// EndNode ? Section ueberspringen!
+            if( pNd->GetEndNode() )     // EndNode ? Section ueberspringen!
             {
                 pNd = pStartOfSection;
                 pStartOfSection = pNd->pStartOfSection;
@@ -380,7 +380,7 @@ SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
     bSetNumLSpace = bIgnoreDontExpand = FALSE;
     nAFmtNumLvl = 0;
 
-    SwNode* pInsNd = this; 		// der MAC kann this nicht einfuegen !!
+    SwNode* pInsNd = this;      // der MAC kann this nicht einfuegen !!
     if( nPos )
     {
         SwNode* pNd = rNodes[ nPos - 1 ];
@@ -388,7 +388,7 @@ SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
         if( 0 == ( pStartOfSection = pNd->GetStartNode()) )
         {
             pStartOfSection = pNd->pStartOfSection;
-            if( pNd->GetEndNode() )		// EndNode ? Section ueberspringen!
+            if( pNd->GetEndNode() )     // EndNode ? Section ueberspringen!
             {
                 pNd = pStartOfSection;
                 pStartOfSection = pNd->pStartOfSection;
@@ -463,7 +463,7 @@ BOOL SwNode::IsInVisibleArea( ViewShell* pSh ) const
 
             if( !pFrm->IsValid() )
                 do
-                {	pFrm = pFrm->FindPrev();
+                {   pFrm = pFrm->FindPrev();
                 } while ( pFrm && !pFrm->IsValid() );
 
             if( !pFrm || pSh->VisArea().IsOver( pFrm->Frm() ) )
@@ -483,7 +483,7 @@ BOOL SwNode::IsInProtectSect() const
 
     // befindet sich der Node in irgendetwas geschuetzten ?
     // (Bereich/Rahmen/Tabellenzellen/... incl. des Ankers bei
-    //	Rahmen/Fussnoten/..)
+    //  Rahmen/Fussnoten/..)
 BOOL SwNode::IsProtect() const
 {
     const SwNode* pNd = ND_SECTIONNODE == nNodeType ? pStartOfSection : this;
@@ -881,7 +881,7 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( BYTE nLvl ) const
                     ->GetAttrOutlineLevel() - 1 )  //<-end,zhaojianwei
                 --nPos;
 
-            if( !nPos )		// bei 0 gesondert holen !!
+            if( !nPos )     // bei 0 gesondert holen !!
                 pRet = rONds[0]->GetTxtNode();
         }
     }
@@ -934,20 +934,20 @@ BYTE SwNode::HasPrevNextLayNode() const
 
 /*******************************************************************
 |*
-|*	SwNode::StartOfSection
+|*  SwNode::StartOfSection
 |*
-|*	Beschreibung
-|*		Die Funktion liefert die StartOfSection des Nodes.
+|*  Beschreibung
+|*      Die Funktion liefert die StartOfSection des Nodes.
 |*
-|*	Parameter
-|*		IN
-|*		rNodes bezeichnet das variable Array, in dem sich der Node
-|*		befindet
-|*	Ersterstellung
-|*		VER0100 vb 901214
+|*  Parameter
+|*      IN
+|*      rNodes bezeichnet das variable Array, in dem sich der Node
+|*      befindet
+|*  Ersterstellung
+|*      VER0100 vb 901214
 |*
-|*	Stand
-|*		VER0100 vb 901214
+|*  Stand
+|*      VER0100 vb 901214
 |*
 *******************************************************************/
 
@@ -982,31 +982,31 @@ void SwStartNode::CheckSectionCondColl() const
 
 /*******************************************************************
 |*
-|*	SwEndNode::SwEndNode
+|*  SwEndNode::SwEndNode
 |*
-|*	Beschreibung
-|*		Konstruktor; dieser fuegt einen Node in das Array rNodes
-|*		an der Position aWhere ein. Der
-|*		theStartOfSection-Pointer wird entsprechend gesetzt,
-|*		und der EndOfSection-Pointer des zugehoerigen
-|*		Startnodes -- durch rStartOfSection bezeichnet --
-|*		wird auf diesen Node gesetzt.
+|*  Beschreibung
+|*      Konstruktor; dieser fuegt einen Node in das Array rNodes
+|*      an der Position aWhere ein. Der
+|*      theStartOfSection-Pointer wird entsprechend gesetzt,
+|*      und der EndOfSection-Pointer des zugehoerigen
+|*      Startnodes -- durch rStartOfSection bezeichnet --
+|*      wird auf diesen Node gesetzt.
 |*
-|*	Parameter
-|*		IN
-|*		rNodes bezeichnet das variable Array, in das der Node
-|*		eingefuegt werden soll
-|*		IN
-|*		aWhere bezeichnet die Position innerhalb dieses Arrays,
-|*		an der der Node eingefuegt werden soll
-|*		!!!!!!!!!!!!
-|*		Es wird eine Kopie uebergeben!
+|*  Parameter
+|*      IN
+|*      rNodes bezeichnet das variable Array, in das der Node
+|*      eingefuegt werden soll
+|*      IN
+|*      aWhere bezeichnet die Position innerhalb dieses Arrays,
+|*      an der der Node eingefuegt werden soll
+|*      !!!!!!!!!!!!
+|*      Es wird eine Kopie uebergeben!
 |*
-|*	Ersterstellung
-|*		VER0100 vb 901214
+|*  Ersterstellung
+|*      VER0100 vb 901214
 |*
-|*	Stand
-|*		VER0100 vb 901214
+|*  Stand
+|*      VER0100 vb 901214
 |*
 *******************************************************************/
 
@@ -1034,7 +1034,7 @@ SwEndNode::SwEndNode( SwNodes& rNds, ULONG nPos, SwStartNode& rSttNd )
 
 SwCntntNode::SwCntntNode( const SwNodeIndex &rWhere, const BYTE nNdType,
                             SwFmtColl *pColl )
-    : SwModify( pColl ),	 // CrsrsShell, FrameFmt,
+    : SwModify( pColl ),     // CrsrsShell, FrameFmt,
     SwNode( rWhere, nNdType ),
     pCondColl( 0 ),
     mbSetModifyAtAttr( false )
@@ -1112,7 +1112,7 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
         {
             ChkCondColl();
         }
-        return ;	// nicht an die Basisklasse / Frames weitergeben
+        return ;    // nicht an die Basisklasse / Frames weitergeben
 //FEATURE::CONDCOLL
 
     case RES_ATTRSET_CHG:
@@ -1208,7 +1208,7 @@ SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
 
 //FEATURE::CONDCOLL
         // HACK: hier muss die entsprechend der neuen Vorlage die Bedingungen
-        //		neu ueberprueft werden!
+        //      neu ueberprueft werden!
         if( TRUE /*pNewColl */ )
         {
             SetCondFmtColl( 0 );
@@ -1341,7 +1341,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
     ASSERT( &rNode != this,
             "Kein Contentnode oder Copy-Node und neuer Node identisch." );
 
-    if( !GetDepends() || &rNode == this )	// gibt es ueberhaupt Frames ??
+    if( !GetDepends() || &rNode == this )   // gibt es ueberhaupt Frames ??
         return;
 
     SwFrm *pFrm, *pNew;
@@ -1524,7 +1524,7 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
 {
     if( !GetpSwAttrSet() )            // lasse von den entsprechenden Nodes die
-        NewAttrSet( GetDoc()->GetAttrPool() );		// AttrSets anlegen
+        NewAttrSet( GetDoc()->GetAttrPool() );      // AttrSets anlegen
 
     ASSERT( GetpSwAttrSet(), "warum wurde kein AttrSet angelegt?" );
 
@@ -1549,7 +1549,7 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
         {
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
+            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
     return bRet;
@@ -1605,7 +1605,7 @@ BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
     }
 
     if( !GetpSwAttrSet() )            // lasse von den entsprechenden Nodes die
-        NewAttrSet( GetDoc()->GetAttrPool() );		// AttrSets anlegen
+        NewAttrSet( GetDoc()->GetAttrPool() );      // AttrSets anlegen
 
     BOOL bRet = FALSE;
     // wenn Modify gelockt ist, werden keine Modifies verschickt
@@ -1625,7 +1625,7 @@ BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
             // einige Sonderbehandlungen fuer Attribute
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
+            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
     return bRet;
@@ -1665,7 +1665,7 @@ BOOL SwCntntNode::ResetAttr( USHORT nWhich1, USHORT nWhich2 )
 
     // sollte kein gueltiger Bereich definiert sein ?
     if( !nWhich2 || nWhich2 < nWhich1 )
-        nWhich2 = nWhich1;		// dann setze auf 1. Id, nur dieses Item
+        nWhich2 = nWhich1;      // dann setze auf 1. Id, nur dieses Item
 
     SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
               aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
@@ -1675,7 +1675,7 @@ BOOL SwCntntNode::ResetAttr( USHORT nWhich1, USHORT nWhich2 )
     {
         SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
         SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-        Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
+        Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
 
         if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
             mpAttrSet.reset();//DELETEZ( mpAttrSet );
@@ -1716,7 +1716,7 @@ BOOL SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
         {
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
+            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
     if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
@@ -1755,7 +1755,7 @@ USHORT SwCntntNode::ResetAllAttr()
     {
         SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
         SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-        Modify( &aChgOld, &aChgNew );		// alle veraenderten werden verschickt
+        Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
 
         if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
             mpAttrSet.reset();//DELETEZ( mpAttrSet );
@@ -1916,8 +1916,8 @@ BOOL SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
         {
             switch( pSttNd->GetNodeType() )
             {
-            case ND_TABLENODE:		nCond = PARA_IN_TABLEBODY; break;
-            case ND_SECTIONNODE: 	nCond = PARA_IN_SECTION; break;
+            case ND_TABLENODE:      nCond = PARA_IN_TABLEBODY; break;
+            case ND_SECTIONNODE:    nCond = PARA_IN_SECTION; break;
 
             default:
                 switch( pSttNd->GetStartNodeType() )
@@ -1933,7 +1933,7 @@ BOOL SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
                             nCond = PARA_IN_TABLEHEAD;
                     }
                     break;
-                case SwFlyStartNode:		nCond = PARA_IN_FRAME; break;
+                case SwFlyStartNode:        nCond = PARA_IN_FRAME; break;
                 case SwFootnoteStartNode:
                     {
                         nCond = PARA_IN_FOOTENOTE;

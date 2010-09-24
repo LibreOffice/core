@@ -56,6 +56,7 @@ IDLFILES=\
     FontRequest.idl \
     IntegerBitmapLayout.idl \
     InterpolationMode.idl \
+    MtfRenderer.idl \
     Panose.idl \
     PanoseArmStyle.idl \
     PanoseContrast.idl \

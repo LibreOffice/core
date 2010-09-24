@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -124,8 +124,8 @@ class UnoControlTableModel : public ITableModel
         // ITableModel overridables
         virtual TableSize           getColumnCount() const;
         virtual TableSize           getRowCount() const;
-    virtual void	            setColumnCount(TableSize _nColCount);
-        virtual void	            setRowCount(TableSize _nRowCount);
+    virtual void                setColumnCount(TableSize _nColCount);
+        virtual void                setRowCount(TableSize _nRowCount);
         virtual bool                hasColumnHeaders() const;
         virtual bool                hasRowHeaders() const;
     virtual void                setRowHeaders(bool _bRowHeaders);
@@ -143,26 +143,26 @@ class UnoControlTableModel : public ITableModel
         virtual TableMetrics        getRowHeaderWidth() const;
         virtual ScrollbarVisibility getVerticalScrollbarVisibility(int overAllHeight, int actHeight) const;
         virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const;
-    virtual void				setVerticalScrollbarVisibility(bool _bVScroll) const;
-        virtual void				setHorizontalScrollbarVisibility(bool _bHScroll) const;
-    virtual void				setCellContent(const std::vector<std::vector< Any > >& cellContent);
-    virtual std::vector<std::vector< Any > >&	getCellContent();
-    virtual void				setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent);
-    virtual std::vector<rtl::OUString>&	getRowHeaderName();
+    virtual void                setVerticalScrollbarVisibility(bool _bVScroll) const;
+        virtual void                setHorizontalScrollbarVisibility(bool _bHScroll) const;
+    virtual void                setCellContent(const std::vector<std::vector< Any > >& cellContent);
+    virtual std::vector<std::vector< Any > >&   getCellContent();
+    virtual void                setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent);
+    virtual std::vector<rtl::OUString>& getRowHeaderName();
     virtual ::com::sun::star::util::Color getLineColor();
-    virtual void				setLineColor(::com::sun::star::util::Color _rColor);
+    virtual void                setLineColor(::com::sun::star::util::Color _rColor);
     virtual ::com::sun::star::util::Color getHeaderBackgroundColor();
-    virtual void			    setHeaderBackgroundColor(::com::sun::star::util::Color _rColor);
+    virtual void                setHeaderBackgroundColor(::com::sun::star::util::Color _rColor);
     virtual ::com::sun::star::util::Color getTextColor();
-    virtual void				setTextColor(::com::sun::star::util::Color _rColor);
+    virtual void                setTextColor(::com::sun::star::util::Color _rColor);
     virtual ::com::sun::star::util::Color getOddRowBackgroundColor();
-    virtual void			    setOddRowBackgroundColor(::com::sun::star::util::Color _rColor);
+    virtual void                setOddRowBackgroundColor(::com::sun::star::util::Color _rColor);
     virtual ::com::sun::star::util::Color getEvenRowBackgroundColor();
-    virtual void			    setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor);
+    virtual void                setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor);
     virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign();
-    virtual void			    setVerticalAlign(::com::sun::star::style::VerticalAlignment _rAlign);
-    virtual bool				hasVerticalScrollbar();
-    virtual bool				hasHorizontalScrollbar();
+    virtual void                setVerticalAlign(::com::sun::star::style::VerticalAlignment _rAlign);
+    virtual bool                hasVerticalScrollbar();
+    virtual bool                hasHorizontalScrollbar();
 };
 
 inline void UnoControlTableModel::SetColumnWidth( ColPos _nColumn, TableMetrics _nWidth100thMM )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,23 +24,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_SectionFileLink_idl__ 
-#define __com_sun_star_text_SectionFileLink_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module text { 
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_text_SectionFileLink_idl__
+#define __com_sun_star_text_SectionFileLink_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
 // DocMerge from xml: struct com::sun::star::text::SectionFileLink
 /** describes the link for a text section.
-    
-    
-    
+
+
+
     <p>If the URL is an empty string, then the section is not linked.
-    
+
     </p>
     <p>The bookmark of the URL (after the "#") is the name of a bookmark
     or a section name in the linked document.  If a bookmark or section
@@ -58,19 +58,19 @@ published struct SectionFileLink
     // DocMerge from xml: field com::sun::star::text::SectionFileLink::FileURL
     /** contains the URL of the linked file.
      */
-    string FileURL; 
- 
-    //------------------------------------------------------------------------- 
-     
+    string FileURL;
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: field com::sun::star::text::SectionFileLink::FilterName
     /** contains the name of the file filter that is used to load the linked file.
      */
-    string FilterName; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-#endif 
+    string FilterName;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

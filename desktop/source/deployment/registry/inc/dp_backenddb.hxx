@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,13 +53,13 @@ namespace backend {
 class BackendDb
 {
 private:
-    
+
     css::uno::Reference<css::xml::dom::XDocument> m_doc;
     css::uno::Reference<css::xml::xpath::XXPathAPI> m_xpathApi;
 
     BackendDb(BackendDb const &);
     BackendDb &  operator = (BackendDb const &);
-    
+
 protected:
     const css::uno::Reference<css::uno::XComponentContext> m_xContext;
     ::rtl::OUString m_urlDb;
@@ -78,7 +78,7 @@ protected:
 
     css::uno::Reference<css::xml::dom::XNode> getKeyElement(
         ::rtl::OUString const & url);
-    
+
     void writeSimpleList(
         ::std::list< ::rtl::OUString> const & list,
         ::rtl::OUString const & sListTagName,
@@ -99,11 +99,11 @@ protected:
 
     css::uno::Reference<css::xml::dom::XNode> writeKeyElement(
         ::rtl::OUString const & url);
-        
+
     ::rtl::OUString readSimpleElement(
         ::rtl::OUString const & sElementName,
         css::uno::Reference<css::xml::dom::XNode> const & xParent);
-        
+
     ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString > >
     readVectorOfPair(
         css::uno::Reference<css::xml::dom::XNode> const & parent,
@@ -157,7 +157,7 @@ public:
                   ::rtl::OUString const & url);
     virtual ~RegisteredDb() {};
 
-    
+
     virtual void addEntry(::rtl::OUString const & url);
     virtual bool getEntry(::rtl::OUString const & url);
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ USHORT lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, BOOL bAllCha
 
 BOOL lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, SCTAB nTabCount )
 {
-    //!	if multiple sheets are copied, update references into the other copied sheets?
+    //! if multiple sheets are copied, update references into the other copied sheets?
 
     BOOL bChanged = FALSE;
 
@@ -262,7 +262,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
                 // the range string must be in Calc A1 format.
                 uno::Reference< chart2::data::XDataSequence > xNewSeq(
                     xDataProvider->createDataSequenceByRangeRepresentation( rRanges[nRange++] ));
-                
+
                 uno::Reference< beans::XPropertySet > xNewProps( xNewSeq, uno::UNO_QUERY );
                 if( xNewProps.is() )
                     xNewProps->setPropertyValue( aPropertyNameRole, xLabel->getPropertyValue( aPropertyNameRole ) );
@@ -278,7 +278,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
                 // the range string must be in Calc A1 format.
                 uno::Reference< chart2::data::XDataSequence > xNewSeq(
                     xDataProvider->createDataSequenceByRangeRepresentation( rRanges[nRange++] ));
-                
+
                 uno::Reference< beans::XPropertySet > xNewProps( xNewSeq, uno::UNO_QUERY );
                 if( xNewProps.is() )
                     xNewProps->setPropertyValue( aPropertyNameRole, xValues->getPropertyValue( aPropertyNameRole ) );

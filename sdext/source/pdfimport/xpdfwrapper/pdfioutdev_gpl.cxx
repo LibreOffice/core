@@ -15,12 +15,12 @@
  *    modify it under the terms of the GNU General Public License as
  *    published by the Free Software Foundation; either version 2 of
  *    the License, or (at your option) any later version.
- *    
+ *
  *    This program is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *    GNU General Public License for more details.
- *    
+ *
  *    You should have received a copy of the GNU General Public
  *    License along with this program; if not, write to the Free
  *    Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -38,7 +38,7 @@
 #include <vector>
 
 #include <boost/shared_array.hpp>
- 
+
 #if defined __SUNPRO_CC
 #pragma disable_warn
 #elif defined _MSC_VER
@@ -58,7 +58,7 @@
 #endif
 
 
-/* SYNC STREAMS 
+/* SYNC STREAMS
    ============
 
    We stream human-readble tokens to stdout, and binary data (fonts,
@@ -89,7 +89,7 @@ boost::shared_array<char> lcl_escapeLineFeeds(const char* const i_pStr)
 {
     size_t nLength(strlen(i_pStr));
     char* pBuffer = new char[2*nLength+1];
-    
+
     const char* pRead = i_pStr;
     char* pWrite = pBuffer;
     while( nLength-- )
@@ -138,7 +138,7 @@ void writeBinaryBuffer( const OutputBuffer& rBuffer )
 
     // put buffer to stderr
     if( !rBuffer.empty() )
-        if( fwrite(&rBuffer[0], sizeof(char), 
+        if( fwrite(&rBuffer[0], sizeof(char),
                    rBuffer.size(), g_binary_out) != (size_t)rBuffer.size() )
             exit(1); // error
 
@@ -194,12 +194,12 @@ void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, b
     // copy the raw stream
     if( bInvert )
     {
-        for( int i=0; i<size; ++i) 
+        for( int i=0; i<size; ++i)
             o_rOutputBuf.push_back(static_cast<char>(str->getChar() ^ 0xff));
     }
     else
     {
-        for( int i=0; i<size; ++i) 
+        for( int i=0; i<size; ++i)
             o_rOutputBuf.push_back(static_cast<char>(str->getChar()));
     }
 
@@ -212,7 +212,7 @@ void writePpm_( OutputBuffer&     o_rOutputBuf,
                 int               height,
                 GfxImageColorMap* colorMap,
                 bool              bWithLinefeed )
-{ 
+{
     // write as PPM (char by char, to avoid stdlib lineend messing)
     o_rOutputBuf.clear();
     o_rOutputBuf.resize(WRITE_BUFFER_SIZE);
@@ -243,28 +243,28 @@ void writePpm_( OutputBuffer&     o_rOutputBuf,
     Guchar *p;
     GfxRGB rgb;
     ImageStream* imgStr =
-        new ImageStream(str, 
-                        width, 
+        new ImageStream(str,
+                        width,
                         colorMap->getNumPixelComps(),
                         colorMap->getBits());
     imgStr->reset();
 
-    for( int y=0; y<height; ++y) 
+    for( int y=0; y<height; ++y)
     {
         p = imgStr->getLine();
-        for( int x=0; x<width; ++x) 
+        for( int x=0; x<width; ++x)
         {
             colorMap->getRGB(p, &rgb);
             o_rOutputBuf.push_back(colToByte(rgb.r));
             o_rOutputBuf.push_back(colToByte(rgb.g));
             o_rOutputBuf.push_back(colToByte(rgb.b));
-       
+
             p +=colorMap->getNumPixelComps();
         }
     }
 
     delete imgStr;
-    
+
 }
 
 // call this only for 1 bit image streams !
@@ -276,11 +276,11 @@ void writePng_( OutputBuffer&     o_rOutputBuf,
                 GfxRGB&           oneColor,
                 bool              bIsMask,
                 bool              bWithLinefeed )
-{ 
+{
     o_rOutputBuf.clear();
-    
+
     // get png image
-    PngHelper::createPng( o_rOutputBuf, str, width, height, zeroColor, oneColor, bIsMask ); 
+    PngHelper::createPng( o_rOutputBuf, str, width, height, zeroColor, oneColor, bIsMask );
 
     printf( " PNG %d", (int)o_rOutputBuf.size() );
     if( bWithLinefeed )
@@ -293,11 +293,11 @@ void writePng_( OutputBuffer& o_rOutputBuf,
                 Stream* maskStr,
                 int maskWidth, int maskHeight, GfxImageColorMap* maskColorMap,
                 bool bWithLinefeed )
-{ 
+{
     o_rOutputBuf.clear();
-    
+
     // get png image
-    PngHelper::createPng( o_rOutputBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskColorMap ); 
+    PngHelper::createPng( o_rOutputBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskColorMap );
 
     printf( " PNG %d", (int)o_rOutputBuf.size() );
     if( bWithLinefeed )
@@ -310,11 +310,11 @@ void writePng_( OutputBuffer& o_rOutputBuf,
                 Stream* maskStr,
                 int maskWidth, int maskHeight, bool maskInvert,
                 bool bWithLinefeed )
-{ 
+{
     o_rOutputBuf.clear();
-    
+
     // get png image
-    PngHelper::createPng( o_rOutputBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskInvert ); 
+    PngHelper::createPng( o_rOutputBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskInvert );
 
     printf( " PNG %d", (int)o_rOutputBuf.size() );
     if( bWithLinefeed )
@@ -326,7 +326,7 @@ void writeMask_( OutputBuffer& o_rOutputBuf, Stream* str, int width, int height,
 {
     if( str->getKind() == strDCT )
         writeJpeg_(o_rOutputBuf, str, bWithLinefeed);
-    else 
+    else
         writePbm_(o_rOutputBuf, str, width, height, bWithLinefeed, bInvert );
 }
 
@@ -335,17 +335,17 @@ void writeImage_( OutputBuffer&     o_rOutputBuf,
                   int               width,
                   int               height,
                   GfxImageColorMap* colorMap,
-                  bool              bWithLinefeed ) 
+                  bool              bWithLinefeed )
 {
     // dump JPEG file
     if( str->getKind() == strDCT &&
         (colorMap->getNumPixelComps() == 1 ||
-         colorMap->getNumPixelComps() == 3) ) 
+         colorMap->getNumPixelComps() == 3) )
     {
         writeJpeg_(o_rOutputBuf, str, bWithLinefeed);
-    } 
+    }
     else if (colorMap->getNumPixelComps() == 1 &&
-             colorMap->getBits() == 1) 
+             colorMap->getBits() == 1)
     {
         // this is a two color bitmap, write a png
         // provide default colors
@@ -359,7 +359,7 @@ void writeImage_( OutputBuffer&     o_rOutputBuf,
             colorMap->getRGB( &nIndex, &oneColor );
         }
         writePng_( o_rOutputBuf, str, width, height, zeroColor, oneColor, false, bWithLinefeed );
-    } 
+    }
     else
         writePpm_( o_rOutputBuf, str, width, height, colorMap, bWithLinefeed );
 }
@@ -442,12 +442,12 @@ void PDFOutDev::writeFontFile( GfxFont* gfxFont ) const
     fflush(stdout);
 
     if( fwrite(pBuf, sizeof(char), nSize, g_binary_out) != (size_t)nSize )
-        exit(1); // error   
+        exit(1); // error
 
-    // ---sync point--- see SYNC STREAMS above  
+    // ---sync point--- see SYNC STREAMS above
     fflush(g_binary_out);
 }
- 
+
 void PDFOutDev::printPath( GfxPath* pPath ) const
 {
     int nSubPaths = pPath ? pPath->getNumSubpaths() : 0;
@@ -455,13 +455,13 @@ void PDFOutDev::printPath( GfxPath* pPath ) const
     {
         GfxSubpath* pSub  = pPath->getSubpath( i );
         const int nPoints = pSub->getNumPoints();
-        
+
         printf( " subpath %d", pSub->isClosed() );
 
         for( int n=0; n<nPoints; ++n )
         {
-            printf( " %f %f %d", 
-                    normalize(pSub->getX(n)), 
+            printf( " %f %f %d",
+                    normalize(pSub->getX(n)),
                     normalize(pSub->getY(n)),
                     pSub->getCurve(n) );
         }
@@ -479,7 +479,7 @@ void PDFOutDev::startPage(int /*pageNum*/, GfxState* state)
 {
     assert(state);
     printf("startPage %f %f\n",
-           normalize(state->getPageWidth()), 
+           normalize(state->getPageWidth()),
            normalize(state->getPageHeight()));
 }
 
@@ -499,13 +499,13 @@ void PDFOutDev::processLink(Link* link, Catalog*)
     if( pAction->getKind() == actionURI )
     {
         const char* pURI = static_cast<LinkURI*>(pAction)->getURI()->getCString();
-        
+
         boost::shared_array<char> pEsc( lcl_escapeLineFeeds(pURI) );
 
-        printf( "drawLink %f %f %f %f %s\n", 
-                normalize(x1), 
-                normalize(y1), 
-                normalize(x2), 
+        printf( "drawLink %f %f %f %f %s\n",
+                normalize(x1),
+                normalize(y1),
+                normalize(x2),
                 normalize(y2),
                 pEsc.get() );
     }
@@ -536,9 +536,9 @@ void PDFOutDev::setDefaultCTM(double *pMat)
             normalize(pMat[5]) );
 }
 
-void PDFOutDev::updateCTM(GfxState* state, 
+void PDFOutDev::updateCTM(GfxState* state,
                           double, double,
-                          double, double, 
+                          double, double,
                           double, double)
 {
     assert(state);
@@ -574,13 +574,13 @@ void PDFOutDev::updateLineDash(GfxState *state)
 
 void PDFOutDev::updateFlatness(GfxState *state)
 {
-    assert(state);    
+    assert(state);
     printf( "updateFlatness %d\n", state->getFlatness() );
 }
 
 void PDFOutDev::updateLineJoin(GfxState *state)
 {
-    assert(state);    
+    assert(state);
     printf( "updateLineJoin %d\n", state->getLineJoin() );
 }
 
@@ -610,8 +610,8 @@ void PDFOutDev::updateFillColor(GfxState *state)
     state->getFillRGB( &aRGB );
 
     printf( "updateFillColor %f %f %f %f\n",
-            normalize(colToDbl(aRGB.r)), 
-            normalize(colToDbl(aRGB.g)), 
+            normalize(colToDbl(aRGB.r)),
+            normalize(colToDbl(aRGB.g)),
             normalize(colToDbl(aRGB.b)),
             normalize(state->getFillOpacity()) );
 }
@@ -622,10 +622,10 @@ void PDFOutDev::updateStrokeColor(GfxState *state)
 
     GfxRGB aRGB;
     state->getStrokeRGB( &aRGB );
-    
+
     printf( "updateStrokeColor %f %f %f %f\n",
-            normalize(colToDbl(aRGB.r)), 
-            normalize(colToDbl(aRGB.g)), 
+            normalize(colToDbl(aRGB.r)),
+            normalize(colToDbl(aRGB.g)),
             normalize(colToDbl(aRGB.b)),
             normalize(state->getFillOpacity()) );
 }
@@ -672,14 +672,14 @@ void PDFOutDev::updateFont(GfxState *state)
             printf( " %lld", fontID );
 
             aFont = it->second;
-            
+
             boost::shared_array<char> pEsc( lcl_escapeLineFeeds(aFont.familyName.getCString()) );
             printf( " %d %d %d %d %f %d %s",
                     aFont.isEmbedded,
-                    aFont.isBold, 
-                    aFont.isItalic, 
-                    aFont.isUnderline, 
-                    normalize(state->getTransformedFontSize()), 
+                    aFont.isBold,
+                    aFont.isItalic,
+                    aFont.isUnderline,
+                    normalize(state->getTransformedFontSize()),
                     nEmbedSize,
                     pEsc.get() );
         }
@@ -693,7 +693,7 @@ void PDFOutDev::updateFont(GfxState *state)
 void PDFOutDev::updateRender(GfxState *state)
 {
     assert(state);
-    
+
     printf( "setTextRenderMode %d\n", state->getRender() );
 }
 
@@ -741,7 +741,7 @@ void PDFOutDev::eoClip(GfxState *state)
     printPath( state->getPath() );
     printf( "\n" );
 }
-        
+
 /** Output one glyph
 
 
@@ -770,44 +770,44 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
 
     if( u == NULL )
         return;
-        
+
     // normalize coordinates: correct from baseline-relative to upper
     // left corner of glyphs
-    double x2(0.0), y2(0.0); 
-    state->textTransformDelta( 0.0, 
-                               state->getFont()->getAscent(), 
+    double x2(0.0), y2(0.0);
+    state->textTransformDelta( 0.0,
+                               state->getFont()->getAscent(),
                                &x2, &y2 );
     const double fFontSize(state->getFontSize());
     x += x2*fFontSize;
     y += y2*fFontSize;
-    
+
     const double aPositionX(x-originX);
     const double aPositionY(y-originY);
     // TODO(F2): use leading here, when set
     const double nWidth(dx != 0.0 ? dx : fFontSize);
     const double nHeight(dy != 0.0 ? dy : fFontSize);
-    
+
     const double* pTextMat=state->getTextMat();
     printf( "drawChar %f %f %f %f %f %f %f %f ",
-            normalize(aPositionX), 
+            normalize(aPositionX),
             normalize(aPositionY),
-            normalize(aPositionX+nWidth), 
+            normalize(aPositionX+nWidth),
             normalize(aPositionY-nHeight),
-            normalize(pTextMat[0]), 
-            normalize(pTextMat[2]), 
-            normalize(pTextMat[1]), 
+            normalize(pTextMat[0]),
+            normalize(pTextMat[2]),
+            normalize(pTextMat[1]),
             normalize(pTextMat[3]) );
 
     // silence spurious warning
     (void)&mapUCS2;
 
     char buf[9];
-    for( int i=0; i<uLen; ++i ) 
+    for( int i=0; i<uLen; ++i )
     {
         buf[ m_pUtf8Map->mapUnicode(u[i], buf, sizeof(buf)-1) ] = 0;
         boost::shared_array<char> pEsc( lcl_escapeLineFeeds(buf) );
         printf( "%s", pEsc.get() );
-    } 
+    }
 
     printf( "\n" );
 }
@@ -821,7 +821,7 @@ void PDFOutDev::endTextObject(GfxState*)
 {
     printf( "endTextObject\n" );
 }
-        
+
 void PDFOutDev::drawImageMask(GfxState* pState, Object*, Stream* str,
                               int width, int height, GBool invert,
                               GBool /*inlineImg*/ )
@@ -869,13 +869,13 @@ void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
         else
         {
             GfxRGB aMinRGB;
-            colorMap->getColorSpace()->getRGB( 
-                (GfxColor*)maskColors, 
+            colorMap->getColorSpace()->getRGB(
+                (GfxColor*)maskColors,
                 &aMinRGB );
 
             GfxRGB aMaxRGB;
-            colorMap->getColorSpace()->getRGB( 
-                (GfxColor*)maskColors+gfxColorMaxComps, 
+            colorMap->getColorSpace()->getRGB(
+                (GfxColor*)maskColors+gfxColorMaxComps,
                 &aMaxRGB );
 
             aMaskBuf.push_back( colToByte(aMinRGB.r) );
@@ -896,7 +896,7 @@ void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
 void PDFOutDev::drawMaskedImage(GfxState*, Object*, Stream* str,
                                 int width, int height,
                                 GfxImageColorMap* colorMap,
-                                Stream* maskStr, 
+                                Stream* maskStr,
                                 int maskWidth, int maskHeight,
                                 GBool maskInvert)
 {

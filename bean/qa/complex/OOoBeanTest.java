@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ import java.awt.*;
 
 public class OOoBeanTest extends ComplexTestCase
 {
-    
+
     public String[] getTestMethodNames()
     {
         // TODO think about trigger of sub-tests from outside
@@ -89,7 +89,7 @@ public class OOoBeanTest extends ComplexTestCase
     {
         boolean ret = false;
         String os = System.getProperty("os.name");
-        if (os != null) 
+        if (os != null)
         {
             os = os.trim();
             if (os.indexOf("Win") == 0)
@@ -131,7 +131,7 @@ public class OOoBeanTest extends ComplexTestCase
 
     /** Sizing, painting
      */
-    public void test2() throws Exception 
+    public void test2() throws Exception
     {
         WriterFrame f = null;
         ScreenComparer capturer = null;
@@ -178,7 +178,7 @@ public class OOoBeanTest extends ComplexTestCase
                 f.setExtendedState(Frame.NORMAL);
                 Thread.sleep(getSleepTime(200));
                 if (f.checkUnoFramePosition() == false)
-                    failed("Sizing error: Frame set from maximized to normal.", true);                
+                    failed("Sizing error: Frame set from maximized to normal.", true);
                 capturer.grabTwo(f.getClientArea());
                 if (capturer.compare() == false)
                 {
@@ -195,14 +195,14 @@ public class OOoBeanTest extends ComplexTestCase
             Thread.sleep(getSleepTime(200));
             if (f.checkUnoFramePosition() == false)
                 failed("Sizing error: Frame moved.", true);
-                            
+
             capturer.grabTwo(f.getClientArea());
             if (capturer.compare() == false)
             {
                 failed("Painting error: Move frame to a different position.", true);
                 capturer.writeImages();
             }
-            
+
             //move Window down
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             int maxY = dim.height - f.getBounds().height;
@@ -225,7 +225,7 @@ public class OOoBeanTest extends ComplexTestCase
             }
 
             //obscure the window and make it visible again
-            
+
             oldPosition = f.getBounds();
 
             Rectangle pos = new Rectangle(oldPosition.x - 50, oldPosition.y - 50,
@@ -276,7 +276,7 @@ public class OOoBeanTest extends ComplexTestCase
             f = new WriterFrame(100, 100, 500, 300, true);
             if (f.checkUnoFramePosition() == false)
                 failed("Sizing error.", true);
-            
+
         }
         finally
         {
@@ -332,7 +332,7 @@ public class OOoBeanTest extends ComplexTestCase
                 f.removeOOoBean();
                 f.addOOoBean();
             }
-            
+
             f.goToStart();
             f.pageDown();
             Thread.sleep(getSleepTime(200));
@@ -344,7 +344,7 @@ public class OOoBeanTest extends ComplexTestCase
                        "repeatedly to java.lang.Frame.", true);
                 capturer.writeImages();
             }
-            
+
             if (f.checkUnoFramePosition() == false)
                 failed("Sizing error.", true);
 
@@ -359,7 +359,7 @@ public class OOoBeanTest extends ComplexTestCase
     }
 
 
-    /** Test focus 	(i49454). After repeatedly adding and removing the bean to a window
+    /** Test focus  (i49454). After repeatedly adding and removing the bean to a window
      * it should still be possible to enter text in the window. This does not
      * work all the time on Windows. This is probably a timing problem. When using
      * Thread.sleep (position #1) then it should work.
@@ -380,7 +380,7 @@ public class OOoBeanTest extends ComplexTestCase
                 bean.loadFromURL("private:factory/swriter", null);
                 // #1
                 Thread.sleep(1000);
-                
+
                 StringBuffer buf = new StringBuffer(1000);
                 for (int i = 0; i < 1; i++)
                 {
@@ -393,7 +393,7 @@ public class OOoBeanTest extends ComplexTestCase
                     bean.aquireSystemWindow();
 //                    frame.validate();
                 }
-                
+
                 if (isWindows() == false)
                     Thread.sleep(5000);
 
@@ -401,7 +401,7 @@ public class OOoBeanTest extends ComplexTestCase
                 roby.keyPress(KeyEvent.VK_H);
                 roby.keyRelease(KeyEvent.VK_H);
                 buf.append("h");
-                
+
                 String s = getText(bean);
                 if ( ! s.equals(buf.toString()))
                 {
@@ -416,12 +416,12 @@ public class OOoBeanTest extends ComplexTestCase
                 {
                     Thread.sleep(2000);
                 }
-            
+
             } finally {
                 bean.stopOOoConnection();
                 frame.dispose();
             }
-        }   
+        }
     }
 
     /** Tests focus problem just like test6, but the implementation is a little
@@ -448,7 +448,7 @@ public class OOoBeanTest extends ComplexTestCase
                 Thread.sleep(1000);
                 StringBuffer buf = new StringBuffer(1000);
                 int i = 0;
-                
+
                 for (; i < 1; i++)
                 {
                 EventQueue q = Toolkit.getDefaultToolkit().getSystemEventQueue();
@@ -456,14 +456,14 @@ public class OOoBeanTest extends ComplexTestCase
                         public void run() {
                             try {
 
-                            bean.releaseSystemWindow(); 
+                            bean.releaseSystemWindow();
                             frame.remove(bean);
                             frame.validate();
 
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            
+
                             }
                         });
                 // #2
@@ -480,11 +480,11 @@ public class OOoBeanTest extends ComplexTestCase
                             }
                             }
                         });
-                    
+
                 // #3
                 Thread.sleep(1000);
                 }
-                
+
                 if (isWindows() == false)
                     Thread.sleep(5000);
 
@@ -501,7 +501,7 @@ public class OOoBeanTest extends ComplexTestCase
                 roby.waitForIdle();
 
                 buf.append("h");
-                Thread.sleep(1000);                
+                Thread.sleep(1000);
                 String s = getText(bean);
                 System.out.println(" getText: " + s);
                 if ( ! s.equals(buf.toString()))
@@ -516,7 +516,7 @@ public class OOoBeanTest extends ComplexTestCase
                     roby.waitForIdle();
 
                     String sH = "h";
-                    Thread.sleep(1000);                
+                    Thread.sleep(1000);
                     String s2 = getText(bean);
 
                     if ( ! sH.equals(s2))
@@ -534,7 +534,7 @@ public class OOoBeanTest extends ComplexTestCase
                 {
                     //                   Thread.sleep(2000);
                 }
-            
+
             } finally {
                 bean.stopOOoConnection();
                 frame.dispose();
@@ -597,7 +597,7 @@ public class OOoBeanTest extends ComplexTestCase
             c.gridx = 0;
             c.gridy = 0;
             f.add(bp1, c);
-            
+
             c.gridx = 1;
             c.insets = new Insets(0, 0, 0, 0);
             f.add(bp2, c);

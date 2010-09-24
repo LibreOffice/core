@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,9 +65,9 @@ enum GraphicImportType
 {
     IMPORT_AS_GRAPHIC,
     IMPORT_AS_SHAPE,
-    IMPORT_AS_DETECTED_INLINE,  
+    IMPORT_AS_DETECTED_INLINE,
     IMPORT_AS_DETECTED_ANCHOR
-};    
+};
 
 class WRITERFILTER_DLLPRIVATE GraphicImport : public Properties, public Table
                     ,public BinaryObj, public Stream
@@ -80,8 +80,8 @@ class WRITERFILTER_DLLPRIVATE GraphicImport : public Properties, public Table
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> m_xShape;
     void ProcessShapeOptions(Value & val);
-    
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > createGraphicObject( 
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > createGraphicObject(
             const ::com::sun::star::beans::PropertyValues& aMediaProperties );
 
 public:

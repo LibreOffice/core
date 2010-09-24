@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ void CBaseReader::end_document()
 {
 }
 
-/** Read interested tag content into respective structure then start parsing process. 
+/** Read interested tag content into respective structure then start parsing process.
     @param ContentName
     the xml file name in the zipped document which we interest.
 */
@@ -85,11 +85,11 @@ void CBaseReader::Initialize( const std::string& ContentName)
     try
     {
         if (m_ZipContent.empty())
-            m_ZipFile.GetUncompressedContent( ContentName, m_ZipContent );  
+            m_ZipFile.GetUncompressedContent( ContentName, m_ZipContent );
 
         xml_parser parser;
         parser.set_document_handler(this);  // pass current reader as reader to the sax parser
-        parser.parse(&m_ZipContent[0], m_ZipContent.size());        
+        parser.parse(&m_ZipContent[0], m_ZipContent.size());
     }
     catch(std::exception&
     #if OSL_DEBUG_LEVEL > 0
@@ -98,7 +98,7 @@ void CBaseReader::Initialize( const std::string& ContentName)
         )
     {
         ENSURE( false, ex.what() );
-    }   
+    }
     catch(...)
     {
         ENSURE(false, "Unknown error");

@@ -39,7 +39,7 @@ sub get_path_from_fullqualifiedname
 
     if ( $$longfilenameref =~ /\Q$installer::globals::separator\E/ )    # Is there a separator in the path? Otherwise the path is empty.
     {
-        if ( $$longfilenameref =~ /^\s*(\S.*\S\Q$installer::globals::separator\E)(\S.+\S?)/ )
+        if ( $$longfilenameref =~ /^\s*(.*\Q$installer::globals::separator\E)(.+)/ )
         {
             $$longfilenameref = $1;
         }

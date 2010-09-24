@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@ class ScAddInCfg : public utl::ConfigItem
 public:
             ScAddInCfg();
 
-    virtual void	Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
-    virtual void	Commit();
+    virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+    virtual void    Commit();
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Any>
             GetProperties(const com::sun::star::uno::Sequence< rtl::OUString >& rNames)
@@ -46,8 +46,8 @@ public:
 
     using ConfigItem::GetNodeNames;
 
-//	com::sun::star::uno::Sequence< rtl::OUString > GetNodeNames(rtl::OUString& rNode)
-//							{ return ConfigItem::GetNodeNames( rNode ); }
+//  com::sun::star::uno::Sequence< rtl::OUString > GetNodeNames(rtl::OUString& rNode)
+//                          { return ConfigItem::GetNodeNames( rNode ); }
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,12 +61,12 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
     ::rtl::OUString aName,aSchema;
     sal_Int32 nLen = _rName.indexOf('.');
     aSchema = _rName.copy(0,nLen);
-    aName	= _rName.copy(nLen+1);
+    aName   = _rName.copy(nLen+1);
 
     Sequence< ::rtl::OUString > aTypes(1);
     aTypes[0] = ::rtl::OUString::createFromAscii("%");
-    //	aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");
-    //	aTypes[1] = ::rtl::OUString::createFromAscii("SYSTEMTABLE");
+    //  aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");
+    //  aTypes[1] = ::rtl::OUString::createFromAscii("SYSTEMTABLE");
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
 
@@ -76,7 +76,7 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
         Reference< XRow > xRow(xResult,UNO_QUERY);
         if(xResult->next()) // there can be only one table with this name
         {
-            OAdabasTable* pRet = new OAdabasTable(this,	static_cast<OAdabasCatalog&>(m_rParent).getConnection(),
+            OAdabasTable* pRet = new OAdabasTable(this, static_cast<OAdabasCatalog&>(m_rParent).getConnection(),
                                         aName,xRow->getString(4),xRow->getString(5),aSchema);
             xRet = pRet;
         }
@@ -111,8 +111,8 @@ sdbcx::ObjectType OTables::appendObject( const ::rtl::OUString& _rForName, const
 // -------------------------------------------------------------------------
 void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aSql	= ::rtl::OUString::createFromAscii("CREATE TABLE ");
-    ::rtl::OUString aQuote	= static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
+    ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
     OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
@@ -173,7 +173,7 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ::rtl::OUString aName,aSchema;
         sal_Int32 nLen = _sElementName.indexOf('.');
         aSchema = _sElementName.copy(0,nLen);
-        aName	= _sElementName.copy(nLen+1);
+        aName   = _sElementName.copy(nLen+1);
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
@@ -201,8 +201,8 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 // -------------------------------------------------------------------------
 void OTables::createTable( const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aSql	= ::rtl::OUString::createFromAscii("CREATE TABLE ");
-    ::rtl::OUString aQuote	= static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
+    ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
     ::rtl::OUString sSchema;
 
@@ -254,7 +254,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
             if(::cppu::extractInterface(xColProp,xKeys->getByIndex(key)) && xColProp.is())
             {
 
-                sal_Int32 nKeyType		= getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
+                sal_Int32 nKeyType      = getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 
                 if(nKeyType == KeyType::PRIMARY)
                 {
@@ -272,7 +272,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                     {
                         if(::cppu::extractInterface(xColProp,xColumns->getByIndex(column)) && xColProp.is())
                             aSql += aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
-                                        + 	::rtl::OUString::createFromAscii(",");
+                                        +   ::rtl::OUString::createFromAscii(",");
                     }
 
                     aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
@@ -296,7 +296,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                 }
                 else if(nKeyType == KeyType::FOREIGN)
                 {
-                    sal_Int32 nDeleteRule	= getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE)));
+                    sal_Int32 nDeleteRule   = getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE)));
 
                     xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
                     xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
@@ -307,7 +307,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                     ::rtl::OUString aName,aSchema,aRefTable = getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
                     sal_Int32 nLen = aRefTable.indexOf('.');
                     aSchema = aRefTable.copy(0,nLen);
-                    aName	= aRefTable.copy(nLen+1);
+                    aName   = aRefTable.copy(nLen+1);
 
                     aSql += aQuote + aSchema + aQuote + sDot
                                 + aQuote + aName + aQuote
@@ -442,7 +442,7 @@ void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OTables::getTypeString(const Reference< XPropertySet >& _rxColProp)
 {
-    ::rtl::OUString	aValue;
+    ::rtl::OUString aValue;
     switch(getINT32(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
     {
         case DataType::BIT:

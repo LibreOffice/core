@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
     namespace xml { namespace sax { class XAttributeList; } }
 } } }
-namespace rtl {	class OUString; }
+namespace rtl { class OUString; }
 
 
 class XMLAutoMarkFileContext : public SvXMLImportContext
@@ -48,7 +48,7 @@ public:
     TYPEINFO();
 
     XMLAutoMarkFileContext(
-        SvXMLImport& rImport, 
+        SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName);
 
@@ -57,7 +57,7 @@ public:
 protected:
 
     virtual void StartElement(
-        const ::com::sun::star::uno::Reference< 
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 };
 

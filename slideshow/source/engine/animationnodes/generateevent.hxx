@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,16 +36,16 @@ namespace slideshow {
 namespace internal {
 
 /** Create an event for the given description, calling the given functor.
-    
+
     @param rEventDescription
     Directly from API
-    
+
     @param rFunctor
     Functor to call when event fires.
-    
+
     @param rContext
     Context struct, to provide event queue
-    
+
     @param nAdditionalDelay
     Additional delay, gets added on top of timeout.
 */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -597,7 +597,7 @@ Reference< XSQLQueryComposer >  OConnection::createQueryComposer(void) throw( Ru
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
-    //	Reference< XNumberFormatsSupplier >  xSupplier = pParent->getNumberFormatsSupplier();
+    //  Reference< XNumberFormatsSupplier >  xSupplier = pParent->getNumberFormatsSupplier();
     Reference< XSQLQueryComposer >  xComposer( new OQueryComposer( this ) );
     m_aComposers.push_back(WeakReferenceHelper(xComposer));
     return xComposer;
@@ -626,11 +626,11 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
             getMasterTables();
 
             if (m_xMasterTables.is() && m_xMasterTables->getTables().is())
-            {	// yes -> wrap them
+            {   // yes -> wrap them
                 m_pTables->construct(m_xMasterTables->getTables(),m_aTableFilter, m_aTableTypeFilter);
             }
             else
-            {	// no -> use an own container
+            {   // no -> use an own container
                 m_pTables->construct(m_aTableFilter, m_aTableTypeFilter);
             }
         }
@@ -941,6 +941,6 @@ Reference< XInterface > SAL_CALL OConnection::getTableEditor( const Reference< X
 
 
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 

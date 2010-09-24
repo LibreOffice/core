@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,15 +52,15 @@ const sal_Char sAPI_ParaStyleHeading[] = "ParaStyleHeading";
 TYPEINIT1( XMLIndexTitleTemplateContext, SvXMLImportContext );
 
 XMLIndexTitleTemplateContext::XMLIndexTitleTemplateContext(
-    SvXMLImport& rImport, 
+    SvXMLImport& rImport,
     Reference<XPropertySet> & rPropSet,
     sal_uInt16 nPrfx,
     const OUString& rLocalName)
-:	SvXMLImportContext(rImport, nPrfx, rLocalName)
-,	sTitle(RTL_CONSTASCII_USTRINGPARAM(sAPI_Title))
-,	sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM(sAPI_ParaStyleHeading))
-,	bStyleNameOK(sal_False)
-,	rTOCPropertySet(rPropSet)
+:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+,   sTitle(RTL_CONSTASCII_USTRINGPARAM(sAPI_Title))
+,   sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM(sAPI_ParaStyleHeading))
+,   bStyleNameOK(sal_False)
+,   rTOCPropertySet(rPropSet)
 {
 }
 
@@ -78,13 +78,13 @@ void XMLIndexTitleTemplateContext::StartElement(
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr), 
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
         if ( (XML_NAMESPACE_TEXT == nPrefix) &&
              (IsXMLToken(sLocalName, XML_STYLE_NAME)) )
         {
             sStyleName = xAttrList->getValueByIndex(nAttr);
-            OUString sDisplayStyleName = GetImport().GetStyleDisplayName( 
+            OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
                 XML_STYLE_FAMILY_TEXT_PARAGRAPH, sStyleName );
             const Reference < ::com::sun::star::container::XNameContainer >&
                 rStyles = GetImport().GetTextImport()->GetParaStyles();
@@ -102,7 +102,7 @@ void XMLIndexTitleTemplateContext::EndElement()
 
     if (bStyleNameOK)
     {
-        aAny <<= GetImport().GetStyleDisplayName( 
+        aAny <<= GetImport().GetStyleDisplayName(
                                 XML_STYLE_FAMILY_TEXT_PARAGRAPH,
                                 sStyleName );
         rTOCPropertySet->setPropertyValue(sParaStyleHeading, aAny);

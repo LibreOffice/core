@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@ using namespace vos;
 // Pipe
 
 
-VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OPipe, vos), 
-                        VOS_NAMESPACE(OPipe, vos), 
+VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OPipe, vos),
+                        VOS_NAMESPACE(OPipe, vos),
                         VOS_NAMESPACE(OObject, vos), 0);
 
 /*****************************************************************************/
@@ -53,11 +53,11 @@ OPipe::OPipe()
 
 OPipe::OPipe( const rtl::OUString& strName, TPipeOption Options)
 {
-    m_pPipeRef = 
-        new PipeRef( osl_createPipe(strName.pData, 
-                                    (oslPipeOptions)Options, 
+    m_pPipeRef =
+        new PipeRef( osl_createPipe(strName.pData,
+                                    (oslPipeOptions)Options,
                                     NULL) );
-    
+
     VOS_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
     VOS_POSTCOND((*m_pPipeRef)(), "OPipe(): creation of pipe failed!\n");
 }
@@ -70,11 +70,11 @@ OPipe::OPipe( const rtl::OUString& strName,
               TPipeOption Options,
               const OSecurity& rSecurity)
 {
-    m_pPipeRef= 
-        new PipeRef(osl_createPipe(strName.pData, 
-                                   (oslPipeOptions)Options, 
+    m_pPipeRef=
+        new PipeRef(osl_createPipe(strName.pData,
+                                   (oslPipeOptions)Options,
                                    (oslSecurity)rSecurity));
-    
+
     VOS_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
     VOS_POSTCOND((*m_pPipeRef)(), "OPipe(): creation of pipe failed!\n");
 }
@@ -85,7 +85,7 @@ OPipe::OPipe( const rtl::OUString& strName,
 OPipe::OPipe(const OPipe& pipe) :
 OReference(), OObject()
 {
-    
+
     VOS_ASSERT(pipe.m_pPipeRef != 0);
 
     m_pPipeRef= pipe.m_pPipeRef;
@@ -123,9 +123,9 @@ sal_Bool OPipe::create( const rtl::OUString& strName, TPipeOption Options )
         m_pPipeRef= 0;
     }
 
-    m_pPipeRef= 
-        new PipeRef(osl_createPipe(strName.pData, 
-                                   (oslPipeOptions)Options, 
+    m_pPipeRef=
+        new PipeRef(osl_createPipe(strName.pData,
+                                   (oslPipeOptions)Options,
                                    NULL));
 
     VOS_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
@@ -138,7 +138,7 @@ sal_Bool OPipe::create( const rtl::OUString& strName, TPipeOption Options )
 /*****************************************************************************/
 sal_Bool OPipe::create( const rtl::OUString& strName,
                         TPipeOption Options,
-                        const NAMESPACE_VOS(OSecurity)& rSecurity ) 
+                        const NAMESPACE_VOS(OSecurity)& rSecurity )
 {
     // if this was a valid pipe, decrease reference
     if ((m_pPipeRef) && (m_pPipeRef->release() == 0))
@@ -148,9 +148,9 @@ sal_Bool OPipe::create( const rtl::OUString& strName,
         m_pPipeRef= 0;
     }
 
-    m_pPipeRef= 
-        new PipeRef(osl_createPipe(strName.pData, 
-                                   (oslPipeOptions)Options, 
+    m_pPipeRef=
+        new PipeRef(osl_createPipe(strName.pData,
+                                   (oslPipeOptions)Options,
                                    (oslSecurity)rSecurity));
 
     VOS_POSTCOND(m_pPipeRef != 0, "OPipe(): new failed.\n");
@@ -206,7 +206,7 @@ sal_Bool OPipe::isValid() const
 /*****************************************************************************/
 void OPipe::close()
 {
-    if (m_pPipeRef && (m_pPipeRef->release() == 0)) 
+    if (m_pPipeRef && (m_pPipeRef->release() == 0))
     {
         osl_releasePipe((*m_pPipeRef)());
         delete m_pPipeRef;
@@ -222,7 +222,7 @@ OPipe::TPipeError OPipe::accept(OStreamPipe& Connection)
     if ( isValid() )
     {
         Connection = osl_acceptPipe((*m_pPipeRef)());
-        
+
         if(Connection.isValid())
             return E_None;
     }
@@ -236,8 +236,8 @@ OPipe::TPipeError OPipe::accept(OStreamPipe& Connection)
 sal_Int32 OPipe::recv(void* pBuffer, sal_uInt32 BytesToRead)
 {
     if ( isValid() )
-        return osl_receivePipe((*m_pPipeRef)(), 
-                             pBuffer, 
+        return osl_receivePipe((*m_pPipeRef)(),
+                             pBuffer,
                             BytesToRead);
     else
         return -1;
@@ -250,8 +250,8 @@ sal_Int32 OPipe::recv(void* pBuffer, sal_uInt32 BytesToRead)
 sal_Int32 OPipe::send(const void* pBuffer, sal_uInt32 BytesToSend)
 {
     if ( isValid() )
-        return osl_sendPipe((*m_pPipeRef)(), 
-                            pBuffer, 
+        return osl_sendPipe((*m_pPipeRef)(),
+                            pBuffer,
                             BytesToSend);
     else
         return -1;
@@ -270,8 +270,8 @@ OPipe::TPipeError OPipe::getError() const
 
 
 
-VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OStreamPipe, vos), 
-                        VOS_NAMESPACE(OStreamPipe, vos), 
+VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OStreamPipe, vos),
+                        VOS_NAMESPACE(OStreamPipe, vos),
                         VOS_NAMESPACE(OPipe, vos), 0);
 
 
@@ -353,11 +353,11 @@ sal_Int32 OStreamPipe::read(void* pBuffer, sal_uInt32 n) const
     /* loop until all desired bytes were read or an error occured */
     sal_Int32 BytesRead= 0;
     sal_Int32 BytesToRead= n;
-    while (BytesToRead > 0) 
+    while (BytesToRead > 0)
     {
         sal_Int32 RetVal;
-        RetVal= osl_receivePipe((*m_pPipeRef)(), 
-                                 pBuffer, 
+        RetVal= osl_receivePipe((*m_pPipeRef)(),
+                                 pBuffer,
                                 BytesToRead);
 
         /* error occured? */
@@ -371,7 +371,7 @@ sal_Int32 OStreamPipe::read(void* pBuffer, sal_uInt32 n) const
         pBuffer= (sal_Char*)pBuffer + RetVal;
     }
 
-    return BytesRead;   
+    return BytesRead;
 }
 
 /*****************************************************************************/
@@ -384,12 +384,12 @@ sal_Int32 OStreamPipe::write(const void* pBuffer, sal_uInt32 n)
     /* loop until all desired bytes were send or an error occured */
     sal_Int32 BytesSend= 0;
     sal_Int32 BytesToSend= n;
-    while (BytesToSend > 0) 
+    while (BytesToSend > 0)
     {
         sal_Int32 RetVal;
 
-        RetVal= osl_sendPipe((*m_pPipeRef)(), 
-                                pBuffer, 
+        RetVal= osl_sendPipe((*m_pPipeRef)(),
+                                pBuffer,
                                 BytesToSend);
 
         /* error occured? */
@@ -403,7 +403,7 @@ sal_Int32 OStreamPipe::write(const void* pBuffer, sal_uInt32 n)
         pBuffer= (sal_Char*)pBuffer + RetVal;
     }
 
-    return BytesSend;   
+    return BytesSend;
 }
 
 sal_Bool OStreamPipe::isEof() const

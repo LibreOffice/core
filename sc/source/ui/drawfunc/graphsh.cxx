@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,8 +129,8 @@ void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
 
                 if( pPageView )
                 {
-                    SdrGrafObj*	pFilteredObj = (SdrGrafObj*) pObj->Clone();
-                    String		aStr( pView->GetDescriptionOfMarkedObjects() );
+                    SdrGrafObj* pFilteredObj = (SdrGrafObj*) pObj->Clone();
+                    String      aStr( pView->GetDescriptionOfMarkedObjects() );
 
                     aStr.Append( sal_Unicode(' ') );
                     aStr.Append( String( ScResId( SCSTR_UNDO_GRAFFILTER ) ) );

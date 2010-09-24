@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,16 +61,16 @@ namespace basegfx
         return *this;
     }
 
-    B2DVector& B2DVector::operator=( const B2DTuple& rVec ) 
-    { 
+    B2DVector& B2DVector::operator=( const B2DTuple& rVec )
+    {
         mfX = rVec.getX();
-        mfY = rVec.getY(); 
-        return *this; 
+        mfY = rVec.getY();
+        return *this;
     }
 
 
-    double B2DVector::getLength() const 
-    { 
+    double B2DVector::getLength() const
+    {
         if(fTools::equalZero(mfX))
         {
             return fabs(mfY);
@@ -80,17 +80,17 @@ namespace basegfx
             return fabs(mfX);
         }
 
-        return hypot( mfX, mfY ); 
+        return hypot( mfX, mfY );
     }
 
-    double B2DVector::scalar( const B2DVector& rVec ) const 
-    { 
-        return((mfX * rVec.mfX) + (mfY * rVec.mfY)); 
+    double B2DVector::scalar( const B2DVector& rVec ) const
+    {
+        return((mfX * rVec.mfX) + (mfY * rVec.mfY));
     }
 
-    double B2DVector::cross( const B2DVector& rVec ) const 
-    { 
-        return(mfX * rVec.getY() - mfY * rVec.getX()); 
+    double B2DVector::cross( const B2DVector& rVec ) const
+    {
+        return(mfX * rVec.getY() - mfY * rVec.getX());
     }
 
     double B2DVector::angle( const B2DVector& rVec ) const
@@ -153,7 +153,7 @@ namespace basegfx
     }
 
     B2VectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB )
-    { 
+    {
         double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
 
         if(fTools::equalZero(fVal))

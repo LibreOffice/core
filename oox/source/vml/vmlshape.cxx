@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -315,7 +315,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
 {
     ModelObjectHelper& rModelObjectHelper = mrDrawing.getFilter().getModelObjectHelper();
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
-    
+
     PropertyMap aPropMap;
     maTypeModel.maStrokeModel.pushToPropMap( aPropMap, rModelObjectHelper, rGraphicHelper );
     maTypeModel.maFillModel.pushToPropMap( aPropMap, rModelObjectHelper, rGraphicHelper );

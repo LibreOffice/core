@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,131 +116,6 @@ bool DocxExport::CollapseScriptsforWordOk( USHORT nScript, USHORT nWhich )
     return true;
 }
 
-bool DocxExport::GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt,
-                    xub_StrLen nEnd, IMarkVector& rArr )
-{
-    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-    ULONG nNd = rNd.GetIndex( );
-
-    const sal_Int32 nMarks = pMarkAccess->getMarksCount();
-    for ( sal_Int32 i = 0; i < nMarks; i++ )
-    {
-        IMark* pMark = ( pMarkAccess->getMarksBegin() + i )->get();
-
-        // Only keep the bookmarks starting or ending in this node
-        if ( pMark->GetMarkStart().nNode == nNd ||
-             pMark->GetMarkEnd().nNode == nNd )
-        {
-            xub_StrLen nBStart = pMark->GetMarkStart().nContent.GetIndex();
-            xub_StrLen nBEnd = pMark->GetMarkEnd().nContent.GetIndex();
-
-            // Keep only the bookmars starting or ending in the snippet
-            bool bIsStartOk = ( nBStart >= nStt ) && ( nBStart <= nEnd );
-            bool bIsEndOk = ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
-
-            if ( bIsStartOk || bIsEndOk )
-                rArr.push_back( pMark );
-        }
-    }
-    return ( rArr.size() > 0 );
-}
-
-class CompareMarksEnd : public std::binary_function < const IMark *, const IMark *, bool >
-{
-public:
-    inline bool operator() ( const IMark * pOneB, const IMark * pTwoB ) const
-    {
-        xub_StrLen nOEnd = pOneB->GetMarkEnd().nContent.GetIndex();
-        xub_StrLen nTEnd = pTwoB->GetMarkEnd().nContent.GetIndex();
-
-        return nOEnd < nTEnd;
-    }
-};
-
-bool DocxExport::NearestBookmark( xub_StrLen& rNearest )
-{
-    bool bHasBookmark = false;
-
-    if ( m_rSortedMarksStart.size( ) > 0 )
-    {
-        IMark* pMarkStart = m_rSortedMarksStart.front();
-        rNearest = pMarkStart->GetMarkStart().nContent.GetIndex();
-        bHasBookmark = true;
-    }        
-
-    if ( m_rSortedMarksEnd.size( ) > 0 )
-    {
-        IMark* pMarkEnd = m_rSortedMarksEnd[0];
-        if ( !bHasBookmark )
-            rNearest = pMarkEnd->GetMarkEnd().nContent.GetIndex();
-        else
-            rNearest = std::min( rNearest, pMarkEnd->GetMarkEnd().nContent.GetIndex() );
-        bHasBookmark = true;
-    }
-
-    return bHasBookmark;
-}
-
-xub_StrLen DocxExport::GetNextPos( SwAttrIter* pAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos )
-{
-    // Get the bookmarks for the normal run
-    xub_StrLen nNextPos = MSWordExportBase::GetNextPos( pAttrIter, rNode, nAktPos );
-
-    GetSortedBookmarks( rNode, nAktPos, nNextPos - nAktPos );
-
-    xub_StrLen nNextBookmark = nNextPos;
-    NearestBookmark( nNextPos );
-    
-    return std::min( nNextPos, nNextBookmark );
-}
-
-void DocxExport::UpdatePosition( SwAttrIter* pAttrIter, xub_StrLen nAktPos, xub_StrLen nEnd )
-{
-    xub_StrLen nNextPos;
-
-    // either no bookmark, or it is not at the current position
-    if ( !NearestBookmark( nNextPos ) || nNextPos > nAktPos )
-    {
-        MSWordExportBase::UpdatePosition( pAttrIter, nAktPos, nEnd );
-    }
-}
-
-void DocxExport::GetSortedBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen )
-{
-    IMarkVector aMarksStart;
-    if ( GetBookmarks( rNode, nAktPos, nAktPos + nLen, aMarksStart ) ) 
-    {
-        IMarkVector aSortedEnd;
-        IMarkVector aSortedStart;
-        for ( IMarkVector::const_iterator it = aMarksStart.begin(), end = aMarksStart.end();
-              it < end; ++it )
-        {
-            IMark* pMark = (*it);
-
-            // Remove the positions egals to the current pos
-            xub_StrLen nStart = pMark->GetMarkStart().nContent.GetIndex();
-            xub_StrLen nEnd = pMark->GetMarkEnd().nContent.GetIndex();
-
-            if ( nStart > nAktPos )
-                aSortedStart.push_back( pMark );
-
-            if ( nEnd > nAktPos )
-                aSortedEnd.push_back( pMark );
-        }
-
-        // Sort the bookmarks by end position
-        std::sort( aSortedEnd.begin(), aSortedEnd.end(), CompareMarksEnd() );
-    
-        m_rSortedMarksStart.swap( aSortedStart );
-        m_rSortedMarksEnd.swap( aSortedEnd );
-    }
-    else
-    {
-        m_rSortedMarksStart.clear( );
-        m_rSortedMarksEnd.clear( );
-    }
-}
-
 void DocxExport::AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen )
 {
     std::vector< OUString > aStarts;
@@ -253,11 +128,11 @@ void DocxExport::AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xu
               it < end; ++it )
         {
             IMark* pMark = (*it);
-            
+
             xub_StrLen nStart = pMark->GetMarkStart().nContent.GetIndex();
             xub_StrLen nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
-            if ( nStart == nAktPos ) 
+            if ( nStart == nAktPos )
                 aStarts.push_back( pMark->GetName() );
 
             if ( nEnd == nAktPos )
@@ -312,7 +187,7 @@ bool DocxExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
 }
 
 void DocxExport::WriteHeadersFooters( BYTE nHeadFootFlags,
-        const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt )
+        const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, BYTE /*nBreakCode*/ )
 {
     // headers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN )
@@ -333,6 +208,10 @@ void DocxExport::WriteHeadersFooters( BYTE nHeadFootFlags,
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_FIRST )
         WriteHeaderFooter( rFirstPageFmt, false, "first" );
+
+#if OSL_DEBUG_LEVEL > 0
+    fprintf( stderr, "DocxExport::WriteHeadersFooters() - nBreakCode introduced, but ignored\n" );
+#endif
 }
 
 void DocxExport::OutputField( const SwField* pFld, ww::eField eFldType, const String& rFldCmd, BYTE nMode )
@@ -345,6 +224,13 @@ void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
     OSL_TRACE( "TODO DocxExport::WriteFormData()\n" );
 }
 
+void DocxExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
+{
+#if OSL_DEBUG_LEVEL > 0
+    fprintf( stderr, "TODO DocxExport::WriteHyperlinkData()\n" );
+#endif
+}
+
 void DocxExport::DoComboBox(const rtl::OUString& rName,
                              const rtl::OUString& rHelp,
                              const rtl::OUString& rToolTip,
@@ -353,41 +239,41 @@ void DocxExport::DoComboBox(const rtl::OUString& rName,
 {
     m_pDocumentFS->startElementNS( XML_w, XML_ffData, FSEND );
 
-    m_pDocumentFS->singleElementNS( XML_w, XML_name, 
+    m_pDocumentFS->singleElementNS( XML_w, XML_name,
             FSNS( XML_w, XML_val ), OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
 
     m_pDocumentFS->singleElementNS( XML_w, XML_enabled, FSEND );
 
     if ( rHelp.getLength( ) > 0 )
-        m_pDocumentFS->singleElementNS( XML_w, XML_helpText, 
+        m_pDocumentFS->singleElementNS( XML_w, XML_helpText,
             FSNS( XML_w, XML_val ), OUStringToOString( rHelp, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
-    
+
     if ( rToolTip.getLength( ) > 0 )
-        m_pDocumentFS->singleElementNS( XML_w, XML_statusText, 
+        m_pDocumentFS->singleElementNS( XML_w, XML_statusText,
             FSNS( XML_w, XML_val ), OUStringToOString( rToolTip, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
 
     m_pDocumentFS->startElementNS( XML_w, XML_ddList, FSEND );
-  
+
     // Output the 0-based index of the selected value
     sal_uInt32 nListItems = rListItems.getLength();
     sal_Int32 nId = 0;
     sal_uInt32 nI = 0;
     while ( ( nI < nListItems ) && ( nId == 0 ) )
     {
-        if ( rListItems[nI] == rSelected ) 
+        if ( rListItems[nI] == rSelected )
             nId = nI;
         nI++;
     }
 
-    m_pDocumentFS->singleElementNS( XML_w, XML_result, 
+    m_pDocumentFS->singleElementNS( XML_w, XML_result,
             FSNS( XML_w, XML_val ), rtl::OString::valueOf( nId ).getStr( ),
             FSEND );
 
     // Loop over the entries
-    
+
     for (sal_uInt32 i = 0; i < nListItems; i++)
     {
         m_pDocumentFS->singleElementNS( XML_w, XML_listEntry,
@@ -415,7 +301,7 @@ void DocxExport::ExportDocument_Impl()
     WriteMainText();
 
     WriteFootnotesEndnotes();
-    
+
     WriteNumbering();
 
     WriteFonts();
@@ -467,7 +353,7 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
                 nRstLnNum = 0;
 
             AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo( ) );
-            m_pSections->AppendSection( pAktPageDesc, pParentFmt, nRstLnNum ); 
+            m_pSections->AppendSection( pAktPageDesc, pParentFmt, nRstLnNum );
         }
     }
 }
@@ -489,7 +375,7 @@ void DocxExport::OutputOLENode( const SwOLENode& )
 
 ULONG DocxExport::ReplaceCr( BYTE )
 {
-    // Completely unused for Docx export... only here for code sharing 
+    // Completely unused for Docx export... only here for code sharing
     // purpose with binary export
     return 0;
 }
@@ -528,7 +414,7 @@ void DocxExport::InitStyles()
             S( "styles.xml" ) );
 
     ::sax_fastparser::FSHelperPtr pStylesFS =
-        m_pFilter->openOutputStreamWithSerializer( S( "word/styles.xml" ),
+        m_pFilter->openFragmentStreamWithSerializer( S( "word/styles.xml" ),
             S( "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml" ) );
 
     // switch the serializer to redirect the output to word/styles.xml
@@ -551,7 +437,7 @@ void DocxExport::WriteFootnotesEndnotes()
                 S( "footnotes.xml" ) );
 
         ::sax_fastparser::FSHelperPtr pFootnotesFS =
-            m_pFilter->openOutputStreamWithSerializer( S( "word/footnotes.xml" ),
+            m_pFilter->openFragmentStreamWithSerializer( S( "word/footnotes.xml" ),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml" ) );
 
         // switch the serializer to redirect the output to word/footnotes.xml
@@ -572,7 +458,7 @@ void DocxExport::WriteFootnotesEndnotes()
                 S( "endnotes.xml" ) );
 
         ::sax_fastparser::FSHelperPtr pEndnotesFS =
-            m_pFilter->openOutputStreamWithSerializer( S( "word/endnotes.xml" ),
+            m_pFilter->openFragmentStreamWithSerializer( S( "word/endnotes.xml" ),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml" ) );
 
         // switch the serializer to redirect the output to word/endnotes.xml
@@ -595,7 +481,7 @@ void DocxExport::WriteNumbering()
         S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" ),
         S( "numbering.xml" ) );
 
-    ::sax_fastparser::FSHelperPtr pNumberingFS = m_pFilter->openOutputStreamWithSerializer( S( "word/numbering.xml" ),
+    ::sax_fastparser::FSHelperPtr pNumberingFS = m_pFilter->openFragmentStreamWithSerializer( S( "word/numbering.xml" ),
         S( "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml" ) );
 
     // switch the serializer to redirect the output to word/nubering.xml
@@ -627,8 +513,8 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                 S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" ),
                 aName );
-        
-        pFS = m_pFilter->openOutputStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
+
+        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml" ) );
 
         pFS->startElementNS( XML_w, XML_hdr,
@@ -642,8 +528,8 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                 S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" ),
                 aName );
-        
-        pFS = m_pFilter->openOutputStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
+
+        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml" ) );
 
         pFS->startElementNS( XML_w, XML_ftr,
@@ -686,7 +572,7 @@ void DocxExport::WriteFonts()
             S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable" ),
             S( "fontTable.xml" ) );
 
-    ::sax_fastparser::FSHelperPtr pFS = m_pFilter->openOutputStreamWithSerializer(
+    ::sax_fastparser::FSHelperPtr pFS = m_pFilter->openFragmentStreamWithSerializer(
             S( "word/fontTable.xml" ),
             S( "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml" ) );
 
@@ -707,14 +593,14 @@ void DocxExport::WriteFonts()
 }
 
 
-void DocxExport::WriteProperties( ) 
+void DocxExport::WriteProperties( )
 {
     // Write the core properties
     SwDocShell* pDocShell( pDoc->GetDocShell( ) );
     uno::Reference<document::XDocumentProperties> xDocProps;
     if ( pDocShell )
     {
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS( 
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                pDocShell->GetModel( ), uno::UNO_QUERY );
         xDocProps = xDPS->getDocumentProperties();
     }
@@ -741,7 +627,7 @@ void DocxExport::WriteMainText()
 
     // body
     m_pDocumentFS->startElementNS( XML_w, XML_body, FSEND );
-    
+
     pCurPam->GetPoint()->nNode = pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
 
     // the text
@@ -774,7 +660,7 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
             S( "word/document.xml" ) );
 
     // the actual document
-    m_pDocumentFS = m_pFilter->openOutputStreamWithSerializer( S( "word/document.xml" ),
+    m_pDocumentFS = m_pFilter->openFragmentStreamWithSerializer( S( "word/document.xml" ),
             S( "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" ) );
 
     // the DrawingML access

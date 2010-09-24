@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,19 +56,19 @@ namespace dbp
             );
 
     public:
-        void	doLayout(
+        void    doLayout(
             const OControlWizardContext& _rContext,
             const OOptionGroupSettings& _rSettings
         );
 
     protected:
-        void	implAnchorShape(
+        void    implAnchorShape(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxShapeProps
             );
     };
 
 //.........................................................................
-}	// namespace dbp
+}   // namespace dbp
 //.........................................................................
 
 #endif // _EXTENSIONS_DBP_OPTIONGROUPLAYOUTER_HXX_

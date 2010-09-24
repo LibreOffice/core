@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,57 +24,57 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_XTextViewCursor_idl__ 
-#define __com_sun_star_text_XTextViewCursor_idl__ 
- 
-#ifndef __com_sun_star_text_XTextCursor_idl__ 
-#include <com/sun/star/text/XTextCursor.idl> 
-#endif 
- 
-#ifndef __com_sun_star_awt_Point_idl__ 
-#include <com/sun/star/awt/Point.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module text {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_text_XTextViewCursor_idl__
+#define __com_sun_star_text_XTextViewCursor_idl__
+
+#ifndef __com_sun_star_text_XTextCursor_idl__
+#include <com/sun/star/text/XTextCursor.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Point_idl__
+#include <com/sun/star/awt/Point.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
 // DocMerge from xml: interface com::sun::star::text::XTextViewCursor
 /** describes a cursor in a text document's view.
  */
 published interface XTextViewCursor: com::sun::star::text::XTextCursor
-{ 
-    //------------------------------------------------------------------------- 
-     
+{
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: method com::sun::star::text::XTextViewCursor::isVisible
-    /** @returns  
+    /** @returns
                 <TRUE/> if this cursor is visible for the user.
      */
-    boolean isVisible(); 
- 
-    //------------------------------------------------------------------------- 
-     
+    boolean isVisible();
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from xml: method com::sun::star::text::XTextViewCursor::setVisible
     /** shows or hides this cursor for the user.
      */
-    [oneway] void setVisible( [in] boolean bVisible ); 
- 
-    //------------------------------------------------------------------------- 
-     
+    [oneway] void setVisible( [in] boolean bVisible );
+
+    //-------------------------------------------------------------------------
+
     // DocMerge from idl: method com::sun::star::text::XTextViewCursor::getPosition
-    /** @returns 
-                the cursor's coordinates relative to the top left position of  
+    /** @returns
+                the cursor's coordinates relative to the top left position of
                 the first page of the document.
      */
-    com::sun::star::awt::Point getPosition(); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    com::sun::star::awt::Point getPosition();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

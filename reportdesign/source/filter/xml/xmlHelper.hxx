@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,11 +36,11 @@
 
 #include <memory>
 
-#define CTF_RPT_NUMBERFORMAT					(XML_DB_CTF_START + 1)
+#define CTF_RPT_NUMBERFORMAT                    (XML_DB_CTF_START + 1)
 
-#define XML_STYLE_FAMILY_REPORT_ID				700
-#define XML_STYLE_FAMILY_REPORT_NAME			"report-element"
-#define XML_STYLE_FAMILY_REPORT_PREFIX			"rptelem"
+#define XML_STYLE_FAMILY_REPORT_ID              700
+#define XML_STYLE_FAMILY_REPORT_NAME            "report-element"
+#define XML_STYLE_FAMILY_REPORT_PREFIX          "rptelem"
 
 
 class SvXMLImport;
@@ -54,8 +54,8 @@ namespace rptxml
         OPropertyHandlerFactory(const OPropertyHandlerFactory&);
         void operator =(const OPropertyHandlerFactory&);
     protected:
-        mutable ::std::auto_ptr<XMLConstantsPropertyHandler>	m_pDisplayHandler;
-        mutable ::std::auto_ptr<XMLPropertyHandler>				m_pTextAlignHandler;
+        mutable ::std::auto_ptr<XMLConstantsPropertyHandler>    m_pDisplayHandler;
+        mutable ::std::auto_ptr<XMLPropertyHandler>             m_pTextAlignHandler;
     public:
         OPropertyHandlerFactory();
         virtual ~OPropertyHandlerFactory();
@@ -68,15 +68,15 @@ namespace rptxml
     public:
         static UniReference < XMLPropertySetMapper > GetCellStylePropertyMap(bool _bOldFormat = false);
 
-        static const SvXMLEnumMapEntry*	GetReportPrintOptions();
-        static const SvXMLEnumMapEntry*	GetForceNewPageOptions();
-        static const SvXMLEnumMapEntry*	GetKeepTogetherOptions();
-        static const SvXMLEnumMapEntry*	GetCommandTypeOptions();
+        static const SvXMLEnumMapEntry* GetReportPrintOptions();
+        static const SvXMLEnumMapEntry* GetForceNewPageOptions();
+        static const SvXMLEnumMapEntry* GetKeepTogetherOptions();
+        static const SvXMLEnumMapEntry* GetCommandTypeOptions();
         static const SvXMLEnumMapEntry* GetImageScaleOptions();
-        
+
         static const XMLPropertyMapEntry* GetTableStyleProps();
         static const XMLPropertyMapEntry* GetColumnStyleProps();
-        
+
         static const XMLPropertyMapEntry* GetRowStyleProps();
 
         static void copyStyleElements(const bool _bOld,const ::rtl::OUString& _sStyleName,const SvXMLStylesContext* _pAutoStyles,const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet>& _xProp);
@@ -84,7 +84,7 @@ namespace rptxml
 
         static SvXMLTokenMap* GetReportElemTokenMap();
         static SvXMLTokenMap* GetSubDocumentElemTokenMap();
-        
+
     };
 // -----------------------------------------------------------------------------
 } // rptxml

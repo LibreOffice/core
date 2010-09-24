@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,18 +36,18 @@
 // -----------------
 
 // WNT3
-#define SAL_DRIVERDATA_SYSSIGN				((ULONG)0x574E5433)
-#define SAL_DRIVERDATA_VERSION_A			1
+#define SAL_DRIVERDATA_SYSSIGN              ((ULONG)0x574E5433)
+#define SAL_DRIVERDATA_VERSION_A            1
 #define SAL_DRIVERDATA_VERSION_W            2
 
 #pragma pack( 1 )
 
 struct SalDriverData
 {
-    ULONG					mnSysSignature;
-    USHORT					mnVersion;
-    USHORT					mnDriverOffset;
-    BYTE					maDriverData[1];
+    ULONG                   mnSysSignature;
+    USHORT                  mnVersion;
+    USHORT                  mnDriverOffset;
+    BYTE                    maDriverData[1];
 };
 
 #pragma pack()
@@ -61,30 +61,30 @@ class WinSalGraphics;
 class WinSalInfoPrinter : public SalInfoPrinter
 {
 public:
-    WinSalGraphics*			mpGraphics; 			// current Printer graphics
-    XubString				maDriverName;			// printer driver name
-    XubString				maDeviceName;			// printer device name
-    XubString				maPortName; 			// printer port name
-    HDC 					mhDC;					// printer hdc
-    BOOL					mbGraphics; 			// is Graphics used
+    WinSalGraphics*         mpGraphics;             // current Printer graphics
+    XubString               maDriverName;           // printer driver name
+    XubString               maDeviceName;           // printer device name
+    XubString               maPortName;             // printer port name
+    HDC                     mhDC;                   // printer hdc
+    BOOL                    mbGraphics;             // is Graphics used
 public:
     WinSalInfoPrinter();
     virtual ~WinSalInfoPrinter();
 
-    virtual SalGraphics*			GetGraphics();
-    virtual void					ReleaseGraphics( SalGraphics* pGraphics );
-    virtual BOOL					Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
-    virtual BOOL					SetPrinterData( ImplJobSetup* pSetupData );
-    virtual BOOL					SetData( ULONG nFlags, ImplJobSetup* pSetupData );
-    virtual void					GetPageInfo( const ImplJobSetup* pSetupData,
+    virtual SalGraphics*            GetGraphics();
+    virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
+    virtual BOOL                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
+    virtual BOOL                    SetPrinterData( ImplJobSetup* pSetupData );
+    virtual BOOL                    SetData( ULONG nFlags, ImplJobSetup* pSetupData );
+    virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,
                                                  long& rPageWidth, long& rPageHeight );
-    virtual ULONG					GetCapabilities( const ImplJobSetup* pSetupData, USHORT nType );
-    virtual ULONG					GetPaperBinCount( const ImplJobSetup* pSetupData );
-    virtual String					GetPaperBinName( const ImplJobSetup* pSetupData, ULONG nPaperBin );
-    virtual void					InitPaperFormats( const ImplJobSetup* pSetupData );
-    virtual int					GetLandscapeAngle( const ImplJobSetup* pSetupData );
+    virtual ULONG                   GetCapabilities( const ImplJobSetup* pSetupData, USHORT nType );
+    virtual ULONG                   GetPaperBinCount( const ImplJobSetup* pSetupData );
+    virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, ULONG nPaperBin );
+    virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
+    virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
 };
 
 // -----------------
@@ -94,34 +94,34 @@ public:
 class WinSalPrinter : public SalPrinter
 {
 public:
-    WinSalGraphics*			mpGraphics; 			// current Printer graphics
-    WinSalInfoPrinter* 		mpInfoPrinter;			// pointer to the compatible InfoPrinter
-    WinSalPrinter* 			mpNextPrinter;			// next printing printer
-    HDC 					mhDC;					// printer hdc
-    ULONG					mnError;				// Error Code
-    ULONG					mnCopies;				// Kopien
-    BOOL					mbCollate;				// Sortierte Kopien
-    BOOL					mbAbort;				// Job Aborted
+    WinSalGraphics*         mpGraphics;             // current Printer graphics
+    WinSalInfoPrinter*      mpInfoPrinter;          // pointer to the compatible InfoPrinter
+    WinSalPrinter*          mpNextPrinter;          // next printing printer
+    HDC                     mhDC;                   // printer hdc
+    ULONG                   mnError;                // Error Code
+    ULONG                   mnCopies;               // Kopien
+    BOOL                    mbCollate;              // Sortierte Kopien
+    BOOL                    mbAbort;                // Job Aborted
 
     bool                    mbValid;
-    
+
 public:
     WinSalPrinter();
     virtual ~WinSalPrinter();
 
     using SalPrinter::StartJob;
-    virtual BOOL					StartJob( const XubString* pFileName,
+    virtual BOOL                    StartJob( const XubString* pFileName,
                                               const XubString& rJobName,
                                               const XubString& rAppName,
                                               ULONG nCopies,
                                               bool bCollate,
                                               bool bDirect,
                                               ImplJobSetup* pSetupData );
-    virtual BOOL					EndJob();
-    virtual BOOL					AbortJob();
-    virtual SalGraphics*			StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData );
-    virtual BOOL					EndPage();
-    virtual ULONG					GetErrorCode();
+    virtual BOOL                    EndJob();
+    virtual BOOL                    AbortJob();
+    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData );
+    virtual BOOL                    EndPage();
+    virtual ULONG                   GetErrorCode();
 
     void markInvalid();
     bool isValid() const { return mbValid; }

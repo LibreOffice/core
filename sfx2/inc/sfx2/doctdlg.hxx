@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,19 +43,19 @@ class SfxDocumentTemplateDlg : public ModalDialog
 {
 private:
 
-    FixedLine		aEditFL;
-    Edit 			aNameEd;
-    FixedLine 		aTemplateFL;
-    FixedText		aRegionFt;
-    ListBox			aRegionLb;
-    FixedText		aTemplateFt;
-    ListBox			aTemplateLb;
+    FixedLine       aEditFL;
+    Edit            aNameEd;
+    FixedLine       aTemplateFL;
+    FixedText       aRegionFt;
+    ListBox         aRegionLb;
+    FixedText       aTemplateFt;
+    ListBox         aTemplateLb;
 
-    OKButton		aOkBt;
-    CancelButton	aCancelBt;
-    HelpButton		aHelpBt;
-    PushButton		aEditBt;
-    PushButton		aOrganizeBt;
+    OKButton        aOkBt;
+    CancelButton    aCancelBt;
+    HelpButton      aHelpBt;
+    PushButton      aEditBt;
+    PushButton      aOrganizeBt;
 
     SfxDocumentTemplates *pTemplates;
 

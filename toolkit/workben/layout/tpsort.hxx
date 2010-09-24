@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 //------------------------------------------------------------------------
 
 // +1 because one field is reserved for the "- undefined -" entry
-#define SC_MAXFIELDS	MAXCOLCOUNT+1
+#define SC_MAXFIELDS    MAXCOLCOUNT+1
 
 class ScViewData;
 class ScSortDlg;
@@ -55,66 +55,66 @@ struct ScSortParam;
 class ScTabPageSortFields : public SfxTabPage
 {
 public:
-                ScTabPageSortFields( Window*			 pParent,
-                                     const SfxItemSet&	 rArgSet );
+                ScTabPageSortFields( Window*             pParent,
+                                     const SfxItemSet&   rArgSet );
                 ~ScTabPageSortFields();
 
-    static	SfxTabPage*	Create		( Window*				pParent,
-                                      const SfxItemSet& 	rArgSet );
-    static	USHORT*		GetRanges	();
-    virtual	BOOL		FillItemSet	( SfxItemSet& rArgSet );
-    virtual	void		Reset		( const SfxItemSet& rArgSet );
+    static  SfxTabPage* Create      ( Window*               pParent,
+                                      const SfxItemSet&     rArgSet );
+    static  USHORT*     GetRanges   ();
+    virtual BOOL        FillItemSet ( SfxItemSet& rArgSet );
+    virtual void        Reset       ( const SfxItemSet& rArgSet );
 
 protected:
 // fuer Datenaustausch (sollte noch umgestellt werden!)
-//	virtual void		ActivatePage	( const SfxItemSet& rSet );
+//  virtual void        ActivatePage    ( const SfxItemSet& rSet );
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual void		ActivatePage	();
-    virtual int			DeactivatePage	( SfxItemSet* pSet = 0);
+    virtual void        ActivatePage    ();
+    virtual int         DeactivatePage  ( SfxItemSet* pSet = 0);
 
 private:
     FixedLine       aFlSort1;
-    ListBox			aLbSort1;
-    RadioButton		aBtnUp1;
-    RadioButton 	aBtnDown1;
+    ListBox         aLbSort1;
+    RadioButton     aBtnUp1;
+    RadioButton     aBtnDown1;
 
     FixedLine       aFlSort2;
-    ListBox			aLbSort2;
-    RadioButton		aBtnUp2;
-    RadioButton 	aBtnDown2;
+    ListBox         aLbSort2;
+    RadioButton     aBtnUp2;
+    RadioButton     aBtnDown2;
 
     FixedLine       aFlSort3;
-    ListBox			aLbSort3;
-    RadioButton		aBtnUp3;
-    RadioButton 	aBtnDown3;
+    ListBox         aLbSort3;
+    RadioButton     aBtnUp3;
+    RadioButton     aBtnDown3;
 
-    String			aStrUndefined;
-    String			aStrColumn;
-    String			aStrRow;
+    String          aStrUndefined;
+    String          aStrColumn;
+    String          aStrRow;
 
-    const USHORT		nWhichSort;
-    ScSortDlg*			pDlg;
-    ScViewData*			pViewData;
-    const ScSortParam&	rSortData;
-    SCCOLROW			nFieldArr[SC_MAXFIELDS];
-    USHORT				nFieldCount;
-    SCCOL				nFirstCol;
-    SCROW				nFirstRow;
-    BOOL				bHasHeader;
-    BOOL				bSortByRows;
+    const USHORT        nWhichSort;
+    ScSortDlg*          pDlg;
+    ScViewData*         pViewData;
+    const ScSortParam&  rSortData;
+    SCCOLROW            nFieldArr[SC_MAXFIELDS];
+    USHORT              nFieldCount;
+    SCCOL               nFirstCol;
+    SCROW               nFirstRow;
+    BOOL                bHasHeader;
+    BOOL                bSortByRows;
 
-    ListBox*			aSortLbArr[3];
-    RadioButton*		aDirBtnArr[3][2];
+    ListBox*            aSortLbArr[3];
+    RadioButton*        aDirBtnArr[3][2];
     FixedLine*          aFlArr[3];
 
 #ifdef _TPSORT_CXX
 private:
-    void	Init			();
-    void	DisableField	( USHORT nField );
-    void	EnableField		( USHORT nField );
-    void	FillFieldLists	();
-    USHORT	GetFieldSelPos	( SCCOLROW nField );
+    void    Init            ();
+    void    DisableField    ( USHORT nField );
+    void    EnableField     ( USHORT nField );
+    void    FillFieldLists  ();
+    USHORT  GetFieldSelPos  ( SCCOLROW nField );
 
     // Handler ------------------------
     DECL_LINK( SelectHdl, ListBox * );
@@ -135,25 +135,25 @@ class CollatorWrapper;
 class ScTabPageSortOptions : public SfxTabPage
 {
 public:
-                ScTabPageSortOptions( Window*			 pParent,
-                                      const SfxItemSet&	 rArgSet );
+                ScTabPageSortOptions( Window*            pParent,
+                                      const SfxItemSet&  rArgSet );
                 ~ScTabPageSortOptions();
 
 #undef SfxTabPage
 #define SfxTabPage ::SfxTabPage
-    static	SfxTabPage*	Create		( Window*				pParent,
-                                      const SfxItemSet& 	rArgSet );
-    static	USHORT*		GetRanges	();
-    virtual	BOOL		FillItemSet	( SfxItemSet& rArgSet );
-    virtual	void		Reset		( const SfxItemSet& rArgSet );
+    static  SfxTabPage* Create      ( Window*               pParent,
+                                      const SfxItemSet&     rArgSet );
+    static  USHORT*     GetRanges   ();
+    virtual BOOL        FillItemSet ( SfxItemSet& rArgSet );
+    virtual void        Reset       ( const SfxItemSet& rArgSet );
 
 protected:
 // fuer Datenaustausch (sollte noch umgestellt werden!)
-//	virtual void		ActivatePage	( const SfxItemSet& rSet );
+//  virtual void        ActivatePage    ( const SfxItemSet& rSet );
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
-    virtual void		ActivatePage	();
-    virtual int			DeactivatePage	( SfxItemSet* pSet = 0);
+    virtual void        ActivatePage    ();
+    virtual int         DeactivatePage  ( SfxItemSet* pSet = 0);
 
 private:
 
@@ -162,7 +162,7 @@ private:
     CheckBox            aBtnFormats;
     CheckBox            aBtnCopyResult;
 
-    CheckBox			aBtnNaturalSort;
+    CheckBox            aBtnNaturalSort;
     ListBox             aLbOutPos;
     Edit                aEdOutPos;
 
@@ -186,26 +186,26 @@ private:
     String              aStrNoName;
     String              aStrAreaLabel;
 
-    const USHORT		nWhichSort;
-    const ScSortParam&	rSortData;
-    ScViewData*			pViewData;
-    ScDocument*			pDoc;
-    ScSortDlg*			pDlg;
-    ScAddress			theOutPos;
+    const USHORT        nWhichSort;
+    const ScSortParam&  rSortData;
+    ScViewData*         pViewData;
+    ScDocument*         pDoc;
+    ScSortDlg*          pDlg;
+    ScAddress           theOutPos;
 
-    CollatorRessource*	pColRes;
-    CollatorWrapper*	pColWrap;
+    CollatorRessource*  pColRes;
+    CollatorWrapper*    pColWrap;
 
 #ifdef _TPSORT_CXX
 private:
-    void Init					();
-    void FillUserSortListBox	();
-    void FillOutPosList 		();
+    void Init                   ();
+    void FillUserSortListBox    ();
+    void FillOutPosList         ();
 
     // Handler ------------------------
     DECL_LINK( EnableHdl, CheckBox * );
     DECL_LINK( SelOutPosHdl, ListBox * );
-    void EdOutPosModHdl	( Edit* pEd );
+    void EdOutPosModHdl ( Edit* pEd );
     DECL_LINK( SortDirHdl, RadioButton * );
     DECL_LINK( FillAlgorHdl, void * );
 #endif

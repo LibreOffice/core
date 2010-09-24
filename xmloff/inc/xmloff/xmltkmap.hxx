@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,14 @@ class SvXMLTokenMapEntry_Impl;
 
 struct SvXMLTokenMapEntry
 {
-    sal_uInt16	nPrefixKey;
+    sal_uInt16  nPrefixKey;
     enum ::xmloff::token::XMLTokenEnum eLocalName;
-    sal_uInt16	nToken;
+    sal_uInt16  nToken;
 };
 
 class XMLOFF_DLLPUBLIC SvXMLTokenMap
 {
-    SvXMLTokenMap_Impl		*pImpl;
+    SvXMLTokenMap_Impl      *pImpl;
 
     SAL_DLLPRIVATE SvXMLTokenMapEntry_Impl *_Find(
         sal_uInt16 nKind, const ::rtl::OUString& rName ) const;
@@ -63,5 +63,5 @@ public:
     sal_uInt16 Get( sal_uInt16 nPrefix, const ::rtl::OUString& rLName ) const;
 };
 
-#endif	//  _XMLOFF_XMLTKMAP_HXX
+#endif  //  _XMLOFF_XMLTKMAP_HXX
 

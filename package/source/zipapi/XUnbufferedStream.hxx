@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,9 +39,9 @@
 #include <CRC32.hxx>
 #include <mutexholder.hxx>
 
-#define UNBUFF_STREAM_DATA			0
-#define UNBUFF_STREAM_RAW			1
-#define UNBUFF_STREAM_WRAPPEDRAW	2
+#define UNBUFF_STREAM_DATA          0
+#define UNBUFF_STREAM_RAW           1
+#define UNBUFF_STREAM_WRAPPEDRAW    2
 
 class EncryptionData;
 typedef void* rtlCipher;
@@ -71,7 +71,7 @@ public:
                  SotMutexHolderRef aMutexHolder,
                  ZipEntry & rEntry,
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
-                 const vos::ORef < EncryptionData > &rData, 
+                 const vos::ORef < EncryptionData > &rData,
                  sal_Int8 nStreamMode,
                  sal_Bool bIsEncrypted,
                  const ::rtl::OUString& aMediaType,
@@ -85,23 +85,23 @@ public:
     virtual ~XUnbufferedStream();
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) 
+    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) 
+    virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) 
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL available(  ) 
+    virtual sal_Int32 SAL_CALL available(  )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL closeInput(  ) 
+    virtual void SAL_CALL closeInput(  )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     // XSeekable
     /*
-    virtual void SAL_CALL seek( sal_Int64 location ) 
+    virtual void SAL_CALL seek( sal_Int64 location )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int64 SAL_CALL getPosition(  ) 
+    virtual sal_Int64 SAL_CALL getPosition(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int64 SAL_CALL getLength(  ) 
+    virtual sal_Int64 SAL_CALL getLength(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     */
 };

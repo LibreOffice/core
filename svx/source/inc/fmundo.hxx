@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,9 +66,9 @@ FORWARD_DECLARE_INTERFACE(awt,XControlContainer)
 class FmUndoPropertyAction: public SdrUndoAction
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xObj;
-    ::rtl::OUString			aPropertyName;
-    ::com::sun::star::uno::Any			aNewValue;
-    ::com::sun::star::uno::Any			aOldValue;
+    ::rtl::OUString         aPropertyName;
+    ::com::sun::star::uno::Any          aNewValue;
+    ::com::sun::star::uno::Any          aOldValue;
 
 public:
     FmUndoPropertyAction(FmFormModel& rMod, const ::com::sun::star::beans::PropertyChangeEvent& evt);
@@ -76,7 +76,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual String			GetComment() const;
+    virtual String          GetComment() const;
 
 };
 
@@ -90,7 +90,7 @@ class FmUndoContainerAction: public SdrUndoAction
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                     m_xElement;     // object not owned by the action
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                    m_xOwnElement;	// object owned by the action
+                    m_xOwnElement;  // object owned by the action
     sal_Int32       m_nIndex;       // index of the object within it's container
     ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >
                     m_aEvents;      // events of the object
@@ -99,11 +99,11 @@ public:
     enum Action
     {
         Inserted = 1,
-        Removed	 = 2
+        Removed  = 2
     };
 
 private:
-    Action				m_eAction;
+    Action              m_eAction;
 
 public:
     FmUndoContainerAction(FmFormModel& rMod,
@@ -128,29 +128,29 @@ protected:
 //==================================================================
 class FmUndoModelReplaceAction : public SdrUndoAction
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>	m_xReplaced;
-    SdrUnoObj*			m_pObject;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> m_xReplaced;
+    SdrUnoObj*          m_pObject;
 
 public:
     FmUndoModelReplaceAction(FmFormModel& rMod, SdrUnoObj* pObject, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xReplaced);
     ~FmUndoModelReplaceAction();
 
     virtual void Undo();
-    virtual void Redo()	{ Undo(); }
+    virtual void Redo() { Undo(); }
 
-    virtual String			GetComment() const;
+    virtual String          GetComment() const;
 
     static void DisposeElement( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xReplaced );
 };
 
 //========================================================================
 class SVX_DLLPRIVATE FmXUndoEnvironment
-    : public ::cppu::WeakImplHelper3<	::com::sun::star::beans::XPropertyChangeListener
-                                    ,	::com::sun::star::container::XContainerListener
-                                    ,	::com::sun::star::util::XModifyListener
+    : public ::cppu::WeakImplHelper3<   ::com::sun::star::beans::XPropertyChangeListener
+                                    ,   ::com::sun::star::container::XContainerListener
+                                    ,   ::com::sun::star::util::XModifyListener
                                     >
     , public SfxListener
-                           //	public ::cppu::OWeakObject
+                           //   public ::cppu::OWeakObject
 {
     FmFormModel& rModel;
 
@@ -166,9 +166,9 @@ public:
     ~FmXUndoEnvironment();
 
     // UNO Anbindung
-    //	SMART_UNO_DECLARATION(FmXUndoEnvironment, ::cppu::OWeakObject);
-    //	virtual sal_Bool queryInterface(UsrUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>&);
-    //	virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass>>	getIdlClasses(void);
+    //  SMART_UNO_DECLARATION(FmXUndoEnvironment, ::cppu::OWeakObject);
+    //  virtual sal_Bool queryInterface(UsrUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>&);
+    //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass>>    getIdlClasses(void);
 
     void Lock() { osl_incrementInterlockedCount( &m_Locks ); }
     void UnLock() { osl_decrementInterlockedCount( &m_Locks ); }
@@ -226,5 +226,5 @@ public:
 };
 
 
-#endif	//_SVX_FMUNDO_HXX
+#endif  //_SVX_FMUNDO_HXX
 

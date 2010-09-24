@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ public class SxwDocument extends OfficeDocument {
     protected String getOfficeClassAttribute() {
         return OfficeConstants.SXW_TYPE;
     }
-    
+
     /**
      * Method to return the MIME type of the document.
      *
@@ -89,6 +89,6 @@ public class SxwDocument extends OfficeDocument {
     protected final String getDocumentMimeType() {
         return OfficeConstants.SXW_MIME_TYPE;
     }
-    
+
 }
 

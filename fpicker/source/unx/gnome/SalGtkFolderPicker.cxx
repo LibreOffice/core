@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -205,24 +205,24 @@ void SAL_CALL SalGtkFolderPicker::cancel() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
 
-    // TODO m_pImpl->cancel();  
+    // TODO m_pImpl->cancel();
 }
 
 // -------------------------------------------------
 // XServiceInfo
 // -------------------------------------------------
 
-rtl::OUString SAL_CALL SalGtkFolderPicker::getImplementationName() 
+rtl::OUString SAL_CALL SalGtkFolderPicker::getImplementationName()
     throw( uno::RuntimeException )
 {
     return rtl::OUString::createFromAscii( FOLDER_PICKER_IMPL_NAME );
 }
 
 // -------------------------------------------------
-//	XServiceInfo
+//  XServiceInfo
 // -------------------------------------------------
 
-sal_Bool SAL_CALL SalGtkFolderPicker::supportsService( const rtl::OUString& ServiceName ) 
+sal_Bool SAL_CALL SalGtkFolderPicker::supportsService( const rtl::OUString& ServiceName )
     throw( uno::RuntimeException )
 {
     uno::Sequence <rtl::OUString> SupportedServicesNames = FolderPicker_getSupportedServiceNames();
@@ -235,10 +235,10 @@ sal_Bool SAL_CALL SalGtkFolderPicker::supportsService( const rtl::OUString& Serv
 }
 
 // -------------------------------------------------
-//	XServiceInfo
+//  XServiceInfo
 // -------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL SalGtkFolderPicker::getSupportedServiceNames() 
+uno::Sequence<rtl::OUString> SAL_CALL SalGtkFolderPicker::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     return FolderPicker_getSupportedServiceNames();

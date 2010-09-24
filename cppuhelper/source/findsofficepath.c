@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ static char* platformSpecific()
     const char* SUBKEYNAME = "Software\\OpenOffice.org\\UNO\\InstallPath";
 
     char* path = NULL;
-    
+
     /* read the key's default value from HKEY_CURRENT_USER */
     path = getPathFromRegistryKey( HKEY_CURRENT_USER, SUBKEYNAME );
 
@@ -111,13 +111,13 @@ static char* platformSpecific()
 #include <unistd.h>
 #include <limits.h>
 
-/*     
+/*
  * Gets the installation path from the PATH environment variable.
  *
  * <p>An installation is found, if the executable 'soffice' or a symbolic link
  * is in one of the directories listed in the PATH environment variable.</p>
  *
- * @return the installation path or NULL, if no installation was found or 
+ * @return the installation path or NULL, if no installation was found or
  *         if an error occured
  */
 static char* platformSpecific()

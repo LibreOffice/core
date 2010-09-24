@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,12 +111,12 @@ DBG_NAME( rpt_PropBrw )
 
 //----------------------------------------------------------------------------
 
-PropBrw::PropBrw(const Reference< XMultiServiceFactory >&	_xORB,Window* pParent,ODesignView*  _pDesignView)
+PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParent,ODesignView*  _pDesignView)
           :DockingWindow(pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
           ,m_xORB(_xORB)
           ,m_pDesignView(_pDesignView)
           ,m_pView( NULL )
-          ,m_bInitialStateChange(sal_True)		  
+          ,m_bInitialStateChange(sal_True)
 {
     DBG_CTOR( rpt_PropBrw,NULL);
 
@@ -168,7 +168,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&	_xORB,Window* pParent,
             Reference< inspection::XObjectInspectorModel> xInspectorModel( bEnableHelpSection
                 ?   report::inspection::DefaultComponentInspectorModel::createWithHelpSection( m_xInspectorContext, 3, 8 )
                 :   report::inspection::DefaultComponentInspectorModel::createDefault( m_xInspectorContext ) );
-            
+
             m_xBrowserController = inspection::ObjectInspector::createWithModel(m_xInspectorContext, xInspectorModel);
             if ( !m_xBrowserController.is() )
             {
@@ -208,7 +208,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&	_xORB,Window* pParent,
 
     if (m_xBrowserComponentWindow.is())
     {
-        
+
         m_xBrowserComponentWindow->setPosSize(0, 0, aPropWinSize.Width(), aPropWinSize.Height(),
             awt::PosSize::WIDTH | awt::PosSize::HEIGHT | awt::PosSize::X | awt::PosSize::Y);
         Resize();
@@ -244,9 +244,9 @@ PropBrw::~PropBrw()
     DBG_DTOR( rpt_PropBrw,NULL);
 }
 // -----------------------------------------------------------------------------
-void PropBrw::setCurrentPage(const ::rtl::OUString& _sLastActivePage) 
-{ 
-    m_sLastActivePage = _sLastActivePage; 
+void PropBrw::setCurrentPage(const ::rtl::OUString& _sLastActivePage)
+{
+    m_sLastActivePage = _sLastActivePage;
 }
 //----------------------------------------------------------------------------
 
@@ -320,7 +320,7 @@ uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const Sdr
 {
     sal_uInt32 nMarkCount = _rMarkList.GetMarkCount();
     ::std::vector< uno::Reference< uno::XInterface> > aSets;
-    aSets.reserve(nMarkCount);	
+    aSets.reserve(nMarkCount);
 
     for(sal_uInt32 i=0;i<nMarkCount;++i)
     {
@@ -361,7 +361,7 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
             OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
         }
 
-        //Resize();		
+        //Resize();
     }
     SetText( GetHeadlineName(_aObjects) );
 }
@@ -592,7 +592,7 @@ void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
                 EndListening( *(m_pView->GetModel()) );
                 m_pView = NULL;
             } // if ( m_pView )
-            
+
             uno::Reference< uno::XInterface> xTemp(CreateComponentPair(_xReportComponent,_xReportComponent));
             implSetNewObject( uno::Sequence< uno::Reference< uno::XInterface> >(&xTemp,1) );
         }
@@ -613,7 +613,7 @@ IMPL_LINK( PropBrw, OnAsyncGetFocus, void*,  )
 void PropBrw::LoseFocus()
 {
     DockingWindow::LoseFocus();
-    m_pDesignView->getController().InvalidateAll();	
+    m_pDesignView->getController().InvalidateAll();
 }
 //----------------------------------------------------------------------------
 }

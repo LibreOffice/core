@@ -194,7 +194,7 @@ PdfKeywordHash::in_word_set (register const char *str, register unsigned int len
 #line 35 "keyword_list"
       {"setPageNum",SETPAGENUM},
 #line 11 "keyword_list"
-      {"drawLink",DRAWLINK	}
+      {"drawLink",DRAWLINK  }
     };
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)

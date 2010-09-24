@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class ScDocument;
 class ScUndoUtil
 {
 public:
-                    //	Block markieren (unsichtbar, muss repainted werden)
+                    //  Block markieren (unsichtbar, muss repainted werden)
     static void MarkSimpleBlock( ScDocShell* pDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ );
@@ -51,12 +51,12 @@ public:
     static void MarkSimpleBlock( ScDocShell* pDocShell,
                                 const ScRange& rRange );
 
-                    //	Bereich +1 painten
+                    //  Bereich +1 painten
     static void PaintMore( ScDocShell* pDocShell,
                                 const ScRange& rRange );
 
-                    //	DB-Bereich im Dokument suchen ("unbenannt" oder nach Bereich)
-                    //	legt neu an, wenn nicht gefunden
+                    //  DB-Bereich im Dokument suchen ("unbenannt" oder nach Bereich)
+                    //  legt neu an, wenn nicht gefunden
     static ScDBData* GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB nTab,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 };

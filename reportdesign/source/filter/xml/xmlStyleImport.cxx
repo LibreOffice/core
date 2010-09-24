@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -228,7 +228,7 @@ UniReference < SvXMLImportPropertyMapper >
                 {
                     m_xCellImpPropMapper =
                         new XMLTextImportPropertyMapper/*OSpecialHanldeXMLImportPropertyMapper*/( rImport.GetCellStylesPropertySetMapper(), m_rImport , const_cast<XMLFontStylesContext*>(m_rImport.GetFontDecls()));
-                
+
                     m_xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(m_rImport, const_cast<XMLFontStylesContext*>(m_rImport.GetFontDecls())));
                 }
                 xMapper = m_xCellImpPropMapper;
@@ -237,9 +237,9 @@ UniReference < SvXMLImportPropertyMapper >
             case XML_STYLE_FAMILY_TABLE_COLUMN:
             {
                 if( !m_xColumnImpPropMapper.is() )
-                    m_xColumnImpPropMapper = 
+                    m_xColumnImpPropMapper =
                         new SvXMLImportPropertyMapper( rImport.GetColumnStylesPropertySetMapper(), m_rImport );
-                        
+
                 xMapper = m_xColumnImpPropMapper;
             }
              break;
@@ -265,7 +265,7 @@ UniReference < SvXMLImportPropertyMapper >
                 break;
         }
     }
-    
+
     return xMapper;
 }
 // -----------------------------------------------------------------------------

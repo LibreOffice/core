@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ public:
             ::std::pair< ::rtl::OUString, ::rtl::OUString> >::const_iterator ITC_ITEMS;
 
     };
-    
+
 public:
 
     ExtensionBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
@@ -84,7 +84,7 @@ public:
     void addEntry(::rtl::OUString const & url, Data const & data);
 
     Data getEntry(::rtl::OUString const & url);
-    
+
 };
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,9 +69,9 @@ extern "C" JNIEXPORT jobject JNICALL Java_test_java_1uno_anytest_TestJni_create_
     // publish some idl types
     ::getCppuType( (Reference< XTransport > const *)0 );
     ::getCppuType( (Reference< ::test::java_uno::anytest::DerivedInterface > const *)0 );
-    
+
     Reference< XTransport > xRet( new Transport() );
-    
+
     // get java vm
     JavaVM * java_vm;
     OSL_VERIFY( 0 == jni_env->GetJavaVM( &java_vm ) );
@@ -94,13 +94,13 @@ extern "C" JNIEXPORT jobject JNICALL Java_test_java_1uno_anytest_TestJni_create_
     OSL_ASSERT( java_env.is() );
     uno_getEnvironment( (uno_Environment **)&cpp_env, cpp_name.pData, 0 );
     OSL_ASSERT( cpp_env.is() );
-    
+
     // map interface
     Mapping mapping( cpp_env.get(), java_env.get() );
     OSL_ASSERT( mapping.is() );
     jobject jo_global = (jobject)mapping.mapInterface( xRet.get(), ::getCppuType( &xRet ) );
     OSL_ASSERT( 0 != jo_global );
-    
+
     // return
     jobject jo_ret = jni_env->NewLocalRef( jo_global );
     jni_env->DeleteGlobalRef( jo_global );

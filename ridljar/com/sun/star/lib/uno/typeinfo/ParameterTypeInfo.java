@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@ import com.sun.star.uno.Type;
 
 public class ParameterTypeInfo extends TypeInfo
 {
-    protected int 		m_index;
-    protected String 	m_methodName;
+    protected int       m_index;
+    protected String    m_methodName;
     private final Type m_unoType; // @since UDK 3.2
 
     /**

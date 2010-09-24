@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,9 +34,9 @@
 #include <impedit.hxx>
 #include <editeng/editview.hxx>
 
-//	----------------------------------------------------------------------
-//	class EditSelFunctionSet
-//	----------------------------------------------------------------------
+//  ----------------------------------------------------------------------
+//  class EditSelFunctionSet
+//  ----------------------------------------------------------------------
 EditSelFunctionSet::EditSelFunctionSet()
 {
     pCurView = NULL;
@@ -88,9 +88,9 @@ void __EXPORT EditSelFunctionSet::DeselectAll()
         pCurView->pImpEditView->DeselectAll();
 }
 
-//	----------------------------------------------------------------------
-//	class EditSelectionEngine
-//	----------------------------------------------------------------------
+//  ----------------------------------------------------------------------
+//  class EditSelectionEngine
+//  ----------------------------------------------------------------------
 EditSelectionEngine::EditSelectionEngine() : SelectionEngine( (Window*)0 )
 {
     // Wegen Bug OV: (1994)

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,7 +100,7 @@ namespace drawinglayer
                     const basegfx::B3DPoint aCenter(aRange.getCenter());
                     aFill = basegfx::tools::applyDefaultTextureCoordinatesSphere(aFill, aCenter, bSphereX, bSphereY);
                 }
-                
+
                 if(bObjectSpecificX || bObjectSpecificY)
                 {
                     // object-specific
@@ -118,7 +118,7 @@ namespace drawinglayer
                                 {
                                     aPoint.setX((1L == b || 2L == b) ? 1.0 : 0.0);
                                 }
-                                
+
                                 if(bObjectSpecificY)
                                 {
                                     aPoint.setY((2L == b || 3L == b) ? 1.0 : 0.0);
@@ -150,20 +150,20 @@ namespace drawinglayer
             {
                 // add fill
                 aRetval = create3DPolyPolygonFillPrimitives(
-                    a3DPolyPolygonVector, 
-                    getTransform(), 
-                    getTextureSize(), 
-                    getSdr3DObjectAttribute(), 
-                    getSdrLFSAttribute().getFill(), 
+                    a3DPolyPolygonVector,
+                    getTransform(),
+                    getTextureSize(),
+                    getSdr3DObjectAttribute(),
+                    getSdrLFSAttribute().getFill(),
                     getSdrLFSAttribute().getFillFloatTransGradient());
             }
             else
             {
                 // create simplified 3d hit test geometry
                 aRetval = createHiddenGeometryPrimitives3D(
-                    a3DPolyPolygonVector, 
-                    getTransform(), 
-                    getTextureSize(), 
+                    a3DPolyPolygonVector,
+                    getTransform(),
+                    getTextureSize(),
                     getSdr3DObjectAttribute());
             }
 
@@ -188,11 +188,11 @@ namespace drawinglayer
         }
 
         SdrCubePrimitive3D::SdrCubePrimitive3D(
-            const basegfx::B3DHomMatrix& rTransform, 
+            const basegfx::B3DHomMatrix& rTransform,
             const basegfx::B2DVector& rTextureSize,
             const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
             const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute)
-        :	SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute)
+        :   SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute)
         {
         }
 

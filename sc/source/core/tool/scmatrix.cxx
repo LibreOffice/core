@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 
 //------------------------------------------------------------------------
 
-void ScMatrix::CreateMatrix(SCSIZE nC, SCSIZE nR)		// nur fuer ctor
+void ScMatrix::CreateMatrix(SCSIZE nC, SCSIZE nR)       // nur fuer ctor
 {
     pErrorInterpreter = NULL;
     nColCount = nC;
@@ -96,7 +96,7 @@ ScMatrix* ScMatrix::CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows ) const
 {
     ScMatrix* pScMat = new ScMatrix( nNewCols, nNewRows);
     MatCopy(*pScMat);
-    pScMat->SetErrorInterpreter( pErrorInterpreter); 
+    pScMat->SetErrorInterpreter( pErrorInterpreter);
     return pScMat;
 }
 
@@ -107,15 +107,15 @@ void ScMatrix::SetErrorAtInterpreter( USHORT nError ) const
 }
 
 //
-//	File format: USHORT columns, USHORT rows, (columns*rows) entries:
-//	BYTE type ( CELLTYPE_NONE, CELLTYPE_VALUE, CELLTYPE_STRING ); nothing, double or String
+//  File format: USHORT columns, USHORT rows, (columns*rows) entries:
+//  BYTE type ( CELLTYPE_NONE, CELLTYPE_VALUE, CELLTYPE_STRING ); nothing, double or String
 //
 
 ScMatrix::ScMatrix(SvStream& /* rStream */)
         : pErrorInterpreter( NULL)
         , nRefCnt(0)
 {
-#if SC_ROWLIMIT_STREAM_ACCESS 
+#if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
     USHORT nC;
     USHORT nR;
@@ -152,7 +152,7 @@ ScMatrix::ScMatrix(SvStream& /* rStream */)
             if ( i < nCount )
             {
                 if (!mnValType)
-                    ResetIsString();		// init string flags
+                    ResetIsString();        // init string flags
                 mnValType[i] = ( nType == CELLTYPE_NONE ? SC_MATVAL_EMPTY : SC_MATVAL_STRING );
                 mnNonValue++;
 
@@ -170,7 +170,7 @@ ScMatrix::ScMatrix(SvStream& /* rStream */)
 
 void ScMatrix::Store(SvStream& /* rStream */) const
 {
-#if SC_ROWLIMIT_STREAM_ACCESS 
+#if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
     SCSIZE nCount = nColCount * nRowCount;
     // Don't store matrix with more than USHORT max elements, old versions
@@ -697,7 +697,7 @@ void ScMatrix::CompareEqual()
     if ( mnValType )
     {
         for ( SCSIZE j=0; j<n; j++ )
-            if ( IsValueType( mnValType[j]) )		        // else: #WERT!
+            if ( IsValueType( mnValType[j]) )               // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal == 0.0);
     }
@@ -715,7 +715,7 @@ void ScMatrix::CompareNotEqual()
     if ( mnValType )
     {
         for ( SCSIZE j=0; j<n; j++ )
-            if ( IsValueType( mnValType[j]) )		        // else: #WERT!
+            if ( IsValueType( mnValType[j]) )               // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal != 0.0);
     }
@@ -733,7 +733,7 @@ void ScMatrix::CompareLess()
     if ( mnValType )
     {
         for ( SCSIZE j=0; j<n; j++ )
-            if ( IsValueType( mnValType[j]) )		        // else: #WERT!
+            if ( IsValueType( mnValType[j]) )               // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal < 0.0);
     }
@@ -751,7 +751,7 @@ void ScMatrix::CompareGreater()
     if ( mnValType )
     {
         for ( SCSIZE j=0; j<n; j++ )
-            if ( IsValueType( mnValType[j]) )		        // else: #WERT!
+            if ( IsValueType( mnValType[j]) )               // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal > 0.0);
     }
@@ -769,7 +769,7 @@ void ScMatrix::CompareLessEqual()
     if ( mnValType )
     {
         for ( SCSIZE j=0; j<n; j++ )
-            if ( IsValueType( mnValType[j]) )		        // else: #WERT!
+            if ( IsValueType( mnValType[j]) )               // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal <= 0.0);
     }
@@ -787,7 +787,7 @@ void ScMatrix::CompareGreaterEqual()
     if ( mnValType )
     {
         for ( SCSIZE j=0; j<n; j++ )
-            if ( IsValueType( mnValType[j]) )		        // else: #WERT!
+            if ( IsValueType( mnValType[j]) )               // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal >= 0.0);
     }

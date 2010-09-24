@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -167,7 +167,7 @@ extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument()
 }
 
 //--------------------------------------------------------------------------
-ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl	)
+ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl )
             :ModelDependentComponent( _pImpl )
             ,ODatabaseDocument_OfficeDocument( getMutex() )
             ,m_aModifyListeners( getMutex() )
@@ -259,7 +259,7 @@ void SAL_CALL ODatabaseDocument::release(  ) throw ()
     ODatabaseDocument_OfficeDocument::release();
 }
 //------------------------------------------------------------------------------
-Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(	) throw (RuntimeException)
+Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  ) throw (RuntimeException)
 {
     Sequence< Type > aTypes = ::comphelper::concatSequences(
         ODatabaseDocument_OfficeDocument::getTypes(),
@@ -2185,7 +2185,7 @@ void SAL_CALL ODatabaseDocument::releaseNumberForComponent( const uno::Reference
 
 //------------------------------------------------------------------
 //........................................................................
-}	// namespace dbaccess
+}   // namespace dbaccess
 //........................................................................
 
 

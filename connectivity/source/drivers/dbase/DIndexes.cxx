@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,13 +47,13 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-namespace starutil		= ::com::sun::star::util;
+namespace starutil      = ::com::sun::star::util;
 
 sdbcx::ObjectType ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
 {
-    //	Dir* pDir = m_pTable->getConnection()->getDir();
-    //	String aPath = pDir->GetName();
-    //	aPath += _rName.getStr();
+    //  Dir* pDir = m_pTable->getConnection()->getDir();
+    //  String aPath = pDir->GetName();
+    //  aPath += _rName.getStr();
     ::rtl::OUString sFile = m_pTable->getConnection()->getURL();
     sFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sFile += _rName;

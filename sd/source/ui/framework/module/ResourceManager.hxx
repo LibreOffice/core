@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ namespace sd { namespace framework {
 */
 class ResourceManager
     : private sd::MutexOwner,
-      public ResourceManagerInterfaceBase      
+      public ResourceManagerInterfaceBase
 {
 public:
     ResourceManager (
@@ -70,14 +70,14 @@ public:
         activate the resource managed by the called object.
     */
     void AddActiveMainView (const ::rtl::OUString& rsMainViewURL);
-    
+
     virtual void SAL_CALL disposing (void);
 
     /** Allow the ResourceManager to make resource activation or
         deactivation requests.
     */
     void Enable (void);
-    
+
     /** Disable the resource management.  When called, the ResourceManager
         requests the resource to be deactivated.  Until enabled again it
         does not make any further requests for resource activation or
@@ -86,7 +86,7 @@ public:
         Call this for example to hide resources in read-only mode.
     */
     void Disable (void);
-    
+
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (

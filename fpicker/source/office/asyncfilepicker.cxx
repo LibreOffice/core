@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace svt
     {
         return osl_incrementInterlockedCount( &m_refCount );
     }
-    
+
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL AsyncPickerAction::release()
     {
@@ -92,11 +92,11 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void AsyncPickerAction::execute( 
-        const String& _rURL, 
-        const String& _rFilter, 
-        sal_Int32 _nMinTimeout, 
-        sal_Int32 _nMaxTimeout, 
+    void AsyncPickerAction::execute(
+        const String& _rURL,
+        const String& _rFilter,
+        sal_Int32 _nMinTimeout,
+        sal_Int32 _nMaxTimeout,
         const OUStringList& rBlackList )
     {
         DBG_TESTSOLARMUTEX();

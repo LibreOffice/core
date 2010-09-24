@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ static void SAL_CALL thisAcquire( uno_Mapping *pMap )
                                  p->pEnvRemote ,
                                  p->m_sPurpose.pData );
         }
-            
+
     }
 }
 
@@ -75,12 +75,12 @@ static void SAL_CALL thisRelease( uno_Mapping *pMap )
 }
 
 namespace bridges_remote {
-    
+
 void remoteToUno( uno_Mapping *pMapping, void **ppUnoI, void *pRemoteI,
                   typelib_InterfaceTypeDescription *pTypeDescr )
 {
     remote_Mapping *pRemoteMapping = ( remote_Mapping * ) pMapping;
-    
+
     OSL_ASSERT( ppUnoI && pTypeDescr );
     if (*ppUnoI)
     {
@@ -109,7 +109,7 @@ void remoteToUno( uno_Mapping *pMapping, void **ppUnoI, void *pRemoteI,
             ppUnoI,
             pOid,
             pTypeDescr);
-            
+
         if ( ! *ppUnoI) // already existing interface
         {
             // try to publish a new proxy; proxy may be exchanged during registration
@@ -119,14 +119,14 @@ void remoteToUno( uno_Mapping *pMapping, void **ppUnoI, void *pRemoteI,
                 pTypeDescr ,
                 pRemoteMapping->pEnvUno,
                 pRemoteMapping->pEnvRemote);
-                
+
             pRemoteMapping->pEnvUno->pExtEnv->registerProxyInterface(
                 pRemoteMapping->pEnvUno->pExtEnv,
                 ppUnoI,
                 freeRemote2UnoProxy,
                 pOid,
                 pTypeDescr );
-            
+
             OSL_ASSERT( *ppUnoI );
         }
         rtl_uString_release( pOid );
@@ -157,7 +157,7 @@ void unoToRemote( uno_Mapping *pMapping, void **ppRemoteI, void *pUnoI,
         {
             return;
         }
-                                                      
+
         pRemoteMapping->pEnvRemote->pExtEnv->getRegisteredInterface(
             pRemoteMapping->pEnvRemote->pExtEnv,
             (void**)ppRemoteI,
@@ -172,8 +172,8 @@ void unoToRemote( uno_Mapping *pMapping, void **ppRemoteI, void *pUnoI,
                 pOid,
                 pTypeDescr,
                 pRemoteMapping->pEnvUno,
-                pRemoteMapping->pEnvRemote );			
-                
+                pRemoteMapping->pEnvRemote );
+
             // note : ppRemoteI may change during registration
             pRemoteMapping->pEnvRemote->pExtEnv->registerProxyInterface(
                 pRemoteMapping->pEnvRemote->pExtEnv,
@@ -200,7 +200,7 @@ RemoteMapping::RemoteMapping( uno_Environment *pEnvUno_ ,
 {
     pEnvUno = pEnvUno_;
     pEnvRemote = pEnvRemote_;
-    
+
     pEnvUno->acquire( pEnvUno );
     pEnvRemote->acquire( pEnvRemote );
 

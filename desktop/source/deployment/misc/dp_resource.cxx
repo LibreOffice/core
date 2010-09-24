@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,7 +104,7 @@ void checkPrimarySubtag(::rtl::OUString const & tag)
     if (len < 1 || len > 3)
         throw Exception(OUSTR("Invalid language string."), 0);
 
-    if (len == 1 
+    if (len == 1
         && (arLang[0] != 'i' && arLang[0] != 'x'))
         throw Exception(OUSTR("Invalid language string."), 0);
 
@@ -131,7 +131,7 @@ void checkSecondSubtag(::rtl::OUString const & tag, bool & bIsCountry)
         throw Exception(OUSTR("Invalid language string."), 0);
     //country code
     bIsCountry = false;
-    if (len == 2)		
+    if (len == 2)
     {
         for (sal_Int32 i = 0; i < 2; i++)
         {
@@ -149,7 +149,7 @@ void checkSecondSubtag(::rtl::OUString const & tag, bool & bIsCountry)
         for (sal_Int32 i = 0; i < len; i++)
         {
             if (!( (arLang[i] >= 'A' && arLang[i] <= 'Z')
-                || (arLang[i] >= 'a' && arLang[i] <= 'z') 
+                || (arLang[i] >= 'a' && arLang[i] <= 'z')
                 || (arLang[i] >= '0' && arLang[i] <= '9') ))
             {
                 throw Exception(OUSTR("Invalid language string."), 0);
@@ -163,12 +163,12 @@ void checkThirdSubtag(::rtl::OUString const & tag)
     sal_Int32 len = tag.getLength();
     sal_Unicode const * arLang = tag.getStr();
     if (len < 1 || len > 8)
-        throw Exception(OUSTR("Invalid language string."), 0);	
+        throw Exception(OUSTR("Invalid language string."), 0);
 
     for (sal_Int32 i = 0; i < len; i++)
     {
         if (!( (arLang[i] >= 'A' && arLang[i] <= 'Z')
-            || (arLang[i] >= 'a' && arLang[i] <= 'z') 
+            || (arLang[i] >= 'a' && arLang[i] <= 'z')
             || (arLang[i] >= '0' && arLang[i] <= '9') ))
         {
             throw Exception(OUSTR("Invalid language string."), 0);
@@ -180,7 +180,7 @@ void checkThirdSubtag(::rtl::OUString const & tag)
 
 //We parse the string acording to RFC 3066
 //We only use the primary sub-tag and two subtags. That is lang-country-variant
-//We do some simple tests if the string is correct. Actually this should do a 
+//We do some simple tests if the string is correct. Actually this should do a
 //validating parser
 //We may have the case that there is no country tag, for example en-welsh
 ::com::sun::star::lang::Locale toLocale( ::rtl::OUString const & slang )
@@ -214,7 +214,7 @@ void checkThirdSubtag(::rtl::OUString const & tag)
             locale.Variant = variant;
         }
     }
-   
+
     return locale;
 }
 

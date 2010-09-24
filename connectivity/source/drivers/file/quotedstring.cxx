@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ namespace connectivity
             return 0;
 
         xub_StrLen nTokCount = 1;
-        BOOL bStart = TRUE;		// Stehen wir auf dem ersten Zeichen im Token?
-        BOOL bInString = FALSE;	// Befinden wir uns INNERHALB eines (cStrDel delimited) String?
+        BOOL bStart = TRUE;     // Stehen wir auf dem ersten Zeichen im Token?
+        BOOL bInString = FALSE; // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
 
         // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
         for( xub_StrLen i = 0; i < nLen; ++i )
@@ -57,12 +57,12 @@ namespace connectivity
                 // Erstes Zeichen ein String-Delimiter?
                 if ( cChar == cStrDel )
                 {
-                    bInString = TRUE;	// dann sind wir jetzt INNERHALB des Strings!
-                    continue;			// dieses Zeichen ueberlesen!
+                    bInString = TRUE;   // dann sind wir jetzt INNERHALB des Strings!
+                    continue;           // dieses Zeichen ueberlesen!
                 }
             }
 
-            if (bInString) 
+            if (bInString)
             {
                 // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
                 if ( cChar == cStrDel )
@@ -70,7 +70,7 @@ namespace connectivity
                     if ((i+1 < nLen) && (m_sString.GetChar(i+1) == cStrDel))
                     {
                         // Verdoppeltes String-Delimiter-Zeichen:
-                        ++i;	// kein String-Ende, naechstes Zeichen ueberlesen.
+                        ++i;    // kein String-Ende, naechstes Zeichen ueberlesen.
                     }
                     else
                     {
@@ -78,8 +78,8 @@ namespace connectivity
                         bInString = FALSE;
                     }
                 }
-            } // if (bInString) 
-            else 
+            } // if (bInString)
+            else
             {
                 // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
                 if ( cChar == cTok )
@@ -102,11 +102,11 @@ namespace connectivity
         const xub_StrLen nLen = m_sString.Len();
         if ( nLen )
         {
-            BOOL bInString = (nStartPos < nLen) && (m_sString.GetChar(nStartPos) == cStrDel);	// Befinden wir uns INNERHALB eines (cStrDel delimited) String?
+            BOOL bInString = (nStartPos < nLen) && (m_sString.GetChar(nStartPos) == cStrDel);   // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
 
             // Erstes Zeichen ein String-Delimiter?
             if (bInString )
-                ++nStartPos;			// dieses Zeichen ueberlesen!
+                ++nStartPos;            // dieses Zeichen ueberlesen!
             if ( nStartPos >= nLen )
                 return;
 
@@ -126,7 +126,7 @@ namespace connectivity
                             // Verdoppeltes String-Delimiter-Zeichen:
                             // kein String-Ende, naechstes Zeichen ueberlesen.
                             ++i;
-                            *pData++ = m_sString.GetChar(i);	// Zeichen gehoert zum Resultat-String
+                            *pData++ = m_sString.GetChar(i);    // Zeichen gehoert zum Resultat-String
                         }
                         else
                         {
@@ -137,7 +137,7 @@ namespace connectivity
                     }
                     else
                     {
-                        *pData++ = cChar;	// Zeichen gehoert zum Resultat-String
+                        *pData++ = cChar;   // Zeichen gehoert zum Resultat-String
                     }
 
                 }
@@ -153,7 +153,7 @@ namespace connectivity
                     }
                     else
                     {
-                        *pData++ = cChar;	// Zeichen gehoert zum Resultat-String
+                        *pData++ = cChar;   // Zeichen gehoert zum Resultat-String
                     }
                 }
             } // for( xub_StrLen i = nStartPos; i < nLen; ++i )

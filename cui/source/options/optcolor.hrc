@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -163,7 +163,7 @@
 #define LB_BASICERROR              164
 #define WN_BASICERROR              165
 
-#define FT_SQL_COMMAND			 173
+#define FT_SQL_COMMAND           173
 #define FT_SQLIDENTIFIER         174
 #define LB_SQLIDENTIFIER         175
 #define WN_SQLIDENTIFIER         176
@@ -182,26 +182,26 @@
 #define FT_SQLPARAMETER          189
 #define LB_SQLPARAMETER          190
 #define WN_SQLPARAMETER          191
-#define FT_SQLCOMMENT	         192
-#define LB_SQLCOMMENT			 193
-#define WN_SQLCOMMENT			 194
+#define FT_SQLCOMMENT            192
+#define LB_SQLCOMMENT            193
+#define WN_SQLCOMMENT            194
 
-#define ST_EXTENSION				166
+#define ST_EXTENSION                166
 
 
 
-#define _FT_WIDTH				120
-#define _LINE_HEIGHT			15
-#define _FT_HEIGHT				10
-#define _CB_WIDTH				130
-#define _FT_XPOS				14
-#define _CB_XPOS				6
-#define _LB_XPOS				139
-#define _LB_WIDTH				50
-#define _LB_HEIGHT				50
-#define _WN_WIDTH				30
-#define _WN_HEIGHT				12
-#define _WN_XPOS				195
+#define _FT_WIDTH               120
+#define _LINE_HEIGHT            15
+#define _FT_HEIGHT              10
+#define _CB_WIDTH               130
+#define _FT_XPOS                14
+#define _CB_XPOS                6
+#define _LB_XPOS                139
+#define _LB_WIDTH               50
+#define _LB_HEIGHT              50
+#define _WN_WIDTH               30
+#define _WN_HEIGHT              12
+#define _WN_XPOS                195
 
 #define FT_SMARTTAGS                    168
 #define LB_SMARTTAGS                    169

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,12 +56,13 @@ public:
                             SystemChildWindow( Window* pParent, const ResId& rResId );
                             ~SystemChildWindow();
 
-    const SystemEnvData*	GetSystemData() const;
+    const SystemEnvData*    GetSystemData() const;
 
     //  per default systemchildwindows erase their background for better plugin support
     //  however, this might not always be required
     void                    EnableEraseBackground( BOOL bEnable = TRUE );
     BOOL                    IsEraseBackgroundEnabled();
+     void                    SetForwardKey( BOOL bEnable );
 };
 
 #endif // _SV_SYSCHILD_HXX

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,40 +74,40 @@ SV_DECL_PTRARR_DEL(SwCacheObjArr,SwCacheObj*,1,1)
 
 class SwCache : public SwCacheObjArr
 {
-    SvUShorts aFreePositions;		//Freie Positionen fuer das Insert wenn
+    SvUShorts aFreePositions;       //Freie Positionen fuer das Insert wenn
                                     //die Maximalgrenze nicht erreicht ist.
                                     //Immer wenn ein Objekt ausgetragen wird,
                                     //so wird seine Position hier eingetragen.
 
-    SwCacheObj *pRealFirst;			//_immer_ der echte LRU-erste
-    SwCacheObj *pFirst;				//der virtuelle erste.
+    SwCacheObj *pRealFirst;         //_immer_ der echte LRU-erste
+    SwCacheObj *pFirst;             //der virtuelle erste.
     SwCacheObj *pLast;
 
-    const USHORT nMax;				//Mehr sollen nicht aufgenommen werden,
+    const USHORT nMax;              //Mehr sollen nicht aufgenommen werden,
                                     //der Cache kann aber dynamisch um jeweils
                                     //nMax vergroessert werden.
-          USHORT nCurMax;			//Mehr werden nicht aufgenommen.
+          USHORT nCurMax;           //Mehr werden nicht aufgenommen.
 
 
     void DeleteObj( SwCacheObj *pObj );
 
 #ifdef DBG_UTIL
     ByteString aName;
-    long nAppend;			//Anzahl der Eintragungen durch Erweiterung.
-    long nInsertFree;		//Anzahl der Eintragungen auf freie Plaetze.
-    long nReplace;			//Anzahl der Ersetzungen durch ein neues Objekt
-    long nGetSuccess;		//Anzahl der Erfolgreichen Get's
-    long nGetFail;			//Anzahl der nicht Erfolgreichen Get's
-    long nToTop;			//Anzahl der Umsortierungen (LRU)
-    long nDelete;			//Anzahl der Loeschungen (von Aussen)
-    long nGetSeek;			//Anzahl der Get's ohne Index
-    long nAverageSeekCnt;	//Anzahl der Seek's fuer alle Get's ohne Index
-    long nFlushCnt;			//Anzahl von Flush-Aufrufen.
-    long nFlushedObjects;	//Anzahl der wg. Flush vernichteten Objekte
-    long nIncreaseMax;		//Anzahl Cache-Erweiterungen
-    long nDecreaseMax;		//Anzahl Cache-Verkleinerungen
+    long nAppend;           //Anzahl der Eintragungen durch Erweiterung.
+    long nInsertFree;       //Anzahl der Eintragungen auf freie Plaetze.
+    long nReplace;          //Anzahl der Ersetzungen durch ein neues Objekt
+    long nGetSuccess;       //Anzahl der Erfolgreichen Get's
+    long nGetFail;          //Anzahl der nicht Erfolgreichen Get's
+    long nToTop;            //Anzahl der Umsortierungen (LRU)
+    long nDelete;           //Anzahl der Loeschungen (von Aussen)
+    long nGetSeek;          //Anzahl der Get's ohne Index
+    long nAverageSeekCnt;   //Anzahl der Seek's fuer alle Get's ohne Index
+    long nFlushCnt;         //Anzahl von Flush-Aufrufen.
+    long nFlushedObjects;   //Anzahl der wg. Flush vernichteten Objekte
+    long nIncreaseMax;      //Anzahl Cache-Erweiterungen
+    long nDecreaseMax;      //Anzahl Cache-Verkleinerungen
 
-    void Check();			//Wird bei swcache.cxx mit DEBUG aktiv!
+    void Check();           //Wird bei swcache.cxx mit DEBUG aktiv!
 #endif
 
 public:
@@ -131,9 +131,9 @@ public:
 
     BOOL Insert( SwCacheObj *pNew );
     void Delete( const void *pOwner );
-//	void Delete( const void *pOwner, const USHORT nIndex );
+//  void Delete( const void *pOwner, const USHORT nIndex );
 
-    void SetLRUOfst( const USHORT nOfst );		//nOfst sagt wieviele unangetastet
+    void SetLRUOfst( const USHORT nOfst );      //nOfst sagt wieviele unangetastet
                                                 //bleiben sollen.
     void ResetLRUOfst() { pFirst = pRealFirst; }
 
@@ -151,9 +151,9 @@ class SwSaveSetLRUOfst
     SwCache &rCache;
 public:
     SwSaveSetLRUOfst( SwCache &rC, const USHORT nOfst )
-        : rCache( rC ) 			{ rCache.SetLRUOfst( nOfst );  }
+        : rCache( rC )          { rCache.SetLRUOfst( nOfst );  }
 
-    ~SwSaveSetLRUOfst()			{ rCache.ResetLRUOfst(); }
+    ~SwSaveSetLRUOfst()         { rCache.ResetLRUOfst(); }
 };
 
 //Das allgemeine CacheObjekt. Anwender des Cache muessen eine Klasse vom
@@ -161,18 +161,18 @@ public:
 
 class SwCacheObj
 {
-    friend class SwCache;	//Der darf alles
+    friend class SwCache;   //Der darf alles
 
-    SwCacheObj *pNext;		//Fuer die LRU-Verkettung.
+    SwCacheObj *pNext;      //Fuer die LRU-Verkettung.
     SwCacheObj *pPrev;
 
-    USHORT nCachePos;		//Position im Cache-Array.
+    USHORT nCachePos;       //Position im Cache-Array.
 
-    BYTE		nLock;
+    BYTE        nLock;
 
     inline SwCacheObj *GetNext() { return pNext; }
     inline SwCacheObj *GetPrev() { return pPrev; }
-    inline void SetNext( SwCacheObj *pNew )	 { pNext = pNew; }
+    inline void SetNext( SwCacheObj *pNew )  { pNext = pNew; }
     inline void SetPrev( SwCacheObj *pNew )  { pPrev = pNew; }
 
     inline void   SetCachePos( const USHORT nNew ) { nCachePos = nNew; }
@@ -190,7 +190,7 @@ public:
     inline BOOL IsOwner( const void *pNew ) const;
 
     inline USHORT GetCachePos() const { return nCachePos; }
-    inline void Invalidate()		  { pOwner = 0; }
+    inline void Invalidate()          { pOwner = 0; }
 
     inline BOOL IsLocked() const { return 0 != nLock; }
 
@@ -224,7 +224,7 @@ class SwCacheAccess
 
 protected:
     SwCacheObj *pObj;
-    const void *pOwner;		//Kann ggf. in NewObj benutzt werden.
+    const void *pOwner;     //Kann ggf. in NewObj benutzt werden.
 
     virtual SwCacheObj *NewObj() = 0;
 

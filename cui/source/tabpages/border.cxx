@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@
 
 #define LINESTYLE_HTML_MAX 5
 
-#include <svx/xtable.hxx>				// XColorTable
+#include <svx/xtable.hxx>               // XColorTable
 #include <svx/drawitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
@@ -51,7 +51,7 @@
 #include <dialmgr.hxx>
 #include "svx/htmlmode.hxx"
 #include <vcl/msgbox.hxx>
-#include "svx/flagsdef.hxx"	//CHINA001
+#include "svx/flagsdef.hxx" //CHINA001
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx> //CHINA001
 #include <sfx2/itemconnect.hxx>
@@ -63,14 +63,14 @@
  * [Beschreibung:]
  * TabPage zum Einstellen der Rahmen-Attribute.
  * Benoetigt
- *		ein SvxShadowItem: Schatten
- *		ein SvxBoxItem:    Linien links,rechts,oben,unten ),
- *		ein SvxBoxInfo:    Linien vertikal,horizontal, Abstaende, Flags )
+ *      ein SvxShadowItem: Schatten
+ *      ein SvxBoxItem:    Linien links,rechts,oben,unten ),
+ *      ein SvxBoxInfo:    Linien vertikal,horizontal, Abstaende, Flags )
  *
  * Linien koennen drei Zustaende haben.
- *		1. Show		( -> gueltige Werte )
- *		2. Hide		( -> NULL-Pointer )
- *		3. DontCare ( -> gesonderte Valid-Flags im InfoItem )
+ *      1. Show     ( -> gueltige Werte )
+ *      2. Hide     ( -> NULL-Pointer )
+ *      3. DontCare ( -> gesonderte Valid-Flags im InfoItem )
  */
 
 // static ----------------------------------------------------------------
@@ -90,56 +90,56 @@ BOOL SvxBorderTabPage::bSync = TRUE;
 
 //------------------------------------------------------------------------
 
-#define LINE_WIDTH0		(DEF_LINE_WIDTH_0 *100)
-#define LINE_WIDTH1		(DEF_LINE_WIDTH_1 *100)
-#define LINE_WIDTH2		(DEF_LINE_WIDTH_2 *100)
-#define LINE_WIDTH3		(DEF_LINE_WIDTH_3 *100)
-#define LINE_WIDTH4		(DEF_LINE_WIDTH_4 *100)
+#define LINE_WIDTH0     (DEF_LINE_WIDTH_0 *100)
+#define LINE_WIDTH1     (DEF_LINE_WIDTH_1 *100)
+#define LINE_WIDTH2     (DEF_LINE_WIDTH_2 *100)
+#define LINE_WIDTH3     (DEF_LINE_WIDTH_3 *100)
+#define LINE_WIDTH4     (DEF_LINE_WIDTH_4 *100)
 #define LINE_WIDTH5     (DEF_LINE_WIDTH_5 *100)
 
-#define DLINE0_OUT		(DEF_DOUBLE_LINE0_OUT  *100)
-#define DLINE0_IN		(DEF_DOUBLE_LINE0_IN   *100)
-#define DLINE0_DIST		(DEF_DOUBLE_LINE0_DIST *100)
+#define DLINE0_OUT      (DEF_DOUBLE_LINE0_OUT  *100)
+#define DLINE0_IN       (DEF_DOUBLE_LINE0_IN   *100)
+#define DLINE0_DIST     (DEF_DOUBLE_LINE0_DIST *100)
 
-#define DLINE1_OUT		(DEF_DOUBLE_LINE1_OUT  *100)
-#define DLINE1_IN		(DEF_DOUBLE_LINE1_IN   *100)
-#define DLINE1_DIST		(DEF_DOUBLE_LINE1_DIST *100)
+#define DLINE1_OUT      (DEF_DOUBLE_LINE1_OUT  *100)
+#define DLINE1_IN       (DEF_DOUBLE_LINE1_IN   *100)
+#define DLINE1_DIST     (DEF_DOUBLE_LINE1_DIST *100)
 
-#define DLINE2_OUT		(DEF_DOUBLE_LINE2_OUT  *100)
-#define DLINE2_IN		(DEF_DOUBLE_LINE2_IN   *100)
-#define DLINE2_DIST		(DEF_DOUBLE_LINE2_DIST *100)
+#define DLINE2_OUT      (DEF_DOUBLE_LINE2_OUT  *100)
+#define DLINE2_IN       (DEF_DOUBLE_LINE2_IN   *100)
+#define DLINE2_DIST     (DEF_DOUBLE_LINE2_DIST *100)
 
-#define DLINE3_OUT		(DEF_DOUBLE_LINE3_OUT  *100)
-#define DLINE3_IN		(DEF_DOUBLE_LINE3_IN   *100)
-#define DLINE3_DIST		(DEF_DOUBLE_LINE3_DIST *100)
+#define DLINE3_OUT      (DEF_DOUBLE_LINE3_OUT  *100)
+#define DLINE3_IN       (DEF_DOUBLE_LINE3_IN   *100)
+#define DLINE3_DIST     (DEF_DOUBLE_LINE3_DIST *100)
 
-#define DLINE4_OUT		(DEF_DOUBLE_LINE4_OUT  *100)
-#define DLINE4_IN		(DEF_DOUBLE_LINE4_IN   *100)
-#define DLINE4_DIST		(DEF_DOUBLE_LINE4_DIST *100)
+#define DLINE4_OUT      (DEF_DOUBLE_LINE4_OUT  *100)
+#define DLINE4_IN       (DEF_DOUBLE_LINE4_IN   *100)
+#define DLINE4_DIST     (DEF_DOUBLE_LINE4_DIST *100)
 
-#define DLINE5_OUT		(DEF_DOUBLE_LINE5_OUT  *100)
-#define DLINE5_IN		(DEF_DOUBLE_LINE5_IN   *100)
-#define DLINE5_DIST		(DEF_DOUBLE_LINE5_DIST *100)
+#define DLINE5_OUT      (DEF_DOUBLE_LINE5_OUT  *100)
+#define DLINE5_IN       (DEF_DOUBLE_LINE5_IN   *100)
+#define DLINE5_DIST     (DEF_DOUBLE_LINE5_DIST *100)
 
-#define DLINE6_OUT		(DEF_DOUBLE_LINE6_OUT  *100)
-#define DLINE6_IN		(DEF_DOUBLE_LINE6_IN   *100)
-#define DLINE6_DIST		(DEF_DOUBLE_LINE6_DIST *100)
+#define DLINE6_OUT      (DEF_DOUBLE_LINE6_OUT  *100)
+#define DLINE6_IN       (DEF_DOUBLE_LINE6_IN   *100)
+#define DLINE6_DIST     (DEF_DOUBLE_LINE6_DIST *100)
 
-#define DLINE7_OUT		(DEF_DOUBLE_LINE7_OUT  *100)
-#define DLINE7_IN		(DEF_DOUBLE_LINE7_IN   *100)
-#define DLINE7_DIST		(DEF_DOUBLE_LINE7_DIST *100)
+#define DLINE7_OUT      (DEF_DOUBLE_LINE7_OUT  *100)
+#define DLINE7_IN       (DEF_DOUBLE_LINE7_IN   *100)
+#define DLINE7_DIST     (DEF_DOUBLE_LINE7_DIST *100)
 
-#define DLINE8_OUT		(DEF_DOUBLE_LINE8_OUT  *100)
-#define DLINE8_IN		(DEF_DOUBLE_LINE8_IN   *100)
-#define DLINE8_DIST		(DEF_DOUBLE_LINE8_DIST *100)
+#define DLINE8_OUT      (DEF_DOUBLE_LINE8_OUT  *100)
+#define DLINE8_IN       (DEF_DOUBLE_LINE8_IN   *100)
+#define DLINE8_DIST     (DEF_DOUBLE_LINE8_DIST *100)
 
-#define DLINE9_OUT		(DEF_DOUBLE_LINE9_OUT  *100)
-#define DLINE9_IN		(DEF_DOUBLE_LINE9_IN   *100)
-#define DLINE9_DIST		(DEF_DOUBLE_LINE9_DIST *100)
+#define DLINE9_OUT      (DEF_DOUBLE_LINE9_OUT  *100)
+#define DLINE9_IN       (DEF_DOUBLE_LINE9_IN   *100)
+#define DLINE9_DIST     (DEF_DOUBLE_LINE9_DIST *100)
 
-#define DLINE10_OUT		(DEF_DOUBLE_LINE10_OUT *100)
-#define DLINE10_IN		(DEF_DOUBLE_LINE10_IN  *100)
-#define DLINE10_DIST	(DEF_DOUBLE_LINE10_DIST*100)
+#define DLINE10_OUT     (DEF_DOUBLE_LINE10_OUT *100)
+#define DLINE10_IN      (DEF_DOUBLE_LINE10_IN  *100)
+#define DLINE10_DIST    (DEF_DOUBLE_LINE10_DIST*100)
 
 #define RGBCOL(eColorName) (TpBorderRGBColor(eColorName))
 
@@ -177,14 +177,14 @@ void lcl_SetDecimalDigitsTo1(MetricField& rField)
 SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
                                     const SfxItemSet& rCoreAttrs )
 
-    :	SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_BORDER ), rCoreAttrs ),
+    :   SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_BORDER ), rCoreAttrs ),
 
         aFlBorder       ( this, CUI_RES( FL_BORDER ) ),
         aDefaultFT      ( this, CUI_RES( FT_DEFAULT ) ),
         aWndPresets     ( this, CUI_RES( WIN_PRESETS ) ),
         aUserDefFT      ( this, CUI_RES( FT_USERDEF ) ),
         aFrameSel       ( this, CUI_RES( WIN_FRAMESEL ) ),
-        
+
         aFlSep1         ( this, CUI_RES( FL_SEPARATOR1 ) ),
         aFlLine         ( this, CUI_RES( FL_LINE ) ),
         aStyleFT        ( this, CUI_RES( FT_STYLE ) ),
@@ -351,9 +351,9 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     FillLineListBox_Impl();
 
     // ColorBox aus der XColorTable fuellen.
-    SfxObjectShell*		pDocSh		= SfxObjectShell::Current();
-    const SfxPoolItem*	pItem 		= NULL;
-    XColorTable*		pColorTable = NULL;
+    SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
+    const SfxPoolItem*  pItem       = NULL;
+    XColorTable*        pColorTable = NULL;
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
 
@@ -449,13 +449,13 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 
     const SvxBoxItem*       pBoxItem;
     const SvxBoxInfoItem*   pBoxInfoItem;
-    USHORT					nWhichBox		= GetWhich(SID_ATTR_BORDER_OUTER);
-    SfxMapUnit 				eCoreUnit;
-    const Color				aColBlack		= RGBCOL(COL_BLACK);
+    USHORT                  nWhichBox       = GetWhich(SID_ATTR_BORDER_OUTER);
+    SfxMapUnit              eCoreUnit;
+    const Color             aColBlack       = RGBCOL(COL_BLACK);
 
     pBoxItem  = (const SvxBoxItem*)GetItem( rSet, SID_ATTR_BORDER_OUTER );
-    
-    
+
+
     pBoxInfoItem = (const SvxBoxInfoItem*)GetItem( rSet, SID_ATTR_BORDER_INNER, sal_False );
 
     eCoreUnit = rSet.GetPool()->GetMetric( nWhichBox );
@@ -670,11 +670,11 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     bool bAttrsChanged = SfxTabPage::FillItemSet( rCoreAttrs );
 
-    BOOL				  bPut		   	= TRUE;
-    USHORT				  nBoxWhich		= GetWhich( SID_ATTR_BORDER_OUTER );
-    USHORT				  nBoxInfoWhich = rCoreAttrs.GetPool()->GetWhich( SID_ATTR_BORDER_INNER, sal_False );
-    const SfxItemSet&	  rOldSet		= GetItemSet();
-    SvxBoxItem		      aBoxItem 	    ( nBoxWhich );
+    BOOL                  bPut          = TRUE;
+    USHORT                nBoxWhich     = GetWhich( SID_ATTR_BORDER_OUTER );
+    USHORT                nBoxInfoWhich = rCoreAttrs.GetPool()->GetWhich( SID_ATTR_BORDER_INNER, sal_False );
+    const SfxItemSet&     rOldSet       = GetItemSet();
+    SvxBoxItem            aBoxItem      ( nBoxWhich );
     SvxBoxInfoItem        aBoxInfoItem  ( nBoxInfoWhich );
     SvxBoxItem* pOldBoxItem = (SvxBoxItem*)GetOldItem( rCoreAttrs, SID_ATTR_BORDER_OUTER );
 
@@ -742,7 +742,7 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                         nMinValue == aRightMF .GetValue() ||
                         nMinValue == aTopMF   .GetValue() ||
                         nMinValue == aBottomMF.GetValue() ||
-                        (pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(VALID_DISTANCE)) 
+                        (pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(VALID_DISTANCE))
                        )
                     {
                         aBoxItem.SetDistance( (USHORT)GetCoreValue( aLeftMF, eCoreUnit ), BOX_LINE_LEFT  );
@@ -1130,7 +1130,7 @@ IMPL_LINK( SvxBorderTabPage, LinesChanged_Impl, void*, EMPTYARG )
     {
         BOOL bLineSet = aFrameSel.IsAnyBorderVisible();
         BOOL bMinAllowed = 0 != (nSWMode & (SW_BORDER_MODE_FRAME|SW_BORDER_MODE_TABLE));
-        BOOL bSpaceModified = 	aLeftMF  .IsModified()||
+        BOOL bSpaceModified =   aLeftMF  .IsModified()||
                                 aRightMF .IsModified()||
                                 aTopMF   .IsModified()||
                                 aBottomMF.IsModified();

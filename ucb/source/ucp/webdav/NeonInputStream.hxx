@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,7 +106,7 @@ class NeonInputStream : public ::com::sun::star::io::XInputStream,
                           ::com::sun::star::uno::RuntimeException );
 
     // XSeekable
-    virtual void SAL_CALL seek(	sal_Int64 location )
+    virtual void SAL_CALL seek( sal_Int64 location )
         throw( ::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException );

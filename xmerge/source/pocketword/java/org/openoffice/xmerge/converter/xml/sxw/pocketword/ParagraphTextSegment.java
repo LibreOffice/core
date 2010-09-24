@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@ import java.io.IOException;
  * @version 1.1
  */
 class ParagraphTextSegment implements PocketWordConstants {
-    
+
     private String    pText;
     private TextStyle pStyle;
-    
-    
+
+
     /**
      * <p>Initialise a new <code>ParagraphTextSegment</p>.
      * <p>Both parameters may be <code>null</code>.</p>
@@ -61,7 +61,7 @@ class ParagraphTextSegment implements PocketWordConstants {
         pText  = data;
         pStyle = style;
     }
-    
+
     /**
      * <p>Sets the text for this segment.</p>
      *
@@ -75,12 +75,12 @@ class ParagraphTextSegment implements PocketWordConstants {
      * <p>Gets the text for this segment.</p>
      *
      * @return    The text of this segment.
-     */    
+     */
     public String getText () {
         return pText;
     }
-    
-    
+
+
     /**
      * <p>Sets the style for this segment.</p>
      *
@@ -89,8 +89,8 @@ class ParagraphTextSegment implements PocketWordConstants {
     public void setStyle (TextStyle style) {
         pStyle = style;
     }
-    
-    
+
+
     /**
      * <p>Gets the style for this segment.</p>
      *
@@ -99,25 +99,25 @@ class ParagraphTextSegment implements PocketWordConstants {
     public TextStyle getStyle () {
         return pStyle;
     }
-    
-    
+
+
     /**
-     * <p>Returns the string data for this text segment wrapped with the 
+     * <p>Returns the string data for this text segment wrapped with the
      *    appropriate byte codes for the formatting settings used.</p>
      *
-     * @return  <code>byte</code> array containing formatted text in Pocket Word 
+     * @return  <code>byte</code> array containing formatted text in Pocket Word
      *          format.
      */
     public byte[] getData () {
         ByteArrayOutputStream data = new ByteArrayOutputStream();
-        
+
         boolean colourSet    = false;
         boolean boldSet      = false;
         boolean italicSet    = false;
         boolean underlineSet = false;
         boolean strikeSet    = false;
         boolean highlightSet = false;
-        
+
         // TODO: Font changes need to be worked out here
 
         try {
@@ -125,7 +125,7 @@ class ParagraphTextSegment implements PocketWordConstants {
                 if (pStyle.getFontColor() != null) {
                     ColourConverter cc = new ColourConverter();
                     short colourCode = cc.convertFromRGB(pStyle.getFontColor());
-                    if (colourCode != 0) {	// not black 
+                    if (colourCode != 0) {  // not black
                         data.write(COLOUR_TAG);
                         data.write(EndianConverter.writeShort(colourCode));
                         colourSet = true;
@@ -134,7 +134,7 @@ class ParagraphTextSegment implements PocketWordConstants {
                 if (pStyle.isSet(TextStyle.BOLD) && pStyle.getAttribute(TextStyle.BOLD)) {
                     data.write(new byte[] { FONT_WEIGHT_TAG, FONT_WEIGHT_BOLD, 0x00 } );
                     boldSet = true;
-                }   
+                }
                 if (pStyle.isSet(TextStyle.ITALIC) && pStyle.getAttribute(TextStyle.ITALIC)) {
                     data.write(new byte[] { ITALIC_TAG, 0x01 } );
                     italicSet = true;
@@ -146,14 +146,14 @@ class ParagraphTextSegment implements PocketWordConstants {
                 if (pStyle.isSet(TextStyle.STRIKETHRU) && pStyle.getAttribute(TextStyle.STRIKETHRU)) {
                     data.write(new byte[] { STRIKETHROUGH_TAG, 0x01 } );
                     strikeSet = true;
-                }        
+                }
                 if (pStyle.getBackgroundColor() != null) {
                     data.write(new byte[] { HIGHLIGHT_TAG, 0x01 } );
                     highlightSet = true;
                 }
             }
-        
-        
+
+
             // Now write out the data
             if (!pText.equals("\t")) {
                 data.write(pText.getBytes());
@@ -165,8 +165,8 @@ class ParagraphTextSegment implements PocketWordConstants {
                 */
                 data.write(new byte[] { (byte)0xC4, 0x04 } );
             }
-        
-        
+
+
             // Now close out any of the settings changes
             if (colourSet) {
                 /*
@@ -196,7 +196,7 @@ class ParagraphTextSegment implements PocketWordConstants {
         catch (IOException ioe) {
             // Should never occur in a memory based stream
         }
-        
+
         return data.toByteArray();
     }
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -123,7 +123,7 @@ void HierarchyUri::init() const
                     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                             DEFAULT_DATA_SOURCE_SERVICE ) );
 
-                nPos 
+                nPos
                     = HIERARCHY_URL_SCHEME_LENGTH + 3 + m_aService.getLength();
             }
             else
@@ -144,7 +144,7 @@ void HierarchyUri::init() const
 
                 // Empty path segments?
                 if ( m_aUri.indexOf(
-                        rtl::OUString::createFromAscii( "//" ), 
+                        rtl::OUString::createFromAscii( "//" ),
                         nStart ) != -1 )
                 {
                     // error, but remember that we did a init().

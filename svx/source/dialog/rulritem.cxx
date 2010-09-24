@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,8 +60,8 @@ String SvxLongLRSpaceItem::GetValueText() const
     return String();
 }
 
-#define TWIP_TO_MM100(TWIP) 	((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-#define MM100_TO_TWIP(MM100)	((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
+#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
 sal_Bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
@@ -135,9 +135,9 @@ SfxItemPresentation SvxLongLRSpaceItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     String&             /*rText*/, const IntlWrapper *
-)	const
+)   const
 {
-    
+
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -158,7 +158,7 @@ SvxLongLRSpaceItem::SvxLongLRSpaceItem(long lL, long lR, USHORT nId)
 
 //------------------------------------------------------------------------
 
-SvxLongLRSpaceItem::SvxLongLRSpaceItem() : 
+SvxLongLRSpaceItem::SvxLongLRSpaceItem() :
     SfxPoolItem( 0 ),
     lLeft( 0 ),
     lRight( 0 )
@@ -291,7 +291,7 @@ SvxLongULSpaceItem::SvxLongULSpaceItem(const SvxLongULSpaceItem &rCpy)
 
 //------------------------------------------------------------------------
 
-SvxLongULSpaceItem::SvxLongULSpaceItem() : 
+SvxLongULSpaceItem::SvxLongULSpaceItem() :
     SfxPoolItem( 0 ),
     lLeft( 0 ),
     lRight( 0 )
@@ -324,7 +324,7 @@ sal_Bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE 
             rVal <<= aPagePosSize;
             return TRUE;
         }
-    
+
         case MID_X: nVal = aPos.X(); break;
         case MID_Y: nVal = aPos.Y(); break;
         case MID_WIDTH: nVal = lWidth; break;
@@ -364,7 +364,7 @@ sal_Bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, B
             case MID_Y: aPos.Y() = nVal; break;
             case MID_WIDTH: lWidth = nVal; break;
             case MID_HEIGHT: lHeight = nVal; break;
-            
+
             default: DBG_ERROR("Wrong MemberId!"); return sal_False;
         }
 
@@ -480,7 +480,7 @@ SfxItemPresentation SvxColumnItem::GetPresentation
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
     String&             /*rText*/, const IntlWrapper *
-)	const
+)   const
 {
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -499,7 +499,7 @@ SvxColumnItem::SvxColumnItem( USHORT nAct ) :
     SfxPoolItem( SID_RULER_BORDERS ),
 
     nLeft       ( 0 ),
-    nRight		( 0 ),
+    nRight      ( 0 ),
     nActColumn  ( nAct ),
     bTable      ( FALSE ),
     bOrtho      (TRUE )
@@ -514,7 +514,7 @@ SvxColumnItem::SvxColumnItem( USHORT nActCol, USHORT left, USHORT right ) :
     SfxPoolItem( SID_RULER_BORDERS ),
 
     nLeft       ( left ),
-    nRight		( right ),
+    nRight      ( right ),
     nActColumn  ( nActCol ),
     bTable      ( TRUE ),
     bOrtho      ( TRUE )
@@ -529,7 +529,7 @@ SvxColumnItem::SvxColumnItem( const SvxColumnItem& rCopy ) :
 
       aColumns  ( (BYTE)rCopy.Count() ),
       nLeft     ( rCopy.nLeft ),
-      nRight	( rCopy.nRight ),
+      nRight    ( rCopy.nRight ),
       nActColumn( rCopy.nActColumn ),
       bTable    ( rCopy.bTable ),
       bOrtho    ( rCopy.bOrtho )
@@ -682,11 +682,11 @@ SvxObjectItem::SvxObjectItem( long nSX, long nEX,
 
     SfxPoolItem( SID_RULER_OBJECT ),
 
-    nStartX	( nSX ),
-    nEndX	( nEX ),
-    nStartY	( nSY ),
-    nEndY	( nEY ),
-    bLimits	( limits )
+    nStartX ( nSX ),
+    nEndX   ( nEX ),
+    nStartY ( nSY ),
+    nEndY   ( nEY ),
+    bLimits ( limits )
 
 {
 }
@@ -697,11 +697,11 @@ SvxObjectItem::SvxObjectItem( const SvxObjectItem& rCopy ) :
 
     SfxPoolItem( rCopy ),
 
-    nStartX	( rCopy.nStartX ),
-    nEndX	( rCopy.nEndX ),
-    nStartY	( rCopy.nStartY ),
-    nEndY	( rCopy.nEndY ),
-    bLimits	( rCopy.bLimits )
+    nStartX ( rCopy.nStartX ),
+    nEndX   ( rCopy.nEndX ),
+    nStartY ( rCopy.nStartY ),
+    nEndY   ( rCopy.nEndY ),
+    bLimits ( rCopy.bLimits )
 
 {
 }

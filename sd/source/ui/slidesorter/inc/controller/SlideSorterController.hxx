@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ public:
     */
     SlideSorterController (SlideSorter& rSlideSorter);
 
-    /** Late initialization.  Call this method once a new new object has been 
+    /** Late initialization.  Call this method once a new new object has been
         created.
     */
     virtual void Init (void);
@@ -138,7 +138,7 @@ public:
     void FuPermanent (SfxRequest& rRequest);
     void FuSupport (SfxRequest& rRequest);
     bool Command (
-        const CommandEvent& rEvent, 
+        const CommandEvent& rEvent,
         ::sd::Window* pWindow);
 
     void GetCtrlState (SfxItemSet &rSet);

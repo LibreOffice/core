@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #define INCLUDED_unotools_EXTENDEDSECURITYOPTIONS_HXX
 
 //_________________________________________________________________________________________________________________
-//	includes
+//  includes
 //_________________________________________________________________________________________________________________
 
 #include "unotools/unotoolsdllapi.h"
@@ -39,12 +39,12 @@
 #include <unotools/options.hxx>
 
 //_________________________________________________________________________________________________________________
-//	forward declarations
+//  forward declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			forward declaration to our private date container implementation
-    @descr			We use these class as internal member to support small memory requirements.
+    @short          forward declaration to our private date container implementation
+    @descr          We use these class as internal member to support small memory requirements.
                     You can create the container if it is neccessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
@@ -52,94 +52,94 @@
 class SvtExtendedSecurityOptions_Impl;
 
 //_________________________________________________________________________________________________________________
-//	declarations
+//  declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short			collect informations about security features
+    @short          collect informations about security features
     @descr          -
 
-    @implements		-
-    @base			-
+    @implements     -
+    @base           -
 
-    @ATTENTION		This class is partially threadsafe.
+    @ATTENTION      This class is partially threadsafe.
 
-    @devstatus		ready to use
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
 class UNOTOOLS_DLLPUBLIC SvtExtendedSecurityOptions: public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
         // Must be zero based!
         enum OpenHyperlinkMode
         {
-            OPEN_NEVER					= 0,
+            OPEN_NEVER                  = 0,
             OPEN_WITHSECURITYCHECK,
             OPEN_ALWAYS
         };
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short		standard constructor and destructor
-            @descr		This will initialize an instance with default values.
+            @short      standard constructor and destructor
+            @descr      This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
                         at create and decrease it at delete time - but all instances use the same data container!
                         He is implemented as a static member ...
 
-            @seealso	member m_nRefCount
-            @seealso	member m_pDataContainer
+            @seealso    member m_nRefCount
+            @seealso    member m_pDataContainer
 
-            @param		-
-            @return		-
+            @param      -
+            @return     -
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
          SvtExtendedSecurityOptions();
         virtual ~SvtExtendedSecurityOptions();
 
         //---------------------------------------------------------------------------------------------------------
-        //	interface
+        //  interface
         //---------------------------------------------------------------------------------------------------------
 
-        sal_Bool										IsSecureHyperlink( const rtl::OUString& aURL ) const;
-        com::sun::star::uno::Sequence< rtl::OUString >	GetSecureExtensionList() const;
+        sal_Bool                                        IsSecureHyperlink( const rtl::OUString& aURL ) const;
+        com::sun::star::uno::Sequence< rtl::OUString >  GetSecureExtensionList() const;
 
-        OpenHyperlinkMode								GetOpenHyperlinkMode();
-        void											SetOpenHyperlinkMode( OpenHyperlinkMode aMode );
+        OpenHyperlinkMode                               GetOpenHyperlinkMode();
+        void                                            SetOpenHyperlinkMode( OpenHyperlinkMode aMode );
         sal_Bool                                        IsOpenHyperlinkModeReadOnly() const;
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short		return a reference to a static mutex
-            @descr		These class is partially threadsafe (for de-/initialization only).
+            @short      return a reference to a static mutex
+            @descr      These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
 
-            @seealso	-
+            @seealso    -
 
-            @param		-
-            @return		A reference to a static mutex member.
+            @param      -
+            @return     A reference to a static mutex member.
 
-            @onerror	-
+            @onerror    -
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private member
+    //  private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
@@ -152,9 +152,9 @@ class UNOTOOLS_DLLPUBLIC SvtExtendedSecurityOptions: public utl::detail::Options
             Do it in your source only.
          */
 
-        static SvtExtendedSecurityOptions_Impl*	m_pDataContainer	;	/// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32						m_nRefCount			;	/// internal ref count mechanism
+        static SvtExtendedSecurityOptions_Impl* m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32                        m_nRefCount         ;   /// internal ref count mechanism
 
-};		// class SvtExtendedSecurityOptions
+};      // class SvtExtendedSecurityOptions
 
 #endif  // #ifndef INCLUDED_unotools_EXTENDEDSECURITYOPTIONS_HXX

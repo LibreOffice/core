@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ class OutputDevice;
 namespace accessibility {
 
 
-/**	<p>This class provides the means to transform between internal coordinates
+/** <p>This class provides the means to transform between internal coordinates
     and screen coordinates without giving direct access to the underlying
     view.  It represents a certain window.  A call to
     <method>GetVisArea</method> returns the corresponding visible
@@ -48,7 +48,7 @@ namespace accessibility {
         change the validity of the forwarder have to be signaled seperately.
 */
 class AccessibleViewForwarder
-    :	public IAccessibleViewForwarder
+    :   public IAccessibleViewForwarder
 {
 public:
     //=====  internal  ========================================================
@@ -56,7 +56,7 @@ public:
     AccessibleViewForwarder (SdrPaintView* pView, OutputDevice& rDevice);
 
     virtual ~AccessibleViewForwarder (void);
-    
+
     //=====  IAccessibleViewforwarder  ========================================
 
     /** This method informs you about the state of the forwarder.  Do not
@@ -70,7 +70,7 @@ public:
     /** Returns the area of the underlying document that is visible in the
     * corresponding window.
 
-        @return 
+        @return
             The rectangle of the visible part of the document.
      */
     virtual Rectangle GetVisibleArea() const;
@@ -81,7 +81,7 @@ public:
         @param rPoint
             Point in internal coordinates.
 
-        @return 
+        @return
             The same point but in screen coordinates relative to the upper
             left corner of the (current) screen.
      */
@@ -93,7 +93,7 @@ public:
         @param rSize
             Size in internal coordinates.
 
-        @return 
+        @return
             The same size but in screen coordinates.
      */
     virtual Size LogicToPixel (const Size& rSize) const;
@@ -105,7 +105,7 @@ public:
             Point in screen coordinates relative to the upper left corner of
             the (current) screen.
 
-        @return 
+        @return
             The same point but in internal coordinates.
      */
     virtual Point PixelToLogic (const Point& rPoint) const;
@@ -116,7 +116,7 @@ public:
         @param rSize
             Size in screen coordinates.
 
-        @return 
+        @return
             The same size but in internal coordinates.
      */
     virtual Size PixelToLogic (const Size& rSize) const;

@@ -39,11 +39,11 @@ constants USER
     /// = 4
     const long FLAG9 = FLAG1 << 2;
     /// = 32
-    const long FLAG10 = (FLAG5 >> 1) << 2;	
+    const long FLAG10 = (FLAG5 >> 1) << 2;
     /// = 1
-    const long FLAG11 = 33 % 4;	
+    const long FLAG11 = 33 % 4;
     /// = 4
-    const long FLAG12 = FLAG10 / 8;	
+    const long FLAG12 = FLAG10 / 8;
 };
 
 };

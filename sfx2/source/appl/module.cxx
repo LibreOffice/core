@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,15 +61,15 @@ class SfxModule_Impl
 {
 public:
 
-    SfxSlotPool*				pSlotPool;
-    SfxTbxCtrlFactArr_Impl* 	pTbxCtrlFac;
-    SfxStbCtrlFactArr_Impl* 	pStbCtrlFac;
-    SfxMenuCtrlFactArr_Impl*	pMenuCtrlFac;
-    SfxChildWinFactArr_Impl*	pFactArr;
+    SfxSlotPool*                pSlotPool;
+    SfxTbxCtrlFactArr_Impl*     pTbxCtrlFac;
+    SfxStbCtrlFactArr_Impl*     pStbCtrlFac;
+    SfxMenuCtrlFactArr_Impl*    pMenuCtrlFac;
+    SfxChildWinFactArr_Impl*    pFactArr;
     ImageList*                  pImgListSmall;
     ImageList*                  pImgListBig;
-    ImageList*					pImgListHiSmall;
-    ImageList*					pImgListHiBig;
+    ImageList*                  pImgListHiSmall;
+    ImageList*                  pImgListHiBig;
 
                                 SfxModule_Impl();
                                 ~SfxModule_Impl();
@@ -362,7 +362,7 @@ ImageList* SfxModule::GetImageList_Impl( BOOL bBig, BOOL bHiContrast )
     return pImpl->GetImageList( pResMgr, bBig, bHiContrast );
 }
 
-SfxTabPage*	SfxModule::CreateTabPage( USHORT, Window*, const SfxItemSet& )
+SfxTabPage* SfxModule::CreateTabPage( USHORT, Window*, const SfxItemSet& )
 {
     return NULL;
 }

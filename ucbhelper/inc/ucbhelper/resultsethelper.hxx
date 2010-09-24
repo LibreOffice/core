@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace ucbhelper {
   *
   * Features of the base class implementation:
   * - standard interfaces ( XInterface, XTypeProvider, XServiceInfo )
-  *	- all required interfaces for service com::sun::star::ucb::DynamicResultSet
+  * - all required interfaces for service com::sun::star::ucb::DynamicResultSet
   */
 class UCBHELPER_DLLPUBLIC ResultSetImplHelper :
                 public cppu::OWeakObject,
@@ -68,20 +68,20 @@ class UCBHELPER_DLLPUBLIC ResultSetImplHelper :
                 public com::sun::star::ucb::XDynamicResultSet
 {
     cppu::OInterfaceContainerHelper* m_pDisposeEventListeners;
-    sal_Bool						 m_bStatic;
-    sal_Bool						 m_bInitDone;
+    sal_Bool                         m_bStatic;
+    sal_Bool                         m_bInitDone;
 
 protected:
-    osl::Mutex						 					 m_aMutex;
-    com::sun::star::ucb::OpenCommandArgument2			 m_aCommand;
+    osl::Mutex                                           m_aMutex;
+    com::sun::star::ucb::OpenCommandArgument2            m_aCommand;
     com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >	 m_xSMgr;
+        com::sun::star::lang::XMultiServiceFactory >     m_xSMgr;
     // Resultset #1
     com::sun::star::uno::Reference<
-        com::sun::star::sdbc::XResultSet > 				 m_xResultSet1;
+        com::sun::star::sdbc::XResultSet >               m_xResultSet1;
     // Resultset #2
     com::sun::star::uno::Reference<
-        com::sun::star::sdbc::XResultSet > 				 m_xResultSet2;
+        com::sun::star::sdbc::XResultSet >               m_xResultSet2;
     // Resultset changes listener.
     com::sun::star::uno::Reference<
         com::sun::star::ucb::XDynamicResultSetListener > m_xListener;

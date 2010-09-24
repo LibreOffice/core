@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -37,7 +37,7 @@ namespace agg
         alloc_type& allocator() { return *m_alloc; }
 
         //--------------------------------------------------------------------
-        void prepare(unsigned max_span_len) 
+        void prepare(unsigned max_span_len)
         {
             m_alloc->allocate(max_span_len);
         }

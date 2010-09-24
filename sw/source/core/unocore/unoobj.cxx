@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,7 +139,7 @@ uno::Sequence< sal_Int8 >  CreateUnoTunnelId()
     static osl::Mutex aCreateMutex;
     osl::Guard<osl::Mutex> aGuard( aCreateMutex );
     uno::Sequence< sal_Int8 > aSeq( 16 );
-    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0,	sal_True );
+    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
     return aSeq;
 }
 /****************************************************************************
@@ -161,7 +161,7 @@ SwUnoInternalPaM::~SwUnoInternalPaM()
     }
 }
 
-SwUnoInternalPaM&	SwUnoInternalPaM::operator=(const SwPaM& rPaM)
+SwUnoInternalPaM&   SwUnoInternalPaM::operator=(const SwPaM& rPaM)
 {
     const SwPaM* pTmp = &rPaM;
     *GetPoint() = *rPaM.GetPoint();
@@ -425,7 +425,7 @@ lcl_SetNodeNumStart(SwPaM & rCrsr, uno::Any const& rValue)
     SwDoc* pDoc = rCrsr.GetDoc();
     UnoActionContext aAction(pDoc);
 
-    if( rCrsr.GetNext() != &rCrsr )			// Mehrfachselektion ?
+    if( rCrsr.GetNext() != &rCrsr )         // Mehrfachselektion ?
     {
         pDoc->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( rCrsr );
@@ -695,8 +695,8 @@ SwUnoCursorHelper::GetCurTxtFmtColl(SwPaM & rPaM, const bool bConditional)
     static const sal_uInt16 nMaxLookup = 1000;
     SwFmtColl *pFmt = 0;
 
-//	if ( GetCrsrCnt() > nMaxLookup )
-//		return 0;
+//  if ( GetCrsrCnt() > nMaxLookup )
+//      return 0;
     bool bError = false;
     SwPaM *pTmpCrsr = &rPaM;
     do
@@ -736,9 +736,9 @@ SwUnoCursorHelper::GetCurTxtFmtColl(SwPaM & rPaM, const bool bConditional)
 }
 
 /* -----------------26.06.98 16:20-------------------
- * 	Hilfsfunktion fuer PageDesc
+ *  Hilfsfunktion fuer PageDesc
  * --------------------------------------------------*/
-SwPageDesc*	GetPageDescByName_Impl(SwDoc& rDoc, const String& rName)
+SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName)
 {
     SwPageDesc* pRet = 0;
     sal_uInt16 nDCount = rDoc.GetPageDescCnt();

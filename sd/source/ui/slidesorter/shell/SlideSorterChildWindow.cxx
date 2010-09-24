@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,18 +40,18 @@ namespace sd { namespace slidesorter {
 
 SlideSorterChildWindow::SlideSorterChildWindow (
     ::Window* pParentWindow,
-    USHORT nId, 
-    SfxBindings* pBindings, 
-    SfxChildWinInfo* pInfo) 
+    USHORT nId,
+    SfxBindings* pBindings,
+    SfxChildWinInfo* pInfo)
     : SfxChildWindow (pParentWindow, nId)
 {
     pWindow = new SlideSorter (
-        pBindings, 
-        this, 
+        pBindings,
+        this,
         pParentWindow);
     eChildAlignment = SFX_ALIGN_LEFT;
     static_cast<SfxDockingWindow*>(pWindow)->Initialize (pInfo);
-    //	SetHideNotDelete (TRUE);
+    //  SetHideNotDelete (TRUE);
 }
 
 

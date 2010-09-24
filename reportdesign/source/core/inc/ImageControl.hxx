@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,28 +37,28 @@
 
 namespace reportdesign
 {
-    typedef ::cppu::PropertySetMixin<		 com::sun::star::report::XImageControl	> ImageControlPropertySet;
+    typedef ::cppu::PropertySetMixin<        com::sun::star::report::XImageControl  > ImageControlPropertySet;
     typedef ::cppu::WeakComponentImplHelper2<    com::sun::star::report::XImageControl
-                                                ,com::sun::star::lang::XServiceInfo		> ImageControlBase;
+                                                ,com::sun::star::lang::XServiceInfo     > ImageControlBase;
 
     /** \class OImageControl Defines the implementation of a \interface com:::sun::star::report::XImageControl
      * \ingroup reportdesign_api
      *
      */
-    class OImageControl :	public comphelper::OBaseMutex,
+    class OImageControl :   public comphelper::OBaseMutex,
                             public ImageControlBase,
                             public ImageControlPropertySet
     {
         friend class OShapeHelper;
-        OReportControlModel		            m_aProps;
-        ::rtl::OUString			            m_aImageURL;
+        OReportControlModel                 m_aProps;
+        ::rtl::OUString                     m_aImageURL;
         sal_Int16                           m_nScaleMode;
-        ::sal_Bool				            m_bPreserveIRI;
+        ::sal_Bool                          m_bPreserveIRI;
     private:
         OImageControl(const OImageControl&);
         OImageControl& operator=(const OImageControl&);
 
-        template <typename T> void set(	 const ::rtl::OUString& _sProperty
+        template <typename T> void set(  const ::rtl::OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)
         {
@@ -128,12 +128,12 @@ namespace reportdesign
 
         // XComponent
         virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException) 
-        { 
+        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
+        {
             cppu::WeakComponentImplHelperBase::addEventListener(aListener);
         }
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
-        { 
+        {
             cppu::WeakComponentImplHelperBase::removeEventListener(aListener);
         }
 

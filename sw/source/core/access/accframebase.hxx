@@ -36,9 +36,9 @@ class SwFlyFrm;
 class SwAccessibleFrameBase : public SwAccessibleContext,
                               public SwClient
 {
-    sal_Bool	bIsSelected;	// protected by base class mutex
+    sal_Bool    bIsSelected;    // protected by base class mutex
 
-    sal_Bool	IsSelected();
+    sal_Bool    IsSelected();
 
 protected:
 
@@ -58,7 +58,7 @@ public:
                            sal_Int16 nInitRole,
                            const SwFlyFrm *pFlyFrm );
 
-    virtual sal_Bool HasCursor();	// required by map to remember that object
+    virtual sal_Bool HasCursor();   // required by map to remember that object
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 

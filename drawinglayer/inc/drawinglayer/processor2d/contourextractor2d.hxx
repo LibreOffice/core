@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ namespace drawinglayer
         public:
             ContourExtractor2D(const geometry::ViewInformation2D& rViewInformation);
             virtual ~ContourExtractor2D();
-            
+
             const std::vector< basegfx::B2DPolyPolygon >& getExtractedContour() const { return maExtractedContour; }
         };
     } // end of namespace processor2d

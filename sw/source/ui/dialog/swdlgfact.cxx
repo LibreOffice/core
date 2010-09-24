@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@
 #include "pattern.hxx" //add for SwBackgroundDlg
 #include "rowht.hxx" //add for SwTableHeightDlg
 #include "selglos.hxx" //add for SwSelGlossaryDlg
-#include "splittbl.hxx" //add for SwSplitTblDlg 
+#include "splittbl.hxx" //add for SwSplitTblDlg
 #include "srtdlg.hxx" //add for SwSortDlg
 #include "tautofmt.hxx" //add for SwAutoFormatDlg
 #include "tblnumfm.hxx" //add for SwNumFmtDlg
@@ -385,7 +385,7 @@ Window* AbstractSwFldDlg_Impl::GetWindow()
 {
     return (Window*)pDlg;
 }
-void	AbstractSwFldDlg_Impl::ShowPage( USHORT nId )
+void    AbstractSwFldDlg_Impl::ShowPage( USHORT nId )
 {
     pDlg->ShowPage(nId);
 }
@@ -398,7 +398,7 @@ void AbstractSwRenameXNamedDlg_Impl::SetForbiddenChars( const String& rSet )
     pDlg->SetForbiddenChars( rSet );
 }
 
-void	AbstractSwRenameXNamedDlg_Impl::SetAlternativeAccess(
+void    AbstractSwRenameXNamedDlg_Impl::SetAlternativeAccess(
              STAR_REFERENCE( container::XNameAccess ) & xSecond,
              STAR_REFERENCE( container::XNameAccess ) & xThird )
 {
@@ -408,7 +408,7 @@ void	AbstractSwRenameXNamedDlg_Impl::SetAlternativeAccess(
 
 //add for SwModalRedlineAcceptDlg begin
 
-void	AbstractSwModalRedlineAcceptDlg_Impl::AcceptAll( BOOL bAccept )
+void    AbstractSwModalRedlineAcceptDlg_Impl::AcceptAll( BOOL bAccept )
 {
     pDlg->AcceptAll( bAccept);
 }
@@ -481,7 +481,7 @@ void AbstractInsTableDlg_Impl::GetValues( String& rName, USHORT& rRow, USHORT& r
                                 SwInsertTableOptions& rInsTblFlags, String& rTableAutoFmtName,
                                 SwTableAutoFmt *& prTAFmt )
 {
-    pDlg->GetValues( rName, rRow, rCol,	rInsTblFlags, rTableAutoFmtName, prTAFmt);
+    pDlg->GetValues( rName, rRow, rCol, rInsTblFlags, rTableAutoFmtName, prTAFmt);
 }
 // AbstractInsTableDlg_Impl end
 
@@ -727,8 +727,8 @@ AbstractSwAsciiFilterDlg* SwAbstractDialogFactory_Impl::CreateSwAsciiFilterDlg( 
 
 // add for SwInsertBookmarkDlg begin
 VclAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDlg( Window *pParent,
-                                                                           SwWrtShell &rSh, 
-                                                                           SfxRequest& rReq, 
+                                                                           SwWrtShell &rSh,
+                                                                           SfxRequest& rReq,
                                                                            int nResId )
 {
     Dialog* pDlg=NULL;
@@ -773,7 +773,7 @@ AbstractSwBreakDlg * SwAbstractDialogFactory_Impl::CreateSwBreakDlg ( Window *pP
 //add for SwBreakDlg end
 
 // add for SwChangeDBDlg begin
-VclAbstractDialog	* SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg( SwView& rVw, int nResId  )
+VclAbstractDialog   * SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg( SwView& rVw, int nResId  )
 {
     Dialog* pDlg=NULL;
     switch ( nResId )
@@ -816,7 +816,7 @@ SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwCharDlg(Window* pP
 // add for SwCharDlg end
 
 //add for SwConvertTableDlg begin
-AbstractSwConvertTableDlg* SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg ( 
+AbstractSwConvertTableDlg* SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg (
                                     SwView& rView,int nResId, bool bToTable )
 {
     SwConvertTableDlg* pDlg=NULL;
@@ -924,7 +924,7 @@ AbstractDropDownFieldDialog *  SwAbstractDialogFactory_Impl::CreateDropDownField
 
 //add for SwEnvDlg begin
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet,
-                                                                 SwWrtShell* pWrtSh, Printer* pPrt, 
+                                                                 SwWrtShell* pWrtSh, Printer* pPrt,
                                                                  BOOL bInsert,int nResId ) //add for SwEnvDlg
 {
     SfxTabDialog* pDlg=NULL;
@@ -974,7 +974,7 @@ SwLabDlgMethod SwAbstractDialogFactory_Impl::GetSwLabDlgStaticMethod ()
 
 //add for SwParaDlg begin
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwParaDlg ( Window *pParent, SwView& rVw,
-                                                    const SfxItemSet& rCoreSet	,
+                                                    const SfxItemSet& rCoreSet  ,
                                                     BYTE nDialogMode,
                                                     int nResId,
                                                     const String *pCollName,
@@ -1055,7 +1055,7 @@ AbstarctSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg 
 //add for SwSelGlossaryDlg end
 
 //add for SwAutoFormatDlg begin
-AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell, 
+AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell,
                                                                                     int nResId,
                                                                                     BOOL bSetAutoFmt,
                                                                                     const SwTableAutoFmt* pSelFmt )
@@ -1097,7 +1097,7 @@ SfxAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg (Window* pPa
 //add for SwBorderDlg end
 
 //add for SwWrapDlg begin
-SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode, int nResId ) 
+SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode, int nResId )
 {
     SfxModalDialog* pDlg=NULL;
     switch ( nResId )
@@ -1137,7 +1137,7 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg ( Window
 
  //add for SwTableTabDlg begin
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwTableTabDlg( Window* pParent, SfxItemPool& Pool,
-                                                        const SfxItemSet* pItemSet, SwWrtShell* pSh,int nResId ) 
+                                                        const SfxItemSet* pItemSet, SwWrtShell* pSh,int nResId )
 {
     SfxTabDialog* pDlg=NULL;
     switch ( nResId )
@@ -1177,7 +1177,7 @@ AbstractSwFldDlg * SwAbstractDialogFactory_Impl::CreateSwFldDlg ( SfxBindings* p
 //add for SwFldDlg end
 
 //add for SwFldEditDlg begin
-SfxAbstractDialog*	 SwAbstractDialogFactory_Impl::CreateSwFldEditDlg ( SwView& rVw, int nResId )
+SfxAbstractDialog*   SwAbstractDialogFactory_Impl::CreateSwFldEditDlg ( SwView& rVw, int nResId )
 {
     SfxModalDialog* pDlg=NULL;
     switch ( nResId )
@@ -1236,7 +1236,7 @@ AbstractSwModalRedlineAcceptDlg * SwAbstractDialogFactory_Impl::CreateSwModalRed
 }
 //add for SwModalRedlineAcceptDlg end
 
-VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwVclDialog( int nResId, 
+VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwVclDialog( int nResId,
                                                 Window* pParent, BOOL& rWithPrev ) //add for SwMergeTblDlg
 {
     Dialog* pDlg=NULL;
@@ -1255,11 +1255,11 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwVclDialog( int nResId,
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrmTabDialog( int nResId,
                                                 SfxViewFrame *pFrame, Window *pParent,
                                                 const SfxItemSet& rCoreSet,
-                                                BOOL			bNewFrm,
-                                                USHORT			nResType,
-                                                BOOL			bFmt,
-                                                UINT16			nDefPage,
-                                                const String* 	pFmtStr ) //add for SwFrmDlg
+                                                BOOL            bNewFrm,
+                                                USHORT          nResType,
+                                                BOOL            bFmt,
+                                                UINT16          nDefPage,
+                                                const String*   pFmtStr ) //add for SwFrmDlg
 {
     SfxTabDialog* pDlg=NULL;
     switch ( nResId )
@@ -1282,9 +1282,9 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog( int nR
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 USHORT              nRegion,
-                                                BOOL 				bColumn,
-                                                SwWrtShell* 		pActShell,
-                                                BOOL 				bNew ) //add for SwTemplateDlg
+                                                BOOL                bColumn,
+                                                SwWrtShell*         pActShell,
+                                                BOOL                bNew ) //add for SwTemplateDlg
 {
     SfxTabDialog* pDlg=NULL;
     switch ( nResId )
@@ -1302,8 +1302,8 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog( int nR
 }
 
 AbstractGlossaryDlg* SwAbstractDialogFactory_Impl::CreateGlossaryDlg( int nResId,
-                                                SfxViewFrame* pViewFrame, 
-                                                SwGlossaryHdl* pGlosHdl, 
+                                                SfxViewFrame* pViewFrame,
+                                                SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) //add for SwGlossaryDlg
 {
     SwGlossaryDlg* pDlg=NULL;
@@ -1355,7 +1355,7 @@ AbstractInsFootNoteDlg* SwAbstractDialogFactory_Impl::CreateInsFootNoteDlg( int 
     return 0;
 }
 
-VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclSwViewDialog( int nResId, 
+VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclSwViewDialog( int nResId,
                                             SwView& rView, BOOL /*bCol*/ ) //add for SwInsRowColDlg, SwLineNumberingDlg
 {
     Dialog* pDlg=NULL;
@@ -1373,7 +1373,7 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclSwViewDialog( int nRe
     return 0;
 }
 
-AbstractInsertGrfRulerDlg * SwAbstractDialogFactory_Impl::CreateInsertGrfRulerDlg( int nResId, 
+AbstractInsertGrfRulerDlg * SwAbstractDialogFactory_Impl::CreateInsertGrfRulerDlg( int nResId,
                                             Window * pParent ) //add for SwInsertGrfRulerDlg
 {
     SwInsertGrfRulerDlg* pDlg=NULL;
@@ -1479,7 +1479,7 @@ AbstractMailMergeFieldConnectionsDlg * SwAbstractDialogFactory_Impl::CreateMailM
     return 0;
 }
 
-VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg( int nResId, 
+VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg( int nResId,
                                                 Window* pParent, SwTOXMgr &rTOXMgr ) //add for SwMultiTOXMarkDlg
 {
     Dialog* pDlg=NULL;
@@ -1517,7 +1517,7 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwTabDialog( int nResI
         return new AbstractTabDialog_Impl( pDlg );
     return 0;
 }
-AbstractMultiTOXTabDialog * SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog( int nResId, 
+AbstractMultiTOXTabDialog * SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog( int nResId,
                                                 Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
                                                 SwTOXBase* pCurTOX, USHORT nToxType,
@@ -1536,7 +1536,7 @@ AbstractMultiTOXTabDialog * SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialo
         return new AbstractMultiTOXTabDialog_Impl( pDlg );
     return 0;
 }
-AbstractEditRegionDlg * SwAbstractDialogFactory_Impl::CreateEditRegionDlg( int nResId, 
+AbstractEditRegionDlg * SwAbstractDialogFactory_Impl::CreateEditRegionDlg( int nResId,
                                                 Window* pParent, SwWrtShell& rWrtSh ) //add for SwEditRegionDlg
 {
     SwEditRegionDlg* pDlg=NULL;
@@ -1552,7 +1552,7 @@ AbstractEditRegionDlg * SwAbstractDialogFactory_Impl::CreateEditRegionDlg( int n
         return new AbstractEditRegionDlg_Impl( pDlg );
     return 0;
 }
-AbstractInsertSectionTabDialog * SwAbstractDialogFactory_Impl::CreateInsertSectionTabDialog( int nResId, 
+AbstractInsertSectionTabDialog * SwAbstractDialogFactory_Impl::CreateInsertSectionTabDialog( int nResId,
                                                     Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) //add for SwInsertSectionTabDialog
 {
     SwInsertSectionTabDialog* pDlg=NULL;
@@ -1569,7 +1569,7 @@ AbstractInsertSectionTabDialog * SwAbstractDialogFactory_Impl::CreateInsertSecti
     return 0;
 }
 
-AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateIndexMarkFloatDlg( int nResId, 
+AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateIndexMarkFloatDlg( int nResId,
                                                     SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        Window *pParent,
@@ -1591,7 +1591,7 @@ AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateIndexMarkFloatDlg( in
     return 0;
 }
 
-AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDlg( int nResId, 
+AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDlg( int nResId,
                                                     SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        Window *pParent,
@@ -1613,7 +1613,7 @@ AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDlg( int
 }
 
 //add for SwIndexMarkModalDlg begin
-VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateIndexMarkModalDlg( int nResId, 
+VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateIndexMarkModalDlg( int nResId,
                                                 Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark ) //add for SwIndexMarkModalDlg
 {
     Dialog* pDlg=NULL;
@@ -1640,7 +1640,7 @@ AbstractMailMergeWizard*    SwAbstractDialogFactory_Impl::CreateMailMergeWizard(
 }
 
 //add for static func in SwGlossaryDlg
-GlossaryGetCurrGroup	SwAbstractDialogFactory_Impl::GetGlossaryCurrGroupFunc( USHORT nId )
+GlossaryGetCurrGroup    SwAbstractDialogFactory_Impl::GetGlossaryCurrGroupFunc( USHORT nId )
 {
     switch ( nId )
     {
@@ -1651,7 +1651,7 @@ GlossaryGetCurrGroup	SwAbstractDialogFactory_Impl::GetGlossaryCurrGroupFunc( USH
     }
     return 0;
 }
-GlossarySetActGroup	SwAbstractDialogFactory_Impl::SetGlossaryActGroupFunc( USHORT nId )
+GlossarySetActGroup SwAbstractDialogFactory_Impl::SetGlossaryActGroupFunc( USHORT nId )
 {
     switch ( nId )
     {

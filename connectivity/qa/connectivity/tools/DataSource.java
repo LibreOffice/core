@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -122,10 +122,10 @@ public class DataSource
     }
 
     /** returns the name of the data source
-     * 
+     *
      * If a data source is registered at the database context, the name is the registration
      * name. Otherwise, its the URL which the respective database document is based on.
-     * 
+     *
      * Note that the above definition is from the UNO API, not from this wrapper here.
      */
     public String getName()

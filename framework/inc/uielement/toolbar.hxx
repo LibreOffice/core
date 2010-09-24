@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 
@@ -44,15 +44,15 @@ class ToolBar : public ToolBox
     public:
                         ToolBar( Window* pParent, WinBits nWinBits );
         virtual         ~ToolBar();
-        
-        virtual void	Command ( const CommandEvent& rCEvt );
-        virtual void	StateChanged( StateChangedType nType );
-        virtual void	DataChanged( const DataChangedEvent& rDCEvt );
+
+        virtual void    Command ( const CommandEvent& rCEvt );
+        virtual void    StateChanged( StateChangedType nType );
+        virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
         // Toolbar manager
         void            SetToolBarManager( ToolBarManager* pTbMgr );
         ToolBarManager* GetToolBarManager() const { return m_pToolBarManager; }
-        
+
         // Provide additional handlers to support external implementations
         void            SetCommandHdl( const Link& aLink ) { m_aCommandHandler = aLink; }
         const Link&     GetCommandHdl() const { return m_aCommandHandler; }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 /*
  * Creates logfile and file for debug information
- * 
+ *
  */
 package com.sun.star.tooling.converter;
 
@@ -34,11 +34,11 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 
 /**
- * Handle the whole output during converting process except the converted files. 
- * Write output to logfiles and to screen depending on switches given 
+ * Handle the whole output during converting process except the converted files.
+ * Write output to logfiles and to screen depending on switches given
  * at command line.
  * @author Christian Schmidt 2005
- *  
+ *
  */
 public class OutputHandler {
 
@@ -67,7 +67,7 @@ public class OutputHandler {
     /**
      * Write the data to screen and if the switches were set to
      * logfile and debugfile
-     * 
+     *
      * @param out the String to write
      */
     final static void out(String out) {
@@ -100,9 +100,9 @@ public class OutputHandler {
     }
 
     /**
-     * write the data to log file and if the switch is set 
+     * write the data to log file and if the switch is set
      * to the debug file
-     * 
+     *
      * @param out the String to write
      */
     final static void log(String out) {
@@ -127,7 +127,7 @@ public class OutputHandler {
 
     /**
      * write the string to the debug file
-     * 
+     *
      * @param out the String to write
      * @throws IOException
      */
@@ -145,7 +145,7 @@ public class OutputHandler {
 
     /**
      * Set a new value to indicate whether a debug file should be written or not
-     * 
+     *
      * @param doDebug
      *            The debug value to set.
      */
@@ -153,16 +153,16 @@ public class OutputHandler {
         OutputHandler.doDebug = doDebug;
     }
 
-    //	/**
-    //	 * @return Returns the doDebug.
-    //	 */
-    //	private static boolean isDebug() {
-    //		return doDebug;
-    //	}
+    //  /**
+    //   * @return Returns the doDebug.
+    //   */
+    //  private static boolean isDebug() {
+    //      return doDebug;
+    //  }
 
     /**
-     * Set the debug file to write to. 
-     * 
+     * Set the debug file to write to.
+     *
      * @param dbgFile
      *            The debug File to use.
      */

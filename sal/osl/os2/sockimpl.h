@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,12 +37,12 @@ extern "C" {
 #endif
 
 typedef void* (*oslCloseCallback) (void*);
-    
+
 struct oslSocketImpl {
-    int					m_Socket;
+    int                 m_Socket;
     int                 m_nLastError;
-    oslCloseCallback	m_CloseCallback;
-    void*				m_CallbackArg;
+    oslCloseCallback    m_CloseCallback;
+    void*               m_CallbackArg;
     oslInterlockedCount m_nRefCount;
 #if defined(LINUX)
     sal_Bool            m_bIsAccepting;
@@ -58,7 +58,7 @@ struct oslSocketAddrImpl
 
 /*
 struct oslPipeImpl {
-    int	 m_Socket;
+    int  m_Socket;
     sal_Char m_Name[PATH_MAX + 1];
     oslInterlockedCount m_nRefCount;
     sal_Bool m_bClosed;
@@ -68,7 +68,7 @@ struct oslPipeImpl {
 #endif
 };
 */
-    
+
 oslSocket __osl_createSocketImpl(int Socket);
 void __osl_destroySocketImpl(oslSocket pImpl);
 
@@ -76,5 +76,5 @@ void __osl_destroySocketImpl(oslSocket pImpl);
 }
 #endif
 
-#endif 
+#endif
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -955,11 +955,11 @@ void WW8AttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTe
     m_rWW8Export.pO->Remove( 0, m_rWW8Export.pO->Count() ); // delete
 
     if ( pTextNodeInfoInner.get() != NULL )
-    {         
+    {
         if ( pTextNodeInfoInner->isEndOfLine() )
         {
             TableRowEnd( pTextNodeInfoInner->getDepth() );
-            
+
             SVBT16 nSty;
             ShortToSVBT16( 0, nSty );
             m_rWW8Export.pO->Insert( (BYTE*)&nSty, 2, m_rWW8Export.pO->Count() );     // Style #
@@ -1166,7 +1166,7 @@ void WW8AttributeOutput::CharAutoKern( const SvxAutoKernItem& rAutoKern )
         m_rWW8Export.InsUInt16( NS_sprm::LN_CHpsKern );
     else
         m_rWW8Export.pO->Insert( 107, m_rWW8Export.pO->Count() );
-    
+
     m_rWW8Export.InsUInt16( rAutoKern.GetValue() ? 1 : 0 );
 }
 
@@ -2217,12 +2217,12 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 //                    }
 
                 }
-                
+
 
         if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
                   {
             // Take the TOC value of the max level to evaluate to as
-            // the starting point for the \o flag, but reduce it to the 
+            // the starting point for the \o flag, but reduce it to the
             // value of the highest outline level filled by a *standard*
             // Heading 1 - 9 style because \o "Builds a table of
             // contents from paragraphs formatted with built-in heading
@@ -2236,7 +2236,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             // Heading 4
             // output
             // \o 1-2 \tcustom-style,3,Heading 3,4
- 
+
             // Search over all the outline styles used and figure out
             // what is the minimum outline level (if any) filled by a
             // non-standard style for that level, i.e. ignore headline
@@ -2259,20 +2259,20 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                               nPosOfLowestNonStandardLvl = ::sal::static_int_cast<BYTE>(pColl->GetAssignedOutlineStyleLevel());
                           }
                       }
-  
+
             BYTE nMaxMSAutoEvaluate = nPosOfLowestNonStandardLvl < nTOXLvl ? nPosOfLowestNonStandardLvl : (BYTE)nTOXLvl;
-  
+
             //output \o 1-X where X is the highest normal outline style to be included in the toc
             if ( nMaxMSAutoEvaluate )
               {
             if (nMaxMSAutoEvaluate > WW8ListManager::nMaxLevel)
               nMaxMSAutoEvaluate = WW8ListManager::nMaxLevel;
-  
+
             sStr.APPEND_CONST_ASC( "\\o \"1-" );
             sStr += String::CreateFromInt32( nMaxMSAutoEvaluate );
             sStr.AppendAscii(sEntryEnd);
                       }
-  
+
             //collect up any other styles in the writer TOC which will
             //not already appear in the MS TOC and place then into the
             //\t option
@@ -2396,7 +2396,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 WRITEFIELD_CMD_END );
         }
     }
-        
+
     GetExport( ).bStartTOX = false;
 }
 
@@ -2566,7 +2566,7 @@ void WW8AttributeOutput::SetField( const SwField& rFld, ww::eField eType, const 
     GetExport().OutputField(&rFld, eType, rCmd, WRITEFIELD_CLOSE);
 }
 
-void WW8AttributeOutput::PostitField( const SwField* pFld ) 
+void WW8AttributeOutput::PostitField( const SwField* pFld )
 {
     const SwPostItField *pPFld = (const SwPostItField*)pFld;
     m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pPFld );
@@ -2773,12 +2773,12 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                         static String sQuotes('\"');
                         const SwDocInfoField * pDocInfoField =
                         dynamic_cast<const SwDocInfoField *> (pFld);
-                        
+
                         if (pDocInfoField != NULL)
                         {
                             String sFieldname = pDocInfoField->GetCntnt(TRUE);
                             xub_StrLen nIndex = sFieldname.Search(':');
-                            
+
                             if (nIndex != sFieldname.Len())
                                 sFieldname = sFieldname.Copy(nIndex + 1);
 
@@ -3340,7 +3340,7 @@ void WW8AttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
         m_rWW8Export.pO->Insert( (BYTE)0x02, m_rWW8Export.pO->Count() );
 
         sal_Unicode cStart = rTwoLines.GetStartBracket();
-        sal_Unicode cEnd = rTwoLines.GetStartBracket();
+        sal_Unicode cEnd = rTwoLines.GetEndBracket();
 
         /*
         As per usual we have problems. We can have seperate left and right brackets
@@ -3756,7 +3756,7 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
                 if ( rGrid.IsSnapToChars() )
                     nGridType = 3;
                 else
-                    nGridType = 1; 
+                    nGridType = 1;
                 break;
         }
         m_rWW8Export.InsUInt16( NS_sprm::LN_SClm );
@@ -3774,25 +3774,12 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         if (pSwFmt != NULL)
         {
             nPageCharSize = ItemGet<SvxFontHeightItem>
-            (*pSwFmt, RES_CHRATR_CJK_FONTSIZE).GetHeight();
+            (*pSwFmt, RES_CHRATR_FONTSIZE).GetHeight();
         }
+        sal_uInt16 nPitch = rGrid.IsSquaredMode() ? rGrid.GetBaseHeight() :
+            rGrid.GetBaseWidth( );
+        INT32 nCharSpace = ( nPitch - nPageCharSize ) * 4096 / 20;
 
-        INT32 nCharWidth = rGrid.GetBaseWidth() - nPageCharSize;
-        INT32 nFraction = 0;
-        nFraction = nCharWidth % 20;
-        if ( nCharWidth < 0 )
-            nFraction = 20 + nFraction;
-        nFraction = ( nFraction * 0xFFF ) / 20;
-        nFraction = ( nFraction & 0x00000FFF );
-
-        INT32 nMain = 0;
-        nMain = nCharWidth / 20;
-        if ( nCharWidth < 0 )
-            nMain -= 1;
-        nMain = nMain * 0x1000;
-        nMain = ( nMain & 0xFFFFF000 );
-
-        UINT32 nCharSpace = nFraction + nMain;
         m_rWW8Export.InsUInt16( NS_sprm::LN_SDxtCharSpace );
         m_rWW8Export.InsUInt32( nCharSpace );
     }
@@ -4382,8 +4369,8 @@ void WW8AttributeOutput::FormatColumns_Impl( USHORT nCols, const SwFmtCol & rCol
     else
         m_rWW8Export.pO->Insert( 138, m_rWW8Export.pO->Count(  ) );
     m_rWW8Export.pO->Insert( bEven ? 1 : 0, m_rWW8Export.pO->Count(  ) );
-    
-#if 0 
+
+#if 0
     // FIXME what's the use of this code
     if ( bEven )
     {
@@ -4492,7 +4479,7 @@ void AttributeOutputBase::FormatColumns( const SwFmtCol& rCol )
                 break;
             }
         }
-        
+
         FormatColumns_Impl( nCols, rCol, bEven, nPageSize );
     }
 }
@@ -4995,11 +4982,11 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
 {
     bool bTabsRelativeToIndex = m_rWW8Export.pCurPam->GetDoc()->get( IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT );
     long nCurrentLeft = 0;
-    
+
     if ( bTabsRelativeToIndex )
     {
         const SfxPoolItem* pLR = m_rWW8Export.HasItem( RES_LR_SPACE );
-        
+
         if ( pLR != NULL )
             nCurrentLeft = ((const SvxLRSpaceItem*)pLR)->GetTxtLeft();
     }
@@ -5007,7 +4994,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
     // --> FLR 2009-03-17 #i100264#
     if ( m_rWW8Export.bStyDef &&
          m_rWW8Export.pCurrentStyle != NULL &&
-         m_rWW8Export.pCurrentStyle->DerivedFrom() != NULL ) 
+         m_rWW8Export.pCurrentStyle->DerivedFrom() != NULL )
     {
         SvxTabStopItem aTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
         const SwFmt *pParentStyle = m_rWW8Export.pCurrentStyle->DerivedFrom();
@@ -5016,7 +5003,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
         {
             aTabs.Insert( pParentTabs );
         }
-        
+
         ParaTabStopDelAdd( m_rWW8Export, aTabs, 0, rTabStops, 0 );
         return;
     }
@@ -5035,7 +5022,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
     else
     {
         long nStyleLeft = 0;
-        
+
         if (bTabsRelativeToIndex)
         {
             const SvxLRSpaceItem &rStyleLR =

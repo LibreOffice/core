@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 #ifndef _SFX_REFERERS_HXX
 #define _SFX_REFERERS_HXX
 
-#define SFX_REFERER_USER		"private:user"
+#define SFX_REFERER_USER        "private:user"
 #define SFX_REFERER_APPEVENT    "private:appevent"
 #define SFX_REFERER_EXPLORER    "private:explorer"
 #define SFX_REFERER_NEWMENU     "private:newmenu"

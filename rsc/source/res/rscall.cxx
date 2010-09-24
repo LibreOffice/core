@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,26 +37,26 @@
 #include <rscall.h>
 #include <rsckey.hxx>
 
-Atom	nRsc_XYMAPMODEId = InvalidAtom;
-Atom	nRsc_WHMAPMODEId = InvalidAtom;
-Atom	nRsc_X = InvalidAtom;
-Atom	nRsc_Y = InvalidAtom;
-Atom	nRsc_WIDTH = InvalidAtom;
-Atom	nRsc_HEIGHT = InvalidAtom;
-Atom	nRsc_DELTALANG = InvalidAtom;
-Atom	nRsc_DELTASYSTEM = InvalidAtom;
-Atom	nRsc_EXTRADATA = InvalidAtom;
+Atom    nRsc_XYMAPMODEId = InvalidAtom;
+Atom    nRsc_WHMAPMODEId = InvalidAtom;
+Atom    nRsc_X = InvalidAtom;
+Atom    nRsc_Y = InvalidAtom;
+Atom    nRsc_WIDTH = InvalidAtom;
+Atom    nRsc_HEIGHT = InvalidAtom;
+Atom    nRsc_DELTALANG = InvalidAtom;
+Atom    nRsc_DELTASYSTEM = InvalidAtom;
+Atom    nRsc_EXTRADATA = InvalidAtom;
 
 void InitRscCompiler()
 {
-    pStdParType 	 = new ByteString( "( const ResId & rResId, BOOL" );
-    pStdPar1		 = new ByteString( '(' );
-    pStdPar2		 = new ByteString( '(' );
+    pStdParType      = new ByteString( "( const ResId & rResId, BOOL" );
+    pStdPar1         = new ByteString( '(' );
+    pStdPar2         = new ByteString( '(' );
 
-    pWinParType 	 = new ByteString( "( Window * pParent, const ResId & rResId, BOOL" );
-    pWinPar1		 = new ByteString( "( pParent," );
-    pWinPar2		 = new ByteString( "( this," );
-    nRefDeep		 = 10;
+    pWinParType      = new ByteString( "( Window * pParent, const ResId & rResId, BOOL" );
+    pWinPar1         = new ByteString( "( pParent," );
+    pWinPar2         = new ByteString( "( this," );
+    nRefDeep         = 10;
     nRsc_XYMAPMODEId = InvalidAtom;
     nRsc_WHMAPMODEId = InvalidAtom;
     pHS = new AtomContainer();

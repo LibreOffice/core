@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -61,7 +61,7 @@ namespace sdr
         protected:
             // the owner of this Properties. Set from constructor and not
             // to be changed in any way.
-            SdrObject&										mrObject;
+            SdrObject&                                      mrObject;
 
             // create a new object specific itemset with object specific ranges.
             virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& pPool) = 0;
@@ -80,7 +80,7 @@ namespace sdr
             // Also needs to handle if nWhich and pNewItem is 0, which means to clear all items.
             virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) = 0;
 
-            // Called after ItemChange() is done for all items. Allows local reactions on 
+            // Called after ItemChange() is done for all items. Allows local reactions on
             // specific item changes
             virtual void PostItemChange(const sal_uInt16 nWhich) = 0;
 
@@ -181,7 +181,7 @@ namespace sdr
             // ClearItemAndBroadcast() and SetItemSetAndBroadcast(), see above.
             // But also from inside SdrObjects.
             void BroadcastItemChange(const ItemChangeBroadcaster& rChange);
-            
+
             // #i101556# add versioning mechanism; used from e.g. text attribute set to
             // allow detection of e.g. style sheet or single text attribute changes. The
             // default implementation returns 0 (zero)

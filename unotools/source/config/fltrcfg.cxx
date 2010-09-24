@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,25 +42,25 @@ using namespace com::sun::star::uno;
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
 // -----------------------------------------------------------------------
-#define FILTERCFG_WORD_CODE 			0x0001
-#define FILTERCFG_WORD_STORAGE 			0x0002
-#define FILTERCFG_EXCEL_CODE 			0x0004
-#define FILTERCFG_EXCEL_STORAGE 		0x0008
-#define FILTERCFG_PPOINT_CODE 			0x0010
-#define FILTERCFG_PPOINT_STORAGE 		0x0020
-#define FILTERCFG_MATH_LOAD				0x0100
-#define FILTERCFG_MATH_SAVE				0x0200
-#define FILTERCFG_WRITER_LOAD			0x0400
-#define FILTERCFG_WRITER_SAVE			0x0800
-#define FILTERCFG_CALC_LOAD				0x1000
-#define FILTERCFG_CALC_SAVE				0x2000
-#define FILTERCFG_IMPRESS_LOAD			0x4000
-#define FILTERCFG_IMPRESS_SAVE			0x8000
-#define FILTERCFG_EXCEL_EXECTBL			0x10000
+#define FILTERCFG_WORD_CODE             0x0001
+#define FILTERCFG_WORD_STORAGE          0x0002
+#define FILTERCFG_EXCEL_CODE            0x0004
+#define FILTERCFG_EXCEL_STORAGE         0x0008
+#define FILTERCFG_PPOINT_CODE           0x0010
+#define FILTERCFG_PPOINT_STORAGE        0x0020
+#define FILTERCFG_MATH_LOAD             0x0100
+#define FILTERCFG_MATH_SAVE             0x0200
+#define FILTERCFG_WRITER_LOAD           0x0400
+#define FILTERCFG_WRITER_SAVE           0x0800
+#define FILTERCFG_CALC_LOAD             0x1000
+#define FILTERCFG_CALC_SAVE             0x2000
+#define FILTERCFG_IMPRESS_LOAD          0x4000
+#define FILTERCFG_IMPRESS_SAVE          0x8000
+#define FILTERCFG_EXCEL_EXECTBL         0x10000
 #define FILTERCFG_ENABLE_PPT_PREVIEW    0x20000
 #define FILTERCFG_ENABLE_EXCEL_PREVIEW  0x40000
 #define FILTERCFG_ENABLE_WORD_PREVIEW   0x80000
-#define FILTERCFG_USE_ENHANCED_FIELDS	0x100000
+#define FILTERCFG_USE_ENHANCED_FIELDS   0x100000
 
 static SvtFilterOptions* pOptions=0;
 
@@ -69,27 +69,27 @@ static SvtFilterOptions* pOptions=0;
  ---------------------------------------------------------------------------*/
 class SvtAppFilterOptions_Impl : public utl::ConfigItem
 {
-    sal_Bool				bLoadVBA;
-    sal_Bool				bSaveVBA;
+    sal_Bool                bLoadVBA;
+    sal_Bool                bSaveVBA;
 public:
     SvtAppFilterOptions_Impl(const OUString& rRoot) :
         utl::ConfigItem(rRoot),
         bLoadVBA(sal_False),
-        bSaveVBA(sal_False)	 {}
+        bSaveVBA(sal_False)  {}
     ~SvtAppFilterOptions_Impl();
-    virtual void			Commit();
-    virtual void    		Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
-    void					Load();
+    virtual void            Commit();
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    void                    Load();
 
-    sal_Bool				IsLoad() const {return bLoadVBA;}
-    void					SetLoad(sal_Bool bSet)
+    sal_Bool                IsLoad() const {return bLoadVBA;}
+    void                    SetLoad(sal_Bool bSet)
                             {
                                 if(bSet != bLoadVBA)
                                     SetModified();
                                 bLoadVBA = bSet;
                             }
-    sal_Bool				IsSave() const {return bSaveVBA;}
-    void					SetSave(sal_Bool bSet)
+    sal_Bool                IsSave() const {return bSaveVBA;}
+    void                    SetSave(sal_Bool bSet)
                             {
                                 if(bSet != bSaveVBA)
                                     SetModified();
@@ -108,7 +108,7 @@ SvtAppFilterOptions_Impl::~SvtAppFilterOptions_Impl()
 /* -----------------------------22.01.01 10:38--------------------------------
 
  ---------------------------------------------------------------------------*/
-void	SvtAppFilterOptions_Impl::Commit()
+void    SvtAppFilterOptions_Impl::Commit()
 {
     Sequence<OUString> aNames(2);
     OUString* pNames = aNames.getArray();
@@ -133,7 +133,7 @@ void SvtAppFilterOptions_Impl::Notify( const Sequence< rtl::OUString >&  )
 /* -----------------------------22.01.01 10:38--------------------------------
 
  ---------------------------------------------------------------------------*/
-void	SvtAppFilterOptions_Impl::Load()
+void    SvtAppFilterOptions_Impl::Load()
 {
     Sequence<OUString> aNames(2);
     OUString* pNames = aNames.getArray();
@@ -152,17 +152,17 @@ void	SvtAppFilterOptions_Impl::Load()
 // -----------------------------------------------------------------------
 class SvtCalcFilterOptions_Impl : public SvtAppFilterOptions_Impl
 {
-    sal_Bool				bLoadExecutable;
+    sal_Bool                bLoadExecutable;
 public:
     SvtCalcFilterOptions_Impl(const OUString& rRoot) :
         SvtAppFilterOptions_Impl(rRoot),
         bLoadExecutable(sal_False)
     {}
-    virtual void			Commit();
-    void					Load();
+    virtual void            Commit();
+    void                    Load();
 
-    sal_Bool				IsLoadExecutable() const {return bLoadExecutable;}
-    void					SetLoadExecutable(sal_Bool bSet)
+    sal_Bool                IsLoadExecutable() const {return bLoadExecutable;}
+    void                    SetLoadExecutable(sal_Bool bSet)
                             {
                                 if(bSet != bLoadExecutable)
                                     SetModified();
@@ -244,13 +244,13 @@ void SvtFilterOptions_Impl::SetFlag( ULONG nFlag, BOOL bSet )
 {
     switch(nFlag)
     {
-        case FILTERCFG_WORD_CODE:		aWriterCfg.SetLoad(bSet);break;
-        case FILTERCFG_WORD_STORAGE:	aWriterCfg.SetSave(bSet);break;
-        case FILTERCFG_EXCEL_CODE:		aCalcCfg.SetLoad(bSet);break;
-        case FILTERCFG_EXCEL_STORAGE:	aCalcCfg.SetSave(bSet);break;
-        case FILTERCFG_EXCEL_EXECTBL:	aCalcCfg.SetLoadExecutable(bSet);break;
-        case FILTERCFG_PPOINT_CODE:		aImpressCfg.SetLoad(bSet);break;
-        case FILTERCFG_PPOINT_STORAGE:	aImpressCfg.SetSave(bSet);break;
+        case FILTERCFG_WORD_CODE:       aWriterCfg.SetLoad(bSet);break;
+        case FILTERCFG_WORD_STORAGE:    aWriterCfg.SetSave(bSet);break;
+        case FILTERCFG_EXCEL_CODE:      aCalcCfg.SetLoad(bSet);break;
+        case FILTERCFG_EXCEL_STORAGE:   aCalcCfg.SetSave(bSet);break;
+        case FILTERCFG_EXCEL_EXECTBL:   aCalcCfg.SetLoadExecutable(bSet);break;
+        case FILTERCFG_PPOINT_CODE:     aImpressCfg.SetLoad(bSet);break;
+        case FILTERCFG_PPOINT_STORAGE:  aImpressCfg.SetSave(bSet);break;
         default:
             if( bSet )
                 nFlags |= nFlag;
@@ -266,13 +266,13 @@ BOOL SvtFilterOptions_Impl::IsFlag( ULONG nFlag ) const
     BOOL bRet;
     switch(nFlag)
     {
-        case FILTERCFG_WORD_CODE 		: bRet = aWriterCfg.IsLoad();break;
-        case FILTERCFG_WORD_STORAGE   	: bRet = aWriterCfg.IsSave();break;
-        case FILTERCFG_EXCEL_CODE 	    : bRet = aCalcCfg.IsLoad();break;
+        case FILTERCFG_WORD_CODE        : bRet = aWriterCfg.IsLoad();break;
+        case FILTERCFG_WORD_STORAGE     : bRet = aWriterCfg.IsSave();break;
+        case FILTERCFG_EXCEL_CODE       : bRet = aCalcCfg.IsLoad();break;
         case FILTERCFG_EXCEL_STORAGE    : bRet = aCalcCfg.IsSave();break;
-        case FILTERCFG_EXCEL_EXECTBL	: bRet = aCalcCfg.IsLoadExecutable();break;
-        case FILTERCFG_PPOINT_CODE 	 	: bRet = aImpressCfg.IsLoad();break;
-        case FILTERCFG_PPOINT_STORAGE	: bRet = aImpressCfg.IsSave();break;
+        case FILTERCFG_EXCEL_EXECTBL    : bRet = aCalcCfg.IsLoadExecutable();break;
+        case FILTERCFG_PPOINT_CODE      : bRet = aImpressCfg.IsLoad();break;
+        case FILTERCFG_PPOINT_STORAGE   : bRet = aImpressCfg.IsSave();break;
         default:
             bRet = 0 != (nFlags & nFlag );
     }
@@ -306,17 +306,17 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
-            "Import/MathTypeToMath",			//  0
-            "Import/WinWordToWriter",			//  1
-            "Import/PowerPointToImpress",		//  2
-            "Import/ExcelToCalc",				//  3
+            "Import/MathTypeToMath",            //  0
+            "Import/WinWordToWriter",           //  1
+            "Import/PowerPointToImpress",       //  2
+            "Import/ExcelToCalc",               //  3
             "Export/MathToMathType",            //  4
             "Export/WriterToWinWord",           //  5
             "Export/ImpressToPowerPoint",       //  6
-            "Export/CalcToExcel",            	//  7
-            "Export/EnablePowerPointPreview",	//	8
-            "Export/EnableExcelPreview",		//	9
-            "Export/EnableWordPreview",			// 10
+            "Export/CalcToExcel",               //  7
+            "Export/EnablePowerPointPreview",   //  8
+            "Export/EnableExcelPreview",        //  9
+            "Export/EnableWordPreview",         // 10
             "Import/ImportWWFieldsAsEnhancedFields" // 11
         };
         OUString* pNames = aNames.getArray();

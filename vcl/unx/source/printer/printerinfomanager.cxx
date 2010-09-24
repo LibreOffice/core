@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,16 +69,16 @@ namespace psp
         std::list< PrinterInfoManager::SystemPrintQueue >
                                     m_aQueues;
         OUString                    m_aCommand;
-        
+
         virtual void run();
-        
+
         public:
         SystemQueueInfo();
         ~SystemQueueInfo();
-        
+
         bool hasChanged() const;
         OUString getCommand() const;
-        
+
         // sets changed status to false; therefore not const
         void getSystemQueues( std::list< PrinterInfoManager::SystemPrintQueue >& rQueues );
     };
@@ -93,20 +93,20 @@ namespace psp
 PrinterInfoManager& PrinterInfoManager::get()
 {
     static PrinterInfoManager* pManager = NULL;
-    
+
     if( ! pManager )
     {
         pManager = CUPSManager::tryLoadCUPS();
         if( ! pManager )
             pManager = new PrinterInfoManager();
-        
+
         if( pManager )
             pManager->initialize();
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "PrinterInfoManager::get create Manager of type %d\n", pManager->getType() );
         #endif
     }
-    
+
     return *pManager;
 }
 
@@ -187,7 +187,7 @@ bool PrinterInfoManager::checkPrintersChanged( bool bWait )
             }
         }
     }
-    
+
     if( bWait && m_pQueueInfo )
     {
         #if OSL_DEBUG_LEVEL > 1
@@ -198,14 +198,14 @@ bool PrinterInfoManager::checkPrintersChanged( bool bWait )
         fprintf( stderr, "done: syncing printer discovery thread\n" );
         #endif
     }
-    
+
     if( ! bChanged && m_pQueueInfo )
         bChanged = m_pQueueInfo->hasChanged();
     if( bChanged )
     {
         initialize();
     }
-    
+
     return bChanged;
 }
 
@@ -218,19 +218,19 @@ void PrinterInfoManager::initialize()
     m_aPrinters.clear();
     m_aWatchFiles.clear();
     OUString aDefaultPrinter;
-    
+
     // first initialize the global defaults
     // have to iterate over all possible files
     // there should be only one global setup section in all
     // available config files
     m_aGlobalDefaults = PrinterInfo();
-    
+
     // need a parser for the PPDContext. generic printer should do.
     m_aGlobalDefaults.m_pParser = PPDParser::getParser( String( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) );
     m_aGlobalDefaults.m_aContext.setParser( m_aGlobalDefaults.m_pParser );
     m_aGlobalDefaults.m_bPerformFontSubstitution = true;
     m_bDisableCUPS = false;
-    
+
     if( ! m_aGlobalDefaults.m_pParser )
     {
         #if OSL_DEBUG_LEVEL > 1
@@ -238,7 +238,7 @@ void PrinterInfoManager::initialize()
         #endif
         return;
     }
-    
+
     std::list< OUString > aDirList;
     psp::getPrinterPathList( aDirList, NULL );
     std::list< OUString >::const_iterator print_dir_it;
@@ -253,15 +253,15 @@ void PrinterInfoManager::initialize()
             fprintf( stderr, "found global defaults in %s\n", OUStringToOString( aFile.PathToFileName(), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
             #endif
             aConfig.SetGroup( GLOBAL_DEFAULTS_GROUP );
-            
+
             ByteString aValue( aConfig.ReadKey( "Copies" ) );
             if( aValue.Len() )
                 m_aGlobalDefaults.m_nCopies = aValue.ToInt32();
-            
+
             aValue = aConfig.ReadKey( "Orientation" );
             if( aValue.Len() )
                 m_aGlobalDefaults.m_eOrientation = aValue.EqualsIgnoreCaseAscii( "Landscape" ) ? orientation::Landscape : orientation::Portrait;
-            
+
             aValue = aConfig.ReadKey( "MarginAdjust" );
             if( aValue.Len() )
             {
@@ -270,19 +270,19 @@ void PrinterInfoManager::initialize()
                 m_aGlobalDefaults.m_nTopMarginAdjust    = aValue.GetToken( 2, ',' ).ToInt32();
                 m_aGlobalDefaults.m_nBottomMarginAdjust = aValue.GetToken( 3, ',' ).ToInt32();
             }
-            
+
             aValue = aConfig.ReadKey( "ColorDepth", "24" );
             if( aValue.Len() )
                 m_aGlobalDefaults.m_nColorDepth = aValue.ToInt32();
-            
+
             aValue = aConfig.ReadKey( "ColorDevice" );
             if( aValue.Len() )
                 m_aGlobalDefaults.m_nColorDevice = aValue.ToInt32();
-            
+
             aValue = aConfig.ReadKey( "PSLevel" );
             if( aValue.Len() )
                 m_aGlobalDefaults.m_nPSLevel = aValue.ToInt32();
-            
+
             aValue = aConfig.ReadKey( "PerformFontSubstitution" );
             if( aValue.Len() )
             {
@@ -291,7 +291,7 @@ void PrinterInfoManager::initialize()
                 else
                     m_aGlobalDefaults.m_bPerformFontSubstitution = false;
             }
-            
+
             aValue = aConfig.ReadKey( "DisableCUPS" );
             if( aValue.Len() )
             {
@@ -300,7 +300,7 @@ void PrinterInfoManager::initialize()
                 else
                     m_bDisableCUPS = false;
             }
-            
+
             // get the PPDContext of global JobData
             for( int nKey = 0; nKey < aConfig.GetKeyCount(); nKey++ )
             {
@@ -330,14 +330,14 @@ void PrinterInfoManager::initialize()
     }
     setDefaultPaper( m_aGlobalDefaults.m_aContext );
     fillFontSubstitutions( m_aGlobalDefaults );
-    
+
     // now collect all available printers
     for( print_dir_it = aDirList.begin(); print_dir_it != aDirList.end(); ++print_dir_it )
     {
         INetURLObject aDir( *print_dir_it, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         INetURLObject aFile( aDir );
         aFile.Append( String( RTL_CONSTASCII_USTRINGPARAM( PRINT_FILENAME ) ) );
-        
+
         // check directory validity
         OUString aUniPath;
         FileBase::getFileURLFromSystemPath( aDir.PathToFileName(), aUniPath );
@@ -345,12 +345,12 @@ void PrinterInfoManager::initialize()
         if( aDirectory.open() )
             continue;
         aDirectory.close();
-        
-        
+
+
         FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aUniPath );
         FileStatus aStatus( FileStatusMask_ModifyTime );
         DirectoryItem aItem;
-        
+
         // setup WatchFile list
         WatchFile aWatchFile;
         aWatchFile.m_aFilePath = aUniPath;
@@ -365,7 +365,7 @@ void PrinterInfoManager::initialize()
             aWatchFile.m_aModified.Nanosec = 0;
         }
         m_aWatchFiles.push_back( aWatchFile );
-        
+
         Config aConfig( aFile.PathToFileName() );
         for( int nGroup = 0; nGroup < aConfig.GetGroupCount(); nGroup++ )
         {
@@ -374,12 +374,12 @@ void PrinterInfoManager::initialize()
             if( aValue.Len() )
             {
                 OUString aPrinterName;
-                
+
                 int nNamePos = aValue.Search( '/' );
                 // check for valid value of "Printer"
                 if( nNamePos == STRING_NOTFOUND )
                     continue;
-                
+
                 Printer aPrinter;
                 // initialize to global defaults
                 aPrinter.m_aInfo = m_aGlobalDefaults;
@@ -388,11 +388,11 @@ void PrinterInfoManager::initialize()
                 // newly created printers
                 aPrinter.m_aInfo.m_aFontSubstitutes.clear();
                 aPrinter.m_aInfo.m_aFontSubstitutions.clear();
-                
+
                 aPrinterName = String( aValue.Copy( nNamePos+1 ), RTL_TEXTENCODING_UTF8 );
                 aPrinter.m_aInfo.m_aPrinterName     = aPrinterName;
                 aPrinter.m_aInfo.m_aDriverName      = String( aValue.Copy( 0, nNamePos ), RTL_TEXTENCODING_UTF8 );
-                
+
                 // set parser, merge settings
                 // don't do this for CUPS printers as this is done
                 // by the CUPS system itself
@@ -401,11 +401,11 @@ void PrinterInfoManager::initialize()
                     aPrinter.m_aInfo.m_pParser          = PPDParser::getParser( aPrinter.m_aInfo.m_aDriverName );
                     aPrinter.m_aInfo.m_aContext.setParser( aPrinter.m_aInfo.m_pParser );
                     // note: setParser also purges the context
-                    
+
                     // ignore this printer if its driver is not found
                     if( ! aPrinter.m_aInfo.m_pParser )
                         continue;
-                    
+
                     // merge the ppd context keys if the printer has the same keys and values
                     // this is a bit tricky, since it involves mixing two PPDs
                     // without constraints which might end up badly
@@ -430,7 +430,7 @@ void PrinterInfoManager::initialize()
                                 aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, NULL );
                         }
                     }
-                    
+
                     aValue = aConfig.ReadKey( "Command" );
                     // no printer without a command
                     if( ! aValue.Len() )
@@ -447,32 +447,32 @@ void PrinterInfoManager::initialize()
                     }
                     aPrinter.m_aInfo.m_aCommand = String( aValue, RTL_TEXTENCODING_UTF8 );
                 }
-                
+
                 aValue = aConfig.ReadKey( "QuickCommand" );
                 aPrinter.m_aInfo.m_aQuickCommand = String( aValue, RTL_TEXTENCODING_UTF8 );
-                
+
                 aValue = aConfig.ReadKey( "Features" );
                 aPrinter.m_aInfo.m_aFeatures = String( aValue, RTL_TEXTENCODING_UTF8 );
-                
+
                 // override the settings in m_aGlobalDefaults if keys exist
                 aValue = aConfig.ReadKey( "DefaultPrinter" );
                 if( ! aValue.Equals( "0" ) && ! aValue.EqualsIgnoreCaseAscii( "false" ) )
                     aDefaultPrinter = aPrinterName;
-                
+
                 aValue = aConfig.ReadKey( "Location" );
                 aPrinter.m_aInfo.m_aLocation = String( aValue, RTL_TEXTENCODING_UTF8 );
-                
+
                 aValue = aConfig.ReadKey( "Comment" );
                 aPrinter.m_aInfo.m_aComment = String( aValue, RTL_TEXTENCODING_UTF8 );
-                
+
                 aValue = aConfig.ReadKey( "Copies" );
                 if( aValue.Len() )
                     aPrinter.m_aInfo.m_nCopies = aValue.ToInt32();
-                
+
                 aValue = aConfig.ReadKey( "Orientation" );
                 if( aValue.Len() )
                     aPrinter.m_aInfo.m_eOrientation = aValue.EqualsIgnoreCaseAscii( "Landscape" ) ? orientation::Landscape : orientation::Portrait;
-                
+
                 aValue = aConfig.ReadKey( "MarginAdjust" );
                 if( aValue.Len() )
                 {
@@ -481,25 +481,25 @@ void PrinterInfoManager::initialize()
                     aPrinter.m_aInfo.m_nTopMarginAdjust     = aValue.GetToken( 2, ',' ).ToInt32();
                     aPrinter.m_aInfo.m_nBottomMarginAdjust  = aValue.GetToken( 3, ',' ).ToInt32();
                 }
-                
+
                 aValue = aConfig.ReadKey( "ColorDepth" );
                 if( aValue.Len() )
                     aPrinter.m_aInfo.m_nColorDepth = aValue.ToInt32();
-                
+
                 aValue = aConfig.ReadKey( "ColorDevice" );
                 if( aValue.Len() )
                     aPrinter.m_aInfo.m_nColorDevice = aValue.ToInt32();
-                
+
                 aValue = aConfig.ReadKey( "PSLevel" );
                 if( aValue.Len() )
                     aPrinter.m_aInfo.m_nPSLevel = aValue.ToInt32();
-                
+
                 aValue = aConfig.ReadKey( "PerformFontSubstitution" );
                 if( ! aValue.Equals( "0" ) && ! aValue.EqualsIgnoreCaseAscii( "false" ) )
                     aPrinter.m_aInfo.m_bPerformFontSubstitution = true;
                 else
                     aPrinter.m_aInfo.m_bPerformFontSubstitution = false;
-                
+
                 // now iterate over all keys to extract multi key information:
                 // 1. PPDContext information
                 // 2. Font substitution table
@@ -524,10 +524,10 @@ void PrinterInfoManager::initialize()
                         aPrinter.m_aInfo.m_aFontSubstitutes[ OStringToOUString( aKey.Copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
                     }
                 }
-                
+
                 setDefaultPaper( aPrinter.m_aInfo.m_aContext );
                 fillFontSubstitutions( aPrinter.m_aInfo );
-                
+
                 // finally insert printer
                 FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aPrinter.m_aFile );
                 aPrinter.m_bModified    = false;
@@ -543,7 +543,7 @@ void PrinterInfoManager::initialize()
             }
         }
     }
-    
+
     // set default printer
     if( m_aPrinters.size() )
     {
@@ -553,23 +553,23 @@ void PrinterInfoManager::initialize()
     else
         aDefaultPrinter = OUString();
     m_aDefaultPrinter = aDefaultPrinter;
-    
+
     if( m_eType != Default )
         return;
-    
+
     // add a default printer for every available print queue
     // merge paper and font substitution from default printer,
     // all else from global defaults
     PrinterInfo aMergeInfo( m_aGlobalDefaults );
     aMergeInfo.m_aDriverName    = String( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) );
     aMergeInfo.m_aFeatures      = String( RTL_CONSTASCII_USTRINGPARAM( "autoqueue" ) );
-    
+
     if( m_aDefaultPrinter.getLength() )
     {
         PrinterInfo aDefaultInfo( getPrinterInfo( m_aDefaultPrinter ) );
         aMergeInfo.m_bPerformFontSubstitution = aDefaultInfo.m_bPerformFontSubstitution;
         fillFontSubstitutions( aMergeInfo );
-        
+
         const PPDKey* pDefKey           = aDefaultInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
         const PPDKey* pMergeKey         = aMergeInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
         const PPDValue* pDefValue       = aDefaultInfo.m_aContext.getValue( pDefKey );
@@ -577,23 +577,23 @@ void PrinterInfoManager::initialize()
         if( pMergeKey && pMergeValue )
             aMergeInfo.m_aContext.setValue( pMergeKey, pMergeValue );
     }
-    
+
     getSystemPrintQueues();
     for( ::std::list< SystemPrintQueue >::iterator it = m_aSystemPrintQueues.begin(); it != m_aSystemPrintQueues.end(); ++it )
     {
         String aPrinterName( RTL_CONSTASCII_USTRINGPARAM( "<" ) );
         aPrinterName += String( it->m_aQueue );
         aPrinterName.Append( '>' );
-        
+
         if( m_aPrinters.find( aPrinterName ) != m_aPrinters.end() )
             // probably user made this one permanent in padmin
         continue;
-        
+
         String aCmd( m_aSystemPrintCommand );
         aCmd.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "(PRINTER)" ) ), it->m_aQueue );
-        
+
         Printer aPrinter;
-        
+
         // initialize to merged defaults
         aPrinter.m_aInfo = aMergeInfo;
         aPrinter.m_aInfo.m_aPrinterName     = aPrinterName;
@@ -602,7 +602,7 @@ void PrinterInfoManager::initialize()
         aPrinter.m_aInfo.m_aLocation        = it->m_aLocation;
         aPrinter.m_bModified                = false;
         aPrinter.m_aGroup                   = ByteString( aPrinterName, aEncoding ); //provide group name in case user makes this one permanent in padmin
-        
+
         m_aPrinters[ aPrinterName ] = aPrinter;
     }
 }
@@ -623,9 +623,9 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter 
 {
     static PrinterInfo aEmptyInfo;
     ::std::hash_map< OUString, Printer, OUStringHash >::const_iterator it = m_aPrinters.find( rPrinter );
-    
+
     DBG_ASSERT( it != m_aPrinters.end(), "Do not ask for info about nonexistant printers" );
-    
+
     return it != m_aPrinters.end() ? it->second.m_aInfo : aEmptyInfo;
 }
 
@@ -634,9 +634,9 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter 
 void PrinterInfoManager::changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo )
 {
     ::std::hash_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinter );
-    
+
     DBG_ASSERT( it != m_aPrinters.end(), "Do not change nonexistant printers" );
-    
+
     if( it != m_aPrinters.end() )
     {
         it->second.m_aInfo      = rNewInfo;
@@ -667,7 +667,7 @@ bool PrinterInfoManager::writePrinterConfig()
     ::std::hash_map< OUString, Config*, OUStringHash > files;
     ::std::hash_map< OUString, int, OUStringHash > rofiles;
     ::std::hash_map< OUString, Config*, OUStringHash >::iterator file_it;
-    
+
     for( ::std::list< WatchFile >::const_iterator wit = m_aWatchFiles.begin(); wit != m_aWatchFiles.end(); ++wit )
     {
         if( checkWriteability( wit->m_aFilePath ) )
@@ -676,21 +676,21 @@ bool PrinterInfoManager::writePrinterConfig()
             break;
         }
     }
-    
+
     if( files.empty() )
         return false;
-    
+
     Config* pGlobal = files.begin()->second;
     pGlobal->SetGroup( GLOBAL_DEFAULTS_GROUP );
     pGlobal->WriteKey( "DisableCUPS", m_bDisableCUPS ? "true" : "false" );
-    
+
     ::std::hash_map< OUString, Printer, OUStringHash >::iterator it;
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
     {
         if( ! it->second.m_bModified )
             // printer was not changed, do nothing
         continue;
-        
+
         // don't save autoqueue printers
         sal_Int32 nIndex = 0;
         bool bAutoQueue = false;
@@ -702,7 +702,7 @@ bool PrinterInfoManager::writePrinterConfig()
         }
         if( bAutoQueue )
             continue;
-        
+
         if( it->second.m_aFile.getLength() )
         {
             // check if file is writable
@@ -735,16 +735,16 @@ bool PrinterInfoManager::writePrinterConfig()
         }
         else // a new printer, write it to the first file available
             it->second.m_aFile = files.begin()->first;
-        
+
         if( ! it->second.m_aGroup.getLength() ) // probably a new printer
             it->second.m_aGroup = OString( it->first.getStr(), it->first.getLength(), RTL_TEXTENCODING_UTF8 );
-        
+
         if( files.find( it->second.m_aFile ) != files.end() )
         {
             Config* pConfig = files[ it->second.m_aFile ];
             pConfig->DeleteGroup( it->second.m_aGroup ); // else some old keys may remain
             pConfig->SetGroup( it->second.m_aGroup );
-            
+
             ByteString aValue( String( it->second.m_aInfo.m_aDriverName ), RTL_TEXTENCODING_UTF8 );
             aValue += '/';
             aValue += ByteString( String( it->first ), RTL_TEXTENCODING_UTF8 );
@@ -768,7 +768,7 @@ bool PrinterInfoManager::writePrinterConfig()
             aValue += ',';
             aValue += ByteString::CreateFromInt32( it->second.m_aInfo.m_nBottomMarginAdjust );
             pConfig->WriteKey( "MarginAdjust", aValue );
-            
+
             if( it->second.m_aInfo.m_aDriverName.compareToAscii( "CUPS:", 5 ) != 0 )
             {
                 // write PPDContext (not for CUPS)
@@ -777,13 +777,13 @@ bool PrinterInfoManager::writePrinterConfig()
                     const PPDKey* pKey = it->second.m_aInfo.m_aContext.getModifiedKey( i );
                     ByteString aKey( "PPD_" );
                     aKey += ByteString( pKey->getKey(), RTL_TEXTENCODING_ISO_8859_1 );
-                    
+
                     const PPDValue* pValue = it->second.m_aInfo.m_aContext.getValue( pKey );
                     aValue = pValue ? ByteString( pValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ) : ByteString( "*nil" );
                     pConfig->WriteKey( aKey, aValue );
                 }
             }
-            
+
             // write font substitution table
             pConfig->WriteKey( "PerformFontSubstitution", it->second.m_aInfo.m_bPerformFontSubstitution ? "true" : "false" );
             for( ::std::hash_map< OUString, OUString, OUStringHash >::const_iterator subst = it->second.m_aInfo.m_aFontSubstitutes.begin();
@@ -795,11 +795,11 @@ bool PrinterInfoManager::writePrinterConfig()
             }
         }
     }
-    
+
     // get rid of Config objects. this also writes any changes
     for( file_it = files.begin(); file_it != files.end(); ++file_it )
         delete file_it->second;
-    
+
     return true;
 }
 
@@ -808,7 +808,7 @@ bool PrinterInfoManager::writePrinterConfig()
 bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUString& rDriverName )
 {
     bool bSuccess = false;
-    
+
     const PPDParser* pParser = NULL;
     if( m_aPrinters.find( rPrinterName ) == m_aPrinters.end() && ( pParser = PPDParser::getParser( rDriverName ) ) )
     {
@@ -819,7 +819,7 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
         aPrinter.m_aInfo.m_pParser                  = pParser;
         aPrinter.m_aInfo.m_aContext.setParser( pParser );
         aPrinter.m_aInfo.m_aPrinterName             = rPrinterName;
-        
+
         fillFontSubstitutions( aPrinter.m_aInfo );
         // merge PPD values with global defaults
         for( int nPPDValueModified = 0; nPPDValueModified < m_aGlobalDefaults.m_aContext.countValuesModified(); nPPDValueModified++ )
@@ -841,7 +841,7 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
                     aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, NULL );
             }
         }
-        
+
         m_aPrinters[ rPrinterName ] = aPrinter;
         bSuccess = true;
         #if OSL_DEBUG_LEVEL > 1
@@ -864,15 +864,15 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
 bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bCheckOnly )
 {
     bool bSuccess = true;
-    
+
     ::std::hash_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinterName );
     if( it != m_aPrinters.end() )
     {
         if( it->second.m_aFile.getLength() )
         {
             // this printer already exists in a config file
-            
-            
+
+
             // check writeability of config file(s)
             if( ! checkWriteability( it->second.m_aFile ) )
                 bSuccess = false;
@@ -887,7 +887,7 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
             }
             if( bSuccess && ! bCheckOnly )
             {
-                
+
                 Config aConfig( it->second.m_aFile );
                 aConfig.DeleteGroup( it->second.m_aGroup );
                 aConfig.Flush();
@@ -918,7 +918,7 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
 bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
 {
     bool bSuccess = false;
-    
+
     ::std::hash_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinterName );
     if( it != m_aPrinters.end() )
     {
@@ -944,21 +944,21 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
 {
     PrintFontManager& rFontManager( PrintFontManager::get() );
     rInfo.m_aFontSubstitutions.clear();
-    
+
     if( ! rInfo.m_bPerformFontSubstitution ||
         ! rInfo.m_aFontSubstitutes.size() )
     return;
-    
+
     ::std::list< FastPrintFontInfo > aFonts;
     ::std::hash_map< OUString, ::std::list< FastPrintFontInfo >, OUStringHash > aPrinterFonts;
     rFontManager.getFontListWithFastInfo( aFonts, rInfo.m_pParser );
-    
+
     // get builtin fonts
     ::std::list< FastPrintFontInfo >::const_iterator it;
     for( it = aFonts.begin(); it != aFonts.end(); ++it )
         if( it->m_eType == fonttype::Builtin )
             aPrinterFonts[ it->m_aFamilyName.toAsciiLowerCase() ].push_back( *it );
-    
+
     // map lower case, so build a local copy of the font substitutions
     ::std::hash_map< OUString, OUString, OUStringHash > aSubstitutions;
     ::std::hash_map< OUString, OUString, OUStringHash >::const_iterator subst;
@@ -972,8 +972,8 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
         else
             aSubstitutions[ aFamily ] = subst->second.toAsciiLowerCase();
     }
-    
-    
+
+
     // now find substitutions
     for( it = aFonts.begin(); it != aFonts.end(); ++it )
     {
@@ -994,15 +994,15 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
                     int nDiff;
                     if( builtin->m_eItalic == it->m_eItalic )
                         nMatch += 8000;
-                    
+
                     nDiff = builtin->m_eWeight - it->m_eWeight;
                     nDiff = nDiff < 0 ? -nDiff : nDiff;
                     nMatch += 4000 - 1000*nDiff;
-                    
+
                     nDiff = builtin->m_eWidth - it->m_eWidth;
                     nDiff = nDiff < 0 ? -nDiff : nDiff;
                     nMatch += 2000 - 500*nDiff;
-                    
+
                     if( nMatch > nLastMatch )
                     {
                         nLastMatch = nMatch;
@@ -1022,7 +1022,7 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
                     it->m_eItalic == italic::Upright ? "r" : it->m_eItalic == italic::Oblique ? "o" : it->m_eItalic == italic::Italic ? "i" : "u",
                     it->m_eWeight,
                     it->m_eWidth,
-                    
+
                     OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
                     aInfo.m_eItalic == italic::Upright ? "r" : aInfo.m_eItalic == italic::Oblique ? "o" : aInfo.m_eItalic == italic::Italic ? "i" : "u",
                     aInfo.m_eWeight,
@@ -1045,7 +1045,7 @@ void PrinterInfoManager::getSystemPrintCommands( std::list< OUString >& rCommand
         m_pQueueInfo->getSystemQueues( m_aSystemPrintQueues );
         delete m_pQueueInfo, m_pQueueInfo = NULL;
     }
-    
+
     std::list< SystemPrintQueue >::const_iterator it;
     rCommands.clear();
     String aPrinterConst( RTL_CONSTASCII_USTRINGPARAM( "(PRINTER)" ) );
@@ -1065,7 +1065,7 @@ const std::list< PrinterInfoManager::SystemPrintQueue >& PrinterInfoManager::get
         m_pQueueInfo->getSystemQueues( m_aSystemPrintQueues );
         delete m_pQueueInfo, m_pQueueInfo = NULL;
     }
-    
+
     return m_aSystemPrintQueues;
 }
 
@@ -1091,7 +1091,7 @@ FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickC
                                           rPrinterInfo.m_aQuickCommand : rPrinterInfo.m_aCommand;
     rtl::OString aShellCommand  = OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1);
     aShellCommand += rtl::OString( " 2>/dev/null" );
-    
+
     return popen (aShellCommand.getStr(), "w");
 }
 
@@ -1115,16 +1115,16 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
 {
     if(  ! rContext.getParser() )
         return;
-    
+
     const PPDKey* pPageSizeKey = rContext.getParser()->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
     if( ! pPageSizeKey )
         return;
-    
+
     int nModified = rContext.countValuesModified();
     while( nModified-- &&
         rContext.getModifiedKey( nModified ) != pPageSizeKey )
     ;
-    
+
     if( nModified >= 0 ) // paper was set already, do not modify
     {
         #if OSL_DEBUG_LEVEL > 1
@@ -1133,7 +1133,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
         #endif
         return;
     }
-    
+
     // paper not set, fill in default value
     const PPDValue* pPaperVal = NULL;
     int nValues = pPageSizeKey->countValues();
@@ -1205,7 +1205,7 @@ struct SystemCommandParameters
     tokenHandler    pHandler;
 };
 
-#if ! (defined(LINUX) || defined(NETBSD) || defined(FREEBSD)) 
+#if ! (defined(LINUX) || defined(NETBSD) || defined(FREEBSD))
 static void lpgetSysQueueTokenHandler(
     const std::list< rtl::OString >& i_rLines,
     std::list< PrinterInfoManager::SystemPrintQueue >& o_rQueues,
@@ -1216,10 +1216,10 @@ static void lpgetSysQueueTokenHandler(
     std::hash_set< OUString, OUStringHash > aOnlySet;
     aUniqueSet.insert( OUString( RTL_CONSTASCII_USTRINGPARAM( "_all" ) ) );
     aUniqueSet.insert( OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
-    
+
     // the eventual "all" attribute of the "_all" queue tells us, which
     // printers are to be used for this user at all
-    
+
     // find _all: line
     rtl::OString aAllLine( "_all:" );
     rtl::OString aAllAttr( "all=" );
@@ -1249,7 +1249,7 @@ static void lpgetSysQueueTokenHandler(
             break;
         }
     }
-    
+
     bool bInsertAttribute = false;
     rtl::OString aDescrStr( "description=" );
     rtl::OString aLocStr( "location=" );
@@ -1318,7 +1318,7 @@ static void standardSysQueueTokenHandler(
          it != i_rLines.end(); ++it )
     {
         sal_Int32 nPos = 0;
-        
+
         // search for a line describing a printer:
         // find if there are enough tokens before the name
         for( unsigned int i = 0; i < i_pParms->nForeTokenCount && nPos != -1; i++ )
@@ -1350,7 +1350,7 @@ static void standardSysQueueTokenHandler(
 
 static const struct SystemCommandParameters aParms[] =
 {
-    #if defined(LINUX) || defined(NETBSD) || defined(FREEBSD) 
+    #if defined(LINUX) || defined(NETBSD) || defined(FREEBSD)
     { "/usr/sbin/lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0, standardSysQueueTokenHandler },
     { "lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0, standardSysQueueTokenHandler },
     { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpstat -s", "lp -d \"(PRINTER)\"", "system for ", ": ", 1, standardSysQueueTokenHandler }
@@ -1367,7 +1367,7 @@ void SystemQueueInfo::run()
     char pBuffer[1024];
     FILE *pPipe;
     std::list< rtl::OString > aLines;
-    
+
     /* Discover which command we can use to get a list of all printer queues */
     for( unsigned int i = 0; i < sizeof(aParms)/sizeof(aParms[0]); i++ )
     {
@@ -1377,7 +1377,7 @@ void SystemQueueInfo::run()
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "trying print queue command \"%s\" ... ", aParms[i].pQueueCommand );
         #endif
-        aCmdLine.append( " 2>/dev/null" );   
+        aCmdLine.append( " 2>/dev/null" );
         if( (pPipe = popen( aCmdLine.getStr(), "r" )) )
         {
             while( fgets( pBuffer, 1024, pPipe ) )
@@ -1399,6 +1399,6 @@ void SystemQueueInfo::run()
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "failed\n" );
         #endif
-    }    
+    }
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ class SvxBrushItem;
 class SvxBorderLine;
 
 //---------------------------------------------------------------------------
-// 		 Code aus dem HTML-Filter fuers schreiben von Tabellen
+//       Code aus dem HTML-Filter fuers schreiben von Tabellen
 //---------------------------------------------------------------------------
 
 #define COLFUZZY 20
@@ -56,18 +56,18 @@ class SvxBorderLine;
 
 class SwWriteTableCell
 {
-    const SwTableBox *pBox;		// SwTableBox der Zelle
-    const SvxBrushItem *pBackground;	// geerbter Hintergrund einer Zeile
+    const SwTableBox *pBox;     // SwTableBox der Zelle
+    const SvxBrushItem *pBackground;    // geerbter Hintergrund einer Zeile
 
-    long nHeight;				// fixe/Mindest-Hoehe der Zeile
+    long nHeight;               // fixe/Mindest-Hoehe der Zeile
 
-    USHORT nWidthOpt;			// Breite aus Option;
+    USHORT nWidthOpt;           // Breite aus Option;
 
-    USHORT nRow;				// Start-Zeile
-    USHORT nCol;				// Start-Spalte
+    USHORT nRow;                // Start-Zeile
+    USHORT nCol;                // Start-Spalte
 
-    USHORT nRowSpan;			// ueberspannte Zeilen
-    USHORT nColSpan;			// ueberspannte Spalten
+    USHORT nRowSpan;            // ueberspannte Zeilen
+    USHORT nColSpan;            // ueberspannte Spalten
 
 
     BOOL bPrcWidthOpt;
@@ -111,10 +111,10 @@ SV_DECL_PTRARR_DEL( SwWriteTableCells, SwWriteTableCellPtr, 5, 5 )
 
 class SwWriteTableRow
 {
-    SwWriteTableCells aCells;		// Alle Zellen der Rows
+    SwWriteTableCells aCells;       // Alle Zellen der Rows
     const SvxBrushItem *pBackground;// Hintergrund
 
-    long nPos;					// End-Position (twips) der Zeile
+    long nPos;                  // End-Position (twips) der Zeile
     BOOL mbUseLayoutHeights;
 
     // Forbidden and not implemented.
@@ -128,10 +128,10 @@ protected:
 
 public:
 
-    USHORT nTopBorder;				// Dicke der oberen/unteren Umrandugen
+    USHORT nTopBorder;              // Dicke der oberen/unteren Umrandugen
     USHORT nBottomBorder;
 
-    BOOL bTopBorder : 1;			// Welche Umrandungen sind da?
+    BOOL bTopBorder : 1;            // Welche Umrandungen sind da?
     BOOL bBottomBorder : 1;
 
     SwWriteTableRow( long nPos, BOOL bUseLayoutHeights );
@@ -148,11 +148,11 @@ public:
     }
     const SvxBrushItem *GetBackground() const { return pBackground; }
 
-    BOOL HasTopBorder() const 					{ return bTopBorder; }
-    BOOL HasBottomBorder() const 				{ return bBottomBorder; }
+    BOOL HasTopBorder() const                   { return bTopBorder; }
+    BOOL HasBottomBorder() const                { return bBottomBorder; }
 
-    long GetPos() const							{ return nPos; }
-    const SwWriteTableCells& GetCells() const	{ return aCells; }
+    long GetPos() const                         { return nPos; }
+    const SwWriteTableCells& GetCells() const   { return aCells; }
 
     inline int operator==( const SwWriteTableRow& rRow ) const;
     inline int operator<( const SwWriteTableRow& rRow2 ) const;
@@ -180,29 +180,29 @@ SV_DECL_PTRARR_SORT_DEL( SwWriteTableRows, SwWriteTableRowPtr, 5, 5 )
 
 class SwWriteTableCol
 {
-    USHORT nPos;						// End Position der Spalte
+    USHORT nPos;                        // End Position der Spalte
 
     USHORT nWidthOpt;
 
     BOOL bRelWidthOpt : 1;
-    BOOL bOutWidth : 1;					// Spaltenbreite ausgeben?
+    BOOL bOutWidth : 1;                 // Spaltenbreite ausgeben?
 
 public:
-    BOOL bLeftBorder : 1;				// Welche Umrandungen sind da?
+    BOOL bLeftBorder : 1;               // Welche Umrandungen sind da?
     BOOL bRightBorder : 1;
 
     SwWriteTableCol( USHORT nPosition );
 
-    USHORT GetPos() const 						{ return nPos; }
+    USHORT GetPos() const                       { return nPos; }
 
-    void SetLeftBorder( BOOL bBorder ) 			{ bLeftBorder = bBorder; }
-    BOOL HasLeftBorder() const 					{ return bLeftBorder; }
+    void SetLeftBorder( BOOL bBorder )          { bLeftBorder = bBorder; }
+    BOOL HasLeftBorder() const                  { return bLeftBorder; }
 
-    void SetRightBorder( BOOL bBorder )			{ bRightBorder = bBorder; }
-    BOOL HasRightBorder() const					{ return bRightBorder; }
+    void SetRightBorder( BOOL bBorder )         { bRightBorder = bBorder; }
+    BOOL HasRightBorder() const                 { return bRightBorder; }
 
-    void SetOutWidth( BOOL bSet ) 				{ bOutWidth = bSet; }
-    BOOL GetOutWidth() const 					{ return bOutWidth; }
+    void SetOutWidth( BOOL bSet )               { bOutWidth = bSet; }
+    BOOL GetOutWidth() const                    { return bOutWidth; }
 
     inline int operator==( const SwWriteTableCol& rCol ) const;
     inline int operator<( const SwWriteTableCol& rCol ) const;
@@ -211,8 +211,8 @@ public:
     {
         nWidthOpt = nWidth; bRelWidthOpt = bRel;
     }
-    USHORT GetWidthOpt() const					{ return nWidthOpt; }
-    BOOL HasRelWidthOpt() const 				{ return bRelWidthOpt; }
+    USHORT GetWidthOpt() const                  { return nWidthOpt; }
+    BOOL HasRelWidthOpt() const                 { return bRelWidthOpt; }
 };
 
 inline int SwWriteTableCol::operator==( const SwWriteTableCol& rCol ) const
@@ -238,27 +238,27 @@ SV_DECL_PTRARR_SORT_DEL( SwWriteTableCols, SwWriteTableColPtr, 5, 5 )
 class SW_DLLPUBLIC SwWriteTable
 {
 protected:
-    SwWriteTableCols aCols;	// alle Spalten
-    SwWriteTableRows aRows;	// alle Zellen
+    SwWriteTableCols aCols; // alle Spalten
+    SwWriteTableRows aRows; // alle Zellen
 
-    UINT32 nBorderColor;		// Umrandungsfarbe
+    UINT32 nBorderColor;        // Umrandungsfarbe
 
-    USHORT nCellSpacing;		// Dicke der inneren Umrandung
-    USHORT nCellPadding;		// Absatnd Umrandung-Inhalt
+    USHORT nCellSpacing;        // Dicke der inneren Umrandung
+    USHORT nCellPadding;        // Absatnd Umrandung-Inhalt
 
-    USHORT nBorder;				// Dicke der ausseren Umrandung
-    USHORT nInnerBorder;		// Dicke der inneren Umrandung
-    USHORT nBaseWidth;			// Bezugsgroesse fur Breiten SwFmtFrmSize
+    USHORT nBorder;             // Dicke der ausseren Umrandung
+    USHORT nInnerBorder;        // Dicke der inneren Umrandung
+    USHORT nBaseWidth;          // Bezugsgroesse fur Breiten SwFmtFrmSize
 
-    USHORT nHeadEndRow;			// letzte Zeile des Tabellen-Kopfes
+    USHORT nHeadEndRow;         // letzte Zeile des Tabellen-Kopfes
 
     USHORT nLeftSub;
     USHORT nRightSub;
 
-    long nTabWidth;				// Absolute/Relative Breite der Tabelle
+    long nTabWidth;             // Absolute/Relative Breite der Tabelle
 
-    BOOL bRelWidths : 1;		// Breiten relativ ausgeben?
-    BOOL bUseLayoutHeights : 1;	// Layout zur Hoehenbestimmung nehmen?
+    BOOL bRelWidths : 1;        // Breiten relativ ausgeben?
+    BOOL bUseLayoutHeights : 1; // Layout zur Hoehenbestimmung nehmen?
 #ifdef DBG_UTIL
     BOOL bGetLineHeightCalled : 1;
 #endif
@@ -298,7 +298,7 @@ protected:
 
 public:
     static long GetBoxWidth( const SwTableBox *pBox );
-    
+
     USHORT GetRawWidth( USHORT nCol, USHORT nColSpan ) const;
     USHORT GetAbsWidth( USHORT nCol, USHORT nColSpan ) const;
     USHORT GetRelWidth( USHORT nCol, USHORT nColSpan ) const;

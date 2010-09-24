@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,45 +24,45 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_chart_XTwoAxisYSupplier_idl__ 
-#define __com_sun_star_chart_XTwoAxisYSupplier_idl__ 
- 
-#ifndef __com_sun_star_chart_XAxisYSupplier_idl__ 
-#include <com/sun/star/chart/XAxisYSupplier.idl> 
-#endif 
- 
-#ifndef __com_sun_star_beans_XPropertySet_idl__ 
-#include <com/sun/star/beans/XPropertySet.idl> 
-#endif 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module chart {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_chart_XTwoAxisYSupplier_idl__
+#define __com_sun_star_chart_XTwoAxisYSupplier_idl__
+
+#ifndef __com_sun_star_chart_XAxisYSupplier_idl__
+#include <com/sun/star/chart/XAxisYSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
 /** gives access to both the primary and the secondary y-axis of a diagram.@see        XChartDocument
  */
 published interface XTwoAxisYSupplier: com::sun::star::chart::XAxisYSupplier
-{ 
-    //------------------------------------------------------------------------- 
-     
-    /** @returns 
+{
+    //-------------------------------------------------------------------------
+
+    /** @returns
             the properties of the secondary <i>y</i>-axis of the
             diagram.
 
         <p>The returned property set contains scaling properties as
         well as formatting properties.</p>
-                 
+
         @see ChartAxis
      */
-    com::sun::star::beans::XPropertySet getSecondaryYAxis(); 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    com::sun::star::beans::XPropertySet getSecondaryYAxis();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,12 +55,12 @@ namespace svt
 {
 //.........................................................................
 
-    typedef ::cppu::WeakComponentImplHelper5	<	::com::sun::star::ui::dialogs::XControlAccess
-                                                ,	::com::sun::star::ui::dialogs::XControlInformation
-                                                ,	::com::sun::star::lang::XEventListener
-                                                ,	::com::sun::star::util::XCancellable
-                                                ,	::com::sun::star::lang::XInitialization
-                                                >	OCommonPicker_Base;
+    typedef ::cppu::WeakComponentImplHelper5    <   ::com::sun::star::ui::dialogs::XControlAccess
+                                                ,   ::com::sun::star::ui::dialogs::XControlInformation
+                                                ,   ::com::sun::star::lang::XEventListener
+                                                ,   ::com::sun::star::util::XCancellable
+                                                ,   ::com::sun::star::lang::XInitialization
+                                                >   OCommonPicker_Base;
     /** implements common functionality for the 2 UNO picker components
     */
     class OCommonPicker
@@ -70,31 +70,31 @@ namespace svt
                     ,public ::comphelper::OPropertyArrayUsageHelper< OCommonPicker >
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
 
         // <properties>
-        ::rtl::OUString														m_sHelpURL;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >	m_xWindow;
+        ::rtl::OUString                                                     m_sHelpURL;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xWindow;
         // </properties>
 
-        SvtFileDialog*		m_pDlg;
-        sal_uInt32			m_nCancelEvent;
-        sal_Bool			m_bExecuting;
+        SvtFileDialog*      m_pDlg;
+        sal_uInt32          m_nCancelEvent;
+        sal_Bool            m_bExecuting;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >	m_xDialogParent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xDialogParent;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >	m_xWindowListenerAdapter;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >	m_xParentListenerAdapter;
-
-    protected:
-        ::rtl::OUString		m_aTitle;
-        ::rtl::OUString		m_aDisplayDirectory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  m_xWindowListenerAdapter;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  m_xParentListenerAdapter;
 
     protected:
-        inline	SvtFileDialog*	getDialog() { return m_pDlg; }
+        ::rtl::OUString     m_aTitle;
+        ::rtl::OUString     m_aDisplayDirectory;
 
-        inline const	::cppu::OBroadcastHelper&	GetBroadcastHelper() const	{ return OCommonPicker_Base::rBHelper; }
-        inline			::cppu::OBroadcastHelper&	GetBroadcastHelper()		{ return OCommonPicker_Base::rBHelper; }
+    protected:
+        inline  SvtFileDialog*  getDialog() { return m_pDlg; }
+
+        inline const    ::cppu::OBroadcastHelper&   GetBroadcastHelper() const  { return OCommonPicker_Base::rBHelper; }
+        inline          ::cppu::OBroadcastHelper&   GetBroadcastHelper()        { return OCommonPicker_Base::rBHelper; }
 
     public:
         OCommonPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
@@ -105,8 +105,8 @@ namespace svt
         // overridables
 
         // will be called with locked SolarMutex
-        virtual SvtFileDialog*	implCreateDialog( Window* _pParent ) = 0;
-        virtual	sal_Int16		implExecutePicker( ) = 0;
+        virtual SvtFileDialog*  implCreateDialog( Window* _pParent ) = 0;
+        virtual sal_Int16       implExecutePicker( ) = 0;
             // do NOT override XExecutableDialog::execute! We need to do some stuff there ourself ...
 
     protected:
@@ -148,8 +148,8 @@ namespace svt
         //------------------------------------------------------------------------------------
         // XExecutableDialog functions
         //------------------------------------------------------------------------------------
-        virtual void SAL_CALL 			setTitle( const ::rtl::OUString& _rTitle ) throw( ::com::sun::star::uno::RuntimeException );
-        virtual sal_Int16 SAL_CALL 		execute() throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL           setTitle( const ::rtl::OUString& _rTitle ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual sal_Int16 SAL_CALL      execute() throw( ::com::sun::star::uno::RuntimeException );
 
         //------------------------------------------------------------------------------------
         // XControlAccess functions
@@ -184,25 +184,25 @@ namespace svt
         void prepareDialog();
 
     protected:
-                sal_Bool	createPicker();
+                sal_Bool    createPicker();
 
         /** handle a single argument from the XInitialization::initialize method
 
             @return <TRUE/> if the argument could be handled
         */
-        virtual	sal_Bool	implHandleInitializationArgument(
+        virtual sal_Bool    implHandleInitializationArgument(
                                 const ::rtl::OUString& _rName,
                                 const ::com::sun::star::uno::Any& _rValue
                             )
                             SAL_THROW( ( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException ) );
 
     private:
-        void		stopWindowListening();
+        void        stopWindowListening();
 
         DECL_LINK( OnCancelPicker, void* );
     };
 //.........................................................................
-}	// namespace svt
+}   // namespace svt
 //.........................................................................
 
 #endif // SVTOOLS_COMMONPICKER_HXX

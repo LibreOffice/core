@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -428,7 +428,7 @@ void lcl_placeLegendEntries(
         sal_Int32 nLegendWidth = -(nCurrentXPos-nXPadding);
         rOutLegendSize.Width  = nLegendWidth;
 
-        awt::Point aPos(0,0); 
+        awt::Point aPos(0,0);
         for( sal_Int32 nEntry=0; nEntry<nNumberOfEntries; nEntry++ )
         {
             Reference< drawing::XShape > xSymbol( rEntries[ nEntry ].aSymbol );
@@ -757,7 +757,7 @@ void VLegend::createShapes(
             }
 
             bool bSymbolsLeftSide = lcl_shouldSymbolsBePlacedOnTheLeftSide( xLegendProp, m_nDefaultWritingMode );
-            
+
             // place entries
             awt::Size aLegendSize;
             lcl_placeLegendEntries( aViewEntries, eExpansion, bSymbolsLeftSide

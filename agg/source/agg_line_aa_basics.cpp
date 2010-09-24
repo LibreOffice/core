@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -30,26 +30,26 @@ namespace agg
     //   [1]          |          [0]
     //       . (3)011 | 001(1) .
     //         .      |      .
-    //           .    |    . 
-    //             .  |  . 
+    //           .    |    .
+    //             .  |  .
     //    (2)010     .|.     000(0)
     // <2> ----------.+.----------- <0>
     //    (6)110   .  |  .   100(4)
     //           .    |    .
     //         .      |      .
     //       .        |        .
-    //         (7)111 | 101(5) 
+    //         (7)111 | 101(5)
     //   [2]          |          [3]
-    //               <3> 
-    //                                                  0,1,2,3,4,5,6,7 
+    //               <3>
+    //                                                  0,1,2,3,4,5,6,7
     int8u line_parameters::s_orthogonal_quadrant[8] = { 0,0,1,1,3,3,2,2 };
     int8u line_parameters::s_diagonal_quadrant[8]   = { 0,1,2,1,0,3,2,3 };
 
 
 
     //-------------------------------------------------------------------------
-    void bisectrix(const line_parameters& l1, 
-                   const line_parameters& l2, 
+    void bisectrix(const line_parameters& l1,
+                   const line_parameters& l2,
                    int* x, int* y)
     {
         double k = double(l2.len) / double(l1.len);

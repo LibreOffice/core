@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,13 +118,13 @@ void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
     }
 }
 
-SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene,	BOOL /*bOnly3DAttr*/) const
+SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, BOOL /*bOnly3DAttr*/) const
 {
     // ItemSet mit entspr. Bereich anlegen
     SfxItemSet aSet(
         pMod->GetItemPool(),
-        SDRATTR_START,		SDRATTR_END,
-        SID_ATTR_3D_INTERN,	SID_ATTR_3D_INTERN,
+        SDRATTR_START,      SDRATTR_END,
+        SID_ATTR_3D_INTERN, SID_ATTR_3D_INTERN,
         0, 0);
 
     sal_uInt32 nSelectedItems(0L);
@@ -179,7 +179,7 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene,	BOOL /*bOnly3DAttr*/) co
 |*
 \************************************************************************/
 
-void E3dView::Set3DAttributes( const SfxItemSet& rAttr,	E3dScene* pInScene, BOOL bReplaceAll)
+void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, BOOL bReplaceAll)
 {
     sal_uInt32 nSelectedItems(0L);
 

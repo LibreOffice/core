@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,7 +120,7 @@ void BasicDocShell::FillStatusBar( StatusBar& rStatusBar )
     rStatusBar.InsertItem( SID_ATTR_SIZE,
         rStatusBar.GetTextWidth( aTmp ), SIB_AUTOSIZE | SIB_LEFT | SIB_USERDRAW );
 
-//	return pStatusBar;
+//  return pStatusBar;
 
 }
 

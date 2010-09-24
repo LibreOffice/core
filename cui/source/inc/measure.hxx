@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,43 +47,43 @@ class SvxMeasurePage : public SvxTabPage
 {
 private:
 
-    FixedLine			aFlLine;
-    FixedText			aFtLineDist;
-    MetricField			aMtrFldLineDist;
-    FixedText			aFtHelplineOverhang;
-    MetricField			aMtrFldHelplineOverhang;
-    FixedText			aFtHelplineDist;
-    MetricField			aMtrFldHelplineDist;
-    FixedText			aFtHelpline1Len;
-    MetricField			aMtrFldHelpline1Len;
-    FixedText			aFtHelpline2Len;
-    MetricField			aMtrFldHelpline2Len;
-    TriStateBox 		aTsbBelowRefEdge;
-    FixedText			aFtDecimalPlaces;
-    MetricField			aMtrFldDecimalPlaces;
+    FixedLine           aFlLine;
+    FixedText           aFtLineDist;
+    MetricField         aMtrFldLineDist;
+    FixedText           aFtHelplineOverhang;
+    MetricField         aMtrFldHelplineOverhang;
+    FixedText           aFtHelplineDist;
+    MetricField         aMtrFldHelplineDist;
+    FixedText           aFtHelpline1Len;
+    MetricField         aMtrFldHelpline1Len;
+    FixedText           aFtHelpline2Len;
+    MetricField         aMtrFldHelpline2Len;
+    TriStateBox         aTsbBelowRefEdge;
+    FixedText           aFtDecimalPlaces;
+    MetricField         aMtrFldDecimalPlaces;
 
-    FixedLine			aFlLabel;
+    FixedLine           aFlLabel;
     FixedText           aFtPosition;
-    SvxRectCtl			aCtlPosition;
-    TriStateBox 		aTsbAutoPosV;
-    TriStateBox 		aTsbAutoPosH;
-    TriStateBox 		aTsbShowUnit;
-    ListBox				aLbUnit;
-    TriStateBox 		aTsbParallel;
+    SvxRectCtl          aCtlPosition;
+    TriStateBox         aTsbAutoPosV;
+    TriStateBox         aTsbAutoPosH;
+    TriStateBox         aTsbShowUnit;
+    ListBox             aLbUnit;
+    TriStateBox         aTsbParallel;
 
-    SvxXMeasurePreview	aCtlPreview;
+    SvxXMeasurePreview  aCtlPreview;
 
     FixedLine           aFlVert;
 
-    const SfxItemSet&	rOutAttrs;
-    SfxItemSet			aAttrSet;
-    const SdrView*		pView;
-    SfxMapUnit			eUnit;
+    const SfxItemSet&   rOutAttrs;
+    SfxItemSet          aAttrSet;
+    const SdrView*      pView;
+    SfxMapUnit          eUnit;
 
-    BOOL				bPositionModified;
+    BOOL                bPositionModified;
 
 #ifdef _SVX_MEASURE_CXX
-    void 				FillUnitLB();
+    void                FillUnitLB();
 
     DECL_LINK( ClickAutoPosHdl_Impl, void * );
     DECL_LINK( ChangeAttrHdl_Impl, void * );
@@ -94,17 +94,17 @@ public:
     SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs );
     ~SvxMeasurePage();
 
-    static SfxTabPage* 	Create( Window*, const SfxItemSet& );
-    static  USHORT*	    GetRanges();
+    static SfxTabPage*  Create( Window*, const SfxItemSet& );
+    static  USHORT*     GetRanges();
 
-    virtual BOOL 		FillItemSet( SfxItemSet& );
-    virtual void 		Reset( const SfxItemSet & );
+    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual void        Reset( const SfxItemSet & );
 
-    virtual void 		PointChanged( Window* pWindow, RECT_POINT eRP );
+    virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void 		 Construct();
-    void		 SetView( const SdrView* pSdrView ) { pView = pSdrView; }
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001 
+    void         Construct();
+    void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
+    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
 };
 
 /*************************************************************************

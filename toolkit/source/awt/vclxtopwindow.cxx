@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -171,7 +171,7 @@ void VCLXTopWindow_Base::toBack(  ) throw(::com::sun::star::uno::RuntimeExceptio
 void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& rxMenu ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutexImpl() );
-    
+
     SystemWindow* pWindow = (SystemWindow*) GetWindowImpl();
     if ( pWindow )
     {
@@ -190,7 +190,7 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
 ::sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMaximized() throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutexImpl() );
-    
+
     const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( GetWindowImpl() );
     if ( !pWindow )
         return sal_False;
@@ -202,7 +202,7 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
 void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutexImpl() );
-    
+
     WorkWindow* pWindow = dynamic_cast< WorkWindow* >( GetWindowImpl() );
     if ( !pWindow )
         return;
@@ -214,7 +214,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) thro
 ::sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMinimized() throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutexImpl() );
-    
+
     const WorkWindow* pWindow = dynamic_cast< const WorkWindow* >( GetWindowImpl() );
     if ( !pWindow )
         return sal_False;
@@ -226,7 +226,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) thro
 void SAL_CALL VCLXTopWindow_Base::setIsMinimized( ::sal_Bool _isMinimized ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutexImpl() );
-    
+
     WorkWindow* pWindow = dynamic_cast< WorkWindow* >( GetWindowImpl() );
     if ( !pWindow )
         return;
@@ -238,7 +238,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMinimized( ::sal_Bool _isMinimized ) thro
 ::sal_Int32 SAL_CALL VCLXTopWindow_Base::getDisplay() throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutexImpl() );
-    
+
     const SystemWindow* pWindow = dynamic_cast< const SystemWindow* >( GetWindowImpl() );
     if ( !pWindow )
         return 0;
@@ -253,7 +253,7 @@ void SAL_CALL VCLXTopWindow_Base::setDisplay( ::sal_Int32 _display ) throw (Runt
 
     if ( ( _display < 0 ) || ( _display >= (sal_Int32)Application::GetScreenCount() ) )
         throw IndexOutOfBoundsException();
-    
+
     SystemWindow* pWindow = dynamic_cast< SystemWindow* >( GetWindowImpl() );
     if ( !pWindow )
         return;
@@ -261,9 +261,9 @@ void SAL_CALL VCLXTopWindow_Base::setDisplay( ::sal_Int32 _display ) throw (Runt
     pWindow->SetScreenNumber( _display );
 }
 
-//	----------------------------------------------------
-//	class VCLXTopWindow
-//	----------------------------------------------------
+//  ----------------------------------------------------
+//  class VCLXTopWindow
+//  ----------------------------------------------------
 
 void VCLXTopWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {

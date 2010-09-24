@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <vector>
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <classes/fwktabwindow.hxx>
@@ -49,7 +49,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/awt/XSimpleTabController.hpp>
@@ -57,46 +57,46 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 
 #include <cppuhelper/weak.hxx>
 #include <vcl/window.hxx>
 
 //_________________________________________________________________________________________________________________
-//	namespace
+//  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//	exported const
+//  exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//	exported definitions
+//  exported definitions
 //_________________________________________________________________________________________________________________
 
 struct TTabPageInfo
 {
     public:
-        
+
         TTabPageInfo()
             : m_nIndex      ( -1      )
             , m_bCreated    (sal_False)
             , m_pPage       ( NULL    )
             , m_lProperties (         )
         {}
-    
+
         TTabPageInfo(::sal_Int32 nID)
             : m_nIndex      ( nID     )
             , m_bCreated    (sal_False)
             , m_pPage       ( NULL    )
             , m_lProperties (         )
         {}
-    
+
     public:
-        
+
         ::sal_Int32                                   m_nIndex;
         ::sal_Bool                                    m_bCreated;
         FwkTabPage*                                   m_pPage;
@@ -122,20 +122,20 @@ class TabWindowService :  public css::lang::XTypeProvider
                          ,  public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
-    //	public methods
+    //  public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //	constructor / destructor
+        //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         TabWindowService( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
         virtual ~TabWindowService();
 
         //---------------------------------------------------------------------------------------------------------
-        //	XInterface, XTypeProvider, XServiceInfo
+        //  XInterface, XTypeProvider, XServiceInfo
         //---------------------------------------------------------------------------------------------------------
 
         FWK_DECLARE_XINTERFACE
@@ -164,13 +164,13 @@ class TabWindowService :  public css::lang::XTypeProvider
         virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw ( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
-    //	protected methods
+    //  protected methods
     //-------------------------------------------------------------------------------------------------------------
 
     protected:
 
     //-------------------------------------------------------------------------------------------------------------
-    //	private methods
+    //  private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
@@ -194,39 +194,39 @@ class TabWindowService :  public css::lang::XTypeProvider
                                                             createPropertySetInfo( ::cppu::IPropertyArrayHelper& rProperties ) SAL_THROW( () );
 */
     //-------------------------------------------------------------------------------------------------------------
-    //	variables
-    //	(should be private everyway!)
+    //  variables
+    //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /// reference to factory, which has created this instance
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
-    
+
         /// the tab window as XWindow ( to hold window* alive !)
         css::uno::Reference< css::awt::XWindow > m_xTabWin;
-    
+
         /// the VCL tab window
         FwkTabWindow* m_pTabWin;
-    
+
         /// container of inserted tab pages
         TTabPageInfoHash m_lTabPageInfos;
-    
+
         /// container of the added TabListener
         ::cppu::OMultiTypeInterfaceContainerHelper m_lListener;
-    
+
         /// counter of the tabpage indexes
         ::sal_Int32 m_nPageIndexCounter;
-    
+
         /// index of the current active page
         ::sal_Int32 m_nCurrentPageIndex;
-    
+
         /// title of the tabcontrolled window
         ::rtl::OUString m_sTitle;
 
 };      //  class TabWindowService
 
-}		//	namespace framework
+}       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_SERVICES_TABWINDOWSERVICE_HXX_
 

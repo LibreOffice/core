@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -517,7 +517,7 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
         Rectangle aRect;
         aRect.Right() = rOrg.X() + GetSize().Width() - nR;
         aRect.Left()  = rOrg.X() + nL;
-        aRect.Top()	  = rOrg.Y() + GetTop()
+        aRect.Top()   = rOrg.Y() + GetTop()
                         + GetHdHeight() + GetHdDist();
         aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom()
                         - GetFtHeight() - GetFtDist();

@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,17 +36,17 @@
 
 namespace fileaccess {
 
-    
+
     // forward
     class shell;
-    
-    
+
+
     class XCommandInfo_impl
         : public cppu::OWeakObject,
           public com::sun::star::ucb::XCommandInfo
     {
     public:
-        
+
         XCommandInfo_impl( shell* pMyShell );
 
         virtual ~XCommandInfo_impl();
@@ -66,14 +66,14 @@ namespace fileaccess {
         release(
             void )
             throw();
-        
+
         // XCommandInfo
-        
+
         virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo > SAL_CALL
         getCommands(
             void )
             throw( com::sun::star::uno::RuntimeException);
-        
+
         virtual com::sun::star::ucb::CommandInfo SAL_CALL
         getCommandInfoByName(
             const rtl::OUString& Name )
@@ -98,7 +98,7 @@ namespace fileaccess {
 
 
     private:
-        
+
         shell*                                                                  m_pMyShell;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider > m_xProvider;
     };

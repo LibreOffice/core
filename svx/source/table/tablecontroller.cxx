@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -151,7 +151,7 @@ SvxTableController::SvxTableController( SdrObjEditView* pView, const SdrObject* 
 , mbLeftButtonDown(false)
 , mpSelectionOverlay(0)
 , mpView( dynamic_cast< SdrView* >( pView ) )
-, mxTableObj( dynamic_cast< SdrTableObj* >( const_cast< SdrObject* >( pObj ) ) ) 
+, mxTableObj( dynamic_cast< SdrTableObj* >( const_cast< SdrObject* >( pObj ) ) )
 , mpModel( 0 )
 , mnUpdateEvent( 0 )
 {
@@ -279,7 +279,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, Window* pWin
     if( mbLeftButtonDown )
     {
         RemoveSelection();
-    
+
         Point aPnt(rMEvt.GetPosPixel());
         if (pWindow!=NULL)
             aPnt=pWindow->PixelToLogic(aPnt);
@@ -336,7 +336,7 @@ bool SvxTableController::onMouseMove(const MouseEvent& rMEvt, Window* pWindow )
     CellPos aPos;
     if( mbLeftButtonDown && pTableObj && pTableObj->CheckTableHit( pWindow->PixelToLogic(rMEvt.GetPosPixel()), aPos.mnCol, aPos.mnRow, 0 ) != SDRTABLEHIT_NONE )
     {
-        if(aPos != maMouseDownPos) 
+        if(aPos != maMouseDownPos)
         {
             if( mbCellSelectionMode )
             {
@@ -476,8 +476,8 @@ void SvxTableController::GetState( SfxItemSet& rSet )
             case SID_AUTOFORMAT:
             case SID_TABLE_SORT_DIALOG:
             case SID_TABLE_AUTOSUM:
-//				if( !mxTable.is() )
-//					rSet.DisableItem( nWhich );
+//              if( !mxTable.is() )
+//                  rSet.DisableItem( nWhich );
                 break;
             default:
                 break;
@@ -498,7 +498,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
 
     if( mxTable.is() ) try
     {
-        // 
+        //
         bool bInsertAfter = true;
         sal_uInt16 nCount = 0;
         if( pArgs )
@@ -512,7 +512,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
                     bInsertAfter = ((const SfxBoolItem* )pItem)->GetValue();
             }
         }
-            
+
         CellPos aStart, aEnd;
         if( hasSelectedCells() )
         {
@@ -521,7 +521,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
         else
         {
             if( bInsertAfter )
-            {		        
+            {
                 aStart.mnCol = mxTable->getColumnCount() - 1;
                 aStart.mnRow = mxTable->getRowCount() - 1;
                 aEnd = aStart;
@@ -531,8 +531,8 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
         if( pTableObj->IsTextEditActive() )
             mpView->SdrEndTextEdit(sal_True);
 
-        RemoveSelection();	
-        
+        RemoveSelection();
+
         const OUString sSize( RTL_CONSTASCII_USTRINGPARAM( "Size" ) );
 
         const bool bUndo = mpModel && mpModel->IsUndoEnabled();
@@ -542,7 +542,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
         case SID_TABLE_INSERT_COL:
         {
             TableModelNotifyGuard aGuard( mxTable.get() );
-    
+
             if( bUndo )
             {
                 mpModel->BegUndo( ImpGetResStr(STR_TABLE_INSCOL) );
@@ -553,7 +553,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
             const sal_Int32 nNewColumns = (nCount == 0) ? (aEnd.mnCol - aStart.mnCol + 1) : nCount;
             const sal_Int32 nNewStartColumn = aEnd.mnCol + (bInsertAfter ? 1 : 0);
             xCols->insertByIndex( nNewStartColumn, nNewColumns );
-            
+
             for( sal_Int32 nOffset = 0; nOffset < nNewColumns; nOffset++ )
             {
                 Reference< XPropertySet >( xCols->getByIndex( aEnd.mnCol + nOffset + 1 ), UNO_QUERY_THROW )->
@@ -571,11 +571,11 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
             aEnd.mnRow = mxTable->getRowCount() - 1;
             break;
         }
-        
+
         case SID_TABLE_INSERT_ROW:
         {
             TableModelNotifyGuard aGuard( mxTable.get() );
-    
+
             if( bUndo )
             {
                 mpModel->BegUndo( ImpGetResStr(STR_TABLE_INSROW ) );
@@ -651,7 +651,7 @@ void SvxTableController::onDelete( sal_uInt16 nSId )
             }
             break;
         }
-        
+
         case SID_TABLE_DELETE_ROW:
         {
             const sal_Int32 nRemovedRows = aEnd.mnRow - aStart.mnRow + 1;
@@ -692,7 +692,7 @@ void SvxTableController::onSelect( sal_uInt16 nSId )
             {
             case SID_TABLE_SELECT_ALL:
                 aEnd.mnCol = 0; aEnd.mnRow = 0;
-                aStart.mnCol = nColCount - 1; aStart.mnRow = nRowCount - 1; 
+                aStart.mnCol = nColCount - 1; aStart.mnRow = nRowCount - 1;
                 break;
             case SID_TABLE_SELECT_COL:
                 aEnd.mnRow = nRowCount - 1;
@@ -879,24 +879,24 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                     if( xCell.is() )
                     {
                         SfxItemSet aSet( xCell->GetItemSet() );
-                        bool bChanges = false;                        
+                        bool bChanges = false;
                         const SfxItemSet& rStyleAttribs = xCell->GetStyleSheet()->GetItemSet();
 
                         for ( USHORT nWhich = SDRATTR_START; nWhich <= SDRATTR_TABLE_LAST; nWhich++ )
                         {
                             if( (rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON) && (aSet.GetItemState( nWhich ) == SFX_ITEM_ON) )
                             {
-                                aSet.ClearItem( nWhich );					
+                                aSet.ClearItem( nWhich );
                                 bChanges = true;
                             }
                         }
-                        
+
                         if( bChanges )
                         {
                             if( bUndo )
                                 xCell->AddUndo();
-                                
-                            xCell->SetMergedItemSetAndBroadcast( aSet, sal_True );	                    
+
+                            xCell->SetMergedItemSetAndBroadcast( aSet, sal_True );
                         }
                     }
                 }
@@ -1242,7 +1242,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, Window*
     const sal_Int16 nCode = rKEvt.GetKeyCode().GetCode();
     switch( nCode )
     {
-    case awt::Key::ESCAPE:			// handle escape
+    case awt::Key::ESCAPE:          // handle escape
     {
         if( bTextEdit )
         {
@@ -1256,7 +1256,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, Window*
         }
         break;
     }
-    case awt::Key::RETURN:		// handle return
+    case awt::Key::RETURN:      // handle return
     {
         if( !bMod1 && !bMod2 && !bTextEdit )
         {
@@ -1266,9 +1266,9 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, Window*
         }
         break;
     }
-    case awt::Key::F2:			// f2 toggles text edit
+    case awt::Key::F2:          // f2 toggles text edit
     {
-        if( bMod1 || bMod2 )	// f2 with modifiers is handled by the view
+        if( bMod1 || bMod2 )    // f2 with modifiers is handled by the view
         {
         }
         else if( bTextEdit )
@@ -1373,7 +1373,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, Window*
                 }
             }
         }
-        
+
         if( mbCellSelectionMode || bTextMove )
         {
             // no text edit, navigate in cells if selection active
@@ -1534,7 +1534,7 @@ void SvxTableController::gotoCell( const CellPos& rPos, bool bSelect, Window* pW
         maCursorLastPos = rPos;
         if( mxTableObj.is() )
             static_cast< SdrTableObj* >( mxTableObj.get() )->setActiveCell( rPos );
-        
+
         if( !mbCellSelectionMode )
         {
             setSelectedCells( maCursorFirstPos, rPos );
@@ -1726,7 +1726,7 @@ void SvxTableController::EditCell( const CellPos& rPos, ::Window* pWindow, const
                         pOLV->MouseButtonDown(aMEvt);
                         pOLV->MouseMove(aMEvt);
                         pOLV->MouseButtonUp(aMEvt);
-//						pOLV->MouseButtonDown(aMEvt);
+//                      pOLV->MouseButtonDown(aMEvt);
                         bNoSel = false;
                     }
                     else
@@ -1805,7 +1805,7 @@ void SvxTableController::getSelectedCells( CellPos& rFirst, CellPos& rLast )
                     Reference< XMergeableCell > xCell( mxTable->getCellByPosition( nCol, nRow ), UNO_QUERY );
                     if( !xCell.is() )
                         continue;
-                        
+
                     if( xCell->isMerged() )
                     {
                         CellPos aPos( nCol, nRow );
@@ -2267,7 +2267,7 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
                         continue;
 
                     const SfxItemSet& rSet = xCell->GetItemSet();
-                    const SvxBoxItem* pOldOuter = (const SvxBoxItem*)	  &rSet.Get( SDRATTR_TABLE_BORDER );
+                    const SvxBoxItem* pOldOuter = (const SvxBoxItem*)     &rSet.Get( SDRATTR_TABLE_BORDER );
 
                     SvxBoxItem aNewFrame( *pOldOuter );
 
@@ -2424,7 +2424,7 @@ bool SvxTableController::GetMarkedObjModel( SdrPage* pNewPage )
 
         SdrInsertReason aReason(SDRREASON_VIEWCALL);
         pNewPage->InsertObject(pNewTableObj,CONTAINER_APPEND,&aReason);
-        
+
         return true;
     }
     catch( Exception& )
@@ -2524,7 +2524,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
         SdrTextObj* pTableObj = dynamic_cast<SdrTextObj*>( mxTableObj.get() );
         if( !pTableObj )
             return false;
-    
+
         const bool bUndo = mpModel && mpModel->IsUndoEnabled();
 
         if( bUndo )
@@ -2543,10 +2543,10 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
             aAttr.ClearItem( SDRATTR_TABLE_BORDER );
             aAttr.ClearItem( SDRATTR_TABLE_BORDER_INNER );
         }
-        
+
         const USHORT* pRanges = rFormatSet.GetRanges();
         bool bTextOnly = true;
-        
+
         while( *pRanges )
         {
             if( (*pRanges != EE_PARA_START) && (*pRanges != EE_CHAR_START) )
@@ -2555,7 +2555,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
                 break;
             }
             pRanges += 2;
-        }		
+        }
 
         const bool bReplaceAll = false;
         for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
@@ -2569,7 +2569,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
                         xCell->AddUndo();
                     if( !bTextOnly )
                         xCell->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
-                    
+
                     SdrText* pText = static_cast< SdrText* >( xCell.get() );
                     mpView->ApplyFormatPaintBrushToText( rFormatSet, *pTableObj, pText, bNoCharacterFormats, bNoParagraphFormats );
                 }
@@ -2585,7 +2585,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
 
         if( bUndo )
             mpModel->EndUndo();
-            
+
         return true;
 
     }

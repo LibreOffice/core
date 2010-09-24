@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,24 +39,24 @@ class ScAreaLink;
 class ScAreaLinkSaver : public ScDataObject
 {
 private:
-    String		aFileName;
-    String		aFilterName;
-    String		aOptions;
-    String		aSourceArea;
-    ScRange		aDestArea;
+    String      aFileName;
+    String      aFilterName;
+    String      aOptions;
+    String      aSourceArea;
+    ScRange     aDestArea;
     ULONG       nRefresh;
 
 public:
                 ScAreaLinkSaver( const ScAreaLink& rSource );
                 ScAreaLinkSaver( const ScAreaLinkSaver& rCopy );
-    virtual		~ScAreaLinkSaver();
+    virtual     ~ScAreaLinkSaver();
 
-    virtual	ScDataObject*	Clone() const;
+    virtual ScDataObject*   Clone() const;
 
-    BOOL		IsEqual( const ScAreaLink& rCompare ) const;
-    BOOL		IsEqualSource( const ScAreaLink& rCompare ) const;
+    BOOL        IsEqual( const ScAreaLink& rCompare ) const;
+    BOOL        IsEqualSource( const ScAreaLink& rCompare ) const;
 
-    void		WriteToLink( ScAreaLink& rLink ) const;
+    void        WriteToLink( ScAreaLink& rLink ) const;
     void        InsertNewLink( ScDocument* pDoc ) const;
 };
 
@@ -66,14 +66,14 @@ class ScAreaLinkSaveCollection : public ScCollection
 public:
                 ScAreaLinkSaveCollection();
                 ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& rCopy );
-    virtual		~ScAreaLinkSaveCollection();
+    virtual     ~ScAreaLinkSaveCollection();
 
-    virtual	ScDataObject*	Clone() const;
+    virtual ScDataObject*   Clone() const;
 
-    ScAreaLinkSaver*	operator[](USHORT nIndex) const {return (ScAreaLinkSaver*)At(nIndex);}
+    ScAreaLinkSaver*    operator[](USHORT nIndex) const {return (ScAreaLinkSaver*)At(nIndex);}
 
-    BOOL		IsEqual( const ScDocument* pDoc ) const;
-    void		Restore( ScDocument* pDoc ) const;
+    BOOL        IsEqual( const ScDocument* pDoc ) const;
+    void        Restore( ScDocument* pDoc ) const;
 
     // returns NULL if empty
     static ScAreaLinkSaveCollection* CreateFromDoc( const ScDocument* pDoc );

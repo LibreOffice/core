@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 
 /**************************************************************************/
 /*                                                                        */
-/* 	TabPage Ansicht/Inhalt                                                */
+/*  TabPage Ansicht/Inhalt                                                */
 /*                                                                        */
 /**************************************************************************/
 TabPage TP_CONTENT_OPT
@@ -220,7 +220,7 @@ TabPage TP_OPTPRINT_PAGE
         TabStop = TRUE ;
         Group = TRUE ;
     };
-/* 
+/*
     removed, tables now always get printed
     CheckBox CB_PTAB
     {
@@ -229,7 +229,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ en-US ] = "~Tables" ;
     };
 */
-/* 
+/*
     functionally merged with CB_PGRF (pictures and graphics)
     CheckBox CB_PDRAW
     {
@@ -801,7 +801,7 @@ TabPage TP_OPTTABLE_PAGE
 };
 /**************************************************************************/
 /*                                                                        */
-/* 	TabPage ShadowCursor                                           		  */
+/*  TabPage ShadowCursor                                                  */
 /*                                                                        */
 /**************************************************************************/
 TabPage TP_OPTSHDWCRSR
@@ -965,7 +965,7 @@ StringArray STR_PRINTOPTUI
         < "Specifies whether to always print text in black."; >;
         < "Pages"; >;
         < "Print ~automatically inserted blank pages"; >;
-        < "If this option is enabled automatically inserted blank pages are printed. This is best if you are printing double-sided. For example, in a book, a \"chapter\" paragraph style has been set to always start with an odd numbered page. If the previous chapter ends on an odd page, %PRODUCTNAME inserts an even numbered blank page. This option controls whether to print that even numbered page or not"; >;  
+        < "If this option is enabled automatically inserted blank pages are printed. This is best if you are printing double-sided. For example, in a book, a \"chapter\" paragraph style has been set to always start with an odd numbered page. If the previous chapter ends on an odd page, %PRODUCTNAME inserts an even numbered blank page. This option controls whether to print that even numbered page or not"; >;
         < "~Use only paper tray from printer preferences"; >;
         < "For printers with multiple trays this option specifies whether the paper tray used is specified by the system settings of the printer."; >;
         < "Print"; >;

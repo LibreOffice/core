@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,17 +45,17 @@ class PBMWriter {
 
 private:
 
-    SvStream*			mpOStm; 			// Die auszugebende PBM-Datei
-    USHORT				mpOStmOldModus;
+    SvStream*           mpOStm;             // Die auszugebende PBM-Datei
+    USHORT              mpOStmOldModus;
 
-    BOOL				mbStatus;
-    sal_Int32			mnMode;				// 0 -> raw, 1-> ascii
-    BitmapReadAccess*	mpAcc;
-    ULONG				mnWidth, mnHeight;	// Bildausmass in Pixeln
+    BOOL                mbStatus;
+    sal_Int32           mnMode;             // 0 -> raw, 1-> ascii
+    BitmapReadAccess*   mpAcc;
+    ULONG               mnWidth, mnHeight;  // Bildausmass in Pixeln
 
-    BOOL				ImplWriteHeader();
-    void				ImplWriteBody();
-    void				ImplWriteNumber( sal_Int32 );
+    BOOL                ImplWriteHeader();
+    void                ImplWriteBody();
+    void                ImplWriteNumber( sal_Int32 );
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
@@ -63,14 +63,14 @@ public:
                         PBMWriter();
                         ~PBMWriter();
 
-    BOOL				WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigItem* pFilterConfigItem );
+    BOOL                WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von PBMWriter ==============================
 
 PBMWriter::PBMWriter() :
-    mbStatus	( TRUE ),
-    mpAcc		( NULL )
+    mbStatus    ( TRUE ),
+    mpAcc       ( NULL )
 {
 }
 
@@ -99,8 +99,8 @@ BOOL PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigI
         }
     }
 
-    BitmapEx	aBmpEx( rGraphic.GetBitmapEx() );
-    Bitmap		aBmp = aBmpEx.GetBitmap();
+    BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
+    Bitmap      aBmp = aBmpEx.GetBitmap();
     aBmp.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
 
     mpOStmOldModus = mpOStm->GetNumberFormatInt();
@@ -153,7 +153,7 @@ void PBMWriter::ImplWriteBody()
 {
     if ( mnMode == 0 )
     {
-        BYTE	nBYTE = 0;
+        BYTE    nBYTE = 0;
         for ( ULONG y = 0; y < mnHeight; y++ )
         {
             ULONG x;
@@ -171,7 +171,7 @@ void PBMWriter::ImplWriteBody()
     }
     else
     {
-        int	nxCount;
+        int nxCount;
         for ( ULONG y = 0; y < mnHeight; y++ )
         {
             nxCount = 70;
@@ -222,8 +222,8 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
 
     if ( rPara.pWindow )
     {
-        ByteString	aResMgrName( "epb" );
-        ResMgr*	pResMgr;
+        ByteString  aResMgrName( "epb" );
+        ResMgr* pResMgr;
 
         pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace vcl
 
     class VCL_DLLPUBLIC PNGWriter
     {
-        PNGWriterImpl*			mpImpl;
+        PNGWriterImpl*          mpImpl;
 
     public:
 
@@ -57,8 +57,8 @@ namespace vcl
         // additional method to be able to modify all chunk before they are stored
         struct ChunkData
         {
-            sal_uInt32					nType;
-            std::vector< sal_uInt8 >	aData;
+            sal_uInt32                  nType;
+            std::vector< sal_uInt8 >    aData;
         };
         std::vector< vcl::PNGWriter::ChunkData >& GetChunks();
     };

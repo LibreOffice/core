@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,13 +104,13 @@ public:
 class WW8SttbTableResource : public ::writerfilter::Reference<Table>
 {
     WW8Sttbf::Pointer_t mpSttbf;
-    
+
 public:
     WW8SttbTableResource(WW8Sttbf::Pointer_t pSttbf);
     virtual ~WW8SttbTableResource();
-    
+
     void resolve(Table & rTable);
-    
+
     string getType() const;
 };
 
@@ -118,13 +118,13 @@ class WW8StringProperty : public ::writerfilter::Reference<Properties>
 {
     sal_uInt32 mnId;
     WW8StringValue::Pointer_t mpValue;
-    
+
 public:
     WW8StringProperty(sal_uInt32 nId, WW8StringValue::Pointer_t pValue);
     virtual ~WW8StringProperty();
-    
+
     void resolve(Properties & rProperties);
-    
+
     string getType() const;
 };
 

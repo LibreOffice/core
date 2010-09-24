@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,22 +32,22 @@
 #include <com/sun/star/form/runtime/FeatureState.idl>
 #endif
 
-#ifndef __com_sun_star_lang_XComponent_idl__ 
+#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
 #endif
-#ifndef __com_sun_star_sdbc_XRowSet_idl__ 
+#ifndef __com_sun_star_sdbc_XRowSet_idl__
 #include <com/sun/star/sdbc/XRowSet.idl>
 #endif
-#ifndef __com_sun_star_sdbc_XResultSetUpdate_idl__ 
+#ifndef __com_sun_star_sdbc_XResultSetUpdate_idl__
 #include <com/sun/star/sdbc/XResultSetUpdate.idl>
 #endif
-#ifndef __com_sun_star_form_runtime_XFormController_idl__ 
+#ifndef __com_sun_star_form_runtime_XFormController_idl__
 #include <com/sun/star/form/runtime/XFormController.idl>
 #endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__ 
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__
 #include <com/sun/star/lang/WrappedTargetException.idl>
 #endif
 #ifndef __com_sun_star_beans_NamedValue_idl__
@@ -56,7 +56,7 @@
 
 //=============================================================================
 
-module com { module sun { module star { module form { module runtime { 
+module com { module sun { module star { module form { module runtime {
 
 interface XFeatureInvalidation;
 
@@ -277,7 +277,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
 
 //=============================================================================
 
-}; }; }; }; }; 
+}; }; }; }; };
 
 //=============================================================================
 

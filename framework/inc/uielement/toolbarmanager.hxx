@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define __FRAMEWORK_UIELEMENT_TOOLBARMANAGER_HXX_
 
 //_________________________________________________________________________________________________________________
-//	my own includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
@@ -40,7 +40,7 @@
 #include <uielement/commandinfo.hxx>
 
 //_________________________________________________________________________________________________________________
-//	interface includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -64,7 +64,7 @@
 #include <com/sun/star/frame/XToolbarController.hpp>
 //end
 //_________________________________________________________________________________________________________________
-//	other includes
+//  other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
@@ -96,12 +96,12 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
                        public ::com::sun::star::lang::XComponent                    ,
                        public ::com::sun::star::lang::XTypeProvider                 ,
                        public ::com::sun::star::ui::XUIConfigurationListener,
-                       public ThreadHelpBase		                                ,
+                       public ThreadHelpBase                                        ,
                        public ::cppu::OWeakObject
 {
     public:
-        ToolBarManager( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServicveManager, 
-                        const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, 
+        ToolBarManager( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServicveManager,
+                        const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                         const rtl::OUString& rResourceName,
                         ToolBar* pToolBar );
         virtual ~ToolBarManager();
@@ -109,23 +109,23 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         //  XInterface, XTypeProvider, XServiceInfo
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
-        
+
         ToolBox* GetToolBar() const;
-        
+
         // XFrameActionListener
         virtual void SAL_CALL frameAction( const com::sun::star::frame::FrameActionEvent& Action ) throw ( ::com::sun::star::uno::RuntimeException );
-        
+
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
-        
+
         // XEventListener
         virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
-        
+
         // XUIConfigurationListener
         virtual void SAL_CALL elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException); 
-        
+        virtual void SAL_CALL elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+
         // XComponent
         void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
         void SAL_CALL addEventListener( const com::sun::star::uno::Reference< XEventListener >& xListener ) throw( com::sun::star::uno::RuntimeException );
@@ -158,7 +158,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
             sal_Int16 nWidth;
         };
         typedef std::vector< ControllerParams > ControllerParamsVector;
-        
+
     protected:
         //added for 33668 by shizhoubo : 2008:04
         DECL_LINK( Command, CommandEvent * );
@@ -197,7 +197,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         void ImplClearPopupMenu( ToolBox *pToolBar );
         void RequestImages();
         sal_uInt16 ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModelFromFrame() const; 
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModelFromFrame() const;
         sal_Bool IsPluginMode() const;
         Image QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages, bool bHiContrast );
         long HandleClick(void ( SAL_CALL ::com::sun::star::frame::XToolbarController::*_pClick )(  ));
@@ -243,15 +243,15 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
 
         CommandToInfoMap                                                                       m_aCommandMap;
         SubToolBarToSubToolBarControllerMap                                                    m_aSubToolBarControllerMap;
-        Timer				                                                                   m_aAsyncUpdateControllersTimer;
+        Timer                                                                                  m_aAsyncUpdateControllersTimer;
         sal_Int16                                                                              m_nSymbolsStyle;
         MenuDescriptionMap m_aMenuMap;
-        sal_Bool																			   m_bAcceleratorCfg;
+        sal_Bool                                                                               m_bAcceleratorCfg;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
 };
-    
+
 }
 
 #endif // __FRAMEWORK_UIELEMENT_TOOLBARMANAGER_HXX_

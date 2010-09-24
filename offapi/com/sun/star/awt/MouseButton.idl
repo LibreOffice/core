@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,42 +24,42 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_MouseButton_idl__ 
-#define __com_sun_star_awt_MouseButton_idl__ 
- 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module awt {  
- 
-//============================================================================= 
- 
+#ifndef __com_sun_star_awt_MouseButton_idl__
+#define __com_sun_star_awt_MouseButton_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
 /** These values are used to specify which keys on the mouse are pressed.
  */
 published constants MouseButton
-{ 
-    //------------------------------------------------------------------------- 
-        
+{
+    //-------------------------------------------------------------------------
+
     /** specifies the left mouse button as being pressed.
      */
-    const short LEFT = 1; 
- 
-    //------------------------------------------------------------------------- 
-        
+    const short LEFT = 1;
+
+    //-------------------------------------------------------------------------
+
     /** specifies the right mouse button as being pressed.
      */
-    const short RIGHT = 2; 
- 
-    //------------------------------------------------------------------------- 
-        
+    const short RIGHT = 2;
+
+    //-------------------------------------------------------------------------
+
     /** specifies the middle mouse button as being pressed.
      */
-    const short MIDDLE = 4; 
- 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    const short MIDDLE = 4;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

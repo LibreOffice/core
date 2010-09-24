@@ -96,6 +96,7 @@ SLOFILES =  \
         $(SLO)$/output3.obj \
         $(SLO)$/gridmerg.obj \
         $(SLO)$/invmerge.obj \
+        $(SLO)$/cellmergeoption.obj \
         $(SLO)$/select.obj \
         $(SLO)$/olinewin.obj \
         $(SLO)$/hintwin.obj \

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@ class SwWrtShell;
 
 class SW_DLLPUBLIC SwWrtShellItem: public SfxPoolItem
 {
-    SwWrtShell*			pWrtSh;
+    SwWrtShell*         pWrtSh;
 
 public:
                             TYPEINFO();
@@ -42,10 +42,10 @@ public:
                             SwWrtShellItem( const SwWrtShellItem& );
 
 
-    virtual int 			operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    SwWrtShell* 			GetValue() const { return pWrtSh; }
+    SwWrtShell*             GetValue() const { return pWrtSh; }
 
 };
 

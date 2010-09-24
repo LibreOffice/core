@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@
 #ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
 #endif
-//	#include <com/sun/star/util/URL.hdl>
+//  #include <com/sun/star/util/URL.hdl>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -128,7 +128,7 @@ void OJoinDesignView::Construct()
     m_pScrollWindow->setTableView(m_pTableView);
     m_pScrollWindow->Show();
     m_pTableView->Show();
-    
+
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
 
     ODataView::Construct();
@@ -136,7 +136,7 @@ void OJoinDesignView::Construct()
 // -----------------------------------------------------------------------------
 void OJoinDesignView::initialize()
 {
-    //	getAddTableDialog()->Update();
+    //  getAddTableDialog()->Update();
 }
 // -------------------------------------------------------------------------
 void OJoinDesignView::resizeDocumentView(Rectangle& _rPlayground)

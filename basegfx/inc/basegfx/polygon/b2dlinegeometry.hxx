@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace basegfx
         /** Create line start/end geometry element, mostly arrows and things like that.
 
             @param rCandidate
-            The polygon which needs to get that line ends and needs to have two points 
+            The polygon which needs to get that line ends and needs to have two points
             at least.
 
             @param rArrow
@@ -56,8 +56,8 @@ namespace basegfx
             defines the size of the element, it's describing the target width in X
             of the arrow.
 
-            @param fDockingPosition needs to be in [0.0 ..1.0] range, where 0.0 means 
-            that the tip of the arrow will be aligned with the polygon start, 1.0 means 
+            @param fDockingPosition needs to be in [0.0 ..1.0] range, where 0.0 means
+            that the tip of the arrow will be aligned with the polygon start, 1.0 means
             the bottom. The default of 0.5 describes a centered arrow.
 
             @param pConsumedLength
@@ -73,8 +73,8 @@ namespace basegfx
             The Line start and end polygon, correctly rotated and scaled
         */
         B2DPolyPolygon createAreaGeometryForLineStartEnd(
-            const B2DPolygon& rCandidate, 
-            const B2DPolyPolygon& rArrow, 
+            const B2DPolygon& rCandidate,
+            const B2DPolyPolygon& rArrow,
             bool bStart,
             double fWidth,
             double fCandidateLength = 0.0, // 0.0 -> calculate self
@@ -84,9 +84,9 @@ namespace basegfx
         /** create filled polygon geometry for lines with a line width
 
             This method will create bezier based, fillable polygons which
-            will resample the curve if it was extended for the given half 
-            line width. It will remove extrema positions from contained 
-            bezier segments and get as close as possible and defined by 
+            will resample the curve if it was extended for the given half
+            line width. It will remove extrema positions from contained
+            bezier segments and get as close as possible and defined by
             the given parameters to the ideal result.
 
             It will check edges for trivial bezier to avoid unnecessary
@@ -113,7 +113,7 @@ namespace basegfx
 
             @param fMaxPartOfEdge
             Allows to influence from with relative length of a control vector
-            compared to it's edge a split is forced. The smaller, the more 
+            compared to it's edge a split is forced. The smaller, the more
             subdivisions will be needed to create the filled geometry. Allowed
             range is cropped to [1.0 .. 0.01]
 
@@ -129,10 +129,10 @@ namespace basegfx
             needed and defined.
         */
         B2DPolyPolygon createAreaGeometry(
-            const B2DPolygon& rCandidate, 
-            double fHalfLineWidth, 
-            B2DLineJoin eJoin = B2DLINEJOIN_ROUND, 
-            double fMaxAllowedAngle = (12.5 * F_PI180), 
+            const B2DPolygon& rCandidate,
+            double fHalfLineWidth,
+            B2DLineJoin eJoin = B2DLINEJOIN_ROUND,
+            double fMaxAllowedAngle = (12.5 * F_PI180),
             double fMaxPartOfEdge = 0.4,
             double fMiterMinimumAngle = (15.0 * F_PI180));
     } // end of namespace tools

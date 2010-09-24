@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,8 +120,8 @@ namespace dbtools
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::task;
-//	using namespace cppu;
-//	using namespace osl;
+//  using namespace cppu;
+//  using namespace osl;
 
 //==============================================================================
 //==============================================================================
@@ -172,7 +172,7 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
         return NumberFormat::UNDEFINED;
 
     sal_Int32 nFormat = 0;
-    sal_Int32 nNumberType	= _bIsCurrency ? NumberFormat::CURRENCY : NumberFormat::NUMBER;
+    sal_Int32 nNumberType   = _bIsCurrency ? NumberFormat::CURRENCY : NumberFormat::NUMBER;
     switch (_nDataType)
     {
         case DataType::BIT:
@@ -208,7 +208,7 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
             {
                 nFormat = _xTypes->getStandardFormat((sal_Int16)nNumberType, _rLocale);
             }
-        }	break;
+        }   break;
         case DataType::CHAR:
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
@@ -316,10 +316,10 @@ Reference< XConnection > getConnection_allowException(
                 OSL_ENSURE(sal_False, "dbtools::getConnection: error while retrieving data source properties!");
             }
             if(bPwdReq && !sPwd.getLength())
-            {	// password required, but empty -> connect using an interaction handler
+            {   // password required, but empty -> connect using an interaction handler
                 Reference<XCompletedConnection> xConnectionCompletion(xProp, UNO_QUERY);
                 if (xConnectionCompletion.is())
-                {	// instantiate the default SDB interaction handler
+                {   // instantiate the default SDB interaction handler
                     Reference< XInteractionHandler > xHandler(_rxFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
                     OSL_ENSURE(xHandler.is(), "dbtools::getConnection service com.sun.star.task.InteractionHandler not available!");
                     if (xHandler.is())
@@ -439,7 +439,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 
         Reference< XConnection > xPureConnection;
         if (sDataSourceName.getLength())
-        {	// the row set's data source property is set
+        {   // the row set's data source property is set
             // -> try to connect, get user and pwd setting for that
             ::rtl::OUString sUser, sPwd;
 
@@ -451,7 +451,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
             xPureConnection = getConnection_allowException( sDataSourceName, sUser, sPwd, _rxFactory );
         }
         else if (sURL.getLength())
-        {	// the row set has no data source, but a connection url set
+        {   // the row set has no data source, but a connection url set
             // -> try to connection with that url
             Reference< XDriverManager > xDriverManager(
                 _rxFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ConnectionPool")), UNO_QUERY);
@@ -463,7 +463,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
                 if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD), xRowSetProps))
                     xRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
                 if (sUser.getLength())
-                {	// use user and pwd together with the url
+                {   // use user and pwd together with the url
                     Sequence< PropertyValue> aInfo(2);
                     aInfo.getArray()[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
                     aInfo.getArray()[0].Value <<= sUser;
@@ -511,7 +511,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 
 //------------------------------------------------------------------------------
 Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
-    sal_Bool _bSetAsActiveConnection )	SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
+    sal_Bool _bSetAsActiveConnection )  SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
 {
     SharedConnection xConnection = lcl_connectRowSet( _rxRowSet, _rxFactory, _bSetAsActiveConnection, true );
     return xConnection.getTyped();
@@ -519,7 +519,7 @@ Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, cons
 
 //------------------------------------------------------------------------------
 SharedConnection ensureRowSetConnection(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
-    bool _bUseAutoConnectionDisposer )	SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
+    bool _bUseAutoConnectionDisposer )  SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
 {
     return lcl_connectRowSet( _rxRowSet, _rxFactory, true, _bUseAutoConnectionDisposer );
 }
@@ -891,8 +891,8 @@ static ::rtl::OUString impl_doComposeTableName( const Reference< XDatabaseMetaDa
     sal_Bool bCatlogAtStart = sal_True;
     if ( _rCatalog.getLength() && aNameComps.bCatalogs )
     {
-        sCatalogSep		= _rxMetaData->getCatalogSeparator();
-        bCatlogAtStart	= _rxMetaData->isCatalogAtStart();
+        sCatalogSep     = _rxMetaData->getCatalogSeparator();
+        bCatlogAtStart  = _rxMetaData->isCatalogAtStart();
 
         if ( bCatlogAtStart && sCatalogSep.getLength())
         {
@@ -970,7 +970,7 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
     if ( aNameComps.bSchemas )
     {
         sal_Int32 nIndex = sName.indexOf((sal_Unicode)'.');
-        //	OSL_ENSURE(-1 != nIndex, "QualifiedNameComponents : no schema separator!");
+        //  OSL_ENSURE(-1 != nIndex, "QualifiedNameComponents : no schema separator!");
         if ( nIndex != -1 )
             _rSchema = sName.copy(0, nIndex);
         sName = sName.copy(nIndex + 1);
@@ -1045,8 +1045,8 @@ try
 
     for (sal_Int16 i=0; i<aOldProperties.getLength(); ++i)
     {
-        if	(	(!pOldProps[i].Name.equals(sPropDefaultControl))
-            &&	(!pOldProps[i].Name.equals(sPropLabelControl))
+        if  (   (!pOldProps[i].Name.equals(sPropDefaultControl))
+            &&  (!pOldProps[i].Name.equals(sPropLabelControl))
             )
         {
             // binaere Suche
@@ -1055,7 +1055,7 @@ try
                 && ( pResult != pNewProps + nNewLen && pResult->Name == pOldProps[i].Name )
                 && ( (pResult->Attributes & PropertyAttribute::READONLY) == 0 )
                 && ( pResult->Type.equals(pOldProps[i].Type)) )
-            {	// Attribute stimmen ueberein und Property ist nicht read-only
+            {   // Attribute stimmen ueberein und Property ist nicht read-only
                 try
                 {
                     xNewProps->setPropertyValue(pResult->Name, xOldProps->getPropertyValue(pResult->Name));
@@ -1082,7 +1082,7 @@ try
     sal_Bool bNewIsFormatted = xSI.is() && xSI->supportsService( sFormattedServiceName );
 
     if (!bOldIsFormatted && !bNewIsFormatted)
-        return;	// nothing to do
+        return; // nothing to do
 
     if (bOldIsFormatted && bNewIsFormatted)
         // nein, wenn beide formatierte Felder sind, dann machen wir keinerlei Konvertierungen
@@ -1117,7 +1117,7 @@ try
         // eine eventuelle-Min-Max-Konvertierung
         Any aEffectiveMin( xOldProps->getPropertyValue(sPropEffectiveMin) );
         if (aEffectiveMin.hasValue())
-        {	// im Gegensatz zu ValueMin kann EffectiveMin void sein
+        {   // im Gegensatz zu ValueMin kann EffectiveMin void sein
             if (hasProperty(sPropValueMin, xNewProps))
             {
                 OSL_ENSURE(aEffectiveMin.getValueType().getTypeClass() == TypeClass_DOUBLE,
@@ -1127,7 +1127,7 @@ try
         }
         Any aEffectiveMax( xOldProps->getPropertyValue(sPropEffectiveMax) );
         if (aEffectiveMax.hasValue())
-        {	// analog
+        {   // analog
             if (hasProperty(sPropValueMax, xNewProps))
             {
                 OSL_ENSURE(aEffectiveMax.getValueType().getTypeClass() == TypeClass_DOUBLE,
@@ -1146,25 +1146,25 @@ try
                 // die Effective-Properties sollten immer void oder string oder double sein ....
 
             if (hasProperty(sPropDefaultDate, xNewProps) && !bIsString)
-            {	// (einen ::rtl::OUString in ein Datum zu konvertieren muss nicht immer klappen, denn das ganze kann ja an
+            {   // (einen ::rtl::OUString in ein Datum zu konvertieren muss nicht immer klappen, denn das ganze kann ja an
                 // eine Textspalte gebunden gewesen sein, aber mit einem double koennen wir was anfangen)
                 Date aDate = DBTypeConversion::toDate(getDouble(aEffectiveDefault));
                 xNewProps->setPropertyValue(sPropDefaultDate, makeAny(aDate));
             }
 
             if (hasProperty(sPropDefaultTime, xNewProps) && !bIsString)
-            {	// voellig analog mit Zeit
+            {   // voellig analog mit Zeit
                 Time aTime = DBTypeConversion::toTime(getDouble(aEffectiveDefault));
                 xNewProps->setPropertyValue(sPropDefaultTime, makeAny(aTime));
             }
 
             if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE), xNewProps) && !bIsString)
-            {	// hier koennen wir einfach das double durchreichen
+            {   // hier koennen wir einfach das double durchreichen
                 xNewProps->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE), aEffectiveDefault);
             }
 
             if (hasProperty(sPropDefaultText, xNewProps) && bIsString)
-            {	// und hier den ::rtl::OUString
+            {   // und hier den ::rtl::OUString
                 xNewProps->setPropertyValue(sPropDefaultText, aEffectiveDefault);
             }
 
@@ -1221,7 +1221,7 @@ try
             // ... und zum FormatsSupplier hinzufuegen (wenn noetig)
             sal_Int32 nKey = xFormats->queryKey(sNewFormat, _rLocale, sal_False);
             if (nKey == (sal_Int32)-1)
-            {	// noch nicht vorhanden in meinem Formatter ...
+            {   // noch nicht vorhanden in meinem Formatter ...
                 nKey = xFormats->addNew(sNewFormat, _rLocale);
             }
 
@@ -1313,7 +1313,7 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
     try
     {
         Reference< XConnection> xConn = connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxFactory, sal_True );
-        if ( xConn.is() )		// implies _rxRowSet.is()
+        if ( xConn.is() )       // implies _rxRowSet.is()
         {
             // build the statement the row set is based on (can't use the ActiveCommand property of the set
             // as this reflects the status after the last execute, not the currently set properties)
@@ -1426,20 +1426,20 @@ namespace
     {
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
         Reference< XPropertySetInfo > xInfo = _xTable->getPropertySetInfo();
-        if (	xInfo.is() 
-            &&	xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_NAME)) )
+        if (    xInfo.is()
+            &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_NAME)) )
         {
-            
+
             ::rtl::OUString aCatalog;
             ::rtl::OUString aSchema;
             ::rtl::OUString aTable;
-            if (    xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) 
-                &&	xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) )
+            if (    xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
+                &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) )
             {
-                _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))	>>= _out_rCatalog;
-                _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))	>>= _out_rSchema;
+                _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= _out_rCatalog;
+                _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= _out_rSchema;
             }
-            _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))		>>= _out_rName;
+            _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= _out_rName;
         }
         else
             OSL_ENSURE( false, "::dbtools::lcl_getTableNameComponents: this is no table object!" );
@@ -1654,7 +1654,7 @@ sal_Bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
     return bSuccessfullyReRouted;
 }
 // -------------------------------------------------------------------------
-sal_Bool implSetObject(	const Reference< XParameters >& _rxParameters,
+sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
                         const sal_Int32 _nColumnIndex, const Any& _rValue) SAL_THROW ( ( SQLException, RuntimeException ) )
 {
     sal_Bool bSuccessfullyReRouted = sal_True;
@@ -1753,7 +1753,7 @@ sal_Bool implSetObject(	const Reference< XParameters >& _rxParameters,
 //..................................................................
 namespace
 {
-    class OParameterWrapper : public ::cppu::WeakImplHelper1< XIndexAccess > 
+    class OParameterWrapper : public ::cppu::WeakImplHelper1< XIndexAccess >
     {
         ::std::bit_vector       m_aSet;
         Reference<XIndexAccess> m_xSource;
@@ -1832,7 +1832,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
             Reference<XPropertySet> xParam(xParamsAsIndicies->getByIndex(i),UNO_QUERY);
             ::rtl::OUString sName;
             xParam->getPropertyValue(PROPERTY_NAME) >>= sName;
-            
+
             TParameterPositions::iterator aFind = aParameterNames.find(sName);
             if ( aFind != aParameterNames.end() )
                 aNewParameterSet[i] = true;
@@ -1888,7 +1888,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
                 ::std::vector<sal_Int32>::iterator aIterPos = aFind->second.begin();
                 ::std::vector<sal_Int32>::iterator aEndPos = aFind->second.end();
                 for(;aIterPos != aEndPos;++aIterPos)
-                {                    
+                {
                     if ( _aParametersSet.empty() || !_aParametersSet[(*aIterPos)-1] )
                     {
                         _xParameters->setObjectWithInfo(*aIterPos, pFinalValues->Value, nParamType, nScale);
@@ -2083,7 +2083,7 @@ void getBoleanComparisonPredicate( const ::rtl::OUString& _rExpression, const sa
 }
 
 //.........................................................................
-}	// namespace dbtools
+}   // namespace dbtools
 //.........................................................................
 
 //.........................................................................
@@ -2123,8 +2123,8 @@ void release(oslInterlockedCount& _refCount,
                 _xInterface = xParent;
             }
 
-//					// destroy the object if xHoldAlive decrement the refcount to 0
-//					m_pDerivedImplementation->WEAK::release();
+//                  // destroy the object if xHoldAlive decrement the refcount to 0
+//                  m_pDerivedImplementation->WEAK::release();
         }
     }
     else
@@ -2138,7 +2138,7 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 
 }
 // -------------------------------------------------------------------------
-    OSQLColumns::Vector::const_iterator find(	OSQLColumns::Vector::const_iterator __first,
+    OSQLColumns::Vector::const_iterator find(   OSQLColumns::Vector::const_iterator __first,
                                         OSQLColumns::Vector::const_iterator __last,
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
@@ -2147,7 +2147,7 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
         return find(__first,__last,sName,_rVal,_rCase);
     }
     // -------------------------------------------------------------------------
-    OSQLColumns::Vector::const_iterator findRealName(	OSQLColumns::Vector::const_iterator __first,
+    OSQLColumns::Vector::const_iterator findRealName(   OSQLColumns::Vector::const_iterator __first,
                                         OSQLColumns::Vector::const_iterator __last,
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
@@ -2156,7 +2156,7 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
         return find(__first,__last,sRealName,_rVal,_rCase);
     }
     // -------------------------------------------------------------------------
-    OSQLColumns::Vector::const_iterator find(	OSQLColumns::Vector::const_iterator __first,
+    OSQLColumns::Vector::const_iterator find(   OSQLColumns::Vector::const_iterator __first,
                                         OSQLColumns::Vector::const_iterator __last,
                                         const ::rtl::OUString& _rProp,
                                         const ::rtl::OUString& _rVal,

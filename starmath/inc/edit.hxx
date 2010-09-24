@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,13 +64,13 @@ class SmEditWindow : public Window, public DropTargetHelper
     SmEditAccessible *                                          pAccessible;
 
     SmCmdBoxWindow &rCmdBox;
-    EditView	   *pEditView;
-    ScrollBar	   *pHScrollBar,
+    EditView       *pEditView;
+    ScrollBar      *pHScrollBar,
                    *pVScrollBar;
     ScrollBarBox   *pScrollBox;
-    Timer			aModifyTimer,
+    Timer           aModifyTimer,
                     aCursorMoveTimer;
-    ESelection		aOldSelection;
+    ESelection      aOldSelection;
 
     virtual void KeyInput(const KeyEvent& rKEvt);
     virtual void Command(const CommandEvent& rCEvt);
@@ -91,12 +91,12 @@ class SmEditWindow : public Window, public DropTargetHelper
     DECL_LINK(EditStatusHdl ,EditStatus *);
     DECL_LINK(ScrollHdl, ScrollBar *);
 
-    void 		CreateEditView();
+    void        CreateEditView();
 
-    Rectangle 	AdjustScrollBars();
-    void 		SetScrollBarRanges();
-    void 		InitScrollBars();
-    void		InvalidateSlots();
+    Rectangle   AdjustScrollBars();
+    void        SetScrollBarRanges();
+    void        InitScrollBars();
+    void        InvalidateSlots();
 
 public:
     SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin );
@@ -109,30 +109,30 @@ public:
     SfxItemPool *   GetEditEngineItemPool();
 
     // Window
-    virtual void		SetText(const XubString &rText);
+    virtual void        SetText(const XubString &rText);
     virtual String      GetText() const;
-    virtual void		GetFocus();
-    virtual void		LoseFocus();
+    virtual void        GetFocus();
+    virtual void        LoseFocus();
 
-    ESelection			GetSelection() const;
-    void				SetSelection(const ESelection &rSel);
+    ESelection          GetSelection() const;
+    void                SetSelection(const ESelection &rSel);
 
-    BOOL 				IsEmpty() const;
-    BOOL 				IsSelected() const;
-    BOOL 				IsAllSelected() const;
-    void 				Cut();
-    void 				Copy();
-    void 				Paste();
-    void 				Delete();
-    void 				SelectAll();
-    void 				InsertText(const String &rText);
-    void 				InsertCommand(USHORT nCommand);
-    void 				MarkError(const Point &rPos);
-    void 				SelNextMark();
-    void 				SelPrevMark();
-    BOOL 				HasMark(const String &rText) const;
+    BOOL                IsEmpty() const;
+    BOOL                IsSelected() const;
+    BOOL                IsAllSelected() const;
+    void                Cut();
+    void                Copy();
+    void                Paste();
+    void                Delete();
+    void                SelectAll();
+    void                InsertText(const String &rText);
+    void                InsertCommand(USHORT nCommand);
+    void                MarkError(const Point &rPos);
+    void                SelNextMark();
+    void                SelPrevMark();
+    BOOL                HasMark(const String &rText) const;
 
-    void 				Flush();
+    void                Flush();
     void                DeleteEditView( SmViewShell &rView );
 
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );

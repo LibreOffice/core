@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,19 +39,19 @@ namespace io_acceptor {
     {
     public:
         PipeAcceptor( const ::rtl::OUString &sPipeName , const ::rtl::OUString &sConnectionDescription );
-        
+
         void init();
         ::com::sun::star::uno::Reference < ::com::sun::star::connection::XConnection >  accept(  );
-        
+
         void stopAccepting();
-        
+
         ::osl::Mutex m_mutex;
         ::osl::Pipe m_pipe;
         ::rtl::OUString m_sPipeName;
         ::rtl::OUString m_sConnectionDescription;
         sal_Bool m_bClosed;
     };
-    
+
     class SocketAcceptor
     {
     public:
@@ -64,7 +64,7 @@ namespace io_acceptor {
         ::com::sun::star::uno::Reference < ::com::sun::star::connection::XConnection > accept();
 
         void stopAccepting();
-        
+
         ::osl::SocketAddr m_addr;
         ::osl::AcceptorSocket m_socket;
         ::rtl::OUString m_sSocketName;
@@ -73,6 +73,6 @@ namespace io_acceptor {
         sal_Bool m_bTcpNoDelay;
         sal_Bool m_bClosed;
     };
-    
+
 }
 

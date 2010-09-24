@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,13 +52,13 @@ using namespace ::com::sun::star;
 // implementation of an effect duration property handler
 
 
-XMLDurationPropertyHdl::~XMLDurationPropertyHdl() 
+XMLDurationPropertyHdl::~XMLDurationPropertyHdl()
 {
 }
 
-sal_Bool XMLDurationPropertyHdl::importXML( 
-    const OUString& rStrImpValue, 
-    ::com::sun::star::uno::Any& rValue, 
+sal_Bool XMLDurationPropertyHdl::importXML(
+    const OUString& rStrImpValue,
+    ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     util::DateTime aTime;
@@ -70,9 +70,9 @@ sal_Bool XMLDurationPropertyHdl::importXML(
     return sal_True;
 }
 
-sal_Bool XMLDurationPropertyHdl::exportXML( 
-    OUString& rStrExpValue, 
-    const ::com::sun::star::uno::Any& rValue, 
+sal_Bool XMLDurationPropertyHdl::exportXML(
+    OUString& rStrExpValue,
+    const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     sal_Int32 nVal = 0;
@@ -99,13 +99,13 @@ XMLOpacityPropertyHdl::XMLOpacityPropertyHdl( SvXMLImport* pImport )
 {
 }
 
-XMLOpacityPropertyHdl::~XMLOpacityPropertyHdl() 
+XMLOpacityPropertyHdl::~XMLOpacityPropertyHdl()
 {
 }
 
-sal_Bool XMLOpacityPropertyHdl::importXML( 
-    const OUString& rStrImpValue, 
-    ::com::sun::star::uno::Any& rValue, 
+sal_Bool XMLOpacityPropertyHdl::importXML(
+    const OUString& rStrImpValue,
+    ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
@@ -151,9 +151,9 @@ sal_Bool XMLOpacityPropertyHdl::importXML(
     return bRet;
 }
 
-sal_Bool XMLOpacityPropertyHdl::exportXML( 
-    OUString& rStrExpValue, 
-    const ::com::sun::star::uno::Any& rValue, 
+sal_Bool XMLOpacityPropertyHdl::exportXML(
+    OUString& rStrExpValue,
+    const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
@@ -179,9 +179,9 @@ XMLTextAnimationStepPropertyHdl::~XMLTextAnimationStepPropertyHdl()
 {
 }
 
-sal_Bool XMLTextAnimationStepPropertyHdl::importXML( 
-    const OUString& rStrImpValue, 
-    ::com::sun::star::uno::Any& rValue, 
+sal_Bool XMLTextAnimationStepPropertyHdl::importXML(
+    const OUString& rStrImpValue,
+    ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
@@ -209,9 +209,9 @@ sal_Bool XMLTextAnimationStepPropertyHdl::importXML(
     return bRet;
 }
 
-sal_Bool XMLTextAnimationStepPropertyHdl::exportXML( 
-    OUString& rStrExpValue, 
-    const ::com::sun::star::uno::Any& rValue, 
+sal_Bool XMLTextAnimationStepPropertyHdl::exportXML(
+    OUString& rStrExpValue,
+    const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;

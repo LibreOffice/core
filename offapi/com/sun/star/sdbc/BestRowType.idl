@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,60 +24,60 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_BestRowType_idl__ 
-#define __com_sun_star_sdbc_BestRowType_idl__ 
- 
- module com {  module sun {  module star {  module sdbc { 
- 
- 
+#ifndef __com_sun_star_sdbc_BestRowType_idl__
+#define __com_sun_star_sdbc_BestRowType_idl__
+
+ module com {  module sun {  module star {  module sdbc {
+
+
 /** determines the type of the best row identifier.
  */
 published constants BestRowType
-{ 
-     
-    /** indicates that the best row identifier may or may not be a pseudo-column. 
-             A possible value for the column 
+{
+
+    /** indicates that the best row identifier may or may not be a pseudo-column.
+             A possible value for the column
              <code>PSEUDO_COLUMN</code>
              in the
              <type scope="com::sun::star::sdbc">XResultSet</type>
-             object 
-             returned by the method 
-             <member>XDatabaseMetaData::getBestRowIdentifier()</member>
-             .
-     */
-    const long UNKNOWN	= 0; 
-    //------------------------------------------------------------------------- 
-     
-    /** indicates that the best row identifier is NOT a pseudo-column. 
-             A possible value for the column 
-             <code>PSEUDO_COLUMN</code>
-             in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
-             object 
-             returned by the method 
-             <member>XDatabaseMetaData::getBestRowIdentifier()</member>
-             .
-     */
-    const long NOT_PSEUDO	= 1; 
-    //------------------------------------------------------------------------- 
-     
-    /** indicates that the best row identifier is a pseudo-column. 
-             A possible value for the column 
-             <code>PSEUDO_COLUMN</code>
-             in the
-             <type scope="com::sun::star::sdbc">XResultSet</type>
-             object 
+             object
              returned by the method
              <member>XDatabaseMetaData::getBestRowIdentifier()</member>
              .
      */
-    const long PSEUDO	= 2; 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; }; 
- 
-/*=========================================================================== 
-===========================================================================*/ 
-#endif 
+    const long UNKNOWN  = 0;
+    //-------------------------------------------------------------------------
+
+    /** indicates that the best row identifier is NOT a pseudo-column.
+             A possible value for the column
+             <code>PSEUDO_COLUMN</code>
+             in the
+             <type scope="com::sun::star::sdbc">XResultSet</type>
+             object
+             returned by the method
+             <member>XDatabaseMetaData::getBestRowIdentifier()</member>
+             .
+     */
+    const long NOT_PSEUDO   = 1;
+    //-------------------------------------------------------------------------
+
+    /** indicates that the best row identifier is a pseudo-column.
+             A possible value for the column
+             <code>PSEUDO_COLUMN</code>
+             in the
+             <type scope="com::sun::star::sdbc">XResultSet</type>
+             object
+             returned by the method
+             <member>XDatabaseMetaData::getBestRowIdentifier()</member>
+             .
+     */
+    const long PSEUDO   = 2;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

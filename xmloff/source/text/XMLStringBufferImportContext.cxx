@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ using ::xmloff::token::XML_P;
 TYPEINIT1(XMLStringBufferImportContext, SvXMLImportContext);
 
 XMLStringBufferImportContext::XMLStringBufferImportContext(
-    SvXMLImport& rImport, 
+    SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& sLocalName,
     OUStringBuffer& rBuffer) :
@@ -61,11 +61,11 @@ SvXMLImportContext *XMLStringBufferImportContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> &)
 {
-    return new XMLStringBufferImportContext(GetImport(), nPrefix, 
+    return new XMLStringBufferImportContext(GetImport(), nPrefix,
                                             rLocalName, rTextBuffer);
 }
 
-void XMLStringBufferImportContext::Characters( 
+void XMLStringBufferImportContext::Characters(
     const OUString& rChars )
 {
     rTextBuffer.append(rChars);

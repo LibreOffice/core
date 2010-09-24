@@ -58,7 +58,6 @@ ULFDIR:=.
 .ENDIF			# "$(WITH_LANG)"!=""
 
 OBJFILES= 	$(OBJ)$/setup_main.obj \
-            $(OBJ)$/setup_a.obj \
             $(OBJ)$/setup_w.obj
 
 # --- Targets ------------------------------------------------------

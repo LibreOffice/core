@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,10 +73,10 @@ OStreamSection::OStreamSection(const staruno::Reference< stario::XDataOutputStre
 OStreamSection::~OStreamSection()
 {
     try
-    {	// don't allow any exceptions to leave this block, this may be called during the stack unwinding of an exception
+    {   // don't allow any exceptions to leave this block, this may be called during the stack unwinding of an exception
         // handling routing
         if (m_xInStream.is() &&  m_xMarkStream.is())
-        {	// we're working on an input stream
+        {   // we're working on an input stream
             m_xMarkStream->jumpToMark(m_nBlockStart);
             m_xInStream->skipBytes(m_nBlockLen);
             m_xMarkStream->deleteMark(m_nBlockStart);
@@ -88,7 +88,7 @@ OStreamSection::~OStreamSection()
                 // nothing to do : the estimation the caller gave us (in the ctor) was correct
                 m_xMarkStream->deleteMark(m_nBlockStart);
             else
-            {	// the estimation was wrong (or we didn't get one)
+            {   // the estimation was wrong (or we didn't get one)
                 m_nBlockLen = nRealBlockLength;
                 m_xMarkStream->jumpToMark(m_nBlockStart);
                 m_xOutStream->writeLong(m_nBlockLen);
@@ -106,7 +106,7 @@ sal_Int32 OStreamSection::available()
 {
     sal_Int32 nBytes = 0;
     try
-    {	// don't allow any exceptions to leave this block, this may be called during the stack unwinding of an exception
+    {   // don't allow any exceptions to leave this block, this may be called during the stack unwinding of an exception
         if (m_xInStream.is() &&  m_xMarkStream.is())
             nBytes = m_xMarkStream->offsetToMark(m_nBlockStart) - sizeof(m_nBlockLen);
     }
@@ -117,6 +117,6 @@ sal_Int32 OStreamSection::available()
 }
 // -----------------------------------------------------------------------------
 
-}	// namespace comphelper
+}   // namespace comphelper
 
 

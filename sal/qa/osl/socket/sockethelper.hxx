@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ extern "C"
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
-#include <netinet/in.h>           
+#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/wait.h>
 #endif
@@ -86,8 +86,8 @@ extern "C"
 
 #if ( defined WNT )                     // Windows
 #include <tools/prewin.h>
-// #include <windows.h> 
-#include <winsock.h> 
+// #include <windows.h>
+#include <winsock.h>
 #include <string.h>
 #include <tools/postwin.h>
 #endif
@@ -111,10 +111,10 @@ sal_Bool compareUString( const ::rtl::OUString & ustr, const sal_Char *astr );
 */
 sal_Bool compareSocketAddr( const ::osl::SocketAddr & addr1 , const ::osl::SocketAddr & addr2  );
 //char * oustring2char( const ::rtl::OUString & str );
-/** print a UNI_CODE String. And also print some comments of the string. 
+/** print a UNI_CODE String. And also print some comments of the string.
 */
 void printUString( const ::rtl::OUString & str, const char * msg = "" );
-/** get the local host name. 
+/** get the local host name.
     mindy: gethostbyname( "localhost" ), on Linux, it returns the hostname in /etc/hosts + domain name,
     if no entry in /etc/hosts, it returns "localhost" + domain name
 */

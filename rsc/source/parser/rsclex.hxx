@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 // a buffer for unique strings
 class StringContainer
 {
-    std::hash_set< rtl::OString, rtl::OStringHash >		m_aStrings;
+    std::hash_set< rtl::OString, rtl::OStringHash >     m_aStrings;
 public:
     StringContainer() {}
     ~StringContainer() {}
@@ -77,9 +77,9 @@ class ObjectStack {
 
         const RSCINST & Top  ()     { return pRoot->aInst; }
         BOOL        IsEmpty()   { return( pRoot == NULL ); }
-        void		IncTupelRec() { pRoot->nTupelRec++; }
-        void		DecTupelRec() { pRoot->nTupelRec--; }
-        sal_uInt32	TupelRecCount() const { return pRoot->nTupelRec; }
+        void        IncTupelRec() { pRoot->nTupelRec++; }
+        void        DecTupelRec() { pRoot->nTupelRec--; }
+        sal_uInt32  TupelRecCount() const { return pRoot->nTupelRec; }
         void        Push( RSCINST aInst )
                     {
                         Node* pTmp;
@@ -125,4 +125,4 @@ extern RscTypCont*              pTC;
 extern RscFileInst *            pFI;
 extern RscExpression *          pExp;
 extern ObjectStack              S;
-extern StringContainer*			pStringContainer;
+extern StringContainer*         pStringContainer;

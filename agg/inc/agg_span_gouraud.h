@@ -2,8 +2,8 @@
 // Anti-Grain Geometry - Version 2.3
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all copies.
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
 //
@@ -24,7 +24,7 @@ namespace agg
 {
 
     //============================================================span_gouraud
-    template<class ColorT, class Allocator> 
+    template<class ColorT, class Allocator>
     class span_gouraud : public span_generator<ColorT, Allocator>
     {
     public:
@@ -39,7 +39,7 @@ namespace agg
         };
 
         //--------------------------------------------------------------------
-        span_gouraud(alloc_type& alloc) : 
+        span_gouraud(alloc_type& alloc) :
             span_generator<color_type, alloc_type>(alloc),
             m_vertex(0)
         {
@@ -54,7 +54,7 @@ namespace agg
                      double x1, double y1,
                      double x2, double y2,
                      double x3, double y3,
-                     double d) : 
+                     double d) :
             span_generator<color_type, alloc_type>(alloc)
         {
             colors(c1, c2, c3);
@@ -71,21 +71,21 @@ namespace agg
 
         //--------------------------------------------------------------------
         // Sets the triangle and dilates it if needed.
-        // The trick here is to calculate beveled joins in the vertices of the 
-        // triangle and render it as a 6-vertex polygon. 
-        // It's necessary to achieve numerical stability. 
+        // The trick here is to calculate beveled joins in the vertices of the
+        // triangle and render it as a 6-vertex polygon.
+        // It's necessary to achieve numerical stability.
         // However, the coordinates to interpolate colors are calculated
         // as miter joins (calc_intersection).
-        void triangle(double x1, double y1, 
+        void triangle(double x1, double y1,
                       double x2, double y2,
                       double x3, double y3,
                       double d)
         {
-            m_coord[0].x = m_x[0] = x1; 
+            m_coord[0].x = m_x[0] = x1;
             m_coord[0].y = m_y[0] = y1;
-            m_coord[1].x = m_x[1] = x2; 
+            m_coord[1].x = m_x[1] = x2;
             m_coord[1].y = m_y[1] = y2;
-            m_coord[2].x = m_x[2] = x3; 
+            m_coord[2].x = m_x[2] = x3;
             m_coord[2].y = m_y[2] = y3;
             m_cmd[0] = path_cmd_move_to;
             m_cmd[1] = path_cmd_line_to;
@@ -93,7 +93,7 @@ namespace agg
             m_cmd[3] = path_cmd_stop;
 
             if(d != 0.0)
-            {   
+            {
                 dilate_triangle(m_coord[0].x, m_coord[0].y,
                                 m_coord[1].x, m_coord[1].y,
                                 m_coord[2].x, m_coord[2].y,
@@ -144,7 +144,7 @@ namespace agg
 
             if(m_coord[0].y > m_coord[2].y)
             {
-                coord[0] = m_coord[2]; 
+                coord[0] = m_coord[2];
                 coord[2] = m_coord[0];
             }
 

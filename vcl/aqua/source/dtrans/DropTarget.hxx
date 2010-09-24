@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@
 
 class DropTarget;
 
-/* The functions declared in this protocol are actually 
+/* The functions declared in this protocol are actually
    declared in vcl/aqua/inc/salframe.h. Because we want
    to avoid importing VCL headers in UNO services and
    on the other hand want to avoid warnings caused by
@@ -84,8 +84,8 @@ class DropTarget;
 
 
 class DropTarget: public cppu::BaseMutex,
-                  public cppu::WeakComponentImplHelper5< com::sun::star::lang::XInitialization, 
-                                                         com::sun::star::datatransfer::dnd::XDropTarget, 
+                  public cppu::WeakComponentImplHelper5< com::sun::star::lang::XInitialization,
+                                                         com::sun::star::datatransfer::dnd::XDropTarget,
                                                          com::sun::star::datatransfer::dnd::XDropTargetDragContext,
                                                          com::sun::star::datatransfer::dnd::XDropTargetDropContext,
                                                          com::sun::star::lang::XServiceInfo >,
@@ -121,7 +121,7 @@ public:
   virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) throw(com::sun::star::uno::RuntimeException);
   virtual void SAL_CALL rejectDrag() throw(com::sun::star::uno::RuntimeException);
 
-  // XDropTargetDragContext 
+  // XDropTargetDragContext
   virtual void SAL_CALL acceptDrop(sal_Int8 dropOperation) throw (com::sun::star::uno::RuntimeException);
   virtual void SAL_CALL rejectDrop() throw (com::sun::star::uno::RuntimeException);
   virtual void SAL_CALL dropComplete(sal_Bool success) throw (com::sun::star::uno::RuntimeException);

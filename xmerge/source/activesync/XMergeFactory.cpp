@@ -8,14 +8,14 @@
 #include "XMergeFactory.h"
 
 //////////////////////////////////////////////////////////////////////
-// IUnknown implementation 
-//////////////////////////////////////////////////////////////////////																		 
-STDMETHODIMP CXMergeFactory::QueryInterface(REFIID riid, void **ppvObject)  
+// IUnknown implementation
+//////////////////////////////////////////////////////////////////////
+STDMETHODIMP CXMergeFactory::QueryInterface(REFIID riid, void **ppvObject)
 {
     if(ppvObject == NULL)
         return E_INVALIDARG;
 
-    if(::IsEqualIID(riid, IID_IUnknown) || ::IsEqualIID(riid, IID_IClassFactory)) 
+    if(::IsEqualIID(riid, IID_IUnknown) || ::IsEqualIID(riid, IID_IClassFactory))
     {
         *ppvObject = static_cast<IClassFactory*>(this);
     }
@@ -36,7 +36,7 @@ STDMETHODIMP_(ULONG) CXMergeFactory::AddRef()
 }
 
 
-STDMETHODIMP_(ULONG) CXMergeFactory::Release() 
+STDMETHODIMP_(ULONG) CXMergeFactory::Release()
 {
     if(::InterlockedDecrement(&m_cRef) == 0)
     {
@@ -49,20 +49,20 @@ STDMETHODIMP_(ULONG) CXMergeFactory::Release()
 
 
 //////////////////////////////////////////////////////////////////////
-// IUnknown implementation 
-//////////////////////////////////////////////////////////////////////																		 
+// IUnknown implementation
+//////////////////////////////////////////////////////////////////////
 STDMETHODIMP CXMergeFactory::CreateInstance(IUnknown *pUnkOuter, REFIID iid, void **ppvObject)
 {
     if (ppvObject == NULL)
         return E_INVALIDARG;
-    
-    if (pUnkOuter != NULL)	// cannot aggregate
+
+    if (pUnkOuter != NULL)  // cannot aggregate
     {
         *ppvObject = NULL;
         return CLASS_E_NOAGGREGATION;
     }
 
-    if (iid == IID_ICeFileFilter) 
+    if (iid == IID_ICeFileFilter)
     {
         CXMergeFilter *pFilter = new CXMergeFilter();
         if(pFilter == NULL)

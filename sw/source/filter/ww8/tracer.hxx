@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ namespace sw
             Tracer(const SfxMedium &rMedium);
             MSFilterTracer *GetTrace() const { return mpTrace; }
             void EnterEnvironment(Environment eContext);
-            void EnterEnvironment(Environment eContext, 
+            void EnterEnvironment(Environment eContext,
                 const rtl::OUString &rDetails);
             void Log(Problem eProblem);
             void LeaveEnvironment(Environment eContext);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -172,7 +172,7 @@ void SbiParser::LineInput()
     pExpr->Gen();
     aGen.Gen( _LINPUT );
     delete pExpr;
-    aGen.Gen( _CHAN0 );		// ResetChannel() nicht mehr in StepLINPUT()
+    aGen.Gen( _CHAN0 );     // ResetChannel() nicht mehr in StepLINPUT()
 }
 
 // INPUT
@@ -203,7 +203,7 @@ void SbiParser::Input()
         else break;
     }
     delete pExpr;
-    aGen.Gen( _CHAN0 );		// ResetChannel() nicht mehr in StepINPUT()
+    aGen.Gen( _CHAN0 );     // ResetChannel() nicht mehr in StepINPUT()
 }
 
 // OPEN stringexpr FOR mode ACCCESS access mode AS Channel [Len=n]
@@ -235,7 +235,7 @@ void SbiParser::Open()
         Next();
         eTok = Next();
         // #27964# Nur STREAM_READ,STREAM_WRITE-Flags in nMode beeinflussen
-        nMode &= ~(STREAM_READ | STREAM_WRITE);		// loeschen
+        nMode &= ~(STREAM_READ | STREAM_WRITE);     // loeschen
         if( eTok == READ )
         {
             if( Peek() == WRITE )

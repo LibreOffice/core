@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ namespace sd { namespace slidesorter { namespace cache {
     static const ::rtl::OUString sErase (RTL_CONSTASCII_USTRINGPARAM("Erase"));
     static const ::rtl::OUString sResolution (RTL_CONSTASCII_USTRINGPARAM("ResolutionReduction"));
     static const ::rtl::OUString sPNGCompression (RTL_CONSTASCII_USTRINGPARAM("PNGCompression"));
-    
+
     ::boost::shared_ptr<BitmapCompressor> pCompressor;
     ::rtl::OUString sCompressionPolicy(sPNGCompression);
     Any aCompressionPolicy (CacheConfiguration::Instance()->GetValue(
@@ -123,7 +123,7 @@ namespace sd { namespace slidesorter { namespace cache {
         pCompressor.reset(new ResolutionReduction());
     else
         pCompressor.reset(new PngCompression());
-    
+
     ::std::auto_ptr<CacheCompactor> pCompactor (NULL);
     ::rtl::OUString sCompactionPolicy(sCompress);
     Any aCompactionPolicy (CacheConfiguration::Instance()->GetValue(
@@ -168,14 +168,14 @@ CacheCompactor::CacheCompactor(
 IMPL_LINK(CacheCompactor, CompactionCallback, Timer*, EMPTYARG)
 {
     mbIsCompactionRunning = true;
-    
+
     try
     {
         Run();
     }
     catch(::com::sun::star::uno::RuntimeException e) { }
     catch(::com::sun::star::uno::Exception e) { }
-    
+
     mbIsCompactionRunning = false;
     return 1;
 }

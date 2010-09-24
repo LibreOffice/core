@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ rtl::OUString MozillaBootstrap::getImplementationName_Static(  ) throw(RuntimeEx
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > MozillaBootstrap::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    // which service is supported 
+    // which service is supported
     // for more information @see com.sun.star.mozilla.MozillaBootstrap
     Sequence< ::rtl::OUString > aSNS( 1 );
     aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap"));
@@ -226,7 +226,7 @@ Sequence< ::rtl::OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(
              && ( aCode->getProductType() != currProduct  || !profileName.equals(currProfileName)) )
         setCurrentProfile(aCode->getProductType(),profileName);
        MNSRunnable xRunnable;
-    
+
     return xRunnable.StartProxy(aCode);;
 #else
     (void)aCode; /* avoid warning about unused parameter */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,14 +72,14 @@ BSTR PromptNew(long hWnd)
 
      // Initialize COM
      ::CoInitialize( NULL );
-     
+
     // Instantiate DataLinks object.
       hr = CoCreateInstance(
-                    CLSID_DataLinks,				//clsid -- Data Links UI
-                    NULL,							//pUnkOuter
-                    CLSCTX_INPROC_SERVER,			//dwClsContext
-                    IID_IDataSourceLocator,		//riid
-                    (void**)&dlPrompt	//ppvObj
+                    CLSID_DataLinks,                //clsid -- Data Links UI
+                    NULL,                           //pUnkOuter
+                    CLSCTX_INPROC_SERVER,           //dwClsContext
+                    IID_IDataSourceLocator,     //riid
+                    (void**)&dlPrompt   //ppvObj
                     );
     if( FAILED( hr ) )
     {
@@ -87,7 +87,7 @@ BSTR PromptNew(long hWnd)
         dlPrompt->Release( );
         return connstr;
     }
-    
+
     dlPrompt->put_hWnd(hWnd);
     if( FAILED( hr ) )
     {
@@ -99,7 +99,7 @@ BSTR PromptNew(long hWnd)
     // Prompt for connection information.
     hr = dlPrompt->PromptNew((IDispatch **)&piTmpConnection);
 
-    if( FAILED( hr ) || !piTmpConnection ) 
+    if( FAILED( hr ) || !piTmpConnection )
     {
         dlPrompt->Release( );
         return connstr;
@@ -129,7 +129,7 @@ BSTR PromptEdit(long hWnd,BSTR connstr)
      // Initialize COM
      ::CoInitialize( NULL );
 
-     hr = CoCreateInstance(CLSID_CADOConnection, 
+     hr = CoCreateInstance(CLSID_CADOConnection,
                 NULL,
                 CLSCTX_INPROC_SERVER,
                 IID_IADOConnection,
@@ -140,21 +140,21 @@ BSTR PromptEdit(long hWnd,BSTR connstr)
         return connstr;
     }
 
-     
+
     hr = piTmpConnection->put_ConnectionString(connstr);
     if( FAILED( hr ) )
     {
         piTmpConnection->Release( );
         return connstr;
     }
-    
+
     // Instantiate DataLinks object.
       hr = CoCreateInstance(
-                    CLSID_DataLinks,				//clsid -- Data Links UI
-                    NULL,							//pUnkOuter
-                    CLSCTX_INPROC_SERVER,			//dwClsContext
-                    IID_IDataSourceLocator,		//riid
-                    (void**)&dlPrompt	//ppvObj
+                    CLSID_DataLinks,                //clsid -- Data Links UI
+                    NULL,                           //pUnkOuter
+                    CLSCTX_INPROC_SERVER,           //dwClsContext
+                    IID_IDataSourceLocator,     //riid
+                    (void**)&dlPrompt   //ppvObj
                     );
     if( FAILED( hr ) )
     {
@@ -162,7 +162,7 @@ BSTR PromptEdit(long hWnd,BSTR connstr)
         dlPrompt->Release( );
         return connstr;
     }
-    
+
     dlPrompt->put_hWnd(hWnd);
     if( FAILED( hr ) )
     {
@@ -172,7 +172,7 @@ BSTR PromptEdit(long hWnd,BSTR connstr)
     }
 
     VARIANT_BOOL pbSuccess;
-        
+
     // Prompt for connection information.
     hr = dlPrompt->PromptEdit((IDispatch **)&piTmpConnection,&pbSuccess);
     if( SUCCEEDED( hr ) && FALSE == pbSuccess ) //if user press cancel then FALSE == pbSuccess
@@ -182,7 +182,7 @@ BSTR PromptEdit(long hWnd,BSTR connstr)
         return connstr;
     }
 
-    if( FAILED( hr ) ) 
+    if( FAILED( hr ) )
     {
         // Prompt for new connection information.
         piTmpConnection->Release( );

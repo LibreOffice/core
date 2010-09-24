@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,11 +80,11 @@ namespace sdr
         OverlayLineStriped::OverlayLineStriped(
             const basegfx::B2DPoint& rBasePos,
             const basegfx::B2DPoint& rSecondPos)
-        :	OverlayObjectWithBasePosition(rBasePos, Color(COL_BLACK)),
+        :   OverlayObjectWithBasePosition(rBasePos, Color(COL_BLACK)),
             maSecondPosition(rSecondPos)
         {
         }
-        
+
         OverlayLineStriped::~OverlayLineStriped()
         {
         }

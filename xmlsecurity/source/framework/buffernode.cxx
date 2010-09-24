@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,42 +49,42 @@ bool BufferNode::isECOfBeforeModifyIncluded(sal_Int32 nIgnoredSecurityId) const
 /****** BufferNode/isECOfBeforeModifyIncluded ********************************
  *
  *   NAME
- *	isECOfBeforeModifyIncluded -- checks whether there is some 
- *	ElementCollector on this BufferNode, that has BEFORE-MODIFY priority.
+ *  isECOfBeforeModifyIncluded -- checks whether there is some
+ *  ElementCollector on this BufferNode, that has BEFORE-MODIFY priority.
  *
  *   SYNOPSIS
- *	bExist = isECOfBeforeModifyIncluded(nIgnoredSecurityId);
+ *  bExist = isECOfBeforeModifyIncluded(nIgnoredSecurityId);
  *
  *   FUNCTION
- *	checks each ElementCollector on this BufferNode, if all following
- *	conditions are satisfied, then returns true:
- *	1. the ElementCollector's priority is BEFOREMODIFY;
- *	2. the ElementCollector's securityId can't be ignored.
- *	otherwise, returns false.
+ *  checks each ElementCollector on this BufferNode, if all following
+ *  conditions are satisfied, then returns true:
+ *  1. the ElementCollector's priority is BEFOREMODIFY;
+ *  2. the ElementCollector's securityId can't be ignored.
+ *  otherwise, returns false.
  *
  *   INPUTS
- *	nIgnoredSecurityId -	the security Id to be ignored. If it equals
- *	                        to UNDEFINEDSECURITYID, then no security Id
- *	                    	will be ignored.
+ *  nIgnoredSecurityId -    the security Id to be ignored. If it equals
+ *                          to UNDEFINEDSECURITYID, then no security Id
+ *                          will be ignored.
  *
  *   RESULT
- *	bExist - true if a match found, false otherwise
+ *  bExist - true if a match found, false otherwise
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     bool rc = false;
     std::vector< const ElementCollector* >::const_iterator ii = m_vElementCollectors.begin();
 
-    for( ; ii != m_vElementCollectors.end() ; ++ii ) 
+    for( ; ii != m_vElementCollectors.end() ; ++ii )
     {
         ElementCollector* pElementCollector = (ElementCollector*)*ii;
-        
+
         if ((nIgnoredSecurityId == cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
              pElementCollector->getSecurityId() != nIgnoredSecurityId) &&
             (pElementCollector->getPriority() == cssxc::sax::ElementMarkPriority_BEFOREMODIFY))
@@ -93,7 +93,7 @@ bool BufferNode::isECOfBeforeModifyIncluded(sal_Int32 nIgnoredSecurityId) const
             break;
         }
     }
-    
+
     return rc;
 }
 
@@ -101,28 +101,28 @@ void BufferNode::setReceivedAll()
 /****** BufferNode/setReceiveAll *********************************************
  *
  *   NAME
- *	setReceivedAll -- indicates that the element in this BufferNode has
- *	been compeletely bufferred.
+ *  setReceivedAll -- indicates that the element in this BufferNode has
+ *  been compeletely bufferred.
  *
  *   SYNOPSIS
- *	setReceivedAll();
+ *  setReceivedAll();
  *
  *   FUNCTION
- *	sets the all-received flag and launches ElementCollector's notify
- *	process.
+ *  sets the all-received flag and launches ElementCollector's notify
+ *  process.
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_bAllReceived = true;
@@ -138,26 +138,26 @@ void BufferNode::addElementCollector(const ElementCollector* pElementCollector)
 /****** BufferNode/addElementCollector ***************************************
  *
  *   NAME
- *	addElementCollector -- adds a new ElementCollector to this BufferNode.
+ *  addElementCollector -- adds a new ElementCollector to this BufferNode.
  *
  *   SYNOPSIS
- *	addElementCollector(pElementCollector);
+ *  addElementCollector(pElementCollector);
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	pElementCollector - the ElementCollector to be added
+ *  pElementCollector - the ElementCollector to be added
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_vElementCollectors.push_back( pElementCollector );
@@ -168,34 +168,34 @@ void BufferNode::removeElementCollector(const ElementCollector* pElementCollecto
 /****** BufferNode/removeElementCollector ************************************
  *
  *   NAME
- *	removeElementCollector -- removes an ElementCollector from this
- *	BufferNode.
+ *  removeElementCollector -- removes an ElementCollector from this
+ *  BufferNode.
  *
  *   SYNOPSIS
- *	removeElementCollector(pElementCollector);
+ *  removeElementCollector(pElementCollector);
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	pElementCollector - the ElementCollector to be removed
+ *  pElementCollector - the ElementCollector to be removed
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     std::vector< const ElementCollector* >::iterator ii = m_vElementCollectors.begin();
 
-    for( ; ii != m_vElementCollectors.end() ; ++ii ) 
+    for( ; ii != m_vElementCollectors.end() ; ++ii )
     {
-        if( *ii == pElementCollector ) 
+        if( *ii == pElementCollector )
         {
             m_vElementCollectors.erase( ii );
             ((ElementCollector*)pElementCollector)->setBufferNode(NULL);
@@ -213,34 +213,34 @@ void BufferNode::setBlocker(const ElementMark* pBlocker)
 /****** BufferNode/setBlocker ************************************************
  *
  *   NAME
- *	setBlocker -- adds a blocker to this BufferNode.
+ *  setBlocker -- adds a blocker to this BufferNode.
  *
  *   SYNOPSIS
- *	setBlocker(pBlocker);
+ *  setBlocker(pBlocker);
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	pBlocker - the new blocker to be attached
+ *  pBlocker - the new blocker to be attached
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   NOTES
- *	Because there is only one blocker permited for a BufferNode, so the
- *	old blocker on this BufferNode, if there is one, will be overcasted.
+ *  Because there is only one blocker permited for a BufferNode, so the
+ *  old blocker on this BufferNode, if there is one, will be overcasted.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     OSL_ASSERT(!(m_pBlocker != NULL && pBlocker != NULL));
-    
+
     m_pBlocker = (ElementMark*)pBlocker;
     if (m_pBlocker != NULL)
     {
@@ -252,32 +252,32 @@ rtl::OUString BufferNode::printChildren() const
 /****** BufferNode/printChildren *********************************************
  *
  *   NAME
- *	printChildren -- prints children information into a string.
+ *  printChildren -- prints children information into a string.
  *
  *   SYNOPSIS
- *	result = printChildren();
+ *  result = printChildren();
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	result - the information string
+ *  result - the information string
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
-{ 
+{
     rtl::OUString rc;
     std::vector< const ElementCollector* >::const_iterator ii = m_vElementCollectors.begin();
-            
-    for( ; ii != m_vElementCollectors.end() ; ++ii ) 
+
+    for( ; ii != m_vElementCollectors.end() ; ++ii )
     {
         rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BufID=" ));
         rc += rtl::OUString::valueOf((*ii)->getBufferId());
@@ -286,9 +286,9 @@ rtl::OUString BufferNode::printChildren() const
         {
             rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "[M]" ));
         }
-        
+
         rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ",Pri=" ));
-        
+
         switch (((ElementCollector*)(*ii))->getPriority())
         {
             case cssxc::sax::ElementMarkPriority_BEFOREMODIFY:
@@ -301,7 +301,7 @@ rtl::OUString BufferNode::printChildren() const
                 rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UNKNOWN" ));
                 break;
         }
-        
+
         rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "(" ));
         /*
         if (((ElementCollector*)(*ii))->isInternalNotificationSuppressed())
@@ -314,7 +314,7 @@ rtl::OUString BufferNode::printChildren() const
         rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));
         rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
     }
-    
+
     return rc;
 }
 
@@ -322,27 +322,27 @@ bool BufferNode::hasAnything() const
 /****** BufferNode/hasAnything ***********************************************
  *
  *   NAME
- *	hasAnything -- checks whether there is any ElementCollector or blocker
- *	on this BufferNode.
+ *  hasAnything -- checks whether there is any ElementCollector or blocker
+ *  on this BufferNode.
  *
  *   SYNOPSIS
- *	bExist = hasAnything();
+ *  bExist = hasAnything();
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	bExist - true if there is, false otherwise.
+ *  bExist - true if there is, false otherwise.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     return (m_pBlocker != NULL || m_vElementCollectors.size() > 0);
@@ -352,27 +352,27 @@ bool BufferNode::hasChildren() const
 /****** BufferNode/hasChildren ***********************************************
  *
  *   NAME
- *	hasChildren -- checks whether this BufferNode has any child
- *	BufferNode.
+ *  hasChildren -- checks whether this BufferNode has any child
+ *  BufferNode.
  *
  *   SYNOPSIS
- *	bExist = hasChildren();
+ *  bExist = hasChildren();
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	bExist - true if there is, false otherwise.
+ *  bExist - true if there is, false otherwise.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     return (m_vChildren.size() > 0);
@@ -387,36 +387,36 @@ const BufferNode* BufferNode::getFirstChild() const
 /****** BufferNode/getFirstChild *********************************************
  *
  *   NAME
- *	getFirstChild -- retrieves the first child BufferNode.
+ *  getFirstChild -- retrieves the first child BufferNode.
  *
  *   SYNOPSIS
- *	child = getFirstChild();
+ *  child = getFirstChild();
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	child -	the first child BufferNode, or NULL if there is no child
- *	       	BufferNode.
+ *  child - the first child BufferNode, or NULL if there is no child
+ *          BufferNode.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     BufferNode* rc = NULL;
-    
+
     if (m_vChildren.size() > 0)
     {
         rc = (BufferNode*)m_vChildren.front();
     }
-    
+
     return (const BufferNode*)rc;
 }
 
@@ -424,31 +424,31 @@ void BufferNode::addChild(const BufferNode* pChild, sal_Int32 nPosition)
 /****** BufferNode/addChild(pChild,nPosition) ********************************
  *
  *   NAME
- *	addChild -- inserts a child BufferNode at specific position.
+ *  addChild -- inserts a child BufferNode at specific position.
  *
  *   SYNOPSIS
- *	addChild(pChild, nPosition);
+ *  addChild(pChild, nPosition);
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	pChild - 	the child BufferNode to be added.
- *	nPosition -	the position where the new child locates.
+ *  pChild -    the child BufferNode to be added.
+ *  nPosition - the position where the new child locates.
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   NOTES
- *	If the nPosition is -1, then the new child BufferNode is appended
- *	at the end.
+ *  If the nPosition is -1, then the new child BufferNode is appended
+ *  at the end.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if (nPosition == -1)
@@ -467,29 +467,29 @@ void BufferNode::addChild(const BufferNode* pChild)
 /****** BufferNode/addChild() ************************************************
  *
  *   NAME
- *	addChild -- add a new child BufferNode.
+ *  addChild -- add a new child BufferNode.
  *
  *   SYNOPSIS
- *	addChild(pChild);
+ *  addChild(pChild);
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	pChild - 	the child BufferNode to be added.
+ *  pChild -    the child BufferNode to be added.
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   NOTES
- *	The new child BufferNode is appended at the end.
+ *  The new child BufferNode is appended at the end.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     addChild(pChild, -1);
@@ -499,33 +499,33 @@ void BufferNode::removeChild(const BufferNode* pChild)
 /****** BufferNode/removeChild ***********************************************
  *
  *   NAME
- *	removeChild -- removes a child BufferNode from the children list.
+ *  removeChild -- removes a child BufferNode from the children list.
  *
  *   SYNOPSIS
- *	removeChild(pChild);
+ *  removeChild(pChild);
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	pChild - the child BufferNode to be removed
+ *  pChild - the child BufferNode to be removed
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     std::vector< const BufferNode* >::iterator ii = m_vChildren.begin();
 
-    for( ; ii != m_vChildren.end() ; ++ii ) 
+    for( ; ii != m_vChildren.end() ; ++ii )
     {
-        if( *ii == pChild ) 
+        if( *ii == pChild )
         {
             m_vChildren.erase( ii );
             break;
@@ -537,49 +537,49 @@ sal_Int32 BufferNode::indexOfChild(const BufferNode* pChild) const
 /****** BufferNode/indexOfChild **********************************************
  *
  *   NAME
- *	indexOfChild -- gets the index of a child BufferNode.
+ *  indexOfChild -- gets the index of a child BufferNode.
  *
  *   SYNOPSIS
- *	index = indexOfChild(pChild);
+ *  index = indexOfChild(pChild);
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	pChild - the child BufferNode whose index to be gotten
+ *  pChild - the child BufferNode whose index to be gotten
  *
  *   RESULT
- *	index -	the index of that child BufferNode. If that child BufferNode
- *	       	is not found, -1 is returned.
+ *  index - the index of that child BufferNode. If that child BufferNode
+ *          is not found, -1 is returned.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     sal_Int32 nIndex = 0;
     bool bFound = false;
-    
+
     std::vector< const BufferNode * >::const_iterator ii = m_vChildren.begin();
 
-    for( ; ii != m_vChildren.end() ; ++ii ) 
+    for( ; ii != m_vChildren.end() ; ++ii )
     {
-        if( *ii == pChild ) 
+        if( *ii == pChild )
         {
             bFound = true;
             break;
         }
         nIndex++;
     }
-    
+
     if (!bFound )
     {
         nIndex = -1;
     }
-    
+
     return nIndex;
 }
 
@@ -587,36 +587,36 @@ const BufferNode* BufferNode::childAt(sal_Int32 nIndex) const
 /****** BufferNode/childAt ***************************************************
  *
  *   NAME
- *	childAt -- retrieves the child BufferNode at specific possition.
+ *  childAt -- retrieves the child BufferNode at specific possition.
  *
  *   SYNOPSIS
- *	child = childAt(nIndex);
+ *  child = childAt(nIndex);
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	nIndex - the index of the child BufferNode to be retrieved
+ *  nIndex - the index of the child BufferNode to be retrieved
  *
  *   RESULT
- *	child -	the child BufferNode at index position, or NULL if the index
- *	       	is out of the range of children.
+ *  child - the child BufferNode at index position, or NULL if the index
+ *          is out of the range of children.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     BufferNode* rc = NULL;
-    
+
     if (nIndex < ((sal_Int32)m_vChildren.size()) && nIndex >= 0)
     {
         rc = (BufferNode*)m_vChildren[nIndex];
     }
-    
+
     return (const BufferNode*)rc;
 }
 
@@ -634,35 +634,35 @@ const BufferNode* BufferNode::getNextSibling() const
 /****** BufferNode/getNextSibling ********************************************
  *
  *   NAME
- *	getNextSibling -- retrieves the next sibling BufferNode.
+ *  getNextSibling -- retrieves the next sibling BufferNode.
  *
  *   SYNOPSIS
- *	sibling = getNextSibling();
+ *  sibling = getNextSibling();
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	sibling - the next sibling BufferNode, or NULL if there is none.
+ *  sibling - the next sibling BufferNode, or NULL if there is none.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     BufferNode* rc = NULL;
-    
+
     if (m_pParent != NULL)
     {
         rc = (BufferNode*)m_pParent->getNextChild(this);
     }
-    
+
     return (const BufferNode*)rc;
 }
 
@@ -670,46 +670,46 @@ const BufferNode* BufferNode::isAncestor(const BufferNode* pDescendant) const
 /****** BufferNode/isAncestor ************************************************
  *
  *   NAME
- *	isAncestor -- checks whether this BufferNode is an ancestor of another
- *	BufferNode.
+ *  isAncestor -- checks whether this BufferNode is an ancestor of another
+ *  BufferNode.
  *
  *   SYNOPSIS
- *	bIs = isAncestor(pDescendant);
+ *  bIs = isAncestor(pDescendant);
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	pDescendant -	the BufferNode to be checked as a descendant
+ *  pDescendant -   the BufferNode to be checked as a descendant
  *
  *   RESULT
- *	bIs -	true if this BufferNode is an ancestor of the pDescendant, 
- *	     	false otherwise.
+ *  bIs -   true if this BufferNode is an ancestor of the pDescendant,
+ *          false otherwise.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     BufferNode* rc = NULL;
-    
+
     if (pDescendant != NULL)
     {
         std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();
-    
-        for( ; ii != m_vChildren.end() ; ++ii ) 
+
+        for( ; ii != m_vChildren.end() ; ++ii )
         {
             BufferNode* pChild = (BufferNode*)*ii;
-            
+
             if (pChild == pDescendant)
             {
                 rc = pChild;
                 break;
             }
-            
+
             if (pChild->isAncestor(pDescendant) != NULL)
             {
                 rc = pChild;
@@ -719,38 +719,38 @@ const BufferNode* BufferNode::isAncestor(const BufferNode* pDescendant) const
     }
 
     return (const BufferNode*)rc;
-}	
+}
 
 bool BufferNode::isPrevious(const BufferNode* pFollowing) const
 /****** BufferNode/isPrevious ************************************************
  *
  *   NAME
- *	isPrevious -- checks whether this BufferNode is ahead of another
- *	BufferNode in the tree order.
+ *  isPrevious -- checks whether this BufferNode is ahead of another
+ *  BufferNode in the tree order.
  *
  *   SYNOPSIS
- *	bIs = isPrevious(pFollowing);
+ *  bIs = isPrevious(pFollowing);
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	pFollowing -	the BufferNode to be checked as a following
+ *  pFollowing -    the BufferNode to be checked as a following
  *
  *   RESULT
- *	bIs -	true if this BufferNode is ahead in the tree order, false
- *	     	otherwise.
+ *  bIs -   true if this BufferNode is ahead in the tree order, false
+ *          otherwise.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     bool rc = false;
-    
+
     BufferNode* pNextBufferNode = (BufferNode*)getNextNodeByTreeOrder();
     while (pNextBufferNode != NULL)
     {
@@ -759,47 +759,47 @@ bool BufferNode::isPrevious(const BufferNode* pFollowing) const
             rc = true;
             break;
         }
-        
+
         pNextBufferNode = (BufferNode*)(pNextBufferNode->getNextNodeByTreeOrder());
     }
-    
+
     return rc;
-}	
+}
 
 const BufferNode* BufferNode::getNextNodeByTreeOrder() const
 /****** BufferNode/getNextNodeByTreeOrder ************************************
  *
  *   NAME
- *	getNextNodeByTreeOrder -- retrieves the next BufferNode in the tree
- *	order.
+ *  getNextNodeByTreeOrder -- retrieves the next BufferNode in the tree
+ *  order.
  *
  *   SYNOPSIS
- *	next = getNextNodeByTreeOrder();
+ *  next = getNextNodeByTreeOrder();
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	next -	the BufferNode following this BufferNode in the tree order, 
- *	      	or NULL if there is none.
+ *  next -  the BufferNode following this BufferNode in the tree order,
+ *          or NULL if there is none.
  *
  *   NOTES
- *	The "next" node in tree order is defined as:
- *	1. If a node has children, then the first child is;
- *	2. otherwise, if it has a following sibling, then this sibling node is;
- *	3. otherwise, if it has a parent node, the the parent's next sibling
- *	   node is;
- *	4. otherwise, no "next" node exists.
+ *  The "next" node in tree order is defined as:
+ *  1. If a node has children, then the first child is;
+ *  2. otherwise, if it has a following sibling, then this sibling node is;
+ *  3. otherwise, if it has a parent node, the the parent's next sibling
+ *     node is;
+ *  4. otherwise, no "next" node exists.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
         /*
@@ -812,7 +812,7 @@ const BufferNode* BufferNode::getNextNodeByTreeOrder() const
     }
 
         /*
-         * Otherwise, it this buffer node has a following sibling, 
+         * Otherwise, it this buffer node has a following sibling,
          * then return that sibling.
          */
     BufferNode* pNextSibling = (BufferNode*)getNextSibling();
@@ -820,7 +820,7 @@ const BufferNode* BufferNode::getNextNodeByTreeOrder() const
     {
         return pNextSibling;
     }
-    
+
         /*
          * Otherwise, it this buffer node has parent, then return
          * its parent's following sibling.
@@ -828,23 +828,23 @@ const BufferNode* BufferNode::getNextNodeByTreeOrder() const
         BufferNode* pNode = (BufferNode*)this;
     BufferNode* pParent;
     BufferNode* pNextSiblingParent = NULL;
-    
+
     do
     {
         if (pNode == NULL)
         {
             break;
         }
-        
+
         pParent = (BufferNode*)pNode->getParent();
         if (pParent != NULL)
         {
             pNextSiblingParent = (BufferNode*)pParent->getNextSibling();
         }
         pNode = pParent;
-        
+
     }while (pNextSiblingParent == NULL);
-    
+
     return pNextSiblingParent;
 }
 
@@ -856,38 +856,38 @@ cssu::Reference< cssxw::XXMLElementWrapper > BufferNode::getXMLElement() const
 void BufferNode::setXMLElement( const cssu::Reference< cssxw::XXMLElementWrapper >& xXMLElement )
 {
     m_xXMLElement = xXMLElement;
-}	
+}
 
 void BufferNode::notifyBranch()
 /****** BufferNode/notifyBranch **********************************************
  *
  *   NAME
- *	notifyBranch -- notifies each BufferNode in the branch of this
- *	BufferNode in the tree order.
+ *  notifyBranch -- notifies each BufferNode in the branch of this
+ *  BufferNode in the tree order.
  *
  *   SYNOPSIS
- *	notifyBranch();
+ *  notifyBranch();
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();
 
-    for( ; ii != m_vChildren.end() ; ++ii ) 
+    for( ; ii != m_vChildren.end() ; ++ii )
     {
         BufferNode* pBufferNode = (BufferNode*)*ii;
         pBufferNode->elementCollectorNotify();
@@ -899,27 +899,27 @@ void BufferNode::notifyAncestor()
 /****** BufferNode/notifyAncestor ********************************************
  *
  *   NAME
- *	notifyAncestor -- notifies each ancestor BufferNode through the parent
- *	link.
+ *  notifyAncestor -- notifies each ancestor BufferNode through the parent
+ *  link.
  *
  *   SYNOPSIS
- *	notifyAncestor();
+ *  notifyAncestor();
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     BufferNode* pParent = m_pParent;
@@ -934,39 +934,39 @@ void BufferNode::elementCollectorNotify()
 /****** BufferNode/elementCollectorNotify ************************************
  *
  *   NAME
- *	elementCollectorNotify -- notifies this BufferNode.
+ *  elementCollectorNotify -- notifies this BufferNode.
  *
  *   SYNOPSIS
- *	elementCollectorNotify();
+ *  elementCollectorNotify();
  *
  *   FUNCTION
- *	Notifies this BufferNode if the notification is not suppressed.
+ *  Notifies this BufferNode if the notification is not suppressed.
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	child -	the first child BufferNode, or NULL if there is no child
- *	       	BufferNode.
+ *  child - the first child BufferNode, or NULL if there is no child
+ *          BufferNode.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if (m_vElementCollectors.size()>0)
     {
         cssxc::sax::ElementMarkPriority nMaxPriority = cssxc::sax::ElementMarkPriority_MINIMUM;
         cssxc::sax::ElementMarkPriority nPriority;
-        
+
         /*
          * get the max priority among ElementCollectors on this BufferNode
          */
         std::vector< const ElementCollector* >::const_iterator ii = m_vElementCollectors.begin();
-        for( ; ii != m_vElementCollectors.end() ; ++ii ) 
+        for( ; ii != m_vElementCollectors.end() ; ++ii )
         {
             ElementCollector* pElementCollector = (ElementCollector*)*ii;
             nPriority = pElementCollector->getPriority();
@@ -975,16 +975,16 @@ void BufferNode::elementCollectorNotify()
                 nMaxPriority = nPriority;
             }
         }
-        
+
         std::vector< const ElementCollector* > vElementCollectors( m_vElementCollectors );
         ii = vElementCollectors.begin();
-        
-        for( ; ii != vElementCollectors.end() ; ++ii ) 
+
+        for( ; ii != vElementCollectors.end() ; ++ii )
         {
             ElementCollector* pElementCollector = (ElementCollector*)*ii;
             nPriority = pElementCollector->getPriority();
             bool bToModify = pElementCollector->getModify();
-            
+
             /*
              * Only ElementCollector with the max priority can
              * perform notify operation.
@@ -1006,7 +1006,7 @@ void BufferNode::elementCollectorNotify()
                  * will destroy the bufferred element, in turn, ElementCollectors
                  * mentioned above can't perform their mission.
                  */
-                //if (!(nMaxPriority == cssxc::sax::ElementMarkPriority_PRI_MODIFY && 
+                //if (!(nMaxPriority == cssxc::sax::ElementMarkPriority_PRI_MODIFY &&
                 if (!(bToModify &&
                      (isECInSubTreeIncluded(pElementCollector->getSecurityId()) ||
                       isECOfBeforeModifyInAncestorIncluded(pElementCollector->getSecurityId()))
@@ -1023,38 +1023,38 @@ bool BufferNode::isECInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
 /****** BufferNode/isECInSubTreeIncluded *************************************
  *
  *   NAME
- *	isECInSubTreeIncluded -- checks whether there is any ElementCollector
- *	in the branch of this BufferNode.
+ *  isECInSubTreeIncluded -- checks whether there is any ElementCollector
+ *  in the branch of this BufferNode.
  *
  *   SYNOPSIS
- *	bExist = isECInSubTreeIncluded(nIgnoredSecurityId);
+ *  bExist = isECInSubTreeIncluded(nIgnoredSecurityId);
  *
  *   FUNCTION
- *	checks each BufferNode in the branch of this BufferNode, if there is
- *	an ElementCollector whose signatureId is not ignored, then return
- *	true, otherwise, false returned.
+ *  checks each BufferNode in the branch of this BufferNode, if there is
+ *  an ElementCollector whose signatureId is not ignored, then return
+ *  true, otherwise, false returned.
  *
  *   INPUTS
- *	nIgnoredSecurityId -	the security Id to be ignored. If it equals
- *	                        to UNDEFINEDSECURITYID, then no security Id
- *	                    	will be ignored.
+ *  nIgnoredSecurityId -    the security Id to be ignored. If it equals
+ *                          to UNDEFINEDSECURITYID, then no security Id
+ *                          will be ignored.
  *
  *   RESULT
- *	bExist - true if a match found, false otherwise.
+ *  bExist - true if a match found, false otherwise.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     bool rc = false;
-    
+
     std::vector< const ElementCollector* >::const_iterator jj = m_vElementCollectors.begin();
-    
-    for( ; jj != m_vElementCollectors.end() ; ++jj ) 
+
+    for( ; jj != m_vElementCollectors.end() ; ++jj )
     {
         ElementCollector* pElementCollector = (ElementCollector*)*jj;
         if (nIgnoredSecurityId == cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
@@ -1064,15 +1064,15 @@ bool BufferNode::isECInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
             break;
         }
     }
-    
+
     if ( !rc )
     {
         std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();
-    
-        for( ; ii != m_vChildren.end() ; ++ii ) 
+
+        for( ; ii != m_vChildren.end() ; ++ii )
         {
             BufferNode* pBufferNode = (BufferNode*)*ii;
-            
+
             if ( pBufferNode->isECInSubTreeIncluded(nIgnoredSecurityId))
             {
                 rc = true;
@@ -1080,7 +1080,7 @@ bool BufferNode::isECInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
             }
         }
     }
-    
+
     return rc;
 }
 
@@ -1088,37 +1088,37 @@ bool BufferNode::isECOfBeforeModifyInAncestorIncluded(sal_Int32 nIgnoredSecurity
 /****** BufferNode/isECOfBeforeModifyInAncestorIncluded **********************
  *
  *   NAME
- *	isECOfBeforeModifyInAncestorIncluded -- checks whether there is some
- *	ancestor BufferNode which has ElementCollector with PRI_BEFPREMODIFY
- *	priority.
+ *  isECOfBeforeModifyInAncestorIncluded -- checks whether there is some
+ *  ancestor BufferNode which has ElementCollector with PRI_BEFPREMODIFY
+ *  priority.
  *
  *   SYNOPSIS
- *	bExist = isECOfBeforeModifyInAncestorIncluded(nIgnoredSecurityId);
+ *  bExist = isECOfBeforeModifyInAncestorIncluded(nIgnoredSecurityId);
  *
  *   FUNCTION
- *	checks each ancestor BufferNode through the parent link, if there is
- *	an ElementCollector with PRI_BEFPREMODIFY priority and its 
- *	signatureId is not ignored, then return true, otherwise, false
- *	returned.
+ *  checks each ancestor BufferNode through the parent link, if there is
+ *  an ElementCollector with PRI_BEFPREMODIFY priority and its
+ *  signatureId is not ignored, then return true, otherwise, false
+ *  returned.
  *
  *   INPUTS
- *	nIgnoredSecurityId -	the security Id to be ignored. If it equals
- *	                        to UNDEFINEDSECURITYID, then no security Id
- *	                    	will be ignored.
+ *  nIgnoredSecurityId -    the security Id to be ignored. If it equals
+ *                          to UNDEFINEDSECURITYID, then no security Id
+ *                          will be ignored.
  *
  *   RESULT
- *	bExist - true if a match found, false otherwise.
+ *  bExist - true if a match found, false otherwise.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     bool rc = false;
-    
+
     BufferNode* pParentNode = m_pParent;
     while (pParentNode != NULL)
     {
@@ -1127,10 +1127,10 @@ bool BufferNode::isECOfBeforeModifyInAncestorIncluded(sal_Int32 nIgnoredSecurity
             rc = true;
             break;
         }
-        
+
         pParentNode = (BufferNode*)pParentNode->getParent();
     }
-    
+
     return rc;
 }
 
@@ -1138,57 +1138,57 @@ bool BufferNode::isBlockerInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
 /****** BufferNode/isBlockerInSubTreeIncluded ********************************
  *
  *   NAME
- *	isBlockerInSubTreeIncluded -- checks whether there is some BufferNode
- *	which has blocker on it
+ *  isBlockerInSubTreeIncluded -- checks whether there is some BufferNode
+ *  which has blocker on it
  *
  *   SYNOPSIS
- *	bExist = isBlockerInSubTreeIncluded(nIgnoredSecurityId);
+ *  bExist = isBlockerInSubTreeIncluded(nIgnoredSecurityId);
  *
  *   FUNCTION
- *	checks each BufferNode in the branch of this BufferNode, if one has
- *	a blocker on it, and the blocker's securityId is not ignored, then
- *	returns true; otherwise, false returns.
+ *  checks each BufferNode in the branch of this BufferNode, if one has
+ *  a blocker on it, and the blocker's securityId is not ignored, then
+ *  returns true; otherwise, false returns.
  *
  *   INPUTS
- *	nIgnoredSecurityId -	the security Id to be ignored. If it equals
- *	                        to UNDEFINEDSECURITYID, then no security Id
- *	                    	will be ignored.
+ *  nIgnoredSecurityId -    the security Id to be ignored. If it equals
+ *                          to UNDEFINEDSECURITYID, then no security Id
+ *                          will be ignored.
  *
  *   RESULT
- *	bExist - true if a match found, false otherwise.
+ *  bExist - true if a match found, false otherwise.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     bool rc = false;
-    
+
     std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();
 
-    for( ; ii != m_vChildren.end() ; ++ii ) 
+    for( ; ii != m_vChildren.end() ; ++ii )
     {
         BufferNode* pBufferNode = (BufferNode*)*ii;
         ElementMark* pBlocker = pBufferNode->getBlocker();
-        
+
         if (pBlocker != NULL &&
             (nIgnoredSecurityId == cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
-            pBlocker->getSecurityId() != nIgnoredSecurityId )) 
+            pBlocker->getSecurityId() != nIgnoredSecurityId ))
         {
             rc = true;
             break;
         }
-        
+
         if (rc || pBufferNode->isBlockerInSubTreeIncluded(nIgnoredSecurityId))
         {
             rc = true;
             break;
         }
     }
-    
+
     return rc;
 }
 
@@ -1196,47 +1196,47 @@ const BufferNode* BufferNode::getNextChild(const BufferNode* pChild) const
 /****** BufferNode/getNextChild **********************************************
  *
  *   NAME
- *	getNextChild -- get the next child BufferNode.
+ *  getNextChild -- get the next child BufferNode.
  *
  *   SYNOPSIS
- *	nextChild = getNextChild();
+ *  nextChild = getNextChild();
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	pChild - the child BufferNode whose next node is retrieved.
+ *  pChild - the child BufferNode whose next node is retrieved.
  *
  *   RESULT
- *	nextChild -	the next child BufferNode after the pChild, or NULL if 
- *	there is none.
+ *  nextChild - the next child BufferNode after the pChild, or NULL if
+ *  there is none.
  *
  *   HISTORY
- *	05.01.2004 -	implemented
+ *  05.01.2004 -    implemented
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     BufferNode* rc = NULL;
     bool bChildFound = false;
-    
+
     std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();
-    for( ; ii != m_vChildren.end() ; ++ii ) 
+    for( ; ii != m_vChildren.end() ; ++ii )
     {
         if (bChildFound)
         {
             rc = (BufferNode*)*ii;
             break;
         }
-            
-        if( *ii == pChild ) 
+
+        if( *ii == pChild )
         {
             bChildFound = true;
         }
     }
-    
+
     return (const BufferNode*)rc;
 }
 
@@ -1245,35 +1245,35 @@ void BufferNode::freeAllChildren()
 /****** BufferNode/freeAllChildren *******************************************
  *
  *   NAME
- *	freeAllChildren -- free all his child BufferNode.
+ *  freeAllChildren -- free all his child BufferNode.
  *
  *   SYNOPSIS
- *	freeAllChildren();
+ *  freeAllChildren();
  *
  *   FUNCTION
- *	see NAME
+ *  see NAME
  *
  *   INPUTS
- *	empty
+ *  empty
  *
  *   RESULT
- *	empty
+ *  empty
  *
  *   HISTORY
- *	30.03.2004 -	the correct the memory leak bug
+ *  30.03.2004 -    the correct the memory leak bug
  *
  *   AUTHOR
- *	Michael Mi
- *	Email: michael.mi@sun.com
+ *  Michael Mi
+ *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
     std::vector< const BufferNode* >::const_iterator ii = m_vChildren.begin();
-    for( ; ii != m_vChildren.end() ; ++ii ) 
+    for( ; ii != m_vChildren.end() ; ++ii )
     {
         BufferNode *pChild = (BufferNode *)(*ii);
         pChild->freeAllChildren();
         delete pChild;
     }
-    
+
     m_vChildren.clear();
 }

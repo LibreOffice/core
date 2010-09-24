@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ private boolean checkBox;
  * @param xMSF A MultiServiceFactory.
  * @param log The log writer.
  */
-public SecurityDialogUtil(XMultiServiceFactory xMSF, String btnName, boolean checkBox ) 
+public SecurityDialogUtil(XMultiServiceFactory xMSF, String btnName, boolean checkBox )
 {
     this.xMSF = xMSF;
     this.btnName = btnName;
@@ -68,7 +68,7 @@ public SecurityDialogUtil(XMultiServiceFactory xMSF, String btnName, boolean che
  * accessing and pressing the button.
  * @return Error message.
  */
-public String getErrorMessage() 
+public String getErrorMessage()
 {
     return errorMsg;
 }
@@ -77,7 +77,7 @@ public String getErrorMessage()
  * Is there an error message available?
  * @return true, if an error happened
  */
-public boolean hasErrorMessage() 
+public boolean hasErrorMessage()
 {
     return !errorMsg.equals("");
 }
@@ -85,22 +85,22 @@ public boolean hasErrorMessage()
 /**
  * Press the named button in the currently visible dialog box.
  */
-public void run() 
+public void run()
 {
     // wait for the message box to appear
-    try 
+    try
     {
         Thread.currentThread().sleep(4000) ;
-    } 
-    catch (InterruptedException e) 
+    }
+    catch (InterruptedException e)
     {
         System.err.println("While waiting :" + e.getMessage()) ;
     }
 
     // access the message box
-   
+
      XAccessibleContext xCon = null;
-    try 
+    try
     {
         XInterface x = (XInterface) xMSF.createInstance(
                                     "com.sun.star.awt.Toolkit") ;
@@ -112,8 +112,8 @@ public void run()
                                 XWindow.class,tk.getActiveTopWindow());
         XAccessible xRoot = at.getAccessibleObject(xWindow);
         xCon = xRoot.getAccessibleContext();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
         errorMsg="Exception while using Accessibility\n"+
                                                     e.getMessage();
@@ -121,7 +121,7 @@ public void run()
     }
     // get the button
     XInterface oObj = null;
-    try 
+    try
     {
         /* System.err.println("Name of the AccessibleContext:\n\t"+
                                         xCon.getAccessibleName()); */

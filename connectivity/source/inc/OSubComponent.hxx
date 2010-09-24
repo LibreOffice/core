@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ namespace connectivity
     protected:
         // the parent must support the tunnel implementation
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
-        SELF*	m_pDerivedImplementation;
+        SELF*   m_pDerivedImplementation;
 
     public:
         OSubComponent(

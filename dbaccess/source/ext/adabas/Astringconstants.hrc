@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,13 +62,13 @@ struct _ConstAsciiString_
 //= property ids
 //============================================================
 
-#define PROPERTY_ID_CREATECATALOG			3
-#define PROPERTY_ID_DATABASENAME			4
-#define PROPERTY_ID_CONTROL_USER			5
-#define PROPERTY_ID_CONTROL_PASSWORD		6
-#define PROPERTY_ID_USER					7
-#define PROPERTY_ID_PASSWORD				8
-#define PROPERTY_ID_CACHESIZE				9
+#define PROPERTY_ID_CREATECATALOG           3
+#define PROPERTY_ID_DATABASENAME            4
+#define PROPERTY_ID_CONTROL_USER            5
+#define PROPERTY_ID_CONTROL_PASSWORD        6
+#define PROPERTY_ID_USER                    7
+#define PROPERTY_ID_PASSWORD                8
+#define PROPERTY_ID_CACHESIZE               9
 
 //============================================================
 //= property names

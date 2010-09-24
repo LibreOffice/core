@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,10 +54,10 @@ namespace sdr
         {
         protected:
             // the animated VOC
-            sdr::contact::ViewObjectContact&					mrVOContact;
+            sdr::contact::ViewObjectContact&                    mrVOContact;
 
             // the vetor of animated primitives
-            drawinglayer::primitive2d::Primitive2DSequence		maAnimatedPrimitives;
+            drawinglayer::primitive2d::Primitive2DSequence      maAnimatedPrimitives;
 
             // local helpers
             double getSmallestNextTime(double fCurrentTime);

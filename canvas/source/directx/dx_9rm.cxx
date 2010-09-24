@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@
 #include "dx_impltools.hxx"
 #include <vcl/sysdata.hxx>
 
-#if defined(DX_DEBUG_IMAGES) 
+#if defined(DX_DEBUG_IMAGES)
 # if OSL_DEBUG_LEVEL > 0
 #  include <imdebug.h>
 #  undef min
@@ -171,7 +171,7 @@ namespace dxcanvas
             public:
                 explicit inline ImplRenderModuleGuard( DXRenderModule& rRenderModule );
                 inline ~ImplRenderModuleGuard();
-                    
+
             private:
                 DXRenderModule& mrRenderModule;
             };
@@ -193,7 +193,7 @@ namespace dxcanvas
         public:
             explicit DXRenderModule( const ::Window& rWindow );
             ~DXRenderModule();
-                    
+
             virtual void lock() const { maMutex.acquire(); }
             virtual void unlock() const { maMutex.release(); }
 
@@ -225,7 +225,7 @@ namespace dxcanvas
             bool createDevice();
             bool verifyDevice( const UINT nAdapter );
             UINT getAdapterFromWindow();
-            
+
             /** This object represents the DirectX state machine.  In order
                 to serialize access to DirectX's global state, a global
                 mutex is required.
@@ -259,7 +259,7 @@ namespace dxcanvas
                 float u,v;
             };
 
-            std::size_t									maNumVertices;
+            std::size_t                                 maNumVertices;
             std::size_t                                 maWriteIndex;
             std::size_t                                 maReadIndex;
         };
@@ -270,7 +270,7 @@ namespace dxcanvas
         // DXSurface::ImplRenderModuleGuard
         //////////////////////////////////////////////////////////////////////////////////
 
-        inline DXSurface::ImplRenderModuleGuard::ImplRenderModuleGuard( 
+        inline DXSurface::ImplRenderModuleGuard::ImplRenderModuleGuard(
             DXRenderModule& rRenderModule ) :
             mrRenderModule( rRenderModule )
         {
@@ -311,7 +311,7 @@ namespace dxcanvas
         //////////////////////////////////////////////////////////////////////////////////
 
         DXSurface::DXSurface( DXRenderModule&           rRenderModule,
-                              const ::basegfx::B2ISize& rSize ) : 
+                              const ::basegfx::B2ISize& rSize ) :
             mrRenderModule(rRenderModule),
             mpTexture(NULL),
             maSize()
@@ -331,7 +331,7 @@ namespace dxcanvas
                 return;
 #endif
 
-            ENSURE_ARG_OR_THROW(rSize.getX() > 0 && rSize.getY() > 0, 
+            ENSURE_ARG_OR_THROW(rSize.getX() > 0 && rSize.getY() > 0,
                             "DXSurface::DXSurface(): request for zero-sized surface");
 
             COMReference<IDirect3DDevice9> pDevice(rRenderModule.getDevice());
@@ -418,7 +418,7 @@ namespace dxcanvas
             rect.bottom = std::min(maSize.getY(),
                                    rect.top + sal_Int32(rSourceRect.getHeight()+1));
             const bool bClearRightColumn( rect.right < maSize.getX() );
-            const bool bClearBottomRow( rect.bottom < maSize.getY() );            
+            const bool bClearBottomRow( rect.bottom < maSize.getY() );
 
             if(SUCCEEDED(mpTexture->LockRect(0,&aLockedRect,&rect,D3DLOCK_NOSYSLOCK)))
             {
@@ -453,9 +453,9 @@ namespace dxcanvas
                                     // manager allocates one pixel gap
                                     // between them. Clear that to
                                     // transparent.
-                                    pDst[nNumBytesToCopy] = 
-                                        pDst[nNumBytesToCopy+1] = 
-                                        pDst[nNumBytesToCopy+2] = 
+                                    pDst[nNumBytesToCopy] =
+                                        pDst[nNumBytesToCopy+1] =
+                                        pDst[nNumBytesToCopy+2] =
                                         pDst[nNumBytesToCopy+3] = 0x00;
                                 }
                                 pDst += aLockedRect.Pitch;
@@ -541,7 +541,7 @@ namespace dxcanvas
                         break;
 
                         default:
-                            ENSURE_OR_RETURN_FALSE(false, 
+                            ENSURE_OR_RETURN_FALSE(false,
                                             "DXSurface::update(): Unknown/unimplemented buffer format" );
                             break;
                     }
@@ -558,7 +558,7 @@ namespace dxcanvas
         //////////////////////////////////////////////////////////////////////////////////
         // DXSurface::getSize
         //////////////////////////////////////////////////////////////////////////////////
-        
+
         ::basegfx::B2IVector DXSurface::getSize()
         {
             return maSize;
@@ -625,7 +625,7 @@ namespace dxcanvas
                 }
             }
             maPageSize=aPageSize;
-            
+
             IDirect3DVertexBuffer9 *pVB(NULL);
             DWORD aFVF(D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_TEX1);
             if( FAILED(mpDevice->CreateVertexBuffer(sizeof(dxvertex)*maNumVertices,
@@ -682,19 +682,19 @@ namespace dxcanvas
 
             maVertexCache.reserve(1024);
 
-            mpWindow.reset( 
+            mpWindow.reset(
                 new SystemChildWindow(
                 const_cast<Window *>(&rWindow), 0) );
 
             // system child window must not receive mouse events
             mpWindow->SetMouseTransparent( TRUE );
-            
+
             // parent should receive paint messages as well
             // [PARENTCLIPMODE_NOCLIP], the argument is here
             // passed as plain numeric value since the stupid
             // define utilizes a USHORT cast.
             mpWindow->SetParentClipMode(0x0002);
-            
+
             // the system child window must not clear its background
             mpWindow->EnableEraseBackground( FALSE );
 
@@ -763,7 +763,7 @@ namespace dxcanvas
             D3DADAPTER_IDENTIFIER9 aIdent;
             if(FAILED(mpDirect3D9->GetAdapterIdentifier(nAdapter,0,&aIdent)))
                 return false;
-            
+
             DXCanvasItem aConfigItem;
             DXCanvasItem::DeviceInfo aInfo;
             aInfo.nVendorId = aIdent.VendorId;
@@ -940,13 +940,13 @@ namespace dxcanvas
 
             flushVertexCache();
 
-            // TODO(P2): Might be faster to actually pass update area here 
-            RECT aRect = 
+            // TODO(P2): Might be faster to actually pass update area here
+            RECT aRect =
                 {
                     rUpdateArea.getMinX(),
                     rUpdateArea.getMinY(),
                     rUpdateArea.getMaxX(),
-                    rUpdateArea.getMaxY() 
+                    rUpdateArea.getMaxY()
                 };
             HRESULT hr(mpSwapChain->Present(&aRect,&aRect,NULL,NULL,0));
             if(FAILED(hr))
@@ -1182,7 +1182,7 @@ namespace dxcanvas
                 }
 
                 default:
-                    OSL_ENSURE(false, 
+                    OSL_ENSURE(false,
                                "DXRenderModule::pushVertex(): unexpected primitive type");
                     break;
             }
@@ -1217,7 +1217,7 @@ namespace dxcanvas
         //////////////////////////////////////////////////////////////////////////////////
         // DXRenderModule::commitVertexCache
         //////////////////////////////////////////////////////////////////////////////////
-        
+
         void DXRenderModule::commitVertexCache()
         {
             if(maReadIndex != maWriteIndex)

@@ -11,7 +11,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:style="radio auto" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HFixedLine" toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:VFixedLine" toolbar:style="radio" /> 
+ <toolbar:toolbaritem xlink:href=".uno:VFixedLine" toolbar:style="radio" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:style="radio auto" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:visible="false"/>

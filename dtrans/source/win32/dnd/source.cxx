@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams);
 DragSource::DragSource( const Reference<XMultiServiceFactory>& sf):
     m_serviceFactory( sf),
     WeakComponentImplHelper3< XDragSource, XInitialization, XServiceInfo >(m_mutex),
-//	m_pcurrentContext_impl(0),
+//  m_pcurrentContext_impl(0),
     m_hAppWindow(0),
     m_MouseButton(0),
     m_RunningDndOperationCount(0)
@@ -218,7 +218,7 @@ void SAL_CALL DragSource::startDrag(
 
         DragSourceDropEvent dsde;
 
-        dsde.DropAction	 = ACTION_NONE;
+        dsde.DropAction  = ACTION_NONE;
         dsde.DropSuccess = false;
 
         try
@@ -296,7 +296,7 @@ HRESULT STDMETHODCALLTYPE DragSource::QueryContinueDrag(
     {
         if( ( m_MouseButton == MouseButton::RIGHT &&  !(grfKeyState & MK_RBUTTON) ) ||
             ( m_MouseButton == MouseButton::MIDDLE && !(grfKeyState & MK_MBUTTON) ) ||
-            ( m_MouseButton == MouseButton::LEFT && !(grfKeyState & MK_LBUTTON)	)   ||
+            ( m_MouseButton == MouseButton::LEFT && !(grfKeyState & MK_LBUTTON) )   ||
             ( m_MouseButton == 0 && !(grfKeyState & MK_LBUTTON) ) )
         {
             retVal= DRAGDROP_S_DROP;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ protected:
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(com::sun::star::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
-    virtual Dialog*	createDialog( Window* pParent );
+    virtual Dialog* createDialog( Window* pParent );
     virtual void executedDialog( sal_Int16 nExecutionResult );
     virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
@@ -79,9 +79,9 @@ protected:
     virtual void SAL_CALL setSourceDocument( const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xDoc ) throw(com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException);
 
 public:
-    
+
                 SWFDialog( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF );
-    virtual		~SWFDialog();
+    virtual     ~SWFDialog();
 };
 
 // -----------------------------------------------------------------------------

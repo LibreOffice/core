@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,8 +57,8 @@ class SdrObject;
 
 //defines fuer die Symbolauswahl auf der Page
 //Positive Werte (0,...n) gibt den Indes in pSymbollist an, sonst :
-#define SVX_SYMBOLTYPE_NONE	      (-3)  //Symbol unsichtbar
-#define SVX_SYMBOLTYPE_AUTO	      (-2)  //Symbol automatisch erzeugen
+#define SVX_SYMBOLTYPE_NONE       (-3)  //Symbol unsichtbar
+#define SVX_SYMBOLTYPE_AUTO       (-2)  //Symbol automatisch erzeugen
 #define SVX_SYMBOLTYPE_BRUSHITEM  (-1)  //Symbol ist als Graphic im Item enthalten:
 #define SVX_SYMBOLTYPE_UNKNOWN  (-100) //unbekannt/nicht initialisiert
 

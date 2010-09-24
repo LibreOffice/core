@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,15 +31,15 @@
 #include "rcid.hrc"
 #include "table.hrc"
 
-#define ED_RANGE		1
+#define ED_RANGE        1
 #define FT_RANGE                2
-#define BT_NEXT  		3
+#define BT_NEXT         3
 #define BT_FINISH               4
 #define BT_HELP                 5
 #define BT_CANCEL               6
-#define CB_FIRST_ROW		7
+#define CB_FIRST_ROW        7
 #define CB_FIRST_COL            8
-#define BT_PREV     	       	9
+#define BT_PREV                 9
 #define FL_HLINE                10
 #define FT_TEXT                 11
 #define FL_1                    12

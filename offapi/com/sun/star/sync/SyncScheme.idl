@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,14 +24,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- 
-#ifndef __com_sun_star_sync_SyncScheme_idl__ 
-#define __com_sun_star_sync_SyncScheme_idl__ 
- 
-//============================================================================= 
- 
- module com {  module sun {  module star {  module sync {  
- 
+
+#ifndef __com_sun_star_sync_SyncScheme_idl__
+#define __com_sun_star_sync_SyncScheme_idl__
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module sync {
+
 /** contains the scheme name of this SyncScheme
 
     @derepcated
@@ -40,17 +40,17 @@ published struct SyncScheme
 {
     /** contains the scheme name of this SyncScheme
      */
-    string Scheme; 
- 
-    //------------------------------------------------------------------------- 
-     
+    string Scheme;
+
+    //-------------------------------------------------------------------------
+
     /** contains the root for this SyncScheme
      */
-    string Root; 
-}; 
- 
-//============================================================================= 
- 
-}; }; }; };  
- 
-#endif 
+    string Root;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

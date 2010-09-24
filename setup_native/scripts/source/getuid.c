@@ -16,7 +16,7 @@ extern "C" {
 int   chown  (const char *path, uid_t owner, gid_t group) {return 0;}
 int   lchown (const char *path, uid_t owner, gid_t group) {return 0;}
 int   fchown (int fildes, uid_t owner, gid_t group)       {return 0;}
- 
+
 uid_t getuid  (void) {return 0;}
 int stat(const char *path,  struct stat *buf);
 #ifdef __notdef__
@@ -122,7 +122,7 @@ int __lxstat64(int n, const char *path, struct stat64 *buf)
     if (buf != NULL)
     {
         buf->st_uid = 0;
-        buf->st_gid = 0; 
+        buf->st_gid = 0;
     }
     return ret;
 }

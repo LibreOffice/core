@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,11 +136,11 @@ bool testNumberToString(hTestResult pTestResult,
     // LLA: rtl::OStringBuffer aBuf;
     // LLA: StringT::appendBuffer(aBuf, aResult1);
     // LLA: t_print("aResult1: %s  ", aBuf.getStr());
-    // LLA: 
+    // LLA:
     // LLA: rtl::OStringBuffer aBuf2;
-    // LLA: StringT::appendBuffer(aBuf2, aResult2);  
+    // LLA: StringT::appendBuffer(aBuf2, aResult2);
     // LLA: t_print("aResult2: %s\n", aBuf2.getStr());
-    
+
     bool bSuccess = aResult1 == aResult2;
 
     rtl::OStringBuffer aBuffer;
@@ -251,7 +251,7 @@ bool testStringToNumberToString(hTestResult pTestResult,
 extern "C" sal_Bool SAL_CALL test_rtl_math(hTestResult pTestResult)
 {
     bool bReturn = true;
-    
+
     {
         static TestNumberToString const aTest[]
             = { // 1, 1+2^-1, ..., 1+2^-52

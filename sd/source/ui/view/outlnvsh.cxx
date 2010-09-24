@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,8 +106,8 @@ using namespace sd;
 
 namespace sd {
 
-#define MIN_ZOOM	       10       // Minimaler Zoomfaktor
-#define MAX_ZOOM	     1000	    // Maximaler Zoomfaktor
+#define MIN_ZOOM           10       // Minimaler Zoomfaktor
+#define MAX_ZOOM         1000       // Maximaler Zoomfaktor
 
 /************************************************************************/
 
@@ -157,7 +157,7 @@ void OutlineViewShell::Construct(DrawDocShell* )
     GetActiveWindow()->SetMaxZoom( MAX_ZOOM );
     InitWindows(aViewOrigin, aSize, aWinPos);
     pOlView = new OutlineView(GetDocSh(), GetActiveWindow(), this);
-    mpView = pOlView;			 // Pointer der Basisklasse ViewShell
+    mpView = pOlView;            // Pointer der Basisklasse ViewShell
 
     SetPool( &GetDoc()->GetPool() );
 
@@ -253,7 +253,7 @@ OutlineViewShell::~OutlineViewShell()
     if ( pClipEvtLstnr )
     {
         pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), FALSE );
-        pClipEvtLstnr->ClearCallbackLink();		// #103849# prevent callback if another thread is waiting
+        pClipEvtLstnr->ClearCallbackLink();     // #103849# prevent callback if another thread is waiting
         pClipEvtLstnr->release();
     }
 }
@@ -313,7 +313,7 @@ void OutlineViewShell::ArrangeGUIElements ()
         OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
 
         Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
-//		aWin.nLeft = pOlView->GetPageNumberWidthPixel();
+//      aWin.nLeft = pOlView->GetPageNumberWidthPixel();
 
         aWin = pWindow->PixelToLogic(aWin);
         pOutlinerView->SetOutputArea(aWin);
@@ -325,7 +325,7 @@ void OutlineViewShell::ArrangeGUIElements ()
                 pOlView->GetOutliner()->GetTextHeight()));
         aText.Bottom() += aWin.GetHeight();
 
-        if (!aWin.IsEmpty())			// nicht beim Oeffnen
+        if (!aWin.IsEmpty())            // nicht beim Oeffnen
         {
             InitWindows(Point(0,0), aText.GetSize(), Point(aVis.TopLeft()));
             UpdateScrollBars();
@@ -514,7 +514,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         (nSlot == SID_TRANSLITERATE_HIRAGANA) ||
         (nSlot == SID_TRANSLITERATE_KATAGANA) ||
         (nSlot == SID_CUT) ||
-//		(nSlot == SID_COPY) ||
+//      (nSlot == SID_COPY) ||
         (nSlot == SID_PASTE) ||
         (nSlot == SID_DELETE)))
     {
@@ -868,7 +868,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     // zunaechst selektionsabhaengige: COLLAPSE, EXPAND
     BOOL bDisableCollapse = TRUE;
     BOOL bDisableExpand   = TRUE;
-    BOOL bUnique		  = TRUE;
+    BOOL bUnique          = TRUE;
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow(GetActiveWindow());
     List* pList = pOutlinerView->CreateSelectionList();
     Paragraph* pPara = (Paragraph*)pList->First();
@@ -915,7 +915,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     // jetzt die selektionsunabhaengigen: COLLAPSE_ALL, EXPAND_ALL
     BOOL bDisableCollapseAll = TRUE;
-    BOOL bDisableExpandAll	 = TRUE;
+    BOOL bDisableExpandAll   = TRUE;
 
     // wenn schon die Selektion etwas kollabierbares/expandierbares enthaelt
     if (!bDisableCollapse)
@@ -1130,17 +1130,17 @@ long OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 {
     long   nThumb = pHScroll->GetThumbPos();
     long   nRange = pHScroll->GetRange().Len();
-    double fX	  = (double) nThumb / nRange;
+    double fX     = (double) nThumb / nRange;
 
-    Window* 	  pWin			= mpContentWindow.get();
+    Window*       pWin          = mpContentWindow.get();
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWin);
-    long		  nViewWidth	= pWin->PixelToLogic(
+    long          nViewWidth    = pWin->PixelToLogic(
         pWin->GetSizePixel()).Width();
-    long		  nTextWidth	= pOlView->GetPaperWidth();
-    nViewWidth					= Max(nViewWidth, nTextWidth);
-    long		  nCurrentPos	= pOutlinerView->GetVisArea().Left();
-    long		  nTargetPos	= (long)(fX * nViewWidth);
-    long		  nDelta		= nTargetPos - nCurrentPos;
+    long          nTextWidth    = pOlView->GetPaperWidth();
+    nViewWidth                  = Max(nViewWidth, nTextWidth);
+    long          nCurrentPos   = pOutlinerView->GetVisArea().Left();
+    long          nTargetPos    = (long)(fX * nViewWidth);
+    long          nDelta        = nTargetPos - nCurrentPos;
 
     pOutlinerView->HideCursor();
     pOutlinerView->Scroll(-nDelta, 0);
@@ -1162,15 +1162,15 @@ long OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     long nRange = pVScroll->GetRange().Len();
     double fY = (double) nThumb / nRange;
 
-    Window* 	  pWin			= mpContentWindow.get();
+    Window*       pWin          = mpContentWindow.get();
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWin);
-    long		  nViewHeight	= pWin->PixelToLogic(
+    long          nViewHeight   = pWin->PixelToLogic(
         pWin->GetSizePixel()).Height();
-    long		  nTextHeight	= pOlView->GetOutliner()->GetTextHeight();
-    nViewHeight 			   += nTextHeight;
-    long		  nCurrentPos	= pOutlinerView->GetVisArea().Top();
-    long		  nTargetPos	= (long)(fY * nViewHeight);
-    long		  nDelta		= nTargetPos - nCurrentPos;
+    long          nTextHeight   = pOlView->GetOutliner()->GetTextHeight();
+    nViewHeight                += nTextHeight;
+    long          nCurrentPos   = pOutlinerView->GetVisArea().Top();
+    long          nTargetPos    = (long)(fY * nViewHeight);
+    long          nDelta        = nTargetPos - nCurrentPos;
 
     pOutlinerView->HideCursor();
     pOutlinerView->Scroll(0, -nDelta);
@@ -1409,15 +1409,15 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_PAGE ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_LAYOUT ) )
     */
-    USHORT	nPageCount = GetDoc()->GetSdPageCount( PK_STANDARD );
-    String	aPageStr, aLayoutStr;
+    USHORT  nPageCount = GetDoc()->GetSdPageCount( PK_STANDARD );
+    String  aPageStr, aLayoutStr;
 
-    ::sd::Window*		pWin		= GetActiveWindow();
-    OutlinerView*	pActiveView = pOlView->GetViewByWindow( pWin );
+    ::sd::Window*       pWin        = GetActiveWindow();
+    OutlinerView*   pActiveView = pOlView->GetViewByWindow( pWin );
     ::Outliner*     pOutliner   = pOlView->GetOutliner();
-    List*			pSelList	= (List*)pActiveView->CreateSelectionList();
-    Paragraph*		pFirstPara	= (Paragraph*)pSelList->First();
-    Paragraph*		pLastPara	= (Paragraph*)pSelList->Last();
+    List*           pSelList    = (List*)pActiveView->CreateSelectionList();
+    Paragraph*      pFirstPara  = (Paragraph*)pSelList->First();
+    Paragraph*      pLastPara   = (Paragraph*)pSelList->Last();
 
     if( !pOutliner->HasParaFlag(pFirstPara,PARAFLAG_ISPAGE) )
         pFirstPara = pOlView->GetPrevTitle( pFirstPara );
@@ -1425,7 +1425,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     if( !pOutliner->HasParaFlag(pLastPara, PARAFLAG_ISPAGE) )
         pLastPara = pOlView->GetPrevTitle( pLastPara );
 
-    delete pSelList;				// die wurde extra fuer uns erzeugt
+    delete pSelList;                // die wurde extra fuer uns erzeugt
 
     // nur eine Seite selektiert?
     if( pFirstPara == pLastPara )
@@ -1446,7 +1446,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 
         aPageStr = String(SdResId( STR_SD_PAGE ));
         aPageStr += sal_Unicode(' ');
-        aPageStr += String::CreateFromInt32( (sal_Int32)(nPos + 1) );	// ULONG -> sal_Int32
+        aPageStr += String::CreateFromInt32( (sal_Int32)(nPos + 1) );   // ULONG -> sal_Int32
         aPageStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
         aPageStr += String::CreateFromInt32( nPageCount );
 
@@ -1566,7 +1566,7 @@ Size OutlineViewShell::GetOptimalSizePixel() const
     // und jetzt jetzt das Standardgelumpe draufaddieren
     aResult.Width()  += mpVerticalScrollBar->GetSizePixel().Width();
     aResult.Height() += mpHorizontalScrollBar->GetSizePixel().Height();
-        //!!! +	System::GetMenuBarHeightPixel();  // statt Titlebar
+        //!!! + System::GetMenuBarHeightPixel();  // statt Titlebar
     return aResult;
 }
 
@@ -1783,11 +1783,11 @@ SdPage* OutlineViewShell::GetActualPage()
 
 String OutlineViewShell::GetPageRangeString()
 {
-    ::sd::Window*	   pWin 			= GetActiveWindow();
-    OutlinerView*  pActiveView		= pOlView->GetViewByWindow(pWin);
+    ::sd::Window*      pWin             = GetActiveWindow();
+    OutlinerView*  pActiveView      = pOlView->GetViewByWindow(pWin);
     ::Outliner*      pOutl            = pActiveView->GetOutliner();
-    List*		   pSelList 		= (List*)pActiveView->CreateSelectionList();
-    Paragraph*	   pPara			= (Paragraph*)pSelList->First();
+    List*          pSelList         = (List*)pActiveView->CreateSelectionList();
+    Paragraph*     pPara            = (Paragraph*)pSelList->First();
 
     String aStrPageRange;
     BOOL bFirstPageNo = TRUE;
@@ -1867,7 +1867,7 @@ String OutlineViewShell::GetPageRangeString()
     if( nPageCount == 0 )
         aStrPageRange.Erase();
 
-    delete pSelList;				// die wurde extra fuer uns erzeugt
+    delete pSelList;                // die wurde extra fuer uns erzeugt
 
     return aStrPageRange;
 }
@@ -1897,13 +1897,13 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
     if( !pPage || !pPara )
         return false;
 
-    ::Outliner* 			pOutliner = pOlView->GetOutliner();
-    SdrTextObj* 		pTO  = pOlView->GetTitleTextObject( pPage );
+    ::Outliner*             pOutliner = pOlView->GetOutliner();
+    SdrTextObj*         pTO  = pOlView->GetTitleTextObject( pPage );
     OutlinerParaObject* pOPO = NULL;
 
-    String	aTest( pOutliner->GetText( pPara ) );
-    bool 	bText = aTest.Len() > 0;
-    bool 	bNewObject = false;
+    String  aTest( pOutliner->GetText( pPara ) );
+    bool    bText = aTest.Len() > 0;
+    bool    bNewObject = false;
 
     if( bText )
     {
@@ -1984,9 +1984,9 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     if( !pPage || !pPara )
         return false;
 
-    ::Outliner* 		pOutliner = pOlView->GetOutliner();
+    ::Outliner*         pOutliner = pOlView->GetOutliner();
     OutlinerParaObject* pOPO = NULL;
-    SdrTextObj* 		pTO  = NULL;
+    SdrTextObj*         pTO  = NULL;
 
     BOOL bNewObject = FALSE;
 
@@ -1999,7 +1999,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     }
 
     // wieviele Absaetze in der Gliederung?
-    ULONG nTitlePara	 = pOutliner->GetAbsPos( pPara );
+    ULONG nTitlePara     = pOutliner->GetAbsPos( pPara );
     ULONG nPara          = nTitlePara + 1;
     ULONG nParasInLayout = 0L;
     pPara = pOutliner->GetParagraph( nPara );

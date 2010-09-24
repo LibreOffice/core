@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,14 +38,14 @@ namespace sd { namespace slidesorter { namespace cache {
 enum RequestPriorityClass
 {
     MIN__CLASS = 0,
-    
+
     // The slide is visible.  A preview does not yet exist.
     VISIBLE_NO_PREVIEW = MIN__CLASS,
     // The slide is visible.  A preview exists but is not up-to-date anymore.
     VISIBLE_OUTDATED_PREVIEW,
     // The slide is not visible.
     NOT_VISIBLE,
-    
+
     MAX__CLASS = NOT_VISIBLE
 };
 

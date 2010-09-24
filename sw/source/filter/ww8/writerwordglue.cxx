@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@
 #   include <fmtfsize.hxx>          //SwFmtFrmSize
 #   include <swrect.hxx>            //SwRect
 #   include <fmthdft.hxx>           //SwFmtHeader/SwFmtFooter
-#	include <frmatr.hxx>	        //GetLRSpace...
+#   include <frmatr.hxx>            //GetLRSpace...
 #   include <ndtxt.hxx>             //SwTxtNode
 #   include <breakit.hxx>           //pBreakIt
 
@@ -162,7 +162,7 @@ namespace myImplHelpers
             RES_NONE, RES_NONE, RES_NONE, RES_POOLCOLL_LISTS_BEGIN,
             RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
             RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
-            RES_NONE, RES_NONE, RES_POOLCOLL_DOC_TITEL, RES_NONE,
+            RES_NONE, RES_NONE, RES_POOLCOLL_HEADLINE_BASE, RES_NONE,
             RES_POOLCOLL_SIGNATURE, RES_NONE, RES_POOLCOLL_TEXT,
             RES_POOLCOLL_TEXT_MOVE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
             RES_NONE, RES_NONE, RES_POOLCOLL_DOC_SUBTITEL
@@ -998,7 +998,7 @@ namespace sw
                 }
                 ++nI;
             }
-            
+
             if (bForceNatNum)
                 bForceJapanese = true;
 

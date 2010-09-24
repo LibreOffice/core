@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ public class ComboBox extends Container {
 
     /** Appends the specified component to the end of this container */
     public java.awt.Component add(java.awt.Component c) {
-        // List should be always the first child 
+        // List should be always the first child
         if (c instanceof List) {
             return super.add(c, 0);
         } else {

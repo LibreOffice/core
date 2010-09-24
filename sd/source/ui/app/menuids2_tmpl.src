@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,23 +28,23 @@
 
 #ifndef _MENUIDS2_SRC
 #define _MENUIDS2_SRC
-#define MI(x) 					MenuItem { x };
+#define MI(x)                   MenuItem { x };
 #define SEPARATOR       MenuItem { Separator = TRUE; };
  // SubMenu-IDs
-#define MN_SUB_VIEW						91
-#define MN_SUB_TOOLBAR				92
-#define MN_SUB_GRAPHIC				93
-#define MN_SUB_SPELLING				94
-#define MN_SUB_TEMPLATES			95
-#define MN_SUB_POSITION				96
-#define MN_SUB_MASTERPAGE   		97
-#define MN_SUB_SEND					98
-#define MN_SUB_FIELD				99
-#define MN_SUB_OUTPUT_QUALITY		100
-#define MN_SUB_PREVIEW_OUTPUT_QUALITY	101
-#define MN_SUB_GROUP					102
-#define MN_TEMPLATES					103
-#define MN_SUB_MASTER_LAYOUTS			104
+#define MN_SUB_VIEW                     91
+#define MN_SUB_TOOLBAR              92
+#define MN_SUB_GRAPHIC              93
+#define MN_SUB_SPELLING             94
+#define MN_SUB_TEMPLATES            95
+#define MN_SUB_POSITION             96
+#define MN_SUB_MASTERPAGE           97
+#define MN_SUB_SEND                 98
+#define MN_SUB_FIELD                99
+#define MN_SUB_OUTPUT_QUALITY       100
+#define MN_SUB_PREVIEW_OUTPUT_QUALITY   101
+#define MN_SUB_GROUP                    102
+#define MN_TEMPLATES                    103
+#define MN_SUB_MASTER_LAYOUTS           104
 
  // Windowmenu-ID (wird in globlmn.hrc gebraucht)
 #ifndef MN_WIN
@@ -113,7 +113,7 @@
     HelpID = 20 ; \
     Command = ".uno:EditMenu"; \
     Text [ en-US ] = "~Edit" ; \
-    
+
 #define MN_PASTE2 \
     MenuItem\
     {\
@@ -169,7 +169,7 @@
     HelpID = 23 ; \
     Command = ".uno:ViewMenu" ; \
     Text [ en-US ] = "~View" ; \
-    
+
 #define MN_TOGGLETOOLBAR \
     MenuItem\
     {\
@@ -396,7 +396,7 @@
     HelpID = 21 ; \
     Command = ".uno:InsertMenu" ; \
     Text [ en-US ] = "~Insert" ; \
-    
+
 #define MN_INSERTPAGE \
     MenuItem\
     {\
@@ -773,7 +773,7 @@
     HelpID = 24 ; \
     Command = ".uno:ModifyMenu" ; \
     Text [ en-US ] = "~Modify" ; \
-    
+
 #define MN_MOREFRONT \
     MenuItem\
     {\

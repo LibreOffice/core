@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,14 +90,14 @@ class VCL_DLLPUBLIC DragAndDropWrapper :
 private:
     DragAndDropClient* mpClient;
 
-public:	
+public:
                     DragAndDropWrapper( DragAndDropClient* pClient );
                     ~DragAndDropWrapper();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any					SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void										SAL_CALL acquire() throw()	{ OWeakObject::acquire(); }
-    void										SAL_CALL release() throw()	{ OWeakObject::release(); }
+    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
+    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
 
     // ::com::sun::star::lang::XEventListener
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
@@ -120,7 +120,7 @@ public:
     void SAL_CALL dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (::com::sun::star::uno::RuntimeException);
 };
 
-}}	// namespace vcl::unohelper
+}}  // namespace vcl::unohelper
 
 #endif  // _VCL_DNDHELP_HXX
 

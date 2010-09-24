@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ PresenterFrameworkObserver::PresenterFrameworkObserver (
 {
     if ( ! mxConfigurationController.is())
         throw lang::IllegalArgumentException();
-    
+
     if (mxConfigurationController->hasPendingRequests())
     {
         if (rsEventName.getLength() > 0)
@@ -170,7 +170,7 @@ void SAL_CALL PresenterFrameworkObserver::disposing (const lang::EventObject& rE
 {
     if ( ! rEvent.Source.is())
         return;
-    
+
     if (rEvent.Source == mxConfigurationController)
     {
         mxConfigurationController = NULL;
@@ -187,7 +187,7 @@ void SAL_CALL PresenterFrameworkObserver::notifyConfigurationChange (
     throw (RuntimeException)
 {
     bool bDispose(false);
-    
+
     Action aAction (maAction);
     Predicate aPredicate (maPredicate);
     if (rEvent.Type.equals(A2S("ConfigurationUpdateEnd")))

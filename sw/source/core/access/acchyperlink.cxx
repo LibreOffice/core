@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,13 +69,13 @@ const SwTxtAttr *SwAccessibleHyperlink::GetTxtAttr() const
 
 
 // XAccessibleAction
-sal_Int32 SAL_CALL SwAccessibleHyperlink::getAccessibleActionCount() 
+sal_Int32 SAL_CALL SwAccessibleHyperlink::getAccessibleActionCount()
         throw (uno::RuntimeException)
 {
      return isValid() ? 1 : 0;
 }
 
-sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex ) 
+sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -110,7 +110,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
 }
 
 OUString SAL_CALL SwAccessibleHyperlink::getAccessibleActionDescription(
-        sal_Int32 nIndex ) 
+        sal_Int32 nIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     OUString sDesc;
@@ -126,7 +126,7 @@ OUString SAL_CALL SwAccessibleHyperlink::getAccessibleActionDescription(
 }
 
 uno::Reference< XAccessibleKeyBinding > SAL_CALL
-    SwAccessibleHyperlink::getAccessibleActionKeyBinding( sal_Int32 nIndex ) 
+    SwAccessibleHyperlink::getAccessibleActionKeyBinding( sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     uno::Reference< XAccessibleKeyBinding > xKeyBinding;
@@ -150,32 +150,32 @@ uno::Reference< XAccessibleKeyBinding > SAL_CALL
 
 // XAccessibleHyperlink
 uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionAnchor(
-        sal_Int32 /*nIndex*/ ) 
+        sal_Int32 /*nIndex*/ )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     return uno::Any();
 }
 
-uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionObject( 
-            sal_Int32 /*nIndex*/ ) 
+uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionObject(
+            sal_Int32 /*nIndex*/ )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     return uno::Any();
 }
 
-sal_Int32 SAL_CALL SwAccessibleHyperlink::getStartIndex() 
+sal_Int32 SAL_CALL SwAccessibleHyperlink::getStartIndex()
         throw (uno::RuntimeException)
 {
     return nStartIdx;
 }
 
-sal_Int32 SAL_CALL SwAccessibleHyperlink::getEndIndex() 
+sal_Int32 SAL_CALL SwAccessibleHyperlink::getEndIndex()
         throw (uno::RuntimeException)
 {
     return nEndIdx;
 }
 
-sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  ) 
+sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
         throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ public class DocumentProperties extends ComplexTestCase {
                 new Date());
         assure("Couldn't set an date property", worked);
         log.println("...done");
-        
+
         log.println("trying to remove a read only Property");
         try {
             xPropContainer.removeProperty ("intValue");
@@ -122,8 +122,8 @@ public class DocumentProperties extends ComplexTestCase {
             log.println("\tException was thrown "+e);
             log.println("\t...OK");
         }
-        log.println("...done");        
-        
+        log.println("...done");
+
 
         String tempdir = System.getProperty("java.io.tmpdir");
         String fs = System.getProperty("file.separator");
@@ -186,11 +186,11 @@ public class DocumentProperties extends ComplexTestCase {
         assure("Date doesn't work",
             checkType(xProps, "dateValue",
                 "com.sun.star.util.DateTime"));
-        
+
                 xPropContainer =
             (XPropertyContainer) UnoRuntime.queryInterface(XPropertyContainer.class,
                 xDocInfo);
-        
+
         log.println("trying to remove a not user defined Property");
         try {
             xPropContainer.removeProperty ("Author");
@@ -200,7 +200,7 @@ public class DocumentProperties extends ComplexTestCase {
             log.println("\t...OK");
         }
         log.println("...done");
-        
+
         log.println("Trying to remove a user defined property");
         try {
             xPropContainer.removeProperty ("dateValue");
@@ -209,9 +209,9 @@ public class DocumentProperties extends ComplexTestCase {
             log.println("\tException was thrown "+e);
             log.println("\t...FAILED");
             assure("Could not remove user defined property", false);
-        }        
+        }
         log.println("...done");
-        
+
     }
 
     public void cleanup() {

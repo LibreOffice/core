@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ namespace canvas
 
         void fillB2DPolyPolygon(
             const ::basegfx::B2DPolyPolygon&                    rPolyPolygon,
-            const ::com::sun::star::rendering::ViewState& 		viewState,
+            const ::com::sun::star::rendering::ViewState&       viewState,
             const ::com::sun::star::rendering::RenderState&     renderState );
 
 
@@ -99,91 +99,91 @@ namespace canvas
         // High-level drawing operations (from the XCanvas interface)
         // ==========================================================
 
-        void drawPoint( const ::com::sun::star::geometry::RealPoint2D& 		aPoint,
-                        const ::com::sun::star::rendering::ViewState& 		viewState,
-                        const ::com::sun::star::rendering::RenderState& 	renderState );
+        void drawPoint( const ::com::sun::star::geometry::RealPoint2D&      aPoint,
+                        const ::com::sun::star::rendering::ViewState&       viewState,
+                        const ::com::sun::star::rendering::RenderState&     renderState );
         void drawLine( const ::com::sun::star::geometry::RealPoint2D&       aStartPoint,
                        const ::com::sun::star::geometry::RealPoint2D&       aEndPoint,
                        const ::com::sun::star::rendering::ViewState&        viewState,
-                       const ::com::sun::star::rendering::RenderState&      renderState	);
-        void drawBezier( const ::com::sun::star::geometry::RealBezierSegment2D&	aBezierSegment,
-                         const ::com::sun::star::geometry::RealPoint2D& 		aEndPoint,
-                         const ::com::sun::star::rendering::ViewState& 			viewState,
-                         const ::com::sun::star::rendering::RenderState& 		renderState );
+                       const ::com::sun::star::rendering::RenderState&      renderState );
+        void drawBezier( const ::com::sun::star::geometry::RealBezierSegment2D& aBezierSegment,
+                         const ::com::sun::star::geometry::RealPoint2D&         aEndPoint,
+                         const ::com::sun::star::rendering::ViewState&          viewState,
+                         const ::com::sun::star::rendering::RenderState&        renderState );
         ImageCachedPrimitiveSharedPtr drawPolyPolygon(
             const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon,
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
             const ::com::sun::star::rendering::ViewState&           viewState,
             const ::com::sun::star::rendering::RenderState&         renderState );
 
         ImageCachedPrimitiveSharedPtr strokePolyPolygon(
             const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon,
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
             const ::com::sun::star::rendering::ViewState&           viewState,
-            const ::com::sun::star::rendering::RenderState& 		renderState,
+            const ::com::sun::star::rendering::RenderState&         renderState,
             const ::com::sun::star::rendering::StrokeAttributes&    strokeAttributes );
         ImageCachedPrimitiveSharedPtr strokeTexturedPolyPolygon(
             const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon,
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
             const ::com::sun::star::rendering::ViewState&           viewState,
-            const ::com::sun::star::rendering::RenderState& 		renderState,
+            const ::com::sun::star::rendering::RenderState&         renderState,
             const ::com::sun::star::uno::Sequence<
                   ::com::sun::star::rendering::Texture >&           textures,
             const ::std::vector< ::boost::shared_ptr<Image> >&      textureAnnotations,
             const ::com::sun::star::rendering::StrokeAttributes&    strokeAttributes );
         ImageCachedPrimitiveSharedPtr strokeTextureMappedPolyPolygon(
             const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon,
-            const ::com::sun::star::rendering::ViewState& 			viewState,
-            const ::com::sun::star::rendering::RenderState& 		renderState,
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
+            const ::com::sun::star::rendering::ViewState&           viewState,
+            const ::com::sun::star::rendering::RenderState&         renderState,
             const ::com::sun::star::uno::Sequence<
                   ::com::sun::star::rendering::Texture >&           textures,
             const ::std::vector< ::boost::shared_ptr<Image> >&      textureAnnotations,
             const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::geometry::XMapping2D >& 		xMapping,
-            const ::com::sun::star::rendering::StrokeAttributes& 	strokeAttributes );
+                  ::com::sun::star::geometry::XMapping2D >&         xMapping,
+            const ::com::sun::star::rendering::StrokeAttributes&    strokeAttributes );
         ImageCachedPrimitiveSharedPtr fillPolyPolygon(
             const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon,
-            const ::com::sun::star::rendering::ViewState& 			viewState,
-            const ::com::sun::star::rendering::RenderState& 		renderState );
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
+            const ::com::sun::star::rendering::ViewState&           viewState,
+            const ::com::sun::star::rendering::RenderState&         renderState );
         ImageCachedPrimitiveSharedPtr fillTexturedPolyPolygon(
             const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::rendering::XPolyPolygon2D >&	xPolyPolygon,
-            const ::com::sun::star::rendering::ViewState& 			viewState,
-            const ::com::sun::star::rendering::RenderState& 		renderState,
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
+            const ::com::sun::star::rendering::ViewState&           viewState,
+            const ::com::sun::star::rendering::RenderState&         renderState,
             const ::com::sun::star::uno::Sequence<
                   ::com::sun::star::rendering::Texture >&           textures,
             const ::std::vector< ::boost::shared_ptr<Image> >&      textureAnnotations );
         ImageCachedPrimitiveSharedPtr fillTextureMappedPolyPolygon(
             const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::rendering::XPolyPolygon2D >& 	xPolyPolygon,
+                  ::com::sun::star::rendering::XPolyPolygon2D >&    xPolyPolygon,
             const ::com::sun::star::rendering::ViewState&           viewState,
-            const ::com::sun::star::rendering::RenderState& 		renderState,
+            const ::com::sun::star::rendering::RenderState&         renderState,
             const ::com::sun::star::uno::Sequence<
                   ::com::sun::star::rendering::Texture >&           textures,
             const ::std::vector< ::boost::shared_ptr<Image> >&      textureAnnotations,
             const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::geometry::XMapping2D >& 		xMapping );
+                  ::com::sun::star::geometry::XMapping2D >&         xMapping );
 
         ImageCachedPrimitiveSharedPtr drawBitmap(
             const ::com::sun::star::uno::Reference<
                   ::com::sun::star::rendering::XBitmap >&   xBitmap,
-            const ::com::sun::star::rendering::ViewState& 	viewState,
+            const ::com::sun::star::rendering::ViewState&   viewState,
             const ::com::sun::star::rendering::RenderState& renderState );
         ImageCachedPrimitiveSharedPtr drawBitmap(
             const ::boost::shared_ptr<Image>&               rImage,
-            const ::com::sun::star::rendering::ViewState& 	viewState,
+            const ::com::sun::star::rendering::ViewState&   viewState,
             const ::com::sun::star::rendering::RenderState& renderState );
 
         ImageCachedPrimitiveSharedPtr drawBitmapModulated(
             const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::rendering::XBitmap >&		xBitmap,
-            const ::com::sun::star::rendering::ViewState& 		viewState,
+                  ::com::sun::star::rendering::XBitmap >&       xBitmap,
+            const ::com::sun::star::rendering::ViewState&       viewState,
             const ::com::sun::star::rendering::RenderState&     renderState );
         ImageCachedPrimitiveSharedPtr drawBitmapModulated(
             const ::boost::shared_ptr<Image>&                   rImage,
-            const ::com::sun::star::rendering::ViewState& 		viewState,
+            const ::com::sun::star::rendering::ViewState&       viewState,
             const ::com::sun::star::rendering::RenderState&     renderState );
 
     private:
@@ -194,7 +194,7 @@ namespace canvas
 
         ImageCachedPrimitiveSharedPtr implDrawBitmap(
                              const Image&                                    rBitmap,
-                             const ::com::sun::star::rendering::ViewState& 	 viewState,
+                             const ::com::sun::star::rendering::ViewState&   viewState,
                              const ::com::sun::star::rendering::RenderState& renderState );
 
         ImageCachedPrimitiveSharedPtr fillTexturedPolyPolygon(
@@ -215,7 +215,7 @@ namespace canvas
         template<class pixel_format>
         void drawLinePolyPolygonImpl( const ::basegfx::B2DPolyPolygon&                  rPoly,
                                       double                                            fStrokeWidth,
-                                      const ::com::sun::star::rendering::ViewState&     viewState, 
+                                      const ::com::sun::star::rendering::ViewState&     viewState,
                                       const ::com::sun::star::rendering::RenderState&   renderState );
 
         template<class pixel_format,class span_gen_type>
@@ -236,8 +236,8 @@ namespace canvas
 
         template<class pixel_format>
         ImageCachedPrimitiveSharedPtr fillPolyPolygonImpl(
-            const ::basegfx::B2DPolyPolygon&                    rPolyPolygon, 
-            const ::com::sun::star::rendering::ViewState&       viewState, 
+            const ::basegfx::B2DPolyPolygon&                    rPolyPolygon,
+            const ::com::sun::star::rendering::ViewState&       viewState,
             const ::com::sun::star::rendering::RenderState&     renderState );
 
         template<class pixel_format> void clearImpl( sal_uInt8 a,

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,33 +42,33 @@
 #endif
 #include <vcl/dialog.hxx>
 
-#define MID_BROWSER 			10
-#define MID_MODE				11
-#define MID_EVENTVIEW			12
-#define MID_INVALIDATE			13
-#define MID_CLEAR				14
+#define MID_BROWSER             10
+#define MID_MODE                11
+#define MID_EVENTVIEW           12
+#define MID_INVALIDATE          13
+#define MID_CLEAR               14
 #define MID_ROW                 20
-#define MID_INSERTROW_BEFORE	21
-#define MID_INSERTROW_AT		22
-#define MID_INSERTROW_BEHIND	23
-#define MID_REMOVEROW_BEFORE	24
-#define MID_REMOVEROW_AT		25
-#define MID_REMOVEROW_BEHIND	26
-#define MID_MODIFYROW_BEFORE	27
-#define MID_MODIFYROW_AT		28
-#define MID_MODIFYROW_BEHIND	29
+#define MID_INSERTROW_BEFORE    21
+#define MID_INSERTROW_AT        22
+#define MID_INSERTROW_BEHIND    23
+#define MID_REMOVEROW_BEFORE    24
+#define MID_REMOVEROW_AT        25
+#define MID_REMOVEROW_BEHIND    26
+#define MID_MODIFYROW_BEFORE    27
+#define MID_MODIFYROW_AT        28
+#define MID_MODIFYROW_BEHIND    29
 #define MID_COL                 30
-#define MID_INSERTCOL			31
-#define MID_REMOVECOL			32
-#define MID_MOVECOLLEFT 		33
-#define MID_MOVECOLRIGHT		34
-#define MID_SELECTIONS			60
-#define MID_SELECTROW			61
-#define MID_SELECTALL			62
-#define MID_SELECTNONE			63
-#define MID_INVERSE 			64
-#define MID_EXTRAS  			70
-#define MID_STARMONEY_1 		71
+#define MID_INSERTCOL           31
+#define MID_REMOVECOL           32
+#define MID_MOVECOLLEFT         33
+#define MID_MOVECOLRIGHT        34
+#define MID_SELECTIONS          60
+#define MID_SELECTROW           61
+#define MID_SELECTALL           62
+#define MID_SELECTNONE          63
+#define MID_INVERSE             64
+#define MID_EXTRAS              70
+#define MID_STARMONEY_1         71
 
 //==================================================================
 
@@ -113,16 +113,16 @@ friend class AppWindow;
 
     DataList        aRows;
     BOOL            bInverse;
-    Edit*			pEdit;
+    Edit*           pEdit;
 
 protected:
     virtual long    GetRowCount() const;
     virtual BOOL    SeekRow( long nRow );
-    virtual void	PaintField( OutputDevice& rDev, const Rectangle& rRect,
+    virtual void    PaintField( OutputDevice& rDev, const Rectangle& rRect,
                                 USHORT nColumnId ) const;
 
     virtual void    Select();
-    virtual void	DoubleClick();
+    virtual void    DoubleClick();
     virtual void    CursorMoved();
     virtual void    StartScroll();
     virtual void    EndScroll();
@@ -131,7 +131,7 @@ protected:
     virtual BOOL    StartDragging( Pointer& rMovePtr,
                                    Pointer& rCopyPtr );
     virtual void    EndDragging( const DropAction &rAction );
-    virtual	void	MouseButtonDown( const BrowserMouseEvent &rEvt );
+    virtual void    MouseButtonDown( const BrowserMouseEvent &rEvt );
 
 public:
                     Browser( AppWindow* pParent, BrowserMode eMode );
@@ -146,8 +146,8 @@ public:
 class AppWindow: public WorkWindow
 {
     MenuBar         aMenu;
-    PopupMenu		aBrwMenu, aRowMenu, aColMenu, aSelMenu, aExtMenu;
-    Edit			aEdit;
+    PopupMenu       aBrwMenu, aRowMenu, aColMenu, aSelMenu, aExtMenu;
+    Edit            aEdit;
     Browser         aBrowser;
     BrowserMode     eCurMode;
     FloatingWindow *pEventView;

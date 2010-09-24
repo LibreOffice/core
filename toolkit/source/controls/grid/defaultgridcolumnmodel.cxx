@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,14 +116,14 @@ void SAL_CALL DefaultGridColumnModel::setDefaultColumns(sal_Int32 rowElements) t
 
     for(sal_Int32 i=0;i<rowElements;i++)
     {
-        Reference<XGridColumn> xColumn( m_xFactory->createInstance ( OUString::createFromAscii( "com.sun.star.awt.grid.GridColumn"	) ), UNO_QUERY );
+        Reference<XGridColumn> xColumn( m_xFactory->createInstance ( OUString::createFromAscii( "com.sun.star.awt.grid.GridColumn"  ) ), UNO_QUERY );
         columns.push_back(xColumn);
         xColumn->setIndex(i);
     }
 }
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > SAL_CALL DefaultGridColumnModel::copyColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > & column)  throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference<XGridColumn> xColumn( m_xFactory->createInstance ( OUString::createFromAscii( "com.sun.star.awt.grid.GridColumn"	) ), UNO_QUERY );
+    Reference<XGridColumn> xColumn( m_xFactory->createInstance ( OUString::createFromAscii( "com.sun.star.awt.grid.GridColumn"  ) ), UNO_QUERY );
     xColumn->setColumnWidth(column->getColumnWidth());
     xColumn->setPreferredWidth(column->getPreferredWidth());
     xColumn->setMaxWidth(column->getMaxWidth());

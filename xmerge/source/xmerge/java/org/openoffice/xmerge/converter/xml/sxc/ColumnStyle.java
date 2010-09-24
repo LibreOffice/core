@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@ import org.openoffice.xmerge.util.TwipsConverter;
 /**
  *  Represents a text <code>Style</code> in an OpenOffice document.
  *
- *  @author	Martin Maher 
+ *  @author Martin Maher
  */
 public class ColumnStyle extends Style implements Cloneable {
 
-    private	int colWidth = 0; 
+    private int colWidth = 0;
     /**
      *  Constructor for use when going from DOM to client device format.
      *
@@ -56,7 +56,7 @@ public class ColumnStyle extends Style implements Cloneable {
      */
     public ColumnStyle(Node node, StyleCatalog sc) {
         super(node, sc);
-        
+
         // Run through the attributes of this node, saving
         // the ones we're interested in.
         NamedNodeMap attrNodes = node.getAttributes();
@@ -67,7 +67,7 @@ public class ColumnStyle extends Style implements Cloneable {
                 handleAttribute(attr.getNodeName(), attr.getNodeValue());
             }
         }
-        
+
         // Look for children.  Only ones we care about are "style:properties"
         // nodes.  If any are found, recursively traverse them, passing
         // along the style element to add properties to.
@@ -91,8 +91,8 @@ public class ColumnStyle extends Style implements Cloneable {
             }
         }
     }
-    
-    
+
+
     /**
      *  Constructor for use when going from client device format to DOM
      *
@@ -101,7 +101,7 @@ public class ColumnStyle extends Style implements Cloneable {
      *                   <i>text</i>).  Can be null.
      *  @param  parent   Name of parent text <code>Style</code>, or null
      *                   for none.
-     *  @param  mask     the width of this column 
+     *  @param  mask     the width of this column
      *  @param sc        The <code>StyleCatalog</code>, which is used for
      *                   looking up ancestor <code>Style</code> objects.
      */
@@ -113,24 +113,24 @@ public class ColumnStyle extends Style implements Cloneable {
     /**
      * Returns the width of this column
      *
-     * @return the <code>Format</code> object 
+     * @return the <code>Format</code> object
      */
     public int getColWidth() {
         return colWidth;
     }
-    
+
     /**
      * Sets the width of this column
      *
-     * @return the <code>Format</code> object 
+     * @return the <code>Format</code> object
      */
     public void setColWidth(int colWidth) {
 
         this.colWidth = colWidth;
     }
-    
+
     /**
-     *  Parse a colwidth in the form "1.234cm" to twips  
+     *  Parse a colwidth in the form "1.234cm" to twips
      *
      *  @param  value  <code>String</code> specification to parse.
      *
@@ -138,8 +138,8 @@ public class ColumnStyle extends Style implements Cloneable {
      */
     private int parseColWidth(String value) {
 
-        int width = 255;	// Default value
-        
+        int width = 255;    // Default value
+
         if(value.indexOf("cm")!=-1) {
             float widthCM = Float.parseFloat(value.substring(0,value.indexOf("c")));
             width = TwipsConverter.cm2twips(widthCM);
@@ -147,10 +147,10 @@ public class ColumnStyle extends Style implements Cloneable {
             float widthInch = Float.parseFloat(value.substring(0,value.indexOf("i")));
             width = TwipsConverter.inches2twips(widthInch);
         }
-        
+
         return (width);
     }
- 
+
 
     /**
      *  Set an attribute.
@@ -159,7 +159,7 @@ public class ColumnStyle extends Style implements Cloneable {
      *  @param  value  The attribute value to set.
      */
     private void handleAttribute(String attr, String value) {
-        
+
         if (attr.equals("style:column-width")) {
             colWidth = parseColWidth(value);
         }
@@ -167,10 +167,10 @@ public class ColumnStyle extends Style implements Cloneable {
             Debug.log(Debug.INFO, "ColumnStyle Unhandled: " + attr + "=" + value);
         }
     }
-    
-    
+
+
     /**
-     *  Return a <code>Style</code> object corresponding to this one, 
+     *  Return a <code>Style</code> object corresponding to this one,
      *  but with all of the inherited information from parent
      *  <code>Style</code> objects filled in.  The object returned will
      *  be a new object, not a reference to this object, even if it does
@@ -187,7 +187,7 @@ public class ColumnStyle extends Style implements Cloneable {
         } catch (Exception e) {
             Debug.log(Debug.ERROR, "Can't clone", e);
         }
-        
+
         // Look up the parentStyle.  (If there is no style catalog
         // specified, we can't do any lookups.)
         ColumnStyle parentStyle = null;
@@ -206,19 +206,19 @@ public class ColumnStyle extends Style implements Cloneable {
                     null, this.getClass());
             }
         }
-        
+
         // If we found a parent, for any attributes which we don't have
         // set, try to get the values from the parent.
         if (parentStyle != null) {
             parentStyle = (ColumnStyle)parentStyle.getResolved();
-               
+
             if ((colWidth == 0) && (parentStyle.getColWidth() != 0))
                 resolved.setColWidth(parentStyle.getColWidth());
         }
         return resolved;
     }
-    
-    
+
+
     /**
      *  Create a new <code>Node</code> in the <code>Document</code>, and
      *  write this <code>Style</code> to it.
@@ -235,10 +235,10 @@ public class ColumnStyle extends Style implements Cloneable {
         writeAttributes(node);
         return node;
     }
-    
-    
+
+
     /**
-     *  Return true if <code>style</code> specifies as much or less 
+     *  Return true if <code>style</code> specifies as much or less
      *  than this <code>Style</code>, and nothing it specifies
      *  contradicts this <code>Style</code>.
      *
@@ -248,17 +248,17 @@ public class ColumnStyle extends Style implements Cloneable {
      *           otherwise.
      */
     public boolean isSubset(Style style) {
-        if (style.getClass() != this.getClass()) 
+        if (style.getClass() != this.getClass())
                 return false;
         ColumnStyle tStyle = (ColumnStyle)style;
-        
+
         if(colWidth!=tStyle.getColWidth())
             return false;
 
         return true;
     }
-    
-    
+
+
     /**
      *  Write this <code>Style</code> object's attributes to a
      *  <code>Node</code> in the <code>Document</code>.
@@ -269,7 +269,7 @@ public class ColumnStyle extends Style implements Cloneable {
     public void writeAttributes(Element node) {
 
         if(colWidth!=0) {
-            String width = TwipsConverter.twips2cm(colWidth) + "cm"; 
+            String width = TwipsConverter.twips2cm(colWidth) + "cm";
             node.setAttribute("style:column-width", width);
         }
     }
@@ -291,7 +291,7 @@ public class ColumnStyle extends Style implements Cloneable {
      */
     private boolean isIgnored(String attribute) {
         for (int i = 0; i < ignored.length; i++) {
-            if (ignored[i].equals(attribute)) 
+            if (ignored[i].equals(attribute))
                 return true;
         }
         return false;

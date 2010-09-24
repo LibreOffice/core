@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-ScVbaSeriesCollection::ScVbaSeriesCollection( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : SeriesCollection_BASE( xParent, xContext, uno::Reference< container::XIndexAccess>() ) 
+ScVbaSeriesCollection::ScVbaSeriesCollection( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : SeriesCollection_BASE( xParent, xContext, uno::Reference< container::XIndexAccess>() )
 {
 }
 
@@ -47,26 +47,26 @@ ScVbaSeriesCollection::createEnumeration() throw (uno::RuntimeException)
 
 // XElementAccess
 
-uno::Type 
+uno::Type
 ScVbaSeriesCollection::getElementType() throw (uno::RuntimeException)
 {
     return excel::XSeries::static_type(0);
 }
 
-uno::Any 
+uno::Any
 ScVbaSeriesCollection::createCollectionObject( const css::uno::Any& rSource )
 {
     return rSource;
 }
 
-rtl::OUString& 
+rtl::OUString&
 ScVbaSeriesCollection::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaSeriesCollection") );
     return sImplName;
 }
 
-css::uno::Sequence<rtl::OUString> 
+css::uno::Sequence<rtl::OUString>
 ScVbaSeriesCollection::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > sNames;

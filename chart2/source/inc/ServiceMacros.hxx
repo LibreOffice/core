@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,12 @@ static com::sun::star::uno::Sequence< rtl::OUString >
 namespace apphelper
 {
 
-#define APPHELPER_XSERVICEINFO_DECL()													\
-    virtual ::rtl::OUString SAL_CALL										\
+#define APPHELPER_XSERVICEINFO_DECL()                                                   \
+    virtual ::rtl::OUString SAL_CALL                                        \
         getImplementationName()                                             \
             throw( ::com::sun::star::uno::RuntimeException );               \
     virtual sal_Bool SAL_CALL                                               \
-        supportsService( const ::rtl::OUString& ServiceName )             	\
+        supportsService( const ::rtl::OUString& ServiceName )               \
             throw( ::com::sun::star::uno::RuntimeException );               \
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL     \
         getSupportedServiceNames()                                          \
@@ -64,9 +64,9 @@ namespace apphelper
 //
 //=========================================================================
 
-#define APPHELPER_XSERVICEINFO_IMPL( Class, ImplName )								\
-::rtl::OUString SAL_CALL Class::getImplementationName()						\
-    throw( ::com::sun::star::uno::RuntimeException )                       	\
+#define APPHELPER_XSERVICEINFO_IMPL( Class, ImplName )                              \
+::rtl::OUString SAL_CALL Class::getImplementationName()                     \
+    throw( ::com::sun::star::uno::RuntimeException )                        \
 {                                                                           \
     return getImplementationName_Static();                                  \
 }                                                                           \
@@ -77,12 +77,12 @@ namespace apphelper
 }                                                                           \
                                                                             \
 sal_Bool SAL_CALL                                                           \
-Class::supportsService(	const ::rtl::OUString& ServiceName )                \
+Class::supportsService( const ::rtl::OUString& ServiceName )                \
     throw( ::com::sun::star::uno::RuntimeException )                        \
 {                                                                           \
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSNL =               \
                                         getSupportedServiceNames();         \
-    const ::rtl::OUString* pArray = aSNL.getArray();                       	\
+    const ::rtl::OUString* pArray = aSNL.getArray();                        \
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )                       \
     {                                                                       \
         if( pArray[ i ] == ServiceName )                                    \
@@ -108,14 +108,14 @@ Class::getSupportedServiceNames()                                           \
 //and implement OWeakObject
 //=========================================================================
 
-#define APPHELPER_SERVICE_FACTORY_HELPER(Class)										\
-static ::com::sun::star::uno::Reference<									\
-                            ::com::sun::star::uno::XInterface > SAL_CALL	\
-    create( ::com::sun::star::uno::Reference<								\
+#define APPHELPER_SERVICE_FACTORY_HELPER(Class)                                     \
+static ::com::sun::star::uno::Reference<                                    \
+                            ::com::sun::star::uno::XInterface > SAL_CALL    \
+    create( ::com::sun::star::uno::Reference<                               \
                ::com::sun::star::uno::XComponentContext > const & xContext) \
-    throw(::com::sun::star::uno::Exception)									\
-{																			\
-    return (::cppu::OWeakObject *)new Class( xContext );					\
+    throw(::com::sun::star::uno::Exception)                                 \
+{                                                                           \
+    return (::cppu::OWeakObject *)new Class( xContext );                    \
 }
 
 /** This macro contains the default implementation for getImplementationId().

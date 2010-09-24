@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@ class ScXMLImport;
 
 class ScXMLTableSourceContext : public SvXMLImportContext
 {
-    rtl::OUString							sLink;
-    rtl::OUString							sTableName;
-    rtl::OUString							sFilterName;
-    rtl::OUString							sFilterOptions;
-    sal_Int32								nRefresh;
-    com::sun::star::sheet::SheetLinkMode	nMode;
+    rtl::OUString                           sLink;
+    rtl::OUString                           sTableName;
+    rtl::OUString                           sFilterName;
+    rtl::OUString                           sFilterOptions;
+    sal_Int32                               nRefresh;
+    com::sun::star::sheet::SheetLinkMode    nMode;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

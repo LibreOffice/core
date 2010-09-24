@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,10 +49,10 @@ TYPEINIT1( FuMeasureDlg, FuPoor );
 \************************************************************************/
 
 FuMeasureDlg::FuMeasureDlg (
-    ViewShell* pViewSh, 
-    ::sd::Window* pWin, 
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
     ::sd::View* pView,
-    SdDrawDocument* pDoc, 
+    SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {

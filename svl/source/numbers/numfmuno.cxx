@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,52 +49,52 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-#define SERVICENAME_NUMBERFORMATTER	"com.sun.star.util.NumberFormatter"
-#define SERVICENAME_NUMBERSETTINGS	"com.sun.star.util.NumberFormatSettings"
-#define SERVICENAME_NUMBERFORMATS	"com.sun.star.util.NumberFormats"
-#define SERVICENAME_NUMBERFORMAT	"com.sun.star.util.NumberFormatProperties"
+#define SERVICENAME_NUMBERFORMATTER "com.sun.star.util.NumberFormatter"
+#define SERVICENAME_NUMBERSETTINGS  "com.sun.star.util.NumberFormatSettings"
+#define SERVICENAME_NUMBERFORMATS   "com.sun.star.util.NumberFormats"
+#define SERVICENAME_NUMBERFORMAT    "com.sun.star.util.NumberFormatProperties"
 
 //------------------------------------------------------------------------
 
-#define PROPERTYNAME_FMTSTR		"FormatString"
-#define PROPERTYNAME_LOCALE		"Locale"
-#define PROPERTYNAME_TYPE		"Type"
-#define PROPERTYNAME_COMMENT 	"Comment"
-#define PROPERTYNAME_CURREXT 	"CurrencyExtension"
-#define PROPERTYNAME_CURRSYM 	"CurrencySymbol"
-#define PROPERTYNAME_CURRABB 	"CurrencyAbbreviation"
-#define PROPERTYNAME_DECIMALS	"Decimals"
-#define PROPERTYNAME_LEADING	"LeadingZeros"
-#define PROPERTYNAME_NEGRED		"NegativeRed"
-#define PROPERTYNAME_STDFORM	"StandardFormat"
-#define PROPERTYNAME_THOUS		"ThousandsSeparator"
-#define PROPERTYNAME_USERDEF	"UserDefined"
+#define PROPERTYNAME_FMTSTR     "FormatString"
+#define PROPERTYNAME_LOCALE     "Locale"
+#define PROPERTYNAME_TYPE       "Type"
+#define PROPERTYNAME_COMMENT    "Comment"
+#define PROPERTYNAME_CURREXT    "CurrencyExtension"
+#define PROPERTYNAME_CURRSYM    "CurrencySymbol"
+#define PROPERTYNAME_CURRABB    "CurrencyAbbreviation"
+#define PROPERTYNAME_DECIMALS   "Decimals"
+#define PROPERTYNAME_LEADING    "LeadingZeros"
+#define PROPERTYNAME_NEGRED     "NegativeRed"
+#define PROPERTYNAME_STDFORM    "StandardFormat"
+#define PROPERTYNAME_THOUS      "ThousandsSeparator"
+#define PROPERTYNAME_USERDEF    "UserDefined"
 
-#define PROPERTYNAME_NOZERO		"NoZero"
-#define PROPERTYNAME_NULLDATE	"NullDate"
-#define PROPERTYNAME_STDDEC		"StandardDecimals"
-#define PROPERTYNAME_TWODIGIT	"TwoDigitDateStart"
+#define PROPERTYNAME_NOZERO     "NoZero"
+#define PROPERTYNAME_NULLDATE   "NullDate"
+#define PROPERTYNAME_STDDEC     "StandardDecimals"
+#define PROPERTYNAME_TWODIGIT   "TwoDigitDateStart"
 
 //------------------------------------------------------------------------
 
-//	alles ohne Which-ID, Map nur fuer PropertySetInfo
+//  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
 const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
 {
     static SfxItemPropertyMapEntry aNumberFormatPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(PROPERTYNAME_FMTSTR),	  0, &getCppuType((rtl::OUString*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_LOCALE),	  0, &getCppuType((lang::Locale*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_TYPE),	  0, &getCppuType((sal_Int16*)0),	beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_FMTSTR),   0, &getCppuType((rtl::OUString*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_LOCALE),   0, &getCppuType((lang::Locale*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_TYPE),     0, &getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_COMMENT),  0, &getCppuType((rtl::OUString*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_CURREXT),  0, &getCppuType((rtl::OUString*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_CURRSYM),  0, &getCppuType((rtl::OUString*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_DECIMALS), 0, &getCppuType((sal_Int16*)0),	beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_LEADING),  0, &getCppuType((sal_Int16*)0),	beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_NEGRED),	  0, &getBooleanCppuType(),			beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_STDFORM),  0, &getBooleanCppuType(),			beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_THOUS),	  0, &getBooleanCppuType(),			beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_USERDEF),  0, &getBooleanCppuType(),			beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_DECIMALS), 0, &getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_LEADING),  0, &getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_NEGRED),   0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_STDFORM),  0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_THOUS),    0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_USERDEF),  0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_CURRABB),  0, &getCppuType((rtl::OUString*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {0,0,0,0,0,0}
     };
@@ -105,10 +105,10 @@ const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
 {
     static SfxItemPropertyMapEntry aNumberSettingsPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(PROPERTYNAME_NOZERO),	  0, &getBooleanCppuType(),			beans::PropertyAttribute::BOUND, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_NULLDATE), 0, &getCppuType((util::Date*)0),	beans::PropertyAttribute::BOUND, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_STDDEC),	  0, &getCppuType((sal_Int16*)0),	beans::PropertyAttribute::BOUND, 0},
-        {MAP_CHAR_LEN(PROPERTYNAME_TWODIGIT), 0, &getCppuType((sal_Int16*)0),	beans::PropertyAttribute::BOUND, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_NOZERO),   0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_NULLDATE), 0, &getCppuType((util::Date*)0),  beans::PropertyAttribute::BOUND, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_STDDEC),   0, &getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND, 0},
+        {MAP_CHAR_LEN(PROPERTYNAME_TWODIGIT), 0, &getCppuType((sal_Int16*)0),   beans::PropertyAttribute::BOUND, 0},
         {0,0,0,0,0,0}
     };
     return aNumberSettingsPropertyMap_Impl;
@@ -118,13 +118,13 @@ const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
 
 LanguageType lcl_GetLanguage( const lang::Locale& rLocale )
 {
-    //	empty language -> LANGUAGE_SYSTEM
+    //  empty language -> LANGUAGE_SYSTEM
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_SYSTEM;
 
     LanguageType eRet = MsLangId::convertLocaleToLanguage( rLocale );
     if ( eRet == LANGUAGE_NONE )
-        eRet = LANGUAGE_SYSTEM;			//! or throw an exception?
+        eRet = LANGUAGE_SYSTEM;         //! or throw an exception?
 
     return eRet;
 }
@@ -157,9 +157,9 @@ void SAL_CALL SvNumberFormatterServiceObj::attachNumberFormatsSupplier(
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
-        SvNumberFormatsSupplierObj*	pNew = SvNumberFormatsSupplierObj::getImplementation( _xSupplier );
+        SvNumberFormatsSupplierObj* pNew = SvNumberFormatsSupplierObj::getImplementation( _xSupplier );
         if (!pNew)
-            throw uno::RuntimeException();		// wrong object
+            throw uno::RuntimeException();      // wrong object
 
         xAutoReleaseOld = xSupplier;
 
@@ -249,7 +249,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    util::Color nRet = aDefaultColor;		// color = INT32
+    util::Color nRet = aDefaultColor;       // color = INT32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
@@ -291,7 +291,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    util::Color nRet = aDefaultColor;		// color = INT32
+    util::Color nRet = aDefaultColor;       // color = INT32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
@@ -369,7 +369,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    util::Color nRet = aDefaultColor;		// color = INT32
+    util::Color nRet = aDefaultColor;       // color = INT32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
@@ -493,7 +493,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const rtl::OUString& aFormat,
         LanguageType eLang = lcl_GetLanguage( nLocale );
         if (bScan)
         {
-            //!	irgendwas muss hier noch passieren...
+            //! irgendwas muss hier noch passieren...
         }
         nRet = pFormatter->GetEntryKey( aFormat, eLang );
     }
@@ -523,10 +523,10 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNew( const rtl::OUString& aFormat,
             nRet = nKey;
         else if (nCheckPos)
         {
-            throw util::MalformedNumberFormatException();		// ungueltiges Format
+            throw util::MalformedNumberFormatException();       // ungueltiges Format
         }
         else
-            throw uno::RuntimeException();						// anderer Fehler (z.B. schon vorhanden)
+            throw uno::RuntimeException();                      // anderer Fehler (z.B. schon vorhanden)
     }
     else
         throw uno::RuntimeException();
@@ -555,10 +555,10 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNewConverted( const rtl::OUString& aFo
             nRet = nKey;
         else if (nCheckPos)
         {
-            throw util::MalformedNumberFormatException();		// ungueltiges Format
+            throw util::MalformedNumberFormatException();       // ungueltiges Format
         }
         else
-            throw uno::RuntimeException();						// anderer Fehler (z.B. schon vorhanden)
+            throw uno::RuntimeException();                      // anderer Fehler (z.B. schon vorhanden)
     }
     else
         throw uno::RuntimeException();
@@ -574,7 +574,7 @@ void SAL_CALL SvNumberFormatsObj::removeByKey( sal_Int32 nKey ) throw(uno::Runti
     if (pFormatter)
     {
         pFormatter->DeleteEntry(nKey);
-        rSupplier.NumberFormatDeleted(nKey);		// Benachrichtigung fuers Dokument
+        rSupplier.NumberFormatDeleted(nKey);        // Benachrichtigung fuers Dokument
     }
 }
 
@@ -628,8 +628,8 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getStandardFormat( sal_Int16 nType, const
     if (pFormatter)
     {
         LanguageType eLang = lcl_GetLanguage( nLocale );
-        //	mask out "defined" bit, so type from an existing number format
-        //	can directly be used for getStandardFormat
+        //  mask out "defined" bit, so type from an existing number format
+        //  can directly be used for getStandardFormat
         nType &= ~NUMBERFORMAT_DEFINED;
         nRet = pFormatter->GetStandardFormat(nType, eLang);
     }
@@ -745,7 +745,7 @@ void SAL_CALL SvNumberFormatObj::setPropertyValue( const rtl::OUString&,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    throw beans::UnknownPropertyException();	//	everything is read-only
+    throw beans::UnknownPropertyException();    //  everything is read-only
 }
 
 uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPropertyName )
@@ -783,7 +783,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPro
         }
         else if (aString.EqualsAscii( PROPERTYNAME_STDFORM ))
         {
-            //!	SvNumberformat Member bStandard rausreichen?
+            //! SvNumberformat Member bStandard rausreichen?
             BOOL bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
             aRet.setValue( &bStandard, getBooleanCppuType() );
         }
@@ -899,7 +899,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         String aFmtStr = pFormat->GetFormatstring();
         String aComment = pFormat->GetComment();
         BOOL bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
-        //!	SvNumberformat Member bStandard rausreichen?
+        //! SvNumberformat Member bStandard rausreichen?
         BOOL bUserDef = ( ( pFormat->GetType() & NUMBERFORMAT_DEFINED ) != 0 );
         BOOL bThousand, bRed;
         USHORT nDecimals, nLeading;
@@ -948,7 +948,7 @@ void SAL_CALL SvNumberFormatObj::setPropertyValues( const uno::Sequence<beans::P
                                 lang::IllegalArgumentException, lang::WrappedTargetException,
                                 uno::RuntimeException)
 {
-    throw beans::UnknownPropertyException();	//	everything is read-only
+    throw beans::UnknownPropertyException();    //  everything is read-only
 }
 
 // XServiceInfo
@@ -1013,7 +1013,7 @@ void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const rtl::OUString& 
         String aString = aPropertyName;
         if (aString.EqualsAscii( PROPERTYNAME_NOZERO ))
         {
-            //	operator >>= shouldn't be used for bool (?)
+            //  operator >>= shouldn't be used for bool (?)
             if ( aValue.getValueTypeClass() == uno::TypeClass_BOOLEAN )
                 pFormatter->SetNoZero( *(sal_Bool*)aValue.getValue() );
         }

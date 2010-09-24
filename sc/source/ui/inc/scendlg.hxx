@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,23 +52,23 @@ public:
 
 private:
     FixedLine           aFlName;
-    Edit				aEdName;
+    Edit                aEdName;
     FixedLine           aFlComment;
-    MultiLineEdit		aEdComment;
+    MultiLineEdit       aEdComment;
     FixedLine           aFlOptions;
-    CheckBox			aCbShowFrame;
-    ColorListBox		aLbColor;
-    //CheckBox			aCbPrintFrame;
-    CheckBox			aCbTwoWay;
-    //CheckBox			aCbAttrib;
-    //CheckBox			aCbValue;
-    CheckBox			aCbCopyAll;
+    CheckBox            aCbShowFrame;
+    ColorListBox        aLbColor;
+    //CheckBox          aCbPrintFrame;
+    CheckBox            aCbTwoWay;
+    //CheckBox          aCbAttrib;
+    //CheckBox          aCbValue;
+    CheckBox            aCbCopyAll;
     CheckBox            aCbProtect;
-    OKButton			aBtnOk;
-    CancelButton		aBtnCancel;
-    HelpButton			aBtnHelp;
-    const String		aDefScenarioName;
-    BOOL				bIsEdit;
+    OKButton            aBtnOk;
+    CancelButton        aBtnCancel;
+    HelpButton          aBtnHelp;
+    const String        aDefScenarioName;
+    BOOL                bIsEdit;
 
     DECL_LINK( OkHdl, OKButton * );
     DECL_LINK( EnableHdl, CheckBox * );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,11 +45,11 @@ namespace drawinglayer
         class SdrCaptionPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            ::basegfx::B2DHomMatrix						maTransform;
-            attribute::SdrLineFillShadowTextAttribute	maSdrLFSTAttribute;
-            ::basegfx::B2DPolygon						maTail;
-            double										mfCornerRadiusX;	// [0.0..1.0] relative to 1/2 width
-            double										mfCornerRadiusY;	// [0.0..1.0] relative to 1/2 height
+            ::basegfx::B2DHomMatrix                     maTransform;
+            attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
+            ::basegfx::B2DPolygon                       maTail;
+            double                                      mfCornerRadiusX;    // [0.0..1.0] relative to 1/2 width
+            double                                      mfCornerRadiusY;    // [0.0..1.0] relative to 1/2 height
 
         protected:
             // local decomposition.
@@ -57,10 +57,10 @@ namespace drawinglayer
 
         public:
             SdrCaptionPrimitive2D(
-                const ::basegfx::B2DHomMatrix& rTransform, 
+                const ::basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-                const ::basegfx::B2DPolygon& rTail, 
-                double fCornerRadiusX = 0.0, 
+                const ::basegfx::B2DPolygon& rTail,
+                double fCornerRadiusX = 0.0,
                 double fCornerRadiusY = 0.0);
 
             // compare operator

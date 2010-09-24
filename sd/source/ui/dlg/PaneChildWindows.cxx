@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,17 +56,17 @@ SFX_IMPL_DOCKINGWINDOW( ToolPanelChildWindow, SID_TASKPANE)
 
 PaneChildWindow::PaneChildWindow (
     ::Window* pParentWindow,
-    USHORT nId, 
-    SfxBindings* pBindings, 
+    USHORT nId,
+    SfxBindings* pBindings,
     SfxChildWinInfo* pInfo,
     const USHORT nDockWinTitleResId,
     const USHORT nTitleBarResId,
-    SfxChildAlignment eAlignment) 
+    SfxChildAlignment eAlignment)
     : SfxChildWindow (pParentWindow, nId)
 {
     pWindow = new PaneDockingWindow (
-        pBindings, 
-        this, 
+        pBindings,
+        this,
         pParentWindow,
         SdResId( nDockWinTitleResId ),
         String( SdResId( nTitleBarResId ) ) );
@@ -104,9 +104,9 @@ PaneChildWindow::~PaneChildWindow (void)
 
 LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
     ::Window* pParentWindow,
-    USHORT nId, 
-    SfxBindings* pBindings, 
-    SfxChildWinInfo* pInfo) 
+    USHORT nId,
+    SfxBindings* pBindings,
+    SfxChildWinInfo* pInfo)
     : PaneChildWindow(
         pParentWindow,
         nId,
@@ -125,9 +125,9 @@ LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
 
 LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
     ::Window* pParentWindow,
-    USHORT nId, 
-    SfxBindings* pBindings, 
-    SfxChildWinInfo* pInfo) 
+    USHORT nId,
+    SfxBindings* pBindings,
+    SfxChildWinInfo* pInfo)
     : PaneChildWindow(
         pParentWindow,
         nId,
@@ -146,7 +146,7 @@ LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
 //= ToolPanelChildWindow
 //======================================================================================================================
 //----------------------------------------------------------------------------------------------------------------------
-ToolPanelChildWindow::ToolPanelChildWindow( ::Window* i_pParentWindow, USHORT i_nId, SfxBindings* i_pBindings, 
+ToolPanelChildWindow::ToolPanelChildWindow( ::Window* i_pParentWindow, USHORT i_nId, SfxBindings* i_pBindings,
         SfxChildWinInfo* i_pChildWindowInfo )
     :PaneChildWindow( i_pParentWindow, i_nId, i_pBindings, i_pChildWindowInfo,
         FLT_TOOL_PANEL_DOCKING_WINDOW, STR_RIGHT_PANE_TITLE, SFX_ALIGN_RIGHT )

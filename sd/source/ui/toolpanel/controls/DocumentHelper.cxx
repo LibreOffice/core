@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -117,7 +117,7 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
         }
         if (bPageExists)
             break;
-        
+
         // Create a new slide (and its notes page.)
         uno::Reference<drawing::XDrawPagesSupplier> xSlideSupplier (
             rTargetDocument.getUnoModel(), uno::UNO_QUERY);
@@ -142,7 +142,7 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
         pNewMasterPage = AddMasterPage(rTargetDocument, pMasterPage);
         if (pNewMasterPage==NULL)
             break;
-        SdPage* pNewNotesMasterPage 
+        SdPage* pNewNotesMasterPage
             = AddMasterPage(rTargetDocument, pNotesMasterPage);
         if (pNewNotesMasterPage==NULL)
             break;
@@ -239,7 +239,7 @@ SdPage* DocumentHelper::AddMasterPage (
 
             // Copy the precious flag.
             pClonedMasterPage->SetPrecious(pMasterPage->IsPrecious());
-            
+
             // Now that the styles are available we can insert the cloned
             // master page.
             rTargetDocument.InsertMasterPage (pClonedMasterPage);
@@ -283,8 +283,8 @@ void DocumentHelper::ProvideStyles (
         static_cast<SdStyleSheetPool*>(rTargetDocument.GetStyleSheetPool());
     SdStyleSheetVector aCreatedStyles;
     pTargetStyleSheetPool->CopyLayoutSheets (
-        sLayoutName, 
-        *pSourceStyleSheetPool, 
+        sLayoutName,
+        *pSourceStyleSheetPool,
         aCreatedStyles);
 
     // Add an undo action for the copied style sheets.
@@ -295,8 +295,8 @@ void DocumentHelper::ProvideStyles (
        {
            SdMoveStyleSheetsUndoAction* pMovStyles =
                new SdMoveStyleSheetsUndoAction (
-                   &rTargetDocument, 
-                   aCreatedStyles, 
+                   &rTargetDocument,
+                   aCreatedStyles,
                    TRUE);
            pUndoManager->AddUndoAction (pMovStyles);
        }
@@ -350,8 +350,8 @@ void DocumentHelper::AssignMasterPageToPageList (
             break;
 
         // Assign the master pages to the given list of pages.
-        for (iPage=aCleanedList.begin(); 
-             iPage!=aCleanedList.end(); 
+        for (iPage=aCleanedList.begin();
+             iPage!=aCleanedList.end();
              ++iPage)
         {
             AssignMasterPageToPage (
@@ -383,7 +383,7 @@ SdPage* DocumentHelper::AddMasterPage (
 
         // Copy the precious flag.
         pClonedMasterPage->SetPrecious(pMasterPage->IsPrecious());
-        
+
         // Copy the necessary styles.
         SdDrawDocument* pSourceDocument
             = static_cast<SdDrawDocument*>(pMasterPage->GetModel());
@@ -439,7 +439,7 @@ void DocumentHelper::AssignMasterPageToPage (
     SdDrawDocument* pDocument = dynamic_cast<SdDrawDocument*>(pPage->GetModel());
     if (pDocument == NULL)
         return;
-    
+
     if ( ! pPage->IsMasterPage())
     {
         // 1. Remove the background object (so that that, if it exists, does
@@ -450,7 +450,7 @@ void DocumentHelper::AssignMasterPageToPage (
                 *pDocument, *pPage, pPage->getSdrPageProperties().GetItemSet()),
             TRUE);
         pPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
-          
+
         pDocument->SetMasterPage (
             (pPage->GetPageNum()-1)/2,
             rsBaseLayoutName,
@@ -513,7 +513,7 @@ SdPage* DocumentHelper::ProvideMasterPage (
     {
         // When the given master page or its associated notes master page do
         // not already belong to the document we have to create copies of
-        // them and insert them into the document. 
+        // them and insert them into the document.
 
         // Determine the position where the new master pages are inserted.
         // By default they are inserted at the end.  When we assign to a
@@ -535,7 +535,7 @@ SdPage* DocumentHelper::ProvideMasterPage (
             pMasterPageInDocument = pMasterPage;
         if (pNotesMasterPage->GetModel() != &rTargetDocument)
         {
-            SdPage* pClonedNotesMasterPage 
+            SdPage* pClonedNotesMasterPage
                 = AddMasterPage (rTargetDocument, pNotesMasterPage, nInsertionIndex+1);
             if( rTargetDocument.IsUndoEnabled() )
                 rTargetDocument.AddUndo(

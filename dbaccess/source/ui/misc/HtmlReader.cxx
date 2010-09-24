@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,20 +74,20 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
-#define DBAUI_HTML_FONTSIZES	8		// wie Export, HTML-Options
-#define HTML_META_NONE			0
-#define HTML_META_AUTHOR		1
-#define HTML_META_DESCRIPTION	2
-#define HTML_META_KEYWORDS		3
-#define HTML_META_REFRESH		4
+#define DBAUI_HTML_FONTSIZES    8       // wie Export, HTML-Options
+#define HTML_META_NONE          0
+#define HTML_META_AUTHOR        1
+#define HTML_META_DESCRIPTION   2
+#define HTML_META_KEYWORDS      3
+#define HTML_META_REFRESH       4
 #define HTML_META_CLASSIFICATION 5
-#define HTML_META_CREATED		6
-#define HTML_META_CHANGEDBY		7
-#define HTML_META_CHANGED		8
-#define HTML_META_GENERATOR		9
-#define HTML_META_SDFOOTNOTE	10
-#define HTML_META_SDENDNOTE		11
-#define HTML_META_CONTENT_TYPE	12
+#define HTML_META_CREATED       6
+#define HTML_META_CHANGEDBY     7
+#define HTML_META_CHANGED       8
+#define HTML_META_GENERATOR     9
+#define HTML_META_SDFOOTNOTE    10
+#define HTML_META_SDENDNOTE     11
+#define HTML_META_CONTENT_TYPE  12
 
 // ==========================================================================
 DBG_NAME(OHTMLReader)
@@ -98,7 +98,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                         const TColumnVector* pList,
-                        const OTypeInfoMap* _pInfoMap) 
+                        const OTypeInfoMap* _pInfoMap)
     :HTMLParser(rIn)
     ,ODatabaseExport( _rxConnection, _rxNumberF, _rM, pList, _pInfoMap, rIn )
     ,m_nTableCount(0)
@@ -160,13 +160,13 @@ void OHTMLReader::NextToken( int nToken )
     if ( nToken ==  HTML_META )
         setTextEncoding();
 
-    if(m_xConnection.is())	  // gibt an welcher CTOR gerufen wurde und damit, ob eine Tabelle erstellt werden soll
+    if(m_xConnection.is())    // gibt an welcher CTOR gerufen wurde und damit, ob eine Tabelle erstellt werden soll
     {
         switch(nToken)
         {
             case HTML_TABLE_ON:
                 ++m_nTableCount;
-                {	// es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
+                {   // es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
                     const HTMLOptions* pHtmlOptions = GetOptions();
                     sal_Int16 nArrLen = pHtmlOptions->Count();
                     for ( sal_Int16 i = 0; i < nArrLen; i++ )
@@ -175,7 +175,7 @@ void OHTMLReader::NextToken( int nToken )
                         switch( pOption->GetToken() )
                         {
                             case HTML_O_WIDTH:
-                            {	// Prozent: von Dokumentbreite bzw. aeusserer Zelle
+                            {   // Prozent: von Dokumentbreite bzw. aeusserer Zelle
                                 m_nColumnWidth = GetWidthPixel( pOption );
                             }
                             break;
@@ -186,7 +186,7 @@ void OHTMLReader::NextToken( int nToken )
             case HTML_TBODY_ON:
                 {
                     sal_uInt32 nTell = rInput.Tell(); // verändert vielleicht die Position des Streams
-                    if ( !m_xTable.is() ) 
+                    if ( !m_xTable.is() )
                     {// erste Zeile als Header verwenden
                         m_bError = !CreateTable(nToken);
                         if ( m_bAppendFirstLine )
@@ -405,7 +405,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
                 String aFontName;
                 xub_StrLen nPos = 0;
                 while( nPos != STRING_NOTFOUND )
-                {	// Fontliste, VCL: Semikolon als Separator, HTML: Komma
+                {   // Fontliste, VCL: Semikolon als Separator, HTML: Komma
                     String aFName = rFace.GetToken( 0, ',', nPos );
                     aFName.EraseTrailingChars().EraseLeadingChars();
                     if( aFontName.Len() )
@@ -437,19 +437,19 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption* pOption )
     DBG_CHKTHIS(OHTMLReader,NULL);
     const String& rOptVal = pOption->GetString();
     if ( rOptVal.Search('%') != STRING_NOTFOUND )
-    {	// Prozent
+    {   // Prozent
         DBG_ASSERT( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 und Width%" );
         return (sal_Int16)((pOption->GetNumber() * m_nColumnWidth) / 100);
     }
     else
     {
         if ( rOptVal.Search('*') != STRING_NOTFOUND )
-        {	// relativ zu was?!?
+        {   // relativ zu was?!?
 //2do: ColArray aller relativen Werte sammeln und dann MakeCol
             return 0;
         }
         else
-            return (sal_Int16)pOption->GetNumber();	// Pixel
+            return (sal_Int16)pOption->GetNumber(); // Pixel
     }
 }
 // ---------------------------------------------------------------------------
@@ -558,13 +558,13 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
         CreateDefaultColumn(aColumnName);
 
     if ( m_vDestVector.empty() )
-        return sal_False;	
+        return sal_False;
 
     if(!aTableName.Len())
         aTableName = aTempName;
 
-    m_bInTbl		= sal_False;
-    m_bFoundTable	= sal_True;
+    m_bInTbl        = sal_False;
+    m_bFoundTable   = sal_True;
 
     if ( isCheckEnabled() )
         return sal_True;

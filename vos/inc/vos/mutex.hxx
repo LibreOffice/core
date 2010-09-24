@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,12 +28,12 @@
 #ifndef _VOS_MUTEX_HXX_
 #define _VOS_MUTEX_HXX_
 
-#	include <vos/types.hxx>
-#	include <vos/object.hxx>
-#	include <osl/mutex.h>
+#   include <vos/types.hxx>
+#   include <vos/object.hxx>
+#   include <osl/mutex.h>
 
 namespace vos
-{     
+{
 
 
 /** IMutex interface
@@ -47,7 +47,7 @@ class IMutex
 public:
 
     /// Blocks if Mutex is already in use
-    virtual void SAL_CALL acquire()= 0;			
+    virtual void SAL_CALL acquire()= 0;
 
     // Tries to get the mutex without blocking.
     virtual sal_Bool SAL_CALL tryToAcquire()= 0;
@@ -58,7 +58,7 @@ public:
 protected:
     IMutex() { }
     virtual ~IMutex() { }
-    
+
 };
 
 // ----------------------------------------------------------
@@ -77,12 +77,12 @@ public:
     static IMutex& SAL_CALL getGlobalMutex();
 
     /// Creates mutex
-    OMutex();	
-    /// Implicitly destroys mutex	
-    virtual ~OMutex();	
-    
+    OMutex();
+    /// Implicitly destroys mutex
+    virtual ~OMutex();
+
     /// Blocks if Mutex is already in use
-    virtual void SAL_CALL acquire();	
+    virtual void SAL_CALL acquire();
 
     /** Tries to get the mutex without blocking.
         @return True if mutex could be obtained, otherwise False
@@ -93,12 +93,12 @@ public:
     virtual void SAL_CALL release();
 
 protected:
-    oslMutex	m_Impl;
+    oslMutex    m_Impl;
 
 private:
     // disable copy/assignment
-    OMutex(const OMutex&);	
-    OMutex& SAL_CALL operator= (const OMutex&);	
+    OMutex(const OMutex&);
+    OMutex& SAL_CALL operator= (const OMutex&);
 };
 
 // *********************************************************************************
@@ -115,10 +115,10 @@ class OGuard
     const OGuard& operator = ( const OGuard& );
 public:
     /** Acquires mutex
-        @param pMutex pointer to mutex which is to be acquired	*/
+        @param pMutex pointer to mutex which is to be acquired  */
     OGuard(IMutex* pMutex)
         : m_rMutex( *pMutex )
-    {	// only for compatible reasons
+    {   // only for compatible reasons
         m_rMutex.acquire();
     }
     OGuard(IMutex & rMutex)
@@ -148,7 +148,7 @@ class OClearableGuard
     const OClearableGuard& operator = ( const OClearableGuard& );
 public:
     /** Acquires mutex
-        @param pMutex pointer to mutex which is to be acquired	*/
+        @param pMutex pointer to mutex which is to be acquired  */
     OClearableGuard(IMutex & rMutex)
         : m_pMutex( &rMutex )
     {
@@ -175,7 +175,7 @@ protected:
     IMutex* m_pMutex;
 };
 
-}     
+}
 
 
 #endif  //_VOS_MUTEX_HXX_

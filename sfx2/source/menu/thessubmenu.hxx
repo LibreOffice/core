@@ -52,8 +52,8 @@ String GetThesaurusReplaceText_Impl( const ::rtl::OUString &rText );
 
 class SfxThesSubMenuControl : public SfxMenuControl
 {
-    PopupMenu*			pMenu;
-    Menu&				rParent;
+    PopupMenu*          pMenu;
+    Menu&               rParent;
 
 private:
     virtual void    StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
@@ -62,9 +62,9 @@ private:
 public:
     SfxThesSubMenuControl(USHORT, Menu&, SfxBindings&);
     ~SfxThesSubMenuControl();
-    
+
     virtual PopupMenu*  GetPopup() const;
-    
+
     SFX_DECL_MENU_CONTROL();
 };
 
@@ -76,17 +76,17 @@ class SfxThesSubMenuHelper
     css::uno::Reference< css::linguistic2::XThesaurus >             m_xThesarus;
 
 private:
-    
+
     // don't use copy c-tor and assignment operator
     SfxThesSubMenuHelper( const SfxThesSubMenuHelper & );
     SfxThesSubMenuHelper & operator = ( const SfxThesSubMenuHelper & );
-    
+
 public:
     SfxThesSubMenuHelper();
     ~SfxThesSubMenuHelper();
 
     static ::rtl::OUString     GetText( const String &rLookUpString, xub_StrLen nDelimPos );
-    
+
     // returns the Locale to be used for the selected text when the thesaurus is to be called
     static void GetLocale( css::lang::Locale /*out */ &rLocale, const String &rLookUpString, xub_StrLen nDelimPos );
 
@@ -101,7 +101,7 @@ public:
 
 ////////////////////////////////////////////////////////////
 
-    
+
 #endif
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ Rectangle AquaSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
         pScreen = [pScreens objectAtIndex: nScreen];
     else
         pScreen = [NSScreen mainScreen];
-        
+
     if( pScreen )
     {
         NSRect aFrame = [pScreen frame];
@@ -87,7 +87,7 @@ Rectangle AquaSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
         pScreen = [pScreens objectAtIndex: nScreen];
     else
         pScreen = [NSScreen mainScreen];
-        
+
     if( pScreen )
     {
         NSRect aFrame = [pScreen visibleFrame];

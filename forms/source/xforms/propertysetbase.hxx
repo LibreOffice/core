@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -250,7 +250,7 @@ protected:
     void notifyAndCachePropertyValue( sal_Int32 nHandle );
 
     /** initializes the property value cache for the given property, with its current value
-    
+
         Usually used to initialize the cache with values which are different from default
         constructed values. Say you have a boolean property whose initial state
         is <TRUE/>. Say you call <member>notifyAndCachePropertyValue</member> the first time: it will
@@ -338,7 +338,7 @@ public:
     /** constructs a PropertyChangeNotifier
         @param rPropertySet
             the property set implementation whose property is going to be changed. Note
-            that this property set implementation must live at least as long as the 
+            that this property set implementation must live at least as long as the
             PropertyChangeNotifier instance does.
         @param nHandle
             the handle of the property which is going to be changed. Must be a valid property

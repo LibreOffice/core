@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,10 +55,10 @@ namespace DOM
     {
         return OUString::createFromAscii("#text");
     }
-    
+
     void SAL_CALL CText::fastSaxify( Context& io_rContext )
     {
-        if( io_rContext.mxCurrentHandler.is() ) 
+        if( io_rContext.mxCurrentHandler.is() )
         {
             try
             {

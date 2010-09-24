@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,14 +36,14 @@ public:
     TYPEINFO();
     AppError( BasicFrame*, String );
     ~AppError();
-//	long Command( short nID );
+//  long Command( short nID );
     virtual long InitMenu( Menu* );
     virtual long DeInitMenu( Menu* );
     USHORT GetLineNr();
     FileType GetFileType();
-    MsgEdit* GetMsgTree()			{ return ((MsgEdit*)pDataEdit);	}
+    MsgEdit* GetMsgTree()           { return ((MsgEdit*)pDataEdit); }
     virtual BOOL ReloadAllowed(){ return !StarBASIC::IsRunning(); }
-    virtual void LoadIniFile();		// (re)load ini file after change
+    virtual void LoadIniFile();     // (re)load ini file after change
     DirEntry aBaseDir;
 };
 

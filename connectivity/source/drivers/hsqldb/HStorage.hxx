@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,43 +41,43 @@
 #include <comphelper/broadcasthelper.hxx>
 
 
-#define DECLARE_SERVICE_INFO_STATIC()	\
-    DECLARE_SERVICE_INFO();	\
-    static ::rtl::OUString SAL_CALL getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);	\
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);	\
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >	\
-        SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)	\
+#define DECLARE_SERVICE_INFO_STATIC()   \
+    DECLARE_SERVICE_INFO(); \
+    static ::rtl::OUString SAL_CALL getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);   \
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);  \
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >    \
+        SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)    \
 
 
 namespace connectivity
 {
     namespace hsqldb
     {
-        typedef	::cppu::WeakComponentImplHelper6<	::com::sun::star::io::XStream
-                                        ,	::com::sun::star::io::XInputStream
-                                        ,	::com::sun::star::io::XOutputStream
-                                        ,	::com::sun::star::io::XSeekable
-                                        ,	::com::sun::star::lang::XInitialization
-                                        ,	::com::sun::star::lang::XServiceInfo>	OStorage_Base;
+        typedef ::cppu::WeakComponentImplHelper6<   ::com::sun::star::io::XStream
+                                        ,   ::com::sun::star::io::XInputStream
+                                        ,   ::com::sun::star::io::XOutputStream
+                                        ,   ::com::sun::star::io::XSeekable
+                                        ,   ::com::sun::star::lang::XInitialization
+                                        ,   ::com::sun::star::lang::XServiceInfo>   OStorage_Base;
         class OStorage : public ::comphelper::OBaseMutex
                         ,public OStorage_Base
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >			m_xServiceFactory;
-            ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentSubStorageSupplier>	m_xDS;
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >            m_xServiceFactory;
+            ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentSubStorageSupplier>  m_xDS;
 
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage>	m_xStorge;
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >		m_xStream;
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >	m_xIn;
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >	m_xOut;
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable >		m_xSeek;		
+            ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage>    m_xStorge;
+            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >       m_xStream;
+            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  m_xIn;
+            ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > m_xOut;
+            ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable >     m_xSeek;
 
-            OStorage();							// never implemented
-            OStorage(const OStorage&);			// never implemented
-            int operator= (const OStorage&);	// never implemented
+            OStorage();                         // never implemented
+            OStorage(const OStorage&);          // never implemented
+            int operator= (const OStorage&);    // never implemented
 
             OStorage(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&	_rxFactory);
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
         protected:
             /** this function is called upon disposing the component
             */

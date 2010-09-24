@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -201,11 +201,11 @@ namespace drawinglayer
 
                 aLine.append(basegfx::B2DPoint(0.0, fOffset));
                 aLine.append(basegfx::B2DPoint(getWidth(), fOffset));
-                
+
                 const basegfx::B2DHomMatrix aUnscaledTransform(
                     basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
                         fShearX, fRotate, aTranslate));
-                
+
                 aLine.transform(aUnscaledTransform);
 
                 if(bWaveLine)
@@ -237,7 +237,7 @@ namespace drawinglayer
                     // double line, create 2nd primitive with offset using TransformPrimitive based on
                     // already created NewPrimitive
                     double fLineDist(2.3 * fHeight);
-                    
+
                     if(bWaveLine)
                     {
                         fLineDist = 6.3 * fHeight;
@@ -257,7 +257,7 @@ namespace drawinglayer
 
                     // add transform primitive
                     const Primitive2DSequence aContent(&aNewPrimitive, 1);
-                    appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, 
+                    appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
                         Primitive2DReference(new TransformPrimitive2D(aTransform, aContent)));
                 }
             }

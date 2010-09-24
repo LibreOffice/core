@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,37 +29,37 @@
 #ifndef _OSL_PIPE_H_
 #define _OSL_PIPE_H_
 
-#	include <rtl/ustring.h>
+#   include <rtl/ustring.h>
 
 
-#	include <osl/security.h>
+#   include <osl/security.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef enum {
-    osl_Pipe_E_None,				/* no error */
-    osl_Pipe_E_NotFound,	 		/* Pipe could not be found */
-    osl_Pipe_E_AlreadyExists,	 	/* Pipe already exists */
-    osl_Pipe_E_NoProtocol,			/* Protocol not available */
-    osl_Pipe_E_NetworkReset,		/* Network dropped connection because of reset */
-    osl_Pipe_E_ConnectionAbort,		/* Software caused connection abort */
-    osl_Pipe_E_ConnectionReset,		/* Connection reset by peer */
-    osl_Pipe_E_NoBufferSpace,		/* No buffer space available */
-    osl_Pipe_E_TimedOut,			/* Connection timed out */
-    osl_Pipe_E_ConnectionRefused,	/* Connection refused */
-    osl_Pipe_E_invalidError,		/* unmapped error: always last entry in enum! */
+    osl_Pipe_E_None,                /* no error */
+    osl_Pipe_E_NotFound,            /* Pipe could not be found */
+    osl_Pipe_E_AlreadyExists,       /* Pipe already exists */
+    osl_Pipe_E_NoProtocol,          /* Protocol not available */
+    osl_Pipe_E_NetworkReset,        /* Network dropped connection because of reset */
+    osl_Pipe_E_ConnectionAbort,     /* Software caused connection abort */
+    osl_Pipe_E_ConnectionReset,     /* Connection reset by peer */
+    osl_Pipe_E_NoBufferSpace,       /* No buffer space available */
+    osl_Pipe_E_TimedOut,            /* Connection timed out */
+    osl_Pipe_E_ConnectionRefused,   /* Connection refused */
+    osl_Pipe_E_invalidError,        /* unmapped error: always last entry in enum! */
     osl_Pipe_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslPipeError;
 
 typedef sal_uInt32 oslPipeOptions;
-#define	osl_Pipe_OPEN        0x0000  	/* open existing pipe */   
-#define	osl_Pipe_CREATE      0x0001     /* create pipe and open it, fails if already existst */
+#define osl_Pipe_OPEN        0x0000     /* open existing pipe */
+#define osl_Pipe_CREATE      0x0001     /* create pipe and open it, fails if already existst */
 
 typedef struct oslPipeImpl * oslPipe;
 
-/** 
+/**
  */
 oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options, oslSecurity Security);
 
@@ -70,11 +70,11 @@ void    SAL_CALL osl_releasePipe( oslPipe );
 
 /** increases the refcount of the pipe.
  */
-void 	SAL_CALL osl_acquirePipe( oslPipe Pipe );
+void    SAL_CALL osl_acquirePipe( oslPipe Pipe );
 
 /** closes the pipe, any read,write or accept actions stop immeadiatly.
  */
-void 	SAL_CALL osl_closePipe( oslPipe );
+void    SAL_CALL osl_closePipe( oslPipe );
 
 
 oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe);
@@ -98,5 +98,5 @@ oslPipeError SAL_CALL osl_getLastPipeError(oslPipe Pipe);
 }
 #endif
 
-#endif	/* _OSL_PIPE_H_ */
+#endif  /* _OSL_PIPE_H_ */
 

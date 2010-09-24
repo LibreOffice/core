@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@ namespace basegfx
             For a description see applyLineDashing in b2dpolygontoos.hxx
         */
         void applyLineDashing(
-            const B3DPolyPolygon& rCandidate, 
-            const ::std::vector<double>& rDotDashArray, 
+            const B3DPolyPolygon& rCandidate,
+            const ::std::vector<double>& rDotDashArray,
             B3DPolyPolygon* pLineTarget,
             B3DPolyPolygon* pGapTarget = 0,
             double fFullDashDotLen = 0.0);
@@ -90,8 +90,8 @@ namespace basegfx
             If nHorSeg == 0 and/or nVerSeg == 0, a default will be calculated to have a step at least each 15 degrees.
             With VerStart, VerStop and hor range in cartesian may be specified to create a partial sphere only.
          */
-        B3DPolyPolygon createSpherePolyPolygonFromB3DRange( 
-            const B3DRange& rRange, 
+        B3DPolyPolygon createSpherePolyPolygonFromB3DRange(
+            const B3DRange& rRange,
             sal_uInt32 nHorSeg = 0L, sal_uInt32 nVerSeg = 0L,
             double fVerStart = F_PI2, double fVerStop = -F_PI2,
             double fHorStart = 0.0, double fHorStop = F_2PI);
@@ -108,16 +108,16 @@ namespace basegfx
         /** same as createSpherePolyPolygonFromB3DRange, but creates filled polygons (closed and oriented)
             There is one extra, the bool bNormals defines if normals will be set, default is false
          */
-        B3DPolyPolygon createSphereFillPolyPolygonFromB3DRange( 
-            const B3DRange& rRange, 
+        B3DPolyPolygon createSphereFillPolyPolygonFromB3DRange(
+            const B3DRange& rRange,
             sal_uInt32 nHorSeg = 0L, sal_uInt32 nVerSeg = 0L,
             bool bNormals = false,
             double fVerStart = F_PI2, double fVerStop = -F_PI2,
             double fHorStart = 0.0, double fHorStop = F_2PI);
 
         /** Create/replace normals for given 3d geometry with default normals from given center to outside.
-            rCandidate:	the 3d geometry to change
-            rCenter:	the center of the 3d geometry
+            rCandidate: the 3d geometry to change
+            rCenter:    the center of the 3d geometry
          */
         B3DPolyPolygon applyDefaultNormalsSphere( const B3DPolyPolygon& rCandidate, const B3DPoint& rCenter);
 
@@ -139,7 +139,7 @@ namespace basegfx
          */
         B3DPolyPolygon applyDefaultTextureCoordinatesSphere( const B3DPolyPolygon& rCandidate, const B3DPoint& rCenter, bool bChangeX = true, bool bChangeY = true);
 
-        // isInside test for B3DPoint. On border is not inside as long as not true is given 
+        // isInside test for B3DPoint. On border is not inside as long as not true is given
         // in bWithBorder flag. It is assumed that the orientations of the given polygon are correct.
         bool isInside(const B3DPolyPolygon& rCandidate, const B3DPoint& rPoint, bool bWithBorder = false);
 

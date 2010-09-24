@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,22 +27,22 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_codemaker.hxx"
-#include 	<stdio.h> 
+#include    <stdio.h>
 
-#include	"corbaoptions.hxx"
+#include    "corbaoptions.hxx"
 
 using namespace rtl;
 
-sal_Bool CorbaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile) 
+sal_Bool CorbaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     throw( IllegalArgument )
 {
-    sal_Bool 	ret = sal_True;
-    sal_uInt16	i=0;
+    sal_Bool    ret = sal_True;
+    sal_uInt16  i=0;
 
     if (!bCmdFile)
     {
         bCmdFile = sal_True;
-        
+
         m_program = av[0];
 
         if (ac < 2)
@@ -57,7 +57,7 @@ sal_Bool CorbaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
         i = 0;
     }
 
-    char	*s=NULL;
+    char    *s=NULL;
     for (i; i < ac; i++)
     {
         if (av[i][0] == '-')
@@ -78,14 +78,14 @@ sal_Bool CorbaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-                            
+
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-                    
+
                     m_options["-O"] = OString(s);
                     break;
                 case 'H':
@@ -102,14 +102,14 @@ sal_Bool CorbaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-                            
+
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-                    
+
                     m_options["-H"] = OString(s);
                     break;
                 case 'B':
@@ -126,14 +126,14 @@ sal_Bool CorbaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-                            
+
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-                    
+
                     m_options["-B"] = OString(s);
                     break;
                 case 'T':
@@ -150,14 +150,14 @@ sal_Bool CorbaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             {
                                 tmp += " your input '" + OString(av[i+1]) + "'";
                             }
-                            
+
                             throw IllegalArgument(tmp);
                         }
                     } else
                     {
                         s = av[i] + 2;
                     }
-                    
+
                     if (m_options.count("-T") > 0)
                     {
                         OString tmp(m_options["-T"]);
@@ -179,12 +179,12 @@ sal_Bool CorbaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                         throw IllegalArgument(tmp);
                     }
-                    
+
                     m_options["-G"] = OString("");
                     break;
                 default:
                     throw IllegalArgument("the option is unknown" + OString(av[i]));
-                    break;					
+                    break;
             }
         } else
         {
@@ -207,26 +207,26 @@ sal_Bool CorbaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         rargc++;
                     }
                     fclose(cmdFile);
-                    
+
                     ret = initOptions(rargc, rargv, bCmdFile);
-                    
-                    for (long i=0; i < rargc; i++) 
+
+                    for (long i=0; i < rargc; i++)
                     {
                         free(rargv[i]);
                     }
-                }		
+                }
             } else
             {
                 m_inputFiles.push_back(av[i]);
-            }		
+            }
         }
     }
-    printf("-T: %s\n", 						m_options["-T"].getStr());
+    printf("-T: %s\n",                      m_options["-T"].getStr());
 
-    return ret;	
-}	
+    return ret;
+}
 
-OString	CorbaOptions::prepareHelp()
+OString CorbaOptions::prepareHelp()
 {
     OString help("\nusing: ");
     help += m_program + " [-options] file_1 ... file_n\nOptions:\n";
@@ -235,22 +235,22 @@ OString	CorbaOptions::prepareHelp()
     help += "    -T<name>   = name specifies a type or a list of types. The output for this\n";
     help += "      [t1;...]   type is generated. If no '-T' option is specified,\n";
     help += "                 then output for all types is generated.\n";
-    help += "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n";		
+    help += "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n";
     help += "    -B<name>   = name specifies the base node. All types are searched under this\n";
     help += "                 node. Default is the root '/' of the registry files.\n";
     help += "    -G         = generate only target files which does not exists.\n";
     help += "    -H<header> = include CORBA generated <header>.\n";
     help += prepareVersion();
-    
-    return help;
-}	
 
-OString	CorbaOptions::prepareVersion()
+    return help;
+}
+
+OString CorbaOptions::prepareVersion()
 {
     OString version("\nSun Microsystems (R) ");
     version += m_program + " Version 2.0\n\n";
 
     return version;
-}	
+}
 
-    
+

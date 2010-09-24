@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,20 +40,20 @@ class CGM;
 class Bundle
 {
 
-    long				mnBundleIndex;
-    sal_uInt32			mnColor;
+    long                mnBundleIndex;
+    sal_uInt32          mnColor;
 
 public:
-    void				SetColor( sal_uInt32 nColor ) ;
-    sal_uInt32				GetColor() ;
-    long				GetIndex() const { return mnBundleIndex; } ;
-    void				SetIndex( long nBundleIndex ) { mnBundleIndex = nBundleIndex; } ;
+    void                SetColor( sal_uInt32 nColor ) ;
+    sal_uInt32              GetColor() ;
+    long                GetIndex() const { return mnBundleIndex; } ;
+    void                SetIndex( long nBundleIndex ) { mnBundleIndex = nBundleIndex; } ;
 
                         Bundle() {};
-    virtual Bundle* 	Clone() { return new Bundle( *this ); };
-            Bundle& 	operator=( Bundle& rBundle );
+    virtual Bundle*     Clone() { return new Bundle( *this ); };
+            Bundle&     operator=( Bundle& rBundle );
 
-    virtual 			~Bundle() {} ;
+    virtual             ~Bundle() {} ;
 };
 
 // ---------------------------------------------------------------
@@ -62,13 +62,13 @@ class LineBundle : public Bundle
 {
 public:
 
-    LineType			eLineType;
-    double				nLineWidth;
+    LineType            eLineType;
+    double              nLineWidth;
 
                         LineBundle() {};
-    virtual Bundle* 	Clone() { return new LineBundle( *this ); };
+    virtual Bundle*     Clone() { return new LineBundle( *this ); };
             LineBundle& operator=( LineBundle& rLineBundle );
-    virtual 			~LineBundle() {};
+    virtual             ~LineBundle() {};
 };
 
 // ---------------------------------------------------------------
@@ -77,13 +77,13 @@ class MarkerBundle : public Bundle
 {
 public:
 
-    MarkerType			eMarkerType;
-    double				nMarkerSize;
+    MarkerType          eMarkerType;
+    double              nMarkerSize;
 
                         MarkerBundle() {};
-    virtual Bundle* 	Clone() { return new MarkerBundle( *this ); } ;
-            MarkerBundle&	operator=( MarkerBundle& rMarkerBundle );
-    virtual 			~MarkerBundle() {};
+    virtual Bundle*     Clone() { return new MarkerBundle( *this ); } ;
+            MarkerBundle&   operator=( MarkerBundle& rMarkerBundle );
+    virtual             ~MarkerBundle() {};
 };
 
 // ---------------------------------------------------------------
@@ -92,13 +92,13 @@ class EdgeBundle : public Bundle
 {
 public:
 
-    EdgeType			eEdgeType;
-    double				nEdgeWidth;
+    EdgeType            eEdgeType;
+    double              nEdgeWidth;
 
                         EdgeBundle() {};
-    virtual Bundle* 	Clone() { return new EdgeBundle( *this ); } ;
+    virtual Bundle*     Clone() { return new EdgeBundle( *this ); } ;
             EdgeBundle& operator=( EdgeBundle& rEdgeBundle );
-    virtual 			~EdgeBundle() {};
+    virtual             ~EdgeBundle() {};
 };
 
 // ---------------------------------------------------------------
@@ -107,15 +107,15 @@ class TextBundle : public Bundle
 {
 public:
 
-    sal_uInt32				nTextFontIndex;
-    TextPrecision		eTextPrecision;
-    double				nCharacterExpansion;
-    double				nCharacterSpacing;
+    sal_uInt32              nTextFontIndex;
+    TextPrecision       eTextPrecision;
+    double              nCharacterExpansion;
+    double              nCharacterSpacing;
 
                         TextBundle() {};
-    virtual Bundle* 	Clone() { return new TextBundle( *this ); } ;
+    virtual Bundle*     Clone() { return new TextBundle( *this ); } ;
             TextBundle& operator=( TextBundle& rTextBundle );
-    virtual 			~TextBundle() {};
+    virtual             ~TextBundle() {};
 };
 
 // ---------------------------------------------------------------
@@ -124,14 +124,14 @@ class FillBundle : public Bundle
 {
 public:
 
-    FillInteriorStyle	eFillInteriorStyle;
-    long				nFillPatternIndex;
-    long				nFillHatchIndex;
+    FillInteriorStyle   eFillInteriorStyle;
+    long                nFillPatternIndex;
+    long                nFillHatchIndex;
 
                         FillBundle() {};
-    virtual Bundle* 	Clone() { return new FillBundle( *this ); } ;
+    virtual Bundle*     Clone() { return new FillBundle( *this ); } ;
             FillBundle& operator=( FillBundle& rFillBundle );
-    virtual 			~FillBundle() {};
+    virtual             ~FillBundle() {};
 };
 
 
@@ -140,14 +140,14 @@ public:
 class FontEntry
 {
 public:
-    sal_Int8*				pFontName;
-    CharSetType 		eCharSetType;
-    sal_Int8*				pCharSetValue;
-    sal_uInt32				nFontType;			// bit 0 = 1 -> Italic,
+    sal_Int8*               pFontName;
+    CharSetType         eCharSetType;
+    sal_Int8*               pCharSetValue;
+    sal_uInt32              nFontType;          // bit 0 = 1 -> Italic,
                                             // bit 1 = 1 -> Bold
 
                         FontEntry();
-    FontEntry*			Clone() { return new FontEntry( *this ); } ;
+    FontEntry*          Clone() { return new FontEntry( *this ); } ;
                         ~FontEntry();
 };
 
@@ -155,17 +155,17 @@ public:
 
 class CGMFList
 {
-    sal_uInt32				nFontNameCount;
-    sal_uInt32				nCharSetCount;
-    List				aFontEntryList;
-    void				ImplDeleteList();
+    sal_uInt32              nFontNameCount;
+    sal_uInt32              nCharSetCount;
+    List                aFontEntryList;
+    void                ImplDeleteList();
 public:
-    sal_uInt32				nFontsAvailable;
-    FontEntry*			GetFontEntry( sal_uInt32 );
-    void				InsertName( sal_uInt8* pSource, sal_uInt32 nSize );
-    void				InsertCharSet( CharSetType, sal_uInt8* pSource, sal_uInt32 nSize );
+    sal_uInt32              nFontsAvailable;
+    FontEntry*          GetFontEntry( sal_uInt32 );
+    void                InsertName( sal_uInt8* pSource, sal_uInt32 nSize );
+    void                InsertCharSet( CharSetType, sal_uInt8* pSource, sal_uInt32 nSize );
                         CGMFList();
-    CGMFList&			operator=( CGMFList& rFontList );
+    CGMFList&           operator=( CGMFList& rFontList );
                         ~CGMFList();
 };
 

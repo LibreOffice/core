@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,17 +33,17 @@
 #include <com/sun/star/uno/Reference.h>
 
 class XWindowPeer;
-class XToolkit; 
-class XVclToolkit; 
-class EventList; 
+class XToolkit;
+class XVclToolkit;
+class EventList;
 class Window;
-class OutputDevice; 
+class OutputDevice;
 class MouseEvent;
 class CommandEvent;
 class KeyEvent;
 class Rectangle;
 class XVclComponentPeer;
-class Menu; 
+class Menu;
 
 namespace com {
 namespace sun {
@@ -67,25 +67,25 @@ namespace accessibility {
 
 class VCL_DLLPUBLIC UnoWrapperBase
 {
-public:	
-    virtual void 				Destroy() = 0;
+public:
+    virtual void                Destroy() = 0;
 
     // Toolkit
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > GetVCLToolkit() = 0;
 
     // Graphics
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >	CreateGraphics( OutputDevice* pOutDev ) = 0;
-    virtual void				ReleaseAllGraphics( OutputDevice* pOutDev ) = 0;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >    CreateGraphics( OutputDevice* pOutDev ) = 0;
+    virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) = 0;
 
     // Window
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( Window* pWindow, sal_Bool bCreate ) = 0;
-    virtual void				SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xIFace ) = 0;
+    virtual void                SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xIFace ) = 0;
 
-    virtual void				WindowDestroyed( Window* pWindow ) = 0;
+    virtual void                WindowDestroyed( Window* pWindow ) = 0;
 
     // Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                                 CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar ) = 0;
 };
 
-#endif	// _VCL_UNOWRAP_HXX
+#endif  // _VCL_UNOWRAP_HXX

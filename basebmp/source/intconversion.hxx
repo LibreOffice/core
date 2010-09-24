@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace basebmp
     template< class RgbVal > struct UInt32FromRgbValue
     {
         sal_uInt32 operator()( RgbVal const& c ) const
-        { 
+        {
             return (c[0] << 16) | (c[1] << 8) | c[2];
         }
     };
@@ -49,7 +49,7 @@ namespace basebmp
     template< class RgbVal > struct RgbValueFromUInt32
     {
         RgbVal operator()( sal_uInt32 c ) const
-        { 
+        {
             return RgbVal((c >> 16) & 0xFF,
                           (c >> 8) & 0xFF,
                           c & 0xFF);
@@ -62,9 +62,9 @@ namespace basebmp
         typedef std::identity<DataType> to;
         typedef std::identity<DataType> from;
     };
-    template< unsigned int RedIndex, 
-              unsigned int GreenIndex, 
-              unsigned int BlueIndex > struct uInt32Converter< 
+    template< unsigned int RedIndex,
+              unsigned int GreenIndex,
+              unsigned int BlueIndex > struct uInt32Converter<
                   vigra::RGBValue< sal_uInt8,
                                    RedIndex,
                                    GreenIndex,

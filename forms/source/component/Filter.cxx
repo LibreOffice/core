@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -151,7 +151,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    Any	SAL_CALL OFilterControl::queryAggregation( const Type & rType ) throw(RuntimeException)
+    Any SAL_CALL OFilterControl::queryAggregation( const Type & rType ) throw(RuntimeException)
     {
         Any aRet = UnoControl::queryAggregation( rType);
         if(!aRet.hasValue())
@@ -510,7 +510,7 @@ namespace frm
                 Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
                 if (xText.is())
                     aText = xText->getText();
-            }	break;
+            }   break;
             default:
                 return sal_True;
         }
@@ -591,7 +591,7 @@ namespace frm
                     m_aText = aText;
                     xVclWindow->setProperty( PROPERTY_STATE, aValue );
                 }
-            }	break;
+            }   break;
             case FormComponentType::RADIOBUTTON:
             {
                 Reference< XVclWindowPeer >  xVclWindow( getPeer(), UNO_QUERY );
@@ -606,7 +606,7 @@ namespace frm
                     m_aText = aText;
                     xVclWindow->setProperty(PROPERTY_STATE, aValue);
                 }
-            }	break;
+            }   break;
             case FormComponentType::LISTBOX:
             {
                 Reference< XListBox >  xListBox( getPeer(), UNO_QUERY );
@@ -712,7 +712,7 @@ namespace frm
             Sequence< Any > aArgs(2);
             aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("SQLException"), 0, makeAny( _rExcept ), PropertyState_DIRECT_VALUE);
             aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny( m_xMessageParent ), PropertyState_DIRECT_VALUE);
-            
+
             static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.sdb.ErrorMessageDialog" );
 
             Reference< XExecutableDialog > xErrorDialog( m_aContext.createComponentWithArguments( s_sDialogServiceName, aArgs ), UNO_QUERY );
@@ -848,7 +848,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString	SAL_CALL OFilterControl::getImplementationName_Static()
+    ::rtl::OUString SAL_CALL OFilterControl::getImplementationName_Static()
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.forms.OFilterControl" ) );
     }
@@ -869,5 +869,5 @@ namespace frm
     }
 
 //.........................................................................
-}	// namespace frm
+}   // namespace frm
 //.........................................................................

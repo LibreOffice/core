@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ class SwTxtNode;
 class SwHistory;
 
 // Basis-Klasse fuer alle Message-Hints:
-//	"Overhead" vom SfxPoolItem wird hier behandelt
+//  "Overhead" vom SfxPoolItem wird hier behandelt
 class SwMsgPoolItem : public SfxPoolItem
 {
 public:
@@ -52,7 +52,7 @@ public:
 
     // "Overhead" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*	Clone( SfxItemPool* pPool = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 };
 
 
@@ -127,7 +127,7 @@ public:
 class SwRefMarkFldUpdate : public SwMsgPoolItem
 {
 public:
-    const OutputDevice* pOut;		// Pointer auf das aktuelle Output-Device
+    const OutputDevice* pOut;       // Pointer auf das aktuelle Output-Device
     SwRefMarkFldUpdate( const OutputDevice* );
 };
 
@@ -155,13 +155,13 @@ enum TableFmlUpdtFlags { TBL_CALC = 0,
 class SwTableFmlUpdate : public SwMsgPoolItem
 {
 public:
-    const SwTable* pTbl;		// Pointer auf die zu aktuelle Tabelle
+    const SwTable* pTbl;        // Pointer auf die zu aktuelle Tabelle
     union {
-        const SwTable* pDelTbl;		// Merge: Ptr auf die zu loeschende Tabelle
-        const String* pNewTblNm;	// Split: der Name der neuen Tabelle
+        const SwTable* pDelTbl;     // Merge: Ptr auf die zu loeschende Tabelle
+        const String* pNewTblNm;    // Split: der Name der neuen Tabelle
     } DATA;
     SwHistory* pHistory;
-    USHORT nSplitLine;			// Split: ab dieser BaseLine wird gespl.
+    USHORT nSplitLine;          // Split: ab dieser BaseLine wird gespl.
     TableFmlUpdtFlags eFlags;
     BOOL bModified : 1;
     BOOL bBehindSplitLine : 1;
@@ -187,19 +187,19 @@ public:
 class SwAttrSetChg: public SwMsgPoolItem
 {
     BOOL bDelSet;
-    SwAttrSet* pChgSet;				// was sich veraendert hat
-    const SwAttrSet* pTheChgdSet;	// wird nur zum Vergleichen gebraucht !!
+    SwAttrSet* pChgSet;             // was sich veraendert hat
+    const SwAttrSet* pTheChgdSet;   // wird nur zum Vergleichen gebraucht !!
 public:
     SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet );
     SwAttrSetChg( const SwAttrSetChg& );
     ~SwAttrSetChg();
 
     // was sich veraendert hat
-    const SwAttrSet* GetChgSet() const	{ return pChgSet; }
-          SwAttrSet* GetChgSet() 		{ return pChgSet; }
+    const SwAttrSet* GetChgSet() const  { return pChgSet; }
+          SwAttrSet* GetChgSet()        { return pChgSet; }
 
     // wo es sich geaendert hat
-    const SwAttrSet* GetTheChgdSet() const	{ return pTheChgdSet; }
+    const SwAttrSet* GetTheChgdSet() const  { return pTheChgdSet; }
 
     USHORT Count() const { return pChgSet->Count(); }
     void ClearItem( USHORT nWhichL = 0 )
@@ -221,7 +221,7 @@ class SwVirtPageNumInfo: public SwMsgPoolItem
 {
     const SwPageFrm *pPage;
     const SwPageFrm *pOrigPage;
-    const SwFrm 	*pFrm;		//An einem Absatz/Tabelle koennen mehrere
+    const SwFrm     *pFrm;      //An einem Absatz/Tabelle koennen mehrere
                                 //Attribute sitzen. Der Frame muss dann
                                 //muss dann letztlich bei bestimmen
                                 //welches Attribut gilt und um welche physikalische
@@ -229,11 +229,11 @@ class SwVirtPageNumInfo: public SwMsgPoolItem
 public:
     SwVirtPageNumInfo( const SwPageFrm *pPg );
 
-    const SwPageFrm *GetPage()			{ return pPage;    }
-    const SwPageFrm *GetOrigPage()		{ return pOrigPage;}
-    const SwFrm *GetFrm()				{ return pFrm; }
+    const SwPageFrm *GetPage()          { return pPage;    }
+    const SwPageFrm *GetOrigPage()      { return pOrigPage;}
+    const SwFrm *GetFrm()               { return pFrm; }
     void  SetInfo( const SwPageFrm *pPg,
-                   const SwFrm *pF	) 	{ pFrm = pF, pPage = pPg; }
+                   const SwFrm *pF  )   { pFrm = pF, pPage = pPg; }
 };
 
 
@@ -266,7 +266,7 @@ public:
     SwFindNearestNode( const SwNode& rNd );
     void CheckNode( const SwNode& rNd );
 
-    const SwNode* GetFoundNode() const 		{ return pFnd; }
+    const SwNode* GetFoundNode() const      { return pFnd; }
 };
 
 class SwStringMsgPoolItem : public SwMsgPoolItem

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ import java.io.InputStream;
  *  {@link org.openoffice.xmerge.Document Document}
  *  object, i.e. {@link
  *  org.openoffice.xmerge.converter.xml.sxw.SxwDocument
- *  SxwDocument} that the converters in this class works with.	Thus,
+ *  SxwDocument} that the converters in this class works with.  Thus,
  *  this class only implements the methods that produces the converters,
  *  i.e. {@link
  *  org.openoffice.xmerge.DocumentSerializer
@@ -69,7 +69,7 @@ import java.io.InputStream;
  *
  *  @author   Herbie Ong
  */
-public final class PluginFactoryImpl extends SxwPluginFactory 
+public final class PluginFactoryImpl extends SxwPluginFactory
     implements DocumentDeserializerFactory, DocumentSerializerFactory,
     DocumentMergerFactory {
 
@@ -103,7 +103,7 @@ public final class PluginFactoryImpl extends SxwPluginFactory
      *  which is an implementation of the <code>DocumentDeserializer</code>
      *  interface.
      *
-     *  @param  cd   <code>ConvertData</code> object for reading data 
+     *  @param  cd   <code>ConvertData</code> object for reading data
      *               which will be converted back to a
      *               <code>Document</code> object.
      *

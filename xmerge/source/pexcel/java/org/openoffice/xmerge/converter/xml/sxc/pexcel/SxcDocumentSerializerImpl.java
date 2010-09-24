@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentSerializer;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 
 /**
- *  <p>Pocket Excel implementation of <code>SxcDocumentDeserializer</code> 
+ *  <p>Pocket Excel implementation of <code>SxcDocumentDeserializer</code>
  *  for the {@link
  *  org.openoffice.xmerge.converter.xml.sxc.pexcel.PluginFactoryImpl
  *  PluginFactoryImpl}.</p>
@@ -62,7 +62,7 @@ public final class SxcDocumentSerializerImpl extends SxcDocumentSerializer {
         super(document);
     }
 
-    
+
     public ConvertData serialize() throws ConvertException, IOException {
 
         // Get the server side document name.  This value should not
@@ -90,7 +90,7 @@ public final class SxcDocumentSerializerImpl extends SxcDocumentSerializer {
             traverseBody(node);
         }
 
-        // get settings for this document 
+        // get settings for this document
         org.w3c.dom.Document settingsDoc = sxcDoc.getSettingsDOM();
         if(settingsDoc!=null) {
             NodeList settingsList = settingsDoc.getElementsByTagName(TAG_OFFICE_SETTINGS);
@@ -110,7 +110,7 @@ public final class SxcDocumentSerializerImpl extends SxcDocumentSerializer {
 
         return cd;
     }
-    
+
 
     /**
      *  A cell reference in a StarOffice formula looks like

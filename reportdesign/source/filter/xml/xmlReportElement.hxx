@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ namespace rptxml
     class ORptFilter;
     class OXMLReportElement : public SvXMLImportContext
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlModel >	m_xComponent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlModel >   m_xComponent;
         ORptFilter& GetOwnImport();
         OXMLReportElement(const OXMLReportElement&);
         void operator =(const OXMLReportElement&);
